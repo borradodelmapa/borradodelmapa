@@ -491,30 +491,22 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<script type="module">
-// ===== FIREBASE =====
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-  signOut, onAuthStateChanged, updateProfile, GoogleAuthProvider, signInWithPopup }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection,
-  addDoc, getDocs, deleteDoc, serverTimestamp }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script>
+window.onload = function() {
+firebase.initializeApp({
   apiKey: "AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",
   authDomain: "borradodelmapa-85257.firebaseapp.com",
   projectId: "borradodelmapa-85257",
   storageBucket: "borradodelmapa-85257.firebasestorage.app",
   messagingSenderId: "833042338746",
-  appId: "1:833042338746:web:32b58e582488c6064d8383",
-  measurementId: "G-JZ00MFJEHB"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const googleProvider = new GoogleAuthProvider();
+  appId: "1:833042338746:web:32b58e582488c6064d8383"
+});
+const auth = firebase.auth();
+const db = firebase.firestore();
+const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 // ===== STATE =====
 let currentUser = null;
@@ -541,10 +533,10 @@ const ROUTE_COORDS = [
 ];
 
 // ===== AUTH STATE LISTENER =====
-onAuthStateChanged(auth, async (user) => {
+auth.onAuthStateChanged(async (user) => {
   if (user) {
     try {
-      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const userDoc = await db.collection("users").doc(user.uid).get();
       const userData = userDoc.exists() ? userDoc.data() : {};
       currentUser = {
         uid: user.uid,
@@ -611,7 +603,7 @@ async function doLogin() {
   if (!email || !pass) { showError(err, "Rellena email y contrasena"); return; }
   try {
     showToast("Entrando...");
-    await signInWithEmailAndPassword(auth, email, pass);
+    await auth.signInWithEmailAndPassword(email, pass);
     closeModal();
     showPage("dashboard");
   } catch(e) {
@@ -636,10 +628,10 @@ async function doRegister() {
   if (pass.length < 6) { showError(err, "Contrasena minimo 6 caracteres"); return; }
   try {
     showToast("Creando cuenta...");
-    const cred = await createUserWithEmailAndPassword(auth, email, pass);
-    await updateProfile(cred.user, { displayName: name });
-    await setDoc(doc(db, "users", cred.user.uid), {
-      name, email, isPremium: false, mapsCount: 0, createdAt: serverTimestamp()
+    const cred = await auth.createUserWithEmailAndPassword(email, pass);
+    await cred.user.updateProfile({ displayName: name });
+    await db.collection("users").doc(cred.user.uid).set({
+      name, email, isPremium: false, mapsCount: 0, createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
     closeModal();
     showPage("dashboard");
@@ -658,13 +650,13 @@ window.doRegister = doRegister;
 async function doSocialLogin() {
   try {
     showToast("Conectando con Google...");
-    const result = await signInWithPopup(auth, googleProvider);
+    const result = await auth.signInWithPopup(googleProvider);
     const user = result.user;
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    if (!userDoc.exists()) {
-      await setDoc(doc(db, "users", user.uid), {
+    const userDoc = await db.collection("users").doc(user.uid).get();
+    if (!userDoc.exists) {
+      await db.collection("users").doc(user.uid).set({
         name: user.displayName || user.email.split("@")[0],
-        email: user.email, isPremium: false, mapsCount: 0, createdAt: serverTimestamp()
+        email: user.email, isPremium: false, mapsCount: 0, createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
     }
     closeModal();
@@ -677,7 +669,7 @@ window.doSocialLogin = doSocialLogin;
 
 // ===== LOGOUT =====
 async function logout() {
-  await signOut(auth);
+  await auth.signOut();
   showPage("home");
   showToast("Sesion cerrada");
 }
@@ -705,8 +697,8 @@ function updateSidebar(user) {
 async function loadUserMaps() {
   if (!currentUser) return;
   try {
-    const mapsRef = collection(db, "users", currentUser.uid, "maps");
-    const snap = await getDocs(mapsRef);
+    const mapsRef = db.collection("users").doc(currentUser.uid).collection("maps");
+    const snap = await mapsRef.get();
     const maps = [];
     snap.forEach(d => maps.push({id: d.id, ...d.data()}));
     renderMapsGrid(maps);
@@ -770,8 +762,8 @@ async function saveProfile() {
   const name = document.getElementById("profile-name-input").value.trim();
   if (!name || !currentUser) return;
   try {
-    await setDoc(doc(db, "users", currentUser.uid), { name }, { merge: true });
-    await updateProfile(auth.currentUser, { displayName: name });
+    await db.collection("users").doc(currentUser.uid).set({ name }, { merge: true });
+    await auth.currentUser.updateProfile({ displayName: name });
     currentUser.name = name;
     document.getElementById("sidebar-name").textContent = name;
     document.getElementById("nav-avatar").textContent = name[0].toUpperCase();
@@ -989,6 +981,7 @@ document.getElementById("modal-auth").addEventListener("click", function(e) {
 document.getElementById("poi-modal").addEventListener("click", function(e) {
   if (e.target === this) closePoiModal();
 });
+}; // end window.onload
 </script>
 </body>
 </html>
