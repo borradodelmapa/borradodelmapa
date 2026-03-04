@@ -496,17 +496,27 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
     <div class="editor-panel">
       <div class="editor-panel-header">
         <div class="editor-back" onclick="showPage('dashboard')">← Volver</div>
-        <div class="editor-map-title">Vietnam en Moto</div>
+        <div class="editor-map-title">🏍️ Vietnam en Moto</div>
+      </div>
+      <div style="padding:12px 16px;background:rgba(200,147,15,.08);border-bottom:1px solid var(--gris2);font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:1px;">
+        DEMO · 12 DÍAS · 10 CIUDADES · 30 POIs · HANOI → HO CHI MINH
       </div>
       <div class="editor-scroll">
         <div class="editor-section-title">Días del viaje</div>
         <div class="day-tab-list">
           <div class="day-tab active" onclick="setDay(this,0)">Todos</div>
-          <div class="day-tab" onclick="setDay(this,1)">Día 1</div>
-          <div class="day-tab" onclick="setDay(this,2)">Día 2</div>
-          <div class="day-tab" onclick="setDay(this,3)">Día 3</div>
-          <div class="day-tab" onclick="setDay(this,4)">Día 4</div>
-          <div class="day-tab" onclick="setDay(this,5)">Día 5</div>
+          <div class="day-tab" onclick="setDay(this,1)">Día 1 · Hanoi</div>
+          <div class="day-tab" onclick="setDay(this,2)">Día 2 · Hanoi</div>
+          <div class="day-tab" onclick="setDay(this,3)">Día 3 · Ha Giang</div>
+          <div class="day-tab" onclick="setDay(this,4)">Día 4 · Ninh Binh</div>
+          <div class="day-tab" onclick="setDay(this,5)">Día 5 · Phong Nha</div>
+          <div class="day-tab" onclick="setDay(this,6)">Día 6 · Hue</div>
+          <div class="day-tab" onclick="setDay(this,7)">Día 7 · Hoi An</div>
+          <div class="day-tab" onclick="setDay(this,8)">Día 8 · Da Nang</div>
+          <div class="day-tab" onclick="setDay(this,9)">Día 9 · Nha Trang</div>
+          <div class="day-tab" onclick="setDay(this,10)">Día 10 · Mui Ne</div>
+          <div class="day-tab" onclick="setDay(this,11)">Día 11 · Ho Chi Minh</div>
+          <div class="day-tab" onclick="setDay(this,12)">Día 12 · Ho Chi Minh</div>
         </div>
         <div class="editor-section-title">Puntos de interés</div>
         <div class="poi-list-editor" id="poi-list-editor"></div>
@@ -611,20 +621,63 @@ let markers = [];
 let polyline = null;
 
 const POIS_DEMO = [
-  {id:1,name:"Puente Long Bien",type:"🏛️",note:"Epoca colonial francesa",day:1,lat:21.044,lng:105.852},
-  {id:2,name:"Pho Thin Bo Ho",type:"🍜",note:"El mejor pho de Hanoi",day:1,lat:21.028,lng:105.849},
-  {id:3,name:"Dong Van Geopark",type:"🏛️",note:"Patrimonio UNESCO",day:4,lat:23.278,lng:105.362},
-  {id:4,name:"Hang En Cave",type:"🏖️",note:"3a cueva mas grande del mundo",day:9,lat:17.551,lng:106.081},
-  {id:5,name:"Hoi An Co Pho",type:"🏛️",note:"Casco antiguo - Por la tarde",day:14,lat:15.880,lng:108.338},
+  // Día 1 - Hanoi
+  {id:1, name:"Puente Long Bien", type:"🏛️", note:"Icono colonial francés. Mejor al amanecer.", day:1, lat:21.044, lng:105.852},
+  {id:2, name:"Pho Thin Bo Ho", type:"🍜", note:"El mejor pho de Hanoi. Abre desde las 6am.", day:1, lat:21.028, lng:105.849},
+  {id:3, name:"Hoan Kiem Lake", type:"📸", note:"El lago del espada. Paseo nocturno imprescindible.", day:1, lat:21.028, lng:105.852},
+  {id:4, name:"Bun Bo Nam Bo", type:"🍜", note:"Fideos con ternera. Local sin turistas.", day:1, lat:21.031, lng:105.848},
+  // Día 2 - Hanoi
+  {id:5, name:"Ho Chi Minh Mausoleum", type:"🏛️", note:"Llegar pronto, colas desde las 8am.", day:2, lat:21.037, lng:105.835},
+  {id:6, name:"Old Quarter", type:"🏛️", note:"36 calles de artesanos. Perderse es el plan.", day:2, lat:21.033, lng:105.850},
+  {id:7, name:"Bia Hoi Corner", type:"🍜", note:"Cerveza a 25 céntimos. Esquina más famosa de Asia.", day:2, lat:21.034, lng:105.851},
+  // Día 3 - Ha Giang
+  {id:8, name:"Dong Van Geopark", type:"🏛️", note:"Patrimonio UNESCO. Paisaje lunar.", day:3, lat:23.278, lng:105.362},
+  {id:9, name:"Ma Pi Leng Pass", type:"📸", note:"El paso de montaña más espectacular de Vietnam.", day:3, lat:23.165, lng:105.354},
+  {id:10, name:"Lung Cu Flag Tower", type:"📸", note:"El punto más al norte de Vietnam.", day:3, lat:23.366, lng:105.334},
+  // Día 4 - Ninh Binh
+  {id:11, name:"Trang An", type:"🏖️", note:"Kayak entre karsts. Reservar con antelación.", day:4, lat:20.253, lng:105.975},
+  {id:12, name:"Mua Cave", type:"📸", note:"500 escalones. Las vistas valen cada uno.", day:4, lat:20.218, lng:105.974},
+  {id:13, name:"Ninh Binh Local Resto", type:"🍜", note:"Cabra de montaña y arroz. Especialidad local.", day:4, lat:20.253, lng:105.975},
+  // Día 5 - Phong Nha
+  {id:14, name:"Phong Nha Cave", type:"🏖️", note:"Cueva navegable en barca. Impresionante.", day:5, lat:17.599, lng:106.142},
+  {id:15, name:"Hang En Cave", type:"🏖️", note:"3ª cueva más grande del mundo. Trek 2 días.", day:5, lat:17.551, lng:106.081},
+  // Día 6 - Hue
+  {id:16, name:"Hue Imperial City", type:"🏛️", note:"Ciudad prohibida vietnamita. Medio día.", day:6, lat:16.469, lng:107.578},
+  {id:17, name:"Thien Mu Pagoda", type:"🏛️", note:"La pagoda más antigua de Hue.", day:6, lat:16.453, lng:107.546},
+  {id:18, name:"Bun Bo Hue", type:"🍜", note:"La sopa más picante de Vietnam. Origen aquí.", day:6, lat:16.463, lng:107.590},
+  // Día 7 - Hoi An
+  {id:19, name:"Hoi An Ancient Town", type:"🏛️", note:"Casco antiguo UNESCO. Por la tarde con las linternas.", day:7, lat:15.880, lng:108.338},
+  {id:20, name:"An Bang Beach", type:"🏖️", note:"La mejor playa cerca de Hoi An.", day:7, lat:15.920, lng:108.373},
+  {id:21, name:"White Rose Restaurant", type:"🍜", note:"Especialidad local: banh bao vac.", day:7, lat:15.877, lng:108.329},
+  // Día 8 - Da Nang
+  {id:22, name:"Marble Mountains", type:"🏛️", note:"Cuevas y pagodas en montañas de mármol.", day:8, lat:16.003, lng:108.263},
+  {id:23, name:"My Khe Beach", type:"🏖️", note:"Forbes la eligió top 6 del mundo.", day:8, lat:16.060, lng:108.247},
+  // Día 9 - Nha Trang
+  {id:24, name:"Po Nagar Towers", type:"🏛️", note:"Torres cham del siglo VII.", day:9, lat:12.265, lng:109.194},
+  {id:25, name:"Nha Trang Beach", type:"🏖️", note:"La bahía más bonita de Vietnam.", day:9, lat:12.238, lng:109.197},
+  // Día 10 - Mui Ne
+  {id:26, name:"Red Sand Dunes", type:"📸", note:"Dunas de arena roja. Al atardecer.", day:10, lat:10.947, lng:108.286},
+  {id:27, name:"Fairy Stream", type:"🏖️", note:"Paseo descalzo por el arroyo entre dunas.", day:10, lat:10.933, lng:108.272},
+  // Día 11-12 - Ho Chi Minh
+  {id:28, name:"Cu Chi Tunnels", type:"🏛️", note:"270km de túneles de la guerra. Imprescindible.", day:11, lat:11.135, lng:106.462},
+  {id:29, name:"Ben Thanh Market", type:"🍜", note:"El mercado más famoso de Saigon.", day:11, lat:10.772, lng:106.698},
+  {id:30, name:"War Remnants Museum", type:"🏛️", note:"El museo más impactante que verás.", day:12, lat:10.779, lng:106.692},
 ];
 
 let poiList = [...POIS_DEMO];
-let nextPoiId = 10;
+let nextPoiId = 100;
 
 const ROUTE_COORDS = [
-  [21.028,105.834],[23.278,105.362],[20.253,105.975],
-  [17.551,106.081],[16.463,107.590],[15.880,108.338],
-  [12.238,109.197],[11.941,108.441],[21.028,105.834]
+  [21.028,105.834], // Hanoi
+  [23.278,105.362], // Ha Giang
+  [20.253,105.975], // Ninh Binh
+  [17.551,106.081], // Phong Nha
+  [16.463,107.590], // Hue
+  [15.880,108.338], // Hoi An
+  [16.060,108.247], // Da Nang
+  [12.238,109.197], // Nha Trang
+  [10.947,108.286], // Mui Ne
+  [10.772,106.698], // Ho Chi Minh
 ];
 
 // ===== AUTH STATE LISTENER =====
@@ -972,18 +1025,46 @@ function renderMapMarkers() {
   });
 }
 
+const BOOKING_LINKS = {
+  1:  {city:"Hanoi",     url:"https://www.booking.com/searchresults.es.html?ss=Hanoi&nflt=price%3D1-20"},
+  2:  {city:"Hanoi",     url:"https://www.booking.com/searchresults.es.html?ss=Hanoi&nflt=price%3D1-20"},
+  3:  {city:"Ha Giang",  url:"https://www.booking.com/searchresults.es.html?ss=Ha+Giang&nflt=price%3D1-20"},
+  4:  {city:"Ninh Binh", url:"https://www.booking.com/searchresults.es.html?ss=Ninh+Binh&nflt=price%3D1-20"},
+  5:  {city:"Phong Nha", url:"https://www.booking.com/searchresults.es.html?ss=Phong+Nha&nflt=price%3D1-20"},
+  6:  {city:"Hue",       url:"https://www.booking.com/searchresults.es.html?ss=Hue+Vietnam&nflt=price%3D1-20"},
+  7:  {city:"Hoi An",    url:"https://www.booking.com/searchresults.es.html?ss=Hoi+An&nflt=price%3D1-20"},
+  8:  {city:"Da Nang",   url:"https://www.booking.com/searchresults.es.html?ss=Da+Nang&nflt=price%3D1-20"},
+  9:  {city:"Nha Trang", url:"https://www.booking.com/searchresults.es.html?ss=Nha+Trang&nflt=price%3D1-20"},
+  10: {city:"Mui Ne",    url:"https://www.booking.com/searchresults.es.html?ss=Mui+Ne&nflt=price%3D1-20"},
+  11: {city:"Ho Chi Minh",url:"https://www.booking.com/searchresults.es.html?ss=Ho+Chi+Minh&nflt=price%3D1-20"},
+  12: {city:"Ho Chi Minh",url:"https://www.booking.com/searchresults.es.html?ss=Ho+Chi+Minh&nflt=price%3D1-20"},
+};
+
 function renderPoiList() {
   const el = document.getElementById("poi-list-editor");
   if (!el) return;
-  el.innerHTML = poiList.map(poi => `
-    <div class="poi-item-editor">
-      <div class="poi-emoji">${poi.type}</div>
-      <div class="poi-info-editor">
-        <div class="poi-name-editor">${poi.name}</div>
-        <div class="poi-meta-editor">Dia ${poi.day} - ${poi.note||"Sin nota"}</div>
-      </div>
-      <button class="poi-del" onclick="deletePoi(${poi.id})">x</button>
-    </div>`).join("");
+  // Group by day
+  const days = [...new Set(poiList.map(p => p.day))].sort((a,b) => a-b);
+  el.innerHTML = days.map(day => {
+    const booking = BOOKING_LINKS[day];
+    const pois = poiList.filter(p => p.day === day);
+    return `
+      <div style="margin-bottom:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--gris2);">
+          <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:1px;">DÍA ${day}${booking ? " · " + booking.city : ""}</div>
+          ${booking ? `<a href="${booking.url}" target="_blank" style="font-family:'Space Mono',monospace;font-size:9px;color:var(--negro);background:var(--dorado);padding:3px 8px;text-decoration:none;letter-spacing:1px;">🏨 BOOKING</a>` : ""}
+        </div>
+        ${pois.map(poi => `
+          <div class="poi-item-editor">
+            <div class="poi-emoji">${poi.type}</div>
+            <div class="poi-info-editor">
+              <div class="poi-name-editor">${poi.name}</div>
+              <div class="poi-meta-editor">${poi.note||"Sin nota"}</div>
+            </div>
+            <button class="poi-del" onclick="deletePoi(${poi.id})">x</button>
+          </div>`).join("")}
+      </div>`;
+  }).join("");
 }
 
 function deletePoi(id) {
