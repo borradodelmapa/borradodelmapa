@@ -247,7 +247,9 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
   .pricing-grid{grid-template-columns:1fr;}
   .dashboard-layout{grid-template-columns:1fr;}
   .sidebar{display:none;}
-  .dash-content{padding:24px;}
+  .dash-content{padding:24px;display:block!important;}
+  #mobile-dash-nav{display:flex!important;}
+  #page-dashboard{padding-bottom:70px;}
   .editor-layout{grid-template-columns:1fr;}
   .editor-panel{display:none;}
   footer{padding:32px 24px;flex-direction:column;gap:20px;text-align:center;}
@@ -256,6 +258,10 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
 
 .hero-tooltip{background:rgba(10,9,8,.85)!important;border:1px solid rgba(200,147,15,.5)!important;color:#f5f0e8!important;font-family:"Space Mono",monospace!important;font-size:9px!important;letter-spacing:1px!important;padding:3px 8px!important;border-radius:0!important;box-shadow:none!important;}
 .hero-tooltip::before{display:none!important;}
+.mobile-dash-nav{position:fixed;bottom:0;left:0;right:0;background:var(--negro);border-top:1px solid var(--gris2);z-index:999;justify-content:space-around;padding:10px 0;}
+.mobile-nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:20px;cursor:pointer;padding:6px 20px;}
+.mobile-nav-item span{font-family:'Space Mono',monospace;font-size:9px;color:var(--crema);opacity:.6;letter-spacing:1px;text-transform:uppercase;}
+.mobile-nav-item.active span{color:var(--dorado);opacity:1;}
 
 
 #hero-map .leaflet-overlay-pane, #hero-map .leaflet-marker-pane, #hero-map .leaflet-tooltip-pane, #hero-map .leaflet-popup-pane {display:none!important;}
@@ -446,8 +452,7 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
           <div class="sidebar-item-txt">Cerrar sesión</div>
         </div>
       </div>
-      </div>
-    </div>
+    </aside>
 
     <div class="dash-content" id="dash-tab-maps">
       <div class="dash-header">
@@ -479,9 +484,13 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
       </div>
     </div>
   </div>
+  <!-- Mobile bottom nav -->
+  <div style="display:none;" id="mobile-dash-nav" class="mobile-dash-nav">
+    <div onclick="setDashTab('maps',this)" class="mobile-nav-item active">🗺️<span>Rutas</span></div>
+    <div onclick="setDashTab('profile',this)" class="mobile-nav-item">👤<span>Perfil</span></div>
+    <div onclick="logout()" class="mobile-nav-item">🚪<span>Salir</span></div>
+  </div>
 </div>
-
-<!-- ===== MAP EDITOR ===== -->
 <div class="page" id="page-editor">
   <div class="editor-layout">
     <div class="editor-panel">
