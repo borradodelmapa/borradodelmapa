@@ -277,13 +277,13 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
 <!-- NAVBAR -->
 <nav>
   <div class="nav-logo" onclick="showPage('home')">borrado<span>del</span>mapa</div>
-  <div class="nav-links" id="nav-links-guest">
+  <div class="nav-links" id="nav-links-guest" style="display:flex;">
     <a class="nav-link" onclick="showPage('blog')" style="cursor:pointer;">Blog</a>
     <a href="https://ko-fi.com/borradodelmapa" target="_blank" class="nav-link" style="color:var(--dorado);">☕ Colabora</a>
     <a class="nav-link" onclick="showPage('editor')" style="cursor:pointer;">Demo</a>
     <button class="nav-cta" onclick="openModal('login')">Entrar</button>
   </div>
-  <div class="nav-user" id="nav-links-user">
+  <div class="nav-user" id="nav-links-user" style="display:none;">
     <a class="nav-link" onclick="showPage('blog')" style="cursor:pointer;">Blog</a>
     <a href="https://ko-fi.com/borradodelmapa" target="_blank" class="nav-link" style="color:var(--dorado);">☕ Colabora</a>
     <a class="nav-link" onclick="showPage('editor')" style="cursor:pointer;">Demo</a>
@@ -482,50 +482,109 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
   <!-- Mobile bottom nav -->
   <div style="display:none;" id="mobile-dash-nav" class="mobile-dash-nav">
     <div onclick="setDashTab('maps',this)" class="mobile-nav-item active">🗺️<span>Rutas</span></div>
-    <div onclick="setDashTab('profile',this)" class="mobile-nav-item">👤<span>Perfil</span></div>
+    <div onclick="setDashTab('profile',this)" class="mobile-nav-item">⚙️<span>Cuenta</span></div>
     <div onclick="logout()" class="mobile-nav-item">🚪<span>Salir</span></div>
   </div>
 </div>
-<div class="page" id="page-editor">
-  <div class="editor-layout">
-    <div class="editor-panel">
-      <div class="editor-panel-header">
-        <div class="editor-back" onclick="showPage('dashboard')">← Volver</div>
-        <div class="editor-map-title">🏍️ Vietnam en Moto</div>
+<div class="page" id="page-editor" style="background:var(--negro);overflow-y:auto;padding-top:88px;padding-bottom:80px;">
+
+  <!-- HERO DEMO -->
+  <div style="max-width:860px;margin:0 auto;padding:40px 24px 0;">
+    <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dorado);letter-spacing:3px;margin-bottom:12px;">DEMO · RUTA COMPLETA</div>
+    <div style="font-family:'Playfair Display',serif;font-size:clamp(32px,6vw,56px);color:var(--blanco);line-height:1.1;margin-bottom:8px;">Vietnam en Moto</div>
+    <div style="font-family:'DM Sans',sans-serif;font-size:16px;color:var(--crema);opacity:.7;margin-bottom:28px;">De Hanoi al sur y de vuelta — la ruta definitiva</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px;">
+      <div style="background:var(--gris);border:1px solid var(--gris2);padding:16px;text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--dorado);">25</div>
+        <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--crema);opacity:.6;letter-spacing:1px;">DÍAS</div>
       </div>
-      <div style="padding:12px 16px;background:rgba(200,147,15,.08);border-bottom:1px solid var(--gris2);font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:1px;">
-        DEMO · 12 DÍAS · 10 CIUDADES · 30 POIs · HANOI → HO CHI MINH
+      <div style="background:var(--gris);border:1px solid var(--gris2);padding:16px;text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--dorado);">3.000</div>
+        <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--crema);opacity:.6;letter-spacing:1px;">KM</div>
       </div>
-      <div class="editor-scroll">
-        <div class="editor-section-title">Días del viaje</div>
-        <div class="day-tab-list">
-          <div class="day-tab active" onclick="setDay(this,0)">Todos</div>
-          <div class="day-tab" onclick="setDay(this,1)">Día 1 · Hanoi</div>
-          <div class="day-tab" onclick="setDay(this,2)">Día 2 · Hanoi</div>
-          <div class="day-tab" onclick="setDay(this,3)">Día 3 · Ha Giang</div>
-          <div class="day-tab" onclick="setDay(this,4)">Día 4 · Ninh Binh</div>
-          <div class="day-tab" onclick="setDay(this,5)">Día 5 · Phong Nha</div>
-          <div class="day-tab" onclick="setDay(this,6)">Día 6 · Hue</div>
-          <div class="day-tab" onclick="setDay(this,7)">Día 7 · Hoi An</div>
-          <div class="day-tab" onclick="setDay(this,8)">Día 8 · Da Nang</div>
-          <div class="day-tab" onclick="setDay(this,9)">Día 9 · Nha Trang</div>
-          <div class="day-tab" onclick="setDay(this,10)">Día 10 · Mui Ne</div>
-          <div class="day-tab" onclick="setDay(this,11)">Día 11 · Ho Chi Minh</div>
-          <div class="day-tab" onclick="setDay(this,12)">Día 12 · Ho Chi Minh</div>
-        </div>
-        <div class="editor-section-title">Puntos de interés</div>
-        <div class="poi-list-editor" id="poi-list-editor"></div>
-        <button class="btn-add-poi" onclick="openPoiModal()">＋ Añadir punto de interés</button>
+      <div style="background:var(--gris);border:1px solid var(--gris2);padding:16px;text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--dorado);">9</div>
+        <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--crema);opacity:.6;letter-spacing:1px;">PARADAS</div>
+      </div>
+      <div style="background:var(--gris);border:1px solid var(--gris2);padding:16px;text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--dorado);">&lt;20€</div>
+        <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--crema);opacity:.6;letter-spacing:1px;">ALOJAM./NOCHE</div>
       </div>
     </div>
-    <div class="editor-map-container">
-      <div id="leaflet-map"></div>
-      <div class="map-toolbar">
-        <div class="map-tool-btn" title="Zoom in" onclick="mapZoom(1)">＋</div>
-        <div class="map-tool-btn" title="Zoom out" onclick="mapZoom(-1)">－</div>
-        <div class="map-tool-btn" title="Centrar ruta" onclick="centerMap()">⊙</div>
-        <div class="map-tool-btn" title="Añadir POI" onclick="openPoiModal()">📍</div>
+    <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--crema);opacity:.5;letter-spacing:2px;margin-bottom:40px;text-align:center;">HANOI → HA GIANG → NINH BINH → PHONG NHA → HUÉ → HOI AN → NHA TRANG → DA LAT → HANOI</div>
+
+    <!-- SECCIÓN 01: MAPA INTERACTIVO -->
+    <div style="margin-bottom:8px;">
+      <div style="background:var(--gris);border:1px solid var(--gris2);border-left:3px solid var(--dorado);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--dorado);margin-right:12px;">01</span>
+          <span style="font-family:'Playfair Display',serif;font-size:18px;color:var(--blanco);">Mapa interactivo</span>
+        </div>
+        <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--crema);opacity:.5;">Visible</span>
       </div>
+      <div style="border:1px solid var(--gris2);border-top:none;">
+        <div id="demo-leaflet-map" style="height:380px;width:100%;"></div>
+        <div style="padding:16px;background:var(--gris);">
+          <a href="https://www.google.com/maps/dir/Hanoi,Vietnam/Ha+Giang,Vietnam/Ninh+Binh,Vietnam/Phong+Nha,Vietnam/Hue,Vietnam/Hoi+An,Vietnam/Nha+Trang,Vietnam/Da+Lat,Vietnam/Hanoi,Vietnam" target="_blank" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dorado);text-decoration:none;letter-spacing:1px;">🗺 Ver ruta completa en Google Maps →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 02: MAPAS DIARIOS -->
+    <div style="margin-bottom:8px;">
+      <div onclick="toggleDemo('mapas-diarios')" style="background:var(--gris);border:1px solid var(--gris2);border-left:3px solid var(--dorado);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;">
+        <div>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--dorado);margin-right:12px;">02</span>
+          <span style="font-family:'Playfair Display',serif;font-size:18px;color:var(--blanco);">Mapas diarios</span>
+        </div>
+        <span id="icon-mapas-diarios" style="font-family:'Space Mono',monospace;font-size:16px;color:var(--dorado);">＋</span>
+      </div>
+      <div id="mapas-diarios" style="display:none;border:1px solid var(--gris2);border-top:none;padding:24px;background:var(--gris);">
+        <div style="font-family:'DM Sans',sans-serif;font-size:14px;color:var(--crema);opacity:.7;margin-bottom:20px;">Haz clic en los marcadores para abrir cada punto en Google Maps.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;" id="day-tabs-demo"></div>
+        <div id="day-map-demo" style="height:300px;border:1px solid var(--gris2);"></div>
+        <div id="day-pois-demo" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;"></div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 03: ITINERARIO DETALLADO -->
+    <div style="margin-bottom:8px;">
+      <div onclick="toggleDemo('itinerario')" style="background:var(--gris);border:1px solid var(--gris2);border-left:3px solid var(--dorado);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;">
+        <div>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--dorado);margin-right:12px;">03</span>
+          <span style="font-family:'Playfair Display',serif;font-size:18px;color:var(--blanco);">Itinerario detallado</span>
+        </div>
+        <span id="icon-itinerario" style="font-family:'Space Mono',monospace;font-size:16px;color:var(--dorado);">＋</span>
+      </div>
+      <div id="itinerario" style="display:none;border:1px solid var(--gris2);border-top:none;background:var(--gris);"></div>
+    </div>
+
+    <!-- SECCIÓN 04: PRESUPUESTO -->
+    <div style="margin-bottom:8px;">
+      <div onclick="toggleDemo('presupuesto')" style="background:var(--gris);border:1px solid var(--gris2);border-left:3px solid var(--dorado);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;">
+        <div>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--dorado);margin-right:12px;">04</span>
+          <span style="font-family:'Playfair Display',serif;font-size:18px;color:var(--blanco);">Consejos esenciales</span>
+        </div>
+        <span id="icon-presupuesto" style="font-family:'Space Mono',monospace;font-size:16px;color:var(--dorado);">＋</span>
+      </div>
+      <div id="presupuesto" style="display:none;border:1px solid var(--gris2);border-top:none;padding:24px;background:var(--gris);"></div>
+    </div>
+
+    <!-- SECCIÓN 05: RECOMENDACIONES -->
+    <div style="margin-bottom:40px;">
+      <div onclick="toggleDemo('recomendaciones')" style="background:var(--gris);border:1px solid var(--gris2);border-left:3px solid var(--dorado);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;">
+        <div>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--dorado);margin-right:12px;">05</span>
+          <span style="font-family:'Playfair Display',serif;font-size:18px;color:var(--blanco);">Recomendaciones</span>
+        </div>
+        <span id="icon-recomendaciones" style="font-family:'Space Mono',monospace;font-size:16px;color:var(--dorado);">＋</span>
+      </div>
+      <div id="recomendaciones" style="display:none;border:1px solid var(--gris2);border-top:none;padding:24px;background:var(--gris);"></div>
+    </div>
+
+    <div style="text-align:center;padding:20px 0 40px;">
+      <button onclick="showPage('dashboard')" style="background:transparent;border:1px solid var(--gris2);color:var(--crema);opacity:.6;font-family:'Space Mono',monospace;font-size:11px;padding:12px 24px;cursor:pointer;letter-spacing:1px;">← VOLVER</button>
     </div>
   </div>
 </div>
@@ -713,7 +772,7 @@ function showPage(name) {
     target.style.display = "block";
   }
   window.scrollTo(0,0);
-  if (name === "editor") setTimeout(initMap, 100);
+  if (name === "editor") setTimeout(initDemoMap, 100);
 }
 window.showPage = showPage;
 
@@ -981,7 +1040,167 @@ async function saveProfile() {
 }
 window.saveProfile = saveProfile;
 
-// ===== DASHBOARD TABS =====
+// ===== DEMO ACCORDION DATA =====
+const ITINERARIO_DATA = [
+  {n:"01",dias:"Días 1–2",km:"Punto de partida",ciudad:"Hanoi",desc:"Capital con 1.000 años de historia. Pasea por el Casco Antiguo de 36 calles gremiales, visita el Mausoleo de Ho Chi Minh y el Templo de la Literatura. Come bún chả en los puestos callejeros. Clave para alquilar la moto y afinar el equipaje.",pois:["Hoan Kiem Lake","Old Quarter 36 calles","Street Food","Ho Chi Minh Mausoleum","Temple of Literature"],alt:"Barrio de Ba Dinh y Tay Ho (West Lake): mercado de flores Quảng Bá al amanecer, templo Trấn Quốc y los cafés de especialidad de Đặng Thai Mai Street.",altmap:"https://www.google.com/maps/dir/Hoan+Kiem+Lake,+Hanoi/Tay+Ho+District,+Hanoi/Tran+Quoc+Pagoda,+Hanoi",booking:"https://www.booking.com/searchresults.es.html?ss=Hanoi&nflt=price%3DEUR-max-20-1"},
+  {n:"02",dias:"Días 3–6",km:"320 km desde Hanoi",ciudad:"Ha Giang Loop",desc:"El bucle de montaña más espectacular del sudeste asiático. 4 días por la meseta kárstica de Dong Van, el paso Mã Pí Lèng a 1.400 m sobre el cañón del río Nho Quế, aldeas H'Mong y Dao.",pois:["Mã Pí Lèng Pass","Dong Van Plateau","Lung Cu Flag Tower","Nho Quế River"],alt:"Extensión Bac Me → Na Hang: un 80% menos de turistas, paisaje igual de épico y pueblos de minoría Tay completamente auténticos.",altmap:"https://www.google.com/maps/dir/Ha+Giang,+Vietnam/Bac+Me,+Ha+Giang/Na+Hang,+Tuyen+Quang,+Vietnam",booking:"https://www.booking.com/searchresults.es.html?ss=Ha+Giang&nflt=price%3DEUR-max-20-1"},
+  {n:"03",dias:"Días 7–8",km:"90 km desde Hanoi",ciudad:"Ninh Binh / Tam Coc",desc:"La Bahía de Ha Long terrestre. Barcas de remo entre picos calizos, el mirador de Mua Cave con 500 escalones, la antigua capital imperial de Hoa Lu y la zona UNESCO de Trang An.",pois:["Tam Coc","Mua Cave","Trang An UNESCO","Hoa Lu","Van Long"],alt:"Van Long Nature Reserve: 20 km de Tam Coc, 90% menos turistas, monos langur dorados y reflejos perfectos al amanecer.",altmap:"https://www.google.com/maps/place/Van+Long+Nature+Reserve,+Ninh+Binh,+Vietnam/@20.348,105.825",booking:"https://www.booking.com/searchresults.es.html?ss=Ninh+Binh&nflt=price%3DEUR-max-20-1"},
+  {n:"04",dias:"Días 9–11",km:"500 km desde Ninh Binh",ciudad:"Phong Nha-Kẻ Bàng",desc:"El parque nacional con las cuevas más grandes del mundo. Paradise Cave (31 km), Dark Cave con kayak y tirolina, Phong Nha Cave en barca por el río subterráneo.",pois:["Paradise Cave","Dark Cave kayak","Phong Nha Cave","Ho Chi Minh Road"],alt:"Tu Lan Cave System: expedición 2 días con Oxalis Adventures. Natación subterránea en ríos de cuevas vírgenes — la experiencia más brutal de Vietnam.",altmap:"https://www.google.com/maps/place/Tu+Lan+Cave,+Quang+Binh,+Vietnam/@17.65,105.95",booking:"https://www.booking.com/searchresults.es.html?ss=Phong+Nha&nflt=price%3DEUR-max-20-1"},
+  {n:"05",dias:"Días 12–13",km:"200 km desde Phong Nha",ciudad:"Huế",desc:"La antigua capital imperial de Vietnam. La Ciudadela UNESCO, los mausoleos reales en la jungla, la Pagoda Thien Mu y la gastronomía de la corte imperial.",pois:["Ciudadela UNESCO","Mausoleo Tu Duc","Pagoda Thien Mu","Río Perfume","Bún Bò Huế"],alt:"Bach Ma National Park: 45 km en moto, sube 1.450 m entre niebla y selva hasta ruinas de una estación francesa. Casi sin turistas.",altmap:"https://www.google.com/maps/dir/Hue,+Vietnam/Bach+Ma+National+Park,+Vietnam",booking:"https://www.booking.com/searchresults.es.html?ss=Hue+Vietnam&nflt=price%3DEUR-max-20-1"},
+  {n:"06",dias:"Días 14–16",km:"130 km desde Huế",ciudad:"Hải Vân → Hội An",desc:"El paso de las nubes Hải Vân en moto y la llegada al casco antiguo UNESCO de Hội An. Linternas de seda sobre el río Thu Bon, sastres a medida en 24h y las ruinas Cham de Mỹ Sơn.",pois:["Hai Van Pass","Casco antiguo UNESCO","Linternas Thu Bon","Mỹ Sơn Cham","An Bang Beach"],alt:"Pueblo alfarero Thanh Ha: alfareros con torno de pie desde el siglo XV. Combínalo con Mỹ Sơn en tarde para un día perfecto fuera del circuito.",altmap:"https://www.google.com/maps/dir/Hoi+An+Old+Town/Thanh+Ha+Pottery+Village,+Hoi+An/My+Son+Sanctuary,+Vietnam",booking:"https://www.booking.com/searchresults.es.html?ss=Hoi+An&nflt=price%3DEUR-max-20-1"},
+  {n:"07",dias:"Días 17–18",km:"530 km desde Hội An",ciudad:"Nha Trang",desc:"La capital del buceo en Vietnam. Seis kilómetros de playa blanca, arrecifes de coral en las islas y las torres Cham de Po Nagar del siglo VII.",pois:["Hon Mun diving","Torres Po Nagar","Playa 6 km","Long Son Pagoda"],alt:"Parada en Quy Nhon: la cala de Bãi Xép y la isla de Kỳ Co tienen agua turquesa igual que Nha Trang pero con un 95% menos de turistas.",altmap:"https://www.google.com/maps/dir/Hoi+An,+Vietnam/Bai+Xep+Beach,+Quy+Nhon,+Vietnam/Ky+Co+Island,+Quy+Nhon/Nha+Trang,+Vietnam",booking:"https://www.booking.com/searchresults.es.html?ss=Nha+Trang&nflt=price%3DEUR-max-20-1"},
+  {n:"08",dias:"Días 19–21",km:"200 km desde Nha Trang",ciudad:"Đà Lạt",desc:"La ciudad de los pinos a 1.500 m. Arquitectura colonial francesa, la Crazy House de Hang Nga, plantaciones de weasel coffee y la cascada Datanla.",pois:["Crazy House","Weasel coffee","Datanla Falls","Lago Xuân Hương","Mercado nocturno"],alt:"Plantaciones de té Cau Dat: terrazas a 1.500 m, una de las vistas más fotogénicas de todo Vietnam y apenas aparecen en las guías.",altmap:"https://www.google.com/maps/dir/Da+Lat,+Vietnam/Cau+Dat+Tea+Farm,+Lac+Duong,+Lam+Dong,+Vietnam",booking:"https://www.booking.com/searchresults.es.html?ss=Da+Lat&nflt=price%3DEUR-max-20-1"},
+  {n:"09",dias:"Días 22–25",km:"✈️ Vuelo DLI → HAN",ciudad:"Regreso a Hanoi",desc:"Vuelo Đà Lạt → Hanoi en 45 minutos. Últimos días para vender la moto, el bún chả que comió Obama, la bia hoi a 20 céntimos, y cerrar el círculo en Hoan Kiem.",pois:["Venta moto","Bún chả Obama","Bia Hoi Corner","Hoan Kiem cierre"],alt:"Da Lat → Mui Ne → bus nocturno: ruta por las dunas de arena roja. Vende la moto en Mui Ne y toma el sleeper bus a Hanoi (12h, ~15€).",altmap:"https://www.google.com/maps/dir/Da+Lat,+Vietnam/Mui+Ne,+Phan+Thiet,+Vietnam/Hanoi,+Vietnam",booking:"https://www.booking.com/searchresults.es.html?ss=Hanoi&nflt=price%3DEUR-max-20-1"}
+];
+
+const CONSEJOS_DATA = [
+  {icon:"🏍",titulo:"Qué moto elegir",texto:"Honda Win o Minsk para rutas largas (~300–500 USD). Para Ha Giang mínimo 150cc. Compra en Hanoi, vende en Hanoi o Saigón. Mr. Pumpy y Tigit Motorbikes son los más fiables."},
+  {icon:"📄",titulo:"Documentación",texto:"Carnet internacional categoría A. E-Visa de 90 días online (~25 USD). Fotocopias del pasaporte siempre encima. Seguro de moto 5–10 USD/mes."},
+  {icon:"🛡",titulo:"Seguridad vial",texto:"Casco integral, no de cuenco. El tráfico vietnamita tiene su lógica: fluye, cede, no confrontes. Nunca conduzcas de noche. Ha Giang tiene tramos sin guardarraíl sobre precipicios de 500 m."},
+  {icon:"🌧",titulo:"Mejor época",texto:"Nov–Feb para norte y centro. El sur es seco todo el año. Ha Giang en octubre (cosecha del arroz amarillo) es mágico. Evita el monzón del norte: mayo–septiembre."},
+  {icon:"🔧",titulo:"Mecánicos",texto:"Cada pocos km hay un taller. Reparaciones de 1 a 5 USD. Lleva parches, aceite de cadena y cable de embrague de repuesto."},
+  {icon:"💊",titulo:"Salud y seguro",texto:"Seguro con cobertura de moto obligatorio: World Nomads o SafetyWing. Vacunas: hepatitis A/B y tifoidea. Botiquín con antidiarreicos y antihistamínico."}
+];
+
+const RECOMENDACIONES_DATA = [
+  {icon:"🏙",ciudad:"Hanoi",tip:"No te quedes más de dos días. El Old Quarter se ve en uno. El segundo: Museo de Etnología por la mañana, Tay Ho al atardecer y la esquina de la bia hoi por la noche."},
+  {icon:"⛰",ciudad:"Ha Giang",tip:"Hazlo en sentido antihorario. Yendo al revés evitas los grupos y tienes el paso Mã Pí Lèng con luz de tarde, que es cuando la fotografía es espectacular."},
+  {icon:"🚣",ciudad:"Ninh Binh",tip:"Madrugar o nada. Las barcas de Tam Coc al amanecer son otra cosa. A las 7am estás solo. A las 9am hay 50 barcas."},
+  {icon:"🦇",ciudad:"Phong Nha",tip:"Reserva Dark Cave. Paradise Cave impresiona, pero Dark Cave es la que recuerdas: kayak, tirolina, nado en barro blanco."},
+  {icon:"👑",ciudad:"Huế",tip:"Céntrate en los mausoleos. Tu Duc y Khai Dinh en un día en moto, luego Thien Mu al atardecer. Cena bún bò Huế en puesto local, no en restaurante turístico."},
+  {icon:"🏖",ciudad:"Hội An",tip:"Merece tres días. Casco antiguo antes de las 8am. Mỹ Sơn el segundo día. Playa de An Bang el tercero. Si te haces ropa, lleva foto y da 48h al sastre."},
+  {icon:"🤿",ciudad:"Nha Trang",tip:"Para una noche en Quy Nhon. El trayecto de 530 km es largo — la cala de Bãi Xép tiene el agua más clara de Vietnam central."},
+  {icon:"☕",ciudad:"Đà Lạt",tip:"Sube a Cau Dat. Las terrazas de té a 1.500 m son una de las imágenes más bonitas del viaje. El frío nocturno es un lujo después de semanas de calor."}
+];
+
+// ===== DEMO ACCORDION =====
+function toggleDemo(id) {
+  const el = document.getElementById(id);
+  const icon = document.getElementById('icon-' + id);
+  if (!el) return;
+  const isOpen = el.style.display !== 'none';
+  el.style.display = isOpen ? 'none' : 'block';
+  if (icon) icon.textContent = isOpen ? '＋' : '－';
+  if (!isOpen) {
+    if (id === 'mapas-diarios') initDayMaps();
+    if (id === 'itinerario') renderItinerario();
+    if (id === 'presupuesto') renderConsejos();
+    if (id === 'recomendaciones') renderRecomendaciones();
+  }
+}
+window.toggleDemo = toggleDemo;
+
+function renderItinerario() {
+  const el = document.getElementById('itinerario');
+  if (!el || el.innerHTML.trim()) return;
+  el.innerHTML = ITINERARIO_DATA.map(p => `
+    <div style="border-bottom:1px solid var(--gris2);padding:28px 24px;">
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dorado);letter-spacing:2px;margin-bottom:6px;">${p.n} · ${p.dias} · ${p.km}</div>
+      <div style="font-family:'Playfair Display',serif;font-size:24px;color:var(--blanco);margin-bottom:12px;">${p.ciudad}</div>
+      <div style="font-size:15px;color:var(--crema);opacity:.82;line-height:1.75;margin-bottom:16px;">${p.desc}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;">${p.pois.map(poi=>`<span style="font-family:'Space Mono',monospace;font-size:10px;background:rgba(200,147,15,.12);color:var(--dorado);padding:5px 10px;border:1px solid rgba(200,147,15,.3);">${poi}</span>`).join('')}</div>
+      <div style="background:rgba(200,147,15,.06);border-left:2px solid var(--dorado);padding:12px 16px;margin-bottom:18px;">
+        <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:1px;margin-bottom:6px;">RUTA ALTERNATIVA</div>
+        <div style="font-size:14px;color:var(--crema);opacity:.7;line-height:1.7;margin-bottom:10px;">${p.alt}</div>
+        <a href="${p.altmap}" target="_blank" style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dorado);text-decoration:none;letter-spacing:1px;border-bottom:1px solid rgba(200,147,15,.4);padding-bottom:1px;">🗺 Ver en Google Maps →</a>
+      </div>
+      <a href="${p.booking}" target="_blank" style="font-family:'Space Mono',monospace;font-size:10px;background:var(--dorado);color:var(--negro);padding:10px 18px;text-decoration:none;letter-spacing:1px;display:inline-block;">🏨 BOOKING &lt;20€/NOCHE</a>
+    </div>`).join('');
+}
+
+function renderConsejos() {
+  const el = document.getElementById('presupuesto');
+  if (!el || el.innerHTML.trim()) return;
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;margin-bottom:1px;">
+      ${CONSEJOS_DATA.map(c=>`
+        <div style="background:var(--negro);padding:24px;border:1px solid var(--gris2);">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dorado);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">${c.titulo}</div>
+          <div style="font-size:14px;color:var(--crema);opacity:.75;line-height:1.75;">${c.texto}</div>
+        </div>`).join('')}
+    </div>
+    <div style="background:var(--negro);border:1px solid var(--gris2);padding:24px;margin-top:1px;">
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dorado);letter-spacing:2px;margin-bottom:20px;">PRESUPUESTO ESTIMADO · 25 DÍAS</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:16px;">
+        ${[["~400€","Moto compra+venta"],["~10€/día","Alojamiento"],["~8€/día","Comida"],["~5€/día","Gasolina"],["~1.100€","TOTAL 25 días"]].map(([v,l])=>`
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--dorado);">${v}</div><div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--crema);opacity:.5;letter-spacing:1px;margin-top:4px;">${l}</div></div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function renderRecomendaciones() {
+  const el = document.getElementById('recomendaciones');
+  if (!el || el.innerHTML.trim()) return;
+  el.innerHTML = RECOMENDACIONES_DATA.map(r=>`
+    <div style="border-bottom:1px solid var(--gris2);padding:20px 0;">
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dorado);letter-spacing:2px;margin-bottom:8px;">${r.ciudad.toUpperCase()}</div>
+      <div style="font-size:15px;color:var(--crema);opacity:.82;line-height:1.75;">${r.tip}</div>
+    </div>`).join('');
+}
+
+// ===== DEMO DAY MAPS =====
+const DEMO_DAYS = [
+  {label:"Día 1-2 · Hanoi",pois:[{n:"Hoan Kiem Lake",lat:21.028,lng:105.852},{n:"Old Quarter 36 calles",lat:21.033,lng:105.850},{n:"Ho Chi Minh Mausoleum",lat:21.037,lng:105.835},{n:"Temple of Literature",lat:21.023,lng:105.836},{n:"Tay Ho West Lake",lat:21.058,lng:105.820},{n:"Museo de Etnología",lat:21.038,lng:105.800},{n:"Bia Hoi Corner",lat:21.034,lng:105.851},{n:"Bún Chả Huong Lien",lat:21.022,lng:105.845}]},
+  {label:"Día 3-6 · Ha Giang",pois:[{n:"Mã Pí Lèng Pass",lat:23.165,lng:105.354},{n:"Dong Van Plateau",lat:23.278,lng:105.362},{n:"Lung Cu Flag Tower",lat:23.366,lng:105.334},{n:"Nho Quế River",lat:23.148,lng:105.358},{n:"Dong Van Old Quarter",lat:23.277,lng:105.360},{n:"Meo Vac Market",lat:23.152,lng:105.425},{n:"Quan Ba Heaven Gate",lat:23.050,lng:105.032}]},
+  {label:"Día 7-8 · Ninh Binh",pois:[{n:"Tam Coc barcas",lat:20.218,lng:105.961},{n:"Mua Cave 500 escalones",lat:20.218,lng:105.974},{n:"Trang An UNESCO",lat:20.253,lng:105.975},{n:"Hoa Lu capital imperial",lat:20.280,lng:105.908},{n:"Van Long Reserve",lat:20.348,lng:105.825},{n:"Bich Dong Pagoda",lat:20.230,lng:105.953}]},
+  {label:"Día 9-11 · Phong Nha",pois:[{n:"Paradise Cave 31km",lat:17.599,lng:106.142},{n:"Dark Cave kayak",lat:17.565,lng:106.089},{n:"Phong Nha Cave barca",lat:17.551,lng:106.081},{n:"Ho Chi Minh Road",lat:17.600,lng:106.050},{n:"Nuoc Mooc Spring",lat:17.555,lng:106.038},{n:"Son Trach village",lat:17.551,lng:106.064}]},
+  {label:"Día 12-13 · Huế",pois:[{n:"Ciudadela UNESCO",lat:16.469,lng:107.578},{n:"Mausoleo Tu Duc",lat:16.438,lng:107.553},{n:"Mausoleo Khai Dinh",lat:16.424,lng:107.573},{n:"Pagoda Thien Mu",lat:16.453,lng:107.546},{n:"Río Perfume barca",lat:16.450,lng:107.560},{n:"Mercado Dong Ba",lat:16.470,lng:107.582},{n:"Bún Bò Huế puesto",lat:16.462,lng:107.578}]},
+  {label:"Día 14-16 · Hội An",pois:[{n:"Hai Van Pass cumbre",lat:16.200,lng:108.120},{n:"Casco antiguo UNESCO",lat:15.880,lng:108.338},{n:"Linternas Thu Bon",lat:15.877,lng:108.329},{n:"Mỹ Sơn ruinas Cham",lat:15.763,lng:108.124},{n:"An Bang Beach",lat:15.920,lng:108.373},{n:"Thanh Ha pottery",lat:15.887,lng:108.305},{n:"Mercado central",lat:15.879,lng:108.334}]},
+  {label:"Día 17-18 · Nha Trang",pois:[{n:"Quy Nhon Bãi Xép",lat:13.762,lng:109.218},{n:"Hon Mun diving",lat:12.172,lng:109.280},{n:"Torres Po Nagar s.VII",lat:12.265,lng:109.194},{n:"Playa Nha Trang 6km",lat:12.238,lng:109.197},{n:"Long Son Pagoda",lat:12.253,lng:109.183},{n:"Mercado Dam",lat:12.245,lng:109.192}]},
+  {label:"Día 19-21 · Đà Lạt",pois:[{n:"Crazy House",lat:11.934,lng:108.442},{n:"Datanla Falls",lat:11.907,lng:108.454},{n:"Cau Dat Tea Farm",lat:11.824,lng:108.499},{n:"Lago Xuân Hương",lat:11.941,lng:108.441},{n:"Weasel Coffee farm",lat:11.950,lng:108.430},{n:"Mercado nocturno",lat:11.940,lng:108.440},{n:"Valle de Amor",lat:11.962,lng:108.423}]},
+  {label:"Día 22-25 · Regreso",pois:[{n:"Mui Ne dunas rojas",lat:10.947,lng:108.286},{n:"Fairy Stream Mui Ne",lat:10.933,lng:108.272},{n:"Hoan Kiem cierre",lat:21.028,lng:105.852},{n:"Bún chả Obama",lat:21.022,lng:105.845},{n:"Bia Hoi 20 céntimos",lat:21.034,lng:105.851},{n:"Venta moto Hanoi",lat:21.030,lng:105.848}]},
+];
+let dayMapInstance = null;
+let dayMarkers = [];
+let dayMapsInited = false;
+
+function initDayMaps() {
+  if (dayMapsInited) return;
+  dayMapsInited = true;
+  const tabsEl = document.getElementById('day-tabs-demo');
+  if (!tabsEl) return;
+  tabsEl.innerHTML = DEMO_DAYS.map((d,i) => `<div onclick="showDayMap(${i})" id="dtab-${i}" style="font-family:'Space Mono',monospace;font-size:10px;padding:6px 12px;border:1px solid var(--gris2);cursor:pointer;color:var(--crema);opacity:.7;letter-spacing:1px;">${d.label}</div>`).join('');
+  showDayMap(0);
+}
+
+function showDayMap(idx) {
+  document.querySelectorAll('[id^="dtab-"]').forEach((t,i) => {
+    t.style.borderColor = i===idx ? 'var(--dorado)' : 'var(--gris2)';
+    t.style.color = i===idx ? 'var(--dorado)' : 'var(--crema)';
+    t.style.opacity = i===idx ? '1' : '.7';
+  });
+  const day = DEMO_DAYS[idx];
+  const mapEl = document.getElementById('day-map-demo');
+  if (!mapEl) return;
+  if (dayMapInstance) { dayMapInstance.remove(); dayMapInstance = null; }
+  const center = [day.pois[0].lat, day.pois[0].lng];
+  dayMapInstance = L.map('day-map-demo', {zoomControl:false}).setView(center, 11);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom:18}).addTo(dayMapInstance);
+  day.pois.forEach(poi => {
+    const icon = L.divIcon({html:`<div style="background:#0a0908;border:2px solid #c8930f;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#c8930f;font-family:Space Mono,monospace;box-shadow:0 2px 8px rgba(0,0,0,.5);">📍</div>`,className:'',iconSize:[24,24],iconAnchor:[12,12]});
+    L.marker([poi.lat,poi.lng],{icon}).addTo(dayMapInstance)
+      .bindPopup(`<div style="font-family:DM Sans,sans-serif;"><strong style="color:#c8930f;">${poi.n}</strong><br><a href="https://www.google.com/maps/search/${encodeURIComponent(poi.n)}+Vietnam" target="_blank" style="font-size:11px;color:#c8930f;">Abrir en Google Maps →</a></div>`);
+  });
+  const poisEl = document.getElementById('day-pois-demo');
+  if (poisEl) poisEl.innerHTML = day.pois.map(p=>`<a href="https://www.google.com/maps/search/${encodeURIComponent(p.n)}+Vietnam" target="_blank" style="font-family:'Space Mono',monospace;font-size:9px;background:rgba(200,147,15,.1);color:var(--dorado);padding:5px 10px;border:1px solid rgba(200,147,15,.3);text-decoration:none;letter-spacing:1px;">${p.n} ↗</a>`).join('');
+}
+window.showDayMap = showDayMap;
+
+// ===== DEMO MAIN MAP INIT =====
+function initDemoMap() {
+  const el = document.getElementById('demo-leaflet-map');
+  if (!el || el._leaflet_id) return;
+  const demoMap = L.map('demo-leaflet-map', {zoomControl:false, scrollWheelZoom:false}).setView([16.5,106.5], 5);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom:18}).addTo(demoMap);
+  const route = [[21.028,105.834],[23.278,105.362],[20.253,105.975],[17.551,106.081],[16.463,107.590],[15.880,108.338],[12.238,109.197],[11.934,108.442],[21.028,105.834]];
+  L.polyline(route, {color:'#c8930f',weight:2,opacity:.7,dashArray:'8,6'}).addTo(demoMap);
+  const stops = [{n:'Hanoi',lat:21.028,lng:105.834},{n:'Ha Giang',lat:23.278,lng:105.362},{n:'Ninh Binh',lat:20.253,lng:105.975},{n:'Phong Nha',lat:17.551,lng:106.081},{n:'Huế',lat:16.463,lng:107.590},{n:'Hội An',lat:15.880,lng:108.338},{n:'Nha Trang',lat:12.238,lng:109.197},{n:'Đà Lạt',lat:11.934,lng:108.442}];
+  stops.forEach(s => {
+    const icon = L.divIcon({html:`<div style="background:#c8930f;border-radius:50%;width:10px;height:10px;box-shadow:0 0 0 3px rgba(200,147,15,.3);"></div>`,className:'',iconSize:[10,10],iconAnchor:[5,5]});
+    L.marker([s.lat,s.lng],{icon}).addTo(demoMap).bindTooltip(s.n,{permanent:false,direction:'right',className:'hero-tooltip'});
+  });
+}
+window.initDemoMap = initDemoMap;
 function setDashTab(tab, el) {
   document.querySelectorAll(".sidebar-item").forEach(i => i.classList.remove("active"));
   if(el) el.classList.add("active");
