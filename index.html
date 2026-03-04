@@ -372,6 +372,14 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
       </div>
     </div>
 
+    <div class="dash-content" id="dash-tab-maps">
+      <div class="dash-header">
+        <div><div class="dash-title">Mis rutas</div><div class="dash-sub">Tus itinerarios de viaje</div></div>
+        <button onclick="newMap()" style="background:var(--dorado);color:var(--negro);border:none;padding:12px 24px;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:1px;">＋ NUEVA RUTA</button>
+      </div>
+      <div class="maps-grid" id="maps-grid-dynamic"></div>
+    </div>
+
     <div class="dash-content" id="dash-tab-profile" style="display:none;">
       <div class="dash-header">
         <div><div class="dash-title">Mi perfil</div><div class="dash-sub">Tu cuenta y preferencias</div></div>
@@ -732,21 +740,18 @@ function renderMapsGrid(maps) {
     </div>`;
   }
 
-  // If no maps yet, show Vietnam demo + locked
+  // If no maps yet, show Vietnam demo + new route button
   if (maps.length === 0) {
-    html = `<div class="map-card" onclick="showPage('editor')">
+    html = `<div class="map-card" onclick="showPage('editor')" style="position:relative;">
+      <div style="position:absolute;top:10px;left:10px;background:var(--dorado);color:var(--negro);font-family:'Space Mono',monospace;font-size:9px;font-weight:700;padding:4px 8px;letter-spacing:1px;z-index:1;">EJEMPLO</div>
       <div class="map-card-img">🏍️</div>
       <div class="map-card-body">
         <div class="map-card-title">Vietnam en Moto</div>
         <div class="map-card-meta">25 dias - 9 paradas - 106 POIs</div>
+        <div style="font-size:11px;color:var(--crema);opacity:.6;margin-bottom:8px;">Así quedará tu ruta. ¡Crea la tuya!</div>
         <div class="map-card-tags"><span class="tag">Hanoi</span><span class="tag">Ha Giang</span><span class="tag">Hoi An</span></div>
       </div>
-    </div>` + (isPremium ? "" : `<div class="map-card map-card-new" onclick="newMap()">
-      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;padding:40px 20px;">
-        <div style="font-size:36px;">🔒</div>
-        <div style="font-family:Space Mono,monospace;font-size:11px;color:var(--crema);opacity:.6;text-align:center;">Requiere Premium<br>para mas mapas</div>
-      </div>
-    </div>`);
+    </div>`;
   }
   grid.innerHTML = html;
 }
