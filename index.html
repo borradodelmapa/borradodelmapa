@@ -231,9 +231,9 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
 .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--blanco);}
 .footer-logo span{color:var(--dorado);}
 .footer-links{display:flex;gap:24px;}
-.footer-link{font-family:'Space Mono',monospace;font-size:10px;color:var(--crema);opacity:.4;cursor:pointer;text-transform:uppercase;letter-spacing:1px;text-decoration:none;}
-.footer-link:hover{opacity:.8;color:var(--dorado);}
-.footer-copy{font-family:'Space Mono',monospace;font-size:10px;color:var(--crema);opacity:.25;}
+.footer-link{font-family:'Space Mono',monospace;font-size:11px;color:rgba(255,255,255,0.85);opacity:1;cursor:pointer;text-transform:uppercase;letter-spacing:1px;text-decoration:none;}
+.footer-link:hover{color:var(--dorado);}
+.footer-copy{font-family:'Space Mono',monospace;font-size:10px;color:rgba(255,255,255,0.6);}
 
 /* RESPONSIVE */
 @media(max-width:900px){
@@ -342,7 +342,7 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
       <a class="footer-link" onclick="showPage('terminos')" style="cursor:pointer;">Términos</a>
       <a class="footer-link" onclick="showPage('privacidad')" style="cursor:pointer;">Privacidad</a>
     </div>
-    <div class="footer-copy">© 2025 borradodelmapa · ♥ Hecho con amor desde una hamaca en Koh Samui, Tailandia</div>
+    <div class="footer-copy">© 2025 borradodelmapa · <span style="color:#e74c3c;">♥</span> Hecho con amor desde una hamaca en Koh Samui, Tailandia</div>
   </footer>
 </div>
 
@@ -780,9 +780,13 @@ async function doRegister() {
     showToast("Creando cuenta...");
     const cred = await auth.createUserWithEmailAndPassword(email, pass);
     await cred.user.updateProfile({ displayName: name });
-    await db.collection("users").doc(cred.user.uid).set({
-      name, email, isPremium: false, mapsCount: 0, createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    try {
+      await db.collection("users").doc(cred.user.uid).set({
+        name, email, isPremium: false, mapsCount: 0, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } catch(dbErr) {
+      console.warn("Firestore no disponible, continuando:", dbErr);
+    }
     closeModal();
     showPage("dashboard");
   } catch(e) {
@@ -1084,5 +1088,13 @@ document.getElementById("poi-modal").addEventListener("click", function(e) {
 });
 }; // end window.onload
 </script>
+<div style="background:var(--negro);border-top:1px solid var(--gris2);padding:20px 32px;text-align:center;position:relative;z-index:100;">
+  <div style="display:flex;justify-content:center;gap:28px;margin-bottom:12px;">
+    <a class="footer-link" href="https://instagram.com/borradodelmapa" target="_blank">@borradodelmapa</a>
+    <a class="footer-link" onclick="showPage('terminos')" style="cursor:pointer;">Términos</a>
+    <a class="footer-link" onclick="showPage('privacidad')" style="cursor:pointer;">Privacidad</a>
+  </div>
+  <div style="font-family:'Space Mono',monospace;font-size:10px;color:rgba(255,255,255,0.6);">© 2025 borradodelmapa · <span style="color:#e74c3c;">♥</span> Hecho con amor desde una hamaca en Koh Samui, Tailandia</div>
+</div>
 </body>
 </html>
