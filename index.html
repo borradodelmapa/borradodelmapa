@@ -173,7 +173,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:88px;background:rgba
 
 /* ===== MAP EDITOR ===== */
 #page-editor{background:var(--negro);}
-.editor-layout{display:grid;grid-template-columns:320px 1fr;height:calc(100vh - 64px);}
+.editor-layout{display:grid;grid-template-columns:320px 1fr;height:calc(100vh - 88px);}
 .editor-panel{background:var(--gris);border-right:1px solid var(--gris2);display:flex;flex-direction:column;overflow:hidden;}
 .editor-panel-header{padding:20px 24px;border-bottom:1px solid var(--gris2);display:flex;align-items:center;gap:12px;}
 .editor-back{font-family:'Space Mono',monospace;font-size:10px;color:var(--dorado);opacity:.7;cursor:pointer;display:flex;align-items:center;gap:6px;}
@@ -250,8 +250,9 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
   .dash-content{padding:24px;display:block!important;}
   #mobile-dash-nav{display:flex!important;}
   #page-dashboard{padding-bottom:70px;}
-  .editor-layout{grid-template-columns:1fr;}
-  .editor-panel{display:none;}
+  .editor-layout{grid-template-columns:1fr;grid-template-rows:50vh 50vh;}
+  .editor-panel{display:flex;height:50vh;overflow-y:auto;}
+  .editor-map-container{height:50vh;}
   footer{padding:32px 24px;flex-direction:column;gap:20px;text-align:center;}
 }
 
@@ -278,12 +279,14 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
   <div class="nav-logo" onclick="showPage('home')">borrado<span>del</span>mapa</div>
   <div class="nav-links" id="nav-links-guest">
     <a class="nav-link" onclick="showPage('blog')" style="cursor:pointer;">Blog</a>
-    <a href="https://ko-fi.com/borradodelmapa" target="_blank" class="nav-link" style="color:var(--dorado);">☕ Apoya</a>
+    <a href="https://ko-fi.com/borradodelmapa" target="_blank" class="nav-link" style="color:var(--dorado);">☕ Colabora</a>
+    <a class="nav-link" onclick="showPage('editor')" style="cursor:pointer;">Demo</a>
     <button class="nav-cta" onclick="openModal('login')">Entrar</button>
   </div>
   <div class="nav-user" id="nav-links-user">
     <a class="nav-link" onclick="showPage('blog')" style="cursor:pointer;">Blog</a>
-    <a href="https://ko-fi.com/borradodelmapa" target="_blank" class="nav-link" style="color:var(--dorado);">☕ Apoya</a>
+    <a href="https://ko-fi.com/borradodelmapa" target="_blank" class="nav-link" style="color:var(--dorado);">☕ Colabora</a>
+    <a class="nav-link" onclick="showPage('editor')" style="cursor:pointer;">Demo</a>
     <a class="nav-link" onclick="showPage('dashboard')">Mis mapas</a>
     <div class="nav-avatar" id="nav-avatar" onclick="logout()">B</div>
   </div>
@@ -343,12 +346,6 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
       borradodelmapa es gratuita y lo seguirá siendo. Asumimos el coste de desarrollo y mantenimiento usando herramientas colaborativas. Si quieres aportar algo, irá directo a ayuda humanitaria — entregada en mano en Marruecos, Ucrania, la DANA en España y donde haga falta.
     </div>
     <a href="https://ko-fi.com/borradodelmapa" target="_blank" style="display:inline-block;background:var(--dorado);color:var(--negro);font-family:'Space Mono',monospace;font-size:12px;font-weight:700;padding:14px 32px;letter-spacing:2px;text-decoration:none;margin-bottom:28px;">☕ APOYA EL PROYECTO</a>
-    <div class="footer-links">
-      <a class="footer-link" href="https://instagram.com/borradodelmapa" target="_blank">@borradodelmapa</a>
-      <a class="footer-link" onclick="showPage('terminos')" style="cursor:pointer;">Términos</a>
-      <a class="footer-link" onclick="showPage('privacidad')" style="cursor:pointer;">Privacidad</a>
-    </div>
-    <div class="footer-copy">© 2025 borradodelmapa · <span style="color:#e74c3c;">♥</span> Hecho con amor desde una hamaca en Koh Samui, Tailandia</div>
   </footer>
 </div>
 
@@ -472,14 +469,12 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
           <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--gris2);">Datos personales</div>
           <label class="form-label">Nombre</label>
           <input class="form-input" id="profile-name-input" placeholder="Tu nombre">
-          <label class="form-label">Email</label>
-          <input class="form-input" id="profile-email-input" placeholder="tu@email.com" disabled style="opacity:.5;">
           <button class="btn-form" onclick="saveProfile()">Guardar cambios</button>
         </div>
         <div style="background:var(--gris);border:1px solid var(--gris2);padding:28px;">
           <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--gris2);">Plan actual</div>
-          <div style="font-size:14px;color:var(--crema);margin-bottom:16px;opacity:.7;">Plan <strong style="color:var(--dorado);">Gratuito</strong> · 1/1 mapa usado</div>
-          <button class="btn-form">⭐ Actualizar a Premium — 7 días gratis</button>
+          <div style="font-size:14px;color:var(--crema);margin-bottom:16px;line-height:1.7;">Es gratuita y lo seguirá siendo. Pero puedes colaborar para proyectos sociales.</div>
+          <a href="https://ko-fi.com/borradodelmapa" target="_blank" class="btn-form" style="display:block;text-align:center;text-decoration:none;">☕ Colabora</a>
         </div>
       </div>
     </div>
@@ -903,9 +898,8 @@ function updateNavForGuest() {
 function updateSidebar(user) {
   document.getElementById("sidebar-name").textContent = user.name;
   document.getElementById("sidebar-avatar").textContent = (user.name||"U")[0].toUpperCase();
-  document.getElementById("sidebar-plan").textContent = user.isPremium ? "Plan Premium" : "Plan Gratuito - 1/1 mapa";
-  document.getElementById("profile-name-input").value = user.name;
-  document.getElementById("profile-email-input").value = user.email;
+  document.getElementById("sidebar-plan").textContent = user.isPremium ? "Plan Premium" : "Plan Gratuito · 1/1 mapa";
+  document.getElementById("profile-name-input").value = user.name || "";
   showToast("Bienvenido, " + user.name + "!");
 }
 
@@ -1002,8 +996,8 @@ function initMap() {
   const el = document.getElementById("leaflet-map");
   if (!el) return;
   map = L.map("leaflet-map", {zoomControl: false}).setView([16.5, 106.5], 6);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "OpenStreetMap", maxZoom: 18
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+    attribution: "CartoDB", maxZoom: 18
   }).addTo(map);
   polyline = L.polyline(ROUTE_COORDS, {
     color: "#c8930f", weight: 3, opacity: 0.7, dashArray: "8,6"
@@ -1179,12 +1173,13 @@ document.getElementById("poi-modal").addEventListener("click", function(e) {
 }; // end window.onload
 </script>
 <div style="background:var(--negro);border-top:1px solid var(--gris2);padding:20px 32px;text-align:center;position:relative;z-index:100;">
-  <div style="display:flex;justify-content:center;gap:28px;margin-bottom:12px;">
+  <div style="display:flex;justify-content:center;gap:28px;margin-bottom:12px;flex-wrap:wrap;">
     <a class="footer-link" href="https://instagram.com/borradodelmapa" target="_blank">@borradodelmapa</a>
+    <a class="footer-link" onclick="showPage('blog')" style="cursor:pointer;">Blog</a>
     <a class="footer-link" onclick="showPage('terminos')" style="cursor:pointer;">Términos</a>
     <a class="footer-link" onclick="showPage('privacidad')" style="cursor:pointer;">Privacidad</a>
   </div>
-  <div style="font-family:'Space Mono',monospace;font-size:10px;color:rgba(255,255,255,0.6);">© 2025 borradodelmapa · <span style="color:#e74c3c;">♥</span> Hecho con amor desde una hamaca en Koh Samui, Tailandia</div>
+  <div style="font-family:'Space Mono',monospace;font-size:10px;color:rgba(255,255,255,0.6);">© 2025 borradodelmapa · <span style="color:#e74c3c;">♥</span> Hecho con amor desde una hamaca en Koh Samui, Tailandia. App inspirada por Salma Pernia.</div>
 </div>
 </body>
 </html>
