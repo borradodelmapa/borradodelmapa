@@ -293,7 +293,7 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
       <h1 class="hero-title">Crea tu ruta.<br><em>Vívela.</em></h1>
       <p class="hero-sub">Diseña itinerarios interactivos para cualquier país en segundos. Mapas, POIs y días organizados. Comparte con quien quieras.</p>
       <div class="hero-btns">
-        <button class="btn-hero btn-hero-primary" onclick="openModal('register')">Empezar es gratis →</button>
+        <button class="btn-hero btn-hero-primary" onclick="openModal('register')">Crea tus rutas →</button>
       </div>
       <div class="hero-stats">
         <div><div class="hero-stat-num">∞</div><div class="hero-stat-lbl">mapas gratis</div></div>
@@ -342,7 +342,7 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
       <a class="footer-link" onclick="showPage('terminos')" style="cursor:pointer;">Términos</a>
       <a class="footer-link" onclick="showPage('privacidad')" style="cursor:pointer;">Privacidad</a>
     </div>
-    <div class="footer-copy">© 2025 borradodelmapa</div>
+    <div class="footer-copy">© 2025 borradodelmapa · ♥ Hecho con amor desde una hamaca en Koh Samui, Tailandia</div>
   </footer>
 </div>
 
@@ -453,6 +453,7 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
       <div class="dash-header">
         <div><div class="dash-title">Mis rutas</div><div class="dash-sub">Tus itinerarios de viaje</div></div>
         <button onclick="newMap()" style="background:var(--dorado);color:var(--negro);border:none;padding:12px 24px;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:1px;">＋ NUEVA RUTA</button>
+        <button onclick="showPage('editor')" style="background:transparent;color:var(--dorado);border:1px solid var(--dorado);padding:12px 24px;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:1px;">DEMO RUTA</button>
       </div>
       <div class="maps-grid" id="maps-grid-dynamic"></div>
     </div>
@@ -1061,59 +1062,13 @@ window.scrollTo2 = scrollTo;
 
 // ===== HERO MAP =====
 function initHeroMap() {
+  // Usar imagen estática como fondo del hero
   const el = document.getElementById("hero-map");
-  if (!el || el._leaflet_id) return;
-
-  const heroMap = L.map("hero-map", {
-    zoomControl: false,
-    dragging: false,
-    touchZoom: false,
-    doubleClickZoom: false,
-    scrollWheelZoom: false,
-    keyboard: false,
-    attributionControl: false
-  }).setView([20, 10], 2);
-
-  // Dark styled tiles
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", {
-    maxZoom: 19
-  }).addTo(heroMap);
-
-  // Puntos de viajes destacados del mundo
-  const destinations = [
-    {name:"🏍️ Vietnam",lat:16.5,lng:107.5},
-    {name:"🏯 Japón",lat:36,lng:138},
-    {name:"🏔️ Perú",lat:-13,lng:-72},
-    {name:"🕌 Marruecos",lat:31.8,lng:-7},
-    {name:"🏝️ Tailandia",lat:13,lng:101},
-    {name:"🍷 Portugal",lat:39.5,lng:-8},
-    {name:"🌶️ India",lat:22,lng:79},
-    {name:"🦁 Kenia",lat:1,lng:38},
-    {name:"🗽 NYC",lat:40.7,lng:-74},
-    {name:"🦘 Australia",lat:-25,lng:133},
-    {name:"🌮 México",lat:23,lng:-102},
-    {name:"🍕 Italia",lat:42,lng:12},
-  ];
-
-  destinations.forEach(d => {
-    const icon = L.divIcon({
-      html: `<div style="background:#e8b040;border-radius:50%;width:14px;height:14px;border:2px solid #fff;box-shadow:0 0 20px rgba(232,176,64,1),0 0 40px rgba(232,176,64,.7);animation:glow 2s ease-in-out infinite;"></div>`,
-      className: "", iconSize:[8,8], iconAnchor:[4,4]
-    });
-    L.marker([d.lat, d.lng], {icon}).addTo(heroMap)
-      .bindTooltip(d.name, {
-        permanent: false, direction: "top", offset: [0,-6],
-        className: "hero-tooltip"
-      });
-  });
-
-  // Slow continuous pan
-  let offset = 0;
-  setInterval(() => {
-    offset += 0.15;
-    heroMap.panTo([20, 10 + offset], {animate:true, duration:4});
-    if (offset > 60) offset = -60;
-  }, 4000);
+  if (!el) return;
+  el.style.backgroundImage = "url('https://raw.githubusercontent.com/borradodelmapa/borradodelmapa/main/mapa.png')";
+  el.style.backgroundSize = "cover";
+  el.style.backgroundPosition = "center";
+  el.style.filter = "brightness(0.55)";
 }
 initHeroMap();
 
