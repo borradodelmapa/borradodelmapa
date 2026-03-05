@@ -248,7 +248,7 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
   .dashboard-layout{grid-template-columns:1fr;}
   .sidebar{display:none;}
   .dash-content{padding:24px;display:block!important;}
-  #mobile-dash-nav{display:flex!important;}
+  #page-dashboard #mobile-dash-nav{display:flex!important;}
   #page-dashboard{padding-bottom:70px;}
   .editor-layout{grid-template-columns:1fr;grid-template-rows:50vh 50vh;}
   .editor-panel{display:flex;height:50vh;overflow-y:auto;}
@@ -284,11 +284,14 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
     <button class="nav-cta" onclick="openModal('login')">Entrar</button>
   </div>
   <div class="nav-user" id="nav-links-user" style="display:none;">
-    <a class="nav-link" onclick="showPage('blog')" style="cursor:pointer;">Blog</a>
-    <a href="https://ko-fi.com/borradodelmapa" target="_blank" class="nav-link" style="color:var(--dorado);">☕ Colabora</a>
     <a class="nav-link" onclick="showPage('editor')" style="cursor:pointer;">Demo</a>
-    <a class="nav-link" onclick="showPage('dashboard')">Mis mapas</a>
-    <div class="nav-avatar" id="nav-avatar" onclick="logout()">B</div>
+    <a class="nav-link" onclick="showPage('dashboard')" style="cursor:pointer;">Mis mapas</a>
+    <div class="nav-avatar" id="nav-avatar" onclick="toggleUserMenu()" style="cursor:pointer;position:relative;">B
+      <div id="user-menu" style="display:none;position:absolute;top:48px;right:0;background:#111;border:1px solid var(--gris2);min-width:140px;z-index:999;">
+        <div onclick="setDashTab('profile',null);showPage('dashboard')" style="padding:12px 16px;font-family:'Space Mono',monospace;font-size:10px;color:var(--crema);cursor:pointer;border-bottom:1px solid var(--gris2);">⚙️ MI CUENTA</div>
+        <div onclick="logout()" style="padding:12px 16px;font-family:'Space Mono',monospace;font-size:10px;color:#e74c3c;cursor:pointer;">🚪 SALIR</div>
+      </div>
+    </div>
   </div>
 </nav>
 
@@ -510,7 +513,7 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
     </div>
   </div>
   <!-- Mobile bottom nav -->
-  <div style="display:none;" id="mobile-dash-nav" class="mobile-dash-nav">
+  <div id="mobile-dash-nav" class="mobile-dash-nav" style="display:none;">
     <div onclick="setDashTab('maps',this)" class="mobile-nav-item active">🗺️<span>Rutas</span></div>
     <div onclick="setDashTab('profile',this)" class="mobile-nav-item">⚙️<span>Cuenta</span></div>
     <div onclick="logout()" class="mobile-nav-item">🚪<span>Salir</span></div>
@@ -1341,6 +1344,21 @@ function initDemoMap() {
   });
 }
 window.initDemoMap = initDemoMap;
+function toggleUserMenu() {
+  const menu = document.getElementById('user-menu');
+  if (menu) menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
+window.toggleUserMenu = toggleUserMenu;
+
+// Cerrar menú al hacer click fuera
+document.addEventListener('click', function(e) {
+  const avatar = document.querySelector('.nav-avatar');
+  const menu = document.getElementById('user-menu');
+  if (menu && avatar && !avatar.contains(e.target)) {
+    menu.style.display = 'none';
+  }
+});
+
 function setDashTab(tab, el) {
   // Ocultar todos los tabs
   document.querySelectorAll(".dash-content").forEach(c => c.style.display = "none");
