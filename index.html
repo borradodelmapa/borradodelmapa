@@ -1527,6 +1527,11 @@ async function sendToSalma() {
     });
     const data = await res.json();
     console.log('Gemini response:', JSON.stringify(data));
+    if (data.error) {
+      typing.remove();
+      appendSalmaMsg('Error: ' + data.error.message, 'salma');
+      return;
+    }
     const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Uy, algo ha fallado. Prueba otra vez.';
     typing.remove();
     appendSalmaMsg(reply, 'salma');
