@@ -1401,10 +1401,10 @@ document.getElementById("poi-modal").addEventListener("click", function(e) {
   <div style="font-family:'Space Mono',monospace;font-size:10px;color:rgba(255,255,255,0.6);">© 2025 borradodelmapa · <span style="color:#e74c3c;">♥</span> Hecho con amor desde una hamaca en Koh Samui, Tailandia. App inspirada por Salma Pernia.</div>
 </div>
 <!-- ===== SALMA CHAT WIDGET ===== -->
-<div id="salma-widget" style="position:fixed;bottom:24px;right:24px;z-index:9999;font-family:'DM Sans',sans-serif;">
+<div id="salma-widget" style="position:fixed;bottom:90px;right:16px;z-index:999999;font-family:'DM Sans',sans-serif;">
 
   <!-- Botón flotante -->
-  <div id="salma-btn" onclick="toggleSalma()" style="width:56px;height:56px;border-radius:50%;background:var(--dorado);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(200,147,15,.4);transition:transform .2s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+  <div id="salma-btn" onclick="toggleSalma()" style="width:56px;height:56px;border-radius:50%;background:#c8930f;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(200,147,15,.5);transition:transform .2s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
     <svg width="34" height="34" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <!-- Cara -->
       <circle cx="50" cy="46" r="28" fill="#f5cba7"/>
@@ -1512,26 +1512,24 @@ async function sendToSalma() {
   input.value = '';
 
   appendSalmaMsg(msg, 'user');
-  salmaHistory.push({role:'user', content: msg});
+  salmaHistory.push({role:'user', parts:[{text: msg}]});
 
   const typing = appendSalmaMsg('...', 'salma', true);
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyCn2TzA8RbPrYERWjZAMQeHusQPsXta9L0', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 600,
-        system: SALMA_SYSTEM,
-        messages: salmaHistory
+        system_instruction: {parts:[{text: SALMA_SYSTEM}]},
+        contents: salmaHistory
       })
     });
     const data = await res.json();
-    const reply = data.content?.[0]?.text || 'Uy, algo ha fallado. Prueba otra vez.';
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Uy, algo ha fallado. Prueba otra vez.';
     typing.remove();
     appendSalmaMsg(reply, 'salma');
-    salmaHistory.push({role:'assistant', content: reply});
+    salmaHistory.push({role:'model', parts:[{text: reply}]});
     if (salmaHistory.length > 20) salmaHistory = salmaHistory.slice(-20);
   } catch(e) {
     typing.remove();
