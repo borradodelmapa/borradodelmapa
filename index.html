@@ -1342,10 +1342,16 @@ function initDemoMap() {
 }
 window.initDemoMap = initDemoMap;
 function setDashTab(tab, el) {
+  // Ocultar todos los tabs
+  document.querySelectorAll(".dash-content").forEach(c => c.style.display = "none");
+  // Mostrar el tab correcto
+  const target = document.getElementById("dash-tab-" + tab);
+  if (target) target.style.display = "block";
+  // Actualizar sidebar
   document.querySelectorAll(".sidebar-item").forEach(i => i.classList.remove("active"));
-  if(el) el.classList.add("active");
-  document.getElementById("dash-tab-maps").style.display = tab === "maps" ? "block" : "none";
-  document.getElementById("dash-tab-profile").style.display = tab === "profile" ? "block" : "none";
+  // Actualizar mobile nav
+  document.querySelectorAll(".mobile-nav-item").forEach(i => i.classList.remove("active"));
+  if (el) el.classList.add("active");
 }
 window.setDashTab = setDashTab;
 
