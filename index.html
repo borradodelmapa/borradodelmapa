@@ -1517,7 +1517,7 @@ async function sendToSalma() {
   const typing = appendSalmaMsg('...', 'salma', true);
 
   try {
-    const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=AIzaSyCAXhHHCML_hTc6mepmIpRs53WIO8X7MSY', {
+    const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyCAXhHHCML_hTc6mepmIpRs53WIO8X7MSY', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
