@@ -1400,5 +1400,166 @@ document.getElementById("poi-modal").addEventListener("click", function(e) {
   </div>
   <div style="font-family:'Space Mono',monospace;font-size:10px;color:rgba(255,255,255,0.6);">© 2025 borradodelmapa · <span style="color:#e74c3c;">♥</span> Hecho con amor desde una hamaca en Koh Samui, Tailandia. App inspirada por Salma Pernia.</div>
 </div>
+<!-- ===== SALMA CHAT WIDGET ===== -->
+<div id="salma-widget" style="position:fixed;bottom:24px;right:24px;z-index:9999;font-family:'DM Sans',sans-serif;">
+
+  <!-- Botón flotante -->
+  <div id="salma-btn" onclick="toggleSalma()" style="width:56px;height:56px;border-radius:50%;background:var(--dorado);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(200,147,15,.4);transition:transform .2s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+    <svg width="34" height="34" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <!-- Cara -->
+      <circle cx="50" cy="46" r="28" fill="#f5cba7"/>
+      <!-- Pelo castaño ondulado -->
+      <ellipse cx="50" cy="24" rx="28" ry="14" fill="#6b3a2a"/>
+      <ellipse cx="24" cy="40" rx="8" ry="18" fill="#6b3a2a"/>
+      <ellipse cx="76" cy="40" rx="8" ry="18" fill="#6b3a2a"/>
+      <!-- Ojos -->
+      <ellipse cx="40" cy="44" rx="5" ry="6" fill="white"/>
+      <ellipse cx="60" cy="44" rx="5" ry="6" fill="white"/>
+      <circle cx="41" cy="45" r="3" fill="#3d2b1f"/>
+      <circle cx="61" cy="45" r="3" fill="#3d2b1f"/>
+      <!-- Gafas tortoise -->
+      <rect x="33" y="39" width="14" height="11" rx="4" fill="none" stroke="#8B5E3C" stroke-width="2.5"/>
+      <rect x="53" y="39" width="14" height="11" rx="4" fill="none" stroke="#8B5E3C" stroke-width="2.5"/>
+      <line x1="47" y1="44" x2="53" y2="44" stroke="#8B5E3C" stroke-width="2"/>
+      <!-- Sonrisa cerrada -->
+      <path d="M42 57 Q50 63 58 57" stroke="#c0715a" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Tirantes negros -->
+      <line x1="40" y1="74" x2="36" y2="100" stroke="#1a1a1a" stroke-width="3"/>
+      <line x1="60" y1="74" x2="64" y2="100" stroke="#1a1a1a" stroke-width="3"/>
+      <!-- Pulsera roja -->
+      <rect x="68" y="68" width="10" height="4" rx="2" fill="#e74c3c"/>
+    </svg>
+  </div>
+
+  <!-- Ventana de chat -->
+  <div id="salma-chat" style="display:none;position:absolute;bottom:68px;right:0;width:320px;background:#111;border:1px solid var(--gris2);border-radius:4px;box-shadow:0 8px 32px rgba(0,0,0,.6);overflow:hidden;flex-direction:column;">
+    <!-- Header -->
+    <div style="background:var(--dorado);padding:14px 16px;display:flex;align-items:center;gap:10px;">
+      <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="46" r="28" fill="#f5cba7"/>
+        <ellipse cx="50" cy="24" rx="28" ry="14" fill="#6b3a2a"/>
+        <ellipse cx="24" cy="40" rx="8" ry="18" fill="#6b3a2a"/>
+        <ellipse cx="76" cy="40" rx="8" ry="18" fill="#6b3a2a"/>
+        <ellipse cx="40" cy="44" rx="5" ry="6" fill="white"/>
+        <ellipse cx="60" cy="44" rx="5" ry="6" fill="white"/>
+        <circle cx="41" cy="45" r="3" fill="#3d2b1f"/>
+        <circle cx="61" cy="45" r="3" fill="#3d2b1f"/>
+        <rect x="33" y="39" width="14" height="11" rx="4" fill="none" stroke="#8B5E3C" stroke-width="2.5"/>
+        <rect x="53" y="39" width="14" height="11" rx="4" fill="none" stroke="#8B5E3C" stroke-width="2.5"/>
+        <line x1="47" y1="44" x2="53" y2="44" stroke="#8B5E3C" stroke-width="2"/>
+        <path d="M42 57 Q50 63 58 57" stroke="#c0715a" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--negro);">Salma</div>
+        <div style="font-family:'Space Mono',monospace;font-size:9px;color:rgba(0,0,0,.6);letter-spacing:1px;">TU GUÍA DE VIAJE · EN LÍNEA</div>
+      </div>
+      <div onclick="toggleSalma()" style="margin-left:auto;cursor:pointer;color:var(--negro);font-size:18px;line-height:1;">✕</div>
+    </div>
+
+    <!-- Mensajes -->
+    <div id="salma-messages" style="height:280px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;">
+      <div style="background:var(--gris);border-radius:4px 12px 12px 12px;padding:10px 14px;max-width:85%;font-size:13px;color:var(--crema);line-height:1.6;">
+        ¡Hola! Soy Salma, tu guía de viaje 🌍<br>Pregúntame lo que quieras — destinos, vuelos, alojamiento, cultura, tradiciones... lo que necesites, que para eso estoy.
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div style="border-top:1px solid var(--gris2);padding:10px;display:flex;gap:8px;background:#0d0d0d;">
+      <input id="salma-input" type="text" placeholder="Pregunta a Salma..." onkeydown="if(event.key==='Enter')sendToSalma()" style="flex:1;background:var(--gris);border:1px solid var(--gris2);color:var(--crema);padding:8px 12px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;border-radius:4px;">
+      <button onclick="sendToSalma()" style="background:var(--dorado);border:none;color:var(--negro);padding:8px 14px;cursor:pointer;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;border-radius:4px;">→</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== SALMA WIDGET =====
+let salmaOpen = false;
+let salmaHistory = [];
+
+const SALMA_SYSTEM = `Eres Salma, la guía de viaje de borradodelmapa. 
+
+PERSONALIDAD:
+- Andaluza, tono cálido y cercano pero sin pasarte — natural, no forzado
+- Fan de Extremoduro, viajera empedernida, tatuajes: "Dulce introducción al caos" y ขอบคุณ (gracias en tailandés)
+- Directa, honesta, con criterio propio. No vendes humo
+- No aceptas machismo ni lenguaje malsonante — lo rediriges con elegancia
+
+EXPERTISE:
+- Experta en aeropuertos, medios de transporte, webs de reservas (Booking, Skyscanner, etc.)
+- Leyes de viaje, visados, seguros, documentación por país
+- Cultura, historia, tradiciones, gastronomía y personalidad de cada pueblo
+- Alojamiento económico, rutas en moto, viaje independiente
+- Presupuestos reales, no turismo de lujo
+
+NORMAS:
+- Contestas en el idioma en que te hablan, siempre
+- Ayudas con traducciones cuando te lo piden
+- Respuestas concisas en el chat — si necesitan más detalle, lo das en pasos
+- Nunca inventas información — si no sabes algo, lo dices y sugieres dónde buscar
+- Cuando sea relevante, mencionas borradodelmapa como herramienta para organizar la ruta`;
+
+function toggleSalma() {
+  salmaOpen = !salmaOpen;
+  document.getElementById('salma-chat').style.display = salmaOpen ? 'flex' : 'none';
+  if (salmaOpen) document.getElementById('salma-input').focus();
+}
+window.toggleSalma = toggleSalma;
+
+async function sendToSalma() {
+  const input = document.getElementById('salma-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+
+  appendSalmaMsg(msg, 'user');
+  salmaHistory.push({role:'user', content: msg});
+
+  const typing = appendSalmaMsg('...', 'salma', true);
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 600,
+        system: SALMA_SYSTEM,
+        messages: salmaHistory
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || 'Uy, algo ha fallado. Prueba otra vez.';
+    typing.remove();
+    appendSalmaMsg(reply, 'salma');
+    salmaHistory.push({role:'assistant', content: reply});
+    if (salmaHistory.length > 20) salmaHistory = salmaHistory.slice(-20);
+  } catch(e) {
+    typing.remove();
+    appendSalmaMsg('Lo siento, no puedo conectar ahora mismo. Prueba en un momento.', 'salma');
+  }
+}
+window.sendToSalma = sendToSalma;
+
+function appendSalmaMsg(text, who, isTyping=false) {
+  const container = document.getElementById('salma-messages');
+  const div = document.createElement('div');
+  const isUser = who === 'user';
+  div.style.cssText = `
+    background:${isUser ? 'var(--dorado)' : 'var(--gris)'};
+    color:${isUser ? 'var(--negro)' : 'var(--crema)'};
+    border-radius:${isUser ? '12px 4px 12px 12px' : '4px 12px 12px 12px'};
+    padding:10px 14px;
+    max-width:85%;
+    font-size:13px;
+    line-height:1.6;
+    align-self:${isUser ? 'flex-end' : 'flex-start'};
+    ${isTyping ? 'opacity:.5;font-style:italic;' : ''}
+  `;
+  div.textContent = text;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return div;
+}
+</script>
+
 </body>
-</html>
