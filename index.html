@@ -278,8 +278,6 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
 <nav>
   <div class="nav-logo" onclick="showPage('home')">borrado<span>del</span>mapa</div>
   <div class="nav-links" id="nav-links-guest" style="display:flex;">
-    <a class="nav-link" onclick="showPage('blog')" style="cursor:pointer;">Blog</a>
-    <a href="https://ko-fi.com/borradodelmapa" target="_blank" class="nav-link" style="color:var(--dorado);">☕ Colabora</a>
     <a class="nav-link" onclick="showPage('editor')" style="cursor:pointer;">Demo</a>
     <button class="nav-cta" onclick="openModal('login')">Entrar</button>
   </div>
@@ -514,9 +512,8 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
   </div>
 </div>
 <!-- Mobile bottom nav - FUERA del dashboard, controlado por JS -->
+<!-- Mobile bottom nav -->
 <div id="mobile-dash-nav" class="mobile-dash-nav" style="display:none;">
-  <div onclick="event.stopPropagation();setDashTab('maps',this)" class="mobile-nav-item active">🗺️<span>Rutas</span></div>
-  <div onclick="event.stopPropagation();setDashTab('profile',this)" class="mobile-nav-item">⚙️<span>Cuenta</span></div>
   <div onclick="event.stopPropagation();logout()" class="mobile-nav-item">🚪<span>Salir</span></div>
 </div>
 <div class="page" id="page-editor" style="background:var(--negro);overflow-y:auto;padding-top:88px;padding-bottom:80px;">
@@ -786,6 +783,9 @@ auth.onAuthStateChanged(async (user) => {
       updateNavForUser(currentUser);
       updateSidebar(currentUser);
       loadUserMaps();
+      // Mostrar mobile nav
+      const mobileNav = document.getElementById("mobile-dash-nav");
+      if (mobileNav) mobileNav.style.display = "flex";
       // Sesión persistente — si recarga y está logado, va al dashboard
       const currentPage = document.querySelector('.page.active');
       if (!currentPage || currentPage.id === 'page-home') {
@@ -812,10 +812,10 @@ function showPage(name) {
     target.classList.add("active");
     target.style.display = "block";
   }
-  // Mostrar mobile nav solo en dashboard si hay usuario
+  // Mostrar mobile nav en todas las páginas si hay usuario
   const mobileNav = document.getElementById("mobile-dash-nav");
   if (mobileNav) {
-    mobileNav.style.display = (name === "dashboard" && currentUser) ? "flex" : "none";
+    mobileNav.style.display = currentUser ? "flex" : "none";
   }
   window.scrollTo(0,0);
   if (name === "editor") setTimeout(initDemoMap, 100);
