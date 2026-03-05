@@ -1539,7 +1539,7 @@ async function sendToSalma() {
   } catch(e) {
     console.error('Salma error:', e);
     typing.remove();
-    appendSalmaMsg('Lo siento, no puedo conectar ahora mismo. Prueba en un momento.', 'salma');
+    appendSalmaMsg('Error: ' + e.message, 'salma');
   }
 }
 window.sendToSalma = sendToSalma;
