@@ -1062,7 +1062,7 @@ function renderMapsGrid(maps) {
 
   // Si no hay rutas, mostrar ejemplo
   if (maps.length === 0) {
-    html = `<div class="map-card" onclick="showPage('editor')" style="position:relative;cursor:pointer;">
+    html = `<div class="map-card" style="position:relative;">
       <div style="position:absolute;top:10px;left:10px;background:var(--dorado);color:var(--negro);font-family:'Space Mono',monospace;font-size:9px;font-weight:700;padding:4px 8px;letter-spacing:1px;z-index:1;">EJEMPLO</div>
       <div class="map-card-img">🏍️</div>
       <div class="map-card-body">
@@ -1160,9 +1160,10 @@ async function saveProfile() {
   const name = document.getElementById("profile-name-input").value.trim();
   const country = document.getElementById("profile-country-input").value.trim();
   const bio = document.getElementById("profile-bio-input").value.trim();
-  if (!name || !currentUser) return;
+  if (!name) { showToast('El nombre no puede estar vacío'); return; }
+  if (!currentUser) { showToast('No hay sesión activa'); return; }
   try {
-    await db.collection("users").doc(currentUser.uid).set({ name, country, bio }, { merge: true });
+    await db.collection("users").doc(currentUser.uid).update({ name, country, bio });
     await auth.currentUser.updateProfile({ displayName: name });
     currentUser.name = name;
     currentUser.country = country;
@@ -1173,7 +1174,8 @@ async function saveProfile() {
     document.getElementById("profile-avatar-big").textContent = name[0].toUpperCase();
     showToast("Perfil actualizado ✓");
   } catch(e) {
-    showToast("Error al guardar");
+    console.error("saveProfile error:", e);
+    showToast("Error: " + e.message);
   }
 }
 window.saveProfile = saveProfile;
