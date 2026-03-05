@@ -464,18 +464,48 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
       <div class="dash-header">
         <div><div class="dash-title">Mi perfil</div><div class="dash-sub">Tu cuenta y preferencias</div></div>
       </div>
-      <div style="max-width:480px;">
-        <div style="background:var(--gris);border:1px solid var(--gris2);padding:28px;margin-bottom:16px;">
-          <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--gris2);">Datos personales</div>
+      <div style="max-width:520px;">
+
+        <!-- Avatar y nombre -->
+        <div style="background:var(--gris);border:1px solid var(--gris2);padding:28px;margin-bottom:12px;display:flex;align-items:center;gap:20px;">
+          <div id="profile-avatar-big" style="width:64px;height:64px;border-radius:50%;background:var(--dorado);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--negro);flex-shrink:0;">U</div>
+          <div style="flex:1;">
+            <div id="profile-display-name" style="font-family:'Playfair Display',serif;font-size:22px;color:var(--blanco);margin-bottom:4px;">Viajero</div>
+            <div id="profile-display-email" style="font-family:'Space Mono',monospace;font-size:10px;color:var(--crema);opacity:.5;"></div>
+          </div>
+        </div>
+
+        <!-- Datos personales -->
+        <div style="background:var(--gris);border:1px solid var(--gris2);padding:28px;margin-bottom:12px;">
+          <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--gris2);">Datos personales</div>
           <label class="form-label">Nombre</label>
           <input class="form-input" id="profile-name-input" placeholder="Tu nombre">
+          <label class="form-label">País de origen</label>
+          <input class="form-input" id="profile-country-input" placeholder="España, México, Argentina...">
+          <label class="form-label">Sobre ti</label>
+          <textarea class="form-input" id="profile-bio-input" placeholder="Cuéntanos cómo viajas..." style="height:80px;resize:none;font-family:'DM Sans',sans-serif;"></textarea>
           <button class="btn-form" onclick="saveProfile()">Guardar cambios</button>
         </div>
-        <div style="background:var(--gris);border:1px solid var(--gris2);padding:28px;">
-          <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--gris2);">Plan actual</div>
-          <div style="font-size:14px;color:var(--crema);margin-bottom:16px;line-height:1.7;">Es gratuita y lo seguirá siendo. Pero puedes colaborar para proyectos sociales.</div>
-          <a href="https://ko-fi.com/borradodelmapa" target="_blank" class="btn-form" style="display:block;text-align:center;text-decoration:none;">☕ Colabora</a>
+
+        <!-- Estadísticas -->
+        <div style="background:var(--gris);border:1px solid var(--gris2);padding:28px;margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div style="text-align:center;">
+            <div id="profile-routes-count" style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--dorado);">0</div>
+            <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--crema);opacity:.5;letter-spacing:1px;">RUTAS CREADAS</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--dorado);">∞</div>
+            <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--crema);opacity:.5;letter-spacing:1px;">PLAN GRATUITO</div>
+          </div>
         </div>
+
+        <!-- Ko-fi -->
+        <div style="background:var(--gris);border:1px solid var(--gris2);padding:28px;">
+          <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--gris2);">Apoya el proyecto</div>
+          <div style="font-size:14px;color:var(--crema);opacity:.7;margin-bottom:16px;line-height:1.7;">Borrado del Mapa es gratuito y lo seguirá siendo. Si te ayuda, puedes colaborar para proyectos sociales.</div>
+          <a href="https://ko-fi.com/borradodelmapa" target="_blank" class="btn-form" style="display:block;text-align:center;text-decoration:none;">☕ Colabora en Ko-fi</a>
+        </div>
+
       </div>
     </div>
   </div>
@@ -739,17 +769,25 @@ auth.onAuthStateChanged(async (user) => {
   if (user) {
     try {
       const userDoc = await db.collection("users").doc(user.uid).get();
-      const userData = userDoc.exists() ? userDoc.data() : {};
+      const userData = userDoc.exists ? userDoc.data() : {};
       currentUser = {
         uid: user.uid,
         name: userData.name || user.displayName || user.email.split("@")[0],
         email: user.email,
-        isPremium: userData.isPremium || false
+        isPremium: userData.isPremium || false,
+        bio: userData.bio || '',
+        country: userData.country || '',
+        photo: userData.photo || ''
       };
       isPremium = currentUser.isPremium;
       updateNavForUser(currentUser);
       updateSidebar(currentUser);
       loadUserMaps();
+      // Sesión persistente — si recarga y está logado, va al dashboard
+      const currentPage = document.querySelector('.page.active');
+      if (!currentPage || currentPage.id === 'page-home') {
+        showPage('dashboard');
+      }
     } catch(e) {
       console.error("Error loading user:", e);
     }
@@ -957,8 +995,13 @@ function updateNavForGuest() {
 function updateSidebar(user) {
   document.getElementById("sidebar-name").textContent = user.name;
   document.getElementById("sidebar-avatar").textContent = (user.name||"U")[0].toUpperCase();
-  document.getElementById("sidebar-plan").textContent = user.isPremium ? "Plan Premium" : "Plan Gratuito · 1/1 mapa";
+  document.getElementById("sidebar-plan").textContent = user.isPremium ? "Plan Premium" : "Plan Gratuito";
   document.getElementById("profile-name-input").value = user.name || "";
+  document.getElementById("profile-country-input").value = user.country || "";
+  document.getElementById("profile-bio-input").value = user.bio || "";
+  document.getElementById("profile-display-name").textContent = user.name || "Viajero";
+  document.getElementById("profile-display-email").textContent = user.email || "";
+  document.getElementById("profile-avatar-big").textContent = (user.name||"U")[0].toUpperCase();
   showToast("Bienvenido, " + user.name + "!");
 }
 
@@ -979,61 +1022,156 @@ async function loadUserMaps() {
 function renderMapsGrid(maps) {
   const grid = document.getElementById("maps-grid-dynamic");
   if (!grid) return;
-  const emojis = {"vietnam":"🏍️","japon":"🏯","peru":"🏔️","default":"🗺️"};
+
+  // Actualizar contador en perfil
+  const el = document.getElementById('profile-routes-count');
+  if (el) el.textContent = maps.length;
+
+  const destEmoji = (d='') => {
+    d = d.toLowerCase();
+    if (d.includes('vietnam')) return '🏍️';
+    if (d.includes('japon') || d.includes('japan')) return '🏯';
+    if (d.includes('tailandia') || d.includes('thailand')) return '🏖️';
+    if (d.includes('marruecos') || d.includes('morocco')) return '🏜️';
+    if (d.includes('peru') || d.includes('perú')) return '🏔️';
+    if (d.includes('india')) return '🕌';
+    return '🗺️';
+  };
+
   let html = maps.map(m => `
-    <div class="map-card" onclick="showPage('editor')">
-      <div class="map-card-img">${emojis.default}</div>
+    <div class="map-card" style="position:relative;">
+      <div class="map-card-img" style="font-size:48px;">${destEmoji(m.destino||m.country)}</div>
       <div class="map-card-body">
-        <div class="map-card-title">${m.title || "Mi mapa"}</div>
-        <div class="map-card-meta">${m.days || 1} dias - ${m.country || "Destino"}</div>
-        <div class="map-card-tags"><span class="tag">${m.country || "Viaje"}</span></div>
+        <div class="map-card-title">${m.nombre || m.title || 'Mi ruta'}</div>
+        <div class="map-card-meta">${m.dias||m.days||0} días · ${m.destino||m.country||'Destino'}</div>
+        ${m.desc ? `<div style="font-size:12px;color:var(--crema);opacity:.6;margin-bottom:8px;line-height:1.5;">${m.desc.substring(0,80)}${m.desc.length>80?'...':''}</div>` : ''}
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button onclick="eliminarRuta('${m.id}')" style="background:transparent;border:1px solid var(--gris2);color:var(--crema);opacity:.5;padding:6px 10px;font-family:'Space Mono',monospace;font-size:9px;cursor:pointer;letter-spacing:1px;">BORRAR</button>
+        </div>
       </div>
     </div>
   `).join("");
 
-  // Add locked card if not premium
-  if (!isPremium) {
-    html += `<div class="map-card map-card-new" onclick="newMap()">
-      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;padding:40px 20px;">
-        <div style="font-size:36px;">🔒</div>
-        <div style="font-family:Space Mono,monospace;font-size:11px;color:var(--crema);opacity:.6;text-align:center;">Requiere Premium<br>para mas mapas</div>
-      </div>
-    </div>`;
-  }
+  // Botón nueva ruta siempre visible
+  html += `<div class="map-card map-card-new" onclick="newMap()" style="cursor:pointer;">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;padding:40px 20px;">
+      <div style="font-size:40px;">＋</div>
+      <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--crema);opacity:.6;text-align:center;letter-spacing:1px;">NUEVA RUTA</div>
+    </div>
+  </div>`;
 
-  // If no maps yet, show Vietnam demo + new route button
+  // Si no hay rutas, mostrar ejemplo
   if (maps.length === 0) {
-    html = `<div class="map-card" onclick="showPage('editor')" style="position:relative;">
+    html = `<div class="map-card" onclick="showPage('editor')" style="position:relative;cursor:pointer;">
       <div style="position:absolute;top:10px;left:10px;background:var(--dorado);color:var(--negro);font-family:'Space Mono',monospace;font-size:9px;font-weight:700;padding:4px 8px;letter-spacing:1px;z-index:1;">EJEMPLO</div>
       <div class="map-card-img">🏍️</div>
       <div class="map-card-body">
         <div class="map-card-title">Vietnam en Moto</div>
-        <div class="map-card-meta">25 dias - 9 paradas - 106 POIs</div>
+        <div class="map-card-meta">25 días · 9 paradas · 106 POIs</div>
         <div style="font-size:11px;color:var(--crema);opacity:.6;margin-bottom:8px;">Así quedará tu ruta. ¡Crea la tuya!</div>
         <div class="map-card-tags"><span class="tag">Hanoi</span><span class="tag">Ha Giang</span><span class="tag">Hoi An</span></div>
       </div>
+    </div>
+    <div class="map-card map-card-new" onclick="newMap()" style="cursor:pointer;">
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;padding:40px 20px;">
+        <div style="font-size:40px;">＋</div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--crema);opacity:.6;text-align:center;letter-spacing:1px;">CREAR MI PRIMERA RUTA</div>
+      </div>
     </div>`;
   }
+
   grid.innerHTML = html;
 }
 
+async function eliminarRuta(id) {
+  if (!currentUser || !id) return;
+  if (!confirm('¿Borrar esta ruta?')) return;
+  try {
+    await db.collection('users').doc(currentUser.uid).collection('maps').doc(id).delete();
+    showToast('Ruta eliminada');
+    loadUserMaps();
+  } catch(e) {
+    showToast('Error al eliminar');
+  }
+}
+window.eliminarRuta = eliminarRuta;
+
 // ===== NEW MAP =====
 function newMap() {
-  showPage("editor");
+  if (!currentUser) { showModal(); return; }
+  // Mostrar modal de creación de ruta
+  const modal = document.getElementById('modal-nueva-ruta');
+  if (modal) { modal.style.display = 'flex'; return; }
+  // Crear modal si no existe
+  const m = document.createElement('div');
+  m.id = 'modal-nueva-ruta';
+  m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:10000;display:flex;align-items:center;justify-content:center;padding:24px;';
+  m.innerHTML = `
+    <div style="background:#111;border:1px solid var(--gris2);padding:32px;max-width:420px;width:100%;">
+      <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;">Nueva Ruta</div>
+      <label class="form-label">Nombre de la ruta</label>
+      <input class="form-input" id="nueva-ruta-nombre" placeholder="Ej: Vietnam en moto, 25 días">
+      <label class="form-label">Destino principal</label>
+      <input class="form-input" id="nueva-ruta-destino" placeholder="Ej: Vietnam, Tailandia, Marruecos...">
+      <label class="form-label">Duración (días)</label>
+      <input class="form-input" id="nueva-ruta-dias" type="number" placeholder="25" min="1" max="365">
+      <label class="form-label">Descripción breve</label>
+      <textarea class="form-input" id="nueva-ruta-desc" placeholder="De qué va esta ruta..." style="height:70px;resize:none;font-family:'DM Sans',sans-serif;"></textarea>
+      <div style="display:flex;gap:12px;margin-top:8px;">
+        <button onclick="document.getElementById('modal-nueva-ruta').style.display='none'" style="flex:1;background:transparent;border:1px solid var(--gris2);color:var(--crema);padding:12px;font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;">CANCELAR</button>
+        <button onclick="crearRuta()" style="flex:2;background:var(--dorado);border:none;color:var(--negro);padding:12px;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;">CREAR RUTA →</button>
+      </div>
+    </div>`;
+  document.body.appendChild(m);
 }
 window.newMap = newMap;
+
+async function crearRuta() {
+  const nombre = document.getElementById('nueva-ruta-nombre').value.trim();
+  const destino = document.getElementById('nueva-ruta-destino').value.trim();
+  const dias = document.getElementById('nueva-ruta-dias').value;
+  const desc = document.getElementById('nueva-ruta-desc').value.trim();
+  if (!nombre || !destino) { showToast('Nombre y destino son obligatorios'); return; }
+  if (!currentUser) return;
+  try {
+    const ruta = {
+      nombre, destino, dias: parseInt(dias)||0, desc,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      pois: [], published: false
+    };
+    await db.collection('users').doc(currentUser.uid).collection('maps').add(ruta);
+    document.getElementById('modal-nueva-ruta').style.display = 'none';
+    showToast('¡Ruta creada! ✓');
+    loadUserMaps();
+    // Actualizar contador en perfil
+    const snap = await db.collection('users').doc(currentUser.uid).collection('maps').get();
+    const el = document.getElementById('profile-routes-count');
+    if (el) el.textContent = snap.size;
+  } catch(e) {
+    showToast('Error al crear la ruta');
+    console.error(e);
+  }
+}
+window.crearRuta = crearRuta;
 
 // ===== SAVE PROFILE =====
 async function saveProfile() {
   const name = document.getElementById("profile-name-input").value.trim();
+  const country = document.getElementById("profile-country-input").value.trim();
+  const bio = document.getElementById("profile-bio-input").value.trim();
   if (!name || !currentUser) return;
   try {
-    await db.collection("users").doc(currentUser.uid).set({ name }, { merge: true });
+    await db.collection("users").doc(currentUser.uid).set({ name, country, bio }, { merge: true });
     await auth.currentUser.updateProfile({ displayName: name });
     currentUser.name = name;
+    currentUser.country = country;
+    currentUser.bio = bio;
     document.getElementById("sidebar-name").textContent = name;
     document.getElementById("nav-avatar").textContent = name[0].toUpperCase();
-    showToast("Perfil actualizado");
+    document.getElementById("profile-display-name").textContent = name;
+    document.getElementById("profile-avatar-big").textContent = name[0].toUpperCase();
+    showToast("Perfil actualizado ✓");
   } catch(e) {
     showToast("Error al guardar");
   }
