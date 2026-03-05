@@ -515,9 +515,9 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
 </div>
 <!-- Mobile bottom nav - FUERA del dashboard, controlado por JS -->
 <div id="mobile-dash-nav" class="mobile-dash-nav" style="display:none;">
-  <div onclick="setDashTab('maps',this)" class="mobile-nav-item active">🗺️<span>Rutas</span></div>
-  <div onclick="setDashTab('profile',this)" class="mobile-nav-item">⚙️<span>Cuenta</span></div>
-  <div onclick="logout()" class="mobile-nav-item">🚪<span>Salir</span></div>
+  <div onclick="event.stopPropagation();setDashTab('maps',this)" class="mobile-nav-item active">🗺️<span>Rutas</span></div>
+  <div onclick="event.stopPropagation();setDashTab('profile',this)" class="mobile-nav-item">⚙️<span>Cuenta</span></div>
+  <div onclick="event.stopPropagation();logout()" class="mobile-nav-item">🚪<span>Salir</span></div>
 </div>
 <div class="page" id="page-editor" style="background:var(--negro);overflow-y:auto;padding-top:88px;padding-bottom:80px;">
 
@@ -1356,18 +1356,69 @@ function toggleUserMenu() {
 window.toggleUserMenu = toggleUserMenu;
 
 function verRuta(id, nombre) {
-  // Por ahora muestra un toast — en el futuro abrirá el editor de esa ruta
-  showToast('Abriendo: ' + nombre);
-  // TODO: cargar ruta en editor
-  showPage('editor');
+  if (!currentUser) return;
+  db.collection('users').doc(currentUser.uid).collection('maps').doc(id).get().then(doc => {
+    if (!doc.exists) return;
+    const r = doc.data();
+    let modal = document.getElementById('modal-editar-ruta');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'modal-editar-ruta';
+      modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:10000;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;';
+      document.body.appendChild(modal);
+    }
+    modal.innerHTML = `
+      <div style="background:#111;border:1px solid var(--gris2);padding:32px;max-width:480px;width:100%;margin:auto;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;">EDITAR RUTA</div>
+          <div onclick="document.getElementById('modal-editar-ruta').style.display='none'" style="cursor:pointer;color:var(--crema);opacity:.5;font-size:20px;">✕</div>
+        </div>
+        <label class="form-label">Nombre</label>
+        <input class="form-input" id="edit-ruta-nombre" value="${(r.nombre||'').replace(/"/g,'&quot;')}">
+        <label class="form-label">Destino</label>
+        <input class="form-input" id="edit-ruta-destino" value="${(r.destino||'').replace(/"/g,'&quot;')}">
+        <label class="form-label">Días</label>
+        <input class="form-input" id="edit-ruta-dias" type="number" value="${r.dias||0}">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-input" id="edit-ruta-desc" style="height:80px;resize:none;font-family:'DM Sans',sans-serif;">${r.desc||''}</textarea>
+        <label class="form-label">Notas / Presupuesto</label>
+        <textarea class="form-input" id="edit-ruta-notas" style="height:80px;resize:none;font-family:'DM Sans',sans-serif;" placeholder="Presupuesto, notas importantes...">${r.notas||''}</textarea>
+        <div style="display:flex;gap:12px;margin-top:8px;">
+          <button onclick="document.getElementById('modal-editar-ruta').style.display='none'" style="flex:1;background:transparent;border:1px solid var(--gris2);color:var(--crema);padding:12px;font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;">CANCELAR</button>
+          <button onclick="guardarEdicionRuta('${id}')" style="flex:2;background:var(--dorado);border:none;color:var(--negro);padding:12px;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;">GUARDAR →</button>
+        </div>
+      </div>`;
+    modal.style.display = 'flex';
+  });
 }
 window.verRuta = verRuta;
 
-// Cerrar menú al hacer click fuera
+async function guardarEdicionRuta(id) {
+  const nombre = document.getElementById('edit-ruta-nombre').value.trim();
+  const destino = document.getElementById('edit-ruta-destino').value.trim();
+  const dias = parseInt(document.getElementById('edit-ruta-dias').value) || 0;
+  const desc = document.getElementById('edit-ruta-desc').value.trim();
+  const notas = document.getElementById('edit-ruta-notas').value.trim();
+  if (!nombre || !currentUser) return;
+  try {
+    await db.collection('users').doc(currentUser.uid).collection('maps').doc(id).update({
+      nombre, destino, dias, desc, notas,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    document.getElementById('modal-editar-ruta').style.display = 'none';
+    showToast('Ruta actualizada ✓');
+    loadUserMaps();
+  } catch(e) {
+    showToast('Error: ' + e.message);
+  }
+}
+window.guardarEdicionRuta = guardarEdicionRuta;
+
+// Cerrar menú usuario al hacer click fuera
 document.addEventListener('click', function(e) {
-  const avatar = document.querySelector('.nav-avatar');
+  const avatar = document.getElementById('nav-avatar');
   const menu = document.getElementById('user-menu');
-  if (menu && avatar && !avatar.contains(e.target)) {
+  if (menu && menu.style.display !== 'none' && avatar && !avatar.contains(e.target)) {
     menu.style.display = 'none';
   }
 });
