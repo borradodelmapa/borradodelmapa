@@ -1796,5 +1796,198 @@ function appendSalmaMsg(text, who, isTyping=false) {
   return div;
 }
 </script>
+<!-- =============================================
+     SALMA — Chat Widget para Borrado del Mapa
+     Pega esto JUSTO ANTES de </body> en tu index.html
+     ============================================= -->
 
+<style>
+#salma-btn{
+  position:fixed;bottom:24px;right:24px;z-index:9999;
+  width:60px;height:60px;border-radius:50%;border:2px solid #c8930f;
+  background:#0a0908;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);transition:transform .2s,box-shadow .2s;
+}
+#salma-btn:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(200,147,15,.3);}
+#salma-btn svg{width:40px;height:40px;}
+#salma-btn .salma-pulse{
+  position:absolute;inset:-4px;border-radius:50%;border:2px solid #c8930f;
+  animation:salma-ping 2s cubic-bezier(0,0,.2,1) infinite;opacity:0;
+}
+@keyframes salma-ping{0%{transform:scale(1);opacity:.6;}100%{transform:scale(1.5);opacity:0;}}
+
+#salma-chat{
+  position:fixed;bottom:96px;right:24px;z-index:9998;
+  width:370px;max-width:calc(100vw - 32px);height:520px;max-height:calc(100vh - 120px);
+  background:#0a0908;border:1px solid #2a2826;border-radius:16px;
+  display:none;flex-direction:column;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.7);
+  animation:salma-slideUp .25s ease-out;
+}
+@keyframes salma-slideUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+#salma-chat.open{display:flex;}
+
+#salma-chat-header{
+  padding:16px 20px;border-bottom:1px solid #2a2826;display:flex;align-items:center;gap:12px;
+  background:#0a0908;flex-shrink:0;
+}
+#salma-chat-header .salma-avatar-sm{width:36px;height:36px;border-radius:50%;border:1.5px solid #c8930f;overflow:hidden;flex-shrink:0;background:#1a1816;}
+#salma-chat-header .salma-info{flex:1;}
+#salma-chat-header .salma-name{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;letter-spacing:1px;}
+#salma-chat-header .salma-status{font-family:'Space Mono',monospace;font-size:9px;color:#c8930f;letter-spacing:2px;text-transform:uppercase;}
+#salma-chat-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;opacity:.5;transition:opacity .2s;padding:4px 8px;}
+#salma-chat-close:hover{opacity:1;}
+
+#salma-messages{
+  flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px;
+  scrollbar-width:thin;scrollbar-color:#2a2826 transparent;
+}
+#salma-messages::-webkit-scrollbar{width:4px;}
+#salma-messages::-webkit-scrollbar-thumb{background:#2a2826;border-radius:2px;}
+
+.salma-msg{max-width:85%;padding:12px 16px;border-radius:16px;font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;word-wrap:break-word;}
+.salma-msg.bot{background:#1a1816;color:#f5f0e8;border-bottom-left-radius:4px;align-self:flex-start;border:1px solid #2a2826;}
+.salma-msg.user{background:#c8930f;color:#0a0908;border-bottom-right-radius:4px;align-self:flex-end;font-weight:500;}
+.salma-msg.typing{color:#c8930f;font-style:italic;font-size:13px;background:transparent;border:none;padding:4px 0;}
+
+#salma-input-area{
+  padding:12px 16px;border-top:1px solid #2a2826;display:flex;gap:8px;
+  background:#0a0908;flex-shrink:0;
+}
+#salma-input{
+  flex:1;background:#1a1816;border:1px solid #2a2826;border-radius:24px;
+  padding:10px 18px;color:#f5f0e8;font-family:'DM Sans',sans-serif;font-size:14px;
+  outline:none;transition:border-color .2s;
+}
+#salma-input::placeholder{color:rgba(245,240,232,.3);}
+#salma-input:focus{border-color:#c8930f;}
+#salma-send{
+  width:40px;height:40px;border-radius:50%;background:#c8930f;border:none;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .2s;flex-shrink:0;
+}
+#salma-send:hover{background:#e8b040;}
+#salma-send svg{width:18px;height:18px;fill:#0a0908;}
+
+@media(max-width:480px){
+  #salma-chat{bottom:0;right:0;width:100vw;height:100vh;max-height:100vh;border-radius:0;max-width:100vw;}
+  #salma-btn{bottom:16px;right:16px;width:54px;height:54px;}
+}
+</style>
+
+<!-- Botón flotante de Salma -->
+<div id="salma-btn" onclick="salmaToggle()" title="Habla con Salma">
+  <div class="salma-pulse"></div>
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="38" fill="#1a1816" stroke="#c8930f" stroke-width="2"/>
+    <path d="M20,42 Q22,18 50,15 Q78,18 80,42 Q82,32 75,24 Q65,12 50,10 Q35,12 25,24 Q18,32 20,42Z" fill="#6B4226"/>
+    <path d="M18,44 Q16,38 20,30 Q19,40 22,44Z" fill="#6B4226"/>
+    <path d="M82,44 Q84,38 80,30 Q81,40 78,44Z" fill="#6B4226"/>
+    <rect x="30" y="38" width="16" height="12" rx="3" fill="none" stroke="#8B6914" stroke-width="2"/>
+    <rect x="54" y="38" width="16" height="12" rx="3" fill="none" stroke="#8B6914" stroke-width="2"/>
+    <line x1="46" y1="43" x2="54" y2="43" stroke="#8B6914" stroke-width="1.5"/>
+    <circle cx="38" cy="44" r="2.5" fill="#f5f0e8"/>
+    <circle cx="62" cy="44" r="2.5" fill="#f5f0e8"/>
+    <path d="M40,56 Q50,64 60,56" fill="none" stroke="#f5f0e8" stroke-width="2" stroke-linecap="round"/>
+    <line x1="38" y1="70" x2="42" y2="80" stroke="#333" stroke-width="2.5"/>
+    <line x1="62" y1="70" x2="58" y2="80" stroke="#333" stroke-width="2.5"/>
+    <path d="M18,58 Q14,58 14,62 Q14,66 18,66" fill="none" stroke="#e05252" stroke-width="2.5" stroke-linecap="round"/>
+  </svg>
+</div>
+
+<!-- Ventana del chat -->
+<div id="salma-chat">
+  <div id="salma-chat-header">
+    <div class="salma-avatar-sm">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+        <circle cx="50" cy="50" r="38" fill="#1a1816" stroke="#c8930f" stroke-width="2"/>
+        <path d="M20,42 Q22,18 50,15 Q78,18 80,42 Q82,32 75,24 Q65,12 50,10 Q35,12 25,24 Q18,32 20,42Z" fill="#6B4226"/>
+        <rect x="30" y="38" width="16" height="12" rx="3" fill="none" stroke="#8B6914" stroke-width="2"/>
+        <rect x="54" y="38" width="16" height="12" rx="3" fill="none" stroke="#8B6914" stroke-width="2"/>
+        <line x1="46" y1="43" x2="54" y2="43" stroke="#8B6914" stroke-width="1.5"/>
+        <circle cx="38" cy="44" r="2.5" fill="#f5f0e8"/>
+        <circle cx="62" cy="44" r="2.5" fill="#f5f0e8"/>
+        <path d="M40,56 Q50,64 60,56" fill="none" stroke="#f5f0e8" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="salma-info">
+      <div class="salma-name">SALMA</div>
+      <div class="salma-status">Tu guía de viajes</div>
+    </div>
+    <button id="salma-chat-close" onclick="salmaToggle()">✕</button>
+  </div>
+
+  <div id="salma-messages">
+    <div class="salma-msg bot">¡Buenaaas! Soy Salma, tu compañera de viajes. ¿A dónde quieres ir? Cuéntame y te ayudo a montar la ruta perfecta. 🌍</div>
+  </div>
+
+  <div id="salma-input-area">
+    <input type="text" id="salma-input" placeholder="Escríbele a Salma..." autocomplete="off">
+    <button id="salma-send" onclick="salmaSend()">
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+const SALMA_API = "https://salma-api.paco-defoto.workers.dev";
+let salmaHistory = [];
+
+function salmaToggle() {
+  const chat = document.getElementById("salma-chat");
+  chat.classList.toggle("open");
+  if (chat.classList.contains("open")) document.getElementById("salma-input").focus();
+}
+
+function salmaAddMsg(text, who) {
+  const container = document.getElementById("salma-messages");
+  const div = document.createElement("div");
+  div.className = "salma-msg " + who;
+  div.textContent = text;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return div;
+}
+
+async function salmaSend() {
+  const input = document.getElementById("salma-input");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  salmaAddMsg(msg, "user");
+  input.value = "";
+  input.disabled = true;
+
+  const typing = salmaAddMsg("Salma está escribiendo...", "typing");
+
+  try {
+    const res = await fetch(SALMA_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: msg, history: salmaHistory })
+    });
+    const data = await res.json();
+    typing.remove();
+
+    if (data.reply) {
+      salmaAddMsg(data.reply, "bot");
+      salmaHistory.push({ role: "user", content: msg });
+      salmaHistory.push({ role: "assistant", content: data.reply });
+      if (salmaHistory.length > 20) salmaHistory = salmaHistory.slice(-20);
+    } else {
+      salmaAddMsg("Uy, algo ha fallado. ¿Puedes repetir?", "bot");
+    }
+  } catch (err) {
+    typing.remove();
+    salmaAddMsg("No puedo conectar ahora mismo. Inténtalo en un momento.", "bot");
+  }
+
+  input.disabled = false;
+  input.focus();
+}
+
+document.getElementById("salma-input").addEventListener("keydown", function(e) {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); salmaSend(); }
+});
+</script>
 </body>
