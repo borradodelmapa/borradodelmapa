@@ -1126,22 +1126,8 @@ function newMap() {
       <input class="form-input" id="nueva-ruta-dias" type="number" placeholder="25" min="1" max="365">
       <label class="form-label">Descripción breve</label>
       <textarea class="form-input" id="nueva-ruta-desc" placeholder="De qué va esta ruta..." style="height:70px;resize:none;font-family:'DM Sans',sans-serif;"></textarea>
-
-      <div style="border-top:1px solid var(--gris2);margin:20px 0 16px;"></div>
-      <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Genera tu ruta con Salma</div>
-      <div style="font-size:12px;color:var(--crema);opacity:.5;margin-bottom:12px;line-height:1.6;">Describe tu viaje como si hablaras con una amiga. Salma te genera el itinerario completo con puntos de interés organizados por días.</div>
-      <textarea class="form-input" id="nueva-ruta-ia-prompt" placeholder="Ej: Voy a hacer un viaje a Vietnam de 20 días en moto. Hazme una ruta por el norte que salga desde Hanoi pasando por los puntos turísticos más espectaculares, con sitios para comer barato y alojamiento económico..." style="height:120px;resize:none;font-family:'DM Sans',sans-serif;"></textarea>
-      <div id="ia-resultado" style="display:none;background:var(--negro);border:1px solid var(--gris2);padding:16px;margin-bottom:12px;max-height:200px;overflow-y:auto;">
-        <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:1px;margin-bottom:8px;">ITINERARIO GENERADO POR SALMA</div>
-        <div id="ia-resultado-texto" style="font-size:13px;color:var(--crema);opacity:.85;line-height:1.7;white-space:pre-wrap;"></div>
-      </div>
-      <div id="ia-loading" style="display:none;text-align:center;padding:16px;">
-        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dorado);letter-spacing:1px;">Salma está creando tu ruta...</div>
-      </div>
-
       <div style="display:flex;gap:12px;margin-top:8px;">
         <button onclick="document.getElementById('modal-nueva-ruta').style.display='none'" style="flex:1;background:transparent;border:1px solid var(--gris2);color:var(--crema);padding:12px;font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;">CANCELAR</button>
-        <button id="btn-generar-ia" onclick="generarRutaConIA()" style="flex:2;background:transparent;border:1px solid var(--dorado);color:var(--dorado);padding:12px;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;">GENERAR CON SALMA</button>
         <button onclick="crearRuta()" style="flex:2;background:var(--dorado);border:none;color:var(--negro);padding:12px;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;">CREAR RUTA →</button>
       </div>
     </div>`;
@@ -1154,13 +1140,11 @@ async function crearRuta() {
   const destino = document.getElementById('nueva-ruta-destino').value.trim();
   const dias = document.getElementById('nueva-ruta-dias').value;
   const desc = document.getElementById('nueva-ruta-desc').value.trim();
-  const itinerarioIA = document.getElementById('ia-resultado-texto')?.textContent?.trim() || '';
   if (!nombre || !destino) { showToast('Nombre y destino son obligatorios'); return; }
   if (!currentUser) return;
   try {
     const ruta = {
       nombre, destino, dias: parseInt(dias)||0, desc,
-      itinerarioIA: itinerarioIA,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       pois: [], published: false
@@ -1169,6 +1153,7 @@ async function crearRuta() {
     document.getElementById('modal-nueva-ruta').style.display = 'none';
     showToast('¡Ruta creada! ✓');
     loadUserMaps();
+    // Actualizar contador en perfil
     const snap = await db.collection('users').doc(currentUser.uid).collection('maps').get();
     const el = document.getElementById('profile-routes-count');
     if (el) el.textContent = snap.size;
@@ -1178,61 +1163,6 @@ async function crearRuta() {
   }
 }
 window.crearRuta = crearRuta;
-
-async function generarRutaConIA() {
-  const prompt = document.getElementById('nueva-ruta-ia-prompt').value.trim();
-  const nombre = document.getElementById('nueva-ruta-nombre').value.trim();
-  const destino = document.getElementById('nueva-ruta-destino').value.trim();
-  const dias = document.getElementById('nueva-ruta-dias').value;
-
-  if (!prompt && !destino) { showToast('Escribe una descripción del viaje o al menos el destino'); return; }
-
-  const fullPrompt = prompt || `Hazme un itinerario de ${dias||7} días en ${destino}. Incluye puntos turísticos, sitios para comer y alojamiento económico.`;
-
-  const loading = document.getElementById('ia-loading');
-  const resultado = document.getElementById('ia-resultado');
-  const texto = document.getElementById('ia-resultado-texto');
-  const btn = document.getElementById('btn-generar-ia');
-
-  loading.style.display = 'block';
-  resultado.style.display = 'none';
-  btn.disabled = true;
-  btn.textContent = 'GENERANDO...';
-
-  try {
-    const res = await fetch(SALMA_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: `El usuario quiere crear una ruta de viaje. Genera un itinerario detallado organizado por días con puntos de interés, restaurantes y alojamiento. Sé concisa pero útil. Aquí la petición del usuario: "${fullPrompt}"${destino ? ` Destino: ${destino}.` : ''}${dias ? ` Duración: ${dias} días.` : ''}${nombre ? ` Nombre de la ruta: ${nombre}.` : ''}`,
-        history: []
-      })
-    });
-    const data = await res.json();
-    loading.style.display = 'none';
-
-    if (data.reply) {
-      texto.textContent = data.reply;
-      resultado.style.display = 'block';
-      // Autorellenar campos si están vacíos
-      if (!nombre && destino) document.getElementById('nueva-ruta-nombre').value = destino + ' - ' + (dias||7) + ' días';
-      if (!document.getElementById('nueva-ruta-desc').value.trim()) {
-        document.getElementById('nueva-ruta-desc').value = fullPrompt.substring(0, 200);
-      }
-      showToast('Itinerario generado ✓');
-    } else {
-      showToast('Salma no pudo generar la ruta. Inténtalo de nuevo.');
-    }
-  } catch(err) {
-    loading.style.display = 'none';
-    showToast('Error conectando con Salma');
-    console.error(err);
-  }
-
-  btn.disabled = false;
-  btn.textContent = 'GENERAR CON SALMA';
-}
-window.generarRutaConIA = generarRutaConIA;
 
 // ===== SAVE PROFILE =====
 async function saveProfile() {
@@ -1455,11 +1385,6 @@ function verRuta(id, nombre) {
           <textarea class="form-input" id="edit-ruta-desc" style="height:80px;resize:none;font-family:'DM Sans',sans-serif;">${r.desc||''}</textarea>
           <label class="form-label">Notas / Presupuesto</label>
           <textarea class="form-input" id="edit-ruta-notas" style="height:80px;resize:none;font-family:'DM Sans',sans-serif;" placeholder="Presupuesto, notas importantes...">${r.notas||''}</textarea>
-          ${r.itinerarioIA ? `
-          <div style="border-top:1px solid var(--gris2);margin:16px 0;padding-top:16px;">
-            <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:1px;margin-bottom:8px;">ITINERARIO GENERADO POR SALMA</div>
-            <div style="font-size:13px;color:var(--crema);opacity:.75;line-height:1.7;white-space:pre-wrap;max-height:200px;overflow-y:auto;background:var(--negro);padding:12px;border:1px solid var(--gris2);">${r.itinerarioIA}</div>
-          </div>` : ''}
           <div style="display:flex;gap:12px;margin-top:8px;">
             <button onclick="document.getElementById('modal-editar-ruta').style.display='none'" style="flex:1;background:transparent;border:1px solid var(--gris2);color:var(--crema);padding:12px;font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;">CANCELAR</button>
             <button onclick="guardarEdicionRuta('${id}')" style="flex:2;background:var(--dorado);border:none;color:var(--negro);padding:12px;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;">GUARDAR →</button>
