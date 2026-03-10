@@ -1468,9 +1468,9 @@ input::placeholder, textarea::placeholder{
       <p class="hero-sub" style="margin-left:auto;margin-right:auto;">Una IA viajera que conoce los caminos. Planifica tu ruta, te acompaña en el viaje y guarda todo lo que descubres.</p>
       
       <!-- SALMA HERO INPUT -->
-      <div id="salma-hero-box" style="display:flex;gap:10px;margin-bottom:24px;max-width:100%;margin-left:auto;margin-right:auto;">
-        <input type="text" id="salma-hero-input" placeholder="Cuéntale a Salma tu próximo viaje..." autocomplete="off" style="flex:1;background:#111111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:16px 20px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color .2s;min-width:0;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'">
-        <button onclick="salmaHeroSend()" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:16px 28px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.14em;cursor:pointer;white-space:nowrap;transition:background .2s;flex-shrink:0;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">PLANEAR →</button>
+      <div id="salma-hero-box" style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;max-width:100%;margin-left:auto;margin-right:auto;">
+        <textarea id="salma-hero-input" placeholder="Cuéntale a Salma tu próximo viaje..." autocomplete="off" rows="3" style="width:100%;background:#111111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:16px 20px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color .2s;resize:none;line-height:1.5;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'"></textarea>
+        <button onclick="salmaHeroSend()" style="width:100%;background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:16px 28px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">PLANEAR →</button>
       </div>
 
       <!-- DEMOS -->
