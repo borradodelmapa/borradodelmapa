@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Borradodelmapa · Planificador de viajes con mapas interactivos</title>
+<title>Borradodelmapa · Tu copiloto de viaje con IA</title>
 
-  <meta name="description" content="Planifica tu viaje por días, organiza rutas y visualiza todo en un solo lugar con Borradodelmapa. Crea itinerarios, comparte rutas y usa mapas interactivos para viajar mejor.">
+  <meta name="description" content="Salma es tu copiloto de viaje con IA. Planifica rutas, descubre lugares únicos y viaja con una guía inteligente que te acompaña antes, durante y después del viaje.">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
   <meta name="theme-color" content="#050505">
   <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -16,14 +16,14 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Borradodelmapa">
   <meta property="og:locale" content="es_ES">
-  <meta property="og:title" content="Borradodelmapa · Planificador de viajes">
-  <meta property="og:description" content="Planifica tu viaje por días, organiza rutas y visualiza todo en un solo lugar.">
+  <meta property="og:title" content="Borradodelmapa · Tu copiloto de viaje con IA">
+  <meta property="og:description" content="Salma planifica tu ruta, te acompaña en el viaje y guarda todo lo que descubres.">
   <meta property="og:url" content="https://borradodelmapa.com/">
   <meta property="og:image" content="https://borradodelmapa.com/og-image.jpg">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Borradodelmapa · Planificador de viajes">
-  <meta name="twitter:description" content="Planifica tu viaje por días, organiza rutas y visualiza todo en un solo lugar.">
+  <meta name="twitter:title" content="Borradodelmapa · Tu copiloto de viaje con IA">
+  <meta name="twitter:description" content="Salma planifica tu ruta, te acompaña en el viaje y guarda todo lo que descubres.">
   <meta name="twitter:image" content="https://borradodelmapa.com/og-image.jpg">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,7 +65,7 @@
     "applicationCategory": "TravelApplication",
     "operatingSystem": "Web",
     "url": "https://borradodelmapa.com/",
-    "description": "Planificador de viajes con mapas interactivos, itinerarios por días y rutas compartibles.",
+    "description": "Salma es tu copiloto de viaje con IA. Planifica rutas, descubre lugares y viaja con una guía inteligente.",
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -718,6 +718,10 @@ body > div[style*="border-top:1px solid #d4a017"] > div:last-child{
   .dash-title{font-size:28px;}
   .modal,.poi-modal-box{padding:24px 18px;}
   #salma-chat{right:12px;left:12px;width:auto;max-width:none;}
+  #hero-demo-grid{grid-template-columns:1fr !important;gap:8px !important;}
+  #hero-demo-modal{padding:10px !important;}
+  #hero-demo-content{border-radius:14px !important;}
+  #hero-demo-map{height:200px !important;}
 }
 </style>
 
@@ -1439,12 +1443,10 @@ input::placeholder, textarea::placeholder{
   <span class="nav-claim">No estás perdido si sabes dónde vas</span>
 </div>
   <div class="nav-links"  id="nav-links-guest" style="display:flex;">
-    <a class="nav-link" onclick="showPage('editor')" style="cursor:pointer;">Demo</a>
-    <button class="nav-cta" onclick="openModal('login')">Entrar</button>
+    <button class="nav-cta" onclick="openModal('login')">Acceso a tus rutas</button>
   </div>
   <div class="nav-user" id="nav-links-user" style="display:none;">
-    <a class="nav-link" onclick="showPage('editor')" style="cursor:pointer;">Demo</a>
-    <a class="nav-link" onclick="showPage('dashboard')" style="cursor:pointer;">Mis mapas</a>
+    <a class="nav-link" onclick="showPage('dashboard')" style="cursor:pointer;">Mis rutas</a>
     <div class="nav-avatar" id="nav-avatar" onclick="toggleUserMenu()" style="cursor:pointer;position:relative;">B
       <div id="user-menu" style="display:none;position:absolute;top:48px;right:0;background:#111;border:1px solid var(--gris2);min-width:140px;z-index:999;">
         <div onclick="setDashTab('profile',null);showPage('dashboard')" style="padding:12px 16px;font-family:'Space Mono',monospace;font-size:10px;color:var(--crema);cursor:pointer;border-bottom:1px solid var(--gris2);">⚙️ MI CUENTA</div>
@@ -1460,25 +1462,44 @@ input::placeholder, textarea::placeholder{
 <div class="hero-map-overlay"></div>
     <div id="hero-map"></div>
     <div class="hero-content" style="position:relative;z-index:2;">
-      <div class="hero-label">Herramienta profesional de planificación de viajes.</div>
-      <h1 class="hero-title">No es un mapa.<br><em>Es tu plan.</em></h1>
+      <div class="hero-label">Salma · Tu copiloto de viaje con IA</div>
+      <h1 class="hero-title"><em>Déjame a mí.</em></h1>
       
-      <p class="hero-sub">Dile a Salma adónde quieres ir. Ella te monta la ruta, los puntos clave y los sitios que no salen en las guías.</p>
+      <p class="hero-sub">Una IA viajera que conoce los caminos. Planifica tu ruta, te acompaña en el viaje y guarda todo lo que descubres.</p>
       
       <!-- SALMA HERO INPUT -->
-      <div id="salma-hero-box" style="display:flex;gap:10px;margin-bottom:18px;max-width:560px;">
-        <input type="text" id="salma-hero-input" placeholder="Ej: 10 días en moto por Vietnam..." autocomplete="off" style="flex:1;background:#111111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:14px 18px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:15px;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'">
-        <button onclick="salmaHeroSend()" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:14px 22px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.14em;cursor:pointer;white-space:nowrap;transition:background .2s;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">PLANEAR →</button>
+      <div id="salma-hero-box" style="display:flex;gap:10px;margin-bottom:24px;max-width:560px;">
+        <input type="text" id="salma-hero-input" placeholder="Ej: 10 días en moto por Vietnam..." autocomplete="off" style="flex:1;background:#111111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:14px 18px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:15px;outline:none;transition:border-color .2s;min-width:0;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'">
+        <button onclick="salmaHeroSend()" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:14px 22px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.14em;cursor:pointer;white-space:nowrap;transition:background .2s;flex-shrink:0;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">PLANEAR →</button>
       </div>
-      <div id="salma-hero-suggestions" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
-        <span class="salma-suggestion" onclick="salmaHeroQuick('Una semana en Japón cultural')" style="cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:9px;padding:6px 12px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:rgba(245,240,232,.65);transition:all .2s;" onmouseover="this.style.borderColor='#d4a017';this.style.color='#d4a017'" onmouseout="this.style.borderColor='rgba(212,160,23,.25)';this.style.color='rgba(245,240,232,.65)'">Japón cultural</span>
-        <span class="salma-suggestion" onclick="salmaHeroQuick('Road trip por Islandia 12 días')" style="cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:9px;padding:6px 12px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:rgba(245,240,232,.65);transition:all .2s;" onmouseover="this.style.borderColor='#d4a017';this.style.color='#d4a017'" onmouseout="this.style.borderColor='rgba(212,160,23,.25)';this.style.color='rgba(245,240,232,.65)'">Islandia road trip</span>
-        <span class="salma-suggestion" onclick="salmaHeroQuick('Tailandia en pareja con poco presupuesto')" style="cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:9px;padding:6px 12px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:rgba(245,240,232,.65);transition:all .2s;" onmouseover="this.style.borderColor='#d4a017';this.style.color='#d4a017'" onmouseout="this.style.borderColor='rgba(212,160,23,.25)';this.style.color='rgba(245,240,232,.65)'">Tailandia low cost</span>
-      </div>
-      <div style="display:flex;gap:12px;align-items:center;">
-        <button class="btn-hero btn-hero-secondary" onclick="openModal('register')" style="font-size:10px;padding:12px 20px;">Crear cuenta gratis</button>
+
+      <!-- DEMOS -->
+      <div style="margin-top:8px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(245,240,232,.45);letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px;">Ver ejemplos de viaje</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;" id="hero-demo-grid">
+          <div onclick="openHeroDemo('japan')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:14px;padding:14px;transition:all .2s;" onmouseover="this.style.borderColor='#d4a017';this.style.background='rgba(212,160,23,.06)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.background='rgba(255,255,255,.03)'">
+            <div style="font-size:24px;margin-bottom:6px;">🏯</div>
+            <div style="font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:4px;">Japón</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">7 DÍAS · CULTURAL</div>
+          </div>
+          <div onclick="openHeroDemo('thailand')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:14px;padding:14px;transition:all .2s;" onmouseover="this.style.borderColor='#d4a017';this.style.background='rgba(212,160,23,.06)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.background='rgba(255,255,255,.03)'">
+            <div style="font-size:24px;margin-bottom:6px;">🏖️</div>
+            <div style="font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:4px;">Tailandia</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">10 DÍAS · LOW COST</div>
+          </div>
+          <div onclick="openHeroDemo('iceland')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:14px;padding:14px;transition:all .2s;" onmouseover="this.style.borderColor='#d4a017';this.style.background='rgba(212,160,23,.06)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.background='rgba(255,255,255,.03)'">
+            <div style="font-size:24px;margin-bottom:6px;">🌋</div>
+            <div style="font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:4px;">Islandia</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">12 DÍAS · ROAD TRIP</div>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
+
+  <!-- DEMO ROUTE MODAL (pre-generadas) -->
+  <div id="hero-demo-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:10002;overflow-y:auto;padding:20px;" onclick="if(event.target===this)this.style.display='none'">
+    <div id="hero-demo-content" style="max-width:640px;margin:0 auto;background:#111;border:1px solid rgba(212,160,23,.25);border-radius:20px;padding:0;overflow:hidden;"></div>
   </div>
 
   <!-- FEATURES -->
@@ -3072,7 +3093,7 @@ document.getElementById("poi-modal").addEventListener("click", function(e) {
 </script>
 <div style="background:var(--negro);border-top:1px solid #d4a017;padding:32px 32px 40px;text-align:center;position:relative;z-index:100;">
   <div style="font-family:'Bebas Neue',sans-serif;font-size:30px;font-weight:700;letter-spacing:2px;color:var(--blanco);margin-bottom:10px;line-height:1;white-space:nowrap;">borrado<span style="color:#d4a017;font-weight:700;">del</span>mapa</div>
-  <div style="font-size:18px;color:#ffffff;margin-bottom:18px;">Diseñado para viajeros que quieren planificar mejor y viajar sin improvisar.</div>
+  <div style="font-size:18px;color:#ffffff;margin-bottom:18px;">Tu copiloto de viaje con IA. Planifica, viaja, descubre.</div>
   <div style="display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:18px;">
     <a class="footer-link" href="https://instagram.com/borradodelmapa" target="_blank">Instagram</a>
     <a class="footer-link" onclick="showPage('blog')" style="cursor:pointer;">Blog</a>
@@ -3531,6 +3552,192 @@ function salmaHeroQuick(text) {
   salmaHeroSend();
 }
 window.salmaHeroQuick = salmaHeroQuick;
+
+// ===== DEMOS PRE-GENERADAS =====
+const HERO_DEMOS = {
+  japan: {
+    title: "Japón cultural",
+    emoji: "🏯",
+    duration: 7,
+    budget: "medio",
+    summary: "Una semana recorriendo lo mejor de la cultura japonesa: desde los templos milenarios de Kioto hasta el bullicio futurista de Tokio, pasando por la serenidad de Nara y la historia de Hiroshima.",
+    region: "Honshū",
+    country: "Japón",
+    stops: [
+      {day:1, name:"Tokio · Shinjuku & Shibuya", type:"city", description:"Aterrizaje y primer impacto. Cruce de Shibuya, Golden Gai, ramen en Fuunji.", lat:35.6895, lng:139.6917},
+      {day:2, name:"Tokio · Asakusa & Akihabara", type:"temple", description:"Senso-ji al amanecer, mercado de Ameyoko, tarde en Akihabara.", lat:35.7148, lng:139.7967},
+      {day:3, name:"Hakone", type:"nature", description:"Escapada al lago Ashi con vistas al Fuji. Onsen tradicional. Tren de montaña.", lat:35.2325, lng:139.1070},
+      {day:4, name:"Kioto · Higashiyama", type:"temple", description:"Fushimi Inari al amanecer (sin gente), barrio de las geishas de Gion, templo Kiyomizu-dera.", lat:34.9671, lng:135.7727},
+      {day:5, name:"Kioto · Arashiyama", type:"nature", description:"Bosque de bambú, puente Togetsukyo, templo Tenryu-ji. Tarde en el barrio de Nishiki.", lat:35.0094, lng:135.6674},
+      {day:6, name:"Nara", type:"temple", description:"Parque de los ciervos, Gran Buda de Todai-ji, santuario Kasuga Taisha entre farolillos de piedra.", lat:34.6851, lng:135.8048},
+      {day:7, name:"Hiroshima & Miyajima", type:"city", description:"Memorial de la Paz, cúpula Genbaku, ferry a Miyajima para ver el torii flotante al atardecer.", lat:34.3955, lng:132.4596}
+    ],
+    tips: [
+      "Compra el Japan Rail Pass de 7 días: amortizas el shinkansen Tokio-Kioto en un solo trayecto.",
+      "Fushimi Inari a las 6am. A las 9 hay colas de 200 personas.",
+      "Come en konbinis (7-Eleven, Lawson): onigiri a 1€ y calidad que no existe en otro país.",
+      "Lleva efectivo. Muchos sitios en Kioto y Nara no aceptan tarjeta.",
+      "Septiembre-noviembre o marzo-mayo. Evita agosto: calor extremo y obon."
+    ],
+    tags: ["cultural", "templos", "gastronomía", "tren"]
+  },
+  thailand: {
+    title: "Tailandia low cost",
+    emoji: "🏖️",
+    duration: 10,
+    budget: "bajo",
+    summary: "10 días con presupuesto mochilero por lo mejor de Tailandia: templos de Bangkok, ruinas de Ayutthaya, selva de Chiang Mai y playas del sur. Todo por menos de 30€/día.",
+    region: "Central y Sur",
+    country: "Tailandia",
+    stops: [
+      {day:1, name:"Bangkok · Khao San & Templos", type:"city", description:"Gran Palacio, Wat Pho (buda reclinado), Wat Arun al atardecer. Pad thai callejero por 1€.", lat:13.7563, lng:100.5018},
+      {day:2, name:"Bangkok · Chatuchak & Chinatown", type:"city", description:"Mercado de fin de semana más grande del mundo. Noche en Yaowarat (Chinatown).", lat:13.7999, lng:100.5535},
+      {day:3, name:"Ayutthaya", type:"temple", description:"Antigua capital del reino de Siam. Alquila bici y recorre las ruinas UNESCO. Tren desde Bangkok por 0,50€.", lat:14.3532, lng:100.5689},
+      {day:4, name:"Chiang Mai · Casco antiguo", type:"temple", description:"Wat Phra Singh, Wat Chedi Luang, mercado nocturno de Sunday Walking Street.", lat:18.7883, lng:98.9853},
+      {day:5, name:"Chiang Mai · Doi Suthep", type:"mountain", description:"Templo dorado en la montaña con vistas. Tarde en Nimmanhaemin para cafés.", lat:18.8048, lng:98.9218},
+      {day:6, name:"Chiang Rai · Templo Blanco", type:"temple", description:"Wat Rong Khun (templo blanco), Casa Negra, mercado nocturno local.", lat:19.8244, lng:99.7632},
+      {day:7, name:"Krabi · Ao Nang", type:"beach", description:"Base para las islas. Playa de Railay en longtail boat, escalada en karsts.", lat:8.0473, lng:98.8365},
+      {day:8, name:"Koh Phi Phi", type:"beach", description:"Maya Bay, snorkel en Shark Point, mirador de la isla. Alojamiento desde 8€.", lat:7.7407, lng:98.7784},
+      {day:9, name:"Koh Lanta", type:"beach", description:"Playas largas sin masificar. Long Beach al atardecer. Comida local baratísima.", lat:7.6500, lng:99.0400},
+      {day:10, name:"Bangkok · Regreso", type:"city", description:"Vuelo interno Krabi-Bangkok. Último paseo por Khao San. Mango sticky rice de despedida.", lat:13.7563, lng:100.5018}
+    ],
+    tips: [
+      "Presupuesto real: 25-35€/día incluyendo alojamiento, comida y transporte interno.",
+      "Vuelos internos con AirAsia o Nok Air: Bangkok-Chiang Mai por 15-25€ si reservas con antelación.",
+      "Come en puestos callejeros, nunca en restaurantes turísticos. El pad thai de la calle es mejor y cuesta 1€.",
+      "Hostales por 5-8€/noche. En las islas sube a 10-15€ en temporada alta.",
+      "Mejor época: noviembre a febrero. Evita abril: 40°C y Songkran (todo cerrado)."
+    ],
+    tags: ["mochilero", "playas", "templos", "low cost"]
+  },
+  iceland: {
+    title: "Islandia road trip",
+    emoji: "🌋",
+    duration: 12,
+    budget: "medio-alto",
+    summary: "La Ring Road completa en 12 días: volcanes, glaciares, auroras boreales, aguas termales y paisajes que parecen de otro planeta. El road trip definitivo.",
+    region: "Ring Road (Ruta 1)",
+    country: "Islandia",
+    stops: [
+      {day:1, name:"Reikiavik", type:"city", description:"Hallgrímskirkja, puerto viejo, Harpa. Alquiler del 4x4. Hot dog en Bæjarins Beztu.", lat:64.1466, lng:-21.9426},
+      {day:2, name:"Círculo Dorado", type:"nature", description:"Þingvellir (fisura tectónica), Geysir, cascada Gullfoss. El día más clásico de Islandia.", lat:64.3271, lng:-20.1199},
+      {day:3, name:"Seljalandsfoss & Skógafoss", type:"nature", description:"Dos cascadas espectaculares. Puedes caminar detrás de Seljalandsfoss. Playa negra de Reynisfjara.", lat:63.6156, lng:-19.9886},
+      {day:4, name:"Vík & Reynisfjara", type:"beach", description:"Playa de arena negra con columnas de basalto. Acantilados de Dyrhólaey. Paisaje lunar.", lat:63.4186, lng:-19.0060},
+      {day:5, name:"Skaftafell & Jökulsárlón", type:"nature", description:"Glaciar Vatnajökull, laguna glaciar con icebergs. Diamond Beach al atardecer.", lat:64.0784, lng:-16.1756},
+      {day:6, name:"Fiordos del Este", type:"nature", description:"La parte menos turística. Carreteras entre fiordos, pueblos pesqueros de 50 habitantes.", lat:64.9139, lng:-13.8589},
+      {day:7, name:"Egilsstaðir & Borgarfjörður", type:"town", description:"Lago Lagarfljót, colonia de frailecillos en Borgarfjörður eystri (jun-ago).", lat:65.2538, lng:-14.3948},
+      {day:8, name:"Mývatn", type:"nature", description:"Lago volcánico, pseudocráteres, cuevas de lava Grjótagjá, baños termales de Mývatn.", lat:65.6035, lng:-16.9964},
+      {day:9, name:"Húsavík & Dettifoss", type:"nature", description:"Capital del whale watching. Dettifoss: la cascada más potente de Europa.", lat:65.9539, lng:-17.3383},
+      {day:10, name:"Akureyri", type:"city", description:"Capital del norte. Jardín botánico, iglesia Akureyrarkirkja, ballenas en Eyjafjörður.", lat:65.6835, lng:-18.0878},
+      {day:11, name:"Península de Snæfellsnes", type:"nature", description:"Kirkjufell (montaña más fotografiada), volcán Snæfellsjökull, pueblo de Arnarstapi.", lat:64.7539, lng:-23.6262},
+      {day:12, name:"Blue Lagoon & Reikiavik", type:"activity", description:"Último baño en la Blue Lagoon. Devolver coche. Cena de despedida en Grillið.", lat:63.8804, lng:-22.4495}
+    ],
+    tips: [
+      "Alquila un 4x4 obligatoriamente. Muchas F-roads requieren tracción total y los seguros no cubren sedanes en grava.",
+      "Presupuesto: 80-120€/día para dos personas (coche + gasolina + camping/guesthouses + comida).",
+      "Septiembre: posibilidad de auroras boreales + días largos + menos turistas que en verano.",
+      "Lleva comida del supermercado Bónus (cerdo rosa). Comer fuera en Islandia cuesta 25-40€ por persona.",
+      "El tiempo cambia cada 15 minutos. Viste en capas y lleva siempre chubasquero."
+    ],
+    tags: ["road trip", "naturaleza", "volcanes", "glaciares", "auroras"]
+  }
+};
+
+function openHeroDemo(key) {
+  const demo = HERO_DEMOS[key];
+  if (!demo) return;
+  
+  const modal = document.getElementById('hero-demo-modal');
+  const content = document.getElementById('hero-demo-content');
+  
+  var typeIcons = {city:'🏙',town:'🏘',nature:'🌿',beach:'🏖',mountain:'⛰',temple:'🛕',viewpoint:'📸',route:'🛤',activity:'🎯',other:'📍'};
+  
+  // Stops HTML
+  var stopsHTML = demo.stops.map(function(s) {
+    var icon = typeIcons[s.type] || '📍';
+    var mapsUrl = 'https://www.google.com/maps?q=' + s.lat + ',' + s.lng;
+    return '<div style="display:flex;gap:12px;padding:14px 0;border-bottom:1px solid rgba(212,160,23,.1);">' +
+      '<div style="min-width:32px;text-align:center;">' +
+        '<span style="font-size:20px;">' + icon + '</span>' +
+        '<div style="font-family:\'JetBrains Mono\',monospace;font-size:8px;color:var(--dorado);margin-top:2px;">DÍA ' + s.day + '</div>' +
+      '</div>' +
+      '<div style="flex:1;">' +
+        '<div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:3px;">' + s.name + '</div>' +
+        '<div style="font-size:13px;color:rgba(245,240,232,.7);line-height:1.6;">' + s.description + '</div>' +
+        '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;margin-top:4px;display:inline-block;">VER EN MAPA →</a>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+  
+  // Tips HTML
+  var tipsHTML = demo.tips.map(function(t) {
+    return '<div style="font-size:13px;color:rgba(245,240,232,.7);line-height:1.6;margin-bottom:6px;">• ' + t + '</div>';
+  }).join('');
+  
+  // Tags HTML
+  var tagsHTML = demo.tags.map(function(t) {
+    return '<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;padding:5px 10px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:var(--dorado);">' + t + '</span>';
+  }).join('');
+  
+  content.innerHTML = 
+    // Mapa
+    '<div id="hero-demo-map" style="width:100%;height:280px;background:#0a0a09;"></div>' +
+    // Contenido
+    '<div style="padding:24px;">' +
+      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">' +
+        '<span style="font-size:32px;">' + demo.emoji + '</span>' +
+        '<div>' +
+          '<div style="font-family:\'Inter Tight\',sans-serif;font-size:24px;font-weight:700;color:#fff;line-height:1.1;">' + demo.title + '</div>' +
+          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-top:4px;">' + demo.duration + ' DÍAS · ' + demo.country.toUpperCase() + ' · ' + demo.budget.toUpperCase() + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.7;margin:16px 0;">' + demo.summary + '</div>' +
+      '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;">' + tagsHTML + '</div>' +
+      // Stops
+      '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:8px;">ITINERARIO · ' + demo.stops.length + ' PARADAS</div>' +
+      stopsHTML +
+      // Tips
+      '<div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(212,160,23,.15);">' +
+        '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:10px;">CONSEJOS DE SALMA</div>' +
+        tipsHTML +
+      '</div>' +
+      // CTA
+      '<div style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(212,160,23,.15);text-align:center;">' +
+        '<div style="font-size:15px;color:rgba(245,240,232,.7);margin-bottom:12px;">¿Quieres algo así para tu viaje?</div>' +
+        '<button onclick="document.getElementById(\'hero-demo-modal\').style.display=\'none\';document.getElementById(\'salma-hero-input\').focus();" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:14px 28px;font-family:\'JetBrains Mono\',monospace;font-size:10px;font-weight:700;letter-spacing:.14em;cursor:pointer;">CREAR MI RUTA CON SALMA →</button>' +
+      '</div>' +
+    '</div>';
+  
+  modal.style.display = 'block';
+  
+  // Inicializar mapa Leaflet
+  setTimeout(function() {
+    var mapEl = document.getElementById('hero-demo-map');
+    if (!mapEl || mapEl._leaflet_id) return;
+    
+    var center = [demo.stops[Math.floor(demo.stops.length/2)].lat, demo.stops[Math.floor(demo.stops.length/2)].lng];
+    var demoMap = L.map('hero-demo-map', {zoomControl:false, scrollWheelZoom:false}).setView(center, 6);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom:18}).addTo(demoMap);
+    
+    // Ruta
+    var coords = demo.stops.map(function(s) { return [s.lat, s.lng]; });
+    L.polyline(coords, {color:'#d4a017', weight:2, opacity:.7, dashArray:'8,6'}).addTo(demoMap);
+    
+    // Markers
+    demo.stops.forEach(function(s) {
+      var icon = L.divIcon({
+        html:'<div style="background:#d4a017;border-radius:50%;width:10px;height:10px;box-shadow:0 0 0 3px rgba(212,160,23,.3);"></div>',
+        className:'', iconSize:[10,10], iconAnchor:[5,5]
+      });
+      L.marker([s.lat, s.lng], {icon:icon}).addTo(demoMap)
+        .bindTooltip(s.name, {permanent:false, direction:'right'});
+    });
+    
+    // Fit bounds
+    demoMap.fitBounds(coords, {padding:[30,30]});
+  }, 150);
+}
+window.openHeroDemo = openHeroDemo;
 
 // Hero input: Enter para enviar
 document.getElementById("salma-hero-input").addEventListener("keydown", function(e) {
