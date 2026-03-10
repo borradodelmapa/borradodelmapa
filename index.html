@@ -365,69 +365,360 @@ footer{background:var(--gris);border-top:1px solid var(--dorado);padding:48px 80
 .leaflet-tile{filter:brightness(2.2) contrast(1.8) saturate(0);}
 @keyframes glow{0%,100%{box-shadow:0 0 12px #050505,0 0 28px #050505,0 0 50px #050505;}50%{box-shadow:0 0 24px #050505,0 0 50px #050505,0 0 80px #050505;}}
 
-/* ===== PREMIUM V2 OVERRIDES ===== */
+/* ===== PREMIUM V3 DESIGN SYSTEM ===== */
 :root{
-  --negro:#0b1020;
-  --dorado:#d4a017;
-  --dorado2:#d4a017;
-  --crema:#d6deea;
-  --blanco:#f8fafc;
-  --gris:#111827;
-  --gris2:#1f2937;
-  --gris3:#334155;
-  --verde:#22c55e;
-  --rojo:#ef4444;
+  --negro:#070707;
+  --dorado:#c8930f;
+  --dorado2:#e8b040;
+  --crema:#f4efe6;
+  --blanco:#ffffff;
+  --gris:#121110;
+  --gris2:#1d1b19;
+  --gris3:#2c2925;
+  --linea:rgba(232,176,64,.18);
+  --linea-fuerte:rgba(232,176,64,.34);
+  --glass:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.01));
+  --sombra:0 16px 44px rgba(0,0,0,.35);
+  --sombra-fuerte:0 28px 70px rgba(0,0,0,.45);
 }
-body{font-family:'Inter',sans-serif;background:radial-gradient(circle at top,#050505,transparent 32%),linear-gradient(180deg,#0b1020 0%,#0a1224 48%,#0b1020 100%);color:var(--crema);letter-spacing:-.01em;}
-nav{min-height:88px;padding:14px 24px;gap:8px;background:#050505;backdrop-filter:none !important;border-bottom:1px solid #050505;box-shadow:0 10px 30px #050505;}
-.page{padding-top:88px;}
-.nav-logo-badge{padding:10px 18px;border-radius:16px;border:1px solid #050505;background:#050505;box-shadow:none;}
-.nav-logo-text,.footer-logo,.hero-stat-num,.pricing-price,.sidebar-avatar{font-family:'Inter Tight',sans-serif!important;letter-spacing:-.03em;}
-.nav-logo-text{font-size:28px;}
-.nav-logo-text span,.footer-logo span{color:var(--dorado2);}
-.nav-link,.hero-label,.sec-label,.feature-title,.pricing-name,.btn-hero,.btn-pricing,.btn-new,.btn-buy,.btn-upgrade,.nav-cta{font-family:'JetBrains Mono',monospace!important;}
-.nav-link{font-size:11px;opacity:.7;}
-.nav-cta,.btn-hero-primary,.btn-pricing-primary,.btn-new,.btn-buy,.btn-upgrade,.btn-alert{background:linear-gradient(180deg,#d4a017,#d4a017)!important;color:#08111f!important;border:none;box-shadow:0 14px 30px #050505;}
-.nav-cta:hover,.btn-hero-primary:hover,.btn-pricing-primary:hover,.btn-new:hover,.btn-buy:hover,.btn-upgrade:hover{transform:translateY(-1px);box-shadow:0 18px 34px #050505;}
-.hero{min-height:84vh;padding:124px 32px 48px;align-items:center;}
-.hero-map-overlay{display:none !important;background:none !important;}
-
-.hero-label{font-size:11px;letter-spacing:2px;color:#d4a017;margin-bottom:18px;opacity:1;}
-.hero-title,.sec-title,.dash-title,.editor-map-title,.store-name,.map-card-title,.pricing-card .pricing-price,.sidebar-name{font-family:'Inter Tight',sans-serif!important;}
-.hero-title{font-size:clamp(52px,7vw,84px);line-height:.98;letter-spacing:-.05em;margin-bottom:14px;}
-.hero-title em{color:#d4a017;font-style:normal;}
-.hero-sub{font-size:20px;line-height:1.65;color:#ffffff;opacity:.92;max-width:620px;margin-left:0;margin-right:0;margin-bottom:28px;text-shadow:none;}
-.hero-btns{justify-content:flex-start;}
-.btn-hero{padding:16px 22px;min-width:220px;border-radius:14px;letter-spacing:.06em;font-size:11px;}
-.btn-hero-secondary{background:#050505;border:1px solid #050505;}
-.hero-stats{gap:18px;justify-content:flex-start;margin-top:34px;padding-top:24px;border-top:1px solid #050505;}
-.hero-stats>div{padding:14px 16px;border-radius:16px;background:#111111;border:1px solid #d4a017;min-width:170px;box-shadow:none;opacity:1;}
-.hero-stat-num{font-size:22px;color:var(--blanco);}
-.hero-stat-lbl{font-size:10px;color:#8a8a8a;opacity:1;margin-top:6px;}
+html{background:var(--negro);}
+body{
+  font-family:'Inter',sans-serif;
+  color:var(--crema);
+  background:
+    radial-gradient(circle at top, rgba(200,147,15,.07), transparent 28%),
+    linear-gradient(180deg,#090909 0%, #0b0a09 44%, #090909 100%);
+  letter-spacing:-.01em;
+}
+a{color:inherit;}
+nav{
+  min-height:92px;
+  padding:14px 28px 16px;
+  gap:9px;
+  background:rgba(7,7,7,.96)!important;
+  border-bottom:1px solid var(--linea)!important;
+  box-shadow:0 12px 40px rgba(0,0,0,.3);
+}
+nav.scrolled{background:rgba(7,7,7,.98)!important;border-bottom-color:var(--linea)!important;}
+.page{padding-top:92px;}
+.nav-logo,.nav-logo-wordmark,.hero-stat-num,.pricing-price,.sidebar-avatar{font-family:'Inter Tight',sans-serif!important;}
+.nav-logo-wordmark{
+  margin-top:12px;
+  font-size:31px;
+  letter-spacing:-.04em;
+  text-transform:lowercase;
+}
+.nav-claim{
+  font-family:'JetBrains Mono',monospace!important;
+  font-size:10px;
+  letter-spacing:.28em;
+  color:rgba(244,239,230,.76);
+}
+.nav-links{margin-top:12px;gap:20px;flex-wrap:wrap;justify-content:center;}
+.nav-link,.hero-label,.sec-label,.pricing-name,.feature-title,.editor-section-title,.sidebar-plan,.sidebar-upgrade-title,.map-card-meta,.store-country,.hero-stat-lbl,.btn-hero,.btn-pricing,.btn-form,.btn-social,.btn-new,.btn-buy,.btn-upgrade,.btn-alert,.nav-cta,.day-tab,.modal-div-txt,.form-label,.footer-link{
+  font-family:'JetBrains Mono',monospace!important;
+}
+.nav-link{
+  font-size:10px;
+  letter-spacing:.16em;
+  opacity:.72;
+}
+.nav-link:hover{color:var(--dorado2);opacity:1;}
+.nav-cta,.btn-hero-primary,.btn-pricing-primary,.btn-form,.btn-new,.btn-buy,.btn-upgrade,.btn-alert{
+  background:linear-gradient(180deg,var(--dorado2) 0%, var(--dorado) 100%)!important;
+  color:#120d02!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:14px;
+  box-shadow:0 12px 28px rgba(200,147,15,.2);
+}
+.nav-cta:hover,.btn-hero-primary:hover,.btn-pricing-primary:hover,.btn-form:hover,.btn-new:hover,.btn-buy:hover,.btn-upgrade:hover,.btn-alert:hover{
+  transform:translateY(-1px);
+  box-shadow:0 18px 34px rgba(200,147,15,.22);
+}
+.btn-hero-secondary,.btn-pricing-outline,.btn-social,.btn-add-poi,.map-tool-btn,.day-tab,.editor-back{
+  background:rgba(255,255,255,.02)!important;
+  border:1px solid var(--linea)!important;
+  color:var(--crema)!important;
+}
+.btn-hero-secondary:hover,.btn-pricing-outline:hover,.btn-social:hover,.btn-add-poi:hover,.map-tool-btn:hover,.day-tab:hover,.editor-back:hover{
+  border-color:var(--linea-fuerte)!important;
+  color:var(--dorado2)!important;
+}
+.hero{
+  min-height:calc(100vh - 20px);
+  align-items:center;
+  justify-content:flex-start;
+  padding:128px 32px 54px;
+}
+.hero-content{
+  max-width:840px;
+  padding:42px 42px 22px;
+  border-radius:30px;
+  background:linear-gradient(180deg,rgba(18,17,16,.88),rgba(10,10,10,.96));
+  border:1px solid var(--linea);
+  box-shadow:var(--sombra-fuerte);
+}
+.hero-map-overlay{display:block!important;background:linear-gradient(90deg,rgba(7,7,7,.78) 0%,rgba(7,7,7,.58) 36%,rgba(7,7,7,.2) 68%,rgba(7,7,7,.08) 100%)!important;}
+.hero-label{
+  font-size:10px;
+  letter-spacing:.28em;
+  color:var(--dorado2);
+  opacity:1;
+  margin-bottom:16px;
+}
+.hero-title,.sec-title,.dash-title,.editor-map-title,.store-name,.map-card-title,.sidebar-name,.modal-title{
+  font-family:'Inter Tight',sans-serif!important;
+}
+.hero-title{
+  font-size:clamp(52px,7vw,86px);
+  line-height:.96;
+  letter-spacing:-.055em;
+  margin-bottom:18px;
+}
+.hero-title em{color:var(--dorado2);font-style:normal;}
+.hero-sub,.sec-sub,.pricing-desc,.feature-desc,.dash-sub,.store-meta,.free-alert-text span,.modal-sub{
+  color:rgba(244,239,230,.78)!important;
+  opacity:1!important;
+}
+.hero-sub{
+  max-width:610px;
+  margin:0 0 30px;
+  font-size:19px;
+  line-height:1.72;
+}
+.hero-btns{justify-content:flex-start;gap:14px;}
+.btn-hero,.btn-pricing,.btn-form,.btn-new,.btn-buy,.btn-upgrade,.btn-alert,.nav-cta{
+  letter-spacing:.14em;
+  font-size:10px;
+  min-height:48px;
+  padding:14px 22px;
+}
+.btn-hero{min-width:220px;border-radius:14px;}
+.hero-stats{
+  gap:16px;
+  justify-content:flex-start;
+  margin-top:30px;
+  padding-top:22px;
+  border-top:1px solid var(--linea);
+  background:transparent;
+  flex-wrap:wrap;
+}
+.hero-stats>div{
+  min-width:168px;
+  padding:16px 18px;
+  border-radius:18px;
+  background:var(--glass);
+  border:1px solid var(--linea);
+}
+.hero-stat-num{font-size:26px;color:var(--blanco);}
+.hero-stat-lbl{font-size:9px;letter-spacing:.2em;color:rgba(244,239,230,.58)!important;opacity:1;}
 .features,.pricing,#page-store .store-inner{max-width:1180px;padding-left:32px;padding-right:32px;}
-.features{padding-top:44px;padding-bottom:88px;}
+.features{padding-top:60px;padding-bottom:96px;}
+.pricing{padding-top:96px;padding-bottom:96px;}
 .sec-header{text-align:left;max-width:760px;}
-.sec-title{font-size:clamp(34px,4vw,54px);letter-spacing:-.04em;margin-bottom:14px;}
-.sec-sub{font-size:18px;line-height:1.7;color:#ffffff;opacity:.88;}
+.sec-title{font-size:clamp(34px,4vw,56px);line-height:1.02;letter-spacing:-.05em;margin-bottom:14px;}
+.sec-sub{font-size:17px;line-height:1.75;max-width:700px;margin:0;}
 .features-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:34px;}
-.feature-card,.pricing-card,.store-card,.map-card,.sidebar-upgrade,.free-alert{background:linear-gradient(180deg,#050505,#050505);border:1px solid #050505;border-left:none;border-radius:20px;box-shadow:0 16px 40px #050505;}
-.feature-card{padding:24px;}
-.feature-card:hover,.pricing-card:hover,.store-card:hover,.map-card:hover{transform:translateY(-2px);border-color:#050505;box-shadow:0 24px 50px #050505;}
-.feature-title{font-size:11px;letter-spacing:.08em;color:#d4a017;margin-bottom:10px;}
-.feature-desc{font-size:15px;line-height:1.72;color:#ffffff;opacity:.9;}
-footer{padding:28px 32px 64px;border-top:1px solid #050505;text-align:center;}
-.footer-logo{font-size:36px;color:var(--blanco);margin-bottom:16px;}
-@media(max-width:900px){.features-grid{grid-template-columns:1fr;}.hero{padding:112px 18px 34px;align-items:flex-start;}.hero-btns .btn-hero{width:100%;}.hero-stats{flex-direction:column;}.hero-stats>div{width:100%;}.sec-header{text-align:left;}}
-@media(max-width:600px){nav{min-height:92px;padding:14px 14px 16px;}.page{padding-top:92px;}.nav-logo-text{font-size:24px;}.hero-sub{font-size:19px;}.features{padding-top:24px;padding-bottom:72px;}.sec-title{font-size:38px;}}
-
-
-.nav-logo{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}
-
-
-.nav-claim{display:block;white-space:nowrap;text-align:center;font-size:9px;letter-spacing:3px;line-height:1.15;color:#d4a017;background:transparent;padding:0;}
-
-@media(max-width:600px){.nav-claim{font-size:8px;letter-spacing:2px;}}
-
+.feature-card,.pricing-card,.store-card,.map-card,.sidebar-upgrade,.free-alert,.modal,.poi-modal-box,.poi-item-editor,.editor-panel,.sidebar,.mobile-dash-nav{
+  background:linear-gradient(180deg,rgba(18,17,16,.94),rgba(12,12,11,.98))!important;
+  border:1px solid var(--linea)!important;
+  box-shadow:var(--sombra);
+}
+.feature-card,.pricing-card,.store-card,.map-card,.sidebar-upgrade,.free-alert,.modal,.poi-modal-box{border-radius:22px;}
+.feature-card,.pricing-card,.store-card,.map-card{overflow:hidden;}
+.feature-card{padding:24px 24px 22px;border-left:1px solid var(--linea)!important;}
+.feature-card:hover,.pricing-card:hover,.store-card:hover,.map-card:hover{transform:translateY(-3px);border-color:var(--linea-fuerte)!important;box-shadow:var(--sombra-fuerte);}
+.feature-title{font-size:10px;letter-spacing:.16em;color:var(--dorado2);margin-bottom:12px;}
+.feature-desc{font-size:15px;line-height:1.72;}
+.pricing-grid{gap:22px;}
+.pricing-card{padding:34px;}
+.pricing-card.featured{
+  background:linear-gradient(180deg,rgba(200,147,15,.12),rgba(18,17,16,.98))!important;
+  border-color:var(--linea-fuerte)!important;
+}
+.pricing-card.featured::before{
+  background:var(--dorado2);
+  color:#120d02;
+  border-radius:999px;
+  padding:5px 14px;
+}
+.pricing-name,.sec-label,.form-label,.editor-section-title,.sidebar-plan,.store-country,.map-card-meta{
+  font-size:10px;
+  letter-spacing:.18em;
+  color:var(--dorado2)!important;
+}
+.pricing-price{font-size:62px;letter-spacing:-.05em;}
+.pricing-price span{color:rgba(244,239,230,.56);}
+.pricing-features li{border-bottom:1px solid rgba(232,176,64,.1);padding:10px 0;color:rgba(244,239,230,.8);}
+.dashboard-layout{grid-template-columns:280px 1fr;min-height:calc(100vh - 92px);}
+.sidebar{padding:28px 18px;border-right:1px solid var(--linea)!important;border-radius:0;box-shadow:none;}
+.sidebar-user{padding:0 12px 24px;border-bottom:1px solid var(--linea);margin-bottom:22px;}
+.sidebar-avatar{
+  width:54px;height:54px;
+  background:linear-gradient(180deg,var(--dorado2),var(--dorado));
+  color:#120d02;
+  font-size:24px;
+  box-shadow:0 10px 26px rgba(200,147,15,.2);
+}
+.sidebar-name{font-size:18px;letter-spacing:-.03em;}
+.sidebar-plan{opacity:1;}
+.sidebar-nav{padding:0;}
+.sidebar-item{
+  border:1px solid transparent;
+  border-left:1px solid transparent;
+  border-radius:14px;
+  margin-bottom:8px;
+  padding:12px 14px;
+}
+.sidebar-item:hover{background:rgba(255,255,255,.025);border-color:var(--linea);}
+.sidebar-item.active{
+  background:rgba(200,147,15,.1);
+  border-color:rgba(232,176,64,.18);
+  border-left-color:var(--dorado2);
+}
+.sidebar-item-txt{opacity:.86;}
+.sidebar-item.active .sidebar-item-txt{color:var(--blanco);}
+.sidebar-upgrade{margin:22px 10px 0;padding:18px;}
+.sidebar-upgrade-desc{color:rgba(244,239,230,.68);}
+.dash-content{padding:34px 36px 46px;}
+.dash-header{margin-bottom:28px;gap:18px;flex-wrap:wrap;}
+.dash-title{font-size:34px;line-height:1;letter-spacing:-.04em;}
+.free-alert{padding:18px 20px;gap:18px;border-radius:20px;}
+.maps-grid,.store-grid{gap:20px;}
+.map-card-img,.store-card-img{
+  background:linear-gradient(180deg,rgba(232,176,64,.1),rgba(255,255,255,.02));
+  border-bottom:1px solid var(--linea);
+}
+.map-card-body,.store-card-body{padding:20px;}
+.map-card-title,.store-name{font-size:21px;line-height:1.08;letter-spacing:-.03em;}
+.map-card-meta{margin-bottom:12px;opacity:1;}
+.tag{
+  border-radius:999px;
+  padding:5px 10px;
+  background:rgba(232,176,64,.08);
+  border:1px solid rgba(232,176,64,.16);
+  color:var(--dorado2);
+}
+.map-card-new{
+  min-height:260px;
+  border-style:solid;
+  border-color:var(--linea)!important;
+  opacity:1;
+  background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+}
+.map-card-new-txt{opacity:.74;}
+.modal-overlay{background:rgba(0,0,0,.72)!important;backdrop-filter:blur(6px)!important;}
+.modal,.poi-modal-box{padding:34px;}
+.modal-title{font-size:31px;line-height:1;letter-spacing:-.04em;}
+.form-input,#salma-input{
+  background:#0c0b0a!important;
+  border:1px solid var(--linea)!important;
+  border-radius:14px;
+  color:var(--crema)!important;
+  font-family:'Inter',sans-serif!important;
+  font-size:15px!important;
+  padding:14px 16px!important;
+}
+.form-input::placeholder,#salma-input::placeholder{color:rgba(244,239,230,.28)!important;}
+.form-input:focus,#salma-input:focus{border-color:var(--linea-fuerte)!important;box-shadow:0 0 0 4px rgba(232,176,64,.08);}
+.modal-error{
+  background:rgba(127,29,29,.2)!important;
+  border:1px solid rgba(248,113,113,.28)!important;
+}
+.editor-layout{grid-template-columns:360px 1fr;height:calc(100vh - 92px);}
+.editor-panel{border-right:1px solid var(--linea)!important;}
+.editor-panel-header{padding:22px 24px;border-bottom:1px solid var(--linea);}
+.editor-back{padding:8px 12px;border-radius:12px;opacity:.9;}
+.editor-map-title{font-size:24px;letter-spacing:-.03em;}
+.editor-scroll{padding:24px;}
+.poi-item-editor{padding:12px 14px;border-radius:16px;margin-bottom:8px;}
+.poi-name-editor{font-size:14px;}
+.poi-meta-editor{opacity:.62;}
+#leaflet-map,.editor-map-container{background:#0a0a09;}
+.map-toolbar{top:20px;right:20px;gap:10px;}
+.map-tool-btn{border-radius:14px;width:44px;height:44px;backdrop-filter:blur(8px);}
+#page-store .store-inner{padding-top:72px;padding-bottom:92px;}
+.store-price{font-family:'Inter Tight',sans-serif;font-size:32px;letter-spacing:-.04em;color:var(--dorado2);}
+.mobile-nav-item,.footer-link{font-family:'JetBrains Mono',monospace!important;letter-spacing:.12em;}
+.footer-link{
+  text-decoration:none;
+  color:rgba(244,239,230,.7)!important;
+  text-transform:uppercase;
+  font-size:10px;
+}
+.footer-link:hover{color:var(--dorado2)!important;}
+body > div[style*="border-top:1px solid #d4a017"]{
+  background:linear-gradient(180deg,#0d0c0b,#090909)!important;
+  border-top:1px solid var(--linea)!important;
+  padding:42px 32px 52px!important;
+}
+body > div[style*="border-top:1px solid #d4a017"] > div:first-child{
+  font-family:'Inter Tight',sans-serif!important;
+  font-size:38px!important;
+  letter-spacing:-.05em!important;
+  margin-bottom:14px!important;
+}
+body > div[style*="border-top:1px solid #d4a017"] > div:nth-child(2){
+  max-width:760px;
+  margin:0 auto 20px!important;
+  color:rgba(244,239,230,.76)!important;
+  line-height:1.7;
+  font-size:17px!important;
+}
+body > div[style*="border-top:1px solid #d4a017"] > div:last-child{
+  color:rgba(244,239,230,.48)!important;
+  letter-spacing:.12em;
+}
+#salma-btn{
+  width:62px;height:62px;
+  border:1px solid var(--linea-fuerte)!important;
+  background:linear-gradient(180deg,#141311,#0a0a09)!important;
+  box-shadow:0 16px 34px rgba(0,0,0,.45);
+}
+#salma-chat{
+  background:linear-gradient(180deg,#11100f,#0a0a09)!important;
+  border:1px solid var(--linea)!important;
+  border-radius:22px!important;
+  box-shadow:var(--sombra-fuerte);
+}
+#salma-chat-header,#salma-input-area{background:rgba(255,255,255,.02)!important;border-color:var(--linea)!important;}
+#salma-chat-header .salma-name{font-family:'Inter Tight',sans-serif!important;letter-spacing:-.03em;}
+#salma-chat-header .salma-status{font-family:'JetBrains Mono',monospace!important;color:var(--dorado2)!important;letter-spacing:.16em;}
+.salma-msg.bot{background:rgba(255,255,255,.03)!important;border:1px solid var(--linea)!important;}
+.salma-msg.user{background:linear-gradient(180deg,var(--dorado2),var(--dorado))!important;color:#120d02!important;}
+#salma-send{background:linear-gradient(180deg,var(--dorado2),var(--dorado))!important;}
+@media (max-width: 1024px){
+  .dashboard-layout{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .editor-layout{grid-template-columns:320px 1fr;}
+}
+@media (max-width: 900px){
+  nav{padding:14px 16px 18px;}
+  .nav-links{gap:14px;}
+  .hero{padding:116px 18px 38px;align-items:flex-start;}
+  .hero-content{padding:28px 22px 16px;max-width:100%;}
+  .hero-btns{flex-direction:column;align-items:stretch;}
+  .btn-hero{width:100%;min-width:0;}
+  .hero-stats{flex-direction:column;}
+  .hero-stats>div{width:100%;}
+  .features,.pricing,#page-store .store-inner,.dash-content{padding-left:18px;padding-right:18px;}
+  .features-grid,.pricing-grid{grid-template-columns:1fr;}
+  .sec-header{text-align:left;}
+  .sec-sub{max-width:none;}
+  .editor-layout{grid-template-columns:1fr;height:auto;}
+  .editor-panel{max-height:none;}
+  .editor-map-container{height:56vh;min-height:360px;}
+}
+@media (max-width: 600px){
+  .page{padding-top:98px;}
+  .nav-logo-wordmark{font-size:28px;}
+  .nav-claim{font-size:9px;letter-spacing:.2em;}
+  .hero-title{font-size:48px;}
+  .hero-sub,.sec-sub{font-size:16px;}
+  .dash-title{font-size:28px;}
+  .modal,.poi-modal-box{padding:24px 18px;}
+  #salma-chat{right:12px;left:12px;width:auto;max-width:none;}
+}
 </style>
 
 
@@ -1088,6 +1379,56 @@ input::placeholder, textarea::placeholder{
 }
 </style>
 
+
+<style id="premium-demo-buttons-hardfix">
+.demo-premium-buttons{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+.demo-map-btn{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  padding:12px 18px !important;
+  background:#0b0b0b !important;
+  color:#ffffff !important;
+  border:1px solid #c8930f !important;
+  border-radius:10px !important;
+  font-family:'Space Mono',monospace !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  text-decoration:none !important;
+  letter-spacing:.5px !important;
+  line-height:1.2 !important;
+  box-shadow:none !important;
+}
+.demo-map-btn:hover{
+  background:#c8930f !important;
+  color:#050505 !important;
+}
+.demo-booking-btn{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:10px !important;
+  padding:14px 22px !important;
+  background:#c8930f !important;
+  color:#050505 !important;
+  border:1px solid #c8930f !important;
+  border-radius:10px !important;
+  font-family:'Space Mono',monospace !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  text-decoration:none !important;
+  letter-spacing:.5px !important;
+  line-height:1.2 !important;
+  box-shadow:none !important;
+}
+</style>
+
 </head>
 <body>
 
@@ -1122,9 +1463,20 @@ input::placeholder, textarea::placeholder{
       <div class="hero-label">Herramienta profesional de planificación de viajes.</div>
       <h1 class="hero-title">No es un mapa.<br><em>Es tu plan.</em></h1>
       
-      <p class="hero-sub">Planifica tu viaje por días, organiza rutas y visualiza todo en un solo lugar. Añade lugares, conoce su historia, cultura...</p>
-      <div class="hero-btns">
-        <button class="btn-hero btn-hero-primary" onclick="openModal('register')">Crear mi viaje gratis</button>
+      <p class="hero-sub">Dile a Salma adónde quieres ir. Ella te monta la ruta, los puntos clave y los sitios que no salen en las guías.</p>
+      
+      <!-- SALMA HERO INPUT -->
+      <div id="salma-hero-box" style="display:flex;gap:10px;margin-bottom:18px;max-width:560px;">
+        <input type="text" id="salma-hero-input" placeholder="Ej: 10 días en moto por Vietnam..." autocomplete="off" style="flex:1;background:#111111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:14px 18px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:15px;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'">
+        <button onclick="salmaHeroSend()" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:14px 22px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.14em;cursor:pointer;white-space:nowrap;transition:background .2s;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">PLANEAR →</button>
+      </div>
+      <div id="salma-hero-suggestions" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+        <span class="salma-suggestion" onclick="salmaHeroQuick('Una semana en Japón cultural')" style="cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:9px;padding:6px 12px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:rgba(245,240,232,.65);transition:all .2s;" onmouseover="this.style.borderColor='#d4a017';this.style.color='#d4a017'" onmouseout="this.style.borderColor='rgba(212,160,23,.25)';this.style.color='rgba(245,240,232,.65)'">Japón cultural</span>
+        <span class="salma-suggestion" onclick="salmaHeroQuick('Road trip por Islandia 12 días')" style="cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:9px;padding:6px 12px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:rgba(245,240,232,.65);transition:all .2s;" onmouseover="this.style.borderColor='#d4a017';this.style.color='#d4a017'" onmouseout="this.style.borderColor='rgba(212,160,23,.25)';this.style.color='rgba(245,240,232,.65)'">Islandia road trip</span>
+        <span class="salma-suggestion" onclick="salmaHeroQuick('Tailandia en pareja con poco presupuesto')" style="cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:9px;padding:6px 12px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:rgba(245,240,232,.65);transition:all .2s;" onmouseover="this.style.borderColor='#d4a017';this.style.color='#d4a017'" onmouseout="this.style.borderColor='rgba(212,160,23,.25)';this.style.color='rgba(245,240,232,.65)'">Tailandia low cost</span>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;">
+        <button class="btn-hero btn-hero-secondary" onclick="openModal('register')" style="font-size:10px;padding:12px 20px;">Crear cuenta gratis</button>
       </div>
     </div>
   </div>
@@ -2129,7 +2481,7 @@ function renderItinerario() {
       <div style="background:#d4a017;border-left:2px solid var(--dorado);padding:12px 16px;margin-bottom:18px;">
         <div style="font-family:'Space Mono',monospace;font-size:10px;color:#c8930f;letter-spacing:1.4px;margin-bottom:10px;font-weight:700;">RUTA ALTERNATIVA</div>
         <div style="font-size:18px;color:var(--crema);opacity:.7;line-height:1.7;margin-bottom:10px;">${p.alt}</div>
-        <a href="${p.altmap}" target="_blank" style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dorado);text-decoration:none;letter-spacing:1px;border-bottom:1px solid #d4a017;padding-bottom:1px;">🗺 Ver en Google Maps →</a>
+        <a href="${p.altmap}" target="_blank" class="demo-map-btn">🗺 VER EN GOOGLE MAPS</a>
       </div>
       <a href="${p.booking}" target="_blank" class="demo-booking-btn">🏨 BOOKING &lt;20€/NOCHE</a>
     </div>`).join('');
@@ -2445,10 +2797,10 @@ async function addPoi() {
   // Save to Firestore if logged in
   if (currentUser) {
     try {
-      await addDoc(collection(db, "users", currentUser.uid, "pois"), {
+      await db.collection("users").doc(currentUser.uid).collection("pois").add({
         name, type, note, day: 1,
         lat: newPoi.lat, lng: newPoi.lng,
-        createdAt: serverTimestamp()
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
     } catch(e) { console.error("Error saving poi:", e); }
   }
@@ -2715,6 +3067,12 @@ function salmaToggle() {
   if (chat.classList.contains("open")) document.getElementById("salma-input").focus();
 }
 
+function escapeHTML(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function salmaAddMsg(text, who) {
   const container = document.getElementById("salma-messages");
   const div = document.createElement("div");
@@ -2725,18 +3083,144 @@ function salmaAddMsg(text, who) {
   return div;
 }
 
-async function salmaSend() {
-  if (window.salmaRateLimitCanSend && !window.salmaRateLimitCanSend()) return;
+function salmaRenderRoute(reply) {
+  const container = document.getElementById("salma-messages");
+  
+  // Intentar extraer JSON de la respuesta
+  let humanText = "";
+  let routeData = null;
+  
+  // Primero intentar parsear directamente (cuando viene de data.route)
+  try {
+    const directParse = JSON.parse(reply);
+    if (directParse && directParse.stops) {
+      routeData = directParse;
+    }
+  } catch(e) {
+    // No es JSON puro, buscar dentro del texto
+  }
+  
+  // Si no se parseó directamente, buscar JSON embebido en texto
+  if (!routeData) {
+    const jsonMatch = reply.match(/\{[\s\S]*"stops"[\s\S]*\}/);
+    if (jsonMatch) {
+      try {
+        routeData = JSON.parse(jsonMatch[0]);
+        humanText = reply.substring(0, reply.indexOf(jsonMatch[0])).trim();
+      } catch(e) {
+        // JSON no válido, mostrar como texto
+      }
+    }
+  }
+  
+  // Mostrar texto humano si existe
+  if (humanText) {
+    const textDiv = document.createElement("div");
+    textDiv.className = "salma-msg bot";
+    textDiv.textContent = humanText;
+    container.appendChild(textDiv);
+  }
+  
+  // Si hay ruta, renderizar tarjetas
+  if (routeData && routeData.stops && routeData.stops.length > 0) {
+    const routeDiv = document.createElement("div");
+    routeDiv.className = "salma-route-card";
+    
+    let stopsHTML = routeData.stops.map(function(stop) {
+      const typeIcons = {city:'🏙',town:'🏘',nature:'🌿',beach:'🏖',mountain:'⛰',temple:'🛕',viewpoint:'📸',route:'🛤',activity:'🎯',other:'📍'};
+      const icon = typeIcons[stop.type] || '📍';
+      const name = escapeHTML(stop.name || '');
+      const desc = escapeHTML(stop.description || '');
+      const day = stop.day ? 'Día ' + stop.day : '';
+      const mapsUrl = stop.lat && stop.lng ? 'https://www.google.com/maps?q=' + stop.lat + ',' + stop.lng : '';
+      
+      return '<div style="padding:10px 0;border-bottom:1px solid rgba(212,160,23,.15);">' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">' +
+          '<span style="font-size:16px;">' + icon + '</span>' +
+          '<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:#d4a017;letter-spacing:.1em;">' + day + '</span>' +
+        '</div>' +
+        '<div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;">' + name + '</div>' +
+        '<div style="font-size:12px;color:rgba(245,240,232,.7);line-height:1.5;">' + desc + '</div>' +
+        (mapsUrl ? '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:#d4a017;text-decoration:none;margin-top:4px;display:inline-block;">VER EN MAPA →</a>' : '') +
+      '</div>';
+    }).join('');
+    
+    const title = escapeHTML(routeData.title || 'Tu ruta');
+    const summary = routeData.summary ? '<div style="font-size:12px;color:rgba(245,240,232,.65);margin-bottom:10px;line-height:1.5;">' + escapeHTML(routeData.summary) + '</div>' : '';
+    const duration = routeData.duration_days ? routeData.duration_days + ' días' : '';
+    const budget = routeData.budget_level && routeData.budget_level !== 'sin_definir' ? ' · ' + routeData.budget_level : '';
+    
+    let tipsHTML = '';
+    if (routeData.tips && routeData.tips.length > 0) {
+      tipsHTML = '<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(212,160,23,.2);">' +
+        '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:#d4a017;letter-spacing:.12em;margin-bottom:6px;">CONSEJOS</div>' +
+        routeData.tips.map(function(tip) { return '<div style="font-size:12px;color:rgba(245,240,232,.7);line-height:1.5;margin-bottom:4px;">• ' + escapeHTML(tip) + '</div>'; }).join('') +
+      '</div>';
+    }
+    
+    routeDiv.innerHTML = 
+      '<div style="background:#111111;border:1px solid rgba(212,160,23,.3);border-radius:14px;padding:14px;max-width:92%;margin-top:8px;">' +
+        '<div style="font-family:\'Inter Tight\',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:4px;">' + title + '</div>' +
+        '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:#d4a017;letter-spacing:.14em;margin-bottom:8px;">' + duration + budget + '</div>' +
+        summary +
+        stopsHTML +
+        tipsHTML +
+        '<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">' +
+          '<button onclick="salmaGuardarRuta()" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;background:#d4a017;color:#0a0908;border:none;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:700;letter-spacing:.1em;">GUARDAR RUTA</button>' +
+          '<button onclick="salmaAddMsg(\'Quiero cambiar algo de la ruta\',\'user\');salmaSend(\'Quiero ajustar la ruta que me propusiste\')" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;background:transparent;color:#d4a017;border:1px solid rgba(212,160,23,.3);border-radius:10px;padding:8px 14px;cursor:pointer;letter-spacing:.1em;">AJUSTAR</button>' +
+        '</div>' +
+      '</div>';
+    
+    container.appendChild(routeDiv);
+    
+    // Guardar datos de la última ruta para poder guardarla
+    window._salmaLastRoute = routeData;
+  }
+  
+  container.scrollTop = container.scrollHeight;
+}
+
+function salmaGuardarRuta() {
+  if (!window._salmaLastRoute) { showToast('No hay ruta para guardar'); return; }
+  if (!currentUser) { openModal('register'); showToast('Regístrate para guardar tu ruta'); return; }
+  
+  const r = window._salmaLastRoute;
+  const ruta = {
+    nombre: r.title || 'Mi ruta',
+    destino: r.region || r.country || '',
+    dias: r.duration_days || 0,
+    desc: r.summary || '',
+    itinerarioIA: JSON.stringify(r),
+    pois: (r.stops || []).map(function(s, i) {
+      return { id: i+1, name: s.name, type: s.type, note: s.description, day: s.day || 1, lat: s.lat, lng: s.lng };
+    }),
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    published: false
+  };
+  
+  db.collection('users').doc(currentUser.uid).collection('maps').add(ruta)
+    .then(function() {
+      showToast('Ruta guardada en tu dashboard');
+      loadUserMaps();
+    })
+    .catch(function(e) { showToast('Error al guardar'); console.error(e); });
+}
+window.salmaGuardarRuta = salmaGuardarRuta;
+
+async function salmaSend(overrideMsg) {
   if (window.salmaRateLimitCanSend && !window.salmaRateLimitCanSend()) return;
   const input = document.getElementById("salma-input");
-  const msg = input.value.trim();
+  const msg = overrideMsg || input.value.trim();
   if (!msg) return;
 
-  salmaAddMsg(msg, "user");
-  input.value = "";
+  if (!overrideMsg) {
+    salmaAddMsg(msg, "user");
+    input.value = "";
+  }
   input.disabled = true;
 
-  const typing = salmaAddMsg("Salma está escribiendo...", "typing");
+  const typing = salmaAddMsg("Salma está creando tu ruta...", "typing");
 
   try {
     const res = await fetch(SALMA_API, {
@@ -2748,9 +3232,22 @@ async function salmaSend() {
     typing.remove();
 
     if (data.reply) {
-      salmaAddMsg(data.reply, "bot");
+      // El Worker ahora envía data.route como JSON separado
+      if (data.route && data.route.stops) {
+        // Mostrar texto humano
+        salmaAddMsg(data.reply, "bot");
+        // Renderizar la ruta visualmente
+        salmaRenderRoute(JSON.stringify(data.route));
+      } else if (data.reply.includes('"stops"')) {
+        // Fallback: parsear JSON del texto (compatibilidad)
+        salmaRenderRoute(data.reply);
+      } else {
+        salmaAddMsg(data.reply, "bot");
+      }
+      // Guardar en historial el texto completo para contexto
+      const fullReply = data.route ? data.reply + "\n---JSON---\n" + JSON.stringify(data.route) : data.reply;
       salmaHistory.push({ role: "user", content: msg });
-      salmaHistory.push({ role: "assistant", content: data.reply });
+      salmaHistory.push({ role: "assistant", content: fullReply });
       if (salmaHistory.length > 20) salmaHistory = salmaHistory.slice(-20);
     } else {
       salmaAddMsg("Uy, algo ha fallado. ¿Puedes repetir?", "bot");
@@ -2763,6 +3260,38 @@ async function salmaSend() {
   input.disabled = false;
   input.focus();
 }
+
+// Hero integration: enviar desde el input del hero y abrir el chat
+function salmaHeroSend() {
+  const heroInput = document.getElementById("salma-hero-input");
+  const msg = heroInput.value.trim();
+  if (!msg) return;
+  
+  // Abrir el chat de Salma
+  const chat = document.getElementById("salma-chat");
+  if (!chat.classList.contains("open")) chat.classList.add("open");
+  
+  // Poner el mensaje en el chat y enviar
+  salmaAddMsg(msg, "user");
+  heroInput.value = "";
+  
+  // Disparar el envío
+  const salmaInput = document.getElementById("salma-input");
+  salmaInput.value = msg;
+  salmaSend(msg);
+}
+window.salmaHeroSend = salmaHeroSend;
+
+function salmaHeroQuick(text) {
+  document.getElementById("salma-hero-input").value = text;
+  salmaHeroSend();
+}
+window.salmaHeroQuick = salmaHeroQuick;
+
+// Hero input: Enter para enviar
+document.getElementById("salma-hero-input").addEventListener("keydown", function(e) {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); salmaHeroSend(); }
+});
 
 document.getElementById("salma-input").addEventListener("keydown", function(e) {
   if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); salmaSend(); }
