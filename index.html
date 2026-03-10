@@ -1461,36 +1461,42 @@ input::placeholder, textarea::placeholder{
   <div class="hero">
 <div class="hero-map-overlay"></div>
     <div id="hero-map"></div>
-    <div class="hero-content" style="position:relative;z-index:2;">
+    <div class="hero-content" style="position:relative;z-index:2;text-align:center;margin:0 auto;">
       <div class="hero-label">Salma · Tu copiloto de viaje con IA</div>
       <h1 class="hero-title"><em>Déjame a mí.</em></h1>
       
-      <p class="hero-sub">Una IA viajera que conoce los caminos. Planifica tu ruta, te acompaña en el viaje y guarda todo lo que descubres.</p>
+      <p class="hero-sub" style="margin-left:auto;margin-right:auto;">Una IA viajera que conoce los caminos. Planifica tu ruta, te acompaña en el viaje y guarda todo lo que descubres.</p>
       
       <!-- SALMA HERO INPUT -->
-      <div id="salma-hero-box" style="display:flex;gap:10px;margin-bottom:24px;max-width:560px;">
-        <input type="text" id="salma-hero-input" placeholder="Ej: 10 días en moto por Vietnam..." autocomplete="off" style="flex:1;background:#111111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:14px 18px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:15px;outline:none;transition:border-color .2s;min-width:0;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'">
-        <button onclick="salmaHeroSend()" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:14px 22px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.14em;cursor:pointer;white-space:nowrap;transition:background .2s;flex-shrink:0;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">PLANEAR →</button>
+      <div id="salma-hero-box" style="display:flex;gap:10px;margin-bottom:24px;max-width:100%;margin-left:auto;margin-right:auto;">
+        <input type="text" id="salma-hero-input" placeholder="Cuéntale a Salma tu próximo viaje..." autocomplete="off" style="flex:1;background:#111111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:16px 20px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color .2s;min-width:0;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'">
+        <button onclick="salmaHeroSend()" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:16px 28px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.14em;cursor:pointer;white-space:nowrap;transition:background .2s;flex-shrink:0;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">PLANEAR →</button>
       </div>
 
       <!-- DEMOS -->
       <div style="margin-top:8px;">
         <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(245,240,232,.45);letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px;">Ver ejemplos de viaje</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;" id="hero-demo-grid">
-          <div onclick="openHeroDemo('japan')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:14px;padding:14px;transition:all .2s;" onmouseover="this.style.borderColor='#d4a017';this.style.background='rgba(212,160,23,.06)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.background='rgba(255,255,255,.03)'">
-            <div style="font-size:24px;margin-bottom:6px;">🏯</div>
-            <div style="font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:4px;">Japón</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">7 DÍAS · CULTURAL</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;" id="hero-demo-grid">
+          <div onclick="openHeroDemo('japan')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:16px;overflow:hidden;transition:all .25s;text-align:left;" onmouseover="this.style.borderColor='#d4a017';this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.4)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.transform='none';this.style.boxShadow='none'">
+            <div style="height:90px;background:url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=200&fit=crop&q=75') center/cover;"></div>
+            <div style="padding:12px 14px;">
+              <div style="font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:3px;">Japón</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">7 DÍAS · CULTURAL</div>
+            </div>
           </div>
-          <div onclick="openHeroDemo('thailand')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:14px;padding:14px;transition:all .2s;" onmouseover="this.style.borderColor='#d4a017';this.style.background='rgba(212,160,23,.06)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.background='rgba(255,255,255,.03)'">
-            <div style="font-size:24px;margin-bottom:6px;">🏖️</div>
-            <div style="font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:4px;">Tailandia</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">10 DÍAS · LOW COST</div>
+          <div onclick="openHeroDemo('thailand')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:16px;overflow:hidden;transition:all .25s;text-align:left;" onmouseover="this.style.borderColor='#d4a017';this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.4)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.transform='none';this.style.boxShadow='none'">
+            <div style="height:90px;background:url('https://images.unsplash.com/photo-1528181304800-259b08848526?w=400&h=200&fit=crop&q=75') center/cover;"></div>
+            <div style="padding:12px 14px;">
+              <div style="font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:3px;">Tailandia</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">10 DÍAS · LOW COST</div>
+            </div>
           </div>
-          <div onclick="openHeroDemo('iceland')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:14px;padding:14px;transition:all .2s;" onmouseover="this.style.borderColor='#d4a017';this.style.background='rgba(212,160,23,.06)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.background='rgba(255,255,255,.03)'">
-            <div style="font-size:24px;margin-bottom:6px;">🌋</div>
-            <div style="font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:4px;">Islandia</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">12 DÍAS · ROAD TRIP</div>
+          <div onclick="openHeroDemo('iceland')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:16px;overflow:hidden;transition:all .25s;text-align:left;" onmouseover="this.style.borderColor='#d4a017';this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.4)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.transform='none';this.style.boxShadow='none'">
+            <div style="height:90px;background:url('https://images.unsplash.com/photo-1504829857797-ddff29c27927?w=400&h=200&fit=crop&q=75') center/cover;"></div>
+            <div style="padding:12px 14px;">
+              <div style="font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:3px;">Islandia</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">12 DÍAS · ROAD TRIP</div>
+            </div>
           </div>
         </div>
       </div>
@@ -1505,26 +1511,26 @@ input::placeholder, textarea::placeholder{
   <!-- FEATURES -->
   <section class="features">
     <div class="sec-header">
-      <div class="sec-label">Funcionalidades</div>
-      <h2 class="sec-title">Todo tu viaje, centralizado y visual</h2>
-      <p class="sec-sub">Deja de usar varias herramientas para planificar. Aquí organizas todo sobre un único mapa estructurado por días.</p>
+      <div class="sec-label">Tu copiloto en cada fase</div>
+      <h2 class="sec-title">Antes, durante y después del viaje</h2>
+      <p class="sec-sub">Salma no es un buscador de vuelos. Es una compañera de viaje con IA que te acompaña de principio a fin.</p>
     </div>
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-title">Mapas interactivos por días</div>
-        <div class="feature-desc">Cada jornada se organiza en su propia capa. Visualiza rutas, puntos de interés y desplazamientos sin mezclar información.</div>
+        <div class="feature-title">Antes · Planifica con IA</div>
+        <div class="feature-desc">Cuéntale tu idea de viaje a Salma. Ella genera la ruta, las paradas, los consejos y todo lo que necesitas. Tú solo decides.</div>
       </div>
       <div class="feature-card">
-        <div class="feature-title">Generación automática de estructura</div>
-        <div class="feature-desc">Elige destino y número de días. Obtén una base organizada lista para personalizar.</div>
+        <div class="feature-title">Durante · Tu guía en ruta</div>
+        <div class="feature-desc">¿Día de lluvia? ¿Dónde comer cerca? ¿Alternativa a un sitio cerrado? Salma te acompaña en tiempo real mientras viajas.</div>
       </div>
       <div class="feature-card">
-        <div class="feature-title">Comparte y exporta fácilmente con tus compañeros de viaje.</div>
-        <div class="feature-desc">Envía tu ruta con un enlace privado. Exporta a PDF para usar sin conexión. Compatible con Google Maps.</div>
+        <div class="feature-title">Después · Guarda y comparte</div>
+        <div class="feature-desc">Tu ruta queda guardada con fotos, notas y recomendaciones. Compártela con otros viajeros o úsala como base para tu próximo viaje.</div>
       </div>
       <div class="feature-card">
-        <div class="feature-title">Organización clara y accionable</div>
-        <div class="feature-desc">Actividades, alojamientos y trayectos estructurados por día. Recomendaciones, noticias locales. Sabes qué haces, dónde y en qué orden.</div>
+        <div class="feature-title">Siempre · Lugares con alma</div>
+        <div class="feature-desc">Salma prioriza sitios auténticos, rincones locales y experiencias que no salen en las guías turísticas. Viaja diferente.</div>
       </div>
     </div>
   </section>
@@ -3558,6 +3564,7 @@ const HERO_DEMOS = {
   japan: {
     title: "Japón cultural",
     emoji: "🏯",
+    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&h=400&fit=crop&q=80",
     duration: 7,
     budget: "medio",
     summary: "Una semana recorriendo lo mejor de la cultura japonesa: desde los templos milenarios de Kioto hasta el bullicio futurista de Tokio, pasando por la serenidad de Nara y la historia de Hiroshima.",
@@ -3584,6 +3591,7 @@ const HERO_DEMOS = {
   thailand: {
     title: "Tailandia low cost",
     emoji: "🏖️",
+    image: "https://images.unsplash.com/photo-1528181304800-259b08848526?w=800&h=400&fit=crop&q=80",
     duration: 10,
     budget: "bajo",
     summary: "10 días con presupuesto mochilero por lo mejor de Tailandia: templos de Bangkok, ruinas de Ayutthaya, selva de Chiang Mai y playas del sur. Todo por menos de 30€/día.",
@@ -3613,6 +3621,7 @@ const HERO_DEMOS = {
   iceland: {
     title: "Islandia road trip",
     emoji: "🌋",
+    image: "https://images.unsplash.com/photo-1504829857797-ddff29c27927?w=800&h=400&fit=crop&q=80",
     duration: 12,
     budget: "medio-alto",
     summary: "La Ring Road completa en 12 días: volcanes, glaciares, auroras boreales, aguas termales y paisajes que parecen de otro planeta. El road trip definitivo.",
@@ -3680,18 +3689,20 @@ function openHeroDemo(key) {
   }).join('');
   
   content.innerHTML = 
+    // Foto cabecera con overlay y título
+    '<div style="position:relative;width:100%;height:220px;background:url(\'' + demo.image + '\') center/cover;">' +
+      '<div style="position:absolute;inset:0;background:linear-gradient(to top,#111 0%,rgba(17,17,17,.4) 50%,rgba(0,0,0,.2) 100%);"></div>' +
+      '<button onclick="document.getElementById(\'hero-demo-modal\').style.display=\'none\'" style="position:absolute;top:14px;right:14px;background:rgba(0,0,0,.5);border:none;color:#fff;font-size:20px;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);">✕</button>' +
+      '<div style="position:absolute;bottom:18px;left:24px;right:24px;">' +
+        '<div style="font-family:\'Inter Tight\',sans-serif;font-size:28px;font-weight:700;color:#fff;line-height:1.1;text-shadow:0 2px 12px rgba(0,0,0,.5);">' + demo.emoji + ' ' + demo.title + '</div>' +
+        '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-top:6px;">' + demo.duration + ' DÍAS · ' + demo.country.toUpperCase() + ' · ' + demo.budget.toUpperCase() + '</div>' +
+      '</div>' +
+    '</div>' +
     // Mapa
-    '<div id="hero-demo-map" style="width:100%;height:280px;background:#0a0a09;"></div>' +
+    '<div id="hero-demo-map" style="width:100%;height:220px;background:#0a0a09;border-top:1px solid rgba(212,160,23,.12);"></div>' +
     // Contenido
     '<div style="padding:24px;">' +
-      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">' +
-        '<span style="font-size:32px;">' + demo.emoji + '</span>' +
-        '<div>' +
-          '<div style="font-family:\'Inter Tight\',sans-serif;font-size:24px;font-weight:700;color:#fff;line-height:1.1;">' + demo.title + '</div>' +
-          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-top:4px;">' + demo.duration + ' DÍAS · ' + demo.country.toUpperCase() + ' · ' + demo.budget.toUpperCase() + '</div>' +
-        '</div>' +
-      '</div>' +
-      '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.7;margin:16px 0;">' + demo.summary + '</div>' +
+      '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:16px;">' + demo.summary + '</div>' +
       '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;">' + tagsHTML + '</div>' +
       // Stops
       '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:8px;">ITINERARIO · ' + demo.stops.length + ' PARADAS</div>' +
