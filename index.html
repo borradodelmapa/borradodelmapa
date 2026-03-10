@@ -188,7 +188,7 @@ text-align:center;
 .sec-sub{font-size:15px;color:var(--crema);opacity:.45;max-width:480px;margin:0 auto;line-height:1.7;}
 
 /* ===== AUTH MODAL ===== */
-.modal-overlay{display:none;position:fixed;inset:0;background:#050505;z-index:2000;align-items:center;justify-content:center;backdrop-filter:none !important;}
+.modal-overlay{display:none;position:fixed;inset:0;background:#050505;z-index:10001;align-items:center;justify-content:center;backdrop-filter:none !important;}
 .modal-overlay.active{display:flex;}
 .modal{background:var(--gris);border:1px solid var(--gris3);width:100%;max-width:440px;padding:40px;position:relative;animation:modalIn .25s ease;}
 @keyframes modalIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
@@ -1948,7 +1948,7 @@ auth.onAuthStateChanged(async (user) => {
       isPremium = currentUser.isPremium;
       updateNavForUser(currentUser);
       updateSidebar(currentUser);
-      loadUserMaps();
+      
       // Mostrar mobile nav
       const mobileNav = document.getElementById("mobile-dash-nav");
       if (mobileNav) mobileNav.style.display = "flex";
@@ -1974,26 +1974,24 @@ auth.onAuthStateChanged(async (user) => {
             published: false
           };
           await db.collection('users').doc(user.uid).collection('maps').add(ruta);
-          window._salmaLastRoute = null; // Limpiar
+          window._salmaLastRoute = null;
+          console.log('Auto-saved route OK');
           showToast('¡Bienvenido! Tu ruta se ha guardado automáticamente ✓');
-          loadUserMaps();
         } catch(saveErr) {
           console.error('Error auto-saving route:', saveErr);
-          showToast('Bienvenido, ' + (userData.name || user.displayName || '') + '. Pulsa GUARDAR RUTA en el chat para guardar tu ruta.');
-        }
-      } else {
-        // Sesión persistente — si recarga y está logado, va al dashboard
-        const currentPage = document.querySelector('.page.active');
-        if (!currentPage || currentPage.id === 'page-home') {
-          showPage('dashboard');
+          showToast('Bienvenido. Hubo un error al guardar la ruta automáticamente.');
         }
       }
       
-      // Ir al dashboard si hay ruta guardada o es sesión normal
-      const currentPage2 = document.querySelector('.page.active');
-      if (!currentPage2 || currentPage2.id === 'page-home') {
+      // Cargar mapas DESPUÉS del posible auto-guardado
+      await loadUserMaps();
+      
+      // Ir al dashboard
+      const currentPage = document.querySelector('.page.active');
+      if (!currentPage || currentPage.id === 'page-home') {
         showPage('dashboard');
       }
+      
     } catch(e) {
       console.error("Error loading user:", e);
     }
@@ -3402,7 +3400,11 @@ function salmaGuardarRuta() {
   var user = window._fbAuth ? window._fbAuth.currentUser : null;
   var firedb = window._fbDb;
   
+  console.log('salmaGuardarRuta:', { hasUser: !!user, hasDb: !!firedb, hasRoute: !!window._salmaLastRoute });
+  
   if (!user || !firedb) { 
+    // Guardar flag para auto-guardar después del login
+    window._salmaPendingSave = true;
     if (typeof openModal === 'function') openModal('register');
     showToast('Regístrate para guardar tu ruta'); 
     return; 
@@ -3423,10 +3425,17 @@ function salmaGuardarRuta() {
     published: false
   };
   
+  console.log('Saving route to Firestore:', ruta.nombre, 'POIs:', ruta.pois.length);
+  
   firedb.collection('users').doc(user.uid).collection('maps').add(ruta)
-    .then(function() {
+    .then(function(docRef) {
+      console.log('Route saved with ID:', docRef.id);
+      window._salmaLastRoute = null;
       showToast('¡Ruta guardada en tu dashboard! ✓');
-      if (window.loadUserMaps) window.loadUserMaps();
+      // Delay para que Firestore propague
+      setTimeout(function() {
+        if (window.loadUserMaps) window.loadUserMaps();
+      }, 500);
     })
     .catch(function(e) { 
       showToast('Error al guardar: ' + e.message); 
