@@ -2192,6 +2192,7 @@ async function loadUserMaps() {
     console.error("Error loading maps:", e);
   }
 }
+window.loadUserMaps = loadUserMaps;
 
 function renderMapsGrid(maps) {
   const grid = document.getElementById("maps-grid-dynamic");
@@ -2671,37 +2672,142 @@ function verRuta(id, nombre) {
         modal.style.cssText = 'position:fixed;inset:0;background:#050505;z-index:10000;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;';
         document.body.appendChild(modal);
       }
-      modal.innerHTML = `
-        <div style="background:#111;border:1px solid var(--gris2);padding:32px;max-width:480px;width:100%;margin:auto;" onclick="event.stopPropagation()">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-            <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;">EDITAR RUTA</div>
-            <div onclick="document.getElementById('modal-editar-ruta').style.display='none'" style="cursor:pointer;color:var(--crema);opacity:.5;font-size:20px;">✕</div>
-          </div>
-          <label class="form-label">Nombre</label>
-          <input class="form-input" id="edit-ruta-nombre" value="${(r.nombre||'').replace(/"/g,'&quot;')}">
-          <label class="form-label">Destino</label>
-          <input class="form-input" id="edit-ruta-destino" value="${(r.destino||'').replace(/"/g,'&quot;')}">
-          <label class="form-label">Días</label>
-          <input class="form-input" id="edit-ruta-dias" type="number" value="${r.dias||0}">
-          <label class="form-label">Descripción</label>
-          <textarea class="form-input" id="edit-ruta-desc" style="height:80px;resize:none;font-family:'DM Sans',sans-serif;">${r.desc||''}</textarea>
-          <label class="form-label">Notas / Presupuesto</label>
-          <textarea class="form-input" id="edit-ruta-notas" style="height:80px;resize:none;font-family:'DM Sans',sans-serif;" placeholder="Presupuesto, notas importantes...">${r.notas||''}</textarea>
-          ${r.itinerarioIA ? `
-          <div style="border-top:1px solid var(--gris2);margin:16px 0;padding-top:16px;">
-            <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:1px;margin-bottom:8px;">ITINERARIO GENERADO POR SALMA</div>
-            <div style="font-size:13px;color:var(--crema);opacity:.75;line-height:1.7;white-space:pre-wrap;max-height:200px;overflow-y:auto;background:var(--negro);padding:12px;border:1px solid var(--gris2);">${r.itinerarioIA}</div>
-          </div>` : ''}
-          <div style="display:flex;gap:12px;margin-top:8px;">
-            <button onclick="document.getElementById('modal-editar-ruta').style.display='none'" style="flex:1;background:transparent;border:1px solid var(--gris2);color:var(--crema);padding:12px;font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;">CANCELAR</button>
-            <button onclick="guardarEdicionRuta('${id}')" style="flex:2;background:var(--dorado);border:none;color:var(--negro);padding:12px;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;">GUARDAR →</button>
-          </div>
-        </div>`;
+
+      // Intentar parsear itinerarioIA como JSON para renderizar paradas
+      var routeData = null;
+      if (r.itinerarioIA) {
+        try { routeData = JSON.parse(r.itinerarioIA); } catch(e) {}
+      }
+      
+      // Construir lista de POIs (desde JSON o desde campo pois)
+      var pois = [];
+      if (routeData && routeData.stops && routeData.stops.length > 0) {
+        pois = routeData.stops;
+      } else if (r.pois && r.pois.length > 0) {
+        pois = r.pois;
+      }
+
+      var typeIcons = {city:'🏙',town:'🏘',nature:'🌿',beach:'🏖',mountain:'⛰',temple:'🛕',viewpoint:'📸',route:'🛤',activity:'🎯',other:'📍'};
+
+      // Renderizar paradas
+      var stopsHTML = '';
+      if (pois.length > 0) {
+        stopsHTML = '<div style="margin-top:20px;">';
+        stopsHTML += '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;margin-bottom:14px;">PARADAS (' + pois.length + ')</div>';
+        
+        pois.forEach(function(stop) {
+          var icon = typeIcons[stop.type] || '📍';
+          var name = (stop.name || '').replace(/</g,'&lt;');
+          var desc2 = (stop.description || stop.note || '').replace(/</g,'&lt;');
+          var day = stop.day ? 'Día ' + stop.day : '';
+          var mapsUrl = stop.lat && stop.lng ? 'https://www.google.com/maps?q=' + stop.lat + ',' + stop.lng : '';
+          
+          stopsHTML += '<div style="display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid rgba(212,160,23,.12);">';
+          stopsHTML += '<span style="font-size:20px;min-width:28px;text-align:center;">' + icon + '</span>';
+          stopsHTML += '<div style="flex:1;">';
+          stopsHTML += '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">';
+          stopsHTML += '<span style="font-size:15px;font-weight:600;color:#fff;">' + name + '</span>';
+          if (day) stopsHTML += '<span style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">' + day + '</span>';
+          stopsHTML += '</div>';
+          if (desc2) stopsHTML += '<div style="font-size:13px;color:rgba(245,240,232,.7);line-height:1.6;margin-top:4px;">' + desc2 + '</div>';
+          if (mapsUrl) stopsHTML += '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;margin-top:4px;display:inline-block;">VER EN MAPA →</a>';
+          stopsHTML += '</div></div>';
+        });
+        stopsHTML += '</div>';
+      }
+
+      // Tips
+      var tipsHTML = '';
+      if (routeData && routeData.tips && routeData.tips.length > 0) {
+        tipsHTML = '<div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(212,160,23,.15);">';
+        tipsHTML += '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;margin-bottom:10px;">CONSEJOS DE SALMA</div>';
+        routeData.tips.forEach(function(tip) {
+          tipsHTML += '<div style="font-size:13px;color:rgba(245,240,232,.7);line-height:1.6;margin-bottom:6px;">• ' + (tip || '').replace(/</g,'&lt;') + '</div>';
+        });
+        tipsHTML += '</div>';
+      }
+
+      // Texto del itinerario si no hay JSON parseado
+      var textHTML = '';
+      if (!routeData && r.itinerarioIA) {
+        textHTML = '<div style="margin-top:16px;padding:14px;background:rgba(255,255,255,.02);border:1px solid rgba(212,160,23,.12);border-radius:14px;">';
+        textHTML += '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:1px;margin-bottom:8px;">ITINERARIO</div>';
+        textHTML += '<div style="font-size:13px;color:rgba(245,240,232,.75);line-height:1.7;white-space:pre-wrap;">' + r.itinerarioIA.replace(/</g,'&lt;') + '</div>';
+        textHTML += '</div>';
+      }
+
+      // Tags
+      var tagsHTML = '';
+      if (routeData && routeData.tags && routeData.tags.length > 0) {
+        tagsHTML = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;">';
+        routeData.tags.forEach(function(tag) {
+          tagsHTML += '<span style="font-family:\'Space Mono\',monospace;font-size:9px;padding:5px 10px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:var(--dorado);">' + (tag || '').replace(/</g,'&lt;') + '</span>';
+        });
+        tagsHTML += '</div>';
+      }
+
+      var summary = routeData && routeData.summary ? '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:16px;">' + routeData.summary.replace(/</g,'&lt;') + '</div>' : '';
+      var budget = routeData && routeData.budget_level && routeData.budget_level !== 'sin_definir' ? ' · Presupuesto ' + routeData.budget_level : '';
+
+      modal.innerHTML = 
+        '<div style="background:#111;border:1px solid rgba(212,160,23,.2);border-radius:18px;padding:32px;max-width:600px;width:100%;margin:auto;" onclick="event.stopPropagation()">' +
+          '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">' +
+            '<div>' +
+              '<div style="font-family:\'Inter Tight\',sans-serif;font-size:26px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;">' + (r.nombre||'Mi ruta').replace(/</g,'&lt;') + '</div>' +
+              '<div style="font-family:\'Space Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-top:6px;">' + (r.dias||0) + ' DÍAS · ' + (r.destino||'').replace(/</g,'&lt;').toUpperCase() + budget + '</div>' +
+            '</div>' +
+            '<div onclick="document.getElementById(\'modal-editar-ruta\').style.display=\'none\'" style="cursor:pointer;color:var(--crema);opacity:.5;font-size:24px;padding:4px 8px;">✕</div>' +
+          '</div>' +
+          (r.desc ? '<div style="font-size:14px;color:rgba(245,240,232,.65);line-height:1.6;margin-bottom:12px;">' + r.desc.replace(/</g,'&lt;') + '</div>' : '') +
+          summary +
+          tagsHTML +
+          stopsHTML +
+          tipsHTML +
+          textHTML +
+          '<div style="display:flex;gap:12px;margin-top:24px;padding-top:16px;border-top:1px solid rgba(212,160,23,.12);">' +
+            '<button onclick="document.getElementById(\'modal-editar-ruta\').style.display=\'none\'" style="flex:1;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:12px;color:var(--crema);padding:12px;font-family:\'Space Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.1em;">CERRAR</button>' +
+            '<button onclick="editarRutaModal(\'' + id + '\')" style="flex:1;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:12px;color:var(--dorado);padding:12px;font-family:\'Space Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.1em;">EDITAR</button>' +
+            '<button onclick="eliminarRuta(\'' + id + '\');document.getElementById(\'modal-editar-ruta\').style.display=\'none\'" style="flex:1;background:transparent;border:1px solid rgba(127,29,29,.3);border-radius:12px;color:#f87171;padding:12px;font-family:\'Space Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.1em;">BORRAR</button>' +
+          '</div>' +
+        '</div>';
       modal.style.display = 'flex';
+      modal.onclick = function(e) { if (e.target === modal) modal.style.display = 'none'; };
     }).catch(e => showToast('Error: ' + e.message));
   }, 50);
 }
 window.verRuta = verRuta;
+
+// Función para abrir el modal de edición desde la vista de ruta
+function editarRutaModal(id) {
+  if (!currentUser) return;
+  db.collection('users').doc(currentUser.uid).collection('maps').doc(id).get().then(doc => {
+    if (!doc.exists) return;
+    const r = doc.data();
+    const modal = document.getElementById('modal-editar-ruta');
+    modal.innerHTML = 
+      '<div style="background:#111;border:1px solid rgba(212,160,23,.2);border-radius:18px;padding:32px;max-width:480px;width:100%;margin:auto;" onclick="event.stopPropagation()">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">' +
+          '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;">EDITAR RUTA</div>' +
+          '<div onclick="document.getElementById(\'modal-editar-ruta\').style.display=\'none\'" style="cursor:pointer;color:var(--crema);opacity:.5;font-size:20px;">✕</div>' +
+        '</div>' +
+        '<label class="form-label">Nombre</label>' +
+        '<input class="form-input" id="edit-ruta-nombre" value="' + (r.nombre||'').replace(/"/g,'&quot;') + '">' +
+        '<label class="form-label">Destino</label>' +
+        '<input class="form-input" id="edit-ruta-destino" value="' + (r.destino||'').replace(/"/g,'&quot;') + '">' +
+        '<label class="form-label">Días</label>' +
+        '<input class="form-input" id="edit-ruta-dias" type="number" value="' + (r.dias||0) + '">' +
+        '<label class="form-label">Descripción</label>' +
+        '<textarea class="form-input" id="edit-ruta-desc" style="height:80px;resize:none;">' + (r.desc||'') + '</textarea>' +
+        '<label class="form-label">Notas / Presupuesto</label>' +
+        '<textarea class="form-input" id="edit-ruta-notas" style="height:80px;resize:none;" placeholder="Presupuesto, notas importantes...">' + (r.notas||'') + '</textarea>' +
+        '<div style="display:flex;gap:12px;margin-top:16px;">' +
+          '<button onclick="document.getElementById(\'modal-editar-ruta\').style.display=\'none\'" style="flex:1;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:12px;color:var(--crema);padding:12px;font-family:\'Space Mono\',monospace;font-size:10px;cursor:pointer;">CANCELAR</button>' +
+          '<button onclick="guardarEdicionRuta(\'' + id + '\')" style="flex:2;background:var(--dorado);border:none;border-radius:12px;color:var(--negro);padding:12px;font-family:\'Space Mono\',monospace;font-size:10px;font-weight:700;cursor:pointer;">GUARDAR →</button>' +
+        '</div>' +
+      '</div>';
+  });
+}
+window.editarRutaModal = editarRutaModal;
 
 async function guardarEdicionRuta(id) {
   const nombre = document.getElementById('edit-ruta-nombre').value.trim();
@@ -3283,7 +3389,7 @@ function salmaGuardarRuta() {
   firedb.collection('users').doc(user.uid).collection('maps').add(ruta)
     .then(function() {
       showToast('¡Ruta guardada en tu dashboard! ✓');
-      if (typeof loadUserMaps === 'function') loadUserMaps();
+      if (window.loadUserMaps) window.loadUserMaps();
     })
     .catch(function(e) { 
       showToast('Error al guardar: ' + e.message); 
