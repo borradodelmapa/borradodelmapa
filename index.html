@@ -1858,6 +1858,11 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
+// Exponer al scope global para que Salma pueda guardar rutas
+window._fbAuth = auth;
+window._fbDb = db;
+window._fbGoogleProvider = googleProvider;
+
 // ===== STATE =====
 let currentUser = null;
 let isPremium = false;
@@ -2317,17 +2322,27 @@ async function crearRuta() {
   const itinerarioIA = document.getElementById('ia-resultado-texto')?.textContent?.trim() || '';
   if (!nombre || !destino) { showToast('Nombre y destino son obligatorios'); return; }
   if (!currentUser) return;
+  
+  // Construir POIs desde el JSON de Salma si existe
+  var pois = [];
+  if (window._salmaFormRoute && window._salmaFormRoute.stops) {
+    pois = window._salmaFormRoute.stops.map(function(s, i) {
+      return { id: i+1, name: s.name, type: s.type, note: s.description, day: s.day || 1, lat: s.lat, lng: s.lng };
+    });
+  }
+  
   try {
     const ruta = {
       nombre, destino, dias: parseInt(dias)||0, desc,
-      itinerarioIA: itinerarioIA,
+      itinerarioIA: window._salmaFormRoute ? JSON.stringify(window._salmaFormRoute) : itinerarioIA,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      pois: [], published: false
+      pois: pois, published: false
     };
     await db.collection('users').doc(currentUser.uid).collection('maps').add(ruta);
     document.getElementById('modal-nueva-ruta').style.display = 'none';
-    showToast('¡Ruta creada! ✓');
+    window._salmaFormRoute = null; // Limpiar
+    showToast('¡Ruta creada con ' + (pois.length || 0) + ' paradas! ✓');
     loadUserMaps();
     const snap = await db.collection('users').doc(currentUser.uid).collection('maps').get();
     const el = document.getElementById('profile-routes-count');
@@ -2364,7 +2379,7 @@ async function generarRutaConIA() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        message: `El usuario quiere crear una ruta de viaje. Genera un itinerario detallado organizado por días con puntos de interés, restaurantes y alojamiento. Sé concisa pero útil. Aquí la petición del usuario: "${fullPrompt}"${destino ? ` Destino: ${destino}.` : ''}${dias ? ` Duración: ${dias} días.` : ''}${nombre ? ` Nombre de la ruta: ${nombre}.` : ''}`,
+        message: fullPrompt + (destino ? ` Destino: ${destino}.` : '') + (dias ? ` Duración: ${dias} días.` : ''),
         history: []
       })
     });
@@ -2372,14 +2387,71 @@ async function generarRutaConIA() {
     loading.style.display = 'none';
 
     if (data.reply) {
+      // Mostrar texto humano
       texto.textContent = data.reply;
       resultado.style.display = 'block';
-      // Autorellenar campos si están vacíos
-      if (!nombre && destino) document.getElementById('nueva-ruta-nombre').value = destino + ' - ' + (dias||7) + ' días';
-      if (!document.getElementById('nueva-ruta-desc').value.trim()) {
-        document.getElementById('nueva-ruta-desc').value = fullPrompt.substring(0, 200);
+
+      // Si el Worker devuelve la ruta con JSON, renderizar tarjetas y guardar datos
+      if (data.route && data.route.stops) {
+        window._salmaFormRoute = data.route;
+
+        // Autorellenar campos desde el JSON
+        if (!nombre) {
+          document.getElementById('nueva-ruta-nombre').value = data.route.title || (destino + ' - ' + (dias||data.route.duration_days||7) + ' días');
+        }
+        if (!document.getElementById('nueva-ruta-dias').value && data.route.duration_days) {
+          document.getElementById('nueva-ruta-dias').value = data.route.duration_days;
+        }
+        if (!document.getElementById('nueva-ruta-destino').value && data.route.region) {
+          document.getElementById('nueva-ruta-destino').value = data.route.region;
+        }
+        if (!document.getElementById('nueva-ruta-desc').value.trim()) {
+          document.getElementById('nueva-ruta-desc').value = data.route.summary || fullPrompt.substring(0, 200);
+        }
+
+        // Renderizar stops visualmente debajo del texto
+        var stopsHTML = '<div style="margin-top:14px;border-top:1px solid rgba(212,160,23,.2);padding-top:12px;">';
+        stopsHTML += '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:#d4a017;letter-spacing:2px;margin-bottom:10px;">PARADAS DE LA RUTA (' + data.route.stops.length + ')</div>';
+        
+        var typeIcons = {city:'🏙',town:'🏘',nature:'🌿',beach:'🏖',mountain:'⛰',temple:'🛕',viewpoint:'📸',route:'🛤',activity:'🎯',other:'📍'};
+        
+        data.route.stops.forEach(function(stop) {
+          var icon = typeIcons[stop.type] || '📍';
+          var day = stop.day ? 'Día ' + stop.day : '';
+          stopsHTML += '<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(212,160,23,.1);">';
+          stopsHTML += '<span style="font-size:18px;">' + icon + '</span>';
+          stopsHTML += '<div style="flex:1;">';
+          stopsHTML += '<div style="display:flex;align-items:center;gap:8px;">';
+          stopsHTML += '<span style="font-size:14px;font-weight:600;color:#fff;">' + (stop.name || '').replace(/</g,'&lt;') + '</span>';
+          stopsHTML += '<span style="font-family:\'Space Mono\',monospace;font-size:9px;color:#d4a017;">' + day + '</span>';
+          stopsHTML += '</div>';
+          stopsHTML += '<div style="font-size:12px;color:rgba(245,240,232,.7);line-height:1.5;margin-top:2px;">' + (stop.description || '').replace(/</g,'&lt;') + '</div>';
+          stopsHTML += '</div></div>';
+        });
+        
+        // Tips
+        if (data.route.tips && data.route.tips.length > 0) {
+          stopsHTML += '<div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(212,160,23,.2);">';
+          stopsHTML += '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:#d4a017;letter-spacing:2px;margin-bottom:6px;">CONSEJOS</div>';
+          data.route.tips.forEach(function(tip) {
+            stopsHTML += '<div style="font-size:12px;color:rgba(245,240,232,.7);line-height:1.5;margin-bottom:4px;">• ' + (tip || '').replace(/</g,'&lt;') + '</div>';
+          });
+          stopsHTML += '</div>';
+        }
+        
+        stopsHTML += '</div>';
+        texto.innerHTML = texto.textContent.replace(/</g,'&lt;') + stopsHTML;
+
+        showToast('Ruta generada con ' + data.route.stops.length + ' paradas ✓');
+      } else {
+        // Fallback sin JSON
+        window._salmaFormRoute = null;
+        if (!nombre && destino) document.getElementById('nueva-ruta-nombre').value = destino + ' - ' + (dias||7) + ' días';
+        if (!document.getElementById('nueva-ruta-desc').value.trim()) {
+          document.getElementById('nueva-ruta-desc').value = fullPrompt.substring(0, 200);
+        }
+        showToast('Itinerario generado ✓');
       }
-      showToast('Itinerario generado ✓');
     } else {
       showToast('Salma no pudo generar la ruta. Inténtalo de nuevo.');
     }
@@ -3182,10 +3254,19 @@ function salmaRenderRoute(reply) {
 
 function salmaGuardarRuta() {
   if (!window._salmaLastRoute) { showToast('No hay ruta para guardar'); return; }
-  if (!currentUser) { openModal('register'); showToast('Regístrate para guardar tu ruta'); return; }
   
-  const r = window._salmaLastRoute;
-  const ruta = {
+  // Acceder a Firebase desde scope global
+  var user = window._fbAuth ? window._fbAuth.currentUser : null;
+  var firedb = window._fbDb;
+  
+  if (!user || !firedb) { 
+    if (typeof openModal === 'function') openModal('register');
+    showToast('Regístrate para guardar tu ruta'); 
+    return; 
+  }
+  
+  var r = window._salmaLastRoute;
+  var ruta = {
     nombre: r.title || 'Mi ruta',
     destino: r.region || r.country || '',
     dias: r.duration_days || 0,
@@ -3199,12 +3280,15 @@ function salmaGuardarRuta() {
     published: false
   };
   
-  db.collection('users').doc(currentUser.uid).collection('maps').add(ruta)
+  firedb.collection('users').doc(user.uid).collection('maps').add(ruta)
     .then(function() {
-      showToast('Ruta guardada en tu dashboard');
-      loadUserMaps();
+      showToast('¡Ruta guardada en tu dashboard! ✓');
+      if (typeof loadUserMaps === 'function') loadUserMaps();
     })
-    .catch(function(e) { showToast('Error al guardar'); console.error(e); });
+    .catch(function(e) { 
+      showToast('Error al guardar: ' + e.message); 
+      console.error('salmaGuardarRuta error:', e); 
+    });
 }
 window.salmaGuardarRuta = salmaGuardarRuta;
 
