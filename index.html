@@ -3403,8 +3403,11 @@ function salmaGuardarRuta() {
   console.log('salmaGuardarRuta:', { hasUser: !!user, hasDb: !!firedb, hasRoute: !!window._salmaLastRoute });
   
   if (!user || !firedb) { 
-    // Guardar flag para auto-guardar después del login
-    window._salmaPendingSave = true;
+    // Cerrar el chat de Salma para que no tape el modal de registro
+    var chat = document.getElementById("salma-chat");
+    if (chat) chat.classList.remove("open");
+    
+    // Abrir modal de registro
     if (typeof openModal === 'function') openModal('register');
     showToast('Regístrate para guardar tu ruta'); 
     return; 
