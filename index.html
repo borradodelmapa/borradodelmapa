@@ -1756,6 +1756,13 @@ input::placeholder, textarea::placeholder{
   <div onclick="event.stopPropagation();setDashTab('profile',null);showPage('dashboard')" class="mobile-nav-item">⚙️<span>Cuenta</span></div>
   <div onclick="event.stopPropagation();logout()" class="mobile-nav-item">🚪<span>Salir</span></div>
 </div>
+<!-- ===== VISTA DE RUTA (página real) ===== -->
+<div class="page" id="page-ruta" style="background:#0a0a09;padding-top:92px;">
+  <div id="ruta-view-container" style="max-width:700px;margin:0 auto;padding:0 0 60px;">
+    <!-- Se renderiza dinámicamente por verRuta() -->
+  </div>
+</div>
+
 <div class="page" id="page-editor" style="background:var(--negro);overflow-y:auto;padding-top:88px;padding-bottom:80px;">
 
   <!-- HERO DEMO -->
@@ -2779,177 +2786,169 @@ window.toggleUserMenu = toggleUserMenu;
 
 function verRuta(id, nombre) {
   if (!currentUser) return;
-  setTimeout(() => {
-    db.collection('users').doc(currentUser.uid).collection('maps').doc(id).get().then(doc => {
-      if (!doc.exists) return;
-      const r = doc.data();
-      let modal = document.getElementById('modal-editar-ruta');
-      if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'modal-editar-ruta';
-        modal.style.cssText = 'position:fixed;inset:0;background:#050505;z-index:10000;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;';
-        document.body.appendChild(modal);
-      }
+  
+  // Cerrar modal si estaba abierto (legacy)
+  var oldModal = document.getElementById('modal-editar-ruta');
+  if (oldModal) oldModal.style.display = 'none';
+  
+  db.collection('users').doc(currentUser.uid).collection('maps').doc(id).get().then(doc => {
+    if (!doc.exists) return;
+    const r = doc.data();
+    const container = document.getElementById('ruta-view-container');
+    if (!container) return;
 
-      // Intentar parsear itinerarioIA como JSON para renderizar paradas
-      var routeData = null;
-      if (r.itinerarioIA) {
-        try { routeData = JSON.parse(r.itinerarioIA); } catch(e) {}
-      }
-      
-      // Construir lista de POIs (desde JSON o desde campo pois)
-      var pois = [];
-      if (routeData && routeData.stops && routeData.stops.length > 0) {
-        pois = routeData.stops;
-      } else if (r.pois && r.pois.length > 0) {
-        pois = r.pois;
-      }
+    // Parsear datos
+    var routeData = null;
+    if (r.itinerarioIA) {
+      try { routeData = JSON.parse(r.itinerarioIA); } catch(e) {}
+    }
+    
+    var pois = [];
+    if (routeData && routeData.stops && routeData.stops.length > 0) {
+      pois = routeData.stops;
+    } else if (r.pois && r.pois.length > 0) {
+      pois = r.pois;
+    }
 
-      var typeIcons = {city:'🏙',town:'🏘',nature:'🌿',beach:'🏖',mountain:'⛰',temple:'🛕',viewpoint:'📸',route:'🛤',activity:'🎯',other:'📍'};
+    var typeIcons = {city:'🏙',town:'🏘',nature:'🌿',beach:'🏖',mountain:'⛰',temple:'🛕',viewpoint:'📸',route:'🛤',activity:'🎯',other:'📍'};
 
-      // Renderizar paradas
-      var stopsHTML = '';
-      if (pois.length > 0) {
-        stopsHTML = '<div style="margin-top:20px;">';
-        stopsHTML += '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;margin-bottom:14px;">PARADAS (' + pois.length + ')</div>';
-        
-        pois.forEach(function(stop) {
-          var icon = typeIcons[stop.type] || '📍';
-          var name = (stop.name || '').replace(/</g,'&lt;');
-          var desc2 = (stop.description || stop.note || '').replace(/</g,'&lt;');
-          var day = stop.day ? 'Día ' + stop.day : '';
-          var mapsUrl = stop.lat && stop.lng ? 'https://www.google.com/maps?q=' + stop.lat + ',' + stop.lng : '';
-          
-          stopsHTML += '<div style="display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid rgba(212,160,23,.12);">';
-          stopsHTML += '<span style="font-size:20px;min-width:28px;text-align:center;">' + icon + '</span>';
-          stopsHTML += '<div style="flex:1;">';
-          stopsHTML += '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">';
-          stopsHTML += '<span style="font-size:15px;font-weight:600;color:#fff;">' + name + '</span>';
-          if (day) stopsHTML += '<span style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">' + day + '</span>';
-          stopsHTML += '</div>';
-          if (desc2) stopsHTML += '<div style="font-size:13px;color:rgba(245,240,232,.7);line-height:1.6;margin-top:4px;">' + desc2 + '</div>';
-          if (mapsUrl) stopsHTML += '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;margin-top:4px;display:inline-block;">VER EN MAPA →</a>';
-          stopsHTML += '</div></div>';
-        });
+    // Paradas HTML
+    var stopsHTML = '';
+    if (pois.length > 0) {
+      stopsHTML = '<div style="margin-top:24px;">';
+      stopsHTML += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:14px;">PARADAS (' + pois.length + ')</div>';
+      pois.forEach(function(stop) {
+        var icon = typeIcons[stop.type] || '📍';
+        var sname = (stop.name || '').replace(/</g,'&lt;');
+        var sdesc = (stop.description || stop.note || '').replace(/</g,'&lt;');
+        var day = stop.day ? 'Día ' + stop.day : '';
+        var mapsUrl = stop.lat && stop.lng ? 'https://www.google.com/maps?q=' + stop.lat + ',' + stop.lng : '';
+        stopsHTML += '<div style="display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid rgba(212,160,23,.1);">';
+        stopsHTML += '<div style="min-width:32px;text-align:center;"><span style="font-size:22px;">' + icon + '</span>';
+        if (day) stopsHTML += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:8px;color:var(--dorado);margin-top:3px;">' + day + '</div>';
         stopsHTML += '</div>';
+        stopsHTML += '<div style="flex:1;">';
+        stopsHTML += '<div style="font-size:16px;font-weight:600;color:#fff;margin-bottom:4px;">' + sname + '</div>';
+        if (sdesc) stopsHTML += '<div style="font-size:14px;color:rgba(245,240,232,.7);line-height:1.65;">' + sdesc + '</div>';
+        if (mapsUrl) stopsHTML += '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;margin-top:6px;display:inline-block;">VER EN MAPA →</a>';
+        stopsHTML += '</div></div>';
+      });
+      stopsHTML += '</div>';
+    }
+
+    // Tips
+    var tipsHTML = '';
+    if (routeData && routeData.tips && routeData.tips.length > 0) {
+      tipsHTML = '<div style="margin-top:28px;padding-top:20px;border-top:1px solid rgba(212,160,23,.12);">';
+      tipsHTML += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:12px;">CONSEJOS DE SALMA</div>';
+      routeData.tips.forEach(function(tip) {
+        tipsHTML += '<div style="font-size:14px;color:rgba(245,240,232,.7);line-height:1.65;margin-bottom:8px;">• ' + (tip || '').replace(/</g,'&lt;') + '</div>';
+      });
+      tipsHTML += '</div>';
+    }
+
+    // Texto plano si no hay JSON
+    var textHTML = '';
+    if (!routeData && r.itinerarioIA) {
+      textHTML = '<div style="margin-top:20px;padding:16px;background:rgba(255,255,255,.02);border:1px solid rgba(212,160,23,.1);border-radius:14px;">';
+      textHTML += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.14em;margin-bottom:8px;">ITINERARIO</div>';
+      textHTML += '<div style="font-size:14px;color:rgba(245,240,232,.75);line-height:1.7;white-space:pre-wrap;">' + r.itinerarioIA.replace(/</g,'&lt;') + '</div>';
+      textHTML += '</div>';
+    }
+
+    // Tags
+    var tagsHTML = '';
+    if (routeData && routeData.tags && routeData.tags.length > 0) {
+      tagsHTML = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;">';
+      routeData.tags.forEach(function(tag) {
+        tagsHTML += '<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;padding:5px 12px;border:1px solid rgba(212,160,23,.2);border-radius:999px;color:var(--dorado);">' + (tag || '').replace(/</g,'&lt;') + '</span>';
+      });
+      tagsHTML += '</div>';
+    }
+
+    var summary = routeData && routeData.summary ? routeData.summary.replace(/</g,'&lt;') : '';
+    var budget = routeData && routeData.budget_level && routeData.budget_level !== 'sin_definir' ? ' · ' + routeData.budget_level.toUpperCase() : '';
+    var hasMapData = pois.some(function(p) { return p.lat && p.lng; });
+
+    // Google Maps URL
+    var gmapsUrl = '';
+    if (hasMapData) {
+      var gmapsPois = pois.filter(function(p) { return p.lat && p.lng; });
+      if (gmapsPois.length >= 2) {
+        var origin = gmapsPois[0].lat + ',' + gmapsPois[0].lng;
+        var dest = gmapsPois[gmapsPois.length-1].lat + ',' + gmapsPois[gmapsPois.length-1].lng;
+        var waypoints = gmapsPois.slice(1, -1).map(function(p) { return p.lat + ',' + p.lng; }).join('|');
+        gmapsUrl = 'https://www.google.com/maps/dir/?api=1&origin=' + origin + '&destination=' + dest + (waypoints ? '&waypoints=' + waypoints : '') + '&travelmode=driving';
+      } else {
+        gmapsUrl = 'https://www.google.com/maps?q=' + gmapsPois[0].lat + ',' + gmapsPois[0].lng;
       }
+    }
 
-      // Tips
-      var tipsHTML = '';
-      if (routeData && routeData.tips && routeData.tips.length > 0) {
-        tipsHTML = '<div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(212,160,23,.15);">';
-        tipsHTML += '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;margin-bottom:10px;">CONSEJOS DE SALMA</div>';
-        routeData.tips.forEach(function(tip) {
-          tipsHTML += '<div style="font-size:13px;color:rgba(245,240,232,.7);line-height:1.6;margin-bottom:6px;">• ' + (tip || '').replace(/</g,'&lt;') + '</div>';
-        });
-        tipsHTML += '</div>';
-      }
+    // Descripción sin duplicados
+    var descText = '';
+    if (summary && r.desc && summary !== r.desc.replace(/</g,'&lt;')) {
+      descText = '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:16px;">' + summary + '</div>';
+    } else if (summary) {
+      descText = '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:16px;">' + summary + '</div>';
+    } else if (r.desc) {
+      descText = '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:16px;">' + r.desc.replace(/</g,'&lt;') + '</div>';
+    }
 
-      // Texto del itinerario si no hay JSON parseado
-      var textHTML = '';
-      if (!routeData && r.itinerarioIA) {
-        textHTML = '<div style="margin-top:16px;padding:14px;background:rgba(255,255,255,.02);border:1px solid rgba(212,160,23,.12);border-radius:14px;">';
-        textHTML += '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:1px;margin-bottom:8px;">ITINERARIO</div>';
-        textHTML += '<div style="font-size:13px;color:rgba(245,240,232,.75);line-height:1.7;white-space:pre-wrap;">' + r.itinerarioIA.replace(/</g,'&lt;') + '</div>';
-        textHTML += '</div>';
-      }
+    // Renderizar en la página
+    container.innerHTML = 
+      // Botón volver
+      '<div style="padding:16px 24px 0;">' +
+        '<div onclick="showPage(\'dashboard\')" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.12em;padding:8px 0;transition:opacity .2s;opacity:.8;" onmouseover="this.style.opacity=\'1\'" onmouseout="this.style.opacity=\'.8\'">← MIS RUTAS</div>' +
+      '</div>' +
+      // Mapa
+      (hasMapData ? '<div style="position:relative;margin:12px 0 0;">' +
+        '<div id="ver-ruta-map" style="width:100%;height:340px;background:#0a0a09;border-radius:0;"></div>' +
+        '<a href="' + gmapsUrl + '" target="_blank" rel="noopener" style="position:absolute;bottom:14px;left:14px;z-index:500;font-family:\'JetBrains Mono\',monospace;font-size:9px;background:rgba(10,10,9,.85);color:#d4a017;border:1px solid rgba(212,160,23,.3);border-radius:10px;padding:10px 16px;text-decoration:none;letter-spacing:.1em;backdrop-filter:blur(4px);">VER RUTA EN GOOGLE MAPS →</a>' +
+      '</div>' : '') +
+      // Header
+      '<div style="padding:24px 24px 0;">' +
+        '<div style="font-family:\'Inter Tight\',sans-serif;font-size:28px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;">' + (r.nombre||'Mi ruta').replace(/</g,'&lt;') + '</div>' +
+        '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-top:8px;">' + (r.dias||0) + ' DÍAS · ' + (r.destino||'').replace(/</g,'&lt;').toUpperCase() + budget + ' · ' + pois.length + ' PARADAS</div>' +
+      '</div>' +
+      // Content
+      '<div style="padding:20px 24px 40px;">' +
+        descText +
+        tagsHTML +
+        stopsHTML +
+        tipsHTML +
+        textHTML +
+        // Botones de acción
+        '<div style="display:flex;gap:10px;margin-top:28px;padding-top:20px;border-top:1px solid rgba(212,160,23,.1);flex-wrap:wrap;">' +
+          (gmapsUrl ? '<a href="' + gmapsUrl + '" target="_blank" rel="noopener" style="flex:1;min-width:120px;text-align:center;background:var(--dorado);border:none;border-radius:12px;color:#0a0908;padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:10px;font-weight:700;text-decoration:none;letter-spacing:.12em;">ABRIR EN GOOGLE MAPS</a>' : '') +
+          '<button onclick="editarRutaModal(\'' + id + '\')" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:12px;color:var(--dorado);padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;">EDITAR</button>' +
+          '<button onclick="showPage(\'dashboard\')" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.1);border-radius:12px;color:rgba(245,240,232,.5);padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;">VOLVER</button>' +
+        '</div>' +
+      '</div>';
 
-      // Tags
-      var tagsHTML = '';
-      if (routeData && routeData.tags && routeData.tags.length > 0) {
-        tagsHTML = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;">';
-        routeData.tags.forEach(function(tag) {
-          tagsHTML += '<span style="font-family:\'Space Mono\',monospace;font-size:9px;padding:5px 10px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:var(--dorado);">' + (tag || '').replace(/</g,'&lt;') + '</span>';
-        });
-        tagsHTML += '</div>';
-      }
+    // Cambiar a la página de ruta
+    showPage('ruta');
 
-      var summary = routeData && routeData.summary ? routeData.summary.replace(/</g,'&lt;') : '';
-      var budget = routeData && routeData.budget_level && routeData.budget_level !== 'sin_definir' ? ' · ' + routeData.budget_level.toUpperCase() : '';
-
-      // Determinar si hay POIs con coordenadas para el mapa
-      var hasMapData = pois.some(function(p) { return p.lat && p.lng; });
-      
-      // Construir Google Maps URL con todos los stops
-      var gmapsUrl = '';
-      if (hasMapData) {
-        var gmapsPois = pois.filter(function(p) { return p.lat && p.lng; });
-        if (gmapsPois.length >= 2) {
-          var origin = gmapsPois[0].lat + ',' + gmapsPois[0].lng;
-          var dest = gmapsPois[gmapsPois.length-1].lat + ',' + gmapsPois[gmapsPois.length-1].lng;
-          var waypoints = gmapsPois.slice(1, -1).map(function(p) { return p.lat + ',' + p.lng; }).join('|');
-          gmapsUrl = 'https://www.google.com/maps/dir/?api=1&origin=' + origin + '&destination=' + dest + (waypoints ? '&waypoints=' + waypoints : '') + '&travelmode=driving';
-        } else {
-          gmapsUrl = 'https://www.google.com/maps?q=' + gmapsPois[0].lat + ',' + gmapsPois[0].lng;
-        }
-      }
-
-      // Usar solo summary O desc, no ambos si son iguales
-      var descText = '';
-      if (summary && r.desc && summary !== r.desc.replace(/</g,'&lt;')) {
-        descText = '<div style="font-size:14px;color:rgba(245,240,232,.65);line-height:1.6;margin-bottom:8px;">' + r.desc.replace(/</g,'&lt;') + '</div>' +
-                   '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:16px;">' + summary + '</div>';
-      } else if (summary) {
-        descText = '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:16px;">' + summary + '</div>';
-      } else if (r.desc) {
-        descText = '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:16px;">' + r.desc.replace(/</g,'&lt;') + '</div>';
-      }
-
-      modal.innerHTML = 
-        '<div style="background:#0a0a09;max-width:640px;width:100%;margin:auto;overflow:hidden;border-radius:0;" onclick="event.stopPropagation()">' +
-          // Mapa con enlace Google Maps
-          (hasMapData ? '<div style="position:relative;"><div id="ver-ruta-map" style="width:100%;height:300px;background:#0a0a09;"></div>' +
-            '<a href="' + gmapsUrl + '" target="_blank" rel="noopener" style="position:absolute;bottom:12px;left:12px;z-index:500;font-family:\'JetBrains Mono\',monospace;font-size:9px;background:rgba(10,10,9,.85);color:#d4a017;border:1px solid rgba(212,160,23,.3);border-radius:10px;padding:8px 14px;text-decoration:none;letter-spacing:.1em;backdrop-filter:blur(4px);">VER RUTA EN GOOGLE MAPS →</a></div>' : '') +
-          // Header
-          '<div style="padding:24px 24px 0;">' +
-            '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">' +
-              '<div style="flex:1;">' +
-                '<div style="font-family:\'Inter Tight\',sans-serif;font-size:24px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;">' + (r.nombre||'Mi ruta').replace(/</g,'&lt;') + '</div>' +
-                '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-top:6px;">' + (r.dias||0) + ' DÍAS · ' + (r.destino||'').replace(/</g,'&lt;').toUpperCase() + budget + '</div>' +
-              '</div>' +
-              '<div onclick="document.getElementById(\'modal-editar-ruta\').style.display=\'none\'" style="cursor:pointer;color:var(--crema);opacity:.4;font-size:24px;padding:4px 8px;transition:opacity .2s;" onmouseover="this.style.opacity=\'1\'" onmouseout="this.style.opacity=\'.4\'">✕</div>' +
-            '</div>' +
-            descText +
-            tagsHTML +
-          '</div>' +
-          // Content
-          '<div style="padding:0 24px 24px;">' +
-            stopsHTML +
-            tipsHTML +
-            textHTML +
-            '<div style="display:flex;gap:10px;margin-top:24px;padding-top:16px;border-top:1px solid rgba(212,160,23,.12);flex-wrap:wrap;">' +
-              (gmapsUrl ? '<a href="' + gmapsUrl + '" target="_blank" rel="noopener" style="flex:1;min-width:120px;text-align:center;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:12px;color:var(--dorado);padding:12px;font-family:\'JetBrains Mono\',monospace;font-size:10px;text-decoration:none;letter-spacing:.1em;">GOOGLE MAPS</a>' : '') +
-              '<button onclick="editarRutaModal(\'' + id + '\')" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:12px;color:var(--dorado);padding:12px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.1em;">EDITAR</button>' +
-              '<button onclick="document.getElementById(\'modal-editar-ruta\').style.display=\'none\'" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.12);border-radius:12px;color:rgba(245,240,232,.5);padding:12px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.1em;">CERRAR</button>' +
-            '</div>' +
-          '</div>' +
-        '</div>';
-      modal.style.display = 'flex';
-      modal.style.cssText = 'position:fixed;inset:0;background:#0a0a09;z-index:10000;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:0;';
-      modal.onclick = function(e) { if (e.target === modal) modal.style.display = 'none'; };
-
-      // Inicializar mapa Leaflet si hay coordenadas
-      if (hasMapData) {
-        setTimeout(function() {
-          var mapEl = document.getElementById('ver-ruta-map');
-          if (!mapEl) return;
-          var coords = pois.filter(function(p) { return p.lat && p.lng; }).map(function(p) { return [p.lat, p.lng]; });
-          var rutaMap = L.map('ver-ruta-map', {zoomControl:false, scrollWheelZoom:false}).setView(coords[0], 6);
-          L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom:18}).addTo(rutaMap);
-          L.polyline(coords, {color:'#d4a017', weight:2.5, opacity:.8, dashArray:'8,6'}).addTo(rutaMap);
-          pois.filter(function(p) { return p.lat && p.lng; }).forEach(function(p) {
-            var markerIcon = L.divIcon({
-              html:'<div style="background:#d4a017;border-radius:50%;width:12px;height:12px;box-shadow:0 0 0 3px rgba(212,160,23,.3);"></div>',
-              className:'', iconSize:[12,12], iconAnchor:[6,6]
-            });
-            L.marker([p.lat, p.lng], {icon:markerIcon}).addTo(rutaMap)
-              .bindTooltip((p.name || p.n || ''), {permanent:false, direction:'top', className:'leaflet-tooltip-salma'});
+    // Inicializar mapa
+    if (hasMapData) {
+      setTimeout(function() {
+        var mapEl = document.getElementById('ver-ruta-map');
+        if (!mapEl || mapEl._leaflet_id) return;
+        var coords = pois.filter(function(p) { return p.lat && p.lng; }).map(function(p) { return [p.lat, p.lng]; });
+        var rutaMap = L.map('ver-ruta-map', {zoomControl:false, scrollWheelZoom:true}).setView(coords[0], 6);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom:18}).addTo(rutaMap);
+        L.polyline(coords, {color:'#d4a017', weight:2.5, opacity:.8, dashArray:'8,6'}).addTo(rutaMap);
+        pois.filter(function(p) { return p.lat && p.lng; }).forEach(function(p) {
+          var markerIcon = L.divIcon({
+            html:'<div style="background:#d4a017;border-radius:50%;width:12px;height:12px;box-shadow:0 0 0 3px rgba(212,160,23,.3);"></div>',
+            className:'', iconSize:[12,12], iconAnchor:[6,6]
           });
-          if (coords.length > 1) rutaMap.fitBounds(coords, {padding:[40,40]});
-        }, 200);
-      }
-    }).catch(e => showToast('Error: ' + e.message));
-  }, 50);
+          L.marker([p.lat, p.lng], {icon:markerIcon}).addTo(rutaMap)
+            .bindTooltip((p.name || p.n || ''), {permanent:false, direction:'top'});
+        });
+        if (coords.length > 1) rutaMap.fitBounds(coords, {padding:[40,40]});
+      }, 250);
+    }
+  }).catch(e => showToast('Error: ' + e.message));
 }
 window.verRuta = verRuta;
 
