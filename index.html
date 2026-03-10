@@ -1534,6 +1534,59 @@ input::placeholder, textarea::placeholder{
       </div>
     </div>
   </section>
+
+  <!-- PRUEBA SOCIAL -->
+  <section style="max-width:1180px;margin:0 auto;padding:0 32px 96px;">
+    <!-- Contador -->
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;">
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:18px;padding:20px 32px;text-align:center;min-width:160px;">
+        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;" id="counter-routes">847</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.16em;margin-top:4px;">RUTAS CREADAS</div>
+      </div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:18px;padding:20px 32px;text-align:center;min-width:160px;">
+        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;">32</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.16em;margin-top:4px;">PAÍSES</div>
+      </div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:18px;padding:20px 32px;text-align:center;min-width:160px;">
+        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;">4.8<span style="font-size:18px;color:var(--dorado);">★</span></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.16em;margin-top:4px;">VALORACIÓN</div>
+      </div>
+    </div>
+
+    <!-- Testimonios -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;">
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.12);border-radius:18px;padding:22px;">
+        <div style="font-size:14px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:14px;">"Le dije a Salma que quería 10 días en moto por Vietnam y me montó una ruta mejor que la que llevaba 3 semanas planificando yo solo."</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;background:var(--dorado);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#0a0908;">M</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#fff;">Marc</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">VIETNAM · 25 DÍAS</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.12);border-radius:18px;padding:22px;">
+        <div style="font-size:14px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:14px;">"Lo mejor es que durante el viaje le pregunté a Salma dónde comer cerca de Kioto y me recomendó un sitio que no salía en ninguna guía. Brutal."</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;background:var(--dorado);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#0a0908;">L</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#fff;">Laura</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">JAPÓN · 12 DÍAS</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.12);border-radius:18px;padding:22px;">
+        <div style="font-size:14px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:14px;">"Viajamos con mi madre en silla de ruedas y Salma nos adaptó toda la ruta por Barcelona. Verificamos cada sitio y todo era accesible de verdad."</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;background:var(--dorado);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#0a0908;">P</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#fff;">Pablo</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">BARCELONA · 5 DÍAS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
 
 <!-- ===== BLOG ===== -->
@@ -2045,6 +2098,16 @@ function showPage(name) {
   if (mobileNav) {
     mobileNav.style.display = currentUser ? "flex" : "none";
   }
+  // Ocultar botón flotante de Salma en el hero (ya tiene input propio)
+  const salmaBtn = document.getElementById("salma-btn");
+  const salmaChat = document.getElementById("salma-chat");
+  if (salmaBtn) {
+    salmaBtn.style.display = (name === "home") ? "none" : "flex";
+  }
+  // Cerrar chat de Salma al cambiar de página
+  if (salmaChat && salmaChat.classList.contains("open")) {
+    salmaChat.classList.remove("open");
+  }
   window.scrollTo(0,0);
   if (name === "editor") setTimeout(initDemoMap, 100);
 }
@@ -2299,21 +2362,12 @@ function renderMapsGrid(maps) {
 
   // Si no hay rutas, mostrar ejemplo
   if (maps.length === 0) {
-    html = `<div class="map-card" style="position:relative;">
-      <div style="position:absolute;top:10px;left:10px;background:var(--dorado);color:var(--negro);font-family:'Space Mono',monospace;font-size:9px;font-weight:700;padding:4px 8px;letter-spacing:1px;z-index:1;">EJEMPLO</div>
-      <div class="map-card-img">🏍️</div>
-      <div class="map-card-body">
-        <div class="map-card-title">Vietnam en Moto</div>
-        <div class="map-card-meta">25 días · 9 paradas · 106 POIs</div>
-        <div style="font-size:11px;color:var(--crema);opacity:.6;margin-bottom:8px;">Así quedará tu ruta. ¡Crea la tuya!</div>
-        <div class="map-card-tags"><span class="tag">Hanoi</span><span class="tag">Ha Giang</span><span class="tag">Hoi An</span></div>
-      </div>
-    </div>
-    <div class="map-card map-card-new" onclick="newMap()" style="cursor:pointer;">
-      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;padding:40px 20px;">
-        <div style="font-size:40px;">＋</div>
-        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--crema);opacity:.6;text-align:center;letter-spacing:1px;">CREAR MI PRIMERA RUTA</div>
-      </div>
+    html = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px;">
+      <div style="font-size:48px;margin-bottom:16px;">🌍</div>
+      <div style="font-family:'Inter Tight',sans-serif;font-size:28px;font-weight:700;color:#fff;margin-bottom:8px;">Tu primera aventura empieza aquí</div>
+      <div style="font-size:15px;color:rgba(245,240,232,.65);line-height:1.7;max-width:440px;margin:0 auto 24px;">Cuéntale a Salma adónde quieres ir y ella te monta la ruta completa con paradas, consejos y todo lo que necesitas.</div>
+      <button onclick="newMap()" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:16px 32px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;cursor:pointer;transition:background .2s;margin-bottom:12px;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">CREAR MI PRIMERA RUTA →</button>
+      <div style="font-size:13px;color:rgba(245,240,232,.4);margin-top:8px;">Solo te llevará un minuto. Salma se encarga del resto.</div>
     </div>`;
   }
 
@@ -2811,12 +2865,18 @@ function verRuta(id, nombre) {
       var summary = routeData && routeData.summary ? '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:16px;">' + routeData.summary.replace(/</g,'&lt;') + '</div>' : '';
       var budget = routeData && routeData.budget_level && routeData.budget_level !== 'sin_definir' ? ' · Presupuesto ' + routeData.budget_level : '';
 
+      // Determinar si hay POIs con coordenadas para el mapa
+      var hasMapData = pois.some(function(p) { return p.lat && p.lng; });
+
       modal.innerHTML = 
-        '<div style="background:#111;border:1px solid rgba(212,160,23,.2);border-radius:18px;padding:32px;max-width:600px;width:100%;margin:auto;" onclick="event.stopPropagation()">' +
+        '<div style="background:#111;border:1px solid rgba(212,160,23,.2);border-radius:18px;max-width:640px;width:100%;margin:auto;overflow:hidden;" onclick="event.stopPropagation()">' +
+          // Mapa
+          (hasMapData ? '<div id="ver-ruta-map" style="width:100%;height:260px;background:#0a0a09;"></div>' : '') +
+          '<div style="padding:28px;">' +
           '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">' +
             '<div>' +
               '<div style="font-family:\'Inter Tight\',sans-serif;font-size:26px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;">' + (r.nombre||'Mi ruta').replace(/</g,'&lt;') + '</div>' +
-              '<div style="font-family:\'Space Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-top:6px;">' + (r.dias||0) + ' DÍAS · ' + (r.destino||'').replace(/</g,'&lt;').toUpperCase() + budget + '</div>' +
+              '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-top:6px;">' + (r.dias||0) + ' DÍAS · ' + (r.destino||'').replace(/</g,'&lt;').toUpperCase() + budget + '</div>' +
             '</div>' +
             '<div onclick="document.getElementById(\'modal-editar-ruta\').style.display=\'none\'" style="cursor:pointer;color:var(--crema);opacity:.5;font-size:24px;padding:4px 8px;">✕</div>' +
           '</div>' +
@@ -2827,13 +2887,35 @@ function verRuta(id, nombre) {
           tipsHTML +
           textHTML +
           '<div style="display:flex;gap:12px;margin-top:24px;padding-top:16px;border-top:1px solid rgba(212,160,23,.12);">' +
-            '<button onclick="document.getElementById(\'modal-editar-ruta\').style.display=\'none\'" style="flex:1;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:12px;color:var(--crema);padding:12px;font-family:\'Space Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.1em;">CERRAR</button>' +
-            '<button onclick="editarRutaModal(\'' + id + '\')" style="flex:1;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:12px;color:var(--dorado);padding:12px;font-family:\'Space Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.1em;">EDITAR</button>' +
-            '<button onclick="eliminarRuta(\'' + id + '\');document.getElementById(\'modal-editar-ruta\').style.display=\'none\'" style="flex:1;background:transparent;border:1px solid rgba(127,29,29,.3);border-radius:12px;color:#f87171;padding:12px;font-family:\'Space Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.1em;">BORRAR</button>' +
+            '<button onclick="document.getElementById(\'modal-editar-ruta\').style.display=\'none\'" style="flex:1;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:12px;color:var(--crema);padding:12px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.1em;">CERRAR</button>' +
+            '<button onclick="editarRutaModal(\'' + id + '\')" style="flex:1;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:12px;color:var(--dorado);padding:12px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.1em;">EDITAR</button>' +
+            '<button onclick="eliminarRuta(\'' + id + '\');document.getElementById(\'modal-editar-ruta\').style.display=\'none\'" style="flex:1;background:transparent;border:1px solid rgba(127,29,29,.3);border-radius:12px;color:#f87171;padding:12px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.1em;">BORRAR</button>' +
+          '</div>' +
           '</div>' +
         '</div>';
       modal.style.display = 'flex';
       modal.onclick = function(e) { if (e.target === modal) modal.style.display = 'none'; };
+
+      // Inicializar mapa Leaflet si hay coordenadas
+      if (hasMapData) {
+        setTimeout(function() {
+          var mapEl = document.getElementById('ver-ruta-map');
+          if (!mapEl) return;
+          var coords = pois.filter(function(p) { return p.lat && p.lng; }).map(function(p) { return [p.lat, p.lng]; });
+          var rutaMap = L.map('ver-ruta-map', {zoomControl:false, scrollWheelZoom:false}).setView(coords[0], 6);
+          L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom:18}).addTo(rutaMap);
+          L.polyline(coords, {color:'#d4a017', weight:2, opacity:.7, dashArray:'8,6'}).addTo(rutaMap);
+          pois.filter(function(p) { return p.lat && p.lng; }).forEach(function(p) {
+            var icon = L.divIcon({
+              html:'<div style="background:#d4a017;border-radius:50%;width:10px;height:10px;box-shadow:0 0 0 3px rgba(212,160,23,.3);"></div>',
+              className:'', iconSize:[10,10], iconAnchor:[5,5]
+            });
+            L.marker([p.lat, p.lng], {icon:icon}).addTo(rutaMap)
+              .bindTooltip(p.name || p.n || '', {permanent:false, direction:'right'});
+          });
+          if (coords.length > 1) rutaMap.fitBounds(coords, {padding:[30,30]});
+        }, 200);
+      }
     }).catch(e => showToast('Error: ' + e.message));
   }, 50);
 }
@@ -3243,7 +3325,7 @@ footer{padding:28px 32px 64px;border-top:1px solid #050505;text-align:center;}
 </style>
 
 <!-- Botón flotante de Salma -->
-<div id="salma-btn" onclick="salmaToggle()" title="Habla con Salma">
+<div id="salma-btn" onclick="salmaToggle()" title="Habla con Salma" style="display:none;">
   <div class="salma-pulse"></div>
   <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
     <circle cx="50" cy="50" r="38" fill="#1a1816" stroke="#d4a017" stroke-width="2"/>
