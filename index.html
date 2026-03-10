@@ -3231,6 +3231,11 @@ async function salmaSend(overrideMsg) {
     const data = await res.json();
     typing.remove();
 
+    // DEBUG — borrar después de confirmar que funciona
+    console.log("SALMA RESPONSE:", JSON.stringify(data).substring(0, 500));
+    console.log("HAS ROUTE:", !!(data.route && data.route.stops));
+    if (data._debug) console.log("WORKER DEBUG:", data._debug);
+
     if (data.reply) {
       // El Worker ahora envía data.route como JSON separado
       if (data.route && data.route.stops) {
