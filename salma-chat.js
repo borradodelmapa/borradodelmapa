@@ -180,16 +180,26 @@ function salmaRenderRoute(routeData) {
     '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:4px;">ITINERARIO · ' + pois.length + ' EXPERIENCIAS</div>' +
     stopsHTML +
     tipsHTML +
-    // Bloque de sugerencias de edición
+    // Bloque de edición — Salma con input
     '<div style="margin-top:32px;padding:20px 24px;background:rgba(255,255,255,.02);border:1px solid rgba(212,160,23,.12);border-radius:18px;">' +
-      '<div style="font-size:14px;color:rgba(245,240,232,.55);margin-bottom:12px;">¿Quieres ajustar algo? Escribe arriba o prueba con:</div>' +
-      '<div id="salma-suggestions" style="display:flex;flex-direction:column;gap:8px;">' +
-        (routeData.suggestions && routeData.suggestions.length > 0 ?
+      // Avatar + mensaje de Salma
+      '<div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;">' +
+        '<div style="flex-shrink:0;width:36px;height:36px;border-radius:50%;border:1.5px solid #d4a017;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#1a1816;">' + SALMA_AVATAR + '</div>' +
+        '<div style="font-size:14px;color:rgba(245,240,232,.7);line-height:1.6;padding-top:6px;">¿Te convence? Pide cambios aquí o guárdala. Después puedes seguir editando.</div>' +
+      '</div>' +
+      // Sugerencias dinámicas (si las hay)
+      (routeData.suggestions && routeData.suggestions.length > 0 ?
+        '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">' +
           routeData.suggestions.map(function(s) {
-            return '<div onclick="salmaUseSuggestion(this)" style="cursor:pointer;padding:10px 16px;background:rgba(212,160,23,.06);border:1px solid rgba(212,160,23,.15);border-radius:12px;font-size:14px;color:rgba(245,240,232,.65);transition:all .15s;line-height:1.5;" onmouseover="this.style.borderColor=\'#d4a017\';this.style.color=\'#f5f0e8\'" onmouseout="this.style.borderColor=\'rgba(212,160,23,.15)\';this.style.color=\'rgba(245,240,232,.65)\'">' + escapeHTML(s) + '</div>';
-          }).join('')
-          : ''
-        ) +
+            return '<div onclick="salmaUseSuggestion(this)" style="cursor:pointer;padding:8px 14px;background:rgba(212,160,23,.06);border:1px solid rgba(212,160,23,.15);border-radius:12px;font-size:13px;color:rgba(245,240,232,.6);transition:all .15s;line-height:1.4;" onmouseover="this.style.borderColor=\'#d4a017\';this.style.color=\'#f5f0e8\'" onmouseout="this.style.borderColor=\'rgba(212,160,23,.15)\';this.style.color=\'rgba(245,240,232,.6)\'">' + escapeHTML(s) + '</div>';
+          }).join('') +
+        '</div>'
+        : ''
+      ) +
+      // Input de edición
+      '<div style="display:flex;gap:8px;">' +
+        '<input type="text" id="salma-edit-input" placeholder="Sugiere un cambio..." autocomplete="off" style="flex:1;background:#0c0b0a;border:1px solid rgba(212,160,23,.2);border-radius:14px;padding:12px 16px;color:#f5f0e8;font-family:\'Inter\',sans-serif;font-size:14px;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor=\'#d4a017\'" onblur="this.style.borderColor=\'rgba(212,160,23,.2)\'">' +
+        '<button onclick="salmaEditFromBox()" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:12px 18px;font-family:\'JetBrains Mono\',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;cursor:pointer;transition:background .2s;white-space:nowrap;" onmouseover="this.style.background=\'#e0b84a\'" onmouseout="this.style.background=\'#d4a017\'">ENVIAR</button>' +
       '</div>' +
     '</div>' +
     // Botones principales
@@ -412,18 +422,58 @@ function salmaReset() {
 // ===== EDICIÓN DE RUTA =====
 
 function salmaUseSuggestion(el) {
-  var input = document.getElementById('salma-inline-input');
+  var input = document.getElementById('salma-edit-input');
   if (input && el) {
     input.value = el.textContent;
-    // Scroll al input y enviar
-    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setTimeout(function() { salmaInlineReply(); }, 200);
+    salmaEditFromBox();
+  }
+}
+
+async function salmaEditFromBox() {
+  var input = document.getElementById('salma-edit-input');
+  if (!input) return;
+  var msg = input.value.trim();
+  if (!msg) return;
+
+  // Mostrar en el diálogo
+  salmaAddDialog(msg, 'user');
+  input.value = '';
+  salmaAddDialog('', 'loading');
+
+  try {
+    var res = await fetch(window.SALMA_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg, history: salmaHistory })
+    });
+    var data = await res.json();
+    salmaRemoveLoading();
+
+    if (data.reply) {
+      salmaAddDialog(data.reply, 'bot');
+      salmaHistory.push({ role: 'user', content: msg });
+      salmaHistory.push({ role: 'assistant', content: data.reply });
+      if (salmaHistory.length > 20) salmaHistory = salmaHistory.slice(-20);
+
+      if (data.route && data.route.stops && data.route.stops.length > 0) {
+        var routeResult = document.getElementById('salma-route-result');
+        if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
+        salmaRenderRoute(data.route);
+        if (routeResult) {
+          setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+        }
+      }
+    } else {
+      salmaAddDialog('No he podido aplicar ese cambio. ¿Puedes decirlo de otra forma?', 'bot');
+    }
+  } catch (err) {
+    salmaRemoveLoading();
+    salmaAddDialog('Error de conexión. Inténtalo de nuevo.', 'bot');
   }
 }
 
 async function salmaEditRoute() {
-  // Alias — usa el mismo flujo que salmaInlineReply
-  salmaInlineReply();
+  salmaEditFromBox();
 }
 
 // ===== KEYBOARD =====
@@ -441,7 +491,13 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); salmaInlineReply(); }
     });
   }
-  // Edit input keyboard — ya no existe salma-edit-input separado
+  // Edit input keyboard — dentro de la ruta generada
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey && document.activeElement && document.activeElement.id === 'salma-edit-input') {
+      e.preventDefault();
+      salmaEditFromBox();
+    }
+  });
 });
 
 // ===== INJECT CSS FOR LOADING ANIMATION =====
@@ -458,3 +514,4 @@ window.salmaRenderRoute = salmaRenderRoute;
 window.salmaToggleStop = salmaToggleStop;
 window.salmaUseSuggestion = salmaUseSuggestion;
 window.salmaEditRoute = salmaEditRoute;
+window.salmaEditFromBox = salmaEditFromBox;
