@@ -586,7 +586,7 @@ async function salmaCreateSend() {
   if (!window._salmaCreateHistory) window._salmaCreateHistory = [];
   
   try {
-    const res = await fetch(SALMA_API, {
+    const res = await fetch(window.SALMA_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: msg, history: window._salmaCreateHistory })
