@@ -118,8 +118,20 @@
         <button onclick="salmaHeroSend()" style="width:100%;background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:16px 28px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">PLANEAR →</button>
       </div>
 
+      <!-- SALMA INLINE — diálogo + resultado (justo después del input) -->
+      <section id="salma-inline" style="display:none;max-width:100%;margin:24px 0 0;text-align:left;">
+        <div id="salma-dialog" style="margin-bottom:24px;"></div>
+        <div id="salma-inline-input-wrap" style="display:none;margin-bottom:24px;">
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="salma-inline-input" placeholder="Responde a Salma..." autocomplete="off" style="flex:1;background:#111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:14px 18px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:15px;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'">
+            <button onclick="salmaInlineReply()" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:14px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;cursor:pointer;transition:background .2s;white-space:nowrap;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">ENVIAR</button>
+          </div>
+        </div>
+        <div id="salma-route-result" style="display:none;"></div>
+      </section>
+
       <!-- DEMOS -->
-      <div style="margin-top:8px;">
+      <div id="salma-demos-block" style="margin-top:8px;">
         <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(245,240,232,.45);letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px;">Ver ejemplos de viaje</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;" id="hero-demo-grid">
           <div onclick="openHeroDemo('japan')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:16px;overflow:hidden;transition:all .25s;text-align:left;" onmouseover="this.style.borderColor='#d4a017';this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.4)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.transform='none';this.style.boxShadow='none'">
@@ -152,21 +164,6 @@
   <div id="hero-demo-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:10002;overflow-y:auto;padding:20px;" onclick="if(event.target===this)this.style.display='none'">
     <div id="hero-demo-content" style="max-width:640px;margin:0 auto;background:#111;border:1px solid rgba(212,160,23,.25);border-radius:20px;padding:0;overflow:hidden;"></div>
   </div>
-
-  <!-- SALMA INLINE — diálogo + resultado debajo del hero -->
-  <section id="salma-inline" style="display:none;max-width:760px;margin:0 auto;padding:0 24px 60px;">
-    <!-- Diálogo: mensajes de Salma y usuario -->
-    <div id="salma-dialog" style="margin-bottom:24px;"></div>
-    <!-- Input para responder a Salma (cuando pregunta algo) -->
-    <div id="salma-inline-input-wrap" style="display:none;margin-bottom:24px;">
-      <div style="display:flex;gap:8px;">
-        <input type="text" id="salma-inline-input" placeholder="Responde a Salma..." autocomplete="off" style="flex:1;background:#111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:14px 18px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:15px;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'">
-        <button onclick="salmaInlineReply()" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:14px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;cursor:pointer;transition:background .2s;white-space:nowrap;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">ENVIAR</button>
-      </div>
-    </div>
-    <!-- Ruta generada a pantalla completa -->
-    <div id="salma-route-result" style="display:none;"></div>
-  </section>
 
   <!-- FEATURES -->
   <section class="features">
