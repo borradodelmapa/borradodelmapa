@@ -435,10 +435,12 @@ async function salmaEditFromBox() {
   var msg = input.value.trim();
   if (!msg) return;
 
-  // Mostrar en el diálogo
-  salmaAddDialog(msg, 'user');
-  input.value = '';
-  salmaAddDialog('', 'loading');
+  // Deshabilitar input mientras procesa
+  input.value = 'Salma está ajustando...';
+  input.disabled = true;
+
+  // Añadir al historial (sin scroll)
+  salmaHistory.push({ role: 'user', content: msg });
 
   try {
     var res = await fetch(window.SALMA_API, {
@@ -447,29 +449,36 @@ async function salmaEditFromBox() {
       body: JSON.stringify({ message: msg, history: salmaHistory })
     });
     var data = await res.json();
-    salmaRemoveLoading();
 
     if (data.reply) {
-      salmaAddDialog(data.reply, 'bot');
-      salmaHistory.push({ role: 'user', content: msg });
       salmaHistory.push({ role: 'assistant', content: data.reply });
       if (salmaHistory.length > 20) salmaHistory = salmaHistory.slice(-20);
 
       if (data.route && data.route.stops && data.route.stops.length > 0) {
+        // Re-renderizar ruta sin moverse
         var routeResult = document.getElementById('salma-route-result');
         if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
         salmaRenderRoute(data.route);
+        // Scroll suave al inicio de la ruta nueva
         if (routeResult) {
-          setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+          setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);
         }
+      } else {
+        // Salma respondió sin ruta — mostrar en diálogo arriba
+        salmaAddDialog(data.reply, 'bot');
       }
     } else {
-      salmaAddDialog('No he podido aplicar ese cambio. ¿Puedes decirlo de otra forma?', 'bot');
+      input.value = '';
+      input.placeholder = 'No he podido. Intenta de otra forma...';
     }
   } catch (err) {
-    salmaRemoveLoading();
-    salmaAddDialog('Error de conexión. Inténtalo de nuevo.', 'bot');
+    input.value = '';
+    input.placeholder = 'Error de conexión. Inténtalo de nuevo.';
   }
+
+  input.disabled = false;
+  input.value = '';
+  input.placeholder = 'Sugiere un cambio...';
 }
 
 async function salmaEditRoute() {
