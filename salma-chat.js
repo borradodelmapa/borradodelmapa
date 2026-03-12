@@ -180,22 +180,16 @@ function salmaRenderRoute(routeData) {
     '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:4px;">ITINERARIO · ' + pois.length + ' EXPERIENCIAS</div>' +
     stopsHTML +
     tipsHTML +
-    // Bloque de edición
-    '<div style="margin-top:32px;padding:24px;background:rgba(255,255,255,.02);border:1px solid rgba(212,160,23,.12);border-radius:18px;">' +
-      '<div style="font-size:15px;color:rgba(245,240,232,.7);margin-bottom:14px;">¿Quieres ajustar algo? Cuéntame o prueba con:</div>' +
-      '<div id="salma-suggestions" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">' +
+    // Bloque de sugerencias de edición
+    '<div style="margin-top:32px;padding:20px 24px;background:rgba(255,255,255,.02);border:1px solid rgba(212,160,23,.12);border-radius:18px;">' +
+      '<div style="font-size:14px;color:rgba(245,240,232,.55);margin-bottom:12px;">¿Quieres ajustar algo? Escribe arriba o prueba con:</div>' +
+      '<div id="salma-suggestions" style="display:flex;flex-direction:column;gap:8px;">' +
         (routeData.suggestions && routeData.suggestions.length > 0 ?
           routeData.suggestions.map(function(s) {
             return '<div onclick="salmaUseSuggestion(this)" style="cursor:pointer;padding:10px 16px;background:rgba(212,160,23,.06);border:1px solid rgba(212,160,23,.15);border-radius:12px;font-size:14px;color:rgba(245,240,232,.65);transition:all .15s;line-height:1.5;" onmouseover="this.style.borderColor=\'#d4a017\';this.style.color=\'#f5f0e8\'" onmouseout="this.style.borderColor=\'rgba(212,160,23,.15)\';this.style.color=\'rgba(245,240,232,.65)\'">' + escapeHTML(s) + '</div>';
           }).join('')
-          : '<div onclick="salmaUseSuggestion(this)" style="cursor:pointer;padding:10px 16px;background:rgba(212,160,23,.06);border:1px solid rgba(212,160,23,.15);border-radius:12px;font-size:14px;color:rgba(245,240,232,.65);transition:all .15s;" onmouseover="this.style.borderColor=\'#d4a017\';this.style.color=\'#f5f0e8\'" onmouseout="this.style.borderColor=\'rgba(212,160,23,.15)\';this.style.color=\'rgba(245,240,232,.65)\'">Hazla más tranquila, menos paradas por día</div>' +
-            '<div onclick="salmaUseSuggestion(this)" style="cursor:pointer;padding:10px 16px;background:rgba(212,160,23,.06);border:1px solid rgba(212,160,23,.15);border-radius:12px;font-size:14px;color:rgba(245,240,232,.65);transition:all .15s;" onmouseover="this.style.borderColor=\'#d4a017\';this.style.color=\'#f5f0e8\'" onmouseout="this.style.borderColor=\'rgba(212,160,23,.15)\';this.style.color=\'rgba(245,240,232,.65)\'">Añade más días de playa</div>' +
-            '<div onclick="salmaUseSuggestion(this)" style="cursor:pointer;padding:10px 16px;background:rgba(212,160,23,.06);border:1px solid rgba(212,160,23,.15);border-radius:12px;font-size:14px;color:rgba(245,240,232,.65);transition:all .15s;" onmouseover="this.style.borderColor=\'#d4a017\';this.style.color=\'#f5f0e8\'" onmouseout="this.style.borderColor=\'rgba(212,160,23,.15)\';this.style.color=\'rgba(245,240,232,.65)\'">Versión con más cultura y menos naturaleza</div>'
+          : ''
         ) +
-      '</div>' +
-      '<div style="display:flex;gap:8px;">' +
-        '<input type="text" id="salma-edit-input" placeholder="Escribe tu cambio..." autocomplete="off" style="flex:1;background:#0c0b0a;border:1px solid rgba(212,160,23,.2);border-radius:14px;padding:14px 18px;color:#f5f0e8;font-family:\'Inter\',sans-serif;font-size:15px;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor=\'#d4a017\'" onblur="this.style.borderColor=\'rgba(212,160,23,.2)\'">' +
-        '<button onclick="salmaEditRoute()" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:14px 20px;font-family:\'JetBrains Mono\',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;cursor:pointer;transition:background .2s;white-space:nowrap;" onmouseover="this.style.background=\'#e0b84a\'" onmouseout="this.style.background=\'#d4a017\'">AJUSTAR</button>' +
       '</div>' +
     '</div>' +
     // Botones principales
@@ -267,7 +261,7 @@ async function salmaHeroSend() {
   // Mostrar mensaje del usuario + loading
   salmaAddDialog(msg, 'user');
   salmaAddDialog('', 'loading');
-  salmaHideInput();
+  
 
   // Reset historial
   salmaHistory = [];
@@ -291,11 +285,11 @@ async function salmaHeroSend() {
         salmaRenderRoute(data.route);
       } else {
         // Salma necesita más info → mostrar input para responder
-        salmaShowInput();
+        
       }
     } else {
       salmaAddDialog('Uy, algo ha fallado. ¿Puedes intentarlo de nuevo?', 'bot');
-      salmaShowInput();
+      
     }
   } catch (err) {
     salmaRemoveLoading();
@@ -317,7 +311,6 @@ async function salmaInlineReply() {
 
   salmaAddDialog(msg, 'user');
   input.value = '';
-  salmaHideInput();
   salmaAddDialog('', 'loading');
 
   try {
@@ -336,18 +329,20 @@ async function salmaInlineReply() {
       if (salmaHistory.length > 20) salmaHistory = salmaHistory.slice(-20);
 
       if (data.route && data.route.stops && data.route.stops.length > 0) {
+        // Limpiar ruta anterior y re-renderizar
+        var routeResult = document.getElementById('salma-route-result');
+        if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
         salmaRenderRoute(data.route);
-      } else {
-        salmaShowInput();
+        if (routeResult) {
+          setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+        }
       }
     } else {
       salmaAddDialog('No he entendido bien. ¿Puedes repetir?', 'bot');
-      salmaShowInput();
     }
   } catch (err) {
     salmaRemoveLoading();
     salmaAddDialog('Error de conexión. Inténtalo de nuevo.', 'bot');
-    salmaShowInput();
   }
 }
 
@@ -403,7 +398,7 @@ function salmaReset() {
   if (dialog) dialog.innerHTML = '';
   if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
   if (section) section.style.display = 'none';
-  salmaHideInput();
+  
   salmaHistory = [];
   window._salmaLastRoute = null;
   // Enfocar el input del hero
@@ -417,58 +412,18 @@ function salmaReset() {
 // ===== EDICIÓN DE RUTA =====
 
 function salmaUseSuggestion(el) {
-  var input = document.getElementById('salma-edit-input');
+  var input = document.getElementById('salma-inline-input');
   if (input && el) {
     input.value = el.textContent;
-    salmaEditRoute();
+    // Scroll al input y enviar
+    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(function() { salmaInlineReply(); }, 200);
   }
 }
 
 async function salmaEditRoute() {
-  var input = document.getElementById('salma-edit-input');
-  if (!input) return;
-  var msg = input.value.trim();
-  if (!msg) return;
-
-  // Mostrar feedback
-  salmaAddDialog(msg, 'user');
-  input.value = '';
-  salmaAddDialog('', 'loading');
-
-  // Scroll al diálogo
-  var dialog = document.getElementById('salma-dialog');
-  if (dialog) dialog.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-  try {
-    var res = await fetch(window.SALMA_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: msg, history: salmaHistory })
-    });
-    var data = await res.json();
-    salmaRemoveLoading();
-
-    if (data.reply) {
-      salmaAddDialog(data.reply, 'bot');
-      salmaHistory.push({ role: 'user', content: msg });
-      salmaHistory.push({ role: 'assistant', content: data.reply });
-      if (salmaHistory.length > 20) salmaHistory = salmaHistory.slice(-20);
-
-      // Si hay ruta actualizada → re-renderizar
-      if (data.route && data.route.stops && data.route.stops.length > 0) {
-        var routeResult = document.getElementById('salma-route-result');
-        if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
-        salmaRenderRoute(data.route);
-        // Scroll a la ruta actualizada
-        if (routeResult) routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    } else {
-      salmaAddDialog('No he podido aplicar ese cambio. ¿Puedes decirlo de otra forma?', 'bot');
-    }
-  } catch (err) {
-    salmaRemoveLoading();
-    salmaAddDialog('Error de conexión. Inténtalo de nuevo.', 'bot');
-  }
+  // Alias — usa el mismo flujo que salmaInlineReply
+  salmaInlineReply();
 }
 
 // ===== KEYBOARD =====
@@ -486,13 +441,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); salmaInlineReply(); }
     });
   }
-  // Edit input keyboard
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey && document.activeElement && document.activeElement.id === 'salma-edit-input') {
-      e.preventDefault();
-      salmaEditRoute();
-    }
-  });
+  // Edit input keyboard — ya no existe salma-edit-input separado
 });
 
 // ===== INJECT CSS FOR LOADING ANIMATION =====
