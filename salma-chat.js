@@ -76,13 +76,11 @@ function escapeHTML(str) {
 }
 
 // ===== RENDERIZAR RUTA A PANTALLA COMPLETA =====
-
 function salmaRenderRoute(routeData) {
   var result = document.getElementById('salma-route-result');
   if (!result || !routeData || !routeData.stops) return;
 
   var typeIcons = {city:'🏙',town:'🏘',nature:'🌿',beach:'🏖',mountain:'⛰',temple:'🛕',viewpoint:'📸',route:'🛤',activity:'🎯',other:'📍'};
-
   var pois = routeData.stops;
   var hasMapData = pois.some(function(p) { return p.lat && p.lng; });
 
@@ -107,21 +105,51 @@ function salmaRenderRoute(routeData) {
       routeData.tags.map(function(t) { return '<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;padding:5px 12px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:var(--dorado);">' + escapeHTML(t) + '</span>'; }).join('') + '</div>';
   }
 
-  // Stops
-  var stopsHTML = pois.map(function(stop) {
+  // Stops — formato acordeón
+  var stopsHTML = pois.map(function(stop, idx) {
     var icon = typeIcons[stop.type] || '📍';
     var day = stop.day ? 'DÍA ' + stop.day : '';
     var mapsUrl = stop.lat && stop.lng ? 'https://www.google.com/maps?q=' + stop.lat + ',' + stop.lng : '';
-    return '<div style="display:flex;gap:16px;padding:20px 0;border-bottom:1px solid rgba(212,160,23,.1);">' +
-      '<div style="min-width:40px;text-align:center;">' +
-        '<span style="font-size:24px;">' + icon + '</span>' +
-        (day ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:8px;color:var(--dorado);margin-top:4px;letter-spacing:.1em;">' + day + '</div>' : '') +
+    var headline = stop.headline || stop.name || '';
+    var narrative = stop.narrative || stop.description || '';
+    var secret = stop.local_secret || '';
+    var alt = stop.alternative || '';
+    var practical = stop.practical || '';
+    var hasDetails = narrative || secret || alt || practical;
+    var stopId = 'salma-stop-' + idx;
+
+    // Preview text (primera línea del narrative)
+    var preview = narrative ? narrative.substring(0, 80).replace(/\s+\S*$/, '') + '...' : '';
+
+    return '<div style="border-bottom:1px solid rgba(212,160,23,.1);">' +
+      // Header colapsado (siempre visible)
+      '<div onclick="salmaToggleStop(\'' + stopId + '\')" style="display:flex;gap:16px;padding:20px 0;cursor:pointer;transition:background .15s;" onmouseover="this.style.background=\'rgba(255,255,255,.02)\'" onmouseout="this.style.background=\'none\'">' +
+        '<div style="min-width:40px;text-align:center;">' +
+          '<span style="font-size:24px;">' + icon + '</span>' +
+          (day ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:8px;color:var(--dorado);margin-top:4px;letter-spacing:.1em;">' + day + '</div>' : '') +
+        '</div>' +
+        '<div style="flex:1;">' +
+          '<div style="font-family:\'Inter Tight\',sans-serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.2;">' + escapeHTML(headline) + '</div>' +
+          (preview ? '<div style="font-size:14px;color:rgba(245,240,232,.5);line-height:1.5;">' + escapeHTML(preview) + '</div>' : '') +
+        '</div>' +
+        (hasDetails ? '<div style="flex-shrink:0;align-self:center;font-size:12px;color:var(--dorado);transition:transform .2s;" id="' + stopId + '-arrow">▾</div>' : '') +
       '</div>' +
-      '<div style="flex:1;">' +
-        '<div style="font-family:\'Inter Tight\',sans-serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:6px;">' + escapeHTML(stop.name || '') + '</div>' +
-        '<div style="font-size:15px;color:rgba(245,240,232,.75);line-height:1.7;">' + escapeHTML(stop.description || '') + '</div>' +
-        (mapsUrl ? '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;margin-top:8px;display:inline-block;letter-spacing:.1em;">VER EN MAPA →</a>' : '') +
-      '</div>' +
+      // Contenido expandible (oculto por defecto)
+      (hasDetails ? '<div id="' + stopId + '" style="display:none;padding:0 0 20px 56px;">' +
+        (narrative ? '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.75;margin-bottom:16px;">' + escapeHTML(narrative) + '</div>' : '') +
+        (secret ? '<div style="background:rgba(212,160,23,.06);border-left:3px solid var(--dorado);padding:12px 16px;margin-bottom:12px;border-radius:0 12px 12px 0;">' +
+          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.14em;margin-bottom:6px;">🔑 SECRETO LOCAL</div>' +
+          '<div style="font-size:14px;color:rgba(245,240,232,.75);line-height:1.6;">' + escapeHTML(secret) + '</div>' +
+        '</div>' : '') +
+        (alt ? '<div style="padding:10px 0;margin-bottom:12px;">' +
+          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:rgba(245,240,232,.4);letter-spacing:.12em;margin-bottom:4px;">↗ ALTERNATIVA</div>' +
+          '<div style="font-size:14px;color:rgba(245,240,232,.6);line-height:1.6;">' + escapeHTML(alt) + '</div>' +
+        '</div>' : '') +
+        (practical ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:rgba(245,240,232,.55);line-height:1.8;padding:10px 14px;background:rgba(255,255,255,.02);border-radius:10px;margin-bottom:12px;">' +
+          '📋 ' + escapeHTML(practical) +
+        '</div>' : '') +
+        (mapsUrl ? '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;letter-spacing:.1em;">VER EN MAPA →</a>' : '') +
+      '</div>' : '') +
     '</div>';
   }).join('');
 
@@ -149,7 +177,7 @@ function salmaRenderRoute(routeData) {
     (routeData.summary ? '<div style="font-size:16px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:20px;">' + escapeHTML(routeData.summary) + '</div>' : '') +
     tagsHTML +
     // Stops
-    '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:8px;">ITINERARIO · ' + pois.length + ' PARADAS</div>' +
+    '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:4px;">ITINERARIO · ' + pois.length + ' EXPERIENCIAS</div>' +
     stopsHTML +
     tipsHTML +
     // Botones
@@ -159,7 +187,7 @@ function salmaRenderRoute(routeData) {
       '<button onclick="salmaReset()" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.1);border-radius:14px;color:rgba(245,240,232,.5);padding:16px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;">NUEVA RUTA</button>' +
     '</div>';
 
-  // Inicializar mapa Leaflet
+  // Mapa Leaflet
   if (hasMapData) {
     setTimeout(function() {
       var mapEl = document.getElementById('salma-route-map');
@@ -180,8 +208,21 @@ function salmaRenderRoute(routeData) {
     }, 200);
   }
 
-  // Guardar datos para el botón guardar
   window._salmaLastRoute = routeData;
+}
+
+// Toggle accordion stop
+function salmaToggleStop(id) {
+  var el = document.getElementById(id);
+  var arrow = document.getElementById(id + '-arrow');
+  if (!el) return;
+  if (el.style.display === 'none') {
+    el.style.display = 'block';
+    if (arrow) arrow.textContent = '▴';
+  } else {
+    el.style.display = 'none';
+    if (arrow) arrow.textContent = '▾';
+  }
 }
 
 // ===== ENVIAR DESDE EL HERO =====
@@ -383,3 +424,4 @@ window.salmaInlineReply = salmaInlineReply;
 window.salmaGuardarRuta = salmaGuardarRuta;
 window.salmaReset = salmaReset;
 window.salmaRenderRoute = salmaRenderRoute;
+window.salmaToggleStop = salmaToggleStop;
