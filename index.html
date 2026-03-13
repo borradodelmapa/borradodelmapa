@@ -341,6 +341,40 @@ if (!firebase.apps.length) {
 const db = firebase.firestore();
 </script>
 
+<script>
+// --- FIXES TEMPORALES PARA ERRORES JS ---
+// Evitar error duplicate-app si algún JS intenta inicializar Firebase otra vez
+const _firebaseInit = firebase.initializeApp.bind(firebase);
+firebase.initializeApp = function(cfg){
+  if(!firebase.apps.length){
+    return _firebaseInit(cfg);
+  }
+  return firebase.app();
+};
+
+// Función demo faltante
+function openHeroDemo(id){
+  const modal=document.getElementById('hero-demo-modal');
+  const content=document.getElementById('hero-demo-content');
+  if(!modal||!content) return;
+  modal.style.display='block';
+  content.innerHTML=`<div style="padding:24px;color:#fff;font-family:Inter">Demo de ruta: ${id}</div>`;
+}
+
+function openModal(id){
+  const m=document.getElementById('modal-'+id)||document.getElementById('modal-auth');
+  if(m) m.style.display='flex';
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  if(!t) return;
+  t.innerText=msg;
+  t.style.display='block';
+  setTimeout(()=>{t.style.display='none'},3000);
+}
+</script>
+
 <script src="app.js"></script>
 <script src="salma-chat.js"></script>
 <script src="utils.js"></script>
