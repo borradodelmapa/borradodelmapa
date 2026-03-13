@@ -352,69 +352,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <div style="background:var(--negro);border-top:1px solid #d4a017;padding:32px 32px 40px;text-align:center;position:relative;z-index:100;">...</div>
-<!-- FIREBASE INIT (ONLY ONE PLACE IN WHOLE FILE) -->
-<script>
-/* FIREBASE CONFIG — single initialization to avoid duplicate-app error */
-const firebaseConfig = {
-  apiKey: "AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",
-  authDomain: "borradodelmapa-85257.firebaseapp.com",
-  projectId: "borradodelmapa-85257",
-  storageBucket: "borradodelmapa-85257.firebasestorage.app",
-  messagingSenderId: "833042338746",
-  appId: "1:833042338746:web:32b58e582488c6064d8383",
-  measurementId: "G-JZ00MFJEHB"
-};
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-
-window.db = firebase.firestore();
-</script>
-
-<!-- UI HELPERS used by app.js and salma-chat.js -->
-<script>
-/* GLOBAL UI HELPERS — needed by app.js and salma-chat.js */
-
-window.openHeroDemo = function(id){
-  const modal=document.getElementById('hero-demo-modal');
-  const content=document.getElementById('hero-demo-content');
-  if(!modal||!content) return;
-  modal.style.display='block';
-  content.innerHTML=`<div style="padding:24px;color:#fff;font-family:Inter">Demo de ruta: ${id}</div>`;
-};
-
-window.openModal = function(view){
-  const modal=document.getElementById('modal-auth');
-  if(!modal) return;
-  modal.style.display='flex';
-  window.switchModal(view || 'login');
-};
-
-window.closeModal = function(){
-  const modal=document.getElementById('modal-auth');
-  if(!modal) return;
-  modal.style.display='none';
-};
-
-window.switchModal = function(view){
-  const login=document.getElementById('modal-login-view');
-  const register=document.getElementById('modal-register-view');
-  if(login) login.style.display = view === 'register' ? 'none' : 'block';
-  if(register) register.style.display = view === 'register' ? 'block' : 'none';
-};
-
-window.showToast = function(msg){
-  const t=document.getElementById('toast');
-  if(!t) return;
-  t.innerText=msg;
-  t.style.display='block';
-  setTimeout(()=>{
-    t.style.display='none';
-  },3000);
-};
-</script>
-
+<!-- Firebase y lógica principal se cargan desde los JS del proyecto -->
 <script src="app.js"></script>
 <script src="salma-chat.js"></script>
 <script src="utils.js"></script>
