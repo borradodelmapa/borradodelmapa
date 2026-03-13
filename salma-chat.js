@@ -359,44 +359,23 @@ async function salmaInlineReply() {
 // ===== GUARDAR RUTA =====
 
 function salmaGuardarRuta() {
-  if (!window._salmaLastRoute) { window.showToast('No hay ruta para guardar'); return; }
+  try {
+    if (!window._salmaLastRoute) {
+      window.showToast('No hay ruta para guardar');
+      return;
+    }
 
-  var user = window._fbAuth ? window._fbAuth.currentUser : null;
-  var firedb = window._fbDb;
+    if (typeof window.normalizeSalmaRoute !== 'function' || typeof window.saveRoute !== 'function') {
+      window.showToast('Sistema de guardado no disponible');
+      return;
+    }
 
-  if (!user || !firedb) {
-    if (typeof window.openModal === 'function') window.openModal('register');
-    window.showToast('Regístrate para guardar tu ruta');
-    return;
+    var rutaNormalizada = window.normalizeSalmaRoute(window._salmaLastRoute);
+    return window.saveRoute(rutaNormalizada);
+  } catch (e) {
+    console.error('salmaGuardarRuta error:', e);
+    window.showToast('Error guardando ruta');
   }
-
-  var r = window._salmaLastRoute;
-  var ruta = {
-    nombre: r.title || 'Mi ruta',
-    destino: r.region || r.country || '',
-    dias: r.duration_days || 0,
-    desc: r.summary || '',
-    itinerarioIA: JSON.stringify(r),
-    pois: (r.stops || []).map(function(s, i) {
-      return { id: i+1, name: s.name, type: s.type, note: s.description, day: s.day || 1, lat: s.lat, lng: s.lng };
-    }),
-    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    published: false
-  };
-
-  firedb.collection('users').doc(user.uid).collection('maps').add(ruta)
-    .then(function(docRef) {
-      window._salmaLastRoute = null;
-      window.showToast('¡Ruta guardada! ✓');
-      setTimeout(function() {
-        if (window.loadUserMaps) window.loadUserMaps();
-        if (window.showPage) window.showPage('dashboard');
-      }, 500);
-    })
-    .catch(function(e) {
-      window.showToast('Error al guardar: ' + e.message);
-    });
 }
 
 // ===== RESET =====
