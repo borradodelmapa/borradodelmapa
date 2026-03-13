@@ -368,12 +368,16 @@ function openModal(id){
 }
 
 // Guard para switchModal usado en app.js
-if(typeof window.switchModal!=='function'){
-  window.switchModal=function(id){
-    const modal=document.getElementById('modal-'+id)||document.getElementById('modal-auth');
-    if(!modal) return;
-    modal.style.display='flex';
+// Forzar versión segura de switchModal para evitar null.style desde app.js
+window.switchModal=function(id){
+  const modal=document.getElementById('modal-'+id)||document.getElementById('modal-auth');
+  if(!modal){
+    console.warn('Modal no encontrado:',id);
+    return;
   }
+  if(!modal.style) return;
+  modal.style.display='flex';
+};
 }
 
 function showToast(msg){
