@@ -295,7 +295,15 @@
 
     <div class="dash-content" id="dash-tab-profile" style="display:none;">
       <div class="dash-header"><div><div class="dash-title">Mi perfil</div><div class="dash-sub">Tu cuenta y preferencias</div></div></div>
-      <div style="max-width:520px;">...
+      <div style="max-width:520px;display:grid;gap:12px;">
+        <div id="profile-avatar-big" style="width:72px;height:72px;border-radius:50%;background:#d4a017;color:#0a0908;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:28px;">B</div>
+        <div id="profile-display-name" style="font-size:22px;font-weight:700;color:#fff;">Viajero</div>
+        <div id="profile-display-email" style="font-size:14px;color:rgba(245,240,232,.65);">-</div>
+        <input id="profile-name-input" class="form-input" placeholder="Tu nombre" style="background:#111;border:1px solid rgba(212,160,23,.2);color:#fff;padding:12px;border-radius:10px;">
+        <input id="profile-country-input" class="form-input" placeholder="País" style="background:#111;border:1px solid rgba(212,160,23,.2);color:#fff;padding:12px;border-radius:10px;">
+        <textarea id="profile-bio-input" class="form-input" placeholder="Bio" style="background:#111;border:1px solid rgba(212,160,23,.2);color:#fff;padding:12px;border-radius:10px;min-height:100px;"></textarea>
+        <div id="profile-routes-count" style="font-size:13px;color:rgba(245,240,232,.65);">0</div>
+        <button onclick="saveProfile()" style="background:#d4a017;color:#0a0908;border:none;border-radius:12px;padding:12px 18px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.12em;cursor:pointer;">GUARDAR PERFIL</button>
       </div>
     </div>
   </div>
@@ -314,7 +322,28 @@
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-auth">...</div>
+<div class="modal-overlay" id="modal-auth" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:10001;align-items:center;justify-content:center;padding:24px;" onclick="if(event.target===this)closeModal()">
+  <div style="background:#111;border:1px solid rgba(212,160,23,.2);border-radius:18px;padding:24px;max-width:420px;width:100%;">
+    <div id="modal-login-view">
+      <div style="font-size:22px;font-weight:700;color:#fff;margin-bottom:14px;">Acceso</div>
+      <input id="login-email" type="email" placeholder="Email" style="width:100%;background:#0d0d0d;border:1px solid rgba(212,160,23,.2);color:#fff;padding:12px;border-radius:10px;margin-bottom:10px;">
+      <input id="login-pass" type="password" placeholder="Contraseña" style="width:100%;background:#0d0d0d;border:1px solid rgba(212,160,23,.2);color:#fff;padding:12px;border-radius:10px;margin-bottom:10px;">
+      <div id="login-error" style="font-size:13px;color:#f87171;min-height:20px;margin-bottom:8px;"></div>
+      <button onclick="doLogin()" style="width:100%;background:#d4a017;color:#0a0908;border:none;border-radius:12px;padding:12px 18px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.12em;cursor:pointer;margin-bottom:10px;">ENTRAR</button>
+      <button onclick="doSocialLogin()" style="width:100%;background:transparent;color:#fff;border:1px solid rgba(212,160,23,.2);border-radius:12px;padding:12px 18px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;cursor:pointer;margin-bottom:10px;">GOOGLE</button>
+      <div style="font-size:13px;color:rgba(245,240,232,.65);">¿No tienes cuenta? <span onclick="switchModal('register')" style="color:#d4a017;cursor:pointer;">Crear cuenta</span></div>
+    </div>
+    <div id="modal-register-view" style="display:none;">
+      <div style="font-size:22px;font-weight:700;color:#fff;margin-bottom:14px;">Crear cuenta</div>
+      <input id="reg-name" type="text" placeholder="Nombre" style="width:100%;background:#0d0d0d;border:1px solid rgba(212,160,23,.2);color:#fff;padding:12px;border-radius:10px;margin-bottom:10px;">
+      <input id="reg-email" type="email" placeholder="Email" style="width:100%;background:#0d0d0d;border:1px solid rgba(212,160,23,.2);color:#fff;padding:12px;border-radius:10px;margin-bottom:10px;">
+      <input id="reg-pass" type="password" placeholder="Contraseña" style="width:100%;background:#0d0d0d;border:1px solid rgba(212,160,23,.2);color:#fff;padding:12px;border-radius:10px;margin-bottom:10px;">
+      <div id="register-error" style="font-size:13px;color:#f87171;min-height:20px;margin-bottom:8px;"></div>
+      <button onclick="doRegister()" style="width:100%;background:#d4a017;color:#0a0908;border:none;border-radius:12px;padding:12px 18px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.12em;cursor:pointer;margin-bottom:10px;">CREAR CUENTA</button>
+      <div style="font-size:13px;color:rgba(245,240,232,.65);">¿Ya tienes cuenta? <span onclick="switchModal('login')" style="color:#d4a017;cursor:pointer;">Entrar</span></div>
+    </div>
+  </div>
+</div>
 <div class="poi-modal" id="poi-modal">...</div>
 <div id="modal-editar-ruta" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:10000;align-items:center;justify-content:center;padding:24px;overflow-y:auto;backdrop-filter:blur(6px);" onclick="if(event.target===this)this.style.display='none'"></div>
 <div class="toast" id="toast"></div>
@@ -342,8 +371,20 @@ const db = firebase.firestore();
 </script>
 
 <script>
-// --- FIXES TEMPORALES PARA ERRORES JS ---
-// Evitar error duplicate-app si algún JS intenta inicializar Firebase otra vez
+const firebaseConfig = {
+  apiKey: "AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",
+  authDomain: "borradodelmapa-85257.firebaseapp.com",
+  projectId: "borradodelmapa-85257",
+  storageBucket: "borradodelmapa-85257.firebasestorage.app",
+  messagingSenderId: "833042338746",
+  appId: "1:833042338746:web:32b58e582488c6064d8383",
+  measurementId: "G-JZ00MFJEHB"
+};
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+window.db = firebase.firestore();
+
 const _firebaseInit = firebase.initializeApp.bind(firebase);
 firebase.initializeApp = function(cfg){
   if(!firebase.apps.length){
@@ -352,41 +393,45 @@ firebase.initializeApp = function(cfg){
   return firebase.app();
 };
 
-// Función demo faltante
-function openHeroDemo(id){
+window.openHeroDemo = function(id){
   const modal=document.getElementById('hero-demo-modal');
   const content=document.getElementById('hero-demo-content');
   if(!modal||!content) return;
   modal.style.display='block';
   content.innerHTML=`<div style="padding:24px;color:#fff;font-family:Inter">Demo de ruta: ${id}</div>`;
-}
+};
 
-function openModal(id){
-  const modal=document.getElementById('modal-'+id)||document.getElementById('modal-auth');
+window.openModal = function(view){
+  const modal=document.getElementById('modal-auth');
   if(!modal) return;
   modal.style.display='flex';
-}
-
-// Guard para switchModal usado en app.js
-// Forzar versión segura de switchModal para evitar null.style desde app.js
-window.switchModal=function(id){
-  const modal=document.getElementById('modal-'+id)||document.getElementById('modal-auth');
-  if(!modal){
-    console.warn('Modal no encontrado:',id);
-    return;
-  }
-  if(!modal.style) return;
-  modal.style.display='flex';
+  window.switchModal(view || 'login');
 };
-}
 
-function showToast(msg){
+window.closeModal = function(){
+  const modal=document.getElementById('modal-auth');
+  if(!modal) return;
+  modal.style.display='none';
+};
+
+window.switchModal = function(view){
+  const login=document.getElementById('modal-login-view');
+  const register=document.getElementById('modal-register-view');
+  if(login) login.style.display = view === 'register' ? 'none' : 'block';
+  if(register) register.style.display = view === 'register' ? 'block' : 'none';
+};
+
+window.showToast = function(msg){
   const t=document.getElementById('toast');
   if(!t) return;
   t.innerText=msg;
   t.style.display='block';
-  setTimeout(()=>{t.style.display='none'},3000);
-}
+  if(t.classList) t.classList.add('show');
+  setTimeout(()=>{
+    if(t.classList) t.classList.remove('show');
+    t.style.display='none';
+  },3000);
+};
 </script>
 
 <script src="app.js"></script>
