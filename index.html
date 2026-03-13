@@ -5,296 +5,68 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Borradodelmapa · Tu copiloto de viaje con IA</title>
 
-  <meta name="description" content="Salma es tu copiloto de viaje con IA. Planifica rutas, descubre lugares únicos y viaja con una guía inteligente que te acompaña antes, durante y después del viaje.">
-  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
-  <meta name="theme-color" content="#050505">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="format-detection" content="telephone=no">
-  <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
-  <link rel="canonical" href="https://borradodelmapa.com/">
-
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Borradodelmapa">
-  <meta property="og:locale" content="es_ES">
-  <meta property="og:title" content="Borradodelmapa · Tu copiloto de viaje con IA">
-  <meta property="og:description" content="Salma planifica tu ruta, te acompaña en el viaje y guarda todo lo que descubres.">
-  <meta property="og:url" content="https://borradodelmapa.com/">
-  <meta property="og:image" content="https://borradodelmapa.com/og-image.jpg">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Borradodelmapa · Tu copiloto de viaje con IA">
-  <meta name="twitter:description" content="Salma planifica tu ruta, te acompaña en el viaje y guarda todo lo que descubres.">
-  <meta name="twitter:image" content="https://borradodelmapa.com/og-image.jpg">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="//raw.githubusercontent.com">
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Borradodelmapa",
-    "url": "https://borradodelmapa.com/",
-    "logo": "https://borradodelmapa.com/logo.png",
-    "sameAs": [
-      "https://instagram.com/borradodelmapa"
-    ]
-  }
-  </script>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Borradodelmapa",
-    "url": "https://borradodelmapa.com/",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://borradodelmapa.com/blog?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-  }
-  </script>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Borradodelmapa",
-    "applicationCategory": "TravelApplication",
-    "operatingSystem": "Web",
-    "url": "https://borradodelmapa.com/",
-    "description": "Salma es tu copiloto de viaje con IA. Planifica rutas, descubre lugares y viaja con una guía inteligente.",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "EUR"
-    }
-  }
-  </script>
+<meta name="description" content="Salma es tu copiloto de viaje con IA. Planifica rutas, descubre lugares únicos y viaja con una guía inteligente que te acompaña antes, durante y después del viaje.">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="theme-color" content="#050505">
 
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
-<!-- NAVBAR -->
 <nav>
-  <div class="nav-logo" onclick="showPage('home')">
-  <div class="nav-logo-wordmark">borrado<span>del</span>mapa</div>
-  <span class="nav-claim">No estás perdido si sabes dónde vas</span>
+<div class="nav-logo">borrado<span>del</span>mapa</div>
+<div class="nav-links">
+<button onclick="openModal('login')">Acceso a tus rutas</button>
 </div>
-  <div class="nav-links"  id="nav-links-guest" style="display:flex;">
-    <button class="nav-cta" onclick="openModal('login')">Acceso a tus rutas</button>
-  </div>
-  <div class="nav-user" id="nav-links-user" style="display:none;">
-    <a class="nav-link" onclick="showPage('dashboard')" style="cursor:pointer;">Mis rutas</a>
-    <div class="nav-avatar" id="nav-avatar" onclick="toggleUserMenu()" style="cursor:pointer;position:relative;">B
-      <div id="user-menu" style="display:none;position:absolute;top:48px;right:0;background:#111;border:1px solid var(--gris2);min-width:140px;z-index:999;">
-        <div onclick="setDashTab('profile',null);showPage('dashboard')" style="padding:12px 16px;font-family:'Space Mono',monospace;font-size:10px;color:var(--crema);cursor:pointer;border-bottom:1px solid var(--gris2);">⚙️ MI CUENTA</div>
-        <div onclick="logout()" style="padding:12px 16px;font-family:'Space Mono',monospace;font-size:10px;color:#e74c3c;cursor:pointer;">🚪 SALIR</div>
-      </div>
-    </div>
-  </div>
 </nav>
 
-<!-- ===== HOME ===== -->
 <div class="page active" id="page-home">
-  <div class="hero">
-<div class="hero-map-overlay"></div>
-    <div id="hero-map"></div>
-    <div class="hero-content" style="position:relative;z-index:2;text-align:center;margin:0 auto;">
-      <div class="hero-label">Salma · Tu copiloto de viaje con IA</div>
-      <h1 class="hero-title"><em>Déjame a mí.</em></h1>
+<h1>Salma · Tu copiloto de viaje</h1>
 
-      <p class="hero-sub" style="margin-left:auto;margin-right:auto;">Una IA viajera que conoce los caminos. Planifica tu ruta, te acompaña en el viaje y guarda todo lo que descubres.</p>
+<textarea id="salma-hero-input" placeholder="Ej: Japón 10 días naturaleza y templos"></textarea>
+<button onclick="salmaHeroSend()">PLANEAR →</button>
 
-      <!-- SALMA HERO INPUT -->
-      <div id="salma-hero-box" style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;max-width:100%;margin-left:auto;margin-right:auto;">
-        <textarea id="salma-hero-input" placeholder="Ej: Tailandia 15 días, mochilero, quiero playa y montaña" autocomplete="off" rows="3" style="width:100%;background:#111111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:16px 20px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color .2s;resize:none;line-height:1.5;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'"></textarea>
-        <button onclick="salmaHeroSend()" style="width:100%;background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:16px 28px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">PLANEAR →</button>
-      </div>
-
-      <!-- SALMA INLINE — diálogo + resultado (justo después del input) -->
-      <section id="salma-inline" style="display:none;max-width:100%;margin:24px 0 0;text-align:left;">
-        <div id="salma-dialog" style="margin-bottom:24px;"></div>
-        <div id="salma-inline-input-wrap" style="margin-bottom:24px;">
-          <div style="display:flex;gap:8px;">
-            <input type="text" id="salma-inline-input" placeholder="Añade más detalles o pide cambios..." autocomplete="off" style="flex:1;background:#111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:14px 18px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:15px;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'">
-            <button onclick="salmaInlineReply()" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:14px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;cursor:pointer;transition:background .2s;white-space:nowrap;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">ENVIAR</button>
-          </div>
-        </div>
-        <div id="salma-route-result" style="display:none;"></div>
-      </section>
-
-      <!-- DEMOS -->
-      <div id="salma-demos-block" style="margin-top:8px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(245,240,232,.45);letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px;">Ver ejemplos de viaje</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;" id="hero-demo-grid">
-          <div onclick="openHeroDemo('japan')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:16px;overflow:hidden;transition:all .25s;text-align:left;" onmouseover="this.style.borderColor='#d4a017';this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.4)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.transform='none';this.style.boxShadow='none'">
-            <div style="height:90px;background:url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=200&fit=crop&q=75') center/cover;"></div>
-            <div style="padding:12px 14px;">
-              <div style="font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:3px;">Japón</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">7 DÍAS · CULTURAL</div>
-            </div>
-          </div>
-          <div onclick="openHeroDemo('thailand')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:16px;overflow:hidden;transition:all .25s;text-align:left;" onmouseover="this.style.borderColor='#d4a017';this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.4)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.transform='none';this.style.boxShadow='none'">
-            <div style="height:90px;background:url('https://images.unsplash.com/photo-1528181304800-259b08848526?w=400&h=200&fit=crop&q=75') center/cover;"></div>
-            <div style="padding:12px 14px;">
-              <div style="font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:3px;">Tailandia</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">10 DÍAS · LOW COST</div>
-            </div>
-          </div>
-          <div onclick="openHeroDemo('iceland')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:16px;overflow:hidden;transition:all .25s;text-align:left;" onmouseover="this.style.borderColor='#d4a017';this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.4)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.transform='none';this.style.boxShadow='none'">
-            <div style="height:90px;background:url('https://images.unsplash.com/photo-1504829857797-ddff29c27927?w=400&h=200&fit=crop&q=75') center/cover;"></div>
-            <div style="padding:12px 14px;">
-              <div style="font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:3px;">Islandia</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">12 DÍAS · ROAD TRIP</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="hero-demo-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:10002;overflow-y:auto;padding:20px;" onclick="if(event.target===this)this.style.display='none'">
-    <div id="hero-demo-content" style="max-width:640px;margin:0 auto;background:#111;border:1px solid rgba(212,160,23,.25);border-radius:20px;padding:0;overflow:hidden;"></div>
-  </div>
-
-  <section class="features">
-    <div class="sec-header">
-      <div class="sec-label">Tu copiloto en cada fase</div>
-      <h2 class="sec-title">Antes, durante y después del viaje</h2>
-      <p class="sec-sub">Salma no es un buscador de vuelos. Es una compañera de viaje con IA que te acompaña de principio a fin.</p>
-    </div>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-title">Antes · Planifica con IA</div>
-        <div class="feature-desc">Cuéntale tu idea de viaje a Salma. Ella genera la ruta, las paradas, los consejos y todo lo que necesitas. Tú solo decides.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-title">Durante · Tu guía en ruta</div>
-        <div class="feature-desc">¿Día de lluvia? ¿Dónde comer cerca? ¿Alternativa a un sitio cerrado? Salma te acompaña en tiempo real mientras viajas.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-title">Después · Guarda y comparte</div>
-        <div class="feature-desc">Tu ruta queda guardada con fotos, notas y recomendaciones. Compártela con otros viajeros o úsala como base para tu próximo viaje.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-title">Siempre · Lugares con alma</div>
-        <div class="feature-desc">Salma prioriza sitios auténticos, rincones locales y experiencias que no salen en las guías turísticas. Viaja diferente.</div>
-      </div>
-    </div>
-  </section>
-
-  <section style="max-width:1180px;margin:0 auto;padding:0 32px 96px;">
-    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;">
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:18px;padding:20px 32px;text-align:center;min-width:160px;">
-        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;" id="counter-routes">847</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.16em;margin-top:4px;">RUTAS CREADAS</div>
-      </div>
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:18px;padding:20px 32px;text-align:center;min-width:160px;">
-        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;">32</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.16em;margin-top:4px;">PAÍSES</div>
-      </div>
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:18px;padding:20px 32px;text-align:center;min-width:160px;">
-        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;">4.8<span style="font-size:18px;color:var(--dorado);">★</span></div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.16em;margin-top:4px;">VALORACIÓN</div>
-      </div>
-    </div>
-  </section>
+<section id="salma-inline" style="display:none;">
+<div id="salma-dialog"></div>
+<div>
+<input type="text" id="salma-inline-input" placeholder="Añade más detalles...">
+<button onclick="salmaInlineReply()">ENVIAR</button>
 </div>
+<div id="salma-route-result"></div>
+</section>
 
-<div class="page" id="page-blog">
-  <div style="max-width:800px;margin:0 auto;padding:60px 32px;">
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--blanco);margin-bottom:8px;">Blog</div>
-    <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--crema);opacity:.5;margin-bottom:48px;letter-spacing:1px;">RUTAS · AYUDA · VIAJES</div>
-    <div id="blog-list" style="display:grid;gap:24px;"></div>
-    <div id="blog-post" style="display:none;">
-      <div onclick="closeBlogPost()" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dorado);cursor:pointer;letter-spacing:1px;margin-bottom:40px;">← VOLVER AL BLOG</div>
-      <div id="blog-post-content"></div>
-    </div>
-  </div>
 </div>
-
-<div class="page" id="page-terminos"><div style="max-width:720px;margin:0 auto;padding:60px 32px;"><div onclick="showPage('home')" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dorado);cursor:pointer;letter-spacing:1px;margin-bottom:40px;">← VOLVER</div><div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--blanco);margin-bottom:8px;">Términos de uso</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--crema);opacity:.5;margin-bottom:48px;">Última actualización: marzo 2025</div><div style="color:var(--crema);line-height:1.8;font-size:18px;opacity:.85;">...</div></div></div>
-<div class="page" id="page-privacidad"><div style="max-width:720px;margin:0 auto;padding:60px 32px;"><div onclick="showPage('home')" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dorado);cursor:pointer;letter-spacing:1px;margin-bottom:40px;">← VOLVER</div><div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--blanco);margin-bottom:8px;">Política de privacidad</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--crema);opacity:.5;margin-bottom:48px;">Última actualización: marzo 2025</div><div style="color:var(--crema);line-height:1.8;font-size:18px;opacity:.85;">...</div></div></div>
 
 <div class="page" id="page-dashboard">
-  <div class="dashboard-layout">
-    <aside class="sidebar">
-      <div class="sidebar-user">
-        <div class="sidebar-avatar" id="sidebar-avatar">B</div>
-        <div class="sidebar-name" id="sidebar-name">Viajero</div>
-        <div class="sidebar-plan" id="sidebar-plan">Plan Gratuito · 1/1 mapa</div>
-      </div>
-      <div class="sidebar-nav">
-        <div class="sidebar-item active" onclick="setDashTab('maps',this)">
-          <div class="sidebar-item-icon">🗺️</div>
-          <div class="sidebar-item-txt">Mis mapas</div>
-        </div>
-        <div class="sidebar-item" onclick="setDashTab('profile',this)">
-          <div class="sidebar-item-icon">👤</div>
-          <div class="sidebar-item-txt">Mi perfil</div>
-        </div>
-        <div class="sidebar-item" onclick="logout()">
-          <div class="sidebar-item-icon">🚪</div>
-          <div class="sidebar-item-txt">Cerrar sesión</div>
-        </div>
-      </div>
-    </aside>
-
-    <div class="dash-content" id="dash-tab-maps">
-      <div class="dash-header">
-        <div><div class="dash-title">Mis rutas</div><div class="dash-sub">Tus itinerarios de viaje</div></div>
-        <button onclick="newMap()" style="background:var(--dorado);color:var(--negro);border:none;border-radius:14px;padding:12px 24px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:.14em;">＋ NUEVA RUTA</button>
-      </div>
-      <div class="maps-grid" id="maps-grid-dynamic"></div>
-    </div>
-
-    <div class="dash-content" id="dash-tab-profile" style="display:none;">
-      <div class="dash-header"><div><div class="dash-title">Mi perfil</div><div class="dash-sub">Tu cuenta y preferencias</div></div></div>
-      <div style="max-width:520px;">...</div>
-    </div>
-  </div>
+<h2>Mis rutas</h2>
+<div id="maps-grid-dynamic"></div>
 </div>
 
-<div id="mobile-dash-nav" class="mobile-dash-nav" style="display:none;">
-  <div onclick="event.stopPropagation();setDashTab('maps',this);showPage('dashboard')" class="mobile-nav-item">🗺️<span>Rutas</span></div>
-  <div onclick="event.stopPropagation();setDashTab('profile',null);showPage('dashboard')" class="mobile-nav-item">⚙️<span>Cuenta</span></div>
-  <div onclick="event.stopPropagation();logout()" class="mobile-nav-item">🚪<span>Salir</span></div>
+<div class="page" id="page-ruta">
+<div id="ruta-view-container"></div>
 </div>
 
-<div class="page" id="page-ruta" style="background:#0a0a09;padding-top:92px;">
-  <div id="ruta-view-container" style="max-width:700px;margin:0 auto;padding:0 0 60px;"></div>
-</div>
-
-<div class="page" id="page-editor" style="background:var(--negro);overflow-y:auto;padding-top:88px;padding-bottom:80px;">
-  <div style="max-width:860px;margin:0 auto;padding:40px 24px 0;">...</div>
-</div>
-
-<div class="modal-overlay" id="modal-auth">...</div>
-<div class="poi-modal" id="poi-modal">...</div>
-<div id="modal-editar-ruta" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:10000;align-items:center;justify-content:center;padding:24px;overflow-y:auto;backdrop-filter:blur(6px);" onclick="if(event.target===this)this.style.display='none'"></div>
-<div class="toast" id="toast"></div>
+<div id="modal-editar-ruta"></div>
+<div id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-<div style="background:var(--negro);border-top:1px solid #d4a017;padding:32px 32px 40px;text-align:center;position:relative;z-index:100;">...</div>
 
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",
-  authDomain: "borradodelmapa-85257.firebaseapp.com",
-  projectId: "borradodelmapa-85257",
-  storageBucket: "borradodelmapa-85257.firebasestorage.app",
-  messagingSenderId: "833042338746",
-  appId: "1:833042338746:web:32b58e582488c6064d8383",
-  measurementId: "G-JZ00MFJEHB"
+apiKey: "AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",
+authDomain: "borradodelmapa-85257.firebaseapp.com",
+projectId: "borradodelmapa-85257",
+storageBucket: "borradodelmapa-85257.firebasestorage.app",
+messagingSenderId: "833042338746",
+appId: "1:833042338746:web:32b58e582488c6064d8383",
+measurementId: "G-JZ00MFJEHB"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -304,5 +76,6 @@ const db = firebase.firestore();
 <script src="app.js"></script>
 <script src="salma-chat.js"></script>
 <script src="utils.js"></script>
+
 </body>
 </html>
