@@ -3,12 +3,137 @@
    Se muestra debajo del hero, a pantalla completa.
    ============================================================ */
 
-window.SALMA_API = typeof WORKER_URL !== "undefined" ? WORKER_URL : "https://salma-api.paco-defoto.workers.dev";
+window.SALMA_API = "https://salma-api.paco-defoto.workers.dev";
 
 // Avatar de Salma (base64)
 const SALMA_AVATAR = '<img src="data:image/png;base64,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" width="36" height="36" style="border-radius:50%;">';
 
 let salmaHistory = [];
+
+// ===== GEOCODIFICACIÓN (fallback cuando la API no devuelve coordenadas) =====
+var NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search';
+
+function salmaGeocode(query) {
+  if (!query || typeof query !== 'string') return Promise.resolve(null);
+  var q = query.trim();
+  if (!q) return Promise.resolve(null);
+  var params = new URLSearchParams({
+    q: q,
+    format: 'json',
+    limit: '1',
+    addressdetails: '0'
+  });
+  return fetch(NOMINATIM_URL + '?' + params.toString(), {
+    headers: {
+      'Accept': 'application/json',
+      'Accept-Language': 'es',
+      'User-Agent': 'BorradodelmapaSalma/1.0 (viaje con IA; https://borradodelmapa.com)'
+    }
+  })
+    .then(function(res) { return res.json(); })
+    .then(function(arr) {
+      if (Array.isArray(arr) && arr.length > 0 && arr[0].lat != null && arr[0].lon != null) {
+        return { lat: parseFloat(arr[0].lat), lng: parseFloat(arr[0].lon) };
+      }
+      return null;
+    })
+    .catch(function() { return null; });
+}
+
+function delay(ms) {
+  return new Promise(function(r) { setTimeout(r, ms); });
+}
+
+// Enriquecer una ruta: geocodificar paradas que no tengan lat/lng (Nominatim 1 req/s)
+function salmaEnrichRouteWithCoords(route) {
+  if (!route || !route.stops || !route.stops.length) return Promise.resolve(route);
+  var country = (route.country || route.region || '').toString().trim();
+  var suffix = country ? ', ' + country : '';
+  var stops = route.stops.slice();
+  var coordsByIndex = [];
+  var chain = Promise.resolve();
+  stops.forEach(function(stop, i) {
+    var lat = stop.lat != null ? Number(stop.lat) : NaN;
+    var lng = stop.lng != null ? Number(stop.lng) : NaN;
+    var hasCoord = lat && lng && !isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0;
+    if (hasCoord) {
+      coordsByIndex[i] = { lat: lat, lng: lng };
+      return;
+    }
+    var name = (stop.headline || stop.name || stop.title || '').toString().trim();
+    if (!name) {
+      coordsByIndex[i] = { lat: 0, lng: 0 };
+      return;
+    }
+    chain = chain
+      .then(function() { return delay(1100); })
+      .then(function() { return salmaGeocode(name + suffix); })
+      .then(function(coord) {
+        coordsByIndex[i] = coord ? { lat: coord.lat, lng: coord.lng } : { lat: 0, lng: 0 };
+      });
+  });
+  return chain.then(function() {
+    var enriched = {
+      title: route.title, name: route.name, country: route.country, region: route.region,
+      duration_days: route.duration_days, summary: route.summary, stops: [],
+      tips: route.tips || [], tags: route.tags || [], budget_level: route.budget_level, suggestions: route.suggestions || []
+    };
+    stops.forEach(function(stop, i) {
+      var c = coordsByIndex[i] || { lat: 0, lng: 0 };
+      enriched.stops.push(Object.assign({}, stop, { lat: c.lat, lng: c.lng }));
+    });
+    return enriched;
+  });
+}
+
+// Si la API dice que no tiene coordenadas/información pero el usuario pidió un lugar, crear ruta mínima geocodificada
+function salmaTryMinimalRouteFromReply(userMessage, replyText) {
+  var lower = (replyText || '').toLowerCase();
+  var sinCoords = lower.indexOf('coordenada') !== -1 || lower.indexOf('no tengo') !== -1 ||
+    lower.indexOf('no dispongo') !== -1 || lower.indexOf('no tiene') !== -1 ||
+    lower.indexOf('no hay') !== -1 || lower.indexOf('sin coordenada') !== -1 ||
+    lower.indexOf('no puedo ubicar') !== -1 || lower.indexOf('no encuentro') !== -1 ||
+    lower.indexOf('no tengo información') !== -1 || lower.indexOf('no tiene información') !== -1 ||
+    lower.indexOf('no tengo informacion') !== -1 || lower.indexOf('no tiene informacion') !== -1 ||
+    lower.indexOf('no dispongo de información') !== -1 || lower.indexOf('sin información sobre') !== -1 ||
+    lower.indexOf('sin informacion sobre') !== -1 || lower.indexOf('no tengo información sobre') !== -1 ||
+    lower.indexOf('no tiene información sobre') !== -1 || lower.indexOf('no tengo informacion sobre') !== -1 ||
+    lower.indexOf('no tiene informacion sobre') !== -1;
+  if (!sinCoords) return Promise.resolve(null);
+  var place = (userMessage || '').trim().replace(/^(ruta|viaje|qué ver|que ver|dame|quiero)\s*(por|en|a|para)?\s*/i, '').trim();
+  var m = place.match(/^([^,.\d]+)/);
+  if (m) place = m[1].trim();
+  if (!place || place.length < 2) return Promise.resolve(null);
+
+  function buildMinimal(coord, title) {
+    if (!coord) return null;
+    return {
+      title: title || place,
+      name: title || place,
+      country: 'España',
+      region: '',
+      duration_days: 0,
+      summary: 'Ruta creada a partir de tu búsqueda. Pide más detalles a Salma para ampliarla.',
+      stops: [{ name: title || place, headline: title || place, lat: coord.lat, lng: coord.lng, type: 'other', day: 1 }],
+      tips: [],
+      tags: [],
+      budget_level: 'sin_definir',
+      suggestions: []
+    };
+  }
+
+  return salmaGeocode(place + ', España')
+    .then(function(coord) {
+      if (coord) return buildMinimal(coord, place);
+      return delay(1100).then(function() { return salmaGeocode(place); }).then(function(c) { return c ? buildMinimal(c, place) : null; });
+    })
+    .then(function(result) {
+      if (result) return result;
+      var sinAcento = place.replace(/á/g, 'a').replace(/é/g, 'e').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u').replace(/ñ/g, 'n');
+      if (sinAcento === place) return null;
+      return delay(1100).then(function() { return salmaGeocode(sinAcento + ', Spain'); }).then(function(c) { return c ? buildMinimal(c, place) : null; });
+    });
+}
 
 // ===== FUNCIONES DE UI INLINE =====
 
@@ -20,6 +145,21 @@ function salmaShowInline() {
   }
 }
 
+// En el chat solo mostramos 1–2 frases; el detalle va en la ruta de abajo
+function salmaShortenReplyForChat(text) {
+  if (!text || typeof text !== 'string') return text;
+  var t = text.trim();
+  if (t.length <= 180) return t;
+  var firstPara = t.split(/\n\n+/)[0].trim();
+  var sentences = (firstPara || t).match(/[^.!?]+[.!?]+/g) || [];
+  if (sentences.length >= 1) {
+    var breve = sentences.length >= 2 ? (sentences[0] + ' ' + sentences[1]).trim() : sentences[0].trim();
+    return breve.length > 220 ? breve.slice(0, 220).trim() + '…' : breve;
+  }
+  var cut = (firstPara || t).slice(0, 200).trim();
+  return (cut + (cut.length >= 200 ? '…' : ''));
+}
+
 function salmaAddDialog(text, who) {
   var dialog = document.getElementById('salma-dialog');
   if (!dialog) return;
@@ -27,9 +167,10 @@ function salmaAddDialog(text, who) {
   var div = document.createElement('div');
 
   if (who === 'bot') {
+    var displayText = salmaShortenReplyForChat(text);
     div.style.cssText = 'display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;';
     div.innerHTML = '<div style="flex-shrink:0;width:40px;height:40px;border-radius:50%;border:1.5px solid #d4a017;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#1a1816;">' + SALMA_AVATAR + '</div>' +
-      '<div style="flex:1;background:#111;border:1px solid rgba(212,160,23,.18);border-radius:18px;padding:16px 20px;font-size:15px;color:#f5f0e8;line-height:1.7;">' + escapeHTML(text) + '</div>';
+      '<div style="flex:1;background:#111;border:1px solid rgba(212,160,23,.18);border-radius:18px;padding:16px 20px;font-size:15px;color:#f5f0e8;line-height:1.7;">' + escapeHTML(displayText) + '</div>';
   } else if (who === 'user') {
     div.style.cssText = 'display:flex;justify-content:flex-end;margin-bottom:16px;';
     div.innerHTML = '<div style="background:#d4a017;color:#0a0908;border-radius:18px;padding:14px 20px;font-size:15px;font-weight:600;max-width:80%;line-height:1.5;">' + escapeHTML(text) + '</div>';
@@ -75,6 +216,40 @@ function escapeHTML(str) {
   return div.innerHTML;
 }
 
+// Fusionar ruta nueva con la existente: al pedir "añade otro lugar" se añade a la ruta actual, no se crea una nueva
+function salmaMergeRoute(existing, incoming) {
+  if (!existing || !incoming) return incoming || existing;
+  var merged = {};
+  var keys = ['country', 'region', 'duration_days', 'summary', 'tips', 'tags', 'budget_level', 'suggestions'];
+  keys.forEach(function(k) {
+    if (incoming[k] !== undefined && incoming[k] !== null) merged[k] = incoming[k];
+    else if (existing[k] !== undefined && existing[k] !== null) merged[k] = existing[k];
+  });
+  var incTitle = (incoming.title || incoming.name || '').toString().trim();
+  var extTitle = (existing.title || existing.name || '').toString().trim();
+  merged.title = incTitle || extTitle || 'Mi ruta';
+  merged.name = merged.title;
+
+  var existingStops = existing.stops && Array.isArray(existing.stops) ? existing.stops : [];
+  var incomingStops = incoming.stops && Array.isArray(incoming.stops) ? incoming.stops : [];
+  if (incomingStops.length === 0) {
+    merged.stops = existingStops.slice();
+  } else if (existingStops.length === 0) {
+    merged.stops = incomingStops.slice();
+  } else if (incomingStops.length >= existingStops.length) {
+    merged.stops = incomingStops.slice();
+  } else {
+    merged.stops = existingStops.slice();
+    var names = {};
+    existingStops.forEach(function(s) { var n = (s.headline || s.name || s.title || '').toString().trim(); if (n) names[n] = true; });
+    incomingStops.forEach(function(s) {
+      var n = (s.headline || s.name || s.title || '').toString().trim();
+      if (n && !names[n]) { merged.stops.push(s); names[n] = true; }
+    });
+  }
+  return merged;
+}
+
 // ===== RENDERIZAR RUTA A PANTALLA COMPLETA =====
 function salmaRenderRoute(routeData) {
   var result = document.getElementById('salma-route-result');
@@ -82,10 +257,28 @@ function salmaRenderRoute(routeData) {
 
   var typeIcons = {city:'🏙',town:'🏘',nature:'🌿',beach:'🏖',mountain:'⛰',temple:'🛕',viewpoint:'📸',route:'🛤',activity:'🎯',other:'📍'};
   var pois = routeData.stops;
-  var country = routeData.country ? ' ' + routeData.country : '';
+  var hasMapData = pois.some(function(p) { return p.lat && p.lng; });
 
-  // Google Maps URL (búsqueda por nombre)
-  var gmapsUrl = pois.length > 0 ? 'https://www.google.com/maps/dir/' + pois.map(function(p) { return encodeURIComponent((p.name || '') + country); }).join('/') : '';
+  var countryOrRegion = (routeData.country || routeData.region || '').toString().trim();
+  // Google Maps: usar nombres de lugar para enlaces más precisos
+  var gmapsUrl = '';
+  if (hasMapData) {
+    var gmapsPois = pois.filter(function(p) { return p.lat && p.lng; });
+    if (gmapsPois.length >= 2) {
+      var name0 = (gmapsPois[0].headline || gmapsPois[0].name || '').toString().trim();
+      var nameLast = (gmapsPois[gmapsPois.length - 1].headline || gmapsPois[gmapsPois.length - 1].name || '').toString().trim();
+      var origin = (name0 && countryOrRegion) ? encodeURIComponent(name0 + ' ' + countryOrRegion) : (gmapsPois[0].lat + ',' + gmapsPois[0].lng);
+      var dest = (nameLast && countryOrRegion) ? encodeURIComponent(nameLast + ' ' + countryOrRegion) : (gmapsPois[gmapsPois.length - 1].lat + ',' + gmapsPois[gmapsPois.length - 1].lng);
+      var waypoints = gmapsPois.slice(1, -1).map(function(p) {
+        var n = (p.headline || p.name || '').toString().trim();
+        return n && countryOrRegion ? encodeURIComponent(n + ' ' + countryOrRegion) : (p.lat + ',' + p.lng);
+      }).join('|');
+      gmapsUrl = 'https://www.google.com/maps/dir/?api=1&origin=' + origin + '&destination=' + dest + (waypoints ? '&waypoints=' + waypoints : '') + '&travelmode=driving';
+    } else {
+      var n0 = (gmapsPois[0].headline || gmapsPois[0].name || '').toString().trim();
+      gmapsUrl = (n0 && countryOrRegion) ? ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(n0 + ' ' + countryOrRegion)) : ('https://www.google.com/maps?q=' + gmapsPois[0].lat + ',' + gmapsPois[0].lng);
+    }
+  }
 
   // Tags
   var tagsHTML = '';
@@ -94,52 +287,66 @@ function salmaRenderRoute(routeData) {
       routeData.tags.map(function(t) { return '<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;padding:5px 12px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:var(--dorado);">' + escapeHTML(t) + '</span>'; }).join('') + '</div>';
   }
 
-  // Stops — formato acordeón
-  var stopsHTML = pois.map(function(stop, idx) {
-    var icon = typeIcons[stop.type] || '📍';
-    var day = stop.day ? 'DÍA ' + stop.day : '';
-    var mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((stop.name || stop.headline || '') + country);
-    var headline = stop.headline || stop.name || '';
-    var narrative = stop.narrative || stop.description || '';
-    var secret = stop.local_secret || '';
-    var alt = stop.alternative || '';
-    var practical = stop.practical || '';
-    var hasDetails = narrative || secret || alt || practical;
-    var stopId = 'salma-stop-' + idx;
+  // Stops — agrupados por día con botón de ruta por día
+  var byDay = {};
+  pois.forEach(function(stop) {
+    var day = stop.day || 1;
+    if (!byDay[day]) byDay[day] = [];
+    byDay[day].push(stop);
+  });
+  var days = Object.keys(byDay).map(Number).sort(function(a,b){ return a-b; });
 
-    // Preview text (primera línea del narrative)
-    var preview = narrative ? narrative.substring(0, 80).replace(/\s+\S*$/, '') + '...' : '';
+  var stopsHTML = days.map(function(day) {
+    var dayPois = byDay[day];
+    var dayRoute = dayPois.length === 1
+      ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((dayPois[0].headline || dayPois[0].name || '') + (countryOrRegion ? ' ' + countryOrRegion : ''))
+      : 'https://www.google.com/maps/dir/' + dayPois.map(function(p){ return encodeURIComponent((p.headline || p.name || '') + (countryOrRegion ? ' ' + countryOrRegion : '')); }).join('/');
 
-    return '<div style="border-bottom:1px solid rgba(212,160,23,.1);">' +
-      // Header colapsado (siempre visible)
-      '<div onclick="salmaToggleStop(\'' + stopId + '\')" style="display:flex;gap:16px;padding:20px 0;cursor:pointer;transition:background .15s;" onmouseover="this.style.background=\'rgba(255,255,255,.02)\'" onmouseout="this.style.background=\'none\'">' +
-        '<div style="min-width:40px;text-align:center;">' +
-          '<span style="font-size:24px;">' + icon + '</span>' +
-          (day ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:8px;color:var(--dorado);margin-top:4px;letter-spacing:.1em;">' + day + '</div>' : '') +
-        '</div>' +
-        '<div style="flex:1;">' +
-          '<div style="font-family:\'Inter Tight\',sans-serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.2;">' + escapeHTML(headline) + '</div>' +
-          (preview ? '<div style="font-size:14px;color:rgba(245,240,232,.5);line-height:1.5;">' + escapeHTML(preview) + '</div>' : '') +
-        '</div>' +
-        (hasDetails ? '<div style="flex-shrink:0;align-self:center;font-size:12px;color:var(--dorado);transition:transform .2s;" id="' + stopId + '-arrow">▾</div>' : '') +
-      '</div>' +
-      // Contenido expandible (oculto por defecto)
-      (hasDetails ? '<div id="' + stopId + '" style="display:none;padding:0 0 20px 56px;">' +
-        (narrative ? '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.75;margin-bottom:16px;">' + escapeHTML(narrative) + '</div>' : '') +
-        (secret ? '<div style="background:rgba(212,160,23,.06);border-left:3px solid var(--dorado);padding:12px 16px;margin-bottom:12px;border-radius:0 12px 12px 0;">' +
-          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.14em;margin-bottom:6px;">🔑 SECRETO LOCAL</div>' +
-          '<div style="font-size:14px;color:rgba(245,240,232,.75);line-height:1.6;">' + escapeHTML(secret) + '</div>' +
-        '</div>' : '') +
-        (alt ? '<div style="padding:10px 0;margin-bottom:12px;">' +
-          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:rgba(245,240,232,.4);letter-spacing:.12em;margin-bottom:4px;">↗ ALTERNATIVA</div>' +
-          '<div style="font-size:14px;color:rgba(245,240,232,.6);line-height:1.6;">' + escapeHTML(alt) + '</div>' +
-        '</div>' : '') +
-        (practical ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:rgba(245,240,232,.55);line-height:1.8;padding:10px 14px;background:rgba(255,255,255,.02);border-radius:10px;margin-bottom:12px;">' +
-          '📋 ' + escapeHTML(practical) +
-        '</div>' : '') +
-        (mapsUrl ? '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;letter-spacing:.1em;">VER EN MAPA →</a>' : '') +
-      '</div>' : '') +
+    var dayHeader = '<div style="display:flex;align-items:center;justify-content:space-between;margin:24px 0 10px;padding-bottom:8px;border-bottom:1px solid rgba(212,160,23,.2);">' +
+      '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--dorado);letter-spacing:.18em;font-weight:700;">DÍA ' + day + '</div>' +
+      '<a href="' + dayRoute + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;background:var(--dorado);color:#0a0908;padding:6px 12px;border-radius:8px;text-decoration:none;letter-spacing:.1em;font-weight:700;">RUTA DÍA ' + day + ' →</a>' +
     '</div>';
+
+    var dayStops = dayPois.map(function(stop, idx) {
+      var icon = typeIcons[stop.type] || '📍';
+      var headline = stop.headline || stop.name || '';
+      var mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(headline + (countryOrRegion ? ' ' + countryOrRegion : ''));
+      var narrative = stop.narrative || stop.description || '';
+      var secret = stop.local_secret || '';
+      var alt = stop.alternative || '';
+      var practical = stop.practical || '';
+      var hasDetails = narrative || secret || alt || practical;
+      var stopId = 'salma-stop-' + day + '-' + idx;
+      var preview = narrative ? narrative.substring(0, 80).replace(/\s+\S*$/, '') + '...' : '';
+
+      return '<div style="border-bottom:1px solid rgba(212,160,23,.06);">' +
+        '<div onclick="salmaToggleStop(\'' + stopId + '\')" style="display:flex;gap:16px;padding:16px 0;cursor:pointer;" onmouseover="this.style.background=\'rgba(255,255,255,.02)\'" onmouseout="this.style.background=\'none\'">' +
+          '<div style="min-width:40px;text-align:center;"><span style="font-size:22px;">' + icon + '</span></div>' +
+          '<div style="flex:1;">' +
+            '<div style="font-family:\'Inter Tight\',sans-serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:4px;">' + escapeHTML(headline) + '</div>' +
+            (preview ? '<div style="font-size:13px;color:rgba(245,240,232,.5);line-height:1.5;">' + escapeHTML(preview) + '</div>' : '') +
+          '</div>' +
+          (hasDetails ? '<div style="flex-shrink:0;align-self:center;font-size:12px;color:var(--dorado);" id="' + stopId + '-arrow">▾</div>' : '') +
+        '</div>' +
+        (hasDetails ? '<div id="' + stopId + '" style="display:none;padding:0 0 16px 56px;">' +
+          (narrative ? '<div style="font-size:14px;color:rgba(245,240,232,.8);line-height:1.75;margin-bottom:12px;">' + escapeHTML(narrative) + '</div>' : '') +
+          (secret ? '<div style="background:rgba(212,160,23,.06);border-left:3px solid var(--dorado);padding:12px 16px;margin-bottom:10px;border-radius:0 10px 10px 0;">' +
+            '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.12em;margin-bottom:4px;">SECRETO LOCAL</div>' +
+            '<div style="font-size:13px;color:rgba(245,240,232,.75);line-height:1.6;">' + escapeHTML(secret) + '</div>' +
+          '</div>' : '') +
+          (alt ? '<div style="padding:8px 0;margin-bottom:10px;">' +
+            '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:rgba(245,240,232,.4);letter-spacing:.12em;margin-bottom:4px;">↗ ALTERNATIVA</div>' +
+            '<div style="font-size:13px;color:rgba(245,240,232,.6);line-height:1.6;">' + escapeHTML(alt) + '</div>' +
+          '</div>' : '') +
+          (practical ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:rgba(245,240,232,.55);line-height:1.8;padding:10px 14px;background:rgba(255,255,255,.02);border-radius:10px;margin-bottom:10px;">' +
+            '📋 ' + escapeHTML(practical) +
+          '</div>' : '') +
+          '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;">VER EN MAPA →</a>' +
+        '</div>' : '') +
+      '</div>';
+    }).join('');
+
+    return dayHeader + dayStops;
   }).join('');
 
   // Tips
@@ -154,27 +361,25 @@ function salmaRenderRoute(routeData) {
   var budget = routeData.budget_level && routeData.budget_level !== 'sin_definir' ? ' · ' + routeData.budget_level.toUpperCase() : '';
 
   result.style.display = 'block';
+  var heroEl = document.querySelector('.hero');
+  if (heroEl) heroEl.classList.add('hero-has-route');
+  // Orden: primero la ruta (texto e itinerario), al final el mapa debajo
   result.innerHTML =
-    (gmapsUrl ? '<div style="margin-bottom:24px;">' +
-      '<a href="' + gmapsUrl + '" target="_blank" rel="noopener" style="display:inline-block;font-family:\'JetBrains Mono\',monospace;font-size:9px;background:rgba(10,10,9,.85);color:#d4a017;border:1px solid rgba(212,160,23,.3);border-radius:10px;padding:10px 16px;text-decoration:none;letter-spacing:.1em;">VER RUTA EN GOOGLE MAPS →</a>' +
-    '</div>' : '') +
     // Header
     '<div style="font-family:\'Inter Tight\',sans-serif;font-size:32px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;margin-bottom:8px;">' + escapeHTML(routeData.title || 'Tu ruta') + '</div>' +
     '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-bottom:16px;">' + (routeData.duration_days || 0) + ' DÍAS · ' + escapeHTML((routeData.country || '').toUpperCase()) + budget + ' · ' + pois.length + ' PARADAS</div>' +
     (routeData.summary ? '<div style="font-size:16px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:20px;">' + escapeHTML(routeData.summary) + '</div>' : '') +
     tagsHTML +
-    // Stops
+    // Stops (itinerario primero)
     '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:4px;">ITINERARIO · ' + pois.length + ' EXPERIENCIAS</div>' +
     stopsHTML +
     tipsHTML +
-    // Bloque de edición — Salma con input
-    '<div style="margin-top:32px;padding:20px 24px;background:rgba(255,255,255,.02);border:1px solid rgba(212,160,23,.12);border-radius:18px;">' +
-      // Avatar + mensaje de Salma
+    // Sugiere un cambio
+    '<div style="margin-top:28px;margin-bottom:24px;padding:20px 24px;background:rgba(255,255,255,.02);border:1px solid rgba(212,160,23,.12);border-radius:18px;">' +
       '<div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;">' +
         '<div style="flex-shrink:0;width:36px;height:36px;border-radius:50%;border:1.5px solid #d4a017;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#1a1816;">' + SALMA_AVATAR + '</div>' +
-        '<div style="font-size:14px;color:rgba(245,240,232,.7);line-height:1.6;padding-top:6px;">¿Te convence? Pide cambios aquí o guárdala. Después puedes seguir editando.</div>' +
+        '<div style="font-size:14px;color:rgba(245,240,232,.7);line-height:1.6;padding-top:6px;">¿Te convence? Pide cambios aquí o guárdala.</div>' +
       '</div>' +
-      // Sugerencias dinámicas (si las hay)
       (routeData.suggestions && routeData.suggestions.length > 0 ?
         '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">' +
           routeData.suggestions.map(function(s) {
@@ -183,18 +388,44 @@ function salmaRenderRoute(routeData) {
         '</div>'
         : ''
       ) +
-      // Input de edición
-      '<div style="display:flex;gap:8px;">' +
-        '<input type="text" id="salma-edit-input" placeholder="Sugiere un cambio..." autocomplete="off" style="flex:1;background:#0c0b0a;border:1px solid rgba(212,160,23,.2);border-radius:14px;padding:12px 16px;color:#f5f0e8;font-family:\'Inter\',sans-serif;font-size:14px;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor=\'#d4a017\'" onblur="this.style.borderColor=\'rgba(212,160,23,.2)\'">' +
-        '<button onclick="salmaEditFromBox()" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:12px 18px;font-family:\'JetBrains Mono\',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;cursor:pointer;transition:background .2s;white-space:nowrap;" onmouseover="this.style.background=\'#e0b84a\'" onmouseout="this.style.background=\'#d4a017\'">ENVIAR</button>' +
+      '<div id="salma-sugiere-cambio-wrap" style="display:flex;flex-direction:column;gap:12px;">' +
+        '<input type="text" id="salma-edit-input" placeholder="Sugiere un cambio..." autocomplete="off" style="width:100%;box-sizing:border-box;background:#0c0b0a;border:1px solid rgba(212,160,23,.2);border-radius:14px;padding:14px 16px;color:#f5f0e8;font-family:\'Inter\',sans-serif;font-size:14px;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor=\'#d4a017\'" onblur="this.style.borderColor=\'rgba(212,160,23,.2)\'">' +
+        '<button id="salma-edit-enviar-btn" type="button" onclick="salmaEditFromBox()" style="width:100%;min-height:48px;background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:14px 20px;font-family:\'JetBrains Mono\',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;cursor:pointer;transition:background .2s;">ENVIAR</button>' +
       '</div>' +
     '</div>' +
     // Botones principales
-    '<div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;">' +
-      '<button onclick="salmaGuardarRuta()" style="flex:2;min-width:140px;background:var(--dorado);border:none;border-radius:14px;color:#0a0908;padding:16px;font-family:\'JetBrains Mono\',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;cursor:pointer;transition:background .2s;" onmouseover="this.style.background=\'#e0b84a\'" onmouseout="this.style.background=\'#d4a017\'">GUARDAR MI RUTA</button>' +
+    '<div style="display:flex;gap:12px;margin-top:16px;margin-bottom:24px;flex-wrap:wrap;">' +
+      '<button id="salma-btn-guardar-ruta" onclick="salmaGuardarRuta()" style="flex:2;min-width:140px;background:var(--dorado);border:none;border-radius:14px;color:#0a0908;padding:16px;font-family:\'JetBrains Mono\',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;cursor:pointer;transition:background .2s;" onmouseover="if(!this.disabled)this.style.background=\'#e0b84a\'" onmouseout="this.style.background=\'#d4a017\'">GUARDAR MI RUTA</button>' +
       (gmapsUrl ? '<a href="' + gmapsUrl + '" target="_blank" rel="noopener" style="flex:1;min-width:120px;text-align:center;background:transparent;border:1px solid rgba(212,160,23,.25);border-radius:14px;color:var(--dorado);padding:16px;font-family:\'JetBrains Mono\',monospace;font-size:10px;text-decoration:none;letter-spacing:.12em;display:flex;align-items:center;justify-content:center;">GOOGLE MAPS</a>' : '') +
       '<button onclick="salmaReset()" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.1);border-radius:14px;color:rgba(245,240,232,.5);padding:16px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;">NUEVA RUTA</button>' +
-    '</div>';
+    '</div>' +
+    // Mapa debajo de la ruta (posiciones ya verificadas/enriquecidas antes de renderizar)
+    (hasMapData ? '<div style="margin-top:24px;position:relative;">' +
+      '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.14em;margin-bottom:10px;">MAPA DE LA RUTA</div>' +
+      '<div id="salma-route-map" style="width:100%;height:380px;background:#0a0a09;border-radius:18px;border:1px solid rgba(212,160,23,.12);"></div>' +
+      (gmapsUrl ? '<a href="' + gmapsUrl + '" target="_blank" rel="noopener" style="position:absolute;bottom:14px;left:14px;z-index:500;font-family:\'JetBrains Mono\',monospace;font-size:9px;background:rgba(10,10,9,.85);color:#d4a017;border:1px solid rgba(212,160,23,.3);border-radius:10px;padding:10px 16px;text-decoration:none;letter-spacing:.1em;backdrop-filter:blur(4px);">VER RUTA EN GOOGLE MAPS →</a>' : '') +
+    '</div>' : '');
+
+  // Mapa Leaflet
+  if (hasMapData) {
+    setTimeout(function() {
+      var mapEl = document.getElementById('salma-route-map');
+      if (!mapEl || mapEl._leaflet_id) return;
+      var coords = pois.filter(function(p) { return p.lat && p.lng; }).map(function(p) { return [p.lat, p.lng]; });
+      var routeMap = L.map('salma-route-map', { zoomControl: false, scrollWheelZoom: true }).setView(coords[0], 6);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(routeMap);
+      L.polyline(coords, { color: '#d4a017', weight: 2.5, opacity: .8, dashArray: '8,6' }).addTo(routeMap);
+      pois.filter(function(p) { return p.lat && p.lng; }).forEach(function(p) {
+        var markerIcon = L.divIcon({
+          html: '<div style="background:#d4a017;border-radius:50%;width:12px;height:12px;box-shadow:0 0 0 3px rgba(212,160,23,.3);"></div>',
+          className: '', iconSize: [12,12], iconAnchor: [6,6]
+        });
+        L.marker([p.lat, p.lng], { icon: markerIcon }).addTo(routeMap)
+          .bindTooltip(p.name || '', { permanent: false, direction: 'top' });
+      });
+      if (coords.length > 1) routeMap.fitBounds(coords, { padding: [40, 40] });
+    }, 200);
+  }
 
   window._salmaLastRoute = routeData;
 }
@@ -256,23 +487,36 @@ async function salmaHeroSend() {
       salmaHistory.push({ role: 'user', content: msg });
       salmaHistory.push({ role: 'assistant', content: data.reply });
 
-      // Si hay ruta → renderizar
       if (data.route && data.route.stops && data.route.stops.length > 0) {
-        salmaRenderRoute(data.route);
+        var hasAnyCoord = data.route.stops.some(function(s) { var a = s.lat, b = s.lng; return a != null && b != null && Number(a) && Number(b); });
+        if (!hasAnyCoord) salmaAddDialog('Buscando coordenadas en el mapa…', 'loading');
+        salmaEnrichRouteWithCoords(data.route).then(function(enriched) {
+          salmaRemoveLoading();
+          salmaRenderRoute(enriched);
+        }).catch(function() { salmaRemoveLoading(); salmaRenderRoute(data.route); });
       } else {
-        // Salma necesita más info → mostrar input para responder
-        
+        salmaAddDialog('Buscando en el mapa…', 'loading');
+        salmaTryMinimalRouteFromReply(msg, data.reply).then(function(minimalRoute) {
+          salmaRemoveLoading();
+          if (minimalRoute) {
+            salmaAddDialog('No tenía coordenadas, pero he ubicado "' + (minimalRoute.title || '') + '" en el mapa. Puedes guardar la ruta y pedirme más detalles.', 'bot');
+            salmaRenderRoute(minimalRoute);
+          } else {
+            salmaAddDialog('No he podido ubicar ese lugar. Prueba con "Málaga, España" o el nombre en inglés.', 'bot');
+          }
+        }).catch(function() {
+          salmaRemoveLoading();
+          salmaAddDialog('No he podido ubicar ese lugar en el mapa. Inténtalo de nuevo.', 'bot');
+        });
       }
     } else {
       salmaAddDialog('Uy, algo ha fallado. ¿Puedes intentarlo de nuevo?', 'bot');
-      
     }
   } catch (err) {
     salmaRemoveLoading();
     salmaAddDialog('No puedo conectar ahora mismo. Inténtalo en un momento.', 'bot');
   }
 
-  // Restaurar botón
   heroInput.value = '';
   if (heroBtn) { heroBtn.textContent = 'PLANEAR →'; heroBtn.disabled = false; }
 }
@@ -290,10 +534,14 @@ async function salmaInlineReply() {
   salmaAddDialog('', 'loading');
 
   try {
+    var body = { message: msg, history: salmaHistory };
+    if (window._salmaLastRoute && window._salmaLastRoute.stops && window._salmaLastRoute.stops.length > 0) {
+      body.current_route = window._salmaLastRoute;
+    }
     var res = await fetch(window.SALMA_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: msg, history: salmaHistory })
+      body: JSON.stringify(body)
     });
     var data = await res.json();
     salmaRemoveLoading();
@@ -305,13 +553,37 @@ async function salmaInlineReply() {
       if (salmaHistory.length > 20) salmaHistory = salmaHistory.slice(-20);
 
       if (data.route && data.route.stops && data.route.stops.length > 0) {
-        // Limpiar ruta anterior y re-renderizar
         var routeResult = document.getElementById('salma-route-result');
         if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
-        salmaRenderRoute(data.route);
-        if (routeResult) {
-          setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
-        }
+        var baseRoute = window._salmaLastRoute ? salmaMergeRoute(window._salmaLastRoute, data.route) : data.route;
+        var hasAnyCoord = baseRoute.stops && baseRoute.stops.some(function(s) { var a = s.lat, b = s.lng; return a != null && b != null && Number(a) && Number(b); });
+        if (!hasAnyCoord) salmaAddDialog('Buscando coordenadas en el mapa…', 'loading');
+        salmaEnrichRouteWithCoords(baseRoute).then(function(enriched) {
+          salmaRemoveLoading();
+          salmaRenderRoute(enriched);
+          if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+        }).catch(function() {
+          salmaRemoveLoading();
+          salmaRenderRoute(baseRoute);
+          if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+        });
+      } else {
+        salmaAddDialog('Buscando en el mapa…', 'loading');
+        salmaTryMinimalRouteFromReply(msg, data.reply).then(function(minimalRoute) {
+          salmaRemoveLoading();
+          if (minimalRoute) {
+            var routeResult = document.getElementById('salma-route-result');
+            if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
+            salmaAddDialog('He ubicado "' + (minimalRoute.title || '') + '" en el mapa. Puedes guardarla y pedirme más detalles.', 'bot');
+            salmaRenderRoute(minimalRoute);
+            if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+          } else {
+            salmaAddDialog('No he podido ubicar ese lugar. Prueba con "Málaga, España" o más detalle.', 'bot');
+          }
+        }).catch(function() {
+          salmaRemoveLoading();
+          salmaAddDialog('No he podido ubicar ese lugar. Inténtalo de nuevo.', 'bot');
+        });
       }
     } else {
       salmaAddDialog('No he entendido bien. ¿Puedes repetir?', 'bot');
@@ -324,45 +596,182 @@ async function salmaInlineReply() {
 
 // ===== GUARDAR RUTA =====
 
+function salmaSetGuardarButtonState(guardando) {
+  var btn = document.getElementById('salma-btn-guardar-ruta');
+  if (!btn) return;
+  btn.disabled = guardando;
+  btn.textContent = guardando ? 'Guardando...' : 'GUARDAR MI RUTA';
+  btn.style.opacity = guardando ? '0.8' : '1';
+  btn.style.cursor = guardando ? 'wait' : 'pointer';
+}
+
 function salmaGuardarRuta() {
-  if (!window._salmaLastRoute) { window.showToast('No hay ruta para guardar'); return; }
-
-  var user = window._fbAuth ? window._fbAuth.currentUser : null;
-  var firedb = window._fbDb;
-
-  if (!user || !firedb) {
-    if (typeof window.openModal === 'function') window.openModal('register');
-    window.showToast('Regístrate para guardar tu ruta');
+  if (!window._salmaLastRoute) {
+    if (typeof window.showToast === 'function') window.showToast('No hay ruta para guardar');
     return;
   }
 
+  var firedb = window._fbDb || (window.firebase && window.firebase.firestore && window.firebase.firestore());
+  var user = window._fbAuth ? window._fbAuth.currentUser : null;
+  var FieldValue = window.firebase && window.firebase.firestore && window.firebase.firestore.FieldValue;
+
+  if (!user || !firedb) {
+    if (typeof window.openModal === 'function') window.openModal('register');
+    if (typeof window.showToast === 'function') window.showToast('Regístrate para guardar tu ruta');
+    return;
+  }
+
+  if (!FieldValue) {
+    if (typeof window.showToast === 'function') window.showToast('Error: Firebase no cargado. Recarga la página.');
+    return;
+  }
+
+  salmaSetGuardarButtonState(true);
+  if (typeof window.showToast === 'function') window.showToast('Guardando tu ruta...');
+
   var r = window._salmaLastRoute;
-  var ruta = {
-    nombre: r.title || 'Mi ruta',
-    destino: r.region || r.country || '',
-    dias: r.duration_days || 0,
-    desc: r.summary || '',
-    itinerarioIA: JSON.stringify(r),
-    pois: (r.stops || []).map(function(s, i) {
-      return { id: i+1, name: s.name, type: s.type, note: s.description, day: s.day || 1, lat: s.lat, lng: s.lng };
+  var stops = r.stops || [];
+
+  var destinoRuta = (r.region || r.country || r.destination || '').toString().trim();
+  var notasRuta = (r.summary || '').toString().trim();
+
+  // Mapear tipo a valores del proyecto técnico: lugar, hotel, restaurante, experiencia, mirador, ruta
+  function mapTipoCanonico(t) {
+    if (!t) return 'lugar';
+    var s = String(t).toLowerCase();
+    if (s.includes('hotel') || s === '🏨') return 'hotel';
+    if (s.includes('restaurant') || s.includes('comida') || s === '🍜' || s === '🍴') return 'restaurante';
+    if (s.includes('mirador') || s.includes('viewpoint') || s === '📸') return 'mirador';
+    if (s.includes('ruta') || s === 'route' || s === '🛤') return 'ruta';
+    if (s.includes('nature') || s.includes('beach') || s.includes('mountain') || s.includes('temple') || s.includes('activity') || /[🌿🏖⛰🛕🎯]/.test(t)) return 'experiencia';
+    return 'lugar';
+  }
+
+  // Normalizar paradas y agrupar por día → estructura canónica dias[]
+  var stopsNorm = stops.map(function(s, i) {
+    var name = (s && (s.headline || s.name || s.title)) != null ? String(s.headline || s.name || s.title) : '';
+    var desc = (s && (s.narrative || s.description)) != null ? String(s.narrative || s.description) : '';
+    var day = (s && s.day) != null ? Number(s.day) : 1;
+    var lat = (s && s.lat) != null ? Number(s.lat) : 0;
+    var lng = (s && s.lng) != null ? Number(s.lng) : 0;
+    return { id: 'p' + (i + 1), tipo: mapTipoCanonico(s && s.type), nombre: name, descripcion: desc, duracion_min: 0, lat: lat, lng: lng, day: day, name: name, description: desc, type: s && s.type };
+  });
+
+  var diasByNum = {};
+  stopsNorm.forEach(function(p) {
+    var d = p.day || 1;
+    if (!diasByNum[d]) diasByNum[d] = [];
+    diasByNum[d].push(p);
+  });
+  var diasOrden = Object.keys(diasByNum).map(Number).sort(function(a, b) { return a - b; });
+  var diasCanonico = diasOrden.map(function(diaNum) {
+    var paradasDelDia = diasByNum[diaNum];
+    var zona = (paradasDelDia[0] && paradasDelDia[0].nombre) ? paradasDelDia[0].nombre : ('Día ' + diaNum);
+    var paradas = paradasDelDia.map(function(p) {
+      return { id: p.id, tipo: p.tipo, nombre: p.nombre, descripcion: p.descripcion, duracion_min: p.duracion_min, lat: p.lat, lng: p.lng };
+    });
+    return { dia: diaNum, zona: zona, paradas: paradas };
+  });
+  // Título: nunca guardar "Mi ruta"; usar siempre un nombre concreto
+  var tituloRuta = (r.title || r.name || r.route_name || '').toString().trim();
+  if (tituloRuta.toLowerCase() === 'mi ruta') tituloRuta = '';
+  if (!tituloRuta && r.country && r.duration_days) tituloRuta = (r.country + ' ' + r.duration_days + ' días').trim();
+  if (!tituloRuta && stops.length > 0) {
+    var firstStop = stops[0];
+    tituloRuta = (firstStop && (firstStop.headline || firstStop.name || firstStop.title)) ? String(firstStop.headline || firstStop.name || firstStop.title).trim() : '';
+  }
+  if (!tituloRuta && destinoRuta) tituloRuta = destinoRuta + ' - Ruta';
+  if (!tituloRuta && diasCanonico[0] && diasCanonico[0].zona) tituloRuta = diasCanonico[0].zona + ' - Ruta';
+  if (!tituloRuta && stopsNorm.length > 0) tituloRuta = 'Ruta · ' + stopsNorm.length + ' paradas';
+  if (!tituloRuta) tituloRuta = 'Ruta guardada';
+  if (!tituloRuta || tituloRuta.length === 0 || tituloRuta.toLowerCase() === 'mi ruta') {
+    tituloRuta = (destinoRuta && destinoRuta.length > 0) ? (destinoRuta + ' - Ruta') : 'Ruta guardada';
+  }
+
+  // itinerarioIA: JSON completo para verRuta (tips, tags, resumen) y compatibilidad
+  var itinerarioCompleto = {
+    title: tituloRuta,
+    country: (destinoRuta || r.country || '').toString(),
+    summary: (notasRuta || '').toString(),
+    stops: stopsNorm.map(function(p) {
+      return {
+        id: (p.id || '').toString(),
+        name: (p.nombre || '').toString(),
+        description: (p.descripcion || '').toString(),
+        type: (p.tipo || 'lugar').toString(),
+        day: typeof p.day === 'number' ? p.day : 1,
+        lat: typeof p.lat === 'number' ? p.lat : 0,
+        lng: typeof p.lng === 'number' ? p.lng : 0
+      };
     }),
-    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    published: false
+    tips: Array.isArray(r.tips) ? r.tips.map(function(t) { return (t || '').toString(); }) : [],
+    tags: Array.isArray(r.tags) ? r.tags.map(function(t) { return (t || '').toString(); }) : [],
+    budget_level: (r.budget_level || 'sin_definir').toString()
   };
 
-  firedb.collection('users').doc(user.uid).collection('maps').add(ruta)
-    .then(function(docRef) {
-      window._salmaLastRoute = null;
-      window.showToast('¡Ruta guardada! ✓');
-      setTimeout(function() {
-        if (window.loadUserMaps) window.loadUserMaps();
-        if (window.showPage) window.showPage('dashboard');
-      }, 500);
-    })
-    .catch(function(e) {
-      window.showToast('Error al guardar: ' + e.message);
-    });
+  // Estructura Firestore: sin undefined (Firestore lo rechaza)
+  var ruta = {
+    titulo: tituloRuta,
+    nombre: tituloRuta,
+    destino: (destinoRuta || '').toString(),
+    dias: diasCanonico,
+    hotel_base: null,
+    notas: (notasRuta || '').toString(),
+    updated_at: FieldValue.serverTimestamp(),
+    createdAt: FieldValue.serverTimestamp(),
+    published: false,
+    itinerarioIA: JSON.stringify(itinerarioCompleto)
+  };
+
+  // Sanitizar dias/paradas por si algún campo viene undefined
+  ruta.dias = (ruta.dias || []).map(function(d) {
+    return {
+      dia: typeof d.dia === 'number' ? d.dia : 1,
+      zona: (d.zona || '').toString(),
+      paradas: (d.paradas || []).map(function(p) {
+        return {
+          id: (p.id || '').toString(),
+          tipo: (p.tipo || 'lugar').toString(),
+          nombre: (p.nombre || '').toString(),
+          descripcion: (p.descripcion || '').toString(),
+          duracion_min: typeof p.duracion_min === 'number' ? p.duracion_min : 0,
+          lat: typeof p.lat === 'number' ? p.lat : 0,
+          lng: typeof p.lng === 'number' ? p.lng : 0
+        };
+      })
+    };
+  });
+
+  try {
+    var uid = (window._fbAuth && window._fbAuth.currentUser && window._fbAuth.currentUser.uid) ? window._fbAuth.currentUser.uid : user.uid;
+    if (!uid) {
+      salmaSetGuardarButtonState(false);
+      if (typeof window.showToast === 'function') window.showToast('Sesión expirada. Vuelve a iniciar sesión.');
+      return;
+    }
+    firedb.collection('users').doc(uid).collection('maps').add(ruta)
+      .then(function(docRef) {
+        window._salmaLastRoute = null;
+        if (typeof window.showToast === 'function') window.showToast('¡Ruta guardada! Redirigiendo a Mis rutas...');
+        var loadMaps = typeof window.loadUserMaps === 'function' ? window.loadUserMaps() : Promise.resolve();
+        var goDashboard = function() {
+          if (typeof window.setDashTab === 'function') window.setDashTab('maps', null);
+          if (typeof window.showPage === 'function') window.showPage('dashboard');
+        };
+        if (loadMaps && typeof loadMaps.then === 'function') {
+          loadMaps.then(goDashboard).catch(goDashboard);
+        } else {
+          setTimeout(goDashboard, 600);
+        }
+      })
+      .catch(function(e) {
+        salmaSetGuardarButtonState(false);
+        if (typeof window.showToast === 'function') window.showToast('Error al guardar: ' + (e && e.message ? e.message : 'Error desconocido'));
+      });
+  } catch (err) {
+    salmaSetGuardarButtonState(false);
+    if (typeof window.showToast === 'function') window.showToast('Error al guardar: ' + (err && err.message ? err.message : 'Error desconocido'));
+  }
 }
 
 // ===== RESET =====
@@ -371,6 +780,8 @@ function salmaReset() {
   var dialog = document.getElementById('salma-dialog');
   var routeResult = document.getElementById('salma-route-result');
   var section = document.getElementById('salma-inline');
+  var heroEl = document.querySelector('.hero');
+  if (heroEl) heroEl.classList.remove('hero-has-route');
   if (dialog) dialog.innerHTML = '';
   if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
   if (section) section.style.display = 'none';
@@ -409,10 +820,14 @@ async function salmaEditFromBox() {
   salmaHistory.push({ role: 'user', content: msg });
 
   try {
+    var body = { message: msg, history: salmaHistory };
+    if (window._salmaLastRoute && window._salmaLastRoute.stops && window._salmaLastRoute.stops.length > 0) {
+      body.current_route = window._salmaLastRoute;
+    }
     var res = await fetch(window.SALMA_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: msg, history: salmaHistory })
+      body: JSON.stringify(body)
     });
     var data = await res.json();
 
@@ -421,16 +836,17 @@ async function salmaEditFromBox() {
       if (salmaHistory.length > 20) salmaHistory = salmaHistory.slice(-20);
 
       if (data.route && data.route.stops && data.route.stops.length > 0) {
-        // Re-renderizar ruta sin moverse
         var routeResult = document.getElementById('salma-route-result');
         if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
-        salmaRenderRoute(data.route);
-        // Scroll suave al inicio de la ruta nueva
-        if (routeResult) {
-          setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);
-        }
+        var baseRoute = window._salmaLastRoute ? salmaMergeRoute(window._salmaLastRoute, data.route) : data.route;
+        salmaEnrichRouteWithCoords(baseRoute).then(function(enriched) {
+          salmaRenderRoute(enriched);
+          if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);
+        }).catch(function() {
+          salmaRenderRoute(baseRoute);
+          if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);
+        });
       } else {
-        // Salma respondió sin ruta — mostrar en diálogo arriba
         salmaAddDialog(data.reply, 'bot');
       }
     } else {
