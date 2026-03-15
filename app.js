@@ -1,3 +1,22 @@
+// ===== AUTH MODAL — disponible inmediatamente =====
+function openModal(view) {
+  var modal = document.getElementById("modal-auth");
+  if (modal) modal.classList.add("active");
+  switchModal(view);
+}
+function closeModal() {
+  var modal = document.getElementById("modal-auth");
+  if (modal) modal.classList.remove("active");
+}
+function switchModal(view) {
+  var login = document.getElementById("modal-login-view");
+  var register = document.getElementById("modal-register-view");
+  if (login) login.style.display = view === "login" ? "block" : "none";
+  if (register) register.style.display = view === "register" ? "block" : "none";
+}
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.switchModal = switchModal;
 window.onload = function() {
 firebase.initializeApp({
   apiKey: "AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",
