@@ -30,65 +30,45 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="dns-prefetch" href="//raw.githubusercontent.com">
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Borradodelmapa",
-    "url": "https://borradodelmapa.com/",
-    "logo": "https://borradodelmapa.com/logo.png",
-    "sameAs": [
-      "https://instagram.com/borradodelmapa"
-    ]
-  }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&family=Inter+Tight:wght@700&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&family=Inter+Tight:wght@700&family=Space+Mono:wght@400;700&display=swap"></noscript>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <!-- Firebase init -->
+  <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",
+    authDomain: "borradodelmapa-85257.firebaseapp.com",
+    projectId: "borradodelmapa-85257",
+    storageBucket: "borradodelmapa-85257.firebasestorage.app",
+    messagingSenderId: "833042338746",
+    appId: "1:833042338746:web:32b58e582488c6064d8383",
+    measurementId: "G-JZ00MFJEHB"
+  };
+  if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+  const WORKER_URL = "https://salma-api.paco-defoto.workers.dev";
+  window.SALMA_API = "https://salma-api.paco-defoto.workers.dev";
   </script>
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Borradodelmapa",
-    "url": "https://borradodelmapa.com/",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://borradodelmapa.com/blog?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-  }
-  </script>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Borradodelmapa",
-    "applicationCategory": "TravelApplication",
-    "operatingSystem": "Web",
-    "url": "https://borradodelmapa.com/",
-    "description": "Salma es tu copiloto de viaje con IA. Planifica rutas, descubre lugares y viaja con una guía inteligente.",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "EUR"
-    }
-  }
-  </script>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&family=Inter+Tight:wght@700&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&family=Inter+Tight:wght@700&family=Space+Mono:wght@400;700&display=swap"></noscript>
-<link rel="stylesheet" href="styles.css">
+  <!-- app.js en el head para que openModal esté disponible inmediatamente -->
+  <script src="app.js"></script>
 </head>
 <body>
 
 <!-- NAVBAR -->
 <nav>
   <div class="nav-logo" onclick="showPage('home')">
-  <div class="nav-logo-wordmark">borrado<span>del</span>mapa</div>
-  <span class="nav-claim">No estás perdido si sabes dónde vas</span>
-</div>
-  <div class="nav-links"  id="nav-links-guest" style="display:flex;">
+    <div class="nav-logo-wordmark">borrado<span>del</span>mapa</div>
+    <span class="nav-claim">No estás perdido si sabes dónde vas</span>
+  </div>
+  <div class="nav-links" id="nav-links-guest" style="display:flex;">
     <button class="nav-cta" onclick="openModal('login')">Acceso a tus rutas</button>
   </div>
   <div class="nav-user" id="nav-links-user" style="display:none;">
@@ -105,21 +85,18 @@
 <!-- ===== HOME ===== -->
 <div class="page active" id="page-home">
   <div class="hero">
-<div class="hero-map-overlay"></div>
+    <div class="hero-map-overlay"></div>
     <div id="hero-map"></div>
     <div class="hero-content" style="position:relative;z-index:2;text-align:center;margin:0 auto;">
       <div class="hero-label">Salma · Tu copiloto de viaje con IA</div>
       <h1 class="hero-title"><em>Déjame a mí.</em></h1>
-
       <p class="hero-sub" style="margin-left:auto;margin-right:auto;">Una IA viajera que conoce los caminos. Planifica tu ruta, te acompaña en el viaje y guarda todo lo que descubres.</p>
 
-      <!-- SALMA HERO INPUT -->
       <div id="salma-hero-box" style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;max-width:100%;margin-left:auto;margin-right:auto;">
         <textarea id="salma-hero-input" placeholder="Ej: Tailandia 15 días, mochilero, quiero playa y montaña" autocomplete="off" rows="3" style="width:100%;background:#111111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:16px 20px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color .2s;resize:none;line-height:1.5;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'"></textarea>
         <button onclick="salmaHeroSend()" style="width:100%;background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:16px 28px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">PLANEAR →</button>
       </div>
 
-      <!-- SALMA INLINE — diálogo + resultado (justo después del input) -->
       <section id="salma-inline" style="display:none;max-width:100%;margin:24px 0 0;text-align:left;">
         <div id="salma-dialog" style="margin-bottom:24px;"></div>
         <div id="salma-inline-input-wrap" style="margin-bottom:24px;">
@@ -131,7 +108,6 @@
         <div id="salma-route-result" style="display:none;"></div>
       </section>
 
-      <!-- DEMOS -->
       <div id="salma-demos-block" style="margin-top:8px;">
         <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(245,240,232,.45);letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px;">Ver ejemplos de viaje</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;" id="hero-demo-grid">
@@ -209,6 +185,7 @@
   </section>
 </div>
 
+<!-- BLOG -->
 <div class="page" id="page-blog">
   <div style="max-width:800px;margin:0 auto;padding:60px 32px;">
     <div style="font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--blanco);margin-bottom:8px;">Blog</div>
@@ -221,16 +198,17 @@
   </div>
 </div>
 
-<div class="page" id="page-terminos"><div style="max-width:720px;margin:0 auto;padding:60px 32px;"><div onclick="showPage('home')" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dorado);cursor:pointer;letter-spacing:1px;margin-bottom:40px;">← VOLVER</div><div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--blanco);margin-bottom:8px;">Términos de uso</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--crema);opacity:.5;margin-bottom:48px;">Última actualización: marzo 2025</div><div style="color:var(--crema);line-height:1.8;font-size:18px;opacity:.85;">...</div></div></div>
-<div class="page" id="page-privacidad"><div style="max-width:720px;margin:0 auto;padding:60px 32px;"><div onclick="showPage('home')" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dorado);cursor:pointer;letter-spacing:1px;margin-bottom:40px;">← VOLVER</div><div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--blanco);margin-bottom:8px;">Política de privacidad</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--crema);opacity:.5;margin-bottom:48px;">Última actualización: marzo 2025</div><div style="color:var(--crema);line-height:1.8;font-size:18px;opacity:.85;">...</div></div></div>
+<div class="page" id="page-terminos"><div style="max-width:720px;margin:0 auto;padding:60px 32px;"><div onclick="showPage('home')" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dorado);cursor:pointer;letter-spacing:1px;margin-bottom:40px;">← VOLVER</div><div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--blanco);margin-bottom:8px;">Términos de uso</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--crema);opacity:.5;margin-bottom:48px;">Última actualización: marzo 2025</div><div style="color:var(--crema);line-height:1.8;font-size:18px;opacity:.85;"></div></div></div>
+<div class="page" id="page-privacidad"><div style="max-width:720px;margin:0 auto;padding:60px 32px;"><div onclick="showPage('home')" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dorado);cursor:pointer;letter-spacing:1px;margin-bottom:40px;">← VOLVER</div><div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--blanco);margin-bottom:8px;">Política de privacidad</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--crema);opacity:.5;margin-bottom:48px;">Última actualización: marzo 2025</div><div style="color:var(--crema);line-height:1.8;font-size:18px;opacity:.85;"></div></div></div>
 
+<!-- DASHBOARD -->
 <div class="page" id="page-dashboard">
   <div class="dashboard-layout">
     <aside class="sidebar">
       <div class="sidebar-user">
         <div class="sidebar-avatar" id="sidebar-avatar">B</div>
         <div class="sidebar-name" id="sidebar-name">Viajero</div>
-        <div class="sidebar-plan" id="sidebar-plan">Plan Gratuito · 1/1 mapa</div>
+        <div class="sidebar-plan" id="sidebar-plan">Plan Gratuito</div>
       </div>
       <div class="sidebar-nav">
         <div class="sidebar-item active" onclick="setDashTab('maps',this)">
@@ -258,7 +236,21 @@
 
     <div class="dash-content" id="dash-tab-profile" style="display:none;">
       <div class="dash-header"><div><div class="dash-title">Mi perfil</div><div class="dash-sub">Tu cuenta y preferencias</div></div></div>
-      <div style="max-width:520px;">...</div>
+      <div style="max-width:520px;">
+        <div style="margin-bottom:20px;">
+          <div class="sidebar-avatar" id="profile-avatar-big" style="width:64px;height:64px;font-size:28px;margin-bottom:12px;">B</div>
+          <div style="font-size:18px;font-weight:700;color:#fff;" id="profile-display-name">Viajero</div>
+          <div style="font-size:13px;color:rgba(245,240,232,.5);" id="profile-display-email"></div>
+        </div>
+        <label class="form-label">Nombre</label>
+        <input class="form-input" id="profile-name-input" placeholder="Tu nombre">
+        <label class="form-label">País</label>
+        <input class="form-input" id="profile-country-input" placeholder="España">
+        <label class="form-label">Bio</label>
+        <textarea class="form-input" id="profile-bio-input" style="height:80px;resize:none;" placeholder="Cuéntanos algo sobre ti..."></textarea>
+        <div style="margin-top:8px;font-size:12px;color:rgba(245,240,232,.4);">Rutas guardadas: <span id="profile-routes-count">0</span></div>
+        <button onclick="saveProfile()" style="margin-top:16px;background:var(--dorado);color:var(--negro);border:none;border-radius:14px;padding:14px 28px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:.14em;">GUARDAR CAMBIOS</button>
+      </div>
     </div>
   </div>
 </div>
@@ -274,60 +266,87 @@
 </div>
 
 <div class="page" id="page-editor" style="background:var(--negro);overflow-y:auto;padding-top:88px;padding-bottom:80px;">
-  <div style="max-width:860px;margin:0 auto;padding:40px 24px 0;">...</div>
+  <div style="max-width:860px;margin:0 auto;padding:40px 24px 0;"></div>
 </div>
 
-<div class="modal-overlay" id="modal-auth">...</div>
-<div class="poi-modal" id="poi-modal">...</div>
-<div id="modal-editar-ruta" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:10000;align-items:center;justify-content:center;padding:24px;overflow-y:auto;backdrop-filter:blur(6px);" onclick="if(event.target===this)this.style.display='none'"></div>
-<div class="toast" id="toast"></div>
+<!-- MODAL AUTH -->
+<div class="modal-overlay" id="modal-auth">
+  <div style="background:#111;border:1px solid rgba(212,160,23,.2);border-radius:20px;padding:36px;max-width:420px;width:100%;margin:auto;position:relative;" onclick="event.stopPropagation()">
+    <div onclick="closeModal()" style="position:absolute;top:16px;right:20px;cursor:pointer;color:rgba(245,240,232,.4);font-size:20px;line-height:1;">✕</div>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- LOGIN -->
+    <div id="modal-login-view">
+      <div style="font-family:'Inter Tight',sans-serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:6px;">Bienvenido de vuelta</div>
+      <div style="font-size:13px;color:rgba(245,240,232,.5);margin-bottom:24px;">Accede a tus rutas guardadas</div>
+      <label class="form-label">Email</label>
+      <input class="form-input" id="login-email" type="email" placeholder="tu@email.com" autocomplete="email">
+      <label class="form-label">Contraseña</label>
+      <input class="form-input" id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+      <div class="form-error" id="login-error"></div>
+      <button onclick="doLogin()" style="width:100%;background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:15px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;cursor:pointer;margin-top:8px;margin-bottom:16px;">ENTRAR →</button>
+      <button onclick="doSocialLogin()" style="width:100%;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:14px;padding:13px;font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(245,240,232,.7);cursor:pointer;margin-bottom:20px;letter-spacing:.1em;">🔵 CONTINUAR CON GOOGLE</button>
+      <div style="text-align:center;font-size:13px;color:rgba(245,240,232,.4);">¿No tienes cuenta? <span onclick="switchModal('register')" style="color:var(--dorado);cursor:pointer;font-weight:600;">Regístrate gratis</span></div>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="modal-register-view" style="display:none;">
+      <div style="font-family:'Inter Tight',sans-serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:6px;">Crea tu cuenta</div>
+      <div style="font-size:13px;color:rgba(245,240,232,.5);margin-bottom:24px;">Guarda tus rutas y accede desde cualquier lugar</div>
+      <label class="form-label">Nombre</label>
+      <input class="form-input" id="reg-name" type="text" placeholder="Tu nombre" autocomplete="name">
+      <label class="form-label">Email</label>
+      <input class="form-input" id="reg-email" type="email" placeholder="tu@email.com" autocomplete="email">
+      <label class="form-label">Contraseña</label>
+      <input class="form-input" id="reg-pass" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+      <div class="form-error" id="register-error"></div>
+      <button onclick="doRegister()" style="width:100%;background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:15px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;cursor:pointer;margin-top:8px;margin-bottom:16px;">CREAR CUENTA →</button>
+      <button onclick="doSocialLogin()" style="width:100%;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:14px;padding:13px;font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(245,240,232,.7);cursor:pointer;margin-bottom:20px;letter-spacing:.1em;">🔵 CONTINUAR CON GOOGLE</button>
+      <div style="text-align:center;font-size:13px;color:rgba(245,240,232,.4);">¿Ya tienes cuenta? <span onclick="switchModal('login')" style="color:var(--dorado);cursor:pointer;font-weight:600;">Inicia sesión</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- POI MODAL (legacy) -->
+<div class="poi-modal" id="poi-modal">
+  <div class="poi-modal-box" onclick="event.stopPropagation()">
+    <div class="poi-modal-title">Añadir punto</div>
+    <label class="form-label">Nombre del lugar</label>
+    <input class="form-input" id="poi-name-input" placeholder="Ej: Templo de Oro">
+    <label class="form-label">Tipo</label>
+    <select class="form-input" id="poi-type-input">
+      <option value="📍">📍 Lugar</option>
+      <option value="🍜">🍜 Restaurante</option>
+      <option value="🏛️">🏛️ Monumento</option>
+      <option value="🏖️">🏖️ Playa</option>
+      <option value="📸">📸 Mirador</option>
+    </select>
+    <label class="form-label">Nota</label>
+    <input class="form-input" id="poi-note-input" placeholder="Tip o nota rápida">
+    <div style="display:flex;gap:12px;margin-top:16px;">
+      <button onclick="closePoiModal()" style="flex:1;background:transparent;border:1px solid var(--gris2);border-radius:12px;color:var(--crema);padding:12px;font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer;">CANCELAR</button>
+      <button onclick="addPoi()" style="flex:2;background:var(--dorado);border:none;border-radius:12px;color:var(--negro);padding:12px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;cursor:pointer;">AÑADIR →</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-editar-ruta" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:10000;align-items:center;justify-content:center;padding:24px;overflow-y:auto;backdrop-filter:blur(6px);" onclick="if(event.target===this)this.style.display='none'"></div>
+
+<div class="toast" id="toast"></div>
 
 <footer class="main-footer">
   <div class="footer-container">
-    <div class="footer-logo">
-      borrado<span>del</span>mapa
-    </div>
+    <div class="footer-logo">borrado<span>del</span>mapa</div>
     <p class="footer-tagline">Tu copiloto de viaje con IA. Planifica, viaja, descubre.</p>
-    
     <div class="footer-links">
       <a href="https://instagram.com/borradodelmapa" target="_blank" rel="noopener">Instagram</a>
       <a onclick="showPage('blog')">Blog</a>
       <a onclick="showPage('terminos')">Términos</a>
       <a onclick="showPage('privacidad')">Privacidad</a>
     </div>
-    
-    <div class="footer-copyright">
-      © 2026 Borrado del Mapa. Todos los derechos reservados.
-    </div>
+    <div class="footer-copyright">© 2026 Borrado del Mapa. Todos los derechos reservados.</div>
   </div>
 </footer>
 
-<script>
-// v30.001 — ÚNICA fuente de verdad Firebase. Guarda anti-duplicate.
-const CURRENT_VER = "30.001 - FUEGO";
-const firebaseConfig = {
-  apiKey: "AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",
-  authDomain: "borradodelmapa-85257.firebaseapp.com",
-  projectId: "borradodelmapa-85257",
-  storageBucket: "borradodelmapa-85257.firebasestorage.app",
-  messagingSenderId: "833042338746",
-  appId: "1:833042338746:web:32b58e582488c6064d8383",
-  measurementId: "G-JZ00MFJEHB"
-};
-
-const WORKER_URL = "https://salma-api.paco-defoto.workers.dev";
-window.SALMA_API = "https://salma-api.paco-defoto.workers.dev";
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-const db = firebase.firestore();
-</script>
-<script src="app.js"></script>
 <script src="salma-chat.js"></script>
 <script src="utils.js"></script>
 </body>
