@@ -350,7 +350,8 @@ function renderMapsGrid(maps) {
     return 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=200&fit=crop&q=75';
   };
   let html = maps.map(m => {
-    const photo = destPhoto(m.destino || m.country || m.nombre || '');
+    const diasNum = typeof m.dias === 'number' ? m.dias : (Array.isArray(m.dias) ? m.dias.length : (m.days||0));
+const meta = diasNum + ' días · ' + (typeof (m.destino||m.country) === 'string' ? (m.destino||m.country||'Destino') : 'Destino');
     const name = (m.nombre || m.title || 'Mi ruta').replace(/</g,'&lt;');
     const meta = (m.dias||m.days||0) + ' días · ' + (m.destino||m.country||'Destino');
     const desc = m.desc ? m.desc.substring(0,80).replace(/</g,'&lt;') + (m.desc.length>80?'...':'') : '';
