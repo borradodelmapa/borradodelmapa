@@ -19,9 +19,18 @@ window.closeModal = closeModal;
 window.switchModal = switchModal;
 
 window.onload = function() {
+firebase.initializeApp({
+  apiKey: "AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",
+  authDomain: "borradodelmapa-85257.firebaseapp.com",
+  projectId: "borradodelmapa-85257",
+  storageBucket: "borradodelmapa-85257.firebasestorage.app",
+  messagingSenderId: "833042338746",
+  appId: "1:833042338746:web:32b58e582488c6064d8383"
+});
 const auth = firebase.auth();
 const db = firebase.firestore();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
+
 window._fbAuth = auth;
 window._fbDb = db;
 window._fbGoogleProvider = googleProvider;
@@ -350,8 +359,7 @@ function renderMapsGrid(maps) {
     return 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=200&fit=crop&q=75';
   };
   let html = maps.map(m => {
-    const diasNum = typeof m.dias === 'number' ? m.dias : (Array.isArray(m.dias) ? m.dias.length : (m.days||0));
-const meta = diasNum + ' días · ' + (typeof (m.destino||m.country) === 'string' ? (m.destino||m.country||'Destino') : 'Destino');
+    const photo = destPhoto(m.destino || m.country || m.nombre || '');
     const name = (m.nombre || m.title || 'Mi ruta').replace(/</g,'&lt;');
     const meta = (m.dias||m.days||0) + ' días · ' + (m.destino||m.country||'Destino');
     const desc = m.desc ? m.desc.substring(0,80).replace(/</g,'&lt;') + (m.desc.length>80?'...':'') : '';
