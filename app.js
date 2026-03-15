@@ -19,6 +19,14 @@ window.closeModal = closeModal;
 window.switchModal = switchModal;
 
 window.onload = function() {
+firebase.initializeApp({
+  apiKey: "AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",
+  authDomain: "borradodelmapa-85257.firebaseapp.com",
+  projectId: "borradodelmapa-85257",
+  storageBucket: "borradodelmapa-85257.firebasestorage.app",
+  messagingSenderId: "833042338746",
+  appId: "1:833042338746:web:32b58e582488c6064d8383"
+});
 const auth = firebase.auth();
 const db = firebase.firestore();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -119,6 +127,7 @@ auth.onAuthStateChanged(async (user) => {
         }
       }
       await loadUserMaps();
+      loadGlobalStats();
       const currentPage = document.querySelector('.page.active');
       if (!currentPage || currentPage.id === 'page-home') {
         showPage('dashboard');
@@ -130,6 +139,7 @@ auth.onAuthStateChanged(async (user) => {
     currentUser = null;
     isPremium = false;
     updateNavForGuest();
+    loadGlobalStats();
   }
 });
 
@@ -333,6 +343,53 @@ async function loadUserMaps() {
 }
 window.loadUserMaps = loadUserMaps;
 
+// ===== CONTADOR REAL DE RUTAS Y PAÍSES =====
+async function loadGlobalStats() {
+  try {
+    const statsDoc = await db.collection('stats').doc('global').get();
+    if (statsDoc.exists) {
+      const data = statsDoc.data();
+      const routesEl = document.getElementById('counter-routes');
+      const countriesEl = document.getElementById('counter-countries');
+      if (routesEl && data.totalRoutes) routesEl.textContent = data.totalRoutes;
+      if (countriesEl && data.totalCountries) countriesEl.textContent = data.totalCountries;
+    }
+  } catch(e) {
+    console.log('Stats not available yet');
+  }
+}
+
+async function incrementGlobalStats(country) {
+  try {
+    const statsRef = db.collection('stats').doc('global');
+    const statsDoc = await statsRef.get();
+    if (statsDoc.exists) {
+      const data = statsDoc.data();
+      const countries = data.countries || [];
+      const normalizedCountry = (country || '').toLowerCase().trim();
+      if (normalizedCountry && !countries.includes(normalizedCountry)) {
+        countries.push(normalizedCountry);
+      }
+      await statsRef.update({
+        totalRoutes: firebase.firestore.FieldValue.increment(1),
+        totalCountries: countries.length,
+        countries: countries
+      });
+    } else {
+      const countries = country ? [country.toLowerCase().trim()] : [];
+      await statsRef.set({
+        totalRoutes: 1,
+        totalCountries: countries.length,
+        countries: countries
+      });
+    }
+  } catch(e) {
+    console.log('Could not update stats:', e);
+  }
+}
+window.loadGlobalStats = loadGlobalStats;
+
+
 function renderMapsGrid(maps) {
   const grid = document.getElementById("maps-grid-dynamic");
   if (!grid) return;
@@ -353,8 +410,7 @@ function renderMapsGrid(maps) {
   let html = maps.map(m => {
     const photo = destPhoto(m.destino || m.country || m.nombre || '');
     const name = (m.nombre || m.title || 'Mi ruta').replace(/</g,'&lt;');
-    const diasNum = typeof m.dias === 'number' ? m.dias : (Array.isArray(m.dias) ? m.dias.length : (m.days||0));
-    const meta = diasNum + ' días · ' + (typeof m.destino === 'string' ? (m.destino||m.country||'Destino') : (typeof m.country === 'string' ? (m.country||'Destino') : 'Destino'));
+    const meta = (m.dias||m.days||0) + ' días · ' + (m.destino||m.country||'Destino');
     const desc = m.desc ? m.desc.substring(0,80).replace(/</g,'&lt;') + (m.desc.length>80?'...':'') : '';
     return `
     <div class="map-card" style="position:relative;cursor:pointer;overflow:hidden;" onclick="verRuta('${m.id}','${name.replace(/'/g,"\\'")}')">
