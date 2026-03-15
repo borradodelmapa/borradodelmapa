@@ -58,7 +58,31 @@
   </script>
 
   <!-- app.js en el head para que openModal esté disponible inmediatamente -->
-  <script src="app.js"></script>
+  <script>
+function openModal(view) {
+  var modal = document.getElementById("modal-auth");
+  if (modal) modal.classList.add("active");
+  if (view === "login") {
+    var l = document.getElementById("modal-login-view");
+    var r = document.getElementById("modal-register-view");
+    if (l) l.style.display = "block";
+    if (r) r.style.display = "none";
+  } else {
+    var l = document.getElementById("modal-login-view");
+    var r = document.getElementById("modal-register-view");
+    if (l) l.style.display = "none";
+    if (r) r.style.display = "block";
+  }
+}
+function closeModal() {
+  var modal = document.getElementById("modal-auth");
+  if (modal) modal.classList.remove("active");
+}
+function switchModal(view) { openModal(view); }
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.switchModal = switchModal;
+</script>
 </head>
 <body>
 
@@ -349,5 +373,6 @@
 
 <script src="salma-chat.js"></script>
 <script src="utils.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
