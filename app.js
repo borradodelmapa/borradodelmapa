@@ -647,28 +647,56 @@ function verRuta(id, nombre) {
 
     var typeIcons = {city:'🏙',town:'🏘',nature:'🌿',beach:'🏖',mountain:'⛰',temple:'🛕',viewpoint:'📸',route:'🛤',activity:'🎯',other:'📍'};
 
-    // Paradas HTML
+    // Paradas HTML (agrupadas por día, botón de ruta por día)
     var stopsHTML = '';
     if (pois.length > 0) {
+      var country = routeData && routeData.country ? ' ' + routeData.country : '';
+
+      var byDay = {};
+      pois.forEach(function(stop) {
+        var day = stop.day || 1;
+        if (!byDay[day]) byDay[day] = [];
+        byDay[day].push(stop);
+      });
+
+      var days = Object.keys(byDay).map(Number).sort(function(a,b) { return a-b; });
+
       stopsHTML = '<div style="margin-top:24px;">';
       stopsHTML += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:14px;">PARADAS (' + pois.length + ')</div>';
-      var country = routeData && routeData.country ? ' ' + routeData.country : '';
-      pois.forEach(function(stop) {
-        var icon = typeIcons[stop.type] || '📍';
-        var sname = (stop.name || '').replace(/</g,'&lt;');
-        var sdesc = (stop.description || stop.note || '').replace(/</g,'&lt;');
-        var day = stop.day ? 'Día ' + stop.day : '';
-        var mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((stop.name || stop.headline || '') + country);
-        stopsHTML += '<div style="display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid rgba(212,160,23,.1);">';
-        stopsHTML += '<div style="min-width:32px;text-align:center;"><span style="font-size:22px;">' + icon + '</span>';
-        if (day) stopsHTML += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:8px;color:var(--dorado);margin-top:3px;">' + day + '</div>';
+
+      days.forEach(function(day) {
+        var dayPois = byDay[day];
+
+        var dayRoute = '';
+        if (dayPois.length === 1) {
+          dayRoute = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((dayPois[0].name || '') + country);
+        } else {
+          dayRoute = 'https://www.google.com/maps/dir/' + dayPois.map(function(p) {
+            return encodeURIComponent((p.name || '') + country);
+          }).join('/');
+        }
+
+        stopsHTML += '<div style="display:flex;align-items:center;justify-content:space-between;margin:20px 0 10px;padding-bottom:8px;border-bottom:1px solid rgba(212,160,23,.2);">';
+        stopsHTML += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;">DÍA ' + day + '</div>';
+        stopsHTML += '<a href="' + dayRoute + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;background:var(--dorado);color:#0a0908;padding:6px 12px;border-radius:8px;text-decoration:none;letter-spacing:.1em;font-weight:700;">RUTA DÍA ' + day + ' →</a>';
         stopsHTML += '</div>';
-        stopsHTML += '<div style="flex:1;">';
-        stopsHTML += '<div style="font-size:16px;font-weight:600;color:#fff;margin-bottom:4px;">' + sname + '</div>';
-        if (sdesc) stopsHTML += '<div style="font-size:14px;color:rgba(245,240,232,.7);line-height:1.65;">' + sdesc + '</div>';
-        if (mapsUrl) stopsHTML += '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;margin-top:6px;display:inline-block;">VER EN MAPA →</a>';
-        stopsHTML += '</div></div>';
+
+        dayPois.forEach(function(stop) {
+          var icon = typeIcons[stop.type] || '📍';
+          var sname = (stop.name || '').replace(/</g,'&lt;');
+          var sdesc = (stop.description || stop.note || '').replace(/</g,'&lt;');
+          var stopUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((stop.name || stop.headline || '') + country);
+
+          stopsHTML += '<div style="display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid rgba(212,160,23,.06);">';
+          stopsHTML += '<div style="min-width:32px;text-align:center;"><span style="font-size:22px;">' + icon + '</span></div>';
+          stopsHTML += '<div style="flex:1;">';
+          stopsHTML += '<div style="font-size:16px;font-weight:600;color:#fff;margin-bottom:4px;">' + sname + '</div>';
+          if (sdesc) stopsHTML += '<div style="font-size:14px;color:rgba(245,240,232,.7);line-height:1.65;margin-bottom:6px;">' + sdesc + '</div>';
+          stopsHTML += '<a href="' + stopUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;">VER EN MAPA →</a>';
+          stopsHTML += '</div></div>';
+        });
       });
+
       stopsHTML += '</div>';
     }
 
@@ -705,10 +733,6 @@ function verRuta(id, nombre) {
     var summary = routeData && routeData.summary ? routeData.summary.replace(/</g,'&lt;') : '';
     var budget = routeData && routeData.budget_level && routeData.budget_level !== 'sin_definir' ? ' · ' + routeData.budget_level.toUpperCase() : '';
 
-    // Google Maps URL (búsqueda por nombre)
-    var countryForDir = routeData && routeData.country ? ' ' + routeData.country : '';
-    var gmapsUrl = pois.length > 0 ? 'https://www.google.com/maps/dir/' + pois.map(function(p) { return encodeURIComponent((p.name || '') + countryForDir); }).join('/') : '';
-
     // Descripción sin duplicados
     var descText = '';
     if (summary && r.desc && summary !== r.desc.replace(/</g,'&lt;')) {
@@ -725,9 +749,6 @@ function verRuta(id, nombre) {
       '<div style="padding:16px 24px 0;">' +
         '<div onclick="showPage(\'dashboard\')" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.12em;padding:8px 0;transition:opacity .2s;opacity:.8;" onmouseover="this.style.opacity=\'1\'" onmouseout="this.style.opacity=\'.8\'">← MIS RUTAS</div>' +
       '</div>' +
-      (gmapsUrl ? '<div style="margin:12px 0 0;padding:0 24px;">' +
-        '<a href="' + gmapsUrl + '" target="_blank" rel="noopener" style="display:inline-block;font-family:\'JetBrains Mono\',monospace;font-size:9px;background:rgba(10,10,9,.85);color:#d4a017;border:1px solid rgba(212,160,23,.3);border-radius:10px;padding:10px 16px;text-decoration:none;letter-spacing:.1em;">VER RUTA EN GOOGLE MAPS →</a>' +
-      '</div>' : '') +
       // Header
       '<div style="padding:24px 24px 0;">' +
         '<div style="font-family:\'Inter Tight\',sans-serif;font-size:28px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;">' + (r.nombre||'Mi ruta').replace(/</g,'&lt;') + '</div>' +
@@ -742,7 +763,6 @@ function verRuta(id, nombre) {
         textHTML +
         // Botones de acción
         '<div style="display:flex;gap:10px;margin-top:28px;padding-top:20px;border-top:1px solid rgba(212,160,23,.1);flex-wrap:wrap;">' +
-          (gmapsUrl ? '<a href="' + gmapsUrl + '" target="_blank" rel="noopener" style="flex:1;min-width:120px;text-align:center;background:var(--dorado);border:none;border-radius:12px;color:#0a0908;padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:10px;font-weight:700;text-decoration:none;letter-spacing:.12em;">ABRIR EN GOOGLE MAPS</a>' : '') +
           '<button onclick="editarRutaModal(\'' + id + '\')" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:12px;color:var(--dorado);padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;">EDITAR</button>' +
           '<button onclick="showPage(\'dashboard\')" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.1);border-radius:12px;color:rgba(245,240,232,.5);padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;">VOLVER</button>' +
         '</div>' +
