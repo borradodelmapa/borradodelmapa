@@ -19,6 +19,9 @@ window.closeModal = closeModal;
 window.switchModal = switchModal;
 
 window.onload = function() {
+const auth = firebase.auth();
+const db = firebase.firestore();
+const googleProvider = new firebase.auth.GoogleAuthProvider();
 window._fbAuth = auth;
 window._fbDb = db;
 window._fbGoogleProvider = googleProvider;
