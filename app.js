@@ -19,18 +19,6 @@ window.closeModal = closeModal;
 window.switchModal = switchModal;
 
 window.onload = function() {
-firebase.initializeApp({
-  apiKey: "AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",
-  authDomain: "borradodelmapa-85257.firebaseapp.com",
-  projectId: "borradodelmapa-85257",
-  storageBucket: "borradodelmapa-85257.firebasestorage.app",
-  messagingSenderId: "833042338746",
-  appId: "1:833042338746:web:32b58e582488c6064d8383"
-});
-const auth = firebase.auth();
-const db = firebase.firestore();
-const googleProvider = new firebase.auth.GoogleAuthProvider();
-
 window._fbAuth = auth;
 window._fbDb = db;
 window._fbGoogleProvider = googleProvider;
