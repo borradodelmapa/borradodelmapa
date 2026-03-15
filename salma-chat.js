@@ -287,66 +287,57 @@ function salmaRenderRoute(routeData) {
       routeData.tags.map(function(t) { return '<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;padding:5px 12px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:var(--dorado);">' + escapeHTML(t) + '</span>'; }).join('') + '</div>';
   }
 
-  // Stops — agrupados por día con botón de ruta por día
-  var byDay = {};
-  pois.forEach(function(stop) {
-    var day = stop.day || 1;
-    if (!byDay[day]) byDay[day] = [];
-    byDay[day].push(stop);
-  });
-  var days = Object.keys(byDay).map(Number).sort(function(a,b){ return a-b; });
+  // Stops — formato acordeón (enlace Google Maps por nombre para mayor precisión)
+  var stopsHTML = pois.map(function(stop, idx) {
+    var icon = typeIcons[stop.type] || '📍';
+    var day = stop.day ? 'DÍA ' + stop.day : '';
+    var headline = stop.headline || stop.name || '';
+    var mapsUrl = '';
+    if (headline && countryOrRegion) {
+      mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(headline + ' ' + countryOrRegion);
+    } else if (stop.lat && stop.lng) {
+      mapsUrl = 'https://www.google.com/maps?q=' + stop.lat + ',' + stop.lng;
+    }
+    var narrative = stop.narrative || stop.description || '';
+    var secret = stop.local_secret || '';
+    var alt = stop.alternative || '';
+    var practical = stop.practical || '';
+    var hasDetails = narrative || secret || alt || practical;
+    var stopId = 'salma-stop-' + idx;
 
-  var stopsHTML = days.map(function(day) {
-    var dayPois = byDay[day];
-    var dayRoute = dayPois.length === 1
-      ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((dayPois[0].headline || dayPois[0].name || '') + (countryOrRegion ? ' ' + countryOrRegion : ''))
-      : 'https://www.google.com/maps/dir/' + dayPois.map(function(p){ return encodeURIComponent((p.headline || p.name || '') + (countryOrRegion ? ' ' + countryOrRegion : '')); }).join('/');
+    // Preview text (primera línea del narrative)
+    var preview = narrative ? narrative.substring(0, 80).replace(/\s+\S*$/, '') + '...' : '';
 
-    var dayHeader = '<div style="display:flex;align-items:center;justify-content:space-between;margin:24px 0 10px;padding-bottom:8px;border-bottom:1px solid rgba(212,160,23,.2);">' +
-      '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--dorado);letter-spacing:.18em;font-weight:700;">DÍA ' + day + '</div>' +
-      '<a href="' + dayRoute + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;background:var(--dorado);color:#0a0908;padding:6px 12px;border-radius:8px;text-decoration:none;letter-spacing:.1em;font-weight:700;">RUTA DÍA ' + day + ' →</a>' +
-    '</div>';
-
-    var dayStops = dayPois.map(function(stop, idx) {
-      var icon = typeIcons[stop.type] || '📍';
-      var headline = stop.headline || stop.name || '';
-      var mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(headline + (countryOrRegion ? ' ' + countryOrRegion : ''));
-      var narrative = stop.narrative || stop.description || '';
-      var secret = stop.local_secret || '';
-      var alt = stop.alternative || '';
-      var practical = stop.practical || '';
-      var hasDetails = narrative || secret || alt || practical;
-      var stopId = 'salma-stop-' + day + '-' + idx;
-      var preview = narrative ? narrative.substring(0, 80).replace(/\s+\S*$/, '') + '...' : '';
-
-      return '<div style="border-bottom:1px solid rgba(212,160,23,.06);">' +
-        '<div onclick="salmaToggleStop(\'' + stopId + '\')" style="display:flex;gap:16px;padding:16px 0;cursor:pointer;" onmouseover="this.style.background=\'rgba(255,255,255,.02)\'" onmouseout="this.style.background=\'none\'">' +
-          '<div style="min-width:40px;text-align:center;"><span style="font-size:22px;">' + icon + '</span></div>' +
-          '<div style="flex:1;">' +
-            '<div style="font-family:\'Inter Tight\',sans-serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:4px;">' + escapeHTML(headline) + '</div>' +
-            (preview ? '<div style="font-size:13px;color:rgba(245,240,232,.5);line-height:1.5;">' + escapeHTML(preview) + '</div>' : '') +
-          '</div>' +
-          (hasDetails ? '<div style="flex-shrink:0;align-self:center;font-size:12px;color:var(--dorado);" id="' + stopId + '-arrow">▾</div>' : '') +
+    return '<div style="border-bottom:1px solid rgba(212,160,23,.1);">' +
+      // Header colapsado (siempre visible)
+      '<div onclick="salmaToggleStop(\'' + stopId + '\')" style="display:flex;gap:16px;padding:20px 0;cursor:pointer;transition:background .15s;" onmouseover="this.style.background=\'rgba(255,255,255,.02)\'" onmouseout="this.style.background=\'none\'">' +
+        '<div style="min-width:40px;text-align:center;">' +
+          '<span style="font-size:24px;">' + icon + '</span>' +
+          (day ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:8px;color:var(--dorado);margin-top:4px;letter-spacing:.1em;">' + day + '</div>' : '') +
         '</div>' +
-        (hasDetails ? '<div id="' + stopId + '" style="display:none;padding:0 0 16px 56px;">' +
-          (narrative ? '<div style="font-size:14px;color:rgba(245,240,232,.8);line-height:1.75;margin-bottom:12px;">' + escapeHTML(narrative) + '</div>' : '') +
-          (secret ? '<div style="background:rgba(212,160,23,.06);border-left:3px solid var(--dorado);padding:12px 16px;margin-bottom:10px;border-radius:0 10px 10px 0;">' +
-            '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.12em;margin-bottom:4px;">SECRETO LOCAL</div>' +
-            '<div style="font-size:13px;color:rgba(245,240,232,.75);line-height:1.6;">' + escapeHTML(secret) + '</div>' +
-          '</div>' : '') +
-          (alt ? '<div style="padding:8px 0;margin-bottom:10px;">' +
-            '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:rgba(245,240,232,.4);letter-spacing:.12em;margin-bottom:4px;">↗ ALTERNATIVA</div>' +
-            '<div style="font-size:13px;color:rgba(245,240,232,.6);line-height:1.6;">' + escapeHTML(alt) + '</div>' +
-          '</div>' : '') +
-          (practical ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:rgba(245,240,232,.55);line-height:1.8;padding:10px 14px;background:rgba(255,255,255,.02);border-radius:10px;margin-bottom:10px;">' +
-            '📋 ' + escapeHTML(practical) +
-          '</div>' : '') +
-          '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;">VER EN MAPA →</a>' +
+        '<div style="flex:1;">' +
+          '<div style="font-family:\'Inter Tight\',sans-serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.2;">' + escapeHTML(headline) + '</div>' +
+          (preview ? '<div style="font-size:14px;color:rgba(245,240,232,.5);line-height:1.5;">' + escapeHTML(preview) + '</div>' : '') +
+        '</div>' +
+        (hasDetails ? '<div style="flex-shrink:0;align-self:center;font-size:12px;color:var(--dorado);transition:transform .2s;" id="' + stopId + '-arrow">▾</div>' : '') +
+      '</div>' +
+      // Contenido expandible (oculto por defecto)
+      (hasDetails ? '<div id="' + stopId + '" style="display:none;padding:0 0 20px 56px;">' +
+        (narrative ? '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.75;margin-bottom:16px;">' + escapeHTML(narrative) + '</div>' : '') +
+        (secret ? '<div style="background:rgba(212,160,23,.06);border-left:3px solid var(--dorado);padding:12px 16px;margin-bottom:12px;border-radius:0 12px 12px 0;">' +
+          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.14em;margin-bottom:6px;">🔑 SECRETO LOCAL</div>' +
+          '<div style="font-size:14px;color:rgba(245,240,232,.75);line-height:1.6;">' + escapeHTML(secret) + '</div>' +
         '</div>' : '') +
-      '</div>';
-    }).join('');
-
-    return dayHeader + dayStops;
+        (alt ? '<div style="padding:10px 0;margin-bottom:12px;">' +
+          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:rgba(245,240,232,.4);letter-spacing:.12em;margin-bottom:4px;">↗ ALTERNATIVA</div>' +
+          '<div style="font-size:14px;color:rgba(245,240,232,.6);line-height:1.6;">' + escapeHTML(alt) + '</div>' +
+        '</div>' : '') +
+        (practical ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:rgba(245,240,232,.55);line-height:1.8;padding:10px 14px;background:rgba(255,255,255,.02);border-radius:10px;margin-bottom:12px;">' +
+          '📋 ' + escapeHTML(practical) +
+        '</div>' : '') +
+        (mapsUrl ? '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;letter-spacing:.1em;">VER EN MAPA →</a>' : '') +
+      '</div>' : '') +
+    '</div>';
   }).join('');
 
   // Tips
@@ -396,36 +387,9 @@ function salmaRenderRoute(routeData) {
     // Botones principales
     '<div style="display:flex;gap:12px;margin-top:16px;margin-bottom:24px;flex-wrap:wrap;">' +
       '<button id="salma-btn-guardar-ruta" onclick="salmaGuardarRuta()" style="flex:2;min-width:140px;background:var(--dorado);border:none;border-radius:14px;color:#0a0908;padding:16px;font-family:\'JetBrains Mono\',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;cursor:pointer;transition:background .2s;" onmouseover="if(!this.disabled)this.style.background=\'#e0b84a\'" onmouseout="this.style.background=\'#d4a017\'">GUARDAR MI RUTA</button>' +
-      (gmapsUrl ? '<a href="' + gmapsUrl + '" target="_blank" rel="noopener" style="flex:1;min-width:120px;text-align:center;background:transparent;border:1px solid rgba(212,160,23,.25);border-radius:14px;color:var(--dorado);padding:16px;font-family:\'JetBrains Mono\',monospace;font-size:10px;text-decoration:none;letter-spacing:.12em;display:flex;align-items:center;justify-content:center;">GOOGLE MAPS</a>' : '') +
       '<button onclick="salmaReset()" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.1);border-radius:14px;color:rgba(245,240,232,.5);padding:16px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;">NUEVA RUTA</button>' +
     '</div>' +
-    // Mapa debajo de la ruta (posiciones ya verificadas/enriquecidas antes de renderizar)
-    (hasMapData ? '<div style="margin-top:24px;position:relative;">' +
-      '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.14em;margin-bottom:10px;">MAPA DE LA RUTA</div>' +
-      '<div id="salma-route-map" style="width:100%;height:380px;background:#0a0a09;border-radius:18px;border:1px solid rgba(212,160,23,.12);"></div>' +
-      (gmapsUrl ? '<a href="' + gmapsUrl + '" target="_blank" rel="noopener" style="position:absolute;bottom:14px;left:14px;z-index:500;font-family:\'JetBrains Mono\',monospace;font-size:9px;background:rgba(10,10,9,.85);color:#d4a017;border:1px solid rgba(212,160,23,.3);border-radius:10px;padding:10px 16px;text-decoration:none;letter-spacing:.1em;backdrop-filter:blur(4px);">VER RUTA EN GOOGLE MAPS →</a>' : '') +
-    '</div>' : '');
-
-  // Mapa Leaflet
-  if (hasMapData) {
-    setTimeout(function() {
-      var mapEl = document.getElementById('salma-route-map');
-      if (!mapEl || mapEl._leaflet_id) return;
-      var coords = pois.filter(function(p) { return p.lat && p.lng; }).map(function(p) { return [p.lat, p.lng]; });
-      var routeMap = L.map('salma-route-map', { zoomControl: false, scrollWheelZoom: true }).setView(coords[0], 6);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(routeMap);
-      L.polyline(coords, { color: '#d4a017', weight: 2.5, opacity: .8, dashArray: '8,6' }).addTo(routeMap);
-      pois.filter(function(p) { return p.lat && p.lng; }).forEach(function(p) {
-        var markerIcon = L.divIcon({
-          html: '<div style="background:#d4a017;border-radius:50%;width:12px;height:12px;box-shadow:0 0 0 3px rgba(212,160,23,.3);"></div>',
-          className: '', iconSize: [12,12], iconAnchor: [6,6]
-        });
-        L.marker([p.lat, p.lng], { icon: markerIcon }).addTo(routeMap)
-          .bindTooltip(p.name || '', { permanent: false, direction: 'top' });
-      });
-      if (coords.length > 1) routeMap.fitBounds(coords, { padding: [40, 40] });
-    }, 200);
-  }
+    '';
 
   window._salmaLastRoute = routeData;
 }
