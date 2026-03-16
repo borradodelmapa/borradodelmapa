@@ -797,8 +797,8 @@ function salmaGuardarRuta() {
     dias: diasCanonico,
     hotel_base: null,
     notas: (notasRuta || '').toString(),
-    updated_at: FieldValue.serverTimestamp(),
-    createdAt: FieldValue.serverTimestamp(),
+    updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     published: false,
     itinerarioIA: JSON.stringify(itinerarioCompleto)
   };
