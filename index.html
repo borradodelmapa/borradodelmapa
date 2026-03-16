@@ -279,7 +279,37 @@
   <div style="max-width:860px;margin:0 auto;padding:40px 24px 0;">...</div>
 </div>
 
-<div class="modal-overlay" id="modal-auth">...</div>
+<div class="modal-overlay" id="modal-auth">
+  <div style="background:#111;border:1px solid rgba(212,160,23,.2);border-radius:20px;padding:36px;max-width:420px;width:100%;margin:auto;position:relative;" onclick="event.stopPropagation()">
+    <div onclick="closeModal()" style="position:absolute;top:16px;right:20px;cursor:pointer;color:rgba(245,240,232,.4);font-size:20px;line-height:1;">✕</div>
+    <div id="modal-login-view">
+      <div style="font-family:'Inter Tight',sans-serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:6px;">Bienvenido de vuelta</div>
+      <div style="font-size:13px;color:rgba(245,240,232,.5);margin-bottom:24px;">Accede a tus rutas guardadas</div>
+      <label class="form-label">Email</label>
+      <input class="form-input" id="login-email" type="email" placeholder="tu@email.com" autocomplete="email">
+      <label class="form-label">Contraseña</label>
+      <input class="form-input" id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+      <div class="form-error" id="login-error"></div>
+      <button onclick="doLogin()" style="width:100%;background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:15px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;cursor:pointer;margin-top:8px;margin-bottom:16px;">ENTRAR →</button>
+      <button onclick="doSocialLogin()" style="width:100%;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:14px;padding:13px;font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(245,240,232,.7);cursor:pointer;margin-bottom:20px;letter-spacing:.1em;">🔵 CONTINUAR CON GOOGLE</button>
+      <div style="text-align:center;font-size:13px;color:rgba(245,240,232,.4);">¿No tienes cuenta? <span onclick="switchModal('register')" style="color:var(--dorado);cursor:pointer;font-weight:600;">Regístrate gratis</span></div>
+    </div>
+    <div id="modal-register-view" style="display:none;">
+      <div style="font-family:'Inter Tight',sans-serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:6px;">Crea tu cuenta</div>
+      <div style="font-size:13px;color:rgba(245,240,232,.5);margin-bottom:24px;">Guarda tus rutas y accede desde cualquier lugar</div>
+      <label class="form-label">Nombre</label>
+      <input class="form-input" id="reg-name" type="text" placeholder="Tu nombre" autocomplete="name">
+      <label class="form-label">Email</label>
+      <input class="form-input" id="reg-email" type="email" placeholder="tu@email.com" autocomplete="email">
+      <label class="form-label">Contraseña</label>
+      <input class="form-input" id="reg-pass" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+      <div class="form-error" id="register-error"></div>
+      <button onclick="doRegister()" style="width:100%;background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:15px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;cursor:pointer;margin-top:8px;margin-bottom:16px;">CREAR CUENTA →</button>
+      <button onclick="doSocialLogin()" style="width:100%;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:14px;padding:13px;font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(245,240,232,.7);cursor:pointer;margin-bottom:20px;letter-spacing:.1em;">🔵 CONTINUAR CON GOOGLE</button>
+      <div style="text-align:center;font-size:13px;color:rgba(245,240,232,.4);">¿Ya tienes cuenta? <span onclick="switchModal('login')" style="color:var(--dorado);cursor:pointer;font-weight:600;">Inicia sesión</span></div>
+    </div>
+  </div>
+</div>
 <div class="poi-modal" id="poi-modal">...</div>
 <div id="modal-editar-ruta" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:10000;align-items:center;justify-content:center;padding:24px;overflow-y:auto;backdrop-filter:blur(6px);" onclick="if(event.target===this)this.style.display='none'"></div>
 <div class="toast" id="toast"></div>
