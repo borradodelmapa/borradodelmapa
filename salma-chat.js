@@ -250,22 +250,6 @@ function salmaMergeRoute(existing, incoming) {
   return merged;
 }
 
-// ===== HELPER: SECCIÓN COLAPSABLE =====
-function salmaSection(id, icon, label, contentHTML) {
-  return '<div style="margin-top:12px;border:1px solid rgba(212,160,23,.12);border-radius:16px;overflow:hidden;">' +
-    '<div onclick="salmaToggleSection(\'' + id + '\')" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;background:rgba(255,255,255,.02);" onmouseover="this.style.background=\'rgba(255,255,255,.04)\'" onmouseout="this.style.background=\'rgba(255,255,255,.02)\'">' +
-      '<div style="display:flex;align-items:center;gap:10px;">' +
-        '<span style="font-size:18px;">' + icon + '</span>' +
-        '<span style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;font-weight:700;">' + label + '</span>' +
-      '</div>' +
-      '<span style="font-size:12px;color:var(--dorado);" id="' + id + '-arrow">▾</span>' +
-    '</div>' +
-    '<div id="' + id + '" style="display:none;padding:16px 20px;border-top:1px solid rgba(212,160,23,.08);">' +
-      contentHTML +
-    '</div>' +
-  '</div>';
-}
-
 // ===== RENDERIZAR RUTA A PANTALLA COMPLETA =====
 function salmaRenderRoute(routeData) {
   var result = document.getElementById('salma-route-result');
@@ -273,233 +257,122 @@ function salmaRenderRoute(routeData) {
 
   var typeIcons = {city:'🏙',town:'🏘',nature:'🌿',beach:'🏖',mountain:'⛰',temple:'🛕',viewpoint:'📸',route:'🛤',activity:'🎯',other:'📍'};
   var pois = routeData.stops;
+  var hasMapData = pois.some(function(p) { return p.lat && p.lng; });
+
   var countryOrRegion = (routeData.country || routeData.region || '').toString().trim();
-
-  // Validar coordenadas — solo paradas con coords reales (no 0,0)
-  var validCoordPois = pois.filter(function(p) {
-    var lat = Number(p.lat), lng = Number(p.lng);
-    return lat && lng && !isNaN(lat) && !isNaN(lng) && Math.abs(lat) > 0.01 && Math.abs(lng) > 0.01;
-  });
-  var hasMapData = validCoordPois.length >= 2;
-
-  // ===== DÍAS AGRUPADOS EN ACORDEÓN =====
-  var byDay = {};
-  pois.forEach(function(stop) {
-    var d = stop.day || 1;
-    if (!byDay[d]) byDay[d] = [];
-    byDay[d].push(stop);
-  });
-  var days = Object.keys(byDay).map(Number).sort(function(a,b){ return a-b; });
-
-  var stopsHTML = days.map(function(day) {
-    var dayPois = byDay[day];
-    var dayRoute = dayPois.length === 1
-      ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((dayPois[0].headline || dayPois[0].name || '') + (countryOrRegion ? ' ' + countryOrRegion : ''))
-      : 'https://www.google.com/maps/dir/' + dayPois.map(function(p){ return encodeURIComponent((p.headline || p.name || '') + (countryOrRegion ? ' ' + countryOrRegion : '')); }).join('/');
-
-    var dayHeader = '<div style="display:flex;align-items:center;justify-content:space-between;margin:24px 0 10px;padding-bottom:8px;border-bottom:1px solid rgba(212,160,23,.2);">' +
-      '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--dorado);letter-spacing:.18em;font-weight:700;">DÍA ' + day + '</div>' +
-      '<a href="' + dayRoute + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;background:var(--dorado);color:#0a0908;padding:6px 12px;border-radius:8px;text-decoration:none;letter-spacing:.1em;font-weight:700;">RUTA DÍA ' + day + ' →</a>' +
-    '</div>';
-
-    var dayStops = dayPois.map(function(stop, idx) {
-      var icon = typeIcons[stop.type] || '📍';
-      var headline = stop.headline || stop.name || '';
-      var mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(headline + (countryOrRegion ? ' ' + countryOrRegion : ''));
-      var narrative = stop.narrative || stop.description || '';
-      var secret = stop.local_secret || '';
-      var practical = stop.practical || '';
-      var hasDetails = narrative || secret || practical;
-      var stopId = 'salma-stop-' + day + '-' + idx;
-      var preview = narrative ? narrative.substring(0, 90).replace(/\s+\S*$/, '') + '...' : '';
-
-      return '<div style="border-bottom:1px solid rgba(212,160,23,.06);">' +
-        '<div onclick="salmaToggleStop(\'' + stopId + '\')" style="display:flex;gap:14px;padding:14px 0;cursor:pointer;" onmouseover="this.style.background=\'rgba(255,255,255,.02)\'" onmouseout="this.style.background=\'none\'">' +
-          '<div style="min-width:36px;text-align:center;padding-top:2px;"><span style="font-size:20px;">' + icon + '</span></div>' +
-          '<div style="flex:1;">' +
-            '<div style="font-family:\'Inter Tight\',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:3px;">' + escapeHTML(headline) + '</div>' +
-            (preview ? '<div style="font-size:13px;color:rgba(245,240,232,.45);line-height:1.5;">' + escapeHTML(preview) + '</div>' : '') +
-          '</div>' +
-          (hasDetails ? '<div style="flex-shrink:0;align-self:center;font-size:11px;color:var(--dorado);" id="' + stopId + '-arrow">▾</div>' : '') +
-        '</div>' +
-        (hasDetails ? '<div id="' + stopId + '" style="display:none;padding:0 0 14px 50px;">' +
-          (narrative ? '<div style="font-size:14px;color:rgba(245,240,232,.8);line-height:1.75;margin-bottom:12px;">' + escapeHTML(narrative) + '</div>' : '') +
-          (secret ? '<div style="background:rgba(212,160,23,.06);border-left:3px solid var(--dorado);padding:10px 14px;margin-bottom:10px;border-radius:0 10px 10px 0;">' +
-            '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.12em;margin-bottom:4px;">🔑 SECRETO LOCAL</div>' +
-            '<div style="font-size:13px;color:rgba(245,240,232,.75);line-height:1.6;">' + escapeHTML(secret) + '</div>' +
-          '</div>' : '') +
-          (practical ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:rgba(245,240,232,.5);line-height:1.8;padding:8px 12px;background:rgba(255,255,255,.02);border-radius:10px;margin-bottom:10px;">📋 ' + escapeHTML(practical) + '</div>' : '') +
-          '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;letter-spacing:.1em;">VER EN MAPA →</a>' +
-        '</div>' : '') +
-      '</div>';
-    }).join('');
-
-    return dayHeader + dayStops;
-  }).join('');
-
-  // ===== SECCIÓN CONSEJOS (colapsable) =====
-  var tipsContent = '';
-  if (routeData.tips && routeData.tips.length > 0) {
-    tipsContent = routeData.tips.map(function(tip) {
-      return '<div style="font-size:14px;color:rgba(245,240,232,.75);line-height:1.7;margin-bottom:10px;padding-left:12px;border-left:2px solid rgba(212,160,23,.3);">• ' + escapeHTML(tip) + '</div>';
-    }).join('');
+  // Google Maps: usar nombres de lugar para enlaces más precisos
+  var gmapsUrl = '';
+  if (hasMapData) {
+    var gmapsPois = pois.filter(function(p) { return p.lat && p.lng; });
+    if (gmapsPois.length >= 2) {
+      var name0 = (gmapsPois[0].headline || gmapsPois[0].name || '').toString().trim();
+      var nameLast = (gmapsPois[gmapsPois.length - 1].headline || gmapsPois[gmapsPois.length - 1].name || '').toString().trim();
+      var origin = (name0 && countryOrRegion) ? encodeURIComponent(name0 + ' ' + countryOrRegion) : (gmapsPois[0].lat + ',' + gmapsPois[0].lng);
+      var dest = (nameLast && countryOrRegion) ? encodeURIComponent(nameLast + ' ' + countryOrRegion) : (gmapsPois[gmapsPois.length - 1].lat + ',' + gmapsPois[gmapsPois.length - 1].lng);
+      var waypoints = gmapsPois.slice(1, -1).map(function(p) {
+        var n = (p.headline || p.name || '').toString().trim();
+        return n && countryOrRegion ? encodeURIComponent(n + ' ' + countryOrRegion) : (p.lat + ',' + p.lng);
+      }).join('|');
+      gmapsUrl = 'https://www.google.com/maps/dir/?api=1&origin=' + origin + '&destination=' + dest + (waypoints ? '&waypoints=' + waypoints : '') + '&travelmode=driving';
+    } else {
+      var n0 = (gmapsPois[0].headline || gmapsPois[0].name || '').toString().trim();
+      gmapsUrl = (n0 && countryOrRegion) ? ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(n0 + ' ' + countryOrRegion)) : ('https://www.google.com/maps?q=' + gmapsPois[0].lat + ',' + gmapsPois[0].lng);
+    }
   }
 
-  // ===== SECCIÓN ALOJAMIENTO (colapsable) =====
-  var accommodationContent = '';
-  if (routeData.accommodation && routeData.accommodation.length > 0) {
-    accommodationContent = routeData.accommodation.map(function(a) {
-      return '<div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid rgba(212,160,23,.08);">' +
-        '<div style="font-family:\'Inter Tight\',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:4px;">' + escapeHTML(a.name || '') + '</div>' +
-        (a.neighborhood ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;margin-bottom:6px;">' + escapeHTML(a.neighborhood) + (a.price_per_night ? ' · ' + escapeHTML(a.price_per_night) : '') + '</div>' : '') +
-        (a.why ? '<div style="font-size:13px;color:rgba(245,240,232,.7);line-height:1.6;margin-bottom:6px;">' + escapeHTML(a.why) + '</div>' : '') +
-        (a.booking_tip ? '<div style="font-size:12px;color:rgba(245,240,232,.45);line-height:1.5;">💡 ' + escapeHTML(a.booking_tip) + '</div>' : '') +
-      '</div>';
-    }).join('');
-  }
-
-  // ===== SECCIÓN TRANSPORTE (colapsable) =====
-  var transportContent = '';
-  if (routeData.transport) {
-    var t = routeData.transport;
-    transportContent =
-      (t.airport_taxi ? '<div style="margin-bottom:10px;"><span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);">AEROPUERTO</span><div style="font-size:13px;color:rgba(245,240,232,.75);margin-top:4px;">' + escapeHTML(t.airport_taxi) + '</div></div>' : '') +
-      (t.local_taxi_app ? '<div style="margin-bottom:10px;"><span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);">TAXI / MOVILIDAD</span><div style="font-size:13px;color:rgba(245,240,232,.75);margin-top:4px;">' + escapeHTML(t.local_taxi_app) + '</div></div>' : '') +
-      (t.rental ? '<div style="margin-bottom:10px;"><span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);">ALQUILER</span><div style="font-size:13px;color:rgba(245,240,232,.75);margin-top:4px;">' + escapeHTML(t.rental) + '</div></div>' : '') +
-      (t.driving_tips ? '<div style="margin-bottom:10px;"><span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);">CONDUCCIÓN</span><div style="font-size:13px;color:rgba(245,240,232,.75);margin-top:4px;">' + escapeHTML(t.driving_tips) + '</div></div>' : '') +
-      (t.useful_apps && t.useful_apps.length > 0 ? '<div><span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);">APPS ÚTILES</span><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">' + t.useful_apps.map(function(a){ return '<span style="font-size:12px;padding:4px 10px;background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.2);border-radius:8px;color:rgba(245,240,232,.7);">' + escapeHTML(a) + '</span>'; }).join('') + '</div></div>' : '');
-  }
-
-  // ===== SECCIÓN PRECIOS (colapsable) =====
-  var pricesContent = '';
-  if (routeData.prices) {
-    var p = routeData.prices;
-    var priceItems = [
-      {label:'Comida callejera', val:p.street_food},
-      {label:'Restaurante medio', val:p.mid_restaurant},
-      {label:'Cerveza local', val:p.local_beer},
-      {label:'Café', val:p.coffee},
-      {label:'Alojamiento', val:p.accommodation_range},
-      {label:'Presupuesto bajo/día', val:p.daily_budget_low},
-      {label:'Presupuesto medio/día', val:p.daily_budget_mid},
-      {label:'Presupuesto alto/día', val:p.daily_budget_high},
-    ].filter(function(i){ return i.val; });
-    pricesContent = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
-      priceItems.map(function(i) {
-        return '<div style="padding:10px;background:rgba(255,255,255,.02);border-radius:10px;">' +
-          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:rgba(245,240,232,.4);letter-spacing:.1em;margin-bottom:4px;">' + escapeHTML(i.label).toUpperCase() + '</div>' +
-          '<div style="font-size:14px;font-weight:700;color:#fff;">' + escapeHTML(i.val) + '</div>' +
-        '</div>';
-      }).join('') +
-    '</div>';
-  }
-
-  // ===== SECCIÓN CULTURA (colapsable) =====
-  var cultureContent = '';
-  if (routeData.culture) {
-    var c = routeData.culture;
-    cultureContent =
-      (c.context ? '<div style="font-size:14px;color:rgba(245,240,232,.75);line-height:1.7;margin-bottom:14px;">' + escapeHTML(c.context) + '</div>' : '') +
-      (c.customs && c.customs.length > 0 ? '<div style="margin-bottom:14px;"><div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.12em;margin-bottom:8px;">COSTUMBRES</div>' + c.customs.map(function(x){ return '<div style="font-size:13px;color:rgba(245,240,232,.7);margin-bottom:6px;">✓ ' + escapeHTML(x) + '</div>'; }).join('') + '</div>' : '') +
-      (c.do_not && c.do_not.length > 0 ? '<div style="margin-bottom:14px;"><div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:#f87171;letter-spacing:.12em;margin-bottom:8px;">EVITAR</div>' + c.do_not.map(function(x){ return '<div style="font-size:13px;color:rgba(245,240,232,.7);margin-bottom:6px;">✗ ' + escapeHTML(x) + '</div>'; }).join('') + '</div>' : '') +
-      (c.useful_phrases && c.useful_phrases.length > 0 ? '<div><div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.12em;margin-bottom:8px;">FRASES ÚTILES</div>' + c.useful_phrases.map(function(x){ return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(212,160,23,.06);"><div><div style="font-size:14px;font-weight:700;color:#fff;">' + escapeHTML(x.phrase || '') + '</div><div style="font-size:11px;color:rgba(245,240,232,.4);">' + escapeHTML(x.pronunciation || '') + '</div></div><div style="font-size:12px;color:var(--dorado);">' + escapeHTML(x.meaning || '') + '</div></div>'; }).join('') + '</div>' : '');
-  }
-
-  // ===== SECCIÓN EMERGENCIAS (colapsable) =====
-  var emergencyContent = '';
-  if (routeData.emergency) {
-    var e = routeData.emergency;
-    emergencyContent =
-      (e.emergency_number ? '<div style="margin-bottom:12px;padding:12px;background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);border-radius:10px;"><div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:#f87171;letter-spacing:.12em;margin-bottom:4px;">EMERGENCIAS</div><div style="font-size:14px;font-weight:700;color:#fff;">' + escapeHTML(e.emergency_number) + '</div></div>' : '') +
-      (e.reference_hospital ? '<div style="margin-bottom:10px;"><div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;margin-bottom:4px;">HOSPITAL</div><div style="font-size:13px;color:rgba(245,240,232,.75);">' + escapeHTML(e.reference_hospital) + '</div></div>' : '') +
-      (e.spanish_embassy ? '<div style="margin-bottom:10px;"><div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;margin-bottom:4px;">EMBAJADA ESPAÑOLA</div><div style="font-size:13px;color:rgba(245,240,232,.75);">' + escapeHTML(e.spanish_embassy) + '</div></div>' : '') +
-      (e.if_stolen ? '<div style="margin-bottom:10px;"><div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;margin-bottom:4px;">SI TE ROBAN</div><div style="font-size:13px;color:rgba(245,240,232,.75);">' + escapeHTML(e.if_stolen) + '</div></div>' : '') +
-      (e.recommended_insurance ? '<div><div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;margin-bottom:4px;">SEGURO RECOMENDADO</div><div style="font-size:13px;color:rgba(245,240,232,.75);">' + escapeHTML(e.recommended_insurance) + '</div></div>' : '');
-  }
-
-  // ===== TAGS =====
+  // Tags
   var tagsHTML = '';
   if (routeData.tags && routeData.tags.length > 0) {
     tagsHTML = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;">' +
-      routeData.tags.map(function(t) { return '<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;padding:4px 10px;border:1px solid rgba(212,160,23,.2);border-radius:999px;color:var(--dorado);">' + escapeHTML(t) + '</span>'; }).join('') + '</div>';
+      routeData.tags.map(function(t) { return '<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;padding:5px 12px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:var(--dorado);">' + escapeHTML(t) + '</span>'; }).join('') + '</div>';
+  }
+
+  // Stops — formato acordeón (enlace Google Maps por nombre para mayor precisión)
+  var stopsHTML = pois.map(function(stop, idx) {
+    var icon = typeIcons[stop.type] || '📍';
+    var day = stop.day ? 'DÍA ' + stop.day : '';
+    var headline = stop.headline || stop.name || '';
+    var mapsUrl = '';
+    if (headline && countryOrRegion) {
+      mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(headline + ' ' + countryOrRegion);
+    } else if (stop.lat && stop.lng) {
+      mapsUrl = 'https://www.google.com/maps?q=' + stop.lat + ',' + stop.lng;
+    }
+    var narrative = stop.narrative || stop.description || '';
+    var secret = stop.local_secret || '';
+    var alt = stop.alternative || '';
+    var practical = stop.practical || '';
+    var hasDetails = narrative || secret || alt || practical;
+    var stopId = 'salma-stop-' + idx;
+
+    // Preview text (primera línea del narrative)
+    var preview = narrative ? narrative.substring(0, 80).replace(/\s+\S*$/, '') + '...' : '';
+
+    return '<div style="border-bottom:1px solid rgba(212,160,23,.1);">' +
+      // Header colapsado (siempre visible)
+      '<div onclick="salmaToggleStop(\'' + stopId + '\')" style="display:flex;gap:16px;padding:20px 0;cursor:pointer;transition:background .15s;" onmouseover="this.style.background=\'rgba(255,255,255,.02)\'" onmouseout="this.style.background=\'none\'">' +
+        '<div style="min-width:40px;text-align:center;">' +
+          '<span style="font-size:24px;">' + icon + '</span>' +
+          (day ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:8px;color:var(--dorado);margin-top:4px;letter-spacing:.1em;">' + day + '</div>' : '') +
+        '</div>' +
+        '<div style="flex:1;">' +
+          '<div style="font-family:\'Inter Tight\',sans-serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.2;">' + escapeHTML(headline) + '</div>' +
+          (preview ? '<div style="font-size:14px;color:rgba(245,240,232,.5);line-height:1.5;">' + escapeHTML(preview) + '</div>' : '') +
+        '</div>' +
+        (hasDetails ? '<div style="flex-shrink:0;align-self:center;font-size:12px;color:var(--dorado);transition:transform .2s;" id="' + stopId + '-arrow">▾</div>' : '') +
+      '</div>' +
+      // Contenido expandible (oculto por defecto)
+      (hasDetails ? '<div id="' + stopId + '" style="display:none;padding:0 0 20px 56px;">' +
+        (narrative ? '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.75;margin-bottom:16px;">' + escapeHTML(narrative) + '</div>' : '') +
+        (secret ? '<div style="background:rgba(212,160,23,.06);border-left:3px solid var(--dorado);padding:12px 16px;margin-bottom:12px;border-radius:0 12px 12px 0;">' +
+          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.14em;margin-bottom:6px;">🔑 SECRETO LOCAL</div>' +
+          '<div style="font-size:14px;color:rgba(245,240,232,.75);line-height:1.6;">' + escapeHTML(secret) + '</div>' +
+        '</div>' : '') +
+        (alt ? '<div style="padding:10px 0;margin-bottom:12px;">' +
+          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:rgba(245,240,232,.4);letter-spacing:.12em;margin-bottom:4px;">↗ ALTERNATIVA</div>' +
+          '<div style="font-size:14px;color:rgba(245,240,232,.6);line-height:1.6;">' + escapeHTML(alt) + '</div>' +
+        '</div>' : '') +
+        (practical ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:rgba(245,240,232,.55);line-height:1.8;padding:10px 14px;background:rgba(255,255,255,.02);border-radius:10px;margin-bottom:12px;">' +
+          '📋 ' + escapeHTML(practical) +
+        '</div>' : '') +
+        (mapsUrl ? '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;letter-spacing:.1em;">VER EN MAPA →</a>' : '') +
+      '</div>' : '') +
+    '</div>';
+  }).join('');
+
+  // Tips
+  var tipsHTML = '';
+  if (routeData.tips && routeData.tips.length > 0) {
+    tipsHTML = '<div style="margin-top:28px;padding:24px;background:rgba(255,255,255,.02);border:1px solid rgba(212,160,23,.12);border-radius:18px;">' +
+      '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:12px;">CONSEJOS DE SALMA</div>' +
+      routeData.tips.map(function(tip) { return '<div style="font-size:14px;color:rgba(245,240,232,.7);line-height:1.7;margin-bottom:8px;">• ' + escapeHTML(tip) + '</div>'; }).join('') +
+    '</div>';
   }
 
   var budget = routeData.budget_level && routeData.budget_level !== 'sin_definir' ? ' · ' + routeData.budget_level.toUpperCase() : '';
-  var uniqueId = Date.now();
 
   result.style.display = 'block';
   var heroEl = document.querySelector('.hero');
   if (heroEl) heroEl.classList.add('hero-has-route');
-
+  // Orden: primero la ruta (texto e itinerario), al final el mapa debajo
   result.innerHTML =
     // Header
-    '<div style="font-family:\'Inter Tight\',sans-serif;font-size:30px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;margin-bottom:8px;">' + escapeHTML(routeData.title || 'Tu ruta') + '</div>' +
-    '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-bottom:14px;">' + (routeData.duration_days || days.length || 0) + ' DÍAS · ' + escapeHTML((routeData.country || '').toUpperCase()) + budget + ' · ' + pois.length + ' PARADAS</div>' +
-    (routeData.summary ? '<div style="font-size:15px;color:rgba(245,240,232,.75);line-height:1.7;margin-bottom:16px;">' + escapeHTML(routeData.summary) + '</div>' : '') +
+    '<div style="font-family:\'Inter Tight\',sans-serif;font-size:32px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;margin-bottom:8px;">' + escapeHTML(routeData.title || 'Tu ruta') + '</div>' +
+    '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-bottom:16px;">' + (routeData.duration_days || 0) + ' DÍAS · ' + escapeHTML((routeData.country || '').toUpperCase()) + budget + ' · ' + pois.length + ' PARADAS</div>' +
+    (routeData.summary ? '<div style="font-size:16px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:20px;">' + escapeHTML(routeData.summary) + '</div>' : '') +
     tagsHTML +
-
-    // Mapa Leaflet (solo si hay coords válidas)
-    (hasMapData ? '<div id="salma-map-wrap-' + uniqueId + '" style="margin-bottom:20px;border-radius:16px;overflow:hidden;border:1px solid rgba(212,160,23,.15);">' +
-      '<div id="salma-route-map-' + uniqueId + '" style="width:100%;height:260px;background:#0a0a09;"></div>' +
-    '</div>' : '') +
-
-    // Itinerario por días
+    // Stops (itinerario primero)
     '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:4px;">ITINERARIO · ' + pois.length + ' EXPERIENCIAS</div>' +
     stopsHTML +
-
-    // Secciones colapsables
-    (tipsContent ? salmaSection('salma-sec-tips-' + uniqueId, '💡', 'CONSEJOS DE VIAJE', tipsContent) : '') +
-    (accommodationContent ? salmaSection('salma-sec-hotel-' + uniqueId, '🏨', 'DÓNDE ALOJARSE', accommodationContent) : '') +
-    (transportContent ? salmaSection('salma-sec-transport-' + uniqueId, '🚗', 'CÓMO MOVERSE', transportContent) : '') +
-    (pricesContent ? salmaSection('salma-sec-prices-' + uniqueId, '💰', 'PRECIOS Y PRESUPUESTO', pricesContent) : '') +
-    (cultureContent ? salmaSection('salma-sec-culture-' + uniqueId, '📖', 'HISTORIA Y CULTURA', cultureContent) : '') +
-    (emergencyContent ? salmaSection('salma-sec-emergency-' + uniqueId, '🆘', 'SI ALGO SALE MAL', emergencyContent) : '') +
-
+    tipsHTML +
     // Botones principales
     '<div style="display:flex;gap:12px;margin-top:28px;margin-bottom:24px;flex-wrap:wrap;">' +
       '<button id="salma-btn-guardar-ruta" onclick="salmaGuardarRuta()" style="flex:2;min-width:140px;background:var(--dorado);border:none;border-radius:14px;color:#0a0908;padding:16px;font-family:\'JetBrains Mono\',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;cursor:pointer;transition:background .2s;" onmouseover="if(!this.disabled)this.style.background=\'#e0b84a\'" onmouseout="this.style.background=\'#d4a017\'">GUARDAR MI RUTA</button>' +
       '<button onclick="salmaReset()" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.1);border-radius:14px;color:rgba(245,240,232,.5);padding:16px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;">NUEVA RUTA</button>' +
-    '</div>';
-
-  // Inicializar mapa Leaflet si hay coords válidas
-  if (hasMapData) {
-    setTimeout(function() {
-      var mapEl = document.getElementById('salma-route-map-' + uniqueId);
-      if (!mapEl || mapEl._leaflet_id) return;
-      if (typeof L === 'undefined') return;
-      var coords = validCoordPois.map(function(p) { return [p.lat, p.lng]; });
-      var routeMap = L.map('salma-route-map-' + uniqueId, { zoomControl: true, scrollWheelZoom: false }).setView(coords[0], 7);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(routeMap);
-      if (coords.length > 1) {
-        L.polyline(coords, { color: '#d4a017', weight: 2, opacity: .7, dashArray: '6,5' }).addTo(routeMap);
-      }
-      validCoordPois.forEach(function(p, i) {
-        var markerIcon = L.divIcon({
-          html: '<div style="background:#d4a017;color:#0a0908;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.4);">' + (i+1) + '</div>',
-          className: '', iconSize: [22,22], iconAnchor: [11,11]
-        });
-        L.marker([p.lat, p.lng], { icon: markerIcon }).addTo(routeMap)
-          .bindTooltip((p.headline || p.name || ''), { permanent: false, direction: 'top' });
-      });
-      if (coords.length > 1) routeMap.fitBounds(coords, { padding: [30, 30] });
-    }, 300);
-  }
+    '</div>' +
+    '';
 
   window._salmaLastRoute = routeData;
-}
-
-// Toggle sección colapsable general
-function salmaToggleSection(id) {
-  var el = document.getElementById(id);
-  var arrow = document.getElementById(id + '-arrow');
-  if (!el) return;
-  if (el.style.display === 'none') {
-    el.style.display = 'block';
-    if (arrow) arrow.textContent = '▴';
-  } else {
-    el.style.display = 'none';
-    if (arrow) arrow.textContent = '▾';
-  }
 }
 
 // Toggle accordion stop
@@ -760,7 +633,7 @@ function salmaGuardarRuta() {
     tituloRuta = (destinoRuta && destinoRuta.length > 0) ? (destinoRuta + ' - Ruta') : 'Ruta guardada';
   }
 
-  // itinerarioIA: JSON completo para verRuta (tips, tags, resumen, nuevas secciones) y compatibilidad
+  // itinerarioIA: JSON completo para verRuta (tips, tags, resumen) y compatibilidad
   var itinerarioCompleto = {
     title: tituloRuta,
     country: (destinoRuta || r.country || '').toString(),
@@ -770,9 +643,6 @@ function salmaGuardarRuta() {
         id: (p.id || '').toString(),
         name: (p.nombre || '').toString(),
         description: (p.descripcion || '').toString(),
-        narrative: (p.descripcion || '').toString(),
-        local_secret: (p.local_secret || '').toString(),
-        practical: (p.practical || '').toString(),
         type: (p.tipo || 'lugar').toString(),
         day: typeof p.day === 'number' ? p.day : 1,
         lat: typeof p.lat === 'number' ? p.lat : 0,
@@ -781,12 +651,7 @@ function salmaGuardarRuta() {
     }),
     tips: Array.isArray(r.tips) ? r.tips.map(function(t) { return (t || '').toString(); }) : [],
     tags: Array.isArray(r.tags) ? r.tags.map(function(t) { return (t || '').toString(); }) : [],
-    budget_level: (r.budget_level || 'sin_definir').toString(),
-    accommodation: r.accommodation || [],
-    transport: r.transport || {},
-    prices: r.prices || {},
-    culture: r.culture || {},
-    emergency: r.emergency || {}
+    budget_level: (r.budget_level || 'sin_definir').toString()
   };
 
   // Estructura Firestore: sin undefined (Firestore lo rechaza)
@@ -795,10 +660,10 @@ function salmaGuardarRuta() {
     nombre: tituloRuta,
     destino: (destinoRuta || '').toString(),
     dias: diasCanonico,
-    hotel_base: '',
+    hotel_base: "",
     notas: (notasRuta || '').toString(),
-    updated_at: firebase.firestore.FieldValue.serverTimestamp(),
-    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    updated_at: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
     published: false,
     itinerarioIA: JSON.stringify(itinerarioCompleto)
   };
@@ -983,7 +848,6 @@ window.salmaGuardarRuta = salmaGuardarRuta;
 window.salmaReset = salmaReset;
 window.salmaRenderRoute = salmaRenderRoute;
 window.salmaToggleStop = salmaToggleStop;
-window.salmaToggleSection = salmaToggleSection;
 window.salmaUseSuggestion = salmaUseSuggestion;
 window.salmaEditRoute = salmaEditRoute;
 window.salmaEditFromBox = salmaEditFromBox;
