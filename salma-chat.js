@@ -783,10 +783,10 @@ function salmaGuardarRuta() {
     tags: Array.isArray(r.tags) ? r.tags.map(function(t) { return (t || '').toString(); }) : [],
     budget_level: (r.budget_level || 'sin_definir').toString(),
     accommodation: r.accommodation || [],
-    transport: r.transport || null,
-    prices: r.prices || null,
-    culture: r.culture || null,
-    emergency: r.emergency || null
+    transport: r.transport || {},
+    prices: r.prices || {},
+    culture: r.culture || {},
+    emergency: r.emergency || {}
   };
 
   // Estructura Firestore: sin undefined (Firestore lo rechaza)
@@ -795,7 +795,7 @@ function salmaGuardarRuta() {
     nombre: tituloRuta,
     destino: (destinoRuta || '').toString(),
     dias: diasCanonico,
-    hotel_base: null,
+    hotel_base: '',
     notas: (notasRuta || '').toString(),
     updated_at: firebase.firestore.FieldValue.serverTimestamp(),
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
