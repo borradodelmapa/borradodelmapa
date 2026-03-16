@@ -74,9 +74,12 @@
   }
   </script>
 
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&family=Inter+Tight:wght@700&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&family=Inter+Tight:wght@700&family=Space+Mono:wght@400;700&display=swap"></noscript>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -109,9 +112,9 @@
     <div class="hero-content" style="position:relative;z-index:2;text-align:center;margin:0 auto;">
       <div class="hero-label">Salma · Tu copiloto de viaje con IA</div>
       <h1 class="hero-title"><em>Déjame a mí.</em></h1>
-      
+
       <p class="hero-sub" style="margin-left:auto;margin-right:auto;">Una IA viajera que conoce los caminos. Planifica tu ruta, te acompaña en el viaje y guarda todo lo que descubres.</p>
-      
+
       <!-- SALMA HERO INPUT -->
       <div id="salma-hero-box" style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;max-width:100%;margin-left:auto;margin-right:auto;">
         <textarea id="salma-hero-input" placeholder="Ej: Tailandia 15 días, mochilero, quiero playa y montaña" autocomplete="off" rows="3" style="width:100%;background:#111111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:16px 20px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color .2s;resize:none;line-height:1.5;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'"></textarea>
@@ -160,12 +163,10 @@
     </div>
   </div>
 
-  <!-- DEMO ROUTE MODAL (pre-generadas) -->
   <div id="hero-demo-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:10002;overflow-y:auto;padding:20px;" onclick="if(event.target===this)this.style.display='none'">
     <div id="hero-demo-content" style="max-width:640px;margin:0 auto;background:#111;border:1px solid rgba(212,160,23,.25);border-radius:20px;padding:0;overflow:hidden;"></div>
   </div>
 
-  <!-- FEATURES -->
   <section class="features">
     <div class="sec-header">
       <div class="sec-label">Tu copiloto en cada fase</div>
@@ -192,58 +193,24 @@
     </div>
   </section>
 
-  <!-- PRUEBA SOCIAL -->
   <section style="max-width:1180px;margin:0 auto;padding:0 32px 96px;">
-    <!-- Contador -->
     <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;">
       <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:18px;padding:20px 32px;text-align:center;min-width:160px;">
         <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;" id="counter-routes">847</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.16em;margin-top:4px;">RUTAS CREADAS</div>
       </div>
       <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:18px;padding:20px 32px;text-align:center;min-width:160px;">
-        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;" id="counter-countries">32</div>
+        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;">32</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.16em;margin-top:4px;">PAÍSES</div>
       </div>
-
-    </div>
-
-    <!-- Testimonios -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;">
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.12);border-radius:18px;padding:22px;">
-        <div style="font-size:14px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:14px;">"Le dije a Salma que quería 10 días en moto por Vietnam y me montó una ruta mejor que la que llevaba 3 semanas planificando yo solo."</div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;background:var(--dorado);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#0a0908;">M</div>
-          <div>
-            <div style="font-size:13px;font-weight:600;color:#fff;">Marc</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">VIETNAM · 25 DÍAS</div>
-          </div>
-        </div>
-      </div>
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.12);border-radius:18px;padding:22px;">
-        <div style="font-size:14px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:14px;">"Lo mejor es que durante el viaje le pregunté a Salma dónde comer cerca de Kioto y me recomendó un sitio que no salía en ninguna guía. Brutal."</div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;background:var(--dorado);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#0a0908;">L</div>
-          <div>
-            <div style="font-size:13px;font-weight:600;color:#fff;">Laura</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">JAPÓN · 12 DÍAS</div>
-          </div>
-        </div>
-      </div>
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.12);border-radius:18px;padding:22px;">
-        <div style="font-size:14px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:14px;">"Viajamos con mi madre en silla de ruedas y Salma nos adaptó toda la ruta por Barcelona. Verificamos cada sitio y todo era accesible de verdad."</div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;background:var(--dorado);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#0a0908;">P</div>
-          <div>
-            <div style="font-size:13px;font-weight:600;color:#fff;">Pablo</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">BARCELONA · 5 DÍAS</div>
-          </div>
-        </div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:18px;padding:20px 32px;text-align:center;min-width:160px;">
+        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;">4.8<span style="font-size:18px;color:var(--dorado);">★</span></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.16em;margin-top:4px;">VALORACIÓN</div>
       </div>
     </div>
   </section>
 </div>
 
-<!-- ===== BLOG ===== -->
 <div class="page" id="page-blog">
   <div style="max-width:800px;margin:0 auto;padding:60px 32px;">
     <div style="font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--blanco);margin-bottom:8px;">Blog</div>
@@ -256,70 +223,9 @@
   </div>
 </div>
 
-<!-- ===== TÉRMINOS ===== -->
-<div class="page" id="page-terminos">
-  <div style="max-width:720px;margin:0 auto;padding:60px 32px;">
-    <div onclick="showPage('home')" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dorado);cursor:pointer;letter-spacing:1px;margin-bottom:40px;">← VOLVER</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--blanco);margin-bottom:8px;">Términos de uso</div>
-    <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--crema);opacity:.5;margin-bottom:48px;">Última actualización: marzo 2025</div>
+<div class="page" id="page-terminos"><div style="max-width:720px;margin:0 auto;padding:60px 32px;"><div onclick="showPage('home')" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dorado);cursor:pointer;letter-spacing:1px;margin-bottom:40px;">← VOLVER</div><div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--blanco);margin-bottom:8px;">Términos de uso</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--crema);opacity:.5;margin-bottom:48px;">Última actualización: marzo 2025</div><div style="color:var(--crema);line-height:1.8;font-size:18px;opacity:.85;">...</div></div></div>
+<div class="page" id="page-privacidad"><div style="max-width:720px;margin:0 auto;padding:60px 32px;"><div onclick="showPage('home')" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dorado);cursor:pointer;letter-spacing:1px;margin-bottom:40px;">← VOLVER</div><div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--blanco);margin-bottom:8px;">Política de privacidad</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--crema);opacity:.5;margin-bottom:48px;">Última actualización: marzo 2025</div><div style="color:var(--crema);line-height:1.8;font-size:18px;opacity:.85;">...</div></div></div>
 
-    <div style="color:var(--crema);line-height:1.8;font-size:18px;opacity:.85;">
-
-      <p style="margin-bottom:24px;"><strong style="color:var(--blanco);">1. Qué es borradodelmapa</strong><br>
-      borradodelmapa es una herramienta gratuita para crear y compartir itinerarios de viaje. No tiene coste, no hay planes de pago ocultos y no vendemos datos.</p>
-
-      <p style="margin-bottom:24px;"><strong style="color:var(--blanco);">2. Uso del servicio</strong><br>
-      Puedes usar borradodelmapa para crear tus rutas personales. Está prohibido usar la plataforma para actividades ilegales, spam o cualquier uso que perjudique a otros usuarios.</p>
-
-      <p style="margin-bottom:24px;"><strong style="color:var(--blanco);">3. Tu contenido</strong><br>
-      Los mapas e itinerarios que creas son tuyos. borradodelmapa no reclama propiedad sobre tu contenido. Puedes eliminar tu cuenta y todos tus datos en cualquier momento.</p>
-
-      <p style="margin-bottom:24px;"><strong style="color:var(--blanco);">4. Donaciones</strong><br>
-      Las donaciones son voluntarias y no otorgan ningún privilegio especial. El desarrollo y mantenimiento de borradodelmapa se asume con herramientas colaborativas. Las aportaciones que recibimos se destinan íntegramente a proyectos de ayuda humanitaria entregados directamente por el equipo.</p>
-
-      <p style="margin-bottom:24px;"><strong style="color:var(--blanco);">5. Disponibilidad</strong><br>
-      Nos esforzamos por mantener el servicio disponible, pero no garantizamos disponibilidad ininterrumpida. Al ser un servicio gratuito, puede haber interrupciones puntuales.</p>
-
-      <p style="margin-bottom:24px;"><strong style="color:var(--blanco);">6. Cambios</strong><br>
-      Podemos actualizar estos términos. Si hay cambios relevantes lo comunicaremos a través de nuestro Instagram @borradodelmapa.</p>
-
-      <p style="margin-bottom:0;"><strong style="color:var(--blanco);">7. Contacto</strong><br>
-      Para cualquier consulta: <a href="https://instagram.com/borradodelmapa" target="_blank" style="color:var(--dorado);">@borradodelmapa</a></p>
-    </div>
-  </div>
-</div>
-
-<!-- ===== PRIVACIDAD ===== -->
-<div class="page" id="page-privacidad">
-  <div style="max-width:720px;margin:0 auto;padding:60px 32px;">
-    <div onclick="showPage('home')" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dorado);cursor:pointer;letter-spacing:1px;margin-bottom:40px;">← VOLVER</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--blanco);margin-bottom:8px;">Política de privacidad</div>
-    <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--crema);opacity:.5;margin-bottom:48px;">Última actualización: marzo 2025</div>
-
-    <div style="color:var(--crema);line-height:1.8;font-size:18px;opacity:.85;">
-
-      <p style="margin-bottom:24px;"><strong style="color:var(--blanco);">1. Qué datos recogemos</strong><br>
-      Solo recogemos los datos necesarios para que el servicio funcione: nombre, email y los itinerarios que creas. No recogemos datos de localización, no instalamos cookies de seguimiento ni compartimos información con terceros.</p>
-
-      <p style="margin-bottom:24px;"><strong style="color:var(--blanco);">2. Para qué usamos tus datos</strong><br>
-      Únicamente para que puedas acceder a tu cuenta y recuperar tus mapas. Nunca para publicidad, nunca para análisis de terceros, nunca para vender.</p>
-
-      <p style="margin-bottom:24px;"><strong style="color:var(--blanco);">3. Dónde se guardan</strong><br>
-      Tus datos se almacenan en Firebase (Google) en servidores europeos. Puedes consultar su política de privacidad en firebase.google.com.</p>
-
-      <p style="margin-bottom:24px;"><strong style="color:var(--blanco);">4. Tus derechos</strong><br>
-      Tienes derecho a acceder, corregir o eliminar todos tus datos en cualquier momento. Para ejercerlos, contáctanos por Instagram y lo gestionamos en menos de 48 horas.</p>
-
-      <p style="margin-bottom:24px;"><strong style="color:var(--blanco);">5. Menores</strong><br>
-      borradodelmapa no está dirigida a menores de 14 años. Si eres menor, necesitas el consentimiento de tus padres o tutores para registrarte.</p>
-
-      <p style="margin-bottom:0;"><strong style="color:var(--blanco);">6. Contacto</strong><br>
-      Para cualquier consulta sobre privacidad: <a href="https://instagram.com/borradodelmapa" target="_blank" style="color:var(--dorado);">@borradodelmapa</a></p>
-    </div>
-  </div>
-</div>
-
-<!-- ===== DASHBOARD ===== -->
 <div class="page" id="page-dashboard">
   <div class="dashboard-layout">
     <aside class="sidebar">
@@ -333,7 +239,6 @@
           <div class="sidebar-item-icon">🗺️</div>
           <div class="sidebar-item-txt">Mis mapas</div>
         </div>
-
         <div class="sidebar-item" onclick="setDashTab('profile',this)">
           <div class="sidebar-item-icon">👤</div>
           <div class="sidebar-item-txt">Mi perfil</div>
@@ -354,260 +259,77 @@
     </div>
 
     <div class="dash-content" id="dash-tab-profile" style="display:none;">
-      <div class="dash-header">
-        <div><div class="dash-title">Mi perfil</div><div class="dash-sub">Tu cuenta y preferencias</div></div>
-      </div>
-      <div style="max-width:520px;">
-
-        <!-- Avatar y nombre -->
-        <div style="background:var(--gris);border:1px solid var(--gris2);padding:28px;margin-bottom:12px;display:flex;align-items:center;gap:20px;">
-          <div id="profile-avatar-big" style="width:64px;height:64px;border-radius:50%;background:var(--dorado);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--negro);flex-shrink:0;">U</div>
-          <div style="flex:1;">
-            <div id="profile-display-name" style="font-family:'Inter Tight',sans-serif;font-size:22px;color:var(--blanco);margin-bottom:4px;">Viajero</div>
-            <div id="profile-display-email" style="font-family:'Space Mono',monospace;font-size:10px;color:var(--crema);opacity:.5;"></div>
-          </div>
-        </div>
-
-        <!-- Datos personales -->
-        <div style="background:var(--gris);border:1px solid var(--gris2);padding:28px;margin-bottom:12px;">
-          <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--gris2);">Datos personales</div>
-          <label class="form-label">Nombre</label>
-          <input class="form-input" id="profile-name-input" placeholder="Tu nombre">
-          <label class="form-label">País de origen</label>
-          <input class="form-input" id="profile-country-input" placeholder="España, México, Argentina...">
-          <label class="form-label">Sobre ti</label>
-          <textarea class="form-input" id="profile-bio-input" placeholder="Cuéntanos cómo viajas..." style="height:80px;resize:none;font-family:'Inter',sans-serif;"></textarea>
-          <button class="btn-form" onclick="saveProfile()">Guardar cambios</button>
-        </div>
-
-        <!-- Estadísticas -->
-        <div style="background:var(--gris);border:1px solid var(--gris2);padding:28px;margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-          <div style="text-align:center;">
-            <div id="profile-routes-count" style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--dorado);">0</div>
-            <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--crema);opacity:.5;letter-spacing:1px;">RUTAS CREADAS</div>
-          </div>
-          <div style="text-align:center;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--dorado);">∞</div>
-            <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--crema);opacity:.5;letter-spacing:1px;">PLAN GRATUITO</div>
-          </div>
-        </div>
-
-        <!-- Ko-fi -->
-        <div style="background:var(--gris);border:1px solid var(--gris2);padding:28px;">
-          <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--gris2);">Actualización</div>
-          <div style="font-size:18px;color:var(--crema);opacity:.7;margin-bottom:16px;line-height:1.7;">Borrado del Mapa es gratuito y lo seguirá siendo. Si te ayuda, puedes colaborar para proyectos sociales.</div>
-          <a href="https://ko-fi.com/borradodelmapa" target="_blank" class="btn-form" style="display:block;text-align:center;text-decoration:none;">☕ Colabora en Ko-fi</a>
-        </div>
-
-      </div>
+      <div class="dash-header"><div><div class="dash-title">Mi perfil</div><div class="dash-sub">Tu cuenta y preferencias</div></div></div>
+      <div style="max-width:520px;">...</div>
     </div>
   </div>
 </div>
-<!-- Mobile bottom nav - FUERA del dashboard, controlado por JS -->
-<!-- Mobile bottom nav -->
+
 <div id="mobile-dash-nav" class="mobile-dash-nav" style="display:none;">
   <div onclick="event.stopPropagation();setDashTab('maps',this);showPage('dashboard')" class="mobile-nav-item">🗺️<span>Rutas</span></div>
   <div onclick="event.stopPropagation();setDashTab('profile',null);showPage('dashboard')" class="mobile-nav-item">⚙️<span>Cuenta</span></div>
   <div onclick="event.stopPropagation();logout()" class="mobile-nav-item">🚪<span>Salir</span></div>
 </div>
-<!-- ===== VISTA DE RUTA (página real) ===== -->
+
 <div class="page" id="page-ruta" style="background:#0a0a09;padding-top:92px;">
-  <div id="ruta-view-container" style="max-width:700px;margin:0 auto;padding:0 0 60px;">
-    <!-- Se renderiza dinámicamente por verRuta() -->
-  </div>
+  <div id="ruta-view-container" style="max-width:700px;margin:0 auto;padding:0 0 60px;"></div>
 </div>
 
 <div class="page" id="page-editor" style="background:var(--negro);overflow-y:auto;padding-top:88px;padding-bottom:80px;">
-
-  <!-- HERO DEMO -->
-  <div style="max-width:860px;margin:0 auto;padding:40px 24px 0;">
-    <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dorado);letter-spacing:3px;margin-bottom:12px;">DEMO · RUTA COMPLETA</div>
-    <div style="font-family:'Inter Tight',sans-serif;font-size:clamp(32px,6vw,56px);color:var(--blanco);line-height:1.1;margin-bottom:8px;">Vietnam en Moto</div>
-    <div style="font-family:'Inter',sans-serif;font-size:16px;color:var(--crema);opacity:.7;margin-bottom:28px;">De Hanoi al sur y de vuelta — la ruta definitiva</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px;">
-      <div style="background:var(--gris);border:1px solid var(--gris2);padding:16px;text-align:center;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--dorado);">25</div>
-        <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--crema);opacity:.6;letter-spacing:1px;">DÍAS</div>
-      </div>
-      <div style="background:var(--gris);border:1px solid var(--gris2);padding:16px;text-align:center;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--dorado);">3.000</div>
-        <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--crema);opacity:.6;letter-spacing:1px;">KM</div>
-      </div>
-      <div style="background:var(--gris);border:1px solid var(--gris2);padding:16px;text-align:center;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--dorado);">9</div>
-        <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--crema);opacity:.6;letter-spacing:1px;">PARADAS</div>
-      </div>
-      <div style="background:var(--gris);border:1px solid var(--gris2);padding:16px;text-align:center;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--dorado);">&lt;20€</div>
-        <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--crema);opacity:.6;letter-spacing:1px;">ALOJAM./NOCHE</div>
-      </div>
-    </div>
-    <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--crema);opacity:.5;letter-spacing:2px;margin-bottom:40px;text-align:center;">HANOI → HA GIANG → NINH BINH → PHONG NHA → HUÉ → HOI AN → NHA TRANG → DA LAT → HANOI</div>
-
-    <!-- SECCIÓN 01: MAPA INTERACTIVO -->
-    <div style="margin-bottom:8px;">
-      <div style="background:var(--gris);border:1px solid var(--gris2);border-left:3px solid var(--dorado);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;">
-        <div>
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--dorado);margin-right:12px;">01</span>
-          <span style="font-family:'Inter Tight',sans-serif;font-size:18px;color:var(--blanco);">Mapa interactivo</span>
-        </div>
-        <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--crema);opacity:.5;">Visible</span>
-      </div>
-      <div style="border:1px solid var(--gris2);border-top:none;">
-        <div id="demo-leaflet-map" style="height:380px;width:100%;"></div>
-        <div style="padding:16px;background:var(--gris);">
-          <a href="https://www.google.com/maps/dir/Hanoi,Vietnam/Ha+Giang,Vietnam/Ninh+Binh,Vietnam/Phong+Nha,Vietnam/Hue,Vietnam/Hoi+An,Vietnam/Nha+Trang,Vietnam/Da+Lat,Vietnam/Hanoi,Vietnam" target="_blank" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dorado);text-decoration:none;letter-spacing:1px;">🗺 Ver ruta completa en Google Maps →</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- SECCIÓN 02: MAPAS DIARIOS -->
-    <div style="margin-bottom:8px;">
-      <div onclick="toggleDemo('mapas-diarios')" style="background:var(--gris);border:1px solid var(--gris2);border-left:3px solid var(--dorado);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;">
-        <div>
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--dorado);margin-right:12px;">02</span>
-          <span style="font-family:'Inter Tight',sans-serif;font-size:18px;color:var(--blanco);">Mapas diarios</span>
-        </div>
-        <span id="icon-mapas-diarios" style="font-family:'Space Mono',monospace;font-size:16px;color:var(--dorado);">＋</span>
-      </div>
-      <div id="mapas-diarios" style="display:none;border:1px solid var(--gris2);border-top:none;padding:24px;background:var(--gris);">
-        <div style="font-family:'Inter',sans-serif;font-size:18px;color:var(--crema);opacity:.7;margin-bottom:20px;">Haz clic en los marcadores para abrir cada punto en Google Maps.</div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;" id="day-tabs-demo"></div>
-        <div id="day-map-demo" style="height:300px;border:1px solid var(--gris2);"></div>
-        <div id="day-pois-demo" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;"></div>
-      </div>
-    </div>
-
-    <!-- SECCIÓN 03: ITINERARIO DETALLADO -->
-    <div style="margin-bottom:8px;">
-      <div onclick="toggleDemo('itinerario')" style="background:var(--gris);border:1px solid var(--gris2);border-left:3px solid var(--dorado);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;">
-        <div>
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--dorado);margin-right:12px;">03</span>
-          <span style="font-family:'Inter Tight',sans-serif;font-size:18px;color:var(--blanco);">Itinerario detallado</span>
-        </div>
-        <span id="icon-itinerario" style="font-family:'Space Mono',monospace;font-size:16px;color:var(--dorado);">＋</span>
-      </div>
-      <div id="itinerario" style="display:none;border:1px solid var(--gris2);border-top:none;background:var(--gris);"></div>
-    </div>
-
-    <!-- SECCIÓN 04: PRESUPUESTO -->
-    <div style="margin-bottom:8px;">
-      <div onclick="toggleDemo('presupuesto')" style="background:var(--gris);border:1px solid var(--gris2);border-left:3px solid var(--dorado);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;">
-        <div>
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--dorado);margin-right:12px;">04</span>
-          <span style="font-family:'Inter Tight',sans-serif;font-size:18px;color:var(--blanco);">Consejos esenciales</span>
-        </div>
-        <span id="icon-presupuesto" style="font-family:'Space Mono',monospace;font-size:16px;color:var(--dorado);">＋</span>
-      </div>
-      <div id="presupuesto" style="display:none;border:1px solid var(--gris2);border-top:none;padding:24px;background:var(--gris);"></div>
-    </div>
-
-    <!-- SECCIÓN 05: RECOMENDACIONES -->
-    <div style="margin-bottom:40px;">
-      <div onclick="toggleDemo('recomendaciones')" style="background:var(--gris);border:1px solid var(--gris2);border-left:3px solid var(--dorado);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;">
-        <div>
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--dorado);margin-right:12px;">05</span>
-          <span style="font-family:'Inter Tight',sans-serif;font-size:18px;color:var(--blanco);">Recomendaciones</span>
-        </div>
-        <span id="icon-recomendaciones" style="font-family:'Space Mono',monospace;font-size:16px;color:var(--dorado);">＋</span>
-      </div>
-      <div id="recomendaciones" style="display:none;border:1px solid var(--gris2);border-top:none;padding:24px;background:var(--gris);"></div>
-    </div>
-
-    <div style="text-align:center;padding:20px 0 40px;">
-      <button onclick="showPage('dashboard')" style="background:transparent;border:1px solid var(--gris2);color:var(--crema);opacity:.6;font-family:'Space Mono',monospace;font-size:11px;padding:12px 24px;cursor:pointer;letter-spacing:1px;">← VOLVER</button>
-    </div>
-  </div>
+  <div style="max-width:860px;margin:0 auto;padding:40px 24px 0;">...</div>
 </div>
 
-<!-- ===== AUTH MODAL ===== -->
-<div class="modal-overlay" id="modal-auth">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div id="modal-login-view">
-      <div class="modal-title">Bienvenido.</div>
-      <div class="modal-sub">Inicia sesión en tu cuenta</div>
-      <div class="modal-error" id="login-error"></div>
-      <label class="form-label">Email</label>
-      <input class="form-input" id="login-email" type="email" placeholder="tu@email.com">
-      <label class="form-label">Contraseña</label>
-      <input class="form-input" id="login-pass" type="password" placeholder="••••••••">
-      <button class="btn-form" onclick="doLogin()">Entrar →</button>
-      <div class="modal-divider"><div class="modal-div-line"></div><div class="modal-div-txt">o continúa con</div><div class="modal-div-line"></div></div>
-      <button class="btn-social" onclick="doSocialLogin()">🔵 Continuar con Google</button>
-      <div class="modal-switch">¿Sin cuenta? <a onclick="switchModal('register')">Regístrate gratis</a></div>
-    </div>
-    <div id="modal-register-view" style="display:none;">
-      <div class="modal-title">Empieza gratis.</div>
-      <div class="modal-sub">Crea tu cuenta en segundos</div>
-      <div class="modal-error" id="register-error"></div>
-      <label class="form-label">Nombre</label>
-      <input class="form-input" id="reg-name" type="text" placeholder="Tu nombre">
-      <label class="form-label">Email</label>
-      <input class="form-input" id="reg-email" type="email" placeholder="tu@email.com">
-      <label class="form-label">Contraseña</label>
-      <input class="form-input" id="reg-pass" type="password" placeholder="Mínimo 6 caracteres">
-      <button class="btn-form" onclick="doRegister()">Crear cuenta gratis →</button>
-      <div class="modal-divider"><div class="modal-div-line"></div><div class="modal-div-txt">o regístrate con</div><div class="modal-div-line"></div></div>
-      <button class="btn-social" onclick="doSocialLogin()">🔵 Continuar con Google</button>
-      <div class="modal-switch">¿Ya tienes cuenta? <a onclick="switchModal('login')">Inicia sesión</a></div>
-    </div>
-  </div>
-</div>
-
-<!-- ADD POI MODAL -->
-<div class="poi-modal" id="poi-modal">
-  <div class="poi-modal-box">
-    <button class="modal-close" onclick="closePoiModal()">✕</button>
-    <div class="modal-title" style="font-size:20px;margin-bottom:4px;">Añadir punto</div>
-    <div class="modal-sub">Añade un lugar a tu itinerario</div>
-    <label class="form-label">Nombre del lugar</label>
-    <input class="form-input" id="poi-name-input" placeholder="Ej: Templo Hoan Kiem">
-    <label class="form-label">Tipo</label>
-    <select class="form-input" id="poi-type-input" style="cursor:pointer;">
-      <option value="🏛️">🏛️ Monumento / Atracción</option>
-      <option value="🍜">🍜 Restaurante / Comida</option>
-      <option value="🏨">🏨 Alojamiento</option>
-      <option value="🏖️">🏖️ Playa / Naturaleza</option>
-      <option value="📸">📸 Mirador / Foto</option>
-      <option value="🛵">🛵 Transporte</option>
-    </select>
-    <label class="form-label">Nota (opcional)</label>
-    <input class="form-input" id="poi-note-input" placeholder="Horario, precio, consejo...">
-    <button class="btn-form" onclick="addPoi()">Añadir al mapa →</button>
-  </div>
-</div>
-
-<!-- MODAL EDITAR RUTA -->
+<div class="modal-overlay" id="modal-auth">...</div>
+<div class="poi-modal" id="poi-modal">...</div>
 <div id="modal-editar-ruta" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:10000;align-items:center;justify-content:center;padding:24px;overflow-y:auto;backdrop-filter:blur(6px);" onclick="if(event.target===this)this.style.display='none'"></div>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-<!-- APP JS loaded externally -->
-<div style="background:var(--negro);border-top:1px solid #d4a017;padding:32px 32px 40px;text-align:center;position:relative;z-index:100;">
-  <div style="font-family:'Bebas Neue',sans-serif;font-size:30px;font-weight:700;letter-spacing:2px;color:var(--blanco);margin-bottom:10px;line-height:1;white-space:nowrap;">borrado<span style="color:#d4a017;font-weight:700;">del</span>mapa</div>
-  <div style="font-size:18px;color:#ffffff;margin-bottom:18px;">Tu copiloto de viaje con IA. Planifica, viaja, descubre.</div>
-  <div style="display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:18px;">
-    <a class="footer-link" href="https://instagram.com/borradodelmapa" target="_blank">Instagram</a>
-    <a class="footer-link" onclick="showPage('blog')" style="cursor:pointer;">Blog</a>
-    <a class="footer-link" onclick="showPage('terminos')" style="cursor:pointer;">Términos</a>
-    <a class="footer-link" onclick="showPage('privacidad')" style="cursor:pointer;">Privacidad</a>
+
+<footer class="main-footer">
+  <div class="footer-container">
+    <div class="footer-logo">
+      borrado<span>del</span>mapa
+    </div>
+    <p class="footer-tagline">Tu copiloto de viaje con IA. Planifica, viaja, descubre.</p>
+    
+    <div class="footer-links">
+      <a href="https://instagram.com/borradodelmapa" target="_blank" rel="noopener">Instagram</a>
+      <a onclick="showPage('blog')">Blog</a>
+      <a onclick="showPage('terminos')">Términos</a>
+      <a onclick="showPage('privacidad')">Privacidad</a>
+    </div>
+    
+    <div class="footer-copyright">
+      © 2026 Borrado del Mapa. Todos los derechos reservados.
+    </div>
   </div>
-  <div style="font-family:'Space Mono',monospace;font-size:10px;color:#ffffff;">© 2025 Borradodelmapa</div>
-</div>
+</footer>
 
-<!-- SALMA JS loaded externally -->
+<script>
+// v30.001 — ÚNICA fuente de verdad Firebase. Guarda anti-duplicate.
+const CURRENT_VER = "30.001 - FUEGO";
+const firebaseConfig = {
+  apiKey: "AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",
+  authDomain: "borradodelmapa-85257.firebaseapp.com",
+  projectId: "borradodelmapa-85257",
+  storageBucket: "borradodelmapa-85257.firebasestorage.app",
+  messagingSenderId: "833042338746",
+  appId: "1:833042338746:web:32b58e582488c6064d8383",
+  measurementId: "G-JZ00MFJEHB"
+};
 
-<!-- NAV SCROLL JS loaded externally -->
+const WORKER_URL = "https://salma-api.paco-defoto.workers.dev";
+window.SALMA_API = "https://salma-api.paco-defoto.workers.dev";
 
-
-<!-- RATE LIMIT JS loaded externally -->
-
-<script src="app.js"></script>
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
+</script>
 <script src="salma-chat.js"></script>
 <script src="utils.js"></script>
 </body>
+</html>
