@@ -91,60 +91,72 @@ const ROUTE_COORDS = [
 
 auth.onAuthStateChanged(async (user) => {
   if (user) {
+    // Leer doc de usuario (no bloquear si falla)
+    let userData = {};
     try {
       const userDoc = await db.collection("users").doc(user.uid).get();
-      const userData = userDoc.exists ? userDoc.data() : {};
-      currentUser = {
-        uid: user.uid,
-        name: userData.name || user.displayName || user.email.split("@")[0],
-        email: user.email,
-        isPremium: userData.isPremium || false,
-        bio: userData.bio || '',
-        country: userData.country || '',
-        photo: userData.photo || ''
-      };
-      isPremium = currentUser.isPremium;
-      updateNavForUser(currentUser);
-      updateSidebar(currentUser);
-      const mobileNav = document.getElementById("mobile-dash-nav");
-      if (mobileNav) mobileNav.style.display = "flex";
-      closeModal();
-      // Restaurar ruta desde localStorage si viene de redirect de Google
-      if (!window._salmaLastRoute) {
-        try {
-          var _backup = localStorage.getItem('_salmaRouteBackup');
-          if (_backup) { window._salmaLastRoute = JSON.parse(_backup); }
-        } catch(e) {}
-      }
-      if (window._salmaLastRoute && window._salmaLastRoute.stops) {
-        try {
-          const r = window._salmaLastRoute;
-          const numDias = r.duration_days ? Number(r.duration_days) : (r.stops ? [...new Set(r.stops.map(s => s.day||1))].length : 0);
-          const ruta = {
-            nombre: r.title || r.name || 'Mi ruta',
-            destino: (r.region || r.country || '').toString(),
-            num_dias: numDias,
-            notas: r.summary || '',
-            itinerarioIA: JSON.stringify(r),
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            published: false
-          };
-          await db.collection('users').doc(user.uid).collection('maps').add(ruta);
-          window._salmaLastRoute = null;
-          localStorage.removeItem('_salmaRouteBackup');
-          showToast('¡Bienvenido! Tu ruta se ha guardado automáticamente ✓');
-        } catch(saveErr) {
-          console.error('Error auto-saving route:', saveErr);
-        }
-      }
-      await loadUserMaps();
-      const currentPage = document.querySelector('.page.active');
-      if (!currentPage || currentPage.id === 'page-home') {
-        showPage('dashboard');
-      }
+      if (userDoc.exists) userData = userDoc.data();
     } catch(e) {
-      console.error("Error loading user:", e);
+      console.warn("No se pudo leer el doc de usuario (reglas Firestore?):", e.code, e.message);
+    }
+
+    currentUser = {
+      uid: user.uid,
+      name: userData.name || user.displayName || (user.email ? user.email.split("@")[0] : 'Viajero'),
+      email: user.email || '',
+      isPremium: userData.isPremium || false,
+      bio: userData.bio || '',
+      country: userData.country || '',
+      photo: userData.photo || ''
+    };
+    isPremium = currentUser.isPremium;
+    updateNavForUser(currentUser);
+    updateSidebar(currentUser);
+    const mobileNav = document.getElementById("mobile-dash-nav");
+    if (mobileNav) mobileNav.style.display = "flex";
+    closeModal();
+
+    // Restaurar ruta desde localStorage si viene de redirect de Google
+    if (!window._salmaLastRoute) {
+      try {
+        var _backup = localStorage.getItem('_salmaRouteBackup');
+        if (_backup) { window._salmaLastRoute = JSON.parse(_backup); }
+      } catch(e) {}
+    }
+    if (window._salmaLastRoute && window._salmaLastRoute.stops) {
+      try {
+        const r = window._salmaLastRoute;
+        const numDias = r.duration_days ? Number(r.duration_days) : (r.stops ? [...new Set(r.stops.map(s => s.day||1))].length : 0);
+        const ruta = {
+          nombre: r.title || r.name || 'Mi ruta',
+          destino: (r.region || r.country || '').toString(),
+          num_dias: numDias,
+          dias: numDias,
+          notas: r.summary || '',
+          itinerarioIA: JSON.stringify(r),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          published: false
+        };
+        await db.collection('users').doc(user.uid).collection('maps').add(ruta);
+        window._salmaLastRoute = null;
+        localStorage.removeItem('_salmaRouteBackup');
+        showToast('¡Bienvenido! Tu ruta se ha guardado automáticamente ✓');
+      } catch(saveErr) {
+        console.error('Error al guardar ruta automáticamente:', saveErr.code, saveErr.message);
+        showToast('No se pudo guardar la ruta: ' + (saveErr.message || saveErr.code || 'Error desconocido'));
+      }
+    }
+
+    try {
+      await loadUserMaps();
+    } catch(e) {
+      console.warn("No se pudieron cargar los mapas:", e.code, e.message);
+    }
+
+    const currentPage = document.querySelector('.page.active');
+    if (!currentPage || currentPage.id === 'page-home') {
+      showPage('dashboard');
     }
   } else {
     currentUser = null;
@@ -369,7 +381,8 @@ function renderMapsGrid(maps) {
   let html = maps.map(m => {
     const photo = destPhoto(m.destino || m.country || m.nombre || '');
     const name = (m.nombre || m.title || 'Mi ruta').replace(/</g,'&lt;');
-    const meta = (m.dias||m.days||0) + ' días · ' + (m.destino||m.country||'Destino');
+    const diasNum = Array.isArray(m.dias) ? m.dias.length : (m.dias||m.num_dias||m.days||0);
+    const meta = diasNum + ' días · ' + (m.destino||m.country||'Destino');
     const desc = m.desc ? m.desc.substring(0,80).replace(/</g,'&lt;') + (m.desc.length>80?'...':'') : '';
     return `
     <div class="map-card" style="position:relative;cursor:pointer;overflow:hidden;" onclick="verRuta('${m.id}','${name.replace(/'/g,"\\'")}')">
