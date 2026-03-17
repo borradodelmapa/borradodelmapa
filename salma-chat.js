@@ -387,6 +387,8 @@ function salmaRenderRoute(routeData) {
     '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-bottom:16px;">' + (routeData.duration_days || 0) + ' DÍAS · ' + escapeHTML((routeData.country || '').toUpperCase()) + budget + ' · ' + pois.length + ' PARADAS</div>' +
     (routeData.summary ? '<div style="font-size:16px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:20px;">' + escapeHTML(routeData.summary) + '</div>' : '') +
     tagsHTML +
+    // Mapa Leaflet
+    (hasMapData ? '<div id="salma-route-map" style="height:260px;width:100%;border-radius:14px;margin-bottom:24px;border:1px solid rgba(212,160,23,.15);overflow:hidden;"></div>' : '') +
     // Stops (itinerario primero)
     '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:4px;">ITINERARIO · ' + pois.length + ' EXPERIENCIAS</div>' +
     stopsHTML +
@@ -399,6 +401,16 @@ function salmaRenderRoute(routeData) {
     '';
 
   window._salmaLastRoute = routeData;
+
+  // Inicializar mapa Leaflet tras renderizar el DOM
+  if (hasMapData) {
+    setTimeout(function() {
+      var mapPois = pois.filter(function(p) { return p.lat && p.lng && Number(p.lat) && Number(p.lng); });
+      if (mapPois.length && typeof window.salmaInitLeaflet === 'function') {
+        window.salmaInitLeaflet('salma-route-map', mapPois, routeData);
+      }
+    }, 150);
+  }
 }
 
 // Toggle accordion stop
@@ -624,7 +636,14 @@ function salmaGuardarRuta() {
     var day = (s && s.day) != null ? Number(s.day) : 1;
     var lat = (s && s.lat) != null ? Number(s.lat) : 0;
     var lng = (s && s.lng) != null ? Number(s.lng) : 0;
-    return { id: 'p' + (i + 1), tipo: mapTipoCanonico(s && s.type), nombre: name, descripcion: desc, duracion_min: 0, lat: lat, lng: lng, day: day, name: name, description: desc, type: s && s.type };
+    return {
+      id: 'p' + (i + 1), tipo: mapTipoCanonico(s && s.type), nombre: name, headline: name, descripcion: desc,
+      narrative: (s && s.narrative) ? String(s.narrative) : desc,
+      local_secret: (s && s.local_secret) ? String(s.local_secret) : '',
+      alternative: (s && s.alternative) ? String(s.alternative) : '',
+      practical: (s && s.practical) ? String(s.practical) : '',
+      duracion_min: 0, lat: lat, lng: lng, day: day, name: name, description: desc, type: s && s.type
+    };
   });
 
   var diasByNum = {};
@@ -661,13 +680,21 @@ function salmaGuardarRuta() {
   // itinerarioIA: JSON completo para verRuta (tips, tags, resumen) y compatibilidad
   var itinerarioCompleto = {
     title: tituloRuta,
+    name: tituloRuta,
     country: (destinoRuta || r.country || '').toString(),
+    region: (r.region || destinoRuta || '').toString(),
+    duration_days: r.duration_days || diasOrden.length || 0,
     summary: (notasRuta || '').toString(),
     stops: stopsNorm.map(function(p) {
       return {
         id: (p.id || '').toString(),
         name: (p.nombre || '').toString(),
+        headline: (p.headline || p.nombre || '').toString(),
         description: (p.descripcion || '').toString(),
+        narrative: (p.narrative || '').toString(),
+        local_secret: (p.local_secret || '').toString(),
+        alternative: (p.alternative || '').toString(),
+        practical: (p.practical || '').toString(),
         type: (p.tipo || 'lugar').toString(),
         day: typeof p.day === 'number' ? p.day : 1,
         lat: typeof p.lat === 'number' ? p.lat : 0,
@@ -676,7 +703,8 @@ function salmaGuardarRuta() {
     }),
     tips: Array.isArray(r.tips) ? r.tips.map(function(t) { return (t || '').toString(); }) : [],
     tags: Array.isArray(r.tags) ? r.tags.map(function(t) { return (t || '').toString(); }) : [],
-    budget_level: (r.budget_level || 'sin_definir').toString()
+    budget_level: (r.budget_level || 'sin_definir').toString(),
+    suggestions: Array.isArray(r.suggestions) ? r.suggestions.map(function(s) { return (s || '').toString(); }) : []
   };
 
   // Estructura Firestore: sin undefined (Firestore lo rechaza)
@@ -752,6 +780,45 @@ function salmaGuardarRuta() {
     if (typeof window.showToast === 'function') window.showToast('Error al guardar: ' + (err && err.message ? err.message : 'Error desconocido'));
   }
 }
+
+// ===== MAPA LEAFLET =====
+
+function salmaInitLeaflet(containerId, pois, routeData) {
+  if (typeof L === 'undefined') { console.warn('[Salma] Leaflet no está cargado'); return; }
+  var container = document.getElementById(containerId);
+  if (!container) { console.warn('[Salma] Contenedor de mapa no encontrado:', containerId); return; }
+  // Destruir instancia previa si existe
+  if (container._leafletMap) {
+    try { container._leafletMap.remove(); } catch(e) {}
+    container._leafletMap = null;
+    container.innerHTML = '';
+  }
+  var validPois = (pois || []).filter(function(p) { return p.lat && p.lng && Number(p.lat) && Number(p.lng); });
+  if (!validPois.length) return;
+  var m = L.map(container, { zoomControl: true, scrollWheelZoom: false });
+  container._leafletMap = m;
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://openstreetmap.org">OSM</a>',
+    maxZoom: 18
+  }).addTo(m);
+  var latlngs = [];
+  validPois.forEach(function(p, i) {
+    var ll = [Number(p.lat), Number(p.lng)];
+    latlngs.push(ll);
+    var nm = p.headline || p.name || ('Parada ' + (i + 1));
+    var popup = '<b>' + nm.replace(/</g,'&lt;') + '</b>';
+    var txt = (p.narrative || p.description || '');
+    if (txt) popup += '<br><span style="font-size:12px;">' + txt.substring(0, 100).replace(/</g,'&lt;') + '</span>';
+    L.marker(ll).addTo(m).bindPopup(popup);
+  });
+  if (latlngs.length > 1) {
+    L.polyline(latlngs, { color: '#d4a017', weight: 2.5, opacity: 0.7, dashArray: '6,4' }).addTo(m);
+    m.fitBounds(latlngs, { padding: [32, 32] });
+  } else {
+    m.setView(latlngs[0], 12);
+  }
+}
+window.salmaInitLeaflet = salmaInitLeaflet;
 
 // ===== RESET =====
 
