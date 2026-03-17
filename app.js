@@ -27,6 +27,20 @@ window._fbAuth = auth;
 window._fbDb = db;
 window._fbGoogleProvider = googleProvider;
 
+// Manejar retorno de signInWithRedirect
+auth.getRedirectResult().then(function(result) {
+  if (!result || !result.user) return;
+  var user = result.user;
+  db.collection("users").doc(user.uid).get().then(function(doc) {
+    if (!doc.exists) {
+      db.collection("users").doc(user.uid).set({
+        name: user.displayName || user.email.split("@")[0],
+        email: user.email, isPremium: false, mapsCount: 0, createdAt: new Date().toISOString()
+      }).catch(function(e) { console.warn('Could not create user doc:', e); });
+    }
+  });
+}).catch(function(e) { console.error('Redirect result error:', e.code, e.message); });
+
 let currentUser = null;
 let isPremium = false;
 let map = null;
@@ -95,24 +109,30 @@ auth.onAuthStateChanged(async (user) => {
       const mobileNav = document.getElementById("mobile-dash-nav");
       if (mobileNav) mobileNav.style.display = "flex";
       closeModal();
+      // Restaurar ruta desde localStorage si viene de redirect de Google
+      if (!window._salmaLastRoute) {
+        try {
+          var _backup = localStorage.getItem('_salmaRouteBackup');
+          if (_backup) { window._salmaLastRoute = JSON.parse(_backup); }
+        } catch(e) {}
+      }
       if (window._salmaLastRoute && window._salmaLastRoute.stops) {
         try {
           const r = window._salmaLastRoute;
+          const numDias = r.duration_days ? Number(r.duration_days) : (r.stops ? [...new Set(r.stops.map(s => s.day||1))].length : 0);
           const ruta = {
-            nombre: r.title || 'Mi ruta',
-            destino: r.region || r.country || '',
-            dias: r.duration_days || 0,
-            desc: r.summary || '',
+            nombre: r.title || r.name || 'Mi ruta',
+            destino: (r.region || r.country || '').toString(),
+            num_dias: numDias,
+            notas: r.summary || '',
             itinerarioIA: JSON.stringify(r),
-            pois: (r.stops || []).map(function(s, i) {
-              return { id: i+1, name: s.name, type: s.type, note: s.description, day: s.day || 1, lat: s.lat, lng: s.lng };
-            }),
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
             published: false
           };
           await db.collection('users').doc(user.uid).collection('maps').add(ruta);
           window._salmaLastRoute = null;
+          localStorage.removeItem('_salmaRouteBackup');
           showToast('¡Bienvenido! Tu ruta se ha guardado automáticamente ✓');
         } catch(saveErr) {
           console.error('Error auto-saving route:', saveErr);
@@ -254,7 +274,7 @@ async function doRegister() {
     await cred.user.updateProfile({ displayName: name });
     try {
       await db.collection("users").doc(cred.user.uid).set({
-        name, email, isPremium: false, mapsCount: 0, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        name, email, isPremium: false, mapsCount: 0, createdAt: new Date().toISOString()
       });
     } catch(dbErr) {
       console.warn("Firestore no disponible:", dbErr);
@@ -272,22 +292,16 @@ async function doRegister() {
 }
 window.doRegister = doRegister;
 
-async function doSocialLogin() {
+function doSocialLogin() {
   try {
-    showToast("Conectando con Google...");
-    const result = await auth.signInWithPopup(googleProvider);
-    const user = result.user;
-    const userDoc = await db.collection("users").doc(user.uid).get();
-    if (!userDoc.exists) {
-      await db.collection("users").doc(user.uid).set({
-        name: user.displayName || user.email.split("@")[0],
-        email: user.email, isPremium: false, mapsCount: 0, createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
+    if (window._salmaLastRoute) {
+      try { localStorage.setItem('_salmaRouteBackup', JSON.stringify(window._salmaLastRoute)); } catch(e) {}
     }
-    closeModal();
-    showPage("dashboard");
+    showToast("Redirigiendo a Google...");
+    auth.signInWithRedirect(googleProvider);
   } catch(e) {
-    showToast("Error con Google. Intenta con email.");
+    console.error("Google login error:", e.code, e.message);
+    showToast("Error al conectar con Google. Inténtalo de nuevo.");
   }
 }
 window.doSocialLogin = doSocialLogin;
@@ -568,7 +582,7 @@ async function guardarEdicionRuta(id) {
   if (!nombre || !currentUser) return;
   try {
     await db.collection('users').doc(currentUser.uid).collection('maps').doc(id).update({
-      nombre, destino, dias, desc, notas, updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      nombre, destino, dias, desc, notas, updatedAt: new Date().toISOString()
     });
     document.getElementById('modal-editar-ruta').style.display = 'none';
     showToast('Ruta actualizada ✓');
@@ -676,7 +690,7 @@ async function addPoi() {
     try {
       await db.collection("users").doc(currentUser.uid).collection("pois").add({
         name, type, note, day: 1, lat: newPoi.lat, lng: newPoi.lng,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        createdAt: new Date().toISOString()
       });
     } catch(e) { console.error("Error saving poi:", e); }
   }

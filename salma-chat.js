@@ -426,6 +426,7 @@ async function salmaHeroSend() {
     });
     var data = await res.json();
     salmaRemoveLoading();
+    if (data._error) console.error('[SALMA WORKER ERROR]', data._error);
 
     if (data.reply) {
       salmaAddDialog(data.reply, 'bot');
