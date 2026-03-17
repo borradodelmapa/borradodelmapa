@@ -287,10 +287,20 @@ function salmaRenderRoute(routeData) {
       routeData.tags.map(function(t) { return '<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;padding:5px 12px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:var(--dorado);">' + escapeHTML(t) + '</span>'; }).join('') + '</div>';
   }
 
-  // Stops — formato acordeón (enlace Google Maps por nombre para mayor precisión)
-  var stopsHTML = pois.map(function(stop, idx) {
+  // Stops — formato acordeón agrupado por día
+  var stopsHTML = '';
+  var lastDay = null;
+  pois.forEach(function(stop, idx) {
+    var stopDay = stop.day || 1;
+    // Cabecera de día cuando cambia
+    if (stopDay !== lastDay) {
+      lastDay = stopDay;
+      stopsHTML += '<div style="display:flex;align-items:center;gap:10px;' + (idx > 0 ? 'margin-top:28px;' : '') + 'margin-bottom:4px;">' +
+        '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;white-space:nowrap;">DÍA ' + stopDay + '</div>' +
+        '<div style="flex:1;height:1px;background:rgba(212,160,23,.25);"></div>' +
+      '</div>';
+    }
     var icon = typeIcons[stop.type] || '📍';
-    var day = stop.day ? 'DÍA ' + stop.day : '';
     var headline = stop.headline || stop.name || '';
     var mapsUrl = '';
     if (headline && countryOrRegion) {
@@ -308,12 +318,11 @@ function salmaRenderRoute(routeData) {
     // Preview text (primera línea del narrative)
     var preview = narrative ? narrative.substring(0, 80).replace(/\s+\S*$/, '') + '...' : '';
 
-    return '<div style="border-bottom:1px solid rgba(212,160,23,.1);">' +
+    stopsHTML += '<div style="border-bottom:1px solid rgba(212,160,23,.1);">' +
       // Header colapsado (siempre visible)
       '<div onclick="salmaToggleStop(\'' + stopId + '\')" style="display:flex;gap:16px;padding:20px 0;cursor:pointer;transition:background .15s;" onmouseover="this.style.background=\'rgba(255,255,255,.02)\'" onmouseout="this.style.background=\'none\'">' +
         '<div style="min-width:40px;text-align:center;">' +
           '<span style="font-size:24px;">' + icon + '</span>' +
-          (day ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:8px;color:var(--dorado);margin-top:4px;letter-spacing:.1em;">' + day + '</div>' : '') +
         '</div>' +
         '<div style="flex:1;">' +
           '<div style="font-family:\'Inter Tight\',sans-serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.2;">' + escapeHTML(headline) + '</div>' +
@@ -338,7 +347,7 @@ function salmaRenderRoute(routeData) {
         (mapsUrl ? '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;letter-spacing:.1em;">VER EN MAPA →</a>' : '') +
       '</div>' : '') +
     '</div>';
-  }).join('');
+  });
 
   // Tips
   var tipsHTML = '';
