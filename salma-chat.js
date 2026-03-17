@@ -552,6 +552,8 @@ function salmaSetGuardarButtonState(guardando) {
 }
 
 function salmaGuardarRuta() {
+  console.log('[Salma] salmaGuardarRuta llamado. _salmaLastRoute:', window._salmaLastRoute ? 'OK (stops: ' + (window._salmaLastRoute.stops ? window._salmaLastRoute.stops.length : 0) + ')' : 'NULL');
+
   if (!window._salmaLastRoute) {
     if (typeof window.showToast === 'function') window.showToast('No hay ruta para guardar');
     return;
@@ -559,16 +561,12 @@ function salmaGuardarRuta() {
 
   var firedb = window._fbDb || (window.firebase && window.firebase.firestore && window.firebase.firestore());
   var user = window._fbAuth ? window._fbAuth.currentUser : null;
-  var FieldValue = window.firebase && window.firebase.firestore && window.firebase.firestore.FieldValue;
+
+  console.log('[Salma] user:', user ? user.uid : 'NULL', '| firedb:', firedb ? 'OK' : 'NULL');
 
   if (!user || !firedb) {
     if (typeof window.openModal === 'function') window.openModal('register');
     if (typeof window.showToast === 'function') window.showToast('Regístrate para guardar tu ruta');
-    return;
-  }
-
-  if (!FieldValue) {
-    if (typeof window.showToast === 'function') window.showToast('Error: Firebase no cargado. Recarga la página.');
     return;
   }
 
