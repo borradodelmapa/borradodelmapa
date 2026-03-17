@@ -305,16 +305,22 @@ async function doRegister() {
 window.doRegister = doRegister;
 
 function doSocialLogin() {
-  try {
-    if (window._salmaLastRoute) {
-      try { localStorage.setItem('_salmaRouteBackup', JSON.stringify(window._salmaLastRoute)); } catch(e) {}
-    }
-    showToast("Redirigiendo a Google...");
-    auth.signInWithRedirect(googleProvider);
-  } catch(e) {
+  showToast("Conectando con Google...");
+  auth.signInWithPopup(googleProvider).then(function(result) {
+    var user = result.user;
+    db.collection("users").doc(user.uid).get().then(function(doc) {
+      if (!doc.exists) {
+        db.collection("users").doc(user.uid).set({
+          name: user.displayName || user.email.split("@")[0],
+          email: user.email, isPremium: false, mapsCount: 0, createdAt: new Date().toISOString()
+        }).catch(function(e) { console.warn('No se pudo crear doc usuario:', e); });
+      }
+    });
+  }).catch(function(e) {
+    if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') return;
     console.error("Google login error:", e.code, e.message);
-    showToast("Error al conectar con Google. Inténtalo de nuevo.");
-  }
+    showToast("Error al conectar con Google: " + (e.message || e.code));
+  });
 }
 window.doSocialLogin = doSocialLogin;
 
