@@ -120,14 +120,14 @@ window.openModal=openModal;window.closeModal=closeModal;window.switchModal=switc
       
       <!-- SALMA HERO INPUT -->
       <div id="salma-hero-box" style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;max-width:100%;margin-left:auto;margin-right:auto;">
-        <textarea id="salma-hero-input" placeholder="Ej: Tailandia 15 días, mochilero, quiero playa y montaña" autocomplete="off" rows="3" style="width:100%;background:#111111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:16px 20px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color .2s;resize:none;line-height:1.5;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'"></textarea>
+        <textarea id="salma-hero-input" placeholder="Diseñame una ruta de 5 días por la provincia de Málaga" autocomplete="off" rows="3" style="width:100%;background:#111111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:16px 20px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color .2s;resize:none;line-height:1.5;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'"></textarea>
         <button onclick="salmaHeroSend()" style="width:100%;background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:16px 28px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">PLANEAR →</button>
       </div>
 
       <!-- SALMA INLINE — diálogo + resultado (justo después del input) -->
       <section id="salma-inline" style="display:none;max-width:100%;margin:24px 0 0;text-align:left;">
         <div id="salma-dialog" style="margin-bottom:24px;"></div>
-        <div id="salma-inline-input-wrap" style="margin-bottom:24px;">
+        <div id="salma-inline-input-wrap" style="display:none;margin-bottom:24px;">
           <div style="display:flex;gap:8px;">
             <input type="text" id="salma-inline-input" placeholder="Añade más detalles o pide cambios..." autocomplete="off" style="flex:1;background:#111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:14px 18px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:15px;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'">
             <button onclick="salmaInlineReply()" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:14px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;cursor:pointer;transition:background .2s;white-space:nowrap;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">ENVIAR</button>
@@ -136,40 +136,10 @@ window.openModal=openModal;window.closeModal=closeModal;window.switchModal=switc
         <div id="salma-route-result" style="display:none;"></div>
       </section>
 
-      <!-- DEMOS -->
-      <div id="salma-demos-block" style="margin-top:8px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(245,240,232,.45);letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px;">Ver ejemplos de viaje</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;" id="hero-demo-grid">
-          <div onclick="openHeroDemo('japan')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:16px;overflow:hidden;transition:all .25s;text-align:left;" onmouseover="this.style.borderColor='#d4a017';this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.4)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.transform='none';this.style.boxShadow='none'">
-            <div style="height:90px;background:url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=200&fit=crop&q=75') center/cover;"></div>
-            <div style="padding:12px 14px;">
-              <div style="font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:3px;">Japón</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">7 DÍAS · CULTURAL</div>
-            </div>
-          </div>
-          <div onclick="openHeroDemo('thailand')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:16px;overflow:hidden;transition:all .25s;text-align:left;" onmouseover="this.style.borderColor='#d4a017';this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.4)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.transform='none';this.style.boxShadow='none'">
-            <div style="height:90px;background:url('https://images.unsplash.com/photo-1528181304800-259b08848526?w=400&h=200&fit=crop&q=75') center/cover;"></div>
-            <div style="padding:12px 14px;">
-              <div style="font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:3px;">Tailandia</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">10 DÍAS · LOW COST</div>
-            </div>
-          </div>
-          <div onclick="openHeroDemo('iceland')" style="cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.18);border-radius:16px;overflow:hidden;transition:all .25s;text-align:left;" onmouseover="this.style.borderColor='#d4a017';this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.4)'" onmouseout="this.style.borderColor='rgba(212,160,23,.18)';this.style.transform='none';this.style.boxShadow='none'">
-            <div style="height:90px;background:url('https://images.unsplash.com/photo-1504829857797-ddff29c27927?w=400&h=200&fit=crop&q=75') center/cover;"></div>
-            <div style="padding:12px 14px;">
-              <div style="font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:3px;">Islandia</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">12 DÍAS · ROAD TRIP</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- TODO: mostrar aquí las 3 últimas rutas diseñadas por usuarios -->
     </div>
   </div>
 
-  <!-- DEMO ROUTE MODAL (pre-generadas) -->
-  <div id="hero-demo-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:10002;overflow-y:auto;padding:20px;" onclick="if(event.target===this)this.style.display='none'">
-    <div id="hero-demo-content" style="max-width:640px;margin:0 auto;background:#111;border:1px solid rgba(212,160,23,.25);border-radius:20px;padding:0;overflow:hidden;"></div>
-  </div>
 
   <!-- FEATURES -->
   <section class="features">
@@ -198,55 +168,16 @@ window.openModal=openModal;window.closeModal=closeModal;window.switchModal=switc
     </div>
   </section>
 
-  <!-- PRUEBA SOCIAL -->
+  <!-- CONTADORES -->
   <section style="max-width:1180px;margin:0 auto;padding:0 32px 96px;">
-    <!-- Contador -->
-    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;">
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
       <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:18px;padding:20px 32px;text-align:center;min-width:160px;">
-        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;" id="counter-routes">847</div>
+        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;" id="counter-routes">—</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.16em;margin-top:4px;">RUTAS CREADAS</div>
       </div>
       <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:18px;padding:20px 32px;text-align:center;min-width:160px;">
-        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;">32</div>
+        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;" id="counter-countries">—</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.16em;margin-top:4px;">PAÍSES</div>
-      </div>
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:18px;padding:20px 32px;text-align:center;min-width:160px;">
-        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;">4.8<span style="font-size:18px;color:var(--dorado);">★</span></div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.16em;margin-top:4px;">VALORACIÓN</div>
-      </div>
-    </div>
-
-    <!-- Testimonios -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;">
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.12);border-radius:18px;padding:22px;">
-        <div style="font-size:14px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:14px;">"Le dije a Salma que quería 10 días en moto por Vietnam y me montó una ruta mejor que la que llevaba 3 semanas planificando yo solo."</div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;background:var(--dorado);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#0a0908;">M</div>
-          <div>
-            <div style="font-size:13px;font-weight:600;color:#fff;">Marc</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">VIETNAM · 25 DÍAS</div>
-          </div>
-        </div>
-      </div>
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.12);border-radius:18px;padding:22px;">
-        <div style="font-size:14px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:14px;">"Lo mejor es que durante el viaje le pregunté a Salma dónde comer cerca de Kioto y me recomendó un sitio que no salía en ninguna guía. Brutal."</div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;background:var(--dorado);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#0a0908;">L</div>
-          <div>
-            <div style="font-size:13px;font-weight:600;color:#fff;">Laura</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">JAPÓN · 12 DÍAS</div>
-          </div>
-        </div>
-      </div>
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.12);border-radius:18px;padding:22px;">
-        <div style="font-size:14px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:14px;">"Viajamos con mi madre en silla de ruedas y Salma nos adaptó toda la ruta por Barcelona. Verificamos cada sitio y todo era accesible de verdad."</div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;background:var(--dorado);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:#0a0908;">P</div>
-          <div>
-            <div style="font-size:13px;font-weight:600;color:#fff;">Pablo</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.1em;">BARCELONA · 5 DÍAS</div>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -620,7 +551,7 @@ window.SALMA_API="https://salma-api.paco-defoto.workers.dev";
 
 <!-- RATE LIMIT JS loaded externally -->
 
-<script src="app.js?v=8"></script>
-<script src="salma-chat.js?v=8"></script>
-<script src="utils.js?v=8"></script>
+<script src="app.js?v=9"></script>
+<script src="salma-chat.js?v=9"></script>
+<script src="utils.js?v=9"></script>
 </body>

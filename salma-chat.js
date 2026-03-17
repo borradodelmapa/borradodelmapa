@@ -139,10 +139,7 @@ function salmaTryMinimalRouteFromReply(userMessage, replyText) {
 
 function salmaShowInline() {
   var section = document.getElementById('salma-inline');
-  if (section) {
-    section.style.display = 'block';
-    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  if (section) section.style.display = 'block';
 }
 
 // En el chat solo mostramos 1–2 frases; el detalle va en la ruta de abajo
@@ -175,23 +172,43 @@ function salmaAddDialog(text, who) {
     div.style.cssText = 'display:flex;justify-content:flex-end;margin-bottom:16px;';
     div.innerHTML = '<div style="background:#d4a017;color:#0a0908;border-radius:18px;padding:14px 20px;font-size:15px;font-weight:600;max-width:80%;line-height:1.5;">' + escapeHTML(text) + '</div>';
   } else if (who === 'loading') {
+    var LOADING_PHRASES = [
+      'Recopilando información de la ruta...',
+      'Buscando rutas alternativas...',
+      'Ahorrando horas a tu compañero de viaje...',
+      'Habla conmigo como si fuera un colega...',
+      'Luego puedes editar la ruta conmigo...',
+      'Soy experta en viajes, te acompaño durante el viaje...',
+      'Buscando los mejores sitios locales...',
+      'Calculando la mejor combinación de días...'
+    ];
     div.id = 'salma-loading-msg';
     div.style.cssText = 'display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;';
     div.innerHTML = '<div style="flex-shrink:0;width:40px;height:40px;border-radius:50%;border:1.5px solid #d4a017;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#1a1816;">' + SALMA_AVATAR + '</div>' +
       '<div style="flex:1;padding:16px 20px;">' +
-        '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:#d4a017;letter-spacing:.12em;margin-bottom:8px;">SALMA ESTÁ CREANDO TU RUTA...</div>' +
+        '<div id="salma-loading-phrase" style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:#d4a017;letter-spacing:.12em;margin-bottom:8px;">' + LOADING_PHRASES[0] + '</div>' +
         '<div style="display:flex;gap:6px;">' +
           '<div style="width:8px;height:8px;background:#d4a017;border-radius:50%;animation:salmaDot 1.2s infinite;"></div>' +
           '<div style="width:8px;height:8px;background:#d4a017;border-radius:50%;animation:salmaDot 1.2s infinite .2s;"></div>' +
           '<div style="width:8px;height:8px;background:#d4a017;border-radius:50%;animation:salmaDot 1.2s infinite .4s;"></div>' +
         '</div>' +
       '</div>';
+    var phraseIdx = 0;
+    window._salmaLoadingInterval = setInterval(function() {
+      phraseIdx = (phraseIdx + 1) % LOADING_PHRASES.length;
+      var el = document.getElementById('salma-loading-phrase');
+      if (el) el.textContent = LOADING_PHRASES[phraseIdx];
+    }, 2500);
   }
 
   dialog.appendChild(div);
 }
 
 function salmaRemoveLoading() {
+  if (window._salmaLoadingInterval) {
+    clearInterval(window._salmaLoadingInterval);
+    window._salmaLoadingInterval = null;
+  }
   var el = document.getElementById('salma-loading-msg');
   if (el) el.remove();
 }
@@ -704,6 +721,15 @@ function salmaGuardarRuta() {
     }
     firedb.collection('users').doc(uid).collection('maps').add(ruta)
       .then(function(docRef) {
+        // Incrementar contador global de rutas
+        try {
+          firedb.collection('stats').doc('global').set(
+            { totalRoutes: firebase.firestore.FieldValue.increment(1) },
+            { merge: true }
+          ).then(function() {
+            if (typeof window.loadGlobalStats === 'function') window.loadGlobalStats();
+          }).catch(function() {});
+        } catch(e) {}
         window._salmaLastRoute = null;
         if (typeof window.showToast === 'function') window.showToast('¡Ruta guardada! Redirigiendo a Mis rutas...');
         var loadMaps = typeof window.loadUserMaps === 'function' ? window.loadUserMaps() : Promise.resolve();

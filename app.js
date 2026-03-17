@@ -429,6 +429,15 @@ async function eliminarRuta(id) {
     await db.collection('users').doc(currentUser.uid).collection('maps').doc(id).delete();
     showToast('Ruta eliminada');
     loadUserMaps();
+    // Decrementar contador global
+    try {
+      db.collection('stats').doc('global').set(
+        { totalRoutes: firebase.firestore.FieldValue.increment(-1) },
+        { merge: true }
+      ).then(function() {
+        if (typeof window.loadGlobalStats === 'function') window.loadGlobalStats();
+      }).catch(function() {});
+    } catch(e2) {}
   } catch(e) {
     showToast('Error al eliminar');
   }
@@ -748,6 +757,48 @@ function initHeroMap() {
   el.style.filter = "brightness(0.55)";
 }
 document.addEventListener("DOMContentLoaded", initHeroMap);
+
+// ===== STATS GLOBALES =====
+async function loadGlobalStats() {
+  try {
+    var snap = await db.collection('stats').doc('global').get();
+    var data = snap.exists ? snap.data() : {};
+    var total = data.totalRoutes || 0;
+    var el = document.getElementById('counter-routes');
+    if (el) el.textContent = total > 0 ? total : '—';
+    // Calcular países únicos si hay datos, si no usar valor por defecto
+    var countries = data.totalCountries || 0;
+    var elC = document.getElementById('counter-countries');
+    if (elC) elC.textContent = countries > 0 ? countries : '—';
+  } catch(e) {
+    // Firestore rules pueden bloquearlo, no pasa nada
+  }
+}
+window.loadGlobalStats = loadGlobalStats;
+document.addEventListener("DOMContentLoaded", loadGlobalStats);
+
+// ===== PLACEHOLDER SLIDER =====
+document.addEventListener("DOMContentLoaded", function() {
+  var HERO_PLACEHOLDERS = [
+    'Diseñame una ruta de 5 días por la provincia de Málaga',
+    '10 días Portugal playas y aventura',
+    'Tailandia 15 días, mochilero, playa y montaña',
+    'Japón cultural 7 días en primavera',
+    'Road trip por Escocia 10 días con coche',
+    'Semana en Marruecos, budget medio',
+    'Costa Amalfitana 6 días en pareja',
+    'Islandia aurora boreal 8 días en invierno'
+  ];
+  var pIdx = 0;
+  var heroInput = document.getElementById('salma-hero-input');
+  if (heroInput) {
+    setInterval(function() {
+      if (document.activeElement === heroInput) return;
+      pIdx = (pIdx + 1) % HERO_PLACEHOLDERS.length;
+      heroInput.placeholder = HERO_PLACEHOLDERS[pIdx];
+    }, 3500);
+  }
+});
 
 document.addEventListener("DOMContentLoaded", function() {
   document.addEventListener("keydown", function(e) {
