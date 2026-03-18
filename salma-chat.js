@@ -519,19 +519,18 @@ function salmaFetchWikipediaImages(pois, prefix) {
     var name = (stop.headline || stop.name || '').toString().trim();
     if (!name || name.length < 3) return;
     var containerId = prefix + '-img-' + idx;
-    fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name), { headers: { 'Accept': 'application/json' } })
+    var tryEN = fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name), { headers: { 'Accept': 'application/json' } })
       .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
-      .then(function(data) {
-        if (data && data.thumbnail && data.thumbnail.source) return data.thumbnail.source;
-        return fetch('https://es.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name), { headers: { 'Accept': 'application/json' } })
-          .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
-          .then(function(d) { return (d && d.thumbnail && d.thumbnail.source) ? d.thumbnail.source : Promise.reject(); });
-      })
-      .then(function(imgUrl) {
-        var c = document.getElementById(containerId);
-        if (c) c.innerHTML = '<img src="' + escapeHTML(imgUrl) + '" alt="' + escapeHTML(name) + '" style="width:100%;height:150px;object-fit:cover;border-radius:10px;margin-bottom:14px;" loading="lazy">';
-      })
-      .catch(function() {});
+      .then(function(d) { return (d && d.thumbnail && d.thumbnail.source) ? d.thumbnail.source : Promise.reject(); });
+    var tryES = tryEN.catch(function() {
+      return fetch('https://es.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name), { headers: { 'Accept': 'application/json' } })
+        .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function(d) { return (d && d.thumbnail && d.thumbnail.source) ? d.thumbnail.source : Promise.reject(); });
+    });
+    tryES.then(function(imgUrl) {
+      var c = document.getElementById(containerId);
+      if (c) c.innerHTML = '<img src="' + escapeHTML(imgUrl) + '" alt="' + escapeHTML(name) + '" style="width:100%;height:150px;object-fit:cover;border-radius:10px;margin-bottom:14px;" loading="lazy">';
+    }).catch(function() {});
   });
 }
 
