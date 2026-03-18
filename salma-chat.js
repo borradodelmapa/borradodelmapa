@@ -304,66 +304,133 @@ function salmaRenderRoute(routeData) {
       routeData.tags.map(function(t) { return '<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;padding:5px 12px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:var(--dorado);">' + escapeHTML(t) + '</span>'; }).join('') + '</div>';
   }
 
-  // Stops — formato acordeón agrupado por día
+  // Stops — acordeón por días
+  var dayGroups = {};
+  var dayOrder = [];
+  pois.forEach(function(stop) {
+    var d = stop.day || 1;
+    if (!dayGroups[d]) { dayGroups[d] = []; dayOrder.push(d); }
+    dayGroups[d].push(stop);
+  });
+  dayOrder.sort(function(a, b) { return a - b; });
+
   var stopsHTML = '';
-  var lastDay = null;
-  pois.forEach(function(stop, idx) {
-    var stopDay = stop.day || 1;
-    // Cabecera de día cuando cambia
-    if (stopDay !== lastDay) {
-      lastDay = stopDay;
-      stopsHTML += '<div style="display:flex;align-items:center;gap:10px;' + (idx > 0 ? 'margin-top:28px;' : '') + 'margin-bottom:4px;">' +
-        '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;white-space:nowrap;">DÍA ' + stopDay + '</div>' +
-        '<div style="flex:1;height:1px;background:rgba(212,160,23,.25);"></div>' +
+  var allStopIdx = 0;
+
+  dayOrder.forEach(function(dayNum) {
+    var dayStops = dayGroups[dayNum];
+    var dayTitle = '';
+    for (var di = 0; di < dayStops.length; di++) {
+      if (dayStops[di].day_title) { dayTitle = dayStops[di].day_title; break; }
+    }
+    var dayContentId = 'salma-day-content-' + dayNum;
+    var dayArrowId = 'salma-day-arrow-' + dayNum;
+
+    // Google Maps para este día
+    var dayPois = dayStops.filter(function(s) { return s.lat && s.lng && Number(s.lat) && Number(s.lng); });
+    var dayGmapsUrl = '';
+    if (dayPois.length >= 2) {
+      var dn0 = (dayPois[0].headline || dayPois[0].name || '').toString().trim();
+      var dnLast = (dayPois[dayPois.length - 1].headline || dayPois[dayPois.length - 1].name || '').toString().trim();
+      var dOrigin = (dn0 && countryOrRegion) ? encodeURIComponent(dn0 + ' ' + countryOrRegion) : (dayPois[0].lat + ',' + dayPois[0].lng);
+      var dDest = (dnLast && countryOrRegion) ? encodeURIComponent(dnLast + ' ' + countryOrRegion) : (dayPois[dayPois.length - 1].lat + ',' + dayPois[dayPois.length - 1].lng);
+      var dWp = dayPois.slice(1, -1).map(function(p) {
+        var n = (p.headline || p.name || '').toString().trim();
+        return n && countryOrRegion ? encodeURIComponent(n + ' ' + countryOrRegion) : (p.lat + ',' + p.lng);
+      }).join('|');
+      dayGmapsUrl = 'https://www.google.com/maps/dir/?api=1&origin=' + dOrigin + '&destination=' + dDest + (dWp ? '&waypoints=' + dWp : '') + '&travelmode=driving';
+    } else if (dayPois.length === 1) {
+      var dn = (dayPois[0].headline || dayPois[0].name || '').toString().trim();
+      dayGmapsUrl = (dn && countryOrRegion) ? ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(dn + ' ' + countryOrRegion)) : ('https://www.google.com/maps?q=' + dayPois[0].lat + ',' + dayPois[0].lng);
+    }
+
+    // Paradas del día
+    var dayStopsHTML = '';
+    dayStops.forEach(function(stop) {
+      var idx = allStopIdx++;
+      var icon = typeIcons[stop.type] || '📍';
+      var headline = stop.headline || stop.name || '';
+      var mapsUrl = '';
+      if (headline && countryOrRegion) {
+        mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(headline + ' ' + countryOrRegion);
+      } else if (stop.lat && stop.lng) {
+        mapsUrl = 'https://www.google.com/maps?q=' + stop.lat + ',' + stop.lng;
+      }
+      var narrative = stop.narrative || stop.description || '';
+      var secret = stop.local_secret || '';
+      var alt = stop.alternative || '';
+      var practical = stop.practical || '';
+      var context = stop.context || '';
+      var food_nearby = stop.food_nearby || '';
+      var links = (stop.links && Array.isArray(stop.links)) ? stop.links.filter(function(l) { return l && l.label && l.url; }) : [];
+      var hasDetails = narrative || secret || alt || practical || context || food_nearby || links.length > 0;
+      var stopId = 'salma-stop-' + idx;
+
+      var linksHTML = '';
+      if (links.length > 0) {
+        linksHTML = '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;">' +
+          links.map(function(l) {
+            return '<a href="' + escapeHTML(l.url) + '" target="_blank" rel="noopener noreferrer" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;border:1px solid rgba(212,160,23,.3);padding:6px 12px;border-radius:999px;letter-spacing:.08em;" onmouseover="this.style.background=\'rgba(212,160,23,.1)\'" onmouseout="this.style.background=\'transparent\'">' + escapeHTML(l.label) + ' ↗</a>';
+          }).join('') +
+        '</div>';
+      }
+
+      dayStopsHTML += '<div style="border-bottom:1px solid rgba(212,160,23,.08);">' +
+        '<div onclick="salmaToggleStop(\'' + stopId + '\')" style="display:flex;align-items:center;gap:10px;padding:16px 0;cursor:pointer;transition:background .15s;" onmouseover="this.style.background=\'rgba(255,255,255,.02)\'" onmouseout="this.style.background=\'none\'">' +
+          '<div style="flex:1;">' +
+            '<div style="font-family:\'Inter Tight\',sans-serif;font-size:18px;font-weight:700;color:#fff;line-height:1.2;">' +
+              '<span style="font-size:16px;margin-right:6px;">' + icon + '</span>' + escapeHTML(headline) +
+            '</div>' +
+          '</div>' +
+          (hasDetails ? '<div style="flex-shrink:0;font-size:12px;color:var(--dorado);" id="' + stopId + '-arrow">▾</div>' : '') +
+        '</div>' +
+        (hasDetails ? '<div id="' + stopId + '" style="display:none;padding:0 0 16px 8px;">' +
+          '<div id="salma-stop-img-' + idx + '"></div>' +
+          (narrative ? '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.75;margin-bottom:16px;">' + escapeHTML(narrative) + '</div>' : '') +
+          (context ? '<div style="background:rgba(100,140,255,.05);border-left:3px solid rgba(100,140,255,.4);padding:12px 16px;margin-bottom:12px;border-radius:0 12px 12px 0;">' +
+            '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:rgba(100,180,255,.8);letter-spacing:.14em;margin-bottom:6px;">📖 CONTEXTO</div>' +
+            '<div style="font-size:14px;color:rgba(245,240,232,.75);line-height:1.6;">' + escapeHTML(context) + '</div>' +
+          '</div>' : '') +
+          (food_nearby ? '<div style="background:rgba(255,140,50,.05);border-left:3px solid rgba(255,140,50,.35);padding:12px 16px;margin-bottom:12px;border-radius:0 12px 12px 0;">' +
+            '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:rgba(255,160,80,.85);letter-spacing:.14em;margin-bottom:6px;">🍜 COME CERCA</div>' +
+            '<div style="font-size:14px;color:rgba(245,240,232,.75);line-height:1.6;">' + escapeHTML(food_nearby) + '</div>' +
+          '</div>' : '') +
+          (secret ? '<div style="background:rgba(212,160,23,.06);border-left:3px solid var(--dorado);padding:12px 16px;margin-bottom:12px;border-radius:0 12px 12px 0;">' +
+            '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.14em;margin-bottom:6px;">🔑 SECRETO LOCAL</div>' +
+            '<div style="font-size:14px;color:rgba(245,240,232,.75);line-height:1.6;">' + escapeHTML(secret) + '</div>' +
+          '</div>' : '') +
+          (alt ? '<div style="padding:10px 0;margin-bottom:12px;">' +
+            '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:rgba(245,240,232,.4);letter-spacing:.12em;margin-bottom:4px;">↗ ALTERNATIVA</div>' +
+            '<div style="font-size:14px;color:rgba(245,240,232,.6);line-height:1.6;">' + escapeHTML(alt) + '</div>' +
+          '</div>' : '') +
+          (practical ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:rgba(245,240,232,.55);line-height:1.8;padding:10px 14px;background:rgba(255,255,255,.02);border-radius:10px;margin-bottom:12px;">📋 ' + escapeHTML(practical) + '</div>' : '') +
+          linksHTML +
+          (mapsUrl ? '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;letter-spacing:.1em;' + (links.length > 0 ? 'display:inline-block;margin-top:10px;' : '') + '">VER EN MAPA →</a>' : '') +
+        '</div>' : '') +
       '</div>';
-    }
-    var icon = typeIcons[stop.type] || '📍';
-    var headline = stop.headline || stop.name || '';
-    var mapsUrl = '';
-    if (headline && countryOrRegion) {
-      mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(headline + ' ' + countryOrRegion);
-    } else if (stop.lat && stop.lng) {
-      mapsUrl = 'https://www.google.com/maps?q=' + stop.lat + ',' + stop.lng;
-    }
-    var narrative = stop.narrative || stop.description || '';
-    var secret = stop.local_secret || '';
-    var alt = stop.alternative || '';
-    var practical = stop.practical || '';
-    var hasDetails = narrative || secret || alt || practical;
-    var stopId = 'salma-stop-' + idx;
+    });
 
-    // Preview text (primera línea del narrative)
-    var preview = narrative ? narrative.substring(0, 80).replace(/\s+\S*$/, '') + '...' : '';
-
-    stopsHTML += '<div style="border-bottom:1px solid rgba(212,160,23,.1);">' +
-      // Header colapsado (siempre visible)
-      '<div onclick="salmaToggleStop(\'' + stopId + '\')" style="display:flex;gap:16px;padding:20px 0;cursor:pointer;transition:background .15s;" onmouseover="this.style.background=\'rgba(255,255,255,.02)\'" onmouseout="this.style.background=\'none\'">' +
-        '<div style="min-width:40px;text-align:center;">' +
-          '<span style="font-size:24px;">' + icon + '</span>' +
+    // Bloque de día con acordeón
+    stopsHTML +=
+      '<div style="border:1px solid rgba(212,160,23,.15);border-radius:14px;margin-bottom:10px;overflow:hidden;">' +
+        '<div onclick="salmaToggleDay(\'' + dayContentId + '\',\'' + dayArrowId + '\')" style="display:flex;align-items:center;gap:10px;padding:14px 18px;cursor:pointer;background:rgba(212,160,23,.04);transition:background .15s;" onmouseover="this.style.background=\'rgba(212,160,23,.09)\'" onmouseout="this.style.background=\'rgba(212,160,23,.04)\'">' +
+          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;white-space:nowrap;">DÍA ' + dayNum + '</div>' +
+          (dayTitle ? '<div style="font-size:13px;color:rgba(245,240,232,.75);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">· ' + escapeHTML(dayTitle) + '</div>' : '') +
+          '<div style="flex:1;"></div>' +
+          '<div style="font-size:10px;color:rgba(212,160,23,.55);font-family:\'JetBrains Mono\',monospace;">' + dayStops.length + ' paradas</div>' +
+          '<div id="' + dayArrowId + '" style="font-size:12px;color:var(--dorado);margin-left:8px;">▾</div>' +
         '</div>' +
-        '<div style="flex:1;">' +
-          '<div style="font-family:\'Inter Tight\',sans-serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.2;">' + escapeHTML(headline) + '</div>' +
-          (preview ? '<div style="font-size:14px;color:rgba(245,240,232,.5);line-height:1.5;">' + escapeHTML(preview) + '</div>' : '') +
+        '<div id="' + dayContentId + '" style="display:none;">' +
+          (dayGmapsUrl ?
+            '<div style="padding:12px 16px 0;">' +
+              '<a href="' + dayGmapsUrl + '" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;background:rgba(212,160,23,.07);border:1px solid rgba(212,160,23,.2);border-radius:10px;font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);text-decoration:none;letter-spacing:.1em;transition:background .15s;" onmouseover="this.style.background=\'rgba(212,160,23,.14)\'" onmouseout="this.style.background=\'rgba(212,160,23,.07)\'">' +
+                '🗺 NAVEGAR DÍA ' + dayNum + ' EN GOOGLE MAPS →' +
+              '</a>' +
+            '</div>'
+            : '') +
+          '<div style="padding:0 16px 8px;">' + dayStopsHTML + '</div>' +
         '</div>' +
-        (hasDetails ? '<div style="flex-shrink:0;align-self:center;font-size:12px;color:var(--dorado);transition:transform .2s;" id="' + stopId + '-arrow">▾</div>' : '') +
-      '</div>' +
-      // Contenido expandible (oculto por defecto)
-      (hasDetails ? '<div id="' + stopId + '" style="display:none;padding:0 0 20px 56px;">' +
-        (narrative ? '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.75;margin-bottom:16px;">' + escapeHTML(narrative) + '</div>' : '') +
-        (secret ? '<div style="background:rgba(212,160,23,.06);border-left:3px solid var(--dorado);padding:12px 16px;margin-bottom:12px;border-radius:0 12px 12px 0;">' +
-          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.14em;margin-bottom:6px;">🔑 SECRETO LOCAL</div>' +
-          '<div style="font-size:14px;color:rgba(245,240,232,.75);line-height:1.6;">' + escapeHTML(secret) + '</div>' +
-        '</div>' : '') +
-        (alt ? '<div style="padding:10px 0;margin-bottom:12px;">' +
-          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:rgba(245,240,232,.4);letter-spacing:.12em;margin-bottom:4px;">↗ ALTERNATIVA</div>' +
-          '<div style="font-size:14px;color:rgba(245,240,232,.6);line-height:1.6;">' + escapeHTML(alt) + '</div>' +
-        '</div>' : '') +
-        (practical ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:rgba(245,240,232,.55);line-height:1.8;padding:10px 14px;background:rgba(255,255,255,.02);border-radius:10px;margin-bottom:12px;">' +
-          '📋 ' + escapeHTML(practical) +
-        '</div>' : '') +
-        (mapsUrl ? '<a href="' + mapsUrl + '" target="_blank" rel="noopener" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);text-decoration:none;letter-spacing:.1em;">VER EN MAPA →</a>' : '') +
-      '</div>' : '') +
-    '</div>';
+      '</div>';
   });
 
   // Tips
@@ -387,10 +454,12 @@ function salmaRenderRoute(routeData) {
     '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-bottom:16px;">' + (routeData.duration_days || 0) + ' DÍAS · ' + escapeHTML((routeData.country || '').toUpperCase()) + budget + ' · ' + pois.length + ' PARADAS</div>' +
     (routeData.summary ? '<div style="font-size:16px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:20px;">' + escapeHTML(routeData.summary) + '</div>' : '') +
     tagsHTML +
+    // Botón Google Maps general (fix: antes estaba calculado pero nunca renderizado)
+    (gmapsUrl ? '<a href="' + gmapsUrl + '" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px;padding:14px 16px;background:rgba(212,160,23,.07);border:1px solid rgba(212,160,23,.2);border-radius:12px;font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);text-decoration:none;letter-spacing:.1em;transition:background .15s;" onmouseover="this.style.background=\'rgba(212,160,23,.14)\'" onmouseout="this.style.background=\'rgba(212,160,23,.07)\'">🗺 VER RUTA COMPLETA EN GOOGLE MAPS →</a>' : '') +
     // Mapa Leaflet
     (hasMapData ? '<div id="salma-route-map" style="height:260px;width:100%;border-radius:14px;margin-bottom:24px;border:1px solid rgba(212,160,23,.15);overflow:hidden;"></div>' : '') +
     // Stops (itinerario primero)
-    '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:4px;">ITINERARIO · ' + pois.length + ' EXPERIENCIAS</div>' +
+    '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:12px;">ITINERARIO · ' + pois.length + ' EXPERIENCIAS</div>' +
     stopsHTML +
     tipsHTML +
     // Botones principales
@@ -411,9 +480,11 @@ function salmaRenderRoute(routeData) {
       }
     }, 150);
   }
+  // Imágenes reales Wikipedia (async, no bloquea el render)
+  setTimeout(function() { salmaFetchWikipediaImages(pois, 'salma-stop'); }, 400);
 }
 
-// Toggle accordion stop
+// Toggle acordeón de parada individual
 function salmaToggleStop(id) {
   var el = document.getElementById(id);
   var arrow = document.getElementById(id + '-arrow');
@@ -425,6 +496,43 @@ function salmaToggleStop(id) {
     el.style.display = 'none';
     if (arrow) arrow.textContent = '▾';
   }
+}
+
+// Toggle acordeón de día completo
+function salmaToggleDay(contentId, arrowId) {
+  var el = document.getElementById(contentId);
+  var arrow = document.getElementById(arrowId);
+  if (!el) return;
+  if (el.style.display === 'none') {
+    el.style.display = 'block';
+    if (arrow) arrow.textContent = '▴';
+  } else {
+    el.style.display = 'none';
+    if (arrow) arrow.textContent = '▾';
+  }
+}
+
+// Imágenes reales desde Wikipedia — solo si encuentra coincidencia exacta, si no: nada
+function salmaFetchWikipediaImages(pois, prefix) {
+  if (!pois || !pois.length) return;
+  pois.forEach(function(stop, idx) {
+    var name = (stop.headline || stop.name || '').toString().trim();
+    if (!name || name.length < 3) return;
+    var containerId = prefix + '-img-' + idx;
+    fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name), { headers: { 'Accept': 'application/json' } })
+      .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function(data) {
+        if (data && data.thumbnail && data.thumbnail.source) return data.thumbnail.source;
+        return fetch('https://es.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name), { headers: { 'Accept': 'application/json' } })
+          .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
+          .then(function(d) { return (d && d.thumbnail && d.thumbnail.source) ? d.thumbnail.source : Promise.reject(); });
+      })
+      .then(function(imgUrl) {
+        var c = document.getElementById(containerId);
+        if (c) c.innerHTML = '<img src="' + escapeHTML(imgUrl) + '" alt="' + escapeHTML(name) + '" style="width:100%;height:150px;object-fit:cover;border-radius:10px;margin-bottom:14px;" loading="lazy">';
+      })
+      .catch(function() {});
+  });
 }
 
 // ===== ENVIAR DESDE EL HERO =====
@@ -642,6 +750,10 @@ function salmaGuardarRuta() {
       local_secret: (s && s.local_secret) ? String(s.local_secret) : '',
       alternative: (s && s.alternative) ? String(s.alternative) : '',
       practical: (s && s.practical) ? String(s.practical) : '',
+      day_title: (s && s.day_title) ? String(s.day_title) : '',
+      context: (s && s.context) ? String(s.context) : '',
+      food_nearby: (s && s.food_nearby) ? String(s.food_nearby) : '',
+      links: (s && Array.isArray(s.links)) ? s.links : [],
       duracion_min: 0, lat: lat, lng: lng, day: day, name: name, description: desc, type: s && s.type
     };
   });
@@ -695,6 +807,10 @@ function salmaGuardarRuta() {
         local_secret: (p.local_secret || '').toString(),
         alternative: (p.alternative || '').toString(),
         practical: (p.practical || '').toString(),
+        day_title: (p.day_title || '').toString(),
+        context: (p.context || '').toString(),
+        food_nearby: (p.food_nearby || '').toString(),
+        links: Array.isArray(p.links) ? p.links : [],
         type: (p.tipo || 'lugar').toString(),
         day: typeof p.day === 'number' ? p.day : 1,
         lat: typeof p.lat === 'number' ? p.lat : 0,
@@ -949,6 +1065,8 @@ window.salmaGuardarRuta = salmaGuardarRuta;
 window.salmaReset = salmaReset;
 window.salmaRenderRoute = salmaRenderRoute;
 window.salmaToggleStop = salmaToggleStop;
+window.salmaToggleDay = salmaToggleDay;
+window.salmaFetchWikipediaImages = salmaFetchWikipediaImages;
 window.salmaUseSuggestion = salmaUseSuggestion;
 window.salmaEditRoute = salmaEditRoute;
 window.salmaEditFromBox = salmaEditFromBox;
