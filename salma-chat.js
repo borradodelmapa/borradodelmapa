@@ -566,7 +566,8 @@ function salmaRenderRoute(routeData) {
     }, 150);
   }
   // Imágenes reales Wikipedia (async, no bloquea el render)
-  setTimeout(function() { salmaFetchWikipediaImages(pois, 'salma-stop'); }, 400);
+  var _routeGeo = (routeData.country || routeData.region || '').toString().trim();
+  setTimeout(function() { salmaFetchWikipediaImages(pois, 'salma-stop', _routeGeo); }, 400);
 }
 
 // Toggle acordeón de parada individual
@@ -597,19 +598,23 @@ function salmaToggleDay(contentId, arrowId) {
   }
 }
 
-// Imágenes reales: Wikipedia EN → Wikipedia ES → Street View (lat/lng) → nada
-function salmaFetchWikipediaImages(pois, prefix) {
+// Imágenes reales: Google Places → Wikipedia EN → Wikipedia ES → nada
+// countryOrRegion: país o región de la ruta — ancla la búsqueda geográficamente
+function salmaFetchWikipediaImages(pois, prefix, countryOrRegion) {
   if (!pois || !pois.length) return;
+  var geo = (countryOrRegion || '').toString().trim();
   pois.forEach(function(stop, idx) {
     var name = (stop.headline || stop.name || '').toString().trim();
     var containerId = prefix + '-img-' + idx;
     var lat = stop.lat || null;
     var lng = stop.lng || null;
+    // Incluir país/región en la query — ancla Places aunque no haya coords
+    var searchName = (name && geo) ? (name + ' ' + geo) : name;
 
     // 1. Google Places Photos (mejor cobertura)
     var tryPlaces = (name && name.length >= 3)
       ? (function() {
-          var pUrl = 'https://salma-api.paco-defoto.workers.dev/photo?name=' + encodeURIComponent(name) + (lat && lng ? '&lat=' + lat + '&lng=' + lng : '');
+          var pUrl = 'https://salma-api.paco-defoto.workers.dev/photo?name=' + encodeURIComponent(searchName) + (lat && lng ? '&lat=' + lat + '&lng=' + lng : '');
           return fetch(pUrl).then(function(r) {
             if (!r.ok) return Promise.reject();
             var ct = r.headers.get('Content-Type') || '';

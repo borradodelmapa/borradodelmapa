@@ -728,7 +728,7 @@ function verRuta(id, nombre) {
     // Imágenes reales Wikipedia (async)
     setTimeout(function() {
       if (typeof window.salmaFetchWikipediaImages === 'function') {
-        window.salmaFetchWikipediaImages(pois, 'vr-stop');
+        window.salmaFetchWikipediaImages(pois, 'vr-stop', vrCountry);
       }
     }, 400);
   }).catch(e => showToast('Error: ' + e.message));
