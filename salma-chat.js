@@ -522,12 +522,28 @@ function salmaFetchWikipediaImages(pois, prefix) {
     var lat = stop.lat || null;
     var lng = stop.lng || null;
 
-    var tryEN = (name && name.length >= 3)
-      ? fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name), { headers: { 'Accept': 'application/json' } })
-          .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
-          .then(function(d) { return (d && d.thumbnail && d.thumbnail.source) ? d.thumbnail.source : Promise.reject(); })
+    // 1. Google Places Photos (mejor cobertura)
+    var tryPlaces = (name && name.length >= 3)
+      ? (function() {
+          var pUrl = 'https://salma-api.paco-defoto.workers.dev/photo?name=' + encodeURIComponent(name) + (lat && lng ? '&lat=' + lat + '&lng=' + lng : '');
+          return fetch(pUrl).then(function(r) {
+            if (!r.ok) return Promise.reject();
+            var ct = r.headers.get('Content-Type') || '';
+            if (ct.indexOf('image') === -1) return Promise.reject();
+            return pUrl;
+          });
+        })()
       : Promise.reject();
 
+    // 2. Wikipedia EN
+    var tryEN = tryPlaces.catch(function() {
+      if (!name || name.length < 3) return Promise.reject();
+      return fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name), { headers: { 'Accept': 'application/json' } })
+        .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function(d) { return (d && d.thumbnail && d.thumbnail.source) ? d.thumbnail.source : Promise.reject(); });
+    });
+
+    // 3. Wikipedia ES
     var tryES = tryEN.catch(function() {
       if (!name || name.length < 3) return Promise.reject();
       return fetch('https://es.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name), { headers: { 'Accept': 'application/json' } })
@@ -535,33 +551,9 @@ function salmaFetchWikipediaImages(pois, prefix) {
         .then(function(d) { return (d && d.thumbnail && d.thumbnail.source) ? d.thumbnail.source : Promise.reject(); });
     });
 
-    var tryPlaces = tryES.catch(function() {
-      if (!name || name.length < 3) return Promise.reject();
-      var pUrl = 'https://salma-api.paco-defoto.workers.dev/photo?name=' + encodeURIComponent(name) + (lat && lng ? '&lat=' + lat + '&lng=' + lng : '');
-      return fetch(pUrl).then(function(r) {
-        if (!r.ok) return Promise.reject();
-        var ct = r.headers.get('Content-Type') || '';
-        if (ct.indexOf('image') === -1) return Promise.reject();
-        return pUrl;
-      });
-    });
-
-    var tryStreetView = tryPlaces.catch(function() {
-      if (!lat || !lng || !window.GOOGLE_STREETVIEW_KEY) return Promise.reject();
-      var metaUrl = 'https://maps.googleapis.com/maps/api/streetview/metadata?location=' + lat + ',' + lng + '&key=' + window.GOOGLE_STREETVIEW_KEY;
-      return fetch(metaUrl)
-        .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
-        .then(function(d) {
-          if (d && d.status === 'OK') {
-            return 'https://maps.googleapis.com/maps/api/streetview?size=600x300&location=' + lat + ',' + lng + '&fov=90&key=' + window.GOOGLE_STREETVIEW_KEY;
-          }
-          return Promise.reject();
-        });
-    });
-
-    tryStreetView.then(function(imgUrl) {
+    tryES.then(function(imgUrl) {
       var c = document.getElementById(containerId);
-      if (c) c.innerHTML = '<img src="' + escapeHTML(imgUrl) + '" alt="' + escapeHTML(name) + '" style="width:100%;height:150px;object-fit:cover;border-radius:10px;margin-bottom:14px;" loading="lazy">';
+      if (c) c.innerHTML = '<img src="' + escapeHTML(imgUrl) + '" alt="' + escapeHTML(name) + '" style="width:100%;height:auto;border-radius:10px;margin-bottom:14px;display:block;" loading="lazy">';
     }).catch(function() {});
   });
 }
