@@ -1,0 +1,515 @@
+DOCUMENTO TÉCNICO — SALMA + BORRADO DEL MAPA
+==============================================
+Versión: 2.0 — 18 marzo 2026
+Estado: referencia única para todo desarrollo
+
+
+  ─────────────
+  1. OBJETIVO
+  ─────────────
+
+Integrar SALMA como asistente inteligente dentro de Borrado del Mapa para:
+
+- Descubrir lugares y recomendar experiencias
+- Generar rutas con datos reales y verificables
+- Sugerir alojamientos con precios y enlaces
+- Editar itinerarios (manual + IA)
+- Organizar viajes en el mapa del usuario
+- Ofrecer info legal, cultural, histórica y práctica de cada destino
+- Adaptarse a la nacionalidad y nivel de experiencia del viajero
+
+Principio clave: SALMA piensa. La aplicación ejecuta.
+
+La IA es capa de asistencia. La lógica principal reside en el sistema (frontend + backend).
+
+
+  ──────────────────────
+  2. STACK TECNOLÓGICO
+  ──────────────────────
+
+Frontend:       HTML/JS vanilla + Leaflet (mapa)
+Repo:           github.com/borradodelmapa/borradodelmapa
+Archivos prod:  index.html, app.js, salma-chat.js, styles.css, utils.js, salma_ai_avatar.png
+Backend:        Firebase / Firestore (usuarios, rutas, perfiles)
+IA:             Cloudflare Worker → API Anthropic (Claude Sonnet 4.6)
+Worker:         salma-api.paco-defoto.workers.dev
+KV:             Cloudflare KV (binding: SALMA_KV) — base de conocimiento de viajes
+Secrets:        ANTHROPIC_API_KEY en Cloudflare (nunca en código público)
+
+Normas de código:
+- Nunca const db duplicado
+- Nunca API keys en código público
+- Nunca window.onload
+- Revertir a versión estable antes de parchear
+- Commits en español
+
+
+  ──────────────────────────
+  3. ARQUITECTURA GENERAL
+  ──────────────────────────
+
+El sistema se divide en seis componentes:
+
+1. SALMA conversacional (salma-prompt — 9 bloques)
+2. Editor visual de rutas (UI + lógica de aplicación, sin IA)
+3. SALMA ayudante del editor (Prompt Editor — diseñado, no implementado)
+4. Orquestador de intención (Prompt Orquestador — diseñado, no implementado)
+5. Base de conocimiento KV (3 niveles)
+6. Detección de destino y categorías (en el Worker)
+
+Flujo actual (V1):
+
+  Usuario
+    ↓
+  Worker recibe mensaje
+    ↓
+  Detecta país + categorías (keywords)
+    ↓
+  Lee KV: ficha país (N1) + destinos (N2) si hay datos
+    ↓
+  Ensambla prompt: salma-prompt + contexto dinámico
+    ↓
+  Llama a Claude API
+    ↓
+  Extrae ruta (SALMA_ROUTE_JSON) si la hay
+    ↓
+  Devuelve { reply, route } al frontend
+
+Flujo futuro (con orquestador):
+
+  Usuario
+    ↓
+  Orquestador de intención
+    ↓
+  Decide entre:
+    → SALMA conversacional
+    → Editor visual (sin IA)
+    → SALMA ayudante del editor
+  ↓
+  Base de datos de rutas (Firestore)
+
+
+  ──────────────────────────────────────────
+  4. BASE DE CONOCIMIENTO — CLOUDFLARE KV
+  ──────────────────────────────────────────
+
+Binding en Worker: SALMA_KV
+Si SALMA_KV no está bindeado, el Worker funciona sin contexto de destino.
+
+4.1 NIVEL 1 — Ficha país (estático, 193 países)
+
+  Clave KV:     dest:{código}:base
+  Ejemplo:      dest:vn:base
+
+  Contenido por país:
+  - Capital, idioma oficial, idioma útil para viajero
+  - Moneda, cambio aprox EUR, huso horario, prefijo tel, enchufes
+  - Visados para 10-15 nacionalidades principales (ES, FR, DE, UK, US, MX, AR, CO, BR, AU...)
+  - Mejor época / época a evitar
+  - Seguridad (nivel 1-5 + comentario)
+  - Vacunas, agua potable, emergencias
+  - Coste diario mochilero / medio (EUR)
+  - Propinas, curiosidad viajera
+  - Historia del país (resumen práctico para viajero)
+  - Cultura (costumbres, tabúes, vestimenta, religión)
+  - Legal viajero:
+    · Leyes que pillan a turistas (drogas, alcohol, vestimenta, foto, drones, VPN)
+    · Qué pasa si te detienen (derechos, contacto consular)
+    · Aduanas (efectivo, tabaco, alcohol, medicamentos)
+    · Conducción (carnet internacional, seguro, multas)
+    · Estafas legales comunes (timos policiales, sobornos)
+    · Seguros de viaje obligatorios
+    · Derechos del viajero en aeropuertos
+    · Leyes LGBTQ+
+    · Nómada digital (legal o no, visados específicos)
+    · Disclaimer: "info orientativa, consulta tu embajada"
+  - Keywords de búsqueda (ciudades, variantes de nombre)
+
+  Generador:    generate.js
+  Coste:        ~$0.90 (193 llamadas × ~1500 tokens)
+  Subida:       upload-kv.js
+
+  Keywords indexadas:
+  Clave KV:     kw:{keyword-normalizado} → código de país
+  Ejemplo:      kw:hanoi → vn
+
+4.2 NIVEL 2 — 10 destinos por país (estático, 193 países)
+
+  Clave KV:     dest:{código}:destinos       (todos los destinos del país)
+                dest:{código}:spot:{slug}    (destino individual)
+  Ejemplo:      dest:vn:destinos
+                dest:vn:spot:hanoi
+
+  Contenido por destino:
+  - id (slug), nombre, tipo, región
+  - Descripción (2-3 frases, sin paja)
+  - Días recomendados
+  - Mejor época
+  - Cómo llegar (medio, duración, coste EUR)
+  - Dónde dormir: mochilero / medio / comfort (tipo + rango EUR/noche)
+  - Qué hacer (actividades con precio)
+  - Dónde comer (platos, precios, zonas)
+  - Consejo local (tip de alguien que ha estado)
+  - Plan B lluvia
+  - Keywords de búsqueda
+
+  Índice de slugs:
+  Clave KV:     spot:{slug} → {código}:{slug}
+  Ejemplo:      spot:hanoi → vn:hanoi
+
+  Generador:    generate-nivel2.js
+  Coste:        ~$11.50 (193 llamadas × ~4000 tokens)
+  Subida:       upload-kv-nivel2.js
+
+  Total: ~1.930 destinos, ~7.000 keywords, ~3.3 MB en KV
+
+4.3 NIVEL 3 — Contexto en vivo (dinámico)
+
+  No es KV estático. Se activa cuando Salma detecta que necesita dato fresco.
+
+  Incluye:
+  - Noticias locales y alertas de seguridad
+  - Precios reales de vuelos (Kiwi en F4) y hoteles (Trivago en F4)
+  - Eventos y festivales con fechas del año actual
+  - Info hiperlocal (SIMs, fronteras, estado de carreteras)
+  - Regulaciones recientes (visados, requisitos sanitarios, tasas)
+
+  Detección inteligente:
+  - Llamada clasificadora rápida (modelo barato) que decide si buscar o no
+  - Si dice "necesito buscar: [query]" → Worker hace búsqueda web
+  - Si dice "no necesito buscar" → responde con N1 + N2
+
+  Caché de búsquedas:
+  Clave KV:     cache:{query-hash} → resultado + timestamp
+  TTL:          7 días
+  Si otro usuario pregunta lo mismo → respuesta directa sin búsqueda
+
+  Feedback de usuarios:
+  Clave KV:     feedback:{código}:{destino}:{tema} → corrección + timestamp
+  Si se acumulan 2-3 feedbacks iguales → ficha marcada "pendiente actualizar"
+
+  Contador de demanda:
+  Clave KV:     demand:{código} → número de consultas
+  Prioriza qué países ampliar de N1 a N2
+
+  Estado: diseñado, pendiente de implementar
+
+4.4 ESTADO ACTUAL DE KVs
+
+  Nivel 1:  PENDIENTE (scripts listos, datos por generar)
+  Nivel 2:  PENDIENTE (scripts listos, datos por generar)
+  Nivel 3:  PENDIENTE (diseñado, sin implementar)
+  Binding:  SALMA_KV (crear namespace en Cloudflare + bindear al Worker)
+
+
+  ────────────────────────────────────────
+  5. DETECCIÓN DE DESTINO Y CATEGORÍAS
+  ────────────────────────────────────────
+
+Implementado en el Worker V1.
+
+5.1 Detección de país
+
+  Diccionario de keywords por código de país (193 países).
+  Incluye: nombre en español, nombre en inglés, ciudades principales,
+  destinos turísticos, variantes sin tildes.
+  Detecta hasta 2 países por mensaje.
+
+5.2 Detección de categorías
+
+  11 categorías temáticas:
+  visados, salud, transporte, alojamiento, comida, seguridad,
+  legal, cultura, historia, presupuesto, clima.
+
+  Se inyectan como [TEMAS DETECTADOS] en el contexto dinámico
+  para que Claude priorice esos aspectos.
+
+5.3 Nacionalidad del usuario
+
+  El frontend puede enviar "nationality" en el body de la llamada al Worker.
+  Se lee de Firestore si el usuario tiene perfil.
+  Si no tiene, Salma le pregunta.
+
+
+  ──────────────────────────────────────
+  6. SALMA-PROMPT (PRODUCCIÓN — V1)
+  ──────────────────────────────────────
+
+Archivo: salma-prompt-v1.txt
+Worker:  salma-worker-v1-final.js
+
+9 bloques ensamblados en el system prompt:
+
+BLOQUE 1 — IDENTIDAD
+  Andaluza cercana, tutea, multiidioma manteniendo carácter.
+
+BLOQUE 2 — PERSONALIDAD Y TONO
+  Cada frase lleva dato útil. Opinión propia, se moja.
+  Gustos: Extremoduro, Springsteen, Sabina, AC/DC. Anti-reguetón.
+  Recursos narrativos del espíritu de las letras (no citas textuales).
+  No acepta machismo ni sexismo.
+
+BLOQUE 3 — MULETILLAS (USO MEDIDO)
+  1 cada 8-10 mensajes, solo cuando encaja emocionalmente.
+  5 categorías: planear, improvisar, social, problemas, cerrar decisiones.
+  Nunca forzadas, nunca repetidas seguidas.
+
+BLOQUE 4 — REGLAS ANTI-PAJA
+  Frases prohibidas listadas. Adjetivos vacíos prohibidos.
+  3 pares de ejemplo bueno vs malo (vacunas, Khao San Road, Vietnam moto).
+  Test: sin personalidad, ¿queda info útil? Si no → paja.
+
+BLOQUE 5 — TONO SEGÚN CONTEXTO Y NIVEL USUARIO
+  Graciosa para planificar, seria para seguridad/legal/LGBTQ+.
+  Detecta nivel: novato (más contexto) vs curtido (al grano).
+  Usa historial para no contradecir gustos/presupuesto del usuario.
+
+BLOQUE 6 — INFORMACIÓN Y DATOS
+  Datos veraces y contrastables. Nunca inventar.
+  Cubre: visados por nacionalidad, salud, transporte, comida,
+  alojamiento, historia, cultura, legal viajero.
+  Disclaimer en temas legales.
+
+BLOQUE 7 — FORMATO DE RESPUESTA
+  Con ruta: 1-2 frases, detalle en SALMA_ROUTE_JSON.
+  Conversacional: extenso pero denso. Prosa fluida.
+  Nunca: bullets, markdown ###, coordenadas en chat, emojis excesivos.
+
+BLOQUE 8 — MODOS Y FORMATO SALMA_ROUTE_JSON
+  3 modos: Explorador / Descubridor / Ruta.
+  Puntos verificables (Google Maps, Booking).
+  Nombres exactos para enlaces a Google Maps.
+  Datos para mapa: tipo, nombre, zona, coords, duración, url_reserva.
+  Rutas organizadas por días.
+  JSON con stops: name, headline, description, narrative, type, day (int), lat, lng.
+  day SIEMPRE número entero, nunca string.
+
+BLOQUE 8B — MAPA, TARJETAS, ALOJAMIENTO Y NAVEGACIÓN
+  Mapa personal del usuario (lugares, restaurantes, experiencias, miradores, hoteles, rutas).
+  Tarjetas visuales: lugar (nombre, desc, duración, ver ruta/guardar) y hotel (nombre, zona, desc, reservar/guardar).
+  Alojamiento: pregunta fechas/presupuesto/zona, varias opciones, afiliados Booking.
+  Funciones inteligentes: cercanos a guardados, optimizar rutas, sugerir zonas dormir.
+  Sugerencias automáticas: hasta 3 lugares cerca de su ruta.
+  Mapa por día: cada día visualizable independiente.
+  Edición: añadir/quitar/reordenar desde móvil y web.
+  Navegación externa: Google Maps / Apple Maps.
+
+
+  ──────────────────────────────────────────────────────
+  7. PROMPT AYUDANTE DEL EDITOR (DISEÑADO, NO ACTIVO)
+  ──────────────────────────────────────────────────────
+
+Para cuando el usuario quiere mejorar una ruta existente sin rehacerla.
+
+ROL:      Analizar rutas existentes y proponer mejoras.
+FUNCIONES: Optimizar orden, añadir/quitar lugares, mover paradas,
+           equilibrar días, recomendar hoteles, rellenar huecos, reducir trayectos.
+
+FORMATO DE SALIDA — Acciones:
+
+  {
+    "tipo_salida": "acciones",
+    "acciones": [
+      {
+        "tipo": "mover_parada",
+        "parada_id": "",
+        "dia_origen": 1,
+        "dia_destino": 2,
+        "nueva_posicion": 1
+      }
+    ]
+  }
+
+FORMATO DE SALIDA — Ruta actualizada:
+
+  {
+    "tipo_salida": "ruta_actualizada",
+    "ruta": { ... }
+  }
+
+Estado: diseñado, pendiente de implementar (Fase 2).
+
+
+  ──────────────────────────────────────────────────────
+  8. PROMPT ORQUESTADOR (DISEÑADO, NO ACTIVO)
+  ──────────────────────────────────────────────────────
+
+Clasificador que decide qué módulo usar antes de gastar tokens.
+
+CATEGORÍAS:
+  conversacion_general, creacion_ruta, recomendacion_lugares,
+  recomendacion_hoteles, edicion_manual_ruta, ayuda_editor_ia
+
+FORMATO DE SALIDA:
+
+  {
+    "modulo_principal": "",
+    "requiere_ruta_existente": false,
+    "requiere_llamada_ia": true,
+    "requiere_accion_ui": false
+  }
+
+Estado: diseñado, pendiente de implementar (Fase 2-3).
+Nota: la detección de destino y categorías en el Worker V1 cubre parte
+de esta función de forma simplificada.
+
+
+  ─────────────────────────────────
+  9. ESTRUCTURA DE DATOS — RUTAS
+  ─────────────────────────────────
+
+Todas las rutas se guardan en Firestore con estructura JSON.
+
+  {
+    "id": "ruta_123",
+    "titulo": "Granada en 3 días",
+    "destino": "Granada, España",
+    "dias": [
+      {
+        "dia": 1,
+        "zona": "Centro histórico",
+        "paradas": [
+          {
+            "id": "p1",
+            "tipo": "lugar",
+            "nombre": "Catedral de Granada",
+            "descripcion": "Visita cultural imprescindible",
+            "duracion_min": 90,
+            "lat": 37.176,
+            "lng": -3.599
+          }
+        ]
+      }
+    ],
+    "hotel_base": null,
+    "notas": "",
+    "updated_at": ""
+  }
+
+Este JSON se usa para:
+- Renderizar rutas en el editor
+- Pintar el mapa (Leaflet)
+- Editar paradas (drag & drop)
+- Enviar contexto a SALMA (current_route en el Worker)
+- Guardar cambios en Firestore
+
+
+  ──────────────────────────────
+  10. FLUJOS DEL SISTEMA
+  ──────────────────────────────
+
+10.1 Crear ruta (ACTIVO)
+
+  Usuario envía mensaje → Worker → Detecta país/categoría →
+  Lee KV (N1+N2 si hay) → Ensambla salma-prompt + contexto →
+  Claude genera ruta → Worker extrae SALMA_ROUTE_JSON →
+  Frontend renderiza mapa + tarjetas → Usuario guarda en Firestore
+
+10.2 Conversación sin ruta (ACTIVO)
+
+  Usuario pregunta (vacunas, visados, cultura...) → Worker →
+  Detecta país/categoría → Lee KV → Salma responde en prosa
+  (sin SALMA_ROUTE_JSON) → Frontend muestra texto
+
+10.3 Edición manual (ACTIVO)
+
+  Usuario abre ruta → Editor visual → Drag & drop / añadir / eliminar →
+  Actualizar JSON → Guardar en Firestore
+
+10.4 Edición con IA (DISEÑADO, NO ACTIVO)
+
+  Usuario pulsa "Optimizar día" → Enviar ruta al Prompt Editor →
+  SALMA devuelve acciones JSON → Mostrar preview →
+  Usuario acepta → Actualizar JSON → Guardar
+
+10.5 Búsqueda web en vivo — Nivel 3 (DISEÑADO, NO ACTIVO)
+
+  Usuario pregunta algo cambiante → Worker → Llamada clasificadora
+  (modelo barato) → "necesito buscar: [query]" → Worker busca web →
+  Cachea resultado en KV (7 días) → Inyecta en contexto →
+  Claude responde con dato fresco
+
+
+  ─────────────────────────────────
+  11. MONETIZACIÓN
+  ─────────────────────────────────
+
+Modelo freemium:
+- 3 rutas gratis por usuario
+- Bundles de pago:
+  · Básico:   5 rutas  / 3.99€
+  · Viajero:  15 rutas / 9.99€
+  · Nómada:   50 rutas / 24.99€
+
+Backend: API Anthropic Claude (~0.015€/ruta, ~97% margen bruto)
+Break-even: ~8 bundles/mes para cubrir infraestructura
+Pagos: Stripe (conectado como MCP)
+F4: Kiwi.com (vuelos) + Trivago (hoteles) para precios en vivo
+
+
+  ────────────────────────────────────
+  12. FASES DE IMPLEMENTACIÓN
+  ────────────────────────────────────
+
+F1 — ESTABILIZAR (actual)
+  - Login e2e
+  - Rutas largas +7 días
+  - Limpieza repo
+  - Worker V1 con salma-prompt desplegado
+  - Crear namespace KV + binding SALMA_KV
+
+F2 — CALIDAD
+  - Generar KV Nivel 1 (193 países, generate.js)
+  - Generar KV Nivel 2 (10 destinos × 193 países, generate-nivel2.js)
+  - Subir datos a KV (upload-kv.js, upload-kv-nivel2.js)
+  - Guía = producto (5 bloques: ruta día a día, Google Maps por día,
+    antes de salir, en destino por parada, info práctica)
+  - Vista guardada = creación
+  - Blog
+  - Cambios UX pendientes:
+    · Dashboard: "Mis viajes / Tus viajes" (no "rutas")
+    · Home: "VIAJES CREADOS" con contadores tiempo real
+
+F3 — MONETIZACIÓN
+  - Stripe bundles + paywall
+  - 3 rutas gratis, luego pago
+
+F4 — COPILOTO V2
+  - Kiwi.com para vuelos reales
+  - Trivago para hoteles reales
+  - Nivel 3: búsqueda web + caché + feedback + demanda
+  - Prompt Ayudante del Editor
+  - Prompt Orquestador
+  - Descarga offline
+
+
+  ──────────────────────────────────────
+  13. INSTRUCCIONES PARA CLAUDE CODE
+  ──────────────────────────────────────
+
+Si Claude Code trabaja en este proyecto, debe saber:
+
+WORKER:
+- El Worker (salma-api.paco-defoto.workers.dev) NO está en el repo de GitHub.
+- Se despliega desde el dashboard de Cloudflare (Quick Edit).
+- El archivo de referencia es salma-worker-v1-final.js.
+- Usa Claude Sonnet 4.6 (modelo: claude-sonnet-4-6).
+- El Worker acepta { message, history, current_route, nationality } en POST.
+- Devuelve { reply, route }.
+
+FRONTEND:
+- salma-chat.js es el que llama al Worker.
+- Puede enviar "nationality" si se lee de Firestore (pendiente).
+- SALMA_ROUTE_JSON se extrae del reply y se renderiza en el mapa.
+
+KV:
+- Binding: SALMA_KV (aún no creado en Cloudflare).
+- Si no existe, el Worker funciona sin contexto de destino.
+- Scripts de generación en carpeta salma-knowledge-base/.
+
+NORMAS:
+- Nunca const db duplicado.
+- Nunca API keys en código público.
+- Nunca window.onload.
+- Revertir a versión estable antes de parchear.
+- Commits en español.

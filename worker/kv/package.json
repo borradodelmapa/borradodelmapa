@@ -1,0 +1,20 @@
+{
+  "name": "salma-knowledge-base",
+  "version": "1.0.0",
+  "description": "Generador de base de conocimiento de viajes para Salma (Borrado del Mapa)",
+  "type": "module",
+  "scripts": {
+    "generate": "node generate.js",
+    "generate:dry": "node generate.js --dry-run",
+    "generate:country": "node generate.js --country",
+    "upload": "node upload-kv.js",
+    "upload:dry": "node upload-kv.js --dry-run",
+    "stats": "node stats.js",
+    "generate:n2": "node generate-nivel2.js",
+    "generate:n2:dry": "node generate-nivel2.js --dry-run",
+    "generate:n2:country": "node generate-nivel2.js --country",
+    "upload:n2": "node upload-kv-nivel2.js",
+    "upload:n2:dry": "node upload-kv-nivel2.js --dry-run",
+    "stats:n2": "node stats-nivel2.js"
+  }
+}

@@ -1,0 +1,11 @@
+name = "salma-api"
+main = "salma-worker.js"
+compatibility_date = "2024-01-01"
+
+# Secret requerido (añadir en Cloudflare dashboard o con wrangler secret put ANTHROPIC_API_KEY):
+# ANTHROPIC_API_KEY = "sk-ant-..."
+
+[vars]
+# Optional: use Workers AI instead — set USE_CLOUDFLARE_AI = "1" and add binding:
+# [ai]
+# binding = "AI"

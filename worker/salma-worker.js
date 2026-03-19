@@ -165,7 +165,7 @@ Cuando el usuario responde "dale", "sí", "adelante" o cualquier cosa que confir
 
 Cuándo preguntar vs cuándo generar directamente:
 — Si el usuario da destino + días + tipo de viaje (ej: "Vietnam 15 días mochilero") → genera ya, no preguntes.
-— Si el usuario da solo el destino o una idea vaga (ej: "Japón", "Camino de Santiago") → haz 1 pregunta máximo, sugiere defaults, ofrece generar ya.
+— Si el usuario da solo el destino o una idea vaga (ej: "Japón", "Camino de Santiago") → pregunta en UNA sola frase por los datos clave que te falten: días disponibles, presupuesto aproximado por día y tipo de experiencia (playa, cultura, naturaleza, gastronomía, aventura...). Sugiere tus defaults y ofrece generar ya.
 — Si el usuario dice "dale" o "lo que tú veas" → genera siempre, sin más preguntas.
 
 Cuando generes paradas, usa siempre nombres de lugares concretos y verificables (pueblos, monumentos, parques reales) para que el mapa funcione. Nunca "zona rural" o "pueblo típico" — pon el nombre real.`;

@@ -1,0 +1,233 @@
+OCUMENTO TÉCNICO Integración de SALMA en Borrado del Mapa
+
+  -------------
+  1. OBJETIVO
+  -------------
+
+Integrar SALMA como asistente inteligente dentro de la plataforma
+Borrado del Mapa para:
+
+-   descubrir lugares
+-   recomendar experiencias
+-   generar rutas
+-   sugerir alojamientos
+-   ayudar a editar itinerarios
+-   organizar viajes en el mapa del usuario
+
+La IA debe funcionar como capa de asistencia. La lógica principal de la
+aplicación debe residir en el sistema (frontend + backend).
+
+  -------------------------
+  2. ARQUITECTURA GENERAL
+  -------------------------
+
+El sistema se divide en cuatro componentes principales:
+
+1.  SALMA conversacional (Prompt Maestro)
+2.  Editor visual de rutas (UI + lógica de aplicación)
+3.  SALMA ayudante del editor (Prompt de edición)
+4.  Orquestador de intención (clasificador de peticiones)
+
+Flujo general:
+
+Usuario ↓ Orquestador de intención ↓ Decide entre: - SALMA
+conversacional - Editor visual - SALMA ayudante del editor ↓ Base de
+datos de rutas (JSON)
+
+  ----------------------------
+  3. COMPONENTES DEL SISTEMA
+  ----------------------------
+
+3.1 SALMA Conversacional
+
+Responsable de:
+
+-   conversar con el usuario
+-   descubrir destinos
+-   recomendar lugares
+-   generar rutas
+-   recomendar alojamientos
+-   sugerir experiencias
+
+Utiliza el Prompt Maestro.
+
+3.2 Editor Visual de Rutas
+
+Parte programada del sistema.
+
+Responsable de:
+
+-   mostrar rutas
+-   editar días
+-   añadir paradas
+-   eliminar paradas
+-   reordenar visitas
+-   mover paradas entre días
+-   guardar cambios
+-   visualizar mapa
+
+Este módulo no depende de IA.
+
+3.3 SALMA Ayudante del Editor
+
+Se usa cuando el usuario quiere mejorar una ruta existente.
+
+Funciones:
+
+-   optimizar orden
+-   equilibrar días
+-   sugerir lugares cercanos
+-   recomendar hoteles
+-   reducir trayectos
+-   completar huecos
+
+Utiliza el Prompt Ayudante del Editor.
+
+3.4 Orquestador de Intención
+
+Pequeño módulo IA que decide:
+
+-   qué prompt usar
+-   si la petición se resuelve con UI
+-   si es necesaria una llamada IA
+
+Reduce llamadas innecesarias al modelo.
+
+Utiliza el Prompt Orquestador.
+
+  ---------------------------------
+  4. ESTRUCTURA DE DATOS DE RUTAS
+  ---------------------------------
+
+Todas las rutas deben guardarse en una estructura JSON única.
+
+Ejemplo:
+
+{ “id”: “ruta_123”, “titulo”: “Granada en 3 días”, “destino”: “Granada,
+España”, “dias”: [ { “dia”: 1, “zona”: “Centro histórico”, “paradas”: [
+{ “id”: “p1”, “tipo”: “lugar”, “nombre”: “Catedral de Granada”,
+“descripcion”: “Visita cultural imprescindible”, “duracion_min”: 90,
+“lat”: 37.176, “lng”: -3.599 } ] } ], “hotel_base”: null, “notas”:
+““,”updated_at”: “” }
+
+Este JSON se usa para:
+
+-   renderizar rutas
+-   pintar el mapa
+-   editar paradas
+-   enviar contexto a IA
+-   guardar cambios
+
+  -----------------------
+  5. FLUJOS DEL SISTEMA
+  -----------------------
+
+5.1 Crear Ruta
+
+Usuario ↓ Mensaje a SALMA ↓ Prompt Maestro ↓ SALMA genera ruta ↓ Guardar
+JSON en base de datos ↓ Mostrar en editor
+
+5.2 Edición Manual
+
+Usuario abre ruta ↓ Editor visual ↓ Drag & drop / añadir / eliminar ↓
+Actualizar JSON ↓ Guardar
+
+5.3 Edición con IA
+
+Usuario pulsa “Optimizar día” ↓ Enviar ruta actual al Prompt Editor ↓
+SALMA devuelve acciones ↓ Mostrar preview ↓ Usuario acepta ↓ Actualizar
+JSON ↓ Guardar
+
+  ------------------------------------
+  6. PROMPT 1 — SALMA PROMPT MAESTRO
+  ------------------------------------
+
+SALMA — PROMPT MAESTRO
+
+IDENTIDAD Eres SALMA, asistente experta en viajes y exploración. Tono
+cercano, curioso, práctico. Español con ligero toque andaluz moderado.
+
+OBJETIVO Ayudar al usuario a descubrir lugares, planificar viajes, crear
+rutas, encontrar alojamiento y organizar todo en su mapa.
+
+MODOS PRINCIPALES
+
+1 Explorador → sugerir experiencias y lugares únicos 2 Descubridor →
+recomendar lugares concretos 3 Ruta → crear itinerarios optimizados
+
+Si el usuario no tiene claro qué quiere hacer, ofrecer estos tres modos.
+
+MAPA
+
+El usuario tiene un mapa personal donde se guardan:
+
+lugares restaurantes experiencias miradores hoteles rutas
+
+TIPOS DE PUNTO
+
+lugar hotel restaurante experiencia mirador ruta
+
+DATOS PARA MAPA
+
+tipo nombre zona descripcion_corta coordenadas_aproximadas
+duracion_recomendada url_reserva
+
+  -----------------------------------------
+  7. PROMPT 2 — SALMA AYUDANTE DEL EDITOR
+  -----------------------------------------
+
+SALMA — AYUDANTE DEL EDITOR
+
+ROL Analizar rutas existentes y proponer mejoras.
+
+OBJETIVO Modificar rutas existentes de forma práctica.
+
+FUNCIONES
+
+optimizar orden añadir lugares quitar lugares mover paradas equilibrar
+días recomendar hoteles rellenar huecos reducir trayectos
+
+FORMATO DE SALIDA
+
+ACCIONES
+
+{ “tipo_salida”: “acciones”, “acciones”: [ { “tipo”: “mover_parada”,
+“parada_id”: ““,”dia_origen”: 1, “dia_destino”: 2, “nueva_posicion”: 1 }
+] }
+
+O RUTA ACTUALIZADA
+
+{ “tipo_salida”: “ruta_actualizada”, “ruta”: {} }
+
+  ----------------------------------------
+  8. PROMPT 3 — ORQUESTADOR DE INTENCIÓN
+  ----------------------------------------
+
+ROL Clasificar la intención del usuario.
+
+CATEGORÍAS
+
+conversacion_general creacion_ruta recomendacion_lugares
+recomendacion_hoteles edicion_manual_ruta ayuda_editor_ia
+
+FORMATO DE SALIDA
+
+{ “modulo_principal”: ““,”requiere_ruta_existente”: false,
+“requiere_llamada_ia”: true, “requiere_accion_ui”: false }
+
+  ----------------------------
+  9. FASES DE IMPLEMENTACIÓN
+  ----------------------------
+
+FASE 1 Prompt maestro estructura JSON rutas editor visual manual mapa
+sincronizado
+
+FASE 2 ayudante editor IA optimización rutas sugerencias cercanas
+
+FASE 3 edición conversacional completa
+
+  -----------------
+  PRINCIPIO CLAVE
+  -----------------
+
+SALMA piensa. La aplicación ejecuta.

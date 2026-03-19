@@ -285,12 +285,24 @@ function salmaRemoveLoading() {
   if (el) el.remove();
 }
 
-function salmaShowInput() {
+function salmaExtractPlaceholder(text) {
+  var clean = (text || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  var matches = clean.match(/[^.!?]*\?/g);
+  if (!matches || matches.length === 0) return 'Escribe tu respuesta...';
+  var q = matches[matches.length - 1].trim().replace(/^[\s,yYoO]+/, '').trim();
+  if (q.length > 120) q = q.substring(0, 117) + '...';
+  return q || 'Escribe tu respuesta...';
+}
+
+function salmaShowInput(botReply) {
   var wrap = document.getElementById('salma-inline-input-wrap');
   if (wrap) {
     wrap.style.display = 'block';
     var input = document.getElementById('salma-inline-input');
-    if (input) input.focus();
+    if (input) {
+      if (botReply) input.placeholder = salmaExtractPlaceholder(botReply);
+      input.focus();
+    }
   }
 }
 
@@ -688,7 +700,7 @@ async function salmaHeroSend() {
         }).catch(function() { salmaRemoveLoading(); salmaRenderRoute(data.route); });
       } else {
         // Salma pregunta o responde sin ruta — mostrar input para que el usuario responda
-        salmaShowInput();
+        salmaShowInput(data.reply);
       }
     } else {
       salmaAddDialog('Uy, algo ha fallado. ¿Puedes intentarlo de nuevo?', 'bot');
@@ -779,7 +791,7 @@ async function salmaInlineReply() {
             salmaShowInput();
           }).catch(function() { salmaRemoveLoading(); salmaShowInput(); });
         } else {
-          salmaShowInput();
+          salmaShowInput(data.reply);
         }
       }
     } else {
