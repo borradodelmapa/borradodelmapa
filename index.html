@@ -131,7 +131,7 @@ window.openModal=openModal;window.closeModal=closeModal;window.switchModal=switc
         </div>
         <div id="salma-dialog" style="margin-bottom:24px;"></div>
         <div id="salma-inline-input-wrap" style="display:none;margin-bottom:24px;">
-          <input type="text" id="salma-inline-input" placeholder="¿Cuántos días? ¿Presupuesto? ¿Qué tipo de viaje?" autocomplete="off" style="width:100%;box-sizing:border-box;background:#111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:14px 18px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:15px;outline:none;transition:border-color .2s;margin-bottom:10px;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'">
+          <textarea id="salma-inline-input" placeholder="¿Cuántos días? ¿Presupuesto? ¿Qué tipo de viaje?" autocomplete="off" rows="3" style="width:100%;box-sizing:border-box;background:#111111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:16px 20px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color .2s;resize:none;line-height:1.5;margin-bottom:10px;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'"></textarea>
           <button onclick="salmaInlineReply()" style="width:100%;background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:14px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">ENVIAR →</button>
         </div>
         <div id="salma-route-result" style="display:none;"></div>

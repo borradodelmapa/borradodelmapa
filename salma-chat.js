@@ -48,12 +48,20 @@ function delay(ms) {
 // Enriquecer una ruta: geocodificar paradas que no tengan lat/lng (Nominatim 1 req/s)
 function salmaEnrichRouteWithCoords(route) {
   if (!route || !route.stops || !route.stops.length) return Promise.resolve(route);
-  // Contexto de ubicación: región/título de la ruta actual; si no hay, usar la ruta anterior
-  var locationCtx = (route.region || route.title || route.name || '').toString().trim();
-  if (!locationCtx && window._salmaLastRoute) {
-    locationCtx = (window._salmaLastRoute.region || window._salmaLastRoute.title || window._salmaLastRoute.name || '').toString().trim();
+  // Contexto de ubicación: preferir región específica > título de ruta > país
+  // Si región == país (ej: "España"), es demasiado vaga — usar título que suele ser más específico
+  var country = (route.country || '').toString().trim().toLowerCase();
+  var region = (route.region || '').toString().trim();
+  var title = (route.title || route.name || '').toString().trim();
+  var regionIsVague = !region || region.toLowerCase() === country;
+  var locationCtx = regionIsVague ? (title || region) : region;
+  // Si aún es vago, usar contexto de ruta anterior
+  if ((!locationCtx || locationCtx.toLowerCase() === country) && window._salmaLastRoute) {
+    var pr = (window._salmaLastRoute.region || '').trim();
+    var pt = (window._salmaLastRoute.title || window._salmaLastRoute.name || '').trim();
+    var pc = (window._salmaLastRoute.country || '').trim().toLowerCase();
+    locationCtx = (pr && pr.toLowerCase() !== pc) ? pr : (pt || locationCtx);
   }
-  if (!locationCtx) locationCtx = (route.country || '').toString().trim();
   var suffix = locationCtx ? ', ' + locationCtx : '';
   var stops = route.stops.slice();
   var coordsByIndex = [];
@@ -149,10 +157,9 @@ function salmaShowInline() {
   var heroSub = document.querySelector('.hero-sub');
   if (heroSub) heroSub.style.display = 'none';
 
-  // Mostrar sección de conversación e input de diálogo
+  // Mostrar sección de conversación (input se muestra solo cuando Salma pregunta)
   var section = document.getElementById('salma-inline');
   if (section) section.style.display = 'block';
-  salmaShowInput();
 }
 
 function salmaReset() {
@@ -649,6 +656,7 @@ async function salmaHeroSend() {
       salmaHistory.push({ role: 'assistant', content: data.reply });
 
       if (data.route && data.route.stops && data.route.stops.length > 0) {
+        // Salma generó ruta — NO mostrar input de preguntas
         var hasAnyCoord = data.route.stops.some(function(s) { var a = s.lat, b = s.lng; return a != null && b != null && Number(a) && Number(b); });
         if (!hasAnyCoord) salmaAddDialog('Buscando coordenadas en el mapa…', 'loading');
         salmaEnrichRouteWithCoords(data.route).then(function(enriched) {
@@ -656,30 +664,17 @@ async function salmaHeroSend() {
           salmaRenderRoute(enriched);
         }).catch(function() { salmaRemoveLoading(); salmaRenderRoute(data.route); });
       } else {
-        // Solo intentar geocodificar si Salma indica explícitamente que no pudo ubicar el lugar.
-        // Si es una respuesta conversacional (pide más datos, hace preguntas), no añadir nada más.
-        var replyLower = (data.reply || '').toLowerCase();
-        var indicaSinUbicacion = replyLower.indexOf('no tengo') !== -1 ||
-          replyLower.indexOf('no dispongo') !== -1 || replyLower.indexOf('no encuentro') !== -1 ||
-          replyLower.indexOf('coordenada') !== -1 || replyLower.indexOf('no puedo ubicar') !== -1 ||
-          replyLower.indexOf('sin informacion') !== -1 || replyLower.indexOf('sin información') !== -1;
-        if (indicaSinUbicacion) {
-          salmaAddDialog('Buscando en el mapa…', 'loading');
-          salmaTryMinimalRouteFromReply(msg, data.reply).then(function(minimalRoute) {
-            salmaRemoveLoading();
-            if (minimalRoute) {
-              salmaAddDialog('He ubicado "' + (minimalRoute.title || '') + '" en el mapa. Puedes guardarla y pedirme más detalles.', 'bot');
-              salmaRenderRoute(minimalRoute);
-            }
-          }).catch(function() { salmaRemoveLoading(); });
-        }
+        // Salma pregunta o responde sin ruta — mostrar input para que el usuario responda
+        salmaShowInput();
       }
     } else {
       salmaAddDialog('Uy, algo ha fallado. ¿Puedes intentarlo de nuevo?', 'bot');
+      salmaShowInput();
     }
   } catch (err) {
     salmaRemoveLoading();
     salmaAddDialog('No puedo conectar ahora mismo. Inténtalo en un momento.', 'bot');
+    salmaShowInput();
   }
 
   heroInput.value = '';
@@ -1025,27 +1020,7 @@ function salmaInitLeaflet(containerId, pois, routeData) {
 }
 window.salmaInitLeaflet = salmaInitLeaflet;
 
-// ===== RESET =====
-
-function salmaReset() {
-  var dialog = document.getElementById('salma-dialog');
-  var routeResult = document.getElementById('salma-route-result');
-  var section = document.getElementById('salma-inline');
-  var heroEl = document.querySelector('.hero');
-  if (heroEl) heroEl.classList.remove('hero-has-route');
-  if (dialog) dialog.innerHTML = '';
-  if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
-  if (section) section.style.display = 'none';
-  
-  salmaHistory = [];
-  window._salmaLastRoute = null;
-  // Enfocar el input del hero
-  var heroInput = document.getElementById('salma-hero-input');
-  if (heroInput) {
-    heroInput.focus();
-    heroInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-}
+// ===== RESET — definición única en salmaShowInline (arriba) =====
 
 // ===== EDICIÓN DE RUTA =====
 
