@@ -54,13 +54,7 @@ function salmaEnrichRouteWithCoords(route) {
   var coordsByIndex = [];
   var chain = Promise.resolve();
   stops.forEach(function(stop, i) {
-    var lat = stop.lat != null ? Number(stop.lat) : NaN;
-    var lng = stop.lng != null ? Number(stop.lng) : NaN;
-    var hasCoord = lat && lng && !isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0;
-    if (hasCoord) {
-      coordsByIndex[i] = { lat: lat, lng: lng };
-      return;
-    }
+    // Siempre geocodificamos con Nominatim — las coords de la IA pueden ser incorrectas
     var name = (stop.headline || stop.name || stop.title || '').toString().trim();
     if (!name) {
       coordsByIndex[i] = { lat: 0, lng: 0 };
@@ -70,7 +64,14 @@ function salmaEnrichRouteWithCoords(route) {
       .then(function() { return delay(1100); })
       .then(function() { return salmaGeocode(name + suffix); })
       .then(function(coord) {
-        coordsByIndex[i] = coord ? { lat: coord.lat, lng: coord.lng } : { lat: 0, lng: 0 };
+        // Si Nominatim no encuentra nada, usamos las coords de la IA como fallback
+        if (coord) {
+          coordsByIndex[i] = { lat: coord.lat, lng: coord.lng };
+        } else {
+          var lat = stop.lat != null ? Number(stop.lat) : 0;
+          var lng = stop.lng != null ? Number(stop.lng) : 0;
+          coordsByIndex[i] = { lat: lat, lng: lng };
+        }
       });
   });
   return chain.then(function() {
