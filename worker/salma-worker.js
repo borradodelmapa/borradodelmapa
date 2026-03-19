@@ -148,9 +148,9 @@ FORMATO DE RESPUESTA CON RUTA
 Cuando generes una ruta o lista de lugares para el mapa, escribe en el chat SOLO el resumen breve (1-2 frases) y DEBES incluir al final un bloque en dos líneas: primera línea exactamente SALMA_ROUTE_JSON, segunda línea el JSON (sin markdown, sin backticks). Estructura del JSON:
 
 SALMA_ROUTE_JSON
-{"title":"Título de la ruta","name":"Mismo título","country":"País","region":"Región o ciudad","duration_days":N,"summary":"Resumen corto","stops":[{"name":"Nombre del lugar","headline":"Nombre","narrative":"3-5 frases ricas: qué es, por qué importa, qué ver exactamente, cuánto tiempo calcular","context":"2-3 frases de contexto histórico/cultural que enriquecen la visita (solo para monumentos, templos, patrimonio, naturaleza relevante; omitir en restaurantes y alojamientos)","food_nearby":"Recomendación concreta de dónde comer cerca: nombre real, qué pedir, precio aproximado, minutos andando (opcional, cuando sea útil)","local_secret":"Dato local accionable que pocos saben","alternative":"Plan B si está cerrado o no convence","practical":"Horario · Precio · Cómo llegar","day_title":"Título del día, igual para todas las paradas del mismo día (ej: Playas y templos)","links":[{"label":"Texto visible","url":"URL completa","type":"app|web|booking"}],"type":"lugar|hotel|restaurante|experiencia|mirador|ruta","day":1,"lat":36.72,"lng":-4.42,"photo_ref":"si existe en el contexto de búsqueda, copia el photo_ref exacto del lugar"}],"tips":["Consejo 1"],"tags":["tag1"],"budget_level":"bajo|medio|alto|sin_definir","suggestions":["Sugerencia 1"]}
+{"title":"Título de la ruta","name":"Mismo título","country":"País","region":"Región o ciudad","duration_days":N,"summary":"Resumen corto","stops":[{"name":"Nombre del lugar","headline":"Nombre","narrative":"3-5 frases ricas: qué es, por qué importa, qué ver exactamente, cuánto tiempo calcular","context":"2-3 frases de contexto histórico/cultural que enriquecen la visita (solo para monumentos, templos, patrimonio, naturaleza relevante; omitir en restaurantes y alojamientos)","food_nearby":"Recomendación concreta de dónde comer cerca: nombre real, qué pedir, precio aproximado, minutos andando (opcional, cuando sea útil)","local_secret":"Dato local accionable que pocos saben","alternative":"Plan B si está cerrado o no convence","practical":"Horario · Precio · Cómo llegar","day_title":"Título del día, igual para todas las paradas del mismo día (ej: Playas y templos)","links":[{"label":"Texto visible","url":"URL completa","type":"app|web|booking"}],"type":"lugar|hotel|restaurante|experiencia|mirador|ruta","day":1,"lat":36.72,"lng":-4.42}],"tips":["Consejo 1"],"tags":["tag1"],"budget_level":"bajo|medio|alto|sin_definir","suggestions":["Sugerencia 1"]}
 
-Cada parada en "stops" debe tener: name/headline (nombre EXACTO como aparece en los datos de búsqueda o en Google Maps), narrative (3-5 frases basadas en datos reales: usa las reseñas y descripción de Google del contexto de búsqueda si están disponibles — no inventes datos de tu entrenamiento si tienes datos reales delante), context (historia/cultura, 2-3 frases, solo para lugares patrimoniales), food_nearby (dónde comer cerca, con nombre real y precio, cuando sea relevante), local_secret (tip accionable), alternative (plan B), practical (horario/precio/transporte — usa los horarios reales del contexto de búsqueda si están disponibles), day_title (título breve del día, 3-5 palabras), links (array de {label, url, type}; max 2-3 por parada), type, day (entero, NUNCA string), lat y lng (OBLIGATORIO — usa las coords del contexto de búsqueda si el lugar aparece ahí; NUNCA uses 0,0), photo_ref (copia el photo_ref exacto del contexto de búsqueda si el lugar aparece ahí — es la referencia a la foto real del lugar). Si un lugar no aparece en el contexto de búsqueda y no tienes certeza absoluta de sus datos, NO lo incluyas.
+Cada parada en "stops" debe tener: name/headline (nombre EXACTO como aparece en los datos de búsqueda o en Google Maps), narrative (3-5 frases basadas en datos reales: usa las reseñas y descripción de Google del contexto de búsqueda si están disponibles — no inventes datos de tu entrenamiento si tienes datos reales delante), context (historia/cultura, 2-3 frases, solo para lugares patrimoniales), food_nearby (dónde comer cerca, con nombre real y precio, cuando sea relevante), local_secret (tip accionable), alternative (plan B), practical (horario/precio/transporte — usa los horarios reales del contexto de búsqueda si están disponibles), day_title (título breve del día, 3-5 palabras), links (array de {label, url, type}; max 2-3 por parada), type, day (entero, NUNCA string), lat y lng (OBLIGATORIO — usa las coords del contexto de búsqueda si el lugar aparece ahí; NUNCA uses 0,0). Si un lugar no aparece en el contexto de búsqueda y no tienes certeza absoluta de sus datos, NO lo incluyas.
 Solo incluye el bloque SALMA_ROUTE_JSON cuando realmente hayas generado una ruta o lista de paradas para mostrar en el mapa. Para respuestas solo conversacionales no incluyas el bloque.
 
 NUNCA TE BLOQUEES — REGLA CRÍTICA
@@ -505,12 +505,13 @@ function isRouteRequest(message) {
   return /ruta|itinerario|qué ver|que ver|visitar|días en|dias en|fin de semana|semana en|lugares en|qué hacer|que hacer|plan para|viaje a|viaje por|llevo.*días|me quedo|escapada|excursion|excursión/i.test(message);
 }
 
+// Devuelve { contextText, placesData } — contextText para Claude, placesData para match posterior
 async function fetchPlacesContext(message, placesKey) {
-  if (!placesKey || !isRouteRequest(message)) return '';
+  if (!placesKey || !isRouteRequest(message)) return { contextText: '', placesData: [] };
   try {
-    // 1. Text Search — candidatos reales
+    // 1. Text Search — el mensaje del usuario directo + restaurantes
     const queries = [
-      `lugares turísticos ${message}`,
+      message,
       `restaurantes recomendados ${message}`,
     ];
     const seen = new Set();
@@ -537,7 +538,7 @@ async function fetchPlacesContext(message, placesKey) {
         });
       }
     }
-    if (candidates.length === 0) return '';
+    if (candidates.length === 0) return { contextText: '', placesData: [] };
 
     // 2. Place Details — reseñas, descripción, horarios (máx 8 en paralelo)
     const detailFields = 'name,editorial_summary,reviews,opening_hours,website,photos';
@@ -548,7 +549,7 @@ async function fetchPlacesContext(message, placesKey) {
     const details = await Promise.all(detailPromises);
 
     // 3. Enriquecer candidatos con datos reales
-    const results = candidates.slice(0, 8).map((c, i) => {
+    const placesData = candidates.slice(0, 8).map((c, i) => {
       const d = details[i]?.result;
       const reviews = (d?.reviews || []).slice(0, 3).map(r => r.text?.slice(0, 200) || '');
       return {
@@ -566,12 +567,61 @@ async function fetchPlacesContext(message, placesKey) {
       };
     });
 
-    return `\n\n[BÚSQUEDA EN TIEMPO REAL — datos verificados de Google Places]
-REGLA CRÍTICA: SOLO incluye en la ruta lugares que aparezcan en esta lista o de los que tengas certeza absoluta. Para cada lugar usa el "nombre" exacto, las coordenadas (lat/lng) y el "photo_ref" tal cual aparecen aquí. Basa tus descripciones en "descripcion_google" y "resenas" — no inventes datos de tu entrenamiento. Si un lugar no tiene reseñas ni descripción, descríbelo de forma genérica sin inventar detalles.
-${JSON.stringify(results)}`;
+    // Contexto para Claude — sin photo_ref (Claude no necesita tocarlo)
+    const contextForClaude = placesData.map(p => ({
+      nombre: p.nombre,
+      direccion: p.direccion,
+      lat: p.lat,
+      lng: p.lng,
+      valoracion: p.valoracion,
+      tipos: p.tipos,
+      descripcion_google: p.descripcion_google,
+      resenas: p.resenas,
+      horario: p.horario,
+      web: p.web,
+    }));
+
+    const contextText = `\n\n[BÚSQUEDA EN TIEMPO REAL — datos verificados de Google Places]
+REGLA CRÍTICA: SOLO incluye en la ruta lugares que aparezcan en esta lista o de los que tengas certeza absoluta en esa zona concreta. Usa el "nombre" exacto y las coordenadas (lat/lng) tal cual aparecen aquí. Basa tus descripciones en "descripcion_google" y "resenas" — no inventes datos. Si un lugar no tiene reseñas ni descripción, descríbelo de forma genérica sin inventar detalles.
+${JSON.stringify(contextForClaude)}`;
+
+    return { contextText, placesData };
   } catch (e) {
-    return '';
+    return { contextText: '', placesData: [] };
   }
+}
+
+// Match automático: asigna photo_ref a cada stop de la ruta comparando nombre y coords
+function assignPhotoRefs(route, placesData) {
+  if (!route?.stops || !placesData?.length) return route;
+  route.stops = route.stops.map(stop => {
+    if (stop.photo_ref) return stop; // ya tiene
+    const stopName = (stop.name || stop.headline || '').toLowerCase().trim();
+    const stopLat = stop.lat || 0;
+    const stopLng = stop.lng || 0;
+    // 1. Match por nombre (contiene o está contenido)
+    let match = placesData.find(p => {
+      const pName = (p.nombre || '').toLowerCase().trim();
+      return pName && stopName && (pName.includes(stopName) || stopName.includes(pName));
+    });
+    // 2. Si no hay match por nombre, match por cercanía (<1km)
+    if (!match && stopLat && stopLng) {
+      let minDist = Infinity;
+      for (const p of placesData) {
+        if (!p.lat || !p.lng || !p.photo_ref) continue;
+        const dLat = Math.abs(p.lat - stopLat);
+        const dLng = Math.abs(p.lng - stopLng);
+        const dist = Math.sqrt(dLat * dLat + dLng * dLng) * 111;
+        if (dist < 1 && dist < minDist) {
+          minDist = dist;
+          match = p;
+        }
+      }
+    }
+    if (match?.photo_ref) stop.photo_ref = match.photo_ref;
+    return stop;
+  });
+  return route;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -618,10 +668,11 @@ async function buildDynamicContext(env, message, userNationality, userName) {
   }
 
   // Búsqueda en tiempo real — Places API
-  const placesContext = await fetchPlacesContext(message, env.GOOGLE_PLACES_KEY);
-  if (placesContext) parts.push(placesContext);
+  const { contextText: placesContextText, placesData } = await fetchPlacesContext(message, env.GOOGLE_PLACES_KEY);
+  if (placesContextText) parts.push(placesContextText);
 
-  return parts.length > 0 ? '\n\n--- CONTEXTO DE DESTINO ---\n' + parts.join('\n\n') : '';
+  const dynamicText = parts.length > 0 ? '\n\n--- CONTEXTO DE DESTINO ---\n' + parts.join('\n\n') : '';
+  return { dynamicText, placesData: placesData || [] };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -823,11 +874,11 @@ export default {
       );
     }
 
-    // Contexto dinámico desde KV (no rompe si KV no existe)
-    const dynamicContext = await buildDynamicContext(env, message, userNationality, userName);
+    // Contexto dinámico desde KV + Places (no rompe si KV no existe)
+    const { dynamicText, placesData } = await buildDynamicContext(env, message, userNationality, userName);
 
     // Construir mensajes
-    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, dynamicContext);
+    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, dynamicText);
 
     // Llamar a Claude
     let replyText = '';
@@ -871,8 +922,13 @@ export default {
       );
     }
 
-    const route = extractRouteFromReply(replyText);
+    let route = extractRouteFromReply(replyText);
     const reply = replyWithoutRouteBlock(replyText);
+
+    // Asignar photo_ref automáticamente — Claude no necesita tocarlo
+    if (route && placesData.length > 0) {
+      route = assignPhotoRefs(route, placesData);
+    }
 
     return new Response(
       JSON.stringify({ reply, route }),

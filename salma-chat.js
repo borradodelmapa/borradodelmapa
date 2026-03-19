@@ -557,10 +557,10 @@ function salmaRenderRoute(routeData) {
 
   window._salmaLastRoute = routeData;
 
-  // DEBUG TEMPORAL — coords de cada parada
-  console.log('[DEBUG COORDS] Paradas generadas:');
+  // DEBUG TEMPORAL — coords y photo_ref de cada parada
+  console.log('[DEBUG] Paradas generadas:');
   (routeData.stops || []).forEach(function(s, i) {
-    console.log('  [' + i + '] ' + (s.name || s.headline) + ' → lat:' + s.lat + ' lng:' + s.lng);
+    console.log('  [' + i + '] ' + (s.name || s.headline) + ' → lat:' + s.lat + ' lng:' + s.lng + ' photo_ref:' + (s.photo_ref ? s.photo_ref.slice(0, 30) + '...' : 'NO'));
   });
 
   // Inicializar mapa Leaflet tras renderizar el DOM
