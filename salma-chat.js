@@ -48,8 +48,12 @@ function delay(ms) {
 // Enriquecer una ruta: geocodificar paradas que no tengan lat/lng (Nominatim 1 req/s)
 function salmaEnrichRouteWithCoords(route) {
   if (!route || !route.stops || !route.stops.length) return Promise.resolve(route);
-  // Contexto de ubicación: título de la ruta > región > país (de más específico a menos)
-  var locationCtx = (route.title || route.name || route.region || route.country || '').toString().trim();
+  // Contexto de ubicación: región/título de la ruta actual; si no hay, usar la ruta anterior
+  var locationCtx = (route.region || route.title || route.name || '').toString().trim();
+  if (!locationCtx && window._salmaLastRoute) {
+    locationCtx = (window._salmaLastRoute.region || window._salmaLastRoute.title || window._salmaLastRoute.name || '').toString().trim();
+  }
+  if (!locationCtx) locationCtx = (route.country || '').toString().trim();
   var suffix = locationCtx ? ', ' + locationCtx : '';
   var stops = route.stops.slice();
   var coordsByIndex = [];
@@ -692,6 +696,7 @@ async function salmaInlineReply() {
 
   salmaAddDialog(msg, 'user');
   input.value = '';
+  salmaHideInput();
   salmaAddDialog('', 'loading');
 
   try {
@@ -727,14 +732,16 @@ async function salmaInlineReply() {
         salmaEnrichRouteWithCoords(baseRoute).then(function(enriched) {
           salmaRemoveLoading();
           salmaRenderRoute(enriched);
+          salmaShowInput();
           if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
         }).catch(function() {
           salmaRemoveLoading();
           salmaRenderRoute(baseRoute);
+          salmaShowInput();
           if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
         });
       } else {
-        // Solo geocodificar si Salma indica que no pudo ubicar — si es conversacional, no añadir nada
+        // Solo geocodificar si Salma indica que no pudo ubicar — si es conversacional, mostrar input
         var replyLowerInline = (data.reply || '').toLowerCase();
         var indicaSinUbicacionInline = replyLowerInline.indexOf('no tengo') !== -1 ||
           replyLowerInline.indexOf('no dispongo') !== -1 || replyLowerInline.indexOf('no encuentro') !== -1 ||
@@ -751,15 +758,20 @@ async function salmaInlineReply() {
               salmaRenderRoute(minimalRoute);
               if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
             }
-          }).catch(function() { salmaRemoveLoading(); });
+            salmaShowInput();
+          }).catch(function() { salmaRemoveLoading(); salmaShowInput(); });
+        } else {
+          salmaShowInput();
         }
       }
     } else {
       salmaAddDialog('No he entendido bien. ¿Puedes repetir?', 'bot');
+      salmaShowInput();
     }
   } catch (err) {
     salmaRemoveLoading();
     salmaAddDialog('Error de conexión. Inténtalo de nuevo.', 'bot');
+    salmaShowInput();
   }
 }
 
