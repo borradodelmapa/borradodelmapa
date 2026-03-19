@@ -79,7 +79,8 @@ function copilotInjectHTML() {
   var style = document.createElement('style');
   style.textContent = [
     '.copilot-float{',
-      'position:fixed;right:18px;bottom:24px;z-index:200;',
+      'position:fixed;right:18px;z-index:200;',
+      'bottom:calc(24px + env(safe-area-inset-bottom, 0px));',
       'border:none;border-radius:999px;padding:14px 22px;',
       "font-family:'JetBrains Mono',monospace;font-size:11px;",
       'font-weight:700;letter-spacing:.12em;cursor:pointer;',
@@ -396,6 +397,11 @@ function copilotMoveStop(globalIdx, direction) {
 
   if (window._copilot.routeData) window._copilot.routeData.stops = pois;
   copilotRerenderAccordion();
+  // Asegurar que el día del stop movido quede abierto
+  var contentEl = document.getElementById('vr-day-content-' + day);
+  var arrowEl   = document.getElementById('vr-day-arrow-'   + day);
+  if (contentEl) contentEl.style.display = 'block';
+  if (arrowEl)   arrowEl.textContent = '▴';
   copilotMarkDirty();
 }
 window.copilotMoveStop = copilotMoveStop;
@@ -420,6 +426,15 @@ window.copilotDeleteStop = copilotDeleteStop;
 function copilotRerenderAccordion() {
   var wrapper = document.getElementById('vr-stops-wrapper');
   if (!wrapper) return;
+
+  // Guardar qué días están abiertos para restaurarlos tras el rerender
+  var openDays = {};
+  wrapper.querySelectorAll('[id^="vr-day-content-"]').forEach(function(el) {
+    if (el.style.display !== 'none') {
+      var dayNum = el.id.replace('vr-day-content-', '');
+      openDays[dayNum] = true;
+    }
+  });
 
   var pois = window._copilot.pois;
   var dest = window._copilot.destination;
@@ -568,6 +583,14 @@ function copilotRerenderAccordion() {
   });
 
   wrapper.innerHTML = html;
+
+  // Restaurar días que estaban abiertos
+  Object.keys(openDays).forEach(function(dayNum) {
+    var contentEl = document.getElementById('vr-day-content-' + dayNum);
+    var arrowEl   = document.getElementById('vr-day-arrow-'   + dayNum);
+    if (contentEl) contentEl.style.display = 'block';
+    if (arrowEl)   arrowEl.textContent = '▴';
+  });
 
   // Actualizar enlace global de ruta completa
   var globalLink = document.getElementById('vr-gmaps-global');
