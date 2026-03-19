@@ -482,6 +482,8 @@ window.eliminarRuta = eliminarRuta;
 
 function newMap() {
   if (!currentUser) { openModal('register'); return; }
+  // Limpiar conversación anterior antes de ir al home
+  if (typeof salmaReset === 'function') salmaReset();
   showPage('home');
   setTimeout(function() {
     var input = document.getElementById('salma-hero-input');
