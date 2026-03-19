@@ -535,7 +535,18 @@ function salmaFetchWikipediaImages(pois, prefix) {
         .then(function(d) { return (d && d.thumbnail && d.thumbnail.source) ? d.thumbnail.source : Promise.reject(); });
     });
 
-    var tryStreetView = tryES.catch(function() {
+    var tryPlaces = tryES.catch(function() {
+      if (!name || name.length < 3) return Promise.reject();
+      var pUrl = 'https://salma-api.paco-defoto.workers.dev/photo?name=' + encodeURIComponent(name) + (lat && lng ? '&lat=' + lat + '&lng=' + lng : '');
+      return fetch(pUrl).then(function(r) {
+        if (!r.ok) return Promise.reject();
+        var ct = r.headers.get('Content-Type') || '';
+        if (ct.indexOf('image') === -1) return Promise.reject();
+        return pUrl;
+      });
+    });
+
+    var tryStreetView = tryPlaces.catch(function() {
       if (!lat || !lng || !window.GOOGLE_STREETVIEW_KEY) return Promise.reject();
       var metaUrl = 'https://maps.googleapis.com/maps/api/streetview/metadata?location=' + lat + ',' + lng + '&key=' + window.GOOGLE_STREETVIEW_KEY;
       return fetch(metaUrl)
