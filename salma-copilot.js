@@ -78,18 +78,6 @@ function copilotInjectHTML() {
   // --- CSS ---
   var style = document.createElement('style');
   style.textContent = [
-    '.copilot-float{',
-      'position:fixed;right:18px;z-index:1001;',
-      'bottom:calc(70px + env(safe-area-inset-bottom, 0px));',
-      'border:none;border-radius:999px;padding:14px 22px;',
-      "font-family:'JetBrains Mono',monospace;font-size:11px;",
-      'font-weight:700;letter-spacing:.12em;cursor:pointer;',
-      'box-shadow:0 8px 28px rgba(0,0,0,.55);transition:transform .15s, box-shadow .15s;',
-      'background:#b00020;color:#fff;',
-    '}',
-    '.copilot-float:hover{transform:scale(1.06);box-shadow:0 12px 36px rgba(0,0,0,.65);}',
-    '.copilot-float.cplt-hidden{display:none!important;}',
-
     /* Botones de reordenar dentro del acordeón */
     '.cplt-stop-btn{',
       'background:transparent;border:1px solid rgba(212,160,23,.18);border-radius:6px;',
@@ -206,8 +194,6 @@ function copilotInjectHTML() {
   // --- HTML ---
   var wrap = document.createElement('div');
   wrap.innerHTML = [
-    '<button id="copilot-btn-sos" class="copilot-float cplt-hidden">🆘 SOS SALMA</button>',
-
     '<div id="copilot-backdrop"></div>',
 
     '<div id="copilot-panel">',
@@ -247,16 +233,8 @@ function copilotInjectHTML() {
 // ===== BIND EVENTS =====
 
 function copilotBindEvents() {
-  document.getElementById('copilot-btn-sos').addEventListener('click', function() {
-    copilotOpen();
-    var msgs = document.getElementById('copilot-messages');
-    if (msgs && !msgs.children.length) {
-      copilotAddMessage('Estoy aquí. ¿Qué necesitas ahora mismo?', 'salma');
-      setTimeout(function() {
-        copilotAddMessage('Puedo buscar hotel, comida, aligerar el día o adaptar el plan si algo cambia.', 'salma');
-      }, 300);
-    }
-  });
+  // El botón SOS está en la nav móvil — ver navSosSalma() más abajo
+
 
   document.getElementById('copilot-close').addEventListener('click', copilotClose);
   document.getElementById('copilot-backdrop').addEventListener('click', copilotClose);
@@ -275,13 +253,27 @@ function copilotBindEvents() {
 // ===== VISIBILIDAD =====
 
 function copilotShowFloating() {
-  var el = document.getElementById('copilot-btn-sos');
-  if (el) el.classList.remove('cplt-hidden');
+  var el = document.getElementById('nav-sos-btn');
+  if (el) el.style.display = 'flex';
 }
 function copilotHideFloating() {
-  var el = document.getElementById('copilot-btn-sos');
-  if (el) el.classList.add('cplt-hidden');
+  var el = document.getElementById('nav-sos-btn');
+  if (el) el.style.display = 'none';
 }
+
+// Función global llamada desde el botón SOS de la nav móvil
+function navSosSalma() {
+  if (!window._copilot || !window._copilot.routeId) return;
+  copilotOpen();
+  var msgs = document.getElementById('copilot-messages');
+  if (msgs && !msgs.children.length) {
+    copilotAddMessage('Estoy aquí. ¿Qué necesitas ahora mismo?', 'salma');
+    setTimeout(function() {
+      copilotAddMessage('Puedo buscar hotel, comida, aligerar el día o adaptar el plan si algo cambia.', 'salma');
+    }, 300);
+  }
+}
+window.navSosSalma = navSosSalma;
 
 function copilotOpen() {
   var panel    = document.getElementById('copilot-panel');

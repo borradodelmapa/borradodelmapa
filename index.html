@@ -349,6 +349,7 @@ window.openModal=openModal;window.closeModal=closeModal;window.switchModal=switc
 <div id="mobile-dash-nav" class="mobile-dash-nav" style="display:none;">
   <div onclick="event.stopPropagation();setDashTab('maps',this);showPage('dashboard')" class="mobile-nav-item">🗺️<span>Rutas</span></div>
   <div onclick="event.stopPropagation();setDashTab('profile',null);showPage('dashboard')" class="mobile-nav-item">⚙️<span>Cuenta</span></div>
+  <div id="nav-sos-btn" onclick="event.stopPropagation();navSosSalma()" class="mobile-nav-item" style="display:none;color:#f87171;">🆘<span style="color:#f87171;">SOS</span></div>
   <div onclick="event.stopPropagation();logout()" class="mobile-nav-item">🚪<span>Salir</span></div>
 </div>
 <!-- ===== VISTA DE RUTA (página real) ===== -->
@@ -567,5 +568,5 @@ window.SALMA_API="https://salma-api.paco-defoto.workers.dev";
 <script src="app.js?v=11"></script>
 <script src="salma-chat.js?v=13"></script>
 <script src="utils.js?v=9"></script>
-<script src="salma-copilot.js?v=4"></script>
+<script src="salma-copilot.js?v=5"></script>
 </body>
