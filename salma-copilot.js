@@ -79,8 +79,8 @@ function copilotInjectHTML() {
   var style = document.createElement('style');
   style.textContent = [
     '.copilot-float{',
-      'position:fixed;right:18px;z-index:200;',
-      'bottom:calc(24px + env(safe-area-inset-bottom, 0px));',
+      'position:fixed;right:18px;z-index:1001;',
+      'bottom:calc(70px + env(safe-area-inset-bottom, 0px));',
       'border:none;border-radius:999px;padding:14px 22px;',
       "font-family:'JetBrains Mono',monospace;font-size:11px;",
       'font-weight:700;letter-spacing:.12em;cursor:pointer;',
