@@ -520,6 +520,24 @@ function copilotRerenderAccordion() {
         '</div>';
     });
 
+    // Enlace Google Maps por día (se regenera con el nuevo orden)
+    var dayPois = dayStops.filter(function(s) { return s.lat && s.lng && Number(s.lat) && Number(s.lng); });
+    var dayGmapsUrl = '';
+    if (dayPois.length >= 2) {
+      var dn0    = (dayPois[0].headline || dayPois[0].name || '').toString().trim();
+      var dnLast = (dayPois[dayPois.length - 1].headline || dayPois[dayPois.length - 1].name || '').toString().trim();
+      var dOrig  = (dn0    && dest) ? encodeURIComponent(dn0    + ' ' + dest) : (dayPois[0].lat + ',' + dayPois[0].lng);
+      var dDest  = (dnLast && dest) ? encodeURIComponent(dnLast + ' ' + dest) : (dayPois[dayPois.length - 1].lat + ',' + dayPois[dayPois.length - 1].lng);
+      var dWp    = dayPois.slice(1, -1).map(function(p) {
+        var n = (p.headline || p.name || '').toString().trim();
+        return (n && dest) ? encodeURIComponent(n + ' ' + dest) : (p.lat + ',' + p.lng);
+      }).join('|');
+      dayGmapsUrl = 'https://www.google.com/maps/dir/?api=1&origin=' + dOrig + '&destination=' + dDest + (dWp ? '&waypoints=' + dWp : '') + '&travelmode=driving';
+    } else if (dayPois.length === 1) {
+      var dn = (dayPois[0].headline || dayPois[0].name || '').toString().trim();
+      dayGmapsUrl = (dn && dest) ? ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(dn + ' ' + dest)) : ('https://www.google.com/maps?q=' + dayPois[0].lat + ',' + dayPois[0].lng);
+    }
+
     html +=
       '<div style="border:1px solid rgba(212,160,23,.15);border-radius:14px;margin-bottom:10px;overflow:hidden;">' +
         '<div onclick="salmaToggleDay(\'' + contentId + '\',\'' + arrowId + '\')" ' +
@@ -533,12 +551,40 @@ function copilotRerenderAccordion() {
           '<div id="' + arrowId + '" style="font-size:12px;color:var(--dorado);margin-left:8px;">▾</div>' +
         '</div>' +
         '<div id="' + contentId + '" style="display:none;">' +
+          (dayGmapsUrl ?
+            '<div style="padding:12px 16px 0;">' +
+              '<a href="' + dayGmapsUrl + '" target="_blank" rel="noopener" ' +
+                'style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;' +
+                'background:rgba(212,160,23,.07);border:1px solid rgba(212,160,23,.2);border-radius:10px;' +
+                'font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);text-decoration:none;letter-spacing:.1em;" ' +
+                'onmouseover="this.style.background=\'rgba(212,160,23,.14)\'" onmouseout="this.style.background=\'rgba(212,160,23,.07)\'">' +
+                '🗺 NAVEGAR DÍA ' + dayNum + ' EN GOOGLE MAPS →' +
+              '</a>' +
+            '</div>'
+          : '') +
           '<div style="padding:0 16px 8px;">' + dayStopsHTML + '</div>' +
         '</div>' +
       '</div>';
   });
 
   wrapper.innerHTML = html;
+
+  // Actualizar enlace global de ruta completa
+  var globalLink = document.getElementById('vr-gmaps-global');
+  if (globalLink && pois.length >= 2) {
+    var allPois = pois.filter(function(p) { return p.lat && p.lng && Number(p.lat) && Number(p.lng); });
+    if (allPois.length >= 2) {
+      var gN0    = (allPois[0].headline || allPois[0].name || '').toString().trim();
+      var gNLast = (allPois[allPois.length - 1].headline || allPois[allPois.length - 1].name || '').toString().trim();
+      var gOrig  = (gN0    && dest) ? encodeURIComponent(gN0    + ' ' + dest) : (allPois[0].lat + ',' + allPois[0].lng);
+      var gDest2 = (gNLast && dest) ? encodeURIComponent(gNLast + ' ' + dest) : (allPois[allPois.length - 1].lat + ',' + allPois[allPois.length - 1].lng);
+      var gWp    = allPois.slice(1, -1).map(function(p) {
+        var n = (p.headline || p.name || '').toString().trim();
+        return (n && dest) ? encodeURIComponent(n + ' ' + dest) : (p.lat + ',' + p.lng);
+      }).join('|');
+      globalLink.href = 'https://www.google.com/maps/dir/?api=1&origin=' + gOrig + '&destination=' + gDest2 + (gWp ? '&waypoints=' + gWp : '') + '&travelmode=driving';
+    }
+  }
 }
 
 // ===== GUARDAR EN FIRESTORE =====
