@@ -369,11 +369,11 @@ function salmaRenderRoute(routeData) {
     if (gmapsPois.length >= 2) {
       var name0 = (gmapsPois[0].headline || gmapsPois[0].name || '').toString().trim();
       var nameLast = (gmapsPois[gmapsPois.length - 1].headline || gmapsPois[gmapsPois.length - 1].name || '').toString().trim();
-      var origin = (name0 && countryOrRegion) ? encodeURIComponent(name0 + ' ' + countryOrRegion) : (gmapsPois[0].lat + ',' + gmapsPois[0].lng);
-      var dest = (nameLast && countryOrRegion) ? encodeURIComponent(nameLast + ' ' + countryOrRegion) : (gmapsPois[gmapsPois.length - 1].lat + ',' + gmapsPois[gmapsPois.length - 1].lng);
+      var origin = (gmapsPois[0].lat && Math.abs(gmapsPois[0].lat) > 0.01) ? (gmapsPois[0].lat + ',' + gmapsPois[0].lng) : encodeURIComponent(name0 + (countryOrRegion ? ' ' + countryOrRegion : ''));
+      var dest = (gmapsPois[gmapsPois.length-1].lat && Math.abs(gmapsPois[gmapsPois.length-1].lat) > 0.01) ? (gmapsPois[gmapsPois.length-1].lat + ',' + gmapsPois[gmapsPois.length-1].lng) : encodeURIComponent(nameLast + (countryOrRegion ? ' ' + countryOrRegion : ''));
       var waypoints = gmapsPois.slice(1, -1).map(function(p) {
         var n = (p.headline || p.name || '').toString().trim();
-        return n && countryOrRegion ? encodeURIComponent(n + ' ' + countryOrRegion) : (p.lat + ',' + p.lng);
+        return (p.lat && Math.abs(p.lat) > 0.01) ? (p.lat + ',' + p.lng) : encodeURIComponent(n + (countryOrRegion ? ' ' + countryOrRegion : ''));
       }).join('|');
       gmapsUrl = 'https://www.google.com/maps/dir/?api=1&origin=' + origin + '&destination=' + dest + (waypoints ? '&waypoints=' + waypoints : '') + '&travelmode=driving';
     } else {
@@ -417,16 +417,16 @@ function salmaRenderRoute(routeData) {
     if (dayPois.length >= 2) {
       var dn0 = (dayPois[0].headline || dayPois[0].name || '').toString().trim();
       var dnLast = (dayPois[dayPois.length - 1].headline || dayPois[dayPois.length - 1].name || '').toString().trim();
-      var dOrigin = (dn0 && countryOrRegion) ? encodeURIComponent(dn0 + ' ' + countryOrRegion) : (dayPois[0].lat + ',' + dayPois[0].lng);
-      var dDest = (dnLast && countryOrRegion) ? encodeURIComponent(dnLast + ' ' + countryOrRegion) : (dayPois[dayPois.length - 1].lat + ',' + dayPois[dayPois.length - 1].lng);
+      var dOrigin = (dayPois[0].lat && Math.abs(dayPois[0].lat) > 0.01) ? (dayPois[0].lat + ',' + dayPois[0].lng) : encodeURIComponent(dn0 + (countryOrRegion ? ' ' + countryOrRegion : ''));
+      var dDest = (dayPois[dayPois.length-1].lat && Math.abs(dayPois[dayPois.length-1].lat) > 0.01) ? (dayPois[dayPois.length-1].lat + ',' + dayPois[dayPois.length-1].lng) : encodeURIComponent(dnLast + (countryOrRegion ? ' ' + countryOrRegion : ''));
       var dWp = dayPois.slice(1, -1).map(function(p) {
         var n = (p.headline || p.name || '').toString().trim();
-        return n && countryOrRegion ? encodeURIComponent(n + ' ' + countryOrRegion) : (p.lat + ',' + p.lng);
+        return (p.lat && Math.abs(p.lat) > 0.01) ? (p.lat + ',' + p.lng) : encodeURIComponent(n + (countryOrRegion ? ' ' + countryOrRegion : ''));
       }).join('|');
       dayGmapsUrl = 'https://www.google.com/maps/dir/?api=1&origin=' + dOrigin + '&destination=' + dDest + (dWp ? '&waypoints=' + dWp : '') + '&travelmode=driving';
     } else if (dayPois.length === 1) {
       var dn = (dayPois[0].headline || dayPois[0].name || '').toString().trim();
-      dayGmapsUrl = (dn && countryOrRegion) ? ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(dn + ' ' + countryOrRegion)) : ('https://www.google.com/maps?q=' + dayPois[0].lat + ',' + dayPois[0].lng);
+      dayGmapsUrl = (dayPois[0].lat && Math.abs(dayPois[0].lat) > 0.01) ? ('https://www.google.com/maps?q=' + dayPois[0].lat + ',' + dayPois[0].lng + '&query=' + encodeURIComponent(dn)) : ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(dn + (countryOrRegion ? ' ' + countryOrRegion : '')));
     }
 
     // Paradas del día
@@ -436,10 +436,11 @@ function salmaRenderRoute(routeData) {
       var icon = typeIcons[stop.type] || '📍';
       var headline = stop.headline || stop.name || '';
       var mapsUrl = '';
-      if (headline && countryOrRegion) {
+      if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && Math.abs(stop.lng) > 0.01) {
+        // Coords exactas: enlace directo al punto, no búsqueda genérica
+        mapsUrl = 'https://www.google.com/maps?q=' + stop.lat + ',' + stop.lng + '&query=' + encodeURIComponent(headline);
+      } else if (headline && countryOrRegion) {
         mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(headline + ' ' + countryOrRegion);
-      } else if (stop.lat && stop.lng) {
-        mapsUrl = 'https://www.google.com/maps?q=' + stop.lat + ',' + stop.lng;
       }
       var narrative = stop.narrative || stop.description || '';
       var secret = stop.local_secret || '';
@@ -556,6 +557,12 @@ function salmaRenderRoute(routeData) {
 
   window._salmaLastRoute = routeData;
 
+  // DEBUG TEMPORAL — coords de cada parada
+  console.log('[DEBUG COORDS] Paradas generadas:');
+  (routeData.stops || []).forEach(function(s, i) {
+    console.log('  [' + i + '] ' + (s.name || s.headline) + ' → lat:' + s.lat + ' lng:' + s.lng);
+  });
+
   // Inicializar mapa Leaflet tras renderizar el DOM
   if (hasMapData) {
     setTimeout(function() {
@@ -606,15 +613,16 @@ function salmaFetchWikipediaImages(pois, prefix, countryOrRegion) {
   pois.forEach(function(stop, idx) {
     var name = (stop.headline || stop.name || '').toString().trim();
     var containerId = prefix + '-img-' + idx;
-    var lat = stop.lat || null;
-    var lng = stop.lng || null;
-    // Incluir país/región en la query — ancla Places aunque no haya coords
+    var lat = (stop.lat && Math.abs(stop.lat) > 0.01) ? stop.lat : null;
+    var lng = (stop.lng && Math.abs(stop.lng) > 0.01) ? stop.lng : null;
+    var hasCoords = !!(lat && lng);
     var searchName = (name && geo) ? (name + ' ' + geo) : name;
 
-    // 1. Google Places Photos (mejor cobertura)
-    var tryPlaces = (name && name.length >= 3)
+    // 1. Google Places Photos — solo si el stop tiene coords válidas (locationrestrict en el worker)
+    // Sin coords, Places puede devolver el lugar equivocado de otra ciudad: mejor no intentarlo
+    var tryPlaces = (name && name.length >= 3 && hasCoords)
       ? (function() {
-          var pUrl = 'https://salma-api.paco-defoto.workers.dev/photo?name=' + encodeURIComponent(searchName) + (lat && lng ? '&lat=' + lat + '&lng=' + lng : '');
+          var pUrl = 'https://salma-api.paco-defoto.workers.dev/photo?name=' + encodeURIComponent(searchName) + '&lat=' + lat + '&lng=' + lng;
           return fetch(pUrl).then(function(r) {
             if (!r.ok) return Promise.reject();
             var ct = r.headers.get('Content-Type') || '';
@@ -624,18 +632,18 @@ function salmaFetchWikipediaImages(pois, prefix, countryOrRegion) {
         })()
       : Promise.reject();
 
-    // 2. Wikipedia EN
+    // 2. Wikipedia EN — solo si tiene coords (sin coords el homónimo equivocado es probable)
     var tryEN = tryPlaces.catch(function() {
-      if (!name || name.length < 3) return Promise.reject();
-      return fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name), { headers: { 'Accept': 'application/json' } })
+      if (!name || name.length < 3 || !hasCoords) return Promise.reject();
+      return fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(searchName), { headers: { 'Accept': 'application/json' } })
         .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
         .then(function(d) { return (d && d.thumbnail && d.thumbnail.source) ? d.thumbnail.source : Promise.reject(); });
     });
 
-    // 3. Wikipedia ES
+    // 3. Wikipedia ES — solo si tiene coords
     var tryES = tryEN.catch(function() {
-      if (!name || name.length < 3) return Promise.reject();
-      return fetch('https://es.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name), { headers: { 'Accept': 'application/json' } })
+      if (!name || name.length < 3 || !hasCoords) return Promise.reject();
+      return fetch('https://es.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(searchName), { headers: { 'Accept': 'application/json' } })
         .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
         .then(function(d) { return (d && d.thumbnail && d.thumbnail.source) ? d.thumbnail.source : Promise.reject(); });
     });
@@ -822,7 +830,7 @@ function salmaSetGuardarButtonState(guardando) {
   btn.style.cursor = guardando ? 'wait' : 'pointer';
 }
 
-function salmaGuardarRuta() {
+async function salmaGuardarRuta() {
   console.log('[Salma] salmaGuardarRuta llamado. _salmaLastRoute:', window._salmaLastRoute ? 'OK (stops: ' + (window._salmaLastRoute.stops ? window._salmaLastRoute.stops.length : 0) + ')' : 'NULL');
 
   if (!window._salmaLastRoute) {
@@ -948,6 +956,31 @@ function salmaGuardarRuta() {
     suggestions: Array.isArray(r.suggestions) ? r.suggestions.map(function(s) { return (s || '').toString(); }) : []
   };
 
+  // Resolver cover_image antes de guardar: usar el primer stop con coords válidas
+  // (nombre específico + coords exactas → Google Places no puede equivocarse de lugar)
+  var coverImageUrl = '';
+  try {
+    var firstValidStop = stops.find(function(s) { return s && s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01; });
+    if (firstValidStop) {
+      var coverName = (firstValidStop.headline || firstValidStop.name || firstValidStop.title || '').toString().trim();
+      if (!coverName && destinoRuta) coverName = destinoRuta;
+      var coverPhotoUrl = 'https://salma-api.paco-defoto.workers.dev/photo?name=' + encodeURIComponent(coverName)
+        + '&lat=' + firstValidStop.lat + '&lng=' + firstValidStop.lng + '&json=1';
+      var photoJsonRes = await fetch(coverPhotoUrl);
+      if (photoJsonRes.ok) {
+        var photoJsonData = await photoJsonRes.json();
+        coverImageUrl = photoJsonData.url || '';
+      }
+    } else if (destinoRuta) {
+      // Sin coords: buscar por nombre de destino sin restricción geográfica
+      var photoJsonRes = await fetch('https://salma-api.paco-defoto.workers.dev/photo?name=' + encodeURIComponent(destinoRuta) + '&json=1');
+      if (photoJsonRes.ok) {
+        var photoJsonData = await photoJsonRes.json();
+        coverImageUrl = photoJsonData.url || '';
+      }
+    }
+  } catch(e) {}
+
   // Estructura Firestore: sin undefined (Firestore lo rechaza)
   var ruta = {
     titulo: tituloRuta,
@@ -956,7 +989,7 @@ function salmaGuardarRuta() {
     dias: diasCanonico,
     hotel_base: "",
     notas: (notasRuta || '').toString(),
-    cover_image: destinoRuta ? 'https://salma-api.paco-defoto.workers.dev/photo?name=' + encodeURIComponent(destinoRuta) : '',
+    cover_image: coverImageUrl,
     updated_at: new Date().toISOString(),
     createdAt: new Date().toISOString(),
     published: false,
