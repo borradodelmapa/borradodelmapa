@@ -114,8 +114,6 @@ auth.onAuthStateChanged(async (user) => {
     updateSidebar(currentUser);
     const mobileNav = document.getElementById("mobile-dash-nav");
     if (mobileNav) mobileNav.style.display = "flex";
-    closeModal();
-
     // Restaurar ruta desde localStorage si viene de redirect de Google
     if (!window._salmaLastRoute) {
       try {
@@ -123,16 +121,25 @@ auth.onAuthStateChanged(async (user) => {
         if (_backup) { window._salmaLastRoute = JSON.parse(_backup); }
       } catch(e) {}
     }
-    if (window._salmaLastRoute && window._salmaLastRoute.stops) {
+    var _hasPendingRoute = !!(window._salmaLastRoute && window._salmaLastRoute.stops);
+    if (_hasPendingRoute) {
+      salmaShowModalSaving();
+    } else {
+      closeModal();
+    }
+
+    if (_hasPendingRoute) {
       try {
         const r = window._salmaLastRoute;
         const numDias = r.duration_days ? Number(r.duration_days) : (r.stops ? [...new Set(r.stops.map(s => s.day||1))].length : 0);
+        const destino = (r.region || r.country || '').toString();
         const ruta = {
           nombre: r.title || r.name || 'Mi ruta',
-          destino: (r.region || r.country || '').toString(),
+          destino: destino,
           num_dias: numDias,
           dias: numDias,
           notas: r.summary || '',
+          cover_image: destino ? 'https://salma-api.paco-defoto.workers.dev/photo?name=' + encodeURIComponent(destino) : '',
           itinerarioIA: JSON.stringify(r),
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
@@ -145,6 +152,12 @@ auth.onAuthStateChanged(async (user) => {
       } catch(saveErr) {
         console.error('Error al guardar ruta automáticamente:', saveErr.code, saveErr.message);
         showToast('No se pudo guardar la ruta: ' + (saveErr.message || saveErr.code || 'Error desconocido'));
+      } finally {
+        var _sv = document.getElementById('modal-saving-view');
+        if (_sv) _sv.style.display = 'none';
+        var _cb = document.querySelector('#modal-auth .modal-close');
+        if (_cb) _cb.style.display = '';
+        closeModal();
       }
     }
 
@@ -367,9 +380,32 @@ async function loadUserMaps() {
 }
 window.loadUserMaps = loadUserMaps;
 
+function salmaShowModalSaving() {
+  var modal = document.getElementById('modal-auth');
+  if (!modal) return;
+  modal.classList.add('active');
+  var loginView = document.getElementById('modal-login-view');
+  var regView = document.getElementById('modal-register-view');
+  var savingView = document.getElementById('modal-saving-view');
+  var closeBtn = modal.querySelector('.modal-close');
+  if (loginView) loginView.style.display = 'none';
+  if (regView) regView.style.display = 'none';
+  if (savingView) savingView.style.display = 'block';
+  if (closeBtn) closeBtn.style.display = 'none';
+  var avatarImg = document.getElementById('modal-saving-avatar');
+  if (avatarImg && window.SALMA_AVATAR_SRC) avatarImg.src = window.SALMA_AVATAR_SRC;
+}
+window.salmaShowModalSaving = salmaShowModalSaving;
+
 function renderMapsGrid(maps) {
   const grid = document.getElementById("maps-grid-dynamic");
   if (!grid) return;
+  // Ordenar por fecha de creación descendente (más nuevas primero)
+  maps = maps.slice().sort(function(a, b) {
+    var da = a.createdAt || a.updated_at || '';
+    var db = b.createdAt || b.updated_at || '';
+    return db.localeCompare(da);
+  });
   const el = document.getElementById('profile-routes-count');
   if (el) el.textContent = maps.length;
   const destPhoto = (d='') => {
@@ -385,7 +421,7 @@ function renderMapsGrid(maps) {
     return 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=200&fit=crop&q=75';
   };
   let html = maps.map(m => {
-    const photo = destPhoto(m.destino || m.country || m.nombre || '');
+    const photo = m.cover_image || destPhoto(m.destino || m.country || m.nombre || '');
     const name = (m.nombre || m.title || 'Mi ruta').replace(/</g,'&lt;');
     const diasNum = Array.isArray(m.dias) ? m.dias.length : (m.dias||m.num_dias||m.days||0);
     const meta = diasNum + ' días · ' + (m.destino||m.country||'Destino');
