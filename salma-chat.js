@@ -294,6 +294,95 @@ function salmaRemoveLoading() {
   if (el) el.remove();
 }
 
+// ===== STREAMING HELPERS =====
+
+// Crea una burbuja de bot vacía para ir rellenando con streaming
+function salmaAddStreamBubble() {
+  var dialog = document.getElementById('salma-dialog');
+  if (!dialog) return null;
+  var div = document.createElement('div');
+  div.id = 'salma-stream-msg';
+  div.style.cssText = 'display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;';
+  div.innerHTML = '<div style="flex-shrink:0;width:40px;height:40px;border-radius:50%;border:1.5px solid #d4a017;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#1a1816;">' + SALMA_AVATAR + '</div>' +
+    '<div id="salma-stream-text" style="flex:1;background:#111;border:1px solid rgba(212,160,23,.18);border-radius:18px;padding:16px 20px;font-size:15px;color:#f5f0e8;line-height:1.7;"></div>';
+  dialog.appendChild(div);
+  return document.getElementById('salma-stream-text');
+}
+
+// Elimina la burbuja de streaming (se reemplaza por la definitiva)
+function salmaRemoveStreamBubble() {
+  var el = document.getElementById('salma-stream-msg');
+  if (el) el.remove();
+}
+
+// Lee SSE del worker con streaming y va actualizando la burbuja
+// Devuelve una Promise con { reply, route }
+function salmaFetchStream(bodyObj) {
+  bodyObj.stream = true;
+  return new Promise(function(resolve, reject) {
+    fetch(window.SALMA_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bodyObj)
+    }).then(function(res) {
+      // Si el servidor devuelve JSON normal (error, fallback), parsearlo
+      var ct = (res.headers.get('content-type') || '');
+      if (ct.indexOf('application/json') !== -1) {
+        return res.json().then(function(data) { resolve(data); });
+      }
+
+      // SSE stream
+      salmaRemoveLoading();
+      var textEl = salmaAddStreamBubble();
+      var reader = res.body.getReader();
+      var decoder = new TextDecoder();
+      var buffer = '';
+      var fullText = '';
+
+      function pump() {
+        reader.read().then(function(result) {
+          if (result.done) {
+            // Si no llegó evento done, resolver con lo que tenemos
+            salmaRemoveStreamBubble();
+            resolve({ reply: fullText, route: null });
+            return;
+          }
+          buffer += decoder.decode(result.value, { stream: true });
+          var lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            if (line.indexOf('data: ') !== 0) continue;
+            var jsonStr = line.slice(6).trim();
+            if (!jsonStr) continue;
+            try {
+              var evt = JSON.parse(jsonStr);
+              if (evt.done) {
+                // Evento final con reply completo y ruta
+                salmaRemoveStreamBubble();
+                resolve({ reply: evt.reply || fullText, route: evt.route || null });
+                return;
+              }
+              if (evt.t) {
+                fullText += evt.t;
+                if (textEl) textEl.textContent = fullText;
+              }
+            } catch (e) { /* ignorar */ }
+          }
+          pump();
+        }).catch(function(err) {
+          salmaRemoveStreamBubble();
+          reject(err);
+        });
+      }
+      pump();
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
+}
+
 function salmaExtractPlaceholder(text) {
   var clean = (text || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
   var matches = clean.match(/[^.!?]*\?/g);
@@ -712,17 +801,12 @@ async function salmaHeroSend() {
   salmaHistory = [];
 
   try {
-    var res = await fetch(window.SALMA_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: msg,
-        history: [],
-        nationality: (typeof currentUser !== 'undefined' && currentUser && currentUser.country) ? currentUser.country : null,
-        user_name: (typeof currentUser !== 'undefined' && currentUser && currentUser.name) ? currentUser.name : null
-      })
+    var data = await salmaFetchStream({
+      message: msg,
+      history: [],
+      nationality: (typeof currentUser !== 'undefined' && currentUser && currentUser.country) ? currentUser.country : null,
+      user_name: (typeof currentUser !== 'undefined' && currentUser && currentUser.name) ? currentUser.name : null
     });
-    var data = await res.json();
     salmaRemoveLoading();
     if (data._error) console.error('[SALMA WORKER ERROR]', data._error);
 
@@ -781,12 +865,7 @@ async function salmaInlineReply() {
     if (window._salmaLastRoute && window._salmaLastRoute.stops && window._salmaLastRoute.stops.length > 0) {
       body.current_route = window._salmaLastRoute;
     }
-    var res = await fetch(window.SALMA_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    var data = await res.json();
+    var data = await salmaFetchStream(body);
     salmaRemoveLoading();
 
     if (data.reply) {
@@ -1159,12 +1238,7 @@ async function salmaEditFromBox() {
     if (window._salmaLastRoute && window._salmaLastRoute.stops && window._salmaLastRoute.stops.length > 0) {
       body.current_route = window._salmaLastRoute;
     }
-    var res = await fetch(window.SALMA_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    var data = await res.json();
+    var data = await salmaFetchStream(body);
 
     if (data.reply) {
       salmaHistory.push({ role: 'assistant', content: data.reply });

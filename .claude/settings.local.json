@@ -55,7 +55,9 @@
       "Bash(curl -s \"https://salma-api.paco-defoto.workers.dev/photo?name=Mezquita%20de%20C%C3%B3rdoba&lat=37.8789&lng=-4.7794\" -I)",
       "Bash(curl -s \"https://salma-api.paco-defoto.workers.dev/photo?name=Mezquita%20de%20C%C3%B3rdoba&lat=37.8789&lng=-4.7794\" -X GET -o /dev/null -w \"%{http_code} %{content_type}\")",
       "Bash(curl -s \"https://salma-api.paco-defoto.workers.dev/photo?name=Mezquita%20de%20C%C3%B3rdoba&lat=37.8789&lng=-4.7794\" -X GET)",
-      "Bash(node \"C:/Users/User/Desktop/salma/worker/salma-worker.js\")"
+      "Bash(node \"C:/Users/User/Desktop/salma/worker/salma-worker.js\")",
+      "Bash(ls \"C:\\\\Users\\\\User\\\\Desktop\"\" | grep -i salma && ls \"C:UsersUserDownloads\"\")",
+      "Bash(ls \"C:\\\\Users\\\\User\\\\Desktop 2>/dev/null && ls C:UsersUserDownloads\")"
     ]
   }
 }

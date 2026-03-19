@@ -1022,7 +1022,115 @@ export default {
     // Construir mensajes
     const { systemPrompt, messages } = buildMessages(history, message, currentRoute, dynamicText);
 
-    // Llamar a Claude
+    const wantStream = body.stream === true;
+
+    // ─── STREAMING MODE ───
+    if (wantStream) {
+      const sseHeaders = {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+        'Access-Control-Allow-Origin': '*',
+      };
+
+      let anthropicRes;
+      try {
+        anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-6',
+            max_tokens: isRouteRequest(message) ? 4000 : 1500,
+            system: systemPrompt,
+            messages: messages,
+            stream: true,
+          }),
+        });
+      } catch (e) {
+        return new Response(
+          JSON.stringify({ reply: 'No puedo conectar ahora mismo. ¿Puedes intentarlo en un momento?', route: null }),
+          { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
+        );
+      }
+
+      if (!anthropicRes.ok) {
+        const errBody = await anthropicRes.text();
+        return new Response(
+          JSON.stringify({
+            reply: 'Uy, no he podido conectar con el asistente. Inténtalo en un momento.',
+            route: null,
+            _error: anthropicRes.status + ' ' + errBody.slice(0, 200),
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
+        );
+      }
+
+      // Leer el stream de Anthropic y reenviarlo simplificado al cliente
+      const encoder = new TextEncoder();
+      const decoder = new TextDecoder();
+      let fullText = '';
+
+      const { readable, writable } = new TransformStream();
+      const writer = writable.getWriter();
+
+      // Procesar en background para no bloquear la respuesta
+      ctx.waitUntil((async () => {
+        try {
+          const reader = anthropicRes.body.getReader();
+          let buffer = '';
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+
+            // Parsear líneas SSE de Anthropic
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+              if (!line.startsWith('data: ')) continue;
+              const jsonStr = line.slice(6).trim();
+              if (jsonStr === '[DONE]') continue;
+
+              try {
+                const evt = JSON.parse(jsonStr);
+                if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
+                  const chunk = evt.delta.text;
+                  fullText += chunk;
+                  // Enviar chunk al cliente — solo texto visible (antes de SALMA_ROUTE_JSON)
+                  if (!fullText.includes('SALMA_ROUTE_JSON')) {
+                    await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`));
+                  }
+                }
+              } catch (e) { /* ignorar líneas mal formadas */ }
+            }
+          }
+
+          // Stream terminado — procesar ruta y enviar evento final
+          let route = extractRouteFromReply(fullText);
+          const reply = replyWithoutRouteBlock(fullText);
+
+          if (route) {
+            route = await verifyAllStops(route, env.GOOGLE_PLACES_KEY);
+          }
+
+          await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply, route: route || null })}\n\n`));
+        } catch (e) {
+          await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: fullText || 'Error de conexión.', route: null })}\n\n`));
+        } finally {
+          await writer.close();
+        }
+      })());
+
+      return new Response(readable, { headers: sseHeaders });
+    }
+
+    // ─── MODO CLÁSICO (sin stream) ───
     let replyText = '';
     try {
       const res = await fetch('https://api.anthropic.com/v1/messages', {

@@ -727,7 +727,8 @@ function verRuta(id, nombre) {
       '<div style="padding:20px 24px 40px;">' + descText + tagsHTML +
       (vrGmapsUrl ? '<a href="' + vrGmapsUrl + '" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px;padding:14px 16px;background:rgba(212,160,23,.07);border:1px solid rgba(212,160,23,.2);border-radius:12px;font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);text-decoration:none;letter-spacing:.1em;transition:background .15s;" onmouseover="this.style.background=\'rgba(212,160,23,.14)\'" onmouseout="this.style.background=\'rgba(212,160,23,.07)\'">🗺 VER RUTA COMPLETA EN GOOGLE MAPS →</a>' : '') +
       (hasMapCoords ? '<div id="ruta-leaflet-map" style="height:260px;width:100%;border-radius:14px;margin-bottom:24px;border:1px solid rgba(212,160,23,.15);overflow:hidden;"></div>' : '') +
-      stopsHTML + tipsHTML +
+      '<div id="vr-stops-wrapper">' + stopsHTML + '</div>' +
+      tipsHTML +
       '<div style="display:flex;gap:10px;margin-top:28px;padding-top:20px;border-top:1px solid rgba(212,160,23,.1);flex-wrap:wrap;">' +
       '<button onclick="editarRutaModal(\'' + id + '\')" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:12px;color:var(--dorado);padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;">EDITAR</button>' +
       '<button onclick="showPage(\'dashboard\')" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.1);border-radius:12px;color:rgba(245,240,232,.5);padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;">VOLVER</button>' +
@@ -747,6 +748,10 @@ function verRuta(id, nombre) {
         window.salmaFetchWikipediaImages(pois, 'vr-stop', vrCountry);
       }
     }, 400);
+    // Copiloto SALMA — se activa al abrir una ruta guardada
+    if (typeof copilotInit === 'function') {
+      copilotInit(id, routeData, pois, r.destino || vrCountry || '', currentUser.uid);
+    }
   }).catch(e => showToast('Error: ' + e.message));
 }
 window.verRuta = verRuta;
