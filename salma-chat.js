@@ -230,7 +230,7 @@ function salmaShortenReplyForChat(text) {
   return (cut + (cut.length >= 200 ? '…' : ''));
 }
 
-function salmaAddDialog(text, who) {
+function salmaAddDialog(text, who, isRoute) {
   var dialog = document.getElementById('salma-dialog');
   if (!dialog) return;
 
@@ -245,16 +245,24 @@ function salmaAddDialog(text, who) {
     div.style.cssText = 'display:flex;justify-content:flex-end;margin-bottom:16px;';
     div.innerHTML = '<div style="background:#d4a017;color:#0a0908;border-radius:18px;padding:14px 20px;font-size:15px;font-weight:600;max-width:80%;line-height:1.5;">' + escapeHTML(text) + '</div>';
   } else if (who === 'loading') {
-    var LOADING_PHRASES = [
+    var LOADING_PHRASES_RUTA = [
       'Recopilando información de la ruta...',
       'Buscando rutas alternativas...',
-      'Ahorrando horas a tu compañero de viaje...',
-      'Habla conmigo como si fuera un colega...',
-      'Luego puedes editar la ruta conmigo...',
-      'Soy experta en viajes, te acompaño durante el viaje...',
       'Buscando los mejores sitios locales...',
-      'Calculando la mejor combinación de días...'
+      'Calculando la mejor combinación de días...',
+      'Comprobando que los lugares existen de verdad...',
+      'Ordenando las paradas para que el recorrido tenga sentido...',
+      'Añadiendo secretos locales que no salen en las guías...',
+      'Afinando los tiempos para que no vayas a mil...'
     ];
+    var LOADING_PHRASES_CHAT = [
+      'Pensando...',
+      'Buscando la info...',
+      'Dame un momento...',
+      'Consultando mis fuentes...',
+      'Casi lista...'
+    ];
+    var LOADING_PHRASES = isRoute ? LOADING_PHRASES_RUTA : LOADING_PHRASES_CHAT;
     div.id = 'salma-loading-msg';
     div.style.cssText = 'display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;';
     div.innerHTML = '<div style="flex-shrink:0;width:40px;height:40px;border-radius:50%;border:1.5px solid #d4a017;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#1a1816;">' + SALMA_AVATAR + '</div>' +
@@ -697,7 +705,7 @@ async function salmaHeroSend() {
 
   // Mostrar mensaje del usuario + loading
   salmaAddDialog(msg, 'user');
-  salmaAddDialog('', 'loading');
+  salmaAddDialog('', 'loading', true);
   
 
   // Reset historial
@@ -760,7 +768,8 @@ async function salmaInlineReply() {
   salmaAddDialog(msg, 'user');
   input.value = '';
   salmaHideInput();
-  salmaAddDialog('', 'loading');
+  var isRouteMsg = /ruta|itinerario|qué ver|que ver|visitar|días en|dias en|fin de semana|semana en|lugares en|qué hacer|que hacer|plan para|viaje a|viaje por|escapada|excursion|excursión/i.test(msg);
+  salmaAddDialog('', 'loading', isRouteMsg);
 
   try {
     var body = {

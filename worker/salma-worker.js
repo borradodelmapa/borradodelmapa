@@ -1034,7 +1034,7 @@ export default {
         },
         body: JSON.stringify({
           model: 'claude-sonnet-4-6',
-          max_tokens: 4096,
+          max_tokens: isRouteRequest(message) ? 4000 : 1500,
           system: systemPrompt,
           messages: messages,
         }),
