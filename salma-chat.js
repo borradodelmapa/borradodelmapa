@@ -587,7 +587,12 @@ async function salmaHeroSend() {
     var res = await fetch(window.SALMA_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: msg, history: [] })
+      body: JSON.stringify({
+        message: msg,
+        history: [],
+        nationality: (typeof currentUser !== 'undefined' && currentUser && currentUser.country) ? currentUser.country : null,
+        user_name: (typeof currentUser !== 'undefined' && currentUser && currentUser.name) ? currentUser.name : null
+      })
     });
     var data = await res.json();
     salmaRemoveLoading();
@@ -606,19 +611,23 @@ async function salmaHeroSend() {
           salmaRenderRoute(enriched);
         }).catch(function() { salmaRemoveLoading(); salmaRenderRoute(data.route); });
       } else {
-        salmaAddDialog('Buscando en el mapa…', 'loading');
-        salmaTryMinimalRouteFromReply(msg, data.reply).then(function(minimalRoute) {
-          salmaRemoveLoading();
-          if (minimalRoute) {
-            salmaAddDialog('No tenía coordenadas, pero he ubicado "' + (minimalRoute.title || '') + '" en el mapa. Puedes guardar la ruta y pedirme más detalles.', 'bot');
-            salmaRenderRoute(minimalRoute);
-          } else {
-            salmaAddDialog('No he podido ubicar ese lugar. Prueba con "Málaga, España" o el nombre en inglés.', 'bot');
-          }
-        }).catch(function() {
-          salmaRemoveLoading();
-          salmaAddDialog('No he podido ubicar ese lugar en el mapa. Inténtalo de nuevo.', 'bot');
-        });
+        // Solo intentar geocodificar si Salma indica explícitamente que no pudo ubicar el lugar.
+        // Si es una respuesta conversacional (pide más datos, hace preguntas), no añadir nada más.
+        var replyLower = (data.reply || '').toLowerCase();
+        var indicaSinUbicacion = replyLower.indexOf('no tengo') !== -1 ||
+          replyLower.indexOf('no dispongo') !== -1 || replyLower.indexOf('no encuentro') !== -1 ||
+          replyLower.indexOf('coordenada') !== -1 || replyLower.indexOf('no puedo ubicar') !== -1 ||
+          replyLower.indexOf('sin informacion') !== -1 || replyLower.indexOf('sin información') !== -1;
+        if (indicaSinUbicacion) {
+          salmaAddDialog('Buscando en el mapa…', 'loading');
+          salmaTryMinimalRouteFromReply(msg, data.reply).then(function(minimalRoute) {
+            salmaRemoveLoading();
+            if (minimalRoute) {
+              salmaAddDialog('He ubicado "' + (minimalRoute.title || '') + '" en el mapa. Puedes guardarla y pedirme más detalles.', 'bot');
+              salmaRenderRoute(minimalRoute);
+            }
+          }).catch(function() { salmaRemoveLoading(); });
+        }
       }
     } else {
       salmaAddDialog('Uy, algo ha fallado. ¿Puedes intentarlo de nuevo?', 'bot');
@@ -645,7 +654,12 @@ async function salmaInlineReply() {
   salmaAddDialog('', 'loading');
 
   try {
-    var body = { message: msg, history: salmaHistory };
+    var body = {
+      message: msg,
+      history: salmaHistory,
+      nationality: (typeof currentUser !== 'undefined' && currentUser && currentUser.country) ? currentUser.country : null,
+      user_name: (typeof currentUser !== 'undefined' && currentUser && currentUser.name) ? currentUser.name : null
+    };
     if (window._salmaLastRoute && window._salmaLastRoute.stops && window._salmaLastRoute.stops.length > 0) {
       body.current_route = window._salmaLastRoute;
     }
@@ -679,22 +693,25 @@ async function salmaInlineReply() {
           if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
         });
       } else {
-        salmaAddDialog('Buscando en el mapa…', 'loading');
-        salmaTryMinimalRouteFromReply(msg, data.reply).then(function(minimalRoute) {
-          salmaRemoveLoading();
-          if (minimalRoute) {
-            var routeResult = document.getElementById('salma-route-result');
-            if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
-            salmaAddDialog('He ubicado "' + (minimalRoute.title || '') + '" en el mapa. Puedes guardarla y pedirme más detalles.', 'bot');
-            salmaRenderRoute(minimalRoute);
-            if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
-          } else {
-            salmaAddDialog('No he podido ubicar ese lugar. Prueba con "Málaga, España" o más detalle.', 'bot');
-          }
-        }).catch(function() {
-          salmaRemoveLoading();
-          salmaAddDialog('No he podido ubicar ese lugar. Inténtalo de nuevo.', 'bot');
-        });
+        // Solo geocodificar si Salma indica que no pudo ubicar — si es conversacional, no añadir nada
+        var replyLowerInline = (data.reply || '').toLowerCase();
+        var indicaSinUbicacionInline = replyLowerInline.indexOf('no tengo') !== -1 ||
+          replyLowerInline.indexOf('no dispongo') !== -1 || replyLowerInline.indexOf('no encuentro') !== -1 ||
+          replyLowerInline.indexOf('coordenada') !== -1 || replyLowerInline.indexOf('no puedo ubicar') !== -1 ||
+          replyLowerInline.indexOf('sin informacion') !== -1 || replyLowerInline.indexOf('sin información') !== -1;
+        if (indicaSinUbicacionInline) {
+          salmaAddDialog('Buscando en el mapa…', 'loading');
+          salmaTryMinimalRouteFromReply(msg, data.reply).then(function(minimalRoute) {
+            salmaRemoveLoading();
+            if (minimalRoute) {
+              var routeResult = document.getElementById('salma-route-result');
+              if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
+              salmaAddDialog('He ubicado "' + (minimalRoute.title || '') + '" en el mapa. Puedes guardarla y pedirme más detalles.', 'bot');
+              salmaRenderRoute(minimalRoute);
+              if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            }
+          }).catch(function() { salmaRemoveLoading(); });
+        }
       }
     } else {
       salmaAddDialog('No he entendido bien. ¿Puedes repetir?', 'bot');
@@ -1001,7 +1018,12 @@ async function salmaEditFromBox() {
   salmaHistory.push({ role: 'user', content: msg });
 
   try {
-    var body = { message: msg, history: salmaHistory };
+    var body = {
+      message: msg,
+      history: salmaHistory,
+      nationality: (typeof currentUser !== 'undefined' && currentUser && currentUser.country) ? currentUser.country : null,
+      user_name: (typeof currentUser !== 'undefined' && currentUser && currentUser.name) ? currentUser.name : null
+    };
     if (window._salmaLastRoute && window._salmaLastRoute.stops && window._salmaLastRoute.stops.length > 0) {
       body.current_route = window._salmaLastRoute;
     }
