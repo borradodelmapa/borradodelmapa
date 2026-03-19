@@ -605,24 +605,23 @@ function salmaToggleDay(contentId, arrowId) {
   }
 }
 
-// Imágenes reales: Google Places → Wikipedia EN → Wikipedia ES → nada
-// countryOrRegion: país o región de la ruta — ancla la búsqueda geográficamente
+// Imágenes: photo_ref directo (mejor) → Google Places con coords → Wikipedia → nada
 function salmaFetchWikipediaImages(pois, prefix, countryOrRegion) {
   if (!pois || !pois.length) return;
   var geo = (countryOrRegion || '').toString().trim();
   pois.forEach(function(stop, idx) {
     var name = (stop.headline || stop.name || '').toString().trim();
     var containerId = prefix + '-img-' + idx;
+    var photoRef = (stop.photo_ref || '').toString().trim();
     var lat = (stop.lat && Math.abs(stop.lat) > 0.01) ? stop.lat : null;
     var lng = (stop.lng && Math.abs(stop.lng) > 0.01) ? stop.lng : null;
     var hasCoords = !!(lat && lng);
     var searchName = (name && geo) ? (name + ' ' + geo) : name;
 
-    // 1. Google Places Photos — solo si el stop tiene coords válidas (locationrestrict en el worker)
-    // Sin coords, Places puede devolver el lugar equivocado de otra ciudad: mejor no intentarlo
-    var tryPlaces = (name && name.length >= 3 && hasCoords)
+    // 1. photo_ref directo — foto exacta del lugar, sin búsqueda
+    var tryRef = photoRef
       ? (function() {
-          var pUrl = 'https://salma-api.paco-defoto.workers.dev/photo?name=' + encodeURIComponent(searchName) + '&lat=' + lat + '&lng=' + lng;
+          var pUrl = 'https://salma-api.paco-defoto.workers.dev/photo?ref=' + encodeURIComponent(photoRef);
           return fetch(pUrl).then(function(r) {
             if (!r.ok) return Promise.reject();
             var ct = r.headers.get('Content-Type') || '';
@@ -632,7 +631,19 @@ function salmaFetchWikipediaImages(pois, prefix, countryOrRegion) {
         })()
       : Promise.reject();
 
-    // 2. Wikipedia EN — solo si tiene coords (sin coords el homónimo equivocado es probable)
+    // 2. Google Places por nombre + coords (fallback si no hay photo_ref)
+    var tryPlaces = tryRef.catch(function() {
+      if (!name || name.length < 3 || !hasCoords) return Promise.reject();
+      var pUrl = 'https://salma-api.paco-defoto.workers.dev/photo?name=' + encodeURIComponent(searchName) + '&lat=' + lat + '&lng=' + lng;
+      return fetch(pUrl).then(function(r) {
+        if (!r.ok) return Promise.reject();
+        var ct = r.headers.get('Content-Type') || '';
+        if (ct.indexOf('image') === -1) return Promise.reject();
+        return pUrl;
+      });
+    });
+
+    // 3. Wikipedia EN
     var tryEN = tryPlaces.catch(function() {
       if (!name || name.length < 3 || !hasCoords) return Promise.reject();
       return fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(searchName), { headers: { 'Accept': 'application/json' } })
@@ -640,7 +651,7 @@ function salmaFetchWikipediaImages(pois, prefix, countryOrRegion) {
         .then(function(d) { return (d && d.thumbnail && d.thumbnail.source) ? d.thumbnail.source : Promise.reject(); });
     });
 
-    // 3. Wikipedia ES — solo si tiene coords
+    // 4. Wikipedia ES
     var tryES = tryEN.catch(function() {
       if (!name || name.length < 3 || !hasCoords) return Promise.reject();
       return fetch('https://es.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(searchName), { headers: { 'Accept': 'application/json' } })

@@ -133,13 +133,29 @@ auth.onAuthStateChanged(async (user) => {
         const r = window._salmaLastRoute;
         const numDias = r.duration_days ? Number(r.duration_days) : (r.stops ? [...new Set(r.stops.map(s => s.day||1))].length : 0);
         const destino = (r.region || r.country || '').toString();
+        let coverImageUrl = '';
+        if (destino) {
+          try {
+            const stops = r.stops || [];
+            const firstValidStop = stops.find(s => s && s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
+            const coverLat = firstValidStop ? firstValidStop.lat : '';
+            const coverLng = firstValidStop ? firstValidStop.lng : '';
+            const coverPhotoUrl = 'https://salma-api.paco-defoto.workers.dev/photo?name=' + encodeURIComponent(destino) + '&json=1'
+              + (coverLat && coverLng ? '&lat=' + coverLat + '&lng=' + coverLng : '');
+            const photoJsonRes = await fetch(coverPhotoUrl);
+            if (photoJsonRes.ok) {
+              const photoJsonData = await photoJsonRes.json();
+              coverImageUrl = photoJsonData.url || '';
+            }
+          } catch(e) {}
+        }
         const ruta = {
           nombre: r.title || r.name || 'Mi ruta',
           destino: destino,
           num_dias: numDias,
           dias: numDias,
           notas: r.summary || '',
-          cover_image: destino ? 'https://salma-api.paco-defoto.workers.dev/photo?name=' + encodeURIComponent(destino) : '',
+          cover_image: coverImageUrl,
           itinerarioIA: JSON.stringify(r),
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
