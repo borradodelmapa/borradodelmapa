@@ -48,8 +48,9 @@ function delay(ms) {
 // Enriquecer una ruta: geocodificar paradas que no tengan lat/lng (Nominatim 1 req/s)
 function salmaEnrichRouteWithCoords(route) {
   if (!route || !route.stops || !route.stops.length) return Promise.resolve(route);
-  var country = (route.country || route.region || '').toString().trim();
-  var suffix = country ? ', ' + country : '';
+  // Contexto de ubicación: título de la ruta > región > país (de más específico a menos)
+  var locationCtx = (route.title || route.name || route.region || route.country || '').toString().trim();
+  var suffix = locationCtx ? ', ' + locationCtx : '';
   var stops = route.stops.slice();
   var coordsByIndex = [];
   var chain = Promise.resolve();
@@ -64,14 +65,8 @@ function salmaEnrichRouteWithCoords(route) {
       .then(function() { return delay(1100); })
       .then(function() { return salmaGeocode(name + suffix); })
       .then(function(coord) {
-        // Si Nominatim no encuentra nada, usamos las coords de la IA como fallback
-        if (coord) {
-          coordsByIndex[i] = { lat: coord.lat, lng: coord.lng };
-        } else {
-          var lat = stop.lat != null ? Number(stop.lat) : 0;
-          var lng = stop.lng != null ? Number(stop.lng) : 0;
-          coordsByIndex[i] = { lat: lat, lng: lng };
-        }
+        // Sin fallback de IA — si Nominatim no encuentra nada, sin pin (nunca datos falsos)
+        coordsByIndex[i] = coord ? { lat: coord.lat, lng: coord.lng } : { lat: 0, lng: 0 };
       });
   });
   return chain.then(function() {
