@@ -66,6 +66,9 @@ function copilotInit(routeId, routeData, pois, destination, uid) {
   if (msgs) msgs.innerHTML = '';
   copilotHideSaveBanner();
   copilotShowFloating();
+
+  // Re-renderizar acordeón para añadir botones ↑↓✕ desde el inicio
+  setTimeout(function() { copilotRerenderAccordion(); }, 50);
 }
 window.copilotInit = copilotInit;
 
@@ -76,16 +79,25 @@ function copilotInjectHTML() {
   var style = document.createElement('style');
   style.textContent = [
     '.copilot-float{',
-      'position:fixed;right:18px;z-index:200;',
-      'border:none;border-radius:999px;padding:14px 20px;',
+      'position:fixed;right:18px;bottom:24px;z-index:200;',
+      'border:none;border-radius:999px;padding:14px 22px;',
       "font-family:'JetBrains Mono',monospace;font-size:11px;",
-      'font-weight:700;letter-spacing:.1em;cursor:pointer;',
-      'box-shadow:0 8px 28px rgba(0,0,0,.45);transition:transform .15s, box-shadow .15s;',
+      'font-weight:700;letter-spacing:.12em;cursor:pointer;',
+      'box-shadow:0 8px 28px rgba(0,0,0,.55);transition:transform .15s, box-shadow .15s;',
+      'background:#b00020;color:#fff;',
     '}',
-    '.copilot-float:hover{transform:scale(1.06);box-shadow:0 12px 36px rgba(0,0,0,.55);}',
-    '.copilot-float.salma{bottom:78px;background:#d4a017;color:#0a0908;}',
-    '.copilot-float.sos  {bottom:146px;background:#b00020;color:#fff;}',
+    '.copilot-float:hover{transform:scale(1.06);box-shadow:0 12px 36px rgba(0,0,0,.65);}',
     '.copilot-float.cplt-hidden{display:none!important;}',
+
+    /* Botones de reordenar dentro del acordeón */
+    '.cplt-stop-btn{',
+      'background:transparent;border:1px solid rgba(212,160,23,.18);border-radius:6px;',
+      'color:rgba(212,160,23,.7);font-size:11px;padding:3px 7px;cursor:pointer;line-height:1;',
+      'font-family:monospace;transition:all .15s;',
+    '}',
+    '.cplt-stop-btn:hover{background:rgba(212,160,23,.12);color:#d4a017;border-color:rgba(212,160,23,.4);}',
+    '.cplt-stop-btn.del{border-color:rgba(248,113,113,.2);color:rgba(248,113,113,.5);}',
+    '.cplt-stop-btn.del:hover{background:rgba(248,113,113,.12);color:#f87171;border-color:#f87171;}',
 
     '#copilot-backdrop{',
       'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;display:none;',
@@ -193,8 +205,7 @@ function copilotInjectHTML() {
   // --- HTML ---
   var wrap = document.createElement('div');
   wrap.innerHTML = [
-    '<button id="copilot-btn-salma" class="copilot-float salma cplt-hidden">SALMA</button>',
-    '<button id="copilot-btn-sos"   class="copilot-float sos   cplt-hidden">SOS</button>',
+    '<button id="copilot-btn-sos" class="copilot-float cplt-hidden">🆘 SOS SALMA</button>',
 
     '<div id="copilot-backdrop"></div>',
 
@@ -235,20 +246,15 @@ function copilotInjectHTML() {
 // ===== BIND EVENTS =====
 
 function copilotBindEvents() {
-  document.getElementById('copilot-btn-salma').addEventListener('click', function() {
+  document.getElementById('copilot-btn-sos').addEventListener('click', function() {
     copilotOpen();
     var msgs = document.getElementById('copilot-messages');
     if (msgs && !msgs.children.length) {
-      copilotAddMessage('Estoy contigo en el viaje. Puedo buscar hotel, comida, aligerar el día o adaptar el plan si algo cambia.', 'salma');
+      copilotAddMessage('Estoy aquí. ¿Qué necesitas ahora mismo?', 'salma');
+      setTimeout(function() {
+        copilotAddMessage('Puedo buscar hotel, comida, aligerar el día o adaptar el plan si algo cambia.', 'salma');
+      }, 300);
     }
-  });
-
-  document.getElementById('copilot-btn-sos').addEventListener('click', function() {
-    copilotOpen();
-    copilotAddMessage('🔴 SOS activado. ¿Qué necesitas ahora mismo?', 'salma');
-    setTimeout(function() {
-      copilotAddMessage('Usa los botones rápidos de abajo o escríbeme directamente.', 'salma');
-    }, 300);
   });
 
   document.getElementById('copilot-close').addEventListener('click', copilotClose);
@@ -268,16 +274,12 @@ function copilotBindEvents() {
 // ===== VISIBILIDAD =====
 
 function copilotShowFloating() {
-  ['copilot-btn-salma', 'copilot-btn-sos'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.classList.remove('cplt-hidden');
-  });
+  var el = document.getElementById('copilot-btn-sos');
+  if (el) el.classList.remove('cplt-hidden');
 }
 function copilotHideFloating() {
-  ['copilot-btn-salma', 'copilot-btn-sos'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.classList.add('cplt-hidden');
-  });
+  var el = document.getElementById('copilot-btn-sos');
+  if (el) el.classList.add('cplt-hidden');
 }
 
 function copilotOpen() {
@@ -370,6 +372,48 @@ function copilotRemoveLastStopFromDay(dayNum) {
   return null;
 }
 
+// ===== MOVER Y ELIMINAR PARADAS =====
+
+function copilotMoveStop(globalIdx, direction) {
+  var pois = window._copilot.pois;
+  var stop = pois[globalIdx];
+  if (!stop) return;
+  var day = stop.day || 1;
+
+  // Índices globales de paradas de ese día, en orden
+  var dayIndices = [];
+  for (var i = 0; i < pois.length; i++) {
+    if ((pois[i].day || 1) === day) dayIndices.push(i);
+  }
+  var posInDay = dayIndices.indexOf(globalIdx);
+  if (direction === 'up'   && posInDay === 0) return;
+  if (direction === 'down' && posInDay === dayIndices.length - 1) return;
+
+  var swapIdx = dayIndices[direction === 'up' ? posInDay - 1 : posInDay + 1];
+  var temp = pois[globalIdx];
+  pois[globalIdx] = pois[swapIdx];
+  pois[swapIdx]   = temp;
+
+  if (window._copilot.routeData) window._copilot.routeData.stops = pois;
+  copilotRerenderAccordion();
+  copilotMarkDirty();
+}
+window.copilotMoveStop = copilotMoveStop;
+
+function copilotDeleteStop(globalIdx) {
+  var pois = window._copilot.pois;
+  var stop = pois[globalIdx];
+  if (!stop) return;
+  var name = stop.headline || stop.name || 'esta parada';
+  if (!confirm('¿Eliminar "' + name + '"?')) return;
+  pois.splice(globalIdx, 1);
+  if (window._copilot.routeData) window._copilot.routeData.stops = pois;
+  copilotRerenderAccordion();
+  copilotMarkDirty();
+  copilotShowToast('"' + name + '" eliminada');
+}
+window.copilotDeleteStop = copilotDeleteStop;
+
 // ===== RE-RENDER DEL ACORDEÓN =====
 // Reconstruye solo el bloque de días/paradas sin recargar toda la ruta
 
@@ -399,6 +443,10 @@ function copilotRerenderAccordion() {
     'color:var(--dorado);letter-spacing:.18em;margin-bottom:12px;">' +
     'ITINERARIO · ' + pois.length + ' PARADAS</div>';
 
+  // Mapa de índice global: stop → posición en pois[]
+  var globalIndexMap = {};
+  pois.forEach(function(s, i) { globalIndexMap[i] = i; });
+
   var stopIdx = 0;
 
   dayOrder.forEach(function(dayNum) {
@@ -410,33 +458,53 @@ function copilotRerenderAccordion() {
     var contentId = 'vr-day-content-' + dayNum;
     var arrowId   = 'vr-day-arrow-'   + dayNum;
 
+    // Índices globales de paradas de este día
+    var dayGlobalIndices = [];
+    for (var gi = 0; gi < pois.length; gi++) {
+      if ((pois[gi].day || 1) === dayNum) dayGlobalIndices.push(gi);
+    }
+
     var dayStopsHTML = '';
-    dayStops.forEach(function(stop) {
-      var idx      = stopIdx++;
-      var icon     = typeIcons[stop.type] || typeIcons[stop.tipo] || '📍';
-      var rawName  = (stop.headline || stop.name || '');
-      var headline = rawName.replace(/</g, '&lt;');
+    dayStops.forEach(function(stop, posInDay) {
+      var globalIdx = dayGlobalIndices[posInDay];
+      var domIdx    = stopIdx++;
+      var icon      = typeIcons[stop.type] || typeIcons[stop.tipo] || '📍';
+      var rawName   = (stop.headline || stop.name || '');
+      var headline  = rawName.replace(/</g, '&lt;');
       var narrative = (stop.narrative || stop.description || '').replace(/</g, '&lt;');
       var secret    = (stop.local_secret || '').replace(/</g, '&lt;');
       var practical = (stop.practical || '').replace(/</g, '&lt;');
-      var stopId    = 'vr-stop-' + idx;
+      var stopId    = 'vr-stop-' + domIdx;
       var hasDetails = !!(narrative || secret || practical);
       var mapsUrl = rawName && dest
         ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(rawName + ' ' + dest)
         : (stop.lat && stop.lng ? 'https://www.google.com/maps?q=' + stop.lat + ',' + stop.lng : '');
 
+      var isFirst = posInDay === 0;
+      var isLast  = posInDay === dayStops.length - 1;
+
+      var ctrlBtns =
+        '<div style="display:flex;gap:4px;flex-shrink:0;align-items:center;" onclick="event.stopPropagation()">' +
+          '<button class="cplt-stop-btn" title="Subir" ' +
+            (isFirst ? 'disabled style="opacity:.25;cursor:default;"' : '') +
+            ' onclick="copilotMoveStop(' + globalIdx + ',\'up\')">↑</button>' +
+          '<button class="cplt-stop-btn" title="Bajar" ' +
+            (isLast  ? 'disabled style="opacity:.25;cursor:default;"' : '') +
+            ' onclick="copilotMoveStop(' + globalIdx + ',\'down\')">↓</button>' +
+          '<button class="cplt-stop-btn del" title="Eliminar" ' +
+            ' onclick="copilotDeleteStop(' + globalIdx + ')">✕</button>' +
+        '</div>';
+
       dayStopsHTML +=
         '<div style="border-bottom:1px solid rgba(212,160,23,.08);">' +
-          '<div onclick="salmaToggleStop(\'' + stopId + '\')" ' +
-            'style="display:flex;align-items:center;gap:10px;padding:16px 0;cursor:pointer;" ' +
-            'onmouseover="this.style.background=\'rgba(255,255,255,.02)\'" ' +
-            'onmouseout="this.style.background=\'none\'">' +
-            '<div style="flex:1;">' +
+          '<div style="display:flex;align-items:center;gap:8px;padding:16px 0;">' +
+            '<div onclick="salmaToggleStop(\'' + stopId + '\')" style="flex:1;cursor:pointer;">' +
               '<div style="font-family:\'Inter Tight\',sans-serif;font-size:18px;font-weight:700;color:#fff;line-height:1.2;">' +
                 '<span style="font-size:16px;margin-right:6px;">' + icon + '</span>' + headline +
               '</div>' +
             '</div>' +
-            (hasDetails ? '<div style="flex-shrink:0;font-size:12px;color:var(--dorado);" id="' + stopId + '-arrow">▾</div>' : '') +
+            ctrlBtns +
+            (hasDetails ? '<div onclick="salmaToggleStop(\'' + stopId + '\')" style="flex-shrink:0;font-size:12px;color:var(--dorado);cursor:pointer;" id="' + stopId + '-arrow">▾</div>' : '') +
           '</div>' +
           (hasDetails
             ? '<div id="' + stopId + '" style="display:none;padding:0 0 16px 8px;">' +

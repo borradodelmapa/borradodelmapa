@@ -730,7 +730,6 @@ function verRuta(id, nombre) {
       '<div id="vr-stops-wrapper">' + stopsHTML + '</div>' +
       tipsHTML +
       '<div style="display:flex;gap:10px;margin-top:28px;padding-top:20px;border-top:1px solid rgba(212,160,23,.1);flex-wrap:wrap;">' +
-      '<button onclick="editarRutaModal(\'' + id + '\')" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:12px;color:var(--dorado);padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;">EDITAR</button>' +
       '<button onclick="showPage(\'dashboard\')" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.1);border-radius:12px;color:rgba(245,240,232,.5);padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;">VOLVER</button>' +
       '</div></div>';
     showPage('ruta');
@@ -756,50 +755,6 @@ function verRuta(id, nombre) {
 }
 window.verRuta = verRuta;
 
-function editarRutaModal(id) {
-  if (!currentUser) return;
-  db.collection('users').doc(currentUser.uid).collection('maps').doc(id).get().then(doc => {
-    if (!doc.exists) return;
-    const r = doc.data();
-    const modal = document.getElementById('modal-editar-ruta');
-    if (!modal) return;
-    modal.innerHTML =
-      '<div style="background:#111;border:1px solid rgba(212,160,23,.2);border-radius:18px;padding:32px;max-width:480px;width:100%;margin:auto;" onclick="event.stopPropagation()">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;">EDITAR RUTA</div>' +
-      '<div onclick="document.getElementById(\'modal-editar-ruta\').style.display=\'none\'" style="cursor:pointer;color:var(--crema);opacity:.5;font-size:20px;">✕</div></div>' +
-      '<label class="form-label">Nombre</label><input class="form-input" id="edit-ruta-nombre" value="' + (r.nombre||'').replace(/"/g,'&quot;') + '">' +
-      '<label class="form-label">Destino</label><input class="form-input" id="edit-ruta-destino" value="' + (r.destino||'').replace(/"/g,'&quot;') + '">' +
-      '<label class="form-label">Días</label><input class="form-input" id="edit-ruta-dias" type="number" value="' + (r.dias||0) + '">' +
-      '<label class="form-label">Descripción</label><textarea class="form-input" id="edit-ruta-desc" style="height:80px;resize:none;">' + (r.desc||'').replace(/</g,'&lt;') + '</textarea>' +
-      '<label class="form-label">Notas</label><textarea class="form-input" id="edit-ruta-notas" style="height:80px;resize:none;">' + (r.notas||'').replace(/</g,'&lt;') + '</textarea>' +
-      '<div style="display:flex;gap:12px;margin-top:16px;">' +
-      '<button onclick="document.getElementById(\'modal-editar-ruta\').style.display=\'none\'" style="flex:1;background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:12px;color:var(--crema);padding:12px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.1em;">CANCELAR</button>' +
-      '<button onclick="guardarEdicionRuta(\'' + id + '\')" style="flex:2;background:var(--dorado);border:none;border-radius:12px;color:var(--negro);padding:12px;font-family:\'JetBrains Mono\',monospace;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:.1em;">GUARDAR →</button>' +
-      '</div></div>';
-    modal.style.display = 'flex';
-  });
-}
-window.editarRutaModal = editarRutaModal;
-
-async function guardarEdicionRuta(id) {
-  const nombre = document.getElementById('edit-ruta-nombre').value.trim();
-  const destino = document.getElementById('edit-ruta-destino').value.trim();
-  const dias = parseInt(document.getElementById('edit-ruta-dias').value) || 0;
-  const desc = document.getElementById('edit-ruta-desc').value.trim();
-  const notas = document.getElementById('edit-ruta-notas').value.trim();
-  if (!nombre || !currentUser) return;
-  try {
-    await db.collection('users').doc(currentUser.uid).collection('maps').doc(id).update({
-      nombre, destino, dias, desc, notas, updatedAt: new Date().toISOString()
-    });
-    document.getElementById('modal-editar-ruta').style.display = 'none';
-    showToast('Ruta actualizada ✓');
-    loadUserMaps();
-  } catch(e) {
-    showToast('Error: ' + e.message);
-  }
-}
-window.guardarEdicionRuta = guardarEdicionRuta;
 
 document.addEventListener("DOMContentLoaded", function() {
   document.addEventListener('click', function(e) {
