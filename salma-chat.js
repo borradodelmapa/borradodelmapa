@@ -11,10 +11,10 @@ const SALMA_AVATAR = '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAF
 
 let salmaHistory = [];
 
-// ===== GEOCODIFICACIÓN (fallback cuando la API no devuelve coordenadas) =====
+// ===== GEOCODIFICACIÓN =====
 var NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search';
 
-function salmaGeocode(query) {
+function salmaGeocode(query, viewbox) {
   if (!query || typeof query !== 'string') return Promise.resolve(null);
   var q = query.trim();
   if (!q) return Promise.resolve(null);
@@ -24,6 +24,11 @@ function salmaGeocode(query) {
     limit: '1',
     addressdetails: '0'
   });
+  // viewbox = "lng_min,lat_max,lng_max,lat_min" — Nominatim prefiere resultados dentro del área
+  if (viewbox) {
+    params.set('viewbox', viewbox);
+    params.set('bounded', '0'); // prefer dentro del viewbox, no restringir
+  }
   return fetch(NOMINATIM_URL + '?' + params.toString(), {
     headers: {
       'Accept': 'application/json',
@@ -45,53 +50,71 @@ function delay(ms) {
   return new Promise(function(r) { setTimeout(r, ms); });
 }
 
-// Enriquecer una ruta: geocodificar paradas que no tengan lat/lng (Nominatim 1 req/s)
-function salmaEnrichRouteWithCoords(route) {
-  if (!route || !route.stops || !route.stops.length) return Promise.resolve(route);
-  // Contexto de ubicación: preferir región específica > título de ruta > país
-  // Si región == país (ej: "España"), es demasiado vaga — usar título que suele ser más específico
-  var country = (route.country || '').toString().trim().toLowerCase();
-  var region = (route.region || '').toString().trim();
-  var title = (route.title || route.name || '').toString().trim();
+// Determinar la ubicación central de la ruta (texto para geocodificar)
+function salmaGetRouteLocationCtx(route) {
+  var country = (route.country || '').trim().toLowerCase();
+  var region = (route.region || '').trim();
+  var title = (route.title || route.name || '').trim();
   var regionIsVague = !region || region.toLowerCase() === country;
-  var locationCtx = regionIsVague ? (title || region) : region;
-  // Si aún es vago, usar contexto de ruta anterior
-  if ((!locationCtx || locationCtx.toLowerCase() === country) && window._salmaLastRoute) {
+  var ctx = regionIsVague ? (title || region) : region;
+  // Fallback: usar ruta anterior si la actual no tiene contexto específico
+  if ((!ctx || ctx.toLowerCase() === country) && window._salmaLastRoute) {
     var pr = (window._salmaLastRoute.region || '').trim();
     var pt = (window._salmaLastRoute.title || window._salmaLastRoute.name || '').trim();
     var pc = (window._salmaLastRoute.country || '').trim().toLowerCase();
-    locationCtx = (pr && pr.toLowerCase() !== pc) ? pr : (pt || locationCtx);
+    ctx = (pr && pr.toLowerCase() !== pc) ? pr : (pt || ctx);
   }
+  return ctx;
+}
+
+// Enriquecer una ruta: geocodificar paradas usando viewbox geográfico centrado en la ubicación de la ruta
+function salmaEnrichRouteWithCoords(route) {
+  if (!route || !route.stops || !route.stops.length) return Promise.resolve(route);
+
+  var locationCtx = salmaGetRouteLocationCtx(route);
   var suffix = locationCtx ? ', ' + locationCtx : '';
-  var stops = route.stops.slice();
-  var coordsByIndex = [];
-  var chain = Promise.resolve();
-  stops.forEach(function(stop, i) {
-    // Siempre geocodificamos con Nominatim — las coords de la IA pueden ser incorrectas
-    var name = (stop.headline || stop.name || stop.title || '').toString().trim();
-    if (!name) {
-      coordsByIndex[i] = { lat: 0, lng: 0 };
-      return;
+
+  // Paso 1: geocodificar la ubicación central de la ruta para obtener el viewbox
+  var centerPromise = locationCtx ? salmaGeocode(locationCtx) : Promise.resolve(null);
+
+  return centerPromise.then(function(center) {
+    var viewbox = null;
+    if (center && center.lat && center.lng) {
+      // Radio ~50km alrededor del centro (0.45 grados ≈ 50km)
+      var d = 0.45;
+      viewbox = (center.lng - d) + ',' + (center.lat + d) + ',' + (center.lng + d) + ',' + (center.lat - d);
     }
-    chain = chain
-      .then(function() { return delay(1100); })
-      .then(function() { return salmaGeocode(name + suffix); })
-      .then(function(coord) {
-        // Sin fallback de IA — si Nominatim no encuentra nada, sin pin (nunca datos falsos)
-        coordsByIndex[i] = coord ? { lat: coord.lat, lng: coord.lng } : { lat: 0, lng: 0 };
-      });
-  });
-  return chain.then(function() {
-    var enriched = {
-      title: route.title, name: route.name, country: route.country, region: route.region,
-      duration_days: route.duration_days, summary: route.summary, stops: [],
-      tips: route.tips || [], tags: route.tags || [], budget_level: route.budget_level, suggestions: route.suggestions || []
-    };
+
+    var stops = route.stops.slice();
+    var coordsByIndex = [];
+    var chain = Promise.resolve();
+
     stops.forEach(function(stop, i) {
-      var c = coordsByIndex[i] || { lat: 0, lng: 0 };
-      enriched.stops.push(Object.assign({}, stop, { lat: c.lat, lng: c.lng }));
+      var name = (stop.headline || stop.name || stop.title || '').toString().trim();
+      if (!name) {
+        coordsByIndex[i] = { lat: 0, lng: 0 };
+        return;
+      }
+      chain = chain
+        .then(function() { return delay(1100); })
+        .then(function() { return salmaGeocode(name + suffix, viewbox); })
+        .then(function(coord) {
+          coordsByIndex[i] = coord ? { lat: coord.lat, lng: coord.lng } : { lat: 0, lng: 0 };
+        });
     });
-    return enriched;
+
+    return chain.then(function() {
+      var enriched = {
+        title: route.title, name: route.name, country: route.country, region: route.region,
+        duration_days: route.duration_days, summary: route.summary, stops: [],
+        tips: route.tips || [], tags: route.tags || [], budget_level: route.budget_level, suggestions: route.suggestions || []
+      };
+      stops.forEach(function(stop, i) {
+        var c = coordsByIndex[i] || { lat: 0, lng: 0 };
+        enriched.stops.push(Object.assign({}, stop, { lat: c.lat, lng: c.lng }));
+      });
+      return enriched;
+    });
   });
 }
 
