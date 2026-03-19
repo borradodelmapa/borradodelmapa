@@ -442,13 +442,20 @@ function salmaRenderRoute(routeData) {
       } else if (headline && countryOrRegion) {
         mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(headline + ' ' + countryOrRegion);
       }
+      // Detectar si la parada está fuera de la zona pedida
+      var verifiedAddr = stop.verified_address || '';
+      var regionCheck = (routeData.region || '').toString().trim().toLowerCase();
+      var outsideZone = false;
+      if (verifiedAddr && regionCheck && regionCheck.length > 2) {
+        outsideZone = verifiedAddr.toLowerCase().indexOf(regionCheck) === -1;
+      }
       var narrative = stop.narrative || stop.description || '';
       var secret = stop.local_secret || '';
       var alt = stop.alternative || '';
       var practical = stop.practical || '';
       var context = stop.context || '';
       var food_nearby = stop.food_nearby || '';
-      var links = (stop.links && Array.isArray(stop.links)) ? stop.links.filter(function(l) { return l && l.label && l.url; }) : [];
+      var links = (stop.links && Array.isArray(stop.links)) ? stop.links.filter(function(l) { return l && l.label && l.url && !/google\.com\/maps/i.test(l.url) && !/maps\.google/i.test(l.url); }) : [];
       var hasDetails = narrative || secret || alt || practical || context || food_nearby || links.length > 0;
       var stopId = 'salma-stop-' + idx;
 
@@ -467,6 +474,7 @@ function salmaRenderRoute(routeData) {
             '<div style="font-family:\'Inter Tight\',sans-serif;font-size:18px;font-weight:700;color:#fff;line-height:1.2;">' +
               '<span style="font-size:16px;margin-right:6px;">' + icon + '</span>' + escapeHTML(headline) +
             '</div>' +
+            (outsideZone ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:#ff4444;letter-spacing:.08em;margin-top:2px;">⚠ FUERA DE ' + escapeHTML(regionCheck.toUpperCase()) + ' — ' + escapeHTML(verifiedAddr) + '</div>' : '') +
           '</div>' +
           (hasDetails ? '<div style="flex-shrink:0;font-size:12px;color:var(--dorado);" id="' + stopId + '-arrow">▾</div>' : '') +
         '</div>' +
@@ -897,6 +905,7 @@ async function salmaGuardarRuta() {
       day_title: (s && s.day_title) ? String(s.day_title) : '',
       context: (s && s.context) ? String(s.context) : '',
       food_nearby: (s && s.food_nearby) ? String(s.food_nearby) : '',
+      verified_address: (s && s.verified_address) ? String(s.verified_address) : '',
       links: (s && Array.isArray(s.links)) ? s.links : [],
       duracion_min: 0, lat: lat, lng: lng, day: day, name: name, description: desc, type: s && s.type
     };

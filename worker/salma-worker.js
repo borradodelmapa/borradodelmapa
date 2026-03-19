@@ -150,7 +150,7 @@ Cuando generes una ruta o lista de lugares para el mapa, escribe en el chat SOLO
 SALMA_ROUTE_JSON
 {"title":"Título de la ruta","name":"Mismo título","country":"País","region":"Región o ciudad","duration_days":N,"summary":"Resumen corto","stops":[{"name":"Nombre del lugar","headline":"Nombre","narrative":"3-5 frases ricas: qué es, por qué importa, qué ver exactamente, cuánto tiempo calcular","context":"2-3 frases de contexto histórico/cultural que enriquecen la visita (solo para monumentos, templos, patrimonio, naturaleza relevante; omitir en restaurantes y alojamientos)","food_nearby":"Recomendación concreta de dónde comer cerca: nombre real, qué pedir, precio aproximado, minutos andando (opcional, cuando sea útil)","local_secret":"Dato local accionable que pocos saben","alternative":"Plan B si está cerrado o no convence","practical":"Horario · Precio · Cómo llegar","day_title":"Título del día, igual para todas las paradas del mismo día (ej: Playas y templos)","links":[{"label":"Texto visible","url":"URL completa","type":"app|web|booking"}],"type":"lugar|hotel|restaurante|experiencia|mirador|ruta","day":1,"lat":36.72,"lng":-4.42}],"tips":["Consejo 1"],"tags":["tag1"],"budget_level":"bajo|medio|alto|sin_definir","suggestions":["Sugerencia 1"]}
 
-Cada parada en "stops" debe tener: name/headline (nombre EXACTO como aparece en los datos de búsqueda o en Google Maps), narrative (3-5 frases basadas en datos reales: usa las reseñas y descripción de Google del contexto de búsqueda si están disponibles — no inventes datos de tu entrenamiento si tienes datos reales delante), context (historia/cultura, 2-3 frases, solo para lugares patrimoniales), food_nearby (dónde comer cerca, con nombre real y precio, cuando sea relevante), local_secret (tip accionable), alternative (plan B), practical (horario/precio/transporte — usa los horarios reales del contexto de búsqueda si están disponibles), day_title (título breve del día, 3-5 palabras), links (array de {label, url, type}; max 2-3 por parada), type, day (entero, NUNCA string), lat y lng (OBLIGATORIO — usa las coords del contexto de búsqueda si el lugar aparece ahí; NUNCA uses 0,0). Si un lugar no aparece en el contexto de búsqueda y no tienes certeza absoluta de sus datos, NO lo incluyas.
+Cada parada en "stops" debe tener: name/headline (nombre EXACTO como aparece en Google Maps — el sistema verificará cada parada después), narrative (1-2 frases de viajero: por qué merece la pena, qué sensación da, cuánto tiempo calcular — NO inventes datos factuales como distancias, horarios o precios, esos se añaden automáticamente desde Google), context (historia/cultura breve, solo para lugares patrimoniales), food_nearby (nombre real de dónde comer cerca si lo conoces con certeza), local_secret (tip accionable solo si estás segura), alternative (plan B), practical (déjalo vacío — se rellena con datos reales de Google), day_title (título breve del día, 3-5 palabras), links (array de {label, url, type}; max 2-3 por parada), type, day (entero, NUNCA string), lat y lng (tu mejor estimación — el sistema los corregirá con Google). IMPORTANTE: usa nombres de lugares reales y verificables. El sistema buscará cada parada en Google Places y descartará las que no existan.
 Solo incluye el bloque SALMA_ROUTE_JSON cuando realmente hayas generado una ruta o lista de paradas para mostrar en el mapa. Para respuestas solo conversacionales no incluyas el bloque.
 
 NUNCA TE BLOQUEES — REGLA CRÍTICA
@@ -505,15 +505,51 @@ function isRouteRequest(message) {
   return /ruta|itinerario|qué ver|que ver|visitar|días en|dias en|fin de semana|semana en|lugares en|qué hacer|que hacer|plan para|viaje a|viaje por|llevo.*días|me quedo|escapada|excursion|excursión/i.test(message);
 }
 
+// Extrae destino y categorías del mensaje para búsquedas específicas
+function extractSearchQueries(message) {
+  // Detectar categorías específicas mencionadas por el usuario
+  const categoryMap = {
+    'iglesia|catedral|ermita|basílica|basilica|capilla|parroquia': 'iglesias',
+    'yacimiento|romano|ruina|arqueológic|arqueologic|restos|excavación|excavacion': 'yacimientos arqueológicos',
+    'museo': 'museos',
+    'playa': 'playas',
+    'parque|jardín|jardin|bosque|natural': 'parques y naturaleza',
+    'castillo|fortaleza|torre|muralla|alcazaba|alcázar|alcazar': 'castillos y monumentos',
+    'mirador|vista|panorámic|panoramic': 'miradores',
+    'mercado|tienda|compras': 'mercados y tiendas',
+    'restaurante|comer|cenar|gastronomía|gastronomia|comida|tapas|bar': 'restaurantes',
+    'hotel|alojamiento|dormir|hostal|hospedaje': 'hoteles',
+    'senderismo|ruta a pie|camino|trekking|hiking': 'rutas de senderismo',
+    'moto|bici|alquiler': 'alquiler de vehículos',
+  };
+  // Extraer destino: quitar palabras de ruta/viaje para quedarnos con el lugar
+  const destino = message
+    .replace(/ruta|itinerario|qué ver|que ver|visitar|días? en|dias? en|fin de semana|semana en|lugares en|qué hacer|que hacer|plan para|viaje a|viaje por|llevo.*días|me quedo|escapada|excursion|excursión|por favor|dame|hazme|genera|crea/gi, '')
+    .replace(/\d+\s*(días|dias)/gi, '')
+    .trim();
+
+  const queries = [];
+  let hasSpecificCategory = false;
+  for (const [pattern, label] of Object.entries(categoryMap)) {
+    if (new RegExp(pattern, 'i').test(message)) {
+      hasSpecificCategory = true;
+      queries.push(`${label} ${destino}`);
+    }
+  }
+  // Si no hay categoría específica, buscar genéricamente
+  if (!hasSpecificCategory) {
+    queries.push(`qué ver en ${destino}`);
+    queries.push(`lugares turísticos ${destino}`);
+  }
+  return queries;
+}
+
 // Devuelve { contextText, placesData } — contextText para Claude, placesData para match posterior
 async function fetchPlacesContext(message, placesKey) {
   if (!placesKey || !isRouteRequest(message)) return { contextText: '', placesData: [] };
   try {
-    // 1. Text Search — el mensaje del usuario directo + restaurantes
-    const queries = [
-      message,
-      `restaurantes recomendados ${message}`,
-    ];
+    // 1. Text Search — búsquedas específicas según lo que pide el usuario
+    const queries = extractSearchQueries(message);
     const seen = new Set();
     const candidates = [];
     const searchPromises = queries.map(q =>
@@ -523,7 +559,7 @@ async function fetchPlacesContext(message, placesKey) {
     const searchResults = await Promise.all(searchPromises);
     for (const data of searchResults) {
       if (!data?.results) continue;
-      for (const p of data.results.slice(0, 5)) {
+      for (const p of data.results.slice(0, 10)) {
         if (seen.has(p.place_id)) continue;
         seen.add(p.place_id);
         candidates.push({
@@ -542,16 +578,16 @@ async function fetchPlacesContext(message, placesKey) {
 
     // 2. Place Details — reseñas, descripción, horarios (máx 8 en paralelo)
     const detailFields = 'name,editorial_summary,reviews,opening_hours,website,photos';
-    const detailPromises = candidates.slice(0, 8).map(c =>
+    const detailPromises = candidates.slice(0, 10).map(c =>
       fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${c.place_id}&fields=${detailFields}&language=es&key=${placesKey}`)
         .then(r => r.json()).catch(() => null)
     );
     const details = await Promise.all(detailPromises);
 
     // 3. Enriquecer candidatos con datos reales
-    const placesData = candidates.slice(0, 8).map((c, i) => {
+    const placesData = candidates.slice(0, 10).map((c, i) => {
       const d = details[i]?.result;
-      const reviews = (d?.reviews || []).slice(0, 3).map(r => r.text?.slice(0, 200) || '');
+      const reviews = (d?.reviews || []).slice(0, 2).map(r => r.text?.slice(0, 120) || '');
       return {
         nombre: c.nombre,
         direccion: c.direccion,
@@ -581,8 +617,15 @@ async function fetchPlacesContext(message, placesKey) {
       web: p.web,
     }));
 
-    const contextText = `\n\n[BÚSQUEDA EN TIEMPO REAL — datos verificados de Google Places]
-REGLA CRÍTICA: SOLO incluye en la ruta lugares que aparezcan en esta lista o de los que tengas certeza absoluta en esa zona concreta. Usa el "nombre" exacto y las coordenadas (lat/lng) tal cual aparecen aquí. Basa tus descripciones en "descripcion_google" y "resenas" — no inventes datos. Si un lugar no tiene reseñas ni descripción, descríbelo de forma genérica sin inventar detalles.
+    const contextText = `\n\n[BÚSQUEDA EN TIEMPO REAL — datos de Google Places]
+REGLAS:
+1. Incluye SOLO paradas de la categoría que el usuario ha pedido. Si pide iglesias, solo iglesias. Si pide yacimientos, solo yacimientos. NO añadas categorías que el usuario no ha mencionado.
+2. Fíjate en la DIRECCIÓN de cada resultado. Si el usuario pide lugares EN una ciudad concreta, incluye solo los que estén en esa zona. Si incluyes alguno de otro municipio cercano, DILO EXPLÍCITAMENTE en la narrative.
+3. Usa estos resultados como base, PERO si conoces con certeza otros lugares de la misma categoría en esa zona que no aparecen aquí, INCLÚYELOS. El sistema verificará cada parada en Google Places y descartará las que no existan — así que no te cortes en añadir lugares reales que conozcas.
+4. Intenta ser COMPLETA: si el usuario pide yacimientos de una zona y conoces 5, pon los 5, no te quedes en 2. El usuario quiere una lista lo más exhaustiva posible.
+5. NO inventes datos factuales (horarios, precios, distancias) — el sistema los añade desde Google.
+6. NO incluyas links a Google Maps en el campo "links" — el sistema los genera automáticamente.
+7. Tu trabajo: recopilar TODOS los lugares relevantes de la zona pedida, ordenarlos, y añadir tu perspectiva de viajera.
 ${JSON.stringify(contextForClaude)}`;
 
     return { contextText, placesData };
@@ -591,36 +634,127 @@ ${JSON.stringify(contextForClaude)}`;
   }
 }
 
-// Match automático: asigna photo_ref a cada stop de la ruta comparando nombre y coords
-function assignPhotoRefs(route, placesData) {
-  if (!route?.stops || !placesData?.length) return route;
-  route.stops = route.stops.map(stop => {
-    if (stop.photo_ref) return stop; // ya tiene
-    const stopName = (stop.name || stop.headline || '').toLowerCase().trim();
-    const stopLat = stop.lat || 0;
-    const stopLng = stop.lng || 0;
-    // 1. Match por nombre (contiene o está contenido)
-    let match = placesData.find(p => {
-      const pName = (p.nombre || '').toLowerCase().trim();
-      return pName && stopName && (pName.includes(stopName) || stopName.includes(pName));
-    });
-    // 2. Si no hay match por nombre, match por cercanía (<1km)
-    if (!match && stopLat && stopLng) {
-      let minDist = Infinity;
-      for (const p of placesData) {
-        if (!p.lat || !p.lng || !p.photo_ref) continue;
-        const dLat = Math.abs(p.lat - stopLat);
-        const dLng = Math.abs(p.lng - stopLng);
-        const dist = Math.sqrt(dLat * dLat + dLng * dLng) * 111;
-        if (dist < 1 && dist < minDist) {
-          minDist = dist;
-          match = p;
-        }
-      }
-    }
-    if (match?.photo_ref) stop.photo_ref = match.photo_ref;
-    return stop;
+// ═══════════════════════════════════════════════════════════════
+// VERIFICACIÓN DE TODAS LAS PARADAS — Google Places (pasada 2)
+// Busca CADA parada en Google Places, reemplaza coords/foto/descripción
+// con datos reales. Si no encuentra una parada cerca, la elimina.
+// ═══════════════════════════════════════════════════════════════
+async function verifyAllStops(route, placesKey) {
+  if (!route?.stops || !placesKey) return route;
+
+  const region = route.region || route.country || '';
+
+  // 1. Buscar CADA parada en Google Places (Find Place + Place Details)
+  const findPromises = route.stops.map(stop => {
+    const name = stop.name || stop.headline || '';
+    if (!name || name.length < 3) return Promise.resolve(null);
+    const searchQuery = region ? `${name} ${region}` : name;
+    // locationbias con coords de Claude como pista (si las tiene)
+    const bias = (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01)
+      ? `&locationbias=circle:10000@${stop.lat},${stop.lng}`
+      : '';
+    return fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(searchQuery)}&inputtype=textquery${bias}&fields=place_id,photos,geometry,name,formatted_address&language=es&key=${placesKey}`)
+      .then(r => r.json()).catch(() => null);
   });
+  const findResults = await Promise.all(findPromises);
+
+  // 2. Calcular centro de ruta a partir de resultados verificados (para validación de distancia)
+  const verifiedCoords = [];
+  findResults.forEach(data => {
+    const c = data?.candidates?.[0];
+    if (c?.geometry?.location) {
+      verifiedCoords.push({ lat: c.geometry.location.lat, lng: c.geometry.location.lng });
+    }
+  });
+  let centerLat = 0, centerLng = 0;
+  if (verifiedCoords.length > 0) {
+    centerLat = verifiedCoords.reduce((s, p) => s + p.lat, 0) / verifiedCoords.length;
+    centerLng = verifiedCoords.reduce((s, p) => s + p.lng, 0) / verifiedCoords.length;
+  }
+
+  // 3. Place Details para cada resultado válido (reseñas, descripción, horarios)
+  const detailFields = 'name,editorial_summary,reviews,opening_hours,website,photos,geometry';
+  const detailPromises = findResults.map(data => {
+    const c = data?.candidates?.[0];
+    if (!c?.place_id) return Promise.resolve(null);
+    // Validar distancia si tenemos centro
+    if (centerLat && centerLng && c.geometry?.location) {
+      const dLat = Math.abs(c.geometry.location.lat - centerLat);
+      const dLng = Math.abs(c.geometry.location.lng - centerLng);
+      const distKm = Math.sqrt(dLat * dLat + dLng * dLng) * 111;
+      if (distKm > 10) return Promise.resolve(null); // Fuera del municipio
+    }
+    return fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${c.place_id}&fields=${detailFields}&language=es&key=${placesKey}`)
+      .then(r => r.json()).catch(() => null);
+  });
+  const detailResults = await Promise.all(detailPromises);
+
+  // 4. Enriquecer cada parada con datos reales de Google
+  const verifiedStops = [];
+  route.stops.forEach((stop, i) => {
+    const findData = findResults[i];
+    const candidate = findData?.candidates?.[0];
+    const detail = detailResults[i]?.result;
+
+    if (!candidate?.geometry?.location) {
+      // Google no encontró esta parada — la descartamos
+      return;
+    }
+
+    const pLat = candidate.geometry.location.lat;
+    const pLng = candidate.geometry.location.lng;
+
+    // Validar distancia al centro de la ruta
+    if (centerLat && centerLng) {
+      const dLat = Math.abs(pLat - centerLat);
+      const dLng = Math.abs(pLng - centerLng);
+      const distKm = Math.sqrt(dLat * dLat + dLng * dLng) * 111;
+      if (distKm > 10) return; // Fuera del municipio — descartar
+    }
+
+    // Coords verificadas de Google (sustituyen las de Claude)
+    stop.lat = pLat;
+    stop.lng = pLng;
+
+    // Foto verificada de Google
+    const photoRef = detail?.photos?.[0]?.photo_reference || candidate.photos?.[0]?.photo_reference || '';
+    if (photoRef) stop.photo_ref = photoRef;
+
+    // Descripción de Google (editorial_summary) — solo para el campo description (datos)
+    // La narrative de Claude se mantiene (está en español y con personalidad de Salma)
+    const googleDesc = detail?.editorial_summary?.overview || '';
+    if (googleDesc) {
+      stop.description = googleDesc;
+    }
+
+    // Nombre verificado de Google — preferir Place Details (tiene language=es)
+    const verifiedName = detail?.name || candidate.name || '';
+    if (verifiedName) {
+      stop.name = verifiedName;
+      stop.headline = verifiedName;
+    }
+
+    // Dirección verificada de Google — para que el frontend pueda avisar si está fuera de la zona pedida
+    const verifiedAddress = candidate.formatted_address || '';
+    if (verifiedAddress) {
+      stop.verified_address = verifiedAddress;
+    }
+
+    // Horarios reales de Google (sustituyen lo que Claude inventó)
+    if (detail?.opening_hours?.weekday_text) {
+      stop.practical = detail.opening_hours.weekday_text.join(' · ');
+    }
+
+    // Reseñas reales — añadir al contexto si no hay
+    const reviews = (detail?.reviews || []).slice(0, 2).map(r => r.text?.slice(0, 150) || '').filter(Boolean);
+    if (reviews.length > 0 && !stop.context) {
+      stop.context = 'Según visitantes: ' + reviews.join(' | ');
+    }
+
+    verifiedStops.push(stop);
+  });
+
+  route.stops = verifiedStops;
   return route;
 }
 
@@ -725,11 +859,19 @@ function extractRouteFromReply(text) {
         headline: s.headline || s.name || s.nombre || '',
         description: s.description || s.descripcion || s.narrative || '',
         narrative: s.narrative || s.description || s.descripcion || '',
+        context: s.context || '',
+        food_nearby: s.food_nearby || '',
+        local_secret: s.local_secret || '',
+        alternative: s.alternative || '',
+        practical: s.practical || '',
+        day_title: s.day_title || '',
+        links: Array.isArray(s.links) ? s.links : [],
         type: s.type || 'lugar',
         day: typeof s.day === 'number' ? s.day : (s.day != null ? (parseInt(s.day) || 1) : 1),
         lat: typeof s.lat === 'number' ? s.lat : (s.lat != null ? parseFloat(s.lat) : 0),
         lng: typeof s.lng === 'number' ? s.lng : (s.lng != null ? parseFloat(s.lng) : 0),
         photo_ref: s.photo_ref || '',
+        verified_address: s.verified_address || '',
       }));
       return route;
     }
@@ -925,9 +1067,9 @@ export default {
     let route = extractRouteFromReply(replyText);
     const reply = replyWithoutRouteBlock(replyText);
 
-    // Asignar photo_ref automáticamente — Claude no necesita tocarlo
-    if (route && placesData.length > 0) {
-      route = assignPhotoRefs(route, placesData);
+    // Verificar TODAS las paradas con Google Places — coords, fotos, descripciones reales
+    if (route) {
+      route = await verifyAllStops(route, env.GOOGLE_PLACES_KEY);
     }
 
     return new Response(
