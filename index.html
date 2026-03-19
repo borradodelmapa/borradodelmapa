@@ -126,6 +126,9 @@ window.openModal=openModal;window.closeModal=closeModal;window.switchModal=switc
 
       <!-- SALMA INLINE — diálogo + resultado (justo después del input) -->
       <section id="salma-inline" style="display:none;max-width:100%;margin:24px 0 0;text-align:left;">
+        <div style="margin-bottom:16px;">
+          <button onclick="salmaReset()" style="background:none;border:none;color:rgba(245,240,232,.4);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;cursor:pointer;padding:0;transition:color .2s;" onmouseover="this.style.color='#d4a017'" onmouseout="this.style.color='rgba(245,240,232,.4)'">← NUEVA RUTA</button>
+        </div>
         <div id="salma-dialog" style="margin-bottom:24px;"></div>
         <div id="salma-inline-input-wrap" style="display:none;margin-bottom:24px;">
           <div style="display:flex;gap:8px;">

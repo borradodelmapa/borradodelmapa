@@ -135,9 +135,50 @@ function salmaTryMinimalRouteFromReply(userMessage, replyText) {
 // ===== FUNCIONES DE UI INLINE =====
 
 function salmaShowInline() {
+  // Ocultar hero (título, subtítulo, input inicial)
+  var heroBox = document.getElementById('salma-hero-box');
+  if (heroBox) heroBox.style.display = 'none';
+  var heroLabel = document.querySelector('.hero-label');
+  if (heroLabel) heroLabel.style.display = 'none';
+  var heroTitle = document.querySelector('.hero-title');
+  if (heroTitle) heroTitle.style.display = 'none';
+  var heroSub = document.querySelector('.hero-sub');
+  if (heroSub) heroSub.style.display = 'none';
+
+  // Mostrar sección de conversación e input de diálogo
   var section = document.getElementById('salma-inline');
   if (section) section.style.display = 'block';
+  salmaShowInput();
 }
+
+function salmaReset() {
+  // Restaurar hero
+  var heroBox = document.getElementById('salma-hero-box');
+  if (heroBox) heroBox.style.display = 'flex';
+  var heroLabel = document.querySelector('.hero-label');
+  if (heroLabel) heroLabel.style.display = '';
+  var heroTitle = document.querySelector('.hero-title');
+  if (heroTitle) heroTitle.style.display = '';
+  var heroSub = document.querySelector('.hero-sub');
+  if (heroSub) heroSub.style.display = '';
+
+  // Ocultar y limpiar conversación
+  var section = document.getElementById('salma-inline');
+  if (section) section.style.display = 'none';
+  var dialog = document.getElementById('salma-dialog');
+  if (dialog) dialog.innerHTML = '';
+  var routeResult = document.getElementById('salma-route-result');
+  if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
+  salmaHideInput();
+  salmaHistory = [];
+  window._salmaLastRoute = null;
+
+  // Foco al hero input
+  var heroInput = document.getElementById('salma-hero-input');
+  if (heroInput) { heroInput.value = ''; heroInput.focus(); }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+window.salmaReset = salmaReset;
 
 // En el chat solo mostramos 1–2 frases; el detalle va en la ruta de abajo
 function salmaShortenReplyForChat(text) {
