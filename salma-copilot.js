@@ -89,7 +89,7 @@ function copilotInjectHTML() {
     '.cplt-stop-btn.del:hover{background:rgba(248,113,113,.12);color:#f87171;border-color:#f87171;}',
 
     '#copilot-backdrop{',
-      'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;display:none;',
+      'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1500;display:none;',
     '}',
 
     '#copilot-panel{',
@@ -100,7 +100,7 @@ function copilotInjectHTML() {
       'border-top:1px solid rgba(212,160,23,.3);',
       'border-left:1px solid rgba(212,160,23,.15);',
       'border-right:1px solid rgba(212,160,23,.15);',
-      'display:none;flex-direction:column;z-index:301;',
+      'display:none;flex-direction:column;z-index:1501;',
       'box-shadow:0 -12px 48px rgba(0,0,0,.55);',
     '}',
 
