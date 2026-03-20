@@ -328,9 +328,15 @@
       ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(name + ' ' + country)
       : 'https://www.google.com/maps?q=' + poi.lat + ',' + poi.lng;
     var photoRef = poi.photo_ref || '';
+    var rawName = poi.headline || poi.name || '';
     var apiBase = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
-    var photoHtml = photoRef
-      ? '<img src="' + apiBase + '/photo?ref=' + encodeURIComponent(photoRef) + '" alt="" style="width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:8px;display:block;" onerror="this.style.display=\'none\'">'
+    var photoSrc = photoRef
+      ? apiBase + '/photo?ref=' + encodeURIComponent(photoRef)
+      : (rawName && poi.lat && poi.lng
+          ? apiBase + '/photo?name=' + encodeURIComponent(rawName) + '&lat=' + poi.lat + '&lng=' + poi.lng
+          : '');
+    var photoHtml = photoSrc
+      ? '<img src="' + photoSrc + '" alt="" style="width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:8px;display:block;" onerror="this.style.display=\'none\'">'
       : '';
 
     var content =
