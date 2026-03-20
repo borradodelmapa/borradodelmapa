@@ -115,6 +115,7 @@ auth.onAuthStateChanged(async (user) => {
     const mobileNav = document.getElementById("mobile-dash-nav");
     if (mobileNav) mobileNav.style.display = "flex";
     injectProfilePanel();
+    injectCuadernoPanel();
     // Restaurar ruta desde localStorage si viene de redirect de Google
     if (!window._salmaLastRoute) {
       try {
@@ -1024,6 +1025,7 @@ function injectProfilePanel() {
             '<div class="pp-stat-lbl">PLAN GRATIS</div>',
           '</div>',
         '</div>',
+        '<button onclick="logout();closeProfilePanel();" style="width:100%;background:transparent;color:rgba(248,113,113,.7);border:1px solid rgba(248,113,113,.25);border-radius:10px;padding:11px;font-family:\'JetBrains Mono\',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;cursor:pointer;">🚪 CERRAR SESIÓN</button>',
       '</div>',
     '</div>'
   ].join('');
@@ -1094,6 +1096,138 @@ async function saveProfilePanel() {
 }
 window.saveProfilePanel = saveProfilePanel;
 
+// ===== PANEL CUADERNO FLOTANTE (móvil) =====
+
+function injectCuadernoPanel() {
+  if (document.getElementById('cuaderno-panel')) return;
+  var style = document.createElement('style');
+  style.textContent = [
+    '#cuaderno-panel-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1500;display:none;}',
+    '#cuaderno-panel{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:560px;',
+      'background:#111;border-radius:20px 20px 0 0;',
+      'border-top:1px solid rgba(212,160,23,.3);border-left:1px solid rgba(212,160,23,.15);border-right:1px solid rgba(212,160,23,.15);',
+      'display:none;flex-direction:column;z-index:1501;box-shadow:0 -12px 48px rgba(0,0,0,.55);height:80vh;}',
+    '#cuaderno-panel-head{padding:16px 20px 0;border-bottom:1px solid rgba(212,160,23,.12);flex-shrink:0;}',
+    '#cuaderno-panel-head-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}',
+    '#cuaderno-panel-tabs{display:flex;gap:0;}',
+    '.cpnl-tab{padding:9px 14px;font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:1.5px;cursor:pointer;',
+      'color:rgba(245,240,232,.4);border-bottom:2px solid transparent;transition:all .15s;}',
+    '.cpnl-tab.active{color:#d4a017;border-bottom-color:#d4a017;}',
+    '#cuaderno-panel-body{flex:1;overflow-y:auto;padding:16px 18px 20px;scrollbar-width:none;}',
+    '#cuaderno-panel-body::-webkit-scrollbar{display:none;}',
+    '.cpnl-pane{display:none;}',
+    '.cpnl-pane.active{display:block;}',
+    '.cpnl-nota{background:rgba(255,255,255,.04);border:1px solid rgba(212,160,23,.15);border-radius:12px;padding:14px 16px;margin-bottom:10px;}',
+    '.cpnl-nota-ruta{font-family:"JetBrains Mono",monospace;font-size:8px;color:rgba(212,160,23,.6);letter-spacing:1.5px;margin-bottom:6px;}',
+    '.cpnl-nota-q{font-family:"JetBrains Mono",monospace;font-size:10px;color:#d4a017;letter-spacing:.8px;margin-bottom:6px;}',
+    '.cpnl-nota-r{font-size:14px;color:rgba(245,240,232,.85);line-height:1.65;}',
+    '.cpnl-nota-footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px;}',
+    '.cpnl-nota-fecha{font-family:"JetBrains Mono",monospace;font-size:8px;color:rgba(245,240,232,.25);}',
+    '.cpnl-del{background:none;border:none;color:rgba(248,113,113,.4);cursor:pointer;font-size:12px;padding:2px 6px;}',
+    '.cpnl-doc{background:rgba(255,255,255,.04);border:1px solid rgba(212,160,23,.15);border-radius:12px;padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}',
+    '.cpnl-upload-area{border:1px dashed rgba(212,160,23,.3);border-radius:12px;padding:24px;text-align:center;cursor:pointer;margin-bottom:14px;}',
+    '.cpnl-upload-area:hover{border-color:rgba(212,160,23,.6);background:rgba(212,160,23,.03);}'
+  ].join('');
+  document.head.appendChild(style);
+
+  var wrap = document.createElement('div');
+  wrap.innerHTML = [
+    '<div id="cuaderno-panel-backdrop"></div>',
+    '<div id="cuaderno-panel">',
+      '<div id="cuaderno-panel-head">',
+        '<div id="cuaderno-panel-head-top">',
+          '<div style="font-family:\'Inter Tight\',sans-serif;font-size:17px;font-weight:700;color:#fff;">📒 MI CUADERNO</div>',
+          '<button onclick="closeCuadernoPanel()" style="background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:8px;padding:7px 13px;color:rgba(245,240,232,.55);font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.08em;">CERRAR</button>',
+        '</div>',
+        '<div id="cuaderno-panel-tabs">',
+          '<div class="cpnl-tab active" id="cpnl-tab-viaje" onclick="setCuadernoPanelTab(\'viaje\')">MI VIAJE</div>',
+          '<div class="cpnl-tab" id="cpnl-tab-global" onclick="setCuadernoPanelTab(\'global\')">SIEMPRE ÚTIL</div>',
+          '<div class="cpnl-tab" id="cpnl-tab-docs" onclick="setCuadernoPanelTab(\'docs\')">DOCS</div>',
+        '</div>',
+      '</div>',
+      '<div id="cuaderno-panel-body">',
+        '<div class="cpnl-pane active" id="cpnl-pane-viaje">',
+          '<div id="cpnl-notas-viaje" style="padding-top:4px;"></div>',
+        '</div>',
+        '<div class="cpnl-pane" id="cpnl-pane-global">',
+          '<div id="cpnl-notas-global" style="padding-top:4px;"></div>',
+        '</div>',
+        '<div class="cpnl-pane" id="cpnl-pane-docs">',
+          '<label for="cpnl-doc-upload" class="cpnl-upload-area">',
+            '<div style="font-size:26px;margin-bottom:6px;">📎</div>',
+            '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:#d4a017;letter-spacing:1.5px;margin-bottom:4px;">SUBIR DOCUMENTO</div>',
+            '<div style="font-size:11px;color:rgba(245,240,232,.35);">Pasaporte · Carnet · Seguro · Contrato · PDF / JPG · máx. 5MB</div>',
+          '</label>',
+          '<input type="file" id="cpnl-doc-upload" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" onchange="uploadDoc(this,\'cpnl-docs-list\')">',
+          '<div id="cpnl-docs-list"></div>',
+        '</div>',
+      '</div>',
+    '</div>'
+  ].join('');
+  while (wrap.firstChild) document.body.appendChild(wrap.firstChild);
+  document.getElementById('cuaderno-panel-backdrop').addEventListener('click', closeCuadernoPanel);
+}
+
+function setCuadernoPanelTab(tab) {
+  ['viaje','global','docs'].forEach(function(t) {
+    var pane = document.getElementById('cpnl-pane-' + t);
+    var btn  = document.getElementById('cpnl-tab-' + t);
+    if (pane) pane.className = 'cpnl-pane';
+    if (btn)  btn.className  = 'cpnl-tab';
+  });
+  var pane = document.getElementById('cpnl-pane-' + tab);
+  var btn  = document.getElementById('cpnl-tab-'  + tab);
+  if (pane) pane.className = 'cpnl-pane active';
+  if (btn)  btn.className  = 'cpnl-tab active';
+  if (tab === 'viaje')  loadNotasViaje('cpnl-notas-viaje');
+  else if (tab === 'global') loadNotasGlobal('cpnl-notas-global');
+  else if (tab === 'docs')   loadDocs('cpnl-docs-list');
+}
+window.setCuadernoPanelTab = setCuadernoPanelTab;
+
+function openCuadernoPanel() {
+  var panel = document.getElementById('cuaderno-panel');
+  if (!panel) { injectCuadernoPanel(); panel = document.getElementById('cuaderno-panel'); }
+  panel.style.display = 'flex';
+  document.getElementById('cuaderno-panel-backdrop').style.display = 'block';
+  // Carga la pestaña activa
+  var activeTab = document.querySelector('.cpnl-tab.active');
+  var tab = activeTab ? activeTab.id.replace('cpnl-tab-','') : 'viaje';
+  setCuadernoPanelTab(tab);
+}
+window.openCuadernoPanel = openCuadernoPanel;
+
+function closeCuadernoPanel() {
+  var panel = document.getElementById('cuaderno-panel');
+  var backdrop = document.getElementById('cuaderno-panel-backdrop');
+  if (panel)    panel.style.display    = 'none';
+  if (backdrop) backdrop.style.display = 'none';
+}
+window.closeCuadernoPanel = closeCuadernoPanel;
+
+// Renderizado de notas en el panel (misma estructura que renderNotaCard pero con clases cpnl-*)
+function renderNotaPanel(id, d, coleccion) {
+  var fecha = d.createdAt ? new Date(d.createdAt).toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : '';
+  return '<div class="cpnl-nota">' +
+    (d.routeName ? '<div class="cpnl-nota-ruta">' + d.routeName.toUpperCase() + '</div>' : '') +
+    '<div class="cpnl-nota-q">' + (d.pregunta || '') + '</div>' +
+    '<div class="cpnl-nota-r">' + (d.respuesta || '') + '</div>' +
+    '<div class="cpnl-nota-footer">' +
+      '<div class="cpnl-nota-fecha">' + fecha + '</div>' +
+      '<button class="cpnl-del" onclick="deleteNotaPanel(\'' + coleccion + '\',\'' + id + '\',this)" title="Eliminar">✕</button>' +
+    '</div></div>';
+}
+
+function deleteNotaPanel(coleccion, id, btn) {
+  if (!currentUser) return;
+  var card = btn ? btn.closest('.cpnl-nota') : null;
+  if (card) card.style.opacity = '.4';
+  db.collection('users').doc(currentUser.uid).collection(coleccion).doc(id).delete()
+    .then(function() { if (card) card.remove(); showToast('Nota eliminada'); })
+    .catch(function() { if (card) card.style.opacity = '1'; showToast('Error al eliminar'); });
+}
+window.deleteNotaPanel = deleteNotaPanel;
+
 // ===== MI CUADERNO =====
 // Firebase Storage (opcional — funciona si está disponible)
 var _fbStorage = null;
@@ -1134,40 +1268,44 @@ function loadCuaderno() {
 }
 window.loadCuaderno = loadCuaderno;
 
-function loadNotasViaje() {
+function loadNotasViaje(listId) {
   if (!currentUser) return;
-  var list = document.getElementById('cuaderno-notas-viaje');
+  var id   = listId || 'cuaderno-notas-viaje';
+  var list = document.getElementById(id);
   if (!list) return;
-  list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--crema);opacity:.4;letter-spacing:1px;">Cargando...</div>';
+  var isPanel = id.indexOf('cpnl') === 0;
+  list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:rgba(245,240,232,.35);letter-spacing:1px;padding:8px 0;">Cargando...</div>';
   db.collection('users').doc(currentUser.uid).collection('notas_viaje')
     .orderBy('createdAt','desc').limit(50)
     .get().then(function(snap) {
       if (snap.empty) {
-        list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--crema);opacity:.4;letter-spacing:1px;padding:20px 0;">AÚN NO HAY NOTAS · Salma guardará aquí las consultas de tu viaje</div>';
+        list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:rgba(245,240,232,.3);letter-spacing:1px;padding:20px 0;">AÚN NO HAY NOTAS · Salma guardará aquí las consultas de tu viaje</div>';
         return;
       }
       list.innerHTML = snap.docs.map(function(doc) {
-        return renderNotaCard(doc.id, doc.data(), 'notas_viaje');
+        return isPanel ? renderNotaPanel(doc.id, doc.data(), 'notas_viaje') : renderNotaCard(doc.id, doc.data(), 'notas_viaje');
       }).join('');
     }).catch(function() {
       list.innerHTML = '<div style="color:#f87171;font-size:12px;">Error cargando notas</div>';
     });
 }
 
-function loadNotasGlobal() {
+function loadNotasGlobal(listId) {
   if (!currentUser) return;
-  var list = document.getElementById('cuaderno-notas-global');
+  var id   = listId || 'cuaderno-notas-global';
+  var list = document.getElementById(id);
   if (!list) return;
-  list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--crema);opacity:.4;letter-spacing:1px;">Cargando...</div>';
+  var isPanel = id.indexOf('cpnl') === 0;
+  list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:rgba(245,240,232,.35);letter-spacing:1px;padding:8px 0;">Cargando...</div>';
   db.collection('users').doc(currentUser.uid).collection('notas_globales')
     .orderBy('createdAt','desc').limit(50)
     .get().then(function(snap) {
       if (snap.empty) {
-        list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--crema);opacity:.4;letter-spacing:1px;padding:20px 0;">AÚN NO HAY NOTAS · Aquí quedarán tus consultas de visados, vacunas y más</div>';
+        list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:rgba(245,240,232,.3);letter-spacing:1px;padding:20px 0;">AÚN NO HAY NOTAS · Aquí quedarán tus consultas de visados, vacunas y más</div>';
         return;
       }
       list.innerHTML = snap.docs.map(function(doc) {
-        return renderNotaCard(doc.id, doc.data(), 'notas_globales');
+        return isPanel ? renderNotaPanel(doc.id, doc.data(), 'notas_globales') : renderNotaCard(doc.id, doc.data(), 'notas_globales');
       }).join('');
     }).catch(function() {
       list.innerHTML = '<div style="color:#f87171;font-size:12px;">Error cargando notas</div>';
@@ -1208,15 +1346,23 @@ function saveNotaCuaderno(pregunta, respuesta, tipo, routeId, routeName) {
   var data = { pregunta: pregunta, respuesta: respuesta, createdAt: new Date().toISOString() };
   if (tipo !== 'global' && routeId) { data.routeId = routeId; data.routeName = routeName || ''; }
   db.collection('users').doc(currentUser.uid).collection(coleccion).add(data)
-    .then(function() { showToast('✓ Guardado en Mi cuaderno'); })
+    .then(function() {
+      showToast('✓ Guardado en Mi cuaderno');
+      // Recargar panel si está abierto en la pestaña correcta
+      var panelOpen = document.getElementById('cuaderno-panel') && document.getElementById('cuaderno-panel').style.display === 'flex';
+      if (panelOpen) {
+        if (tipo === 'global') loadNotasGlobal('cpnl-notas-global');
+        else loadNotasViaje('cpnl-notas-viaje');
+      }
+    })
     .catch(function() { showToast('Error al guardar la nota'); });
 }
 window.saveNotaCuaderno = saveNotaCuaderno;
 
 // DOCS
-function loadDocs() {
+function loadDocs(listId) {
   if (!currentUser) return;
-  var list = document.getElementById('cuaderno-docs-list');
+  var list = document.getElementById(listId || 'cuaderno-docs-list');
   if (!list) return;
   list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--crema);opacity:.4;letter-spacing:1px;">Cargando...</div>';
   db.collection('users').doc(currentUser.uid).collection('docs')
@@ -1276,6 +1422,8 @@ function uploadDoc(input) {
     showToast('✓ Documento guardado');
     input.value = '';
     loadDocs();
+    // Recargar también en el panel si está abierto
+    if (document.getElementById('cpnl-docs-list')) loadDocs('cpnl-docs-list');
   }).catch(function(e) {
     showToast('Error al subir: ' + (e.message || ''));
     input.value = '';

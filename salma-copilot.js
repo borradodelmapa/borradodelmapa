@@ -184,6 +184,13 @@ function copilotInjectHTML() {
       'font-size:10px;font-weight:700;letter-spacing:.08em;cursor:pointer;white-space:nowrap;',
     '}',
 
+    '.cplt-save-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:2px 0 4px 40px;}',
+    '.cplt-save-label{font-family:"JetBrains Mono",monospace;font-size:9px;color:rgba(245,240,232,.3);letter-spacing:.08em;}',
+    '.cplt-save-opt{border:1px solid rgba(212,160,23,.25);background:transparent;border-radius:999px;',
+      'padding:5px 11px;font-family:"JetBrains Mono",monospace;font-size:9px;color:rgba(212,160,23,.75);',
+      'cursor:pointer;letter-spacing:.06em;white-space:nowrap;}',
+    '.cplt-save-opt:hover{background:rgba(212,160,23,.1);color:#d4a017;border-color:rgba(212,160,23,.5);}',
+
     '#copilot-toast{',
       'position:fixed;left:50%;transform:translateX(-50%);bottom:92px;z-index:400;',
       'background:#1a1816;color:#f5f0e8;padding:10px 18px;border-radius:999px;',
@@ -806,6 +813,36 @@ function copilotTriggerAction(action) {
 
 // ===== INPUT Y DETECCIÓN DE INTENCIÓN =====
 
+// ===== PROMPT DE GUARDADO =====
+
+function copilotShowSavePrompt(pregunta, respuesta) {
+  var msgs = document.getElementById('copilot-messages');
+  if (!msgs || !respuesta) return;
+  var routeId   = window._copilot.routeId;
+  var routeName = (window._copilot.routeData && window._copilot.routeData.title) || window._copilot.destination || '';
+
+  var row = document.createElement('div');
+  row.className = 'cplt-save-row';
+  row.innerHTML =
+    '<span class="cplt-save-label">¿Guardar?</span>' +
+    '<button class="cplt-save-opt" data-tipo="viaje">📒 Mi viaje</button>' +
+    '<button class="cplt-save-opt" data-tipo="global">🌍 Siempre útil</button>';
+
+  row.querySelectorAll('.cplt-save-opt').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var tipo = btn.dataset.tipo;
+      if (typeof saveNotaCuaderno === 'function') {
+        saveNotaCuaderno(pregunta, respuesta, tipo, routeId, routeName);
+      }
+      row.innerHTML = '<span class="cplt-save-label" style="color:rgba(212,160,23,.5);">✓ Guardado en cuaderno</span>';
+      setTimeout(function() { if (row.parentNode) row.remove(); }, 2200);
+    });
+  });
+
+  msgs.appendChild(row);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
 function copilotHandleInput() {
   var input = document.getElementById('copilot-input');
   if (!input) return;
@@ -837,6 +874,7 @@ function copilotProcessText(text) {
 }
 
 function copilotSendToSalma(text) {
+  window._copilot._lastUserMsg = text;  // guardar para el prompt de guardado
   var dest     = window._copilot.destination;
   var pois     = window._copilot.pois;
   var dayCount = {};
@@ -873,7 +911,9 @@ function copilotSendToSalma(text) {
         var el = document.getElementById('copilot-loading-tmp');
         if (el) el.remove();
         var reply = (data.reply || data.text || data.message || '').trim();
-        copilotAddMessage(reply || 'Puedo ayudarte con hotel, comida, reducir la ruta o plan lluvia.', 'salma');
+        var msg = reply || 'Puedo ayudarte con hotel, comida, reducir la ruta o plan lluvia.';
+        copilotAddMessage(msg, 'salma');
+        copilotShowSavePrompt(window._copilot._lastUserMsg || '', msg);
       });
     }
     // SSE stream
@@ -907,6 +947,8 @@ function copilotSendToSalma(text) {
             if (evt.done) {
               fullText = evt.reply || fullText;
               if (bubbleEl) bubbleEl.innerHTML = fullText.replace(/\n/g, '<br>');
+              // Mostrar prompt de guardado
+              copilotShowSavePrompt(window._copilot._lastUserMsg || '', fullText);
               return;
             }
             if (evt.t) {
