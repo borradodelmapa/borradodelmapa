@@ -288,9 +288,6 @@ function navSosSalma() {
   var meta = window._vrRouteMeta || { nombre: rd.title || '', destino: rd.country || '' };
   if (typeof window.abrirMapaRuta === 'function') {
     window.abrirMapaRuta(rd, (window._copilot && window._copilot.routeId) || null, meta);
-    setTimeout(function() {
-      if (typeof window.abrirSalmaPanel === 'function') window.abrirSalmaPanel();
-    }, 600);
   }
 }
 window.navSosSalma = navSosSalma;
