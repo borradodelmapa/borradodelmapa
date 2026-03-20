@@ -114,6 +114,7 @@ auth.onAuthStateChanged(async (user) => {
     updateSidebar(currentUser);
     const mobileNav = document.getElementById("mobile-dash-nav");
     if (mobileNav) mobileNav.style.display = "flex";
+    injectProfilePanel();
     // Restaurar ruta desde localStorage si viene de redirect de Google
     if (!window._salmaLastRoute) {
       try {
@@ -949,6 +950,149 @@ document.addEventListener("DOMContentLoaded", function() {
     if (e.target === this) closePoiModal();
   });
 });
+// ===== PANEL PERFIL FLOTANTE (móvil) =====
+
+function injectProfilePanel() {
+  if (document.getElementById('profile-panel')) return;
+  var style = document.createElement('style');
+  style.textContent = [
+    '#profile-panel-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1500;display:none;}',
+    '#profile-panel{',
+      'position:fixed;bottom:0;left:50%;transform:translateX(-50%);',
+      'width:100%;max-width:520px;',
+      'background:#111;border-radius:20px 20px 0 0;',
+      'border-top:1px solid rgba(212,160,23,.3);',
+      'border-left:1px solid rgba(212,160,23,.15);',
+      'border-right:1px solid rgba(212,160,23,.15);',
+      'display:none;flex-direction:column;z-index:1501;',
+      'box-shadow:0 -12px 48px rgba(0,0,0,.55);',
+      'max-height:82vh;overflow-y:auto;',
+    '}',
+    '#profile-panel-head{',
+      'padding:16px 20px 14px;border-bottom:1px solid rgba(212,160,23,.12);',
+      'display:flex;align-items:center;justify-content:space-between;',
+      'position:sticky;top:0;background:#111;z-index:2;',
+    '}',
+    '#profile-panel-body{padding:20px 20px 32px;display:flex;flex-direction:column;gap:14px;}',
+    '.pp-label{font-family:"JetBrains Mono",monospace;font-size:9px;color:rgba(212,160,23,.75);letter-spacing:.14em;text-transform:uppercase;margin-bottom:5px;}',
+    '.pp-input{width:100%;box-sizing:border-box;background:rgba(255,255,255,.06);border:1px solid rgba(212,160,23,.22);border-radius:10px;padding:11px 14px;font-size:14px;color:#f5f0e8;font-family:"Inter",sans-serif;outline:none;}',
+    '.pp-input:focus{border-color:rgba(212,160,23,.6);}',
+    '.pp-btn{width:100%;background:#d4a017;color:#0a0908;border:none;border-radius:10px;padding:13px;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.1em;cursor:pointer;}',
+    '.pp-btn:hover{background:#e0b020;}',
+    '.pp-btn-outline{width:100%;background:transparent;color:#d4a017;border:1px solid rgba(212,160,23,.35);border-radius:10px;padding:13px;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.1em;cursor:pointer;text-decoration:none;display:block;text-align:center;box-sizing:border-box;}',
+    '.pp-btn-outline:hover{background:rgba(212,160,23,.08);}',
+    '.pp-divider{border:none;border-top:1px solid rgba(212,160,23,.1);margin:4px 0;}',
+    '.pp-stat{text-align:center;background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.12);border-radius:12px;padding:14px;}',
+    '.pp-stat-num{font-family:"Bebas Neue",sans-serif;font-size:32px;color:#d4a017;}',
+    '.pp-stat-lbl{font-family:"JetBrains Mono",monospace;font-size:8px;color:rgba(245,240,232,.4);letter-spacing:.14em;}'
+  ].join('');
+  document.head.appendChild(style);
+
+  var wrap = document.createElement('div');
+  wrap.innerHTML = [
+    '<div id="profile-panel-backdrop"></div>',
+    '<div id="profile-panel">',
+      '<div id="profile-panel-head">',
+        '<div style="font-family:\'Inter Tight\',sans-serif;font-size:17px;font-weight:700;color:#fff;">MI PERFIL</div>',
+        '<button onclick="closeProfilePanel()" style="background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:8px;padding:7px 13px;color:rgba(245,240,232,.55);font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.08em;">CERRAR</button>',
+      '</div>',
+      '<div id="profile-panel-body">',
+        '<div style="display:flex;gap:10px;">',
+          '<div class="pp-stat" style="flex:1;">',
+            '<div class="pp-stat-num" id="pp-routes-count">0</div>',
+            '<div class="pp-stat-lbl">RUTAS</div>',
+          '</div>',
+          '<div class="pp-stat" style="flex:1;">',
+            '<div class="pp-stat-num">∞</div>',
+            '<div class="pp-stat-lbl">PLAN GRATIS</div>',
+          '</div>',
+        '</div>',
+        '<hr class="pp-divider">',
+        '<div>',
+          '<div class="pp-label">Nombre</div>',
+          '<input class="pp-input" id="pp-name" type="text" placeholder="Tu nombre">',
+        '</div>',
+        '<div>',
+          '<div class="pp-label">País de origen</div>',
+          '<input class="pp-input" id="pp-country" type="text" placeholder="España, México, Argentina...">',
+        '</div>',
+        '<div>',
+          '<div class="pp-label">Sobre ti</div>',
+          '<textarea class="pp-input" id="pp-bio" rows="3" placeholder="Cuéntanos cómo viajas..." style="resize:none;font-family:\'Inter\',sans-serif;"></textarea>',
+        '</div>',
+        '<button class="pp-btn" onclick="saveProfilePanel()">GUARDAR CAMBIOS</button>',
+        '<hr class="pp-divider">',
+        '<a href="https://ko-fi.com/borradodelmapa" target="_blank" class="pp-btn-outline">☕ Colaborar en Ko-fi</a>',
+      '</div>',
+    '</div>'
+  ].join('');
+  while (wrap.firstChild) document.body.appendChild(wrap.firstChild);
+
+  document.getElementById('profile-panel-backdrop').addEventListener('click', closeProfilePanel);
+}
+
+function openProfilePanel() {
+  var panel = document.getElementById('profile-panel');
+  var backdrop = document.getElementById('profile-panel-backdrop');
+  if (!panel) { injectProfilePanel(); panel = document.getElementById('profile-panel'); backdrop = document.getElementById('profile-panel-backdrop'); }
+  // Rellenar con datos actuales
+  if (currentUser) {
+    var nameEl    = document.getElementById('pp-name');
+    var countryEl = document.getElementById('pp-country');
+    var bioEl     = document.getElementById('pp-bio');
+    var routesEl  = document.getElementById('pp-routes-count');
+    if (nameEl)    nameEl.value    = currentUser.name    || '';
+    if (countryEl) countryEl.value = currentUser.country || '';
+    if (bioEl)     bioEl.value     = currentUser.bio     || '';
+    if (routesEl) {
+      var grid = document.getElementById('maps-grid-dynamic');
+      routesEl.textContent = grid ? grid.querySelectorAll('[data-map-id]').length : '—';
+    }
+  }
+  if (panel)    panel.style.display    = 'flex';
+  if (backdrop) backdrop.style.display = 'block';
+}
+window.openProfilePanel = openProfilePanel;
+
+function closeProfilePanel() {
+  var panel    = document.getElementById('profile-panel');
+  var backdrop = document.getElementById('profile-panel-backdrop');
+  if (panel)    panel.style.display    = 'none';
+  if (backdrop) backdrop.style.display = 'none';
+}
+window.closeProfilePanel = closeProfilePanel;
+
+async function saveProfilePanel() {
+  var nameEl    = document.getElementById('pp-name');
+  var countryEl = document.getElementById('pp-country');
+  var bioEl     = document.getElementById('pp-bio');
+  var name    = nameEl    ? nameEl.value.trim()    : '';
+  var country = countryEl ? countryEl.value.trim() : '';
+  var bio     = bioEl     ? bioEl.value.trim()     : '';
+  if (!name) { showToast('El nombre no puede estar vacío'); return; }
+  if (!currentUser) { showToast('No hay sesión activa'); return; }
+  try {
+    await db.collection('users').doc(currentUser.uid).update({ name: name, country: country, bio: bio });
+    await auth.currentUser.updateProfile({ displayName: name });
+    currentUser.name    = name;
+    currentUser.country = country;
+    currentUser.bio     = bio;
+    // Sync con los campos del dashboard por si está abierto
+    ['sidebar-name','profile-display-name'].forEach(function(id) {
+      var el = document.getElementById(id); if (el) el.textContent = name;
+    });
+    ['nav-avatar','profile-avatar-big','sidebar-avatar'].forEach(function(id) {
+      var el = document.getElementById(id); if (el) el.textContent = name[0].toUpperCase();
+    });
+    var emailEl = document.getElementById('profile-display-email'); if (emailEl) emailEl.textContent = currentUser.email;
+    showToast('Perfil actualizado ✓');
+    closeProfilePanel();
+  } catch(e) {
+    showToast('Error: ' + e.message);
+  }
+}
+window.saveProfilePanel = saveProfilePanel;
+
 // ===== MI CUADERNO =====
 // Firebase Storage (opcional — funciona si está disponible)
 var _fbStorage = null;
