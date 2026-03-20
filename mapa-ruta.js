@@ -327,9 +327,15 @@
     var mapsUrl = name && country
       ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(name + ' ' + country)
       : 'https://www.google.com/maps?q=' + poi.lat + ',' + poi.lng;
+    var photoRef = poi.photo_ref || '';
+    var apiBase = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+    var photoHtml = photoRef
+      ? '<img src="' + apiBase + '/photo?ref=' + encodeURIComponent(photoRef) + '" alt="" style="width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:8px;display:block;" onerror="this.style.display=\'none\'">'
+      : '';
 
     var content =
       '<div style="font-family:Inter,sans-serif;max-width:260px;padding:2px;">' +
+      photoHtml +
       '<div style="font-size:15px;font-weight:700;color:#111;margin-bottom:6px;line-height:1.3;">' + icon + ' ' + name + '</div>' +
       (narrative ? '<div style="font-size:13px;color:#555;line-height:1.55;margin-bottom:8px;">' + narrative.substring(0, 140) + (narrative.length > 140 ? '…' : '') + '</div>' : '') +
       (secret ? '<div style="font-size:12px;color:#92400e;margin-bottom:8px;font-style:italic;">🔑 ' + secret.substring(0, 100) + '</div>' : '') +
