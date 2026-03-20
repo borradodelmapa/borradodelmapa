@@ -372,10 +372,7 @@
     if (msgs && !msgs.children.length) {
       msgs.innerHTML = '<div style="background:rgba(212,160,23,.08);border-left:2px solid rgba(212,160,23,.4);padding:10px 12px;border-radius:8px;font-size:13px;color:#f5f0e8;line-height:1.6;">Estoy aquí. Dime lo que necesitas.</div>';
     }
-    setTimeout(function () {
-      var input = document.getElementById('mapa-salma-input');
-      if (input) input.focus();
-    }, 100);
+    // No hacer focus automático — evita que el teclado móvil suba al abrir el panel
   }
   window.abrirSalmaPanel = abrirSalmaPanel;
 
