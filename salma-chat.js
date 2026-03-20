@@ -645,10 +645,8 @@ function salmaRenderRoute(routeData) {
     '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-bottom:16px;">' + (routeData.duration_days || 0) + ' DÍAS · ' + escapeHTML((routeData.country || '').toUpperCase()) + budget + ' · ' + pois.length + ' PARADAS</div>' +
     (routeData.summary ? '<div style="font-size:16px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:20px;">' + escapeHTML(routeData.summary) + '</div>' : '') +
     tagsHTML +
-    // Botón Google Maps general (fix: antes estaba calculado pero nunca renderizado)
-    (gmapsUrl ? '<a href="' + gmapsUrl + '" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px;padding:14px 16px;background:rgba(212,160,23,.07);border:1px solid rgba(212,160,23,.2);border-radius:12px;font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);text-decoration:none;letter-spacing:.1em;transition:background .15s;" onmouseover="this.style.background=\'rgba(212,160,23,.14)\'" onmouseout="this.style.background=\'rgba(212,160,23,.07)\'">🗺 VER RUTA COMPLETA EN GOOGLE MAPS →</a>' : '') +
-    // Mapa Leaflet
-    (hasMapData ? '<div id="salma-route-map" style="height:260px;width:100%;border-radius:14px;margin-bottom:24px;border:1px solid rgba(212,160,23,.15);overflow:hidden;"></div>' : '') +
+    // Mapa Google Maps embebido (clicable → abre mapa completo)
+    (hasMapData ? '<div id="salma-route-map-wrap" style="position:relative;height:260px;width:100%;border-radius:14px;margin-bottom:24px;border:1px solid rgba(212,160,23,.2);overflow:hidden;"><div id="salma-route-map" style="height:100%;width:100%;"></div></div>' : '') +
     // Stops (itinerario primero)
     '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:12px;">ITINERARIO · ' + pois.length + ' EXPERIENCIAS</div>' +
     stopsHTML +
@@ -672,8 +670,8 @@ function salmaRenderRoute(routeData) {
   if (hasMapData) {
     setTimeout(function() {
       var mapPois = pois.filter(function(p) { return p.lat && p.lng && Number(p.lat) && Number(p.lng); });
-      if (mapPois.length && typeof window.salmaInitLeaflet === 'function') {
-        window.salmaInitLeaflet('salma-route-map', mapPois, routeData);
+      if (mapPois.length && typeof window.salmaInitGoogleMap === 'function') {
+        window.salmaInitGoogleMap('salma-route-map', mapPois, routeData, { nombre: routeData.title || '', destino: routeData.country || '' });
       }
     }, 150);
   }
@@ -1164,7 +1162,85 @@ async function salmaGuardarRuta() {
   }
 }
 
-// ===== MAPA LEAFLET =====
+// ===== MAPA GOOGLE MAPS (mini, embebido en ruta) =====
+
+function salmaInitGoogleMap(containerId, pois, routeData, routeMeta) {
+  var mapDiv = document.getElementById(containerId);
+  if (!mapDiv || !pois || !pois.length) return;
+  if (mapDiv._gmapInstance) return;
+
+  var validPois = pois.filter(function(p) { return Number(p.lat) && Number(p.lng); });
+  if (!validPois.length) return;
+
+  function _doInit() {
+    if (mapDiv._gmapInstance) return;
+    var map = new google.maps.Map(mapDiv, {
+      center: { lat: Number(validPois[0].lat), lng: Number(validPois[0].lng) },
+      zoom: 9,
+      disableDefaultUI: true,
+      gestureHandling: 'none',
+      clickableIcons: false,
+      styles: [
+        { elementType: 'geometry', stylers: [{ color: '#1a1a1a' }] },
+        { elementType: 'labels.text.fill', stylers: [{ color: '#d4d4d4' }] },
+        { elementType: 'labels.text.stroke', stylers: [{ color: '#050505' }] },
+        { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#2d2d2d' }] },
+        { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#3d3d3d' }] },
+        { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0d1b2a' }] },
+        { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+        { featureType: 'transit', stylers: [{ visibility: 'off' }] },
+        { featureType: 'administrative.country', elementType: 'labels.text.fill', stylers: [{ color: '#d4a017' }] },
+        { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#141414' }] }
+      ]
+    });
+    mapDiv._gmapInstance = map;
+
+    var bounds = new google.maps.LatLngBounds();
+    validPois.forEach(function(poi, idx) {
+      var pos = { lat: Number(poi.lat), lng: Number(poi.lng) };
+      var isFirst = idx === 0, isLast = idx === validPois.length - 1;
+      new google.maps.Marker({
+        position: pos, map: map,
+        label: { text: isFirst ? 'S' : (isLast ? 'F' : String(idx + 1)), color: '#050505', fontFamily: "'JetBrains Mono',monospace", fontSize: '10px', fontWeight: '700' },
+        icon: { path: google.maps.SymbolPath.CIRCLE, scale: 14, fillColor: isFirst ? '#22c55e' : (isLast ? '#ef4444' : '#d4a017'), fillOpacity: 1, strokeColor: '#050505', strokeWeight: 2 }
+      });
+      bounds.extend(pos);
+    });
+    if (validPois.length > 1) map.fitBounds(bounds, 30);
+
+    // Overlay clicable — abre mapa completo al tocar
+    var wrap = mapDiv.parentNode;
+    if (wrap) {
+      var overlay = document.createElement('div');
+      overlay.style.cssText = 'position:absolute;inset:0;z-index:5;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;pointer-events:all;';
+      overlay.innerHTML = '<div style="width:100%;padding:12px;background:linear-gradient(to top,rgba(5,5,5,.88) 0%,transparent 100%);text-align:center;"><span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:rgba(212,160,23,.9);letter-spacing:.14em;">TAP PARA NAVEGAR →</span></div>';
+      overlay.onclick = function() {
+        var rd = routeData || window._vrRouteData || window._salmaLastRoute;
+        var meta = routeMeta || window._vrRouteMeta || { nombre: '', destino: '' };
+        if (rd && typeof window.abrirMapaRuta === 'function') window.abrirMapaRuta(rd, null, meta);
+      };
+      wrap.appendChild(overlay);
+    }
+  }
+
+  if (window.google && window.google.maps) {
+    _doInit();
+  } else if (!document.querySelector('script[src*="maps.googleapis.com"]')) {
+    var key = window.GOOGLE_STREETVIEW_KEY || '';
+    window._salmaGmapMiniReady = function() { _doInit(); };
+    var s = document.createElement('script');
+    s.src = 'https://maps.googleapis.com/maps/api/js?key=' + key + '&libraries=geometry&callback=_salmaGmapMiniReady&loading=async';
+    s.async = true;
+    document.head.appendChild(s);
+  } else {
+    var poll = setInterval(function() {
+      if (window.google && window.google.maps) { clearInterval(poll); _doInit(); }
+    }, 200);
+  }
+}
+window.salmaInitGoogleMap = salmaInitGoogleMap;
+
+// ===== MAPA LEAFLET (conservado para posible uso en demo) =====
 
 function salmaInitLeaflet(containerId, pois, routeData) {
   if (typeof L === 'undefined') { console.warn('[Salma] Leaflet no está cargado'); return; }

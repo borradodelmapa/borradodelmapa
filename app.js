@@ -727,8 +727,7 @@ function verRuta(id, nombre) {
       '<div style="padding:24px 24px 0;"><div style="font-family:\'Inter Tight\',sans-serif;font-size:28px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;">' + (r.nombre||'Mi ruta').replace(/</g,'&lt;') + '</div>' +
       '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-top:8px;">' + (routeData && routeData.duration_days ? routeData.duration_days : (Array.isArray(r.dias) ? r.dias.length : (r.dias || 0))) + ' DÍAS · ' + (r.destino||'').replace(/</g,'&lt;').toUpperCase() + budget + ' · ' + pois.length + ' PARADAS</div></div>' +
       '<div style="padding:20px 24px 40px;">' + descText + tagsHTML +
-      (vrGmapsUrl ? '<a id="vr-gmaps-global" href="' + vrGmapsUrl + '" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px;padding:14px 16px;background:rgba(212,160,23,.07);border:1px solid rgba(212,160,23,.2);border-radius:12px;font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);text-decoration:none;letter-spacing:.1em;transition:background .15s;" onmouseover="this.style.background=\'rgba(212,160,23,.14)\'" onmouseout="this.style.background=\'rgba(212,160,23,.07)\'">🗺 VER RUTA COMPLETA EN GOOGLE MAPS →</a>' : '') +
-      (hasMapCoords ? '<div id="ruta-leaflet-map" style="height:260px;width:100%;border-radius:14px;margin-bottom:24px;border:1px solid rgba(212,160,23,.15);overflow:hidden;"></div>' : '') +
+      (hasMapCoords ? '<div id="ruta-map-wrap" style="position:relative;height:260px;width:100%;border-radius:14px;margin-bottom:24px;border:1px solid rgba(212,160,23,.2);overflow:hidden;"><div id="ruta-leaflet-map" style="height:100%;width:100%;"></div></div>' : '') +
       '<div id="vr-stops-wrapper">' + stopsHTML + '</div>' +
       tipsHTML +
       '<div style="display:flex;gap:10px;margin-top:28px;padding-top:20px;border-top:1px solid rgba(212,160,23,.1);flex-wrap:wrap;">' +
@@ -741,8 +740,8 @@ function verRuta(id, nombre) {
     // Inicializar mapa Leaflet tras mostrar la página
     if (hasMapCoords) {
       setTimeout(function() {
-        if (typeof window.salmaInitLeaflet === 'function') {
-          window.salmaInitLeaflet('ruta-leaflet-map', mapPois, routeData);
+        if (typeof window.salmaInitGoogleMap === 'function') {
+          window.salmaInitGoogleMap('ruta-leaflet-map', mapPois, routeData, window._vrRouteMeta);
         }
       }, 150);
     }
