@@ -773,6 +773,7 @@ function setDashTab(tab, el) {
   document.querySelectorAll(".sidebar-item").forEach(i => i.classList.remove("active"));
   document.querySelectorAll(".mobile-nav-item").forEach(i => i.classList.remove("active"));
   if (el) el.classList.add("active");
+  if (tab === 'cuaderno') loadCuaderno();
 }
 window.setDashTab = setDashTab;
 
@@ -948,4 +949,212 @@ document.addEventListener("DOMContentLoaded", function() {
     if (e.target === this) closePoiModal();
   });
 });
+// ===== MI CUADERNO =====
+// Firebase Storage (opcional — funciona si está disponible)
+var _fbStorage = null;
+try {
+  if (typeof firebase !== 'undefined' && firebase.storage) {
+    _fbStorage = firebase.storage();
+    window._fbStorage = _fbStorage;
+  }
+} catch(e) {}
+
+function setCuadernoTab(tab) {
+  ['viaje','global','docs'].forEach(function(t) {
+    var pane = document.getElementById('cuaderno-pane-' + t);
+    if (pane) pane.style.display = 'none';
+    var btn = document.getElementById('cuaderno-tab-' + t);
+    if (btn) {
+      btn.style.color = 'var(--crema)';
+      btn.style.opacity = '.5';
+      btn.style.borderBottomColor = 'transparent';
+    }
+  });
+  var pane = document.getElementById('cuaderno-pane-' + tab);
+  if (pane) pane.style.display = 'block';
+  var activeBtn = document.getElementById('cuaderno-tab-' + tab);
+  if (activeBtn) {
+    activeBtn.style.color = 'var(--dorado)';
+    activeBtn.style.opacity = '1';
+    activeBtn.style.borderBottomColor = 'var(--dorado)';
+  }
+  if (tab === 'viaje') loadNotasViaje();
+  else if (tab === 'global') loadNotasGlobal();
+  else if (tab === 'docs') loadDocs();
+}
+window.setCuadernoTab = setCuadernoTab;
+
+function loadCuaderno() {
+  setCuadernoTab('viaje');
+}
+window.loadCuaderno = loadCuaderno;
+
+function loadNotasViaje() {
+  if (!currentUser) return;
+  var list = document.getElementById('cuaderno-notas-viaje');
+  if (!list) return;
+  list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--crema);opacity:.4;letter-spacing:1px;">Cargando...</div>';
+  db.collection('users').doc(currentUser.uid).collection('notas_viaje')
+    .orderBy('createdAt','desc').limit(50)
+    .get().then(function(snap) {
+      if (snap.empty) {
+        list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--crema);opacity:.4;letter-spacing:1px;padding:20px 0;">AÚN NO HAY NOTAS · Salma guardará aquí las consultas de tu viaje</div>';
+        return;
+      }
+      list.innerHTML = snap.docs.map(function(doc) {
+        return renderNotaCard(doc.id, doc.data(), 'notas_viaje');
+      }).join('');
+    }).catch(function() {
+      list.innerHTML = '<div style="color:#f87171;font-size:12px;">Error cargando notas</div>';
+    });
+}
+
+function loadNotasGlobal() {
+  if (!currentUser) return;
+  var list = document.getElementById('cuaderno-notas-global');
+  if (!list) return;
+  list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--crema);opacity:.4;letter-spacing:1px;">Cargando...</div>';
+  db.collection('users').doc(currentUser.uid).collection('notas_globales')
+    .orderBy('createdAt','desc').limit(50)
+    .get().then(function(snap) {
+      if (snap.empty) {
+        list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--crema);opacity:.4;letter-spacing:1px;padding:20px 0;">AÚN NO HAY NOTAS · Aquí quedarán tus consultas de visados, vacunas y más</div>';
+        return;
+      }
+      list.innerHTML = snap.docs.map(function(doc) {
+        return renderNotaCard(doc.id, doc.data(), 'notas_globales');
+      }).join('');
+    }).catch(function() {
+      list.innerHTML = '<div style="color:#f87171;font-size:12px;">Error cargando notas</div>';
+    });
+}
+
+function renderNotaCard(id, d, coleccion) {
+  var fecha = d.createdAt ? new Date(d.createdAt).toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : '';
+  return '<div style="background:var(--gris);border:1px solid var(--gris2);padding:18px 20px;margin-bottom:8px;">' +
+    (d.routeName ? '<div style="font-family:\'Space Mono\',monospace;font-size:8px;color:var(--dorado);letter-spacing:1.5px;margin-bottom:8px;opacity:.7;">' + d.routeName.toUpperCase() + '</div>' : '') +
+    '<div style="font-family:\'Space Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:1px;margin-bottom:8px;opacity:.8;">' + (d.pregunta || '') + '</div>' +
+    '<div style="font-size:15px;color:var(--crema);opacity:.85;line-height:1.7;">' + (d.respuesta || '') + '</div>' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">' +
+      '<div style="font-family:\'Space Mono\',monospace;font-size:8px;color:var(--crema);opacity:.3;">' + fecha + '</div>' +
+      '<button onclick="deleteNota(\'' + coleccion + '\',\'' + id + '\',this)" style="background:none;border:none;color:rgba(248,113,113,.4);cursor:pointer;font-size:12px;padding:2px 6px;" title="Eliminar">✕</button>' +
+    '</div></div>';
+}
+
+function deleteNota(coleccion, id, btn) {
+  if (!currentUser) return;
+  var card = btn ? btn.closest('div[style*="background:var(--gris)"]') : null;
+  if (card) card.style.opacity = '.4';
+  db.collection('users').doc(currentUser.uid).collection(coleccion).doc(id).delete()
+    .then(function() {
+      if (card) card.remove();
+      showToast('Nota eliminada');
+    }).catch(function() {
+      if (card) card.style.opacity = '1';
+      showToast('Error al eliminar');
+    });
+}
+window.deleteNota = deleteNota;
+
+// Guardar nota desde el copiloto
+function saveNotaCuaderno(pregunta, respuesta, tipo, routeId, routeName) {
+  if (!currentUser) return;
+  var coleccion = tipo === 'global' ? 'notas_globales' : 'notas_viaje';
+  var data = { pregunta: pregunta, respuesta: respuesta, createdAt: new Date().toISOString() };
+  if (tipo !== 'global' && routeId) { data.routeId = routeId; data.routeName = routeName || ''; }
+  db.collection('users').doc(currentUser.uid).collection(coleccion).add(data)
+    .then(function() { showToast('✓ Guardado en Mi cuaderno'); })
+    .catch(function() { showToast('Error al guardar la nota'); });
+}
+window.saveNotaCuaderno = saveNotaCuaderno;
+
+// DOCS
+function loadDocs() {
+  if (!currentUser) return;
+  var list = document.getElementById('cuaderno-docs-list');
+  if (!list) return;
+  list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--crema);opacity:.4;letter-spacing:1px;">Cargando...</div>';
+  db.collection('users').doc(currentUser.uid).collection('docs')
+    .orderBy('uploadedAt','desc').limit(20)
+    .get().then(function(snap) {
+      if (snap.empty) {
+        list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--crema);opacity:.4;letter-spacing:1px;padding:12px 0;">SIN DOCUMENTOS GUARDADOS</div>';
+        return;
+      }
+      list.innerHTML = snap.docs.map(function(doc) {
+        return renderDocCard(doc.id, doc.data());
+      }).join('');
+    }).catch(function() {
+      list.innerHTML = '<div style="color:#f87171;font-size:12px;">Error cargando documentos</div>';
+    });
+}
+
+function renderDocCard(id, d) {
+  var fecha = d.uploadedAt ? new Date(d.uploadedAt).toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : '';
+  var icon = d.docType === 'pasaporte' ? '🛂' : d.docType === 'conducir' ? '🚗' : d.docType === 'seguro' ? '🏥' : '📄';
+  return '<div style="background:var(--gris);border:1px solid var(--gris2);padding:16px 18px;margin-bottom:8px;display:flex;align-items:center;gap:12px;">' +
+    '<div style="font-size:24px;flex-shrink:0;">' + icon + '</div>' +
+    '<div style="flex:1;min-width:0;">' +
+      '<div style="font-family:\'Inter Tight\',sans-serif;font-size:15px;color:var(--blanco);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (d.name || d.fileName || 'Documento') + '</div>' +
+      '<div style="font-family:\'Space Mono\',monospace;font-size:8px;color:var(--crema);opacity:.4;">' + fecha + '</div>' +
+    '</div>' +
+    '<div style="display:flex;gap:8px;flex-shrink:0;">' +
+      (d.downloadUrl ? '<a href="' + d.downloadUrl + '" target="_blank" style="background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.3);color:var(--dorado);padding:6px 10px;font-family:\'Space Mono\',monospace;font-size:8px;text-decoration:none;letter-spacing:1px;">VER</a>' : '') +
+      '<button onclick="deleteDoc(\'' + id + '\',\'' + (d.storageRef||'') + '\',this)" style="background:none;border:none;color:rgba(248,113,113,.4);cursor:pointer;font-size:12px;padding:2px 6px;" title="Eliminar">✕</button>' +
+    '</div></div>';
+}
+
+function uploadDoc(input) {
+  if (!currentUser || !input.files || !input.files[0]) return;
+  if (!window._fbStorage) { showToast('Activa Firebase Storage para subir docs'); return; }
+  var file = input.files[0];
+  if (file.size > 5 * 1024 * 1024) { showToast('El archivo no puede superar 5MB'); input.value = ''; return; }
+  var docName = prompt('Nombre del documento:', file.name.replace(/\.[^.]+$/, ''));
+  if (!docName) { input.value = ''; return; }
+  showToast('Subiendo...');
+  var storagePath = 'users/' + currentUser.uid + '/docs/' + Date.now() + '_' + file.name;
+  var storageRef = window._fbStorage.ref(storagePath);
+  storageRef.put(file).then(function(snap) {
+    return snap.ref.getDownloadURL();
+  }).then(function(downloadUrl) {
+    var n = docName.toLowerCase();
+    var docType = n.includes('pasaporte') || n.includes('passport') ? 'pasaporte'
+      : n.includes('conducir') || n.includes('carnet') ? 'conducir'
+      : n.includes('seguro') || n.includes('poliza') || n.includes('insurance') ? 'seguro'
+      : 'otro';
+    return db.collection('users').doc(currentUser.uid).collection('docs').add({
+      name: docName, fileName: file.name, docType: docType,
+      storageRef: storagePath, downloadUrl: downloadUrl,
+      uploadedAt: new Date().toISOString()
+    });
+  }).then(function() {
+    showToast('✓ Documento guardado');
+    input.value = '';
+    loadDocs();
+  }).catch(function(e) {
+    showToast('Error al subir: ' + (e.message || ''));
+    input.value = '';
+  });
+}
+window.uploadDoc = uploadDoc;
+
+function deleteDoc(id, storagePath, btn) {
+  if (!currentUser) return;
+  if (!confirm('¿Eliminar este documento?')) return;
+  var card = btn ? btn.closest('div[style*="display:flex"]') : null;
+  if (card) card.style.opacity = '.4';
+  var promises = [db.collection('users').doc(currentUser.uid).collection('docs').doc(id).delete()];
+  if (storagePath && window._fbStorage) {
+    promises.push(window._fbStorage.ref(storagePath).delete().catch(function(){}));
+  }
+  Promise.all(promises).then(function() {
+    if (card) card.remove();
+    showToast('Documento eliminado');
+  }).catch(function() {
+    if (card) card.style.opacity = '1';
+    showToast('Error al eliminar');
+  });
+}
+window.deleteDoc = deleteDoc;
+
 // end of app.js

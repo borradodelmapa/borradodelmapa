@@ -263,7 +263,10 @@ function copilotHideFloating() {
 
 // Función global llamada desde el botón SOS de la nav móvil
 function navSosSalma() {
-  if (!window._copilot || !window._copilot.routeId) return;
+  if (!window._copilot || !window._copilot.routeId) {
+    if (typeof showToast === 'function') showToast('Abre una ruta para hablar con Salma ✈️');
+    return;
+  }
   copilotOpen();
   var msgs = document.getElementById('copilot-messages');
   if (msgs && !msgs.children.length) {
