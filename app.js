@@ -957,9 +957,9 @@ function injectProfilePanel() {
   if (document.getElementById('profile-panel')) return;
   var style = document.createElement('style');
   style.textContent = [
-    '#profile-panel-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1500;display:none;}',
+    '#profile-panel-backdrop{position:fixed;top:0;left:0;right:0;bottom:62px;background:rgba(0,0,0,.55);z-index:1500;display:none;}',
     '#profile-panel{',
-      'position:fixed;bottom:0;left:50%;transform:translateX(-50%);',
+      'position:fixed;bottom:62px;left:50%;transform:translateX(-50%);',
       'width:100%;max-width:520px;',
       'background:#111;border-radius:20px 20px 0 0;',
       'border-top:1px solid rgba(212,160,23,.3);',
@@ -967,7 +967,7 @@ function injectProfilePanel() {
       'border-right:1px solid rgba(212,160,23,.15);',
       'display:none;flex-direction:column;z-index:1501;',
       'box-shadow:0 -12px 48px rgba(0,0,0,.55);',
-      'max-height:82vh;overflow-y:auto;',
+      'max-height:78vh;overflow-y:auto;',
     '}',
     '#profile-panel-head{',
       'padding:16px 20px 14px;border-bottom:1px solid rgba(212,160,23,.12);',
@@ -1102,8 +1102,8 @@ function injectCuadernoPanel() {
   if (document.getElementById('cuaderno-panel')) return;
   var style = document.createElement('style');
   style.textContent = [
-    '#cuaderno-panel-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1500;display:none;}',
-    '#cuaderno-panel{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:560px;',
+    '#cuaderno-panel-backdrop{position:fixed;top:0;left:0;right:0;bottom:62px;background:rgba(0,0,0,.55);z-index:1500;display:none;}',
+    '#cuaderno-panel{position:fixed;bottom:62px;left:50%;transform:translateX(-50%);width:100%;max-width:560px;',
       'background:#111;border-radius:20px 20px 0 0;',
       'border-top:1px solid rgba(212,160,23,.3);border-left:1px solid rgba(212,160,23,.15);border-right:1px solid rgba(212,160,23,.15);',
       'display:none;flex-direction:column;z-index:1501;box-shadow:0 -12px 48px rgba(0,0,0,.55);height:80vh;}',
@@ -1125,7 +1125,7 @@ function injectCuadernoPanel() {
     '.cpnl-nota-fecha{font-family:"JetBrains Mono",monospace;font-size:8px;color:rgba(245,240,232,.25);}',
     '.cpnl-del{background:none;border:none;color:rgba(248,113,113,.4);cursor:pointer;font-size:12px;padding:2px 6px;}',
     '.cpnl-doc{background:rgba(255,255,255,.04);border:1px solid rgba(212,160,23,.15);border-radius:12px;padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}',
-    '.cpnl-upload-area{border:1px dashed rgba(212,160,23,.3);border-radius:12px;padding:24px;text-align:center;cursor:pointer;margin-bottom:14px;}',
+    '.cpnl-upload-area{display:block;width:100%;box-sizing:border-box;border:1px dashed rgba(212,160,23,.3);border-radius:12px;padding:24px;text-align:center;cursor:pointer;margin-bottom:14px;}',
     '.cpnl-upload-area:hover{border-color:rgba(212,160,23,.6);background:rgba(212,160,23,.03);}'
   ].join('');
   document.head.appendChild(style);
@@ -1364,19 +1364,21 @@ function loadDocs(listId) {
   if (!currentUser) return;
   var list = document.getElementById(listId || 'cuaderno-docs-list');
   if (!list) return;
-  list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--crema);opacity:.4;letter-spacing:1px;">Cargando...</div>';
+  list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:rgba(245,240,232,.35);letter-spacing:1px;padding:8px 0;">Cargando...</div>';
+  // Sin orderBy para evitar problema de índices en Firestore
   db.collection('users').doc(currentUser.uid).collection('docs')
-    .orderBy('uploadedAt','desc').limit(20)
+    .limit(20)
     .get().then(function(snap) {
       if (snap.empty) {
-        list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:var(--crema);opacity:.4;letter-spacing:1px;padding:12px 0;">SIN DOCUMENTOS GUARDADOS</div>';
+        list.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:rgba(245,240,232,.3);letter-spacing:1px;padding:12px 0;">SIN DOCUMENTOS · Sube tu pasaporte, carnet o seguro aquí</div>';
         return;
       }
       list.innerHTML = snap.docs.map(function(doc) {
         return renderDocCard(doc.id, doc.data());
       }).join('');
-    }).catch(function() {
-      list.innerHTML = '<div style="color:#f87171;font-size:12px;">Error cargando documentos</div>';
+    }).catch(function(e) {
+      console.error('loadDocs error:', e);
+      list.innerHTML = '<div style="color:#f87171;font-size:11px;line-height:1.6;">Error al cargar docs.<br><span style="opacity:.6;">Verifica las reglas de Firestore (ver consola)</span></div>';
     });
 }
 

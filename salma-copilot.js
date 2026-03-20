@@ -89,12 +89,12 @@ function copilotInjectHTML() {
     '.cplt-stop-btn.del:hover{background:rgba(248,113,113,.12);color:#f87171;border-color:#f87171;}',
 
     '#copilot-backdrop{',
-      'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1500;display:none;',
+      'position:fixed;top:0;left:0;right:0;bottom:62px;background:rgba(0,0,0,.55);z-index:1500;display:none;',
     '}',
 
     '#copilot-panel{',
-      'position:fixed;bottom:0;left:50%;transform:translateX(-50%);',
-      'width:100%;max-width:620px;height:76vh;',
+      'position:fixed;bottom:62px;left:50%;transform:translateX(-50%);',
+      'width:100%;max-width:620px;height:72vh;',
       'background:#111;',
       'border-radius:20px 20px 0 0;',
       'border-top:1px solid rgba(212,160,23,.3);',
