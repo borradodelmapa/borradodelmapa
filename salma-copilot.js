@@ -280,17 +280,17 @@ function copilotHideFloating() { /* SOS siempre visible en la nav */ }
 
 // Función global llamada desde el botón SOS de la nav móvil
 function navSosSalma() {
-  if (!window._copilot || !window._copilot.routeId) {
+  var rd = window._vrRouteData || window._salmaLastRoute;
+  if (!rd) {
     if (typeof showToast === 'function') showToast('Abre una ruta para hablar con Salma ✈️');
     return;
   }
-  copilotOpen();
-  var msgs = document.getElementById('copilot-messages');
-  if (msgs && !msgs.children.length) {
-    copilotAddMessage('Estoy aquí. ¿Qué necesitas ahora mismo?', 'salma');
+  var meta = window._vrRouteMeta || { nombre: rd.title || '', destino: rd.country || '' };
+  if (typeof window.abrirMapaRuta === 'function') {
+    window.abrirMapaRuta(rd, (window._copilot && window._copilot.routeId) || null, meta);
     setTimeout(function() {
-      copilotAddMessage('Puedo buscar hotel, comida, aligerar el día o adaptar el plan si algo cambia.', 'salma');
-    }, 300);
+      if (typeof window.abrirSalmaPanel === 'function') window.abrirSalmaPanel();
+    }, 600);
   }
 }
 window.navSosSalma = navSosSalma;
