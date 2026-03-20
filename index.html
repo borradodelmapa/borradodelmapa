@@ -413,6 +413,12 @@ window.openModal=openModal;window.closeModal=closeModal;window.switchModal=switc
   <!-- Mapa (ocupa toda la pantalla) -->
   <div id="mapa-ruta-contenedor" style="position:absolute;inset:0;"></div>
 
+  <!-- Alerta desvío de ruta -->
+  <div id="mapa-alerta-desvio" style="display:none;position:absolute;top:90px;left:12px;right:12px;z-index:15;background:rgba(239,68,68,.92);border-radius:12px;padding:10px 16px;align-items:center;justify-content:space-between;gap:8px;backdrop-filter:blur(8px);">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#fff;letter-spacing:.05em;flex:1;">⚠️ Estás fuera de la ruta</span>
+    <button onclick="document.getElementById('mapa-alerta-desvio').style.display='none'" style="background:none;border:none;color:#fff;font-size:16px;cursor:pointer;padding:0;line-height:1;flex-shrink:0;">×</button>
+  </div>
+
   <!-- Panel SOS Salma -->
   <div id="mapa-salma-panel" style="display:none;position:absolute;bottom:calc(80px + max(0px,env(safe-area-inset-bottom)));left:12px;right:12px;z-index:20;flex-direction:column;background:rgba(14,14,14,.97);border:1px solid rgba(212,160,23,.2);border-radius:20px;overflow:hidden;box-shadow:0 -8px 40px rgba(0,0,0,.6);">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;">

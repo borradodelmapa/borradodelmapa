@@ -17,7 +17,10 @@
     directionsService: null,
     userMarker: null,
     infoWindow: null,
-    gmapsLoading: false
+    gmapsLoading: false,
+    routeSteps: [],
+    watchId: null,
+    desvioAlertado: false
   };
 
   var TYPE_ICONS = {
@@ -122,6 +125,7 @@
 
   // ── Cerrar mapa, volver a vista de ruta ───────────────────────
   function cerrarMapaRuta() {
+    _pararSeguimiento();
     var nav = document.querySelector('nav');
     if (nav) nav.style.display = '';
     var mobileNav = document.getElementById('mobile-dash-nav');
@@ -220,8 +224,15 @@
     }, function (result, status) {
       if (status === 'OK') {
         _state.directionsRenderer.setDirections(result);
-        // Mostrar resumen de ruta
         _mostrarResumenRuta(result);
+        // Guardar puntos de la ruta para detección de desvío
+        _state.routeSteps = [];
+        result.routes[0].legs.forEach(function (leg) {
+          leg.steps.forEach(function (step) {
+            _state.routeSteps.push(step.start_location);
+            _state.routeSteps.push(step.end_location);
+          });
+        });
       } else {
         // Fallback: dibujar polilínea recta si Directions falla
         console.warn('Directions API status:', status);
@@ -401,10 +412,10 @@
     var rd = _state.routeData;
     var routeCtx = '';
     if (rd) {
-      var stopNames = (rd.stops || []).slice(0, 10)
-        .map(function (s) { return s.headline || s.name || ''; })
-        .filter(Boolean).join(', ');
-      routeCtx = '[Ruta: ' + (rd.title || rd.name || '') + ', ' + (rd.country || '') + ', paradas: ' + stopNames + '] ';
+      var stopsCtx = JSON.stringify((rd.stops || []).map(function (s, i) {
+        return { idx: i + 1, name: s.headline || s.name || '', lat: s.lat, lng: s.lng, type: s.type || s.tipo || 'lugar', day: s.day || 1 };
+      }));
+      routeCtx = '[MODO MAPA] Ruta activa: "' + (rd.title || rd.name || '') + '" en ' + (rd.country || '') + '. Paradas actuales: ' + stopsCtx + '. ';
     }
 
     fetch(window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev', {
@@ -425,13 +436,41 @@
   function _mostrarRespuestaSalma(typingId, texto) {
     var typing = document.getElementById(typingId);
     if (typing) typing.remove();
+
+    // Detectar SALMA_ROUTE_UPDATE y actualizar paradas
+    var updateMatch = texto.match(/SALMA_ROUTE_UPDATE\s*\n(\[[\s\S]*?\]|\{[\s\S]*?\})/);
+    if (updateMatch) {
+      try {
+        var updateData = JSON.parse(updateMatch[1]);
+        var newStops = Array.isArray(updateData) ? updateData : (updateData.stops || []);
+        if (newStops.length > 0) {
+          _actualizarParadas(newStops);
+        }
+      } catch (e) { /* JSON inválido, ignorar */ }
+      texto = texto.replace(/SALMA_ROUTE_UPDATE[\s\S]*$/, '').trim();
+    }
+
     var msgs = document.getElementById('mapa-salma-msgs');
-    if (msgs) {
+    if (msgs && texto) {
       msgs.innerHTML +=
         '<div style="background:rgba(255,255,255,.04);padding:8px 12px;border-radius:8px;font-size:13px;color:#f5f0e8;line-height:1.55;word-break:break-word;">' +
         texto.replace(/</g, '&lt;').replace(/\n/g, '<br>') + '</div>';
       msgs.scrollTop = msgs.scrollHeight;
     }
+  }
+
+  function _actualizarParadas(newStops) {
+    if (!_state.routeData) return;
+    _state.routeData.stops = newStops;
+    _state.routeSteps = [];
+    var pois = _getPois(_state.routeData);
+    if (pois.length === 0) {
+      _mostrarError('La ruta actualizada no tiene coordenadas válidas.');
+      return;
+    }
+    _initMapa(pois, _state.routeData);
+    var subtituloEl = document.getElementById('mapa-ruta-subtitulo');
+    if (subtituloEl) subtituloEl.textContent = 'Recalculando ruta...';
   }
 
   // ── BOTONES BOTTOM BAR ────────────────────────────────────────
@@ -448,18 +487,27 @@
   }
   window.abrirAnadirParada = abrirAnadirParada;
 
-  // Cerca de mí: geolocaliza y muestra posición en el mapa
+  // Cerca de mí: activa/desactiva seguimiento continuo de posición
   function buscarCercaDeMi() {
     if (!navigator.geolocation) {
       alert('Tu dispositivo no soporta geolocalización.');
       return;
     }
-    navigator.geolocation.getCurrentPosition(
+    if (_state.watchId !== null) {
+      _pararSeguimiento();
+      return;
+    }
+    _iniciarSeguimiento();
+  }
+  window.buscarCercaDeMi = buscarCercaDeMi;
+
+  function _iniciarSeguimiento() {
+    _state.watchId = navigator.geolocation.watchPosition(
       function (pos) {
         if (!_state.map) return;
         var lat = pos.coords.latitude;
         var lng = pos.coords.longitude;
-
+        // Actualizar marker de posición
         if (_state.userMarker) _state.userMarker.setMap(null);
         _state.userMarker = new google.maps.Marker({
           position: { lat: lat, lng: lng },
@@ -475,15 +523,54 @@
           },
           zIndex: 100
         });
-        _state.map.panTo({ lat: lat, lng: lng });
+        _comprobarDesvio(lat, lng);
       },
       function (err) {
+        _state.watchId = null;
         alert(err.code === 1 ? 'Permiso de ubicación denegado.' : 'No se pudo obtener tu ubicación.');
       },
-      { timeout: 8000, maximumAge: 30000 }
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 }
     );
   }
-  window.buscarCercaDeMi = buscarCercaDeMi;
+
+  function _pararSeguimiento() {
+    if (_state.watchId !== null) {
+      navigator.geolocation.clearWatch(_state.watchId);
+      _state.watchId = null;
+    }
+    _ocultarAlertaDesvio();
+  }
+
+  function _comprobarDesvio(lat, lng) {
+    if (!_state.routeSteps.length || !window.google) return;
+    var userLatLng = new google.maps.LatLng(lat, lng);
+    var minDist = Infinity;
+    _state.routeSteps.forEach(function (step) {
+      var d = google.maps.geometry.spherical.computeDistanceBetween(userLatLng, step);
+      if (d < minDist) minDist = d;
+    });
+    if (minDist > 500) {
+      _mostrarAlertaDesvio(Math.round(minDist));
+    } else {
+      _ocultarAlertaDesvio();
+    }
+  }
+
+  function _mostrarAlertaDesvio(metros) {
+    var el = document.getElementById('mapa-alerta-desvio');
+    if (!el) return;
+    var txt = metros >= 1000
+      ? '⚠️ Estás ' + (metros / 1000).toFixed(1) + ' km fuera de la ruta'
+      : '⚠️ Estás ' + metros + ' m fuera de la ruta';
+    var span = el.querySelector('span');
+    if (span) span.textContent = txt;
+    el.style.display = 'flex';
+  }
+
+  function _ocultarAlertaDesvio() {
+    var el = document.getElementById('mapa-alerta-desvio');
+    if (el) el.style.display = 'none';
+  }
 
   // Abrir ruta completa en Google Maps externo
   function abrirEnGoogleMaps() {
