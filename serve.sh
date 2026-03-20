@@ -1,5 +1,4 @@
 #!/usr/bin/bash
-cd "$(dirname "$0")"
 /usr/bin/perl -MIO::Socket::INET -e '
 use IO::Socket::INET;
 my $srv = IO::Socket::INET->new(LocalPort=>8080,Listen=>20,ReuseAddr=>1) or die "Cannot bind: $!";

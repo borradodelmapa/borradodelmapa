@@ -365,7 +365,6 @@ window.logout = logout;
 function updateNavForUser(user) {
   document.getElementById("nav-links-guest").style.display = "none";
   document.getElementById("nav-links-user").style.display = "flex";
-  document.getElementById("nav-avatar").textContent = (user.name||"U")[0].toUpperCase();
 }
 function updateNavForGuest() {
   document.getElementById("nav-links-guest").style.display = "flex";
@@ -528,7 +527,6 @@ async function saveProfile() {
     currentUser.country = country;
     currentUser.bio = bio;
     document.getElementById("sidebar-name").textContent = name;
-    document.getElementById("nav-avatar").textContent = name[0].toUpperCase();
     document.getElementById("profile-display-name").textContent = name;
     document.getElementById("profile-avatar-big").textContent = name[0].toUpperCase();
     showToast("Perfil actualizado ✓");
