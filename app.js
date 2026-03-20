@@ -714,7 +714,6 @@ function verRuta(id, nombre) {
       : (r.desc ? '<div style="font-size:15px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:16px;">' + r.desc.replace(/</g,'&lt;') + '</div>' : '');
     var hasMapCoords = mapPois.length > 0;
     container.innerHTML =
-      '<div style="padding:16px 24px 0;"><div onclick="showPage(\'dashboard\')" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.12em;padding:8px 0;opacity:.8;" onmouseover="this.style.opacity=\'1\'" onmouseout="this.style.opacity=\'.8\'">← MIS RUTAS</div></div>' +
       '<div style="padding:24px 24px 0;"><div style="font-family:\'Inter Tight\',sans-serif;font-size:28px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;">' + (r.nombre||'Mi ruta').replace(/</g,'&lt;') + '</div>' +
       '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-top:8px;">' + (routeData && routeData.duration_days ? routeData.duration_days : (Array.isArray(r.dias) ? r.dias.length : (r.dias || 0))) + ' DÍAS · ' + (r.destino||'').replace(/</g,'&lt;').toUpperCase() + budget + ' · ' + pois.length + ' PARADAS</div></div>' +
       '<div style="padding:20px 24px 40px;">' + descText + tagsHTML +
