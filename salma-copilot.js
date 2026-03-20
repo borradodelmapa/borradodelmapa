@@ -111,18 +111,18 @@ function copilotInjectHTML() {
 
     '#copilot-messages{',
       'flex:1;overflow-y:auto;padding:14px;',
-      'display:flex;flex-direction:column;gap:10px;',
+      'display:flex;flex-direction:column;gap:12px;',
       'background:rgba(0,0,0,.2);',
     '}',
 
     '.cplt-msg{',
-      'max-width:88%;padding:12px 15px;border-radius:16px;',
-      'font-size:14px;line-height:1.5;',
+      'max-width:82%;padding:12px 15px;border-radius:16px;',
+      'font-size:14px;line-height:1.55;word-break:break-word;',
     '}',
-    '.cplt-msg.user  {align-self:flex-end;background:rgba(212,160,23,.2);color:#f5f0e8;}',
-    '.cplt-msg.salma {align-self:flex-start;background:rgba(255,255,255,.05);border:1px solid rgba(212,160,23,.18);color:#f5f0e8;}',
-    '.cplt-msg.system{align-self:center;background:transparent;border:1px dashed rgba(212,160,23,.2);',
-      "color:rgba(245,240,232,.45);font-size:12px;font-family:'JetBrains Mono',monospace;}",
+    '.cplt-msg.user  {background:rgba(212,160,23,.2);color:#f5f0e8;border-radius:16px 4px 16px 16px;}',
+    '.cplt-msg.salma {background:rgba(255,255,255,.05);border:1px solid rgba(212,160,23,.18);color:#f5f0e8;border-radius:4px 16px 16px 16px;}',
+    '.cplt-msg.system{background:transparent;border:1px dashed rgba(212,160,23,.2);',
+      "color:rgba(245,240,232,.45);font-size:12px;font-family:'JetBrains Mono',monospace;border-radius:8px;}",
 
     '.cplt-card{',
       'background:rgba(255,255,255,.04);border:1px solid rgba(212,160,23,.2);',
@@ -198,9 +198,12 @@ function copilotInjectHTML() {
 
     '<div id="copilot-panel">',
       '<div id="copilot-head">',
-        '<div>',
-          "<div style=\"font-family:'Inter Tight',sans-serif;font-size:16px;font-weight:700;color:#fff;\">SALMA</div>",
-          "<div style=\"font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(212,160,23,.75);letter-spacing:.12em;margin-top:3px;\">COPILOTO &middot; EN RUTA</div>",
+        '<div style="display:flex;align-items:center;gap:12px;">',
+          '<div id="copilot-head-avatar" style="width:44px;height:44px;border-radius:50%;border:2px solid #d4a017;overflow:hidden;flex-shrink:0;background:#1a1816;display:flex;align-items:center;justify-content:center;"></div>',
+          '<div>',
+            "<div style=\"font-family:'Inter Tight',sans-serif;font-size:16px;font-weight:700;color:#fff;\">SALMA</div>",
+            "<div style=\"font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(212,160,23,.75);letter-spacing:.12em;margin-top:3px;\">COPILOTO &middot; EN RUTA</div>",
+          '</div>',
         '</div>',
         '<button id="copilot-close" style="background:transparent;border:1px solid rgba(212,160,23,.2);border-radius:8px;padding:8px 14px;color:rgba(245,240,232,.55);font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.08em;">CERRAR</button>',
       '</div>',
@@ -233,8 +236,19 @@ function copilotInjectHTML() {
 // ===== BIND EVENTS =====
 
 function copilotBindEvents() {
-  // El botón SOS está en la nav móvil — ver navSosSalma() más abajo
-
+  // Cargar avatar de Salma en el header
+  var avatarEl = document.getElementById('copilot-head-avatar');
+  if (avatarEl) {
+    var src = window.SALMA_AVATAR_SRC || '';
+    if (src) {
+      avatarEl.innerHTML = '<img src="' + src + '" style="width:100%;height:100%;object-fit:cover;object-position:center 25%;">';
+    } else {
+      avatarEl.textContent = 'S';
+      avatarEl.style.color = '#d4a017';
+      avatarEl.style.fontFamily = 'Bebas Neue,sans-serif';
+      avatarEl.style.fontSize = '20px';
+    }
+  }
 
   document.getElementById('copilot-close').addEventListener('click', copilotClose);
   document.getElementById('copilot-backdrop').addEventListener('click', copilotClose);
@@ -252,14 +266,8 @@ function copilotBindEvents() {
 
 // ===== VISIBILIDAD =====
 
-function copilotShowFloating() {
-  var el = document.getElementById('nav-sos-btn');
-  if (el) el.style.display = 'flex';
-}
-function copilotHideFloating() {
-  var el = document.getElementById('nav-sos-btn');
-  if (el) el.style.display = 'none';
-}
+function copilotShowFloating() { /* SOS siempre visible en la nav */ }
+function copilotHideFloating() { /* SOS siempre visible en la nav */ }
 
 // Función global llamada desde el botón SOS de la nav móvil
 function navSosSalma() {
@@ -294,13 +302,30 @@ window.copilotClose = copilotClose;
 
 // ===== MENSAJES =====
 
+function copilotAvatarHTML() {
+  var src = window.SALMA_AVATAR_SRC || '';
+  if (src) return '<img src="' + src + '" style="width:32px;height:32px;border-radius:50%;border:1.5px solid #d4a017;object-fit:cover;object-position:center 25%;flex-shrink:0;">';
+  return '<div style="width:32px;height:32px;border-radius:50%;border:1.5px solid #d4a017;background:#1a1816;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;color:#d4a017;font-family:Bebas Neue,sans-serif;">S</div>';
+}
+
 function copilotAddMessage(text, who) {
   var msgs = document.getElementById('copilot-messages');
   if (!msgs) return;
-  var div = document.createElement('div');
-  div.className = 'cplt-msg ' + (who || 'salma');
-  div.textContent = text;
-  msgs.appendChild(div);
+  var wrap = document.createElement('div');
+
+  if (who === 'salma') {
+    wrap.style.cssText = 'display:flex;gap:8px;align-items:flex-start;';
+    wrap.innerHTML = copilotAvatarHTML() +
+      '<div class="cplt-msg salma">' + (text || '').replace(/\n/g, '<br>') + '</div>';
+  } else if (who === 'user') {
+    wrap.style.cssText = 'display:flex;justify-content:flex-end;';
+    wrap.innerHTML = '<div class="cplt-msg user">' + (text || '') + '</div>';
+  } else {
+    wrap.style.cssText = 'display:flex;justify-content:center;';
+    wrap.innerHTML = '<div class="cplt-msg system">' + (text || '') + '</div>';
+  }
+
+  msgs.appendChild(wrap);
   msgs.scrollTop = msgs.scrollHeight;
 }
 
@@ -815,33 +840,90 @@ function copilotSendToSalma(text) {
   var dayCount = {};
   pois.forEach(function(p) { var d = p.day || 1; dayCount[d] = (dayCount[d] || 0) + 1; });
 
-  var routeCtx = 'El usuario está viajando' + (dest ? ' por ' + dest : '') +
-    ' con una ruta de ' + pois.length + ' paradas en ' + Object.keys(dayCount).length + ' días.' +
-    ' Día actual del viaje: día ' + window._copilot.currentDay + '.' +
-    ' Está usando el copiloto de SALMA en tiempo real, durante el viaje.';
+  var routeCtx = 'Contexto del viaje: el usuario está viajando' + (dest ? ' por ' + dest : '') +
+    ', ruta de ' + pois.length + ' paradas en ' + Object.keys(dayCount).length + ' días.' +
+    ' Día actual: ' + window._copilot.currentDay + '. Modo copiloto en tiempo real.';
 
-  // Burbuja de espera
-  var msgs    = document.getElementById('copilot-messages');
-  var loadDiv = document.createElement('div');
-  loadDiv.id        = 'copilot-loading-tmp';
-  loadDiv.className = 'cplt-msg salma';
-  loadDiv.textContent = '...';
-  if (msgs) { msgs.appendChild(loadDiv); msgs.scrollTop = msgs.scrollHeight; }
+  var msgs = document.getElementById('copilot-messages');
+
+  // Burbuja de streaming con avatar
+  var loadWrap = document.createElement('div');
+  loadWrap.id = 'copilot-loading-tmp';
+  loadWrap.style.cssText = 'display:flex;gap:8px;align-items:flex-start;';
+  loadWrap.innerHTML = copilotAvatarHTML() +
+    '<div class="cplt-msg salma" id="copilot-stream-bubble">...</div>';
+  if (msgs) { msgs.appendChild(loadWrap); msgs.scrollTop = msgs.scrollHeight; }
 
   fetch(window.SALMA_API, {
     method:  'POST',
     headers: { 'Content-Type': 'application/json' },
     body:    JSON.stringify({
-      messages: [{ role: 'user', content: routeCtx + '\n\nEl usuario dice: ' + text }],
-      mode:     'copiloto'
+      message: routeCtx + '\n\n' + text,
+      stream:  true,
+      mode:    'copiloto'
     })
   })
-  .then(function(res) { return res.json(); })
-  .then(function(data) {
-    var el = document.getElementById('copilot-loading-tmp');
-    if (el) el.remove();
-    var reply = (data.reply || data.text || data.message || '').trim();
-    copilotAddMessage(reply || 'Puedo ayudarte con hotel, comida, reducir la ruta o plan lluvia. ¿Qué necesitas?', 'salma');
+  .then(function(res) {
+    var ct = (res.headers.get('content-type') || '');
+    // Respuesta JSON directa (error o fallback del worker)
+    if (ct.indexOf('application/json') !== -1) {
+      return res.json().then(function(data) {
+        var el = document.getElementById('copilot-loading-tmp');
+        if (el) el.remove();
+        var reply = (data.reply || data.text || data.message || '').trim();
+        copilotAddMessage(reply || 'Puedo ayudarte con hotel, comida, reducir la ruta o plan lluvia.', 'salma');
+      });
+    }
+    // SSE stream
+    var bubbleEl = document.getElementById('copilot-stream-bubble');
+    var reader   = res.body.getReader();
+    var decoder  = new TextDecoder();
+    var buffer   = '';
+    var fullText = '';
+
+    function pump() {
+      reader.read().then(function(result) {
+        if (result.done) {
+          if (!fullText) {
+            var el = document.getElementById('copilot-loading-tmp');
+            if (el) el.remove();
+            copilotAddMessage('No he recibido respuesta. Prueba de nuevo.', 'salma');
+          }
+          return;
+        }
+        buffer += decoder.decode(result.value, { stream: true });
+        var lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (var i = 0; i < lines.length; i++) {
+          var line = lines[i];
+          if (line.indexOf('data: ') !== 0) continue;
+          var jsonStr = line.slice(6).trim();
+          if (!jsonStr) continue;
+          try {
+            var evt = JSON.parse(jsonStr);
+            if (evt.done) {
+              fullText = evt.reply || fullText;
+              if (bubbleEl) bubbleEl.innerHTML = fullText.replace(/\n/g, '<br>');
+              return;
+            }
+            if (evt.t) {
+              fullText += evt.t;
+              if (bubbleEl) {
+                bubbleEl.innerHTML = fullText.replace(/\n/g, '<br>');
+                if (msgs) msgs.scrollTop = msgs.scrollHeight;
+              }
+            }
+          } catch(e) {}
+        }
+        pump();
+      }).catch(function() {
+        var el = document.getElementById('copilot-loading-tmp');
+        if (el) el.remove();
+        copilotAddMessage('No he podido conectar ahora mismo. Usa los botones rápidos de abajo.', 'salma');
+      });
+    }
+    pump();
   })
   .catch(function() {
     var el = document.getElementById('copilot-loading-tmp');
