@@ -102,6 +102,7 @@
 
     _loadGmaps(function () {
       _initMapa(pois, routeData);
+      setTimeout(abrirSalmaPanel, 800);
     });
   }
   window.abrirMapaRuta = abrirMapaRuta;
