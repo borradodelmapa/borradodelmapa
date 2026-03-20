@@ -733,7 +733,10 @@ function verRuta(id, nombre) {
       tipsHTML +
       '<div style="display:flex;gap:10px;margin-top:28px;padding-top:20px;border-top:1px solid rgba(212,160,23,.1);flex-wrap:wrap;">' +
       '<button onclick="showPage(\'dashboard\')" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.1);border-radius:12px;color:rgba(245,240,232,.5);padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;">VOLVER</button>' +
+      '<button onclick="abrirMapaRuta(window._vrRouteData,\'' + id + '\',window._vrRouteMeta)" style="flex:2;background:#d4a017;border:none;border-radius:12px;color:#050505;padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;font-weight:700;">🗺 VER EN MAPA</button>' +
       '</div></div>';
+    window._vrRouteData = routeData;
+    window._vrRouteMeta = { nombre: r.nombre || '', destino: r.destino || vrCountry || '' };
     showPage('ruta');
     // Inicializar mapa Leaflet tras mostrar la página
     if (hasMapCoords) {
