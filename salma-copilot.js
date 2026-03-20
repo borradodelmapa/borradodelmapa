@@ -113,7 +113,9 @@ function copilotInjectHTML() {
       'flex:1;overflow-y:auto;padding:14px;min-height:0;',
       'display:flex;flex-direction:column;gap:12px;',
       'background:rgba(0,0,0,.2);',
+      'scrollbar-width:none;',
     '}',
+    '#copilot-messages::-webkit-scrollbar{display:none;}',
 
     '.cplt-msg{',
       'max-width:82%;padding:12px 15px;border-radius:16px;',
@@ -143,9 +145,9 @@ function copilotInjectHTML() {
       'border-top:1px solid rgba(212,160,23,.1);flex-shrink:0;',
     '}',
     '#copilot-input{',
-      'width:100%;box-sizing:border-box;',
+      'width:100%;box-sizing:border-box;resize:none;',
       'background:rgba(255,255,255,.06);border:1px solid rgba(212,160,23,.22);',
-      "border-radius:10px;padding:11px 14px;font-size:14px;color:#f5f0e8;",
+      "border-radius:10px;padding:11px 14px;font-size:14px;color:#f5f0e8;line-height:1.5;",
       "font-family:'Inter',sans-serif;",
     '}',
     '#copilot-input::placeholder{color:rgba(245,240,232,.3);}',
@@ -211,7 +213,7 @@ function copilotInjectHTML() {
       '<div id="copilot-messages"></div>',
 
       '<div id="copilot-input-row">',
-        '<input id="copilot-input" type="text" placeholder="Pregunta a SALMA lo que necesites...">',
+        '<textarea id="copilot-input" rows="3" placeholder="Pregúntame lo que necesites — cambios de planes, anotaciones de viaje, información, historia, cultura, reservas de última hora..."></textarea>',
         '<button id="copilot-send">ENVIAR →</button>',
       '</div>',
 
@@ -254,7 +256,7 @@ function copilotBindEvents() {
   document.getElementById('copilot-backdrop').addEventListener('click', copilotClose);
   document.getElementById('copilot-send').addEventListener('click', copilotHandleInput);
   document.getElementById('copilot-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') copilotHandleInput();
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); copilotHandleInput(); }
   });
 
   document.querySelectorAll('.cplt-quick').forEach(function(btn) {
