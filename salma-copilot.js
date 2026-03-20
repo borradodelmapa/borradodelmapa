@@ -110,7 +110,7 @@ function copilotInjectHTML() {
     '}',
 
     '#copilot-messages{',
-      'flex:1;overflow-y:auto;padding:14px;',
+      'flex:1;overflow-y:auto;padding:14px;min-height:0;',
       'display:flex;flex-direction:column;gap:12px;',
       'background:rgba(0,0,0,.2);',
     '}',

@@ -676,6 +676,7 @@ nav.scrolled { background:var(--negro); }
   .hero-stats { flex-direction:column; }
   .hero-stats > div { width:100%; }
   .features, .pricing, .dash-content { padding-left:18px; padding-right:18px; }
+  .dash-content { padding-bottom:88px; }
   .features-grid, .pricing-grid { grid-template-columns:1fr; }
   .editor-layout { grid-template-columns:1fr; height:auto; }
   .editor-panel { max-height:none; }
