@@ -481,10 +481,6 @@ function salmaRenderRoute(routeData) {
 
   // Tags
   var tagsHTML = '';
-  if (routeData.tags && routeData.tags.length > 0) {
-    tagsHTML = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;">' +
-      routeData.tags.map(function(t) { return '<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;padding:5px 12px;border:1px solid rgba(212,160,23,.25);border-radius:999px;color:var(--dorado);">' + escapeHTML(t) + '</span>'; }).join('') + '</div>';
-  }
 
   // Stops — acordeón por días
   var dayGroups = {};
@@ -1130,14 +1126,17 @@ async function salmaGuardarRuta() {
     }
     firedb.collection('users').doc(uid).collection('maps').add(ruta)
       .then(function(docRef) {
-        // Incrementar contador global de rutas
+        // Incrementar contador global de rutas y añadir país
         try {
-          firedb.collection('stats').doc('global').set(
-            { totalRoutes: firebase.firestore.FieldValue.increment(1) },
-            { merge: true }
-          ).then(function() {
-            if (typeof window.loadGlobalStats === 'function') window.loadGlobalStats();
-          }).catch(function() {});
+          var statsUpdate = { totalRoutes: firebase.firestore.FieldValue.increment(1) };
+          var paisGuardado = (ruta.country || ruta.destino || '').toString().trim();
+          if (paisGuardado) {
+            statsUpdate.countries = firebase.firestore.FieldValue.arrayUnion(paisGuardado);
+          }
+          firedb.collection('stats').doc('global').set(statsUpdate, { merge: true })
+            .then(function() {
+              if (typeof window.loadGlobalStats === 'function') window.loadGlobalStats();
+            }).catch(function() {});
         } catch(e) {}
         window._salmaLastRoute = null;
         if (typeof window.showToast === 'function') window.showToast('¡Ruta guardada! Redirigiendo a Mis rutas...');

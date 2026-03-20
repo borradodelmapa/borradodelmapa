@@ -709,13 +709,6 @@ function verRuta(id, nombre) {
       tipsHTML += '</div>';
     }
     var tagsHTML = '';
-    if (routeData && routeData.tags && routeData.tags.length > 0) {
-      tagsHTML = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;">';
-      routeData.tags.forEach(function(tag) {
-        tagsHTML += '<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;padding:5px 12px;border:1px solid rgba(212,160,23,.2);border-radius:999px;color:var(--dorado);">' + (tag || '').replace(/</g,'&lt;') + '</span>';
-      });
-      tagsHTML += '</div>';
-    }
     var summary = routeData && routeData.summary ? routeData.summary.replace(/</g,'&lt;') : '';
     var budget = routeData && routeData.budget_level && routeData.budget_level !== 'sin_definir' ? ' · ' + routeData.budget_level.toUpperCase() : '';
     var descText = summary
@@ -730,10 +723,7 @@ function verRuta(id, nombre) {
       (hasMapCoords ? '<div id="ruta-map-wrap" style="position:relative;height:260px;width:100%;border-radius:14px;margin-bottom:24px;border:1px solid rgba(212,160,23,.2);overflow:hidden;"><div id="ruta-leaflet-map" style="height:100%;width:100%;"></div></div>' : '') +
       '<div id="vr-stops-wrapper">' + stopsHTML + '</div>' +
       tipsHTML +
-      '<div style="display:flex;gap:10px;margin-top:28px;padding-top:20px;border-top:1px solid rgba(212,160,23,.1);flex-wrap:wrap;">' +
-      '<button onclick="showPage(\'dashboard\')" style="flex:1;min-width:100px;background:transparent;border:1px solid rgba(212,160,23,.1);border-radius:12px;color:rgba(245,240,232,.5);padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;">VOLVER</button>' +
-      '<button onclick="abrirMapaRuta(window._vrRouteData,\'' + id + '\',window._vrRouteMeta)" style="flex:2;background:#d4a017;border:none;border-radius:12px;color:#050505;padding:14px;font-family:\'JetBrains Mono\',monospace;font-size:10px;cursor:pointer;letter-spacing:.12em;font-weight:700;">🗺 VER EN MAPA</button>' +
-      '</div></div>';
+      '</div>';
     window._vrRouteData = routeData;
     window._vrRouteMeta = { nombre: r.nombre || '', destino: r.destino || vrCountry || '' };
     showPage('ruta');
@@ -899,17 +889,31 @@ function initHeroMap() {
 document.addEventListener("DOMContentLoaded", initHeroMap);
 
 // ===== STATS GLOBALES =====
+function animateCounter(el, target) {
+  if (!target || target <= 0) { el.textContent = '—'; return; }
+  var start = 0;
+  var duration = 1200;
+  var startTime = null;
+  function step(ts) {
+    if (!startTime) startTime = ts;
+    var progress = Math.min((ts - startTime) / duration, 1);
+    var ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(ease * target);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
 async function loadGlobalStats() {
   try {
     var snap = await db.collection('stats').doc('global').get();
     var data = snap.exists ? snap.data() : {};
     var total = data.totalRoutes || 0;
     var el = document.getElementById('counter-routes');
-    if (el) el.textContent = total > 0 ? total : '—';
-    // Calcular países únicos si hay datos, si no usar valor por defecto
-    var countries = data.totalCountries || 0;
+    if (el) animateCounter(el, total);
+    var countries = Array.isArray(data.countries) ? data.countries.length : (data.totalCountries || 0);
     var elC = document.getElementById('counter-countries');
-    if (elC) elC.textContent = countries > 0 ? countries : '—';
+    if (elC) animateCounter(elC, countries);
   } catch(e) {
     // Firestore rules pueden bloquearlo, no pasa nada
   }
