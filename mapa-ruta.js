@@ -409,6 +409,9 @@
     }
 
     function onStart(e) {
+      // No interceptar toques en botones (ej: botón cerrar ×)
+      var target = e.target;
+      if (target.tagName === 'BUTTON' || target.closest('button')) return;
       panel = document.getElementById('mapa-salma-panel');
       if (!panel || panel.style.display === 'none') return;
       dragging = true;

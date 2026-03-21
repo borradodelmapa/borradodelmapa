@@ -404,6 +404,12 @@ function salmaShowInput(botReply) {
   }
 }
 
+// Mostrar input sin robar foco (tras generar ruta — evita que el scroll salte arriba)
+function salmaShowInputNoFocus() {
+  var wrap = document.getElementById('salma-inline-input-wrap');
+  if (wrap) wrap.style.display = 'block';
+}
+
 function salmaHideInput() {
   var wrap = document.getElementById('salma-inline-input-wrap');
   if (wrap) wrap.style.display = 'none';
@@ -879,13 +885,13 @@ async function salmaInlineReply() {
         salmaEnrichRouteWithCoords(baseRoute).then(function(enriched) {
           salmaRemoveLoading();
           salmaRenderRoute(enriched);
-          salmaShowInput();
-          if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+          salmaHideInput();
+          if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 300);
         }).catch(function() {
           salmaRemoveLoading();
           salmaRenderRoute(baseRoute);
-          salmaShowInput();
-          if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+          salmaHideInput();
+          if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 300);
         });
       } else {
         // Solo geocodificar si Salma indica que no pudo ubicar — si es conversacional, mostrar input

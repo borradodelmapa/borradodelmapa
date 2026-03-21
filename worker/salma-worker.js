@@ -638,6 +638,74 @@ ${JSON.stringify(contextForClaude)}`;
 }
 
 // ═══════════════════════════════════════════════════════════════
+// MAPEO PAÍS → CÓDIGO ISO (para filtrar Google Places por país)
+// ═══════════════════════════════════════════════════════════════
+function getCountryCode(countryName) {
+  if (!countryName) return '';
+  const norm = countryName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+  const map = {
+    'afganistan': 'AF', 'albania': 'AL', 'alemania': 'DE', 'germany': 'DE', 'andorra': 'AD',
+    'angola': 'AO', 'argentina': 'AR', 'armenia': 'AM', 'australia': 'AU', 'austria': 'AT',
+    'azerbaiyan': 'AZ', 'bahamas': 'BS', 'bangladesh': 'BD', 'barbados': 'BB', 'barein': 'BH', 'bahrain': 'BH',
+    'belgica': 'BE', 'belgium': 'BE', 'belice': 'BZ', 'benin': 'BJ', 'bielorrusia': 'BY', 'belarus': 'BY',
+    'birmania': 'MM', 'myanmar': 'MM', 'bolivia': 'BO', 'bosnia': 'BA', 'botsuana': 'BW', 'botswana': 'BW',
+    'brasil': 'BR', 'brazil': 'BR', 'brunei': 'BN', 'bulgaria': 'BG', 'burkina faso': 'BF', 'burundi': 'BI',
+    'butan': 'BT', 'bhutan': 'BT', 'cabo verde': 'CV', 'camboya': 'KH', 'cambodia': 'KH',
+    'camerun': 'CM', 'cameroon': 'CM', 'canada': 'CA', 'catar': 'QA', 'qatar': 'QA', 'chad': 'TD',
+    'chile': 'CL', 'china': 'CN', 'chipre': 'CY', 'cyprus': 'CY', 'colombia': 'CO',
+    'corea del norte': 'KP', 'corea del sur': 'KR', 'south korea': 'KR',
+    'costa de marfil': 'CI', 'costa rica': 'CR', 'croacia': 'HR', 'croatia': 'HR',
+    'cuba': 'CU', 'dinamarca': 'DK', 'denmark': 'DK', 'ecuador': 'EC', 'egipto': 'EG', 'egypt': 'EG',
+    'el salvador': 'SV', 'emiratos': 'AE', 'eritrea': 'ER', 'eslovaquia': 'SK', 'slovakia': 'SK',
+    'eslovenia': 'SI', 'slovenia': 'SI', 'espana': 'ES', 'spain': 'ES',
+    'estados unidos': 'US', 'eeuu': 'US', 'usa': 'US', 'united states': 'US',
+    'estonia': 'EE', 'etiopia': 'ET', 'ethiopia': 'ET', 'filipinas': 'PH', 'philippines': 'PH',
+    'finlandia': 'FI', 'finland': 'FI', 'fiyi': 'FJ', 'fiji': 'FJ',
+    'francia': 'FR', 'france': 'FR', 'gabon': 'GA', 'gambia': 'GM', 'georgia': 'GE',
+    'ghana': 'GH', 'grecia': 'GR', 'greece': 'GR', 'guatemala': 'GT', 'guinea': 'GN',
+    'guinea ecuatorial': 'GQ', 'guyana': 'GY', 'haiti': 'HT', 'honduras': 'HN',
+    'hungria': 'HU', 'hungary': 'HU', 'india': 'IN', 'indonesia': 'ID',
+    'irak': 'IQ', 'iraq': 'IQ', 'iran': 'IR', 'irlanda': 'IE', 'ireland': 'IE',
+    'islandia': 'IS', 'iceland': 'IS', 'israel': 'IL', 'italia': 'IT', 'italy': 'IT',
+    'jamaica': 'JM', 'japon': 'JP', 'japan': 'JP', 'jordania': 'JO', 'jordan': 'JO',
+    'kazajistan': 'KZ', 'kazakhstan': 'KZ', 'kenia': 'KE', 'kenya': 'KE',
+    'kirguistan': 'KG', 'kyrgyzstan': 'KG', 'kuwait': 'KW', 'laos': 'LA',
+    'letonia': 'LV', 'latvia': 'LV', 'libano': 'LB', 'lebanon': 'LB',
+    'liberia': 'LR', 'libia': 'LY', 'libya': 'LY', 'liechtenstein': 'LI',
+    'lituania': 'LT', 'lithuania': 'LT', 'luxemburgo': 'LU', 'luxembourg': 'LU',
+    'macedonia': 'MK', 'madagascar': 'MG', 'malasia': 'MY', 'malaysia': 'MY',
+    'maldivas': 'MV', 'maldives': 'MV', 'mali': 'ML', 'malta': 'MT',
+    'marruecos': 'MA', 'morocco': 'MA', 'mauricio': 'MU', 'mauritius': 'MU',
+    'mauritania': 'MR', 'mexico': 'MX', 'moldavia': 'MD', 'moldova': 'MD',
+    'monaco': 'MC', 'mongolia': 'MN', 'montenegro': 'ME', 'mozambique': 'MZ',
+    'namibia': 'NA', 'nepal': 'NP', 'nicaragua': 'NI', 'niger': 'NE', 'nigeria': 'NG',
+    'noruega': 'NO', 'norway': 'NO', 'nueva zelanda': 'NZ', 'new zealand': 'NZ',
+    'oman': 'OM', 'paises bajos': 'NL', 'holanda': 'NL', 'netherlands': 'NL',
+    'pakistan': 'PK', 'palestina': 'PS', 'panama': 'PA', 'papua nueva guinea': 'PG',
+    'paraguay': 'PY', 'peru': 'PE', 'polonia': 'PL', 'poland': 'PL',
+    'portugal': 'PT', 'reino unido': 'GB', 'uk': 'GB', 'united kingdom': 'GB', 'england': 'GB',
+    'republica checa': 'CZ', 'czech republic': 'CZ', 'chequia': 'CZ',
+    'republica dominicana': 'DO', 'dominican republic': 'DO',
+    'rumania': 'RO', 'romania': 'RO', 'rusia': 'RU', 'russia': 'RU',
+    'ruanda': 'RW', 'rwanda': 'RW', 'senegal': 'SN', 'serbia': 'RS',
+    'singapur': 'SG', 'singapore': 'SG', 'siria': 'SY', 'syria': 'SY',
+    'somalia': 'SO', 'sri lanka': 'LK', 'sudafrica': 'ZA', 'south africa': 'ZA',
+    'sudan': 'SD', 'suecia': 'SE', 'sweden': 'SE', 'suiza': 'CH', 'switzerland': 'CH',
+    'tailandia': 'TH', 'thailand': 'TH', 'taiwan': 'TW', 'tanzania': 'TZ',
+    'tunez': 'TN', 'tunisia': 'TN', 'turquia': 'TR', 'turkey': 'TR', 'turkiye': 'TR',
+    'ucrania': 'UA', 'ukraine': 'UA', 'uganda': 'UG', 'uruguay': 'UY',
+    'uzbekistan': 'UZ', 'venezuela': 'VE', 'vietnam': 'VN', 'yemen': 'YE',
+    'zambia': 'ZM', 'zimbabue': 'ZW', 'zimbabwe': 'ZW'
+  };
+  // Buscar coincidencia exacta primero, luego parcial
+  if (map[norm]) return map[norm];
+  for (const [key, code] of Object.entries(map)) {
+    if (norm.includes(key) || key.includes(norm)) return code;
+  }
+  return '';
+}
+
+// ═══════════════════════════════════════════════════════════════
 // VERIFICACIÓN DE TODAS LAS PARADAS — Google Places (pasada 2)
 // Busca CADA parada en Google Places, reemplaza coords/foto/descripción
 // con datos reales. Si no encuentra una parada cerca, la elimina.
@@ -646,6 +714,8 @@ async function verifyAllStops(route, placesKey) {
   if (!route?.stops || !placesKey) return route;
 
   const region = route.region || route.country || '';
+  // Código ISO del país para restringir búsqueda en Google Places
+  const countryCode = route.country ? getCountryCode(route.country) : '';
 
   // 1. Buscar CADA parada en Google Places (Find Place + Place Details)
   const findPromises = route.stops.map(stop => {
@@ -654,14 +724,16 @@ async function verifyAllStops(route, placesKey) {
     const searchQuery = region ? `${name} ${region}` : name;
     // locationbias con coords de Claude como pista (si las tiene)
     const bias = (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01)
-      ? `&locationbias=circle:10000@${stop.lat},${stop.lng}`
+      ? `&locationbias=circle:50000@${stop.lat},${stop.lng}`
       : '';
-    return fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(searchQuery)}&inputtype=textquery${bias}&fields=place_id,photos,geometry,name,formatted_address&language=es&key=${placesKey}`)
+    // Filtro por país — evita resultados de otros continentes
+    const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
+    return fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(searchQuery)}&inputtype=textquery${bias}${countryFilter}&fields=place_id,photos,geometry,name,formatted_address&language=es&key=${placesKey}`)
       .then(r => r.json()).catch(() => null);
   });
   const findResults = await Promise.all(findPromises);
 
-  // 2. Calcular centro de ruta a partir de resultados verificados (para validación de distancia)
+  // 2. Calcular centro y radio de la ruta a partir de resultados verificados
   const verifiedCoords = [];
   findResults.forEach(data => {
     const c = data?.candidates?.[0];
@@ -669,10 +741,19 @@ async function verifyAllStops(route, placesKey) {
       verifiedCoords.push({ lat: c.geometry.location.lat, lng: c.geometry.location.lng });
     }
   });
-  let centerLat = 0, centerLng = 0;
+  let centerLat = 0, centerLng = 0, routeRadiusKm = 50;
   if (verifiedCoords.length > 0) {
     centerLat = verifiedCoords.reduce((s, p) => s + p.lat, 0) / verifiedCoords.length;
     centerLng = verifiedCoords.reduce((s, p) => s + p.lng, 0) / verifiedCoords.length;
+    // Radio = distancia máxima de cualquier parada al centro
+    const maxDist = verifiedCoords.reduce((max, p) => {
+      const dLat = Math.abs(p.lat - centerLat);
+      const dLng = Math.abs(p.lng - centerLng);
+      const d = Math.sqrt(dLat * dLat + dLng * dLng) * 111;
+      return d > max ? d : max;
+    }, 0);
+    // Umbral dinámico: radio de ruta × 1.5, mínimo 50km
+    routeRadiusKm = Math.max(50, maxDist * 1.5);
   }
 
   // 3. Place Details para cada resultado válido (reseñas, descripción, horarios)
@@ -680,12 +761,12 @@ async function verifyAllStops(route, placesKey) {
   const detailPromises = findResults.map(data => {
     const c = data?.candidates?.[0];
     if (!c?.place_id) return Promise.resolve(null);
-    // Validar distancia si tenemos centro
+    // Validar distancia con umbral dinámico
     if (centerLat && centerLng && c.geometry?.location) {
       const dLat = Math.abs(c.geometry.location.lat - centerLat);
       const dLng = Math.abs(c.geometry.location.lng - centerLng);
       const distKm = Math.sqrt(dLat * dLat + dLng * dLng) * 111;
-      if (distKm > 10) return Promise.resolve(null); // Fuera del municipio
+      if (distKm > routeRadiusKm) return Promise.resolve(null); // Fuera del radio de la ruta
     }
     return fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${c.place_id}&fields=${detailFields}&language=es&key=${placesKey}`)
       .then(r => r.json()).catch(() => null);
@@ -707,12 +788,12 @@ async function verifyAllStops(route, placesKey) {
     const pLat = candidate.geometry.location.lat;
     const pLng = candidate.geometry.location.lng;
 
-    // Validar distancia al centro de la ruta
+    // Validar distancia al centro con umbral dinámico
     if (centerLat && centerLng) {
       const dLat = Math.abs(pLat - centerLat);
       const dLng = Math.abs(pLng - centerLng);
       const distKm = Math.sqrt(dLat * dLat + dLng * dLng) * 111;
-      if (distKm > 10) return; // Fuera del municipio — descartar
+      if (distKm > routeRadiusKm) return; // Fuera del radio de la ruta — descartar
     }
 
     // Coords verificadas de Google (sustituyen las de Claude)
