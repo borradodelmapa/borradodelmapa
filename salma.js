@@ -57,6 +57,8 @@ const salma = {
             console.error('Error renderizando guía:', renderErr);
           }
         }
+        // Mensaje post-guía
+        this._addSalmaBubble('Guárdala y la tienes completa en Mis Viajes. Cuando quieras otra, dime destino y días.');
       }
 
       this._scrollToBottom();
