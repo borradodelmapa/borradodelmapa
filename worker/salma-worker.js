@@ -430,28 +430,32 @@ async function verifyAllStops(route, placesKey) {
       if (distKm > routeRadiusKm) return;
     }
 
+    // Google solo corrige coords y fotos — NO sobrescribe contenido de Haiku
     stop.lat = pLat;
     stop.lng = pLng;
 
     const photoRef = detail?.photos?.[0]?.photo_reference || candidate.photos?.[0]?.photo_reference || '';
     if (photoRef) stop.photo_ref = photoRef;
 
-    const googleDesc = detail?.editorial_summary?.overview || '';
-    if (googleDesc) stop.description = googleDesc;
-
     const verifiedName = detail?.name || candidate.name || '';
     if (verifiedName) { stop.name = verifiedName; stop.headline = verifiedName; }
 
     if (candidate.formatted_address) stop.verified_address = candidate.formatted_address;
 
-    if (detail?.opening_hours?.weekday_text) {
-      stop.practical = detail.opening_hours.weekday_text.join(' · ');
+    // Horarios: solo si aportan (no "Abierto 24 horas" genérico) y no hay practical de Haiku
+    if (!stop.practical && detail?.opening_hours?.weekday_text) {
+      const hours = detail.opening_hours.weekday_text.join(' · ');
+      const isGeneric = /abierto 24 horas/i.test(hours) || /open 24 hours/i.test(hours);
+      if (!isGeneric) {
+        stop.practical = hours;
+      }
     }
 
-    const reviews = (detail?.reviews || []).slice(0, 2).map(r => r.text?.slice(0, 150) || '').filter(Boolean);
-    if (reviews.length > 0 && !stop.context) {
-      stop.context = 'Según visitantes: ' + reviews.join(' | ');
-    }
+    // Editorial summary de Google → solo como description (datos), nunca como context
+    const googleDesc = detail?.editorial_summary?.overview || '';
+    if (googleDesc && !stop.description) stop.description = googleDesc;
+
+    // NO meter reseñas de Google como context — context es para info histórica/cultural de Haiku
 
     verifiedStops.push(stop);
   });
