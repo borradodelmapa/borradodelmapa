@@ -923,7 +923,7 @@ function buildMessages(history, message, currentRoute, dynamicContext) {
   }
   // Si es petición de ruta, forzar generación inmediata
   if (isRouteRequest(message, history)) {
-    userContent += '\n\n[INSTRUCCIÓN OBLIGATORIA: El usuario está pidiendo una RUTA. DEBES generar SALMA_ROUTE_JSON con paradas organizadas por días. NO respondas solo con texto conversacional. NO preguntes más datos — usa defaults razonables (presupuesto medio, mix cultural/experiencial). Responde con 1-2 frases breves + SALMA_ROUTE_JSON obligatorio.]';
+    userContent += '\n\n[OBLIGATORIO — GENERA RUTA AHORA: El usuario pide una ruta. Tu respuesta DEBE contener el bloque SALMA_ROUTE_JSON. Formato: 1 frase corta + salto de línea + SALMA_ROUTE_JSON + salto de línea + JSON completo. NO respondas solo con texto. NO hagas preguntas. Usa defaults razonables para lo que falte (presupuesto medio, mix cultural). Si no generas SALMA_ROUTE_JSON la ruta no se mostrará y el usuario verá una pantalla vacía.]';
   } else {
     userContent += '\n\n[Recuerda: si generas ruta, responde en el chat con 1-2 frases solo. Sin listas ni detalles en el texto; el detalle va en SALMA_ROUTE_JSON. Si es conversacional, extiéndete lo necesario pero con densidad de datos.]';
   }

@@ -256,14 +256,14 @@ function salmaAddDialog(text, who, isRoute) {
     div.innerHTML = '<div style="background:#d4a017;color:#0a0908;border-radius:18px;padding:14px 20px;font-size:15px;font-weight:600;max-width:80%;line-height:1.5;">' + escapeHTML(text) + '</div>';
   } else if (who === 'loading') {
     var LOADING_PHRASES_RUTA = [
-      'Recopilando información de la ruta...',
-      'Buscando rutas alternativas...',
+      'Diseñando tu ruta, esto tarda un poco pero merece la pena...',
       'Buscando los mejores sitios locales...',
       'Calculando la mejor combinación de días...',
+      'Organizando las paradas para que tenga sentido...',
+      'Añadiendo secretos que no salen en las guías...',
+      'Casi lista, afinando los últimos detalles...',
       'Comprobando que los lugares existen de verdad...',
-      'Ordenando las paradas para que el recorrido tenga sentido...',
-      'Añadiendo secretos locales que no salen en las guías...',
-      'Afinando los tiempos para que no vayas a mil...'
+      'Un poco más de paciencia, va a quedar genial...'
     ];
     var LOADING_PHRASES_CHAT = [
       'Pensando...',
