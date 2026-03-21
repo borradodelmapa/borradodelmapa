@@ -1103,11 +1103,9 @@ async function salmaInlineReply() {
           }
         }).catch(function() {
           salmaRemoveLoading();
-            salmaRenderRoute(baseRoute2);
-            salmaHideInput();
-            if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 300);
-          });
-        }
+          salmaRenderRoute(baseRoute);
+          salmaHideInput();
+        });
       } else {
         // Solo geocodificar si Salma indica que no pudo ubicar — si es conversacional, mostrar input
         var replyLowerInline = (data.reply || '').toLowerCase();
