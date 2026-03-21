@@ -51,7 +51,11 @@ const salma = {
         this.currentRoute = data.route;
         if (!data._hadDraft) {
           this._removeLoading();
-          guideRenderer.render(data.route);
+          try {
+            guideRenderer.render(data.route);
+          } catch (renderErr) {
+            console.error('Error renderizando guía:', renderErr);
+          }
         }
       }
 
@@ -60,7 +64,9 @@ const salma = {
     } catch (e) {
       console.error('Error en salma.send:', e);
       this._removeLoading();
-      this._addSalmaBubble('Uf, algo ha fallado. Vuelve a intentarlo.');
+      this._removeStreamBubble();
+      const errMsg = (e && e.message) ? e.message : String(e);
+      this._addSalmaBubble('Uf, algo ha fallado (' + errMsg + '). Vuelve a intentarlo.');
     } finally {
       this._streaming = false;
       $send.disabled = false;
@@ -130,7 +136,11 @@ const salma = {
                 this._removeLoading();
                 if (evt.route && evt.route.stops) {
                   this.currentRoute = evt.route;
-                  guideRenderer.render(evt.route);
+                  try {
+                    guideRenderer.render(evt.route);
+                  } catch (renderErr) {
+                    console.error('Error renderizando guía draft:', renderErr);
+                  }
                   this._scrollToBottom();
                 }
               }
@@ -171,26 +181,37 @@ const salma = {
           reader.read().then(result => {
             if (result.value) {
               buffer += decoder.decode(result.value, { stream: true });
-              processLines();
+              try { processLines(); } catch (e) { console.warn('processLines error:', e); }
             }
             if (resolved) return;
             if (result.done) {
-              if (buffer.trim()) { buffer += '\n'; processLines(); }
+              if (buffer.trim()) { buffer += '\n'; try { processLines(); } catch (e) {} }
               if (!resolved) {
                 this._removeStreamBubble();
-                resolve({ reply: fullText, route: null, _hadDraft: false });
+                resolve({ reply: fullText, route: null, _hadDraft: draftSent });
               }
               return;
             }
             pump();
           }).catch(err => {
+            console.warn('Stream read error:', err);
             this._removeStreamBubble();
-            if (!resolved) reject(err);
+            // Si ya tenemos texto, resolver en vez de rechazar
+            if (!resolved) {
+              if (fullText) {
+                resolve({ reply: fullText, route: null, _hadDraft: draftSent });
+              } else {
+                reject(err);
+              }
+            }
           });
         };
         pump();
 
-      }).catch(err => reject(err));
+      }).catch(err => {
+        console.error('Fetch error:', err);
+        reject(err);
+      });
     });
   },
 
