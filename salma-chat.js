@@ -540,7 +540,9 @@ function salmaRenderRoute(routeData) {
       var regionCheck = (routeData.region || '').toString().trim().toLowerCase();
       var outsideZone = false;
       if (verifiedAddr && regionCheck && regionCheck.length > 2) {
-        outsideZone = verifiedAddr.toLowerCase().indexOf(regionCheck) === -1;
+        var addrNorm = verifiedAddr.toLowerCase().replace(/koh /g,'ko ').replace(/\s+/g,' ');
+        var regionNorm = regionCheck.replace(/koh /g,'ko ').replace(/\s+/g,' ');
+        outsideZone = addrNorm.indexOf(regionNorm) === -1 && addrNorm.indexOf(regionNorm.replace(/ko /g,'koh ')) === -1;
       }
       var narrative = stop.narrative || stop.description || '';
       var secret = stop.local_secret || '';
