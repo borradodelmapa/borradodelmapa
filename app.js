@@ -356,6 +356,7 @@ async function guardarGuiaDirecto(routeData) {
       notas: r.summary || '',
       cover_image: coverImageUrl,
       itinerarioIA: JSON.stringify(r),
+      enriched: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       published: false
@@ -363,6 +364,10 @@ async function guardarGuiaDirecto(routeData) {
 
     const docRef = await db.collection('users').doc(currentUser.uid).collection('maps').add(ruta);
     showToast('Guía guardada');
+
+    // Enriquecer en background (no esperar)
+    enrichGuia(docRef.id, r);
+
     return docRef.id;
   } catch (e) {
     console.error('Error guardando guía:', e);
@@ -375,6 +380,40 @@ async function guardarGuiaAuto(routeData) {
   const id = await guardarGuiaDirecto(routeData);
   if (id) showToast('Tu ruta se ha guardado automáticamente');
 }
+
+// ═══ ENRIQUECIMIENTO (Pasada 2 — Haiku en background) ═══
+
+async function enrichGuia(docId, routeData) {
+  if (!currentUser || !docId || !routeData) return;
+  try {
+    const res = await fetch(window.SALMA_API + '/enrich', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ route: routeData })
+    });
+    const data = await res.json();
+
+    if (data.route && data.route.stops) {
+      await db.collection('users').doc(currentUser.uid)
+        .collection('maps').doc(docId).update({
+          itinerarioIA: JSON.stringify(data.route),
+          enriched: true,
+          enrichedAt: new Date().toISOString()
+        });
+
+      // Si el usuario sigue viendo esta guía, actualizar la vista
+      if (typeof salma !== 'undefined' && salma.currentRouteId === docId) {
+        salma.currentRoute = data.route;
+        guideRenderer.render(data.route, { saved: true });
+      }
+    }
+  } catch (e) {
+    console.warn('Enriquecimiento fallido:', e);
+    // No pasa nada — la guía ligera funciona perfectamente
+  }
+}
+
+window.enrichGuia = enrichGuia;
 
 // ═══ INPUT — textarea auto-resize + enviar ═══
 

@@ -243,11 +243,17 @@ const salma = {
 
     this._initChat();
     const title = routeData.title || routeData.name || 'Tu ruta';
-    this._addSalmaBubble('Aquí tienes tu guía de ' + title + '. Pregúntame lo que necesites o pídeme cambios.');
+    this._addSalmaBubble('Aquí tienes tu guía de ' + title + '. Cuando quieras otra, dime destino y días.');
     guideRenderer.render(routeData, { saved: true });
     this._scrollToBottom();
 
     showState('chat');
+
+    // Si no está enriquecida, enriquecer ahora en background
+    const isEnriched = docData && docData.enriched === true;
+    if (!isEnriched && docId && typeof enrichGuia === 'function') {
+      enrichGuia(docId, routeData);
+    }
   },
 
   // ═══ GUARDAR ═══

@@ -539,6 +539,98 @@ export default {
       }
     }
 
+    // ─── ENDPOINT /enrich (Pasada 2 — Haiku rellena campos) ───
+    if (request.method === 'POST' && url.pathname === '/enrich') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      let enrichBody;
+      try { enrichBody = await request.json(); } catch (e) {
+        return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: corsH });
+      }
+
+      const route = enrichBody.route;
+      if (!route || !route.stops || !route.stops.length) {
+        return new Response(JSON.stringify({ error: 'No route' }), { status: 400, headers: corsH });
+      }
+
+      const apiKey = env.ANTHROPIC_API_KEY;
+      if (!apiKey) {
+        return new Response(JSON.stringify({ error: 'No API key' }), { status: 500, headers: corsH });
+      }
+
+      const enrichPrompt = `Aquí tienes una ruta de viaje con paradas ligeras. Tu trabajo: para CADA parada, añade estos campos que faltan:
+
+- context: 2-3 frases de contexto histórico/cultural (solo para monumentos, templos, patrimonio, naturaleza relevante; omitir en restaurantes y alojamientos)
+- food_nearby: nombre REAL de dónde comer cerca, qué pedir, precio aproximado, minutos andando. Si no conoces uno real cerca, déjalo vacío.
+- local_secret: un dato local accionable que pocos turistas conocen. Si no tienes uno real, déjalo vacío.
+- alternative: plan B si está cerrado o no convence (1 frase)
+
+Reglas:
+- NO cambies name, headline, type, day, lat, lng, day_title, narrative
+- NO inventes restaurantes ni datos — si no estás segura, deja el campo vacío
+- Mantén tu tono: directa, con datos, sin paja
+- Devuelve SOLO el JSON completo de la ruta con stops actualizados, nada más. Sin markdown, sin backticks.
+
+RUTA:
+${JSON.stringify(route)}`;
+
+      try {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 8000,
+            system: BLOQUE_IDENTIDAD + '\n' + BLOQUE_PERSONALIDAD + '\n' + BLOQUE_ANTIPAJA,
+            messages: [{ role: 'user', content: enrichPrompt }],
+          }),
+        });
+
+        if (!res.ok) {
+          return new Response(JSON.stringify({ error: 'Anthropic error', status: res.status }), { status: 500, headers: corsH });
+        }
+
+        const data = await res.json();
+        const text = data.content?.[0]?.text || '';
+
+        let enrichedRoute = null;
+        try {
+          const clean = text.replace(/```json|```/g, '').trim();
+          enrichedRoute = JSON.parse(clean);
+        } catch (e) {
+          // Intentar extraer JSON del texto
+          const jsonMatch = text.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            try { enrichedRoute = JSON.parse(jsonMatch[0]); } catch (e2) {}
+          }
+        }
+
+        if (enrichedRoute && enrichedRoute.stops) {
+          // Preservar campos verificados de Google (coords, fotos, horarios)
+          enrichedRoute.stops = enrichedRoute.stops.map((s, i) => {
+            const original = route.stops[i];
+            if (!original) return s;
+            return {
+              ...s,
+              lat: original.lat || s.lat,
+              lng: original.lng || s.lng,
+              photo_ref: original.photo_ref || s.photo_ref || '',
+              verified_address: original.verified_address || s.verified_address || '',
+              practical: original.practical || s.practical || '',
+            };
+          });
+          return new Response(JSON.stringify({ route: enrichedRoute }), { headers: corsH });
+        }
+
+        return new Response(JSON.stringify({ error: 'Could not parse enriched route' }), { status: 500, headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── POST / ───
     if (request.method !== 'POST') {
       return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
