@@ -704,3 +704,16 @@ nav.scrolled { background:var(--negro); }
   #salma-btn { bottom:16px; right:16px; width:54px; height:54px; }
   #salma-messages { max-height:30vh; min-height:60px; }
 }
+
+/* ── Panel Salma bottom sheet ──────────────────────────────── */
+.salma-panel-compact { max-height: 52vh; }
+.salma-panel-expanded { max-height: 75vh; }
+.salma-panel-snap { transition: max-height 300ms ease-out; }
+.salma-drag-handle {
+  width: 40px;
+  height: 4px;
+  background: rgba(255,255,255,.3);
+  border-radius: 2px;
+  margin: 8px auto 4px;
+  cursor: grab;
+}

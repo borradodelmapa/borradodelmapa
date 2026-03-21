@@ -380,6 +380,8 @@
   function abrirSalmaPanel() {
     var panel = document.getElementById('mapa-salma-panel');
     if (!panel) return;
+    panel.classList.remove('salma-panel-expanded');
+    panel.classList.add('salma-panel-compact');
     panel.style.display = 'flex';
     var msgs = document.getElementById('mapa-salma-msgs');
     if (msgs && !msgs.children.length) {
@@ -394,6 +396,81 @@
     if (panel) panel.style.display = 'none';
   }
   window.cerrarSalmaPanel = _cerrarSalmaPanel;
+
+  // ── DRAG BOTTOM SHEET ──────────────────────────────────────
+  (function initSalmaDrag() {
+    var panel, startY, startMaxH, dragging = false;
+    var COMPACT_VH = 52, EXPANDED_VH = 75, CLOSE_THRESHOLD = 80;
+
+    function vhToPx(vh) { return window.innerHeight * vh / 100; }
+
+    function isExpanded() {
+      return panel && panel.classList.contains('salma-panel-expanded');
+    }
+
+    function onStart(e) {
+      panel = document.getElementById('mapa-salma-panel');
+      if (!panel || panel.style.display === 'none') return;
+      dragging = true;
+      startY = e.touches ? e.touches[0].clientY : e.clientY;
+      startMaxH = isExpanded() ? vhToPx(EXPANDED_VH) : vhToPx(COMPACT_VH);
+      panel.classList.remove('salma-panel-snap');
+      e.preventDefault();
+    }
+
+    function onMove(e) {
+      if (!dragging || !panel) return;
+      var currentY = e.touches ? e.touches[0].clientY : e.clientY;
+      var delta = startY - currentY; // positivo = arrastra arriba
+      var newH = Math.max(0, Math.min(vhToPx(EXPANDED_VH), startMaxH + delta));
+      panel.style.maxHeight = newH + 'px';
+      e.preventDefault();
+    }
+
+    function onEnd(e) {
+      if (!dragging || !panel) return;
+      dragging = false;
+      var currentY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+      var delta = startY - currentY;
+      var compactPx = vhToPx(COMPACT_VH);
+      var expandedPx = vhToPx(EXPANDED_VH);
+      var travel = expandedPx - compactPx;
+
+      panel.classList.add('salma-panel-snap');
+      panel.style.maxHeight = '';
+
+      if (isExpanded()) {
+        // Desde expandido: drag abajo > 40% del recorrido → compactar
+        if (delta < -(travel * 0.4)) {
+          panel.classList.remove('salma-panel-expanded');
+          panel.classList.add('salma-panel-compact');
+        }
+      } else {
+        // Desde compacto: drag arriba > 40% del recorrido → expandir
+        if (delta > travel * 0.4) {
+          panel.classList.remove('salma-panel-compact');
+          panel.classList.add('salma-panel-expanded');
+        // Desde compacto: drag abajo > 80px → cerrar
+        } else if (delta < -CLOSE_THRESHOLD) {
+          _cerrarSalmaPanel();
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var handle = document.getElementById('salma-drag-handle');
+      var header = document.getElementById('salma-panel-header');
+      [handle, header].forEach(function(el) {
+        if (!el) return;
+        el.addEventListener('touchstart', onStart, { passive: false });
+        el.addEventListener('mousedown', onStart);
+      });
+      document.addEventListener('touchmove', onMove, { passive: false });
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('touchend', onEnd);
+      document.addEventListener('mouseup', onEnd);
+    });
+  })();
 
   function enviarMensajeSalma() {
     var input = document.getElementById('mapa-salma-input');

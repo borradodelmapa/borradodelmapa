@@ -410,8 +410,9 @@ window.openModal=openModal;window.closeModal=closeModal;window.switchModal=switc
   </div>
 
   <!-- Panel Salma -->
-  <div id="mapa-salma-panel" style="display:none;position:absolute;bottom:calc(96px + max(0px,env(safe-area-inset-bottom)));left:12px;right:12px;z-index:20;flex-direction:column;max-height:52vh;background:rgba(5,5,5,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(212,160,23,.25);border-radius:20px;overflow:hidden;box-shadow:0 -4px 32px rgba(0,0,0,.4);">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;">
+  <div id="mapa-salma-panel" class="salma-panel-compact salma-panel-snap" style="display:none;position:absolute;bottom:calc(96px + max(0px,env(safe-area-inset-bottom)));left:12px;right:12px;z-index:20;flex-direction:column;background:rgba(5,5,5,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(212,160,23,.25);border-radius:20px;overflow:hidden;box-shadow:0 -4px 32px rgba(0,0,0,.4);">
+    <div id="salma-drag-handle" class="salma-drag-handle"></div>
+    <div id="salma-panel-header" style="display:flex;align-items:center;justify-content:space-between;padding:4px 16px 10px;cursor:grab;">
       <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#d4a017;letter-spacing:.15em;">💬 SALMA</div>
       <button onclick="cerrarSalmaPanel()" style="background:none;border:none;color:rgba(245,240,232,.4);font-size:18px;cursor:pointer;line-height:1;padding:0 4px;">×</button>
     </div>
