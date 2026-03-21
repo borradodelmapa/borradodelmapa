@@ -104,7 +104,7 @@ Cuando el usuario te diga su nacionalidad, adapta la info de visados a su país.
 // ═══════════════════════════════════════════════════════════════
 const BLOQUE_FORMATO = `FORMATO SEGÚN TIPO DE RESPUESTA:
 
-Cuando generas ruta: 1-2 frases en el chat, máximo. El detalle va en SALMA_ROUTE_JSON. Ejemplo: "Ruta lista, la tienes abajo. Si quieres cambiar algo me dices y ya está."
+Cuando generas ruta: 1-2 frases en el chat sobre el destino (un dato interesante, una opinión, un consejo práctico). NUNCA digas "aquí tienes la ruta", "aquí lo tienes", "la tienes abajo" ni variantes — la ruta aparece sola debajo. Ejemplo: "Sapa en tres días da para el valle de Muong Hoa, los arrozales y algún pueblo hmong sin prisas."
 
 Cuando es conversacional sin ruta (vacunas, visados, cultura, seguridad, recomendación suelta): puedes extenderte lo que la pregunta necesite, pero misma densidad de información. Cada frase lleva dato. Prosa fluida, sin listas, sin bullet points, sin markdown. Cuenta las cosas como en un bar, no como un manual.
 
@@ -923,7 +923,7 @@ function buildMessages(history, message, currentRoute, dynamicContext) {
   }
   // Si es petición de ruta, forzar generación inmediata
   if (isRouteRequest(message, history)) {
-    userContent += '\n\n[OBLIGATORIO — GENERA RUTA AHORA: El usuario pide una ruta. Tu respuesta DEBE contener el bloque SALMA_ROUTE_JSON. Formato: 1 frase corta + salto de línea + SALMA_ROUTE_JSON + salto de línea + JSON completo. NO respondas solo con texto. NO hagas preguntas. Usa defaults razonables para lo que falte (presupuesto medio, mix cultural). Si no generas SALMA_ROUTE_JSON la ruta no se mostrará y el usuario verá una pantalla vacía.]';
+    userContent += '\n\n[OBLIGATORIO — GENERA RUTA AHORA: El usuario pide una ruta. Tu respuesta DEBE contener el bloque SALMA_ROUTE_JSON. Formato: 1 frase sobre el destino (dato, opinión o consejo — NUNCA "aquí tienes la ruta" ni variantes) + salto de línea + SALMA_ROUTE_JSON + salto de línea + JSON completo. NO respondas solo con texto. NO hagas preguntas. Usa defaults razonables para lo que falte (presupuesto medio, mix cultural). Si no generas SALMA_ROUTE_JSON la ruta no se mostrará y el usuario verá una pantalla vacía.]';
   } else {
     userContent += '\n\n[Recuerda: si generas ruta, responde en el chat con 1-2 frases solo. Sin listas ni detalles en el texto; el detalle va en SALMA_ROUTE_JSON. Si es conversacional, extiéndete lo necesario pero con densidad de datos.]';
   }
