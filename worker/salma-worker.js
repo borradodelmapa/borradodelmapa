@@ -921,7 +921,12 @@ function buildMessages(history, message, currentRoute, dynamicContext) {
   if (currentRoute && currentRoute.stops && currentRoute.stops.length > 0) {
     userContent += '\n\n[Contexto: el usuario tiene una ruta actual en el mapa con ' + currentRoute.stops.length + ' paradas. Si pide cambios (añadir, quitar, modificar), devuelve la ruta completa actualizada en SALMA_ROUTE_JSON.]';
   }
-  userContent += '\n\n[Recuerda: si generas ruta, responde en el chat con 1-2 frases solo. Sin listas ni detalles en el texto; el detalle va en SALMA_ROUTE_JSON. Si es conversacional, extiéndete lo necesario pero con densidad de datos.]';
+  // Si es petición de ruta, forzar generación inmediata
+  if (isRouteRequest(message, history)) {
+    userContent += '\n\n[INSTRUCCIÓN OBLIGATORIA: El usuario está pidiendo una RUTA. DEBES generar SALMA_ROUTE_JSON con paradas organizadas por días. NO respondas solo con texto conversacional. NO preguntes más datos — usa defaults razonables (presupuesto medio, mix cultural/experiencial). Responde con 1-2 frases breves + SALMA_ROUTE_JSON obligatorio.]';
+  } else {
+    userContent += '\n\n[Recuerda: si generas ruta, responde en el chat con 1-2 frases solo. Sin listas ni detalles en el texto; el detalle va en SALMA_ROUTE_JSON. Si es conversacional, extiéndete lo necesario pero con densidad de datos.]';
+  }
 
   // Si hay historial y el último mensaje fue de Salma preguntando, reforzar que GENERE
   if (Array.isArray(history) && history.length >= 2) {
