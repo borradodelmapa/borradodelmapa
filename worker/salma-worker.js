@@ -1218,8 +1218,9 @@ export default {
           const reply = replyWithoutRouteBlock(fullText);
 
           if (route) {
-            // Keepalive inmediato + cada 3s mientras se verifican las paradas
-            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
+            // Enviar ruta borrador ANTES de verificar — el frontend la muestra inmediatamente
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ draft: true, reply, route })}\n\n`)); } catch (_) {}
+            // Keepalive cada 3s mientras se verifican las paradas
             const keepalive = setInterval(async () => {
               try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
             }, 3000);

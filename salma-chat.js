@@ -327,7 +327,7 @@ function salmaRemoveStreamBubble() {
 
 // Lee SSE del worker con streaming y va actualizando la burbuja
 // Devuelve una Promise con { reply, route }
-function salmaFetchStream(bodyObj) {
+function salmaFetchStream(bodyObj, onDraft) {
   bodyObj.stream = true;
   return new Promise(function(resolve, reject) {
     fetch(window.SALMA_API, {
@@ -351,6 +351,7 @@ function salmaFetchStream(bodyObj) {
 
       var _resolved = false;
       var _textDone = false;
+      var _draftSent = false;
       function _processLines() {
         var lines = buffer.split('\n');
         buffer = lines.pop() || '';
@@ -365,17 +366,24 @@ function salmaFetchStream(bodyObj) {
               salmaRemoveStreamBubble();
               salmaRemoveLoading();
               _resolved = true;
-              // Si ya mostramos el texto en keepalive, no duplicar — solo pasar _replyShown para que el caller no lo añada otra vez
-              resolve({ reply: evt.reply || fullText, route: evt.route || null, _replyShown: _textDone });
+              resolve({ reply: evt.reply || fullText, route: evt.route || null, _replyShown: _textDone, _hadDraft: _draftSent });
               return;
             }
-            if (evt.k && !_textDone) {
-              // Keepalive — el texto ya terminó, estamos verificando paradas
+            if (evt.draft && !_draftSent) {
+              // Ruta borrador — mostrar acordeón inmediatamente
+              _draftSent = true;
               _textDone = true;
-              // Convertir burbuja streaming en definitiva (quitar id para que no se borre)
               var streamMsg = document.getElementById('salma-stream-msg');
               if (streamMsg) streamMsg.removeAttribute('id');
-              // Mostrar loading con frases de ruta debajo
+              if (typeof onDraft === 'function') {
+                onDraft({ reply: evt.reply || fullText, route: evt.route || null });
+              }
+            }
+            if (evt.k && !_textDone) {
+              // Keepalive sin draft — texto terminó, verificando paradas
+              _textDone = true;
+              var streamMsg2 = document.getElementById('salma-stream-msg');
+              if (streamMsg2) streamMsg2.removeAttribute('id');
               salmaAddDialog('', 'loading', true);
             }
             if (evt.t) {
@@ -494,7 +502,8 @@ function salmaMergeRoute(existing, incoming) {
 }
 
 // ===== RENDERIZAR RUTA A PANTALLA COMPLETA =====
-function salmaRenderRoute(routeData) {
+function salmaRenderRoute(routeData, options) {
+  var skipMap = options && options.skipMap;
   var result = document.getElementById('salma-route-result');
   if (!result || !routeData || !routeData.stops) return;
 
@@ -687,8 +696,19 @@ function salmaRenderRoute(routeData) {
     '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--dorado);letter-spacing:.14em;margin-bottom:16px;">' + (routeData.duration_days || 0) + ' DÍAS · ' + escapeHTML((routeData.country || '').toUpperCase()) + budget + ' · ' + pois.length + ' PARADAS</div>' +
     (routeData.summary ? '<div style="font-size:16px;color:rgba(245,240,232,.8);line-height:1.7;margin-bottom:20px;">' + escapeHTML(routeData.summary) + '</div>' : '') +
     tagsHTML +
-    // Mapa Google Maps embebido (clicable → abre mapa completo)
-    (hasMapData ? '<div id="salma-route-map-wrap" style="position:relative;height:260px;width:100%;border-radius:14px;margin-bottom:24px;border:1px solid rgba(212,160,23,.2);overflow:hidden;"><div id="salma-route-map" style="height:100%;width:100%;"></div></div>' : '') +
+    // Mapa Google Maps embebido o placeholder mientras se verifica
+    (skipMap ?
+      '<div id="salma-route-map-wrap" style="position:relative;height:260px;width:100%;border-radius:14px;margin-bottom:24px;border:1px solid rgba(212,160,23,.2);overflow:hidden;background:#0d0b09;display:flex;align-items:center;justify-content:center;">' +
+        '<div style="text-align:center;padding:20px;">' +
+          '<div style="display:flex;gap:6px;justify-content:center;margin-bottom:12px;">' +
+            '<div style="width:8px;height:8px;background:#d4a017;border-radius:50%;animation:salmaDot 1.2s infinite;"></div>' +
+            '<div style="width:8px;height:8px;background:#d4a017;border-radius:50%;animation:salmaDot 1.2s infinite .2s;"></div>' +
+            '<div style="width:8px;height:8px;background:#d4a017;border-radius:50%;animation:salmaDot 1.2s infinite .4s;"></div>' +
+          '</div>' +
+          '<div id="salma-map-loading-phrase" style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:#d4a017;letter-spacing:.12em;">Verificando los mejores spots...</div>' +
+        '</div>' +
+      '</div>'
+    : (hasMapData ? '<div id="salma-route-map-wrap" style="position:relative;height:260px;width:100%;border-radius:14px;margin-bottom:24px;border:1px solid rgba(212,160,23,.2);overflow:hidden;"><div id="salma-route-map" style="height:100%;width:100%;"></div></div>' : '')) +
     // Stops (itinerario primero)
     '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--dorado);letter-spacing:.18em;margin-bottom:12px;">ITINERARIO · ' + pois.length + ' EXPERIENCIAS</div>' +
     stopsHTML +
@@ -708,14 +728,33 @@ function salmaRenderRoute(routeData) {
     console.log('  [' + i + '] ' + (s.name || s.headline) + ' → lat:' + s.lat + ' lng:' + s.lng + ' photo_ref:' + (s.photo_ref ? s.photo_ref.slice(0, 30) + '...' : 'NO'));
   });
 
-  // Inicializar mapa Google Maps tras renderizar el DOM
-  if (hasMapData) {
-    setTimeout(function() {
-      var mapPois = pois.filter(function(p) { return p.lat && p.lng && Number(p.lat) && Number(p.lng); });
-      if (mapPois.length && typeof window.salmaInitGoogleMap === 'function') {
-        window.salmaInitGoogleMap('salma-route-map', mapPois, routeData, { nombre: routeData.title || '', destino: routeData.country || '' });
-      }
-    }, 150);
+  if (skipMap) {
+    // Frases contextuales del destino mientras se verifica el mapa
+    var destName = routeData.title || routeData.country || 'tu destino';
+    var mapPhrases = [
+      'Verificando los mejores spots de ' + destName + '...',
+      'Comprobando que los lugares existen de verdad...',
+      'Preparando tu mapa de ' + destName + '...',
+      'Buscando coordenadas exactas...',
+      'Añadiendo horarios y datos reales...',
+      'Casi listo, ultimando detalles...'
+    ];
+    var phraseIdx = 0;
+    window._salmaMapLoadingInterval = setInterval(function() {
+      phraseIdx = (phraseIdx + 1) % mapPhrases.length;
+      var el = document.getElementById('salma-map-loading-phrase');
+      if (el) el.textContent = mapPhrases[phraseIdx];
+    }, 2500);
+  } else {
+    // Inicializar mapa Google Maps tras renderizar el DOM
+    if (hasMapData) {
+      setTimeout(function() {
+        var mapPois = pois.filter(function(p) { return p.lat && p.lng && Number(p.lat) && Number(p.lng); });
+        if (mapPois.length && typeof window.salmaInitGoogleMap === 'function') {
+          window.salmaInitGoogleMap('salma-route-map', mapPois, routeData, { nombre: routeData.title || '', destino: routeData.country || '' });
+        }
+      }, 150);
+    }
   }
   // Imágenes reales Wikipedia (async, no bloquea el render)
   var _routeGeo = (routeData.country || routeData.region || '').toString().trim();
@@ -811,6 +850,111 @@ function salmaFetchWikipediaImages(pois, prefix, countryOrRegion) {
   });
 }
 
+// ===== CABECERA INSTANTÁNEA =====
+
+// Mapa de banderas por país
+var COUNTRY_FLAGS = {
+  'portugal':'🇵🇹','españa':'🇪🇸','spain':'🇪🇸','francia':'🇫🇷','france':'🇫🇷','italia':'🇮🇹','italy':'🇮🇹',
+  'alemania':'🇩🇪','germany':'🇩🇪','reino unido':'🇬🇧','uk':'🇬🇧','grecia':'🇬🇷','greece':'🇬🇷',
+  'tailandia':'🇹🇭','thailand':'🇹🇭','japón':'🇯🇵','japan':'🇯🇵','marruecos':'🇲🇦','morocco':'🇲🇦',
+  'méxico':'🇲🇽','mexico':'🇲🇽','colombia':'🇨🇴','perú':'🇵🇪','peru':'🇵🇪','argentina':'🇦🇷',
+  'chile':'🇨🇱','brasil':'🇧🇷','brazil':'🇧🇷','india':'🇮🇳','turquía':'🇹🇷','turkey':'🇹🇷',
+  'egipto':'🇪🇬','egypt':'🇪🇬','croacia':'🇭🇷','croatia':'🇭🇷','indonesia':'🇮🇩','vietnam':'🇻🇳',
+  'camboya':'🇰🇭','cambodia':'🇰🇭','sri lanka':'🇱🇰','nepal':'🇳🇵','irlanda':'🇮🇪','ireland':'🇮🇪',
+  'islandia':'🇮🇸','iceland':'🇮🇸','noruega':'🇳🇴','norway':'🇳🇴','suecia':'🇸🇪','sweden':'🇸🇪',
+  'dinamarca':'🇩🇰','denmark':'🇩🇰','holanda':'🇳🇱','netherlands':'🇳🇱','suiza':'🇨🇭','switzerland':'🇨🇭',
+  'austria':'🇦🇹','república checa':'🇨🇿','czech':'🇨🇿','hungría':'🇭🇺','hungary':'🇭🇺',
+  'polonia':'🇵🇱','poland':'🇵🇱','cuba':'🇨🇺','costa rica':'🇨🇷','panamá':'🇵🇦','panama':'🇵🇦',
+  'filipinas':'🇵🇭','philippines':'🇵🇭','australia':'🇦🇺','nueva zelanda':'🇳🇿','new zealand':'🇳🇿'
+};
+
+function salmaShowInstantHeader(msg) {
+  var routeResult = document.getElementById('salma-route-result');
+  if (!routeResult) return;
+
+  // Extraer duración
+  var durMatch = msg.match(/(\d+)\s*d[ií]as?/i) || msg.match(/fin\s*de\s*semana/i);
+  var duracion = durMatch ? (durMatch[1] ? durMatch[1] + ' días' : 'Fin de semana') : '';
+
+  // Extraer país — buscar en el mapa de flags
+  var flag = '';
+  var pais = '';
+  var msgLow = msg.toLowerCase();
+  for (var key in COUNTRY_FLAGS) {
+    if (msgLow.indexOf(key) !== -1) {
+      flag = COUNTRY_FLAGS[key];
+      pais = key.charAt(0).toUpperCase() + key.slice(1);
+      break;
+    }
+  }
+
+  // Extraer destino — quitar palabras de ruta/viaje/duración/país
+  var destino = msg
+    .replace(/ruta|itinerario|qué ver|que ver|visitar|días? en|dias? en|fin de semana|semana en|lugares en|qué hacer|que hacer|plan para|viaje a|viaje por|llevo.*días|me quedo|escapada|excursion|excursión|por favor|dame|hazme|genera|crea|quiero ir a|preparas?|una|me|las?|los?|del?|por|con|en|y|\d+\s*d[ií]as?/gi, ' ')
+    .replace(new RegExp(pais, 'gi'), '')
+    .replace(/\s+/g, ' ').trim();
+
+  // Extraer tema
+  var temas = [];
+  if (/playa|costa|surf|olas|calas?|bañ/i.test(msg)) temas.push('Playas');
+  if (/montaña|senderismo|trekking|hiking|naturaleza/i.test(msg)) temas.push('Naturaleza');
+  if (/gastronomía|comida|tapas|restaurante|comer/i.test(msg)) temas.push('Gastronomía');
+  if (/cultura|museo|templo|iglesia|historia|monument/i.test(msg)) temas.push('Cultura');
+  if (/aventura|deportes?|activ/i.test(msg)) temas.push('Aventura');
+  if (/pueblo|rural|interior/i.test(msg)) temas.push('Pueblos');
+  if (/fiesta|noche|nightlife/i.test(msg)) temas.push('Vida nocturna');
+
+  // Construir cabecera
+  var parts = [];
+  if (flag) parts.push(flag);
+  if (destino) parts.push(destino);
+  if (pais && !destino) parts.push(pais);
+  if (duracion) parts.push(duracion);
+  if (temas.length) parts.push(temas.join(' · '));
+
+  if (parts.length === 0) return;
+
+  routeResult.style.display = 'block';
+  routeResult.innerHTML =
+    '<div id="salma-instant-header" style="padding:24px 20px;text-align:center;">' +
+      '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:#d4a017;letter-spacing:.15em;margin-bottom:8px;">PREPARANDO TU RUTA</div>' +
+      '<div style="font-size:26px;font-weight:700;color:#f5f0e8;line-height:1.3;">' + escapeHTML(parts.join(' · ')) + '</div>' +
+    '</div>';
+}
+
+// Reemplaza el placeholder del mapa con el mapa real usando la ruta verificada
+function salmaLoadVerifiedMap(routeData) {
+  // Limpiar intervalo de frases
+  if (window._salmaMapLoadingInterval) {
+    clearInterval(window._salmaMapLoadingInterval);
+    window._salmaMapLoadingInterval = null;
+  }
+  // Actualizar ruta guardada con datos verificados
+  window._salmaLastRoute = routeData;
+
+  var wrap = document.getElementById('salma-route-map-wrap');
+  if (!wrap) return;
+
+  var pois = (routeData.stops || []).filter(function(s) {
+    return s.lat && s.lng && Number(s.lat) && Number(s.lng);
+  });
+  if (pois.length === 0) {
+    wrap.remove();
+    return;
+  }
+  // Reemplazar placeholder con mapa real
+  wrap.style.background = '';
+  wrap.style.display = '';
+  wrap.style.alignItems = '';
+  wrap.style.justifyContent = '';
+  wrap.innerHTML = '<div id="salma-route-map" style="height:100%;width:100%;"></div>';
+  setTimeout(function() {
+    if (typeof window.salmaInitGoogleMap === 'function') {
+      window.salmaInitGoogleMap('salma-route-map', pois, routeData, { nombre: routeData.title || '', destino: routeData.country || '' });
+    }
+  }, 150);
+}
+
 // ===== ENVIAR DESDE EL HERO =====
 
 async function salmaHeroSend() {
@@ -832,13 +976,15 @@ async function salmaHeroSend() {
   var heroBtn = heroInput.nextElementSibling;
   if (heroBtn) { heroBtn.textContent = 'CREANDO RUTA...'; heroBtn.disabled = true; }
 
-  // Mostrar mensaje del usuario + loading
+  // Mostrar cabecera instantánea + mensaje del usuario + loading
+  salmaShowInstantHeader(msg);
   salmaAddDialog(msg, 'user');
   salmaAddDialog('', 'loading', true);
-  
 
   // Reset historial
   salmaHistory = [];
+
+  var _draftRendered = false;
 
   try {
     var data = await salmaFetchStream({
@@ -846,6 +992,16 @@ async function salmaHeroSend() {
       history: [],
       nationality: (typeof currentUser !== 'undefined' && currentUser && currentUser.country) ? currentUser.country : null,
       user_name: (typeof currentUser !== 'undefined' && currentUser && currentUser.name) ? currentUser.name : null
+    }, function onDraft(draft) {
+      // Ruta borrador — mostrar acordeón inmediatamente SIN mapa
+      salmaRemoveLoading();
+      if (draft.route && draft.route.stops && draft.route.stops.length > 0) {
+        _draftRendered = true;
+        salmaRenderRoute(draft.route, { skipMap: true });
+        // Scroll al resultado
+        var rr = document.getElementById('salma-route-result');
+        if (rr) setTimeout(function() { rr.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 200);
+      }
     });
     salmaRemoveLoading();
     if (data._error) console.error('[SALMA WORKER ERROR]', data._error);
@@ -856,13 +1012,20 @@ async function salmaHeroSend() {
       salmaHistory.push({ role: 'assistant', content: data.reply });
 
       if (data.route && data.route.stops && data.route.stops.length > 0) {
-        // Salma generó ruta — NO mostrar input de preguntas
-        var hasAnyCoord = data.route.stops.some(function(s) { var a = s.lat, b = s.lng; return a != null && b != null && Number(a) && Number(b); });
-        if (!hasAnyCoord) salmaAddDialog('Buscando coordenadas en el mapa…', 'loading');
-        salmaEnrichRouteWithCoords(data.route).then(function(enriched) {
-          salmaRemoveLoading();
-          salmaRenderRoute(enriched);
-        }).catch(function() { salmaRemoveLoading(); salmaRenderRoute(data.route); });
+        if (_draftRendered) {
+          // Ya mostramos el borrador — ahora cargar el mapa con datos verificados
+          salmaEnrichRouteWithCoords(data.route).then(function(enriched) {
+            salmaLoadVerifiedMap(enriched);
+          }).catch(function() { salmaLoadVerifiedMap(data.route); });
+        } else {
+          // No hubo draft — render completo (fallback)
+          var hasAnyCoord = data.route.stops.some(function(s) { var a = s.lat, b = s.lng; return a != null && b != null && Number(a) && Number(b); });
+          if (!hasAnyCoord) salmaAddDialog('Buscando coordenadas en el mapa…', 'loading');
+          salmaEnrichRouteWithCoords(data.route).then(function(enriched) {
+            salmaRemoveLoading();
+            salmaRenderRoute(enriched);
+          }).catch(function() { salmaRemoveLoading(); salmaRenderRoute(data.route); });
+        }
       } else {
         // Salma pregunta o responde sin ruta — mostrar input para que el usuario responda
         salmaShowInput(data.reply);
@@ -905,7 +1068,19 @@ async function salmaInlineReply() {
     if (window._salmaLastRoute && window._salmaLastRoute.stops && window._salmaLastRoute.stops.length > 0) {
       body.current_route = window._salmaLastRoute;
     }
-    var data = await salmaFetchStream(body);
+    var _inlineDraftRendered = false;
+    var data = await salmaFetchStream(body, function onDraft(draft) {
+      if (draft.route && draft.route.stops && draft.route.stops.length > 0) {
+        _inlineDraftRendered = true;
+        salmaRemoveLoading();
+        var routeResult = document.getElementById('salma-route-result');
+        if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
+        var baseRoute = window._salmaLastRoute ? salmaMergeRoute(window._salmaLastRoute, draft.route) : draft.route;
+        salmaRenderRoute(baseRoute, { skipMap: true });
+        salmaHideInput();
+        if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 200);
+      }
+    });
     salmaRemoveLoading();
 
     if (data.reply) {
@@ -915,22 +1090,31 @@ async function salmaInlineReply() {
       if (salmaHistory.length > 20) salmaHistory = salmaHistory.slice(-20);
 
       if (data.route && data.route.stops && data.route.stops.length > 0) {
-        var routeResult = document.getElementById('salma-route-result');
-        if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
-        var baseRoute = window._salmaLastRoute ? salmaMergeRoute(window._salmaLastRoute, data.route) : data.route;
-        var hasAnyCoord = baseRoute.stops && baseRoute.stops.some(function(s) { var a = s.lat, b = s.lng; return a != null && b != null && Number(a) && Number(b); });
-        if (!hasAnyCoord) salmaAddDialog('Buscando coordenadas en el mapa…', 'loading');
-        salmaEnrichRouteWithCoords(baseRoute).then(function(enriched) {
-          salmaRemoveLoading();
-          salmaRenderRoute(enriched);
-          salmaHideInput();
-          if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 300);
-        }).catch(function() {
-          salmaRemoveLoading();
-          salmaRenderRoute(baseRoute);
-          salmaHideInput();
-          if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 300);
-        });
+        if (_inlineDraftRendered) {
+          // Ya mostramos borrador — cargar mapa verificado
+          var baseRoute = window._salmaLastRoute ? salmaMergeRoute(window._salmaLastRoute, data.route) : data.route;
+          salmaEnrichRouteWithCoords(baseRoute).then(function(enriched) {
+            salmaLoadVerifiedMap(enriched);
+          }).catch(function() { salmaLoadVerifiedMap(baseRoute); });
+        } else {
+          // Sin draft — render completo (fallback)
+          var routeResult = document.getElementById('salma-route-result');
+          if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
+          var baseRoute2 = window._salmaLastRoute ? salmaMergeRoute(window._salmaLastRoute, data.route) : data.route;
+          var hasAnyCoord = baseRoute2.stops && baseRoute2.stops.some(function(s) { var a = s.lat, b = s.lng; return a != null && b != null && Number(a) && Number(b); });
+          if (!hasAnyCoord) salmaAddDialog('Buscando coordenadas en el mapa…', 'loading');
+          salmaEnrichRouteWithCoords(baseRoute2).then(function(enriched) {
+            salmaRemoveLoading();
+            salmaRenderRoute(enriched);
+            salmaHideInput();
+            if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 300);
+          }).catch(function() {
+            salmaRemoveLoading();
+            salmaRenderRoute(baseRoute2);
+            salmaHideInput();
+            if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 300);
+          });
+        }
       } else {
         // Solo geocodificar si Salma indica que no pudo ubicar — si es conversacional, mostrar input
         var replyLowerInline = (data.reply || '').toLowerCase();
