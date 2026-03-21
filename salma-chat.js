@@ -994,13 +994,19 @@ async function salmaHeroSend() {
       user_name: (typeof currentUser !== 'undefined' && currentUser && currentUser.name) ? currentUser.name : null
     }, function onDraft(draft) {
       // Ruta borrador — mostrar acordeón inmediatamente SIN mapa
-      salmaRemoveLoading();
-      if (draft.route && draft.route.stops && draft.route.stops.length > 0) {
-        _draftRendered = true;
-        salmaRenderRoute(draft.route, { skipMap: true });
-        // Scroll directo al resultado — sin delay, el DOM ya está listo
-        var rr = document.getElementById('salma-route-result');
-        if (rr) rr.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      try {
+        console.log('[DRAFT] Recibido, stops:', draft.route ? draft.route.stops.length : 0);
+        salmaRemoveLoading();
+        if (draft.route && draft.route.stops && draft.route.stops.length > 0) {
+          _draftRendered = true;
+          console.log('[DRAFT] Llamando salmaRenderRoute con skipMap');
+          salmaRenderRoute(draft.route, { skipMap: true });
+          var rr = document.getElementById('salma-route-result');
+          console.log('[DRAFT] route-result display:', rr ? rr.style.display : 'NO EXISTE', 'innerHTML length:', rr ? rr.innerHTML.length : 0);
+          if (rr) rr.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } catch (e) {
+        console.error('[DRAFT] ERROR en onDraft:', e);
       }
     });
     salmaRemoveLoading();
