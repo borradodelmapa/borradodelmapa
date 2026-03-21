@@ -91,8 +91,7 @@ window.openModal=openModal;window.closeModal=closeModal;window.switchModal=switc
   <div class="nav-logo-wordmark">borrado<span>del</span>mapa</div>
   <span class="nav-claim">No estás perdido si sabes dónde vas</span>
 </div>
-  <div class="nav-links"  id="nav-links-guest" style="display:flex;">
-    <button class="nav-cta" onclick="openModal('login')">Acceso a tus rutas</button>
+  <div class="nav-links"  id="nav-links-guest" style="display:none;">
   </div>
   <div class="nav-user" id="nav-links-user" style="display:none;"></div>
 </nav>
@@ -104,14 +103,16 @@ window.openModal=openModal;window.closeModal=closeModal;window.switchModal=switc
     <div id="hero-map"></div>
     <div class="hero-content" style="position:relative;z-index:2;text-align:center;margin:0 auto;">
       <div class="hero-label">Salma · Tu copiloto de viaje con IA</div>
-      <h1 class="hero-title"><em>Déjame a mí.</em></h1>
-      
-      <p class="hero-sub" style="margin-left:auto;margin-right:auto;">Una IA viajera que conoce los caminos. Planifica tu ruta, te acompaña en el viaje y guarda todo lo que descubres.</p>
+      <h1 class="hero-title"><em>Viaja sin pensar.</em></h1>
+
+      <p class="hero-sub" style="margin-left:auto;margin-right:auto;">Planifica tu ruta, la ajusta sobre la marcha y te ayuda a tomar decisiones en cada momento.</p>
       
       <!-- SALMA HERO INPUT -->
       <div id="salma-hero-box" style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;max-width:100%;margin-left:auto;margin-right:auto;">
         <textarea id="salma-hero-input" placeholder="Diseñame una ruta de 5 días por la provincia de Málaga" autocomplete="off" rows="3" style="width:100%;background:#111111;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:16px 20px;color:#f5f0e8;font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color .2s;resize:none;line-height:1.5;" onfocus="this.style.borderColor='#d4a017'" onblur="this.style.borderColor='rgba(212,160,23,.35)'"></textarea>
         <button onclick="salmaHeroSend()" style="width:100%;background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:16px 28px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='#e0b84a'" onmouseout="this.style.background='#d4a017'">PLANEAR →</button>
+        <div style="text-align:center;font-family:'Inter',sans-serif;font-size:14px;color:rgba(245,240,232,.4);margin:4px 0;">o</div>
+        <button onclick="openModal('login')" style="width:100%;background:transparent;color:#d4a017;border:1px solid rgba(212,160,23,.35);border-radius:14px;padding:14px 28px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;cursor:pointer;transition:border-color .2s,color .2s;" onmouseover="this.style.borderColor='#d4a017'" onmouseout="this.style.borderColor='rgba(212,160,23,.35)'">ACCESO A TUS RUTAS</button>
       </div>
 
       <!-- SALMA INLINE — diálogo + resultado (justo después del input) -->
@@ -132,46 +133,6 @@ window.openModal=openModal;window.closeModal=closeModal;window.switchModal=switc
   </div>
 
 
-  <!-- FEATURES -->
-  <section class="features">
-    <div class="sec-header">
-      <div class="sec-label">Tu copiloto en cada fase</div>
-      <h2 class="sec-title">Antes, durante y después del viaje</h2>
-      <p class="sec-sub">Salma no es un buscador de vuelos. Es una compañera de viaje con IA que te acompaña de principio a fin.</p>
-    </div>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-title">Antes · Planifica con IA</div>
-        <div class="feature-desc">Cuéntale tu idea de viaje a Salma. Ella genera la ruta, las paradas, los consejos y todo lo que necesitas. Tú solo decides.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-title">Durante · Tu guía en ruta</div>
-        <div class="feature-desc">¿Día de lluvia? ¿Dónde comer cerca? ¿Alternativa a un sitio cerrado? Salma te acompaña en tiempo real mientras viajas.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-title">Después · Guarda y comparte</div>
-        <div class="feature-desc">Tu ruta queda guardada con fotos, notas y recomendaciones. Compártela con otros viajeros o úsala como base para tu próximo viaje.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-title">Siempre · Lugares con alma</div>
-        <div class="feature-desc">Salma prioriza sitios auténticos, rincones locales y experiencias que no salen en las guías turísticas. Viaja diferente.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTADORES -->
-  <section style="max-width:1180px;margin:0 auto;padding:0 32px 96px;">
-    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:18px;padding:20px 32px;text-align:center;min-width:160px;">
-        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;" id="counter-routes">—</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.16em;margin-top:4px;">RUTAS CREADAS</div>
-      </div>
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:18px;padding:20px 32px;text-align:center;min-width:160px;">
-        <div style="font-family:'Inter Tight',sans-serif;font-size:36px;font-weight:700;color:#fff;" id="counter-countries">—</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dorado);letter-spacing:.16em;margin-top:4px;">PAÍSES</div>
-      </div>
-    </div>
-  </section>
 </div>
 
 <!-- ===== BLOG ===== -->
@@ -534,16 +495,13 @@ const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomai
 if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
 window.SALMA_API="https://salma-api.paco-defoto.workers.dev";
 </script>
-<div style="background:var(--negro);border-top:1px solid #d4a017;padding:32px 32px 40px;text-align:center;position:relative;z-index:100;">
-  <div style="font-family:'Bebas Neue',sans-serif;font-size:30px;font-weight:700;letter-spacing:2px;color:var(--blanco);margin-bottom:10px;line-height:1;white-space:nowrap;">borrado<span style="color:#d4a017;font-weight:700;">del</span>mapa</div>
-  <div style="font-size:18px;color:#ffffff;margin-bottom:18px;">Tu copiloto de viaje con IA. Planifica, viaja, descubre.</div>
-  <div style="display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:18px;">
+<div style="background:var(--negro);border-top:1px solid #d4a017;padding:24px 32px;text-align:center;position:relative;z-index:100;">
+  <div style="display:flex;justify-content:center;gap:28px;flex-wrap:wrap;">
     <a class="footer-link" href="https://instagram.com/borradodelmapa" target="_blank">Instagram</a>
     <a class="footer-link" onclick="showPage('blog')" style="cursor:pointer;">Blog</a>
     <a class="footer-link" onclick="showPage('terminos')" style="cursor:pointer;">Términos</a>
     <a class="footer-link" onclick="showPage('privacidad')" style="cursor:pointer;">Privacidad</a>
   </div>
-  <div style="font-family:'Space Mono',monospace;font-size:10px;color:#ffffff;">© 2025 Borradodelmapa</div>
 </div>
 
 <!-- SALMA JS loaded externally -->
