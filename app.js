@@ -381,6 +381,7 @@ window.doRegister = doRegister;
 function doSocialLogin() {
   showToast("Conectando con Google...");
   auth.signInWithPopup(googleProvider).then(function(result) {
+    closeModal();
     var user = result.user;
     db.collection("users").doc(user.uid).get().then(function(doc) {
       if (!doc.exists) {
