@@ -97,7 +97,7 @@ nav.scrolled { background:var(--negro); }
   min-height:calc(100vh - 20px);
   display:flex; align-items:center; justify-content:center;
   position:relative; overflow:hidden;
-  padding:128px 32px 54px; background:var(--negro);
+  padding:48px 32px 54px; background:var(--negro);
 }
 #hero-map {
   position:absolute; inset:0; z-index:1;
@@ -669,7 +669,7 @@ nav.scrolled { background:var(--negro); }
 @media (max-width:900px) {
   nav { padding:14px 16px 18px; }
   .nav-links { gap:14px; display:none; }
-  .hero { padding:116px 18px 38px; align-items:flex-start; }
+  .hero { padding:44px 18px 38px; align-items:flex-start; }
   .hero-content { padding:28px 22px 16px; max-width:100%; }
   .hero-btns { flex-direction:column; align-items:stretch; }
   .btn-hero { width:100%; min-width:0; }
