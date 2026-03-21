@@ -339,41 +339,50 @@ function salmaFetchStream(bodyObj) {
       var buffer = '';
       var fullText = '';
 
+      var _resolved = false;
+      function _processLines() {
+        var lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+        for (var i = 0; i < lines.length; i++) {
+          var line = lines[i];
+          if (line.indexOf('data: ') !== 0) continue;
+          var jsonStr = line.slice(6).trim();
+          if (!jsonStr) continue;
+          try {
+            var evt = JSON.parse(jsonStr);
+            if (evt.done) {
+              salmaRemoveStreamBubble();
+              _resolved = true;
+              resolve({ reply: evt.reply || fullText, route: evt.route || null });
+              return;
+            }
+            if (evt.t) {
+              fullText += evt.t;
+              if (textEl) textEl.textContent = fullText;
+            }
+          } catch (e) { /* ignorar */ }
+        }
+      }
       function pump() {
         reader.read().then(function(result) {
-          if (result.done) {
-            // Si no llegó evento done, resolver con lo que tenemos
-            salmaRemoveStreamBubble();
-            resolve({ reply: fullText, route: null });
-            return;
+          if (result.value) {
+            buffer += decoder.decode(result.value, { stream: true });
+            _processLines();
           }
-          buffer += decoder.decode(result.value, { stream: true });
-          var lines = buffer.split('\n');
-          buffer = lines.pop() || '';
-
-          for (var i = 0; i < lines.length; i++) {
-            var line = lines[i];
-            if (line.indexOf('data: ') !== 0) continue;
-            var jsonStr = line.slice(6).trim();
-            if (!jsonStr) continue;
-            try {
-              var evt = JSON.parse(jsonStr);
-              if (evt.done) {
-                // Evento final con reply completo y ruta
-                salmaRemoveStreamBubble();
-                resolve({ reply: evt.reply || fullText, route: evt.route || null });
-                return;
-              }
-              if (evt.t) {
-                fullText += evt.t;
-                if (textEl) textEl.textContent = fullText;
-              }
-            } catch (e) { /* ignorar */ }
+          if (_resolved) return;
+          if (result.done) {
+            // Procesar lo que quede en el buffer antes de cerrar
+            if (buffer.trim()) { buffer += '\n'; _processLines(); }
+            if (!_resolved) {
+              salmaRemoveStreamBubble();
+              resolve({ reply: fullText, route: null });
+            }
+            return;
           }
           pump();
         }).catch(function(err) {
           salmaRemoveStreamBubble();
-          reject(err);
+          if (!_resolved) reject(err);
         });
       }
       pump();
