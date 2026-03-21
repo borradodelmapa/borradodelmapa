@@ -170,6 +170,7 @@ Cuándo preguntar vs cuándo generar directamente:
 — Si el usuario da destino + días + tipo de viaje (ej: "Vietnam 15 días mochilero") → genera ya, no preguntes.
 — Si el usuario da solo el destino o una idea vaga (ej: "Japón", "Camino de Santiago") → pregunta en UNA sola frase por los datos clave que te falten: días disponibles, presupuesto aproximado por día y tipo de experiencia (playa, cultura, naturaleza, gastronomía, aventura...). Sugiere tus defaults y ofrece generar ya.
 — Si el usuario dice "dale" o "lo que tú veas" → genera siempre, sin más preguntas.
+— REGLA DE ORO: si tú ya preguntaste y el usuario responde con datos (destino, días, tipo, zona, o cualquier combinación) → GENERA LA RUTA. No hagas más preguntas. Ya tienes lo que necesitas. Si falta algún dato menor, usa defaults razonables. El usuario ya esperó una ronda de preguntas — no le hagas esperar dos.
 
 Cuando generes paradas, usa siempre nombres de lugares concretos y verificables (pueblos, monumentos, parques reales) para que el mapa funcione. Nunca "zona rural" o "pueblo típico" — pon el nombre real.`;
 
@@ -504,8 +505,17 @@ async function incrementDemand(env, countryCode) {
 // BÚSQUEDA EN TIEMPO REAL — Google Places
 // ═══════════════════════════════════════════════════════════════
 
-function isRouteRequest(message) {
-  return /ruta|itinerario|qué ver|que ver|visitar|días en|dias en|fin de semana|semana en|lugares en|qué hacer|que hacer|plan para|viaje a|viaje por|llevo.*días|me quedo|escapada|excursion|excursión/i.test(message);
+function isRouteRequest(message, history) {
+  const directMatch = /ruta|itinerario|qué ver|que ver|visitar|días en|dias en|días|dias|fin de semana|semana en|lugares en|qué hacer|que hacer|plan para|viaje a|viaje por|llevo.*días|me quedo|escapada|excursion|excursión/i.test(message);
+  if (directMatch) return true;
+  // Si el historial contiene una pregunta de Salma y el usuario responde con datos (días, zona...), es probable que sea continuación de petición de ruta
+  if (Array.isArray(history) && history.length >= 2) {
+    const prevMessages = history.map(h => h.content || '').join(' ');
+    const historyHasRouteContext = /ruta|itinerario|días|dias|viaje|visitar|qué ver|que ver|playas|playa/i.test(prevMessages);
+    const userGivesData = /\d+\s*d[ií]as?|\d+\s*noches?|zona|calas?|playa|surf|ciudad|pueblo|costa|norte|sur|este|oeste/i.test(message);
+    if (historyHasRouteContext && userGivesData) return true;
+  }
+  return false;
 }
 
 // Extrae destino y categorías del mensaje para búsquedas específicas
@@ -912,6 +922,14 @@ function buildMessages(history, message, currentRoute, dynamicContext) {
     userContent += '\n\n[Contexto: el usuario tiene una ruta actual en el mapa con ' + currentRoute.stops.length + ' paradas. Si pide cambios (añadir, quitar, modificar), devuelve la ruta completa actualizada en SALMA_ROUTE_JSON.]';
   }
   userContent += '\n\n[Recuerda: si generas ruta, responde en el chat con 1-2 frases solo. Sin listas ni detalles en el texto; el detalle va en SALMA_ROUTE_JSON. Si es conversacional, extiéndete lo necesario pero con densidad de datos.]';
+
+  // Si hay historial y el último mensaje fue de Salma preguntando, reforzar que GENERE
+  if (Array.isArray(history) && history.length >= 2) {
+    const lastAssistant = history.filter(h => h.role === 'assistant').pop();
+    if (lastAssistant && lastAssistant.content && /\?/.test(lastAssistant.content)) {
+      userContent += '\n\n[IMPORTANTE: Ya le hiciste una pregunta al usuario y ahora está respondiendo. Si su respuesta incluye destino, zona, días o tipo de viaje, GENERA LA RUTA YA con SALMA_ROUTE_JSON. No hagas más preguntas. Usa defaults razonables para lo que falte.]';
+    }
+  }
   messages.push({ role: 'user', content: userContent });
 
   return { systemPrompt, messages };
@@ -1128,7 +1146,7 @@ export default {
           },
           body: JSON.stringify({
             model: 'claude-sonnet-4-6',
-            max_tokens: isRouteRequest(message) ? 4000 : 1500,
+            max_tokens: isRouteRequest(message, history) ? 4000 : 1500,
             system: systemPrompt,
             messages: messages,
             stream: true,
@@ -1226,7 +1244,7 @@ export default {
         },
         body: JSON.stringify({
           model: 'claude-sonnet-4-6',
-          max_tokens: isRouteRequest(message) ? 4000 : 1500,
+          max_tokens: isRouteRequest(message, history) ? 4000 : 1500,
           system: systemPrompt,
           messages: messages,
         }),
