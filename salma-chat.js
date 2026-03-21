@@ -985,6 +985,9 @@ async function salmaHeroSend() {
   salmaHistory = [];
 
   var _draftRendered = false;
+  var _draftRoute = null;
+  var _draftTimer = null;
+  var _finalRendered = false;
 
   try {
     var data = await salmaFetchStream({
@@ -993,23 +996,26 @@ async function salmaHeroSend() {
       nationality: (typeof currentUser !== 'undefined' && currentUser && currentUser.country) ? currentUser.country : null,
       user_name: (typeof currentUser !== 'undefined' && currentUser && currentUser.name) ? currentUser.name : null
     }, function onDraft(draft) {
-      // Ruta borrador — mostrar acordeón inmediatamente SIN mapa
-      try {
-        salmaRemoveLoading();
-        if (draft.route && draft.route.stops && draft.route.stops.length > 0) {
-          _draftRendered = true;
-          salmaRenderRoute(draft.route, { skipMap: true });
-          // Scroll forzado al resultado — scrollIntoView puede fallar, usar scrollTop directo
-          var rr = document.getElementById('salma-route-result');
-          if (rr) {
-            var top = rr.getBoundingClientRect().top + window.pageYOffset - 20;
-            window.scrollTo({ top: top, behavior: 'smooth' });
+      // Ruta borrador — guardar para renderizar si hay gap antes de DONE
+      if (draft.route && draft.route.stops && draft.route.stops.length > 0) {
+        _draftRendered = true;
+        _draftRoute = draft.route;
+        // Dar al navegador un frame para pintar antes de que DONE pueda llegar
+        _draftTimer = setTimeout(function() {
+          if (!_finalRendered) {
+            salmaRemoveLoading();
+            salmaRenderRoute(_draftRoute, { skipMap: true });
+            var rr = document.getElementById('salma-route-result');
+            if (rr) {
+              var top = rr.getBoundingClientRect().top + window.pageYOffset - 20;
+              window.scrollTo({ top: top, behavior: 'smooth' });
+            }
           }
-        }
-      } catch (e) {
-        console.error('[DRAFT] ERROR:', e);
+        }, 50);
       }
     });
+    if (_draftTimer) clearTimeout(_draftTimer);
+    _finalRendered = true;
     salmaRemoveLoading();
     if (data._error) console.error('[SALMA WORKER ERROR]', data._error);
 
@@ -1019,20 +1025,19 @@ async function salmaHeroSend() {
       salmaHistory.push({ role: 'assistant', content: data.reply });
 
       if (data.route && data.route.stops && data.route.stops.length > 0) {
-        if (_draftRendered) {
-          // Ya mostramos el borrador — ahora cargar el mapa con datos verificados
-          salmaEnrichRouteWithCoords(data.route).then(function(enriched) {
-            salmaLoadVerifiedMap(enriched);
-          }).catch(function() { salmaLoadVerifiedMap(data.route); });
-        } else {
-          // No hubo draft — render completo (fallback)
-          var hasAnyCoord = data.route.stops.some(function(s) { var a = s.lat, b = s.lng; return a != null && b != null && Number(a) && Number(b); });
-          if (!hasAnyCoord) salmaAddDialog('Buscando coordenadas en el mapa…', 'loading');
-          salmaEnrichRouteWithCoords(data.route).then(function(enriched) {
-            salmaRemoveLoading();
-            salmaRenderRoute(enriched);
-          }).catch(function() { salmaRemoveLoading(); salmaRenderRoute(data.route); });
-        }
+        // Render completo con mapa — tanto si hubo draft como si no
+        salmaEnrichRouteWithCoords(data.route).then(function(enriched) {
+          salmaRemoveLoading();
+          salmaRenderRoute(enriched);
+          var rr = document.getElementById('salma-route-result');
+          if (rr) {
+            var top = rr.getBoundingClientRect().top + window.pageYOffset - 20;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+          }
+        }).catch(function() {
+          salmaRemoveLoading();
+          salmaRenderRoute(data.route);
+        });
       } else {
         // Salma pregunta o responde sin ruta — mostrar input para que el usuario responda
         salmaShowInput(data.reply);
@@ -1075,20 +1080,7 @@ async function salmaInlineReply() {
     if (window._salmaLastRoute && window._salmaLastRoute.stops && window._salmaLastRoute.stops.length > 0) {
       body.current_route = window._salmaLastRoute;
     }
-    var _inlineDraftRendered = false;
-    var data = await salmaFetchStream(body, function onDraft(draft) {
-      if (draft.route && draft.route.stops && draft.route.stops.length > 0) {
-        _inlineDraftRendered = true;
-        salmaRemoveLoading();
-        var routeResult = document.getElementById('salma-route-result');
-        if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
-        var baseRoute = window._salmaLastRoute ? salmaMergeRoute(window._salmaLastRoute, draft.route) : draft.route;
-        salmaRenderRoute(baseRoute, { skipMap: true });
-        salmaHideInput();
-        var rr2 = document.getElementById('salma-route-result');
-        if (rr2) rr2.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
+    var data = await salmaFetchStream(body);
     salmaRemoveLoading();
 
     if (data.reply) {
@@ -1098,26 +1090,19 @@ async function salmaInlineReply() {
       if (salmaHistory.length > 20) salmaHistory = salmaHistory.slice(-20);
 
       if (data.route && data.route.stops && data.route.stops.length > 0) {
-        if (_inlineDraftRendered) {
-          // Ya mostramos borrador — cargar mapa verificado
-          var baseRoute = window._salmaLastRoute ? salmaMergeRoute(window._salmaLastRoute, data.route) : data.route;
-          salmaEnrichRouteWithCoords(baseRoute).then(function(enriched) {
-            salmaLoadVerifiedMap(enriched);
-          }).catch(function() { salmaLoadVerifiedMap(baseRoute); });
-        } else {
-          // Sin draft — render completo (fallback)
-          var routeResult = document.getElementById('salma-route-result');
-          if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
-          var baseRoute2 = window._salmaLastRoute ? salmaMergeRoute(window._salmaLastRoute, data.route) : data.route;
-          var hasAnyCoord = baseRoute2.stops && baseRoute2.stops.some(function(s) { var a = s.lat, b = s.lng; return a != null && b != null && Number(a) && Number(b); });
-          if (!hasAnyCoord) salmaAddDialog('Buscando coordenadas en el mapa…', 'loading');
-          salmaEnrichRouteWithCoords(baseRoute2).then(function(enriched) {
-            salmaRemoveLoading();
-            salmaRenderRoute(enriched);
-            salmaHideInput();
-            if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 300);
-          }).catch(function() {
-            salmaRemoveLoading();
+        var routeResult = document.getElementById('salma-route-result');
+        if (routeResult) { routeResult.innerHTML = ''; routeResult.style.display = 'none'; }
+        var baseRoute = window._salmaLastRoute ? salmaMergeRoute(window._salmaLastRoute, data.route) : data.route;
+        salmaEnrichRouteWithCoords(baseRoute).then(function(enriched) {
+          salmaRemoveLoading();
+          salmaRenderRoute(enriched);
+          salmaHideInput();
+          if (routeResult) {
+            var top = routeResult.getBoundingClientRect().top + window.pageYOffset - 20;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+          }
+        }).catch(function() {
+          salmaRemoveLoading();
             salmaRenderRoute(baseRoute2);
             salmaHideInput();
             if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 300);
