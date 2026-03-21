@@ -1180,6 +1180,7 @@ export default {
       const encoder = new TextEncoder();
       const decoder = new TextDecoder();
       let fullText = '';
+      let routeSignalSent = false;
 
       const { readable, writable } = new TransformStream();
       const writer = writable.getWriter();
@@ -1212,6 +1213,10 @@ export default {
                   // Cortar envío al cliente en cuanto aparezca el marcador de ruta
                   if (!fullText.includes('SALMA_ROUTE')) {
                     await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`));
+                  } else if (!routeSignalSent) {
+                    // Avisar al frontend de que se está generando la ruta JSON
+                    routeSignalSent = true;
+                    await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`));
                   }
                 }
               } catch (e) { /* ignorar líneas mal formadas */ }

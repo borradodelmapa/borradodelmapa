@@ -383,6 +383,13 @@ function salmaFetchStream(bodyObj, onDraft) {
                 console.warn('[SSE] No hay callback onDraft — el acordeón no se mostrará antes');
               }
             }
+            if (evt.generating && !_textDone) {
+              // Salma está generando el JSON de la ruta — mostrar loading
+              _textDone = true;
+              var streamMsg3 = document.getElementById('salma-stream-msg');
+              if (streamMsg3) streamMsg3.removeAttribute('id');
+              salmaAddDialog('', 'loading', true);
+            }
             if (evt.k && !_textDone) {
               // Keepalive sin draft — texto terminó, verificando paradas
               _textDone = true;
