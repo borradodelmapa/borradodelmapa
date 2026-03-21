@@ -7,6 +7,11 @@ function openModal(view) {
 function closeModal() {
   var modal = document.getElementById("modal-auth");
   if (modal) modal.classList.remove("active");
+  // Resetear formularios y errores
+  var fields = ['login-email','login-pass','reg-name','reg-email','reg-pass'];
+  fields.forEach(function(id) { var el = document.getElementById(id); if (el) el.value = ''; });
+  var errs = ['login-error','register-error'];
+  errs.forEach(function(id) { var el = document.getElementById(id); if (el) el.textContent = ''; });
 }
 function switchModal(view) {
   var login = document.getElementById("modal-login-view");
@@ -196,7 +201,8 @@ auth.onAuthStateChanged(async (user) => {
   }
 });
 
-function showPage(name) {
+// _showPageInternal: lógica real de cambio de página (sin history)
+function _showPageInternal(name) {
   document.querySelectorAll(".page").forEach(p => {
     p.classList.remove("active");
     p.style.display = "none";
@@ -205,12 +211,49 @@ function showPage(name) {
   if (target) {
     target.classList.add("active");
     target.style.display = "block";
+  } else {
+    console.warn("showPage: página no encontrada →", name);
+    var home = document.getElementById("page-home");
+    if (home) { home.classList.add("active"); home.style.display = "block"; }
   }
   const mobileNav = document.getElementById("mobile-dash-nav");
   if (mobileNav) mobileNav.style.display = currentUser ? "flex" : "none";
-  window.scrollTo(0,0);
+  window.scrollTo(0, 0);
+}
+
+// showPage: cambia de página Y guarda en historial del navegador
+function showPage(name) {
+  _showPageInternal(name);
+  // Guardar estado en history para que el botón atrás funcione
+  var current = history.state && history.state.page;
+  if (current !== name) {
+    history.pushState({ page: name }, '', '#' + name);
+  }
 }
 window.showPage = showPage;
+
+// Botón atrás del navegador
+window.addEventListener('popstate', function(e) {
+  if (e.state && e.state.page) {
+    _showPageInternal(e.state.page);
+    // Si la página es blog, cargar contenido dinámico
+    if (e.state.page === 'blog' && typeof loadBlog === 'function') loadBlog();
+  } else {
+    // Sin estado → ir a home
+    _showPageInternal('home');
+  }
+  // Cerrar paneles que pudieran estar abiertos
+  if (typeof closeProfilePanel === 'function') closeProfilePanel();
+  if (typeof closeCuadernoPanel === 'function') closeCuadernoPanel();
+  // Cerrar mapa fullscreen si está visible
+  var mapaRuta = document.getElementById('page-mapa-ruta');
+  if (mapaRuta && mapaRuta.style.display !== 'none' && typeof cerrarMapaRuta === 'function') {
+    cerrarMapaRuta();
+  }
+});
+
+// Estado inicial en history
+history.replaceState({ page: 'home' }, '', '#home');
 
 const GITHUB_USER = "borradodelmapa";
 const GITHUB_REPO = "borradodelmapa";
@@ -356,6 +399,9 @@ function doSocialLogin() {
 window.doSocialLogin = doSocialLogin;
 
 async function logout() {
+  // Cerrar paneles flotantes antes de salir
+  if (typeof closeProfilePanel === 'function') closeProfilePanel();
+  if (typeof closeCuadernoPanel === 'function') closeCuadernoPanel();
   await auth.signOut();
   showPage("home");
   showToast("Sesion cerrada");
@@ -546,6 +592,9 @@ function verRuta(id, nombre) {
   if (!currentUser) return;
   var oldModal = document.getElementById('modal-editar-ruta');
   if (oldModal) oldModal.style.display = 'none';
+  // Limpiar render anterior
+  var container = document.getElementById('ruta-view-container');
+  if (container) container.innerHTML = '';
   db.collection('users').doc(currentUser.uid).collection('maps').doc(id).get().then(doc => {
     if (!doc.exists) return;
     const r = doc.data();
@@ -765,6 +814,7 @@ function setDashTab(tab, el) {
   document.querySelectorAll(".mobile-nav-item").forEach(i => i.classList.remove("active"));
   if (el) el.classList.add("active");
   if (tab === 'cuaderno') loadCuaderno();
+  window.scrollTo(0, 0);
 }
 window.setDashTab = setDashTab;
 
@@ -960,7 +1010,7 @@ function injectProfilePanel() {
   if (document.getElementById('profile-panel')) return;
   var style = document.createElement('style');
   style.textContent = [
-    '#profile-panel-backdrop{position:fixed;top:0;left:0;right:0;bottom:62px;background:rgba(0,0,0,.55);z-index:1500;display:none;}',
+    '#profile-panel-backdrop{position:fixed;top:0;left:0;right:0;bottom:62px;background:rgba(0,0,0,.55);z-index:10000;display:none;}',
     '#profile-panel{',
       'position:fixed;bottom:62px;left:50%;transform:translateX(-50%);',
       'width:100%;max-width:520px;',
@@ -968,7 +1018,7 @@ function injectProfilePanel() {
       'border-top:1px solid rgba(212,160,23,.3);',
       'border-left:1px solid rgba(212,160,23,.15);',
       'border-right:1px solid rgba(212,160,23,.15);',
-      'display:none;flex-direction:column;z-index:1501;',
+      'display:none;flex-direction:column;z-index:10001;',
       'box-shadow:0 -12px 48px rgba(0,0,0,.55);',
       'max-height:78vh;overflow-y:auto;',
     '}',
@@ -1105,11 +1155,11 @@ function injectCuadernoPanel() {
   if (document.getElementById('cuaderno-panel')) return;
   var style = document.createElement('style');
   style.textContent = [
-    '#cuaderno-panel-backdrop{position:fixed;top:0;left:0;right:0;bottom:62px;background:rgba(0,0,0,.55);z-index:1500;display:none;}',
+    '#cuaderno-panel-backdrop{position:fixed;top:0;left:0;right:0;bottom:62px;background:rgba(0,0,0,.55);z-index:10000;display:none;}',
     '#cuaderno-panel{position:fixed;bottom:62px;left:50%;transform:translateX(-50%);width:100%;max-width:560px;',
       'background:#111;border-radius:20px 20px 0 0;',
       'border-top:1px solid rgba(212,160,23,.3);border-left:1px solid rgba(212,160,23,.15);border-right:1px solid rgba(212,160,23,.15);',
-      'display:none;flex-direction:column;z-index:1501;box-shadow:0 -12px 48px rgba(0,0,0,.55);height:80vh;}',
+      'display:none;flex-direction:column;z-index:10001;box-shadow:0 -12px 48px rgba(0,0,0,.55);height:80vh;}',
     '#cuaderno-panel-head{padding:16px 20px 0;border-bottom:1px solid rgba(212,160,23,.12);flex-shrink:0;}',
     '#cuaderno-panel-head-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}',
     '#cuaderno-panel-tabs{display:flex;gap:0;}',
