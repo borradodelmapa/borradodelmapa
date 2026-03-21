@@ -72,6 +72,12 @@ function salmaGetRouteLocationCtx(route) {
 function salmaEnrichRouteWithCoords(route) {
   if (!route || !route.stops || !route.stops.length) return Promise.resolve(route);
 
+  // Si TODAS las paradas ya tienen coords verificadas (del worker), saltar geocodificación
+  var allHaveCoords = route.stops.every(function(s) {
+    return s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01;
+  });
+  if (allHaveCoords) return Promise.resolve(route);
+
   var locationCtx = salmaGetRouteLocationCtx(route);
   var suffix = locationCtx ? ', ' + locationCtx : '';
 
@@ -81,7 +87,6 @@ function salmaEnrichRouteWithCoords(route) {
   return centerPromise.then(function(center) {
     var viewbox = null;
     if (center && center.lat && center.lng) {
-      // Radio ~50km alrededor del centro (0.45 grados ≈ 50km)
       var d = 0.45;
       viewbox = (center.lng - d) + ',' + (center.lat + d) + ',' + (center.lng + d) + ',' + (center.lat - d);
     }
@@ -91,6 +96,11 @@ function salmaEnrichRouteWithCoords(route) {
     var chain = Promise.resolve();
 
     stops.forEach(function(stop, i) {
+      // Si esta parada ya tiene coords verificadas, no geocodificar
+      if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && Math.abs(stop.lng) > 0.01) {
+        coordsByIndex[i] = { lat: stop.lat, lng: stop.lng };
+        return;
+      }
       var name = (stop.headline || stop.name || stop.title || '').toString().trim();
       if (!name) {
         coordsByIndex[i] = { lat: 0, lng: 0 };
@@ -340,6 +350,7 @@ function salmaFetchStream(bodyObj) {
       var fullText = '';
 
       var _resolved = false;
+      var _textDone = false;
       function _processLines() {
         var lines = buffer.split('\n');
         buffer = lines.pop() || '';
@@ -352,9 +363,17 @@ function salmaFetchStream(bodyObj) {
             var evt = JSON.parse(jsonStr);
             if (evt.done) {
               salmaRemoveStreamBubble();
+              salmaRemoveLoading();
               _resolved = true;
               resolve({ reply: evt.reply || fullText, route: evt.route || null });
               return;
+            }
+            if (evt.k && !_textDone) {
+              // Keepalive — el texto ya terminó, estamos verificando paradas
+              _textDone = true;
+              salmaRemoveStreamBubble();
+              salmaAddDialog(fullText.replace(/\nSALMA_ROUTE_JSON[\s\S]*/,'').replace(/\nSAL$/,'').trim(), 'bot');
+              salmaAddDialog('', 'loading', true);
             }
             if (evt.t) {
               fullText += evt.t;
