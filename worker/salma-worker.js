@@ -1218,7 +1218,15 @@ export default {
           const reply = replyWithoutRouteBlock(fullText);
 
           if (route) {
-            route = await verifyAllStops(route, env.GOOGLE_PLACES_KEY);
+            // Keepalive cada 5s mientras se verifican las paradas (evita timeout del navegador)
+            const keepalive = setInterval(async () => {
+              try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
+            }, 5000);
+            try {
+              route = await verifyAllStops(route, env.GOOGLE_PLACES_KEY);
+            } finally {
+              clearInterval(keepalive);
+            }
           }
 
           await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply, route: route || null })}\n\n`));
