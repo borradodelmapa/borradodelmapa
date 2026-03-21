@@ -1145,7 +1145,7 @@ export default {
             'anthropic-version': '2023-06-01',
           },
           body: JSON.stringify({
-            model: 'claude-sonnet-4-6',
+            model: isRouteRequest(message, history) ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001',
             max_tokens: isRouteRequest(message, history) ? 4000 : 1500,
             system: systemPrompt,
             messages: messages,
@@ -1204,8 +1204,8 @@ export default {
                 if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
                   const chunk = evt.delta.text;
                   fullText += chunk;
-                  // Enviar chunk al cliente — solo texto visible (antes de SALMA_ROUTE_JSON)
-                  if (!fullText.includes('SALMA_ROUTE_JSON')) {
+                  // Cortar envío al cliente en cuanto aparezca el marcador de ruta
+                  if (!fullText.includes('SALMA_ROUTE')) {
                     await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`));
                   }
                 }
@@ -1218,10 +1218,11 @@ export default {
           const reply = replyWithoutRouteBlock(fullText);
 
           if (route) {
-            // Keepalive cada 5s mientras se verifican las paradas (evita timeout del navegador)
+            // Keepalive inmediato + cada 3s mientras se verifican las paradas
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
             const keepalive = setInterval(async () => {
               try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
-            }, 5000);
+            }, 3000);
             try {
               route = await verifyAllStops(route, env.GOOGLE_PLACES_KEY);
             } finally {
@@ -1251,7 +1252,7 @@ export default {
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
+          model: isRouteRequest(message, history) ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001',
           max_tokens: isRouteRequest(message, history) ? 4000 : 1500,
           system: systemPrompt,
           messages: messages,

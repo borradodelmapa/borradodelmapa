@@ -377,7 +377,14 @@ function salmaFetchStream(bodyObj) {
             }
             if (evt.t) {
               fullText += evt.t;
-              if (textEl) textEl.textContent = fullText;
+              // Ocultar marcador SALMA_ROUTE_JSON (parcial o completo) del texto visible
+              if (textEl) {
+                var display = fullText;
+                var markerPos = display.indexOf('\nSALMA_ROUTE');
+                if (markerPos === -1) markerPos = display.indexOf('SALMA_ROUTE');
+                if (markerPos !== -1) display = display.substring(0, markerPos);
+                textEl.textContent = display.trim();
+              }
             }
           } catch (e) { /* ignorar */ }
         }
