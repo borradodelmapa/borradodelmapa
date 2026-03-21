@@ -96,6 +96,8 @@ const ROUTE_COORDS = [
 
 auth.onAuthStateChanged(async (user) => {
   if (user) {
+    // Cerrar modal inmediatamente para que el usuario no lo vea mientras carga
+    closeModal();
     // Leer doc de usuario (no bloquear si falla)
     let userData = {};
     try {
