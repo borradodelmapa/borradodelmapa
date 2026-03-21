@@ -1025,14 +1025,21 @@ async function salmaHeroSend() {
       salmaHistory.push({ role: 'assistant', content: data.reply });
 
       if (data.route && data.route.stops && data.route.stops.length > 0) {
-        // Render completo con mapa — tanto si hubo draft como si no
+        // Render completo con mapa
         salmaEnrichRouteWithCoords(data.route).then(function(enriched) {
           salmaRemoveLoading();
           salmaRenderRoute(enriched);
+          // Botón visible en el chat para ir a la ruta
+          var btnDiv = document.createElement('div');
+          btnDiv.style.cssText = 'display:flex;justify-content:center;margin:16px 0;';
+          btnDiv.innerHTML = '<button onclick="var r=document.getElementById(\'salma-route-result\');if(r)r.scrollIntoView({block:\'start\'});this.parentElement.remove();" style="background:#d4a017;color:#0a0908;border:none;border-radius:14px;padding:16px 32px;font-family:\'JetBrains Mono\',monospace;font-size:12px;font-weight:700;letter-spacing:.12em;cursor:pointer;animation:salmaPulse 2s infinite;">TU RUTA ESTÁ LISTA · VER ↓</button>';
+          var dialog = document.getElementById('salma-dialog');
+          if (dialog) dialog.appendChild(btnDiv);
+          // También intentar scroll directo
           var rr = document.getElementById('salma-route-result');
           if (rr) {
             var top = rr.getBoundingClientRect().top + window.pageYOffset - 20;
-            window.scrollTo({ top: top, behavior: 'smooth' });
+            window.scrollTo(0, top);
           }
         }).catch(function() {
           salmaRemoveLoading();
@@ -1560,7 +1567,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ===== INJECT CSS FOR LOADING ANIMATION =====
 var salmaStyle = document.createElement('style');
-salmaStyle.textContent = '@keyframes salmaDot{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1.2)}}';
+salmaStyle.textContent = '@keyframes salmaDot{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1.2)}} @keyframes salmaPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(212,160,23,.4)}50%{transform:scale(1.03);box-shadow:0 0 20px 4px rgba(212,160,23,.3)}}';
 document.head.appendChild(salmaStyle);
 
 // ===== EXPOSE TO GLOBAL =====
