@@ -365,14 +365,17 @@ function salmaFetchStream(bodyObj) {
               salmaRemoveStreamBubble();
               salmaRemoveLoading();
               _resolved = true;
-              resolve({ reply: evt.reply || fullText, route: evt.route || null });
+              // Si ya mostramos el texto en keepalive, no duplicar — solo pasar _replyShown para que el caller no lo añada otra vez
+              resolve({ reply: evt.reply || fullText, route: evt.route || null, _replyShown: _textDone });
               return;
             }
             if (evt.k && !_textDone) {
               // Keepalive — el texto ya terminó, estamos verificando paradas
               _textDone = true;
-              salmaRemoveStreamBubble();
-              salmaAddDialog(fullText.replace(/\nSALMA_ROUTE_JSON[\s\S]*/,'').replace(/\nSAL$/,'').trim(), 'bot');
+              // Convertir burbuja streaming en definitiva (quitar id para que no se borre)
+              var streamMsg = document.getElementById('salma-stream-msg');
+              if (streamMsg) streamMsg.removeAttribute('id');
+              // Mostrar loading con frases de ruta debajo
               salmaAddDialog('', 'loading', true);
             }
             if (evt.t) {
@@ -848,7 +851,7 @@ async function salmaHeroSend() {
     if (data._error) console.error('[SALMA WORKER ERROR]', data._error);
 
     if (data.reply) {
-      salmaAddDialog(data.reply, 'bot');
+      if (!data._replyShown) salmaAddDialog(data.reply, 'bot');
       salmaHistory.push({ role: 'user', content: msg });
       salmaHistory.push({ role: 'assistant', content: data.reply });
 
@@ -906,7 +909,7 @@ async function salmaInlineReply() {
     salmaRemoveLoading();
 
     if (data.reply) {
-      salmaAddDialog(data.reply, 'bot');
+      if (!data._replyShown) salmaAddDialog(data.reply, 'bot');
       salmaHistory.push({ role: 'user', content: msg });
       salmaHistory.push({ role: 'assistant', content: data.reply });
       if (salmaHistory.length > 20) salmaHistory = salmaHistory.slice(-20);
