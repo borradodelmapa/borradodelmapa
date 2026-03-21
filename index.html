@@ -377,7 +377,7 @@ window.openModal=openModal;window.closeModal=closeModal;window.switchModal=switc
 <!-- Mobile bottom nav -->
 <div id="mobile-dash-nav" class="mobile-dash-nav" style="display:none;">
   <div onclick="event.stopPropagation();setDashTab('maps',this);showPage('dashboard')" class="mobile-nav-item" id="mnav-rutas">🗺️<span>Rutas</span></div>
-  <div onclick="event.stopPropagation();navSosSalma()" class="mobile-nav-item" id="mnav-sos" style="color:#f87171;">🆘<span style="color:#f87171;font-size:9px;">SOS SALMA</span></div>
+  <div onclick="event.stopPropagation();navSosSalma()" class="mobile-nav-item" id="mnav-sos" style="color:#d4a017;">💬<span style="color:#d4a017;font-size:9px;">SALMA</span></div>
   <div onclick="event.stopPropagation();openCuadernoPanel()" class="mobile-nav-item" id="mnav-cuaderno">📒<span>Cuaderno</span></div>
   <div onclick="event.stopPropagation();openProfilePanel()" class="mobile-nav-item" id="mnav-perfil">👤<span>Perfil</span></div>
 </div>
@@ -409,10 +409,10 @@ window.openModal=openModal;window.closeModal=closeModal;window.switchModal=switc
     <button onclick="document.getElementById('mapa-alerta-desvio').style.display='none'" style="background:none;border:none;color:#fff;font-size:16px;cursor:pointer;padding:0;line-height:1;flex-shrink:0;">×</button>
   </div>
 
-  <!-- Panel SOS Salma -->
+  <!-- Panel Salma -->
   <div id="mapa-salma-panel" style="display:none;position:absolute;bottom:calc(96px + max(0px,env(safe-area-inset-bottom)));left:12px;right:12px;z-index:20;flex-direction:column;max-height:52vh;background:rgba(5,5,5,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(212,160,23,.25);border-radius:20px;overflow:hidden;box-shadow:0 -4px 32px rgba(0,0,0,.4);">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#d4a017;letter-spacing:.15em;">⚡ SOS SALMA</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#d4a017;letter-spacing:.15em;">💬 SALMA</div>
       <button onclick="cerrarSalmaPanel()" style="background:none;border:none;color:rgba(245,240,232,.4);font-size:18px;cursor:pointer;line-height:1;padding:0 4px;">×</button>
     </div>
     <div id="mapa-salma-msgs" style="flex:1;overflow-y:auto;padding:0 14px;display:flex;flex-direction:column;gap:8px;"></div>
@@ -425,9 +425,9 @@ window.openModal=openModal;window.closeModal=closeModal;window.switchModal=switc
   <!-- Bottom bar -->
   <div style="position:absolute;bottom:0;left:0;right:0;z-index:10;padding:10px 12px max(28px,calc(env(safe-area-inset-bottom) + 12px));background:linear-gradient(to top,rgba(5,5,5,.98) 0%,rgba(5,5,5,.85) 70%,transparent 100%);">
     <div style="display:flex;gap:8px;">
-      <button onclick="abrirSalmaPanel()" style="flex:1.6;display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 6px;border-radius:14px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);cursor:pointer;">
-        <span style="font-size:18px;line-height:1;">🆘</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#fca5a5;letter-spacing:.05em;text-align:center;line-height:1.2;">SOS<br>SALMA</span>
+      <button onclick="abrirSalmaPanel()" style="flex:1.6;display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 6px;border-radius:14px;background:rgba(212,160,23,.15);border:1px solid rgba(212,160,23,.3);cursor:pointer;">
+        <span style="font-size:18px;line-height:1;">💬</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#d4a017;letter-spacing:.05em;text-align:center;line-height:1.2;">SALMA</span>
       </button>
       <button onclick="buscarCercaDeMi()" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 6px;border-radius:14px;background:rgba(17,17,17,.9);border:1px solid rgba(255,255,255,.08);cursor:pointer;">
         <span style="font-size:18px;line-height:1;">📍</span>
