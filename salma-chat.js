@@ -664,7 +664,7 @@ function salmaRenderRoute(routeData) {
     console.log('  [' + i + '] ' + (s.name || s.headline) + ' → lat:' + s.lat + ' lng:' + s.lng + ' photo_ref:' + (s.photo_ref ? s.photo_ref.slice(0, 30) + '...' : 'NO'));
   });
 
-  // Inicializar mapa Leaflet tras renderizar el DOM
+  // Inicializar mapa Google Maps tras renderizar el DOM
   if (hasMapData) {
     setTimeout(function() {
       var mapPois = pois.filter(function(p) { return p.lat && p.lng && Number(p.lat) && Number(p.lng); });
@@ -1241,44 +1241,6 @@ function salmaInitGoogleMap(containerId, pois, routeData, routeMeta) {
 }
 window.salmaInitGoogleMap = salmaInitGoogleMap;
 
-// ===== MAPA LEAFLET (conservado para posible uso en demo) =====
-
-function salmaInitLeaflet(containerId, pois, routeData) {
-  if (typeof L === 'undefined') { console.warn('[Salma] Leaflet no está cargado'); return; }
-  var container = document.getElementById(containerId);
-  if (!container) { console.warn('[Salma] Contenedor de mapa no encontrado:', containerId); return; }
-  // Destruir instancia previa si existe
-  if (container._leafletMap) {
-    try { container._leafletMap.remove(); } catch(e) {}
-    container._leafletMap = null;
-    container.innerHTML = '';
-  }
-  var validPois = (pois || []).filter(function(p) { return p.lat && p.lng && Number(p.lat) && Number(p.lng); });
-  if (!validPois.length) return;
-  var m = L.map(container, { zoomControl: true, scrollWheelZoom: false });
-  container._leafletMap = m;
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://openstreetmap.org">OSM</a>',
-    maxZoom: 18
-  }).addTo(m);
-  var latlngs = [];
-  validPois.forEach(function(p, i) {
-    var ll = [Number(p.lat), Number(p.lng)];
-    latlngs.push(ll);
-    var nm = p.headline || p.name || ('Parada ' + (i + 1));
-    var popup = '<b>' + nm.replace(/</g,'&lt;') + '</b>';
-    var txt = (p.narrative || p.description || '');
-    if (txt) popup += '<br><span style="font-size:12px;">' + txt.substring(0, 100).replace(/</g,'&lt;') + '</span>';
-    L.marker(ll).addTo(m).bindPopup(popup);
-  });
-  if (latlngs.length > 1) {
-    L.polyline(latlngs, { color: '#d4a017', weight: 2.5, opacity: 0.7, dashArray: '6,4' }).addTo(m);
-    m.fitBounds(latlngs, { padding: [32, 32] });
-  } else {
-    m.setView(latlngs[0], 12);
-  }
-}
-window.salmaInitLeaflet = salmaInitLeaflet;
 
 // ===== RESET — definición única en salmaShowInline (arriba) =====
 
