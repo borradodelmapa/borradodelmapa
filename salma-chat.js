@@ -388,12 +388,16 @@ function salmaFetchStream(bodyObj, onDraft) {
             }
             if (evt.t) {
               fullText += evt.t;
-              // Ocultar marcador SALMA_ROUTE_JSON (parcial o completo) del texto visible
+              // Ocultar marcador SALMA_ROUTE (completo o parcial) del texto visible
               if (textEl) {
                 var display = fullText;
-                var markerPos = display.indexOf('\nSALMA_ROUTE');
-                if (markerPos === -1) markerPos = display.indexOf('SALMA_ROUTE');
-                if (markerPos !== -1) display = display.substring(0, markerPos);
+                var markerPos = display.indexOf('SALMA_ROUTE');
+                if (markerPos !== -1) {
+                  display = display.substring(0, markerPos);
+                } else {
+                  // Cortar prefijos parciales al final (solo tras salto de línea o punto+espacio)
+                  display = display.replace(/[\n.][ ]?SAL[MA_ROUTE]*$/,'');
+                }
                 textEl.textContent = display.trim();
               }
             }
@@ -888,12 +892,6 @@ function salmaShowInstantHeader(msg) {
     }
   }
 
-  // Extraer destino — quitar palabras de ruta/viaje/duración/país
-  var destino = msg
-    .replace(/ruta|itinerario|qué ver|que ver|visitar|días? en|dias? en|fin de semana|semana en|lugares en|qué hacer|que hacer|plan para|viaje a|viaje por|llevo.*días|me quedo|escapada|excursion|excursión|por favor|dame|hazme|genera|crea|quiero ir a|preparas?|una|me|las?|los?|del?|por|con|en|y|\d+\s*d[ií]as?/gi, ' ')
-    .replace(new RegExp(pais, 'gi'), '')
-    .replace(/\s+/g, ' ').trim();
-
   // Extraer tema
   var temas = [];
   if (/playa|costa|surf|olas|calas?|bañ/i.test(msg)) temas.push('Playas');
@@ -904,13 +902,11 @@ function salmaShowInstantHeader(msg) {
   if (/pueblo|rural|interior/i.test(msg)) temas.push('Pueblos');
   if (/fiesta|noche|nightlife/i.test(msg)) temas.push('Vida nocturna');
 
-  // Construir cabecera
+  // Construir cabecera — solo datos limpios: flag+país, duración, tema
   var parts = [];
-  if (flag) parts.push(flag);
-  if (destino) parts.push(destino);
-  if (pais && !destino) parts.push(pais);
+  if (flag && pais) parts.push(flag + ' ' + pais);
   if (duracion) parts.push(duracion);
-  if (temas.length) parts.push(temas.join(' · '));
+  if (temas.length) parts.push(temas.join(', '));
 
   if (parts.length === 0) return;
 
