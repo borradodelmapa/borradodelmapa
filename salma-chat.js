@@ -362,6 +362,7 @@ function salmaFetchStream(bodyObj, onDraft) {
           if (!jsonStr) continue;
           try {
             var evt = JSON.parse(jsonStr);
+            console.log('[SSE]', evt.done ? 'DONE' : evt.draft ? 'DRAFT' : evt.k ? 'KEEPALIVE' : evt.t ? 'TEXT' : 'OTHER', evt.draft ? '(route stops: ' + (evt.route && evt.route.stops ? evt.route.stops.length : 0) + ')' : '');
             if (evt.done) {
               salmaRemoveStreamBubble();
               salmaRemoveLoading();
@@ -371,12 +372,15 @@ function salmaFetchStream(bodyObj, onDraft) {
             }
             if (evt.draft && !_draftSent) {
               // Ruta borrador — mostrar acordeón inmediatamente
+              console.log('[SSE] Draft recibido — renderizando acordeón sin mapa');
               _draftSent = true;
               _textDone = true;
               var streamMsg = document.getElementById('salma-stream-msg');
               if (streamMsg) streamMsg.removeAttribute('id');
               if (typeof onDraft === 'function') {
                 onDraft({ reply: evt.reply || fullText, route: evt.route || null });
+              } else {
+                console.warn('[SSE] No hay callback onDraft — el acordeón no se mostrará antes');
               }
             }
             if (evt.k && !_textDone) {
