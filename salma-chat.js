@@ -998,9 +998,9 @@ async function salmaHeroSend() {
       if (draft.route && draft.route.stops && draft.route.stops.length > 0) {
         _draftRendered = true;
         salmaRenderRoute(draft.route, { skipMap: true });
-        // Scroll al resultado
+        // Scroll directo al resultado — sin delay, el DOM ya está listo
         var rr = document.getElementById('salma-route-result');
-        if (rr) setTimeout(function() { rr.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 200);
+        if (rr) rr.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
     salmaRemoveLoading();
@@ -1078,7 +1078,8 @@ async function salmaInlineReply() {
         var baseRoute = window._salmaLastRoute ? salmaMergeRoute(window._salmaLastRoute, draft.route) : draft.route;
         salmaRenderRoute(baseRoute, { skipMap: true });
         salmaHideInput();
-        if (routeResult) setTimeout(function() { routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 200);
+        var rr2 = document.getElementById('salma-route-result');
+        if (rr2) rr2.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
     salmaRemoveLoading();
