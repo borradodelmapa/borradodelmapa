@@ -12,6 +12,11 @@
   <meta name="format-detection" content="telephone=no">
   <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
   <link rel="canonical" href="https://borradodelmapa.com/">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Borradodelmapa">
+  <link rel="apple-touch-icon" href="/salma_ai_avatar.png">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Borradodelmapa">
@@ -149,5 +154,10 @@ window.SALMA_API="https://salma-api.paco-defoto.workers.dev";
 <script src="app.js"></script>
 <script src="salma.js"></script>
 <script src="guide-renderer.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+</script>
 </body>
 </html>
