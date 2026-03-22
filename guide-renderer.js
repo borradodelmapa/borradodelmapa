@@ -258,15 +258,9 @@ const guideRenderer = {
   _dayGmapsUrl(stops, country) {
     const valid = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
     if (valid.length < 2) return this._stopGmapsUrl(valid[0] || stops[0], country);
-
-    const origin = valid[0].lat + ',' + valid[0].lng;
-    const dest = valid[valid.length - 1].lat + ',' + valid[valid.length - 1].lng;
-    const waypoints = valid.slice(1, -1).map(p => p.lat + ',' + p.lng).join('|');
-
-    return 'https://www.google.com/maps/dir/?api=1&origin=' + origin
-      + '&destination=' + dest
-      + (waypoints ? '&waypoints=' + waypoints : '')
-      + '&travelmode=driving';
+    // Formato path: /dir/lat,lng/lat,lng/lat,lng — funciona siempre
+    const segments = valid.map(p => p.lat + ',' + p.lng).join('/');
+    return 'https://www.google.com/maps/dir/' + segments;
   },
 
   _fullRouteGmapsUrl(stops, country) {
@@ -275,17 +269,9 @@ const guideRenderer = {
       if (valid.length === 1) return this._stopGmapsUrl(valid[0], country);
       return 'https://www.google.com/maps';
     }
-
-    const origin = valid[0].lat + ',' + valid[0].lng;
-    const dest = valid[valid.length - 1].lat + ',' + valid[valid.length - 1].lng;
-    // Google Maps limita a ~25 waypoints
-    const sampled = this._sampleWaypoints(valid.slice(1, -1), 23);
-    const waypoints = sampled.map(p => p.lat + ',' + p.lng).join('|');
-
-    return 'https://www.google.com/maps/dir/?api=1&origin=' + origin
-      + '&destination=' + dest
-      + (waypoints ? '&waypoints=' + waypoints : '')
-      + '&travelmode=driving';
+    const sampled = this._sampleWaypoints(valid, 25);
+    const segments = sampled.map(p => p.lat + ',' + p.lng).join('/');
+    return 'https://www.google.com/maps/dir/' + segments;
   },
 
   _sampleWaypoints(arr, max) {
