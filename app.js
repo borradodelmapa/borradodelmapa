@@ -76,10 +76,7 @@ function handleAvatarClick() {
 // ═══ WELCOME (estado 1) ═══
 
 async function renderWelcome() {
-  const defaultChips = `
-    <div class="chip" data-msg="Vietnam 15 días mochilero">Vietnam 15 días</div>
-    <div class="chip" data-msg="Andalucía 7 días en familia">Andalucía en familia</div>
-    <div class="chip" data-msg="Tailandia 10 días mochilero">Tailandia mochilero</div>`;
+  const defaultChips = `<div class="welcome-chips-loading"></div>`;
 
   $content.innerHTML = `
     <div class="welcome-hero fade-in">
@@ -100,47 +97,73 @@ async function renderWelcome() {
       </div>
     </div>`;
 
-  // Si hay usuario, cargar sus últimas guías como chips
-  if (currentUser) {
+  const chipsEl = document.getElementById('welcome-chips');
+  let loaded = false;
+
+  // Si hay usuario, intentar cargar sus últimas guías
+  if (currentUser && chipsEl) {
     try {
       const snap = await db.collection('users').doc(currentUser.uid)
         .collection('maps').orderBy('createdAt', 'desc').limit(3).get();
       if (!snap.empty) {
-        const chipsEl = document.getElementById('welcome-chips');
-        if (chipsEl) {
-          let chipsHtml = '';
-          snap.forEach(doc => {
-            const d = doc.data();
-            const nombre = d.nombre || 'Mi ruta';
-            chipsHtml += `<div class="chip chip-saved" data-doc-id="${doc.id}">${escapeHTML(nombre)}</div>`;
-          });
-          chipsEl.innerHTML = chipsHtml;
+        let chipsHtml = '';
+        snap.forEach(doc => {
+          const d = doc.data();
+          chipsHtml += `<div class="chip chip-saved" data-doc-id="${doc.id}">${escapeHTML(d.nombre || 'Mi ruta')}</div>`;
+        });
+        chipsEl.innerHTML = chipsHtml;
+        loaded = true;
 
-          // Click en chip guardado → abrir guía
-          chipsEl.querySelectorAll('.chip-saved').forEach(chip => {
-            chip.addEventListener('click', async () => {
-              const docId = chip.dataset.docId;
-              try {
-                const guideDoc = await db.collection('users').doc(currentUser.uid)
-                  .collection('maps').doc(docId).get();
-                if (guideDoc.exists && typeof salma !== 'undefined') {
-                  salma.cargarGuia(docId, guideDoc.data());
-                }
-              } catch (_) {}
-            });
+        chipsEl.querySelectorAll('.chip-saved').forEach(chip => {
+          chip.addEventListener('click', async () => {
+            try {
+              const guideDoc = await db.collection('users').doc(currentUser.uid)
+                .collection('maps').doc(chip.dataset.docId).get();
+              if (guideDoc.exists && typeof salma !== 'undefined') {
+                salma.cargarGuia(chip.dataset.docId, guideDoc.data());
+              }
+            } catch (_) {}
           });
-        }
+        });
       }
     } catch (_) {}
   }
 
-  // Chips genéricos → enviar mensaje
-  document.querySelectorAll('.chip:not(.chip-saved)').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const msg = chip.dataset.msg;
-      if (msg && typeof salma !== 'undefined') salma.send(msg);
-    });
-  });
+  // Si no hay guías del usuario, cargar guías destacadas (featured)
+  if (!loaded && chipsEl) {
+    try {
+      const snap = await db.collection('public_guides')
+        .where('featured', '==', true).limit(3).get();
+      if (!snap.empty) {
+        let chipsHtml = '';
+        snap.forEach(doc => {
+          const d = doc.data();
+          chipsHtml += `<div class="chip chip-featured" data-slug="${doc.id}">${escapeHTML(d.nombre || 'Ruta')}</div>`;
+        });
+        chipsEl.innerHTML = chipsHtml;
+
+        chipsEl.querySelectorAll('.chip-featured').forEach(chip => {
+          chip.addEventListener('click', () => {
+            window.location.href = '/' + chip.dataset.slug;
+          });
+        });
+      } else {
+        // Fallback si no hay featured todavía
+        chipsEl.innerHTML = `
+          <div class="chip" data-msg="Vietnam 15 días mochilero">Vietnam 15 días</div>
+          <div class="chip" data-msg="Andalucía 7 días en familia">Andalucía en familia</div>
+          <div class="chip" data-msg="Tailandia 10 días mochilero">Tailandia mochilero</div>`;
+        chipsEl.querySelectorAll('.chip').forEach(chip => {
+          chip.addEventListener('click', () => {
+            const msg = chip.dataset.msg;
+            if (msg && typeof salma !== 'undefined') salma.send(msg);
+          });
+        });
+      }
+    } catch (_) {
+      chipsEl.innerHTML = '';
+    }
+  }
 }
 
 // ═══ MIS VIAJES (estado 3) ═══
