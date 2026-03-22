@@ -44,7 +44,7 @@ body {
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
   border-bottom:1px solid var(--linea);
-  display:flex; align-items:center; justify-content:space-between;
+  display:flex; align-items:center; justify-content:center;
   height:56px;
 }
 .app-logo {
@@ -54,7 +54,7 @@ body {
   cursor:pointer;
 }
 .app-logo span { color:var(--dorado); }
-.app-header-actions { display:flex; gap:12px; align-items:center; }
+.app-header-actions { position:absolute; right:20px; display:flex; gap:12px; align-items:center; }
 .app-header-btn {
   font-family:var(--font-mono); font-size:9px;
   color:var(--crema); opacity:.6; letter-spacing:.14em;

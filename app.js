@@ -82,7 +82,7 @@ async function renderWelcome() {
     <div class="welcome-hero fade-in">
       <div class="welcome-bg"></div>
       <div class="welcome-content">
-        <div class="welcome-label">AI TRAVEL COPILOT</div>
+        <div class="welcome-label">SALMA · AI TRAVEL COPILOT</div>
         <h1 class="welcome-title">Tu próximo<br>viaje empieza<br><em>aquí</em></h1>
         <div class="welcome-claim">No estás perdido si sabes dónde vas</div>
         <div class="welcome-bubble">
