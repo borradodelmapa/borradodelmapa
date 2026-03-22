@@ -75,7 +75,12 @@ function handleAvatarClick() {
 
 // ═══ WELCOME (estado 1) ═══
 
-function renderWelcome() {
+async function renderWelcome() {
+  const defaultChips = `
+    <div class="chip" data-msg="Vietnam 15 días mochilero">Vietnam 15 días</div>
+    <div class="chip" data-msg="Andalucía 7 días en familia">Andalucía en familia</div>
+    <div class="chip" data-msg="Tailandia 10 días mochilero">Tailandia mochilero</div>`;
+
   $content.innerHTML = `
     <div class="welcome-hero fade-in">
       <div class="welcome-bg"></div>
@@ -90,15 +95,47 @@ function renderWelcome() {
           <div class="welcome-msg">Ey, ¿a dónde te apetece ir? Dime destino y días y te monto la guía.</div>
         </div>
         <div class="welcome-chips" id="welcome-chips">
-          <div class="chip" data-msg="Vietnam 15 días mochilero">Vietnam 15 días</div>
-          <div class="chip" data-msg="Andalucía 7 días en familia">Andalucía en familia</div>
-          <div class="chip" data-msg="Tailandia 10 días mochilero">Tailandia mochilero</div>
+          ${defaultChips}
         </div>
       </div>
     </div>`;
 
-  // Chips → enviar mensaje
-  document.querySelectorAll('.chip').forEach(chip => {
+  // Si hay usuario, cargar sus últimas guías como chips
+  if (currentUser) {
+    try {
+      const snap = await db.collection('users').doc(currentUser.uid)
+        .collection('maps').orderBy('createdAt', 'desc').limit(3).get();
+      if (!snap.empty) {
+        const chipsEl = document.getElementById('welcome-chips');
+        if (chipsEl) {
+          let chipsHtml = '';
+          snap.forEach(doc => {
+            const d = doc.data();
+            const nombre = d.nombre || 'Mi ruta';
+            chipsHtml += `<div class="chip chip-saved" data-doc-id="${doc.id}">${escapeHTML(nombre)}</div>`;
+          });
+          chipsEl.innerHTML = chipsHtml;
+
+          // Click en chip guardado → abrir guía
+          chipsEl.querySelectorAll('.chip-saved').forEach(chip => {
+            chip.addEventListener('click', async () => {
+              const docId = chip.dataset.docId;
+              try {
+                const guideDoc = await db.collection('users').doc(currentUser.uid)
+                  .collection('maps').doc(docId).get();
+                if (guideDoc.exists && typeof salma !== 'undefined') {
+                  salma.cargarGuia(docId, guideDoc.data());
+                }
+              } catch (_) {}
+            });
+          });
+        }
+      }
+    } catch (_) {}
+  }
+
+  // Chips genéricos → enviar mensaje
+  document.querySelectorAll('.chip:not(.chip-saved)').forEach(chip => {
     chip.addEventListener('click', () => {
       const msg = chip.dataset.msg;
       if (msg && typeof salma !== 'undefined') salma.send(msg);
