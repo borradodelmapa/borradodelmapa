@@ -48,12 +48,22 @@ function updateHeader() {
       const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
       html += `<div class="app-avatar" id="btn-avatar">${escapeHTML(initial)}</div>`;
     }
+  } else {
+    // No logueado: mostrar botón MIS VIAJES que lleva a login
+    html = `<button class="app-header-btn gold" id="btn-viajes">MIS VIAJES</button>`;
   }
   $headerActions.innerHTML = html;
 
   // Listeners
   const btnViajes = document.getElementById('btn-viajes');
-  if (btnViajes) btnViajes.addEventListener('click', () => showState('viajes'));
+  if (btnViajes) btnViajes.addEventListener('click', () => {
+    if (currentUser) {
+      showState('viajes');
+    } else {
+      window._afterLogin = 'viajes';
+      openModal('login');
+    }
+  });
 
   const btnAvatar = document.getElementById('btn-avatar');
   if (btnAvatar) btnAvatar.addEventListener('click', handleAvatarClick);
@@ -321,6 +331,12 @@ auth.onAuthStateChanged(async (user) => {
       await guardarGuiaAuto(window._salmaLastRoute);
       window._salmaLastRoute = null;
       localStorage.removeItem('_salmaRouteBackup');
+    }
+
+    // Si venía de un intento de ver Mis Viajes sin login
+    if (window._afterLogin === 'viajes') {
+      window._afterLogin = null;
+      showState('viajes');
     }
   } else {
     currentUser = null;
