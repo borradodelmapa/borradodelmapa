@@ -329,7 +329,7 @@ const salma = {
     div.className = 'msg msg-salma';
     div.innerHTML = `
       <div class="msg-avatar"><img src="salma_ai_avatar.png" alt="Salma"></div>
-      <div class="msg-body-salma">${escapeHTML(text)}</div>`;
+      <div class="msg-body-salma">${formatMessage(text)}</div>`;
     area.appendChild(div);
     this._scrollToBottom();
   },
@@ -351,7 +351,11 @@ const salma = {
     const el = document.getElementById('salma-stream-msg');
     if (el) el.removeAttribute('id');
     const txt = document.getElementById('salma-stream-text');
-    if (txt) txt.removeAttribute('id');
+    if (txt) {
+      // Convertir texto plano a HTML con enlaces clicables
+      txt.innerHTML = formatMessage(txt.textContent);
+      txt.removeAttribute('id');
+    }
   },
 
   _removeStreamBubble() {
@@ -361,8 +365,11 @@ const salma = {
       if (txt && !txt.textContent.trim()) {
         el.remove(); // Vacía, quitar
       } else {
-        el.removeAttribute('id');
-        if (txt) txt.removeAttribute('id');
+        if (txt) {
+          txt.innerHTML = formatMessage(txt.textContent);
+          txt.removeAttribute('id');
+        }
+        if (el) el.removeAttribute('id');
       }
     }
   },

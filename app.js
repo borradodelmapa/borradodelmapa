@@ -650,9 +650,23 @@ function escapeHTML(str) {
   return d.innerHTML;
 }
 
+// Formatear mensaje de Salma: escapar HTML + linkificar URLs y teléfonos
+function formatMessage(str) {
+  let html = escapeHTML(str || '');
+  // URLs → enlaces clicables
+  html = html.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+  // Teléfonos internacionales: +XX XXX XXX XXX (con espacios, guiones o puntos)
+  html = html.replace(/(\+\d{1,3}[\s.-]?\d{1,4}[\s.-]?\d{2,4}[\s.-]?\d{2,4}[\s.-]?\d{0,4})/g, (match) => {
+    const clean = match.replace(/[\s.-]/g, '').trim();
+    return `<a href="tel:${clean}">${match.trim()}</a>`;
+  });
+  return html;
+}
+
 // Exponer globalmente
 window.showToast = showToast;
 window.escapeHTML = escapeHTML;
+window.formatMessage = formatMessage;
 window.guardarGuia = guardarGuia;
 window.currentUser = null;
 Object.defineProperty(window, 'currentUser', {

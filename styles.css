@@ -234,6 +234,11 @@ body {
   padding:12px 16px; font-size:14px; line-height:1.65; color:var(--crema);
   max-width:82%; word-break:break-word;
 }
+.msg-body-salma a {
+  color:var(--dorado); text-decoration:underline;
+  text-underline-offset:2px;
+}
+.msg-body-salma a:active { opacity:0.7; }
 .msg-body-user {
   background:var(--dorado); color:var(--negro);
   border-radius:18px; border-bottom-right-radius:4px;

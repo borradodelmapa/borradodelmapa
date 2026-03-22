@@ -206,6 +206,139 @@ function isRouteRequest(message, history) {
   return false;
 }
 
+function isHelpRequest(message) {
+  if (!message) return null;
+  const m = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  const categories = {
+    health: /farmacia|pharmacy|hospital|urgencias|emergency room|medico|doctor|dentista|dentist|veterinari|clinica|clinic|ambulancia|ambulance/,
+    vehicle: /grua|tow.?truck|taller|mecanico|mechanic|gasolinera|gas.?station|petrol|averia|breakdown|pinch|pinchazo|flat.?tire/,
+    security: /embajada|embassy|consulado|consulate|comisaria|policia|police|abogado|lawyer|denuncia|robo|robado|stolen/,
+    money: /cajero|atm|cambio.?de.?(divisa|moneda)|currency.?exchange|western.?union|money.?transfer/,
+    logistics: /cerrajero|locksmith|lavanderia|laundry|optica|optician|zapatero|cobbler|tienda.?de?.?electronica|electronics|cargador|charger|adaptador|adapter/,
+    transport: /taxi|transfer|estacion.?de?.?tren|train.?station|estacion.?de?.?bus|bus.?station|ferry|puerto|port|aeropuerto|airport/,
+    communication: /tarjeta.?sim|sim.?card|wifi|locutorio|internet.?cafe/,
+    weather: /tiempo|clima|temperatura|lluvia|llover|pronostico|forecast|weather|rain|cold|frio|calor|heat|humedad|humidity|tormenta|storm|nieve|snow|monzon|monsoon|cuando.?mejor.?ir|mejor.?epoca|best.?time/,
+  };
+
+  for (const [cat, regex] of Object.entries(categories)) {
+    if (regex.test(m)) return cat;
+  }
+  return null;
+}
+
+function extractHelpLocation(message, history, currentRoute) {
+  // 1. Patrón explícito "en <lugar>" o "in <place>" en el mensaje
+  const esMatch = message.match(/\b(?:en|cerca\s+de|por)\s+([A-ZÁÉÍÓÚÑ\u00C0-\u024F][a-záéíóúñ\u00E0-\u024FA-ZÁÉÍÓÚÑ\u00C0-\u024F\s]{2,30})/);
+  const enMatch = message.match(/\b(?:in|near|around|at)\s+([A-Z][a-zA-Z\s]{2,30})/);
+  const loc = esMatch?.[1]?.trim() || enMatch?.[1]?.trim();
+  if (loc) return loc;
+
+  // 2. Ruta actual del usuario
+  if (currentRoute?.region) return currentRoute.region;
+  if (currentRoute?.country) return currentRoute.country;
+
+  // 3. Historial reciente — buscar menciones de lugar
+  if (Array.isArray(history) && history.length > 0) {
+    const recent = history.slice(-6).map(h => h.content || '').join(' ');
+    const histMatch = recent.match(/\b(?:en|in)\s+([A-ZÁÉÍÓÚÑ\u00C0-\u024F][a-záéíóúñ\u00E0-\u024FA-Za-z\s]{2,25})/);
+    if (histMatch) return histMatch[1].trim();
+  }
+
+  return null;
+}
+
+async function searchPlacesForHelp(query, location, placesKey) {
+  if (!query || !location || !placesKey) return null;
+
+  const searchText = `${query} ${location}`;
+
+  // Text Search — mejor que findplacefromtext para búsquedas genéricas
+  let searchResults;
+  try {
+    const res = await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchText)}&language=es&key=${placesKey}`);
+    searchResults = await res.json();
+  } catch (e) {
+    return null;
+  }
+
+  if (!searchResults?.results?.length) return null;
+
+  // Top 3 resultados → Place Details en paralelo para teléfono
+  const top = searchResults.results.slice(0, 3);
+  const detailPromises = top.map(place => {
+    if (!place.place_id) return Promise.resolve(null);
+    return fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.place_id}&fields=name,formatted_phone_number,international_phone_number,formatted_address,rating,opening_hours&language=es&key=${placesKey}`)
+      .then(r => r.json()).catch(() => null);
+  });
+  const details = await Promise.all(detailPromises);
+
+  const results = [];
+  top.forEach((place, i) => {
+    const detail = details[i]?.result;
+    const name = detail?.name || place.name || '';
+    const phone = detail?.international_phone_number || detail?.formatted_phone_number || '';
+    const address = detail?.formatted_address || place.formatted_address || '';
+    const rating = detail?.rating || place.rating || null;
+
+    if (name) {
+      results.push({
+        name,
+        phone: phone || '',
+        address: address || '',
+        rating: rating ? `${rating}★` : '',
+      });
+    }
+  });
+
+  return results.length > 0 ? results : null;
+}
+
+async function fetchWeather(location) {
+  if (!location) return null;
+
+  try {
+    // wttr.in — API gratuita, sin key, devuelve JSON
+    const res = await fetch(`https://wttr.in/${encodeURIComponent(location)}?format=j1&lang=es`, {
+      headers: { 'User-Agent': 'BorradoDelMapa/1.0' },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+
+    if (!data?.current_condition?.[0] || !data?.weather) return null;
+
+    const current = data.current_condition[0];
+    const forecast = data.weather.slice(0, 3); // 3 días
+
+    const result = {
+      location: data.nearest_area?.[0]?.areaName?.[0]?.value || location,
+      country: data.nearest_area?.[0]?.country?.[0]?.value || '',
+      current: {
+        temp_c: current.temp_C,
+        feels_like: current.FeelsLikeC,
+        description: current.lang_es?.[0]?.value || current.weatherDesc?.[0]?.value || '',
+        humidity: current.humidity,
+        wind_kmph: current.windspeedKmph,
+      },
+      forecast: forecast.map(day => ({
+        date: day.date,
+        max_c: day.maxtempC,
+        min_c: day.mintempC,
+        description: day.hourly?.[4]?.lang_es?.[0]?.value || day.hourly?.[4]?.weatherDesc?.[0]?.value || '',
+        rain_chance: day.hourly?.[4]?.chanceofrain || '0',
+      })),
+      links: [
+        `https://www.weather.com/es-ES/clima/hoy/l/${encodeURIComponent(location)}`,
+        `https://www.yr.no/en/forecast/daily-table/${encodeURIComponent(location)}`,
+      ],
+    };
+
+    return result;
+  } catch (e) {
+    return null;
+  }
+}
+
 function getCountryCode(countryName) {
   if (!countryName) return '';
   const norm = countryName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
@@ -274,7 +407,7 @@ function getCountryCode(countryName) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData) {
   let systemPrompt = SALMA_SYSTEM_BASE;
 
   // Contexto mínimo del usuario
@@ -308,6 +441,36 @@ function buildMessages(history, message, currentRoute, userName, userNationality
     if (lastAssistant && lastAssistant.content && /\?/.test(lastAssistant.content)) {
       userContent += '\n\n[IMPORTANTE: Ya preguntaste y el usuario responde. Si incluye destino/días/tipo, GENERA LA RUTA YA. No preguntes más.]';
     }
+  }
+
+  // Inyectar resultados de búsqueda de ayuda al viajero
+  if (helpResults && helpResults.length > 0) {
+    const formatted = helpResults.map((r, i) => {
+      const parts = [`${i + 1}. ${r.name}`];
+      if (r.phone) parts.push(r.phone);
+      if (r.address) parts.push(r.address);
+      if (r.rating) parts.push(r.rating);
+      return parts.join(' — ');
+    }).join('\n');
+
+    userContent += `\n\n[RESULTADOS DE BÚSQUEDA REAL — Google Places:\n${formatted}\nSÉ BREVE Y DIRECTA. PRIMERO los datos que pide el viajero (nombre + teléfono de cada resultado), DESPUÉS tu opinión o consejo práctico en 1-2 frases. Máximo 4-5 frases en total. Di "llama antes para confirmar" porque horarios pueden cambiar. Si un resultado no tiene teléfono, dilo y sugiere buscarlo en Google Maps por el nombre. NUNCA inventes datos que no estén aquí.]`;
+  }
+
+  // Inyectar datos del tiempo
+  if (weatherData) {
+    const cur = weatherData.current;
+    const forecastLines = weatherData.forecast.map(d =>
+      `${d.date}: ${d.min_c}–${d.max_c}°C, ${d.description}, probabilidad lluvia ${d.rain_chance}%`
+    ).join('\n');
+
+    userContent += `\n\n[DATOS DEL TIEMPO REAL — wttr.in para ${weatherData.location}${weatherData.country ? ', ' + weatherData.country : ''}:
+AHORA: ${cur.temp_c}°C (sensación ${cur.feels_like}°C), ${cur.description}, humedad ${cur.humidity}%, viento ${cur.wind_kmph} km/h
+PRÓXIMOS DÍAS:
+${forecastLines}
+ENLACES para pronóstico actualizado:
+- weather.com: ${weatherData.links[0]}
+- yr.no: ${weatherData.links[1]}
+SÉ BREVE Y DIRECTA. PRIMERO los datos del tiempo (temperatura, lluvia), DESPUÉS 1 consejo práctico (ropa, paraguas, mejor hora). Incluye los enlaces para que el viajero consulte el pronóstico actualizado. Máximo 4-5 frases. Menciona que el pronóstico puede cambiar. NUNCA inventes datos que no estén aquí.]`;
   }
 
   messages.push({ role: 'user', content: userContent });
@@ -770,8 +933,27 @@ ${JSON.stringify(route)}`;
       );
     }
 
-    // Construir mensajes (SIN pre-search)
-    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality);
+    // ─── HELP SEARCH / WEATHER (pre-Claude) ───
+    let helpResults = null;
+    let weatherData = null;
+    const helpCategory = isHelpRequest(message);
+    if (helpCategory) {
+      const helpLocation = extractHelpLocation(message, history, currentRoute);
+      if (helpLocation) {
+        try {
+          if (helpCategory === 'weather') {
+            weatherData = await fetchWeather(helpLocation);
+          } else {
+            helpResults = await searchPlacesForHelp(message, helpLocation, env.GOOGLE_PLACES_KEY);
+          }
+        } catch (e) {
+          // Fallo silencioso — Salma responde sin datos de búsqueda
+        }
+      }
+    }
+
+    // Construir mensajes
+    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData);
     const isRoute = isRouteRequest(message, history);
 
     // ─── STREAMING SSE ───
