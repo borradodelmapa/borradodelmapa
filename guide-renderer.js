@@ -17,9 +17,14 @@ const guideRenderer = {
     const area = document.getElementById('chat-area');
     if (!area || !routeData) return;
 
-    // Eliminar guide-card anterior si existe
+    // Eliminar guide-card anterior y limpiar mapas
     const prev = area.querySelector('.guide-card');
     if (prev) prev.remove();
+    // Destruir mapas Leaflet anteriores
+    for (const key of Object.keys(this._maps)) {
+      try { this._maps[key].remove(); } catch (_) {}
+    }
+    this._maps = {};
 
     const r = routeData;
     const stops = r.stops || [];
