@@ -269,6 +269,18 @@ body {
   margin-bottom:8px; border:1px solid var(--linea);
 }
 
+/* Map popups */
+.dark-popup .leaflet-popup-content-wrapper { background:#1a1a1a; color:#f4efe6; border-radius:10px; border:1px solid rgba(212,160,23,.15); }
+.dark-popup .leaflet-popup-tip { background:#1a1a1a; }
+.dark-popup .leaflet-popup-close-button { color:rgba(244,239,230,.5); }
+.map-popup { min-width:160px; }
+.map-popup-photo { height:100px; background:rgba(255,255,255,.05); border-radius:6px; margin-bottom:8px; overflow:hidden; }
+.map-popup-name { font-weight:700; font-size:13px; margin-bottom:2px; }
+.map-popup-day { font-family:var(--font-mono); font-size:8px; letter-spacing:.12em; color:var(--dorado); margin-bottom:6px; }
+.map-popup-desc { font-size:11px; line-height:1.5; color:rgba(244,239,230,.65); margin-bottom:6px; }
+.map-popup-link { font-family:var(--font-mono); font-size:9px; color:var(--dorado); text-decoration:none; letter-spacing:.1em; }
+.map-popup-link:hover { text-decoration:underline; }
+
 /* Guide days */
 .guide-days { padding:16px 16px 8px; }
 .guide-days-label {

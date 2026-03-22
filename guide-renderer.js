@@ -349,10 +349,10 @@ const guideRenderer = {
       const color = this._dayColors[idx % this._dayColors.length];
       const dayStops = this._getValidStops(days[num].stops);
       dayStops.forEach(s => {
-        L.circleMarker([s.lat, s.lng], {
+        const marker = L.circleMarker([s.lat, s.lng], {
           radius: 7, fillColor: color, color: '#fff', weight: 2, fillOpacity: 0.9
-        }).bindPopup(`<b>${s.headline || s.name}</b><br><small>Día ${num}</small>`)
-          .addTo(map);
+        }).addTo(map);
+        this._bindRichPopup(marker, s, num);
       });
     });
 
@@ -378,10 +378,10 @@ const guideRenderer = {
 
     // Pins
     valid.forEach((s, i) => {
-      L.circleMarker([s.lat, s.lng], {
+      const marker = L.circleMarker([s.lat, s.lng], {
         radius: 6, fillColor: color, color: '#fff', weight: 2, fillOpacity: 0.9
-      }).bindPopup(`<b>${i + 1}. ${s.headline || s.name}</b>`)
-        .addTo(map);
+      }).addTo(map);
+      this._bindRichPopup(marker, s, dayNum);
     });
 
     // Ajustar vista
@@ -392,6 +392,40 @@ const guideRenderer = {
     // Pedir ruta real a Google Directions
     if (valid.length >= 2) {
       this._loadDirections(map, valid, color);
+    }
+  },
+
+  _bindRichPopup(marker, stop, dayNum) {
+    const name = escapeHTML(stop.headline || stop.name);
+    const narrative = stop.narrative ? escapeHTML(stop.narrative).substring(0, 120) + (stop.narrative.length > 120 ? '...' : '') : '';
+    const gmapsUrl = this._stopGmapsUrl(stop, '');
+    const photoId = 'popup-photo-' + Math.random().toString(36).slice(2, 8);
+
+    let html = `<div class="map-popup">`;
+    if (stop.photo_ref) {
+      html += `<div class="map-popup-photo" id="${photoId}"></div>`;
+    }
+    html += `<div class="map-popup-name">${name}</div>`;
+    html += `<div class="map-popup-day">Día ${dayNum}</div>`;
+    if (narrative) html += `<div class="map-popup-desc">${narrative}</div>`;
+    html += `<a class="map-popup-link" href="${gmapsUrl}" target="_blank" rel="noopener">Ver en Maps →</a>`;
+    html += `</div>`;
+
+    marker.bindPopup(html, { maxWidth: 220, className: 'dark-popup' });
+
+    // Cargar foto cuando se abre el popup
+    if (stop.photo_ref) {
+      marker.on('popupopen', () => {
+        const el = document.getElementById(photoId);
+        if (!el || el.dataset.loaded) return;
+        el.dataset.loaded = '1';
+        fetch(window.SALMA_API + '/photo?ref=' + encodeURIComponent(stop.photo_ref) + '&json=1')
+          .then(r => r.json()).then(data => {
+            if (data.url) {
+              el.innerHTML = `<img src="${data.url}" alt="" style="width:100%;height:100px;object-fit:cover;border-radius:6px;">`;
+            } else { el.remove(); }
+          }).catch(() => el.remove());
+      });
     }
   },
 
