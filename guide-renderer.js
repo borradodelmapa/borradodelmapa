@@ -335,7 +335,12 @@ const guideRenderer = {
     const valid = this._getValidStops(allStops);
     if (valid.length === 0) { el.style.display = 'none'; return; }
 
-    const map = L.map(el, { scrollWheelZoom: false, zoomControl: true, attributionControl: false });
+    const bounds = L.latLngBounds(valid.map(s => [s.lat, s.lng]));
+    const map = L.map(el, {
+      scrollWheelZoom: false, zoomControl: true, attributionControl: false,
+      maxBounds: bounds.pad(0.3), maxBoundsViscosity: 0.8,
+      dragging: !L.Browser.mobile, tap: !L.Browser.mobile
+    });
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       maxZoom: 18
     }).addTo(map);
@@ -353,8 +358,7 @@ const guideRenderer = {
       });
     });
 
-    // Ajustar vista a todos los puntos
-    const bounds = L.latLngBounds(valid.map(s => [s.lat, s.lng]));
+    // Ajustar vista a todos los puntos — limitado a la ruta
     map.fitBounds(bounds, { padding: [30, 30] });
     this._maps['main'] = map;
   },
@@ -368,7 +372,12 @@ const guideRenderer = {
     if (valid.length === 0) { el.style.display = 'none'; return; }
 
     const color = this._dayColors[(dayNum - 1) % this._dayColors.length];
-    const map = L.map(el, { scrollWheelZoom: false, zoomControl: false, attributionControl: false });
+    const bounds = L.latLngBounds(valid.map(s => [s.lat, s.lng]));
+    const map = L.map(el, {
+      scrollWheelZoom: false, zoomControl: false, attributionControl: false,
+      maxBounds: bounds.pad(0.3), maxBoundsViscosity: 0.8,
+      dragging: !L.Browser.mobile, tap: !L.Browser.mobile
+    });
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       maxZoom: 18
     }).addTo(map);
@@ -381,8 +390,7 @@ const guideRenderer = {
       this._bindRichPopup(marker, s, dayNum);
     });
 
-    // Ajustar vista
-    const bounds = L.latLngBounds(valid.map(s => [s.lat, s.lng]));
+    // Ajustar vista — limitado a la ruta
     map.fitBounds(bounds, { padding: [20, 20] });
     this._maps[mapId] = map;
 
