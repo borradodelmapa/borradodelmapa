@@ -61,7 +61,6 @@ const salma = {
         this._addSalmaBubble('Guárdala y la tienes completa en Mis Viajes. Cuando quieras otra, dime destino y días.');
         // Limpiar historial — cada guía empieza de cero
         this.history = [];
-        this.currentRoute = null;
       }
 
       this._scrollToBottom();
