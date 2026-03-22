@@ -428,7 +428,11 @@ async function verifyAllStops(route, placesKey) {
     const candidate = findResults[i]?.candidates?.[0];
     const detail = detailResults[i]?.result;
 
-    if (!candidate?.geometry?.location) return; // Google no encontró → descartar
+    if (!candidate?.geometry?.location) {
+      // Google no encontró → mantener datos originales de Claude
+      verifiedStops.push(stop);
+      return;
+    }
 
     const pLat = candidate.geometry.location.lat;
     const pLng = candidate.geometry.location.lng;
@@ -436,7 +440,28 @@ async function verifyAllStops(route, placesKey) {
     // Validar distancia al centro
     if (centerLat && centerLng) {
       const distKm = Math.sqrt(Math.pow(Math.abs(pLat - centerLat), 2) + Math.pow(Math.abs(pLng - centerLng), 2)) * 111;
-      if (distKm > routeRadiusKm) return;
+      if (distKm > routeRadiusKm) {
+        verifiedStops.push(stop); // Fuera de rango → mantener original
+        return;
+      }
+    }
+
+    // Validar que Google devolvió algo relevante (no una tienda random)
+    const originalName = (stop.name || stop.headline || '').toLowerCase();
+    const googleName = (detail?.name || candidate.name || '').toLowerCase();
+    const nameWords = originalName.split(/\s+/).filter(w => w.length > 3);
+    const nameMatch = nameWords.some(w => googleName.includes(w)) || googleName.split(/\s+/).filter(w => w.length > 3).some(w => originalName.includes(w));
+
+    // Validar distancia al punto original de Claude
+    const origDist = (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01)
+      ? Math.sqrt(Math.pow(Math.abs(pLat - stop.lat), 2) + Math.pow(Math.abs(pLng - stop.lng), 2)) * 111
+      : 0;
+    const closeEnough = origDist < 15; // menos de 15km del punto original
+
+    if (!nameMatch && !closeEnough) {
+      // Google devolvió algo sin relación → mantener datos de Claude
+      verifiedStops.push(stop);
+      return;
     }
 
     // Google solo corrige coords y fotos — NO sobrescribe contenido de Haiku
@@ -446,8 +471,9 @@ async function verifyAllStops(route, placesKey) {
     const photoRef = detail?.photos?.[0]?.photo_reference || candidate.photos?.[0]?.photo_reference || '';
     if (photoRef) stop.photo_ref = photoRef;
 
+    // Solo sobrescribir nombre si Google devolvió algo relevante
     const verifiedName = detail?.name || candidate.name || '';
-    if (verifiedName) { stop.name = verifiedName; stop.headline = verifiedName; }
+    if (verifiedName && nameMatch) { stop.name = verifiedName; stop.headline = verifiedName; }
 
     if (candidate.formatted_address) stop.verified_address = candidate.formatted_address;
 
