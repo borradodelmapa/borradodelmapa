@@ -135,7 +135,7 @@ body {
 }
 .welcome-bg {
   position:absolute; inset:0; z-index:0;
-  background-image:url('mapa.png');
+  background-image:url('mapa.webp');
   background-position:center; background-size:cover; opacity:.5;
 }
 .welcome-bg::after {

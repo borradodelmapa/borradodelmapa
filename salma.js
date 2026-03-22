@@ -328,7 +328,7 @@ const salma = {
     const div = document.createElement('div');
     div.className = 'msg msg-salma';
     div.innerHTML = `
-      <div class="msg-avatar"><img src="salma_ai_avatar.png" alt="Salma"></div>
+      <div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div>
       <div class="msg-body-salma">${formatMessage(text)}</div>`;
     area.appendChild(div);
     this._scrollToBottom();
@@ -341,7 +341,7 @@ const salma = {
     div.className = 'msg msg-salma';
     div.id = 'salma-stream-msg';
     div.innerHTML = `
-      <div class="msg-avatar"><img src="salma_ai_avatar.png" alt="Salma"></div>
+      <div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div>
       <div class="msg-body-salma" id="salma-stream-text"></div>`;
     area.appendChild(div);
     return document.getElementById('salma-stream-text');
@@ -391,7 +391,7 @@ const salma = {
     div.id = 'salma-loading';
     const phrase = this._loadingPhrases[Math.floor(Math.random() * this._loadingPhrases.length)];
     div.innerHTML = `
-      <div class="msg-avatar"><img src="salma_ai_avatar.png" alt="Salma"></div>
+      <div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div>
       <div class="msg-body-salma">
         <div class="loading-dots"><span></span><span></span><span></span></div>
         <div class="loading-text" id="loading-phrase">${phrase}</div>
