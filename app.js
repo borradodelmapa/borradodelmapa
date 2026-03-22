@@ -79,7 +79,7 @@ async function renderWelcome() {
         <h1 class="welcome-title">Tu próximo<br>viaje empieza<br><em>aquí</em></h1>
         <div class="welcome-claim">Escribe destino + días y sal con ruta lista</div>
         <div class="welcome-input-wrap">
-          <textarea class="welcome-input" id="welcome-input" placeholder="Ej: Vietnam 10 días en moto" rows="1"></textarea>
+          <textarea class="welcome-input" id="welcome-input" placeholder="Vietnam 10 días en moto" rows="1"></textarea>
           <button class="welcome-send" id="welcome-send">Planear viaje ›</button>
         </div>
         <div class="welcome-spacer"></div>
@@ -107,16 +107,16 @@ async function renderWelcome() {
   // Placeholder rotativo
   if (wInput) {
     const ejemplos = [
-      'Ej: Vietnam 10 días en moto',
-      'Ej: 3 días en Ronda con niños',
-      'Ej: Andalucía 7 días en familia',
-      'Ej: Tailandia 15 días mochilero',
-      'Ej: Ruta por los pueblos blancos',
-      'Ej: Japón 2 semanas primer viaje',
-      'Ej: Transpirenaica en camper',
-      'Ej: Costa Amalfitana 4 días en coche',
-      'Ej: Marruecos 5 días desde Tánger',
-      'Ej: Islandia Ring Road 10 días'
+      'Vietnam 10 días en moto',
+      '3 días en Ronda con niños',
+      'Andalucía 7 días en familia',
+      'Tailandia 15 días mochilero',
+      'Ruta por los pueblos blancos',
+      'Japón 2 semanas primer viaje',
+      'Transpirenaica en camper',
+      'Costa Amalfitana 4 días en coche',
+      'Marruecos 5 días desde Tánger',
+      'Islandia Ring Road 10 días'
     ];
     let idx = 0;
     window._placeholderInterval = setInterval(() => {
