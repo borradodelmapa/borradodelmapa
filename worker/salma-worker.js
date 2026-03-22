@@ -103,9 +103,9 @@ const BLOQUE_FORMATO = `FORMATO SEGÚN TIPO DE RESPUESTA:
 
 Cuando generas ruta: 1-2 frases en el chat sobre el destino (un dato interesante, una opinión, un consejo práctico). NUNCA digas "aquí tienes la ruta", "aquí lo tienes", "la tienes abajo" ni variantes — la ruta aparece sola debajo. Ejemplo: "Sapa en tres días da para el valle de Muong Hoa, los arrozales y algún pueblo hmong sin prisas."
 
-Cuando es conversacional sin ruta (vacunas, visados, cultura, seguridad, recomendación suelta): puedes extenderte lo que la pregunta necesite, pero misma densidad de información. Cada frase lleva dato. Prosa fluida, sin listas, sin bullet points, sin markdown. Cuenta las cosas como en un bar, no como un manual.
+Cuando es conversacional sin ruta (vacunas, visados, cultura, seguridad, recomendación suelta): puedes extenderte lo que la pregunta necesite, pero misma densidad de información. Cada frase lleva dato. Usa saltos de línea para separar bloques de información y **negritas** para resaltar datos clave (nombres, precios, teléfonos). NO uses bullet points ni listas con guiones — separa con saltos de línea y negritas. Cuenta las cosas como en un bar, no como un manual.
 
-NUNCA en ningún caso: listas con bullet points, markdown con ### o ####, coordenadas en el texto del chat, emojis excesivos.`;
+NUNCA en ningún caso: listas con bullet points (- ni •), markdown con ### o ####, coordenadas en el texto del chat, emojis excesivos.`;
 
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 8 — Modos y formato SALMA_ROUTE_JSON
@@ -453,7 +453,7 @@ function buildMessages(history, message, currentRoute, userName, userNationality
       return parts.join(' — ');
     }).join('\n');
 
-    userContent += `\n\n[RESULTADOS DE BÚSQUEDA REAL — Google Places:\n${formatted}\nSÉ BREVE Y DIRECTA. PRIMERO los datos que pide el viajero (nombre + teléfono de cada resultado), DESPUÉS tu opinión o consejo práctico en 1-2 frases. Máximo 4-5 frases en total. Di "llama antes para confirmar" porque horarios pueden cambiar. Si un resultado no tiene teléfono, dilo y sugiere buscarlo en Google Maps por el nombre. NUNCA inventes datos que no estén aquí.]`;
+    userContent += `\n\n[RESULTADOS DE BÚSQUEDA REAL — Google Places:\n${formatted}\nSÉ BREVE Y DIRECTA. USA FORMATO VISUAL: pon cada resultado en su propia línea con **nombre en negrita** seguido del teléfono. Separa con saltos de línea. PRIMERO los datos, DESPUÉS tu consejo en 1-2 frases. Ejemplo de formato:\n\n**Nombre del sitio** — +66 77 425 123\nDirección, rating\n\n**Otro sitio** — +66 77 960 456\nDirección, rating\n\nConsejo breve.\n\nDi "llama antes para confirmar" porque horarios pueden cambiar. Si no hay teléfono, dilo. NUNCA inventes datos.]`;
   }
 
   // Inyectar datos del tiempo
@@ -470,7 +470,7 @@ ${forecastLines}
 ENLACES para pronóstico actualizado:
 - weather.com: ${weatherData.links[0]}
 - yr.no: ${weatherData.links[1]}
-SÉ BREVE Y DIRECTA. PRIMERO los datos del tiempo (temperatura, lluvia), DESPUÉS 1 consejo práctico (ropa, paraguas, mejor hora). Incluye los enlaces para que el viajero consulte el pronóstico actualizado. Máximo 4-5 frases. Menciona que el pronóstico puede cambiar. NUNCA inventes datos que no estén aquí.]`;
+SÉ BREVE Y DIRECTA. USA FORMATO VISUAL con saltos de línea y **negritas** para separar datos. Ejemplo:\n\n**Ahora**: 34°C, humedad 75%\n**Próximos días**: 32-36°C, lluvias por la tarde\n\nConsejo práctico + enlaces.\n\nIncluye los enlaces para pronóstico actualizado. Menciona que puede cambiar. NUNCA inventes datos.]`;
   }
 
   messages.push({ role: 'user', content: userContent });

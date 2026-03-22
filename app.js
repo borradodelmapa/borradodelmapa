@@ -656,10 +656,14 @@ function formatMessage(str) {
   // URLs → enlaces clicables
   html = html.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
   // Teléfonos internacionales: +XX XXX XXX XXX (con espacios, guiones o puntos)
-  html = html.replace(/(\+\d{1,3}[\s.-]?\d{1,4}[\s.-]?\d{2,4}[\s.-]?\d{2,4}[\s.-]?\d{0,4})/g, (match) => {
+  html = html.replace(/(\+\d{1,3}[ .-]?\d{1,4}[ .-]?\d{2,4}[ .-]?\d{2,4}[ .-]?\d{0,4})/g, (match) => {
     const clean = match.replace(/[\s.-]/g, '').trim();
     return `<a href="tel:${clean}">${match.trim()}</a>`;
   });
+  // **negrita** → <strong>
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // Saltos de línea → <br>
+  html = html.replace(/\n/g, '<br>');
   return html;
 }
 
