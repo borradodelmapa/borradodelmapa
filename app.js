@@ -42,37 +42,28 @@ function showState(state) {
 function updateHeader() {
   let html = '';
   if (currentUser) {
-    if (currentState === 'viajes') {
-      const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
-      html = `<div class="app-avatar" id="btn-avatar">${escapeHTML(initial)}</div>`;
-    } else {
-      html = `<button class="app-header-btn gold" id="btn-viajes">MIS VIAJES</button>`;
-      const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
-      html += `<div class="app-avatar" id="btn-avatar">${escapeHTML(initial)}</div>`;
-    }
+    const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
+    html = `<div class="app-avatar" id="btn-avatar" title="Mis Viajes">${escapeHTML(initial)}</div>`;
   } else {
-    // No logueado: mostrar botón MIS VIAJES que lleva a login
-    html = `<button class="app-header-btn gold" id="btn-viajes">MIS VIAJES</button>`;
+    html = `<div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>`;
   }
   $headerActions.innerHTML = html;
-
-  // Listeners
-  const btnViajes = document.getElementById('btn-viajes');
-  if (btnViajes) btnViajes.addEventListener('click', () => {
-    if (currentUser) {
-      showState('viajes');
-    } else {
-      window._afterLogin = 'viajes';
-      openModal('login');
-    }
-  });
 
   const btnAvatar = document.getElementById('btn-avatar');
   if (btnAvatar) btnAvatar.addEventListener('click', handleAvatarClick);
 }
 
 function handleAvatarClick() {
-  if (confirm('¿Cerrar sesión?')) logout();
+  if (currentUser) {
+    if (currentState === 'viajes') {
+      if (confirm('¿Cerrar sesión?')) logout();
+    } else {
+      showState('viajes');
+    }
+  } else {
+    window._afterLogin = 'viajes';
+    openModal('login');
+  }
 }
 
 // ═══ WELCOME (estado 1) ═══

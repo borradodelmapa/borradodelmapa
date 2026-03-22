@@ -49,28 +49,34 @@ body {
 }
 .app-logo {
   font-family:var(--font-display);
-  font-size:26px; color:var(--blanco);
-  letter-spacing:2px; line-height:1;
+  font-size:30px; color:var(--blanco);
+  letter-spacing:2.5px; line-height:1;
   cursor:pointer;
 }
 .app-logo span { color:var(--dorado); }
-.app-header-actions { position:absolute; right:12px; display:flex; gap:6px; align-items:center; }
+.app-header-actions { position:absolute; right:14px; display:flex; align-items:center; }
 @media (max-width:420px) {
-  .app-logo { font-size:20px; letter-spacing:1.5px; }
+  .app-logo { font-size:24px; letter-spacing:2px; }
 }
-.app-header-btn {
-  font-family:var(--font-mono); font-size:9px;
-  color:var(--crema); opacity:.4; letter-spacing:.1em;
-  cursor:pointer; transition:all .2s; background:none; border:none;
-  padding:4px 8px; border-radius:6px; text-transform:uppercase;
-}
-.app-header-btn:hover { opacity:.8; color:var(--dorado); }
-.app-header-btn.gold { color:var(--dorado); opacity:.5; }
+.app-header-btn { display:none; }
 .app-avatar {
-  width:22px; height:22px; border-radius:50%; background:var(--dorado);
+  width:32px; height:32px; border-radius:50%; background:var(--dorado);
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--font-tight); font-size:10px; color:var(--negro);
-  cursor:pointer; font-weight:700; opacity:.7;
+  font-family:var(--font-tight); font-size:13px; color:var(--negro);
+  cursor:pointer; font-weight:700;
+  animation: avatar-pulse 3s ease-in-out infinite;
+  position:relative;
+}
+.app-avatar::after {
+  content:'Mis Viajes'; position:absolute; right:110%; top:50%; transform:translateY(-50%);
+  font-family:var(--font-mono); font-size:9px; color:var(--dorado);
+  letter-spacing:.1em; white-space:nowrap; opacity:0; transition:opacity .2s;
+  pointer-events:none;
+}
+.app-avatar:hover::after { opacity:1; }
+@keyframes avatar-pulse {
+  0%, 100% { box-shadow:0 0 0 0 rgba(212,160,23,.4); }
+  50% { box-shadow:0 0 0 6px rgba(212,160,23,0); }
 }
 
 /* ── App content (scroll entre header e input) ── */
@@ -161,14 +167,14 @@ body {
   width:100%; max-width:400px; display:flex; flex-direction:column; gap:10px; margin-bottom:20px;
 }
 .welcome-input {
-  width:100%; padding:14px 16px; box-sizing:border-box;
-  background:rgba(255,255,255,.06); border:1px solid var(--linea);
+  width:100%; padding:16px 18px; box-sizing:border-box;
+  background:rgba(255,255,255,.08); border:1px solid rgba(212,160,23,.3);
   border-radius:12px; color:var(--crema);
-  font-family:var(--font-body); font-size:15px;
-  outline:none; resize:none; min-height:48px; line-height:1.4;
+  font-family:var(--font-body); font-size:16px;
+  outline:none; resize:none; min-height:52px; line-height:1.4;
 }
-.welcome-input::placeholder { color:rgba(244,239,230,.3); }
-.welcome-input:focus { border-color:var(--dorado); }
+.welcome-input::placeholder { color:rgba(244,239,230,.35); }
+.welcome-input:focus { border-color:var(--dorado); background:rgba(255,255,255,.1); }
 .welcome-send {
   width:100%; height:48px; border-radius:12px;
   background:var(--dorado); border:none; cursor:pointer;
