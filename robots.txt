@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://salma-api.paco-defoto.workers.dev/sitemap.xml

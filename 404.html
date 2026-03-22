@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title id="page-title">Guía de viaje · Borradodelmapa</title>
+<meta name="description" id="page-desc" content="Guía de viaje creada con IA por Salma, tu copiloto de viaje.">
+<meta name="theme-color" content="#050505">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Borradodelmapa">
+<meta property="og:title" id="og-title" content="Guía de viaje · Borradodelmapa">
+<meta property="og:description" id="og-desc" content="Guía de viaje creada con IA por Salma, tu copiloto de viaje.">
+<meta property="og:image" id="og-image" content="https://borradodelmapa.com/og-image.jpg">
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<link rel="stylesheet" href="/styles.css">
+<style>
+  .public-page { min-height:100vh; background:var(--negro); }
+  .public-header { padding:16px 20px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--linea); }
+  .public-header a { text-decoration:none; }
+  .public-logo { font-family:var(--font-display); font-size:18px; color:var(--blanco); letter-spacing:.08em; }
+  .public-logo span { color:var(--dorado); }
+  .public-content { max-width:700px; margin:0 auto; padding:20px 16px 40px; }
+  .public-cta {
+    margin:30px 0; padding:24px; text-align:center;
+    background:rgba(212,160,23,.06); border:1px solid var(--linea);
+    border-radius:16px;
+  }
+  .public-cta h3 { font-family:var(--font-tight); font-size:22px; color:var(--blanco); margin-bottom:8px; }
+  .public-cta p { font-size:13px; color:rgba(244,239,230,.6); margin-bottom:16px; }
+  .public-cta a {
+    display:inline-block; padding:12px 28px; background:var(--dorado); color:var(--negro);
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.14em;
+    border-radius:10px; text-decoration:none; font-weight:700;
+  }
+  .public-cta a:hover { opacity:.9; }
+  .public-loading { text-align:center; padding:80px 20px; color:rgba(244,239,230,.5); }
+  .public-error { text-align:center; padding:80px 20px; }
+  .public-error h2 { font-family:var(--font-tight); font-size:28px; color:var(--blanco); margin-bottom:12px; }
+  .public-error p { color:rgba(244,239,230,.6); margin-bottom:20px; }
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script>
+const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
+if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
+</script>
+</head>
+<body>
+<div class="public-page">
+  <div class="public-header">
+    <a href="/"><div class="public-logo">BORRADO<span>DEL</span>MAPA</div></a>
+  </div>
+  <div class="public-content" id="public-content">
+    <div class="public-loading" id="public-loading">Cargando guía...</div>
+  </div>
+</div>
+
+<script>
+window.SALMA_API = "https://salma-api.paco-defoto.workers.dev";
+
+function escapeHTML(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+<script src="/guide-renderer.js"></script>
+<script>
+(async function() {
+  const slug = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
+  if (!slug || slug === '404.html') {
+    showError();
+    return;
+  }
+
+  try {
+    const db = firebase.firestore();
+    const doc = await db.collection('public_guides').doc(slug).get();
+
+    if (!doc.exists) {
+      showError();
+      return;
+    }
+
+    const data = doc.data();
+    const routeData = JSON.parse(data.itinerarioIA);
+
+    // Actualizar meta tags
+    const title = (data.nombre || 'Guía de viaje') + ' · Borradodelmapa';
+    document.getElementById('page-title').textContent = title;
+    document.getElementById('og-title').content = title;
+    const desc = data.summary || routeData.summary || 'Guía de viaje creada con IA';
+    document.getElementById('page-desc').content = desc;
+    document.getElementById('og-desc').content = desc;
+    if (data.cover_image) document.getElementById('og-image').content = data.cover_image;
+
+    // Renderizar
+    const content = document.getElementById('public-content');
+    document.getElementById('public-loading').remove();
+
+    // Crear chat-area para guide-renderer
+    const area = document.createElement('div');
+    area.id = 'chat-area';
+    content.appendChild(area);
+
+    guideRenderer.render(routeData, { saved: true });
+
+    // CTA
+    const cta = document.createElement('div');
+    cta.className = 'public-cta';
+    cta.innerHTML = `
+      <h3>Crea tu propia guía de viaje</h3>
+      <p>Salma te prepara una guía personalizada con mapas, fotos y recomendaciones en un minuto.</p>
+      <a href="/">CREAR MI GUÍA GRATIS</a>
+    `;
+    content.appendChild(cta);
+
+  } catch (e) {
+    console.error('Error cargando guía pública:', e);
+    showError();
+  }
+
+  function showError() {
+    const content = document.getElementById('public-content');
+    content.innerHTML = `
+      <div class="public-error">
+        <h2>Esta guía no existe</h2>
+        <p>Puede que se haya eliminado o que el enlace esté mal.</p>
+        <a href="/" style="color:var(--dorado);">Crear mi propia guía de viaje →</a>
+      </div>`;
+  }
+})();
+</script>
+</body>
+</html>

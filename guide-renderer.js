@@ -112,18 +112,29 @@ const guideRenderer = {
       });
     }
 
-    // Botón compartir
+    // Botón compartir — usa URL pública si hay slug
     const shareBtn = document.getElementById('guide-share-btn');
     if (shareBtn) {
-      shareBtn.addEventListener('click', () => {
+      shareBtn.addEventListener('click', async () => {
+        // Buscar slug de la guía
+        let shareUrl = window.location.href;
+        if (typeof salma !== 'undefined' && salma.currentRouteId && typeof db !== 'undefined' && typeof currentUser !== 'undefined' && currentUser) {
+          try {
+            const doc = await db.collection('users').doc(currentUser.uid)
+              .collection('maps').doc(salma.currentRouteId).get();
+            const slug = doc.data()?.slug;
+            if (slug) shareUrl = 'https://borradodelmapa.com/' + slug;
+          } catch (_) {}
+        }
+
         if (navigator.share) {
           navigator.share({
             title: r.title || 'Mi ruta de viaje',
             text: `Mira mi ruta: ${r.title || ''}`,
-            url: window.location.href
+            url: shareUrl
           }).catch(() => {});
         } else {
-          navigator.clipboard.writeText(window.location.href).then(() => {
+          navigator.clipboard.writeText(shareUrl).then(() => {
             showToast('Link copiado');
           }).catch(() => {});
         }

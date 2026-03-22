@@ -518,6 +518,36 @@ export default {
 
     const url = new URL(request.url);
 
+    // ─── ENDPOINT /sitemap.xml (SEO) ───
+    if (request.method === 'GET' && url.pathname === '/sitemap.xml') {
+      try {
+        const projectId = 'borradodelmapa-85257';
+        const firestoreUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/public_guides?pageSize=500`;
+        const res = await fetch(firestoreUrl);
+        const data = await res.json();
+
+        let urls = `  <url>\n    <loc>https://borradodelmapa.com/</loc>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
+
+        if (data.documents) {
+          for (const doc of data.documents) {
+            const slug = doc.name.split('/').pop();
+            const updated = doc.fields?.updatedAt?.stringValue || doc.fields?.createdAt?.stringValue || new Date().toISOString();
+            const lastmod = updated.split('T')[0];
+            urls += `  <url>\n    <loc>https://borradodelmapa.com/${slug}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
+          }
+        }
+
+        const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}</urlset>`;
+        return new Response(sitemap, {
+          headers: { 'Content-Type': 'application/xml', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=3600' }
+        });
+      } catch (e) {
+        return new Response('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>', {
+          headers: { 'Content-Type': 'application/xml' }
+        });
+      }
+    }
+
     // ─── ENDPOINT /photo ───
     if (request.method === 'GET' && url.pathname === '/photo') {
       const name = url.searchParams.get('name') || '';

@@ -396,6 +396,10 @@ async function guardarGuiaDirecto(routeData) {
     const docRef = await db.collection('users').doc(currentUser.uid).collection('maps').add(ruta);
     showToast('Guía guardada');
 
+    // Publicar guía pública (no esperar)
+    const slug = generateSlug(r.title || r.name || 'mi-ruta');
+    publishGuide(docRef.id, ruta, slug, r).catch(() => {});
+
     // Enriquecer en background (no esperar)
     enrichGuia(docRef.id, r);
 
@@ -412,6 +416,43 @@ async function guardarGuiaAuto(routeData) {
   if (id) showToast('Tu ruta se ha guardado automáticamente');
 }
 
+// ═══ GUÍAS PÚBLICAS (SEO) ═══
+
+function generateSlug(title) {
+  const base = (title || 'mi-ruta').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // quitar acentos
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .substring(0, 60);
+  // Añadir timestamp corto para unicidad
+  const ts = Date.now().toString(36).slice(-4);
+  return base + '-' + ts;
+}
+
+async function publishGuide(docId, rutaData, slug, routeData) {
+  try {
+    await db.collection('public_guides').doc(slug).set({
+      slug: slug,
+      ownerDocId: docId,
+      nombre: rutaData.nombre,
+      destino: rutaData.destino,
+      num_dias: rutaData.num_dias,
+      summary: rutaData.notas || '',
+      cover_image: rutaData.cover_image || '',
+      itinerarioIA: rutaData.itinerarioIA,
+      createdAt: rutaData.createdAt,
+      updatedAt: rutaData.updatedAt
+    });
+    // Guardar slug en la guía del usuario
+    await db.collection('users').doc(currentUser.uid)
+      .collection('maps').doc(docId).update({ slug: slug, published: true });
+  } catch (e) {
+    console.warn('Error publicando guía:', e);
+  }
+}
+
 // ═══ ENRIQUECIMIENTO (Pasada 2 — Haiku en background) ═══
 
 async function enrichGuia(docId, routeData) {
@@ -425,12 +466,26 @@ async function enrichGuia(docId, routeData) {
     const data = await res.json();
 
     if (data.route && data.route.stops) {
+      const enrichedJSON = JSON.stringify(data.route);
       await db.collection('users').doc(currentUser.uid)
         .collection('maps').doc(docId).update({
-          itinerarioIA: JSON.stringify(data.route),
+          itinerarioIA: enrichedJSON,
           enriched: true,
           enrichedAt: new Date().toISOString()
         });
+
+      // Actualizar guía pública también
+      try {
+        const userDoc = await db.collection('users').doc(currentUser.uid)
+          .collection('maps').doc(docId).get();
+        const slug = userDoc.data()?.slug;
+        if (slug) {
+          await db.collection('public_guides').doc(slug).update({
+            itinerarioIA: enrichedJSON,
+            updatedAt: new Date().toISOString()
+          });
+        }
+      } catch (_) {}
 
       // Si el usuario sigue viendo esta guía, actualizar la vista
       if (typeof salma !== 'undefined' && salma.currentRouteId === docId) {
