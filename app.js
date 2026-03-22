@@ -25,15 +25,17 @@ function showState(state) {
   currentState = state;
   updateHeader();
 
+  const inputBar = document.querySelector('.app-input-bar');
+
   if (state === 'welcome') {
     renderWelcome();
-    $input.placeholder = '¿A dónde te apetece ir?';
+    if (inputBar) inputBar.style.display = 'none';
   } else if (state === 'viajes') {
     loadUserGuides();
-    $input.placeholder = '¿A dónde te apetece ir?';
+    if (inputBar) inputBar.style.display = 'none';
   } else if (state === 'chat') {
-    // salma.js controla el contenido del chat
     $input.placeholder = 'Escribe a Salma...';
+    if (inputBar) inputBar.style.display = '';
   }
 }
 
@@ -85,17 +87,30 @@ async function renderWelcome() {
         <div class="welcome-label">SALMA · AI TRAVEL COPILOT</div>
         <h1 class="welcome-title">Tu próximo<br>viaje empieza<br><em>aquí</em></h1>
         <div class="welcome-claim">Escribe destino + días y sal con ruta lista</div>
-        <div class="welcome-bubble">
-          <div class="welcome-avatar">
-            <img src="salma_ai_avatar.png" alt="Salma">
-          </div>
-          <div class="welcome-msg">Ey, ¿a dónde te apetece ir? Dime destino y días y te monto la guía.</div>
+        <div class="welcome-input-wrap">
+          <textarea class="welcome-input" id="welcome-input" placeholder="Ej: Vietnam 10 días en moto" rows="1"></textarea>
+          <button class="welcome-send" id="welcome-send">Planear viaje ›</button>
         </div>
         <div class="welcome-chips" id="welcome-chips">
           ${defaultChips}
         </div>
       </div>
     </div>`;
+
+  // Welcome input → enviar
+  const wInput = document.getElementById('welcome-input');
+  const wSend = document.getElementById('welcome-send');
+  if (wSend) wSend.addEventListener('click', () => {
+    const msg = wInput.value.trim();
+    if (msg && typeof salma !== 'undefined') salma.send(msg);
+  });
+  if (wInput) wInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      const msg = wInput.value.trim();
+      if (msg && typeof salma !== 'undefined') salma.send(msg);
+    }
+  });
 
   const chipsEl = document.getElementById('welcome-chips');
   let loaded = false;
