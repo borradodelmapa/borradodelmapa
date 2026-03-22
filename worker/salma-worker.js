@@ -118,14 +118,15 @@ En las rutas solo incluye zonas o puntos que sean verificables (existen en Googl
 NOMBRES PARA ENLACES A GOOGLE MAPS
 El sistema construye enlaces de búsqueda con el "nombre" de cada parada + país/región. Usa SIEMPRE el nombre exacto con el que el lugar aparece en Google Maps (ej. "Puente Nuevo", "Alhambra de Granada", "Catedral de Málaga", "Plaza de la Constitución, Ronda"). Evita nombres genéricos o inventados; si pones "Centro histórico" en vez del nombre del monumento, el enlace no llevará al sitio correcto. Para cada parada: name y headline deben ser el nombre oficial o el que la gente busca en Google Maps.
 
-RUTAS POR DÍA — LÓGICA DE RECORRIDO (MUY IMPORTANTE)
-Cada ruta es un RECORRIDO REAL, no una lista de sitios interesantes. Piensa como un viajero que conduce, camina o pedalea:
-1. PUNTO DE PARTIDA: cada día empieza en un lugar con acceso real (pueblo, aparcamiento, estación). Dilo explícitamente en el narrative de la primera parada.
-2. ORDEN GEOGRÁFICO: las paradas del día siguen una secuencia lógica — de norte a sur, siguiendo la carretera, la ruta de senderismo o la costa. NUNCA pongas paradas que obliguen a volver sobre tus pasos.
-3. FIN DE JORNADA: la última parada del día debe ser un lugar donde el viajero pueda dormir, cenar o aparcar. Indica en el narrative dónde termina el día.
-4. DISTANCIAS REALES: no pongas 6 paradas a 50km entre ellas en un día a pie. Ajusta el número de paradas al medio de transporte y al tiempo disponible.
-5. CONEXIÓN ENTRE DÍAS: el día 2 empieza donde acabó el día 1 (o cerca). No saltes 200km entre el final de un día y el inicio del siguiente sin explicarlo.
-6. TIPO DE RUTA: adapta las paradas al medio de transporte. En moto: puertos de montaña y carreteras escénicas. A pie: senderos y refugios. En coche: pueblos y miradores accesibles por carretera.
+RUTAS POR DÍA — PIENSA EN EL RECORRIDO PRIMERO (CRÍTICO)
+NO pienses en "sitios interesantes" y luego los ordenes. Piensa AL REVÉS:
+1. TRAZA LA RUTA PRIMERO: decide el recorrido completo (ej: "Tarifa → costa norte → Cádiz → interior → Grazalema"). Divide los km totales entre los días disponibles.
+2. PON PARADAS EN EL CAMINO: cada parada es algo que el viajero pilla DE PASO en ese recorrido. No se desvía 50km para ver algo — lo pilla porque está en la ruta o muy cerca (máx 5-10km de desvío).
+3. CADA DÍA ES UN TRAMO: Día 1 = tramo A→B, Día 2 = tramo B→C. Las paradas del día van en el orden en que las encuentras conduciendo/caminando de A a B. La primera parada del día es el punto de salida. La última es donde duermes.
+4. CONTINUIDAD OBLIGATORIA: la primera parada del día 2 es la misma ciudad/pueblo donde terminó el día 1. Si el día 1 acaba en Cádiz, el día 2 empieza en Cádiz.
+5. DISTANCIAS POR TRANSPORTE: en moto/coche un día = 150-300km de recorrido, en bici = 50-80km, a pie = 15-25km. No pongas más paradas de las que caben en las horas disponibles.
+6. INDICA KM Y CARRETERAS: en el narrative de la primera parada de cada día, indica los km totales del tramo y la carretera principal (ej: "Hoy son 120km por la N-340 y la CA-9107").
+7. TIPO DE PARADAS SEGÚN TRANSPORTE: en moto → puertos, curvas, carreteras escénicas, bares de carretera. A pie → senderos, fuentes, refugios. En coche → pueblos, miradores con aparcamiento.
 Cada parada debe llevar un campo day_title con un título breve del día (3-5 palabras), el mismo valor para todas las paradas del mismo día.
 
 TEXTO VISIBLE EN EL CHAT (MUY IMPORTANTE)
