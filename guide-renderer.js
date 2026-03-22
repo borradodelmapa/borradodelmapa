@@ -258,8 +258,8 @@ const guideRenderer = {
   _dayGmapsUrl(stops, country) {
     const valid = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
     if (valid.length < 2) return this._stopGmapsUrl(valid[0] || stops[0], country);
-    // Formato path: /dir/lat,lng/lat,lng/lat,lng — funciona siempre
-    const segments = valid.map(p => p.lat + ',' + p.lng).join('/');
+    // Usar nombres para que Google muestre nombres reales, no coordenadas
+    const segments = valid.map(p => encodeURIComponent(p.headline || p.name)).join('/');
     return 'https://www.google.com/maps/dir/' + segments;
   },
 
@@ -270,7 +270,7 @@ const guideRenderer = {
       return 'https://www.google.com/maps';
     }
     const sampled = this._sampleWaypoints(valid, 25);
-    const segments = sampled.map(p => p.lat + ',' + p.lng).join('/');
+    const segments = sampled.map(p => encodeURIComponent(p.headline || p.name)).join('/');
     return 'https://www.google.com/maps/dir/' + segments;
   },
 
