@@ -85,6 +85,12 @@ async function renderWelcome() {
         <div class="welcome-label">SALMA · AI TRAVEL COPILOT</div>
         <h1 class="welcome-title">Tu próximo<br>viaje empieza<br><em>aquí</em></h1>
         <div class="welcome-claim">Escribe destino + días y sal con ruta lista</div>
+        <div class="welcome-bubble">
+          <div class="welcome-avatar">
+            <img src="salma_ai_avatar.png" alt="Salma">
+          </div>
+          <div class="welcome-msg">Ey, ¿a dónde te apetece ir? Dime destino y días y te monto la guía.</div>
+        </div>
         <div class="welcome-chips" id="welcome-chips">
           ${defaultChips}
         </div>
