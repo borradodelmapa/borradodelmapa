@@ -247,7 +247,11 @@ const salma = {
     const title = routeData.title || routeData.name || 'Tu ruta';
     this._addSalmaBubble('Aquí tienes tu guía de ' + title + '. Cuando quieras otra, dime destino y días.');
     guideRenderer.render(routeData, { saved: true });
-    this._scrollToBottom();
+    // Scroll al inicio de la guía, no al final
+    const guideCard = document.querySelector('.guide-card');
+    if (guideCard) {
+      setTimeout(() => guideCard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    }
 
     showState('chat');
 
