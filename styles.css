@@ -56,7 +56,7 @@ body {
 .app-logo span { color:var(--dorado); }
 .app-header-actions { position:absolute; right:20px; display:flex; gap:12px; align-items:center; }
 .app-header-btn {
-  font-family:var(--font-mono); font-size:9px;
+  font-family:var(--font-mono); font-size:12px;
   color:var(--crema); opacity:.6; letter-spacing:.14em;
   cursor:pointer; transition:all .2s; background:none; border:none;
   padding:6px 10px; border-radius:8px; text-transform:uppercase;
@@ -244,10 +244,10 @@ body {
   color:var(--blanco); line-height:1.1; letter-spacing:-.02em; margin-bottom:6px;
 }
 .guide-meta {
-  font-family:var(--font-mono); font-size:9px;
+  font-family:var(--font-mono); font-size:11px;
   color:var(--dorado); letter-spacing:.16em; margin-bottom:10px;
 }
-.guide-summary { font-size:13px; color:rgba(244,239,230,.7); line-height:1.6; }
+.guide-summary { font-size:14px; color:rgba(244,239,230,.7); line-height:1.6; }
 
 /* Map placeholder (Fase 2) */
 /* Mapa general Leaflet */
@@ -257,7 +257,7 @@ body {
 }
 .guide-gmaps-link {
   display:block; text-align:center; padding:8px;
-  font-family:var(--font-mono); font-size:9px;
+  font-family:var(--font-mono); font-size:12px;
   color:var(--dorado); letter-spacing:.14em; text-decoration:none;
   opacity:.6; transition:opacity .15s;
 }
@@ -322,7 +322,7 @@ body {
   padding:10px 14px; margin-bottom:8px;
   background:rgba(212,160,23,.06); border:1px solid var(--linea);
   border-radius:8px; font-family:var(--font-mono);
-  font-size:9px; color:var(--dorado); text-decoration:none;
+  font-size:12px; color:var(--dorado); text-decoration:none;
   letter-spacing:.1em; transition:background .15s;
 }
 .guide-day-gmaps:hover { background:rgba(212,160,23,.12); }
@@ -336,7 +336,7 @@ body {
 }
 .guide-stop-icon { font-size:14px; }
 .guide-stop-name {
-  font-family:var(--font-tight); font-size:15px; font-weight:700;
+  font-family:var(--font-tight); font-size:16px; font-weight:700;
   color:var(--blanco); flex:1; line-height:1.2;
 }
 .guide-stop-arrow {
@@ -352,14 +352,14 @@ body {
 .guide-stop-img { width:100%; height:160px; object-fit:cover; display:block; border-radius:8px; }
 
 .guide-stop-narrative {
-  font-size:13px; color:rgba(244,239,230,.75); line-height:1.7; margin-bottom:10px;
+  font-size:14px; color:rgba(244,239,230,.75); line-height:1.7; margin-bottom:10px;
 }
 .guide-stop-tag {
   padding:10px 12px; margin-bottom:8px; border-radius:0 10px 10px 0;
   font-size:12px; line-height:1.5; color:rgba(244,239,230,.7);
 }
 .guide-stop-tag-label {
-  font-family:var(--font-mono); font-size:8px;
+  font-family:var(--font-mono); font-size:11px;
   letter-spacing:.14em; margin-bottom:4px; display:block;
 }
 .tag-secret { background:rgba(212,160,23,.06); border-left:3px solid var(--dorado); }
@@ -370,13 +370,13 @@ body {
 .tag-context .guide-stop-tag-label { color:rgba(100,180,255,.8); }
 
 .guide-stop-practical {
-  font-family:var(--font-mono); font-size:10px;
+  font-family:var(--font-mono); font-size:12px;
   color:rgba(244,239,230,.5); line-height:1.7;
   padding:8px 10px; background:rgba(255,255,255,.02); border-radius:8px;
   margin-bottom:8px;
 }
 .guide-stop-gmaps {
-  font-family:var(--font-mono); font-size:9px;
+  font-family:var(--font-mono); font-size:12px;
   color:var(--dorado); text-decoration:none; letter-spacing:.1em;
   display:inline-block; padding:4px 0;
 }
