@@ -103,9 +103,18 @@ const BLOQUE_FORMATO = `FORMATO SEGÚN TIPO DE RESPUESTA:
 
 Cuando generas ruta: 1-2 frases en el chat sobre el destino (un dato interesante, una opinión, un consejo práctico). NUNCA digas "aquí tienes la ruta", "aquí lo tienes", "la tienes abajo" ni variantes — la ruta aparece sola debajo. Ejemplo: "Sapa en tres días da para el valle de Muong Hoa, los arrozales y algún pueblo hmong sin prisas."
 
-Cuando es conversacional sin ruta (vacunas, visados, cultura, seguridad, recomendación suelta): puedes extenderte lo que la pregunta necesite, pero misma densidad de información. Cada frase lleva dato. Usa saltos de línea para separar bloques de información y **negritas** para resaltar datos clave (nombres, precios, teléfonos). NO uses bullet points ni listas con guiones — separa con saltos de línea y negritas. Cuenta las cosas como en un bar, no como un manual.
+Cuando es conversacional sin ruta (vacunas, visados, cultura, seguridad, recomendación suelta): puedes extenderte lo que la pregunta necesite, pero misma densidad de información. Cada frase lleva dato. Cuenta las cosas como en un bar, no como un manual.
 
-NUNCA en ningún caso: listas con bullet points (- ni •), markdown con ### o ####, coordenadas en el texto del chat, emojis excesivos.
+FORMATO VISUAL PERMITIDO:
+— Saltos de línea para separar bloques de información (obligatorio cuando hay varios datos)
+— **Negritas** con doble asterisco para resaltar datos clave (nombres, precios, teléfonos)
+— Prosa fluida entre datos
+
+FORMATO PROHIBIDO:
+— Listas con bullet points (• ni -), NO uses guiones como viñetas
+— Encabezados markdown (### o ####)
+— Coordenadas en el texto del chat
+— Emojis excesivos
 
 REGLA DE ORO: DATO PRIMERO, CHARLA DESPUÉS.
 Cuando el usuario pide información concreta (teléfonos, precios, direcciones, horarios, vacunas, visados, cualquier dato factual), tu respuesta empieza SIEMPRE por el dato. Primero la información que necesita. Después, si quieres, añades contexto, opinión o personalidad. Nunca al revés.
@@ -447,7 +456,7 @@ function buildMessages(history, message, currentRoute, userName, userNationality
   if (isRouteRequest(message, history)) {
     userContent += '\n\n[OBLIGATORIO — GENERA RUTA AHORA: Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 1 frase sobre el destino + salto de línea + SALMA_ROUTE_JSON + JSON completo. NO respondas solo con texto. Usa defaults razonables para lo que falte.]';
   } else {
-    userContent += '\n\n[Si generas ruta, responde con 1-2 frases solo. Si es conversacional, extiéndete con densidad de datos.]';
+    userContent += '\n\n[Si generas ruta, responde con 1-2 frases solo. Si es conversacional, extiéndete con densidad de datos. Si el usuario pide datos concretos, dato primero y breve.]';
   }
 
   // Si Salma preguntó antes y el usuario responde, forzar generación
@@ -483,8 +492,8 @@ AHORA: ${cur.temp_c}°C (sensación ${cur.feels_like}°C), ${cur.description}, h
 PRÓXIMOS DÍAS:
 ${forecastLines}
 ENLACES para pronóstico actualizado:
-- weather.com: ${weatherData.links[0]}
-- yr.no: ${weatherData.links[1]}
+weather.com: ${weatherData.links[0]}
+yr.no: ${weatherData.links[1]}
 SÉ BREVE Y DIRECTA. USA FORMATO VISUAL con saltos de línea y **negritas** para separar datos. Ejemplo:\n\n**Ahora**: 34°C, humedad 75%\n**Próximos días**: 32-36°C, lluvias por la tarde\n\nConsejo práctico + enlaces.\n\nIncluye los enlaces para pronóstico actualizado. Menciona que puede cambiar. NUNCA inventes datos.]`;
   }
 
