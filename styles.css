@@ -54,10 +54,13 @@ body {
   cursor:pointer;
 }
 .app-logo span { color:var(--dorado); }
+.app-logo-viajes { color:var(--crema); opacity:.5; font-size:16px; letter-spacing:3px; margin-left:4px; }
 .app-header-actions { position:absolute; right:12px; display:flex; gap:8px; align-items:center; }
 @media (max-width:420px) {
-  .app-logo { font-size:15px; letter-spacing:1px; }
+  .app-logo { font-size:14px; letter-spacing:1px; }
+  .app-logo-viajes { font-size:12px; letter-spacing:2px; }
   .app-header-btn { font-size:10px; padding:4px 6px; letter-spacing:.1em; }
+  .app-send { padding:0 12px; font-size:10px; }
 }
 .app-header-btn {
   font-family:var(--font-mono); font-size:12px;
@@ -109,10 +112,12 @@ body {
 .app-input::placeholder { color:rgba(244,239,230,.25); }
 .app-input:focus { border-color:var(--linea-fuerte); }
 .app-send {
-  width:44px; height:44px; border-radius:50%; flex-shrink:0;
+  padding:0 18px; height:44px; border-radius:10px; flex-shrink:0;
   background:var(--dorado); border:none; cursor:pointer;
   display:flex; align-items:center; justify-content:center;
-  font-size:18px; color:var(--negro); transition:background .2s;
+  font-family:var(--font-mono); font-size:12px; font-weight:700;
+  color:var(--negro); letter-spacing:.08em; transition:background .2s;
+  white-space:nowrap;
 }
 .app-send:hover { background:var(--dorado2); }
 .app-send:disabled { opacity:.4; cursor:not-allowed; }
@@ -172,17 +177,18 @@ body {
   backdrop-filter:blur(8px);
 }
 .welcome-chips {
-  display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
-  max-width:340px;
+  display:flex; flex-direction:column; gap:10px; align-items:center;
+  max-width:400px; width:100%; margin-top:8px;
 }
 .chip {
-  font-family:var(--font-mono); font-size:10px;
-  padding:10px 14px; border-radius:var(--radius-pill);
-  background:rgba(212,160,23,.08); border:1px solid var(--linea);
-  color:var(--dorado2); cursor:pointer; transition:all .2s;
-  letter-spacing:.05em;
+  font-family:var(--font-body); font-size:15px; font-weight:500;
+  padding:14px 20px; border-radius:12px; width:100%; max-width:360px;
+  background:rgba(212,160,23,.06); border:1px solid var(--linea);
+  color:var(--crema); cursor:pointer; transition:all .2s;
+  display:flex; align-items:center; justify-content:space-between;
 }
-.chip:hover { background:rgba(212,160,23,.18); border-color:var(--dorado); }
+.chip::after { content:'›'; font-size:20px; color:var(--dorado); opacity:.6; }
+.chip:hover { background:rgba(212,160,23,.15); border-color:var(--dorado); }
 
 /* ═══ STATE 2: CHAT + GUIDE ═══ */
 .chat-area { padding:12px 16px; }
