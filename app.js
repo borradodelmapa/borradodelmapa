@@ -133,9 +133,24 @@ async function loadUserGuides() {
         <div class="viaje-card-body">
           <div class="viaje-card-title">${escapeHTML(d.nombre || 'Mi ruta')}</div>
           <div class="viaje-card-meta">${d.num_dias || d.dias || '?'} DÍAS · ${escapeHTML((d.destino || '').toUpperCase())}</div>
-        </div>`;
-      card.addEventListener('click', () => {
+        </div>
+        <button class="viaje-card-delete" data-doc-id="${doc.id}" title="Eliminar guía">✕</button>`;
+      // Click en la tarjeta → abrir guía
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.viaje-card-delete')) return; // no abrir si es el botón borrar
         if (typeof salma !== 'undefined') salma.cargarGuia(doc.id, d);
+      });
+      // Click en borrar
+      card.querySelector('.viaje-card-delete').addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (!confirm('¿Eliminar esta guía?')) return;
+        try {
+          await db.collection('users').doc(currentUser.uid).collection('maps').doc(doc.id).delete();
+          card.remove();
+          showToast('Guía eliminada');
+        } catch (err) {
+          showToast('Error al eliminar');
+        }
       });
       grid.appendChild(card);
     });

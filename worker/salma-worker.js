@@ -291,7 +291,8 @@ function buildMessages(history, message, currentRoute, userName, userNationality
 
   let userContent = message || '';
   if (currentRoute && currentRoute.stops && currentRoute.stops.length > 0) {
-    userContent += '\n\n[Contexto: el usuario tiene una ruta actual con ' + currentRoute.stops.length + ' paradas. Si pide cambios, devuelve la ruta completa actualizada en SALMA_ROUTE_JSON.]';
+    const stopSummary = currentRoute.stops.map((s, i) => `Día ${s.day}: ${s.name}`).join(', ');
+    userContent += `\n\n[RUTA ACTUAL del usuario: "${currentRoute.title || ''}" — ${currentRoute.stops.length} paradas: ${stopSummary}. Si el usuario pide CAMBIOS (añadir, quitar, reordenar), devuelve la ruta completa actualizada en SALMA_ROUTE_JSON manteniendo las paradas que no cambian. Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero.]`;
   }
 
   if (isRouteRequest(message, history)) {

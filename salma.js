@@ -48,19 +48,33 @@ const salma = {
 
       // Si hay ruta, renderizar guide-card
       if (data.route && data.route.stops) {
+        const isEdit = this.currentRouteId && this.currentRoute;
         this.currentRoute = data.route;
         if (!data._hadDraft) {
           this._removeLoading();
           try {
-            guideRenderer.render(data.route);
+            guideRenderer.render(data.route, isEdit ? { saved: true } : {});
           } catch (renderErr) {
             console.error('Error renderizando guía:', renderErr);
           }
         }
-        // Mensaje post-guía
-        this._addSalmaBubble('Guárdala y la tienes completa en Mis Viajes. Cuando quieras otra, dime destino y días.');
-        // Limpiar historial — cada guía empieza de cero
-        this.history = [];
+
+        if (isEdit) {
+          // Editando ruta guardada — actualizar Firestore
+          this._addSalmaBubble('Ruta actualizada. Dime si quieres más cambios.');
+          try {
+            await db.collection('users').doc(window.currentUser.uid)
+              .collection('maps').doc(this.currentRouteId).update({
+                itinerarioIA: JSON.stringify(data.route),
+                nombre: data.route.title || data.route.name || 'Mi ruta',
+                updatedAt: new Date().toISOString()
+              });
+          } catch (e) { console.warn('Error actualizando guía:', e); }
+        } else {
+          // Ruta nueva
+          this._addSalmaBubble('Guárdala y la tienes completa en Mis Viajes. Cuando quieras otra, dime destino y días.');
+          this.history = [];
+        }
       }
 
       this._scrollToBottom();
