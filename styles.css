@@ -164,8 +164,9 @@ body {
   text-align:left; margin-bottom:20px; max-width:340px;
 }
 .welcome-input-wrap {
-  width:100%; max-width:400px; display:flex; flex-direction:column; gap:10px; margin-bottom:20px;
+  width:100%; max-width:460px; display:flex; flex-direction:column; gap:10px; margin-bottom:0;
 }
+.welcome-spacer { height:30px; }
 .welcome-input {
   width:100%; padding:16px 18px; box-sizing:border-box;
   background:rgba(255,255,255,.08); border:1px solid rgba(212,160,23,.3);

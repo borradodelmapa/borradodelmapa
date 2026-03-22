@@ -82,6 +82,7 @@ async function renderWelcome() {
           <textarea class="welcome-input" id="welcome-input" placeholder="Ej: Vietnam 10 días en moto" rows="1"></textarea>
           <button class="welcome-send" id="welcome-send">Planear viaje ›</button>
         </div>
+        <div class="welcome-spacer"></div>
         <div class="welcome-chips" id="welcome-chips">
           ${defaultChips}
         </div>
@@ -102,6 +103,28 @@ async function renderWelcome() {
       if (msg && typeof salma !== 'undefined') salma.send(msg);
     }
   });
+
+  // Placeholder rotativo
+  if (wInput) {
+    const ejemplos = [
+      'Ej: Vietnam 10 días en moto',
+      'Ej: 3 días en Ronda con niños',
+      'Ej: Andalucía 7 días en familia',
+      'Ej: Tailandia 15 días mochilero',
+      'Ej: Ruta por los pueblos blancos',
+      'Ej: Japón 2 semanas primer viaje',
+      'Ej: Transpirenaica en camper',
+      'Ej: Costa Amalfitana 4 días en coche',
+      'Ej: Marruecos 5 días desde Tánger',
+      'Ej: Islandia Ring Road 10 días'
+    ];
+    let idx = 0;
+    window._placeholderInterval = setInterval(() => {
+      if (wInput.value) return;
+      idx = (idx + 1) % ejemplos.length;
+      wInput.placeholder = ejemplos[idx];
+    }, 3000);
+  }
 
   const chipsEl = document.getElementById('welcome-chips');
   let loaded = false;
