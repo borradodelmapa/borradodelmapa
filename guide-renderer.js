@@ -61,6 +61,9 @@ const guideRenderer = {
 
     area.appendChild(card);
 
+    // Cargar fotos de paradas visibles (primera parada abierta)
+    this._loadVisiblePhotos(card);
+
     // Event delegation — toggles de día y parada
     card.addEventListener('click', (e) => {
       const dayHead = e.target.closest('.guide-day-head');
@@ -70,7 +73,12 @@ const guideRenderer = {
       }
       const stopHead = e.target.closest('.guide-stop-head');
       if (stopHead) {
-        stopHead.parentElement.classList.toggle('open');
+        const stop = stopHead.parentElement;
+        stop.classList.toggle('open');
+        // Lazy load foto al abrir
+        if (stop.classList.contains('open')) {
+          this._lazyLoadPhoto(stop);
+        }
         return;
       }
     });
@@ -178,6 +186,11 @@ const guideRenderer = {
         tagsHtml += `<div class="guide-stop-practical">📋 ${escapeHTML(s.practical)}</div>`;
       }
 
+      // Foto: lazy load desde /photo si hay photo_ref
+      const photoHtml = s.photo_ref
+        ? `<div class="guide-stop-photo" data-photo-ref="${s.photo_ref}"><div class="guide-stop-photo-placeholder">📷</div></div>`
+        : '';
+
       html += `
         <div class="guide-stop${isFirstStop ? ' open' : ''}">
           <div class="guide-stop-head">
@@ -186,6 +199,7 @@ const guideRenderer = {
             <span class="guide-stop-arrow">▾</span>
           </div>
           <div class="guide-stop-body">
+            ${photoHtml}
             ${s.narrative ? `<p class="guide-stop-narrative">${escapeHTML(s.narrative)}</p>` : ''}
             ${tagsHtml}
             <a class="guide-stop-gmaps" href="${gmapsUrl}" target="_blank" rel="noopener">
@@ -260,6 +274,30 @@ const guideRenderer = {
       result.push(arr[Math.floor(i * step)]);
     }
     return result;
+  },
+
+  // ═══ LAZY LOAD FOTOS ═══
+  _lazyLoadPhoto(stopEl) {
+    const photoDiv = stopEl.querySelector('.guide-stop-photo');
+    if (!photoDiv || photoDiv.dataset.loaded) return;
+    const ref = photoDiv.dataset.photoRef;
+    if (!ref) return;
+
+    photoDiv.dataset.loaded = '1';
+    const url = window.SALMA_API + '/photo?ref=' + encodeURIComponent(ref) + '&json=1';
+
+    fetch(url).then(r => r.json()).then(data => {
+      if (data.url) {
+        photoDiv.innerHTML = `<img src="${data.url}" alt="" class="guide-stop-img" loading="lazy">`;
+      } else {
+        photoDiv.remove();
+      }
+    }).catch(() => photoDiv.remove());
+  },
+
+  _loadVisiblePhotos(card) {
+    const openStops = card.querySelectorAll('.guide-stop.open');
+    openStops.forEach(stop => this._lazyLoadPhoto(stop));
   }
 };
 

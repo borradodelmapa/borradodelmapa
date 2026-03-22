@@ -339,6 +339,10 @@ body {
 .guide-stop.open .guide-stop-body { display:block; }
 .guide-stop.open .guide-stop-arrow { transform:rotate(180deg); }
 
+.guide-stop-photo { margin-bottom:10px; border-radius:8px; overflow:hidden; }
+.guide-stop-photo-placeholder { height:120px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.05); border-radius:8px; font-size:24px; }
+.guide-stop-img { width:100%; height:160px; object-fit:cover; display:block; border-radius:8px; }
+
 .guide-stop-narrative {
   font-size:13px; color:rgba(244,239,230,.75); line-height:1.7; margin-bottom:10px;
 }
