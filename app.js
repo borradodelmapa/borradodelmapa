@@ -174,7 +174,7 @@ async function loadUserGuides() {
   $content.innerHTML = `
     <div class="viajes-header fade-in">
       <h2 class="viajes-title">Mis Viajes</h2>
-      <div class="viajes-sub">Tus guías guardadas</div>
+      <div class="viajes-sub">Nacido para el Ocio</div>
     </div>
     <div class="viajes-grid" id="viajes-grid">
       <div class="viaje-card viaje-card-new" id="btn-new-guide">
