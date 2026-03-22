@@ -250,28 +250,24 @@ body {
 .guide-summary { font-size:13px; color:rgba(244,239,230,.7); line-height:1.6; }
 
 /* Map placeholder (Fase 2) */
-.guide-map-placeholder {
-  height:160px; margin:0 16px; border-radius:12px; overflow:hidden;
+/* Mapa general Leaflet */
+.guide-map-container {
+  height:220px; margin:0 16px; border-radius:12px; overflow:hidden;
   border:1px solid var(--linea);
-  background:linear-gradient(135deg, rgba(212,160,23,.06), rgba(212,160,23,.02));
-  display:flex; align-items:center; justify-content:center;
-  position:relative;
 }
-.guide-map-placeholder::before {
-  content:''; position:absolute; inset:0;
-  background-image:url('mapa.png');
-  background-position:center; background-size:cover; opacity:.25;
+.guide-gmaps-link {
+  display:block; text-align:center; padding:8px;
+  font-family:var(--font-mono); font-size:9px;
+  color:var(--dorado); letter-spacing:.14em; text-decoration:none;
+  opacity:.6; transition:opacity .15s;
 }
-.guide-map-label {
-  position:relative; z-index:1;
-  font-family:var(--font-mono); font-size:10px;
-  color:var(--dorado); letter-spacing:.16em; padding:8px 16px;
-  background:rgba(5,5,5,.7); border-radius:8px;
-  backdrop-filter:blur(4px);
-  border:1px solid var(--linea);
-  text-decoration:none; transition:background .2s;
+.guide-gmaps-link:hover { opacity:1; }
+
+/* Mini-mapa por día */
+.guide-day-map {
+  height:160px; border-radius:8px; overflow:hidden;
+  margin-bottom:8px; border:1px solid var(--linea);
 }
-.guide-map-label:hover { background:rgba(5,5,5,.9); }
 
 /* Guide days */
 .guide-days { padding:16px 16px 8px; }

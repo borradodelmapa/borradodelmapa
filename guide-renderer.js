@@ -42,8 +42,9 @@ const guideRenderer = {
         ${r.summary ? `<p class="guide-summary">${escapeHTML(r.summary)}</p>` : ''}
       </div>
 
-      <a class="guide-map-placeholder" href="${this._fullRouteGmapsUrl(stops, country)}" target="_blank" rel="noopener">
-        <span class="guide-map-label">VER RUTA EN GOOGLE MAPS →</span>
+      <div class="guide-map-container" id="guide-map-main"></div>
+      <a class="guide-gmaps-link" href="${this._fullRouteGmapsUrl(stops, country)}" target="_blank" rel="noopener">
+        ABRIR EN GOOGLE MAPS →
       </a>
 
       <div class="guide-days">
@@ -64,11 +65,26 @@ const guideRenderer = {
     // Cargar fotos de paradas visibles (primera parada abierta)
     this._loadVisiblePhotos(card);
 
+    // Inicializar mapa general
+    this._initMainMap(stops, days);
+
+    // Inicializar mini-mapa del primer día (abierto por defecto)
+    const firstDayNum = Object.keys(days).map(Number).sort((a, b) => a - b)[0];
+    if (firstDayNum) this._initDayMap(firstDayNum, days[firstDayNum].stops);
+
     // Event delegation — toggles de día y parada
     card.addEventListener('click', (e) => {
       const dayHead = e.target.closest('.guide-day-head');
       if (dayHead) {
-        dayHead.parentElement.classList.toggle('open');
+        const dayEl = dayHead.parentElement;
+        dayEl.classList.toggle('open');
+        // Lazy load mini-mapa al abrir día
+        if (dayEl.classList.contains('open')) {
+          const dayNum = dayEl.querySelector('.guide-day-map')?.dataset.day;
+          if (dayNum && days[Number(dayNum)]) {
+            this._initDayMap(Number(dayNum), days[Number(dayNum)].stops);
+          }
+        }
         return;
       }
       const stopHead = e.target.closest('.guide-stop-head');
@@ -143,6 +159,7 @@ const guideRenderer = {
             <span class="guide-day-arrow">▾</span>
           </div>
           <div class="guide-day-body">
+            <div class="guide-day-map" id="guide-map-day-${num}" data-day="${num}"></div>
             <a class="guide-day-gmaps" href="${gmapsUrl}" target="_blank" rel="noopener">
               🗺 Navegar Día ${num} en Google Maps →
             </a>
@@ -298,6 +315,115 @@ const guideRenderer = {
   _loadVisiblePhotos(card) {
     const openStops = card.querySelectorAll('.guide-stop.open');
     openStops.forEach(stop => this._lazyLoadPhoto(stop));
+  },
+
+  // ═══ MAPAS LEAFLET ═══
+
+  _dayColors: ['#D4A843', '#E87040', '#5CB85C', '#5BC0DE', '#D9534F', '#AA66CC', '#FF8C00'],
+  _maps: {},
+
+  _getValidStops(stops) {
+    return (stops || []).filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
+  },
+
+  _initMainMap(allStops, days) {
+    const el = document.getElementById('guide-map-main');
+    if (!el || this._maps['main']) return;
+
+    const valid = this._getValidStops(allStops);
+    if (valid.length === 0) { el.style.display = 'none'; return; }
+
+    const map = L.map(el, { scrollWheelZoom: false, zoomControl: true, attributionControl: false });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 18
+    }).addTo(map);
+
+    // Pins por día con colores distintos
+    const dayNums = Object.keys(days).map(Number).sort((a, b) => a - b);
+    dayNums.forEach((num, idx) => {
+      const color = this._dayColors[idx % this._dayColors.length];
+      const dayStops = this._getValidStops(days[num].stops);
+      dayStops.forEach(s => {
+        L.circleMarker([s.lat, s.lng], {
+          radius: 7, fillColor: color, color: '#fff', weight: 2, fillOpacity: 0.9
+        }).bindPopup(`<b>${s.headline || s.name}</b><br><small>Día ${num}</small>`)
+          .addTo(map);
+      });
+    });
+
+    // Ajustar vista a todos los puntos
+    const bounds = L.latLngBounds(valid.map(s => [s.lat, s.lng]));
+    map.fitBounds(bounds, { padding: [30, 30] });
+    this._maps['main'] = map;
+  },
+
+  _initDayMap(dayNum, stops) {
+    const mapId = 'guide-map-day-' + dayNum;
+    const el = document.getElementById(mapId);
+    if (!el || this._maps[mapId]) return;
+
+    const valid = this._getValidStops(stops);
+    if (valid.length === 0) { el.style.display = 'none'; return; }
+
+    const color = this._dayColors[(dayNum - 1) % this._dayColors.length];
+    const map = L.map(el, { scrollWheelZoom: false, zoomControl: false, attributionControl: false });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 18
+    }).addTo(map);
+
+    // Pins
+    valid.forEach((s, i) => {
+      L.circleMarker([s.lat, s.lng], {
+        radius: 6, fillColor: color, color: '#fff', weight: 2, fillOpacity: 0.9
+      }).bindPopup(`<b>${i + 1}. ${s.headline || s.name}</b>`)
+        .addTo(map);
+    });
+
+    // Ajustar vista
+    const bounds = L.latLngBounds(valid.map(s => [s.lat, s.lng]));
+    map.fitBounds(bounds, { padding: [20, 20] });
+    this._maps[mapId] = map;
+
+    // Pedir ruta real a Google Directions
+    if (valid.length >= 2) {
+      this._loadDirections(map, valid, color);
+    }
+  },
+
+  _loadDirections(map, stops, color) {
+    const origin = stops[0].lat + ',' + stops[0].lng;
+    const dest = stops[stops.length - 1].lat + ',' + stops[stops.length - 1].lng;
+    const waypoints = stops.slice(1, -1).map(s => s.lat + ',' + s.lng).join('|');
+
+    const url = window.SALMA_API + '/directions?origin=' + origin + '&destination=' + dest
+      + (waypoints ? '&waypoints=' + waypoints : '');
+
+    fetch(url).then(r => r.json()).then(data => {
+      if (data.polyline) {
+        const coords = this._decodePolyline(data.polyline);
+        L.polyline(coords, { color: color, weight: 3, opacity: 0.7 }).addTo(map);
+      }
+    }).catch(() => {
+      // Fallback: línea recta entre paradas
+      const coords = stops.map(s => [s.lat, s.lng]);
+      L.polyline(coords, { color: color, weight: 2, opacity: 0.5, dashArray: '6,8' }).addTo(map);
+    });
+  },
+
+  // Decode Google polyline encoding
+  _decodePolyline(encoded) {
+    const coords = [];
+    let i = 0, lat = 0, lng = 0;
+    while (i < encoded.length) {
+      let b, shift = 0, result = 0;
+      do { b = encoded.charCodeAt(i++) - 63; result |= (b & 0x1f) << shift; shift += 5; } while (b >= 0x20);
+      lat += (result & 1) ? ~(result >> 1) : (result >> 1);
+      shift = 0; result = 0;
+      do { b = encoded.charCodeAt(i++) - 63; result |= (b & 0x1f) << shift; shift += 5; } while (b >= 0x20);
+      lng += (result & 1) ? ~(result >> 1) : (result >> 1);
+      coords.push([lat / 1e5, lng / 1e5]);
+    }
+    return coords;
   }
 };
 

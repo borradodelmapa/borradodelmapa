@@ -543,6 +543,45 @@ export default {
       }
     }
 
+    // ─── ENDPOINT /directions (polyline para mini-mapas) ───
+    if (request.method === 'GET' && url.pathname === '/directions') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      const placesKey = env.GOOGLE_PLACES_KEY;
+      const origin = url.searchParams.get('origin') || '';
+      const destination = url.searchParams.get('destination') || '';
+      const waypoints = url.searchParams.get('waypoints') || '';
+      const mode = url.searchParams.get('mode') || 'driving';
+
+      if (!origin || !destination || !placesKey) {
+        return new Response(JSON.stringify({ error: 'missing params' }), { status: 400, headers: corsH });
+      }
+
+      try {
+        let dirUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&mode=${mode}&key=${placesKey}`;
+        if (waypoints) dirUrl += `&waypoints=${encodeURIComponent(waypoints)}`;
+
+        const res = await fetch(dirUrl);
+        const data = await res.json();
+
+        if (data.status !== 'OK' || !data.routes?.[0]) {
+          return new Response(JSON.stringify({ error: data.status || 'No route' }), { status: 404, headers: corsH });
+        }
+
+        const route = data.routes[0];
+        const polyline = route.overview_polyline?.points || '';
+        const legs = (route.legs || []).map(l => ({
+          distance: l.distance?.text || '',
+          duration: l.duration?.text || '',
+        }));
+
+        return new Response(JSON.stringify({ polyline, legs }), {
+          headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' }
+        });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /enrich (Pasada 2 — Haiku rellena campos) ───
     if (request.method === 'POST' && url.pathname === '/enrich') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
