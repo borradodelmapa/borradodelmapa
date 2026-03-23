@@ -115,12 +115,16 @@ body {
   line-height:1.4; box-sizing:border-box;
 }
 .app-mic {
-  width:44px; height:44px; flex-shrink:0;
+  width:52px; height:52px; flex-shrink:0;
   border-radius:50%; border:1px solid var(--linea);
   background:rgba(255,255,255,.04);
   color:var(--crema); cursor:pointer;
   display:flex; align-items:center; justify-content:center;
   transition:all .2s;
+  -webkit-touch-callout:none;
+  -webkit-user-select:none;
+  user-select:none;
+  touch-action:manipulation;
 }
 .app-mic:hover { border-color:var(--linea-fuerte); }
 .app-mic.listening {
@@ -196,7 +200,7 @@ body {
   outline:none; resize:none; min-height:58px; line-height:1.4;
 }
 .welcome-mic {
-  width:58px; height:58px; border-color:rgba(212,160,23,.4);
+  width:62px; height:62px; border-color:rgba(212,160,23,.4);
 }
 .welcome-input::placeholder { color:rgba(244,239,230,.45); }
 .welcome-input:focus { border-color:var(--dorado); background:rgba(255,255,255,.1); }

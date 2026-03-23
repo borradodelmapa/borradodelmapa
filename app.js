@@ -743,19 +743,33 @@ function sendMessage() {
     }
   }
 
-  // Un solo listener en document — funciona con botones dinámicos
-  document.addEventListener('click', (e) => {
+  // Handler único para click y touch
+  function handleMicTap(e) {
     const micBtn = e.target.closest('.app-mic');
     if (!micBtn) return;
     e.preventDefault();
+    e.stopPropagation();
 
     if (listening) {
-      // Forzar reset y permitir nuevo intento
       resetMicState();
       return;
     }
 
     startListening(micBtn);
+  }
+
+  // Bloquear long-press en el botón de micro (evita menú contextual)
+  document.addEventListener('contextmenu', (e) => {
+    if (e.target.closest('.app-mic')) e.preventDefault();
+  });
+
+  // touchend responde al instante en móvil (no espera 300ms del click)
+  document.addEventListener('touchend', handleMicTap);
+  // click como fallback para desktop
+  document.addEventListener('click', (e) => {
+    // En móvil touchend ya lo manejó, evitar doble disparo
+    if (e.target.closest('.app-mic') && 'ontouchend' in window) return;
+    handleMicTap(e);
   });
 })();
 
