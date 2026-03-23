@@ -40,11 +40,6 @@ const salma = {
     if (!msg || this._streaming) return;
     if (!this._checkRate()) return;
 
-    // Pedir geolocalización en la primera interacción del usuario
-    if (!this._geoRequested) {
-      this._geoRequested = true;
-      this.initGeolocation();
-    }
 
     // Transicionar a chat si estamos en welcome
     if (currentState === 'welcome' || currentState === 'viajes') {
