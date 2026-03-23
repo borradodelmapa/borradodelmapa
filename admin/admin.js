@@ -150,14 +150,17 @@
     if (db && firebase.auth().currentUser) {
       if (tabId === 'dashboard') {
         loadDashboard();
-        // Actualizar métrica Salma desde caché si existe
-        if (window._salmaLogsCache && window._salmaLogsCache.length > 0) {
-          var today = new Date().toISOString().slice(0, 10);
-          var salmaCalls = window._salmaLogsCache.filter(function(log) {
-            return log.timestamp && log.timestamp.slice(0, 10) === today;
-          }).length;
-          document.getElementById('m-salma').textContent = salmaCalls;
-        }
+        // Actualizar métrica Salma desde caché si existe (con pequeño delay)
+        setTimeout(function() {
+          if (window._salmaLogsCache && window._salmaLogsCache.length > 0) {
+            var today = new Date().toISOString().slice(0, 10);
+            var salmaCalls = window._salmaLogsCache.filter(function(log) {
+              return log.timestamp && log.timestamp.slice(0, 10) === today;
+            }).length;
+            var el = document.getElementById('m-salma');
+            if (el) el.textContent = salmaCalls;
+          }
+        }, 100);
       }
       if (tabId === 'usuarios') loadUsuarios();
       if (tabId === 'proyecto') loadProyecto();
@@ -1052,6 +1055,10 @@
 
   var salmaLoaded = false;
   var salmaLogs = [];
+  // Inicializar caché global vacío
+  if (!window._salmaLogsCache) {
+    window._salmaLogsCache = [];
+  }
 
   function loadSalma() {
     if (salmaLoaded) return;
