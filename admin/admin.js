@@ -150,17 +150,27 @@
     if (db && firebase.auth().currentUser) {
       if (tabId === 'dashboard') {
         loadDashboard();
-        // También actualizar m-salma desde caché si está disponible
-        if (window._salmaLogsCache && window._salmaLogsCache.length > 0) {
-          var today = new Date().toISOString().slice(0, 10);
-          var salmaCalls = window._salmaLogsCache.filter(function(log) {
-            return log.timestamp && log.timestamp.slice(0, 10) === today;
-          }).length;
-          setTimeout(function() {
+        // También actualizar m-salma desde caché o localStorage
+        setTimeout(function() {
+          var logsToUse = window._salmaLogsCache;
+          if (!logsToUse || logsToUse.length === 0) {
+            try {
+              var stored = localStorage.getItem('_salmaLogs');
+              if (stored) {
+                logsToUse = JSON.parse(stored);
+              }
+            } catch(e) {}
+          }
+          if (logsToUse && logsToUse.length > 0) {
+            var today = new Date().toISOString().slice(0, 10);
+            var salmaCalls = logsToUse.filter(function(log) {
+              return log.timestamp && log.timestamp.slice(0, 10) === today;
+            }).length;
             var el = document.getElementById('m-salma');
             if (el) el.textContent = salmaCalls;
-          }, 50);
-        }
+          }
+        }, 100);
+      }
       }
       if (tabId === 'usuarios') loadUsuarios();
       if (tabId === 'proyecto') loadProyecto();
@@ -271,11 +281,19 @@
       console.error('Error cargando métricas dashboard:', err);
     }
 
-    // Actualizar métrica Salma desde caché (se llena cuando se visita la pestaña Salma)
-    // No se puede leer admin_logs directamente desde el cliente por permisos de Firestore
-    if (window._salmaLogsCache && window._salmaLogsCache.length > 0) {
+    // Actualizar métrica Salma desde caché o localStorage (se llena cuando se visita la pestaña Salma)
+    var logsToUse = window._salmaLogsCache;
+    if (!logsToUse || logsToUse.length === 0) {
+      try {
+        var stored = localStorage.getItem('_salmaLogs');
+        if (stored) {
+          logsToUse = JSON.parse(stored);
+        }
+      } catch(e) {}
+    }
+    if (logsToUse && logsToUse.length > 0) {
       var today = new Date().toISOString().slice(0, 10);
-      var salmaCalls = window._salmaLogsCache.filter(function(log) {
+      var salmaCalls = logsToUse.filter(function(log) {
         return log.timestamp && log.timestamp.slice(0, 10) === today;
       }).length;
       document.getElementById('m-salma').textContent = salmaCalls;
@@ -1106,9 +1124,12 @@
         });
       });
 
-      // Guardar en caché global para que el dashboard pueda actualizar la métrica
-      // Usar el array local como caché (no copiar, sino referenciar)
+      // Guardar en localStorage y caché global
       window._salmaLogsCache = salmaLogs;
+      try {
+        localStorage.setItem('_salmaLogs', JSON.stringify(salmaLogs));
+        localStorage.setItem('_salmaLogsTime', new Date().toISOString());
+      } catch(e) {}
 
       renderSalmaMetrics();
       renderSalmaTable();
