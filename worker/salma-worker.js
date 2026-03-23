@@ -215,6 +215,46 @@ const SALMA_SYSTEM_BASE = [
 ].join('\n\n');
 
 // ═══════════════════════════════════════════════════════════════
+// HERRAMIENTAS — Tool Use para agente Salma (Duffel vuelos)
+// ═══════════════════════════════════════════════════════════════
+const SALMA_TOOLS = [
+  {
+    name: "buscar_vuelos",
+    description: "Busca vuelos reales entre ciudades con precios actualizados. Usa esta herramienta cuando el usuario pida buscar, comparar o encontrar vuelos. Devuelve opciones reales con aerolínea, horarios, escalas, precio, y un campo enlace_reserva con URL de Google Flights para reservar. REGLAS DE FORMATO PARA ENLACES: cuando incluyas el enlace_reserva en tu respuesta, pon la URL SOLA en su propia línea, sin formato markdown, sin corchetes, sin paréntesis. Solo la URL tal cual. Ejemplo: 'Para reservar:' seguido de salto de línea y la URL sola. NUNCA uses formato [texto](url). NUNCA inventes URLs — usa exactamente el enlace_reserva que devuelve la herramienta. Los códigos IATA: MAD=Madrid, BCN=Barcelona, FCO=Roma Fiumicino, CDG=París, LHR=Londres. Para ciudades con varios aeropuertos: LON=Londres, PAR=París, ROM=Roma, NYC=Nueva York.",
+    input_schema: {
+      type: "object",
+      properties: {
+        origen: {
+          type: "string",
+          description: "Código IATA de la ciudad/aeropuerto de origen. Ejemplos: 'MAD' para Madrid, 'BCN' para Barcelona, 'LON' para Londres (todos sus aeropuertos)"
+        },
+        destino: {
+          type: "string",
+          description: "Código IATA de la ciudad/aeropuerto de destino. Ejemplos: 'ROM' para Roma, 'PAR' para París, 'BKK' para Bangkok"
+        },
+        fecha_ida: {
+          type: "string",
+          description: "Fecha de salida en formato YYYY-MM-DD. Ejemplo: '2026-05-15'"
+        },
+        fecha_vuelta: {
+          type: "string",
+          description: "Fecha de regreso en formato YYYY-MM-DD. Omitir para vuelos solo ida"
+        },
+        adultos: {
+          type: "integer",
+          description: "Número de pasajeros adultos. Por defecto 1"
+        },
+        clase: {
+          type: "string",
+          description: "Clase de cabina: 'economy', 'premium_economy', 'business', 'first'. Por defecto 'economy'"
+        }
+      },
+      required: ["origen", "destino", "fecha_ida"]
+    }
+  }
+];
+
+// ═══════════════════════════════════════════════════════════════
 // UTILIDADES
 // ═══════════════════════════════════════════════════════════════
 
@@ -249,6 +289,11 @@ function isHelpRequest(message) {
     if (regex.test(m)) return cat;
   }
   return null;
+}
+
+// Detectar si el usuario pide búsqueda de vuelos (para usar Sonnet en vez de Haiku)
+function isFlightRequest(message) {
+  return /vuelo|vuelos|flight|flights|volar|avion|avión|billete.*avi[oó]n|busca.*vuelo|reserva.*vuelo|fly\s|flying/i.test(message);
 }
 
 function extractHelpLocation(message, history, currentRoute) {
@@ -434,11 +479,13 @@ function getCountryCode(countryName) {
 function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData) {
   let systemPrompt = SALMA_SYSTEM_BASE;
 
-  // Contexto mínimo del usuario
+  // Contexto mínimo del usuario + fecha actual
   const ctx = [];
+  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  ctx.push(`[FECHA ACTUAL: ${today}]`);
   if (userName) ctx.push(`[USUARIO: ${userName}]`);
   if (userNationality) ctx.push(`[NACIONALIDAD: ${userNationality} — adapta visados]`);
-  if (ctx.length) systemPrompt += '\n\n' + ctx.join('\n');
+  systemPrompt += '\n\n' + ctx.join('\n');
 
   const messages = [];
   if (Array.isArray(history) && history.length > 0) {
@@ -684,6 +731,259 @@ async function verifyAllStops(route, placesKey) {
 
   route.stops = verifiedStops;
   return route;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BÚSQUEDA DE VUELOS — Duffel API
+// ═══════════════════════════════════════════════════════════════
+
+async function buscarVuelosDuffel(params, duffelToken) {
+  if (!duffelToken) {
+    return { error: 'Token de Duffel no configurado. Añade DUFFEL_ACCESS_TOKEN en Cloudflare.' };
+  }
+
+  try {
+    // Construir slices (tramos del viaje)
+    const slices = [
+      {
+        origin: params.origen,
+        destination: params.destino,
+        departure_date: params.fecha_ida
+      }
+    ];
+
+    // Si hay fecha de vuelta, añadir slice de regreso
+    if (params.fecha_vuelta) {
+      slices.push({
+        origin: params.destino,
+        destination: params.origen,
+        departure_date: params.fecha_vuelta
+      });
+    }
+
+    // Construir array de pasajeros
+    const passengers = [];
+    const numAdultos = params.adultos || 1;
+    for (let i = 0; i < numAdultos; i++) {
+      passengers.push({ type: 'adult' });
+    }
+
+    const requestBody = {
+      data: {
+        slices: slices,
+        passengers: passengers,
+        cabin_class: params.clase || 'economy'
+      }
+    };
+
+    // Llamar a Duffel — return_offers=true incluye ofertas directamente
+    const response = await fetch(
+      'https://api.duffel.com/air/offer_requests?return_offers=true&supplier_timeout=15000',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Accept-Encoding': 'gzip',
+          'Duffel-Version': 'v2',
+          'Authorization': `Bearer ${duffelToken}`
+        },
+        body: JSON.stringify(requestBody)
+      }
+    );
+
+    const data = await response.json();
+
+    // Manejar errores de Duffel
+    if (data.errors) {
+      return {
+        encontrados: 0,
+        error: data.errors[0]?.message || 'Error en la búsqueda de vuelos'
+      };
+    }
+
+    const offers = data.data?.offers || [];
+    const offerRequestId = data.data?.id || null;
+
+    if (offers.length === 0) {
+      return {
+        encontrados: 0,
+        mensaje: 'No se encontraron vuelos con esos criterios. Prueba con fechas más flexibles.'
+      };
+    }
+
+    // Generar enlace de reserva en Skyscanner (distingue solo ida vs ida+vuelta)
+    // Formato fecha Skyscanner: AAMMDD (260415 = 15 abril 2026)
+    const skyDate = (d) => d.replace(/^20(\d{2})-(\d{2})-(\d{2})$/, '$1$2$3');
+    let bookingUrl = `https://www.skyscanner.es/transporte/vuelos/${params.origen.toLowerCase()}/${params.destino.toLowerCase()}/${skyDate(params.fecha_ida)}/`;
+    if (params.fecha_vuelta) {
+      bookingUrl += `${skyDate(params.fecha_vuelta)}/`;
+    }
+
+    // Ordenar por precio y tomar los 5 más baratos
+    const sortedOffers = offers
+      .sort((a, b) => parseFloat(a.total_amount) - parseFloat(b.total_amount))
+      .slice(0, 5);
+
+    // Formatear resultados para que Claude los presente bien
+    const vuelos = sortedOffers.map(offer => {
+      const idaSlice = offer.slices[0];
+      const primerSegmento = idaSlice.segments[0];
+      const ultimoSegmento = idaSlice.segments[idaSlice.segments.length - 1];
+
+      const resultado = {
+        precio: offer.total_amount + ' ' + offer.total_currency,
+        aerolinea: primerSegmento.operating_carrier?.name || primerSegmento.marketing_carrier?.name || 'Desconocida',
+        codigo_aerolinea: primerSegmento.marketing_carrier?.iata_code || '',
+        numero_vuelo: (primerSegmento.marketing_carrier?.iata_code || '') + primerSegmento.marketing_carrier_flight_number,
+        origen: primerSegmento.origin?.iata_code + ' (' + (primerSegmento.origin?.city_name || primerSegmento.origin?.name || '') + ')',
+        destino: ultimoSegmento.destination?.iata_code + ' (' + (ultimoSegmento.destination?.city_name || ultimoSegmento.destination?.name || '') + ')',
+        salida: primerSegmento.departing_at,
+        llegada: ultimoSegmento.arriving_at,
+        duracion: idaSlice.duration || 'No disponible',
+        escalas: idaSlice.segments.length - 1,
+        clase: offer.cabin_class || params.clase || 'economy'
+      };
+
+      // Info de vuelta si es ida y vuelta
+      if (offer.slices[1]) {
+        const vueltaSlice = offer.slices[1];
+        const vueltaPrimer = vueltaSlice.segments[0];
+        const vueltaUltimo = vueltaSlice.segments[vueltaSlice.segments.length - 1];
+        resultado.vuelta_salida = vueltaPrimer.departing_at;
+        resultado.vuelta_llegada = vueltaUltimo.arriving_at;
+        resultado.vuelta_duracion = vueltaSlice.duration || 'No disponible';
+        resultado.vuelta_escalas = vueltaSlice.segments.length - 1;
+      }
+
+      return resultado;
+    });
+
+    return {
+      encontrados: vuelos.length,
+      tipo: params.fecha_vuelta ? 'ida_y_vuelta' : 'solo_ida',
+      enlace_reserva: bookingUrl,
+      vuelos: vuelos
+    };
+
+  } catch (error) {
+    return {
+      error: 'Error buscando vuelos: ' + error.message
+    };
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DISPATCHER DE HERRAMIENTAS — Ejecuta la tool que Claude pida
+// ═══════════════════════════════════════════════════════════════
+
+async function executeToolCall(toolName, toolInput, env) {
+  switch (toolName) {
+    case 'buscar_vuelos':
+      return await buscarVuelosDuffel(toolInput, env.DUFFEL_ACCESS_TOKEN);
+    // Futuras herramientas:
+    // case 'buscar_hoteles':
+    //   return await buscarHotelesDuffel(toolInput, env.DUFFEL_ACCESS_TOKEN);
+    default:
+      return { error: `Herramienta desconocida: ${toolName}` };
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LECTOR DE STREAM SSE — Lee respuesta de Claude y detecta tool_use
+// ═══════════════════════════════════════════════════════════════
+
+// Lee un stream SSE de Anthropic, reenvía texto al cliente, y detecta tool_use
+// Devuelve: { fullText, contentBlocks, stopReason, routeSignalSent }
+async function readAnthropicStream(anthropicRes, writer, encoder, decoder, forwardText) {
+  const reader = anthropicRes.body.getReader();
+  let buffer = '';
+  let fullText = '';            // Todo el texto acumulado
+  let contentBlocks = [];       // Bloques content para reconstruir mensaje assistant
+  let currentBlockType = null;
+  let currentTextContent = '';  // Texto del bloque actual
+  let currentToolUse = null;    // Tool use en construcción
+  let toolInputJson = '';       // JSON parcial del input de la tool
+  let stopReason = null;
+  let routeSignalSent = false;
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+
+    const lines = buffer.split('\n');
+    buffer = lines.pop() || '';
+
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const jsonStr = line.slice(6).trim();
+      if (jsonStr === '[DONE]') continue;
+
+      try {
+        const evt = JSON.parse(jsonStr);
+
+        // Inicio de bloque de contenido
+        if (evt.type === 'content_block_start') {
+          currentBlockType = evt.content_block?.type;
+          if (currentBlockType === 'tool_use') {
+            currentToolUse = {
+              type: 'tool_use',
+              id: evt.content_block.id,
+              name: evt.content_block.name,
+              input: {}
+            };
+            toolInputJson = '';
+            // NO enviar {generating: true} aquí — rompe los IDs de la burbuja de streaming
+            // y el texto posterior llega sin formatear. El texto sigue fluyendo
+            // a la misma burbuja y se formatea al final.
+          } else if (currentBlockType === 'text') {
+            currentTextContent = '';
+          }
+        }
+
+        // Delta de contenido
+        if (evt.type === 'content_block_delta') {
+          if (evt.delta?.type === 'text_delta') {
+            const chunk = evt.delta.text;
+            fullText += chunk;
+            currentTextContent += chunk;
+            // Reenviar texto al cliente (mismo comportamiento que antes)
+            if (forwardText && writer) {
+              if (!fullText.includes('SALMA_ROUTE')) {
+                await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`));
+              } else if (!routeSignalSent) {
+                routeSignalSent = true;
+                await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`));
+              }
+            }
+          }
+          if (evt.delta?.type === 'input_json_delta') {
+            toolInputJson += evt.delta.partial_json;
+          }
+        }
+
+        // Fin de bloque de contenido
+        if (evt.type === 'content_block_stop') {
+          if (currentBlockType === 'text') {
+            contentBlocks.push({ type: 'text', text: currentTextContent });
+          } else if (currentBlockType === 'tool_use' && currentToolUse) {
+            try { currentToolUse.input = JSON.parse(toolInputJson); } catch (e) {}
+            contentBlocks.push(currentToolUse);
+            currentToolUse = null;
+          }
+          currentBlockType = null;
+        }
+
+        // Fin del mensaje — contiene stop_reason
+        if (evt.type === 'message_delta') {
+          stopReason = evt.delta?.stop_reason || null;
+        }
+      } catch (e) { /* ignorar JSON mal formado */ }
+    }
+  }
+
+  return { fullText, contentBlocks, stopReason, routeSignalSent };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1129,10 +1429,13 @@ ${JSON.stringify(route)}`;
     // Construir mensajes
     const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData);
     const isRoute = isRouteRequest(message, history);
+    const isFlightReq = isFlightRequest(message);
     const reqStartTime = Date.now();
-    const reqModel = isRoute ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001';
+    // Sonnet para rutas y vuelos (necesita tool use fiable), Haiku para conversacional
+    const reqModel = (isRoute || isFlightReq) ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001';
+    const reqMaxTokens = (isRoute || isFlightReq) ? 4000 : 1500;
 
-    // ─── STREAMING SSE ───
+    // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
     const sseHeaders = {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
@@ -1140,89 +1443,100 @@ ${JSON.stringify(route)}`;
       'Access-Control-Allow-Origin': '*',
     };
 
-    let anthropicRes;
-    try {
-      anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: isRoute ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001',
-          max_tokens: isRoute ? 4000 : 1500,
-          system: systemPrompt,
-          messages: messages,
-          stream: true,
-        }),
-      });
-    } catch (e) {
-      return new Response(
-        JSON.stringify({ reply: 'No puedo conectar ahora mismo. Inténtalo en un momento.', route: null }),
-        { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
-      );
-    }
-
-    if (!anthropicRes.ok) {
-      const errBody = await anthropicRes.text();
-      return new Response(
-        JSON.stringify({ reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null, _error: anthropicRes.status + ' ' + errBody.slice(0, 200) }),
-        { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
-      );
-    }
-
-    // Stream SSE al cliente
     const encoder = new TextEncoder();
     const decoder = new TextDecoder();
-    let fullText = '';
-    let routeSignalSent = false;
-
     const { readable, writable } = new TransformStream();
     const writer = writable.getWriter();
 
+    // Todo el flujo (incluido el bucle agentic) ocurre dentro de ctx.waitUntil
     ctx.waitUntil((async () => {
+      let allText = '';  // Texto acumulado de TODAS las iteraciones
+      const MAX_TOOL_ITERATIONS = 5;  // Seguridad: máximo 5 tool calls por turno
+
       try {
-        const reader = anthropicRes.body.getReader();
-        let buffer = '';
+        // Mensajes que crecen con cada iteración del bucle (tool_use → tool_result)
+        let currentMessages = [...messages];
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-
-          const lines = buffer.split('\n');
-          buffer = lines.pop() || '';
-
-          for (const line of lines) {
-            if (!line.startsWith('data: ')) continue;
-            const jsonStr = line.slice(6).trim();
-            if (jsonStr === '[DONE]') continue;
-
-            try {
-              const evt = JSON.parse(jsonStr);
-              if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
-                const chunk = evt.delta.text;
-                fullText += chunk;
-                if (!fullText.includes('SALMA_ROUTE')) {
-                  await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`));
-                } else if (!routeSignalSent) {
-                  routeSignalSent = true;
-                  await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`));
-                }
-              }
-            } catch (e) { /* ignorar */ }
+        for (let iteration = 0; iteration <= MAX_TOOL_ITERATIONS; iteration++) {
+          // ── Llamar a Claude (streaming + tools) ──
+          let anthropicRes;
+          try {
+            anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': apiKey,
+                'anthropic-version': '2023-06-01',
+              },
+              body: JSON.stringify({
+                model: reqModel,
+                max_tokens: reqMaxTokens,
+                system: systemPrompt,
+                messages: currentMessages,
+                tools: SALMA_TOOLS,
+                stream: true,
+              }),
+            });
+          } catch (e) {
+            await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No puedo conectar ahora mismo. Inténtalo en un momento.', route: null })}\n\n`));
+            break;
           }
+
+          if (!anthropicRes.ok) {
+            const errBody = await anthropicRes.text().catch(() => '');
+            await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
+            break;
+          }
+
+          // ── Leer stream: reenviar texto al cliente + detectar tool_use ──
+          const result = await readAnthropicStream(anthropicRes, writer, encoder, decoder, true);
+          allText += result.fullText;
+
+          // ── Si Claude terminó (no pide herramientas), salir del bucle ──
+          if (result.stopReason !== 'tool_use') {
+            break;
+          }
+
+          // ── Claude pide usar herramientas → ejecutarlas ──
+          // Añadir respuesta de Claude (con tool_use blocks) al historial
+          currentMessages.push({
+            role: 'assistant',
+            content: result.contentBlocks
+          });
+
+          // Ejecutar cada herramienta pedida
+          const toolResults = [];
+          for (const block of result.contentBlocks) {
+            if (block.type === 'tool_use') {
+              const toolResult = await executeToolCall(block.name, block.input, env);
+              toolResults.push({
+                type: 'tool_result',
+                tool_use_id: block.id,
+                content: JSON.stringify(toolResult)
+              });
+            }
+          }
+
+          // Añadir resultados de herramientas al historial
+          currentMessages.push({
+            role: 'user',
+            content: toolResults
+          });
+
+          // Separador entre texto de la iteración anterior y la siguiente
+          try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: '\n\n' })}\n\n`)); } catch (_) {}
+
+          // El for vuelve al inicio: Claude recibe los resultados y decide qué hacer
         }
 
-        // Stream terminado — procesar ruta
-        let route = extractRouteFromReply(fullText);
-        const reply = replyWithoutRouteBlock(fullText);
+        // ── Procesar respuesta final (ruta, verificación, etc.) ──
+        let route = extractRouteFromReply(allText);
+        const reply = replyWithoutRouteBlock(allText);
 
         if (route) {
-          // Draft inmediato
+          // Draft inmediato (la ruta sin verificar, para que el usuario vea algo rápido)
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ draft: true, reply, route })}\n\n`)); } catch (_) {}
-          // Verificar con Google Places
+          // Verificar con Google Places (corregir coords + fotos)
           const keepalive = setInterval(async () => {
             try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
           }, 3000);
@@ -1238,16 +1552,16 @@ ${JSON.stringify(route)}`;
         // Log exitoso
         ctx.waitUntil(logToFirestore({
           timestamp: new Date().toISOString(),
-          type: isRoute ? 'route' : 'conversational',
+          type: isRoute ? 'route' : (isFlightReq ? 'flight_search' : 'conversational'),
           user_message: message.slice(0, 200),
-          chars_out: fullText.length,
+          chars_out: allText.length,
           latency_ms: Date.now() - reqStartTime,
           status: 'ok',
           error_detail: '',
           model: reqModel,
         }));
       } catch (e) {
-        try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: fullText || 'Error de conexión.', route: null })}\n\n`)); } catch (_) {}
+        try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: allText || 'Error de conexión.', route: null })}\n\n`)); } catch (_) {}
         // Log error
         ctx.waitUntil(logToFirestore({
           timestamp: new Date().toISOString(),
