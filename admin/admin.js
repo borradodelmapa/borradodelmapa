@@ -156,6 +156,7 @@
       if (tabId === 'analytics') loadAnalytics();
       if (tabId === 'salma') loadSalma();
       if (tabId === 'chat') loadChat();
+      if (tabId === 'settings') initSettings();
     }
   }
 
@@ -1311,6 +1312,45 @@
 
     document.getElementById('chat-send').disabled = false;
     document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+  }
+
+  // ═══════════════════════════════════════════
+  //  CONFIGURACIÓN (Settings)
+  // ═══════════════════════════════════════════
+
+  function initSettings() {
+    var btnClear = document.getElementById('btn-clear-cache');
+    if (!btnClear) return;
+
+    btnClear.addEventListener('click', async function() {
+      btnClear.disabled = true;
+      btnClear.textContent = 'Limpiando...';
+      var statusDiv = document.getElementById('cache-status');
+      statusDiv.style.display = 'block';
+      statusDiv.textContent = 'Limpiando caché...';
+
+      try {
+        if ('caches' in window) {
+          var cacheNames = await caches.keys();
+          var promises = cacheNames.map(function(cacheName) {
+            return caches.delete(cacheName);
+          });
+          await Promise.all(promises);
+          statusDiv.textContent = '✅ Caché limpiado. Recargando...';
+          setTimeout(function() {
+            window.location.reload();
+          }, 1000);
+        } else {
+          statusDiv.textContent = '❌ No se puede limpiar el caché en este navegador';
+          btnClear.disabled = false;
+          btnClear.textContent = 'Limpiar caché y recargar';
+        }
+      } catch (err) {
+        statusDiv.textContent = '❌ Error: ' + err.message;
+        btnClear.disabled = false;
+        btnClear.textContent = 'Limpiar caché y recargar';
+      }
+    });
   }
 
   // ═══════════════════════════════════════════
