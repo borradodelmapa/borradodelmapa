@@ -652,7 +652,16 @@ function escapeHTML(str) {
 
 // Formatear mensaje de Salma: escapar HTML + linkificar URLs y teléfonos
 function formatMessage(str) {
-  let html = escapeHTML(str || '');
+  let raw = str || '';
+  // Extraer imágenes markdown ANTES del escape HTML y guardarlas como placeholders
+  const images = [];
+  raw = raw.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, (_, alt, url) => {
+    const idx = images.length;
+    images.push('<img src="' + url + '" alt="' + alt + '" style="width:100%;max-width:280px;border-radius:8px;margin:6px 0;display:block;" loading="lazy">');
+    return '%%IMG' + idx + '%%';
+  });
+
+  let html = escapeHTML(raw);
   // URLs → enlaces clicables
   html = html.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
   // Teléfonos internacionales: +XX XXX XXX XXX (con espacios, guiones o puntos)
@@ -662,6 +671,8 @@ function formatMessage(str) {
   });
   // **negrita** → <strong>
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // Restaurar imágenes desde placeholders
+  images.forEach((img, i) => { html = html.replace('%%IMG' + i + '%%', img); });
   // Saltos de línea → <br>
   html = html.replace(/\n/g, '<br>');
   return html;

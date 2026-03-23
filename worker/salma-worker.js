@@ -193,8 +193,30 @@ Cuando generes paradas, usa siempre nombres de lugares concretos y verificables 
 const BLOQUE_MAPA = `MAPA PERSONAL
 El usuario tiene un mapa personal donde se guardan: lugares, restaurantes, experiencias, miradores, hoteles y rutas. Cuando recomiendes algo relevante, ofrece añadirlo al mapa.
 
-ALOJAMIENTO
-Si el usuario busca hotel, pregunta si es necesario: fechas, presupuesto, zona. Recomienda varias opciones con nombres reales.
+SERVICIOS DE VIAJE — HERRAMIENTAS buscar_hotel, buscar_coche, buscar_restaurante
+
+HOTELES: Cuando el usuario pida hotel, alojamiento, hostal, apartamento o dónde dormir, usa la herramienta buscar_hotel.
+- Datos mínimos: ciudad y fechas. Si no los tienes, pregúntalos (máx 1 pregunta, nunca 2 seguidas).
+- Si menciona presupuesto, pásalo como presupuesto_max. Filtra y muestra solo los que encajan.
+- La herramienta devuelve hoteles REALES de Booking.com con precios, enlaces de reserva y fotos.
+- Presenta cada hotel con: foto (formato ![nombre](foto_url)), nombre, precio/noche, review score, y enlace de reserva en su propia línea.
+- Destaca cuál es el mejor valorado y cuál el más barato.
+- Si tiene una ruta activa, sugiere buscar hotel en las ciudades donde duerme cada noche.
+
+COCHES: Cuando el usuario pida alquilar coche, moto, scooter o vehículo, usa la herramienta buscar_coche.
+- Datos mínimos: ciudad de recogida y fechas. Si no los tienes, pregúntalos.
+- Devuelve coches REALES de Booking.com con precios, plazas, transmisión y proveedor.
+- Presenta cada coche con: nombre, precio total y por día, plazas, transmisión, proveedor y punto de recogida.
+
+RESTAURANTES: Cuando el usuario pida restaurante, dónde comer o dónde cenar, usa la herramienta buscar_restaurante.
+- Pasa tipo de cocina y zona si el usuario los menciona.
+- TheFork permite reservar mesa. Google Maps muestra reseñas y fotos.
+
+REGLAS COMUNES PARA TODOS LOS SERVICIOS:
+- Pon cada enlace SOLO en su propia línea, sin formato markdown, sin corchetes. Solo la URL tal cual.
+- NUNCA inventes URLs — usa exactamente los enlaces que devuelve la herramienta.
+- Si el usuario tiene ruta activa, sugiere servicios en las ciudades de la ruta.
+- Máximo 1 pregunta si faltan datos, nunca 2 seguidas.
 
 NAVEGACIÓN EXTERNA
 Cada parada puede abrirse en Google Maps para navegación.`;
@@ -251,6 +273,92 @@ const SALMA_TOOLS = [
       },
       required: ["origen", "destino", "fecha_ida"]
     }
+  },
+  {
+    name: "buscar_hotel",
+    description: "Busca hoteles REALES con precios y disponibilidad en Booking.com. Usa esta herramienta cuando el usuario pida hotel, hostal, alojamiento, apartamento o dónde dormir. Devuelve hoteles con nombre, precio, review, dirección, enlace de reserva y foto. REGLAS DE FORMATO: para cada hotel, muestra primero la foto con formato ![nombre](foto_url), luego nombre, precio, review, y el enlace de reserva SOLO en su propia línea sin formato markdown. Si el usuario tiene presupuesto, filtra y muestra solo los que encajan. Destaca el mejor valorado y el más barato.",
+    input_schema: {
+      type: "object",
+      properties: {
+        ciudad: {
+          type: "string",
+          description: "Nombre de la ciudad donde buscar hotel (ej: 'Hanoi', 'Barcelona', 'Tokyo')"
+        },
+        fecha_entrada: {
+          type: "string",
+          description: "Fecha de check-in en formato YYYY-MM-DD"
+        },
+        fecha_salida: {
+          type: "string",
+          description: "Fecha de check-out en formato YYYY-MM-DD"
+        },
+        adultos: {
+          type: "integer",
+          description: "Número de adultos. Por defecto 2"
+        },
+        habitaciones: {
+          type: "integer",
+          description: "Número de habitaciones. Por defecto 1"
+        },
+        presupuesto_max: {
+          type: "integer",
+          description: "Presupuesto máximo por noche en EUR. Trivago no filtra por precio en el enlace, así que menciónalo en tu respuesta para que el usuario filtre manualmente."
+        }
+      },
+      required: ["ciudad", "fecha_entrada", "fecha_salida"]
+    }
+  },
+  {
+    name: "buscar_coche",
+    description: "Busca coches de alquiler REALES con precios y disponibilidad. Usa esta herramienta cuando el usuario pida alquilar coche, moto, scooter o vehículo. Devuelve vehículos con nombre, precio total, precio/día, plazas, transmisión, proveedor, dirección de recogida, y web_proveedor (enlace directo a la web del proveedor para reservar). REGLAS DE FORMATO: para cada coche muestra los datos y si tiene web_proveedor pon el enlace SOLO en su propia línea, sin formato markdown. Destaca el más barato y el mejor equipado.",
+    input_schema: {
+      type: "object",
+      properties: {
+        ciudad_recogida: {
+          type: "string",
+          description: "Ciudad donde recoger el vehículo (ej: 'Barcelona', 'Bangkok')"
+        },
+        fecha_recogida: {
+          type: "string",
+          description: "Fecha de recogida en formato YYYY-MM-DD"
+        },
+        hora_recogida: {
+          type: "string",
+          description: "Hora de recogida en formato HH:MM. Por defecto '10:00'"
+        },
+        fecha_devolucion: {
+          type: "string",
+          description: "Fecha de devolución en formato YYYY-MM-DD"
+        },
+        hora_devolucion: {
+          type: "string",
+          description: "Hora de devolución en formato HH:MM. Por defecto '10:00'"
+        }
+      },
+      required: ["ciudad_recogida", "fecha_recogida", "fecha_devolucion"]
+    }
+  },
+  {
+    name: "buscar_restaurante",
+    description: "Busca restaurantes en TheFork (el mayor comparador de restaurantes en Europa y Asia) y Google Maps. Usa esta herramienta cuando el usuario pida restaurante, dónde comer, dónde cenar, o recomiende comida local. Devuelve enlaces a TheFork y Google Maps con la búsqueda precargada. REGLAS DE FORMATO: pon cada enlace SOLO en su propia línea, sin formato markdown.",
+    input_schema: {
+      type: "object",
+      properties: {
+        ciudad: {
+          type: "string",
+          description: "Ciudad donde buscar restaurante (ej: 'Madrid', 'Tokyo', 'Bangkok')"
+        },
+        tipo_cocina: {
+          type: "string",
+          description: "Tipo de cocina si el usuario lo especifica (ej: 'sushi', 'italiana', 'local', 'vegetariana')"
+        },
+        zona: {
+          type: "string",
+          description: "Zona o barrio si el usuario lo especifica (ej: 'centro', 'casco antiguo', 'Shibuya')"
+        }
+      },
+      required: ["ciudad"]
+    }
   }
 ];
 
@@ -294,6 +402,16 @@ function isHelpRequest(message) {
 // Detectar si el usuario pide búsqueda de vuelos (para usar Sonnet en vez de Haiku)
 function isFlightRequest(message) {
   return /vuelo|vuelos|flight|flights|volar|avion|avión|billete.*avi[oó]n|busca.*vuelo|reserva.*vuelo|fly\s|flying/i.test(message);
+}
+
+// Detectar si el usuario pide hotel/alojamiento
+function isHotelRequest(message) {
+  return /hotel|hoteles|alojamiento|hostal|apartamento|airbnb|dormir|hospedaje|accommodation|where to stay|dónde dormir|donde dormir|busca.*hotel|reserva.*hotel/i.test(message);
+}
+
+// Detectar si el usuario pide alquiler de coche o restaurante
+function isServiceRequest(message) {
+  return /alquil|rent.*car|coche.*alquil|moto|scooter|restaurante|restaurant|dónde comer|donde comer|cenar|cena|comida|dónde cenar|donde cenar/i.test(message);
 }
 
 function extractHelpLocation(message, history, currentRoute) {
@@ -476,7 +594,7 @@ function getCountryCode(countryName) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation) {
   let systemPrompt = SALMA_SYSTEM_BASE;
 
   // Contexto mínimo del usuario + fecha actual
@@ -485,6 +603,7 @@ function buildMessages(history, message, currentRoute, userName, userNationality
   ctx.push(`[FECHA ACTUAL: ${today}]`);
   if (userName) ctx.push(`[USUARIO: ${userName}]`);
   if (userNationality) ctx.push(`[NACIONALIDAD: ${userNationality} — adapta visados]`);
+  if (userLocation) ctx.push(`[UBICACIÓN GPS DEL VIAJERO: lat=${userLocation.lat}, lng=${userLocation.lng} — Usa estas coordenadas si el usuario dice "cerca de mí", "aquí", "donde estoy". Para hoteles/coches, usa la ciudad más cercana a estas coordenadas.]`);
   systemPrompt += '\n\n' + ctx.join('\n');
 
   const messages = [];
@@ -874,6 +993,267 @@ async function buscarVuelosDuffel(params, duffelToken) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// GENERADORES DE DEEP LINKS — Google Hotels, DiscoverCars, TheFork
+// ═══════════════════════════════════════════════════════════════
+
+function normalizeQuery(text) {
+  return encodeURIComponent(text.trim());
+}
+
+// Busca hoteles reales en Booking.com via RapidAPI — precios, reviews, enlaces de reserva
+async function buscarHotelesBooking(input, rapidApiKey) {
+  const RAPIDAPI_HOST = 'booking-com.p.rapidapi.com';
+  const headers = {
+    'Content-Type': 'application/json',
+    'x-rapidapi-host': RAPIDAPI_HOST,
+    'x-rapidapi-key': rapidApiKey
+  };
+
+  const adultos = input.adultos || 1;
+  const habitaciones = input.habitaciones || 1;
+  const presupuestoMax = input.presupuesto_max || null;
+
+  try {
+    // Paso 1: Resolver ciudad → dest_id
+    const locUrl = `https://${RAPIDAPI_HOST}/v1/hotels/locations?name=${normalizeQuery(input.ciudad)}&locale=es`;
+    const locRes = await fetch(locUrl, { headers });
+    const locData = await locRes.json();
+
+    if (!locData || locData.length === 0) {
+      return { error: `No encontré "${input.ciudad}" en Booking.com. Prueba con otro nombre.` };
+    }
+
+    // Buscar primero tipo "city", luego cualquier resultado
+    const cityResult = locData.find(l => l.dest_type === 'city') || locData[0];
+    const destId = cityResult.dest_id;
+    const destType = cityResult.dest_type;
+
+    // Paso 2: Buscar hoteles con precios reales
+    const searchParams = new URLSearchParams({
+      dest_id: destId,
+      dest_type: destType,
+      checkin_date: input.fecha_entrada,
+      checkout_date: input.fecha_salida,
+      adults_number: String(adultos),
+      room_number: String(habitaciones),
+      order_by: 'price',
+      filter_by_currency: 'EUR',
+      locale: 'es',
+      units: 'metric',
+      page_number: '0',
+      include_adjacency: 'true'
+    });
+
+    const searchUrl = `https://${RAPIDAPI_HOST}/v1/hotels/search?${searchParams}`;
+    const searchRes = await fetch(searchUrl, { headers });
+    const searchData = await searchRes.json();
+
+    if (!searchData.result || searchData.result.length === 0) {
+      return {
+        encontrados: 0,
+        mensaje: `No encontré hoteles disponibles en ${input.ciudad} para esas fechas. Prueba con otras fechas.`
+      };
+    }
+
+    const fechaIn = new Date(input.fecha_entrada);
+    const fechaOut = new Date(input.fecha_salida);
+    const noches = Math.round((fechaOut - fechaIn) / (1000 * 60 * 60 * 24));
+
+    // Convertir precios de moneda local a EUR por noche
+    let hoteles = searchData.result.map(h => {
+      const precioTotal = h.min_total_price || h.composite_price_breakdown?.gross_amount?.value || 0;
+      const moneda = h.currency_code || 'EUR';
+      const precioNoche = noches > 0 ? Math.round(precioTotal / noches * 100) / 100 : precioTotal;
+
+      return {
+        nombre: h.hotel_name,
+        precio_total: precioTotal,
+        moneda_original: moneda,
+        precio_noche_estimado: precioNoche,
+        review_score: h.review_score || 0,
+        review_texto: h.review_score_word || '',
+        num_reviews: h.review_nr || 0,
+        estrellas: h.class || 0,
+        direccion: h.address || '',
+        distrito: h.district || h.city || '',
+        enlace_reserva: h.url || '',
+        foto: h.max_photo_url || h.main_photo_url || ''
+      };
+    });
+
+    // Filtrar por presupuesto si se especificó (necesitamos convertir a EUR)
+    // Los precios vienen en moneda local, así que filtramos si currency es EUR
+    if (presupuestoMax) {
+      const filtrados = hoteles.filter(h => {
+        if (h.moneda_original === 'EUR') return h.precio_noche_estimado <= presupuestoMax;
+        // Para otras monedas, incluimos todos y dejamos que Claude mencione el presupuesto
+        return true;
+      });
+      if (filtrados.length > 0) hoteles = filtrados;
+    }
+
+    // Top 5 más baratos
+    hoteles = hoteles.slice(0, 5);
+
+    const result = {
+      encontrados: hoteles.length,
+      ciudad: input.ciudad,
+      noches: noches,
+      huespedes: `${adultos} adulto${adultos > 1 ? 's' : ''}, ${habitaciones} habitación${habitaciones > 1 ? 'es' : ''}`,
+      hoteles: hoteles
+    };
+
+    if (presupuestoMax) {
+      result.nota_presupuesto = `El usuario busca hoteles por debajo de ${presupuestoMax} EUR/noche.`;
+    }
+
+    return result;
+
+  } catch (error) {
+    return { error: 'Error buscando hoteles: ' + error.message };
+  }
+}
+
+// Busca coches de alquiler reales en Booking.com via RapidAPI
+async function buscarCochesBooking(input, rapidApiKey) {
+  const RAPIDAPI_HOST = 'booking-com.p.rapidapi.com';
+  const headers = {
+    'Content-Type': 'application/json',
+    'x-rapidapi-host': RAPIDAPI_HOST,
+    'x-rapidapi-key': rapidApiKey
+  };
+
+  const horaRecogida = input.hora_recogida || '10:00';
+  const horaDevolucion = input.hora_devolucion || '10:00';
+
+  try {
+    // Paso 1: Resolver ciudad → coordenadas
+    const locUrl = `https://${RAPIDAPI_HOST}/v1/hotels/locations?name=${normalizeQuery(input.ciudad_recogida)}&locale=es`;
+    const locRes = await fetch(locUrl, { headers });
+    const locData = await locRes.json();
+
+    if (!locData || locData.length === 0) {
+      return { error: `No encontré "${input.ciudad_recogida}" para alquiler de coches.` };
+    }
+
+    const loc = locData.find(l => l.dest_type === 'city') || locData[0];
+    const lat = loc.latitude;
+    const lon = loc.longitude;
+    const cc = loc.cc1 || 'es';
+
+    // Paso 2: Buscar coches disponibles
+    const searchParams = new URLSearchParams({
+      pick_up_latitude: String(lat),
+      pick_up_longitude: String(lon),
+      drop_off_latitude: String(lat),
+      drop_off_longitude: String(lon),
+      pick_up_datetime: `${input.fecha_recogida}T${horaRecogida}:00`,
+      drop_off_datetime: `${input.fecha_devolucion}T${horaDevolucion}:00`,
+      currency: 'EUR',
+      locale: 'es',
+      sort_by: 'price_low_to_high',
+      from_country: cc
+    });
+
+    const searchUrl = `https://${RAPIDAPI_HOST}/v1/car-rental/search?${searchParams}`;
+    const searchRes = await fetch(searchUrl, { headers });
+    const searchData = await searchRes.json();
+
+    if (!searchData.search_results || searchData.search_results.length === 0) {
+      return {
+        encontrados: 0,
+        mensaje: `No encontré coches disponibles en ${input.ciudad_recogida} para esas fechas.`
+      };
+    }
+
+    const fechaIn = new Date(input.fecha_recogida);
+    const fechaOut = new Date(input.fecha_devolucion);
+    const dias = Math.round((fechaOut - fechaIn) / (1000 * 60 * 60 * 24));
+
+    // Top 5 más baratos
+    const coches = searchData.search_results.slice(0, 5).map(r => {
+      const v = r.vehicle_info || {};
+      const p = r.pricing_info || {};
+      const s = r.supplier_info || {};
+      const route = r.route_info || {};
+
+      // Mapeo de proveedores conocidos a sus webs
+      const webs = {
+        'ok mobility': 'https://www.okmobility.com',
+        'europcar': 'https://www.europcar.es',
+        'hertz': 'https://www.hertz.es',
+        'sixt': 'https://www.sixt.es',
+        'avis': 'https://www.avis.es',
+        'enterprise': 'https://www.enterprise.es',
+        'goldcar': 'https://www.goldcar.es',
+        'clickrent': 'https://www.clickrent.es',
+        'budget': 'https://www.budget.es',
+        'thrifty': 'https://www.thrifty.com',
+        'alamo': 'https://www.alamo.com',
+        'national': 'https://www.nationalcar.com',
+        'dollar': 'https://www.dollar.com',
+        'firefly': 'https://www.fireflycarrental.com',
+        'interrent': 'https://www.interrent.com',
+        'keddy': 'https://www.keddy.com',
+        'record go': 'https://www.recordrentacar.com',
+        'centauro': 'https://www.centauro.net',
+        'drivalia': 'https://www.drivalia.com',
+      };
+      const provNombre = s.name || 'Desconocido';
+      const provKey = provNombre.toLowerCase();
+      const webProveedor = webs[provKey] || null;
+
+      return {
+        vehiculo: v.v_name || v.group || 'Desconocido',
+        categoria: v.group || '',
+        precio_total: p.price + ' ' + (p.currency || 'EUR'),
+        precio_dia: Math.round((p.price || 0) / dias * 100) / 100 + ' EUR/día',
+        plazas: v.seats || '?',
+        puertas: v.doors || '?',
+        transmision: v.transmission === 'Manual' ? 'Manual' : 'Automático',
+        aire_acondicionado: v.aircon ? 'Sí' : 'No',
+        proveedor: provNombre,
+        web_proveedor: webProveedor,
+        punto_recogida: (route.pickup || {}).name || '',
+        direccion_recogida: s.address || ''
+      };
+    });
+
+    return {
+      encontrados: coches.length,
+      ciudad: input.ciudad_recogida,
+      dias: dias,
+      fecha_recogida: `${input.fecha_recogida} ${horaRecogida}`,
+      fecha_devolucion: `${input.fecha_devolucion} ${horaDevolucion}`,
+      coches: coches,
+      nota: 'Precios reales con disponibilidad. Cada coche incluye la web del proveedor para reservar directamente.'
+    };
+
+  } catch (error) {
+    return { error: 'Error buscando coches: ' + error.message };
+  }
+}
+
+function generarEnlaceRestaurante(input) {
+  const ciudadQuery = normalizeQuery(input.ciudad);
+  let searchTerms = input.ciudad;
+  if (input.tipo_cocina) searchTerms += ' ' + input.tipo_cocina;
+  if (input.zona) searchTerms += ' ' + input.zona;
+
+  const theforkUrl = `https://www.thefork.es/buscar?q=${normalizeQuery(searchTerms)}`;
+  const googleMapsUrl = `https://www.google.com/maps/search/restaurantes+${normalizeQuery(searchTerms)}`;
+
+  return {
+    enlace_thefork: theforkUrl,
+    enlace_google_maps: googleMapsUrl,
+    ciudad: input.ciudad,
+    tipo_cocina: input.tipo_cocina || 'variada',
+    zona: input.zona || 'toda la ciudad',
+    nota: 'TheFork permite reservar mesa directamente. Google Maps muestra reseñas y fotos de usuarios.'
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════
 // DISPATCHER DE HERRAMIENTAS — Ejecuta la tool que Claude pida
 // ═══════════════════════════════════════════════════════════════
 
@@ -881,9 +1261,12 @@ async function executeToolCall(toolName, toolInput, env) {
   switch (toolName) {
     case 'buscar_vuelos':
       return await buscarVuelosDuffel(toolInput, env.DUFFEL_ACCESS_TOKEN);
-    // Futuras herramientas:
-    // case 'buscar_hoteles':
-    //   return await buscarHotelesDuffel(toolInput, env.DUFFEL_ACCESS_TOKEN);
+    case 'buscar_hotel':
+      return await buscarHotelesBooking(toolInput, env.RAPIDAPI_KEY);
+    case 'buscar_coche':
+      return await buscarCochesBooking(toolInput, env.RAPIDAPI_KEY);
+    case 'buscar_restaurante':
+      return generarEnlaceRestaurante(toolInput);
     default:
       return { error: `Herramienta desconocida: ${toolName}` };
   }
@@ -1079,6 +1462,71 @@ export default {
     }
 
     const url = new URL(request.url);
+
+    // ─── ENDPOINT /health (monitoreo de APIs) ───
+    if (request.method === 'GET' && url.pathname === '/health') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const checks = {};
+      const startTime = Date.now();
+
+      // 1. Worker — si llegas aquí, está online
+      checks.worker = { status: 'ok', ms: 0 };
+
+      // 2. Anthropic API
+      try {
+        const t = Date.now();
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+          body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 5, messages: [{ role: 'user', content: 'ping' }] })
+        });
+        checks.anthropic = { status: res.ok ? 'ok' : 'error', code: res.status, ms: Date.now() - t };
+      } catch (e) { checks.anthropic = { status: 'error', error: e.message }; }
+
+      // 3. Google Places API
+      try {
+        const t = Date.now();
+        const res = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Alhambra&inputtype=textquery&key=${env.GOOGLE_PLACES_KEY}`);
+        const data = await res.json();
+        checks.google_places = { status: data.status === 'OK' ? 'ok' : 'error', api_status: data.status, ms: Date.now() - t };
+      } catch (e) { checks.google_places = { status: 'error', error: e.message }; }
+
+      // 4. Booking.com (RapidAPI) — Hotels
+      try {
+        const t = Date.now();
+        const res = await fetch('https://booking-com.p.rapidapi.com/v1/hotels/locations?name=Madrid&locale=es', {
+          headers: { 'Content-Type': 'application/json', 'x-rapidapi-host': 'booking-com.p.rapidapi.com', 'x-rapidapi-key': env.RAPIDAPI_KEY }
+        });
+        const data = await res.json();
+        checks.booking_hotels = { status: Array.isArray(data) && data.length > 0 ? 'ok' : 'error', results: data.length || 0, ms: Date.now() - t };
+      } catch (e) { checks.booking_hotels = { status: 'error', error: e.message }; }
+
+      // 5. Booking.com (RapidAPI) — Car Rental (misma key, distinto endpoint)
+      try {
+        const t = Date.now();
+        const res = await fetch('https://booking-com.p.rapidapi.com/v1/car-rental/locations?name=Barcelona&locale=es', {
+          headers: { 'Content-Type': 'application/json', 'x-rapidapi-host': 'booking-com.p.rapidapi.com', 'x-rapidapi-key': env.RAPIDAPI_KEY }
+        });
+        checks.booking_cars = { status: res.ok ? 'ok' : 'error', code: res.status, ms: Date.now() - t };
+      } catch (e) { checks.booking_cars = { status: 'error', error: e.message }; }
+
+      // 6. Duffel (vuelos)
+      try {
+        const t = Date.now();
+        const res = await fetch('https://api.duffel.com/air/airports?limit=1', {
+          headers: { 'Authorization': `Bearer ${env.DUFFEL_ACCESS_TOKEN}`, 'Duffel-Version': 'v2', 'Content-Type': 'application/json' }
+        });
+        checks.duffel_flights = { status: res.ok ? 'ok' : 'error', code: res.status, ms: Date.now() - t };
+      } catch (e) { checks.duffel_flights = { status: 'error', error: e.message }; }
+
+      const allOk = Object.values(checks).every(c => c.status === 'ok');
+      return new Response(JSON.stringify({
+        status: allOk ? 'all_ok' : 'degraded',
+        timestamp: new Date().toISOString(),
+        total_ms: Date.now() - startTime,
+        checks
+      }, null, 2), { status: allOk ? 200 : 503, headers: corsH });
+    }
 
     // ─── ENDPOINT /sitemap.xml (SEO) ───
     if (request.method === 'GET' && url.pathname === '/sitemap.xml') {
@@ -1391,6 +1839,7 @@ ${JSON.stringify(route)}`;
     const currentRoute = body.current_route || null;
     const userName = body.user_name || null;
     const userNationality = body.nationality || null;
+    const userLocation = body.user_location || null;
 
     if (!message.trim()) {
       return new Response(
@@ -1427,13 +1876,16 @@ ${JSON.stringify(route)}`;
     }
 
     // Construir mensajes
-    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData);
+    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation);
     const isRoute = isRouteRequest(message, history);
     const isFlightReq = isFlightRequest(message);
+    const isHotelReq = isHotelRequest(message);
+    const isServiceReq = isServiceRequest(message);
     const reqStartTime = Date.now();
-    // Sonnet para rutas y vuelos (necesita tool use fiable), Haiku para conversacional
-    const reqModel = (isRoute || isFlightReq) ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001';
-    const reqMaxTokens = (isRoute || isFlightReq) ? 4000 : 1500;
+    // Sonnet para rutas, vuelos y servicios (necesita tool use fiable), Haiku para conversacional
+    const needsSonnet = isRoute || isFlightReq || isHotelReq || isServiceReq;
+    const reqModel = needsSonnet ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001';
+    const reqMaxTokens = needsSonnet ? 4000 : 1500;
 
     // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
     const sseHeaders = {

@@ -9,6 +9,23 @@ const salma = {
   currentRouteId: null,
   _streaming: false,
   _rateTimes: [],
+  _userLocation: null,
+
+  // Pedir geolocalización al usuario (se llama una vez al iniciar)
+  initGeolocation() {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        this._userLocation = {
+          lat: Math.round(pos.coords.latitude * 10000) / 10000,
+          lng: Math.round(pos.coords.longitude * 10000) / 10000
+        };
+        console.log('[Salma] Ubicación del viajero:', this._userLocation);
+      },
+      () => { /* Usuario denegó o error — sin ubicación, no pasa nada */ },
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 }
+    );
+  },
 
   // ═══ PUNTO DE ENTRADA ÚNICO ═══
   async send(msg) {
@@ -38,6 +55,7 @@ const salma = {
       if (this.currentRoute) body.current_route = this.currentRoute;
       if (window.currentUser?.country) body.nationality = window.currentUser.country;
       if (window.currentUser?.name) body.user_name = window.currentUser.name;
+      if (this._userLocation) body.user_location = this._userLocation;
 
       const data = await this._stream(body, loadingEl);
 
