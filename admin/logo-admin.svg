@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 50">
+  <rect width="360" height="50" fill="transparent"/>
+  <text x="180" y="37" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-weight="900" font-size="36" letter-spacing="2">
+    <tspan fill="#ffffff">BORRADO</tspan>
+    <tspan fill="#d4a017">DEL</tspan>
+    <tspan fill="#ffffff">MAPA</tspan>
+  </text>
+</svg>

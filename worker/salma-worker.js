@@ -690,6 +690,27 @@ async function verifyAllStops(route, placesKey) {
 // HANDLER PRINCIPAL
 // ═══════════════════════════════════════════════════════════════
 
+// ═══════════════════════════════════════════════════════════════
+// LOGGING — Registra cada petición en Firestore para admin
+// ═══════════════════════════════════════════════════════════════
+async function logToFirestore(logData) {
+  try {
+    const projectId = 'borradodelmapa-85257';
+    const docId = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/admin_logs/${docId}`;
+    const fields = {};
+    for (const [k, v] of Object.entries(logData)) {
+      if (typeof v === 'number') fields[k] = { integerValue: String(Math.round(v)) };
+      else fields[k] = { stringValue: String(v || '') };
+    }
+    await fetch(url, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fields }),
+    });
+  } catch (_) { /* logging no debe romper el flujo */ }
+}
+
 export default {
   async fetch(request, env, ctx) {
     // CORS
@@ -829,6 +850,50 @@ export default {
         return new Response(JSON.stringify({ polyline, legs }), {
           headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' }
         });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /admin-chat (Chat del admin con Claude) ───
+    if (request.method === 'POST' && url.pathname === '/admin-chat') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+
+      // Verificar token admin (hash SHA-256 de la contraseña)
+      const authHeader = request.headers.get('Authorization') || '';
+      const adminToken = authHeader.replace('Bearer ', '');
+      if (adminToken !== 'bdm-admin-2026') {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+
+      let chatBody;
+      try { chatBody = await request.json(); } catch (e) {
+        return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: corsH });
+      }
+
+      const apiKey = env.ANTHROPIC_API_KEY;
+      if (!apiKey) {
+        return new Response(JSON.stringify({ error: 'API key not configured' }), { status: 500, headers: corsH });
+      }
+
+      try {
+        const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: chatBody.model || 'claude-sonnet-4-6',
+            max_tokens: 2000,
+            system: chatBody.system || '',
+            messages: chatBody.messages || [],
+          }),
+        });
+
+        const result = await anthropicRes.json();
+        return new Response(JSON.stringify(result), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
@@ -979,6 +1044,8 @@ ${JSON.stringify(route)}`;
     // Construir mensajes
     const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData);
     const isRoute = isRouteRequest(message, history);
+    const reqStartTime = Date.now();
+    const reqModel = isRoute ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001';
 
     // ─── STREAMING SSE ───
     const sseHeaders = {
@@ -1082,8 +1149,31 @@ ${JSON.stringify(route)}`;
         }
 
         await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply, route: route || null })}\n\n`));
+
+        // Log exitoso
+        ctx.waitUntil(logToFirestore({
+          timestamp: new Date().toISOString(),
+          type: isRoute ? 'route' : 'conversational',
+          user_message: message.slice(0, 200),
+          chars_out: fullText.length,
+          latency_ms: Date.now() - reqStartTime,
+          status: 'ok',
+          error_detail: '',
+          model: reqModel,
+        }));
       } catch (e) {
         try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: fullText || 'Error de conexión.', route: null })}\n\n`)); } catch (_) {}
+        // Log error
+        ctx.waitUntil(logToFirestore({
+          timestamp: new Date().toISOString(),
+          type: isRoute ? 'route' : 'conversational',
+          user_message: message.slice(0, 200),
+          chars_out: 0,
+          latency_ms: Date.now() - reqStartTime,
+          status: 'error',
+          error_detail: e.message || 'Stream error',
+          model: reqModel,
+        }));
       } finally {
         await writer.close();
       }
