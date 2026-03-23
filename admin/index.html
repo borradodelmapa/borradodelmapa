@@ -350,12 +350,29 @@
   <script src="config.js"></script>
   <script src="admin.js"></script>
 
-  <!-- Service Worker -->
+  <!-- Service Worker + PWA Ready -->
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/admin/sw.js', { scope: '/admin/' })
-        .then(registration => console.log('✅ Service Worker registrado'))
-        .catch(err => console.log('Service Worker error:', err));
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/admin/sw.js', { scope: '/admin/' })
+          .then(reg => {
+            console.log('✅ SW registrado', reg);
+            // Detectar instalación
+            if (window.navigator.standalone === true) {
+              console.log('✅ APP instalada (standalone)');
+            } else if (window.matchMedia('(display-mode: standalone)').matches) {
+              console.log('✅ APP en modo standalone');
+            }
+          })
+          .catch(err => console.error('❌ SW error:', err));
+      });
+
+      // Sugerir instalación en Chrome/Edge
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', e => {
+        deferredPrompt = e;
+        console.log('💾 App instalable detectada');
+      });
     }
   </script>
 </body>

@@ -1,8 +1,8 @@
 {
   "name": "Admin Borrado del Mapa",
-  "short_name": "Admin BDM",
-  "description": "Panel de administración de Borrado del Mapa",
-  "start_url": "/admin/",
+  "short_name": "Admin",
+  "description": "Panel de administración",
+  "start_url": "/admin/index.html",
   "scope": "/admin/",
   "display": "standalone",
   "orientation": "portrait-primary",
@@ -10,26 +10,27 @@
   "background_color": "#1a1a2e",
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%231a1a2e' width='192' height='192'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='80' fill='%23d4a017' font-family='system-ui' font-weight='bold'>BDM</text></svg>",
-      "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any"
+      "src": "logo-admin.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%231a1a2e' width='512' height='512'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='240' fill='%23d4a017' font-family='system-ui' font-weight='bold'>BDM</text></svg>",
-      "sizes": "512x512",
+      "src": "logo-admin.svg",
+      "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ],
-  "screenshots": [
+  "categories": ["productivity"],
+  "screenshots": [],
+  "prefer_related_applications": false,
+  "shortcuts": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%231a1a2e' width='540' height='720'/><text x='50%' y='100' font-size='40' fill='%23d4a017' font-family='system-ui' font-weight='bold' text-anchor='middle'>Admin</text><text x='50%' y='200' font-size='30' fill='%23999' font-family='system-ui' text-anchor='middle'>Borrado del Mapa</text></svg>",
-      "sizes": "540x720",
-      "type": "image/svg+xml",
-      "form_factor": "narrow"
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Accede al dashboard",
+      "url": "/admin/index.html",
+      "icons": [{ "src": "logo-admin.svg", "sizes": "any" }]
     }
-  ],
-  "categories": ["productivity", "utilities"],
-  "prefer_related_applications": false
+  ]
 }

@@ -1,12 +1,9 @@
 /* ═══════════════════════════════════════════
    Service Worker — Admin Borrado del Mapa
-   Cache de archivos locales para funcionamiento offline
+   Caché offline + actualizaciones en background
    ═══════════════════════════════════════════ */
 
-const CACHE_VERSION = 'admin-v1';
-const STATIC_CACHE = `${CACHE_VERSION}-static`;
-const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
-
+const CACHE_NAME = 'admin-cache-v1';
 const STATIC_ASSETS = [
   '/admin/',
   '/admin/index.html',
@@ -15,84 +12,64 @@ const STATIC_ASSETS = [
   '/admin/config.js',
   '/admin/logo-admin.svg',
   '/admin/manifest.json',
-  'https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js',
-  'https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js',
-  'https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js'
+  '/admin/sw.js'
 ];
 
-// Install: cachear archivos estáticos
+// ─── INSTALL ───
 self.addEventListener('install', event => {
+  console.log('[SW] Instalando...');
   event.waitUntil(
-    caches.open(STATIC_CACHE)
-      .then(cache => cache.addAll(STATIC_ASSETS))
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        console.log('[SW] Cacheando archivos...');
+        return cache.addAll(STATIC_ASSETS);
+      })
       .then(() => self.skipWaiting())
-      .catch(err => console.log('Cache install error:', err))
   );
 });
 
-// Activate: limpiar caches viejos
+// ─── ACTIVATE ───
 self.addEventListener('activate', event => {
+  console.log('[SW] Activando...');
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames
-          .filter(name => name.startsWith('admin-') && name !== STATIC_CACHE && name !== DYNAMIC_CACHE)
-          .map(name => caches.delete(name))
+        cacheNames.map(name => {
+          if (name !== CACHE_NAME) {
+            console.log('[SW] Eliminando caché:', name);
+            return caches.delete(name);
+          }
+        })
       );
     }).then(() => self.clients.claim())
   );
 });
 
-// Fetch: estrategia network-first para API, cache-first para assets
+// ─── FETCH ───
 self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // APIs y cross-origin: network-first con fallback a cache
-  if (request.method === 'POST' || url.origin !== location.origin ||
-      url.pathname.includes('/firebase') || url.pathname.includes('/gstatic') ||
-      url.pathname.includes('cloudflare')) {
+  // Solo cachear peticiones GET de admin
+  if (request.method !== 'GET') {
+    event.respondWith(fetch(request));
+    return;
+  }
+
+  // Archivos locales: cache-first
+  if (url.pathname.startsWith('/admin/')) {
     event.respondWith(
-      fetch(request)
-        .then(response => {
-          // Cache de APIs de terceros (opcional)
-          if (request.method === 'GET' && url.origin !== location.origin) {
-            const cache = caches.open(DYNAMIC_CACHE);
-            cache.then(c => c.put(request, response.clone()));
-          }
-          return response;
-        })
-        .catch(() => caches.match(request))
+      caches.match(request)
+        .then(response => response || fetch(request))
+        .catch(() => caches.match('/admin/index.html'))
     );
     return;
   }
 
-  // Assets locales: cache-first con fallback a network
-  event.respondWith(
-    caches.match(request)
-      .then(response => response || fetch(request))
-      .then(response => {
-        if (response && response.status === 200 && request.method === 'GET') {
-          caches.open(DYNAMIC_CACHE).then(cache => cache.put(request, response.clone()));
-        }
-        return response;
-      })
-      .catch(() => {
-        // Fallback para HTML si está offline
-        if (request.destination === 'document') {
-          return caches.match('/admin/index.html');
-        }
-      })
-  );
-});
-
-// Sync: sincronizar datos cuando vuelva conexión
-self.addEventListener('sync', event => {
-  if (event.tag === 'sync-admin') {
-    event.waitUntil(
-      // Aquí iría lógica para resincronizar datos
-      Promise.resolve()
-    );
-  }
+  // APIs externas: network-first sin cachear
+  event.respondWith(fetch(request).catch(() => {
+    if (request.destination === 'document') {
+      return caches.match('/admin/index.html');
+    }
+  }));
 });
