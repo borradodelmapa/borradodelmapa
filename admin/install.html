@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#1a1a2e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Instalar Admin</title>
+  <link rel="manifest" href="/admin/manifest.json">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -38,13 +41,17 @@
       border-radius: 8px;
       margin-bottom: 30px;
       font-family: monospace;
-      font-size: 13px;
+      font-size: 12px;
       color: #4361ee;
       text-align: left;
+      line-height: 1.8;
+      max-height: 200px;
+      overflow-y: auto;
     }
-    .status strong { color: #d4a017; }
+    .status strong { color: #d4a017; display: block; margin-bottom: 10px; }
     .status.error { color: #ff6b6b; border-left: 4px solid #ff6b6b; }
     .status.success { color: #51cf66; border-left: 4px solid #51cf66; }
+    .status.warning { color: #ffd43b; border-left: 4px solid #ffd43b; }
     button {
       background: #4361ee;
       color: #fff;
@@ -58,7 +65,7 @@
       margin-bottom: 10px;
       transition: background 0.2s;
     }
-    button:hover { background: #3a4fc9; }
+    button:hover:not(:disabled) { background: #3a4fc9; }
     button:disabled {
       background: #666;
       cursor: not-allowed;
@@ -69,105 +76,202 @@
       border: 2px solid #4361ee;
       color: #4361ee;
     }
-    .secondary:hover { background: rgba(67, 97, 238, 0.1); }
-    .info { font-size: 13px; color: #999; margin-top: 20px; }
+    .secondary:hover:not(:disabled) { background: rgba(67, 97, 238, 0.1); }
+    .info {
+      font-size: 13px;
+      color: #999;
+      margin-top: 20px;
+      background: rgba(67, 97, 238, 0.1);
+      padding: 15px;
+      border-radius: 6px;
+    }
+    .manual-steps {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 20px;
+      text-align: left;
+    }
+    .manual-steps strong {
+      color: #d4a017;
+      display: block;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>📱 Admin</h1>
-    <p>Instala el panel en tu pantalla de inicio</p>
+    <h1>📱 Admin BDM</h1>
+    <p>Instala el panel de administración</p>
 
     <div class="status" id="status">
-      <strong>Verificando...</strong>
+      <strong>Inicializando...</strong>
     </div>
 
-    <button id="install-btn" disabled>Instalar en pantalla de inicio</button>
-    <button class="secondary" onclick="window.location.href='/admin/index.html'">Ir a Admin</button>
+    <button id="install-btn" disabled>🎯 Instalar en pantalla de inicio</button>
+    <button class="secondary" onclick="window.location.href='/admin/index.html'">➜ Ir a Admin</button>
 
     <div class="info" id="info"></div>
+
+    <div class="manual-steps" id="manual"></div>
   </div>
 
   <script>
     const statusEl = document.getElementById('status');
     const installBtn = document.getElementById('install-btn');
     const infoEl = document.getElementById('info');
-    let deferredPrompt;
+    const manualEl = document.getElementById('manual');
+    let deferredPrompt = null;
+    let canInstall = false;
 
-    function updateStatus(msg, isError = false, isSuccess = false) {
-      statusEl.innerHTML = `<strong>${msg}</strong>`;
-      statusEl.className = 'status' + (isError ? ' error' : '') + (isSuccess ? ' success' : '');
+    function log(msg) {
+      console.log('[INSTALL]', msg);
     }
 
-    // Verificaciones
-    window.addEventListener('load', async () => {
-      let checks = [];
+    async function checkRequirements() {
+      const checks = [];
+      let allGood = true;
 
       // 1. HTTPS
-      checks.push(`🔒 HTTPS: ${location.protocol === 'https:' ? '✅' : '❌'}`);
+      const hasHttps = location.protocol === 'https:';
+      checks.push(`${hasHttps ? '✅' : '❌'} HTTPS`);
+      if (!hasHttps) allGood = false;
 
       // 2. Manifest
       try {
-        const manifest = await fetch('/admin/manifest.json').then(r => r.json());
-        checks.push(`📋 Manifest: ✅ (${manifest.name})`);
+        const res = await fetch('/admin/manifest.json');
+        if (res.ok) {
+          const manifest = await res.json();
+          checks.push(`✅ Manifest (${manifest.name})`);
+        } else {
+          checks.push(`❌ Manifest (HTTP ${res.status})`);
+          allGood = false;
+        }
       } catch (e) {
-        checks.push(`📋 Manifest: ❌ (${e.message})`);
+        checks.push(`❌ Manifest (${e.message})`);
+        allGood = false;
       }
 
       // 3. Service Worker
-      if ('serviceWorker' in navigator) {
-        try {
+      try {
+        if ('serviceWorker' in navigator) {
           const reg = await navigator.serviceWorker.register('/admin/sw.js', { scope: '/admin/' });
-          checks.push(`⚙️ Service Worker: ✅ (activo)`);
-        } catch (e) {
-          checks.push(`⚙️ Service Worker: ❌ (${e.message})`);
+          checks.push(`✅ Service Worker (${reg.scope})`);
+          log('SW registrado: ' + reg.scope);
+        } else {
+          checks.push(`❌ Service Worker (no soportado)`);
+          allGood = false;
         }
-      } else {
-        checks.push(`⚙️ Service Worker: ❌ (no soportado)`);
+      } catch (e) {
+        checks.push(`❌ Service Worker (${e.message})`);
+        allGood = false;
       }
 
-      // 4. IndexedDB
-      if ('indexedDB' in window) {
-        checks.push(`💾 IndexedDB: ✅`);
-      } else {
-        checks.push(`💾 IndexedDB: ❌`);
-      }
+      // 4. Web App Manifest Link
+      const manifestLink = document.querySelector('link[rel="manifest"]');
+      checks.push(`${manifestLink ? '✅' : '❌'} Link manifest en HTML`);
 
       // 5. Standalone
       const isStandalone = window.navigator.standalone === true ||
                           window.matchMedia('(display-mode: standalone)').matches;
-      checks.push(`🎯 Instalada: ${isStandalone ? '✅ (ya instalada)' : '⬜ (no instalada)'}`);
+      checks.push(`${isStandalone ? '✅' : '⬜'} Instalada`);
 
-      updateStatus(checks.join('\n'), false, true);
+      // 6. Prompt disponible
+      checks.push(`${canInstall ? '✅' : '⏳'} Instalador disponible`);
 
-      if (!isStandalone) {
-        installBtn.disabled = false;
-        infoEl.innerHTML = 'Toca el botón para instalar, o usa el menú del navegador (⋮ o Compartir)';
-      } else {
+      return { checks, allGood };
+    }
+
+    window.addEventListener('load', async () => {
+      log('Página cargada');
+      const { checks, allGood } = await checkRequirements();
+
+      statusEl.textContent = '';
+      checks.forEach(check => {
+        const line = document.createElement('div');
+        line.textContent = check;
+        statusEl.appendChild(line);
+      });
+
+      const isStandalone = window.navigator.standalone === true ||
+                          window.matchMedia('(display-mode: standalone)').matches;
+
+      if (isStandalone) {
+        statusEl.className = 'status success';
+        infoEl.innerHTML = '✅ <strong>Ya está instalada</strong><br>Puedes cerrar esta página.';
         installBtn.disabled = true;
-        infoEl.innerHTML = '✅ Ya está instalada en tu pantalla de inicio';
+      } else if (allGood && canInstall) {
+        statusEl.className = 'status success';
+        installBtn.disabled = false;
+        infoEl.innerHTML = '🎯 <strong>Toca el botón para instalar</strong><br>Se añadirá a tu pantalla de inicio.';
+      } else if (allGood && !canInstall) {
+        statusEl.className = 'status warning';
+        infoEl.innerHTML = '⏳ <strong>Instalador no disponible aún</strong><br>Espera unos segundos o usa el menú manual.';
+        showManualSteps();
+      } else {
+        statusEl.className = 'status error';
+        infoEl.innerHTML = '❌ <strong>Falta configuración</strong><br>Revisa los detalles arriba.';
       }
     });
 
+    function showManualSteps() {
+      const userAgent = navigator.userAgent;
+      const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+      const isAndroid = /Android/.test(userAgent);
+
+      let steps = '<strong>Instalación manual:</strong>';
+
+      if (isIOS) {
+        steps += '<div style="margin-top:10px;text-align:left;padding:10px;background:rgba(212,160,23,0.1);border-radius:4px;">' +
+                 '1. Toca <strong>Compartir</strong> (cuadrado con flecha)<br>' +
+                 '2. Tapa <strong>"Añadir a pantalla de inicio"</strong><br>' +
+                 '3. Confirma' +
+                 '</div>';
+      } else if (isAndroid) {
+        steps += '<div style="margin-top:10px;text-align:left;padding:10px;background:rgba(212,160,23,0.1);border-radius:4px;">' +
+                 '1. Tapa el <strong>menú</strong> (⋮) arriba a la derecha<br>' +
+                 '2. Selecciona <strong>"Instalar aplicación"</strong><br>' +
+                 '3. Confirma' +
+                 '</div>';
+      } else {
+        steps += '<div style="margin-top:10px;text-align:left;padding:10px;background:rgba(212,160,23,0.1);border-radius:4px;">' +
+                 'Usa el menú del navegador para instalar como aplicación.' +
+                 '</div>';
+      }
+
+      manualEl.innerHTML = steps;
+    }
+
     // beforeinstallprompt
     window.addEventListener('beforeinstallprompt', e => {
+      log('beforeinstallprompt disparado');
       e.preventDefault();
       deferredPrompt = e;
+      canInstall = true;
       installBtn.disabled = false;
-      infoEl.innerHTML = '💡 Toca el botón para instalar';
+      infoEl.innerHTML = '🎯 <strong>¡Listo para instalar!</strong><br>Toca el botón.';
+      manualEl.innerHTML = '';
     });
 
     installBtn.addEventListener('click', async () => {
       if (deferredPrompt) {
+        log('Mostrando instalador...');
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
+
         if (outcome === 'accepted') {
-          updateStatus('✅ Instalada correctamente. Puedes cerrar esta pestaña.', false, true);
+          log('Instalación aceptada');
+          statusEl.className = 'status success';
+          statusEl.innerHTML = '<strong>✅ Instalada correctamente</strong><br>Ya aparece en tu pantalla de inicio.';
           installBtn.disabled = true;
+          infoEl.innerHTML = 'Puedes cerrar esta pestaña.';
         } else {
-          updateStatus('⏸️ Instalación cancelada', true);
+          log('Instalación rechazada');
+          infoEl.innerHTML = '⏸️ Instalación cancelada.<br>Puedes intentar después.';
         }
         deferredPrompt = null;
+      } else {
+        log('Instalador no disponible - mostrando pasos manuales');
+        showManualSteps();
       }
     });
   </script>
