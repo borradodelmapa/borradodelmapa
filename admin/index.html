@@ -2,10 +2,16 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Panel de administración de Borrado del Mapa">
+  <meta name="theme-color" content="#1a1a2e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Admin BDM">
   <title>Admin — Borrado del Mapa</title>
   <link rel="icon" href="../favicon.ico">
+  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="admin.css">
   <!-- Firebase 8.10.1 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -343,5 +349,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script src="config.js"></script>
   <script src="admin.js"></script>
+
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/admin/sw.js', { scope: '/admin/' })
+        .then(registration => console.log('✅ Service Worker registrado'))
+        .catch(err => console.log('Service Worker error:', err));
+    }
+  </script>
 </body>
 </html>
