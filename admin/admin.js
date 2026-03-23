@@ -151,11 +151,13 @@
       if (tabId === 'dashboard') {
         loadDashboard();
         // Actualizar métrica Salma desde caché si existe
+        console.log('[NAVIGATE] Dashboard: cache', window._salmaLogsCache ? window._salmaLogsCache.length + ' logs' : 'none');
         if (window._salmaLogsCache && window._salmaLogsCache.length > 0) {
           var today = new Date().toISOString().slice(0, 10);
           var salmaCalls = window._salmaLogsCache.filter(function(log) {
             return log.timestamp && log.timestamp.slice(0, 10) === today;
           }).length;
+          console.log('[NAVIGATE] Updating m-salma to', salmaCalls);
           document.getElementById('m-salma').textContent = salmaCalls;
         }
       }
@@ -1092,6 +1094,7 @@
 
       // Guardar en caché global para que el dashboard pueda actualizar la métrica
       window._salmaLogsCache = salmaLogs;
+      console.log('[SALMA] Caché creado con', salmaLogs.length, 'logs');
 
       renderSalmaMetrics();
       renderSalmaTable();
@@ -1104,7 +1107,10 @@
         var salmaCalls = salmaLogs.filter(function(log) {
           return log.timestamp && log.timestamp.slice(0, 10) === today;
         }).length;
+        console.log('[SALMA] Actualizando m-salma a', salmaCalls);
         salmaMetricEl.textContent = salmaCalls;
+      } else {
+        console.log('[SALMA] m-salma element not found');
       }
     } catch (err) {
       console.error('Error cargando logs Salma:', err);
