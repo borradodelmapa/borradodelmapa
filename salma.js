@@ -40,6 +40,9 @@ const salma = {
     if (!msg || this._streaming) return;
     if (!this._checkRate()) return;
 
+    // Si no tenemos ubicación todavía, reintentar (ahora hay interacción del usuario)
+    if (!this._userLocation && !this._geoWatchId) this.initGeolocation();
+
 
     // Transicionar a chat si estamos en welcome
     if (currentState === 'welcome' || currentState === 'viajes') {
