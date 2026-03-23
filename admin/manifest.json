@@ -1,36 +1,18 @@
 {
   "name": "Admin Borrado del Mapa",
   "short_name": "Admin",
-  "description": "Panel de administración",
-  "start_url": "/admin/index.html",
+  "description": "Panel de administración de Borrado del Mapa",
+  "start_url": "/admin/",
   "scope": "/admin/",
   "display": "standalone",
-  "orientation": "portrait-primary",
   "theme_color": "#1a1a2e",
   "background_color": "#1a1a2e",
   "icons": [
     {
-      "src": "logo-admin.svg",
-      "sizes": "any",
-      "type": "image/svg+xml"
-    },
-    {
-      "src": "logo-admin.svg",
-      "sizes": "any",
+      "src": "/admin/logo-admin.svg",
+      "sizes": "192x192 512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
-    }
-  ],
-  "categories": ["productivity"],
-  "screenshots": [],
-  "prefer_related_applications": false,
-  "shortcuts": [
-    {
-      "name": "Dashboard",
-      "short_name": "Dashboard",
-      "description": "Accede al dashboard",
-      "url": "/admin/index.html",
-      "icons": [{ "src": "logo-admin.svg", "sizes": "any" }]
     }
   ]
 }
