@@ -150,27 +150,7 @@
     if (db && firebase.auth().currentUser) {
       if (tabId === 'dashboard') {
         loadDashboard();
-        // También actualizar m-salma desde caché o localStorage
-        setTimeout(function() {
-          var logsToUse = window._salmaLogsCache;
-          if (!logsToUse || logsToUse.length === 0) {
-            try {
-              var stored = localStorage.getItem('_salmaLogs');
-              if (stored) {
-                logsToUse = JSON.parse(stored);
-              }
-            } catch(e) {}
-          }
-          if (logsToUse && logsToUse.length > 0) {
-            var today = new Date().toISOString().slice(0, 10);
-            var salmaCalls = logsToUse.filter(function(log) {
-              return log.timestamp && log.timestamp.slice(0, 10) === today;
-            }).length;
-            var el = document.getElementById('m-salma');
-            if (el) el.textContent = salmaCalls;
-          }
-        }, 100);
-      }
+        updateSalmaMetric();
       }
       if (tabId === 'usuarios') loadUsuarios();
       if (tabId === 'proyecto') loadProyecto();
@@ -180,6 +160,25 @@
       if (tabId === 'salma') loadSalma();
       if (tabId === 'chat') loadChat();
       if (tabId === 'settings') initSettings();
+    }
+  }
+
+  // Actualiza m-salma desde localStorage (se llena cuando se visita Salma)
+  function updateSalmaMetric() {
+    var logsToUse = window._salmaLogsCache;
+    if (!logsToUse || logsToUse.length === 0) {
+      try {
+        var stored = localStorage.getItem('_salmaLogs');
+        if (stored) logsToUse = JSON.parse(stored);
+      } catch(e) {}
+    }
+    if (logsToUse && logsToUse.length > 0) {
+      var today = new Date().toISOString().slice(0, 10);
+      var count = logsToUse.filter(function(l) {
+        return l.timestamp && l.timestamp.slice(0, 10) === today;
+      }).length;
+      var el = document.getElementById('m-salma');
+      if (el) el.textContent = count;
     }
   }
 
@@ -281,23 +280,8 @@
       console.error('Error cargando métricas dashboard:', err);
     }
 
-    // Actualizar métrica Salma desde caché o localStorage (se llena cuando se visita la pestaña Salma)
-    var logsToUse = window._salmaLogsCache;
-    if (!logsToUse || logsToUse.length === 0) {
-      try {
-        var stored = localStorage.getItem('_salmaLogs');
-        if (stored) {
-          logsToUse = JSON.parse(stored);
-        }
-      } catch(e) {}
-    }
-    if (logsToUse && logsToUse.length > 0) {
-      var today = new Date().toISOString().slice(0, 10);
-      var salmaCalls = logsToUse.filter(function(log) {
-        return log.timestamp && log.timestamp.slice(0, 10) === today;
-      }).length;
-      document.getElementById('m-salma').textContent = salmaCalls;
-    }
+    // Actualizar métrica Salma (función reutilizable)
+    updateSalmaMetric();
   }
 
   async function checkWorkerHealth() {
