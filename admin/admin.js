@@ -1223,8 +1223,13 @@
       var phases = projectData.phases || {};
       Object.keys(phases).forEach(function(pid) {
         var p = phases[pid];
-        var done = (p.tasks || []).filter(function(t) { return t.status === 'done'; }).length;
-        parts.push(pid + ' ' + p.name + ' (' + p.status + '): ' + done + '/' + (p.tasks || []).length + ' tareas');
+        var tasks = p.tasks || [];
+        var done = tasks.filter(function(t) { return t.status === 'done'; }).length;
+        parts.push('\n' + pid + ' ' + p.name + ' (' + p.status + '): ' + done + '/' + tasks.length + ' tareas');
+        tasks.forEach(function(t) {
+          var icon = t.status === 'done' ? '✅' : t.status === 'in_progress' ? '🔨' : t.status === 'designed' ? '📐' : '⬜';
+          parts.push('  ' + icon + ' ' + t.task + ' [' + t.status + ']');
+        });
       });
       if (projectData.changelog && projectData.changelog.length > 0) {
         parts.push('\nÚltimos cambios:');
