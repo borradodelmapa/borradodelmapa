@@ -645,46 +645,71 @@ function setupMic(micBtn, inputEl, onSend) {
 
   let recognition = null;
   let listening = false;
+  let gotResult = false;
 
   micBtn.addEventListener('click', () => {
     if (listening) { recognition.stop(); return; }
 
     recognition = new SpeechRecognition();
-    recognition.lang = navigator.language || 'es-ES';
+    recognition.lang = 'es-ES';
     recognition.interimResults = true;
     recognition.continuous = false;
     recognition.maxAlternatives = 1;
+    gotResult = false;
 
     recognition.onstart = () => {
       listening = true;
+      gotResult = false;
       micBtn.classList.add('listening');
+      if (typeof showToast === 'function') showToast('Escuchando...');
     };
 
     recognition.onresult = (event) => {
+      gotResult = true;
       let transcript = '';
+      let isFinal = false;
       for (let i = 0; i < event.results.length; i++) {
         transcript += event.results[i][0].transcript;
+        if (event.results[i].isFinal) isFinal = true;
       }
       inputEl.value = transcript;
       inputEl.style.height = 'auto';
       inputEl.style.height = Math.min(inputEl.scrollHeight, 100) + 'px';
+      // Enviar solo cuando el resultado es final
+      if (isFinal) {
+        recognition.stop();
+      }
     };
 
     recognition.onend = () => {
       listening = false;
       micBtn.classList.remove('listening');
-      if (inputEl.value.trim()) onSend();
+      if (gotResult && inputEl.value.trim()) {
+        onSend();
+      } else if (!gotResult) {
+        if (typeof showToast === 'function') showToast('No he captado nada, inténtalo de nuevo');
+      }
     };
 
     recognition.onerror = (event) => {
       listening = false;
       micBtn.classList.remove('listening');
-      if (event.error === 'not-allowed') {
-        if (typeof showToast === 'function') showToast('Permite el micrófono en tu navegador');
+      const msgs = {
+        'not-allowed': 'Permite el micrófono en ajustes del navegador',
+        'no-speech': 'No he oído nada, pulsa el micro y habla',
+        'network': 'Sin conexión para reconocimiento de voz',
+        'audio-capture': 'No se detecta micrófono en el dispositivo'
+      };
+      if (typeof showToast === 'function') {
+        showToast(msgs[event.error] || 'Error de micro: ' + event.error);
       }
     };
 
-    recognition.start();
+    try {
+      recognition.start();
+    } catch (e) {
+      if (typeof showToast === 'function') showToast('Error al iniciar micro');
+    }
   });
 }
 
