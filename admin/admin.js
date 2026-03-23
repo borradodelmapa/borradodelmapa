@@ -151,13 +151,11 @@
       if (tabId === 'dashboard') {
         loadDashboard();
         // Actualizar métrica Salma desde caché si existe
-        console.log('[NAVIGATE] Dashboard: cache', window._salmaLogsCache ? window._salmaLogsCache.length + ' logs' : 'none');
         if (window._salmaLogsCache && window._salmaLogsCache.length > 0) {
           var today = new Date().toISOString().slice(0, 10);
           var salmaCalls = window._salmaLogsCache.filter(function(log) {
             return log.timestamp && log.timestamp.slice(0, 10) === today;
           }).length;
-          console.log('[NAVIGATE] Updating m-salma to', salmaCalls);
           document.getElementById('m-salma').textContent = salmaCalls;
         }
       }
@@ -1069,12 +1067,10 @@
     // Si hay caché en memoria, usarlo. Si no, cargar desde Firestore
     if (window._salmaLogsCache && window._salmaLogsCache.length > 0) {
       salmaLogs = window._salmaLogsCache;
-      console.log('[SALMA] Usando caché en memoria:', salmaLogs.length, 'logs');
       renderSalmaMetrics();
       renderSalmaTable();
       renderSalmaAlerts();
     } else {
-      console.log('[SALMA] No hay caché, cargando desde Firestore');
       fetchSalmaLogs();
     }
   }
@@ -1105,13 +1101,6 @@
       // Guardar en caché global para que el dashboard pueda actualizar la métrica
       // Usar el array local como caché (no copiar, sino referenciar)
       window._salmaLogsCache = salmaLogs;
-      // También guardar en localStorage como backup
-      try {
-        localStorage.setItem('_salmaLogsCache', JSON.stringify(salmaLogs.map(function(l) {
-          return { timestamp: l.timestamp, type: l.type };
-        })));
-      } catch(e) {}
-      console.log('[SALMA] Caché creado con', salmaLogs.length, 'logs');
 
       renderSalmaMetrics();
       renderSalmaTable();
@@ -1124,10 +1113,7 @@
         var salmaCalls = salmaLogs.filter(function(log) {
           return log.timestamp && log.timestamp.slice(0, 10) === today;
         }).length;
-        console.log('[SALMA] Actualizando m-salma a', salmaCalls);
         salmaMetricEl.textContent = salmaCalls;
-      } else {
-        console.log('[SALMA] m-salma element not found');
       }
     } catch (err) {
       console.error('Error cargando logs Salma:', err);
