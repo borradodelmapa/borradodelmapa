@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#1a1a2e">
+  <title>Instalar Admin</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui;
+      background: #1a1a2e;
+      color: #fff;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      max-width: 500px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      color: #d4a017;
+    }
+    p {
+      font-size: 16px;
+      color: #aaa;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    .status {
+      background: #1e2a4a;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      font-family: monospace;
+      font-size: 13px;
+      color: #4361ee;
+      text-align: left;
+    }
+    .status strong { color: #d4a017; }
+    .status.error { color: #ff6b6b; border-left: 4px solid #ff6b6b; }
+    .status.success { color: #51cf66; border-left: 4px solid #51cf66; }
+    button {
+      background: #4361ee;
+      color: #fff;
+      border: none;
+      padding: 16px 32px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+      margin-bottom: 10px;
+      transition: background 0.2s;
+    }
+    button:hover { background: #3a4fc9; }
+    button:disabled {
+      background: #666;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+    .secondary {
+      background: transparent;
+      border: 2px solid #4361ee;
+      color: #4361ee;
+    }
+    .secondary:hover { background: rgba(67, 97, 238, 0.1); }
+    .info { font-size: 13px; color: #999; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📱 Admin</h1>
+    <p>Instala el panel en tu pantalla de inicio</p>
+
+    <div class="status" id="status">
+      <strong>Verificando...</strong>
+    </div>
+
+    <button id="install-btn" disabled>Instalar en pantalla de inicio</button>
+    <button class="secondary" onclick="window.location.href='/admin/index.html'">Ir a Admin</button>
+
+    <div class="info" id="info"></div>
+  </div>
+
+  <script>
+    const statusEl = document.getElementById('status');
+    const installBtn = document.getElementById('install-btn');
+    const infoEl = document.getElementById('info');
+    let deferredPrompt;
+
+    function updateStatus(msg, isError = false, isSuccess = false) {
+      statusEl.innerHTML = `<strong>${msg}</strong>`;
+      statusEl.className = 'status' + (isError ? ' error' : '') + (isSuccess ? ' success' : '');
+    }
+
+    // Verificaciones
+    window.addEventListener('load', async () => {
+      let checks = [];
+
+      // 1. HTTPS
+      checks.push(`🔒 HTTPS: ${location.protocol === 'https:' ? '✅' : '❌'}`);
+
+      // 2. Manifest
+      try {
+        const manifest = await fetch('/admin/manifest.json').then(r => r.json());
+        checks.push(`📋 Manifest: ✅ (${manifest.name})`);
+      } catch (e) {
+        checks.push(`📋 Manifest: ❌ (${e.message})`);
+      }
+
+      // 3. Service Worker
+      if ('serviceWorker' in navigator) {
+        try {
+          const reg = await navigator.serviceWorker.register('/admin/sw.js', { scope: '/admin/' });
+          checks.push(`⚙️ Service Worker: ✅ (activo)`);
+        } catch (e) {
+          checks.push(`⚙️ Service Worker: ❌ (${e.message})`);
+        }
+      } else {
+        checks.push(`⚙️ Service Worker: ❌ (no soportado)`);
+      }
+
+      // 4. IndexedDB
+      if ('indexedDB' in window) {
+        checks.push(`💾 IndexedDB: ✅`);
+      } else {
+        checks.push(`💾 IndexedDB: ❌`);
+      }
+
+      // 5. Standalone
+      const isStandalone = window.navigator.standalone === true ||
+                          window.matchMedia('(display-mode: standalone)').matches;
+      checks.push(`🎯 Instalada: ${isStandalone ? '✅ (ya instalada)' : '⬜ (no instalada)'}`);
+
+      updateStatus(checks.join('\n'), false, true);
+
+      if (!isStandalone) {
+        installBtn.disabled = false;
+        infoEl.innerHTML = 'Toca el botón para instalar, o usa el menú del navegador (⋮ o Compartir)';
+      } else {
+        installBtn.disabled = true;
+        infoEl.innerHTML = '✅ Ya está instalada en tu pantalla de inicio';
+      }
+    });
+
+    // beforeinstallprompt
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.disabled = false;
+      infoEl.innerHTML = '💡 Toca el botón para instalar';
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          updateStatus('✅ Instalada correctamente. Puedes cerrar esta pestaña.', false, true);
+          installBtn.disabled = true;
+        } else {
+          updateStatus('⏸️ Instalación cancelada', true);
+        }
+        deferredPrompt = null;
+      }
+    });
+  </script>
+</body>
+</html>
