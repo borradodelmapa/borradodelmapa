@@ -258,20 +258,13 @@
       console.error('Error cargando métricas dashboard:', err);
     }
 
-    // Contar llamadas a Salma hoy (fuera del try principal para evitar que el error de users bloquee esto)
-    try {
-      console.log('[DEBUG] Cargando logs Salma...');
+    // Actualizar métrica Salma desde el caché (se carga cuando se visita la pestaña Salma)
+    if (window._salmaLogsCache && window._salmaLogsCache.length > 0) {
       var today = new Date().toISOString().slice(0, 10);
-      var salmaSnap = await db.collection('admin_logs').orderBy('timestamp', 'desc').limit(500).get();
-      var salmaCalls = salmaSnap.docs.filter(function(doc) {
-        var d = doc.data();
-        return d.timestamp && d.timestamp.slice(0, 10) === today;
+      var salmaCalls = window._salmaLogsCache.filter(function(log) {
+        return log.timestamp && log.timestamp.slice(0, 10) === today;
       }).length;
-      console.log('[DEBUG] Salma calls hoy:', salmaCalls);
       document.getElementById('m-salma').textContent = salmaCalls;
-    } catch (err) {
-      console.warn('[DEBUG] No se pudo cargar logs Salma:', err.message);
-      document.getElementById('m-salma').textContent = '—';
     }
   }
 
@@ -1087,9 +1080,22 @@
         });
       });
 
+      // Guardar en caché global para que el dashboard pueda actualizar la métrica
+      window._salmaLogsCache = salmaLogs;
+
       renderSalmaMetrics();
       renderSalmaTable();
       renderSalmaAlerts();
+
+      // Actualizar métrica en el dashboard si está cargado
+      var salmaMetricEl = document.getElementById('m-salma');
+      if (salmaMetricEl) {
+        var today = new Date().toISOString().slice(0, 10);
+        var salmaCalls = salmaLogs.filter(function(log) {
+          return log.timestamp && log.timestamp.slice(0, 10) === today;
+        }).length;
+        salmaMetricEl.textContent = salmaCalls;
+      }
     } catch (err) {
       console.error('Error cargando logs Salma:', err);
       tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:20px;text-align:center;">Sin logs disponibles: ' + err.message + '</td></tr>';
