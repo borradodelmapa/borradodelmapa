@@ -255,13 +255,18 @@
       }
 
       // Contar llamadas a Salma hoy
-      var today = new Date().toISOString().slice(0, 10);
-      var salmaSnap = await db.collection('admin_logs')
-        .where('timestamp', '>=', today + 'T00:00:00Z')
-        .where('timestamp', '<', new Date(new Date().getTime() + 86400000).toISOString().slice(0, 10) + 'T00:00:00Z')
-        .get();
-      var salmaCalls = salmaSnap.size;
-      document.getElementById('m-salma').textContent = salmaCalls;
+      try {
+        var today = new Date().toISOString().slice(0, 10);
+        var salmaSnap = await db.collection('admin_logs').orderBy('timestamp', 'desc').limit(500).get();
+        var salmaCalls = salmaSnap.docs.filter(function(doc) {
+          var d = doc.data();
+          return d.timestamp && d.timestamp.slice(0, 10) === today;
+        }).length;
+        document.getElementById('m-salma').textContent = salmaCalls;
+      } catch (err) {
+        console.warn('No se pudo cargar logs Salma:', err.message);
+        document.getElementById('m-salma').textContent = '—';
+      }
 
     } catch (err) {
       console.error('Error cargando métricas dashboard:', err);
