@@ -148,7 +148,17 @@
 
     // Cargar datos al entrar en la pestaña (solo si auth activo)
     if (db && firebase.auth().currentUser) {
-      if (tabId === 'dashboard') loadDashboard();
+      if (tabId === 'dashboard') {
+        loadDashboard();
+        // Actualizar métrica Salma desde caché si existe
+        if (window._salmaLogsCache && window._salmaLogsCache.length > 0) {
+          var today = new Date().toISOString().slice(0, 10);
+          var salmaCalls = window._salmaLogsCache.filter(function(log) {
+            return log.timestamp && log.timestamp.slice(0, 10) === today;
+          }).length;
+          document.getElementById('m-salma').textContent = salmaCalls;
+        }
+      }
       if (tabId === 'usuarios') loadUsuarios();
       if (tabId === 'proyecto') loadProyecto();
       if (tabId === 'marketing') loadMarketing();
