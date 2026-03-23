@@ -23,7 +23,7 @@ const salma = {
         console.log('[Salma] Ubicación del viajero:', this._userLocation);
       },
       () => { /* Usuario denegó o error — sin ubicación, no pasa nada */ },
-      { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 }
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 }
     );
   },
 
