@@ -1066,7 +1066,17 @@
       loadSalma();
     });
 
-    fetchSalmaLogs();
+    // Si hay caché en memoria, usarlo. Si no, cargar desde Firestore
+    if (window._salmaLogsCache && window._salmaLogsCache.length > 0) {
+      salmaLogs = window._salmaLogsCache;
+      console.log('[SALMA] Usando caché en memoria:', salmaLogs.length, 'logs');
+      renderSalmaMetrics();
+      renderSalmaTable();
+      renderSalmaAlerts();
+    } else {
+      console.log('[SALMA] No hay caché, cargando desde Firestore');
+      fetchSalmaLogs();
+    }
   }
 
   async function fetchSalmaLogs() {
@@ -1093,7 +1103,14 @@
       });
 
       // Guardar en caché global para que el dashboard pueda actualizar la métrica
+      // Usar el array local como caché (no copiar, sino referenciar)
       window._salmaLogsCache = salmaLogs;
+      // También guardar en localStorage como backup
+      try {
+        localStorage.setItem('_salmaLogsCache', JSON.stringify(salmaLogs.map(function(l) {
+          return { timestamp: l.timestamp, type: l.type };
+        })));
+      } catch(e) {}
       console.log('[SALMA] Caché creado con', salmaLogs.length, 'logs');
 
       renderSalmaMetrics();
