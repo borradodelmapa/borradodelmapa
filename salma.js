@@ -11,28 +11,27 @@ const salma = {
   _rateTimes: [],
   _userLocation: null,
 
-  // Pedir geolocalización al usuario (se llama una vez al iniciar)
+  // Pedir geolocalización al usuario (se llama una vez, se actualiza continuamente)
   initGeolocation() {
     if (!navigator.geolocation) return;
-    const saveLocation = (pos) => {
-      this._userLocation = {
-        lat: Math.round(pos.coords.latitude * 10000) / 10000,
-        lng: Math.round(pos.coords.longitude * 10000) / 10000
-      };
-      console.log('[Salma] Ubicación del viajero:', this._userLocation);
-    };
-    // Intentar GPS real primero, si falla usar IP/WiFi como fallback
-    navigator.geolocation.getCurrentPosition(
-      saveLocation,
-      () => {
-        // Fallback: sin GPS, usar IP/WiFi (menos preciso pero mejor que nada)
-        navigator.geolocation.getCurrentPosition(
-          saveLocation,
-          () => { console.log('[Salma] Ubicación no disponible'); },
-          { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
-        );
+    // watchPosition actualiza conforme el GPS mejora la precisión
+    // Primero puede dar torre de celda, luego corrige con GPS real
+    this._geoWatchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        this._userLocation = {
+          lat: Math.round(pos.coords.latitude * 10000) / 10000,
+          lng: Math.round(pos.coords.longitude * 10000) / 10000,
+          accuracy: Math.round(pos.coords.accuracy)
+        };
+        console.log('[Salma] Ubicación:', this._userLocation.lat, this._userLocation.lng, '±' + this._userLocation.accuracy + 'm');
+        // Si ya tenemos buena precisión (<500m), dejar de monitorizar para ahorrar batería
+        if (pos.coords.accuracy < 500 && this._geoWatchId) {
+          navigator.geolocation.clearWatch(this._geoWatchId);
+          this._geoWatchId = null;
+        }
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      () => { console.log('[Salma] Ubicación no disponible'); },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
     );
   },
 
