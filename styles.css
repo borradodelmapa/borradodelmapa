@@ -630,7 +630,7 @@ body {
 
 /* ═══ TOAST ═══ */
 .toast {
-  position:fixed; bottom:90px; left:50%; transform:translateX(-50%);
+  position:fixed; bottom:160px; left:50%; transform:translateX(-50%);
   z-index:300;
   font-family:var(--font-mono); font-size:11px;
   color:var(--negro); background:var(--dorado);
