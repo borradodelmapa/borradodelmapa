@@ -21,6 +21,7 @@ const ADMIN_CONFIG = {
 
   // GA4
   GA4_MEASUREMENT_ID: 'G-B2YWQKPTZZ',
+  GA4_PROPERTY_ID: '352732094',
 
   // Worker de Salma
   WORKER_URL: 'https://salma-api.paco-defoto.workers.dev',

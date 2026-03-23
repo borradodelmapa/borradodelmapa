@@ -691,6 +691,60 @@ async function verifyAllStops(route, placesKey) {
 // ═══════════════════════════════════════════════════════════════
 
 // ═══════════════════════════════════════════════════════════════
+// GA4 — JWT auth para Google Analytics Data API
+// ═══════════════════════════════════════════════════════════════
+function base64url(buf) {
+  return btoa(String.fromCharCode(...new Uint8Array(buf)))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function getGoogleAccessToken(creds) {
+  const now = Math.floor(Date.now() / 1000);
+  const header = { alg: 'RS256', typ: 'JWT' };
+  const payload = {
+    iss: creds.client_email,
+    scope: 'https://www.googleapis.com/auth/analytics.readonly',
+    aud: 'https://oauth2.googleapis.com/token',
+    iat: now,
+    exp: now + 3600,
+  };
+
+  const enc = new TextEncoder();
+  const headerB64 = base64url(enc.encode(JSON.stringify(header)));
+  const payloadB64 = base64url(enc.encode(JSON.stringify(payload)));
+  const unsignedToken = headerB64 + '.' + payloadB64;
+
+  // Import private key
+  const pemBody = creds.private_key
+    .replace('-----BEGIN PRIVATE KEY-----', '')
+    .replace('-----END PRIVATE KEY-----', '')
+    .replace(/\s/g, '');
+  const keyBuf = Uint8Array.from(atob(pemBody), c => c.charCodeAt(0));
+
+  const cryptoKey = await crypto.subtle.importKey(
+    'pkcs8', keyBuf,
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+    false, ['sign']
+  );
+
+  const signature = await crypto.subtle.sign(
+    'RSASSA-PKCS1-v1_5', cryptoKey, enc.encode(unsignedToken)
+  );
+
+  const jwt = unsignedToken + '.' + base64url(signature);
+
+  // Exchange JWT for access token
+  const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=' + jwt,
+  });
+  const tokenData = await tokenRes.json();
+  if (tokenData.error) throw new Error(tokenData.error_description || tokenData.error);
+  return tokenData.access_token;
+}
+
+// ═══════════════════════════════════════════════════════════════
 // LOGGING — Registra cada petición en Firestore para admin
 // ═══════════════════════════════════════════════════════════════
 async function logToFirestore(logData) {
@@ -850,6 +904,37 @@ export default {
         return new Response(JSON.stringify({ polyline, legs }), {
           headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' }
         });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /ga4 (Analytics proxy) ───
+    if (request.method === 'POST' && url.pathname === '/ga4') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      const authHeader = request.headers.get('Authorization') || '';
+      if (authHeader.replace('Bearer ', '') !== 'bdm-admin-2026') {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+
+      try {
+        const creds = JSON.parse(env.GA4_CREDENTIALS);
+        const token = await getGoogleAccessToken(creds);
+
+        let reqBody;
+        try { reqBody = await request.json(); } catch (_) { reqBody = {}; }
+
+        const propertyId = reqBody.propertyId || '352732094';
+        const ga4Res = await fetch(
+          `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+          {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+            body: JSON.stringify(reqBody.report),
+          }
+        );
+        const ga4Data = await ga4Res.json();
+        return new Response(JSON.stringify(ga4Data), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }

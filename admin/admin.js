@@ -153,6 +153,7 @@
       if (tabId === 'proyecto') loadProyecto();
       if (tabId === 'marketing') loadMarketing();
       if (tabId === 'contabilidad') loadContabilidad();
+      if (tabId === 'analytics') loadAnalytics();
       if (tabId === 'salma') loadSalma();
       if (tabId === 'chat') loadChat();
     }
@@ -838,6 +839,189 @@
         });
       });
     }
+  }
+
+  // ═══════════════════════════════════════════
+  //  ANALYTICS (GA4)
+  // ═══════════════════════════════════════════
+
+  var analyticsLoaded = false;
+  var ga4Charts = {};
+
+  function loadAnalytics() {
+    if (!analyticsLoaded) {
+      analyticsLoaded = true;
+      document.getElementById('ga4-range').addEventListener('change', function() {
+        fetchGA4Data(parseInt(this.value));
+      });
+    }
+    fetchGA4Data(parseInt(document.getElementById('ga4-range').value));
+  }
+
+  async function ga4Report(report) {
+    var res = await fetch(ADMIN_CONFIG.WORKER_URL + '/ga4', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + ADMIN_CONFIG.ADMIN_CHAT_TOKEN,
+      },
+      body: JSON.stringify({
+        propertyId: ADMIN_CONFIG.GA4_PROPERTY_ID,
+        report: report,
+      }),
+    });
+    return await res.json();
+  }
+
+  async function fetchGA4Data(days) {
+    var startDate = days + 'daysAgo';
+    var endDate = 'today';
+
+    try {
+      // Lanzar todas las queries en paralelo
+      var results = await Promise.all([
+        // Sesiones totales + usuarios
+        ga4Report({
+          dateRanges: [{ startDate: startDate, endDate: endDate }],
+          metrics: [{ name: 'sessions' }, { name: 'totalUsers' }, { name: 'newUsers' }, { name: 'averageSessionDuration' }],
+        }),
+        // Visitas por día
+        ga4Report({
+          dateRanges: [{ startDate: startDate, endDate: endDate }],
+          dimensions: [{ name: 'date' }],
+          metrics: [{ name: 'sessions' }],
+          orderBys: [{ dimension: { dimensionName: 'date' } }],
+        }),
+        // Fuentes de tráfico
+        ga4Report({
+          dateRanges: [{ startDate: startDate, endDate: endDate }],
+          dimensions: [{ name: 'sessionDefaultChannelGroup' }],
+          metrics: [{ name: 'sessions' }],
+          orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
+          limit: 8,
+        }),
+        // Dispositivos
+        ga4Report({
+          dateRanges: [{ startDate: startDate, endDate: endDate }],
+          dimensions: [{ name: 'deviceCategory' }],
+          metrics: [{ name: 'sessions' }],
+        }),
+        // Países
+        ga4Report({
+          dateRanges: [{ startDate: startDate, endDate: endDate }],
+          dimensions: [{ name: 'country' }],
+          metrics: [{ name: 'sessions' }],
+          orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
+          limit: 10,
+        }),
+        // Páginas
+        ga4Report({
+          dateRanges: [{ startDate: startDate, endDate: endDate }],
+          dimensions: [{ name: 'pagePath' }],
+          metrics: [{ name: 'screenPageViews' }],
+          orderBys: [{ metric: { metricName: 'screenPageViews' }, desc: true }],
+          limit: 10,
+        }),
+      ]);
+
+      renderGA4Metrics(results[0]);
+      renderGA4Visits(results[1]);
+      renderGA4Sources(results[2]);
+      renderGA4Devices(results[3]);
+      renderGA4Table('ga4-countries', results[4]);
+      renderGA4Table('ga4-pages', results[5]);
+    } catch (err) {
+      console.error('Error GA4:', err);
+      document.getElementById('ga4-metrics').innerHTML =
+        '<div class="metric-card"><span class="metric-icon">⚠️</span><span class="metric-value">Error</span><span class="metric-label">' + err.message + '</span></div>';
+    }
+  }
+
+  function getGA4Rows(data) {
+    return (data && data.rows) || [];
+  }
+
+  function renderGA4Metrics(data) {
+    var rows = getGA4Rows(data);
+    var sessions = 0, users = 0, newUsers = 0, avgDuration = 0;
+    if (rows.length > 0) {
+      sessions = parseInt(rows[0].metricValues[0].value) || 0;
+      users = parseInt(rows[0].metricValues[1].value) || 0;
+      newUsers = parseInt(rows[0].metricValues[2].value) || 0;
+      avgDuration = parseFloat(rows[0].metricValues[3].value) || 0;
+    }
+
+    document.getElementById('ga4-metrics').innerHTML =
+      '<div class="metric-card"><span class="metric-icon">👁️</span><span class="metric-value">' + sessions + '</span><span class="metric-label">Sesiones</span></div>' +
+      '<div class="metric-card"><span class="metric-icon">👥</span><span class="metric-value">' + users + '</span><span class="metric-label">Usuarios</span></div>' +
+      '<div class="metric-card"><span class="metric-icon">🆕</span><span class="metric-value">' + newUsers + '</span><span class="metric-label">Nuevos</span></div>' +
+      '<div class="metric-card"><span class="metric-icon">⏱️</span><span class="metric-value">' + Math.round(avgDuration) + 's</span><span class="metric-label">Duración media</span></div>';
+  }
+
+  function renderGA4Visits(data) {
+    var rows = getGA4Rows(data);
+    var labels = [], values = [];
+    rows.forEach(function(r) {
+      var d = r.dimensionValues[0].value;
+      labels.push(d.slice(4, 6) + '/' + d.slice(6, 8));
+      values.push(parseInt(r.metricValues[0].value) || 0);
+    });
+
+    if (ga4Charts.visits) ga4Charts.visits.destroy();
+    ga4Charts.visits = new Chart(document.getElementById('chart-visits'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{ label: 'Sesiones', data: values, borderColor: '#4361ee', backgroundColor: 'rgba(67,97,238,.1)', fill: true, tension: .3 }],
+      },
+      options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#8b8fa3' }, grid: { color: 'rgba(255,255,255,.05)' } }, y: { ticks: { color: '#8b8fa3' }, grid: { color: 'rgba(255,255,255,.05)' }, beginAtZero: true } } },
+    });
+  }
+
+  function renderGA4Sources(data) {
+    var rows = getGA4Rows(data);
+    var labels = [], values = [];
+    var colors = ['#4361ee', '#06d6a0', '#ffd166', '#ef476f', '#8b8fa3', '#e0b84a', '#4cc9f0', '#f72585'];
+    rows.forEach(function(r) {
+      labels.push(r.dimensionValues[0].value);
+      values.push(parseInt(r.metricValues[0].value) || 0);
+    });
+
+    if (ga4Charts.sources) ga4Charts.sources.destroy();
+    ga4Charts.sources = new Chart(document.getElementById('chart-sources'), {
+      type: 'doughnut',
+      data: { labels: labels, datasets: [{ data: values, backgroundColor: colors.slice(0, labels.length) }] },
+      options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#8b8fa3', font: { size: 11 } } } } },
+    });
+  }
+
+  function renderGA4Devices(data) {
+    var rows = getGA4Rows(data);
+    var labels = [], values = [];
+    var colors = ['#4361ee', '#06d6a0', '#ffd166'];
+    rows.forEach(function(r) {
+      labels.push(r.dimensionValues[0].value);
+      values.push(parseInt(r.metricValues[0].value) || 0);
+    });
+
+    if (ga4Charts.devices) ga4Charts.devices.destroy();
+    ga4Charts.devices = new Chart(document.getElementById('chart-devices'), {
+      type: 'doughnut',
+      data: { labels: labels, datasets: [{ data: values, backgroundColor: colors.slice(0, labels.length) }] },
+      options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#8b8fa3', font: { size: 11 } } } } },
+    });
+  }
+
+  function renderGA4Table(tableId, data) {
+    var rows = getGA4Rows(data);
+    var tbody = document.querySelector('#' + tableId + ' tbody');
+    if (rows.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="2" style="color:var(--text-muted);padding:12px;">Sin datos</td></tr>';
+      return;
+    }
+    tbody.innerHTML = rows.map(function(r) {
+      return '<tr><td>' + r.dimensionValues[0].value + '</td><td>' + (parseInt(r.metricValues[0].value) || 0) + '</td></tr>';
+    }).join('');
   }
 
   // ═══════════════════════════════════════════

@@ -923,6 +923,29 @@ body { min-height: 100vh; }
 .chat-send:hover { background: var(--accent-hover); }
 .chat-send:disabled { opacity: .5; cursor: default; }
 
+/* ─── CHARTS ─── */
+
+.chart-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.chart-sm { max-width: 100%; }
+
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .charts-row { grid-template-columns: 1fr 1fr; }
+}
+
 /* ─── RESPONSIVE ─── */
 
 @media (min-width: 768px) {
