@@ -79,7 +79,17 @@ async function renderWelcome() {
         <h1 class="welcome-title">Tu próximo<br>viaje empieza<br><em>aquí</em></h1>
         <div class="welcome-claim">Escribe destino + días y sal con ruta lista</div>
         <div class="welcome-input-wrap">
-          <textarea class="welcome-input" id="welcome-input" placeholder="Vietnam 10 días en moto" rows="1"></textarea>
+          <div class="input-row">
+            <textarea class="welcome-input" id="welcome-input" placeholder="Vietnam 10 días en moto" rows="1"></textarea>
+            <button class="app-mic welcome-mic" id="welcome-mic-btn" aria-label="Hablar">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="1" width="6" height="12" rx="3"/>
+                <path d="M19 10v1a7 7 0 0 1-14 0v-1"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </button>
+          </div>
           <button class="welcome-send" id="welcome-send">Planear viaje ›</button>
         </div>
         <div class="welcome-spacer"></div>
@@ -103,6 +113,14 @@ async function renderWelcome() {
       if (msg && typeof salma !== 'undefined') salma.send(msg);
     }
   });
+
+  // Micro del welcome
+  if (wInput && typeof setupMic === 'function') {
+    setupMic(document.getElementById('welcome-mic-btn'), wInput, () => {
+      const msg = wInput.value.trim();
+      if (msg && typeof salma !== 'undefined') salma.send(msg);
+    });
+  }
 
   // Placeholder rotativo
   if (wInput) {
@@ -615,6 +633,63 @@ function sendMessage() {
   $input.style.height = 'auto';
   if (typeof salma !== 'undefined') salma.send(msg);
 }
+
+// ═══ MICRÓFONO — Speech to Text ═══
+
+function setupMic(micBtn, inputEl, onSend) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!micBtn || !SpeechRecognition) {
+    if (micBtn) micBtn.style.display = 'none';
+    return;
+  }
+
+  let recognition = null;
+  let listening = false;
+
+  micBtn.addEventListener('click', () => {
+    if (listening) { recognition.stop(); return; }
+
+    recognition = new SpeechRecognition();
+    recognition.lang = navigator.language || 'es-ES';
+    recognition.interimResults = true;
+    recognition.continuous = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      listening = true;
+      micBtn.classList.add('listening');
+    };
+
+    recognition.onresult = (event) => {
+      let transcript = '';
+      for (let i = 0; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript;
+      }
+      inputEl.value = transcript;
+      inputEl.style.height = 'auto';
+      inputEl.style.height = Math.min(inputEl.scrollHeight, 100) + 'px';
+    };
+
+    recognition.onend = () => {
+      listening = false;
+      micBtn.classList.remove('listening');
+      if (inputEl.value.trim()) onSend();
+    };
+
+    recognition.onerror = (event) => {
+      listening = false;
+      micBtn.classList.remove('listening');
+      if (event.error === 'not-allowed') {
+        if (typeof showToast === 'function') showToast('Permite el micrófono en tu navegador');
+      }
+    };
+
+    recognition.start();
+  });
+}
+
+// Micro del input bar principal
+setupMic(document.getElementById('mic-btn'), $input, sendMessage);
 
 // ═══ MODAL — Event listeners ═══
 
