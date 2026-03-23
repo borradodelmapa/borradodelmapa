@@ -594,7 +594,7 @@ function getCountryCode(countryName) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName) {
   let systemPrompt = SALMA_SYSTEM_BASE;
 
   // Contexto mínimo del usuario + fecha actual
@@ -603,7 +603,11 @@ function buildMessages(history, message, currentRoute, userName, userNationality
   ctx.push(`[FECHA ACTUAL: ${today}]`);
   if (userName) ctx.push(`[USUARIO: ${userName}]`);
   if (userNationality) ctx.push(`[NACIONALIDAD: ${userNationality} — adapta visados]`);
-  if (userLocation) ctx.push(`[UBICACIÓN GPS DEL VIAJERO: lat=${userLocation.lat}, lng=${userLocation.lng} — Usa estas coordenadas si el usuario dice "cerca de mí", "aquí", "donde estoy". Para hoteles/coches, usa la ciudad más cercana a estas coordenadas.]`);
+  if (userLocationName) {
+    ctx.push(`[UBICACIÓN DEL VIAJERO: ${userLocationName} — El viajero está AQUÍ ahora mismo. Usa esta ubicación cuando diga "cerca de mí", "aquí", "donde estoy".]`);
+  } else if (userLocation) {
+    ctx.push(`[COORDENADAS GPS DEL VIAJERO: lat=${userLocation.lat}, lng=${userLocation.lng} — Usa la ciudad más cercana a estas coordenadas.]`);
+  }
   systemPrompt += '\n\n' + ctx.join('\n');
 
   const messages = [];
@@ -1841,6 +1845,19 @@ ${JSON.stringify(route)}`;
     const userNationality = body.nationality || null;
     const userLocation = body.user_location || null;
 
+    // Reverse geocoding: convertir coordenadas → nombre de ciudad (Nominatim/OSM, gratis)
+    let userLocationName = null;
+    if (userLocation && userLocation.lat && userLocation.lng) {
+      try {
+        const geoUrl = `https://nominatim.openstreetmap.org/reverse?lat=${userLocation.lat}&lon=${userLocation.lng}&format=json&zoom=10&accept-language=en`;
+        const geoRes = await fetch(geoUrl, { headers: { 'User-Agent': 'BorradoDelMapa/1.0 (salma@borradodelmapa.com)' } });
+        const geoData = await geoRes.json();
+        const city = geoData.address?.city || geoData.address?.town || geoData.address?.village || geoData.name || '';
+        const country = geoData.address?.country || '';
+        if (city) userLocationName = city + (country ? ', ' + country : '');
+      } catch (e) { /* Si falla, Claude recibe coords sin nombre */ }
+    }
+
     if (!message.trim()) {
       return new Response(
         JSON.stringify({ reply: 'Dime a dónde quieres ir o qué te apetece hacer y te ayudo.', route: null }),
@@ -1876,7 +1893,7 @@ ${JSON.stringify(route)}`;
     }
 
     // Construir mensajes
-    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation);
+    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName);
     const isRoute = isRouteRequest(message, history);
     const isFlightReq = isFlightRequest(message);
     const isHotelReq = isHotelRequest(message);
