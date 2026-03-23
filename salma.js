@@ -14,16 +14,25 @@ const salma = {
   // Pedir geolocalización al usuario (se llama una vez al iniciar)
   initGeolocation() {
     if (!navigator.geolocation) return;
+    const saveLocation = (pos) => {
+      this._userLocation = {
+        lat: Math.round(pos.coords.latitude * 10000) / 10000,
+        lng: Math.round(pos.coords.longitude * 10000) / 10000
+      };
+      console.log('[Salma] Ubicación del viajero:', this._userLocation);
+    };
+    // Intentar GPS real primero, si falla usar IP/WiFi como fallback
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        this._userLocation = {
-          lat: Math.round(pos.coords.latitude * 10000) / 10000,
-          lng: Math.round(pos.coords.longitude * 10000) / 10000
-        };
-        console.log('[Salma] Ubicación del viajero:', this._userLocation);
+      saveLocation,
+      () => {
+        // Fallback: sin GPS, usar IP/WiFi (menos preciso pero mejor que nada)
+        navigator.geolocation.getCurrentPosition(
+          saveLocation,
+          () => { console.log('[Salma] Ubicación no disponible'); },
+          { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+        );
       },
-      () => { /* Usuario denegó o error — sin ubicación, no pasa nada */ },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
     );
   },
 
