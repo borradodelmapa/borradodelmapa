@@ -254,22 +254,22 @@
         trendRutas.className = 'metric-trend up';
       }
 
-      // Contar llamadas a Salma hoy
-      try {
-        var today = new Date().toISOString().slice(0, 10);
-        var salmaSnap = await db.collection('admin_logs').orderBy('timestamp', 'desc').limit(500).get();
-        var salmaCalls = salmaSnap.docs.filter(function(doc) {
-          var d = doc.data();
-          return d.timestamp && d.timestamp.slice(0, 10) === today;
-        }).length;
-        document.getElementById('m-salma').textContent = salmaCalls;
-      } catch (err) {
-        console.warn('No se pudo cargar logs Salma:', err.message);
-        document.getElementById('m-salma').textContent = '—';
-      }
-
     } catch (err) {
       console.error('Error cargando métricas dashboard:', err);
+    }
+
+    // Contar llamadas a Salma hoy (fuera del try principal para evitar que el error de users bloquee esto)
+    try {
+      var today = new Date().toISOString().slice(0, 10);
+      var salmaSnap = await db.collection('admin_logs').orderBy('timestamp', 'desc').limit(500).get();
+      var salmaCalls = salmaSnap.docs.filter(function(doc) {
+        var d = doc.data();
+        return d.timestamp && d.timestamp.slice(0, 10) === today;
+      }).length;
+      document.getElementById('m-salma').textContent = salmaCalls;
+    } catch (err) {
+      console.warn('No se pudo cargar logs Salma:', err.message);
+      document.getElementById('m-salma').textContent = '—';
     }
   }
 
