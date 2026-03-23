@@ -1037,6 +1037,10 @@
 
     document.getElementById('salma-filter-type').addEventListener('change', renderSalmaTable);
     document.getElementById('salma-filter-status').addEventListener('change', renderSalmaTable);
+    document.getElementById('btn-refresh-salma').addEventListener('click', function() {
+      salmaLoaded = false;
+      loadSalma();
+    });
 
     fetchSalmaLogs();
   }
