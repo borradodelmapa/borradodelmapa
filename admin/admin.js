@@ -150,6 +150,17 @@
     if (db && firebase.auth().currentUser) {
       if (tabId === 'dashboard') {
         loadDashboard();
+        // También actualizar m-salma desde caché si está disponible
+        if (window._salmaLogsCache && window._salmaLogsCache.length > 0) {
+          var today = new Date().toISOString().slice(0, 10);
+          var salmaCalls = window._salmaLogsCache.filter(function(log) {
+            return log.timestamp && log.timestamp.slice(0, 10) === today;
+          }).length;
+          setTimeout(function() {
+            var el = document.getElementById('m-salma');
+            if (el) el.textContent = salmaCalls;
+          }, 50);
+        }
       }
       if (tabId === 'usuarios') loadUsuarios();
       if (tabId === 'proyecto') loadProyecto();
@@ -260,26 +271,14 @@
       console.error('Error cargando métricas dashboard:', err);
     }
 
-    // Actualizar métrica Salma (intentar cargar desde Firestore primero)
-    try {
+    // Actualizar métrica Salma desde caché (se llena cuando se visita la pestaña Salma)
+    // No se puede leer admin_logs directamente desde el cliente por permisos de Firestore
+    if (window._salmaLogsCache && window._salmaLogsCache.length > 0) {
       var today = new Date().toISOString().slice(0, 10);
-      var salmaSnap = await db.collection('admin_logs').orderBy('timestamp', 'desc').limit(500).get();
-      var salmaCalls = salmaSnap.docs.filter(function(doc) {
-        var d = doc.data();
-        return d.timestamp && d.timestamp.slice(0, 10) === today;
+      var salmaCalls = window._salmaLogsCache.filter(function(log) {
+        return log.timestamp && log.timestamp.slice(0, 10) === today;
       }).length;
       document.getElementById('m-salma').textContent = salmaCalls;
-      // Guardar en caché para la próxima vez
-      window._salmaLogsCache = salmaSnap.docs.map(function(doc) { return doc.data(); });
-    } catch (err) {
-      // Si falla, usar caché si existe
-      if (window._salmaLogsCache && window._salmaLogsCache.length > 0) {
-        var today = new Date().toISOString().slice(0, 10);
-        var salmaCalls = window._salmaLogsCache.filter(function(log) {
-          return log.timestamp && log.timestamp.slice(0, 10) === today;
-        }).length;
-        document.getElementById('m-salma').textContent = salmaCalls;
-      }
     }
   }
 
