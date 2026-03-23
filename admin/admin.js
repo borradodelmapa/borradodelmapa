@@ -1046,35 +1046,30 @@
     tbody.innerHTML = '<tr><td colspan="7"><div class="loading">Cargando logs...</div></td></tr>';
 
     try {
-      // Leer admin_logs via REST API (misma que usa el Worker)
-      var projectId = 'borradodelmapa-85257';
-      var url = 'https://firestore.googleapis.com/v1/projects/' + projectId + '/databases/(default)/documents/admin_logs?pageSize=200&orderBy=timestamp desc';
-      var res = await fetch(url);
-      var data = await res.json();
+      // Leer admin_logs via Firebase SDK (con auth del admin)
+      var snap = await db.collection('admin_logs').orderBy('timestamp', 'desc').limit(200).get();
 
       salmaLogs = [];
-      if (data.documents) {
-        data.documents.forEach(function(doc) {
-          var f = doc.fields || {};
-          salmaLogs.push({
-            timestamp: (f.timestamp && f.timestamp.stringValue) || '',
-            type: (f.type && f.type.stringValue) || '',
-            user_message: (f.user_message && f.user_message.stringValue) || '',
-            chars_out: parseInt((f.chars_out && (f.chars_out.integerValue || f.chars_out.stringValue)) || '0'),
-            latency_ms: parseInt((f.latency_ms && (f.latency_ms.integerValue || f.latency_ms.stringValue)) || '0'),
-            status: (f.status && f.status.stringValue) || '',
-            error_detail: (f.error_detail && f.error_detail.stringValue) || '',
-            model: (f.model && f.model.stringValue) || '',
-          });
+      snap.forEach(function(doc) {
+        var d = doc.data();
+        salmaLogs.push({
+          timestamp: d.timestamp || '',
+          type: d.type || '',
+          user_message: d.user_message || '',
+          chars_out: parseInt(d.chars_out) || 0,
+          latency_ms: parseInt(d.latency_ms) || 0,
+          status: d.status || '',
+          error_detail: d.error_detail || '',
+          model: d.model || '',
         });
-      }
+      });
 
       renderSalmaMetrics();
       renderSalmaTable();
       renderSalmaAlerts();
     } catch (err) {
       console.error('Error cargando logs Salma:', err);
-      tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:20px;text-align:center;">Sin logs disponibles. Despliega el Worker con logging (Fase D) para ver datos.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:20px;text-align:center;">Sin logs disponibles: ' + err.message + '</td></tr>';
       renderSalmaMetrics();
     }
   }
