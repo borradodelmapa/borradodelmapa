@@ -114,14 +114,6 @@ async function renderWelcome() {
     }
   });
 
-  // Micro del welcome
-  if (wInput && typeof setupMic === 'function') {
-    setupMic(document.getElementById('welcome-mic-btn'), wInput, () => {
-      const msg = wInput.value.trim();
-      if (msg && typeof salma !== 'undefined') salma.send(msg);
-    });
-  }
-
   // Placeholder rotativo
   if (wInput) {
     const ejemplos = [
@@ -634,34 +626,52 @@ function sendMessage() {
   if (typeof salma !== 'undefined') salma.send(msg);
 }
 
-// ═══ MICRÓFONO — Speech to Text ═══
+// ═══ MICRÓFONO — Speech to Text (event delegation) ═══
 
-function setupMic(micBtn, inputEl, onSend) {
+(function initMicSystem() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!micBtn || !SpeechRecognition) {
-    if (micBtn) micBtn.style.display = 'none';
+  if (!SpeechRecognition) {
+    // Ocultar todos los micros si el navegador no soporta
+    document.querySelectorAll('.app-mic').forEach(b => b.style.display = 'none');
     return;
   }
 
   let recognition = null;
   let listening = false;
   let gotResult = false;
+  let activeMicBtn = null;
 
-  micBtn.addEventListener('click', () => {
-    if (listening) { recognition.stop(); return; }
+  // Un solo listener en document — funciona con botones dinámicos
+  document.addEventListener('click', (e) => {
+    const micBtn = e.target.closest('.app-mic');
+    if (!micBtn) return;
+
+    e.preventDefault();
+
+    if (listening) {
+      if (recognition) recognition.stop();
+      return;
+    }
+
+    // Buscar el input más cercano al botón
+    const row = micBtn.closest('.input-row');
+    const inputEl = row ? row.querySelector('textarea') : null;
+    if (!inputEl) return;
+
+    activeMicBtn = micBtn;
+    gotResult = false;
 
     recognition = new SpeechRecognition();
     recognition.lang = 'es-ES';
     recognition.interimResults = true;
     recognition.continuous = false;
     recognition.maxAlternatives = 1;
-    gotResult = false;
 
     recognition.onstart = () => {
       listening = true;
       gotResult = false;
-      micBtn.classList.add('listening');
-      if (typeof showToast === 'function') showToast('Escuchando...');
+      activeMicBtn.classList.add('listening');
+      if (typeof showToast === 'function') showToast('Escuchando... habla ahora');
     };
 
     recognition.onresult = (event) => {
@@ -675,46 +685,55 @@ function setupMic(micBtn, inputEl, onSend) {
       inputEl.value = transcript;
       inputEl.style.height = 'auto';
       inputEl.style.height = Math.min(inputEl.scrollHeight, 100) + 'px';
-      // Enviar solo cuando el resultado es final
-      if (isFinal) {
-        recognition.stop();
-      }
+      if (isFinal) recognition.stop();
     };
 
     recognition.onend = () => {
       listening = false;
-      micBtn.classList.remove('listening');
+      if (activeMicBtn) activeMicBtn.classList.remove('listening');
       if (gotResult && inputEl.value.trim()) {
-        onSend();
+        // Enviar: detectar si es welcome o chat
+        const isWelcome = inputEl.id === 'welcome-input';
+        if (isWelcome) {
+          const msg = inputEl.value.trim();
+          if (msg && typeof salma !== 'undefined') salma.send(msg);
+        } else {
+          sendMessage();
+        }
       } else if (!gotResult) {
         if (typeof showToast === 'function') showToast('No he captado nada, inténtalo de nuevo');
       }
+      activeMicBtn = null;
+      recognition = null;
     };
 
     recognition.onerror = (event) => {
       listening = false;
-      micBtn.classList.remove('listening');
+      if (activeMicBtn) activeMicBtn.classList.remove('listening');
+      activeMicBtn = null;
+      recognition = null;
       const msgs = {
         'not-allowed': 'Permite el micrófono en ajustes del navegador',
         'no-speech': 'No he oído nada, pulsa el micro y habla',
         'network': 'Sin conexión para reconocimiento de voz',
-        'audio-capture': 'No se detecta micrófono en el dispositivo'
+        'audio-capture': 'No se detecta micrófono en el dispositivo',
+        'aborted': '' // silenciar abort voluntario
       };
-      if (typeof showToast === 'function') {
-        showToast(msgs[event.error] || 'Error de micro: ' + event.error);
-      }
+      const m = msgs[event.error];
+      if (m && typeof showToast === 'function') showToast(m);
+      else if (m === undefined && typeof showToast === 'function') showToast('Error de micro: ' + event.error);
     };
 
     try {
       recognition.start();
     } catch (e) {
+      listening = false;
+      if (activeMicBtn) activeMicBtn.classList.remove('listening');
+      activeMicBtn = null;
       if (typeof showToast === 'function') showToast('Error al iniciar micro');
     }
   });
-}
-
-// Micro del input bar principal
-setupMic(document.getElementById('mic-btn'), $input, sendMessage);
+})();
 
 // ═══ MODAL — Event listeners ═══
 
