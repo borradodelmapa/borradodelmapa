@@ -636,45 +636,46 @@ function sendMessage() {
     return;
   }
 
-  let recognition = null;
   let listening = false;
-  let gotResult = false;
   let activeMicBtn = null;
+  let safetyTimer = null;
 
-  // Un solo listener en document — funciona con botones dinámicos
-  document.addEventListener('click', (e) => {
-    const micBtn = e.target.closest('.app-mic');
-    if (!micBtn) return;
+  function resetMicState() {
+    listening = false;
+    if (activeMicBtn) activeMicBtn.classList.remove('listening');
+    activeMicBtn = null;
+    if (safetyTimer) { clearTimeout(safetyTimer); safetyTimer = null; }
+  }
 
-    e.preventDefault();
-
-    if (listening) {
-      if (recognition) recognition.stop();
-      return;
-    }
-
+  function startListening(micBtn) {
     // Buscar el input más cercano al botón
     const row = micBtn.closest('.input-row');
     const inputEl = row ? row.querySelector('textarea') : null;
     if (!inputEl) return;
 
     activeMicBtn = micBtn;
-    gotResult = false;
+    let gotResult = false;
 
-    recognition = new SpeechRecognition();
-    recognition.lang = 'es-ES';
-    recognition.interimResults = true;
-    recognition.continuous = false;
-    recognition.maxAlternatives = 1;
+    const rec = new SpeechRecognition();
+    rec.lang = 'es-ES';
+    rec.interimResults = true;
+    rec.continuous = false;
+    rec.maxAlternatives = 1;
 
-    recognition.onstart = () => {
+    // Safety timeout — si en 8s no pasa nada, resetear
+    safetyTimer = setTimeout(() => {
+      try { rec.abort(); } catch (_) {}
+      resetMicState();
+      if (typeof showToast === 'function') showToast('Tiempo agotado, pulsa el micro de nuevo');
+    }, 8000);
+
+    rec.onstart = () => {
       listening = true;
-      gotResult = false;
-      activeMicBtn.classList.add('listening');
+      micBtn.classList.add('listening');
       if (typeof showToast === 'function') showToast('Escuchando... habla ahora');
     };
 
-    recognition.onresult = (event) => {
+    rec.onresult = (event) => {
       gotResult = true;
       let transcript = '';
       let isFinal = false;
@@ -685,14 +686,15 @@ function sendMessage() {
       inputEl.value = transcript;
       inputEl.style.height = 'auto';
       inputEl.style.height = Math.min(inputEl.scrollHeight, 100) + 'px';
-      if (isFinal) recognition.stop();
+      if (isFinal) {
+        if (safetyTimer) { clearTimeout(safetyTimer); safetyTimer = null; }
+        try { rec.stop(); } catch (_) {}
+      }
     };
 
-    recognition.onend = () => {
-      listening = false;
-      if (activeMicBtn) activeMicBtn.classList.remove('listening');
+    rec.onend = () => {
+      resetMicState();
       if (gotResult && inputEl.value.trim()) {
-        // Enviar: detectar si es welcome o chat
         const isWelcome = inputEl.id === 'welcome-input';
         if (isWelcome) {
           const msg = inputEl.value.trim();
@@ -701,37 +703,59 @@ function sendMessage() {
           sendMessage();
         }
       } else if (!gotResult) {
-        if (typeof showToast === 'function') showToast('No he captado nada, inténtalo de nuevo');
+        if (typeof showToast === 'function') showToast('No he captado nada, pulsa y habla claro');
       }
-      activeMicBtn = null;
-      recognition = null;
     };
 
-    recognition.onerror = (event) => {
-      listening = false;
-      if (activeMicBtn) activeMicBtn.classList.remove('listening');
-      activeMicBtn = null;
-      recognition = null;
+    rec.onerror = (event) => {
+      resetMicState();
+      // no-speech también dispara onend, evitar doble toast
+      if (event.error === 'no-speech' || event.error === 'aborted') return;
       const msgs = {
         'not-allowed': 'Permite el micrófono en ajustes del navegador',
-        'no-speech': 'No he oído nada, pulsa el micro y habla',
         'network': 'Sin conexión para reconocimiento de voz',
-        'audio-capture': 'No se detecta micrófono en el dispositivo',
-        'aborted': '' // silenciar abort voluntario
+        'audio-capture': 'No se detecta micrófono en el dispositivo'
       };
-      const m = msgs[event.error];
-      if (m && typeof showToast === 'function') showToast(m);
-      else if (m === undefined && typeof showToast === 'function') showToast('Error de micro: ' + event.error);
+      if (typeof showToast === 'function') {
+        showToast(msgs[event.error] || 'Error de micro: ' + event.error);
+      }
     };
 
     try {
-      recognition.start();
+      rec.start();
     } catch (e) {
-      listening = false;
-      if (activeMicBtn) activeMicBtn.classList.remove('listening');
-      activeMicBtn = null;
-      if (typeof showToast === 'function') showToast('Error al iniciar micro');
+      resetMicState();
+      // Reintentar una vez tras 300ms (Android a veces necesita pausa)
+      setTimeout(() => {
+        try {
+          const rec2 = new SpeechRecognition();
+          Object.assign(rec2, { lang: 'es-ES', interimResults: true, continuous: false, maxAlternatives: 1 });
+          rec2.onstart = rec.onstart;
+          rec2.onresult = rec.onresult;
+          rec2.onend = rec.onend;
+          rec2.onerror = rec.onerror;
+          rec2.start();
+        } catch (_) {
+          resetMicState();
+          if (typeof showToast === 'function') showToast('No se pudo iniciar el micro');
+        }
+      }, 300);
     }
+  }
+
+  // Un solo listener en document — funciona con botones dinámicos
+  document.addEventListener('click', (e) => {
+    const micBtn = e.target.closest('.app-mic');
+    if (!micBtn) return;
+    e.preventDefault();
+
+    if (listening) {
+      // Forzar reset y permitir nuevo intento
+      resetMicState();
+      return;
+    }
+
+    startListening(micBtn);
   });
 })();
 
