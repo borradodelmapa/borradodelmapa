@@ -771,6 +771,41 @@ body {
   border-top:1px solid var(--linea);
 }
 
+/* ═══ COOKIE BANNER ═══ */
+.cookie-banner {
+  position:fixed; bottom:0; left:0; right:0; z-index:9999;
+  background:rgba(14,14,14,.97); border-top:1px solid rgba(212,168,67,.2);
+  padding:16px 20px; display:flex; align-items:center; justify-content:center;
+  gap:16px; flex-wrap:wrap; backdrop-filter:blur(10px);
+}
+.cookie-banner p {
+  font-size:13px; color:rgba(244,239,230,.7); margin:0; flex:1; min-width:200px;
+}
+.cookie-banner a { color:var(--dorado); text-decoration:none; }
+.cookie-banner-actions { display:flex; gap:8px; }
+.cookie-btn-accept {
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.1em;
+  background:var(--dorado); color:#0e0e0e; border:none; padding:8px 18px;
+  border-radius:6px; cursor:pointer; font-weight:600;
+}
+.cookie-btn-reject {
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.1em;
+  background:transparent; color:rgba(244,239,230,.5); border:1px solid rgba(244,239,230,.15);
+  padding:8px 18px; border-radius:6px; cursor:pointer;
+}
+.cookie-btn-reject:hover { border-color:rgba(244,239,230,.3); color:rgba(244,239,230,.7); }
+
+/* ═══ LEGAL FOOTER (links en welcome) ═══ */
+.legal-links {
+  display:flex; justify-content:center; gap:16px; padding:12px 0;
+  margin-top:8px;
+}
+.legal-links a {
+  font-family:var(--font-mono); font-size:10px; letter-spacing:.08em;
+  color:rgba(244,239,230,.25); text-decoration:none;
+}
+.legal-links a:hover { color:rgba(244,239,230,.5); }
+
 /* ═══ DESKTOP ═══ */
 @media (min-width:768px) {
   .app-content { max-width:700px; margin:0 auto; }
