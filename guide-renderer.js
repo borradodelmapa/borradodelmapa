@@ -155,7 +155,7 @@ const guideRenderer = {
               } catch (_) {}
             }
             if (navigator.share) {
-              navigator.share({ title: r.title || 'Mi ruta de viaje', text: 'Viaje creado por borradodelmapa.com', url: shareUrl }).catch(() => {});
+              navigator.share({ title: r.title || 'Mi ruta de viaje', text: 'Mapa en mano, viaje en camino', url: shareUrl }).catch(() => {});
             } else {
               navigator.clipboard.writeText(shareUrl).then(() => showToast('Link copiado')).catch(() => {});
             }
