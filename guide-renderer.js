@@ -48,9 +48,6 @@ const guideRenderer = {
       </div>
 
       <div class="guide-map-container" id="guide-map-main"></div>
-      <a class="guide-gmaps-link" href="${this._fullRouteGmapsUrl(stops, country)}" target="_blank" rel="noopener">
-        ABRIR EN GOOGLE MAPS →
-      </a>
 
       <div class="guide-days">
         <div class="guide-days-label">ITINERARIO</div>
@@ -61,6 +58,7 @@ const guideRenderer = {
 
       <div class="guide-actions">
         ${options.saved ? '' : '<button class="btn-primary" id="guide-save-btn">GUARDAR MI GUÍA</button>'}
+        ${options.showGmapsOffer ? `<a class="btn-primary" id="guide-gmaps-btn" href="${this._fullRouteGmapsUrl(stops, country)}" target="_blank" rel="noopener">🗺 ABRIR EN GOOGLE MAPS</a>` : ''}
         <button class="btn-ghost" id="guide-share-btn">COMPARTIR</button>
       </div>
     `;
@@ -188,7 +186,6 @@ const guideRenderer = {
       const day = days[num];
       const isFirst = i === 0;
       const stopsHtml = this._renderStops(day.stops, country, isFirst);
-      const gmapsUrl = this._dayGmapsUrl(day.stops, country);
 
       html += `
         <div class="guide-day${isFirst ? ' open' : ''}">
@@ -200,9 +197,6 @@ const guideRenderer = {
           </div>
           <div class="guide-day-body">
             <div class="guide-day-map" id="guide-map-day-${num}" data-day="${num}"></div>
-            <a class="guide-day-gmaps" href="${gmapsUrl}" target="_blank" rel="noopener">
-              🗺 Navegar Día ${num} en Google Maps →
-            </a>
             ${stopsHtml}
           </div>
         </div>`;
@@ -217,7 +211,6 @@ const guideRenderer = {
       const s = stops[i];
       const icon = this._icons[s.type] || '📍';
       const isFirstStop = isFirstDay && i === 0;
-      const gmapsUrl = this._stopGmapsUrl(s, country);
 
       // Tags opcionales (solo si tienen contenido)
       let tagsHtml = '';
@@ -259,9 +252,6 @@ const guideRenderer = {
             ${photoHtml}
             ${s.narrative ? `<p class="guide-stop-narrative">${escapeHTML(s.narrative)}</p>` : ''}
             ${tagsHtml}
-            <a class="guide-stop-gmaps" href="${gmapsUrl}" target="_blank" rel="noopener">
-              VER EN GOOGLE MAPS →
-            </a>
           </div>
         </div>`;
     }
@@ -494,6 +484,103 @@ const guideRenderer = {
 
     // Esperar un poco a que carguen fotos y mapas
     setTimeout(() => window.print(), 600);
+  },
+
+  // ═══ UPDATE VERIFICADO (parcheo post-draft) ═══
+  // Actualiza fotos, coords y mapas sin re-renderizar la tarjeta completa
+  updateVerified(routeData) {
+    if (!routeData?.stops) return;
+    const card = document.querySelector('.guide-card');
+    if (!card) return;
+
+    const stops = routeData.stops;
+    const stopEls = card.querySelectorAll('.guide-stop');
+
+    // Parchear cada parada: foto + coords
+    stopEls.forEach((el, i) => {
+      const stop = stops[i];
+      if (!stop) return;
+
+      // Inyectar foto si el verify la trajo y no existía
+      const photoDiv = el.querySelector('.guide-stop-photo');
+      if (stop.photo_ref) {
+        if (!photoDiv) {
+          // No había foto en el draft — crear placeholder
+          const body = el.querySelector('.guide-stop-body');
+          if (body) {
+            const newPhoto = document.createElement('div');
+            newPhoto.className = 'guide-stop-photo';
+            newPhoto.dataset.photoRef = stop.photo_ref;
+            newPhoto.innerHTML = '<div class="guide-stop-photo-placeholder">📷</div>';
+            body.insertBefore(newPhoto, body.firstChild);
+            // Si la parada está abierta, cargar foto inmediatamente
+            if (el.classList.contains('open')) this._lazyLoadPhoto(el);
+          }
+        } else if (!photoDiv.dataset.loaded) {
+          // Había placeholder pero sin ref válida — actualizar ref
+          photoDiv.dataset.photoRef = stop.photo_ref;
+          if (el.classList.contains('open')) this._lazyLoadPhoto(el);
+        }
+      }
+    });
+
+    // Re-centrar mapas con coords verificadas
+    this._updateMaps(routeData);
+  },
+
+  // Actualizar mapas existentes con coords verificadas
+  _updateMaps(routeData) {
+    const stops = routeData.stops || [];
+    const days = this._groupByDay(stops);
+
+    // Mapa principal
+    const mainMap = this._maps['main'];
+    if (mainMap) {
+      const valid = this._getValidStops(stops);
+      if (valid.length > 0) {
+        // Limpiar markers y re-crear
+        mainMap.eachLayer(l => { if (l instanceof L.CircleMarker) mainMap.removeLayer(l); });
+        const dayNums = Object.keys(days).map(Number).sort((a, b) => a - b);
+        dayNums.forEach((num, idx) => {
+          const color = this._dayColors[idx % this._dayColors.length];
+          this._getValidStops(days[num].stops).forEach(s => {
+            const marker = L.circleMarker([s.lat, s.lng], {
+              radius: 7, fillColor: color, color: '#fff', weight: 2, fillOpacity: 0.9
+            }).addTo(mainMap);
+            this._bindRichPopup(marker, s, num);
+          });
+        });
+        const bounds = L.latLngBounds(valid.map(s => [s.lat, s.lng]));
+        mainMap.fitBounds(bounds, { padding: [30, 30] });
+      }
+    }
+
+    // Mini-mapas por día — solo los ya inicializados
+    for (const key of Object.keys(this._maps)) {
+      if (!key.startsWith('guide-map-day-')) continue;
+      const dayNum = Number(key.replace('guide-map-day-', ''));
+      if (!days[dayNum]) continue;
+
+      const map = this._maps[key];
+      const dayStops = this._getValidStops(days[dayNum].stops);
+      if (dayStops.length === 0) continue;
+
+      // Limpiar markers y polylines
+      map.eachLayer(l => { if (l instanceof L.CircleMarker || l instanceof L.Polyline) map.removeLayer(l); });
+
+      const color = this._dayColors[(dayNum - 1) % this._dayColors.length];
+      dayStops.forEach(s => {
+        const marker = L.circleMarker([s.lat, s.lng], {
+          radius: 6, fillColor: color, color: '#fff', weight: 2, fillOpacity: 0.9
+        }).addTo(map);
+        this._bindRichPopup(marker, s, dayNum);
+      });
+      const bounds = L.latLngBounds(dayStops.map(s => [s.lat, s.lng]));
+      map.fitBounds(bounds, { padding: [20, 20] });
+
+      // Re-pedir ruta
+      if (dayStops.length >= 2) this._loadDirections(map, dayStops, color);
+    }
   },
 
   // Decode Google polyline encoding

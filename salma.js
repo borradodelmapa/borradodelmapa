@@ -306,6 +306,13 @@ const salma = {
           } catch (renderErr) {
             console.error('Error renderizando guía:', renderErr);
           }
+        } else {
+          // Draft ya renderizado — parchear con datos verificados (fotos, coords)
+          try {
+            guideRenderer.updateVerified(data.route);
+          } catch (e) {
+            console.warn('Error actualizando guía verificada:', e);
+          }
         }
 
         if (isEdit) {
@@ -508,8 +515,8 @@ const salma = {
 
     this._initChat();
     const title = routeData.title || routeData.name || 'Tu ruta';
-    this._addSalmaBubble('Aquí tienes tu guía de ' + title + '. Si quieres cambiar algo — quitar una parada, añadir un restaurante, cambiar un día entero — dímelo y lo actualizo.');
-    guideRenderer.render(routeData, { saved: true });
+    this._addSalmaBubble('Aquí tienes tu guía de ' + title + '. Si quieres cambiar algo, dímelo. También puedo crearte la ruta completa para Google Maps en un momento.');
+    guideRenderer.render(routeData, { saved: true, showGmapsOffer: true });
     // Scroll al inicio de la guía, no al final
     const guideCard = document.querySelector('.guide-card');
     if (guideCard) {
