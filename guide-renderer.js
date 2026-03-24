@@ -211,6 +211,7 @@ const guideRenderer = {
       const s = stops[i];
       const icon = this._icons[s.type] || '📍';
       const isFirstStop = isFirstDay && i === 0;
+      const gmapsUrl = this._stopGmapsUrl(s, country);
 
       // Tags opcionales (solo si tienen contenido)
       let tagsHtml = '';
@@ -252,6 +253,9 @@ const guideRenderer = {
             ${photoHtml}
             ${s.narrative ? `<p class="guide-stop-narrative">${escapeHTML(s.narrative)}</p>` : ''}
             ${tagsHtml}
+            <a class="guide-stop-gmaps" href="${gmapsUrl}" target="_blank" rel="noopener">
+              VER EN GOOGLE MAPS →
+            </a>
           </div>
         </div>`;
     }

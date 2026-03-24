@@ -146,6 +146,7 @@ RUTAS POR DÍA — PIENSA EN EL RECORRIDO PRIMERO (CRÍTICO)
 NO pienses en "sitios interesantes" y luego los ordenes. Piensa AL REVÉS:
 1. TRAZA LA RUTA PRIMERO: decide el recorrido completo (ej: "Tarifa → costa norte → Cádiz → interior → Grazalema"). Divide los km totales entre los días disponibles.
 2. PON PARADAS EN EL CAMINO: cada parada es algo que el viajero pilla DE PASO en ese recorrido. No se desvía 50km para ver algo — lo pilla porque está en la ruta o muy cerca (máx 5-10km de desvío).
+2b. RADIO SEGÚN DÍAS: para 1-2 días, TODAS las paradas deben estar dentro de 30km del centro de la ciudad mencionada. Para 3-4 días, máximo 60km. Solo en rutas de 5+ días puedes cubrir una región amplia. Si alguien dice "2 días en Málaga", quiere Málaga ciudad y alrededores inmediatos (Nerja, Frigiliana, El Torcal), NO Ronda ni Antequera.
 3. CADA DÍA ES UN TRAMO: Día 1 = tramo A→B, Día 2 = tramo B→C. Las paradas del día van en el orden en que las encuentras conduciendo/caminando de A a B. La primera parada del día es el punto de salida. La última es donde duermes.
 4. CONTINUIDAD OBLIGATORIA: la primera parada del día 2 es la misma ciudad/pueblo donde terminó el día 1. Si el día 1 acaba en Cádiz, el día 2 empieza en Cádiz.
 5. DISTANCIAS POR TRANSPORTE: en moto/coche un día = 150-300km de recorrido, en bici = 50-80km, a pie = 15-25km. No pongas más paradas de las que caben en las horas disponibles.
