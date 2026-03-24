@@ -349,7 +349,7 @@ const salma = {
     div.className = 'msg msg-user';
     div.innerHTML = `<div class="msg-body-user">${escapeHTML(text)}</div>`;
     area.appendChild(div);
-    this._scrollToBottom();
+    this._scrollToBottom(true);  // forzar: es el mensaje del usuario
   },
 
   _addSalmaBubble(text) {
@@ -427,7 +427,7 @@ const salma = {
         <div class="loading-text" id="loading-phrase">${phrase}</div>
       </div>`;
     area.appendChild(div);
-    this._scrollToBottom();
+    this._scrollToBottom(true);  // forzar: loading inicial
 
     // Rotar frases
     let idx = 0;
@@ -447,7 +447,11 @@ const salma = {
     }
   },
 
-  _scrollToBottom() {
+  _scrollToBottom(force) {
+    // Solo hacer scroll si el usuario ya está cerca del fondo (< 300px)
+    // o si se fuerza (ej: mensaje del usuario, no contenido streaming)
+    const distFromBottom = document.body.scrollHeight - window.innerHeight - window.scrollY;
+    if (!force && distFromBottom > 300) return;
     setTimeout(() => {
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }, 50);
