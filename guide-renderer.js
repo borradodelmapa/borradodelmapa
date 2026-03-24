@@ -126,7 +126,6 @@ const guideRenderer = {
         menu.className = 'share-menu';
         menu.innerHTML = `
           <button class="share-menu-item" data-action="link">🔗 Compartir link</button>
-          <button class="share-menu-item" data-action="pdf">📄 Descargar PDF</button>
         `;
 
         // Overlay para cerrar al pulsar fuera
@@ -162,9 +161,6 @@ const guideRenderer = {
             }
           }
 
-          if (action === 'pdf') {
-            guideRenderer._printGuide(card);
-          }
         });
       });
     }
