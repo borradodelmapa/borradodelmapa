@@ -112,32 +112,60 @@ const guideRenderer = {
       });
     }
 
-    // Botón compartir — usa URL pública si hay slug
+    // Botón compartir — menú con opciones
     const shareBtn = document.getElementById('guide-share-btn');
     if (shareBtn) {
-      shareBtn.addEventListener('click', async () => {
-        // Buscar slug de la guía
-        let shareUrl = window.location.href;
-        if (typeof salma !== 'undefined' && salma.currentRouteId && typeof db !== 'undefined' && typeof currentUser !== 'undefined' && currentUser) {
-          try {
-            const doc = await db.collection('users').doc(currentUser.uid)
-              .collection('maps').doc(salma.currentRouteId).get();
-            const slug = doc.data()?.slug;
-            if (slug) shareUrl = 'https://borradodelmapa.com/' + slug;
-          } catch (_) {}
-        }
+      shareBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // Cerrar menú si ya existe
+        const existing = document.querySelector('.share-menu');
+        if (existing) { existing.remove(); document.querySelector('.share-menu-overlay')?.remove(); return; }
 
-        if (navigator.share) {
-          navigator.share({
-            title: r.title || 'Mi ruta de viaje',
-            text: `Mira mi ruta: ${r.title || ''}`,
-            url: shareUrl
-          }).catch(() => {});
-        } else {
-          navigator.clipboard.writeText(shareUrl).then(() => {
-            showToast('Link copiado');
-          }).catch(() => {});
-        }
+        // Crear menú
+        const menu = document.createElement('div');
+        menu.className = 'share-menu';
+        menu.innerHTML = `
+          <button class="share-menu-item" data-action="link">🔗 Compartir link</button>
+          <button class="share-menu-item" data-action="pdf">📄 Descargar PDF</button>
+        `;
+
+        // Overlay para cerrar al pulsar fuera
+        const overlay = document.createElement('div');
+        overlay.className = 'share-menu-overlay';
+        overlay.addEventListener('click', () => { menu.remove(); overlay.remove(); });
+        document.body.appendChild(overlay);
+
+        // Posicionar relativo al botón
+        shareBtn.style.position = 'relative';
+        shareBtn.appendChild(menu);
+
+        // Acciones
+        menu.addEventListener('click', async (ev) => {
+          const action = ev.target.closest('.share-menu-item')?.dataset.action;
+          if (!action) return;
+          menu.remove(); overlay.remove();
+
+          if (action === 'link') {
+            let shareUrl = window.location.href;
+            if (typeof salma !== 'undefined' && salma.currentRouteId && typeof db !== 'undefined' && typeof currentUser !== 'undefined' && currentUser) {
+              try {
+                const doc = await db.collection('users').doc(currentUser.uid)
+                  .collection('maps').doc(salma.currentRouteId).get();
+                const slug = doc.data()?.slug;
+                if (slug) shareUrl = 'https://borradodelmapa.com/' + slug;
+              } catch (_) {}
+            }
+            if (navigator.share) {
+              navigator.share({ title: r.title || 'Mi ruta de viaje', text: 'Viaje creado por borradodelmapa.com', url: shareUrl }).catch(() => {});
+            } else {
+              navigator.clipboard.writeText(shareUrl).then(() => showToast('Link copiado')).catch(() => {});
+            }
+          }
+
+          if (action === 'pdf') {
+            guideRenderer._printGuide(card);
+          }
+        });
       });
     }
   },
@@ -452,6 +480,24 @@ const guideRenderer = {
       const coords = stops.map(s => [s.lat, s.lng]);
       L.polyline(coords, { color: color, weight: 2, opacity: 0.5, dashArray: '6,8' }).addTo(map);
     });
+  },
+
+  // ═══ PRINT / PDF ═══
+  _printGuide(card) {
+    // Abrir todos los días y paradas
+    card.querySelectorAll('.guide-day').forEach(d => d.classList.add('open'));
+    card.querySelectorAll('.guide-stop').forEach(s => {
+      s.classList.add('open');
+      this._lazyLoadPhoto(s);
+    });
+
+    // Invalidar mapas para que se rendericen bien
+    for (const key of Object.keys(this._maps)) {
+      try { this._maps[key].invalidateSize(); } catch (_) {}
+    }
+
+    // Esperar un poco a que carguen fotos y mapas
+    setTimeout(() => window.print(), 600);
   },
 
   // Decode Google polyline encoding

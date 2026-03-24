@@ -656,6 +656,41 @@ body {
 .fade-in { animation:fadeIn .4s ease; }
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
+/* ═══ SHARE MENU ═══ */
+.share-menu-overlay {
+  position:fixed; inset:0; z-index:9998;
+  background:transparent;
+}
+.share-menu {
+  position:absolute; bottom:100%; left:50%; transform:translateX(-50%);
+  margin-bottom:8px;
+  background:var(--gris2);
+  border:1px solid var(--linea-fuerte);
+  border-radius:var(--radius-sm);
+  overflow:hidden;
+  min-width:200px;
+  box-shadow:0 -4px 20px rgba(0,0,0,.5);
+  animation:fadeIn .15s ease;
+  z-index:9999;
+}
+.share-menu-item {
+  display:flex; align-items:center; gap:10px;
+  padding:14px 18px;
+  font-family:var(--font-tight);
+  font-size:14px;
+  color:var(--crema);
+  cursor:pointer;
+  border:none; background:none; width:100%;
+  text-align:left;
+  transition:background .15s;
+}
+.share-menu-item:hover, .share-menu-item:active {
+  background:rgba(212,160,23,.12);
+}
+.share-menu-item + .share-menu-item {
+  border-top:1px solid var(--linea);
+}
+
 /* ═══ DESKTOP ═══ */
 @media (min-width:768px) {
   .app-content { max-width:700px; margin:0 auto; }
@@ -663,4 +698,95 @@ body {
   .welcome-title { font-size:52px; }
   .guide-card { max-width:600px; }
   .viajes-grid { grid-template-columns:1fr 1fr; }
+}
+
+/* ═══ PRINT ═══ */
+@media print {
+  /* Ocultar toda la UI */
+  .app-header, .app-input-bar, .welcome-section, #login-modal,
+  .guide-actions, .toast, .guide-gmaps-link, .guide-day-gmaps,
+  .guide-stop-gmaps, .share-menu, .share-menu-overlay { display:none !important; }
+
+  /* Reset fondo y color para papel */
+  html, body {
+    background:#fff !important;
+    color:#111 !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  /* Chat area sin scroll, sin padding extra */
+  .app-content, #chat-area {
+    padding:0 !important;
+    margin:0 !important;
+    max-width:100% !important;
+    overflow:visible !important;
+  }
+
+  /* Guía ocupa todo */
+  .guide-card {
+    max-width:100% !important;
+    border:none !important;
+    background:#fff !important;
+    color:#111 !important;
+    box-shadow:none !important;
+    padding:0 !important;
+  }
+
+  .guide-header {
+    background:none !important;
+    color:#111 !important;
+    border-bottom:2px solid #d4a017 !important;
+    padding-bottom:12px !important;
+    margin-bottom:16px !important;
+  }
+  .guide-title { color:#111 !important; }
+  .guide-meta { color:#555 !important; }
+  .guide-summary { color:#333 !important; }
+
+  /* Abrir todos los días y paradas para imprimir */
+  .guide-day, .guide-stop { display:block !important; }
+  .guide-day-body, .guide-stop-body { display:block !important; max-height:none !important; height:auto !important; overflow:visible !important; }
+  .guide-day-arrow, .guide-stop-arrow { display:none !important; }
+
+  /* Colores texto */
+  .guide-day-head { background:rgba(212,160,23,.1) !important; color:#111 !important; }
+  .guide-day-num, .guide-day-title { color:#111 !important; }
+  .guide-day-count { color:#555 !important; }
+  .guide-stop-head { color:#111 !important; }
+  .guide-stop-name { color:#111 !important; }
+  .guide-stop-narrative { color:#333 !important; }
+  .guide-stop-tag { color:#333 !important; background:rgba(212,160,23,.08) !important; }
+  .guide-tips { color:#333 !important; background:rgba(212,160,23,.05) !important; }
+  .guide-tips-label, .guide-days-label { color:#111 !important; }
+
+  /* Mapas: intentar mostrarlos */
+  .guide-map-container, .guide-day-map {
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+    break-inside:avoid;
+  }
+
+  /* Fotos */
+  .guide-stop-img {
+    max-width:100% !important;
+    break-inside:avoid;
+  }
+
+  /* Evitar cortes de página dentro de parada */
+  .guide-stop { break-inside:avoid; }
+  .guide-day { break-inside:avoid-page; }
+
+  /* Footer con marca */
+  .guide-card::after {
+    content:'borradodelmapa.com — Tu copiloto de viaje con IA';
+    display:block;
+    text-align:center;
+    margin-top:24px;
+    padding-top:12px;
+    border-top:1px solid #ccc;
+    font-size:11px;
+    color:#999;
+    font-family:var(--font-tight);
+  }
 }
