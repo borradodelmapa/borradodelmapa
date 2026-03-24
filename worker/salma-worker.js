@@ -526,6 +526,46 @@ async function fetchWeather(location) {
   }
 }
 
+// ═══════════════════════════════════════════════════════════════
+// BÚSQUEDA DE EVENTOS LOCALES (Serper.dev)
+// ═══════════════════════════════════════════════════════════════
+
+async function searchEvents(destination, dateFrom, dateTo, serperKey) {
+  if (!destination || !dateFrom || !serperKey) return null;
+  try {
+    const fromDate = new Date(dateFrom);
+    const monthNames = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    const month = monthNames[fromDate.getMonth()];
+    const year = fromDate.getFullYear();
+    const query = `eventos ${destination} ${month} ${year} festivales cultura fiestas`;
+
+    const res = await fetch('https://google.serper.dev/search', {
+      method: 'POST',
+      headers: {
+        'X-API-KEY': serperKey,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        q: query,
+        gl: 'es',
+        hl: 'es',
+        num: 5,
+      }),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+
+    const results = (data.organic || []).slice(0, 5).map(r => ({
+      title: r.title || '',
+      snippet: r.snippet || '',
+    }));
+
+    return results.length > 0 ? results : null;
+  } catch (e) {
+    return null;
+  }
+}
+
 function getCountryCode(countryName) {
   if (!countryName) return '';
   const norm = countryName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
@@ -594,7 +634,7 @@ function getCountryCode(countryName) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids) {
   let systemPrompt = SALMA_SYSTEM_BASE;
 
   // Contexto mínimo del usuario + fecha actual
@@ -607,6 +647,15 @@ function buildMessages(history, message, currentRoute, userName, userNationality
     ctx.push(`[UBICACIÓN DEL VIAJERO: ${userLocationName} — El viajero está AQUÍ ahora mismo. Usa esta ubicación cuando diga "cerca de mí", "aquí", "donde estoy".]`);
   } else if (userLocation) {
     ctx.push(`[COORDENADAS GPS DEL VIAJERO: lat=${userLocation.lat}, lng=${userLocation.lng} — Usa la ciudad más cercana a estas coordenadas.]`);
+  }
+  if (travelDates && travelDates.from) {
+    ctx.push(`[FECHAS DE VIAJE: del ${travelDates.from} al ${travelDates.to} — menciona estacionalidad, clima esperado y festivos que coincidan]`);
+  }
+  if (transport) {
+    ctx.push(`[TRANSPORTE: ${transport} — adapta distancias y paradas]`);
+  }
+  if (withKids) {
+    ctx.push(`[VIAJA CON NIÑOS — adapta paradas y ritmo, incluye planes kid-friendly]`);
   }
   systemPrompt += '\n\n' + ctx.join('\n');
 
@@ -665,6 +714,17 @@ ENLACES para pronóstico actualizado:
 weather.com: ${weatherData.links[0]}
 yr.no: ${weatherData.links[1]}
 SÉ BREVE Y DIRECTA. USA FORMATO VISUAL con saltos de línea y **negritas** para separar datos. Ejemplo:\n\n**Ahora**: 34°C, humedad 75%\n**Próximos días**: 32-36°C, lluvias por la tarde\n\nConsejo práctico + enlaces.\n\nIncluye los enlaces para pronóstico actualizado. Menciona que puede cambiar. NUNCA inventes datos.]`;
+  }
+
+  // Inyectar eventos locales (búsqueda web)
+  if (eventData && eventData.length > 0) {
+    const formatted = eventData.map((r, i) =>
+      `${i + 1}. ${r.title}\n   ${r.snippet}`
+    ).join('\n');
+
+    userContent += `\n\n[EVENTOS LOCALES EN ESAS FECHAS — búsqueda web:
+${formatted}
+Si alguno de estos eventos o festivales coincide con las fechas del viaje, menciónalo brevemente en el día que toque como dato útil. NO reestructures la ruta por un evento. Si ninguno encaja con las fechas, ignóralos. NUNCA inventes eventos.]`;
   }
 
   messages.push({ role: 'user', content: userContent });
@@ -1844,6 +1904,9 @@ ${JSON.stringify(route)}`;
     const userName = body.user_name || null;
     const userNationality = body.nationality || null;
     const userLocation = body.user_location || null;
+    const travelDates = body.travel_dates || null;
+    const transport = body.transport || null;
+    const withKids = body.with_kids || false;
 
     // Reverse geocoding: convertir coordenadas → nombre de ciudad (Nominatim/OSM, gratis)
     let userLocationName = null;
@@ -1892,8 +1955,21 @@ ${JSON.stringify(route)}`;
       }
     }
 
+    // ─── EVENT SEARCH (pre-Claude, solo cuando hay fechas) ───
+    let eventData = null;
+    if (travelDates && travelDates.from && env.SERPER_API_KEY) {
+      try {
+        // Extraer destino del mensaje (simplificado: primera palabra capitalizada significativa)
+        const destMatch = message.match(/(?:a |en |por |de )([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*)/);
+        const destination = destMatch ? destMatch[1] : (currentRoute ? (currentRoute.name || currentRoute.title) : null);
+        if (destination) {
+          eventData = await searchEvents(destination, travelDates.from, travelDates.to, env.SERPER_API_KEY);
+        }
+      } catch (e) { /* Fallo silencioso */ }
+    }
+
     // Construir mensajes
-    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName);
+    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids);
     const isRoute = isRouteRequest(message, history);
     const isFlightReq = isFlightRequest(message);
     const isHotelReq = isHotelRequest(message);

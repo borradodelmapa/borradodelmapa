@@ -10,6 +10,7 @@ const salma = {
   _streaming: false,
   _rateTimes: [],
   _userLocation: null,
+  _pendingRouteInfo: null,  // Info parcial mientras esperamos fechas
 
   // Pedir geolocalización al usuario (se llama una vez, se actualiza continuamente)
   initGeolocation() {
@@ -35,6 +36,167 @@ const salma = {
     );
   },
 
+  // ═══ DETECCIÓN DE INFO DE RUTA ═══
+  _detectRouteInfo(msg) {
+    const lower = msg.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+    // ¿Es petición de ruta? (destino + días)
+    const daysMatch = lower.match(/(\d+)\s*d[ií]as?/);
+    const days = daysMatch ? parseInt(daysMatch[1]) : null;
+    const isRoute = !!days || /\bruta\s+de\b|\bruta\s+por\b|itinerario|viaje a |escapada|roadtrip|road trip|semana\s*santa|en\s+coche|mochilero/i.test(msg);
+    if (!isRoute) return { isRoute: false };
+
+    // Fechas explícitas
+    const datePatterns = [
+      /del\s+(\d{1,2})\s+(al|a)\s+(\d{1,2})\s+(de\s+)?(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)/i,
+      /(\d{1,2})\s+(de\s+)?(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)/i,
+      /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/,
+      /semana\s*santa/i,
+      /navidad|nochevieja|fin\s+de\s+a[nñ]o|nochebuena/i,
+      /puente\s+de/i,
+      /este\s+finde|este\s+fin\s+de\s+semana/i,
+      /la\s+semana\s+que\s+viene|proxima\s+semana|pr[oó]xima\s+semana/i,
+      /en\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)/i,
+    ];
+    let dates = null;
+    for (const pat of datePatterns) {
+      const m = msg.match(pat);
+      if (m) { dates = m[0]; break; }
+    }
+
+    // Transporte
+    const transportMatch = msg.match(/\b(en\s+coche|roadtrip|road\s*trip|sin\s+coche|en\s+tren|en\s+moto|en\s+bici|en\s+autobus|en\s+bus|en\s+camper|en\s+furgo|a\s+pie|andando|en\s+avion|mochilero)\b/i);
+    const transport = transportMatch ? transportMatch[1].trim() : null;
+
+    // Niños
+    const kids = /con\s+ni[nñ]os|con\s+peques|en\s+familia|con\s+hijos|with\s+kids|family/i.test(msg);
+
+    // Completo = tiene fechas (lo principal que queremos preguntar)
+    const complete = !!dates;
+
+    return { isRoute: true, days, dates, transport, kids, complete };
+  },
+
+  _buildDateQuestion(info) {
+    const parts = [];
+    // Siempre preguntar fechas (es lo principal)
+    parts.push('Si me dices las fechas, busco qué eventos, fiestas o expos hay esos días');
+    if (!info.transport) {
+      parts.push('¿Vas en coche, en tren, o cómo te mueves?');
+    }
+    if (!info.kids) {
+      parts.push('¿Viajas con niños? Así ajusto el ritmo');
+    }
+
+    let question = '¡Me pongo con ello!\n\nAntes de montar la ruta:\n';
+    question += parts.map(p => '- ' + p).join('\n');
+    question += '\n\nSi no quieres complicarte, dale al botón y te la monto ya.';
+    return question;
+  },
+
+  _addSkipButton() {
+    const area = this._getChatArea();
+    if (!area) return;
+    const div = document.createElement('div');
+    div.className = 'skip-dates-wrap';
+    div.id = 'salma-skip-dates';
+    div.innerHTML = '<button class="skip-dates-btn" onclick="salma._skipDateQuestion()">Generar ruta ya →</button>';
+    area.appendChild(div);
+    this._scrollToBottom();
+  },
+
+  _skipDateQuestion() {
+    // Quitar botón
+    const btn = document.getElementById('salma-skip-dates');
+    if (btn) btn.remove();
+
+    if (!this._pendingRouteInfo) return;
+    const originalMsg = this._pendingRouteInfo._originalMsg;
+    this._pendingRouteInfo = null;
+
+    // Enviar al worker sin fechas
+    this._addUserBubble('Hazla ya');
+    this.history.push({ role: 'user', content: originalMsg });
+    this._doSend(originalMsg, {});
+  },
+
+  _resolveDates(dateStr, days) {
+    if (!dateStr) return null;
+    const lower = dateStr.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const now = new Date();
+    const year = now.getFullYear();
+    const numDays = days || 3;
+
+    const monthNames = { enero:0, febrero:1, marzo:2, abril:3, mayo:4, junio:5, julio:6, agosto:7, septiembre:8, octubre:9, noviembre:10, diciembre:11 };
+
+    // "del 15 al 17 de abril"
+    const rangeMatch = dateStr.match(/del\s+(\d{1,2})\s+(?:al|a)\s+(\d{1,2})\s+(?:de\s+)?(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)/i);
+    if (rangeMatch) {
+      const m = monthNames[rangeMatch[3].toLowerCase()];
+      const from = new Date(year, m, parseInt(rangeMatch[1]));
+      const to = new Date(year, m, parseInt(rangeMatch[2]));
+      if (from < now) { from.setFullYear(year + 1); to.setFullYear(year + 1); }
+      return { from: this._fmtDate(from), to: this._fmtDate(to) };
+    }
+
+    // "15 de abril"
+    const singleMatch = dateStr.match(/(\d{1,2})\s+(?:de\s+)?(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)/i);
+    if (singleMatch) {
+      const m = monthNames[singleMatch[2].toLowerCase()];
+      const from = new Date(year, m, parseInt(singleMatch[1]));
+      if (from < now) from.setFullYear(year + 1);
+      const to = new Date(from); to.setDate(to.getDate() + numDays - 1);
+      return { from: this._fmtDate(from), to: this._fmtDate(to) };
+    }
+
+    // "en abril"
+    const monthMatch = lower.match(/en\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)/);
+    if (monthMatch) {
+      const m = monthNames[monthMatch[1]];
+      const from = new Date(year, m, 1);
+      if (from < now) from.setFullYear(year + 1);
+      const to = new Date(from); to.setDate(to.getDate() + numDays - 1);
+      return { from: this._fmtDate(from), to: this._fmtDate(to) };
+    }
+
+    // "este finde"
+    if (/este\s+finde|este\s+fin\s+de\s+semana/.test(lower)) {
+      const sat = new Date(now);
+      sat.setDate(sat.getDate() + (6 - sat.getDay()));
+      const sun = new Date(sat); sun.setDate(sun.getDate() + 1);
+      return { from: this._fmtDate(sat), to: this._fmtDate(sun) };
+    }
+
+    // "la semana que viene"
+    if (/semana\s+que\s+viene|proxima\s+semana/.test(lower)) {
+      const mon = new Date(now);
+      mon.setDate(mon.getDate() + (8 - mon.getDay()) % 7);
+      const to = new Date(mon); to.setDate(to.getDate() + numDays - 1);
+      return { from: this._fmtDate(mon), to: this._fmtDate(to) };
+    }
+
+    // "semana santa" — aproximación
+    if (/semana\s*santa/.test(lower)) {
+      // Semana Santa 2026 = 29 marzo - 5 abril
+      // Semana Santa 2027 = 18 abril - 25 abril
+      const ss2026 = new Date(2026, 2, 29);
+      const ss2027 = new Date(2027, 3, 18);
+      const ss = now < ss2026 ? ss2026 : ss2027;
+      const to = new Date(ss); to.setDate(to.getDate() + 7);
+      return { from: this._fmtDate(ss), to: this._fmtDate(to) };
+    }
+
+    // Fallback: próximas 2 semanas
+    return { from: this._fmtDate(now), to: this._fmtDate(new Date(now.getTime() + numDays * 86400000)) };
+  },
+
+  _fmtDate(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  },
+
   // ═══ PUNTO DE ENTRADA ÚNICO ═══
   async send(msg) {
     if (!msg || this._streaming) return;
@@ -42,7 +204,6 @@ const salma = {
 
     // Si no tenemos ubicación todavía, reintentar (ahora hay interacción del usuario)
     if (!this._userLocation && !this._geoWatchId) this.initGeolocation();
-
 
     // Transicionar a chat si estamos en welcome
     if (currentState === 'welcome' || currentState === 'viajes') {
@@ -53,7 +214,61 @@ const salma = {
     this._addUserBubble(msg);
     this.history.push({ role: 'user', content: msg });
 
-    // Loading
+    // Si estamos esperando respuesta a la pregunta de fechas
+    if (this._pendingRouteInfo) {
+      const btn = document.getElementById('salma-skip-dates');
+      if (btn) btn.remove();
+
+      const pending = this._pendingRouteInfo;
+      this._pendingRouteInfo = null;
+
+      // Intentar extraer fechas/transporte/niños de la respuesta
+      const newInfo = this._detectRouteInfo(msg);
+      const dates = newInfo.dates || pending.dates;
+      const transport = newInfo.transport || pending.transport;
+      const kids = newInfo.kids || pending.kids;
+
+      const extra = {};
+      if (dates) extra.travel_dates = this._resolveDates(dates, pending.days);
+      if (transport) extra.transport = transport;
+      if (kids) extra.with_kids = true;
+
+      // Reconstruir mensaje completo para el worker
+      const fullMsg = pending._originalMsg;
+      this._doSend(fullMsg, extra);
+      return;
+    }
+
+    // Detección de info de ruta (solo para rutas nuevas, no ediciones)
+    if (!this.currentRouteId) {
+      const info = this._detectRouteInfo(msg);
+      if (info.isRoute && !info.complete) {
+        // Guardar info parcial y preguntar
+        info._originalMsg = msg;
+        this._pendingRouteInfo = info;
+        const question = this._buildDateQuestion(info);
+        this._addSalmaBubble(question);
+        this._addSkipButton();
+        return;
+      }
+
+      // Si tiene todo completo, pasar extra al worker
+      if (info.isRoute && info.complete) {
+        const extra = {};
+        if (info.dates) extra.travel_dates = this._resolveDates(info.dates, info.days);
+        if (info.transport) extra.transport = info.transport;
+        if (info.kids) extra.with_kids = true;
+        this._doSend(msg, extra);
+        return;
+      }
+    }
+
+    // Mensaje normal (no ruta, o edición) → directo al worker
+    this._doSend(msg, {});
+  },
+
+  // ═══ ENVÍO AL WORKER ═══
+  async _doSend(msg, extra) {
     this._streaming = true;
     $send.disabled = true;
     const loadingEl = this._addLoading();
@@ -61,13 +276,17 @@ const salma = {
     try {
       const body = {
         message: msg,
-        history: this.history.slice(-20), // últimos 20 mensajes
+        history: this.history.slice(-20),
         stream: true
       };
       if (this.currentRoute) body.current_route = this.currentRoute;
       if (window.currentUser?.country) body.nationality = window.currentUser.country;
       if (window.currentUser?.name) body.user_name = window.currentUser.name;
       if (this._userLocation) body.user_location = this._userLocation;
+      // Datos extra de detección
+      if (extra.travel_dates) body.travel_dates = extra.travel_dates;
+      if (extra.transport) body.transport = extra.transport;
+      if (extra.with_kids) body.with_kids = extra.with_kids;
 
       const data = await this._stream(body, loadingEl);
 
@@ -324,6 +543,7 @@ const salma = {
     this.currentRoute = null;
     this.currentRouteId = null;
     this._streaming = false;
+    this._pendingRouteInfo = null;
   },
 
   // ═══ CHAT DOM ═══
