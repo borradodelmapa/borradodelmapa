@@ -3,6 +3,15 @@
    Motor de conversación ÚNICO
    ═══════════════════════════════════════════ */
 
+const SALMA_WELCOME_MESSAGES = [
+  "Cuéntame a dónde quieres ir. Te armo la ruta día a día con nombres de carreteras, kilómetros y alternativas si algo falla. Busco vuelos, hoteles con disponibilidad real, dónde comer y qué ver — con historia y contexto, no solo listas. Y cuando estés en ruta, voy contigo.",
+  "Dime un destino y te doy una ruta completa: camino, alojamiento, vuelos, presupuesto desglosado y un plan B para cuando llueve. Sin paja — solo lo que necesitas para salir por la puerta.",
+  "Puedo planear el viaje entero: la ruta con mapa y días reales, vuelos con precios actuales, hoteles con disponibilidad, qué comer, qué ver, cuánto llevar y qué documentos no olvidar. ¿Por dónde empezamos?",
+  "He cruzado Vietnam en moto, buscado auroras en Islandia y perdido el tren en Roma. Cuéntame el viaje que tienes en la cabeza — rutas, vuelos, hoteles, cultura, presupuesto — y lo montamos juntos."
+];
+
+const SALMA_WELCOME_RETURNING = "¿Tienes ya un viaje guardado? Puedo acompañarte en tiempo real cuando salgas — te cuento qué hay cerca, qué no te puedes perder y cómo llegar. Si todavía estás planeando, dime destino y empezamos.";
+
 const salma = {
   history: [],
   currentRoute: null,
@@ -555,13 +564,22 @@ const salma = {
 
   // ═══ CHAT DOM ═══
 
-  _initChat() {
+  _initChat(skipWelcome) {
     if (currentState !== 'chat') {
       $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
       showState('chat');
     }
     if (!document.getElementById('chat-area')) {
       $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
+    }
+    // Saludo de Salma si el chat está vacío
+    const area = document.getElementById('chat-area');
+    if (!skipWelcome && area && area.children.length === 0) {
+      const hasRoutes = typeof currentUser !== 'undefined' && currentUser && document.querySelectorAll('.viaje-card:not(.viaje-card-new)').length > 0;
+      const msg = hasRoutes
+        ? SALMA_WELCOME_RETURNING
+        : SALMA_WELCOME_MESSAGES[Math.floor(Math.random() * SALMA_WELCOME_MESSAGES.length)];
+      this._addSalmaBubble(msg);
     }
   },
 
