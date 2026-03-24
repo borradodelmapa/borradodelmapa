@@ -463,6 +463,66 @@ body {
 .tag-food .guide-stop-tag-label { color:rgba(255,160,80,.85); }
 .tag-context { background:rgba(100,140,255,.05); border-left:3px solid rgba(100,140,255,.4); }
 .tag-context .guide-stop-tag-label { color:rgba(100,180,255,.8); }
+.tag-eat { background:rgba(255,180,50,.05); border-left:3px solid rgba(255,180,50,.35); }
+.tag-eat .guide-stop-tag-label { color:rgba(255,200,80,.85); }
+.tag-sleep { background:rgba(130,100,255,.05); border-left:3px solid rgba(130,100,255,.35); }
+.tag-sleep .guide-stop-tag-label { color:rgba(160,130,255,.85); }
+.tag-weather { background:rgba(100,200,220,.05); border-left:3px solid rgba(100,200,220,.35); }
+.tag-weather .guide-stop-tag-label { color:rgba(130,210,230,.85); }
+
+/* Route badge (km + carretera entre paradas) */
+.guide-stop-route-badge {
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.05em;
+  color:rgba(244,239,230,.45); padding:4px 12px; margin:2px 0 0;
+  border-left:2px dashed rgba(244,239,230,.15);
+}
+
+/* Km badge en header de día */
+.guide-day-km {
+  font-family:var(--font-mono); font-size:11px;
+  color:var(--dorado); opacity:.7; margin-left:6px;
+}
+
+/* Maps link por día */
+.guide-day-gmaps-link {
+  display:block; font-family:var(--font-mono); font-size:12px;
+  color:var(--dorado); text-decoration:none; padding:8px 12px;
+  margin-bottom:8px; letter-spacing:.05em;
+}
+.guide-day-gmaps-link:hover { color:var(--dorado2); }
+
+/* Secciones pre-departure y practical-info */
+.guide-section {
+  padding:16px; margin:12px 0; border-radius:12px;
+  background:rgba(255,255,255,.02);
+}
+.guide-section-label {
+  font-family:var(--font-mono); font-size:12px; font-weight:600;
+  letter-spacing:.18em; color:var(--dorado); margin-bottom:12px;
+}
+.guide-info-block {
+  font-size:13px; line-height:1.6; color:rgba(244,239,230,.75);
+  margin-bottom:12px; padding-bottom:10px;
+  border-bottom:1px solid rgba(244,239,230,.06);
+}
+.guide-info-block:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+.guide-info-block strong { color:rgba(244,239,230,.9); }
+.guide-info-block em { color:rgba(244,239,230,.5); font-size:12px; }
+
+/* Budget grid */
+.guide-budget-grid {
+  display:flex; flex-wrap:wrap; gap:6px 16px; margin:6px 0;
+}
+.guide-budget-item { font-size:12px; color:rgba(244,239,230,.6); }
+.guide-budget-total {
+  font-size:14px; color:var(--dorado); margin-top:6px;
+}
+
+/* Phrases grid */
+.guide-phrases-grid { margin-top:6px; }
+.guide-phrase { font-size:12px; padding:3px 0; }
+.guide-phrase-original { color:rgba(244,239,230,.85); font-weight:500; }
+.guide-phrase-meaning { color:rgba(244,239,230,.5); margin-left:6px; }
 
 .guide-stop-practical {
   font-family:var(--font-mono); font-size:12px;
@@ -777,6 +837,17 @@ body {
   .guide-stop-name { color:#111 !important; }
   .guide-stop-narrative { color:#333 !important; }
   .guide-stop-tag { color:#333 !important; background:rgba(212,160,23,.08) !important; }
+  .guide-stop-route-badge { color:#555 !important; border-left-color:#ccc !important; }
+  .guide-day-km { color:#555 !important; }
+  .guide-day-gmaps-link { display:none !important; }
+  .guide-section { background:rgba(212,160,23,.04) !important; }
+  .guide-section-label { color:#111 !important; }
+  .guide-info-block { color:#333 !important; border-bottom-color:#eee !important; }
+  .guide-info-block strong { color:#111 !important; }
+  .guide-info-block em { color:#555 !important; }
+  .guide-budget-total { color:#333 !important; }
+  .guide-phrase-original { color:#111 !important; }
+  .guide-phrase-meaning { color:#555 !important; }
   .guide-tips { color:#333 !important; background:rgba(212,160,23,.05) !important; }
   .guide-tips-label, .guide-days-label { color:#111 !important; }
 

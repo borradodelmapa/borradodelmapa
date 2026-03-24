@@ -51,9 +51,11 @@ const guideRenderer = {
 
       <div class="guide-days">
         <div class="guide-days-label">ITINERARIO</div>
-        ${this._renderDays(days, country)}
+        ${this._renderDays(days, country, r.maps_links)}
       </div>
 
+      ${this._renderPreDeparture(r.pre_departure)}
+      ${this._renderPracticalInfo(r.practical_info)}
       ${this._renderTips(r.tips)}
 
       <div class="guide-actions">
@@ -177,9 +179,13 @@ const guideRenderer = {
   },
 
   // ═══ RENDER DÍAS ═══
-  _renderDays(days, country) {
+  _renderDays(days, country, mapsLinks) {
     let html = '';
     const dayNums = Object.keys(days).map(Number).sort((a, b) => a - b);
+    const linksMap = {};
+    if (Array.isArray(mapsLinks)) {
+      mapsLinks.forEach(l => { if (l.day && l.url) linksMap[l.day] = l; });
+    }
 
     for (let i = 0; i < dayNums.length; i++) {
       const num = dayNums[i];
@@ -187,16 +193,28 @@ const guideRenderer = {
       const isFirst = i === 0;
       const stopsHtml = this._renderStops(day.stops, country, isFirst);
 
+      // Resumen de km totales del día
+      const dayKm = day.stops.reduce((sum, s) => sum + (s.km_from_previous || 0), 0);
+      const kmBadge = dayKm > 0 ? `<span class="guide-day-km">${Math.round(dayKm)} km</span>` : '';
+
+      // Enlace Google Maps del día
+      const dayLink = linksMap[num];
+      const mapsLinkHtml = dayLink
+        ? `<a class="guide-day-gmaps-link" href="${dayLink.url}" target="_blank" rel="noopener">🗺️ ${escapeHTML(dayLink.label || 'Ver ruta en Google Maps')}</a>`
+        : '';
+
       html += `
         <div class="guide-day${isFirst ? ' open' : ''}">
           <div class="guide-day-head">
             <span class="guide-day-num">DÍA ${num}</span>
             <span class="guide-day-title">${escapeHTML(day.title)}</span>
+            ${kmBadge}
             <span class="guide-day-count">${day.stops.length} paradas</span>
             <span class="guide-day-arrow">▾</span>
           </div>
           <div class="guide-day-body">
             <div class="guide-day-map" id="guide-map-day-${num}" data-day="${num}"></div>
+            ${mapsLinkHtml}
             ${stopsHtml}
           </div>
         </div>`;
@@ -213,6 +231,24 @@ const guideRenderer = {
       const isFirstStop = isFirstDay && i === 0;
       const gmapsUrl = this._stopGmapsUrl(s, country);
 
+      // Badge de ruta (km + carretera) — si hay km desde la parada anterior
+      let routeBadgeHtml = '';
+      if (s.km_from_previous && s.km_from_previous > 0) {
+        const parts = [];
+        parts.push(s.km_from_previous + ' km');
+        if (s.road_name) parts.push(escapeHTML(s.road_name));
+        if (s.estimated_hours && s.estimated_hours > 0) {
+          const h = Math.floor(s.estimated_hours);
+          const m = Math.round((s.estimated_hours - h) * 60);
+          parts.push(h > 0 ? (m > 0 ? h + 'h ' + m + 'min' : h + 'h') : m + 'min');
+        }
+        if (s.road_difficulty) {
+          const diffIcons = { bajo: '🟢', medio: '🟡', alto: '🔴' };
+          parts.push((diffIcons[s.road_difficulty] || '') + ' ' + s.road_difficulty);
+        }
+        routeBadgeHtml = `<div class="guide-stop-route-badge">🛣️ ${parts.join(' · ')}</div>`;
+      }
+
       // Tags opcionales (solo si tienen contenido)
       let tagsHtml = '';
       if (s.context) {
@@ -227,10 +263,37 @@ const guideRenderer = {
           ${escapeHTML(s.food_nearby)}
         </div>`;
       }
+      if (s.eat && (s.eat.dish || s.eat.name)) {
+        const eatParts = [];
+        if (s.eat.name) eatParts.push('<strong>' + escapeHTML(s.eat.name) + '</strong>');
+        if (s.eat.dish) eatParts.push(escapeHTML(s.eat.dish));
+        if (s.eat.price_approx) eatParts.push(escapeHTML(s.eat.price_approx));
+        tagsHtml += `<div class="guide-stop-tag tag-eat">
+          <span class="guide-stop-tag-label">🍽️ COMER AQUÍ</span>
+          ${eatParts.join(' · ')}
+        </div>`;
+      }
       if (s.local_secret) {
         tagsHtml += `<div class="guide-stop-tag tag-secret">
           <span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>
           ${escapeHTML(s.local_secret)}
+        </div>`;
+      }
+      if (s.sleep && (s.sleep.zone || s.sleep.name)) {
+        const sleepParts = [];
+        if (s.sleep.name) sleepParts.push('<strong>' + escapeHTML(s.sleep.name) + '</strong>');
+        if (s.sleep.zone) sleepParts.push(escapeHTML(s.sleep.zone));
+        if (s.sleep.type) sleepParts.push(escapeHTML(s.sleep.type));
+        if (s.sleep.price_range) sleepParts.push(escapeHTML(s.sleep.price_range));
+        tagsHtml += `<div class="guide-stop-tag tag-sleep">
+          <span class="guide-stop-tag-label">🛏️ DORMIR</span>
+          ${sleepParts.join(' · ')}
+        </div>`;
+      }
+      if (s.alt_bad_weather) {
+        tagsHtml += `<div class="guide-stop-tag tag-weather">
+          <span class="guide-stop-tag-label">🌧️ SI LLUEVE</span>
+          ${escapeHTML(s.alt_bad_weather)}
         </div>`;
       }
       if (s.practical) {
@@ -244,6 +307,7 @@ const guideRenderer = {
 
       html += `
         <div class="guide-stop${isFirstStop ? ' open' : ''}">
+          ${routeBadgeHtml}
           <div class="guide-stop-head">
             <span class="guide-stop-icon">${icon}</span>
             <span class="guide-stop-name">${escapeHTML(s.headline || s.name)}</span>
@@ -259,6 +323,106 @@ const guideRenderer = {
           </div>
         </div>`;
     }
+    return html;
+  },
+
+  // ═══ RENDER PRE-DEPARTURE ═══
+  _renderPreDeparture(pd) {
+    if (!pd) return '';
+    let html = '<div class="guide-section guide-pre-departure"><div class="guide-section-label">ANTES DE SALIR</div>';
+
+    if (pd.transport && (pd.transport.type || pd.transport.provider)) {
+      html += '<div class="guide-info-block"><strong>🚗 Transporte</strong><br>';
+      const parts = [];
+      if (pd.transport.type) parts.push(escapeHTML(pd.transport.type));
+      if (pd.transport.provider) parts.push(escapeHTML(pd.transport.provider));
+      if (pd.transport.price) parts.push(escapeHTML(pd.transport.price));
+      html += parts.join(' · ');
+      if (pd.transport.address) html += '<br>' + escapeHTML(pd.transport.address);
+      if (pd.transport.details) html += '<br><em>' + escapeHTML(pd.transport.details) + '</em>';
+      html += '</div>';
+    }
+
+    if (pd.first_night && (pd.first_night.name || pd.first_night.address)) {
+      html += '<div class="guide-info-block"><strong>🛏️ Primera noche</strong><br>';
+      const parts = [];
+      if (pd.first_night.name) parts.push(escapeHTML(pd.first_night.name));
+      if (pd.first_night.address) parts.push(escapeHTML(pd.first_night.address));
+      if (pd.first_night.price) parts.push(escapeHTML(pd.first_night.price));
+      html += parts.join(' · ');
+      if (pd.first_night.why) html += '<br><em>' + escapeHTML(pd.first_night.why) + '</em>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+    return html;
+  },
+
+  // ═══ RENDER PRACTICAL INFO ═══
+  _renderPracticalInfo(pi) {
+    if (!pi) return '';
+    let html = '<div class="guide-section guide-practical-info"><div class="guide-section-label">INFO PRÁCTICA</div>';
+
+    // Presupuesto
+    if (pi.budget) {
+      html += '<div class="guide-info-block"><strong>💰 Presupuesto estimado</strong>';
+      if (pi.budget.daily_breakdown) {
+        const bd = pi.budget.daily_breakdown;
+        html += '<div class="guide-budget-grid">';
+        for (const [key, val] of Object.entries(bd)) {
+          if (val) {
+            const labels = { transport: 'Transporte', sleep: 'Alojamiento', food: 'Comida', activities: 'Actividades', misc: 'Otros' };
+            html += `<span class="guide-budget-item">${labels[key] || key}: <strong>${escapeHTML(val)}</strong></span>`;
+          }
+        }
+        html += '</div>';
+      }
+      if (pi.budget.total_estimated) html += '<div class="guide-budget-total">Total: <strong>' + escapeHTML(pi.budget.total_estimated) + '</strong></div>';
+      if (pi.budget.currency) html += '<br>Moneda: ' + escapeHTML(pi.budget.currency);
+      if (pi.budget.exchange_tip) html += '<br><em>' + escapeHTML(pi.budget.exchange_tip) + '</em>';
+      html += '</div>';
+    }
+
+    // Documentos
+    if (pi.documents && pi.documents.length) {
+      html += '<div class="guide-info-block"><strong>📄 Documentos</strong><br>';
+      html += pi.documents.map(d => escapeHTML(d)).join('<br>');
+      html += '</div>';
+    }
+
+    // Kit
+    if (pi.kit && pi.kit.length) {
+      html += '<div class="guide-info-block"><strong>🎒 Kit recomendado</strong><br>';
+      html += pi.kit.map(k => escapeHTML(k)).join(' · ');
+      html += '</div>';
+    }
+
+    // Apps
+    if (pi.useful_apps && pi.useful_apps.length) {
+      html += '<div class="guide-info-block"><strong>📱 Apps útiles</strong><br>';
+      html += pi.useful_apps.map(a => escapeHTML(a)).join('<br>');
+      html += '</div>';
+    }
+
+    // Frases
+    if (pi.phrases && pi.phrases.list && pi.phrases.list.length) {
+      html += '<div class="guide-info-block"><strong>🗣️ Frases en ' + escapeHTML(pi.phrases.language || 'idioma local') + '</strong>';
+      html += '<div class="guide-phrases-grid">';
+      for (const p of pi.phrases.list) {
+        html += `<div class="guide-phrase"><span class="guide-phrase-original">${escapeHTML(p.phrase)}</span> <span class="guide-phrase-meaning">${escapeHTML(p.meaning)}</span></div>`;
+      }
+      html += '</div></div>';
+    }
+
+    // Emergencias
+    if (pi.emergencies) {
+      html += '<div class="guide-info-block"><strong>🚨 Emergencias</strong><br>';
+      if (pi.emergencies.general_number) html += 'Tel: <strong>' + escapeHTML(pi.emergencies.general_number) + '</strong><br>';
+      if (pi.emergencies.embassy) html += escapeHTML(pi.emergencies.embassy);
+      html += '</div>';
+    }
+
+    html += '</div>';
     return html;
   },
 

@@ -150,7 +150,7 @@ NO pienses en "sitios interesantes" y luego los ordenes. Piensa AL REVÉS:
 3. CADA DÍA ES UN TRAMO: Día 1 = tramo A→B, Día 2 = tramo B→C. Las paradas del día van en el orden en que las encuentras conduciendo/caminando de A a B. La primera parada del día es el punto de salida. La última es donde duermes.
 4. CONTINUIDAD OBLIGATORIA: la primera parada del día 2 es la misma ciudad/pueblo donde terminó el día 1. Si el día 1 acaba en Cádiz, el día 2 empieza en Cádiz.
 5. DISTANCIAS POR TRANSPORTE: en moto/coche un día = 150-300km de recorrido, en bici = 50-80km, a pie = 15-25km. No pongas más paradas de las que caben en las horas disponibles.
-6. KM Y CARRETERAS: los km y carreteras van en los campos km_from_previous y road_name de cada parada, NO en el narrative. El narrative es solo para la experiencia del viajero.
+6. INDICA KM Y CARRETERAS: en el narrative de la primera parada de cada día, indica los km totales del tramo y la carretera principal (ej: "Hoy son 120km por la N-340 y la CA-9107").
 7. TIPO DE PARADAS SEGÚN TRANSPORTE: en moto → puertos, curvas, carreteras escénicas, bares de carretera. A pie → senderos, fuentes, refugios. En coche → pueblos, miradores con aparcamiento.
 Cada parada debe llevar un campo day_title con un título breve del día (3-5 palabras), el mismo valor para todas las paradas del mismo día.
 
@@ -161,25 +161,12 @@ FORMATO DE RESPUESTA CON RUTA
 Cuando generes una ruta o lista de lugares para el mapa, escribe en el chat SOLO el resumen breve (1-2 frases) y DEBES incluir al final un bloque en dos líneas: primera línea exactamente SALMA_ROUTE_JSON, segunda línea el JSON (sin markdown, sin backticks). Estructura del JSON:
 
 SALMA_ROUTE_JSON
-{"title":"Título de la ruta","name":"Mismo título","country":"País","region":"Región o ciudad","duration_days":N,"summary":"Resumen corto","stops":[{"name":"Nombre del lugar","headline":"Nombre","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","day":1,"lat":36.72,"lng":-4.42,"km_from_previous":0,"road_name":"N-340","road_difficulty":"medio","estimated_hours":2.5}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/PuntoA/PuntoB","label":"Día 1: A → B"}],"tips":["Consejo 1"],"tags":["tag1"],"budget_level":"bajo|medio|alto|sin_definir","suggestions":["Sugerencia 1"]}
+{"title":"Título de la ruta","name":"Mismo título","country":"País","region":"Región o ciudad","duration_days":N,"summary":"Resumen corto","stops":[{"name":"Nombre del lugar","headline":"Nombre","narrative":"1-2 frases: por qué merece la pena y cuánto tiempo calcular","day_title":"Título del día","type":"lugar|hotel|restaurante|experiencia|mirador|ruta","day":1,"lat":36.72,"lng":-4.42}],"tips":["Consejo 1"],"tags":["tag1"],"budget_level":"bajo|medio|alto|sin_definir","suggestions":["Sugerencia 1"]}
 
-FORMATO DE PARADA (obligatorio):
-Cada stop lleva estos campos:
-- name/headline: nombre EXACTO como aparece en Google Maps (el sistema verificará después)
-- narrative: 1-2 frases de viajero (por qué merece la pena, qué sensación da — NO inventes datos factuales como distancias, horarios o precios)
-- day_title: título breve del día (3-5 palabras, igual para todas las paradas del mismo día)
-- type, day (entero, NUNCA string), lat, lng (tu mejor estimación)
-- km_from_previous: kilómetros desde la parada anterior (0 para la primera del día 1, para la primera parada de cada día siguiente = km desde donde se durmió)
-- road_name: nombre de la carretera o ruta principal (ej: "QL4C", "N-340", "AP-7"). Si no conoces el nombre exacto, pon la ruta general (ej: "Carretera costera", "Nacional 1A"). NUNCA inventes nombres.
-- road_difficulty: "bajo" | "medio" | "alto" (solo para rutas en moto/bici/coche; omitir para transporte público o a pie)
-- estimated_hours: horas estimadas de viaje/conducción hasta esta parada desde la anterior
-NO incluyas estos campos (el sistema los añade automáticamente después): context, food_nearby, local_secret, alternative, practical, links, sleep, eat, alt_bad_weather.
-
-GOOGLE MAPS POR DÍA (campo maps_links, obligatorio):
-Genera un enlace de Google Maps por cada día de la ruta. Formato: https://www.google.com/maps/dir/PuntoA/PuntoB/PuntoC
-Usa nombres que Google Maps reconozca (los mismos que en las paradas). Cada enlace tiene: day (número), url (enlace completo), label (ej: "Día 1: Hanoi → Ha Giang").
-
-IMPORTANTE: usa nombres de lugares reales y verificables. El sistema buscará cada parada en Google Places y descartará las que no existan.
+FORMATO DE PARADA RÁPIDO (obligatorio):
+Cada stop lleva SOLO estos campos: name/headline (nombre EXACTO como aparece en Google Maps — el sistema verificará cada parada después), narrative (1-2 frases de viajero: por qué merece la pena, qué sensación da — NO inventes datos factuales como distancias, horarios o precios), day_title (título breve del día, 3-5 palabras, igual para todas las paradas del mismo día), type, day (entero, NUNCA string), lat y lng (tu mejor estimación — el sistema los corregirá con Google).
+NO incluyas estos campos (el sistema los añade automáticamente después): context, food_nearby, local_secret, alternative, practical, links.
+Esto te permite generar rutas largas RÁPIDO. IMPORTANTE: usa nombres de lugares reales y verificables. El sistema buscará cada parada en Google Places y descartará las que no existan.
 Solo incluye el bloque SALMA_ROUTE_JSON cuando realmente hayas generado una ruta o lista de paradas para mostrar en el mapa. Para respuestas solo conversacionales no incluyas el bloque.
 
 EDICIÓN DE RUTA EN TIEMPO REAL
@@ -783,17 +770,7 @@ function extractRouteFromReply(text) {
         lng: typeof s.lng === 'number' ? s.lng : (parseFloat(s.lng) || 0),
         photo_ref: s.photo_ref || '',
         verified_address: s.verified_address || '',
-        km_from_previous: typeof s.km_from_previous === 'number' ? s.km_from_previous : (parseFloat(s.km_from_previous) || 0),
-        road_name: s.road_name || '',
-        road_difficulty: s.road_difficulty || '',
-        estimated_hours: typeof s.estimated_hours === 'number' ? s.estimated_hours : (parseFloat(s.estimated_hours) || 0),
-        sleep: s.sleep || null,
-        eat: s.eat || null,
-        alt_bad_weather: s.alt_bad_weather || '',
       }));
-      if (!route.maps_links) route.maps_links = [];
-      if (!route.pre_departure) route.pre_departure = null;
-      if (!route.practical_info) route.practical_info = null;
       return route;
     }
   } catch (e) {}
@@ -1838,41 +1815,21 @@ export default {
         return new Response(JSON.stringify({ error: 'No API key' }), { status: 500, headers: corsH });
       }
 
-      const enrichPrompt = `Aquí tienes una ruta de viaje con paradas ligeras. Tu trabajo tiene DOS partes:
+      const enrichPrompt = `Aquí tienes una ruta de viaje con paradas ligeras. Tu trabajo: para CADA parada, añade estos campos que faltan:
 
-PARTE 1 — Para CADA parada, añade estos campos:
 - context: 2-3 frases de contexto histórico/cultural (solo para monumentos, templos, patrimonio, naturaleza relevante; omitir en restaurantes y alojamientos)
-- food_nearby: nombre REAL de dónde comer cerca, qué pedir, precio aproximado, minutos andando. Si no conoces uno real, déjalo vacío.
+- food_nearby: nombre REAL de dónde comer cerca, qué pedir, precio aproximado, minutos andando. Si no conoces uno real cerca, déjalo vacío.
 - local_secret: un dato local accionable que pocos turistas conocen. Si no tienes uno real, déjalo vacío.
 - alternative: plan B si está cerrado o no convence (1 frase)
-- sleep: objeto con {name, zone, price_range, type} — dónde dormir en esa parada. Solo para la ÚLTIMA parada de cada día (donde el viajero pasa la noche). Para las demás, pon null. Si no conoces un alojamiento real, pon zona y tipo genérico: {"name": "", "zone": "Centro de Ha Giang", "price_range": "8-15 USD", "type": "hostal/homestay"}.
-- eat: objeto con {name, dish, price_approx} — dónde comer EN esa parada. Si no conoces un local real, pon el plato típico: {"name": "", "dish": "Thắng cố (guiso local)", "price_approx": "3-5 USD"}.
-- alt_bad_weather: qué hacer si llueve o hay mal tiempo en esa etapa (1 frase). Solo si aplica.
-
-PARTE 2 — A nivel de RUTA (fuera de stops), añade estos objetos:
-- pre_departure: logística pre-viaje:
-  {"transport": {"type": "tipo transporte", "provider": "nombre si lo conoces", "address": "dirección si la conoces", "price": "precio estimado", "details": "info útil (carnet, seguro...)"},
-   "first_night": {"name": "alojamiento noche 1", "address": "dirección o zona", "price": "precio", "why": "por qué ese"},
-   "user_requests": []}
-  Si no conoces proveedores concretos, da zona y tipo. NUNCA inventes nombres de negocios.
-
-- practical_info: info práctica:
-  {"budget": {"daily_breakdown": {"transport": "X USD", "sleep": "X USD", "food": "X USD", "activities": "X USD", "misc": "X USD"}, "total_estimated": "X USD (N días)", "currency": "moneda local", "exchange_tip": "consejo cambio"},
-   "documents": ["visa...", "seguro...", "carnet..."],
-   "kit": ["elemento 1", "elemento 2"],
-   "useful_apps": ["app 1 (para qué)"],
-   "phrases": {"language": "idioma", "list": [{"phrase": "frase", "meaning": "traducción"}]},
-   "emergencies": {"general_number": "números", "hospital_zones": [{"zone": "zona", "name": "hospital", "address": "dir"}], "embassy": "embajada/consulado (España por defecto)"}}
 
 Reglas:
-- NO cambies name, headline, type, day, lat, lng, day_title, narrative, km_from_previous, road_name, road_difficulty, estimated_hours
-- NO inventes nombres de negocios ni datos — si no estás segura, deja el campo vacío
-- Visados para españoles por defecto
-- Presupuesto ESTIMADO — indica siempre "aproximado"
-- Frases en alfabeto original + transliteración si aplica
-- Devuelve SOLO el JSON completo con stops actualizados Y los campos nuevos a nivel de ruta. Sin markdown, sin backticks.
+- NO cambies name, headline, type, day, lat, lng, day_title, narrative
+- NO inventes restaurantes ni datos — si no estás segura, deja el campo vacío
+- Mantén tu tono: directa, con datos, sin paja
+- Devuelve SOLO el JSON completo de la ruta con stops actualizados, nada más. Sin markdown, sin backticks.
 
-RUTA: ${JSON.stringify(route)}`;
+RUTA:
+${JSON.stringify(route)}`;
 
       try {
         const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1884,7 +1841,7 @@ RUTA: ${JSON.stringify(route)}`;
           },
           body: JSON.stringify({
             model: 'claude-haiku-4-5-20251001',
-            max_tokens: 12000,
+            max_tokens: 8000,
             system: BLOQUE_IDENTIDAD + '\n' + BLOQUE_PERSONALIDAD + '\n' + BLOQUE_ANTIPAJA,
             messages: [{ role: 'user', content: enrichPrompt }],
           }),
@@ -1921,16 +1878,8 @@ RUTA: ${JSON.stringify(route)}`;
               photo_ref: original.photo_ref || s.photo_ref || '',
               verified_address: original.verified_address || s.verified_address || '',
               practical: original.practical || s.practical || '',
-              km_from_previous: original.km_from_previous ?? s.km_from_previous ?? 0,
-              road_name: original.road_name || s.road_name || '',
-              road_difficulty: original.road_difficulty || s.road_difficulty || '',
-              estimated_hours: original.estimated_hours ?? s.estimated_hours ?? 0,
             };
           });
-          // Preservar maps_links de la generación original
-          if (!enrichedRoute.maps_links && route.maps_links) {
-            enrichedRoute.maps_links = route.maps_links;
-          }
           return new Response(JSON.stringify({ route: enrichedRoute }), { headers: corsH });
         }
 
@@ -2030,7 +1979,7 @@ RUTA: ${JSON.stringify(route)}`;
     // Sonnet para rutas, vuelos y servicios (necesita tool use fiable), Haiku para conversacional
     const needsSonnet = isRoute || isFlightReq || isHotelReq || isServiceReq;
     const reqModel = needsSonnet ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001';
-    const reqMaxTokens = needsSonnet ? 6000 : 1500;
+    const reqMaxTokens = needsSonnet ? 4000 : 1500;
 
     // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
     const sseHeaders = {
