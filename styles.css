@@ -128,13 +128,23 @@ body {
 }
 .app-mic:hover { border-color:var(--linea-fuerte); }
 .app-mic.listening {
-  background:var(--dorado); color:var(--negro);
-  border-color:var(--dorado);
-  animation:mic-pulse 1s ease-in-out infinite;
+  background:#e53e3e; color:#fff;
+  border-color:#e53e3e;
+  animation:mic-pulse .8s ease-in-out infinite;
+  transform:scale(1.15);
 }
 @keyframes mic-pulse {
-  0%,100% { box-shadow:0 0 0 0 rgba(212,175,55,.4); }
-  50% { box-shadow:0 0 0 10px rgba(212,175,55,0); }
+  0%,100% { box-shadow:0 0 0 0 rgba(229,62,62,.5); }
+  50% { box-shadow:0 0 0 14px rgba(229,62,62,0); }
+}
+/* Borde rojo pulsante en el textarea cuando graba */
+.mic-active {
+  border-color:#e53e3e !important;
+  animation:input-rec-pulse 1.2s ease-in-out infinite;
+}
+@keyframes input-rec-pulse {
+  0%,100% { box-shadow:0 0 0 0 rgba(229,62,62,.3); }
+  50% { box-shadow:0 0 4px 4px rgba(229,62,62,.15); }
 }
 .app-input::placeholder { color:rgba(244,239,230,.25); }
 .app-input:focus { border-color:var(--linea-fuerte); }

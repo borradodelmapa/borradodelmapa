@@ -638,79 +638,104 @@ function sendMessage() {
 
   let listening = false;
   let activeMicBtn = null;
-  let safetyTimer = null;
+  let activeRec = null;
+  let activeInputEl = null;
+  let gotResult = false;
 
   function resetMicState() {
     listening = false;
     if (activeMicBtn) activeMicBtn.classList.remove('listening');
+    // Quitar borde rojo del textarea y restaurar placeholder
+    if (activeInputEl) {
+      activeInputEl.classList.remove('mic-active');
+      activeInputEl.placeholder = activeInputEl.id === 'welcome-input'
+        ? '¿A dónde vamos?' : 'Escribe aquí...';
+    }
     activeMicBtn = null;
-    if (safetyTimer) { clearTimeout(safetyTimer); safetyTimer = null; }
+    activeInputEl = null;
+    activeRec = null;
+    gotResult = false;
+  }
+
+  function stopAndSend() {
+    // Parar grabación y enviar si hay texto
+    try { if (activeRec) activeRec.stop(); } catch (_) {}
+    const inputEl = activeInputEl;
+    const hadResult = gotResult;
+    resetMicState();
+    if (hadResult && inputEl && inputEl.value.trim()) {
+      const isWelcome = inputEl.id === 'welcome-input';
+      if (isWelcome) {
+        const msg = inputEl.value.trim();
+        if (msg && typeof salma !== 'undefined') salma.send(msg);
+      } else {
+        sendMessage();
+      }
+    } else if (!hadResult) {
+      if (typeof showToast === 'function') showToast('No he captado nada, pulsa y habla claro');
+    }
   }
 
   function startListening(micBtn) {
-    // Buscar el input más cercano al botón
     const row = micBtn.closest('.input-row');
     const inputEl = row ? row.querySelector('textarea') : null;
     if (!inputEl) return;
 
     activeMicBtn = micBtn;
-    let gotResult = false;
+    activeInputEl = inputEl;
+    gotResult = false;
 
     const rec = new SpeechRecognition();
     rec.lang = 'es-ES';
     rec.interimResults = true;
-    rec.continuous = false;
+    rec.continuous = true;   // NO corta solo — el usuario decide cuándo parar
     rec.maxAlternatives = 1;
-
-    // Safety timeout — si en 8s no pasa nada, resetear
-    safetyTimer = setTimeout(() => {
-      try { rec.abort(); } catch (_) {}
-      resetMicState();
-      if (typeof showToast === 'function') showToast('Tiempo agotado, pulsa el micro de nuevo');
-    }, 8000);
+    activeRec = rec;
 
     rec.onstart = () => {
       listening = true;
       micBtn.classList.add('listening');
-      if (typeof showToast === 'function') showToast('Escuchando... habla ahora');
+      inputEl.classList.add('mic-active');
+      inputEl.placeholder = '🎙️ Escuchando...';
     };
 
     rec.onresult = (event) => {
       gotResult = true;
       let transcript = '';
-      let isFinal = false;
       for (let i = 0; i < event.results.length; i++) {
         transcript += event.results[i][0].transcript;
-        if (event.results[i].isFinal) isFinal = true;
       }
       inputEl.value = transcript;
       inputEl.style.height = 'auto';
       inputEl.style.height = Math.min(inputEl.scrollHeight, 100) + 'px';
-      if (isFinal) {
-        if (safetyTimer) { clearTimeout(safetyTimer); safetyTimer = null; }
-        try { rec.stop(); } catch (_) {}
-      }
     };
 
     rec.onend = () => {
-      resetMicState();
-      if (gotResult && inputEl.value.trim()) {
-        const isWelcome = inputEl.id === 'welcome-input';
-        if (isWelcome) {
-          const msg = inputEl.value.trim();
-          if (msg && typeof salma !== 'undefined') salma.send(msg);
-        } else {
-          sendMessage();
+      // En continuous mode, Android a veces mata la sesión solo
+      // Si el usuario NO pidió parar, reenganchar automáticamente
+      if (listening) {
+        try { rec.start(); } catch (_) {
+          // Si no se puede reiniciar, parar limpiamente
+          const inputEl = activeInputEl;
+          const hadResult = gotResult;
+          resetMicState();
+          if (hadResult && inputEl && inputEl.value.trim()) {
+            const isWelcome = inputEl.id === 'welcome-input';
+            if (isWelcome) {
+              const msg = inputEl.value.trim();
+              if (msg && typeof salma !== 'undefined') salma.send(msg);
+            } else {
+              sendMessage();
+            }
+          }
         }
-      } else if (!gotResult) {
-        if (typeof showToast === 'function') showToast('No he captado nada, pulsa y habla claro');
+        return;
       }
     };
 
     rec.onerror = (event) => {
-      resetMicState();
-      // no-speech también dispara onend, evitar doble toast
       if (event.error === 'no-speech' || event.error === 'aborted') return;
+      resetMicState();
       const msgs = {
         'not-allowed': 'Permite el micrófono en ajustes del navegador',
         'network': 'Sin conexión para reconocimiento de voz',
@@ -725,15 +750,14 @@ function sendMessage() {
       rec.start();
     } catch (e) {
       resetMicState();
-      // Reintentar una vez tras 300ms (Android a veces necesita pausa)
       setTimeout(() => {
         try {
           const rec2 = new SpeechRecognition();
-          Object.assign(rec2, { lang: 'es-ES', interimResults: true, continuous: false, maxAlternatives: 1 });
-          rec2.onstart = rec.onstart;
-          rec2.onresult = rec.onresult;
-          rec2.onend = rec.onend;
-          rec2.onerror = rec.onerror;
+          rec2.lang = 'es-ES'; rec2.interimResults = true;
+          rec2.continuous = true; rec2.maxAlternatives = 1;
+          rec2.onstart = rec.onstart; rec2.onresult = rec.onresult;
+          rec2.onend = rec.onend; rec2.onerror = rec.onerror;
+          activeRec = rec2;
           rec2.start();
         } catch (_) {
           resetMicState();
@@ -751,7 +775,8 @@ function sendMessage() {
     e.stopPropagation();
 
     if (listening) {
-      resetMicState();
+      // Segundo toque — parar y enviar
+      stopAndSend();
       return;
     }
 
