@@ -344,7 +344,7 @@ const salma = {
     } finally {
       this._streaming = false;
       $send.disabled = false;
-      $input.focus();
+      if (!('ontouchstart' in window)) $input.focus();
     }
   },
 
