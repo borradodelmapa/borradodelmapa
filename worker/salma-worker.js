@@ -1838,103 +1838,132 @@ export default {
         return new Response(JSON.stringify({ error: 'No API key' }), { status: 500, headers: corsH });
       }
 
-      const enrichPrompt = `Aquí tienes una ruta de viaje con paradas ligeras. Tu trabajo tiene DOS partes:
+      // ─── ENRICH POR LOTES (día a día en paralelo) ───
+      const enrichSystem = BLOQUE_IDENTIDAD + '\n' + BLOQUE_PERSONALIDAD + '\n' + BLOQUE_ANTIPAJA;
 
-PARTE 1 — Para CADA parada, añade estos campos:
-- context: 2-3 frases de contexto histórico/cultural (solo para monumentos, templos, patrimonio, naturaleza relevante; omitir en restaurantes y alojamientos)
+      // Agrupar stops por día
+      const dayGroups = {};
+      route.stops.forEach((s, i) => {
+        const d = s.day || 1;
+        if (!dayGroups[d]) dayGroups[d] = [];
+        dayGroups[d].push({ stop: s, index: i });
+      });
+      const dayNums = Object.keys(dayGroups).map(Number).sort((a, b) => a - b);
+
+      const stopsPrompt = `Enriquece estas paradas de un día de viaje por ${route.region || route.country || 'destino'}. Para CADA parada, añade:
+- context: 2-3 frases de contexto histórico/cultural (solo monumentos, templos, patrimonio, naturaleza; omitir en restaurantes y alojamientos)
 - food_nearby: nombre REAL de dónde comer cerca, qué pedir, precio aproximado, minutos andando. Si no conoces uno real, déjalo vacío.
-- local_secret: un dato local accionable que pocos turistas conocen. Si no tienes uno real, déjalo vacío.
+- local_secret: dato local accionable que pocos turistas conocen. Si no tienes uno real, déjalo vacío.
 - alternative: plan B si está cerrado o no convence (1 frase)
-- sleep: objeto con {name, zone, price_range, type} — dónde dormir en esa parada. Solo para la ÚLTIMA parada de cada día (donde el viajero pasa la noche). Para las demás, pon null. Si no conoces un alojamiento real, pon zona y tipo genérico: {"name": "", "zone": "Centro de Ha Giang", "price_range": "8-15 USD", "type": "hostal/homestay"}.
-- eat: objeto con {name, dish, price_approx} — dónde comer EN esa parada. Si no conoces un local real, pon el plato típico: {"name": "", "dish": "Thắng cố (guiso local)", "price_approx": "3-5 USD"}.
-- alt_bad_weather: qué hacer si llueve o hay mal tiempo en esa etapa (1 frase). Solo si aplica.
-
-PARTE 2 — A nivel de RUTA (fuera de stops), añade estos objetos:
-- pre_departure: logística pre-viaje:
-  {"transport": {"type": "tipo transporte", "provider": "nombre si lo conoces", "address": "dirección si la conoces", "price": "precio estimado", "details": "info útil (carnet, seguro...)"},
-   "first_night": {"name": "alojamiento noche 1", "address": "dirección o zona", "price": "precio", "why": "por qué ese"},
-   "user_requests": []}
-  Si no conoces proveedores concretos, da zona y tipo. NUNCA inventes nombres de negocios.
-
-- practical_info: info práctica:
-  {"budget": {"daily_breakdown": {"transport": "X USD", "sleep": "X USD", "food": "X USD", "activities": "X USD", "misc": "X USD"}, "total_estimated": "X USD (N días)", "currency": "moneda local", "exchange_tip": "consejo cambio"},
-   "documents": ["visa...", "seguro...", "carnet..."],
-   "kit": ["elemento 1", "elemento 2"],
-   "useful_apps": ["app 1 (para qué)"],
-   "phrases": {"language": "idioma", "list": [{"phrase": "frase", "meaning": "traducción"}]},
-   "emergencies": {"general_number": "números", "hospital_zones": [{"zone": "zona", "name": "hospital", "address": "dir"}], "embassy": "embajada/consulado (España por defecto)"}}
+- sleep: objeto {name, zone, price_range, type} — solo para la ÚLTIMA parada del día. Para las demás, null. Si no conoces alojamiento real: {"name": "", "zone": "zona", "price_range": "X USD", "type": "tipo"}.
+- eat: objeto {name, dish, price_approx} — dónde comer EN esa parada. Si no conoces local real, pon plato típico: {"name": "", "dish": "plato", "price_approx": "X USD"}.
+- alt_bad_weather: qué hacer si llueve (1 frase). Solo si aplica.
 
 Reglas:
 - NO cambies name, headline, type, day, lat, lng, day_title, narrative, km_from_previous, road_name, road_difficulty, estimated_hours
-- NO inventes nombres de negocios ni datos — si no estás segura, deja el campo vacío
-- Visados para españoles por defecto
-- Presupuesto ESTIMADO — indica siempre "aproximado"
-- Frases en alfabeto original + transliteración si aplica
-- Devuelve SOLO el JSON completo con stops actualizados Y los campos nuevos a nivel de ruta. Sin markdown, sin backticks.
+- NO inventes nombres de negocios — si no estás segura, deja vacío
+- Devuelve SOLO un array JSON con las paradas actualizadas. Sin markdown, sin backticks.
 
-RUTA: ${JSON.stringify(route)}`;
+PARADAS:`;
 
-      try {
+      // Función helper para llamar a Haiku
+      const callHaiku = async (prompt, maxTokens) => {
         const res = await fetch('https://api.anthropic.com/v1/messages', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': apiKey,
-            'anthropic-version': '2023-06-01',
-          },
+          headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
           body: JSON.stringify({
             model: 'claude-haiku-4-5-20251001',
-            max_tokens: 12000,
-            system: BLOQUE_IDENTIDAD + '\n' + BLOQUE_PERSONALIDAD + '\n' + BLOQUE_ANTIPAJA,
-            messages: [{ role: 'user', content: enrichPrompt }],
+            max_tokens: maxTokens,
+            system: enrichSystem,
+            messages: [{ role: 'user', content: prompt }],
           }),
         });
-
-        if (!res.ok) {
-          return new Response(JSON.stringify({ error: 'Anthropic error', status: res.status }), { status: 500, headers: corsH });
-        }
-
+        if (!res.ok) return null;
         const data = await res.json();
-        const text = data.content?.[0]?.text || '';
+        return data.content?.[0]?.text || '';
+      };
 
-        let enrichedRoute = null;
+      // Función helper para parsear JSON de respuesta
+      const parseJSON = (text) => {
+        if (!text) return null;
         try {
-          const clean = text.replace(/```json|```/g, '').trim();
-          enrichedRoute = JSON.parse(clean);
+          return JSON.parse(text.replace(/```json|```/g, '').trim());
         } catch (e) {
-          // Intentar extraer JSON del texto
-          const jsonMatch = text.match(/\{[\s\S]*\}/);
-          if (jsonMatch) {
-            try { enrichedRoute = JSON.parse(jsonMatch[0]); } catch (e2) {}
-          }
+          const match = text.match(/[\[{][\s\S]*[\]}]/);
+          if (match) { try { return JSON.parse(match[0]); } catch (e2) {} }
+          return null;
         }
+      };
 
-        if (enrichedRoute && enrichedRoute.stops) {
-          // Preservar campos verificados de Google (coords, fotos, horarios)
-          enrichedRoute.stops = enrichedRoute.stops.map((s, i) => {
-            const original = route.stops[i];
-            if (!original) return s;
-            return {
-              ...s,
-              lat: original.lat || s.lat,
-              lng: original.lng || s.lng,
-              photo_ref: original.photo_ref || s.photo_ref || '',
-              verified_address: original.verified_address || s.verified_address || '',
-              practical: original.practical || s.practical || '',
-              km_from_previous: original.km_from_previous ?? s.km_from_previous ?? 0,
-              road_name: original.road_name || s.road_name || '',
-              road_difficulty: original.road_difficulty || s.road_difficulty || '',
-              estimated_hours: original.estimated_hours ?? s.estimated_hours ?? 0,
-            };
+      try {
+        // Lanzar enrich de stops por día + info práctica EN PARALELO
+        const dayPromises = dayNums.map(dayNum => {
+          const dayStops = dayGroups[dayNum].map(g => g.stop);
+          const tokensPerStop = 350;
+          const maxTokens = Math.min(dayStops.length * tokensPerStop + 200, 4000);
+          const prompt = stopsPrompt + ' ' + JSON.stringify(dayStops);
+          return callHaiku(prompt, maxTokens).then(text => ({ dayNum, text }));
+        });
+
+        const practicalPrompt = `Para esta ruta de viaje, genera info logística. Devuelve SOLO un JSON con estos dos objetos:
+
+- pre_departure: {"transport": {"type": "tipo", "provider": "nombre si lo conoces", "address": "dir si la conoces", "price": "precio estimado", "details": "info útil"}, "first_night": {"name": "alojamiento", "address": "dir o zona", "price": "precio", "why": "por qué ese"}, "user_requests": []}
+- practical_info: {"budget": {"daily_breakdown": {"transport": "X", "sleep": "X", "food": "X", "activities": "X", "misc": "X"}, "total_estimated": "X (N días)", "currency": "moneda local", "exchange_tip": "consejo"}, "documents": ["doc1"], "kit": ["item1"], "useful_apps": ["app1"], "phrases": {"language": "idioma", "list": [{"phrase": "frase", "meaning": "traducción"}]}, "emergencies": {"general_number": "tel", "hospital_zones": [{"zone": "zona", "name": "hospital", "address": "dir"}], "embassy": "embajada España"}}
+
+NO inventes nombres de negocios. Visados para españoles. Presupuesto aproximado. Frases en alfabeto original + transliteración.
+Sin markdown, sin backticks. Solo el JSON.
+
+RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${route.duration_days || ''} días`;
+
+        const practicalPromise = callHaiku(practicalPrompt, 3000).then(text => ({ type: 'practical', text }));
+
+        // Esperar todos en paralelo
+        const allResults = await Promise.all([...dayPromises, practicalPromise]);
+
+        // Reconstruir stops enriquecidos
+        const enrichedStops = [...route.stops]; // copia
+        for (const result of allResults) {
+          if (result.type === 'practical') continue;
+          const parsed = parseJSON(result.text);
+          if (!parsed) continue;
+          const stopsArr = Array.isArray(parsed) ? parsed : (parsed.stops || []);
+          const group = dayGroups[result.dayNum];
+          if (!group) continue;
+          stopsArr.forEach((enrichedStop, j) => {
+            if (j < group.length) {
+              const originalIdx = group[j].index;
+              const original = route.stops[originalIdx];
+              enrichedStops[originalIdx] = {
+                ...original,
+                ...enrichedStop,
+                // Preservar campos verificados de Google
+                lat: original.lat || enrichedStop.lat,
+                lng: original.lng || enrichedStop.lng,
+                photo_ref: original.photo_ref || enrichedStop.photo_ref || '',
+                verified_address: original.verified_address || enrichedStop.verified_address || '',
+                practical: original.practical || enrichedStop.practical || '',
+                km_from_previous: original.km_from_previous ?? enrichedStop.km_from_previous ?? 0,
+                road_name: original.road_name || enrichedStop.road_name || '',
+                road_difficulty: original.road_difficulty || enrichedStop.road_difficulty || '',
+                estimated_hours: original.estimated_hours ?? enrichedStop.estimated_hours ?? 0,
+              };
+            }
           });
-          // Preservar maps_links de la generación original
-          if (!enrichedRoute.maps_links && route.maps_links) {
-            enrichedRoute.maps_links = route.maps_links;
-          }
-          return new Response(JSON.stringify({ route: enrichedRoute }), { headers: corsH });
         }
 
-        return new Response(JSON.stringify({ error: 'Could not parse enriched route' }), { status: 500, headers: corsH });
+        // Extraer info práctica
+        const practicalResult = allResults.find(r => r.type === 'practical');
+        const practicalData = parseJSON(practicalResult?.text);
+
+        const enrichedRoute = {
+          ...route,
+          stops: enrichedStops,
+          maps_links: route.maps_links || [],
+          pre_departure: practicalData?.pre_departure || null,
+          practical_info: practicalData?.practical_info || null,
+        };
+
+        return new Response(JSON.stringify({ route: enrichedRoute }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
