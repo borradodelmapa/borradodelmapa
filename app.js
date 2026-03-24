@@ -636,16 +636,16 @@ function sendMessage() {
     return;
   }
 
-  let listening = false;
+  let listening = false;      // true = sesión de micro activa
   let activeMicBtn = null;
   let activeRec = null;
   let activeInputEl = null;
+  let accumulatedText = '';    // texto confirmado de ráfagas anteriores
   let gotResult = false;
 
   function resetMicState() {
     listening = false;
     if (activeMicBtn) activeMicBtn.classList.remove('listening');
-    // Quitar borde rojo del textarea y restaurar placeholder
     if (activeInputEl) {
       activeInputEl.classList.remove('mic-active');
       activeInputEl.placeholder = activeInputEl.id === 'welcome-input'
@@ -654,11 +654,12 @@ function sendMessage() {
     activeMicBtn = null;
     activeInputEl = null;
     activeRec = null;
+    accumulatedText = '';
     gotResult = false;
   }
 
   function stopAndSend() {
-    // Parar grabación y enviar si hay texto
+    listening = false;  // marcar ANTES de stop para que onend no reenganche
     try { if (activeRec) activeRec.stop(); } catch (_) {}
     const inputEl = activeInputEl;
     const hadResult = gotResult;
@@ -676,21 +677,12 @@ function sendMessage() {
     }
   }
 
-  function startListening(micBtn) {
-    const row = micBtn.closest('.input-row');
-    const inputEl = row ? row.querySelector('textarea') : null;
-    if (!inputEl) return;
-
-    activeMicBtn = micBtn;
-    activeInputEl = inputEl;
-    gotResult = false;
-
+  function createRec(micBtn, inputEl) {
     const rec = new SpeechRecognition();
     rec.lang = 'es-ES';
     rec.interimResults = true;
-    rec.continuous = true;   // NO corta solo — el usuario decide cuándo parar
+    rec.continuous = false;    // ráfaga única — escucha bien, sin repeticiones
     rec.maxAlternatives = 1;
-    activeRec = rec;
 
     rec.onstart = () => {
       listening = true;
@@ -701,40 +693,44 @@ function sendMessage() {
 
     rec.onresult = (event) => {
       gotResult = true;
-      let transcript = '';
+      let current = '';
       for (let i = 0; i < event.results.length; i++) {
-        transcript += event.results[i][0].transcript;
+        current += event.results[i][0].transcript;
       }
-      inputEl.value = transcript;
+      // Mostrar acumulado + lo que está diciendo ahora
+      const sep = accumulatedText ? ' ' : '';
+      inputEl.value = accumulatedText + sep + current;
       inputEl.style.height = 'auto';
       inputEl.style.height = Math.min(inputEl.scrollHeight, 100) + 'px';
     };
 
     rec.onend = () => {
-      // En continuous mode, Android a veces mata la sesión solo
-      // Si el usuario NO pidió parar, reenganchar automáticamente
-      if (listening) {
-        try { rec.start(); } catch (_) {
-          // Si no se puede reiniciar, parar limpiamente
-          const inputEl = activeInputEl;
-          const hadResult = gotResult;
-          resetMicState();
-          if (hadResult && inputEl && inputEl.value.trim()) {
-            const isWelcome = inputEl.id === 'welcome-input';
-            if (isWelcome) {
-              const msg = inputEl.value.trim();
-              if (msg && typeof salma !== 'undefined') salma.send(msg);
-            } else {
-              sendMessage();
-            }
-          }
-        }
-        return;
+      if (!listening) return;  // el usuario pidió parar — no reenganchar
+
+      // Guardar texto confirmado de esta ráfaga
+      if (inputEl.value.trim()) {
+        accumulatedText = inputEl.value.trim();
       }
+
+      // Reenganchar automáticamente con nueva ráfaga
+      setTimeout(() => {
+        if (!listening) return;
+        try {
+          const newRec = createRec(micBtn, inputEl);
+          activeRec = newRec;
+          newRec.start();
+        } catch (_) {
+          // No se pudo reiniciar — enviar lo que haya
+          stopAndSend();
+        }
+      }, 200);
     };
 
     rec.onerror = (event) => {
-      if (event.error === 'no-speech' || event.error === 'aborted') return;
+      if (event.error === 'aborted') return;
+      // no-speech: no pasa nada, reenganchar
+      if (event.error === 'no-speech') return;
+      listening = false;
       resetMicState();
       const msgs = {
         'not-allowed': 'Permite el micrófono en ajustes del navegador',
@@ -746,19 +742,31 @@ function sendMessage() {
       }
     };
 
+    return rec;
+  }
+
+  function startListening(micBtn) {
+    const row = micBtn.closest('.input-row');
+    const inputEl = row ? row.querySelector('textarea') : null;
+    if (!inputEl) return;
+
+    activeMicBtn = micBtn;
+    activeInputEl = inputEl;
+    accumulatedText = '';
+    gotResult = false;
+
     try {
+      const rec = createRec(micBtn, inputEl);
+      activeRec = rec;
       rec.start();
     } catch (e) {
       resetMicState();
+      // Reintentar una vez tras 300ms (Android a veces necesita pausa)
       setTimeout(() => {
         try {
-          const rec2 = new SpeechRecognition();
-          rec2.lang = 'es-ES'; rec2.interimResults = true;
-          rec2.continuous = true; rec2.maxAlternatives = 1;
-          rec2.onstart = rec.onstart; rec2.onresult = rec.onresult;
-          rec2.onend = rec.onend; rec2.onerror = rec.onerror;
-          activeRec = rec2;
-          rec2.start();
+          const rec = createRec(micBtn, inputEl);
+          activeRec = rec;
+          rec.start();
         } catch (_) {
           resetMicState();
           if (typeof showToast === 'function') showToast('No se pudo iniciar el micro');
@@ -775,7 +783,6 @@ function sendMessage() {
     e.stopPropagation();
 
     if (listening) {
-      // Segundo toque — parar y enviar
       stopAndSend();
       return;
     }
