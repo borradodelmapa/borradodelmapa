@@ -457,7 +457,7 @@ const salma = {
                   } else {
                     display = display.replace(/[\n.][ ]?SAL[MA_ROUTE]*$/, '');
                   }
-                  textEl.textContent = display.trim();
+                  textEl.innerHTML = formatMessage(display.trim());
                 }
               }
             } catch (e) { /* ignorar JSON mal formado */ }
