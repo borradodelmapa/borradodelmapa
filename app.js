@@ -899,6 +899,7 @@ function openCoinsModal() {
       <div id="stripe-card-wrapper" class="stripe-card-wrapper">
         <div id="stripe-card-element" class="stripe-card-element"></div>
         <div id="stripe-card-errors" class="stripe-card-errors"></div>
+        <div class="stripe-test-badge">MODO PRUEBA · no se cobrará</div>
       </div>
       <div id="stripe-loading" class="stripe-loading" style="display:none">
         <div class="stripe-spinner"></div>
@@ -957,7 +958,7 @@ function openCoinsModal() {
 function initStripeCard(overlay) {
   // STRIPE_PK: tu publishable key de Stripe (test o live)
   // De momento usa la test key. Cuando tengas la real, cámbiala aquí.
-  const STRIPE_PK = 'pk_test_PLACEHOLDER';
+  const STRIPE_PK = 'pk_test_51TEhUfDT9GNHUXNZJB0yABaUKu4KIR7HPihR2RJaHIOeSmDfBZvcplmXjcFfeUVQbBYSHURE0HmXoRz1DeD5l0Qc00R0YSOWwe';
 
   const cardEl = document.getElementById('stripe-card-element');
   const errorsEl = document.getElementById('stripe-card-errors');
