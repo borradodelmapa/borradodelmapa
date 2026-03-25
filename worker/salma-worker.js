@@ -243,7 +243,18 @@ REGLAS COMUNES PARA TODOS LOS SERVICIOS:
 - Máximo 1 pregunta si faltan datos, nunca 2 seguidas.
 
 NAVEGACIÓN EXTERNA
-Cada parada puede abrirse en Google Maps para navegación.`;
+Cada parada puede abrirse en Google Maps para navegación.
+
+FOTOS DE LUGARES — herramienta buscar_foto
+Cuando recomiendes un lugar concreto (plaza, templo, barrio, monumento, paisaje), usa buscar_foto para mostrar una foto REAL al usuario. Es mucho más potente que solo describir — una imagen vale más que mil palabras.
+
+Reglas:
+— Usa 1-3 fotos por respuesta. No más — no es un álbum de fotos.
+— Solo para lugares concretos con nombre propio (no para "la comida local" o "el centro").
+— Incluye la foto justo después de mencionar el lugar, con el formato que devuelve la herramienta.
+— Si la herramienta devuelve error, sigue sin foto — no menciones el error.
+— NO uses fotos cuando generes ruta (SALMA_ROUTE_JSON) — la ruta tiene sus propias fotos.
+— Úsala en respuestas conversacionales: "¿qué ver en X?", "recomiéndame algo en X", "cómo es X?".`;
 
 // ═══════════════════════════════════════════════════════════════
 // ENSAMBLAR SYSTEM PROMPT
@@ -382,6 +393,20 @@ const SALMA_TOOLS = [
         }
       },
       required: ["ciudad"]
+    }
+  },
+  {
+    name: "buscar_foto",
+    description: "Busca una foto REAL de un lugar, monumento, plaza, barrio o paisaje usando Google Places Photos. Usa esta herramienta cuando recomiendes un lugar concreto al usuario y quieras mostrarle cómo es. Devuelve la URL de la imagen que puedes incluir en tu respuesta con formato ![nombre](url). Úsala 1-3 veces por respuesta, solo para los lugares más relevantes. NO la uses para conceptos abstractos ni países enteros — solo para lugares concretos con nombre propio.",
+    input_schema: {
+      type: "object",
+      properties: {
+        lugar: {
+          type: "string",
+          description: "Nombre del lugar concreto + ciudad/país. Ejemplos: 'Plaza Durbar Kathmandu', 'Templo Swayambhunath Nepal', 'Halong Bay Vietnam', 'Alhambra Granada España'"
+        }
+      },
+      required: ["lugar"]
     }
   }
 ];
@@ -1512,8 +1537,47 @@ async function executeToolCall(toolName, toolInput, env) {
       return await buscarCochesBooking(toolInput, env.RAPIDAPI_KEY);
     case 'buscar_restaurante':
       return generarEnlaceRestaurante(toolInput);
+    case 'buscar_foto':
+      return await buscarFotoLugar(toolInput, env.GOOGLE_PLACES_KEY);
     default:
       return { error: `Herramienta desconocida: ${toolName}` };
+  }
+}
+
+// ═══ BUSCAR FOTO — Google Places Photos ═══
+async function buscarFotoLugar(input, placesKey) {
+  if (!placesKey || !input.lugar) return { error: 'Falta lugar o API key' };
+
+  try {
+    // 1. Buscar el lugar en Google Places
+    const searchRes = await fetch(
+      `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(input.lugar)}&inputtype=textquery&fields=name,photos,formatted_address&key=${placesKey}`
+    );
+    const searchData = await searchRes.json();
+
+    const place = searchData?.candidates?.[0];
+    if (!place || !place.photos || !place.photos.length) {
+      return { error: 'No se encontró foto para: ' + input.lugar, lugar: input.lugar };
+    }
+
+    // 2. Obtener URL de la foto
+    const photoRef = place.photos[0].photo_reference;
+    const photoRes = await fetch(
+      `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photo_reference=${photoRef}&key=${placesKey}`
+    );
+
+    if (!photoRes.ok) {
+      return { error: 'Error obteniendo foto', lugar: input.lugar };
+    }
+
+    return {
+      lugar: place.name || input.lugar,
+      direccion: place.formatted_address || '',
+      foto_url: photoRes.url,
+      foto_markdown: `![${place.name || input.lugar}](${photoRes.url})`,
+    };
+  } catch (e) {
+    return { error: 'Error buscando foto: ' + e.message, lugar: input.lugar };
   }
 }
 
