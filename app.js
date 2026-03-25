@@ -507,9 +507,6 @@ auth.onAuthStateChanged(async (user) => {
     if (window._afterLogin === 'viajes') {
       window._afterLogin = null;
       showState('viajes');
-    } else if (currentState === 'welcome') {
-      // Logueado → ir directo a Mis Viajes
-      showState('viajes');
     }
   } else {
     currentUser = null;

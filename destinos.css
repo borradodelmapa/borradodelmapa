@@ -20,7 +20,7 @@
 
 .destino-hero {
   text-align: center;
-  padding: 48px 20px 32px;
+  padding: 48px 20px 56px;
   max-width: 700px;
   margin: 0 auto;
 }
@@ -434,37 +434,59 @@ details[open] > .destino-acc-header::after {
   box-shadow: 0 0 20px rgba(212, 160, 23, .15);
 }
 
-/* ── Mic button (unified) ────────────────────────────────── */
+/* ── Mic button (unified — mismo estilo que index.html) ── */
 
 .salma-mic {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: rgba(244, 239, 230, .08);
-  border: 1px solid rgba(244, 239, 230, .15);
-  font-size: 16px;
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid var(--linea);
+  color: var(--crema);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all .2s;
   flex-shrink: 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
 }
 
 .salma-mic:hover {
-  background: rgba(244, 239, 230, .15);
-  border-color: rgba(244, 239, 230, .3);
+  border-color: var(--linea-fuerte);
 }
 
-.salma-mic.recording {
-  background: rgba(220, 50, 50, .2);
-  border-color: rgba(220, 50, 50, .5);
-  animation: mic-pulse 1s ease-in-out infinite;
+.salma-mic.listening {
+  background: #e53e3e;
+  color: #fff;
+  border-color: #e53e3e;
+  animation: mic-pulse .8s ease-in-out infinite;
+  transform: scale(1.15);
+}
+
+/* Borde rojo pulsante en el input cuando graba */
+.mic-active {
+  border-color: #e53e3e !important;
+  animation: input-rec-pulse 1.2s ease-in-out infinite;
 }
 
 @keyframes mic-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 50, 50, .3); }
-  50% { box-shadow: 0 0 0 8px rgba(220, 50, 50, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, .5); }
+  50% { box-shadow: 0 0 0 14px rgba(229, 62, 62, 0); }
+}
+@keyframes input-rec-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, .3); }
+  50% { box-shadow: 0 0 4px 4px rgba(229, 62, 62, .15); }
+}
+
+/* Hero input — mic más grande */
+.salma-input-hero .salma-mic {
+  width: 48px;
+  height: 48px;
+  border-color: rgba(212, 160, 23, .4);
 }
 
 /* ── Recent guides ───────────────────────────────────────── */
@@ -902,8 +924,8 @@ details[open] > .destino-acc-header::after {
   border: 1px solid rgba(212, 160, 23, .15);
   border-radius: 16px;
   overflow: hidden;
-  margin-top: 20px;
-  margin-bottom: 40px;
+  margin-top: 40px;
+  margin-bottom: 60px;
 }
 
 .destino-salma-header {
@@ -988,8 +1010,11 @@ details[open] > .destino-acc-header::after {
   align-items: center;
   padding: 10px 12px;
   border-top: 1px solid var(--linea);
-  gap: 8px;
+  gap: 10px;
 }
+.salma-chat-input-bar .salma-chat-input { order: 1; }
+.salma-chat-input-bar .salma-chat-send { order: 2; }
+.salma-chat-input-bar .salma-mic { order: 3; }
 
 .salma-chat-input {
   flex: 1;
@@ -1013,9 +1038,9 @@ details[open] > .destino-acc-header::after {
 }
 
 .salma-chat-send {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   background: var(--dorado);
   color: var(--negro);
   border: none;

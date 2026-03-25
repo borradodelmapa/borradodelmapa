@@ -51,24 +51,35 @@
         });
       }
 
-      // Help button → show info
+      // Help button → show info (mismo modal que index.html)
       document.getElementById('btn-help')?.addEventListener('click', () => {
-        const existing = document.querySelector('.salma-help-overlay');
+        const existing = document.querySelector('.salma-info-overlay');
         if (existing) { existing.remove(); return; }
         const overlay = document.createElement('div');
-        overlay.className = 'salma-help-overlay';
+        overlay.className = 'salma-info-overlay';
+        overlay.style.display = 'flex';
         overlay.innerHTML = `
-          <div class="salma-help-modal">
-            <button class="salma-help-close" onclick="this.closest('.salma-help-overlay').remove()">×</button>
-            <h3>¿Qué puede hacer Salma?</h3>
-            <ul>
-              <li>✅ Crear rutas de viaje día a día</li>
-              <li>✅ Buscar vuelos y hoteles</li>
-              <li>✅ Presupuestos detallados</li>
-              <li>✅ Consejos locales y seguridad</li>
-              <li>✅ Acompañarte durante el viaje</li>
-            </ul>
-            <a href="/" class="salma-help-btn">Ir a Salma ›</a>
+          <div class="salma-info-modal">
+            <button class="salma-info-close" onclick="this.closest('.salma-info-overlay').remove()">&times;</button>
+            <div class="salma-info-hero">
+              <div class="salma-info-hero-line">Ahorro de tiempo al viajero</div>
+              <div class="salma-info-hero-line">Asistente de viajes personal</div>
+              <div class="salma-info-hero-big">Generador de rutas</div>
+            </div>
+            <div class="salma-info-list">
+              <div class="salma-info-item done">Rutas dia a dia con mapa</div>
+              <div class="salma-info-item done">Vuelos con precios reales</div>
+              <div class="salma-info-item done">Hoteles con disponibilidad</div>
+              <div class="salma-info-item done">Alquiler de coches</div>
+              <div class="salma-info-item done">Restaurantes cerca</div>
+              <div class="salma-info-item done">Info del destino (visa, vacunas, moneda)</div>
+              <div class="salma-info-item done">Presupuesto desglosado</div>
+              <div class="salma-info-item done">Plan B si llueve</div>
+              <div class="salma-info-item done">Compartir guia por link</div>
+              <div class="salma-info-item soon">Trenes y buses</div>
+              <div class="salma-info-item soon">Audio guia en ruta</div>
+              <div class="salma-info-item soon">Salma te acompana durante el viaje</div>
+            </div>
           </div>`;
         overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
         document.body.appendChild(overlay);
@@ -361,40 +372,146 @@
     } catch (_) {}
   }
 
-  // ═══ MIC (Speech Recognition) ═══
+  // ═══ MIC (Speech Recognition) — sistema completo con auto-send ═══
 
   function initMic() {
-    const mic = document.getElementById('salma-mic') || document.querySelector('.salma-mic');
-    const input = document.getElementById('destino-search') || $input;
-    if (!mic || !input) return;
-
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) { mic.style.display = 'none'; return; }
+    if (!SpeechRecognition) {
+      document.querySelectorAll('.salma-mic, .app-mic').forEach(b => b.style.display = 'none');
+      return;
+    }
 
-    let recognition = null;
-    let recording = false;
+    let listening = false;
+    let activeMicBtn = null;
+    let activeRec = null;
+    let activeInputEl = null;
+    let accumulatedText = '';
+    let gotResult = false;
 
-    mic.addEventListener('click', () => {
-      if (recording) {
-        recognition?.stop();
+    function resetMicState() {
+      listening = false;
+      if (activeMicBtn) activeMicBtn.classList.remove('listening');
+      if (activeInputEl) activeInputEl.classList.remove('mic-active');
+      activeMicBtn = null;
+      activeInputEl = null;
+      activeRec = null;
+      accumulatedText = '';
+      gotResult = false;
+    }
+
+    function stopAndSend() {
+      listening = false;
+      try { if (activeRec) activeRec.stop(); } catch (_) {}
+      const inputEl = activeInputEl;
+      const hadResult = gotResult;
+      resetMicState();
+      if (hadResult && inputEl && inputEl.value.trim()) {
+        const msg = inputEl.value.trim();
+        // Index page search → redirect to main app
+        if (inputEl.id === 'destino-search') {
+          window.location.href = '/?q=' + encodeURIComponent(msg);
+        } else {
+          // Country/destination chat → send via Salma
+          sendMessage(msg);
+        }
+      }
+    }
+
+    function createRec(micBtn, inputEl) {
+      const rec = new SpeechRecognition();
+      rec.lang = 'es-ES';
+      rec.interimResults = true;
+      rec.continuous = false;
+      rec.maxAlternatives = 1;
+
+      rec.onstart = () => {
+        listening = true;
+        micBtn.classList.add('listening');
+        inputEl.classList.add('mic-active');
+      };
+
+      rec.onresult = (event) => {
+        gotResult = true;
+        let current = '';
+        for (let i = 0; i < event.results.length; i++) {
+          current += event.results[i][0].transcript;
+        }
+        const sep = accumulatedText ? ' ' : '';
+        inputEl.value = accumulatedText + sep + current;
+      };
+
+      rec.onend = () => {
+        if (!listening) return;
+        if (inputEl.value.trim()) accumulatedText = inputEl.value.trim();
+        setTimeout(() => {
+          if (!listening) return;
+          try {
+            const newRec = createRec(micBtn, inputEl);
+            activeRec = newRec;
+            newRec.start();
+          } catch (_) { stopAndSend(); }
+        }, 200);
+      };
+
+      rec.onerror = (event) => {
+        if (event.error === 'aborted' || event.error === 'no-speech') return;
+        listening = false;
+        resetMicState();
+      };
+
+      return rec;
+    }
+
+    function startListening(micBtn) {
+      const bar = micBtn.closest('.salma-chat-input-bar');
+      const inputEl = bar ? bar.querySelector('input, textarea') : null;
+      if (!inputEl) return;
+
+      activeMicBtn = micBtn;
+      activeInputEl = inputEl;
+      accumulatedText = '';
+      gotResult = false;
+
+      try {
+        const rec = createRec(micBtn, inputEl);
+        activeRec = rec;
+        rec.start();
+      } catch (e) {
+        resetMicState();
+        setTimeout(() => {
+          try {
+            const rec = createRec(micBtn, inputEl);
+            activeRec = rec;
+            rec.start();
+          } catch (_) { resetMicState(); }
+        }, 300);
+      }
+    }
+
+    function handleMicTap(e) {
+      const micBtn = e.target.closest('.salma-mic, .app-mic');
+      if (!micBtn) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (listening) {
+        stopAndSend();
         return;
       }
-      recognition = new SpeechRecognition();
-      recognition.lang = 'es-ES';
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
+      startListening(micBtn);
+    }
 
-      recognition.onresult = (e) => {
-        const text = e.results[0][0].transcript;
-        input.value = text;
-        input.dispatchEvent(new Event('input'));
-      };
-      recognition.onend = () => { recording = false; mic.classList.remove('recording'); };
-      recognition.onerror = () => { recording = false; mic.classList.remove('recording'); };
+    // Block long-press context menu on mic
+    document.addEventListener('contextmenu', (e) => {
+      if (e.target.closest('.salma-mic, .app-mic')) e.preventDefault();
+    });
 
-      recording = true;
-      mic.classList.add('recording');
-      recognition.start();
+    // touchend for instant mobile response
+    document.addEventListener('touchend', handleMicTap);
+    // click as fallback for desktop
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.salma-mic, .app-mic') && 'ontouchend' in window) return;
+      handleMicTap(e);
     });
   }
 

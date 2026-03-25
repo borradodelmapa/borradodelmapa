@@ -576,15 +576,6 @@ const salma = {
     if (!document.getElementById('chat-area')) {
       $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
     }
-    // Saludo de Salma si el chat está vacío
-    const area = document.getElementById('chat-area');
-    if (!skipWelcome && area && area.children.length === 0) {
-      const hasRoutes = typeof currentUser !== 'undefined' && currentUser && document.querySelectorAll('.viaje-card:not(.viaje-card-new)').length > 0;
-      const msg = hasRoutes
-        ? SALMA_WELCOME_RETURNING
-        : SALMA_WELCOME_MESSAGES[Math.floor(Math.random() * SALMA_WELCOME_MESSAGES.length)];
-      this._addSalmaBubble(msg);
-    }
   },
 
   _getChatArea() {

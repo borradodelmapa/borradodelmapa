@@ -3,6 +3,15 @@
    Renderizado ÚNICO de la tarjeta de guía
    ═══════════════════════════════════════════ */
 
+// Asegurar que escapeHTML existe (en destinos no se carga app.js)
+if (typeof escapeHTML === 'undefined') {
+  window.escapeHTML = function(str) {
+    const d = document.createElement('div');
+    d.textContent = str || '';
+    return d.innerHTML;
+  };
+}
+
 const guideRenderer = {
 
   // Iconos por tipo de parada
