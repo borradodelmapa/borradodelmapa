@@ -167,8 +167,8 @@
                 streaming = false;
                 return;
               }
-              if (evt.text) {
-                fullText += evt.text;
+              if (evt.t || evt.text) {
+                fullText += evt.t || evt.text;
                 streamEl.innerHTML = miniMarkdown(fullText);
                 $body.scrollTop = $body.scrollHeight;
               }
