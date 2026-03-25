@@ -215,7 +215,7 @@ function buildSchemaOrg(dest, countryName, slug, faqs) {
 
 // ── HTML Template ────────────────────────────────────────────
 
-function buildHTML(dest, countryName, countryCode, slug, route) {
+function buildHTML(dest, countryName, countryCode, slug, route, nav) {
   const faqs = generateFAQs(dest, countryName);
   const schemaOrg = buildSchemaOrg(dest, countryName, slug, faqs);
   const budget = estimateBudget(dest);
@@ -282,11 +282,24 @@ function buildHTML(dest, countryName, countryCode, slug, route) {
     </div>
   </header>
 
+  <!-- NAV BREADCRUMB -->
+  <nav class="destino-nav-bar">
+    <a href="/destinos/" class="destino-nav-link">Destinos</a>
+    <span class="destino-nav-sep">›</span>
+    <a href="/destinos/${slugify(countryName)}.html" class="destino-nav-link">${escapeHTML(countryName)}</a>
+  </nav>
+
   <!-- HERO -->
   <section class="destino-hero">
-    <span class="destino-badge">${typeBadge(dest.tipo)}</span>
-    <h1 class="destino-title">Viajar a ${escapeHTML(dest.nombre)}</h1>
-    <p class="destino-subtitle">${escapeHTML(dest.region || '')} · ${escapeHTML(countryName)}</p>
+    <div class="destino-hero-nav">
+      ${nav?.prev ? `<a href="/destinos/${nav.prev.slug}.html" class="destino-arrow destino-arrow-prev" title="${escapeHTML(nav.prev.name)}">‹</a>` : '<span class="destino-arrow destino-arrow-disabled">‹</span>'}
+      <div class="destino-hero-center">
+        <span class="destino-badge">${typeBadge(dest.tipo)}</span>
+        <h1 class="destino-title">Viajar a ${escapeHTML(dest.nombre)}</h1>
+        <p class="destino-subtitle">${escapeHTML(dest.region || '')} · ${escapeHTML(countryName)}</p>
+      </div>
+      ${nav?.next ? `<a href="/destinos/${nav.next.slug}.html" class="destino-arrow destino-arrow-next" title="${escapeHTML(nav.next.name)}">›</a>` : '<span class="destino-arrow destino-arrow-disabled">›</span>'}
+    </div>
   </section>
 
   <!-- CONTENT -->
@@ -804,12 +817,17 @@ async function main() {
       if (destinos.length === 0) continue;
 
       // ── Nivel 3: páginas de destino ──
-      for (const dest of destinos) {
-        if (!dest.id || !dest.nombre) { errors++; continue; }
+      const validDests = destinos.filter(d => d.id && d.nombre);
+      for (let i = 0; i < validDests.length; i++) {
+        const dest = validDests[i];
         const slug = `${dest.id}-${countrySlug}`;
+        const nav = {
+          prev: i > 0 ? { slug: `${validDests[i-1].id}-${countrySlug}`, name: validDests[i-1].nombre } : null,
+          next: i < validDests.length - 1 ? { slug: `${validDests[i+1].id}-${countrySlug}`, name: validDests[i+1].nombre } : null,
+        };
         if (!dryRun) {
           const route = loadRoute(dest.id, countrySlug);
-          fs.writeFileSync(path.join(OUT_DIR, `${slug}.html`), buildHTML(dest, countryName, code, slug, route));
+          fs.writeFileSync(path.join(OUT_DIR, `${slug}.html`), buildHTML(dest, countryName, code, slug, route, nav));
         }
         allSitemapUrls.push({ url: `${DOMAIN}/destinos/${slug}.html`, priority: 0.8, freq: 'monthly' });
         totalDest++;

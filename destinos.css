@@ -520,7 +520,76 @@ details[open] > .destino-acc-header::after {
   margin-bottom: 32px;
 }
 
-/* ── Breadcrumb ──────────────────────────────────────────── */
+/* ── Nav bar (breadcrumb) ─────────────────────────────────── */
+
+.destino-nav-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 20px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .08em;
+  color: rgba(244, 239, 230, .4);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.destino-nav-link {
+  color: rgba(244, 239, 230, .5);
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.destino-nav-link:hover {
+  color: var(--dorado);
+}
+
+.destino-nav-sep {
+  color: rgba(244, 239, 230, .25);
+}
+
+/* ── Hero nav (prev/next arrows) ─────────────────────────── */
+
+.destino-hero-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.destino-hero-center {
+  flex: 1;
+  text-align: center;
+}
+
+.destino-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(244, 239, 230, .06);
+  border: 1px solid var(--linea);
+  color: var(--dorado);
+  font-size: 24px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all .2s;
+  flex-shrink: 0;
+}
+
+.destino-arrow:hover {
+  background: rgba(212, 160, 23, .12);
+  border-color: var(--dorado);
+}
+
+.destino-arrow-disabled {
+  opacity: .2;
+  pointer-events: none;
+}
+
+/* ── Breadcrumb (country pages) ──────────────────────────── */
 
 .destino-breadcrumb {
   font-family: var(--font-mono);
@@ -710,7 +779,7 @@ details[open] > .destino-acc-header::after {
   font-size: 10px;
   letter-spacing: .08em;
   color: rgba(244, 239, 230, .4);
-  margin-left: auto;
+  margin-left: 8px;
 }
 
 .destino-stop {

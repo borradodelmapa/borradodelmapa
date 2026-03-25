@@ -6251,26 +6251,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://borradodelmapa.com/destinos/upper-mustang-nepal.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://borradodelmapa.com/destinos/langtang-nepal.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://borradodelmapa.com/destinos/patan-nepal.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://borradodelmapa.com/destinos/nepal.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
     <loc>https://borradodelmapa.com/destinos/port-moresby-papua-nueva-guinea.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
