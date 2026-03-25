@@ -805,7 +805,7 @@ body {
 }
 .salma-info-hero-big {
   font-family:var(--font-mono); font-size:18px; font-weight:700;
-  color:var(--dorado); letter-spacing:.08em; margin-top:4px;
+  color:#d4a017; letter-spacing:.08em; margin-top:4px; margin-bottom:16px;
 }
 .salma-info-list { display:flex; flex-direction:column; gap:10px; }
 .salma-info-item {
