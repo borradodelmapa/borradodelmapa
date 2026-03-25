@@ -261,9 +261,14 @@ async function loadUserGuides() {
           <div class="viaje-card-meta">${d.num_dias || d.dias || '?'} DÍAS · ${escapeHTML((d.destino || '').toUpperCase())}</div>
         </div>
         <button class="viaje-card-delete" data-doc-id="${doc.id}" title="Eliminar guía">✕</button>`;
-      // Click en la tarjeta → abrir guía
+      // Click en la tarjeta → abrir guía o página de destino
       card.addEventListener('click', (e) => {
-        if (e.target.closest('.viaje-card-delete')) return; // no abrir si es el botón borrar
+        if (e.target.closest('.viaje-card-delete')) return;
+        // Guías light (de KV) → abrir página de destino
+        if (d.source === 'kv-nivel2' && d.slug) {
+          window.location.href = '/destinos/' + d.slug + '.html';
+          return;
+        }
         if (typeof salma !== 'undefined') salma.cargarGuia(doc.id, d);
       });
       // Click en borrar
@@ -271,6 +276,11 @@ async function loadUserGuides() {
         e.stopPropagation();
         if (!confirm('¿Eliminar esta guía?')) return;
         try {
+          // Borrar guía pública si existe
+          const slug = d.slug;
+          if (slug) {
+            await db.collection('public_guides').doc(slug).delete();
+          }
           await db.collection('users').doc(currentUser.uid).collection('maps').doc(doc.id).delete();
           card.remove();
           showToast('Guía eliminada');

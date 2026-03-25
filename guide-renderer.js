@@ -145,14 +145,23 @@ const guideRenderer = {
           menu.remove(); overlay.remove();
 
           if (action === 'link') {
-            let shareUrl = window.location.href;
+            let shareUrl = null;
             if (typeof salma !== 'undefined' && salma.currentRouteId && typeof db !== 'undefined' && typeof currentUser !== 'undefined' && currentUser) {
               try {
-                const doc = await db.collection('users').doc(currentUser.uid)
+                const userDoc = await db.collection('users').doc(currentUser.uid)
                   .collection('maps').doc(salma.currentRouteId).get();
-                const slug = doc.data()?.slug;
+                let slug = userDoc.data()?.slug;
+                // Si no tiene slug, generar y publicar ahora
+                if (!slug && typeof generateSlug === 'function' && typeof publishGuide === 'function') {
+                  slug = generateSlug(r.title || r.name || 'mi-ruta');
+                  publishGuide(salma.currentRouteId, userDoc.data(), slug, r).catch(() => {});
+                }
                 if (slug) shareUrl = 'https://borradodelmapa.com/' + slug;
               } catch (_) {}
+            }
+            if (!shareUrl) {
+              showToast('Guarda la guía primero para compartirla');
+              return;
             }
             if (navigator.share) {
               navigator.share({ title: r.title || 'Mi ruta de viaje', text: 'Mapa en mano, viaje en camino', url: shareUrl }).catch(() => {});

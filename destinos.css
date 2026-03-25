@@ -1,0 +1,596 @@
+/* ═══ DESTINOS — Páginas SEO de destinos ═══
+   Mobile-first, dark theme, reutiliza variables de styles.css
+*/
+
+/* ── Page layout ────────────────────────────────────────── */
+
+.destino-page {
+  background: var(--negro);
+  color: var(--crema);
+  min-height: 100vh;
+  padding-top: 56px; /* header height */
+}
+
+.app-logo-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ── Hero ────────────────────────────────────────────────── */
+
+.destino-hero {
+  text-align: center;
+  padding: 48px 20px 32px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.destino-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  color: var(--dorado);
+  border: 1px solid rgba(212, 160, 23, .3);
+  border-radius: var(--radius-pill, 100px);
+  margin-bottom: 16px;
+}
+
+.destino-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 8vw, 56px);
+  color: var(--blanco);
+  letter-spacing: 2px;
+  line-height: 1.1;
+  margin: 0 0 8px;
+}
+
+.destino-subtitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  color: var(--dorado);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* ── Content ─────────────────────────────────────────────── */
+
+.destino-content {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+  padding-right: 70px; /* espacio para FAB flotante */
+}
+
+@media (min-width: 900px) {
+  .destino-content { padding-right: 20px; } /* en pantallas anchas el FAB no tapa */
+}
+
+.destino-desc {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(244, 239, 230, .85);
+  margin: 0 0 32px;
+}
+
+/* ── Quick Facts ─────────────────────────────────────────── */
+
+.destino-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 36px;
+}
+
+.destino-fact {
+  background: var(--gris, #111);
+  border: 1px solid var(--linea);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.destino-fact-icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.destino-fact-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: .12em;
+  color: rgba(244, 239, 230, .4);
+  text-transform: uppercase;
+}
+
+.destino-fact-value {
+  font-family: var(--font-tight);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--blanco);
+}
+
+.destino-security-ok { color: #4ade80; }
+.destino-security-warn { color: #f59e0b; }
+
+/* ── Sections ────────────────────────────────────────────── */
+
+.destino-section {
+  margin-bottom: 28px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--linea);
+}
+
+.destino-section:last-of-type {
+  border-bottom: none;
+}
+
+.destino-h2 {
+  font-family: var(--font-tight);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--blanco);
+  margin: 0 0 12px;
+}
+
+.destino-section p {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(244, 239, 230, .8);
+  margin: 0;
+}
+
+/* ── Highlight (consejo local) ───────────────────────────── */
+
+.destino-highlight {
+  border-left: 3px solid var(--dorado);
+  padding-left: 16px;
+  background: rgba(212, 160, 23, .04);
+  border-radius: 0 12px 12px 0;
+  padding: 20px;
+  padding-left: 20px;
+  border-bottom: none;
+}
+
+/* ── Dormir grid ─────────────────────────────────────────── */
+
+.destino-dormir-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 540px) {
+  .destino-dormir-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+.destino-dormir-card {
+  background: var(--gris, #111);
+  border: 1px solid var(--linea);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.destino-dormir-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: .12em;
+  color: var(--dorado);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.destino-dormir-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Activity list ───────────────────────────────────────── */
+
+.destino-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.destino-list li {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(244, 239, 230, .8);
+  padding: 8px 0;
+  padding-left: 20px;
+  position: relative;
+  border-bottom: 1px solid rgba(244, 239, 230, .05);
+}
+
+.destino-list li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: var(--dorado);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+/* ── FAQ ─────────────────────────────────────────────────── */
+
+.destino-faq-item {
+  margin-bottom: 20px;
+}
+
+.destino-faq-item h3 {
+  font-family: var(--font-tight);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--blanco);
+  margin: 0 0 6px;
+}
+
+.destino-faq-item p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(244, 239, 230, .7);
+  margin: 0;
+}
+
+/* ── CTA ─────────────────────────────────────────────────── */
+
+.destino-cta {
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: 20px;
+}
+
+.destino-cta h2 {
+  font-family: var(--font-tight);
+  font-size: 20px;
+  color: var(--blanco);
+  margin: 0 0 8px;
+}
+
+.destino-cta p {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: rgba(244, 239, 230, .5);
+  margin: 0 0 20px;
+}
+
+.destino-cta-btn {
+  display: inline-block;
+  padding: 14px 32px;
+  background: var(--dorado);
+  color: var(--negro);
+  font-family: var(--font-tight);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all .2s;
+}
+
+.destino-cta-btn:hover {
+  background: #e5b82a;
+  transform: translateY(-1px);
+}
+
+/* ── Share button ─────────────────────────────────────────── */
+
+.destino-share-btn {
+  display: block;
+  margin: 14px auto 0;
+  background: none;
+  border: none;
+  color: rgba(244, 239, 230, .4);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  cursor: pointer;
+  padding: 6px 12px;
+  transition: color .2s;
+}
+
+.destino-share-btn:hover {
+  color: var(--dorado);
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+
+.destino-footer {
+  text-align: center;
+  padding: 32px 20px 24px;
+  border-top: 1px solid var(--linea);
+}
+
+.destino-footer-logo {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: rgba(244, 239, 230, .3);
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.destino-footer-logo a {
+  color: rgba(244, 239, 230, .3);
+  text-decoration: none;
+}
+
+.destino-footer-logo span {
+  color: var(--dorado);
+}
+
+.destino-footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 12px;
+}
+
+.destino-footer-links a {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .08em;
+  color: rgba(244, 239, 230, .3);
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.destino-footer-links a:hover {
+  color: var(--dorado);
+}
+
+.destino-footer-copy {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: rgba(244, 239, 230, .2);
+  letter-spacing: .1em;
+  margin: 0;
+}
+
+/* ── Salma FAB ───────────────────────────────────────────── */
+
+.salma-fab {
+  position: fixed;
+  right: 20px;
+  top: 45%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  background: var(--dorado);
+  color: var(--negro);
+  border: none;
+  border-radius: 28px;
+  padding: 12px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 20px rgba(212, 160, 23, .3);
+  transition: all .25s;
+  font-family: var(--font-tight);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.salma-fab:hover {
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 6px 28px rgba(212, 160, 23, .5);
+}
+
+.salma-fab-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.salma-fab-label {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .salma-fab-label { display: inline; }
+}
+
+/* ── Salma Chat Popup ────────────────────────────────────── */
+
+.salma-chat-popup {
+  display: none;
+  position: fixed;
+  right: 20px;
+  top: 66px; /* debajo del header (56px + 10px) */
+  bottom: 20px;
+  z-index: 1001;
+  width: 380px;
+  max-width: calc(100vw - 40px);
+  background: var(--gris, #111);
+  border: 1px solid var(--linea);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, .6);
+  flex-direction: column;
+  animation: popupIn .2s ease;
+}
+
+.salma-chat-popup.open {
+  display: flex;
+}
+
+@keyframes popupIn {
+  from { opacity: 0; transform: translateY(10px) scale(.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.salma-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--linea);
+}
+
+.salma-chat-title {
+  font-family: var(--font-tight);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dorado);
+}
+
+.salma-chat-close {
+  background: none;
+  border: none;
+  color: rgba(244, 239, 230, .4);
+  font-size: 22px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.salma-chat-close:hover { color: var(--crema); }
+
+.salma-chat-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0; /* important for flex shrink */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(244, 239, 230, .1) transparent;
+}
+
+.salma-chat-bubble {
+  background: rgba(212, 160, 23, .08);
+  border: 1px solid rgba(212, 160, 23, .15);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--crema);
+  max-width: 90%;
+  align-self: flex-start;
+}
+
+.salma-chat-bubble.user {
+  background: rgba(244, 239, 230, .08);
+  border-color: rgba(244, 239, 230, .15);
+  align-self: flex-end;
+}
+
+.salma-chat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.salma-chip {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--dorado);
+  background: rgba(212, 160, 23, .08);
+  border: 1px solid rgba(212, 160, 23, .25);
+  border-radius: 100px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+
+.salma-chip:hover {
+  background: rgba(212, 160, 23, .2);
+  border-color: var(--dorado);
+}
+
+.salma-chat-input-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-top: 1px solid var(--linea);
+  gap: 8px;
+}
+
+.salma-chat-input {
+  flex: 1;
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--crema);
+  outline: none;
+  transition: border-color .2s;
+}
+
+.salma-chat-input::placeholder {
+  color: rgba(244, 239, 230, .25);
+}
+
+.salma-chat-input:focus {
+  border-color: var(--dorado);
+}
+
+.salma-chat-send {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--dorado);
+  color: var(--negro);
+  border: none;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+
+.salma-chat-send:hover {
+  background: #e5b82a;
+}
+
+/* ── Mobile responsive ───────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .destino-hero { padding: 32px 16px 24px; }
+  .destino-content { padding: 0 16px 60px; }
+  .destino-facts { gap: 8px; }
+  .destino-fact { padding: 12px; }
+
+  .salma-fab {
+    right: 12px;
+    padding: 10px 14px;
+  }
+
+  .salma-chat-popup {
+    right: 0;
+    left: 0;
+    top: 56px;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    animation: slideUp .25s ease;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
