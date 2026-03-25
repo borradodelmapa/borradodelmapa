@@ -2573,15 +2573,23 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
   },
 
   // ═══════════════════════════════════════════════════════════════
-  // CRON: Regenerar fichas KV caducadas (cada lunes 4:00 UTC)
+  // CRON: Lunes = regenerar fichas nivel 1 | Miércoles = generar rutas nivel 3
   // ═══════════════════════════════════════════════════════════════
   async scheduled(event, env, ctx) {
-    const MAX_PER_RUN = 5; // máx países por ejecución (~$0.025)
-    const MAX_AGE_DAYS = 180; // 6 meses
+    if (!env.SALMA_KB || !env.ANTHROPIC_API_KEY) return;
+
+    const dayOfWeek = new Date(event.scheduledTime).getUTCDay(); // 0=dom, 1=lun, 3=mié
+    if (dayOfWeek === 3) {
+      // MIÉRCOLES → Generar rutas nivel 3
+      await this._cronNivel3(env);
+      return;
+    }
+
+    // LUNES → Regenerar fichas nivel 1 caducadas
+    const MAX_PER_RUN = 5;
+    const MAX_AGE_DAYS = 180;
     const now = Date.now();
     const cutoff = now - (MAX_AGE_DAYS * 24 * 60 * 60 * 1000);
-
-    if (!env.SALMA_KB || !env.ANTHROPIC_API_KEY) return;
 
     try {
       // Leer el índice de países del KV
@@ -2681,6 +2689,99 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
 
     } catch (e) {
       console.log(`[KV Cron] Error general: ${e.message}`);
+    }
+  },
+
+  // ═══ CRON MIÉRCOLES: Generar rutas nivel 3 ═══
+  async _cronNivel3(env) {
+    const MAX_ROUTES = 3; // máx rutas por ejecución (~$0.18)
+    const ROUTE_PROMPT_TEMPLATE = (destName, country, days, region) =>
+      `Genera una ruta de viaje de ${days} días por ${destName}, ${country}. Responde SOLO con JSON válido. Estructura: {"title":"${destName} en ${days} días","name":"${destName} en ${days} días","country":"${country}","region":"${region}","duration_days":${days},"summary":"Resumen","stops":[{"name":"Nombre Google Maps","headline":"Nombre","narrative":"1-2 frases","day_title":"Título día","type":"lugar","day":1,"lat":0,"lng":0,"km_from_previous":0,"road_name":"carretera","road_difficulty":"bajo","estimated_hours":0}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/A/B","label":"Día 1"}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo","suggestions":["Sugerencia"]}. Reglas: 3-5 paradas/día, nombres exactos Google Maps, km reales, orden geográfico.`;
+
+    try {
+      // Leer índice de destinos con rutas generadas
+      let routeIndex = {};
+      const routeIdxJson = await env.SALMA_KB.get('_index:routes');
+      if (routeIdxJson) routeIndex = JSON.parse(routeIdxJson);
+
+      // Buscar destinos sin ruta (listar keys dest:*:destinos)
+      const destList = await env.SALMA_KB.list({ prefix: 'dest:', limit: 500 });
+      const countriesWithDests = [];
+      for (const key of destList.keys) {
+        if (key.name.endsWith(':destinos')) {
+          const code = key.name.replace('dest:', '').replace(':destinos', '');
+          countriesWithDests.push(code);
+        }
+      }
+
+      // Buscar destinos sin ruta cacheada
+      let generated = 0;
+      for (const code of countriesWithDests) {
+        if (generated >= MAX_ROUTES) break;
+
+        const destJson = await env.SALMA_KB.get('dest:' + code + ':destinos');
+        if (!destJson) continue;
+        const destinos = JSON.parse(destJson);
+
+        // Ficha del país para el nombre
+        const baseJson = await env.SALMA_KB.get('dest:' + code + ':base');
+        const countryName = baseJson ? JSON.parse(baseJson).pais : code;
+
+        for (const dest of destinos) {
+          if (generated >= MAX_ROUTES) break;
+          if (!dest.id || !dest.nombre) continue;
+
+          // ¿Ya tiene ruta?
+          const routeKey = 'route:' + code + ':' + dest.id + ':' + (dest.dias_recomendados || 3);
+          if (routeIndex[routeKey]) continue;
+
+          // Generar ruta con Sonnet
+          console.log(`[KV Cron L3] Generando: ${dest.nombre}, ${countryName} (${dest.dias_recomendados || 3} días)...`);
+
+          try {
+            const prompt = ROUTE_PROMPT_TEMPLATE(dest.nombre, countryName, dest.dias_recomendados || 3, dest.region || '');
+            const res = await fetch('https://api.anthropic.com/v1/messages', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': env.ANTHROPIC_API_KEY,
+                'anthropic-version': '2023-06-01',
+              },
+              body: JSON.stringify({
+                model: 'claude-sonnet-4-6',
+                max_tokens: 6000,
+                temperature: 0.7,
+                messages: [{ role: 'user', content: prompt }],
+              }),
+            });
+
+            const result = await res.json();
+            const text = result?.content?.[0]?.text || '';
+            const jsonMatch = text.match(/\{[\s\S]*\}/);
+            if (!jsonMatch) throw new Error('No JSON');
+
+            const route = JSON.parse(jsonMatch[0]);
+            if (!route.stops || route.stops.length === 0) throw new Error('Sin paradas');
+
+            // Guardar en KV
+            await env.SALMA_KB.put(routeKey, JSON.stringify(route), { expirationTtl: 2592000 });
+            routeIndex[routeKey] = Date.now();
+            generated++;
+            console.log(`[KV Cron L3] ✅ ${dest.nombre}: ${route.stops.length} paradas`);
+
+            await new Promise(r => setTimeout(r, 2000));
+          } catch (e) {
+            console.log(`[KV Cron L3] ❌ ${dest.nombre}: ${e.message}`);
+          }
+        }
+      }
+
+      // Guardar índice de rutas
+      await env.SALMA_KB.put('_index:routes', JSON.stringify(routeIndex));
+      console.log(`[KV Cron L3] Completado: ${generated} rutas generadas`);
+
+    } catch (e) {
+      console.log(`[KV Cron L3] Error general: ${e.message}`);
     }
   },
 };
