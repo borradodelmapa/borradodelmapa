@@ -360,6 +360,43 @@
     });
   }
 
+  // ═══ COMMUNITY ROUTES ═══
+
+  function initCommunityRoutes() {
+    const section = document.getElementById('destino-community');
+    const grid = document.getElementById('destino-community-grid');
+    if (!section || !grid || !DESTINO.pais) return;
+    if (typeof firebase === 'undefined' || !firebase.firestore) return;
+
+    const db = firebase.firestore();
+    db.collection('public_guides')
+      .where('destino', '==', DESTINO.pais)
+      .limit(20)
+      .get()
+      .then(snap => {
+        if (snap.empty) return;
+        let html = '';
+        snap.forEach(doc => {
+          const d = doc.data();
+          const slug = d.slug || doc.id;
+          const photo = d.cover_image || '';
+          const title = d.nombre || 'Ruta';
+          const days = d.num_dias || '?';
+          html += `
+            <a href="/${slug}" class="destino-community-card">
+              ${photo ? `<div class="destino-community-img" style="background-image:url('${photo}')"></div>` : ''}
+              <div class="destino-community-body">
+                <div class="destino-community-title">${title}</div>
+                <div class="destino-community-meta">${days} días</div>
+              </div>
+            </a>`;
+        });
+        grid.innerHTML = html;
+        section.style.display = '';
+      })
+      .catch(() => {});
+  }
+
   // ═══ INIT ═══
   initAuth();
   initPlaceholder();
@@ -368,5 +405,6 @@
   initIndexSearch();
   initRecentGuides();
   initMic();
+  initCommunityRoutes();
 
 })();

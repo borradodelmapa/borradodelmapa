@@ -556,6 +556,12 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script>
+  const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
+  if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
+  </script>
 </head>
 <body class="destino-page">
 
@@ -580,6 +586,12 @@ function buildCountryHTML(countryName, countryCode, destinos) {
     <div class="destino-country-grid">
       ${cardsHTML}
     </div>
+
+    <!-- RUTAS DE LA COMUNIDAD -->
+    <section class="destino-community" id="destino-community" style="display:none">
+      <h2 class="destino-index-continent-title">Rutas de viajeros</h2>
+      <div class="destino-community-grid" id="destino-community-grid"></div>
+    </section>
 
     <!-- SALMA INLINE -->
     <section class="destino-salma-section">

@@ -740,6 +740,67 @@ details[open] > .destino-acc-header::after {
   color: rgba(244, 239, 230, .4);
 }
 
+/* ── Community routes ─────────────────────────────────────── */
+
+.destino-community {
+  margin: 32px 0;
+}
+
+.destino-community-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 540px) {
+  .destino-community-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.destino-community-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--gris, #111);
+  border: 1px solid var(--linea);
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--crema);
+  transition: all .2s;
+}
+
+.destino-community-card:hover {
+  border-color: var(--dorado);
+}
+
+.destino-community-img {
+  width: 80px;
+  height: 60px;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+.destino-community-body {
+  padding: 10px 12px 10px 0;
+}
+
+.destino-community-title {
+  font-family: var(--font-tight);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blanco);
+  line-height: 1.2;
+}
+
+.destino-community-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .08em;
+  color: var(--dorado);
+  margin-top: 2px;
+}
+
 /* ── Subtle CTAs ─────────────────────────────────────────── */
 
 .destino-cta-subtle {
