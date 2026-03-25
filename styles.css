@@ -854,6 +854,183 @@ body {
 }
 .legal-links a:hover { color:rgba(244,239,230,.5); }
 
+/* ═══ COINS BUTTON (header) ═══ */
+.coins-btn {
+  font-family:var(--font-mono); font-size:11px; font-weight:700;
+  color:var(--dorado); background:rgba(212,160,23,.1);
+  border:1px solid rgba(212,160,23,.3); border-radius:var(--radius-pill);
+  padding:6px 12px; cursor:pointer; letter-spacing:.05em;
+  transition:all .2s; white-space:nowrap;
+}
+.coins-btn:hover { background:rgba(212,160,23,.2); border-color:var(--dorado); }
+
+/* ═══ COINS MODAL ═══ */
+.coins-modal-overlay {
+  position:fixed; inset:0; z-index:2000;
+  background:rgba(0,0,0,.7); backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center;
+  animation:fadeIn .2s ease;
+}
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.coins-modal {
+  background:var(--gris); border:1px solid var(--linea);
+  border-radius:var(--radius); padding:28px 24px;
+  max-width:360px; width:90%; position:relative; text-align:center;
+}
+.coins-modal-close {
+  position:absolute; top:10px; right:14px;
+  background:none; border:none; color:rgba(244,239,230,.4);
+  font-size:22px; cursor:pointer;
+}
+.coins-modal-close:hover { color:var(--crema); }
+.coins-modal-balance { margin-bottom:20px; }
+.coins-modal-balance-num {
+  font-family:var(--font-display); font-size:48px; color:var(--dorado);
+  line-height:1;
+}
+.coins-modal-balance-label {
+  font-family:var(--font-mono); font-size:11px; color:rgba(244,239,230,.5);
+  letter-spacing:.15em; text-transform:uppercase;
+}
+.coins-modal-free {
+  font-size:12px; color:var(--verde); margin-top:6px;
+  font-family:var(--font-mono); letter-spacing:.05em;
+}
+.coins-modal-packs {
+  display:flex; gap:10px; margin-bottom:16px;
+}
+.coins-modal-pack {
+  flex:1; background:rgba(255,255,255,.04); border:1px solid var(--linea);
+  border-radius:var(--radius-sm); padding:14px 8px; position:relative;
+}
+.coins-modal-pack-featured {
+  border-color:var(--dorado); background:rgba(212,160,23,.08);
+}
+.coins-modal-pack-tag {
+  position:absolute; top:-8px; left:50%; transform:translateX(-50%);
+  font-family:var(--font-mono); font-size:7px; letter-spacing:.12em;
+  background:var(--dorado); color:var(--negro); padding:2px 8px;
+  border-radius:var(--radius-pill); font-weight:700; white-space:nowrap;
+}
+.coins-modal-pack-name {
+  font-family:var(--font-tight); font-size:12px; font-weight:700;
+  color:var(--crema); margin-top:2px;
+}
+.coins-modal-pack-coins {
+  font-family:var(--font-display); font-size:18px; color:var(--dorado);
+  line-height:1.2; margin:4px 0;
+}
+.coins-modal-pack-btn {
+  width:100%; padding:8px 0; border:1px solid var(--linea-fuerte);
+  border-radius:6px; background:transparent;
+  color:var(--crema); font-family:var(--font-mono); font-size:12px;
+  font-weight:700; cursor:pointer; transition:all .2s;
+}
+.coins-modal-pack-btn:hover { border-color:var(--dorado); color:var(--dorado); }
+.coins-modal-pack-btn-featured {
+  background:var(--dorado); color:var(--negro); border-color:var(--dorado);
+}
+.coins-modal-pack-btn-featured:hover { opacity:.9; color:var(--negro); }
+.coins-modal-note {
+  font-size:11px; color:rgba(244,239,230,.35);
+  font-family:var(--font-mono); letter-spacing:.03em;
+}
+
+/* ═══ PRICING — Salma Coins ═══ */
+.pricing-free {
+  max-width:400px; width:100%; margin:32px auto 0; text-align:left;
+}
+.pricing-free-badge {
+  font-family:var(--font-mono); font-size:10px; letter-spacing:.2em;
+  color:var(--dorado2); margin-bottom:12px; text-align:center;
+}
+.pricing-free-detail { display:flex; flex-direction:column; gap:6px; }
+.pricing-free-item {
+  font-size:14px; color:var(--crema); display:flex; align-items:center; gap:8px;
+}
+.pricing-free-icon { font-size:13px; width:20px; text-align:center; flex-shrink:0; }
+.pricing-free-locked { opacity:.4; }
+
+.pricing-section {
+  max-width:500px; width:100%; margin:40px auto 0; text-align:center;
+}
+.pricing-section-title {
+  font-family:var(--font-display); font-size:28px; color:var(--dorado);
+  letter-spacing:2px; margin-bottom:4px;
+}
+.pricing-section-sub {
+  font-size:13px; color:rgba(244,239,230,.45); margin-bottom:24px;
+}
+.pricing-cards {
+  display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;
+}
+.pricing-card {
+  background:rgba(255,255,255,.04); border:1px solid var(--linea);
+  border-radius:var(--radius); padding:20px 12px; position:relative;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.pricing-card-featured {
+  border-color:var(--dorado); background:rgba(212,160,23,.08);
+}
+.pricing-card-badge {
+  position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+  font-family:var(--font-mono); font-size:8px; letter-spacing:.15em;
+  background:var(--dorado); color:var(--negro); padding:3px 10px;
+  border-radius:var(--radius-pill); font-weight:700; white-space:nowrap;
+}
+.pricing-card-name {
+  font-family:var(--font-tight); font-size:15px; font-weight:700;
+  color:var(--crema); margin-top:4px;
+}
+.pricing-card-coins {
+  font-family:var(--font-display); font-size:24px; color:var(--dorado);
+  letter-spacing:1px; line-height:1;
+}
+.pricing-card-price {
+  font-family:var(--font-tight); font-size:20px; font-weight:800;
+  color:var(--blanco);
+}
+.pricing-card-unit {
+  font-family:var(--font-mono); font-size:10px; color:rgba(244,239,230,.4);
+  letter-spacing:.05em;
+}
+.pricing-card-btn {
+  margin-top:8px; width:100%; padding:10px 0; border:1px solid var(--linea-fuerte);
+  border-radius:var(--radius-sm); background:transparent;
+  color:var(--crema); font-family:var(--font-mono); font-size:12px;
+  font-weight:700; letter-spacing:.08em; cursor:pointer; transition:all .2s;
+}
+.pricing-card-btn:hover { border-color:var(--dorado); color:var(--dorado); }
+.pricing-card-btn-featured {
+  background:var(--dorado); color:var(--negro); border-color:var(--dorado);
+}
+.pricing-card-btn-featured:hover { opacity:.9; color:var(--negro); }
+
+.pricing-costs {
+  margin-top:24px; text-align:left;
+  background:rgba(255,255,255,.03); border:1px solid var(--linea);
+  border-radius:var(--radius); padding:16px 20px;
+}
+.pricing-costs-title {
+  font-family:var(--font-tight); font-size:14px; font-weight:700;
+  color:var(--crema); margin-bottom:10px;
+}
+.pricing-cost-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:6px 0; border-bottom:1px solid rgba(255,255,255,.04);
+  font-size:13px; color:rgba(244,239,230,.6);
+}
+.pricing-cost-row:last-child { border-bottom:none; }
+.pricing-cost-val {
+  font-family:var(--font-mono); font-size:12px; color:var(--dorado);
+  font-weight:700;
+}
+
+@media (max-width:380px) {
+  .pricing-cards { grid-template-columns:1fr; gap:10px; max-width:260px; margin:0 auto; }
+  .pricing-card-featured { order:-1; }
+}
+
 /* ═══ DESKTOP ═══ */
 @media (min-width:768px) {
   .app-content { max-width:700px; margin:0 auto; }

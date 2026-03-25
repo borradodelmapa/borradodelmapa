@@ -85,12 +85,14 @@ El usuario es **Paco**, founder y único desarrollador. Trabaja desde portátil,
 
 ---
 
-## Modelo de negocio (freemium)
+## Modelo de negocio — Salma Coins (créditos recargables)
 
-- **Gratis**: 3 generaciones de rutas
-- **Básico**: 5 rutas / 3.99€
-- **Viajero**: 15 rutas / 9.99€
-- **Nómada**: 50 rutas / 24.99€
+- **Plan gratuito**: 3 rutas completas con IA (para siempre), 20 mensajes/día, sin búsquedas reales
+- **Salma Coins**: créditos que NO caducan, reembolsables si no se usan
+- **Packs**: Starter (10 coins / 4,99€), Viajero (25 coins / 9,99€), Explorador (60 coins / 19,99€)
+- **Costes por acción**: buscar vuelos (1), buscar hoteles (1), ruta con IA (2), copiloto (3), emergencia (2), resumen post-viaje (1)
+- **UI implementada**: sección precios en welcome, botón saldo en header, modal de compra, Salma avisa de rutas gratis restantes
+- **Pendiente**: integración Stripe, transacciones atómicas en Firestore, descontar coins en worker
 - Coste real por ruta: ~0.015€ (margen ~97%)
 
 ---

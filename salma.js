@@ -291,6 +291,10 @@ const salma = {
       if (this.currentRoute) body.current_route = this.currentRoute;
       if (window.currentUser?.country) body.nationality = window.currentUser.country;
       if (window.currentUser?.name) body.user_name = window.currentUser.name;
+      if (window.currentUser) {
+        body.coins_saldo = window.currentUser.coins_saldo || 0;
+        body.rutas_gratis_usadas = window.currentUser.rutas_gratis_usadas || 0;
+      }
       if (this._userLocation) body.user_location = this._userLocation;
       // Datos extra de detección
       if (extra.travel_dates) body.travel_dates = extra.travel_dates;

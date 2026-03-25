@@ -648,7 +648,7 @@ function getCountryCode(countryName) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas) {
   let systemPrompt = SALMA_SYSTEM_BASE;
 
   // Contexto mínimo del usuario + fecha actual
@@ -656,6 +656,18 @@ function buildMessages(history, message, currentRoute, userName, userNationality
   const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
   ctx.push(`[FECHA ACTUAL: ${today}]`);
   if (userName) ctx.push(`[USUARIO: ${userName}]`);
+
+  // ── Coins y rutas gratis ──
+  const rutasGratisRestantes = Math.max(0, 3 - (rutasGratisUsadas || 0));
+  const coins = coinsSaldo || 0;
+  ctx.push(`[SALMA COINS: ${coins} | RUTAS GRATIS RESTANTES: ${rutasGratisRestantes}/3]`);
+  ctx.push(`[INSTRUCCIONES SOBRE COINS — Lee atentamente:
+- El usuario tiene ${rutasGratisRestantes} ruta${rutasGratisRestantes !== 1 ? 's' : ''} gratis y ${coins} Salma Coins.
+- Si le quedan rutas gratis (>0): al generar una ruta, dile de forma natural cuántas le quedan después. Ejemplo: "Ya tienes tu ruta. Te queda 1 ruta gratis más — aprovéchala bien."
+- Si NO le quedan rutas gratis y NO tiene coins: cuando pida una ruta, dile con cariño que se le acabaron las gratis y que necesita Salma Coins para seguir. No seas brusca. Ejemplo: "Ey, ya usaste tus 3 rutas gratis. Para seguir creando rutas necesitas Salma Coins — dale al botón ✈ arriba a la derecha."
+- Si tiene coins: no hace falta mencionarlos salvo que le quede 1 solo. En ese caso: "Por cierto, te queda 1 coin. Para esta ruta necesitarás alguno más."
+- NUNCA interrumpas una conversación normal para hablar de coins. Solo menciónalos cuando el usuario pide algo que los requiere.
+- NUNCA digas precios de los packs ni hagas de vendedora. Solo informa del saldo y señala el botón.]`);
   if (userNationality) ctx.push(`[NACIONALIDAD: ${userNationality} — adapta visados]`);
   if (userLocationName) {
     ctx.push(`[UBICACIÓN DEL VIAJERO: ${userLocationName} — El viajero está AQUÍ ahora mismo. Usa esta ubicación cuando diga "cerca de mí", "aquí", "donde estoy".]`);
@@ -1988,6 +2000,8 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     const travelDates = body.travel_dates || null;
     const transport = body.transport || null;
     const withKids = body.with_kids || false;
+    const coinsSaldo = typeof body.coins_saldo === 'number' ? body.coins_saldo : 0;
+    const rutasGratisUsadas = typeof body.rutas_gratis_usadas === 'number' ? body.rutas_gratis_usadas : 0;
 
     // Reverse geocoding: convertir coordenadas → nombre de ciudad (Nominatim/OSM, gratis)
     let userLocationName = null;
@@ -2050,7 +2064,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     }
 
     // Construir mensajes
-    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids);
+    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas);
     const isRoute = isRouteRequest(message, history);
     const isFlightReq = isFlightRequest(message);
     const isHotelReq = isHotelRequest(message);
