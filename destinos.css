@@ -342,9 +342,14 @@ details[open] > .destino-acc-header::after {
 
 /* ── Share button ─────────────────────────────────────────── */
 
+.destino-share-wrap {
+  text-align: center;
+  margin: 28px 0 0;
+}
+
 .destino-share-btn {
-  display: block;
-  margin: 14px auto 0;
+  display: inline-block;
+  margin: 0;
   background: none;
   border: none;
   color: rgba(244, 239, 230, .4);
@@ -564,117 +569,38 @@ details[open] > .destino-acc-header::after {
   color: rgba(244, 239, 230, .4);
 }
 
-/* ── Salma FAB ───────────────────────────────────────────── */
+/* ── Salma Inline Section ─────────────────────────────────── */
 
-.salma-fab {
-  position: fixed;
-  right: 20px;
-  top: 45%;
-  transform: translateY(-50%);
-  z-index: 1000;
-  background: var(--dorado);
-  color: var(--negro);
-  border: none;
-  border-radius: 28px;
-  padding: 12px 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 4px 20px rgba(212, 160, 23, .3);
-  transition: all .25s;
-  font-family: var(--font-tight);
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.salma-fab:hover {
-  transform: translateY(-50%) scale(1.05);
-  box-shadow: 0 6px 28px rgba(212, 160, 23, .5);
-}
-
-.salma-fab-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.salma-fab-label {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .salma-fab-label { display: inline; }
-}
-
-/* ── Salma Chat Popup ────────────────────────────────────── */
-
-.salma-chat-popup {
-  display: none;
-  position: fixed;
-  right: 20px;
-  top: 66px; /* debajo del header (56px + 10px) */
-  bottom: 20px;
-  z-index: 1001;
-  width: 380px;
-  max-width: calc(100vw - 40px);
+.destino-salma-section {
   background: var(--gris, #111);
-  border: 1px solid var(--linea);
+  border: 1px solid rgba(212, 160, 23, .15);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, .6);
-  flex-direction: column;
-  animation: popupIn .2s ease;
+  margin-top: 20px;
+  margin-bottom: 40px;
 }
 
-.salma-chat-popup.open {
-  display: flex;
-}
-
-@keyframes popupIn {
-  from { opacity: 0; transform: translateY(10px) scale(.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.salma-chat-header {
+.destino-salma-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px;
+  gap: 10px;
+  padding: 16px;
   border-bottom: 1px solid var(--linea);
 }
 
-.salma-chat-avatar {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.salma-chat-title {
+.destino-salma-title {
   font-family: var(--font-tight);
   font-size: 14px;
   font-weight: 700;
   color: var(--dorado);
 }
 
-.salma-chat-close {
-  background: none;
-  border: none;
-  color: rgba(244, 239, 230, .4);
-  font-size: 22px;
-  cursor: pointer;
-  line-height: 1;
-  padding: 0;
+.salma-chat-avatar {
   width: 28px;
   height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 50%;
+  object-fit: cover;
 }
-
-.salma-chat-close:hover { color: var(--crema); }
 
 .salma-chat-body {
   flex: 1;
@@ -794,19 +720,4 @@ details[open] > .destino-acc-header::after {
     padding: 10px 14px;
   }
 
-  .salma-chat-popup {
-    right: 0;
-    left: 0;
-    top: 56px;
-    bottom: 0;
-    width: 100%;
-    max-width: 100%;
-    border-radius: 0;
-    animation: slideUp .25s ease;
-  }
-
-  @keyframes slideUp {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
 }

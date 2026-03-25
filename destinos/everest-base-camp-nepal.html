@@ -168,12 +168,31 @@
         </div>
     </section>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Campo Base del Everest</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Campo%20Base%20del%20Everest%2014%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Campo Base del Everest</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Campo Base del Everest. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Campo Base del Everest">💡 Consejos Campo Base del Everest</button>
+          <button class="salma-chip" data-msg="Itinerario 14 días en Campo Base del Everest">📋 Itinerario 14 días</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Campo Base del Everest">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Campo Base del Everest">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Campo Base del Everest">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Campo Base del Everest?|ruta por Nepal|¿dónde comer en Campo Base del Everest?|Campo Base del Everest en 14 días|presupuesto Nepal|¿es seguro viajar a Campo Base del Everest?|mejor época para Nepal">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -187,35 +206,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Campo Base del Everest. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Campo Base del Everest">💡 Consejos Campo Base del Everest</button>
-        <button class="salma-chip" data-msg="Itinerario 14 días en Campo Base del Everest">📋 Itinerario 14 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Campo Base del Everest">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Campo Base del Everest">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Campo Base del Everest">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Campo Base del Everest?|ruta por Nepal|¿dónde comer en Campo Base del Everest?|Campo Base del Everest en 14 días|presupuesto Nepal|¿es seguro viajar a Campo Base del Everest?|mejor época para Nepal">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Campo Base del Everest","pais":"Nepal","id":"everest-base-camp","code":"np"};

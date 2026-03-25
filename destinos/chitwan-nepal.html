@@ -168,12 +168,31 @@
         </div>
     </section>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Parque Nacional de Chitwan</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Parque%20Nacional%20de%20Chitwan%202%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Parque Nacional de Chitwan</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Parque Nacional de Chitwan. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Parque Nacional de Chitwan">💡 Consejos Parque Nacional de Chitwan</button>
+          <button class="salma-chip" data-msg="Itinerario 2 días en Parque Nacional de Chitwan">📋 Itinerario 2 días</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Parque Nacional de Chitwan">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Parque Nacional de Chitwan">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Parque Nacional de Chitwan">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Parque Nacional de Chitwan?|ruta por Nepal|¿dónde comer en Parque Nacional de Chitwan?|Parque Nacional de Chitwan en 2 días|presupuesto Nepal|¿es seguro viajar a Parque Nacional de Chitwan?|mejor época para Nepal">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -187,35 +206,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Parque Nacional de Chitwan. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Parque Nacional de Chitwan">💡 Consejos Parque Nacional de Chitwan</button>
-        <button class="salma-chip" data-msg="Itinerario 2 días en Parque Nacional de Chitwan">📋 Itinerario 2 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Parque Nacional de Chitwan">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Parque Nacional de Chitwan">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Parque Nacional de Chitwan">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Parque Nacional de Chitwan?|ruta por Nepal|¿dónde comer en Parque Nacional de Chitwan?|Parque Nacional de Chitwan en 2 días|presupuesto Nepal|¿es seguro viajar a Parque Nacional de Chitwan?|mejor época para Nepal">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Parque Nacional de Chitwan","pais":"Nepal","id":"chitwan","code":"np"};

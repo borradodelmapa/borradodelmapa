@@ -39,33 +39,14 @@
     });
   }
 
-  // ═══ CHAT FLOTANTE ═══
+  // ═══ CHAT INLINE ═══
 
-  const $fab = document.getElementById('salma-fab');
-  const $popup = document.getElementById('salma-chat-popup');
-  const $close = document.getElementById('salma-chat-close');
   const $body = document.getElementById('salma-chat-body');
   const $input = document.getElementById('salma-chat-input');
   const $send = document.getElementById('salma-chat-send');
   const $chips = document.getElementById('salma-chat-chips');
 
-  let chatOpen = false;
   let streaming = false;
-
-  function toggleChat() {
-    chatOpen = !chatOpen;
-    if (chatOpen) {
-      $popup.classList.add('open');
-      $fab.style.display = 'none';
-      setTimeout(() => $input?.focus(), 200);
-    } else {
-      $popup.classList.remove('open');
-      $fab.style.display = '';
-    }
-  }
-
-  if ($fab) $fab.addEventListener('click', toggleChat);
-  if ($close) $close.addEventListener('click', toggleChat);
 
   // Chips
   if ($chips) {

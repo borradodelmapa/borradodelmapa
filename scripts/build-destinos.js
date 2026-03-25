@@ -334,12 +334,31 @@ ${activitiesHTML}
       ${faqsHTML}
     </section>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por ${escapeHTML(dest.nombre)}</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=${encodeURIComponent(dest.nombre + ' ' + (dest.dias_recomendados || 3) + ' días')}" class="destino-cta-btn">Planear viaje ›</a>
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre ${escapeHTML(dest.nombre)}</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo ${escapeHTML(dest.nombre)}. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a ${escapeHTML(dest.nombre)}">💡 Consejos ${escapeHTML(dest.nombre)}</button>
+          <button class="salma-chip" data-msg="Itinerario ${dest.dias_recomendados || 3} días en ${escapeHTML(dest.nombre)}">📋 Itinerario ${dest.dias_recomendados || 3} días</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a ${escapeHTML(dest.nombre)}">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a ${escapeHTML(dest.nombre)}">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en ${escapeHTML(dest.nombre)}">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en ${escapeHTML(dest.nombre)}?|ruta por ${escapeHTML(countryName)}|¿dónde comer en ${escapeHTML(dest.nombre)}?|${escapeHTML(dest.nombre)} en ${dest.dias_recomendados || 3} días|presupuesto ${escapeHTML(countryName)}|¿es seguro viajar a ${escapeHTML(dest.nombre)}?|mejor época para ${escapeHTML(countryName)}">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -353,35 +372,6 @@ ${activitiesHTML}
     </div>
     <p class="destino-footer-copy">© ${new Date().getFullYear()} Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo ${escapeHTML(dest.nombre)}. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a ${escapeHTML(dest.nombre)}">💡 Consejos ${escapeHTML(dest.nombre)}</button>
-        <button class="salma-chip" data-msg="Itinerario ${dest.dias_recomendados || 3} días en ${escapeHTML(dest.nombre)}">📋 Itinerario ${dest.dias_recomendados || 3} días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a ${escapeHTML(dest.nombre)}">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a ${escapeHTML(dest.nombre)}">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en ${escapeHTML(dest.nombre)}">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en ${escapeHTML(dest.nombre)}?|ruta por ${escapeHTML(countryName)}|¿dónde comer en ${escapeHTML(dest.nombre)}?|${escapeHTML(dest.nombre)} en ${dest.dias_recomendados || 3} días|presupuesto ${escapeHTML(countryName)}|¿es seguro viajar a ${escapeHTML(dest.nombre)}?|mejor época para ${escapeHTML(countryName)}">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = ${JSON.stringify({ nombre: dest.nombre, pais: countryName, id: dest.id, code: countryCode })};

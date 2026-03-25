@@ -249,8 +249,13 @@ async function loadUserGuides() {
       .collection('maps').orderBy('createdAt', 'desc').get();
 
     const grid = document.getElementById('viajes-grid');
-    snap.forEach(doc => {
-      const d = doc.data();
+
+    // Recopilar todas las guías
+    const allGuides = [];
+    snap.forEach(doc => allGuides.push({ id: doc.id, data: doc.data() }));
+
+    // Función para crear una card
+    function createCard(doc, d) {
       const card = document.createElement('div');
       card.className = 'viaje-card';
       const photo = d.cover_image || destPhoto(d.destino || d.country || d.nombre || '');
@@ -261,35 +266,61 @@ async function loadUserGuides() {
           <div class="viaje-card-meta">${d.num_dias || d.dias || '?'} DÍAS · ${escapeHTML((d.destino || '').toUpperCase())}</div>
         </div>
         <button class="viaje-card-delete" data-doc-id="${doc.id}" title="Eliminar guía">✕</button>`;
-      // Click en la tarjeta → abrir guía o página de destino
       card.addEventListener('click', (e) => {
         if (e.target.closest('.viaje-card-delete')) return;
-        // Guías light (de KV) → abrir página de destino
         if (d.source === 'kv-nivel2' && d.slug) {
           window.location.href = '/destinos/' + d.slug + '.html';
           return;
         }
         if (typeof salma !== 'undefined') salma.cargarGuia(doc.id, d);
       });
-      // Click en borrar
       card.querySelector('.viaje-card-delete').addEventListener('click', async (e) => {
         e.stopPropagation();
         if (!confirm('¿Eliminar esta guía?')) return;
         try {
-          // Borrar guía pública si existe
           const slug = d.slug;
-          if (slug) {
-            await db.collection('public_guides').doc(slug).delete();
-          }
+          if (slug) await db.collection('public_guides').doc(slug).delete();
           await db.collection('users').doc(currentUser.uid).collection('maps').doc(doc.id).delete();
           card.remove();
+          // Si el grupo queda vacío, quitar el header
+          const group = card.closest('.viaje-group');
+          if (group && group.querySelectorAll('.viaje-card').length === 0) group.remove();
           showToast('Guía eliminada');
         } catch (err) {
           showToast('Error al eliminar');
         }
       });
-      grid.appendChild(card);
-    });
+      return card;
+    }
+
+    // Si más de 5 guías → agrupar por país
+    if (allGuides.length > 5) {
+      const byCountry = {};
+      for (const g of allGuides) {
+        const country = g.data.destino || 'Otros';
+        if (!byCountry[country]) byCountry[country] = [];
+        byCountry[country].push(g);
+      }
+      // Ordenar países alfabéticamente
+      const sorted = Object.keys(byCountry).sort((a, b) => a.localeCompare(b, 'es'));
+      for (const country of sorted) {
+        const group = document.createElement('div');
+        group.className = 'viaje-group';
+        group.innerHTML = `<div class="viaje-group-header">${escapeHTML(country.toUpperCase())} <span class="viaje-group-count">${byCountry[country].length}</span></div>`;
+        const groupGrid = document.createElement('div');
+        groupGrid.className = 'viaje-group-grid';
+        for (const g of byCountry[country]) {
+          groupGrid.appendChild(createCard(g, g.data));
+        }
+        group.appendChild(groupGrid);
+        grid.appendChild(group);
+      }
+    } else {
+      // Lista plana normal
+      for (const g of allGuides) {
+        grid.appendChild(createCard(g, g.data));
+      }
+    }
   } catch (e) {
     console.error('Error cargando guías:', e);
     showToast('Error al cargar guías');

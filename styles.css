@@ -617,6 +617,20 @@ body {
   backdrop-filter:blur(4px);
 }
 .viaje-card:hover .viaje-card-delete { opacity:1; }
+/* Agrupación por país (>5 guías) */
+.viaje-group { margin-bottom:20px; }
+.viaje-group-header {
+  font-family:var(--font-tight); font-size:14px; font-weight:700;
+  color:var(--dorado); letter-spacing:.08em;
+  padding:0 0 8px; margin-bottom:12px;
+  border-bottom:1px solid var(--linea);
+  display:flex; align-items:center; gap:8px;
+}
+.viaje-group-count {
+  font-family:var(--font-mono); font-size:10px;
+  color:rgba(244,239,230,.4); font-weight:400;
+}
+.viaje-group-grid { display:grid; gap:14px; }
 .viaje-card-delete:hover { background:rgba(200,50,50,.7); color:#fff; }
 @media (max-width:600px) { .viaje-card-delete { opacity:.7; } }
 .viaje-card-new {
