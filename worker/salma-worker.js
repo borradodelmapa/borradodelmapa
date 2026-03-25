@@ -2166,6 +2166,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
               body: JSON.stringify({
                 model: reqModel,
                 max_tokens: reqMaxTokens,
+                temperature: 0.7,
                 system: systemPrompt,
                 messages: currentMessages,
                 tools: SALMA_TOOLS,

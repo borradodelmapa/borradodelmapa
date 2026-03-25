@@ -95,6 +95,7 @@
   const $chips = document.getElementById('salma-chat-chips');
 
   let streaming = false;
+  let chatHistory = [];
 
   // Chips
   if ($chips) {
@@ -157,21 +158,29 @@
 
   // ═══ SEND + SSE ═══
 
+  // Limpiar texto de marcadores de ruta
+  function cleanRouteText(text) {
+    if (!text) return text;
+    const marker = text.indexOf('SALMA_ROUTE');
+    if (marker !== -1) return text.substring(0, marker).trim();
+    return text.replace(/[\n.][ ]?SAL[MA_ROUTE]*$/, '').trim();
+  }
+
   function sendMessage(text) {
     if (streaming) return;
     streaming = true;
 
     addBubble(text, true);
+    chatHistory.push({ role: 'user', content: text });
     if ($input) $input.value = '';
 
     const streamEl = addStreamBubble();
 
-    // No redirect — all messages go to Salma API
-
-    // Simple Q&A via worker — add destination context
-    const contextPrefix = DESTINO.nombre ? `[Contexto: el usuario está en la página de ${DESTINO.nombre}${DESTINO.pais ? ', ' + DESTINO.pais : ''}. Responde sobre este destino de forma breve y práctica.]\n\n` : '';
+    const contextPrefix = DESTINO.nombre ? `[Contexto: el usuario está en la página de ${DESTINO.nombre}${DESTINO.pais ? ', ' + DESTINO.pais : ''}]\n\n` : '';
     const body = {
-      message: contextPrefix + text
+      message: contextPrefix + text,
+      history: chatHistory.slice(-10),
+      stream: true
     };
 
     fetch(API, {
@@ -185,60 +194,157 @@
       if (ct.includes('application/json')) {
         return res.json().then(data => {
           streamEl.remove();
-          addBubble(data.reply || 'No he podido responder, prueba de nuevo.', false);
+          const reply = cleanRouteText(data.reply) || 'No he podido responder, prueba de nuevo.';
+          addBubble(reply, false);
+          chatHistory.push({ role: 'assistant', content: reply });
           streaming = false;
         });
       }
 
-      // SSE stream
+      // SSE stream — mismo sistema que el index
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let buffer = '';
       let fullText = '';
+      let resolved = false;
+      let textDone = false;
+      let draftSent = false;
 
-      function read() {
-        reader.read().then(({ done, value }) => {
-          if (done) {
-            streamEl.remove();
-            if (fullText) addBubble(fullText, false);
-            streaming = false;
-            return;
-          }
+      function processLines() {
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
 
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split('\n');
-          buffer = lines.pop() || '';
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const jsonStr = line.slice(6).trim();
+          if (!jsonStr) continue;
 
-          for (const line of lines) {
-            if (!line.startsWith('data: ')) continue;
-            const jsonStr = line.slice(6).trim();
-            if (!jsonStr) continue;
+          try {
+            const evt = JSON.parse(jsonStr);
 
-            try {
-              const evt = JSON.parse(jsonStr);
-              if (evt.done) {
-                streamEl.remove();
-                addBubble(evt.reply || fullText, false);
-                streaming = false;
-                return;
+            // DONE — final con ruta verificada
+            if (evt.done) {
+              streamEl.remove();
+              resolved = true;
+              const reply = cleanRouteText(evt.reply || fullText);
+              if (reply) {
+                addBubble(reply, false);
+                chatHistory.push({ role: 'assistant', content: reply });
               }
-              if (evt.t || evt.text) {
-                fullText += evt.t || evt.text;
-                streamEl.innerHTML = miniMarkdown(fullText);
+              // Renderizar ruta completa
+              if (evt.route && evt.route.stops && typeof guideRenderer !== 'undefined') {
+                const area = document.getElementById('chat-area') || $body;
+                // Crear chat-area si no existe
+                if (!document.getElementById('chat-area')) {
+                  const div = document.createElement('div');
+                  div.id = 'chat-area';
+                  $body.parentElement.insertBefore(div, $body.nextSibling);
+                }
+                try {
+                  guideRenderer.render(evt.route, {});
+                  // Scroll a la guía
+                  const gc = document.querySelector('.guide-card');
+                  if (gc) setTimeout(() => gc.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+                } catch (e) { console.warn('Error renderizando guía:', e); }
+                // Limpiar historial después de ruta
+                chatHistory = [];
+              } else if (draftSent) {
+                // Draft ya renderizado, parchear con datos verificados
+                if (evt.route && typeof guideRenderer !== 'undefined') {
+                  try { guideRenderer.updateVerified(evt.route); } catch (_) {}
+                }
+              }
+              streaming = false;
+              return;
+            }
+
+            // DRAFT — ruta borrador (render rápido)
+            if (evt.draft && !draftSent) {
+              draftSent = true;
+              textDone = true;
+              // Fijar burbuja de texto
+              streamEl.innerHTML = miniMarkdown(cleanRouteText(fullText));
+              streamEl.classList.remove('streaming');
+              if (evt.route && evt.route.stops && typeof guideRenderer !== 'undefined') {
+                if (!document.getElementById('chat-area')) {
+                  const div = document.createElement('div');
+                  div.id = 'chat-area';
+                  $body.parentElement.insertBefore(div, $body.nextSibling);
+                }
+                try {
+                  guideRenderer.render(evt.route);
+                  const gc = document.querySelector('.guide-card');
+                  if (gc) setTimeout(() => gc.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+                } catch (e) { console.warn('Error renderizando draft:', e); }
+              }
+            }
+
+            // GENERATING / KEEPALIVE — Salma está generando JSON
+            if ((evt.generating || evt.k) && !textDone) {
+              textDone = true;
+              streamEl.innerHTML = miniMarkdown(cleanRouteText(fullText));
+              streamEl.classList.remove('streaming');
+              // Mostrar loading
+              const loadDiv = document.createElement('div');
+              loadDiv.className = 'salma-chat-bubble streaming';
+              loadDiv.id = 'salma-destino-loading';
+              loadDiv.textContent = 'Generando ruta...';
+              $body.appendChild(loadDiv);
+              $body.scrollTop = $body.scrollHeight;
+            }
+
+            // TEXT CHUNK
+            if (evt.t || evt.text) {
+              fullText += evt.t || evt.text;
+              if (!textDone) {
+                const display = cleanRouteText(fullText);
+                streamEl.innerHTML = miniMarkdown(display);
                 $body.scrollTop = $body.scrollHeight;
               }
-            } catch (_) {}
-          }
-
-          read();
-        }).catch(() => {
-          streamEl.remove();
-          addBubble('Error de conexión. Prueba de nuevo.', false);
-          streaming = false;
-        });
+            }
+          } catch (_) {}
+        }
       }
 
-      read();
+      function pump() {
+        reader.read().then(result => {
+          if (result.value) {
+            buffer += decoder.decode(result.value, { stream: true });
+            try { processLines(); } catch (_) {}
+          }
+          if (resolved) {
+            const ld = document.getElementById('salma-destino-loading');
+            if (ld) ld.remove();
+            return;
+          }
+          if (result.done) {
+            if (buffer.trim()) { buffer += '\n'; try { processLines(); } catch (_) {} }
+            if (!resolved) {
+              streamEl.remove();
+              const ld = document.getElementById('salma-destino-loading');
+              if (ld) ld.remove();
+              const clean = cleanRouteText(fullText);
+              if (clean) {
+                addBubble(clean, false);
+                chatHistory.push({ role: 'assistant', content: clean });
+              }
+              streaming = false;
+            }
+            return;
+          }
+          pump();
+        }).catch(() => {
+          streamEl.remove();
+          const ld = document.getElementById('salma-destino-loading');
+          if (ld) ld.remove();
+          if (!resolved) {
+            addBubble('Error de conexión. Prueba de nuevo.', false);
+            streaming = false;
+          }
+        });
+      }
+      pump();
+
     }).catch(() => {
       streamEl.remove();
       addBubble('Error de conexión. Prueba de nuevo.', false);
