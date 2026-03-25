@@ -43,7 +43,7 @@ function updateHeader() {
   let html = '<button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?">?</button>';
   if (currentUser) {
     const coins = currentUser.coins_saldo || 0;
-    html += `<button class="coins-btn" id="btn-coins" title="Salma Coins">✈ ${coins}</button>`;
+    html += `<button class="coins-btn" id="btn-coins" title="Salma Coins"><span class="coins-icon-circle">S</span> ${coins}</button>`;
     const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
     html += `<div class="app-avatar" id="btn-avatar" title="Mis Viajes">${escapeHTML(initial)}</div>`;
   } else {
@@ -105,57 +105,6 @@ async function renderWelcome() {
         <div class="welcome-spacer"></div>
         <div class="welcome-chips" id="welcome-chips">
           ${defaultChips}
-        </div>
-
-        <!-- Sección gratuita -->
-        <div class="pricing-free">
-          <div class="pricing-free-badge">EMPIEZA GRATIS</div>
-          <div class="pricing-free-detail">
-            <div class="pricing-free-item"><span class="pricing-free-icon">✓</span> 3 rutas completas con IA</div>
-            <div class="pricing-free-item"><span class="pricing-free-icon">✓</span> 20 mensajes/día con Salma</div>
-            <div class="pricing-free-item pricing-free-locked"><span class="pricing-free-icon">🔒</span> Búsqueda real de vuelos</div>
-            <div class="pricing-free-item pricing-free-locked"><span class="pricing-free-icon">🔒</span> Búsqueda real de hoteles</div>
-            <div class="pricing-free-item pricing-free-locked"><span class="pricing-free-icon">🔒</span> Copiloto durante el viaje</div>
-          </div>
-        </div>
-
-        <!-- Planes de Salma Coins -->
-        <div class="pricing-section">
-          <div class="pricing-section-title">SALMA COINS</div>
-          <div class="pricing-section-sub">Créditos para desbloquear funciones premium. No caducan.</div>
-          <div class="pricing-cards">
-            <div class="pricing-card">
-              <div class="pricing-card-name">Starter</div>
-              <div class="pricing-card-coins">10 coins</div>
-              <div class="pricing-card-price">4,99€</div>
-              <div class="pricing-card-unit">0,50€/coin</div>
-              <button class="pricing-card-btn" data-pack="starter">Comprar</button>
-            </div>
-            <div class="pricing-card pricing-card-featured">
-              <div class="pricing-card-badge">RECOMENDADO</div>
-              <div class="pricing-card-name">Viajero</div>
-              <div class="pricing-card-coins">25 coins</div>
-              <div class="pricing-card-price">9,99€</div>
-              <div class="pricing-card-unit">0,40€/coin</div>
-              <button class="pricing-card-btn pricing-card-btn-featured" data-pack="viajero">Comprar</button>
-            </div>
-            <div class="pricing-card">
-              <div class="pricing-card-name">Explorador</div>
-              <div class="pricing-card-coins">60 coins</div>
-              <div class="pricing-card-price">19,99€</div>
-              <div class="pricing-card-unit">0,33€/coin</div>
-              <button class="pricing-card-btn" data-pack="explorador">Comprar</button>
-            </div>
-          </div>
-          <div class="pricing-costs">
-            <div class="pricing-costs-title">¿Qué puedes hacer con coins?</div>
-            <div class="pricing-cost-row"><span>Buscar vuelos reales</span><span class="pricing-cost-val">1 coin</span></div>
-            <div class="pricing-cost-row"><span>Buscar hoteles reales</span><span class="pricing-cost-val">1 coin</span></div>
-            <div class="pricing-cost-row"><span>Crear ruta completa con IA</span><span class="pricing-cost-val">2 coins</span></div>
-            <div class="pricing-cost-row"><span>Copiloto en tu viaje</span><span class="pricing-cost-val">3 coins</span></div>
-            <div class="pricing-cost-row"><span>Modo emergencia</span><span class="pricing-cost-val">2 coins</span></div>
-            <div class="pricing-cost-row"><span>Resumen post-viaje</span><span class="pricing-cost-val">1 coin</span></div>
-          </div>
         </div>
 
         <div class="legal-links">
@@ -903,7 +852,7 @@ function openCoinsModal() {
   if (existing) { existing.remove(); return; }
 
   const coins = currentUser ? (currentUser.coins_saldo || 0) : 0;
-  const rutasGratis = currentUser ? (3 - (currentUser.rutas_gratis_usadas || 0)) : 3;
+  const rutasGratis = currentUser ? Math.max(0, 3 - (currentUser.rutas_gratis_usadas || 0)) : 3;
 
   const overlay = document.createElement('div');
   overlay.id = 'coins-modal-overlay';
@@ -911,43 +860,62 @@ function openCoinsModal() {
   overlay.innerHTML = `
     <div class="coins-modal">
       <button class="coins-modal-close" id="coins-modal-close">&times;</button>
-      <div class="coins-modal-balance">
-        <div class="coins-modal-balance-num">${coins}</div>
-        <div class="coins-modal-balance-label">Salma Coins</div>
-        ${rutasGratis > 0 ? `<div class="coins-modal-free">${rutasGratis} ruta${rutasGratis > 1 ? 's' : ''} gratis restante${rutasGratis > 1 ? 's' : ''}</div>` : ''}
-      </div>
-      <div class="coins-modal-packs">
-        <div class="coins-modal-pack">
-          <div class="coins-modal-pack-name">Starter</div>
-          <div class="coins-modal-pack-coins">10 coins</div>
-          <button class="coins-modal-pack-btn" data-pack="starter">4,99€</button>
+
+      <!-- Saldo -->
+      <div class="coins-modal-saldo">
+        <div class="coins-modal-saldo-row">
+          <span class="coins-modal-saldo-label">Crédito</span>
+          <span class="coins-modal-saldo-val">${coins} coins</span>
         </div>
-        <div class="coins-modal-pack coins-modal-pack-featured">
-          <div class="coins-modal-pack-tag">RECOMENDADO</div>
-          <div class="coins-modal-pack-name">Viajero</div>
-          <div class="coins-modal-pack-coins">25 coins</div>
-          <button class="coins-modal-pack-btn coins-modal-pack-btn-featured" data-pack="viajero">9,99€</button>
-        </div>
-        <div class="coins-modal-pack">
-          <div class="coins-modal-pack-name">Explorador</div>
-          <div class="coins-modal-pack-coins">60 coins</div>
-          <button class="coins-modal-pack-btn" data-pack="explorador">19,99€</button>
+        <div class="coins-modal-saldo-row">
+          <span class="coins-modal-saldo-label">Rutas gratis</span>
+          <span class="coins-modal-saldo-val coins-modal-saldo-free">${rutasGratis} de 3</span>
         </div>
       </div>
-      <div class="coins-modal-note">Los coins no caducan. Reembolsables si no se usan.</div>
+
+      <!-- Pack único -->
+      <div class="coins-modal-plan">
+        <div class="coins-modal-plan-header">
+          <div class="coins-modal-plan-name">Pack Viajero</div>
+          <div class="coins-modal-plan-coins">25 Salma Coins</div>
+        </div>
+        <div class="coins-modal-plan-price">9,99€</div>
+        <div class="coins-modal-plan-note">No caducan · Reembolsables si no se usan</div>
+        <button class="coins-modal-buy" id="coins-buy-btn">Comprar 25 coins</button>
+      </div>
+
+      <!-- Acordeón: qué puedes hacer -->
+      <button class="coins-modal-accordion" id="coins-accordion">
+        <span>¿Qué puedes hacer con coins?</span>
+        <span class="coins-modal-accordion-arrow">›</span>
+      </button>
+      <div class="coins-modal-accordion-body" id="coins-accordion-body">
+        <div class="coins-modal-cost"><span>Buscar vuelos reales</span><span>1</span></div>
+        <div class="coins-modal-cost"><span>Buscar hoteles reales</span><span>1</span></div>
+        <div class="coins-modal-cost"><span>Crear ruta con IA</span><span>2</span></div>
+        <div class="coins-modal-cost"><span>Copiloto en tu viaje</span><span>3</span></div>
+        <div class="coins-modal-cost"><span>Modo emergencia</span><span>2</span></div>
+        <div class="coins-modal-cost"><span>Resumen post-viaje</span><span>1</span></div>
+      </div>
     </div>`;
 
   document.body.appendChild(overlay);
 
-  // Cerrar al pulsar X o fuera
+  // Cerrar
   document.getElementById('coins-modal-close').addEventListener('click', () => overlay.remove());
   overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
 
-  // Botones de compra (de momento solo aviso — Stripe vendrá después)
-  overlay.querySelectorAll('.coins-modal-pack-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      showToast('Compra de coins disponible pronto');
-    });
+  // Acordeón
+  document.getElementById('coins-accordion').addEventListener('click', () => {
+    const body = document.getElementById('coins-accordion-body');
+    const arrow = overlay.querySelector('.coins-modal-accordion-arrow');
+    const open = body.classList.toggle('open');
+    arrow.style.transform = open ? 'rotate(90deg)' : '';
+  });
+
+  // Comprar (placeholder Stripe)
+  document.getElementById('coins-buy-btn').addEventListener('click', () => {
+    showToast('Conectando con Stripe... (próximamente)');
   });
 }
 
