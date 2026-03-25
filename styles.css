@@ -798,9 +798,14 @@ body {
   font-size:22px; cursor:pointer; line-height:1;
 }
 .salma-info-close:hover { color:var(--dorado); }
-.salma-info-title {
-  font-family:var(--font-mono); font-size:14px; font-weight:600;
-  color:var(--dorado); letter-spacing:.1em; margin-bottom:20px;
+.salma-info-hero { margin-bottom:20px; }
+.salma-info-hero-line {
+  font-family:var(--font-mono); font-size:11px;
+  color:rgba(244,239,230,.5); letter-spacing:.12em; line-height:1.8;
+}
+.salma-info-hero-big {
+  font-family:var(--font-mono); font-size:18px; font-weight:700;
+  color:var(--dorado); letter-spacing:.08em; margin-top:4px;
 }
 .salma-info-list { display:flex; flex-direction:column; gap:10px; }
 .salma-info-item {
