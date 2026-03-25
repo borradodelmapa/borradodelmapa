@@ -340,8 +340,8 @@ const salma = {
               });
           } catch (e) { console.warn('Error actualizando guía:', e); }
         } else {
-          // Ruta nueva
-          this._addSalmaBubble('Guárdala y la tienes completa en Mis Viajes. Cuando quieras otra, dime destino y días.');
+          // Ruta nueva — indicar que hay que pulsar GUARDAR
+          this._addSalmaBubble('Dale al botón GUARDAR de abajo para no perderla. Cuando quieras otra ruta, dime destino y días.');
           this.history = [];
         }
       }
