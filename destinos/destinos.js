@@ -111,17 +111,7 @@
 
     const streamEl = addStreamBubble();
 
-    // Check if this is a route request → redirect to main app
-    const routeKeywords = ['itinerario', 'ruta', 'días', 'dias', 'planear', 'planifica'];
-    const isRouteRequest = routeKeywords.some(k => text.toLowerCase().includes(k));
-    if (isRouteRequest) {
-      streamEl.textContent = 'Para crear una ruta completa con mapa y paradas, te llevo a la app.';
-      setTimeout(() => {
-        window.location.href = '/?q=' + encodeURIComponent(DESTINO.nombre + ' ' + text.match(/\d+/)?.[0] + ' días');
-      }, 1500);
-      streaming = false;
-      return;
-    }
+    // No redirect — all messages go to Salma API
 
     // Simple Q&A via worker — add destination context
     const contextPrefix = DESTINO.nombre ? `[Contexto: el usuario está en la página de ${DESTINO.nombre}${DESTINO.pais ? ', ' + DESTINO.pais : ''}. Responde sobre este destino de forma breve y práctica.]\n\n` : '';
