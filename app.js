@@ -227,6 +227,13 @@ async function renderWelcome() {
 async function loadUserGuides() {
   if (!currentUser) { showState('welcome'); return; }
 
+  // Si es el usuario Salma, redirigir al perfil público
+  const SALMA_UID = 'I4GiGrINQ3NKCg2RXa4ouwuDzxz1';
+  if (currentUser.uid === SALMA_UID) {
+    window.location.href = '/destinos/';
+    return;
+  }
+
   $content.innerHTML = `
     <div class="viajes-header fade-in">
       <h2 class="viajes-title">Mis Viajes</h2>
