@@ -626,11 +626,8 @@ const salma = {
     const el = document.getElementById('salma-stream-msg');
     if (el) el.removeAttribute('id');
     const txt = document.getElementById('salma-stream-text');
-    if (txt) {
-      // Convertir texto plano a HTML con enlaces clicables
-      txt.innerHTML = formatMessage(txt.textContent);
-      txt.removeAttribute('id');
-    }
+    if (txt) txt.removeAttribute('id');
+    // No re-procesar: el innerHTML ya está formateado durante el streaming
   },
 
   _removeStreamBubble() {
@@ -640,10 +637,8 @@ const salma = {
       if (txt && !txt.textContent.trim()) {
         el.remove(); // Vacía, quitar
       } else {
-        if (txt) {
-          txt.innerHTML = formatMessage(txt.textContent);
-          txt.removeAttribute('id');
-        }
+        // No re-procesar: el innerHTML ya está formateado
+        if (txt) txt.removeAttribute('id');
         if (el) el.removeAttribute('id');
       }
     }
