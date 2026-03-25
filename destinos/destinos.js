@@ -87,12 +87,18 @@
       .replace(/\n/g, '<br>');
   }
 
+  function scrollToChat() {
+    const salmaSection = document.querySelector('.destino-salma-section');
+    if (salmaSection) salmaSection.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }
+
   function addBubble(text, isUser) {
     const div = document.createElement('div');
     div.className = 'salma-chat-bubble' + (isUser ? ' user' : '');
     div.innerHTML = isUser ? (text || '').replace(/&/g,'&amp;').replace(/</g,'&lt;') : miniMarkdown(text);
     $body.appendChild(div);
     $body.scrollTop = $body.scrollHeight;
+    scrollToChat();
     return div;
   }
 
@@ -102,6 +108,7 @@
     div.textContent = '...';
     $body.appendChild(div);
     $body.scrollTop = $body.scrollHeight;
+    scrollToChat();
     return div;
   }
 
