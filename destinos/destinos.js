@@ -453,19 +453,10 @@
       });
     });
 
-    // Send → app con query
-    if (planearBtn) {
-      planearBtn.addEventListener('click', () => {
-        const q = searchInput.value.trim();
-        if (q) window.location.href = '/?q=' + encodeURIComponent(q);
-      });
-    }
-
-    // Enter → planear viaje
+    // Enter → prevenir redirect, el filtro ya funciona con input
     searchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        const q = searchInput.value.trim();
-        if (q) window.location.href = '/?q=' + encodeURIComponent(q);
+        e.preventDefault(); // Solo filtrar, no redirigir
       }
     });
   }
