@@ -448,6 +448,7 @@ ${activitiesHTML}
       </div>
       <div class="salma-chat-input-bar">
         <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en ${escapeHTML(dest.nombre)}?|ruta por ${escapeHTML(countryName)}|¿dónde comer en ${escapeHTML(dest.nombre)}?|${escapeHTML(dest.nombre)} en ${dest.dias_recomendados || 3} días|presupuesto ${escapeHTML(countryName)}|¿es seguro viajar a ${escapeHTML(dest.nombre)}?|mejor época para ${escapeHTML(countryName)}">
+        <button class="salma-mic" id="salma-mic" type="button" aria-label="Hablar">🎙️</button>
         <button class="salma-chat-send" id="salma-chat-send">›</button>
       </div>
     </section>
@@ -609,6 +610,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
       </div>
       <div class="salma-chat-input-bar">
         <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="ruta por ${escapeHTML(countryName)}|presupuesto ${escapeHTML(countryName)}|mejor época ${escapeHTML(countryName)}|¿es seguro ${escapeHTML(countryName)}?">
+        <button class="salma-mic" id="salma-mic" type="button" aria-label="Hablar">🎙️</button>
         <button class="salma-chat-send" id="salma-chat-send">›</button>
       </div>
     </section>
@@ -709,12 +711,10 @@ function buildIndexHTML(countriesByContinent) {
 
     <!-- Salma input -->
     <div class="destino-salma-input-wrap">
-      <div class="destino-salma-input-row">
-        <input type="text" class="destino-salma-input" id="destino-search" placeholder="" autocomplete="off" data-placeholders="Marruecos 5 días desde Tánger|Vietnam 2 semanas mochilero|Roma fin de semana romántico|Nepal trekking Everest|Tailandia playas e islas 10 días">
-        <div class="destino-input-actions">
-          <button class="destino-mic-btn" id="destino-mic" aria-label="Hablar" type="button">🎙️</button>
-          <button class="destino-send-btn" id="destino-planear" type="button">›</button>
-        </div>
+      <div class="salma-chat-input-bar salma-input-hero">
+        <input type="text" class="salma-chat-input" id="destino-search" placeholder="" autocomplete="off" data-placeholders="Marruecos 5 días desde Tánger|Vietnam 2 semanas mochilero|Roma fin de semana romántico|Nepal trekking Everest|Tailandia playas e islas 10 días">
+        <button class="salma-mic" id="salma-mic" type="button" aria-label="Hablar">🎙️</button>
+        <button class="salma-chat-send" id="destino-planear" type="button">›</button>
       </div>
     </div>
 
@@ -745,6 +745,7 @@ function buildIndexHTML(countriesByContinent) {
       </div>
       <div class="salma-chat-input-bar">
         <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="Japón 2 semanas|playa Caribe presupuesto|trekking Nepal|ruta Marruecos en coche|islas Grecia 7 días">
+        <button class="salma-mic" id="salma-mic" type="button" aria-label="Hablar">🎙️</button>
         <button class="salma-chat-send" id="salma-chat-send">›</button>
       </div>
     </section>

@@ -326,8 +326,8 @@
   // ═══ MIC (Speech Recognition) ═══
 
   function initMic() {
-    const mic = document.getElementById('destino-mic');
-    const input = document.getElementById('destino-search');
+    const mic = document.getElementById('salma-mic') || document.querySelector('.salma-mic');
+    const input = document.getElementById('destino-search') || $input;
     if (!mic || !input) return;
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;

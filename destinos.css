@@ -418,71 +418,45 @@ details[open] > .destino-acc-header::after {
   margin: 0;
 }
 
-/* ── Salma input (index) ──────────────────────────────────── */
+/* ── Salma input wrap (index hero) ────────────────────────── */
 
 .destino-salma-input-wrap {
   margin-bottom: 32px;
 }
 
-.destino-salma-input-row {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, .06);
+.salma-input-hero {
   border: 1px solid var(--dorado);
   border-radius: 14px;
   padding: 6px 6px 6px 18px;
-  transition: all .2s;
 }
 
-.destino-salma-input-row:focus-within {
+.salma-input-hero:focus-within {
   box-shadow: 0 0 20px rgba(212, 160, 23, .15);
-  background: rgba(255, 255, 255, .08);
 }
 
-.destino-salma-input {
-  flex: 1;
-  background: none;
-  border: none;
-  padding: 10px 0;
-  font-family: var(--font-body);
-  font-size: 16px;
-  color: var(--crema);
-  outline: none;
-}
+/* ── Mic button (unified) ────────────────────────────────── */
 
-.destino-salma-input::placeholder {
-  color: rgba(244, 239, 230, .35);
-}
-
-.destino-input-actions {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-}
-
-.destino-mic-btn {
-  width: 40px;
-  height: 40px;
+.salma-mic {
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: rgba(244, 239, 230, .08);
   border: 1px solid rgba(244, 239, 230, .15);
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all .2s;
+  flex-shrink: 0;
 }
 
-.destino-mic-btn:hover {
+.salma-mic:hover {
   background: rgba(244, 239, 230, .15);
   border-color: rgba(244, 239, 230, .3);
 }
 
-.destino-mic-btn.recording {
+.salma-mic.recording {
   background: rgba(220, 50, 50, .2);
   border-color: rgba(220, 50, 50, .5);
   animation: mic-pulse 1s ease-in-out infinite;
@@ -491,27 +465,6 @@ details[open] > .destino-acc-header::after {
 @keyframes mic-pulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(220, 50, 50, .3); }
   50% { box-shadow: 0 0 0 8px rgba(220, 50, 50, 0); }
-}
-
-.destino-send-btn {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
-  background: var(--dorado);
-  color: var(--negro);
-  border: none;
-  font-size: 22px;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all .15s;
-  flex-shrink: 0;
-}
-
-.destino-send-btn:hover {
-  background: #e5b82a;
 }
 
 /* ── Recent guides ───────────────────────────────────────── */
