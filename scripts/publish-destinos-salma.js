@@ -21,7 +21,7 @@ const COUNTRIES_FILE = path.join(ROOT, 'worker', 'kv', 'countries.json');
 
 const FIREBASE_API_KEY = 'AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA';
 const PROJECT_ID = 'borradodelmapa-85257';
-const SALMA_EMAIL = 'salma@borradodelmapa.com';
+const SALMA_EMAIL = 'salmaborradodelmapa@gmail.com';
 const SALMA_PASS = 'Zonakanjea159876';
 
 // ── Helpers ──────────────────────────────────────────────
