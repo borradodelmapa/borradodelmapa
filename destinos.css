@@ -413,6 +413,157 @@ details[open] > .destino-acc-header::after {
   margin: 0;
 }
 
+/* ── Breadcrumb ──────────────────────────────────────────── */
+
+.destino-breadcrumb {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  color: rgba(244, 239, 230, .4);
+  margin-bottom: 12px;
+}
+
+.destino-breadcrumb a {
+  color: var(--dorado);
+  text-decoration: none;
+}
+
+.destino-breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* ── Wide content (country + index) ──────────────────────── */
+
+.destino-content-wide {
+  max-width: 960px;
+  padding-right: 20px;
+}
+
+/* ── Country page — destination cards grid ───────────────── */
+
+.destino-country-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+@media (min-width: 540px) {
+  .destino-country-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 800px) {
+  .destino-country-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+.destino-country-card {
+  display: block;
+  background: var(--gris, #111);
+  border: 1px solid var(--linea);
+  border-radius: 14px;
+  padding: 20px;
+  text-decoration: none;
+  color: var(--crema);
+  transition: all .2s;
+}
+
+.destino-country-card:hover {
+  border-color: var(--dorado);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(212, 160, 23, .1);
+}
+
+.destino-country-card-badge {
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.destino-country-card-title {
+  font-family: var(--font-tight);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--blanco);
+  margin: 0 0 6px;
+}
+
+.destino-country-card-desc {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(244, 239, 230, .6);
+  margin: 0 0 12px;
+}
+
+.destino-country-card-meta {
+  display: flex;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .08em;
+  color: var(--dorado);
+}
+
+/* ── Index page — countries grid ─────────────────────────── */
+
+.destino-index-continent {
+  margin-bottom: 36px;
+}
+
+.destino-index-continent-title {
+  font-family: var(--font-tight);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--dorado);
+  margin: 0 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--linea);
+}
+
+.destino-index-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 540px) {
+  .destino-index-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+@media (min-width: 800px) {
+  .destino-index-grid { grid-template-columns: 1fr 1fr 1fr 1fr; }
+}
+
+.destino-index-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 16px;
+  background: var(--gris, #111);
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all .2s;
+}
+
+.destino-index-card:hover {
+  border-color: var(--dorado);
+  background: rgba(212, 160, 23, .05);
+}
+
+.destino-index-card-name {
+  font-family: var(--font-tight);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blanco);
+}
+
+.destino-index-card-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .08em;
+  color: rgba(244, 239, 230, .4);
+}
+
 /* ── Salma FAB ───────────────────────────────────────────── */
 
 .salma-fab {

@@ -392,13 +392,266 @@ ${activitiesHTML}
 </html>`;
 }
 
+// ── Continentes ──────────────────────────────────────────────
+
+const CONTINENTS = {
+  'Europa': ['al','ad','at','by','be','ba','bg','hr','cy','cz','dk','ee','fi','fr','de','gr','hu','is','ie','it','kz','lv','li','lt','lu','mk','mt','md','mc','me','nl','no','pl','pt','ro','ru','sm','rs','sk','si','es','se','ch','ua','gb','va'],
+  'Asia': ['af','am','az','bd','bt','bn','kh','cn','cy','ge','in','id','ir','iq','il','jp','jo','kz','kw','kg','la','lb','my','mv','mn','mm','np','kp','kr','om','pk','ps','ph','qa','sa','sg','lk','sy','tj','th','tl','tm','tr','ae','uz','vn','ye'],
+  'África': ['dz','ao','bj','bw','bf','bi','cv','cm','cf','td','km','cg','cd','ci','dj','eg','gq','er','sz','et','ga','gm','gh','gn','gw','ke','ls','lr','ly','mg','mw','ml','mr','mu','ma','mz','na','ne','ng','rw','st','sn','sc','sl','so','za','ss','sd','tz','tg','tn','ug','zm','zw'],
+  'América del Norte': ['ca','cr','cu','dm','do','sv','gt','ht','hn','jm','mx','ni','pa','tt','us'],
+  'América del Sur': ['ar','bo','br','cl','co','ec','gy','py','pe','sr','uy','ve'],
+  'Oceanía': ['au','fj','ki','fm','nr','nz','pw','pg','ws','to','tv','vu'],
+  'Caribe': ['ag','bs','bb','bz','gd','kn','lc','vc'],
+};
+
+function getContinent(code) {
+  for (const [cont, codes] of Object.entries(CONTINENTS)) {
+    if (codes.includes(code)) return cont;
+  }
+  return 'Otros';
+}
+
+// ── Country Page Template ────────────────────────────────────
+
+function buildCountryHTML(countryName, countryCode, destinos) {
+  const countrySlug = slugify(countryName);
+  const pageTitle = `Viajar a ${countryName}: ${destinos.length} destinos imprescindibles · Borradodelmapa`;
+  const metaDesc = `Guía para viajar a ${countryName}. Los ${destinos.length} mejores destinos con presupuesto, alojamiento y consejos. Planifica tu ruta con IA.`;
+  const canonical = `${DOMAIN}/destinos/${countrySlug}.html`;
+
+  const cardsHTML = destinos.map(dest => {
+    const destSlug = `${dest.id}-${countrySlug}`;
+    const badge = typeBadge(dest.tipo);
+    const budget = estimateBudget(dest);
+    return `
+      <a href="/destinos/${destSlug}.html" class="destino-country-card">
+        <div class="destino-country-card-badge">${badge}</div>
+        <h3 class="destino-country-card-title">${escapeHTML(dest.nombre)}</h3>
+        <p class="destino-country-card-desc">${escapeHTML((dest.descripcion || '').substring(0, 120))}...</p>
+        <div class="destino-country-card-meta">
+          <span>${dest.dias_recomendados || 3} días</span>
+          <span>${budget}/día</span>
+        </div>
+      </a>`;
+  }).join('');
+
+  const schemaOrg = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": `Destinos en ${countryName}`,
+    "description": metaDesc,
+    "numberOfItems": destinos.length,
+    "itemListElement": destinos.map((dest, i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "name": dest.nombre,
+      "url": `${DOMAIN}/destinos/${dest.id}-${countrySlug}.html`
+    }))
+  });
+
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>${escapeHTML(pageTitle)}</title>
+  <meta name="description" content="${escapeHTML(metaDesc)}">
+  <meta name="theme-color" content="#050505">
+  <meta name="robots" content="index,follow,max-snippet:-1">
+  <link rel="canonical" href="${canonical}">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Borradodelmapa">
+  <meta property="og:title" content="${escapeHTML(pageTitle)}">
+  <meta property="og:description" content="${escapeHTML(metaDesc)}">
+  <meta property="og:url" content="${canonical}">
+  <meta property="og:image" content="${DOMAIN}/og-image.jpg">
+  <meta property="og:locale" content="es_ES">
+
+  <script type="application/ld+json">${schemaOrg}</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/destinos.css">
+</head>
+<body class="destino-page">
+
+  <header class="app-header">
+    <a href="/" class="app-logo-link"><div class="app-logo">borrado<span>del</span>mapa</div></a>
+    <div class="app-header-actions" id="header-actions">
+      <div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>
+    </div>
+  </header>
+
+  <section class="destino-hero">
+    <nav class="destino-breadcrumb">
+      <a href="/destinos/">Destinos</a> ›
+    </nav>
+    <h1 class="destino-title">Viajar a ${escapeHTML(countryName)}</h1>
+    <p class="destino-subtitle">${destinos.length} DESTINOS</p>
+  </section>
+
+  <main class="destino-content destino-content-wide">
+    <div class="destino-country-grid">
+      ${cardsHTML}
+    </div>
+
+    <section class="destino-cta">
+      <h2>Planifica tu viaje a ${escapeHTML(countryName)}</h2>
+      <p>Salma te arma una ruta día a día con mapa, paradas y presupuesto.</p>
+      <a href="/?q=${encodeURIComponent(countryName + ' 7 días')}" class="destino-cta-btn">Planear viaje ›</a>
+    </section>
+  </main>
+
+  <footer class="destino-footer">
+    <div class="destino-footer-links">
+      <a href="/legal.html">Términos y condiciones</a>
+      <a href="/legal.html#privacidad">Privacidad</a>
+      <a href="/legal.html#cookies">Cookies</a>
+    </div>
+    <p class="destino-footer-copy">© ${new Date().getFullYear()} Borradodelmapa</p>
+  </footer>
+
+  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
+    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
+    <span class="salma-fab-label">Salma</span>
+  </button>
+
+  <div class="salma-chat-popup" id="salma-chat-popup">
+    <div class="salma-chat-header">
+      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
+      <span class="salma-chat-title">Salma</span>
+      <button class="salma-chat-close" id="salma-chat-close">×</button>
+    </div>
+    <div class="salma-chat-body" id="salma-chat-body">
+      <div class="salma-chat-bubble">¡Ey! ¿Quieres viajar a ${escapeHTML(countryName)}? Pregúntame lo que quieras.</div>
+      <div class="salma-chat-chips" id="salma-chat-chips">
+        <button class="salma-chip" data-msg="Mejor ruta por ${escapeHTML(countryName)}">📋 Mejor ruta</button>
+        <button class="salma-chip" data-msg="Presupuesto para ${escapeHTML(countryName)}">💰 Presupuesto</button>
+        <button class="salma-chip" data-msg="Vuelos a ${escapeHTML(countryName)}">✈️ Vuelos</button>
+      </div>
+    </div>
+    <div class="salma-chat-input-bar">
+      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="ruta por ${escapeHTML(countryName)}|presupuesto ${escapeHTML(countryName)}|mejor época ${escapeHTML(countryName)}|¿es seguro ${escapeHTML(countryName)}?">
+      <button class="salma-chat-send" id="salma-chat-send">›</button>
+    </div>
+  </div>
+
+  <script>
+  window.DESTINO = ${JSON.stringify({ nombre: countryName, pais: countryName, id: countryCode, code: countryCode })};
+  window.SALMA_API = "https://salma-api.paco-defoto.workers.dev";
+  </script>
+  <script src="/destinos/destinos.js"></script>
+</body>
+</html>`;
+}
+
+// ── Index Page Template ──────────────────────────────────────
+
+function buildIndexHTML(countriesByContinent) {
+  const pageTitle = 'Destinos de viaje — Guías por país · Borradodelmapa';
+  const metaDesc = 'Explora más de 190 países con guías de viaje prácticas. Presupuestos, alojamiento, qué hacer y consejos locales. Planifica tu ruta con IA.';
+
+  let continentsHTML = '';
+  for (const [continent, countries] of Object.entries(countriesByContinent)) {
+    if (countries.length === 0) continue;
+    const cardsHTML = countries.map(c => `
+        <a href="/destinos/${slugify(c.name)}.html" class="destino-index-card">
+          <span class="destino-index-card-name">${escapeHTML(c.name)}</span>
+          <span class="destino-index-card-count">${c.numDestinos} destinos</span>
+        </a>`).join('');
+
+    continentsHTML += `
+      <section class="destino-index-continent">
+        <h2 class="destino-index-continent-title">${escapeHTML(continent)}</h2>
+        <div class="destino-index-grid">
+          ${cardsHTML}
+        </div>
+      </section>`;
+  }
+
+  const schemaOrg = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Destinos de viaje",
+    "description": metaDesc,
+    "url": `${DOMAIN}/destinos/`
+  });
+
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>${escapeHTML(pageTitle)}</title>
+  <meta name="description" content="${escapeHTML(metaDesc)}">
+  <meta name="theme-color" content="#050505">
+  <meta name="robots" content="index,follow,max-snippet:-1">
+  <link rel="canonical" href="${DOMAIN}/destinos/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Borradodelmapa">
+  <meta property="og:title" content="${escapeHTML(pageTitle)}">
+  <meta property="og:description" content="${escapeHTML(metaDesc)}">
+  <meta property="og:url" content="${DOMAIN}/destinos/">
+  <meta property="og:image" content="${DOMAIN}/og-image.jpg">
+  <meta property="og:locale" content="es_ES">
+
+  <script type="application/ld+json">${schemaOrg}</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/destinos.css">
+</head>
+<body class="destino-page">
+
+  <header class="app-header">
+    <a href="/" class="app-logo-link"><div class="app-logo">borrado<span>del</span>mapa</div></a>
+    <div class="app-header-actions" id="header-actions">
+      <div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>
+    </div>
+  </header>
+
+  <section class="destino-hero">
+    <h1 class="destino-title">Destinos de viaje</h1>
+    <p class="destino-subtitle">MÁS DE 190 PAÍSES · GUÍAS PRÁCTICAS CON IA</p>
+  </section>
+
+  <main class="destino-content destino-content-wide">
+    ${continentsHTML}
+
+    <section class="destino-cta">
+      <h2>¿No encuentras tu destino?</h2>
+      <p>Dile a Salma adónde quieres ir y te arma la ruta en un minuto.</p>
+      <a href="/" class="destino-cta-btn">Pregúntale a Salma ›</a>
+    </section>
+  </main>
+
+  <footer class="destino-footer">
+    <div class="destino-footer-links">
+      <a href="/legal.html">Términos y condiciones</a>
+      <a href="/legal.html#privacidad">Privacidad</a>
+      <a href="/legal.html#cookies">Cookies</a>
+    </div>
+    <p class="destino-footer-copy">© ${new Date().getFullYear()} Borradodelmapa</p>
+  </footer>
+
+  <script src="/destinos/destinos.js"></script>
+</body>
+</html>`;
+}
+
 // ── Sitemap ──────────────────────────────────────────────────
 
-function buildSitemap(slugs) {
-  const urls = slugs.map(s => `  <url>
-    <loc>${DOMAIN}/destinos/${s}.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+function buildSitemap(allUrls) {
+  const urls = allUrls.map(u => `  <url>
+    <loc>${u.url}</loc>
+    <changefreq>${u.freq || 'monthly'}</changefreq>
+    <priority>${u.priority || 0.8}</priority>
   </url>`).join('\n');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -415,65 +668,86 @@ async function main() {
   const countryFlag = args.indexOf('--country');
   const onlyCountry = countryFlag >= 0 ? args[countryFlag + 1] : null;
 
-  // Load countries for name mapping
   const countries = JSON.parse(fs.readFileSync(COUNTRIES_FILE, 'utf-8'));
   const countryMap = {};
   for (const c of countries) countryMap[c.code] = c.name;
 
-  // Find KV files
   let files = fs.readdirSync(KV_DIR).filter(f => f.endsWith('.json'));
   if (onlyCountry) files = files.filter(f => f.startsWith(onlyCountry));
 
-  console.log(`\n📍 Build Destinos — Páginas SEO`);
+  console.log(`\n📍 Build Destinos — Páginas SEO (3 niveles)`);
   console.log(`   Países disponibles: ${files.length}`);
 
   if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
 
-  const allSlugs = [];
-  let totalPages = 0;
+  const allSitemapUrls = [];
+  const countriesByContinent = {};
+  let totalDest = 0;
+  let totalCountry = 0;
   let errors = 0;
 
   for (const file of files) {
     const code = file.replace('.json', '');
     const countryName = countryMap[code] || code;
+    const countrySlug = slugify(countryName);
 
     try {
       const data = JSON.parse(fs.readFileSync(path.join(KV_DIR, file), 'utf-8'));
       const destinos = data.destinos || [];
+      if (destinos.length === 0) continue;
 
+      // ── Nivel 3: páginas de destino ──
       for (const dest of destinos) {
-        if (!dest.id || !dest.nombre) {
-          console.warn(`   ⚠️ ${countryName}: destino sin id/nombre, saltando`);
-          errors++;
-          continue;
-        }
-
-        const slug = `${dest.id}-${slugify(countryName)}`;
-        allSlugs.push(slug);
-
+        if (!dest.id || !dest.nombre) { errors++; continue; }
+        const slug = `${dest.id}-${countrySlug}`;
         if (!dryRun) {
-          const html = buildHTML(dest, countryName, code, slug);
-          fs.writeFileSync(path.join(OUT_DIR, `${slug}.html`), html);
+          fs.writeFileSync(path.join(OUT_DIR, `${slug}.html`), buildHTML(dest, countryName, code, slug));
         }
-        totalPages++;
+        allSitemapUrls.push({ url: `${DOMAIN}/destinos/${slug}.html`, priority: 0.8, freq: 'monthly' });
+        totalDest++;
       }
+
+      // ── Nivel 2: página de país ──
+      if (!dryRun) {
+        fs.writeFileSync(path.join(OUT_DIR, `${countrySlug}.html`), buildCountryHTML(countryName, code, destinos));
+      }
+      allSitemapUrls.push({ url: `${DOMAIN}/destinos/${countrySlug}.html`, priority: 0.9, freq: 'weekly' });
+      totalCountry++;
+
+      // Track for index page
+      const continent = getContinent(code);
+      if (!countriesByContinent[continent]) countriesByContinent[continent] = [];
+      countriesByContinent[continent].push({ name: countryName, code, numDestinos: destinos.length });
+
     } catch (e) {
       console.error(`   ❌ ${code}: ${e.message}`);
       errors++;
     }
   }
 
-  // Generate sitemap
-  if (!dryRun && allSlugs.length > 0) {
-    fs.writeFileSync(SITEMAP_FILE, buildSitemap(allSlugs));
-    console.log(`   🗺️ Sitemap: ${SITEMAP_FILE} (${allSlugs.length} URLs)`);
+  // ── Nivel 1: página índice ──
+  if (!dryRun && !onlyCountry) {
+    // Sort countries within each continent
+    for (const cont of Object.keys(countriesByContinent)) {
+      countriesByContinent[cont].sort((a, b) => a.name.localeCompare(b.name, 'es'));
+    }
+    fs.writeFileSync(path.join(OUT_DIR, 'index.html'), buildIndexHTML(countriesByContinent));
+    allSitemapUrls.push({ url: `${DOMAIN}/destinos/`, priority: 1.0, freq: 'weekly' });
+    console.log(`   📄 Índice: destinos/index.html`);
+  }
+
+  // Sitemap
+  if (!dryRun && allSitemapUrls.length > 0) {
+    fs.writeFileSync(SITEMAP_FILE, buildSitemap(allSitemapUrls));
+    console.log(`   🗺️ Sitemap: ${allSitemapUrls.length} URLs`);
   }
 
   console.log(`\n── Resumen ──`);
-  console.log(`   ✅ Páginas generadas: ${totalPages}`);
+  console.log(`   📄 Índice: 1`);
+  console.log(`   🌍 Países: ${totalCountry}`);
+  console.log(`   📍 Destinos: ${totalDest}`);
   console.log(`   ⚠️ Errores: ${errors}`);
-  console.log(`   📁 Directorio: ${OUT_DIR}/`);
-  if (dryRun) console.log(`   (dry-run — no se generaron archivos)`);
+  if (dryRun) console.log(`   (dry-run)`);
 }
 
 main().catch(console.error);
