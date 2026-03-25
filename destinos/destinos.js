@@ -74,10 +74,18 @@
 
   // ═══ MESSAGES ═══
 
+  function miniMarkdown(text) {
+    return (text || '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/\n/g, '<br>');
+  }
+
   function addBubble(text, isUser) {
     const div = document.createElement('div');
     div.className = 'salma-chat-bubble' + (isUser ? ' user' : '');
-    div.textContent = text;
+    div.innerHTML = isUser ? (text || '').replace(/&/g,'&amp;').replace(/</g,'&lt;') : miniMarkdown(text);
     $body.appendChild(div);
     $body.scrollTop = $body.scrollHeight;
     return div;
@@ -171,7 +179,7 @@
               }
               if (evt.text) {
                 fullText += evt.text;
-                streamEl.textContent = fullText;
+                streamEl.innerHTML = miniMarkdown(fullText);
                 $body.scrollTop = $body.scrollHeight;
               }
             } catch (_) {}
