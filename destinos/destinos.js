@@ -124,11 +124,32 @@
   // ═══ MESSAGES ═══
 
   function miniMarkdown(text) {
-    return (text || '')
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')
-      .replace(/\n/g, '<br>');
+    let raw = text || '';
+    // Extraer imágenes markdown ANTES del escape
+    const images = [];
+    raw = raw.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, (_, alt, url) => {
+      const idx = images.length;
+      images.push('<img src="' + url + '" alt="' + alt + '" style="width:100%;max-width:280px;border-radius:8px;margin:6px 0;display:block;" loading="lazy">');
+      return '%%IMG' + idx + '%%';
+    });
+    // Escape HTML
+    let html = raw.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    // URLs → enlaces clicables
+    html = html.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:var(--dorado);word-break:break-all;">$1</a>');
+    // Teléfonos internacionales
+    html = html.replace(/(\+\d{1,3}[ .-]?\d{1,4}[ .-]?\d{2,4}[ .-]?\d{2,4}[ .-]?\d{0,4})/g, (match) => {
+      const clean = match.replace(/[\s.-]/g, '').trim();
+      return '<a href="tel:' + clean + '">' + match.trim() + '</a>';
+    });
+    // **negrita**
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    // *cursiva*
+    html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    // Restaurar imágenes
+    images.forEach((img, i) => { html = html.replace('%%IMG' + i + '%%', img); });
+    // Saltos de línea
+    html = html.replace(/\n/g, '<br>');
+    return html;
   }
 
   function scrollToChat() {
