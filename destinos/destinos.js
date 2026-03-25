@@ -29,7 +29,7 @@
       if (user) {
         const initial = (user.displayName || user.email || '?')[0].toUpperCase();
         $actions.innerHTML = helpBtn +
-          `<button class="coins-btn" onclick="window.location.href='/?coins=1'" title="Salma Coins"><span class="coins-icon-circle">S</span> 0</button>` +
+          `<button class="coins-btn" title="Salma Coins"><span class="coins-icon-circle">S</span> 0</button>` +
           `<div class="app-avatar" id="btn-avatar" title="Mis Viajes">${initial}</div>`;
         document.getElementById('btn-avatar')?.addEventListener('click', () => {
           window.location.href = '/?state=viajes';
@@ -51,14 +51,27 @@
         });
       }
 
-      // Help button → scroll to Salma
+      // Help button → show info
       document.getElementById('btn-help')?.addEventListener('click', () => {
-        const salma = document.querySelector('.destino-salma-section');
-        if (salma) {
-          salma.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else {
-          alert('Salma es tu copiloto de viaje con IA.\\nPregúntale lo que quieras sobre cualquier destino.');
-        }
+        const existing = document.querySelector('.salma-help-overlay');
+        if (existing) { existing.remove(); return; }
+        const overlay = document.createElement('div');
+        overlay.className = 'salma-help-overlay';
+        overlay.innerHTML = `
+          <div class="salma-help-modal">
+            <button class="salma-help-close" onclick="this.closest('.salma-help-overlay').remove()">×</button>
+            <h3>¿Qué puede hacer Salma?</h3>
+            <ul>
+              <li>✅ Crear rutas de viaje día a día</li>
+              <li>✅ Buscar vuelos y hoteles</li>
+              <li>✅ Presupuestos detallados</li>
+              <li>✅ Consejos locales y seguridad</li>
+              <li>✅ Acompañarte durante el viaje</li>
+            </ul>
+            <a href="/" class="salma-help-btn">Ir a Salma ›</a>
+          </div>`;
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+        document.body.appendChild(overlay);
       });
     });
   }
@@ -225,23 +238,17 @@
   // ═══ ROTATING PLACEHOLDER ═══
 
   function initPlaceholder() {
-    if (!$input) return;
-    const raw = $input.dataset.placeholders;
-    if (!raw) return;
-    const texts = raw.split('|').filter(Boolean);
-    if (texts.length === 0) return;
-
-    let idx = 0;
-    $input.placeholder = texts[0];
-    setInterval(() => {
-      idx = (idx + 1) % texts.length;
-      $input.style.transition = 'opacity .3s';
-      $input.style.opacity = '0';
-      setTimeout(() => {
-        $input.placeholder = texts[idx];
-        $input.style.opacity = '1';
-      }, 300);
-    }, 3000);
+    // Apply to ALL inputs with data-placeholders
+    document.querySelectorAll('[data-placeholders]').forEach(input => {
+      const texts = (input.dataset.placeholders || '').split('|').filter(Boolean);
+      if (texts.length === 0) return;
+      let idx = 0;
+      input.placeholder = texts[0];
+      setInterval(() => {
+        idx = (idx + 1) % texts.length;
+        input.placeholder = texts[idx];
+      }, 3000);
+    });
   }
 
   // ═══ SHARE BUTTON ═══

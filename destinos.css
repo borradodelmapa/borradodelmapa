@@ -827,6 +827,74 @@ details[open] > .destino-acc-header::after {
   margin-right: 12px;
 }
 
+/* ── Help modal ───────────────────────────────────────────── */
+
+.salma-help-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0, 0, 0, .7);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.salma-help-modal {
+  background: var(--gris, #111);
+  border: 1px solid rgba(212, 160, 23, .15);
+  border-radius: 16px;
+  padding: 28px 24px;
+  max-width: 340px;
+  width: 100%;
+  position: relative;
+}
+
+.salma-help-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: rgba(244, 239, 230, .4);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.salma-help-modal h3 {
+  font-family: var(--font-tight);
+  font-size: 16px;
+  color: var(--dorado);
+  margin: 0 0 14px;
+}
+
+.salma-help-modal ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px;
+}
+
+.salma-help-modal li {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--crema);
+  padding: 6px 0;
+}
+
+.salma-help-btn {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  background: var(--dorado);
+  color: var(--negro);
+  font-family: var(--font-tight);
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
 /* ── Salma Inline Section ─────────────────────────────────── */
 
 .destino-salma-section {
