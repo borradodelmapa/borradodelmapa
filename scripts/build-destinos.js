@@ -278,6 +278,7 @@ function buildHTML(dest, countryName, countryCode, slug, route, nav) {
   <header class="app-header">
     <a href="/" class="app-logo-link"><div class="app-logo">borrado<span>del</span>mapa</div></a>
     <div class="app-header-actions" id="header-actions">
+      <button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?" onclick="window.location.href='/?help=1'">?</button>
       <div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>
     </div>
   </header>
@@ -569,6 +570,7 @@ function buildCountryHTML(countryName, countryCode, destinos) {
   <header class="app-header">
     <a href="/" class="app-logo-link"><div class="app-logo">borrado<span>del</span>mapa</div></a>
     <div class="app-header-actions" id="header-actions">
+      <button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?" onclick="window.location.href='/?help=1'">?</button>
       <div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>
     </div>
   </header>
@@ -698,6 +700,7 @@ function buildIndexHTML(countriesByContinent) {
   <header class="app-header">
     <a href="/" class="app-logo-link"><div class="app-logo">borrado<span>del</span>mapa</div></a>
     <div class="app-header-actions" id="header-actions">
+      <button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?" onclick="window.location.href='/?help=1'">?</button>
       <div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>
     </div>
   </header>

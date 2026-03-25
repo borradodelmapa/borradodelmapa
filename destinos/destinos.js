@@ -24,14 +24,19 @@
     firebase.auth().onAuthStateChanged(user => {
       if (!$actions) return;
 
+      const helpBtn = '<button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?" onclick="window.location.href=\'/?help=1\'">?</button>';
+
       if (user) {
         const initial = (user.displayName || user.email || '?')[0].toUpperCase();
-        $actions.innerHTML = `<div class="app-avatar" id="btn-avatar" title="Mis Viajes">${initial}</div>`;
+        $actions.innerHTML = helpBtn +
+          `<button class="coins-btn" onclick="window.location.href='/?coins=1'" title="Salma Coins"><span class="coins-icon-circle">S</span> 0</button>` +
+          `<div class="app-avatar" id="btn-avatar" title="Mis Viajes">${initial}</div>`;
         document.getElementById('btn-avatar')?.addEventListener('click', () => {
           window.location.href = '/?state=viajes';
         });
       } else {
-        $actions.innerHTML = `<div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>`;
+        $actions.innerHTML = helpBtn +
+          `<div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>`;
         document.getElementById('btn-avatar')?.addEventListener('click', () => {
           window.location.href = '/?login=1';
         });
@@ -374,7 +379,7 @@
       .limit(20)
       .get()
       .then(snap => {
-        if (snap.empty) return;
+        if (snap.empty) { console.log('Community: 0 results for', DESTINO.pais); return; }
         let html = '';
         snap.forEach(doc => {
           const d = doc.data();
@@ -394,7 +399,7 @@
         grid.innerHTML = html;
         section.style.display = '';
       })
-      .catch(() => {});
+      .catch(err => { console.log('Community error:', err.message); });
   }
 
   // ═══ INIT ═══
