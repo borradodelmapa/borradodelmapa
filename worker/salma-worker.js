@@ -655,6 +655,106 @@ function getCountryCode(countryName) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// RESPUESTA DIRECTA DEL KV — sin llamar a Claude
+// ═══════════════════════════════════════════════════════════════
+
+function tryKVDirectAnswer(message, country, destination) {
+  if (!country) return null;
+  const m = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const c = country;
+  const pais = c.pais || '';
+
+  // ── Vacunas ──
+  if (/vacuna|vaccine|inmuniza/i.test(m)) {
+    return `**Vacunas para ${pais}:**\n${c.vacunas}\n\nAgua potable: ${c.agua_potable}\n\nEsto es orientativo — confirma con tu centro de vacunación internacional antes de viajar.`;
+  }
+
+  // ── Visado ──
+  if (/visado|visa|pasaporte|documentos?.*entrar|necesito.*para.*entrar|requisitos.*entrada/i.test(m)) {
+    let reply = `**Visado para ${pais}:**\n\nEspañoles: ${c.visado_espanoles}\nCiudadanos EU: ${c.visado_eu}`;
+    reply += `\n\nEsto es orientativo — confirma con la embajada o consulado para tu caso concreto.`;
+    return reply;
+  }
+
+  // ── Moneda / dinero ──
+  if (/moneda|currency|dinero|cambio|euros?|dolares?|cajero|atm|pagar|efectivo|tarjeta/i.test(m)) {
+    return `**Moneda en ${pais}:** ${c.moneda}\nCambio aproximado: ${c.cambio_aprox_eur}\n\nPropinas: ${c.propinas}`;
+  }
+
+  // ── Enchufes ──
+  if (/enchufe|plug|adaptador|voltaje|corriente|electricidad/i.test(m)) {
+    return `**Enchufes en ${pais}:** ${c.enchufes}\n\nLlévate un adaptador universal por si acaso.`;
+  }
+
+  // ── Seguridad ──
+  if (/segur|seguridad|peligro|safe|dangerous|robo|estafa|scam|cuidado/i.test(m)) {
+    return `**Seguridad en ${pais}:** ${c.seguridad}\n\nEmergencias: ${c.emergencias}`;
+  }
+
+  // ── Mejor época ──
+  if (/mejor.?epoca|cuando.*ir|cuando.*viajar|best.*time|temporada|estacion|clima|weather/i.test(m)) {
+    return `**Mejor época para ${pais}:**\n${c.mejor_epoca}\n\n**Evitar:** ${c.evitar_epoca}`;
+  }
+
+  // ── Presupuesto / coste ──
+  if (/presupuesto|budget|cuanto.*cuesta|coste|caro|barato|precio|gastar|dinero.*dia|cost/i.test(m)) {
+    return `**Coste diario en ${pais}:**\n\nMochilero: **${c.coste_diario_mochilero}**/día\nViajero medio: **${c.coste_diario_medio}**/día\n\nMoneda: ${c.moneda} (${c.cambio_aprox_eur})\nPropinas: ${c.propinas}`;
+  }
+
+  // ── Idioma ──
+  if (/idioma|language|hablan|inglés|ingles|comunicar/i.test(m)) {
+    return `**Idioma en ${pais}:** ${c.idioma_oficial}\n\nPara viajeros: ${c.idioma_viajero}`;
+  }
+
+  // ── Emergencias ──
+  if (/emergencia|emergency|telefono.*urgencia|numero.*emergencia|policia|ambulancia|hospital/i.test(m)) {
+    return `**Emergencias en ${pais}:** ${c.emergencias}\nPrefijo telefónico: ${c.prefijo_tel}`;
+  }
+
+  // ── Info general del país (pregunta amplia) ──
+  if (/info|informacion|cuentame|dime.*sobre|que.*saber|datos|basico|practica|practico|general/i.test(m)) {
+    let reply = `**${pais}** — Info práctica:\n\n`;
+    reply += `Capital: **${c.capital}**\n`;
+    reply += `Idioma: ${c.idioma_oficial}\n`;
+    reply += `Moneda: ${c.moneda} (${c.cambio_aprox_eur})\n`;
+    reply += `Visado (españoles): ${c.visado_espanoles}\n`;
+    reply += `Enchufes: ${c.enchufes}\n`;
+    reply += `Emergencias: ${c.emergencias}\n`;
+    reply += `Seguridad: ${c.seguridad}\n\n`;
+    reply += `Mejor época: ${c.mejor_epoca}\n\n`;
+    reply += `Coste mochilero: ${c.coste_diario_mochilero}/día | Medio: ${c.coste_diario_medio}/día\n\n`;
+    reply += `${c.curiosidad_viajera}`;
+    return reply;
+  }
+
+  // ── Destino específico (si tenemos datos nivel 2) ──
+  if (destination) {
+    const d = destination;
+    if (/donde.*dormir|alojamiento|hostal|hotel|hospeda|donde.*queda|sleep|stay/i.test(m)) {
+      return `**Dónde dormir en ${d.nombre}:**\n\nMochilero: ${d.donde_dormir?.mochilero}\nMedio: ${d.donde_dormir?.medio}\nConfort: ${d.donde_dormir?.comfort}`;
+    }
+    if (/donde.*comer|restaurante|comida|cena|cenar|eat|food/i.test(m)) {
+      return `**Dónde comer en ${d.nombre}:**\n${d.donde_comer}`;
+    }
+    if (/como.*llegar|llegar|transporte|ir.*a|get.*to|how.*get/i.test(m)) {
+      return `**Cómo llegar a ${d.nombre}:**\n${d.como_llegar}`;
+    }
+    if (/que.*hacer|actividades|ver|visit|hacer|planes|things.*do/i.test(m)) {
+      let reply = `**Qué hacer en ${d.nombre} (${d.dias_recomendados} días recomendados):**\n\n`;
+      if (d.que_hacer) reply += d.que_hacer.map(a => '— ' + a).join('\n');
+      if (d.consejo_local) reply += `\n\n**Consejo local:** ${d.consejo_local}`;
+      return reply;
+    }
+    if (/lluvia|llueve|mal.*tiempo|plan.*b|rain/i.test(m)) {
+      return `**Plan B si llueve en ${d.nombre}:**\n${d.plan_b_lluvia}`;
+    }
+  }
+
+  // No match → dejar que Claude responda
+  return null;
+}
+
+// ═══════════════════════════════════════════════════════════════
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
@@ -2169,11 +2269,27 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     let kvCachedRoute = null;
     if (env.SALMA_KB) {
       try {
-        const location = extractHelpLocation(message, history, currentRoute);
+        // Extraer ubicación: primero el extractor normal, luego buscar palabras del mensaje en KV
+        let location = extractHelpLocation(message, history, currentRoute);
+        let countryCode = null;
+
         if (location) {
           const kwNorm = location.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
-          // Buscar código de país por keyword
-          const countryCode = await env.SALMA_KB.get('kw:' + kwNorm);
+          countryCode = await env.SALMA_KB.get('kw:' + kwNorm);
+        }
+
+        // Si no encontró con extractHelpLocation, buscar cada palabra capitalizada del mensaje
+        if (!countryCode) {
+          const words = message.match(/[A-ZÁÉÍÓÚÑ\u00C0-\u024F][a-záéíóúñ\u00E0-\u024F]{2,}/g) || [];
+          for (const word of words) {
+            const norm = word.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            const code = await env.SALMA_KB.get('kw:' + norm);
+            if (code) { countryCode = code; location = word; break; }
+          }
+        }
+
+        if (countryCode) {
+          const kwNorm = (location || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
           if (countryCode) {
             // Ficha del país (nivel 1)
             const baseJson = await env.SALMA_KB.get('dest:' + countryCode + ':base');
@@ -2208,6 +2324,17 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         JSON.stringify({ reply: cachedReply, route: kvCachedRoute }),
         { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
       );
+    }
+
+    // ─── RESPUESTA DIRECTA DEL KV (sin llamar a Claude = 0 coste) ───
+    if (kvCountryData && !isRouteRequest(message, history) && !isFlightRequest(message) && !isHotelRequest(message) && !isServiceRequest(message) && !helpCategory) {
+      const kvDirectReply = tryKVDirectAnswer(message, kvCountryData, kvDestinationData);
+      if (kvDirectReply) {
+        return new Response(
+          JSON.stringify({ reply: kvDirectReply, route: null }),
+          { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
+        );
+      }
     }
 
     // Construir mensajes (con datos KV si los hay)
