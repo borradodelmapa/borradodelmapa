@@ -228,7 +228,7 @@ async function loadUserGuides() {
   if (!currentUser) { showState('welcome'); return; }
 
   // Si es el usuario Salma, redirigir al perfil público
-  const SALMA_UID = 'I4GiGrINQ3NKCg2RXa4ouwuDzxz1';
+  const SALMA_UID = 'LlXDmuXD1qgM97Xya8FiVHONXDw2';
   if (currentUser.uid === SALMA_UID) {
     window.location.href = '/destinos/';
     return;
