@@ -1,0 +1,358 @@
+{
+  "pais": "Nepal",
+  "codigo": "np",
+  "destinos": [
+    {
+      "id": "kathmandu",
+      "nombre": "Kathmandú",
+      "tipo": "ciudad",
+      "region": "Valle de Kathmandú, Bagmati",
+      "descripcion": "Capital y puerta de entrada al país, con una concentración brutal de templos hindúes y budistas en el barrio de Thamel y Durbar Square. Es el hub logístico desde donde se organiza cualquier trek o expedición. La mezcla de caos urbano, olor a incienso y patrimonio UNESCO la convierte en una ciudad que no deja indiferente.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre-noviembre, marzo-abril",
+      "como_llegar": "Aeropuerto Internacional Tribhuvan (TIA), con vuelos directos desde Doha, Delhi, Dubái. Desde Europa: conexión 1 escala, 10-14h de vuelo total. Precio aproximado 400-700 EUR ida.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Thamel: 4-10 EUR/noche por habitación individual básica",
+        "medio": "Hoteles boutique en Thamel o Jyatha: 20-45 EUR/noche",
+        "comfort": "Hoteles tipo Dwarika's o Hyatt Regency: 80-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasear por Durbar Square de Kathmandú (entrada ~2 EUR para extranjeros)",
+        "Visitar Boudhanath Stupa al amanecer (entrada ~2 EUR)",
+        "Explorar Pashupatinath y los ghats del río Bagmati (acceso templo principal solo hindúes, exterior libre)",
+        "Subir a Swayambhunath (Templo de los Monos) con vistas al valle (entrada ~2 EUR)"
+      ],
+      "donde_comer": "Dal bhat en cualquier restaurante local de Thamel: 2-4 EUR. Momos (dumplings) en los puestos callejeros: 1-2 EUR. Para variedad, la calle Freak Street tiene opciones económicas. Evita los restaurantes más vistosos de Thamel que inflan precios para turistas.",
+      "consejo_local": "Negocia siempre el precio del taxi antes de subir; los taxímetros son una leyenda urbana. Un trayecto dentro de Kathmandú nunca debería costar más de 3-5 EUR.",
+      "plan_b_lluvia": "Museos: Museo Nacional de Nepal en Chhauni o el Museo de Historia Natural. También puedes aprovechar para gestionar permisos de trekking en la oficina TIMS o el Departamento de Inmigración.",
+      "keywords": [
+        "Kathmandu",
+        "Katmandú",
+        "KTM",
+        "Thamel",
+        "Durbar Square",
+        "Boudhanath",
+        "Pashupatinath",
+        "Swayambhunath",
+        "Templo de los Monos",
+        "valle de Katmandú"
+      ]
+    },
+    {
+      "id": "pokhara",
+      "nombre": "Pokhara",
+      "tipo": "naturaleza",
+      "region": "Gandaki, Nepal central",
+      "descripcion": "Segunda ciudad del país y base principal para el trekking al Circuito de Annapurna y el Santuario de Annapurna. Su lago Phewa con el reflejo del Machapuchare (Cola de Pez) es una de las estampas más reconocibles de Nepal. Tiene un ambiente mucho más relajado que Kathmandú y la orilla del lago está llena de cafés y tiendas de equipamiento.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre-noviembre, marzo-mayo",
+      "como_llegar": "Vuelo desde Kathmandú: 25-35 min, 70-100 EUR ida. Autobús turístico desde Kathmandú: 6-7h, 8-12 EUR. Autobús local: 7-9h, 3-5 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Lakeside: 5-12 EUR/noche",
+        "medio": "Hoteles con vistas al lago en Lakeside: 25-50 EUR/noche",
+        "comfort": "Resorts en colina con vistas Himalaya como Fish Tail Lodge: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Remar en el lago Phewa al atardecer (alquiler barca 3-5 EUR/hora)",
+        "Subir a la Paz Stupa (World Peace Pagoda) caminando desde Lakeside: 2-3h ida/vuelta, gratis",
+        "Sunrise en Sarangkot con vistas al Annapurna: taxi a las 5h, 5-8 EUR",
+        "Salto en parapente sobre el lago: 70-100 EUR con empresa local"
+      ],
+      "donde_comer": "Lakeside tiene cientos de opciones. Dal bhat en restaurantes locales 2-3 EUR. Para un café con vistas al lago y montañas, zona de Baidam. Evita la fruta pelada de los puestos callejeros sin garantías de higiene.",
+      "consejo_local": "Si quieres salida de trekking al Santuario de Annapurna sin guía, registra bien tus permisos ACAP y TIMS antes de salir; los controles son frecuentes y las multas, elevadas.",
+      "plan_b_lluvia": "Visita el Museo Internacional de la Montaña en Pokhara (entrada 3 EUR), que detalla la historia del alpinismo en el Himalaya.",
+      "keywords": [
+        "Pokhara",
+        "lago Phewa",
+        "Phewa Lake",
+        "Lakeside",
+        "Sarangkot",
+        "Annapurna base camp",
+        "Machapuchare",
+        "Fish Tail",
+        "parapente Nepal"
+      ]
+    },
+    {
+      "id": "circuito-annapurna",
+      "nombre": "Circuito de Annapurna",
+      "tipo": "montaña",
+      "region": "Gandaki / Manang / Mustang, Nepal central",
+      "descripcion": "Uno de los treks más completos del mundo, rodea el macizo del Annapurna cruzando el paso de Thorong La a 5.416m. Combina vegetación tropical, paisajes alpinos, desierto de altiplano y cultura tibetana en 12-20 días. La construcción de carreteras ha cambiado el itinerario clásico pero sigue siendo excepcional.",
+      "dias_recomendados": 14,
+      "mejor_epoca": "octubre-noviembre, marzo-abril",
+      "como_llegar": "Desde Pokhara: jeep o autobús hasta Besisahar o Chame (punto de inicio), 4-6h, 5-10 EUR. Los trekkers que quieren evitar tramos con carretera suelen comenzar en Dharapani.",
+      "donde_dormir": {
+        "mochilero": "Teahouses (lodges de montaña) en ruta: 2-5 EUR/noche, cena y desayuno incluidos a veces en 7-10 EUR",
+        "medio": "Teahouses con habitación propia y baño compartido en pueblos más grandes: 8-15 EUR",
+        "comfort": "No hay hoteles de confort en ruta; en Manang algunas lodges tienen calefacción y wi-fi a 15-25 EUR"
+      },
+      "que_hacer": [
+        "Cruzar el paso Thorong La (5.416m): inicio a las 3-4h desde Thorong Phedi, jornada de 7-9h",
+        "Explorar Manang y aclimatarse con caminatas cortas al lago Gangapurna",
+        "Visitar el pueblo de Marpha, famoso por el brandy de manzana local",
+        "Relajarse en las aguas termales de Tatopani tras el descenso (entrada 1-2 EUR)"
+      ],
+      "donde_comer": "Las teahouses sirven dal bhat, pasta, tsampa y sopas. Presupuesto de comida: 8-15 EUR/día en altitud. Cuanto más alto, más caro. El apple pie de Marpha es legendario.",
+      "consejo_local": "Lleva billetes pequeños en rupias nepalesas; en los pueblos de altitud no hay cajeros y muchos lugares no aceptan tarjeta. Cambia suficiente en Chame o Manang.",
+      "plan_b_lluvia": "Si hay nieve en el paso o condiciones malas, existe la ruta alternativa por Mesokanto La o bajar hacia Jomsom directamente. Consulta en cada lodge el estado del paso el día anterior.",
+      "keywords": [
+        "Annapurna Circuit",
+        "Circuito Annapurna",
+        "Thorong La",
+        "Manang",
+        "Marpha",
+        "Jomsom",
+        "Tatopani",
+        "trekking Nepal",
+        "ACAP"
+      ]
+    },
+    {
+      "id": "everest-base-camp",
+      "nombre": "Campo Base del Everest",
+      "tipo": "montaña",
+      "region": "Khumbu, Sagarmatha, Nepal oriental",
+      "descripcion": "El trek al EBC (5.364m) es el más famoso del planeta y ofrece vistas directas al Everest, Lhotse, Nuptse y Ama Dablam. El vuelo de montaña a Lukla es en sí mismo una experiencia. La cultura sherpa y los monasterios de Tengboche y Namche Bazaar añaden una dimensión cultural imprescindible.",
+      "dias_recomendados": 14,
+      "mejor_epoca": "octubre-noviembre, marzo-mayo",
+      "como_llegar": "Vuelo Kathmandú-Lukla: 35 min, 160-200 EUR ida. Frecuentemente cancelado por niebla, así que ten días de margen. Alternativa terrestre: bus hasta Salleri y trek 2-3 días más.",
+      "donde_dormir": {
+        "mochilero": "Teahouses desde Lukla hasta EBC: 3-8 EUR/noche habitación básica",
+        "medio": "Lodges en Namche Bazaar con vistas al Everest: 10-20 EUR/noche",
+        "comfort": "Yeti Mountain Home o Everest View Hotel en Syangboche: 80-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Llegar al Campo Base del Everest (5.364m): jornada final desde Gorak Shep, 3-4h ida/vuelta",
+        "Subir a Kala Patthar (5.545m) al amanecer para las mejores vistas del Everest",
+        "Visitar el monasterio de Tengboche y asistir a puja matinal",
+        "Aclimatarse en Namche Bazaar y subir al Everest View Hotel para las vistas (libre)"
+      ],
+      "donde_comer": "Las teahouses son la única opción. Dal bhat, noodles, pizza de altitud. Presupuesto comida: 10-20 EUR/día. En Namche hay panaderías y hasta cafeterías con buen espresso.",
+      "consejo_local": "Namche Bazaar tiene cajero automático (puede estar vacío en temporada alta). Saca suficiente dinero allí porque más arriba ya no hay. El MAL de altura no discrimina: sube lento aunque te sientas bien.",
+      "plan_b_lluvia": "En días de nubes bajas en EBC, visita el museo sherpa de Namche o explora el mercado del sábado en Namche.",
+      "keywords": [
+        "EBC",
+        "Everest Base Camp",
+        "Campo Base Everest",
+        "Khumbu",
+        "Lukla",
+        "Namche Bazaar",
+        "Kala Patthar",
+        "Tengboche",
+        "trekking Everest",
+        "Sagarmatha"
+      ]
+    },
+    {
+      "id": "chitwan",
+      "nombre": "Parque Nacional de Chitwan",
+      "tipo": "naturaleza",
+      "region": "Terai, Nepal central-sur",
+      "descripcion": "Reserva de la biosfera UNESCO y uno de los mejores parques para avistar rinoceronte de un cuerno y tigre de Bengala en Asia. El Terai nepalés es jungla densa con elefantes, cocodrilos y cientos de especies de aves. A diferencia de los safaris africanos, aquí también puedes hacer safaris a pie con guía.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre-marzo (fuera del monzón)",
+      "como_llegar": "Desde Kathmandú: autobús turístico 5-6h, 8-12 EUR. Vuelo a Bharatpur: 30 min, 80-120 EUR. Desde Pokhara: autobús 4-5h, 7-10 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Sauraha: 6-12 EUR/noche",
+        "medio": "Lodges con jardín en Sauraha: 20-45 EUR/noche",
+        "comfort": "Jungle lodges con safari incluido tipo Tiger Tops o Meghauli Serai: 150-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en jeep al amanecer dentro del parque (entrada parque ~25 EUR + jeep ~15 EUR/persona)",
+        "Safari a pie de 2-3h con guía armado (incluido en muchos paquetes lodge o ~15 EUR separado)",
+        "Canoa por el río Rapti para avistar cocodrilos y aves (5-8 EUR/hora)",
+        "Visitar el Centro de Reproducción de Cocodrilos en Kasara (libre)"
+      ],
+      "donde_comer": "Sauraha tiene restaurantes para turistas con menús internacionales a 3-7 EUR. Dal bhat local por 2-3 EUR. La especialidad local es el pollo tikka del Terai.",
+      "consejo_local": "Los safaris en jeep del amanecer (salida 6h) tienen mucha más probabilidad de avistamiento de rinoceronte y aves que los de media mañana. Reserva la tarde anterior.",
+      "plan_b_lluvia": "Visita el Museo de Historia Natural de Chitwan en Sauraha o el Tharu Cultural Museum para entender la cultura local del Terai.",
+      "keywords": [
+        "Chitwan",
+        "Parque Nacional Chitwan",
+        "Chitwan National Park",
+        "Sauraha",
+        "rinoceronte Nepal",
+        "tigre Bengala",
+        "Terai",
+        "safari Nepal",
+        "Bharatpur"
+      ]
+    },
+    {
+      "id": "lumbini",
+      "nombre": "Lumbini",
+      "tipo": "histórico",
+      "region": "Lumbini, Terai occidental",
+      "descripcion": "Lugar de nacimiento de Siddharta Gautama (Buda), declarado Patrimonio UNESCO. El recinto sagrado incluye el Templo Maya Devi, el pilar de Ashoka del siglo III a.C. y docenas de templos y monasterios construidos por países budistas de todo el mundo. Es un lugar de peregrinación activo y a la vez un recinto arqueológico fascinante.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre-febrero",
+      "como_llegar": "Desde Pokhara: autobús 6-7h, 6-10 EUR. Desde Kathmandú: autobús 8-9h, 8-12 EUR o vuelo a Bhairahawa (30 min, 80-120 EUR) + taxi 20 min (~5 EUR). Desde la frontera india de Sunauli: 30 min en taxi, ~3 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Siddharthanagar (Bhairahawa): 5-10 EUR/noche",
+        "medio": "Hoteles en la zona de Lumbini: 15-30 EUR/noche",
+        "comfort": "Lumbini Buddha Hotel o Kasara Resort: 50-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar el Templo Maya Devi y el Jardín Sagrado al amanecer (entrada ~3 EUR)",
+        "Alquilar bicicleta para recorrer la Zona de los Monasterios del Mundo (1-2 EUR/día)",
+        "Ver el pilar de Ashoka y el estanque sagrado Puskarini",
+        "Asistir a meditación en alguno de los monasterios abiertos al público (gratis)"
+      ],
+      "donde_comer": "Las opciones dentro del recinto son limitadas y caras. Come en los restaurantes de Siddharthanagar: dal bhat 2-3 EUR. Hay algún puesto de chai y snacks en la entrada del parque.",
+      "consejo_local": "Llega al Jardín Sagrado justo al abrir (6-7h) antes de que lleguen los grupos de peregrinos. La luz de la mañana en el estanque y el ambiente de meditación son completamente distintos a mediodía.",
+      "plan_b_lluvia": "Visita los monasterios cubiertos del recinto: el monasterio coreano, el chino y el japonés tienen techumbre y son visitables con lluvia.",
+      "keywords": [
+        "Lumbini",
+        "nacimiento Buda",
+        "birthplace Buddha",
+        "Templo Maya Devi",
+        "pilar Ashoka",
+        "Siddharthanagar",
+        "Bhairahawa",
+        "peregrinación budista",
+        "UNESCO Nepal"
+      ]
+    },
+    {
+      "id": "bhaktapur",
+      "nombre": "Bhaktapur",
+      "tipo": "histórico",
+      "region": "Valle de Kathmandú, Bagmati",
+      "descripcion": "La mejor conservada de las tres ciudades medievales del Valle de Kathmandú (junto a Patan y Kathmandú). Su Durbar Square, la escultura de barro cocido y los talleres de alfarería del barrio de Potters Square son únicos en Asia. A 13km de Kathmandú, funciona como ciudad viva, no como museo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre-noviembre, marzo-abril",
+      "como_llegar": "Desde Kathmandú: microbús desde Ratna Park, 45 min, menos de 1 EUR. Taxi: 30 min, 6-10 EUR. También hay servicio de autobús local frecuente.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses dentro del recinto amurallado: 8-15 EUR/noche",
+        "medio": "Hoteles boutique en casas newar restauradas: 25-50 EUR/noche",
+        "comfort": "Peacock Guest House o Bhadgaon Guest House: 40-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasear por Durbar Square de Bhaktapur (entrada ~15 EUR, incluye Patan en mismo día)",
+        "Ver los alfareros trabajar en Potters Square, especialmente por la mañana (gratis)",
+        "Subir a la Nyatapola Temple (templo de 5 pisos) para vistas del conjunto",
+        "Probar el juju dhau (yogur de búfala) que se fabrica solo en Bhaktapur"
+      ],
+      "donde_comer": "Restaurantes en los alrededores de Durbar Square: dal bhat 2-4 EUR. El juju dhau es obligatorio: 0,5-1 EUR por taza. Para comer bien y barato, camina 5 minutos del centro y busca donde coman los locales.",
+      "consejo_local": "La entrada de ~15 EUR es cara pero sirve también para Patan. Si te quedas a dormir dentro de la ciudad, el precio de entrada se exime o reduce; consúltalo al entrar.",
+      "plan_b_lluvia": "Los talleres de máscara de Thimi (a 2km) operan bajo techo y puedes ver artesanos trabajar. También el museo Woodcarving en Durbar Square.",
+      "keywords": [
+        "Bhaktapur",
+        "Bhadgaon",
+        "Durbar Square Bhaktapur",
+        "Nyatapola",
+        "Potters Square",
+        "juju dhau",
+        "valle Katmandú",
+        "ciudad medieval Nepal",
+        "arte newar"
+      ]
+    },
+    {
+      "id": "upper-mustang",
+      "nombre": "Upper Mustang",
+      "tipo": "desierto",
+      "region": "Mustang, Gandaki, Nepal norte",
+      "descripcion": "Antiguo reino budista tibetano prohibido hasta 1992, con paisajes de desierto lunar, cañones de colores y cuevas milenarias. Lo Manthang, la capital amurallada, parece un set de película medieval. Requiere permiso especial de 500 USD por 10 días, lo que limita el turismo masivo y mantiene su autenticidad.",
+      "dias_recomendados": 10,
+      "mejor_epoca": "mayo-octubre (incluso en monzón, esta zona es seca por estar en sombra orográfica)",
+      "como_llegar": "Vuelo Pokhara-Jomsom: 20 min, 100-150 EUR. Desde Jomsom, trek o jeep hasta Kagbeni y luego inicio de zona restringida. El permiso de Upper Mustang (500 USD/10 días) se tramita en Kathmandú o Pokhara con agencia.",
+      "donde_dormir": {
+        "mochilero": "Teahouses en ruta: 3-6 EUR/noche (con permiso ya pagado)",
+        "medio": "Lodges en Lo Manthang: 10-20 EUR/noche",
+        "comfort": "Hotel Lotus Suites o Mustang Holiday Inn en Lo Manthang: 30-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Explorar Lo Manthang, la ciudad amurallada del antiguo reino (acceso con permiso)",
+        "Visitar las cuevas de Chungsi y los monasterios rupestres de Lori Gompa",
+        "Trek por los cañones rojos y amarillos entre Ghemi y Charang",
+        "Asistir al festival Tiji en Lo Manthang si coincide (mayo, 3 días de danzas rituales)"
+      ],
+      "donde_comer": "Las teahouses son la única opción; cocina tibetana: tsampa, thukpa (sopa de fideos), momos. Presupuesto comida 8-15 EUR/día. Lleva snacks de Jomsom porque arriba hay poco suministro.",
+      "consejo_local": "El permiso obliga a ir con guía oficial registrado. Contrata uno de confianza en Pokhara o Kathmandú; los guías de Mustang tienen conocimiento cultural que ningún guía externo puede replicar.",
+      "plan_b_lluvia": "En Upper Mustang la lluvia es escasa incluso en monzón. Si hay viento (frecuente en primavera), es buen momento para visitar los monasterios interiores de Lo Manthang.",
+      "keywords": [
+        "Upper Mustang",
+        "Lo Manthang",
+        "Mustang prohibido",
+        "reino Lo",
+        "Jomsom",
+        "trekking desierto Nepal",
+        "permiso restringido Nepal",
+        "Tibet Nepal",
+        "festival Tiji"
+      ]
+    },
+    {
+      "id": "langtang",
+      "nombre": "Valle de Langtang",
+      "tipo": "montaña",
+      "region": "Langtang, Bagmati, Nepal central-norte",
+      "descripcion": "El valle glaciar más accesible desde Kathmandú, a solo 7h en bus. Aunque parcialmente destruido por el terremoto de 2015, está reconstruido y recibir turistas es vital para la economía local. Las vistas al Langtang Lirung (7.234m) y la cultura tamang son los puntos fuertes. Mucho menos masificado que Everest o Annapurna.",
+      "dias_recomendados": 7,
+      "mejor_epoca": "octubre-noviembre, marzo-mayo",
+      "como_llegar": "Desde Kathmandú: jeep o bus hasta Syabrubesi, 7-8h, 6-10 EUR. Los jeeps salen del área de Macchapokhari en Kathmandú.",
+      "donde_dormir": {
+        "mochilero": "Teahouses desde Syabrubesi a Kyanjin Gompa: 3-6 EUR/noche",
+        "medio": "Lodges en Langtang Village o Kyanjin: 8-15 EUR/noche",
+        "comfort": "No hay opciones de confort real en ruta; Kyanjin Gompa tiene las mejores lodges a 12-20 EUR"
+      },
+      "que_hacer": [
+        "Trek de Syabrubesi a Kyanjin Gompa en 3 días de subida con vistas al glaciar",
+        "Subir a Kyanjin Ri (4.773m) al amanecer: 3-4h desde Kyanjin Gompa, guía opcional",
+        "Visitar la quesería tradicional de Kyanjin y probar el yak cheese local",
+        "Explorar el lago glaciar Langtang y el campo base de Langtang Lirung"
+      ],
+      "donde_comer": "Dal bhat y noodles en las teahouses. En Kyanjin Gompa hacen queso de yak artesanal que venden por trozos (~1-2 EUR). Presupuesto comida 8-12 EUR/día.",
+      "consejo_local": "Kyanjin Ri es técnicamente más fácil que otros miradores del Himalaya pero requiere buena aclimatización. Pasa al menos 1 noche en Kyanjin Gompa antes de subir.",
+      "plan_b_lluvia": "Visita el monasterio budista de Kyanjin Gompa y charla con los monjes; suelen recibir bien a los viajeros bajo techo durante días de niebla.",
+      "keywords": [
+        "Langtang",
+        "Valle Langtang",
+        "Langtang Valley",
+        "Kyanjin Gompa",
+        "Syabrubesi",
+        "Langtang Lirung",
+        "trekking cerca Katmandú",
+        "tamang",
+        "queso yak Nepal"
+      ]
+    },
+    {
+      "id": "patan",
+      "nombre": "Patan (Lalitpur)",
+      "tipo": "histórico",
+      "region": "Valle de Kathmandú, Lalitpur",
+      "descripcion": "La más artística de las ciudades del valle, conocida como 'la ciudad de los artesanos'. Su Durbar Square tiene la mayor concentración de templos newar por metro cuadrado de Nepal. El Museo de Patan, instalado en el antiguo palacio real, es el mejor museo de arte budista e hindú del país.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre-noviembre, marzo-abril",
+      "como_llegar": "Desde Kathmandú: taxi 20-30 min, 4-7 EUR. Micro o bus local desde Ratna Park: 30-40 min, menos de 1 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Patan o Kathmandú: 6-12 EUR/noche",
+        "medio": "Guesthouses boutique en casas newar en Mangal Bazaar: 20-40 EUR/noche",
+        "comfort": "Hyatt Regency o Dwarika's en Kathmandú a 20 min: 80-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar el Museo de Patan en el Palacio Real de Durbar Square (entrada ~5 EUR, uno de los mejores del país)",
+        "Pasear por Kumbheshwar Temple, uno de los pocos templos de 5 pisos en Nepal (exterior libre)",
+        "Explorar los patios (bahals) tradicionales newar escondidos en callejones, empezando por Hiranya Varna Mahavihar",
+        "Comprar artesanía en bronce y thangkas directamente a artesanos en los talleres de Mangal Bazaar"
+      ],
+      "donde_comer": "Más tranquilo que Kathmandú para comer bien. Newari food en restaurantes locales alrededor de Durbar Square: 3-6 EUR. Prueba el choila (carne especiada) y el bara (torta de lentejas).",
+      "consejo_local": "La entrada a Patan Durbar Square está incluida con el ticket de Bhaktapur si vas el mismo día. Guarda el ticket de Bhaktapur para ahorrarte los ~10 EUR de entrada.",
+      "plan_b_lluvia": "El Museo de Patan cubre perfectamente una mañana lluviosa; tiene iluminación interior excelente y explicaciones en inglés muy completas.",
+      "keywords": [
+        "Patan",
+        "Lalitpur",
+        "Patan Durbar Square",
+        "Museo Patan",
+        "Mangal Bazaar",
+        "arte newar",
+        "Kumbheshwar",
+        "valle Katmandú",
+        "artesanía Nepal"
+      ]
+    }
+  ]
+}
