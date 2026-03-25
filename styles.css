@@ -912,36 +912,64 @@ body {
 }
 .coins-modal-saldo-free { color:var(--verde); }
 
-/* Pack único */
+/* Pack compacto */
 .coins-modal-plan {
-  text-align:center; margin-bottom:16px;
-  padding:20px 16px; border:1px solid var(--dorado);
-  border-radius:var(--radius); background:rgba(212,160,23,.06);
+  margin-bottom:14px; padding:12px 14px;
+  border:1px solid var(--dorado); border-radius:var(--radius-sm);
+  background:rgba(212,160,23,.06);
 }
-.coins-modal-plan-header { margin-bottom:8px; }
+.coins-modal-plan-row {
+  display:flex; justify-content:space-between; align-items:center;
+}
 .coins-modal-plan-name {
-  font-family:var(--font-tight); font-size:13px; font-weight:700;
-  color:rgba(244,239,230,.5); text-transform:uppercase; letter-spacing:.1em;
-}
-.coins-modal-plan-coins {
-  font-family:var(--font-display); font-size:28px; color:var(--dorado);
-  letter-spacing:1px; line-height:1.1;
-}
-.coins-modal-plan-price {
-  font-family:var(--font-tight); font-size:32px; font-weight:800;
-  color:var(--blanco); margin-bottom:4px;
+  font-family:var(--font-tight); font-size:14px; font-weight:700;
+  color:var(--crema);
 }
 .coins-modal-plan-note {
   font-size:11px; color:rgba(244,239,230,.35);
-  font-family:var(--font-mono); margin-bottom:14px;
+  font-family:var(--font-mono); margin-top:2px;
 }
-.coins-modal-buy {
-  width:100%; padding:14px 0; border:none;
+.coins-modal-pay {
+  padding:10px 20px; border:none;
   border-radius:var(--radius-sm); background:var(--dorado);
   color:var(--negro); font-family:var(--font-mono); font-size:14px;
-  font-weight:700; letter-spacing:.06em; cursor:pointer; transition:opacity .2s;
+  font-weight:700; letter-spacing:.04em; cursor:pointer; transition:opacity .2s;
+  white-space:nowrap; flex-shrink:0;
 }
-.coins-modal-buy:hover { opacity:.9; }
+.coins-modal-pay:hover { opacity:.9; }
+.coins-modal-pay:disabled { opacity:.4; cursor:not-allowed; }
+/* Stripe card integrado */
+.stripe-card-wrapper { margin-bottom:16px; }
+.stripe-card-element {
+  background:rgba(255,255,255,.06); border:1px solid var(--linea-fuerte);
+  border-radius:8px; padding:12px 14px;
+}
+.stripe-card-element .StripeElement--focus { border-color:var(--dorado); }
+.stripe-card-errors {
+  font-size:12px; color:var(--rojo); margin-top:6px; min-height:16px;
+  font-family:var(--font-body);
+}
+.stripe-placeholder {
+  font-size:11px; color:rgba(244,239,230,.25); text-align:center;
+  padding:10px; font-family:var(--font-mono);
+  border:1px dashed var(--linea); border-radius:8px;
+}
+.stripe-loading {
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  padding:16px 0; font-size:13px; color:rgba(244,239,230,.5);
+  font-family:var(--font-mono);
+}
+.stripe-spinner {
+  width:18px; height:18px; border:2px solid var(--linea);
+  border-top-color:var(--dorado); border-radius:50%;
+  animation:spin .6s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+.stripe-success {
+  display:flex; align-items:center; justify-content:center;
+  padding:16px 0; font-size:15px; color:var(--verde);
+  font-family:var(--font-tight); font-weight:700;
+}
 
 /* Acordeón */
 .coins-modal-accordion {

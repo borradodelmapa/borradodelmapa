@@ -363,6 +363,8 @@ async function doRegister() {
       email: email,
       isPremium: false,
       mapsCount: 0,
+      coins_saldo: 0,
+      rutas_gratis_usadas: 0,
       createdAt: new Date().toISOString()
     });
     closeModal();
@@ -382,6 +384,8 @@ async function doGoogleLogin() {
         email: user.email,
         isPremium: false,
         mapsCount: 0,
+        coins_saldo: 0,
+        rutas_gratis_usadas: 0,
         createdAt: new Date().toISOString()
       });
     }
@@ -516,6 +520,24 @@ async function guardarGuiaDirecto(routeData) {
 
     const docRef = await db.collection('users').doc(currentUser.uid).collection('maps').add(ruta);
     showToast('Guía guardada');
+
+    // Incrementar contador de rutas gratis usadas (si aplica)
+    try {
+      const usadas = currentUser.rutas_gratis_usadas || 0;
+      const coins = currentUser.coins_saldo || 0;
+      if (usadas < 3) {
+        // Todavía tiene gratis — gastar una
+        const newUsadas = usadas + 1;
+        await db.collection('users').doc(currentUser.uid).update({
+          rutas_gratis_usadas: newUsadas
+        });
+        currentUser.rutas_gratis_usadas = newUsadas;
+        updateHeader();
+      }
+      // TODO: si no tiene gratis, descontar coins aquí
+    } catch (e) {
+      console.warn('Error actualizando contador rutas:', e);
+    }
 
     // Publicar guía pública (no esperar)
     const slug = generateSlug(r.title || r.name || 'mi-ruta');
@@ -873,15 +895,28 @@ function openCoinsModal() {
         </div>
       </div>
 
-      <!-- Pack único -->
+      <!-- Pago integrado -->
+      <div id="stripe-card-wrapper" class="stripe-card-wrapper">
+        <div id="stripe-card-element" class="stripe-card-element"></div>
+        <div id="stripe-card-errors" class="stripe-card-errors"></div>
+      </div>
+      <div id="stripe-loading" class="stripe-loading" style="display:none">
+        <div class="stripe-spinner"></div>
+        <span>Procesando pago...</span>
+      </div>
+      <div id="stripe-success" class="stripe-success" style="display:none">
+        ✓ ¡25 coins añadidos a tu cuenta!
+      </div>
+
+      <!-- Pack -->
       <div class="coins-modal-plan">
-        <div class="coins-modal-plan-header">
-          <div class="coins-modal-plan-name">Pack Viajero</div>
-          <div class="coins-modal-plan-coins">25 Salma Coins</div>
+        <div class="coins-modal-plan-row">
+          <div>
+            <div class="coins-modal-plan-name">Pack Viajero</div>
+            <div class="coins-modal-plan-note">25 coins · no caducan</div>
+          </div>
+          <button class="coins-modal-pay" id="coins-pay-btn" disabled>9,99€</button>
         </div>
-        <div class="coins-modal-plan-price">9,99€</div>
-        <div class="coins-modal-plan-note">No caducan · Reembolsables si no se usan</div>
-        <button class="coins-modal-buy" id="coins-buy-btn">Comprar 25 coins</button>
       </div>
 
       <!-- Acordeón: qué puedes hacer -->
@@ -913,9 +948,106 @@ function openCoinsModal() {
     arrow.style.transform = open ? 'rotate(90deg)' : '';
   });
 
-  // Comprar (placeholder Stripe)
-  document.getElementById('coins-buy-btn').addEventListener('click', () => {
-    showToast('Conectando con Stripe... (próximamente)');
+  // Stripe Elements — formulario de tarjeta integrado
+  initStripeCard(overlay);
+}
+
+// ═══ STRIPE ELEMENTS — Tarjeta integrada ═══
+
+function initStripeCard(overlay) {
+  // STRIPE_PK: tu publishable key de Stripe (test o live)
+  // De momento usa la test key. Cuando tengas la real, cámbiala aquí.
+  const STRIPE_PK = 'pk_test_PLACEHOLDER';
+
+  const cardEl = document.getElementById('stripe-card-element');
+  const errorsEl = document.getElementById('stripe-card-errors');
+  const payBtn = document.getElementById('coins-pay-btn');
+  const loadingEl = document.getElementById('stripe-loading');
+  const successEl = document.getElementById('stripe-success');
+  const wrapperEl = document.getElementById('stripe-card-wrapper');
+
+  // Si Stripe no cargó o no hay key real, mostrar placeholder
+  if (typeof Stripe === 'undefined' || STRIPE_PK.includes('PLACEHOLDER')) {
+    cardEl.innerHTML = '<div class="stripe-placeholder">Introduce tu Stripe key para activar pagos</div>';
+    payBtn.disabled = true;
+    return;
+  }
+
+  const stripe = Stripe(STRIPE_PK);
+  const elements = stripe.elements();
+  const card = elements.create('card', {
+    style: {
+      base: {
+        color: '#f5f0e8',
+        fontFamily: '"Inter", sans-serif',
+        fontSize: '15px',
+        '::placeholder': { color: 'rgba(244,239,230,.35)' }
+      },
+      invalid: { color: '#ef4444' }
+    }
+  });
+  card.mount('#stripe-card-element');
+
+  card.on('change', (event) => {
+    errorsEl.textContent = event.error ? event.error.message : '';
+    payBtn.disabled = !event.complete;
+  });
+
+  payBtn.addEventListener('click', async () => {
+    payBtn.disabled = true;
+    wrapperEl.style.display = 'none';
+    loadingEl.style.display = 'flex';
+
+    try {
+      // 1. Pedir PaymentIntent al worker
+      const res = await fetch(window.SALMA_API + '/create-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: currentUser.uid,
+          pack: 'viajero'
+        })
+      });
+      const { client_secret } = await res.json();
+
+      // 2. Confirmar pago con Stripe
+      const { error, paymentIntent } = await stripe.confirmCardPayment(client_secret, {
+        payment_method: { card: card }
+      });
+
+      if (error) {
+        loadingEl.style.display = 'none';
+        wrapperEl.style.display = '';
+        errorsEl.textContent = error.message;
+        payBtn.disabled = false;
+        return;
+      }
+
+      if (paymentIntent.status === 'succeeded') {
+        // 3. Actualizar saldo local
+        currentUser.coins_saldo = (currentUser.coins_saldo || 0) + 25;
+        updateHeader();
+
+        // Mostrar éxito
+        loadingEl.style.display = 'none';
+        successEl.style.display = 'flex';
+
+        // Actualizar el saldo en el modal
+        const valEl = overlay.querySelector('.coins-modal-saldo-val');
+        if (valEl) valEl.textContent = currentUser.coins_saldo + ' coins';
+
+        // Cerrar modal tras 2s
+        setTimeout(() => {
+          overlay.remove();
+          showToast('¡25 Salma Coins añadidos!');
+        }, 2000);
+      }
+    } catch (e) {
+      loadingEl.style.display = 'none';
+      wrapperEl.style.display = '';
+      errorsEl.textContent = 'Error de conexión. Inténtalo de nuevo.';
+      payBtn.disabled = false;
+    }
   });
 }
 
