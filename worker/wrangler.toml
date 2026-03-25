@@ -9,6 +9,10 @@ compatibility_date = "2024-01-01"
 binding = "SALMA_KB"
 id = "b2056c0613d94feb955b92279ba02fb6"
 
+# Cron: cada lunes a las 4:00 UTC (6:00 España) — regenera fichas KV caducadas
+[triggers]
+crons = ["0 4 * * 1"]
+
 [vars]
 # Optional: use Workers AI instead — set USE_CLOUDFLARE_AI = "1" and add binding:
 # [ai]

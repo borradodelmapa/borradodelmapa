@@ -2507,4 +2507,116 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
 
     return new Response(readable, { headers: sseHeaders });
   },
+
+  // ═══════════════════════════════════════════════════════════════
+  // CRON: Regenerar fichas KV caducadas (cada lunes 4:00 UTC)
+  // ═══════════════════════════════════════════════════════════════
+  async scheduled(event, env, ctx) {
+    const MAX_PER_RUN = 5; // máx países por ejecución (~$0.025)
+    const MAX_AGE_DAYS = 180; // 6 meses
+    const now = Date.now();
+    const cutoff = now - (MAX_AGE_DAYS * 24 * 60 * 60 * 1000);
+
+    if (!env.SALMA_KB || !env.ANTHROPIC_API_KEY) return;
+
+    try {
+      // Leer el índice de países del KV
+      const indexJson = await env.SALMA_KB.get('_index:countries');
+      if (!indexJson) {
+        // Primera vez: crear índice desde las fichas existentes
+        const list = await env.SALMA_KB.list({ prefix: 'dest:', limit: 1000 });
+        const countries = [];
+        for (const key of list.keys) {
+          if (key.name.endsWith(':base')) {
+            const code = key.name.replace('dest:', '').replace(':base', '');
+            countries.push({ code, generated_at: now });
+          }
+        }
+        await env.SALMA_KB.put('_index:countries', JSON.stringify(countries));
+        console.log(`[KV Cron] Índice creado: ${countries.length} países`);
+        return;
+      }
+
+      const countries = JSON.parse(indexJson);
+      // Ordenar por fecha más antigua primero
+      countries.sort((a, b) => (a.generated_at || 0) - (b.generated_at || 0));
+
+      // Filtrar los caducados
+      const stale = countries.filter(c => !c.generated_at || c.generated_at < cutoff);
+      if (stale.length === 0) {
+        console.log('[KV Cron] Todas las fichas están al día');
+        return;
+      }
+
+      const toRegenerate = stale.slice(0, MAX_PER_RUN);
+      console.log(`[KV Cron] Regenerando ${toRegenerate.length} fichas caducadas de ${stale.length}`);
+
+      for (const entry of toRegenerate) {
+        try {
+          // Leer ficha actual para obtener el nombre del país
+          const currentJson = await env.SALMA_KB.get('dest:' + entry.code + ':base');
+          const current = currentJson ? JSON.parse(currentJson) : null;
+          const countryName = current?.pais || entry.code;
+
+          // Regenerar con Claude (Haiku para ahorrar — datos factuales no necesitan Sonnet)
+          const prompt = `Genera una ficha de viaje práctica y actualizada del país "${countryName}" para viajeros independientes. FORMATO: Responde SOLO con JSON válido, sin backticks. Estructura: {"pais":"${countryName}","codigo":"${entry.code}","capital":"","idioma_oficial":"","idioma_viajero":"","moneda":"","cambio_aprox_eur":"","huso_horario":"","prefijo_tel":"","enchufes":"","visado_espanoles":"","visado_eu":"","mejor_epoca":"","evitar_epoca":"","seguridad":"","vacunas":"","agua_potable":"","emergencias":"","coste_diario_mochilero":"","coste_diario_medio":"","propinas":"","curiosidad_viajera":"","keywords":[]}. Datos realistas y actualizados. Precios en EUR. Keywords: ciudades principales y destinos clave.`;
+
+          const res = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': env.ANTHROPIC_API_KEY,
+              'anthropic-version': '2023-06-01',
+            },
+            body: JSON.stringify({
+              model: 'claude-haiku-4-5-20251001',
+              max_tokens: 1500,
+              temperature: 0.3,
+              messages: [{ role: 'user', content: prompt }],
+            }),
+          });
+
+          const result = await res.json();
+          const text = result?.content?.[0]?.text || '';
+
+          // Parsear JSON
+          const jsonMatch = text.match(/\{[\s\S]*\}/);
+          if (!jsonMatch) {
+            console.log(`[KV Cron] Error parseando ${entry.code}: no JSON`);
+            continue;
+          }
+
+          const newData = JSON.parse(jsonMatch[0]);
+
+          // Guardar en KV
+          await env.SALMA_KB.put('dest:' + entry.code + ':base', JSON.stringify(newData));
+
+          // Actualizar keywords
+          if (newData.keywords && Array.isArray(newData.keywords)) {
+            for (const kw of newData.keywords) {
+              const kwNorm = kw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+              await env.SALMA_KB.put('kw:' + kwNorm, entry.code);
+            }
+          }
+
+          // Actualizar fecha en el índice
+          entry.generated_at = now;
+          console.log(`[KV Cron] ✅ ${countryName} (${entry.code}) regenerado`);
+
+          // Pausa entre llamadas (rate limit)
+          await new Promise(r => setTimeout(r, 2000));
+
+        } catch (e) {
+          console.log(`[KV Cron] ❌ Error regenerando ${entry.code}: ${e.message}`);
+        }
+      }
+
+      // Guardar índice actualizado
+      await env.SALMA_KB.put('_index:countries', JSON.stringify(countries));
+      console.log(`[KV Cron] Índice actualizado. Próximas caducadas: ${Math.max(0, stale.length - MAX_PER_RUN)}`);
+
+    } catch (e) {
+      console.log(`[KV Cron] Error general: ${e.message}`);
+    }
+  },
 };
