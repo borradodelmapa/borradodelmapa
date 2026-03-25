@@ -24,7 +24,7 @@
     firebase.auth().onAuthStateChanged(user => {
       if (!$actions) return;
 
-      const helpBtn = '<button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?" onclick="window.location.href=\'/?help=1\'">?</button>';
+      const helpBtn = '<button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?">?</button>';
 
       if (user) {
         const initial = (user.displayName || user.email || '?')[0].toUpperCase();
@@ -34,6 +34,15 @@
         document.getElementById('btn-avatar')?.addEventListener('click', () => {
           window.location.href = '/?state=viajes';
         });
+        // Long press avatar → logout
+        let pressTimer;
+        const av = document.getElementById('btn-avatar');
+        if (av) {
+          av.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            if (confirm('¿Cerrar sesión?')) firebase.auth().signOut();
+          });
+        }
       } else {
         $actions.innerHTML = helpBtn +
           `<div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>`;
@@ -41,6 +50,16 @@
           window.location.href = '/?login=1';
         });
       }
+
+      // Help button → scroll to Salma
+      document.getElementById('btn-help')?.addEventListener('click', () => {
+        const salma = document.querySelector('.destino-salma-section');
+        if (salma) {
+          salma.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          alert('Salma es tu copiloto de viaje con IA.\\nPregúntale lo que quieras sobre cualquier destino.');
+        }
+      });
     });
   }
 
