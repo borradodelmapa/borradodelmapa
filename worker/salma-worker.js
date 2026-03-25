@@ -397,7 +397,7 @@ const SALMA_TOOLS = [
   },
   {
     name: "buscar_foto",
-    description: "Busca una foto REAL de un lugar, monumento, plaza, barrio o paisaje usando Google Places Photos. Usa esta herramienta cuando recomiendes un lugar concreto al usuario y quieras mostrarle cómo es. Devuelve la URL de la imagen que puedes incluir en tu respuesta con formato ![nombre](url). Úsala 1-3 veces por respuesta, solo para los lugares más relevantes. NO la uses para conceptos abstractos ni países enteros — solo para lugares concretos con nombre propio.",
+    description: "Busca fotos REALES de lugares usando Google Places Photos. Devuelve hasta 3 fotos distintas del lugar. Incluye las fotos en tu respuesta con formato ![nombre](url). IMPORTANTE: llama a esta herramienta UNA SOLA VEZ con el lugar, no la llames varias veces para el mismo sitio — ya devuelve varias fotos. Para mostrar fotos de DISTINTOS lugares, haz una llamada por lugar.",
     input_schema: {
       type: "object",
       properties: {
@@ -1560,21 +1560,35 @@ async function buscarFotoLugar(input, placesKey) {
       return { error: 'No se encontró foto para: ' + input.lugar, lugar: input.lugar };
     }
 
-    // 2. Obtener URL de la foto
-    const photoRef = place.photos[0].photo_reference;
-    const photoRes = await fetch(
-      `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photo_reference=${photoRef}&key=${placesKey}`
-    );
+    // 2. Obtener hasta 3 fotos DISTINTAS del lugar
+    const maxPhotos = Math.min(place.photos.length, 3);
+    const fotos = [];
 
-    if (!photoRes.ok) {
-      return { error: 'Error obteniendo foto', lugar: input.lugar };
+    for (let i = 0; i < maxPhotos; i++) {
+      try {
+        const photoRef = place.photos[i].photo_reference;
+        const photoRes = await fetch(
+          `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photo_reference=${photoRef}&key=${placesKey}`
+        );
+        if (photoRes.ok) {
+          fotos.push({
+            url: photoRes.url,
+            markdown: `![${place.name || input.lugar}](${photoRes.url})`,
+          });
+        }
+      } catch (_) {}
+    }
+
+    if (fotos.length === 0) {
+      return { error: 'No se pudo obtener foto', lugar: input.lugar };
     }
 
     return {
       lugar: place.name || input.lugar,
       direccion: place.formatted_address || '',
-      foto_url: photoRes.url,
-      foto_markdown: `![${place.name || input.lugar}](${photoRes.url})`,
+      total_fotos: fotos.length,
+      fotos: fotos,
+      foto_markdown: fotos.map(f => f.markdown).join('\n\n'),
     };
   } catch (e) {
     return { error: 'Error buscando foto: ' + e.message, lugar: input.lugar };
