@@ -1981,6 +1981,61 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       }
     }
 
+    // ─── ENDPOINT /create-payment (Stripe PaymentIntent) ───
+    if (request.method === 'POST' && url.pathname === '/create-payment') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+
+      const stripeKey = env.STRIPE_SECRET_KEY;
+      if (!stripeKey) {
+        return new Response(JSON.stringify({ error: 'Stripe not configured' }), { status: 500, headers: corsH });
+      }
+
+      let payBody;
+      try { payBody = await request.json(); } catch (e) {
+        return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: corsH });
+      }
+
+      const userId = payBody.user_id;
+      if (!userId) {
+        return new Response(JSON.stringify({ error: 'user_id required' }), { status: 400, headers: corsH });
+      }
+
+      // Pack Viajero: 9.99€ = 999 céntimos
+      const PACK = { name: 'viajero', amount: 999, coins: 25, currency: 'eur' };
+
+      try {
+        // Crear PaymentIntent en Stripe
+        const stripeRes = await fetch('https://api.stripe.com/v1/payment_intents', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Basic ' + btoa(stripeKey + ':'),
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            amount: PACK.amount.toString(),
+            currency: PACK.currency,
+            'metadata[user_id]': userId,
+            'metadata[pack]': PACK.name,
+            'metadata[coins]': PACK.coins.toString(),
+          }).toString(),
+        });
+
+        const intent = await stripeRes.json();
+
+        if (intent.error) {
+          return new Response(JSON.stringify({ error: intent.error.message }), { status: 400, headers: corsH });
+        }
+
+        return new Response(JSON.stringify({
+          client_secret: intent.client_secret,
+          amount: PACK.amount,
+          coins: PACK.coins,
+        }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── POST / ───
     if (request.method !== 'POST') {
       return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
