@@ -424,6 +424,39 @@ details[open] > .destino-acc-header::after {
   margin-bottom: 32px;
 }
 
+/* ── Buscador de países (index destinos) ── */
+.destino-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--dorado);
+  border-radius: 14px;
+  padding: 14px 20px;
+  background: rgba(255, 255, 255, .03);
+  transition: all .2s;
+}
+.destino-search-bar:focus-within {
+  box-shadow: 0 0 20px rgba(212, 160, 23, .15);
+  background: rgba(255, 255, 255, .06);
+}
+.destino-search-icon {
+  color: var(--dorado);
+  opacity: .5;
+  flex-shrink: 0;
+}
+.destino-search-input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--crema);
+  font-family: var(--font-body);
+  font-size: 16px;
+  outline: none;
+}
+.destino-search-input::placeholder {
+  color: rgba(244, 239, 230, .3);
+}
+
 .salma-input-hero {
   border: 1px solid var(--dorado);
   border-radius: 14px;
