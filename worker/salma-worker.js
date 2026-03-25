@@ -648,7 +648,7 @@ function getCountryCode(countryName) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData) {
   let systemPrompt = SALMA_SYSTEM_BASE;
 
   // Contexto mínimo del usuario + fecha actual
@@ -683,6 +683,41 @@ function buildMessages(history, message, currentRoute, userName, userNationality
   if (withKids) {
     ctx.push(`[VIAJA CON NIÑOS — adapta paradas y ritmo, incluye planes kid-friendly]`);
   }
+
+  // ── Datos verificados del KV (nivel 1 + nivel 2) ──
+  if (kvCountryData) {
+    const c = kvCountryData;
+    ctx.push(`[DATOS VERIFICADOS DEL PAÍS — usa estos datos, NO inventes:
+País: ${c.pais} | Capital: ${c.capital} | Idioma: ${c.idioma_oficial}
+Moneda: ${c.moneda} (${c.cambio_aprox_eur}) | Huso: ${c.huso_horario}
+Visado españoles: ${c.visado_espanoles} | Visado EU: ${c.visado_eu}
+Enchufes: ${c.enchufes} | Agua potable: ${c.agua_potable}
+Emergencias: ${c.emergencias} | Prefijo: ${c.prefijo_tel}
+Mejor época: ${c.mejor_epoca}
+Evitar: ${c.evitar_epoca}
+Seguridad: ${c.seguridad}
+Vacunas: ${c.vacunas}
+Coste mochilero: ${c.coste_diario_mochilero}/día | Medio: ${c.coste_diario_medio}/día
+Propinas: ${c.propinas}]`);
+  }
+
+  if (kvDestinationData) {
+    const d = kvDestinationData;
+    let destCtx = `[DATOS VERIFICADOS DEL DESTINO — usa estos datos para la ruta:
+Destino: ${d.nombre} (${d.tipo}) | Región: ${d.region}
+Días recomendados: ${d.dias_recomendados} | Mejor época: ${d.mejor_epoca}
+Cómo llegar: ${d.como_llegar}
+Dónde dormir: Mochilero: ${d.donde_dormir?.mochilero} | Medio: ${d.donde_dormir?.medio} | Comfort: ${d.donde_dormir?.comfort}
+Dónde comer: ${d.donde_comer}
+Consejo local: ${d.consejo_local}
+Plan B lluvia: ${d.plan_b_lluvia}`;
+    if (d.que_hacer && d.que_hacer.length > 0) {
+      destCtx += '\nQué hacer: ' + d.que_hacer.join(' | ');
+    }
+    destCtx += ']';
+    ctx.push(destCtx);
+  }
+
   systemPrompt += '\n\n' + ctx.join('\n');
 
   const messages = [];
@@ -2118,8 +2153,55 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       } catch (e) { /* Fallo silencioso */ }
     }
 
-    // Construir mensajes
-    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas);
+    // ─── KV LOOKUP (pre-Claude) ───
+    let kvCountryData = null;
+    let kvDestinationData = null;
+    let kvCachedRoute = null;
+    if (env.SALMA_KB) {
+      try {
+        const location = extractHelpLocation(message, history, currentRoute);
+        if (location) {
+          const kwNorm = location.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+          // Buscar código de país por keyword
+          const countryCode = await env.SALMA_KB.get('kw:' + kwNorm);
+          if (countryCode) {
+            // Ficha del país (nivel 1)
+            const baseJson = await env.SALMA_KB.get('dest:' + countryCode + ':base');
+            if (baseJson) kvCountryData = JSON.parse(baseJson);
+
+            // Buscar destino específico (nivel 2)
+            const spotRef = await env.SALMA_KB.get('spot:' + kwNorm);
+            if (spotRef) {
+              const spotJson = await env.SALMA_KB.get('dest:' + spotRef.replace(':', ':spot:'));
+              if (spotJson) kvDestinationData = JSON.parse(spotJson);
+            }
+
+            // Buscar ruta cacheada (nivel 3) — solo para peticiones de ruta
+            if (isRouteRequest(message, history)) {
+              const daysMatch = message.match(/(\d+)\s*d[ií]as?/i);
+              const days = daysMatch ? daysMatch[1] : null;
+              if (days) {
+                const routeKey = 'route:' + countryCode + ':' + kwNorm.replace(/\s+/g, '-') + ':' + days;
+                const cachedJson = await env.SALMA_KB.get(routeKey);
+                if (cachedJson) kvCachedRoute = JSON.parse(cachedJson);
+              }
+            }
+          }
+        }
+      } catch (e) { /* KV fallo silencioso — Salma funciona sin KV */ }
+    }
+
+    // Si hay ruta cacheada, devolverla directamente (0 coste, <100ms)
+    if (kvCachedRoute && kvCachedRoute.stops && kvCachedRoute.stops.length > 0) {
+      const cachedReply = kvCachedRoute.title ? `Aquí tienes tu ruta por ${kvCachedRoute.title}.` : 'Aquí tienes tu ruta.';
+      return new Response(
+        JSON.stringify({ reply: cachedReply, route: kvCachedRoute }),
+        { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
+      );
+    }
+
+    // Construir mensajes (con datos KV si los hay)
+    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData);
     const isRoute = isRouteRequest(message, history);
     const isFlightReq = isFlightRequest(message);
     const isHotelReq = isHotelRequest(message);
@@ -2241,6 +2323,18 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           } finally {
             clearInterval(keepalive);
           }
+        }
+
+        // ── Guardar ruta en KV (nivel 3 — caché automático) ──
+        if (route && route.stops && route.stops.length > 0 && env.SALMA_KB) {
+          try {
+            const country = (route.country || route.region || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+            const region = (route.region || route.country || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+            const days = route.duration_days || route.stops.filter((s, i, arr) => i === 0 || s.day !== arr[i-1]?.day).length;
+            const countryCode = await env.SALMA_KB.get('kw:' + country) || country.substring(0, 2);
+            const routeKey = `route:${countryCode}:${region}:${days}`;
+            ctx.waitUntil(env.SALMA_KB.put(routeKey, JSON.stringify(route), { expirationTtl: 2592000 })); // 30 días
+          } catch (_) { /* fallo silencioso */ }
         }
 
         await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply, route: route || null })}\n\n`));
