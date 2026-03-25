@@ -266,56 +266,67 @@ function buildHTML(dest, countryName, countryCode, slug) {
       </div>
     </div>
 
-    <!-- Cómo llegar -->
-    <section class="destino-section">
-      <h2 class="destino-h2">✈️ Cómo llegar</h2>
-      <p>${escapeHTML(dest.como_llegar)}</p>
-    </section>
+    <!-- Secciones en acordeón -->
+    <div class="destino-accordion">
 
-    <!-- Dónde dormir -->
-    <section class="destino-section">
-      <h2 class="destino-h2">🛏️ Dónde dormir</h2>
-      <div class="destino-dormir-grid">
-        <div class="destino-dormir-card">
-          <span class="destino-dormir-label">MOCHILERO</span>
-          <p>${escapeHTML(dest.donde_dormir?.mochilero || '')}</p>
+      <details class="destino-acc-item" open>
+        <summary class="destino-acc-header">✈️ Cómo llegar</summary>
+        <div class="destino-acc-body">
+          <p>${escapeHTML(dest.como_llegar)}</p>
         </div>
-        <div class="destino-dormir-card">
-          <span class="destino-dormir-label">RANGO MEDIO</span>
-          <p>${escapeHTML(dest.donde_dormir?.medio || '')}</p>
-        </div>
-        <div class="destino-dormir-card">
-          <span class="destino-dormir-label">COMFORT</span>
-          <p>${escapeHTML(dest.donde_dormir?.comfort || '')}</p>
-        </div>
-      </div>
-    </section>
+      </details>
 
-    <!-- Qué hacer -->
-    <section class="destino-section">
-      <h2 class="destino-h2">🎯 Qué hacer</h2>
-      <ul class="destino-list">
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">🛏️ Dónde dormir</summary>
+        <div class="destino-acc-body">
+          <div class="destino-dormir-grid">
+            <div class="destino-dormir-card">
+              <span class="destino-dormir-label">MOCHILERO</span>
+              <p>${escapeHTML(dest.donde_dormir?.mochilero || '')}</p>
+            </div>
+            <div class="destino-dormir-card">
+              <span class="destino-dormir-label">RANGO MEDIO</span>
+              <p>${escapeHTML(dest.donde_dormir?.medio || '')}</p>
+            </div>
+            <div class="destino-dormir-card">
+              <span class="destino-dormir-label">COMFORT</span>
+              <p>${escapeHTML(dest.donde_dormir?.comfort || '')}</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">🎯 Qué hacer</summary>
+        <div class="destino-acc-body">
+          <ul class="destino-list">
 ${activitiesHTML}
-      </ul>
-    </section>
+          </ul>
+        </div>
+      </details>
 
-    <!-- Dónde comer -->
-    <section class="destino-section">
-      <h2 class="destino-h2">🍽️ Dónde comer</h2>
-      <p>${escapeHTML(dest.donde_comer)}</p>
-    </section>
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">🍽️ Dónde comer</summary>
+        <div class="destino-acc-body">
+          <p>${escapeHTML(dest.donde_comer)}</p>
+        </div>
+      </details>
 
-    <!-- Consejo local -->
-    <section class="destino-section destino-highlight">
-      <h2 class="destino-h2">💡 Consejo local</h2>
-      <p>${escapeHTML(dest.consejo_local)}</p>
-    </section>
+      <details class="destino-acc-item destino-highlight">
+        <summary class="destino-acc-header">💡 Consejo local</summary>
+        <div class="destino-acc-body">
+          <p>${escapeHTML(dest.consejo_local)}</p>
+        </div>
+      </details>
 
-    <!-- Plan B -->
-    <section class="destino-section">
-      <h2 class="destino-h2">🌧️ Plan B si llueve</h2>
-      <p>${escapeHTML(dest.plan_b_lluvia)}</p>
-    </section>
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">🌧️ Plan B si llueve</summary>
+        <div class="destino-acc-body">
+          <p>${escapeHTML(dest.plan_b_lluvia)}</p>
+        </div>
+      </details>
+
+    </div>
 
     <!-- FAQ -->
     <section class="destino-section destino-faq">
@@ -345,13 +356,14 @@ ${activitiesHTML}
 
   <!-- SALMA FAB -->
   <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <span class="salma-fab-icon">💬</span>
+    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
     <span class="salma-fab-label">Salma</span>
   </button>
 
   <!-- SALMA CHAT POPUP (hidden) -->
   <div class="salma-chat-popup" id="salma-chat-popup">
     <div class="salma-chat-header">
+      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
       <span class="salma-chat-title">Salma</span>
       <button class="salma-chat-close" id="salma-chat-close">×</button>
     </div>

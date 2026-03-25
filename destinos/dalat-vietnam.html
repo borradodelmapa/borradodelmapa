@@ -77,59 +77,70 @@
       </div>
     </div>
 
-    <!-- Cómo llegar -->
-    <section class="destino-section">
-      <h2 class="destino-h2">✈️ Cómo llegar</h2>
-      <p>Vuelo desde HCMC (50 min, desde 20€). Bus desde HCMC: 7h (~8€). Bus desde Nha Trang: 4h (~5€).</p>
-    </section>
+    <!-- Secciones en acordeón -->
+    <div class="destino-accordion">
 
-    <!-- Dónde dormir -->
-    <section class="destino-section">
-      <h2 class="destino-h2">🛏️ Dónde dormir</h2>
-      <div class="destino-dormir-grid">
-        <div class="destino-dormir-card">
-          <span class="destino-dormir-label">MOCHILERO</span>
-          <p>Hostel centro: 5-7€/noche</p>
+      <details class="destino-acc-item" open>
+        <summary class="destino-acc-header">✈️ Cómo llegar</summary>
+        <div class="destino-acc-body">
+          <p>Vuelo desde HCMC (50 min, desde 20€). Bus desde HCMC: 7h (~8€). Bus desde Nha Trang: 4h (~5€).</p>
         </div>
-        <div class="destino-dormir-card">
-          <span class="destino-dormir-label">RANGO MEDIO</span>
-          <p>Hotel con vistas al lago: 15-30€/noche</p>
-        </div>
-        <div class="destino-dormir-card">
-          <span class="destino-dormir-label">COMFORT</span>
-          <p>Ana Mandara Villas: 80-150€/noche</p>
-        </div>
-      </div>
-    </section>
+      </details>
 
-    <!-- Qué hacer -->
-    <section class="destino-section">
-      <h2 class="destino-h2">🎯 Qué hacer</h2>
-      <ul class="destino-list">
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">🛏️ Dónde dormir</summary>
+        <div class="destino-acc-body">
+          <div class="destino-dormir-grid">
+            <div class="destino-dormir-card">
+              <span class="destino-dormir-label">MOCHILERO</span>
+              <p>Hostel centro: 5-7€/noche</p>
+            </div>
+            <div class="destino-dormir-card">
+              <span class="destino-dormir-label">RANGO MEDIO</span>
+              <p>Hotel con vistas al lago: 15-30€/noche</p>
+            </div>
+            <div class="destino-dormir-card">
+              <span class="destino-dormir-label">COMFORT</span>
+              <p>Ana Mandara Villas: 80-150€/noche</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">🎯 Qué hacer</summary>
+        <div class="destino-acc-body">
+          <ul class="destino-list">
           <li>Ruta de cascadas en moto: Elephant Falls + Datanla + Pongour (moto 5€/día, entradas 1-2€ cada una)</li>
           <li>Tour de café especialidad — fincas locales (10-15€)</li>
           <li>Canyoning en Datanla Falls con Highland Sport (65€, adrenalina pura)</li>
           <li>Mercado nocturno + pizza vietnamita (banh trang nuong, 0.50€)</li>
-      </ul>
-    </section>
+          </ul>
+        </div>
+      </details>
 
-    <!-- Dónde comer -->
-    <section class="destino-section">
-      <h2 class="destino-h2">🍽️ Dónde comer</h2>
-      <p>Banh trang nuong (pizza vietnamita) en el mercado nocturno. Lau (hotpot) en cualquier restaurante local por 5€/persona. Café: La Viet o The Married Beans para especialidad.</p>
-    </section>
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">🍽️ Dónde comer</summary>
+        <div class="destino-acc-body">
+          <p>Banh trang nuong (pizza vietnamita) en el mercado nocturno. Lau (hotpot) en cualquier restaurante local por 5€/persona. Café: La Viet o The Married Beans para especialidad.</p>
+        </div>
+      </details>
 
-    <!-- Consejo local -->
-    <section class="destino-section destino-highlight">
-      <h2 class="destino-h2">💡 Consejo local</h2>
-      <p>Alquila moto y haz la ruta desde Da Lat hasta Nha Trang por carretera de montaña (140 km). Es la segunda mejor ruta en moto de Vietnam después de Hai Van Pass.</p>
-    </section>
+      <details class="destino-acc-item destino-highlight">
+        <summary class="destino-acc-header">💡 Consejo local</summary>
+        <div class="destino-acc-body">
+          <p>Alquila moto y haz la ruta desde Da Lat hasta Nha Trang por carretera de montaña (140 km). Es la segunda mejor ruta en moto de Vietnam después de Hai Van Pass.</p>
+        </div>
+      </details>
 
-    <!-- Plan B -->
-    <section class="destino-section">
-      <h2 class="destino-h2">🌧️ Plan B si llueve</h2>
-      <p>Tour de cafés (Da Lat tiene los mejores de Vietnam). Crazy House (arquitectura surrealista, 2€). Invernaderos de flores.</p>
-    </section>
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">🌧️ Plan B si llueve</summary>
+        <div class="destino-acc-body">
+          <p>Tour de cafés (Da Lat tiene los mejores de Vietnam). Crazy House (arquitectura surrealista, 2€). Invernaderos de flores.</p>
+        </div>
+      </details>
+
+    </div>
 
     <!-- FAQ -->
     <section class="destino-section destino-faq">
@@ -179,13 +190,14 @@
 
   <!-- SALMA FAB -->
   <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <span class="salma-fab-icon">💬</span>
+    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
     <span class="salma-fab-label">Salma</span>
   </button>
 
   <!-- SALMA CHAT POPUP (hidden) -->
   <div class="salma-chat-popup" id="salma-chat-popup">
     <div class="salma-chat-header">
+      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
       <span class="salma-chat-title">Salma</span>
       <button class="salma-chat-close" id="salma-chat-close">×</button>
     </div>

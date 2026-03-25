@@ -118,7 +118,83 @@
 .destino-security-ok { color: #4ade80; }
 .destino-security-warn { color: #f59e0b; }
 
-/* ── Sections ────────────────────────────────────────────── */
+/* ── Accordion Sections ──────────────────────────────────── */
+
+.destino-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.destino-acc-item {
+  border-bottom: 1px solid var(--linea);
+}
+
+.destino-acc-item:last-child {
+  border-bottom: none;
+}
+
+.destino-acc-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 0;
+  font-family: var(--font-tight);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--blanco);
+  cursor: pointer;
+  list-style: none;
+  transition: color .2s;
+}
+
+.destino-acc-header::-webkit-details-marker { display: none; }
+
+.destino-acc-header::after {
+  content: '▸';
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--dorado);
+  transition: transform .2s;
+}
+
+details[open] > .destino-acc-header::after {
+  transform: rotate(90deg);
+}
+
+.destino-acc-header:hover {
+  color: var(--dorado);
+}
+
+.destino-acc-body {
+  padding: 0 0 20px;
+}
+
+.destino-acc-body p {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(244, 239, 230, .8);
+  margin: 0;
+}
+
+/* ── Highlight (consejo local) ───────────────────────────── */
+
+.destino-highlight {
+  border-left: 3px solid var(--dorado);
+  padding-left: 16px;
+  background: rgba(212, 160, 23, .04);
+  border-radius: 0 12px 12px 0;
+}
+
+.destino-highlight .destino-acc-header {
+  padding-left: 4px;
+}
+
+.destino-highlight .destino-acc-body {
+  padding-left: 4px;
+}
+
+/* ── FAQ section (keep non-accordion) ────────────────────── */
 
 .destino-section {
   margin-bottom: 28px;
@@ -136,26 +212,6 @@
   font-weight: 700;
   color: var(--blanco);
   margin: 0 0 12px;
-}
-
-.destino-section p {
-  font-family: var(--font-body);
-  font-size: 15px;
-  line-height: 1.7;
-  color: rgba(244, 239, 230, .8);
-  margin: 0;
-}
-
-/* ── Highlight (consejo local) ───────────────────────────── */
-
-.destino-highlight {
-  border-left: 3px solid var(--dorado);
-  padding-left: 16px;
-  background: rgba(212, 160, 23, .04);
-  border-radius: 0 12px 12px 0;
-  padding: 20px;
-  padding-left: 20px;
-  border-bottom: none;
 }
 
 /* ── Dormir grid ─────────────────────────────────────────── */
@@ -386,9 +442,11 @@
   box-shadow: 0 6px 28px rgba(212, 160, 23, .5);
 }
 
-.salma-fab-icon {
-  font-size: 18px;
-  line-height: 1;
+.salma-fab-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .salma-fab-label {
@@ -434,6 +492,13 @@
   justify-content: space-between;
   padding: 14px 16px;
   border-bottom: 1px solid var(--linea);
+}
+
+.salma-chat-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .salma-chat-title {

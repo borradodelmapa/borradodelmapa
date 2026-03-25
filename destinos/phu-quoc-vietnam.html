@@ -77,59 +77,70 @@
       </div>
     </div>
 
-    <!-- Cómo llegar -->
-    <section class="destino-section">
-      <h2 class="destino-h2">✈️ Cómo llegar</h2>
-      <p>Vuelo directo desde HCMC (1h, desde 20€) o Hanói. Ferry desde Ha Tien/Rach Gia (~2.5h, 10€).</p>
-    </section>
+    <!-- Secciones en acordeón -->
+    <div class="destino-accordion">
 
-    <!-- Dónde dormir -->
-    <section class="destino-section">
-      <h2 class="destino-h2">🛏️ Dónde dormir</h2>
-      <div class="destino-dormir-grid">
-        <div class="destino-dormir-card">
-          <span class="destino-dormir-label">MOCHILERO</span>
-          <p>Hostel/bungalow Long Beach: 8-12€/noche</p>
+      <details class="destino-acc-item" open>
+        <summary class="destino-acc-header">✈️ Cómo llegar</summary>
+        <div class="destino-acc-body">
+          <p>Vuelo directo desde HCMC (1h, desde 20€) o Hanói. Ferry desde Ha Tien/Rach Gia (~2.5h, 10€).</p>
         </div>
-        <div class="destino-dormir-card">
-          <span class="destino-dormir-label">RANGO MEDIO</span>
-          <p>Resort playa norte: 25-50€/noche</p>
-        </div>
-        <div class="destino-dormir-card">
-          <span class="destino-dormir-label">COMFORT</span>
-          <p>Resort 5★ Ong Lang: 80-200€/noche</p>
-        </div>
-      </div>
-    </section>
+      </details>
 
-    <!-- Qué hacer -->
-    <section class="destino-section">
-      <h2 class="destino-h2">🎯 Qué hacer</h2>
-      <ul class="destino-list">
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">🛏️ Dónde dormir</summary>
+        <div class="destino-acc-body">
+          <div class="destino-dormir-grid">
+            <div class="destino-dormir-card">
+              <span class="destino-dormir-label">MOCHILERO</span>
+              <p>Hostel/bungalow Long Beach: 8-12€/noche</p>
+            </div>
+            <div class="destino-dormir-card">
+              <span class="destino-dormir-label">RANGO MEDIO</span>
+              <p>Resort playa norte: 25-50€/noche</p>
+            </div>
+            <div class="destino-dormir-card">
+              <span class="destino-dormir-label">COMFORT</span>
+              <p>Resort 5★ Ong Lang: 80-200€/noche</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">🎯 Qué hacer</summary>
+        <div class="destino-acc-body">
+          <ul class="destino-list">
           <li>Snorkel en islas del sur — tour en barco (15€ con almuerzo)</li>
           <li>Playa Sao Beach (la más bonita, gratis)</li>
           <li>Visitar fábricas de nuoc mam (salsa de pescado) y pimienta (gratis)</li>
           <li>Mercado nocturno Dinh Cau — marisco a la parrilla (5-10€)</li>
-      </ul>
-    </section>
+          </ul>
+        </div>
+      </details>
 
-    <!-- Dónde comer -->
-    <section class="destino-section">
-      <h2 class="destino-h2">🍽️ Dónde comer</h2>
-      <p>Mercado nocturno Dinh Cau: elige marisco vivo, te lo cocinan. 5-10€ por persona. Crab House en Long Beach para cangrejo con pimienta (especialidad local).</p>
-    </section>
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">🍽️ Dónde comer</summary>
+        <div class="destino-acc-body">
+          <p>Mercado nocturno Dinh Cau: elige marisco vivo, te lo cocinan. 5-10€ por persona. Crab House en Long Beach para cangrejo con pimienta (especialidad local).</p>
+        </div>
+      </details>
 
-    <!-- Consejo local -->
-    <section class="destino-section destino-highlight">
-      <h2 class="destino-h2">💡 Consejo local</h2>
-      <p>El norte de la isla (Ganh Dau, Rach Vem) tiene playas mucho más tranquilas que Long Beach. Alquila moto y explora. La puesta de sol desde Ong Lang Beach es mejor que la de Long Beach.</p>
-    </section>
+      <details class="destino-acc-item destino-highlight">
+        <summary class="destino-acc-header">💡 Consejo local</summary>
+        <div class="destino-acc-body">
+          <p>El norte de la isla (Ganh Dau, Rach Vem) tiene playas mucho más tranquilas que Long Beach. Alquila moto y explora. La puesta de sol desde Ong Lang Beach es mejor que la de Long Beach.</p>
+        </div>
+      </details>
 
-    <!-- Plan B -->
-    <section class="destino-section">
-      <h2 class="destino-h2">🌧️ Plan B si llueve</h2>
-      <p>Fábricas de nuoc mam y pimienta son cubiertas. Vinpearl Safari (zoo, 20€). O simplemente spa + cervezas viendo llover.</p>
-    </section>
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">🌧️ Plan B si llueve</summary>
+        <div class="destino-acc-body">
+          <p>Fábricas de nuoc mam y pimienta son cubiertas. Vinpearl Safari (zoo, 20€). O simplemente spa + cervezas viendo llover.</p>
+        </div>
+      </details>
+
+    </div>
 
     <!-- FAQ -->
     <section class="destino-section destino-faq">
@@ -179,13 +190,14 @@
 
   <!-- SALMA FAB -->
   <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <span class="salma-fab-icon">💬</span>
+    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
     <span class="salma-fab-label">Salma</span>
   </button>
 
   <!-- SALMA CHAT POPUP (hidden) -->
   <div class="salma-chat-popup" id="salma-chat-popup">
     <div class="salma-chat-header">
+      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
       <span class="salma-chat-title">Salma</span>
       <button class="salma-chat-close" id="salma-chat-close">×</button>
     </div>
