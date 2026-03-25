@@ -34,10 +34,12 @@
     </div>
   </header>
 
+  <!-- NAV -->
+  <nav class="destino-nav-bar">
+    <a href="/destinos/" class="destino-nav-link">Destinos</a>
+  </nav>
+
   <section class="destino-hero">
-    <nav class="destino-breadcrumb">
-      <a href="/destinos/">Destinos</a> ›
-    </nav>
     <h1 class="destino-title">Viajar a Kazajistán</h1>
     <p class="destino-subtitle">10 DESTINOS</p>
   </section>
@@ -137,10 +139,24 @@
       </a>
     </div>
 
-    <section class="destino-cta">
-      <h2>Planifica tu viaje a Kazajistán</h2>
-      <p>Salma te arma una ruta día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Kazajist%C3%A1n%207%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    <!-- SALMA INLINE -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Planifica tu viaje a Kazajistán</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! ¿Quieres viajar a Kazajistán? Pregúntame lo que quieras.</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Mejor ruta por Kazajistán">📋 Mejor ruta</button>
+          <button class="salma-chip" data-msg="Presupuesto para Kazajistán">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Vuelos a Kazajistán">✈️ Vuelos</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="ruta por Kazajistán|presupuesto Kazajistán|mejor época Kazajistán|¿es seguro Kazajistán?">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
   </main>
 
@@ -152,31 +168,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! ¿Quieres viajar a Kazajistán? Pregúntame lo que quieras.</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Mejor ruta por Kazajistán">📋 Mejor ruta</button>
-        <button class="salma-chip" data-msg="Presupuesto para Kazajistán">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Vuelos a Kazajistán">✈️ Vuelos</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="ruta por Kazajistán|presupuesto Kazajistán|mejor época Kazajistán|¿es seguro Kazajistán?">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Kazajistán","pais":"Kazajistán","id":"kz","code":"kz"};

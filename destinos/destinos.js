@@ -116,11 +116,9 @@
     }
 
     // Simple Q&A via worker — add destination context
+    const contextPrefix = DESTINO.nombre ? `[Contexto: el usuario está en la página de ${DESTINO.nombre}${DESTINO.pais ? ', ' + DESTINO.pais : ''}. Responde sobre este destino de forma breve y práctica.]\n\n` : '';
     const body = {
-      messages: [
-        { role: 'user', content: `[Contexto: el usuario está en la página de ${DESTINO.nombre}, ${DESTINO.pais}. Responde sobre este destino de forma breve y práctica.]\n\n${text}` }
-      ],
-      destino_context: true
+      message: contextPrefix + text
     };
 
     fetch(API, {
