@@ -54,7 +54,7 @@ body {
   cursor:pointer;
 }
 .app-logo span { color:var(--dorado); }
-.app-header-actions { position:absolute; right:14px; display:flex; align-items:center; }
+.app-header-actions { position:absolute; right:14px; display:flex; align-items:center; gap:10px; }
 @media (max-width:420px) {
   .app-logo { font-size:24px; letter-spacing:2px; }
 }
@@ -768,6 +768,51 @@ body {
 .share-menu-item + .share-menu-item {
   border-top:1px solid var(--linea);
 }
+
+/* ═══ HELP BUTTON ═══ */
+.app-help-btn {
+  width:32px; height:32px; border-radius:50%;
+  background:transparent; border:1px solid rgba(244,239,230,.15);
+  color:rgba(244,239,230,.4); font-family:var(--font-mono);
+  font-size:14px; font-weight:600; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .2s;
+}
+.app-help-btn:hover { border-color:var(--dorado); color:var(--dorado); }
+
+/* ═══ SALMA INFO MODAL ═══ */
+.salma-info-overlay {
+  position:fixed; inset:0; z-index:9998;
+  background:rgba(0,0,0,.7); backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+}
+.salma-info-modal {
+  background:rgba(20,20,20,.95); border:1px solid rgba(212,168,67,.15);
+  border-radius:16px; padding:28px 24px; max-width:360px; width:100%;
+  position:relative;
+}
+.salma-info-close {
+  position:absolute; top:12px; right:16px;
+  background:none; border:none; color:rgba(244,239,230,.4);
+  font-size:22px; cursor:pointer; line-height:1;
+}
+.salma-info-close:hover { color:var(--dorado); }
+.salma-info-title {
+  font-family:var(--font-mono); font-size:14px; font-weight:600;
+  color:var(--dorado); letter-spacing:.1em; margin-bottom:20px;
+}
+.salma-info-list { display:flex; flex-direction:column; gap:10px; }
+.salma-info-item {
+  font-size:14px; color:rgba(244,239,230,.75);
+  padding-left:28px; position:relative; line-height:1.4;
+}
+.salma-info-item::before {
+  position:absolute; left:0; top:0; font-size:14px;
+}
+.salma-info-item.done::before { content:'✅'; }
+.salma-info-item.soon::before { content:'🔜'; }
+.salma-info-item.soon { color:rgba(244,239,230,.4); }
 
 /* ═══ COOKIE BANNER ═══ */
 .cookie-banner {

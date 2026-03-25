@@ -146,6 +146,28 @@
   </div>
 </div>
 
+<!-- ═══ MODAL: QUÉ PUEDE HACER SALMA ═══ -->
+<div class="salma-info-overlay" id="salma-info-overlay" style="display:none">
+  <div class="salma-info-modal">
+    <button class="salma-info-close" id="salma-info-close">&times;</button>
+    <div class="salma-info-title">¿Qué puede hacer Salma?</div>
+    <div class="salma-info-list">
+      <div class="salma-info-item done">Rutas día a día con mapa</div>
+      <div class="salma-info-item done">Vuelos con precios reales</div>
+      <div class="salma-info-item done">Hoteles con disponibilidad</div>
+      <div class="salma-info-item done">Alquiler de coches</div>
+      <div class="salma-info-item done">Restaurantes cerca</div>
+      <div class="salma-info-item done">Info del destino (visa, vacunas, moneda)</div>
+      <div class="salma-info-item done">Presupuesto desglosado</div>
+      <div class="salma-info-item done">Plan B si llueve</div>
+      <div class="salma-info-item done">Compartir guía por link</div>
+      <div class="salma-info-item soon">Trenes y buses</div>
+      <div class="salma-info-item soon">Audio guía en ruta</div>
+      <div class="salma-info-item soon">Salma te acompaña durante el viaje</div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ TOAST ═══ -->
 <div class="toast" id="toast"></div>
 
@@ -178,6 +200,14 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').catch(() => {});
 }
 if (typeof salma !== 'undefined') salma.initGeolocation();
+
+// Salma info modal
+document.getElementById('salma-info-close')?.addEventListener('click', () => {
+  document.getElementById('salma-info-overlay').style.display = 'none';
+});
+document.getElementById('salma-info-overlay')?.addEventListener('click', (e) => {
+  if (e.target.id === 'salma-info-overlay') e.target.style.display = 'none';
+});
 
 // Cookie consent
 (function() {

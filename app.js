@@ -40,17 +40,22 @@ function showState(state) {
 }
 
 function updateHeader() {
-  let html = '';
+  let html = '<button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?">?</button>';
   if (currentUser) {
     const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
-    html = `<div class="app-avatar" id="btn-avatar" title="Mis Viajes">${escapeHTML(initial)}</div>`;
+    html += `<div class="app-avatar" id="btn-avatar" title="Mis Viajes">${escapeHTML(initial)}</div>`;
   } else {
-    html = `<div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>`;
+    html += `<div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>`;
   }
   $headerActions.innerHTML = html;
 
   const btnAvatar = document.getElementById('btn-avatar');
   if (btnAvatar) btnAvatar.addEventListener('click', handleAvatarClick);
+
+  const btnHelp = document.getElementById('btn-help');
+  if (btnHelp) btnHelp.addEventListener('click', () => {
+    document.getElementById('salma-info-overlay').style.display = 'flex';
+  });
 }
 
 function handleAvatarClick() {
