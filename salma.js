@@ -547,14 +547,19 @@ const salma = {
 
   // ═══ GUARDAR ═══
   async guardar() {
-    if (!this.currentRoute) return;
+    if (!this.currentRoute) {
+      showToast('No hay ruta para guardar');
+      return;
+    }
     const id = await guardarGuia(this.currentRoute);
     if (id) {
       this.currentRouteId = id;
       // Quitar botón guardar de la guide-card
       const btn = document.getElementById('guide-save-btn');
       if (btn) btn.remove();
+      showToast('Guía guardada en Mis Viajes');
     }
+    // Si id es null → el modal de registro se ha abierto (guardarGuia lo maneja)
   },
 
   // ═══ RESET ═══

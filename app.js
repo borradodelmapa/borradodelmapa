@@ -518,9 +518,10 @@ auth.onAuthStateChanged(async (user) => {
 
 async function guardarGuia(routeData) {
   if (!currentUser) {
-    // Registro lazy
+    // Registro lazy — guardar ruta y pedir login
     window._salmaLastRoute = routeData;
     localStorage.setItem('_salmaRouteBackup', JSON.stringify(routeData));
+    showToast('Regístrate para guardar tu ruta');
     openModal('register');
     return null;
   }
