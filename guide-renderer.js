@@ -12,6 +12,20 @@ if (typeof escapeHTML === 'undefined') {
   };
 }
 
+// Escapar HTML + linkificar URLs y teléfonos
+function linkify(str) {
+  if (!str) return '';
+  let html = escapeHTML(str);
+  // URLs → enlaces clicables
+  html = html.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:var(--dorado);word-break:break-all;">$1</a>');
+  // Teléfonos internacionales
+  html = html.replace(/(\+\d{1,3}[ .-]?\d{1,4}[ .-]?\d{2,4}[ .-]?\d{2,4}[ .-]?\d{0,4})/g, function(match) {
+    var clean = match.replace(/[\s.-]/g, '').trim();
+    return '<a href="tel:' + clean + '" style="color:var(--dorado);">' + match.trim() + '</a>';
+  });
+  return html;
+}
+
 const guideRenderer = {
 
   // Iconos por tipo de parada
@@ -272,19 +286,19 @@ const guideRenderer = {
       if (s.context) {
         tagsHtml += `<div class="guide-stop-tag tag-context">
           <span class="guide-stop-tag-label">📖 CONTEXTO</span>
-          ${escapeHTML(s.context)}
+          ${linkify(s.context)}
         </div>`;
       }
       if (s.food_nearby) {
         tagsHtml += `<div class="guide-stop-tag tag-food">
           <span class="guide-stop-tag-label">🍜 COME CERCA</span>
-          ${escapeHTML(s.food_nearby)}
+          ${linkify(s.food_nearby)}
         </div>`;
       }
       if (s.eat && (s.eat.dish || s.eat.name)) {
         const eatParts = [];
         if (s.eat.name) eatParts.push('<strong>' + escapeHTML(s.eat.name) + '</strong>');
-        if (s.eat.dish) eatParts.push(escapeHTML(s.eat.dish));
+        if (s.eat.dish) eatParts.push(linkify(s.eat.dish));
         if (s.eat.price_approx) eatParts.push(escapeHTML(s.eat.price_approx));
         tagsHtml += `<div class="guide-stop-tag tag-eat">
           <span class="guide-stop-tag-label">🍽️ COMER AQUÍ</span>
@@ -294,7 +308,7 @@ const guideRenderer = {
       if (s.local_secret) {
         tagsHtml += `<div class="guide-stop-tag tag-secret">
           <span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>
-          ${escapeHTML(s.local_secret)}
+          ${linkify(s.local_secret)}
         </div>`;
       }
       if (s.sleep && (s.sleep.zone || s.sleep.name)) {
@@ -311,11 +325,11 @@ const guideRenderer = {
       if (s.alt_bad_weather) {
         tagsHtml += `<div class="guide-stop-tag tag-weather">
           <span class="guide-stop-tag-label">🌧️ SI LLUEVE</span>
-          ${escapeHTML(s.alt_bad_weather)}
+          ${linkify(s.alt_bad_weather)}
         </div>`;
       }
       if (s.practical) {
-        tagsHtml += `<div class="guide-stop-practical">📋 ${escapeHTML(s.practical)}</div>`;
+        tagsHtml += `<div class="guide-stop-practical">${linkify(s.practical)}</div>`;
       }
 
       // Foto: lazy load desde /photo si hay photo_ref
@@ -333,7 +347,7 @@ const guideRenderer = {
           </div>
           <div class="guide-stop-body">
             ${photoHtml}
-            ${s.narrative ? `<p class="guide-stop-narrative">${escapeHTML(s.narrative)}</p>` : ''}
+            ${s.narrative ? `<p class="guide-stop-narrative">${linkify(s.narrative)}</p>` : ''}
             ${tagsHtml}
             <a class="guide-stop-gmaps" href="${gmapsUrl}" target="_blank" rel="noopener">
               VER EN GOOGLE MAPS →
@@ -435,8 +449,8 @@ const guideRenderer = {
     // Emergencias
     if (pi.emergencies) {
       html += '<div class="guide-info-block"><strong>🚨 Emergencias</strong><br>';
-      if (pi.emergencies.general_number) html += 'Tel: <strong>' + escapeHTML(pi.emergencies.general_number) + '</strong><br>';
-      if (pi.emergencies.embassy) html += escapeHTML(pi.emergencies.embassy);
+      if (pi.emergencies.general_number) html += 'Tel: <strong>' + linkify(pi.emergencies.general_number) + '</strong><br>';
+      if (pi.emergencies.embassy) html += linkify(pi.emergencies.embassy);
       html += '</div>';
     }
 
