@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Cap-Haïtien en tap-tap o coche compartido hacia el oeste, ~2-3 horas. Acceso a Isla Tortuga en barca desde Port-de-Paix (~1 hora, 5-8 EUR).</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Saint-Louis-du-Nord y Costa Noroeste">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>No hay opciones comfort en la zona</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Saint-Louis-du-Nord y Costa Noroeste">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -115,6 +120,7 @@
           <li>Snorkel en arrecifes vírgenes de la costa noroeste - equipo propio necesario</li>
           <li>Visitar mercados locales de Port-de-Paix - gratuito</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Saint-Louis-du-Nord y Costa Noroeste">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -139,12 +145,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Saint-Louis-du-Nord y Costa Noroeste desde España?</h3>
           <p>El presupuesto diario en Saint-Louis-du-Nord y Costa Noroeste va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Casas de familias locales, 10-18 EUR/noche (negociado directamente). Rango medio: Pequeñas pensiones en Port-de-Paix, 20-35 EUR/noche. Desde Cap-Haïtien en tap-tap o coche compartido hacia el oeste, ~2-3 horas. Acceso a Isla Tortuga en barca desde Port-de-Paix (~1 hora, 5-8 EUR).</p>
@@ -165,14 +169,36 @@
           <h3>¿Cuál es la mejor época para viajar a Saint-Louis-du-Nord y Costa Noroeste?</h3>
           <p>La mejor época para visitar Saint-Louis-du-Nord y Costa Noroeste es Enero a abril. Se recomiendan 2 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Saint-Louis-du-Nord y Costa Noroeste</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Saint-Louis-du-Nord%20y%20Costa%20Noroeste%202%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Saint-Louis-du-Nord y Costa Noroeste</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Saint-Louis-du-Nord y Costa Noroeste. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Saint-Louis-du-Nord y Costa Noroeste">💡 Consejos Saint-Louis-du-Nord y Costa Noroeste</button>
+          <button class="salma-chip" data-msg="Itinerario en Saint-Louis-du-Nord y Costa Noroeste">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Saint-Louis-du-Nord y Costa Noroeste">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Saint-Louis-du-Nord y Costa Noroeste">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Saint-Louis-du-Nord y Costa Noroeste">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Saint-Louis-du-Nord y Costa Noroeste?|ruta por Haití|¿dónde comer en Saint-Louis-du-Nord y Costa Noroeste?|Saint-Louis-du-Nord y Costa Noroeste en 2 días|presupuesto Haití|¿es seguro viajar a Saint-Louis-du-Nord y Costa Noroeste?|mejor época para Haití">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -186,35 +212,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Saint-Louis-du-Nord y Costa Noroeste. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Saint-Louis-du-Nord y Costa Noroeste">💡 Consejos Saint-Louis-du-Nord y Costa Noroeste</button>
-        <button class="salma-chip" data-msg="Itinerario 2 días en Saint-Louis-du-Nord y Costa Noroeste">📋 Itinerario 2 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Saint-Louis-du-Nord y Costa Noroeste">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Saint-Louis-du-Nord y Costa Noroeste">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Saint-Louis-du-Nord y Costa Noroeste">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Saint-Louis-du-Nord y Costa Noroeste?|ruta por Haití|¿dónde comer en Saint-Louis-du-Nord y Costa Noroeste?|Saint-Louis-du-Nord y Costa Noroeste en 2 días|presupuesto Haití|¿es seguro viajar a Saint-Louis-du-Nord y Costa Noroeste?|mejor época para Haití">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Saint-Louis-du-Nord y Costa Noroeste","pais":"Haití","id":"saint-louis-du-nord","code":"ht"};

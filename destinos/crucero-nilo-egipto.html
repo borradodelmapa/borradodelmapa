@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Salida desde Luxor o Asuán. Llegar a cualquiera de las dos desde El Cairo en tren o vuelo. Los barcos de crucero salen diariamente en temporada alta.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Crucero por el Nilo (Luxor-Asuán)">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Crucero boutique o dahabiya (barco de vela grande): 400-800 EUR todo incluido</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Crucero por el Nilo (Luxor-Asuán)">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -117,6 +122,7 @@
           <li>Atardecer en cubierta navegando entre campos de caña de azúcar</li>
           <li>Escala en aldeas rurales durante el trayecto en felucca</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Crucero por el Nilo (Luxor-Asuán)">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -141,12 +147,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Crucero por el Nilo (Luxor-Asuán) desde España?</h3>
           <p>El presupuesto diario en Crucero por el Nilo (Luxor-Asuán) va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Felucca tradicional de vela con colchonetas en cubierta + cocinero: 20-30 EUR/persona/noche (mínimo 3-4 personas). Rango medio: Crucero standard de 4 días: 150-300 EUR todo incluido por persona. Salida desde Luxor o Asuán. Llegar a cualquiera de las dos desde El Cairo en tren o vuelo. Los barcos de crucero salen diariamente en temporada alta.</p>
@@ -167,14 +171,36 @@
           <h3>¿Cuál es la mejor época para viajar a Crucero por el Nilo (Luxor-Asuán)?</h3>
           <p>La mejor época para visitar Crucero por el Nilo (Luxor-Asuán) es Octubre a febrero. Se recomiendan 4 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Crucero por el Nilo (Luxor-Asuán)</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Crucero%20por%20el%20Nilo%20(Luxor-Asu%C3%A1n)%204%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Crucero por el Nilo (Luxor-Asuán)</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Crucero por el Nilo (Luxor-Asuán). ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Crucero por el Nilo (Luxor-Asuán)">💡 Consejos Crucero por el Nilo (Luxor-Asuán)</button>
+          <button class="salma-chip" data-msg="Itinerario en Crucero por el Nilo (Luxor-Asuán)">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Crucero por el Nilo (Luxor-Asuán)">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Crucero por el Nilo (Luxor-Asuán)">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Crucero por el Nilo (Luxor-Asuán)">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Crucero por el Nilo (Luxor-Asuán)?|ruta por Egipto|¿dónde comer en Crucero por el Nilo (Luxor-Asuán)?|Crucero por el Nilo (Luxor-Asuán) en 4 días|presupuesto Egipto|¿es seguro viajar a Crucero por el Nilo (Luxor-Asuán)?|mejor época para Egipto">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -188,35 +214,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Crucero por el Nilo (Luxor-Asuán). ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Crucero por el Nilo (Luxor-Asuán)">💡 Consejos Crucero por el Nilo (Luxor-Asuán)</button>
-        <button class="salma-chip" data-msg="Itinerario 4 días en Crucero por el Nilo (Luxor-Asuán)">📋 Itinerario 4 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Crucero por el Nilo (Luxor-Asuán)">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Crucero por el Nilo (Luxor-Asuán)">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Crucero por el Nilo (Luxor-Asuán)">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Crucero por el Nilo (Luxor-Asuán)?|ruta por Egipto|¿dónde comer en Crucero por el Nilo (Luxor-Asuán)?|Crucero por el Nilo (Luxor-Asuán) en 4 días|presupuesto Egipto|¿es seguro viajar a Crucero por el Nilo (Luxor-Asuán)?|mejor época para Egipto">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Crucero por el Nilo (Luxor-Asuán)","pais":"Egipto","id":"crucero-nilo","code":"eg"};

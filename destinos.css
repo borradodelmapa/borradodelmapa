@@ -418,6 +418,108 @@ details[open] > .destino-acc-header::after {
   margin: 0;
 }
 
+/* ── Salma input (index) ──────────────────────────────────── */
+
+.destino-salma-input-wrap {
+  margin-bottom: 32px;
+}
+
+.destino-salma-input-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid var(--dorado);
+  border-radius: 14px;
+  padding: 6px 6px 6px 18px;
+  transition: all .2s;
+}
+
+.destino-salma-input-row:focus-within {
+  box-shadow: 0 0 20px rgba(212, 160, 23, .15);
+  background: rgba(255, 255, 255, .08);
+}
+
+.destino-salma-input {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 10px 0;
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--crema);
+  outline: none;
+}
+
+.destino-salma-input::placeholder {
+  color: rgba(244, 239, 230, .35);
+}
+
+.destino-input-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.destino-mic-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(244, 239, 230, .08);
+  border: 1px solid rgba(244, 239, 230, .15);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+}
+
+.destino-mic-btn:hover {
+  background: rgba(244, 239, 230, .15);
+  border-color: rgba(244, 239, 230, .3);
+}
+
+.destino-mic-btn.recording {
+  background: rgba(220, 50, 50, .2);
+  border-color: rgba(220, 50, 50, .5);
+  animation: mic-pulse 1s ease-in-out infinite;
+}
+
+@keyframes mic-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 50, 50, .3); }
+  50% { box-shadow: 0 0 0 8px rgba(220, 50, 50, 0); }
+}
+
+.destino-send-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--dorado);
+  color: var(--negro);
+  border: none;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+
+.destino-send-btn:hover {
+  background: #e5b82a;
+}
+
+/* ── Recent guides ───────────────────────────────────────── */
+
+.destino-recent {
+  margin-bottom: 32px;
+}
+
 /* ── Breadcrumb ──────────────────────────────────────────── */
 
 .destino-breadcrumb {
@@ -567,6 +669,79 @@ details[open] > .destino-acc-header::after {
   font-size: 10px;
   letter-spacing: .08em;
   color: rgba(244, 239, 230, .4);
+}
+
+/* ── Subtle CTAs ─────────────────────────────────────────── */
+
+.destino-cta-subtle {
+  display: block;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .05em;
+  color: rgba(212, 160, 23, .5);
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.destino-cta-subtle:hover {
+  color: var(--dorado);
+}
+
+.destino-cta-note {
+  color: rgba(244, 239, 230, .3);
+  font-weight: 400;
+}
+
+/* ── Static Itinerary (SEO) ───────────────────────────────── */
+
+.destino-itinerary-static {
+  margin: 32px 0;
+  padding-top: 28px;
+  border-top: 1px solid var(--linea);
+}
+
+.destino-itinerary-static .destino-h2 {
+  margin-bottom: 16px;
+}
+
+.destino-day-stops {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .08em;
+  color: rgba(244, 239, 230, .4);
+  margin-left: auto;
+}
+
+.destino-stop {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(244, 239, 230, .05);
+}
+
+.destino-stop:last-child { border-bottom: none; }
+
+.destino-stop-name {
+  font-family: var(--font-tight);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blanco);
+  margin: 0 0 4px;
+}
+
+.destino-stop-desc {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(244, 239, 230, .65);
+  margin: 0 0 4px;
+}
+
+.destino-stop-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .06em;
+  color: var(--dorado);
+  margin-right: 12px;
 }
 
 /* ── Salma Inline Section ─────────────────────────────────── */

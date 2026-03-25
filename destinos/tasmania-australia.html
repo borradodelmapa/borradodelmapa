@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Vuelo desde Melbourne (1h, 50-120 EUR) o Sydney (1.5h, 80-150 EUR) a Hobart (HBA). Ferry Spirit of Tasmania desde Melbourne (11h nocturno, desde 80 EUR + camarote).</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Tasmania (Hobart y Wilderness)">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Islington Hotel o Henry Jones Art Hotel, 180-300 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Tasmania (Hobart y Wilderness)">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -116,6 +121,7 @@
           <li>Cradle Mountain: Dove Lake Circuit 6 km (entrada parque 20 EUR)</li>
           <li>Freycinet National Park: subida a Wineglass Bay Lookout (20 EUR entrada)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Tasmania (Hobart y Wilderness)">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -140,12 +146,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Tasmania (Hobart y Wilderness) desde España?</h3>
           <p>El presupuesto diario en Tasmania (Hobart y Wilderness) va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Hostales en Hobart CBD o North Hobart, 25-40 EUR/noche (Central City Backpackers). Rango medio: Guesthouses en Battery Point o Sandy Bay, 85-140 EUR/noche. Vuelo desde Melbourne (1h, 50-120 EUR) o Sydney (1.5h, 80-150 EUR) a Hobart (HBA). Ferry Spirit of Tasmania desde Melbourne (11h nocturno, desde 80 EUR + camarote).</p>
@@ -166,14 +170,36 @@
           <h3>¿Cuál es la mejor época para viajar a Tasmania (Hobart y Wilderness)?</h3>
           <p>La mejor época para visitar Tasmania (Hobart y Wilderness) es Diciembre a marzo (verano austral, días largos). Se recomiendan 6 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Tasmania (Hobart y Wilderness)</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Tasmania%20(Hobart%20y%20Wilderness)%206%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Tasmania (Hobart y Wilderness)</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Tasmania (Hobart y Wilderness). ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Tasmania (Hobart y Wilderness)">💡 Consejos Tasmania (Hobart y Wilderness)</button>
+          <button class="salma-chip" data-msg="Itinerario en Tasmania (Hobart y Wilderness)">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Tasmania (Hobart y Wilderness)">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Tasmania (Hobart y Wilderness)">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Tasmania (Hobart y Wilderness)">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Tasmania (Hobart y Wilderness)?|ruta por Australia|¿dónde comer en Tasmania (Hobart y Wilderness)?|Tasmania (Hobart y Wilderness) en 6 días|presupuesto Australia|¿es seguro viajar a Tasmania (Hobart y Wilderness)?|mejor época para Australia">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -187,35 +213,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Tasmania (Hobart y Wilderness). ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Tasmania (Hobart y Wilderness)">💡 Consejos Tasmania (Hobart y Wilderness)</button>
-        <button class="salma-chip" data-msg="Itinerario 6 días en Tasmania (Hobart y Wilderness)">📋 Itinerario 6 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Tasmania (Hobart y Wilderness)">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Tasmania (Hobart y Wilderness)">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Tasmania (Hobart y Wilderness)">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Tasmania (Hobart y Wilderness)?|ruta por Australia|¿dónde comer en Tasmania (Hobart y Wilderness)?|Tasmania (Hobart y Wilderness) en 6 días|presupuesto Australia|¿es seguro viajar a Tasmania (Hobart y Wilderness)?|mejor época para Australia">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Tasmania (Hobart y Wilderness)","pais":"Australia","id":"tasmania","code":"au"};

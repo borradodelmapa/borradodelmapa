@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Vuelo desde Quito o Guayaquil a Baltra o San Cristóbal (~180-350 EUR ida). Obligatorio pagar tasa de entrada al Parque Nacional (~90 EUR) y tarjeta de control de tránsito (~15 EUR) en el aeropuerto continental.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Islas Galápagos">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Crucero de 4-8 días o ecolodges premium, 150-400 EUR/noche o por persona/día en crucero</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Islas Galápagos">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -117,6 +122,7 @@
           <li>Buceo en Gordon Rocks o Kicker Rock (~100-180 EUR por inmersión)</li>
           <li>Caminar el Camino a Tortuga Bay en Santa Cruz (gratis)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Islas Galápagos">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -141,12 +147,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Islas Galápagos desde España?</h3>
           <p>El presupuesto diario en Islas Galápagos va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Hostales en Puerto Ayora (Santa Cruz), 20-35 EUR/noche. Rango medio: Hoteles medianos en Puerto Ayora o Puerto Baquerizo Moreno, 60-100 EUR/noche. Vuelo desde Quito o Guayaquil a Baltra o San Cristóbal (~180-350 EUR ida). Obligatorio pagar tasa de entrada al Parque Nacional (~90 EUR) y tarjeta de control de tránsito (~15 EUR) en el aeropuerto continental.</p>
@@ -167,14 +171,36 @@
           <h3>¿Cuál es la mejor época para viajar a Islas Galápagos?</h3>
           <p>La mejor época para visitar Islas Galápagos es diciembre a mayo (aguas cálidas, fauna activa); junio a noviembre (agua fría, tortugas y pingüinos más visibles). Se recomiendan 7 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Islas Galápagos</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Islas%20Gal%C3%A1pagos%207%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Islas Galápagos</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Islas Galápagos. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Islas Galápagos">💡 Consejos Islas Galápagos</button>
+          <button class="salma-chip" data-msg="Itinerario en Islas Galápagos">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Islas Galápagos">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Islas Galápagos">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Islas Galápagos">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Islas Galápagos?|ruta por Ecuador|¿dónde comer en Islas Galápagos?|Islas Galápagos en 7 días|presupuesto Ecuador|¿es seguro viajar a Islas Galápagos?|mejor época para Ecuador">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -188,35 +214,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Islas Galápagos. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Islas Galápagos">💡 Consejos Islas Galápagos</button>
-        <button class="salma-chip" data-msg="Itinerario 7 días en Islas Galápagos">📋 Itinerario 7 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Islas Galápagos">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Islas Galápagos">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Islas Galápagos">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Islas Galápagos?|ruta por Ecuador|¿dónde comer en Islas Galápagos?|Islas Galápagos en 7 días|presupuesto Ecuador|¿es seguro viajar a Islas Galápagos?|mejor época para Ecuador">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Islas Galápagos","pais":"Ecuador","id":"galapagos","code":"ec"};

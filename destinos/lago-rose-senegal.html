@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Dakar: taxi o sept-place a Niaga o Lac Rose directo, 45-60 min, ~3-5 EUR. O tour organizado desde Dakar: 15-25 EUR incluyendo transporte.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Lac Rose (Lago Retba)">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Lodge con piscina en la zona: 70-100 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Lac Rose (Lago Retba)">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -116,6 +121,7 @@
           <li>Quad o 4x4 por las dunas adyacentes: 15-25 EUR/hora</li>
           <li>Fotografía del lago al amanecer o atardecer (gratis)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Lac Rose (Lago Retba)">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -140,12 +146,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Lac Rose (Lago Retba) desde España?</h3>
           <p>El presupuesto diario en Lac Rose (Lago Retba) va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Campings básicos junto al lago: 8-12 EUR/noche. Rango medio: Lodges pequeños en la orilla: 30-50 EUR/noche. Desde Dakar: taxi o sept-place a Niaga o Lac Rose directo, 45-60 min, ~3-5 EUR. O tour organizado desde Dakar: 15-25 EUR incluyendo transporte.</p>
@@ -166,14 +170,36 @@
           <h3>¿Cuál es la mejor época para viajar a Lac Rose (Lago Retba)?</h3>
           <p>La mejor época para visitar Lac Rose (Lago Retba) es Noviembre a enero (mayor intensidad del color rosa). Se recomiendan 1 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Lac Rose (Lago Retba)</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Lac%20Rose%20(Lago%20Retba)%201%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Lac Rose (Lago Retba)</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Lac Rose (Lago Retba). ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Lac Rose (Lago Retba)">💡 Consejos Lac Rose (Lago Retba)</button>
+          <button class="salma-chip" data-msg="Itinerario en Lac Rose (Lago Retba)">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Lac Rose (Lago Retba)">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Lac Rose (Lago Retba)">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Lac Rose (Lago Retba)">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Lac Rose (Lago Retba)?|ruta por Senegal|¿dónde comer en Lac Rose (Lago Retba)?|Lac Rose (Lago Retba) en 1 días|presupuesto Senegal|¿es seguro viajar a Lac Rose (Lago Retba)?|mejor época para Senegal">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -187,35 +213,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Lac Rose (Lago Retba). ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Lac Rose (Lago Retba)">💡 Consejos Lac Rose (Lago Retba)</button>
-        <button class="salma-chip" data-msg="Itinerario 1 días en Lac Rose (Lago Retba)">📋 Itinerario 1 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Lac Rose (Lago Retba)">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Lac Rose (Lago Retba)">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Lac Rose (Lago Retba)">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Lac Rose (Lago Retba)?|ruta por Senegal|¿dónde comer en Lac Rose (Lago Retba)?|Lac Rose (Lago Retba) en 1 días|presupuesto Senegal|¿es seguro viajar a Lac Rose (Lago Retba)?|mejor época para Senegal">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Lac Rose (Lago Retba)","pais":"Senegal","id":"lago-rose","code":"sn"};

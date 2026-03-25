@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Tel Aviv: tren hasta Caesarea-Pardes Hanna, ~45 min, ~5 EUR, luego taxi local (~10 EUR) o autobús. Desde Haifa: tren, ~30 min, ~4 EUR. En coche: autopista 2, 45 min desde Tel Aviv.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Cesarea Marítima">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Dan Caesarea Hotel suites con vistas al Mediterráneo: 250-400 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Cesarea Marítima">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -116,6 +121,7 @@
           <li>Ver espectáculo o concierto en el teatro romano (programa variable, 30-80 EUR)</li>
           <li>Caminar hasta el acueducto romano en la playa norte (gratis)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Cesarea Marítima">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -140,12 +146,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Cesarea Marítima desde España?</h3>
           <p>El presupuesto diario en Cesarea Marítima va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: No hay hostal en Cesarea; base en Tel Aviv o Haifa para excursión de día. Rango medio: Dan Caesarea Hotel, el único hotel dentro del recinto: 150-220 EUR/noche. Desde Tel Aviv: tren hasta Caesarea-Pardes Hanna, ~45 min, ~5 EUR, luego taxi local (~10 EUR) o autobús. Desde Haifa: tren, ~30 min, ~4 EUR. En coche: autopista 2, 45 min desde Tel Aviv.</p>
@@ -166,14 +170,36 @@
           <h3>¿Cuál es la mejor época para viajar a Cesarea Marítima?</h3>
           <p>La mejor época para visitar Cesarea Marítima es Todo el año, mejor primavera y otoño. Se recomiendan 1 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Cesarea Marítima</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Cesarea%20Mar%C3%ADtima%201%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Cesarea Marítima</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Cesarea Marítima. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Cesarea Marítima">💡 Consejos Cesarea Marítima</button>
+          <button class="salma-chip" data-msg="Itinerario en Cesarea Marítima">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Cesarea Marítima">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Cesarea Marítima">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Cesarea Marítima">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Cesarea Marítima?|ruta por Israel|¿dónde comer en Cesarea Marítima?|Cesarea Marítima en 1 días|presupuesto Israel|¿es seguro viajar a Cesarea Marítima?|mejor época para Israel">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -187,35 +213,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Cesarea Marítima. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Cesarea Marítima">💡 Consejos Cesarea Marítima</button>
-        <button class="salma-chip" data-msg="Itinerario 1 días en Cesarea Marítima">📋 Itinerario 1 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Cesarea Marítima">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Cesarea Marítima">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Cesarea Marítima">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Cesarea Marítima?|ruta por Israel|¿dónde comer en Cesarea Marítima?|Cesarea Marítima en 1 días|presupuesto Israel|¿es seguro viajar a Cesarea Marítima?|mejor época para Israel">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Cesarea Marítima","pais":"Israel","id":"cesarea-maritima","code":"il"};

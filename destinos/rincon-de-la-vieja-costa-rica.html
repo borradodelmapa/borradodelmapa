@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Liberia: taxi o 4x4 alquilado (~30 min, carretera de lastre). Bus público irregular desde Liberia: consultar horarios localmente. Shuttle desde Tamarindo o Liberia: ~25-35 EUR.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Rincón de la Vieja">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Haciendas con aguas termales y actividades incluidas, 110-180 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Rincón de la Vieja">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -115,6 +120,7 @@
           <li>Cascada La Cangreja (~15 EUR incluido en entrada): poza azul turquesa para bañarse</li>
           <li>Tubing o canopy desde lodges privados adyacentes al parque (~35-50 EUR)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Rincón de la Vieja">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -139,12 +145,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Rincón de la Vieja desde España?</h3>
           <p>El presupuesto diario en Rincón de la Vieja va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Haciendas económicas en las afueras de Liberia, 15-25 EUR/noche. Rango medio: Lodges dentro o cerca del parque con acceso directo a senderos, 60-90 EUR/noche. Desde Liberia: taxi o 4x4 alquilado (~30 min, carretera de lastre). Bus público irregular desde Liberia: consultar horarios localmente. Shuttle desde Tamarindo o Liberia: ~25-35 EUR.</p>
@@ -165,14 +169,36 @@
           <h3>¿Cuál es la mejor época para viajar a Rincón de la Vieja?</h3>
           <p>La mejor época para visitar Rincón de la Vieja es Enero a abril (estación seca en Guanacaste); llueve mucho de mayo a noviembre. Se recomiendan 2 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Rincón de la Vieja</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Rinc%C3%B3n%20de%20la%20Vieja%202%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Rincón de la Vieja</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Rincón de la Vieja. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Rincón de la Vieja">💡 Consejos Rincón de la Vieja</button>
+          <button class="salma-chip" data-msg="Itinerario en Rincón de la Vieja">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Rincón de la Vieja">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Rincón de la Vieja">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Rincón de la Vieja">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Rincón de la Vieja?|ruta por Costa Rica|¿dónde comer en Rincón de la Vieja?|Rincón de la Vieja en 2 días|presupuesto Costa Rica|¿es seguro viajar a Rincón de la Vieja?|mejor época para Costa Rica">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -186,35 +212,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Rincón de la Vieja. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Rincón de la Vieja">💡 Consejos Rincón de la Vieja</button>
-        <button class="salma-chip" data-msg="Itinerario 2 días en Rincón de la Vieja">📋 Itinerario 2 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Rincón de la Vieja">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Rincón de la Vieja">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Rincón de la Vieja">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Rincón de la Vieja?|ruta por Costa Rica|¿dónde comer en Rincón de la Vieja?|Rincón de la Vieja en 2 días|presupuesto Costa Rica|¿es seguro viajar a Rincón de la Vieja?|mejor época para Costa Rica">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Rincón de la Vieja","pais":"Costa Rica","id":"rincon-de-la-vieja","code":"cr"};

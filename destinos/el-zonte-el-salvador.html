@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde San Salvador: bus 192 o 287 a La Libertad y luego mototaxi o pickup a El Zonte (~20 min, 2-3 USD). Desde El Tunco: 15 min en mototaxi (~2 USD).</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a El Zonte / Surf City">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Villas o casas de alquiler en Airbnb: 50-80 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en El Zonte / Surf City">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -115,6 +120,7 @@
           <li>Caminar al río El Zonte al atardecer y nadar en pozas naturales (gratis)</li>
           <li>Visitar la comunidad Bitcoin Beach y pagar con sats en tiendas locales (experiencia gratuita)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en El Zonte / Surf City">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -139,12 +145,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a El Zonte / Surf City desde España?</h3>
           <p>El presupuesto diario en El Zonte / Surf City va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Hostal Horizonte Surf Camp o similares: 10-16 EUR/noche en dormitorio. Rango medio: Habitaciones privadas en guesthouses frente al mar: 25-40 EUR/noche. Desde San Salvador: bus 192 o 287 a La Libertad y luego mototaxi o pickup a El Zonte (~20 min, 2-3 USD). Desde El Tunco: 15 min en mototaxi (~2 USD).</p>
@@ -165,14 +169,36 @@
           <h3>¿Cuál es la mejor época para viajar a El Zonte / Surf City?</h3>
           <p>La mejor época para visitar El Zonte / Surf City es noviembre a abril. Se recomiendan 2 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por El Zonte / Surf City</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=El%20Zonte%20%2F%20Surf%20City%202%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre El Zonte / Surf City</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo El Zonte / Surf City. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a El Zonte / Surf City">💡 Consejos El Zonte / Surf City</button>
+          <button class="salma-chip" data-msg="Itinerario en El Zonte / Surf City">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a El Zonte / Surf City">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a El Zonte / Surf City">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en El Zonte / Surf City">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en El Zonte / Surf City?|ruta por El Salvador|¿dónde comer en El Zonte / Surf City?|El Zonte / Surf City en 2 días|presupuesto El Salvador|¿es seguro viajar a El Zonte / Surf City?|mejor época para El Salvador">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -186,35 +212,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo El Zonte / Surf City. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a El Zonte / Surf City">💡 Consejos El Zonte / Surf City</button>
-        <button class="salma-chip" data-msg="Itinerario 2 días en El Zonte / Surf City">📋 Itinerario 2 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a El Zonte / Surf City">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a El Zonte / Surf City">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en El Zonte / Surf City">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en El Zonte / Surf City?|ruta por El Salvador|¿dónde comer en El Zonte / Surf City?|El Zonte / Surf City en 2 días|presupuesto El Salvador|¿es seguro viajar a El Zonte / Surf City?|mejor época para El Salvador">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"El Zonte / Surf City","pais":"El Salvador","id":"el-zonte","code":"sv"};

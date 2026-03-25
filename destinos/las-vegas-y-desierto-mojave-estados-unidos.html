@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Vuelos directos desde Europa a LAS ~400-700 EUR. El Strip está a 15 min del aeropuerto en taxi (~20 USD) o shuttle (~10 USD). No se necesita coche para el Strip pero sí para los parques naturales.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Las Vegas y Desierto Mojave">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Bellagio, Aria o Wynn – 180-400 EUR/noche (precios muy variables según fin de semana)</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Las Vegas y Desierto Mojave">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -115,6 +120,7 @@
           <li>Red Rock Canyon National Conservation Area a 30 min en coche (15 USD/coche, senderismo de día completo)</li>
           <li>Valley of Fire State Park: 1h de Las Vegas, paisaje marciano (~15 USD/coche)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Las Vegas y Desierto Mojave">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -139,12 +145,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Las Vegas y Desierto Mojave desde España?</h3>
           <p>El presupuesto diario en Las Vegas y Desierto Mojave va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Sin hostels de calidad; hoteles-casino entre semana pueden bajar a 30-50 EUR/noche (Circus Circus, Excalibur). Rango medio: Hoteles-casino mid-range como Paris o Bally's – 70-130 EUR/noche entre semana. Vuelos directos desde Europa a LAS ~400-700 EUR. El Strip está a 15 min del aeropuerto en taxi (~20 USD) o shuttle (~10 USD). No se necesita coche para el Strip pero sí para los parques naturales.</p>
@@ -165,14 +169,36 @@
           <h3>¿Cuál es la mejor época para viajar a Las Vegas y Desierto Mojave?</h3>
           <p>La mejor época para visitar Las Vegas y Desierto Mojave es Octubre-abril (el verano supera 45°C). Se recomiendan 3 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Las Vegas y Desierto Mojave</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Las%20Vegas%20y%20Desierto%20Mojave%203%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Las Vegas y Desierto Mojave</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Las Vegas y Desierto Mojave. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Las Vegas y Desierto Mojave">💡 Consejos Las Vegas y Desierto Mojave</button>
+          <button class="salma-chip" data-msg="Itinerario en Las Vegas y Desierto Mojave">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Las Vegas y Desierto Mojave">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Las Vegas y Desierto Mojave">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Las Vegas y Desierto Mojave">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Las Vegas y Desierto Mojave?|ruta por Estados Unidos|¿dónde comer en Las Vegas y Desierto Mojave?|Las Vegas y Desierto Mojave en 3 días|presupuesto Estados Unidos|¿es seguro viajar a Las Vegas y Desierto Mojave?|mejor época para Estados Unidos">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -186,35 +212,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Las Vegas y Desierto Mojave. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Las Vegas y Desierto Mojave">💡 Consejos Las Vegas y Desierto Mojave</button>
-        <button class="salma-chip" data-msg="Itinerario 3 días en Las Vegas y Desierto Mojave">📋 Itinerario 3 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Las Vegas y Desierto Mojave">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Las Vegas y Desierto Mojave">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Las Vegas y Desierto Mojave">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Las Vegas y Desierto Mojave?|ruta por Estados Unidos|¿dónde comer en Las Vegas y Desierto Mojave?|Las Vegas y Desierto Mojave en 3 días|presupuesto Estados Unidos|¿es seguro viajar a Las Vegas y Desierto Mojave?|mejor época para Estados Unidos">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Las Vegas y Desierto Mojave","pais":"Estados Unidos","id":"las-vegas-y-desierto-mojave","code":"us"};

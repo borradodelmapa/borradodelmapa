@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Janjanbureh, cruzar el río y tomar bush taxi hacia el norte, ~30-40 min, menos de 1 EUR. Desde Banjul es excursión de día completo o parada en ruta hacia el interior (North Bank Road).</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Círculos de Piedra de Wassu">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>No hay opciones de confort en la zona inmediata</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Círculos de Piedra de Wassu">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -115,6 +120,7 @@
           <li>Museo pequeño en el sitio con contexto histórico</li>
           <li>Combinación con los círculos de Ker Batch en la South Bank (mismo día posible)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Círculos de Piedra de Wassu">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -139,12 +145,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Círculos de Piedra de Wassu desde España?</h3>
           <p>El presupuesto diario en Círculos de Piedra de Wassu va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Base en Janjanbureh o en Kaur, guesthouses ~8-12 EUR/noche. Rango medio: Camp en Janjanbureh, 20-35 EUR/noche. Desde Janjanbureh, cruzar el río y tomar bush taxi hacia el norte, ~30-40 min, menos de 1 EUR. Desde Banjul es excursión de día completo o parada en ruta hacia el interior (North Bank Road).</p>
@@ -165,14 +169,36 @@
           <h3>¿Cuál es la mejor época para viajar a Círculos de Piedra de Wassu?</h3>
           <p>La mejor época para visitar Círculos de Piedra de Wassu es Noviembre a febrero. Se recomiendan 1 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Círculos de Piedra de Wassu</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=C%C3%ADrculos%20de%20Piedra%20de%20Wassu%201%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Círculos de Piedra de Wassu</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Círculos de Piedra de Wassu. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Círculos de Piedra de Wassu">💡 Consejos Círculos de Piedra de Wassu</button>
+          <button class="salma-chip" data-msg="Itinerario en Círculos de Piedra de Wassu">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Círculos de Piedra de Wassu">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Círculos de Piedra de Wassu">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Círculos de Piedra de Wassu">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Círculos de Piedra de Wassu?|ruta por Gambia|¿dónde comer en Círculos de Piedra de Wassu?|Círculos de Piedra de Wassu en 1 días|presupuesto Gambia|¿es seguro viajar a Círculos de Piedra de Wassu?|mejor época para Gambia">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -186,35 +212,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Círculos de Piedra de Wassu. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Círculos de Piedra de Wassu">💡 Consejos Círculos de Piedra de Wassu</button>
-        <button class="salma-chip" data-msg="Itinerario 1 días en Círculos de Piedra de Wassu">📋 Itinerario 1 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Círculos de Piedra de Wassu">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Círculos de Piedra de Wassu">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Círculos de Piedra de Wassu">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Círculos de Piedra de Wassu?|ruta por Gambia|¿dónde comer en Círculos de Piedra de Wassu?|Círculos de Piedra de Wassu en 1 días|presupuesto Gambia|¿es seguro viajar a Círculos de Piedra de Wassu?|mejor época para Gambia">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Círculos de Piedra de Wassu","pais":"Gambia","id":"wassu-stone-circles","code":"gm"};

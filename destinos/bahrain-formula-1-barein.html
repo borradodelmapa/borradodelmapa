@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Manama en taxi: 30-40 minutos, 12-18 EUR. En coche de alquiler por la autopista hacia el sur.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Circuito Internacional de Baréin (BIC)">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Durante el GP: hoteles de lujo en Manama 200-400 EUR/noche (reservar con meses de antelación)</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Circuito Internacional de Baréin (BIC)">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -115,6 +120,7 @@
           <li>Experiencia de vuelta en coche de carreras en pista – desde 80 EUR</li>
           <li>Asistir al Gran Premio de F1 (marzo) – entradas desde 100 EUR hasta 500+ EUR</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Circuito Internacional de Baréin (BIC)">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -139,12 +145,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Circuito Internacional de Baréin (BIC) desde España?</h3>
           <p>El presupuesto diario en Circuito Internacional de Baréin (BIC) va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Base en Manama. Rango medio: Base en Manama o hoteles en Isa Town: 60-90 EUR/noche. Desde Manama en taxi: 30-40 minutos, 12-18 EUR. En coche de alquiler por la autopista hacia el sur.</p>
@@ -165,14 +169,36 @@
           <h3>¿Cuál es la mejor época para viajar a Circuito Internacional de Baréin (BIC)?</h3>
           <p>La mejor época para visitar Circuito Internacional de Baréin (BIC) es Gran Premio en marzo. Visitas generales: octubre a abril. Se recomiendan 1 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Circuito Internacional de Baréin (BIC)</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Circuito%20Internacional%20de%20Bar%C3%A9in%20(BIC)%201%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Circuito Internacional de Baréin (BIC)</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Circuito Internacional de Baréin (BIC). ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Circuito Internacional de Baréin (BIC)">💡 Consejos Circuito Internacional de Baréin (BIC)</button>
+          <button class="salma-chip" data-msg="Itinerario en Circuito Internacional de Baréin (BIC)">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Circuito Internacional de Baréin (BIC)">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Circuito Internacional de Baréin (BIC)">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Circuito Internacional de Baréin (BIC)">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Circuito Internacional de Baréin (BIC)?|ruta por Baréin|¿dónde comer en Circuito Internacional de Baréin (BIC)?|Circuito Internacional de Baréin (BIC) en 1 días|presupuesto Baréin|¿es seguro viajar a Circuito Internacional de Baréin (BIC)?|mejor época para Baréin">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -186,35 +212,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Circuito Internacional de Baréin (BIC). ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Circuito Internacional de Baréin (BIC)">💡 Consejos Circuito Internacional de Baréin (BIC)</button>
-        <button class="salma-chip" data-msg="Itinerario 1 días en Circuito Internacional de Baréin (BIC)">📋 Itinerario 1 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Circuito Internacional de Baréin (BIC)">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Circuito Internacional de Baréin (BIC)">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Circuito Internacional de Baréin (BIC)">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Circuito Internacional de Baréin (BIC)?|ruta por Baréin|¿dónde comer en Circuito Internacional de Baréin (BIC)?|Circuito Internacional de Baréin (BIC) en 1 días|presupuesto Baréin|¿es seguro viajar a Circuito Internacional de Baréin (BIC)?|mejor época para Baréin">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Circuito Internacional de Baréin (BIC)","pais":"Baréin","id":"bahrain-formula-1","code":"bh"};

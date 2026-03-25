@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Maseru: taxi compartido o minibús hacia Roma/Morija y bajar en la desviación (~45 min, 2 EUR), luego 3 km a pie o en taxi local. También en tour desde Maseru (~25-40 EUR todo incluido).</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Thaba Bosiu">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Avani Maseru, 80-120 EUR/noche como base</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Thaba Bosiu">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -115,6 +120,7 @@
           <li>Visita al centro de visitantes sobre la historia de la nación basotho (incluido en entrada)</li>
           <li>Fotografía panorámica de las llanuras y el perfil de Table Mountain basotho al atardecer (gratis)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Thaba Bosiu">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -139,12 +145,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Thaba Bosiu desde España?</h3>
           <p>El presupuesto diario en Thaba Bosiu va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Se hace como excursión de día desde Maseru; no hay alojamiento en el sitio. Rango medio: Guesthouses en Maseru como base, 30-50 EUR/noche. Desde Maseru: taxi compartido o minibús hacia Roma/Morija y bajar en la desviación (~45 min, 2 EUR), luego 3 km a pie o en taxi local. También en tour desde Maseru (~25-40 EUR todo incluido).</p>
@@ -165,14 +169,36 @@
           <h3>¿Cuál es la mejor época para viajar a Thaba Bosiu?</h3>
           <p>La mejor época para visitar Thaba Bosiu es todo el año, mejor marzo a mayo. Se recomiendan 1 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Thaba Bosiu</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Thaba%20Bosiu%201%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Thaba Bosiu</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Thaba Bosiu. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Thaba Bosiu">💡 Consejos Thaba Bosiu</button>
+          <button class="salma-chip" data-msg="Itinerario en Thaba Bosiu">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Thaba Bosiu">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Thaba Bosiu">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Thaba Bosiu">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Thaba Bosiu?|ruta por Lesoto|¿dónde comer en Thaba Bosiu?|Thaba Bosiu en 1 días|presupuesto Lesoto|¿es seguro viajar a Thaba Bosiu?|mejor época para Lesoto">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -186,35 +212,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Thaba Bosiu. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Thaba Bosiu">💡 Consejos Thaba Bosiu</button>
-        <button class="salma-chip" data-msg="Itinerario 1 días en Thaba Bosiu">📋 Itinerario 1 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Thaba Bosiu">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Thaba Bosiu">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Thaba Bosiu">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Thaba Bosiu?|ruta por Lesoto|¿dónde comer en Thaba Bosiu?|Thaba Bosiu en 1 días|presupuesto Lesoto|¿es seguro viajar a Thaba Bosiu?|mejor época para Lesoto">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Thaba Bosiu","pais":"Lesoto","id":"thaba-bosiu","code":"ls"};

@@ -16,6 +16,7 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 const KV_DIR = path.join(ROOT, 'worker', 'kv', 'output-nivel2');
+const ROUTES_DIR = path.join(ROOT, 'worker', 'kv', 'routes-nivel3');
 const COUNTRIES_FILE = path.join(ROOT, 'worker', 'kv', 'countries.json');
 const OUT_DIR = path.join(ROOT, 'destinos');
 const SITEMAP_FILE = path.join(ROOT, 'sitemap-destinos.xml');
@@ -76,6 +77,56 @@ function estimateBudget(dest) {
   const low = Math.round(sleepMin * 1.8);
   const mid = Math.round(sleepMid * 1.8);
   return `${low}-${mid}€`;
+}
+
+// ── Route Loading ────────────────────────────────────────────
+
+function loadRoute(destId, countrySlug) {
+  const routeFile = path.join(ROUTES_DIR, `${destId}-${countrySlug}.json`);
+  try {
+    if (fs.existsSync(routeFile)) {
+      return JSON.parse(fs.readFileSync(routeFile, 'utf-8'));
+    }
+  } catch (_) {}
+  return null;
+}
+
+// Genera HTML estático del itinerario (indexable por Google)
+function buildStaticItinerary(route) {
+  if (!route || !route.stops || route.stops.length === 0) return '';
+
+  // Agrupar stops por día
+  const byDay = {};
+  for (const stop of route.stops) {
+    const day = stop.day || 1;
+    if (!byDay[day]) byDay[day] = { stops: [], day_title: stop.day_title || `Día ${day}` };
+    if (stop.day_title) byDay[day].day_title = stop.day_title;
+    byDay[day].stops.push(stop);
+  }
+
+  const days = Object.keys(byDay).sort((a, b) => Number(a) - Number(b));
+  let html = '<div class="destino-itinerary-static">\n';
+  html += '  <h2 class="destino-h2">🗺️ Itinerario completo</h2>\n';
+
+  for (const dayNum of days) {
+    const { stops, day_title } = byDay[dayNum];
+    html += `  <details class="destino-acc-item">\n`;
+    html += `    <summary class="destino-acc-header">Día ${dayNum} — ${escapeHTML(day_title)} <span class="destino-day-stops">${stops.length} paradas</span></summary>\n`;
+    html += `    <div class="destino-acc-body">\n`;
+    for (const stop of stops) {
+      html += `      <div class="destino-stop">\n`;
+      html += `        <h4 class="destino-stop-name">${escapeHTML(stop.name || '')}</h4>\n`;
+      if (stop.narrative) html += `        <p class="destino-stop-desc">${escapeHTML(stop.narrative)}</p>\n`;
+      if (stop.duration) html += `        <span class="destino-stop-meta">⏱ ${escapeHTML(stop.duration)}</span>\n`;
+      if (stop.km_from_previous) html += `        <span class="destino-stop-meta">📍 ${stop.km_from_previous} km</span>\n`;
+      html += `      </div>\n`;
+    }
+    html += `    </div>\n`;
+    html += `  </details>\n`;
+  }
+
+  html += '</div>';
+  return html;
 }
 
 // ── FAQ Generation ───────────────────────────────────────────
@@ -164,7 +215,7 @@ function buildSchemaOrg(dest, countryName, slug, faqs) {
 
 // ── HTML Template ────────────────────────────────────────────
 
-function buildHTML(dest, countryName, countryCode, slug) {
+function buildHTML(dest, countryName, countryCode, slug, route) {
   const faqs = generateFAQs(dest, countryName);
   const schemaOrg = buildSchemaOrg(dest, countryName, slug, faqs);
   const budget = estimateBudget(dest);
@@ -216,6 +267,8 @@ function buildHTML(dest, countryName, countryCode, slug) {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  ${route ? `<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>` : ''}
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -266,13 +319,35 @@ function buildHTML(dest, countryName, countryCode, slug) {
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    ${route ? `
+    <!-- ITINERARIO COMPLETO -->
+    ${buildStaticItinerary(route)}
+
+    <!-- ITINERARIO INTERACTIVO (mapa + guide-renderer) -->
+    <div id="chat-area"></div>
+    <script>
+    window.__ROUTE_DATA = ${JSON.stringify(route)};
+    </script>
+    <script src="/guide-renderer.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.__ROUTE_DATA && typeof guideRenderer !== 'undefined') {
+        guideRenderer.render(window.__ROUTE_DATA, { saved: true });
+        var staticIt = document.querySelector('.destino-itinerary-static');
+        if (staticIt) staticIt.style.display = 'none';
+      }
+    });
+    </script>
+    ` : ''}
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>${escapeHTML(dest.como_llegar)}</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a ${escapeHTML(dest.nombre)}">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -293,6 +368,7 @@ function buildHTML(dest, countryName, countryCode, slug) {
               <p>${escapeHTML(dest.donde_dormir?.comfort || '')}</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en ${escapeHTML(dest.nombre)}">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -302,6 +378,7 @@ function buildHTML(dest, countryName, countryCode, slug) {
           <ul class="destino-list">
 ${activitiesHTML}
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en ${escapeHTML(dest.nombre)}">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -326,13 +403,14 @@ ${activitiesHTML}
         </div>
       </details>
 
-    </div>
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          ${faqsHTML}
+        </div>
+      </details>
 
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      ${faqsHTML}
-    </section>
+    </div>
 
     <!-- SHARE -->
     <div class="destino-share-wrap">
@@ -349,7 +427,7 @@ ${activitiesHTML}
         <div class="salma-chat-bubble">¡Ey! Estás viendo ${escapeHTML(dest.nombre)}. ¿En qué te ayudo?</div>
         <div class="salma-chat-chips" id="salma-chat-chips">
           <button class="salma-chip" data-msg="Consejos para viajar a ${escapeHTML(dest.nombre)}">💡 Consejos ${escapeHTML(dest.nombre)}</button>
-          <button class="salma-chip" data-msg="Itinerario ${dest.dias_recomendados || 3} días en ${escapeHTML(dest.nombre)}">📋 Itinerario ${dest.dias_recomendados || 3} días</button>
+          <button class="salma-chip" data-msg="Itinerario en ${escapeHTML(dest.nombre)}">📋 Itinerarios</button>
           <button class="salma-chip" data-msg="Presupuesto para viajar a ${escapeHTML(dest.nombre)}">💰 Presupuesto</button>
           <button class="salma-chip" data-msg="Buscar vuelos a ${escapeHTML(dest.nombre)}">✈️ Vuelos</button>
           <button class="salma-chip" data-msg="Hoteles en ${escapeHTML(dest.nombre)}">🏨 Hoteles</button>
@@ -607,17 +685,52 @@ function buildIndexHTML(countriesByContinent) {
   </header>
 
   <section class="destino-hero">
-    <h1 class="destino-title">Destinos de viaje</h1>
-    <p class="destino-subtitle">MÁS DE 190 PAÍSES · GUÍAS PRÁCTICAS CON IA</p>
+    <h1 class="destino-title">Destinos</h1>
+    <p class="destino-subtitle">MÁS DE 190 PAÍSES · GUÍAS PRÁCTICAS</p>
   </section>
 
   <main class="destino-content destino-content-wide">
-    ${continentsHTML}
 
-    <section class="destino-cta">
-      <h2>¿No encuentras tu destino?</h2>
-      <p>Dile a Salma adónde quieres ir y te arma la ruta en un minuto.</p>
-      <a href="/" class="destino-cta-btn">Pregúntale a Salma ›</a>
+    <!-- Salma input -->
+    <div class="destino-salma-input-wrap">
+      <div class="destino-salma-input-row">
+        <input type="text" class="destino-salma-input" id="destino-search" placeholder="" autocomplete="off" data-placeholders="Marruecos 5 días desde Tánger|Vietnam 2 semanas mochilero|Roma fin de semana romántico|Nepal trekking Everest|Tailandia playas e islas 10 días">
+        <div class="destino-input-actions">
+          <button class="destino-mic-btn" id="destino-mic" aria-label="Hablar" type="button">🎙️</button>
+          <button class="destino-send-btn" id="destino-planear" type="button">›</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Últimas guías visitadas -->
+    <section class="destino-recent" id="destino-recent" style="display:none">
+      <h2 class="destino-index-continent-title">Últimas guías visitadas</h2>
+      <div class="destino-index-grid" id="destino-recent-grid"></div>
+    </section>
+
+    <!-- Países por continente -->
+    <div id="destino-countries">
+    ${continentsHTML}
+    </div>
+
+    <!-- SALMA INLINE -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">¿No encuentras tu destino? Pregúntale a Salma</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">Dime adónde quieres ir y te armo la ruta en un minuto.</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Destinos baratos desde España">💰 Destinos baratos</button>
+          <button class="salma-chip" data-msg="Destinos de playa en invierno">🏖️ Playa en invierno</button>
+          <button class="salma-chip" data-msg="Escapada fin de semana Europa">✈️ Escapada Europa</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="Japón 2 semanas|playa Caribe presupuesto|trekking Nepal|ruta Marruecos en coche|islas Grecia 7 días">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
   </main>
 
@@ -630,6 +743,10 @@ function buildIndexHTML(countriesByContinent) {
     <p class="destino-footer-copy">© ${new Date().getFullYear()} Borradodelmapa</p>
   </footer>
 
+  <script>
+  window.DESTINO = { nombre: 'Destinos', pais: '', id: 'index', code: '' };
+  window.SALMA_API = "https://salma-api.paco-defoto.workers.dev";
+  </script>
   <script src="/destinos/destinos.js"></script>
 </body>
 </html>`;
@@ -691,7 +808,8 @@ async function main() {
         if (!dest.id || !dest.nombre) { errors++; continue; }
         const slug = `${dest.id}-${countrySlug}`;
         if (!dryRun) {
-          fs.writeFileSync(path.join(OUT_DIR, `${slug}.html`), buildHTML(dest, countryName, code, slug));
+          const route = loadRoute(dest.id, countrySlug);
+          fs.writeFileSync(path.join(OUT_DIR, `${slug}.html`), buildHTML(dest, countryName, code, slug, route));
         }
         allSitemapUrls.push({ url: `${DOMAIN}/destinos/${slug}.html`, priority: 0.8, freq: 'monthly' });
         totalDest++;

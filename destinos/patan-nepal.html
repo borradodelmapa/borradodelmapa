@@ -27,6 +27,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +79,72 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+    <!-- ITINERARIO COMPLETO -->
+    <div class="destino-itinerary-static">
+  <h2 class="destino-h2">🗺️ Itinerario completo</h2>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 1 — Patan de punta a punta <span class="destino-day-stops">7 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Patan Darbar Square</h4>
+        <p class="destino-stop-desc">El corazón medieval de Patan, declarado Patrimonio de la Humanidad. El Palacio Real Newari, el Templo de Krishna Mandir y el Templo Vishwanath están todos aquí en menos de 200 metros. Llega antes de las 9h para evitar aglomeraciones.</p>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Patan Museum</h4>
+        <p class="destino-stop-desc">Uno de los mejores museos de arte del sur de Asia, dentro del propio Palacio Real. La colección de bronces y estatuas hindúes y budistas nepalíes del siglo VII al XVIII es excepcional. Entrada alrededor de 500 NPR.</p>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Kumbheshwor Temple(Patan)</h4>
+        <p class="destino-stop-desc">El único templo de cinco pisos que se conserva en Patan, dedicado a Shiva. Los patios interiores están llenos de estatuas antiguas y es uno de los pocos templos que los no hindúes pueden recorrer libremente por fuera.</p>
+        <span class="destino-stop-meta">📍 1 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Golden Temple Patan</h4>
+        <p class="destino-stop-desc">El Hiranya Varna Mahavihar es un monasterio budista del siglo XII completamente revestido de metal dorado. Solo se puede entrar descalzo y sin cuero. La entrada cuesta unos 100 NPR y merece cada rupia.</p>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Mahabuddha Temple</h4>
+        <p class="destino-stop-desc">El templo de los mil Budas: cubierto de terracota con la imagen de Buda repetida en cada centímetro de su superficie. Está metido en un patio estrecho del barrio artesano y hay que buscarlo a propósito, que es parte del encanto.</p>
+        <span class="destino-stop-meta">📍 1 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Rudra Varna Mahavihar , Oku Bahal</h4>
+        <p class="destino-stop-desc">El monasterio budista más activo del casco histórico, donde los rituales de la comunidad Newari siguen intactos. Sin entrada, sin turistas, sin señales. Solo hay que empujar la puerta del patio.</p>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Mangal Bazar</h4>
+        <p class="destino-stop-desc">El mercado central que rodea Durbar Square, el mejor sitio para ver a los artesanos Newari trabajar el metal en vivo. Los talleres de estatuas de bronce son famosos en todo el valle; los precios aquí son más honestos que en Katmandú.</p>
+      </div>
+    </div>
+  </details>
+</div>
+
+    <!-- ITINERARIO INTERACTIVO (mapa + guide-renderer) -->
+    <div id="chat-area"></div>
+    <script>
+    window.__ROUTE_DATA = {"title":"Patan Lalitpur en 1 día","name":"Patan Lalitpur en 1 día","country":"Nepal","region":"Valle de Katmandú","duration_days":1,"summary":"Un día completo en la ciudad de los Newari: palacios medievales, patios escondidos y la mejor orfebrería del valle.","stops":[{"name":"Patan Darbar Square","headline":"Patan Darbar Square","narrative":"El corazón medieval de Patan, declarado Patrimonio de la Humanidad. El Palacio Real Newari, el Templo de Krishna Mandir y el Templo Vishwanath están todos aquí en menos de 200 metros. Llega antes de las 9h para evitar aglomeraciones.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Patan de punta a punta","links":[],"type":"monumento","day":1,"lat":27.6726981,"lng":85.3253211,"photo_ref":"AU_ZVEHj7WbdtcnmF3-pJFlQvpqeBGIR9V0thWmLwnCcuB9UK9703iZfXaKeFE4-mJ0PIfLz2t0icavpQfn1C49h2i1TaQrVE-F0RvQhn5X3maVLzmjOxTIoTlzaancJzp9bNF2JSkA28pNrP6RzPm9kuKkOonV30rtND7mAipABywfPmfxBBqxKJMZp1k-t4BXrxu2tW5MqYOYmMnyAQT-vXtxnIJjacecNQw_CHb-b66zZvociaoxFXyXR6xldZl_fa_0PJaRgbEPz4qEQVPEQ_3rB08UIxBeTl0oPj1aGZiGMsrqwa6GNRKgAYep1W3VDIlCtZ4SPDpSwD-rx7_36y-hr-bPxFPcH04pHmsBhgSXMiUCyqNwu1G4Hx_Tdm0e_j-V1Ft91VC565rFBR2b4w1sGKOYJ4zjsdbZfeDzHV4KWIbB6","verified_address":"Lalitpur 44600, Nepal","km_from_previous":0,"road_name":"","road_difficulty":"bajo","estimated_hours":0,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Museo en un antiguo palacio real con esculturas hindúes y budistas, además de otros objetos culturales."},{"name":"Patan Museum","headline":"Patan Museum","narrative":"Uno de los mejores museos de arte del sur de Asia, dentro del propio Palacio Real. La colección de bronces y estatuas hindúes y budistas nepalíes del siglo VII al XVIII es excepcional. Entrada alrededor de 500 NPR.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"lunes: 8:00–18:30 · martes: 8:00–18:30 · miércoles: 8:00–18:30 · jueves: 8:00–18:30 · viernes: 8:00–18:30 · sábado: 8:00–18:30 · domingo: 8:00–18:30","day_title":"Patan de punta a punta","links":[],"type":"cultura","day":1,"lat":27.6733773,"lng":85.3253361,"photo_ref":"AU_ZVEHi2SIdSP20u7QVXRNNJgP1CTxaNGrW9chg0jdnR8T4IDpmkMnMcqsIrnXCEZnYkb8_GLCaroU_T4_8R5gAuId36PMsqUr0wlcZvTshlY7ZyrNttwd6qXO2MePOei09qxNNHaBueFpLIxgY2ejAFpcYPXmJTNvdp3K2pjNnKTCUSSfIDBAINo_q-wipQjBVhNKp6-EY1LEpGIp7GA8a98ohrrAwnWXOwMCNUp98aONUxsaTxS1unEwhbBvtUBxuz-bYBHgR1ywpawji4S1Nu2NuTzAmbn2H5ZbJMy3uADuP6PMXaWEoKLrry-qxJFXf252LVR9UV6WTcZH30DwALAJkzDFtjCBkkPdvjooynMAlWA04dTqBLeDMdaUHA5VukviEKh6coC6lEfefpoR-Yu_TlWLCNjyXUDw_wm77YwP6XA","verified_address":"M8FG+944, भिन्द्यो क्व - सौग: लँ, Lalitpur 44700, Nepal","km_from_previous":0,"road_name":"","road_difficulty":"bajo","estimated_hours":1.5,"sleep":null,"eat":null,"alt_bad_weather":"","description":"An extensive collection of traditional religious art on display in an 18th-century royal palace."},{"name":"Kumbheshwor Temple(Patan)","headline":"Kumbheshwor Temple(Patan)","narrative":"El único templo de cinco pisos que se conserva en Patan, dedicado a Shiva. Los patios interiores están llenos de estatuas antiguas y es uno de los pocos templos que los no hindúes pueden recorrer libremente por fuera.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Patan de punta a punta","links":[],"type":"monumento","day":1,"lat":27.6764504,"lng":85.3260037,"photo_ref":"AU_ZVEEvZGe2N5WvGKc4fIbzNaHh1pY-dXUkjsGgzH0r6ylUjjzI9pFsA1H1eSi4ueNGlCwSg4zkcQBnc-t1yX4F450NrdfqTXmMQ-PEvuWrEyO50JBbQUeRdo3iwbnX1LD_P3e3koxG0c3ynYmytB9IWovqCEh-TCHsrS4C0UTo0K0g5EmvcEn6w4MnpzRCiQQzjFjovi1wINxtcGS9cSZx-MH5RgGBXBrQZRzBe87JYSdww5PPJEvkMNxDb1RQuY3ex86lTFhuiFCxO44DI7Nwlr7zaROxQAzCDzPfw4vkFomOVN3OnL94GgQ80aIhP-srYwccbkmOH5ulWQ9Dvq0pJDfUHAHBGCXs0o5vofMy7x3kTaOtDJ2TcQYiTcLck2-mkC08Y4HS02WwAfV6LZhLHF6b9RaQ1hSqwb3s8wmofB3Kys0","verified_address":"M8GG+HCJ, Lalitpur 44600, Nepal","km_from_previous":1,"road_name":"Calle Kumbheshwar","road_difficulty":"bajo","estimated_hours":0.5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Golden Temple Patan","headline":"Golden Temple Patan","narrative":"El Hiranya Varna Mahavihar es un monasterio budista del siglo XII completamente revestido de metal dorado. Solo se puede entrar descalzo y sin cuero. La entrada cuesta unos 100 NPR y merece cada rupia.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"lunes: 5:00–17:00 · martes: 5:00–17:00 · miércoles: 5:00–17:00 · jueves: 5:00–17:00 · viernes: 5:00–17:00 · sábado: 5:00–17:00 · domingo: 5:00–17:00","day_title":"Patan de punta a punta","links":[],"type":"monumento","day":1,"lat":27.6751969,"lng":85.32446279999999,"photo_ref":"AU_ZVEGaaa0Sn6FHHx--evtiDo_egt9pU2K3fc8X3MJWU7KZl6OEb0Wr0Mus_hCUHtG3j6aqXNwpyYSkG4tYKKINOOEHOUEh9bqxrjAQFEFGZigVsZ5caVxJiZNqc-3bB7ieqFx1Ya2oAZ3b_AWP-UX5cpTI9s9zPUskyeRIm6Zw2GwWlgJmc6Ha-oXEHk9_IrIpibJbAt6kkKmpu0xOIA6bz0TrskgnLgI39rnCm_uev1yi-IVekn5NlrBTuE2HHj7ZxXJs87nlWO0Xxq3MigKmFkq9N6ug0LhOU7620bixt4ScdYRkCNg6ykYwC-dELi00v5M2hJOO4AyyFoWD8XDo7-YEMcS-jElzvBMEiYUey8LWRC3ZTPh7qwvYGGUkDrQDirbS_zUuh4VhKzyRej5yuoTRNTdTZC2V6VI_a2TLsxM","verified_address":"M8GF+3QG, Kwalakhu Rd, Lalitpur 44700, Nepal","km_from_previous":0,"road_name":"","road_difficulty":"bajo","estimated_hours":0.5,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Este monasterio budista centenario cuenta con estatuas de latón adornadas y elementos bañados en oro."},{"name":"Mahabuddha Temple","headline":"Mahabuddha Temple","narrative":"El templo de los mil Budas: cubierto de terracota con la imagen de Buda repetida en cada centímetro de su superficie. Está metido en un patio estrecho del barrio artesano y hay que buscarlo a propósito, que es parte del encanto.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Patan de punta a punta","links":[],"type":"monumento","day":1,"lat":27.6689586,"lng":85.3271105,"photo_ref":"AU_ZVEFCQN_ipqsPs6l3wC6b-83ZiEY_2HVRe4826BfdqK-h5vu8JJ60cltFMm55oViYjJz-NIm3T71RIg2mkwL96S6taygbQNNNHtfdMcWQuKrVZwQHk7vWSZJDPbVPXbXG3RT0exjUL9YWIaZRu73hq8VBDKHZuRTeHxqfH8ardYYnxzd5xABUOa4e56B6zR6nQZdyWnijYI8-o4E3OKDCACQhk1HIzVqmhnVHPxM1FlNV44Tu3EcB2pddZfZp8_Faa7g0Kj5_8_20RD4ui0NV9mveDc4F5MDaBZhkjL5k_ke9oTYV0W2RA52qWMq0GA52z33CrSI4eXO0fu6nHrRx-zUuZlqzL-ekZFInRAkRm4GnmE0_-t2SUnXs5ly3M5im24Oc34JTNGS-zbJQBf1foUBqmzjAXVwH6tV9O-IxJ27d9wVv","verified_address":"Lalitpur 44700, Nepal","km_from_previous":1,"road_name":"","road_difficulty":"bajo","estimated_hours":0.5,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Pequeño templo de terracota con una torre en cuyos ladrillos hay tallados varios centenares de imágenes de Buda."},{"name":"Rudra Varna Mahavihar , Oku Bahal","headline":"Rudra Varna Mahavihar , Oku Bahal","narrative":"El monasterio budista más activo del casco histórico, donde los rituales de la comunidad Newari siguen intactos. Sin entrada, sin turistas, sin señales. Solo hay que empujar la puerta del patio.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"lunes: 5:00–19:00 · martes: 5:00–19:00 · miércoles: 5:00–19:00 · jueves: 5:00–19:00 · viernes: 5:00–19:00 · sábado: 5:00–19:00 · domingo: 5:00–19:00","day_title":"Patan de punta a punta","links":[],"type":"cultura","day":1,"lat":27.6682072,"lng":85.32719449999999,"photo_ref":"AU_ZVEFQkYwEhiGxB34ozwDgd5tnD2Um9Hi-uAIUuvxcQVkj8s8pfOZZzizqojmBroTb95gPk6RyqL5mEJWmYvht7tjpyPGXz9pq5Ie_lbupk62FrWrGpOKzpB5UJbXoH0rU7K_jlxRXN5oJ6Lmkcit3qD1FO977vbgXNnA6XF5rU-cBrqzjIEFpEpJaoKAlMJXl4EjCN8SY8eLkA4V7TNMzxBGNKGO9uzeeUfGHHCpqZwARGMy1guz5CQ7VfAYW3ZXWj5HH37Cw_WE6ulZaegRZt9DOpAmtCF082282UBKMOTretw86eq3uaOcfNqGYU0kszmgIGRLjGOxPkHtNAP5WS1FjlBJFpaJA0zQbhMZPVW-LC6CwtmVwXY3BvlKTfaGvP07oNCcHT4MSzRDV0qiT-OPENZNoBscn1rn8a4ln694","verified_address":"Lalitpur 44700, Nepal","km_from_previous":0,"road_name":"","road_difficulty":"bajo","estimated_hours":0.5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Mangal Bazar","headline":"Mangal Bazar","narrative":"El mercado central que rodea Durbar Square, el mejor sitio para ver a los artesanos Newari trabajar el metal en vivo. Los talleres de estatuas de bronce son famosos en todo el valle; los precios aquí son más honestos que en Katmandú.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Patan de punta a punta","links":[],"type":"mercado","day":1,"lat":27.6726484,"lng":85.32491979999999,"photo_ref":"AU_ZVEG27C6vvUAaL1WC-N0ovuo_gJKR7k2pHh8d73ouGFRENIFNstCs9C-OyEeFNdh224dDXGgf1-d1FWkGndepHNyj243k0TQLq1fmv_s_OvBU1O0ouAj0oE6m6HF-Gqksiy1Ilg3_n1nVg74aiHpGsbCyQy3uCUibVRj-w0Tp88feqd-Bm0HQhsLQ0mQCCbYO-YeAI1iOaRgtwyyzzIt5XOo0bPZpHxNpl6ad6cHKRYCoBuArwd5texfOs6NQP-JQv0VbbJ1iUUQUb1o3vfJ2VP0k8K12fqM24HB7KFnc4LWzWNTINEwnJcIxJnJ-LZmUxmiKmNp1-lSHRT7Cjhq-kQRtN5Y7TiI9dZ2rfMvGEiXz3ZHxdELN1eWnC6juXAifBpy2hzZaGoeNahEGVjgNAFB5WTvbMgdQrcd4bQDaGerzeaPp","verified_address":"Lalitpur 44600, Nepal","km_from_previous":0,"road_name":"","road_difficulty":"bajo","estimated_hours":1,"sleep":null,"eat":null,"alt_bad_weather":""}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/Patan+Durbar+Square/Patan+Museum/Kumbheshwar+Temple+Patan/Golden+Temple+Patan/Mahabouddha+Temple+Patan/Uku+Bahal+Patan/Mangal+Bazar+Patan","label":"Día 1: Patan completo a pie"}],"tips":["La entrada a Patan Durbar Square cuesta unos 1.000 NPR para extranjeros (aprox 7€). Guarda el ticket, lo piden varias veces.","Ve descalzo preparado: Golden Temple y varios monasterios lo exigen en la puerta.","Los mejores thali nepalíes del centro están en el restaurante Café de Patan, dentro del Patan Museum — comer aquí vale la pena aunque no estés en el museo.","La mejor luz para fotos es entre las 7h y las 9h de la mañana, antes de que lleguen los grupos.","Desde Katmandú se llega en 20 minutos en taxi por unos 300-400 NPR o en micro (línea Lagankhel) por 25 NPR."],"tags":["cultura","templos","historia","patrimonio UNESCO","a pie","arte nepalí"],"budget_level":"bajo","suggestions":["Añade medio día en Bhaktapur si tienes un día más — está a 15 km y es la tercera ciudad medieval del valle.","El mercado de Patan es el mejor sitio del valle para comprar estatuas de bronce sin intermediarios."],"pre_departure":null,"practical_info":null};
+    </script>
+    <script src="/guide-renderer.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.__ROUTE_DATA && typeof guideRenderer !== 'undefined') {
+        guideRenderer.render(window.__ROUTE_DATA, { saved: true });
+        var staticIt = document.querySelector('.destino-itinerary-static');
+        if (staticIt) staticIt.style.display = 'none';
+      }
+    });
+    </script>
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Kathmandú: taxi 20-30 min, 4-7 EUR. Micro o bus local desde Ratna Park: 30-40 min, menos de 1 EUR.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Patan (Lalitpur)">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +165,7 @@
               <p>Hyatt Regency o Dwarika's en Kathmandú a 20 min: 80-200 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Patan (Lalitpur)">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -116,6 +178,7 @@
           <li>Explorar los patios (bahals) tradicionales newar escondidos en callejones, empezando por Hiranya Varna Mahavihar</li>
           <li>Comprar artesanía en bronce y thangkas directamente a artesanos en los talleres de Mangal Bazaar</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Patan (Lalitpur)">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -140,12 +203,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Patan (Lalitpur) desde España?</h3>
           <p>El presupuesto diario en Patan (Lalitpur) va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Guesthouses en Patan o Kathmandú: 6-12 EUR/noche. Rango medio: Guesthouses boutique en casas newar en Mangal Bazaar: 20-40 EUR/noche. Desde Kathmandú: taxi 20-30 min, 4-7 EUR. Micro o bus local desde Ratna Park: 30-40 min, menos de 1 EUR.</p>
@@ -166,7 +227,10 @@
           <h3>¿Cuál es la mejor época para viajar a Patan (Lalitpur)?</h3>
           <p>La mejor época para visitar Patan (Lalitpur) es octubre-noviembre, marzo-abril. Se recomiendan 1 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
+
+    </div>
 
     <!-- SHARE -->
     <div class="destino-share-wrap">
@@ -183,7 +247,7 @@
         <div class="salma-chat-bubble">¡Ey! Estás viendo Patan (Lalitpur). ¿En qué te ayudo?</div>
         <div class="salma-chat-chips" id="salma-chat-chips">
           <button class="salma-chip" data-msg="Consejos para viajar a Patan (Lalitpur)">💡 Consejos Patan (Lalitpur)</button>
-          <button class="salma-chip" data-msg="Itinerario 1 días en Patan (Lalitpur)">📋 Itinerario 1 días</button>
+          <button class="salma-chip" data-msg="Itinerario en Patan (Lalitpur)">📋 Itinerarios</button>
           <button class="salma-chip" data-msg="Presupuesto para viajar a Patan (Lalitpur)">💰 Presupuesto</button>
           <button class="salma-chip" data-msg="Buscar vuelos a Patan (Lalitpur)">✈️ Vuelos</button>
           <button class="salma-chip" data-msg="Hoteles en Patan (Lalitpur)">🏨 Hoteles</button>

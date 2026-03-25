@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde San Ignacio: cruce fronterizo Benque Viejo / Melchor de Mencos, luego 1h en transporte al sitio. Tour organizado desde San Ignacio: 50-70 EUR todo incluido. En independiente: minibús a la frontera 3 EUR + transporte guatemalteco 10-15 EUR + entrada al parque 20 EUR.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Tikal (excursión desde San Ignacio)">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Jungle Lodge dentro del parque Tikal, 90-140 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Tikal (excursión desde San Ignacio)">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -115,6 +120,7 @@
           <li>Recorrido completo por la Gran Plaza y los templos I y II</li>
           <li>Avistamiento de fauna: monos saraguatos, aves tropicales, cocodrilos (gratis dentro del recinto)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Tikal (excursión desde San Ignacio)">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -139,12 +145,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Tikal (excursión desde San Ignacio) desde España?</h3>
           <p>El presupuesto diario en Tikal (excursión desde San Ignacio) va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Hospedaje en Flores (Guatemala), 15-22 EUR/noche. Rango medio: Hotel en Flores o El Remate, 40-60 EUR/noche. Desde San Ignacio: cruce fronterizo Benque Viejo / Melchor de Mencos, luego 1h en transporte al sitio. Tour organizado desde San Ignacio: 50-70 EUR todo incluido. En independiente: minibús a la frontera 3 EUR + transporte guatemalteco 10-15 EUR + entrada al parque 20 EUR.</p>
@@ -165,14 +169,36 @@
           <h3>¿Cuál es la mejor época para viajar a Tikal (excursión desde San Ignacio)?</h3>
           <p>La mejor época para visitar Tikal (excursión desde San Ignacio) es Noviembre a abril (mañanas tempranas para el amanecer). Se recomiendan 1 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Tikal (excursión desde San Ignacio)</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Tikal%20(excursi%C3%B3n%20desde%20San%20Ignacio)%201%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Tikal (excursión desde San Ignacio)</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Tikal (excursión desde San Ignacio). ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Tikal (excursión desde San Ignacio)">💡 Consejos Tikal (excursión desde San Ignacio)</button>
+          <button class="salma-chip" data-msg="Itinerario en Tikal (excursión desde San Ignacio)">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Tikal (excursión desde San Ignacio)">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Tikal (excursión desde San Ignacio)">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Tikal (excursión desde San Ignacio)">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Tikal (excursión desde San Ignacio)?|ruta por Belice|¿dónde comer en Tikal (excursión desde San Ignacio)?|Tikal (excursión desde San Ignacio) en 1 días|presupuesto Belice|¿es seguro viajar a Tikal (excursión desde San Ignacio)?|mejor época para Belice">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -186,35 +212,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Tikal (excursión desde San Ignacio). ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Tikal (excursión desde San Ignacio)">💡 Consejos Tikal (excursión desde San Ignacio)</button>
-        <button class="salma-chip" data-msg="Itinerario 1 días en Tikal (excursión desde San Ignacio)">📋 Itinerario 1 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Tikal (excursión desde San Ignacio)">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Tikal (excursión desde San Ignacio)">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Tikal (excursión desde San Ignacio)">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Tikal (excursión desde San Ignacio)?|ruta por Belice|¿dónde comer en Tikal (excursión desde San Ignacio)?|Tikal (excursión desde San Ignacio) en 1 días|presupuesto Belice|¿es seguro viajar a Tikal (excursión desde San Ignacio)?|mejor época para Belice">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Tikal (excursión desde San Ignacio)","pais":"Belice","id":"tikal-excursion","code":"bz"};

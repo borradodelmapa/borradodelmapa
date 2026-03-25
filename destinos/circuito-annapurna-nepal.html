@@ -27,6 +27,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +79,211 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+    <!-- ITINERARIO COMPLETO -->
+    <div class="destino-itinerary-static">
+  <h2 class="destino-h2">🗺️ Itinerario completo</h2>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 1 — Inicio del circuito <span class="destino-day-stops">2 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Besisahar</h4>
+        <p class="destino-stop-desc">Punto de partida oficial del circuito. Pueblo en el valle del Marsyangdi donde se sellan los permisos y se ajustan las mochilas antes del primer tramo.</p>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Bahundanda</h4>
+        <p class="destino-stop-desc">Primera jornada suave por el valle del Marsyangdi, entre terrazas de arroz y aldeas de etnia gurung. Se ganan unos 400 metros de altitud sin prisa.</p>
+        <span class="destino-stop-meta">📍 12 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 2 — Valle del Marsyangdi <span class="destino-day-stops">2 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Chamje</h4>
+        <p class="destino-stop-desc">El valle se estrecha y el Marsyangdi empieza a mostrar su carácter más salvaje. Varios puentes colgantes y cascadas marcan el ritmo del día.</p>
+        <span class="destino-stop-meta">📍 15 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Tal</h4>
+        <p class="destino-stop-desc">Primera aldea claramente de influencia tibetana, en una llanura aluvial junto al río. Las casas de piedra y los primeros chortens marcan el cambio de cultura.</p>
+        <span class="destino-stop-meta">📍 8 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 3 — Hacia Manang <span class="destino-day-stops">2 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Bagarchhap</h4>
+        <p class="destino-stop-desc">La vegetación cambia a pino y rododendro. El frío empieza a notarse por las noches y los tejados planos anuncian que la influencia tibetana ya es total.</p>
+        <span class="destino-stop-meta">📍 18 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Chame</h4>
+        <p class="destino-stop-desc">Capital del distrito de Manang, con oficina de permisos, tiendas de equipamiento y los primeros muros de mani en piedra tallada. Buena noche para revisar el equipo.</p>
+        <span class="destino-stop-meta">📍 14 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 4 — Pisang y Manang <span class="destino-day-stops">1 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Pisang</h4>
+        <p class="destino-stop-desc">Primer gran impacto visual del macizo de Annapurna II. El Upper Pisang, 200 metros más arriba del pueblo bajo, ofrece las mejores vistas y un gompa activo.</p>
+        <span class="destino-stop-meta">📍 20 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 5 — Aclimatación en Manang <span class="destino-day-stops">1 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Manang</h4>
+        <p class="destino-stop-desc">El pueblo más importante del valle antes del paso. A 3.519 m, aquí se hace el día de aclimatación obligatorio — sin él el Thorong La castiga de verdad.</p>
+        <span class="destino-stop-meta">📍 16 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 6 — Aclimatación en Manang <span class="destino-day-stops">1 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Khicho Ice Lake</h4>
+        <p class="destino-stop-desc">Día de aclimatación: subir al lago glacial a 4.600 m y bajar a dormir a Manang. Regla de oro del Himalaya: camina alto, duerme bajo. Este día puede salvarte el paso.</p>
+        <span class="destino-stop-meta">📍 8 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 7 — Al pie del paso <span class="destino-day-stops">1 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Thorong La</h4>
+        <p class="destino-stop-desc">Campamento base informal del paso de Thorong La, a 4.450 m. La mayoría duerme aquí o en el High Camp para salir al amanecer y cruzar el paso con luz.</p>
+        <span class="destino-stop-meta">📍 14 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 8 — Cruce de Thorong La <span class="destino-day-stops">2 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Thorong La</h4>
+        <p class="destino-stop-desc">El punto culminante del circuito: 5.416 m, con las banderas de oración y las vistas al Dhaulagiri al sur. Se cruza de madrugada para evitar el viento de la tarde.</p>
+        <span class="destino-stop-meta">📍 7 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Muktinath</h4>
+        <p class="destino-stop-desc">Bajada de 1.600 metros de desnivel hasta este lugar sagrado tanto para hindúes como para budistas. El templo de Jwala Mai, con sus llamas eternas alimentadas por gas natural, vale la parada.</p>
+        <span class="destino-stop-meta">📍 9 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 9 — Valle de Mustang <span class="destino-day-stops">3 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Kagbeni</h4>
+        <p class="destino-stop-desc">Pueblo medieval de adobe en la confluencia de dos ríos, puerta del Alto Mustang. Las callejuelas estrechas y el gompa rojo hacen que merezca la pena madrugar para llegar con luz.</p>
+        <span class="destino-stop-meta">📍 14 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Marpha</h4>
+        <p class="destino-stop-desc">Conocido como el pueblo del manzano de Nepal, sus calles empedradas y limpias contrastan con el polvo del valle. El brandy de manzana local es un argumento sólido para parar aquí.</p>
+        <span class="destino-stop-meta">📍 10 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Jomsom</h4>
+        <p class="destino-stop-desc">Capital del distrito de Mustang, con aeropuerto que conecta con Pokhara. El viento del mediodía en el valle de Kali Gandaki es de los más fuertes del mundo — sal pronto.</p>
+        <span class="destino-stop-meta">📍 5 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 10 — Cañón del Kali Gandaki <span class="destino-day-stops">1 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Ghasa</h4>
+        <p class="destino-stop-desc">El paisaje cambia radicalmente: del desierto de Mustang a bosques de pino y rododendro en pocas horas. El Kali Gandaki ruge en el cañón más profundo del mundo entre Dhaulagiri y Annapurna.</p>
+        <span class="destino-stop-meta">📍 22 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 11 — Aguas termales de Tatopani <span class="destino-day-stops">1 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Tatopani</h4>
+        <p class="destino-stop-desc">Las aguas termales de Tatopani son el premio gordo tras días de frío y esfuerzo. A 1.190 m, el calor ya se nota y una cerveza Everest aquí después del baño termal tiene otro sabor.</p>
+        <span class="destino-stop-meta">📍 20 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 12 — Subida a Ghorepani <span class="destino-day-stops">1 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Ghode Pani</h4>
+        <p class="destino-stop-desc">La subida desde Tatopani son 1.800 metros de desnivel positivo — el día más duro del segundo tramo. Pero Ghorepani a 2.874 m tiene la mejor concentración de lodges cómodos del circuito.</p>
+        <span class="destino-stop-meta">📍 18 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 13 — Amanecer en Poon Hill <span class="destino-day-stops">2 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Poon Hill</h4>
+        <p class="destino-stop-desc">Salida antes del amanecer para subir 45 minutos al mirador de Poon Hill, a 3.210 m. La panorámica del Annapurna Sur, Hiunchuli y Dhaulagiri con luz dorada es el momento más fotografiado del circuito.</p>
+        <span class="destino-stop-meta">📍 2 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Naya Pul</h4>
+        <p class="destino-stop-desc">Final oficial del trek para la mayoría. Desde aquí se toma el jeep o bus a Pokhara, a unos 42 km. El circuito ha cerrado el bucle y el cuerpo lo sabe.</p>
+        <span class="destino-stop-meta">📍 18 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 14 — Descanso en Pokhara <span class="destino-day-stops">1 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Pokhara</h4>
+        <p class="destino-stop-desc">Merecido día de descanso junto al lago Phewa, con el Annapurna de fondo. Pokhara tiene la mejor concentración de restaurantes, masajes y camas blandas por euro de todo Nepal.</p>
+        <span class="destino-stop-meta">📍 42 km</span>
+      </div>
+    </div>
+  </details>
+</div>
+
+    <!-- ITINERARIO INTERACTIVO (mapa + guide-renderer) -->
+    <div id="chat-area"></div>
+    <script>
+    window.__ROUTE_DATA = {"title":"Circuito de Annapurna 14 Días","name":"Circuito de Annapurna 14 Días","country":"Nepal","region":"Annapurna, Gandaki","duration_days":14,"summary":"Trek clásico alrededor del macizo de Annapurna, cruzando el paso de Thorong La a 5.416 m. 160-200 km a pie por valles, aldeas y paisaje alpino de altura.","stops":[{"name":"Besisahar","headline":"Besisahar","narrative":"Punto de partida oficial del circuito. Pueblo en el valle del Marsyangdi donde se sellan los permisos y se ajustan las mochilas antes del primer tramo.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Inicio del circuito","links":[],"type":"lugar","day":1,"lat":28.1962471,"lng":84.38574419999999,"photo_ref":"AU_ZVEEobJ8AbIGs0Ruc_v8nKpoJCUwn050ZIEN8tK-hrWFeAenke6oJH-AaVAKL6tspeHciZBaFIDEmJliFDKMnyn3S3OcSOvMZSGRrfiwxV9XIjuv6qJvgLosuQVv8G1bGbrfNcLa8-N8kHn-HYAgkSADxJI_Rh_cIYePmLzbx35W1JCOvmNzk9ujdWIs3LPRUsS6-E86-YJghLaARvvEcbcjGqPBPRtNekJksk--l9VGcyKJWD_9uMEqt9P8GiBg66kUkx0IX-XlagG62diCfpNx-E4eIQx8eglaVmsnot1WnxFs6FCFPPPcnpdeULwAa4eA9H7gf4wwkr3nNiZzDCQ7NQ8rmnCupn4lIcfQOLK4Cztsy60ppDtnZDeaOfcokupiIfaffSY7arW6O-gDItjaRncmpc5sM688Jowr7r3lwAw","verified_address":"Besisahar 33600, Nepal","km_from_previous":0,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"bajo","estimated_hours":0,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Bahundanda","headline":"Bahundanda","narrative":"Primera jornada suave por el valle del Marsyangdi, entre terrazas de arroz y aldeas de etnia gurung. Se ganan unos 400 metros de altitud sin prisa.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Inicio del circuito","links":[],"type":"lugar","day":1,"lat":28.3434382,"lng":84.42251859999999,"photo_ref":"AU_ZVEEZvu_Blw719etexjX-NxZ3yggA5hBam_wVzRJ9JwvlZVe4L8_uTPxs3ZZSgN5N1TsDHz5ctOVsNJwqHf4W03klyPVJdeBwVmW5Vm6gC1dA6Gy4baveb39VzF0fVyyyq6NtEfGzJ_itmswfw0yHx7VlUwFvSh09CXf-DrwtyFB8W0sUOsFq1ZCi3dfHxD3e7Hwya9x1SkdHJi42FwaEnebSdkpKDxiGZ8JH5a71nnwiKdJVpSLkTmb3Q83gNqvVUWTzObsiTCUBwxx6GVhXJHIXuvW-no7xn9K81jSo4voa3zfiZnyE2v7NmtVC6XAEM1t9yxibxjn9_xj178e4J1c_yFqeQ9PLJRdJDRlRGpjJtu8eYPjtTKgzHYMV-EY5Y0yOv2wwlQwKLMrTyRknWjcnzNxlfzg070kb6B6SDzQYYQ","verified_address":"Bahundanda 33600, Nepal","km_from_previous":12,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"bajo","estimated_hours":5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Chamje","headline":"Chamje","narrative":"El valle se estrecha y el Marsyangdi empieza a mostrar su carácter más salvaje. Varios puentes colgantes y cascadas marcan el ritmo del día.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Valle del Marsyangdi","links":[],"type":"lugar","day":2,"lat":28.335,"lng":84.414,"photo_ref":"","verified_address":"","km_from_previous":15,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"bajo","estimated_hours":5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Tal","headline":"Tal","narrative":"Primera aldea claramente de influencia tibetana, en una llanura aluvial junto al río. Las casas de piedra y los primeros chortens marcan el cambio de cultura.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Valle del Marsyangdi","links":[],"type":"lugar","day":2,"lat":28.397,"lng":84.432,"photo_ref":"","verified_address":"","km_from_previous":8,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"bajo","estimated_hours":2,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Bagarchhap","headline":"Bagarchhap","narrative":"La vegetación cambia a pino y rododendro. El frío empieza a notarse por las noches y los tejados planos anuncian que la influencia tibetana ya es total.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Hacia Manang","links":[],"type":"lugar","day":3,"lat":28.5328403,"lng":84.3390864,"photo_ref":"AU_ZVEEHdLMh9Tjm5G6nUb2a0XcBPccxhtBBKZLlQ0kHGOffr0KBjKNOVE1RtF83TkNsDs5t_S-jxD9gFvtxPgXiRXxxrsNtsBZwv5M2PGBEtypny2mTtpT656eq20wKGmO72dtGRBNh9KUq559_IvuMrl5h-QCU9elIu5C1b3RwU_Te_6AvrUM91AexfS_h18kY4PTBRZ-9_5j1rcd3bwu_L_oZojIO3RXQS565UXC4PGuoIxJvhg2MwnPccCUk6qSSA32ZsheEyRfS_nIDZw5wq92yWaCpRE3sfUp6VyLBWJ2_vBCPYe5fkOAK9X50oVEYwwSXogEL6oVTsUvMYORpIuMQaeR-Wk67cRlGYL4VIEcve3O6eKCABqEcskKsYF1L8OwcWzTyTEvVy_LX5PmXW8cfeCn0ycQLThyU2aoRwSbLa-X4","verified_address":"Bagarchhap, Dharapani 33500, Nepal","km_from_previous":18,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"medio","estimated_hours":6,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Chame","headline":"Chame","narrative":"Capital del distrito de Manang, con oficina de permisos, tiendas de equipamiento y los primeros muros de mani en piedra tallada. Buena noche para revisar el equipo.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Hacia Manang","links":[],"type":"lugar","day":3,"lat":28.516253,"lng":84.238417,"photo_ref":"AU_ZVEHGaTpzc20RqGzv1s83Jwd4DFEIb_9H04ZwGtN0ENo-LpXrI1SFcp9a8pfa0quTpX8-M0UJNeiPoi-mZQopUQ_3oW9GAzfd7AOQmix1RAPCUmHOcWMmMnL_atPBFtTOkbG9owg4vp46TuqyJzJ6G3uGVcc2QJt72jG7bMZcrpkAEyGFWTAjVCQM4uo-ijH22TheUCSIG8h0FTgpa7KfRd2A0dKf6tcMRbTU-9xPBjBFn49TGMvEwMr1Rn7rtJVGYEf4uPiag7Q05r7VDO37WVmvrcBWOuj-AHpHuke0-STSFjTZFv-It2fSakXqpMg9NBULNHhM7c6R00SIdyMY-S8Y5lIAXsUQyssJYKUmvy9ySiOWr0AudbeTEdG4KoPL2ZI_QiaCocQA-nnZ-AKx4sDfBpS2qT7c0yLL28qz5eo","verified_address":"Chame, Nepal","km_from_previous":14,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"medio","estimated_hours":4,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Pisang","headline":"Pisang","narrative":"Primer gran impacto visual del macizo de Annapurna II. El Upper Pisang, 200 metros más arriba del pueblo bajo, ofrece las mejores vistas y un gompa activo.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Pisang y Manang","links":[],"type":"lugar","day":4,"lat":28.5936253,"lng":84.14351359999999,"photo_ref":"AU_ZVEEsBxZkKH5aZ5Lfv2GXgBa1m9ChZZMmxVRkBmgLPPjs6J8AgieOeEHtYR51cDtb7Tn6vOYIyANNvbzMozX-8VdF_eaqdpWekzcZMK0wHLPVZrP64gxnXggj3e9LJenV0HW3pHzjm8zEN6T7AcNCNYXGQFSXUFq-0dUx-GaSIKJ9FVrG2UblX4m3ExHRQ6rnh_bc4gbNYfFImyA3_t9VoO1rpjf2TA28b8FSeEs-tPqC2Fj6dDpcwFdumR-Lvp2y-Hjc6hYnQr4CEbXulIPwzccS9gdXSDFwOi_dlUHy16yBIUkyLd85nT3t0OBYm_00IFYWPFMkDgT0_o5j_-W_3LPEBnGLeco7qNkLb3y_TTN1Q_3kUCAOPOFMHt7sZpTU70nDKc7_BQTopuAIC-BsDukNDvarTKO1V4NwRtmQJ2k","verified_address":"Pisang 33500, Nepal","km_from_previous":20,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"medio","estimated_hours":5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Manang","headline":"Manang","narrative":"El pueblo más importante del valle antes del paso. A 3.519 m, aquí se hace el día de aclimatación obligatorio — sin él el Thorong La castiga de verdad.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"lunes: 7:00–20:00 · martes: 7:00–20:00 · miércoles: 7:00–20:00 · jueves: 7:00–20:00 · viernes: 7:00–20:00 · sábado: 7:00–20:00 · domingo: 7:00–20:00","day_title":"Aclimatación en Manang","links":[],"type":"lugar","day":5,"lat":28.6651857,"lng":84.0239605,"photo_ref":"AU_ZVEEnJUl5v8ZQjwR9qZC3UDixM-JbN2GuYWls90kgCvS8p_08vbFSH-jP1_To6jFpR2F8oWXfxt4707AH8BpRPiFPseR3vcU-OQyAu5iZvF7wH-RJ4GHNoGF1eNv04XatSNZT1LJcFoXQZAUhjHYVtjIz07YoorX9JLVxSosqpqLBHzdfWFWwX2Efq2rRhu9FcpDmTJlRBvTYnCTqGrAqDpDWywrATPfchk-IHXF-Z683tWvM9mwDqlYdvdxBkrA-icimUNaELM1isvmZw7rjtD1HU74tXFbnyVhPTd0QgMm3hA","verified_address":"Manang 3540, Nepal","km_from_previous":16,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"medio","estimated_hours":5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Khicho Ice Lake","headline":"Khicho Ice Lake","narrative":"Día de aclimatación: subir al lago glacial a 4.600 m y bajar a dormir a Manang. Regla de oro del Himalaya: camina alto, duerme bajo. Este día puede salvarte el paso.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Aclimatación en Manang","links":[],"type":"lugar","day":6,"lat":28.6797352,"lng":84.0612191,"photo_ref":"AU_ZVEFiIIVTHU2_aksguesgItOe7v6gDFJe4PUH299YuU46IOLrkICi5hKLrDwYlYFWpq7E1vQjmhdYvCjH2k24BTVHSrZOdUHjoZ15oGJ99uE-Hfh1jd6V8KqcExhRpPRWP_RYjV5euwHe94CY1RxboXqucFGZ8GPUcCrCWG-WeZAX-plgDYzDDtY_FjrlXCZBFtK82xPzLXMv9hfEg1120y-ptSo0fegoromhmrdw22t1dtYbWOuTrr0u7xCSMZ1kK5sD8NpLD51NpWIuTmU98eVcXsWgeZsOPWeG6X-Hiopm109rNcIImwziR7x5CDlnH9BKUYAnbk4DE9maPyZus0KTw8H9c0_Nb-53xl1yUutgO_TWEuK1qObBajjpC83JHCf-Bm2H2RORP2it1zaNYcWys4PuJNqEXsMwKdfhcZ9ISUei","verified_address":"M3H6+VFX, Khicho Taal,, Bhraka 33500, Nepal","km_from_previous":8,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"medio","estimated_hours":5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Thorong La","headline":"Thorong La","narrative":"Campamento base informal del paso de Thorong La, a 4.450 m. La mayoría duerme aquí o en el High Camp para salir al amanecer y cruzar el paso con luz.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Al pie del paso","links":[],"type":"lugar","day":7,"lat":28.79337769999999,"lng":83.93866899999999,"photo_ref":"AU_ZVEGd37Q_AcD28AQpRgoF4ccHfJGsNQcc3-EtNuxua8S9sUBdDUMdUrGirjiDno99ylEhZex3xFLC1sS1MoHEUe3G6cQfnee1p-viYR0uruThF-wbP8nKQJPUvmKCspbtFoh5-3yIG-B7suGqGJzLVJR2yraC1KcB9TQ2AncTw6tR3n0zSlCEthN_2ClmMmfhUzqKBOpTxvFWpCAmffOTUV5F0lJPkyUXrgDgF0HbUVEn3h5O3E4g2kF5XFtJ2j5B0JmmULffDAAY4UqE9Xk2RmCjtUiQk-2bL4Ok7f4Tp8u30X7ZwoKlVJtT8hGLaulnGuKn6mMJnfRnfyMf9emx_gLV9MbRCLhS_7kVWJgazg_sC1hzZz0LSydW9E16kAnBBHN4vQQkEx55XazwcTSCQNWhE3ZDXObI7QNmvxs_WjQ","verified_address":"Thorong La, Tanki Manang 33500, Nepal","km_from_previous":14,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"alto","estimated_hours":5,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Paso de montaña, el más alto del famoso circuito del Annapurna, que alcanza una altura de 5416 m."},{"name":"Thorong La","headline":"Thorong La","narrative":"El punto culminante del circuito: 5.416 m, con las banderas de oración y las vistas al Dhaulagiri al sur. Se cruza de madrugada para evitar el viento de la tarde.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Cruce de Thorong La","links":[],"type":"lugar","day":8,"lat":28.79337769999999,"lng":83.93866899999999,"photo_ref":"AU_ZVEGtStvLKF6cRSW75f2g-DT6agFEG4YoE_y3L_1iwjh7E28JoUHIjTsQRkktM6-baFm7qJkA5WPin7QdjS0YMBCYRfzgSHWFgXe1HR42rEoSzqCstLQCRE_tMVjGE8g98xbIhEiZ2WwnfKNeEhvl6-2t2gYqyfOYjixpzDbRwZIpoXNRkeIWssZ6J3hBeMWHmP-YD_odPYS00p-WG3Hy_waMz_MQMOwWyqHwkuPy4infO4jh3iC9FYw10S9IjtMHMMBVAgjwfapfgtsshQ-HPL2iFWYN0mZcfD0R24qarq1ee12u6eWPIri9EuKKa34EXmQjrA1EDU-9aXwxq_J4ytnldQqIvzdU_SicA5Cyi7B1OuJNe_50mQV1La6Iw5lsDwJsKHftFdVQFS9fCqGz8NakO3HWldUn0VXAY9w85HQ","verified_address":"Thorong La, Tanki Manang 33500, Nepal","km_from_previous":7,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"alto","estimated_hours":4,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Paso de montaña, el más alto del famoso circuito del Annapurna, que alcanza una altura de 5416 m."},{"name":"Muktinath","headline":"Muktinath","narrative":"Bajada de 1.600 metros de desnivel hasta este lugar sagrado tanto para hindúes como para budistas. El templo de Jwala Mai, con sus llamas eternas alimentadas por gas natural, vale la parada.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Cruce de Thorong La","links":[],"type":"lugar","day":8,"lat":28.8017498,"lng":83.8579053,"photo_ref":"AU_ZVEHUKBrBiHPgb8sPGgX8uypNGf_-x35Id0s5l6-hZLTJNuvxGD4fd79Y7OfHhjEvW1YPi_qzYvYE2i3RZAwhRC9nzN3sdXUgmWqGCsD6PAaDX40RREIU6hBWMZmWZVF681QSU1FZMBip-sgSX5XW-Fe5LRXvareF7wChbJFcoSn9rrI0MQ0URkjadP5JmW3V3BEJBNmWglxHJhcH09UUWLtmIbyRpbpDHYhuFE5IC9zJ9MUU1evHqoqhhye5VJfnsTJ16n1SpJQJfB4PFHWAjKWIg0x1FjsmLUYBktJcrbqcGgnWbmfUt7vQDMMOwk2x-TEUz-UFJFnprUzb59OYEu8e0f6-i3utn9QLck5IoNq4ctdZPwNdMRRGXZGGKKXO3s46rHCZyqYyhBJpHMiP0CCFhJ4daZ4r4BL4TmgAEoS87-XM","verified_address":"Muktinath 33100, Nepal","km_from_previous":9,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"alto","estimated_hours":3,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Kagbeni","headline":"Kagbeni","narrative":"Pueblo medieval de adobe en la confluencia de dos ríos, puerta del Alto Mustang. Las callejuelas estrechas y el gompa rojo hacen que merezca la pena madrugar para llegar con luz.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Valle de Mustang","links":[],"type":"lugar","day":9,"lat":28.83,"lng":83.774,"photo_ref":"","verified_address":"","km_from_previous":14,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"medio","estimated_hours":4,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Marpha","headline":"Marpha","narrative":"Conocido como el pueblo del manzano de Nepal, sus calles empedradas y limpias contrastan con el polvo del valle. El brandy de manzana local es un argumento sólido para parar aquí.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Valle de Mustang","links":[],"type":"lugar","day":9,"lat":28.8151445,"lng":83.64548309999999,"photo_ref":"AU_ZVEGPIx99yuLTTl7o4xsm_-DKMugYhm7vVbg_nrUXnWSzz56l_TI63sZ_42fcrbsBNg7bLFkXgAu8LwvwfI7KRkKYWqZTrOIy59tq9I5I6Giw6EPR28adag9-AvXLh-MSydMVyK-Er3_9zguED7cJclZeEZEEO9hvl576Tm_tup2IeH2ybi8QlS6eKxG_Fj6t29cQBI2X0pIinQ2m-yN6_3DRtfJwZWHChav-aXT6-zr3Nmqd-gK_uqMCqmP3shyTtTr6yXr5XRtlM5cvoZ5dsecy7ZM2sF5-4QbiqVXhknXvuNKLIe_pJ7ujQOK7RlLEm7HG1wcLXNLZHDZTBgmbJ-PE6bC4bpIS92evDLaQSe-hrBE4KQE5d4HcMhT0R-Ej53I7FhpnRnHaHcsNzQIpX8TdCPfd-8gAda0rOzBT7Ok","verified_address":"Marpha 33100, Nepal","km_from_previous":10,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"bajo","estimated_hours":2,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Jomsom","headline":"Jomsom","narrative":"Capital del distrito de Mustang, con aeropuerto que conecta con Pokhara. El viento del mediodía en el valle de Kali Gandaki es de los más fuertes del mundo — sal pronto.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Valle de Mustang","links":[],"type":"lugar","day":9,"lat":28.7746477,"lng":83.7730237,"photo_ref":"AU_ZVEHs1zNpaW_DD83qjr0ErJXs0b9IyYFo4NQ7O3-tjHLKEtVXR4AdnegvhsOVi39L4DEy_fLh-nc9zZN_zTxEDenIb4BRkpOHrwe4JRzTBR_ovwXo5GsU6L5KtoMiCwcBLWXIgU8eL1a5pvp_tQyr52Y9hHc8lX7AwlQKaUkdugH0TcjBz5DgnO4Ir7ZGKClgOgCcIKtf7ItVqM1CDd-6RgaOmgbsL-kvFEprBhWoIUHJVLFz81tWdmfuvJrXqUiFGfQlvZ7mlWa-Gs-UlKbX7p1lW6EopT7-EigdD0cR2H6wF72hwMIoDDuYkPDTUIaWo2dtMX40Ha9mNI1293wUarpMstVq1NIChBCjlrd5UzZLx4KoxE1ggaHj-OenSGn1kt2n7OXGs4qt4KQLfBWfmpd0gV2vFS6VylCua1eSA2vtGHQ","verified_address":"Jomsom, Nepal","km_from_previous":5,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"bajo","estimated_hours":1,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Ghasa","headline":"Ghasa","narrative":"El paisaje cambia radicalmente: del desierto de Mustang a bosques de pino y rododendro en pocas horas. El Kali Gandaki ruge en el cañón más profundo del mundo entre Dhaulagiri y Annapurna.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Cañón del Kali Gandaki","links":[],"type":"lugar","day":10,"lat":28.6090953,"lng":83.643322,"photo_ref":"AU_ZVEH1QH0EI8soJLgEUzK7dadUXTZlQZnXlSjBhZtxT_U5M4krAdqYavDRSk6Z-Ey9j_ymYdSQTZI7legxqo8iCuPpEui6XIFaozdHcCfe4ra4GIhinqvp_eqMxAaBH0BHhPR6ah9GUZiS0eY-Z-3amJvKXzsnqDstY3mUFgZ5Q0ArcnaVP88wuPxnkyke-HKOw-8hTtycdMwCv5U-szqtlyfPV9xFMiUlpL1dhfAWpAQghPKVrCvCtES_cMHExKJy86O2sbIaM8Ojoak4hC1I4otrFU2TpUV0ATQU2ZTaEK-Jp7-8yj2ISaXuE55mGvxGHyJz67c6lRycxx0YT0gjDNCbbVXgy7kmtQjmKvvGz5PfEixKwBRh3j8wGcX0RsX4IpEeOkDxZC28ffpTNwsK1wQLcXQCl7vV2UfHaw","verified_address":"Ghasa, Lete 33100, Nepal","km_from_previous":22,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"medio","estimated_hours":6,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Tatopani","headline":"Tatopani","narrative":"Las aguas termales de Tatopani son el premio gordo tras días de frío y esfuerzo. A 1.190 m, el calor ya se nota y una cerveza Everest aquí después del baño termal tiene otro sabor.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Aguas termales de Tatopani","links":[],"type":"lugar","day":11,"lat":28.4944327,"lng":83.6188793,"photo_ref":"AU_ZVEHUZBghx9zkcLasrX7FDVtL2msz8n2f0IJDBzS0CCf4dpWdL2g7pP6prTG1zWa-EU07kbn5mw1JuM36uIXU23p21oBV7Q0FQbyjGRndI22G1vSEwiRZ1xMCQQhHSx3UJgwg_0imMhzByTMBwCmJ5AV7refslw-fjaV-kVhr1M72px8Jj2bLaTfKL2Cy3-45u0d3DvPYgdGQwjD3ImR57eN0Umu-46MO9X88mmt_4agYk7qd3T9sTfsXj9QpXJ3cjMugCCmRbYJorsw4FVU_nKzAVVNsJlNm43v0po0Gtyzm931gzWeKVvrDFFVZcvcpSQ6CiP7i3mLbXyRdl2RftbphB4ak25pxaohrXkqqHfBWuqkLVeqIZyihloqYK76b2jC7lNJC1AgJsxO9gsYlDugZGiXNFQmoBFfMA9oUp8nKoA","verified_address":"Tatopani 33200, Nepal","km_from_previous":20,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"medio","estimated_hours":5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Ghode Pani","headline":"Ghode Pani","narrative":"La subida desde Tatopani son 1.800 metros de desnivel positivo — el día más duro del segundo tramo. Pero Ghorepani a 2.874 m tiene la mejor concentración de lodges cómodos del circuito.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Subida a Ghorepani","links":[],"type":"lugar","day":12,"lat":28.4007902,"lng":83.69998559999999,"photo_ref":"AU_ZVEFOXUUoKHLnOVdCDcTl1zDT5CdscLWRk_ntLqyEyul24JOdMit-AMLhj62w5pQBp1J93OuaNdDjnJ9nuTmBhzt5q4UAuYyjVS0fUZJdavHsBHwxLlFWpUh0arqV3pzc0RLOerVe5iBUfUe9DHQ9N4dexUCc01fTZa7fDf6jwbhEgUDUguYz60_gYAL-tgDYF4ORsAZW8S3u17u5eyTog3IdZ7t-YnhTfEhdTluBUNpCEHOtjEFzSESXI0K8a5UcNe3cP03JAxW0LYVu9K8W6L7H3BHFipLmiwh8iGqFhVMyW3eEUEPUmCKWR_YFiWpaTF4yiYL9SFeYtFryWcfktKPPZB-noCOjjm6F9prczY9MnPJCdzjHRdtAXDFu4a9aqR2xhUPdkJj7VOGNQSKgAS3gdrCbNjho_pkb5dtVIySAUW1D","verified_address":"Ghode Pani 33200, Nepal","km_from_previous":18,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"alto","estimated_hours":7,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Poon Hill","headline":"Poon Hill","narrative":"Salida antes del amanecer para subir 45 minutos al mirador de Poon Hill, a 3.210 m. La panorámica del Annapurna Sur, Hiunchuli y Dhaulagiri con luz dorada es el momento más fotografiado del circuito.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Amanecer en Poon Hill","links":[],"type":"lugar","day":13,"lat":28.4001966,"lng":83.68929860000001,"photo_ref":"AU_ZVEE5wathYLQUH0fvu2BQLuHFg9SvzFgfxFQjxxoEubyplwKyUlN4Lgo5WAlDjiLah4KMCfS_XPaDPZQ0wJh-NrvfUjyCA-hJ5XYRnTMEi7fp4Ni0PH3TpR0FS4huuplVlj00OvHEoprVikd415H2IitgTwtPqF-LVC2a_8kRTo8IR6O7a0462z_kfp0zZo6B4B6Fg4pfxPEZuvm-ulg87UBjQLygdfia8JjY_aXxD8yECBS3mG4-J-FEwRn6RLhNyF4hATG2-HkTmnTvCSp48I9m0cKQVusSxDlQ8jcuQC-4TfmfEbzouf_cXFSerbf2FeNbnxDFoRzdsd2CHQQIvhNm_c52l8maW7wPvJZVNP1dOat7EQGqPQtxTCETCY8h9zsBY1kqae9rqmPdrCg8tKLd15B3GPsmsciHC0KNe3CO2xC6","verified_address":"Poon Hill, Histan Mandali 33200, Nepal","km_from_previous":2,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"bajo","estimated_hours":1,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Estación de montaña frecuentada por senderistas principiantes, popular para ver la puesta de sol y contemplar los picos cercanos."},{"name":"Naya Pul","headline":"Naya Pul","narrative":"Final oficial del trek para la mayoría. Desde aquí se toma el jeep o bus a Pokhara, a unos 42 km. El circuito ha cerrado el bucle y el cuerpo lo sabe.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Amanecer en Poon Hill","links":[],"type":"lugar","day":13,"lat":28.3021112,"lng":83.769042,"photo_ref":"AU_ZVEGSq6UQLkvEywUIfw2daDRatA1qjH2iJZcq0NGXLxjVR_icKKzKBN1-xHusdozbCrjjq5weM5KN92eYy8hZNqGu7ELkxpSgjSkO-JZNCYAblMioZlT_CEQF53tmse1ENtM10Yem3E_3kPNNJWHKtCRJ2unkOiwi14w7jZnG1a3US-cZOPd_0BUjkfKDo3d0D5Q6lQiA8qwbTNZ4hV-AyxBagUaH20uIE4gGhpn1Mf9nj1ZUKIbSlZSGnNFSLq0kcCb1dwSGgBkzTBW7J2LwMrnwB3f6occJwsoK64rSkz6sqMzHaD-oHSwV2Mh-_nr5N-d-K60FfX5ZguasZbwdKDCytBjjWvf2X7ed1U-nu1bcZngk2t_2-qWEJGXP-41whY30k9sGOBgVcOM__aM7Wv6e6HvroYiDxtdsukjcPLE","verified_address":"Naya Pul, Lumle, Nepal","km_from_previous":18,"road_name":"Ruta de trek Circuito Annapurna","road_difficulty":"bajo","estimated_hours":5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Pokhara","headline":"Pokhara","narrative":"Merecido día de descanso junto al lago Phewa, con el Annapurna de fondo. Pokhara tiene la mejor concentración de restaurantes, masajes y camas blandas por euro de todo Nepal.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Descanso en Pokhara","links":[],"type":"lugar","day":14,"lat":28.2095831,"lng":83.9855674,"photo_ref":"AU_ZVEFCy65x_pwq6HxPVNLxPN_PwkOSYc56IW_m2TB63loOAvKwj5MDXM4UnSDjZbXsqRn00J0UEdlwxkggLd9nWr4xH7AHJM1wkVyphT1LraifUHBgaoouEmueeXd0GwFASPAQcqwC1hexlbRrumdQI3QagCmxcn1ENZVKsD0t-eXIJZnIsttVMuJQEVv8oF1sxwaza_zlRUXjSlhnk-7T5AqNrqCMEpxLNLcMRNrKKJ310wKKGd0SJK-QEWD9-NHAs3yhEVWNxXBUdXJUiozBaOKJnuFUbcX7uTe7KquKpK2flbOTQEJc_RAzPfT_Vvg4oo1NAXUdXffmYMwwwv2UqOLs9zZd8bAAbDdZGn2RjHmyt0mE9F0-GVIj1ddKV7IIx6XBzsYK64_CMTZ3_qj5zOjQ9qauX3NZys9YaYajJguELRXj","verified_address":"Pokhara, Nepal","km_from_previous":42,"road_name":"Carretera Nayapul-Pokhara","road_difficulty":"bajo","estimated_hours":1.5,"sleep":null,"eat":null,"alt_bad_weather":""}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/Besisahar/Bahundanda","label":"Día 1: Besisahar → Bahundanda"},{"day":2,"url":"https://www.google.com/maps/dir/Bahundanda/Chamje/Tal","label":"Día 2: Bahundanda → Chamje → Tal"},{"day":3,"url":"https://www.google.com/maps/dir/Tal/Bagarchhap/Chame","label":"Día 3: Tal → Bagarchhap → Chame"},{"day":4,"url":"https://www.google.com/maps/dir/Chame/Pisang/Manang","label":"Día 4: Chame → Pisang → Manang"},{"day":5,"url":"https://www.google.com/maps/dir/Manang/Manang","label":"Día 5: Aclimatación en Manang"},{"day":6,"url":"https://www.google.com/maps/dir/Manang/Ice+Lake+Manang/Manang","label":"Día 6: Manang → Ice Lake → Manang"},{"day":7,"url":"https://www.google.com/maps/dir/Manang/Thorong+Phedi","label":"Día 7: Manang → Thorong Phedi"},{"day":8,"url":"https://www.google.com/maps/dir/Thorong+Phedi/Thorong+La+Pass/Muktinath","label":"Día 8: Thorong Phedi → Thorong La → Muktinath"},{"day":9,"url":"https://www.google.com/maps/dir/Muktinath/Kagbeni/Marpha/Jomsom","label":"Día 9: Muktinath → Kagbeni → Marpha → Jomsom"},{"day":10,"url":"https://www.google.com/maps/dir/Jomsom/Ghasa","label":"Día 10: Jomsom → Ghasa"},{"day":11,"url":"https://www.google.com/maps/dir/Ghasa/Tatopani","label":"Día 11: Ghasa → Tatopani"},{"day":12,"url":"https://www.google.com/maps/dir/Tatopani/Ghorepani","label":"Día 12: Tatopani → Ghorepani"},{"day":13,"url":"https://www.google.com/maps/dir/Ghorepani/Poon+Hill/Nayapul","label":"Día 13: Ghorepani → Poon Hill → Nayapul"},{"day":14,"url":"https://www.google.com/maps/dir/Nayapul/Pokhara","label":"Día 14: Nayapul → Pokhara"}],"tips":["Necesitas dos permisos: TIMS Card (20 USD) y ACAP (Annapurna Conservation Area Permit, 30 USD). Se tramitan en Katmandú o Besisahar.","El día de aclimatación en Manang no es opcional. Saltárselo aumenta mucho el riesgo de mal de altura en Thorong La.","Lleva moneda nepalesa en efectivo desde Besisahar. A partir de Manang los cajeros no existen y los lodges solo aceptan rupias.","El paso de Thorong La suele cerrarse con nieve entre diciembre y febrero. La mejor época es octubre-noviembre y marzo-mayo.","Sal del Thorong Phedi o High Camp antes de las 5:00 AM. El viento de la tarde puede hacer el paso intransitable a partir del mediodía.","El seguro de viaje debe cubrir evacuación en helicóptero hasta 6.000 m. Sin esa cobertura no te deberían dejar entrar al parque, y además es una imprudencia seria.","La app Maps.me o Gaia GPS con el mapa offline de Nepal te salva si no hay cobertura, que es casi siempre."],"tags":["trekking","himalaya","alta montaña","circuito","nepal","mochilero","aventura"],"budget_level":"bajo","suggestions":["Si tienes 16-18 días, añade 2 noches en Manang para aclimatación más progresiva y una excursión al lago Tilicho (4.919 m)","Desde Jomsom puedes volar a Pokhara en 20 minutos (vuelo escénico, ~100 USD) si el cuerpo ya no da para más días a pie","El Alto Mustang (Lo Manthang) requiere permiso especial de 500 USD/10 días — vale si buscas algo más remoto y con mucho menos gente"],"pre_departure":null,"practical_info":null};
+    </script>
+    <script src="/guide-renderer.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.__ROUTE_DATA && typeof guideRenderer !== 'undefined') {
+        guideRenderer.render(window.__ROUTE_DATA, { saved: true });
+        var staticIt = document.querySelector('.destino-itinerary-static');
+        if (staticIt) staticIt.style.display = 'none';
+      }
+    });
+    </script>
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Pokhara: jeep o autobús hasta Besisahar o Chame (punto de inicio), 4-6h, 5-10 EUR. Los trekkers que quieren evitar tramos con carretera suelen comenzar en Dharapani.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Circuito de Annapurna">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +304,7 @@
               <p>No hay hoteles de confort en ruta; en Manang algunas lodges tienen calefacción y wi-fi a 15-25 EUR</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Circuito de Annapurna">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -116,6 +317,7 @@
           <li>Visitar el pueblo de Marpha, famoso por el brandy de manzana local</li>
           <li>Relajarse en las aguas termales de Tatopani tras el descenso (entrada 1-2 EUR)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Circuito de Annapurna">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -140,12 +342,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Circuito de Annapurna desde España?</h3>
           <p>El presupuesto diario en Circuito de Annapurna va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Teahouses (lodges de montaña) en ruta: 2-5 EUR/noche, cena y desayuno incluidos a veces en 7-10 EUR. Rango medio: Teahouses con habitación propia y baño compartido en pueblos más grandes: 8-15 EUR. Desde Pokhara: jeep o autobús hasta Besisahar o Chame (punto de inicio), 4-6h, 5-10 EUR. Los trekkers que quieren evitar tramos con carretera suelen comenzar en Dharapani.</p>
@@ -166,7 +366,10 @@
           <h3>¿Cuál es la mejor época para viajar a Circuito de Annapurna?</h3>
           <p>La mejor época para visitar Circuito de Annapurna es octubre-noviembre, marzo-abril. Se recomiendan 14 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
+
+    </div>
 
     <!-- SHARE -->
     <div class="destino-share-wrap">
@@ -183,7 +386,7 @@
         <div class="salma-chat-bubble">¡Ey! Estás viendo Circuito de Annapurna. ¿En qué te ayudo?</div>
         <div class="salma-chat-chips" id="salma-chat-chips">
           <button class="salma-chip" data-msg="Consejos para viajar a Circuito de Annapurna">💡 Consejos Circuito de Annapurna</button>
-          <button class="salma-chip" data-msg="Itinerario 14 días en Circuito de Annapurna">📋 Itinerario 14 días</button>
+          <button class="salma-chip" data-msg="Itinerario en Circuito de Annapurna">📋 Itinerarios</button>
           <button class="salma-chip" data-msg="Presupuesto para viajar a Circuito de Annapurna">💰 Presupuesto</button>
           <button class="salma-chip" data-msg="Buscar vuelos a Circuito de Annapurna">✈️ Vuelos</button>
           <button class="salma-chip" data-msg="Hoteles en Circuito de Annapurna">🏨 Hoteles</button>

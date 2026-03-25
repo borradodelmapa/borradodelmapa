@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Ashgabat: ~260 km al norte por la carretera M37. Con guía/vehículo 4x4 alquilado ~80-120 EUR ida y vuelta. Los últimos 10 km son pista de arena. No hay transporte público.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Cráter de Darvaza (Puerta del Infierno)">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>No existe opción de confort real; volver a Ashgabat el mismo día</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Cráter de Darvaza (Puerta del Infierno)">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -115,6 +120,7 @@
           <li>Visitar también el cráter de barro burbujeante a 10 km al norte (gratis)</li>
           <li>Dormir en el desierto bajo las estrellas (sin contaminación lumínica)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Cráter de Darvaza (Puerta del Infierno)">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -139,12 +145,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Cráter de Darvaza (Puerta del Infierno) desde España?</h3>
           <p>El presupuesto diario en Cráter de Darvaza (Puerta del Infierno) va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Acampada libre junto al cráter (llevar todo el equipo) ~0 EUR, pero necesitas permiso y guía. Rango medio: Yurtas turísticas improvisadas cerca del cráter organizadas por agencias ~30-50 EUR. Desde Ashgabat: ~260 km al norte por la carretera M37. Con guía/vehículo 4x4 alquilado ~80-120 EUR ida y vuelta. Los últimos 10 km son pista de arena. No hay transporte público.</p>
@@ -165,14 +169,36 @@
           <h3>¿Cuál es la mejor época para viajar a Cráter de Darvaza (Puerta del Infierno)?</h3>
           <p>La mejor época para visitar Cráter de Darvaza (Puerta del Infierno) es Octubre-abril (el calor del desierto en verano supera los 50°C). Se recomiendan 1 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Cráter de Darvaza (Puerta del Infierno)</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Cr%C3%A1ter%20de%20Darvaza%20(Puerta%20del%20Infierno)%201%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Cráter de Darvaza (Puerta del Infierno)</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Cráter de Darvaza (Puerta del Infierno). ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Cráter de Darvaza (Puerta del Infierno)">💡 Consejos Cráter de Darvaza (Puerta del Infierno)</button>
+          <button class="salma-chip" data-msg="Itinerario en Cráter de Darvaza (Puerta del Infierno)">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Cráter de Darvaza (Puerta del Infierno)">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Cráter de Darvaza (Puerta del Infierno)">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Cráter de Darvaza (Puerta del Infierno)">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Cráter de Darvaza (Puerta del Infierno)?|ruta por Turkmenistán|¿dónde comer en Cráter de Darvaza (Puerta del Infierno)?|Cráter de Darvaza (Puerta del Infierno) en 1 días|presupuesto Turkmenistán|¿es seguro viajar a Cráter de Darvaza (Puerta del Infierno)?|mejor época para Turkmenistán">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -186,35 +212,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Cráter de Darvaza (Puerta del Infierno). ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Cráter de Darvaza (Puerta del Infierno)">💡 Consejos Cráter de Darvaza (Puerta del Infierno)</button>
-        <button class="salma-chip" data-msg="Itinerario 1 días en Cráter de Darvaza (Puerta del Infierno)">📋 Itinerario 1 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Cráter de Darvaza (Puerta del Infierno)">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Cráter de Darvaza (Puerta del Infierno)">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Cráter de Darvaza (Puerta del Infierno)">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Cráter de Darvaza (Puerta del Infierno)?|ruta por Turkmenistán|¿dónde comer en Cráter de Darvaza (Puerta del Infierno)?|Cráter de Darvaza (Puerta del Infierno) en 1 días|presupuesto Turkmenistán|¿es seguro viajar a Cráter de Darvaza (Puerta del Infierno)?|mejor época para Turkmenistán">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Cráter de Darvaza (Puerta del Infierno)","pais":"Turkmenistán","id":"darvaza-crater","code":"tm"};

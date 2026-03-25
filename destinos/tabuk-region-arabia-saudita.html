@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Vuelo desde Riad al aeropuerto de Tabuk (TUU), 1.5h, desde 65 EUR. Desde Jeddah, aprox. 2h en vuelo o 12h en coche.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Tabuk y Costa del Mar Rojo Norte">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Resorts costeros en Haql o Sharma, 150-350 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Tabuk y Costa del Mar Rojo Norte">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -117,6 +122,7 @@
           <li>Playa de Sharma y acantilados de Wadi Disah (cañón verde espectacular), acceso libre con 4x4</li>
           <li>Vista a Jordania desde Haql: el punto más cercano a Aqaba, a solo 3km por mar</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Tabuk y Costa del Mar Rojo Norte">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -141,12 +147,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Tabuk y Costa del Mar Rojo Norte desde España?</h3>
           <p>El presupuesto diario en Tabuk y Costa del Mar Rojo Norte va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Guesthouses en Tabuk ciudad, 20-40 EUR/noche. Rango medio: Holiday Inn Tabuk o Novotel Tabuk, 70-110 EUR/noche. Vuelo desde Riad al aeropuerto de Tabuk (TUU), 1.5h, desde 65 EUR. Desde Jeddah, aprox. 2h en vuelo o 12h en coche.</p>
@@ -167,14 +171,36 @@
           <h3>¿Cuál es la mejor época para viajar a Tabuk y Costa del Mar Rojo Norte?</h3>
           <p>La mejor época para visitar Tabuk y Costa del Mar Rojo Norte es Octubre a Abril. Se recomiendan 3 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Tabuk y Costa del Mar Rojo Norte</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Tabuk%20y%20Costa%20del%20Mar%20Rojo%20Norte%203%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Tabuk y Costa del Mar Rojo Norte</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Tabuk y Costa del Mar Rojo Norte. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Tabuk y Costa del Mar Rojo Norte">💡 Consejos Tabuk y Costa del Mar Rojo Norte</button>
+          <button class="salma-chip" data-msg="Itinerario en Tabuk y Costa del Mar Rojo Norte">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Tabuk y Costa del Mar Rojo Norte">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Tabuk y Costa del Mar Rojo Norte">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Tabuk y Costa del Mar Rojo Norte">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Tabuk y Costa del Mar Rojo Norte?|ruta por Arabia Saudita|¿dónde comer en Tabuk y Costa del Mar Rojo Norte?|Tabuk y Costa del Mar Rojo Norte en 3 días|presupuesto Arabia Saudita|¿es seguro viajar a Tabuk y Costa del Mar Rojo Norte?|mejor época para Arabia Saudita">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -188,35 +214,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Tabuk y Costa del Mar Rojo Norte. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Tabuk y Costa del Mar Rojo Norte">💡 Consejos Tabuk y Costa del Mar Rojo Norte</button>
-        <button class="salma-chip" data-msg="Itinerario 3 días en Tabuk y Costa del Mar Rojo Norte">📋 Itinerario 3 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Tabuk y Costa del Mar Rojo Norte">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Tabuk y Costa del Mar Rojo Norte">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Tabuk y Costa del Mar Rojo Norte">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Tabuk y Costa del Mar Rojo Norte?|ruta por Arabia Saudita|¿dónde comer en Tabuk y Costa del Mar Rojo Norte?|Tabuk y Costa del Mar Rojo Norte en 3 días|presupuesto Arabia Saudita|¿es seguro viajar a Tabuk y Costa del Mar Rojo Norte?|mejor época para Arabia Saudita">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Tabuk y Costa del Mar Rojo Norte","pais":"Arabia Saudita","id":"tabuk-region","code":"sa"};

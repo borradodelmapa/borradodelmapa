@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Chengdu: vuelo ~50 min (40-80 EUR) al aeropuerto de Jiuzhai Huanglong, o bus ~10h (12 EUR). El bus nocturno es opción económica pero dura.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Jiuzhaigou">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Sheraton Jiuzhaigou o InterContinental: 120-200 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Jiuzhaigou">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -116,6 +121,7 @@
           <li>Valle Zechawa para los lagos del espejo al amanecer (madrugar para luz y sin gente)</li>
           <li>Tibetan village cultural walk (gratis en las zonas no valladas)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Jiuzhaigou">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -140,12 +146,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Jiuzhaigou desde España?</h3>
           <p>El presupuesto diario en Jiuzhaigou va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Hostales en el pueblo de Jiuzhaigou (fuera del parque): 10-18 EUR/noche. Rango medio: Guesthouses o hoteles de 3 estrellas en Zhangzha Town: 40-70 EUR/noche. Desde Chengdu: vuelo ~50 min (40-80 EUR) al aeropuerto de Jiuzhai Huanglong, o bus ~10h (12 EUR). El bus nocturno es opción económica pero dura.</p>
@@ -166,14 +170,36 @@
           <h3>¿Cuál es la mejor época para viajar a Jiuzhaigou?</h3>
           <p>La mejor época para visitar Jiuzhaigou es Septiembre-Noviembre (colores otoñales), Junio-Agosto. Se recomiendan 2 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Jiuzhaigou</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Jiuzhaigou%202%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Jiuzhaigou</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Jiuzhaigou. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Jiuzhaigou">💡 Consejos Jiuzhaigou</button>
+          <button class="salma-chip" data-msg="Itinerario en Jiuzhaigou">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Jiuzhaigou">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Jiuzhaigou">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Jiuzhaigou">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Jiuzhaigou?|ruta por China|¿dónde comer en Jiuzhaigou?|Jiuzhaigou en 2 días|presupuesto China|¿es seguro viajar a Jiuzhaigou?|mejor época para China">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -187,35 +213,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Jiuzhaigou. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Jiuzhaigou">💡 Consejos Jiuzhaigou</button>
-        <button class="salma-chip" data-msg="Itinerario 2 días en Jiuzhaigou">📋 Itinerario 2 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Jiuzhaigou">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Jiuzhaigou">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Jiuzhaigou">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Jiuzhaigou?|ruta por China|¿dónde comer en Jiuzhaigou?|Jiuzhaigou en 2 días|presupuesto China|¿es seguro viajar a Jiuzhaigou?|mejor época para China">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Jiuzhaigou","pais":"China","id":"jiuzhaigou","code":"cn"};

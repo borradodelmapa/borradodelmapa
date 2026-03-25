@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Natitingou: bush taxi o mototaxi, ~1 h, 1,5-3 EUR. Desde Cotonou es un viaje largo (~9-10 h total con cambio en Natitingou).</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Tanguiéta y la cadena del Atakora">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Opciones muy limitadas; prepararse para comodidad básica</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Tanguiéta y la cadena del Atakora">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -115,6 +120,7 @@
           <li>Visita a aldeas Ditammari en los cerros del Atakora: arquitectura defensiva con casas-torre (tata) habitadas, con guía local ~8-10 EUR</li>
           <li>Trekking de 1-2 días por las colinas con guías locales: muy poco frecuentado, sensación de exploración real (~15-20 EUR/día con guía)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Tanguiéta y la cadena del Atakora">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -139,12 +145,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Tanguiéta y la cadena del Atakora desde España?</h3>
           <p>El presupuesto diario en Tanguiéta y la cadena del Atakora va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Alojamiento en familias de acogida o auberges básicas en Tanguiéta: 5-10 EUR/noche. Rango medio: Hôtel Tanguiéta o Campement Dibou: 15-25 EUR/noche. Desde Natitingou: bush taxi o mototaxi, ~1 h, 1,5-3 EUR. Desde Cotonou es un viaje largo (~9-10 h total con cambio en Natitingou).</p>
@@ -165,14 +169,36 @@
           <h3>¿Cuál es la mejor época para viajar a Tanguiéta y la cadena del Atakora?</h3>
           <p>La mejor época para visitar Tanguiéta y la cadena del Atakora es noviembre a febrero. Se recomiendan 2 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Tanguiéta y la cadena del Atakora</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Tangui%C3%A9ta%20y%20la%20cadena%20del%20Atakora%202%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Tanguiéta y la cadena del Atakora</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Tanguiéta y la cadena del Atakora. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Tanguiéta y la cadena del Atakora">💡 Consejos Tanguiéta y la cadena del Atakora</button>
+          <button class="salma-chip" data-msg="Itinerario en Tanguiéta y la cadena del Atakora">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Tanguiéta y la cadena del Atakora">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Tanguiéta y la cadena del Atakora">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Tanguiéta y la cadena del Atakora">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Tanguiéta y la cadena del Atakora?|ruta por Benín|¿dónde comer en Tanguiéta y la cadena del Atakora?|Tanguiéta y la cadena del Atakora en 2 días|presupuesto Benín|¿es seguro viajar a Tanguiéta y la cadena del Atakora?|mejor época para Benín">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -186,35 +212,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Tanguiéta y la cadena del Atakora. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Tanguiéta y la cadena del Atakora">💡 Consejos Tanguiéta y la cadena del Atakora</button>
-        <button class="salma-chip" data-msg="Itinerario 2 días en Tanguiéta y la cadena del Atakora">📋 Itinerario 2 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Tanguiéta y la cadena del Atakora">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Tanguiéta y la cadena del Atakora">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Tanguiéta y la cadena del Atakora">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Tanguiéta y la cadena del Atakora?|ruta por Benín|¿dónde comer en Tanguiéta y la cadena del Atakora?|Tanguiéta y la cadena del Atakora en 2 días|presupuesto Benín|¿es seguro viajar a Tanguiéta y la cadena del Atakora?|mejor época para Benín">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Tanguiéta y la cadena del Atakora","pais":"Benín","id":"tanguieta-atakora","code":"bj"};

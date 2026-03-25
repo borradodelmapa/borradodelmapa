@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Vuelo desde Bagdad a Nasiriyah (~1h, 30-60 EUR) o autobús (5-6h, 10-15 EUR). Desde Nasiriyah, taxi o fijador local hasta el yacimiento (~30 min, 10-15 EUR ida y vuelta).</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Ur (cerca de Nasiriyah)">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Opciones muy limitadas; mejor considerar Basora o Bagdad para mayor comodidad, 70-100 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Ur (cerca de Nasiriyah)">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -115,6 +120,7 @@
           <li>Recorrer las ruinas del área residencial y el puerto fluvial de la antigua Ur (incluido en entrada)</li>
           <li>Visitar el Museo de Nasiriyah con piezas sumerias locales (~2 EUR)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Ur (cerca de Nasiriyah)">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -139,12 +145,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Ur (cerca de Nasiriyah) desde España?</h3>
           <p>El presupuesto diario en Ur (cerca de Nasiriyah) va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Hoteles básicos en Nasiriyah, 15-25 EUR/noche. Rango medio: Hotel Al-Hamdan u opciones similares en Nasiriyah, 40-60 EUR/noche. Vuelo desde Bagdad a Nasiriyah (~1h, 30-60 EUR) o autobús (5-6h, 10-15 EUR). Desde Nasiriyah, taxi o fijador local hasta el yacimiento (~30 min, 10-15 EUR ida y vuelta).</p>
@@ -165,14 +169,36 @@
           <h3>¿Cuál es la mejor época para viajar a Ur (cerca de Nasiriyah)?</h3>
           <p>La mejor época para visitar Ur (cerca de Nasiriyah) es Noviembre a Marzo. Se recomiendan 2 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Ur (cerca de Nasiriyah)</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Ur%20(cerca%20de%20Nasiriyah)%202%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Ur (cerca de Nasiriyah)</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Ur (cerca de Nasiriyah). ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Ur (cerca de Nasiriyah)">💡 Consejos Ur (cerca de Nasiriyah)</button>
+          <button class="salma-chip" data-msg="Itinerario en Ur (cerca de Nasiriyah)">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Ur (cerca de Nasiriyah)">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Ur (cerca de Nasiriyah)">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Ur (cerca de Nasiriyah)">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Ur (cerca de Nasiriyah)?|ruta por Irak|¿dónde comer en Ur (cerca de Nasiriyah)?|Ur (cerca de Nasiriyah) en 2 días|presupuesto Irak|¿es seguro viajar a Ur (cerca de Nasiriyah)?|mejor época para Irak">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -186,35 +212,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Ur (cerca de Nasiriyah). ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Ur (cerca de Nasiriyah)">💡 Consejos Ur (cerca de Nasiriyah)</button>
-        <button class="salma-chip" data-msg="Itinerario 2 días en Ur (cerca de Nasiriyah)">📋 Itinerario 2 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Ur (cerca de Nasiriyah)">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Ur (cerca de Nasiriyah)">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Ur (cerca de Nasiriyah)">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Ur (cerca de Nasiriyah)?|ruta por Irak|¿dónde comer en Ur (cerca de Nasiriyah)?|Ur (cerca de Nasiriyah) en 2 días|presupuesto Irak|¿es seguro viajar a Ur (cerca de Nasiriyah)?|mejor época para Irak">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Ur (cerca de Nasiriyah)","pais":"Irak","id":"ur-nasiriyah","code":"iq"};

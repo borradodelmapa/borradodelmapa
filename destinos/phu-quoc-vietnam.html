@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Vuelo directo desde HCMC (1h, desde 20€) o Hanói. Ferry desde Ha Tien/Rach Gia (~2.5h, 10€).</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Phu Quoc">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Resort 5★ Ong Lang: 80-200€/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Phu Quoc">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -116,6 +121,7 @@
           <li>Visitar fábricas de nuoc mam (salsa de pescado) y pimienta (gratis)</li>
           <li>Mercado nocturno Dinh Cau — marisco a la parrilla (5-10€)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Phu Quoc">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -140,12 +146,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Phu Quoc desde España?</h3>
           <p>El presupuesto diario en Phu Quoc va desde 22-90€, dependiendo del estilo de viaje. Alojamiento mochilero: Hostel/bungalow Long Beach: 8-12€/noche. Rango medio: Resort playa norte: 25-50€/noche. Vuelo directo desde HCMC (1h, desde 20€) o Hanói. Ferry desde Ha Tien/Rach Gia (~2.5h, 10€).</p>
@@ -166,14 +170,36 @@
           <h3>¿Cuál es la mejor época para viajar a Phu Quoc?</h3>
           <p>La mejor época para visitar Phu Quoc es Noviembre a marzo (seco, mar en calma). Se recomiendan 3 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Phu Quoc</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Phu%20Quoc%203%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Phu Quoc</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Phu Quoc. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Phu Quoc">💡 Consejos Phu Quoc</button>
+          <button class="salma-chip" data-msg="Itinerario en Phu Quoc">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Phu Quoc">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Phu Quoc">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Phu Quoc">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Phu Quoc?|ruta por Vietnam|¿dónde comer en Phu Quoc?|Phu Quoc en 3 días|presupuesto Vietnam|¿es seguro viajar a Phu Quoc?|mejor época para Vietnam">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -187,35 +213,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Phu Quoc. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Phu Quoc">💡 Consejos Phu Quoc</button>
-        <button class="salma-chip" data-msg="Itinerario 3 días en Phu Quoc">📋 Itinerario 3 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Phu Quoc">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Phu Quoc">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Phu Quoc">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Phu Quoc?|ruta por Vietnam|¿dónde comer en Phu Quoc?|Phu Quoc en 3 días|presupuesto Vietnam|¿es seguro viajar a Phu Quoc?|mejor época para Vietnam">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Phu Quoc","pais":"Vietnam","id":"phu-quoc","code":"vn"};

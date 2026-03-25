@@ -235,9 +235,142 @@
     });
   }
 
+  // ═══ SUBTLE CTAs ═══
+
+  function initSubtleCTAs() {
+    document.querySelectorAll('.destino-cta-subtle').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const msg = link.dataset.salmaMsg;
+        if (msg && $input) {
+          $input.value = msg;
+          $input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setTimeout(() => $input.focus(), 400);
+        }
+      });
+    });
+  }
+
+  // ═══ INDEX SEARCH + RECENT ═══
+
+  function initIndexSearch() {
+    const searchInput = document.getElementById('destino-search');
+    const countriesDiv = document.getElementById('destino-countries');
+    const planearBtn = document.getElementById('destino-planear');
+    if (!searchInput || !countriesDiv) return;
+
+    const allSections = countriesDiv.querySelectorAll('.destino-index-continent');
+
+    // Filtrar países mientras escribe
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (!q) {
+        countriesDiv.querySelectorAll('.destino-index-card').forEach(c => c.style.display = '');
+        allSections.forEach(s => s.style.display = '');
+        return;
+      }
+      allSections.forEach(s => {
+        const cards = s.querySelectorAll('.destino-index-card');
+        let visible = 0;
+        cards.forEach(c => {
+          const name = (c.querySelector('.destino-index-card-name')?.textContent || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+          c.style.display = name.includes(q) ? '' : 'none';
+          if (name.includes(q)) visible++;
+        });
+        s.style.display = visible > 0 ? '' : 'none';
+      });
+    });
+
+    // Send → app con query
+    if (planearBtn) {
+      planearBtn.addEventListener('click', () => {
+        const q = searchInput.value.trim();
+        if (q) window.location.href = '/?q=' + encodeURIComponent(q);
+      });
+    }
+
+    // Enter → planear viaje
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const q = searchInput.value.trim();
+        if (q) window.location.href = '/?q=' + encodeURIComponent(q);
+      }
+    });
+  }
+
+  function initRecentGuides() {
+    const recentSection = document.getElementById('destino-recent');
+    const recentGrid = document.getElementById('destino-recent-grid');
+    if (!recentSection || !recentGrid) return;
+
+    // Track current page visit
+    if (DESTINO.nombre && window.location.pathname.includes('/destinos/') && !window.location.pathname.endsWith('/')) {
+      try {
+        const recent = JSON.parse(localStorage.getItem('bdm_recent') || '[]');
+        const entry = { name: DESTINO.nombre, url: window.location.pathname, ts: Date.now() };
+        const filtered = recent.filter(r => r.url !== entry.url);
+        filtered.unshift(entry);
+        localStorage.setItem('bdm_recent', JSON.stringify(filtered.slice(0, 8)));
+      } catch (_) {}
+    }
+
+    // Show recent on index page
+    try {
+      const recent = JSON.parse(localStorage.getItem('bdm_recent') || '[]');
+      if (recent.length === 0) return;
+      recentGrid.innerHTML = recent.slice(0, 6).map(r => `
+        <a href="${r.url}" class="destino-index-card">
+          <span class="destino-index-card-name">${r.name}</span>
+        </a>
+      `).join('');
+      recentSection.style.display = '';
+    } catch (_) {}
+  }
+
+  // ═══ MIC (Speech Recognition) ═══
+
+  function initMic() {
+    const mic = document.getElementById('destino-mic');
+    const input = document.getElementById('destino-search');
+    if (!mic || !input) return;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) { mic.style.display = 'none'; return; }
+
+    let recognition = null;
+    let recording = false;
+
+    mic.addEventListener('click', () => {
+      if (recording) {
+        recognition?.stop();
+        return;
+      }
+      recognition = new SpeechRecognition();
+      recognition.lang = 'es-ES';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onresult = (e) => {
+        const text = e.results[0][0].transcript;
+        input.value = text;
+        input.dispatchEvent(new Event('input'));
+      };
+      recognition.onend = () => { recording = false; mic.classList.remove('recording'); };
+      recognition.onerror = () => { recording = false; mic.classList.remove('recording'); };
+
+      recording = true;
+      mic.classList.add('recording');
+      recognition.start();
+    });
+  }
+
   // ═══ INIT ═══
   initAuth();
   initPlaceholder();
   initShare();
+  initSubtleCTAs();
+  initIndexSearch();
+  initRecentGuides();
+  initMic();
 
 })();

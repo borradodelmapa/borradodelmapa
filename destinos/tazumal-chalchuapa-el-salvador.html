@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Santa Ana: bus 218 (~30 min, 0.40 EUR). Desde San Salvador: bus 201 a Santa Ana y transbordo (~2h total, 1.50 EUR). En coche desde San Salvador: ~90 min por CA-1.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Tazumal y Chalchuapa">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Base en Santa Ana con hoteles de categoría: 45-70 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Tazumal y Chalchuapa">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -116,6 +121,7 @@
           <li>Mercado artesanal de Chalchuapa para textiles y cerámica tradicional (gratis para ver)</li>
           <li>Iglesia Santiago Apóstol de Chalchuapa, mezcla colonial e indígena (gratis)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Tazumal y Chalchuapa">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -140,12 +146,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Tazumal y Chalchuapa desde España?</h3>
           <p>El presupuesto diario en Tazumal y Chalchuapa va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Base en Santa Ana (ver entrada Santa Ana): 8-14 EUR/noche. Rango medio: Guesthouses en Chalchuapa: 18-28 EUR/noche. Desde Santa Ana: bus 218 (~30 min, 0.40 EUR). Desde San Salvador: bus 201 a Santa Ana y transbordo (~2h total, 1.50 EUR). En coche desde San Salvador: ~90 min por CA-1.</p>
@@ -166,14 +170,36 @@
           <h3>¿Cuál es la mejor época para viajar a Tazumal y Chalchuapa?</h3>
           <p>La mejor época para visitar Tazumal y Chalchuapa es todo el año; mejor en temporada seca. Se recomiendan 1 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Tazumal y Chalchuapa</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Tazumal%20y%20Chalchuapa%201%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Tazumal y Chalchuapa</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Tazumal y Chalchuapa. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Tazumal y Chalchuapa">💡 Consejos Tazumal y Chalchuapa</button>
+          <button class="salma-chip" data-msg="Itinerario en Tazumal y Chalchuapa">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Tazumal y Chalchuapa">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Tazumal y Chalchuapa">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Tazumal y Chalchuapa">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Tazumal y Chalchuapa?|ruta por El Salvador|¿dónde comer en Tazumal y Chalchuapa?|Tazumal y Chalchuapa en 1 días|presupuesto El Salvador|¿es seguro viajar a Tazumal y Chalchuapa?|mejor época para El Salvador">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -187,35 +213,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Tazumal y Chalchuapa. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Tazumal y Chalchuapa">💡 Consejos Tazumal y Chalchuapa</button>
-        <button class="salma-chip" data-msg="Itinerario 1 días en Tazumal y Chalchuapa">📋 Itinerario 1 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Tazumal y Chalchuapa">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Tazumal y Chalchuapa">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Tazumal y Chalchuapa">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Tazumal y Chalchuapa?|ruta por El Salvador|¿dónde comer en Tazumal y Chalchuapa?|Tazumal y Chalchuapa en 1 días|presupuesto El Salvador|¿es seguro viajar a Tazumal y Chalchuapa?|mejor época para El Salvador">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Tazumal y Chalchuapa","pais":"El Salvador","id":"tazumal-chalchuapa","code":"sv"};

@@ -27,6 +27,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +79,81 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+    <!-- ITINERARIO COMPLETO -->
+    <div class="destino-itinerary-static">
+  <h2 class="destino-h2">🗺️ Itinerario completo</h2>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 1 — Llegada y primer safari <span class="destino-day-stops">4 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Parque Nacional de Chitwan</h4>
+        <p class="destino-stop-desc">La puerta de entrada al parque. Este pueblo ribereño es donde se concentran los lodges, las agencias de safari y el ambiente de viajero. Llega por la mañana temprano para aprovechar el día.</p>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Parque Nacional de Chitwan</h4>
+        <p class="destino-stop-desc">Safari en jeep por la zona de Sauraha al amanecer — la mejor franja horaria para ver rinocerontes de un cuerno, ciervos barasinga y, con suerte, tigres de Bengala. Guía obligatorio dentro del parque.</p>
+        <span class="destino-stop-meta">📍 5 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Rapti River, Sauraha</h4>
+        <p class="destino-stop-desc">Paseo en canoa por el río Rapti al atardecer. Cocodrilos mugger y gaviales en las orillas, y los últimos rayos de sol sobre la jungla. Una hora de travesía que acaba siempre con algo que contar.</p>
+        <span class="destino-stop-meta">📍 4 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">New Sauraha Tharu Cultural House</h4>
+        <p class="destino-stop-desc">Por la noche, espectáculo de danza Tharu en alguno de los lodges del pueblo — es la cultura local de verdad, no montaje para turistas. La comunidad Tharu lleva siglos conviviendo con el parque y tiene historia que merece atención.</p>
+        <span class="destino-stop-meta">📍 1 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 2 — Safari a pie y despedida <span class="destino-day-stops">3 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Elephant Breeding Center</h4>
+        <p class="destino-stop-desc">Primera parada del segundo día: el centro de cría de elefantes en el propio parque, donde puedes ver los ejemplares jóvenes de cerca. La visita dura unos 30 minutos y es una de las pocas interacciones éticas con elefantes en Nepal.</p>
+        <span class="destino-stop-meta">📍 3 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Parque Nacional de Chitwan</h4>
+        <p class="destino-stop-desc">Safari a pie guiado por el interior del parque — la forma más intensa de moverse por la jungla. A pie ves, hueles y escuchas la selva de otra manera. Guía armado obligatorio por normativa del parque; grupos de máximo 6 personas.</p>
+        <span class="destino-stop-meta">📍 6 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Parque Nacional de Chitwan</h4>
+        <p class="destino-stop-desc">El lago Bis Hazari es un humedal dentro del parque donde se concentran aves acuáticas, cocodrilos y rinocerontes que vienen a beber. Perfecto para el cierre de tarde antes de salir del parque.</p>
+        <span class="destino-stop-meta">📍 9 km</span>
+      </div>
+    </div>
+  </details>
+</div>
+
+    <!-- ITINERARIO INTERACTIVO (mapa + guide-renderer) -->
+    <div id="chat-area"></div>
+    <script>
+    window.__ROUTE_DATA = {"title":"Chitwan Safari 2 días","name":"Chitwan Safari 2 días","country":"Nepal","region":"Parque Nacional de Chitwan","duration_days":2,"summary":"Dos días de safari intenso en el mejor parque nacional de Nepal: rinocerontes, elefantes, cocodrilos y la jungla del Terai a pie y en jeep.","stops":[{"name":"Parque Nacional de Chitwan","headline":"Parque Nacional de Chitwan","narrative":"La puerta de entrada al parque. Este pueblo ribereño es donde se concentran los lodges, las agencias de safari y el ambiente de viajero. Llega por la mañana temprano para aprovechar el día.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Llegada y primer safari","links":[],"type":"lugar","day":1,"lat":27.519285,"lng":84.31353179999999,"photo_ref":"AU_ZVEFx743O-Sy7q26AxpbNvBf-cLSwLdWC17ysLCl681PaOBCUOhmfMQx1TMfTWqzrfetinCizQYIprGg46AITCMF1oL8DNmXweppU8mzVaP4-dAtaq87PJmjUnrQDWGUj6I-l1fAyhdkWaXjVs3yKbq4nOi3X9aJfR797cNgyL9VttLjm8J7rr4f4oIspA0eYdKpaTnZKkUH93-sOT1uWa0ek2bRay0fLDw_wq6rxW_-QZRZy7b26Do0wlBpOn2pE599f4MtSPz04uC9brfVLd2rLFfhmz_WAQQrVfHOqBAn3HlW-c4fIlVaK0lD22-AP9wwFMGZwXcwnNRYihUh0hgxTEGZQreuCwgDpVW6B5i6hOVbXzUBOUawCLBogPcwg1-YH4vn24WCtPv2x5zW74BMN5LBbrxHcOn-V1ZRdazs","verified_address":"Nepal","km_from_previous":0,"road_name":"Mahendra Highway","road_difficulty":"bajo","estimated_hours":0,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Establecido en 1973, parque nacional de 932 km² tiene tigres de Bengala y otros animales nativos."},{"name":"Parque Nacional de Chitwan","headline":"Parque Nacional de Chitwan","narrative":"Safari en jeep por la zona de Sauraha al amanecer — la mejor franja horaria para ver rinocerontes de un cuerno, ciervos barasinga y, con suerte, tigres de Bengala. Guía obligatorio dentro del parque.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Llegada y primer safari","links":[],"type":"lugar","day":1,"lat":27.519285,"lng":84.31353179999999,"photo_ref":"AU_ZVEGUnsQzseKnaEhQL9L8_igYaMQaZtEDRqijmD3CpGnZUgw36s1ZCkvMz2FUm_mhBD3ABr0MytLOwyR5xsljSVI0ZKZVodT6x1GkHfSe649JvcYXmPm6OKTRqcNVeKf6A6LcQ20aEuChpyPvN7r5GvM-cQ9PLatGOEO6x6OSLJ0ygaAuQuZJuaOH8U_SlrHO0HfauiiySEHvfshSpe9J9zSADgx800_EhoMgfZJJkpZasWRxh6UR-oNkD0R7BW5CY2D-nlKslowcEOMm5PLvF9gPF8d9PAowZ7gcdOtqCUYaOskbZauyvESfB4PLv_c9i019nzZVnFmcgc7RLefy4H7jWIgtx24JBiXJ2uTYuU8He4O_G_fTAI_K1YPpMuT7fBHl_6UoZZWFBJtGrLQZqSxzAekwDRjdyursBDmePhQ","verified_address":"Nepal","km_from_previous":5,"road_name":"Pista interior del parque","road_difficulty":"medio","estimated_hours":1,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Establecido en 1973, parque nacional de 932 km² tiene tigres de Bengala y otros animales nativos."},{"name":"Rapti River, Sauraha","headline":"Rapti River, Sauraha","narrative":"Paseo en canoa por el río Rapti al atardecer. Cocodrilos mugger y gaviales en las orillas, y los últimos rayos de sol sobre la jungla. Una hora de travesía que acaba siempre con algo que contar.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Llegada y primer safari","links":[],"type":"lugar","day":1,"lat":27.59,"lng":84.49,"photo_ref":"","verified_address":"","km_from_previous":4,"road_name":"Orilla del Rapti","road_difficulty":"bajo","estimated_hours":0.5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"New Sauraha Tharu Cultural House","headline":"New Sauraha Tharu Cultural House","narrative":"Por la noche, espectáculo de danza Tharu en alguno de los lodges del pueblo — es la cultura local de verdad, no montaje para turistas. La comunidad Tharu lleva siglos conviviendo con el parque y tiene historia que merece atención.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"lunes: 19:00–21:00 · martes: 19:00–21:00 · miércoles: 19:00–21:00 · jueves: 19:00–21:00 · viernes: 19:00–21:00 · sábado: 19:00–21:00 · domingo: 19:00–21:00","day_title":"Llegada y primer safari","links":[],"type":"lugar","day":1,"lat":27.5768533,"lng":84.4946535,"photo_ref":"AU_ZVEG3z07FmkgsC8luWo3dazGlOZcplqY6rPoZa-he9-0nla4IeIEpP-PANoxfxxqdiuq0QcV6Pmhvd4vyJKrSfu8PrDjDdkWIYmFECqc3fCGWSYrD_RDsA1ebW5Bn3P6F2xckIU1WoYSNc3gAjujdvV742PvlXwFrWpExTdxl8t4zj6a7qe7SbAwluMd1BVWHNAvNxnD1Tahn0fgQP7rXL2hpYVTIJJjmOABDRDvhFwUXYFa1ofouwYU_PZfXNJvSONEgso1uR1qIzU5wt0RuQqbZl_zcJsCX2-IydBiL5GAsHf1qIGx1SPpZwIVRefb4WgFGAFtGhTriuB9obCgbxHlG17gBuTpTuu8xaK-Wv7jh8VxeR4MZvhIDVDaUTai2HmlAQ52OyIECrFnj9h-Ab-megl9xdTuAWtrSA9xXgOtn2JwN","verified_address":"HFGV+PWC, Ratananagar-18, Sauraha, Chitwan, Nepal, Sauraha Road, Ratnanagar 44200, Nepal","km_from_previous":1,"road_name":"Centro de Sauraha","road_difficulty":"bajo","estimated_hours":1,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Elephant Breeding Center","headline":"Elephant Breeding Center","narrative":"Primera parada del segundo día: el centro de cría de elefantes en el propio parque, donde puedes ver los ejemplares jóvenes de cerca. La visita dura unos 30 minutos y es una de las pocas interacciones éticas con elefantes en Nepal.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"lunes: 7:00–11:00, 16:00–19:00 · martes: 7:00–11:00, 16:00–19:00 · miércoles: 7:00–11:00, 16:00–19:00 · jueves: 7:00–11:00, 16:00–19:00 · viernes: 7:00–11:00, 16:00–19:00 · sábado: 7:00–11:00, 16:00–19:00 · domingo: 7:00–11:00, 16:00–19:00","day_title":"Safari a pie y despedida","links":[],"type":"lugar","day":2,"lat":27.5822869,"lng":84.4628963,"photo_ref":"AU_ZVEGVA-U8e3Nujh-DTFB73vXwXolz-UNLT_juyZEMLAI6qbkhq49lTgK-3VeSxRvcP6SEpUqgr0MQd9ME1_yNLC1IHhGodwNrjkHfoslurRfxuLq77-NQpQzp41ImFjze98_OZ4128urVdGma8CytVOqo3jHiffSbc8bQGgE4_ACpKp6JziGBg5bkYOt-ilvVK7BfVKQl8OCEbVsPFdRM6qEsgVZcJKJbqd7M7Sx6z7TkoG8RVYqKlVbLew6dtZnHG5rYIuf4n3UbZhQ8tazQMoSaGTYrLo-R9jRhnPfe22_v-E7wPEtCgOWVVxdXQPj4dA5cfK90VrnYwT0U-RQoXzYOYn1mcds-v0S9oadYC87aMPZKOKEpsld-nQOtVtRCI9rBbybK48tQSy0OQ6TKVcS8bNIsgCi32EswVuSY7LPkOa9kjkge_ErOSk3vohKL","verified_address":"Royal Chitwan NP. Baadreni Road, Bharatpur 44204, Nepal","km_from_previous":3,"road_name":"Pista interior del parque","road_difficulty":"bajo","estimated_hours":0.5,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Family-friendly destination to see elephants of all ages & learn about their care & feeding."},{"name":"Parque Nacional de Chitwan","headline":"Parque Nacional de Chitwan","narrative":"Safari a pie guiado por el interior del parque — la forma más intensa de moverse por la jungla. A pie ves, hueles y escuchas la selva de otra manera. Guía armado obligatorio por normativa del parque; grupos de máximo 6 personas.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Safari a pie y despedida","links":[],"type":"lugar","day":2,"lat":27.519285,"lng":84.31353179999999,"photo_ref":"AU_ZVEFx743O-Sy7q26AxpbNvBf-cLSwLdWC17ysLCl681PaOBCUOhmfMQx1TMfTWqzrfetinCizQYIprGg46AITCMF1oL8DNmXweppU8mzVaP4-dAtaq87PJmjUnrQDWGUj6I-l1fAyhdkWaXjVs3yKbq4nOi3X9aJfR797cNgyL9VttLjm8J7rr4f4oIspA0eYdKpaTnZKkUH93-sOT1uWa0ek2bRay0fLDw_wq6rxW_-QZRZy7b26Do0wlBpOn2pE599f4MtSPz04uC9brfVLd2rLFfhmz_WAQQrVfHOqBAn3HlW-c4fIlVaK0lD22-AP9wwFMGZwXcwnNRYihUh0hgxTEGZQreuCwgDpVW6B5i6hOVbXzUBOUawCLBogPcwg1-YH4vn24WCtPv2x5zW74BMN5LBbrxHcOn-V1ZRdazs","verified_address":"Nepal","km_from_previous":6,"road_name":"Sendero interior","road_difficulty":"medio","estimated_hours":3,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Establecido en 1973, parque nacional de 932 km² tiene tigres de Bengala y otros animales nativos."},{"name":"Parque Nacional de Chitwan","headline":"Parque Nacional de Chitwan","narrative":"El lago Bis Hazari es un humedal dentro del parque donde se concentran aves acuáticas, cocodrilos y rinocerontes que vienen a beber. Perfecto para el cierre de tarde antes de salir del parque.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Safari a pie y despedida","links":[],"type":"lugar","day":2,"lat":27.519285,"lng":84.31353179999999,"photo_ref":"AU_ZVEEBGM6j9hib2a5-8lWb8Cu2LrBEHnP0y9Zh5sa7i_QPMDJaZtvNc4ANgrwMY-gJkJzmz4wkiNxVaPyDNv-hRElhzNrzsXEGhjXVY-AuZnQHaPJscyKLnZqcvNZN-QQfxUlIkc-fDddI0zP8aLkaqaNuBkJ0I1XFPL9CFs-cUVu-xb7qIMLp36oo8RK5ECmuPYWUFhrha56T-mnZTh4oaK5OAPEUS-xuItCdqhZ4pm0nTztDjJSJpXEX6CbrsIqZpREXZCVZL4WY2Efz7SwKLFiP37tcCIfUiAXJ-0FGw33OuMiIECFzFIjHijO_BXdGc759hotuoUON-fpla-_R_j7-EVgewNTKLCueUxV8NNDkIaTEStbIDeN06dgqoq59gJoi8Pd9Py8lNkbsOiL616J2gZ_xSYeOpyCKYJjG3YQ","verified_address":"Nepal","km_from_previous":9,"road_name":"Pista interior del parque","road_difficulty":"bajo","estimated_hours":1,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Establecido en 1973, parque nacional de 932 km² tiene tigres de Bengala y otros animales nativos."}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/Sauraha,+Chitwan/Chitwan+National+Park+Jeep+Safari/Rapti+River,+Sauraha/Tharu+Cultural+Program,+Sauraha","label":"Día 1: Llegada, jeep safari y río Rapti"},{"day":2,"url":"https://www.google.com/maps/dir/Sauraha,+Chitwan/Chitwan+National+Park+Elephant+Breeding+Center/Chitwan+National+Park+Walking+Safari/Bis+Hazari+Tal,+Chitwan","label":"Día 2: Elefantes, safari a pie y lago"}],"tips":["La entrada al parque cuesta 1.500 NPR (unos 11€) por día para extranjeros — págala en la taquilla de Sauraha antes de entrar.","El jeep safari de madrugada (salida 6:00h) y el de tarde (15:00h) son los mejores para fauna; el de mediodía es calor y la fauna no aparece.","Lleva ropa en tonos oscuros o tierra — nada brillante ni blanco que espante a los animales.","El safari a pie requiere reserva previa y guía oficial. No salgas solo al parque bajo ningún concepto: hay tigres.","Temporada ideal: octubre a marzo. En monzón (junio-agosto) el parque cierra parcialmente y las pistas se inundan.","Malaria en zona baja de Nepal: consulta con tu médico, especialmente si vas en verano."],"tags":["safari","naturaleza","fauna","rinocerontes","jungla","Nepal","wildlife"],"budget_level":"medio","suggestions":["Añadir noche extra para safari nocturno en jeep (requiere permiso especial)","Combinar con Lumbini (2h en bus) si tienes más días en Nepal","Desde Chitwan se puede seguir a Pokhara en bus turístico (5h) o en avioneta (20min)"],"pre_departure":null,"practical_info":null};
+    </script>
+    <script src="/guide-renderer.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.__ROUTE_DATA && typeof guideRenderer !== 'undefined') {
+        guideRenderer.render(window.__ROUTE_DATA, { saved: true });
+        var staticIt = document.querySelector('.destino-itinerary-static');
+        if (staticIt) staticIt.style.display = 'none';
+      }
+    });
+    </script>
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Kathmandú: autobús turístico 5-6h, 8-12 EUR. Vuelo a Bharatpur: 30 min, 80-120 EUR. Desde Pokhara: autobús 4-5h, 7-10 EUR.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Parque Nacional de Chitwan">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +174,7 @@
               <p>Jungle lodges con safari incluido tipo Tiger Tops o Meghauli Serai: 150-400 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Parque Nacional de Chitwan">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -116,6 +187,7 @@
           <li>Canoa por el río Rapti para avistar cocodrilos y aves (5-8 EUR/hora)</li>
           <li>Visitar el Centro de Reproducción de Cocodrilos en Kasara (libre)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Parque Nacional de Chitwan">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -140,12 +212,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Parque Nacional de Chitwan desde España?</h3>
           <p>El presupuesto diario en Parque Nacional de Chitwan va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Guesthouses en Sauraha: 6-12 EUR/noche. Rango medio: Lodges con jardín en Sauraha: 20-45 EUR/noche. Desde Kathmandú: autobús turístico 5-6h, 8-12 EUR. Vuelo a Bharatpur: 30 min, 80-120 EUR. Desde Pokhara: autobús 4-5h, 7-10 EUR.</p>
@@ -166,7 +236,10 @@
           <h3>¿Cuál es la mejor época para viajar a Parque Nacional de Chitwan?</h3>
           <p>La mejor época para visitar Parque Nacional de Chitwan es octubre-marzo (fuera del monzón). Se recomiendan 2 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
+
+    </div>
 
     <!-- SHARE -->
     <div class="destino-share-wrap">
@@ -183,7 +256,7 @@
         <div class="salma-chat-bubble">¡Ey! Estás viendo Parque Nacional de Chitwan. ¿En qué te ayudo?</div>
         <div class="salma-chat-chips" id="salma-chat-chips">
           <button class="salma-chip" data-msg="Consejos para viajar a Parque Nacional de Chitwan">💡 Consejos Parque Nacional de Chitwan</button>
-          <button class="salma-chip" data-msg="Itinerario 2 días en Parque Nacional de Chitwan">📋 Itinerario 2 días</button>
+          <button class="salma-chip" data-msg="Itinerario en Parque Nacional de Chitwan">📋 Itinerarios</button>
           <button class="salma-chip" data-msg="Presupuesto para viajar a Parque Nacional de Chitwan">💰 Presupuesto</button>
           <button class="salma-chip" data-msg="Buscar vuelos a Parque Nacional de Chitwan">✈️ Vuelos</button>
           <button class="salma-chip" data-msg="Hoteles en Parque Nacional de Chitwan">🏨 Hoteles</button>

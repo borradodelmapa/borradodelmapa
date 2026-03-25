@@ -35,11 +35,31 @@
   </header>
 
   <section class="destino-hero">
-    <h1 class="destino-title">Destinos de viaje</h1>
-    <p class="destino-subtitle">MÁS DE 190 PAÍSES · GUÍAS PRÁCTICAS CON IA</p>
+    <h1 class="destino-title">Destinos</h1>
+    <p class="destino-subtitle">MÁS DE 190 PAÍSES · GUÍAS PRÁCTICAS</p>
   </section>
 
   <main class="destino-content destino-content-wide">
+
+    <!-- Salma input -->
+    <div class="destino-salma-input-wrap">
+      <div class="destino-salma-input-row">
+        <input type="text" class="destino-salma-input" id="destino-search" placeholder="" autocomplete="off" data-placeholders="Marruecos 5 días desde Tánger|Vietnam 2 semanas mochilero|Roma fin de semana romántico|Nepal trekking Everest|Tailandia playas e islas 10 días">
+        <div class="destino-input-actions">
+          <button class="destino-mic-btn" id="destino-mic" aria-label="Hablar" type="button">🎙️</button>
+          <button class="destino-send-btn" id="destino-planear" type="button">›</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Últimas guías visitadas -->
+    <section class="destino-recent" id="destino-recent" style="display:none">
+      <h2 class="destino-index-continent-title">Últimas guías visitadas</h2>
+      <div class="destino-index-grid" id="destino-recent-grid"></div>
+    </section>
+
+    <!-- Países por continente -->
+    <div id="destino-countries">
     
       <section class="destino-index-continent">
         <h2 class="destino-index-continent-title">Europa</h2>
@@ -313,6 +333,10 @@
         </a>
         <a href="/destinos/maldivas.html" class="destino-index-card">
           <span class="destino-index-card-name">Maldivas</span>
+          <span class="destino-index-card-count">10 destinos</span>
+        </a>
+        <a href="/destinos/nepal.html" class="destino-index-card">
+          <span class="destino-index-card-name">Nepal</span>
           <span class="destino-index-card-count">10 destinos</span>
         </a>
         <a href="/destinos/singapur.html" class="destino-index-card">
@@ -737,11 +761,26 @@
         </a>
         </div>
       </section>
+    </div>
 
-    <section class="destino-cta">
-      <h2>¿No encuentras tu destino?</h2>
-      <p>Dile a Salma adónde quieres ir y te arma la ruta en un minuto.</p>
-      <a href="/" class="destino-cta-btn">Pregúntale a Salma ›</a>
+    <!-- SALMA INLINE -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">¿No encuentras tu destino? Pregúntale a Salma</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">Dime adónde quieres ir y te armo la ruta en un minuto.</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Destinos baratos desde España">💰 Destinos baratos</button>
+          <button class="salma-chip" data-msg="Destinos de playa en invierno">🏖️ Playa en invierno</button>
+          <button class="salma-chip" data-msg="Escapada fin de semana Europa">✈️ Escapada Europa</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="Japón 2 semanas|playa Caribe presupuesto|trekking Nepal|ruta Marruecos en coche|islas Grecia 7 días">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
   </main>
 
@@ -754,6 +793,10 @@
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
 
+  <script>
+  window.DESTINO = { nombre: 'Destinos', pais: '', id: 'index', code: '' };
+  window.SALMA_API = "https://salma-api.paco-defoto.workers.dev";
+  </script>
   <script src="/destinos/destinos.js"></script>
 </body>
 </html>

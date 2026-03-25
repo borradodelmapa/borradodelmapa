@@ -27,6 +27,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +79,71 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+    <!-- ITINERARIO COMPLETO -->
+    <div class="destino-itinerary-static">
+  <h2 class="destino-h2">🗺️ Itinerario completo</h2>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 1 — Bhaktapur sin prisas <span class="destino-day-stops">6 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Bhaktapur Durbar Square</h4>
+        <p class="destino-stop-desc">El corazón histórico de la ciudad. El Palacio de los 55 Ventanas y el templo de Vatsala Devi marcan el arranque del día antes de que lleguen los grupos organizados.</p>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Taumadhi Square (𑐟𑑅𑐩𑐵𑐬𑐷‎, Tamārhi)</h4>
+        <p class="destino-stop-desc">A cinco minutos caminando está el Nyatapola, el templo de cinco pisos más alto de Nepal. Súbete si te dejan — las vistas sobre los tejados newar valen el esfuerzo.</p>
+        <span class="destino-stop-meta">📍 0.4 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Bhaktapur Durbar Square</h4>
+        <p class="destino-stop-desc">La plaza más antigua de la ciudad y la menos turistificada de las tres. El templo Dattatreya data del siglo XV y está rodeado de casas de madera tallada que son museos en sí mismas.</p>
+        <span class="destino-stop-meta">📍 0.6 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Peacock Window Bhaktapur</h4>
+        <p class="destino-stop-desc">La ventana de madera tallada más famosa de todo Nepal, escondida en un callejón junto a Dattatreya. Es una obra de artesanía newar del siglo XV que no tiene equivalente en toda la región.</p>
+        <span class="destino-stop-meta">📍 0.1 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Pottery Square कुम्हः त्वः</h4>
+        <p class="destino-stop-desc">Los alfareros trabajan aquí igual que hace siglos, con torno de pie y barro del valle. Por la mañana temprano hay piezas secando al sol en toda la plaza — es la foto del día.</p>
+        <span class="destino-stop-meta">📍 0.7 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Siddha Pokhari (Ta Pukhu)</h4>
+        <p class="destino-stop-desc">El gran estanque sagrado al oeste de la ciudad, construido en el siglo XV. Al atardecer los locales pasean por sus orillas y la luz cae de lado sobre los templos — un cierre de día sin artificios.</p>
+        <span class="destino-stop-meta">📍 0.5 km</span>
+      </div>
+    </div>
+  </details>
+</div>
+
+    <!-- ITINERARIO INTERACTIVO (mapa + guide-renderer) -->
+    <div id="chat-area"></div>
+    <script>
+    window.__ROUTE_DATA = {"title":"Bhaktapur en un día","name":"Bhaktapur en un día","country":"Nepal","region":"Valle de Katmandú","duration_days":1,"summary":"Un día completo en la ciudad medieval mejor conservada del valle de Katmandú, con sus tres plazas históricas, templos newar y vida local sin filtros.","stops":[{"name":"Bhaktapur Durbar Square","headline":"Bhaktapur Durbar Square","narrative":"El corazón histórico de la ciudad. El Palacio de los 55 Ventanas y el templo de Vatsala Devi marcan el arranque del día antes de que lleguen los grupos organizados.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"lunes: 9:00–18:00 · martes: 9:00–18:00 · miércoles: 9:00–18:00 · jueves: 9:00–18:00 · viernes: 9:00–18:00 · sábado: 9:00–18:00 · domingo: 9:00–18:00","day_title":"Bhaktapur sin prisas","links":[],"type":"lugar","day":1,"lat":27.67207,"lng":85.4282951,"photo_ref":"AU_ZVEEVr2DbCA-c7gJe2HIL8JmmfLbcseMO-BG62l_W1pSuO4AaYUZ43OhBITkUmsTmEkvqolIspz_VY7rdyvI9uYP2_BFtzK4mjIAJjTJQSraXzK5P-koauROXlll0fLXgp4M1qVenal7qBzcDgwdJG_KWxZcs1682yvjRlSkF8FBblMMnwA-zF8oAM1MaNYJ9za0II8rhdlWxKeyMk9CbE9c5Baa4HTmverXITEsNruEoIJiSK_618fBzErT7kMB9mtgjCsJZlfQytorarNIids3eDj0nIB1-q34fgiAURnYHl8R2LQw3ZWAeHF9NhiAwCo16Xkr07AN7z8iwqhC0TAuvn9-jZRtcX3LWE4DfWRSHczMwFF37HWWTig1w0wVn1rpxIv40hx3uP91aFuToy-fUDZyk4O1fS1nK3GJHudk","verified_address":"Durbar square, Bhaktapur 44800, Nepal","km_from_previous":0,"road_name":"Durbar Marg","road_difficulty":"bajo","estimated_hours":0,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Histórica plaza municipal con un palacio de 1427, varios templos, estatuas y puertas de intrincado diseño."},{"name":"Taumadhi Square (𑐟𑑅𑐩𑐵𑐬𑐷‎, Tamārhi)","headline":"Taumadhi Square (𑐟𑑅𑐩𑐵𑐬𑐷‎, Tamārhi)","narrative":"A cinco minutos caminando está el Nyatapola, el templo de cinco pisos más alto de Nepal. Súbete si te dejan — las vistas sobre los tejados newar valen el esfuerzo.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Bhaktapur sin prisas","links":[],"type":"lugar","day":1,"lat":27.6711658,"lng":85.4293033,"photo_ref":"AU_ZVEHt8OSPHlHpDJ7eQfCGdWGXmypCOg6lF0PHzAF_BM-bx-icZQISjAvRD_XEME2WE6hF4VssQlbgE8h3Omj0silL7L_o9leilD6Kvk15tadDX3xPt_RyP7DmVACF15yRpJqy2Of6n2tQN_5Pa-Kopp76RVtdLcVAWpsZ4-MvGGDxDHJ6k1-5L993hwQMcceRb8QVRZpAP-SdH32OkpvNVyZqKev4Ke5zrHaO-7DWcXM29JlxfMXEkwM5Ic5d7_jzEdHJxRSxS96Rrv0CANIvx3uCaEdxHUxGim0wkn7HvoQ0GSeVht2vgXm_R2E3SzlT6QF80IgoW40-LxrRDyfj6m1YLURgXRyF_4cYJaCACFPcFcjjojtXlGYcWsR2mqQTRo1SJHszgHPus8W2Qq1L6d4iHEudbjFzYETgXQETFm-7PhRm8UudZhYrMUcNPD8l","verified_address":"Taumadhi Square, Bhaktapur 44800, Nepal","km_from_previous":0.4,"road_name":"Calle peatonal Taumadhi","road_difficulty":"bajo","estimated_hours":0.3,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Bhaktapur Durbar Square","headline":"Bhaktapur Durbar Square","narrative":"La plaza más antigua de la ciudad y la menos turistificada de las tres. El templo Dattatreya data del siglo XV y está rodeado de casas de madera tallada que son museos en sí mismas.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"lunes: 9:00–18:00 · martes: 9:00–18:00 · miércoles: 9:00–18:00 · jueves: 9:00–18:00 · viernes: 9:00–18:00 · sábado: 9:00–18:00 · domingo: 9:00–18:00","day_title":"Bhaktapur sin prisas","links":[],"type":"lugar","day":1,"lat":27.67207,"lng":85.4282951,"photo_ref":"AU_ZVEEVr2DbCA-c7gJe2HIL8JmmfLbcseMO-BG62l_W1pSuO4AaYUZ43OhBITkUmsTmEkvqolIspz_VY7rdyvI9uYP2_BFtzK4mjIAJjTJQSraXzK5P-koauROXlll0fLXgp4M1qVenal7qBzcDgwdJG_KWxZcs1682yvjRlSkF8FBblMMnwA-zF8oAM1MaNYJ9za0II8rhdlWxKeyMk9CbE9c5Baa4HTmverXITEsNruEoIJiSK_618fBzErT7kMB9mtgjCsJZlfQytorarNIids3eDj0nIB1-q34fgiAURnYHl8R2LQw3ZWAeHF9NhiAwCo16Xkr07AN7z8iwqhC0TAuvn9-jZRtcX3LWE4DfWRSHczMwFF37HWWTig1w0wVn1rpxIv40hx3uP91aFuToy-fUDZyk4O1fS1nK3GJHudk","verified_address":"Durbar square, Bhaktapur 44800, Nepal","km_from_previous":0.6,"road_name":"Calle peatonal este","road_difficulty":"bajo","estimated_hours":0.3,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Histórica plaza municipal con un palacio de 1427, varios templos, estatuas y puertas de intrincado diseño."},{"name":"Peacock Window Bhaktapur","headline":"Peacock Window","narrative":"La ventana de madera tallada más famosa de todo Nepal, escondida en un callejón junto a Dattatreya. Es una obra de artesanía newar del siglo XV que no tiene equivalente en toda la región.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Bhaktapur sin prisas","links":[],"type":"lugar","day":1,"lat":27.6733036,"lng":85.4356439,"photo_ref":"AU_ZVEG_oNp89W9yDN1AqGMbp5Tigwl-FQZLy-IMSIILofcVUNUBS4ZhCasXbEOlIlpbk8vBozJ0tE9kM7RgB3okH_YLh957s1jUucu737dbc02UfPa8w_1XFLbGyFDHtICc3DVe4FaTslZNcf7VqTG1i1DSSB--JtkGF7mCRMM0tYtTSiaqMM5BKtYV4vVmHCroZ5DzPh11PHZXrvlbo8L4dC5L5nAL3z00oRwVm8hDk3Ti1P5HuFJydt6sLoTqhhPGrel9znZH3eT7TZEp6qqULmmlz13piyW76kpLS6QKAvNywWogyMyE__-HMTM_3oMl0x6jtHqNUvwadjkHk2r8gGWP4UDcwh7dyCVaq7Ly7RZOsvuhZnyK7na3O24zMFdnB3RB-xgeDYb2TCZpgKFufWj4cRZ4NhKHJfsNuLLpFgo","verified_address":"MCFP+87C, Bhaktapur 44800, Nepal","km_from_previous":0.1,"road_name":"Callejón Dattatreya","road_difficulty":"bajo","estimated_hours":0.2,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Pottery Square कुम्हः त्वः","headline":"Pottery Square कुम्हः त्वः","narrative":"Los alfareros trabajan aquí igual que hace siglos, con torno de pie y barro del valle. Por la mañana temprano hay piezas secando al sol en toda la plaza — es la foto del día.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"lunes: 9:00–18:00 · martes: 9:00–18:00 · miércoles: 9:00–18:00 · jueves: 9:00–18:00 · viernes: 9:00–18:00 · sábado: 9:00–18:00 · domingo: 9:00–18:00","day_title":"Bhaktapur sin prisas","links":[],"type":"lugar","day":1,"lat":27.6698386,"lng":85.42774399999999,"photo_ref":"AU_ZVEFbN1U1OrA-KBGJCeDzfp9Z29pkckb2bxWooBMm_yyRHlAsmC6f9-o2rUK76mh04WG4qiWUP4EsbS_ZMWmK6F8eHR3a4tHL8FG2uEKFw92IXILY_FpoIh7YiXMhnYKYPEDNFEttG8mEUDFKKESziTWzTO3-WGYZ-3ZKaBB9RdWM5MI3drb909Ufg_hLExN4q_ypINspEnxVFCd0SM6gTKEB7zPezxE2OZiH3dMAZ9fMwfxdu0KkAFxKA1pDHbuBSlJ-HyAdi34vOrm_Bp3W_4nOdnm7PSSlk-iCA5qF4RdFwg","verified_address":"pottery square कुम्हः त्व, Bhaktapur 44800, Nepal","km_from_previous":0.7,"road_name":"Calle sur","road_difficulty":"bajo","estimated_hours":0.3,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Siddha Pokhari (Ta Pukhu)","headline":"Siddha Pokhari (Ta Pukhu)","narrative":"El gran estanque sagrado al oeste de la ciudad, construido en el siglo XV. Al atardecer los locales pasean por sus orillas y la luz cae de lado sobre los templos — un cierre de día sin artificios.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Bhaktapur sin prisas","links":[],"type":"lugar","day":1,"lat":27.6719776,"lng":85.42039059999999,"photo_ref":"AU_ZVEFEclUcWwM_cArT3ALyiGy4PUQBnh8aCoKt_7XdmFTz4LD7_7TDGxF6vW4J2_A_UhHAqUWljbGDqHZNw-hmP0wPwEpcgWkOdxu9S9QzPQlKvSXUk24TpizzWVHhTBKyYzh8H1EAqqY6bmNkPd-ci_P5thiuuK8ORT4_BG_Zoib62YE5tHGN7V3tEGwdh2xY9SwZvC4Rx85yUwMjFhnL0l_csMPYc2fyzz_NhV6Wm0zVr6NaF2gf5l0qL6-Fx-tqdnNJXECrEnxX0ulGNljT960xeuTf_XSKeQLhwU-rUpzOqJxQIr0f0Mw_uuwd44yY3xuwxoX6aKWED9s9VX4vEAkMiogj8BIv_RqwRz9qewCKbs609AlY2jZ2GE0KPmg-t0H6Iqc-qf994iAFP_3zEtrZpnz8LwGtLyEFI6KOiZPUsWoFWPafhrUa0ALxzA","verified_address":"Siddha Pokhari, Bhaktapur 44800, Nepal","km_from_previous":0.5,"road_name":"Siddha Pokhari Marg","road_difficulty":"bajo","estimated_hours":0.2,"sleep":null,"eat":null,"alt_bad_weather":""}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/Bhaktapur+Durbar+Square/Taumadhi+Square+Bhaktapur/Dattatreya+Square+Bhaktapur/Peacock+Window+Bhaktapur/Pottery+Square+Bhaktapur/Siddha+Pokhari+Bhaktapur","label":"Día 1: Bhaktapur completo"}],"tips":["La entrada a Bhaktapur cuesta 1.500 rupias nepalesas (~11€) para extranjeros — guarda el ticket porque te lo piden varias veces dentro.","Llega antes de las 8h: las plazas principales se llenan de grupos a media mañana.","El Juju Dhau, yogur local servido en cuenco de barro, es el desayuno correcto — cuesta menos de 1€ en cualquier tienda de Taumadhi.","Desde Katmandú llegas en taxi en 40 minutos o en micro (número 26) desde Kathmandu Bus Park por 30 rupias.","Si tienes cámara, el barrio de alfareros funciona mejor antes de las 10h con luz lateral."],"tags":["cultura","historia","templos","nepal","a pie","patrimonio UNESCO"],"budget_level":"bajo","suggestions":["Añade Nagarkot al día siguiente para ver el amanecer sobre el Himalaya a 30km de aquí.","Desde Bhaktapur también es fácil subir a Changu Narayan, el templo más antiguo del valle, a 7km en moto-taxi."],"pre_departure":null,"practical_info":null};
+    </script>
+    <script src="/guide-renderer.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.__ROUTE_DATA && typeof guideRenderer !== 'undefined') {
+        guideRenderer.render(window.__ROUTE_DATA, { saved: true });
+        var staticIt = document.querySelector('.destino-itinerary-static');
+        if (staticIt) staticIt.style.display = 'none';
+      }
+    });
+    </script>
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Kathmandú: microbús desde Ratna Park, 45 min, menos de 1 EUR. Taxi: 30 min, 6-10 EUR. También hay servicio de autobús local frecuente.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Bhaktapur">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +164,7 @@
               <p>Peacock Guest House o Bhadgaon Guest House: 40-80 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Bhaktapur">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -116,6 +177,7 @@
           <li>Subir a la Nyatapola Temple (templo de 5 pisos) para vistas del conjunto</li>
           <li>Probar el juju dhau (yogur de búfala) que se fabrica solo en Bhaktapur</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Bhaktapur">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -140,12 +202,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Bhaktapur desde España?</h3>
           <p>El presupuesto diario en Bhaktapur va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Guesthouses dentro del recinto amurallado: 8-15 EUR/noche. Rango medio: Hoteles boutique en casas newar restauradas: 25-50 EUR/noche. Desde Kathmandú: microbús desde Ratna Park, 45 min, menos de 1 EUR. Taxi: 30 min, 6-10 EUR. También hay servicio de autobús local frecuente.</p>
@@ -166,7 +226,10 @@
           <h3>¿Cuál es la mejor época para viajar a Bhaktapur?</h3>
           <p>La mejor época para visitar Bhaktapur es octubre-noviembre, marzo-abril. Se recomiendan 1 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
+
+    </div>
 
     <!-- SHARE -->
     <div class="destino-share-wrap">
@@ -183,7 +246,7 @@
         <div class="salma-chat-bubble">¡Ey! Estás viendo Bhaktapur. ¿En qué te ayudo?</div>
         <div class="salma-chat-chips" id="salma-chat-chips">
           <button class="salma-chip" data-msg="Consejos para viajar a Bhaktapur">💡 Consejos Bhaktapur</button>
-          <button class="salma-chip" data-msg="Itinerario 1 días en Bhaktapur">📋 Itinerario 1 días</button>
+          <button class="salma-chip" data-msg="Itinerario en Bhaktapur">📋 Itinerarios</button>
           <button class="salma-chip" data-msg="Presupuesto para viajar a Bhaktapur">💰 Presupuesto</button>
           <button class="salma-chip" data-msg="Buscar vuelos a Bhaktapur">✈️ Vuelos</button>
           <button class="salma-chip" data-msg="Hoteles en Bhaktapur">🏨 Hoteles</button>

@@ -27,6 +27,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +79,151 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+    <!-- ITINERARIO COMPLETO -->
+    <div class="destino-itinerary-static">
+  <h2 class="destino-h2">🗺️ Itinerario completo</h2>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 1 — Llegada a Jomsom <span class="destino-day-stops">2 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Jomsom</h4>
+        <p class="destino-stop-desc">Punto de entrada al valle del Kali Gandaki. Aquí coges los permisos finales y te abasteces antes de que empiece el polvo y el viento del desierto de altura.</p>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Kagbeni</h4>
+        <p class="destino-stop-desc">Pueblo medieval amurallado a 2.810 m donde empieza oficialmente Upper Mustang. El monasterio rojo sobre el río marca el límite — aquí ya no se entra sin el permiso especial.</p>
+        <span class="destino-stop-meta">📍 12 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 2 — Kagbeni a Chele <span class="destino-day-stops">1 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Chele</h4>
+        <p class="destino-stop-desc">Primera etapa real del trekking, con el viento del Kali Gandaki en contra toda la tarde. Los cañones empiezan a ponerse serios y el paisaje ya no se parece a nada que hayas visto antes.</p>
+        <span class="destino-stop-meta">📍 16 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 3 — Chele a Syangboche <span class="destino-day-stops">1 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Syangboche, Mustang</h4>
+        <p class="destino-stop-desc">Etapa con dos puertos de montaña consecutivos: Taklam La (3.624 m) y Dajori La (3.735 m). El pueblo es pequeño pero las vistas al valle son el premio al esfuerzo.</p>
+        <span class="destino-stop-meta">📍 18 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 4 — Syangboche a Ghami <span class="destino-day-stops">1 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Ghami</h4>
+        <p class="destino-stop-desc">Pueblo con el muro de mani más largo de Mustang — más de 400 metros de piedras grabadas con mantras. El paisaje de barrancos rojos y ocres aquí alcanza su máxima intensidad.</p>
+        <span class="destino-stop-meta">📍 20 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 5 — Ghami a Lo Manthang <span class="destino-day-stops">1 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Lo Manthang</h4>
+        <p class="destino-stop-desc">La capital amurallada del antiguo reino de Mustang, a 3.840 m. Cuatro monasterios, el palacio del rey y calles de barro que no han cambiado en 500 años. Es el núcleo de todo el viaje.</p>
+        <span class="destino-stop-meta">📍 22 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 6 — Exploración Lo Manthang <span class="destino-day-stops">1 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Cuevas de Chhoser</h4>
+        <p class="destino-stop-desc">Complejo de cuevas excavadas en los acantilados a pocos kilómetros de Lo Manthang, algunas con pinturas budistas de siglos. Día de exploración desde la capital sin cargar la mochila completa.</p>
+        <span class="destino-stop-meta">📍 8 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 7 — Dhakmar a Tsarang <span class="destino-day-stops">2 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Dhakmar</h4>
+        <p class="destino-stop-desc">Pueblo de casas rojas encastradas en un acantilado bermellón — una de las imágenes más fotográficas del Himalaya. Se coge una ruta alternativa de vuelta para no repetir el camino de ida.</p>
+        <span class="destino-stop-meta">📍 25 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Tsarang</h4>
+        <p class="destino-stop-desc">Segundo pueblo más importante del reino, con un monasterio del siglo XIV y vistas al valle de Charang Khola. El dzong en ruinas sobre el pueblo vale el desvío de 20 minutos.</p>
+        <span class="destino-stop-meta">📍 10 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 8 — Tsarang a Charang <span class="destino-day-stops">1 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Charang</h4>
+        <p class="destino-stop-desc">Pequeño pueblo con gompa activa donde los monjes todavía hacen la vida cotidiana sin turistas. Dormir aquí es la parada más tranquila de todo el circuito.</p>
+        <span class="destino-stop-meta">📍 12 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 9 — Charang a Kagbeni <span class="destino-day-stops">2 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Tetang</h4>
+        <p class="destino-stop-desc">Pueblo de paso antes de bajar al Kali Gandaki. Desde aquí la ruta de vuelta empieza a descender y el paisaje cambia de los cañones rojizos al valle más ancho y ventoso.</p>
+        <span class="destino-stop-meta">📍 18 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Kagbeni</h4>
+        <p class="destino-stop-desc">De vuelta al pueblo amurallado donde empezó todo. Una noche aquí para cerrar el círculo antes de bajar a Jomsom — y para tomarte la cerveza más merecida del viaje.</p>
+        <span class="destino-stop-meta">📍 10 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 10 — Regreso a Jomsom <span class="destino-day-stops">1 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Jomsom</h4>
+        <p class="destino-stop-desc">Último día: bajada a Jomsom para coger el vuelo a Pokhara. El viento de la mañana en el Kali Gandaki te despide como llegó — sin contemplaciones.</p>
+        <span class="destino-stop-meta">📍 12 km</span>
+      </div>
+    </div>
+  </details>
+</div>
+
+    <!-- ITINERARIO INTERACTIVO (mapa + guide-renderer) -->
+    <div id="chat-area"></div>
+    <script>
+    window.__ROUTE_DATA = {"title":"Upper Mustang 10 días trekking","name":"Upper Mustang 10 días trekking","country":"Nepal","region":"Mustang, Gandaki Pradesh","duration_days":10,"summary":"Trekking de 10 días por el reino prohibido de Upper Mustang, desde Jomsom hasta Lo Manthang y vuelta, por un paisaje de cañones rojizos y cultura tibetana intacta.","stops":[{"name":"Jomsom","headline":"Jomsom","narrative":"Punto de entrada al valle del Kali Gandaki. Aquí coges los permisos finales y te abasteces antes de que empiece el polvo y el viento del desierto de altura.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Llegada a Jomsom","links":[],"type":"lugar","day":1,"lat":28.7746477,"lng":83.7730237,"photo_ref":"AU_ZVEHnHxRmq_8N79SNCdiLjV2YP0RY9YiM99Uqmf0caqXXKVtOA6lRhvOwNiuXjMz2vE8EBQmncBzRr2BCS2g__tmV552PCGmgM6SuT7BJjWzKLOe4-9MJksRgM1MKUq6bgr4Fo0vRZrtgVizoS1bOXVA8dtZIpdZmkrGCryEwGO8caeqROuerdwMS2da-tT3SZ5ZjeHfMP2QUL66o6moH7a21yjCla5N529lRra-ZR81Jemu7rgAzvcjxBXRqMUBETbvhOUM10yXW_eKegMZOEeQf8ZUXK4GJ6AUEreGAlns5H2Is1R6Xof54JYcilz_h01s5GUviKTo6Y6o86s-S7p2ibePztCnSGTYR8jtvmJSrrTL9ms0PyKmRMdl_7PhJIfFVcGQPjnozxOxkpbAnyWgI3BFaLK-J9lIP_7-6-Gn2cvA","verified_address":"Jomsom, Nepal","km_from_previous":0,"road_name":"Vuelo desde Pokhara o carretera","road_difficulty":"bajo","estimated_hours":1,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Kagbeni","headline":"Kagbeni","narrative":"Pueblo medieval amurallado a 2.810 m donde empieza oficialmente Upper Mustang. El monasterio rojo sobre el río marca el límite — aquí ya no se entra sin el permiso especial.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Llegada a Jomsom","links":[],"type":"lugar","day":1,"lat":28.83737,"lng":83.7838434,"photo_ref":"AU_ZVEHzNn6tHQ0hABD9URUfRPTadMTpRWRHzgxfisfBnXW2nj1Qp-4RxthaUXRDplvrpGXvx9W6fhwUTDrWjaPGqp2l7UJvZmiBfOYAUKnxOSzaypFwPG7mxaXAoy3fwNWMAQjwwGlY39ATV5cyshWdqU1VwQGYcDMQdDyjmI-5tWd5Q_hUjLZOsAuWLa8XLjLwntgLOSkGaOqfibu-xki4maFRj37dRZ1iMsYt8WG8OG3EhIK27ohen8wTTUAPvDE9jruLT4zMcsl5qKJNTgtLKjtborZ_el8yQB7329ntfcmITgmNJ7xEKBRrOn31sh1NauTu56seS9lWL9YOjYn9JuSGjkw2Z85SqHCuIh_7Cdlif-o03p9uvs09KTkiPZ9M1vbQqBYYwGVR5KS9ULmcWUGqOpEcpvSfysJgmHWMEDZq5Q","verified_address":"Kagbeni, Nepal","km_from_previous":12,"road_name":"Carretera del Kali Gandaki","road_difficulty":"bajo","estimated_hours":3.5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Chele","headline":"Chele","narrative":"Primera etapa real del trekking, con el viento del Kali Gandaki en contra toda la tarde. Los cañones empiezan a ponerse serios y el paisaje ya no se parece a nada que hayas visto antes.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Kagbeni a Chele","links":[],"type":"lugar","day":2,"lat":28.9309761,"lng":83.8268343,"photo_ref":"AU_ZVEHAUZqaNoRcCFs9vEf_rBtwgwOKTw8YYm46lh83dWQJC4xRwVjKqlR7nZiy2JAqICXql3gzS2KgFXlPzqUuox2M-DRnGHwdKYPp3RO_C4G7PJjWNxcAD24FKnnugCG7xDVCNtWFn2DDNuIC1OlHb8WGdrsYVZ2U6QJss4i9EgF9CFz2Wmk7PbbQzsgxG55oyei0NN_jau2jknoplJv1DrnHI00-aqnmAeJQ7WH77qaVOLDvELHmIf6CDIvwruI9eaVBpW3CpOW3iZnKlJjnvbgWh8FjqjKs0GkaLUmMMFoj1sPEi1zxxL-UMWgKEKwi9FR3RjJTp3W5ZBZ754QSIhO5Y_IvCQ24AAfPuUGU7RXNEmQew4NyjejPonjiF1k6kHq-RnOKf7cskLQYzGa0B9zaveKLlLZRISq1AfMOROI","verified_address":"Chele, Chhusang 33100, Nepal","km_from_previous":16,"road_name":"Ruta de trekking Upper Mustang","road_difficulty":"medio","estimated_hours":5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Syangboche, Mustang","headline":"Syangboche","narrative":"Etapa con dos puertos de montaña consecutivos: Taklam La (3.624 m) y Dajori La (3.735 m). El pueblo es pequeño pero las vistas al valle son el premio al esfuerzo.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Chele a Syangboche","links":[],"type":"lugar","day":3,"lat":28.991307,"lng":83.8384359,"photo_ref":"AU_ZVEEFHcT8Yil7fRXI7VEQ6tg9mwncHFUJ_dt1z3Nv2wAHKlRkWkwV9OZCP_eg3XgxeXHVAnLxRA6MfBn2elW_hn86IILYvnrD2-DaE6-Ic_IibzXbrfdpaq6D42pmDIfnWc097dYnd4Tts3u7oUlQ_hGhRmpbFED7i7IIMnmh7o9YBChrDyaEmOMDn-4ay0dHkR4siCEq6l798EVuj7lakpEAtMrqZPI-Yg68U7YyjnIKsIx5v5GeHCURoyn_Ui4Fucos5vDD82fmVh9uIqh6w_sv0P_HrfubZtxfuupr8wo_He2k_pFp6IdFQxKzXdPCsSHx1K-IMkJvCLKGfmrqMtv7bt-d930aFwdRoB88wqmHDCKumvRBsEJ97oKpOxtdcd7grmq2xq1cWIFf5SnyTisgvGum_B_wn-yd5i8eNX_ccQ","verified_address":"Syanboche 33100, Nepal","km_from_previous":18,"road_name":"Ruta de trekking Upper Mustang","road_difficulty":"alto","estimated_hours":6,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Ghami","headline":"Ghami","narrative":"Pueblo con el muro de mani más largo de Mustang — más de 400 metros de piedras grabadas con mantras. El paisaje de barrancos rojos y ocres aquí alcanza su máxima intensidad.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Syangboche a Ghami","links":[],"type":"lugar","day":4,"lat":29.0630687,"lng":83.8728138,"photo_ref":"AU_ZVEEEBw4wlCWHfPhxwPiD1S84c_ELm30r-AR_x0T-akBitKZycql0IFRrKcKITvRrigNBekbtR1tUS_pFu3gLBjiX-Me96r62gTXuKz0HxduLw_Cygw5C3jGT2FxDJpqMLYwbe6OaMX5BJmrh6f4F9xL-igsbtlUwi1FUXoSpyk_EvYbF2pVtEAhGoX-BcDBVHu9-DWxUxuoqYBtsYhQSHD2Z_5v-03beAXSrY0p-UuRATl6gfsIVTrh7Hn_kIiFbbir14qt5uHrUYGjo-KVNBb93NtmdppEqaCK1MRP1yj562PAgq0I0zYoGxAeuF7RUh1Yslsqyho3RQqtNF1693mADRr_9TxySHReyNq-sLmZA5_B4nGlScXRnwjtodW-xt4NN2UxpC27iOhD_hqAD5C7gvPFYLfNBtrwcJQ2iRkSr7w","verified_address":"Ghami, Dhami 33100, Nepal","km_from_previous":20,"road_name":"Ruta de trekking Upper Mustang","road_difficulty":"medio","estimated_hours":6,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Lo Manthang","headline":"Lo Manthang","narrative":"La capital amurallada del antiguo reino de Mustang, a 3.840 m. Cuatro monasterios, el palacio del rey y calles de barro que no han cambiado en 500 años. Es el núcleo de todo el viaje.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Ghami a Lo Manthang","links":[],"type":"lugar","day":5,"lat":29.2080456,"lng":83.8685072,"photo_ref":"AU_ZVEEjrvkEplOWlc5LZfMoyb3E4vRMEyxC0maw0erMWLg_jwN_HdsiicQeZ3jJg58AiPeClCMfvTtAvzTTF-2dfKSYsAEPo8AHJ3jtCvHuFSlBI8EQMDFU3aqMabj5xsLp0G4xQCgj7nwSwIaMB4flDHySSrm6qLmgnpak12gP80ElPUqm1xTN_WX3N5CfXJU9C1j5erksrD9OoELoPE-wl6Xdo0fUpgLVfp-Oe9oyKe-ZJwrOpp2SI8stRdGvuafUpoTN0se6S8clDWut04ONsWiHvM3XYDfoks5_0lg1yNOybsUUdkbmTr5gBczDOtC_Bk111timYd8CDL5XD-E8cVQ27S4MIaCiE9BZS6HuAYlNA_nqJAGMXif37Hv2wm7p4Z4WhWCWXNjN0yqiYVrVXy9X3xB0iBZBPvqSmRG3GLIRgQ","verified_address":"Lo Manthang 33100, Nepal","km_from_previous":22,"road_name":"Ruta de trekking Upper Mustang","road_difficulty":"medio","estimated_hours":6.5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Cuevas de Chhoser","headline":"Cuevas de Chhoser","narrative":"Complejo de cuevas excavadas en los acantilados a pocos kilómetros de Lo Manthang, algunas con pinturas budistas de siglos. Día de exploración desde la capital sin cargar la mochila completa.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Exploración Lo Manthang","links":[],"type":"lugar","day":6,"lat":29.236287,"lng":83.9824845,"photo_ref":"AU_ZVEH7yyS-j1IYA_a7yxP893057-vvNfkqVAsIaxlEF7JF-wF9pWsgqzZ3jNUAt2vAHW9m1HlmbsuWFwN7arOWoGv3aE_iEjeD5-pO71xJUSTH8TlkjexwoQ4-owMfvJZXBMELptW9f301x-46JroE5XiVDjPxQQP_FMNtrMkbS4uG2AR2hOZ6WdaLpV34PDjrEQpE1opvxtJF7sTy80-1YmrurDmq6nngPPorQA4r9I-3XZDXFosfg6IMwuU5F9z1zmkQUUH26gcqosNN1yrjbVBZ4eKmk1fvQY9i3lak2MeYxSXw6ENScwYyEf1f3k_qwQu7NYbDvgIQFcR35HqDPnvvoXmZK5Ti_5VM5_BCc2g1zzUID3Qol9hBuXm6H9iukdiL9oSvxfDq9ptHrgRPLiumZOQtI-7DshmaZ4TzWR9LsEhF","verified_address":"Chhoser 33100, Nepal","km_from_previous":8,"road_name":"Pista de tierra norte de Lo Manthang","road_difficulty":"medio","estimated_hours":3,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Dhakmar","headline":"Dhakmar","narrative":"Pueblo de casas rojas encastradas en un acantilado bermellón — una de las imágenes más fotográficas del Himalaya. Se coge una ruta alternativa de vuelta para no repetir el camino de ida.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Lo Manthang a Dhakmar","links":[],"type":"lugar","day":7,"lat":29.0824907,"lng":83.8777825,"photo_ref":"AU_ZVEHfNpCkquFA8pTWSLsuR_MW9v7lzedm-luFKikRwL6raoSx0Rz6tw6ZM4vCCXUE_CwVe3B2ylwXJd1HyHiheRe94oW43-Oy06hE8s2mksPAzoabxZMXlSqS4abdaxpL8TdaGwkpQSM8B5DEgrAY1gTnrcFqDpFzt9zjR_v47ik59Lzu8j2HCimnZoKGz28LcBPNddbzZrmLe47gKjhA2NT6ePL5J8bhQj2jJn_u-o-hHuD7clKVSPTIGHt1aiwORmWiu13kJ6Fee-g3mpRloI2Jr_MCBGTw7F4umdM7uZ26wTMdyRjC9_GedEilb22f364ixz3Iy1dnFlgqYJXFbqdLNAwJ_XF0pn79kfKU3wtLxadReDbZT9UKgU31EyVOktwiDEIU1B7-zWmven5wMs5oLmBUbh2FLRk8FbGIL-Gm3pNR","verified_address":"Dhakmar 33100, Nepal","km_from_previous":25,"road_name":"Ruta alternativa de regreso","road_difficulty":"medio","estimated_hours":6,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Tsarang","headline":"Tsarang","narrative":"Segundo pueblo más importante del reino, con un monasterio del siglo XIV y vistas al valle de Charang Khola. El dzong en ruinas sobre el pueblo vale el desvío de 20 minutos.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Dhakmar a Tsarang","links":[],"type":"lugar","day":7,"lat":29.0933466,"lng":83.9254615,"photo_ref":"AU_ZVEEktX2t0aSfRRvAMvDw5Ce7_Zfcu12kiIbc9TvCSsrIoFTcgTKF83AdCPU8uTcOM-aKEYkyyS1mnUzgvLDCs_Zs1S4LnIP4TSax1VsJZ0cCsBx27SGLFUbjD54avBcsiRsxIh9jndPlHDQuf9aG-GYdP_9mkpe48PSjhKBoiT3Q3V6EVLrxSQHGRaE3931pC1IIvPD5HeV7UPDueI_Leprm-u1N6599pngWOqmLmK4pOyYa81hY0qtLjnIGVWEy8LNwvDhSplMfjnhAAELX1538sFuddlUfNOyV2y-PfVEwLLIzOC7chqkBGzks94osM8Jo9mwIyaQccSQ9D7XwV4pEAP-8TmnFr6mnQgXwdoppIAMieWYf8xnZqLygUj8wwkapbFZrianven32LgUwX3xEaH7WraVgAV3G_iywsq7rSdvh","verified_address":"Tsarang, Charang 33100, Nepal","km_from_previous":10,"road_name":"Ruta alternativa de regreso","road_difficulty":"medio","estimated_hours":2.5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Charang","headline":"Charang","narrative":"Pequeño pueblo con gompa activa donde los monjes todavía hacen la vida cotidiana sin turistas. Dormir aquí es la parada más tranquila de todo el circuito.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Tsarang a Charang","links":[],"type":"lugar","day":8,"lat":29.1558396,"lng":83.7411631,"photo_ref":"AU_ZVEF8ckzcmn9gdNIc1lwAlhcAkfOAo30tSBYCObSEHDBuFFBDk25rqoDw7FnnLBInJAwa0uRQsV8D0sR8r4F6Umaa9EJbPyFA-tjJm_mlt4OEvvc_3SfNHuS5S7t6Pp6wKfo7d4VWbwHOhBpnqSkwYVW5tKHzQPMIaKGnBwPckKpOmH-Fiel0dKMMpUcV8NykoWIKJO6ewFaLIhVyGjQZaW_gCW_4-odhmBL6sQ8eWv4xuUY_VG8DUaI4kxyfiDJf3w6ea7nIzeHLTdRa6N0FlQE5l6wEFxraaZmqAfdud8UGLWgtvUhUE6VbSmvj9ZUQrXpJeUo5RtMOUkkv3nrtQgQZ9hcEyE2pXn150hJGsGddW3fFUJtEGTbN6OA_yM_RgTe85PTUDZEyJIhqrVgYp8fouOW9mqfY9HsA7IQ1hGpIwA89","verified_address":"Charang 33100, Nepal","km_from_previous":12,"road_name":"Ruta alternativa de regreso","road_difficulty":"medio","estimated_hours":4.5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Tetang","headline":"Tetang","narrative":"Pueblo de paso antes de bajar al Kali Gandaki. Desde aquí la ruta de vuelta empieza a descender y el paisaje cambia de los cañones rojizos al valle más ancho y ventoso.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Charang a Kagbeni","links":[],"type":"lugar","day":9,"lat":28.90933609999999,"lng":83.8352043,"photo_ref":"AU_ZVEHGyC3H0xaSKqmJWHsgP5YdOs8tfoIJgn3JbyyjRDZ3GkiErE8s-oByhMjsQneXB85eN_ibRdRPE2YVFVqg1mB9ncG1U8auA5hyzxhDoPw43TGtkNOJplBOTQIXZGyp0bps-Lr-kzxf8j-nvTQwdpfKyK2vmQOmVDoScXBXCEldpfiLfWV2xXVA3r4iFa5ojOtBErKyJwNt96Sdzf3-X-HbNkvbNsgN1jIphlDJpAcdOk9QQhGX_trhZbEDkDG83MHRv_p3h1pP5DKPFbZoEeg0hlAlBtxICXaIReOiv6-l3-Wrvk5AsLNv9yz7cxL2Ya0jq3a3PR9xi2V-jjTdpBLAmuQvk-44EDX7cYSK-tPvqUI_jLqWUjPj7nEv_a63RBolauQRBmEmJTs8KzT2Yki7ZGOcO78o-h0kHRjpdE367C_2A5cyuMsWfew3UmWW","verified_address":"Tetang, Chhusang 33100, Nepal","km_from_previous":18,"road_name":"Ruta de trekking Upper Mustang","road_difficulty":"medio","estimated_hours":5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Kagbeni","headline":"Kagbeni","narrative":"De vuelta al pueblo amurallado donde empezó todo. Una noche aquí para cerrar el círculo antes de bajar a Jomsom — y para tomarte la cerveza más merecida del viaje.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Charang a Kagbeni","links":[],"type":"lugar","day":9,"lat":28.83737,"lng":83.7838434,"photo_ref":"AU_ZVEGj64EKM0G8yvb9uvBimuMFtXgHPJsMePC2RH8bOTOfFCgW94pKSMxislSQMjLwxpiQv-WsrU7sSYVrlgMGhyW7zo9YcqDk5ky8iFQvBNffulI4Hv8KYnVisxY6rStEmMy4XZxIFJAFxZEbPoFoEs2fidxnhhR6noY5C8ZEt81isFLOgAd-IR2phbySAZch2zHv-ImWY-M1l0VWY4BFRZ_GUVsgJ2Jql3U07uyECH6mF0Fx74E8UkTGIgPfs4jykDO6Z_XL6kHQPCfCqWMpxzNAw7P1g-O4DX-gpsvi7W7OiBGbXXrv9bqfLBqTjXsGcheHs9Vq97XDsQPZQFfci3l3DVF6xecgNCDk8IrsJN1nVijQZFvA-X2dE0ZYd4UQgLNAotKDYZdyavJYnG9uQ39z8H4DVXYfCzPg52t4T2P04A","verified_address":"Kagbeni, Nepal","km_from_previous":10,"road_name":"Carretera del Kali Gandaki","road_difficulty":"bajo","estimated_hours":2.5,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Jomsom","headline":"Jomsom","narrative":"Último día: bajada a Jomsom para coger el vuelo a Pokhara. El viento de la mañana en el Kali Gandaki te despide como llegó — sin contemplaciones.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Regreso a Jomsom","links":[],"type":"lugar","day":10,"lat":28.7746477,"lng":83.7730237,"photo_ref":"AU_ZVEErXXDmu0HEMYnrHv8XODos6r928a6UZPShECYXpDxCWIL0GmnEEqmEi3sftMUI2RheU8z-I_0PLcRiYvsPqMvs3LWFQyTXU6SpolOl5CLc4L1I3SaJREzed6-iXXMi7EVl9B8AYt2owQzFtzvx-60mn7qNhtdcL-nMVNtwHWhcwo0JMYsfAfG7sih35RInhKOMo6fF4c5p9elv93hv8ZFTmkYIu_KtIrzvnsvzKQ-uXvq7lyhclRBs_XHBBFypdsFzxbQrTKxFTAqpUQNsFT4YLI6byzO_jR3RWd9Jdyj7CEIQJ7UvhAyzVS9w7v7Ki0_KNI-eUUMfRJsznXg3IDUnPbGh6P5pQDe3qyt5Rm2llc9y0RwJvgbEhmoh9DdLTxekZURgi4ddHv4-lStwhBl4x_76PCnxW6MmDqRdmp7Q3AU","verified_address":"Jomsom, Nepal","km_from_previous":12,"road_name":"Carretera del Kali Gandaki","road_difficulty":"bajo","estimated_hours":3,"sleep":null,"eat":null,"alt_bad_weather":""}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/Jomsom,+Mustang/Kagbeni,+Mustang","label":"Día 1: Jomsom → Kagbeni"},{"day":2,"url":"https://www.google.com/maps/dir/Kagbeni,+Mustang/Chele,+Mustang","label":"Día 2: Kagbeni → Chele"},{"day":3,"url":"https://www.google.com/maps/dir/Chele,+Mustang/Syangboche,+Mustang","label":"Día 3: Chele → Syangboche"},{"day":4,"url":"https://www.google.com/maps/dir/Syangboche,+Mustang/Ghami,+Mustang","label":"Día 4: Syangboche → Ghami"},{"day":5,"url":"https://www.google.com/maps/dir/Ghami,+Mustang/Lo+Manthang","label":"Día 5: Ghami → Lo Manthang"},{"day":6,"url":"https://www.google.com/maps/dir/Lo+Manthang/Cuevas+de+Chhoser,+Mustang","label":"Día 6: Lo Manthang → Cuevas de Chhoser"},{"day":7,"url":"https://www.google.com/maps/dir/Lo+Manthang/Dhakmar,+Mustang/Tsarang,+Mustang","label":"Día 7: Lo Manthang → Dhakmar → Tsarang"},{"day":8,"url":"https://www.google.com/maps/dir/Tsarang,+Mustang/Charang,+Mustang","label":"Día 8: Tsarang → Charang"},{"day":9,"url":"https://www.google.com/maps/dir/Charang,+Mustang/Tetang,+Mustang/Kagbeni,+Mustang","label":"Día 9: Charang → Tetang → Kagbeni"},{"day":10,"url":"https://www.google.com/maps/dir/Kagbeni,+Mustang/Jomsom,+Mustang","label":"Día 10: Kagbeni → Jomsom"}],"tips":["Permiso obligatorio: ACAP (30$) + Upper Mustang Restricted Area Permit (500$ por 10 días). Sin esto no te dejan pasar de Kagbeni.","El vuelo Pokhara-Jomsom dura 20 minutos pero se cancela con viento. Ten siempre un día de margen en Pokhara.","El viento del Kali Gandaki sopla fuerte desde el mediodía — sal a caminar antes de las 8h para no ir contra el viento toda la tarde.","Los teahouses en Upper Mustang son más básicos que en el Annapurna Circuit. Lleva saco de dormir hasta -10°C.","El AMS (mal de altura) puede aparecer desde Kagbeni (2.810 m). Sube despacio, hidratación constante y acetazolamida si tu médico te la receta.","No hay cajeros en Upper Mustang. Saca suficiente rupias nepalesas en Pokhara o Jomsom.","La mejor época: marzo-junio y septiembre-noviembre. En julio-agosto el monzón hace el camino complicado aunque Upper Mustang recibe menos lluvia que el resto de Nepal."],"tags":["trekking","himalaya","nepal","cultura tibetana","reino prohibido","alta montaña","sin masificación"],"budget_level":"alto","suggestions":["Si tienes 2 días más, añade una excursión a Nyphu Gompa al norte de Lo Manthang.","Combina con el Annapurna Circuit saliendo por Thorong La si llevas buen estado físico.","Busca un guía local de Lo Manthang — obligatorio por regulación y además te abre puertas en los monasterios."],"pre_departure":null,"practical_info":null};
+    </script>
+    <script src="/guide-renderer.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.__ROUTE_DATA && typeof guideRenderer !== 'undefined') {
+        guideRenderer.render(window.__ROUTE_DATA, { saved: true });
+        var staticIt = document.querySelector('.destino-itinerary-static');
+        if (staticIt) staticIt.style.display = 'none';
+      }
+    });
+    </script>
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Vuelo Pokhara-Jomsom: 20 min, 100-150 EUR. Desde Jomsom, trek o jeep hasta Kagbeni y luego inicio de zona restringida. El permiso de Upper Mustang (500 USD/10 días) se tramita en Kathmandú o Pokhara con agencia.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Upper Mustang">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +244,7 @@
               <p>Hotel Lotus Suites o Mustang Holiday Inn en Lo Manthang: 30-60 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Upper Mustang">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -116,6 +257,7 @@
           <li>Trek por los cañones rojos y amarillos entre Ghemi y Charang</li>
           <li>Asistir al festival Tiji en Lo Manthang si coincide (mayo, 3 días de danzas rituales)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Upper Mustang">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -140,12 +282,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Upper Mustang desde España?</h3>
           <p>El presupuesto diario en Upper Mustang va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Teahouses en ruta: 3-6 EUR/noche (con permiso ya pagado). Rango medio: Lodges en Lo Manthang: 10-20 EUR/noche. Vuelo Pokhara-Jomsom: 20 min, 100-150 EUR. Desde Jomsom, trek o jeep hasta Kagbeni y luego inicio de zona restringida. El permiso de Upper Mustang (500 USD/10 días) se tramita en Kathmandú o Pokhara con agencia.</p>
@@ -166,7 +306,10 @@
           <h3>¿Cuál es la mejor época para viajar a Upper Mustang?</h3>
           <p>La mejor época para visitar Upper Mustang es mayo-octubre (incluso en monzón, esta zona es seca por estar en sombra orográfica). Se recomiendan 10 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
+
+    </div>
 
     <!-- SHARE -->
     <div class="destino-share-wrap">
@@ -183,7 +326,7 @@
         <div class="salma-chat-bubble">¡Ey! Estás viendo Upper Mustang. ¿En qué te ayudo?</div>
         <div class="salma-chat-chips" id="salma-chat-chips">
           <button class="salma-chip" data-msg="Consejos para viajar a Upper Mustang">💡 Consejos Upper Mustang</button>
-          <button class="salma-chip" data-msg="Itinerario 10 días en Upper Mustang">📋 Itinerario 10 días</button>
+          <button class="salma-chip" data-msg="Itinerario en Upper Mustang">📋 Itinerarios</button>
           <button class="salma-chip" data-msg="Presupuesto para viajar a Upper Mustang">💰 Presupuesto</button>
           <button class="salma-chip" data-msg="Buscar vuelos a Upper Mustang">✈️ Vuelos</button>
           <button class="salma-chip" data-msg="Hoteles en Upper Mustang">🏨 Hoteles</button>

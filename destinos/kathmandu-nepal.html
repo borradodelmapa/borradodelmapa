@@ -27,6 +27,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +79,101 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+    <!-- ITINERARIO COMPLETO -->
+    <div class="destino-itinerary-static">
+  <h2 class="destino-h2">🗺️ Itinerario completo</h2>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 1 — Casco histórico y Swayambhunath <span class="destino-day-stops">4 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Durbar Square</h4>
+        <p class="destino-stop-desc">El corazón histórico de la ciudad, con palacios y templos medievales agrupados en un espacio donde todo pasa a la vez. Entrada de pago para extranjeros, pero te dan un pase semanal.</p>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Kumari Ghar</h4>
+        <p class="destino-stop-desc">Casa de la diosa viviente Kumari, una niña que vive recluida y aparece ocasionalmente en la ventana. Uno de los rituales más singulares del hinduismo nepalés.</p>
+        <span class="destino-stop-meta">📍 0.1 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Kasthamandap</h4>
+        <p class="destino-stop-desc">Uno de los edificios de madera más antiguos del mundo, aunque parcialmente reconstruido tras el terremoto de 2015. Da nombre a la propia ciudad.</p>
+        <span class="destino-stop-meta">📍 0.1 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Swayambhunath</h4>
+        <p class="destino-stop-desc">La stupa budista sobre la colina al oeste de la ciudad, con vistas de 360º sobre el valle. Los monos campan a sus anchas — guarda bien la cámara.</p>
+        <span class="destino-stop-meta">📍 3 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 2 — Boudhanath y Pashupatinath <span class="destino-day-stops">3 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Boudhanath</h4>
+        <p class="destino-stop-desc">La stupa budista más grande de Asia fuera del Tíbet, con 36 metros de altura. El barrio alrededor concentra monasterios tibetanos, restaurantes y tiendas de thangkas. Caminar el kora (vuelta ritual) al atardecer es una de las mejores cosas que puedes hacer en Kathmandú.</p>
+        <span class="destino-stop-meta">📍 8 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Pashupatinath Temple</h4>
+        <p class="destino-stop-desc">El templo hinduista más sagrado de Nepal, junto al río Bagmati. Las cremaciones funerarias se realizan en los ghats abiertos al público — es un sitio serio y hay que comportarse con respeto. No se puede entrar al templo principal siendo extranjero.</p>
+        <span class="destino-stop-meta">📍 3 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Thamel Bazar Kathmandu</h4>
+        <p class="destino-stop-desc">El barrio mochilero por excelencia, con el mejor streetfood de la ciudad y equipación de trekking a precios razonables. Buena base para cenar y organizar el resto del viaje.</p>
+        <span class="destino-stop-meta">📍 5 km</span>
+      </div>
+    </div>
+  </details>
+  <details class="destino-acc-item">
+    <summary class="destino-acc-header">Día 3 — Patan y Bhaktapur <span class="destino-day-stops">3 paradas</span></summary>
+    <div class="destino-acc-body">
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Patan Darbar Square</h4>
+        <p class="destino-stop-desc">La plaza medieval de Patan, a 5 km al sur, es más tranquila que la de Kathmandú y está mejor conservada tras el terremoto. Los templos Newari aquí son de los más elaborados del valle.</p>
+        <span class="destino-stop-meta">📍 6 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Bhaktapur Durbar Square</h4>
+        <p class="destino-stop-desc">La ciudad medieval mejor preservada del valle, a 13 km al este. La entrada cuesta 15 dólares pero incluye acceso a todos los monumentos. El yogur de Bhaktapur (juju dhau) es la razón de peso para quedarte a almorzar.</p>
+        <span class="destino-stop-meta">📍 14 km</span>
+      </div>
+      <div class="destino-stop">
+        <h4 class="destino-stop-name">Nyatapola Temple</h4>
+        <p class="destino-stop-desc">El templo de cinco pisos más alto de Nepal, construido en 1702 sin un solo clavo. Sube hasta arriba para ver Bhaktapur desde una perspectiva que pocas guías mencionan.</p>
+        <span class="destino-stop-meta">📍 0.5 km</span>
+      </div>
+    </div>
+  </details>
+</div>
+
+    <!-- ITINERARIO INTERACTIVO (mapa + guide-renderer) -->
+    <div id="chat-area"></div>
+    <script>
+    window.__ROUTE_DATA = {"title":"Kathmandú en 3 días","name":"Kathmandú en 3 días","country":"Nepal","region":"Valle de Kathmandú","duration_days":3,"summary":"Tres días en la capital nepalesa recorriendo templos hinduistas y budistas, plazas medievales y barrios con carácter propio.","stops":[{"name":"Durbar Square","headline":"Durbar Square","narrative":"El corazón histórico de la ciudad, con palacios y templos medievales agrupados en un espacio donde todo pasa a la vez. Entrada de pago para extranjeros, pero te dan un pase semanal.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Casco histórico y Swayambhunath","links":[],"type":"lugar","day":1,"lat":27.7042737,"lng":85.307463,"photo_ref":"AU_ZVEHJGSmDWFu9tojrESGf6A6G8g-F_O7vXQ6umzJHcJ7fSbzWcd4uRLpdnvOS6jJiOBGVh0yI43KXyGIWef4KSFXtl0smEEdcSjFC3LBgoA_rSxFAQ2LP9buNL8mUxES16fgZ6dx5zdsAvU8fHUCdKM_zGEkxh18rW7681xAmGj7HMtep1Jfg3X3gCwZHQUo7-022V8d789szzGc3cgNMrpKEWP8AyX5c6PSnp6XfMf9MYaOyQuZ38CVM43FgUZ1P_98vcp3n6xSPUal9sqdlO9ZWiB-KkxmUgPkR2ba-ws8BVa-MLt69ZCk4yQF_fAN1ukZQ1pVgkW4UotWG-0UejwdRvYgOzb3SXrXUSJgRmvWXgDs-NVM291KNNq2VjnCnbF8Ck4RZHcQ2pFCYDC4Y1_LGgwE78-nAnlUiMr0XH7gim1-W","verified_address":"Kathmandu 44600, Nepal","km_from_previous":0,"road_name":"Durbar Marg","road_difficulty":"bajo","estimated_hours":0,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Antigua plaza real en un entorno emblemático, con un museo y varios palacios, templos y jardines."},{"name":"Kumari Ghar","headline":"Kumari Ghar","narrative":"Casa de la diosa viviente Kumari, una niña que vive recluida y aparece ocasionalmente en la ventana. Uno de los rituales más singulares del hinduismo nepalés.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Casco histórico y Swayambhunath","links":[],"type":"lugar","day":1,"lat":27.7037217,"lng":85.3064717,"photo_ref":"AU_ZVEEDmgZcMtihpYporzrJEdVOI40VR2i7jqPHnVi33vE8yp_5msr9oj5_agULYJz_7J9Q795abt62SymBFj6aGzYZiyup1of1ach-26qW9IG8taeM0tl5t5zbAUFXVqxd1nhdNvUNC7v5SN591nJlzXL352SyXJUmVSsPcm2b18ksQakc2EUaWr7rTKmw0NSZ4w9WUk9_bkwwTBCaHdtmOi-82I7jsYZ5bhgIA0IT3gJUEvXM-DdlBy55QSWE5wM4Zkz3wJD4ef1QINAtIvUfAE5s9r0YNdUUOMBULqKIT4sRHbqhot32ZxaeCIb-Af6lsepFpU4HSIs1MHYvajemj16IG4qhbKToW6QrGoD_FUE2-OHvnz-PJKlOouhrt2P9Cjh5BuIFRLh-0P-nAU-w9pzcqsLe9L5WQEuL6OUcjClWxFkd","verified_address":"P834+FHQ, Layaku Marg, Kathmandu 44600, Nepal","km_from_previous":0.1,"road_name":"Durbar Marg","road_difficulty":"bajo","estimated_hours":0.1,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Historical palace of the living goddess Kumari who is worshipped by Hindus & Buddhists."},{"name":"Kasthamandap","headline":"Kasthamandap","narrative":"Uno de los edificios de madera más antiguos del mundo, aunque parcialmente reconstruido tras el terremoto de 2015. Da nombre a la propia ciudad.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Casco histórico y Swayambhunath","links":[],"type":"lugar","day":1,"lat":27.703876,"lng":85.3058219,"photo_ref":"AU_ZVEFHhhgCIdQbvTmxE70gAo0D52v2Z9zGAJMQa7jLvh_Q7A8yANUQmi0JqfonyaNx9j31Shx2j5JaXWe1nwM5N8M4oT2EyQKl28_BbRXfY13-tpENhLGVswYqQIHo3emaDikHA_7YAcS7NMyVGrRHjSTsNwuvjNwDvjJghyRPW6B-jU66En2MwExyujCx18yW7VwLnghDVeTzFBO94FXzB2fcqT6k-9DW3YFB8f7Ja0hhjcX9k9JPIU-ku_BZG0KDHaQHRHMKEyw1H5D55iX30lYsXnp9uzYhGEsMqCO9tADMc6qqee3g-vcCR3_J0UWcsN-7uoc-g36EbX0bAbiWTtO0wwSmttSFKDHo1R2ZFt6IhLgybu1EgWzaltX9qrJ3AinIlOjn5Uoldxbop4RWfszcQ0eN2Vn6nCbpoyJDfitslfed","verified_address":"22 Gangalal Marg, Kathmandu 44600, Nepal","km_from_previous":0.1,"road_name":"Durbar Marg","road_difficulty":"bajo","estimated_hours":0.1,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Former site of a temple, dating to the 7th century A.D., that gave Kathmandu its name."},{"name":"Swayambhunath","headline":"Swayambhunath","narrative":"La stupa budista sobre la colina al oeste de la ciudad, con vistas de 360º sobre el valle. Los monos campan a sus anchas — guarda bien la cámara.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Casco histórico y Swayambhunath","links":[],"type":"lugar","day":1,"lat":27.7148996,"lng":85.29039569999999,"photo_ref":"AU_ZVEHz0U40VTIwpjgDChx9sR5GAqX6AiwOL7biSmj8bsdjcgIr3811x71ME2lihVV86Mrm6OY2PVp4ITUSd6wrMjMekruA-ioNt6e8GfYhc54cL8BZswQ4K32PeiMVxgqVynso8vGsdSFs5W2d9hpDaV71naUAQZa_LedY7-ok5vyBJNINjX6KKOoB50VtVJQM_EdONMTOzlOZ7C2iGMkJ2bV4s0i-M-aUt1j8pi1rD1GBW8RiAhgRgOYyqp9aEGBO7be_QzTbbgRk04wa_t9yXL_jIfa9yvPGSH943bYsIkGkUkRAWA-TvNEOjYsbpbkWj3o55SrW33TZ9VHppuLEmWNer81UTjlTKU4Se43z8Hjza32niGOPLY5QvCkmbqPDh1T-eA0HaelcZeCKwff7hYCI4w_bgGdT9oosjrMrnL-3UQ","verified_address":"Katmandú 44600, Nepal","km_from_previous":3,"road_name":"Swayambhu Marg","road_difficulty":"bajo","estimated_hours":0.3,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Complejo budista de gran antigüedad, con una estupa icónica, templos y numerosos santuarios."},{"name":"Boudhanath","headline":"Boudhanath","narrative":"La stupa budista más grande de Asia fuera del Tíbet, con 36 metros de altura. El barrio alrededor concentra monasterios tibetanos, restaurantes y tiendas de thangkas. Caminar el kora (vuelta ritual) al atardecer es una de las mejores cosas que puedes hacer en Kathmandú.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Boudhanath y Pashupatinath","links":[],"type":"lugar","day":2,"lat":27.7214694,"lng":85.36203499999999,"photo_ref":"AU_ZVEFtUyfsP4nlmMv38Yv5Pb4Kmv4mXgB2eraSSTfzMQomxYmbKu6dhvKQT1d0bozUsimELXPppdyLCvu0iI7ww8tbI0DEsBT3NEhbAW7JArIh7LRxxmSWXzRljaY9dwxZrDAYj95LKp1mCXbDNIJFZohsMUnOC01qF94Hu7mN49o-8OgUoHJ7sE-aJgjsHT-r_TeC9cN2LPSieCLo1z6-rp6IQzC5XmZYBPL-MBueH7O5HeMpXN4WpA0SS3VWzt2v7qpW1eT_f35sKAKndojhiNiyArrU-8w8qsv0Aj2s4ZKh5rwqep9EOSZft8JQ1krTXdUhg5q4BoaxU8jvyYWtNGHAw54aOMx7eGam2DuwBGXb4GIm5QSkYg1PStJTZ_yjQ5h_Xl3OdaZUVMbToVxw5floTAU9IIrfg9JWA-qh9St2SQ","verified_address":"Kathmandu 44600, Nepal","km_from_previous":8,"road_name":"Boudha Sadak","road_difficulty":"bajo","estimated_hours":0.4,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Templo budista con una enorme bóveda blanca coronada con una aguja dorada de gran altura."},{"name":"Pashupatinath Temple","headline":"Pashupatinath Temple","narrative":"El templo hinduista más sagrado de Nepal, junto al río Bagmati. Las cremaciones funerarias se realizan en los ghats abiertos al público — es un sitio serio y hay que comportarse con respeto. No se puede entrar al templo principal siendo extranjero.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"lunes: 10:00–17:00 · martes: 10:00–17:00 · miércoles: 10:00–17:00 · jueves: 10:00–17:00 · viernes: 10:00–17:00 · sábado: 10:00–17:00 · domingo: 10:00–17:00","day_title":"Boudhanath y Pashupatinath","links":[],"type":"lugar","day":2,"lat":27.710512,"lng":85.3488125,"photo_ref":"AU_ZVEHaRWS422X7DywQbGVYZAXyF_5LxF873wGx3jxksp1M45zP8E3lFtbpXviSzSJcF67buRBjJ09PdX2a62Rjm2Pwa_cs4fEo0VlRsA0RleVpg_S8SmK4vHIF8e6WMQyTJiEjh0RmBvCZ-w_R9KAWgCJzcS-jg_OTvBvNzUFNblPUkawU_atzq1C6hrtTAjSPhgg0qg-Ez_9d2A29a2zFkuyHnqsFyuq8E7S2yAXQ73oUR9T5npT0f0yb8jM5jI0xs48arm47lGOEkRcGBfTP4uxupAxuI8soU-glbjMjRx9nZPyGkG0KY--j-17H_HlEIFlW7Yxp5ghE_1krhZSJAUkUx4bhS3PpK1tt-P8BVr9a09h7gBEQrS6gUap99ra-OEHYShTyqIbNDJ_r7T8m-cikDumEhbpGOaSCQja5qbttPA","verified_address":"44621 Pashupati Nath Road, Kathmandu 44600, Nepal","km_from_previous":3,"road_name":"Pashupatinath Road","road_difficulty":"bajo","estimated_hours":0.3,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Famoso templo sagrado y lugar de cremación de la cultura hindú, al lado del río, reconstruido en el siglo XV."},{"name":"Thamel Bazar Kathmandu","headline":"Thamel Bazar Kathmandu","narrative":"El barrio mochilero por excelencia, con el mejor streetfood de la ciudad y equipación de trekking a precios razonables. Buena base para cenar y organizar el resto del viaje.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"lunes: 10:00–22:00 · martes: 10:00–22:00 · miércoles: 10:00–22:00 · jueves: 10:00–22:00 · viernes: 10:00–22:00 · sábado: 10:00–22:00 · domingo: 10:00–22:00","day_title":"Boudhanath y Pashupatinath","links":[],"type":"lugar","day":2,"lat":27.7143536,"lng":85.3113133,"photo_ref":"AU_ZVEHgw6OPDy-6pDgGSO23BD5HyURc3jxtxb18LlJSaJi5a3hsAg0EI-k9ZxG0FiAgCXG6do4VEfL_T2sxg7eClJIr9BoRGeH9Bbf5YeiMpBYA3Zw4W0x6NYP5EvJze12Ix6JWm1BTSkxPdYDb1lgBdTLtzxZ__Fa9P43h0eBdWbCgQ2y8-ysVrJI3ykK2QSnT8hmZMKTRGel_3vbBGazUXdyPPSjnj749VrB67YamlhSKgqN3BOm6AEQpqqDTDrE8Ccytsr3oTyyMabuUp8jANslr9YBSgY8TroyAqtFT77jPnvG8rKyZabSUQNdo0mAcogN0iqj34NKzbQyTF8wiVRIQLNpR5DPexQclxhLj0KLk2VJdzgAYy4oFAFcIvREJfnYrNWTmbEkWom2rvLTDk2fhoNP3PaMOoU4-zK_nLsExig","verified_address":"P876+PGW, Thamel Marg, Kathmandu 44600, Nepal","km_from_previous":5,"road_name":"Thamel Marg","road_difficulty":"bajo","estimated_hours":0.3,"sleep":null,"eat":null,"alt_bad_weather":""},{"name":"Patan Darbar Square","headline":"Patan Darbar Square","narrative":"La plaza medieval de Patan, a 5 km al sur, es más tranquila que la de Kathmandú y está mejor conservada tras el terremoto. Los templos Newari aquí son de los más elaborados del valle.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Patan y Bhaktapur","links":[],"type":"lugar","day":3,"lat":27.6726981,"lng":85.3253211,"photo_ref":"AU_ZVEE_mgFj2D73w1Xucl9fpaE2vSuz1toi_ChAUr1rCWx33nRQLkiZv88bTh2yXO091U4pwBJMWk9s9kJewZZwy4A_hw7XCPSwJkCH3NQ8f3SzDw1CbrlkirvQ5rK4h-6wjmAwv606-PesUVStH_IGdhncCGA03tgvVwG9NJbn-xcRB-k3ptzyG1bZX1aYKCVxd35AUKoIZpzsXCglMQpqbqoAxiLl64lUvUY2oG_6jW1RbbV11ox5kWJjLLTUdgTAwAqmqY5d3RoHne9kd7Yv76rNgqqXgu09J2Oj2U1DgoARqc49GOL00PqiYySTJiyqlEF1avJjq332zFu3kddpi6fUvzML2vWWxN59fWJ-UCDlwg7mrirbV1GrLz6uhzRKzBXC7FbZMPWOS6agvckOm1BsCV3MJQWmnO-bbaZGcTLC6cBG","verified_address":"Lalitpur 44600, Nepal","km_from_previous":6,"road_name":"Jawlakhel Road","road_difficulty":"bajo","estimated_hours":0.3,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Museo en un antiguo palacio real con esculturas hindúes y budistas, además de otros objetos culturales."},{"name":"Bhaktapur Durbar Square","headline":"Bhaktapur Durbar Square","narrative":"La ciudad medieval mejor preservada del valle, a 13 km al este. La entrada cuesta 15 dólares pero incluye acceso a todos los monumentos. El yogur de Bhaktapur (juju dhau) es la razón de peso para quedarte a almorzar.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"lunes: 9:00–18:00 · martes: 9:00–18:00 · miércoles: 9:00–18:00 · jueves: 9:00–18:00 · viernes: 9:00–18:00 · sábado: 9:00–18:00 · domingo: 9:00–18:00","day_title":"Patan y Bhaktapur","links":[],"type":"lugar","day":3,"lat":27.67207,"lng":85.4282951,"photo_ref":"AU_ZVEH2N-Q3Jxz1m54tv2793mpzB3WtyIR0trgZbM_MPoAhBvjY2Z8McxiwYR8N7nuSWIWSTMqp9ytSV6r8Gtxu6XULMg0CQSF6RH9VoEOPTZylYmmOyfqLjAFDLoSeP5Z-ETSd3lO9xa9UJFHZa9_SnDy1TYIRe_zWD0ovALq7GSUoeBM0xuVlBIOpYmjC679QKqnhy9aq1rskN6Q2PBOXuMcCRgNmQ7k9fBARpmXThCtl410tGN3D3RfA3Bpyc5U-4xnLvyKwsFrdvgPQuALozdGpZox6RG8voFQitFQPsjio7ic0_U_kGtOforStGTXtkstPPehUZVoqDXmdMreve9Dff4XnLPjXCJQfdPzc0KsiqnAnpLgZ8M3Ozc7uuPMPkWL-p43YPlSlQtXak2BfT6m4N8I58PxUdOXYO4bz4hw","verified_address":"Durbar square, Bhaktapur 44800, Nepal","km_from_previous":14,"road_name":"Arniko Highway","road_difficulty":"bajo","estimated_hours":0.5,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Histórica plaza municipal con un palacio de 1427, varios templos, estatuas y puertas de intrincado diseño."},{"name":"Nyatapola Temple","headline":"Nyatapola Temple","narrative":"El templo de cinco pisos más alto de Nepal, construido en 1702 sin un solo clavo. Sube hasta arriba para ver Bhaktapur desde una perspectiva que pocas guías mencionan.","context":"","food_nearby":"","local_secret":"","alternative":"","practical":"","day_title":"Patan y Bhaktapur","links":[],"type":"lugar","day":3,"lat":27.6713593,"lng":85.4293285,"photo_ref":"AU_ZVEHB07vy74oTt944Es9VM9rnRwi49JgsbObALIjhDm4y17mSQvq1jNCXB_wd_bivh0xuSVlLcmAMmS4HsoojWu4lEdmOnz-HekryqCDsIKpwd1RRvetQCy2cDDNjmUW_RIU4CWtCjCm1To7BnXYLycUHSRxM4ORYT7z2CTEKKSc_MK22CHYFy2pi96-V-e8TQkO88ECIWjHimgV4KcXdrIulooRW1FVyiH-D5v33i8nO4RSgoRh4s78URCeNgXFu8yG-2W5QHD9ynUfVbp166TUpF2OCVY0pkC3QEN3RfUKWpHWJEbEdEG7-0GAFixHoQ5xx8YRL_vDsVVtvJHqaOXKUURNYDe9RzzCF2FyFgqo5mGwIf7EF-XkuPSyfcnHo3YJzaaRxYRZvq3q1ENSD5MjUUtFT-HOq77Rka6LJbrUYHQ","verified_address":"Taumadhi Square, Bhaktapur 44800, Nepal","km_from_previous":0.5,"road_name":"Taumadhi Square","road_difficulty":"bajo","estimated_hours":0.2,"sleep":null,"eat":null,"alt_bad_weather":"","description":"Templo hindú con una pagoda de 5 plantas, construido en 1701 y dedicado a la diosa Siddhi Lakshmi."}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/Plaza+Durbar+de+Kathmandu/Templo+Kumari+Ghar+Kathmandu/Kasthamandap+Kathmandu/Swayambhunath+Kathmandu","label":"Día 1: Durbar Plaza → Swayambhunath"},{"day":2,"url":"https://www.google.com/maps/dir/Boudhanath+Kathmandu/Pashupatinath+Kathmandu/Thamel+Kathmandu","label":"Día 2: Boudhanath → Pashupatinath → Thamel"},{"day":3,"url":"https://www.google.com/maps/dir/Patan+Durbar+Square+Kathmandu/Bhaktapur+Durbar+Square/Nyatapola+Temple+Bhaktapur","label":"Día 3: Patan → Bhaktapur"}],"tips":["La entrada a la Plaza Durbar te da un pase semanal — guarda el ticket.","En Pashupatinath, respeta el espacio de las familias en los ghats. No es un espectáculo.","El taxi del aeropuerto tiene tarifa fija: unos 700 NPR al centro. No pagues más.","La altitud en Kathmandú es de 1.400 m — si vienes de niveles bajos, el primer día tómatelo con calma.","Lleva rupias nepalesas en efectivo; los cajeros en Thamel funcionan pero cobran comisión."],"tags":["cultura","templos","historia","budismo","hinduismo","patrimonio"],"budget_level":"bajo","suggestions":["Añade un día en Nagarkot para ver el amanecer sobre el Himalaya con el Everest al fondo en días despejados.","Si tienes más tiempo, el valle de Kathmandú tiene 7 zonas Patrimonio UNESCO — Changu Narayan es la menos visitada.","Desde Thamel puedes organizar el trekking al Everest Base Camp o al circuito de Annapurna."],"pre_departure":null,"practical_info":null};
+    </script>
+    <script src="/guide-renderer.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.__ROUTE_DATA && typeof guideRenderer !== 'undefined') {
+        guideRenderer.render(window.__ROUTE_DATA, { saved: true });
+        var staticIt = document.querySelector('.destino-itinerary-static');
+        if (staticIt) staticIt.style.display = 'none';
+      }
+    });
+    </script>
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Aeropuerto Internacional Tribhuvan (TIA), con vuelos directos desde Doha, Delhi, Dubái. Desde Europa: conexión 1 escala, 10-14h de vuelo total. Precio aproximado 400-700 EUR ida.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Kathmandú">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +194,7 @@
               <p>Hoteles tipo Dwarika's o Hyatt Regency: 80-200 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Kathmandú">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -116,6 +207,7 @@
           <li>Explorar Pashupatinath y los ghats del río Bagmati (acceso templo principal solo hindúes, exterior libre)</li>
           <li>Subir a Swayambhunath (Templo de los Monos) con vistas al valle (entrada ~2 EUR)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Kathmandú">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -140,12 +232,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Kathmandú desde España?</h3>
           <p>El presupuesto diario en Kathmandú va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Guesthouses en Thamel: 4-10 EUR/noche por habitación individual básica. Rango medio: Hoteles boutique en Thamel o Jyatha: 20-45 EUR/noche. Aeropuerto Internacional Tribhuvan (TIA), con vuelos directos desde Doha, Delhi, Dubái. Desde Europa: conexión 1 escala, 10-14h de vuelo total. Precio aproximado 400-700 EUR ida.</p>
@@ -166,7 +256,10 @@
           <h3>¿Cuál es la mejor época para viajar a Kathmandú?</h3>
           <p>La mejor época para visitar Kathmandú es octubre-noviembre, marzo-abril. Se recomiendan 3 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
+
+    </div>
 
     <!-- SHARE -->
     <div class="destino-share-wrap">
@@ -183,7 +276,7 @@
         <div class="salma-chat-bubble">¡Ey! Estás viendo Kathmandú. ¿En qué te ayudo?</div>
         <div class="salma-chat-chips" id="salma-chat-chips">
           <button class="salma-chip" data-msg="Consejos para viajar a Kathmandú">💡 Consejos Kathmandú</button>
-          <button class="salma-chip" data-msg="Itinerario 3 días en Kathmandú">📋 Itinerario 3 días</button>
+          <button class="salma-chip" data-msg="Itinerario en Kathmandú">📋 Itinerarios</button>
           <button class="salma-chip" data-msg="Presupuesto para viajar a Kathmandú">💰 Presupuesto</button>
           <button class="salma-chip" data-msg="Buscar vuelos a Kathmandú">✈️ Vuelos</button>
           <button class="salma-chip" data-msg="Hoteles en Kathmandú">🏨 Hoteles</button>

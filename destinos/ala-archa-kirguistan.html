@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/destinos.css">
 </head>
@@ -77,13 +78,16 @@
       </div>
     </div>
 
-    <!-- Secciones en acordeón -->
+    
+
+    <!-- Más info en acordeón -->
     <div class="destino-accordion">
 
       <details class="destino-acc-item" open>
         <summary class="destino-acc-header">✈️ Cómo llegar</summary>
         <div class="destino-acc-body">
           <p>Desde Bishkek en taxi compartido o taxi privado desde la plaza Este (~25-35 EUR ida y vuelta en taxi privado). Marshrutka hasta Kashka-Suu y después taxi al parque (~5-8 EUR total). También bicicleta de montaña desde la ciudad para los atrevidos.</p>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Buscar vuelos a Parque Nacional Ala-Archa">Salma te busca vuelos <span class="destino-cta-note">· te ahorra horas comparando</span></a>
         </div>
       </details>
 
@@ -104,6 +108,7 @@
               <p>Resort Ala-Archa en la entrada del parque 50-90 EUR/noche</p>
             </div>
           </div>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Hoteles en Parque Nacional Ala-Archa">Pídele a Salma los mejores hoteles <span class="destino-cta-note">· filtra por tu presupuesto</span></a>
         </div>
       </details>
 
@@ -115,6 +120,7 @@
           <li>Trekking al glaciar Ak-Say (6-7 h ida y vuelta, nivel medio, vistas a la cara norte del Semyonov-Tian-Shansky)</li>
           <li>Escalada técnica en las paredes norte con guía de Bishkek (desde 80-150 EUR/día con guía certificado)</li>
           </ul>
+          <a class="destino-cta-subtle" href="#salma-chat-input" data-salma-msg="Plan personalizado en Parque Nacional Ala-Archa">Salma te monta un plan a medida <span class="destino-cta-note">· en segundos</span></a>
         </div>
       </details>
 
@@ -139,12 +145,10 @@
         </div>
       </details>
 
-    </div>
-
-    <!-- FAQ -->
-    <section class="destino-section destino-faq">
-      <h2 class="destino-h2">❓ Preguntas frecuentes</h2>
-      
+      <details class="destino-acc-item">
+        <summary class="destino-acc-header">❓ Preguntas frecuentes</summary>
+        <div class="destino-acc-body">
+          
         <div class="destino-faq-item">
           <h3>¿Cuánto cuesta viajar a Parque Nacional Ala-Archa desde España?</h3>
           <p>El presupuesto diario en Parque Nacional Ala-Archa va desde 18-54€, dependiendo del estilo de viaje. Alojamiento mochilero: Camping libre dentro del parque (entrada ~1,5 EUR/persona) o en el aparcamiento. Rango medio: Refugio alpino Ratsek (a 3.500 m, para montañeros) 10-15 EUR/noche básico. Desde Bishkek en taxi compartido o taxi privado desde la plaza Este (~25-35 EUR ida y vuelta en taxi privado). Marshrutka hasta Kashka-Suu y después taxi al parque (~5-8 EUR total). También bicicleta de montaña desde la ciudad para los atrevidos.</p>
@@ -165,14 +169,36 @@
           <h3>¿Cuál es la mejor época para viajar a Parque Nacional Ala-Archa?</h3>
           <p>La mejor época para visitar Parque Nacional Ala-Archa es Mayo a octubre para senderismo; noviembre a marzo para esquí de travesía. Se recomiendan 1 días para disfrutarlo bien.</p>
         </div>
-    </section>
+        </div>
+      </details>
 
-    <!-- CTA -->
-    <section class="destino-cta">
-      <h2>Crea tu ruta de viaje por Parque Nacional Ala-Archa</h2>
-      <p>Salma te arma un itinerario día a día con mapa, paradas y presupuesto.</p>
-      <a href="/?q=Parque%20Nacional%20Ala-Archa%201%20d%C3%ADas" class="destino-cta-btn">Planear viaje ›</a>
+    </div>
+
+    <!-- SHARE -->
+    <div class="destino-share-wrap">
       <button class="destino-share-btn" id="destino-share">Compartir esta guía</button>
+    </div>
+
+    <!-- SALMA INLINE CHAT -->
+    <section class="destino-salma-section">
+      <div class="destino-salma-header">
+        <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="28" height="28">
+        <span class="destino-salma-title">Pregúntale a Salma sobre Parque Nacional Ala-Archa</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo Parque Nacional Ala-Archa. ¿En qué te ayudo?</div>
+        <div class="salma-chat-chips" id="salma-chat-chips">
+          <button class="salma-chip" data-msg="Consejos para viajar a Parque Nacional Ala-Archa">💡 Consejos Parque Nacional Ala-Archa</button>
+          <button class="salma-chip" data-msg="Itinerario en Parque Nacional Ala-Archa">📋 Itinerarios</button>
+          <button class="salma-chip" data-msg="Presupuesto para viajar a Parque Nacional Ala-Archa">💰 Presupuesto</button>
+          <button class="salma-chip" data-msg="Buscar vuelos a Parque Nacional Ala-Archa">✈️ Vuelos</button>
+          <button class="salma-chip" data-msg="Hoteles en Parque Nacional Ala-Archa">🏨 Hoteles</button>
+        </div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Parque Nacional Ala-Archa?|ruta por Kirguistán|¿dónde comer en Parque Nacional Ala-Archa?|Parque Nacional Ala-Archa en 1 días|presupuesto Kirguistán|¿es seguro viajar a Parque Nacional Ala-Archa?|mejor época para Kirguistán">
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
+      </div>
     </section>
 
   </main>
@@ -186,35 +212,6 @@
     </div>
     <p class="destino-footer-copy">© 2026 Borradodelmapa</p>
   </footer>
-
-  <!-- SALMA FAB -->
-  <button class="salma-fab" id="salma-fab" aria-label="Pregúntale a Salma">
-    <img class="salma-fab-avatar" src="/salma_ai_avatar.png" alt="Salma" width="32" height="32">
-    <span class="salma-fab-label">Salma</span>
-  </button>
-
-  <!-- SALMA CHAT POPUP (hidden) -->
-  <div class="salma-chat-popup" id="salma-chat-popup">
-    <div class="salma-chat-header">
-      <img class="salma-chat-avatar" src="/salma_ai_avatar.png" alt="Salma" width="24" height="24">
-      <span class="salma-chat-title">Salma</span>
-      <button class="salma-chat-close" id="salma-chat-close">×</button>
-    </div>
-    <div class="salma-chat-body" id="salma-chat-body">
-      <div class="salma-chat-bubble">¡Ey! Estás viendo Parque Nacional Ala-Archa. ¿En qué te ayudo?</div>
-      <div class="salma-chat-chips" id="salma-chat-chips">
-        <button class="salma-chip" data-msg="Consejos para viajar a Parque Nacional Ala-Archa">💡 Consejos Parque Nacional Ala-Archa</button>
-        <button class="salma-chip" data-msg="Itinerario 1 días en Parque Nacional Ala-Archa">📋 Itinerario 1 días</button>
-        <button class="salma-chip" data-msg="Presupuesto para viajar a Parque Nacional Ala-Archa">💰 Presupuesto</button>
-        <button class="salma-chip" data-msg="Buscar vuelos a Parque Nacional Ala-Archa">✈️ Vuelos</button>
-        <button class="salma-chip" data-msg="Hoteles en Parque Nacional Ala-Archa">🏨 Hoteles</button>
-      </div>
-    </div>
-    <div class="salma-chat-input-bar">
-      <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="" autocomplete="off" data-placeholders="¿qué ver en Parque Nacional Ala-Archa?|ruta por Kirguistán|¿dónde comer en Parque Nacional Ala-Archa?|Parque Nacional Ala-Archa en 1 días|presupuesto Kirguistán|¿es seguro viajar a Parque Nacional Ala-Archa?|mejor época para Kirguistán">
-      <button class="salma-chat-send" id="salma-chat-send">›</button>
-    </div>
-  </div>
 
   <script>
   window.DESTINO = {"nombre":"Parque Nacional Ala-Archa","pais":"Kirguistán","id":"ala-archa","code":"kg"};
