@@ -702,10 +702,13 @@ auth.onAuthStateChanged(async (user) => {
       localStorage.removeItem('_salmaRouteBackup');
     }
 
-    // Si venía de un intento de ver Mis Viajes sin login
-    if (window._afterLogin === 'viajes') {
+    // Tras login, ir al perfil
+    if (window._afterLogin) {
+      const dest = window._afterLogin;
       window._afterLogin = null;
-      showState('viajes');
+      showState(dest);
+    } else if (currentState === 'welcome') {
+      showState('profile');
     }
   } else {
     currentUser = null;
@@ -1107,8 +1110,12 @@ document.getElementById('register-pass')?.addEventListener('keydown', e => { if 
 
 // Logo → welcome
 document.getElementById('app-logo')?.addEventListener('click', () => {
-  if (typeof salma !== 'undefined') salma.reset();
-  showState('welcome');
+  if (currentUser) {
+    showState('profile');
+  } else {
+    if (typeof salma !== 'undefined') salma.reset();
+    showState('welcome');
+  }
 });
 
 // ═══ MODAL COINS ═══
