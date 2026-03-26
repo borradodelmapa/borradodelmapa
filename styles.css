@@ -263,6 +263,13 @@ body {
   max-width:400px; width:100%; margin-top:8px;
   min-height:160px;
 }
+.welcome-chips.chips-loaded {
+  animation:chipsFadeIn .6s ease-out;
+}
+@keyframes chipsFadeIn {
+  0% { opacity:0; transform:translateY(8px); }
+  100% { opacity:1; transform:translateY(0); }
+}
 .chip {
   font-family:var(--font-body); font-size:15px; font-weight:500;
   padding:14px 20px; border-radius:12px; width:100%; max-width:360px;

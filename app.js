@@ -169,6 +169,7 @@ async function renderWelcome() {
           chipsHtml += `<div class="chip chip-saved" data-doc-id="${doc.id}">${escapeHTML(d.nombre || 'Mi ruta')}</div>`;
         });
         chipsEl.innerHTML = chipsHtml;
+        chipsEl.classList.add('chips-loaded');
         loaded = true;
 
         chipsEl.querySelectorAll('.chip-saved').forEach(chip => {
@@ -198,6 +199,7 @@ async function renderWelcome() {
           chipsHtml += `<div class="chip chip-featured" data-slug="${doc.id}">${escapeHTML(d.nombre || 'Ruta')}</div>`;
         });
         chipsEl.innerHTML = chipsHtml;
+        chipsEl.classList.add('chips-loaded');
 
         chipsEl.querySelectorAll('.chip-featured').forEach(chip => {
           chip.addEventListener('click', () => {
