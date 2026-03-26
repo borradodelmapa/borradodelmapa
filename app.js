@@ -95,18 +95,18 @@ function handleAvatarClick() {
 async function renderWelcome() {
   // Chips fallback — se muestran inmediatamente, Firestore actualiza después
   const defaultChips = `
+    <div class="chip" data-msg="3 días en Lisboa sola">Mi primer viaje sola</div>
     <div class="chip" data-msg="Vietnam 15 días mochilero">Vietnam 15 días</div>
-    <div class="chip" data-msg="Andalucía 7 días en familia">Andalucía en familia</div>
-    <div class="chip" data-msg="Tailandia 10 días mochilero">Tailandia mochilero</div>`;
+    <div class="chip" data-msg="Me han robado el pasaporte en el extranjero">He perdido el pasaporte</div>`;
 
   $content.innerHTML = `
     <div class="welcome-hero fade-in">
       <div class="welcome-bg"></div>
       <div class="welcome-cloud"></div>
       <div class="welcome-content">
-        <div class="welcome-label">SALMA · AI TRAVEL COPILOT</div>
-        <h1 class="welcome-title">Tu próximo<br>viaje empieza<br><em>aquí</em></h1>
-        <div class="welcome-claim">Escribe destino + días y sal con ruta lista</div>
+        <div class="welcome-label">SALMA · TU COMPAÑERA DE VIAJE</div>
+        <h1 class="welcome-title">Viaja con alguien<br>que sabe lo<br><em>que hace</em></h1>
+        <div class="welcome-claim">Te resuelve antes, durante y después. Como viajar con alguien que ya ha estado ahí.</div>
         <div class="welcome-input-wrap">
           <div class="input-row">
             <textarea class="welcome-input" id="welcome-input" placeholder="Vietnam 10 días en moto" rows="1"></textarea>
@@ -119,7 +119,7 @@ async function renderWelcome() {
               </svg>
             </button>
           </div>
-          <button class="welcome-send" id="welcome-send">Planear viaje ›</button>
+          <button class="welcome-send" id="welcome-send">Habla con Salma ›</button>
         </div>
         <div class="welcome-spacer"></div>
         <div class="welcome-chips" id="welcome-chips">
@@ -154,15 +154,15 @@ async function renderWelcome() {
   if (wInput) {
     const ejemplos = [
       'Vietnam 10 días en moto',
-      '3 días en Ronda con niños',
-      'Andalucía 7 días en familia',
+      'Estoy en Bangkok sin hotel',
+      '3 días en Lisboa sola',
+      'No sé qué vacunas necesito para Nepal',
       'Tailandia 15 días mochilero',
-      'Ruta por los pueblos blancos',
+      'Me han robado la cartera en Roma',
       'Japón 2 semanas primer viaje',
-      'Transpirenaica en camper',
-      'Costa Amalfitana 4 días en coche',
+      'No hablo tailandés y necesito un médico',
       'Marruecos 5 días desde Tánger',
-      'Islandia Ring Road 10 días'
+      'Avería en carretera en Turquía'
     ];
     let idx = 0;
     window._placeholderInterval = setInterval(() => {
