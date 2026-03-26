@@ -82,7 +82,7 @@ body {
 /* ── App content (scroll entre header e input) ── */
 .app-content {
   padding-top:56px;
-  padding-bottom:140px;
+  padding-bottom:180px;
   min-height:0;
   overflow-y:auto;
   scrollbar-width:none;
@@ -169,11 +169,35 @@ body {
 .welcome-bg {
   position:absolute; inset:0; z-index:0;
   background-image:url('mapa.webp');
-  background-position:center; background-size:cover; opacity:.5;
+  background-position:center; background-size:cover;
+  opacity:0; animation:mapFadeIn 1.5s ease-out forwards, heartbeat 2s ease-in-out 2s 5;
+}
+@keyframes mapFadeIn {
+  0% { opacity:0; }
+  100% { opacity:.5; }
+}
+@keyframes heartbeat {
+  0%,100% { transform:scale(1); }
+  15% { transform:scale(1.012); }
+  30% { transform:scale(1); }
+  45% { transform:scale(1.008); }
 }
 .welcome-bg::after {
-  content:''; position:absolute; inset:0;
+  content:''; position:absolute; inset:0; z-index:0;
   background:radial-gradient(ellipse at center, transparent 0%, var(--negro) 75%);
+}
+.welcome-cloud {
+  position:absolute; top:15%; left:-50%; width:50%; height:40%;
+  background:radial-gradient(ellipse at center, rgba(255,255,255,.25) 0%, rgba(255,255,255,.10) 40%, transparent 70%);
+  filter:blur(60px);
+  animation:cloud-drift 11s ease-in-out forwards;
+  z-index:2; pointer-events:none;
+}
+@keyframes cloud-drift {
+  0% { transform:translateX(0); opacity:0; }
+  10% { opacity:1; }
+  80% { opacity:.3; }
+  100% { transform:translateX(400%); opacity:0; }
 }
 .welcome-content { position:relative; z-index:1; }
 .welcome-label {
@@ -237,15 +261,24 @@ body {
 .welcome-chips {
   display:flex; flex-direction:column; gap:10px; align-items:center;
   max-width:400px; width:100%; margin-top:8px;
+  min-height:200px;
+}
+.welcome-chips.chips-loaded {
+  animation:chipsFadeIn .6s ease-out;
+}
+@keyframes chipsFadeIn {
+  0% { opacity:0; transform:translateY(8px); }
+  100% { opacity:1; transform:translateY(0); }
 }
 .chip {
   font-family:var(--font-body); font-size:15px; font-weight:500;
   padding:14px 20px; border-radius:12px; width:100%; max-width:360px;
   background:rgba(212,160,23,.06); border:1px solid var(--linea);
   color:var(--crema); cursor:pointer; transition:all .2s;
-  display:flex; align-items:center; justify-content:space-between;
+  display:flex; align-items:center; justify-content:space-between; text-align:left;
 }
 .chip::after { content:'›'; font-size:20px; color:var(--dorado); opacity:.6; }
+.chip-ghost { visibility:hidden; }
 .chip:hover { background:rgba(212,160,23,.15); border-color:var(--dorado); }
 
 /* ═══ STATE 2: CHAT + GUIDE ═══ */
@@ -1124,4 +1157,153 @@ body {
     color:#999;
     font-family:var(--font-tight);
   }
+}
+
+/* ═══ COPILOTO — Tarjeta info país ═══ */
+.copilot-card {
+  margin:0 auto 16px; max-width:640px;
+  background:rgba(212,160,23,.06); border:1px solid rgba(212,160,23,.15);
+  border-radius:14px; overflow:hidden;
+}
+.copilot-header {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:12px 16px; cursor:pointer; user-select:none;
+}
+.copilot-title {
+  font-family:var(--font-mono); font-size:12px; font-weight:600;
+  letter-spacing:.12em; color:var(--dorado);
+}
+.copilot-toggle { color:var(--dorado); font-size:14px; transition:transform .2s; }
+.copilot-body { display:none; padding:0 16px 14px; }
+.copilot-body.copilot-open { display:block; }
+.copilot-body.copilot-open + .copilot-header .copilot-toggle,
+.copilot-open ~ .copilot-header .copilot-toggle { transform:rotate(90deg); }
+.copilot-section {
+  font-size:13px; line-height:1.6; color:rgba(244,239,230,.75);
+  margin-bottom:10px; padding-bottom:8px;
+  border-bottom:1px solid rgba(244,239,230,.06);
+}
+.copilot-section:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+.copilot-section strong { color:rgba(244,239,230,.9); display:block; margin-bottom:4px; }
+.copilot-section small { font-size:12px; color:rgba(244,239,230,.6); }
+.copilot-section em { color:rgba(244,239,230,.45); }
+.copilot-phrases {
+  display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;
+}
+.copilot-phrase {
+  background:rgba(255,255,255,.04); border-radius:8px; padding:4px 10px;
+  font-size:12px; color:rgba(244,239,230,.7);
+}
+.copilot-phrase b { color:var(--dorado); font-weight:600; margin-right:4px; }
+
+/* ═══ BOTTOM BAR ═══ */
+.app-bottom-bar {
+  position:fixed; bottom:0; left:0; right:0; z-index:900;
+  display:flex; justify-content:space-around; align-items:center;
+  background:rgba(18,18,16,.95); backdrop-filter:blur(12px);
+  border-top:1px solid rgba(244,239,230,.08);
+  padding:6px 0 env(safe-area-inset-bottom, 6px);
+  height:56px;
+}
+.bottom-tab {
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+  background:none; border:none; cursor:pointer;
+  color:rgba(244,239,230,.4); font-size:10px; font-family:var(--font-mono);
+  letter-spacing:.05em; padding:4px 16px; transition:color .2s;
+}
+.bottom-tab svg { stroke:currentColor; }
+.bottom-tab-active { color:var(--dorado); }
+.bottom-tab:hover { color:rgba(244,239,230,.7); }
+.bottom-tab-active:hover { color:var(--dorado); }
+
+/* ═══ PERFIL DE USUARIO ═══ */
+.profile-area {
+  max-width:480px; margin:0 auto; padding:24px 16px 40px;
+}
+.profile-header {
+  display:flex; align-items:center; gap:16px;
+  padding:24px 0 20px; margin-bottom:12px;
+  border-bottom:1px solid rgba(244,239,230,.06);
+}
+.profile-avatar {
+  width:60px; height:60px; border-radius:50%;
+  background:var(--dorado); color:var(--negro);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-tight); font-size:26px; font-weight:700;
+  flex-shrink:0;
+  box-shadow:0 0 0 3px rgba(212,160,23,.2);
+}
+.profile-info { flex:1; min-width:0; }
+.profile-name {
+  font-family:var(--font-tight); font-size:22px; font-weight:700;
+  color:var(--blanco); line-height:1.2;
+}
+.profile-stats {
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.05em;
+  color:var(--dorado); margin-top:6px;
+}
+
+.profile-sections { margin-bottom:28px; }
+.profile-section {
+  display:flex; align-items:center; gap:14px;
+  padding:15px 18px; border-radius:14px;
+  background:rgba(255,255,255,.025); margin-bottom:8px;
+  cursor:pointer; transition:all .2s;
+  border:1px solid transparent;
+}
+.profile-section:hover {
+  background:rgba(212,160,23,.06);
+  border-color:rgba(212,160,23,.12);
+}
+.profile-section:active { transform:scale(.985); }
+.profile-section-icon {
+  width:32px; height:32px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px; flex-shrink:0;
+  background:rgba(255,255,255,.04);
+  filter:grayscale(1) brightness(.6);
+  transition:filter .2s;
+}
+.profile-section:hover .profile-section-icon {
+  filter:grayscale(0) brightness(1);
+}
+.profile-section-label {
+  flex:1; font-size:15px; color:rgba(244,239,230,.75); font-weight:500;
+  transition:color .2s;
+}
+.profile-section:hover .profile-section-label { color:var(--crema); }
+.profile-section-arrow {
+  font-size:18px; color:rgba(244,239,230,.2);
+  transition:color .2s, transform .2s;
+}
+.profile-section:hover .profile-section-arrow {
+  color:var(--dorado); transform:translateX(2px);
+}
+.profile-section-badge {
+  font-family:var(--font-mono); font-size:9px; letter-spacing:.1em;
+  text-transform:uppercase; color:rgba(244,239,230,.25);
+  background:rgba(255,255,255,.03); padding:4px 10px; border-radius:8px;
+  border:1px solid rgba(244,239,230,.04);
+}
+.profile-section-locked {
+  cursor:default; opacity:.45;
+}
+.profile-section-locked:hover {
+  background:rgba(255,255,255,.025); border-color:transparent;
+}
+.profile-section-locked:hover .profile-section-icon { filter:grayscale(1) brightness(.6); }
+.profile-section-locked:hover .profile-section-label { color:rgba(244,239,230,.75); }
+.profile-section-locked:active { transform:none; }
+.profile-section-logout {
+  border-top:1px solid rgba(244,239,230,.06);
+  margin-top:12px; padding-top:18px;
+}
+.profile-section-logout .profile-section-label { color:rgba(244,239,230,.4); }
+.profile-section-logout:hover .profile-section-label { color:rgba(239,68,68,.8); }
+
+.profile-viajes { margin-top:12px; }
+.profile-viajes-header {
+  font-family:var(--font-mono); font-size:11px; font-weight:600;
+  letter-spacing:.18em; color:var(--dorado); margin-bottom:14px;
+  padding-bottom:8px; border-bottom:1px solid rgba(212,160,23,.1);
 }

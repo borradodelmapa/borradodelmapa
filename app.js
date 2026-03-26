@@ -10,7 +10,7 @@ const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 // Estado global
 let currentUser = null;
-let currentState = 'welcome'; // 'welcome' | 'chat' | 'viajes'
+let currentState = 'welcome'; // 'welcome' | 'chat' | 'viajes' | 'profile'
 
 // ═══ DOM refs ═══
 const $content = document.getElementById('app-content');
@@ -30,8 +30,8 @@ function showState(state) {
   if (state === 'welcome') {
     renderWelcome();
     if (inputBar) inputBar.style.display = 'none';
-  } else if (state === 'viajes') {
-    loadUserGuides();
+  } else if (state === 'viajes' || state === 'profile') {
+    renderProfile();
     if (inputBar) inputBar.style.display = 'none';
   } else if (state === 'chat') {
     $input.placeholder = 'Escribe a Salma...';
@@ -40,38 +40,52 @@ function showState(state) {
 }
 
 function updateHeader() {
-  let html = '<button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?">?</button>';
-  if (currentUser) {
-    const coins = currentUser.coins_saldo || 0;
-    html += `<button class="coins-btn" id="btn-coins" title="Salma Coins"><span class="coins-icon-circle">S</span> ${coins}</button>`;
-    const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
-    html += `<div class="app-avatar" id="btn-avatar" title="Mis Viajes">${escapeHTML(initial)}</div>`;
-  } else {
-    html += `<div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>`;
+  // Header limpio — solo logo. Navegación en bottom bar.
+  $headerActions.innerHTML = '';
+  updateBottomBar();
+}
+
+function updateBottomBar() {
+  let bar = document.getElementById('app-bottom-bar');
+  if (!bar) {
+    bar = document.createElement('nav');
+    bar.id = 'app-bottom-bar';
+    bar.className = 'app-bottom-bar';
+    document.body.appendChild(bar);
   }
-  $headerActions.innerHTML = html;
 
-  const btnAvatar = document.getElementById('btn-avatar');
-  if (btnAvatar) btnAvatar.addEventListener('click', handleAvatarClick);
+  const isHome = currentState === 'welcome';
+  const isChat = currentState === 'chat';
+  const isProfile = currentState === 'profile' || currentState === 'viajes';
 
-  const btnCoins = document.getElementById('btn-coins');
-  if (btnCoins) btnCoins.addEventListener('click', openCoinsModal);
+  bar.innerHTML = `
+    <button class="bottom-tab ${isHome ? 'bottom-tab-active' : ''}" id="tab-home">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Chat</span>
+    </button>
+    <button class="bottom-tab ${isProfile ? 'bottom-tab-active' : ''}" id="tab-profile">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
+    </button>`;
 
-  const btnHelp = document.getElementById('btn-help');
-  if (btnHelp) btnHelp.addEventListener('click', () => {
-    document.getElementById('salma-info-overlay').style.display = 'flex';
+  document.getElementById('tab-home').addEventListener('click', () => showState('welcome'));
+  document.getElementById('tab-chat').addEventListener('click', () => {
+    if (currentState !== 'chat') {
+      if (typeof salma !== 'undefined') salma._initChat();
+    }
   });
+  document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
 }
 
 function handleAvatarClick() {
   if (currentUser) {
-    if (currentState === 'viajes') {
-      if (confirm('¿Cerrar sesión?')) logout();
-    } else {
-      showState('viajes');
-    }
+    showState('profile');
   } else {
-    window._afterLogin = 'viajes';
+    window._afterLogin = 'profile';
     openModal('login');
   }
 }
@@ -79,15 +93,20 @@ function handleAvatarClick() {
 // ═══ WELCOME (estado 1) ═══
 
 async function renderWelcome() {
-  const defaultChips = `<div class="welcome-chips-loading"></div>`;
+  // Chips fallback — se muestran inmediatamente, Firestore actualiza después
+  const defaultChips = `
+    <div class="chip" data-msg="3 días en Lisboa sola">Mi primer viaje sola</div>
+    <div class="chip" data-msg="Vietnam 15 días mochilero">Vietnam 15 días</div>
+    <div class="chip" data-msg="Me han robado el pasaporte en el extranjero">He perdido el pasaporte</div>`;
 
   $content.innerHTML = `
     <div class="welcome-hero fade-in">
       <div class="welcome-bg"></div>
+      <div class="welcome-cloud"></div>
       <div class="welcome-content">
-        <div class="welcome-label">SALMA · AI TRAVEL COPILOT</div>
-        <h1 class="welcome-title">Tu próximo<br>viaje empieza<br><em>aquí</em></h1>
-        <div class="welcome-claim">Escribe destino + días y sal con ruta lista</div>
+        <div class="welcome-label">SALMA · TU COMPAÑERA DE VIAJE</div>
+        <h1 class="welcome-title">Viaja con alguien<br>que sabe lo<br><em>que hace</em></h1>
+        <div class="welcome-claim">Te resuelve antes, durante y después. Como viajar con alguien que ya ha estado ahí.</div>
         <div class="welcome-input-wrap">
           <div class="input-row">
             <textarea class="welcome-input" id="welcome-input" placeholder="Vietnam 10 días en moto" rows="1"></textarea>
@@ -100,7 +119,7 @@ async function renderWelcome() {
               </svg>
             </button>
           </div>
-          <button class="welcome-send" id="welcome-send">Planear viaje ›</button>
+          <button class="welcome-send" id="welcome-send">Habla con Salma ›</button>
         </div>
         <div class="welcome-spacer"></div>
         <div class="welcome-chips" id="welcome-chips">
@@ -135,15 +154,15 @@ async function renderWelcome() {
   if (wInput) {
     const ejemplos = [
       'Vietnam 10 días en moto',
-      '3 días en Ronda con niños',
-      'Andalucía 7 días en familia',
+      'Estoy en Bangkok sin hotel',
+      '3 días en Lisboa sola',
+      'No sé qué vacunas necesito para Nepal',
       'Tailandia 15 días mochilero',
-      'Ruta por los pueblos blancos',
+      'Me han robado la cartera en Roma',
       'Japón 2 semanas primer viaje',
-      'Transpirenaica en camper',
-      'Costa Amalfitana 4 días en coche',
+      'No hablo tailandés y necesito un médico',
       'Marruecos 5 días desde Tánger',
-      'Islandia Ring Road 10 días'
+      'Avería en carretera en Turquía'
     ];
     let idx = 0;
     window._placeholderInterval = setInterval(() => {
@@ -153,76 +172,218 @@ async function renderWelcome() {
     }, 3000);
   }
 
+  // Event listeners para chips fallback (inmediatos)
   const chipsEl = document.getElementById('welcome-chips');
-  let loaded = false;
+  if (chipsEl) {
+    chipsEl.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const msg = chip.dataset.msg;
+        if (msg && typeof salma !== 'undefined') salma.send(msg);
+      });
+    });
+  }
 
-  // Si hay usuario, intentar cargar sus últimas guías
-  if (currentUser && chipsEl) {
-    try {
+  // Actualizar chips con datos reales de Firestore (async, sin layout shift)
+  _loadChipsAsync(chipsEl);
+}
+
+async function _loadChipsAsync(chipsEl) {
+  if (!chipsEl) return;
+  try {
+    let chipsHtml = '';
+    let chipsType = 'none';
+
+    if (currentUser) {
       const snap = await db.collection('users').doc(currentUser.uid)
         .collection('maps').orderBy('createdAt', 'desc').limit(3).get();
       if (!snap.empty) {
-        let chipsHtml = '';
         snap.forEach(doc => {
           const d = doc.data();
           chipsHtml += `<div class="chip chip-saved" data-doc-id="${doc.id}">${escapeHTML(d.nombre || 'Mi ruta')}</div>`;
         });
-        chipsEl.innerHTML = chipsHtml;
-        loaded = true;
-
-        chipsEl.querySelectorAll('.chip-saved').forEach(chip => {
-          chip.addEventListener('click', async () => {
-            try {
-              const guideDoc = await db.collection('users').doc(currentUser.uid)
-                .collection('maps').doc(chip.dataset.docId).get();
-              if (guideDoc.exists && typeof salma !== 'undefined') {
-                salma.cargarGuia(chip.dataset.docId, guideDoc.data());
-              }
-            } catch (_) {}
-          });
-        });
+        chipsType = 'saved';
       }
-    } catch (_) {}
-  }
-
-  // Si no hay guías del usuario, cargar guías destacadas (featured)
-  if (!loaded && chipsEl) {
-    try {
+    }
+    if (!chipsHtml) {
       const snap = await db.collection('public_guides')
         .where('featured', '==', true).limit(3).get();
       if (!snap.empty) {
-        let chipsHtml = '';
         snap.forEach(doc => {
           const d = doc.data();
           chipsHtml += `<div class="chip chip-featured" data-slug="${doc.id}">${escapeHTML(d.nombre || 'Ruta')}</div>`;
         });
-        chipsEl.innerHTML = chipsHtml;
-
-        chipsEl.querySelectorAll('.chip-featured').forEach(chip => {
-          chip.addEventListener('click', () => {
-            window.location.href = '/' + chip.dataset.slug;
-          });
-        });
-      } else {
-        // Fallback si no hay featured todavía
-        chipsEl.innerHTML = `
-          <div class="chip" data-msg="Vietnam 15 días mochilero">Vietnam 15 días</div>
-          <div class="chip" data-msg="Andalucía 7 días en familia">Andalucía en familia</div>
-          <div class="chip" data-msg="Tailandia 10 días mochilero">Tailandia mochilero</div>`;
-        chipsEl.querySelectorAll('.chip').forEach(chip => {
-          chip.addEventListener('click', () => {
-            const msg = chip.dataset.msg;
-            if (msg && typeof salma !== 'undefined') salma.send(msg);
-          });
-        });
+        chipsType = 'featured';
       }
-    } catch (_) {
-      chipsEl.innerHTML = '';
     }
+
+    if (!chipsHtml) return; // Mantener fallback
+
+    // Reemplazar contenido sin cambiar tamaño
+    chipsEl.innerHTML = chipsHtml;
+
+    if (chipsType === 'saved') {
+      chipsEl.querySelectorAll('.chip-saved').forEach(chip => {
+        chip.addEventListener('click', async () => {
+          try {
+            const guideDoc = await db.collection('users').doc(currentUser.uid)
+              .collection('maps').doc(chip.dataset.docId).get();
+            if (guideDoc.exists && typeof salma !== 'undefined') {
+              salma.cargarGuia(chip.dataset.docId, guideDoc.data());
+            }
+          } catch (_) {}
+        });
+      });
+    } else if (chipsType === 'featured') {
+      chipsEl.querySelectorAll('.chip-featured').forEach(chip => {
+        chip.addEventListener('click', () => {
+          window.location.href = '/' + chip.dataset.slug;
+        });
+      });
+    }
+  } catch (_) {}
+}
+
+// ═══ PERFIL DE USUARIO ═══
+
+async function renderProfile() {
+  if (!currentUser) { showState('welcome'); return; }
+
+  const coins = currentUser.coins_saldo || 0;
+  const rutas = currentUser.rutas_gratis_usadas || 0;
+  const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
+
+  $content.innerHTML = `
+    <div class="profile-area fade-in">
+      <div class="profile-header">
+        <div class="profile-avatar">${escapeHTML(initial)}</div>
+        <div class="profile-info">
+          <div class="profile-name">${escapeHTML(currentUser.name || 'Viajero')}</div>
+          <div class="profile-stats">${coins} Salma Coins · ${3 - rutas} rutas gratis</div>
+        </div>
+      </div>
+
+      <div class="profile-sections">
+        <div class="profile-section" id="prof-coins">
+          <span class="profile-section-icon">S</span>
+          <span class="profile-section-label">Salma Coins</span>
+          <span class="profile-section-arrow">›</span>
+        </div>
+
+        <div class="profile-section profile-section-locked">
+          <span class="profile-section-icon">📓</span>
+          <span class="profile-section-label">Cuaderno de viaje</span>
+          <span class="profile-section-badge">pronto</span>
+        </div>
+
+        <div class="profile-section profile-section-locked">
+          <span class="profile-section-icon">📝</span>
+          <span class="profile-section-label">Notas de Salma</span>
+          <span class="profile-section-badge">pronto</span>
+        </div>
+
+        <div class="profile-section profile-section-locked">
+          <span class="profile-section-icon">⚙️</span>
+          <span class="profile-section-label">Preferencias</span>
+          <span class="profile-section-badge">pronto</span>
+        </div>
+
+        <div class="profile-section" id="prof-help">
+          <span class="profile-section-icon">?</span>
+          <span class="profile-section-label">Ayuda</span>
+          <span class="profile-section-arrow">›</span>
+        </div>
+
+        <div class="profile-section profile-section-logout" id="prof-logout">
+          <span class="profile-section-icon">🚪</span>
+          <span class="profile-section-label">Cerrar sesión</span>
+        </div>
+      </div>
+
+      <div class="profile-viajes">
+        <div class="profile-viajes-header">MIS VIAJES</div>
+        <div class="viajes-grid" id="viajes-grid">
+          <div class="viaje-card viaje-card-new" id="btn-new-guide">
+            <div class="viaje-card-new-icon">+</div>
+            <div class="viaje-card-new-txt">NUEVA GUÍA</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  // Event listeners
+  document.getElementById('prof-coins').addEventListener('click', openCoinsModal);
+  document.getElementById('prof-help').addEventListener('click', () => {
+    document.getElementById('salma-info-overlay').style.display = 'flex';
+  });
+  document.getElementById('prof-logout').addEventListener('click', () => {
+    if (confirm('¿Cerrar sesión?')) logout();
+  });
+  document.getElementById('btn-new-guide').addEventListener('click', () => {
+    if (typeof salma !== 'undefined') {
+      salma.reset();
+      salma._initChat();
+    }
+  });
+
+  // Cargar guías del usuario
+  _loadProfileGuides();
+}
+
+async function _loadProfileGuides() {
+  if (!currentUser) return;
+  try {
+    const snap = await db.collection('users').doc(currentUser.uid)
+      .collection('maps').orderBy('createdAt', 'desc').get();
+    const grid = document.getElementById('viajes-grid');
+    if (!grid) return;
+
+    const allGuides = [];
+    snap.forEach(doc => allGuides.push({ id: doc.id, data: doc.data() }));
+
+    for (const g of allGuides) {
+      grid.appendChild(_createGuideCard(g, g.data));
+    }
+  } catch (e) {
+    console.error('Error cargando guías:', e);
   }
 }
 
-// ═══ MIS VIAJES (estado 3) ═══
+function _createGuideCard(doc, d) {
+  const card = document.createElement('div');
+  card.className = 'viaje-card';
+  const photo = d.cover_image || destPhoto(d.destino || d.country || d.nombre || '');
+  card.innerHTML = `
+    <div class="viaje-card-img" style="background-image:url('${escapeHTML(photo)}')"></div>
+    <div class="viaje-card-body">
+      <div class="viaje-card-title">${escapeHTML(d.nombre || 'Mi ruta')}</div>
+      <div class="viaje-card-meta">${d.num_dias || d.dias || '?'} DÍAS · ${escapeHTML((d.destino || '').toUpperCase())}</div>
+    </div>
+    <button class="viaje-card-delete" data-doc-id="${doc.id}" title="Eliminar guía">✕</button>`;
+  card.addEventListener('click', (e) => {
+    if (e.target.closest('.viaje-card-delete')) return;
+    if (d.source === 'kv-nivel2' && d.slug) {
+      window.location.href = '/destinos/' + d.slug + '.html';
+      return;
+    }
+    if (typeof salma !== 'undefined') salma.cargarGuia(doc.id, d);
+  });
+  card.querySelector('.viaje-card-delete').addEventListener('click', async (e) => {
+    e.stopPropagation();
+    if (!confirm('¿Eliminar esta guía?')) return;
+    try {
+      const slug = d.slug;
+      if (slug) await db.collection('public_guides').doc(slug).delete();
+      await db.collection('users').doc(currentUser.uid).collection('maps').doc(doc.id).delete();
+      card.remove();
+      showToast('Guía eliminada');
+    } catch (err) {
+      showToast('Error al eliminar');
+    }
+  });
+  return card;
+}
+
+// ═══ MIS VIAJES (legacy — redirige a perfil) ═══
 
 async function loadUserGuides() {
   if (!currentUser) { showState('welcome'); return; }
@@ -503,10 +664,13 @@ auth.onAuthStateChanged(async (user) => {
       localStorage.removeItem('_salmaRouteBackup');
     }
 
-    // Si venía de un intento de ver Mis Viajes sin login
-    if (window._afterLogin === 'viajes') {
+    // Tras login, ir al perfil
+    if (window._afterLogin) {
+      const dest = window._afterLogin;
       window._afterLogin = null;
-      showState('viajes');
+      showState(dest);
+    } else if (currentState === 'welcome') {
+      showState('profile');
     }
   } else {
     currentUser = null;
@@ -908,8 +1072,12 @@ document.getElementById('register-pass')?.addEventListener('keydown', e => { if 
 
 // Logo → welcome
 document.getElementById('app-logo')?.addEventListener('click', () => {
-  if (typeof salma !== 'undefined') salma.reset();
-  showState('welcome');
+  if (currentUser) {
+    showState('profile');
+  } else {
+    if (typeof salma !== 'undefined') salma.reset();
+    showState('welcome');
+  }
 });
 
 // ═══ MODAL COINS ═══
@@ -945,17 +1113,9 @@ function openCoinsModal() {
       <div id="stripe-card-wrapper" class="stripe-card-wrapper">
         <div id="stripe-card-element" class="stripe-card-element"></div>
         <div id="stripe-card-errors" class="stripe-card-errors"></div>
-        <div class="stripe-test-badge">MODO PRUEBA · no se cobrará</div>
-      </div>
-      <div id="stripe-loading" class="stripe-loading" style="display:none">
-        <div class="stripe-spinner"></div>
-        <span>Procesando pago...</span>
-      </div>
-      <div id="stripe-success" class="stripe-success" style="display:none">
-        ✓ ¡25 coins añadidos a tu cuenta!
       </div>
 
-      <!-- Pack -->
+      <!-- Pack + botón pagar -->
       <div class="coins-modal-plan">
         <div class="coins-modal-plan-row">
           <div>
@@ -964,6 +1124,14 @@ function openCoinsModal() {
           </div>
           <button class="coins-modal-pay" id="coins-pay-btn" disabled>9,99€</button>
         </div>
+        <div class="stripe-test-badge">MODO PRUEBA · no se cobrará</div>
+      </div>
+      <div id="stripe-loading" class="stripe-loading" style="display:none">
+        <div class="stripe-spinner"></div>
+        <span>Procesando pago...</span>
+      </div>
+      <div id="stripe-success" class="stripe-success" style="display:none">
+        ✓ ¡25 coins añadidos a tu cuenta!
       </div>
 
       <!-- Acordeón: qué puedes hacer -->
@@ -1023,6 +1191,7 @@ function initStripeCard(overlay) {
   const stripe = Stripe(STRIPE_PK);
   const elements = stripe.elements();
   const card = elements.create('card', {
+    hidePostalCode: true,
     style: {
       base: {
         color: '#f5f0e8',
@@ -1071,8 +1240,16 @@ function initStripeCard(overlay) {
       }
 
       if (paymentIntent.status === 'succeeded') {
-        // 3. Actualizar saldo local
-        currentUser.coins_saldo = (currentUser.coins_saldo || 0) + 25;
+        // 3. Actualizar saldo en Firestore + local
+        const newSaldo = (currentUser.coins_saldo || 0) + 25;
+        try {
+          await db.collection('users').doc(currentUser.uid).update({
+            coins_saldo: newSaldo
+          });
+        } catch (e) {
+          console.error('Error actualizando coins en Firestore:', e);
+        }
+        currentUser.coins_saldo = newSaldo;
         updateHeader();
 
         // Mostrar éxito
@@ -1126,8 +1303,8 @@ function formatMessage(str) {
   });
 
   let html = escapeHTML(raw);
-  // URLs → enlaces clicables
-  html = html.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+  // URLs → enlaces clicables (onclick fuerza apertura externa en PWA)
+  html = html.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href);return false;">$1</a>');
   // Teléfonos internacionales: +XX XXX XXX XXX (con espacios, guiones o puntos)
   html = html.replace(/(\+\d{1,3}[ .-]?\d{1,4}[ .-]?\d{2,4}[ .-]?\d{2,4}[ .-]?\d{0,4})/g, (match) => {
     const clean = match.replace(/[\s.-]/g, '').trim();
