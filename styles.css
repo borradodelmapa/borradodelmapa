@@ -275,7 +275,7 @@ body {
   padding:14px 20px; border-radius:12px; width:100%; max-width:360px;
   background:rgba(212,160,23,.06); border:1px solid var(--linea);
   color:var(--crema); cursor:pointer; transition:all .2s;
-  display:flex; align-items:center; justify-content:space-between;
+  display:flex; align-items:center; justify-content:space-between; text-align:left;
 }
 .chip::after { content:'›'; font-size:20px; color:var(--dorado); opacity:.6; }
 .chip-ghost { visibility:hidden; }
