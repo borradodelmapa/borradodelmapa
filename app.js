@@ -1076,6 +1076,17 @@ function openCoinsModal() {
         </div>
       </div>
 
+      <!-- Pack -->
+      <div class="coins-modal-plan">
+        <div class="coins-modal-plan-row">
+          <div>
+            <div class="coins-modal-plan-name">Pack Viajero</div>
+            <div class="coins-modal-plan-note">25 coins · no caducan</div>
+          </div>
+          <button class="coins-modal-pay" id="coins-pay-btn" disabled>9,99€</button>
+        </div>
+      </div>
+
       <!-- Pago integrado -->
       <div id="stripe-card-wrapper" class="stripe-card-wrapper">
         <div id="stripe-card-element" class="stripe-card-element"></div>
@@ -1088,17 +1099,6 @@ function openCoinsModal() {
       </div>
       <div id="stripe-success" class="stripe-success" style="display:none">
         ✓ ¡25 coins añadidos a tu cuenta!
-      </div>
-
-      <!-- Pack -->
-      <div class="coins-modal-plan">
-        <div class="coins-modal-plan-row">
-          <div>
-            <div class="coins-modal-plan-name">Pack Viajero</div>
-            <div class="coins-modal-plan-note">25 coins · no caducan</div>
-          </div>
-          <button class="coins-modal-pay" id="coins-pay-btn" disabled>9,99€</button>
-        </div>
       </div>
 
       <!-- Acordeón: qué puedes hacer -->
