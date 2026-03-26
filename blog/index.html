@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Borrado del Mapa · Viaja con Salma</title>
+<meta name="description" content="Consejos reales para viajeros reales. Salma te cuenta cómo resolver los problemas que no salen en las guías.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Blog — Borrado del Mapa">
+<meta property="og:description" content="Consejos reales para viajeros reales. Problemas que no salen en las guías, resueltos.">
+<meta property="og:url" content="https://borradodelmapa.com/blog/">
+<meta property="og:image" content="https://borradodelmapa.com/og-image.jpg">
+<link rel="canonical" href="https://borradodelmapa.com/blog/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --negro: #050505;
+  --dorado: #d4a017;
+  --dorado2: #e0b84a;
+  --crema: #f5f0e8;
+  --blanco: #ffffff;
+  --gris: #111111;
+  --gris2: #1a1a1a;
+  --linea: rgba(212,160,23,.18);
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-tight: 'Inter Tight', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--negro);
+  color: var(--crema);
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
+
+/* Nav */
+.blog-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--linea);
+  max-width: 800px;
+  margin: 0 auto;
+}
+.blog-nav a {
+  color: var(--dorado);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+.blog-nav .logo {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 2px;
+  color: var(--dorado);
+}
+
+/* Header */
+.blog-header {
+  text-align: center;
+  padding: 60px 20px 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.blog-header h1 {
+  font-family: var(--font-display);
+  font-size: 48px;
+  letter-spacing: 3px;
+  color: var(--dorado);
+  margin-bottom: 12px;
+}
+.blog-header p {
+  font-size: 16px;
+  color: rgba(245,240,232,0.6);
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Articles grid */
+.articles {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.article-card {
+  display: block;
+  background: var(--gris2);
+  border-radius: 16px;
+  padding: 24px;
+  text-decoration: none;
+  color: var(--crema);
+  border: 1px solid var(--linea);
+  transition: border-color 0.3s, transform 0.2s;
+}
+.article-card:hover {
+  border-color: var(--dorado);
+  transform: translateY(-2px);
+}
+.article-card h2 {
+  font-family: var(--font-tight);
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--crema);
+}
+.article-card p {
+  font-size: 14px;
+  color: rgba(245,240,232,0.5);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.article-card .meta {
+  font-size: 12px;
+  color: var(--dorado);
+  opacity: 0.7;
+}
+
+/* CTA */
+.blog-cta {
+  text-align: center;
+  padding: 40px 20px 60px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.blog-cta p {
+  font-size: 15px;
+  color: rgba(245,240,232,0.5);
+  margin-bottom: 16px;
+}
+.blog-cta a {
+  display: inline-block;
+  background: var(--dorado);
+  color: var(--negro);
+  padding: 12px 28px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  transition: opacity 0.2s;
+}
+.blog-cta a:hover { opacity: 0.85; }
+
+/* Footer */
+.blog-footer {
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid var(--linea);
+  max-width: 800px;
+  margin: 0 auto;
+}
+.blog-footer a {
+  color: rgba(245,240,232,0.3);
+  text-decoration: none;
+  font-size: 12px;
+  margin: 0 10px;
+}
+.blog-footer a:hover { color: var(--dorado); }
+
+@media (max-width: 600px) {
+  .blog-header h1 { font-size: 36px; }
+  .article-card { padding: 18px; }
+  .article-card h2 { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="blog-nav">
+  <a href="/" class="logo">BORRADO DEL MAPA</a>
+  <a href="/">← Inicio</a>
+</nav>
+
+<header class="blog-header">
+  <h1>BLOG</h1>
+  <p>Problemas reales de viajeros reales. Resueltos por Salma.</p>
+</header>
+
+<main class="articles">
+
+  <a href="/blog/sin-hotel-de-noche" class="article-card">
+    <h2>Sin hotel de noche en un país que no conoces</h2>
+    <p>Son las 11 de la noche, no tienes dónde dormir y no hablas el idioma. Qué hacer paso a paso, sin dramas.</p>
+    <span class="meta">26 marzo 2026</span>
+  </a>
+
+  <a href="/blog/me-han-robado-pasaporte" class="article-card">
+    <h2>Me han robado el pasaporte en el extranjero</h2>
+    <p>Denuncia, embajada, salvoconducto. Todo lo que necesitas hacer en orden, sin perder la cabeza.</p>
+    <span class="meta">26 marzo 2026</span>
+  </a>
+
+  <a href="/blog/no-hablo-el-idioma" class="article-card">
+    <h2>No hablo el idioma y necesito que me entiendan</h2>
+    <p>5 frases que funcionan en cualquier país, apps offline y gestos universales que te sacan de cualquier apuro.</p>
+    <span class="meta">26 marzo 2026</span>
+  </a>
+
+  <a href="/blog/averia-en-carretera" class="article-card">
+    <h2>Avería en carretera en el extranjero</h2>
+    <p>Pinchazo, batería muerta o motor recalentado a 200 km de la ciudad más cercana. Paso a paso.</p>
+    <span class="meta">26 marzo 2026</span>
+  </a>
+
+</main>
+
+<section class="blog-cta">
+  <p>¿Prefieres que alguien te lo resuelva en el momento?</p>
+  <a href="/">Pregúntale a Salma</a>
+</section>
+
+<footer class="blog-footer">
+  <a href="/">Inicio</a>
+  <a href="/blog/">Blog</a>
+  <a href="/legal.html#aviso-legal">Aviso legal</a>
+  <a href="/legal.html#privacidad">Privacidad</a>
+</footer>
+
+</body>
+</html>
