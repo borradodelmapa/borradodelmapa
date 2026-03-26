@@ -293,8 +293,10 @@ async function renderProfile() {
     if (confirm('¿Cerrar sesión?')) logout();
   });
   document.getElementById('btn-new-guide').addEventListener('click', () => {
-    if (typeof salma !== 'undefined') salma.reset();
-    showState('welcome');
+    if (typeof salma !== 'undefined') {
+      salma.reset();
+      salma._initChat();
+    }
   });
 
   // Cargar guías del usuario
