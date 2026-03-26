@@ -380,7 +380,7 @@ const SALMA_TOOLS = [
   },
   {
     name: "buscar_restaurante",
-    description: "Busca restaurantes en TheFork (el mayor comparador de restaurantes en Europa y Asia) y Google Maps. Usa esta herramienta cuando el usuario pida restaurante, dónde comer, dónde cenar, o recomiende comida local. Devuelve enlaces a TheFork y Google Maps con la búsqueda precargada. REGLAS DE FORMATO: pon cada enlace SOLO en su propia línea, sin formato markdown.",
+    description: "Busca restaurantes reales cerca del usuario con Google Places (si tiene geolocalización) o genera enlaces de búsqueda. Usa esta herramienta cuando el usuario pida restaurante, dónde comer o dónde cenar. Si devuelve un array 'restaurantes', presenta cada uno con **nombre en negrita**, teléfono, dirección, rating y si está abierto. Si devuelve enlaces, ponlos en su propia línea sin markdown.",
     input_schema: {
       type: "object",
       properties: {
@@ -1514,15 +1514,51 @@ async function buscarCochesBooking(input, rapidApiKey) {
   }
 }
 
-function generarEnlaceRestaurante(input) {
-  const ciudadQuery = normalizeQuery(input.ciudad);
-  let searchTerms = input.ciudad;
+async function buscarRestaurante(input, placesKey, userCoords) {
+  let searchTerms = 'restaurante ' + input.ciudad;
   if (input.tipo_cocina) searchTerms += ' ' + input.tipo_cocina;
   if (input.zona) searchTerms += ' ' + input.zona;
 
+  // Si tenemos Google Places key y coordenadas, buscar restaurantes reales
+  if (placesKey && userCoords && userCoords.lat && userCoords.lng) {
+    try {
+      let url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchTerms)}&language=es&type=restaurant&location=${userCoords.lat},${userCoords.lng}&radius=1500&key=${placesKey}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data?.results?.length) {
+        const top = data.results.slice(0, 5);
+        const detailPromises = top.map(p => {
+          if (!p.place_id) return Promise.resolve(null);
+          return fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${p.place_id}&fields=name,formatted_phone_number,international_phone_number,formatted_address,rating,price_level,opening_hours&language=es&key=${placesKey}`)
+            .then(r => r.json()).catch(() => null);
+        });
+        const details = await Promise.all(detailPromises);
+        const restaurantes = top.map((p, i) => {
+          const d = details[i]?.result;
+          return {
+            nombre: d?.name || p.name,
+            telefono: d?.international_phone_number || d?.formatted_phone_number || '',
+            direccion: d?.formatted_address || p.formatted_address || '',
+            rating: (d?.rating || p.rating) ? `${d?.rating || p.rating}★` : '',
+            precio: p.price_level ? '€'.repeat(p.price_level) : '',
+            abierto: d?.opening_hours?.open_now != null ? (d.opening_hours.open_now ? 'Abierto ahora' : 'Cerrado ahora') : '',
+          };
+        }).filter(r => r.nombre);
+        if (restaurantes.length) {
+          return {
+            restaurantes,
+            ciudad: input.ciudad,
+            tipo_cocina: input.tipo_cocina || 'variada',
+            nota: 'Resultados reales de Google Places cerca de tu ubicación. Llama antes para confirmar disponibilidad.'
+          };
+        }
+      }
+    } catch (e) { /* fallback a enlaces */ }
+  }
+
+  // Fallback: solo enlaces
   const theforkUrl = `https://www.thefork.es/buscar?q=${normalizeQuery(searchTerms)}`;
   const googleMapsUrl = `https://www.google.com/maps/search/restaurantes+${normalizeQuery(searchTerms)}`;
-
   return {
     enlace_thefork: theforkUrl,
     enlace_google_maps: googleMapsUrl,
@@ -1537,7 +1573,7 @@ function generarEnlaceRestaurante(input) {
 // DISPATCHER DE HERRAMIENTAS — Ejecuta la tool que Claude pida
 // ═══════════════════════════════════════════════════════════════
 
-async function executeToolCall(toolName, toolInput, env) {
+async function executeToolCall(toolName, toolInput, env, userCoords) {
   switch (toolName) {
     case 'buscar_vuelos':
       return await buscarVuelosDuffel(toolInput, env.DUFFEL_ACCESS_TOKEN);
@@ -1546,7 +1582,7 @@ async function executeToolCall(toolName, toolInput, env) {
     case 'buscar_coche':
       return await buscarCochesBooking(toolInput, env.RAPIDAPI_KEY);
     case 'buscar_restaurante':
-      return generarEnlaceRestaurante(toolInput);
+      return await buscarRestaurante(toolInput, env.GOOGLE_PLACES_KEY, userCoords);
     case 'buscar_foto':
       return await buscarFotoLugar(toolInput, env.GOOGLE_PLACES_KEY);
     default:
@@ -2564,7 +2600,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           const toolResults = [];
           for (const block of result.contentBlocks) {
             if (block.type === 'tool_use') {
-              const toolResult = await executeToolCall(block.name, block.input, env);
+              const toolResult = await executeToolCall(block.name, block.input, env, userLocation);
               toolResults.push({
                 type: 'tool_result',
                 tool_use_id: block.id,
