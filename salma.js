@@ -34,6 +34,8 @@ const salma = {
           accuracy: Math.round(pos.coords.accuracy)
         };
         console.log('[Salma] Ubicación:', this._userLocation.lat, this._userLocation.lng, '±' + this._userLocation.accuracy + 'm');
+        // Activar copiloto cuando tenemos ubicación
+        if (!this._copilotCountry) this.initCopilot();
         // Si ya tenemos buena precisión (<500m), dejar de monitorizar para ahorrar batería
         if (pos.coords.accuracy < 500 && this._geoWatchId) {
           navigator.geolocation.clearWatch(this._geoWatchId);
@@ -573,6 +575,104 @@ const salma = {
     this._pendingRouteInfo = null;
   },
 
+  // ═══ COPILOTO — TARJETA INFO PAÍS ═══
+  _copilotCountry: null,
+  _copilotData: null,
+
+  async initCopilot() {
+    if (!this._userLocation) return;
+    try {
+      // Reverse geocoding con Nominatim (OpenStreetMap, gratuito)
+      const { lat, lng } = this._userLocation;
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=en&zoom=3`);
+      const geo = await res.json();
+      const countryCode = (geo.address?.country_code || '').toLowerCase();
+      if (!countryCode || countryCode === this._copilotCountry) return;
+
+      // Pedir info práctica del país al worker
+      const piRes = await fetch(window.SALMA_API + '/practical-info?country=' + countryCode);
+      if (!piRes.ok) return;
+      const piData = await piRes.json();
+      if (!piData.practical_info) return;
+
+      this._copilotCountry = countryCode;
+      this._copilotData = piData.practical_info;
+      console.log('[Salma] Copiloto activado:', geo.address?.country, countryCode);
+    } catch (e) {
+      console.log('[Salma] Copiloto: error obteniendo info', e.message);
+    }
+  },
+
+  showCopilotCard() {
+    const pi = this._copilotData;
+    if (!pi) return;
+
+    // No mostrar si ya existe
+    if (document.getElementById('copilot-card')) return;
+
+    const area = this._getChatArea();
+    if (!area) return;
+
+    let html = '<div id="copilot-card" class="copilot-card">';
+    html += '<div class="copilot-header" onclick="document.getElementById(\'copilot-body\').classList.toggle(\'copilot-open\')">';
+    html += '<span class="copilot-title">📍 Info práctica del país</span>';
+    html += '<span class="copilot-toggle">▸</span></div>';
+    html += '<div id="copilot-body" class="copilot-body">';
+
+    // Emergencias (siempre visible, es lo más urgente)
+    if (pi.emergencies) {
+      html += '<div class="copilot-section"><strong>🚨 Emergencias</strong><br>';
+      if (pi.emergencies.general_number) html += '<strong>' + pi.emergencies.general_number + '</strong><br>';
+      if (pi.emergencies.embassy) html += '<small>' + pi.emergencies.embassy + '</small>';
+      html += '</div>';
+    }
+
+    // Frases clave
+    if (pi.phrases && pi.phrases.list) {
+      html += '<div class="copilot-section"><strong>🗣️ ' + (pi.phrases.language || 'Frases') + '</strong>';
+      html += '<div class="copilot-phrases">';
+      for (const p of pi.phrases.list.slice(0, 6)) {
+        html += '<span class="copilot-phrase"><b>' + p.phrase + '</b> ' + p.meaning + '</span>';
+      }
+      html += '</div></div>';
+    }
+
+    // Apps
+    if (pi.useful_apps && pi.useful_apps.length) {
+      html += '<div class="copilot-section"><strong>📱 Apps</strong><br>';
+      html += '<small>' + pi.useful_apps.join('<br>') + '</small>';
+      html += '</div>';
+    }
+
+    // Conectividad
+    if (pi.connectivity) {
+      html += '<div class="copilot-section"><strong>📶 Conectividad</strong><br>';
+      if (pi.connectivity.sim_local) html += '<small>' + pi.connectivity.sim_local + '</small>';
+      html += '</div>';
+    }
+
+    // Salud
+    if (pi.health) {
+      html += '<div class="copilot-section"><strong>🏥 Salud</strong><br>';
+      if (pi.health.hospitals) html += '<small>' + pi.health.hospitals + '</small><br>';
+      if (pi.health.water) html += '<small><em>' + pi.health.water + '</em></small>';
+      html += '</div>';
+    }
+
+    // Presupuesto
+    if (pi.budget) {
+      html += '<div class="copilot-section"><strong>💰 Presupuesto</strong><br>';
+      if (pi.budget.total_estimated) html += '<small>' + pi.budget.total_estimated + '</small><br>';
+      if (pi.budget.exchange_tip) html += '<small><em>' + pi.budget.exchange_tip + '</em></small>';
+      html += '</div>';
+    }
+
+    html += '</div></div>';
+
+    // Insertar al principio del chat
+    area.insertAdjacentHTML('afterbegin', html);
+  },
+
   // ═══ CHAT DOM ═══
 
   _initChat(skipWelcome) {
@@ -583,6 +683,8 @@ const salma = {
     if (!document.getElementById('chat-area')) {
       $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
     }
+    // Mostrar tarjeta copiloto si hay datos del país
+    if (this._copilotData) this.showCopilotCard();
   },
 
   _getChatArea() {

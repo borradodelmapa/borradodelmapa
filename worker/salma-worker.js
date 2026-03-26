@@ -2055,6 +2055,24 @@ export default {
       }
     }
 
+    // ─── ENDPOINT /practical-info (Nivel 2.5 — info práctica por país) ───
+    if (request.method === 'GET' && url.pathname === '/practical-info') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      const country = url.searchParams.get('country');
+      if (!country || !env.SALMA_KB) {
+        return new Response(JSON.stringify({ error: 'Missing country or KV' }), { status: 400, headers: corsH });
+      }
+      try {
+        const piJson = await env.SALMA_KB.get('dest:' + country.toLowerCase() + ':practical');
+        if (!piJson) {
+          return new Response(JSON.stringify({ error: 'Not found' }), { status: 404, headers: corsH });
+        }
+        return new Response(JSON.stringify({ country, practical_info: JSON.parse(piJson) }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /enrich (Pasada 2 — Haiku rellena campos) ───
     if (request.method === 'POST' && url.pathname === '/enrich') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
@@ -2190,12 +2208,41 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         const practicalResult = allResults.find(r => r.type === 'practical');
         const practicalData = parseJSON(practicalResult?.text);
 
+        // KV nivel 2.5: info práctica verificada del país (frases, apps, emergencias, kit)
+        let kvPracticalInfo = null;
+        if (env.SALMA_KB && route.country) {
+          try {
+            const countryNorm = route.country.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+            const countryCode = await env.SALMA_KB.get('kw:' + countryNorm);
+            if (countryCode) {
+              const piJson = await env.SALMA_KB.get('dest:' + countryCode + ':practical');
+              if (piJson) kvPracticalInfo = JSON.parse(piJson);
+            }
+          } catch (e) { /* KV fallo silencioso */ }
+        }
+
+        // Mergear: KV 2.5 tiene prioridad (datos verificados), Haiku rellena lo que falte
+        const haikuPI = practicalData?.practical_info || {};
+        const kvPI = kvPracticalInfo || {};
+        const mergedPracticalInfo = {
+          budget: kvPI.budget || haikuPI.budget || null,
+          documents: kvPI.documents || haikuPI.documents || null,
+          kit: kvPI.kit || haikuPI.kit || null,
+          useful_apps: kvPI.useful_apps || haikuPI.useful_apps || null,
+          phrases: kvPI.phrases || haikuPI.phrases || null,
+          emergencies: kvPI.emergencies || haikuPI.emergencies || null,
+          connectivity: kvPI.connectivity || haikuPI.connectivity || null,
+          health: kvPI.health || haikuPI.health || null,
+        };
+        // Si todo es null, no incluir
+        const hasPractical = Object.values(mergedPracticalInfo).some(v => v !== null);
+
         const enrichedRoute = {
           ...route,
           stops: enrichedStops,
           maps_links: route.maps_links || [],
           pre_departure: practicalData?.pre_departure || null,
-          practical_info: practicalData?.practical_info || null,
+          practical_info: hasPractical ? mergedPracticalInfo : null,
         };
 
         return new Response(JSON.stringify({ route: enrichedRoute }), { headers: corsH });

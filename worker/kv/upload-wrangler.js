@@ -3,14 +3,16 @@
  * Genera un archivo JSON bulk y lo sube con wrangler kv bulk put
  *
  * Uso:
- *   node upload-wrangler.js              → sube nivel 1 + nivel 2
+ *   node upload-wrangler.js              → sube nivel 1 + nivel 2 + nivel 2.5
  *   node upload-wrangler.js --nivel1     → solo nivel 1
  *   node upload-wrangler.js --nivel2     → solo nivel 2
+ *   node upload-wrangler.js --nivel25    → solo nivel 2.5
  *   node upload-wrangler.js --dry-run    → solo muestra stats
  */
 
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 
@@ -22,8 +24,11 @@ const args = process.argv.slice(2);
 const dryRun = args.includes('--dry-run');
 const onlyNivel1 = args.includes('--nivel1');
 const onlyNivel2 = args.includes('--nivel2');
-const doNivel1 = !onlyNivel2;
-const doNivel2 = !onlyNivel1;
+const onlyNivel25 = args.includes('--nivel25');
+const hasFilter = onlyNivel1 || onlyNivel2 || onlyNivel25;
+const doNivel1 = hasFilter ? onlyNivel1 : true;
+const doNivel2 = hasFilter ? onlyNivel2 : true;
+const doNivel25 = hasFilter ? onlyNivel25 : true;
 
 async function main() {
   const kvPairs = [];
@@ -88,6 +93,27 @@ async function main() {
     }
   }
 
+  // ── NIVEL 2.5: Info práctica por país ──
+  if (doNivel25) {
+    const outputDir25 = path.join(__dirname, 'output-nivel25');
+    if (fs.existsSync(outputDir25)) {
+      const files25 = fs.readdirSync(outputDir25).filter(f => f.endsWith('.json'));
+      console.log(`📦 Nivel 2.5: ${files25.length} países con info práctica`);
+
+      for (const file of files25) {
+        const code = file.replace('.json', '');
+        const data = JSON.parse(fs.readFileSync(path.join(outputDir25, file), 'utf-8'));
+
+        // Info práctica del país — key: dest:{code}:practical
+        if (data.practical_info) {
+          kvPairs.push({ key: `dest:${code}:practical`, value: JSON.stringify(data.practical_info) });
+        }
+      }
+    } else {
+      console.log('⚠️ No se encontró output-nivel25/');
+    }
+  }
+
   console.log(`\n📊 Total pares KV: ${kvPairs.length}`);
 
   if (dryRun) {
@@ -107,7 +133,8 @@ async function main() {
   for (let i = 0; i < kvPairs.length; i += BATCH_SIZE) {
     const batch = kvPairs.slice(i, i + BATCH_SIZE);
     const batchNum = Math.floor(i / BATCH_SIZE) + 1;
-    const tmpFile = `/tmp/_kv_bulk_${batchNum}.json`;
+    const tmpName = `_kv_bulk_${batchNum}.json`;
+    const tmpFile = path.join(__dirname, tmpName);
 
     // Escribir batch a archivo temporal
     fs.writeFileSync(tmpFile, JSON.stringify(batch));
@@ -115,11 +142,12 @@ async function main() {
     process.stdout.write(`   ⏳ Lote ${batchNum}/${totalBatches} (${batch.length} pares)...`);
 
     try {
-      execSync(`npx wrangler kv bulk put ${tmpFile} --namespace-id ${NAMESPACE_ID} --remote`, {
+      const result = execSync(`npx wrangler kv bulk put kv/${tmpName} --namespace-id ${NAMESPACE_ID} --remote 2>&1`, {
         cwd: path.join(__dirname, '..'),
-        stdio: 'pipe',
+        encoding: 'utf-8',
         timeout: 120000,
       });
+      if (!result.includes('Success')) throw new Error(result.trim().split('\n').pop());
       console.log(' ✅');
       uploaded += batch.length;
     } catch (err) {

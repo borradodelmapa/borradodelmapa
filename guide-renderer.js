@@ -450,7 +450,26 @@ const guideRenderer = {
     if (pi.emergencies) {
       html += '<div class="guide-info-block"><strong>🚨 Emergencias</strong><br>';
       if (pi.emergencies.general_number) html += 'Tel: <strong>' + linkify(pi.emergencies.general_number) + '</strong><br>';
+      if (pi.emergencies.police) html += 'Policía: <strong>' + linkify(pi.emergencies.police) + '</strong><br>';
+      if (pi.emergencies.ambulance) html += 'Ambulancia: <strong>' + linkify(pi.emergencies.ambulance) + '</strong><br>';
       if (pi.emergencies.embassy) html += linkify(pi.emergencies.embassy);
+      html += '</div>';
+    }
+
+    // Conectividad
+    if (pi.connectivity) {
+      html += '<div class="guide-info-block"><strong>📶 Conectividad</strong><br>';
+      if (pi.connectivity.sim_local) html += escapeHTML(pi.connectivity.sim_local) + '<br>';
+      if (pi.connectivity.wifi) html += '<em>' + escapeHTML(pi.connectivity.wifi) + '</em>';
+      html += '</div>';
+    }
+
+    // Salud
+    if (pi.health) {
+      html += '<div class="guide-info-block"><strong>🏥 Salud</strong><br>';
+      if (pi.health.hospitals) html += escapeHTML(pi.health.hospitals) + '<br>';
+      if (pi.health.pharmacy) html += escapeHTML(pi.health.pharmacy) + '<br>';
+      if (pi.health.water) html += '<em>' + escapeHTML(pi.health.water) + '</em>';
       html += '</div>';
     }
 
