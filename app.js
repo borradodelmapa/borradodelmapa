@@ -296,7 +296,6 @@ async function renderProfile() {
         <div class="profile-avatar">${escapeHTML(initial)}</div>
         <div class="profile-info">
           <div class="profile-name">${escapeHTML(currentUser.name || 'Viajero')}</div>
-          <div class="profile-email">${escapeHTML(currentUser.email || '')}</div>
           <div class="profile-stats">${coins} Salma Coins · ${3 - rutas} rutas gratis</div>
         </div>
       </div>
