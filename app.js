@@ -1206,8 +1206,16 @@ function initStripeCard(overlay) {
       }
 
       if (paymentIntent.status === 'succeeded') {
-        // 3. Actualizar saldo local
-        currentUser.coins_saldo = (currentUser.coins_saldo || 0) + 25;
+        // 3. Actualizar saldo en Firestore + local
+        const newSaldo = (currentUser.coins_saldo || 0) + 25;
+        try {
+          await db.collection('users').doc(currentUser.uid).update({
+            coins_saldo: newSaldo
+          });
+        } catch (e) {
+          console.error('Error actualizando coins en Firestore:', e);
+        }
+        currentUser.coins_saldo = newSaldo;
         updateHeader();
 
         // Mostrar éxito
