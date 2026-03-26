@@ -40,83 +40,45 @@ function showState(state) {
 }
 
 function updateHeader() {
-  let html = '';
-  if (currentUser) {
-    html += `<button class="header-menu-btn" id="btn-menu" title="Menú">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>`;
-  } else {
-    html += `<button class="header-menu-btn" id="btn-menu" title="Menú">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>`;
-  }
-  $headerActions.innerHTML = html;
-
-  document.getElementById('btn-menu').addEventListener('click', toggleMenu);
-
-  // Quitar bottom bar si existía
-  const bar = document.getElementById('app-bottom-bar');
-  if (bar) bar.remove();
+  // Header limpio — solo logo. Navegación en bottom bar.
+  $headerActions.innerHTML = '';
+  updateBottomBar();
 }
 
-function toggleMenu() {
-  const existing = document.getElementById('app-menu-dropdown');
-  if (existing) { existing.remove(); return; }
-
-  const menu = document.createElement('div');
-  menu.id = 'app-menu-dropdown';
-  menu.className = 'app-menu-dropdown';
-
-  if (currentUser) {
-    const coins = currentUser.coins_saldo || 0;
-    const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
-    menu.innerHTML = `
-      <div class="menu-user">
-        <div class="menu-user-avatar">${escapeHTML(initial)}</div>
-        <div class="menu-user-info">
-          <div class="menu-user-name">${escapeHTML(currentUser.name || 'Viajero')}</div>
-          <div class="menu-user-coins">${coins} Salma Coins</div>
-        </div>
-      </div>
-      <div class="menu-item" id="menu-home">Home</div>
-      <div class="menu-item" id="menu-chat">Chat con Salma</div>
-      <div class="menu-item" id="menu-profile">Mi perfil</div>
-      <div class="menu-item" id="menu-coins">Salma Coins</div>
-      <div class="menu-item" id="menu-help">Ayuda</div>
-      <div class="menu-divider"></div>
-      <div class="menu-item menu-item-logout" id="menu-logout">Cerrar sesión</div>`;
-  } else {
-    menu.innerHTML = `
-      <div class="menu-item" id="menu-home">Home</div>
-      <div class="menu-item" id="menu-chat">Chat con Salma</div>
-      <div class="menu-item" id="menu-help">Ayuda</div>
-      <div class="menu-divider"></div>
-      <div class="menu-item" id="menu-login">Entrar / Registrarse</div>`;
+function updateBottomBar() {
+  let bar = document.getElementById('app-bottom-bar');
+  if (!bar) {
+    bar = document.createElement('nav');
+    bar.id = 'app-bottom-bar';
+    bar.className = 'app-bottom-bar';
+    document.body.appendChild(bar);
   }
 
-  document.body.appendChild(menu);
+  const isHome = currentState === 'welcome';
+  const isChat = currentState === 'chat';
+  const isProfile = currentState === 'profile' || currentState === 'viajes';
 
-  // Cerrar al hacer click fuera
-  setTimeout(() => {
-    document.addEventListener('click', function closeMenu(e) {
-      if (!menu.contains(e.target) && e.target.id !== 'btn-menu' && !e.target.closest('#btn-menu')) {
-        menu.remove();
-        document.removeEventListener('click', closeMenu);
-      }
-    });
-  }, 10);
+  bar.innerHTML = `
+    <button class="bottom-tab ${isHome ? 'bottom-tab-active' : ''}" id="tab-home">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Chat</span>
+    </button>
+    <button class="bottom-tab ${isProfile ? 'bottom-tab-active' : ''}" id="tab-profile">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
+    </button>`;
 
-  // Event listeners
-  const close = () => menu.remove();
-  const el = (id) => document.getElementById(id);
-
-  if (el('menu-home')) el('menu-home').addEventListener('click', () => { close(); showState('welcome'); });
-  if (el('menu-chat')) el('menu-chat').addEventListener('click', () => { close(); if (typeof salma !== 'undefined') salma._initChat(); });
-  if (el('menu-profile')) el('menu-profile').addEventListener('click', () => { close(); showState('profile'); });
-  if (el('menu-coins')) el('menu-coins').addEventListener('click', () => { close(); openCoinsModal(); });
-  if (el('menu-help')) el('menu-help').addEventListener('click', () => { close(); document.getElementById('salma-info-overlay').style.display = 'flex'; });
-  if (el('menu-logout')) el('menu-logout').addEventListener('click', () => { close(); if (confirm('¿Cerrar sesión?')) logout(); });
-  if (el('menu-login')) el('menu-login').addEventListener('click', () => { close(); openModal('login'); });
+  document.getElementById('tab-home').addEventListener('click', () => showState('welcome'));
+  document.getElementById('tab-chat').addEventListener('click', () => {
+    if (currentState !== 'chat') {
+      if (typeof salma !== 'undefined') salma._initChat();
+    }
+  });
+  document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
 }
 
 function handleAvatarClick() {
