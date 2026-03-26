@@ -125,7 +125,7 @@ const salma = {
 
     // Enviar al worker sin fechas
     this._addUserBubble('Hazla ya');
-    this.history.push({ role: 'user', content: originalMsg });
+    // NO push a history aquí — _doSend lo hace tras recibir respuesta
     this._doSend(originalMsg, {});
   },
 
@@ -221,7 +221,8 @@ const salma = {
 
     // Burbuja del usuario
     this._addUserBubble(msg);
-    this.history.push({ role: 'user', content: msg });
+    // NO push a history aquí — se hace en _doSend tras recibir respuesta
+    // para evitar duplicación (el worker ya recibe msg como campo separado)
 
     // Si estamos esperando respuesta a la pregunta de fechas
     if (this._pendingRouteInfo) {
@@ -303,7 +304,8 @@ const salma = {
 
       const data = await this._stream(body, loadingEl);
 
-      // Guardar respuesta en historial
+      // Guardar mensaje del usuario + respuesta en historial (juntos, tras éxito)
+      this.history.push({ role: 'user', content: msg });
       if (data.reply) {
         this.history.push({ role: 'assistant', content: data.reply });
       }
