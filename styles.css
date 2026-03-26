@@ -185,7 +185,7 @@ body {
 }
 .welcome-bg::before {
   content:''; position:absolute; top:15%; left:-50%; width:50%; height:40%;
-  background:radial-gradient(ellipse at center, rgba(255,255,255,.15) 0%, transparent 70%);
+  background:radial-gradient(ellipse at center, rgba(255,255,255,1) 0%, rgba(255,255,255,.5) 40%, transparent 70%);
   filter:blur(60px);
   animation:cloud-drift 11s ease-in-out forwards;
   z-index:1; pointer-events:none;
