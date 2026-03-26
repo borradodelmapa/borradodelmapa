@@ -217,6 +217,9 @@ Cuando generes paradas, usa siempre nombres de lugares concretos y verificables 
 const BLOQUE_MAPA = `MAPA PERSONAL
 El usuario tiene un mapa personal donde se guardan: lugares, restaurantes, experiencias, miradores, hoteles y rutas. Cuando recomiendes algo relevante, ofrece añadirlo al mapa.
 
+GEOLOCALIZACIÓN
+Si el contexto incluye [UBICACIÓN DEL VIAJERO] o [COORDENADAS GPS DEL VIAJERO], SÍ tienes su ubicación real. Úsala para buscar restaurantes, hoteles, servicios "cerca de mí". NUNCA digas que no tienes su ubicación si ves ese dato en el contexto. Confirma la ciudad y actúa.
+
 SERVICIOS DE VIAJE — HERRAMIENTAS buscar_hotel, buscar_coche, buscar_restaurante
 
 HOTELES: Cuando el usuario pida hotel, alojamiento, hostal, apartamento o dónde dormir, usa la herramienta buscar_hotel.
@@ -233,8 +236,10 @@ COCHES: Cuando el usuario pida alquilar coche, moto, scooter o vehículo, usa la
 - Presenta cada coche con: nombre, precio total y por día, plazas, transmisión, proveedor y punto de recogida.
 
 RESTAURANTES: Cuando el usuario pida restaurante, dónde comer o dónde cenar, usa la herramienta buscar_restaurante.
+- Si el usuario NO dice ciudad pero tienes su UBICACIÓN (contexto [UBICACIÓN DEL VIAJERO]), usa esa ciudad como parámetro "ciudad".
 - Pasa tipo de cocina y zona si el usuario los menciona.
 - TheFork permite reservar mesa. Google Maps muestra reseñas y fotos.
+- SIEMPRE usa la herramienta, NUNCA respondas solo con texto cuando piden restaurante.
 
 REGLAS COMUNES PARA TODOS LOS SERVICIOS:
 - Pon cada enlace SOLO en su propia línea, sin formato markdown, sin corchetes. Solo la URL tal cual.
@@ -436,6 +441,7 @@ function isHelpRequest(message) {
     vehicle: /grua|tow.?truck|taller|mecanico|mechanic|gasolinera|gas.?station|petrol|averia|breakdown|pinch|pinchazo|flat.?tire/,
     security: /embajada|embassy|consulado|consulate|comisaria|policia|police|abogado|lawyer|denuncia|robo|robado|stolen/,
     money: /cajero|atm|cambio.?de.?(divisa|moneda)|currency.?exchange|western.?union|money.?transfer/,
+    food: /restaurante.*cerca|restaurant.*near|donde.*comer.*aqui|donde.*comer.*cerca|donde.*cenar.*aqui|donde.*cenar.*cerca|comer.*por.*aqui|cenar.*por.*aqui/,
     logistics: /cerrajero|locksmith|lavanderia|laundry|optica|optician|zapatero|cobbler|tienda.?de?.?electronica|electronics|cargador|charger|adaptador|adapter/,
     transport: /taxi|transfer|estacion.?de?.?tren|train.?station|estacion.?de?.?bus|bus.?station|ferry|puerto|port|aeropuerto|airport/,
     communication: /tarjeta.?sim|sim.?card|wifi|locutorio|internet.?cafe/,
@@ -2361,7 +2367,11 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     let weatherData = null;
     const helpCategory = isHelpRequest(message);
     if (helpCategory) {
-      const helpLocation = extractHelpLocation(message, history, currentRoute);
+      let helpLocation = extractHelpLocation(message, history, currentRoute);
+      // Si no hay location explícita pero tenemos geoloc, usar la ciudad del usuario
+      if (!helpLocation && userLocationName) {
+        helpLocation = userLocationName.split(',')[0].trim();
+      }
       if (helpLocation) {
         try {
           if (helpCategory === 'weather') {
@@ -2469,8 +2479,10 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     const isHotelReq = isHotelRequest(message);
     const isServiceReq = isServiceRequest(message);
     const reqStartTime = Date.now();
+    // Si helpCategory=food y ya tenemos resultados de Google Places, no usar Sonnet con tool
+    const serviceReqEffective = isServiceReq && !(helpCategory === 'food' && helpResults);
     // Sonnet para rutas, vuelos y servicios (necesita tool use fiable), Haiku para conversacional
-    const needsSonnet = isRoute || isFlightReq || isHotelReq || isServiceReq;
+    const needsSonnet = isRoute || isFlightReq || isHotelReq || serviceReqEffective;
     const reqModel = needsSonnet ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001';
     const reqMaxTokens = needsSonnet ? 6000 : 1500;
 
