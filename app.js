@@ -1158,7 +1158,7 @@ function initStripeCard(overlay) {
   const stripe = Stripe(STRIPE_PK);
   const elements = stripe.elements();
   const card = elements.create('card', {
-    hidePostalCode: false,
+    hidePostalCode: true,
     style: {
       base: {
         color: '#f5f0e8',
