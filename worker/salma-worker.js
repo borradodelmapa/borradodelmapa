@@ -490,15 +490,19 @@ function extractHelpLocation(message, history, currentRoute) {
   return null;
 }
 
-async function searchPlacesForHelp(query, location, placesKey) {
+async function searchPlacesForHelp(query, location, placesKey, coords) {
   if (!query || !location || !placesKey) return null;
 
   const searchText = `${query} ${location}`;
 
-  // Text Search — mejor que findplacefromtext para búsquedas genéricas
+  // Text Search — si tenemos coordenadas, usarlas con radio para resultados cercanos
   let searchResults;
   try {
-    const res = await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchText)}&language=es&key=${placesKey}`);
+    let url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchText)}&language=es&key=${placesKey}`;
+    if (coords && coords.lat && coords.lng) {
+      url += `&location=${coords.lat},${coords.lng}&radius=1500`;
+    }
+    const res = await fetch(url);
     searchResults = await res.json();
   } catch (e) {
     return null;
@@ -2377,7 +2381,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           if (helpCategory === 'weather') {
             weatherData = await fetchWeather(helpLocation);
           } else {
-            helpResults = await searchPlacesForHelp(message, helpLocation, env.GOOGLE_PLACES_KEY);
+            helpResults = await searchPlacesForHelp(message, helpLocation, env.GOOGLE_PLACES_KEY, userLocation);
           }
         } catch (e) {
           // Fallo silencioso — Salma responde sin datos de búsqueda
