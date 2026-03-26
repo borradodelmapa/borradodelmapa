@@ -79,41 +79,11 @@ function handleAvatarClick() {
 // ═══ WELCOME (estado 1) ═══
 
 async function renderWelcome() {
-  // Pre-cargar chips ANTES de renderizar para evitar layout shift
-  let chipsHtml = '';
-  let chipsType = 'none';
-  try {
-    if (currentUser) {
-      const snap = await db.collection('users').doc(currentUser.uid)
-        .collection('maps').orderBy('createdAt', 'desc').limit(3).get();
-      if (!snap.empty) {
-        snap.forEach(doc => {
-          const d = doc.data();
-          chipsHtml += `<div class="chip chip-saved" data-doc-id="${doc.id}">${escapeHTML(d.nombre || 'Mi ruta')}</div>`;
-        });
-        chipsType = 'saved';
-      }
-    }
-    if (!chipsHtml) {
-      const snap = await db.collection('public_guides')
-        .where('featured', '==', true).limit(3).get();
-      if (!snap.empty) {
-        snap.forEach(doc => {
-          const d = doc.data();
-          chipsHtml += `<div class="chip chip-featured" data-slug="${doc.id}">${escapeHTML(d.nombre || 'Ruta')}</div>`;
-        });
-        chipsType = 'featured';
-      }
-    }
-  } catch (_) {}
-  if (!chipsHtml) {
-    chipsHtml = `
-      <div class="chip" data-msg="Vietnam 15 días mochilero">Vietnam 15 días</div>
-      <div class="chip" data-msg="Andalucía 7 días en familia">Andalucía en familia</div>
-      <div class="chip" data-msg="Tailandia 10 días mochilero">Tailandia mochilero</div>`;
-    chipsType = 'fallback';
-  }
-  const defaultChips = chipsHtml;
+  // Chips fallback — se muestran inmediatamente, Firestore actualiza después
+  const defaultChips = `
+    <div class="chip" data-msg="Vietnam 15 días mochilero">Vietnam 15 días</div>
+    <div class="chip" data-msg="Andalucía 7 días en familia">Andalucía en familia</div>
+    <div class="chip" data-msg="Tailandia 10 días mochilero">Tailandia mochilero</div>`;
 
   $content.innerHTML = `
     <div class="welcome-hero fade-in">
@@ -188,9 +158,55 @@ async function renderWelcome() {
     }, 3000);
   }
 
-  // Añadir event listeners a los chips ya renderizados
+  // Event listeners para chips fallback (inmediatos)
   const chipsEl = document.getElementById('welcome-chips');
   if (chipsEl) {
+    chipsEl.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const msg = chip.dataset.msg;
+        if (msg && typeof salma !== 'undefined') salma.send(msg);
+      });
+    });
+  }
+
+  // Actualizar chips con datos reales de Firestore (async, sin layout shift)
+  _loadChipsAsync(chipsEl);
+}
+
+async function _loadChipsAsync(chipsEl) {
+  if (!chipsEl) return;
+  try {
+    let chipsHtml = '';
+    let chipsType = 'none';
+
+    if (currentUser) {
+      const snap = await db.collection('users').doc(currentUser.uid)
+        .collection('maps').orderBy('createdAt', 'desc').limit(3).get();
+      if (!snap.empty) {
+        snap.forEach(doc => {
+          const d = doc.data();
+          chipsHtml += `<div class="chip chip-saved" data-doc-id="${doc.id}">${escapeHTML(d.nombre || 'Mi ruta')}</div>`;
+        });
+        chipsType = 'saved';
+      }
+    }
+    if (!chipsHtml) {
+      const snap = await db.collection('public_guides')
+        .where('featured', '==', true).limit(3).get();
+      if (!snap.empty) {
+        snap.forEach(doc => {
+          const d = doc.data();
+          chipsHtml += `<div class="chip chip-featured" data-slug="${doc.id}">${escapeHTML(d.nombre || 'Ruta')}</div>`;
+        });
+        chipsType = 'featured';
+      }
+    }
+
+    if (!chipsHtml) return; // Mantener fallback
+
+    // Reemplazar contenido sin cambiar tamaño
+    chipsEl.innerHTML = chipsHtml;
+
     if (chipsType === 'saved') {
       chipsEl.querySelectorAll('.chip-saved').forEach(chip => {
         chip.addEventListener('click', async () => {
@@ -209,15 +225,8 @@ async function renderWelcome() {
           window.location.href = '/' + chip.dataset.slug;
         });
       });
-    } else {
-      chipsEl.querySelectorAll('.chip').forEach(chip => {
-        chip.addEventListener('click', () => {
-          const msg = chip.dataset.msg;
-          if (msg && typeof salma !== 'undefined') salma.send(msg);
-        });
-      });
     }
-  }
+  } catch (_) {}
 }
 
 // ═══ MIS VIAJES (estado 3) ═══
