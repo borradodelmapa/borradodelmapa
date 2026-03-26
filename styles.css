@@ -170,13 +170,13 @@ body {
   position:absolute; inset:0; z-index:0;
   background-image:url('mapa.webp');
   background-position:center; background-size:cover; opacity:.5;
-  animation:heartbeat 1.8s ease-in-out 6;
+  animation:heartbeat 1.8s ease-in-out 1s 6;
 }
 @keyframes heartbeat {
   0%,100% { transform:scale(1); }
-  15% { transform:scale(1.03); }
+  15% { transform:scale(1.02); }
   30% { transform:scale(1); }
-  45% { transform:scale(1.02); }
+  45% { transform:scale(1.015); }
 }
 .welcome-bg::after {
   content:''; position:absolute; inset:0;
@@ -185,7 +185,7 @@ body {
 .welcome-content { position:relative; z-index:1; }
 .welcome-content::before {
   content:''; position:absolute; top:-20%; left:-100%; width:120%; height:140%;
-  background:radial-gradient(ellipse at center, rgba(255,255,255,.12) 0%, rgba(255,255,255,.04) 50%, transparent 75%);
+  background:radial-gradient(ellipse at center, rgba(255,255,255,.20) 0%, rgba(255,255,255,.08) 50%, transparent 75%);
   filter:blur(50px);
   animation:cloud-drift 10.8s ease-in-out forwards;
   pointer-events:none; z-index:0;
