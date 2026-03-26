@@ -1851,16 +1851,29 @@ export default {
       }, null, 2), { status: allOk ? 200 : 503, headers: corsH });
     }
 
-    // ─── ENDPOINT /sitemap.xml (SEO) ───
+    // ─── ENDPOINT /sitemap.xml (SEO — sitemap index) ───
     if (request.method === 'GET' && url.pathname === '/sitemap.xml') {
+      const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap><loc>https://borradodelmapa.com/sitemap-static.xml</loc></sitemap>
+  <sitemap><loc>https://borradodelmapa.com/sitemap-destinos.xml</loc></sitemap>
+  <sitemap><loc>https://borradodelmapa.com/sitemap-blog.xml</loc></sitemap>
+  <sitemap><loc>https://salma-api.paco-defoto.workers.dev/sitemap-guides.xml</loc></sitemap>
+</sitemapindex>`;
+      return new Response(sitemapIndex, {
+        headers: { 'Content-Type': 'application/xml', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=3600' }
+      });
+    }
+
+    // ─── ENDPOINT /sitemap-guides.xml (guías públicas dinámicas) ───
+    if (request.method === 'GET' && url.pathname === '/sitemap-guides.xml') {
       try {
         const projectId = 'borradodelmapa-85257';
         const firestoreUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/public_guides?pageSize=500`;
         const res = await fetch(firestoreUrl);
         const data = await res.json();
 
-        let urls = `  <url>\n    <loc>https://borradodelmapa.com/</loc>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
-
+        let urls = '';
         if (data.documents) {
           for (const doc of data.documents) {
             const slug = doc.name.split('/').pop();
