@@ -170,32 +170,33 @@ body {
   position:absolute; inset:0; z-index:0;
   background-image:url('mapa.webp');
   background-position:center; background-size:cover; opacity:.5;
-  animation:heartbeat 1.8s ease-in-out 1s 6;
+  animation:heartbeat 2s ease-in-out 0.5s 5;
+  transform:scale(1);
 }
 @keyframes heartbeat {
-  0%,100% { transform:scale(1); }
-  15% { transform:scale(1.02); }
-  30% { transform:scale(1); }
-  45% { transform:scale(1.015); }
+  0%,100% { transform:scale(1); opacity:.5; }
+  15% { transform:scale(1.015); opacity:.55; }
+  30% { transform:scale(1); opacity:.5; }
+  45% { transform:scale(1.01); opacity:.53; }
 }
 .welcome-bg::after {
   content:''; position:absolute; inset:0;
   background:radial-gradient(ellipse at center, transparent 0%, var(--negro) 75%);
 }
-.welcome-content { position:relative; z-index:1; }
-.welcome-content::before {
-  content:''; position:absolute; top:-20%; left:-100%; width:120%; height:140%;
-  background:radial-gradient(ellipse at center, rgba(255,255,255,.20) 0%, rgba(255,255,255,.08) 50%, transparent 75%);
-  filter:blur(50px);
-  animation:cloud-drift 10.8s ease-in-out forwards;
-  pointer-events:none; z-index:0;
+.welcome-bg::before {
+  content:''; position:absolute; top:15%; left:-50%; width:50%; height:40%;
+  background:radial-gradient(ellipse at center, rgba(255,255,255,.15) 0%, transparent 70%);
+  filter:blur(60px);
+  animation:cloud-drift 11s ease-in-out forwards;
+  z-index:1; pointer-events:none;
 }
 @keyframes cloud-drift {
   0% { transform:translateX(0); opacity:0; }
   10% { opacity:1; }
-  75% { opacity:.4; }
-  100% { transform:translateX(200%); opacity:0; }
+  80% { opacity:.3; }
+  100% { transform:translateX(400%); opacity:0; }
 }
+.welcome-content { position:relative; z-index:1; }
 .welcome-label {
   font-family:var(--font-mono); font-size:9px;
   color:var(--dorado2); letter-spacing:.28em; text-transform:uppercase;
