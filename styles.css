@@ -82,7 +82,7 @@ body {
 /* ── App content (scroll entre header e input) ── */
 .app-content {
   padding-top:56px;
-  padding-bottom:180px;
+  padding-bottom:140px;
   min-height:0;
   overflow-y:auto;
   scrollbar-width:none;
@@ -1196,25 +1196,44 @@ body {
 }
 .copilot-phrase b { color:var(--dorado); font-weight:600; margin-right:4px; }
 
-/* ═══ BOTTOM BAR ═══ */
-.app-bottom-bar {
-  position:fixed; bottom:0; left:0; right:0; z-index:900;
-  display:flex; justify-content:space-around; align-items:center;
-  background:rgba(18,18,16,.95); backdrop-filter:blur(12px);
-  border-top:1px solid rgba(244,239,230,.08);
-  padding:6px 0 env(safe-area-inset-bottom, 6px);
-  height:56px;
-}
-.bottom-tab {
-  display:flex; flex-direction:column; align-items:center; gap:2px;
+/* ═══ MENU HAMBURGUESA ═══ */
+.header-menu-btn {
   background:none; border:none; cursor:pointer;
-  color:rgba(244,239,230,.4); font-size:10px; font-family:var(--font-mono);
-  letter-spacing:.05em; padding:4px 16px; transition:color .2s;
+  color:var(--crema); padding:6px; display:flex; align-items:center;
 }
-.bottom-tab svg { stroke:currentColor; }
-.bottom-tab-active { color:var(--dorado); }
-.bottom-tab:hover { color:rgba(244,239,230,.7); }
-.bottom-tab-active:hover { color:var(--dorado); }
+.header-menu-btn:hover { color:var(--dorado); }
+.app-menu-dropdown {
+  position:fixed; top:52px; right:12px; z-index:2000;
+  background:rgba(28,28,24,.97); backdrop-filter:blur(16px);
+  border:1px solid rgba(244,239,230,.1); border-radius:14px;
+  min-width:220px; padding:8px 0;
+  box-shadow:0 12px 40px rgba(0,0,0,.5);
+  animation:menuFadeIn .15s ease-out;
+}
+@keyframes menuFadeIn {
+  0% { opacity:0; transform:translateY(-8px); }
+  100% { opacity:1; transform:translateY(0); }
+}
+.menu-user {
+  display:flex; align-items:center; gap:12px;
+  padding:12px 16px 10px; border-bottom:1px solid rgba(244,239,230,.06);
+  margin-bottom:4px;
+}
+.menu-user-avatar {
+  width:36px; height:36px; border-radius:50%;
+  background:var(--dorado); color:var(--negro);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-tight); font-size:16px; font-weight:700;
+}
+.menu-user-name { font-size:14px; font-weight:600; color:var(--blanco); }
+.menu-user-coins { font-family:var(--font-mono); font-size:11px; color:var(--dorado); }
+.menu-item {
+  padding:10px 16px; font-size:14px; color:var(--crema);
+  cursor:pointer; transition:background .15s;
+}
+.menu-item:hover { background:rgba(255,255,255,.05); }
+.menu-item-logout { color:rgba(244,239,230,.4); }
+.menu-divider { height:1px; background:rgba(244,239,230,.06); margin:4px 0; }
 
 /* ═══ PERFIL DE USUARIO ═══ */
 .profile-area {
