@@ -182,19 +182,19 @@ body {
   content:''; position:absolute; inset:0;
   background:radial-gradient(ellipse at center, transparent 0%, var(--negro) 75%);
 }
-.welcome-content { position:relative; z-index:1; overflow:hidden; }
+.welcome-content { position:relative; z-index:1; }
 .welcome-content::before {
-  content:''; position:absolute; top:0; left:-80%; width:80%; height:100%;
-  background:radial-gradient(ellipse at center, rgba(255,255,255,.18) 0%, rgba(255,255,255,.06) 40%, transparent 70%);
-  filter:blur(40px);
-  animation:cloud-drift 14s ease-in-out forwards;
+  content:''; position:absolute; top:-20%; left:-100%; width:120%; height:140%;
+  background:radial-gradient(ellipse at center, rgba(255,255,255,.12) 0%, rgba(255,255,255,.04) 50%, transparent 75%);
+  filter:blur(50px);
+  animation:cloud-drift 10.8s ease-in-out forwards;
   pointer-events:none; z-index:0;
 }
 @keyframes cloud-drift {
-  0% { left:-80%; opacity:0; }
-  8% { opacity:1; }
-  70% { opacity:.5; }
-  100% { left:130%; opacity:0; }
+  0% { transform:translateX(0); opacity:0; }
+  10% { opacity:1; }
+  75% { opacity:.4; }
+  100% { transform:translateX(200%); opacity:0; }
 }
 .welcome-label {
   font-family:var(--font-mono); font-size:9px;
