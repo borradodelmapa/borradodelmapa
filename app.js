@@ -79,7 +79,41 @@ function handleAvatarClick() {
 // ═══ WELCOME (estado 1) ═══
 
 async function renderWelcome() {
-  const defaultChips = `<div class="chip chip-ghost">&nbsp;</div><div class="chip chip-ghost">&nbsp;</div><div class="chip chip-ghost">&nbsp;</div>`;
+  // Pre-cargar chips ANTES de renderizar para evitar layout shift
+  let chipsHtml = '';
+  let chipsType = 'none';
+  try {
+    if (currentUser) {
+      const snap = await db.collection('users').doc(currentUser.uid)
+        .collection('maps').orderBy('createdAt', 'desc').limit(3).get();
+      if (!snap.empty) {
+        snap.forEach(doc => {
+          const d = doc.data();
+          chipsHtml += `<div class="chip chip-saved" data-doc-id="${doc.id}">${escapeHTML(d.nombre || 'Mi ruta')}</div>`;
+        });
+        chipsType = 'saved';
+      }
+    }
+    if (!chipsHtml) {
+      const snap = await db.collection('public_guides')
+        .where('featured', '==', true).limit(3).get();
+      if (!snap.empty) {
+        snap.forEach(doc => {
+          const d = doc.data();
+          chipsHtml += `<div class="chip chip-featured" data-slug="${doc.id}">${escapeHTML(d.nombre || 'Ruta')}</div>`;
+        });
+        chipsType = 'featured';
+      }
+    }
+  } catch (_) {}
+  if (!chipsHtml) {
+    chipsHtml = `
+      <div class="chip" data-msg="Vietnam 15 días mochilero">Vietnam 15 días</div>
+      <div class="chip" data-msg="Andalucía 7 días en familia">Andalucía en familia</div>
+      <div class="chip" data-msg="Tailandia 10 días mochilero">Tailandia mochilero</div>`;
+    chipsType = 'fallback';
+  }
+  const defaultChips = chipsHtml;
 
   $content.innerHTML = `
     <div class="welcome-hero fade-in">
@@ -154,73 +188,34 @@ async function renderWelcome() {
     }, 3000);
   }
 
+  // Añadir event listeners a los chips ya renderizados
   const chipsEl = document.getElementById('welcome-chips');
-  let loaded = false;
-
-  // Si hay usuario, intentar cargar sus últimas guías
-  if (currentUser && chipsEl) {
-    try {
-      const snap = await db.collection('users').doc(currentUser.uid)
-        .collection('maps').orderBy('createdAt', 'desc').limit(3).get();
-      if (!snap.empty) {
-        let chipsHtml = '';
-        snap.forEach(doc => {
-          const d = doc.data();
-          chipsHtml += `<div class="chip chip-saved" data-doc-id="${doc.id}">${escapeHTML(d.nombre || 'Mi ruta')}</div>`;
+  if (chipsEl) {
+    if (chipsType === 'saved') {
+      chipsEl.querySelectorAll('.chip-saved').forEach(chip => {
+        chip.addEventListener('click', async () => {
+          try {
+            const guideDoc = await db.collection('users').doc(currentUser.uid)
+              .collection('maps').doc(chip.dataset.docId).get();
+            if (guideDoc.exists && typeof salma !== 'undefined') {
+              salma.cargarGuia(chip.dataset.docId, guideDoc.data());
+            }
+          } catch (_) {}
         });
-        chipsEl.innerHTML = chipsHtml;
-        chipsEl.classList.add('chips-loaded');
-        loaded = true;
-
-        chipsEl.querySelectorAll('.chip-saved').forEach(chip => {
-          chip.addEventListener('click', async () => {
-            try {
-              const guideDoc = await db.collection('users').doc(currentUser.uid)
-                .collection('maps').doc(chip.dataset.docId).get();
-              if (guideDoc.exists && typeof salma !== 'undefined') {
-                salma.cargarGuia(chip.dataset.docId, guideDoc.data());
-              }
-            } catch (_) {}
-          });
+      });
+    } else if (chipsType === 'featured') {
+      chipsEl.querySelectorAll('.chip-featured').forEach(chip => {
+        chip.addEventListener('click', () => {
+          window.location.href = '/' + chip.dataset.slug;
         });
-      }
-    } catch (_) {}
-  }
-
-  // Si no hay guías del usuario, cargar guías destacadas (featured)
-  if (!loaded && chipsEl) {
-    try {
-      const snap = await db.collection('public_guides')
-        .where('featured', '==', true).limit(3).get();
-      if (!snap.empty) {
-        let chipsHtml = '';
-        snap.forEach(doc => {
-          const d = doc.data();
-          chipsHtml += `<div class="chip chip-featured" data-slug="${doc.id}">${escapeHTML(d.nombre || 'Ruta')}</div>`;
+      });
+    } else {
+      chipsEl.querySelectorAll('.chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const msg = chip.dataset.msg;
+          if (msg && typeof salma !== 'undefined') salma.send(msg);
         });
-        chipsEl.innerHTML = chipsHtml;
-        chipsEl.classList.add('chips-loaded');
-
-        chipsEl.querySelectorAll('.chip-featured').forEach(chip => {
-          chip.addEventListener('click', () => {
-            window.location.href = '/' + chip.dataset.slug;
-          });
-        });
-      } else {
-        // Fallback si no hay featured todavía
-        chipsEl.innerHTML = `
-          <div class="chip" data-msg="Vietnam 15 días mochilero">Vietnam 15 días</div>
-          <div class="chip" data-msg="Andalucía 7 días en familia">Andalucía en familia</div>
-          <div class="chip" data-msg="Tailandia 10 días mochilero">Tailandia mochilero</div>`;
-        chipsEl.querySelectorAll('.chip').forEach(chip => {
-          chip.addEventListener('click', () => {
-            const msg = chip.dataset.msg;
-            if (msg && typeof salma !== 'undefined') salma.send(msg);
-          });
-        });
-      }
-    } catch (_) {
-      chipsEl.innerHTML = '';
+      });
     }
   }
 }
