@@ -278,6 +278,7 @@ body {
   display:flex; align-items:center; justify-content:space-between;
 }
 .chip::after { content:'›'; font-size:20px; color:var(--dorado); opacity:.6; }
+.chip-ghost { visibility:hidden; }
 .chip:hover { background:rgba(212,160,23,.15); border-color:var(--dorado); }
 
 /* ═══ STATE 2: CHAT + GUIDE ═══ */

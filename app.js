@@ -79,7 +79,7 @@ function handleAvatarClick() {
 // ═══ WELCOME (estado 1) ═══
 
 async function renderWelcome() {
-  const defaultChips = `<div class="welcome-chips-loading"></div>`;
+  const defaultChips = `<div class="chip chip-ghost">&nbsp;</div><div class="chip chip-ghost">&nbsp;</div><div class="chip chip-ghost">&nbsp;</div>`;
 
   $content.innerHTML = `
     <div class="welcome-hero fade-in">
