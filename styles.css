@@ -188,7 +188,7 @@ body {
 }
 .welcome-cloud {
   position:absolute; top:15%; left:-50%; width:50%; height:40%;
-  background:radial-gradient(ellipse at center, rgba(255,255,255,1) 0%, rgba(255,255,255,.5) 40%, transparent 70%);
+  background:radial-gradient(ellipse at center, rgba(255,255,255,.25) 0%, rgba(255,255,255,.10) 40%, transparent 70%);
   filter:blur(60px);
   animation:cloud-drift 11s ease-in-out forwards;
   z-index:2; pointer-events:none;
@@ -261,7 +261,7 @@ body {
 .welcome-chips {
   display:flex; flex-direction:column; gap:10px; align-items:center;
   max-width:400px; width:100%; margin-top:8px;
-  min-height:160px;
+  min-height:200px;
 }
 .welcome-chips.chips-loaded {
   animation:chipsFadeIn .6s ease-out;
