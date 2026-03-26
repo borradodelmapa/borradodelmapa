@@ -40,27 +40,45 @@ function showState(state) {
 }
 
 function updateHeader() {
-  let html = '<button class="app-help-btn" id="btn-help" title="¿Qué puede hacer Salma?">?</button>';
-  if (currentUser) {
-    const coins = currentUser.coins_saldo || 0;
-    html += `<button class="coins-btn" id="btn-coins" title="Salma Coins"><span class="coins-icon-circle">S</span> ${coins}</button>`;
-    const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
-    html += `<div class="app-avatar" id="btn-avatar" title="Mi perfil">${escapeHTML(initial)}</div>`;
-  } else {
-    html += `<div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>`;
+  // Header limpio — solo logo. Navegación en bottom bar.
+  $headerActions.innerHTML = '';
+  updateBottomBar();
+}
+
+function updateBottomBar() {
+  let bar = document.getElementById('app-bottom-bar');
+  if (!bar) {
+    bar = document.createElement('nav');
+    bar.id = 'app-bottom-bar';
+    bar.className = 'app-bottom-bar';
+    document.body.appendChild(bar);
   }
-  $headerActions.innerHTML = html;
 
-  const btnAvatar = document.getElementById('btn-avatar');
-  if (btnAvatar) btnAvatar.addEventListener('click', handleAvatarClick);
+  const isHome = currentState === 'welcome';
+  const isChat = currentState === 'chat';
+  const isProfile = currentState === 'profile' || currentState === 'viajes';
 
-  const btnCoins = document.getElementById('btn-coins');
-  if (btnCoins) btnCoins.addEventListener('click', openCoinsModal);
+  bar.innerHTML = `
+    <button class="bottom-tab ${isHome ? 'bottom-tab-active' : ''}" id="tab-home">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Chat</span>
+    </button>
+    <button class="bottom-tab ${isProfile ? 'bottom-tab-active' : ''}" id="tab-profile">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
+    </button>`;
 
-  const btnHelp = document.getElementById('btn-help');
-  if (btnHelp) btnHelp.addEventListener('click', () => {
-    document.getElementById('salma-info-overlay').style.display = 'flex';
+  document.getElementById('tab-home').addEventListener('click', () => showState('welcome'));
+  document.getElementById('tab-chat').addEventListener('click', () => {
+    if (currentState !== 'chat') {
+      if (typeof salma !== 'undefined') salma._initChat();
+    }
   });
+  document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
 }
 
 function handleAvatarClick() {
@@ -270,6 +288,12 @@ async function renderProfile() {
           <span class="profile-section-badge">pronto</span>
         </div>
 
+        <div class="profile-section" id="prof-help">
+          <span class="profile-section-icon">?</span>
+          <span class="profile-section-label">Ayuda</span>
+          <span class="profile-section-arrow">›</span>
+        </div>
+
         <div class="profile-section profile-section-logout" id="prof-logout">
           <span class="profile-section-icon">🚪</span>
           <span class="profile-section-label">Cerrar sesión</span>
@@ -289,6 +313,9 @@ async function renderProfile() {
 
   // Event listeners
   document.getElementById('prof-coins').addEventListener('click', openCoinsModal);
+  document.getElementById('prof-help').addEventListener('click', () => {
+    document.getElementById('salma-info-overlay').style.display = 'flex';
+  });
   document.getElementById('prof-logout').addEventListener('click', () => {
     if (confirm('¿Cerrar sesión?')) logout();
   });
