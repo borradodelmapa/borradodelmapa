@@ -1081,9 +1081,8 @@ function openCoinsModal() {
         <div class="coins-modal-plan-row">
           <div>
             <div class="coins-modal-plan-name">Pack Viajero</div>
-            <div class="coins-modal-plan-note">25 coins · no caducan</div>
+            <div class="coins-modal-plan-note">25 coins · no caducan · 9,99€</div>
           </div>
-          <button class="coins-modal-pay" id="coins-pay-btn" disabled>9,99€</button>
         </div>
       </div>
 
@@ -1091,6 +1090,7 @@ function openCoinsModal() {
       <div id="stripe-card-wrapper" class="stripe-card-wrapper">
         <div id="stripe-card-element" class="stripe-card-element"></div>
         <div id="stripe-card-errors" class="stripe-card-errors"></div>
+        <button class="coins-modal-pay" id="coins-pay-btn" disabled>Pagar 9,99€</button>
         <div class="stripe-test-badge">MODO PRUEBA · no se cobrará</div>
       </div>
       <div id="stripe-loading" class="stripe-loading" style="display:none">
