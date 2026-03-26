@@ -180,15 +180,15 @@ body {
   45% { transform:scale(1.01); opacity:.53; }
 }
 .welcome-bg::after {
-  content:''; position:absolute; inset:0;
+  content:''; position:absolute; inset:0; z-index:0;
   background:radial-gradient(ellipse at center, transparent 0%, var(--negro) 75%);
 }
-.welcome-bg::before {
-  content:''; position:absolute; top:15%; left:-50%; width:50%; height:40%;
+.welcome-cloud {
+  position:absolute; top:15%; left:-50%; width:50%; height:40%;
   background:radial-gradient(ellipse at center, rgba(255,255,255,1) 0%, rgba(255,255,255,.5) 40%, transparent 70%);
   filter:blur(60px);
   animation:cloud-drift 11s ease-in-out forwards;
-  z-index:1; pointer-events:none;
+  z-index:2; pointer-events:none;
 }
 @keyframes cloud-drift {
   0% { transform:translateX(0); opacity:0; }

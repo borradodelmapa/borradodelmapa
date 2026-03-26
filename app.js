@@ -84,6 +84,7 @@ async function renderWelcome() {
   $content.innerHTML = `
     <div class="welcome-hero fade-in">
       <div class="welcome-bg"></div>
+      <div class="welcome-cloud"></div>
       <div class="welcome-content">
         <div class="welcome-label">SALMA · AI TRAVEL COPILOT</div>
         <h1 class="welcome-title">Tu próximo<br>viaje empieza<br><em>aquí</em></h1>
