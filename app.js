@@ -127,6 +127,8 @@ async function renderWelcome() {
         </div>
 
         <div class="legal-links">
+          <a href="/destinos/" class="legal-link-destinos">Destinos</a>
+          <a href="/blog/">Blog</a>
           <a href="/legal.html#aviso-legal">Aviso legal</a>
           <a href="/legal.html#privacidad">Privacidad</a>
           <a href="/legal.html#cookies">Cookies</a>

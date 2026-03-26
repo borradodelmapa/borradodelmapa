@@ -900,6 +900,8 @@ body {
   color:rgba(244,239,230,.25); text-decoration:none;
 }
 .legal-links a:hover { color:rgba(244,239,230,.5); }
+.legal-link-destinos { color:var(--dorado) !important; }
+.legal-link-destinos:hover { color:var(--dorado2) !important; }
 
 /* ═══ COINS BUTTON (header) ═══ */
 .coins-btn {
