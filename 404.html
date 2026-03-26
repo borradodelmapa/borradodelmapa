@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title id="page-title">Guía de viaje · Borradodelmapa</title>
-<meta name="description" id="page-desc" content="Guía de viaje creada con IA por Salma, tu copiloto de viaje.">
+<title id="page-title">Guía de viaje · Borrado del Mapa</title>
+<meta name="description" id="page-desc" content="Guía de viaje creada con Salma, tu compañera de viaje.">
 <meta name="theme-color" content="#050505">
 <meta property="og:type" content="article">
-<meta property="og:site_name" content="Borradodelmapa">
-<meta property="og:title" id="og-title" content="Guía de viaje · Borradodelmapa">
-<meta property="og:description" id="og-desc" content="Guía de viaje creada con IA por Salma, tu copiloto de viaje.">
+<meta property="og:site_name" content="Borrado del Mapa">
+<meta property="og:title" id="og-title" content="Guía de viaje · Borrado del Mapa">
+<meta property="og:description" id="og-desc" content="Guía de viaje creada con Salma, tu compañera de viaje.">
 <meta property="og:image" id="og-image" content="https://borradodelmapa.com/og-image.jpg">
 
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -96,7 +96,7 @@ function escapeHTML(str) {
     const title = (data.nombre || 'Guía de viaje') + ' · Borradodelmapa';
     document.getElementById('page-title').textContent = title;
     document.getElementById('og-title').content = title;
-    const desc = data.summary || routeData.summary || 'Guía de viaje creada con IA';
+    const desc = data.summary || routeData.summary || 'Guía de viaje creada con Salma';
     document.getElementById('page-desc').content = desc;
     document.getElementById('og-desc').content = desc;
     if (data.cover_image) document.getElementById('og-image').content = data.cover_image;
@@ -116,9 +116,9 @@ function escapeHTML(str) {
     const cta = document.createElement('div');
     cta.className = 'public-cta';
     cta.innerHTML = `
-      <h3>Crea tu propia guía de viaje</h3>
-      <p>Salma te prepara una guía personalizada con mapas, fotos y recomendaciones en un minuto.</p>
-      <a href="/">CREAR MI GUÍA GRATIS</a>
+      <h3>Viaja con alguien que sabe lo que hace</h3>
+      <p>Salma te resuelve antes, durante y después. Como viajar con alguien que ya ha estado ahí.</p>
+      <a href="/">EMPIEZA TU VIAJE</a>
     `;
     content.appendChild(cta);
 
@@ -133,7 +133,7 @@ function escapeHTML(str) {
       <div class="public-error">
         <h2>Esta guía no existe</h2>
         <p>Puede que se haya eliminado o que el enlace esté mal.</p>
-        <a href="/" style="color:var(--dorado);">Crear mi propia guía de viaje →</a>
+        <a href="/" style="color:var(--dorado);">Viaja con Salma →</a>
       </div>`;
   }
 })();
