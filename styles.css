@@ -258,6 +258,7 @@ body {
 .welcome-chips {
   display:flex; flex-direction:column; gap:10px; align-items:center;
   max-width:400px; width:100%; margin-top:8px;
+  min-height:160px;
 }
 .chip {
   font-family:var(--font-body); font-size:15px; font-weight:500;
