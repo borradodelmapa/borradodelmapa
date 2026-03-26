@@ -1126,8 +1126,8 @@ function formatMessage(str) {
   });
 
   let html = escapeHTML(raw);
-  // URLs → enlaces clicables
-  html = html.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+  // URLs → enlaces clicables (onclick fuerza apertura externa en PWA)
+  html = html.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href);return false;">$1</a>');
   // Teléfonos internacionales: +XX XXX XXX XXX (con espacios, guiones o puntos)
   html = html.replace(/(\+\d{1,3}[ .-]?\d{1,4}[ .-]?\d{2,4}[ .-]?\d{2,4}[ .-]?\d{0,4})/g, (match) => {
     const clean = match.replace(/[\s.-]/g, '').trim();
