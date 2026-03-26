@@ -169,15 +169,18 @@ body {
 .welcome-bg {
   position:absolute; inset:0; z-index:0;
   background-image:url('mapa.webp');
-  background-position:center; background-size:cover; opacity:.5;
-  animation:heartbeat 2s ease-in-out 0.5s 5;
-  transform:scale(1);
+  background-position:center; background-size:cover;
+  opacity:0; animation:mapFadeIn 1.5s ease-out forwards, heartbeat 2s ease-in-out 2s 5;
+}
+@keyframes mapFadeIn {
+  0% { opacity:0; }
+  100% { opacity:.5; }
 }
 @keyframes heartbeat {
-  0%,100% { transform:scale(1); opacity:.5; }
-  15% { transform:scale(1.015); opacity:.55; }
-  30% { transform:scale(1); opacity:.5; }
-  45% { transform:scale(1.01); opacity:.53; }
+  0%,100% { transform:scale(1); }
+  15% { transform:scale(1.012); }
+  30% { transform:scale(1); }
+  45% { transform:scale(1.008); }
 }
 .welcome-bg::after {
   content:''; position:absolute; inset:0; z-index:0;
