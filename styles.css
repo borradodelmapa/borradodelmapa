@@ -1195,3 +1195,66 @@ body {
   font-size:12px; color:rgba(244,239,230,.7);
 }
 .copilot-phrase b { color:var(--dorado); font-weight:600; margin-right:4px; }
+
+/* ═══ PERFIL DE USUARIO ═══ */
+.profile-area {
+  max-width:480px; margin:0 auto; padding:24px 16px 40px;
+}
+.profile-header {
+  display:flex; align-items:center; gap:16px;
+  padding:20px 0; margin-bottom:8px;
+}
+.profile-avatar {
+  width:56px; height:56px; border-radius:50%;
+  background:var(--dorado); color:var(--negro);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-tight); font-size:24px; font-weight:700;
+  flex-shrink:0;
+}
+.profile-info { flex:1; min-width:0; }
+.profile-name {
+  font-family:var(--font-tight); font-size:20px; font-weight:700;
+  color:var(--blanco); line-height:1.2;
+}
+.profile-email {
+  font-size:13px; color:rgba(244,239,230,.5);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.profile-stats {
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.05em;
+  color:var(--dorado); margin-top:4px;
+}
+
+.profile-sections { margin-bottom:24px; }
+.profile-section {
+  display:flex; align-items:center; gap:12px;
+  padding:14px 16px; border-radius:12px;
+  background:rgba(255,255,255,.03); margin-bottom:6px;
+  cursor:pointer; transition:background .2s;
+}
+.profile-section:hover { background:rgba(255,255,255,.06); }
+.profile-section-icon {
+  width:28px; text-align:center; font-size:16px; flex-shrink:0;
+}
+.profile-section-label {
+  flex:1; font-size:15px; color:var(--crema); font-weight:500;
+}
+.profile-section-arrow {
+  font-size:18px; color:var(--dorado); opacity:.6;
+}
+.profile-section-badge {
+  font-family:var(--font-mono); font-size:9px; letter-spacing:.1em;
+  text-transform:uppercase; color:rgba(244,239,230,.35);
+  background:rgba(255,255,255,.04); padding:3px 8px; border-radius:6px;
+}
+.profile-section-locked {
+  cursor:default; opacity:.5;
+}
+.profile-section-locked:hover { background:rgba(255,255,255,.03); }
+.profile-section-logout { border-top:1px solid rgba(244,239,230,.06); margin-top:8px; padding-top:16px; }
+
+.profile-viajes { margin-top:8px; }
+.profile-viajes-header {
+  font-family:var(--font-mono); font-size:11px; font-weight:600;
+  letter-spacing:.18em; color:var(--dorado); margin-bottom:12px;
+}

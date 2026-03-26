@@ -10,7 +10,7 @@ const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 // Estado global
 let currentUser = null;
-let currentState = 'welcome'; // 'welcome' | 'chat' | 'viajes'
+let currentState = 'welcome'; // 'welcome' | 'chat' | 'viajes' | 'profile'
 
 // ═══ DOM refs ═══
 const $content = document.getElementById('app-content');
@@ -30,8 +30,8 @@ function showState(state) {
   if (state === 'welcome') {
     renderWelcome();
     if (inputBar) inputBar.style.display = 'none';
-  } else if (state === 'viajes') {
-    loadUserGuides();
+  } else if (state === 'viajes' || state === 'profile') {
+    renderProfile();
     if (inputBar) inputBar.style.display = 'none';
   } else if (state === 'chat') {
     $input.placeholder = 'Escribe a Salma...';
@@ -45,7 +45,7 @@ function updateHeader() {
     const coins = currentUser.coins_saldo || 0;
     html += `<button class="coins-btn" id="btn-coins" title="Salma Coins"><span class="coins-icon-circle">S</span> ${coins}</button>`;
     const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
-    html += `<div class="app-avatar" id="btn-avatar" title="Mis Viajes">${escapeHTML(initial)}</div>`;
+    html += `<div class="app-avatar" id="btn-avatar" title="Mi perfil">${escapeHTML(initial)}</div>`;
   } else {
     html += `<div class="app-avatar" id="btn-avatar" title="Entrar">✦</div>`;
   }
@@ -65,13 +65,9 @@ function updateHeader() {
 
 function handleAvatarClick() {
   if (currentUser) {
-    if (currentState === 'viajes') {
-      if (confirm('¿Cerrar sesión?')) logout();
-    } else {
-      showState('viajes');
-    }
+    showState('profile');
   } else {
-    window._afterLogin = 'viajes';
+    window._afterLogin = 'profile';
     openModal('login');
   }
 }
@@ -229,7 +225,137 @@ async function _loadChipsAsync(chipsEl) {
   } catch (_) {}
 }
 
-// ═══ MIS VIAJES (estado 3) ═══
+// ═══ PERFIL DE USUARIO ═══
+
+async function renderProfile() {
+  if (!currentUser) { showState('welcome'); return; }
+
+  const coins = currentUser.coins_saldo || 0;
+  const rutas = currentUser.rutas_gratis_usadas || 0;
+  const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
+
+  $content.innerHTML = `
+    <div class="profile-area fade-in">
+      <div class="profile-header">
+        <div class="profile-avatar">${escapeHTML(initial)}</div>
+        <div class="profile-info">
+          <div class="profile-name">${escapeHTML(currentUser.name || 'Viajero')}</div>
+          <div class="profile-email">${escapeHTML(currentUser.email || '')}</div>
+          <div class="profile-stats">${coins} Salma Coins · ${3 - rutas} rutas gratis</div>
+        </div>
+      </div>
+
+      <div class="profile-sections">
+        <div class="profile-section" id="prof-coins">
+          <span class="profile-section-icon">S</span>
+          <span class="profile-section-label">Salma Coins</span>
+          <span class="profile-section-arrow">›</span>
+        </div>
+
+        <div class="profile-section profile-section-locked">
+          <span class="profile-section-icon">📓</span>
+          <span class="profile-section-label">Cuaderno de viaje</span>
+          <span class="profile-section-badge">pronto</span>
+        </div>
+
+        <div class="profile-section profile-section-locked">
+          <span class="profile-section-icon">📝</span>
+          <span class="profile-section-label">Notas de Salma</span>
+          <span class="profile-section-badge">pronto</span>
+        </div>
+
+        <div class="profile-section profile-section-locked">
+          <span class="profile-section-icon">⚙️</span>
+          <span class="profile-section-label">Preferencias</span>
+          <span class="profile-section-badge">pronto</span>
+        </div>
+
+        <div class="profile-section profile-section-logout" id="prof-logout">
+          <span class="profile-section-icon">🚪</span>
+          <span class="profile-section-label">Cerrar sesión</span>
+        </div>
+      </div>
+
+      <div class="profile-viajes">
+        <div class="profile-viajes-header">MIS VIAJES</div>
+        <div class="viajes-grid" id="viajes-grid">
+          <div class="viaje-card viaje-card-new" id="btn-new-guide">
+            <div class="viaje-card-new-icon">+</div>
+            <div class="viaje-card-new-txt">NUEVA GUÍA</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  // Event listeners
+  document.getElementById('prof-coins').addEventListener('click', openCoinsModal);
+  document.getElementById('prof-logout').addEventListener('click', () => {
+    if (confirm('¿Cerrar sesión?')) logout();
+  });
+  document.getElementById('btn-new-guide').addEventListener('click', () => {
+    if (typeof salma !== 'undefined') salma.reset();
+    showState('welcome');
+  });
+
+  // Cargar guías del usuario
+  _loadProfileGuides();
+}
+
+async function _loadProfileGuides() {
+  if (!currentUser) return;
+  try {
+    const snap = await db.collection('users').doc(currentUser.uid)
+      .collection('maps').orderBy('createdAt', 'desc').get();
+    const grid = document.getElementById('viajes-grid');
+    if (!grid) return;
+
+    const allGuides = [];
+    snap.forEach(doc => allGuides.push({ id: doc.id, data: doc.data() }));
+
+    for (const g of allGuides) {
+      grid.appendChild(_createGuideCard(g, g.data));
+    }
+  } catch (e) {
+    console.error('Error cargando guías:', e);
+  }
+}
+
+function _createGuideCard(doc, d) {
+  const card = document.createElement('div');
+  card.className = 'viaje-card';
+  const photo = d.cover_image || destPhoto(d.destino || d.country || d.nombre || '');
+  card.innerHTML = `
+    <div class="viaje-card-img" style="background-image:url('${escapeHTML(photo)}')"></div>
+    <div class="viaje-card-body">
+      <div class="viaje-card-title">${escapeHTML(d.nombre || 'Mi ruta')}</div>
+      <div class="viaje-card-meta">${d.num_dias || d.dias || '?'} DÍAS · ${escapeHTML((d.destino || '').toUpperCase())}</div>
+    </div>
+    <button class="viaje-card-delete" data-doc-id="${doc.id}" title="Eliminar guía">✕</button>`;
+  card.addEventListener('click', (e) => {
+    if (e.target.closest('.viaje-card-delete')) return;
+    if (d.source === 'kv-nivel2' && d.slug) {
+      window.location.href = '/destinos/' + d.slug + '.html';
+      return;
+    }
+    if (typeof salma !== 'undefined') salma.cargarGuia(doc.id, d);
+  });
+  card.querySelector('.viaje-card-delete').addEventListener('click', async (e) => {
+    e.stopPropagation();
+    if (!confirm('¿Eliminar esta guía?')) return;
+    try {
+      const slug = d.slug;
+      if (slug) await db.collection('public_guides').doc(slug).delete();
+      await db.collection('users').doc(currentUser.uid).collection('maps').doc(doc.id).delete();
+      card.remove();
+      showToast('Guía eliminada');
+    } catch (err) {
+      showToast('Error al eliminar');
+    }
+  });
+  return card;
+}
+
+// ═══ MIS VIAJES (legacy — redirige a perfil) ═══
 
 async function loadUserGuides() {
   if (!currentUser) { showState('welcome'); return; }
