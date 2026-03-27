@@ -2769,10 +2769,11 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     // Si hay ruta cacheada, devolverla directamente (0 coste, <100ms)
     if (kvCachedRoute && kvCachedRoute.stops && kvCachedRoute.stops.length > 0) {
       const cachedReply = kvCachedRoute.title ? `Aquí tienes tu ruta por ${kvCachedRoute.title}.` : 'Aquí tienes tu ruta.';
-      return new Response(
-        JSON.stringify({ done: true, reply: cachedReply, route: kvCachedRoute }),
-        { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'X-Salma-Cache': 'HIT' } }
-      );
+      // Devolver como SSE para que el frontend lo procese correctamente
+      const sseData = `data: ${JSON.stringify({ t: cachedReply })}\n\ndata: ${JSON.stringify({ done: true, reply: cachedReply, route: kvCachedRoute })}\n\n`;
+      return new Response(sseData, {
+        headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', 'Access-Control-Allow-Origin': '*', 'X-Salma-Cache': 'HIT' }
+      });
     }
 
     // ─── RESPUESTA DIRECTA DEL KV (sin llamar a Claude = 0 coste) ───
@@ -2817,7 +2818,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     ctx.waitUntil((async () => {
       let allText = '';  // Texto acumulado de TODAS las iteraciones
       const MAX_TOOL_ITERATIONS = 5;  // Seguridad: máximo 5 tool calls por turno
-      const longRoute = isRoute && isLongRoute(message);
+      const longRoute = false; // DESACTIVADO temporalmente — bloques paralelos necesitan fix
 
       try {
         // ── RUTA LARGA (≥8 días): generación por bloques paralelos ──
