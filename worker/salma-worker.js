@@ -1228,13 +1228,26 @@ async function verifyAllStops(route, placesKey) {
     routeRadiusKm = Math.max(50, maxDist * 1.5);
   }
 
-  // 3. NO hay segunda ronda — findplacefromtext ya trae photos, geometry, opening_hours, editorial_summary
-  // Mapeamos findResults como si fueran detailResults para mantener compatibilidad
-  const detailResults = findResults.map(data => {
-    const c = data?.candidates?.[0];
-    if (!c) return null;
-    return { result: { name: c.name, geometry: c.geometry, photos: c.photos, formatted_address: c.formatted_address, opening_hours: c.opening_hours, editorial_summary: c.editorial_summary } };
-  });
+  // 3. Place Details en lotes de 5 (fotos + editorial summary)
+  const detailResults = new Array(findResults.length).fill(null);
+  const BATCH_SIZE = 5;
+  for (let i = 0; i < findResults.length; i += BATCH_SIZE) {
+    const batch = [];
+    for (let j = i; j < Math.min(i + BATCH_SIZE, findResults.length); j++) {
+      const c = findResults[j]?.candidates?.[0];
+      if (!c?.place_id) { batch.push(Promise.resolve(null)); continue; }
+      if (centerLat && centerLng && c.geometry?.location) {
+        const distKm = Math.sqrt(Math.pow(Math.abs(c.geometry.location.lat - centerLat), 2) + Math.pow(Math.abs(c.geometry.location.lng - centerLng), 2)) * 111;
+        if (distKm > routeRadiusKm) { batch.push(Promise.resolve(null)); continue; }
+      }
+      batch.push(
+        fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${c.place_id}&fields=name,photos,geometry,editorial_summary&language=es&key=${placesKey}`)
+          .then(r => r.json()).catch(() => null)
+      );
+    }
+    const batchResults = await Promise.all(batch);
+    batchResults.forEach((r, idx) => { detailResults[i + idx] = r; });
+  }
 
   // 4. Enriquecer cada parada con datos reales
   const verifiedStops = [];
