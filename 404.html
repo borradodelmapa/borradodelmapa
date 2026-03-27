@@ -75,22 +75,57 @@ function escapeHTML(str) {
 <script src="/bitacora-renderer.js"></script>
 <style>
   /* Blog mode overrides for public diario */
+  /* Blog mode — hide edit controls */
   .public-content .diario-area { max-width:700px; }
   .public-content .diario-back { display:none; }
   .public-content .diario-privacy-change { display:none; }
+  .public-content .diario-privacy { display:none; }
   .public-content .diario-upload-btn { display:none; }
   .public-content .diario-note-toggle { display:none; }
+  .public-content .diario-photo-delete { display:none !important; }
   .public-content .diario-stop-note { max-height:none; }
   .public-content .diario-stop-note:empty { display:none; }
-  .public-content .diario-note-input { background:none; border:none; padding:0; color:rgba(244,239,230,.7); font-style:italic; resize:none; pointer-events:none; min-height:auto; }
+  .public-content .diario-note-input { background:rgba(212,160,23,.08); border:none; border-left:3px solid var(--dorado); padding:12px 16px; color:rgba(244,239,230,.7); font-style:italic; resize:none; pointer-events:none; min-height:auto; border-radius:0 8px 8px 0; }
+  .public-content .diario-note-input:empty, .public-content .diario-note-input[value=""] { display:none; }
   .public-content .diario-stop-actions { display:none; }
   .public-content .diario-note-status { display:none; }
-  .public-content .diario-note-day { pointer-events:none; background:none; border:none; color:rgba(244,239,230,.6); font-style:italic; }
+  .public-content .diario-note-day { pointer-events:none; background:rgba(212,160,23,.08); border:none; border-left:3px solid var(--dorado); padding:12px 16px; color:rgba(244,239,230,.6); font-style:italic; border-radius:0 8px 8px 0; }
   .public-content .diario-note-day:empty { display:none; }
   .public-content .diario-share-btn { display:none; }
-  .public-diario-author { text-align:center; padding:20px 0; margin-bottom:20px; border-bottom:1px solid var(--linea); }
-  .public-diario-author-name { font-weight:600; color:rgba(244,239,230,.8); }
-  .public-diario-author-date { font-size:12px; color:rgba(244,239,230,.4); margin-top:4px; }
+
+  /* Blog mode — enhanced hero */
+  .public-diario-hero { text-align:center; padding:40px 20px 20px; }
+  .public-diario-country { font-family:var(--font-mono); font-size:11px; letter-spacing:.2em; color:var(--dorado); margin-bottom:8px; }
+  .public-diario-title { font-size:26px; font-weight:700; color:var(--blanco); margin-bottom:8px; }
+  .public-diario-author { font-size:13px; color:rgba(244,239,230,.5); margin-bottom:4px; }
+  .public-diario-salma { display:inline-flex; align-items:center; gap:6px; font-size:11px; color:rgba(244,239,230,.4); margin-top:12px; }
+  .public-diario-salma img { width:20px; height:20px; border-radius:50%; }
+  .public-diario-stats { display:flex; justify-content:center; gap:24px; margin-top:20px; padding-bottom:20px; border-bottom:1px solid var(--linea); }
+  .public-diario-stat-num { display:block; font-size:22px; font-weight:700; color:var(--dorado); }
+  .public-diario-stat-label { font-size:10px; color:rgba(244,239,230,.4); letter-spacing:.1em; }
+
+  /* Blog mode — photo badges */
+  .public-content .diario-photo-user { position:relative; }
+  .public-content .diario-photo-user::after {
+    content:'Mi foto'; position:absolute; bottom:8px; left:8px;
+    background:rgba(0,0,0,.7); color:var(--dorado); font-size:10px;
+    padding:3px 8px; border-radius:10px; font-family:var(--font-mono);
+  }
+
+  /* Blog mode — CTA enhanced */
+  .public-cta-enhanced {
+    text-align:center; padding:60px 20px; margin:40px 0;
+    background:linear-gradient(180deg, transparent, rgba(212,160,23,.08) 50%, transparent);
+    border-radius:20px;
+  }
+  .public-cta-enhanced h3 { font-size:20px; color:var(--blanco); margin-bottom:8px; font-family:var(--font-tight); }
+  .public-cta-enhanced p { font-size:14px; color:rgba(244,239,230,.5); margin-bottom:24px; }
+  .public-cta-enhanced a {
+    display:inline-block; background:var(--dorado); color:#0d0d0d;
+    font-weight:700; font-size:13px; padding:14px 32px; border-radius:25px;
+    text-decoration:none; transition:transform .15s; border:none;
+  }
+  .public-cta-enhanced a:hover { transform:scale(1.03); }
 </style>
 <script>
 (async function() {
@@ -133,10 +168,28 @@ function escapeHTML(str) {
       // Vista blog — diario con notas y fotos
       const authorName = data.owner_name || 'Viajero';
       const date = data.createdAt ? new Date(data.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
-      const authorDiv = document.createElement('div');
-      authorDiv.className = 'public-diario-author';
-      authorDiv.innerHTML = `<div class="public-diario-author-name">${escapeHTML(authorName)}</div>${date ? `<div class="public-diario-author-date">${escapeHTML(date)}</div>` : ''}`;
-      content.appendChild(authorDiv);
+      const stops = routeData.stops || [];
+      const totalDays = [...new Set(stops.map(s => s.day))].length;
+      const totalKm = Math.round(stops.reduce((sum, s) => sum + (s.km_from_previous || 0), 0));
+      const totalPhotos = (data.photos || []).length;
+      const country = routeData.country || routeData.region || '';
+
+      // Hero
+      const heroDiv = document.createElement('div');
+      heroDiv.className = 'public-diario-hero';
+      heroDiv.innerHTML = `
+        ${country ? `<div class="public-diario-country">${escapeHTML(country.toUpperCase())}</div>` : ''}
+        <div class="public-diario-title">${escapeHTML(data.nombre || routeData.title || 'Mi viaje')}</div>
+        <div class="public-diario-author">por ${escapeHTML(authorName)}${date ? ` · ${date}` : ''}</div>
+        <div class="public-diario-salma"><img src="/salma_ai_avatar.png" alt="Salma"> Ruta creada con Salma</div>
+        <div class="public-diario-stats">
+          <div><span class="public-diario-stat-num">${totalDays}</span><span class="public-diario-stat-label">DÍAS</span></div>
+          ${totalKm > 0 ? `<div><span class="public-diario-stat-num">${totalKm}</span><span class="public-diario-stat-label">KM</span></div>` : ''}
+          <div><span class="public-diario-stat-num">${stops.length}</span><span class="public-diario-stat-label">PARADAS</span></div>
+          ${totalPhotos > 0 ? `<div><span class="public-diario-stat-num">${totalPhotos}</span><span class="public-diario-stat-label">FOTOS</span></div>` : ''}
+        </div>
+      `;
+      content.appendChild(heroDiv);
 
       // Contenedor para el diario
       const diarioArea = document.createElement('div');
@@ -162,8 +215,12 @@ function escapeHTML(str) {
 
     // CTA
     const cta = document.createElement('div');
-    cta.className = 'public-cta';
-    cta.innerHTML = `
+    cta.className = isDiario ? 'public-cta-enhanced' : 'public-cta';
+    cta.innerHTML = isDiario ? `
+      <h3>¿Quieres tu propia Bitácora?</h3>
+      <p>Salma te diseña la ruta, te guía en el viaje y documenta tu aventura.</p>
+      <a href="/">Empieza tu viaje</a>
+    ` : `
       <h3>Viaja con alguien que sabe lo que hace</h3>
       <p>Salma te resuelve antes, durante y después. Como viajar con alguien que ya ha estado ahí.</p>
       <a href="/">EMPIEZA TU VIAJE</a>
