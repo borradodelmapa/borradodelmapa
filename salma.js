@@ -54,7 +54,9 @@ const salma = {
     // ¿Es petición de ruta? (destino + días)
     const daysMatch = lower.match(/(\d+)\s*d[ií]as?/);
     const days = daysMatch ? parseInt(daysMatch[1]) : null;
-    const isRoute = !!days || /\bruta\s+de\b|\bruta\s+por\b|itinerario|viaje a |escapada|roadtrip|road trip|semana\s*santa|en\s+coche|mochilero/i.test(msg);
+    // Excluir preguntas informativas ("qué sabes de", "háblame de", "cuéntame", "info sobre")
+    const isInfoQuestion = /\b(qu[eé]\s+sabes|h[aá]blame|cu[eé]ntame|info\s+sobre|informaci[oó]n|c[oó]mo\s+es|qu[eé]\s+es|qu[eé]\s+tal)\b/i.test(msg);
+    const isRoute = !isInfoQuestion && (!!days || /\b(hazme|cr[eé]ame|planifica|monta|genera)\s+(una\s+)?ruta\b|\bruta\s+de\s+\d|\bruta\s+por\b|itinerario|escapada|roadtrip|road trip/i.test(msg));
     if (!isRoute) return { isRoute: false };
 
     // Fechas explícitas
