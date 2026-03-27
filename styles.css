@@ -1354,7 +1354,7 @@ body {
 
 .diario-map-main { border-radius:12px; overflow:hidden; margin-bottom:16px; }
 
-.diario-privacy { display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(244,239,230,.5); margin-bottom:20px; padding:8px 12px; background:rgba(244,239,230,.03); border-radius:8px; }
+.diario-privacy { display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(244,239,230,.5); margin-bottom:20px; padding:8px 12px; background:rgba(244,239,230,.03); border-radius:8px; position:relative; }
 .diario-privacy-change, .diario-share-btn { background:none; border:1px solid rgba(212,160,23,.3); color:var(--dorado); font-size:11px; padding:4px 10px; border-radius:6px; cursor:pointer; margin-left:auto; }
 .diario-share-btn { margin-left:6px; background:rgba(212,160,23,.1); }
 
@@ -1379,6 +1379,9 @@ body {
 .diario-stop-photos { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
 .diario-photo-google img, .diario-photo-user img { width:100%; max-width:280px; border-radius:8px; display:block; }
 .diario-photo-placeholder { width:280px; height:160px; background:rgba(244,239,230,.04); border-radius:8px; display:flex; align-items:center; justify-content:center; color:rgba(244,239,230,.2); font-size:12px; }
+.diario-photo-user { position:relative; }
+.diario-photo-delete { position:absolute; top:6px; right:6px; background:rgba(0,0,0,.7); border:none; color:#fff; width:24px; height:24px; border-radius:50%; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .15s; }
+.diario-photo-user:hover .diario-photo-delete { opacity:1; }
 .diario-photo-caption { font-size:11px; color:rgba(244,239,230,.4); margin-top:4px; }
 
 /* Actions */

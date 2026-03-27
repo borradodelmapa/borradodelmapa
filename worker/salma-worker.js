@@ -2068,6 +2068,20 @@ export default {
       }
     }
 
+    // ─── ENDPOINT /delete-photo (eliminar de R2) ───
+    if (request.method === 'POST' && url.pathname === '/delete-photo') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      if (!env.SALMA_PHOTOS) return new Response(JSON.stringify({ error: 'R2 not configured' }), { status: 500, headers: corsH });
+      try {
+        const { key } = await request.json();
+        if (!key) return new Response(JSON.stringify({ error: 'Missing key' }), { status: 400, headers: corsH });
+        await env.SALMA_PHOTOS.delete(key);
+        return new Response(JSON.stringify({ ok: true }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /photo/* (servir fotos desde R2) ───
     if (request.method === 'GET' && url.pathname.startsWith('/photo/')) {
       if (!env.SALMA_PHOTOS) {

@@ -88,6 +88,9 @@ const bitacoraRenderer = {
     // Init photo upload listeners
     this._initPhotoUploadListeners(docId);
 
+    // Init photo delete listeners
+    this._initPhotoDeleteListeners(docId, routeData, docData);
+
     // Load Google Places photos
     this._loadAllPhotos();
   },
@@ -138,7 +141,7 @@ const bitacoraRenderer = {
 
           <div class="diario-stop-photos">
             ${stop.photo_ref ? `<div class="diario-photo-google" data-ref="${escapeHTML(stop.photo_ref)}"><div class="diario-photo-placeholder">Cargando foto...</div></div>` : ''}
-            ${userPhotos.map(p => `<div class="diario-photo-user"><img src="${escapeHTML(p.url)}" alt="Mi foto"><div class="diario-photo-caption">${escapeHTML(p.caption || '')}</div></div>`).join('')}
+            ${userPhotos.map((p, pi) => `<div class="diario-photo-user" data-photo-key="${escapeHTML(p.key)}"><img src="${escapeHTML(p.url)}" alt="Mi foto"><button class="diario-photo-delete" data-key="${escapeHTML(p.key)}" title="Eliminar foto">✕</button>${p.caption ? `<div class="diario-photo-caption">${escapeHTML(p.caption)}</div>` : ''}</div>`).join('')}
           </div>
 
           <div class="diario-stop-actions">
@@ -284,6 +287,37 @@ const bitacoraRenderer = {
       console.error('Error subiendo foto:', e);
       showToast('Error al subir foto');
     }
+  },
+
+  _initPhotoDeleteListeners(docId, routeData, docData) {
+    document.querySelectorAll('.diario-photo-delete').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const key = btn.dataset.key;
+        if (!key || !confirm('¿Eliminar esta foto?')) return;
+
+        // Quitar del array local
+        this._currentPhotos = this._currentPhotos.filter(p => p.key !== key);
+
+        // Actualizar Firestore
+        try {
+          await db.collection('users').doc(currentUser.uid)
+            .collection('maps').doc(docId).update({ photos: this._currentPhotos });
+          // Eliminar de R2
+          fetch(window.SALMA_API + '/delete-photo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key })
+          }).catch(() => {});
+          // Quitar del DOM
+          const photoEl = btn.closest('.diario-photo-user');
+          if (photoEl) photoEl.remove();
+          showToast('Foto eliminada');
+        } catch (err) {
+          showToast('Error al eliminar');
+        }
+      });
+    });
   },
 
   _compressImage(file, maxWidth, quality) {
@@ -445,7 +479,10 @@ const bitacoraRenderer = {
       menu.remove();
 
       if (action === 'link' && url) {
-        navigator.clipboard?.writeText(url);
+        try {
+          if (navigator.clipboard) { await navigator.clipboard.writeText(url); }
+          else { const ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+        } catch (_) {}
         showToast('Enlace copiado');
       } else if (action === 'native' && url) {
         navigator.share({ title: docData.nombre || 'Mi viaje', url });
