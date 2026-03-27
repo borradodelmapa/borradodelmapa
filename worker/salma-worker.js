@@ -164,7 +164,8 @@ NO pienses en "sitios interesantes" y luego los ordenes. Piensa AL REVÉS:
 2b. RADIO SEGÚN DÍAS: para 1-2 días, TODAS las paradas deben estar dentro de 30km del centro de la ciudad mencionada. Para 3-4 días, máximo 60km. Solo en rutas de 5+ días puedes cubrir una región amplia. Si alguien dice "2 días en Málaga", quiere Málaga ciudad y alrededores inmediatos (Nerja, Frigiliana, El Torcal), NO Ronda ni Antequera.
 3. CADA DÍA ES UN TRAMO: Día 1 = tramo A→B, Día 2 = tramo B→C. Las paradas del día van en el orden en que las encuentras conduciendo/caminando de A a B. La primera parada del día es el punto de salida. La última es donde duermes.
 4. CONTINUIDAD OBLIGATORIA: la primera parada del día 2 es la misma ciudad/pueblo donde terminó el día 1. Si el día 1 acaba en Cádiz, el día 2 empieza en Cádiz.
-5. DISTANCIAS POR TRANSPORTE: en moto/coche un día = 150-300km de recorrido, en bici = 50-80km, a pie = 15-25km. No pongas más paradas de las que caben en las horas disponibles.
+5. MÁXIMO 5-6 PARADAS POR DÍA. Calidad sobre cantidad. Mejor 5 paradas bien explicadas que 12 que no dicen nada. Si un día tiene más de 6 paradas, fusiona las que estén a menos de 1km.
+5b. DISTANCIAS POR TRANSPORTE: en moto/coche un día = 150-300km de recorrido, en bici = 50-80km, a pie = 15-25km. No pongas más paradas de las que caben en las horas disponibles.
 6. KM Y CARRETERAS: los km y carreteras van en los campos km_from_previous y road_name de cada parada, NO en el narrative. El narrative es solo para la experiencia del viajero.
 7. TIPO DE PARADAS SEGÚN TRANSPORTE: en moto → puertos, curvas, carreteras escénicas, bares de carretera. A pie → senderos, fuentes, refugios. En coche → pueblos, miradores con aparcamiento.
 Cada parada debe llevar un campo day_title con un título breve del día (3-5 palabras), el mismo valor para todas las paradas del mismo día.
@@ -1195,7 +1196,7 @@ async function verifyAllStops(route, placesKey) {
   const region = route.region || route.country || '';
   const countryCode = route.country ? getCountryCode(route.country) : '';
 
-  // 1. Buscar cada parada en Google Places
+  // 1. Buscar cada parada en Google Places (find + details en 1 sola llamada)
   const findPromises = route.stops.map(stop => {
     const name = stop.name || stop.headline || '';
     if (!name || name.length < 3) return Promise.resolve(null);
@@ -1203,7 +1204,7 @@ async function verifyAllStops(route, placesKey) {
     const bias = (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01)
       ? `&locationbias=circle:50000@${stop.lat},${stop.lng}` : '';
     const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
-    return fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(searchQuery)}&inputtype=textquery${bias}${countryFilter}&fields=place_id,photos,geometry,name,formatted_address&language=es&key=${placesKey}`)
+    return fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(searchQuery)}&inputtype=textquery${bias}${countryFilter}&fields=place_id,photos,geometry,name,formatted_address,opening_hours,editorial_summary&language=es&key=${placesKey}`)
       .then(r => r.json()).catch(() => null);
   });
   const findResults = await Promise.all(findPromises);
@@ -1227,19 +1228,13 @@ async function verifyAllStops(route, placesKey) {
     routeRadiusKm = Math.max(50, maxDist * 1.5);
   }
 
-  // 3. Place Details para cada resultado válido
-  const detailFields = 'name,editorial_summary,reviews,opening_hours,website,photos,geometry';
-  const detailPromises = findResults.map(data => {
+  // 3. NO hay segunda ronda — findplacefromtext ya trae photos, geometry, opening_hours, editorial_summary
+  // Mapeamos findResults como si fueran detailResults para mantener compatibilidad
+  const detailResults = findResults.map(data => {
     const c = data?.candidates?.[0];
-    if (!c?.place_id) return Promise.resolve(null);
-    if (centerLat && centerLng && c.geometry?.location) {
-      const distKm = Math.sqrt(Math.pow(Math.abs(c.geometry.location.lat - centerLat), 2) + Math.pow(Math.abs(c.geometry.location.lng - centerLng), 2)) * 111;
-      if (distKm > routeRadiusKm) return Promise.resolve(null);
-    }
-    return fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${c.place_id}&fields=${detailFields}&language=es&key=${placesKey}`)
-      .then(r => r.json()).catch(() => null);
+    if (!c) return null;
+    return { result: { name: c.name, geometry: c.geometry, photos: c.photos, formatted_address: c.formatted_address, opening_hours: c.opening_hours, editorial_summary: c.editorial_summary } };
   });
-  const detailResults = await Promise.all(detailPromises);
 
   // 4. Enriquecer cada parada con datos reales
   const verifiedStops = [];
