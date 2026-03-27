@@ -2715,6 +2715,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     let kvCountryData = null;
     let kvDestinationData = null;
     let kvCachedRoute = null;
+    const _kvDebug = {};
     if (env.SALMA_KB) {
       try {
         // Extraer ubicación: primero el extractor normal, luego buscar palabras del mensaje en KV
@@ -2752,7 +2753,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
 
             // Buscar ruta cacheada (nivel 3) — solo para peticiones de ruta
             if (isRouteRequest(message, history)) {
-              const daysMatch = message.match(/(\d+)\s*d[ií]as?/i);
+              const daysMatch = message.match(/(\d+)\s*d\S*as?/i) || message.match(/(\d+)\s*days?/i);
               const days = daysMatch ? daysMatch[1] : null;
               if (days) {
                 const routeKey = 'route:' + countryCode + ':' + kwNorm.replace(/\s+/g, '-') + ':' + days;
@@ -2769,8 +2770,8 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     if (kvCachedRoute && kvCachedRoute.stops && kvCachedRoute.stops.length > 0) {
       const cachedReply = kvCachedRoute.title ? `Aquí tienes tu ruta por ${kvCachedRoute.title}.` : 'Aquí tienes tu ruta.';
       return new Response(
-        JSON.stringify({ reply: cachedReply, route: kvCachedRoute }),
-        { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
+        JSON.stringify({ done: true, reply: cachedReply, route: kvCachedRoute }),
+        { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'X-Salma-Cache': 'HIT' } }
       );
     }
 
@@ -2852,14 +2853,24 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
               if (route) {
                 const reply = 'Aquí tienes tu ruta completa.';
 
-                // Guardar en KV nivel 3
+                // Guardar en KV nivel 3 — con múltiples keys para matchear
                 if (route.stops && route.stops.length > 0 && env.SALMA_KB) {
                   try {
-                    const country = (route.country || route.region || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
-                    const region = (route.region || route.country || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
-                    const countryCode = await env.SALMA_KB.get('kw:' + country) || country.substring(0, 2);
-                    const routeKey = `route:${countryCode}:${region}:${days}`;
-                    ctx.waitUntil(env.SALMA_KB.put(routeKey, JSON.stringify(route), { expirationTtl: 2592000 }));
+                    const routeJson = JSON.stringify(route);
+                    const ttl = { expirationTtl: 2592000 }; // 30 días
+                    const country = (route.country || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+                    const region = (route.region || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+                    const title = (route.title || route.name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+                    const cc = await env.SALMA_KB.get('kw:' + country) || country.substring(0, 2);
+                    // Key principal (region completa)
+                    if (region) ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${region}:${days}`, routeJson, ttl));
+                    // Key simple (solo país/destino — para matchear "3 días en Sevilla")
+                    if (country && country !== region) ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${country}:${days}`, routeJson, ttl));
+                    // Key por primera palabra relevante del destino
+                    const simpleKey = region.split(',')[0].split('-')[0].trim();
+                    if (simpleKey && simpleKey !== country && simpleKey !== region) {
+                      ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${simpleKey}:${days}`, routeJson, ttl));
+                    }
                   } catch (_) {}
                 }
 
@@ -2980,15 +2991,21 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           }
         }
 
-        // ── Guardar ruta en KV (nivel 3 — caché automático) ──
+        // ── Guardar ruta en KV (nivel 3 — caché automático con múltiples keys) ──
         if (route && route.stops && route.stops.length > 0 && env.SALMA_KB) {
           try {
-            const country = (route.country || route.region || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
-            const region = (route.region || route.country || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+            const routeJson = JSON.stringify(route);
+            const ttl = { expirationTtl: 2592000 }; // 30 días
+            const country = (route.country || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+            const region = (route.region || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
             const days = route.duration_days || route.stops.filter((s, i, arr) => i === 0 || s.day !== arr[i-1]?.day).length;
-            const countryCode = await env.SALMA_KB.get('kw:' + country) || country.substring(0, 2);
-            const routeKey = `route:${countryCode}:${region}:${days}`;
-            ctx.waitUntil(env.SALMA_KB.put(routeKey, JSON.stringify(route), { expirationTtl: 2592000 })); // 30 días
+            const cc = await env.SALMA_KB.get('kw:' + country) || country.substring(0, 2);
+            if (region) ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${region}:${days}`, routeJson, ttl));
+            if (country && country !== region) ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${country}:${days}`, routeJson, ttl));
+            const simpleKey = region.split(',')[0].split('-')[0].trim();
+            if (simpleKey && simpleKey !== country && simpleKey !== region) {
+              ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${simpleKey}:${days}`, routeJson, ttl));
+            }
           } catch (_) { /* fallo silencioso */ }
         }
 
