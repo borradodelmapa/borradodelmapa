@@ -419,18 +419,297 @@ const bitacoraRenderer = {
   // ═══ COMPARTIR ═══
 
   _share(docId, docData) {
+    // Cerrar menú si ya existe
+    const existing = document.querySelector('.diario-share-menu');
+    if (existing) { existing.remove(); return; }
+
     const slug = docData?.slug;
-    if (!slug) {
-      showToast('Guarda la guía primero');
-      return;
+    const url = slug ? 'https://borradodelmapa.com/' + slug : null;
+
+    const menu = document.createElement('div');
+    menu.className = 'diario-share-menu';
+    menu.innerHTML = `
+      ${url ? `<button class="diario-share-option" data-action="link">🔗 Copiar enlace</button>` : ''}
+      ${url && navigator.share ? `<button class="diario-share-option" data-action="native">📤 Compartir</button>` : ''}
+      <button class="diario-share-option" data-action="instagram-post">📸 Instagram Post</button>
+      <button class="diario-share-option" data-action="instagram-story">📱 Instagram Story</button>
+      <button class="diario-share-option" data-action="carousel">🎠 Carrusel</button>
+    `;
+
+    const shareBtn = document.getElementById('diario-share-btn');
+    if (shareBtn) shareBtn.parentElement.appendChild(menu);
+
+    menu.addEventListener('click', async (e) => {
+      const action = e.target.dataset.action;
+      if (!action) return;
+      menu.remove();
+
+      if (action === 'link' && url) {
+        navigator.clipboard?.writeText(url);
+        showToast('Enlace copiado');
+      } else if (action === 'native' && url) {
+        navigator.share({ title: docData.nombre || 'Mi viaje', url });
+      } else if (action === 'instagram-post') {
+        await this._generateShareImage('post', docData);
+      } else if (action === 'instagram-story') {
+        await this._generateShareImage('story', docData);
+      } else if (action === 'carousel') {
+        await this._generateCarousel(docData);
+      }
+    });
+
+    // Cerrar al click fuera
+    setTimeout(() => {
+      const close = (e) => { if (!menu.contains(e.target)) { menu.remove(); document.removeEventListener('click', close); } };
+      document.addEventListener('click', close);
+    }, 100);
+  },
+
+  // ═══ CANVAS — IMÁGENES PARA REDES ═══
+
+  async _generateShareImage(format, docData) {
+    const route = this._getCurrentRoute(docData);
+    if (!route) return;
+
+    const isStory = format === 'story';
+    const w = isStory ? 1080 : 1080;
+    const h = isStory ? 1920 : 1350;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+
+    // Fondo degradado oscuro
+    const grad = ctx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, '#0a0a0a');
+    grad.addColorStop(0.5, '#111');
+    grad.addColorStop(1, '#050505');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+
+    // Intentar cargar foto de portada
+    const coverUrl = docData.cover_image;
+    if (coverUrl) {
+      try {
+        const img = await this._loadImageAsync(coverUrl);
+        // Foto ocupa la mitad superior
+        const imgH = isStory ? h * 0.55 : h * 0.5;
+        ctx.save();
+        ctx.globalAlpha = 0.7;
+        const scale = Math.max(w / img.width, imgH / img.height);
+        const dx = (w - img.width * scale) / 2;
+        const dy = (imgH - img.height * scale) / 2;
+        ctx.drawImage(img, dx, dy, img.width * scale, img.height * scale);
+        ctx.restore();
+
+        // Degradado sobre la foto
+        const fadeGrad = ctx.createLinearGradient(0, imgH * 0.5, 0, imgH);
+        fadeGrad.addColorStop(0, 'rgba(10,10,10,0)');
+        fadeGrad.addColorStop(1, 'rgba(10,10,10,1)');
+        ctx.fillStyle = fadeGrad;
+        ctx.fillRect(0, imgH * 0.5, w, imgH * 0.5);
+      } catch (_) {}
     }
-    const url = 'https://borradodelmapa.com/' + slug;
-    if (navigator.share) {
-      navigator.share({ title: docData.nombre || 'Mi viaje', url });
-    } else if (navigator.clipboard) {
-      navigator.clipboard.writeText(url);
-      showToast('Enlace copiado');
+
+    // Título
+    const textY = isStory ? h * 0.58 : h * 0.55;
+    ctx.fillStyle = '#d4a843';
+    ctx.font = 'bold 28px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('📍 ' + (route.region || route.country || '').toUpperCase(), w / 2, textY);
+
+    // Nombre de la ruta
+    ctx.fillStyle = '#f4efe6';
+    ctx.font = 'bold 48px Inter, sans-serif';
+    const title = route.title || route.name || docData.nombre || 'Mi viaje';
+    this._wrapText(ctx, title, w / 2, textY + 60, w - 120, 56);
+
+    // Stats
+    const stops = route.stops || [];
+    const totalKm = Math.round(stops.reduce((s, st) => s + (st.km_from_previous || 0), 0));
+    const days = route.duration_days || new Set(stops.map(s => s.day)).size;
+    ctx.fillStyle = 'rgba(244,239,230,0.5)';
+    ctx.font = '500 24px Inter, sans-serif';
+    ctx.fillText(`${days} días · ${stops.length} paradas · ${totalKm} km`, w / 2, textY + 180);
+
+    // Nota del usuario (primera que encuentre)
+    const firstNote = this._getFirstNote(docData.notes);
+    if (firstNote) {
+      ctx.fillStyle = 'rgba(244,239,230,0.6)';
+      ctx.font = 'italic 26px Inter, sans-serif';
+      this._wrapText(ctx, '"' + firstNote + '"', w / 2, textY + 240, w - 160, 34);
     }
+
+    // Branding
+    ctx.fillStyle = 'rgba(212,168,67,0.4)';
+    ctx.font = '600 18px JetBrains Mono, monospace';
+    ctx.fillText('borradodelmapa.com', w / 2, h - 40);
+
+    // Línea dorada decorativa
+    ctx.strokeStyle = 'rgba(212,168,67,0.3)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(w * 0.3, h - 70);
+    ctx.lineTo(w * 0.7, h - 70);
+    ctx.stroke();
+
+    this._downloadCanvas(canvas, `${(route.title || 'viaje').replace(/\s+/g, '-')}-${format}.png`);
+    showToast('Imagen descargada');
+  },
+
+  async _generateCarousel(docData) {
+    const route = this._getCurrentRoute(docData);
+    if (!route) return;
+
+    const stops = route.stops || [];
+    const days = {};
+    stops.forEach(s => {
+      const d = s.day || 1;
+      if (!days[d]) days[d] = { title: s.day_title || '', stops: [] };
+      days[d].stops.push(s);
+    });
+
+    const dayNums = Object.keys(days).map(Number).sort((a, b) => a - b);
+    const w = 1080, h = 1080;
+    let slideNum = 0;
+
+    // Slide 1: portada
+    const c1 = document.createElement('canvas');
+    c1.width = w; c1.height = h;
+    const ctx1 = c1.getContext('2d');
+    const grad1 = ctx1.createLinearGradient(0, 0, 0, h);
+    grad1.addColorStop(0, '#111');
+    grad1.addColorStop(1, '#050505');
+    ctx1.fillStyle = grad1;
+    ctx1.fillRect(0, 0, w, h);
+
+    ctx1.fillStyle = '#d4a843';
+    ctx1.font = 'bold 24px Inter';
+    ctx1.textAlign = 'center';
+    ctx1.fillText('📍 ' + (route.country || '').toUpperCase(), w / 2, h * 0.35);
+    ctx1.fillStyle = '#f4efe6';
+    ctx1.font = 'bold 56px Inter';
+    this._wrapText(ctx1, route.title || 'Mi viaje', w / 2, h * 0.45, w - 120, 64);
+    ctx1.fillStyle = 'rgba(244,239,230,0.4)';
+    ctx1.font = '500 22px Inter';
+    const totalKm = Math.round(stops.reduce((s, st) => s + (st.km_from_previous || 0), 0));
+    ctx1.fillText(`${dayNums.length} días · ${stops.length} paradas · ${totalKm} km`, w / 2, h * 0.62);
+    ctx1.fillStyle = 'rgba(212,168,67,0.4)';
+    ctx1.font = '600 16px JetBrains Mono';
+    ctx1.fillText('borradodelmapa.com', w / 2, h - 40);
+
+    this._downloadCanvas(c1, `carrusel-00-portada.png`);
+
+    // Slides por día (máx 9 para Instagram)
+    for (const dayNum of dayNums.slice(0, 9)) {
+      slideNum++;
+      const day = days[dayNum];
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const ctx = c.getContext('2d');
+
+      const grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, '#0a0a0a');
+      grad.addColorStop(1, '#080808');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+
+      // Número de día
+      ctx.fillStyle = 'rgba(212,168,67,0.2)';
+      ctx.font = 'bold 200px Inter';
+      ctx.textAlign = 'center';
+      ctx.fillText(dayNum, w / 2, h * 0.25);
+
+      // Título del día
+      ctx.fillStyle = '#d4a843';
+      ctx.font = 'bold 20px JetBrains Mono';
+      ctx.fillText(`DÍA ${dayNum}`, w / 2, h * 0.35);
+      ctx.fillStyle = '#f4efe6';
+      ctx.font = 'bold 36px Inter';
+      ctx.fillText(day.title || '', w / 2, h * 0.42);
+
+      // Paradas del día
+      ctx.textAlign = 'left';
+      ctx.fillStyle = 'rgba(244,239,230,0.7)';
+      ctx.font = '500 22px Inter';
+      let y = h * 0.52;
+      for (const stop of day.stops.slice(0, 5)) {
+        ctx.fillStyle = '#d4a843';
+        ctx.fillText('●', 100, y);
+        ctx.fillStyle = 'rgba(244,239,230,0.8)';
+        ctx.fillText(stop.name || '', 130, y);
+        y += 40;
+      }
+
+      // Nota del día si existe
+      const dayNote = docData.notes?.['day_' + dayNum + '_general'];
+      if (dayNote) {
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(244,239,230,0.5)';
+        ctx.font = 'italic 20px Inter';
+        this._wrapText(ctx, '"' + dayNote + '"', w / 2, h * 0.82, w - 200, 28);
+      }
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = 'rgba(212,168,67,0.3)';
+      ctx.font = '600 14px JetBrains Mono';
+      ctx.fillText('borradodelmapa.com', w / 2, h - 30);
+
+      this._downloadCanvas(c, `carrusel-${String(slideNum).padStart(2, '0')}-dia${dayNum}.png`);
+    }
+
+    showToast(`${slideNum + 1} imágenes descargadas`);
+  },
+
+  _getCurrentRoute(docData) {
+    try {
+      if (docData.itinerarioIA) return JSON.parse(docData.itinerarioIA);
+    } catch (_) {}
+    // Fallback: buscar en currentRoute del renderer
+    const stops = document.querySelectorAll('.diario-stop');
+    return stops.length > 0 ? { stops: [], title: docData.nombre } : null;
+  },
+
+  _getFirstNote(notes) {
+    if (!notes) return null;
+    for (const key of Object.keys(notes)) {
+      if (notes[key] && notes[key].trim()) return notes[key].trim().slice(0, 120);
+    }
+    return null;
+  },
+
+  _wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(' ');
+    let line = '';
+    for (const word of words) {
+      const test = line + word + ' ';
+      if (ctx.measureText(test).width > maxWidth && line) {
+        ctx.fillText(line.trim(), x, y);
+        line = word + ' ';
+        y += lineHeight;
+      } else {
+        line = test;
+      }
+    }
+    ctx.fillText(line.trim(), x, y);
+  },
+
+  _loadImageAsync(url) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = url;
+    });
+  },
+
+  _downloadCanvas(canvas, filename) {
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
   },
 
   // ═══ LIMPIEZA ═══

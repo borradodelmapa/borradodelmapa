@@ -1395,3 +1395,8 @@ body {
 .diario-note-input::placeholder { color:rgba(244,239,230,.2); }
 .diario-note-day { min-height:40px; margin-bottom:8px; }
 .diario-note-status { font-size:10px; color:rgba(212,160,23,.6); text-align:right; min-height:14px; }
+
+/* Share menu */
+.diario-share-menu { position:absolute; right:0; top:100%; margin-top:8px; background:#1a1a1a; border:1px solid rgba(244,239,230,.1); border-radius:10px; padding:6px; z-index:100; min-width:200px; box-shadow:0 8px 24px rgba(0,0,0,.5); }
+.diario-share-option { display:block; width:100%; text-align:left; background:none; border:none; color:rgba(244,239,230,.7); font-size:13px; padding:10px 14px; border-radius:6px; cursor:pointer; }
+.diario-share-option:hover { background:rgba(212,160,23,.1); color:var(--dorado); }
