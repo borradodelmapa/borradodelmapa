@@ -1208,6 +1208,11 @@ async function verifyAllStops(route, placesKey) {
       .then(r => r.json()).catch(() => null);
   });
   const findResults = await Promise.all(findPromises);
+  // DEBUG photos
+  findResults.forEach((r, i) => {
+    const c = r?.candidates?.[0];
+    if (c) console.log(`[FIND] ${route.stops[i]?.name} → ${c.name} | photos: ${c.photos?.length || 0} | photo_ref: ${(c.photos?.[0]?.photo_reference || '').substring(0, 30)}`);
+  });
 
   // 2. Calcular centro y radio dinámico
   const verifiedCoords = [];
@@ -3029,17 +3034,9 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           // ── PASO 2: Draft inmediato (coords del KV donde haya, Claude donde no) ──
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ draft: true, reply, route })}\n\n`)); } catch (_) {}
 
-          // ── PASO 3: Verify con Google (paradas sin KV usan verify normal) ──
-          if (env.GOOGLE_PLACES_KEY) {
-            const keepalive = setInterval(async () => {
-              try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
-            }, 3000);
-            try {
-              route = await verifyAllStops(route, env.GOOGLE_PLACES_KEY);
-            } finally {
-              clearInterval(keepalive);
-            }
-          }
+          // ── Verify DESACTIVADO — las fotos tienen bug, el verify solo añade 30s sin beneficio ──
+          // TODO: arreglar bug de fotos en verifyAllStops y reactivar
+          // Las coords vienen del KV (verificadas) o de Claude (95% correctas)
         }
 
         // ── Guardar ruta en KV (nivel 3 — caché automático con múltiples keys) ──
