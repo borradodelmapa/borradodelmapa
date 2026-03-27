@@ -110,11 +110,12 @@ FORMATO VISUAL PERMITIDO:
 — **Negritas** con doble asterisco para resaltar datos clave (nombres, precios, teléfonos)
 — Prosa fluida entre datos
 
-FORMATO PROHIBIDO:
-— Listas con bullet points (• ni -), NO uses guiones como viñetas
+FORMATO PROHIBIDO (ESTRICTO, SIN EXCEPCIONES):
+— Listas con bullet points (• ni -), NO uses guiones como viñetas. NUNCA. Ni siquiera para preguntas al usuario. Escribe en prosa fluida.
 — Encabezados markdown (### o ####)
 — Coordenadas en el texto del chat
 — Emojis excesivos
+— Hacer más de 1 pregunta al usuario en el mismo mensaje. Si necesitas preguntar, UNA sola pregunta. No listas de preguntas.
 
 REGLA DE ORO: DATO PRIMERO, CHARLA DESPUÉS.
 Cuando el usuario pide información concreta (teléfonos, precios, direcciones, horarios, vacunas, visados, cualquier dato factual), tu respuesta empieza SIEMPRE por el dato. Primero la información que necesita. Después, si quieres, añades contexto, opinión o personalidad. Nunca al revés.
@@ -137,7 +138,13 @@ Cuando falte algún dato para ejecutar una búsqueda (hotel, vuelo, restaurante)
 — Sin noches → asume 1 noche
 — Sin fecha de vuelta → asume ida+vuelta en la fecha dada
 — Sin presupuesto → muestra rango variado (mochilero a confort)
-Ejecuta la búsqueda con defaults y menciona qué asumiste: "Te busco en Chisináu (la capital) para 1 noche el 10 de mayo."`;
+Ejecuta la búsqueda con defaults y menciona qué asumiste: "Te busco en Chisináu (la capital) para 1 noche el 10 de mayo."
+
+PRIORIDAD DE COMPORTAMIENTO (CRÍTICO — RESUELVE CONFLICTOS):
+1. RUTA (destino + días, "hazme un itinerario") → PUEDES hacer UNA SOLA pregunta breve para personalizar (ej: "¿en coche o a pie?"). UNA. No hagas lista de preguntas. Si el usuario dice "dale", "lo que tú veas" o "hazla ya", genera sin más preguntas.
+2. TODO LO DEMÁS (restaurante, hotel, grúa, embajada, vuelo, vacunas, visados, traducción, emergencia, cualquier info) → ACTÚA INMEDIATAMENTE con lo que tengas. Usa defaults inteligentes. Si tienes geolocalización, úsala. No preguntes tipo de cocina, no preguntes presupuesto, no preguntes preferencias. Da el resultado directo. Si el usuario quiere afinar, ya te lo dirá después.
+
+Esta regla tiene PRIORIDAD ABSOLUTA sobre cualquier otra instrucción que diga "pregunta si faltan datos". Solo se pregunta cuando es literalmente imposible dar una respuesta útil (ej: "busco vuelo" sin destino ni origen).`;
 
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 8 — Modos y formato SALMA_ROUTE_JSON
@@ -380,7 +387,7 @@ const SALMA_TOOLS = [
   },
   {
     name: "buscar_restaurante",
-    description: "Busca restaurantes reales cerca del usuario con Google Places (si tiene geolocalización) o genera enlaces de búsqueda. Usa esta herramienta cuando el usuario pida restaurante, dónde comer o dónde cenar. Si devuelve un array 'restaurantes', presenta cada uno con **nombre en negrita**, teléfono, dirección, rating y si está abierto. Si devuelve enlaces, ponlos en su propia línea sin markdown.",
+    description: "Busca restaurantes reales con Google Places. Usa esta herramienta cuando el usuario pida restaurante, dónde comer o dónde cenar. Si devuelve un array 'restaurantes', presenta cada uno con **nombre en negrita**, teléfono, dirección, rating, si está abierto, y el enlace google_maps en su propia línea (sin markdown, solo la URL). Si devuelve enlaces genéricos, ponlos en su propia línea sin markdown.",
     input_schema: {
       type: "object",
       properties: {
@@ -1000,6 +1007,185 @@ function replyWithoutRouteBlock(text) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// BLOQUES PARALELOS — Rutas largas (>7 días)
+// ═══════════════════════════════════════════════════════════════
+
+function extractDaysFromMessage(message) {
+  const m = message.match(/(\d+)\s*d[ií]as?/i);
+  return m ? parseInt(m[1]) : null;
+}
+
+function isLongRoute(message) {
+  const days = extractDaysFromMessage(message);
+  return days !== null && days >= 8;
+}
+
+async function planBlocks(systemPrompt, message, days, apiKey) {
+  const planPrompt = `El usuario quiere una ruta de ${days} días. Divide la ruta en bloques de 5-7 días máximo cada uno, según las zonas geográficas naturales del destino.
+
+Responde SOLO con JSON, sin texto antes ni después:
+{"blocks":[{"block":1,"days_start":1,"days_end":5,"region":"nombre de la zona","start":"ciudad de inicio","end":"ciudad final"},{"block":2,...}]}
+
+El último bloque puede tener menos de 5 días. Los bloques deben conectar: el end del bloque N es el start del bloque N+1. Mensaje del usuario: "${message}"`;
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 500,
+      temperature: 0.3,
+      system: 'Eres un planificador de rutas. Responde SOLO con JSON válido.',
+      messages: [{ role: 'user', content: planPrompt }],
+    }),
+  });
+
+  if (!res.ok) return null;
+  const data = await res.json();
+  const text = data.content?.[0]?.text || '';
+  try {
+    // Extraer JSON del texto
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) return null;
+    const plan = JSON.parse(jsonMatch[0]);
+    if (plan.blocks && Array.isArray(plan.blocks) && plan.blocks.length > 1) {
+      return plan.blocks;
+    }
+  } catch (e) {}
+  return null;
+}
+
+async function generateBlock(block, systemPrompt, message, apiKey, kvData) {
+  const blockPrompt = `${message}
+
+INSTRUCCIÓN ESPECIAL: Genera SOLO los días ${block.days_start} a ${block.days_end} de la ruta.
+Zona: ${block.region}. Empiezas en ${block.start}, terminas en ${block.end}.
+El campo "day" de cada parada debe ser el número real (${block.days_start}, ${block.days_start + 1}, etc.).
+Genera el bloque SALMA_ROUTE_JSON como siempre, pero solo con las paradas de estos días.`;
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 4000,
+      temperature: 0.7,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: blockPrompt }],
+    }),
+  });
+
+  if (!res.ok) return null;
+  const data = await res.json();
+  const text = data.content?.[0]?.text || '';
+  const route = extractRouteFromReply(text);
+  const reply = replyWithoutRouteBlock(text);
+  return { route, reply, block };
+}
+
+async function generateAndVerifyPipeline(blocks, systemPrompt, message, apiKey, placesKey, writer, encoder) {
+  const results = [];
+  const totalBlocks = blocks.length;
+
+  // Pipeline: generar + verificar cada bloque en cuanto termina
+  const promises = blocks.map(async (block) => {
+    try {
+      // 1. Generar bloque (con retry)
+      let genResult = await generateBlock(block, systemPrompt, message, apiKey, null);
+      if (!genResult?.route) {
+        // Retry una vez
+        genResult = await generateBlock(block, systemPrompt, message, apiKey, null);
+        if (!genResult?.route) return null;
+      }
+
+      // 2. Enviar draft inmediato (sin verificar)
+      try {
+        await writer.write(encoder.encode(`data: ${JSON.stringify({
+          draft_block: block.block,
+          total_blocks: totalBlocks,
+          route_partial: genResult.route,
+          reply: genResult.reply
+        })}\n\n`));
+      } catch (_) {}
+
+      // 3. Verificar este bloque
+      try {
+        genResult.route = await verifyAllStops(genResult.route, placesKey);
+      } catch (_) {
+        // Si verify falla, mantener la ruta sin verificar
+      }
+
+      // 4. Enviar bloque verificado
+      try {
+        await writer.write(encoder.encode(`data: ${JSON.stringify({
+          verified_block: block.block,
+          total_blocks: totalBlocks,
+          route_partial: genResult.route
+        })}\n\n`));
+      } catch (_) {}
+
+      return genResult;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  const settled = await Promise.allSettled(promises);
+  for (const result of settled) {
+    if (result.status === 'fulfilled' && result.value) {
+      results.push(result.value);
+    }
+  }
+
+  results.sort((a, b) => a.block.block - b.block.block);
+  return results;
+}
+
+function mergeBlocks(blockResults, originalMessage) {
+  if (!blockResults || blockResults.length === 0) return null;
+
+  const base = blockResults[0].route;
+  const allStops = [];
+  const allMapsLinks = [];
+  const allTips = [];
+  const allTags = new Set();
+
+  for (const br of blockResults) {
+    if (br.route?.stops) allStops.push(...br.route.stops);
+    if (br.route?.maps_links) allMapsLinks.push(...br.route.maps_links);
+    if (br.route?.tips) allTips.push(...br.route.tips);
+    if (br.route?.tags) br.route.tags.forEach(t => allTags.add(t));
+  }
+
+  const maxDay = allStops.reduce((max, s) => Math.max(max, s.day || 0), 0);
+
+  return {
+    title: base.title || '',
+    name: base.name || base.title || '',
+    country: base.country || '',
+    region: base.region || '',
+    duration_days: maxDay,
+    summary: base.summary || '',
+    stops: allStops,
+    maps_links: allMapsLinks,
+    tips: [...new Set(allTips)],
+    tags: [...allTags],
+    budget_level: base.budget_level || 'sin_definir',
+    suggestions: base.suggestions || [],
+    pre_departure: base.pre_departure || null,
+    practical_info: base.practical_info || null,
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════
 // VERIFICACIÓN DE PARADAS — Google Places (post-generación)
 // ═══════════════════════════════════════════════════════════════
 
@@ -1519,10 +1705,17 @@ async function buscarRestaurante(input, placesKey, userCoords) {
   if (input.tipo_cocina) searchTerms += ' ' + input.tipo_cocina;
   if (input.zona) searchTerms += ' ' + input.zona;
 
-  // Si tenemos Google Places key y coordenadas, buscar restaurantes reales
-  if (placesKey && userCoords && userCoords.lat && userCoords.lng) {
+  // Si tenemos Google Places key, buscar restaurantes reales
+  // Con coords del usuario: búsqueda por proximidad (radius 1500m)
+  // Sin coords pero con ciudad: búsqueda por texto (Google geocodifica la ciudad)
+  if (placesKey) {
     try {
-      let url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchTerms)}&language=es&type=restaurant&location=${userCoords.lat},${userCoords.lng}&radius=1500&key=${placesKey}`;
+      let url;
+      if (userCoords && userCoords.lat && userCoords.lng) {
+        url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchTerms)}&language=es&type=restaurant&location=${userCoords.lat},${userCoords.lng}&radius=1500&key=${placesKey}`;
+      } else {
+        url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchTerms)}&language=es&type=restaurant&key=${placesKey}`;
+      }
       const res = await fetch(url);
       const data = await res.json();
       if (data?.results?.length) {
@@ -1535,13 +1728,18 @@ async function buscarRestaurante(input, placesKey, userCoords) {
         const details = await Promise.all(detailPromises);
         const restaurantes = top.map((p, i) => {
           const d = details[i]?.result;
+          const nombre = d?.name || p.name;
+          const gmapsLink = p.place_id
+            ? `https://www.google.com/maps/place/?q=place_id:${p.place_id}`
+            : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nombre + ' ' + (input.ciudad || ''))}`;
           return {
-            nombre: d?.name || p.name,
+            nombre,
             telefono: d?.international_phone_number || d?.formatted_phone_number || '',
             direccion: d?.formatted_address || p.formatted_address || '',
             rating: (d?.rating || p.rating) ? `${d?.rating || p.rating}★` : '',
             precio: p.price_level ? '€'.repeat(p.price_level) : '',
             abierto: d?.opening_hours?.open_now != null ? (d.opening_hours.open_now ? 'Abierto ahora' : 'Cerrado ahora') : '',
+            google_maps: gmapsLink,
           };
         }).filter(r => r.nombre);
         if (restaurantes.length) {
@@ -1831,6 +2029,59 @@ export default {
     }
 
     const url = new URL(request.url);
+
+    // ─── ENDPOINT /upload-photo (R2) ───
+    if (request.method === 'POST' && url.pathname === '/upload-photo') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      if (!env.SALMA_PHOTOS) {
+        return new Response(JSON.stringify({ error: 'R2 not configured' }), { status: 500, headers: corsH });
+      }
+      try {
+        const formData = await request.formData();
+        const photo = formData.get('photo');
+        const uid = formData.get('uid');
+        const mapId = formData.get('mapId');
+        const day = formData.get('day');
+        const stop = formData.get('stop');
+
+        if (!photo || !uid || !mapId) {
+          return new Response(JSON.stringify({ error: 'Missing fields' }), { status: 400, headers: corsH });
+        }
+
+        // Verificar tamaño (max 5MB)
+        if (photo.size > 5 * 1024 * 1024) {
+          return new Response(JSON.stringify({ error: 'Photo too large (max 5MB)' }), { status: 400, headers: corsH });
+        }
+
+        const timestamp = Date.now();
+        const key = `photos/${uid}/${mapId}/day${day}_stop${stop}_${timestamp}.jpg`;
+
+        await env.SALMA_PHOTOS.put(key, photo.stream(), {
+          httpMetadata: { contentType: photo.type || 'image/jpeg' },
+          customMetadata: { uid, mapId, day, stop }
+        });
+
+        const photoUrl = `https://salma-api.paco-defoto.workers.dev/photo/${encodeURIComponent(key)}`;
+        return new Response(JSON.stringify({ key, url: photoUrl }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /photo/* (servir fotos desde R2) ───
+    if (request.method === 'GET' && url.pathname.startsWith('/photo/')) {
+      if (!env.SALMA_PHOTOS) {
+        return new Response('R2 not configured', { status: 500 });
+      }
+      const key = decodeURIComponent(url.pathname.slice(7)); // quitar /photo/
+      const object = await env.SALMA_PHOTOS.get(key);
+      if (!object) return new Response('Not found', { status: 404 });
+      const headers = new Headers();
+      headers.set('Content-Type', object.httpMetadata?.contentType || 'image/jpeg');
+      headers.set('Cache-Control', 'public, max-age=31536000'); // 1 año
+      headers.set('Access-Control-Allow-Origin', '*');
+      return new Response(object.body, { headers });
+    }
 
     // ─── ENDPOINT /health (monitoreo de APIs) ───
     if (request.method === 'GET' && url.pathname === '/health') {
@@ -2556,8 +2807,76 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     ctx.waitUntil((async () => {
       let allText = '';  // Texto acumulado de TODAS las iteraciones
       const MAX_TOOL_ITERATIONS = 5;  // Seguridad: máximo 5 tool calls por turno
+      const longRoute = isRoute && isLongRoute(message);
 
       try {
+        // ── RUTA LARGA (≥8 días): generación por bloques paralelos ──
+        if (longRoute) {
+          const days = extractDaysFromMessage(message);
+          try {
+            // 1. Texto intro streameado
+            await writer.write(encoder.encode(`data: ${JSON.stringify({ t: 'Venga, me pongo con ello. Te la monto en varias partes para que vayas viendo...' })}\n\n`));
+
+            // 2. Planificar bloques (~2s)
+            const blocks = await planBlocks(systemPrompt, message, days, apiKey);
+
+            if (blocks && blocks.length > 1) {
+              await writer.write(encoder.encode(`data: ${JSON.stringify({ plan: blocks, total_blocks: blocks.length })}\n\n`));
+
+              // 3. Generar bloques en paralelo
+              const keepalive = setInterval(async () => {
+                try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
+              }, 3000);
+
+              let route = null;
+              try {
+                // Pipeline: cada bloque genera→verifica→emite independientemente
+                const blockResults = await generateAndVerifyPipeline(blocks, systemPrompt, message, apiKey, env.GOOGLE_PLACES_KEY, writer, encoder);
+
+                if (blockResults.length > 0) {
+                  route = mergeBlocks(blockResults, message);
+                }
+              } finally {
+                clearInterval(keepalive);
+              }
+
+              if (route) {
+                const reply = 'Aquí tienes tu ruta completa.';
+
+                // Guardar en KV nivel 3
+                if (route.stops && route.stops.length > 0 && env.SALMA_KB) {
+                  try {
+                    const country = (route.country || route.region || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+                    const region = (route.region || route.country || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+                    const countryCode = await env.SALMA_KB.get('kw:' + country) || country.substring(0, 2);
+                    const routeKey = `route:${countryCode}:${region}:${days}`;
+                    ctx.waitUntil(env.SALMA_KB.put(routeKey, JSON.stringify(route), { expirationTtl: 2592000 }));
+                  } catch (_) {}
+                }
+
+                await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply, route })}\n\n`));
+
+                ctx.waitUntil(logToFirestore({
+                  timestamp: new Date().toISOString(),
+                  type: 'route_blocks',
+                  user_message: message.slice(0, 200),
+                  chars_out: JSON.stringify(route).length,
+                  latency_ms: Date.now() - reqStartTime,
+                  status: 'ok',
+                  error_detail: `${blocks.length} bloques`,
+                  model: reqModel,
+                }));
+
+                await writer.close();
+                return; // Sale del flujo — ruta larga completada
+              }
+            }
+            // Si planBlocks falla o devuelve 1 bloque, cae al flujo normal
+          } catch (e) {
+            // Fallback al flujo normal
+          }
+        }
+
         // Mensajes que crecen con cada iteración del bucle (tool_use → tool_result)
         let currentMessages = [...messages];
 

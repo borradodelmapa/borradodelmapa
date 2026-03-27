@@ -136,7 +136,7 @@ const bitacoraRenderer = {
 
           <div class="diario-stop-actions">
             <label class="diario-upload-btn">
-              <input type="file" accept="image/*" capture="environment" class="diario-photo-input" data-day="${dayNum}" data-stop="${idx}" style="display:none">
+              <input type="file" accept="image/*" multiple class="diario-photo-input" data-day="${dayNum}" data-stop="${idx}" style="display:none">
               📷 Foto
             </label>
             <button class="diario-note-toggle ${hasNote ? 'has-note' : ''}" data-key="${noteKey}">📝 ${hasNote ? 'Nota' : 'Nota'}</button>
@@ -201,11 +201,25 @@ const bitacoraRenderer = {
   _initPhotoUploadListeners(docId) {
     document.querySelectorAll('.diario-photo-input').forEach(input => {
       input.addEventListener('change', async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
         const dayNum = parseInt(input.dataset.day);
         const stopIdx = parseInt(input.dataset.stop);
-        await this._uploadPhoto(file, docId, dayNum, stopIdx);
+
+        // Límite 5 fotos por parada
+        const existing = this._currentPhotos.filter(p => p.day === dayNum && p.stop === stopIdx).length;
+        const allowed = Math.min(files.length, 5 - existing);
+        if (allowed <= 0) {
+          showToast('Máximo 5 fotos por parada');
+          return;
+        }
+        if (allowed < files.length) {
+          showToast(`Solo se suben ${allowed} fotos (límite 5 por parada)`);
+        }
+
+        for (let i = 0; i < allowed; i++) {
+          await this._uploadPhoto(files[i], docId, dayNum, stopIdx);
+        }
       });
     });
   },
