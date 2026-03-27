@@ -1295,7 +1295,7 @@ async function verifyAllStops(route, placesKey) {
     stop.lat = pLat;
     stop.lng = pLng;
 
-    const photoRef = detail?.photos?.[0]?.photo_reference || candidate.photos?.[0]?.photo_reference || '';
+    const photoRef = candidate.photos?.[0]?.photo_reference || detail?.photos?.[0]?.photo_reference || '';
     if (photoRef) stop.photo_ref = photoRef;
 
     // Solo sobrescribir nombre si Google devolvió algo relevante
