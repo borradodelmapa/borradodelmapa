@@ -81,11 +81,11 @@ const guideRenderer = {
       ${this._renderPracticalInfo(r.practical_info)}
       ${this._renderTips(r.tips)}
 
-      <div class="guide-actions">
+      ${options.partial ? '<div class="guide-actions"><div class="guide-loading-blocks">Cargando más días...</div></div>' : `<div class="guide-actions">
         ${options.saved ? '' : '<button class="btn-primary" id="guide-save-btn">GUARDAR MI GUÍA</button>'}
         ${options.showGmapsOffer ? `<a class="btn-primary" id="guide-gmaps-btn" href="${this._fullRouteGmapsUrl(stops, country)}" target="_blank" rel="noopener">🗺 ABRIR EN GOOGLE MAPS</a>` : ''}
         <button class="btn-ghost" id="guide-share-btn">COMPARTIR</button>
-      </div>
+      </div>`}
     `;
 
     area.appendChild(card);

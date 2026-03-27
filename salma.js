@@ -419,7 +419,49 @@ const salma = {
                 return;
               }
 
-              // DRAFT — ruta borrador
+              // PLAN — bloques paralelos planificados
+              if (evt.plan) {
+                textDone = true;
+                this._fixStreamBubble();
+                this._addLoading(`Montando ${evt.total_blocks || evt.plan.length} partes...`);
+                continue;
+              }
+
+              // DRAFT_BLOCK — bloque parcial generado (sin verificar)
+              if (evt.draft_block && evt.route_partial) {
+                draftSent = true;
+                textDone = true;
+                this._fixStreamBubble();
+                this._addLoading(`Verificando parte ${evt.draft_block} de ${evt.total_blocks}...`);
+                // Renderizar bloque parcial progresivamente
+                if (evt.route_partial.stops) {
+                  if (!this.currentRoute) {
+                    this.currentRoute = evt.route_partial;
+                    try {
+                      guideRenderer.render(evt.route_partial, { partial: true });
+                    } catch (e) {}
+                  } else {
+                    // Añadir paradas al route existente
+                    this.currentRoute.stops = [...(this.currentRoute.stops || []), ...evt.route_partial.stops];
+                    if (evt.route_partial.maps_links) {
+                      this.currentRoute.maps_links = [...(this.currentRoute.maps_links || []), ...evt.route_partial.maps_links];
+                    }
+                    try {
+                      guideRenderer.render(this.currentRoute, { partial: true });
+                    } catch (e) {}
+                  }
+                  this._scrollToBottom();
+                }
+                continue;
+              }
+
+              // VERIFIED_BLOCK — bloque verificado con Google Places
+              if (evt.verified_block && evt.route_partial) {
+                this._addLoading(`Parte ${evt.verified_block} de ${evt.total_blocks} lista ✓`);
+                continue;
+              }
+
+              // DRAFT — ruta borrador (flujo normal ≤7 días)
               if (evt.draft && !draftSent) {
                 draftSent = true;
                 textDone = true;
@@ -756,14 +798,14 @@ const salma = {
   ],
   _loadingInterval: null,
 
-  _addLoading() {
+  _addLoading(customText) {
     this._removeLoading();
     const area = this._getChatArea();
     if (!area) return;
     const div = document.createElement('div');
     div.className = 'msg msg-salma';
     div.id = 'salma-loading';
-    const phrase = this._loadingPhrases[Math.floor(Math.random() * this._loadingPhrases.length)];
+    const phrase = customText || this._loadingPhrases[Math.floor(Math.random() * this._loadingPhrases.length)];
     div.innerHTML = `
       <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
       <div class="msg-body-salma">
@@ -773,13 +815,15 @@ const salma = {
     area.appendChild(div);
     this._scrollToBottom(true);  // forzar: loading inicial
 
-    // Rotar frases
-    let idx = 0;
-    this._loadingInterval = setInterval(() => {
-      idx = (idx + 1) % this._loadingPhrases.length;
-      const el = document.getElementById('loading-phrase');
-      if (el) el.textContent = this._loadingPhrases[idx];
-    }, 3000);
+    // Rotar frases solo si no hay texto custom
+    if (!customText) {
+      let idx = 0;
+      this._loadingInterval = setInterval(() => {
+        idx = (idx + 1) % this._loadingPhrases.length;
+        const el = document.getElementById('loading-phrase');
+        if (el) el.textContent = this._loadingPhrases[idx];
+      }, 3000);
+    }
   },
 
   _removeLoading() {
