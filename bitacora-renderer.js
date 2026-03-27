@@ -375,7 +375,7 @@ const bitacoraRenderer = {
     el.style.overflow = 'hidden';
     el.style.marginBottom = '16px';
 
-    const map = L.map('diario-map-main', { zoomControl: true, attributionControl: false });
+    const map = L.map('diario-map-main', { zoomControl: true, attributionControl: false, dragging: false, scrollWheelZoom: false, touchZoom: true, doubleClickZoom: true });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
     const bounds = [];
@@ -458,7 +458,7 @@ const bitacoraRenderer = {
     if (existing) { existing.remove(); return; }
 
     const slug = docData?.slug;
-    const url = slug ? 'https://borradodelmapa.com/' + slug : null;
+    const url = slug ? 'https://borradodelmapa.com/' + slug : 'https://borradodelmapa.com';
 
     const menu = document.createElement('div');
     menu.className = 'diario-share-menu';

@@ -1352,9 +1352,9 @@ body {
 .diario-stat-num { display:block; font-weight:700; color:var(--dorado); font-size:18px; }
 .diario-stat-label { font-size:10px; color:rgba(244,239,230,.4); text-transform:uppercase; letter-spacing:.1em; }
 
-.diario-map-main { border-radius:12px; overflow:hidden; margin-bottom:16px; }
+.diario-map-main { border-radius:12px; overflow:hidden; margin-bottom:16px; position:relative; z-index:1; }
 
-.diario-privacy { display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(244,239,230,.5); margin-bottom:20px; padding:8px 12px; background:rgba(244,239,230,.03); border-radius:8px; position:relative; }
+.diario-privacy { display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(244,239,230,.5); margin-bottom:20px; padding:8px 12px; background:rgba(244,239,230,.03); border-radius:8px; position:relative; z-index:10; }
 .diario-privacy-change, .diario-share-btn { background:none; border:1px solid rgba(212,160,23,.3); color:var(--dorado); font-size:11px; padding:4px 10px; border-radius:6px; cursor:pointer; margin-left:auto; }
 .diario-share-btn { margin-left:6px; background:rgba(212,160,23,.1); }
 
