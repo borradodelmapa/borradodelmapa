@@ -136,10 +136,14 @@ const bitacoraRenderer = {
 
           <div class="diario-stop-actions">
             <label class="diario-upload-btn">
-              <input type="file" accept="image/*" multiple class="diario-photo-input" data-day="${dayNum}" data-stop="${idx}" style="display:none">
-              📷 Foto
+              <input type="file" accept="image/*" capture="environment" class="diario-photo-input diario-photo-camera" data-day="${dayNum}" data-stop="${idx}" style="display:none">
+              📷
             </label>
-            <button class="diario-note-toggle ${hasNote ? 'has-note' : ''}" data-key="${noteKey}">📝 ${hasNote ? 'Nota' : 'Nota'}</button>
+            <label class="diario-upload-btn">
+              <input type="file" accept="image/*" multiple class="diario-photo-input diario-photo-gallery" data-day="${dayNum}" data-stop="${idx}" style="display:none">
+              🖼️
+            </label>
+            <button class="diario-note-toggle ${hasNote ? 'has-note' : ''}" data-key="${noteKey}">📝</button>
           </div>
 
           <div class="diario-stop-note ${hasNote ? 'open' : ''}" data-key="${noteKey}">
