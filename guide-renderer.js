@@ -332,10 +332,10 @@ const guideRenderer = {
         tagsHtml += `<div class="guide-stop-practical">${linkify(s.practical)}</div>`;
       }
 
-      // Foto: lazy load desde /photo si hay photo_ref
+      // Foto: lazy load — si hay photo_ref usa eso, si no busca por nombre+coords
       const photoHtml = s.photo_ref
         ? `<div class="guide-stop-photo" data-photo-ref="${s.photo_ref}"><div class="guide-stop-photo-placeholder">📷</div></div>`
-        : '';
+        : `<div class="guide-stop-photo" data-photo-name="${escapeHTML(s.name || s.headline || '')}" data-lat="${s.lat||''}" data-lng="${s.lng||''}"><div class="guide-stop-photo-placeholder">📷</div></div>`;
 
       html += `
         <div class="guide-stop${isFirstStop ? ' open' : ''}">
@@ -532,11 +532,22 @@ const guideRenderer = {
   _lazyLoadPhoto(stopEl) {
     const photoDiv = stopEl.querySelector('.guide-stop-photo');
     if (!photoDiv || photoDiv.dataset.loaded) return;
-    const ref = photoDiv.dataset.photoRef;
-    if (!ref) return;
-
     photoDiv.dataset.loaded = '1';
-    const url = window.SALMA_API + '/photo?ref=' + encodeURIComponent(ref) + '&json=1';
+
+    const ref = photoDiv.dataset.photoRef;
+    const name = photoDiv.dataset.photoName;
+    const lat = photoDiv.dataset.lat;
+    const lng = photoDiv.dataset.lng;
+
+    let url;
+    if (ref) {
+      url = window.SALMA_API + '/photo?ref=' + encodeURIComponent(ref) + '&json=1';
+    } else if (name) {
+      url = window.SALMA_API + '/photo?name=' + encodeURIComponent(name) + (lat ? '&lat=' + lat : '') + (lng ? '&lng=' + lng : '') + '&json=1';
+    } else {
+      photoDiv.remove();
+      return;
+    }
 
     fetch(url).then(r => r.json()).then(data => {
       if (data.url) {
