@@ -33,6 +33,12 @@ function showState(state) {
   } else if (state === 'viajes' || state === 'profile') {
     renderProfile();
     if (inputBar) inputBar.style.display = 'none';
+  } else if (state === 'bitacora') {
+    renderBitacora();
+    if (inputBar) inputBar.style.display = 'none';
+  } else if (state === 'diario') {
+    // renderDiario se llama con parámetros desde renderBitacora
+    if (inputBar) inputBar.style.display = 'none';
   } else if (state === 'chat') {
     $input.placeholder = 'Escribe a Salma...';
     if (inputBar) inputBar.style.display = '';
@@ -56,7 +62,7 @@ function updateBottomBar() {
 
   const isHome = currentState === 'welcome';
   const isChat = currentState === 'chat';
-  const isProfile = currentState === 'profile' || currentState === 'viajes';
+  const isProfile = currentState === 'profile' || currentState === 'viajes' || currentState === 'bitacora' || currentState === 'diario';
 
   bar.innerHTML = `
     <button class="bottom-tab ${isHome ? 'bottom-tab-active' : ''}" id="tab-home">
@@ -271,10 +277,10 @@ async function renderProfile() {
           <span class="profile-section-arrow">›</span>
         </div>
 
-        <div class="profile-section profile-section-locked">
+        <div class="profile-section" id="prof-bitacora">
           <span class="profile-section-icon">📓</span>
-          <span class="profile-section-label">Cuaderno de viaje</span>
-          <span class="profile-section-badge">pronto</span>
+          <span class="profile-section-label">Bitácora</span>
+          <span class="profile-section-arrow">›</span>
         </div>
 
         <div class="profile-section profile-section-locked">
@@ -314,6 +320,7 @@ async function renderProfile() {
 
   // Event listeners
   document.getElementById('prof-coins').addEventListener('click', openCoinsModal);
+  document.getElementById('prof-bitacora').addEventListener('click', () => showState('bitacora'));
   document.getElementById('prof-help').addEventListener('click', () => {
     document.getElementById('salma-info-overlay').style.display = 'flex';
   });
@@ -383,6 +390,83 @@ function _createGuideCard(doc, d) {
     }
   });
   return card;
+}
+
+// ═══ BITÁCORA ═══
+
+async function renderBitacora() {
+  if (!currentUser) { showState('welcome'); return; }
+
+  $content.innerHTML = `
+    <div class="bitacora-area fade-in">
+      <div class="bitacora-header">
+        <button class="bitacora-back" id="bitacora-back">←</button>
+        <div class="bitacora-title">Bitácora</div>
+      </div>
+      <div class="bitacora-grid" id="bitacora-grid">
+        <div class="bitacora-loading">Cargando tus diarios...</div>
+      </div>
+    </div>`;
+
+  document.getElementById('bitacora-back').addEventListener('click', () => showState('profile'));
+
+  try {
+    const snap = await db.collection('users').doc(currentUser.uid)
+      .collection('maps').orderBy('createdAt', 'desc').get();
+    const grid = document.getElementById('bitacora-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    if (snap.empty) {
+      grid.innerHTML = `
+        <div class="bitacora-empty">
+          <div class="bitacora-empty-icon">📓</div>
+          <div class="bitacora-empty-text">Tu bitácora está vacía</div>
+          <div class="bitacora-empty-sub">Pídele una ruta a Salma y empieza a documentar tu viaje</div>
+          <button class="btn-primary" id="bitacora-new">Planear viaje</button>
+        </div>`;
+      document.getElementById('bitacora-new')?.addEventListener('click', () => {
+        if (typeof salma !== 'undefined') { salma.reset(); salma._initChat(); }
+      });
+      return;
+    }
+
+    snap.forEach(doc => {
+      const d = doc.data();
+      let route = null;
+      try { route = JSON.parse(d.itinerarioIA || '{}'); } catch (_) {}
+      const stops = route?.stops?.length || 0;
+      const notesCount = d.notes ? Object.keys(d.notes).length : 0;
+      const photosCount = d.photos ? d.photos.length : 0;
+      const date = d.createdAt ? new Date(d.createdAt).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }) : '';
+      const privacy = d.privacy || 'private';
+      const privacyIcon = privacy === 'public' ? '🌍' : privacy === 'link' ? '🔗' : '🔒';
+      const photo = d.cover_image || destPhoto(d.destino || d.country || d.nombre || '');
+
+      const card = document.createElement('div');
+      card.className = 'bitacora-card';
+      card.innerHTML = `
+        <div class="bitacora-card-img" style="background-image:url('${escapeHTML(photo)}')"></div>
+        <div class="bitacora-card-body">
+          <div class="bitacora-card-title">${escapeHTML(d.nombre || 'Mi viaje')}</div>
+          <div class="bitacora-card-date">${escapeHTML(date)}</div>
+          <div class="bitacora-card-stats">${stops} paradas${photosCount ? ' · ' + photosCount + ' fotos' : ''}${notesCount ? ' · ' + notesCount + ' notas' : ''}</div>
+          <div class="bitacora-card-privacy">${privacyIcon} ${privacy === 'public' ? 'Pública' : privacy === 'link' ? 'Con enlace' : 'Privada'}</div>
+        </div>`;
+      card.addEventListener('click', () => {
+        currentState = 'diario';
+        updateBottomBar();
+        if (typeof bitacoraRenderer !== 'undefined') {
+          bitacoraRenderer.renderDiario(route, doc.id, d.notes || {}, d.photos || [], d);
+        }
+      });
+      grid.appendChild(card);
+    });
+  } catch (e) {
+    console.error('Error cargando bitácora:', e);
+    const grid = document.getElementById('bitacora-grid');
+    if (grid) grid.innerHTML = '<div class="bitacora-empty-text">Error cargando tus diarios</div>';
+  }
 }
 
 // ═══ MIS VIAJES (legacy — redirige a perfil) ═══
