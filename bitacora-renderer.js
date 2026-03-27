@@ -46,6 +46,8 @@ const bitacoraRenderer = {
           <div class="diario-stat"><span class="diario-stat-num">${notesCount}</span><span class="diario-stat-label">notas</span></div>
         </div>
 
+        <div class="diario-map-main" id="diario-map-main"></div>
+
         <div class="diario-privacy">
           ${privacyIcon} ${privacyLabel}
           <button class="diario-privacy-change" id="diario-privacy-btn">Cambiar</button>
@@ -71,9 +73,14 @@ const bitacoraRenderer = {
       this._share(docId, docData);
     });
 
-    // Init maps
-    const firstDay = Object.keys(days).map(Number).sort((a, b) => a - b)[0];
-    if (firstDay) this._initDayMap(firstDay, days[firstDay]);
+    // Init main map (toda la ruta)
+    this._initMainMap(stops);
+
+    // Init day maps
+    const dayNums = Object.keys(days).map(Number).sort((a, b) => a - b);
+    for (const d of dayNums) {
+      this._initDayMap(d, days[d]);
+    }
 
     // Init note listeners
     this._initNoteListeners(docId);
@@ -305,12 +312,58 @@ const bitacoraRenderer = {
     document.querySelectorAll('.diario-photo-google[data-ref]').forEach(el => {
       const ref = el.dataset.ref;
       if (!ref) return;
-      const url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${ref}&key=AIzaSyBSgOFqIjB1EHjiRKVGPSg6sNBaqxbptTE`;
-      el.innerHTML = `<img src="${url}" alt="Foto" loading="lazy" onerror="this.parentElement.style.display='none'">`;
+      el.innerHTML = '<div class="diario-photo-placeholder">Cargando...</div>';
+      fetch(window.SALMA_API + '/photo?ref=' + encodeURIComponent(ref) + '&json=1')
+        .then(r => r.json())
+        .then(data => {
+          if (data.url) {
+            el.innerHTML = `<img src="${data.url}" alt="Foto" loading="lazy">`;
+          } else {
+            el.style.display = 'none';
+          }
+        })
+        .catch(() => { el.style.display = 'none'; });
     });
   },
 
   // ═══ MAPAS ═══
+
+  _initMainMap(stops) {
+    const el = document.getElementById('diario-map-main');
+    if (!el || this._maps['main']) return;
+    if (typeof L === 'undefined') return;
+
+    const validStops = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01);
+    if (validStops.length === 0) { el.style.display = 'none'; return; }
+
+    el.style.height = '250px';
+    el.style.borderRadius = '12px';
+    el.style.overflow = 'hidden';
+    el.style.marginBottom = '16px';
+
+    const map = L.map('diario-map-main', { zoomControl: true, attributionControl: false });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+    const bounds = [];
+    const dayColors = ['#d4a843', '#e8734a', '#4a9de8', '#6dd45a', '#d44a9d', '#9d4ae8', '#e8c84a', '#4ae8c8'];
+
+    validStops.forEach((s, i) => {
+      const dayIdx = (s.day || 1) - 1;
+      const color = dayColors[dayIdx % dayColors.length];
+      L.circleMarker([s.lat, s.lng], {
+        radius: 7, fillColor: color, color: '#222', weight: 2, fillOpacity: 0.9
+      }).bindTooltip(`Día ${s.day}: ${s.name || ''}`, { direction: 'top' }).addTo(map);
+      bounds.push([s.lat, s.lng]);
+    });
+
+    // Línea de ruta
+    if (bounds.length > 1) {
+      L.polyline(bounds, { color: '#d4a843', weight: 2, opacity: 0.5, dashArray: '5,8' }).addTo(map);
+    }
+
+    map.fitBounds(bounds, { padding: [30, 30] });
+    this._maps['main'] = map;
+  },
 
   _initDayMap(dayNum, dayData) {
     const mapId = 'diario-map-day-' + dayNum;
