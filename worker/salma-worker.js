@@ -3029,26 +3029,13 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           // ── PASO 2: Draft inmediato (coords del KV donde haya, Claude donde no) ──
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ draft: true, reply, route })}\n\n`)); } catch (_) {}
 
-          // ── PASO 3: Verify con Google SOLO paradas sin KV ──
-          const stopsNeedVerify = route.stops.filter(s => !s._kvVerified);
-          if (stopsNeedVerify.length > 0 && env.GOOGLE_PLACES_KEY) {
+          // ── PASO 3: Verify con Google (paradas sin KV usan verify normal) ──
+          if (env.GOOGLE_PLACES_KEY) {
             const keepalive = setInterval(async () => {
               try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
             }, 3000);
             try {
-              const partialRoute = { ...route, stops: stopsNeedVerify };
-              const verified = await verifyAllStops(partialRoute, env.GOOGLE_PLACES_KEY);
-              if (verified?.stops) {
-                for (const vs of verified.stops) {
-                  const orig = route.stops.find(s => (s.name || s.headline) === (vs.name || vs.headline));
-                  if (orig) {
-                    if (vs.lat) orig.lat = vs.lat;
-                    if (vs.lng) orig.lng = vs.lng;
-                    if (vs.photo_ref) orig.photo_ref = vs.photo_ref;
-                    if (vs.verified_address) orig.verified_address = vs.verified_address;
-                  }
-                }
-              }
+              route = await verifyAllStops(route, env.GOOGLE_PLACES_KEY);
             } finally {
               clearInterval(keepalive);
             }
