@@ -431,23 +431,70 @@ const bitacoraRenderer = {
 
   // ═══ PRIVACIDAD ═══
 
-  _togglePrivacy(docId, docData) {
+  async _togglePrivacy(docId, docData) {
     const levels = ['private', 'link', 'public'];
     const current = docData?.privacy || 'private';
     const next = levels[(levels.indexOf(current) + 1) % levels.length];
     const labels = { private: 'Privada', link: 'Con enlace', public: 'Pública' };
     const icons = { private: '🔒', link: '🔗', public: '🌍' };
 
-    db.collection('users').doc(currentUser.uid)
-      .collection('maps').doc(docId).update({ privacy: next })
-      .then(() => {
-        docData.privacy = next;
-        const el = document.querySelector('.diario-privacy');
-        if (el) el.innerHTML = `${icons[next]} ${labels[next]} <button class="diario-privacy-change" id="diario-privacy-btn">Cambiar</button> <button class="diario-share-btn" id="diario-share-btn">Compartir</button>`;
-        document.getElementById('diario-privacy-btn')?.addEventListener('click', () => this._togglePrivacy(docId, docData));
-        document.getElementById('diario-share-btn')?.addEventListener('click', () => this._share(docId, docData));
+    try {
+      // Actualizar privacidad en la guía del usuario
+      await db.collection('users').doc(currentUser.uid)
+        .collection('maps').doc(docId).update({ privacy: next });
+      docData.privacy = next;
+
+      // Si pasa a enlace o público, publicar/actualizar en public_guides
+      if (next !== 'private') {
+        let slug = docData.slug;
+        if (!slug) {
+          // Generar slug
+          const title = docData.nombre || docData.destino || 'mi-viaje';
+          slug = title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').substring(0, 60)
+            + '-' + Math.random().toString(36).substring(2, 6);
+          docData.slug = slug;
+          await db.collection('users').doc(currentUser.uid)
+            .collection('maps').doc(docId).update({ slug, published: true });
+        }
+        // Copiar a public_guides con notas y fotos actualizadas
+        await db.collection('public_guides').doc(slug).set({
+          slug,
+          ownerDocId: docId,
+          nombre: docData.nombre || docData.destino || 'Mi viaje',
+          destino: docData.destino,
+          num_dias: docData.num_dias,
+          summary: docData.notas || '',
+          cover_image: docData.cover_image || '',
+          itinerarioIA: docData.itinerarioIA,
+          notes: this._currentNotes || {},
+          photos: this._currentPhotos || [],
+          privacy: next,
+          owner_name: currentUser?.name || currentUser?.displayName || 'Viajero',
+          createdAt: docData.createdAt || new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        });
+        showToast(icons[next] + ' ' + labels[next] + ' — enlace listo');
+      } else {
+        // Si vuelve a privada, eliminar de public_guides
+        if (docData.slug) {
+          await db.collection('public_guides').doc(docData.slug).delete().catch(() => {});
+        }
         showToast(icons[next] + ' ' + labels[next]);
-      });
+      }
+
+      // Actualizar UI
+      const el = document.querySelector('.diario-privacy');
+      if (el) {
+        const urlText = docData.slug && next !== 'private' ? `<div style="font-size:10px;color:rgba(244,239,230,.3);margin-top:4px;word-break:break-all;">borradodelmapa.com/${docData.slug}</div>` : '';
+        el.innerHTML = `${icons[next]} ${labels[next]} <button class="diario-privacy-change" id="diario-privacy-btn">Cambiar</button> <button class="diario-share-btn" id="diario-share-btn">Compartir</button>${urlText}`;
+      }
+      document.getElementById('diario-privacy-btn')?.addEventListener('click', () => this._togglePrivacy(docId, docData));
+      document.getElementById('diario-share-btn')?.addEventListener('click', () => this._share(docId, docData));
+    } catch (e) {
+      console.error('Error cambiando privacidad:', e);
+      showToast('Error al cambiar privacidad');
+    }
   },
 
   // ═══ COMPARTIR ═══
