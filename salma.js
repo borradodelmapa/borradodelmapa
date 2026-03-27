@@ -315,6 +315,7 @@ const salma = {
       // Si hay ruta, renderizar guide-card
       if (data.route && data.route.stops) {
         const isEdit = this.currentRouteId && this.currentRoute;
+        const prevStopsCount = this.currentRoute?.stops?.length || 0;
         this.currentRoute = data.route;
         if (!data._hadDraft) {
           this._removeLoading();
@@ -324,11 +325,20 @@ const salma = {
             console.error('Error renderizando guía:', renderErr);
           }
         } else {
-          // Draft ya renderizado — parchear con datos verificados (fotos, coords)
-          try {
-            guideRenderer.updateVerified(data.route);
-          } catch (e) {
-            console.warn('Error actualizando guía verificada:', e);
+          // Draft ya renderizado — comprobar si es ruta de bloques (más stops que el draft)
+          const finalStops = data.route.stops?.length || 0;
+          if (finalStops > prevStopsCount + 2) {
+            // Ruta de bloques: render completo con todos los bloques merged
+            try {
+              guideRenderer.render(data.route, isEdit ? { saved: true } : {});
+            } catch (e) {}
+          } else {
+            // Ruta normal: parchear con datos verificados (fotos, coords)
+            try {
+              guideRenderer.updateVerified(data.route);
+            } catch (e) {
+              console.warn('Error actualizando guía verificada:', e);
+            }
           }
         }
 
