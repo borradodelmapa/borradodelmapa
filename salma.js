@@ -317,7 +317,8 @@ const salma = {
         const isEdit = this.currentRouteId && this.currentRoute;
         const prevStopsCount = this.currentRoute?.stops?.length || 0;
         this.currentRoute = data.route;
-        if (!data._hadDraft) {
+        if (!data._hadDraft || data._isBlocks) {
+          // Ruta nueva o ruta de bloques: render completo
           this._removeLoading();
           try {
             guideRenderer.render(data.route, isEdit ? { saved: true } : {});
@@ -325,20 +326,11 @@ const salma = {
             console.error('Error renderizando guía:', renderErr);
           }
         } else {
-          // Draft ya renderizado — comprobar si es ruta de bloques (más stops que el draft)
-          const finalStops = data.route.stops?.length || 0;
-          if (finalStops > prevStopsCount + 2) {
-            // Ruta de bloques: render completo con todos los bloques merged
-            try {
-              guideRenderer.render(data.route, isEdit ? { saved: true } : {});
-            } catch (e) {}
-          } else {
-            // Ruta normal: parchear con datos verificados (fotos, coords)
-            try {
-              guideRenderer.updateVerified(data.route);
-            } catch (e) {
-              console.warn('Error actualizando guía verificada:', e);
-            }
+          // Ruta normal con draft: parchear con datos verificados (fotos, coords)
+          try {
+            guideRenderer.updateVerified(data.route);
+          } catch (e) {
+            console.warn('Error actualizando guía verificada:', e);
           }
         }
 
@@ -403,6 +395,7 @@ const salma = {
         let resolved = false;
         let textDone = false;
         let draftSent = false;
+        let isBlocksRoute = false;
 
         const processLines = () => {
           const lines = buffer.split('\n');
@@ -424,7 +417,8 @@ const salma = {
                 resolve({
                   reply: evt.reply || fullText,
                   route: evt.route || null,
-                  _hadDraft: draftSent
+                  _hadDraft: draftSent,
+                  _isBlocks: isBlocksRoute
                 });
                 return;
               }
@@ -432,6 +426,7 @@ const salma = {
               // PLAN — bloques paralelos planificados
               if (evt.plan) {
                 textDone = true;
+                isBlocksRoute = true;
                 this._fixStreamBubble();
                 this._addLoading(`Montando ${evt.total_blocks || evt.plan.length} partes...`);
                 continue;
