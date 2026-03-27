@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nepal · 20 días — Bitácora de Paco | Borrado del Mapa</title>
+  <meta name="description" content="20 días recorriendo Nepal: Kathmandu, Annapurna, Chitwan y más. Bitácora de viaje con fotos, mapa y notas.">
+  <meta property="og:title" content="Nepal · 20 días — Bitácora de Paco">
+  <meta property="og:description" content="20 días, 12 paradas, 847 km. Mi viaje por Nepal con Salma.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --surface: #151515;
+      --surface2: #1a1a1a;
+      --text: #f4efe6;
+      --text-soft: rgba(244,239,230,.55);
+      --dorado: #d4a843;
+      --dorado-soft: rgba(212,160,23,.15);
+      --font: 'Space Grotesk', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:var(--text); font-family:var(--font); line-height:1.6; }
+
+    /* Header */
+    .blog-header {
+      padding:20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(244,239,230,.06);
+    }
+    .blog-logo {
+      font-family:var(--font-mono);
+      font-size:11px;
+      letter-spacing:.15em;
+      color:var(--dorado);
+      text-decoration:none;
+    }
+    .blog-cta-top {
+      font-size:12px;
+      color:var(--dorado);
+      text-decoration:none;
+      border:1px solid rgba(212,160,23,.3);
+      padding:6px 14px;
+      border-radius:20px;
+      transition:all .2s;
+    }
+    .blog-cta-top:hover { background:var(--dorado-soft); }
+
+    /* Hero */
+    .blog-hero {
+      padding:40px 20px 20px;
+      text-align:center;
+    }
+    .blog-hero-country {
+      font-family:var(--font-mono);
+      font-size:11px;
+      letter-spacing:.2em;
+      color:var(--dorado);
+      margin-bottom:8px;
+    }
+    .blog-hero-title {
+      font-size:28px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+    .blog-hero-author {
+      font-size:13px;
+      color:var(--text-soft);
+      margin-bottom:4px;
+    }
+    .blog-hero-stats {
+      display:flex;
+      justify-content:center;
+      gap:24px;
+      margin-top:20px;
+    }
+    .blog-stat {
+      text-align:center;
+    }
+    .blog-stat-num {
+      display:block;
+      font-size:24px;
+      font-weight:700;
+      color:var(--dorado);
+    }
+    .blog-stat-label {
+      font-size:11px;
+      color:var(--text-soft);
+      letter-spacing:.1em;
+    }
+
+    /* Map */
+    .blog-map {
+      margin:24px 20px;
+      border-radius:12px;
+      overflow:hidden;
+      height:280px;
+    }
+
+    /* Content */
+    .blog-content {
+      max-width:700px;
+      margin:0 auto;
+      padding:0 20px;
+    }
+
+    /* Day */
+    .blog-day {
+      margin-bottom:48px;
+    }
+    .blog-day-header {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+      padding-bottom:10px;
+      border-bottom:2px solid rgba(212,160,23,.2);
+    }
+    .blog-day-num {
+      font-family:var(--font-mono);
+      font-size:11px;
+      font-weight:600;
+      letter-spacing:.15em;
+      color:var(--dorado);
+      white-space:nowrap;
+    }
+    .blog-day-title {
+      font-size:18px;
+      font-weight:600;
+    }
+    .blog-day-location {
+      font-size:12px;
+      color:var(--text-soft);
+    }
+
+    /* Photos */
+    .blog-photos {
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
+      gap:8px;
+      margin-bottom:16px;
+      border-radius:10px;
+      overflow:hidden;
+    }
+    .blog-photo {
+      width:100%;
+      aspect-ratio:4/3;
+      object-fit:cover;
+      border-radius:8px;
+    }
+    .blog-photo-user {
+      position:relative;
+    }
+    .blog-photo-badge {
+      position:absolute;
+      bottom:8px;
+      left:8px;
+      background:rgba(0,0,0,.7);
+      color:var(--dorado);
+      font-size:10px;
+      padding:3px 8px;
+      border-radius:10px;
+      font-family:var(--font-mono);
+    }
+
+    /* Narrative */
+    .blog-narrative {
+      font-size:15px;
+      line-height:1.7;
+      color:rgba(244,239,230,.8);
+      margin-bottom:12px;
+    }
+
+    /* User note */
+    .blog-note {
+      background:var(--dorado-soft);
+      border-left:3px solid var(--dorado);
+      padding:12px 16px;
+      border-radius:0 8px 8px 0;
+      margin-bottom:16px;
+    }
+    .blog-note-icon {
+      font-size:12px;
+      color:var(--dorado);
+      margin-bottom:4px;
+    }
+    .blog-note-text {
+      font-size:14px;
+      font-style:italic;
+      color:rgba(244,239,230,.7);
+    }
+
+    /* Day map */
+    .blog-day-map {
+      height:180px;
+      border-radius:10px;
+      overflow:hidden;
+      margin-bottom:12px;
+    }
+
+    /* Stops list */
+    .blog-stops {
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-bottom:16px;
+    }
+    .blog-stop-chip {
+      font-size:11px;
+      padding:4px 10px;
+      background:var(--surface2);
+      border-radius:12px;
+      color:var(--text-soft);
+    }
+
+    /* Practical info */
+    .blog-practical {
+      font-size:12px;
+      color:var(--text-soft);
+      margin-top:8px;
+    }
+    .blog-practical span {
+      color:var(--dorado);
+    }
+
+    /* CTA */
+    .blog-cta {
+      text-align:center;
+      padding:60px 20px;
+      margin:40px 0;
+      background:linear-gradient(180deg, transparent, var(--dorado-soft) 50%, transparent);
+      border-radius:20px;
+    }
+    .blog-cta h2 {
+      font-size:22px;
+      margin-bottom:8px;
+    }
+    .blog-cta p {
+      font-size:14px;
+      color:var(--text-soft);
+      margin-bottom:24px;
+    }
+    .blog-cta-btn {
+      display:inline-block;
+      background:var(--dorado);
+      color:#0d0d0d;
+      font-weight:700;
+      font-size:14px;
+      padding:14px 32px;
+      border-radius:25px;
+      text-decoration:none;
+      transition:transform .15s;
+    }
+    .blog-cta-btn:hover { transform:scale(1.03); }
+
+    /* Footer */
+    .blog-footer {
+      text-align:center;
+      padding:30px 20px;
+      font-size:11px;
+      color:rgba(244,239,230,.25);
+      border-top:1px solid rgba(244,239,230,.06);
+    }
+    .blog-footer a { color:var(--dorado); text-decoration:none; }
+
+    /* Salma badge */
+    .blog-salma-badge {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:11px;
+      color:var(--text-soft);
+      margin-top:20px;
+    }
+    .blog-salma-badge img {
+      width:20px;
+      height:20px;
+      border-radius:50%;
+    }
+
+    /* Share bar */
+    .blog-share {
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      padding:20px;
+      margin-bottom:20px;
+    }
+    .blog-share-btn {
+      background:var(--surface2);
+      border:1px solid rgba(244,239,230,.08);
+      color:var(--text-soft);
+      font-size:12px;
+      padding:8px 16px;
+      border-radius:20px;
+      cursor:pointer;
+      transition:all .15s;
+    }
+    .blog-share-btn:hover { color:var(--dorado); border-color:rgba(212,160,23,.3); }
+
+    @media (max-width:480px) {
+      .blog-hero-title { font-size:22px; }
+      .blog-photos { grid-template-columns:1fr 1fr; }
+      .blog-map { height:220px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="blog-header">
+    <a href="/" class="blog-logo">BORRADO DEL MAPA</a>
+    <a href="/" class="blog-cta-top">Crea tu viaje</a>
+  </header>
+
+  <!-- Hero -->
+  <div class="blog-hero">
+    <div class="blog-hero-country">NEPAL</div>
+    <h1 class="blog-hero-title">20 días por Nepal</h1>
+    <div class="blog-hero-author">por Paco · Marzo 2026</div>
+    <div class="blog-salma-badge">
+      <img src="../salma_ai_avatar.png" alt="Salma"> Ruta creada con Salma
+    </div>
+    <div class="blog-hero-stats">
+      <div class="blog-stat"><span class="blog-stat-num">20</span><span class="blog-stat-label">DÍAS</span></div>
+      <div class="blog-stat"><span class="blog-stat-num">847</span><span class="blog-stat-label">KM</span></div>
+      <div class="blog-stat"><span class="blog-stat-num">12</span><span class="blog-stat-label">PARADAS</span></div>
+      <div class="blog-stat"><span class="blog-stat-num">23</span><span class="blog-stat-label">FOTOS</span></div>
+    </div>
+  </div>
+
+  <!-- Map -->
+  <div class="blog-map" id="main-map"></div>
+
+  <!-- Share -->
+  <div class="blog-share">
+    <button class="blog-share-btn">🔗 Copiar enlace</button>
+    <button class="blog-share-btn">📤 Compartir</button>
+  </div>
+
+  <!-- Content -->
+  <div class="blog-content">
+
+    <!-- Day 1 -->
+    <div class="blog-day">
+      <div class="blog-day-header">
+        <span class="blog-day-num">DÍA 1</span>
+        <div>
+          <div class="blog-day-title">Kathmandu</div>
+          <div class="blog-day-location">Valle de Kathmandu, Nepal</div>
+        </div>
+      </div>
+
+      <div class="blog-photos">
+        <img class="blog-photo" src="https://images.unsplash.com/photo-1558799401-1dcba79834c2?w=400&h=300&fit=crop" alt="Boudhanath">
+        <div class="blog-photo-user" style="position:relative">
+          <img class="blog-photo" src="https://images.unsplash.com/photo-1605640840605-14ac1855827b?w=400&h=300&fit=crop" alt="Mi foto Kathmandu">
+          <span class="blog-photo-badge">Mi foto</span>
+        </div>
+      </div>
+
+      <p class="blog-narrative">Llegamos de noche a Thamel. El caos te golpea como una pared de sonido, motos, incienso y especias todo a la vez. Boudhanath al atardecer es otra cosa. Los monjes haciendo kora alrededor de la estupa mientras el sol pinta todo de naranja.</p>
+
+      <div class="blog-note">
+        <div class="blog-note-icon">📝 Nota de Paco</div>
+        <div class="blog-note-text">"El mono me robó el mango delante de Boudhanath. Salma me dijo que no sacase comida cerca de los templos. Tenía razón."</div>
+      </div>
+
+      <div class="blog-stops">
+        <span class="blog-stop-chip">📍 Aeropuerto TIA</span>
+        <span class="blog-stop-chip">📍 Thamel</span>
+        <span class="blog-stop-chip">📍 Boudhanath</span>
+        <span class="blog-stop-chip">📍 Pashupatinath</span>
+      </div>
+
+      <div class="blog-practical">
+        <span>🚕</span> Taxi aeropuerto → Thamel: ~700 NPR (4.50€) · <span>💰</span> Día: ~18€
+      </div>
+    </div>
+
+    <!-- Day 2 -->
+    <div class="blog-day">
+      <div class="blog-day-header">
+        <span class="blog-day-num">DÍA 2</span>
+        <div>
+          <div class="blog-day-title">Bhaktapur → Nagarkot</div>
+          <div class="blog-day-location">Valle de Kathmandu, Nepal</div>
+        </div>
+      </div>
+
+      <div class="blog-photos">
+        <img class="blog-photo" src="https://images.unsplash.com/photo-1576877138403-8ec2f82cb1f2?w=400&h=300&fit=crop" alt="Bhaktapur">
+        <div class="blog-photo-user" style="position:relative">
+          <img class="blog-photo" src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=400&h=300&fit=crop" alt="Amanecer Nagarkot">
+          <span class="blog-photo-badge">Mi foto</span>
+        </div>
+      </div>
+
+      <p class="blog-narrative">Bhaktapur es el pueblo medieval que Kathmandu quiso ser. Calles empedradas, artesanos tallando madera, el Nyatapola de cinco pisos vigilando la plaza. Cenar en Nagarkot con el Himalaya de fondo no se olvida.</p>
+
+      <div class="blog-note">
+        <div class="blog-note-icon">📝 Nota de Paco</div>
+        <div class="blog-note-text">"Hacía un frío que pelaba pero mereció la pena madrugar. 5 ochomiles a la vez desde la terraza del hotel. El Everest asomando entre nubes."</div>
+      </div>
+
+      <div class="blog-stops">
+        <span class="blog-stop-chip">📍 Durbar Square</span>
+        <span class="blog-stop-chip">📍 Nyatapola</span>
+        <span class="blog-stop-chip">📍 Pottery Square</span>
+        <span class="blog-stop-chip">📍 Nagarkot Viewpoint</span>
+      </div>
+    </div>
+
+    <!-- Day 3 -->
+    <div class="blog-day">
+      <div class="blog-day-header">
+        <span class="blog-day-num">DÍA 3</span>
+        <div>
+          <div class="blog-day-title">Pokhara</div>
+          <div class="blog-day-location">Pokhara, Nepal</div>
+        </div>
+      </div>
+
+      <div class="blog-photos">
+        <img class="blog-photo" src="https://images.unsplash.com/photo-1585938389612-a552a28d6914?w=400&h=300&fit=crop" alt="Phewa Lake">
+      </div>
+
+      <p class="blog-narrative">7 horas de bus desde Kathmandu. El lago Phewa con el Machapuchare reflejado al fondo. Alquilar una barca y dejarte llevar es obligatorio. Por la noche, Lakeside se llena de mochileros preparando el Annapurna.</p>
+
+      <div class="blog-stops">
+        <span class="blog-stop-chip">📍 Phewa Lake</span>
+        <span class="blog-stop-chip">📍 Lakeside</span>
+        <span class="blog-stop-chip">📍 World Peace Pagoda</span>
+      </div>
+
+      <div class="blog-practical">
+        <span>🚌</span> Bus turístico Kathmandu → Pokhara: ~1200 NPR (8€) · 7h
+      </div>
+    </div>
+
+    <!-- More days placeholder -->
+    <div style="text-align:center; padding:30px 0; color:var(--text-soft); font-size:14px;">
+      ... 17 días más de aventura ...
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="blog-cta">
+    <h2>¿Quieres tu propia Bitácora?</h2>
+    <p>Salma te diseña la ruta, te guía en el viaje y documenta tu aventura.</p>
+    <a href="/" class="blog-cta-btn">Empieza tu viaje</a>
+  </div>
+
+  <!-- Footer -->
+  <footer class="blog-footer">
+    <a href="/">Borrado del Mapa</a> · 2026<br>
+    Viaja con alguien que sabe lo que hace
+  </footer>
+
+  <script>
+    // Mapa con ruta de ejemplo
+    const map = L.map('main-map', {
+      zoomControl: true,
+      attributionControl: false,
+      dragging: false,
+      scrollWheelZoom: false,
+      touchZoom: true,
+      doubleClickZoom: true
+    });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+
+    const stops = [
+      { lat: 27.7172, lng: 85.3240, name: 'Kathmandu', day: 1 },
+      { lat: 27.6710, lng: 85.4298, name: 'Bhaktapur', day: 2 },
+      { lat: 27.7150, lng: 85.5200, name: 'Nagarkot', day: 2 },
+      { lat: 28.2096, lng: 83.9856, name: 'Pokhara', day: 3 },
+      { lat: 28.5366, lng: 83.8833, name: 'Ghandruk', day: 5 },
+      { lat: 28.7960, lng: 83.7203, name: 'Annapurna BC', day: 8 },
+      { lat: 27.5291, lng: 84.3542, name: 'Chitwan', day: 12 },
+      { lat: 27.4833, lng: 83.2762, name: 'Lumbini', day: 15 },
+      { lat: 27.6124, lng: 85.5370, name: 'Patan', day: 18 },
+      { lat: 27.7172, lng: 85.3240, name: 'Kathmandu', day: 20 }
+    ];
+
+    const colors = ['#d4a843', '#e8734a', '#4a9de8', '#6dd45a', '#d44a9d', '#9d4ae8'];
+    const bounds = [];
+
+    stops.forEach((s, i) => {
+      const color = colors[Math.min(Math.floor(s.day / 4), colors.length - 1)];
+      L.circleMarker([s.lat, s.lng], {
+        radius: 7, fillColor: color, color: '#222', weight: 2, fillOpacity: 0.9
+      }).bindTooltip(`Día ${s.day}: ${s.name}`, { direction: 'top' }).addTo(map);
+      bounds.push([s.lat, s.lng]);
+    });
+
+    L.polyline(bounds, { color: '#d4a843', weight: 2, opacity: 0.5, dashArray: '5,8' }).addTo(map);
+    map.fitBounds(bounds, { padding: [30, 30] });
+  </script>
+
+</body>
+</html>
