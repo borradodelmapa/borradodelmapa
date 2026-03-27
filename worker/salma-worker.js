@@ -2979,17 +2979,60 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         const reply = replyWithoutRouteBlock(allText);
 
         if (route) {
-          // Draft inmediato (la ruta sin verificar, para que el usuario vea algo rápido)
-          try { await writer.write(encoder.encode(`data: ${JSON.stringify({ draft: true, reply, route })}\n\n`)); } catch (_) {}
-          // Verificar con Google Places (corregir coords + fotos)
-          const keepalive = setInterval(async () => {
-            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
-          }, 3000);
-          try {
-            route = await verifyAllStops(route, env.GOOGLE_PLACES_KEY);
-          } finally {
-            clearInterval(keepalive);
+          // ── PASO 1: Enriquecer paradas con KV (coords + fotos verificadas, instantáneo) ──
+          if (env.SALMA_KB) {
+            for (const stop of route.stops) {
+              const stopName = (stop.name || stop.headline || '').toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').substring(0, 80);
+              if (!stopName) continue;
+              try {
+                const spotJson = await env.SALMA_KB.get('spot:' + stopName);
+                if (spotJson) {
+                  const spot = JSON.parse(spotJson);
+                  if (spot.lat && spot.lng) {
+                    stop.lat = spot.lat;
+                    stop.lng = spot.lng;
+                    stop._kvVerified = true;
+                  }
+                  if (spot.photo_ref && !stop.photo_ref) stop.photo_ref = spot.photo_ref;
+                  if (spot.verified_address) stop.verified_address = spot.verified_address;
+                }
+              } catch (_) {}
+            }
           }
+
+          // ── PASO 2: Enviar ruta al usuario AHORA (con coords del KV, sin esperar Google) ──
+          await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply, route })}\n\n`));
+
+          // ── PASO 3: Verify background SOLO para paradas sin KV ──
+          const stopsNeedVerify = route.stops.filter(s => !s._kvVerified);
+          if (stopsNeedVerify.length > 0 && env.GOOGLE_PLACES_KEY) {
+            ctx.waitUntil((async () => {
+              try {
+                // Crear ruta temporal solo con paradas sin verificar
+                const partialRoute = { ...route, stops: stopsNeedVerify };
+                const verified = await verifyAllStops(partialRoute, env.GOOGLE_PLACES_KEY);
+                // Merge: actualizar solo las paradas verificadas en la ruta original
+                if (verified?.stops) {
+                  for (const vs of verified.stops) {
+                    const orig = route.stops.find(s => (s.name || s.headline) === (vs.name || vs.headline));
+                    if (orig) {
+                      if (vs.lat) orig.lat = vs.lat;
+                      if (vs.lng) orig.lng = vs.lng;
+                      if (vs.photo_ref) orig.photo_ref = vs.photo_ref;
+                      if (vs.verified_address) orig.verified_address = vs.verified_address;
+                    }
+                  }
+                }
+                // Enviar actualización al cliente (si el stream sigue abierto)
+                try { await writer.write(encoder.encode(`data: ${JSON.stringify({ verified: true, route })}\n\n`)); } catch (_) {}
+              } catch (_) {}
+            })());
+          }
+        } else {
+          // Sin ruta — solo texto conversacional
+          await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply, route: null })}\n\n`));
         }
 
         // ── Guardar ruta en KV (nivel 3 — caché automático con múltiples keys) ──
@@ -3009,8 +3052,6 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
             }
           } catch (_) { /* fallo silencioso */ }
         }
-
-        await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply, route: route || null })}\n\n`));
 
         // Log exitoso
         ctx.waitUntil(logToFirestore({

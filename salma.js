@@ -466,6 +466,23 @@ const salma = {
                 continue;
               }
 
+              // VERIFIED — actualización background con coords/fotos de Google
+              if (evt.verified && evt.route) {
+                this.currentRoute = evt.route;
+                try {
+                  guideRenderer.updateVerified(evt.route);
+                } catch (_) {}
+                // Actualizar Firestore si ya estaba guardada
+                if (this._lastSavedDocId && typeof currentUser !== 'undefined' && currentUser) {
+                  try {
+                    db.collection('users').doc(currentUser.uid)
+                      .collection('maps').doc(this._lastSavedDocId)
+                      .update({ itinerarioIA: JSON.stringify(evt.route) }).catch(() => {});
+                  } catch (_) {}
+                }
+                continue;
+              }
+
               // DRAFT — ruta borrador (flujo normal ≤7 días)
               if (evt.draft && !draftSent) {
                 draftSent = true;
