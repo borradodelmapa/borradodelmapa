@@ -455,7 +455,7 @@ const salma = {
                       guideRenderer.render(this.currentRoute, { partial: true });
                     } catch (e) {}
                   }
-                  this._scrollToBottom();
+                  // No hacer scroll — el usuario explora mientras carga
                 }
                 continue;
               }
