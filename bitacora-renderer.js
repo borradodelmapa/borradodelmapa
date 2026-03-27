@@ -410,7 +410,7 @@ const bitacoraRenderer = {
     if (validStops.length === 0) { el.style.display = 'none'; return; }
 
     el.style.height = '200px';
-    const map = L.map(mapId, { zoomControl: false, attributionControl: false });
+    const map = L.map(mapId, { zoomControl: false, attributionControl: false, dragging: false, scrollWheelZoom: false, touchZoom: true, doubleClickZoom: true });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
     const bounds = [];
