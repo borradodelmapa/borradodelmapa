@@ -3013,37 +3013,33 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
             }
           }
 
-          // ── PASO 2: Enviar ruta al usuario AHORA (con coords del KV, sin esperar Google) ──
-          await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply, route })}\n\n`));
+          // ── PASO 2: Draft inmediato (coords del KV donde haya, Claude donde no) ──
+          try { await writer.write(encoder.encode(`data: ${JSON.stringify({ draft: true, reply, route })}\n\n`)); } catch (_) {}
 
-          // ── PASO 3: Verify background SOLO para paradas sin KV ──
+          // ── PASO 3: Verify con Google SOLO paradas sin KV ──
           const stopsNeedVerify = route.stops.filter(s => !s._kvVerified);
           if (stopsNeedVerify.length > 0 && env.GOOGLE_PLACES_KEY) {
-            ctx.waitUntil((async () => {
-              try {
-                // Crear ruta temporal solo con paradas sin verificar
-                const partialRoute = { ...route, stops: stopsNeedVerify };
-                const verified = await verifyAllStops(partialRoute, env.GOOGLE_PLACES_KEY);
-                // Merge: actualizar solo las paradas verificadas en la ruta original
-                if (verified?.stops) {
-                  for (const vs of verified.stops) {
-                    const orig = route.stops.find(s => (s.name || s.headline) === (vs.name || vs.headline));
-                    if (orig) {
-                      if (vs.lat) orig.lat = vs.lat;
-                      if (vs.lng) orig.lng = vs.lng;
-                      if (vs.photo_ref) orig.photo_ref = vs.photo_ref;
-                      if (vs.verified_address) orig.verified_address = vs.verified_address;
-                    }
+            const keepalive = setInterval(async () => {
+              try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
+            }, 3000);
+            try {
+              const partialRoute = { ...route, stops: stopsNeedVerify };
+              const verified = await verifyAllStops(partialRoute, env.GOOGLE_PLACES_KEY);
+              if (verified?.stops) {
+                for (const vs of verified.stops) {
+                  const orig = route.stops.find(s => (s.name || s.headline) === (vs.name || vs.headline));
+                  if (orig) {
+                    if (vs.lat) orig.lat = vs.lat;
+                    if (vs.lng) orig.lng = vs.lng;
+                    if (vs.photo_ref) orig.photo_ref = vs.photo_ref;
+                    if (vs.verified_address) orig.verified_address = vs.verified_address;
                   }
                 }
-                // Enviar actualización al cliente (si el stream sigue abierto)
-                try { await writer.write(encoder.encode(`data: ${JSON.stringify({ verified: true, route })}\n\n`)); } catch (_) {}
-              } catch (_) {}
-            })());
+              }
+            } finally {
+              clearInterval(keepalive);
+            }
           }
-        } else {
-          // Sin ruta — solo texto conversacional
-          await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply, route: null })}\n\n`));
         }
 
         // ── Guardar ruta en KV (nivel 3 — caché automático con múltiples keys) ──
@@ -3063,6 +3059,9 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
             }
           } catch (_) { /* fallo silencioso */ }
         }
+
+        // ── Enviar DONE con ruta verificada (fotos + coords corregidas) ──
+        await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply, route: route || null })}\n\n`));
 
         // Log exitoso
         ctx.waitUntil(logToFirestore({
