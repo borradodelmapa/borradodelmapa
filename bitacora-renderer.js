@@ -486,7 +486,7 @@ const bitacoraRenderer = {
       // Actualizar UI
       const el = document.querySelector('.diario-privacy');
       if (el) {
-        const urlText = docData.slug && next !== 'private' ? `<div style="font-size:10px;color:rgba(244,239,230,.3);margin-top:4px;word-break:break-all;">borradodelmapa.com/${docData.slug}</div>` : '';
+        const urlText = docData.slug && next !== 'private' ? `<div style="font-size:10px;margin-top:4px;word-break:break-all;"><a href="https://borradodelmapa.com/${docData.slug}" target="_blank" rel="noopener" onclick="window.open(this.href);return false;" style="color:var(--dorado);text-decoration:underline;">borradodelmapa.com/${docData.slug}</a></div>` : '';
         el.innerHTML = `${icons[next]} ${labels[next]} <button class="diario-privacy-change" id="diario-privacy-btn">Cambiar</button> <button class="diario-share-btn" id="diario-share-btn">Compartir</button>${urlText}`;
       }
       document.getElementById('diario-privacy-btn')?.addEventListener('click', () => this._togglePrivacy(docId, docData));
