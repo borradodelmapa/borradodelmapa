@@ -2982,12 +2982,23 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           // ── PASO 1: Enriquecer paradas con KV (coords + fotos verificadas, instantáneo) ──
           if (env.SALMA_KB) {
             for (const stop of route.stops) {
-              const stopName = (stop.name || stop.headline || '').toLowerCase()
-                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-                .replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').substring(0, 80);
-              if (!stopName) continue;
+              const rawName = (stop.name || stop.headline || '').toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+              if (!rawName || rawName.length < 3) continue;
               try {
-                const spotJson = await env.SALMA_KB.get('spot:' + stopName);
+                // Generar variantes de búsqueda
+                const full = rawName.replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').substring(0, 80);
+                const parts = rawName.replace(/[,()]/g, '').split(/\s+/).filter(w => w.length > 2);
+                const first = parts[0] || '';
+                const firstTwo = parts.slice(0, 2).join('-');
+                const withoutCity = rawName.replace(/,.*$/, '').trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+
+                // Buscar en orden: nombre completo, sin ciudad, primeras 2 palabras, primera palabra
+                let spotJson = await env.SALMA_KB.get('spot:' + full);
+                if (!spotJson && withoutCity !== full) spotJson = await env.SALMA_KB.get('spot:' + withoutCity);
+                if (!spotJson && firstTwo && firstTwo !== full) spotJson = await env.SALMA_KB.get('spot:' + firstTwo);
+                if (!spotJson && first.length > 4 && first !== firstTwo) spotJson = await env.SALMA_KB.get('spot:' + first);
+
                 if (spotJson) {
                   const spot = JSON.parse(spotJson);
                   if (spot.lat && spot.lng) {
