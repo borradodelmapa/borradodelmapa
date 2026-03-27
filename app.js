@@ -881,6 +881,10 @@ async function publishGuide(docId, rutaData, slug, routeData) {
       summary: rutaData.notas || '',
       cover_image: rutaData.cover_image || '',
       itinerarioIA: rutaData.itinerarioIA,
+      notes: rutaData.notes || null,
+      photos: rutaData.photos || null,
+      privacy: rutaData.privacy || 'link',
+      owner_name: currentUser?.name || 'Viajero',
       createdAt: rutaData.createdAt,
       updatedAt: rutaData.updatedAt
     });
