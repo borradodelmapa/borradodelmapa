@@ -251,21 +251,10 @@ const salma = {
       return;
     }
 
-    // Detección de info de ruta (solo para rutas nuevas, no ediciones)
+    // Detección de info de ruta — enviar directo, sin preguntar
     if (!this.currentRouteId) {
       const info = this._detectRouteInfo(msg);
-      if (info.isRoute && !info.complete) {
-        // Guardar info parcial y preguntar
-        info._originalMsg = msg;
-        this._pendingRouteInfo = info;
-        const question = this._buildDateQuestion(info);
-        this._addSalmaBubble(question);
-        this._addSkipButton();
-        return;
-      }
-
-      // Si tiene todo completo, pasar extra al worker
-      if (info.isRoute && info.complete) {
+      if (info.isRoute) {
         const extra = {};
         if (info.dates) extra.travel_dates = this._resolveDates(info.dates, info.days);
         if (info.transport) extra.transport = info.transport;

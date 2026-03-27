@@ -141,10 +141,10 @@ Cuando falte algún dato para ejecutar una búsqueda (hotel, vuelo, restaurante)
 Ejecuta la búsqueda con defaults y menciona qué asumiste: "Te busco en Chisináu (la capital) para 1 noche el 10 de mayo."
 
 PRIORIDAD DE COMPORTAMIENTO (CRÍTICO — RESUELVE CONFLICTOS):
-1. RUTA (destino + días, "hazme un itinerario") → PUEDES hacer UNA SOLA pregunta breve para personalizar (ej: "¿en coche o a pie?"). UNA. No hagas lista de preguntas. Si el usuario dice "dale", "lo que tú veas" o "hazla ya", genera sin más preguntas.
+1. RUTA (destino + días, "hazme un itinerario") → GENERA DIRECTAMENTE. NUNCA preguntes. Usa defaults inteligentes para lo que falte: sin transporte → a pie y transporte público, sin presupuesto → rango variado, sin fechas → genérico. Si el usuario quiere afinar, ya te lo dirá después.
 2. TODO LO DEMÁS (restaurante, hotel, grúa, embajada, vuelo, vacunas, visados, traducción, emergencia, cualquier info) → ACTÚA INMEDIATAMENTE con lo que tengas. Usa defaults inteligentes. Si tienes geolocalización, úsala. No preguntes tipo de cocina, no preguntes presupuesto, no preguntes preferencias. Da el resultado directo. Si el usuario quiere afinar, ya te lo dirá después.
 
-Esta regla tiene PRIORIDAD ABSOLUTA sobre cualquier otra instrucción que diga "pregunta si faltan datos". Solo se pregunta cuando es literalmente imposible dar una respuesta útil (ej: "busco vuelo" sin destino ni origen).`;
+Esta regla tiene PRIORIDAD ABSOLUTA sobre cualquier otra instrucción. NUNCA preguntes antes de generar una ruta. NUNCA hagas lista de preguntas. Genera siempre.`;
 
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 8 — Modos y formato SALMA_ROUTE_JSON
@@ -209,12 +209,10 @@ Cuando el destino es vago o te faltan datos clave:
 2. Sugiere valores por defecto razonables.
 3. Ofrece dos caminos: "dame más datos" o "le doy caña ya con esto".
 
-Cuándo preguntar vs cuándo generar ruta:
-— SOLO genera ruta (SALMA_ROUTE_JSON) cuando el usuario lo pide EXPLÍCITAMENTE: "hazme una ruta", "créame un itinerario", "planifica X días", "ruta de X días por Y".
-— Si el usuario da solo un destino ("Vietnam", "Nepal") → NO generes ruta. Pregunta qué necesita: ruta, info, vuelos, hoteles, etc.
-— Si da destino + días ("Nepal 5 días") → GENERA la ruta, eso es una petición explícita.
-— Si dice "dale", "hazla", "lo que tú veas", "genera ya" → genera siempre, sin más preguntas.
-— REGLA DE ORO: si ya preguntaste y el usuario responde confirmando → GENERA. No hagas más preguntas.
+Cuándo generar ruta:
+— Si el usuario menciona destino + días ("Nepal 5 días", "3 días en Sevilla") → GENERA la ruta DIRECTAMENTE. Sin preguntas.
+— Si el usuario da solo un destino sin días ("Vietnam", "Nepal") → NO generes ruta. Pregunta cuántos días.
+— Si dice "dale", "hazla", "lo que tú veas", "genera ya" → genera siempre.
 — NUNCA generes ruta como respuesta a una pregunta conversacional ("¿qué ver en Nepal?" NO es "hazme una ruta").
 
 Cuando generes paradas, usa siempre nombres de lugares concretos y verificables para que el mapa funcione. Nunca "zona rural" o "pueblo típico" — pon el nombre real.`;
@@ -283,6 +281,39 @@ const SALMA_SYSTEM_BASE = [
   BLOQUE_RUTAS,
   BLOQUE_MAPA,
 ].join('\n\n');
+
+// Prompt LITE para rutas — solo lo que Claude necesita para generar JSON
+// La personalidad viene del historial de conversación (mensajes anteriores de Salma)
+const SALMA_SYSTEM_ROUTE = `INSTRUCCIÓN PRINCIPAL: Tu respuesta DEBE contener un bloque SALMA_ROUTE_JSON con la ruta completa en JSON. Esto es OBLIGATORIO. Si tu respuesta no contiene SALMA_ROUTE_JSON, has fallado. Primero 1-2 frases, luego SALMA_ROUTE_JSON en una línea, luego el JSON completo en la siguiente línea.
+
+Eres SALMA, compañera de viaje de Borrado del Mapa. Andaluza, directa, con dato concreto, sin paja. Tuteas siempre. Si el usuario escribe en otro idioma, contestas en ese idioma.
+
+GENERA LA RUTA DIRECTAMENTE. NUNCA preguntes. NUNCA pidas más datos. NUNCA metas fotos ni imágenes. Usa defaults: sin transporte → a pie y transporte público, sin presupuesto → rango variado.
+
+ZONAS Y PUNTOS VERIFICABLES
+Solo incluye lugares que existen en Google Maps. No inventes nombres, direcciones ni coordenadas. Usa SIEMPRE el nombre exacto con el que aparece en Google Maps.
+
+RUTAS POR DÍA — PIENSA EN EL RECORRIDO PRIMERO
+1. TRAZA LA RUTA PRIMERO: decide el recorrido completo. Divide los km entre los días.
+2. PON PARADAS EN EL CAMINO: cada parada se pilla DE PASO (máx 5-10km de desvío).
+2b. RADIO SEGÚN DÍAS: 1-2 días → 30km del centro. 3-4 días → 60km. 5+ días → región amplia.
+3. CADA DÍA ES UN TRAMO: Día 1 = A→B, Día 2 = B→C. Paradas en orden de recorrido.
+4. CONTINUIDAD: la primera parada del día 2 es donde terminó el día 1.
+5. MÁXIMO 5-6 PARADAS POR DÍA. Calidad sobre cantidad.
+6. KM y carreteras en campos km_from_previous y road_name, NO en narrative.
+Cada parada lleva day_title (título breve del día, 3-5 palabras, igual para todo el día).
+
+FORMATO DE RESPUESTA
+1-2 frases sobre el destino (dato interesante, opinión, consejo). NUNCA digas "aquí tienes la ruta". Después:
+
+SALMA_ROUTE_JSON
+{"title":"Título","country":"País","region":"Región","stops":[{"name":"Nombre Google Maps","narrative":"1 frase","day":1,"lat":36.72,"lng":-4.42}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/A/B","label":"Día 1: A → B"}],"tips":["Consejo"]}
+
+Campos OBLIGATORIOS por parada (SOLO estos, nada más): name (nombre exacto Google Maps), narrative (1 frase corta), day (entero), lat, lng.
+maps_links: un enlace Google Maps por día.
+tips: 2-3 consejos prácticos.
+
+FORMATO PROHIBIDO: bullet points, encabezados markdown (###), coordenadas en texto, emojis, fotos, imágenes.`;
 
 // ═══════════════════════════════════════════════════════════════
 // HERRAMIENTAS — Tool Use para agente Salma (Duffel vuelos)
@@ -429,12 +460,17 @@ const SALMA_TOOLS = [
 // ═══════════════════════════════════════════════════════════════
 
 function isRouteRequest(message, history) {
-  const directMatch = /ruta|itinerario|qué ver|que ver|visitar|días en|dias en|días|dias|fin de semana|semana en|lugares en|qué hacer|que hacer|plan para|viaje a|viaje por|llevo.*días|me quedo|escapada|excursion|excursión/i.test(message);
-  if (directMatch) return true;
+  const raw = (message || '').toLowerCase();
+  // Patrón robusto: matchea con y sin acentos, y con \d+.*di/día como fallback
+  const routePattern = /ruta|itinerario|que ver|qué ver|visitar|dias en|días en|dias|días|fin de semana|semana en|lugares en|que hacer|qué hacer|plan para|viaje a|viaje por|me quedo|escapada|excursion|excursión/i;
+  if (routePattern.test(raw)) return true;
+  // Fallback: "N días" o "N dias" con cualquier encoding
+  if (/\d+\s*.{0,2}as?\s+en\s/i.test(raw)) return true;
+  if (/\d+\s*d\S{0,3}as/i.test(raw)) return true;
   if (Array.isArray(history) && history.length >= 2) {
-    const prevMessages = history.map(h => h.content || '').join(' ');
-    const historyHasRouteContext = /ruta|itinerario|días|dias|viaje|visitar|qué ver|que ver|playas?|playa/i.test(prevMessages);
-    const userGivesData = /\d+\s*d[ií]as?|\d+\s*noches?|zona|calas?|playa|surf|ciudad|pueblo|costa|norte|sur|este|oeste/i.test(message);
+    const prevMessages = history.map(h => (h.content || '').toLowerCase()).join(' ');
+    const historyHasRouteContext = /ruta|itinerario|d[ií]as|viaje|visitar|qu[eé] ver|playas?|playa/i.test(prevMessages);
+    const userGivesData = /\d+\s*d[ií]as?|\d+\s*noches?|zona|calas?|playa|surf|ciudad|pueblo|costa|norte|sur|este|oeste/i.test(raw);
     if (historyHasRouteContext && userGivesData) return true;
   }
   return false;
@@ -802,7 +838,8 @@ function tryKVDirectAnswer(message, country, destination) {
 // ═══════════════════════════════════════════════════════════════
 
 function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData) {
-  let systemPrompt = SALMA_SYSTEM_BASE;
+  const isRoute = isRouteRequest(message, history);
+  let systemPrompt = isRoute ? SALMA_SYSTEM_ROUTE : SALMA_SYSTEM_BASE;
 
   // Contexto mínimo del usuario + fecha actual
   const ctx = [];
@@ -854,7 +891,8 @@ Coste mochilero: ${c.coste_diario_mochilero}/día | Medio: ${c.coste_diario_medi
 Propinas: ${c.propinas}]`);
   }
 
-  if (kvDestinationData) {
+  if (kvDestinationData && !isRoute) {
+    // KV nivel 2 solo para conversación — en rutas Claude ya sabe los destinos
     const d = kvDestinationData;
     let destCtx = `[DATOS VERIFICADOS DEL DESTINO — usa estos datos para la ruta:
 Destino: ${d.nombre} (${d.tipo}) | Región: ${d.region}
@@ -887,7 +925,16 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
   }
 
   if (isRouteRequest(message, history)) {
-    userContent += '\n\n[OBLIGATORIO — GENERA RUTA AHORA: Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 1 frase sobre el destino + salto de línea + SALMA_ROUTE_JSON + JSON completo. NO respondas solo con texto. Usa defaults razonables para lo que falte.]';
+    userContent += `\n\n[INSTRUCCIÓN OBLIGATORIA — LEE ESTO ANTES DE RESPONDER:
+Tu respuesta DEBE tener esta estructura exacta:
+1. Una o dos frases sobre el destino
+2. Línea vacía
+3. La palabra SALMA_ROUTE_JSON (sola en una línea)
+4. El JSON completo de la ruta en la línea siguiente
+
+Si tu respuesta NO contiene la palabra SALMA_ROUTE_JSON seguida de un JSON, has FALLADO tu tarea.
+NO preguntes nada. NO metas fotos ni imágenes. NO uses markdown con ![]().
+GENERA la ruta AHORA con los datos que tienes. Usa defaults para lo que falte.]`;
   } else {
     userContent += '\n\n[Si generas ruta, responde con 1-2 frases solo. Si es conversacional, extiéndete con densidad de datos. Si el usuario pide datos concretos, dato primero y breve.]';
   }
@@ -1018,7 +1065,7 @@ function extractDaysFromMessage(message) {
 
 function isLongRoute(message) {
   const days = extractDaysFromMessage(message);
-  return days !== null && days >= 8;
+  return days !== null && days >= 7;
 }
 
 async function planBlocks(systemPrompt, message, days, apiKey) {
@@ -1119,7 +1166,7 @@ async function generateAndVerifyPipeline(blocks, systemPrompt, message, apiKey, 
 
       // 3. Verificar este bloque
       try {
-        genResult.route = await verifyAllStops(genResult.route, placesKey);
+        genResult.route = await verifyLite(genResult.route, placesKey);
       } catch (_) {
         // Si verify falla, mantener la ruta sin verificar
       }
@@ -1328,6 +1375,69 @@ async function verifyAllStops(route, placesKey) {
   });
 
   route.stops = verifiedStops;
+  return route;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VERIFY LITE — solo findplacefromtext en paralelo (~1s)
+// Coords verificadas + photo_ref. Sin Place Details.
+// ═══════════════════════════════════════════════════════════════
+
+async function verifyLite(route, placesKey) {
+  if (!route?.stops || !placesKey) return route;
+
+  const region = route.region || route.country || '';
+  const countryCode = route.country ? getCountryCode(route.country) : '';
+
+  // 1 sola ronda: findplacefromtext para todas las paradas en paralelo
+  const findPromises = route.stops.map(stop => {
+    const name = stop.name || stop.headline || '';
+    if (!name || name.length < 3) return Promise.resolve(null);
+    const searchQuery = region ? `${name} ${region}` : name;
+    const bias = (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01)
+      ? `&locationbias=circle:50000@${stop.lat},${stop.lng}` : '';
+    const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
+    return fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(searchQuery)}&inputtype=textquery${bias}${countryFilter}&fields=geometry,photos,name&language=es&key=${placesKey}`)
+      .then(r => r.json()).catch(() => null);
+  });
+
+  const findResults = await Promise.all(findPromises);
+
+  // Parchear cada parada con coords + photo_ref
+  route.stops.forEach((stop, i) => {
+    const candidate = findResults[i]?.candidates?.[0];
+    if (!candidate?.geometry?.location) return;
+
+    const pLat = candidate.geometry.location.lat;
+    const pLng = candidate.geometry.location.lng;
+
+    // Validación mínima: nombre debe tener alguna palabra en común
+    const originalName = (stop.name || stop.headline || '').toLowerCase();
+    const googleName = (candidate.name || '').toLowerCase();
+    const nameWords = originalName.split(/\s+/).filter(w => w.length > 3);
+    const nameMatch = nameWords.some(w => googleName.includes(w)) || googleName.split(/\s+/).filter(w => w.length > 3).some(w => originalName.includes(w));
+
+    // Si el nombre no coincide nada, verificar que esté cerca (~15km)
+    const origDist = (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01)
+      ? Math.sqrt(Math.pow(pLat - stop.lat, 2) + Math.pow(pLng - stop.lng, 2)) * 111 : 0;
+
+    if (!nameMatch && origDist > 15) return; // Google devolvió algo sin relación
+
+    // Actualizar coords
+    stop.lat = pLat;
+    stop.lng = pLng;
+
+    // Photo ref
+    const photoRef = candidate.photos?.[0]?.photo_reference || '';
+    if (photoRef) stop.photo_ref = photoRef;
+
+    // Nombre verificado
+    if (candidate.name && nameMatch) {
+      stop.name = candidate.name;
+      stop.headline = candidate.name;
+    }
+  });
+
   return route;
 }
 
@@ -2815,9 +2925,13 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     // Si helpCategory=food y ya tenemos resultados de Google Places, no usar Sonnet con tool
     const serviceReqEffective = isServiceReq && !(helpCategory === 'food' && helpResults);
     // Sonnet para rutas, vuelos y servicios (necesita tool use fiable), Haiku para conversacional
-    const needsSonnet = isRoute || isFlightReq || isHotelReq || serviceReqEffective;
-    const reqModel = needsSonnet ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001';
-    const reqMaxTokens = needsSonnet ? 6000 : 1500;
+    const needsSonnet = (!isRoute && (isFlightReq || isHotelReq || serviceReqEffective));
+    const reqModel = isRoute ? 'claude-haiku-4-5-20251001' : (needsSonnet ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001');
+    const reqMaxTokens = isRoute ? 2500 : (needsSonnet ? 6000 : 1500);
+
+    // Debug log
+    const debugNorm = (message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    console.log(`[SALMA] msg="${message}" norm="${debugNorm}" isRoute=${isRoute} model=${reqModel} maxTokens=${reqMaxTokens}`);
 
     // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
     const sseHeaders = {
@@ -2825,6 +2939,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       'Cache-Control': 'no-cache',
       'Connection': 'keep-alive',
       'Access-Control-Allow-Origin': '*',
+      'X-Salma-Debug': `route=${isRoute},model=${reqModel},tokens=${reqMaxTokens}`,
     };
 
     const encoder = new TextEncoder();
@@ -2836,7 +2951,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     ctx.waitUntil((async () => {
       let allText = '';  // Texto acumulado de TODAS las iteraciones
       const MAX_TOOL_ITERATIONS = 5;  // Seguridad: máximo 5 tool calls por turno
-      const longRoute = false; // DESACTIVADO temporalmente — bloques paralelos necesitan fix
+      const longRoute = isRoute && isLongRoute(message); // ≥8 días → bloques paralelos
 
       try {
         // ── RUTA LARGA (≥8 días): generación por bloques paralelos ──
@@ -2936,7 +3051,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
                 temperature: 0.7,
                 system: systemPrompt,
                 messages: currentMessages,
-                tools: SALMA_TOOLS,
+                ...(isRoute ? {} : { tools: SALMA_TOOLS }),
                 stream: true,
               }),
             });
@@ -3034,9 +3149,18 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           // ── PASO 2: Draft inmediato (coords del KV donde haya, Claude donde no) ──
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ draft: true, reply, route })}\n\n`)); } catch (_) {}
 
-          // ── Verify DESACTIVADO — las fotos tienen bug, el verify solo añade 30s sin beneficio ──
-          // TODO: arreglar bug de fotos en verifyAllStops y reactivar
-          // Las coords vienen del KV (verificadas) o de Claude (95% correctas)
+          // ── PASO 3: Verify LITE — findplacefromtext en paralelo (~1s) ──
+          // Coords verificadas + photo_ref. Sin Place Details.
+          try {
+            const placesKey = env.GOOGLE_PLACES_KEY;
+            if (placesKey) {
+              route = await verifyLite(route, placesKey);
+              // Enviar update verificado — frontend parchea fotos + coords
+              try { await writer.write(encoder.encode(`data: ${JSON.stringify({ verified: true, route })}\n\n`)); } catch (_) {}
+            }
+          } catch (_) {
+            // Si verify falla, la ruta sigue con coords de KV/Claude
+          }
         }
 
         // ── Guardar ruta en KV (nivel 3 — caché automático con múltiples keys) ──
