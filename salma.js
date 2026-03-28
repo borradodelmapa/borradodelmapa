@@ -903,9 +903,20 @@ const salma = {
       if (txt && !txt.textContent.trim()) {
         el.remove(); // Vacía, quitar
       } else {
-        // No re-procesar: el innerHTML ya está formateado
+        // Mantener burbuja y añadir botón guardar nota
+        const textContent = txt ? txt.textContent : '';
         if (txt) txt.removeAttribute('id');
-        if (el) el.removeAttribute('id');
+        el.removeAttribute('id');
+        if (!el.querySelector('.msg-save-note')) {
+          const btn = document.createElement('button');
+          btn.className = 'msg-save-note';
+          btn.innerHTML = '&#x1F516; Guardar nota';
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this._saveNoteFromBubble(textContent);
+          });
+          el.appendChild(btn);
+        }
       }
     }
   },
