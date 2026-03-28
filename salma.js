@@ -301,6 +301,19 @@ const salma = {
         body.rutas_gratis_usadas = window.currentUser.rutas_gratis_usadas || 0;
       }
       if (this._userLocation) body.user_location = this._userLocation;
+      // Inyectar notas del país si hay contexto
+      if (window.currentUser && typeof detectCountryInMessage === 'function') {
+        const msgCountry = detectCountryInMessage(msg) || (this.currentRoute ? normalizeCountry(this.currentRoute.country) : null);
+        if (msgCountry && msgCountry.code) {
+          try {
+            const paisDoc = await db.collection('users').doc(window.currentUser.uid).collection('paises').doc(msgCountry.code).get();
+            if (paisDoc.exists) {
+              const notas = (paisDoc.data().notas || []).slice(-10);
+              if (notas.length) body.country_notes = notas.map(n => ({ texto: n.texto, tipo: n.tipo }));
+            }
+          } catch (_) {}
+        }
+      }
       // Datos extra de detección
       if (extra.travel_dates) body.travel_dates = extra.travel_dates;
       if (extra.transport) body.transport = extra.transport;
@@ -423,6 +436,27 @@ const salma = {
                   _isBlocks: isBlocksRoute
                 });
                 return;
+              }
+
+              // TOOL_NOTE — auto-guardar nota del país
+              if (evt.tool_note && evt.summary && evt.country_hint) {
+                try {
+                  if (typeof normalizeCountry === 'function' && typeof saveCountryNote === 'function' && window.currentUser) {
+                    const c = normalizeCountry(evt.country_hint);
+                    if (c.code) {
+                      const tipoMap = { buscar_hotel:'hotel', buscar_vuelos:'vuelo', buscar_coche:'transporte', buscar_restaurante:'restaurante', buscar_lugar:'lugar', buscar_web:'nota' };
+                      saveCountryNote(c.code, c.name, c.emoji, {
+                        id: 'nota_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+                        texto: evt.summary,
+                        tipo: tipoMap[evt.tool] || 'nota',
+                        origen: 'auto',
+                        fuente: evt.tool,
+                        fecha: new Date().toISOString()
+                      });
+                    }
+                  }
+                } catch (_) {}
+                continue;
               }
 
               // PLAN — bloques paralelos planificados
@@ -774,9 +808,57 @@ const salma = {
     div.className = 'msg msg-salma';
     div.innerHTML = `
       <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
-      <div class="msg-body-salma">${formatMessage(text)}</div>`;
+      <div class="msg-body-salma">${formatMessage(text)}</div>
+      <button class="msg-save-note" title="Guardar como nota">&#x1F516;</button>`;
+    // Bookmark click handler
+    div.querySelector('.msg-save-note').addEventListener('click', (e) => {
+      e.stopPropagation();
+      this._saveNoteFromBubble(text);
+    });
     area.appendChild(div);
     this._scrollToBottom();
+  },
+
+  _saveNoteFromBubble(text) {
+    if (!window.currentUser) { alert('Inicia sesión para guardar notas'); return; }
+    // Detectar país del texto o del contexto actual
+    const country = detectCountryInMessage(text) || (this.currentRoute ? normalizeCountry(this.currentRoute.country) : null);
+    const snippet = text.length > 200 ? text.slice(0, 200) + '...' : text;
+
+    if (country && country.code) {
+      saveCountryNote(country.code, country.name, country.emoji, {
+        id: 'nota_' + Date.now(),
+        texto: snippet,
+        tipo: 'nota',
+        origen: 'manual',
+        fecha: new Date().toISOString()
+      });
+      // Feedback visual
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = `Guardado en ${country.emoji} ${country.name}`;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2000);
+    } else {
+      // Pedir país al usuario
+      const pais = prompt('¿En qué país guardamos esta nota?');
+      if (!pais) return;
+      const c = normalizeCountry(pais);
+      if (c.code) {
+        saveCountryNote(c.code, c.name, c.emoji, {
+          id: 'nota_' + Date.now(),
+          texto: snippet,
+          tipo: 'nota',
+          origen: 'manual',
+          fecha: new Date().toISOString()
+        });
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = `Guardado en ${c.emoji} ${c.name}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+      }
+    }
   },
 
   _addStreamBubble() {

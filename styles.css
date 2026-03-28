@@ -1339,6 +1339,57 @@ body {
 .bitacora-empty-text { font-weight:600; color:rgba(244,239,230,.7); margin-bottom:8px; }
 .bitacora-empty-sub { font-size:13px; color:rgba(244,239,230,.4); margin-bottom:20px; }
 
+/* ═══ BOOKMARK EN BURBUJAS CHAT ═══ */
+.msg-save-note {
+  position:absolute; top:6px; right:6px;
+  background:none; border:none; cursor:pointer;
+  font-size:14px; opacity:0; transition:opacity .2s;
+  padding:4px; color:rgba(244,239,230,.4);
+}
+.msg-salma:hover .msg-save-note { opacity:1; }
+.msg-save-note:hover { color:var(--dorado); }
+.msg.msg-salma { position:relative; }
+
+/* ═══ BITÁCORA POR PAÍSES ═══ */
+.bitacora-countries { display:flex; flex-direction:column; gap:10px; }
+.bitacora-country { background:rgba(244,239,230,.03); border:1px solid rgba(244,239,230,.08); border-radius:12px; overflow:hidden; }
+.bitacora-country-header { display:flex; align-items:center; gap:10px; padding:14px 16px; cursor:pointer; transition:background .15s; }
+.bitacora-country-header:hover { background:rgba(244,239,230,.05); }
+.bitacora-country-flag { font-size:22px; }
+.bitacora-country-name { font-weight:600; color:rgba(244,239,230,.9); font-size:15px; flex:1; }
+.bitacora-country-counts { font-size:11px; color:rgba(244,239,230,.4); }
+.bitacora-country-arrow { color:var(--dorado); font-size:18px; font-weight:700; transition:transform .2s; }
+
+.bitacora-country-body { padding:0 16px 16px; }
+.bitacora-section { margin-bottom:12px; }
+.bitacora-section:last-child { margin-bottom:0; }
+.bitacora-section-title { font-family:var(--font-mono); font-size:10px; font-weight:600; letter-spacing:.12em; color:var(--dorado); padding-bottom:6px; border-bottom:1px solid rgba(212,168,67,.2); margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; }
+.bitacora-add-note { background:none; border:1px solid rgba(212,168,67,.3); color:var(--dorado); width:22px; height:22px; border-radius:6px; cursor:pointer; font-size:14px; line-height:1; display:flex; align-items:center; justify-content:center; }
+.bitacora-add-note:hover { background:rgba(212,168,67,.15); }
+
+.bitacora-notes-list { display:flex; flex-direction:column; gap:6px; }
+.bitacora-note { padding:8px 10px; background:rgba(244,239,230,.03); border-radius:8px; border:1px solid rgba(244,239,230,.06); }
+.bitacora-note-text { font-size:13px; color:rgba(244,239,230,.75); line-height:1.4; margin-bottom:4px; }
+.bitacora-note-meta { display:flex; align-items:center; gap:6px; }
+.bitacora-note-type { font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; letter-spacing:.04em; }
+.bitacora-note-origin { font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; letter-spacing:.04em; }
+.tag-visado, .tag-auto { background:rgba(92,184,92,.15); color:#5cb85c; }
+.tag-hotel { background:rgba(107,159,255,.15); color:#6b9fff; }
+.tag-vuelo, .tag-transporte { background:rgba(155,89,182,.15); color:#b68edc; }
+.tag-restaurante { background:rgba(230,126,34,.15); color:#e6842a; }
+.tag-lugar { background:rgba(26,188,156,.15); color:#1abc9c; }
+.tag-nota, .tag-manual { background:rgba(240,173,78,.15); color:#f0ad4e; }
+.tag-guardado { background:rgba(240,173,78,.15); color:#f0ad4e; }
+.bitacora-note-delete { background:none; border:none; color:rgba(244,239,230,.25); cursor:pointer; font-size:13px; margin-left:auto; padding:2px 4px; }
+.bitacora-note-delete:hover { color:rgba(244,239,230,.6); }
+.bitacora-note-empty { font-size:12px; color:rgba(244,239,230,.25); font-style:italic; padding:4px 0; }
+
+.bitacora-rutas-list { display:flex; flex-direction:column; gap:6px; }
+.bitacora-ruta-item { padding:10px 12px; background:rgba(212,168,67,.06); border:1px solid rgba(212,168,67,.12); border-radius:8px; cursor:pointer; transition:background .15s; }
+.bitacora-ruta-item:hover { background:rgba(212,168,67,.12); }
+.bitacora-ruta-name { font-weight:600; color:rgba(244,239,230,.85); font-size:14px; }
+.bitacora-ruta-meta { font-size:11px; color:rgba(244,239,230,.4); margin-top:2px; }
+
 /* ═══ DIARIO ═══ */
 .diario-area { max-width:600px; margin:0 auto; padding:16px; }
 .diario-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }

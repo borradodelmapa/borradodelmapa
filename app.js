@@ -392,7 +392,30 @@ function _createGuideCard(doc, d) {
   return card;
 }
 
-// ═══ BITÁCORA ═══
+// ═══ BITÁCORA — Organizada por países ═══
+
+// CRUD notas por país
+async function saveCountryNote(countryCode, countryName, emoji, nota) {
+  if (!currentUser || !countryCode) return;
+  const ref = db.collection('users').doc(currentUser.uid).collection('paises').doc(countryCode);
+  const doc = await ref.get();
+  if (doc.exists) {
+    const notas = doc.data().notas || [];
+    notas.push(nota);
+    await ref.update({ notas, updatedAt: new Date().toISOString() });
+  } else {
+    await ref.set({ countryCode, countryName, emoji, notas: [nota], updatedAt: new Date().toISOString() });
+  }
+}
+
+async function deleteCountryNote(countryCode, notaId) {
+  if (!currentUser || !countryCode) return;
+  const ref = db.collection('users').doc(currentUser.uid).collection('paises').doc(countryCode);
+  const doc = await ref.get();
+  if (!doc.exists) return;
+  const notas = (doc.data().notas || []).filter(n => n.id !== notaId);
+  await ref.update({ notas, updatedAt: new Date().toISOString() });
+}
 
 async function renderBitacora() {
   if (!currentUser) { showState('welcome'); return; }
@@ -403,27 +426,52 @@ async function renderBitacora() {
         <button class="bitacora-back" id="bitacora-back">←</button>
         <div class="bitacora-title">Bitácora</div>
       </div>
-      <div class="bitacora-grid" id="bitacora-grid">
-        <div class="bitacora-loading">Cargando tus diarios...</div>
+      <div class="bitacora-countries" id="bitacora-countries">
+        <div class="bitacora-loading">Cargando tu bitácora...</div>
       </div>
     </div>`;
 
   document.getElementById('bitacora-back').addEventListener('click', () => showState('profile'));
 
   try {
-    const snap = await db.collection('users').doc(currentUser.uid)
-      .collection('maps').orderBy('createdAt', 'desc').get();
-    const grid = document.getElementById('bitacora-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
+    // Cargar rutas y notas en paralelo
+    const [mapsSnap, paisesSnap] = await Promise.all([
+      db.collection('users').doc(currentUser.uid).collection('maps').orderBy('createdAt', 'desc').get(),
+      db.collection('users').doc(currentUser.uid).collection('paises').get()
+    ]);
 
-    if (snap.empty) {
-      grid.innerHTML = `
+    const container = document.getElementById('bitacora-countries');
+    if (!container) return;
+
+    // Agrupar rutas por país
+    const countriesMap = {}; // code → { name, emoji, rutas: [], notas: [] }
+
+    mapsSnap.forEach(doc => {
+      const d = doc.data();
+      const country = normalizeCountry(d.destino || d.country || d.nombre || '');
+      const code = country.code || 'XX';
+      if (!countriesMap[code]) countriesMap[code] = { name: country.name || 'Otros', emoji: country.emoji || '', rutas: [], notas: [] };
+      let route = null;
+      try { route = JSON.parse(d.itinerarioIA || '{}'); } catch (_) {}
+      countriesMap[code].rutas.push({ doc, data: d, route });
+    });
+
+    // Merge notas de países
+    paisesSnap.forEach(doc => {
+      const d = doc.data();
+      const code = d.countryCode || doc.id;
+      if (!countriesMap[code]) countriesMap[code] = { name: d.countryName || code, emoji: d.emoji || countryEmoji(code), rutas: [], notas: [] };
+      countriesMap[code].notas = d.notas || [];
+    });
+
+    // Si no hay nada
+    if (Object.keys(countriesMap).length === 0) {
+      container.innerHTML = `
         <div class="bitacora-empty">
           <div class="bitacora-empty-icon">📓</div>
           <div class="bitacora-empty-text">Tu bitácora está vacía</div>
-          <div class="bitacora-empty-sub">Pídele una ruta a Salma y empieza a documentar tu viaje</div>
-          <button class="btn-primary" id="bitacora-new">Planear viaje</button>
+          <div class="bitacora-empty-sub">Habla con Salma y la info se irá guardando aquí</div>
+          <button class="btn-primary" id="bitacora-new">Habla con Salma</button>
         </div>`;
       document.getElementById('bitacora-new')?.addEventListener('click', () => {
         if (typeof salma !== 'undefined') { salma.reset(); salma._initChat(); }
@@ -431,42 +479,174 @@ async function renderBitacora() {
       return;
     }
 
-    snap.forEach(doc => {
-      const d = doc.data();
-      let route = null;
-      try { route = JSON.parse(d.itinerarioIA || '{}'); } catch (_) {}
-      const stops = route?.stops?.length || 0;
-      const notesCount = d.notes ? Object.keys(d.notes).length : 0;
-      const photosCount = d.photos ? d.photos.length : 0;
-      const date = d.createdAt ? new Date(d.createdAt).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }) : '';
-      const privacy = d.privacy || 'private';
-      const privacyIcon = privacy === 'public' ? '🌍' : privacy === 'link' ? '🔗' : '🔒';
-      const photo = d.cover_image || destPhoto(d.destino || d.country || d.nombre || '');
+    // Ordenar países por última actividad
+    const sorted = Object.entries(countriesMap).sort((a, b) => {
+      const aDate = a[1].rutas[0]?.data?.createdAt || a[1].notas[0]?.fecha || '';
+      const bDate = b[1].rutas[0]?.data?.createdAt || b[1].notas[0]?.fecha || '';
+      return bDate.localeCompare(aDate);
+    });
 
-      const card = document.createElement('div');
-      card.className = 'bitacora-card';
-      card.innerHTML = `
-        <div class="bitacora-card-img" style="background-image:url('${escapeHTML(photo)}')"></div>
-        <div class="bitacora-card-body">
-          <div class="bitacora-card-title">${escapeHTML(d.nombre || 'Mi viaje')}</div>
-          <div class="bitacora-card-date">${escapeHTML(date)}</div>
-          <div class="bitacora-card-stats">${stops} paradas${photosCount ? ' · ' + photosCount + ' fotos' : ''}${notesCount ? ' · ' + notesCount + ' notas' : ''}</div>
-          <div class="bitacora-card-privacy">${privacyIcon} ${privacy === 'public' ? 'Pública' : privacy === 'link' ? 'Con enlace' : 'Privada'}</div>
+    container.innerHTML = '';
+
+    sorted.forEach(([code, country]) => {
+      const notasCount = country.notas.length;
+      const rutasCount = country.rutas.length;
+
+      const el = document.createElement('div');
+      el.className = 'bitacora-country';
+      el.innerHTML = `
+        <div class="bitacora-country-header" data-code="${code}">
+          <span class="bitacora-country-flag">${country.emoji}</span>
+          <span class="bitacora-country-name">${escapeHTML(country.name)}</span>
+          <span class="bitacora-country-counts">${notasCount ? notasCount + ' notas' : ''}${notasCount && rutasCount ? ' · ' : ''}${rutasCount ? rutasCount + ' ruta' + (rutasCount > 1 ? 's' : '') : ''}</span>
+          <span class="bitacora-country-arrow">›</span>
+        </div>
+        <div class="bitacora-country-body" id="country-body-${code}" style="display:none;">
+          <div class="bitacora-section">
+            <div class="bitacora-section-title">NOTAS <button class="bitacora-add-note" data-code="${code}" data-name="${escapeHTML(country.name)}" data-emoji="${country.emoji}" title="Añadir nota">+</button></div>
+            <div class="bitacora-notes-list" id="notes-${code}">
+              ${notasCount === 0 ? '<div class="bitacora-note-empty">Sin notas aún</div>' :
+                country.notas.map(n => `
+                  <div class="bitacora-note" data-id="${n.id}">
+                    <div class="bitacora-note-text">${escapeHTML(n.texto)}</div>
+                    <div class="bitacora-note-meta">
+                      <span class="bitacora-note-type tag-${n.tipo || 'nota'}">${n.tipo || 'nota'}</span>
+                      <span class="bitacora-note-origin tag-${n.origen || 'manual'}">${n.origen === 'auto' ? 'auto' : 'guardado'}</span>
+                      <button class="bitacora-note-delete" data-code="${code}" data-id="${n.id}">✕</button>
+                    </div>
+                  </div>`).join('')}
+            </div>
+          </div>
+          <div class="bitacora-section">
+            <div class="bitacora-section-title">RUTAS</div>
+            <div class="bitacora-rutas-list">
+              ${rutasCount === 0 ? '<div class="bitacora-note-empty">Aún no tienes rutas</div>' :
+                country.rutas.map(r => {
+                  const d = r.data;
+                  const stops = r.route?.stops?.length || 0;
+                  const days = r.route?.duration_days || d.num_dias || '?';
+                  return `
+                    <div class="bitacora-ruta-item" data-docid="${r.doc.id}">
+                      <div class="bitacora-ruta-name">${escapeHTML(d.nombre || 'Mi ruta')}</div>
+                      <div class="bitacora-ruta-meta">${days} días · ${stops} paradas</div>
+                    </div>`;
+                }).join('')}
+            </div>
+          </div>
         </div>`;
-      card.addEventListener('click', () => {
-        currentState = 'diario';
-        updateBottomBar();
-        if (typeof bitacoraRenderer !== 'undefined') {
-          bitacoraRenderer.renderDiario(route, doc.id, d.notes || {}, d.photos || [], d);
+
+      // Acordeón toggle
+      el.querySelector('.bitacora-country-header').addEventListener('click', () => {
+        const body = document.getElementById('country-body-' + code);
+        const arrow = el.querySelector('.bitacora-country-arrow');
+        if (body.style.display === 'none') {
+          body.style.display = 'block';
+          arrow.textContent = '⌄';
+        } else {
+          body.style.display = 'none';
+          arrow.textContent = '›';
         }
       });
-      grid.appendChild(card);
+
+      container.appendChild(el);
     });
+
+    // Event delegation para eliminar notas
+    container.addEventListener('click', async (e) => {
+      const del = e.target.closest('.bitacora-note-delete');
+      if (del) {
+        e.stopPropagation();
+        const code = del.dataset.code;
+        const id = del.dataset.id;
+        del.closest('.bitacora-note')?.remove();
+        await deleteCountryNote(code, id);
+        // Actualizar contador
+        const notesList = document.getElementById('notes-' + code);
+        if (notesList && notesList.children.length === 0) {
+          notesList.innerHTML = '<div class="bitacora-note-empty">Sin notas aún</div>';
+        }
+      }
+    });
+
+    // Event delegation para abrir rutas
+    container.addEventListener('click', (e) => {
+      const ruta = e.target.closest('.bitacora-ruta-item');
+      if (ruta) {
+        const docId = ruta.dataset.docid;
+        // Buscar la ruta en mapsSnap
+        const doc = mapsSnap.docs.find(d => d.id === docId);
+        if (doc) {
+          const d = doc.data();
+          let route = null;
+          try { route = JSON.parse(d.itinerarioIA || '{}'); } catch (_) {}
+          currentState = 'diario';
+          updateBottomBar();
+          if (typeof bitacoraRenderer !== 'undefined') {
+            bitacoraRenderer.renderDiario(route, doc.id, d.notes || {}, d.photos || [], d);
+          }
+        }
+      }
+    });
+
+    // Event delegation para añadir nota manual
+    container.addEventListener('click', (e) => {
+      const btn = e.target.closest('.bitacora-add-note');
+      if (btn) {
+        e.stopPropagation();
+        showAddNoteModal(btn.dataset.code, btn.dataset.name, btn.dataset.emoji);
+      }
+    });
+
   } catch (e) {
     console.error('Error cargando bitácora:', e);
-    const grid = document.getElementById('bitacora-grid');
-    if (grid) grid.innerHTML = '<div class="bitacora-empty-text">Error cargando tus diarios</div>';
+    const container = document.getElementById('bitacora-countries');
+    if (container) container.innerHTML = '<div class="bitacora-empty-text">Error cargando tu bitácora</div>';
   }
+}
+
+// Modal para añadir nota manual
+function showAddNoteModal(code, name, emoji) {
+  const existing = document.getElementById('add-note-modal');
+  if (existing) existing.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'add-note-modal';
+  modal.className = 'modal-overlay';
+  modal.style.display = 'flex';
+  modal.innerHTML = `
+    <div class="modal" style="max-width:400px;">
+      <div class="modal-title">${emoji} ${escapeHTML(name)} — Nueva nota</div>
+      <textarea class="app-input" id="note-text" placeholder="Escribe tu nota..." rows="3" style="width:100%;margin:12px 0;"></textarea>
+      <select class="app-input" id="note-type" style="width:100%;margin-bottom:12px;padding:8px;">
+        <option value="nota">Nota general</option>
+        <option value="visado">Visado / requisitos</option>
+        <option value="hotel">Hotel / alojamiento</option>
+        <option value="vuelo">Vuelo / transporte</option>
+        <option value="restaurante">Restaurante / comida</option>
+        <option value="lugar">Lugar / sitio</option>
+      </select>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-primary" id="note-save" style="flex:1;">Guardar</button>
+        <button class="btn-secondary" id="note-cancel" style="flex:1;">Cancelar</button>
+      </div>
+    </div>`;
+
+  document.body.appendChild(modal);
+
+  document.getElementById('note-cancel').addEventListener('click', () => modal.remove());
+  modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+
+  document.getElementById('note-save').addEventListener('click', async () => {
+    const texto = document.getElementById('note-text').value.trim();
+    const tipo = document.getElementById('note-type').value;
+    if (!texto) return;
+    const nota = { id: 'nota_' + Date.now(), texto, tipo, origen: 'manual', fecha: new Date().toISOString() };
+    await saveCountryNote(code, name, emoji, nota);
+    modal.remove();
+    renderBitacora(); // Refrescar
+  });
+
+  document.getElementById('note-text').focus();
 }
 
 // ═══ MIS VIAJES (legacy — redirige a perfil) ═══
