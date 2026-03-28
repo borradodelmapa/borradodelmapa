@@ -324,7 +324,12 @@ const salma = {
   async send(msg) {
     // Capturar foto pendiente antes de validar msg
     const photo = this._pendingPhoto;
-    if (photo) this._clearPendingPhoto();
+    if (photo) {
+      // Ocultar preview pero NO revocar el blob URL todavía (lo necesita la burbuja)
+      this._pendingPhoto = null;
+      const preview = document.getElementById('chat-photo-preview');
+      if (preview) preview.style.display = 'none';
+    }
     if (!msg && !photo) return;
     if (this._streaming) return;
     if (!this._checkRate()) return;
@@ -501,11 +506,13 @@ const salma = {
               if (evt.done) {
                 this._removeStreamBubble();
                 this._removeLoading();
-                // Actualizar foto en burbuja con URL persistente de R2
+                // Actualizar foto en burbuja con URL persistente de R2 y revocar blob
                 if (evt.photo_url) {
-                  const lastPhoto = document.querySelector('.msg-user-photo:last-of-type') ||
-                    document.querySelector('.msg-user:last-of-type .msg-user-photo');
-                  if (lastPhoto) lastPhoto.src = evt.photo_url;
+                  const lastPhoto = document.querySelector('.msg-user:last-of-type .msg-user-photo');
+                  if (lastPhoto) {
+                    if (lastPhoto.src.startsWith('blob:')) URL.revokeObjectURL(lastPhoto.src);
+                    lastPhoto.src = evt.photo_url;
+                  }
                   if (evt.photo_key) this._savePhotoToBitacora(evt.photo_url, evt.photo_key);
                 }
                 resolved = true;
