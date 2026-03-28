@@ -553,6 +553,14 @@ async function renderBitacora() {
       container.appendChild(el);
     });
 
+    // Event delegation para expandir/contraer notas
+    container.addEventListener('click', (e) => {
+      const noteText = e.target.closest('.bitacora-note-text');
+      if (noteText) {
+        noteText.classList.toggle('expanded');
+      }
+    });
+
     // Event delegation para eliminar notas
     container.addEventListener('click', async (e) => {
       const del = e.target.closest('.bitacora-note-delete');
@@ -929,6 +937,15 @@ auth.onAuthStateChanged(async (user) => {
       await guardarGuiaAuto(window._salmaLastRoute);
       window._salmaLastRoute = null;
       localStorage.removeItem('_salmaRouteBackup');
+    }
+
+    // Guardar nota pendiente (usuario se registró al pulsar "Guardar nota")
+    if (window._pendingSaveNote) {
+      const pending = window._pendingSaveNote;
+      window._pendingSaveNote = null;
+      if (typeof salma !== 'undefined') {
+        salma._saveNoteFromBubble(pending.text, pending.btnEl);
+      }
     }
 
     // Tras login, ir al perfil

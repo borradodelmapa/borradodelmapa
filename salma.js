@@ -821,9 +821,14 @@ const salma = {
   },
 
   _saveNoteFromBubble(text, btnEl) {
-    if (!window.currentUser) { alert('Inicia sesión para guardar notas'); return; }
+    if (!window.currentUser) {
+      // Guardar nota pendiente para después del registro
+      window._pendingSaveNote = { text, btnEl };
+      if (typeof openModal === 'function') openModal('register');
+      return;
+    }
     const country = detectCountryInMessage(text) || (this.currentRoute ? normalizeCountry(this.currentRoute.country) : null);
-    const snippet = text.length > 200 ? text.slice(0, 200) + '...' : text;
+    const snippet = text;
 
     const doSave = (code, name, emoji) => {
       saveCountryNote(code, name, emoji, {
