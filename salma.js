@@ -876,10 +876,24 @@ const salma = {
 
   _fixStreamBubble() {
     const el = document.getElementById('salma-stream-msg');
-    if (el) el.removeAttribute('id');
+    if (el) {
+      el.removeAttribute('id');
+      // Añadir botón guardar nota
+      if (!el.querySelector('.msg-save-note')) {
+        const btn = document.createElement('button');
+        btn.className = 'msg-save-note';
+        btn.innerHTML = '&#x1F516; Guardar nota';
+        const bodyEl = el.querySelector('.msg-body-salma');
+        const textContent = bodyEl ? bodyEl.textContent : '';
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this._saveNoteFromBubble(textContent);
+        });
+        el.appendChild(btn);
+      }
+    }
     const txt = document.getElementById('salma-stream-text');
     if (txt) txt.removeAttribute('id');
-    // No re-procesar: el innerHTML ya está formateado durante el streaming
   },
 
   _removeStreamBubble() {
