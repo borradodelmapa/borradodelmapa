@@ -988,6 +988,11 @@ async function guardarGuiaDirecto(routeData) {
     const r = routeData;
     const numDias = r.duration_days ? Number(r.duration_days) : (r.stops ? [...new Set(r.stops.map(s => s.day || 1))].length : 0);
     const destino = (r.region || r.country || '').toString();
+    // Normalizar país para bitácora
+    const countryInfo = typeof normalizeCountry === 'function'
+      ? (normalizeCountry(r.country || '') || normalizeCountry(destino) || normalizeCountry(r.name || ''))
+      : { code: '', name: destino };
+    const countryNormalized = countryInfo.code ? countryInfo.name : destino;
 
     // Cover image
     let coverImageUrl = '';
@@ -1008,6 +1013,7 @@ async function guardarGuiaDirecto(routeData) {
     const ruta = {
       nombre: r.title || r.name || 'Mi ruta',
       destino: destino,
+      country: countryNormalized,
       num_dias: numDias,
       dias: numDias,
       notas: r.summary || '',
