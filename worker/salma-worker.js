@@ -279,7 +279,12 @@ Cuando el usuario te envía una foto, la recibes como imagen en el mensaje. Anal
 — Si es un problema (avería, picadura, herida): consejo práctico inmediato.
 — Si no sabes qué es: describe lo que ves y pregunta.
 SÉ BREVE Y ÚTIL. No describas la foto de forma obvia ("veo una imagen de..."). Ve al dato útil directo.
-Las fotos se guardan automáticamente en la bitácora del viaje.`;
+Las fotos se guardan automáticamente en la galería del viajero.
+
+ETIQUETADO OBLIGATORIO: Cuando analices una foto, incluye SIEMPRE como última línea de tu respuesta:
+FOTO_TAG: [palabra]
+Palabras válidas: paisaje, monumento, comida, persona, documento, cartel, transporte, alojamiento, otro
+Una sola palabra. No la menciones ni la expliques al usuario. Es un tag interno para organizar fotos.`;
 
 // ═══════════════════════════════════════════════════════════════
 // ENSAMBLAR SYSTEM PROMPT
@@ -3052,6 +3057,16 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           // El for vuelve al inicio: Claude recibe los resultados y decide qué hacer
         }
 
+        // ── Extraer FOTO_TAG si la hubo ──
+        let photoTag = null;
+        if (imageBase64) {
+          const tagMatch = allText.match(/\n?FOTO_TAG:\s*(\w+)/i);
+          if (tagMatch) {
+            photoTag = tagMatch[1].toLowerCase();
+            allText = allText.replace(/\n?FOTO_TAG:\s*\w+/i, '').trim();
+          }
+        }
+
         // ── Procesar respuesta final (ruta, verificación, etc.) ──
         let route = extractRouteFromReply(allText);
         const reply = replyWithoutRouteBlock(allText);
@@ -3122,6 +3137,12 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         if (photoUploadPromise) {
           const photoResult = await photoUploadPromise;
           if (photoResult) { doneEvt.photo_url = photoResult.url; doneEvt.photo_key = photoResult.key; }
+        }
+        if (photoTag) doneEvt.photo_tag = photoTag;
+        // Caption breve para la galería (primera frase de la respuesta de Salma)
+        if (imageBase64 && reply) {
+          const firstSentence = reply.split(/[.\n]/).filter(s => s.trim().length > 5)[0];
+          if (firstSentence) doneEvt.photo_caption = firstSentence.trim().replace(/\*\*/g, '').slice(0, 120);
         }
         await writer.write(encoder.encode(`data: ${JSON.stringify(doneEvt)}\n\n`));
 

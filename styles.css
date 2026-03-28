@@ -191,6 +191,78 @@ body {
   max-width:220px; border-radius:10px; margin-bottom:6px; display:block;
 }
 
+/* ═══ GALERÍA DE FOTOS ═══ */
+.galeria-area { max-width:540px; margin:0 auto; padding:16px; }
+.galeria-header {
+  display:flex; align-items:center; gap:12px; margin-bottom:16px;
+}
+.galeria-back {
+  background:none; border:none; color:var(--dorado); cursor:pointer;
+  font-family:var(--font-mono); font-size:13px; font-weight:600;
+  padding:0; letter-spacing:.05em;
+}
+.galeria-title {
+  font-family:var(--font-mono); font-size:12px; font-weight:600;
+  letter-spacing:.1em; color:var(--crema); text-transform:uppercase;
+}
+.galeria-albums {
+  display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px;
+}
+.galeria-album-chip {
+  padding:6px 12px; border-radius:20px; font-size:12px;
+  font-family:var(--font-mono); letter-spacing:.03em;
+  background:rgba(255,255,255,.04); border:1px solid var(--linea);
+  color:rgba(244,239,230,.6); cursor:pointer; transition:all .15s;
+  white-space:nowrap;
+}
+.galeria-album-chip:hover { border-color:var(--linea-fuerte); color:var(--crema); }
+.galeria-album-chip.active {
+  background:rgba(212,160,23,.15); border-color:var(--dorado);
+  color:var(--dorado); font-weight:600;
+}
+.galeria-album-new { border-style:dashed; }
+.galeria-grid {
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:3px;
+}
+.galeria-item {
+  position:relative; aspect-ratio:1; overflow:hidden;
+  border-radius:4px; cursor:pointer;
+}
+.galeria-thumb {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .2s;
+}
+.galeria-item:hover .galeria-thumb { transform:scale(1.05); }
+.galeria-tag-badge {
+  position:absolute; bottom:4px; right:4px;
+  font-size:12px; background:rgba(0,0,0,.6);
+  border-radius:4px; padding:2px 4px; line-height:1;
+}
+.galeria-empty {
+  text-align:center; color:rgba(244,239,230,.35);
+  font-size:14px; padding:60px 20px;
+}
+.galeria-loading {
+  text-align:center; color:rgba(244,239,230,.35);
+  font-size:14px; padding:60px 20px;
+}
+/* Acciones foto modal */
+.foto-action-section {
+  font-family:var(--font-mono); font-size:10px; font-weight:600;
+  letter-spacing:.1em; color:var(--dorado); margin-bottom:8px;
+  text-transform:uppercase;
+}
+.foto-action-btn {
+  display:block; width:100%; text-align:left;
+  padding:10px 14px; margin-bottom:4px; border-radius:8px;
+  background:rgba(255,255,255,.04); border:1px solid var(--linea);
+  color:var(--crema); font-size:14px; cursor:pointer;
+  transition:all .15s;
+}
+.foto-action-btn:hover { background:rgba(212,160,23,.1); border-color:var(--linea-fuerte); }
+.foto-action-delete { color:var(--rojo); border-color:rgba(239,68,68,.2); margin-top:12px; }
+.foto-action-delete:hover { background:rgba(239,68,68,.1); }
+
 /* ═══ STATE 1: WELCOME ═══ */
 .welcome-hero {
   position:relative; min-height:calc(100dvh - 196px);

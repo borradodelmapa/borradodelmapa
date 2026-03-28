@@ -301,22 +301,35 @@ const salma = {
     });
   },
 
-  async _savePhotoToBitacora(photoUrl, photoKey) {
-    if (!window.currentUser || !this.currentRouteId) return;
+  async _savePhotoToGallery(photoUrl, photoKey, photoTag, photoCaption) {
+    if (!window.currentUser) return;
+    const uid = currentUser.uid;
+    const now = new Date().toISOString();
     try {
-      const photoEntry = {
+      // 1. Guardar en colección central de fotos (SIEMPRE, haya o no viaje)
+      await db.collection('users').doc(uid).collection('fotos').add({
         key: photoKey,
         url: photoUrl,
-        source: 'chat',
-        caption: '',
-        uploadedAt: new Date().toISOString()
-      };
-      await db.collection('users').doc(currentUser.uid)
-        .collection('maps').doc(this.currentRouteId).update({
-          photos: firebase.firestore.FieldValue.arrayUnion(photoEntry)
-        });
+        tag: photoTag || 'otro',
+        caption: photoCaption || '',
+        albumId: null,
+        routeId: this.currentRouteId || null,
+        createdAt: now
+      });
+
+      // 2. Compatibilidad: guardar también en maps/{docId}.photos si hay viaje activo
+      if (this.currentRouteId) {
+        await db.collection('users').doc(uid)
+          .collection('maps').doc(this.currentRouteId).update({
+            photos: firebase.firestore.FieldValue.arrayUnion({
+              key: photoKey, url: photoUrl, source: 'chat',
+              tag: photoTag || 'otro', caption: photoCaption || '',
+              uploadedAt: now
+            })
+          });
+      }
     } catch (e) {
-      console.warn('[Salma] Error guardando foto en bitácora:', e);
+      console.warn('[Salma] Error guardando foto:', e);
     }
   },
 
@@ -513,7 +526,7 @@ const salma = {
                     if (lastPhoto.src.startsWith('blob:')) URL.revokeObjectURL(lastPhoto.src);
                     lastPhoto.src = evt.photo_url;
                   }
-                  if (evt.photo_key) this._savePhotoToBitacora(evt.photo_url, evt.photo_key);
+                  if (evt.photo_key) this._savePhotoToGallery(evt.photo_url, evt.photo_key, evt.photo_tag, evt.photo_caption);
                 }
                 resolved = true;
                 resolve({

@@ -302,6 +302,12 @@ async function renderProfile() {
           <span class="profile-section-arrow">›</span>
         </div>
 
+        <div class="profile-section" id="prof-galeria">
+          <span class="profile-section-icon">🖼️</span>
+          <span class="profile-section-label">Galería</span>
+          <span class="profile-section-arrow">›</span>
+        </div>
+
         <div class="profile-section profile-section-locked">
           <span class="profile-section-icon">📝</span>
           <span class="profile-section-label">Notas de Salma</span>
@@ -340,6 +346,7 @@ async function renderProfile() {
   // Event listeners
   document.getElementById('prof-coins').addEventListener('click', openCoinsModal);
   document.getElementById('prof-bitacora').addEventListener('click', () => showState('bitacora'));
+  document.getElementById('prof-galeria').addEventListener('click', () => renderGaleria());
   document.getElementById('prof-help').addEventListener('click', () => {
     document.getElementById('salma-info-overlay').style.display = 'flex';
   });
@@ -638,6 +645,181 @@ async function renderBitacora() {
     const container = document.getElementById('bitacora-countries');
     if (container) container.innerHTML = '<div class="bitacora-empty-text">Error cargando tu bitácora</div>';
   }
+}
+
+// ═══ GALERÍA DE FOTOS ═══
+
+const TAG_ICONS = { paisaje:'🏔️', monumento:'🏛️', comida:'🍜', persona:'👤', documento:'📄', cartel:'🪧', transporte:'🚗', alojamiento:'🏨', otro:'📷' };
+
+async function renderGaleria(albumFilter) {
+  if (!currentUser) return;
+  currentState = 'galeria';
+  updateHeader();
+
+  const $c = document.getElementById('app-content');
+  $c.innerHTML = '<div class="galeria-area fade-in"><div class="galeria-loading">Cargando galería...</div></div>';
+  document.querySelector('.app-input-bar').style.display = 'none';
+
+  const uid = currentUser.uid;
+  const [fotosSnap, albumesSnap] = await Promise.all([
+    db.collection('users').doc(uid).collection('fotos').orderBy('createdAt', 'desc').get(),
+    db.collection('users').doc(uid).collection('albumes').orderBy('createdAt', 'desc').get()
+  ]);
+
+  const fotos = [];
+  fotosSnap.forEach(d => fotos.push({ id: d.id, ...d.data() }));
+  const albumes = [];
+  albumesSnap.forEach(d => albumes.push({ id: d.id, ...d.data() }));
+
+  const sinAlbum = fotos.filter(f => !f.albumId).length;
+  const activeAlbum = albumFilter || null;
+  const filtered = activeAlbum === '__sin_album__'
+    ? fotos.filter(f => !f.albumId)
+    : activeAlbum
+      ? fotos.filter(f => f.albumId === activeAlbum)
+      : fotos;
+
+  const activeAlbumName = activeAlbum === '__sin_album__'
+    ? 'Sin álbum'
+    : activeAlbum
+      ? (albumes.find(a => a.id === activeAlbum)?.nombre || 'Álbum')
+      : 'Todas las fotos';
+
+  const albumsHtml = `
+    <div class="galeria-albums">
+      <div class="galeria-album-chip ${!activeAlbum ? 'active' : ''}" data-album="">Todas (${fotos.length})</div>
+      ${albumes.map(a => {
+        const count = fotos.filter(f => f.albumId === a.id).length;
+        return `<div class="galeria-album-chip ${activeAlbum === a.id ? 'active' : ''}" data-album="${a.id}">${escapeHTML(a.nombre)} (${count})</div>`;
+      }).join('')}
+      ${sinAlbum > 0 ? `<div class="galeria-album-chip ${activeAlbum === '__sin_album__' ? 'active' : ''}" data-album="__sin_album__">Sin álbum (${sinAlbum})</div>` : ''}
+      <div class="galeria-album-chip galeria-album-new" id="galeria-new-album">+ Crear álbum</div>
+    </div>`;
+
+  const gridHtml = filtered.length === 0
+    ? '<div class="galeria-empty">No hay fotos todavía. Envía una foto a Salma desde el chat.</div>'
+    : `<div class="galeria-grid">${filtered.map(f => `
+        <div class="galeria-item" data-foto-id="${f.id}">
+          <img src="${escapeHTML(f.url)}" class="galeria-thumb" alt="${escapeHTML(f.caption || '')}" loading="lazy">
+          <span class="galeria-tag-badge">${TAG_ICONS[f.tag] || '📷'}</span>
+        </div>`).join('')}</div>`;
+
+  $c.innerHTML = `
+    <div class="galeria-area fade-in">
+      <div class="galeria-header">
+        <button class="galeria-back" id="galeria-back">← Galería</button>
+        <span class="galeria-title">${escapeHTML(activeAlbumName)}</span>
+      </div>
+      ${albumsHtml}
+      ${gridHtml}
+    </div>`;
+
+  // Event: back
+  document.getElementById('galeria-back').addEventListener('click', () => {
+    showState('profile');
+    document.querySelector('.app-input-bar').style.display = '';
+  });
+
+  // Event: album chips
+  document.querySelectorAll('.galeria-album-chip[data-album]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const aid = chip.dataset.album;
+      renderGaleria(aid || undefined);
+    });
+  });
+
+  // Event: crear álbum
+  document.getElementById('galeria-new-album')?.addEventListener('click', async () => {
+    const nombre = prompt('Nombre del álbum:');
+    if (!nombre || !nombre.trim()) return;
+    try {
+      await db.collection('users').doc(uid).collection('albumes').add({
+        nombre: nombre.trim(),
+        createdAt: new Date().toISOString()
+      });
+      renderGaleria(activeAlbum);
+    } catch (e) {
+      if (typeof showToast === 'function') showToast('Error al crear álbum');
+    }
+  });
+
+  // Event: click foto → acciones (mover, eliminar)
+  document.querySelectorAll('.galeria-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const fotoId = item.dataset.fotoId;
+      const foto = fotos.find(f => f.id === fotoId);
+      if (!foto) return;
+      _showFotoActions(foto, albumes, uid, activeAlbum);
+    });
+  });
+}
+
+function _showFotoActions(foto, albumes, uid, currentAlbumFilter) {
+  const existing = document.getElementById('foto-actions-modal');
+  if (existing) existing.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'foto-actions-modal';
+  modal.className = 'modal-overlay active';
+
+  const albumOptions = albumes.map(a =>
+    `<button class="foto-action-btn" data-move="${a.id}">${escapeHTML(a.nombre)}</button>`
+  ).join('');
+
+  modal.innerHTML = `
+    <div class="modal" style="max-width:340px">
+      <button class="modal-close" id="foto-modal-close">&times;</button>
+      <img src="${escapeHTML(foto.url)}" style="width:100%;border-radius:8px;margin-bottom:12px">
+      ${foto.caption ? `<p style="font-size:13px;color:var(--crema);margin-bottom:12px">${escapeHTML(foto.caption)}</p>` : ''}
+      <div style="font-size:11px;color:rgba(244,239,230,.4);margin-bottom:16px">${TAG_ICONS[foto.tag] || '📷'} ${foto.tag || 'otro'} · ${new Date(foto.createdAt).toLocaleDateString('es-ES')}</div>
+      ${albumes.length > 0 ? `<div class="foto-action-section">Mover a álbum:</div>${albumOptions}` : ''}
+      ${foto.albumId ? `<button class="foto-action-btn" data-move="__quitar__">Quitar de álbum</button>` : ''}
+      <button class="foto-action-btn foto-action-delete" id="foto-delete">Eliminar foto</button>
+    </div>`;
+
+  document.body.appendChild(modal);
+
+  // Cerrar
+  modal.querySelector('#foto-modal-close').addEventListener('click', () => modal.remove());
+  modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+
+  // Mover a álbum
+  modal.querySelectorAll('[data-move]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const targetAlbum = btn.dataset.move;
+      try {
+        await db.collection('users').doc(uid).collection('fotos').doc(foto.id).update({
+          albumId: targetAlbum === '__quitar__' ? null : targetAlbum
+        });
+        modal.remove();
+        if (typeof showToast === 'function') showToast(targetAlbum === '__quitar__' ? 'Foto quitada del álbum' : 'Foto movida');
+        renderGaleria(currentAlbumFilter);
+      } catch (e) {
+        if (typeof showToast === 'function') showToast('Error al mover foto');
+      }
+    });
+  });
+
+  // Eliminar
+  modal.querySelector('#foto-delete')?.addEventListener('click', async () => {
+    if (!confirm('¿Eliminar esta foto?')) return;
+    try {
+      await db.collection('users').doc(uid).collection('fotos').doc(foto.id).delete();
+      // Eliminar de R2
+      if (foto.key) {
+        fetch(window.SALMA_API + '/delete-photo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: foto.key })
+        }).catch(() => {});
+      }
+      modal.remove();
+      if (typeof showToast === 'function') showToast('Foto eliminada');
+      renderGaleria(currentAlbumFilter);
+    } catch (e) {
+      if (typeof showToast === 'function') showToast('Error al eliminar');
+    }
+  });
 }
 
 // Modal para añadir nota manual
