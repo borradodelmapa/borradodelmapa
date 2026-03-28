@@ -809,7 +809,7 @@ const salma = {
     div.innerHTML = `
       <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
       <div class="msg-body-salma">${formatMessage(text)}</div>
-      <button class="msg-save-note" title="Guardar como nota">&#x1F516;</button>`;
+      <button class="msg-save-note">&#x1F516; Guardar nota</button>`;
     // Bookmark click handler
     div.querySelector('.msg-save-note').addEventListener('click', (e) => {
       e.stopPropagation();

@@ -1341,13 +1341,13 @@ body {
 
 /* ═══ BOOKMARK EN BURBUJAS CHAT ═══ */
 .msg-save-note {
-  position:absolute; top:6px; right:6px;
-  background:none; border:none; cursor:pointer;
-  font-size:14px; opacity:0; transition:opacity .2s;
-  padding:4px; color:rgba(244,239,230,.4);
+  display:inline-flex; align-items:center; gap:4px;
+  background:rgba(212,168,67,.1); border:1px solid rgba(212,168,67,.25);
+  border-radius:6px; cursor:pointer;
+  font-size:11px; padding:4px 8px; margin-top:6px;
+  color:var(--dorado); transition:background .15s;
 }
-.msg-salma:hover .msg-save-note { opacity:1; }
-.msg-save-note:hover { color:var(--dorado); }
+.msg-save-note:hover { background:rgba(212,168,67,.2); }
 .msg.msg-salma { position:relative; }
 
 /* ═══ BITÁCORA POR PAÍSES ═══ */
