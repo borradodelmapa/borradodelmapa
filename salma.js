@@ -761,7 +761,7 @@ const salma = {
       <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
       <div class="msg-body-salma">${formatMessage(text)}</div>`;
     // Botón guardar nota solo si el mensaje tiene contenido relevante (>80 chars)
-    if (text.length > 80) {
+    if (text.length > 150) {
       const btnHtml = document.createElement('button');
       btnHtml.className = 'msg-save-note';
       btnHtml.innerHTML = '&#x1F516; Guardar nota';
@@ -833,7 +833,7 @@ const salma = {
       // Añadir botón guardar nota solo si hay contenido relevante
       const bodyEl = el.querySelector('.msg-body-salma');
       const textContent = bodyEl ? bodyEl.textContent : '';
-      if (textContent.length > 80 && !el.querySelector('.msg-save-note')) {
+      if (textContent.length > 150 && !el.querySelector('.msg-save-note')) {
         const btn = document.createElement('button');
         btn.className = 'msg-save-note';
         btn.innerHTML = '&#x1F516; Guardar nota';
@@ -859,7 +859,7 @@ const salma = {
         if (txt) txt.removeAttribute('id');
         el.removeAttribute('id');
         // Botón guardar nota solo si hay contenido relevante
-        if (textContent.length > 80 && !el.querySelector('.msg-save-note')) {
+        if (textContent.length > 150 && !el.querySelector('.msg-save-note')) {
           const btn = document.createElement('button');
           btn.className = 'msg-save-note';
           btn.innerHTML = '&#x1F516; Guardar nota';
