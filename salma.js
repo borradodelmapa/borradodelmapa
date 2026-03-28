@@ -811,53 +811,45 @@ const salma = {
       <div class="msg-body-salma">${formatMessage(text)}</div>
       <button class="msg-save-note">&#x1F516; Guardar nota</button>`;
     // Bookmark click handler
-    div.querySelector('.msg-save-note').addEventListener('click', (e) => {
+    const saveBtn = div.querySelector('.msg-save-note');
+    saveBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      this._saveNoteFromBubble(text);
+      this._saveNoteFromBubble(text, saveBtn);
     });
     area.appendChild(div);
     this._scrollToBottom();
   },
 
-  _saveNoteFromBubble(text) {
+  _saveNoteFromBubble(text, btnEl) {
     if (!window.currentUser) { alert('Inicia sesión para guardar notas'); return; }
-    // Detectar país del texto o del contexto actual
     const country = detectCountryInMessage(text) || (this.currentRoute ? normalizeCountry(this.currentRoute.country) : null);
     const snippet = text.length > 200 ? text.slice(0, 200) + '...' : text;
 
-    if (country && country.code) {
-      saveCountryNote(country.code, country.name, country.emoji, {
+    const doSave = (code, name, emoji) => {
+      saveCountryNote(code, name, emoji, {
         id: 'nota_' + Date.now(),
         texto: snippet,
         tipo: 'nota',
         origen: 'manual',
         fecha: new Date().toISOString()
       });
-      // Feedback visual
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.textContent = `Guardado en ${country.emoji} ${country.name}`;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 2000);
+      // Cambiar botón a "Guardado" en verde
+      if (btnEl) {
+        btnEl.innerHTML = '&#x2713; Guardado';
+        btnEl.style.background = 'rgba(92,184,92,.2)';
+        btnEl.style.borderColor = 'rgba(92,184,92,.4)';
+        btnEl.style.color = '#5cb85c';
+        btnEl.disabled = true;
+      }
+    };
+
+    if (country && country.code) {
+      doSave(country.code, country.name, country.emoji);
     } else {
-      // Pedir país al usuario
       const pais = prompt('¿En qué país guardamos esta nota?');
       if (!pais) return;
       const c = normalizeCountry(pais);
-      if (c.code) {
-        saveCountryNote(c.code, c.name, c.emoji, {
-          id: 'nota_' + Date.now(),
-          texto: snippet,
-          tipo: 'nota',
-          origen: 'manual',
-          fecha: new Date().toISOString()
-        });
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.textContent = `Guardado en ${c.emoji} ${c.name}`;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2000);
-      }
+      if (c.code) doSave(c.code, c.name, c.emoji);
     }
   },
 
@@ -887,7 +879,7 @@ const salma = {
         const textContent = bodyEl ? bodyEl.textContent : '';
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
-          this._saveNoteFromBubble(textContent);
+          this._saveNoteFromBubble(textContent, btn);
         });
         el.appendChild(btn);
       }
@@ -913,7 +905,7 @@ const salma = {
           btn.innerHTML = '&#x1F516; Guardar nota';
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            this._saveNoteFromBubble(textContent);
+            this._saveNoteFromBubble(textContent, btn);
           });
           el.appendChild(btn);
         }

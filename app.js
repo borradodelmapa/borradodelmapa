@@ -400,9 +400,11 @@ async function saveCountryNote(countryCode, countryName, emoji, nota) {
   const ref = db.collection('users').doc(currentUser.uid).collection('paises').doc(countryCode);
   const doc = await ref.get();
   if (doc.exists) {
-    const notas = doc.data().notas || [];
-    notas.push(nota);
-    await ref.update({ notas, updatedAt: new Date().toISOString() });
+    // arrayUnion es atómico — no pierde notas si hay escrituras simultáneas
+    await ref.update({
+      notas: firebase.firestore.FieldValue.arrayUnion(nota),
+      updatedAt: new Date().toISOString()
+    });
   } else {
     await ref.set({ countryCode, countryName, emoji, notas: [nota], updatedAt: new Date().toISOString() });
   }
