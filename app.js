@@ -611,8 +611,7 @@ function showAddNoteModal(code, name, emoji) {
 
   const modal = document.createElement('div');
   modal.id = 'add-note-modal';
-  modal.className = 'modal-overlay';
-  modal.style.display = 'flex';
+  modal.className = 'modal-overlay active';
   modal.innerHTML = `
     <div class="modal" style="max-width:400px;">
       <div class="modal-title">${emoji} ${escapeHTML(name)} — Nueva nota</div>
