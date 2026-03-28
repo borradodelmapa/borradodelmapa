@@ -334,6 +334,112 @@ const salma = {
     }
   },
 
+  // ═══ VIDEO PLAYER INLINE ═══
+  async _renderVideoPlayer(params) {
+    if (!window.currentUser) return;
+    const area = this._getChatArea();
+    if (!area) return;
+
+    // Leer fotos de la galería (excluir documentos y carteles)
+    let photoUrls = [];
+    try {
+      const fotosSnap = await db.collection('users').doc(currentUser.uid)
+        .collection('fotos').orderBy('createdAt', 'desc').limit(20).get();
+      fotosSnap.forEach(d => {
+        const f = d.data();
+        if (f.tag !== 'documento' && f.tag !== 'cartel' && f.url) photoUrls.push(f.url);
+      });
+    } catch (_) {}
+
+    // Fallback: fotos de las rutas
+    if (photoUrls.length === 0) {
+      try {
+        const mapsSnap = await db.collection('users').doc(currentUser.uid).collection('maps').get();
+        mapsSnap.forEach(doc => {
+          const data = doc.data();
+          if (data.photos && Array.isArray(data.photos)) {
+            data.photos.forEach(p => {
+              if (p.url && p.tag !== 'documento' && p.tag !== 'cartel') photoUrls.push(p.url);
+            });
+          }
+        });
+      } catch (_) {}
+    }
+
+    if (photoUrls.length === 0) {
+      this._addSalmaBubble('No tienes fotos todavía. Envíame fotos desde el chat y te monto el video con ellas.');
+      return;
+    }
+
+    // Crear contenedor del player
+    const wrap = document.createElement('div');
+    wrap.className = 'msg msg-salma';
+    wrap.innerHTML = `
+      <div class="video-player-wrap">
+        <div class="video-canvas-wrap" id="video-canvas-container"></div>
+        <div class="video-controls">
+          <button class="video-btn" id="video-play-btn">▶ Play</button>
+          <div class="video-progress"><div class="video-progress-fill" id="video-progress-fill"></div></div>
+          <button class="video-btn" id="video-download-btn">⬇</button>
+          <button class="video-btn" id="video-share-btn">↗</button>
+        </div>
+      </div>`;
+    area.appendChild(wrap);
+
+    // Inicializar video player
+    const container = document.getElementById('video-canvas-container');
+    const ok = await videoPlayer.init(container, photoUrls.slice(0, 10), params);
+    if (!ok) {
+      wrap.remove();
+      this._addSalmaBubble('No se pudieron cargar las fotos para el video. Inténtalo de nuevo.');
+      return;
+    }
+    container.appendChild(videoPlayer._canvas);
+    videoPlayer._progressFill = document.getElementById('video-progress-fill');
+
+    // Event listeners
+    const playBtn = document.getElementById('video-play-btn');
+    playBtn.addEventListener('click', () => {
+      if (videoPlayer._playing) {
+        videoPlayer.pause();
+        playBtn.textContent = '▶ Play';
+      } else {
+        videoPlayer.play();
+        playBtn.textContent = '⏸ Pausa';
+      }
+    });
+
+    document.getElementById('video-download-btn').addEventListener('click', () => videoPlayer.download());
+    document.getElementById('video-share-btn').addEventListener('click', () => videoPlayer.share());
+
+    // Barra de progreso clicable
+    document.querySelector('.video-progress').addEventListener('click', (e) => {
+      const rect = e.target.getBoundingClientRect();
+      const pct = (e.clientX - rect.left) / rect.width;
+      videoPlayer._frame = Math.floor(pct * videoPlayer._totalFrames);
+      videoPlayer._renderFrame(videoPlayer._frame);
+      videoPlayer._updateProgress();
+    });
+
+    // Auto-save video JSON en Firestore
+    if (this.currentRouteId) {
+      try {
+        await db.collection('users').doc(currentUser.uid)
+          .collection('maps').doc(this.currentRouteId).update({
+            videos: firebase.firestore.FieldValue.arrayUnion({
+              titulo: params.titulo,
+              highlight: params.highlight,
+              tipo: params.tipo,
+              photoUrls: photoUrls.slice(0, 10),
+              createdAt: new Date().toISOString()
+            })
+          });
+      } catch (_) {}
+    }
+
+    this._scrollToBottom();
+  },
+
   // ═══ PUNTO DE ENTRADA ÚNICO ═══
   async send(msg) {
     // Capturar foto pendiente antes de validar msg
@@ -457,6 +563,11 @@ const salma = {
         }
       }
 
+      // Si hay video_params, renderizar player inline
+      if (data.video_params && typeof videoPlayer !== 'undefined') {
+        this._renderVideoPlayer(data.video_params);
+      }
+
       this._scrollToBottom();
 
     } catch (e) {
@@ -533,6 +644,7 @@ const salma = {
                 resolve({
                   reply: evt.reply || fullText,
                   route: evt.route || null,
+                  video_params: evt.video_params || null,
                   _hadDraft: draftSent,
                   _isBlocks: isBlocksRoute
                 });

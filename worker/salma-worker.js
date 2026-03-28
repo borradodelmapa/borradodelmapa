@@ -439,6 +439,29 @@ const SALMA_TOOLS = [
       },
       required: ["lugar"]
     }
+  },
+  {
+    name: "generar_video",
+    description: "Genera un video resumen animado con las fotos del viajero. Usa esta herramienta SOLO cuando el viajero pida explícitamente 'hazme el video', 'video del día', 'resumen en video', 'quiero un video'. Devuelve datos para renderizar un slideshow animado en el navegador del viajero con las fotos que ha enviado.",
+    input_schema: {
+      type: "object",
+      properties: {
+        titulo: {
+          type: "string",
+          description: "Título del video. Usa el destino + contexto. Ej: 'Koh Samui · Día 3', 'Vietnam en moto', 'Fin de semana en Cádiz'"
+        },
+        highlight: {
+          type: "string",
+          description: "Frase memorable o emotiva del día/viaje. Algo que resuma la experiencia. Máximo 60 caracteres."
+        },
+        tipo: {
+          type: "string",
+          enum: ["jornada", "resumen"],
+          description: "'jornada' para video de un día específico. 'resumen' para todo el viaje."
+        }
+      },
+      required: ["titulo", "tipo"]
+    }
   }
 ];
 
@@ -1816,6 +1839,19 @@ async function buscarRestaurante(input, placesKey, userCoords) {
   };
 }
 
+// ═══ GENERAR VIDEO — Devuelve parámetros para slideshow en el navegador ═══
+function generarVideo(input) {
+  return {
+    success: true,
+    video_params: {
+      tipo: input.tipo || 'jornada',
+      titulo: input.titulo || 'Mi viaje',
+      highlight: input.highlight || ''
+    },
+    message: `Video "${input.titulo || 'Mi viaje'}" listo para renderizar con las fotos del viajero.`
+  };
+}
+
 // ═══════════════════════════════════════════════════════════════
 // DISPATCHER DE HERRAMIENTAS — Ejecuta la tool que Claude pida
 // ═══════════════════════════════════════════════════════════════
@@ -1832,6 +1868,8 @@ async function executeToolCall(toolName, toolInput, env, userCoords) {
       return await buscarRestaurante(toolInput, env.GOOGLE_PLACES_KEY, userCoords);
     case 'buscar_foto':
       return await buscarFotoLugar(toolInput, env.GOOGLE_PLACES_KEY);
+    case 'generar_video':
+      return generarVideo(toolInput);
     default:
       return { error: `Herramienta desconocida: ${toolName}` };
   }
@@ -3143,6 +3181,16 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         if (imageBase64 && reply) {
           const firstSentence = reply.split(/[.\n]/).filter(s => s.trim().length > 5)[0];
           if (firstSentence) doneEvt.photo_caption = firstSentence.trim().replace(/\*\*/g, '').slice(0, 120);
+        }
+        // Detectar si se usó generar_video en las iteraciones
+        for (const msg of currentMessages) {
+          if (Array.isArray(msg.content)) {
+            for (const block of msg.content) {
+              if (block.type === 'tool_result') {
+                try { const p = JSON.parse(block.content); if (p.video_params) doneEvt.video_params = p.video_params; } catch(_) {}
+              }
+            }
+          }
         }
         await writer.write(encoder.encode(`data: ${JSON.stringify(doneEvt)}\n\n`));
 
