@@ -305,20 +305,21 @@ const salma = {
     if (!window.currentUser) return;
     const uid = currentUser.uid;
     const now = new Date().toISOString();
+    // 1. Guardar en colección central de fotos (SIEMPRE, haya o no viaje)
     try {
-      // 1. Guardar en colección central de fotos (SIEMPRE, haya o no viaje)
       await db.collection('users').doc(uid).collection('fotos').add({
-        key: photoKey,
-        url: photoUrl,
-        tag: photoTag || 'otro',
-        caption: photoCaption || '',
-        albumId: null,
-        routeId: this.currentRouteId || null,
+        key: photoKey, url: photoUrl,
+        tag: photoTag || 'otro', caption: photoCaption || '',
+        albumId: null, routeId: this.currentRouteId || null,
         createdAt: now
       });
+    } catch (e) {
+      console.warn('[Salma] Galería no disponible (reglas Firestore):', e.message);
+    }
 
-      // 2. Compatibilidad: guardar también en maps/{docId}.photos si hay viaje activo
-      if (this.currentRouteId) {
+    // 2. Compatibilidad: guardar también en maps/{docId}.photos si hay viaje activo
+    if (this.currentRouteId) {
+      try {
         await db.collection('users').doc(uid)
           .collection('maps').doc(this.currentRouteId).update({
             photos: firebase.firestore.FieldValue.arrayUnion({
@@ -327,9 +328,9 @@ const salma = {
               uploadedAt: now
             })
           });
+      } catch (e) {
+        console.warn('[Salma] Error guardando en bitácora:', e.message);
       }
-    } catch (e) {
-      console.warn('[Salma] Error guardando foto:', e);
     }
   },
 

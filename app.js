@@ -661,15 +661,38 @@ async function renderGaleria(albumFilter) {
   document.querySelector('.app-input-bar').style.display = 'none';
 
   const uid = currentUser.uid;
-  const [fotosSnap, albumesSnap] = await Promise.all([
-    db.collection('users').doc(uid).collection('fotos').orderBy('createdAt', 'desc').get(),
-    db.collection('users').doc(uid).collection('albumes').orderBy('createdAt', 'desc').get()
-  ]);
-
-  const fotos = [];
-  fotosSnap.forEach(d => fotos.push({ id: d.id, ...d.data() }));
-  const albumes = [];
-  albumesSnap.forEach(d => albumes.push({ id: d.id, ...d.data() }));
+  let fotos = [];
+  let albumes = [];
+  try {
+    const [fotosSnap, albumesSnap] = await Promise.all([
+      db.collection('users').doc(uid).collection('fotos').orderBy('createdAt', 'desc').get(),
+      db.collection('users').doc(uid).collection('albumes').orderBy('createdAt', 'desc').get()
+    ]);
+    fotosSnap.forEach(d => fotos.push({ id: d.id, ...d.data() }));
+    albumesSnap.forEach(d => albumes.push({ id: d.id, ...d.data() }));
+  } catch (e) {
+    console.warn('[Galería] Error Firestore (puede faltar reglas):', e.message);
+    // Intentar cargar fotos de las rutas existentes como fallback
+    try {
+      const mapsSnap = await db.collection('users').doc(uid).collection('maps').get();
+      mapsSnap.forEach(doc => {
+        const data = doc.data();
+        if (data.photos && Array.isArray(data.photos)) {
+          data.photos.forEach((p, i) => {
+            fotos.push({
+              id: doc.id + '_' + i,
+              key: p.key, url: p.url,
+              tag: p.tag || 'otro',
+              caption: p.caption || '',
+              albumId: null,
+              routeId: doc.id,
+              createdAt: p.uploadedAt || data.createdAt || ''
+            });
+          });
+        }
+      });
+    } catch (_) {}
+  }
 
   const sinAlbum = fotos.filter(f => !f.albumId).length;
   const activeAlbum = albumFilter || null;
