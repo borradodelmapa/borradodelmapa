@@ -1074,3 +1074,6 @@ const salma = {
 
 // Exponer globalmente
 window.salma = salma;
+
+// Auto-inicializar cámara cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => salma._initCameraBtn());

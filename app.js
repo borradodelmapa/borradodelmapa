@@ -1188,9 +1188,6 @@ $input.addEventListener('keydown', (e) => {
     sendMessage();
   }
 });
-// Inicializar botón cámara del chat
-if (typeof salma !== 'undefined' && salma._initCameraBtn) salma._initCameraBtn();
-
 function sendMessage() {
   const msg = $input.value.trim();
   if (!msg) return;
