@@ -228,56 +228,7 @@ const salma = {
     // NO push a history aquí — se hace en _doSend tras recibir respuesta
     // para evitar duplicación (el worker ya recibe msg como campo separado)
 
-    // Si estamos esperando respuesta a la pregunta de fechas
-    if (this._pendingRouteInfo) {
-      const btn = document.getElementById('salma-skip-dates');
-      if (btn) btn.remove();
-
-      const pending = this._pendingRouteInfo;
-      this._pendingRouteInfo = null;
-
-      // Intentar extraer fechas/transporte/niños de la respuesta
-      const newInfo = this._detectRouteInfo(msg);
-      const dates = newInfo.dates || pending.dates;
-      const transport = newInfo.transport || pending.transport;
-      const kids = newInfo.kids || pending.kids;
-
-      const extra = {};
-      if (dates) extra.travel_dates = this._resolveDates(dates, pending.days);
-      if (transport) extra.transport = transport;
-      if (kids) extra.with_kids = true;
-
-      // Reconstruir mensaje completo para el worker
-      const fullMsg = pending._originalMsg;
-      this._doSend(fullMsg, extra);
-      return;
-    }
-
-    // Detección de info de ruta (solo para rutas nuevas, no ediciones)
-    if (!this.currentRouteId) {
-      const info = this._detectRouteInfo(msg);
-      if (info.isRoute && !info.complete) {
-        // Guardar info parcial y preguntar
-        info._originalMsg = msg;
-        this._pendingRouteInfo = info;
-        const question = this._buildDateQuestion(info);
-        this._addSalmaBubble(question);
-        this._addSkipButton();
-        return;
-      }
-
-      // Si tiene todo completo, pasar extra al worker
-      if (info.isRoute && info.complete) {
-        const extra = {};
-        if (info.dates) extra.travel_dates = this._resolveDates(info.dates, info.days);
-        if (info.transport) extra.transport = info.transport;
-        if (info.kids) extra.with_kids = true;
-        this._doSend(msg, extra);
-        return;
-      }
-    }
-
-    // Mensaje normal (no ruta, o edición) → directo al worker
+    // Todo va directo al worker — Salma decide si preguntar (máx 1 pregunta según prompt)
     this._doSend(msg, {});
   },
 
@@ -808,14 +759,18 @@ const salma = {
     div.className = 'msg msg-salma';
     div.innerHTML = `
       <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
-      <div class="msg-body-salma">${formatMessage(text)}</div>
-      <button class="msg-save-note">&#x1F516; Guardar nota</button>`;
-    // Bookmark click handler
-    const saveBtn = div.querySelector('.msg-save-note');
-    saveBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this._saveNoteFromBubble(text, saveBtn);
-    });
+      <div class="msg-body-salma">${formatMessage(text)}</div>`;
+    // Botón guardar nota solo si el mensaje tiene contenido relevante (>80 chars)
+    if (text.length > 80) {
+      const btnHtml = document.createElement('button');
+      btnHtml.className = 'msg-save-note';
+      btnHtml.innerHTML = '&#x1F516; Guardar nota';
+      btnHtml.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this._saveNoteFromBubble(text, btnHtml);
+      });
+      div.appendChild(btnHtml);
+    }
     area.appendChild(div);
     this._scrollToBottom();
   },
@@ -875,13 +830,13 @@ const salma = {
     const el = document.getElementById('salma-stream-msg');
     if (el) {
       el.removeAttribute('id');
-      // Añadir botón guardar nota
-      if (!el.querySelector('.msg-save-note')) {
+      // Añadir botón guardar nota solo si hay contenido relevante
+      const bodyEl = el.querySelector('.msg-body-salma');
+      const textContent = bodyEl ? bodyEl.textContent : '';
+      if (textContent.length > 80 && !el.querySelector('.msg-save-note')) {
         const btn = document.createElement('button');
         btn.className = 'msg-save-note';
         btn.innerHTML = '&#x1F516; Guardar nota';
-        const bodyEl = el.querySelector('.msg-body-salma');
-        const textContent = bodyEl ? bodyEl.textContent : '';
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           this._saveNoteFromBubble(textContent, btn);
@@ -900,11 +855,11 @@ const salma = {
       if (txt && !txt.textContent.trim()) {
         el.remove(); // Vacía, quitar
       } else {
-        // Mantener burbuja y añadir botón guardar nota
         const textContent = txt ? txt.textContent : '';
         if (txt) txt.removeAttribute('id');
         el.removeAttribute('id');
-        if (!el.querySelector('.msg-save-note')) {
+        // Botón guardar nota solo si hay contenido relevante
+        if (textContent.length > 80 && !el.querySelector('.msg-save-note')) {
           const btn = document.createElement('button');
           btn.className = 'msg-save-note';
           btn.innerHTML = '&#x1F516; Guardar nota';

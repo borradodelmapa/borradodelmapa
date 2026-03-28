@@ -450,12 +450,19 @@ async function renderBitacora() {
 
     mapsSnap.forEach(doc => {
       const d = doc.data();
-      const country = normalizeCountry(d.destino || d.country || d.nombre || '');
-      const code = country.code || 'XX';
-      if (!countriesMap[code]) countriesMap[code] = { name: country.name || 'Otros', emoji: country.emoji || '', rutas: [], notas: [] };
       let route = null;
       try { route = JSON.parse(d.itinerarioIA || '{}'); } catch (_) {}
-      countriesMap[code].rutas.push({ doc, data: d, route });
+      // Intentar normalizar por varios campos hasta encontrar un código válido
+      let country = normalizeCountry(d.country || '');
+      if (!country.code) country = normalizeCountry(d.destino || '');
+      if (!country.code && route?.country) country = normalizeCountry(route.country);
+      if (!country.code && d.nombre) country = normalizeCountry(d.nombre);
+      const code = country.code || 'XX';
+      if (!countriesMap[code]) countriesMap[code] = { name: country.name || 'Otros', emoji: country.emoji || '', rutas: [], notas: [] };
+      // Evitar duplicados por doc.id
+      if (!countriesMap[code].rutas.some(r => r.doc.id === doc.id)) {
+        countriesMap[code].rutas.push({ doc, data: d, route });
+      }
     });
 
     // Merge notas de países

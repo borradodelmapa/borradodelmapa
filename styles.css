@@ -82,7 +82,7 @@ body {
 /* ── App content (scroll entre header e input) ── */
 .app-content {
   padding-top:56px;
-  padding-bottom:180px;
+  padding-bottom:220px;
   min-height:0;
   overflow-y:auto;
   scrollbar-width:none;
@@ -685,7 +685,7 @@ body {
 
 /* ═══ MODAL AUTH ═══ */
 .modal-overlay {
-  position:fixed; inset:0; z-index:200;
+  position:fixed; inset:0; z-index:9999;
   background:rgba(0,0,0,.75);
   backdrop-filter:blur(6px);
   display:flex; align-items:center; justify-content:center;
