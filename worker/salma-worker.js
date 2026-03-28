@@ -269,6 +269,18 @@ Reglas:
 — NO uses fotos cuando generes ruta (SALMA_ROUTE_JSON) — la ruta tiene sus propias fotos.
 — Úsala en respuestas conversacionales: "¿qué ver en X?", "recomiéndame algo en X", "cómo es X?".`;
 
+const BLOQUE_VISION = `FOTOS DEL VIAJERO
+Cuando el usuario te envía una foto, la recibes como imagen en el mensaje. Analízala según el contexto:
+— Si es un plato de comida: identifica el plato, ingredientes visibles, nombre local si lo conoces. Si conoces su dieta, avisa de incompatibilidades.
+— Si es un lugar o monumento: identifícalo si puedes. Da un dato histórico o práctico breve.
+— Si es un menú o carta: traduce los platos principales y recomienda.
+— Si es un cartel o señal en otro idioma: traduce y explica.
+— Si es un paisaje: identifica la zona si puedes, sugiere qué hacer.
+— Si es un problema (avería, picadura, herida): consejo práctico inmediato.
+— Si no sabes qué es: describe lo que ves y pregunta.
+SÉ BREVE Y ÚTIL. No describas la foto de forma obvia ("veo una imagen de..."). Ve al dato útil directo.
+Las fotos se guardan automáticamente en la bitácora del viaje.`;
+
 // ═══════════════════════════════════════════════════════════════
 // ENSAMBLAR SYSTEM PROMPT
 // ═══════════════════════════════════════════════════════════════
@@ -282,6 +294,7 @@ const SALMA_SYSTEM_BASE = [
   BLOQUE_FORMATO,
   BLOQUE_RUTAS,
   BLOQUE_MAPA,
+  BLOQUE_VISION,
 ].join('\n\n');
 
 // ═══════════════════════════════════════════════════════════════
@@ -801,7 +814,7 @@ function tryKVDirectAnswer(message, country, destination) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, imageBase64) {
   let systemPrompt = SALMA_SYSTEM_BASE;
 
   // Contexto mínimo del usuario + fecha actual
@@ -941,7 +954,25 @@ ${formatted}
 Si alguno de estos eventos o festivales coincide con las fechas del viaje, menciónalo brevemente en el día que toque como dato útil. NO reestructures la ruta por un evento. Si ninguno encaja con las fechas, ignóralos. NUNCA inventes eventos.]`;
   }
 
-  messages.push({ role: 'user', content: userContent });
+  // Si hay imagen, enviar como content array (vision de Claude)
+  if (imageBase64) {
+    messages.push({
+      role: 'user',
+      content: [
+        {
+          type: 'image',
+          source: {
+            type: 'base64',
+            media_type: 'image/jpeg',
+            data: imageBase64
+          }
+        },
+        { type: 'text', text: userContent || 'El viajero te envía esta foto. Analízala según el contexto del viaje.' }
+      ]
+    });
+  } else {
+    messages.push({ role: 'user', content: userContent });
+  }
   return { systemPrompt, messages };
 }
 
@@ -2664,6 +2695,8 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     const withKids = body.with_kids || false;
     const coinsSaldo = typeof body.coins_saldo === 'number' ? body.coins_saldo : 0;
     const rutasGratisUsadas = typeof body.rutas_gratis_usadas === 'number' ? body.rutas_gratis_usadas : 0;
+    const imageBase64 = body.image_base64 || null;
+    const uid = body.uid || null;
 
     // Reverse geocoding: convertir coordenadas → nombre de ciudad (Nominatim/OSM, gratis)
     let userLocationName = null;
@@ -2795,7 +2828,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     }
 
     // ─── RESPUESTA DIRECTA DEL KV (sin llamar a Claude = 0 coste) ───
-    if (kvCountryData && !isRouteRequest(message, history) && !isFlightRequest(message) && !isHotelRequest(message) && !isServiceRequest(message) && !helpCategory) {
+    if (kvCountryData && !imageBase64 && !isRouteRequest(message, history) && !isFlightRequest(message) && !isHotelRequest(message) && !isServiceRequest(message) && !helpCategory) {
       const kvDirectReply = tryKVDirectAnswer(message, kvCountryData, kvDestinationData);
       if (kvDirectReply) {
         return new Response(
@@ -2806,7 +2839,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     }
 
     // Construir mensajes (con datos KV si los hay)
-    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData);
+    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, imageBase64);
     const isRoute = isRouteRequest(message, history);
     const isFlightReq = isFlightRequest(message);
     const isHotelReq = isHotelRequest(message);
@@ -2815,7 +2848,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     // Si helpCategory=food y ya tenemos resultados de Google Places, no usar Sonnet con tool
     const serviceReqEffective = isServiceReq && !(helpCategory === 'food' && helpResults);
     // Sonnet para rutas, vuelos y servicios (necesita tool use fiable), Haiku para conversacional
-    const needsSonnet = isRoute || isFlightReq || isHotelReq || serviceReqEffective;
+    const needsSonnet = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64;
     const reqModel = needsSonnet ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001';
     const reqMaxTokens = needsSonnet ? 6000 : 1500;
 
@@ -2831,6 +2864,28 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     const decoder = new TextDecoder();
     const { readable, writable } = new TransformStream();
     const writer = writable.getWriter();
+
+    // Subida paralela de foto a R2 (no bloquea la respuesta de Claude)
+    let photoUploadPromise = null;
+    if (imageBase64 && env.SALMA_PHOTOS && uid) {
+      photoUploadPromise = (async () => {
+        try {
+          const timestamp = Date.now();
+          const key = `photos/${uid}/chat/${timestamp}.jpg`;
+          const binaryStr = atob(imageBase64);
+          const bytes = new Uint8Array(binaryStr.length);
+          for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+          await env.SALMA_PHOTOS.put(key, bytes, {
+            httpMetadata: { contentType: 'image/jpeg' },
+            customMetadata: { uid, source: 'chat' }
+          });
+          return { key, url: `https://salma-api.paco-defoto.workers.dev/photo/${encodeURIComponent(key)}` };
+        } catch (e) {
+          console.error('R2 chat photo upload error:', e);
+          return null;
+        }
+      })();
+    }
 
     // Todo el flujo (incluido el bucle agentic) ocurre dentro de ctx.waitUntil
     ctx.waitUntil((async () => {
@@ -2893,7 +2948,12 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
                   } catch (_) {}
                 }
 
-                await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply, route })}\n\n`));
+                const doneEvtB = { done: true, reply, route };
+                if (photoUploadPromise) {
+                  const pr = await photoUploadPromise;
+                  if (pr) { doneEvtB.photo_url = pr.url; doneEvtB.photo_key = pr.key; }
+                }
+                await writer.write(encoder.encode(`data: ${JSON.stringify(doneEvtB)}\n\n`));
 
                 ctx.waitUntil(logToFirestore({
                   timestamp: new Date().toISOString(),
@@ -3058,7 +3118,12 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         }
 
         // ── Enviar DONE con ruta verificada (fotos + coords corregidas) ──
-        await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply, route: route || null })}\n\n`));
+        const doneEvt = { done: true, reply, route: route || null };
+        if (photoUploadPromise) {
+          const photoResult = await photoUploadPromise;
+          if (photoResult) { doneEvt.photo_url = photoResult.url; doneEvt.photo_key = photoResult.key; }
+        }
+        await writer.write(encoder.encode(`data: ${JSON.stringify(doneEvt)}\n\n`));
 
         // Log exitoso
         ctx.waitUntil(logToFirestore({

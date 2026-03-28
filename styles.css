@@ -157,6 +157,39 @@ body {
 }
 .app-send:hover { background:var(--dorado2); }
 .app-send:disabled { opacity:.4; cursor:not-allowed; }
+/* Botón cámara */
+.app-cam {
+  width:44px; height:44px; flex-shrink:0;
+  border-radius:50%; border:1px solid var(--linea);
+  background:rgba(255,255,255,.04);
+  color:var(--crema); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .2s;
+  -webkit-touch-callout:none; -webkit-user-select:none; user-select:none;
+  touch-action:manipulation; padding:0;
+}
+.app-cam:hover { border-color:var(--linea-fuerte); }
+.app-cam:disabled { opacity:.4; cursor:not-allowed; }
+/* Preview foto en input bar */
+.chat-photo-preview {
+  display:flex; align-items:center; gap:10px; padding:6px 0;
+}
+.chat-photo-preview img {
+  height:72px; width:72px; border-radius:8px; object-fit:cover;
+  border:1px solid var(--linea);
+}
+.chat-photo-cancel {
+  width:28px; height:28px; border-radius:50%; border:none;
+  background:rgba(255,255,255,.12); color:var(--crema);
+  cursor:pointer; font-size:18px; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  transition:background .15s;
+}
+.chat-photo-cancel:hover { background:rgba(255,255,255,.25); }
+/* Foto en burbuja del usuario */
+.msg-user-photo {
+  max-width:220px; border-radius:10px; margin-bottom:6px; display:block;
+}
 
 /* ═══ STATE 1: WELCOME ═══ */
 .welcome-hero {

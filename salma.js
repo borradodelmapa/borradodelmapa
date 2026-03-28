@@ -20,6 +20,7 @@ const salma = {
   _rateTimes: [],
   _userLocation: null,
   _pendingRouteInfo: null,  // Info parcial mientras esperamos fechas
+  _pendingPhoto: null,      // {blob, base64, localUrl} mientras compone mensaje con foto
 
   // Pedir geolocalización al usuario (se llama una vez, se actualiza continuamente)
   initGeolocation() {
@@ -210,9 +211,122 @@ const salma = {
     return `${y}-${m}-${day}`;
   },
 
+  // ═══ CÁMARA EN EL CHAT ═══
+
+  _initCameraBtn() {
+    const camBtn = document.getElementById('cam-btn');
+    const photoInput = document.getElementById('chat-photo-input');
+    const cancelBtn = document.getElementById('chat-photo-cancel');
+    if (!camBtn || !photoInput) return;
+
+    camBtn.addEventListener('click', () => {
+      if (this._streaming) return;
+      photoInput.click();
+    });
+
+    photoInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      photoInput.value = ''; // reset para permitir reselección
+      if (file) this._handlePhotoSelected(file);
+    });
+
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', () => this._clearPendingPhoto());
+    }
+  },
+
+  async _handlePhotoSelected(file) {
+    if (!file.type.startsWith('image/')) {
+      if (typeof showToast === 'function') showToast('Solo se permiten imágenes');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      if (typeof showToast === 'function') showToast('Imagen demasiado grande (máx 10MB)');
+      return;
+    }
+
+    try {
+      // Comprimir
+      const blob = await this._compressImage(file, 1024, 0.8);
+      // Base64
+      const base64 = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+        reader.readAsDataURL(blob);
+      });
+      // Preview local
+      const localUrl = URL.createObjectURL(blob);
+
+      this._pendingPhoto = { blob, base64, localUrl };
+
+      // Mostrar preview
+      const preview = document.getElementById('chat-photo-preview');
+      const thumb = document.getElementById('chat-photo-thumb');
+      if (preview && thumb) {
+        thumb.src = localUrl;
+        preview.style.display = '';
+      }
+    } catch (e) {
+      console.error('[Salma] Error procesando foto:', e);
+      if (typeof showToast === 'function') showToast('Error al procesar la foto');
+    }
+  },
+
+  _clearPendingPhoto() {
+    if (this._pendingPhoto?.localUrl) {
+      URL.revokeObjectURL(this._pendingPhoto.localUrl);
+    }
+    this._pendingPhoto = null;
+    const preview = document.getElementById('chat-photo-preview');
+    if (preview) preview.style.display = 'none';
+  },
+
+  _compressImage(file, maxWidth, quality) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let w = img.width, h = img.height;
+          if (w > maxWidth) { h = (maxWidth / w) * h; w = maxWidth; }
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          canvas.toBlob(resolve, 'image/jpeg', quality);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  },
+
+  async _savePhotoToBitacora(photoUrl, photoKey) {
+    if (!window.currentUser || !this.currentRouteId) return;
+    try {
+      const photoEntry = {
+        key: photoKey,
+        url: photoUrl,
+        source: 'chat',
+        caption: '',
+        uploadedAt: new Date().toISOString()
+      };
+      await db.collection('users').doc(currentUser.uid)
+        .collection('maps').doc(this.currentRouteId).update({
+          photos: firebase.firestore.FieldValue.arrayUnion(photoEntry)
+        });
+    } catch (e) {
+      console.warn('[Salma] Error guardando foto en bitácora:', e);
+    }
+  },
+
   // ═══ PUNTO DE ENTRADA ÚNICO ═══
   async send(msg) {
-    if (!msg || this._streaming) return;
+    // Capturar foto pendiente antes de validar msg
+    const photo = this._pendingPhoto;
+    if (photo) this._clearPendingPhoto();
+    if (!msg && !photo) return;
+    if (this._streaming) return;
     if (!this._checkRate()) return;
 
     // Si no tenemos ubicación todavía, reintentar (ahora hay interacción del usuario)
@@ -223,19 +337,20 @@ const salma = {
       this._initChat();
     }
 
-    // Burbuja del usuario
-    this._addUserBubble(msg);
+    // Burbuja del usuario (con foto si hay)
+    this._addUserBubble(msg || '', photo ? photo.localUrl : null);
     // NO push a history aquí — se hace en _doSend tras recibir respuesta
-    // para evitar duplicación (el worker ya recibe msg como campo separado)
 
-    // Todo va directo al worker — Salma decide si preguntar (máx 1 pregunta según prompt)
-    this._doSend(msg, {});
+    // Todo va directo al worker — Salma decide si preguntar
+    this._doSend(msg || '', { photo });
   },
 
   // ═══ ENVÍO AL WORKER ═══
   async _doSend(msg, extra) {
     this._streaming = true;
     $send.disabled = true;
+    const camBtn = document.getElementById('cam-btn');
+    if (camBtn) camBtn.disabled = true;
     const loadingEl = this._addLoading();
 
     try {
@@ -269,6 +384,11 @@ const salma = {
       if (extra.travel_dates) body.travel_dates = extra.travel_dates;
       if (extra.transport) body.transport = extra.transport;
       if (extra.with_kids) body.with_kids = extra.with_kids;
+      // Foto del chat
+      if (extra.photo) {
+        body.image_base64 = extra.photo.base64;
+        if (window.currentUser?.uid) body.uid = window.currentUser.uid;
+      }
 
       const data = await this._stream(body, loadingEl);
 
@@ -329,6 +449,8 @@ const salma = {
     } finally {
       this._streaming = false;
       $send.disabled = false;
+      const camBtnF = document.getElementById('cam-btn');
+      if (camBtnF) camBtnF.disabled = false;
       if (!('ontouchstart' in window)) $input.focus();
     }
   },
@@ -379,6 +501,13 @@ const salma = {
               if (evt.done) {
                 this._removeStreamBubble();
                 this._removeLoading();
+                // Actualizar foto en burbuja con URL persistente de R2
+                if (evt.photo_url) {
+                  const lastPhoto = document.querySelector('.msg-user-photo:last-of-type') ||
+                    document.querySelector('.msg-user:last-of-type .msg-user-photo');
+                  if (lastPhoto) lastPhoto.src = evt.photo_url;
+                  if (evt.photo_key) this._savePhotoToBitacora(evt.photo_url, evt.photo_key);
+                }
                 resolved = true;
                 resolve({
                   reply: evt.reply || fullText,
@@ -742,14 +871,16 @@ const salma = {
     return document.getElementById('chat-area');
   },
 
-  _addUserBubble(text) {
+  _addUserBubble(text, photoUrl) {
     const area = this._getChatArea();
     if (!area) return;
     const div = document.createElement('div');
     div.className = 'msg msg-user';
-    div.innerHTML = `<div class="msg-body-user">${escapeHTML(text)}</div>`;
+    const photoHtml = photoUrl ? `<img src="${photoUrl}" class="msg-user-photo" alt="Foto">` : '';
+    const textHtml = text ? escapeHTML(text) : '';
+    div.innerHTML = `<div class="msg-body-user">${photoHtml}${textHtml}</div>`;
     area.appendChild(div);
-    this._scrollToBottom(true);  // forzar: es el mensaje del usuario
+    this._scrollToBottom(true);
   },
 
   _addSalmaBubble(text) {
