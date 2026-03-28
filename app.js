@@ -116,6 +116,13 @@ async function renderWelcome() {
         <div class="welcome-input-wrap">
           <div class="input-row">
             <textarea class="welcome-input" id="welcome-input" placeholder="Vietnam 10 días en moto" rows="1"></textarea>
+            <input type="file" id="welcome-photo-input" accept="image/*" capture="environment" style="display:none">
+            <button class="app-cam welcome-cam" id="welcome-cam-btn" aria-label="Enviar foto">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+              </svg>
+            </button>
             <button class="app-mic welcome-mic" id="welcome-mic-btn" aria-label="Hablar">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="9" y="1" width="6" height="12" rx="3"/>
@@ -157,6 +164,18 @@ async function renderWelcome() {
       if (msg && typeof salma !== 'undefined') salma.send(msg);
     }
   });
+
+  // Welcome camera button
+  const wCamBtn = document.getElementById('welcome-cam-btn');
+  const wPhotoInput = document.getElementById('welcome-photo-input');
+  if (wCamBtn && wPhotoInput && typeof salma !== 'undefined') {
+    wCamBtn.addEventListener('click', () => wPhotoInput.click());
+    wPhotoInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      wPhotoInput.value = '';
+      if (file) salma._handlePhotoSelected(file);
+    });
+  }
 
   // Placeholder rotativo
   if (wInput) {
