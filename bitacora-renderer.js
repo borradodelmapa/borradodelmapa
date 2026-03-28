@@ -118,6 +118,8 @@ const bitacoraRenderer = {
           <div class="diario-day-map" id="diario-map-day-${dayNum}"></div>
           <div class="diario-day-note">
             <textarea class="diario-note-input diario-note-day" data-key="day_${dayNum}_general" placeholder="Nota del día...">${escapeHTML(this._currentNotes['day_' + dayNum + '_general'] || '')}</textarea>
+            <button class="diario-note-save" data-key="day_${dayNum}_general" style="display:none;">Guardar</button>
+            <div class="diario-note-status" id="note-status-day_${dayNum}_general"></div>
           </div>
           <div class="diario-day-stops">
             ${day.stops.map((stop, idx) => this._renderStop(stop, dayNum, idx)).join('')}
@@ -158,6 +160,7 @@ const bitacoraRenderer = {
 
           <div class="diario-stop-note ${hasNote ? 'open' : ''}" data-key="${noteKey}">
             <textarea class="diario-note-input" data-key="${noteKey}" placeholder="Escribe tu nota...">${escapeHTML(note)}</textarea>
+            <button class="diario-note-save" data-key="${noteKey}" style="display:none;">Guardar</button>
             <div class="diario-note-status" id="note-status-${noteKey}"></div>
           </div>
         </div>
@@ -170,9 +173,40 @@ const bitacoraRenderer = {
     document.querySelectorAll('.diario-note-input').forEach(textarea => {
       textarea.addEventListener('input', (e) => {
         const key = e.target.dataset.key;
-        const value = e.target.value;
-        this._currentNotes[key] = value;
-        this._debounceSaveNote(docId, key, value);
+        this._currentNotes[key] = e.target.value;
+        // Mostrar botón Guardar
+        const saveBtn = e.target.parentElement.querySelector('.diario-note-save[data-key="' + key + '"]');
+        if (saveBtn) {
+          saveBtn.style.display = 'inline-block';
+          saveBtn.textContent = 'Guardar';
+          saveBtn.style.background = '';
+          saveBtn.style.color = '';
+          saveBtn.disabled = false;
+        }
+      });
+    });
+
+    // Botón guardar nota
+    document.querySelectorAll('.diario-note-save').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const key = e.target.dataset.key;
+        const value = this._currentNotes[key] || '';
+        e.target.textContent = '...';
+        e.target.disabled = true;
+        try {
+          const notesUpdate = {};
+          notesUpdate['notes.' + key] = value;
+          await db.collection('users').doc(currentUser.uid)
+            .collection('maps').doc(docId).update(notesUpdate);
+          e.target.textContent = '✓ Guardado';
+          e.target.style.background = 'rgba(92,184,92,.2)';
+          e.target.style.color = '#5cb85c';
+          e.target.style.borderColor = 'rgba(92,184,92,.4)';
+        } catch (err) {
+          console.error('Error guardando nota:', err);
+          e.target.textContent = 'Error';
+          e.target.disabled = false;
+        }
       });
     });
 

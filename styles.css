@@ -1449,6 +1449,9 @@ body {
 .diario-note-input:focus { border-color:rgba(212,160,23,.3); outline:none; }
 .diario-note-input::placeholder { color:rgba(244,239,230,.2); }
 .diario-note-day { min-height:40px; margin-bottom:8px; }
+.diario-note-save { background:rgba(212,168,67,.15); border:1px solid rgba(212,168,67,.3); color:var(--dorado); padding:6px 14px; border-radius:6px; font-size:11px; cursor:pointer; margin-top:6px; transition:background .15s; }
+.diario-note-save:hover { background:rgba(212,168,67,.25); }
+.diario-note-save:disabled { cursor:default; }
 .diario-note-status { font-size:10px; color:rgba(212,160,23,.6); text-align:right; min-height:14px; }
 
 /* Share menu */
