@@ -91,8 +91,8 @@ body {
 
 /* ── Input bar (fijo abajo, NUNCA desaparece) ── */
 .app-input-bar {
-  position:fixed; bottom:0; left:0; right:0; z-index:1100;
-  padding:10px 16px calc(env(safe-area-inset-bottom, 0px) + 12px);
+  position:fixed; bottom:56px; left:0; right:0; z-index:1100;
+  padding:10px 16px 12px;
   background:rgba(5,5,5,.95);
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
