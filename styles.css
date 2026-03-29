@@ -1598,10 +1598,7 @@ body {
 .profile-toggle input:checked + .toggle-slider::before {
   transform:translateX(20px);
 }
-#prof-narrator {
-  display:flex; align-items:center; justify-content:space-between;
-}
-#prof-narrator .profile-section-label { flex:1; }
+/* narrator usa el layout base de .profile-section */
 
 /* ═══ PERFIL DE USUARIO ═══ */
 .profile-area {
@@ -1662,6 +1659,7 @@ body {
 .profile-section-arrow {
   font-size:18px; color:rgba(244,239,230,.2);
   transition:color .2s, transform .2s;
+  width:18px; text-align:center; flex-shrink:0;
 }
 .profile-section:hover .profile-section-arrow {
   color:var(--dorado); transform:translateX(2px);

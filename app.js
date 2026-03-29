@@ -337,6 +337,7 @@ async function renderProfile() {
         <div class="profile-section" id="prof-bitacora">
           <span class="profile-section-icon">📓</span>
           <span class="profile-section-label">Bitácora</span>
+          <button class="profile-info-btn" id="prof-bitacora-info" onclick="event.stopPropagation()">i</button>
           <span class="profile-section-arrow">›</span>
         </div>
 
@@ -415,6 +416,9 @@ async function renderProfile() {
       salma.stopNarrator();
     }
     updateBottomBar();
+  });
+  document.getElementById('prof-bitacora-info').addEventListener('click', () => {
+    showInfoPopup('Aquí encontrarás listados todos tus viajes. Encontrarás las notas asignadas a cada viaje. Además podrás escribir un blog de viaje, añadirle fotos... y compartirlo si quieres con la comunidad.');
   });
   document.getElementById('prof-galeria-info').addEventListener('click', () => {
     showInfoPopup('Aquí encontrarás listados todos tus viajes. Encontrarás las notas asignadas a cada viaje. Además podrás escribir un blog de viaje, añadirle fotos... y compartirlo si quieres con la comunidad.');
