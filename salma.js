@@ -25,6 +25,50 @@ const salma = {
   _narratorNotified: new Set(),
   _narratorLastCheck: 0,
   _narratorInterval: null,
+  _voices: [],
+
+  // ═══ VOZ DE SALMA — Web Speech API ═══
+  initVoices() {
+    if (!window.speechSynthesis) return;
+    this._voices = speechSynthesis.getVoices();
+    speechSynthesis.onvoiceschanged = () => { this._voices = speechSynthesis.getVoices(); };
+    // Restaurar icono si estaba muteado
+    const btn = document.getElementById('salma-mute-btn');
+    if (btn && localStorage.getItem('salma_mute') === 'true') btn.textContent = '\u{1F507}';
+  },
+
+  salmaSpeak(text) {
+    if (!window.speechSynthesis) return;
+    if (localStorage.getItem('salma_mute') === 'true') return;
+    speechSynthesis.cancel();
+    // Limpiar texto: quitar markdown, emojis, URLs, guiones de lista
+    const clean = text
+      .replace(/#{1,6}\s?/g, '')
+      .replace(/\*{1,2}([^*]+)\*{1,2}/g, '$1')
+      .replace(/https?:\/\/\S+/g, '')
+      .replace(/[\u{1F600}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{200D}\u{1F1E0}-\u{1F1FF}]/gu, '')
+      .replace(/^[\s]*[-•]\s*/gm, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (!clean) return;
+    const utt = new SpeechSynthesisUtterance(clean);
+    // Preferir voz española
+    const esVoice = this._voices.find(v => v.lang.startsWith('es'));
+    utt.voice = esVoice || this._voices[0] || null;
+    utt.lang = esVoice ? esVoice.lang : 'es-ES';
+    utt.rate = 1.0;
+    utt.pitch = 1.05;
+    speechSynthesis.speak(utt);
+  },
+
+  toggleMute() {
+    const muted = localStorage.getItem('salma_mute') === 'true';
+    localStorage.setItem('salma_mute', muted ? 'false' : 'true');
+    if (!muted) speechSynthesis.cancel();
+    // Actualizar icono
+    const btn = document.getElementById('salma-mute-btn');
+    if (btn) btn.textContent = muted ? '\u{1F50A}' : '\u{1F507}';
+  },
 
   // Pedir geolocalización al usuario (se llama una vez, se actualiza continuamente)
   initGeolocation() {
@@ -999,6 +1043,7 @@ const salma = {
               '</div>';
             area.appendChild(bubble);
             bubble.scrollIntoView({ behavior: 'smooth' });
+            this.salmaSpeak(narData.narrative);
           }
 
           console.log('[Salma] Narrador:', poi.name, '→', narData.narrative.substring(0, 60) + '...');
@@ -1160,6 +1205,7 @@ const salma = {
     }
     area.appendChild(div);
     this._scrollToBottom();
+    this.salmaSpeak(text);
   },
 
   _saveNoteFromBubble(text, btnEl) {
@@ -1245,6 +1291,8 @@ const salma = {
         const textContent = txt ? txt.textContent : '';
         if (txt) txt.removeAttribute('id');
         el.removeAttribute('id');
+        // Leer en voz alta el texto final del stream
+        if (textContent) this.salmaSpeak(textContent);
         // Botón guardar nota solo si hay contenido relevante
         if (textContent.length > 150 && !el.querySelector('.msg-save-note')) {
           const btn = document.createElement('button');
