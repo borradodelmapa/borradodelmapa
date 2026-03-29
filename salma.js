@@ -38,7 +38,7 @@ const salma = {
     try {
       if (!window.speechSynthesis) return;
       if (localStorage.getItem('salma_voice') === 'false') return;
-      speechSynthesis.cancel();
+      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
       // Limpiar texto: quitar markdown, emojis, URLs, guiones de lista
       const clean = text
         .replace(/#{1,6}\s?/g, '')
@@ -1038,7 +1038,8 @@ const salma = {
             bubble.scrollIntoView({ behavior: 'smooth' });
             // Narrador habla automático solo si voz está activada
             if (localStorage.getItem('salma_voice') !== 'false') {
-              this.salmaSpeak(narData.narrative);
+              const narText = narData.narrative;
+              setTimeout(() => this.salmaSpeak(narText), 50);
             }
           }
 
@@ -1202,8 +1203,10 @@ const salma = {
     }
     area.appendChild(div);
     this._scrollToBottom();
-    // Auto-speak si voz activada
-    if (localStorage.getItem('salma_voice') !== 'false') this.salmaSpeak(text);
+    // Auto-speak si voz activada (setTimeout para no bloquear el flujo)
+    if (localStorage.getItem('salma_voice') !== 'false') {
+      setTimeout(() => this.salmaSpeak(text), 50);
+    }
   },
 
   _saveNoteFromBubble(text, btnEl) {
@@ -1322,8 +1325,11 @@ const salma = {
         if (txt) txt.removeAttribute('id');
         el.removeAttribute('id');
         this._addSpeakButton(el);
-        // Auto-speak si voz activada
-        if (textContent && localStorage.getItem('salma_voice') !== 'false') this.salmaSpeak(textContent);
+        // Auto-speak si voz activada (setTimeout para no bloquear el flujo)
+        if (textContent && localStorage.getItem('salma_voice') !== 'false') {
+          const t = textContent;
+          setTimeout(() => this.salmaSpeak(t), 50);
+        }
         // Botón guardar nota solo si hay contenido relevante
         if (textContent.length > 150 && !el.querySelector('.msg-save-note')) {
           const btn = document.createElement('button');
