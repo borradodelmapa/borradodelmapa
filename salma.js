@@ -680,6 +680,10 @@ const salma = {
               if (evt.done) {
                 this._removeStreamBubble();
                 this._removeLoading();
+                // Si no hubo texto streamed pero hay reply, mostrarlo
+                if (!fullText.trim() && evt.reply) {
+                  this._addSalmaBubble(evt.reply);
+                }
                 // Actualizar foto en burbuja con URL persistente de R2 y revocar blob
                 if (evt.photo_url) {
                   const lastPhoto = document.querySelector('.msg-user:last-of-type .msg-user-photo');
