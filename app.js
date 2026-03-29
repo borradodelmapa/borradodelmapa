@@ -63,6 +63,7 @@ function updateBottomBar() {
   const isHome = currentState === 'welcome';
   const isChat = currentState === 'chat';
   const isProfile = currentState === 'profile' || currentState === 'viajes' || currentState === 'bitacora' || currentState === 'diario';
+  const narratorOn = typeof salma !== 'undefined' && salma._narratorActive;
 
   bar.innerHTML = `
     <button class="bottom-tab ${isHome ? 'bottom-tab-active' : ''}" id="tab-home">
@@ -73,6 +74,13 @@ function updateBottomBar() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span>Chat</span>
     </button>
+    <button class="bottom-tab ${narratorOn ? 'bottom-tab-active narrator-active' : ''}" id="tab-narrator">
+      <div class="narrator-icon-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        ${narratorOn ? '<span class="narrator-pulse"></span>' : ''}
+      </div>
+      <span>Narrador</span>
+    </button>
     <button class="bottom-tab ${isProfile ? 'bottom-tab-active' : ''}" id="tab-profile">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
@@ -82,6 +90,17 @@ function updateBottomBar() {
   document.getElementById('tab-chat').addEventListener('click', () => {
     if (currentState !== 'chat') {
       if (typeof salma !== 'undefined') salma._initChat();
+    }
+  });
+  document.getElementById('tab-narrator').addEventListener('click', async () => {
+    if (typeof salma === 'undefined') return;
+    if (salma._narratorActive) {
+      salma.stopNarrator();
+    } else {
+      const ok = await salma.startNarrator();
+      if (ok === false) {
+        alert('Para usar el narrador, permite las notificaciones en tu navegador.');
+      }
     }
   });
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
@@ -308,6 +327,15 @@ async function renderProfile() {
           <span class="profile-section-arrow">›</span>
         </div>
 
+        <div class="profile-section" id="prof-narrator">
+          <span class="profile-section-icon">📍</span>
+          <span class="profile-section-label">Narrador en ruta</span>
+          <label class="profile-toggle" onclick="event.stopPropagation()">
+            <input type="checkbox" id="narrator-toggle" ${typeof salma !== 'undefined' && salma._narratorActive ? 'checked' : ''}>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
         <div class="profile-section profile-section-locked">
           <span class="profile-section-icon">📝</span>
           <span class="profile-section-label">Notas de Salma</span>
@@ -347,6 +375,18 @@ async function renderProfile() {
   document.getElementById('prof-coins').addEventListener('click', openCoinsModal);
   document.getElementById('prof-bitacora').addEventListener('click', () => showState('bitacora'));
   document.getElementById('prof-galeria').addEventListener('click', () => renderGaleria());
+  document.getElementById('narrator-toggle').addEventListener('change', async (e) => {
+    if (typeof salma === 'undefined') return;
+    if (e.target.checked) {
+      const ok = await salma.startNarrator();
+      if (ok === false) {
+        e.target.checked = false;
+        alert('Para usar el narrador, permite las notificaciones en tu navegador.');
+      }
+    } else {
+      salma.stopNarrator();
+    }
+  });
   document.getElementById('prof-help').addEventListener('click', () => {
     document.getElementById('salma-info-overlay').style.display = 'flex';
   });

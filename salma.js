@@ -21,6 +21,10 @@ const salma = {
   _userLocation: null,
   _pendingRouteInfo: null,  // Info parcial mientras esperamos fechas
   _pendingPhoto: null,      // {blob, base64, localUrl} mientras compone mensaje con foto
+  _narratorActive: false,
+  _narratorNotified: new Set(),
+  _narratorLastCheck: 0,
+  _narratorInterval: null,
 
   // Pedir geolocalización al usuario (se llama una vez, se actualiza continuamente)
   initGeolocation() {
@@ -38,7 +42,8 @@ const salma = {
         // Activar copiloto cuando tenemos ubicación
         if (!this._copilotCountry) this.initCopilot();
         // Si ya tenemos buena precisión (<500m), dejar de monitorizar para ahorrar batería
-        if (pos.coords.accuracy < 500 && this._geoWatchId) {
+        // PERO si el narrador está activo, mantener GPS continuo
+        if (pos.coords.accuracy < 500 && this._geoWatchId && !this._narratorActive) {
           navigator.geolocation.clearWatch(this._geoWatchId);
           this._geoWatchId = null;
         }
@@ -893,6 +898,117 @@ const salma = {
     this.currentRouteId = null;
     this._streaming = false;
     this._pendingRouteInfo = null;
+  },
+
+  // ═══ NARRADOR EN RUTA ═══
+
+  async startNarrator() {
+    if (this._narratorActive) return;
+    // Pedir permiso notificaciones
+    if ('Notification' in window && Notification.permission === 'default') {
+      const perm = await Notification.requestPermission();
+      if (perm !== 'granted') {
+        console.log('[Salma] Narrador: notificaciones denegadas');
+        return false;
+      }
+    }
+    if ('Notification' in window && Notification.permission === 'denied') {
+      console.log('[Salma] Narrador: notificaciones bloqueadas');
+      return false;
+    }
+    this._narratorActive = true;
+    this._narratorNotified = new Set();
+    this._narratorLastCheck = 0;
+    // Reactivar GPS continuo si se había parado
+    if (!this._geoWatchId) this.initGeolocation();
+    // Check periódico cada 30s
+    this._narratorInterval = setInterval(() => this.checkNearbyPOIs(), 30000);
+    // Primer check inmediato
+    this.checkNearbyPOIs();
+    localStorage.setItem('narrator_active', 'true');
+    console.log('[Salma] Narrador activado');
+    if (typeof updateBottomBar === 'function') updateBottomBar();
+    return true;
+  },
+
+  stopNarrator() {
+    this._narratorActive = false;
+    if (this._narratorInterval) {
+      clearInterval(this._narratorInterval);
+      this._narratorInterval = null;
+    }
+    localStorage.setItem('narrator_active', 'false');
+    console.log('[Salma] Narrador desactivado');
+    if (typeof updateBottomBar === 'function') updateBottomBar();
+  },
+
+  async checkNearbyPOIs() {
+    if (!this._narratorActive || !this._userLocation) return;
+    const now = Date.now();
+    if (now - this._narratorLastCheck < 25000) return;
+    this._narratorLastCheck = now;
+
+    const { lat, lng } = this._userLocation;
+    console.log('[Salma] Narrator check:', lat, lng);
+
+    try {
+      const res = await fetch(window.SALMA_API + '/nearby-pois?lat=' + lat + '&lng=' + lng + '&radius=500');
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!data.pois || !data.pois.length) return;
+
+      for (const poi of data.pois) {
+        const key = poi.place_id || poi.name;
+        if (this._narratorNotified.has(key)) continue;
+        this._narratorNotified.add(key);
+
+        // Pedir narrativa a Haiku
+        try {
+          const narRes = await fetch(window.SALMA_API + '/narrate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              poi_name: poi.name,
+              lat: poi.lat,
+              lng: poi.lng,
+              country_code: this._copilotCountry || ''
+            })
+          });
+          if (!narRes.ok) continue;
+          const narData = await narRes.json();
+          if (!narData.narrative) continue;
+
+          // Notificación push
+          if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification('Salma', {
+              body: narData.narrative,
+              icon: '/salma_ai_avatar.png',
+              tag: 'narrator-' + key,
+              data: { poi_name: poi.name, narrative: narData.narrative }
+            });
+          }
+
+          // Si el chat está abierto, insertar burbuja
+          const area = document.getElementById('chat-area');
+          if (area) {
+            const bubble = document.createElement('div');
+            bubble.className = 'chat-msg salma-msg narrator-msg';
+            bubble.innerHTML = '<div class="msg-content">' +
+              '<div class="narrator-poi-name">📍 ' + poi.name + '</div>' +
+              narData.narrative +
+              '</div>';
+            area.appendChild(bubble);
+            bubble.scrollIntoView({ behavior: 'smooth' });
+          }
+
+          console.log('[Salma] Narrador:', poi.name, '→', narData.narrative.substring(0, 60) + '...');
+        } catch (e) {
+          console.log('[Salma] Narrador: error narrativa', e.message);
+        }
+      }
+    } catch (e) {
+      console.log('[Salma] Narrador: error check POIs', e.message);
+    }
   },
 
   // ═══ COPILOTO — TARJETA INFO PAÍS ═══

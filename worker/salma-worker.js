@@ -2513,6 +2513,101 @@ export default {
       }
     }
 
+    // ─── ENDPOINT /nearby-pois (Narrador — POIs cercanos via Google Places) ───
+    if (request.method === 'GET' && url.pathname === '/nearby-pois') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      const lat = url.searchParams.get('lat');
+      const lng = url.searchParams.get('lng');
+      const radius = url.searchParams.get('radius') || '500';
+      if (!lat || !lng) {
+        return new Response(JSON.stringify({ error: 'Missing lat/lng' }), { status: 400, headers: corsH });
+      }
+      try {
+        const placesKey = env.GOOGLE_PLACES_KEY;
+        if (!placesKey) {
+          return new Response(JSON.stringify({ error: 'No Places key' }), { status: 500, headers: corsH });
+        }
+        const types = 'tourist_attraction|museum|church|mosque|synagogue|hindu_temple|park|art_gallery';
+        const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${types}&key=${placesKey}&language=es`;
+        const pRes = await fetch(placesUrl);
+        const pData = await pRes.json();
+        if (!pData.results || !pData.results.length) {
+          return new Response(JSON.stringify({ pois: [] }), { headers: corsH });
+        }
+        // Calcular distancia y devolver top 5
+        const userLat = parseFloat(lat);
+        const userLng = parseFloat(lng);
+        const pois = pData.results.slice(0, 5).map(p => {
+          const pLat = p.geometry.location.lat;
+          const pLng = p.geometry.location.lng;
+          const dLat = (pLat - userLat) * Math.PI / 180;
+          const dLng = (pLng - userLng) * Math.PI / 180;
+          const a = Math.sin(dLat/2)**2 + Math.cos(userLat*Math.PI/180)*Math.cos(pLat*Math.PI/180)*Math.sin(dLng/2)**2;
+          const dist = 6371000 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+          return {
+            name: p.name,
+            lat: pLat,
+            lng: pLng,
+            place_id: p.place_id,
+            types: (p.types || []).slice(0, 3),
+            distance_m: Math.round(dist),
+            photo_ref: p.photos && p.photos[0] ? p.photos[0].photo_reference : null,
+            rating: p.rating || null
+          };
+        }).sort((a, b) => a.distance_m - b.distance_m);
+        return new Response(JSON.stringify({ pois }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /narrate (Narrador — Haiku genera narrativa de un POI) ───
+    if (request.method === 'POST' && url.pathname === '/narrate') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      let body;
+      try { body = await request.json(); } catch (e) {
+        return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: corsH });
+      }
+      const { poi_name, country_code } = body;
+      if (!poi_name) {
+        return new Response(JSON.stringify({ error: 'Missing poi_name' }), { status: 400, headers: corsH });
+      }
+      try {
+        // Obtener contexto del país del KV si existe
+        let countryContext = '';
+        if (country_code && env.SALMA_KB) {
+          const kvData = await env.SALMA_KB.get('dest:' + country_code + ':destinos');
+          if (kvData) {
+            const parsed = JSON.parse(kvData);
+            countryContext = ' en ' + (parsed.pais || country_code.toUpperCase());
+          }
+        }
+
+        const apiKey = env.ANTHROPIC_API_KEY;
+        const haikuRes = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01'
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 200,
+            messages: [{
+              role: 'user',
+              content: `Eres Salma, compañera de viaje. El viajero está junto a ${poi_name}${countryContext}. Cuéntale en 2-3 frases: qué es, por qué importa y un dato curioso. Tono cercano y directo, sin paja. Máximo 80 palabras. Solo el texto, sin encabezados ni viñetas.`
+            }]
+          })
+        });
+        const haikuData = await haikuRes.json();
+        const narrative = haikuData.content && haikuData.content[0] ? haikuData.content[0].text : '';
+        return new Response(JSON.stringify({ narrative, poi_name }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /enrich (Pasada 2 — Haiku rellena campos) ───
     if (request.method === 'POST' && url.pathname === '/enrich') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };

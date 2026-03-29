@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bdm-v27';
+const CACHE_NAME = 'bdm-v28';
 const STATIC_ASSETS = [
   '/',
   '/styles.css',
@@ -47,5 +47,33 @@ self.addEventListener('fetch', (e) => {
         return res;
       })
       .catch(() => caches.match(e.request))
+  );
+});
+
+// Push notification (narrador en ruta)
+self.addEventListener('push', (e) => {
+  let data = { title: 'Salma', body: '' };
+  try { data = e.data.json(); } catch (_) { data.body = e.data ? e.data.text() : ''; }
+  e.waitUntil(
+    self.registration.showNotification(data.title || 'Salma', {
+      body: data.body,
+      icon: '/salma_ai_avatar.png',
+      badge: '/salma_ai_avatar.png',
+      tag: data.tag || 'narrator',
+      data: data
+    })
+  );
+});
+
+// Click en notificación — abrir la app
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  e.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(cls => {
+      for (const c of cls) {
+        if (c.url.includes(self.location.origin)) { c.focus(); return; }
+      }
+      clients.openWindow('/');
+    })
   );
 });
