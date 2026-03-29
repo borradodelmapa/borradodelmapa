@@ -1719,12 +1719,178 @@ body {
 .profile-section-locked:hover .profile-section-icon { filter:grayscale(1) brightness(.6); }
 .profile-section-locked:hover .profile-section-label { color:rgba(244,239,230,.75); }
 .profile-section-locked:active { transform:none; }
+/* SOS button in profile */
+.profile-section-sos {
+  background:rgba(211,47,47,.08);
+  border:1px solid rgba(211,47,47,.2);
+  margin-top:4px;
+}
+.profile-section-sos:hover {
+  background:rgba(211,47,47,.14);
+  border-color:rgba(211,47,47,.35);
+}
+.profile-section-icon-sos { filter:none !important; }
+.profile-section-sos .profile-section-label { color:rgba(244,210,210,.9); }
+.profile-section-sos .profile-section-arrow { color:rgba(211,47,47,.4); }
+.profile-section-sos:hover .profile-section-label { color:#ffcdd2; }
+.profile-section-sos:hover .profile-section-arrow { color:#ef5350; }
 .profile-section-logout {
   border-top:1px solid rgba(244,239,230,.06);
   margin-top:12px; padding-top:18px;
 }
 .profile-section-logout .profile-section-label { color:rgba(244,239,230,.4); }
 .profile-section-logout:hover .profile-section-label { color:rgba(239,68,68,.8); }
+
+/* ═══ SOS — MODAL CONFIRMACIÓN ═══ */
+.sos-overlay {
+  position:fixed; inset:0; z-index:9998;
+  background:rgba(0,0,0,.7); backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center;
+  padding:24px;
+}
+.sos-modal {
+  background:#1a0a0a; border:2px solid #c62828;
+  border-radius:20px; padding:32px 24px 24px;
+  max-width:340px; width:100%; text-align:center;
+  box-shadow:0 8px 40px rgba(198,40,40,.4);
+}
+.sos-modal-icon { font-size:48px; margin-bottom:12px; }
+.sos-modal-title {
+  font-family:var(--font-mono); font-size:18px; font-weight:700;
+  color:#ffcdd2; margin:0 0 10px; letter-spacing:.05em;
+}
+.sos-modal-text {
+  font-size:14px; color:rgba(244,239,230,.65); line-height:1.5;
+  margin:0 0 20px;
+}
+.sos-countdown {
+  font-family:var(--font-mono); font-size:48px; font-weight:700;
+  color:#ef5350; margin-bottom:20px; line-height:1;
+}
+.sos-modal-btns { display:flex; gap:10px; }
+.sos-btn-cancel {
+  flex:1; padding:12px; border-radius:12px;
+  border:1px solid rgba(244,239,230,.15); background:rgba(255,255,255,.05);
+  color:rgba(244,239,230,.6); font-size:14px; cursor:pointer;
+  transition:all .2s;
+}
+.sos-btn-cancel:hover { background:rgba(255,255,255,.1); color:var(--crema); }
+.sos-btn-go {
+  flex:1; padding:12px; border-radius:12px;
+  border:none; background:#c62828; color:#fff;
+  font-family:var(--font-mono); font-size:13px; font-weight:700;
+  letter-spacing:.05em; cursor:pointer; transition:background .2s;
+}
+.sos-btn-go:hover { background:#b71c1c; }
+
+/* ═══ SOS — ÁREA PRINCIPAL ═══ */
+.sos-area, .sos-config-area {
+  max-width:480px; margin:0 auto; padding:20px 16px 60px;
+}
+.sos-header {
+  display:flex; align-items:center; gap:12px; margin-bottom:24px;
+}
+.sos-back {
+  background:none; border:none; color:var(--dorado);
+  font-size:14px; cursor:pointer; padding:4px 0; flex-shrink:0;
+}
+.sos-header-title {
+  font-family:var(--font-mono); font-size:15px; font-weight:700;
+  color:#ffcdd2; letter-spacing:.05em;
+}
+.sos-instruct {
+  font-size:14px; color:rgba(244,239,230,.6); margin-bottom:16px;
+}
+.sos-contacts { display:flex; flex-direction:column; gap:10px; }
+.sos-wa-btn {
+  display:flex; align-items:center; gap:12px;
+  padding:16px 18px; border-radius:14px;
+  background:rgba(37,211,102,.08); border:1px solid rgba(37,211,102,.2);
+  color:var(--crema); text-decoration:none; font-size:15px; font-weight:500;
+  transition:all .2s;
+}
+.sos-wa-btn:hover { background:rgba(37,211,102,.15); border-color:rgba(37,211,102,.4); }
+.sos-wa-icon { font-size:20px; }
+.sos-divider {
+  height:1px; background:rgba(244,239,230,.06); margin:20px 0;
+}
+.sos-sms-btn {
+  display:block; padding:14px 18px; border-radius:14px;
+  background:rgba(255,255,255,.04); border:1px solid rgba(244,239,230,.1);
+  color:rgba(244,239,230,.6); text-decoration:none; font-size:14px;
+  text-align:center; margin-bottom:12px; transition:all .2s;
+}
+.sos-sms-btn:hover { background:rgba(255,255,255,.08); color:var(--crema); }
+.sos-config-link {
+  display:block; width:100%; padding:10px;
+  background:none; border:none; color:rgba(244,239,230,.3);
+  font-size:12px; cursor:pointer; text-align:center;
+  transition:color .2s;
+}
+.sos-config-link:hover { color:rgba(244,239,230,.6); }
+
+/* ═══ SOS — CONFIGURACIÓN ═══ */
+.sos-config-desc {
+  font-size:14px; color:rgba(244,239,230,.55); line-height:1.5;
+  margin-bottom:20px;
+}
+.sos-config-contacts { display:flex; flex-direction:column; gap:6px; margin-bottom:20px; }
+.sos-config-row {
+  display:flex; align-items:center; gap:8px;
+}
+.sos-config-num {
+  width:22px; height:22px; border-radius:50%;
+  background:rgba(211,47,47,.2); color:#ffcdd2;
+  font-family:var(--font-mono); font-size:11px; font-weight:700;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.sos-config-name {
+  flex:1; padding:10px 12px; border-radius:10px;
+  background:rgba(255,255,255,.05); border:1px solid rgba(244,239,230,.1);
+  color:var(--crema); font-size:14px; min-width:0;
+}
+.sos-config-phone {
+  flex:1.4; padding:10px 12px; border-radius:10px;
+  background:rgba(255,255,255,.05); border:1px solid rgba(244,239,230,.1);
+  color:var(--crema); font-size:14px; min-width:0;
+}
+.sos-config-name:focus, .sos-config-phone:focus {
+  outline:none; border-color:rgba(211,47,47,.4);
+}
+.sos-config-error {
+  font-size:11px; color:#ef5350; padding:2px 30px 4px;
+}
+.sos-config-custom { margin-bottom:16px; }
+.sos-config-label {
+  display:block; font-family:var(--font-mono); font-size:10px;
+  letter-spacing:.1em; color:rgba(244,239,230,.35); margin-bottom:8px;
+}
+.sos-config-opt { color:rgba(244,239,230,.2); }
+.sos-config-textarea {
+  width:100%; padding:10px 12px; border-radius:10px; box-sizing:border-box;
+  background:rgba(255,255,255,.05); border:1px solid rgba(244,239,230,.1);
+  color:var(--crema); font-size:13px; resize:vertical; min-height:70px;
+}
+.sos-config-textarea:focus { outline:none; border-color:rgba(211,47,47,.4); }
+.sos-save-btn {
+  width:100%; padding:14px; border:none; border-radius:12px;
+  background:#c62828; color:#fff;
+  font-family:var(--font-mono); font-size:13px; font-weight:700;
+  letter-spacing:.06em; cursor:pointer; transition:background .2s;
+}
+.sos-save-btn:hover { background:#b71c1c; }
+.sos-save-btn:disabled { opacity:.5; cursor:not-allowed; }
+/* SOS spinner */
+.sos-spinner {
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:center; padding:60px 20px; gap:16px;
+}
+.sos-spinner-icon { font-size:48px; animation:sos-pulse 1s ease-in-out infinite; }
+@keyframes sos-pulse {
+  0%,100% { transform:scale(1); opacity:1; }
+  50% { transform:scale(1.15); opacity:.7; }
+}
+.sos-spinner-text { color:rgba(244,239,230,.6); font-size:14px; }
 
 .profile-viajes { margin-top:12px; }
 .profile-viajes-header {
