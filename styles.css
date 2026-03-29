@@ -1553,9 +1553,31 @@ body {
 .bottom-tab-active { color:var(--dorado); }
 .bottom-tab:hover { color:rgba(244,239,230,.7); }
 .bottom-tab-active:hover { color:var(--dorado); }
+/* SOS configurado — rojo */
 .bottom-tab-sos { color:#ef5350; }
 .bottom-tab-sos:hover { color:#ff1744; }
 .bottom-tab-sos svg { filter:drop-shadow(0 0 4px rgba(239,83,80,.4)); }
+/* SOS sin configurar — gris apagado */
+.bottom-tab-sos-off { color:rgba(244,239,230,.25); }
+.bottom-tab-sos-off:hover { color:rgba(244,239,230,.5); }
+/* Badge estado SOS en perfil */
+.sos-status-badge { margin-left:auto; }
+.sos-badge-on {
+  font-family:var(--font-mono); font-size:9px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase;
+  color:#ef5350; background:rgba(239,83,80,.1);
+  padding:3px 8px; border-radius:6px; border:1px solid rgba(239,83,80,.2);
+}
+.sos-badge-off {
+  font-family:var(--font-mono); font-size:9px; letter-spacing:.08em;
+  text-transform:uppercase; color:rgba(244,239,230,.25);
+  background:rgba(255,255,255,.03); padding:3px 8px;
+  border-radius:6px; border:1px solid rgba(244,239,230,.06);
+}
+/* Perfil SOS sin configurar — sin el estilo rojo fuerte */
+.profile-section-sos.sos-unconfigured { background:rgba(255,255,255,.025); border-color:transparent; }
+.profile-section-sos.sos-unconfigured .profile-section-label { color:rgba(244,239,230,.75); }
+.profile-section-sos.sos-unconfigured:hover { background:rgba(255,255,255,.04); }
 
 /* ═══ NARRADOR ═══ */
 .narrator-icon-wrap { position:relative; display:inline-flex; }
