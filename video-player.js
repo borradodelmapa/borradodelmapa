@@ -11,6 +11,7 @@ const videoPlayer = {
   _photos: [],        // Array de Image objects cargados
   _params: {},        // {titulo, highlight, tipo, stops:[{name,lat,lng}]}
   _stops: [],         // Paradas de ruta con coords normalizadas
+  _stopsSimulated: false, // true = stops generados sintéticamente
   _frame: 0,
   _totalFrames: 600,
   _fps: 30,
@@ -57,13 +58,17 @@ const videoPlayer = {
 
     // Procesar paradas de ruta para el mapa
     const rawStops = (params.stops || []).filter(s => s.lat && s.lng);
-    const hasMap = rawStops.length >= 2;
-    if (hasMap) {
+    this._stopsSimulated = false;
+    if (rawStops.length >= 2) {
       this._stops = this._normalizeStops(rawStops);
+    } else {
+      // Generar recorrido simulado a partir del título (siempre hay escena de mapa)
+      this._stops = this._generateSimulatedStops(params.titulo || '');
+      this._stopsSimulated = true;
     }
 
-    // Calcular frames por escena
-    const mapFrames   = hasMap ? 120 : 0;
+    // Calcular frames por escena — siempre 120 frames de mapa
+    const mapFrames   = 120;
     const photoFrames = Math.max(this._photos.length * 90, 270);
 
     this._titleEnd  = 90;
@@ -92,6 +97,31 @@ const videoPlayer = {
       nx: (s.lng - minLng + padLng) / (maxLng - minLng + padLng * 2),
       ny: 1 - (s.lat - minLat + padLat) / (maxLat - minLat + padLat * 2)
     }));
+  },
+
+  // Genera paradas sintéticas cuando no hay ruta real.
+  // Usa el título como semilla para que cada video tenga un camino diferente.
+  _generateSimulatedStops(titulo) {
+    const seed = (titulo || 'viaje').split('').reduce((a, c) => (a * 31 + c.charCodeAt(0)) | 0, 7);
+    const rnd = (i) => Math.abs(Math.sin(seed * 9301 + i * 49297)) % 1;
+
+    const count = 4 + (Math.abs(seed) % 3); // 4, 5 o 6 paradas
+    const labels = ['Salida', 'Día 1', 'Día 2', 'Día 3', 'Día 4', 'Destino'];
+    const stops = [];
+
+    for (let i = 0; i < count; i++) {
+      const t = i / (count - 1);
+      // Camino de izquierda a derecha con ondulación vertical
+      const nx = 0.08 + t * 0.84 + (rnd(i * 3) - 0.5) * 0.1;
+      const ny = 0.3 + (rnd(i * 3 + 1) - 0.5) * 0.5;
+      stops.push({
+        nx: Math.max(0.05, Math.min(0.95, nx)),
+        ny: Math.max(0.1, Math.min(0.9, ny)),
+        name: i === 0 ? labels[0] : (i === count - 1 ? labels[5] : labels[i] || `Día ${i}`),
+        day: i > 0 ? i : null
+      });
+    }
+    return stops;
   },
 
   _loadImage(url) {
@@ -284,7 +314,8 @@ const videoPlayer = {
       const opLabel = this._lerpEased(frame, 30, 60, 0, 0.6);
       ctx.globalAlpha = opLabel;
       ctx.font = '11px monospace';
-      this._drawText(ctx, `${this._stops.length} paradas · ver mapa`, w / 2, dateY + 22, this.CREAM2);
+      const mapHint = this._stopsSimulated ? 'recorrido · ver mapa' : `${this._stops.length} paradas · ver mapa`;
+      this._drawText(ctx, mapHint, w / 2, dateY + 22, this.CREAM2);
       ctx.globalAlpha = opacity;
     }
 
@@ -370,14 +401,16 @@ const videoPlayer = {
     ctx.globalAlpha = sceneOp * labelOp;
     ctx.font = 'bold 14px monospace';
     ctx.textAlign = 'center';
-    this._drawText(ctx, 'TU RUTA', w / 2, h * 0.14, this.GOLD);
+    const mapHeader = this._stopsSimulated ? 'EL RECORRIDO' : 'TU RUTA';
+    this._drawText(ctx, mapHeader, w / 2, h * 0.14, this.GOLD);
     ctx.font = '11px sans-serif';
     this._drawText(ctx, this._params.titulo || '', w / 2, h * 0.14 + 20, this.CREAM2);
 
     // Contador de paradas
     ctx.globalAlpha = sceneOp * this._lerpEased(localFrame, totalFrames - 25, totalFrames - 5, 0, 1);
     ctx.font = '11px monospace';
-    this._drawText(ctx, `${this._stops.length} destinos`, w / 2, h * 0.84, this.GOLD);
+    const countLabel = this._stopsSimulated ? 'el viaje comienza' : `${this._stops.length} destinos`;
+    this._drawText(ctx, countLabel, w / 2, h * 0.84, this.GOLD);
 
     ctx.globalAlpha = 1;
   },

@@ -720,7 +720,7 @@ async function renderGaleria(albumFilter) {
     </div>`;
 
   const gridHtml = filtered.length === 0
-    ? '<div class="galeria-empty">No hay fotos todavía. Envía una foto a Salma desde el chat.</div>'
+    ? '<div class="galeria-empty">No hay fotos todavía.<br>Pulsa <strong>📤 Añadir</strong> para subir desde tu galería, o envía fotos a Salma desde el chat.</div>'
     : `<div class="galeria-grid">${filtered.map(f => `
         <div class="galeria-item" data-foto-id="${f.id}">
           <img src="${escapeHTML(f.url)}" class="galeria-thumb" alt="${escapeHTML(f.caption || '')}" loading="lazy">
@@ -732,7 +732,9 @@ async function renderGaleria(albumFilter) {
       <div class="galeria-header">
         <button class="galeria-back" id="galeria-back">← Galería</button>
         <span class="galeria-title">${escapeHTML(activeAlbumName)}</span>
+        <button class="galeria-upload-btn" id="galeria-upload-btn" title="Añadir fotos">📤 Añadir</button>
       </div>
+      <input type="file" id="galeria-file-input" accept="image/*" multiple style="display:none">
       ${albumsHtml}
       ${gridHtml}
     </div>`;
@@ -764,6 +766,19 @@ async function renderGaleria(albumFilter) {
     } catch (e) {
       if (typeof showToast === 'function') showToast('Error al crear álbum');
     }
+  });
+
+  // Event: subir fotos directamente a la galería
+  document.getElementById('galeria-upload-btn')?.addEventListener('click', () => {
+    document.getElementById('galeria-file-input').click();
+  });
+  document.getElementById('galeria-file-input')?.addEventListener('change', async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    await _uploadFilesToGaleria(files, uid, activeAlbum, fotos, albumes, albumes);
+    // Limpiar input para poder subir el mismo archivo otra vez
+    e.target.value = '';
+    renderGaleria(activeAlbum);
   });
 
   // Event: click foto → acciones (mover, eliminar)
@@ -842,6 +857,87 @@ function _showFotoActions(foto, albumes, uid, currentAlbumFilter) {
     } catch (e) {
       if (typeof showToast === 'function') showToast('Error al eliminar');
     }
+  });
+}
+
+// ─── Subir fotos directamente a la galería ───
+async function _uploadFilesToGaleria(files, uid, albumId, existingFotos, albumes) {
+  const validFiles = files.filter(f => f.type.startsWith('image/')).slice(0, 20);
+  if (!validFiles.length) return;
+
+  const btn = document.getElementById('galeria-upload-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Subiendo…'; }
+
+  let ok = 0, fail = 0;
+
+  for (const file of validFiles) {
+    try {
+      // 1. Comprimir (reutiliza lógica de salma.js si está disponible)
+      let blob;
+      if (typeof salma !== 'undefined' && typeof salma._compressImage === 'function') {
+        blob = await salma._compressImage(file, 1024, 0.8);
+      } else {
+        blob = await _compressImageLocal(file, 1024, 0.8);
+      }
+
+      // 2. Subir a R2 via worker
+      const formData = new FormData();
+      formData.append('photo', blob, 'photo.jpg');
+      formData.append('uid', uid);
+
+      const res = await fetch(window.SALMA_API + '/upload-gallery-photo', {
+        method: 'POST',
+        body: formData
+      });
+      if (!res.ok) throw new Error('Upload failed');
+      const { key, url } = await res.json();
+
+      // 3. Guardar en Firestore fotos/
+      await db.collection('users').doc(uid).collection('fotos').add({
+        key, url,
+        tag: 'otro',
+        caption: '',
+        albumId: albumId && albumId !== '__sin_album__' ? albumId : null,
+        routeId: null,
+        source: 'gallery',
+        createdAt: new Date().toISOString()
+      });
+
+      ok++;
+    } catch (e) {
+      console.warn('[Galería upload]', e);
+      fail++;
+    }
+  }
+
+  if (btn) { btn.disabled = false; btn.textContent = '📤 Añadir'; }
+
+  if (typeof showToast === 'function') {
+    if (ok > 0 && fail === 0) showToast(`${ok} foto${ok > 1 ? 's' : ''} añadida${ok > 1 ? 's' : ''} ✓`);
+    else if (ok > 0) showToast(`${ok} subidas, ${fail} con error`);
+    else showToast('Error al subir las fotos');
+  }
+}
+
+// Compresión local (fallback si salma.js no está cargado)
+function _compressImageLocal(file, maxW, quality) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const scale = Math.min(1, maxW / Math.max(img.width, img.height));
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      canvas.toBlob(blob => {
+        URL.revokeObjectURL(url);
+        blob ? resolve(blob) : reject(new Error('toBlob failed'));
+      }, 'image/jpeg', quality);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('load failed')); };
+    img.src = url;
   });
 }
 

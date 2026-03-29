@@ -2155,6 +2155,35 @@ export default {
       }
     }
 
+    // ─── ENDPOINT /upload-gallery-photo (galería directa, sin chat) ───
+    if (request.method === 'POST' && url.pathname === '/upload-gallery-photo') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      if (!env.SALMA_PHOTOS) {
+        return new Response(JSON.stringify({ error: 'R2 not configured' }), { status: 500, headers: corsH });
+      }
+      try {
+        const formData = await request.formData();
+        const photo    = formData.get('photo');
+        const uid      = formData.get('uid') || 'anon';
+        if (!photo) {
+          return new Response(JSON.stringify({ error: 'Missing photo' }), { status: 400, headers: corsH });
+        }
+        if (photo.size > 6 * 1024 * 1024) {
+          return new Response(JSON.stringify({ error: 'Photo too large (max 6MB)' }), { status: 400, headers: corsH });
+        }
+        const timestamp = Date.now();
+        const key = `photos/${uid}/gallery/${timestamp}.jpg`;
+        await env.SALMA_PHOTOS.put(key, photo.stream(), {
+          httpMetadata: { contentType: 'image/jpeg' },
+          customMetadata: { uid, source: 'gallery' }
+        });
+        const photoUrl = `https://salma-api.paco-defoto.workers.dev/photo/${encodeURIComponent(key)}`;
+        return new Response(JSON.stringify({ key, url: photoUrl }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /delete-photo (eliminar de R2) ───
     if (request.method === 'POST' && url.pathname === '/delete-photo') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };

@@ -225,6 +225,23 @@ body {
 .galeria-header {
   display:flex; align-items:center; gap:12px; margin-bottom:16px;
 }
+.galeria-upload-btn {
+  margin-left:auto;
+  background:rgba(212,160,23,.12);
+  border:1px solid var(--dorado);
+  border-radius:8px;
+  color:var(--dorado);
+  font-size:12px;
+  font-family:var(--font-mono);
+  padding:6px 12px;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:background .15s;
+}
+.galeria-upload-btn:hover { background:rgba(212,160,23,.22); }
+.galeria-upload-btn:disabled { opacity:.5; cursor:default; }
+.galeria-empty { text-align:center; color:rgba(245,240,232,.4); font-size:13px; padding:40px 16px; line-height:1.6; }
+.galeria-empty strong { color:var(--dorado); }
 .galeria-back {
   background:none; border:none; color:var(--dorado); cursor:pointer;
   font-family:var(--font-mono); font-size:13px; font-weight:600;
