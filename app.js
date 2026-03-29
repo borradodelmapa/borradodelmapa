@@ -2545,7 +2545,7 @@ function renderSOSConfig() {
       <button class="sos-test-btn" id="sos-test">Enviar prueba</button>
     </div>
     <div class="sos-config-explainer">
-      <p>Un tap en SOS y Salma avisa a tus contactos de emergencia automáticamente. Les manda un SMS con tu nombre y tu ubicación exacta en Google Maps. Sin que tengas que escribir nada. Si el SMS falla, te da los botones para avisar por WhatsApp o SMS directo desde tu móvil.</p>
+      <p>SOS y Salma avisa a tus contactos de emergencia automáticamente. Les manda un SMS con tu nombre y tu ubicación exacta en Google Maps. Sin que tengas que escribir nada. Si el SMS falla, te da los botones para avisar por WhatsApp o SMS directo desde tu móvil. Si no tienes señal, lo envía cuando la recuperes.</p>
     </div>
   </div>`;
   document.querySelector('.app-input-bar').style.display = 'none';
