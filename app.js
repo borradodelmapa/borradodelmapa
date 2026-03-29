@@ -139,6 +139,11 @@ async function renderWelcome() {
           <div class="input-row">
             <textarea class="welcome-input" id="welcome-input" placeholder="Vietnam 10 días en moto" rows="1"></textarea>
             <input type="file" id="welcome-photo-input" accept="image/*" style="display:none">
+            <input type="file" id="welcome-camera-input" accept="image/*" capture="environment" style="display:none">
+            <div class="cam-menu" id="welcome-cam-menu" style="display:none">
+              <button class="cam-menu-opt" id="welcome-cam-menu-foto">📸 Hacer foto</button>
+              <button class="cam-menu-opt" id="welcome-cam-menu-galeria">🖼️ Galería</button>
+            </div>
             <button class="app-cam welcome-cam" id="welcome-cam-btn" aria-label="Enviar foto">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
@@ -187,16 +192,33 @@ async function renderWelcome() {
     }
   });
 
-  // Welcome camera button
+  // Welcome camera button — menú foto/galería
   const wCamBtn = document.getElementById('welcome-cam-btn');
   const wPhotoInput = document.getElementById('welcome-photo-input');
+  const wCameraInput = document.getElementById('welcome-camera-input');
+  const wCamMenu = document.getElementById('welcome-cam-menu');
   if (wCamBtn && wPhotoInput && typeof salma !== 'undefined') {
-    wCamBtn.addEventListener('click', () => wPhotoInput.click());
-    wPhotoInput.addEventListener('change', (e) => {
-      const file = e.target.files && e.target.files[0];
-      wPhotoInput.value = '';
-      if (file) salma._handlePhotoSelected(file);
+    wCamBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (wCamMenu) wCamMenu.style.display = wCamMenu.style.display === 'none' ? '' : 'none';
     });
+    if (wCamMenu) {
+      document.getElementById('welcome-cam-menu-foto')?.addEventListener('click', () => {
+        wCamMenu.style.display = 'none';
+        if (wCameraInput) wCameraInput.click();
+      });
+      document.getElementById('welcome-cam-menu-galeria')?.addEventListener('click', () => {
+        wCamMenu.style.display = 'none';
+        wPhotoInput.click();
+      });
+    }
+    const handleWelcomeFile = (e) => {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = '';
+      if (file) salma._handlePhotoSelected(file);
+    };
+    wPhotoInput.addEventListener('change', handleWelcomeFile);
+    if (wCameraInput) wCameraInput.addEventListener('change', handleWelcomeFile);
   }
 
   // Placeholder rotativo
@@ -312,12 +334,6 @@ async function renderProfile() {
       </div>
 
       <div class="profile-sections">
-        <div class="profile-section" id="prof-coins">
-          <span class="profile-section-icon">S</span>
-          <span class="profile-section-label">Salma Coins</span>
-          <span class="profile-section-arrow">›</span>
-        </div>
-
         <div class="profile-section" id="prof-bitacora">
           <span class="profile-section-icon">📓</span>
           <span class="profile-section-label">Bitácora</span>
@@ -327,12 +343,14 @@ async function renderProfile() {
         <div class="profile-section" id="prof-galeria">
           <span class="profile-section-icon">🖼️</span>
           <span class="profile-section-label">Galería</span>
+          <button class="profile-info-btn" id="prof-galeria-info" onclick="event.stopPropagation()">i</button>
           <span class="profile-section-arrow">›</span>
         </div>
 
         <div class="profile-section" id="prof-narrator">
           <span class="profile-section-icon">📍</span>
           <span class="profile-section-label">Narrador en ruta</span>
+          <button class="profile-info-btn" id="prof-narrator-info" onclick="event.stopPropagation()">i</button>
           <label class="profile-toggle" onclick="event.stopPropagation()">
             <input type="checkbox" id="narrator-toggle" ${typeof salma !== 'undefined' && salma._narratorActive ? 'checked' : ''}>
             <span class="toggle-slider"></span>
@@ -354,6 +372,13 @@ async function renderProfile() {
         <div class="profile-section" id="prof-help">
           <span class="profile-section-icon">?</span>
           <span class="profile-section-label">Ayuda</span>
+          <span class="profile-section-arrow">›</span>
+        </div>
+
+        <div class="profile-section" id="prof-coins">
+          <span class="profile-section-icon">S</span>
+          <span class="profile-section-label">Salma Coins</span>
+          <span class="profile-section-coins-badge">${coins}</span>
           <span class="profile-section-arrow">›</span>
         </div>
 
@@ -390,6 +415,12 @@ async function renderProfile() {
       salma.stopNarrator();
     }
     updateBottomBar();
+  });
+  document.getElementById('prof-galeria-info').addEventListener('click', () => {
+    showInfoPopup('Aquí encontrarás listados todos tus viajes. Encontrarás las notas asignadas a cada viaje. Además podrás escribir un blog de viaje, añadirle fotos... y compartirlo si quieres con la comunidad.');
+  });
+  document.getElementById('prof-narrator-info').addEventListener('click', () => {
+    showInfoPopup('Si estás cerca de un punto de interés cultural, Salma te manda una notificación y te cuenta la historia. Así no te pierdes nada. Info actualizada de más de 190 países.');
   });
   document.getElementById('prof-help').addEventListener('click', () => {
     document.getElementById('salma-info-overlay').style.display = 'flex';
@@ -777,6 +808,7 @@ async function renderGaleria(albumFilter) {
         <button class="galeria-back" id="galeria-back">← Galería</button>
         <span class="galeria-title">${escapeHTML(activeAlbumName)}</span>
         <div class="galeria-header-btns">
+          <button class="profile-info-btn" id="galeria-info-btn" title="Info">i</button>
           <label for="galeria-file-input" class="galeria-upload-btn" title="Añadir fotos">📤 Añadir</label>
           <button class="galeria-video-btn" id="galeria-video-btn" title="Crear video">🎬 Video</button>
         </div>
@@ -790,6 +822,11 @@ async function renderGaleria(albumFilter) {
   document.getElementById('galeria-back').addEventListener('click', () => {
     showState('profile');
     document.querySelector('.app-input-bar').style.display = '';
+  });
+
+  // Event: info
+  document.getElementById('galeria-info-btn')?.addEventListener('click', () => {
+    showInfoPopup('Aquí puedes organizar las fotos de todos tus viajes. Crear galerías nuevas. Y hacer videos para compartir con tus amigos en redes sociales o como quieras.');
   });
 
   // Event: album chips
@@ -2225,6 +2262,27 @@ function showToast(msg) {
   $toast.textContent = msg;
   $toast.classList.add('show');
   setTimeout(() => $toast.classList.remove('show'), 2500);
+}
+
+function showInfoPopup(msg) {
+  let overlay = document.getElementById('info-popup-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'info-popup-overlay';
+    overlay.className = 'info-popup-overlay';
+    overlay.innerHTML = `
+      <div class="info-popup">
+        <p class="info-popup-text"></p>
+        <button class="info-popup-close">Entendido</button>
+      </div>`;
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay || e.target.classList.contains('info-popup-close'))
+        overlay.style.display = 'none';
+    });
+  }
+  overlay.querySelector('.info-popup-text').textContent = msg;
+  overlay.style.display = 'flex';
 }
 
 function escapeHTML(str) {

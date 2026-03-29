@@ -10,7 +10,7 @@
   <meta name="theme-color" content="#050505">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="format-detection" content="telephone=no">
-  <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+  <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=()">
   <link rel="canonical" href="https://borradodelmapa.com/">
   <link rel="manifest" href="/manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -88,6 +88,11 @@
   <div class="input-row">
     <textarea class="app-input" id="main-input" placeholder="Ej: Vietnam 10 días en moto" autocomplete="off" rows="1"></textarea>
     <input type="file" id="chat-photo-input" accept="image/*" style="display:none">
+    <input type="file" id="chat-camera-input" accept="image/*" capture="environment" style="display:none">
+    <div class="cam-menu" id="cam-menu" style="display:none">
+      <button class="cam-menu-opt" id="cam-menu-foto">📸 Hacer foto</button>
+      <button class="cam-menu-opt" id="cam-menu-galeria">🖼️ Galería</button>
+    </div>
     <button class="app-cam" id="cam-btn" aria-label="Enviar foto">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>

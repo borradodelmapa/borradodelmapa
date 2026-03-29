@@ -258,23 +258,46 @@ const salma = {
   _initCameraBtn() {
     const camBtn = document.getElementById('cam-btn');
     const photoInput = document.getElementById('chat-photo-input');
+    const cameraInput = document.getElementById('chat-camera-input');
+    const camMenu = document.getElementById('cam-menu');
     const cancelBtn = document.getElementById('chat-photo-cancel');
     if (!camBtn || !photoInput) return;
 
-    camBtn.addEventListener('click', () => {
+    camBtn.addEventListener('click', (e) => {
       if (this._streaming) return;
+      e.stopPropagation();
+      if (camMenu) camMenu.style.display = camMenu.style.display === 'none' ? '' : 'none';
+    });
+
+    // Opción: Hacer foto
+    document.getElementById('cam-menu-foto')?.addEventListener('click', () => {
+      if (camMenu) camMenu.style.display = 'none';
+      if (cameraInput) cameraInput.click();
+    });
+    // Opción: Galería
+    document.getElementById('cam-menu-galeria')?.addEventListener('click', () => {
+      if (camMenu) camMenu.style.display = 'none';
       photoInput.click();
     });
 
-    photoInput.addEventListener('change', (e) => {
+    const handleFile = (e) => {
       const file = e.target.files && e.target.files[0];
-      photoInput.value = ''; // reset para permitir reselección
+      e.target.value = '';
       if (file) this._handlePhotoSelected(file);
-    });
+    };
+    photoInput.addEventListener('change', handleFile);
+    if (cameraInput) cameraInput.addEventListener('change', handleFile);
 
     if (cancelBtn) {
       cancelBtn.addEventListener('click', () => this._clearPendingPhoto());
     }
+
+    // Cerrar menú al tocar fuera
+    document.addEventListener('click', () => {
+      if (camMenu) camMenu.style.display = 'none';
+      const wMenu = document.getElementById('welcome-cam-menu');
+      if (wMenu) wMenu.style.display = 'none';
+    });
   },
 
   async _handlePhotoSelected(file) {
