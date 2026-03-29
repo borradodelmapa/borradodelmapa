@@ -1,30 +1,38 @@
 /* ═══════════════════════════════════════════
    BORRADO DEL MAPA — video-player.js
-   Motor de video slideshow animado
-   Canvas + requestAnimationFrame + Ken Burns
+   Motor de video slideshow animado v2
+   Canvas + requestAnimationFrame + Ken Burns + Mapa animado
    ═══════════════════════════════════════════ */
 
 const videoPlayer = {
   _canvas: null,
   _ctx: null,
   _container: null,
-  _photos: [],       // Array de Image objects cargados
-  _params: {},       // {titulo, highlight, tipo}
+  _photos: [],        // Array de Image objects cargados
+  _params: {},        // {titulo, highlight, tipo, stops:[{name,lat,lng}]}
+  _stops: [],         // Paradas de ruta con coords normalizadas
   _frame: 0,
-  _totalFrames: 600, // 20s a 30fps
+  _totalFrames: 600,
   _fps: 30,
   _playing: false,
   _raf: null,
   _progressFill: null,
+  _onEnd: null,       // Callback cuando termina
+
+  // Offsets de escenas (calculados en init)
+  _titleEnd: 90,
+  _mapEnd: 90,        // = titleEnd si no hay mapa
+  _photosEnd: 0,
 
   // ═══ COLORES ═══
   BG: '#050505',
   GOLD: '#d4a017',
+  GOLD2: '#f0c040',
   CREAM: '#f5f0e8',
-  FONT_TITLE: 'bold 28px sans-serif',
-  FONT_SUB: '14px monospace',
-  FONT_HIGHLIGHT: 'italic 18px sans-serif',
-  FONT_BRAND: 'bold 12px monospace',
+  CREAM2: 'rgba(245,240,232,0.7)',
+  MAP_BG: '#080c12',
+  MAP_LINE: '#d4a017',
+  MAP_DOT: '#ffffff',
 
   // ═══ INICIALIZACIÓN ═══
   async init(container, photoUrls, params) {
@@ -33,6 +41,7 @@ const videoPlayer = {
     this._frame = 0;
     this._playing = false;
     this._photos = [];
+    this._stops = [];
 
     // Crear canvas
     this._canvas = document.createElement('canvas');
@@ -44,15 +53,45 @@ const videoPlayer = {
     // Cargar imágenes
     const loaded = await Promise.all(photoUrls.map(url => this._loadImage(url)));
     this._photos = loaded.filter(Boolean);
-
-    // Ajustar frames según número de fotos
     if (this._photos.length === 0) return false;
-    const photoFrames = Math.max(this._photos.length * 90, 300);
-    this._totalFrames = 90 + photoFrames + 120; // titulo + fotos + cierre
+
+    // Procesar paradas de ruta para el mapa
+    const rawStops = (params.stops || []).filter(s => s.lat && s.lng);
+    const hasMap = rawStops.length >= 2;
+    if (hasMap) {
+      this._stops = this._normalizeStops(rawStops);
+    }
+
+    // Calcular frames por escena
+    const mapFrames   = hasMap ? 120 : 0;
+    const photoFrames = Math.max(this._photos.length * 90, 270);
+
+    this._titleEnd  = 90;
+    this._mapEnd    = this._titleEnd + mapFrames;
+    this._photosEnd = this._mapEnd + photoFrames;
+    this._totalFrames = this._photosEnd + 120; // +120 cierre
 
     // Renderizar primer frame
     this._renderFrame(0);
     return true;
+  },
+
+  // Normalizar coords a espacio canvas (0..1)
+  _normalizeStops(stops) {
+    const lats = stops.map(s => s.lat);
+    const lngs = stops.map(s => s.lng);
+    const minLat = Math.min(...lats), maxLat = Math.max(...lats);
+    const minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
+    const padLat = (maxLat - minLat) * 0.2 || 0.5;
+    const padLng = (maxLng - minLng) * 0.2 || 0.5;
+
+    return stops.map(s => ({
+      name: s.name || '',
+      day: s.day || null,
+      // nx/ny en [0..1] donde ny=0 es arriba (lat mayor)
+      nx: (s.lng - minLng + padLng) / (maxLng - minLng + padLng * 2),
+      ny: 1 - (s.lat - minLat + padLat) / (maxLat - minLat + padLat * 2)
+    }));
   },
 
   _loadImage(url) {
@@ -84,14 +123,16 @@ const videoPlayer = {
     if (!this._playing) return;
     const now = performance.now();
     const elapsed = now - this._lastTime;
-    if (elapsed >= 1000 / this._fps) {
-      this._lastTime = now - (elapsed % (1000 / this._fps));
+    const interval = 1000 / this._fps;
+    if (elapsed >= interval) {
+      this._lastTime = now - (elapsed % interval);
       this._frame++;
       if (this._frame >= this._totalFrames) {
         this._playing = false;
         this._frame = this._totalFrames - 1;
         this._renderFrame(this._frame);
         this._updateProgress();
+        if (typeof this._onEnd === 'function') this._onEnd();
         return;
       }
       this._renderFrame(this._frame);
@@ -106,7 +147,7 @@ const videoPlayer = {
     }
   },
 
-  // ═══ INTERPOLACIÓN ═══
+  // ═══ INTERPOLACIÓN Y EASING ═══
   _lerp(frame, fromFrame, toFrame, fromVal, toVal) {
     if (frame <= fromFrame) return fromVal;
     if (frame >= toFrame) return toVal;
@@ -118,57 +159,41 @@ const videoPlayer = {
     return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
   },
 
-  // ═══ RENDERIZADO DE FRAMES ═══
-  _renderFrame(frame) {
-    const ctx = this._ctx;
-    const w = this._canvas.width;
-    const h = this._canvas.height;
-
-    // Fondo negro
-    ctx.fillStyle = this.BG;
-    ctx.fillRect(0, 0, w, h);
-
-    // Determinar escena
-    const titleEnd = 90;
-    const photoFramesPerImage = Math.floor((this._totalFrames - 90 - 120) / Math.max(this._photos.length, 1));
-    const photosEnd = titleEnd + (this._photos.length * photoFramesPerImage);
-
-    if (frame < titleEnd) {
-      this._drawTitleScene(frame, w, h);
-    } else if (frame < photosEnd) {
-      const photoFrame = frame - titleEnd;
-      const photoIdx = Math.min(Math.floor(photoFrame / photoFramesPerImage), this._photos.length - 1);
-      const localFrame = photoFrame % photoFramesPerImage;
-      this._drawPhotoScene(photoIdx, localFrame, photoFramesPerImage, w, h);
-    } else {
-      this._drawCloseScene(frame - photosEnd, this._totalFrames - photosEnd, w, h);
-    }
+  _easeOut(t) {
+    return 1 - Math.pow(1 - t, 3);
   },
 
-  // ═══ ESCENA: TÍTULO ═══
-  _drawTitleScene(frame, w, h) {
-    const ctx = this._ctx;
-    const opacity = this._lerp(frame, 0, 30, 0, 1);
+  _easeIn(t) {
+    return t * t * t;
+  },
 
-    ctx.globalAlpha = opacity;
+  _lerpEased(frame, fromFrame, toFrame, fromVal, toVal) {
+    if (frame <= fromFrame) return fromVal;
+    if (frame >= toFrame) return toVal;
+    const t = this._easeInOut((frame - fromFrame) / (toFrame - fromFrame));
+    return fromVal + t * (toVal - fromVal);
+  },
 
-    // Línea dorada decorativa
-    const lineW = this._lerp(frame, 10, 50, 0, 120);
-    ctx.fillStyle = this.GOLD;
-    ctx.fillRect((w - lineW) / 2, h * 0.35, lineW, 2);
+  // Texto con sombra (helper)
+  _drawText(ctx, text, x, y, color, shadow) {
+    if (shadow !== false) {
+      ctx.shadowColor = 'rgba(0,0,0,0.8)';
+      ctx.shadowBlur = 10;
+    }
+    ctx.fillStyle = color || this.CREAM;
+    ctx.fillText(text, x, y);
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = 'transparent';
+  },
 
-    // Título
-    ctx.fillStyle = this.CREAM;
-    ctx.font = this.FONT_TITLE;
-    ctx.textAlign = 'center';
-    const titulo = this._params.titulo || 'Mi viaje';
-    // Word wrap
-    const words = titulo.split(' ');
-    let lines = [];
+  // Envolver texto
+  _wrapText(ctx, text, maxWidth) {
+    const words = (text || '').split(' ');
+    const lines = [];
     let current = '';
     for (const word of words) {
       const test = current ? current + ' ' + word : word;
-      if (ctx.measureText(test).width > w * 0.8) {
+      if (ctx.measureText(test).width > maxWidth) {
         if (current) lines.push(current);
         current = word;
       } else {
@@ -176,120 +201,470 @@ const videoPlayer = {
       }
     }
     if (current) lines.push(current);
+    return lines;
+  },
 
-    const lineHeight = 36;
-    const startY = h * 0.42 - (lines.length - 1) * lineHeight / 2;
+  // ═══ RENDERIZADO DE FRAMES ═══
+  _renderFrame(frame) {
+    const ctx = this._ctx;
+    const w = this._canvas.width;
+    const h = this._canvas.height;
+
+    // Fondo negro base
+    ctx.fillStyle = this.BG;
+    ctx.fillRect(0, 0, w, h);
+
+    if (frame < this._titleEnd) {
+      this._drawTitleScene(frame, w, h);
+
+    } else if (frame < this._mapEnd) {
+      // Escena mapa (solo si hay paradas)
+      const localFrame = frame - this._titleEnd;
+      const totalMap   = this._mapEnd - this._titleEnd;
+      this._drawMapScene(localFrame, totalMap, w, h);
+
+    } else if (frame < this._photosEnd) {
+      // Fotos
+      const photoFrames = this._photosEnd - this._mapEnd;
+      const photoFramesPerImage = Math.floor(photoFrames / Math.max(this._photos.length, 1));
+      const photoFrame = frame - this._mapEnd;
+      const photoIdx   = Math.min(Math.floor(photoFrame / photoFramesPerImage), this._photos.length - 1);
+      const localFrame = photoFrame % photoFramesPerImage;
+      this._drawPhotoScene(photoIdx, localFrame, photoFramesPerImage, w, h);
+
+    } else {
+      const localFrame  = frame - this._photosEnd;
+      const totalClose  = this._totalFrames - this._photosEnd;
+      this._drawCloseScene(localFrame, totalClose, w, h);
+    }
+  },
+
+  // ═══ ESCENA: TÍTULO ═══
+  _drawTitleScene(frame, w, h) {
+    const ctx = this._ctx;
+
+    // Gradiente de fondo
+    const grad = ctx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, '#0a0a0a');
+    grad.addColorStop(1, '#050505');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+
+    // Partículas sutiles (puntos fijos en posición)
+    this._drawStarfield(frame, w, h);
+
+    const opacity = this._lerpEased(frame, 0, 25, 0, 1);
+    ctx.globalAlpha = opacity;
+
+    // Línea dorada superior (crece)
+    const lineW = this._lerpEased(frame, 5, 40, 0, 140);
+    ctx.fillStyle = this.GOLD;
+    ctx.fillRect((w - lineW) / 2, h * 0.34, lineW, 2);
+
+    // Título principal
+    ctx.font = 'bold 30px sans-serif';
+    ctx.textAlign = 'center';
+    const titulo = this._params.titulo || 'Mi viaje';
+    const lines  = this._wrapText(ctx, titulo, w * 0.8);
+    const lineH  = 38;
+    const startY = h * 0.42 - ((lines.length - 1) * lineH) / 2;
+
     lines.forEach((line, i) => {
-      ctx.fillText(line, w / 2, startY + i * lineHeight);
+      this._drawText(ctx, line, w / 2, startY + i * lineH, this.CREAM);
     });
 
     // Fecha
-    ctx.font = this.FONT_SUB;
-    ctx.fillStyle = this.GOLD;
+    ctx.font = '13px monospace';
     const fecha = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
-    ctx.fillText(fecha, w / 2, startY + lines.length * lineHeight + 20);
+    const dateY = startY + lines.length * lineH + 18;
+    this._drawText(ctx, fecha, w / 2, dateY, this.GOLD);
+
+    // Destino / tipo (si hay ruta)
+    if (this._stops.length >= 2) {
+      const opLabel = this._lerpEased(frame, 30, 60, 0, 0.6);
+      ctx.globalAlpha = opLabel;
+      ctx.font = '11px monospace';
+      this._drawText(ctx, `${this._stops.length} paradas · ver mapa`, w / 2, dateY + 22, this.CREAM2);
+      ctx.globalAlpha = opacity;
+    }
 
     // Línea dorada inferior
     ctx.fillStyle = this.GOLD;
-    ctx.fillRect((w - lineW) / 2, startY + lines.length * lineHeight + 40, lineW, 2);
+    ctx.fillRect((w - lineW) / 2, h * 0.34 + (lines.length * lineH) + 52, lineW, 2);
+
+    // Marca de agua muy tenue
+    const brandOp = this._lerp(frame, 50, 80, 0, 0.25);
+    ctx.globalAlpha = brandOp;
+    ctx.font = '10px monospace';
+    ctx.fillStyle = this.GOLD;
+    ctx.fillText('SALMA · borradodelmapa.com', w / 2, h * 0.92);
 
     ctx.globalAlpha = 1;
   },
 
-  // ═══ ESCENA: FOTOS (Ken Burns) ═══
+  // Estrellitas de fondo (decorativas)
+  _drawStarfield(frame, w, h) {
+    const ctx = this._ctx;
+    ctx.save();
+    // Puntos fijos basados en pseudo-random determinista
+    for (let i = 0; i < 40; i++) {
+      const sx = ((i * 137 + 23) % 100) / 100 * w;
+      const sy = ((i * 97 + 11) % 100) / 100 * h;
+      const sr = 0.5 + (i % 3) * 0.5;
+      const flicker = 0.2 + 0.3 * Math.abs(Math.sin((frame + i * 7) * 0.04));
+      ctx.globalAlpha = flicker;
+      ctx.fillStyle = this.CREAM;
+      ctx.beginPath();
+      ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  },
+
+  // ═══ ESCENA: MAPA ANIMADO ═══
+  _drawMapScene(localFrame, totalFrames, w, h) {
+    if (this._stops.length < 2) return;
+    const ctx = this._ctx;
+
+    // Fondo mapa (azul noche)
+    const grad = ctx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, '#060a10');
+    grad.addColorStop(1, '#030508');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+
+    // Grid sutil tipo mapa
+    this._drawMapGrid(w, h);
+
+    // Fade in global de la escena
+    const sceneOp = this._lerpEased(localFrame, 0, 20, 0, 1);
+    ctx.globalAlpha = sceneOp;
+
+    // Área del mapa en canvas (centrada, con padding)
+    const mapPad  = 80;
+    const mapX    = mapPad;
+    const mapY    = h * 0.18;
+    const mapW    = w - mapPad * 2;
+    const mapH    = h * 0.58;
+
+    // Calcular posición de cada parada en canvas
+    const pts = this._stops.map(s => ({
+      ...s,
+      cx: mapX + s.nx * mapW,
+      cy: mapY + s.ny * mapH
+    }));
+
+    // Progreso del trazo (0→1 durante frames 10..totalFrames-20)
+    const traceT = this._easeInOut(
+      Math.max(0, Math.min(1, (localFrame - 10) / (totalFrames - 35)))
+    );
+
+    // Dibujar conexiones (línea de ruta)
+    this._drawRouteTrace(ctx, pts, traceT);
+
+    // Dibujar paradas
+    this._drawStops(ctx, pts, traceT, localFrame, totalFrames);
+
+    // Título del mapa
+    const labelOp = this._lerpEased(localFrame, 15, 40, 0, 1);
+    ctx.globalAlpha = sceneOp * labelOp;
+    ctx.font = 'bold 14px monospace';
+    ctx.textAlign = 'center';
+    this._drawText(ctx, 'TU RUTA', w / 2, h * 0.14, this.GOLD);
+    ctx.font = '11px sans-serif';
+    this._drawText(ctx, this._params.titulo || '', w / 2, h * 0.14 + 20, this.CREAM2);
+
+    // Contador de paradas
+    ctx.globalAlpha = sceneOp * this._lerpEased(localFrame, totalFrames - 25, totalFrames - 5, 0, 1);
+    ctx.font = '11px monospace';
+    this._drawText(ctx, `${this._stops.length} destinos`, w / 2, h * 0.84, this.GOLD);
+
+    ctx.globalAlpha = 1;
+  },
+
+  _drawMapGrid(w, h) {
+    const ctx = this._ctx;
+    ctx.save();
+    ctx.globalAlpha = 0.04;
+    ctx.strokeStyle = '#4488aa';
+    ctx.lineWidth = 0.5;
+    const step = 40;
+    for (let x = 0; x < w; x += step) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+    }
+    for (let y = 0; y < h; y += step) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+    }
+    ctx.restore();
+  },
+
+  _drawRouteTrace(ctx, pts, progress) {
+    if (pts.length < 2) return;
+    ctx.save();
+
+    // Total length of the path
+    const totalLen = pts.reduce((acc, p, i) => {
+      if (i === 0) return 0;
+      const dx = p.cx - pts[i-1].cx;
+      const dy = p.cy - pts[i-1].cy;
+      return acc + Math.sqrt(dx*dx + dy*dy);
+    }, 0);
+
+    // Dibujar hasta 'progress' de la longitud total
+    let drawn = 0;
+    const targetLen = totalLen * progress;
+
+    // Glow exterior (gold difuso)
+    ctx.globalAlpha = 0.25;
+    ctx.strokeStyle = this.GOLD2;
+    ctx.lineWidth = 6;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(pts[0].cx, pts[0].cy);
+
+    for (let i = 1; i < pts.length; i++) {
+      const dx = pts[i].cx - pts[i-1].cx;
+      const dy = pts[i].cy - pts[i-1].cy;
+      const segLen = Math.sqrt(dx*dx + dy*dy);
+      if (drawn >= targetLen) break;
+      if (drawn + segLen <= targetLen) {
+        ctx.lineTo(pts[i].cx, pts[i].cy);
+        drawn += segLen;
+      } else {
+        const frac = (targetLen - drawn) / segLen;
+        ctx.lineTo(pts[i-1].cx + dx * frac, pts[i-1].cy + dy * frac);
+        drawn = targetLen;
+        break;
+      }
+    }
+    ctx.stroke();
+
+    // Línea principal (dorada)
+    drawn = 0;
+    ctx.globalAlpha = 0.9;
+    ctx.strokeStyle = this.GOLD;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([8, 4]);
+    ctx.beginPath();
+    ctx.moveTo(pts[0].cx, pts[0].cy);
+
+    for (let i = 1; i < pts.length; i++) {
+      const dx = pts[i].cx - pts[i-1].cx;
+      const dy = pts[i].cy - pts[i-1].cy;
+      const segLen = Math.sqrt(dx*dx + dy*dy);
+      if (drawn >= targetLen) break;
+      if (drawn + segLen <= targetLen) {
+        ctx.lineTo(pts[i].cx, pts[i].cy);
+        drawn += segLen;
+      } else {
+        const frac = (targetLen - drawn) / segLen;
+        ctx.lineTo(pts[i-1].cx + dx * frac, pts[i-1].cy + dy * frac);
+        drawn = targetLen;
+        break;
+      }
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  },
+
+  _drawStops(ctx, pts, traceT, localFrame, totalFrames) {
+    ctx.save();
+    const n = pts.length;
+
+    pts.forEach((p, i) => {
+      // Cuándo aparece esta parada (distribuido por traceT)
+      const stopThreshold = i / (n - 1);
+      const stopProgress  = Math.max(0, Math.min(1, (traceT - stopThreshold * 0.9) / 0.12));
+      if (stopProgress <= 0) return;
+
+      const isFirst  = i === 0;
+      const isLast   = i === n - 1;
+      const isCurrent = i === Math.floor(traceT * (n - 1));
+
+      // Glow del punto
+      ctx.globalAlpha = stopProgress * 0.4;
+      const glowR = isFirst || isLast ? 18 : 12;
+      const glowGrad = ctx.createRadialGradient(p.cx, p.cy, 0, p.cx, p.cy, glowR);
+      glowGrad.addColorStop(0, this.GOLD2);
+      glowGrad.addColorStop(1, 'rgba(212,160,23,0)');
+      ctx.fillStyle = glowGrad;
+      ctx.beginPath();
+      ctx.arc(p.cx, p.cy, glowR, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Punto central
+      ctx.globalAlpha = stopProgress;
+      const r = isFirst || isLast ? 6 : 4;
+      ctx.fillStyle = isFirst || isLast ? this.GOLD : this.MAP_DOT;
+      ctx.beginPath();
+      ctx.arc(p.cx, p.cy, r, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Borde
+      ctx.strokeStyle = this.GOLD;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Pulso animado en el último punto dibujado
+      if (isCurrent && traceT > 0.02) {
+        const pulseT = (localFrame * 0.15) % 1;
+        const pulseR = r + pulseT * 14;
+        ctx.globalAlpha = stopProgress * (1 - pulseT) * 0.6;
+        ctx.strokeStyle = this.GOLD;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(p.cx, p.cy, pulseR, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Etiqueta del nombre
+      ctx.globalAlpha = stopProgress;
+      const shortName = p.name.length > 14 ? p.name.substring(0, 13) + '…' : p.name;
+      ctx.font = isFirst || isLast ? 'bold 11px sans-serif' : '10px sans-serif';
+      ctx.textAlign = 'center';
+
+      // Posición del texto: alternar arriba/abajo para evitar solapamientos
+      const labelOffset = i % 2 === 0 ? -14 : 16;
+      this._drawText(ctx, shortName, p.cx, p.cy + labelOffset, isFirst || isLast ? this.GOLD : this.CREAM);
+
+      if (p.day) {
+        ctx.globalAlpha = stopProgress * 0.6;
+        ctx.font = '9px monospace';
+        this._drawText(ctx, `Día ${p.day}`, p.cx, p.cy + labelOffset + 11, this.GOLD);
+      }
+    });
+
+    ctx.restore();
+  },
+
+  // ═══ ESCENA: FOTOS (Ken Burns mejorado) ═══
   _drawPhotoScene(photoIdx, localFrame, totalFrames, w, h) {
     const ctx = this._ctx;
     const photo = this._photos[photoIdx];
     if (!photo) return;
 
-    // Ken Burns: zoom lento + pan
-    const progress = localFrame / totalFrames;
-    const zoom = 1.0 + 0.15 * progress;
-    const panX = (photoIdx % 2 === 0 ? 1 : -1) * 20 * progress;
-    const panY = (photoIdx % 3 === 0 ? -1 : 1) * 10 * progress;
+    // Ken Burns con easing suave
+    const progress = this._easeInOut(localFrame / totalFrames);
+    const zoom     = 1.0 + 0.12 * progress;
+    // Alternar dirección del pan por foto
+    const dirX = (photoIdx % 2 === 0 ? 1 : -1);
+    const dirY = (photoIdx % 3 === 0 ? -1 : 1);
+    const panX = dirX * 18 * progress;
+    const panY = dirY * 10 * progress;
 
-    // Fade in (primeros 15 frames)
-    const fadeIn = this._lerp(localFrame, 0, 15, 0, 1);
-    // Fade out (últimos 15 frames)
-    const fadeOut = this._lerp(localFrame, totalFrames - 15, totalFrames, 1, 0);
-    ctx.globalAlpha = Math.min(fadeIn, fadeOut);
+    // Fade in / fade out con easing
+    const fadeIn  = this._lerpEased(localFrame, 0, 18, 0, 1);
+    const fadeOut = this._lerpEased(localFrame, totalFrames - 18, totalFrames, 1, 0);
+    const alpha   = Math.min(fadeIn, fadeOut);
 
-    // Dibujar foto con Ken Burns
     ctx.save();
+    ctx.globalAlpha = alpha;
     ctx.translate(w / 2 + panX, h / 2 + panY);
     ctx.scale(zoom, zoom);
 
-    // Calcular dimensiones para cover
-    const imgRatio = photo.width / photo.height;
+    // Cover: llenar canvas manteniendo relación de aspecto
+    const imgRatio    = photo.width / photo.height;
     const canvasRatio = w / h;
     let dw, dh;
     if (imgRatio > canvasRatio) {
-      dh = h;
-      dw = h * imgRatio;
+      dh = h; dw = h * imgRatio;
     } else {
-      dw = w;
-      dh = w / imgRatio;
+      dw = w; dh = w / imgRatio;
     }
-
     ctx.drawImage(photo, -dw / 2, -dh / 2, dw, dh);
     ctx.restore();
-    ctx.globalAlpha = 1;
 
-    // Contador de foto (esquina inferior)
-    ctx.fillStyle = 'rgba(0,0,0,0.5)';
-    ctx.fillRect(w - 60, h - 36, 52, 24);
-    ctx.fillStyle = this.CREAM;
-    ctx.font = '12px monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText(`${photoIdx + 1}/${this._photos.length}`, w - 34, h - 19);
+    // Overlay gradient (abajo) para legibilidad del contador
+    ctx.globalAlpha = alpha * 0.6;
+    const overlayGrad = ctx.createLinearGradient(0, h * 0.75, 0, h);
+    overlayGrad.addColorStop(0, 'rgba(0,0,0,0)');
+    overlayGrad.addColorStop(1, 'rgba(0,0,0,0.85)');
+    ctx.fillStyle = overlayGrad;
+    ctx.fillRect(0, h * 0.75, w, h * 0.25);
+
+    // Contador de foto
+    ctx.globalAlpha = alpha;
+    ctx.font = '11px monospace';
+    ctx.textAlign = 'right';
+    this._drawText(ctx, `${photoIdx + 1} / ${this._photos.length}`, w - 20, h - 18, this.CREAM2);
+
+    ctx.globalAlpha = 1;
     ctx.textAlign = 'center';
   },
 
   // ═══ ESCENA: CIERRE ═══
   _drawCloseScene(localFrame, totalFrames, w, h) {
     const ctx = this._ctx;
-    const opacity = this._lerp(localFrame, 0, 30, 0, 1);
-    ctx.globalAlpha = opacity;
+
+    // Fondo degradado oscuro
+    const grad = ctx.createLinearGradient(0, h * 0.3, 0, h);
+    grad.addColorStop(0, '#050505');
+    grad.addColorStop(1, '#0a0805');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+
+    // Estrellas de fondo
+    this._drawStarfield(localFrame + 300, w, h);
+
+    const sceneOp = this._lerpEased(localFrame, 0, 25, 0, 1);
+    ctx.globalAlpha = sceneOp;
+
+    // Comillas decorativas
+    const quoteOp = this._lerpEased(localFrame, 5, 30, 0, 0.3);
+    ctx.globalAlpha = sceneOp * quoteOp;
+    ctx.font = 'bold 72px serif';
+    ctx.fillStyle = this.GOLD;
+    ctx.textAlign = 'left';
+    ctx.fillText('"', w * 0.12, h * 0.38);
+    ctx.textAlign = 'right';
+    ctx.fillText('"', w * 0.88, h * 0.52);
 
     // Highlight (frase del día)
     if (this._params.highlight) {
-      ctx.font = this.FONT_HIGHLIGHT;
-      ctx.fillStyle = this.CREAM;
+      ctx.globalAlpha = sceneOp;
+      ctx.font = 'italic 19px sans-serif';
       ctx.textAlign = 'center';
-      // Word wrap highlight
-      const words = this._params.highlight.split(' ');
-      let lines = [];
-      let current = '';
-      for (const word of words) {
-        const test = current ? current + ' ' + word : word;
-        if (ctx.measureText(test).width > w * 0.8) {
-          if (current) lines.push(current);
-          current = word;
-        } else {
-          current = test;
-        }
-      }
-      if (current) lines.push(current);
+      const lines = this._wrapText(ctx, this._params.highlight, w * 0.72);
+      const lineH = 28;
+      const startY = h * 0.42 - ((lines.length - 1) * lineH) / 2;
       lines.forEach((line, i) => {
-        ctx.fillText(line, w / 2, h * 0.4 + i * 26);
+        this._drawText(ctx, line, w / 2, startY + i * lineH, this.CREAM);
       });
     }
 
-    // Línea dorada
-    const lineW = this._lerp(localFrame, 15, 50, 0, 80);
+    // Línea dorada central
+    const lineW = this._lerpEased(localFrame, 20, 55, 0, 100);
+    ctx.globalAlpha = sceneOp;
     ctx.fillStyle = this.GOLD;
-    ctx.fillRect((w - lineW) / 2, h * 0.55, lineW, 2);
+    ctx.fillRect((w - lineW) / 2, h * 0.58, lineW, 2);
 
     // Branding
-    const brandOpacity = this._lerp(localFrame, 40, 70, 0, 1);
-    ctx.globalAlpha = brandOpacity;
-    ctx.font = 'bold 16px monospace';
-    ctx.fillStyle = this.GOLD;
+    const brandOp = this._lerpEased(localFrame, 40, 70, 0, 1);
+    ctx.globalAlpha = sceneOp * brandOp;
+
+    // SALMA (grande)
+    ctx.font = 'bold 22px monospace';
     ctx.textAlign = 'center';
-    ctx.fillText('SALMA', w / 2, h * 0.62);
+    this._drawText(ctx, 'SALMA', w / 2, h * 0.655, this.GOLD);
+
+    // Línea separadora
+    ctx.globalAlpha = sceneOp * brandOp * 0.4;
+    ctx.fillStyle = this.GOLD;
+    ctx.fillRect(w / 2 - 30, h * 0.672, 60, 1);
+
+    // URL
+    ctx.globalAlpha = sceneOp * brandOp * 0.6;
     ctx.font = '11px monospace';
-    ctx.fillStyle = 'rgba(245,240,232,0.5)';
-    ctx.fillText('borradodelmapa.com', w / 2, h * 0.66);
+    this._drawText(ctx, 'borradodelmapa.com', w / 2, h * 0.69, this.CREAM2);
+
+    // Destino (de params)
+    if (this._params.titulo) {
+      ctx.globalAlpha = sceneOp * this._lerpEased(localFrame, 55, 80, 0, 0.5);
+      ctx.font = '12px sans-serif';
+      this._drawText(ctx, this._params.titulo, w / 2, h * 0.73, this.CREAM2);
+    }
 
     ctx.globalAlpha = 1;
   },
@@ -297,52 +672,49 @@ const videoPlayer = {
   // ═══ DESCARGAR COMO WEBM ═══
   async download() {
     const exportCanvas = document.createElement('canvas');
-    exportCanvas.width = 1080;
+    exportCanvas.width  = 1080;
     exportCanvas.height = 1920;
     const exportCtx = exportCanvas.getContext('2d');
 
-    // Comprobar soporte MediaRecorder
     if (typeof MediaRecorder === 'undefined') {
       if (typeof showToast === 'function') showToast('Tu navegador no soporta la descarga de video');
       return;
     }
 
-    const stream = exportCanvas.captureStream(this._fps);
-    let mimeType = 'video/webm;codecs=vp9';
-    if (!MediaRecorder.isTypeSupported(mimeType)) {
-      mimeType = 'video/webm';
-    }
-    const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 5000000 });
-    const chunks = [];
+    const stream    = exportCanvas.captureStream(this._fps);
+    let mimeType    = 'video/webm;codecs=vp9';
+    if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = 'video/webm';
 
+    const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 6000000 });
+    const chunks   = [];
     recorder.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
 
     const done = new Promise(resolve => {
       recorder.onstop = () => {
         const blob = new Blob(chunks, { type: 'video/webm' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = (this._params.titulo || 'mi-viaje').replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s-]/g, '').replace(/\s+/g, '_') + '.webm';
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href     = url;
+        const name = (this._params.titulo || 'mi-viaje')
+          .replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s-]/g, '')
+          .replace(/\s+/g, '_');
+        a.download = name + '.webm';
         a.click();
         URL.revokeObjectURL(url);
         resolve();
       };
     });
 
-    if (typeof showToast === 'function') showToast('Generando video...');
+    if (typeof showToast === 'function') showToast('Generando video… puede tardar unos segundos');
     recorder.start();
 
-    // Escalar y renderizar cada frame en el canvas de exportación
+    // Renderizar a resolución 2x usando canvas de exportación
     const origCanvas = this._canvas;
-    const origCtx = this._ctx;
-    const origW = this._canvas.width;
-    const origH = this._canvas.height;
+    const origCtx    = this._ctx;
 
-    // Temporalmente usar el canvas de exportación
-    this._canvas = exportCanvas;
-    this._ctx = exportCtx;
-    this._canvas.width = 1080;
+    this._canvas        = exportCanvas;
+    this._ctx           = exportCtx;
+    this._canvas.width  = 1080;
     this._canvas.height = 1920;
 
     for (let f = 0; f < this._totalFrames; f++) {
@@ -350,22 +722,20 @@ const videoPlayer = {
       await new Promise(r => setTimeout(r, 1000 / this._fps));
     }
 
-    // Restaurar canvas original
     this._canvas = origCanvas;
-    this._ctx = origCtx;
+    this._ctx    = origCtx;
 
     recorder.stop();
     await done;
-    if (typeof showToast === 'function') showToast('Video descargado');
+    if (typeof showToast === 'function') showToast('Video descargado ✓');
   },
 
   // ═══ COMPARTIR ═══
   async share() {
     if (navigator.share && navigator.canShare) {
       try {
-        // Generar blob rápido (resolución reducida para compartir)
-        if (typeof showToast === 'function') showToast('Preparando para compartir...');
-        await this.download(); // Por ahora descarga; Web Share con archivos requiere blob previo
+        if (typeof showToast === 'function') showToast('Preparando para compartir…');
+        await this.download();
       } catch (e) {
         this.download();
       }

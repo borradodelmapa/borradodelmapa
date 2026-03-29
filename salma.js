@@ -565,7 +565,14 @@ const salma = {
 
       // Si hay video_params, renderizar player inline
       if (data.video_params && typeof videoPlayer !== 'undefined') {
-        this._renderVideoPlayer(data.video_params);
+        // Enriquecer params con paradas de la ruta activa (para escena del mapa)
+        const enrichedParams = Object.assign({}, data.video_params);
+        if (this.currentRoute && this.currentRoute.stops && this.currentRoute.stops.length >= 2) {
+          enrichedParams.stops = this.currentRoute.stops
+            .filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01)
+            .map(s => ({ name: s.name || '', lat: s.lat, lng: s.lng, day: s.day }));
+        }
+        this._renderVideoPlayer(enrichedParams);
       }
 
       this._scrollToBottom();
