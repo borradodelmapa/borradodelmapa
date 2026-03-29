@@ -372,11 +372,12 @@ async function renderProfile() {
         <div class="profile-section profile-section-sos ${(currentUserSOSConfig?.contacts || []).filter(c=>c.phone?.trim()).length > 0 ? 'sos-configured' : 'sos-unconfigured'}" id="prof-sos">
           <span class="profile-section-icon profile-section-icon-sos">🆘</span>
           <span class="profile-section-label">SOS Emergencia</span>
-          <span class="sos-status-badge" id="sos-status-badge">
+          <span class="sos-status-badge">
             ${(currentUserSOSConfig?.contacts || []).filter(c=>c.phone?.trim()).length > 0
               ? '<span class="sos-badge-on">configurado</span>'
               : '<span class="sos-badge-off">sin configurar</span>'}
           </span>
+          <button class="profile-info-btn sos-edit-btn" id="prof-sos-edit" onclick="event.stopPropagation()" title="Editar contactos">✏️</button>
           <span class="profile-section-arrow">›</span>
         </div>
 
@@ -459,6 +460,7 @@ async function renderProfile() {
       showSOSConfirm();
     }
   });
+  document.getElementById('prof-sos-edit').addEventListener('click', () => renderSOSConfig());
   document.getElementById('prof-logout').addEventListener('click', () => {
     if (confirm('¿Cerrar sesión?')) logout();
   });
@@ -2541,6 +2543,9 @@ function renderSOSConfig() {
     <div class="sos-config-btns">
       <button class="sos-save-btn" id="sos-save">Guardar contactos</button>
       <button class="sos-test-btn" id="sos-test">Enviar prueba</button>
+    </div>
+    <div class="sos-config-explainer">
+      <p>Un tap en SOS y Salma avisa a tus contactos de emergencia automáticamente. Les manda un SMS con tu nombre y tu ubicación exacta en Google Maps. Sin que tengas que escribir nada. Si el SMS falla, te da los botones para avisar por WhatsApp o SMS directo desde tu móvil.</p>
     </div>
   </div>`;
   document.querySelector('.app-input-bar').style.display = 'none';

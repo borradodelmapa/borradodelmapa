@@ -1846,6 +1846,17 @@ body {
 .sos-test-btn:hover { background:rgba(211,47,47,.12); border-color:rgba(211,47,47,.5); }
 .sos-test-btn:disabled { opacity:.5; cursor:not-allowed; }
 .sos-save-btn { flex:2; }
+/* Botón editar (lápiz) en SOS — más ancho que el i de info */
+.sos-edit-btn { font-style:normal; font-size:13px; }
+/* Texto explicativo en config SOS */
+.sos-config-explainer {
+  margin-top:20px; padding:14px 16px;
+  background:rgba(255,255,255,.03); border-radius:12px;
+  border:1px solid rgba(244,239,230,.06);
+}
+.sos-config-explainer p {
+  font-size:13px; color:rgba(244,239,230,.45); line-height:1.6; margin:0;
+}
 .sos-contacts { display:flex; flex-direction:column; gap:10px; }
 .sos-wa-btn {
   display:flex; align-items:center; gap:12px;
