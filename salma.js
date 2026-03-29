@@ -32,14 +32,11 @@ const salma = {
     if (!window.speechSynthesis) return;
     this._voices = speechSynthesis.getVoices();
     speechSynthesis.onvoiceschanged = () => { this._voices = speechSynthesis.getVoices(); };
-    // Restaurar icono si estaba muteado
-    const btn = document.getElementById('salma-mute-btn');
-    if (btn && localStorage.getItem('salma_mute') === 'true') btn.textContent = '\u{1F507}';
   },
 
   salmaSpeak(text) {
     if (!window.speechSynthesis) return;
-    if (localStorage.getItem('salma_mute') === 'true') return;
+    if (localStorage.getItem('salma_voice') === 'false') return;
     speechSynthesis.cancel();
     // Limpiar texto: quitar markdown, emojis, URLs, guiones de lista
     const clean = text
@@ -52,7 +49,6 @@ const salma = {
       .trim();
     if (!clean) return;
     const utt = new SpeechSynthesisUtterance(clean);
-    // Preferir voz española
     const esVoice = this._voices.find(v => v.lang.startsWith('es'));
     utt.voice = esVoice || this._voices[0] || null;
     utt.lang = esVoice ? esVoice.lang : 'es-ES';
@@ -61,13 +57,8 @@ const salma = {
     speechSynthesis.speak(utt);
   },
 
-  toggleMute() {
-    const muted = localStorage.getItem('salma_mute') === 'true';
-    localStorage.setItem('salma_mute', muted ? 'false' : 'true');
-    if (!muted) speechSynthesis.cancel();
-    // Actualizar icono
-    const btn = document.getElementById('salma-mute-btn');
-    if (btn) btn.textContent = muted ? '\u{1F50A}' : '\u{1F507}';
+  salmaSpeakStop() {
+    if (window.speechSynthesis) speechSynthesis.cancel();
   },
 
   // Pedir geolocalización al usuario (se llama una vez, se actualiza continuamente)
@@ -1043,7 +1034,10 @@ const salma = {
               '</div>';
             area.appendChild(bubble);
             bubble.scrollIntoView({ behavior: 'smooth' });
-            this.salmaSpeak(narData.narrative);
+            // Narrador habla automático solo si voz está activada
+            if (localStorage.getItem('salma_voice') !== 'false') {
+              this.salmaSpeak(narData.narrative);
+            }
           }
 
           console.log('[Salma] Narrador:', poi.name, '→', narData.narrative.substring(0, 60) + '...');
@@ -1192,6 +1186,7 @@ const salma = {
     div.innerHTML = `
       <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
       <div class="msg-body-salma">${formatMessage(text)}</div>`;
+    this._addSpeakButton(div, text);
     // Botón guardar nota solo si el mensaje tiene contenido relevante (>80 chars)
     if (text.length > 150) {
       const btnHtml = document.createElement('button');
@@ -1205,7 +1200,6 @@ const salma = {
     }
     area.appendChild(div);
     this._scrollToBottom();
-    this.salmaSpeak(text);
   },
 
   _saveNoteFromBubble(text, btnEl) {
@@ -1246,6 +1240,37 @@ const salma = {
     }
   },
 
+  _addSpeakButton(el, text) {
+    if (localStorage.getItem('salma_voice') === 'false' || !window.speechSynthesis) return;
+    const header = el.querySelector('.msg-salma-header');
+    if (!header || header.querySelector('.msg-speak-btn')) return;
+    const speakBtn = document.createElement('button');
+    speakBtn.className = 'msg-speak-btn';
+    speakBtn.textContent = '\u{1F50A}';
+    speakBtn.title = 'Escuchar';
+    speakBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (window.speechSynthesis.speaking) {
+        this.salmaSpeakStop();
+        speakBtn.textContent = '\u{1F50A}';
+        speakBtn.classList.remove('speaking');
+      } else {
+        document.querySelectorAll('.msg-speak-btn.speaking').forEach(b => { b.textContent = '\u{1F50A}'; b.classList.remove('speaking'); });
+        speakBtn.textContent = '\u{1F507}';
+        speakBtn.classList.add('speaking');
+        this.salmaSpeak(text);
+        const checkDone = setInterval(() => {
+          if (!window.speechSynthesis.speaking) {
+            speakBtn.textContent = '\u{1F50A}';
+            speakBtn.classList.remove('speaking');
+            clearInterval(checkDone);
+          }
+        }, 300);
+      }
+    });
+    header.appendChild(speakBtn);
+  },
+
   _addStreamBubble() {
     const area = this._getChatArea();
     if (!area) return null;
@@ -1263,9 +1288,10 @@ const salma = {
     const el = document.getElementById('salma-stream-msg');
     if (el) {
       el.removeAttribute('id');
-      // Añadir botón guardar nota solo si hay contenido relevante
       const bodyEl = el.querySelector('.msg-body-salma');
       const textContent = bodyEl ? bodyEl.textContent : '';
+      this._addSpeakButton(el, textContent);
+      // Añadir botón guardar nota solo si hay contenido relevante
       if (textContent.length > 150 && !el.querySelector('.msg-save-note')) {
         const btn = document.createElement('button');
         btn.className = 'msg-save-note';
@@ -1291,8 +1317,7 @@ const salma = {
         const textContent = txt ? txt.textContent : '';
         if (txt) txt.removeAttribute('id');
         el.removeAttribute('id');
-        // Leer en voz alta el texto final del stream
-        if (textContent) this.salmaSpeak(textContent);
+        this._addSpeakButton(el, textContent);
         // Botón guardar nota solo si hay contenido relevante
         if (textContent.length > 150 && !el.querySelector('.msg-save-note')) {
           const btn = document.createElement('button');

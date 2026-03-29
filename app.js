@@ -336,6 +336,15 @@ async function renderProfile() {
           </label>
         </div>
 
+        <div class="profile-section" id="prof-voice">
+          <span class="profile-section-icon">🔊</span>
+          <span class="profile-section-label">Voz de Salma</span>
+          <label class="profile-toggle" onclick="event.stopPropagation()">
+            <input type="checkbox" id="voice-toggle" ${localStorage.getItem('salma_voice') !== 'false' ? 'checked' : ''}>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
         <div class="profile-section profile-section-locked">
           <span class="profile-section-icon">📝</span>
           <span class="profile-section-label">Notas de Salma</span>
@@ -386,6 +395,10 @@ async function renderProfile() {
     } else {
       salma.stopNarrator();
     }
+  });
+  document.getElementById('voice-toggle').addEventListener('change', (e) => {
+    localStorage.setItem('salma_voice', e.target.checked ? 'true' : 'false');
+    if (!e.target.checked && window.speechSynthesis) speechSynthesis.cancel();
   });
   document.getElementById('prof-help').addEventListener('click', () => {
     document.getElementById('salma-info-overlay').style.display = 'flex';

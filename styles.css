@@ -170,18 +170,14 @@ body {
 }
 .app-cam:hover { border-color:var(--linea-fuerte); }
 .app-cam:disabled { opacity:.4; cursor:not-allowed; }
-/* Botón mute voz Salma */
-.app-mute {
-  width:44px; height:44px; flex-shrink:0;
-  border-radius:50%; border:1px solid var(--linea);
-  background:rgba(255,255,255,.04);
-  color:var(--crema); cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  transition:all .2s; font-size:18px;
-  -webkit-touch-callout:none; -webkit-user-select:none; user-select:none;
-  touch-action:manipulation; padding:0;
+/* Botón escuchar en burbuja de Salma */
+.msg-speak-btn {
+  background:none; border:none; cursor:pointer;
+  font-size:14px; padding:2px 6px; margin-left:auto;
+  opacity:.4; transition:opacity .2s;
+  line-height:1;
 }
-.app-mute:hover { border-color:var(--linea-fuerte); }
+.msg-speak-btn:hover, .msg-speak-btn.speaking { opacity:1; }
 /* Preview foto en input bar */
 .chat-photo-preview {
   display:flex; align-items:center; gap:10px; padding:6px 0;
