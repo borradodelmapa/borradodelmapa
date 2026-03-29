@@ -397,6 +397,29 @@ body {
   color:var(--dorado); font-weight:600;
 }
 .galeria-album-new { border-style:dashed; }
+
+/* Formulario inline de nuevo álbum */
+.galeria-album-form {
+  display:flex; align-items:center; gap:4px;
+}
+.galeria-album-input {
+  background:rgba(255,255,255,.06); border:1px solid var(--dorado);
+  border-radius:20px; color:var(--crema); font-size:12px;
+  font-family:var(--font-mono); padding:5px 12px;
+  outline:none; width:130px;
+}
+.galeria-album-input::placeholder { color:rgba(245,240,232,.3); }
+.galeria-album-confirm, .galeria-album-cancel {
+  background:none; border:1px solid var(--linea); border-radius:50%;
+  width:26px; height:26px; cursor:pointer; font-size:12px;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; transition:all .15s;
+}
+.galeria-album-confirm { color:var(--dorado); border-color:var(--dorado); }
+.galeria-album-confirm:hover { background:rgba(212,160,23,.2); }
+.galeria-album-cancel  { color:rgba(245,240,232,.4); }
+.galeria-album-cancel:hover  { border-color:rgba(245,240,232,.4); color:var(--crema); }
+
 .galeria-grid {
   display:grid; grid-template-columns:repeat(3, 1fr); gap:3px;
 }

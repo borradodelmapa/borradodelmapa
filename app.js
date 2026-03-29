@@ -733,7 +733,7 @@ async function renderGaleria(albumFilter) {
         <button class="galeria-back" id="galeria-back">← Galería</button>
         <span class="galeria-title">${escapeHTML(activeAlbumName)}</span>
         <div class="galeria-header-btns">
-          <button class="galeria-upload-btn" id="galeria-upload-btn" title="Añadir fotos">📤 Añadir</button>
+          <label for="galeria-file-input" class="galeria-upload-btn" title="Añadir fotos">📤 Añadir</label>
           <button class="galeria-video-btn" id="galeria-video-btn" title="Crear video">🎬 Video</button>
         </div>
       </div>
@@ -756,19 +756,41 @@ async function renderGaleria(albumFilter) {
     });
   });
 
-  // Event: crear álbum
-  document.getElementById('galeria-new-album')?.addEventListener('click', async () => {
-    const nombre = prompt('Nombre del álbum:');
-    if (!nombre || !nombre.trim()) return;
-    try {
-      await db.collection('users').doc(uid).collection('albumes').add({
-        nombre: nombre.trim(),
-        createdAt: new Date().toISOString()
-      });
-      renderGaleria(activeAlbum);
-    } catch (e) {
-      if (typeof showToast === 'function') showToast('Error al crear álbum');
-    }
+  // Event: crear álbum (formulario inline, sin prompt)
+  document.getElementById('galeria-new-album')?.addEventListener('click', function() {
+    // Sustituir el chip por un mini-formulario inline
+    this.outerHTML = `
+      <div class="galeria-album-form" id="galeria-album-form">
+        <input class="galeria-album-input" id="galeria-album-input"
+          type="text" placeholder="Nombre del álbum" maxlength="30" autocomplete="off">
+        <button class="galeria-album-confirm" id="galeria-album-confirm">✓</button>
+        <button class="galeria-album-cancel"  id="galeria-album-cancel">✕</button>
+      </div>`;
+
+    const input = document.getElementById('galeria-album-input');
+    input?.focus();
+
+    const guardar = async () => {
+      const nombre = document.getElementById('galeria-album-input')?.value?.trim();
+      if (!nombre) { renderGaleria(activeAlbum); return; }
+      try {
+        const docRef = await db.collection('users').doc(uid).collection('albumes').add({
+          nombre, createdAt: new Date().toISOString()
+        });
+        if (typeof showToast === 'function') showToast(`Álbum "${nombre}" creado`);
+        renderGaleria(docRef.id); // navegar directo al nuevo álbum
+      } catch (e) {
+        if (typeof showToast === 'function') showToast('Error al crear álbum');
+        renderGaleria(activeAlbum);
+      }
+    };
+
+    document.getElementById('galeria-album-confirm')?.addEventListener('click', guardar);
+    document.getElementById('galeria-album-cancel')?.addEventListener('click', () => renderGaleria(activeAlbum));
+    document.getElementById('galeria-album-input')?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') guardar();
+      if (e.key === 'Escape') renderGaleria(activeAlbum);
+    });
   });
 
   // Event: crear video desde galería
@@ -780,10 +802,7 @@ async function renderGaleria(albumFilter) {
     _showCreateVideoModal(fotos, albumes, uid, activeAlbum);
   });
 
-  // Event: subir fotos directamente a la galería
-  document.getElementById('galeria-upload-btn')?.addEventListener('click', () => {
-    document.getElementById('galeria-file-input').click();
-  });
+  // Event: subir fotos directamente a la galería (el label dispara el input directamente)
   document.getElementById('galeria-file-input')?.addEventListener('change', async (e) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
