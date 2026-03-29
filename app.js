@@ -96,10 +96,13 @@ function updateBottomBar() {
     if (typeof salma === 'undefined') return;
     if (salma._narratorActive) {
       salma.stopNarrator();
+      updateBottomBar();
     } else {
       const ok = await salma.startNarrator();
       if (ok === false) {
         alert('Para usar el narrador, permite las notificaciones en tu navegador.');
+      } else {
+        updateBottomBar();
       }
     }
   });
@@ -395,6 +398,7 @@ async function renderProfile() {
     } else {
       salma.stopNarrator();
     }
+    updateBottomBar();
   });
   document.getElementById('voice-toggle').addEventListener('change', (e) => {
     localStorage.setItem('salma_voice', e.target.checked ? 'true' : 'false');
