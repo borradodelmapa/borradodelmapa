@@ -35,26 +35,28 @@ const salma = {
   },
 
   salmaSpeak(text) {
-    if (!window.speechSynthesis) return;
-    if (localStorage.getItem('salma_voice') === 'false') return;
-    speechSynthesis.cancel();
-    // Limpiar texto: quitar markdown, emojis, URLs, guiones de lista
-    const clean = text
-      .replace(/#{1,6}\s?/g, '')
-      .replace(/\*{1,2}([^*]+)\*{1,2}/g, '$1')
-      .replace(/https?:\/\/\S+/g, '')
-      .replace(/[\u{1F600}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{200D}\u{1F1E0}-\u{1F1FF}]/gu, '')
-      .replace(/^[\s]*[-•]\s*/gm, '')
-      .replace(/\s+/g, ' ')
-      .trim();
-    if (!clean) return;
-    const utt = new SpeechSynthesisUtterance(clean);
-    const esVoice = this._voices.find(v => v.lang.startsWith('es'));
-    utt.voice = esVoice || this._voices[0] || null;
-    utt.lang = esVoice ? esVoice.lang : 'es-ES';
-    utt.rate = 1.0;
-    utt.pitch = 1.05;
-    speechSynthesis.speak(utt);
+    try {
+      if (!window.speechSynthesis) return;
+      if (localStorage.getItem('salma_voice') === 'false') return;
+      speechSynthesis.cancel();
+      // Limpiar texto: quitar markdown, emojis, URLs, guiones de lista
+      const clean = text
+        .replace(/#{1,6}\s?/g, '')
+        .replace(/\*{1,2}([^*]+)\*{1,2}/g, '$1')
+        .replace(/https?:\/\/\S+/g, '')
+        .replace(/[^\p{L}\p{N}\p{P}\p{Z}]/gu, '')
+        .replace(/^[\s]*[-•]\s*/gm, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (!clean) return;
+      const utt = new SpeechSynthesisUtterance(clean);
+      const esVoice = this._voices.find(v => v.lang.startsWith('es'));
+      utt.voice = esVoice || this._voices[0] || null;
+      utt.lang = esVoice ? esVoice.lang : 'es-ES';
+      utt.rate = 1.0;
+      utt.pitch = 1.05;
+      speechSynthesis.speak(utt);
+    } catch (e) { console.warn('[Salma] Error voz:', e); }
   },
 
   salmaSpeakStop() {
