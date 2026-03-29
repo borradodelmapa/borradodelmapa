@@ -421,7 +421,7 @@ async function renderProfile() {
     showInfoPopup('Aquí encontrarás listados todos tus viajes. Encontrarás las notas asignadas a cada viaje. Además podrás escribir un blog de viaje, añadirle fotos... y compartirlo si quieres con la comunidad.');
   });
   document.getElementById('prof-galeria-info').addEventListener('click', () => {
-    showInfoPopup('Aquí encontrarás listados todos tus viajes. Encontrarás las notas asignadas a cada viaje. Además podrás escribir un blog de viaje, añadirle fotos... y compartirlo si quieres con la comunidad.');
+    showInfoPopup('Aquí puedes organizar las fotos de todos tus viajes. Crear galerías nuevas. Y hacer videos para compartir con tus amigos en redes sociales o como quieras.');
   });
   document.getElementById('prof-narrator-info').addEventListener('click', () => {
     showInfoPopup('Si estás cerca de un punto de interés cultural, Salma te manda una notificación y te cuenta la historia. Así no te pierdes nada. Info actualizada de más de 190 países.');
