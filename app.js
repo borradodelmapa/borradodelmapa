@@ -2590,10 +2590,19 @@ function renderSOSConfig() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contacts: [firstContact], message, uid: currentUser.uid, test: true })
       });
-      const result = await res.json();
-      showToast(result.sent_count > 0 ? '✅ SMS de prueba enviado a ' + (firstContact.name || firstContact.phone) : '⚠️ No se pudo enviar la prueba');
+      let result = {};
+      try { result = await res.json(); } catch (_) {}
+      if (result.sent_count > 0) {
+        showToast('✅ SMS de prueba enviado a ' + (firstContact.name || firstContact.phone));
+      } else if (result.error === 'Twilio not configured') {
+        showToast('⚙️ Twilio pendiente de configurar en Cloudflare');
+      } else if (result.error === 'rate_limit') {
+        showToast('⏳ Límite alcanzado, espera 10 minutos');
+      } else {
+        showToast('⚠️ SMS no disponible aún — usa WhatsApp como alternativa');
+      }
     } catch (_) {
-      showToast('Error al enviar prueba');
+      showToast('⚠️ Worker no desplegado — ejecuta wrangler deploy');
     }
     btn.disabled = false; btn.textContent = 'Enviar prueba';
   });
