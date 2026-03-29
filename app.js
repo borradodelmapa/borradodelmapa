@@ -732,7 +732,10 @@ async function renderGaleria(albumFilter) {
       <div class="galeria-header">
         <button class="galeria-back" id="galeria-back">← Galería</button>
         <span class="galeria-title">${escapeHTML(activeAlbumName)}</span>
-        <button class="galeria-upload-btn" id="galeria-upload-btn" title="Añadir fotos">📤 Añadir</button>
+        <div class="galeria-header-btns">
+          <button class="galeria-upload-btn" id="galeria-upload-btn" title="Añadir fotos">📤 Añadir</button>
+          <button class="galeria-video-btn" id="galeria-video-btn" title="Crear video">🎬 Video</button>
+        </div>
       </div>
       <input type="file" id="galeria-file-input" accept="image/*" multiple style="display:none">
       ${albumsHtml}
@@ -766,6 +769,15 @@ async function renderGaleria(albumFilter) {
     } catch (e) {
       if (typeof showToast === 'function') showToast('Error al crear álbum');
     }
+  });
+
+  // Event: crear video desde galería
+  document.getElementById('galeria-video-btn')?.addEventListener('click', () => {
+    if (typeof videoPlayer === 'undefined') {
+      if (typeof showToast === 'function') showToast('Cargando motor de video…');
+      return;
+    }
+    _showCreateVideoModal(fotos, albumes, uid, activeAlbum);
   });
 
   // Event: subir fotos directamente a la galería
@@ -938,6 +950,229 @@ function _compressImageLocal(file, maxW, quality) {
     };
     img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('load failed')); };
     img.src = url;
+  });
+}
+
+// ─── Modal de CREACIÓN DE VIDEO desde galería ───
+function _showCreateVideoModal(fotos, albumes, uid, activeAlbum) {
+  const existing = document.getElementById('create-video-modal');
+  if (existing) existing.remove();
+
+  // Helpers de filtro
+  const visual = (arr) => arr.filter(f => f.tag !== 'documento' && f.tag !== 'cartel' && f.url);
+  const hoy    = new Date().toISOString().slice(0, 10);
+
+  const sets = {
+    jornada: visual(fotos.filter(f => f.createdAt && f.createdAt.slice(0, 10) === hoy)),
+    resumen: visual(fotos),
+    album:   visual(activeAlbum && activeAlbum !== '__sin_album__'
+               ? fotos.filter(f => f.albumId === activeAlbum)
+               : fotos)
+  };
+
+  const albumName = activeAlbum && activeAlbum !== '__sin_album__'
+    ? (albumes.find(a => a.id === activeAlbum)?.nombre || 'Álbum')
+    : 'Todas';
+
+  // Título por defecto
+  let defaultTitle = 'Mi viaje';
+  if (typeof salma !== 'undefined' && salma.currentRoute?.title) {
+    defaultTitle = salma.currentRoute.title;
+  } else {
+    defaultTitle = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  // Paradas de ruta (para la escena de mapa si hay ruta activa)
+  let routeStops = null;
+  if (typeof salma !== 'undefined' && salma.currentRoute?.stops?.length >= 2) {
+    routeStops = salma.currentRoute.stops
+      .filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01)
+      .map(s => ({ name: s.name || '', lat: s.lat, lng: s.lng, day: s.day }));
+  }
+
+  const tipos = [
+    { key: 'jornada', label: 'Jornada de hoy',    emoji: '📅', count: sets.jornada.length },
+    { key: 'resumen', label: 'Todo el viaje',     emoji: '🌍', count: sets.resumen.length },
+    { key: 'album',   label: albumName,            emoji: '📁', count: sets.album.length }
+  ];
+
+  const modal = document.createElement('div');
+  modal.id = 'create-video-modal';
+  modal.className = 'modal-overlay active';
+
+  modal.innerHTML = `
+    <div class="modal video-create-modal">
+      <button class="modal-close" id="cv-close">&times;</button>
+      <div class="video-create-title">🎬 Crear video</div>
+
+      <div class="video-create-section">Tipo de video</div>
+      <div class="video-tipo-group">
+        ${tipos.map(t => `
+          <button class="video-tipo-btn ${t.key === 'jornada' ? 'active' : ''}" data-tipo="${t.key}">
+            <span class="video-tipo-emoji">${t.emoji}</span>
+            <span class="video-tipo-label">${escapeHTML(t.label)}</span>
+            <span class="video-tipo-count">${t.count} fotos</span>
+          </button>`).join('')}
+      </div>
+
+      <div class="video-create-section">Título</div>
+      <input class="video-create-input" id="cv-titulo" type="text"
+        placeholder="Ej: Koh Samui · Día 3" value="${escapeHTML(defaultTitle)}" maxlength="60">
+
+      <div class="video-create-section">Frase memorable <span style="opacity:.45">(opcional)</span></div>
+      <input class="video-create-input" id="cv-highlight" type="text"
+        placeholder="Ej: El mejor atardecer de mi vida" maxlength="100">
+
+      <div class="video-create-section">Fotos seleccionadas</div>
+      <div class="video-foto-preview" id="cv-foto-preview"></div>
+
+      <button class="video-create-gen-btn" id="cv-generar" disabled>▶ Generar video</button>
+    </div>`;
+
+  document.body.appendChild(modal);
+
+  // Estado activo
+  let tipoActivo = 'jornada';
+
+  const updatePreview = () => {
+    const sel = sets[tipoActivo] || [];
+    const genBtn = document.getElementById('cv-generar');
+    const preview = document.getElementById('cv-foto-preview');
+
+    if (genBtn) {
+      genBtn.disabled = sel.length === 0;
+      genBtn.textContent = sel.length === 0
+        ? '⚠ Sin fotos para este tipo'
+        : `▶ Generar video (${Math.min(sel.length, 12)} fotos)`;
+    }
+
+    if (preview) {
+      const visible = sel.slice(0, 8);
+      const extra   = sel.length - visible.length;
+      preview.innerHTML = visible.length === 0
+        ? '<span class="video-foto-empty">No hay fotos para este tipo</span>'
+        : visible.map(f =>
+            `<img src="${escapeHTML(f.url)}" class="video-foto-thumb" alt="">`
+          ).join('') + (extra > 0 ? `<span class="video-foto-more">+${extra}</span>` : '');
+    }
+  };
+
+  updatePreview();
+
+  // Listeners tipo
+  modal.querySelectorAll('.video-tipo-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      modal.querySelectorAll('.video-tipo-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      tipoActivo = btn.dataset.tipo;
+      updatePreview();
+    });
+  });
+
+  // Cerrar
+  modal.querySelector('#cv-close').addEventListener('click', () => modal.remove());
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+
+  // Generar
+  modal.querySelector('#cv-generar').addEventListener('click', async () => {
+    const sel    = (sets[tipoActivo] || []).slice(0, 12);
+    if (!sel.length) return;
+
+    const titulo    = (document.getElementById('cv-titulo')?.value || defaultTitle).trim();
+    const highlight = (document.getElementById('cv-highlight')?.value || '').trim();
+    const params    = { titulo, highlight, tipo: tipoActivo };
+    if (routeStops) params.stops = routeStops;
+
+    modal.remove();
+    await _showVideoPlayerModal(sel.map(f => f.url), params);
+  });
+}
+
+// ─── Modal PLAYER de video (pantalla completa) ───
+async function _showVideoPlayerModal(photoUrls, params) {
+  if (typeof videoPlayer === 'undefined') {
+    if (typeof showToast === 'function') showToast('Motor de video no cargado');
+    return;
+  }
+
+  const existing = document.getElementById('video-player-modal');
+  if (existing) { videoPlayer.pause(); existing.remove(); }
+
+  const modal = document.createElement('div');
+  modal.id = 'video-player-modal';
+  modal.className = 'video-modal-overlay';
+
+  modal.innerHTML = `
+    <div class="video-modal-inner">
+      <div class="video-modal-header">
+        <button class="video-modal-close" id="vpm-close">✕ Cerrar</button>
+        <span class="video-modal-titulo">${escapeHTML(params.titulo || '')}</span>
+      </div>
+      <div class="video-modal-canvas-wrap" id="vpm-canvas-wrap">
+        <div class="video-modal-loading" id="vpm-loading">Preparando video…</div>
+      </div>
+      <div class="video-controls" id="vpm-controls" style="display:none">
+        <button class="video-btn" id="vpm-play">▶ Play</button>
+        <div class="video-progress" id="vpm-progress">
+          <div class="video-progress-fill" id="vpm-progress-fill"></div>
+        </div>
+        <button class="video-btn" id="vpm-download" title="Descargar WebM">⬇</button>
+        <button class="video-btn" id="vpm-share" title="Compartir">↗</button>
+      </div>
+    </div>`;
+
+  document.body.appendChild(modal);
+
+  // Inicializar player
+  const canvasWrap = document.getElementById('vpm-canvas-wrap');
+  const ok = await videoPlayer.init(canvasWrap, photoUrls, params);
+  const loadingEl = document.getElementById('vpm-loading');
+
+  if (!ok) {
+    if (loadingEl) loadingEl.textContent = '⚠ No se pudieron cargar las fotos. Inténtalo de nuevo.';
+    return;
+  }
+
+  if (loadingEl) loadingEl.remove();
+  canvasWrap.appendChild(videoPlayer._canvas);
+
+  videoPlayer._progressFill = document.getElementById('vpm-progress-fill');
+  videoPlayer._onEnd = () => {
+    const btn = document.getElementById('vpm-play');
+    if (btn) btn.textContent = '▶ Play';
+  };
+
+  const controls = document.getElementById('vpm-controls');
+  if (controls) controls.style.display = '';
+
+  // Botón play
+  const playBtn = document.getElementById('vpm-play');
+  playBtn?.addEventListener('click', () => {
+    if (videoPlayer._playing) {
+      videoPlayer.pause();
+      playBtn.textContent = '▶ Play';
+    } else {
+      videoPlayer.play();
+      playBtn.textContent = '⏸ Pausa';
+    }
+  });
+
+  document.getElementById('vpm-download')?.addEventListener('click', () => videoPlayer.download());
+  document.getElementById('vpm-share')?.addEventListener('click', () => videoPlayer.share());
+
+  // Progreso clicable
+  document.getElementById('vpm-progress')?.addEventListener('click', e => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    videoPlayer._frame = Math.floor(pct * videoPlayer._totalFrames);
+    videoPlayer._renderFrame(videoPlayer._frame);
+    videoPlayer._updateProgress();
+  });
+
+  // Cerrar
+  document.getElementById('vpm-close')?.addEventListener('click', () => {
+    videoPlayer.pause();
+    modal.remove();
   });
 }
 

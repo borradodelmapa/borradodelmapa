@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bdm-v24';
+const CACHE_NAME = 'bdm-v25';
 const STATIC_ASSETS = [
   '/',
   '/styles.css',
