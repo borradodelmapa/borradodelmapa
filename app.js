@@ -1633,6 +1633,9 @@ auth.onAuthStateChanged(async (user) => {
       custom_message: ''
     };
 
+    startTrackingLastPosition();
+    _checkSOSQueue();
+
     updateHeader();
 
     // Restaurar ruta pendiente
@@ -2288,7 +2291,34 @@ function showToast(msg) {
   setTimeout(() => $toast.classList.remove('show'), 2500);
 }
 
-// ═══ SOS EMERGENCIA ═══
+// ═══ SOS EMERGENCIA v3 (Twilio → WhatsApp → SMS → Queue) ═══
+
+const SOS_QUEUE_KEY = 'sos_pending_queue';
+let lastKnownCoords = null;
+
+function startTrackingLastPosition() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.watchPosition(
+    pos => { lastKnownCoords = pos.coords; },
+    null,
+    { enableHighAccuracy: false, maximumAge: 60000 }
+  );
+}
+
+function _buildSOSMessage(coords) {
+  const mapsUrl = coords
+    ? `https://maps.google.com/?q=${coords.latitude},${coords.longitude}`
+    : null;
+  const userName = currentUser?.name || 'Un viajero de Borrado del Mapa';
+  const locationText = mapsUrl ? `📍 ${mapsUrl}` : '📍 Ubicación no disponible';
+  const defaultMsg = `🆘 *${userName}* necesita ayuda urgente.\n${locationText}`;
+  const raw = currentUserSOSConfig?.custom_message
+    ? currentUserSOSConfig.custom_message
+        .replace('{maps_url}', mapsUrl || 'no disponible')
+        .replace('{nombre}', userName)
+    : defaultMsg;
+  return { message: raw, mapsUrl };
+}
 
 function showSOSConfirm() {
   let overlay = document.getElementById('sos-confirm-overlay');
@@ -2302,7 +2332,7 @@ function showSOSConfirm() {
     <div class="sos-modal">
       <div class="sos-modal-icon">🆘</div>
       <h2 class="sos-modal-title">Aviso de emergencia</h2>
-      <p class="sos-modal-text">Se abrirá WhatsApp para enviar tu ubicación a tus contactos de emergencia.</p>
+      <p class="sos-modal-text">Se enviará un SMS automático con tu ubicación a tus contactos de emergencia.</p>
       <div class="sos-countdown" id="sos-countdown">3</div>
       <div class="sos-modal-btns">
         <button class="sos-btn-cancel" id="sos-cancel">Cancelar</button>
@@ -2339,51 +2369,100 @@ async function triggerSOS() {
   $c.innerHTML = `<div class="sos-area fade-in">
     <div class="sos-spinner">
       <div class="sos-spinner-icon">🆘</div>
-      <p class="sos-spinner-text">Obteniendo ubicación...</p>
+      <p class="sos-spinner-text">Enviando aviso de emergencia...</p>
     </div>
   </div>`;
   document.querySelector('.app-input-bar').style.display = 'none';
   currentState = 'sos';
 
+  // Obtener GPS (intenta fresco, usa último conocido como fallback)
   let coords = null;
+  try { coords = await getPositionWithTimeout(10000); } catch (_) {}
+  if (!coords && lastKnownCoords) coords = lastKnownCoords;
+
+  const contacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim());
+  const { message } = _buildSOSMessage(coords);
+
+  // Sin internet → encolar
+  if (!navigator.onLine) {
+    localStorage.setItem(SOS_QUEUE_KEY, JSON.stringify({ contacts, message, timestamp: Date.now() }));
+    _renderSOSScreen('offline', contacts, message);
+    return;
+  }
+
+  // Plan A: Twilio via Worker
   try {
-    coords = await getPositionWithTimeout(10000);
-  } catch (e) { /* sin geo — continuar sin coords */ }
+    const res = await fetch(window.SALMA_API + '/sos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contacts, message, uid: currentUser.uid })
+    });
+    if (!res.ok) throw new Error('Worker error ' + res.status);
+    const result = await res.json();
+    if (result.sent_count > 0) {
+      _renderSOSScreen('success', contacts, message, result.sent_count);
+      return;
+    }
+    throw new Error('0 sent');
+  } catch (_) {
+    // Plan B: WhatsApp
+    _renderSOSScreen('whatsapp', contacts, message);
+  }
+}
 
-  const mapsUrl = coords
-    ? `https://maps.google.com/?q=${coords.latitude},${coords.longitude}`
-    : null;
-
-  const contacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone && c.phone.trim());
-  const userName = currentUser?.name || 'Un viajero de Borrado del Mapa';
-  const locationText = mapsUrl ? `📍 Ubicación: ${mapsUrl}` : '📍 Ubicación no disponible';
-  const defaultMsg = `🆘 *${userName}* necesita ayuda.\n${locationText}`;
-  const rawMsg = currentUserSOSConfig?.custom_message
-    ? currentUserSOSConfig.custom_message
-        .replace('{maps_url}', mapsUrl || 'no disponible')
-        .replace('{nombre}', userName)
-    : defaultMsg;
-
-  const encodedMsg = encodeURIComponent(rawMsg);
+function _renderSOSScreen(mode, contacts, message, sentCount) {
+  const $c = document.getElementById('app-content');
+  const encodedMsg = encodeURIComponent(message);
   const phones = contacts.map(c => c.phone).join(',');
+
+  const waButtons = contacts.map(c => `
+    <a class="sos-wa-btn" href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${encodedMsg}" target="_blank" rel="noopener">
+      <span class="sos-wa-icon">🟢</span>
+      <span>WhatsApp → ${escapeHTML(c.name || c.phone)}</span>
+    </a>`).join('');
+
+  const smsBtn = `<a class="sos-sms-btn" href="sms:${encodeURIComponent(phones)}?body=${encodedMsg}">
+    📱 SMS a todos (sin datos)
+  </a>`;
+
+  let body = '';
+  if (mode === 'success') {
+    body = `
+      <div class="sos-result sos-result-ok">
+        <div class="sos-result-icon">✅</div>
+        <p class="sos-result-text">SMS enviado a ${sentCount} contacto${sentCount !== 1 ? 's' : ''}.</p>
+      </div>
+      <div class="sos-divider"></div>
+      ${waButtons}
+      <div class="sos-divider"></div>
+      ${smsBtn}`;
+  } else if (mode === 'whatsapp') {
+    body = `
+      <div class="sos-result sos-result-warn">
+        <div class="sos-result-icon">⚠️</div>
+        <p class="sos-result-text">SMS automático no disponible. Avisa por WhatsApp:</p>
+      </div>
+      ${waButtons}
+      <div class="sos-divider"></div>
+      ${smsBtn}`;
+  } else if (mode === 'offline') {
+    body = `
+      <div class="sos-result sos-result-warn">
+        <div class="sos-result-icon">⏳</div>
+        <p class="sos-result-text">Sin conexión. El aviso se enviará automáticamente cuando recuperes señal.</p>
+      </div>
+      <div class="sos-divider"></div>
+      ${waButtons}
+      <div class="sos-divider"></div>
+      ${smsBtn}`;
+  }
 
   $c.innerHTML = `<div class="sos-area fade-in">
     <div class="sos-header">
       <button class="sos-back" id="sos-back">← Volver</button>
       <span class="sos-header-title">🆘 Emergencia</span>
     </div>
-    <p class="sos-instruct">Pulsa cada botón para avisar por WhatsApp:</p>
-    <div class="sos-contacts" id="sos-contacts">
-      ${contacts.map(c => `
-        <a class="sos-wa-btn" href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${encodedMsg}" target="_blank" rel="noopener">
-          <span class="sos-wa-icon">🟢</span>
-          <span>WhatsApp → ${escapeHTML(c.name || c.phone)}</span>
-        </a>`).join('')}
-    </div>
-    <div class="sos-divider"></div>
-    <a class="sos-sms-btn" href="sms:${encodeURIComponent(phones)}?body=${encodedMsg}">
-      📱 SMS a todos (sin datos)
-    </a>
+    ${body}
     <button class="sos-config-link" id="sos-edit-contacts">Editar contactos de emergencia</button>
   </div>`;
 
@@ -2394,13 +2473,35 @@ async function triggerSOS() {
   document.getElementById('sos-edit-contacts').addEventListener('click', () => renderSOSConfig());
 }
 
+// Cola offline: reintenta automáticamente al recuperar conexión
+function _checkSOSQueue() {
+  if (!currentUser) return;
+  const raw = localStorage.getItem(SOS_QUEUE_KEY);
+  if (!raw) return;
+  let sosData;
+  try { sosData = JSON.parse(raw); } catch (_) { localStorage.removeItem(SOS_QUEUE_KEY); return; }
+  localStorage.removeItem(SOS_QUEUE_KEY);
+
+  fetch(window.SALMA_API + '/sos', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contacts: sosData.contacts,
+      message: sosData.message + '\n⚠️ Enviado con retraso (sin señal en el momento del aviso)',
+      uid: currentUser.uid
+    })
+  })
+  .then(r => r.ok ? showToast('✅ Aviso SOS pendiente enviado') : null)
+  .catch(() => {});
+}
+window.addEventListener('online', _checkSOSQueue);
+
 function renderSOSConfig() {
   const $c = document.getElementById('app-content');
   const cfg = currentUserSOSConfig || {
     contacts: [{ name: '', phone: '' }, { name: '', phone: '' }, { name: '', phone: '' }],
     custom_message: ''
   };
-  // Asegurar 3 slots
   while (cfg.contacts.length < 3) cfg.contacts.push({ name: '', phone: '' });
 
   $c.innerHTML = `<div class="sos-config-area fade-in">
@@ -2408,8 +2509,8 @@ function renderSOSConfig() {
       <button class="sos-back" id="sos-config-back">← Volver</button>
       <span class="sos-header-title">Contactos SOS</span>
     </div>
-    <p class="sos-config-desc">Cuando pulses SOS, Salma enviará tu ubicación por WhatsApp a estas personas.</p>
-    <div class="sos-config-contacts" id="sos-config-contacts">
+    <p class="sos-config-desc">Un tap en SOS → SMS automático con tu ubicación a estas personas. Sin que tengas que hacer nada más.</p>
+    <div class="sos-config-contacts">
       ${cfg.contacts.map((c, i) => `
         <div class="sos-config-row">
           <span class="sos-config-num">${i + 1}</span>
@@ -2423,7 +2524,10 @@ function renderSOSConfig() {
       <textarea class="sos-config-textarea" id="sos-custom-msg" placeholder="Usa {nombre} y {maps_url} para incluir tu nombre y ubicación">${escapeHTML(cfg.custom_message || '')}</textarea>
     </div>
     <div class="sos-config-error" id="sos-save-error" style="display:none">Añade al menos un contacto con teléfono válido.</div>
-    <button class="sos-save-btn" id="sos-save">Guardar contactos</button>
+    <div class="sos-config-btns">
+      <button class="sos-save-btn" id="sos-save">Guardar contactos</button>
+      <button class="sos-test-btn" id="sos-test">Enviar prueba</button>
+    </div>
   </div>`;
   document.querySelector('.app-input-bar').style.display = 'none';
   currentState = 'sos-config';
@@ -2433,51 +2537,65 @@ function renderSOSConfig() {
     showState('profile');
   });
 
-  document.getElementById('sos-save').addEventListener('click', async () => {
-    const contacts = [0, 1, 2].map(i => ({
-      name: document.getElementById(`sos-name-${i}`)?.value.trim() || '',
-      phone: document.getElementById(`sos-phone-${i}`)?.value.trim() || ''
-    }));
+  const _getContactsFromForm = () => [0, 1, 2].map(i => ({
+    name: document.getElementById(`sos-name-${i}`)?.value.trim() || '',
+    phone: document.getElementById(`sos-phone-${i}`)?.value.trim() || ''
+  }));
 
-    // Validar
+  const _validateContacts = (contacts) => {
     let valid = true;
     contacts.forEach((c, i) => {
       const errEl = document.getElementById(`sos-err-${i}`);
-      if (c.phone && !/^\+[1-9]\d{6,14}$/.test(c.phone)) {
-        if (errEl) errEl.style.display = '';
-        valid = false;
-      } else {
-        if (errEl) errEl.style.display = 'none';
-      }
+      const bad = c.phone && !/^\+[1-9]\d{6,14}$/.test(c.phone);
+      if (errEl) errEl.style.display = bad ? '' : 'none';
+      if (bad) valid = false;
     });
-
     const hasOne = contacts.some(c => c.phone && /^\+[1-9]\d{6,14}$/.test(c.phone));
     const saveErr = document.getElementById('sos-save-error');
-    if (!hasOne) {
-      if (saveErr) saveErr.style.display = '';
-      return;
-    } else {
-      if (saveErr) saveErr.style.display = 'none';
-    }
-    if (!valid) return;
+    if (!hasOne) { if (saveErr) saveErr.style.display = ''; valid = false; }
+    else { if (saveErr) saveErr.style.display = 'none'; }
+    return valid && hasOne;
+  };
 
+  document.getElementById('sos-save').addEventListener('click', async () => {
+    const contacts = _getContactsFromForm();
+    if (!_validateContacts(contacts)) return;
     const custom_message = document.getElementById('sos-custom-msg')?.value.trim() || '';
     const newConfig = { contacts, custom_message };
-
     const btn = document.getElementById('sos-save');
-    btn.disabled = true;
-    btn.textContent = 'Guardando...';
+    btn.disabled = true; btn.textContent = 'Guardando...';
     try {
       await db.collection('users').doc(currentUser.uid).update({ sos_config: newConfig });
       currentUserSOSConfig = newConfig;
       showToast('Contactos de emergencia guardados');
       document.querySelector('.app-input-bar').style.display = '';
       showState('profile');
-    } catch (e) {
-      btn.disabled = false;
-      btn.textContent = 'Guardar contactos';
+    } catch (_) {
+      btn.disabled = false; btn.textContent = 'Guardar contactos';
       showToast('Error al guardar');
     }
+  });
+
+  document.getElementById('sos-test').addEventListener('click', async () => {
+    const contacts = _getContactsFromForm();
+    if (!_validateContacts(contacts)) return;
+    const firstContact = contacts.find(c => c.phone && /^\+[1-9]\d{6,14}$/.test(c.phone));
+    if (!firstContact) return;
+    const { message } = _buildSOSMessage(lastKnownCoords);
+    const btn = document.getElementById('sos-test');
+    btn.disabled = true; btn.textContent = 'Enviando...';
+    try {
+      const res = await fetch(window.SALMA_API + '/sos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contacts: [firstContact], message, uid: currentUser.uid, test: true })
+      });
+      const result = await res.json();
+      showToast(result.sent_count > 0 ? '✅ SMS de prueba enviado a ' + (firstContact.name || firstContact.phone) : '⚠️ No se pudo enviar la prueba');
+    } catch (_) {
+      showToast('Error al enviar prueba');
+    }
+    btn.disabled = false; btn.textContent = 'Enviar prueba';
   });
 }
 

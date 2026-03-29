@@ -2513,6 +2513,76 @@ export default {
       }
     }
 
+    // ─── ENDPOINT /sos (Emergencia — SMS via Twilio) ───
+    if (request.method === 'POST' && url.pathname === '/sos') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      try {
+        const { contacts, message, uid, test } = await request.json();
+        if (!contacts?.length || !uid) {
+          return new Response(JSON.stringify({ error: 'Missing contacts or uid' }), { status: 400, headers: corsH });
+        }
+
+        // Rate limiting: máx 3 SOS por uid en 10 minutos
+        const rateLimitKey = `sos_rate:${uid}`;
+        const count = parseInt(await env.SALMA_KB?.get(rateLimitKey) || '0');
+        if (count >= 3) {
+          return new Response(JSON.stringify({ error: 'rate_limit', message: 'Máximo 3 alertas SOS por 10 minutos' }), { status: 429, headers: corsH });
+        }
+        if (env.SALMA_KB) await env.SALMA_KB.put(rateLimitKey, String(count + 1), { expirationTtl: 600 });
+
+        const TWILIO_SID = env.TWILIO_ACCOUNT_SID;
+        const TWILIO_TOKEN = env.TWILIO_AUTH_TOKEN;
+        const TWILIO_FROM = env.TWILIO_PHONE_NUMBER;
+
+        if (!TWILIO_SID || !TWILIO_TOKEN || !TWILIO_FROM) {
+          return new Response(JSON.stringify({ error: 'Twilio not configured' }), { status: 500, headers: corsH });
+        }
+
+        const finalMessage = test ? `(PRUEBA) ${message}` : message;
+        const targetContacts = test ? [contacts[0]] : contacts;
+
+        let sent_count = 0;
+        const errors = [];
+
+        for (const contact of targetContacts) {
+          if (!contact.phone) continue;
+          try {
+            const body = new URLSearchParams();
+            body.append('To', contact.phone);
+            body.append('From', TWILIO_FROM);
+            body.append('Body', finalMessage);
+
+            const res = await fetch(
+              `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_SID}/Messages.json`,
+              {
+                method: 'POST',
+                headers: {
+                  'Authorization': 'Basic ' + btoa(`${TWILIO_SID}:${TWILIO_TOKEN}`),
+                  'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: body.toString()
+              }
+            );
+            if (res.ok) {
+              sent_count++;
+            } else {
+              const errBody = await res.json().catch(() => ({}));
+              errors.push({ phone: contact.phone, error: errBody.message || res.status });
+            }
+          } catch (e) {
+            errors.push({ phone: contact.phone, error: e.message });
+          }
+        }
+
+        return new Response(JSON.stringify({ sent_count, errors }), {
+          status: sent_count > 0 ? 200 : 500,
+          headers: corsH
+        });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /nearby-pois (Narrador — POIs cercanos via Google Places) ───
     if (request.method === 'GET' && url.pathname === '/nearby-pois') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };

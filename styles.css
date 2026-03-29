@@ -1801,6 +1801,26 @@ body {
 .sos-instruct {
   font-size:14px; color:rgba(244,239,230,.6); margin-bottom:16px;
 }
+/* Resultado SOS */
+.sos-result {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:16px; border-radius:14px; margin-bottom:16px;
+}
+.sos-result-ok { background:rgba(46,125,50,.12); border:1px solid rgba(46,125,50,.25); }
+.sos-result-warn { background:rgba(245,124,0,.08); border:1px solid rgba(245,124,0,.2); }
+.sos-result-icon { font-size:24px; flex-shrink:0; }
+.sos-result-text { font-size:14px; line-height:1.5; color:rgba(244,239,230,.8); margin:0; }
+/* Config btns */
+.sos-config-btns { display:flex; gap:10px; margin-top:4px; }
+.sos-test-btn {
+  flex:1; padding:14px; border:1px solid rgba(211,47,47,.3);
+  border-radius:12px; background:rgba(211,47,47,.06); color:#ffcdd2;
+  font-family:var(--font-mono); font-size:12px; font-weight:600;
+  letter-spacing:.05em; cursor:pointer; transition:all .2s;
+}
+.sos-test-btn:hover { background:rgba(211,47,47,.12); border-color:rgba(211,47,47,.5); }
+.sos-test-btn:disabled { opacity:.5; cursor:not-allowed; }
+.sos-save-btn { flex:2; }
 .sos-contacts { display:flex; flex-direction:column; gap:10px; }
 .sos-wa-btn {
   display:flex; align-items:center; gap:12px;
