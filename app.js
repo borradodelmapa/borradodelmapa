@@ -2525,7 +2525,7 @@ function renderSOSConfig() {
       <button class="sos-back" id="sos-config-back">← Volver</button>
       <span class="sos-header-title">Contactos SOS</span>
     </div>
-    <p class="sos-config-desc">Un tap en SOS → SMS automático con tu ubicación a estas personas. Sin que tengas que hacer nada más.</p>
+    <p class="sos-config-desc">SMS automático a tus contactos con tu ubicación exacta. Funciona en más de 180 países. Si falla, WhatsApp. Si no tienes datos, SMS directo. Si no tienes señal, lo envía cuando la recuperes.</p>
     <div class="sos-config-contacts">
       ${cfg.contacts.map((c, i) => `
         <div class="sos-config-row">
