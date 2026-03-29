@@ -1186,7 +1186,7 @@ const salma = {
     div.innerHTML = `
       <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
       <div class="msg-body-salma">${formatMessage(text)}</div>`;
-    this._addSpeakButton(div, text);
+    this._addSpeakButton(div);
     // Botón guardar nota solo si el mensaje tiene contenido relevante (>80 chars)
     if (text.length > 150) {
       const btnHtml = document.createElement('button');
@@ -1200,6 +1200,8 @@ const salma = {
     }
     area.appendChild(div);
     this._scrollToBottom();
+    // Auto-speak si voz activada
+    if (localStorage.getItem('salma_voice') !== 'false') this.salmaSpeak(text);
   },
 
   _saveNoteFromBubble(text, btnEl) {
@@ -1240,35 +1242,35 @@ const salma = {
     }
   },
 
-  _addSpeakButton(el, text) {
-    if (localStorage.getItem('salma_voice') === 'false' || !window.speechSynthesis) return;
+  // Botón mute/unmute global en cada burbuja
+  _addSpeakButton(el) {
+    if (!window.speechSynthesis) return;
     const header = el.querySelector('.msg-salma-header');
     if (!header || header.querySelector('.msg-speak-btn')) return;
+    const muted = localStorage.getItem('salma_voice') === 'false';
     const speakBtn = document.createElement('button');
     speakBtn.className = 'msg-speak-btn';
-    speakBtn.textContent = '\u{1F50A}';
-    speakBtn.title = 'Escuchar';
+    speakBtn.textContent = muted ? '\u{1F507}' : '\u{1F50A}';
+    speakBtn.title = muted ? 'Activar voz' : 'Silenciar voz';
     speakBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (window.speechSynthesis.speaking) {
-        this.salmaSpeakStop();
-        speakBtn.textContent = '\u{1F50A}';
-        speakBtn.classList.remove('speaking');
-      } else {
-        document.querySelectorAll('.msg-speak-btn.speaking').forEach(b => { b.textContent = '\u{1F50A}'; b.classList.remove('speaking'); });
-        speakBtn.textContent = '\u{1F507}';
-        speakBtn.classList.add('speaking');
-        this.salmaSpeak(text);
-        const checkDone = setInterval(() => {
-          if (!window.speechSynthesis.speaking) {
-            speakBtn.textContent = '\u{1F50A}';
-            speakBtn.classList.remove('speaking');
-            clearInterval(checkDone);
-          }
-        }, 300);
-      }
+      const isOn = localStorage.getItem('salma_voice') !== 'false';
+      // Toggle global
+      localStorage.setItem('salma_voice', isOn ? 'false' : 'true');
+      if (isOn) this.salmaSpeakStop();
+      // Actualizar TODOS los botones
+      this._syncSpeakButtons();
     });
     header.appendChild(speakBtn);
+  },
+
+  // Sincronizar icono de todos los botones de voz
+  _syncSpeakButtons() {
+    const muted = localStorage.getItem('salma_voice') === 'false';
+    document.querySelectorAll('.msg-speak-btn').forEach(btn => {
+      btn.textContent = muted ? '\u{1F507}' : '\u{1F50A}';
+      btn.title = muted ? 'Activar voz' : 'Silenciar voz';
+    });
   },
 
   _addStreamBubble() {
@@ -1290,7 +1292,7 @@ const salma = {
       el.removeAttribute('id');
       const bodyEl = el.querySelector('.msg-body-salma');
       const textContent = bodyEl ? bodyEl.textContent : '';
-      this._addSpeakButton(el, textContent);
+      this._addSpeakButton(el);
       // Añadir botón guardar nota solo si hay contenido relevante
       if (textContent.length > 150 && !el.querySelector('.msg-save-note')) {
         const btn = document.createElement('button');
@@ -1317,7 +1319,9 @@ const salma = {
         const textContent = txt ? txt.textContent : '';
         if (txt) txt.removeAttribute('id');
         el.removeAttribute('id');
-        this._addSpeakButton(el, textContent);
+        this._addSpeakButton(el);
+        // Auto-speak si voz activada
+        if (textContent && localStorage.getItem('salma_voice') !== 'false') this.salmaSpeak(textContent);
         // Botón guardar nota solo si hay contenido relevante
         if (textContent.length > 150 && !el.querySelector('.msg-save-note')) {
           const btn = document.createElement('button');
