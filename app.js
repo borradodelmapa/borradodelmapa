@@ -65,6 +65,8 @@ function updateBottomBar() {
   const isChat = currentState === 'chat';
   const isProfile = currentState === 'profile' || currentState === 'viajes' || currentState === 'bitacora' || currentState === 'diario';
   const narratorOn = typeof salma !== 'undefined' && salma._narratorActive;
+  const sosContacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim());
+  const showSOS = currentUser && sosContacts.length > 0;
 
   bar.innerHTML = `
     <button class="bottom-tab ${isHome ? 'bottom-tab-active' : ''}" id="tab-home">
@@ -82,6 +84,11 @@ function updateBottomBar() {
       </div>
       <span>Narrador</span>
     </button>
+    ${showSOS ? `
+    <button class="bottom-tab bottom-tab-sos" id="tab-sos">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>SOS</span>
+    </button>` : ''}
     <button class="bottom-tab ${isProfile ? 'bottom-tab-active' : ''}" id="tab-profile">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
@@ -107,6 +114,9 @@ function updateBottomBar() {
       }
     }
   });
+  if (showSOS) {
+    document.getElementById('tab-sos').addEventListener('click', () => showSOSConfirm());
+  }
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
 }
 
@@ -359,6 +369,12 @@ async function renderProfile() {
           </label>
         </div>
 
+        <div class="profile-section profile-section-sos" id="prof-sos">
+          <span class="profile-section-icon profile-section-icon-sos">🆘</span>
+          <span class="profile-section-label">SOS Emergencia</span>
+          <span class="profile-section-arrow">›</span>
+        </div>
+
         <div class="profile-section profile-section-locked">
           <span class="profile-section-icon">📝</span>
           <span class="profile-section-label">Notas de Salma</span>
@@ -381,12 +397,6 @@ async function renderProfile() {
           <span class="profile-section-icon">S</span>
           <span class="profile-section-label">Salma Coins</span>
           <span class="profile-section-coins-badge">${coins}</span>
-          <span class="profile-section-arrow">›</span>
-        </div>
-
-        <div class="profile-section profile-section-sos" id="prof-sos">
-          <span class="profile-section-icon profile-section-icon-sos">🆘</span>
-          <span class="profile-section-label">SOS Emergencia</span>
           <span class="profile-section-arrow">›</span>
         </div>
 

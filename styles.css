@@ -1553,6 +1553,9 @@ body {
 .bottom-tab-active { color:var(--dorado); }
 .bottom-tab:hover { color:rgba(244,239,230,.7); }
 .bottom-tab-active:hover { color:var(--dorado); }
+.bottom-tab-sos { color:#ef5350; }
+.bottom-tab-sos:hover { color:#ff1744; }
+.bottom-tab-sos svg { filter:drop-shadow(0 0 4px rgba(239,83,80,.4)); }
 
 /* ═══ NARRADOR ═══ */
 .narrator-icon-wrap { position:relative; display:inline-flex; }
