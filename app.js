@@ -1005,6 +1005,20 @@ function _showCreateVideoModal(fotos, albumes, uid, activeAlbum) {
       <button class="modal-close" id="cv-close">&times;</button>
       <div class="video-create-title">🎬 Crear video</div>
 
+      <div class="video-create-section">Formato</div>
+      <div class="video-formato-group">
+        <button class="video-formato-btn active" data-formato="documental">
+          <span class="video-formato-icon">📽️</span>
+          <span class="video-formato-name">Documental</span>
+          <span class="video-formato-desc">Mapa animado · Ken Burns · 20s</span>
+        </button>
+        <button class="video-formato-btn" data-formato="historia">
+          <span class="video-formato-icon">📱</span>
+          <span class="video-formato-name">Historia</span>
+          <span class="video-formato-desc">Instagram Stories · 2s/foto</span>
+        </button>
+      </div>
+
       <div class="video-create-section">Tipo de video</div>
       <div class="video-tipo-group">
         ${tipos.map(t => `
@@ -1032,7 +1046,17 @@ function _showCreateVideoModal(fotos, albumes, uid, activeAlbum) {
   document.body.appendChild(modal);
 
   // Estado activo
-  let tipoActivo = 'jornada';
+  let tipoActivo    = 'jornada';
+  let formatoActivo = 'documental';
+
+  // Listeners formato
+  modal.querySelectorAll('.video-formato-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      modal.querySelectorAll('.video-formato-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      formatoActivo = btn.dataset.formato;
+    });
+  });
 
   const updatePreview = () => {
     const sel = sets[tipoActivo] || [];
@@ -1080,8 +1104,8 @@ function _showCreateVideoModal(fotos, albumes, uid, activeAlbum) {
 
     const titulo    = (document.getElementById('cv-titulo')?.value || defaultTitle).trim();
     const highlight = (document.getElementById('cv-highlight')?.value || '').trim();
-    const params    = { titulo, highlight, tipo: tipoActivo };
-    if (routeStops) params.stops = routeStops;
+    const params    = { titulo, highlight, tipo: tipoActivo, style: formatoActivo };
+    if (routeStops && formatoActivo === 'documental') params.stops = routeStops;
 
     modal.remove();
     await _showVideoPlayerModal(sel.map(f => f.url), params);

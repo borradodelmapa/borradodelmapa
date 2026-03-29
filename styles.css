@@ -243,7 +243,29 @@ body {
 .galeria-video-btn { background:rgba(212,160,23,.18); font-weight:600; }
 
 /* ─── Modal creación de video ─── */
-.video-create-modal { max-width:380px; max-height:90dvh; overflow-y:auto; }
+.video-create-modal { max-width:400px; max-height:92dvh; overflow-y:auto; }
+
+/* Selector de formato (Documental / Historia) */
+.video-formato-group { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:4px; }
+.video-formato-btn {
+  display:flex; flex-direction:column; align-items:center;
+  gap:4px; padding:14px 8px; border-radius:12px;
+  background:rgba(255,255,255,.04); border:1.5px solid var(--linea);
+  cursor:pointer; transition:all .15s; text-align:center;
+}
+.video-formato-btn.active {
+  background:rgba(212,160,23,.14); border-color:var(--dorado);
+}
+.video-formato-icon { font-size:24px; line-height:1; }
+.video-formato-name {
+  font-size:13px; font-weight:700; color:var(--crema);
+  font-family:var(--font-mono); letter-spacing:.04em;
+}
+.video-formato-desc {
+  font-size:10px; color:rgba(245,240,232,.4);
+  font-family:var(--font-mono); line-height:1.3;
+}
+.video-formato-btn.active .video-formato-desc { color:rgba(212,160,23,.7); }
 .video-create-title {
   font-family:var(--font-mono); font-size:15px; font-weight:700;
   color:var(--crema); letter-spacing:.06em; margin-bottom:20px;

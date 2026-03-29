@@ -12,6 +12,7 @@ const videoPlayer = {
   _params: {},        // {titulo, highlight, tipo, stops:[{name,lat,lng}]}
   _stops: [],         // Paradas de ruta con coords normalizadas
   _stopsSimulated: false, // true = stops generados sintéticamente
+  _style: 'documental',  // 'documental' | 'historia'
   _frame: 0,
   _totalFrames: 600,
   _fps: 30,
@@ -39,6 +40,7 @@ const videoPlayer = {
   async init(container, photoUrls, params) {
     this._container = container;
     this._params = params || {};
+    this._style  = params.style || 'documental';
     this._frame = 0;
     this._playing = false;
     this._photos = [];
@@ -67,14 +69,22 @@ const videoPlayer = {
       this._stopsSimulated = true;
     }
 
-    // Calcular frames por escena — siempre 120 frames de mapa
-    const mapFrames   = 120;
-    const photoFrames = Math.max(this._photos.length * 90, 270);
-
-    this._titleEnd  = 90;
-    this._mapEnd    = this._titleEnd + mapFrames;
-    this._photosEnd = this._mapEnd + photoFrames;
-    this._totalFrames = this._photosEnd + 120; // +120 cierre
+    if (this._style === 'historia') {
+      // Historia: solo fotos, 2s por foto (60 frames), sin escenas extra
+      const framesPerPhoto = 60;
+      this._titleEnd  = 0;
+      this._mapEnd    = 0;
+      this._photosEnd = this._photos.length * framesPerPhoto;
+      this._totalFrames = this._photosEnd;
+    } else {
+      // Documental: título + mapa + fotos + cierre
+      const mapFrames   = 120;
+      const photoFrames = Math.max(this._photos.length * 90, 270);
+      this._titleEnd  = 90;
+      this._mapEnd    = this._titleEnd + mapFrames;
+      this._photosEnd = this._mapEnd + photoFrames;
+      this._totalFrames = this._photosEnd + 120;
+    }
 
     // Renderizar primer frame
     this._renderFrame(0);
@@ -243,6 +253,12 @@ const videoPlayer = {
     // Fondo negro base
     ctx.fillStyle = this.BG;
     ctx.fillRect(0, 0, w, h);
+
+    // Historia de Instagram — renderer propio
+    if (this._style === 'historia') {
+      this._renderFrameHistoria(frame, w, h);
+      return;
+    }
 
     if (frame < this._titleEnd) {
       this._drawTitleScene(frame, w, h);
@@ -700,6 +716,210 @@ const videoPlayer = {
     }
 
     ctx.globalAlpha = 1;
+  },
+
+  // ══════════════════════════════════════════════
+  //   MODO HISTORIA — Instagram Stories 9:16
+  // ══════════════════════════════════════════════
+
+  _renderFrameHistoria(frame, w, h) {
+    const framesPerPhoto = 60;
+    const n       = this._photos.length;
+    const photoIdx = Math.min(Math.floor(frame / framesPerPhoto), n - 1);
+    const local    = frame % framesPerPhoto;
+    this._drawHistoriaSlide(photoIdx, local, framesPerPhoto, w, h);
+  },
+
+  _drawHistoriaSlide(photoIdx, localFrame, totalFrames, w, h) {
+    const ctx   = this._ctx;
+    const photo = this._photos[photoIdx];
+    if (!photo) return;
+
+    const n = this._photos.length;
+
+    // Ken Burns (zoom + pan suave)
+    const progress = this._easeInOut(localFrame / totalFrames);
+    const zoom     = 1.0 + 0.08 * progress;
+    const dirX     = (photoIdx % 2 === 0 ? 1 : -1);
+    const panX     = dirX * 12 * progress;
+
+    // Fade in / out rápidos (6 frames)
+    const fadeIn   = this._lerpEased(localFrame, 0, 8, 0, 1);
+    const fadeOut  = this._lerpEased(localFrame, totalFrames - 8, totalFrames, 1, 0);
+    const alpha    = Math.min(fadeIn, fadeOut);
+
+    // ── Foto con Ken Burns ──
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(w / 2 + panX, h / 2);
+    ctx.scale(zoom, zoom);
+    const imgRatio    = photo.width / photo.height;
+    const canvasRatio = w / h;
+    let dw, dh;
+    if (imgRatio > canvasRatio) { dh = h; dw = h * imgRatio; }
+    else                        { dw = w; dh = w / imgRatio; }
+    ctx.drawImage(photo, -dw / 2, -dh / 2, dw, dh);
+    ctx.restore();
+
+    ctx.globalAlpha = alpha;
+
+    // ── Gradiente superior (para barra de progreso) ──
+    const topGrad = ctx.createLinearGradient(0, 0, 0, h * 0.22);
+    topGrad.addColorStop(0,   'rgba(0,0,0,0.72)');
+    topGrad.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.fillStyle = topGrad;
+    ctx.fillRect(0, 0, w, h * 0.22);
+
+    // ── Gradiente inferior (para texto) ──
+    const botGrad = ctx.createLinearGradient(0, h * 0.6, 0, h);
+    botGrad.addColorStop(0,   'rgba(0,0,0,0)');
+    botGrad.addColorStop(0.5, 'rgba(0,0,0,0.55)');
+    botGrad.addColorStop(1,   'rgba(0,0,0,0.88)');
+    ctx.fillStyle = botGrad;
+    ctx.fillRect(0, h * 0.6, w, h * 0.4);
+
+    // ── Barra de progreso tipo Instagram (top) ──
+    this._drawStoryProgress(ctx, photoIdx, localFrame, totalFrames, n, w, h, alpha);
+
+    // ── Marca SALMA (top-left bajo la barra) ──
+    const labelFade = this._lerpEased(localFrame, 6, 18, 0, 1);
+    ctx.globalAlpha = alpha * labelFade * 0.75;
+    ctx.font = 'bold 11px monospace';
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#ffffff';
+    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+    ctx.shadowBlur = 4;
+    ctx.fillText('SALMA', 20, h * 0.075);
+    ctx.font = '10px monospace';
+    ctx.globalAlpha = alpha * labelFade * 0.5;
+    const fecha = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+    ctx.fillText(fecha, 20, h * 0.075 + 14);
+    ctx.shadowBlur = 0;
+
+    // ── Contenido inferior según posición ──
+    ctx.textAlign = 'center';
+    const textFade = this._lerpEased(localFrame, 10, 24, 0, 1);
+    ctx.globalAlpha = alpha * textFade;
+
+    if (photoIdx === 0) {
+      // Primera foto — título grande
+      this._drawHistoriaTitulo(ctx, w, h);
+    } else if (photoIdx === n - 1 && this._params.highlight) {
+      // Última foto — highlight
+      this._drawHistoriaHighlight(ctx, w, h, localFrame, totalFrames);
+    } else {
+      // Fotos del medio — contador limpio
+      ctx.font = '11px monospace';
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.fillText(`${photoIdx + 1} / ${n}`, w / 2, h - 24);
+    }
+
+    // ── Branding final en última foto ──
+    if (photoIdx === n - 1) {
+      const brandFade = this._lerpEased(localFrame, totalFrames - 30, totalFrames - 8, 0, 1);
+      ctx.globalAlpha = alpha * brandFade;
+      ctx.font = 'bold 13px monospace';
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = 'rgba(0,0,0,0.7)';
+      ctx.shadowBlur = 6;
+      ctx.fillText('borradodelmapa.com', w / 2, h - 22);
+      ctx.shadowBlur = 0;
+    }
+
+    ctx.globalAlpha = 1;
+    ctx.textAlign = 'center';
+  },
+
+  _drawStoryProgress(ctx, photoIdx, localFrame, totalFrames, n, w, h, alpha) {
+    ctx.save();
+    const barH    = 2.5;
+    const barY    = h * 0.045;
+    const gap     = 4;
+    const totalW  = w - 32;
+    const segW    = (totalW - gap * (n - 1)) / n;
+    const startX  = 16;
+
+    for (let i = 0; i < n; i++) {
+      const x = startX + i * (segW + gap);
+
+      if (i < photoIdx) {
+        // Completado
+        ctx.globalAlpha = alpha * 0.9;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(x, barY, segW, barH, 2) : ctx.rect(x, barY, segW, barH);
+        ctx.fill();
+      } else if (i === photoIdx) {
+        // Activo: fondo dim + relleno progresivo
+        ctx.globalAlpha = alpha * 0.35;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(x, barY, segW, barH, 2) : ctx.rect(x, barY, segW, barH);
+        ctx.fill();
+
+        const fill = (localFrame / totalFrames) * segW;
+        ctx.globalAlpha = alpha * 0.95;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(x, barY, fill, barH, 2) : ctx.rect(x, barY, fill, barH);
+        ctx.fill();
+      } else {
+        // Pendiente
+        ctx.globalAlpha = alpha * 0.25;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(x, barY, segW, barH, 2) : ctx.rect(x, barY, segW, barH);
+        ctx.fill();
+      }
+    }
+    ctx.restore();
+  },
+
+  _drawHistoriaTitulo(ctx, w, h) {
+    const titulo = this._params.titulo || 'Mi viaje';
+    ctx.font = 'bold 32px sans-serif';
+    ctx.shadowColor = 'rgba(0,0,0,0.8)';
+    ctx.shadowBlur = 12;
+
+    const lines  = this._wrapText(ctx, titulo, w * 0.78);
+    const lineH  = 40;
+    const startY = h * 0.82 - ((lines.length - 1) * lineH) / 2;
+
+    ctx.fillStyle = '#ffffff';
+    lines.forEach((line, i) => ctx.fillText(line, w / 2, startY + i * lineH));
+
+    // Línea decorativa bajo el título
+    ctx.globalAlpha *= 0.5;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(w / 2 - 24, startY + lines.length * lineH - 2, 48, 1.5);
+
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
+  },
+
+  _drawHistoriaHighlight(ctx, w, h, localFrame, totalFrames) {
+    const highlight = this._params.highlight;
+    if (!highlight) return;
+
+    // Comilla de apertura
+    ctx.globalAlpha = 0.4;
+    ctx.font = 'bold 48px serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'left';
+    ctx.fillText('"', w * 0.1, h * 0.78);
+    ctx.textAlign = 'center';
+
+    // Texto de highlight
+    ctx.globalAlpha = 1;
+    ctx.font = 'italic 20px sans-serif';
+    ctx.shadowColor = 'rgba(0,0,0,0.9)';
+    ctx.shadowBlur = 10;
+    ctx.fillStyle = '#ffffff';
+    const lines  = this._wrapText(ctx, highlight, w * 0.72);
+    const lineH  = 28;
+    const startY = h * 0.82 - ((lines.length - 1) * lineH) / 2;
+    lines.forEach((line, i) => ctx.fillText(line, w / 2, startY + i * lineH));
+    ctx.shadowBlur = 0;
   },
 
   // ═══ DESCARGAR COMO WEBM ═══
