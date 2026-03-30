@@ -1877,7 +1877,11 @@ auth.onAuthStateChanged(async (user) => {
 
     // Tras login, ir al destino indicado o quedarse en welcome
     hideSplash();
-    if (window._afterLogin) {
+    const goParam = new URLSearchParams(window.location.search).get('go');
+    if (goParam) {
+      history.replaceState(null, '', '/');
+      showState(goParam);
+    } else if (window._afterLogin) {
       const dest = window._afterLogin;
       window._afterLogin = null;
       showState(dest);
@@ -1888,6 +1892,13 @@ auth.onAuthStateChanged(async (user) => {
     currentUser = null;
     updateHeader();
     hideSplash();
+    const goParam = new URLSearchParams(window.location.search).get('go');
+    if (goParam) {
+      history.replaceState(null, '', '/');
+      // Si pide chat o rutas sin login, mostrar welcome con login
+      if (goParam === 'chat') showState('welcome');
+      else showState('welcome');
+    }
   }
 });
 
