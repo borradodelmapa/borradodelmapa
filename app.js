@@ -69,6 +69,9 @@ function showState(state) {
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '';
   } else if (state === 'chat') {
+    // Limpiar welcome si estaba visible (ej: llegando desde ?go=chat)
+    const welcomeEl = $content.querySelector('.welcome-area');
+    if (welcomeEl) $content.innerHTML = '';
     $input.placeholder = 'Escribe a Salma...';
     if (inputBar) inputBar.style.display = '';
   }
