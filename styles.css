@@ -1324,7 +1324,7 @@ body {
 /* ═══ TOAST ═══ */
 .toast {
   position:fixed; bottom:160px; left:50%; transform:translateX(-50%);
-  z-index:300;
+  z-index:10000;
   font-family:var(--font-mono); font-size:11px;
   color:var(--negro); background:var(--dorado);
   padding:10px 20px; border-radius:var(--radius-pill);
