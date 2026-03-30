@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bdm-v35';
+const CACHE_NAME = 'bdm-v36';
 
 // Assets que se cachean para offline (imágenes, no JS/CSS)
 const CACHE_ASSETS = [
