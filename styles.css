@@ -492,7 +492,7 @@ body {
   position:relative; min-height:calc(100dvh - 56px);
   display:flex; flex-direction:column;
   align-items:center; justify-content:center;
-  padding:60px 24px 160px;
+  padding:80px 24px 100px;
   text-align:center;
 }
 .welcome-bg {
@@ -1722,6 +1722,24 @@ body {
 /* SOS sin configurar — gris apagado */
 .bottom-tab-sos-off { color:rgba(244,239,230,.25); }
 .bottom-tab-sos-off:hover { color:rgba(244,239,230,.5); }
+/* SOS flotante */
+.sos-fab {
+  position:fixed; right:16px; z-index:950;
+  bottom:calc(64px + env(safe-area-inset-bottom, 6px));
+  width:44px; height:44px; border-radius:50%;
+  border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:transform .2s, box-shadow .2s;
+}
+.sos-fab:active { transform:scale(.94); }
+.sos-fab-ready {
+  background:#c62828; color:#fff;
+  box-shadow:0 0 0 3px rgba(198,40,40,.3), 0 4px 12px rgba(0,0,0,.4);
+}
+.sos-fab-off {
+  background:rgba(244,239,230,.08); color:rgba(244,239,230,.3);
+  border:1px solid rgba(244,239,230,.12);
+  box-shadow:none;
+}
 /* Badge estado SOS en perfil */
 .sos-status-badge { margin-left:auto; }
 .sos-badge-on {
