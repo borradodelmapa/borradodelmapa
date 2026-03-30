@@ -226,16 +226,17 @@ window.notasManager = (() => {
     if (!el || !_uid()) return;
 
     try {
-      const reminders = await getReminders(7);
-      // Incluir también los vencidos (hasta 7 días atrás)
-      const snap = await _col()
-        .where('completado', '==', false)
-        .orderBy('fechaRecordatorio', 'asc')
-        .get();
-      const pastDue = snap.docs
-        .map(d => d.data())
-        .filter(n => n.fechaRecordatorio && n.fechaRecordatorio < _today());
-      const all = [...pastDue, ...reminders].slice(0, 5);
+      // Traer todas las notas y filtrar en JS (sin índice compuesto)
+      const allNotas = await getAll();
+      const today = _today();
+      const future = new Date();
+      future.setDate(future.getDate() + 7);
+      const futureStr = future.toISOString().slice(0, 10);
+
+      const all = allNotas
+        .filter(n => !n.completado && n.fechaRecordatorio && n.fechaRecordatorio <= futureStr)
+        .sort((a, b) => (a.fechaRecordatorio || '').localeCompare(b.fechaRecordatorio || ''))
+        .slice(0, 5);
 
       if (all.length === 0) { el.innerHTML = ''; return; }
 
