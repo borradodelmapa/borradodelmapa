@@ -227,7 +227,7 @@ async function renderWelcome() {
   if (wInput) {
     const ejemplos = [
       'Vietnam 10 días en moto',
-      'Bangkok sin hotel esta noche',
+      'Bangkok sin hotel, es tarde',
       '3 días en Lisboa sola',
       'Vacunas para Nepal',
       'Me han robado en Roma',
@@ -260,6 +260,13 @@ async function renderWelcome() {
   _loadChipsAsync(chipsEl);
 }
 
+function chipLabel(name, max = 18) {
+  if (name.length <= max) return name;
+  const cut = name.slice(0, max);
+  const lastSpace = cut.lastIndexOf(' ');
+  return lastSpace > 6 ? cut.slice(0, lastSpace) : cut;
+}
+
 async function _loadChipsAsync(chipsEl) {
   if (!chipsEl) return;
   try {
@@ -272,7 +279,8 @@ async function _loadChipsAsync(chipsEl) {
       if (!snap.empty) {
         snap.forEach(doc => {
           const d = doc.data();
-          chipsHtml += `<div class="chip chip-saved" data-doc-id="${doc.id}">${escapeHTML(d.nombre || 'Mi ruta')}</div>`;
+          const label = chipLabel(d.nombre || 'Mi ruta');
+          chipsHtml += `<div class="chip chip-saved" data-doc-id="${doc.id}">${escapeHTML(label)}</div>`;
         });
         chipsType = 'saved';
       }
@@ -283,7 +291,8 @@ async function _loadChipsAsync(chipsEl) {
       if (!snap.empty) {
         snap.forEach(doc => {
           const d = doc.data();
-          chipsHtml += `<div class="chip chip-featured" data-slug="${doc.id}">${escapeHTML(d.nombre || 'Ruta')}</div>`;
+          const label = chipLabel(d.nombre || 'Ruta');
+          chipsHtml += `<div class="chip chip-featured" data-slug="${doc.id}">${escapeHTML(label)}</div>`;
         });
         chipsType = 'featured';
       }
