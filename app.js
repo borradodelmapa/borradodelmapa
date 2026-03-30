@@ -415,11 +415,16 @@ async function renderProfile() {
   const coins = currentUser.coins_saldo || 0;
   const rutas = currentUser.rutas_gratis_usadas || 0;
   const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
+  const avatarHtml = currentUser.avatarURL
+    ? `<div class="profile-avatar profile-avatar-img" id="prof-avatar-btn"><img src="${currentUser.avatarURL}" alt="Avatar"><div class="profile-avatar-edit">\u{1F4F7}</div></div>`
+    : `<div class="profile-avatar" id="prof-avatar-btn">${escapeHTML(initial)}<div class="profile-avatar-edit">\u{1F4F7}</div></div>`;
 
   $content.innerHTML = `
     <div class="profile-area fade-in">
       <div class="profile-header">
-        <div class="profile-avatar">${escapeHTML(initial)}</div>
+        ${avatarHtml}
+        <input type="file" id="prof-avatar-input" accept="image/*" style="display:none">
+        <input type="file" id="prof-avatar-camera" accept="image/*" capture="user" style="display:none">
         <div class="profile-info">
           <div class="profile-name">${escapeHTML(currentUser.name || 'Viajero')}</div>
           <div class="profile-stats">${coins} Salma Coins · ${3 - rutas} rutas gratis</div>
@@ -497,6 +502,39 @@ async function renderProfile() {
     </div>`;
 
   // Event listeners
+  // Avatar — click abre selector, sube a R2, guarda URL en Firestore
+  const avatarBtn = document.getElementById('prof-avatar-btn');
+  const avatarInput = document.getElementById('prof-avatar-input');
+  const avatarCamera = document.getElementById('prof-avatar-camera');
+  if (avatarBtn && avatarInput) {
+    avatarBtn.addEventListener('click', () => {
+      // En móvil se ofrece cámara nativa automáticamente con accept="image/*"
+      avatarInput.click();
+    });
+    const handleAvatarFile = async (file) => {
+      if (!file || !file.type.startsWith('image/')) return;
+      if (file.size > 5 * 1024 * 1024) { if (typeof showToast === 'function') showToast('La imagen supera 5 MB'); return; }
+      try {
+        if (typeof showToast === 'function') showToast('Subiendo avatar...');
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('uid', currentUser.uid);
+        formData.append('docId', 'avatar');
+        const res = await fetch(window.SALMA_API + '/upload-doc', { method: 'POST', body: formData });
+        if (!res.ok) throw new Error('Error subiendo');
+        const { url } = await res.json();
+        await db.collection('users').doc(currentUser.uid).update({ avatarURL: url });
+        currentUser.avatarURL = url;
+        if (typeof showToast === 'function') showToast('Avatar actualizado');
+        renderProfile();
+      } catch (e) {
+        console.error('Error subiendo avatar:', e);
+        if (typeof showToast === 'function') showToast('Error al subir avatar');
+      }
+    };
+    avatarInput.addEventListener('change', (e) => handleAvatarFile(e.target.files[0]));
+    avatarCamera.addEventListener('change', (e) => handleAvatarFile(e.target.files[0]));
+  }
   document.getElementById('prof-coins').addEventListener('click', openCoinsModal);
   document.getElementById('prof-bitacora').addEventListener('click', () => showState('bitacora'));
   document.getElementById('prof-galeria').addEventListener('click', () => renderGaleria());
@@ -1801,6 +1839,7 @@ auth.onAuthStateChanged(async (user) => {
       country: userData.country || '',
       coins_saldo: userData.coins_saldo || 0,
       rutas_gratis_usadas: userData.rutas_gratis_usadas || 0,
+      avatarURL: userData.avatarURL || '',
     };
 
     currentUserSOSConfig = userData.sos_config || {
