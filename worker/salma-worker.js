@@ -842,7 +842,7 @@ function tryKVDirectAnswer(message, country, destination) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, imageBase64) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64) {
   let systemPrompt = SALMA_SYSTEM_BASE;
 
   // Contexto mínimo del usuario + fecha actual
@@ -893,6 +893,36 @@ Seguridad: ${c.seguridad}
 Vacunas: ${c.vacunas}
 Coste mochilero: ${c.coste_diario_mochilero}/día | Medio: ${c.coste_diario_medio}/día
 Propinas: ${c.propinas}]`);
+  }
+
+  if (kvTransportData) {
+    const t = kvTransportData;
+    const lines = [];
+    if (t.ridehailing) {
+      const r = t.ridehailing;
+      lines.push(`Ride-hailing: ${r.best || ''} (también: ${(r.others || []).join(', ')}). ${r.tips || ''}`);
+    }
+    if (t.train) {
+      const tr = t.train;
+      lines.push(`Tren: apps ${(tr.apps || []).join(', ')}. ${tr.tips || ''}`);
+    }
+    if (t.metro_bus) {
+      const m = t.metro_bus;
+      lines.push(`Metro/bus: apps ${(m.apps || []).join(', ')}. ${m.tips || ''}`);
+    }
+    if (t.ferry) {
+      const f = t.ferry;
+      lines.push(`Ferry: apps ${(f.apps || []).join(', ')}. ${f.tips || ''}`);
+    }
+    if (t.special) {
+      const s = t.special;
+      lines.push(`Transporte especial: ${(s.types || []).join(', ')}. ${s.tips || ''}`);
+    }
+    if (lines.length > 0) {
+      ctx.push(`[TRANSPORTE EN EL DESTINO — usa estos datos cuando el viajero pregunte por moverse:
+${lines.join('\n')}
+INSTRUCCIÓN: cuando el usuario pregunte cómo moverse, llegar o desplazarse, usa estos datos. Si recomiendas una app, menciona el nombre exacto y un precio/consejo práctico si lo tienes. Para camellos, tuk-tuks u otros transportes especiales, sé directa y da contexto de precio y dónde contratarlos.]`);
+    }
   }
 
   if (kvDestinationData) {
@@ -3003,6 +3033,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     let kvCountryData = null;
     let kvDestinationData = null;
     let kvCachedRoute = null;
+    let kvTransportData = null;
     const _kvDebug = {};
     if (env.SALMA_KB) {
       try {
@@ -3038,6 +3069,10 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
               const spotJson = await env.SALMA_KB.get('dest:' + spotRef.replace(':', ':spot:'));
               if (spotJson) kvDestinationData = JSON.parse(spotJson);
             }
+
+            // Datos de transporte del país (apps de transporte)
+            const transportJson = await env.SALMA_KB.get('transport:' + countryCode);
+            if (transportJson) kvTransportData = JSON.parse(transportJson);
 
             // Buscar ruta cacheada (nivel 3) — solo para peticiones de ruta
             if (isRouteRequest(message, history)) {
@@ -3076,7 +3111,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     }
 
     // Construir mensajes (con datos KV si los hay)
-    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, imageBase64);
+    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64);
     const isRoute = isRouteRequest(message, history);
     const isFlightReq = isFlightRequest(message);
     const isHotelReq = isHotelRequest(message);
