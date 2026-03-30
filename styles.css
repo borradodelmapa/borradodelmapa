@@ -586,7 +586,7 @@ body {
   background:radial-gradient(ellipse at center, transparent 0%, var(--negro) 75%);
 }
 .welcome-cloud {
-  position:absolute; top:15%; left:-50%; width:50%; height:40%;
+  position:fixed; top:15%; left:-50%; width:50%; height:40%;
   background:radial-gradient(ellipse at center, rgba(255,255,255,.25) 0%, rgba(255,255,255,.10) 40%, transparent 70%);
   filter:blur(60px);
   animation:cloud-drift 11s ease-in-out forwards;
