@@ -144,7 +144,6 @@ function handleAvatarClick() {
   if (currentUser) {
     showState('profile');
   } else {
-    window._afterLogin = 'profile';
     openModal('login');
   }
 }
