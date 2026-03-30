@@ -64,6 +64,10 @@ function showState(state) {
     // renderDiario se llama con parámetros desde renderBitacora
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '';
+  } else if (state === 'documentos') {
+    if (typeof docsViajero !== 'undefined') docsViajero.render();
+    if (inputBar) inputBar.style.display = 'none';
+    $content.style.paddingBottom = '';
   } else if (state === 'chat') {
     $input.placeholder = 'Escribe a Salma...';
     if (inputBar) inputBar.style.display = '';
@@ -88,7 +92,7 @@ function updateBottomBar() {
   const isHome = currentState === 'welcome';
   const isChat = currentState === 'chat';
   const isRutas = currentState === 'rutas';
-  const isProfile = currentState === 'profile' || currentState === 'bitacora' || currentState === 'diario';
+  const isProfile = currentState === 'profile' || currentState === 'bitacora' || currentState === 'diario' || currentState === 'documentos';
   const sosContacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim());
   const sosReady = currentUser && sosContacts.length > 0;
 
@@ -423,6 +427,12 @@ async function renderProfile() {
       </div>
 
       <div class="profile-sections">
+        <div class="profile-section" id="prof-docs">
+          <span class="profile-section-icon">\u{1F5C4}\uFE0F</span>
+          <span class="profile-section-label">Documentos del Viajero</span>
+          <span class="profile-section-arrow">\u203A</span>
+        </div>
+
         <div class="profile-section" id="prof-bitacora">
           <span class="profile-section-icon">📓</span>
           <span class="profile-section-label">Bitácora</span>
@@ -490,6 +500,9 @@ async function renderProfile() {
   document.getElementById('prof-coins').addEventListener('click', openCoinsModal);
   document.getElementById('prof-bitacora').addEventListener('click', () => showState('bitacora'));
   document.getElementById('prof-galeria').addEventListener('click', () => renderGaleria());
+  document.getElementById('prof-docs').addEventListener('click', () => {
+    if (typeof docsViajero !== 'undefined') docsViajero.render();
+  });
   document.getElementById('narrator-toggle').addEventListener('change', async (e) => {
     if (typeof salma === 'undefined') return;
     if (e.target.checked) {
