@@ -1,6 +1,6 @@
 {
-  "name": "Borradodelmapa · Tu copiloto de viaje con IA",
-  "short_name": "Borradodelmapa",
+  "name": "Borrado del Mapa · Tu compañera de viaje",
+  "short_name": "Borrado",
   "description": "Salma te prepara guías de viaje personalizadas con mapas, fotos y recomendaciones en un minuto.",
   "start_url": "/",
   "display": "standalone",
@@ -11,7 +11,13 @@
   "icons": [
     {
       "src": "/salma_ai_avatar.png",
-      "sizes": "192x192",
+      "sizes": "320x320",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/salma_ai_avatar.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }

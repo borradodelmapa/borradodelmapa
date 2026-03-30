@@ -1228,12 +1228,12 @@ body {
 
 /* ═══ LEGAL FOOTER (links en welcome) ═══ */
 .legal-links {
-  display:flex; justify-content:center; gap:16px; padding:12px 0;
+  display:flex; flex-wrap:wrap; justify-content:center; gap:8px 16px; padding:12px 0;
   margin-top:8px;
 }
 .legal-links a {
   font-family:var(--font-mono); font-size:10px; letter-spacing:.08em;
-  color:rgba(244,239,230,.25); text-decoration:none;
+  color:rgba(244,239,230,.25); text-decoration:none; white-space:nowrap;
 }
 .legal-links a:hover { color:rgba(244,239,230,.5); }
 .legal-link-destinos { color:var(--dorado) !important; }
@@ -1537,11 +1537,11 @@ body {
 /* ═══ BOTTOM BAR ═══ */
 .app-bottom-bar {
   position:fixed; bottom:0; left:0; right:0; z-index:900;
-  display:flex; justify-content:space-around; align-items:center;
+  display:flex; justify-content:space-around; align-items:flex-start;
   background:rgba(18,18,16,.95); backdrop-filter:blur(12px);
   border-top:1px solid rgba(244,239,230,.08);
   padding:6px 0 env(safe-area-inset-bottom, 6px);
-  height:56px;
+  min-height:56px; height:auto;
 }
 .bottom-tab {
   display:flex; flex-direction:column; align-items:center; gap:2px;
