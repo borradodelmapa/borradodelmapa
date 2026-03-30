@@ -8,6 +8,11 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
+// Forzar comprobación de SW nuevo en cada carga
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistration().then(reg => { if (reg) reg.update(); });
+}
+
 // ── Splash ──
 function hideSplash() {
   const s = document.getElementById('splash');
