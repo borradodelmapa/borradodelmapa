@@ -136,19 +136,17 @@ async function renderWelcome() {
   const defaultChips = `
     <div class="chip" data-msg="3 días en Lisboa sola">Mi primer viaje sola</div>
     <div class="chip" data-msg="Vietnam 15 días mochilero">Vietnam 15 días</div>
-    <div class="chip" data-msg="Me han robado el pasaporte en el extranjero">He perdido el pasaporte</div>`;
+    <div class="chip" data-msg="Me han robado el pasaporte en el extranjero">Pasaporte robado</div>`;
 
   $content.innerHTML = `
     <div class="welcome-hero fade-in">
       <div class="welcome-bg"></div>
       <div class="welcome-cloud"></div>
       <div class="welcome-content">
-        <div class="welcome-label">SALMA · TU COMPAÑERA DE VIAJE</div>
-        <h1 class="welcome-title">Viaja con alguien<br>que sabe lo<br><em>que hace</em></h1>
-        <div class="welcome-claim">Te resuelve antes, durante y después. Como viajar con alguien que ya ha estado ahí.</div>
+        <h1 class="welcome-title">Viaja con alguien<br>que sabe lo <em>que hace</em></h1>
         <div class="welcome-input-wrap">
           <div class="input-row">
-            <textarea class="welcome-input" id="welcome-input" placeholder="Vietnam 10 días en moto" rows="1"></textarea>
+            <textarea class="welcome-input" id="welcome-input" placeholder="¿A dónde vamos?" rows="1"></textarea>
             <input type="file" id="welcome-photo-input" accept="image/*" style="display:none">
             <input type="file" id="welcome-camera-input" accept="image/*" capture="environment" style="display:none">
             <div class="cam-menu" id="welcome-cam-menu" style="display:none">
@@ -170,9 +168,7 @@ async function renderWelcome() {
               </svg>
             </button>
           </div>
-          <button class="welcome-send" id="welcome-send">Habla con Salma ›</button>
         </div>
-        <div class="welcome-spacer"></div>
         <div class="welcome-chips" id="welcome-chips">
           ${defaultChips}
         </div>
@@ -236,13 +232,13 @@ async function renderWelcome() {
   if (wInput) {
     const ejemplos = [
       'Vietnam 10 días en moto',
-      'Estoy en Bangkok sin hotel',
+      'Bangkok sin hotel esta noche',
       '3 días en Lisboa sola',
-      'No sé qué vacunas necesito para Nepal',
+      'Vacunas para Nepal',
       'Tailandia 15 días mochilero',
-      'Me han robado la cartera en Roma',
+      'Me han robado en Roma',
       'Japón 2 semanas primer viaje',
-      'No hablo tailandés y necesito un médico',
+      'Médico en Tailandia, no hablo tailandés',
       'Marruecos 5 días desde Tánger',
       'Avería en carretera en Turquía'
     ];
