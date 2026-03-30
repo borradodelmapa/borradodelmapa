@@ -565,9 +565,10 @@ body {
   overflow:hidden;
 }
 .welcome-bg {
-  position:absolute; inset:0; z-index:0;
+  position:fixed; inset:0; z-index:0;
   background-image:url('mapa.webp');
   background-position:center; background-size:cover;
+  pointer-events:none;
   opacity:0; animation:mapFadeIn 1.5s ease-out forwards, heartbeat 2s ease-in-out 2s 5;
 }
 @keyframes mapFadeIn {
