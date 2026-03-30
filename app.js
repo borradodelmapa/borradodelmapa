@@ -130,6 +130,7 @@ function handleAvatarClick() {
 // ═══ WELCOME (estado 1) ═══
 
 async function renderWelcome() {
+  window.scrollTo(0, 0);
   // Chips fallback — se muestran inmediatamente, Firestore actualiza después
   const defaultChips = `
     <div class="chip" data-msg="3 días en Lisboa sola">Mi primer viaje sola</div>
@@ -141,7 +142,7 @@ async function renderWelcome() {
       <div class="welcome-bg"></div>
       <div class="welcome-cloud"></div>
       <div class="welcome-content">
-        <h1 class="welcome-title">Viaja con alguien<br>que sabe lo <em>que hace</em></h1>
+        <h1 class="welcome-title">Dime a dónde vas.<br><em>Yo me encargo.</em></h1>
         <div class="welcome-input-wrap">
           <div class="input-row">
             <textarea class="welcome-input" id="welcome-input" placeholder="¿A dónde vamos?" rows="1"></textarea>
