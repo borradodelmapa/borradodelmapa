@@ -1137,12 +1137,12 @@ body {
 .auth-logo-wrap {
   flex:1; display:flex; flex-direction:column;
   justify-content:center; align-items:center;
-  padding-top:env(safe-area-inset-top, 0px);
+  padding:0 8px;
 }
 .auth-logo {
-  font-family:var(--font-tight); font-size:42px; font-weight:900;
+  font-family:var(--font-tight); font-size:36px; font-weight:900;
   color:var(--blanco); letter-spacing:.04em; text-align:center;
-  line-height:1;
+  line-height:1; width:100%;
 }
 .auth-logo span { color:var(--dorado); }
 .auth-logo.small { font-size:18px; margin-bottom:6px; letter-spacing:.06em; }
@@ -1193,8 +1193,8 @@ body {
 
 .auth-btn-google {
   width:100%; padding:14px;
-  background:rgba(255,255,255,.07); color:var(--crema);
-  border:1px solid rgba(244,239,230,.15); border-radius:50px;
+  background:rgba(255,255,255,.12); color:var(--crema);
+  border:1px solid rgba(244,239,230,.25); border-radius:50px;
   font-family:var(--font-mono); font-size:11px; letter-spacing:.08em;
   cursor:pointer; transition:all .2s;
   display:flex; align-items:center; justify-content:center; gap:10px;
