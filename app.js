@@ -2217,6 +2217,11 @@ function sendMessage() {
     if (e.target.closest('.app-mic')) e.preventDefault();
   });
 
+  // Evitar que el botón de micro quite el foco al textarea
+  document.addEventListener('mousedown', (e) => {
+    if (e.target.closest('.app-mic')) e.preventDefault();
+  });
+
   // touchend responde al instante en móvil (no espera 300ms del click)
   document.addEventListener('touchend', handleMicTap);
   // click como fallback para desktop
