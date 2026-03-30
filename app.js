@@ -182,6 +182,10 @@ async function renderWelcome() {
     const msg = wInput.value.trim();
     if (msg && typeof salma !== 'undefined') salma.send(msg);
   });
+  if (wInput) wInput.addEventListener('input', () => {
+    wInput.style.height = 'auto';
+    wInput.style.height = Math.min(wInput.scrollHeight, 120) + 'px';
+  });
   if (wInput) wInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -226,12 +230,12 @@ async function renderWelcome() {
       'Bangkok sin hotel esta noche',
       '3 días en Lisboa sola',
       'Vacunas para Nepal',
-      'Tailandia 15 días mochilero',
       'Me han robado en Roma',
-      'Japón 2 semanas primer viaje',
-      'Médico en Tailandia, no hablo tailandés',
+      'Japón 2 semanas, primer viaje',
+      'Médico en Tailandia urgente',
       'Marruecos 5 días desde Tánger',
-      'Avería en carretera en Turquía'
+      'Avería en carretera en Turquía',
+      'Ferry de Atenas a Santorini'
     ];
     let idx = 0;
     window._placeholderInterval = setInterval(() => {

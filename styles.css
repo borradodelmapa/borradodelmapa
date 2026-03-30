@@ -548,11 +548,12 @@ body {
   width:100%; max-width:500px; display:flex; flex-direction:column; gap:0; margin-bottom:0;
 }
 .welcome-input {
-  flex:1; padding:16px 20px; box-sizing:border-box;
+  flex:1; padding:13px 18px; box-sizing:border-box;
   background:rgba(255,255,255,.08); border:1.5px solid rgba(212,160,23,.4);
   border-radius:14px; color:var(--crema);
-  font-family:var(--font-body); font-size:17px;
-  outline:none; resize:none; min-height:58px; line-height:1.4;
+  font-family:var(--font-body); font-size:16px;
+  outline:none; resize:none; height:48px; min-height:48px; max-height:120px; line-height:1.4;
+  overflow-y:hidden;
 }
 .welcome-mic, .welcome-cam {
   width:52px; height:52px; border-color:rgba(212,160,23,.4);
