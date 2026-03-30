@@ -1873,6 +1873,83 @@ body {
 }
 .profile-section-icon-svg { color:rgba(244,239,230,.5); display:block; }
 
+/* ── Estado vacío Mis Viajes ── */
+.viajes-empty {
+  grid-column: 1 / -1;
+  display:flex; flex-direction:column; align-items:center; gap:16px;
+  padding:48px 24px; text-align:center;
+}
+.viajes-empty-icon { color:var(--dorado); opacity:.6; }
+.viajes-empty-title {
+  font-family:var(--font-tight); font-size:20px; font-weight:700;
+  color:var(--blanco); letter-spacing:-.02em;
+}
+.viajes-empty-sub {
+  font-size:14px; color:rgba(244,239,230,.5); line-height:1.6; max-width:280px;
+}
+.viajes-empty-btn {
+  margin-top:8px; padding:13px 28px; border-radius:999px;
+  background:var(--dorado); color:var(--negro); border:none; cursor:pointer;
+  font-family:var(--font-mono); font-size:13px; font-weight:700; letter-spacing:.08em;
+  transition:opacity .2s;
+}
+.viajes-empty-btn:hover { opacity:.85; }
+
+/* ── Legal en Perfil ── */
+.profile-legal {
+  display:flex; flex-wrap:wrap; justify-content:center; gap:6px 10px;
+  padding:8px 20px 4px;
+}
+.profile-legal a {
+  font-family:var(--font-mono); font-size:10px; letter-spacing:.06em;
+  color:rgba(244,239,230,.2); text-decoration:none; transition:color .2s;
+}
+.profile-legal a:hover { color:rgba(244,239,230,.5); }
+.profile-legal span { color:rgba(244,239,230,.1); font-size:10px; }
+
+/* ── Onboarding ── */
+.onboarding-overlay {
+  position:fixed; inset:0; z-index:9000;
+  background:rgba(6,5,3,.92); backdrop-filter:blur(8px);
+  display:flex; align-items:center; justify-content:center; padding:24px;
+}
+.onboarding-card {
+  background:var(--gris); border:1px solid var(--linea-fuerte);
+  border-radius:24px; padding:32px 28px 28px;
+  max-width:360px; width:100%;
+  display:flex; flex-direction:column; align-items:center; gap:20px;
+  position:relative; text-align:center;
+}
+.onboarding-skip {
+  position:absolute; top:18px; right:18px;
+  background:none; border:none; cursor:pointer;
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.06em;
+  color:rgba(244,239,230,.3); transition:color .2s;
+}
+.onboarding-skip:hover { color:rgba(244,239,230,.6); }
+.onboarding-icon { color:var(--dorado); }
+.onboarding-title {
+  font-family:var(--font-tight); font-size:26px; font-weight:800;
+  color:var(--blanco); letter-spacing:-.03em; line-height:1.1;
+}
+.onboarding-title em { color:var(--dorado2); font-style:italic; }
+.onboarding-body {
+  font-size:14px; color:rgba(244,239,230,.6); line-height:1.6; max-width:280px;
+}
+.onboarding-dots { display:flex; gap:6px; }
+.onboarding-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:rgba(244,239,230,.2); transition:background .3s;
+}
+.onboarding-dot-active { background:var(--dorado); }
+.onboarding-next {
+  width:100%; padding:14px; border-radius:12px;
+  background:var(--dorado); color:var(--negro); border:none; cursor:pointer;
+  font-family:var(--font-mono); font-size:14px; font-weight:700; letter-spacing:.08em;
+  transition:opacity .2s;
+}
+.onboarding-next:hover { opacity:.85; }
+
 .profile-logout-link {
   display:block; width:100%; background:none; border:none; cursor:pointer;
   font-family:var(--font-mono); font-size:11px; letter-spacing:.08em;
