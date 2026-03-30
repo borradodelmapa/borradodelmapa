@@ -74,7 +74,10 @@ function showState(state) {
     if (welcomeEl) $content.innerHTML = '';
     $input.placeholder = 'Escribe a Salma...';
     if (inputBar) inputBar.style.display = '';
+    document.body.classList.add('chat-bg');
   }
+  // Quitar fondo mapa si salimos del chat
+  if (state !== 'chat') document.body.classList.remove('chat-bg');
 }
 
 function updateHeader() {
