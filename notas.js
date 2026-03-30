@@ -58,11 +58,25 @@ window.notasManager = (() => {
 
   async function getAll(filters) {
     if (!_uid()) return [];
-    let q = _col().orderBy('createdAt', 'desc');
-    if (filters?.countryCode) q = q.where('countryCode', '==', filters.countryCode);
-    if (filters?.limit) q = q.limit(filters.limit);
-    const snap = await q.get();
-    return snap.docs.map(d => d.data());
+    try {
+      let q = _col().orderBy('createdAt', 'desc');
+      if (filters?.countryCode) q = q.where('countryCode', '==', filters.countryCode);
+      if (filters?.limit) q = q.limit(filters.limit);
+      const snap = await q.get();
+      return snap.docs.map(d => d.data());
+    } catch (e) {
+      console.warn('getAll notas error (probando sin orderBy):', e);
+      // Fallback sin orderBy por si falta índice
+      try {
+        const snap = await _col().get();
+        const docs = snap.docs.map(d => d.data());
+        docs.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+        return filters?.limit ? docs.slice(0, filters.limit) : docs;
+      } catch (e2) {
+        console.error('getAll notas fallback error:', e2);
+        return [];
+      }
+    }
   }
 
   async function getReminders(daysAhead = 7) {
@@ -72,15 +86,25 @@ window.notasManager = (() => {
     future.setDate(future.getDate() + daysAhead);
     const futureStr = future.toISOString().slice(0, 10);
 
-    // Firestore no permite != null en where, así que filtramos client-side
-    const snap = await _col()
-      .where('completado', '==', false)
-      .orderBy('fechaRecordatorio', 'asc')
-      .get();
-
-    return snap.docs
-      .map(d => d.data())
-      .filter(n => n.fechaRecordatorio && n.fechaRecordatorio <= futureStr);
+    try {
+      // Intenta con índice compuesto (completado + fechaRecordatorio)
+      const snap = await _col()
+        .where('completado', '==', false)
+        .orderBy('fechaRecordatorio', 'asc')
+        .get();
+      return snap.docs.map(d => d.data()).filter(n => n.fechaRecordatorio && n.fechaRecordatorio <= futureStr);
+    } catch (e) {
+      console.warn('getReminders índice no disponible, fallback client-side:', e);
+      // Fallback: traer todo y filtrar
+      try {
+        const snap = await _col().get();
+        return snap.docs.map(d => d.data())
+          .filter(n => !n.completado && n.fechaRecordatorio && n.fechaRecordatorio <= futureStr)
+          .sort((a, b) => (a.fechaRecordatorio || '').localeCompare(b.fechaRecordatorio || ''));
+      } catch (e2) {
+        return [];
+      }
+    }
   }
 
   async function getByCountry(code) {
@@ -220,11 +244,20 @@ window.notasManager = (() => {
     const $content = document.getElementById('app-content');
     if (!$content || !_uid()) return;
 
-    // Migrar si es necesario
     $content.innerHTML = `<div class="notas-area fade-in"><div class="notas-loading">Cargando notas...</div></div>`;
-    await _migrateIfNeeded();
 
-    const notas = await getAll();
+    try {
+      await _migrateIfNeeded();
+    } catch (e) {
+      console.warn('Migración notas falló (no pasa nada):', e);
+    }
+
+    let notas = [];
+    try {
+      notas = await getAll();
+    } catch (e) {
+      console.warn('Error cargando notas:', e);
+    }
     _renderNotasList($content, notas);
   }
 

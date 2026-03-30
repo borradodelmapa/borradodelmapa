@@ -421,12 +421,14 @@ function renderSalmaCan() {
         <div class="salma-can-title">¿Qué puedo hacer?</div>
         <div class="salma-can-sub">Todo lo que Salma puede hacer por ti</div>
       </div>
-      <div class="salma-can-grid">
+      <div class="salma-can-list">
         ${features.map(f => `
-          <div class="salma-can-card">
+          <div class="salma-can-row">
             <div class="salma-can-icon">${f.icon}</div>
-            <div class="salma-can-name">${f.title}</div>
-            <div class="salma-can-desc">${f.desc}</div>
+            <div class="salma-can-info">
+              <div class="salma-can-name">${f.title}</div>
+              <div class="salma-can-desc">${f.desc}</div>
+            </div>
           </div>
         `).join('')}
       </div>

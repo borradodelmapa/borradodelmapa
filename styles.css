@@ -1930,8 +1930,8 @@ body {
 
 .profile-sections { margin-bottom:12px; }
 /* ── ¿Qué puedo hacer? ── */
-.salma-can-area { padding:0 0 40px; }
-.salma-can-header { padding:24px 20px 20px; }
+.salma-can-area { max-width:540px; margin:0 auto; padding:0 16px 40px; }
+.salma-can-header { padding:24px 4px 16px; }
 .salma-can-title {
   font-family:var(--font-tight); font-size:28px; font-weight:800;
   color:var(--blanco); letter-spacing:-.02em; line-height:1.1;
@@ -1940,23 +1940,26 @@ body {
   font-family:var(--font-mono); font-size:11px; color:rgba(244,239,230,.4);
   letter-spacing:.1em; margin-top:6px;
 }
-.salma-can-grid {
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:12px; padding:0 16px;
+.salma-can-list {
+  display:flex; flex-direction:column;
+  border-radius:var(--radius);
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.06);
 }
-.salma-can-card {
-  background:var(--gris); border:1px solid var(--linea);
-  border-radius:16px; padding:20px 16px;
-  display:flex; flex-direction:column; gap:10px;
+.salma-can-row {
+  display:flex; align-items:flex-start; gap:14px;
+  padding:16px; border-bottom:1px solid rgba(255,255,255,.04);
 }
-.salma-can-icon { color:var(--dorado); line-height:1; }
-.salma-can-icon svg { display:block; }
+.salma-can-row:last-child { border-bottom:none; }
+.salma-can-icon { color:var(--dorado); line-height:1; flex-shrink:0; padding-top:2px; }
+.salma-can-icon svg { display:block; width:24px; height:24px; }
+.salma-can-info { flex:1; min-width:0; }
 .salma-can-name {
-  font-family:var(--font-tight); font-size:17px; font-weight:700;
+  font-family:var(--font-tight); font-size:15px; font-weight:700;
   color:var(--blanco); letter-spacing:-.01em;
 }
 .salma-can-desc {
-  font-size:12px; color:rgba(244,239,230,.55); line-height:1.5;
+  font-size:12px; color:rgba(244,239,230,.45); line-height:1.5; margin-top:3px;
 }
 .profile-section-icon-svg { color:rgba(244,239,230,.5); display:block; }
 
