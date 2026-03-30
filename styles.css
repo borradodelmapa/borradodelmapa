@@ -265,7 +265,7 @@ body {
 }
 .galeria-upload-btn:hover, .galeria-video-btn:hover { background:rgba(212,160,23,.22); }
 .galeria-upload-btn:disabled, .galeria-video-btn:disabled { opacity:.5; cursor:default; }
-.galeria-video-btn { background:rgba(212,160,23,.18); font-weight:600; }
+.galeria-video-btn { background:rgba(212,160,23,.1); padding:6px 10px; }
 
 /* ─── Modal creación de video ─── */
 .video-create-modal { max-width:400px; max-height:92dvh; overflow-y:auto; }
@@ -407,8 +407,10 @@ body {
   letter-spacing:.1em; color:var(--crema); text-transform:uppercase;
 }
 .galeria-albums {
-  display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px;
+  display:flex; flex-wrap:nowrap; gap:6px; margin-bottom:16px;
+  overflow-x:auto; scrollbar-width:none; padding-bottom:4px;
 }
+.galeria-albums::-webkit-scrollbar { display:none; }
 .galeria-album-chip {
   padding:6px 12px; border-radius:20px; font-size:12px;
   font-family:var(--font-mono); letter-spacing:.03em;
@@ -446,7 +448,7 @@ body {
 .galeria-album-cancel:hover  { border-color:rgba(245,240,232,.4); color:var(--crema); }
 
 .galeria-grid {
-  display:grid; grid-template-columns:repeat(3, 1fr); gap:3px;
+  display:grid; grid-template-columns:repeat(2, 1fr); gap:4px;
 }
 .galeria-item {
   position:relative; aspect-ratio:1; overflow:hidden;
