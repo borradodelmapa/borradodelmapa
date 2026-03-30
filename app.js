@@ -490,13 +490,13 @@ async function renderProfile() {
       </div>
 
       <div class="profile-legal">
-        <a href="/aviso-legal.html" target="_blank">Aviso legal</a>
+        <a href="/legal.html#aviso-legal" target="_blank">Aviso legal</a>
         <span>·</span>
-        <a href="/privacidad.html" target="_blank">Privacidad</a>
+        <a href="/legal.html#privacidad" target="_blank">Privacidad</a>
         <span>·</span>
-        <a href="/cookies.html" target="_blank">Cookies</a>
+        <a href="/legal.html#cookies" target="_blank">Cookies</a>
         <span>·</span>
-        <a href="/terminos.html" target="_blank">Términos</a>
+        <a href="/legal.html#terminos" target="_blank">Términos</a>
       </div>
       <button class="profile-logout-link" id="prof-logout">Cerrar sesión</button>
     </div>`;
