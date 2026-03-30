@@ -1230,8 +1230,8 @@ const salma = {
     }
     area.appendChild(div);
     this._scrollToBottom();
-    // Auto-speak si voz activada (setTimeout para no bloquear el flujo)
-    if (localStorage.getItem('salma_voice') !== 'false') {
+    // Auto-speak solo si el usuario lo ha activado explícitamente
+    if (localStorage.getItem('salma_voice') === 'true') {
       setTimeout(() => this.salmaSpeak(text), 50);
     }
   },
@@ -1352,8 +1352,8 @@ const salma = {
         if (txt) txt.removeAttribute('id');
         el.removeAttribute('id');
         this._addSpeakButton(el);
-        // Auto-speak si voz activada (setTimeout para no bloquear el flujo)
-        if (textContent && localStorage.getItem('salma_voice') !== 'false') {
+        // Auto-speak solo si el usuario lo ha activado explícitamente
+        if (textContent && localStorage.getItem('salma_voice') === 'true') {
           const t = textContent;
           setTimeout(() => this.salmaSpeak(t), 50);
         }
