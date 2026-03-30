@@ -1365,9 +1365,13 @@ async function loadUserGuides() {
 
     const grid = document.getElementById('viajes-grid');
 
-    // Recopilar todas las guías
+    // Recopilar solo guías creadas por el usuario (excluir destinos KV pre-generados)
     const allGuides = [];
-    snap.forEach(doc => allGuides.push({ id: doc.id, data: doc.data() }));
+    snap.forEach(doc => {
+      const d = doc.data();
+      if (d.source === 'kv-nivel2') return;
+      allGuides.push({ id: doc.id, data: d });
+    });
 
     // Función para crear una card
     function createCard(doc, d) {
