@@ -1731,9 +1731,13 @@ body {
 .sos-fab {
   position:fixed; right:16px; z-index:950;
   bottom:calc(64px + env(safe-area-inset-bottom, 6px));
-  width:44px; height:44px; border-radius:50%;
+  width:52px; height:32px; border-radius:8px;
   border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
   transition:transform .2s, box-shadow .2s;
+}
+.sos-fab-text {
+  font-family:var(--font-mono); font-size:13px; font-weight:700;
+  letter-spacing:.1em;
 }
 .sos-fab:active { transform:scale(.94); }
 .sos-fab-ready {
