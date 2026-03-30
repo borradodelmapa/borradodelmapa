@@ -2525,12 +2525,16 @@ body {
 .notas-list { display:flex; flex-direction:column; gap:10px; }
 .nota-card { padding:14px 16px; background:rgba(244,239,230,.04); border:1px solid rgba(244,239,230,.08); border-radius:12px; transition:opacity .3s, transform .3s; }
 .nota-card-header { display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
-.nota-tipo-tag { font-size:11px; padding:2px 8px; border-radius:6px; font-weight:600; }
-.nota-card-country { font-size:14px; }
+.nota-tipo-tag { font-size:11px; padding:2px 8px; border-radius:6px; font-weight:600; filter:grayscale(1) brightness(.7); }
+.nota-card-country { font-size:14px; filter:grayscale(1) brightness(.7); }
 .nota-card-actions { margin-left:auto; display:flex; gap:4px; }
-.nota-card-edit, .nota-card-delete { background:none; border:none; cursor:pointer; font-size:13px; padding:2px 6px; opacity:.3; transition:opacity .15s; }
-.nota-card-edit:hover, .nota-card-delete:hover { opacity:.8; }
+.nota-card-edit { background:none; border:none; cursor:pointer; font-size:13px; padding:2px 6px; opacity:.3; transition:opacity .15s; filter:grayscale(1) brightness(.7); }
+.nota-card-edit:hover { opacity:.8; }
+.nota-card-delete { background:none; border:none; cursor:pointer; font-size:14px; padding:2px 8px; color:rgba(239,68,68,.5); transition:color .15s; }
+.nota-card-delete:hover { color:#f87171; }
 .nota-card-texto { font-size:14px; color:rgba(244,239,230,.8); line-height:1.5; word-break:break-word; }
+.nota-card-texto.nota-truncated { overflow:hidden; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; cursor:pointer; }
+.nota-card-texto.nota-expanded { -webkit-line-clamp:unset; cursor:pointer; }
 .nota-card-date { font-size:11px; color:rgba(244,239,230,.3); margin-top:6px; }
 
 /* Estado vacío */

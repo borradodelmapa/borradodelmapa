@@ -314,7 +314,6 @@ window.notasManager = (() => {
     $content.innerHTML = `
       <div class="notas-area fade-in">
         <div class="notas-header">
-          <button class="notas-back" id="notas-back">\u2039</button>
           <div class="notas-title">Mis Notas</div>
           <button class="notas-add-btn" id="notas-add-btn">+</button>
         </div>
@@ -345,6 +344,7 @@ window.notasManager = (() => {
   }
 
   function _renderNotaCard(n) {
+    const isLong = (n.texto || '').length > 120;
     return `
       <div class="nota-card" data-id="${n.id}">
         <div class="nota-card-header">
@@ -356,7 +356,7 @@ window.notasManager = (() => {
             <button class="nota-card-delete" data-id="${n.id}" aria-label="Eliminar">\u2715</button>
           </div>
         </div>
-        <div class="nota-card-texto" data-id="${n.id}">${_escHtml(n.texto)}</div>
+        <div class="nota-card-texto ${isLong ? 'nota-truncated' : ''}" data-id="${n.id}">${_escHtml(n.texto)}</div>
         ${(n.files && n.files.length) ? `<div class="nota-card-files">${n.files.map(f => {
           const isImg = (f.fileType || '').startsWith('image/');
           return isImg
@@ -449,12 +449,6 @@ window.notasManager = (() => {
   }
 
   function _initNotasListeners($content, notas) {
-    // Back
-    const backBtn = $content.querySelector('#notas-back');
-    if (backBtn) backBtn.addEventListener('click', () => {
-      if (typeof showState === 'function') showState('profile');
-    });
-
     // Add
     const addBtn = $content.querySelector('#notas-add-btn');
     if (addBtn) addBtn.addEventListener('click', () => {
@@ -469,11 +463,19 @@ window.notasManager = (() => {
       });
     });
 
+    // Expand truncated text
+    $content.querySelectorAll('.nota-card-texto.nota-truncated').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        el.classList.toggle('nota-truncated');
+        el.classList.toggle('nota-expanded');
+      });
+    });
+
     // Delete
     $content.querySelectorAll('.nota-card-delete').forEach(btn => {
       btn.addEventListener('click', async (e) => {
         e.stopPropagation();
-        if (!confirm('\u00bfEliminar esta nota?')) return;
         await remove(btn.dataset.id);
         const card = $content.querySelector(`.nota-card[data-id="${btn.dataset.id}"]`);
         if (card) { card.style.opacity = '0'; card.style.transform = 'translateX(-20px)'; }
