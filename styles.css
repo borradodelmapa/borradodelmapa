@@ -599,7 +599,6 @@ body {
   background:rgba(212,160,23,.08); border:1px solid rgba(212,160,23,.3);
   color:var(--crema); cursor:pointer; transition:all .2s;
   white-space:nowrap; max-width:48%;
-  overflow:hidden; text-overflow:ellipsis;
 }
 .chip-ghost { display:none; }
 .chip:hover { background:rgba(212,160,23,.2); border-color:var(--dorado); }
