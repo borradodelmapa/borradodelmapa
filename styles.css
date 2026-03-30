@@ -49,14 +49,14 @@ body {
 }
 .app-logo {
   font-family:var(--font-display);
-  font-size:30px; color:var(--blanco);
-  letter-spacing:2.5px; line-height:1;
-  cursor:pointer;
+  font-size:28px; color:var(--blanco);
+  letter-spacing:5px; line-height:1;
+  cursor:pointer; text-transform:uppercase;
 }
-.app-logo span { color:var(--dorado); }
+.app-logo span { color:var(--dorado); letter-spacing:5px; }
 .app-header-actions { position:absolute; right:14px; display:flex; align-items:center; gap:10px; }
 @media (max-width:420px) {
-  .app-logo { font-size:24px; letter-spacing:2px; }
+  .app-logo { font-size:24px; letter-spacing:4px; }
 }
 .app-header-btn { display:none; }
 .app-avatar {
@@ -493,8 +493,8 @@ body {
 .welcome-hero {
   position:relative; min-height:calc(100dvh - 112px);
   display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  padding:16px 24px 80px;
+  align-items:center; justify-content:flex-start;
+  padding:10vh 24px 80px;
   text-align:center;
 }
 .welcome-bg {
@@ -532,7 +532,7 @@ body {
 }
 .welcome-content {
   position:relative; z-index:1;
-  display:flex; flex-direction:column; align-items:center; gap:28px;
+  display:flex; flex-direction:column; align-items:center; gap:64px;
   width:100%;
 }
 .welcome-title {
