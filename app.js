@@ -47,18 +47,23 @@ function showState(state) {
   if (state === 'welcome') {
     renderWelcome();
     if (inputBar) inputBar.style.display = 'none';
+    $content.style.paddingBottom = '0';
   } else if (state === 'rutas') {
     loadUserGuides();
     if (inputBar) inputBar.style.display = 'none';
+    $content.style.paddingBottom = '';
   } else if (state === 'viajes' || state === 'profile') {
     renderProfile();
     if (inputBar) inputBar.style.display = 'none';
+    $content.style.paddingBottom = '';
   } else if (state === 'bitacora') {
     renderBitacora();
     if (inputBar) inputBar.style.display = 'none';
+    $content.style.paddingBottom = '';
   } else if (state === 'diario') {
     // renderDiario se llama con parámetros desde renderBitacora
     if (inputBar) inputBar.style.display = 'none';
+    $content.style.paddingBottom = '';
   } else if (state === 'chat') {
     $input.placeholder = 'Escribe a Salma...';
     if (inputBar) inputBar.style.display = '';
