@@ -271,22 +271,41 @@
   background:rgba(239,68,68,.2); color:#f87171;
 }
 
-/* ── Links de archivos en vista detalle ── */
-.docs-view-files {
-  display:flex; flex-direction:column; gap:6px;
+/* ── Preview inline de archivos ── */
+.docs-preview-grid {
+  display:flex; flex-direction:column; gap:12px;
+  margin-bottom:16px;
 }
-.docs-view-file-link {
-  display:block; padding:10px 14px;
+.docs-preview-item {
+  border-radius:var(--radius-sm); overflow:hidden;
   background:rgba(255,255,255,.03);
   border:1px solid rgba(255,255,255,.06);
-  border-radius:var(--radius-sm);
+}
+.docs-preview-img {
+  width:100%; display:block;
+  border-radius:var(--radius-sm) var(--radius-sm) 0 0;
+}
+.docs-preview-pdf {
+  width:100%; height:300px; border:none; display:block;
+  border-radius:var(--radius-sm) var(--radius-sm) 0 0;
+  background:#fff;
+}
+.docs-preview-download {
+  display:block; padding:8px 12px;
+  font-size:12px; color:rgba(244,239,230,.4);
+  text-decoration:none; transition:color .2s;
+  font-family:var(--font-mono); letter-spacing:.03em;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.docs-preview-download:hover { color:var(--dorado); }
+.docs-view-file-link {
+  display:block; padding:12px 14px;
   color:var(--dorado); font-size:13px;
   text-decoration:none; transition:all .2s;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 .docs-view-file-link:hover {
   background:rgba(240,180,41,.06);
-  border-color:rgba(240,180,41,.15);
 }
 .docs-file-name {
   font-size:13px; color:var(--dorado); font-weight:600;

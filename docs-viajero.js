@@ -298,22 +298,27 @@ const docsViajero = {
       notesSection = `<div class="docs-view-notes">${this._esc(doc.notes)}</div>`;
     }
 
-    // Lista de archivos (soporta docs antiguos con 1 archivo y nuevos con array)
-    const docFiles = doc.files || [{ fileName: doc.fileName, downloadURL: doc.downloadURL, r2Key: doc.r2Key }];
-    const filesHtml = docFiles.map((f, i) => `<a class="docs-view-file-link" href="${f.downloadURL}" target="_blank" rel="noopener">${this._esc(f.fileName)}</a>`).join('');
-    const filesCount = docFiles.length > 1 ? ` (${docFiles.length})` : '';
+    // Archivos (soporta docs antiguos con 1 archivo y nuevos con array)
+    const docFiles = doc.files || [{ fileName: doc.fileName, fileType: doc.fileType, downloadURL: doc.downloadURL, r2Key: doc.r2Key }];
 
-    overlay.innerHTML = `<div class="docs-modal"><div class="docs-modal-handle"></div><div class="docs-modal-title">${cat.emoji} ${this._esc(doc.name)}</div><div class="docs-view-info"><div class="docs-view-row"><span class="docs-view-label">Categoría</span><span class="docs-view-value">${this._esc(cat.label)}</span></div><div class="docs-view-row"><span class="docs-view-label">Archivos${filesCount}</span></div><div class="docs-view-files">${filesHtml}</div>${expiryRow}${notesSection}</div><div class="docs-modal-actions"><button class="docs-btn docs-btn-danger" id="doc-delete">Eliminar</button><button class="docs-btn docs-btn-primary" id="doc-download-all">Ver / Descargar</button></div></div>`;
+    // Renderizar previews inline: imágenes directas, PDFs embebidos, otros como link
+    const previewsHtml = docFiles.map(f => {
+      const type = (f.fileType || '').toLowerCase();
+      if (type.startsWith('image/')) {
+        return `<div class="docs-preview-item"><img class="docs-preview-img" src="${f.downloadURL}" alt="${this._esc(f.fileName)}" loading="lazy"><a class="docs-preview-download" href="${f.downloadURL}" target="_blank" rel="noopener">\u{2B07}\uFE0F ${this._esc(f.fileName)}</a></div>`;
+      }
+      if (type === 'application/pdf') {
+        return `<div class="docs-preview-item"><iframe class="docs-preview-pdf" src="${f.downloadURL}" title="${this._esc(f.fileName)}"></iframe><a class="docs-preview-download" href="${f.downloadURL}" target="_blank" rel="noopener">\u{2B07}\uFE0F ${this._esc(f.fileName)}</a></div>`;
+      }
+      return `<div class="docs-preview-item"><a class="docs-view-file-link" href="${f.downloadURL}" target="_blank" rel="noopener">\u{1F4CE} ${this._esc(f.fileName)}</a></div>`;
+    }).join('');
+
+    overlay.innerHTML = `<div class="docs-modal"><div class="docs-modal-handle"></div><div class="docs-modal-title">${cat.emoji} ${this._esc(doc.name)}</div><div class="docs-preview-grid">${previewsHtml}</div><div class="docs-view-info">${expiryRow}${notesSection}</div><div class="docs-modal-actions"><button class="docs-btn docs-btn-danger" id="doc-delete">Eliminar</button></div></div>`;
 
     document.body.appendChild(overlay);
 
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) overlay.remove();
-    });
-
-    overlay.querySelector('#doc-download-all').addEventListener('click', () => {
-      const docFiles = doc.files || [{ downloadURL: doc.downloadURL }];
-      docFiles.forEach(f => window.open(f.downloadURL, '_blank'));
     });
 
     overlay.querySelector('#doc-delete').addEventListener('click', async () => {
