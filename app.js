@@ -116,7 +116,8 @@ function updateBottomBar() {
     document.body.appendChild(sosBtn);
     sosBtn.addEventListener('click', () => {
       if (!currentUser) { window._afterLogin = 'profile'; openModal('login'); return; }
-      if (sosReady) { showSOSConfirm(); } else { renderSOSConfig(); }
+      const contacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim());
+      if (contacts.length > 0) { showSOSConfirm(); } else { renderSOSConfig(); }
     });
   }
   sosBtn.className = `sos-fab ${sosReady ? 'sos-fab-ready' : 'sos-fab-off'}`;
@@ -2678,7 +2679,6 @@ function renderSOSConfig() {
       <button class="sos-back" id="sos-config-back">← Volver</button>
       <span class="sos-header-title">Contactos SOS</span>
     </div>
-    <p class="sos-config-desc">SMS automático a tus contactos con tu ubicación exacta. Funciona en más de 180 países. Si falla, WhatsApp. Si no tienes datos, SMS directo. Si no tienes señal, lo envía cuando la recuperes.</p>
     <div class="sos-config-contacts">
       ${cfg.contacts.map((c, i) => `
         <div class="sos-config-row">
@@ -2696,9 +2696,6 @@ function renderSOSConfig() {
     <div class="sos-config-btns">
       <button class="sos-save-btn" id="sos-save">Guardar contactos</button>
       <button class="sos-test-btn" id="sos-test">Enviar prueba</button>
-    </div>
-    <div class="sos-config-explainer">
-      <p>SOS y Salma avisa a tus contactos de emergencia automáticamente. Les manda un SMS con tu nombre y tu ubicación exacta en Google Maps. Sin que tengas que escribir nada. Si el SMS falla, te da los botones para avisar por WhatsApp o SMS directo desde tu móvil. Si no tienes señal, lo envía cuando la recuperes.</p>
     </div>
   </div>`;
   document.querySelector('.app-input-bar').style.display = 'none';
