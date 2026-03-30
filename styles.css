@@ -1393,16 +1393,15 @@ body {
 
 /* ═══ LEGAL FOOTER (links en welcome) ═══ */
 .legal-links {
-  display:flex; flex-wrap:wrap; justify-content:center; gap:8px 16px; padding:12px 0;
-  margin-top:8px;
+  display:flex; flex-wrap:wrap; justify-content:center; gap:6px 12px;
+  padding:24px 16px 8px; margin-top:40px; opacity:.35;
 }
 .legal-links a {
-  font-family:var(--font-mono); font-size:10px; letter-spacing:.08em;
-  color:rgba(244,239,230,.25); text-decoration:none; white-space:nowrap;
+  font-family:var(--font-mono); font-size:9px; letter-spacing:.06em;
+  color:rgba(244,239,230,.6); text-decoration:none; white-space:nowrap;
 }
-.legal-links a:hover { color:rgba(244,239,230,.5); }
+.legal-links a:hover { opacity:1; }
 .legal-link-destinos { color:var(--dorado) !important; }
-.legal-link-destinos:hover { color:var(--dorado2) !important; }
 
 /* ═══ COINS BUTTON (header) ═══ */
 .coins-btn {
