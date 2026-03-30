@@ -525,7 +525,6 @@ async function renderBitacora() {
   $content.innerHTML = `
     <div class="bitacora-area fade-in">
       <div class="bitacora-header">
-        <button class="bitacora-back" id="bitacora-back">←</button>
         <div class="bitacora-title">Bitácora</div>
       </div>
       <div class="bitacora-countries" id="bitacora-countries">
@@ -533,7 +532,6 @@ async function renderBitacora() {
       </div>
     </div>`;
 
-  document.getElementById('bitacora-back').addEventListener('click', () => showState('profile'));
 
   try {
     // Cargar rutas y notas en paralelo
@@ -801,7 +799,6 @@ async function renderGaleria(albumFilter) {
   $c.innerHTML = `
     <div class="galeria-area fade-in">
       <div class="galeria-header">
-        <button class="galeria-back" id="galeria-back">← Perfil</button>
         <span class="galeria-title">Galería</span>
         <div class="galeria-header-btns">
           <label for="galeria-file-input" class="galeria-upload-btn" title="Añadir fotos">+ Añadir</label>
@@ -812,12 +809,6 @@ async function renderGaleria(albumFilter) {
       ${albumsHtml}
       ${gridHtml}
     </div>`;
-
-  // Event: back
-  document.getElementById('galeria-back').addEventListener('click', () => {
-    showState('profile');
-    document.querySelector('.app-input-bar').style.display = '';
-  });
 
   // Event: info
   document.getElementById('galeria-info-btn')?.addEventListener('click', () => {
