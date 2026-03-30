@@ -444,6 +444,15 @@ async function renderProfile() {
 
       </div>
 
+      <div class="profile-legal">
+        <a href="/aviso-legal.html" target="_blank">Aviso legal</a>
+        <span>·</span>
+        <a href="/privacidad.html" target="_blank">Privacidad</a>
+        <span>·</span>
+        <a href="/cookies.html" target="_blank">Cookies</a>
+        <span>·</span>
+        <a href="/terminos.html" target="_blank">Términos</a>
+      </div>
       <button class="profile-logout-link" id="prof-logout">Cerrar sesión</button>
     </div>`;
 
@@ -1493,6 +1502,21 @@ async function loadUserGuides() {
         group.appendChild(groupGrid);
         grid.appendChild(group);
       }
+    } else if (allGuides.length === 0) {
+      // Estado vacío — ninguna ruta todavía
+      grid.innerHTML = `
+        <div class="viajes-empty">
+          <div class="viajes-empty-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+          </div>
+          <div class="viajes-empty-title">Aún no tienes ninguna ruta</div>
+          <div class="viajes-empty-sub">Dile a Salma a dónde quieres ir y en un minuto tienes tu primera guía con mapa, fotos y toda la info.</div>
+          <button class="viajes-empty-btn" id="btn-empty-new">Crear mi primera ruta</button>
+        </div>`;
+      document.getElementById('btn-empty-new').addEventListener('click', () => {
+        if (typeof salma !== 'undefined') salma.reset();
+        showState('welcome');
+      });
     } else {
       // Lista plana normal
       for (const g of allGuides) {
@@ -2809,5 +2833,67 @@ Object.defineProperty(window, 'currentUser', {
   set: (v) => { currentUser = v; }
 });
 
+// ═══ ONBOARDING ═══
+function showOnboarding() {
+  const slides = [
+    {
+      icon: `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>`,
+      title: 'Dime a dónde vas.',
+      titleEm: 'Yo me encargo.',
+      body: 'Cuéntame tu destino y los días que tienes. En un minuto te monto la ruta con mapa, fotos y todo lo que necesitas saber.'
+    },
+    {
+      icon: `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>`,
+      title: 'Rutas, reservas,',
+      titleEm: 'búsquedas y emergencias.',
+      body: 'Vuelos, hoteles, trenes, ferry, restaurantes cerca tuyo, info del país en tiempo real... y si algo va mal, también estoy aquí.'
+    },
+    {
+      icon: `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
+      title: 'Tu compañera',
+      titleEm: 'de viaje.',
+      body: 'Directa, con opinión propia y siempre a tu lado. Para el viaje de tu vida o para sacarte de un apuro esta noche.'
+    }
+  ];
+
+  const overlay = document.createElement('div');
+  overlay.id = 'onboarding-overlay';
+  overlay.className = 'onboarding-overlay';
+
+  let current = 0;
+
+  function renderSlide() {
+    const s = slides[current];
+    const isLast = current === slides.length - 1;
+    overlay.innerHTML = `
+      <div class="onboarding-card">
+        <button class="onboarding-skip" id="ob-skip">Saltar</button>
+        <div class="onboarding-icon">${s.icon}</div>
+        <div class="onboarding-title">${s.title}<br><em>${s.titleEm}</em></div>
+        <div class="onboarding-body">${s.body}</div>
+        <div class="onboarding-dots">
+          ${slides.map((_, i) => `<span class="onboarding-dot ${i === current ? 'onboarding-dot-active' : ''}"></span>`).join('')}
+        </div>
+        <button class="onboarding-next" id="ob-next">${isLast ? 'Empezar' : 'Siguiente'}</button>
+      </div>`;
+    overlay.querySelector('#ob-next').addEventListener('click', () => {
+      if (isLast) closeOnboarding();
+      else { current++; renderSlide(); }
+    });
+    overlay.querySelector('#ob-skip').addEventListener('click', closeOnboarding);
+  }
+
+  function closeOnboarding() {
+    localStorage.setItem('bdm_onboarding_done', '1');
+    overlay.remove();
+  }
+
+  document.body.appendChild(overlay);
+  renderSlide();
+}
+
 // ═══ INIT ═══
+if (!localStorage.getItem('bdm_onboarding_done')) {
+  showOnboarding();
+}
 showState('welcome');
