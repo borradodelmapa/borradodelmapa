@@ -2622,63 +2622,62 @@ function showSOSConfirm() {
 }
 
 async function triggerSOS() {
-  const $c = document.getElementById('app-content');
-  $c.innerHTML = `<div class="sos-area fade-in">
-    <div class="sos-spinner">
-      <div class="sos-spinner-icon">🆘</div>
-      <p class="sos-spinner-text">Enviando aviso de emergencia...</p>
-    </div>
-  </div>`;
   document.querySelector('.app-input-bar').style.display = 'none';
   currentState = 'sos';
 
-  // Obtener GPS (intenta fresco, usa último conocido como fallback)
-  let coords = null;
-  try { coords = await getPositionWithTimeout(10000); } catch (_) {}
-  if (!coords && lastKnownCoords) coords = lastKnownCoords;
-
+  // Usar coords que ya tenemos (instantáneo), mejorar en background
+  let coords = lastKnownCoords || null;
   const contacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim());
   const { message } = _buildSOSMessage(coords);
 
-  // Sin internet → encolar
+  // Sin internet → encolar + mostrar WhatsApp
   if (!navigator.onLine) {
     localStorage.setItem(SOS_QUEUE_KEY, JSON.stringify({ contacts, message, timestamp: Date.now() }));
     _renderSOSScreen('offline', contacts, message);
     return;
   }
 
-  // Plan A: Twilio via Worker
+  // Mostrar WhatsApp INMEDIATAMENTE — no hacer esperar
+  _renderSOSScreen('whatsapp', contacts, message);
+
+  // En background: intentar SMS automático via Twilio
   try {
+    // Intentar GPS fresco (3s máx) para mejorar el mensaje
+    let freshCoords = null;
+    try { freshCoords = await getPositionWithTimeout(3000); } catch (_) {}
+    if (freshCoords) coords = freshCoords;
+    const freshMsg = _buildSOSMessage(coords).message;
+
     const res = await fetch(window.SALMA_API + '/sos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contacts, message, uid: currentUser.uid })
+      body: JSON.stringify({ contacts, message: freshMsg, uid: currentUser.uid }),
+      signal: AbortSignal.timeout(5000)
     });
-    if (!res.ok) throw new Error('Worker error ' + res.status);
-    const result = await res.json();
-    if (result.sent_count > 0) {
-      _renderSOSScreen('success', contacts, message, result.sent_count);
-      return;
+    if (res.ok) {
+      const result = await res.json();
+      if (result.sent_count > 0) {
+        showToast(`✅ SMS enviado a ${result.sent_count} contacto${result.sent_count !== 1 ? 's' : ''}`);
+      }
     }
-    throw new Error('0 sent');
-  } catch (_) {
-    // Plan B: WhatsApp
-    _renderSOSScreen('whatsapp', contacts, message);
-  }
+  } catch (_) { /* SMS no disponible — WhatsApp ya visible */ }
 }
 
 function _renderSOSScreen(mode, contacts, message, sentCount) {
   const $c = document.getElementById('app-content');
   const encodedMsg = encodeURIComponent(message);
-  const phones = contacts.map(c => c.phone).join(',');
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const phonesSep = isIOS ? ';' : ',';
+  const smsSep = isIOS ? '&' : '?';
+  const phones = contacts.map(c => c.phone).join(phonesSep);
 
   const waButtons = contacts.map(c => `
-    <a class="sos-wa-btn" href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${encodedMsg}" target="_blank" rel="noopener">
+    <a class="sos-wa-btn" href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${encodedMsg}">
       <span class="sos-wa-icon">🟢</span>
       <span>WhatsApp → ${escapeHTML(c.name || c.phone)}</span>
     </a>`).join('');
 
-  const smsBtn = `<a class="sos-sms-btn" href="sms:${encodeURIComponent(phones)}?body=${encodedMsg}">
+  const smsBtn = `<a class="sos-sms-btn" href="sms:${phones}${smsSep}body=${encodedMsg}">
     📱 SMS a todos (sin datos)
   </a>`;
 
