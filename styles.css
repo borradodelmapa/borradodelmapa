@@ -1140,9 +1140,9 @@ body {
   padding:0 8px;
 }
 .auth-logo {
-  font-family:var(--font-tight); font-size:36px; font-weight:900;
+  font-family:var(--font-tight); font-size:clamp(24px, 8vw, 36px); font-weight:900;
   color:var(--blanco); letter-spacing:.04em; text-align:center;
-  line-height:1; width:100%;
+  line-height:1; width:100%; padding:0 16px; box-sizing:border-box;
 }
 .auth-logo span { color:var(--dorado); }
 .auth-logo.small { font-size:18px; margin-bottom:6px; letter-spacing:.06em; }
