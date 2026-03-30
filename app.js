@@ -31,6 +31,9 @@ function showState(state) {
   if (state === 'welcome') {
     renderWelcome();
     if (inputBar) inputBar.style.display = 'none';
+  } else if (state === 'rutas') {
+    loadUserGuides();
+    if (inputBar) inputBar.style.display = 'none';
   } else if (state === 'viajes' || state === 'profile') {
     renderProfile();
     if (inputBar) inputBar.style.display = 'none';
@@ -63,8 +66,8 @@ function updateBottomBar() {
 
   const isHome = currentState === 'welcome';
   const isChat = currentState === 'chat';
-  const isProfile = currentState === 'profile' || currentState === 'viajes' || currentState === 'bitacora' || currentState === 'diario';
-  const narratorOn = typeof salma !== 'undefined' && salma._narratorActive;
+  const isRutas = currentState === 'rutas';
+  const isProfile = currentState === 'profile' || currentState === 'bitacora' || currentState === 'diario';
   const sosContacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim());
   const sosReady = currentUser && sosContacts.length > 0;
 
@@ -77,21 +80,30 @@ function updateBottomBar() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span>Chat</span>
     </button>
-    <button class="bottom-tab ${narratorOn ? 'bottom-tab-active narrator-active' : ''}" id="tab-narrator">
-      <div class="narrator-icon-wrap">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        ${narratorOn ? '<span class="narrator-pulse"></span>' : ''}
-      </div>
-      <span>Narrador</span>
-    </button>
-    <button class="bottom-tab ${sosReady ? 'bottom-tab-sos' : 'bottom-tab-sos-off'}" id="tab-sos">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <span>SOS</span>
+    <button class="bottom-tab ${isRutas ? 'bottom-tab-active' : ''}" id="tab-rutas">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
+      <span>Mis Rutas</span>
     </button>
     <button class="bottom-tab ${isProfile ? 'bottom-tab-active' : ''}" id="tab-profile">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
     </button>`;
+
+  // Botón SOS flotante
+  let sosBtn = document.getElementById('sos-fab');
+  if (!sosBtn) {
+    sosBtn = document.createElement('button');
+    sosBtn.id = 'sos-fab';
+    sosBtn.className = 'sos-fab';
+    sosBtn.setAttribute('aria-label', 'SOS Emergencia');
+    sosBtn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+    document.body.appendChild(sosBtn);
+    sosBtn.addEventListener('click', () => {
+      if (!currentUser) { window._afterLogin = 'profile'; openModal('login'); return; }
+      if (sosReady) { showSOSConfirm(); } else { renderSOSConfig(); }
+    });
+  }
+  sosBtn.className = `sos-fab ${sosReady ? 'sos-fab-ready' : 'sos-fab-off'}`;
 
   document.getElementById('tab-home').addEventListener('click', () => showState('welcome'));
   document.getElementById('tab-chat').addEventListener('click', () => {
@@ -99,23 +111,9 @@ function updateBottomBar() {
       if (typeof salma !== 'undefined') salma._initChat();
     }
   });
-  document.getElementById('tab-narrator').addEventListener('click', async () => {
-    if (typeof salma === 'undefined') return;
-    if (salma._narratorActive) {
-      salma.stopNarrator();
-      updateBottomBar();
-    } else {
-      const ok = await salma.startNarrator();
-      if (ok === false) {
-        alert('Para usar el narrador, permite las notificaciones en tu navegador.');
-      } else {
-        updateBottomBar();
-      }
-    }
-  });
-  document.getElementById('tab-sos').addEventListener('click', () => {
-    if (!currentUser) { window._afterLogin = 'profile'; openModal('login'); return; }
-    if (sosReady) { showSOSConfirm(); } else { renderSOSConfig(); }
+  document.getElementById('tab-rutas').addEventListener('click', () => {
+    if (!currentUser) { window._afterLogin = 'rutas'; openModal('login'); return; }
+    showState('rutas');
   });
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
 }
