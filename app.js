@@ -1446,13 +1446,17 @@ async function loadUserGuides() {
 
     const grid = document.getElementById('viajes-grid');
 
-    // Recopilar solo guías creadas por el usuario (excluir destinos KV pre-generados)
+    // Limpiar guías KV pre-generadas (una sola vez) y recopilar las del usuario
     const allGuides = [];
+    const kvDocs = [];
     snap.forEach(doc => {
       const d = doc.data();
-      if (d.source === 'kv-nivel2') return;
+      if (d.source === 'kv-nivel2') { kvDocs.push(doc); return; }
       allGuides.push({ id: doc.id, data: d });
     });
+    if (kvDocs.length > 0) {
+      kvDocs.forEach(doc => db.collection('users').doc(currentUser.uid).collection('maps').doc(doc.id).delete().catch(() => {}));
+    }
 
     // Función para crear una card
     function createCard(doc, d) {
