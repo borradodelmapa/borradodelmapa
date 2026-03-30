@@ -2243,6 +2243,66 @@ export default {
       return new Response(object.body, { headers });
     }
 
+    // ─── ENDPOINT /upload-doc (subir documento a R2) ───
+    if (request.method === 'POST' && url.pathname === '/upload-doc') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      if (!env.SALMA_PHOTOS) {
+        return new Response(JSON.stringify({ error: 'R2 not configured' }), { status: 500, headers: corsH });
+      }
+      try {
+        const formData = await request.formData();
+        const file = formData.get('file');
+        const uid  = formData.get('uid') || 'anon';
+        const docId = formData.get('docId') || Date.now().toString();
+        if (!file) {
+          return new Response(JSON.stringify({ error: 'Missing file' }), { status: 400, headers: corsH });
+        }
+        if (file.size > 10 * 1024 * 1024) {
+          return new Response(JSON.stringify({ error: 'File too large (max 10MB)' }), { status: 400, headers: corsH });
+        }
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+        const key = `docs/${uid}/${docId}/${safeName}`;
+        await env.SALMA_PHOTOS.put(key, file.stream(), {
+          httpMetadata: { contentType: file.type || 'application/octet-stream' },
+          customMetadata: { uid, docId, originalName: file.name }
+        });
+        const docUrl = `https://salma-api.paco-defoto.workers.dev/doc/${encodeURIComponent(key)}`;
+        return new Response(JSON.stringify({ key, url: docUrl }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /delete-doc (eliminar documento de R2) ───
+    if (request.method === 'POST' && url.pathname === '/delete-doc') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      if (!env.SALMA_PHOTOS) return new Response(JSON.stringify({ error: 'R2 not configured' }), { status: 500, headers: corsH });
+      try {
+        const { key } = await request.json();
+        if (!key) return new Response(JSON.stringify({ error: 'Missing key' }), { status: 400, headers: corsH });
+        await env.SALMA_PHOTOS.delete(key);
+        return new Response(JSON.stringify({ ok: true }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /doc/* (servir documentos desde R2) ───
+    if (request.method === 'GET' && url.pathname.startsWith('/doc/')) {
+      if (!env.SALMA_PHOTOS) {
+        return new Response('R2 not configured', { status: 500 });
+      }
+      const key = decodeURIComponent(url.pathname.slice(5)); // quitar /doc/
+      const object = await env.SALMA_PHOTOS.get(key);
+      if (!object) return new Response('Not found', { status: 404 });
+      const headers = new Headers();
+      headers.set('Content-Type', object.httpMetadata?.contentType || 'application/octet-stream');
+      headers.set('Content-Disposition', `inline; filename="${object.customMetadata?.originalName || 'document'}"`)
+      headers.set('Cache-Control', 'private, max-age=3600');
+      headers.set('Access-Control-Allow-Origin', '*');
+      return new Response(object.body, { headers });
+    }
+
     // ─── ENDPOINT /health (monitoreo de APIs) ───
     if (request.method === 'GET' && url.pathname === '/health') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };

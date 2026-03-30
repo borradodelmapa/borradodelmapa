@@ -203,40 +203,42 @@ const docsViajero = {
     });
   },
 
-  // ── Subir archivo a Firebase Storage + guardar en Firestore ──
+  // ── Subir archivo a R2 via worker + guardar metadatos en Firestore ──
   async _saveDoc({ name, category, file, expiresAt, notes, progressBar }) {
     const uid = currentUser.uid;
     const docRef = db.collection('users').doc(uid).collection('travel_docs').doc();
     const docId = docRef.id;
-    const storagePath = `users/${uid}/docs/${docId}/${file.name}`;
 
-    const storageRef = firebase.storage().ref(storagePath);
-    const uploadTask = storageRef.put(file);
+    // Subir a R2 via worker
+    if (progressBar) progressBar.style.width = '30%';
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('uid', uid);
+    formData.append('docId', docId);
 
-    await new Promise((resolve, reject) => {
-      uploadTask.on('state_changed',
-        (snapshot) => {
-          const pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          if (progressBar) progressBar.style.width = pct + '%';
-        },
-        reject,
-        resolve
-      );
+    const res = await fetch(window.SALMA_API + '/upload-doc', {
+      method: 'POST',
+      body: formData
     });
+    if (!res.ok) throw new Error('Error subiendo archivo');
+    const { key, url: downloadURL } = await res.json();
 
-    const downloadURL = await storageRef.getDownloadURL();
+    if (progressBar) progressBar.style.width = '70%';
 
+    // Guardar metadatos en Firestore
     await docRef.set({
       name,
       category,
       fileName: file.name,
       fileType: file.type || 'application/octet-stream',
-      storagePath,
+      r2Key: key,
       downloadURL,
       expiresAt: expiresAt ? firebase.firestore.Timestamp.fromDate(expiresAt) : null,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       notes: notes || ''
     });
+
+    if (progressBar) progressBar.style.width = '100%';
   },
 
   // ── Modal ver documento ──
@@ -282,12 +284,16 @@ const docsViajero = {
   async _deleteDoc(doc) {
     const uid = currentUser.uid;
     try {
-      // Borrar archivo de Storage
-      if (doc.storagePath) {
+      // Borrar archivo de R2
+      if (doc.r2Key) {
         try {
-          await firebase.storage().ref(doc.storagePath).delete();
+          await fetch(window.SALMA_API + '/delete-doc', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key: doc.r2Key })
+          });
         } catch (e) {
-          console.warn('No se pudo borrar archivo de Storage:', e);
+          console.warn('No se pudo borrar archivo de R2:', e);
         }
       }
       // Borrar metadata de Firestore
