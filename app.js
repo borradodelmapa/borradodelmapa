@@ -1709,13 +1709,13 @@ auth.onAuthStateChanged(async (user) => {
       }
     }
 
-    // Tras login, ir al perfil
+    // Tras login, ir al destino indicado o quedarse en welcome
     if (window._afterLogin) {
       const dest = window._afterLogin;
       window._afterLogin = null;
       showState(dest);
-    } else if (currentState === 'welcome') {
-      showState('profile');
+    } else {
+      showState('welcome');
     }
   } else {
     currentUser = null;
