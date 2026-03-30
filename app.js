@@ -1508,18 +1508,18 @@ function destPhoto(destino) {
   return 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=200&fit=crop';
 }
 
-// ═══ AUTH — Modal ═══
+// ═══ AUTH — Pantallas completas ═══
 
 function openModal(view) {
-  const modal = document.getElementById('modal-auth');
-  if (modal) modal.classList.add('active');
-  switchModalView(view || 'login');
+  const screen = document.getElementById('auth-screen');
+  if (!screen) return;
+  screen.classList.add('active');
+  _authShowView(view === 'register' ? 'register' : 'welcome');
 }
 
 function closeModal() {
-  const modal = document.getElementById('modal-auth');
-  if (modal) modal.classList.remove('active');
-  // Reset
+  const screen = document.getElementById('auth-screen');
+  if (screen) screen.classList.remove('active');
   ['login-email','login-pass','register-name','register-email','register-pass'].forEach(id => {
     const el = document.getElementById(id); if (el) el.value = '';
   });
@@ -1529,11 +1529,11 @@ function closeModal() {
   });
 }
 
-function switchModalView(view) {
-  const login = document.getElementById('modal-login-view');
-  const register = document.getElementById('modal-register-view');
-  if (login) login.classList.toggle('hidden', view !== 'login');
-  if (register) register.classList.toggle('hidden', view !== 'register');
+function _authShowView(view) {
+  ['welcome','login','register'].forEach(v => {
+    const el = document.getElementById('auth-' + v + '-view');
+    if (el) el.classList.toggle('hidden', v !== view);
+  });
 }
 
 window.openModal = openModal;
@@ -1551,6 +1551,10 @@ async function doLogin() {
   try {
     await auth.signInWithEmailAndPassword(email, pass);
     closeModal();
+    // Ofrecer registrar huella si no la tiene y el dispositivo la soporta
+    if (!localStorage.getItem('bdm_webauthn_cred') && window.PublicKeyCredential) {
+      registerFingerprint(email);
+    }
   } catch (e) {
     showAuthError('login-error', authErrorMsg(e));
   }
@@ -1600,6 +1604,83 @@ async function doGoogleLogin() {
     console.error('Google login error:', e);
     showAuthError('login-error', authErrorMsg(e));
   }
+}
+
+// ═══ WebAuthn — Huella dactilar ═══
+
+async function doFingerprintLogin() {
+  const btn = document.getElementById('btn-fingerprint');
+  if (!btn) return;
+  try {
+    btn.classList.remove('success','error');
+    const storedCred = localStorage.getItem('bdm_webauthn_cred');
+    if (!storedCred) { btn.classList.add('error'); return; }
+    const { credentialId, email } = JSON.parse(storedCred);
+    const assertion = await navigator.credentials.get({
+      publicKey: {
+        challenge: new Uint8Array(32),
+        allowCredentials: [{ id: _base64ToBuffer(credentialId), type: 'public-key' }],
+        userVerification: 'required',
+        timeout: 30000
+      }
+    });
+    if (assertion) {
+      btn.classList.add('success');
+      // Con WebAuthn verificado, iniciamos sesión con el email guardado
+      // (en producción esto iría al servidor; aquí usamos custom token o email link)
+      // Por ahora mostramos el formulario con el email prellenado
+      document.getElementById('login-email').value = email || '';
+      document.getElementById('login-pass').focus();
+      showToast('Identidad verificada — introduce tu contraseña');
+    }
+  } catch (e) {
+    btn.classList.add('error');
+    if (e.name !== 'NotAllowedError') console.error('WebAuthn error:', e);
+  }
+}
+
+async function registerFingerprint(email) {
+  if (!window.PublicKeyCredential) return;
+  try {
+    const cred = await navigator.credentials.create({
+      publicKey: {
+        challenge: new Uint8Array(32),
+        rp: { name: 'Borrado del Mapa', id: location.hostname },
+        user: {
+          id: new TextEncoder().encode(email),
+          name: email,
+          displayName: email.split('@')[0]
+        },
+        pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
+        authenticatorSelection: { userVerification: 'required', residentKey: 'preferred' },
+        timeout: 30000
+      }
+    });
+    if (cred) {
+      localStorage.setItem('bdm_webauthn_cred', JSON.stringify({
+        credentialId: _bufferToBase64(cred.rawId),
+        email
+      }));
+    }
+  } catch (e) {
+    if (e.name !== 'NotAllowedError') console.error('WebAuthn register error:', e);
+  }
+}
+
+function _bufferToBase64(buffer) {
+  return btoa(String.fromCharCode(...new Uint8Array(buffer)));
+}
+function _base64ToBuffer(base64) {
+  const bin = atob(base64);
+  const buf = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+  return buf;
+}
+
+function _checkBiometricAvailable() {
+  const stored = localStorage.getItem('bdm_webauthn_cred');
+  const biometric = document.getElementById('auth-biometric');
+  if (biometric) biometric.classList.toggle('hidden', !stored);
 }
 
 function logout() {
@@ -2079,17 +2160,28 @@ function sendMessage() {
   });
 })();
 
-// ═══ MODAL — Event listeners ═══
+// ═══ AUTH SCREEN — Event listeners ═══
 
-document.getElementById('modal-close')?.addEventListener('click', closeModal);
+// Navegación entre vistas
+document.getElementById('auth-go-login')?.addEventListener('click', () => { _authShowView('login'); _checkBiometricAvailable(); });
+document.getElementById('auth-go-register')?.addEventListener('click', () => _authShowView('register'));
+document.getElementById('auth-back-login')?.addEventListener('click', () => _authShowView('welcome'));
+document.getElementById('auth-back-register')?.addEventListener('click', () => _authShowView('welcome'));
+document.getElementById('auth-skip')?.addEventListener('click', closeModal);
+document.getElementById('switch-to-register')?.addEventListener('click', () => _authShowView('register'));
+document.getElementById('switch-to-login')?.addEventListener('click', () => _authShowView('login'));
+
+// Login / Registro
 document.getElementById('btn-login')?.addEventListener('click', doLogin);
 document.getElementById('btn-register')?.addEventListener('click', doRegister);
 document.getElementById('btn-google-login')?.addEventListener('click', doGoogleLogin);
+document.getElementById('btn-google-login-2')?.addEventListener('click', doGoogleLogin);
 document.getElementById('btn-google-register')?.addEventListener('click', doGoogleLogin);
-document.getElementById('switch-to-register')?.addEventListener('click', () => switchModalView('register'));
-document.getElementById('switch-to-login')?.addEventListener('click', () => switchModalView('login'));
 
-// Enter en inputs de login
+// Huella dactilar (WebAuthn)
+document.getElementById('btn-fingerprint')?.addEventListener('click', doFingerprintLogin);
+
+// Enter en inputs
 document.getElementById('login-pass')?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 document.getElementById('register-pass')?.addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
 
