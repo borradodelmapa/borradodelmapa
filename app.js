@@ -8,6 +8,17 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
+// ── Splash ──
+function hideSplash() {
+  const s = document.getElementById('splash');
+  if (s && !s.classList.contains('splash-hidden')) {
+    s.classList.add('splash-hidden');
+    setTimeout(() => s.remove(), 450);
+  }
+}
+// Fallback: ocultar splash máximo a los 4s aunque Firebase tarde
+setTimeout(hideSplash, 4000);
+
 // Estado global
 let currentUser = null;
 let currentState = 'welcome'; // 'welcome' | 'chat' | 'viajes' | 'profile'
@@ -1806,6 +1817,7 @@ auth.onAuthStateChanged(async (user) => {
     }
 
     // Tras login, ir al destino indicado o quedarse en welcome
+    hideSplash();
     if (window._afterLogin) {
       const dest = window._afterLogin;
       window._afterLogin = null;
@@ -1816,6 +1828,7 @@ auth.onAuthStateChanged(async (user) => {
   } else {
     currentUser = null;
     updateHeader();
+    hideSplash();
   }
 });
 
