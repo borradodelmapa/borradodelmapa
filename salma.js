@@ -570,6 +570,13 @@ const salma = {
           } catch (_) {}
         }
       }
+      // Inyectar notas del nuevo sistema (recordatorios y generales)
+      if (window.currentUser && typeof notasManager !== 'undefined') {
+        try {
+          const userNotas = await notasManager.getAll({ limit: 10 });
+          if (userNotas.length) body.user_notes = userNotas.map(n => ({ texto: n.texto, tipo: n.tipo, fecha: n.fechaRecordatorio }));
+        } catch (_) {}
+      }
       // Datos extra de detección
       if (extra.travel_dates) body.travel_dates = extra.travel_dates;
       if (extra.transport) body.transport = extra.transport;
@@ -725,6 +732,26 @@ const salma = {
                   _isBlocks: isBlocksRoute
                 });
                 return;
+              }
+
+              // SAVE_NOTA — guardar nota/recordatorio desde herramienta guardar_nota
+              if (evt.save_nota && evt.nota_data) {
+                try {
+                  if (typeof notasManager !== 'undefined' && window.currentUser) {
+                    const nd = evt.nota_data;
+                    notasManager.create({
+                      texto: nd.texto,
+                      tipo: nd.tipo || 'general',
+                      fechaRecordatorio: nd.fecha_recordatorio || null,
+                      countryCode: nd.country_code || null,
+                      countryName: nd.country_name || null,
+                      emoji: nd.country_code && typeof countryEmoji === 'function' ? countryEmoji(nd.country_code) : null,
+                      origen: 'salma',
+                      fuente: 'guardar_nota'
+                    });
+                  }
+                } catch (_) {}
+                continue;
               }
 
               // TOOL_NOTE — auto-guardar nota del país

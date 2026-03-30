@@ -68,6 +68,10 @@ function showState(state) {
     if (typeof docsViajero !== 'undefined') docsViajero.render();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '';
+  } else if (state === 'notas') {
+    if (typeof notasManager !== 'undefined') notasManager.renderNotasView();
+    if (inputBar) inputBar.style.display = 'none';
+    $content.style.paddingBottom = '';
   } else if (state === 'chat') {
     // Limpiar welcome si estaba visible (ej: llegando desde ?go=chat)
     const welcomeEl = $content.querySelector('.welcome-area');
@@ -106,7 +110,7 @@ function updateBottomBar() {
   const isHome = currentState === 'welcome';
   const isChat = currentState === 'chat';
   const isRutas = currentState === 'rutas';
-  const isProfile = currentState === 'profile' || currentState === 'bitacora' || currentState === 'diario' || currentState === 'documentos';
+  const isProfile = currentState === 'profile' || currentState === 'bitacora' || currentState === 'diario' || currentState === 'documentos' || currentState === 'notas';
   const sosContacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim());
   const sosReady = currentUser && sosContacts.length > 0;
 
@@ -210,6 +214,7 @@ async function renderWelcome() {
         <div class="welcome-chips" id="welcome-chips">
           ${defaultChips}
         </div>
+        <div id="welcome-reminders"></div>
 
       </div>
     </div>`;
@@ -297,6 +302,11 @@ async function renderWelcome() {
 
   // Actualizar chips con datos reales de Firestore (async, sin layout shift)
   _loadChipsAsync(chipsEl);
+
+  // Recordatorios próximos
+  if (currentUser && typeof notasManager !== 'undefined') {
+    notasManager.renderWelcomeReminders('welcome-reminders');
+  }
 }
 
 function chipLabel(name, max = 18) {
@@ -459,6 +469,12 @@ async function renderProfile() {
           <span class="profile-section-arrow">›</span>
         </div>
 
+        <div class="profile-section" id="prof-notas">
+          <span class="profile-section-icon">\u{1F4DD}</span>
+          <span class="profile-section-label">Mis Notas</span>
+          <span class="profile-section-arrow">\u203A</span>
+        </div>
+
         <div class="profile-section" id="prof-galeria">
           <span class="profile-section-icon">🖼️</span>
           <span class="profile-section-label">Galería</span>
@@ -551,6 +567,7 @@ async function renderProfile() {
   }
   document.getElementById('prof-coins').addEventListener('click', openCoinsModal);
   document.getElementById('prof-bitacora').addEventListener('click', () => showState('bitacora'));
+  document.getElementById('prof-notas').addEventListener('click', () => showState('notas'));
   document.getElementById('prof-galeria').addEventListener('click', () => renderGaleria());
   document.getElementById('prof-docs').addEventListener('click', () => {
     if (typeof docsViajero !== 'undefined') docsViajero.render();

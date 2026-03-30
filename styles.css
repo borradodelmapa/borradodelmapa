@@ -2485,3 +2485,66 @@ body {
 .diario-share-menu { position:absolute; right:0; top:100%; margin-top:8px; background:#1a1a1a; border:1px solid rgba(244,239,230,.1); border-radius:10px; padding:6px; z-index:100; min-width:200px; box-shadow:0 8px 24px rgba(0,0,0,.5); }
 .diario-share-option { display:block; width:100%; text-align:left; background:none; border:none; color:rgba(244,239,230,.7); font-size:13px; padding:10px 14px; border-radius:6px; cursor:pointer; }
 .diario-share-option:hover { background:rgba(212,160,23,.1); color:var(--dorado); }
+
+/* ═══ RECORDATORIOS WELCOME ═══ */
+.welcome-reminders { padding:0 4px; margin-top:18px; }
+.welcome-reminders-title { font-family:var(--font-mono); font-size:10px; font-weight:600; letter-spacing:.15em; color:var(--dorado); margin-bottom:10px; text-transform:uppercase; }
+.reminder-card { display:flex; align-items:flex-start; gap:10px; padding:12px 14px; background:rgba(244,239,230,.04); border:1px solid rgba(244,239,230,.08); border-radius:10px; margin-bottom:8px; transition:opacity .3s, transform .3s; }
+.reminder-card-urgent { border-color:rgba(212,168,67,.35); background:rgba(212,168,67,.06); }
+.reminder-check { width:22px; height:22px; border-radius:50%; border:2px solid rgba(212,168,67,.4); background:none; color:transparent; font-size:12px; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all .15s; margin-top:1px; }
+.reminder-check:hover { border-color:var(--dorado); color:var(--dorado); background:rgba(212,168,67,.1); }
+.reminder-body { flex:1; min-width:0; }
+.reminder-text { font-size:14px; color:rgba(244,239,230,.85); line-height:1.4; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+.reminder-meta { display:flex; align-items:center; gap:6px; margin-top:4px; font-size:12px; }
+.reminder-badge { font-size:11px; padding:2px 8px; border-radius:10px; font-weight:600; }
+.reminder-badge-urgent { background:rgba(212,168,67,.2); color:var(--dorado); }
+.reminder-badge-soon { background:rgba(212,168,67,.1); color:rgba(212,168,67,.8); }
+.reminder-badge-future { background:rgba(244,239,230,.06); color:rgba(244,239,230,.5); }
+.reminder-badge-far { background:rgba(244,239,230,.04); color:rgba(244,239,230,.35); }
+
+/* ═══ MIS NOTAS ═══ */
+.notas-area { max-width:540px; margin:0 auto; padding:16px; }
+.notas-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.notas-back { background:none; border:none; color:var(--dorado); font-size:24px; cursor:pointer; padding:4px 8px; }
+.notas-title { font-family:var(--font-mono); font-size:14px; font-weight:600; letter-spacing:.15em; color:var(--dorado); flex:1; }
+.notas-add-btn { width:32px; height:32px; border-radius:50%; border:1px solid rgba(212,168,67,.4); background:rgba(212,168,67,.08); color:var(--dorado); font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s; }
+.notas-add-btn:hover { background:rgba(212,168,67,.2); }
+.notas-loading { color:rgba(244,239,230,.4); text-align:center; padding:40px 0; }
+
+/* Filtros */
+.nota-filters { display:flex; gap:8px; overflow-x:auto; padding-bottom:12px; margin-bottom:16px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+.nota-filters::-webkit-scrollbar { display:none; }
+.nota-filter-pill { white-space:nowrap; padding:6px 14px; border-radius:20px; border:1px solid rgba(244,239,230,.1); background:rgba(244,239,230,.04); color:rgba(244,239,230,.6); font-size:12px; cursor:pointer; transition:all .15s; flex-shrink:0; }
+.nota-filter-pill:hover { border-color:rgba(212,168,67,.3); color:var(--dorado); }
+.nota-filter-pill.active { background:rgba(212,168,67,.15); border-color:rgba(212,168,67,.4); color:var(--dorado); font-weight:600; }
+
+/* Tarjetas de nota */
+.notas-list { display:flex; flex-direction:column; gap:10px; }
+.nota-card { padding:14px 16px; background:rgba(244,239,230,.04); border:1px solid rgba(244,239,230,.08); border-radius:12px; transition:opacity .3s, transform .3s; }
+.nota-card-header { display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
+.nota-tipo-tag { font-size:11px; padding:2px 8px; border-radius:6px; font-weight:600; }
+.nota-card-country { font-size:14px; }
+.nota-card-actions { margin-left:auto; display:flex; gap:4px; }
+.nota-card-edit, .nota-card-delete { background:none; border:none; cursor:pointer; font-size:13px; padding:2px 6px; opacity:.3; transition:opacity .15s; }
+.nota-card-edit:hover, .nota-card-delete:hover { opacity:.8; }
+.nota-card-texto { font-size:14px; color:rgba(244,239,230,.8); line-height:1.5; word-break:break-word; }
+.nota-card-date { font-size:11px; color:rgba(244,239,230,.3); margin-top:6px; }
+
+/* Estado vacío */
+.nota-empty { text-align:center; padding:60px 20px; }
+.nota-empty-icon { font-size:48px; margin-bottom:16px; }
+.nota-empty-text { font-weight:600; color:rgba(244,239,230,.7); margin-bottom:8px; }
+.nota-empty-sub { font-size:13px; color:rgba(244,239,230,.4); }
+
+/* Formulario crear/editar */
+.nota-form { padding:16px; background:rgba(244,239,230,.04); border:1px solid rgba(212,168,67,.2); border-radius:12px; margin-bottom:16px; }
+.nota-form-input { width:100%; background:rgba(244,239,230,.04); border:1px solid rgba(244,239,230,.08); border-radius:8px; color:rgba(244,239,230,.85); padding:10px 12px; font-size:14px; resize:vertical; min-height:60px; font-family:inherit; box-sizing:border-box; }
+.nota-form-input:focus { border-color:rgba(212,160,23,.3); outline:none; }
+.nota-form-input::placeholder { color:rgba(244,239,230,.25); }
+.nota-form-row { display:flex; gap:8px; margin-top:10px; }
+.nota-form-select { flex:1; background:rgba(244,239,230,.06); border:1px solid rgba(244,239,230,.1); border-radius:8px; color:rgba(244,239,230,.7); padding:8px 10px; font-size:13px; font-family:inherit; }
+.nota-form-date { flex:1; background:rgba(244,239,230,.06); border:1px solid rgba(244,239,230,.1); border-radius:8px; color:rgba(244,239,230,.7); padding:8px 10px; font-size:13px; font-family:inherit; }
+.nota-form-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+.nota-form-cancel { background:none; border:1px solid rgba(244,239,230,.1); color:rgba(244,239,230,.5); padding:8px 16px; border-radius:8px; font-size:13px; cursor:pointer; }
+.nota-form-save { background:rgba(212,168,67,.15); border:1px solid rgba(212,168,67,.4); color:var(--dorado); padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; transition:background .15s; }
+.nota-form-save:hover { background:rgba(212,168,67,.25); }

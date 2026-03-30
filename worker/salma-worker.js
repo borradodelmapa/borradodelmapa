@@ -289,6 +289,12 @@ Una sola palabra. No la menciones ni la expliques al usuario. Es un tag interno 
 // ═══════════════════════════════════════════════════════════════
 // ENSAMBLAR SYSTEM PROMPT
 // ═══════════════════════════════════════════════════════════════
+const BLOQUE_NOTAS = `NOTAS Y RECORDATORIOS — herramienta guardar_nota
+Cuando el usuario diga "apúntame", "recuérdame", "anota", "guarda que", "no olvides" o cualquier variante de querer guardar info → usa guardar_nota INMEDIATAMENTE. Sin preguntar. Guarda y confirma con frase corta tipo "Apuntado" o "Guardado, no se me olvida".
+Si menciona una fecha → extrae la fecha como YYYY-MM-DD en fecha_recordatorio. Calcula bien el año actual (2026).
+Si menciona un país → pon el código ISO en country_code y el nombre en country_name.
+Si dice algo como "recuérdame devolver la moto el 15 de abril" → tipo: recordatorio, fecha_recordatorio: 2026-04-15, texto: "Devolver la moto".`;
+
 const SALMA_SYSTEM_BASE = [
   BLOQUE_IDENTIDAD,
   BLOQUE_PERSONALIDAD,
@@ -297,6 +303,7 @@ const SALMA_SYSTEM_BASE = [
   BLOQUE_TONO,
   BLOQUE_INFORMACION,
   BLOQUE_FORMATO,
+  BLOQUE_NOTAS,
   BLOQUE_RUTAS,
   BLOQUE_MAPA,
   BLOQUE_VISION,
@@ -461,6 +468,37 @@ const SALMA_TOOLS = [
         }
       },
       required: ["titulo", "tipo"]
+    }
+  },
+  {
+    name: "guardar_nota",
+    description: "Guarda una nota o recordatorio para el viajero. Usa esta herramienta INMEDIATAMENTE cuando el usuario diga 'apúntame', 'recuérdame', 'anota que', 'guarda que', 'no olvides que', 'apunta que' o cualquier variante de querer guardar información o un recordatorio. NO preguntes, guarda directamente y confirma con una frase corta.",
+    input_schema: {
+      type: "object",
+      properties: {
+        texto: {
+          type: "string",
+          description: "El contenido de la nota tal como lo dice el usuario. Limpia y reformula si es necesario para que sea claro al releerlo."
+        },
+        tipo: {
+          type: "string",
+          enum: ["general", "recordatorio", "hotel", "vuelo", "restaurante", "lugar", "visado", "transporte"],
+          description: "Tipo de nota. Usa 'recordatorio' si hay una fecha o algo que no debe olvidar. 'general' para todo lo demás."
+        },
+        fecha_recordatorio: {
+          type: "string",
+          description: "Fecha en formato YYYY-MM-DD si el usuario menciona una fecha concreta. Ej: 'el 15 de abril' → '2026-04-15'. Si no hay fecha, omite."
+        },
+        country_code: {
+          type: "string",
+          description: "Código ISO de 2 letras del país si la nota está relacionada con un país concreto. Ej: 'TH' para Tailandia."
+        },
+        country_name: {
+          type: "string",
+          description: "Nombre del país en español si aplica. Ej: 'Tailandia'."
+        }
+      },
+      required: ["texto", "tipo"]
     }
   }
 ];
@@ -1900,6 +1938,8 @@ async function executeToolCall(toolName, toolInput, env, userCoords) {
       return await buscarFotoLugar(toolInput, env.GOOGLE_PLACES_KEY);
     case 'generar_video':
       return generarVideo(toolInput);
+    case 'guardar_nota':
+      return { saved: true, nota: toolInput };
     default:
       return { error: `Herramienta desconocida: ${toolName}` };
   }
@@ -3024,6 +3064,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     const rutasGratisUsadas = typeof body.rutas_gratis_usadas === 'number' ? body.rutas_gratis_usadas : 0;
     const imageBase64 = body.image_base64 || null;
     const uid = body.uid || null;
+    const userNotes = body.user_notes || null;
 
     // Reverse geocoding: convertir coordenadas → nombre de ciudad (Nominatim/OSM, gratis)
     let userLocationName = null;
@@ -3171,7 +3212,18 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     }
 
     // Construir mensajes (con datos KV si los hay)
-    const { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64);
+    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64);
+
+    // Inyectar notas del usuario en el contexto
+    if (userNotes && userNotes.length > 0) {
+      const notasCtx = userNotes.map(n => {
+        let line = `- ${n.texto} (${n.tipo})`;
+        if (n.fecha) line += ` [fecha: ${n.fecha}]`;
+        return line;
+      }).join('\n');
+      systemPrompt += `\n\n[NOTAS DEL VIAJERO — el usuario tiene estas notas guardadas. Tenlas en cuenta si son relevantes:\n${notasCtx}]`;
+    }
+
     const isRoute = isRouteRequest(message, history);
     const isFlightReq = isFlightRequest(message);
     const isHotelReq = isHotelRequest(message);
@@ -3369,6 +3421,10 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
                 tool_use_id: block.id,
                 content: JSON.stringify(toolResult)
               });
+              // Enviar evento al cliente para guardar nota en Firestore
+              if (block.name === 'guardar_nota' && toolResult.saved) {
+                try { await writer.write(encoder.encode(`data: ${JSON.stringify({ save_nota: true, nota_data: toolResult.nota })}\n\n`)); } catch (_) {}
+              }
             }
           }
 
