@@ -602,8 +602,11 @@ body {
 .welcome-input-wrap {
   width:100%; max-width:500px; display:flex; flex-direction:column; gap:0; margin-bottom:0;
 }
+.welcome-input-wrap .input-row {
+  position:relative;
+}
 .welcome-input {
-  flex:1; padding:13px 18px; box-sizing:border-box;
+  width:100%; padding:13px 110px 13px 18px; box-sizing:border-box;
   background:rgba(255,255,255,.08); border:1.5px solid rgba(212,160,23,.4);
   border-radius:14px; color:var(--crema);
   font-family:var(--font-body); font-size:16px;
@@ -611,8 +614,11 @@ body {
   overflow-y:hidden;
 }
 .welcome-mic, .welcome-cam {
-  width:52px; height:52px; border-color:rgba(212,160,23,.4);
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:36px; height:36px; border-color:transparent; background:transparent;
 }
+.welcome-cam { right:44px; }
+.welcome-mic { right:6px; }
 .welcome-input::placeholder { color:rgba(244,239,230,.45); }
 .welcome-input:focus { border-color:var(--dorado); background:rgba(255,255,255,.1); }
 .welcome-send {
