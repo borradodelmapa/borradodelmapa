@@ -86,34 +86,34 @@ const docsViajero = {
     el.innerHTML = html;
   },
 
-  // ── Grid de tarjetas ──
+  // ── Lista de documentos ──
   _renderGrid() {
     const wrap = document.getElementById('docs-grid-wrap');
     if (!wrap) return;
 
     if (this._docs.length === 0) {
-      wrap.innerHTML = `<div class="docs-empty"><div class="docs-empty-icon">\u{1F5C4}\uFE0F</div><div class="docs-empty-text">Aún no tienes documentos guardados.<br>Sube tu pasaporte, visados, seguros...</div><div class="docs-grid"><div class="doc-card doc-card-add" id="doc-add-empty"><div class="doc-card-add-icon">+</div><div class="doc-card-add-label">Añadir documento</div></div></div></div>`;
+      wrap.innerHTML = `<div class="docs-empty"><div class="docs-empty-icon">\u{1F5C4}\uFE0F</div><div class="docs-empty-text">Aún no tienes documentos guardados.<br>Sube tu pasaporte, visados, seguros...</div><div class="docs-list"><div class="doc-row-add" id="doc-add-empty"><div class="doc-row-add-icon">+</div><div class="doc-row-add-label">Añadir documento</div></div></div></div>`;
       document.getElementById('doc-add-empty').addEventListener('click', () => this._openAddModal());
       return;
     }
 
-    let html = '<div class="docs-grid">';
+    let html = '<div class="docs-list">';
     this._docs.forEach(doc => {
       const cat = DOC_CATEGORIES.find(c => c.id === doc.category) || DOC_CATEGORIES[6];
       const expiry = this._getExpiryStatus(doc.expiresAt);
       let badge = '';
       if (expiry) {
-        badge = `<span class="doc-card-badge doc-badge-${expiry.status}">${this._esc(expiry.label)}</span>`;
+        badge = `<span class="doc-row-badge doc-badge-${expiry.status}">${this._esc(expiry.label)}</span>`;
       }
-      html += `<div class="doc-card" data-doc-id="${doc.id}"><span class="doc-card-emoji">${cat.emoji}</span><div class="doc-card-name">${this._esc(doc.name)}</div><div class="doc-card-cat">${this._esc(cat.label)}</div>${badge}</div>`;
+      html += `<div class="doc-row" data-doc-id="${doc.id}"><span class="doc-row-emoji">${cat.emoji}</span><div class="doc-row-info"><div class="doc-row-name">${this._esc(doc.name)}</div><div class="doc-row-cat">${this._esc(cat.label)}</div></div><div class="doc-row-right">${badge}<span class="doc-row-arrow">\u203A</span></div></div>`;
     });
-    html += `<div class="doc-card doc-card-add" id="doc-add-btn"><div class="doc-card-add-icon">+</div><div class="doc-card-add-label">Añadir</div></div></div>`;
+    html += `<div class="doc-row-add" id="doc-add-btn"><div class="doc-row-add-icon">+</div><div class="doc-row-add-label">Añadir documento</div></div></div>`;
     wrap.innerHTML = html;
 
     // Listeners
-    wrap.querySelectorAll('.doc-card[data-doc-id]').forEach(card => {
-      card.addEventListener('click', () => {
-        const doc = this._docs.find(d => d.id === card.dataset.docId);
+    wrap.querySelectorAll('.doc-row[data-doc-id]').forEach(row => {
+      row.addEventListener('click', () => {
+        const doc = this._docs.find(d => d.id === row.dataset.docId);
         if (doc) this._openViewModal(doc);
       });
     });
