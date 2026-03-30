@@ -74,10 +74,18 @@ function showState(state) {
     if (welcomeEl) $content.innerHTML = '';
     $input.placeholder = 'Escribe a Salma...';
     if (inputBar) inputBar.style.display = '';
-    document.body.classList.add('chat-bg');
+    if (!document.getElementById('chat-bg-layer')) {
+      const layer = document.createElement('div');
+      layer.id = 'chat-bg-layer';
+      layer.className = 'chat-bg-layer';
+      document.body.insertBefore(layer, document.body.firstChild);
+    }
   }
   // Quitar fondo mapa si salimos del chat
-  if (state !== 'chat') document.body.classList.remove('chat-bg');
+  if (state !== 'chat') {
+    const layer = document.getElementById('chat-bg-layer');
+    if (layer) layer.remove();
+  }
 }
 
 function updateHeader() {

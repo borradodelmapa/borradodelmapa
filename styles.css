@@ -143,17 +143,16 @@ body {
   scrollbar-width:none;
 }
 /* Fondo mapa sutil en el chat */
-.chat-bg .app-content {
+.chat-bg-layer {
+  position:fixed; inset:0; z-index:0;
   background-image:url('mapa.webp');
   background-position:center; background-size:cover;
-  background-attachment:fixed;
+  pointer-events:none;
 }
-.chat-bg .app-content::before {
-  content:''; position:fixed; inset:0;
-  background:rgba(6,5,3,.7);
-  pointer-events:none; z-index:0;
+.chat-bg-layer::after {
+  content:''; position:absolute; inset:0;
+  background:rgba(6,5,3,.65);
 }
-.chat-bg .app-content > * { position:relative; z-index:1; }
 .app-content::-webkit-scrollbar { display:none; }
 
 /* ── Input bar (fijo abajo, NUNCA desaparece) ── */
