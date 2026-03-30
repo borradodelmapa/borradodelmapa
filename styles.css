@@ -35,9 +35,10 @@
   font-family: 'Bebas Neue', sans-serif;
   font-size: 22px;
   letter-spacing: 5px;
-  color: #f0b429;
+  color: var(--blanco, #ffffff);
   text-transform: uppercase;
 }
+.splash-logo span { color: #f0b429; }
 .splash-dots {
   display: flex;
   gap: 6px;
