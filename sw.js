@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bdm-v32';
+const CACHE_NAME = 'bdm-v33';
 const STATIC_ASSETS = [
   '/',
   '/styles.css',
@@ -7,6 +7,8 @@ const STATIC_ASSETS = [
   '/country-utils.js',
   '/guide-renderer.js',
   '/salma_ai_avatar.png',
+  '/icon-192.png',
+  '/icon-512.png',
   '/mapa.png'
 ];
 
