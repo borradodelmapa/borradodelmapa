@@ -314,6 +314,63 @@ async function _loadChipsAsync(chipsEl) {
 
 // ═══ PERFIL DE USUARIO ═══
 
+function renderSalmaCan() {
+  const features = [
+    {
+      icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>`,
+      title: 'Planifica',
+      desc: 'Rutas a medida con IA, mapas, fotos reales e info pre-viaje para 193 países.'
+    },
+    {
+      icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>`,
+      title: 'Reserva',
+      desc: 'Vuelos, trenes, ferry, hotel, coche, bus y lo que haga falta. Enlace directo sin publicidad.'
+    },
+    {
+      icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
+      title: 'Búsquedas',
+      desc: 'Restaurantes, lugares y servicios cerca de ti. Google sin anuncios ni patrocinados.'
+    },
+    {
+      icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>`,
+      title: 'Acompaña',
+      desc: 'Copiloto con info del país en tiempo real. Narrador de lo que tienes cerca.'
+    },
+    {
+      icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`,
+      title: 'Documenta',
+      desc: 'Galería de fotos por álbum, bitácora de viaje y notas asociadas a cada destino.'
+    },
+    {
+      icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`,
+      title: 'Comparte',
+      desc: 'Tu ruta con URL propia. Google Maps de toda la ruta de un solo toque.'
+    },
+    {
+      icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+      title: 'Protege',
+      desc: 'SOS a tus contactos de emergencia. Embajadas, hospitales y policía al instante.'
+    }
+  ];
+
+  $content.innerHTML = `
+    <div class="salma-can-area fade-in">
+      <div class="salma-can-header">
+        <div class="salma-can-title">¿Qué puedo hacer?</div>
+        <div class="salma-can-sub">Todo lo que Salma puede hacer por ti</div>
+      </div>
+      <div class="salma-can-grid">
+        ${features.map(f => `
+          <div class="salma-can-card">
+            <div class="salma-can-icon">${f.icon}</div>
+            <div class="salma-can-name">${f.title}</div>
+            <div class="salma-can-desc">${f.desc}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+}
+
 async function renderProfile() {
   if (!currentUser) { showState('welcome'); return; }
 
@@ -368,16 +425,16 @@ async function renderProfile() {
           <span class="profile-section-arrow">›</span>
         </div>
 
-        <div class="profile-section" id="prof-help">
-          <span class="profile-section-icon">?</span>
-          <span class="profile-section-label">Ayuda</span>
-          <span class="profile-section-arrow">›</span>
-        </div>
-
         <div class="profile-section" id="prof-coins">
           <span class="profile-section-icon">S</span>
           <span class="profile-section-label">Salma Coins</span>
           <span class="profile-section-coins-badge">${coins}</span>
+          <span class="profile-section-arrow">›</span>
+        </div>
+
+        <div class="profile-section" id="prof-help">
+          <svg class="profile-section-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span class="profile-section-label">¿Qué puedo hacer?</span>
           <span class="profile-section-arrow">›</span>
         </div>
 
@@ -412,9 +469,7 @@ async function renderProfile() {
   document.getElementById('prof-narrator-info').addEventListener('click', () => {
     showInfoPopup('Si estás cerca de un punto de interés cultural, Salma te manda una notificación y te cuenta la historia. Así no te pierdes nada. Info actualizada de más de 190 países.');
   });
-  document.getElementById('prof-help').addEventListener('click', () => {
-    document.getElementById('salma-info-overlay').style.display = 'flex';
-  });
+  document.getElementById('prof-help').addEventListener('click', () => renderSalmaCan());
   document.getElementById('prof-sos').addEventListener('click', () => {
     const contacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone && c.phone.trim());
     if (contacts.length === 0) {
