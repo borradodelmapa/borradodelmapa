@@ -220,24 +220,32 @@
 .docs-textarea { resize:vertical; min-height:60px; }
 .docs-input[type="date"] { color-scheme:dark; }
 
-/* ── File input ── */
-.docs-file-area {
-  border:1px dashed var(--linea);
+/* ── File input — botones cámara + archivo ── */
+.docs-file-buttons {
+  display:flex; gap:10px; margin-bottom:10px;
+}
+.docs-file-btn {
+  flex:1; padding:14px 12px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--linea);
   border-radius:var(--radius-sm);
-  padding:20px; text-align:center;
+  color:rgba(244,239,230,.7); font-size:14px;
+  font-family:var(--font-tight); font-weight:600;
   cursor:pointer; transition:all .2s;
-  position:relative;
+  text-align:center;
 }
-.docs-file-area:hover {
+.docs-file-btn:hover {
+  background:rgba(255,255,255,.08);
   border-color:var(--linea-fuerte);
-  background:rgba(255,255,255,.03);
+  color:var(--crema);
 }
-.docs-file-area input[type="file"] {
-  position:absolute; inset:0; opacity:0; cursor:pointer;
-}
-.docs-file-icon { font-size:24px; margin-bottom:6px; }
-.docs-file-text {
-  font-size:13px; color:rgba(244,239,230,.4);
+.docs-file-btn:active { transform:scale(.97); }
+.docs-file-preview {
+  display:flex; align-items:center; gap:8px;
+  padding:10px 14px;
+  background:rgba(74,222,128,.06);
+  border:1px solid rgba(74,222,128,.15);
+  border-radius:var(--radius-sm);
 }
 .docs-file-name {
   font-size:13px; color:var(--dorado); font-weight:600;

@@ -127,42 +127,49 @@ const docsViajero = {
 
     let catOptions = DOC_CATEGORIES.map(c => `<option value="${c.id}">${c.emoji} ${c.label}</option>`).join('');
 
-    overlay.innerHTML = `<div class="docs-modal"><div class="docs-modal-handle"></div><div class="docs-modal-title">Nuevo documento</div><div class="docs-field"><label class="docs-label">Nombre *</label><input class="docs-input" id="doc-name" type="text" placeholder="Ej: Pasaporte España" maxlength="100"></div><div class="docs-field"><label class="docs-label">Categoría *</label><select class="docs-select" id="doc-category">${catOptions}</select></div><div class="docs-field"><label class="docs-label">Archivo *</label><div class="docs-file-area" id="doc-file-area"><div class="docs-file-icon">\u{1F4CE}</div><div class="docs-file-text">Pulsa para seleccionar archivo</div><div class="docs-file-name" id="doc-file-name"></div><div class="docs-file-size" id="doc-file-size"></div><div class="docs-file-error" id="doc-file-error"></div><input type="file" id="doc-file-input" accept="*"></div></div><div class="docs-field"><label class="docs-label">Fecha de caducidad</label><input class="docs-input" id="doc-expires" type="date"></div><div class="docs-field"><label class="docs-label">Notas</label><textarea class="docs-textarea" id="doc-notes" placeholder="Opcional" rows="2" maxlength="500"></textarea></div><div id="doc-progress-wrap"></div><div class="docs-modal-actions"><button class="docs-btn docs-btn-secondary" id="doc-cancel">Cancelar</button><button class="docs-btn docs-btn-primary" id="doc-save" disabled>Guardar</button></div></div>`;
+    overlay.innerHTML = `<div class="docs-modal"><div class="docs-modal-handle"></div><div class="docs-modal-title">Nuevo documento</div><div class="docs-field"><label class="docs-label">Nombre *</label><input class="docs-input" id="doc-name" type="text" placeholder="Ej: Pasaporte España" maxlength="100"></div><div class="docs-field"><label class="docs-label">Categoría *</label><select class="docs-select" id="doc-category">${catOptions}</select></div><div class="docs-field"><label class="docs-label">Archivo *</label><div class="docs-file-buttons"><button class="docs-file-btn" id="doc-camera-btn">\u{1F4F8} Hacer foto</button><button class="docs-file-btn" id="doc-file-btn">\u{1F4CE} Elegir archivo</button></div><input type="file" id="doc-file-input" accept="*" style="display:none"><input type="file" id="doc-camera-input" accept="image/*" capture="environment" style="display:none"><div class="docs-file-preview" id="doc-file-preview" style="display:none"><div class="docs-file-name" id="doc-file-name"></div><div class="docs-file-size" id="doc-file-size"></div></div><div class="docs-file-error" id="doc-file-error"></div></div><div class="docs-field"><label class="docs-label">Fecha de caducidad</label><input class="docs-input" id="doc-expires" type="date"></div><div class="docs-field"><label class="docs-label">Notas</label><textarea class="docs-textarea" id="doc-notes" placeholder="Opcional" rows="2" maxlength="500"></textarea></div><div id="doc-progress-wrap"></div><div class="docs-modal-actions"><button class="docs-btn docs-btn-secondary" id="doc-cancel">Cancelar</button><button class="docs-btn docs-btn-primary" id="doc-save" disabled>Guardar</button></div></div>`;
 
     document.body.appendChild(overlay);
 
     let selectedFile = null;
 
     const fileInput = overlay.querySelector('#doc-file-input');
+    const cameraInput = overlay.querySelector('#doc-camera-input');
     const nameInput = overlay.querySelector('#doc-name');
     const saveBtn = overlay.querySelector('#doc-save');
+    const filePreview = overlay.querySelector('#doc-file-preview');
 
     const updateSaveState = () => {
       const hasName = nameInput.value.trim().length > 0;
       saveBtn.disabled = !(hasName && selectedFile);
     };
 
-    nameInput.addEventListener('input', updateSaveState);
-
-    fileInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
+    const handleFileSelected = (file) => {
       if (!file) return;
-
       if (file.size > MAX_FILE_SIZE) {
         overlay.querySelector('#doc-file-error').textContent = 'El archivo supera 10 MB';
-        overlay.querySelector('#doc-file-name').textContent = '';
-        overlay.querySelector('#doc-file-size').textContent = '';
+        filePreview.style.display = 'none';
         selectedFile = null;
         updateSaveState();
         return;
       }
-
       selectedFile = file;
       overlay.querySelector('#doc-file-error').textContent = '';
       overlay.querySelector('#doc-file-name').textContent = file.name;
       overlay.querySelector('#doc-file-size').textContent = this._formatSize(file.size);
+      filePreview.style.display = '';
       updateSaveState();
-    });
+    };
+
+    nameInput.addEventListener('input', updateSaveState);
+
+    // Botón cámara
+    overlay.querySelector('#doc-camera-btn').addEventListener('click', () => cameraInput.click());
+    // Botón archivo
+    overlay.querySelector('#doc-file-btn').addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', (e) => handleFileSelected(e.target.files[0]));
+    cameraInput.addEventListener('change', (e) => handleFileSelected(e.target.files[0]));
 
     overlay.querySelector('#doc-cancel').addEventListener('click', () => overlay.remove());
     overlay.addEventListener('click', (e) => {
