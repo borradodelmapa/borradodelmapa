@@ -2877,15 +2877,16 @@ function showOnboarding() {
         <button class="onboarding-next" id="ob-next">${isLast ? 'Empezar' : 'Siguiente'}</button>
       </div>`;
     overlay.querySelector('#ob-next').addEventListener('click', () => {
-      if (isLast) closeOnboarding();
+      if (isLast) closeOnboarding(true);
       else { current++; renderSlide(); }
     });
-    overlay.querySelector('#ob-skip').addEventListener('click', closeOnboarding);
+    overlay.querySelector('#ob-skip').addEventListener('click', () => closeOnboarding(false));
   }
 
-  function closeOnboarding() {
+  function closeOnboarding(goToRegister) {
     localStorage.setItem('bdm_onboarding_done', '1');
     overlay.remove();
+    if (goToRegister && !currentUser) openModal('register');
   }
 
   document.body.appendChild(overlay);
