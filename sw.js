@@ -1,22 +1,21 @@
-const CACHE_NAME = 'bdm-v34';
-const STATIC_ASSETS = [
-  '/',
-  '/styles.css',
-  '/app.js',
-  '/salma.js',
-  '/country-utils.js',
-  '/guide-renderer.js',
+const CACHE_NAME = 'bdm-v35';
+
+// Assets que se cachean para offline (imágenes, no JS/CSS)
+const CACHE_ASSETS = [
   '/salma_ai_avatar.png',
   '/icon-192.png',
   '/icon-512.png',
   '/mapa.png'
 ];
 
-// Instalar — cachear assets estáticos
+// JS/CSS/HTML — siempre frescos desde red, sin caché HTTP
+const ALWAYS_FRESH = ['.js', '.css', '.html', '/'];
+
+// Instalar — solo cachear imágenes (no JS/CSS que cambian frecuentemente)
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(STATIC_ASSETS))
+      .then(cache => cache.addAll(CACHE_ASSETS))
       .then(() => self.skipWaiting())
   );
 });
@@ -30,26 +29,36 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-// Fetch — network first, fallback to cache
+// Fetch — JS/CSS/HTML siempre desde red (no-cache), imágenes desde caché
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
 
-  // No cachear API calls ni streams
   if (url.origin !== location.origin) return;
   if (e.request.method !== 'GET') return;
 
-  e.respondWith(
-    fetch(e.request)
-      .then(res => {
-        // Cachear respuesta fresca
-        if (res.ok) {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
-        }
-        return res;
-      })
-      .catch(() => caches.match(e.request))
-  );
+  const path = url.pathname;
+  const isFresh = ALWAYS_FRESH.some(ext => path.endsWith(ext) || path === '/');
+
+  if (isFresh) {
+    // Siempre red, forzando bypass de caché HTTP
+    e.respondWith(
+      fetch(e.request, { cache: 'no-cache' })
+        .catch(() => caches.match(e.request))
+    );
+  } else {
+    // Imágenes y otros: network first con caché de fallback
+    e.respondWith(
+      fetch(e.request)
+        .then(res => {
+          if (res.ok) {
+            const clone = res.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
+          }
+          return res;
+        })
+        .catch(() => caches.match(e.request))
+    );
+  }
 });
 
 // Push notification (narrador en ruta)
