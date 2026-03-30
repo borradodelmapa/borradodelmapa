@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "Frontend (servidor estático)",
-      "runtimeExecutable": "C:\\Program Files\\Git\\usr\\bin\\bash.exe",
-      "runtimeArgs": ["serve.sh"],
+      "runtimeExecutable": "node",
+      "runtimeArgs": [".claude/serve.js"],
       "port": 8080
     },
     {
