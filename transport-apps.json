@@ -1,0 +1,1161 @@
+{
+  "meta": {
+    "version": "1.0",
+    "updated": "2026-03-30",
+    "update_cycle": "semestral",
+    "note": "ride-hailing + trenes + metro/bus + ferry + especial. Deep links con coords solo Uber y Lyft."
+  },
+  "apps": {
+    "uber": {
+      "name": "Uber", "icon": "🚕",
+      "deep_link": "https://m.uber.com/ul/?action=setPickup&pickup[latitude]={pickup_lat}&pickup[longitude]={pickup_lng}&dropoff[latitude]={dropoff_lat}&dropoff[longitude]={dropoff_lng}&dropoff[nickname]={dropoff_name}",
+      "web_fallback": "https://m.uber.com/looking",
+      "store_ios": "https://apps.apple.com/app/uber/id368677368",
+      "store_android": "https://play.google.com/store/apps/details?id=com.ubercab"
+    },
+    "bolt": {
+      "name": "Bolt", "icon": "🟢",
+      "deep_link": null, "web_fallback": "https://bolt.eu",
+      "store_ios": "https://apps.apple.com/app/bolt-request-a-ride/id675033630",
+      "store_android": "https://play.google.com/store/apps/details?id=ee.mtakso.client"
+    },
+    "grab": {
+      "name": "Grab", "icon": "🟩",
+      "deep_link": null, "web_fallback": "https://www.grab.com",
+      "store_ios": "https://apps.apple.com/app/grab-superapp/id647268330",
+      "store_android": "https://play.google.com/store/apps/details?id=com.grabtaxi.passenger"
+    },
+    "lyft": {
+      "name": "Lyft", "icon": "🩷",
+      "deep_link": "https://lyft.com/ride?pickup[latitude]={pickup_lat}&pickup[longitude]={pickup_lng}&destination[latitude]={dropoff_lat}&destination[longitude]={dropoff_lng}",
+      "web_fallback": "https://www.lyft.com",
+      "store_ios": "https://apps.apple.com/app/lyft/id529379082",
+      "store_android": "https://play.google.com/store/apps/details?id=me.lyft.android"
+    },
+    "didi": {
+      "name": "DiDi", "icon": "🟠",
+      "deep_link": null, "web_fallback": "https://www.didiglobal.com",
+      "store_ios": "https://apps.apple.com/app/didi-rider/id554499054",
+      "store_android": "https://play.google.com/store/apps/details?id=com.xiaojukeji.didi.global.customer"
+    },
+    "gojek": {
+      "name": "Gojek", "icon": "🟢",
+      "deep_link": null, "web_fallback": "https://www.gojek.com",
+      "store_ios": "https://apps.apple.com/app/gojek/id944875099",
+      "store_android": "https://play.google.com/store/apps/details?id=com.gojek.app"
+    },
+    "careem": {
+      "name": "Careem", "icon": "🟢",
+      "deep_link": null, "web_fallback": "https://www.careem.com",
+      "store_ios": "https://apps.apple.com/app/careem/id592978487",
+      "store_android": "https://play.google.com/store/apps/details?id=com.careem.acma"
+    },
+    "ola": {
+      "name": "Ola", "icon": "🟡",
+      "deep_link": null, "web_fallback": "https://www.olacabs.com",
+      "store_ios": "https://apps.apple.com/app/ola-cabs/id539179365",
+      "store_android": "https://play.google.com/store/apps/details?id=com.olacabs.customer"
+    },
+    "indrive": {
+      "name": "inDrive", "icon": "🟣",
+      "deep_link": null, "web_fallback": "https://indrive.com",
+      "store_ios": "https://apps.apple.com/app/indrive/id1050763635",
+      "store_android": "https://play.google.com/store/apps/details?id=sinet.startup.inDriver",
+      "note": "Precio negociable con el conductor"
+    },
+    "cabify": {
+      "name": "Cabify", "icon": "🟣",
+      "deep_link": null, "web_fallback": "https://cabify.com",
+      "store_ios": "https://apps.apple.com/app/cabify/id476087442",
+      "store_android": "https://play.google.com/store/apps/details?id=com.cabify.rider"
+    },
+    "freenow": {
+      "name": "FREENOW", "icon": "🔴",
+      "deep_link": null, "web_fallback": "https://www.free-now.com",
+      "store_ios": "https://apps.apple.com/app/free-now/id357852748",
+      "store_android": "https://play.google.com/store/apps/details?id=taxi.android.client"
+    },
+    "yandex": {
+      "name": "Yandex Go", "icon": "🔴",
+      "deep_link": null, "web_fallback": "https://go.yandex.com",
+      "store_android": "https://play.google.com/store/apps/details?id=ru.yandex.taxi"
+    },
+    "yango": {
+      "name": "Yango", "icon": "🔴",
+      "deep_link": null, "web_fallback": "https://yango.com",
+      "store_android": "https://play.google.com/store/apps/details?id=com.yandex.yango",
+      "note": "Marca internacional de Yandex, fuerte en África"
+    },
+    "kakao_t": {
+      "name": "Kakao T", "icon": "🟡",
+      "deep_link": null, "web_fallback": "https://t.kakao.com",
+      "store_android": "https://play.google.com/store/apps/details?id=com.kakao.taxi"
+    },
+    "maxim": {
+      "name": "Maxim", "icon": "🔵",
+      "deep_link": null, "web_fallback": "https://taximaxim.com",
+      "store_android": "https://play.google.com/store/apps/details?id=com.taxsee.taxsee"
+    },
+    "gozem": {
+      "name": "Gozem", "icon": "🟢",
+      "deep_link": null, "web_fallback": "https://gozem.co",
+      "store_android": "https://play.google.com/store/apps/details?id=com.gozem.client"
+    },
+    "yassir": {
+      "name": "Yassir", "icon": "🟣",
+      "deep_link": null, "web_fallback": "https://yassir.com",
+      "store_android": "https://play.google.com/store/apps/details?id=com.yatechnologies.yassir"
+    },
+    "trainline": {
+      "name": "Trainline", "icon": "🚆",
+      "deep_link": null, "web_fallback": "https://www.thetrainline.com",
+      "store_ios": "https://apps.apple.com/app/trainline/id349907872",
+      "store_android": "https://play.google.com/store/apps/details?id=com.thetrainline.android",
+      "note": "Agregador trenes Europa — compra directa con comparativa de precios"
+    },
+    "omio": {
+      "name": "Omio", "icon": "🚄",
+      "deep_link": null, "web_fallback": "https://www.omio.com",
+      "store_ios": "https://apps.apple.com/app/omio/id539469909",
+      "store_android": "https://play.google.com/store/apps/details?id=net.goeuro.android",
+      "note": "Tren + bus + vuelo Europa y global"
+    },
+    "rome2rio": {
+      "name": "Rome2rio", "icon": "🗺️",
+      "deep_link": null, "web_fallback": "https://www.rome2rio.com",
+      "store_ios": "https://apps.apple.com/app/rome2rio/id505429854",
+      "store_android": "https://play.google.com/store/apps/details?id=com.rome2rio",
+      "note": "Planificador global de rutas — todos los medios de transporte"
+    },
+    "renfe": {
+      "name": "Renfe", "icon": "🚅",
+      "deep_link": null, "web_fallback": "https://www.renfe.com",
+      "store_ios": "https://apps.apple.com/es/app/renfe/id457059542",
+      "store_android": "https://play.google.com/store/apps/details?id=com.renfe.renfemobile"
+    },
+    "sncf": {
+      "name": "SNCF Connect", "icon": "🚄",
+      "deep_link": null, "web_fallback": "https://www.sncf-connect.com",
+      "store_ios": "https://apps.apple.com/fr/app/sncf-connect/id469680982",
+      "store_android": "https://play.google.com/store/apps/details?id=com.vsct.vsc.mobile.horaireetresa"
+    },
+    "db": {
+      "name": "DB Navigator", "icon": "🚆",
+      "deep_link": null, "web_fallback": "https://www.bahn.de",
+      "store_ios": "https://apps.apple.com/de/app/db-navigator/id343555245",
+      "store_android": "https://play.google.com/store/apps/details?id=de.hafas.android.db"
+    },
+    "trenitalia": {
+      "name": "Trenitalia", "icon": "🚆",
+      "deep_link": null, "web_fallback": "https://www.trenitalia.com",
+      "store_ios": "https://apps.apple.com/it/app/trenitalia/id412183831",
+      "store_android": "https://play.google.com/store/apps/details?id=it.trenitalia.ticketapp"
+    },
+    "amtrak": {
+      "name": "Amtrak", "icon": "🚆",
+      "deep_link": null, "web_fallback": "https://www.amtrak.com",
+      "store_ios": "https://apps.apple.com/us/app/amtrak/id418165331",
+      "store_android": "https://play.google.com/store/apps/details?id=com.amtrak.rider"
+    },
+    "via_rail": {
+      "name": "VIA Rail", "icon": "🚆",
+      "deep_link": null, "web_fallback": "https://www.viarail.ca",
+      "store_ios": "https://apps.apple.com/ca/app/via-rail/id1437960959",
+      "store_android": "https://play.google.com/store/apps/details?id=com.viarail.android"
+    },
+    "jr_pass": {
+      "name": "JR Pass / Navitime", "icon": "🚄",
+      "deep_link": null, "web_fallback": "https://japanrailpass.net",
+      "note": "Compra el JR Pass antes de viajar. App Navitime Japan para rutas."
+    },
+    "irctc": {
+      "name": "IRCTC Rail Connect", "icon": "🚆",
+      "deep_link": null, "web_fallback": "https://www.irctc.co.in",
+      "store_ios": "https://apps.apple.com/in/app/irctc-rail-connect/id1107111546",
+      "store_android": "https://play.google.com/store/apps/details?id=cris.org.in.prs.ima"
+    },
+    "12306": {
+      "name": "12306 (China Rail)", "icon": "🚄",
+      "deep_link": null, "web_fallback": "https://www.12306.cn",
+      "note": "Requiere cuenta china. Alternativa: Trip.com o Klook para extranjeros."
+    },
+    "korail": {
+      "name": "Korail Talk", "icon": "🚄",
+      "deep_link": null, "web_fallback": "https://www.letskorail.com",
+      "store_android": "https://play.google.com/store/apps/details?id=com.korail.talk"
+    },
+    "eurostar": {
+      "name": "Eurostar", "icon": "🚄",
+      "deep_link": null, "web_fallback": "https://www.eurostar.com",
+      "store_ios": "https://apps.apple.com/gb/app/eurostar/id568900785",
+      "store_android": "https://play.google.com/store/apps/details?id=com.eurostar.android"
+    },
+    "oebb": {
+      "name": "ÖBB (Austria)", "icon": "🚆",
+      "deep_link": null, "web_fallback": "https://www.oebb.at",
+      "store_ios": "https://apps.apple.com/at/app/oebb/id370987668",
+      "store_android": "https://play.google.com/store/apps/details?id=at.oebb.ts"
+    },
+    "sbb": {
+      "name": "SBB Mobile (Suiza)", "icon": "🚆",
+      "deep_link": null, "web_fallback": "https://www.sbb.ch",
+      "store_ios": "https://apps.apple.com/ch/app/sbb-mobile/id294855397",
+      "store_android": "https://play.google.com/store/apps/details?id=ch.sbb.mobile.android.b2c"
+    },
+    "ns": {
+      "name": "NS (Países Bajos)", "icon": "🚆",
+      "deep_link": null, "web_fallback": "https://www.ns.nl",
+      "store_ios": "https://apps.apple.com/nl/app/ns/id370362301",
+      "store_android": "https://play.google.com/store/apps/details?id=nl.ns.android.activity"
+    },
+    "cp_portugal": {
+      "name": "CP Portugal", "icon": "🚆",
+      "deep_link": null, "web_fallback": "https://www.cp.pt",
+      "store_ios": "https://apps.apple.com/pt/app/cp-comboios-de-portugal/id1048155691",
+      "store_android": "https://play.google.com/store/apps/details?id=pt.cp.cpandroid"
+    },
+    "busbud": {
+      "name": "Busbud", "icon": "🚌",
+      "deep_link": null, "web_fallback": "https://www.busbud.com",
+      "store_ios": "https://apps.apple.com/app/busbud/id599346533",
+      "store_android": "https://play.google.com/store/apps/details?id=com.busbud.android",
+      "note": "Compra de autobuses interurbanos global"
+    },
+    "flixbus": {
+      "name": "FlixBus", "icon": "🟩",
+      "deep_link": null, "web_fallback": "https://www.flixbus.com",
+      "store_ios": "https://apps.apple.com/app/flixbus/id1049297614",
+      "store_android": "https://play.google.com/store/apps/details?id=de.flixbus.app",
+      "note": "Autobús interurbano Europa y EEUU"
+    },
+    "blablacar": {
+      "name": "BlaBlaCar", "icon": "🚗",
+      "deep_link": null, "web_fallback": "https://www.blablacar.com",
+      "store_ios": "https://apps.apple.com/app/blablacar/id341329033",
+      "store_android": "https://play.google.com/store/apps/details?id=com.comuto",
+      "note": "Coche compartido + autobús en Europa"
+    },
+    "directferries": {
+      "name": "Direct Ferries", "icon": "⛴️",
+      "deep_link": null, "web_fallback": "https://www.directferries.com",
+      "store_ios": "https://apps.apple.com/app/direct-ferries/id953273916",
+      "store_android": "https://play.google.com/store/apps/details?id=com.directferries",
+      "note": "Comparador global de ferries"
+    },
+    "citymapper": {
+      "name": "Citymapper", "icon": "🗺️",
+      "deep_link": null, "web_fallback": "https://citymapper.com",
+      "store_ios": "https://apps.apple.com/app/citymapper/id469463298",
+      "store_android": "https://play.google.com/store/apps/details?id=com.citymapper.app.release",
+      "note": "Metro/bus/tranvía en grandes ciudades globales"
+    },
+    "moovit": {
+      "name": "Moovit", "icon": "🚇",
+      "deep_link": null, "web_fallback": "https://moovit.com",
+      "store_ios": "https://apps.apple.com/app/moovit/id498477945",
+      "store_android": "https://play.google.com/store/apps/details?id=com.tranzmate",
+      "note": "Transporte público en 3500+ ciudades globales"
+    },
+    "grab_transit": {
+      "name": "Grab Transit", "icon": "🚇",
+      "deep_link": null, "web_fallback": "https://www.grab.com",
+      "note": "Integrado en la app de Grab — metro y bus en Singapur, KL, Bangkok"
+    },
+    "klook": {
+      "name": "Klook", "icon": "🎫",
+      "deep_link": null, "web_fallback": "https://www.klook.com",
+      "store_ios": "https://apps.apple.com/app/klook/id1035091002",
+      "store_android": "https://play.google.com/store/apps/details?id=com.klook.klook",
+      "note": "Compra de passes de transporte, tours y actividades en Asia"
+    },
+    "rome2rio_app": {
+      "name": "Rome2rio", "icon": "🗺️",
+      "deep_link": null, "web_fallback": "https://www.rome2rio.com",
+      "note": "Planificador global — tren, bus, ferry, vuelo, coche"
+    }
+  },
+  "countries": {
+    "AD": {
+      "ridehailing": { "best": null, "others": [], "tips": "Sin apps de ride-hailing. Taxis locales o alquiler de coche." },
+      "train": { "apps": [], "tips": "Sin red ferroviaria. Acceso en tren desde Barcelona (Renfe) o Toulouse (SNCF) hasta la frontera." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Autobuses locales entre Andorra la Vella y parroquias. Servicio limitado." },
+      "ferry": { "apps": [], "tips": "Sin salida al mar." },
+      "special": { "tips": null }
+    },
+    "AF": {
+      "ridehailing": { "best": null, "others": [], "tips": "Sin apps de ride-hailing fiables. Usar taxis locales negociando precio antes." },
+      "train": { "apps": [], "tips": "Red ferroviaria prácticamente inexistente." },
+      "metro_bus": { "apps": [], "tips": "Minibuses compartidos entre ciudades. Negociar precio." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": null }
+    },
+    "AL": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": ["trainline", "omio"], "tips": "Red ferroviaria limitada y lenta. El autobús es más rápido." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Autobuses urbanos en Tirana. Furgonetas compartidas (furgon) entre ciudades." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries desde Durrës a Bari y Ancona (Italia). Reserva con antelación en temporada alta." },
+      "special": { "tips": null }
+    },
+    "DZ": {
+      "ridehailing": { "best": "yassir", "others": ["indrive"] },
+      "train": { "apps": [], "tips": "SNTF opera trenes entre Argel, Orán y Constantine. Compra en taquilla." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro en Argel (línea 1). Tranvía en Orán y Constantine." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries desde Argel y Orán a Marsella y Alicante." },
+      "special": { "tips": "En el Sáhara (Tamanrasset, Tassili): 4x4 con guía local obligatorio. Sin transporte público." }
+    },
+    "AO": {
+      "ridehailing": { "best": "indrive", "others": [] },
+      "train": { "apps": [], "tips": "Línea Luanda-Malanje en reconstrucción. Consultar estado antes de viajar." },
+      "metro_bus": { "apps": [], "tips": "Minibuses Candongueiro en Luanda. Caótico pero barato." },
+      "ferry": { "apps": [], "tips": "Ferries fluviales en el río Congo hacia RDC." },
+      "special": { "tips": null }
+    },
+    "AR": {
+      "ridehailing": { "best": "uber", "others": ["cabify", "didi"] },
+      "train": { "apps": ["omio"], "tips": "Trenes Trenes Argentinos entre Buenos Aires y ciudades principales. Compra en trenesargentinos.com.ar" },
+      "metro_bus": { "apps": ["moovit", "citymapper"], "tips": "Metro (Subte) en Buenos Aires, 6 líneas. Tarjeta SUBE para metro y bus." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferry Buenos Aires-Montevideo con Buquebus (1h). Reserva online." },
+      "special": { "tips": null }
+    },
+    "AM": {
+      "ridehailing": { "best": "yandex", "others": [] },
+      "train": { "apps": ["omio"], "tips": "Tren Ereván-Tbilisi (5h). Reserva en pass.am" },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro en Ereván, 2 líneas. Muy barato." },
+      "ferry": { "apps": [], "tips": "Sin salida al mar." },
+      "special": { "tips": null }
+    },
+    "AU": {
+      "ridehailing": { "best": "uber", "others": ["didi", "bolt"] },
+      "train": { "apps": ["omio"], "tips": "The Ghan (Adelaida-Darwin), Indian Pacific (Sídney-Perth), Overland. Reserva con meses de antelación." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Opal card (Sídney), Myki (Melbourne), go card (Brisbane). Metro y tren urbano en todas las capitales." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferry Sídney Harbour. Spirit of Tasmania entre Melbourne y Tasmania (noche)." },
+      "special": { "tips": null }
+    },
+    "AT": {
+      "ridehailing": { "best": "bolt", "others": ["uber", "freenow"] },
+      "train": { "apps": ["oebb", "trainline"] },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro de Viena (U-Bahn), 5 líneas. Wiener Linien app para Viena." },
+      "ferry": { "apps": [], "tips": "Barcos fluviales en el Danubio (DDSG Blue Danube)." },
+      "special": { "tips": null }
+    },
+    "AZ": {
+      "ridehailing": { "best": "bolt", "others": ["yango", "uber", "maxim"] },
+      "train": { "apps": [], "tips": "Tren Bakú-Tbilisi. Reserva en ady.az" },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro de Bakú, 2 líneas. Tarjeta BakıKart." },
+      "ferry": { "apps": [], "tips": "Ferry en el Mar Caspio Bakú-Aktau (Kazajistán). Sin horario fijo — espera de 1-3 días." },
+      "special": { "tips": null }
+    },
+    "BH": {
+      "ridehailing": { "best": "uber", "others": ["indrive", "careem"] },
+      "train": { "apps": [], "tips": "Sin red ferroviaria." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Autobuses públicos (Bahrain Public Transport). App Mawasalat." },
+      "ferry": { "apps": [], "tips": "Ferry Baréin-Arabia Saudí por el Puente Rey Fahd (en coche)." },
+      "special": { "tips": null }
+    },
+    "BD": {
+      "ridehailing": { "best": "indrive", "others": ["uber"], "tips": "Pathao (mototaxi) muy popular en Dhaka." },
+      "train": { "apps": [], "tips": "Bangladesh Railway para rutas entre ciudades. Compra en shohoz.com o taquilla." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro de Dhaka (MRT-6) inaugurado en 2023. Rickshaws de ciclo para distancias cortas." },
+      "ferry": { "apps": [], "tips": "Ferries nocturnos Dhaka-Barisal-Khulna. Espectacular pero lento. Compra en taquilla." },
+      "special": { "tips": "Rickshaw de ciclo: icónico en Dhaka. Negocia precio antes. Bicitaxi para 1-2km." }
+    },
+    "BE": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": ["trainline", "omio"], "tips": "NMBS/SNCB conecta toda Bélgica. Rail Pass para viajeros frecuentes." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro en Bruselas, 4 líneas. De Lijn (Flandes), TEC (Valonia), STIB/MIVB (Bruselas)." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries desde Zeebrugge y Ostende a Dover (UK) y Hull." },
+      "special": { "tips": null }
+    },
+    "BJ": {
+      "ridehailing": { "best": "gozem", "others": [] },
+      "train": { "apps": [], "tips": "Sin servicio ferroviario activo." },
+      "metro_bus": { "apps": [], "tips": "Mototaxis Zemidjan (motos amarillas) son el transporte principal en Cotonú." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": "Zémidjan: mototaxis amarillos, transporte más común. Negocia precio antes." }
+    },
+    "BO": {
+      "ridehailing": { "best": "indrive", "others": [] },
+      "train": { "apps": [], "tips": "Ferrocarril Andino y Oriental. Muy lento. Compra en fca.com.bo" },
+      "metro_bus": { "apps": ["moovit"], "tips": "Teleférico Mi Teleférico en La Paz — 10 líneas, espectacular y práctico." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": "Teleférico de La Paz: 10 líneas, la red de teleférico urbano más larga del mundo. Barato y con vistas increíbles." }
+    },
+    "BA": {
+      "ridehailing": { "best": "bolt", "others": [] },
+      "train": { "apps": ["trainline"], "tips": "Trenes lentos pero con paisajes increíbles. Sarajevo-Mostar es épico." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Tranvía en Sarajevo. Autobuses interurbanos más rápidos que el tren." },
+      "ferry": { "apps": ["directferries"], "tips": "Pequeña salida al Adriático en Neum. Ferries desde Split (Croacia) más accesibles." },
+      "special": { "tips": null }
+    },
+    "BW": {
+      "ridehailing": { "best": "indrive", "others": [] },
+      "train": { "apps": [], "tips": "Tren Gaborone-Bulawayo (Zimbabue) muy lento. Sólo para aventureros." },
+      "metro_bus": { "apps": [], "tips": "Combis (minibuses) entre ciudades. Sin app — en paradas principales." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": "Safari en 4x4: obligatorio en Chobe, Okavango y Kalahari. Contratar con operador local o rent-a-car 4x4." }
+    },
+    "BR": {
+      "ridehailing": { "best": "uber", "others": ["indrive"], "tips": "99 (filial de DiDi) es muy popular también." },
+      "train": { "apps": [], "tips": "Trenes urbanos en São Paulo (CPTM/Metrô) y Río (SuperVia). Trenes de larga distancia prácticamente inexistentes." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro en São Paulo (12 líneas), Río, Brasilia, Salvador. BRT en varias ciudades." },
+      "ferry": { "apps": [], "tips": "Ferry Manaus-Belém por el Amazonas (4-5 días, imprescindible). Ferries en Salvador-Itaparica." },
+      "special": { "tips": "Barco por el Amazonas: experiencia única. Lleva hamaca, comida y repelente. Duermes a bordo." }
+    },
+    "BN": {
+      "ridehailing": { "best": null, "others": [], "tips": "Dart es la app local de ride-hailing en Brunéi." },
+      "train": { "apps": [], "tips": "Sin red ferroviaria." },
+      "metro_bus": { "apps": [], "tips": "Autobuses públicos muy limitados. El coche o taxi es prácticamente obligatorio." },
+      "ferry": { "apps": [], "tips": "Ferries entre Bandar Seri Begawan y Labuan (Malasia). También speedboats al este de Malasia." },
+      "special": { "tips": null }
+    },
+    "BG": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": ["trainline", "omio"], "tips": "BDZ conecta Sofía con Varna, Plovdiv y Burgas. Lento pero barato y con paisajes." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro de Sofía, 3 líneas. Autobuses urbanos abundantes." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries en el Mar Negro desde Varna." },
+      "special": { "tips": null }
+    },
+    "BF": {
+      "ridehailing": { "best": "gozem", "others": [] },
+      "train": { "apps": [], "tips": "Tren Uagadugú-Abiyán (Costa de Marfil) poco fiable." },
+      "metro_bus": { "apps": [], "tips": "Sotraco (autobuses) en Uagadugú. Mototaxis Taxi-moto informales." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": "Mototaxis informales: principal transporte en ciudades y pueblos." }
+    },
+    "KH": {
+      "ridehailing": { "best": "grab", "others": [], "tips": "Tada también es popular y suele ser más barato." },
+      "train": { "apps": [], "tips": "Tren Phnom Penh-Sihanoukville (fin de semana). Lento y pintoresco." },
+      "metro_bus": { "apps": [], "tips": "Tuk-tuks y motos son el transporte urbano principal. Giant Ibis para autobuses interurbanos (goldibis.com)." },
+      "ferry": { "apps": [], "tips": "Speedboats entre Sihanoukville y las islas (Koh Rong, Koh Rong Samloem)." },
+      "special": { "tips": "Tuk-tuk: icónico en Camboya. Negocia precio antes. Mototaxi (moto-dop) más barato para 1 persona." }
+    },
+    "CM": {
+      "ridehailing": { "best": "yango", "others": ["gozem"] },
+      "train": { "apps": [], "tips": "Camrail conecta Duala-Yaundé-Ngaoundéré. Tren nocturno interesante." },
+      "metro_bus": { "apps": [], "tips": "Mototaxis (bendskin) en Duala y Yaundé. Principal transporte urbano." },
+      "ferry": { "apps": [], "tips": "Ferries en el río Wouri y hacia Fernando Poo (Guinea Ecuatorial)." },
+      "special": { "tips": "Bendskin: mototaxis, transporte más común. Acuerda precio antes." }
+    },
+    "CA": {
+      "ridehailing": { "best": "uber", "others": ["lyft"] },
+      "train": { "apps": ["via_rail", "omio"], "tips": "VIA Rail conecta Toronto-Montréal-Vancouver. Canadian (Toronto-Vancouver, 3 días) es una experiencia única." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro en Toronto (TTC), Montreal (STM), Vancouver (SkyTrain). Presto card en Toronto." },
+      "ferry": { "apps": [], "tips": "BC Ferries en Columbia Británica (mainland-islas). Obligatorio reservar en temporada alta." },
+      "special": { "tips": null }
+    },
+    "CL": {
+      "ridehailing": { "best": "uber", "others": ["didi", "cabify"] },
+      "train": { "apps": [], "tips": "Trenes EFE solo en zona central (Santiago-Chillán). Compra en trencentral.cl" },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro de Santiago, 7 líneas. Tarjeta Bip! para metro y Transantiago." },
+      "ferry": { "apps": [], "tips": "Navimag Patagonia (Puerto Montt-Puerto Natales, 4 días). Experiencia imprescindible. Reserva con meses de antelación." },
+      "special": { "tips": "Navimag: ferry navegando los fiordos patagónicos, 4 días. Una de las rutas más espectaculares del mundo." }
+    },
+    "CN": {
+      "ridehailing": { "best": "didi", "others": [], "tips": "DiDi versión internacional funciona con tarjeta extranjera. WeChat/Alipay necesarios para la versión china." },
+      "train": { "apps": ["12306"], "tips": "Red de alta velocidad (CRH/G-trains) la más extensa del mundo. Compra en Trip.com o Klook para extranjeros con pasaporte." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro en 40+ ciudades. App local de cada ciudad (p.ej. 上海地铁 para Shanghai). Pago con Alipay/WeChat." },
+      "ferry": { "apps": [], "tips": "Ferries Shanghai-Osaka (2 días), cruceros por el río Yangtsé (Li Jiang)." },
+      "special": { "tips": "Rickshaws eléctricos en zonas turísticas. Barcos de bambú en Guilin/Li Jiang. Teleféricos en montañas sagradas." }
+    },
+    "CO": {
+      "ridehailing": { "best": "uber", "others": ["didi", "indrive", "cabify"], "tips": "InDriver popular en ciudades medianas." },
+      "train": { "apps": [], "tips": "Sin trenes de pasajeros de larga distancia. Tren turístico Bogotá-Zipaquirá (Tren de la Sabana)." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro de Medellín (2 líneas + cables). TransMilenio en Bogotá (BRT). SITVA en Medellín." },
+      "ferry": { "apps": [], "tips": "Lanchas por el río Magdalena y hacia islas del Caribe (San Andrés en avión)." },
+      "special": { "tips": "Teleférico y metrocable en Medellín: conecta comunas de ladera. Lancha por el Magdalena para rutas rurales." }
+    },
+    "CI": {
+      "ridehailing": { "best": "yango", "others": ["gozem"] },
+      "train": { "apps": [], "tips": "Tren Abiyán-Uagadugú (Burkina Faso) poco fiable." },
+      "metro_bus": { "apps": [], "tips": "Gbaka (minibuses) y woro-woro (taxis colectivos) en Abiyán." },
+      "ferry": { "apps": [], "tips": "Bateau-bus en la laguna de Abiyán. Barato y pintoresco." },
+      "special": { "tips": "Bateau-bus: ferries en la laguna de Abiyán, alternativa al tráfico caótico de la ciudad." }
+    },
+    "HR": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": ["trainline", "omio"], "tips": "HŽ Putnik conecta Zagreb con la costa (lento). Bus más rápido para Split y Dubrovnik." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Tranvía en Zagreb. Autobuses interurbanos (FlixBus, Arriva) muy eficientes." },
+      "ferry": { "apps": ["directferries"], "tips": "Jadrolinija opera ferries a todas las islas. Imprescindible reservar en verano." },
+      "special": { "tips": null }
+    },
+    "CY": {
+      "ridehailing": { "best": "bolt", "others": [] },
+      "train": { "apps": [], "tips": "Sin red ferroviaria." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Autobuses interurbanos OSEA entre Nicosia, Limassol, Lárnaca y Pafos." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferry Limassol-Rodas-Pireo (Grecia). Reserva en varinaos.com" },
+      "special": { "tips": null }
+    },
+    "CZ": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": ["trainline", "omio"], "tips": "České dráhy (ČD) conecta todo el país. RegioJet y FlixTrain también operan." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro de Praga, 3 líneas. Tarjeta Lítačka para transporte público." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": null }
+    },
+    "DK": {
+      "ridehailing": { "best": "bolt", "others": ["uber", "freenow"] },
+      "train": { "apps": ["trainline", "omio"], "tips": "DSB conecta toda Dinamarca. Rejsekort (tarjeta contactless) para metro y trenes." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro de Copenhague, 4 líneas (24h). S-Tog (tren de cercanías). App DOT." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries entre islas danesas y hacia Suecia, Noruega, Alemania." },
+      "special": { "tips": "Bicicleta: Copenhague tiene la mejor infraestructura ciclista del mundo. Donkey Republic app para alquiler." }
+    },
+    "DO": {
+      "ridehailing": { "best": "uber", "others": ["indrive"] },
+      "train": { "apps": [], "tips": "Metro de Santo Domingo, 2 líneas." },
+      "metro_bus": { "apps": [], "tips": "OMSA (autobuses públicos) en Santo Domingo. Guaguas (minibuses) interurbanas." },
+      "ferry": { "apps": [], "tips": "Ferry Puerto Plata-San Juan de Puerto Rico con América Ferries." },
+      "special": { "tips": "Motoconcho: mototaxis informales, cuidado con la seguridad. Carros públicos (taxis colectivos) en rutas fijas." }
+    },
+    "EC": {
+      "ridehailing": { "best": "uber", "others": ["indrive"] },
+      "train": { "apps": [], "tips": "Tren Crucero Ecuador (Quito-Guayaquil, turístico). Tren de la Nariz del Diablo cerca de Riobamba." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro de Quito (línea 1, 2023). Trolebús y Metrobús en Quito." },
+      "ferry": { "apps": [], "tips": "Ferry Guayaquil-Puerto Ayora (Galápagos) en barco de carga. Vuelo mucho más práctico." },
+      "special": { "tips": "Tren Nariz del Diablo: una de las rutas en tren más espectaculares de Sudamérica, baja en zigzag por la cordillera." }
+    },
+    "EG": {
+      "ridehailing": { "best": "indrive", "others": ["didi", "uber", "bolt", "careem"] },
+      "train": { "apps": [], "tips": "Egyptian National Railways. El Cairo-Alejandría-Luxor-Asuán. Reserva en enr.gov.eg o taquilla." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro de El Cairo, 3 líneas. Barato y eficiente para cruzar la ciudad." },
+      "ferry": { "apps": [], "tips": "Ferry El Cairo-Nilo (felucas). Ferry Asuán-Abu Simbel. Ferry Egipto-Jordania por el Mar Rojo (Nuweiba-Aqaba)." },
+      "special": { "tips": "Feluca: vela tradicional en el Nilo (Asuán-Luxor). Camello en Guiza y desierto — negocia precio antes, son muy insistentes." }
+    },
+    "SV": {
+      "ridehailing": { "best": "uber", "others": ["indrive"] },
+      "train": { "apps": [], "tips": "Sin red ferroviaria de pasajeros." },
+      "metro_bus": { "apps": [], "tips": "Autobuses urbanos en San Salvador. Microbuses interurbanos." },
+      "ferry": { "apps": [], "tips": "Ferry al Golfo de Fonseca (El Salvador-Honduras-Nicaragua)." },
+      "special": { "tips": null }
+    },
+    "EE": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": ["trainline"], "tips": "Elron conecta Tallin con Tartu, Pärnu y Narva. App Elron." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Transporte público en Tallin gratuito para residentes. Tarjeta Ühiskaart para turistas." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries Tallin-Helsinki (2h), Tallin-Estocolmo (noche). Tallink/Silja Line." },
+      "special": { "tips": null }
+    },
+    "ET": {
+      "ridehailing": { "best": null, "others": [], "tips": "RIDE es la app local dominante en Addis Abeba." },
+      "train": { "apps": [], "tips": "Tren eléctrico Addis Abeba-Yibuti (Tren del Cuerno de África). Compra en taquilla." },
+      "metro_bus": { "apps": [], "tips": "Metro ligero (LRT) en Addis Abeba, 2 líneas. Minibuses azules y blancos muy usados." },
+      "ferry": { "apps": [], "tips": "Ferry en el lago Tana (Bahir Dar) hacia monasterios insulares." },
+      "special": { "tips": "Bajaj (mototaxi de 3 ruedas) en ciudades medianas. Muleros en zonas rurales." }
+    },
+    "FI": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": ["trainline", "omio"], "tips": "VR (Valtion Rautatiet) cubre todo el país. Helsinki-Rovaniemi (Laponia) en tren nocturno, espectacular." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro de Helsinki, 2 líneas. HSL para transporte de Helsinki. App Whim para movilidad combinada." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries Helsinki-Estocolmo, Helsinki-Tallin. Viking Line, Tallink, Finnlines." },
+      "special": { "tips": "Moto de nieve y husky sled en Laponia — contratar con operador local." }
+    },
+    "FR": {
+      "ridehailing": { "best": "uber", "others": ["bolt", "freenow"], "tips": "Heetch popular en suburbios de París." },
+      "train": { "apps": ["sncf", "trainline"], "tips": "TGV conecta París con toda Francia. Eurail/Interrail válido. Compra con antelación para mejores precios." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro de París, 16 líneas. Navigo Pass (semanal/mensual). RER para aeropuertos." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries desde Calais/Dunkerque a Dover (UK). Córcega desde Marsella/Niza (Corsica Ferries, La Méridionale)." },
+      "special": { "tips": null }
+    },
+    "GE": {
+      "ridehailing": { "best": "bolt", "others": ["yandex", "maxim"] },
+      "train": { "apps": [], "tips": "Georgian Railway: Tbilisi-Batumi, Tbilisi-Kutaisi. Reserva en railways.ge" },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro de Tbilisi, 2 líneas. Marshrutkas (minibuses) para rutas interurbanas." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferry Batumi-Constanza (Rumanía) y Batumi-Odesa en el Mar Negro." },
+      "special": { "tips": null }
+    },
+    "DE": {
+      "ridehailing": { "best": "uber", "others": ["bolt", "freenow"] },
+      "train": { "apps": ["db", "trainline"], "tips": "Deutsche Bahn (DB). ICE entre grandes ciudades. Deutschland-Ticket (49€/mes) para transporte local ilimitado." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "U-Bahn y S-Bahn en Berlín, Munich, Hamburgo, Colonia. MVV (Munich), HVV (Hamburgo), VBB (Berlín)." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries desde Kiel y Rostock a Copenhague, Gotemburgo, Oslo, Helsinki." },
+      "special": { "tips": null }
+    },
+    "GH": {
+      "ridehailing": { "best": "bolt", "others": ["yango", "uber", "indrive"] },
+      "train": { "apps": [], "tips": "Ghana Railway muy limitado. Autobuses STC para rutas interurbanas." },
+      "metro_bus": { "apps": [], "tips": "Metro Mass Transit en Acra. Trotros (minibuses) para todo." },
+      "ferry": { "apps": [], "tips": "Ferry en el lago Volta." },
+      "special": { "tips": "Trotro: minibuses que cubren toda la ciudad y el país. Muy barato, a veces caótico." }
+    },
+    "GR": {
+      "ridehailing": { "best": "bolt", "others": ["uber", "freenow"] },
+      "train": { "apps": ["trainline", "omio"], "tips": "Hellenic Train (ex-TrainOSE). Atenas-Salónica en 4h. App Hellenic Train." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro de Atenas, 3 líneas. Tranvía hasta la costa. OASA para transporte ateniense." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries desde El Pireo a todas las islas griegas. Reservar con antelación en julio-agosto. Hellenic Seaways, Blue Star." },
+      "special": { "tips": null }
+    },
+    "GT": {
+      "ridehailing": { "best": "uber", "others": ["indrive"] },
+      "train": { "apps": [], "tips": "Sin red ferroviaria de pasajeros." },
+      "metro_bus": { "apps": [], "tips": "Transmetro (BRT) en Ciudad de Guatemala. Chicken buses (autobuses coloridos reciclados) interurbanos." },
+      "ferry": { "apps": [], "tips": "Lanchas en el lago Atitlán entre pueblos." },
+      "special": { "tips": "Chicken bus: autobuses de colores, antiguos schoolbuses americanos. La forma más local de viajar entre pueblos." }
+    },
+    "HN": {
+      "ridehailing": { "best": "uber", "others": ["indrive"] },
+      "train": { "apps": [], "tips": "Sin red ferroviaria de pasajeros." },
+      "metro_bus": { "apps": [], "tips": "Autobuses urbanos en Tegucigalpa. Autobuses de primera clase para rutas largas." },
+      "ferry": { "apps": [], "tips": "Ferries La Ceiba-Islas de la Bahía (Roatán, Utila). Galaxy Wave." },
+      "special": { "tips": null }
+    },
+    "HK": {
+      "ridehailing": { "best": "uber", "others": ["bolt", "didi"] },
+      "train": { "apps": [], "tips": "MTR (Mass Transit Railway): el mejor metro de Asia. Tren expreso al aeropuerto (AEL). Octopus Card para todo." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "MTR, autobuses (KMB, CTB), tranvía Ding Ding, minibuses. Octopus Card obligatoria." },
+      "ferry": { "apps": [], "tips": "Star Ferry entre Kowloon e Hong Kong Island (icónico y barato). Ferries a Macao (1h) y a las islas." },
+      "special": { "tips": "Tranvía Ding Ding: doble piso por la isla de Hong Kong desde 1904. Star Ferry: uno de los trayectos más bonitos del mundo." }
+    },
+    "HU": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": ["trainline", "omio"], "tips": "MÁV-Start conecta Budapest con toda Hungría y países vecinos. Elvira app." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro de Budapest, 4 líneas (M1 es el más antiguo de Europa continental). BKK para transporte." },
+      "ferry": { "apps": [], "tips": "Cruceros fluviales por el Danubio (Budapest-Viena-Bratislava). MAHART PassNave." },
+      "special": { "tips": null }
+    },
+    "IS": {
+      "ridehailing": { "best": "bolt", "others": [] },
+      "train": { "apps": [], "tips": "Sin red ferroviaria." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Strætó (autobuses) en Reikiavik. App Strætó. Fuera de la capital, coche de alquiler imprescindible." },
+      "ferry": { "apps": ["directferries"], "tips": "Smyril Line: ferry Reikiavik-Islas Feroe-Dinamarca (Hirtshals). Ferry a Westman Islands." },
+      "special": { "tips": "Coche de alquiler 4x4 imprescindible para el interior y la F-road. Snowmobile y quad en glaciares con operadores locales." }
+    },
+    "IN": {
+      "ridehailing": { "best": "ola", "others": ["uber", "indrive", "maxim"], "tips": "Rapido para mototaxis en ciudades grandes. Namma Yatri en Bangalore (sin comisión)." },
+      "train": { "apps": ["irctc"], "tips": "IRCTC: red ferroviaria más grande del mundo. Reserva con semanas de antelación en trenes populares. Rajdhani y Shatabdi son los más rápidos." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro en Delhi, Mumbai, Bangalore, Chennai, Kolkata, Hyderabad y más. Delhi Metro: 8 líneas, muy eficiente." },
+      "ferry": { "apps": [], "tips": "Ferries en Kerala (backwaters de Alappuzha), Andamán e islas Lakshadweep. Houseboat en Kerala: experiencia única." },
+      "special": { "tips": "Tuk-tuk (auto-rickshaw): icónico en toda India. Negocia precio o exige taxímetro. Houseboat en Kerala: dormir en una embarcación tradicional navegando los backwaters." }
+    },
+    "ID": {
+      "ridehailing": { "best": "gojek", "others": ["grab", "indrive", "maxim"] },
+      "train": { "apps": [], "tips": "KAI (Kereta Api Indonesia) conecta Java. Jakarta-Yogyakarta en 7h. App KAI Access." },
+      "metro_bus": { "apps": ["moovit"], "tips": "MRT Jakarta (2 líneas). Transjakarta (BRT, 13 corredores). KRL (tren de cercanías Jakarta). Gojek para todo lo demás." },
+      "ferry": { "apps": [], "tips": "PELNI opera ferries entre islas (lentos, baratos). Ferries rápidos Bali-Lombok, Bali-Java. Perama Tours en Bali." },
+      "special": { "tips": "Ojek (mototaxi): Gojek y Grab tienen función de mototaxi. Becak (rickshaw de pedales) en Yogyakarta. Cidomo (carrito de caballo) en Lombok." }
+    },
+    "IQ": {
+      "ridehailing": { "best": "careem", "others": ["bolt"] },
+      "train": { "apps": [], "tips": "Iraqi Republic Railways muy limitado. Bagdad-Basora. Reserva en taquilla." },
+      "metro_bus": { "apps": [], "tips": "Autobuses y minibuses en Bagdad y Erbil. Sin app." },
+      "ferry": { "apps": [], "tips": "Barcas en el Tigris y Éufrates." },
+      "special": { "tips": null }
+    },
+    "IR": {
+      "ridehailing": { "best": null, "others": [], "tips": "Snapp es la app dominante (no disponible en stores internacionales — pide ayuda local para instalarla). Tapsi también." },
+      "train": { "apps": [], "tips": "RAI (Ferrocarriles de Irán). Teherán-Isfahan-Shiraz-Yazd. Rápido y muy barato. Reserva en raj.ir" },
+      "metro_bus": { "apps": [], "tips": "Metro en Teherán (7 líneas), Isfahan, Mashhad, Shiraz. BRT en varias ciudades." },
+      "ferry": { "apps": [], "tips": "Ferries en el golfo Pérsico (Bandar Abbas-Qeshm-Hormuz). Barcos en el Mar Caspio." },
+      "special": { "tips": null }
+    },
+    "IE": {
+      "ridehailing": { "best": "bolt", "others": ["uber", "freenow"] },
+      "train": { "apps": ["trainline"], "tips": "Irish Rail (Iarnród Éireann): Dublin-Cork, Dublin-Galway, Dublin-Belfast. App Irish Rail." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "DART (tren costero Dublin), Luas (tranvía Dublin). Leap Card para todo el transporte de Dublin." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries Dublin-Holyhead (Gales), Rosslare-Pembroke, Rosslare-Cherbourg. Irish Ferries, Stena Line." },
+      "special": { "tips": null }
+    },
+    "IL": {
+      "ridehailing": { "best": "bolt", "others": ["yango"], "tips": "Gett es la app local más usada por los israelíes." },
+      "train": { "apps": [], "tips": "Israel Railways conecta Tel Aviv con Haifa, Jerusalén, Ben Gurion. App Rail Israel." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Egged y Dan (autobuses). Rav-Kav card para todo Israel. Metro Tel Aviv en construcción (2025)." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": null }
+    },
+    "IT": {
+      "ridehailing": { "best": "uber", "others": ["bolt", "freenow"], "tips": "Uber Black/Van solo en grandes ciudades. itTaxi para taxis tradicionales." },
+      "train": { "apps": ["trenitalia", "trainline"], "tips": "Trenitalia y Italo compiten en alta velocidad (Frecciarossa). Reserva con antelación para mejores precios." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro en Roma (3 líneas), Milán (5 líneas), Nápoles (3 líneas). ATM app para Milán." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries a Cerdeña, Sicilia, Córcega, Grecia, Croacia, Montenegro. Grimaldi Lines, Tirrenia, GNV." },
+      "special": { "tips": "Vaporetto en Venecia: transporte público acuático, líneas de ACTV. Gondola es turístico (80€/30min). Traghetto (góndola pública) cruza el Gran Canal por 2€." }
+    },
+    "JM": {
+      "ridehailing": { "best": "uber", "others": [] },
+      "train": { "apps": [], "tips": "Sin red ferroviaria de pasajeros." },
+      "metro_bus": { "apps": [], "tips": "Jamaica Urban Transit Company (JUTC) en Kingston. Taxis colectivos (route taxis)." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": null }
+    },
+    "JP": {
+      "ridehailing": { "best": "uber", "others": ["didi"], "tips": "GO es la app local más usada por los japoneses para taxis." },
+      "train": { "apps": ["jr_pass"], "tips": "Shinkansen (bala): Tokio-Osaka en 2h15. JR Pass para turistas (compra antes de viajar). Reserva asientos en shinkansen con antelación." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro de Tokio: 13 líneas, puntual al segundo. Suica/Pasmo card para todo. IC card válida en todo Japón." },
+      "ferry": { "apps": [], "tips": "Ferries a Hokkaido, Kyushu, Okinawa y islas. Shin Nihonkai Ferry, Meimon Taiyo Ferry." },
+      "special": { "tips": "Shinkansen: el tren bala más puntual del mundo. Rickshaw (jinrikisha) turístico en Asakusa/Kyoto. Retro trolley en Kyoto." }
+    },
+    "JO": {
+      "ridehailing": { "best": "careem", "others": ["uber"], "tips": "Jeeny (antes Enwani) también opera en Amán." },
+      "train": { "apps": [], "tips": "Tren turístico Hejaz Railway Amán-Medina Saleh (ocasional). Sin red comercial regular." },
+      "metro_bus": { "apps": [], "tips": "Metrobus en Amán (BRT). Sin metro." },
+      "ferry": { "apps": [], "tips": "Ferry Aqaba-Nuweiba (Egipto) en el Mar Rojo. Arab Bridge Maritime." },
+      "special": { "tips": "Camello en Wadi Rum y Petra: para tours de 1-2h. Contratar con operador beduino local." }
+    },
+    "KZ": {
+      "ridehailing": { "best": "yandex", "others": ["indrive", "maxim"] },
+      "train": { "apps": [], "tips": "Kazakhstan Temir Zholy (KTZ). Almatý-Nur-Sultán en tren nocturno (14h). Reserva en railways.kz" },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro en Almatý (2 líneas). Tranvías y autobuses." },
+      "ferry": { "apps": [], "tips": "Ferry Aktau-Bakú en el Mar Caspio (sin horario fijo, espera 1-3 días)." },
+      "special": { "tips": "Caballo: en las estepas kazajas, los nómadas ofrecen paseos a caballo. Yurt stays en la estepa." }
+    },
+    "KE": {
+      "ridehailing": { "best": "bolt", "others": ["uber", "indrive"] },
+      "train": { "apps": [], "tips": "SGR (Standard Gauge Railway) Nairobi-Mombasa (4h30, muy recomendado). Matatu (minibuses) interurbanos." },
+      "metro_bus": { "apps": [], "tips": "Matatus en Nairobi: cubre todo pero caótico. Sin app oficial fiable. Boda-boda (mototaxis) para corto." },
+      "ferry": { "apps": [], "tips": "Ferry Likoni (Mombasa-costa sur), ferries al lago Victoria." },
+      "special": { "tips": "Boda-boda: mototaxis, transporte más rápido en ciudad y campo. Negocia precio. Matatu: minibuses decorados, la experiencia keniana por excelencia." }
+    },
+    "KR": {
+      "ridehailing": { "best": "kakao_t", "others": ["uber"] },
+      "train": { "apps": ["korail"], "tips": "KTX (tren bala) Seúl-Busan en 2h15. Korail Pass para extranjeros." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro de Seúl: 9 líneas + AREX al aeropuerto. T-money card para metro, bus y Kakao T." },
+      "ferry": { "apps": [], "tips": "Ferries desde Mokpo e Incheon a las islas (Jeju, Ulleungdo). Ferries a Japón (Busan-Fukuoka, 3h)." },
+      "special": { "tips": null }
+    },
+    "KW": {
+      "ridehailing": { "best": "yandex", "others": ["careem", "uber", "indrive"] },
+      "train": { "apps": [], "tips": "Sin red ferroviaria. Metro en construcción." },
+      "metro_bus": { "apps": [], "tips": "KGL (Kuwait Gulf Link) autobuses. Sin metro aún." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": null }
+    },
+    "KG": {
+      "ridehailing": { "best": "yandex", "others": ["indrive"] },
+      "train": { "apps": [], "tips": "Trenes muy limitados. Bishkek-Balykchy. Marshrutkas para el resto." },
+      "metro_bus": { "apps": [], "tips": "Trolleybuses en Bishkek. Marshrutkas (minibuses) para todo." },
+      "ferry": { "apps": [], "tips": "Barcos turísticos en el lago Issyk-Kul." },
+      "special": { "tips": "Caballo: la mejor forma de explorar los valles de Tian Shan. Contratar guías locales en Son-Kul o Karakol. Yurta + caballo es la experiencia clásica kirguís." }
+    },
+    "LA": {
+      "ridehailing": { "best": "bolt", "others": ["indrive"], "tips": "LOCA es la app local más usada." },
+      "train": { "apps": [], "tips": "Tren Boten-Vientiane (Laos-China Railway, inaugurado 2021). Rápido y moderno. Reserva en llr.la" },
+      "metro_bus": { "apps": [], "tips": "Tuk-tuks y songthaews (minibuses de caja) para todo. Sin transporte público formal." },
+      "ferry": { "apps": [], "tips": "Speedboats y slowboats por el Mekong (Huay Xai-Luang Prabang: slowboat 2 días, espectacular)." },
+      "special": { "tips": "Slowboat por el Mekong: 2 días de Huay Xai a Luang Prabang, una de las rutas fluviales más famosas de Asia. Tuk-tuk: negocia siempre." }
+    },
+    "LV": {
+      "ridehailing": { "best": "bolt", "others": [] },
+      "train": { "apps": [], "tips": "Pasažieru vilciens conecta Riga con ciudades letanas. App e-tickets.lv" },
+      "metro_bus": { "apps": ["moovit"], "tips": "Tranvías y trolebuses en Riga. E-talons card." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries Riga-Estocolmo con Tallink Silja." },
+      "special": { "tips": null }
+    },
+    "LB": {
+      "ridehailing": { "best": "bolt", "others": ["uber", "indrive"] },
+      "train": { "apps": [], "tips": "Sin red ferroviaria operativa." },
+      "metro_bus": { "apps": [], "tips": "Servicios (taxis colectivos de ruta fija) son el transporte principal. Sin metro." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": null }
+    },
+    "LT": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": ["trainline"], "tips": "LTG Link: Vilna-Kaunas-Klaipeda. App LTG Link." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Autobuses y trolebuses en Vilna. Tarjeta Vilnius CARD." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferry Klaipeda-Kiel y Klaipeda-Karlshamn (Suecia). DFDS, Stena Line." },
+      "special": { "tips": null }
+    },
+    "LU": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": ["trainline", "omio"], "tips": "CFL conecta Luxemburgo con Bélgica, Francia y Alemania. Transporte público gratuito en todo el país." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Todo el transporte público es GRATUITO en Luxemburgo desde 2020." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": "Transporte público totalmente gratuito — el primero del mundo. Úsalo para todo." }
+    },
+    "MY": {
+      "ridehailing": { "best": "grab", "others": ["indrive", "bolt", "maxim"] },
+      "train": { "apps": [], "tips": "KTM Intercity: KL-Penang-Ipoh-JB. ETS (tren rápido). App KTM Berhad." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "MRT, LRT y Monorail en Kuala Lumpur. MyRapid card. KLIA Ekspres al aeropuerto (28 min)." },
+      "ferry": { "apps": [], "tips": "Ferries a Penang, Langkawi, Tioman, Borneo. Langkawi Ferry Service." },
+      "special": { "tips": null }
+    },
+    "MT": {
+      "ridehailing": { "best": "bolt", "others": [] },
+      "train": { "apps": [], "tips": "Sin red ferroviaria." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Malta Public Transport: autobuses cubren toda la isla. App Tallinja Card." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferry La Valeta-Gozo (25 min). Ferries a Sicilia y Nápoles (Virtu Ferries)." },
+      "special": { "tips": "Karozzin: carruaje de caballos tradicional en La Valeta — turístico. Dgħajsa (barco de madera) en el Gran Puerto." }
+    },
+    "MX": {
+      "ridehailing": { "best": "uber", "others": ["didi", "indrive", "cabify"] },
+      "train": { "apps": [], "tips": "Tren Maya (Cancún-Palenque, inaugurado 2023). Reserva en tren-maya.fonatur.gob.mx" },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro CDMX: 12 líneas, el más grande de Latinoamérica. Metrobús (BRT) en CDMX y otras ciudades." },
+      "ferry": { "apps": [], "tips": "Ferries Playa del Carmen-Cozumel. Ferries Baja California-Mazatlán (BAJA Ferries, 18h)." },
+      "special": { "tips": null }
+    },
+    "MA": {
+      "ridehailing": { "best": "indrive", "others": ["yassir", "yango", "careem"] },
+      "train": { "apps": [], "tips": "ONCF: red moderna, Tánger-Casablanca en 2h15 (Al Boraq, alta velocidad). Reserva en oncf.ma" },
+      "metro_bus": { "apps": ["moovit"], "tips": "Tranvía en Casablanca y Rabat. Casa Tramway app." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries Tánger-Tarifa (35 min), Tánger-Algeciras (1h30). FRS, Baleària, Trasmediterránea." },
+      "special": { "tips": "Camello en el desierto de Merzouga/Zagora: tours de 1h o noche en duna incluida. Derija (carruaje) en medinas. Grand taxi (taxis colectivos) para rutas interurbanas." }
+    },
+    "MZ": {
+      "ridehailing": { "best": "yango", "others": ["bolt"] },
+      "train": { "apps": [], "tips": "Línea Maputo-Ressano Garcia (frontera Sudáfrica). CFM (Mozambique Railways)." },
+      "metro_bus": { "apps": [], "tips": "Chapas (minibuses) en Maputo y ciudades. Principal transporte." },
+      "ferry": { "apps": [], "tips": "Ferries a las islas Quirimbas y Ilha de Moçambique." },
+      "special": { "tips": null }
+    },
+    "MM": {
+      "ridehailing": { "best": "grab", "others": [] },
+      "train": { "apps": [], "tips": "Myanma Railways: Yangón-Mandalay (15h, lento pero experiencia local). Circular de Yangón (3h, para ver la vida local)." },
+      "metro_bus": { "apps": [], "tips": "Autobuses YANGON BUS en Yangón. Trishaw (rickshaw de bicicleta) en ciudades pequeñas." },
+      "ferry": { "apps": [], "tips": "Ferry Mandalay-Bagan por el Ayeyarwady (10h, muy recomendado). Slow boat imprescindible." },
+      "special": { "tips": "Ferry por el Ayeyarwady entre Mandalay y Bagan: un clásico. Trishaw (bicicleta con sidecar): transporte local en ciudades históricas." }
+    },
+    "NP": {
+      "ridehailing": { "best": "indrive", "others": [], "tips": "Pathao también opera en Katmandú." },
+      "train": { "apps": [], "tips": "Sin red ferroviaria significativa." },
+      "metro_bus": { "apps": [], "tips": "Microbus y tempo (taxis eléctricos colectivos) en Katmandú. Caótico." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": "Teléferico Chandragiri y Manakamana. Porteadores (sherpas) en trekking al Himalaya — contratar con agencia certificada." }
+    },
+    "NL": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": ["ns", "trainline"], "tips": "NS (Nederlandse Spoorwegen): red puntual y frecuente. OV-chipkaart para todo. Intercity Direct Ámsterdam-Rotterdam (40 min)." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro en Ámsterdam (5 líneas) y Róterdam. Tram en La Haya. GVB app para Ámsterdam." },
+      "ferry": { "apps": [], "tips": "Ferries gratuitos desde Ámsterdam Centraal al otro lado del IJ (Noord). Ferries Hook of Holland a Harwich (UK)." },
+      "special": { "tips": "Bicicleta: los Países Bajos tienen la mejor red ciclista del mundo. OV-fiets (alquiler en estaciones de tren)." }
+    },
+    "NZ": {
+      "ridehailing": { "best": "uber", "others": ["didi"] },
+      "train": { "apps": [], "tips": "KiwiRail: Coastal Pacific (Picton-Christchurch), TranzAlpine (Christchurch-Greymouth). Rutas turísticas espectaculares." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "AT (Auckland Transport), Metlink (Wellington). AT HOP card y Snapper card." },
+      "ferry": { "apps": ["directferries"], "tips": "Interislander y Bluebridge: ferry Wellington-Picton (estrecho de Cook, 3h30). Reservar con antelación." },
+      "special": { "tips": null }
+    },
+    "NI": {
+      "ridehailing": { "best": "uber", "others": ["indrive"] },
+      "train": { "apps": [], "tips": "Sin red ferroviaria de pasajeros." },
+      "metro_bus": { "apps": [], "tips": "Autobuses interurbanos desde Managua. Expresos a Granada y León." },
+      "ferry": { "apps": [], "tips": "Ferry Granada-Ometepe-San Carlos (lago Nicaragua)." },
+      "special": { "tips": null }
+    },
+    "NG": {
+      "ridehailing": { "best": "indrive", "others": ["bolt", "uber"] },
+      "train": { "apps": [], "tips": "NRC (Nigeria Railway): Lagos-Ibadan (expreso moderno). Reserva en nigeriarailways.org" },
+      "metro_bus": { "apps": [], "tips": "BRT en Lagos. Danfos (minibuses amarillos) por todo Lagos." },
+      "ferry": { "apps": [], "tips": "Ferries en el delta del Níger y ríos." },
+      "special": { "tips": "Okada (mototaxis): muy populares pero arriesgados en Lagos. Keke (triciclos) más seguros." }
+    },
+    "NO": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": ["trainline", "omio"], "tips": "Vy (Norges Statsbaner): Oslo-Bergen (Bergensbanen, 7h, una de las rutas de tren más bellas del mundo)." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "T-bane (metro de Oslo), 6 líneas. Ruter app para transporte de Oslo. Skyss en Bergen." },
+      "ferry": { "apps": ["directferries"], "tips": "Hurtigruten: ferry costero Bergen-Kirkenes (11 días, icónico). Ferries a Dinamarca, Alemania, UK." },
+      "special": { "tips": "Hurtigruten: la ruta costera más famosa del mundo, de Bergen a la frontera rusa. Trineo de perros y snowmobile en Tromsø." }
+    },
+    "OM": {
+      "ridehailing": { "best": "yango", "others": [] },
+      "train": { "apps": [], "tips": "Sin red ferroviaria operativa." },
+      "metro_bus": { "apps": [], "tips": "Mwasalat (autobuses) en Mascate. Sin metro." },
+      "ferry": { "apps": [], "tips": "Ferries en los fiordos de Musandam (Khasab) y a Irán." },
+      "special": { "tips": null }
+    },
+    "PK": {
+      "ridehailing": { "best": "indrive", "others": ["yango", "careem"] },
+      "train": { "apps": [], "tips": "Pakistan Railways: Lahore-Karachi (Green Line Express). Reserva en pakrail.gov.pk" },
+      "metro_bus": { "apps": [], "tips": "Orange Line Metro en Lahore. Metrobus en Karachi y Lahore." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": "Rickshaws de motor (chhakra) y qingqis (minirrickshaws) en ciudades. Jeep 4x4 para zonas montañosas (Karakorum, Gilgit)." }
+    },
+    "PA": {
+      "ridehailing": { "best": "uber", "others": ["indrive"] },
+      "train": { "apps": [], "tips": "Metro de Ciudad de Panamá, 2 líneas." },
+      "metro_bus": { "apps": [], "tips": "Metrobús en Ciudad de Panamá. Diablo Rojo (buses locales clásicos)." },
+      "ferry": { "apps": [], "tips": "Lanchas San Blas (Guna Yala). Ferry a Bocas del Toro desde Almirante." },
+      "special": { "tips": null }
+    },
+    "PY": {
+      "ridehailing": { "best": "uber", "others": ["indrive"] },
+      "train": { "apps": [], "tips": "Sin red ferroviaria comercial." },
+      "metro_bus": { "apps": [], "tips": "Autobuses en Asunción. Sin metro." },
+      "ferry": { "apps": [], "tips": "Ferry Asunción a Concepción por el río Paraguay." },
+      "special": { "tips": null }
+    },
+    "PE": {
+      "ridehailing": { "best": "uber", "others": ["indrive", "didi", "cabify"] },
+      "train": { "apps": [], "tips": "PeruRail: Cusco-Aguas Calientes (Machu Picchu). OBLIGATORIO reservar con meses de antelación. También Belmond Hiram Bingham (lujo)." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro de Lima (línea 1). Metropolitano (BRT) en Lima." },
+      "ferry": { "apps": [], "tips": "Barcos en el lago Titicaca (Puno-Islas Uros-Taquile). Ferry Puno-Copacabana (Bolivia)." },
+      "special": { "tips": "Tren a Machu Picchu: única forma de llegar (o trekking). Reservar con meses de antelación. Barco en el lago Titicaca para visitar las islas flotantes de los Uros." }
+    },
+    "PH": {
+      "ridehailing": { "best": "grab", "others": ["indrive", "maxim"] },
+      "train": { "apps": [], "tips": "LRT y MRT en Manila (3 líneas). PNR (tren de cercanías Manila)." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Jeepneys (icónicos), tricycles, FX taxis. EDSA Carousel BRT en Manila." },
+      "ferry": { "apps": [], "tips": "2GO Travel y Starlite Ferries entre islas. Bangkas (bancas) locales entre islas menores." },
+      "special": { "tips": "Jeepney: el transporte más icónico de Filipinas, autobuses coloridos reutilizados de jeeps militares EEUU. Tricycle: mototaxi con sidecar, para distancias cortas. Habal-habal: moto que lleva varios pasajeros en zonas rurales." }
+    },
+    "PL": {
+      "ridehailing": { "best": "bolt", "others": ["uber", "freenow"] },
+      "train": { "apps": ["trainline", "omio"], "tips": "PKP Intercity: Warsaw-Cracovia-Wrocław-Gdańsk. IC+ muy rápido. Reserva en pkp.pl" },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro de Varsovia, 2 líneas. SKM Varsovia (cercanías). Jakdojade app para toda Polonia." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries desde Świnoujście y Gdańsk a Escandinavia." },
+      "special": { "tips": null }
+    },
+    "PT": {
+      "ridehailing": { "best": "bolt", "others": ["uber", "freenow", "cabify"] },
+      "train": { "apps": ["cp_portugal", "trainline"], "tips": "CP: Lisboa-Porto en 3h (Alfa Pendular). Oriente-Santa Apolónia en Lisboa. Reserva en cp.pt" },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro de Lisboa (4 líneas) y Porto (6 líneas). Viva Viagem card (Lisboa), Andante card (Porto)." },
+      "ferry": { "apps": [], "tips": "Transbordadores (cacilheiros) en el Tajo (Lisboa-Almada). Ferries a las Azores y Madeira." },
+      "special": { "tips": "Tuk-tuk turístico en Lisboa: en las empinadas calles del Alfama. Eléctrico 28 en Lisboa: tranvía histórico icónico." }
+    },
+    "QA": {
+      "ridehailing": { "best": "uber", "others": ["careem", "bolt", "indrive"] },
+      "train": { "apps": [], "tips": "Doha Metro: 3 líneas, moderno y eficiente. App Qatar Rail." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Doha Metro es la mejor opción. Mowasalat buses." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": null }
+    },
+    "RO": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": ["trainline"], "tips": "CFR Călători: Bucarest-Cluj-Timișoara. Reserva en cfrcalatori.ro" },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro de Bucarest, 5 líneas. STB (autobuses y tranvías). Metrorex app." },
+      "ferry": { "apps": [], "tips": "Cruceros por el delta del Danubio (Tulcea). Barcos en el Mar Negro." },
+      "special": { "tips": null }
+    },
+    "RU": {
+      "ridehailing": { "best": "yandex", "others": ["maxim", "indrive"] },
+      "train": { "apps": [], "tips": "RZhD: Moscú-San Petersburgo (Sapsan, 4h). Transiberiano (Moscú-Vladivostok, 7 días). Reserva en rzd.ru" },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro de Moscú: el más hermoso del mundo, 15 líneas. Metro de San Petersburgo, 5 líneas. Troika card en Moscú." },
+      "ferry": { "apps": [], "tips": "Cruceros fluviales Moscú-San Petersburgo (10 días, río Volga). Ferries en el Báltico." },
+      "special": { "tips": "Transiberiano: el viaje en tren más largo del mundo. Reserva con meses de antelación." }
+    },
+    "RW": {
+      "ridehailing": { "best": null, "others": [], "tips": "Yego es la app local de Rwanda (motocicletas eléctricas verdes)." },
+      "train": { "apps": [], "tips": "Sin red ferroviaria." },
+      "metro_bus": { "apps": [], "tips": "Bus Tap & Go en Kigali. Mototaxis (motos) verdes de Yego." },
+      "ferry": { "apps": [], "tips": "Barcas en el lago Kivu (Kibuye-Cyangugu)." },
+      "special": { "tips": "Yego moto: mototaxis eléctricos oficiales de Rwanda, todos verde brillante. La forma más rápida de moverse en Kigali." }
+    },
+    "SA": {
+      "ridehailing": { "best": "uber", "others": ["bolt", "careem", "indrive"], "tips": "Jeeny también muy popular." },
+      "train": { "apps": [], "tips": "Haramain High Speed Railway (Medina-Jeddah-Meca, 450 km/h). SAR para rutas largas (Riyadh-Dammam). App Haramain Train." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro de Riyadh (6 líneas, inaugurado 2024). Metro de La Meca y Medina para peregrinos." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": null }
+    },
+    "SN": {
+      "ridehailing": { "best": "yango", "others": ["yassir", "gozem"] },
+      "train": { "apps": [], "tips": "TER (Tren Express Regional) Dakar-AIBD (aeropuerto). Petit train de banlieue." },
+      "metro_bus": { "apps": [], "tips": "DDD (Dakar Dem Dikk) autobuses. Car rapides (minibuses coloridos) icónicos." },
+      "ferry": { "apps": [], "tips": "Ferry Dakar-Ziguinchor (Casamance, 14h nocturno). Ferries a Gorea." },
+      "special": { "tips": "Car rapide: minibuses decorados con colores brillantes, el transporte más icónico de Dakar." }
+    },
+    "RS": {
+      "ridehailing": { "best": "bolt", "others": [] },
+      "train": { "apps": ["trainline"], "tips": "Srbija Voz: Belgrado-Novi Sad (30 min, nueva línea rápida). Belgrado-Bar (Montenegro) espectacular." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Autobuses y tranvías en Belgrado. GSP Beograd app." },
+      "ferry": { "apps": [], "tips": "Barcas en el Danubio y Sava en Belgrado." },
+      "special": { "tips": null }
+    },
+    "SG": {
+      "ridehailing": { "best": "grab", "others": ["gojek", "uber", "bolt", "didi", "indrive"] },
+      "train": { "apps": [], "tips": "MRT de Singapur: 6 líneas, puntual y eficiente. EZ-Link card o SimplyGo para todo." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "MRT + buses SBS/SMRT cubren todo. Google Maps muy preciso en Singapur." },
+      "ferry": { "apps": [], "tips": "Ferries a las islas de Indonesia (Batam, Bintan) desde Harbourfront/Tanah Merah. Bumboat a Ubin Island." },
+      "special": { "tips": null }
+    },
+    "SK": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": ["trainline", "omio"], "tips": "ZSSK: Bratislava-Košice. Reserva en zssk.sk" },
+      "metro_bus": { "apps": ["moovit"], "tips": "Tranvías y autobuses en Bratislava. IMHDsk app." },
+      "ferry": { "apps": [], "tips": "Cruceros por el Danubio (Bratislava-Budapest-Viena)." },
+      "special": { "tips": null }
+    },
+    "SI": {
+      "ridehailing": { "best": "bolt", "others": [] },
+      "train": { "apps": ["trainline"], "tips": "SŽ: Liubliana-Maribor-Zagreb. App SŽ Potniški promet." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Autobuses urbanos en Liubliana. Bicicletas BicikeLJ en la ciudad." },
+      "ferry": { "apps": [], "tips": "Pequeña salida al Adriático en Piran y Koper." },
+      "special": { "tips": null }
+    },
+    "ZA": {
+      "ridehailing": { "best": "bolt", "others": ["indrive", "uber", "yassir"] },
+      "train": { "apps": [], "tips": "Gautrain (Johannesburgo-Pretoria-aeropuerto OR Tambo). PRASA/Metrorail muy poco recomendable por seguridad." },
+      "metro_bus": { "apps": ["moovit"], "tips": "MyCiti BRT en Ciudad del Cabo. Rea Vaya BRT en Johannesburgo. Gautrain app." },
+      "ferry": { "apps": [], "tips": "Ferry a la isla Robben (Ciudad del Cabo) donde estuvo preso Mandela." },
+      "special": { "tips": "Safari en 4x4: Kruger, iSimangaliso, Addo. Combis (minibuses Toyota) son el transporte más usado por locales entre ciudades." }
+    },
+    "ES": {
+      "ridehailing": { "best": "uber", "others": ["bolt", "cabify", "freenow"] },
+      "train": { "apps": ["renfe", "trainline"], "tips": "AVE conecta Madrid con Barcelona (2h30), Sevilla, Valencia, Málaga. AVLO más económico. Reserva con antelación." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro en Madrid (13 líneas), Barcelona (12 líneas), Bilbao, Sevilla, Valencia. TMB app para Barcelona, Metro de Madrid app." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries a Baleares (Trasmediterránea, Baleària, FRS) y Canarias. Ferries a Marruecos desde Tarifa/Algeciras y a Italia (Grimaldi)." },
+      "special": { "tips": null }
+    },
+    "LK": {
+      "ridehailing": { "best": "uber", "others": [] },
+      "train": { "apps": [], "tips": "Sri Lanka Railways: Colombo-Ella-Kandy, la ruta en tren más bonita de Asia. Primera clase hay que reservar. pickme.lk para taxi." },
+      "metro_bus": { "apps": [], "tips": "Tuk-tuks en todo el país. PickMe app para taxis y tuk-tuks." },
+      "ferry": { "apps": [], "tips": "Ferry Colombo-Talaimannar (norte Sri Lanka). Barcos turísticos en Laguna Negombo." },
+      "special": { "tips": "Tren Ella-Nuwara Eliya: las plantaciones de té entre niebla, uno de los viajes en tren más fotogénicos del mundo. Tuk-tuk: negociar siempre o usar PickMe para precio fijo." }
+    },
+    "SE": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": ["trainline", "omio"], "tips": "SJ: Estocolmo-Gotemburgo-Malmö. Night trains a Laponia (Estocolmo-Kiruna-Narvik). App SJ." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Tunnelbana (metro de Estocolmo), 3 líneas, famoso por su arte en las estaciones. SL app para Estocolmo." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries Estocolmo-Helsinki, Estocolmo-Tallin, Gotemburgo-Kiel. Viking Line, Tallink, Stena Line." },
+      "special": { "tips": "Tren nocturno a Laponia: duerme en el tren y amaneces en la nieve." }
+    },
+    "CH": {
+      "ridehailing": { "best": "uber", "others": ["bolt"] },
+      "train": { "apps": ["sbb", "trainline"], "tips": "SBB: el sistema ferroviario más puntual del mundo. Swiss Travel Pass para turistas (ilimitado). Glacier Express (Zermatt-St. Moritz, 8h)." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro en Lausana. Tranvías en Zúrich, Ginebra, Basilea. Zürich Card y Geneva Transport Card." },
+      "ferry": { "apps": [], "tips": "Barcos en lago Lemán, lago Zúrich, lago de Lucerna (incluido en Swiss Pass)." },
+      "special": { "tips": "Glacier Express: considerado el tren panorámico más famoso del mundo. Rack railways a Jungfraujoch y Pilatus. Telecabinas por todo el país." }
+    },
+    "TW": {
+      "ridehailing": { "best": "uber", "others": ["bolt"] },
+      "train": { "apps": [], "tips": "THSR (tren bala Taipei-Kaohsiung, 90 min). TRA (red convencional costera). App T Express." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "MRT Taipei (6 líneas). EasyCard para metro, bus, alquiler YouBike." },
+      "ferry": { "apps": [], "tips": "Ferry Kaohsiung-Islas Penghu. Ferry Bitan y Sun Moon Lake." },
+      "special": { "tips": null }
+    },
+    "TJ": {
+      "ridehailing": { "best": "maxim", "others": [] },
+      "train": { "apps": [], "tips": "Red ferroviaria muy limitada. Dushanbé-Khujand." },
+      "metro_bus": { "apps": [], "tips": "Metro de Dushanbé (3 estaciones). Marshrutkas para el resto." },
+      "ferry": { "apps": [], "tips": "Barcas en el lago Karakul y ríos." },
+      "special": { "tips": "4x4 con guía obligatorio para el Pamir Highway. Una de las rutas de montaña más extremas del mundo." }
+    },
+    "TZ": {
+      "ridehailing": { "best": "bolt", "others": ["uber", "indrive"] },
+      "train": { "apps": [], "tips": "TAZARA: Dar es-Salaam-Zambia (2 días). Central Line: Dar es-Salaam-Kigoma. Lento pero experiencia única." },
+      "metro_bus": { "apps": [], "tips": "DART (BRT) en Dar es-Salaam. Daladalas (minibuses) en todo el país." },
+      "ferry": { "apps": [], "tips": "Ferry Dar es-Salaam-Zanzíbar (2h, MV Kilimanjaro). Ferry en el lago Victoria y lago Tanganica." },
+      "special": { "tips": "Safari en 4x4: Serengeti, Ngorongoro, Tarangire. Ferries en el lago Tanganica para zonas remotas." }
+    },
+    "TH": {
+      "ridehailing": { "best": "grab", "others": ["bolt", "indrive"], "tips": "Grab tiene zona dedicada en aeropuertos. Bolt suele ser más barato en ciudad." },
+      "train": { "apps": [], "tips": "Thai Railway: Bangkok-Chiang Mai (noche, 12h). Ferrocarril de la muerte (Kanchanaburi). App Hua Lamphong." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "BTS Skytrain (Bangkok, 4 líneas). MRT (3 líneas). Rabbit Card para BTS, MRT Card para metro. Barcos en el río Chao Phraya." },
+      "ferry": { "apps": [], "tips": "Ferries desde Surat Thani a Koh Samui, Koh Phangan, Koh Tao. Ferry de Bangkok por el río." },
+      "special": { "tips": "Tuk-tuk: icónico en Bangkok, negocia siempre o usa Grab/Bolt para precio justo. Songthaew (pickup compartido) en ciudades del norte. Elefante: SOLO en santuarios éticos (Elephant Nature Park en Chiang Mai). NUNCA en espectáculos de circo o equitación." }
+    },
+    "TG": {
+      "ridehailing": { "best": "gozem", "others": [] },
+      "train": { "apps": [], "tips": "Sin red ferroviaria operativa." },
+      "metro_bus": { "apps": [], "tips": "Zemidjan (mototaxis) en Lomé. Principal transporte." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": "Mototaxis Zemidjan: transporte principal en toda la ciudad." }
+    },
+    "TN": {
+      "ridehailing": { "best": "yassir", "others": ["indrive"] },
+      "train": { "apps": [], "tips": "SNCFT: Túnez-Sousse-Sfax-Gabès. Metro ligero (métro léger) en Túnez." },
+      "metro_bus": { "apps": [], "tips": "Metro ligero en Túnez (6 líneas). TUT autobuses." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries Túnez-Marsella, Túnez-Génova. CTN, Grimaldi." },
+      "special": { "tips": "Camello en el desierto del Sáhara (Douz, Tataouine): tours de 1h o noche en tienda beduina." }
+    },
+    "TR": {
+      "ridehailing": { "best": "uber", "others": ["bolt"] },
+      "train": { "apps": ["trainline"], "tips": "TCDD: Estambul-Ankara (YHT, 4h30). App TCDD E-bilet." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro en Estambul (12 líneas), Ankara (4 líneas). İstanbulkart para metro, tranvía, ferry, bus." },
+      "ferry": { "apps": [], "tips": "IDO ferries entre las orillas del Bósforo y Estambul-Islas Príncipes. İDO app." },
+      "special": { "tips": "Vapur (ferry): cruzar el Bósforo en barco por 5 TL es una de las mejores experiencias de Estambul. Globo aerostático en Capadocia (reserva con meses de antelación, amanecer)." }
+    },
+    "TM": {
+      "ridehailing": { "best": "maxim", "others": [] },
+      "train": { "apps": [], "tips": "Türkmendemirýollary: Ashgabat-Türkmenabat. Muy poco frecuente." },
+      "metro_bus": { "apps": [], "tips": "Metro de Asjabad (2 líneas). Autobuses blancos de lujo (gratuitos en teoría)." },
+      "ferry": { "apps": [], "tips": "Ferry Türkmenbashi-Bakú (Azerbaiyán) en el Caspio (sin horario, espera hasta 4 días)." },
+      "special": { "tips": null }
+    },
+    "UA": {
+      "ridehailing": { "best": "bolt", "others": ["uber"] },
+      "train": { "apps": [], "tips": "Ukrzaliznytsia: Kiev-Lviv-Odesa. Reserva en uz.gov.ua (situación actual — verificar disponibilidad)." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro en Kiev (3 líneas), Járkov (3 líneas), Dnipró (6 estaciones)." },
+      "ferry": { "apps": [], "tips": "Barcas en el Dniéper." },
+      "special": { "tips": null }
+    },
+    "AE": {
+      "ridehailing": { "best": "uber", "others": ["careem", "bolt"] },
+      "train": { "apps": [], "tips": "Etihad Rail en construcción. Sin trenes interurbanos operativos aún." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Dubai Metro (2 líneas, 24h en fines de semana). NOL card para metro y bus. Abu Dhabi bus." },
+      "ferry": { "apps": [], "tips": "Abra (barco de madera tradicional) por Dubai Creek (1 AED). Ferry Dubai-Muscat." },
+      "special": { "tips": "Abra de madera: cruzar Dubai Creek por 1 AED es la experiencia más auténtica de Dubai. Camello en el desierto — excursiones desde Dubai y Abu Dhabi." }
+    },
+    "GB": {
+      "ridehailing": { "best": "uber", "others": ["bolt", "freenow"] },
+      "train": { "apps": ["trainline", "omio"], "tips": "National Rail: múltiples operadores. Railcard para descuentos. Londres-Manchester en 2h, Londres-Edimburgo en 4h30." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Tube de Londres (11 líneas), Oyster card o contactless. Metro de Glasgow. Overground y Elizabeth line en Londres." },
+      "ferry": { "apps": ["directferries"], "tips": "Ferries Dover-Calais/Dunkerque (Francia), Portsmouth-Santander/Bilbao, Hull-Rotterdam/Zeebrugge." },
+      "special": { "tips": null }
+    },
+    "US": {
+      "ridehailing": { "best": "uber", "others": ["lyft"] },
+      "train": { "apps": ["amtrak"], "tips": "Amtrak: costa este frecuente (NYC-DC-Boston). California Zephyr (Chicago-San Francisco, 2 días) y Empire Builder espectaculares. Fuera de estos, avión más práctico." },
+      "metro_bus": { "apps": ["citymapper", "moovit"], "tips": "Metro en NYC (24h), Washington DC, Chicago, Boston, SF (BART), LA (Metro). Cada ciudad tiene su app." },
+      "ferry": { "apps": [], "tips": "Ferry Staten Island (NYC, gratuito). WETA en San Francisco Bay. Ferries en Seattle y Alaska." },
+      "special": { "tips": null }
+    },
+    "UY": {
+      "ridehailing": { "best": "uber", "others": ["cabify"] },
+      "train": { "apps": [], "tips": "AFE solo tren de carga. Sin pasajeros de larga distancia." },
+      "metro_bus": { "apps": ["moovit"], "tips": "CUTCSA autobuses en Montevideo. STM card." },
+      "ferry": { "apps": [], "tips": "Ferry Montevideo-Buenos Aires (1h, Buquebus). Colonia-Buenos Aires (1h)." },
+      "special": { "tips": null }
+    },
+    "UZ": {
+      "ridehailing": { "best": "yandex", "others": ["maxim", "indrive"] },
+      "train": { "apps": [], "tips": "O'zbekiston Temir Yo'llari: Tashkent-Samarkanda-Bujará (Afrosiyob, 2h). Tren de alta velocidad impresionante. Reserva en uzrailpass.com" },
+      "metro_bus": { "apps": [], "tips": "Metro de Tashkent (3 líneas), uno de los más bonitos del mundo (decoración soviética). Marshrutkas." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": "Camello en el desierto de Kyzylkum (cerca de Bujará): noches en yurta con camellos." }
+    },
+    "VE": {
+      "ridehailing": { "best": "indrive", "others": [] },
+      "train": { "apps": [], "tips": "Sistema ferroviario muy limitado y poco fiable." },
+      "metro_bus": { "apps": [], "tips": "Metro de Caracas (4 líneas). Por inseguridad, evitar transporte público nocturno." },
+      "ferry": { "apps": [], "tips": "Ferry a la isla Margarita." },
+      "special": { "tips": null }
+    },
+    "VN": {
+      "ridehailing": { "best": "grab", "others": ["gojek", "indrive", "maxim"], "tips": "Grab es el rey. Gojek (Be) más barato en Ho Chi Minh. Xanh SM (motos eléctricas verdes) emergiendo." },
+      "train": { "apps": [], "tips": "Reunification Express: Hanói-Ho Chi Minh (SE1/SE2, 34h). Hanói-Hue o Danang son los tramos más bonitos. Reserva en dsvn.vn o Baolau." },
+      "metro_bus": { "apps": ["moovit"], "tips": "Metro de Hanói (inaugurado 2021, 1 línea). Metro de HCMC en construcción. BRT en Hanói." },
+      "ferry": { "apps": [], "tips": "Ferries a la Bahía de Halong (cruceros 2-3 días), Phu Quoc, Con Dao. Barcos de madera en Halong." },
+      "special": { "tips": "Mototaxi (xe om) y Grab moto: la forma más rápida de moverse en el caótico tráfico vietnamita. Ciclo-rickshaw (xích lô) turístico en Hanói. Crucero en junco por Halong: dormir en la bahía es la experiencia definitiva." }
+    },
+    "ZM": {
+      "ridehailing": { "best": "yango", "others": ["bolt", "indrive"] },
+      "train": { "apps": [], "tips": "TAZARA: Lusaka-Dar es-Salaam. Muy lento (48h). Sólo para aventureros." },
+      "metro_bus": { "apps": [], "tips": "Minibuses en Lusaka. Sin app oficial." },
+      "ferry": { "apps": [], "tips": "Ferry en el lago Tanganica." },
+      "special": { "tips": null }
+    },
+    "ZW": {
+      "ridehailing": { "best": "indrive", "others": ["bolt"] },
+      "train": { "apps": [], "tips": "NRZ (National Railways of Zimbabwe): muy poco fiable." },
+      "metro_bus": { "apps": [], "tips": "Combis (minibuses) en Harare. Sin app." },
+      "ferry": { "apps": [], "tips": "Ferry en el lago Kariba (cruceros y houseboat)." },
+      "special": { "tips": "Houseboat en el lago Kariba: dormir en el lago artificial más grande de África, con hipopótamos y elefantes." }
+    },
+    "MN": {
+      "ridehailing": { "best": "indrive", "others": [] },
+      "train": { "apps": [], "tips": "Trans-Mongolian: Ulan Bator-Beijing (30h) y Ulan Bator-Moscú. Parte del Transiberiano. Reserva con meses de antelación." },
+      "metro_bus": { "apps": [], "tips": "Autobuses en Ulan Bator. Sin metro." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": "Caballo: la Mongolia rural se recorre a caballo. Contratar con nómadas locales o agencia en UB. Camello en el desierto de Gobi." }
+    },
+    "KH_special": {
+      "ridehailing": { "best": "grab", "others": [] },
+      "train": { "apps": [], "tips": null },
+      "metro_bus": { "apps": [], "tips": null },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": "Elefante: SOLO en santuarios éticos. En Tailandia el mejor es Elephant Nature Park (Chiang Mai). NUNCA montar ni verlos actuar en circo." }
+    },
+    "MR": {
+      "ridehailing": { "best": null, "others": [], "tips": "Sin apps. Taxis locales en Nuakchot." },
+      "train": { "apps": [], "tips": "Tren del mineral de hierro Nuadibú-Zuerat: uno de los trenes de carga más largos del mundo (3 km). Los viajeros pueden subirse gratuitamente en vagones abiertos — experiencia extrema." },
+      "metro_bus": { "apps": [], "tips": "Sin transporte público formal." },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": "Tren minero Mauritania: 700 km a través del desierto en vagones de mineral de hierro abiertos. Una de las experiencias de viaje más extremas y únicas del mundo." }
+    },
+    "PE_special": {
+      "ridehailing": { "best": "uber", "others": [] },
+      "train": { "apps": [], "tips": null },
+      "metro_bus": { "apps": [], "tips": null },
+      "ferry": { "apps": [], "tips": null },
+      "special": { "tips": "Llama y alpaca en el Altiplano: para fotos, no como transporte. Balsas de totora en el lago Titicaca (Islas Uros): usadas por la comunidad Uros." }
+    }
+  }
+}
