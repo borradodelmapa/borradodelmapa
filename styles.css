@@ -2190,12 +2190,10 @@ body {
 .bitacora-add-note:hover { background:rgba(212,168,67,.15); }
 
 .bitacora-notes-list { display:flex; flex-direction:column; gap:6px; }
-.bitacora-note { padding:8px 10px; background:rgba(244,239,230,.03); border-radius:8px; border:1px solid rgba(244,239,230,.06); }
-.bitacora-note-text { font-size:13px; color:rgba(244,239,230,.75); line-height:1.4; margin-bottom:4px; cursor:pointer; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+.bitacora-note { display:flex; align-items:flex-start; gap:8px; padding:8px 0; border-bottom:1px solid rgba(244,239,230,.06); }
+.bitacora-note:last-child { border-bottom:none; }
+.bitacora-note-text { flex:1; font-size:13px; color:rgba(244,239,230,.75); line-height:1.4; cursor:pointer; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
 .bitacora-note-text.expanded { -webkit-line-clamp:unset; display:block; }
-.bitacora-note-meta { display:flex; align-items:center; gap:6px; }
-.bitacora-note-type { font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; letter-spacing:.04em; }
-.bitacora-note-origin { font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; letter-spacing:.04em; }
 .tag-visado, .tag-auto { background:rgba(92,184,92,.15); color:#5cb85c; }
 .tag-hotel { background:rgba(107,159,255,.15); color:#6b9fff; }
 .tag-vuelo, .tag-transporte { background:rgba(155,89,182,.15); color:#b68edc; }
@@ -2203,7 +2201,7 @@ body {
 .tag-lugar { background:rgba(26,188,156,.15); color:#1abc9c; }
 .tag-nota, .tag-manual { background:rgba(240,173,78,.15); color:#f0ad4e; }
 .tag-guardado { background:rgba(240,173,78,.15); color:#f0ad4e; }
-.bitacora-note-delete { background:none; border:none; color:rgba(244,239,230,.25); cursor:pointer; font-size:13px; margin-left:auto; padding:2px 4px; }
+.bitacora-note-delete { background:none; border:none; color:rgba(244,239,230,.2); cursor:pointer; font-size:12px; flex-shrink:0; padding:2px 4px; margin-top:1px; }
 .bitacora-note-delete:hover { color:rgba(244,239,230,.6); }
 .bitacora-note-empty { font-size:12px; color:rgba(244,239,230,.25); font-style:italic; padding:4px 0; }
 
