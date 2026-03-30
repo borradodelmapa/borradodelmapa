@@ -1903,10 +1903,8 @@ body {
   width:22px; height:22px; border-radius:50%;
   background:var(--gris); border:2px solid var(--dorado);
   display:flex; align-items:center; justify-content:center;
-  font-size:11px; opacity:0; transition:opacity .2s;
-  pointer-events:none;
+  font-size:11px; pointer-events:none;
 }
-.profile-avatar:hover .profile-avatar-edit { opacity:1; }
 .profile-info { flex:1; min-width:0; }
 .profile-name {
   font-family:var(--font-tight); font-size:22px; font-weight:700;
