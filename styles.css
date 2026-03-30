@@ -2545,9 +2545,20 @@ body {
 .nota-form-input:focus { border-color:rgba(212,160,23,.3); outline:none; }
 .nota-form-input::placeholder { color:rgba(244,239,230,.25); }
 .nota-form-row { display:flex; gap:8px; margin-top:10px; }
-.nota-form-select { flex:1; background:rgba(244,239,230,.06); border:1px solid rgba(244,239,230,.1); border-radius:8px; color:rgba(244,239,230,.7); padding:8px 10px; font-size:13px; font-family:inherit; }
-.nota-form-date { flex:1; background:rgba(244,239,230,.06); border:1px solid rgba(244,239,230,.1); border-radius:8px; color:rgba(244,239,230,.7); padding:8px 10px; font-size:13px; font-family:inherit; }
+.nota-form-select { flex:1; background:rgba(244,239,230,.06); border:1px solid rgba(244,239,230,.1); border-radius:8px; color:var(--crema); padding:8px 10px; font-size:13px; font-family:inherit; appearance:none; cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(244,239,230,0.4)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 10px center; padding-right:28px; }
+.nota-form-select option { background:var(--gris); color:var(--crema); }
+.nota-form-date { flex:1; background:rgba(244,239,230,.06); border:1px solid rgba(244,239,230,.1); border-radius:8px; color:var(--crema); padding:8px 10px; font-size:13px; font-family:inherit; color-scheme:dark; }
+.nota-form-file-btn { flex:1; padding:10px 12px; background:rgba(244,239,230,.04); border:1px solid rgba(244,239,230,.08); border-radius:8px; color:rgba(244,239,230,.6); font-size:13px; font-family:inherit; cursor:pointer; transition:all .15s; text-align:center; }
+.nota-form-file-btn:hover { background:rgba(244,239,230,.08); color:var(--crema); }
+.nota-form-file-list { display:flex; flex-direction:column; gap:4px; margin-top:8px; }
+.nota-file-item { display:flex; align-items:center; gap:8px; padding:6px 10px; background:rgba(74,222,128,.06); border:1px solid rgba(74,222,128,.15); border-radius:6px; font-size:12px; color:rgba(244,239,230,.7); }
+.nota-file-item-name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.nota-file-item-remove { background:none; border:none; color:rgba(239,68,68,.5); font-size:11px; cursor:pointer; padding:2px 4px; }
+.nota-form-existing { display:flex; flex-direction:column; gap:4px; margin-top:8px; }
 .nota-form-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
 .nota-form-cancel { background:none; border:1px solid rgba(244,239,230,.1); color:rgba(244,239,230,.5); padding:8px 16px; border-radius:8px; font-size:13px; cursor:pointer; }
 .nota-form-save { background:rgba(212,168,67,.15); border:1px solid rgba(212,168,67,.4); color:var(--dorado); padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; transition:background .15s; }
 .nota-form-save:hover { background:rgba(212,168,67,.25); }
+.nota-card-files { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.nota-card-thumb { width:60px; height:60px; object-fit:cover; border-radius:6px; border:1px solid rgba(244,239,230,.08); }
+.nota-card-file-link { font-size:12px; color:var(--dorado); text-decoration:none; padding:4px 8px; background:rgba(212,168,67,.06); border-radius:6px; }

@@ -21,6 +21,40 @@ window.notasManager = (() => {
     transporte:   { label: 'Transporte',   icon: '\u{1F68C}', tagClass: 'tag-transporte' }
   };
 
+  // ── Upload files to R2 ──
+
+  async function _uploadFiles(files) {
+    const uid = _uid();
+    const uploaded = [];
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('uid', uid);
+      formData.append('docId', 'nota_' + Date.now());
+      const res = await fetch(window.SALMA_API + '/upload-doc', { method: 'POST', body: formData });
+      if (!res.ok) { console.error('Upload failed:', file.name); continue; }
+      const { key, url } = await res.json();
+      uploaded.push({ fileName: file.name, fileType: file.type, r2Key: key, downloadURL: url });
+    }
+    return uploaded;
+  }
+
+  function _renderFileList(el, files) {
+    if (!el) return;
+    el.innerHTML = files.map((f, i) => `
+      <div class="nota-file-item">
+        <span class="nota-file-item-name">${_escHtml(f.name)}</span>
+        <button class="nota-file-item-remove" data-idx="${i}">\u2715</button>
+      </div>
+    `).join('');
+    el.querySelectorAll('.nota-file-item-remove').forEach(btn => {
+      btn.addEventListener('click', () => {
+        files.splice(parseInt(btn.dataset.idx), 1);
+        _renderFileList(el, files);
+      });
+    });
+  }
+
   // ── CRUD ──
 
   async function create(data) {
@@ -35,6 +69,7 @@ window.notasManager = (() => {
       countryName: data.countryName || null,
       emoji: data.emoji || null,
       fechaRecordatorio: data.fechaRecordatorio || null,
+      files: data.files || [],
       completado: false,
       origen: data.origen || 'manual',
       fuente: data.fuente || null,
@@ -322,6 +357,12 @@ window.notasManager = (() => {
           </div>
         </div>
         <div class="nota-card-texto" data-id="${n.id}">${_escHtml(n.texto)}</div>
+        ${(n.files && n.files.length) ? `<div class="nota-card-files">${n.files.map(f => {
+          const isImg = (f.fileType || '').startsWith('image/');
+          return isImg
+            ? `<a href="${f.downloadURL}" target="_blank" rel="noopener"><img class="nota-card-thumb" src="${f.downloadURL}" alt="${_escHtml(f.fileName)}"></a>`
+            : `<a class="nota-card-file-link" href="${f.downloadURL}" target="_blank" rel="noopener">\u{1F4CE} ${_escHtml(f.fileName)}</a>`;
+        }).join('')}</div>` : ''}
         <div class="nota-card-date">${new Date(n.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
       </div>`;
   }
@@ -331,6 +372,8 @@ window.notasManager = (() => {
     if (!el) return;
     const isNew = !nota;
     const n = nota || { texto: '', tipo: 'general', fechaRecordatorio: '', countryCode: '' };
+
+    const existingFiles = (n.files || []).map(f => `<div class="nota-file-item"><span class="nota-file-item-name">${_escHtml(f.fileName)}</span></div>`).join('');
 
     el.innerHTML = `
       <div class="nota-form">
@@ -343,11 +386,33 @@ window.notasManager = (() => {
           </select>
           <input type="date" class="nota-form-date" id="nota-form-fecha" value="${n.fechaRecordatorio || ''}" placeholder="Fecha">
         </div>
+        <div class="nota-form-row">
+          <button class="nota-form-file-btn" id="nota-form-file-btn">\u{1F4CE} Adjuntar archivo</button>
+          <input type="file" id="nota-form-file-input" accept="image/*,application/pdf" multiple style="display:none">
+        </div>
+        ${existingFiles ? `<div class="nota-form-existing">${existingFiles}</div>` : ''}
+        <div id="nota-form-file-list" class="nota-form-file-list"></div>
         <div class="nota-form-actions">
           <button class="nota-form-cancel" id="nota-form-cancel">Cancelar</button>
           <button class="nota-form-save" id="nota-form-save">${isNew ? 'Crear' : 'Guardar'}</button>
         </div>
       </div>`;
+
+    // File handling
+    const selectedFiles = [];
+    const fileInput = document.getElementById('nota-form-file-input');
+    const fileListEl = document.getElementById('nota-form-file-list');
+
+    if (fileInput) {
+      document.getElementById('nota-form-file-btn').addEventListener('click', () => { fileInput.value = ''; fileInput.click(); });
+      fileInput.addEventListener('change', (e) => {
+        for (const f of e.target.files) {
+          if (f.size > 10 * 1024 * 1024) continue;
+          selectedFiles.push(f);
+        }
+        _renderFileList(fileListEl, selectedFiles);
+      });
+    }
 
     document.getElementById('nota-form-cancel').addEventListener('click', () => { el.innerHTML = ''; });
     document.getElementById('nota-form-save').addEventListener('click', async () => {
@@ -355,14 +420,31 @@ window.notasManager = (() => {
       if (!texto) return;
       const tipo = document.getElementById('nota-form-tipo').value;
       const fecha = document.getElementById('nota-form-fecha').value || null;
+      const saveBtn = document.getElementById('nota-form-save');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Guardando...';
 
-      if (isNew) {
-        await create({ texto, tipo, fechaRecordatorio: fecha });
-      } else {
-        await update(nota.id, { texto, tipo, fechaRecordatorio: fecha });
+      try {
+        // Subir archivos si hay
+        let files = nota?.files || [];
+        if (selectedFiles.length > 0) {
+          files = [...files, ...(await _uploadFiles(selectedFiles))];
+        }
+
+        if (isNew) {
+          await create({ texto, tipo, fechaRecordatorio: fecha, files });
+        } else {
+          await update(nota.id, { texto, tipo, fechaRecordatorio: fecha, files });
+        }
+        el.innerHTML = '';
+        if (typeof showToast === 'function') showToast(isNew ? 'Nota creada' : 'Nota guardada');
+        renderNotasView();
+      } catch (err) {
+        console.error('Error guardando nota:', err);
+        saveBtn.disabled = false;
+        saveBtn.textContent = isNew ? 'Crear' : 'Guardar';
+        if (typeof showToast === 'function') showToast('Error al guardar nota');
       }
-      el.innerHTML = '';
-      renderNotasView();
     });
   }
 
