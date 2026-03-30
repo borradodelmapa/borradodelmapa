@@ -642,11 +642,7 @@ async function renderBitacora() {
                 country.notas.map(n => `
                   <div class="bitacora-note" data-id="${n.id}">
                     <div class="bitacora-note-text">${escapeHTML(n.texto)}</div>
-                    <div class="bitacora-note-meta">
-                      <span class="bitacora-note-type tag-${n.tipo || 'nota'}">${n.tipo || 'nota'}</span>
-                      <span class="bitacora-note-origin tag-${n.origen || 'manual'}">${n.origen === 'auto' ? 'auto' : 'guardado'}</span>
-                      <button class="bitacora-note-delete" data-code="${code}" data-id="${n.id}">✕</button>
-                    </div>
+                    <button class="bitacora-note-delete" data-code="${code}" data-id="${n.id}">✕</button>
                   </div>`).join('')}
             </div>
           </div>
