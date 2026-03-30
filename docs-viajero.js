@@ -127,49 +127,68 @@ const docsViajero = {
 
     let catOptions = DOC_CATEGORIES.map(c => `<option value="${c.id}">${c.emoji} ${c.label}</option>`).join('');
 
-    overlay.innerHTML = `<div class="docs-modal"><div class="docs-modal-handle"></div><div class="docs-modal-title">Nuevo documento</div><div class="docs-field"><label class="docs-label">Nombre *</label><input class="docs-input" id="doc-name" type="text" placeholder="Ej: Pasaporte España" maxlength="100"></div><div class="docs-field"><label class="docs-label">Categoría *</label><select class="docs-select" id="doc-category">${catOptions}</select></div><div class="docs-field"><label class="docs-label">Archivo *</label><div class="docs-file-buttons"><button class="docs-file-btn" id="doc-camera-btn">\u{1F4F8} Hacer foto</button><button class="docs-file-btn" id="doc-file-btn">\u{1F4CE} Elegir archivo</button></div><input type="file" id="doc-file-input" accept="*" style="display:none"><input type="file" id="doc-camera-input" accept="image/*" capture="environment" style="display:none"><div class="docs-file-preview" id="doc-file-preview" style="display:none"><div class="docs-file-name" id="doc-file-name"></div><div class="docs-file-size" id="doc-file-size"></div></div><div class="docs-file-error" id="doc-file-error"></div></div><div class="docs-field"><label class="docs-label">Fecha de caducidad</label><input class="docs-input" id="doc-expires" type="date"></div><div class="docs-field"><label class="docs-label">Notas</label><textarea class="docs-textarea" id="doc-notes" placeholder="Opcional" rows="2" maxlength="500"></textarea></div><div id="doc-progress-wrap"></div><div class="docs-modal-actions"><button class="docs-btn docs-btn-secondary" id="doc-cancel">Cancelar</button><button class="docs-btn docs-btn-primary" id="doc-save" disabled>Guardar</button></div></div>`;
+    overlay.innerHTML = `<div class="docs-modal"><div class="docs-modal-handle"></div><div class="docs-modal-title">Nuevo documento</div><div class="docs-field"><label class="docs-label">Nombre *</label><input class="docs-input" id="doc-name" type="text" placeholder="Ej: Pasaporte España" maxlength="100"></div><div class="docs-field"><label class="docs-label">Categoría *</label><select class="docs-select" id="doc-category">${catOptions}</select></div><div class="docs-field"><label class="docs-label">Archivos *</label><div class="docs-file-buttons"><button class="docs-file-btn" id="doc-camera-btn">\u{1F4F8} Hacer foto</button><button class="docs-file-btn" id="doc-file-btn">\u{1F4CE} Elegir archivos</button></div><input type="file" id="doc-file-input" accept="*" multiple style="display:none"><input type="file" id="doc-camera-input" accept="image/*" capture="environment" style="display:none"><div id="doc-file-list" class="docs-file-list"></div><div class="docs-file-error" id="doc-file-error"></div></div><div class="docs-field"><label class="docs-label">Fecha de caducidad</label><input class="docs-input" id="doc-expires" type="date"></div><div class="docs-field"><label class="docs-label">Notas</label><textarea class="docs-textarea" id="doc-notes" placeholder="Opcional" rows="2" maxlength="500"></textarea></div><div id="doc-progress-wrap"></div><div class="docs-modal-actions"><button class="docs-btn docs-btn-secondary" id="doc-cancel">Cancelar</button><button class="docs-btn docs-btn-primary" id="doc-save" disabled>Guardar</button></div></div>`;
 
     document.body.appendChild(overlay);
 
-    let selectedFile = null;
+    const selectedFiles = [];
 
     const fileInput = overlay.querySelector('#doc-file-input');
     const cameraInput = overlay.querySelector('#doc-camera-input');
     const nameInput = overlay.querySelector('#doc-name');
     const saveBtn = overlay.querySelector('#doc-save');
-    const filePreview = overlay.querySelector('#doc-file-preview');
+    const fileListEl = overlay.querySelector('#doc-file-list');
 
     const updateSaveState = () => {
       const hasName = nameInput.value.trim().length > 0;
-      saveBtn.disabled = !(hasName && selectedFile);
+      saveBtn.disabled = !(hasName && selectedFiles.length > 0);
     };
 
-    const handleFileSelected = (file) => {
-      if (!file) return;
-      if (file.size > MAX_FILE_SIZE) {
-        overlay.querySelector('#doc-file-error').textContent = 'El archivo supera 10 MB';
-        filePreview.style.display = 'none';
-        selectedFile = null;
-        updateSaveState();
+    const renderFileList = () => {
+      if (selectedFiles.length === 0) {
+        fileListEl.innerHTML = '';
         return;
       }
-      selectedFile = file;
-      overlay.querySelector('#doc-file-error').textContent = '';
-      overlay.querySelector('#doc-file-name').textContent = file.name;
-      overlay.querySelector('#doc-file-size').textContent = this._formatSize(file.size);
-      filePreview.style.display = '';
+      fileListEl.innerHTML = selectedFiles.map((f, i) => `<div class="docs-file-item"><span class="docs-file-item-name">${this._esc(f.name)}</span><span class="docs-file-item-size">${this._formatSize(f.size)}</span><button class="docs-file-item-remove" data-idx="${i}">\u2715</button></div>`).join('');
+      fileListEl.querySelectorAll('.docs-file-item-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectedFiles.splice(parseInt(btn.dataset.idx), 1);
+          renderFileList();
+          updateSaveState();
+        });
+      });
+    };
+
+    const addFiles = (files) => {
+      const errorEl = overlay.querySelector('#doc-file-error');
+      errorEl.textContent = '';
+      for (const file of files) {
+        if (file.size > MAX_FILE_SIZE) {
+          errorEl.textContent = `"${file.name}" supera 10 MB`;
+          continue;
+        }
+        selectedFiles.push(file);
+      }
+      renderFileList();
       updateSaveState();
     };
 
     nameInput.addEventListener('input', updateSaveState);
 
-    // Botón cámara
-    overlay.querySelector('#doc-camera-btn').addEventListener('click', () => cameraInput.click());
-    // Botón archivo
-    overlay.querySelector('#doc-file-btn').addEventListener('click', () => fileInput.click());
+    // Botón cámara — cada foto se añade a la lista, puede hacer varias
+    overlay.querySelector('#doc-camera-btn').addEventListener('click', () => {
+      cameraInput.value = '';
+      cameraInput.click();
+    });
+    // Botón archivo — multiple
+    overlay.querySelector('#doc-file-btn').addEventListener('click', () => {
+      fileInput.value = '';
+      fileInput.click();
+    });
 
-    fileInput.addEventListener('change', (e) => handleFileSelected(e.target.files[0]));
-    cameraInput.addEventListener('change', (e) => handleFileSelected(e.target.files[0]));
+    fileInput.addEventListener('change', (e) => addFiles(Array.from(e.target.files)));
+    cameraInput.addEventListener('change', (e) => addFiles(Array.from(e.target.files)));
 
     overlay.querySelector('#doc-cancel').addEventListener('click', () => overlay.remove());
     overlay.addEventListener('click', (e) => {
@@ -182,17 +201,17 @@ const docsViajero = {
       const expiresVal = overlay.querySelector('#doc-expires').value;
       const notes = overlay.querySelector('#doc-notes').value.trim();
 
-      if (!name || !selectedFile) return;
+      if (!name || selectedFiles.length === 0) return;
 
       saveBtn.disabled = true;
-      saveBtn.textContent = 'Subiendo...';
+      saveBtn.textContent = `Subiendo ${selectedFiles.length} archivo${selectedFiles.length > 1 ? 's' : ''}...`;
 
       const progressWrap = overlay.querySelector('#doc-progress-wrap');
       progressWrap.innerHTML = '<div class="docs-progress"><div class="docs-progress-bar" id="doc-upload-bar"></div></div>';
 
       try {
         await this._saveDoc({
-          name, category, file: selectedFile,
+          name, category, files: selectedFiles,
           expiresAt: expiresVal ? new Date(expiresVal) : null,
           notes,
           progressBar: overlay.querySelector('#doc-upload-bar')
@@ -210,36 +229,43 @@ const docsViajero = {
     });
   },
 
-  // ── Subir archivo a R2 via worker + guardar metadatos en Firestore ──
-  async _saveDoc({ name, category, file, expiresAt, notes, progressBar }) {
+  // ── Subir archivos a R2 via worker + guardar metadatos en Firestore ──
+  async _saveDoc({ name, category, files, expiresAt, notes, progressBar }) {
     const uid = currentUser.uid;
     const docRef = db.collection('users').doc(uid).collection('travel_docs').doc();
     const docId = docRef.id;
 
-    // Subir a R2 via worker
-    if (progressBar) progressBar.style.width = '30%';
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('uid', uid);
-    formData.append('docId', docId);
+    const uploadedFiles = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (progressBar) progressBar.style.width = ((i / files.length) * 80) + '%';
 
-    const res = await fetch(window.SALMA_API + '/upload-doc', {
-      method: 'POST',
-      body: formData
-    });
-    if (!res.ok) throw new Error('Error subiendo archivo');
-    const { key, url: downloadURL } = await res.json();
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('uid', uid);
+      formData.append('docId', docId);
 
-    if (progressBar) progressBar.style.width = '70%';
+      const res = await fetch(window.SALMA_API + '/upload-doc', {
+        method: 'POST',
+        body: formData
+      });
+      if (!res.ok) throw new Error(`Error subiendo ${file.name}`);
+      const { key, url } = await res.json();
+      uploadedFiles.push({ fileName: file.name, fileType: file.type || 'application/octet-stream', r2Key: key, downloadURL: url });
+    }
+
+    if (progressBar) progressBar.style.width = '90%';
 
     // Guardar metadatos en Firestore
     await docRef.set({
       name,
       category,
-      fileName: file.name,
-      fileType: file.type || 'application/octet-stream',
-      r2Key: key,
-      downloadURL,
+      files: uploadedFiles,
+      // Compatibilidad: primer archivo como campo principal
+      fileName: uploadedFiles[0].fileName,
+      fileType: uploadedFiles[0].fileType,
+      r2Key: uploadedFiles[0].r2Key,
+      downloadURL: uploadedFiles[0].downloadURL,
       expiresAt: expiresAt ? firebase.firestore.Timestamp.fromDate(expiresAt) : null,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       notes: notes || ''
@@ -272,7 +298,12 @@ const docsViajero = {
       notesSection = `<div class="docs-view-notes">${this._esc(doc.notes)}</div>`;
     }
 
-    overlay.innerHTML = `<div class="docs-modal"><div class="docs-modal-handle"></div><div class="docs-modal-title">${cat.emoji} ${this._esc(doc.name)}</div><div class="docs-view-info"><div class="docs-view-row"><span class="docs-view-label">Categoría</span><span class="docs-view-value">${this._esc(cat.label)}</span></div><div class="docs-view-row"><span class="docs-view-label">Archivo</span><span class="docs-view-value">${this._esc(doc.fileName)}</span></div>${expiryRow}${notesSection}</div><div class="docs-modal-actions"><button class="docs-btn docs-btn-danger" id="doc-delete">Eliminar</button><a class="docs-btn docs-btn-primary" id="doc-download" href="${doc.downloadURL}" target="_blank" rel="noopener" style="text-decoration:none;display:flex;align-items:center;justify-content:center">Ver / Descargar</a></div></div>`;
+    // Lista de archivos (soporta docs antiguos con 1 archivo y nuevos con array)
+    const docFiles = doc.files || [{ fileName: doc.fileName, downloadURL: doc.downloadURL, r2Key: doc.r2Key }];
+    const filesHtml = docFiles.map((f, i) => `<a class="docs-view-file-link" href="${f.downloadURL}" target="_blank" rel="noopener">${this._esc(f.fileName)}</a>`).join('');
+    const filesCount = docFiles.length > 1 ? ` (${docFiles.length})` : '';
+
+    overlay.innerHTML = `<div class="docs-modal"><div class="docs-modal-handle"></div><div class="docs-modal-title">${cat.emoji} ${this._esc(doc.name)}</div><div class="docs-view-info"><div class="docs-view-row"><span class="docs-view-label">Categoría</span><span class="docs-view-value">${this._esc(cat.label)}</span></div><div class="docs-view-row"><span class="docs-view-label">Archivos${filesCount}</span></div><div class="docs-view-files">${filesHtml}</div>${expiryRow}${notesSection}</div><div class="docs-modal-actions"><button class="docs-btn docs-btn-danger" id="doc-delete">Eliminar</button><button class="docs-btn docs-btn-primary" id="doc-download-all">Ver / Descargar</button></div></div>`;
 
     document.body.appendChild(overlay);
 
@@ -280,8 +311,13 @@ const docsViajero = {
       if (e.target === overlay) overlay.remove();
     });
 
+    overlay.querySelector('#doc-download-all').addEventListener('click', () => {
+      const docFiles = doc.files || [{ downloadURL: doc.downloadURL }];
+      docFiles.forEach(f => window.open(f.downloadURL, '_blank'));
+    });
+
     overlay.querySelector('#doc-delete').addEventListener('click', async () => {
-      if (!confirm('¿Eliminar este documento? Se borrará el archivo y no se puede deshacer.')) return;
+      if (!confirm('¿Eliminar este documento? Se borrarán todos los archivos y no se puede deshacer.')) return;
       await this._deleteDoc(doc);
       overlay.remove();
     });
@@ -291,13 +327,15 @@ const docsViajero = {
   async _deleteDoc(doc) {
     const uid = currentUser.uid;
     try {
-      // Borrar archivo de R2
-      if (doc.r2Key) {
+      // Borrar archivos de R2
+      const docFiles = doc.files || (doc.r2Key ? [{ r2Key: doc.r2Key }] : []);
+      for (const f of docFiles) {
+        if (!f.r2Key) continue;
         try {
           await fetch(window.SALMA_API + '/delete-doc', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ key: doc.r2Key })
+            body: JSON.stringify({ key: f.r2Key })
           });
         } catch (e) {
           console.warn('No se pudo borrar archivo de R2:', e);
