@@ -3,15 +3,15 @@
    ═══════════════════════════════════════════ */
 
 :root {
-  --negro: #050505;
-  --dorado: #d4a017;
-  --dorado2: #e0b84a;
+  --negro: #060503;
+  --dorado: #f0b429;
+  --dorado2: #ffc947;
   --crema: #f5f0e8;
   --blanco: #ffffff;
-  --gris: #111111;
-  --gris2: #1a1a1a;
-  --linea: rgba(212,160,23,.18);
-  --linea-fuerte: rgba(212,160,23,.35);
+  --gris: #141209;
+  --gris2: #1e190f;
+  --linea: rgba(240,180,41,.22);
+  --linea-fuerte: rgba(240,180,41,.45);
   --rojo: #ef4444;
   --verde: #4ade80;
 
@@ -40,7 +40,7 @@ body {
 .app-header {
   position:fixed; top:0; left:0; right:0; z-index:1000;
   padding:14px 20px;
-  background:rgba(5,5,5,.92);
+  background:rgba(8,7,4,.92);
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
   border-bottom:1px solid var(--linea);
@@ -93,7 +93,7 @@ body {
 .app-input-bar {
   position:fixed; bottom:56px; left:0; right:0; z-index:1100;
   padding:10px 16px 12px;
-  background:rgba(5,5,5,.95);
+  background:rgba(8,7,4,.95);
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
   border-top:1px solid var(--linea);
@@ -1705,7 +1705,7 @@ body {
 .app-bottom-bar {
   position:fixed; bottom:0; left:0; right:0; z-index:900;
   display:flex; justify-content:space-around; align-items:flex-start;
-  background:rgba(18,18,16,.95); backdrop-filter:blur(12px);
+  background:rgba(12,10,6,.95); backdrop-filter:blur(12px);
   border-top:1px solid rgba(244,239,230,.08);
   padding:6px 0 env(safe-area-inset-bottom, 6px);
   min-height:56px; height:auto;
