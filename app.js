@@ -515,13 +515,6 @@ async function renderProfile() {
   document.getElementById('prof-logout').addEventListener('click', () => {
     if (confirm('¿Cerrar sesión?')) logout();
   });
-  document.getElementById('btn-new-guide').addEventListener('click', () => {
-    if (typeof salma !== 'undefined') {
-      salma.reset();
-      salma._initChat();
-    }
-  });
-
   // Cargar guías del usuario
   _loadProfileGuides();
 }
