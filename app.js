@@ -368,18 +368,6 @@ async function renderProfile() {
           <span class="profile-section-arrow">›</span>
         </div>
 
-        <div class="profile-section profile-section-locked">
-          <span class="profile-section-icon">📝</span>
-          <span class="profile-section-label">Notas de Salma</span>
-          <span class="profile-section-badge">pronto</span>
-        </div>
-
-        <div class="profile-section profile-section-locked">
-          <span class="profile-section-icon">⚙️</span>
-          <span class="profile-section-label">Preferencias</span>
-          <span class="profile-section-badge">pronto</span>
-        </div>
-
         <div class="profile-section" id="prof-help">
           <span class="profile-section-icon">?</span>
           <span class="profile-section-label">Ayuda</span>
@@ -393,21 +381,9 @@ async function renderProfile() {
           <span class="profile-section-arrow">›</span>
         </div>
 
-        <div class="profile-section profile-section-logout" id="prof-logout">
-          <span class="profile-section-icon">🚪</span>
-          <span class="profile-section-label">Cerrar sesión</span>
-        </div>
       </div>
 
-      <div class="profile-viajes">
-        <div class="profile-viajes-header">MIS VIAJES</div>
-        <div class="viajes-grid" id="viajes-grid">
-          <div class="viaje-card viaje-card-new" id="btn-new-guide">
-            <div class="viaje-card-new-icon">+</div>
-            <div class="viaje-card-new-txt">NUEVA GUÍA</div>
-          </div>
-        </div>
-      </div>
+      <button class="profile-logout-link" id="prof-logout">Cerrar sesión</button>
     </div>`;
 
   // Event listeners
