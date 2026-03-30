@@ -811,10 +811,11 @@ async function renderGaleria(albumFilter) {
       <div class="galeria-album-chip ${!activeAlbum ? 'active' : ''}" data-album="">Todas (${fotos.length})</div>
       ${albumes.map(a => {
         const count = fotos.filter(f => f.albumId === a.id).length;
+        if (count === 0) return '';
         return `<div class="galeria-album-chip ${activeAlbum === a.id ? 'active' : ''}" data-album="${a.id}">${escapeHTML(a.nombre)} (${count})</div>`;
       }).join('')}
       ${sinAlbum > 0 ? `<div class="galeria-album-chip ${activeAlbum === '__sin_album__' ? 'active' : ''}" data-album="__sin_album__">Sin álbum (${sinAlbum})</div>` : ''}
-      <div class="galeria-album-chip galeria-album-new" id="galeria-new-album">+ Crear álbum</div>
+      <div class="galeria-album-chip galeria-album-new" id="galeria-new-album">+ Álbum</div>
     </div>`;
 
   const gridHtml = filtered.length === 0
@@ -828,12 +829,11 @@ async function renderGaleria(albumFilter) {
   $c.innerHTML = `
     <div class="galeria-area fade-in">
       <div class="galeria-header">
-        <button class="galeria-back" id="galeria-back">← Galería</button>
-        <span class="galeria-title">${escapeHTML(activeAlbumName)}</span>
+        <button class="galeria-back" id="galeria-back">← Perfil</button>
+        <span class="galeria-title">Galería</span>
         <div class="galeria-header-btns">
-          <button class="profile-info-btn" id="galeria-info-btn" title="Info">i</button>
-          <label for="galeria-file-input" class="galeria-upload-btn" title="Añadir fotos">📤 Añadir</label>
-          <button class="galeria-video-btn" id="galeria-video-btn" title="Crear video">🎬 Video</button>
+          <label for="galeria-file-input" class="galeria-upload-btn" title="Añadir fotos">+ Añadir</label>
+          <button class="galeria-video-btn" id="galeria-video-btn" title="Crear video">🎬</button>
         </div>
       </div>
       <input type="file" id="galeria-file-input" accept="image/*" multiple style="display:none">
