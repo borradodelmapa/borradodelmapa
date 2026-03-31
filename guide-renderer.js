@@ -663,12 +663,23 @@ const guideRenderer = {
     marker.bindPopup(html, { maxWidth: 220, className: 'dark-popup', autoPan: false });
 
     marker.on('popupopen', () => {
-      // Centrar el marcador en la parte baja del mapa para que la galleta quede visible
+      // Centrar la galleta en el mapa: quitar maxBounds temporalmente, pan, restaurar
       const map = marker._map;
       if (map) {
-        const px = map.project(marker.getLatLng());
-        px.y -= map.getSize().y * 0.28;
-        map.panTo(map.unproject(px), { animate: true, duration: 0.25 });
+        const saved = map.options.maxBounds;
+        map.setMaxBounds(null);
+        setTimeout(() => {
+          const popup = marker.getPopup();
+          const popupEl = popup && popup._container;
+          const mapEl = map.getContainer();
+          if (popupEl && mapEl) {
+            const pr = popupEl.getBoundingClientRect();
+            const mr = mapEl.getBoundingClientRect();
+            const dy = (pr.top + pr.height / 2) - (mr.top + mr.height / 2);
+            map.panBy([0, dy], { animate: true, duration: 0.25 });
+          }
+          setTimeout(() => { if (saved) map.setMaxBounds(saved); }, 400);
+        }, 50);
       }
       // Lazy-load foto
       if (stop.photo_ref) {
