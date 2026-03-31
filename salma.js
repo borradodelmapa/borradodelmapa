@@ -1256,7 +1256,7 @@ const salma = {
       div.appendChild(btnHtml);
     }
     area.appendChild(div);
-    this._scrollToBottom();
+    this._scrollToBottom(true);
     // Auto-speak solo si el usuario lo ha activado explícitamente
     if (localStorage.getItem('salma_voice') === 'true') {
       setTimeout(() => this.salmaSpeak(text), 50);

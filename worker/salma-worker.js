@@ -1960,9 +1960,9 @@ async function buscarWeb(input, braveKey) {
 
   try {
     // 1. Buscar via Brave Search API
-    const params = new URLSearchParams({ q: input.query, count: 5, country: 'es', search_lang: 'es', ui_lang: 'es' });
+    const params = new URLSearchParams({ q: input.query, count: 5, country: 'ES', search_lang: 'es', ui_lang: 'es-ES' });
     const braveRes = await fetch(`https://api.search.brave.com/res/v1/web/search?${params}`, {
-      headers: { 'Accept': 'application/json', 'X-Subscription-Token': braveKey },
+      headers: { 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'X-Subscription-Token': braveKey },
     });
     if (!braveRes.ok) return { error: 'Error buscando en Brave Search' };
     const braveData = await braveRes.json();
