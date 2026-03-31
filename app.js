@@ -2945,9 +2945,16 @@ function formatMessage(str) {
     images.push('<img src="' + url + '" alt="' + alt + '" style="width:100%;max-width:280px;border-radius:8px;margin:6px 0;display:block;" loading="lazy">');
     return '%%IMG' + idx + '%%';
   });
+  // Extraer enlaces markdown [texto](url) ANTES del escape HTML
+  const links = [];
+  raw = raw.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_, text, url) => {
+    const idx = links.length;
+    links.push('<a href="' + url + '" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href);return false;">' + text + '</a>');
+    return '%%LINK' + idx + '%%';
+  });
 
   let html = escapeHTML(raw);
-  // URLs → enlaces clicables (onclick fuerza apertura externa en PWA)
+  // URLs sueltas → enlaces clicables (onclick fuerza apertura externa en PWA)
   html = html.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href);return false;">$1</a>');
   // Teléfonos internacionales: +XX XXX XXX XXX (con espacios, guiones o puntos)
   html = html.replace(/(\+\d{1,3}[ .-]?\d{1,4}[ .-]?\d{2,4}[ .-]?\d{2,4}[ .-]?\d{0,4})/g, (match) => {
@@ -2956,8 +2963,9 @@ function formatMessage(str) {
   });
   // **negrita** → <strong>
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  // Restaurar imágenes desde placeholders
+  // Restaurar imágenes y enlaces desde placeholders
   images.forEach((img, i) => { html = html.replace('%%IMG' + i + '%%', img); });
+  links.forEach((link, i) => { html = html.replace('%%LINK' + i + '%%', link); });
   // Saltos de línea → <br>
   html = html.replace(/\n/g, '<br>');
   return html;
