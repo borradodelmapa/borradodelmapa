@@ -782,7 +782,7 @@ body {
 /* Map placeholder (Fase 2) */
 /* Mapa general Leaflet */
 .guide-map-container {
-  height:220px; margin:0 16px 16px; border-radius:12px; overflow:hidden;
+  height:300px; margin:0 16px 16px; border-radius:12px; overflow:hidden;
   border:1px solid var(--linea); position:relative;
 }
 .guide-gmaps-link {
@@ -795,7 +795,7 @@ body {
 
 /* Mini-mapa por día */
 .guide-day-map {
-  height:160px; border-radius:8px; overflow:hidden;
+  height:260px; border-radius:8px; overflow:hidden;
   margin-bottom:16px; border:1px solid var(--linea); position:relative;
 }
 

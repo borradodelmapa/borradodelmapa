@@ -646,63 +646,35 @@ const guideRenderer = {
 
   _bindRichPopup(marker, stop, dayNum) {
     const name = escapeHTML(stop.headline || stop.name);
+    const narrative = stop.narrative ? escapeHTML(stop.narrative).substring(0, 120) + (stop.narrative.length > 120 ? '...' : '') : '';
     const gmapsUrl = this._stopGmapsUrl(stop, '');
+    const photoId = 'popup-photo-' + Math.random().toString(36).slice(2, 8);
 
-    marker.on('click', (e) => {
-      L.DomEvent.stopPropagation(e);
+    let html = `<div class="map-popup">`;
+    if (stop.photo_ref) {
+      html += `<div class="map-popup-photo" id="${photoId}"></div>`;
+    }
+    html += `<div class="map-popup-name">${name}</div>`;
+    html += `<div class="map-popup-day">Día ${dayNum}</div>`;
+    if (narrative) html += `<div class="map-popup-desc">${narrative}</div>`;
+    html += `<a class="map-popup-link" href="${gmapsUrl}" target="_blank" rel="noopener">Ver en Maps →</a>`;
+    html += `</div>`;
 
-      // Cerrar cualquier popup previo
-      document.querySelector('.salma-map-popup')?.remove();
+    marker.bindPopup(html, { maxWidth: 220, className: 'dark-popup', autoPan: true, autoPanPadding: [10, 20] });
 
-      // Posición del marcador en pantalla
-      const map = marker._map;
-      const pt = map.latLngToContainerPoint(marker.getLatLng());
-      const rect = map.getContainer().getBoundingClientRect();
-      const x = rect.left + pt.x;
-      const y = rect.top + pt.y;
-
-      // Construir popup
-      const popup = document.createElement('div');
-      popup.className = 'salma-map-popup';
-
-      const photoId = 'smp-' + Math.random().toString(36).slice(2, 7);
-      popup.innerHTML =
-        `<button class="salma-map-popup-close" aria-label="Cerrar">✕</button>` +
-        (stop.photo_ref ? `<div class="salma-map-popup-photo" id="${photoId}"></div>` : '') +
-        `<div class="salma-map-popup-name">${name}</div>` +
-        `<div class="salma-map-popup-day">Día ${dayNum}</div>` +
-        `<a class="salma-map-popup-link" href="${gmapsUrl}" target="_blank" rel="noopener">Ver en Maps →</a>`;
-
-      popup.style.left = x + 'px';
-      popup.style.top  = y + 'px';
-      document.body.appendChild(popup);
-
-      // Cargar foto
-      if (stop.photo_ref) {
-        const photoEl = document.getElementById(photoId);
-        if (photoEl) {
-          fetch(window.SALMA_API + '/photo?ref=' + encodeURIComponent(stop.photo_ref) + '&json=1')
-            .then(r => r.json()).then(d => {
-              if (d.url) photoEl.innerHTML = `<img src="${d.url}" alt="">`;
-              else photoEl.remove();
-            }).catch(() => photoEl?.remove());
-        }
-      }
-
-      // Cerrar con botón
-      popup.querySelector('.salma-map-popup-close').addEventListener('click', () => popup.remove());
-
-      // Cerrar al mover el mapa
-      map.once('movestart zoomstart', () => popup.remove());
-
-      // Cerrar al hacer click fuera
-      setTimeout(() => {
-        const onOutside = (ev) => {
-          if (!popup.contains(ev.target)) { popup.remove(); document.removeEventListener('click', onOutside); }
-        };
-        document.addEventListener('click', onOutside);
-      }, 0);
-    });
+    if (stop.photo_ref) {
+      marker.on('popupopen', () => {
+        const el = document.getElementById(photoId);
+        if (!el || el.dataset.loaded) return;
+        el.dataset.loaded = '1';
+        fetch(window.SALMA_API + '/photo?ref=' + encodeURIComponent(stop.photo_ref) + '&json=1')
+          .then(r => r.json()).then(data => {
+            if (data.url) {
+              el.innerHTML = `<img src="${data.url}" alt="" style="width:100%;height:100px;object-fit:cover;border-radius:6px;">`;
+            } else { el.remove(); }
+          }).catch(() => el.remove());
+      });
+    }
   },
 
   _loadDirections(map, stops, color) {
