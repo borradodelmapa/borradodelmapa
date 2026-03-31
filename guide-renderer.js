@@ -663,24 +663,19 @@ const guideRenderer = {
     marker.bindPopup(html, { maxWidth: 220, className: 'dark-popup', autoPan: false });
 
     marker.on('popupopen', () => {
-      // Centrar la galleta en el mapa: quitar maxBounds temporalmente, pan, restaurar
+      // Centrar la galleta en el mapa sin mover el mapa — solo reposicionar el popup
       const map = marker._map;
-      if (map) {
-        const saved = map.options.maxBounds;
-        map.setMaxBounds(null);
-        setTimeout(() => {
-          const popup = marker.getPopup();
-          const popupEl = popup && popup._container;
-          const mapEl = map.getContainer();
-          if (popupEl && mapEl) {
-            const pr = popupEl.getBoundingClientRect();
-            const mr = mapEl.getBoundingClientRect();
-            const dy = (pr.top + pr.height / 2) - (mr.top + mr.height / 2);
-            map.panBy([0, dy], { animate: true, duration: 0.25 });
-          }
-          setTimeout(() => { if (saved) map.setMaxBounds(saved); }, 400);
-        }, 50);
-      }
+      if (!map) return;
+      setTimeout(() => {
+        const popup = marker.getPopup();
+        if (!popup || !popup._container) return;
+        const popupEl = popup._container;
+        const mapEl = map.getContainer();
+        const pr = popupEl.getBoundingClientRect();
+        const mr = mapEl.getBoundingClientRect();
+        const dy = (mr.top + mr.height / 2) - (pr.top + pr.height / 2);
+        popupEl.style.marginTop = dy + 'px';
+      }, 30);
       // Lazy-load foto
       if (stop.photo_ref) {
         const el = document.getElementById(photoId);
@@ -693,6 +688,11 @@ const guideRenderer = {
             } else { el.remove(); }
           }).catch(() => el.remove());
       }
+    });
+
+    marker.on('popupclose', () => {
+      const popup = marker.getPopup();
+      if (popup && popup._container) popup._container.style.marginTop = '';
     });
   },
 
