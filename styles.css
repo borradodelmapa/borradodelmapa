@@ -758,6 +758,7 @@ body {
 
 /* ═══ GUIDE CARD ═══ */
 .guide-card {
+  position:relative;
   margin:8px 0 16px;
   background:var(--gris);
   border:1px solid var(--linea-fuerte);
@@ -1739,6 +1740,7 @@ body {
 
 /* ═══ COPILOTO — Tarjeta info país ═══ */
 .copilot-card {
+  position:relative;
   margin:0 auto 16px; max-width:640px;
   background:rgba(212,160,23,.06); border:1px solid rgba(212,160,23,.15);
   border-radius:14px; overflow:hidden;
