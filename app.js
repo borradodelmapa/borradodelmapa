@@ -1928,9 +1928,11 @@ auth.onAuthStateChanged(async (user) => {
     const goParam = new URLSearchParams(window.location.search).get('go');
     if (goParam) {
       history.replaceState(null, '', '/');
-      // Si pide chat o rutas sin login, mostrar welcome con login
-      if (goParam === 'chat') showState('welcome');
-      else showState('welcome');
+      showState('welcome');
+      if (goParam === 'rutas' || goParam === 'profile') {
+        window._afterLogin = goParam;
+        setTimeout(() => openModal('login'), 350);
+      }
     }
   }
 });
