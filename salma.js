@@ -528,18 +528,19 @@ const salma = {
     // Si no tenemos ubicación todavía, reintentar (ahora hay interacción del usuario)
     if (!this._userLocation && !this._geoWatchId && !this._geoBlocked) this.initGeolocation();
 
+    // Transicionar a chat si estamos en welcome
+    if (currentState === 'welcome' || currentState === 'viajes') {
+      this._initChat();
+    }
+
     // Si el mensaje requiere ubicación y no la tenemos, mostrar prompt
     if (!this._userLocation && msg) {
       const needsLocation = /desde donde estoy|cerca de m[ií]|por aqu[ií]|aqu[ií] cerca|donde estoy|mi ubicaci[oó]n|nearest|near me/i.test(msg);
       if (needsLocation) {
+        this._addUserBubble(msg);
         this._showGeoPrompt();
         return;
       }
-    }
-
-    // Transicionar a chat si estamos en welcome
-    if (currentState === 'welcome' || currentState === 'viajes') {
-      this._initChat();
     }
 
     // Burbuja del usuario (con foto si hay)
