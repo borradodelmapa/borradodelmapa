@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/destinos.css">
 <!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-B2YWQKPTZZ"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-B2YWQKPTZZ');</script>
@@ -26,19 +27,60 @@
   .public-logo { font-family:var(--font-display); font-size:18px; color:var(--blanco); letter-spacing:.08em; }
   .public-logo span { color:var(--dorado); }
   .public-content { max-width:700px; margin:0 auto; padding:20px 16px 40px; }
-  .public-cta {
-    margin:20px 0 80px; padding:20px 0 0;
-    border-top:1px solid var(--linea);
-  }
-  .public-cta-label { font-family:var(--font-mono); font-size:9px; color:rgba(244,239,230,.4); letter-spacing:.14em; text-align:center; margin-bottom:12px; text-transform:uppercase; }
-  .public-salma-input-wrap { display:flex; gap:8px; align-items:center; background:rgba(255,255,255,.04); border:1px solid var(--linea); border-radius:14px; padding:10px 14px; }
-  .public-salma-input { flex:1; background:none; border:none; outline:none; color:var(--blanco); font-size:14px; font-family:var(--font-sans); }
-  .public-salma-input::placeholder { color:rgba(244,239,230,.35); }
-  .public-salma-btn { background:var(--dorado); color:#0d0d0d; border:none; border-radius:10px; padding:8px 16px; font-weight:700; font-size:13px; cursor:pointer; white-space:nowrap; }
   .public-loading { text-align:center; padding:80px 20px; color:rgba(244,239,230,.5); }
   .public-error { text-align:center; padding:80px 20px; }
   .public-error h2 { font-family:var(--font-tight); font-size:28px; color:var(--blanco); margin-bottom:12px; }
   .public-error p { color:rgba(244,239,230,.6); margin-bottom:20px; }
+
+  /* Blog mode overrides for public diario */
+  .public-content .diario-area { max-width:700px; }
+  .public-content .diario-back { display:none; }
+  .public-content .diario-privacy-change { display:none; }
+  .public-content .diario-privacy { display:none; }
+  .public-content .diario-upload-btn { display:none; }
+  .public-content .diario-note-toggle { display:none; }
+  .public-content .diario-photo-delete { display:none !important; }
+  .public-content .diario-stop-note { max-height:none; }
+  .public-content .diario-stop-note:empty { display:none; }
+  .public-content .diario-note-input { background:rgba(212,160,23,.08); border:none; border-left:3px solid var(--dorado); padding:12px 16px; color:rgba(244,239,230,.7); font-style:italic; resize:none; pointer-events:none; min-height:auto; border-radius:0 8px 8px 0; }
+  .public-content .diario-note-input:empty, .public-content .diario-note-input[value=""] { display:none; }
+  .public-content .diario-stop-actions { display:none; }
+  .public-content .diario-note-status { display:none; }
+  .public-content .diario-note-day { pointer-events:none; background:rgba(212,160,23,.08); border:none; border-left:3px solid var(--dorado); padding:12px 16px; color:rgba(244,239,230,.6); font-style:italic; border-radius:0 8px 8px 0; }
+  .public-content .diario-note-day:empty { display:none; }
+  .public-content .diario-share-btn { display:none; }
+
+  /* Blog mode — enhanced hero */
+  .public-diario-hero { text-align:center; padding:40px 20px 20px; }
+  .public-diario-country { font-family:var(--font-mono); font-size:11px; letter-spacing:.2em; color:var(--dorado); margin-bottom:8px; }
+  .public-diario-title { font-size:26px; font-weight:700; color:var(--blanco); margin-bottom:8px; }
+  .public-diario-author { font-size:13px; color:rgba(244,239,230,.5); margin-bottom:4px; }
+  .public-diario-salma { display:inline-flex; align-items:center; gap:6px; font-size:11px; color:rgba(244,239,230,.4); margin-top:12px; }
+  .public-diario-salma img { width:20px; height:20px; border-radius:50%; }
+  .public-diario-stats { display:flex; justify-content:center; gap:24px; margin-top:20px; padding-bottom:20px; border-bottom:1px solid var(--linea); }
+  .public-diario-stat-num { display:block; font-size:22px; font-weight:700; color:var(--dorado); }
+  .public-diario-stat-label { font-size:10px; color:rgba(244,239,230,.4); letter-spacing:.1em; }
+
+  .public-content .diario-photo-user { position:relative; }
+  .public-content .diario-photo-user::after {
+    content:'Mi foto'; position:absolute; bottom:8px; left:8px;
+    background:rgba(0,0,0,.7); color:var(--dorado); font-size:10px;
+    padding:3px 8px; border-radius:10px; font-family:var(--font-mono);
+  }
+
+  .public-cta-enhanced {
+    text-align:center; padding:60px 20px; margin:40px 0;
+    background:linear-gradient(180deg, transparent, rgba(212,160,23,.08) 50%, transparent);
+    border-radius:20px;
+  }
+  .public-cta-enhanced h3 { font-size:20px; color:var(--blanco); margin-bottom:8px; font-family:var(--font-tight); }
+  .public-cta-enhanced p { font-size:14px; color:rgba(244,239,230,.5); margin-bottom:24px; }
+  .public-cta-enhanced a {
+    display:inline-block; background:var(--dorado); color:#0d0d0d;
+    font-weight:700; font-size:13px; padding:14px 32px; border-radius:25px;
+    text-decoration:none; transition:transform .15s; border:none;
+  }
+  .public-cta-enhanced a:hover { transform:scale(1.03); }
 </style>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -70,63 +112,12 @@ function escapeHTML(str) {
 </script>
 <script src="/guide-renderer.js"></script>
 <script src="/bitacora-renderer.js"></script>
-<style>
-  /* Blog mode overrides for public diario */
-  /* Blog mode — hide edit controls */
-  .public-content .diario-area { max-width:700px; }
-  .public-content .diario-back { display:none; }
-  .public-content .diario-privacy-change { display:none; }
-  .public-content .diario-privacy { display:none; }
-  .public-content .diario-upload-btn { display:none; }
-  .public-content .diario-note-toggle { display:none; }
-  .public-content .diario-photo-delete { display:none !important; }
-  .public-content .diario-stop-note { max-height:none; }
-  .public-content .diario-stop-note:empty { display:none; }
-  .public-content .diario-note-input { background:rgba(212,160,23,.08); border:none; border-left:3px solid var(--dorado); padding:12px 16px; color:rgba(244,239,230,.7); font-style:italic; resize:none; pointer-events:none; min-height:auto; border-radius:0 8px 8px 0; }
-  .public-content .diario-note-input:empty, .public-content .diario-note-input[value=""] { display:none; }
-  .public-content .diario-stop-actions { display:none; }
-  .public-content .diario-note-status { display:none; }
-  .public-content .diario-note-day { pointer-events:none; background:rgba(212,160,23,.08); border:none; border-left:3px solid var(--dorado); padding:12px 16px; color:rgba(244,239,230,.6); font-style:italic; border-radius:0 8px 8px 0; }
-  .public-content .diario-note-day:empty { display:none; }
-  .public-content .diario-share-btn { display:none; }
-
-  /* Blog mode — enhanced hero */
-  .public-diario-hero { text-align:center; padding:40px 20px 20px; }
-  .public-diario-country { font-family:var(--font-mono); font-size:11px; letter-spacing:.2em; color:var(--dorado); margin-bottom:8px; }
-  .public-diario-title { font-size:26px; font-weight:700; color:var(--blanco); margin-bottom:8px; }
-  .public-diario-author { font-size:13px; color:rgba(244,239,230,.5); margin-bottom:4px; }
-  .public-diario-salma { display:inline-flex; align-items:center; gap:6px; font-size:11px; color:rgba(244,239,230,.4); margin-top:12px; }
-  .public-diario-salma img { width:20px; height:20px; border-radius:50%; }
-  .public-diario-stats { display:flex; justify-content:center; gap:24px; margin-top:20px; padding-bottom:20px; border-bottom:1px solid var(--linea); }
-  .public-diario-stat-num { display:block; font-size:22px; font-weight:700; color:var(--dorado); }
-  .public-diario-stat-label { font-size:10px; color:rgba(244,239,230,.4); letter-spacing:.1em; }
-
-  /* Blog mode — photo badges */
-  .public-content .diario-photo-user { position:relative; }
-  .public-content .diario-photo-user::after {
-    content:'Mi foto'; position:absolute; bottom:8px; left:8px;
-    background:rgba(0,0,0,.7); color:var(--dorado); font-size:10px;
-    padding:3px 8px; border-radius:10px; font-family:var(--font-mono);
-  }
-
-  /* Blog mode — CTA enhanced */
-  .public-cta-enhanced {
-    text-align:center; padding:60px 20px; margin:40px 0;
-    background:linear-gradient(180deg, transparent, rgba(212,160,23,.08) 50%, transparent);
-    border-radius:20px;
-  }
-  .public-cta-enhanced h3 { font-size:20px; color:var(--blanco); margin-bottom:8px; font-family:var(--font-tight); }
-  .public-cta-enhanced p { font-size:14px; color:rgba(244,239,230,.5); margin-bottom:24px; }
-  .public-cta-enhanced a {
-    display:inline-block; background:var(--dorado); color:#0d0d0d;
-    font-weight:700; font-size:13px; padding:14px 32px; border-radius:25px;
-    text-decoration:none; transition:transform .15s; border:none;
-  }
-  .public-cta-enhanced a:hover { transform:scale(1.03); }
-</style>
 <script>
 (async function() {
+  const API = window.SALMA_API;
   const slug = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
+  let guideName = '';
+
   if (!slug || slug === '404.html') {
     showError();
     return;
@@ -143,6 +134,7 @@ function escapeHTML(str) {
 
     const data = doc.data();
     const routeData = JSON.parse(data.itinerarioIA);
+    guideName = data.nombre || routeData.title || '';
 
     // Actualizar meta tags
     const title = (data.nombre || 'Guía de viaje') + ' · Borradodelmapa';
@@ -162,7 +154,6 @@ function escapeHTML(str) {
     const isDiario = hasNotes || hasPhotos;
 
     if (isDiario && typeof bitacoraRenderer !== 'undefined') {
-      // Vista blog — diario con notas y fotos
       const authorName = data.owner_name || 'Viajero';
       const date = data.createdAt ? new Date(data.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
       const stops = routeData.stops || [];
@@ -171,7 +162,6 @@ function escapeHTML(str) {
       const totalPhotos = (data.photos || []).length;
       const country = routeData.country || routeData.region || '';
 
-      // Hero
       const heroDiv = document.createElement('div');
       heroDiv.className = 'public-diario-hero';
       heroDiv.innerHTML = `
@@ -188,59 +178,302 @@ function escapeHTML(str) {
       `;
       content.appendChild(heroDiv);
 
-      // Contenedor para el diario
       const diarioArea = document.createElement('div');
       diarioArea.id = 'app-content';
       content.appendChild(diarioArea);
 
-      // Simular currentUser como null para modo lectura
       window.currentUser = null;
       bitacoraRenderer.renderDiario(routeData, slug, data.notes || {}, data.photos || [], data);
 
-      // Quitar interactividad (notas readonly, sin upload)
       document.querySelectorAll('.diario-note-input').forEach(el => {
         el.readOnly = true;
         if (!el.value.trim()) el.closest('.diario-stop-note,.diario-day-note')?.remove();
       });
     } else {
-      // Vista guía normal
       const area = document.createElement('div');
       area.id = 'chat-area';
       content.appendChild(area);
       guideRenderer.render(routeData, { saved: true });
     }
 
-    // CTA
-    const cta = document.createElement('div');
-    cta.className = 'public-cta';
-    cta.innerHTML = `
-      <div class="public-cta-label">Habla con Salma</div>
-      <div class="public-salma-input-wrap">
-        <input class="public-salma-input" id="public-salma-input" type="text" placeholder="Escribe a Salma..." autocomplete="off">
-        <button class="public-salma-btn" id="public-salma-btn">Habla con Salma ›</button>
+    // Salma chat inline
+    const salmaSection = document.createElement('section');
+    salmaSection.className = 'destino-salma-section';
+    salmaSection.innerHTML = `
+      <div class="destino-salma-header">
+        <img src="/salma_ai_avatar.png" alt="Salma" style="width:28px;height:28px;border-radius:50%;">
+        <span class="destino-salma-title">Pregunta a Salma</span>
+      </div>
+      <div class="salma-chat-body" id="salma-chat-body">
+        <div class="salma-chat-bubble">¡Ey! Estás viendo ${escapeHTML(guideName)}. ¿Quieres cambiar algo, más días, otro plan? Pregúntame lo que quieras.</div>
+      </div>
+      <div class="salma-chat-input-bar">
+        <input type="text" class="salma-chat-input" id="salma-chat-input" placeholder="Escribe a Salma..." autocomplete="off">
+        <button class="salma-mic app-mic" id="salma-mic" type="button" aria-label="Hablar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="1" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
+        <button class="salma-chat-send" id="salma-chat-send">›</button>
       </div>
     `;
-    // Al enviar → handoff a la app
-    setTimeout(() => {
-      const inp = document.getElementById('public-salma-input');
-      const btn = document.getElementById('public-salma-btn');
-      function goSalma() {
-        const txt = inp?.value?.trim();
-        if (txt) localStorage.setItem('_salmaHandoff', txt);
-        window.location.href = '/?go=chat';
-      }
-      btn?.addEventListener('click', goSalma);
-      inp?.addEventListener('keydown', e => { if (e.key === 'Enter') goSalma(); });
-    }, 0);
-    content.appendChild(cta);
+    content.appendChild(salmaSection);
 
-    // Bottom bar — igual que en la app
+    // Bottom bar
     addBottomBar();
+
+    // Init chat + mic
+    initInlineChat(guideName);
 
   } catch (e) {
     console.error('Error cargando guía pública:', e);
     showError();
   }
+
+  // ═══ INLINE CHAT (SSE streaming) ═══
+
+  function initInlineChat(context) {
+    const $body = document.getElementById('salma-chat-body');
+    const $input = document.getElementById('salma-chat-input');
+    const $send = document.getElementById('salma-chat-send');
+    if (!$body || !$input || !$send) return;
+
+    let streaming = false;
+    let chatHistory = [];
+
+    $send.addEventListener('click', () => {
+      const msg = $input.value.trim();
+      if (msg) sendMsg(msg);
+    });
+    $input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        const msg = $input.value.trim();
+        if (msg) sendMsg(msg);
+      }
+    });
+
+    function miniMd(text) {
+      let raw = text || '';
+      const imgs = [];
+      raw = raw.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, (_, alt, url) => {
+        const i = imgs.length;
+        imgs.push('<img src="' + url + '" alt="' + alt + '" style="width:100%;max-width:280px;border-radius:8px;margin:6px 0;display:block;" loading="lazy">');
+        return '%%IMG' + i + '%%';
+      });
+      let html = raw.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      html = html.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:var(--dorado);word-break:break-all;">$1</a>');
+      html = html.replace(/(\+\d{1,3}[ .-]?\d{1,4}[ .-]?\d{2,4}[ .-]?\d{2,4}[ .-]?\d{0,4})/g, (m) => {
+        const c = m.replace(/[\s.-]/g, '').trim();
+        return '<a href="tel:' + c + '">' + m.trim() + '</a>';
+      });
+      html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+      imgs.forEach((img, i) => { html = html.replace('%%IMG' + i + '%%', img); });
+      html = html.replace(/\n/g, '<br>');
+      return html;
+    }
+
+    function addBubble(text, isUser) {
+      const div = document.createElement('div');
+      div.className = 'salma-chat-bubble' + (isUser ? ' user' : '');
+      div.innerHTML = isUser ? escapeHTML(text) : miniMd(text);
+      $body.appendChild(div);
+      $body.scrollTop = $body.scrollHeight;
+      return div;
+    }
+
+    function cleanRoute(t) {
+      if (!t) return t;
+      const m = t.indexOf('SALMA_ROUTE');
+      if (m !== -1) return t.substring(0, m).trim();
+      return t;
+    }
+
+    function sendMsg(text) {
+      if (streaming) return;
+      streaming = true;
+      addBubble(text, true);
+      chatHistory.push({ role: 'user', content: text });
+      $input.value = '';
+
+      const streamEl = document.createElement('div');
+      streamEl.className = 'salma-chat-bubble streaming';
+      streamEl.textContent = '...';
+      $body.appendChild(streamEl);
+      $body.scrollTop = $body.scrollHeight;
+
+      const ctxPrefix = context ? `[Contexto: el usuario está viendo la guía "${context}"]\n\n` : '';
+      const body = { message: ctxPrefix + text, history: chatHistory.slice(-10), stream: true };
+
+      fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      }).then(res => {
+        const ct = res.headers.get('content-type') || '';
+
+        if (ct.includes('application/json')) {
+          return res.json().then(data => {
+            streamEl.remove();
+            const reply = cleanRoute(data.reply) || 'No he podido responder, prueba de nuevo.';
+            addBubble(reply, false);
+            chatHistory.push({ role: 'assistant', content: reply });
+            streaming = false;
+          });
+        }
+
+        // SSE stream
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '', fullText = '', resolved = false, textDone = false, draftSent = false;
+
+        function processLines() {
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+          for (const line of lines) {
+            if (!line.startsWith('data: ')) continue;
+            const j = line.slice(6).trim();
+            if (!j) continue;
+            try {
+              const evt = JSON.parse(j);
+              if (evt.done) {
+                streamEl.remove();
+                resolved = true;
+                const reply = cleanRoute(evt.reply || fullText);
+                if (reply) { addBubble(reply, false); chatHistory.push({ role: 'assistant', content: reply }); }
+                if (evt.route && evt.route.stops && typeof guideRenderer !== 'undefined') {
+                  if (!document.getElementById('chat-area')) {
+                    const d = document.createElement('div'); d.id = 'chat-area';
+                    $body.parentElement.insertBefore(d, $body.nextSibling);
+                  }
+                  try {
+                    guideRenderer.render(evt.route, {});
+                    const gc = document.querySelector('.guide-card');
+                    if (gc) setTimeout(() => gc.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+                  } catch (_) {}
+                  chatHistory = [];
+                } else if (draftSent && evt.route && typeof guideRenderer !== 'undefined') {
+                  try { guideRenderer.updateVerified(evt.route); } catch (_) {}
+                }
+                streaming = false;
+                return;
+              }
+              if (evt.draft && !draftSent) {
+                draftSent = true; textDone = true;
+                streamEl.innerHTML = miniMd(cleanRoute(fullText));
+                streamEl.classList.remove('streaming');
+                if (evt.route && evt.route.stops && typeof guideRenderer !== 'undefined') {
+                  if (!document.getElementById('chat-area')) {
+                    const d = document.createElement('div'); d.id = 'chat-area';
+                    $body.parentElement.insertBefore(d, $body.nextSibling);
+                  }
+                  try {
+                    guideRenderer.render(evt.route);
+                    const gc = document.querySelector('.guide-card');
+                    if (gc) setTimeout(() => gc.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+                  } catch (_) {}
+                }
+              }
+              if ((evt.generating || evt.k) && !textDone) {
+                textDone = true;
+                streamEl.innerHTML = miniMd(cleanRoute(fullText));
+                streamEl.classList.remove('streaming');
+                const ld = document.createElement('div');
+                ld.className = 'salma-chat-bubble streaming';
+                ld.id = 'salma-pub-loading';
+                ld.textContent = 'Generando ruta...';
+                $body.appendChild(ld);
+              }
+              if (evt.t || evt.text) {
+                fullText += evt.t || evt.text;
+                if (!textDone) {
+                  streamEl.innerHTML = miniMd(cleanRoute(fullText));
+                  $body.scrollTop = $body.scrollHeight;
+                }
+              }
+            } catch (_) {}
+          }
+        }
+
+        function pump() {
+          reader.read().then(result => {
+            if (result.value) { buffer += decoder.decode(result.value, { stream: true }); try { processLines(); } catch (_) {} }
+            if (resolved) { const ld = document.getElementById('salma-pub-loading'); if (ld) ld.remove(); return; }
+            if (result.done) {
+              if (buffer.trim()) { buffer += '\n'; try { processLines(); } catch (_) {} }
+              if (!resolved) {
+                streamEl.remove();
+                const ld = document.getElementById('salma-pub-loading'); if (ld) ld.remove();
+                const clean = cleanRoute(fullText);
+                if (clean) { addBubble(clean, false); chatHistory.push({ role: 'assistant', content: clean }); }
+                streaming = false;
+              }
+              return;
+            }
+            pump();
+          }).catch(() => {
+            streamEl.remove();
+            const ld = document.getElementById('salma-pub-loading'); if (ld) ld.remove();
+            if (!resolved) { addBubble('Error de conexión. Prueba de nuevo.', false); streaming = false; }
+          });
+        }
+        pump();
+      }).catch(() => {
+        streamEl.remove();
+        addBubble('Error de conexión. Prueba de nuevo.', false);
+        streaming = false;
+      });
+    }
+
+    // ═══ MIC ═══
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      document.querySelectorAll('.salma-mic, .app-mic').forEach(b => b.style.display = 'none');
+      return;
+    }
+
+    let listening = false, activeMicBtn = null, activeRec = null, activeInputEl = null, accText = '', gotResult = false;
+
+    function resetMic() {
+      listening = false;
+      if (activeMicBtn) activeMicBtn.classList.remove('listening');
+      if (activeInputEl) activeInputEl.classList.remove('mic-active');
+      activeMicBtn = null; activeInputEl = null; activeRec = null; accText = ''; gotResult = false;
+    }
+
+    function stopAndSend() {
+      listening = false;
+      try { if (activeRec) activeRec.stop(); } catch (_) {}
+      const inp = activeInputEl, had = gotResult;
+      resetMic();
+      if (had && inp && inp.value.trim()) sendMsg(inp.value.trim());
+    }
+
+    function createRec(micBtn, inp) {
+      const rec = new SpeechRecognition();
+      rec.lang = 'es-ES'; rec.interimResults = true; rec.continuous = false; rec.maxAlternatives = 1;
+      rec.onstart = () => { listening = true; micBtn.classList.add('listening'); inp.classList.add('mic-active'); };
+      rec.onresult = (e) => { gotResult = true; let c = ''; for (let i = 0; i < e.results.length; i++) c += e.results[i][0].transcript; inp.value = accText + (accText ? ' ' : '') + c; };
+      rec.onend = () => { if (!listening) return; if (inp.value.trim()) accText = inp.value.trim(); setTimeout(() => { if (!listening) return; try { const nr = createRec(micBtn, inp); activeRec = nr; nr.start(); } catch (_) { stopAndSend(); } }, 200); };
+      rec.onerror = (e) => { if (e.error === 'aborted' || e.error === 'no-speech') return; resetMic(); };
+      return rec;
+    }
+
+    function handleMicTap(e) {
+      const micBtn = e.target.closest('.salma-mic, .app-mic');
+      if (!micBtn) return;
+      e.preventDefault(); e.stopPropagation();
+      if (listening) { stopAndSend(); return; }
+      const bar = micBtn.closest('.salma-chat-input-bar');
+      const inp = bar ? bar.querySelector('input') : null;
+      if (!inp) return;
+      activeMicBtn = micBtn; activeInputEl = inp; accText = ''; gotResult = false;
+      try { const r = createRec(micBtn, inp); activeRec = r; r.start(); } catch (_) { resetMic(); }
+    }
+
+    document.addEventListener('contextmenu', (e) => { if (e.target.closest('.salma-mic, .app-mic')) e.preventDefault(); });
+    document.addEventListener('touchend', handleMicTap);
+    document.addEventListener('click', (e) => { if (e.target.closest('.salma-mic, .app-mic') && 'ontouchend' in window) return; handleMicTap(e); });
+  }
+
+  // ═══ BOTTOM BAR ═══
 
   function addBottomBar() {
     if (document.getElementById('public-bottom-bar')) return;
