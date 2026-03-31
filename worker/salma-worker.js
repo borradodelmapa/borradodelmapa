@@ -488,6 +488,20 @@ const SALMA_TOOLS = [
     }
   },
   {
+    name: "buscar_web",
+    description: "Busca información actual en internet usando Google. Usa esta herramienta OBLIGATORIAMENTE cuando la pregunta incluya fechas concretas, horarios, precios actuales, programas de eventos, procesiones, conciertos, ferias, si algo está abierto o cerrado, o cualquier dato que pueda haber cambiado desde agosto de 2025. Devuelve los resultados más relevantes con su fuente para que puedas responder con datos verificados.",
+    input_schema: {
+      type: "object",
+      properties: {
+        query: {
+          type: "string",
+          description: "La búsqueda en Google. Sé específico: incluye lugar, año y qué buscas. Ej: 'procesiones Semana Santa Málaga 2026 horario Calle Larios', 'precio entrada Sagrada Familia 2026', 'horario museo Picasso Málaga hoy'"
+        }
+      },
+      required: ["query"]
+    }
+  },
+  {
     name: "guardar_nota",
     description: "Guarda una nota o recordatorio para el viajero. Usa esta herramienta INMEDIATAMENTE cuando el usuario diga 'apúntame', 'recuérdame', 'anota que', 'guarda que', 'no olvides que', 'apunta que' o cualquier variante de querer guardar información o un recordatorio. NO preguntes, guarda directamente y confirma con una frase corta.",
     input_schema: {
@@ -1938,6 +1952,63 @@ function generarVideo(input) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// BÚSQUEDA WEB GENERAL (Serper + fetch contenido top URLs)
+// ═══════════════════════════════════════════════════════════════
+
+async function buscarWeb(input, braveKey) {
+  if (!braveKey || !input.query) return { error: 'Falta query o API key' };
+
+  try {
+    // 1. Buscar via Brave Search API
+    const params = new URLSearchParams({ q: input.query, count: 5, country: 'es', search_lang: 'es', ui_lang: 'es' });
+    const braveRes = await fetch(`https://api.search.brave.com/res/v1/web/search?${params}`, {
+      headers: { 'Accept': 'application/json', 'X-Subscription-Token': braveKey },
+    });
+    if (!braveRes.ok) return { error: 'Error buscando en Brave Search' };
+    const braveData = await braveRes.json();
+
+    const organic = (braveData.web?.results || []).slice(0, 5);
+    if (!organic.length) return { resultados: [], mensaje: 'No se encontraron resultados para esa búsqueda.' };
+
+    // 2. Intentar obtener contenido de las top 2 URLs
+    const topUrls = organic.slice(0, 2).map(r => r.link).filter(Boolean);
+    const contenidos = await Promise.all(topUrls.map(async url => {
+      try {
+        const res = await fetch(url, {
+          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; SalmaBot/1.0)' },
+          signal: AbortSignal.timeout(4000),
+        });
+        if (!res.ok) return null;
+        const html = await res.text();
+        // Extraer texto plano: quitar tags HTML, scripts y estilos
+        const text = html
+          .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+          .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim()
+          .slice(0, 3000); // máx 3000 chars por página
+        return { url, texto: text };
+      } catch (e) {
+        return null;
+      }
+    }));
+
+    // 3. Combinar snippets de Serper + contenido real de las webs
+    const resultados = organic.map((r, i) => ({
+      titulo: r.title || '',
+      snippet: r.description || '',
+      url: r.url || '',
+      contenido: contenidos[i]?.texto || null,
+    }));
+
+    return { resultados, query: input.query };
+  } catch (e) {
+    return { error: 'Error en búsqueda web: ' + e.message };
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
 // DISPATCHER DE HERRAMIENTAS — Ejecuta la tool que Claude pida
 // ═══════════════════════════════════════════════════════════════
 
@@ -1953,6 +2024,8 @@ async function executeToolCall(toolName, toolInput, env, userCoords) {
       return await buscarRestaurante(toolInput, env.GOOGLE_PLACES_KEY, userCoords);
     case 'buscar_foto':
       return await buscarFotoLugar(toolInput, env.GOOGLE_PLACES_KEY);
+    case 'buscar_web':
+      return await buscarWeb(toolInput, env.BRAVE_SEARCH_KEY);
     case 'generar_video':
       return generarVideo(toolInput);
     case 'guardar_nota':
