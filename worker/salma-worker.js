@@ -14,7 +14,7 @@ const BLOQUE_IDENTIDAD = `Eres SALMA, asistente de viajes de Borrado del Mapa. A
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 2 — Personalidad y tono
 // ═══════════════════════════════════════════════════════════════
-const BLOQUE_PERSONALIDAD = `Tu personalidad no es decoración, es el vehículo para dar información. Cada frase que escribes lleva un dato útil o no se escribe. Eres directa, tienes opinión propia y no te da miedo mojarte. Si un sitio no merece la pena, lo dices. Si una zona es una trampa turística, lo dices. Siempre con datos, nunca con capricho.
+const BLOQUE_PERSONALIDAD = `Tu personalidad no es decoración, es el vehículo para dar información. Cada frase que escribes lleva un dato útil o no se escribe. Eres directa y no te da miedo mojarte. Si un sitio no merece la pena, lo dices. Si una zona es una trampa turística, lo dices. Siempre con datos, nunca con capricho.
 
 Gustos musicales: Extremoduro, Springsteen, Sabina, AC/DC. No te gusta el reguetón y si te preguntan lo dices sin rodeos. Puedes usar el espíritu de las letras como recurso narrativo cuando encaje de forma natural — no como cita textual, no en cada mensaje. Ejemplo: "buscarse la ruina" evoca Extremoduro sin nombrarlos. Úsalo con criterio.
 
@@ -93,6 +93,23 @@ const BLOQUE_INFORMACION = `Eres experta en viajes con conocimiento profundo de 
 - Siempre con disclaimer en temas legales: "esto es orientativo, consulta tu embajada para tu caso concreto"
 
 Los datos deben ser veraces y contrastables. Nombres reales, precios reales, distancias reales. Si no sabes algo, dilo. NUNCA inventes datos.
+
+DATOS Y VERIFICACIÓN
+
+Tu conocimiento viene de Anthropic y llega hasta agosto de 2025.
+
+BÚSQUEDA OBLIGATORIA — sin excepción — cuando la pregunta incluya cualquiera de estos elementos:
+- una fecha concreta (hoy, mañana, este fin de semana, 2026...)
+- un horario (¿a qué hora?, ¿cuándo abre?, ¿hasta qué hora?)
+- un precio actual (¿cuánto cuesta?, ¿qué vale?)
+- un programa o evento (procesiones, conciertos, ferias, festivos)
+- si algo está abierto, cerrado, disponible o cancelado
+
+Flujo: busca primero → lee los resultados → responde con lo que encuentres → cita siempre el nombre de la web y su URL completa en texto (se convierte en enlace automáticamente).
+
+Si la búsqueda no devuelve el dato exacto: díselo al usuario, dile qué has encontrado y dónde puede buscarlo él directamente.
+
+Lo que nunca harás: responder de memoria a cualquiera de las preguntas de la lista de arriba.
 
 Cuando el usuario te diga su nacionalidad, adapta la info de visados a su país. Si no la sabes, pregúntale.`;
 
@@ -468,6 +485,20 @@ const SALMA_TOOLS = [
         }
       },
       required: ["titulo", "tipo"]
+    }
+  },
+  {
+    name: "buscar_web",
+    description: "Busca información actual en internet usando Google. Usa esta herramienta OBLIGATORIAMENTE cuando la pregunta incluya fechas concretas, horarios, precios actuales, programas de eventos, procesiones, conciertos, ferias, si algo está abierto o cerrado, o cualquier dato que pueda haber cambiado desde agosto de 2025. Devuelve los resultados más relevantes con su fuente para que puedas responder con datos verificados.",
+    input_schema: {
+      type: "object",
+      properties: {
+        query: {
+          type: "string",
+          description: "La búsqueda en Google. Sé específico: incluye lugar, año y qué buscas. Ej: 'procesiones Semana Santa Málaga 2026 horario Calle Larios', 'precio entrada Sagrada Familia 2026', 'horario museo Picasso Málaga hoy'"
+        }
+      },
+      required: ["query"]
     }
   },
   {
@@ -1921,6 +1952,63 @@ function generarVideo(input) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// BÚSQUEDA WEB GENERAL (Serper + fetch contenido top URLs)
+// ═══════════════════════════════════════════════════════════════
+
+async function buscarWeb(input, braveKey) {
+  if (!braveKey || !input.query) return { error: 'Falta query o API key' };
+
+  try {
+    // 1. Buscar via Brave Search API
+    const params = new URLSearchParams({ q: input.query, count: 5, country: 'ES', search_lang: 'es', ui_lang: 'es-ES' });
+    const braveRes = await fetch(`https://api.search.brave.com/res/v1/web/search?${params}`, {
+      headers: { 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'X-Subscription-Token': braveKey },
+    });
+    if (!braveRes.ok) return { error: 'Error buscando en Brave Search' };
+    const braveData = await braveRes.json();
+
+    const organic = (braveData.web?.results || []).slice(0, 5);
+    if (!organic.length) return { resultados: [], mensaje: 'No se encontraron resultados para esa búsqueda.' };
+
+    // 2. Intentar obtener contenido de las top 2 URLs
+    const topUrls = organic.slice(0, 2).map(r => r.link).filter(Boolean);
+    const contenidos = await Promise.all(topUrls.map(async url => {
+      try {
+        const res = await fetch(url, {
+          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; SalmaBot/1.0)' },
+          signal: AbortSignal.timeout(4000),
+        });
+        if (!res.ok) return null;
+        const html = await res.text();
+        // Extraer texto plano: quitar tags HTML, scripts y estilos
+        const text = html
+          .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+          .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim()
+          .slice(0, 3000); // máx 3000 chars por página
+        return { url, texto: text };
+      } catch (e) {
+        return null;
+      }
+    }));
+
+    // 3. Combinar snippets de Serper + contenido real de las webs
+    const resultados = organic.map((r, i) => ({
+      titulo: r.title || '',
+      snippet: r.description || '',
+      url: r.url || '',
+      contenido: contenidos[i]?.texto || null,
+    }));
+
+    return { resultados, query: input.query };
+  } catch (e) {
+    return { error: 'Error en búsqueda web: ' + e.message };
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
 // DISPATCHER DE HERRAMIENTAS — Ejecuta la tool que Claude pida
 // ═══════════════════════════════════════════════════════════════
 
@@ -1936,6 +2024,8 @@ async function executeToolCall(toolName, toolInput, env, userCoords) {
       return await buscarRestaurante(toolInput, env.GOOGLE_PLACES_KEY, userCoords);
     case 'buscar_foto':
       return await buscarFotoLugar(toolInput, env.GOOGLE_PLACES_KEY);
+    case 'buscar_web':
+      return await buscarWeb(toolInput, env.BRAVE_SEARCH_KEY);
     case 'generar_video':
       return generarVideo(toolInput);
     case 'guardar_nota':
