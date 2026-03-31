@@ -185,7 +185,7 @@ async function renderWelcome() {
       <div class="welcome-bg"></div>
       <div class="welcome-cloud"></div>
       <div class="welcome-content">
-        <h1 class="welcome-title">Dime a dónde vas.<br><em>Yo me encargo.</em></h1>
+        <h1 class="welcome-title">Dime dónde vamos.<br><em>De lo demás yo me encargo.</em></h1>
         <div class="welcome-input-wrap">
           <div class="input-row">
             <textarea class="welcome-input" id="welcome-input" placeholder="¿A dónde vamos?" rows="1"></textarea>
@@ -2966,8 +2966,8 @@ function showOnboarding() {
   const slides = [
     {
       icon: `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>`,
-      title: 'Dime a dónde vas.',
-      titleEm: 'Yo me encargo.',
+      title: 'Dime dónde vamos.',
+      titleEm: 'De lo demás yo me encargo.',
       body: 'Cuéntame tu destino y los días que tienes. En un minuto te monto la ruta con mapa, fotos y todo lo que necesitas saber.'
     },
     {
