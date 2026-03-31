@@ -78,6 +78,7 @@ function showState(state) {
     if (welcomeEl) $content.innerHTML = '';
     $input.placeholder = 'Escribe a Salma...';
     if (inputBar) inputBar.style.display = '';
+    $content.style.paddingBottom = '';
     if (!document.getElementById('chat-bg-layer')) {
       const layer = document.createElement('div');
       layer.id = 'chat-bg-layer';
