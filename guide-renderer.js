@@ -660,7 +660,7 @@ const guideRenderer = {
     html += `<a class="map-popup-link" href="${gmapsUrl}" target="_blank" rel="noopener">Ver en Maps →</a>`;
     html += `</div>`;
 
-    marker.bindPopup(html, { maxWidth: 220, className: 'dark-popup', autoPan: true, autoPanPadding: [10, 20] });
+    marker.bindPopup(html, { maxWidth: 220, className: 'dark-popup', autoPan: true, autoPanPaddingTopLeft: L.point(5, 120), autoPanPaddingBottomRight: L.point(5, 10) });
 
     if (stop.photo_ref) {
       marker.on('popupopen', () => {
@@ -670,7 +670,7 @@ const guideRenderer = {
         fetch(window.SALMA_API + '/photo?ref=' + encodeURIComponent(stop.photo_ref) + '&json=1')
           .then(r => r.json()).then(data => {
             if (data.url) {
-              el.innerHTML = `<img src="${data.url}" alt="" style="width:100%;height:100px;object-fit:cover;border-radius:6px;">`;
+              el.innerHTML = `<img src="${data.url}" alt="" style="width:100%;height:70px;object-fit:cover;border-radius:6px;">`;
             } else { el.remove(); }
           }).catch(() => el.remove());
       });
