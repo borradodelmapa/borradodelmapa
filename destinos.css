@@ -60,7 +60,7 @@
 .destino-content {
   max-width: 700px;
   margin: 0 auto;
-  padding: 0 20px 60px;
+  padding: 0 20px 160px;
   padding-right: 70px; /* espacio para FAB flotante */
 }
 
@@ -1095,7 +1095,7 @@ details[open] > .destino-acc-header::after {
 
 @media (max-width: 480px) {
   .destino-hero { padding: 32px 16px 24px; }
-  .destino-content { padding: 0 16px 60px; }
+  .destino-content { padding: 0 16px 160px; }
   .destino-facts { gap: 8px; }
   .destino-fact { padding: 12px; }
 
