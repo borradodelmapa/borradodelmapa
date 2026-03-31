@@ -37,7 +37,7 @@ const salma = {
   salmaSpeak(text) {
     try {
       if (!window.speechSynthesis) return;
-      if (localStorage.getItem('salma_voice') === 'false') return;
+      if (localStorage.getItem('salma_voice') !== 'true') return;
       if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
       // Limpiar texto: quitar markdown, emojis, URLs, guiones de lista
       const clean = text
@@ -1091,7 +1091,7 @@ const salma = {
             area.appendChild(bubble);
             bubble.scrollIntoView({ behavior: 'smooth' });
             // Narrador habla automático solo si voz está activada
-            if (localStorage.getItem('salma_voice') !== 'false') {
+            if (localStorage.getItem('salma_voice') === 'true') {
               const narText = narData.narrative;
               setTimeout(() => this.salmaSpeak(narText), 50);
             }
@@ -1306,14 +1306,14 @@ const salma = {
     if (!window.speechSynthesis) return;
     const header = el.querySelector('.msg-salma-header');
     if (!header || header.querySelector('.msg-speak-btn')) return;
-    const muted = localStorage.getItem('salma_voice') === 'false';
+    const muted = localStorage.getItem('salma_voice') !== 'true';
     const speakBtn = document.createElement('button');
     speakBtn.className = 'msg-speak-btn';
     speakBtn.textContent = muted ? '\u{1F507}' : '\u{1F50A}';
     speakBtn.title = muted ? 'Activar voz' : 'Silenciar voz';
     speakBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const isOn = localStorage.getItem('salma_voice') !== 'false';
+      const isOn = localStorage.getItem('salma_voice') === 'true';
       // Toggle global
       localStorage.setItem('salma_voice', isOn ? 'false' : 'true');
       if (isOn) this.salmaSpeakStop();
@@ -1325,7 +1325,7 @@ const salma = {
 
   // Sincronizar icono de todos los botones de voz
   _syncSpeakButtons() {
-    const muted = localStorage.getItem('salma_voice') === 'false';
+    const muted = localStorage.getItem('salma_voice') !== 'true';
     document.querySelectorAll('.msg-speak-btn').forEach(btn => {
       btn.textContent = muted ? '\u{1F507}' : '\u{1F50A}';
       btn.title = muted ? 'Activar voz' : 'Silenciar voz';
