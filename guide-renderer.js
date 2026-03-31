@@ -660,10 +660,18 @@ const guideRenderer = {
     html += `<a class="map-popup-link" href="${gmapsUrl}" target="_blank" rel="noopener">Ver en Maps →</a>`;
     html += `</div>`;
 
-    marker.bindPopup(html, { maxWidth: 220, className: 'dark-popup', autoPan: true, autoPanPaddingTopLeft: L.point(5, 120), autoPanPaddingBottomRight: L.point(5, 10) });
+    marker.bindPopup(html, { maxWidth: 220, className: 'dark-popup', autoPan: false });
 
-    if (stop.photo_ref) {
-      marker.on('popupopen', () => {
+    marker.on('popupopen', () => {
+      // Centrar el marcador en la parte baja del mapa para que la galleta quede visible
+      const map = marker._map;
+      if (map) {
+        const px = map.project(marker.getLatLng());
+        px.y -= map.getSize().y * 0.28;
+        map.panTo(map.unproject(px), { animate: true, duration: 0.25 });
+      }
+      // Lazy-load foto
+      if (stop.photo_ref) {
         const el = document.getElementById(photoId);
         if (!el || el.dataset.loaded) return;
         el.dataset.loaded = '1';
@@ -673,8 +681,8 @@ const guideRenderer = {
               el.innerHTML = `<img src="${data.url}" alt="" style="width:100%;height:70px;object-fit:cover;border-radius:6px;">`;
             } else { el.remove(); }
           }).catch(() => el.remove());
-      });
-    }
+      }
+    });
   },
 
   _loadDirections(map, stops, color) {
