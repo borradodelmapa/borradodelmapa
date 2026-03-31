@@ -799,11 +799,26 @@ body {
   margin-bottom:16px; border:1px solid var(--linea); position:relative;
 }
 
-/* Leaflet dark popup */
+/* Leaflet dark popup (legacy) */
 .dark-popup .leaflet-popup-content-wrapper { background:#1a1a1a; color:#f4efe6; border-radius:10px; border:1px solid rgba(212,160,23,.15); }
 .dark-popup .leaflet-popup-tip { background:#1a1a1a; }
 .dark-popup .leaflet-popup-close-button { color:rgba(244,239,230,.7) !important; font-size:16px; font-weight:700; top:6px; right:8px; }
 .dark-popup .leaflet-popup-close-button:hover { color:#fff !important; }
+
+/* Overlay popup — centrado en el mapa, fuera de overflow:hidden */
+.map-overlay-popup {
+  position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);
+  z-index:1000; background:#1a1a1a; color:#f4efe6;
+  border-radius:12px; border:1px solid rgba(212,160,23,.2);
+  box-shadow:0 8px 32px rgba(0,0,0,.6);
+  padding:14px 16px 12px; width:220px; max-width:85%;
+}
+.map-overlay-close {
+  position:absolute; top:6px; right:10px;
+  color:rgba(244,239,230,.6); font-size:18px; font-weight:700;
+  cursor:pointer; line-height:1; padding:2px 4px;
+}
+.map-overlay-close:hover { color:#fff; }
 .map-popup { min-width:160px; }
 .map-popup-photo { height:70px; background:rgba(255,255,255,.05); border-radius:6px; margin-bottom:8px; overflow:hidden; }
 .map-popup-name { font-weight:700; font-size:13px; margin-bottom:2px; }

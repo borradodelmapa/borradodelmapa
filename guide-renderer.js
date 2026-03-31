@@ -660,39 +660,52 @@ const guideRenderer = {
     html += `<a class="map-popup-link" href="${gmapsUrl}" target="_blank" rel="noopener">Ver en Maps →</a>`;
     html += `</div>`;
 
-    marker.bindPopup(html, { maxWidth: 220, className: 'dark-popup', autoPan: false });
+    // No usar bindPopup de Leaflet — creamos overlay propio centrado en el mapa
+    marker.on('click', () => {
+      // Cerrar cualquier popup anterior
+      document.querySelectorAll('.map-overlay-popup').forEach(el => el.remove());
 
-    marker.on('popupopen', () => {
-      // Centrar la galleta en el mapa sin mover el mapa — solo reposicionar el popup
-      const map = marker._map;
-      if (!map) return;
-      setTimeout(() => {
-        const popup = marker.getPopup();
-        if (!popup || !popup._container) return;
-        const popupEl = popup._container;
-        const mapEl = map.getContainer();
-        const pr = popupEl.getBoundingClientRect();
-        const mr = mapEl.getBoundingClientRect();
-        const dy = (mr.top + mr.height / 2) - (pr.top + pr.height / 2);
-        popupEl.style.marginTop = dy + 'px';
-      }, 30);
+      const mapEl = marker._map ? marker._map.getContainer() : marker._eventParents ? Object.values(marker._eventParents)[0]?.getContainer() : null;
+      if (!mapEl) return;
+
+      // Crear overlay centrado en el mapa
+      const overlay = document.createElement('div');
+      overlay.className = 'map-overlay-popup';
+      overlay.innerHTML = `
+        <div class="map-overlay-close">&times;</div>
+        ${stop.photo_ref ? `<div class="map-popup-photo" id="${photoId}"></div>` : ''}
+        <div class="map-popup-name">${name}</div>
+        <div class="map-popup-day">Día ${dayNum}</div>
+        ${narrative ? `<div class="map-popup-desc">${narrative}</div>` : ''}
+        <a class="map-popup-link" href="${gmapsUrl}" target="_blank" rel="noopener">Ver en Maps →</a>
+      `;
+      mapEl.style.position = 'relative';
+      mapEl.appendChild(overlay);
+
+      // Cerrar con X
+      overlay.querySelector('.map-overlay-close').addEventListener('click', (e) => {
+        e.stopPropagation();
+        overlay.remove();
+      });
+
+      // Cerrar al tocar fuera del overlay
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) overlay.remove();
+      });
+
       // Lazy-load foto
       if (stop.photo_ref) {
         const el = document.getElementById(photoId);
-        if (!el || el.dataset.loaded) return;
-        el.dataset.loaded = '1';
-        fetch(window.SALMA_API + '/photo?ref=' + encodeURIComponent(stop.photo_ref) + '&json=1')
-          .then(r => r.json()).then(data => {
-            if (data.url) {
-              el.innerHTML = `<img src="${data.url}" alt="" style="width:100%;height:70px;object-fit:cover;border-radius:6px;">`;
-            } else { el.remove(); }
-          }).catch(() => el.remove());
+        if (el && !el.dataset.loaded) {
+          el.dataset.loaded = '1';
+          fetch(window.SALMA_API + '/photo?ref=' + encodeURIComponent(stop.photo_ref) + '&json=1')
+            .then(r => r.json()).then(data => {
+              if (data.url) {
+                el.innerHTML = `<img src="${data.url}" alt="" style="width:100%;height:70px;object-fit:cover;border-radius:6px;">`;
+              } else { el.remove(); }
+            }).catch(() => el.remove());
+        }
       }
-    });
-
-    marker.on('popupclose', () => {
-      const popup = marker.getPopup();
-      if (popup && popup._container) popup._container.style.marginTop = '';
     });
   },
 
