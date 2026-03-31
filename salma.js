@@ -19,6 +19,7 @@ const salma = {
   _streaming: false,
   _rateTimes: [],
   _userLocation: null,
+  _geoBlocked: false,
   _pendingRouteInfo: null,  // Info parcial mientras esperamos fechas
   _pendingPhoto: null,      // {blob, base64, localUrl} mientras compone mensaje con foto
   _narratorActive: false,
@@ -85,7 +86,12 @@ const salma = {
           this._geoWatchId = null;
         }
       },
-      () => { console.log('[Salma] Ubicación no disponible'); },
+      (err) => {
+        console.log('[Salma] Ubicación no disponible:', err.code);
+        if (err.code === 1) { // PERMISSION_DENIED
+          this._geoBlocked = true;
+        }
+      },
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
     );
   },
@@ -520,7 +526,16 @@ const salma = {
     if (!this._checkRate()) return;
 
     // Si no tenemos ubicación todavía, reintentar (ahora hay interacción del usuario)
-    if (!this._userLocation && !this._geoWatchId) this.initGeolocation();
+    if (!this._userLocation && !this._geoWatchId && !this._geoBlocked) this.initGeolocation();
+
+    // Si el mensaje requiere ubicación y no la tenemos, mostrar prompt
+    if (!this._userLocation && msg) {
+      const needsLocation = /desde donde estoy|cerca de m[ií]|por aqu[ií]|aqu[ií] cerca|donde estoy|mi ubicaci[oó]n|nearest|near me/i.test(msg);
+      if (needsLocation) {
+        this._showGeoPrompt();
+        return;
+      }
+    }
 
     // Transicionar a chat si estamos en welcome
     if (currentState === 'welcome' || currentState === 'viajes') {
@@ -1397,6 +1412,49 @@ const salma = {
         }
       }
     }
+  },
+
+  _showGeoPrompt() {
+    const area = this._getChatArea();
+    if (!area) return;
+    // Evitar duplicados
+    if (area.querySelector('.msg-geo-prompt')) return;
+    const div = document.createElement('div');
+    div.className = 'msg msg-salma msg-geo-prompt';
+    div.innerHTML = `
+      <div class="msg-salma-header">
+        <div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div>
+        <span class="msg-salma-name">Salma</span>
+      </div>
+      <div class="msg-body-salma">
+        Necesito tu ubicación para buscarte lo más cercano.<br><br>
+        Toca el <strong>🔒 candado</strong> en la barra del navegador → <strong>Permisos</strong> → <strong>Ubicación</strong> → <strong>Permitir</strong>. Luego vuelve a enviar tu mensaje.<br><br>
+        <button class="btn-geo-retry" onclick="salma.retryGeolocation(this)">📍 Intentar activar ubicación</button>
+      </div>`;
+    area.appendChild(div);
+    this._scrollToBottom(true);
+  },
+
+  retryGeolocation(btn) {
+    if (btn) btn.textContent = 'Activando...';
+    this._geoBlocked = false;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        this._userLocation = {
+          lat: Math.round(pos.coords.latitude * 10000) / 10000,
+          lng: Math.round(pos.coords.longitude * 10000) / 10000,
+          accuracy: Math.round(pos.coords.accuracy)
+        };
+        const prompt = document.querySelector('.msg-geo-prompt');
+        if (prompt) prompt.remove();
+        if (!this._copilotCountry) this.initCopilot();
+      },
+      (err) => {
+        if (btn) btn.textContent = '📍 Intentar activar ubicación';
+        this._geoBlocked = (err.code === 1);
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
   },
 
   _loadingPhrases: [
