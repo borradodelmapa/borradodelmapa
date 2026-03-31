@@ -84,6 +84,16 @@ function showState(state) {
       layer.className = 'chat-bg-layer';
       document.body.insertBefore(layer, document.body.firstChild);
     }
+    // Handoff desde guía pública o destino externo
+    const handoff = localStorage.getItem('_salmaHandoff');
+    if (handoff) {
+      localStorage.removeItem('_salmaHandoff');
+      setTimeout(() => {
+        $input.value = handoff;
+        $input.dispatchEvent(new Event('input'));
+        $input.focus();
+      }, 150);
+    }
   }
   // Quitar fondo mapa si salimos del chat
   if (state !== 'chat') {

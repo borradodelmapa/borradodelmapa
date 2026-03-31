@@ -27,17 +27,14 @@
   .public-logo span { color:var(--dorado); }
   .public-content { max-width:700px; margin:0 auto; padding:20px 16px 40px; }
   .public-cta {
-    margin:20px 0; padding:16px; text-align:center;
+    margin:20px 0 80px; padding:20px 0 0;
     border-top:1px solid var(--linea);
   }
-  .public-cta h3 { font-family:var(--font-mono); font-size:10px; color:rgba(244,239,230,.5); letter-spacing:.12em; margin-bottom:10px; text-transform:uppercase; }
-  .public-cta p { display:none; }
-  .public-cta a {
-    display:inline-block; padding:10px 22px; background:transparent; color:var(--dorado);
-    font-family:var(--font-mono); font-size:10px; letter-spacing:.12em;
-    border-radius:8px; text-decoration:none; border:1px solid var(--linea);
-  }
-  .public-cta a:hover { opacity:.9; }
+  .public-cta-label { font-family:var(--font-mono); font-size:9px; color:rgba(244,239,230,.4); letter-spacing:.14em; text-align:center; margin-bottom:12px; text-transform:uppercase; }
+  .public-salma-input-wrap { display:flex; gap:8px; align-items:center; background:rgba(255,255,255,.04); border:1px solid var(--linea); border-radius:14px; padding:10px 14px; }
+  .public-salma-input { flex:1; background:none; border:none; outline:none; color:var(--blanco); font-size:14px; font-family:var(--font-sans); }
+  .public-salma-input::placeholder { color:rgba(244,239,230,.35); }
+  .public-salma-btn { background:var(--dorado); color:#0d0d0d; border:none; border-radius:10px; padding:8px 16px; font-weight:700; font-size:13px; cursor:pointer; white-space:nowrap; }
   .public-loading { text-align:center; padding:80px 20px; color:rgba(244,239,230,.5); }
   .public-error { text-align:center; padding:80px 20px; }
   .public-error h2 { font-family:var(--font-tight); font-size:28px; color:var(--blanco); margin-bottom:12px; }
@@ -215,16 +212,26 @@ function escapeHTML(str) {
 
     // CTA
     const cta = document.createElement('div');
-    cta.className = isDiario ? 'public-cta-enhanced' : 'public-cta';
-    cta.innerHTML = isDiario ? `
-      <h3>¿Quieres tu propia Bitácora?</h3>
-      <p>Salma te diseña la ruta, te guía en el viaje y documenta tu aventura.</p>
-      <a href="/">Empieza tu viaje</a>
-    ` : `
-      <h3>Viaja con alguien que sabe lo que hace</h3>
-      <p>Salma te resuelve antes, durante y después. Como viajar con alguien que ya ha estado ahí.</p>
-      <a href="/">EMPIEZA TU VIAJE</a>
+    cta.className = 'public-cta';
+    cta.innerHTML = `
+      <div class="public-cta-label">Habla con Salma</div>
+      <div class="public-salma-input-wrap">
+        <input class="public-salma-input" id="public-salma-input" type="text" placeholder="Escribe a Salma..." autocomplete="off">
+        <button class="public-salma-btn" id="public-salma-btn">Habla con Salma ›</button>
+      </div>
     `;
+    // Al enviar → handoff a la app
+    setTimeout(() => {
+      const inp = document.getElementById('public-salma-input');
+      const btn = document.getElementById('public-salma-btn');
+      function goSalma() {
+        const txt = inp?.value?.trim();
+        if (txt) localStorage.setItem('_salmaHandoff', txt);
+        window.location.href = '/?go=chat';
+      }
+      btn?.addEventListener('click', goSalma);
+      inp?.addEventListener('keydown', e => { if (e.key === 'Enter') goSalma(); });
+    }, 0);
     content.appendChild(cta);
 
     // Bottom bar — igual que en la app
