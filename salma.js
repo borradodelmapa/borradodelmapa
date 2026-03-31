@@ -894,6 +894,7 @@ const salma = {
                     display = display.replace(/[\n.][ ]?SAL[MA_ROUTE]*$/, '');
                   }
                   textEl.innerHTML = formatMessage(display.trim());
+                  this._scrollToBottom();
                 }
               }
             } catch (e) { /* ignorar JSON mal formado */ }
