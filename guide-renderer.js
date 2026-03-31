@@ -660,7 +660,7 @@ const guideRenderer = {
     html += `<a class="map-popup-link" href="${gmapsUrl}" target="_blank" rel="noopener">Ver en Maps →</a>`;
     html += `</div>`;
 
-    marker.bindPopup(html, { maxWidth: 220, className: 'dark-popup' });
+    marker.bindPopup(html, { maxWidth: 220, className: 'dark-popup', autoPan: true, autoPanPadding: [20, 60] });
 
     // Cargar foto cuando se abre el popup
     if (stop.photo_ref) {
