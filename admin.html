@@ -272,7 +272,7 @@ async function savePrompt() {
   }
 }
 
-// ─── Tests ───
+// ─── Tests (2 fases para no reventar el límite de subrequests) ───
 async function runTests() {
   const btn = document.getElementById('run-tests-btn');
   const progress = document.getElementById('test-progress');
@@ -283,36 +283,55 @@ async function runTests() {
   progress.classList.remove('hidden');
   resultsSection.classList.add('hidden');
 
-  document.getElementById('progress-fill').style.width = '10%';
-  document.getElementById('progress-text').textContent = 'Haiku extrayendo reglas del prompt...';
+  document.getElementById('progress-fill').style.width = '5%';
+  document.getElementById('progress-text').textContent = 'Fase 1: Haiku extrayendo reglas del prompt...';
 
   try {
     const t0 = Date.now();
 
-    // Simular progreso
-    let pct = 10;
-    const interval = setInterval(() => {
-      pct = Math.min(pct + 3, 90);
+    // Fase 1: Extraer reglas
+    const extractData = await apiFetch('/admin/test-extract', { method: 'POST' });
+    if (extractData.error) { alert('Error extrayendo reglas: ' + extractData.error); return; }
+
+    const rules = extractData.rules;
+    document.getElementById('progress-fill').style.width = '15%';
+    document.getElementById('progress-text').textContent = `${rules.length} reglas encontradas. Fase 2: Testeando...`;
+
+    // Fase 2: Testear cada regla por separado
+    const results = [];
+    for (let i = 0; i < rules.length; i++) {
+      const pct = 15 + Math.round((i / rules.length) * 80);
       document.getElementById('progress-fill').style.width = pct + '%';
-      if (pct < 30) document.getElementById('progress-text').textContent = 'Haiku extrayendo reglas...';
-      else if (pct < 60) document.getElementById('progress-text').textContent = 'Enviando mensajes trampa a Salma...';
-      else document.getElementById('progress-text').textContent = 'Evaluando respuestas...';
-    }, 2000);
+      document.getElementById('progress-text').textContent = `Testeando regla ${i + 1}/${rules.length}: ${rules[i].name}`;
 
-    const data = await apiFetch('/admin/test-prompt', { method: 'POST' });
+      try {
+        const ruleData = await apiFetch('/admin/test-rule', {
+          method: 'POST',
+          body: JSON.stringify({ rule: rules[i] }),
+        });
+        if (ruleData.ok) {
+          results.push(ruleData.result);
+        } else {
+          results.push({ id: rules[i].id, name: rules[i].name, description: rules[i].description, overall: 'error', tests: [{ message: '—', response: '', pass: false, reason: ruleData.error || 'Error', fix_suggestion: null }] });
+        }
+      } catch (e) {
+        results.push({ id: rules[i].id, name: rules[i].name, description: rules[i].description, overall: 'error', tests: [{ message: '—', response: '', pass: false, reason: e.message, fix_suggestion: null }] });
+      }
+    }
 
-    clearInterval(interval);
     document.getElementById('progress-fill').style.width = '100%';
-
     const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
     document.getElementById('progress-text').textContent = `Completado en ${elapsed}s`;
 
-    if (data.error) {
-      alert('Error: ' + data.error);
-      return;
-    }
+    const passCount = results.filter(r => r.overall === 'pass').length;
+    const failCount = results.filter(r => r.overall === 'fail').length;
+    const parcialCount = results.filter(r => r.overall === 'parcial').length;
 
-    renderResults(data);
+    renderResults({
+      timestamp: new Date().toISOString(),
+      summary: { total: results.length, pass: passCount, fail: failCount, parcial: parcialCount },
+      results,
+    });
 
   } catch (e) {
     alert('Error: ' + e.message);
