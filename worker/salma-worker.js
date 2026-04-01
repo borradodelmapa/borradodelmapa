@@ -456,6 +456,28 @@ const SALMA_TOOLS = [
     }
   },
   {
+    name: "buscar_transporte",
+    description: "Genera enlaces directos para reservar taxi/VTC en apps locales (Grab, Uber, Bolt, Careem, Snapp, InDrive, DiDi, Gojek, Cabify, FreeNow, Yandex Go). Usa esta herramienta cuando el usuario pida taxi, Grab, Uber, Bolt, Careem, transporte al aeropuerto, transfer, o cualquier servicio de VTC/ride-hailing. Devuelve deep links que abren la app con el viaje pre-configurado. REGLAS: 1) SIEMPRE incluye los deep_link y web_link que devuelve la herramienta en tu respuesta. Son URLs reales — ponlas tal cual, cada una en su propia línea. 2) Si hay web_link de Uber (m.uber.com), ponlo PRIMERO porque funciona sin app. 3) NUNCA digas 'abre la app manualmente' si la herramienta devolvió enlaces. El enlace ES el botón.",
+    input_schema: {
+      type: "object",
+      properties: {
+        origen: {
+          type: "string",
+          description: "Punto de recogida. Puede ser un nombre de lugar ('aeropuerto de Hanoi', 'hotel Marriott Bangkok') o dirección."
+        },
+        destino: {
+          type: "string",
+          description: "Punto de destino. Puede ser un nombre de lugar ('centro de Hanoi', 'Khao San Road') o dirección."
+        },
+        pais: {
+          type: "string",
+          description: "Código ISO de 2 letras del país. Ej: 'VN' para Vietnam, 'TH' para Tailandia, 'IR' para Irán, 'ES' para España."
+        }
+      },
+      required: ["origen", "destino", "pais"]
+    }
+  },
+  {
     name: "guardar_nota",
     description: "Guarda una nota o recordatorio para el viajero. Usa esta herramienta INMEDIATAMENTE cuando el usuario diga 'apúntame', 'recuérdame', 'anota que', 'guarda que', 'no olvides que', 'apunta que' o cualquier variante de querer guardar información o un recordatorio. NO preguntes, guarda directamente y confirma con una frase corta.",
     input_schema: {
@@ -2007,6 +2029,214 @@ async function buscarWeb(input, braveKey) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// BUSCAR TRANSPORTE — Deep links para apps de taxi/VTC
+// ═══════════════════════════════════════════════════════════════
+
+const RIDE_APPS_BY_COUNTRY = {
+  // Sudeste Asiático — Grab
+  VN: ['grab','bolt'], TH: ['grab','bolt'], KH: ['grab'], MY: ['grab'], PH: ['grab'],
+  SG: ['grab','gojek'], ID: ['grab','gojek'], MM: ['grab'], LA: ['grab'],
+  // Irán — Snapp
+  IR: ['snapp'],
+  // Oriente Medio — Careem + Uber
+  AE: ['careem','uber','bolt'], SA: ['careem','uber'], QA: ['careem','uber'],
+  KW: ['careem','uber'], BH: ['careem','uber'], OM: ['careem','uber'],
+  JO: ['careem','uber'], LB: ['careem','uber'], IQ: ['careem'],
+  EG: ['careem','uber','bolt'], MA: ['careem','bolt'], TN: ['bolt'],
+  PK: ['careem','uber','indrive'],
+  // Europa — Bolt, Uber, FreeNow, Cabify
+  ES: ['cabify','uber','bolt','freenow'], PT: ['bolt','uber','freenow'],
+  FR: ['uber','bolt','freenow'], DE: ['uber','bolt','freenow'], IT: ['uber','bolt','freenow'],
+  GB: ['uber','bolt','freenow'], IE: ['uber','bolt','freenow'], NL: ['uber','bolt','freenow'],
+  BE: ['uber','bolt'], AT: ['uber','bolt'], CH: ['uber','bolt'],
+  PL: ['uber','bolt','freenow'], CZ: ['bolt','uber'], RO: ['bolt','uber'],
+  HU: ['bolt','uber'], HR: ['bolt'], BG: ['bolt'], EE: ['bolt','uber'],
+  LV: ['bolt'], LT: ['bolt'], FI: ['uber','bolt'], SE: ['uber','bolt'],
+  NO: ['uber','bolt'], DK: ['uber','bolt'], GR: ['uber','bolt','freenow'],
+  TR: ['uber','bolt'], GE: ['bolt','yandex'], UA: ['bolt','uber'],
+  // Rusia y Asia Central — Yandex
+  RU: ['yandex'], KZ: ['yandex','indrive','bolt'], UZ: ['yandex','indrive'],
+  KG: ['yandex','indrive'], TJ: ['indrive'], AZ: ['bolt','uber'],
+  // América — Uber, DiDi, Cabify, InDrive
+  US: ['uber','lyft'], CA: ['uber','lyft'], MX: ['uber','didi','cabify','beat'],
+  BR: ['uber','99','didi','indrive'], AR: ['uber','cabify','didi'],
+  CL: ['uber','didi','cabify','beat'], CO: ['uber','didi','indrive','beat'],
+  PE: ['uber','didi','indrive','beat'], EC: ['uber','indrive'],
+  CR: ['uber','didi'], PA: ['uber','didi'], DO: ['uber','indrive'],
+  CU: [], GT: ['uber','indrive'], HN: ['indrive'], NI: ['indrive'],
+  // África — Bolt, Uber, InDrive
+  ZA: ['uber','bolt'], KE: ['uber','bolt'], NG: ['bolt','uber','indrive'],
+  GH: ['bolt','uber'], TZ: ['bolt','uber'], UG: ['bolt','uber'],
+  RW: ['bolt'], ET: ['ride'], SN: ['bolt'],
+  // Asia — Uber, Grab, otros
+  IN: ['uber','ola','rapido'], CN: ['didi'], JP: ['uber','didi'], KR: ['kakao'],
+  TW: ['uber'], HK: ['uber','grab'],
+  // Oceanía
+  AU: ['uber','didi','bolt'], NZ: ['uber'],
+};
+
+function getRideLinks(apps, pickupLat, pickupLng, dropoffLat, dropoffLng, origen, destino) {
+  const links = [];
+  for (const app of apps) {
+    switch (app) {
+      case 'grab':
+        links.push({
+          app: 'Grab',
+          deep_link: `grab://open?screenType=BOOKING&pickUpLatitude=${pickupLat}&pickUpLongitude=${pickupLng}&dropOffLatitude=${dropoffLat}&dropOffLongitude=${dropoffLng}`,
+          web_link: `https://r.grab.com/`,
+          download: 'https://grab.onelink.me/2695613898',
+          nota: 'Si no tienes la app, descárgala primero'
+        });
+        break;
+      case 'uber':
+        links.push({
+          app: 'Uber',
+          deep_link: `uber://?action=setPickup&pickup[latitude]=${pickupLat}&pickup[longitude]=${pickupLng}&dropoff[latitude]=${dropoffLat}&dropoff[longitude]=${dropoffLng}&dropoff[nickname]=${encodeURIComponent(destino)}`,
+          web_link: `https://m.uber.com/ul/?action=setPickup&pickup[latitude]=${pickupLat}&pickup[longitude]=${pickupLng}&dropoff[latitude]=${dropoffLat}&dropoff[longitude]=${dropoffLng}&dropoff[nickname]=${encodeURIComponent(destino)}`,
+          nota: 'Funciona desde el navegador sin app'
+        });
+        break;
+      case 'bolt':
+        links.push({
+          app: 'Bolt',
+          deep_link: `bolt://ride?pickup_lat=${pickupLat}&pickup_lng=${pickupLng}&dropoff_lat=${dropoffLat}&dropoff_lng=${dropoffLng}`,
+          web_link: `https://bolt.eu/`,
+          nota: 'Necesita la app instalada'
+        });
+        break;
+      case 'careem':
+        links.push({
+          app: 'Careem',
+          deep_link: `careem://booking?pickup_latitude=${pickupLat}&pickup_longitude=${pickupLng}&dropoff_latitude=${dropoffLat}&dropoff_longitude=${dropoffLng}`,
+          web_link: `https://www.careem.com/`,
+          nota: 'Funciona en todo Oriente Medio'
+        });
+        break;
+      case 'snapp':
+        links.push({
+          app: 'Snapp',
+          deep_link: `snapp://ride?origin_lat=${pickupLat}&origin_lng=${pickupLng}&dest_lat=${dropoffLat}&dest_lng=${dropoffLng}`,
+          web_link: `https://app.snapp.taxi/`,
+          nota: 'La app de taxi de Irán — funciona en todo el país'
+        });
+        break;
+      case 'cabify':
+        links.push({
+          app: 'Cabify',
+          deep_link: `cabify://ride?pickup[latitude]=${pickupLat}&pickup[longitude]=${pickupLng}&dropoff[latitude]=${dropoffLat}&dropoff[longitude]=${dropoffLng}`,
+          web_link: `https://cabify.com/`,
+          nota: 'España y Latinoamérica'
+        });
+        break;
+      case 'freenow':
+        links.push({
+          app: 'FREE NOW',
+          deep_link: `freenow://ride?pickup_lat=${pickupLat}&pickup_lng=${pickupLng}&dropoff_lat=${dropoffLat}&dropoff_lng=${dropoffLng}`,
+          web_link: `https://www.free-now.com/`,
+          nota: 'Europa'
+        });
+        break;
+      case 'didi':
+        links.push({
+          app: 'DiDi',
+          deep_link: `didiglobal://ride?fromlat=${pickupLat}&fromlng=${pickupLng}&tolat=${dropoffLat}&tolng=${dropoffLng}`,
+          web_link: `https://web.didiglobal.com/`,
+          nota: 'China y Latinoamérica'
+        });
+        break;
+      case 'gojek':
+        links.push({
+          app: 'Gojek',
+          deep_link: `gojek://goride?pickup_lat=${pickupLat}&pickup_lng=${pickupLng}&dropoff_lat=${dropoffLat}&dropoff_lng=${dropoffLng}`,
+          web_link: `https://www.gojek.com/`,
+          nota: 'Indonesia y Vietnam'
+        });
+        break;
+      case 'yandex':
+        links.push({
+          app: 'Yandex Go',
+          deep_link: `yandextaxi://route?start-lat=${pickupLat}&start-lon=${pickupLng}&end-lat=${dropoffLat}&end-lon=${dropoffLng}`,
+          web_link: `https://go.yandex/`,
+          nota: 'Rusia y Asia Central'
+        });
+        break;
+      case 'indrive':
+        links.push({
+          app: 'InDrive',
+          web_link: `https://indrive.com/`,
+          nota: 'Tú pones el precio — descarga la app'
+        });
+        break;
+      // Apps sin deep link conocido: solo info
+      case 'lyft': links.push({ app: 'Lyft', web_link: 'https://www.lyft.com/', nota: 'USA y Canadá' }); break;
+      case 'ola': links.push({ app: 'Ola', web_link: 'https://www.olacabs.com/', nota: 'India' }); break;
+      case '99': links.push({ app: '99', web_link: 'https://99app.com/', nota: 'Brasil' }); break;
+      case 'kakao': links.push({ app: 'Kakao T', web_link: 'https://www.kakaomobility.com/', nota: 'Corea del Sur' }); break;
+      case 'rapido': links.push({ app: 'Rapido', web_link: 'https://www.rapido.bike/', nota: 'India — motos' }); break;
+      case 'beat': links.push({ app: 'Beat', web_link: 'https://thebeat.co/', nota: 'Latinoamérica' }); break;
+      case 'ride': links.push({ app: 'RIDE', web_link: 'https://www.ride.com.et/', nota: 'Etiopía' }); break;
+    }
+  }
+  return links;
+}
+
+async function buscarTransporte(input, placesKey) {
+  const { origen, destino, pais } = input;
+  if (!origen || !destino || !pais) return { error: 'Falta origen, destino o país' };
+
+  const countryCode = pais.toUpperCase();
+  const apps = RIDE_APPS_BY_COUNTRY[countryCode] || ['uber']; // Uber como fallback global
+
+  if (apps.length === 0) return { error: 'No hay apps de taxi/VTC disponibles en este país', pais: countryCode };
+
+  // Geocodificar con Google Places Find Place (misma API que buscar_foto)
+  async function geocode(place) {
+    if (!placesKey) return null;
+    try {
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(place + ', ' + countryCode)}&inputtype=textquery&fields=name,geometry,formatted_address&key=${placesKey}`
+      );
+      const data = await res.json();
+      if (data.candidates?.[0]?.geometry?.location) {
+        const loc = data.candidates[0].geometry.location;
+        return { lat: loc.lat, lng: loc.lng, address: data.candidates[0].formatted_address || place };
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  const [pickupGeo, dropoffGeo] = await Promise.all([geocode(origen), geocode(destino)]);
+
+  if (!pickupGeo || !dropoffGeo) {
+    return {
+      error: 'No pude geocodificar origen o destino',
+      apps_disponibles: apps.map(a => a.charAt(0).toUpperCase() + a.slice(1)),
+      consejo: 'Dile al usuario que abra la app directamente y ponga origen/destino manualmente'
+    };
+  }
+
+  const links = getRideLinks(apps, pickupGeo.lat, pickupGeo.lng, dropoffGeo.lat, dropoffGeo.lng, origen, destino);
+
+  return {
+    origen: { nombre: origen, direccion: pickupGeo.address, lat: pickupGeo.lat, lng: pickupGeo.lng },
+    destino: { nombre: destino, direccion: dropoffGeo.address, lat: dropoffGeo.lat, lng: dropoffGeo.lng },
+    distancia_km_aprox: Math.round(haversineDistance(pickupGeo.lat, pickupGeo.lng, dropoffGeo.lat, dropoffGeo.lng)),
+    apps: links,
+    consejo: links[0]?.web_link ? 'El primer enlace es la mejor opción para este país' : 'Descarga la app recomendada'
+  };
+}
+
+function haversineDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+// ═══════════════════════════════════════════════════════════════
 // DISPATCHER DE HERRAMIENTAS — Ejecuta la tool que Claude pida
 // ═══════════════════════════════════════════════════════════════
 
@@ -2022,6 +2252,8 @@ async function executeToolCall(toolName, toolInput, env, userCoords) {
       return await buscarRestaurante(toolInput, env.GOOGLE_PLACES_KEY, userCoords);
     case 'buscar_foto':
       return await buscarFotoLugar(toolInput, env.GOOGLE_PLACES_KEY);
+    case 'buscar_transporte':
+      return await buscarTransporte(toolInput, env.GOOGLE_PLACES_KEY);
     case 'buscar_web':
       return await buscarWeb(toolInput, env.BRAVE_SEARCH_KEY);
     case 'generar_video':
