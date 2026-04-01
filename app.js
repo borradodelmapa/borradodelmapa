@@ -497,7 +497,7 @@ async function renderProfile() {
 
         <div class="profile-section" id="prof-narrator">
           <span class="profile-section-icon">📍</span>
-          <span class="profile-section-label">Narrador en ruta</span>
+          <span class="profile-section-label">GPS y narrador</span>
           <button class="profile-info-btn" id="prof-narrator-info" onclick="event.stopPropagation()">i</button>
           <label class="profile-toggle" onclick="event.stopPropagation()">
             <input type="checkbox" id="narrator-toggle" ${typeof salma !== 'undefined' && salma._narratorActive ? 'checked' : ''}>
