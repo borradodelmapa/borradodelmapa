@@ -533,6 +533,13 @@ const salma = {
       this._initChat();
     }
 
+    // Si el usuario pide activar/desactivar GPS, mostrar botón toggle
+    if (msg && /activa.*gps|desactiva.*gps|activa.*ubicaci|desactiva.*ubicaci|pon.*gps|quita.*gps|apaga.*gps|enciende.*gps|activar.*gps|desactivar.*gps|activar.*ubicaci|desactivar.*ubicaci/i.test(msg)) {
+      this._addUserBubble(msg);
+      this.showGPSToggle();
+      return;
+    }
+
     // Si el mensaje requiere ubicación y no la tenemos, mostrar prompt
     if (!this._userLocation && msg) {
       const needsLocation = /desde donde estoy|cerca de m[ií]|por aqu[ií]|aqu[ií] cerca|donde estoy|mi ubicaci[oó]n|nearest|near me/i.test(msg);
@@ -1457,6 +1464,51 @@ const salma = {
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
+  },
+
+  showGPSToggle() {
+    const area = this._getChatArea();
+    if (!area) return;
+    if (area.querySelector('.msg-gps-toggle')) return;
+    const isActive = !!this._userLocation && !this._geoBlocked;
+    const div = document.createElement('div');
+    div.className = 'msg msg-salma msg-gps-toggle';
+    div.innerHTML = `
+      <div class="msg-salma-header">
+        <div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div>
+        <span class="msg-salma-name">Salma</span>
+      </div>
+      <div class="msg-body-salma">
+        <button class="btn-gps-toggle" onclick="salma.toggleGPS(this)" style="
+          padding:10px 20px;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;width:100%;
+          background:${isActive ? '#c0392b' : 'var(--dorado, #d4a843)'};color:${isActive ? '#fff' : '#1a1a1a'};
+        ">${isActive ? '📍 Desactivar GPS' : '📍 Activar GPS'}</button>
+      </div>`;
+    area.appendChild(div);
+    this._scrollToBottom(true);
+  },
+
+  toggleGPS(btn) {
+    const isActive = !!this._userLocation && !this._geoBlocked;
+    if (isActive) {
+      if (this._geoWatchId) { navigator.geolocation.clearWatch(this._geoWatchId); this._geoWatchId = null; }
+      this._userLocation = null;
+      this.stopNarrator();
+      if (btn) { btn.textContent = '📍 Activar GPS'; btn.style.background = 'var(--dorado, #d4a843)'; btn.style.color = '#1a1a1a'; }
+      const toggle = document.getElementById('narrator-toggle');
+      if (toggle) toggle.checked = false;
+    } else {
+      this._geoBlocked = false;
+      this.initGeolocation();
+      if (btn) btn.textContent = 'Activando...';
+      setTimeout(() => {
+        if (this._userLocation) {
+          if (btn) { btn.textContent = '📍 Desactivar GPS'; btn.style.background = '#c0392b'; btn.style.color = '#fff'; }
+        } else {
+          if (btn) { btn.textContent = '📍 Activar GPS'; btn.style.background = 'var(--dorado, #d4a843)'; btn.style.color = '#1a1a1a'; }
+        }
+      }, 3000);
+    }
   },
 
   _loadingPhrases: [
