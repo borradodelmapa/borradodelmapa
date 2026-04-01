@@ -2598,7 +2598,7 @@ export default {
     if (request.method === 'POST' && url.pathname === '/ga4') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
       const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== 'bdm-admin-2026') {
+      if (authHeader.replace('Bearer ', '') !== 'Zonakanjea159876') {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
 
@@ -2632,7 +2632,7 @@ export default {
       // Verificar token admin (hash SHA-256 de la contraseña)
       const authHeader = request.headers.get('Authorization') || '';
       const adminToken = authHeader.replace('Bearer ', '');
-      if (adminToken !== 'bdm-admin-2026') {
+      if (adminToken !== 'Zonakanjea159876') {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
 
@@ -3093,7 +3093,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     if (request.method === 'POST' && url.pathname === '/admin/init-prompt') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== 'bdm-admin-2026') {
+      if (authHeader.replace('Bearer ', '') !== 'Zonakanjea159876') {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
       try {
@@ -3135,7 +3135,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     if (request.method === 'GET' && url.pathname === '/admin/get-prompt') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== 'bdm-admin-2026') {
+      if (authHeader.replace('Bearer ', '') !== 'Zonakanjea159876') {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
       try {
@@ -3161,7 +3161,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     if (request.method === 'POST' && url.pathname === '/admin/test-prompt') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== 'bdm-admin-2026') {
+      if (authHeader.replace('Bearer ', '') !== 'Zonakanjea159876') {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
 
@@ -3305,7 +3305,7 @@ Responde en JSON estricto (sin markdown):
     if (request.method === 'POST' && url.pathname === '/admin/apply-fix') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== 'bdm-admin-2026') {
+      if (authHeader.replace('Bearer ', '') !== 'Zonakanjea159876') {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
 
@@ -3406,7 +3406,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     if (request.method === 'POST' && url.pathname === '/admin/save-prompt') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== 'bdm-admin-2026') {
+      if (authHeader.replace('Bearer ', '') !== 'Zonakanjea159876') {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
       try {
