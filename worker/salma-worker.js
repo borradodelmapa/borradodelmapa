@@ -612,11 +612,58 @@ async function searchPlacesForHelp(query, location, placesKey, coords) {
   return results.length > 0 ? results : null;
 }
 
-async function fetchWeather(location) {
+async function fetchWeather(location, openweatherKey) {
   if (!location) return null;
 
+  // ─── Primario: OpenWeatherMap (rápido, fiable) ───
+  if (openweatherKey) {
+    try {
+      const geoRes = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(location)}&limit=1&appid=${openweatherKey}`);
+      const geoData = await geoRes.json();
+      if (geoData?.[0]) {
+        const { lat, lon, name, country } = geoData[0];
+        const wxRes = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${openweatherKey}`);
+        const wxData = await wxRes.json();
+        if (wxData?.list) {
+          const now = wxData.list[0];
+          // Agrupar forecast por día (max/min)
+          const days = {};
+          for (const item of wxData.list) {
+            const date = item.dt_txt.split(' ')[0];
+            if (!days[date]) days[date] = { date, temps: [], descs: [], rain: [] };
+            days[date].temps.push(item.main.temp);
+            days[date].descs.push(item.weather[0].description);
+            days[date].rain.push(item.pop || 0);
+          }
+          const forecast = Object.values(days).slice(0, 3).map(d => ({
+            date: d.date,
+            max_c: String(Math.round(Math.max(...d.temps))),
+            min_c: String(Math.round(Math.min(...d.temps))),
+            description: d.descs[Math.floor(d.descs.length / 2)],
+            rain_chance: String(Math.round(Math.max(...d.rain) * 100)),
+          }));
+          return {
+            location: name || location,
+            country: country || '',
+            current: {
+              temp_c: String(Math.round(now.main.temp)),
+              feels_like: String(Math.round(now.main.feels_like)),
+              description: now.weather[0].description,
+              humidity: String(now.main.humidity),
+              wind_kmph: String(Math.round(now.wind.speed * 3.6)),
+            },
+            forecast,
+            links: [
+              `https://openweathermap.org/city/${wxData.city?.id || ''}`,
+            ],
+          };
+        }
+      }
+    } catch (_) { /* fallback a wttr.in */ }
+  }
+
+  // ─── Fallback: wttr.in (sin key, menos fiable) ───
   try {
-    // wttr.in — API gratuita, sin key, devuelve JSON
     const res = await fetch(`https://wttr.in/${encodeURIComponent(location)}?format=j1&lang=es`, {
       headers: { 'User-Agent': 'BorradoDelMapa/1.0' },
     });
@@ -626,9 +673,9 @@ async function fetchWeather(location) {
     if (!data?.current_condition?.[0] || !data?.weather) return null;
 
     const current = data.current_condition[0];
-    const forecast = data.weather.slice(0, 3); // 3 días
+    const forecast = data.weather.slice(0, 3);
 
-    const result = {
+    return {
       location: data.nearest_area?.[0]?.areaName?.[0]?.value || location,
       country: data.nearest_area?.[0]?.country?.[0]?.value || '',
       current: {
@@ -647,11 +694,8 @@ async function fetchWeather(location) {
       })),
       links: [
         `https://www.weather.com/es-ES/clima/hoy/l/${encodeURIComponent(location)}`,
-        `https://www.yr.no/en/forecast/daily-table/${encodeURIComponent(location)}`,
       ],
     };
-
-    return result;
   } catch (e) {
     return null;
   }
@@ -3477,7 +3521,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       if (helpLocation) {
         try {
           if (helpCategory === 'weather') {
-            weatherData = await fetchWeather(helpLocation);
+            weatherData = await fetchWeather(helpLocation, env.OPENWEATHER_KEY);
           } else {
             helpResults = await searchPlacesForHelp(message, helpLocation, env.GOOGLE_PLACES_KEY, userLocation);
           }
