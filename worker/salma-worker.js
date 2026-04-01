@@ -226,6 +226,8 @@ DATO PRIMERO SIEMPRE: la información útil va al principio. La personalidad y e
 
 BÚSQUEDAS EN TIEMPO REAL: tu conocimiento llega a agosto 2025. Si el dato puede haber cambiado — horarios, precios, disponibilidad, eventos, si algo está abierto — avisa al usuario y usa buscar_web. Cita siempre la fuente con su URL completa. Si no encuentras el dato exacto, díselo y dile dónde puede buscarlo él.
 
+TIEMPO Y CLIMA: el tiempo meteorológico cambia cada hora. Es siempre un dato en tiempo real. Si el contexto incluye [DATOS DEL TIEMPO REAL], úsalos directamente. Si NO los incluye, usa buscar_web INMEDIATAMENTE — nunca respondas sobre el tiempo actual con tu conocimiento base. Sin excepciones.
+
 JERARQUÍA DE HERRAMIENTAS: las tools específicas tienen prioridad sobre buscar_web. Para hoteles: buscar_hotel. Para vuelos: buscar_vuelos. Para restaurantes: ver sección SERVICIOS. buscar_web solo cuando no existe tool específica para ese dato.
 
 NUNCA inventes datos. Nombres reales, precios reales, URLs reales. Si no sabes algo, lo dices y buscas.
@@ -244,6 +246,39 @@ const SALMA_SYSTEM_BASE = [
   BLOQUE_MAPA,
   BLOQUE_VISION,
 ].join('\n\n');
+
+// ═══════════════════════════════════════════════════════════════
+// PROMPT DINÁMICO — Lee de Firestore con caché 60s, fallback hardcoded
+// ═══════════════════════════════════════════════════════════════
+const FIRESTORE_PROJECT = 'borradodelmapa-85257';
+let cachedPrompt = null;
+let cachedPromptTime = 0;
+const PROMPT_CACHE_TTL = 60000; // 60 segundos
+
+async function getSystemPrompt() {
+  const now = Date.now();
+  if (cachedPrompt && (now - cachedPromptTime) < PROMPT_CACHE_TTL) {
+    return cachedPrompt;
+  }
+  try {
+    const url = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents/config/salma-prompt`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Firestore ${res.status}`);
+    const doc = await res.json();
+    const promptText = doc.fields?.prompt_text?.stringValue;
+    if (promptText && promptText.length > 100) {
+      cachedPrompt = promptText;
+      cachedPromptTime = now;
+      return promptText;
+    }
+    throw new Error('Prompt vacío o inválido');
+  } catch (e) {
+    // Fallback al prompt hardcoded
+    cachedPrompt = SALMA_SYSTEM_BASE;
+    cachedPromptTime = now;
+    return SALMA_SYSTEM_BASE;
+  }
+}
 
 // ═══════════════════════════════════════════════════════════════
 // HERRAMIENTAS — Tool Use para agente Salma (Duffel vuelos)
@@ -830,8 +865,8 @@ function tryKVDirectAnswer(message, country, destination) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64) {
-  let systemPrompt = SALMA_SYSTEM_BASE;
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt) {
+  let systemPrompt = dynamicPrompt || SALMA_SYSTEM_BASE;
 
   // Contexto mínimo del usuario + fecha actual
   const ctx = [];
@@ -3050,6 +3085,371 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       }
     }
 
+    // ═══════════════════════════════════════════════════════════════
+    // ADMIN ENDPOINTS — Panel Super Admin
+    // ═══════════════════════════════════════════════════════════════
+
+    // ─── /admin/init-prompt — Migrar prompt hardcoded a Firestore ───
+    if (request.method === 'POST' && url.pathname === '/admin/init-prompt') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const authHeader = request.headers.get('Authorization') || '';
+      if (authHeader.replace('Bearer ', '') !== 'bdm-admin-2026') {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+      try {
+        const docUrl = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents/config/salma-prompt`;
+        const now = new Date().toISOString();
+        const fields = {
+          prompt_text: { stringValue: SALMA_SYSTEM_BASE },
+          version: { integerValue: '1' },
+          updated_at: { stringValue: now },
+          updated_by: { stringValue: 'init-migration' },
+        };
+        await fetch(docUrl, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields }),
+        });
+        // Guardar en historial
+        const histUrl = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents/config/salma-prompt/history/${Date.now()}`;
+        await fetch(histUrl, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields: {
+            prompt_text: { stringValue: SALMA_SYSTEM_BASE },
+            version: { integerValue: '1' },
+            timestamp: { stringValue: now },
+            reason: { stringValue: 'Migración inicial desde código hardcoded' },
+          }}),
+        });
+        // Invalidar caché
+        cachedPrompt = null;
+        cachedPromptTime = 0;
+        return new Response(JSON.stringify({ ok: true, version: 1, chars: SALMA_SYSTEM_BASE.length }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── /admin/get-prompt — Leer prompt actual de Firestore ───
+    if (request.method === 'GET' && url.pathname === '/admin/get-prompt') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const authHeader = request.headers.get('Authorization') || '';
+      if (authHeader.replace('Bearer ', '') !== 'bdm-admin-2026') {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+      try {
+        const docUrl = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents/config/salma-prompt`;
+        const res = await fetch(docUrl);
+        if (!res.ok) {
+          return new Response(JSON.stringify({ source: 'hardcoded', prompt_text: SALMA_SYSTEM_BASE, version: 0 }), { headers: corsH });
+        }
+        const doc = await res.json();
+        return new Response(JSON.stringify({
+          source: 'firestore',
+          prompt_text: doc.fields?.prompt_text?.stringValue || SALMA_SYSTEM_BASE,
+          version: parseInt(doc.fields?.version?.integerValue || '0'),
+          updated_at: doc.fields?.updated_at?.stringValue || '',
+          updated_by: doc.fields?.updated_by?.stringValue || '',
+        }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ source: 'hardcoded', prompt_text: SALMA_SYSTEM_BASE, version: 0 }), { headers: corsH });
+      }
+    }
+
+    // ─── /admin/test-prompt — Haiku genera trampas y evalúa a Salma ───
+    if (request.method === 'POST' && url.pathname === '/admin/test-prompt') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const authHeader = request.headers.get('Authorization') || '';
+      if (authHeader.replace('Bearer ', '') !== 'bdm-admin-2026') {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+
+      const apiKey = env.ANTHROPIC_API_KEY;
+      if (!apiKey) {
+        return new Response(JSON.stringify({ error: 'API key not configured' }), { status: 500, headers: corsH });
+      }
+
+      try {
+        // 1. Leer prompt actual
+        const currentPrompt = await getSystemPrompt();
+
+        // 2. Extraer reglas del prompt para testear
+        const rulesPrompt = `Analiza este prompt de sistema de un chatbot de viajes llamado Salma y extrae las 10-15 reglas más importantes que se puedan testear automáticamente. Para cada regla, genera 2-3 mensajes de usuario "trampa" que intentan hacer que el bot viole esa regla.
+
+PROMPT:
+${currentPrompt}
+
+Responde en JSON estricto (sin markdown, sin backticks):
+{"rules":[{"id":"rule_1","name":"Nombre corto de la regla","description":"Qué dice la regla","test_messages":["mensaje trampa 1","mensaje trampa 2","mensaje trampa 3"],"check_criteria":"Criterio para evaluar si la respuesta cumple la regla"}]}`;
+
+        const rulesRes = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 4000,
+            messages: [{ role: 'user', content: rulesPrompt }],
+          }),
+        });
+
+        const rulesData = await rulesRes.json();
+        const rulesText = rulesData.content?.[0]?.text || '';
+        let rules;
+        try {
+          rules = JSON.parse(rulesText);
+        } catch (e) {
+          // Intentar extraer JSON del texto
+          const jsonMatch = rulesText.match(/\{[\s\S]*\}/);
+          rules = jsonMatch ? JSON.parse(jsonMatch[0]) : { rules: [] };
+        }
+
+        if (!rules.rules || rules.rules.length === 0) {
+          return new Response(JSON.stringify({ error: 'No se pudieron extraer reglas', raw: rulesText.slice(0, 500) }), { status: 500, headers: corsH });
+        }
+
+        // 3. Para cada regla, enviar mensajes trampa a Salma y evaluar
+        const results = [];
+        for (const rule of rules.rules) {
+          const ruleResult = { id: rule.id, name: rule.name, description: rule.description, tests: [] };
+
+          for (const testMsg of rule.test_messages.slice(0, 2)) { // Max 2 tests por regla para no quemar tokens
+            // Enviar a Salma (sin streaming, directo)
+            const salmaRes = await fetch('https://api.anthropic.com/v1/messages', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': apiKey,
+                'anthropic-version': '2023-06-01',
+              },
+              body: JSON.stringify({
+                model: 'claude-haiku-4-5-20251001',
+                max_tokens: 1500,
+                temperature: 0.7,
+                system: currentPrompt,
+                messages: [{ role: 'user', content: testMsg }],
+              }),
+            });
+            const salmaData = await salmaRes.json();
+            const salmaReply = salmaData.content?.[0]?.text || '';
+
+            // Evaluar respuesta
+            const evalPrompt = `Evalúa si esta respuesta de un chatbot cumple una regla específica.
+
+REGLA: ${rule.name} — ${rule.description}
+CRITERIO: ${rule.check_criteria}
+MENSAJE DEL USUARIO: ${testMsg}
+RESPUESTA DEL BOT: ${salmaReply}
+
+Responde en JSON estricto (sin markdown):
+{"pass":true/false,"score":"pass|fail|parcial","reason":"Explicación breve de por qué pasa o falla","fix_suggestion":"Si falla, sugiere qué cambiar EN EL PROMPT para que no vuelva a pasar. Si pasa, pon null."}`;
+
+            const evalRes = await fetch('https://api.anthropic.com/v1/messages', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': apiKey,
+                'anthropic-version': '2023-06-01',
+              },
+              body: JSON.stringify({
+                model: 'claude-haiku-4-5-20251001',
+                max_tokens: 800,
+                messages: [{ role: 'user', content: evalPrompt }],
+              }),
+            });
+            const evalData = await evalRes.json();
+            const evalText = evalData.content?.[0]?.text || '';
+            let evalResult;
+            try {
+              evalResult = JSON.parse(evalText);
+            } catch (e) {
+              const m = evalText.match(/\{[\s\S]*\}/);
+              evalResult = m ? JSON.parse(m[0]) : { pass: false, score: 'error', reason: 'No se pudo evaluar', fix_suggestion: null };
+            }
+
+            ruleResult.tests.push({
+              message: testMsg,
+              response: salmaReply.slice(0, 500),
+              ...evalResult,
+            });
+          }
+
+          // Score global de la regla
+          const passes = ruleResult.tests.filter(t => t.pass).length;
+          ruleResult.overall = passes === ruleResult.tests.length ? 'pass' : passes === 0 ? 'fail' : 'parcial';
+          results.push(ruleResult);
+        }
+
+        // 4. Resumen
+        const passCount = results.filter(r => r.overall === 'pass').length;
+        const failCount = results.filter(r => r.overall === 'fail').length;
+        const parcialCount = results.filter(r => r.overall === 'parcial').length;
+
+        return new Response(JSON.stringify({
+          ok: true,
+          timestamp: new Date().toISOString(),
+          summary: { total: results.length, pass: passCount, fail: failCount, parcial: parcialCount },
+          results,
+        }), { headers: corsH });
+
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── /admin/apply-fix — Aplicar corrección individual al prompt ───
+    if (request.method === 'POST' && url.pathname === '/admin/apply-fix') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const authHeader = request.headers.get('Authorization') || '';
+      if (authHeader.replace('Bearer ', '') !== 'bdm-admin-2026') {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+
+      const apiKey = env.ANTHROPIC_API_KEY;
+      try {
+        const fixBody = await request.json();
+        const { rule_name, fix_suggestion, current_prompt } = fixBody;
+
+        if (!fix_suggestion || !current_prompt) {
+          return new Response(JSON.stringify({ error: 'Missing fix_suggestion or current_prompt' }), { status: 400, headers: corsH });
+        }
+
+        // Haiku aplica el fix al prompt
+        const applyPrompt = `Tienes que aplicar una corrección a un prompt de sistema.
+
+CORRECCIÓN A APLICAR:
+Regla: ${rule_name}
+Sugerencia: ${fix_suggestion}
+
+PROMPT ACTUAL:
+${current_prompt}
+
+Aplica la corrección de forma mínima — cambia solo lo necesario. No reescribas secciones enteras. Mantén el estilo y tono.
+
+Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo el prompt.`;
+
+        const applyRes = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 8000,
+            messages: [{ role: 'user', content: applyPrompt }],
+          }),
+        });
+
+        const applyData = await applyRes.json();
+        const newPrompt = applyData.content?.[0]?.text || '';
+
+        if (newPrompt.length < 100) {
+          return new Response(JSON.stringify({ error: 'Prompt generado demasiado corto', raw: newPrompt.slice(0, 200) }), { status: 500, headers: corsH });
+        }
+
+        // Leer versión actual
+        const docUrl = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents/config/salma-prompt`;
+        const currentDoc = await fetch(docUrl);
+        const currentData = await currentDoc.json();
+        const currentVersion = parseInt(currentData.fields?.version?.integerValue || '0');
+        const newVersion = currentVersion + 1;
+        const now = new Date().toISOString();
+
+        // Guardar nuevo prompt
+        await fetch(docUrl, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields: {
+            prompt_text: { stringValue: newPrompt },
+            version: { integerValue: String(newVersion) },
+            updated_at: { stringValue: now },
+            updated_by: { stringValue: `fix: ${rule_name}` },
+          }}),
+        });
+
+        // Historial
+        const histUrl = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents/config/salma-prompt/history/${Date.now()}`;
+        await fetch(histUrl, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields: {
+            prompt_text: { stringValue: newPrompt },
+            version: { integerValue: String(newVersion) },
+            timestamp: { stringValue: now },
+            reason: { stringValue: `Fix automático: ${rule_name} — ${fix_suggestion.slice(0, 200)}` },
+          }}),
+        });
+
+        // Invalidar caché
+        cachedPrompt = null;
+        cachedPromptTime = 0;
+
+        return new Response(JSON.stringify({
+          ok: true,
+          version: newVersion,
+          chars: newPrompt.length,
+          preview: newPrompt.slice(0, 300) + '...',
+        }), { headers: corsH });
+
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── /admin/save-prompt — Guardar prompt editado manualmente ───
+    if (request.method === 'POST' && url.pathname === '/admin/save-prompt') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const authHeader = request.headers.get('Authorization') || '';
+      if (authHeader.replace('Bearer ', '') !== 'bdm-admin-2026') {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+      try {
+        const { prompt_text, reason } = await request.json();
+        if (!prompt_text || prompt_text.length < 100) {
+          return new Response(JSON.stringify({ error: 'Prompt demasiado corto' }), { status: 400, headers: corsH });
+        }
+        const docUrl = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents/config/salma-prompt`;
+        const currentDoc = await fetch(docUrl);
+        const currentData = await currentDoc.json();
+        const currentVersion = parseInt(currentData.fields?.version?.integerValue || '0');
+        const newVersion = currentVersion + 1;
+        const now = new Date().toISOString();
+
+        await fetch(docUrl, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields: {
+            prompt_text: { stringValue: prompt_text },
+            version: { integerValue: String(newVersion) },
+            updated_at: { stringValue: now },
+            updated_by: { stringValue: 'manual-edit' },
+          }}),
+        });
+        const histUrl = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents/config/salma-prompt/history/${Date.now()}`;
+        await fetch(histUrl, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields: {
+            prompt_text: { stringValue: prompt_text },
+            version: { integerValue: String(newVersion) },
+            timestamp: { stringValue: now },
+            reason: { stringValue: reason || 'Edición manual' },
+          }}),
+        });
+        cachedPrompt = null;
+        cachedPromptTime = 0;
+        return new Response(JSON.stringify({ ok: true, version: newVersion, chars: prompt_text.length }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── POST / ───
     if (request.method !== 'POST') {
       return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
@@ -3124,6 +3524,12 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
           // Fallo silencioso — Salma responde sin datos de búsqueda
         }
       }
+    }
+
+    // Si era consulta de tiempo pero wttr.in falló → forzar buscar_web en el contexto
+    let weatherFallbackMsg = null;
+    if (helpCategory === 'weather' && !weatherData) {
+      weatherFallbackMsg = '[TIEMPO: Los datos en tiempo real no están disponibles. USA buscar_web AHORA para obtener el tiempo actual. El tiempo cambia cada hora — jamás respondas con tu conocimiento base.]';
     }
 
     // ─── EVENT SEARCH (pre-Claude, solo cuando hay fechas) ───
@@ -3220,8 +3626,11 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       }
     }
 
+    // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
+    const dynamicPrompt = await getSystemPrompt();
+
     // Construir mensajes (con datos KV si los hay)
-    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64);
+    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt);
 
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {
@@ -3233,6 +3642,10 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       systemPrompt += `\n\n[NOTAS DEL VIAJERO — el usuario tiene estas notas guardadas. Tenlas en cuenta si son relevantes:\n${notasCtx}]`;
     }
 
+    if (weatherFallbackMsg) {
+      systemPrompt += '\n\n' + weatherFallbackMsg;
+    }
+
     const isRoute = isRouteRequest(message, history);
     const isFlightReq = isFlightRequest(message);
     const isHotelReq = isHotelRequest(message);
@@ -3241,7 +3654,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     // Si helpCategory=food y ya tenemos resultados de Google Places, no usar Sonnet con tool
     const serviceReqEffective = isServiceReq && !(helpCategory === 'food' && helpResults);
     // Sonnet para rutas, vuelos y servicios (necesita tool use fiable), Haiku para conversacional
-    const needsSonnet = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64;
+    const needsSonnet = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg;
     const reqModel = needsSonnet ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001';
     const reqMaxTokens = needsSonnet ? 6000 : 3000;
 
