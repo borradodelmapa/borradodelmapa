@@ -2947,7 +2947,7 @@ function formatMessage(str) {
   });
   // Extraer enlaces markdown [texto](url) ANTES del escape HTML
   const links = [];
-  raw = raw.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_, text, url) => {
+  raw = raw.replace(/\[([^\]]+)\]\(([a-zA-Z][a-zA-Z0-9+.-]*:\/\/[^\s)]+)\)/g, (_, text, url) => {
     const idx = links.length;
     links.push('<a href="' + url + '" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href);return false;">' + text + '</a>');
     return '%%LINK' + idx + '%%';
@@ -2955,7 +2955,7 @@ function formatMessage(str) {
 
   let html = escapeHTML(raw);
   // URLs sueltas → enlaces clicables (onclick fuerza apertura externa en PWA)
-  html = html.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href);return false;">$1</a>');
+  html = html.replace(/([a-zA-Z][a-zA-Z0-9+.-]*:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href);return false;">$1</a>');
   // Teléfonos internacionales: +XX XXX XXX XXX (con espacios, guiones o puntos)
   html = html.replace(/(\+\d{1,3}[ .-]?\d{1,4}[ .-]?\d{2,4}[ .-]?\d{2,4}[ .-]?\d{0,4})/g, (match) => {
     const clean = match.replace(/[\s.-]/g, '').trim();
