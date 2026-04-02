@@ -2886,6 +2886,41 @@ export default {
       }
     }
 
+    // ─── ENDPOINT /place-details (rating, horarios, foto por place_id) ───
+    if (request.method === 'GET' && url.pathname === '/place-details') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      const placeId = url.searchParams.get('place_id') || '';
+      const placesKey = env.GOOGLE_PLACES_KEY;
+      if (!placeId || !placesKey) {
+        return new Response(JSON.stringify({ error: 'missing params' }), { status: 400, headers: corsH });
+      }
+      try {
+        const fields = 'name,rating,user_ratings_total,opening_hours,photos';
+        const res = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=${fields}&language=es&key=${placesKey}`);
+        const data = await res.json();
+        if (data.status !== 'OK' || !data.result) {
+          return new Response(JSON.stringify({ error: data.status || 'not found' }), { status: 404, headers: corsH });
+        }
+        const r = data.result;
+        const photoRef = r.photos?.[0]?.photo_reference || '';
+        let photoUrl = '';
+        if (photoRef) {
+          const imgRes = await fetch(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${photoRef}&key=${placesKey}`);
+          if (imgRes.ok) photoUrl = imgRes.url;
+        }
+        return new Response(JSON.stringify({
+          name: r.name || '',
+          rating: r.rating || null,
+          reviews: r.user_ratings_total || 0,
+          photo_url: photoUrl,
+          hours: r.opening_hours?.weekday_text || [],
+          open_now: r.opening_hours?.open_now ?? null,
+        }), { headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' } });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /directions (polyline para mini-mapas) ───
     if (request.method === 'GET' && url.pathname === '/directions') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };

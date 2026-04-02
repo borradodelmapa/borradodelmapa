@@ -2600,3 +2600,302 @@ body {
   transition: opacity 0.2s;
 }
 .btn-geo-retry:active { opacity: 0.7; }
+
+/* ═══════════════════════════════════════════
+   VISTA ITINERARIO — mapa + cards enriquecidas
+   ══════════════════════════════════════════ */
+
+.itin-view {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: var(--negro);
+}
+
+/* ── Layout desktop: 60/40 ── */
+.itin-layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+.itin-map-col {
+  flex: 0 0 60%;
+  height: 100%;
+  position: relative;
+}
+.itin-cards-col {
+  flex: 0 0 40%;
+  height: 100%;
+  overflow-y: auto;
+  background: var(--negro);
+  border-left: 1px solid rgba(240,180,41,.15);
+}
+
+/* ── Layout mobile: stack vertical ── */
+@media (max-width: 768px) {
+  .itin-layout {
+    flex-direction: column;
+  }
+  .itin-map-col {
+    flex: 0 0 40vh;
+    height: 40vh;
+  }
+  .itin-cards-col {
+    flex: 1;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid rgba(240,180,41,.15);
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 12px 8px;
+    gap: 12px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .itin-cards-col .itin-header {
+    display: none;
+  }
+  .itin-cards-col .itin-cards-scroll {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 12px;
+  }
+  .itin-cards-col .itin-day-sep {
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    padding: 8px 4px;
+    white-space: nowrap;
+  }
+  .itin-card {
+    min-width: 280px;
+    max-width: 300px;
+    scroll-snap-align: center;
+    flex-shrink: 0;
+  }
+}
+
+/* ── Header ── */
+.itin-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(240,180,41,.1);
+}
+.itin-back {
+  background: none;
+  border: 1px solid rgba(240,180,41,.3);
+  color: var(--dorado);
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s;
+}
+.itin-back:hover { background: rgba(240,180,41,.1); }
+.itin-title {
+  font-family: var(--font-tight, 'Inter Tight', sans-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--blanco);
+}
+.itin-meta {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  color: rgba(255,255,255,.45);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ── Cards scroll container ── */
+.itin-cards-scroll {
+  padding: 8px 16px 80px;
+}
+
+/* ── Separador de día ── */
+.itin-day-sep {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 0 8px;
+}
+.itin-day-num {
+  font-family: var(--font-tight, 'Inter Tight', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--dorado);
+  letter-spacing: .12em;
+}
+.itin-day-title {
+  font-size: 12px;
+  color: rgba(255,255,255,.4);
+}
+
+/* ── Card ── */
+.itin-card {
+  background: var(--gris2, #1e190f);
+  border: 1px solid rgba(240,180,41,.08);
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .2s, transform .15s;
+  margin-bottom: 12px;
+}
+.itin-card:hover {
+  border-color: rgba(240,180,41,.25);
+}
+.itin-card.active {
+  border-color: var(--dorado);
+  transform: scale(1.01);
+  box-shadow: 0 0 20px rgba(240,180,41,.12);
+}
+
+/* ── Card foto ── */
+.itin-card-photo {
+  width: 100%;
+  height: 160px;
+  background: var(--gris, #141209);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.itin-card-photo-placeholder {
+  font-size: 36px;
+  opacity: .4;
+}
+.itin-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Card body ── */
+.itin-card-body {
+  padding: 14px 16px;
+  position: relative;
+}
+.itin-card-num {
+  position: absolute;
+  top: -22px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  background: var(--dorado);
+  color: var(--negro);
+  font-family: var(--font-tight, 'Inter Tight', sans-serif);
+  font-weight: 800;
+  font-size: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,.4);
+}
+.itin-card-name {
+  font-family: var(--font-tight, 'Inter Tight', sans-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--blanco);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+/* ── Card detalles (km, horas) ── */
+.itin-card-details {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.itin-card-km,
+.itin-card-hours {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  color: rgba(255,255,255,.5);
+  background: rgba(255,255,255,.05);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+/* ── Card nota (narrative) ── */
+.itin-card-nota {
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255,255,255,.65);
+  margin-bottom: 8px;
+}
+
+/* ── Card enriquecimiento Places ── */
+.itin-card-places {
+  font-size: 12px;
+}
+.itin-card-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.itin-stars {
+  color: var(--dorado);
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+.itin-rating-num {
+  color: var(--blanco);
+  font-weight: 600;
+}
+.itin-reviews {
+  color: rgba(255,255,255,.4);
+}
+.itin-card-open {
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.itin-card-open.open { color: #5CB85C; }
+.itin-card-open.closed { color: #D9534F; }
+.itin-card-hours-detail {
+  font-size: 11px;
+  color: rgba(255,255,255,.4);
+}
+
+/* ── Marcadores numerados en el mapa ── */
+.itin-marker {
+  background: none !important;
+  border: none !important;
+}
+.itin-marker-pin {
+  width: 28px;
+  height: 28px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-tight, 'Inter Tight', sans-serif);
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.5);
+  transition: transform .2s, box-shadow .2s;
+  font-variant-numeric: tabular-nums;
+}
+.itin-marker-pin span {
+  transform: rotate(45deg);
+  display: block;
+}
+
+.itin-marker-pin.active {
+  transform: rotate(-45deg) scale(1.3);
+  box-shadow: 0 3px 12px rgba(240,180,41,.5);
+  z-index: 1000 !important;
+}
