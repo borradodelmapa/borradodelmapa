@@ -2935,9 +2935,21 @@ function escapeHTML(str) {
   return d.innerHTML;
 }
 
+// Sanitizar URLs inventadas por Claude — solo permite dominios de herramientas reales
+function sanitizeUrls(text) {
+  if (!text) return text;
+  const allowed = ['google.com/maps', 'googleusercontent.com', 'places.googleapis.com', 'thefork.com', 'thefork.es', 'booking.com', 'kiwi.com', 'rentalcars.com', 'discovercars.com'];
+  return text.replace(/(?:https?:\/\/|[a-z]+:\/\/)[^\s<>]+/gi, function(url) {
+    for (let i = 0; i < allowed.length; i++) {
+      if (url.indexOf(allowed[i]) !== -1) return url;
+    }
+    return '';
+  });
+}
+
 // Formatear mensaje de Salma: escapar HTML + linkificar URLs y teléfonos
 function formatMessage(str) {
-  let raw = str || '';
+  let raw = sanitizeUrls(str || '');
   // Extraer imágenes markdown ANTES del escape HTML y guardarlas como placeholders
   const images = [];
   raw = raw.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, (_, alt, url) => {

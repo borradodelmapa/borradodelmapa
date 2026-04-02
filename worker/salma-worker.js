@@ -171,7 +171,7 @@ CÓMO PRESENTAR RESULTADOS:
 — Coches: nombre, precio total y por día, plazas, transmisión, proveedor, punto de recogida.
 — Restaurantes: nombre, tipo de cocina, zona, enlace TheFork o Google Maps.
 — Cada enlace en su propia línea, sin markdown, sin corchetes. Solo la URL.
-— NUNCA inventes URLs. Usa exactamente las que devuelve la herramienta.
+— CERO URLs inventadas. Solo pon URLs que te haya devuelto una herramienta en esta conversación. Si no tienes URL, pon solo el nombre.
 
 NAVEGACIÓN: cada parada puede abrirse en Google Maps para navegar.`;
 
@@ -230,7 +230,14 @@ TIEMPO Y CLIMA: el tiempo meteorológico cambia cada hora. Es siempre un dato en
 
 JERARQUÍA DE HERRAMIENTAS: las tools específicas tienen prioridad sobre buscar_web. Para hoteles: buscar_hotel. Para vuelos: buscar_vuelos. Para restaurantes: ver sección SERVICIOS. buscar_web solo cuando no existe tool específica para ese dato.
 
-NUNCA inventes datos. Nombres reales, precios reales, URLs reales. Si no sabes algo, lo dices y buscas.
+PROHIBIDO INVENTAR — ESTO ES LO MÁS IMPORTANTE DE TODO EL PROMPT:
+1. Las ÚNICAS URLs que puedes dar son: (a) las que te devuelve una herramienta, (b) enlaces de Google Maps que TÚ construyes con datos reales (coordenadas del viajero, nombres de lugares verificados).
+2. NUNCA escribas NINGUNA URL excepto google.com/maps/dir/. Ni m.uber.com, ni grab://open, ni play.google.com, ni apps.apple.com, ni booking.com, ni uber.com, ni grab.onelink.me, ni NADA. Construir una URL con coordenadas del viajero NO es válido excepto para Google Maps. Si metes m.uber.com/ul/?pickup[latitude]=... ESTÁS INVENTANDO. Si metes grab://open?pickUpLatitude=... ESTÁS INVENTANDO. La única URL construida permitida es google.com/maps/dir/{lat},{lng}/Destino.
+3. NUNCA inventes teléfonos, direcciones, horarios, precios exactos ni nombres de negocios que no vengan de una herramienta o del contexto KV.
+4. Si no tienes el dato, usa buscar_web para encontrarlo. Si buscar_web no lo encuentra, di "no he encontrado ese dato" — NUNCA rellenes el hueco con algo que suena plausible.
+5. Recomendar una app por nombre está bien ("descárgate Grab"). Poner su URL NO está bien a menos que venga de buscar_web.
+6. EXCEPCIÓN ÚNICA — Google Maps: puedes construir enlaces google.com/maps/dir/ — SIEMPRE con las coordenadas numéricas del viajero como origen, NUNCA con nombre de ciudad. Ejemplo correcto: https://www.google.com/maps/dir/9.5234,100.0621/Samui+Airport — Ejemplo INCORRECTO: https://www.google.com/maps/dir/Ko+Samui/Samui+Airport — Esta es la ÚNICA URL que puedes construir tú. Cualquier otra URL (uber.com, booking.com, apps.apple.com, play.google.com, lo que sea) SOLO si viene de una herramienta.
+NUNCA dejes tirado al viajero. Si tienes los datos para resolver su problema, resuélvelo. No le digas "búscalo tú".
 
 Visados y leyes: adapta siempre a la nacionalidad del usuario. Si no la tienes y es relevante, pregúntasela.`;
 
@@ -930,10 +937,9 @@ function buildMessages(history, message, currentRoute, userName, userNationality
 - NUNCA interrumpas una conversación normal para hablar de coins. Solo menciónalos cuando el usuario pide algo que los requiere.
 - NUNCA digas precios de los packs ni hagas de vendedora. Solo informa del saldo y señala el botón.]`);
   if (userNationality) ctx.push(`[NACIONALIDAD: ${userNationality} — adapta visados]`);
-  if (userLocationName) {
-    ctx.push(`[UBICACIÓN DEL VIAJERO: ${userLocationName} — El viajero está AQUÍ ahora mismo. Usa esta ubicación cuando diga "cerca de mí", "aquí", "donde estoy".]`);
-  } else if (userLocation) {
-    ctx.push(`[COORDENADAS GPS DEL VIAJERO: lat=${userLocation.lat}, lng=${userLocation.lng} — Usa la ciudad más cercana a estas coordenadas.]`);
+  if (userLocation) {
+    const locName = userLocationName ? ` (${userLocationName})` : '';
+    ctx.push(`[UBICACIÓN DEL VIAJERO${locName}: lat=${userLocation.lat}, lng=${userLocation.lng} — El viajero está AQUÍ. Para Google Maps usa SIEMPRE estas coordenadas como origen: ${userLocation.lat},${userLocation.lng}]`);
   }
   if (travelDates && travelDates.from) {
     ctx.push(`[FECHAS DE VIAJE: del ${travelDates.from} al ${travelDates.to} — menciona estacionalidad, clima esperado y festivos que coincidan]`);
@@ -988,7 +994,7 @@ Propinas: ${c.propinas}]`);
     if (lines.length > 0) {
       ctx.push(`[TRANSPORTE EN EL DESTINO — usa estos datos cuando el viajero pregunte por moverse:
 ${lines.join('\n')}
-INSTRUCCIÓN: cuando el usuario pregunte cómo moverse, llegar o desplazarse, usa estos datos. Si recomiendas una app, menciona el nombre exacto y un precio/consejo práctico si lo tienes. Para camellos, tuk-tuks u otros transportes especiales, sé directa y da contexto de precio y dónde contratarlos.]`);
+INSTRUCCIÓN: usa estos datos cuando pregunten por transporte. Recomienda apps por NOMBRE ("descárgate Grab"), NUNCA pongas URLs de apps ni de tiendas. El viajero sabe buscar una app en su móvil. Da precios y consejos prácticos si los tienes.]`);
     }
   }
 
@@ -1159,8 +1165,32 @@ function extractRouteFromReply(text) {
 function replyWithoutRouteBlock(text) {
   if (!text || typeof text !== 'string') return text;
   const idx = text.indexOf('SALMA_ROUTE_JSON');
-  if (idx === -1) return text.trim();
-  return text.slice(0, idx).trim();
+  const clean = idx === -1 ? text.trim() : text.slice(0, idx).trim();
+  return sanitizeInventedUrls(clean);
+}
+
+// Elimina URLs inventadas por Claude que no vienen de herramientas.
+// Solo permite: google.com/maps, y URLs que el worker inyecta (Google Places, etc.)
+function sanitizeInventedUrls(text) {
+  if (!text || typeof text !== 'string') return text;
+  // Regex que pilla URLs completas incluyendo query strings con corchetes (uber deep links)
+  const urlRegex = /(?:https?:\/\/|[a-z]+:\/\/)[^\s<>]+/gi;
+  return text.replace(urlRegex, (url) => {
+    // Google Maps — siempre OK
+    if (url.includes('google.com/maps')) return url;
+    // Google Places fotos — vienen del worker
+    if (url.includes('googleusercontent.com') || url.includes('places.googleapis.com')) return url;
+    // TheFork — viene de buscar_restaurante
+    if (url.includes('thefork.com') || url.includes('thefork.es')) return url;
+    // Booking — viene de buscar_hotel
+    if (url.includes('booking.com')) return url;
+    // Kiwi — viene de buscar_vuelos
+    if (url.includes('kiwi.com')) return url;
+    // Rentalcars/DiscoverCars — viene de buscar_coche
+    if (url.includes('rentalcars.com') || url.includes('discovercars.com')) return url;
+    // Todo lo demás: inventado. Se elimina.
+    return '[enlace eliminado]';
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════
