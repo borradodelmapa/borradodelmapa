@@ -2938,7 +2938,7 @@ function escapeHTML(str) {
 // Sanitizar URLs inventadas por Claude — solo permite dominios de herramientas reales
 function sanitizeUrls(text) {
   if (!text) return text;
-  var allowed = ['google.com/maps', 'googleusercontent.com', 'places.googleapis.com', 'thefork.com', 'thefork.es', 'booking.com', 'kiwi.com', 'rentalcars.com', 'discovercars.com', 'grab.com', 'm.uber.com', 'bolt.eu', 'didiglobal.com', 'gojek.com', 'careem.com', 'indrive.com', 'cabify.com', 'free-now.com', 'go.yandex.com', 'lyft.com', 'olacabs.com'];
+  var allowed = ['google.com/maps', 'googleusercontent.com', 'places.googleapis.com', 'thefork.com', 'thefork.es', 'booking.com', 'kiwi.com', 'rentalcars.com', 'discovercars.com', 'skyscanner.es', 'skyscanner.com', 'grab.com', 'm.uber.com', 'bolt.eu', 'didiglobal.com', 'gojek.com', 'careem.com', 'indrive.com', 'cabify.com', 'free-now.com', 'go.yandex.com', 'lyft.com', 'olacabs.com'];
   var clean = text.replace(/(?:https?:\/\/|[a-z]+:\/\/)[^\s<>]+/gi, function(url) {
     for (var i = 0; i < allowed.length; i++) {
       if (url.indexOf(allowed[i]) !== -1) return url;
@@ -2974,6 +2974,7 @@ function formatMessage(str) {
     if (url.indexOf('google.com/maps') !== -1) label = '📍 Abrir en Google Maps';
     else if (url.indexOf('booking.com') !== -1) label = '🏨 Ver en Booking';
     else if (url.indexOf('kiwi.com') !== -1) label = '✈️ Ver vuelo';
+    else if (url.indexOf('skyscanner') !== -1) label = '✈️ Buscar en Skyscanner';
     else if (url.indexOf('thefork') !== -1) label = '🍴 Ver en TheFork';
     else if (url.indexOf('grab.com') !== -1) label = '🟩 Descargar Grab';
     else if (url.indexOf('m.uber.com') !== -1) label = '🚕 Descargar Uber';

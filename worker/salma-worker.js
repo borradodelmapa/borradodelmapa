@@ -4092,6 +4092,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
 
         // Mensajes que crecen con cada iteración del bucle (tool_use → tool_result)
         let currentMessages = [...messages];
+        let lastFlightBookingUrl = null; // Guardar enlace de vuelos para inyectar si GPT no lo incluye
 
         for (let iteration = 0; iteration <= MAX_TOOL_ITERATIONS; iteration++) {
           // ── Llamar a OpenAI (streaming + tools) ──
@@ -4180,6 +4181,10 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
                 tool_use_id: block.id,
                 content: JSON.stringify(toolResult)
               });
+              // Capturar enlace de vuelos para inyectar si GPT no lo incluye
+              if (block.name === 'buscar_vuelos' && toolResult.enlace_reserva) {
+                lastFlightBookingUrl = toolResult.enlace_reserva;
+              }
               // Enviar evento al cliente para guardar nota en Firestore
               if (block.name === 'guardar_nota' && toolResult.saved) {
                 try { await writer.write(encoder.encode(`data: ${JSON.stringify({ save_nota: true, nota_data: toolResult.nota })}\n\n`)); } catch (_) {}
@@ -4197,6 +4202,13 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: '\n\n' })}\n\n`)); } catch (_) {}
 
           // El for vuelve al inicio: OpenAI recibe los resultados y decide qué hacer
+        }
+
+        // ── Inyectar enlace de vuelos si GPT no lo incluyó ──
+        if (lastFlightBookingUrl && !allText.includes(lastFlightBookingUrl)) {
+          const linkChunk = '\n\nPara reservar:\n' + lastFlightBookingUrl;
+          allText += linkChunk;
+          try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: linkChunk })}\n\n`)); } catch (_) {}
         }
 
         // ── Extraer FOTO_TAG si la hubo ──
