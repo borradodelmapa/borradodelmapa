@@ -27,11 +27,12 @@ const mapaRuta = {
     const bounds = L.latLngBounds(valid.map(s => [s.lat, s.lng]));
     this._map = L.map(el, {
       scrollWheelZoom: true,
-      zoomControl: true,
+      zoomControl: false,
       attributionControl: false,
       maxBounds: bounds.pad(0.5),
       maxBoundsViscosity: 0.7,
     });
+    L.control.zoom({ position: 'bottomleft' }).addTo(this._map);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       maxZoom: 18

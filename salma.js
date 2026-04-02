@@ -634,10 +634,9 @@ const salma = {
           this._removeLoading();
           try {
             if (typeof window.openItinerarioView === 'function') {
-              window.openItinerarioView(data.route, isEdit ? this.currentRouteId : null,
-                Object.assign(isEdit ? { saved: true } : {}, { fromChat: true }));
+              window.openItinerarioView(data.route, null, { fromChat: true });
             } else {
-              guideRenderer.render(data.route, isEdit ? { saved: true } : {});
+              guideRenderer.render(data.route, {});
             }
           } catch (renderErr) {
             console.error('Error renderizando guía:', renderErr);

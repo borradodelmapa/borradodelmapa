@@ -354,9 +354,9 @@ const mapaItinerario = {
     document.querySelectorAll('.guide-card').forEach(el => el.remove());
     if (typeof salma !== 'undefined' && typeof salma._removeLoading === 'function') salma._removeLoading();
 
-    // Ocultar contenido principal y barra de input
+    // Ocultar contenido principal; en desktop dejar input bar visible para chatear
     if (appContent) appContent.style.display = 'none';
-    if (inputBar) inputBar.style.display = 'none';
+    if (inputBar && window.innerWidth < 769) inputBar.style.display = 'none';
     view.style.display = 'block';
 
     // Inicializar mapa y cards
@@ -392,7 +392,7 @@ const mapaItinerario = {
 
     if (view) view.style.display = 'none';
     if (appContent) appContent.style.display = '';
-    if (inputBar) inputBar.style.display = '';
+    if (inputBar) inputBar.style.display = ''; // siempre restaurar
 
     // Restaurar showState si fue interceptado
     if (window.showState !== window._showStateOriginal && typeof window._showStateOriginal === 'function') {
