@@ -2183,7 +2183,12 @@ async function enrichGuia(docId, routeData) {
       // Si el usuario sigue viendo esta guía, actualizar la vista
       if (typeof salma !== 'undefined' && salma.currentRouteId === docId) {
         salma.currentRoute = data.route;
-        guideRenderer.render(data.route, { saved: true });
+        // Actualizar cards de mapaItinerario si está activo
+        if (typeof mapaItinerario !== 'undefined' && typeof mapaItinerario.updateEnrichedFields === 'function') {
+          mapaItinerario.updateEnrichedFields(data.route.stops);
+        } else {
+          guideRenderer.render(data.route, { saved: true });
+        }
       }
     }
   } catch (e) {

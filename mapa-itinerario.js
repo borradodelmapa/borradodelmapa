@@ -176,6 +176,10 @@ const mapaItinerario = {
           ${horas ? `<span class="itin-card-hours">${this._formatHours(horas)}</span>` : ''}
         </div>
         ${nota ? `<div class="itin-card-nota">${this._esc(nota)}</div>` : ''}
+        ${stop.context ? `<div class="guide-stop-tag tag-context"><span class="guide-stop-tag-label">📖 CONTEXTO</span>${this._esc(stop.context)}</div>` : ''}
+        ${stop.food_nearby ? `<div class="guide-stop-tag tag-food"><span class="guide-stop-tag-label">🍜 COME CERCA</span>${this._esc(stop.food_nearby)}</div>` : ''}
+        ${stop.local_secret ? `<div class="guide-stop-tag tag-secret"><span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>${this._esc(stop.local_secret)}</div>` : ''}
+        ${stop.practical ? `<div class="guide-stop-practical">${this._esc(stop.practical)}</div>` : ''}
         <div class="itin-card-places" id="itin-places-${index}"></div>
         <a class="itin-card-nav" href="${mapsNavUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 Ir aquí</a>
       </div>
@@ -336,6 +340,32 @@ const mapaItinerario = {
     const result = [];
     for (let i = 0; i < max; i++) result.push(arr[Math.floor(i * step)]);
     return result;
+  },
+
+  // ═══ ACTUALIZAR CAMPOS ENRIQUECIDOS (después de enrichGuia) ═══
+  updateEnrichedFields(stops) {
+    if (!Array.isArray(stops)) return;
+    stops.forEach((stop, i) => {
+      const card = this._cards[i];
+      if (!card) return;
+      const body = card.querySelector('.itin-card-body');
+      if (!body) return;
+      // Eliminar tags enriquecidos anteriores para no duplicar
+      body.querySelectorAll('.guide-stop-tag, .guide-stop-practical').forEach(el => el.remove());
+      // Insertar antes del div de places
+      const placesDiv = body.querySelector('.itin-card-places');
+      if (!placesDiv) return;
+      const tags = [];
+      if (stop.context) tags.push(`<div class="guide-stop-tag tag-context"><span class="guide-stop-tag-label">📖 CONTEXTO</span>${this._esc(stop.context)}</div>`);
+      if (stop.food_nearby) tags.push(`<div class="guide-stop-tag tag-food"><span class="guide-stop-tag-label">🍜 COME CERCA</span>${this._esc(stop.food_nearby)}</div>`);
+      if (stop.local_secret) tags.push(`<div class="guide-stop-tag tag-secret"><span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>${this._esc(stop.local_secret)}</div>`);
+      if (stop.practical) tags.push(`<div class="guide-stop-practical">${this._esc(stop.practical)}</div>`);
+      if (tags.length) {
+        const temp = document.createElement('div');
+        temp.innerHTML = tags.join('');
+        while (temp.firstChild) body.insertBefore(temp.firstChild, placesDiv);
+      }
+    });
   },
 
   // ═══ DESTROY ═══
