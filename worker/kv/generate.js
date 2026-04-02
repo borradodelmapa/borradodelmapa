@@ -22,7 +22,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CONFIG = {
   apiUrl: 'https://api.anthropic.com/v1/messages',
   model: 'claude-sonnet-4-20250514',
-  maxTokens: 1500,
+  maxTokens: 2500,           // +1000 por el bloque transporte
   delayBetweenCalls: 1500,  // ms entre llamadas (evitar rate limit)
   outputDir: path.join(__dirname, 'output'),
   countriesFile: path.join(__dirname, 'countries.json'),
@@ -58,14 +58,57 @@ FORMATO: Responde SOLO con JSON válido, sin backticks ni texto adicional. Usa e
   "coste_diario_medio": "rango en EUR (hotel medio+restaurantes+actividades)",
   "propinas": "costumbre local sobre propinas",
   "curiosidad_viajera": "un dato útil o curioso que todo viajero debería saber",
-  "keywords": ["lista", "de", "ciudades", "y", "lugares", "clave", "para", "búsqueda"]
+  "keywords": ["lista", "de", "ciudades", "y", "lugares", "clave", "para", "búsqueda"],
+  "transporte": {
+    "taxi": [
+      {"nombre": "NombreApp", "url": "https://... o null", "nota": "cobertura real"}
+    ],
+    "tren": {
+      "operadora": "Nombre oficial o null si no hay red ferroviaria",
+      "url": "https://... o null",
+      "plataforma_global": "Rail Europe / Trainline / Omio / null",
+      "url_global": "https://... o null"
+    },
+    "bus_interurbano": {
+      "plataforma": "Nombre real de la plataforma principal o null",
+      "url": "https://... o null"
+    },
+    "ferry_maritimo": {
+      "existe": true,
+      "plataforma": "Nombre real o null",
+      "url": "https://... o null",
+      "url_global": "https://www.bookaway.com"
+    },
+    "ferry_fluvial": {
+      "existe": false,
+      "descripcion": null,
+      "plataforma": null,
+      "url": null,
+      "url_global": null
+    },
+    "alquiler_coche": [
+      {"nombre": "Rentalcars", "url": "https://www.rentalcars.com"},
+      {"nombre": "Discover Cars", "url": "https://www.discovercars.com"}
+    ]
+  }
 }
 
-REGLAS:
+REGLAS GENERALES:
 - Datos realistas y actualizados. Si no estás seguro de un dato, indica "verificar".
 - Precios orientativos en EUR.
 - keywords: incluye ciudades principales, destinos turísticos clave y variantes de nombre (ej: "Ho Chi Minh", "Saigón").
-- Sé directo, sin relleno.`;
+- Sé directo, sin relleno.
+
+REGLAS CRÍTICAS — BLOQUE TRANSPORTE (incumplirlas puede dejar a un viajero tirado):
+- NUNCA inventes URLs, nombres de apps ni operadoras. Una URL falsa es peor que null — el viajero hace click y no llega a ningún sitio.
+- Si no conoces una URL con certeza absoluta: null. Ante cualquier duda: null o añade "verificar": true.
+- Incluye SOLO apps y plataformas que realmente operan en ${country.name}. Ejemplos de errores a evitar: Uber no opera en China, Bolt no opera en Irán, Grab no llega a India.
+- Sentido geográfico obligatorio:
+  · País sin costa → ferry_maritimo.existe: false, resto de campos null
+  · País sin ríos navegables con tráfico de pasajeros → ferry_fluvial.existe: false, resto null
+  · País sin red ferroviaria → tren.operadora: null, tren.url: null
+- alquiler_coche: Rentalcars y Discover Cars son agregadores globales — inclúyelos siempre.
+- Un campo null o existe: false es siempre mejor que un dato incorrecto.`;
 }
 
 // ── Llamada a la API ───────────────────────────────────────────

@@ -1064,6 +1064,19 @@ Seguridad: ${c.seguridad}
 Vacunas: ${c.vacunas}
 Coste mochilero: ${c.coste_diario_mochilero}/día | Medio: ${c.coste_diario_medio}/día
 Propinas: ${c.propinas}]`);
+
+    // Bloque transporte del nivel 1 (taxi/tren/bus/ferry/coche)
+    if (c.transporte) {
+      const t = c.transporte;
+      const tLines = [];
+      if (t.taxi?.length) tLines.push(`Taxi/ride-hailing: ${t.taxi.map(a => a.nombre + (a.url && a.url !== 'null' ? ` (${a.url})` : '') + (a.nota ? ' — ' + a.nota : '')).join(' | ')}`);
+      if (t.tren?.operadora) tLines.push(`Tren: ${t.tren.operadora}${t.tren.url ? ' → ' + t.tren.url : ''}${t.tren.plataforma_global ? ' | Global: ' + t.tren.plataforma_global : ''}`);
+      if (t.bus_interurbano?.plataforma) tLines.push(`Bus interurbano: ${t.bus_interurbano.plataforma}${t.bus_interurbano.url ? ' → ' + t.bus_interurbano.url : ''}`);
+      if (t.ferry_maritimo?.existe) tLines.push(`Ferry marítimo: ${t.ferry_maritimo.plataforma || 'disponible'}${t.ferry_maritimo.url ? ' → ' + t.ferry_maritimo.url : ''}${t.ferry_maritimo.url_global ? ' | Global: ' + t.ferry_maritimo.url_global : ''}`);
+      if (t.ferry_fluvial?.existe) tLines.push(`Ferry fluvial: ${t.ferry_fluvial.descripcion || ''}${t.ferry_fluvial.plataforma ? ' — ' + t.ferry_fluvial.plataforma : ''}${t.ferry_fluvial.url_global ? ' | Global: ' + t.ferry_fluvial.url_global : ''}`);
+      if (t.alquiler_coche?.length) tLines.push(`Alquiler de coche: ${t.alquiler_coche.map(a => a.nombre).join(', ')}`);
+      if (tLines.length) ctx.push(`[TRANSPORTE VERIFICADO EN ${c.pais?.toUpperCase() || 'EL PAÍS'}:\n${tLines.join('\n')}\nRecomienda por nombre ("descárgate Grab"). Para reservas usa buscar_web.]`);
+    }
   }
 
   if (kvTransportData) {
