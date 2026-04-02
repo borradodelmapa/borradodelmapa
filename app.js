@@ -2945,8 +2945,16 @@ function sanitizeUrls(text) {
     }
     return '';
   });
-  // Limpiar restos huérfanos
-  return clean.replace(/:\s*\n\s*\n/g, '.\n\n').replace(/\n{3,}/g, '\n\n').trim();
+  // Limpiar restos huérfanos tras eliminar URLs inventadas
+  return clean
+    .replace(/^.*este enlace te abre[^.\n]*\.?\s*$/gm, '')
+    .replace(/^.*descárga(?:te)?l[ao][^.\n]*\.?\s*$/gm, '')
+    .replace(/^.*[Ss]i no l[ao] tienes[^.\n]*[.,]?\s*$/gm, '')
+    .replace(/^.*[Ss]i tienes[^.\n]*instalad[ao][^.\n]*[.,]?\s*$/gm, '')
+    .replace(/aquí[.:]\s*\n/gi, '\n')
+    .replace(/:\s*\n\s*\n/g, '.\n\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 // Formatear mensaje de Salma: escapar HTML + linkificar URLs y teléfonos
