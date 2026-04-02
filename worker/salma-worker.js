@@ -1248,29 +1248,34 @@ function injectGoogleMapsLink(reply, userLocation, message) {
   // Detectar si el mensaje habla de ir a un lugar concreto
   const goKeywords = /aeropuerto|airport|estación|station|terminal|cómo llegar|como llegar|ir a[l ]|llegar a[l ]|ir desde|dame enlace|google maps|navegar|cómo voy|como voy/i;
   if (!goKeywords.test(message)) return reply;
-  // Extraer destino: primero del mensaje del usuario, luego de la respuesta
+  // Extraer destino: siempre buscar el nombre real en la respuesta de GPT
   let dest = null;
 
-  // 1. Del mensaje: "ir al aeropuerto de X", "a la torre eiffel", "al taj mahal"
-  const msgDestFull = message.match(/(?:a[l ]?\s*(?:la\s+)?)(aeropuerto\s+(?:de\s+)?[\w\sáéíóúñ]+|estación\s+(?:de\s+)?[\w\sáéíóúñ]+|terminal\s+[\w\sáéíóúñ]+|torre eiffel|taj mahal|coliseo|big ben|sagrada familia|alhambra|machu picchu|[\w\sáéíóúñ]+(?:airport|station|terminal))/i);
-  const msgDestSimple = message.match(/(?:a[l ]?\s*(?:la\s+)?)(aeropuerto|estación|terminal)/i);
-  if (msgDestFull) dest = msgDestFull[1].trim();
-  else if (msgDestSimple) dest = msgDestSimple[1].trim();
-
-  // 2. Si dice "aeropuerto" sin nombre específico, buscar el nombre real en la respuesta de Claude
-  if (dest && /^aeropuerto$/i.test(dest)) {
-    // Buscar **Samui Airport**, **Aeropuerto de Málaga**, etc.
-    const realAirport = reply.match(/\*\*([\w\sáéíóúñ'-]*(?:Airport|Aeropuerto)[\w\sáéíóúñ'-]*)\*\*/i)
-      || reply.match(/\*\*(?:Aeropuerto|Airport)[^*]*?\*\*/i);
-    if (realAirport) {
-      dest = (realAirport[1] || realAirport[0]).replace(/\*\*/g, '').replace(/\s*[-—].*/, '').trim();
+  // 1. Buscar aeropuerto/estación con nombre completo en la respuesta
+  const airportPatterns = [
+    /\*\*([^*]*(?:Airport|Aeropuerto|Aeroporto)[^*]*)\*\*/i,
+    /\*\*([^*]*(?:Station|Estación|Terminal|Gare)[^*]*)\*\*/i,
+  ];
+  for (const pat of airportPatterns) {
+    const m = reply.match(pat);
+    if (m) {
+      dest = m[1].replace(/\s*[-—].*/, '').replace(/\s*\+\d.*/, '').trim();
+      break;
     }
   }
 
-  // 3. Fallback: buscar lugar con keyword en negrita en la respuesta
+  // 2. Del mensaje: "ir al aeropuerto de Málaga", "a la torre eiffel"
   if (!dest) {
-    const placeMatch = reply.match(/\*\*([\w\sáéíóúñ'-]*(?:Airport|Aeropuerto|Station|Tower|Torre|Mahal|Museum|Museo|Palace|Temple|Cathedral|Plaza|Beach)[\w\sáéíóúñ'-]*)\*\*/i);
-    if (placeMatch) dest = placeMatch[1];
+    const msgDest = message.match(/(?:a[l ]?\s*(?:la\s+)?)(aeropuerto\s+de\s+[\w\sáéíóúñ]{2,20}|estación\s+de\s+[\w\sáéíóúñ]{2,20}|torre eiffel|taj mahal|coliseo|big ben|sagrada familia|alhambra|machu picchu)/i);
+    if (msgDest) dest = msgDest[1].trim();
+  }
+
+  // 3. Fallback: primer lugar en negrita en la respuesta
+  if (!dest) {
+    const placeMatch = reply.match(/\*\*([^*]{3,50})\*\*/);
+    if (placeMatch) {
+      dest = placeMatch[1].replace(/\s*[-—].*/, '').replace(/\s*\+\d.*/, '').trim();
+    }
   }
 
   if (!dest) return reply;
@@ -1294,6 +1299,7 @@ function injectTransportBlock(reply, kvTransportData, message) {
     const best = kvTransportData.ridehailing.best;
     const appData = best ? TRANSPORT_APP_URLS[best.toLowerCase()] : null;
     if (appData) {
+      // Caso normal: app conocida con URL de descarga
       appBlock += `\n\n${appData.icon} Abre **${appData.name}** y pide un coche hasta tu destino.`;
       appBlock += ` Si no la tienes: [Descargar ${appData.name}](${appData.web})`;
       // Alternativas
@@ -1308,6 +1314,9 @@ function injectTransportBlock(reply, kvTransportData, message) {
       if (kvTransportData.ridehailing.tips) {
         appBlock += `\n${kvTransportData.ridehailing.tips}`;
       }
+    } else if (kvTransportData.ridehailing.tips) {
+      // Caso especial: no hay app en stores internacionales pero hay tips (ej: Irán → Snapp)
+      appBlock += `\n\n🚕 **Transporte local**: ${kvTransportData.ridehailing.tips}`;
     }
   }
 
