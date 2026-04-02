@@ -1248,19 +1248,32 @@ function injectGoogleMapsLink(reply, userLocation, message) {
   // Detectar si el mensaje habla de ir a un lugar concreto
   const goKeywords = /aeropuerto|airport|estación|station|terminal|cómo llegar|como llegar|ir a[l ]|llegar a[l ]|ir desde|dame enlace|google maps|navegar|cómo voy|como voy/i;
   if (!goKeywords.test(message)) return reply;
-  // Extraer destino: siempre buscar el nombre real en la respuesta de GPT
+  // Extraer destino del mensaje y de la respuesta de GPT
   let dest = null;
 
+  // 0. Del mensaje: "ir desde X a Y", "ir a Y", "hasta Y" — el destino es Y
+  const fromTo = message.match(/(?:desde\s+[\w\sáéíóúñ]+\s+)?(?:a|hasta|hacia)\s+([\w\sáéíóúñ]{2,30})$/i)
+    || message.match(/(?:ir|llegar|viajar)\s+(?:desde\s+[\w\sáéíóúñ]+\s+)?(?:a|hasta|hacia)\s+([\w\sáéíóúñ]{2,30})/i);
+  if (fromTo) {
+    const candidate = fromTo[1].trim();
+    // Solo usar si parece un nombre de lugar (empieza con mayúscula o es conocido)
+    if (candidate.length >= 3 && !/^(un|una|el|la|los|las|mi|tu|su|este|donde|aqui|ahi|alli)$/i.test(candidate)) {
+      dest = candidate;
+    }
+  }
+
   // 1. Buscar aeropuerto/estación con nombre completo en la respuesta
-  const airportPatterns = [
-    /\*\*([^*]*(?:Airport|Aeropuerto|Aeroporto)[^*]*)\*\*/i,
-    /\*\*([^*]*(?:Station|Estación|Terminal|Gare)[^*]*)\*\*/i,
-  ];
-  for (const pat of airportPatterns) {
-    const m = reply.match(pat);
-    if (m) {
-      dest = m[1].replace(/\s*[-—].*/, '').replace(/\s*\+\d.*/, '').trim();
-      break;
+  if (!dest) {
+    const airportPatterns = [
+      /\*\*([^*]*(?:Airport|Aeropuerto|Aeroporto)[^*]*)\*\*/i,
+      /\*\*([^*]*(?:Station|Estación|Terminal|Gare)[^*]*)\*\*/i,
+    ];
+    for (const pat of airportPatterns) {
+      const m = reply.match(pat);
+      if (m) {
+        dest = m[1].replace(/\s*[-—].*/, '').replace(/\s*\+\d.*/, '').trim();
+        break;
+      }
     }
   }
 
