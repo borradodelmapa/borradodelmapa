@@ -577,7 +577,23 @@ function isServiceRequest(message) {
 }
 
 function extractHelpLocation(message, history, currentRoute) {
-  // 1. Patrón explícito "en <lugar>" o "in <place>" en el mensaje
+  // 1a. Patrón "desde X a/hasta Y" → destino es Y
+  const desdeAMatch = message.match(/desde\s+[\wáéíóúñÁÉÍÓÚÑ\s]+?\s+(?:a|hasta|hacia)\s+([A-ZÁÉÍÓÚÑ\u00C0-\u024F][\wáéíóúñ\u00E0-\u024F\s]{1,30})/i);
+  if (desdeAMatch) return desdeAMatch[1].trim();
+
+  // 1b. Patrón "a/hasta/hacia <Lugar>" (ir a Málaga, llegar a Madrid)
+  const aMatch = message.match(/\b(?:a|hasta|hacia)\s+([A-ZÁÉÍÓÚÑ\u00C0-\u024F][a-záéíóúñ\u00E0-\u024FA-ZÁÉÍÓÚÑ\u00C0-\u024F\s]{2,30}?)(?:\s+(?:desde|en\s+taxi|en\s+coche|por|con|,)|$)/i);
+  if (aMatch) {
+    const candidate = aMatch[1].trim();
+    // Filtrar palabras comunes que no son lugares
+    if (!/^(taxi|coche|bus|tren|pie|casa|hotel|aeropuerto|airport)$/i.test(candidate)) return candidate;
+  }
+
+  // 1c. Patrón "desde <Lugar>" (cuando no hay "a Y")
+  const desdeMatch = message.match(/desde\s+([A-ZÁÉÍÓÚÑ\u00C0-\u024F][a-záéíóúñ\u00E0-\u024FA-ZÁÉÍÓÚÑ\u00C0-\u024F\s]{2,30}?)(?:\s+(?:a\s|hasta\s|hacia\s|en\s+taxi|en\s+coche|por|con|,)|$)/i);
+  if (desdeMatch) return desdeMatch[1].trim();
+
+  // 1d. Patrón original "en <lugar>" o "in <place>"
   const esMatch = message.match(/\b(?:en|cerca\s+de|por)\s+([A-ZÁÉÍÓÚÑ\u00C0-\u024F][a-záéíóúñ\u00E0-\u024FA-ZÁÉÍÓÚÑ\u00C0-\u024F\s]{2,30})/);
   const enMatch = message.match(/\b(?:in|near|around|at)\s+([A-Z][a-zA-Z\s]{2,30})/);
   const loc = esMatch?.[1]?.trim() || enMatch?.[1]?.trim();
@@ -1246,7 +1262,7 @@ function injectGoogleMapsLink(reply, userLocation, message) {
   // Si ya tiene un enlace de Google Maps, no duplicar
   if (reply.includes('google.com/maps')) return reply;
   // Detectar si el mensaje habla de ir a un lugar concreto
-  const goKeywords = /aeropuerto|airport|estación|station|terminal|cómo llegar|como llegar|ir a[l ]|llegar a[l ]|ir desde|dame enlace|google maps|navegar|cómo voy|como voy/i;
+  const goKeywords = /aeropuerto|airport|estación|estacion|station|terminal|cómo llegar|como llegar|ir a[l ]|llegar a[l ]|ir desde|dame enlace|google maps|navegar|cómo voy|como voy|taxi/i;
   if (!goKeywords.test(message)) return reply;
   // Extraer destino del mensaje y de la respuesta de GPT
   let dest = null;
@@ -1290,17 +1306,33 @@ function injectGoogleMapsLink(reply, userLocation, message) {
     if (msgDest) dest = msgDest[1].trim();
   }
 
-  // 3. Fallback: primer lugar en negrita en la respuesta
+  // 3. Fallback: primer lugar en negrita en la respuesta (ignorar precios, números, phones)
   if (!dest) {
-    const placeMatch = reply.match(/\*\*([^*]{3,50})\*\*/);
-    if (placeMatch) {
-      dest = placeMatch[1].replace(/\s*[-—].*/, '').replace(/\s*\+\d.*/, '').trim();
+    const boldMatches = reply.matchAll(/\*\*([^*]{3,50})\*\*/g);
+    for (const bm of boldMatches) {
+      const candidate = bm[1].replace(/\s*[-—].*/, '').replace(/\s*\+\d.*/, '').trim();
+      // Ignorar si es un precio, número, teléfono o texto genérico
+      if (/^\d|^[€$£¥]|€|USD|\d+\s*(min|km|h\b|hora|metro|€|\$)/.test(candidate)) continue;
+      if (candidate.length < 3) continue;
+      dest = candidate;
+      break;
     }
   }
 
   if (!dest) return reply;
   dest = dest.replace(/\s+/g, '+');
-  const mapsUrl = `https://www.google.com/maps/dir/${userLocation.lat},${userLocation.lng}/${dest}`;
+
+  // Extraer origen del mensaje: "desde X" → usar X como origen en vez de GPS
+  let origin = `${userLocation.lat},${userLocation.lng}`;
+  const fromMatch = message.match(/desde\s+([\wáéíóúñÁÉÍÓÚÑ\s]{3,40}?)(?:\s+(?:a\s|hasta\s|hacia\s|en\s+taxi|en\s+coche|por|con|,)|$)/i);
+  if (fromMatch) {
+    const fromPlace = fromMatch[1].trim();
+    if (fromPlace.length >= 3 && !/^(un|una|el|la|los|las|mi|tu|su|aqui|ahi|alli|taxi|coche|bus|tren)$/i.test(fromPlace)) {
+      origin = fromPlace.replace(/\s+/g, '+');
+    }
+  }
+
+  const mapsUrl = `https://www.google.com/maps/dir/${origin}/${dest}`;
   return reply + `\n\n📍 ${mapsUrl}`;
 }
 
@@ -3728,19 +3760,22 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     const helpCategory = isHelpRequest(message);
     if (helpCategory) {
       let helpLocation = extractHelpLocation(message, history, currentRoute);
+      const helpLocationFromMessage = !!helpLocation; // true si la ubicación viene del mensaje, no del GPS
       // Si no hay location explícita pero tenemos geoloc, usar la ciudad del usuario
       if (!helpLocation && userLocationName) {
         helpLocation = userLocationName.split(',')[0].trim();
       }
+      // Solo usar GPS coords si la ubicación NO viene del mensaje (evita buscar taxis en Samui cuando piden Málaga)
+      const searchCoords = helpLocationFromMessage ? null : userLocation;
       if (helpLocation) {
         try {
           if (helpCategory === 'weather') {
             weatherData = await fetchWeather(helpLocation, env.OPENWEATHER_KEY);
           } else if (helpCategory === 'transport') {
             // Para transporte: buscar "taxi [location]" en vez del mensaje completo
-            helpResults = await searchPlacesForHelp('taxi', helpLocation, env.GOOGLE_PLACES_KEY, userLocation);
+            helpResults = await searchPlacesForHelp('taxi', helpLocation, env.GOOGLE_PLACES_KEY, searchCoords);
           } else {
-            helpResults = await searchPlacesForHelp(message, helpLocation, env.GOOGLE_PLACES_KEY, userLocation);
+            helpResults = await searchPlacesForHelp(message, helpLocation, env.GOOGLE_PLACES_KEY, searchCoords);
           }
         } catch (e) {
           // Fallo silencioso — Salma responde sin datos de búsqueda
@@ -3794,7 +3829,53 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           }
         }
 
-        // Fallback: si hay GPS y no se encontró país por el mensaje, usar el país del GPS
+        // Fallback 2: geocodificar el nombre de la ciudad/lugar para detectar país
+        if (!countryCode && location) {
+          try {
+            const geoUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=1&accept-language=es`;
+            const geoRes = await fetch(geoUrl, { headers: { 'User-Agent': 'SalmaBot/1.0' } });
+            const geoArr = await geoRes.json();
+            if (geoArr.length > 0 && geoArr[0].display_name) {
+              // Extraer país del display_name (último componente) o usar boundingbox
+              const parts = geoArr[0].display_name.split(',');
+              const countryName = parts[parts.length - 1].trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+              // Mapeo rápido de nombres de país a código ISO
+              const countryMap = {
+                'espana': 'ES', 'spain': 'ES', 'francia': 'FR', 'france': 'FR', 'portugal': 'PT',
+                'italia': 'IT', 'italy': 'IT', 'alemania': 'DE', 'germany': 'DE', 'reino unido': 'GB',
+                'united kingdom': 'GB', 'estados unidos': 'US', 'united states': 'US', 'mexico': 'MX',
+                'argentina': 'AR', 'colombia': 'CO', 'peru': 'PE', 'chile': 'CL', 'brasil': 'BR',
+                'brazil': 'BR', 'tailandia': 'TH', 'thailand': 'TH', 'japon': 'JP', 'japan': 'JP',
+                'marruecos': 'MA', 'morocco': 'MA', 'turquia': 'TR', 'turkey': 'TR', 'turkiye': 'TR',
+                'grecia': 'GR', 'greece': 'GR', 'iran': 'IR', 'india': 'IN', 'china': 'CN',
+                'australia': 'AU', 'canada': 'CA', 'cuba': 'CU', 'republica dominicana': 'DO',
+                'costa rica': 'CR', 'panama': 'PA', 'ecuador': 'EC', 'bolivia': 'BO', 'uruguay': 'UY',
+                'paraguay': 'PY', 'venezuela': 'VE', 'guatemala': 'GT', 'honduras': 'HN',
+                'el salvador': 'SV', 'nicaragua': 'NI', 'filipinas': 'PH', 'philippines': 'PH',
+                'indonesia': 'ID', 'malasia': 'MY', 'malaysia': 'MY', 'vietnam': 'VN', 'viet nam': 'VN',
+                'camboya': 'KH', 'cambodia': 'KH', 'laos': 'LA', 'myanmar': 'MM', 'singapur': 'SG',
+                'singapore': 'SG', 'corea del sur': 'KR', 'south korea': 'KR', 'egipto': 'EG',
+                'egypt': 'EG', 'sudafrica': 'ZA', 'south africa': 'ZA', 'kenia': 'KE', 'kenya': 'KE',
+                'tanzania': 'TZ', 'etiopia': 'ET', 'ethiopia': 'ET', 'nigeria': 'NG',
+                'belgica': 'BE', 'belgium': 'BE', 'paises bajos': 'NL', 'netherlands': 'NL',
+                'suiza': 'CH', 'switzerland': 'CH', 'austria': 'AT', 'irlanda': 'IE', 'ireland': 'IE',
+                'dinamarca': 'DK', 'denmark': 'DK', 'noruega': 'NO', 'norway': 'NO',
+                'suecia': 'SE', 'sweden': 'SE', 'finlandia': 'FI', 'finland': 'FI',
+                'polonia': 'PL', 'poland': 'PL', 'rumania': 'RO', 'romania': 'RO',
+                'hungria': 'HU', 'hungary': 'HU', 'republica checa': 'CZ', 'czechia': 'CZ',
+                'croacia': 'HR', 'croatia': 'HR', 'serbia': 'RS', 'bulgaria': 'BG',
+                'rusia': 'RU', 'russia': 'RU', 'ucrania': 'UA', 'ukraine': 'UA',
+                'israel': 'IL', 'jordania': 'JO', 'jordan': 'JO', 'libano': 'LB', 'lebanon': 'LB',
+                'arabia saudita': 'SA', 'saudi arabia': 'SA', 'emiratos arabes unidos': 'AE',
+                'united arab emirates': 'AE', 'qatar': 'QA', 'oman': 'OM', 'kuwait': 'KW',
+                'nueva zelanda': 'NZ', 'new zealand': 'NZ', 'islandia': 'IS', 'iceland': 'IS',
+              };
+              countryCode = countryMap[countryName] || null;
+            }
+          } catch (e) { /* geocoding fallo — silencioso */ }
+        }
+
+        // Fallback 3: si hay GPS y no se encontró país por el mensaje, usar el país del GPS
         if (!countryCode && userCountryCode) {
           countryCode = userCountryCode;
         }
