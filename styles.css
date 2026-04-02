@@ -2987,6 +2987,29 @@ body {
   z-index: 10;
 }
 
+/* ── Botón reintentar (aparece a los 18s si Salma no responde) ── */
+.btn-retry-salma {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(212,168,67,.45);
+  background: rgba(212,168,67,.08);
+  color: var(--dorado, #D4A843);
+  font-family: var(--font-tight, 'Inter Tight', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+.btn-retry-salma:hover {
+  background: rgba(212,168,67,.18);
+  border-color: rgba(212,168,67,.7);
+}
+.btn-retry-salma:active { opacity: .7; }
+
 /* ── SALMA_ACTION — contenedor de resultados de acción ── */
 .salma-action-results {
   margin: 8px 0 16px;

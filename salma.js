@@ -560,6 +560,12 @@ const salma = {
 
   // ═══ ENVÍO AL WORKER ═══
   async _doSend(msg, extra) {
+    // Guardar para poder reintentar
+    this._lastMsg = msg;
+    this._lastExtra = extra || {};
+    this._currentReader = null;
+    this._currentAbort = new AbortController();
+
     this._streaming = true;
     $send.disabled = true;
     const camBtn = document.getElementById('cam-btn');
@@ -690,10 +696,12 @@ const salma = {
   // ═══ SSE STREAMING ═══
   _stream(bodyObj, loadingEl) {
     return new Promise((resolve, reject) => {
+      const signal = this._currentAbort ? this._currentAbort.signal : undefined;
       fetch(window.SALMA_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bodyObj)
+        body: JSON.stringify(bodyObj),
+        signal,
       }).then(res => {
         // Si viene JSON normal (error/fallback)
         const ct = res.headers.get('content-type') || '';
@@ -709,6 +717,7 @@ const salma = {
         this._removeLoading();
         const textEl = this._addStreamBubble();
         const reader = res.body.getReader();
+        this._currentReader = reader;
         const decoder = new TextDecoder();
         let buffer = '';
         let fullText = '';
@@ -1665,6 +1674,20 @@ const salma = {
         if (el) el.textContent = this._loadingPhrases[idx];
       }, 3000);
     }
+
+    // Botón reintentar: aparece a los 18s si Salma aún está pensando
+    this._retryTimer = setTimeout(() => {
+      const body = div.querySelector('.msg-body-salma');
+      if (!body || div.querySelector('.btn-retry-salma')) return;
+      const btn = document.createElement('button');
+      btn.className = 'btn-retry-salma';
+      btn.textContent = '↩ Reintentar';
+      btn.addEventListener('click', () => this._cancelAndRetry());
+      body.appendChild(btn);
+      this._scrollToBottom(false);
+    }, 18000);
+
+    return div;
   },
 
   _removeLoading() {
@@ -1673,6 +1696,37 @@ const salma = {
     if (this._loadingInterval) {
       clearInterval(this._loadingInterval);
       this._loadingInterval = null;
+    }
+    if (this._retryTimer) {
+      clearTimeout(this._retryTimer);
+      this._retryTimer = null;
+    }
+  },
+
+  // Cancela la petición actual y vuelve a enviar el último mensaje
+  _cancelAndRetry() {
+    // Abortar fetch (cancela la red)
+    if (this._currentAbort) {
+      try { this._currentAbort.abort(); } catch (_) {}
+      this._currentAbort = null;
+    }
+    // Cancelar el lector SSE si ya arrancó
+    if (this._currentReader) {
+      try { this._currentReader.cancel(); } catch (_) {}
+      this._currentReader = null;
+    }
+    // Limpiar UI
+    this._removeLoading();
+    this._removeStreamBubble();
+    this._streaming = false;
+    const $send = document.getElementById('send-btn');
+    if ($send) $send.disabled = false;
+    const camBtn = document.getElementById('cam-btn');
+    if (camBtn) camBtn.disabled = false;
+
+    // Reintentar con el último mensaje
+    if (this._lastMsg !== undefined) {
+      this._doSend(this._lastMsg, this._lastExtra || {});
     }
   },
 
