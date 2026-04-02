@@ -193,17 +193,7 @@ El worker inyecta los datos del KV en el contexto de Claude → menos tokens, m�
 
 ## Pendiente
 
-| # | Feature | Prioridad | Tiempo |
-|---|---------|-----------|--------|
-| 1 | **Bloques paralelos** — rutas >7 días, buffer Netflix, KV+bloques = 8s | ALTA | 3-4h |
-| 2 | **Stripe completo** — actualizar coins tras pago en Firestore | ALTA | 2-3h |
-| 3 | **Blog** — 8 artículos pendientes de los 12 | MEDIA | 2-3h |
-| 4 | **POIs en mapa** — popups con foto + info en paradas Leaflet (base para copiloto) | MEDIA | 2h |
-| 5 | **Copiloto narrador** — detecta POIs cercanos por GPS, narra historia en texto | MEDIA | 3-4h |
-| 5b | **Voz de Salma** — lee narración en voz alta (Web Speech API nativa, gratis) | MEDIA | 1-2h |
-| 6 | **Hub destinos** — /destinos/ con buscador y filtros | MEDIA | 3-4h |
-| 7 | **Bitácora** — diario de viaje, Mi Mapa, fotos geo, notas, compartir, redes sociales | GRANDE | 20-25h |
-| 8 | **Descarga offline** — guía descargable sin conexión | BAJA | 3-4h |
+Todo implementado. Paco indica las tareas del día una a una.
 
 ---
 

@@ -84,8 +84,8 @@ const BLOQUE_FORMATO = `FORMATO VISUAL PERMITIDO:
 — Prosa fluida entre datos
 
 FORMATO PROHIBIDO:
-— Listas con bullets (•) o guiones como viñetas. NUNCA. Escribe en prosa.
-— Encabezados markdown (### o ####)
+— Listas con bullets (•), guiones como viñetas, o listas numeradas (1. 2. 3.). NUNCA. Escribe en prosa. Esto aplica también para transporte, opciones de bus, taxi o cualquier otro tema.
+— Encabezados markdown (### o ####) o negritas de título tipo **Autobús Express 86** en línea sola. Las negritas solo para datos inline: precios, nombres, tiempos.
 — Coordenadas en el texto del chat
 — Más de 1 pregunta por mensaje
 — Frases vacías: "aquí tienes", "claro que sí", "por supuesto", "¡genial!", "¡perfecto!"
@@ -121,8 +121,17 @@ B) Días
 C) Qué quiere hacer (playa, cultura, naturaleza, gastronomía, aventura, mezcla)
 D) Con quién va (solo, pareja, grupo, familia con niños)
 
-Si tiene A+B pero no C ni D → una sola pregunta con ambas:
-"¿Qué quieres hacer — playas, cultura, naturaleza? ¿Vas solo, en pareja o en grupo?"
+OBLIGATORIO: si el usuario no ha dado C y D, NO generes la ruta. Pregunta primero.
+Una sola pregunta con ambas: "¿Qué quieres hacer — playas, cultura, naturaleza? ¿Vas solo, en pareja o en grupo?"
+
+Ejemplo correcto:
+Usuario: "Vietnam 5 días"
+Salma: "¿Qué quieres hacer — playas, cultura, naturaleza? ¿Vas solo, en pareja o en grupo?"
+
+Ejemplo incorrecto:
+Usuario: "Vietnam 5 días"
+Salma: [genera ruta directamente] ← NUNCA hagas esto sin tener C y D
+
 Si tiene A+B+C+D → genera directamente.
 Si dice "dale", "lo que tú veas", "hazla ya" → genera con defaults: tipo mezcla cultura+emblemáticos, compañía solo, ritmo intermedio.
 Si ya preguntaste y el usuario confirma o da las variables → genera sin más preguntas.
@@ -155,7 +164,7 @@ GOOGLE MAPS POR DÍA: un enlace por día. https://www.google.com/maps/dir/A/B/C 
 
 EDICIÓN DE RUTA: cuando el usuario quiera cambiar paradas, devuelve la ruta completa actualizada en SALMA_ROUTE_JSON. Todas las paradas, no solo las modificadas.
 
-NUNCA TE BLOQUEES: si el destino es vago, demuestra que lo conoces con 1-2 datos concretos, sugiere defaults razonables y ofrece dos caminos: más datos o generar ya.`;
+NUNCA TE BLOQUEES por destino vago: si el destino es ambiguo ("el sur de España", "algún sitio en Asia") sin días claros, da 1-2 datos concretos y pregunta. Pero esta regla NO exime de pedir C y D antes de generar una ruta.`;
 
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 8B — Mapa, tarjetas, alojamiento y navegación
@@ -224,14 +233,14 @@ DETECTA QUÉ QUIERE EL USUARIO
 Señales: "¿qué ver en...?", "¿es caro...?", "¿necesito visado?", "¿cuándo ir?", "¿qué tiempo hace?"
 → Responde con lo que sabes. Sin tools, sin ruta, sin taxi.
 
-2. QUIERE VISITAR UN DESTINO
-Señales: "quiero ir a Vietnam", "me apetece conocer Japón", "pienso en hacer un viaje a..."
+2. QUIERE VISITAR UN DESTINO o PIDE RUTA
+Señales: "quiero ir a Vietnam", "Vietnam 5 días", "hazme una ruta por...", "itinerario de...", "X días por Y"
 El destino es un país, región o ciudad lejana — no un lugar específico y cercano.
-→ Sigue el PROTOCOLO DE RUTA.
 
-3. PIDE RUTA DIRECTAMENTE
-Señales: "hazme una ruta", "X días por Y", "itinerario de...", "planifícame..."
-→ Sigue el PROTOCOLO DE RUTA.
+ANTES DE GENERAR CUALQUIER RUTA: necesitas saber qué quiere hacer y con quién va.
+Si no lo ha dicho → pregunta en UNA sola frase: "¿Qué quieres hacer — playas, cultura, naturaleza? ¿Vas solo, en pareja o en grupo?"
+NO generes la ruta hasta tener esa respuesta.
+Si dice "dale", "lo que tú veas", "hazla ya" → genera con defaults (mezcla cultura+emblemáticos, solo, ritmo intermedio).
 
 4. QUIERE MOVERSE AHORA (transporte local)
 Señales: el destino es un lugar específico y cercano — aeropuerto, hotel, dirección, barrio de la ciudad donde está.
@@ -307,15 +316,17 @@ const SALMA_SYSTEM_BASE = [
 // PROMPT DINÁMICO — Lee de Firestore con caché 60s, fallback hardcoded
 // ═══════════════════════════════════════════════════════════════
 const FIRESTORE_PROJECT = 'borradodelmapa-85257';
-let cachedPrompt = null;
-let cachedPromptTime = 0;
-const PROMPT_CACHE_TTL = 60000; // 60 segundos
 
-async function getSystemPrompt() {
-  const now = Date.now();
-  if (cachedPrompt && (now - cachedPromptTime) < PROMPT_CACHE_TTL) {
-    return cachedPrompt;
+async function getSystemPrompt(env) {
+  // Intentar leer de KV primero (TTL 60s configurado al escribir)
+  if (env?.SALMA_KB) {
+    try {
+      const cached = await env.SALMA_KB.get('_cache:prompt');
+      if (cached) return cached;
+    } catch (_) {}
   }
+
+  // Leer de Firestore
   try {
     const url = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents/config/salma-prompt`;
     const res = await fetch(url);
@@ -323,15 +334,16 @@ async function getSystemPrompt() {
     const doc = await res.json();
     const promptText = doc.fields?.prompt_text?.stringValue;
     if (promptText && promptText.length > 100) {
-      cachedPrompt = promptText;
-      cachedPromptTime = now;
+      // Guardar en KV con TTL 60s
+      if (env?.SALMA_KB) {
+        try {
+          await env.SALMA_KB.put('_cache:prompt', promptText, { expirationTtl: 60 });
+        } catch (_) {}
+      }
       return promptText;
     }
     throw new Error('Prompt vacío o inválido');
   } catch (e) {
-    // Fallback al prompt hardcoded
-    cachedPrompt = SALMA_SYSTEM_BASE;
-    cachedPromptTime = now;
     return SALMA_SYSTEM_BASE;
   }
 }
@@ -711,11 +723,11 @@ async function fetchWeather(location, openweatherKey) {
   // ─── Primario: OpenWeatherMap (rápido, fiable) ───
   if (openweatherKey) {
     try {
-      const geoRes = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(location)}&limit=1&appid=${openweatherKey}`);
+      const geoRes = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(location)}&limit=1&appid=${openweatherKey}`, { signal: AbortSignal.timeout(6000) });
       const geoData = await geoRes.json();
       if (geoData?.[0]) {
         const { lat, lon, name, country } = geoData[0];
-        const wxRes = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${openweatherKey}`);
+        const wxRes = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${openweatherKey}`, { signal: AbortSignal.timeout(6000) });
         const wxData = await wxRes.json();
         if (wxData?.list) {
           const now = wxData.list[0];
@@ -1117,7 +1129,18 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
   }
 
   if (isRouteRequest(message, history)) {
-    userContent += '\n\n[OBLIGATORIO — GENERA RUTA AHORA: Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 1 frase sobre el destino + salto de línea + SALMA_ROUTE_JSON + JSON completo. NO respondas solo con texto. Usa defaults razonables para lo que falte.]';
+    // Solo forzar generación si el usuario ya dio tipo de actividad (C) y compañía (D),
+    // o si Salma ya preguntó por esos datos en el turno anterior.
+    const hasC = /playa|playas|cultura|naturaleza|gastronomia|gastronomía|aventura|mezcla|museos?|historia|relax|descanso|fiesta|deporte|senderismo|trekking|paisajes?|urbano|monumental/i.test(message);
+    const hasD = /solo|sola|pareja|familia|niños|ninos|grupo|amigos|con mi|con mis|en pareja/i.test(message);
+    const cdPresent = hasC && hasD;
+    const lastAssistant = Array.isArray(history) ? history.filter(h => h.role === 'assistant').pop() : null;
+    const salmaAlreadyAsked = lastAssistant && /qué quieres hacer|que quieres hacer|con quién|con quien|playas.*cultura|solo.*pareja/i.test(lastAssistant.content || '');
+    if (cdPresent || salmaAlreadyAsked) {
+      userContent += '\n\n[OBLIGATORIO — GENERA RUTA AHORA: Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 1 frase sobre el destino + salto de línea + SALMA_ROUTE_JSON + JSON completo. NO respondas solo con texto. Usa defaults razonables para lo que falte.]';
+    } else {
+      userContent += '\n\n[ESPERA — FALTAN DATOS PARA PERSONALIZAR LA RUTA: No generes ruta ni itinerario en texto. Haz UNA sola pregunta: "¿Qué quieres hacer — playas, cultura, naturaleza? ¿Vas solo, en pareja o en grupo?"]';
+    }
   } else {
     userContent += '\n\n[Si generas ruta, responde con 1-2 frases solo. Si es conversacional, extiéndete con densidad de datos. Si el usuario pide datos concretos, dato primero y breve.]';
   }
@@ -1258,43 +1281,21 @@ function replyWithoutRouteBlock(text) {
 // Solo permite: google.com/maps, y URLs que el worker inyecta (Google Places, etc.)
 function sanitizeInventedUrls(text) {
   if (!text || typeof text !== 'string') return text;
-  // Regex que pilla URLs completas incluyendo query strings con corchetes (uber deep links)
   const urlRegex = /(?:https?:\/\/|[a-z]+:\/\/)[^\s<>]+/gi;
   return text.replace(urlRegex, (url) => {
-    // Google Maps — siempre OK
     if (url.includes('google.com/maps')) return url;
-    // Google Places fotos — vienen del worker
     if (url.includes('googleusercontent.com') || url.includes('places.googleapis.com')) return url;
-    // TheFork — viene de buscar_restaurante
     if (url.includes('thefork.com') || url.includes('thefork.es')) return url;
-    // Booking — viene de buscar_hotel
     if (url.includes('booking.com')) return url;
-    // Skyscanner — enlace de reserva de vuelos (Duffel)
     if (url.includes('skyscanner.es') || url.includes('skyscanner.com')) return url;
-    // Rentalcars/DiscoverCars — viene de buscar_coche
     if (url.includes('rentalcars.com') || url.includes('discovercars.com')) return url;
-    // Apps de transporte — SOLO URLs cortas inyectadas por el worker (no deep links inventados por IA)
     const transportClean = ['https://www.grab.com', 'https://m.uber.com', 'https://bolt.eu',
       'https://www.didiglobal.com', 'https://www.gojek.com', 'https://www.careem.com',
       'https://indrive.com', 'https://cabify.com', 'https://www.free-now.com',
       'https://go.yandex.com', 'https://www.lyft.com', 'https://www.olacabs.com'];
     if (transportClean.some(t => url === t || url === t + '/')) return url;
-    // Todo lo demás: inventado. Se elimina sin dejar rastro.
     return '';
-  })
-  // Limpiar restos huérfanos tras eliminar URLs
-  .replace(/\((?:Android|iOS|iPhone|iPad)\)/gi, '')                          // (Android), (iOS)
-  .replace(/^.*[Ss]i no l[ao] tienes[^.\n]*[.,]?\s*$/gm, '')                  // "Si no la tienes, ..."
-  .replace(/^.*[Ss]i tienes[^.\n]*instalad[ao][^.\n]*[.,]?\s*$/gm, '')      // "Si tienes la app Grab instalada, ..."
-  .replace(/^.*[Ss]i tienes[^.\n]*[Gg]rab[^.\n]*[.,]?\s*$/gm, '')           // "si tienes Grab, ..."
-  .replace(/^[^\n]*,\s*$/gm, '')                                             // Cualquier línea que termina en coma (frase cortada)
-  .replace(/este enlace te abre[^.\n]*\.?\s*\n/gi, '\n')                     // "este enlace te abre el viaje.\n"
-  .replace(/descárga(?:te)?l[ao][^.\n]*\.?\s*\n/gi, '\n')                   // "descárgatela aquí.\n"
-  .replace(/aquí[.:]\s*\n/gi, '\n')                                          // "aquí:\n"
-  .replace(/,\s*\n\s*\n/g, '.\n\n')                                         // "algo,\n\n" → "algo.\n\n"
-  .replace(/:\s*\n\s*\n/g, '.\n\n')                                         // "algo:\n\n" → "algo.\n\n"
-  .replace(/\n{3,}/g, '\n\n')
-  .replace(/^\s+|\s+$/g, '');
+  }).replace(/\n{3,}/g, '\n\n').replace(/^\s+|\s+$/g, '');
 }
 
 // Inyecta enlace Google Maps si el usuario tiene GPS, la respuesta habla de ir a un sitio,
@@ -1303,8 +1304,8 @@ function injectGoogleMapsLink(reply, userLocation, message) {
   if (!reply || !userLocation || !userLocation.lat || !userLocation.lng) return reply;
   // Si ya tiene un enlace de Google Maps, no duplicar
   if (reply.includes('google.com/maps')) return reply;
-  // Detectar si el mensaje habla de ir a un lugar concreto
-  const goKeywords = /aeropuerto|airport|estación|estacion|station|terminal|cómo llegar|como llegar|ir a[l ]|llegar a[l ]|ir desde|dame enlace|google maps|navegar|cómo voy|como voy|taxi/i;
+  // Solo para transporte local concreto — no para intención de viaje a un país/ciudad lejana
+  const goKeywords = /aeropuerto|airport|estación|estacion|station|terminal|cómo llegar|como llegar|llegar a[l ]|ir desde|dame enlace|google maps|navegar|cómo voy|como voy|taxi/i;
   if (!goKeywords.test(message)) return reply;
   // Extraer destino del mensaje y de la respuesta de GPT
   let dest = null;
@@ -1392,8 +1393,8 @@ function injectGoogleMapsLink(reply, userLocation, message) {
 // Usa datos reales del KV de transporte + URLs reales de TRANSPORT_APP_URLS
 function injectTransportBlock(reply, kvTransportData, message) {
   if (!reply || !message) return reply;
-  // Solo para mensajes de "quiero ir a X", taxi, transporte
-  const goKeywords = /quiero ir|llévame|como llego|cómo llego|como ir|cómo ir|taxi|transporte|aeropuerto|airport|estación|station|terminal/i;
+  // Solo para transporte local concreto — NO para intención de viaje a un país/ciudad lejana
+  const goKeywords = /llévame|taxi|aeropuerto|airport|estación|estacion|station|terminal/i;
   if (!goKeywords.test(message)) return reply;
   // Si ya tiene enlace de una app de transporte, no duplicar
   if (/grab\.com|m\.uber\.com|bolt\.eu|indrive\.com/i.test(reply)) return reply;
@@ -1405,7 +1406,6 @@ function injectTransportBlock(reply, kvTransportData, message) {
     if (appData) {
       // Caso normal: app conocida con URL de descarga
       appBlock += `\n\n${appData.icon} Abre **${appData.name}** y pide un coche hasta tu destino.`;
-      appBlock += `\nDescargar ${appData.name}: ${appData.web}`;
       // Alternativas
       const others = (kvTransportData.ridehailing.others || []).filter(o => o !== best);
       if (others.length > 0) {
@@ -1567,11 +1567,24 @@ function mergeBlocks(blockResults, originalMessage) {
   const allTips = [];
   const allTags = new Set();
 
-  for (const br of blockResults) {
-    if (br.route?.stops) allStops.push(...br.route.stops);
-    if (br.route?.maps_links) allMapsLinks.push(...br.route.maps_links);
-    if (br.route?.tips) allTips.push(...br.route.tips);
-    if (br.route?.tags) br.route.tags.forEach(t => allTags.add(t));
+  for (let i = 0; i < blockResults.length; i++) {
+    const br = blockResults[i];
+    if (!br.route?.stops) continue;
+
+    let stops = br.route.stops;
+
+    if (i > 0 && allStops.length > 0) {
+      const lastStopName = (allStops[allStops.length - 1].name || '').toLowerCase().trim();
+      const firstStopName = (stops[0]?.name || '').toLowerCase().trim();
+      if (lastStopName && firstStopName && lastStopName === firstStopName) {
+        stops = stops.slice(1);
+      }
+    }
+
+    allStops.push(...stops);
+    if (br.route.maps_links) allMapsLinks.push(...br.route.maps_links);
+    if (br.route.tips) allTips.push(...br.route.tips);
+    if (br.route.tags) br.route.tags.forEach(t => allTags.add(t));
   }
 
   const maxDay = allStops.reduce((max, s) => Math.max(max, s.day || 0), 0);
@@ -1794,7 +1807,8 @@ async function buscarVuelosDuffel(params, duffelToken) {
           'Duffel-Version': 'v2',
           'Authorization': `Bearer ${duffelToken}`
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify(requestBody),
+        signal: AbortSignal.timeout(12000)
       }
     );
 
@@ -1903,7 +1917,8 @@ async function buscarHotelesBooking(input, rapidApiKey) {
   try {
     // Paso 1: Resolver ciudad → dest_id
     const locUrl = `https://${RAPIDAPI_HOST}/v1/hotels/locations?name=${normalizeQuery(input.ciudad)}&locale=es`;
-    const locRes = await fetch(locUrl, { headers });
+    const locRes = await fetch(locUrl, { headers, signal: AbortSignal.timeout(10000) });
+    if (!locRes.ok) return { error: `Booking API error ${locRes.status} — verifica la RapidAPI key` };
     const locData = await locRes.json();
 
     if (!locData || locData.length === 0) {
@@ -1932,7 +1947,8 @@ async function buscarHotelesBooking(input, rapidApiKey) {
     });
 
     const searchUrl = `https://${RAPIDAPI_HOST}/v1/hotels/search?${searchParams}`;
-    const searchRes = await fetch(searchUrl, { headers });
+    const searchRes = await fetch(searchUrl, { headers, signal: AbortSignal.timeout(10000) });
+    if (!searchRes.ok) return { error: `Booking API error ${searchRes.status}` };
     const searchData = await searchRes.json();
 
     if (!searchData.result || searchData.result.length === 0) {
@@ -2016,7 +2032,8 @@ async function buscarCochesBooking(input, rapidApiKey) {
   try {
     // Paso 1: Resolver ciudad → coordenadas
     const locUrl = `https://${RAPIDAPI_HOST}/v1/hotels/locations?name=${normalizeQuery(input.ciudad_recogida)}&locale=es`;
-    const locRes = await fetch(locUrl, { headers });
+    const locRes = await fetch(locUrl, { headers, signal: AbortSignal.timeout(10000) });
+    if (!locRes.ok) return { error: `Car rental API error ${locRes.status}` };
     const locData = await locRes.json();
 
     if (!locData || locData.length === 0) {
@@ -2043,7 +2060,8 @@ async function buscarCochesBooking(input, rapidApiKey) {
     });
 
     const searchUrl = `https://${RAPIDAPI_HOST}/v1/car-rental/search?${searchParams}`;
-    const searchRes = await fetch(searchUrl, { headers });
+    const searchRes = await fetch(searchUrl, { headers, signal: AbortSignal.timeout(10000) });
+    if (!searchRes.ok) return { error: `Car rental API error ${searchRes.status}` };
     const searchData = await searchRes.json();
 
     if (!searchData.search_results || searchData.search_results.length === 0) {
@@ -2137,7 +2155,7 @@ async function buscarRestaurante(input, placesKey, userCoords) {
       } else {
         url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchTerms)}&language=es&type=restaurant&key=${placesKey}`;
       }
-      const res = await fetch(url);
+      const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
       const data = await res.json();
       if (data?.results?.length) {
         const top = data.results.slice(0, 5);
@@ -2213,6 +2231,7 @@ async function buscarWeb(input, braveKey) {
     const params = new URLSearchParams({ q: input.query, count: 5, country: 'ES', search_lang: 'es', ui_lang: 'es-ES' });
     const braveRes = await fetch(`https://api.search.brave.com/res/v1/web/search?${params}`, {
       headers: { 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'X-Subscription-Token': braveKey },
+      signal: AbortSignal.timeout(8000),
     });
     if (!braveRes.ok) return { error: 'Error buscando en Brave Search' };
     const braveData = await braveRes.json();
@@ -2367,12 +2386,15 @@ async function executeSalmaActionsParallel(actions, env, userLocation) {
   return results.filter(r => r !== null);
 }
 
-// Parsear duración ISO 8601 "PT18H30M" → número de horas (ej. 18.5)
+// Parsear duración ISO 8601 "P1DT18H30M" → número de horas (ej. 42.5)
 function parseDurationHours(d) {
   if (!d) return null;
-  const m = d.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
-  if (!m) return null;
-  return Math.round((parseInt(m[1] || 0) + parseInt(m[2] || 0) / 60) * 10) / 10;
+  const dayMatch = d.match(/P(\d+)D/);
+  const days = dayMatch ? parseInt(dayMatch[1]) * 24 : 0;
+  const m = d.match(/T(?:(\d+)H)?(?:(\d+)M)?/);
+  if (!m && !dayMatch) return null;
+  const hours = parseInt(m?.[1] || 0) + parseInt(m?.[2] || 0) / 60;
+  return Math.round((days + hours) * 10) / 10;
 }
 
 // Dispatcher individual — un switch por tipo de acción
@@ -2935,6 +2957,10 @@ export default {
     // ─── ENDPOINT /health (monitoreo de APIs) ───
     if (request.method === 'GET' && url.pathname === '/health') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const authHeader = request.headers.get('Authorization') || '';
+      if (authHeader.replace('Bearer ', '') !== env.ADMIN_TOKEN) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
       const checks = {};
       const startTime = Date.now();
 
@@ -3178,7 +3204,7 @@ export default {
     if (request.method === 'POST' && url.pathname === '/ga4') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
       const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== 'Zonakanjea159876') {
+      if (authHeader.replace('Bearer ', '') !== env.ADMIN_TOKEN) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
 
@@ -3212,7 +3238,7 @@ export default {
       // Verificar token admin (hash SHA-256 de la contraseña)
       const authHeader = request.headers.get('Authorization') || '';
       const adminToken = authHeader.replace('Bearer ', '');
-      if (adminToken !== 'Zonakanjea159876') {
+      if (adminToken !== env.ADMIN_TOKEN) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
 
@@ -3267,8 +3293,9 @@ export default {
           return new Response(JSON.stringify({ error: 'Missing contacts or uid' }), { status: 400, headers: corsH });
         }
 
-        // Rate limiting: máx 3 SOS por uid en 10 minutos
-        const rateLimitKey = `sos_rate:${uid}`;
+        // Rate limiting: máx 3 SOS por IP en 10 minutos
+        const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
+        const rateLimitKey = `sos_rate:${clientIP}`;
         const count = parseInt(await env.SALMA_KB?.get(rateLimitKey) || '0');
         if (count >= 3) {
           return new Response(JSON.stringify({ error: 'rate_limit', message: 'Máximo 3 alertas SOS por 10 minutos' }), { status: 429, headers: corsH });
@@ -3656,7 +3683,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     if (request.method === 'POST' && url.pathname === '/admin/init-prompt') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== 'Zonakanjea159876') {
+      if (authHeader.replace('Bearer ', '') !== env.ADMIN_TOKEN) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
       try {
@@ -3685,9 +3712,8 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
             reason: { stringValue: 'Migración inicial desde código hardcoded' },
           }}),
         });
-        // Invalidar caché
-        cachedPrompt = null;
-        cachedPromptTime = 0;
+        // Invalidar caché KV
+        try { if (env.SALMA_KB) await env.SALMA_KB.delete('_cache:prompt'); } catch (_) {}
         return new Response(JSON.stringify({ ok: true, version: 1, chars: SALMA_SYSTEM_BASE.length }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
@@ -3698,7 +3724,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     if (request.method === 'GET' && url.pathname === '/admin/get-prompt') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== 'Zonakanjea159876') {
+      if (authHeader.replace('Bearer ', '') !== env.ADMIN_TOKEN) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
       try {
@@ -3724,7 +3750,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
     if (request.method === 'POST' && url.pathname === '/admin/test-extract') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== 'Zonakanjea159876') {
+      if (authHeader.replace('Bearer ', '') !== env.ADMIN_TOKEN) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
       const apiKey = env.OPENAI_API_KEY;
@@ -3732,7 +3758,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         return new Response(JSON.stringify({ error: 'API key not configured' }), { status: 500, headers: corsH });
       }
       try {
-        const currentPrompt = await getSystemPrompt();
+        const currentPrompt = await getSystemPrompt(env);
         const rulesPrompt = `Analiza este prompt de sistema de un chatbot de viajes llamado Salma y extrae las 10-15 reglas más importantes que se puedan testear automáticamente. Para cada regla, genera 2 mensajes de usuario "trampa" que intentan hacer que el bot viole esa regla.
 
 PROMPT:
@@ -3765,7 +3791,7 @@ Responde en JSON estricto (sin markdown, sin backticks):
     if (request.method === 'POST' && url.pathname === '/admin/test-rule') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== 'Zonakanjea159876') {
+      if (authHeader.replace('Bearer ', '') !== env.ADMIN_TOKEN) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
       const apiKey = env.OPENAI_API_KEY;
@@ -3777,7 +3803,7 @@ Responde en JSON estricto (sin markdown, sin backticks):
         if (!rule || !rule.test_messages) {
           return new Response(JSON.stringify({ error: 'Missing rule data' }), { status: 400, headers: corsH });
         }
-        const currentPrompt = await getSystemPrompt();
+        const currentPrompt = await getSystemPrompt(env);
         const ruleResult = { id: rule.id, name: rule.name, description: rule.description, tests: [] };
 
         for (const testMsg of rule.test_messages.slice(0, 2)) {
@@ -3828,7 +3854,7 @@ Responde en JSON estricto (sin markdown):
     if (request.method === 'POST' && url.pathname === '/admin/apply-fix') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== 'Zonakanjea159876') {
+      if (authHeader.replace('Bearer ', '') !== env.ADMIN_TOKEN) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
 
@@ -3900,9 +3926,8 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           }}),
         });
 
-        // Invalidar caché
-        cachedPrompt = null;
-        cachedPromptTime = 0;
+        // Invalidar caché KV
+        try { if (env.SALMA_KB) await env.SALMA_KB.delete('_cache:prompt'); } catch (_) {}
 
         return new Response(JSON.stringify({
           ok: true,
@@ -3920,7 +3945,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     if (request.method === 'POST' && url.pathname === '/admin/save-prompt') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== 'Zonakanjea159876') {
+      if (authHeader.replace('Bearer ', '') !== env.ADMIN_TOKEN) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
       try {
@@ -3956,8 +3981,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
             reason: { stringValue: reason || 'Edición manual' },
           }}),
         });
-        cachedPrompt = null;
-        cachedPromptTime = 0;
+        try { if (env.SALMA_KB) await env.SALMA_KB.delete('_cache:prompt'); } catch (_) {}
         return new Response(JSON.stringify({ ok: true, version: newVersion, chars: prompt_text.length }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
@@ -3994,15 +4018,39 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     let userLocationName = null;
     let userCountryCode = null; // ISO 2 letras del país donde está el usuario (por GPS)
     if (userLocation && userLocation.lat && userLocation.lng) {
-      try {
-        const geoUrl = `https://nominatim.openstreetmap.org/reverse?lat=${userLocation.lat}&lon=${userLocation.lng}&format=json&zoom=10&accept-language=en`;
-        const geoRes = await fetch(geoUrl, { headers: { 'User-Agent': 'BorradoDelMapa/1.0 (salma@borradodelmapa.com)' } });
-        const geoData = await geoRes.json();
-        const city = geoData.address?.city || geoData.address?.town || geoData.address?.village || geoData.name || '';
-        const country = geoData.address?.country || '';
-        userCountryCode = (geoData.address?.country_code || '').toUpperCase();
-        if (city) userLocationName = city + (country ? ', ' + country : '');
-      } catch (e) { /* Si falla, recibe coords sin nombre */ }
+      const geoKey = `geo:${userLocation.lat.toFixed(2)}:${userLocation.lng.toFixed(2)}`;
+
+      let geoCache = null;
+      if (env.SALMA_KB) {
+        try {
+          const cached = await env.SALMA_KB.get(geoKey);
+          if (cached) geoCache = JSON.parse(cached);
+        } catch (_) {}
+      }
+
+      if (geoCache) {
+        userLocationName = geoCache.name;
+        userCountryCode = geoCache.cc;
+      } else {
+        try {
+          const geoUrl = `https://nominatim.openstreetmap.org/reverse?lat=${userLocation.lat}&lon=${userLocation.lng}&format=json&zoom=10&accept-language=en`;
+          const geoRes = await fetch(geoUrl, {
+            headers: { 'User-Agent': 'BorradoDelMapa/1.0 (salma@borradodelmapa.com)' },
+            signal: AbortSignal.timeout(5000),
+          });
+          const geoData = await geoRes.json();
+          const city = geoData.address?.city || geoData.address?.town || geoData.address?.village || geoData.name || '';
+          const country = geoData.address?.country || '';
+          userCountryCode = (geoData.address?.country_code || '').toUpperCase();
+          if (city) userLocationName = city + (country ? ', ' + country : '');
+
+          if (env.SALMA_KB && userLocationName) {
+            try {
+              await env.SALMA_KB.put(geoKey, JSON.stringify({ name: userLocationName, cc: userCountryCode }), { expirationTtl: 86400 });
+            } catch (_) {}
+          }
+        } catch (e) {}
+      }
     }
 
     if (!message.trim()) {
@@ -4038,8 +4086,8 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           if (helpCategory === 'weather') {
             weatherData = await fetchWeather(helpLocation, env.OPENWEATHER_KEY);
           } else if (helpCategory === 'transport') {
-            // Para transporte: buscar "taxi [location]" en vez del mensaje completo
-            helpResults = await searchPlacesForHelp('taxi', helpLocation, env.GOOGLE_PLACES_KEY, searchCoords);
+            // Para transporte no hacemos búsqueda Places — Google devuelve resultados irrelevantes.
+            // La IA responde con datos KV de transporte + conocimiento propio.
           } else {
             helpResults = await searchPlacesForHelp(message, helpLocation, env.GOOGLE_PLACES_KEY, searchCoords);
           }
@@ -4207,7 +4255,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     }
 
     // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
-    const dynamicPrompt = await getSystemPrompt();
+    const dynamicPrompt = await getSystemPrompt(env);
 
     // Construir mensajes (con datos KV si los hay)
     let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt);
@@ -4725,6 +4773,14 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
 
           const newData = JSON.parse(jsonMatch[0]);
 
+          // Validar campos obligatorios antes de sobrescribir
+          const requiredFields = ['pais', 'capital', 'moneda', 'idioma_oficial', 'emergencias'];
+          const hasRequiredData = requiredFields.every(f => newData[f] && newData[f].length > 1);
+          if (!hasRequiredData) {
+            console.log(`[KV Cron] ⚠️ Ficha de ${entry.code} incompleta, no se sobreescribe`);
+            continue;
+          }
+
           // Guardar en KV
           await env.SALMA_KB.put('dest:' + entry.code + ':base', JSON.stringify(newData));
 
@@ -4818,6 +4874,15 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
 
             const route = JSON.parse(jsonMatch[0]);
             if (!route.stops || route.stops.length === 0) throw new Error('Sin paradas');
+
+            // Validar calidad de la ruta antes de guardar
+            const minStops = (dest.dias_recomendados || 3) * 2;
+            const hasValidCoords = route.stops.every(s => s.lat !== 0 && s.lng !== 0);
+            const hasValidNames = route.stops.every(s => s.name && s.name.length > 2);
+            if (route.stops.length < minStops || !hasValidCoords || !hasValidNames) {
+              console.log(`[KV Cron L3] ⚠️ Ruta de ${dest.nombre} no supera validación de calidad, descartada`);
+              continue;
+            }
 
             // Guardar en KV
             await env.SALMA_KB.put(routeKey, JSON.stringify(route), { expirationTtl: 2592000 });
