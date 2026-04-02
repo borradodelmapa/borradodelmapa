@@ -3830,21 +3830,32 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     // Si es transporte → preparar enlaces de reserva para inyectar DESPUÉS de la respuesta
     let transportBookingLinks = null;
     if (helpCategory === 'transport') {
-      // Extraer ubicación completa: "aeropuerto hanoi" → "aeropuerto hanoi", no solo "airport"
-      let helpLoc = extractHelpLocation(message, history, currentRoute) || '';
-      // Si helpLoc es genérico, enriquecer con ciudad del mensaje
-      if (!helpLoc || /^(taxi|airport|aeropuerto|estacion|terminal)$/i.test(helpLoc)) {
-        // Buscar ciudad en el mensaje: "aeropuerto de hanoi", "aeropuerto hanoi", "hanoi"
-        const cityInMsg = message.match(/(?:aeropuerto|airport|estacion|terminal)\s+(?:de\s+|internacional\s+(?:de\s+)?)?([\wáéíóúñÁÉÍÓÚÑ]+)/i);
-        if (cityInMsg) helpLoc = 'airport ' + cityInMsg[1];
-        else if (userLocationName) helpLoc = 'airport ' + userLocationName.split(',')[0].trim();
+      // Extraer ciudad del mensaje: "aeropuerto de hanoi" → "hanoi"
+      let city = '';
+      const cityInMsg = message.match(/(?:aeropuerto|airport|estacion|terminal)\s+(?:de\s+|internacional\s+(?:de\s+)?)?([\wáéíóúñÁÉÍÓÚÑ]+)/i);
+      if (cityInMsg) city = cityInMsg[1].toLowerCase();
+      if (!city) {
+        // Buscar nombre de ciudad en el mensaje
+        const anyCity = message.match(/(?:en|de|desde|a)\s+([\wáéíóúñÁÉÍÓÚÑ]{3,})/i);
+        if (anyCity && !/^(taxi|coche|bus|tren|centro|ciudad|aeropuerto|el|la|un|una)$/i.test(anyCity[1])) {
+          city = anyCity[1].toLowerCase();
+        }
       }
-      if (!helpLoc) helpLoc = userLocationName || 'airport';
-      const locEncoded = encodeURIComponent(helpLoc);
+      if (!city && userLocationName) city = userLocationName.split(',')[0].trim().toLowerCase();
+      if (!city) city = 'airport';
+
+      // Extraer país — countryCode aún no está definido aquí, usar body.country del frontend
+      const countrySlug = (body.country || '').toLowerCase();
+      // Mapa de country codes a nombres para URLs
+      const countryNames = { vn: 'vietnam', th: 'thailand', es: 'spain', fr: 'france', it: 'italy', de: 'germany', gb: 'uk', us: 'usa', mx: 'mexico', co: 'colombia', ar: 'argentina', br: 'brazil', pe: 'peru', cl: 'chile', pt: 'portugal', gr: 'greece', tr: 'turkey', eg: 'egypt', ma: 'morocco', za: 'south-africa', ke: 'kenya', in: 'india', jp: 'japan', kr: 'south-korea', cn: 'china', id: 'indonesia', my: 'malaysia', ph: 'philippines', kh: 'cambodia', la: 'laos', mm: 'myanmar', np: 'nepal', lk: 'sri-lanka', ae: 'uae', sa: 'saudi-arabia', jo: 'jordan', il: 'israel', hr: 'croatia', cz: 'czech-republic', pl: 'poland', hu: 'hungary', ro: 'romania', bg: 'bulgaria', rs: 'serbia', ba: 'bosnia', me: 'montenegro', al: 'albania', mk: 'north-macedonia', si: 'slovenia', at: 'austria', ch: 'switzerland', nl: 'netherlands', be: 'belgium', dk: 'denmark', se: 'sweden', no: 'norway', fi: 'finland', ie: 'ireland', is: 'iceland', ru: 'russia', ua: 'ukraine', ge: 'georgia', am: 'armenia', az: 'azerbaijan', uz: 'uzbekistan', kz: 'kazakhstan', cu: 'cuba', cr: 'costa-rica', pa: 'panama', ec: 'ecuador', bo: 'bolivia', uy: 'uruguay', py: 'paraguay', do: 'dominican-republic', tn: 'tunisia', dz: 'algeria', ng: 'nigeria', gh: 'ghana', tz: 'tanzania', et: 'ethiopia', au: 'australia', nz: 'new-zealand' };
+      const country = countryNames[countrySlug] || countrySlug;
+      const citySlug = city.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+
+      // URLs con formato slug correcto (verificadas)
       transportBookingLinks = `\n\n🚐 **Reservar transfer online:**\n` +
-        `- GetTransfer: https://gettransfer.com/es/routes?from=${locEncoded}\n` +
-        `- KiwiTaxi: https://kiwitaxi.com/es/search?from=${locEncoded}\n` +
-        `- 12Go: https://12go.asia/es/travel/from/${locEncoded.toLowerCase().replace(/%20/g, '-')}`;
+        `- GetTransfer: https://gettransfer.com/es/directions/${country}/${citySlug}\n` +
+        `- KiwiTaxi: https://kiwitaxi.com/es/${country}/${citySlug}\n` +
+        `- 12Go: https://12go.asia/es/travel/${citySlug}`;
     }
 
     // Contexto para el modelo: no des teléfonos, recomienda ride-hailing

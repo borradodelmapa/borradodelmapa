@@ -2935,9 +2935,35 @@ function escapeHTML(str) {
   return d.innerHTML;
 }
 
+// Sanitizar URLs inventadas por GPT — solo permite dominios reales
+function sanitizeUrls(text) {
+  if (!text) return text;
+  var allowed = [
+    'google.com/maps', 'googleusercontent.com', 'places.googleapis.com',
+    'thefork.com', 'thefork.es', 'booking.com', 'kiwi.com',
+    'rentalcars.com', 'discovercars.com', 'skyscanner.es', 'skyscanner.com',
+    'grab.com', 'm.uber.com', 'bolt.eu', 'didiglobal.com', 'gojek.com',
+    'careem.com', 'indrive.com', 'cabify.com', 'free-now.com', 'go.yandex.com',
+    'lyft.com', 'olacabs.com',
+    'gettransfer.com', 'kiwitaxi.com', '12go.asia', '12go.co',
+    'klook.com', 'welcomepickups.com', 'intui.travel', 'jayride.com',
+    'suntransfers.com', 'hoppa.com', 'mozio.com', 'getyourguide.com',
+    'viator.com', 'civitatis.com', 'rome2rio.com', 'bookaway.com',
+    'omio.com', 'busbud.com', 'tiqets.com'
+  ];
+  return text.replace(/(?:https?:\/\/|[a-z]+:\/\/)[^\s<>]+/gi, function(url) {
+    for (var i = 0; i < allowed.length; i++) {
+      if (url.indexOf(allowed[i]) !== -1) return url;
+    }
+    return '';
+  })
+  .replace(/\n{3,}/g, '\n\n')
+  .trim();
+}
+
 // Formatear mensaje de Salma: escapar HTML + linkificar URLs y teléfonos
 function formatMessage(str) {
-  let raw = str || '';
+  let raw = sanitizeUrls(str || '');
   // Extraer imágenes markdown ANTES del escape HTML y guardarlas como placeholders
   const images = [];
   raw = raw.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, (_, alt, url) => {
