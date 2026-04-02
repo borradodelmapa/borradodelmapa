@@ -3058,7 +3058,21 @@ function escapeHTML(str) {
 // Sanitizar URLs inventadas por Claude — solo permite dominios de herramientas reales
 function sanitizeUrls(text) {
   if (!text) return text;
-  var allowed = ['google.com/maps', 'googleusercontent.com', 'places.googleapis.com', 'thefork.com', 'thefork.es', 'booking.com', 'kiwi.com', 'rentalcars.com', 'discovercars.com', 'skyscanner.es', 'skyscanner.com', 'grab.com', 'm.uber.com', 'bolt.eu', 'didiglobal.com', 'gojek.com', 'careem.com', 'indrive.com', 'cabify.com', 'free-now.com', 'go.yandex.com', 'lyft.com', 'olacabs.com'];
+  var allowed = [
+    'google.com/maps', 'googleusercontent.com', 'places.googleapis.com',
+    'booking.com', 'airbnb.com', 'hostelworld.com',
+    'kiwi.com', 'skyscanner.es', 'skyscanner.com',
+    'rentalcars.com', 'discovercars.com',
+    'thefork.com', 'thefork.es',
+    '12go.asia', 'bookaway.com', 'lomprayah.com', 'seatrandiscovery.com', 'rajaferryport.com', 'rome2rio.com',
+    'thetrainline.com', 'renfe.com', 'raileurope.com', 'sncf-connect.com', 'bahn.com', 'trenitalia.com', 'cp.pt',
+    'alsa.es', 'flixbus.com', 'blablacar.es', 'blablacar.com',
+    'grab.com', 'gojek.com',
+    'uber.com', 'm.uber.com', 'bolt.eu', 'indrive.com',
+    'cabify.com', 'free-now.com', 'careem.com', 'lyft.com',
+    'olacabs.com', 'rapido.bike', '99app.com', 'didiglobal.com', 'go.yandex.com',
+    'kiwitaxi.com', 'intui.travel',
+  ];
   var clean = text.replace(/(?:https?:\/\/|[a-z]+:\/\/)[^\s<>]+/gi, function(url) {
     for (var i = 0; i < allowed.length; i++) {
       if (url.indexOf(allowed[i]) !== -1) return url;
@@ -3116,6 +3130,22 @@ function formatMessage(str) {
     else if (url.indexOf('cabify.com') !== -1) label = '🟣 Descargar Cabify';
     else if (url.indexOf('free-now.com') !== -1) label = '🔴 Descargar FREENOW';
     else if (url.indexOf('lyft.com') !== -1) label = '🩷 Descargar Lyft';
+    else if (url.indexOf('12go.asia') !== -1) label = '🚢 Reservar en 12Go Asia';
+    else if (url.indexOf('bookaway.com') !== -1) label = '🚌 Reservar en Bookaway';
+    else if (url.indexOf('rome2rio.com') !== -1) label = '🗺️ Ver opciones en Rome2Rio';
+    else if (url.indexOf('thetrainline.com') !== -1) label = '🚆 Reservar en Trainline';
+    else if (url.indexOf('renfe.com') !== -1) label = '🚄 Reservar en Renfe';
+    else if (url.indexOf('raileurope.com') !== -1) label = '🚆 Reservar en Rail Europe';
+    else if (url.indexOf('alsa.es') !== -1) label = '🚌 Reservar en Alsa';
+    else if (url.indexOf('flixbus.com') !== -1) label = '🟢 Reservar en FlixBus';
+    else if (url.indexOf('blablacar') !== -1) label = '🚗 Ver en BlaBlaCar';
+    else if (url.indexOf('kiwitaxi.com') !== -1) label = '🚕 Reservar transfer';
+    else if (url.indexOf('uber.com') !== -1) label = '🚕 Abrir Uber';
+    else if (url.indexOf('gojek.com') !== -1) label = '🟢 Descargar Gojek';
+    else if (url.indexOf('rapido.bike') !== -1) label = '🏍️ Descargar Rapido';
+    else if (url.indexOf('olacabs.com') !== -1) label = '🟡 Descargar Ola';
+    else if (url.indexOf('airbnb.com') !== -1) label = '🏠 Ver en Airbnb';
+    else if (url.indexOf('hostelworld.com') !== -1) label = '🛏️ Ver en Hostelworld';
     return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href);return false;">' + label + '</a>';
   });
   // Teléfonos internacionales: +XX XXX XXX XXX (con espacios, guiones o puntos)
