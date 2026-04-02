@@ -3827,43 +3827,30 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       weatherFallbackMsg = '[TIEMPO: Los datos en tiempo real no están disponibles. USA buscar_web AHORA para obtener el tiempo actual. El tiempo cambia cada hora — jamás respondas con tu conocimiento base.]';
     }
 
-    // Si es transporte → buscar plataformas de reserva ANTES de llamar a Claude
-    let transportForceBuscarWeb = null;
-    if (helpCategory === 'transport' && env.BRAVE_SEARCH_KEY) {
-      const helpLoc = extractHelpLocation(message, history, currentRoute) || userLocationName || '';
-      try {
-        // Buscar directamente plataformas de reserva de transfers
-        const transferResults = await buscarWeb(
-          { query: `book airport transfer ${helpLoc} online site:gettransfer.com OR site:klook.com OR site:12go.asia OR site:kiwitaxi.com OR site:welcomepickups.com OR site:intui.travel` },
-          env.BRAVE_SEARCH_KEY
-        );
-        const links = (transferResults.resultados || [])
-          .filter(r => r.url && /gettransfer|klook|12go|kiwitaxi|welcomepickups|intui\.travel|jayride|suntransfers|bookaway|mozio|getyourguide|viator|civitatis/i.test(r.url))
-          .slice(0, 3)
-          .map(r => `- ${r.titulo}: ${r.url}`)
-          .join('\n');
-        if (links) {
-          transportForceBuscarWeb = `[TRANSPORTE — ENLACES DE RESERVA VERIFICADOS:\n${links}\nINCLUYE estos enlaces en tu respuesta para que el viajero pueda reservar online. NO busques más — ya tienes los datos. NO des teléfonos. NO preguntes si quiere el enlace — DALO DIRECTAMENTE.]`;
-        } else {
-          // Fallback: búsqueda más genérica
-          const fallbackResults = await buscarWeb(
-            { query: `${helpLoc} airport transfer booking online` },
-            env.BRAVE_SEARCH_KEY
-          );
-          const fallbackLinks = (fallbackResults.resultados || [])
-            .filter(r => r.url && !/blog|tripadvisor|reddit|quora|youtube|wikipedia/i.test(r.url))
-            .slice(0, 3)
-            .map(r => `- ${r.titulo}: ${r.url}`)
-            .join('\n');
-          if (fallbackLinks) {
-            transportForceBuscarWeb = `[TRANSPORTE — OPCIONES DE RESERVA ONLINE:\n${fallbackLinks}\nINCLUYE estos enlaces para que el viajero reserve. NO des teléfonos. ACTÚA DIRECTO.]`;
-          } else {
-            transportForceBuscarWeb = `[TRANSPORTE: no se encontraron plataformas de reserva online. Recomienda la app de ride-hailing del país (Grab, Uber, Bolt, etc. según contexto KV) y sugiere buscar "airport transfer ${helpLoc}" en Google. NO des teléfonos de taxi.]`;
-          }
-        }
-      } catch (e) {
-        transportForceBuscarWeb = `[TRANSPORTE: recomienda la app de ride-hailing del país y sugiere buscar "airport transfer ${helpLoc}" en Google. NO des teléfonos.]`;
+    // Si es transporte → preparar enlaces de reserva para inyectar DESPUÉS de la respuesta
+    let transportBookingLinks = null;
+    if (helpCategory === 'transport') {
+      // Extraer ubicación completa: "aeropuerto hanoi" → "aeropuerto hanoi", no solo "airport"
+      let helpLoc = extractHelpLocation(message, history, currentRoute) || '';
+      // Si helpLoc es genérico, enriquecer con ciudad del mensaje
+      if (!helpLoc || /^(taxi|airport|aeropuerto|estacion|terminal)$/i.test(helpLoc)) {
+        // Buscar ciudad en el mensaje: "aeropuerto de hanoi", "aeropuerto hanoi", "hanoi"
+        const cityInMsg = message.match(/(?:aeropuerto|airport|estacion|terminal)\s+(?:de\s+|internacional\s+(?:de\s+)?)?([\wáéíóúñÁÉÍÓÚÑ]+)/i);
+        if (cityInMsg) helpLoc = 'airport ' + cityInMsg[1];
+        else if (userLocationName) helpLoc = 'airport ' + userLocationName.split(',')[0].trim();
       }
+      if (!helpLoc) helpLoc = userLocationName || 'airport';
+      const locEncoded = encodeURIComponent(helpLoc);
+      transportBookingLinks = `\n\n🚐 **Reservar transfer online:**\n` +
+        `- GetTransfer: https://gettransfer.com/es/routes?from=${locEncoded}\n` +
+        `- KiwiTaxi: https://kiwitaxi.com/es/search?from=${locEncoded}\n` +
+        `- 12Go: https://12go.asia/es/travel/from/${locEncoded.toLowerCase().replace(/%20/g, '-')}`;
+    }
+
+    // Contexto para el modelo: no des teléfonos, recomienda ride-hailing
+    let transportForceBuscarWeb = null;
+    if (helpCategory === 'transport') {
+      transportForceBuscarWeb = `[TRANSPORTE: el viajero quiere ir a un sitio. Da precio estimado y tiempo. Recomienda la app de ride-hailing del país por NOMBRE (Grab, Uber, Bolt — según contexto KV). NO des teléfonos de taxi ni centralitas. NO inventes URLs. Los enlaces de reserva online se añadirán automáticamente después de tu respuesta.]`;
     }
 
     // ─── EVENT SEARCH (pre-Claude, solo cuando hay fechas) ───
@@ -4307,18 +4294,25 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           }
         }
 
-        // ── Inyectar Google Maps y transporte como stream chunks (antes de procesar reply) ──
+        // ── Inyectar enlaces de reserva de transfer + Google Maps + transporte como stream chunks ──
         {
           const tempReply = replyWithoutRouteBlock(allText);
-          const withMaps = injectGoogleMapsLink(tempReply, userLocation, message);
-          const withTransport = injectTransportBlock(withMaps, kvTransportData, message);
-          // Si se añadió algo, enviar la parte nueva como chunk de texto
-          if (withTransport.length > tempReply.length) {
-            const injected = withTransport.slice(tempReply.length);
-            allText += injected;
-            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: injected })}\n\n`)); } catch (_) {}
-          } else if (withMaps.length > tempReply.length) {
-            const injected = withMaps.slice(tempReply.length);
+          let enriched = tempReply;
+
+          // 1. Enlaces de reserva de transfer (GetTransfer, KiwiTaxi, 12Go)
+          if (transportBookingLinks) {
+            enriched += transportBookingLinks;
+          }
+
+          // 2. Google Maps
+          enriched = injectGoogleMapsLink(enriched, userLocation, message);
+
+          // 3. App de ride-hailing (Grab, Uber, etc.)
+          enriched = injectTransportBlock(enriched, kvTransportData, message);
+
+          // Enviar la parte nueva como chunk de texto
+          if (enriched.length > tempReply.length) {
+            const injected = enriched.slice(tempReply.length);
             allText += injected;
             try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: injected })}\n\n`)); } catch (_) {}
           }
