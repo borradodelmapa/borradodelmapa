@@ -3723,6 +3723,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     const imageBase64 = body.image_base64 || null;
     const uid = body.uid || null;
     const userNotes = body.user_notes || null;
+    const frontendCountryCode = body.country || null; // País enviado por el frontend (detectado por GPS)
 
     // Reverse geocoding: convertir coordenadas → nombre de ciudad + país (Nominatim/OSM, gratis)
     let userLocationName = null;
@@ -3880,11 +3881,17 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           countryCode = userCountryCode;
         }
 
+        // Fallback 4: país enviado por el frontend (detectado por GPS del navegador)
+        if (!countryCode && frontendCountryCode) {
+          countryCode = frontendCountryCode;
+        }
+
         if (countryCode) {
           const kwNorm = (location || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
           if (countryCode) {
+            const ccLower = countryCode.toLowerCase();
             // Ficha del país (nivel 1)
-            const baseJson = await env.SALMA_KB.get('dest:' + countryCode + ':base');
+            const baseJson = await env.SALMA_KB.get('dest:' + ccLower + ':base');
             if (baseJson) kvCountryData = JSON.parse(baseJson);
 
             // Buscar destino específico (nivel 2)
@@ -3895,7 +3902,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
             }
 
             // Datos de transporte del país (apps de transporte)
-            const transportJson = await env.SALMA_KB.get('transport:' + countryCode);
+            const transportJson = await env.SALMA_KB.get('transport:' + countryCode.toLowerCase());
             if (transportJson) kvTransportData = JSON.parse(transportJson);
 
             // Buscar ruta cacheada (nivel 3) — solo para peticiones de ruta
@@ -4218,6 +4225,23 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           if (tagMatch) {
             photoTag = tagMatch[1].toLowerCase();
             allText = allText.replace(/\n?FOTO_TAG:\s*\w+/i, '').trim();
+          }
+        }
+
+        // ── Inyectar Google Maps y transporte como stream chunks (antes de procesar reply) ──
+        {
+          const tempReply = replyWithoutRouteBlock(allText);
+          const withMaps = injectGoogleMapsLink(tempReply, userLocation, message);
+          const withTransport = injectTransportBlock(withMaps, kvTransportData, message);
+          // Si se añadió algo, enviar la parte nueva como chunk de texto
+          if (withTransport.length > tempReply.length) {
+            const injected = withTransport.slice(tempReply.length);
+            allText += injected;
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: injected })}\n\n`)); } catch (_) {}
+          } else if (withMaps.length > tempReply.length) {
+            const injected = withMaps.slice(tempReply.length);
+            allText += injected;
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: injected })}\n\n`)); } catch (_) {}
           }
         }
 
