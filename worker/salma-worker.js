@@ -1251,14 +1251,21 @@ function injectGoogleMapsLink(reply, userLocation, message) {
   // Extraer destino del mensaje y de la respuesta de GPT
   let dest = null;
 
-  // 0. Del mensaje: "ir desde X a Y", "ir a Y", "hasta Y" — el destino es Y
-  const fromTo = message.match(/(?:desde\s+[\w\sáéíóúñ]+\s+)?(?:a|hasta|hacia)\s+([\w\sáéíóúñ]{2,30})$/i)
-    || message.match(/(?:ir|llegar|viajar)\s+(?:desde\s+[\w\sáéíóúñ]+\s+)?(?:a|hasta|hacia)\s+([\w\sáéíóúñ]{2,30})/i);
-  if (fromTo) {
-    const candidate = fromTo[1].trim();
-    // Solo usar si parece un nombre de lugar (empieza con mayúscula o es conocido)
-    if (candidate.length >= 3 && !/^(un|una|el|la|los|las|mi|tu|su|este|donde|aqui|ahi|alli)$/i.test(candidate)) {
-      dest = candidate;
+  // 0. Del mensaje: "ir a Málaga desde X", "ir desde X a Y", "ir a Y en taxi"
+  //    Extraer destino: la palabra/s después de "a/hasta/hacia" cortando en "desde/en/por/con"
+  const destPatterns = [
+    /\ba\s+([\wáéíóúñ]+(?:\s+[\wáéíóúñ]+)?)\s+desde/i,                           // "a Málaga desde..."
+    /(?:ir|llegar|viajar)\s+(?:a|hasta|hacia)\s+([\wáéíóúñ\s]+?)(?:\s+(?:desde|en\s|por\s|con\s|,)|$)/i, // "ir a Málaga en taxi"
+    /desde\s+[\wáéíóúñ\s]+?\s+(?:a|hasta|hacia)\s+([\wáéíóúñ]+(?:\s+[\wáéíóúñ]+)?)/i, // "desde X a Y"
+  ];
+  for (const pat of destPatterns) {
+    const m = message.match(pat);
+    if (m) {
+      const candidate = m[1].trim();
+      if (candidate.length >= 3 && !/^(un|una|el|la|los|las|mi|tu|su|este|donde|aqui|ahi|alli|taxi|coche|bus|tren|pie)$/i.test(candidate)) {
+        dest = candidate;
+        break;
+      }
     }
   }
 
@@ -3729,6 +3736,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         try {
           if (helpCategory === 'weather') {
             weatherData = await fetchWeather(helpLocation, env.OPENWEATHER_KEY);
+          } else if (helpCategory === 'transport') {
+            // Para transporte: buscar "taxi [location]" en vez del mensaje completo
+            helpResults = await searchPlacesForHelp('taxi', helpLocation, env.GOOGLE_PLACES_KEY, userLocation);
           } else {
             helpResults = await searchPlacesForHelp(message, helpLocation, env.GOOGLE_PLACES_KEY, userLocation);
           }
