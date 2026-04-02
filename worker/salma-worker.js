@@ -2,7 +2,7 @@
  * SALMA API — Cloudflare Worker V2 (limpio)
  *
  * BINDINGS en Cloudflare Dashboard:
- *   - Secret: ANTHROPIC_API_KEY
+ *   - Secret: OPENAI_API_KEY
  *   - Secret: GOOGLE_PLACES_KEY
  */
 
@@ -211,7 +211,12 @@ DOS MODOS:
 
 ACTÚA YA — para todo excepto rutas: restaurantes, hoteles, vuelos, taxis, transporte, grúas, vacunas, visados, emergencias, información, fotos, notas, cualquier servicio. Da el resultado con defaults inteligentes; el usuario afina si quiere.
 
-"QUIERO IR A X" = el viajero quiere LLEGAR a ese sitio. Responde con: (1) cómo llegar desde donde está (opciones de transporte con precios), (2) tiempo estimado, (3) enlace de Google Maps con sus coordenadas. NO preguntes "¿necesitas transporte?" — ES OBVIO. Actúa.
+"QUIERO IR A X" = el viajero quiere LLEGAR a ese sitio. Responde así:
+- Primero: "Abre **Grab** y pide un coche hasta [destino]" (o Uber, Bolt, InDrive, DiDi — según el país del contexto). SOLO pon el nombre de la app, JAMÁS pongas URL ni enlace de la app. Ejemplo correcto: "Abre **Grab** y pide un coche hasta Samui Airport. Cuesta unos 300-500 THB." Ejemplo incorrecto: "Descarga Grab: https://grab.com/..."
+- Segundo: alternativa local (taxi, tuk-tuk, songthaew) con precio si lo sabes
+- Tercero: tiempo estimado
+- Cuarto: enlace de Google Maps con sus coordenadas como origen
+NO generes ruta JSON (SALMA_ROUTE_JSON) para esto — no es un itinerario, es un desplazamiento. NO preguntes "¿necesitas transporte?" — ES OBVIO. Actúa.
 
 PLANIFICA PRIMERO — solo rutas explícitas ("hazme una ruta", "X días por Y", "itinerario"). Puedes hacer UNA pregunta breve para personalizar. Solo una. Si el usuario dice "dale", "lo que tú veas" o "hazla ya", genera sin preguntar.
 
@@ -497,11 +502,32 @@ const SALMA_TOOLS = [
   }
 ];
 
+// URLs reales de las apps de transporte — para inyectar por código, no por IA
+const TRANSPORT_APP_URLS = {
+  grab:     { name: 'Grab',     icon: '🟩', web: 'https://www.grab.com' },
+  uber:     { name: 'Uber',     icon: '🚕', web: 'https://m.uber.com' },
+  bolt:     { name: 'Bolt',     icon: '🟢', web: 'https://bolt.eu' },
+  didi:     { name: 'DiDi',     icon: '🟠', web: 'https://www.didiglobal.com' },
+  gojek:    { name: 'Gojek',    icon: '🟢', web: 'https://www.gojek.com' },
+  careem:   { name: 'Careem',   icon: '🟢', web: 'https://www.careem.com' },
+  indrive:  { name: 'inDrive',  icon: '🟣', web: 'https://indrive.com' },
+  cabify:   { name: 'Cabify',   icon: '🟣', web: 'https://cabify.com' },
+  freenow:  { name: 'FREENOW',  icon: '🔴', web: 'https://www.free-now.com' },
+  yandex:   { name: 'Yandex Go',icon: '🔴', web: 'https://go.yandex.com' },
+  lyft:     { name: 'Lyft',     icon: '🩷', web: 'https://www.lyft.com' },
+  ola:      { name: 'Ola',      icon: '🟡', web: 'https://www.olacabs.com' },
+  kakao_t:  { name: 'Kakao T',  icon: '🟡', web: 'https://t.kakao.com' },
+  yango:    { name: 'Yango',    icon: '🔴', web: 'https://yango.com' },
+};
+
 // ═══════════════════════════════════════════════════════════════
 // UTILIDADES
 // ═══════════════════════════════════════════════════════════════
 
 function isRouteRequest(message, history) {
+  // Excluir "ruta" cuando se usa en contexto de Google Maps / direcciones (no es itinerario de viaje)
+  const isDirectionsRequest = /ruta.*(google|maps|gps|como llego|como ir|llegar|ir a)|google.*ruta|maps.*ruta|dame.*(la )?ruta.*(a |al |en )/i.test(message);
+  if (isDirectionsRequest && !/\d+\s*d[ií]as?/i.test(message)) return false;
   const directMatch = /ruta|itinerario|qué ver|que ver|visitar|días en|dias en|días|dias|fin de semana|semana en|lugares en|qué hacer|que hacer|plan para|viaje a|viaje por|llevo.*días|me quedo|escapada|excursion|excursión/i.test(message);
   if (directMatch) return true;
   if (Array.isArray(history) && history.length >= 2) {
@@ -1087,17 +1113,16 @@ ${formatted}
 Si alguno de estos eventos o festivales coincide con las fechas del viaje, menciónalo brevemente en el día que toque como dato útil. NO reestructures la ruta por un evento. Si ninguno encaja con las fechas, ignóralos. NUNCA inventes eventos.]`;
   }
 
-  // Si hay imagen, enviar como content array (vision de Claude)
+  // Si hay imagen, enviar como content array (vision de OpenAI)
   if (imageBase64) {
     messages.push({
       role: 'user',
       content: [
         {
-          type: 'image',
-          source: {
-            type: 'base64',
-            media_type: 'image/jpeg',
-            data: imageBase64
+          type: 'image_url',
+          image_url: {
+            url: `data:image/jpeg;base64,${imageBase64}`,
+            detail: 'low'
           }
         },
         { type: 'text', text: userContent || 'El viajero te envía esta foto. Analízala según el contexto del viaje.' }
@@ -1190,16 +1215,25 @@ function sanitizeInventedUrls(text) {
     if (url.includes('kiwi.com')) return url;
     // Rentalcars/DiscoverCars — viene de buscar_coche
     if (url.includes('rentalcars.com') || url.includes('discovercars.com')) return url;
+    // Apps de transporte — SOLO URLs cortas inyectadas por el worker (no deep links inventados por IA)
+    const transportClean = ['https://www.grab.com', 'https://m.uber.com', 'https://bolt.eu',
+      'https://www.didiglobal.com', 'https://www.gojek.com', 'https://www.careem.com',
+      'https://indrive.com', 'https://cabify.com', 'https://www.free-now.com',
+      'https://go.yandex.com', 'https://www.lyft.com', 'https://www.olacabs.com'];
+    if (transportClean.some(t => url === t || url === t + '/')) return url;
     // Todo lo demás: inventado. Se elimina sin dejar rastro.
     return '';
   })
   // Limpiar restos huérfanos tras eliminar URLs
   .replace(/\((?:Android|iOS|iPhone|iPad)\)/gi, '')                          // (Android), (iOS)
-  .replace(/Si no l[ao] tienes,?\s*\.?\s*\n/gi, '\n')                       // "Si no la tienes,\n"
+  .replace(/^.*[Ss]i no l[ao] tienes[^.\n]*[.,]?\s*$/gm, '')                  // "Si no la tienes, ..."
+  .replace(/^.*[Ss]i tienes[^.\n]*instalad[ao][^.\n]*[.,]?\s*$/gm, '')      // "Si tienes la app Grab instalada, ..."
+  .replace(/^.*[Ss]i tienes[^.\n]*[Gg]rab[^.\n]*[.,]?\s*$/gm, '')           // "si tienes Grab, ..."
+  .replace(/^[^\n]*,\s*$/gm, '')                                             // Cualquier línea que termina en coma (frase cortada)
   .replace(/este enlace te abre[^.\n]*\.?\s*\n/gi, '\n')                     // "este enlace te abre el viaje.\n"
   .replace(/descárga(?:te)?l[ao][^.\n]*\.?\s*\n/gi, '\n')                   // "descárgatela aquí.\n"
-  .replace(/Si tienes \*?\*?(?:Uber|Grab|Bolt)\*?\*? instalad[ao][^.\n]*\.?\s*\n/gi, '\n') // "Si tienes Uber instalada.\n"
   .replace(/aquí[.:]\s*\n/gi, '\n')                                          // "aquí:\n"
+  .replace(/,\s*\n\s*\n/g, '.\n\n')                                         // "algo,\n\n" → "algo.\n\n"
   .replace(/:\s*\n\s*\n/g, '.\n\n')                                         // "algo:\n\n" → "algo.\n\n"
   .replace(/\n{3,}/g, '\n\n')
   .replace(/^\s+|\s+$/g, '');
@@ -1245,6 +1279,47 @@ function injectGoogleMapsLink(reply, userLocation, message) {
   return reply + `\n\n📍 ${mapsUrl}`;
 }
 
+// Inyecta bloque de transporte (app + descarga) cuando el usuario quiere ir a un sitio
+// Usa datos reales del KV de transporte + URLs reales de TRANSPORT_APP_URLS
+function injectTransportBlock(reply, kvTransportData, message) {
+  if (!reply || !message) return reply;
+  // Solo para mensajes de "quiero ir a X", taxi, transporte
+  const goKeywords = /quiero ir|llévame|como llego|cómo llego|como ir|cómo ir|taxi|transporte|aeropuerto|airport|estación|station|terminal/i;
+  if (!goKeywords.test(message)) return reply;
+  // Si ya tiene enlace de una app de transporte, no duplicar
+  if (/grab\.com|m\.uber\.com|bolt\.eu|indrive\.com/i.test(reply)) return reply;
+
+  let appBlock = '';
+  if (kvTransportData && kvTransportData.ridehailing) {
+    const best = kvTransportData.ridehailing.best;
+    const appData = best ? TRANSPORT_APP_URLS[best.toLowerCase()] : null;
+    if (appData) {
+      appBlock += `\n\n${appData.icon} Abre **${appData.name}** y pide un coche hasta tu destino.`;
+      appBlock += ` Si no la tienes: [Descargar ${appData.name}](${appData.web})`;
+      // Alternativas
+      const others = (kvTransportData.ridehailing.others || []).filter(o => o !== best);
+      if (others.length > 0) {
+        const otherNames = others.map(o => {
+          const od = TRANSPORT_APP_URLS[o.toLowerCase()];
+          return od ? od.name : o;
+        }).join(', ');
+        appBlock += `\nTambién funciona: ${otherNames}`;
+      }
+      if (kvTransportData.ridehailing.tips) {
+        appBlock += `\n${kvTransportData.ridehailing.tips}`;
+      }
+    }
+  }
+
+  if (!appBlock) return reply;
+  // Insertar antes del enlace de Google Maps si existe, o al final
+  const mapsIdx = reply.indexOf('📍');
+  if (mapsIdx !== -1) {
+    return reply.slice(0, mapsIdx).trimEnd() + appBlock + '\n\n' + reply.slice(mapsIdx);
+  }
+  return reply + appBlock;
+}
+
 // ═══════════════════════════════════════════════════════════════
 // BLOQUES PARALELOS — Rutas largas (>7 días)
 // ═══════════════════════════════════════════════════════════════
@@ -1267,25 +1342,16 @@ Responde SOLO con JSON, sin texto antes ni después:
 
 El último bloque puede tener menos de 5 días. Los bloques deben conectar: el end del bloque N es el start del bloque N+1. Mensaje del usuario: "${message}"`;
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 500,
-      temperature: 0.3,
-      system: 'Eres un planificador de rutas. Responde SOLO con JSON válido.',
-      messages: [{ role: 'user', content: planPrompt }],
-    }),
+  const result = await callOpenAI(apiKey, {
+    model: 'gpt-4o-mini',
+    max_tokens: 500,
+    temperature: 0.3,
+    system: 'Eres un planificador de rutas. Responde SOLO con JSON válido.',
+    messages: [{ role: 'user', content: planPrompt }],
   });
 
-  if (!res.ok) return null;
-  const data = await res.json();
-  const text = data.content?.[0]?.text || '';
+  if (result.error) return null;
+  const text = result.text || '';
   try {
     // Extraer JSON del texto
     const jsonMatch = text.match(/\{[\s\S]*\}/);
@@ -1306,25 +1372,16 @@ Zona: ${block.region}. Empiezas en ${block.start}, terminas en ${block.end}.
 El campo "day" de cada parada debe ser el número real (${block.days_start}, ${block.days_start + 1}, etc.).
 Genera el bloque SALMA_ROUTE_JSON como siempre, pero solo con las paradas de estos días.`;
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 4000,
-      temperature: 0.7,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: blockPrompt }],
-    }),
+  const result = await callOpenAI(apiKey, {
+    model: 'gpt-4o-mini',
+    max_tokens: 4000,
+    temperature: 0.7,
+    system: systemPrompt,
+    messages: [{ role: 'user', content: blockPrompt }],
   });
 
-  if (!res.ok) return null;
-  const data = await res.json();
-  const text = data.content?.[0]?.text || '';
+  if (result.error) return null;
+  const text = result.text || '';
   const route = extractRouteFromReply(text);
   const reply = replyWithoutRouteBlock(text);
   return { route, reply, block };
@@ -2167,22 +2224,97 @@ async function buscarFotoLugar(input, placesKey) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// LECTOR DE STREAM SSE — Lee respuesta de Claude y detecta tool_use
+// OPENAI API HELPERS
 // ═══════════════════════════════════════════════════════════════
 
-// Lee un stream SSE de Anthropic, reenvía texto al cliente, y detecta tool_use
+// Convierte SALMA_TOOLS (formato Anthropic) a formato OpenAI function calling
+function toolsToOpenAI(tools) {
+  return tools.map(t => ({
+    type: 'function',
+    function: {
+      name: t.name,
+      description: t.description,
+      parameters: t.input_schema,
+    }
+  }));
+}
+
+const OPENAI_TOOLS = toolsToOpenAI(SALMA_TOOLS);
+
+// Llamada no-streaming a OpenAI (reemplaza todas las llamadas a Anthropic sin stream)
+async function callOpenAI(apiKey, { model, max_tokens, temperature, system, messages }) {
+  const msgs = [];
+  if (system) msgs.push({ role: 'system', content: system });
+  for (const m of messages) {
+    // Convertir tool_result de formato Anthropic a formato OpenAI
+    if (m.role === 'user' && Array.isArray(m.content)) {
+      for (const block of m.content) {
+        if (block.type === 'tool_result') {
+          msgs.push({ role: 'tool', tool_call_id: block.tool_use_id, content: block.content });
+        }
+      }
+    } else if (m.role === 'assistant' && Array.isArray(m.content)) {
+      // Convertir assistant content blocks (text + tool_use) al formato OpenAI
+      let textParts = '';
+      const toolCalls = [];
+      for (const block of m.content) {
+        if (block.type === 'text') textParts += block.text;
+        else if (block.type === 'tool_use') {
+          toolCalls.push({
+            id: block.id,
+            type: 'function',
+            function: { name: block.name, arguments: JSON.stringify(block.input) }
+          });
+        }
+      }
+      const msg = { role: 'assistant' };
+      if (textParts) msg.content = textParts;
+      if (toolCalls.length) msg.tool_calls = toolCalls;
+      if (!textParts && !toolCalls.length) msg.content = '';
+      msgs.push(msg);
+    } else {
+      msgs.push(m);
+    }
+  }
+
+  const body = {
+    model: model || 'gpt-4o-mini',
+    max_tokens: max_tokens || 2000,
+    messages: msgs,
+  };
+  if (temperature !== undefined) body.temperature = temperature;
+
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) return { error: true, status: res.status, body: await res.text().catch(() => '') };
+  const data = await res.json();
+  const choice = data.choices?.[0];
+  const text = choice?.message?.content || '';
+  return { text, message: choice?.message, finish_reason: choice?.finish_reason };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LECTOR DE STREAM SSE — Lee respuesta de OpenAI y detecta tool_calls
+// ═══════════════════════════════════════════════════════════════
+
+// Lee un stream SSE de OpenAI, reenvía texto al cliente, y detecta tool_calls
 // Devuelve: { fullText, contentBlocks, stopReason, routeSignalSent }
-async function readAnthropicStream(anthropicRes, writer, encoder, decoder, forwardText) {
-  const reader = anthropicRes.body.getReader();
+async function readOpenAIStream(openaiRes, writer, encoder, decoder, forwardText) {
+  const reader = openaiRes.body.getReader();
   let buffer = '';
-  let fullText = '';            // Todo el texto acumulado
-  let contentBlocks = [];       // Bloques content para reconstruir mensaje assistant
-  let currentBlockType = null;
-  let currentTextContent = '';  // Texto del bloque actual
-  let currentToolUse = null;    // Tool use en construcción
-  let toolInputJson = '';       // JSON parcial del input de la tool
+  let fullText = '';
+  let contentBlocks = [];
   let stopReason = null;
   let routeSignalSent = false;
+  // Track tool calls being built
+  const toolCallsInProgress = {}; // indexed by tool call index
 
   while (true) {
     const { done, value } = await reader.read();
@@ -2199,66 +2331,68 @@ async function readAnthropicStream(anthropicRes, writer, encoder, decoder, forwa
 
       try {
         const evt = JSON.parse(jsonStr);
+        const delta = evt.choices?.[0]?.delta;
+        const finishReason = evt.choices?.[0]?.finish_reason;
 
-        // Inicio de bloque de contenido
-        if (evt.type === 'content_block_start') {
-          currentBlockType = evt.content_block?.type;
-          if (currentBlockType === 'tool_use') {
-            currentToolUse = {
-              type: 'tool_use',
-              id: evt.content_block.id,
-              name: evt.content_block.name,
-              input: {}
-            };
-            toolInputJson = '';
-            // NO enviar {generating: true} aquí — rompe los IDs de la burbuja de streaming
-            // y el texto posterior llega sin formatear. El texto sigue fluyendo
-            // a la misma burbuja y se formatea al final.
-          } else if (currentBlockType === 'text') {
-            currentTextContent = '';
-          }
+        if (finishReason) {
+          stopReason = finishReason; // 'stop', 'tool_calls', 'length'
         }
 
-        // Delta de contenido
-        if (evt.type === 'content_block_delta') {
-          if (evt.delta?.type === 'text_delta') {
-            const chunk = evt.delta.text;
-            fullText += chunk;
-            currentTextContent += chunk;
-            // Reenviar texto al cliente (mismo comportamiento que antes)
-            if (forwardText && writer) {
-              if (!fullText.includes('SALMA_ROUTE')) {
-                await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`));
-              } else if (!routeSignalSent) {
-                routeSignalSent = true;
-                await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`));
-              }
+        if (!delta) continue;
+
+        // Text content
+        if (delta.content) {
+          const chunk = delta.content;
+          fullText += chunk;
+          if (forwardText && writer) {
+            if (!fullText.includes('SALMA_ROUTE')) {
+              await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`));
+            } else if (!routeSignalSent) {
+              routeSignalSent = true;
+              await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`));
             }
           }
-          if (evt.delta?.type === 'input_json_delta') {
-            toolInputJson += evt.delta.partial_json;
-          }
         }
 
-        // Fin de bloque de contenido
-        if (evt.type === 'content_block_stop') {
-          if (currentBlockType === 'text') {
-            contentBlocks.push({ type: 'text', text: currentTextContent });
-          } else if (currentBlockType === 'tool_use' && currentToolUse) {
-            try { currentToolUse.input = JSON.parse(toolInputJson); } catch (e) {}
-            contentBlocks.push(currentToolUse);
-            currentToolUse = null;
+        // Tool calls (streamed incrementally)
+        if (delta.tool_calls) {
+          for (const tc of delta.tool_calls) {
+            const idx = tc.index;
+            if (!toolCallsInProgress[idx]) {
+              toolCallsInProgress[idx] = {
+                id: tc.id || '',
+                name: tc.function?.name || '',
+                arguments: ''
+              };
+            }
+            if (tc.id) toolCallsInProgress[idx].id = tc.id;
+            if (tc.function?.name) toolCallsInProgress[idx].name = tc.function.name;
+            if (tc.function?.arguments) toolCallsInProgress[idx].arguments += tc.function.arguments;
           }
-          currentBlockType = null;
-        }
-
-        // Fin del mensaje — contiene stop_reason
-        if (evt.type === 'message_delta') {
-          stopReason = evt.delta?.stop_reason || null;
         }
       } catch (e) { /* ignorar JSON mal formado */ }
     }
   }
+
+  // Build contentBlocks in Anthropic-compatible format for downstream code
+  if (fullText) {
+    contentBlocks.push({ type: 'text', text: fullText });
+  }
+  for (const idx of Object.keys(toolCallsInProgress).sort((a, b) => a - b)) {
+    const tc = toolCallsInProgress[idx];
+    let input = {};
+    try { input = JSON.parse(tc.arguments); } catch (e) {}
+    contentBlocks.push({
+      type: 'tool_use',
+      id: tc.id,
+      name: tc.name,
+      input: input,
+    });
+  }
+
+  // Map OpenAI finish_reason to Anthropic-compatible stop_reason
+  if (stopReason === 'tool_calls') stopReason = 'tool_use';
+  else if (stopReason === 'stop') stopReason = 'end_turn';
 
   return { fullText, contentBlocks, stopReason, routeSignalSent };
 }
@@ -2522,16 +2656,16 @@ export default {
       // 1. Worker — si llegas aquí, está online
       checks.worker = { status: 'ok', ms: 0 };
 
-      // 2. Anthropic API
+      // 2. OpenAI API
       try {
         const t = Date.now();
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
+        const res = await fetch('https://api.openai.com/v1/chat/completions', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-          body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 5, messages: [{ role: 'user', content: 'ping' }] })
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${env.OPENAI_API_KEY}` },
+          body: JSON.stringify({ model: 'gpt-4o-mini', max_tokens: 5, messages: [{ role: 'user', content: 'ping' }] })
         });
-        checks.anthropic = { status: res.ok ? 'ok' : 'error', code: res.status, ms: Date.now() - t };
-      } catch (e) { checks.anthropic = { status: 'error', error: e.message }; }
+        checks.openai = { status: res.ok ? 'ok' : 'error', code: res.status, ms: Date.now() - t };
+      } catch (e) { checks.openai = { status: 'error', error: e.message }; }
 
       // 3. Google Places API
       try {
@@ -2767,29 +2901,20 @@ export default {
         return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: corsH });
       }
 
-      const apiKey = env.ANTHROPIC_API_KEY;
+      const apiKey = env.OPENAI_API_KEY;
       if (!apiKey) {
         return new Response(JSON.stringify({ error: 'API key not configured' }), { status: 500, headers: corsH });
       }
 
       try {
-        const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': apiKey,
-            'anthropic-version': '2023-06-01',
-          },
-          body: JSON.stringify({
-            model: chatBody.model || 'claude-sonnet-4-6',
-            max_tokens: 2000,
-            system: chatBody.system || '',
-            messages: chatBody.messages || [],
-          }),
+        const result = await callOpenAI(apiKey, {
+          model: 'gpt-4o-mini',
+          max_tokens: 2000,
+          system: chatBody.system || '',
+          messages: chatBody.messages || [],
         });
-
-        const result = await anthropicRes.json();
-        return new Response(JSON.stringify(result), { headers: corsH });
+        // Return in Anthropic-compatible format for any existing consumers
+        return new Response(JSON.stringify({ content: [{ type: 'text', text: result.text }] }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
@@ -2953,25 +3078,16 @@ export default {
           }
         }
 
-        const apiKey = env.ANTHROPIC_API_KEY;
-        const haikuRes = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': apiKey,
-            'anthropic-version': '2023-06-01'
-          },
-          body: JSON.stringify({
-            model: 'claude-haiku-4-5-20251001',
-            max_tokens: 200,
-            messages: [{
-              role: 'user',
-              content: `Eres Salma, compañera de viaje. El viajero está junto a ${poi_name}${countryContext}. Cuéntale en 2-3 frases: qué es, por qué importa y un dato curioso. Tono cercano y directo, sin paja. Máximo 80 palabras. Solo el texto, sin encabezados ni viñetas.`
-            }]
-          })
+        const apiKey = env.OPENAI_API_KEY;
+        const result = await callOpenAI(apiKey, {
+          model: 'gpt-4o-mini',
+          max_tokens: 200,
+          messages: [{
+            role: 'user',
+            content: `Eres Salma, compañera de viaje. El viajero está junto a ${poi_name}${countryContext}. Cuéntale en 2-3 frases: qué es, por qué importa y un dato curioso. Tono cercano y directo, sin paja. Máximo 80 palabras. Solo el texto, sin encabezados ni viñetas.`
+          }]
         });
-        const haikuData = await haikuRes.json();
-        const narrative = haikuData.content && haikuData.content[0] ? haikuData.content[0].text : '';
+        const narrative = result.text || '';
         return new Response(JSON.stringify({ narrative, poi_name }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
@@ -2991,7 +3107,7 @@ export default {
         return new Response(JSON.stringify({ error: 'No route' }), { status: 400, headers: corsH });
       }
 
-      const apiKey = env.ANTHROPIC_API_KEY;
+      const apiKey = env.OPENAI_API_KEY;
       if (!apiKey) {
         return new Response(JSON.stringify({ error: 'No API key' }), { status: 500, headers: corsH });
       }
@@ -3024,21 +3140,16 @@ Reglas:
 
 PARADAS:`;
 
-      // Función helper para llamar a Haiku
+      // Función helper para llamar a GPT-4o-mini (reemplaza Haiku)
       const callHaiku = async (prompt, maxTokens) => {
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-          body: JSON.stringify({
-            model: 'claude-haiku-4-5-20251001',
-            max_tokens: maxTokens,
-            system: enrichSystem,
-            messages: [{ role: 'user', content: prompt }],
-          }),
+        const result = await callOpenAI(apiKey, {
+          model: 'gpt-4o-mini',
+          max_tokens: maxTokens,
+          system: enrichSystem,
+          messages: [{ role: 'user', content: prompt }],
         });
-        if (!res.ok) return null;
-        const data = await res.json();
-        return data.content?.[0]?.text || '';
+        if (result.error) return null;
+        return result.text || '';
       };
 
       // Función helper para parsear JSON de respuesta
@@ -3290,7 +3401,7 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       if (authHeader.replace('Bearer ', '') !== 'Zonakanjea159876') {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
-      const apiKey = env.ANTHROPIC_API_KEY;
+      const apiKey = env.OPENAI_API_KEY;
       if (!apiKey) {
         return new Response(JSON.stringify({ error: 'API key not configured' }), { status: 500, headers: corsH });
       }
@@ -3304,13 +3415,12 @@ ${currentPrompt}
 Responde en JSON estricto (sin markdown, sin backticks):
 {"rules":[{"id":"rule_1","name":"Nombre corto de la regla","description":"Qué dice la regla","test_messages":["mensaje trampa 1","mensaje trampa 2"],"check_criteria":"Criterio para evaluar si la respuesta cumple la regla"}]}`;
 
-        const rulesRes = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-          body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 4000, messages: [{ role: 'user', content: rulesPrompt }] }),
+        const rulesResult = await callOpenAI(apiKey, {
+          model: 'gpt-4o-mini',
+          max_tokens: 4000,
+          messages: [{ role: 'user', content: rulesPrompt }],
         });
-        const rulesData = await rulesRes.json();
-        const rulesText = rulesData.content?.[0]?.text || '';
+        const rulesText = rulesResult.text || '';
         let rules;
         try { rules = JSON.parse(rulesText); } catch (e) {
           const m = rulesText.match(/\{[\s\S]*\}/);
@@ -3332,7 +3442,7 @@ Responde en JSON estricto (sin markdown, sin backticks):
       if (authHeader.replace('Bearer ', '') !== 'Zonakanjea159876') {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
-      const apiKey = env.ANTHROPIC_API_KEY;
+      const apiKey = env.OPENAI_API_KEY;
       if (!apiKey) {
         return new Response(JSON.stringify({ error: 'API key not configured' }), { status: 500, headers: corsH });
       }
@@ -3346,15 +3456,16 @@ Responde en JSON estricto (sin markdown, sin backticks):
 
         for (const testMsg of rule.test_messages.slice(0, 2)) {
           // Salma responde al mensaje trampa
-          const salmaRes = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-            body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1500, temperature: 0.7, system: currentPrompt, messages: [{ role: 'user', content: testMsg }] }),
+          const salmaResult = await callOpenAI(apiKey, {
+            model: 'gpt-4o-mini',
+            max_tokens: 1500,
+            temperature: 0.7,
+            system: currentPrompt,
+            messages: [{ role: 'user', content: testMsg }],
           });
-          const salmaData = await salmaRes.json();
-          const salmaReply = salmaData.content?.[0]?.text || '';
+          const salmaReply = salmaResult.text || '';
 
-          // Haiku evalúa la respuesta
+          // GPT evalúa la respuesta
           const evalPrompt = `Evalúa si esta respuesta de un chatbot cumple una regla específica.
 
 REGLA: ${rule.name} — ${rule.description}
@@ -3365,19 +3476,18 @@ RESPUESTA DEL BOT: ${salmaReply}
 Responde en JSON estricto (sin markdown):
 {"pass":true/false,"score":"pass|fail|parcial","reason":"Explicación breve de por qué pasa o falla","fix_suggestion":"Si falla, sugiere qué cambiar EN EL PROMPT para que no vuelva a pasar. Si pasa, pon null."}`;
 
-          const evalRes = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-            body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 800, messages: [{ role: 'user', content: evalPrompt }] }),
+          const evalRes = await callOpenAI(apiKey, {
+            model: 'gpt-4o-mini',
+            max_tokens: 800,
+            messages: [{ role: 'user', content: evalPrompt }],
           });
-          const evalData = await evalRes.json();
-          const evalText = evalData.content?.[0]?.text || '';
-          let evalResult;
-          try { evalResult = JSON.parse(evalText); } catch (e) {
+          const evalText = evalRes.text || '';
+          let evalParsed;
+          try { evalParsed = JSON.parse(evalText); } catch (e) {
             const m = evalText.match(/\{[\s\S]*\}/);
-            evalResult = m ? JSON.parse(m[0]) : { pass: false, score: 'error', reason: 'No se pudo evaluar', fix_suggestion: null };
+            evalParsed = m ? JSON.parse(m[0]) : { pass: false, score: 'error', reason: 'No se pudo evaluar', fix_suggestion: null };
           }
-          ruleResult.tests.push({ message: testMsg, response: salmaReply.slice(0, 500), ...evalResult });
+          ruleResult.tests.push({ message: testMsg, response: salmaReply.slice(0, 500), ...evalParsed });
         }
 
         const passes = ruleResult.tests.filter(t => t.pass).length;
@@ -3396,7 +3506,7 @@ Responde en JSON estricto (sin markdown):
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
       }
 
-      const apiKey = env.ANTHROPIC_API_KEY;
+      const apiKey = env.OPENAI_API_KEY;
       try {
         const fixBody = await request.json();
         const { rule_name, fix_suggestion, current_prompt } = fixBody;
@@ -3405,7 +3515,7 @@ Responde en JSON estricto (sin markdown):
           return new Response(JSON.stringify({ error: 'Missing fix_suggestion or current_prompt' }), { status: 400, headers: corsH });
         }
 
-        // Haiku aplica el fix al prompt
+        // GPT aplica el fix al prompt
         const applyPrompt = `Tienes que aplicar una corrección a un prompt de sistema.
 
 CORRECCIÓN A APLICAR:
@@ -3419,22 +3529,13 @@ Aplica la corrección de forma mínima — cambia solo lo necesario. No reescrib
 
 Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo el prompt.`;
 
-        const applyRes = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': apiKey,
-            'anthropic-version': '2023-06-01',
-          },
-          body: JSON.stringify({
-            model: 'claude-haiku-4-5-20251001',
-            max_tokens: 8000,
-            messages: [{ role: 'user', content: applyPrompt }],
-          }),
+        const applyResult = await callOpenAI(apiKey, {
+          model: 'gpt-4o-mini',
+          max_tokens: 8000,
+          messages: [{ role: 'user', content: applyPrompt }],
         });
 
-        const applyData = await applyRes.json();
-        const newPrompt = applyData.content?.[0]?.text || '';
+        const newPrompt = applyResult.text || '';
 
         if (newPrompt.length < 100) {
           return new Response(JSON.stringify({ error: 'Prompt generado demasiado corto', raw: newPrompt.slice(0, 200) }), { status: 500, headers: corsH });
@@ -3562,8 +3663,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     const uid = body.uid || null;
     const userNotes = body.user_notes || null;
 
-    // Reverse geocoding: convertir coordenadas → nombre de ciudad (Nominatim/OSM, gratis)
+    // Reverse geocoding: convertir coordenadas → nombre de ciudad + país (Nominatim/OSM, gratis)
     let userLocationName = null;
+    let userCountryCode = null; // ISO 2 letras del país donde está el usuario (por GPS)
     if (userLocation && userLocation.lat && userLocation.lng) {
       try {
         const geoUrl = `https://nominatim.openstreetmap.org/reverse?lat=${userLocation.lat}&lon=${userLocation.lng}&format=json&zoom=10&accept-language=en`;
@@ -3571,8 +3673,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         const geoData = await geoRes.json();
         const city = geoData.address?.city || geoData.address?.town || geoData.address?.village || geoData.name || '';
         const country = geoData.address?.country || '';
+        userCountryCode = (geoData.address?.country_code || '').toUpperCase();
         if (city) userLocationName = city + (country ? ', ' + country : '');
-      } catch (e) { /* Si falla, Claude recibe coords sin nombre */ }
+      } catch (e) { /* Si falla, recibe coords sin nombre */ }
     }
 
     if (!message.trim()) {
@@ -3582,7 +3685,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       );
     }
 
-    const apiKey = env.ANTHROPIC_API_KEY;
+    const apiKey = env.OPENAI_API_KEY;
     if (!apiKey) {
       return new Response(
         JSON.stringify({ reply: 'Salma no está configurada (falta API key).', route: null }),
@@ -3657,6 +3760,11 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
             const code = await env.SALMA_KB.get('kw:' + norm);
             if (code) { countryCode = code; location = word; break; }
           }
+        }
+
+        // Fallback: si hay GPS y no se encontró país por el mensaje, usar el país del GPS
+        if (!countryCode && userCountryCode) {
+          countryCode = userCountryCode;
         }
 
         if (countryCode) {
@@ -3738,12 +3846,12 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     const isHotelReq = isHotelRequest(message);
     const isServiceReq = isServiceRequest(message);
     const reqStartTime = Date.now();
-    // Si helpCategory=food y ya tenemos resultados de Google Places, no usar Sonnet con tool
+    // Si helpCategory=food y ya tenemos resultados de Google Places, no usar tool
     const serviceReqEffective = isServiceReq && !(helpCategory === 'food' && helpResults);
-    // Sonnet para rutas, vuelos y servicios (necesita tool use fiable), Haiku para conversacional
-    const needsSonnet = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg;
-    const reqModel = needsSonnet ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001';
-    const reqMaxTokens = needsSonnet ? 6000 : 3000;
+    // GPT-4o-mini para todo (reemplaza Sonnet/Haiku)
+    const needsTools = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg;
+    const reqModel = 'gpt-4o-mini';
+    const reqMaxTokens = needsTools ? 6000 : 3000;
 
     // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
     const sseHeaders = {
@@ -3873,23 +3981,52 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         let currentMessages = [...messages];
 
         for (let iteration = 0; iteration <= MAX_TOOL_ITERATIONS; iteration++) {
-          // ── Llamar a Claude (streaming + tools) ──
-          let anthropicRes;
+          // ── Llamar a OpenAI (streaming + tools) ──
+          let openaiRes;
+          // Build messages in OpenAI format
+          const openaiMsgs = [{ role: 'system', content: systemPrompt }];
+          for (const m of currentMessages) {
+            if (m.role === 'user' && Array.isArray(m.content)) {
+              // tool_result blocks → OpenAI tool messages
+              for (const block of m.content) {
+                if (block.type === 'tool_result') {
+                  openaiMsgs.push({ role: 'tool', tool_call_id: block.tool_use_id, content: block.content });
+                }
+              }
+            } else if (m.role === 'assistant' && Array.isArray(m.content)) {
+              let textParts = '';
+              const toolCalls = [];
+              for (const block of m.content) {
+                if (block.type === 'text') textParts += block.text;
+                else if (block.type === 'tool_use') {
+                  toolCalls.push({ id: block.id, type: 'function', function: { name: block.name, arguments: JSON.stringify(block.input) } });
+                }
+              }
+              const msg = { role: 'assistant' };
+              if (textParts) msg.content = textParts;
+              if (toolCalls.length) msg.tool_calls = toolCalls;
+              if (!textParts && !toolCalls.length) msg.content = '';
+              openaiMsgs.push(msg);
+            } else if (m.role === 'user' && m.content && Array.isArray(m.content) && m.content[0]?.type === 'image_url') {
+              // Vision message — pass through
+              openaiMsgs.push(m);
+            } else {
+              openaiMsgs.push(m);
+            }
+          }
           try {
-            anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
+            openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': apiKey,
-                'anthropic-version': '2023-06-01',
+                'Authorization': `Bearer ${apiKey}`,
               },
               body: JSON.stringify({
                 model: reqModel,
                 max_tokens: reqMaxTokens,
                 temperature: 0.7,
-                system: systemPrompt,
-                messages: currentMessages,
-                tools: SALMA_TOOLS,
+                messages: openaiMsgs,
+                tools: OPENAI_TOOLS,
                 stream: true,
               }),
             });
@@ -3898,14 +4035,14 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
             break;
           }
 
-          if (!anthropicRes.ok) {
-            const errBody = await anthropicRes.text().catch(() => '');
+          if (!openaiRes.ok) {
+            const errBody = await openaiRes.text().catch(() => '');
             await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
             break;
           }
 
-          // ── Leer stream: reenviar texto al cliente + detectar tool_use ──
-          const result = await readAnthropicStream(anthropicRes, writer, encoder, decoder, true);
+          // ── Leer stream: reenviar texto al cliente + detectar tool_calls ──
+          const result = await readOpenAIStream(openaiRes, writer, encoder, decoder, true);
           allText += result.fullText;
 
           // ── Si Claude terminó (no pide herramientas), salir del bucle ──
@@ -3913,8 +4050,8 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
             break;
           }
 
-          // ── Claude pide usar herramientas → ejecutarlas ──
-          // Añadir respuesta de Claude (con tool_use blocks) al historial
+          // ── OpenAI pide usar herramientas → ejecutarlas ──
+          // Añadir respuesta (con tool_use blocks) al historial
           currentMessages.push({
             role: 'assistant',
             content: result.contentBlocks
@@ -3946,7 +4083,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           // Separador entre texto de la iteración anterior y la siguiente
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: '\n\n' })}\n\n`)); } catch (_) {}
 
-          // El for vuelve al inicio: Claude recibe los resultados y decide qué hacer
+          // El for vuelve al inicio: OpenAI recibe los resultados y decide qué hacer
         }
 
         // ── Extraer FOTO_TAG si la hubo ──
@@ -3964,6 +4101,8 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         let reply = replyWithoutRouteBlock(allText);
         // Inyectar Google Maps automáticamente si aplica
         reply = injectGoogleMapsLink(reply, userLocation, message);
+        // Inyectar bloque de transporte (app + descarga) si aplica
+        reply = injectTransportBlock(reply, kvTransportData, message);
 
         if (route) {
           // ── PASO 1: Enriquecer paradas con KV (coords + fotos verificadas, instantáneo) ──
@@ -4086,7 +4225,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
   // CRON: Lunes = regenerar fichas nivel 1 | Miércoles = generar rutas nivel 3
   // ═══════════════════════════════════════════════════════════════
   async scheduled(event, env, ctx) {
-    if (!env.SALMA_KB || !env.ANTHROPIC_API_KEY) return;
+    if (!env.SALMA_KB || !env.OPENAI_API_KEY) return;
 
     const dayOfWeek = new Date(event.scheduledTime).getUTCDay(); // 0=dom, 1=lun, 3=mié
     if (dayOfWeek === 3) {
@@ -4143,23 +4282,14 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           // Regenerar con Claude (Haiku para ahorrar — datos factuales no necesitan Sonnet)
           const prompt = `Genera una ficha de viaje práctica y actualizada del país "${countryName}" para viajeros independientes. FORMATO: Responde SOLO con JSON válido, sin backticks. Estructura: {"pais":"${countryName}","codigo":"${entry.code}","capital":"","idioma_oficial":"","idioma_viajero":"","moneda":"","cambio_aprox_eur":"","huso_horario":"","prefijo_tel":"","enchufes":"","visado_espanoles":"","visado_eu":"","mejor_epoca":"","evitar_epoca":"","seguridad":"","vacunas":"","agua_potable":"","emergencias":"","coste_diario_mochilero":"","coste_diario_medio":"","propinas":"","curiosidad_viajera":"","keywords":[]}. Datos realistas y actualizados. Precios en EUR. Keywords: ciudades principales y destinos clave.`;
 
-          const res = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'x-api-key': env.ANTHROPIC_API_KEY,
-              'anthropic-version': '2023-06-01',
-            },
-            body: JSON.stringify({
-              model: 'claude-haiku-4-5-20251001',
-              max_tokens: 1500,
-              temperature: 0.3,
-              messages: [{ role: 'user', content: prompt }],
-            }),
+          const result = await callOpenAI(env.OPENAI_API_KEY, {
+            model: 'gpt-4o-mini',
+            max_tokens: 1500,
+            temperature: 0.3,
+            messages: [{ role: 'user', content: prompt }],
           });
 
-          const result = await res.json();
-          const text = result?.content?.[0]?.text || '';
+          const text = result.text || '';
 
           // Parsear JSON
           const jsonMatch = text.match(/\{[\s\S]*\}/);
@@ -4250,23 +4380,14 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
 
           try {
             const prompt = ROUTE_PROMPT_TEMPLATE(dest.nombre, countryName, dest.dias_recomendados || 3, dest.region || '');
-            const res = await fetch('https://api.anthropic.com/v1/messages', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': env.ANTHROPIC_API_KEY,
-                'anthropic-version': '2023-06-01',
-              },
-              body: JSON.stringify({
-                model: 'claude-sonnet-4-6',
-                max_tokens: 6000,
-                temperature: 0.7,
-                messages: [{ role: 'user', content: prompt }],
-              }),
+            const result = await callOpenAI(env.OPENAI_API_KEY, {
+              model: 'gpt-4o-mini',
+              max_tokens: 6000,
+              temperature: 0.7,
+              messages: [{ role: 'user', content: prompt }],
             });
 
-            const result = await res.json();
-            const text = result?.content?.[0]?.text || '';
+            const text = result.text || '';
             const jsonMatch = text.match(/\{[\s\S]*\}/);
             if (!jsonMatch) throw new Error('No JSON');
 

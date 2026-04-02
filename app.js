@@ -2938,7 +2938,7 @@ function escapeHTML(str) {
 // Sanitizar URLs inventadas por Claude — solo permite dominios de herramientas reales
 function sanitizeUrls(text) {
   if (!text) return text;
-  var allowed = ['google.com/maps', 'googleusercontent.com', 'places.googleapis.com', 'thefork.com', 'thefork.es', 'booking.com', 'kiwi.com', 'rentalcars.com', 'discovercars.com'];
+  var allowed = ['google.com/maps', 'googleusercontent.com', 'places.googleapis.com', 'thefork.com', 'thefork.es', 'booking.com', 'kiwi.com', 'rentalcars.com', 'discovercars.com', 'grab.com', 'm.uber.com', 'bolt.eu', 'didiglobal.com', 'gojek.com', 'careem.com', 'indrive.com', 'cabify.com', 'free-now.com', 'go.yandex.com', 'lyft.com', 'olacabs.com'];
   var clean = text.replace(/(?:https?:\/\/|[a-z]+:\/\/)[^\s<>]+/gi, function(url) {
     for (var i = 0; i < allowed.length; i++) {
       if (url.indexOf(allowed[i]) !== -1) return url;
@@ -2975,6 +2975,16 @@ function formatMessage(str) {
     else if (url.indexOf('booking.com') !== -1) label = '🏨 Ver en Booking';
     else if (url.indexOf('kiwi.com') !== -1) label = '✈️ Ver vuelo';
     else if (url.indexOf('thefork') !== -1) label = '🍴 Ver en TheFork';
+    else if (url.indexOf('grab.com') !== -1) label = '🟩 Descargar Grab';
+    else if (url.indexOf('m.uber.com') !== -1) label = '🚕 Descargar Uber';
+    else if (url.indexOf('bolt.eu') !== -1) label = '🟢 Descargar Bolt';
+    else if (url.indexOf('didiglobal.com') !== -1) label = '🟠 Descargar DiDi';
+    else if (url.indexOf('gojek.com') !== -1) label = '🟢 Descargar Gojek';
+    else if (url.indexOf('careem.com') !== -1) label = '🟢 Descargar Careem';
+    else if (url.indexOf('indrive.com') !== -1) label = '🟣 Descargar inDrive';
+    else if (url.indexOf('cabify.com') !== -1) label = '🟣 Descargar Cabify';
+    else if (url.indexOf('free-now.com') !== -1) label = '🔴 Descargar FREENOW';
+    else if (url.indexOf('lyft.com') !== -1) label = '🩷 Descargar Lyft';
     return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href);return false;">' + label + '</a>';
   });
   // Teléfonos internacionales: +XX XXX XXX XXX (con espacios, guiones o puntos)
