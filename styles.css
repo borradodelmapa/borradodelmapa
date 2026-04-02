@@ -2806,20 +2806,20 @@ body {
 }
 .itin-header-info { flex: 1; min-width: 0; }
 
-/* ── Barra de acciones flotante (siempre visible) ── */
+/* ── Barra de acciones flotante (se añade al body, z-index raíz) ── */
 .itin-action-bar {
   position: fixed;
   top: 12px;
   right: 12px;
-  z-index: 1010;
+  z-index: 1250;
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(5,5,5,.82);
+  background: rgba(5,5,5,.88);
   padding: 6px 10px;
   border-radius: 12px;
-  border: 1px solid rgba(212,160,23,.22);
-  backdrop-filter: blur(10px);
+  border: 1px solid rgba(212,160,23,.3);
+  backdrop-filter: blur(12px);
 }
 .itin-btn {
   background: none;
@@ -2902,6 +2902,12 @@ body {
 /* ── Cards scroll container ── */
 .itin-cards-scroll {
   padding: 8px 16px 80px;
+}
+/* En desktop, el input bar tapa las últimas cards — más padding */
+@media (min-width: 769px) {
+  .itin-cards-col .itin-cards-scroll {
+    padding-bottom: 155px;
+  }
 }
 
 /* ── Separador de día ── */
@@ -3050,6 +3056,48 @@ body {
   font-size: 11px;
   color: rgba(255,255,255,.4);
 }
+
+/* ── Leaflet zoom por encima del bottom bar ── */
+.itin-map-col .leaflet-bottom {
+  margin-bottom: 62px;
+}
+
+/* ── Link navegación por parada ── */
+.itin-card-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-family: var(--font-mono, monospace);
+  color: var(--dorado);
+  text-decoration: none;
+  margin-top: 8px;
+  padding: 3px 8px;
+  border: 1px solid rgba(212,160,23,.25);
+  border-radius: 6px;
+  transition: background .15s;
+}
+.itin-card-nav:hover { background: rgba(212,160,23,.1); }
+
+/* ── Botón volver a la ruta desde el chat ── */
+.msg-return-route {
+  display: flex;
+  justify-content: flex-start;
+  padding: 4px 0 8px;
+}
+.btn-return-route {
+  background: rgba(212,160,23,.12);
+  border: 1px solid rgba(212,160,23,.4);
+  color: var(--dorado);
+  font-family: var(--font-tight, 'Inter Tight', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background .2s;
+}
+.btn-return-route:hover { background: rgba(212,160,23,.22); }
 
 /* ── Marcadores numerados en el mapa ── */
 .itin-marker {

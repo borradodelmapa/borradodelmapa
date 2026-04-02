@@ -566,6 +566,23 @@ const salma = {
     this._currentReader = null;
     this._currentAbort = new AbortController();
 
+    // Si el itinerario está abierto, cerrarlo para mostrar la respuesta en el chat
+    const _itinWasOpen = !!(window._itinViewOpen);
+    const _itinSavedRoute = window._itinViewRoute || null;
+    const _itinSavedDocId = window._itinViewDocId || null;
+    const _itinSavedOptions = window._itinViewOptions || null;
+    if (_itinWasOpen) {
+      const _view = document.getElementById('itin-view');
+      const _appContent = document.getElementById('app-content');
+      const _inputBar = document.getElementById('app-input-bar');
+      window._itinViewOpen = false;
+      if (_view) _view.style.display = 'none';
+      if (_appContent) _appContent.style.display = '';
+      if (_inputBar) _inputBar.style.display = '';
+      if (typeof mapaRuta !== 'undefined') mapaRuta.destroy();
+      if (typeof mapaItinerario !== 'undefined') mapaItinerario.destroy();
+    }
+
     this._streaming = true;
     $send.disabled = true;
     const camBtn = document.getElementById('cam-btn');
@@ -681,6 +698,12 @@ const salma = {
       }
 
       this._scrollToBottom();
+
+      // Si el usuario escribió desde el itinerario y la respuesta NO abre ruta nueva,
+      // añadir botón para volver a la ruta
+      if (_itinWasOpen && _itinSavedRoute && !(data.route && data.route.stops)) {
+        this._addReturnToRouteButton(_itinSavedRoute, _itinSavedDocId, _itinSavedOptions);
+      }
 
     } catch (e) {
       console.error('Error en salma.send:', e);
@@ -1675,6 +1698,26 @@ const salma = {
     'Buscando restaurantes de verdad...', 'Verificando coordenadas...',
   ],
   _loadingInterval: null,
+
+  // ═══ BOTÓN VOLVER A LA RUTA (cuando se chatea desde el itinerario) ═══
+  _addReturnToRouteButton(route, docId, options) {
+    const area = this._getChatArea();
+    if (!area || !route) return;
+    const div = document.createElement('div');
+    div.className = 'msg-return-route';
+    const btn = document.createElement('button');
+    btn.className = 'btn-return-route';
+    btn.textContent = '← Volver a la ruta';
+    btn.addEventListener('click', () => {
+      div.remove();
+      if (typeof window.openItinerarioView === 'function') {
+        window.openItinerarioView(route, docId, options || { fromChat: true });
+      }
+    });
+    div.appendChild(btn);
+    area.appendChild(div);
+    this._scrollToBottom(true);
+  },
 
   _addLoading(customText, noRetry = false) {
     this._removeLoading();

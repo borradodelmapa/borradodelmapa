@@ -41,19 +41,18 @@ const mapaItinerario = {
     `;
     this._container.appendChild(header);
 
-    // Barra de acciones flotante — visible siempre (móvil y desktop)
-    const itinView = document.getElementById('itin-view');
-    if (itinView) {
-      const existingBar = itinView.querySelector('.itin-action-bar');
+    // Barra de acciones flotante — se añade al body para escapar del stacking context
+    {
+      const existingBar = document.body.querySelector('.itin-action-bar');
       if (existingBar) existingBar.remove();
       const actionBar = document.createElement('div');
       actionBar.className = 'itin-action-bar';
       actionBar.innerHTML = `
-        <a class="itin-btn itin-btn-maps" href="${mapsUrl}" target="_blank" rel="noopener" title="Abrir en Google Maps">🗺️</a>
+        <a class="itin-btn itin-btn-maps" href="${mapsUrl}" target="_blank" rel="noopener" title="Ver ruta en Google Maps">🗺️ Ruta</a>
         ${options.saved ? '' : '<button class="itin-btn itin-btn-save" id="itin-save-btn">GUARDAR</button>'}
         <button class="itin-btn itin-btn-share" id="itin-share-btn" title="Compartir">⤴</button>
       `;
-      itinView.appendChild(actionBar);
+      document.body.appendChild(actionBar);
     }
 
     // Contenedor scroll de cards
@@ -152,6 +151,10 @@ const mapaItinerario = {
     const horas = stop.estimated_hours || stop.duracion_horas || null;
     const km = stop.km_from_previous || 0;
 
+    const mapsNavUrl = (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && Math.abs(stop.lng) > 0.01)
+      ? `https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}&travelmode=driving`
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(stop.name || stop.headline || '')}`;
+
     card.innerHTML = `
       <div class="itin-card-photo" id="itin-photo-${index}">
         <div class="itin-card-photo-placeholder">${icon}</div>
@@ -165,6 +168,7 @@ const mapaItinerario = {
         </div>
         ${nota ? `<div class="itin-card-nota">${this._esc(nota)}</div>` : ''}
         <div class="itin-card-places" id="itin-places-${index}"></div>
+        <a class="itin-card-nav" href="${mapsNavUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 Ir aquí</a>
       </div>
     `;
 
@@ -332,9 +336,8 @@ const mapaItinerario = {
     this._cards = [];
     this._activeIdx = -1;
     if (this._container) this._container.innerHTML = '';
-    // Limpiar barra de acciones flotante
-    const bar = document.getElementById('itin-view')?.querySelector('.itin-action-bar');
-    if (bar) bar.remove();
+    // Limpiar barra de acciones flotante (ahora en body)
+    document.body.querySelectorAll('.itin-action-bar').forEach(el => el.remove());
   },
 };
 
@@ -344,6 +347,12 @@ const mapaItinerario = {
 
   function openItinerarioView(routeData, docId, options = {}) {
     _openedFromChat = !!options.fromChat;
+
+    // Guardar referencia global para que salma.js pueda reabrir la vista
+    window._itinViewOpen = true;
+    window._itinViewRoute = routeData;
+    window._itinViewDocId = docId;
+    window._itinViewOptions = options;
 
     const view = document.getElementById('itin-view');
     const appContent = document.getElementById('app-content');
@@ -386,6 +395,8 @@ const mapaItinerario = {
     const view = document.getElementById('itin-view');
     const appContent = document.getElementById('app-content');
     const inputBar = document.getElementById('app-input-bar');
+
+    window._itinViewOpen = false;
 
     mapaRuta.destroy();
     mapaItinerario.destroy();
