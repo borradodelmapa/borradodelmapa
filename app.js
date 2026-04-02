@@ -2935,31 +2935,9 @@ function escapeHTML(str) {
   return d.innerHTML;
 }
 
-// Sanitizar URLs inventadas por Claude — solo permite dominios de herramientas reales
-function sanitizeUrls(text) {
-  if (!text) return text;
-  var allowed = ['google.com/maps', 'googleusercontent.com', 'places.googleapis.com', 'thefork.com', 'thefork.es', 'booking.com', 'kiwi.com', 'rentalcars.com', 'discovercars.com', 'skyscanner.es', 'skyscanner.com', 'grab.com', 'm.uber.com', 'bolt.eu', 'didiglobal.com', 'gojek.com', 'careem.com', 'indrive.com', 'cabify.com', 'free-now.com', 'go.yandex.com', 'lyft.com', 'olacabs.com'];
-  var clean = text.replace(/(?:https?:\/\/|[a-z]+:\/\/)[^\s<>]+/gi, function(url) {
-    for (var i = 0; i < allowed.length; i++) {
-      if (url.indexOf(allowed[i]) !== -1) return url;
-    }
-    return '';
-  });
-  // Limpiar restos huérfanos tras eliminar URLs inventadas
-  return clean
-    .replace(/^.*este enlace te abre[^.\n]*\.?\s*$/gm, '')
-    .replace(/^.*descárga(?:te)?l[ao][^.\n]*\.?\s*$/gm, '')
-    .replace(/^.*[Ss]i no l[ao] tienes[^.\n]*[.,]?\s*$/gm, '')
-    .replace(/^.*[Ss]i tienes[^.\n]*instalad[ao][^.\n]*[.,]?\s*$/gm, '')
-    .replace(/aquí[.:]\s*\n/gi, '\n')
-    .replace(/:\s*\n\s*\n/g, '.\n\n')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
-}
-
 // Formatear mensaje de Salma: escapar HTML + linkificar URLs y teléfonos
 function formatMessage(str) {
-  let raw = sanitizeUrls(str || '');
+  let raw = str || '';
   // Extraer imágenes markdown ANTES del escape HTML y guardarlas como placeholders
   const images = [];
   raw = raw.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, (_, alt, url) => {

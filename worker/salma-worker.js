@@ -211,12 +211,14 @@ DOS MODOS:
 
 ACTÚA YA — para todo excepto rutas: restaurantes, hoteles, vuelos, taxis, transporte, grúas, vacunas, visados, emergencias, información, fotos, notas, cualquier servicio. Da el resultado con defaults inteligentes; el usuario afina si quiere.
 
-"QUIERO IR A X" = el viajero quiere LLEGAR a ese sitio. Responde así:
-- Primero: "Abre **Grab** y pide un coche hasta [destino]" (o Uber, Bolt, InDrive, DiDi — según el país del contexto). SOLO pon el nombre de la app, JAMÁS pongas URL ni enlace de la app. Ejemplo correcto: "Abre **Grab** y pide un coche hasta Samui Airport. Cuesta unos 300-500 THB." Ejemplo incorrecto: "Descarga Grab: https://grab.com/..."
-- Segundo: alternativa local (taxi, tuk-tuk, songthaew) con precio si lo sabes
-- Tercero: tiempo estimado
-- Cuarto: enlace de Google Maps con sus coordenadas como origen
-NO generes ruta JSON (SALMA_ROUTE_JSON) para esto — no es un itinerario, es un desplazamiento. NO preguntes "¿necesitas transporte?" — ES OBVIO. Actúa.
+"QUIERO IR A X" / TAXI / TRANSFER = el viajero quiere LLEGAR a ese sitio. OBLIGATORIO seguir estos pasos EN ORDEN:
+1. PRIMERO — USA buscar_web AHORA con query tipo "book transfer airport [ciudad] to city center" o "reserve taxi [origen] [destino] online". ESTO ES OBLIGATORIO, NO OPCIONAL. Sin buscar_web NO puedes responder.
+2. SEGUNDO — con los resultados de buscar_web, da al viajero el enlace REAL de la plataforma de reserva que hayas encontrado (GetTransfer, Klook, 12Go, KiwiTaxi, Welcome Pickups, intui.travel, etc.). Pon la URL exacta que devolvió buscar_web.
+3. TERCERO — recomienda la app de ride-hailing del país (Grab, Uber, Bolt, Careem, DiDi — según el contexto KV). Solo el nombre: "También puedes abrir **Grab** y pedir un coche directo."
+4. CUARTO — precio estimado + tiempo estimado + enlace Google Maps
+
+PROHIBIDO: teléfonos de compañías de taxi, centralitas, "llama antes", responder SIN haber usado buscar_web.
+NO generes ruta JSON — es un desplazamiento, no un itinerario.
 
 PLANIFICA PRIMERO — solo rutas explícitas ("hazme una ruta", "X días por Y", "itinerario"). Puedes hacer UNA pregunta breve para personalizar. Solo una. Si el usuario dice "dale", "lo que tú veas" o "hazla ya", genera sin preguntar.
 
@@ -235,12 +237,12 @@ BÚSQUEDAS EN TIEMPO REAL: tu conocimiento llega a agosto 2025. Si el dato puede
 
 TIEMPO Y CLIMA: el tiempo meteorológico cambia cada hora. Es siempre un dato en tiempo real. Si el contexto incluye [DATOS DEL TIEMPO REAL], úsalos directamente. Si NO los incluye, usa buscar_web INMEDIATAMENTE — nunca respondas sobre el tiempo actual con tu conocimiento base. Sin excepciones.
 
-JERARQUÍA DE HERRAMIENTAS: las tools específicas tienen prioridad sobre buscar_web. Para hoteles: buscar_hotel. Para vuelos: buscar_vuelos. Para restaurantes: ver sección SERVICIOS. buscar_web solo cuando no existe tool específica para ese dato.
+JERARQUÍA DE HERRAMIENTAS: las tools específicas tienen prioridad sobre buscar_web. Para hoteles: buscar_hotel. Para vuelos: buscar_vuelos. Para restaurantes: ver sección SERVICIOS. Para TAXIS y TRANSFERS: buscar_web SIEMPRE (busca plataformas de reserva online). buscar_web solo para lo que no tiene tool específica.
 
 PROHIBIDO INVENTAR — ESTO ES LO MÁS IMPORTANTE DE TODO EL PROMPT:
 1. Las ÚNICAS URLs que puedes dar son: (a) las que te devuelve una herramienta, (b) enlaces de Google Maps que TÚ construyes con datos reales (coordenadas del viajero, nombres de lugares verificados).
 2. NUNCA escribas NINGUNA URL excepto google.com/maps/dir/. Ni m.uber.com, ni grab://open, ni play.google.com, ni apps.apple.com, ni booking.com, ni uber.com, ni grab.onelink.me, ni NADA. Construir una URL con coordenadas del viajero NO es válido excepto para Google Maps. Si metes m.uber.com/ul/?pickup[latitude]=... ESTÁS INVENTANDO. Si metes grab://open?pickUpLatitude=... ESTÁS INVENTANDO. La única URL construida permitida es google.com/maps/dir/{lat},{lng}/Destino.
-3. NUNCA inventes teléfonos, direcciones, horarios, precios exactos ni nombres de negocios que no vengan de una herramienta o del contexto KV.
+3. NUNCA inventes teléfonos, direcciones, horarios, precios exactos ni nombres de negocios que no vengan de una herramienta o del contexto KV. NUNCA des teléfonos de compañías de taxi — el viajero quiere reservar online, no llamar a una centralita.
 4. Si no tienes el dato, usa buscar_web para encontrarlo. Si buscar_web no lo encuentra, di "no he encontrado ese dato" — NUNCA rellenes el hueco con algo que suena plausible.
 5. Recomendar una app por nombre está bien ("descárgate Grab"). Poner su URL NO está bien a menos que venga de buscar_web.
 6. EXCEPCIÓN ÚNICA — Google Maps: puedes construir enlaces google.com/maps/dir/ — SIEMPRE con las coordenadas numéricas del viajero como origen, NUNCA con nombre de ciudad. Ejemplo correcto: https://www.google.com/maps/dir/9.5234,100.0621/Samui+Airport — Ejemplo INCORRECTO: https://www.google.com/maps/dir/Ko+Samui/Samui+Airport — Esta es la ÚNICA URL que puedes construir tú. Cualquier otra URL (uber.com, booking.com, apps.apple.com, play.google.com, lo que sea) SOLO si viene de una herramienta.
@@ -1038,7 +1040,7 @@ Propinas: ${c.propinas}]`);
     if (lines.length > 0) {
       ctx.push(`[TRANSPORTE EN EL DESTINO — usa estos datos cuando el viajero pregunte por moverse:
 ${lines.join('\n')}
-INSTRUCCIÓN: usa estos datos cuando pregunten por transporte. Recomienda apps por NOMBRE ("descárgate Grab"). Si el viajero quiere RESERVAR un taxi o transfer, usa buscar_web para encontrar una web real de reserva en ese país — no inventes URLs. Da precios y consejos prácticos si los tienes.]`);
+INSTRUCCIÓN: usa estos datos cuando pregunten por transporte. Recomienda apps por NOMBRE ("abre Grab"). Para RESERVAR un transfer, usa buscar_web para encontrar una plataforma real de reserva online (GetTransfer, Klook, 12Go, KiwiTaxi, Welcome Pickups, etc.) — pon el enlace real que devuelva buscar_web. NUNCA des teléfonos de taxi ni centralitas.]`);
     }
   }
 
@@ -1231,12 +1233,22 @@ function sanitizeInventedUrls(text) {
     if (url.includes('kiwi.com')) return url;
     // Rentalcars/DiscoverCars — viene de buscar_coche
     if (url.includes('rentalcars.com') || url.includes('discovercars.com')) return url;
-    // Apps de transporte — SOLO URLs cortas inyectadas por el worker (no deep links inventados por IA)
-    const transportClean = ['https://www.grab.com', 'https://m.uber.com', 'https://bolt.eu',
-      'https://www.didiglobal.com', 'https://www.gojek.com', 'https://www.careem.com',
-      'https://indrive.com', 'https://cabify.com', 'https://www.free-now.com',
-      'https://go.yandex.com', 'https://www.lyft.com', 'https://www.olacabs.com'];
-    if (transportClean.some(t => url === t || url === t + '/')) return url;
+    // Apps de transporte
+    const transportClean = ['grab.com', 'm.uber.com', 'bolt.eu',
+      'didiglobal.com', 'gojek.com', 'careem.com',
+      'indrive.com', 'cabify.com', 'free-now.com',
+      'go.yandex.com', 'lyft.com', 'olacabs.com'];
+    if (transportClean.some(t => url.includes(t))) return url;
+    // Plataformas de reserva de transfers — vienen de buscar_web
+    const transferPlatforms = ['gettransfer.com', 'klook.com', '12go.asia', '12go.co',
+      'kiwitaxi.com', 'welcomepickups.com', 'intui.travel', 'jayride.com',
+      'suntransfers.com', 'hoppa.com', 'i-transfer.net', 'goopti.com',
+      'mozio.com', 'airportshuttles.com', 'terravision.eu', 'rome2rio.com',
+      'bookaway.com', 'busbud.com', 'omio.com', 'getyourguide.com',
+      'viator.com', 'civitatis.com', 'tiqets.com'];
+    if (transferPlatforms.some(t => url.includes(t))) return url;
+    // Skyscanner — viene de buscar_vuelos
+    if (url.includes('skyscanner.es') || url.includes('skyscanner.com')) return url;
     // Todo lo demás: inventado. Se elimina sin dejar rastro.
     return '';
   })
@@ -1356,28 +1368,29 @@ function injectTransportBlock(reply, kvTransportData, message) {
   // Si ya tiene enlace de una app de transporte, no duplicar
   if (/grab\.com|m\.uber\.com|bolt\.eu|indrive\.com/i.test(reply)) return reply;
 
+  // No inyectar bloque — dejamos que Claude use buscar_web para encontrar plataformas reales
+  // Solo añadimos un recordatorio sutil si Claude no ha mencionado reserva online
   let appBlock = '';
-  if (kvTransportData && kvTransportData.ridehailing) {
+  const hasBookingLink = /gettransfer|klook|12go|kiwitaxi|welcome.*pickups|intui\.travel/i.test(reply);
+  const hasAppMention = /grab|uber|bolt|careem|didi|gojek|indrive|cabify|freenow|yandex/i.test(reply);
+
+  if (!hasBookingLink && !hasAppMention && kvTransportData && kvTransportData.ridehailing) {
     const best = kvTransportData.ridehailing.best;
     const appData = best ? TRANSPORT_APP_URLS[best.toLowerCase()] : null;
     if (appData) {
-      // Caso normal: app conocida con URL de descarga
-      appBlock += `\n\n${appData.icon} Abre **${appData.name}** y pide un coche hasta tu destino.`;
-      appBlock += `\nDescargar ${appData.name}: ${appData.web}`;
-      // Alternativas
+      appBlock += `\n\n${appData.icon} La app más usada aquí es **${appData.name}** — ábrela y pide un coche hasta tu destino.`;
       const others = (kvTransportData.ridehailing.others || []).filter(o => o !== best);
       if (others.length > 0) {
         const otherNames = others.map(o => {
           const od = TRANSPORT_APP_URLS[o.toLowerCase()];
           return od ? od.name : o;
         }).join(', ');
-        appBlock += `\nTambién funciona: ${otherNames}`;
+        appBlock += ` También funciona: ${otherNames}.`;
       }
       if (kvTransportData.ridehailing.tips) {
         appBlock += `\n${kvTransportData.ridehailing.tips}`;
       }
     } else if (kvTransportData.ridehailing.tips) {
-      // Caso especial: no hay app en stores internacionales pero hay tips (ej: Irán → Snapp)
       appBlock += `\n\n🚕 **Transporte local**: ${kvTransportData.ridehailing.tips}`;
     }
   }
@@ -2168,7 +2181,11 @@ async function buscarWeb(input, braveKey) {
 
   try {
     // 1. Buscar via Brave Search API
-    const params = new URLSearchParams({ q: input.query, count: 5, country: 'ES', search_lang: 'es', ui_lang: 'es-ES' });
+    // Si es query de transfer/taxi, buscar en inglés para mejores resultados
+    const isTransferQuery = /transfer|taxi.*book|book.*taxi|book.*transfer|reserve.*taxi/i.test(input.query);
+    const searchLang = isTransferQuery ? 'en' : 'es';
+    const searchCountry = isTransferQuery ? 'ALL' : 'ES';
+    const params = new URLSearchParams({ q: input.query, count: 5, country: searchCountry, search_lang: searchLang, ui_lang: isTransferQuery ? 'en-US' : 'es-ES' });
     const braveRes = await fetch(`https://api.search.brave.com/res/v1/web/search?${params}`, {
       headers: { 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'X-Subscription-Token': braveKey },
     });
@@ -3783,8 +3800,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           if (helpCategory === 'weather') {
             weatherData = await fetchWeather(helpLocation, env.OPENWEATHER_KEY);
           } else if (helpCategory === 'transport') {
-            // Para transporte: buscar "taxi [location]" en vez del mensaje completo
-            helpResults = await searchPlacesForHelp('taxi', helpLocation, env.GOOGLE_PLACES_KEY, searchCoords);
+            // NO buscar taxis en Google Places — devuelve centralitas telefónicas
+            // Claude usará buscar_web para encontrar plataformas de reserva online
+            helpResults = null;
           } else {
             helpResults = await searchPlacesForHelp(message, helpLocation, env.GOOGLE_PLACES_KEY, searchCoords);
           }
@@ -3798,6 +3816,13 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     let weatherFallbackMsg = null;
     if (helpCategory === 'weather' && !weatherData) {
       weatherFallbackMsg = '[TIEMPO: Los datos en tiempo real no están disponibles. USA buscar_web AHORA para obtener el tiempo actual. El tiempo cambia cada hora — jamás respondas con tu conocimiento base.]';
+    }
+
+    // Si es transporte → forzar buscar_web para encontrar plataforma de reserva online
+    let transportForceBuscarWeb = null;
+    if (helpCategory === 'transport') {
+      const helpLoc = extractHelpLocation(message, history, currentRoute) || userLocationName || '';
+      transportForceBuscarWeb = `[TRANSPORTE SOLICITADO: el viajero quiere reservar transporte. USA buscar_web AHORA con query "book transfer ${helpLoc} online" o similar. DEBES encontrar una plataforma de reserva real (GetTransfer, Klook, 12Go, KiwiTaxi, Welcome Pickups, intui.travel) y dar el enlace. NO respondas sin antes usar buscar_web. NO des teléfonos de taxi.]`;
     }
 
     // ─── EVENT SEARCH (pre-Claude, solo cuando hay fechas) ───
@@ -3970,6 +3995,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     if (weatherFallbackMsg) {
       systemPrompt += '\n\n' + weatherFallbackMsg;
     }
+    if (transportForceBuscarWeb) {
+      systemPrompt += '\n\n' + transportForceBuscarWeb;
+    }
 
     const isRoute = isRouteRequest(message, history);
     const isFlightReq = isFlightRequest(message);
@@ -3979,7 +4007,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     // Si helpCategory=food y ya tenemos resultados de Google Places, no usar tool
     const serviceReqEffective = isServiceReq && !(helpCategory === 'food' && helpResults);
     // GPT-4o-mini para todo (reemplaza Sonnet/Haiku)
-    const needsTools = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg;
+    const needsTools = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg || !!transportForceBuscarWeb;
     const reqModel = 'gpt-4o-mini';
     const reqMaxTokens = needsTools ? 6000 : 3000;
 
