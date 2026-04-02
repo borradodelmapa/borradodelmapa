@@ -3079,21 +3079,23 @@ function sanitizeUrls(text) {
 
 // Formatear mensaje de Salma: escapar HTML + linkificar URLs y teléfonos
 function formatMessage(str) {
-  let raw = sanitizeUrls(str || '');
-  // Extraer imágenes markdown ANTES del escape HTML y guardarlas como placeholders
+  let raw = str || '';
+  // Extraer imágenes markdown ANTES de sanitizar y del escape HTML
   const images = [];
   raw = raw.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, (_, alt, url) => {
     const idx = images.length;
     images.push('<img src="' + url + '" alt="' + alt + '" style="width:100%;max-width:280px;border-radius:8px;margin:6px 0;display:block;" loading="lazy">');
     return '%%IMG' + idx + '%%';
   });
-  // Extraer enlaces markdown [texto](url) ANTES del escape HTML
+  // Extraer enlaces markdown [texto](url) ANTES de sanitizar — son links intencionales de Salma
   const links = [];
-  raw = raw.replace(/\[([^\]]+)\]\(([a-zA-Z][a-zA-Z0-9+.-]*:\/\/[^\s)]+)\)/g, (_, text, url) => {
+  raw = raw.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_, text, url) => {
     const idx = links.length;
     links.push('<a href="' + url + '" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href);return false;">' + text + '</a>');
     return '%%LINK' + idx + '%%';
   });
+  // Sanitizar el resto del texto (URLs en texto plano — filtra inventadas)
+  raw = sanitizeUrls(raw);
 
   let html = escapeHTML(raw);
   // URLs sueltas → enlaces clicables (onclick fuerza apertura externa en PWA)
