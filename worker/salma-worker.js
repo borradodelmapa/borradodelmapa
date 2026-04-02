@@ -994,7 +994,7 @@ Propinas: ${c.propinas}]`);
     if (lines.length > 0) {
       ctx.push(`[TRANSPORTE EN EL DESTINO — usa estos datos cuando el viajero pregunte por moverse:
 ${lines.join('\n')}
-INSTRUCCIÓN: usa estos datos cuando pregunten por transporte. Recomienda apps por NOMBRE ("descárgate Grab"), NUNCA pongas URLs de apps ni de tiendas. El viajero sabe buscar una app en su móvil. Da precios y consejos prácticos si los tienes.]`);
+INSTRUCCIÓN: usa estos datos cuando pregunten por transporte. Recomienda apps por NOMBRE ("descárgate Grab"). Si el viajero quiere RESERVAR un taxi o transfer, usa buscar_web para encontrar una web real de reserva en ese país — no inventes URLs. Da precios y consejos prácticos si los tienes.]`);
     }
   }
 
@@ -1191,10 +1191,55 @@ function sanitizeInventedUrls(text) {
     // Todo lo demás: inventado. Se elimina sin dejar rastro.
     return '';
   })
-  // Limpiar restos: líneas vacías múltiples, "descárgatela:\n\n", "aquí:\n\n"
-  .replace(/:\s*\n\s*\n/g, '.\n\n')
+  // Limpiar restos huérfanos tras eliminar URLs
+  .replace(/\((?:Android|iOS|iPhone|iPad)\)/gi, '')                          // (Android), (iOS)
+  .replace(/Si no l[ao] tienes,?\s*\.?\s*\n/gi, '\n')                       // "Si no la tienes,\n"
+  .replace(/este enlace te abre[^.\n]*\.?\s*\n/gi, '\n')                     // "este enlace te abre el viaje.\n"
+  .replace(/descárga(?:te)?l[ao][^.\n]*\.?\s*\n/gi, '\n')                   // "descárgatela aquí.\n"
+  .replace(/Si tienes \*?\*?(?:Uber|Grab|Bolt)\*?\*? instalad[ao][^.\n]*\.?\s*\n/gi, '\n') // "Si tienes Uber instalada.\n"
+  .replace(/aquí[.:]\s*\n/gi, '\n')                                          // "aquí:\n"
+  .replace(/:\s*\n\s*\n/g, '.\n\n')                                         // "algo:\n\n" → "algo.\n\n"
   .replace(/\n{3,}/g, '\n\n')
   .replace(/^\s+|\s+$/g, '');
+}
+
+// Inyecta enlace Google Maps si el usuario tiene GPS, la respuesta habla de ir a un sitio,
+// y no hay ya un enlace de Google Maps en la respuesta.
+function injectGoogleMapsLink(reply, userLocation, message) {
+  if (!reply || !userLocation || !userLocation.lat || !userLocation.lng) return reply;
+  // Si ya tiene un enlace de Google Maps, no duplicar
+  if (reply.includes('google.com/maps')) return reply;
+  // Detectar si el mensaje habla de ir a un lugar concreto
+  const goKeywords = /aeropuerto|airport|estación|station|terminal|cómo llegar|como llegar|ir a[l ]|llegar a[l ]|ir desde|dame enlace|google maps|navegar|cómo voy|como voy/i;
+  if (!goKeywords.test(message)) return reply;
+  // Extraer destino: primero del mensaje del usuario, luego de la respuesta
+  let dest = null;
+
+  // 1. Del mensaje: "ir al aeropuerto", "a la torre eiffel", "al taj mahal"
+  const msgDest = message.match(/(?:a[l ]?\s*(?:la\s+)?)(aeropuerto|estación|terminal|torre eiffel|taj mahal|coliseo|big ben|sagrada familia|alhambra|machu picchu|[\w\sáéíóúñ]+(?:airport|station|terminal))/i);
+  if (msgDest) dest = msgDest[1].trim();
+
+  // 2. Si solo dice "aeropuerto" genérico, buscar el nombre completo en la respuesta de Claude
+  if (dest && /^aeropuerto$/i.test(dest)) {
+    const realAirport = reply.match(/\*\*(?:Aeropuerto|Airport)[^*]*?\*\*/i);
+    if (realAirport) {
+      dest = realAirport[0].replace(/\*\*/g, '').replace(/\s*[-—].*/, '').trim();
+    } else {
+      const airportName = reply.match(/(?:Aeropuerto|Airport)\s+(?:de\s+|Internacional\s+)?([A-ZÁÉÍÓÚÑ][\w\sáéíóúñ'-]+?)(?:\s*[-—(+\n])/i);
+      if (airportName) dest = 'Aeropuerto ' + airportName[1].trim();
+    }
+  }
+
+  // 3. Fallback: buscar lugar con keyword en negrita en la respuesta
+  if (!dest) {
+    const placeMatch = reply.match(/\*\*([\w\sáéíóúñ'-]*(?:Airport|Aeropuerto|Station|Tower|Torre|Mahal|Museum|Museo|Palace|Temple|Cathedral|Plaza|Beach)[\w\sáéíóúñ'-]*)\*\*/i);
+    if (placeMatch) dest = placeMatch[1];
+  }
+
+  if (!dest) return reply;
+  dest = dest.replace(/\s+/g, '+');
+  const mapsUrl = `https://www.google.com/maps/dir/${userLocation.lat},${userLocation.lng}/${dest}`;
+  return reply + `\n\n📍 ${mapsUrl}`;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -3913,7 +3958,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
 
         // ── Procesar respuesta final (ruta, verificación, etc.) ──
         let route = extractRouteFromReply(allText);
-        const reply = replyWithoutRouteBlock(allText);
+        let reply = replyWithoutRouteBlock(allText);
+        // Inyectar Google Maps automáticamente si aplica
+        reply = injectGoogleMapsLink(reply, userLocation, message);
 
         if (route) {
           // ── PASO 1: Enriquecer paradas con KV (coords + fotos verificadas, instantáneo) ──
