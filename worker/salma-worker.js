@@ -1321,17 +1321,26 @@ function injectGoogleMapsLink(reply, userLocation, message) {
   }
 
   if (!dest) return reply;
-  dest = dest.replace(/\s+/g, '+');
 
   // Extraer origen del mensaje: "desde X" → usar X como origen en vez de GPS
   let origin = `${userLocation.lat},${userLocation.lng}`;
+  let originCity = '';
   const fromMatch = message.match(/desde\s+([\wáéíóúñÁÉÍÓÚÑ\s]{3,40}?)(?:\s+(?:al?\s|hasta\s|hacia\s|para\s|en\s+taxi|en\s+coche|por|con|,)|$)/i);
   if (fromMatch) {
     const fromPlace = fromMatch[1].trim();
     if (fromPlace.length >= 3 && !/^(un|una|el|la|los|las|mi|tu|su|aqui|ahi|alli|taxi|coche|bus|tren)$/i.test(fromPlace)) {
       origin = fromPlace.replace(/\s+/g, '+');
+      // Extraer ciudad del origen para enriquecer destinos genéricos
+      const cityMatch = fromPlace.match(/(?:de|in)\s+([\wáéíóúñ]+)/i);
+      if (cityMatch) originCity = cityMatch[1];
     }
   }
+
+  // Si el destino es genérico ("centro", "centro de la ciudad"), añadir la ciudad
+  if (/^centro\b/i.test(dest) && originCity) {
+    dest = dest + ', ' + originCity;
+  }
+  dest = dest.replace(/\s+/g, '+');
 
   const mapsUrl = `https://www.google.com/maps/dir/${origin}/${dest}`;
   return reply + `\n\n📍 ${mapsUrl}`;
@@ -1354,7 +1363,7 @@ function injectTransportBlock(reply, kvTransportData, message) {
     if (appData) {
       // Caso normal: app conocida con URL de descarga
       appBlock += `\n\n${appData.icon} Abre **${appData.name}** y pide un coche hasta tu destino.`;
-      appBlock += ` Si no la tienes: [Descargar ${appData.name}](${appData.web})`;
+      appBlock += `\nDescargar ${appData.name}: ${appData.web}`;
       // Alternativas
       const others = (kvTransportData.ridehailing.others || []).filter(o => o !== best);
       if (others.length > 0) {
