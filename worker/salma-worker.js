@@ -1270,9 +1270,10 @@ function sanitizeInventedUrls(text) {
 // Inyecta enlace Google Maps si el usuario tiene GPS, la respuesta habla de ir a un sitio,
 // y no hay ya un enlace de Google Maps en la respuesta.
 function injectGoogleMapsLink(reply, userLocation, message) {
-  if (!reply || !userLocation || !userLocation.lat || !userLocation.lng) return reply;
+  if (!reply || !message) return reply;
   // Si ya tiene un enlace de Google Maps, no duplicar
   if (reply.includes('google.com/maps')) return reply;
+  const hasGPS = userLocation && userLocation.lat && userLocation.lng;
   // Detectar si el mensaje habla de ir a un lugar concreto
   const goKeywords = /aeropuerto|airport|estación|estacion|station|terminal|cómo llegar|como llegar|ir a[l ]|llegar a[l ]|ir desde|dame enlace|google maps|navegar|cómo voy|como voy|taxi/i;
   if (!goKeywords.test(message)) return reply;
@@ -1335,7 +1336,7 @@ function injectGoogleMapsLink(reply, userLocation, message) {
   if (!dest) return reply;
 
   // Extraer origen del mensaje: "desde X" → usar X como origen en vez de GPS
-  let origin = `${userLocation.lat},${userLocation.lng}`;
+  let origin = hasGPS ? `${userLocation.lat},${userLocation.lng}` : '';
   let originCity = '';
   const fromMatch = message.match(/desde\s+([\wáéíóúñÁÉÍÓÚÑ\s]{3,40}?)(?:\s+(?:al?\s|hasta\s|hacia\s|para\s|en\s+taxi|en\s+coche|por|con|,)|$)/i);
   if (fromMatch) {
@@ -1343,10 +1344,18 @@ function injectGoogleMapsLink(reply, userLocation, message) {
     if (fromPlace.length >= 3 && !/^(un|una|el|la|los|las|mi|tu|su|aqui|ahi|alli|taxi|coche|bus|tren)$/i.test(fromPlace)) {
       origin = fromPlace.replace(/\s+/g, '+');
       // Extraer ciudad del origen para enriquecer destinos genéricos
-      const cityMatch = fromPlace.match(/(?:de|in)\s+([\wáéíóúñ]+)/i);
+      // "aeropuerto de Hanoi" → "Hanoi", "aeropuerto Hanoi" → "Hanoi"
+      const cityMatch = fromPlace.match(/(?:aeropuerto|airport|estacion|estación|terminal|puerto)\s+(?:de\s+|internacional\s+(?:de\s+)?)?([\wáéíóúñÁÉÍÓÚÑ]+(?:\s+[\wáéíóúñÁÉÍÓÚÑ]+)?)/i);
       if (cityMatch) originCity = cityMatch[1];
+      // Fallback: última palabra significativa del origen
+      if (!originCity) {
+        const words = fromPlace.split(/\s+/).filter(w => !/^(el|la|de|del|los|las|un|una|aeropuerto|airport|estacion|estación|terminal|internacional)$/i.test(w));
+        if (words.length > 0) originCity = words[words.length - 1];
+      }
     }
   }
+  // Si no hay GPS ni origen en el mensaje, no podemos generar enlace útil
+  if (!origin) return reply;
 
   // Si el destino es genérico ("centro", "centro de la ciudad"), añadir la ciudad
   if (/^centro\b/i.test(dest) && originCity) {
@@ -3818,11 +3827,43 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       weatherFallbackMsg = '[TIEMPO: Los datos en tiempo real no están disponibles. USA buscar_web AHORA para obtener el tiempo actual. El tiempo cambia cada hora — jamás respondas con tu conocimiento base.]';
     }
 
-    // Si es transporte → forzar buscar_web para encontrar plataforma de reserva online
+    // Si es transporte → buscar plataformas de reserva ANTES de llamar a Claude
     let transportForceBuscarWeb = null;
-    if (helpCategory === 'transport') {
+    if (helpCategory === 'transport' && env.BRAVE_SEARCH_KEY) {
       const helpLoc = extractHelpLocation(message, history, currentRoute) || userLocationName || '';
-      transportForceBuscarWeb = `[TRANSPORTE SOLICITADO: el viajero quiere reservar transporte. USA buscar_web AHORA con query "book transfer ${helpLoc} online" o similar. DEBES encontrar una plataforma de reserva real (GetTransfer, Klook, 12Go, KiwiTaxi, Welcome Pickups, intui.travel) y dar el enlace. NO respondas sin antes usar buscar_web. NO des teléfonos de taxi.]`;
+      try {
+        // Buscar directamente plataformas de reserva de transfers
+        const transferResults = await buscarWeb(
+          { query: `book airport transfer ${helpLoc} online site:gettransfer.com OR site:klook.com OR site:12go.asia OR site:kiwitaxi.com OR site:welcomepickups.com OR site:intui.travel` },
+          env.BRAVE_SEARCH_KEY
+        );
+        const links = (transferResults.resultados || [])
+          .filter(r => r.url && /gettransfer|klook|12go|kiwitaxi|welcomepickups|intui\.travel|jayride|suntransfers|bookaway|mozio|getyourguide|viator|civitatis/i.test(r.url))
+          .slice(0, 3)
+          .map(r => `- ${r.titulo}: ${r.url}`)
+          .join('\n');
+        if (links) {
+          transportForceBuscarWeb = `[TRANSPORTE — ENLACES DE RESERVA VERIFICADOS:\n${links}\nINCLUYE estos enlaces en tu respuesta para que el viajero pueda reservar online. NO busques más — ya tienes los datos. NO des teléfonos. NO preguntes si quiere el enlace — DALO DIRECTAMENTE.]`;
+        } else {
+          // Fallback: búsqueda más genérica
+          const fallbackResults = await buscarWeb(
+            { query: `${helpLoc} airport transfer booking online` },
+            env.BRAVE_SEARCH_KEY
+          );
+          const fallbackLinks = (fallbackResults.resultados || [])
+            .filter(r => r.url && !/blog|tripadvisor|reddit|quora|youtube|wikipedia/i.test(r.url))
+            .slice(0, 3)
+            .map(r => `- ${r.titulo}: ${r.url}`)
+            .join('\n');
+          if (fallbackLinks) {
+            transportForceBuscarWeb = `[TRANSPORTE — OPCIONES DE RESERVA ONLINE:\n${fallbackLinks}\nINCLUYE estos enlaces para que el viajero reserve. NO des teléfonos. ACTÚA DIRECTO.]`;
+          } else {
+            transportForceBuscarWeb = `[TRANSPORTE: no se encontraron plataformas de reserva online. Recomienda la app de ride-hailing del país (Grab, Uber, Bolt, etc. según contexto KV) y sugiere buscar "airport transfer ${helpLoc}" en Google. NO des teléfonos de taxi.]`;
+          }
+        }
+      } catch (e) {
+        transportForceBuscarWeb = `[TRANSPORTE: recomienda la app de ride-hailing del país y sugiere buscar "airport transfer ${helpLoc}" en Google. NO des teléfonos.]`;
+      }
     }
 
     // ─── EVENT SEARCH (pre-Claude, solo cuando hay fechas) ───
@@ -4007,7 +4048,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     // Si helpCategory=food y ya tenemos resultados de Google Places, no usar tool
     const serviceReqEffective = isServiceReq && !(helpCategory === 'food' && helpResults);
     // GPT-4o-mini para todo (reemplaza Sonnet/Haiku)
-    const needsTools = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg || !!transportForceBuscarWeb;
+    const needsTools = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg;
     const reqModel = 'gpt-4o-mini';
     const reqMaxTokens = needsTools ? 6000 : 3000;
 
