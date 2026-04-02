@@ -2938,13 +2938,15 @@ function escapeHTML(str) {
 // Sanitizar URLs inventadas por Claude — solo permite dominios de herramientas reales
 function sanitizeUrls(text) {
   if (!text) return text;
-  const allowed = ['google.com/maps', 'googleusercontent.com', 'places.googleapis.com', 'thefork.com', 'thefork.es', 'booking.com', 'kiwi.com', 'rentalcars.com', 'discovercars.com'];
-  return text.replace(/(?:https?:\/\/|[a-z]+:\/\/)[^\s<>]+/gi, function(url) {
-    for (let i = 0; i < allowed.length; i++) {
+  var allowed = ['google.com/maps', 'googleusercontent.com', 'places.googleapis.com', 'thefork.com', 'thefork.es', 'booking.com', 'kiwi.com', 'rentalcars.com', 'discovercars.com'];
+  var clean = text.replace(/(?:https?:\/\/|[a-z]+:\/\/)[^\s<>]+/gi, function(url) {
+    for (var i = 0; i < allowed.length; i++) {
       if (url.indexOf(allowed[i]) !== -1) return url;
     }
     return '';
   });
+  // Limpiar restos huérfanos
+  return clean.replace(/:\s*\n\s*\n/g, '.\n\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 
 // Formatear mensaje de Salma: escapar HTML + linkificar URLs y teléfonos

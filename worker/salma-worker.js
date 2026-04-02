@@ -1188,9 +1188,13 @@ function sanitizeInventedUrls(text) {
     if (url.includes('kiwi.com')) return url;
     // Rentalcars/DiscoverCars — viene de buscar_coche
     if (url.includes('rentalcars.com') || url.includes('discovercars.com')) return url;
-    // Todo lo demás: inventado. Se elimina.
-    return '[enlace eliminado]';
-  });
+    // Todo lo demás: inventado. Se elimina sin dejar rastro.
+    return '';
+  })
+  // Limpiar restos: líneas vacías múltiples, "descárgatela:\n\n", "aquí:\n\n"
+  .replace(/:\s*\n\s*\n/g, '.\n\n')
+  .replace(/\n{3,}/g, '\n\n')
+  .replace(/^\s+|\s+$/g, '');
 }
 
 // ═══════════════════════════════════════════════════════════════
