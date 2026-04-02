@@ -229,6 +229,13 @@ DEFAULTS — nunca preguntes lo que puedes asumir:
 
 PETICIONES MÚLTIPLES: si el mensaje pide más de una cosa, ejecútalas todas en orden lógico — lo urgente primero (taxi, grúa, vuelo hoy, emergencia), lo planificable después (ruta, hotel para la semana que viene). Si son del mismo tipo, sigue el orden del mensaje.
 
+SALMA_ACTION — acciones especiales que el sistema detecta y ejecuta automáticamente. Puedes emitirlas al final de tu respuesta, en una línea aparte, sin explicarlas al usuario:
+— Para buscar vuelos: SALMA_ACTION:{"type":"SEARCH_FLIGHTS","origin":"MAD","destination":"BKK","date":"2026-06-01","return_date":"2026-06-15","currency":"EUR","adults":1}
+— Para buscar hoteles: SALMA_ACTION:{"type":"SEARCH_HOTELS","city":"Bangkok","budget":"mid","adults":2,"checkin":"2026-06-01","checkout":"2026-06-05"}
+— Para buscar lugares: SALMA_ACTION:{"type":"SEARCH_PLACES","query":"restaurante vietnamita Hanoi","type":"restaurant"}
+— Para guardar una nota automáticamente: SALMA_ACTION:{"type":"SAVE_NOTE","texto":"Visado Vietnam gratis hasta 45 días","tipo":"visado","country_code":"VN","country_name":"Vietnam"}
+Usa SALMA_ACTION ADEMÁS de tu respuesta normal, no en lugar de ella. El usuario ve primero tu texto; los resultados visuales aparecen debajo. Usa herramientas (buscar_vuelos, buscar_hotel, buscar_restaurante) cuando quieras los datos EN TU RESPUESTA. Usa SALMA_ACTION cuando quieras mostrar una tarjeta visual DEBAJO de tu respuesta.
+
 DATO PRIMERO SIEMPRE: la información útil va al principio. La personalidad y el contexto, detrás.
 
 BÚSQUEDAS EN TIEMPO REAL: tu conocimiento llega a agosto 2025. Si el dato puede haber cambiado — horarios, precios, disponibilidad, eventos, si algo está abierto — avisa al usuario y usa buscar_web. Cita siempre la fuente con su URL completa. Si no encuentras el dato exacto, díselo y dile dónde puede buscarlo él.
@@ -2295,6 +2302,184 @@ async function buscarFotoLugar(input, placesKey) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// SALMA_ACTION — Interceptor de acciones en el texto de Claude
+// Claude puede emitir SALMA_ACTION:{...} en su respuesta para
+// triggear búsquedas (vuelos, hoteles, lugares) o guardar notas.
+// El worker extrae los patrones, limpia el texto y ejecuta en paralelo.
+// Los resultados van en doneEvt.action_results → frontend renderiza cards.
+// ═══════════════════════════════════════════════════════════════
+
+// Extrae todos los SALMA_ACTION:{...} del texto.
+// Devuelve { cleanText, actions[] }
+function extractSalmaActions(text) {
+  const actions = [];
+  // Acepta tanto JSON de una línea como JSON con espacios internos
+  const cleanText = text.replace(/SALMA_ACTION:\s*(\{[^\n]{1,500}\})/g, (match, jsonStr) => {
+    try {
+      const action = JSON.parse(jsonStr);
+      if (action && action.type) actions.push(action);
+    } catch (_) {}
+    return '';
+  }).replace(/\n{3,}/g, '\n\n').trim();
+  return { cleanText, actions };
+}
+
+// Ejecuta todas las acciones en paralelo y filtra nulls
+async function executeSalmaActionsParallel(actions, env, userLocation) {
+  const results = await Promise.all(
+    actions.map(action => executeSalmaAction(action, env, userLocation).catch(e => ({ type: action.type, error: e.message })))
+  );
+  return results.filter(r => r !== null);
+}
+
+// Dispatcher individual — un switch por tipo de acción
+async function executeSalmaAction(action, env, userLocation) {
+  switch (action.type) {
+    case 'SEARCH_FLIGHTS':
+      return await searchFlightsKiwi(action, env.KIWI_API_KEY);
+    case 'SEARCH_HOTELS':
+      return await searchHotelsPlaces(action, env.GOOGLE_PLACES_KEY, userLocation);
+    case 'SEARCH_PLACES':
+      return await searchPlacesGoogle(action, env.GOOGLE_PLACES_KEY, userLocation);
+    case 'SAVE_NOTE':
+      // La nota se guarda en el frontend; aquí la devolvemos tal cual
+      return { type: 'note', texto: action.texto, tipo: action.tipo || 'general', country_code: action.country_code || null, country_name: action.country_name || null };
+    default:
+      return null;
+  }
+}
+
+// ═══ KIWI TEQUILA v2 — Búsqueda de vuelos ═══
+// params: { origin, destination, date, return_date?, currency?, adults? }
+// origin/destination → IATA code (ej. "MAD", "BKK") o nombre de ciudad
+async function searchFlightsKiwi(params, apiKey) {
+  if (!apiKey) return { type: 'flights', error: 'No KIWI_API_KEY configurada' };
+  const { origin, destination, date, return_date, currency = 'EUR', adults = 1 } = params;
+  if (!origin || !destination || !date) {
+    return { type: 'flights', error: 'Faltan parámetros: origin, destination, date' };
+  }
+
+  // Kiwi usa DD/MM/YYYY
+  const fmtDate = d => d.split('-').reverse().join('/');
+
+  const qs = new URLSearchParams({
+    fly_from: origin,
+    fly_to: destination,
+    date_from: fmtDate(date),
+    date_to: fmtDate(date),
+    currency,
+    adults: String(adults),
+    limit: '5',
+    sort: 'price',
+    partner: 'picky',
+  });
+  if (return_date) {
+    qs.set('return_from', fmtDate(return_date));
+    qs.set('return_to', fmtDate(return_date));
+  }
+
+  const res = await fetch(`https://api.tequila.kiwi.com/v2/search?${qs}`, {
+    headers: { apikey: apiKey },
+  });
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '');
+    return { type: 'flights', error: `Kiwi ${res.status}: ${errText.slice(0, 100)}` };
+  }
+  const data = await res.json();
+
+  const flights = (data.data || []).slice(0, 5).map(f => ({
+    id: f.id,
+    origin: `${f.cityFrom} (${f.flyFrom})`,
+    destination: `${f.cityTo} (${f.flyTo})`,
+    departure: f.local_departure,
+    arrival: f.local_arrival,
+    duration_h: f.duration?.departure ? Math.round(f.duration.departure / 3600 * 10) / 10 : null,
+    airlines: [...new Set(f.airlines || [])].join(', '),
+    price: f.price,
+    currency,
+    stops: f.route ? f.route.length - 1 : 0,
+    booking_link: f.deep_link || null,
+  }));
+
+  return { type: 'flights', origin, destination, date, return_date: return_date || null, currency, flights };
+}
+
+// ═══ GOOGLE PLACES — Búsqueda de hoteles ═══
+// params: { city?, lat?, lng?, budget?, adults?, checkin?, checkout? }
+async function searchHotelsPlaces(params, placesKey, userLocation) {
+  if (!placesKey) return { type: 'hotels', error: 'No GOOGLE_PLACES_KEY configurada' };
+  const { city, lat, lng, budget, adults = 2, checkin, checkout } = params;
+
+  // Construir query adaptada al presupuesto
+  let query = 'hotel';
+  if (budget === 'low') query = 'hostel alojamiento barato';
+  else if (budget === 'high') query = 'hotel de lujo boutique';
+  else if (budget === 'mid') query = 'hotel 3 estrellas';
+  if (city) query += ' ' + city;
+
+  const searchLat = lat || userLocation?.lat;
+  const searchLng = lng || userLocation?.lng;
+
+  let url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&type=lodging&language=es&key=${placesKey}`;
+  if (searchLat && searchLng) url += `&location=${searchLat},${searchLng}&radius=3000`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+  if (!data?.results?.length) return { type: 'hotels', error: 'Sin resultados', city };
+
+  const hotels = data.results.slice(0, 5).map(p => ({
+    name: p.name,
+    address: p.formatted_address || p.vicinity || '',
+    rating: p.rating || null,
+    reviews: p.user_ratings_total || 0,
+    price_level: p.price_level || null,
+    place_id: p.place_id,
+    photo_ref: p.photos?.[0]?.photo_reference || null,
+    lat: p.geometry?.location?.lat,
+    lng: p.geometry?.location?.lng,
+    maps_link: p.place_id ? `https://www.google.com/maps/place/?q=place_id:${p.place_id}` : null,
+    open_now: p.opening_hours?.open_now ?? null,
+  }));
+
+  return { type: 'hotels', city, checkin, checkout, adults, budget, hotels };
+}
+
+// ═══ GOOGLE PLACES — Búsqueda genérica de lugares ═══
+// params: { query, type?, lat?, lng? }
+async function searchPlacesGoogle(params, placesKey, userLocation) {
+  if (!placesKey) return { type: 'places', error: 'No GOOGLE_PLACES_KEY configurada' };
+  const { query, type, lat, lng } = params;
+  if (!query) return { type: 'places', error: 'Falta query' };
+
+  const searchLat = lat || userLocation?.lat;
+  const searchLng = lng || userLocation?.lng;
+
+  let url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&language=es&key=${placesKey}`;
+  if (type) url += `&type=${encodeURIComponent(type)}`;
+  if (searchLat && searchLng) url += `&location=${searchLat},${searchLng}&radius=5000`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+  if (!data?.results?.length) return { type: 'places', error: 'Sin resultados', query };
+
+  const places = data.results.slice(0, 5).map(p => ({
+    name: p.name,
+    address: p.formatted_address || p.vicinity || '',
+    rating: p.rating || null,
+    reviews: p.user_ratings_total || 0,
+    price_level: p.price_level || null,
+    place_id: p.place_id,
+    photo_ref: p.photos?.[0]?.photo_reference || null,
+    lat: p.geometry?.location?.lat,
+    lng: p.geometry?.location?.lng,
+    maps_link: p.place_id ? `https://www.google.com/maps/place/?q=place_id:${p.place_id}` : null,
+    open_now: p.opening_hours?.open_now ?? null,
+  }));
+
+  return { type: 'places', query, places };
+}
+
+// ═══════════════════════════════════════════════════════════════
 // OPENAI API HELPERS
 // ═══════════════════════════════════════════════════════════════
 
@@ -4298,6 +4483,16 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         // Inyectar bloque de transporte (app + descarga) si aplica
         reply = injectTransportBlock(reply, kvTransportData, message);
 
+        // ── SALMA_ACTION: extraer acciones del texto, limpiar reply, ejecutar APIs en paralelo ──
+        let actionResults = [];
+        try {
+          const { cleanText: saClean, actions: saActions } = extractSalmaActions(reply);
+          if (saActions.length > 0) {
+            reply = saClean;
+            actionResults = await executeSalmaActionsParallel(saActions, env, userLocation);
+          }
+        } catch (_) {}
+
         if (route) {
           // ── PASO 1: Enriquecer paradas con KV (coords + fotos verificadas, instantáneo) ──
           if (env.SALMA_KB) {
@@ -4361,6 +4556,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
 
         // ── Enviar DONE con ruta verificada (fotos + coords corregidas) ──
         const doneEvt = { done: true, reply, route: route || null };
+        if (actionResults.length > 0) doneEvt.action_results = actionResults;
         if (photoUploadPromise) {
           const photoResult = await photoUploadPromise;
           if (photoResult) { doneEvt.photo_url = photoResult.url; doneEvt.photo_key = photoResult.key; }

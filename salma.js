@@ -746,6 +746,22 @@ const salma = {
                   }
                   if (evt.photo_key) this._savePhotoToGallery(evt.photo_url, evt.photo_key, evt.photo_tag, evt.photo_caption);
                 }
+                // Renderizar tarjetas de resultados de SALMA_ACTION
+                if (evt.action_results && evt.action_results.length > 0) {
+                  try { this._renderActionResults(evt.action_results); } catch (_) {}
+                }
+                // Guardar notas automáticas de SALMA_ACTION:SAVE_NOTE
+                if (evt.action_results) {
+                  for (const r of evt.action_results) {
+                    if (r.type === 'note' && r.texto && window.currentUser) {
+                      try {
+                        if (typeof notasManager !== 'undefined') {
+                          notasManager.create({ texto: r.texto, tipo: r.tipo || 'general', countryCode: r.country_code || null, countryName: r.country_name || null, origen: 'salma', fuente: 'salma_action' });
+                        }
+                      } catch (_) {}
+                    }
+                  }
+                }
                 resolved = true;
                 resolve({
                   reply: evt.reply || fullText,
@@ -1285,6 +1301,110 @@ const salma = {
     if (localStorage.getItem('salma_voice') === 'true') {
       setTimeout(() => this.salmaSpeak(text), 50);
     }
+  },
+
+  // ═══ SALMA_ACTION — Renderizar tarjetas de resultados ═══
+  _renderActionResults(results) {
+    const area = this._getChatArea();
+    if (!area) return;
+    for (const result of results) {
+      if (!result || result.error) continue;
+      const wrap = document.createElement('div');
+      wrap.className = 'salma-action-results';
+      switch (result.type) {
+        case 'flights': this._renderFlightResults(result, wrap); break;
+        case 'hotels':  this._renderHotelResults(result, wrap); break;
+        case 'places':  this._renderPlaceResults(result, wrap); break;
+        default: continue;
+      }
+      if (wrap.children.length > 0) {
+        area.appendChild(wrap);
+        this._scrollToBottom(true);
+      }
+    }
+  },
+
+  _renderFlightResults(result, wrap) {
+    if (!result.flights || result.flights.length === 0) return;
+    const header = document.createElement('div');
+    header.className = 'salma-results-header';
+    header.textContent = `✈️ Vuelos ${result.origin} → ${result.destination} · ${result.date}${result.return_date ? ' (ida y vuelta)' : ''}`;
+    wrap.appendChild(header);
+    const grid = document.createElement('div');
+    grid.className = 'salma-result-grid';
+    for (const f of result.flights) {
+      const dep = f.departure ? new Date(f.departure).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : '';
+      const arr = f.arrival ? new Date(f.arrival).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : '';
+      const stops = f.stops === 0 ? 'Directo' : f.stops === 1 ? '1 escala' : `${f.stops} escalas`;
+      const card = document.createElement('div');
+      card.className = 'salma-result-card';
+      card.innerHTML = `
+        <div class="salma-result-card-body">
+          <div class="salma-result-card-name">✈ ${f.airlines || 'Aerolínea'}</div>
+          <div class="salma-result-card-sub">${dep} → ${arr} · ${f.duration_h ? f.duration_h + 'h' : ''} · ${stops}</div>
+          <div class="salma-result-card-price">${f.price ? f.price + ' ' + (result.currency || 'EUR') : ''}</div>
+          ${f.booking_link ? `<a class="salma-result-card-cta" href="${f.booking_link}" target="_blank" rel="noopener">Reservar</a>` : ''}
+        </div>`;
+      grid.appendChild(card);
+    }
+    wrap.appendChild(grid);
+  },
+
+  _renderHotelResults(result, wrap) {
+    const items = result.hotels;
+    if (!items || items.length === 0) return;
+    const SALMA_API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+    const header = document.createElement('div');
+    header.className = 'salma-results-header';
+    header.textContent = `🏨 Hoteles en ${result.city || 'la zona'}${result.checkin ? ' · ' + result.checkin : ''}`;
+    wrap.appendChild(header);
+    const grid = document.createElement('div');
+    grid.className = 'salma-result-grid';
+    for (const h of items) {
+      const stars = h.rating ? '⭐ ' + h.rating.toFixed(1) + (h.reviews ? ` (${h.reviews.toLocaleString()})` : '') : '';
+      const price = h.price_level ? '€'.repeat(h.price_level) : '';
+      const card = document.createElement('div');
+      card.className = 'salma-result-card';
+      card.innerHTML = `
+        ${h.photo_ref ? `<img src="${SALMA_API}/photo?ref=${encodeURIComponent(h.photo_ref)}&maxwidth=400" alt="${h.name}" loading="lazy" onerror="this.style.display='none'">` : ''}
+        <div class="salma-result-card-body">
+          <div class="salma-result-card-name">${h.name}</div>
+          <div class="salma-result-card-sub">${h.address}</div>
+          ${stars ? `<div class="salma-result-card-rating">${stars}</div>` : ''}
+          ${price ? `<div class="salma-result-card-price">${price}</div>` : ''}
+          ${h.maps_link ? `<a class="salma-result-card-cta" href="${h.maps_link}" target="_blank" rel="noopener">Ver en Maps</a>` : ''}
+        </div>`;
+      grid.appendChild(card);
+    }
+    wrap.appendChild(grid);
+  },
+
+  _renderPlaceResults(result, wrap) {
+    const items = result.places;
+    if (!items || items.length === 0) return;
+    const SALMA_API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+    const header = document.createElement('div');
+    header.className = 'salma-results-header';
+    header.textContent = `📍 ${result.query}`;
+    wrap.appendChild(header);
+    const grid = document.createElement('div');
+    grid.className = 'salma-result-grid';
+    for (const p of items) {
+      const stars = p.rating ? '⭐ ' + p.rating.toFixed(1) + (p.reviews ? ` (${p.reviews.toLocaleString()})` : '') : '';
+      const openBadge = p.open_now === true ? '<span class="salma-open-badge">Abierto</span>' : p.open_now === false ? '<span class="salma-closed-badge">Cerrado</span>' : '';
+      const card = document.createElement('div');
+      card.className = 'salma-result-card';
+      card.innerHTML = `
+        ${p.photo_ref ? `<img src="${SALMA_API}/photo?ref=${encodeURIComponent(p.photo_ref)}&maxwidth=400" alt="${p.name}" loading="lazy" onerror="this.style.display='none'">` : ''}
+        <div class="salma-result-card-body">
+          <div class="salma-result-card-name">${p.name} ${openBadge}</div>
+          <div class="salma-result-card-sub">${p.address}</div>
+          ${stars ? `<div class="salma-result-card-rating">${stars}</div>` : ''}
+          ${p.maps_link ? `<a class="salma-result-card-cta" href="${p.maps_link}" target="_blank" rel="noopener">Ver en Maps</a>` : ''}
+        </div>`;
+      grid.appendChild(card);
+    }
+    wrap.appendChild(grid);
   },
 
   _saveNoteFromBubble(text, btnEl) {
