@@ -832,7 +832,7 @@ const salma = {
                 textDone = true;
                 isBlocksRoute = true;
                 this._fixStreamBubble();
-                this._addLoading(`Montando ${evt.total_blocks || evt.plan.length} partes...`);
+                this._addLoading(`Montando ${evt.total_blocks || evt.plan.length} partes...`, true);
                 continue;
               }
 
@@ -841,7 +841,7 @@ const salma = {
                 draftSent = true;
                 textDone = true;
                 this._fixStreamBubble();
-                this._addLoading(`Verificando parte ${evt.draft_block} de ${evt.total_blocks}...`);
+                this._addLoading(`Verificando parte ${evt.draft_block} de ${evt.total_blocks}...`, true);
                 // Renderizar bloque parcial progresivamente
                 if (evt.route_partial.stops) {
                   if (!this.currentRoute) {
@@ -866,7 +866,7 @@ const salma = {
 
               // VERIFIED_BLOCK — bloque verificado con Google Places
               if (evt.verified_block && evt.route_partial) {
-                this._addLoading(`Parte ${evt.verified_block} de ${evt.total_blocks} lista ✓`);
+                this._addLoading(`Parte ${evt.verified_block} de ${evt.total_blocks} lista ✓`, true);
                 continue;
               }
 
@@ -1676,7 +1676,7 @@ const salma = {
   ],
   _loadingInterval: null,
 
-  _addLoading(customText) {
+  _addLoading(customText, noRetry = false) {
     this._removeLoading();
     const area = this._getChatArea();
     if (!area) return;
@@ -1704,16 +1704,19 @@ const salma = {
     }
 
     // Botón reintentar: aparece a los 18s si Salma aún está pensando
-    this._retryTimer = setTimeout(() => {
-      const body = div.querySelector('.msg-body-salma');
-      if (!body || div.querySelector('.btn-retry-salma')) return;
-      const btn = document.createElement('button');
-      btn.className = 'btn-retry-salma';
-      btn.textContent = '↩ Reintentar';
-      btn.addEventListener('click', () => this._cancelAndRetry());
-      body.appendChild(btn);
-      this._scrollToBottom(false);
-    }, 18000);
+    // noRetry=true cuando estamos en generación por bloques (cada bloque resetea el timer → loop infinito)
+    if (!noRetry) {
+      this._retryTimer = setTimeout(() => {
+        const body = div.querySelector('.msg-body-salma');
+        if (!body || div.querySelector('.btn-retry-salma')) return;
+        const btn = document.createElement('button');
+        btn.className = 'btn-retry-salma';
+        btn.textContent = '↩ Reintentar';
+        btn.addEventListener('click', () => this._cancelAndRetry());
+        body.appendChild(btn);
+        this._scrollToBottom(false);
+      }, 18000);
+    }
 
     return div;
   },
