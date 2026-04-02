@@ -110,15 +110,16 @@ const mapaItinerario = {
       mapaRuta.centerOn(index);
     });
 
-    // Cargar foto inicial (sin Places, con el endpoint /photo existente)
-    this._loadInitialPhoto(stop, index);
+    // Cargar foto inicial — pasamos el card directamente porque aún no está en el DOM
+    this._loadInitialPhoto(stop, index, card);
 
     return card;
   },
 
   // ═══ FOTO INICIAL ═══
-  _loadInitialPhoto(stop, index) {
-    const photoDiv = document.getElementById(`itin-photo-${index}`);
+  _loadInitialPhoto(stop, index, cardEl) {
+    // Buscar dentro del card (antes de estar en el DOM) o en el documento si ya está
+    const photoDiv = (cardEl && cardEl.querySelector('.itin-card-photo')) || document.getElementById(`itin-photo-${index}`);
     if (!photoDiv) return;
 
     if (stop.photo_ref) {
@@ -285,6 +286,20 @@ const mapaItinerario = {
 
     // Asegurar que el mapa se dimensiona bien
     setTimeout(() => mapaRuta.invalidateSize(), 200);
+
+    // Interceptar showState para cerrar la vista si el usuario navega con el bottom bar
+    const _origShowState = window.showState;
+    window.showState = function(state) {
+      if (view.style.display !== 'none') {
+        view.style.display = 'none';
+        if (appContent) appContent.style.display = '';
+        if (inputBar) inputBar.style.display = '';
+        mapaRuta.destroy();
+        mapaItinerario.destroy();
+        window.showState = _origShowState; // restaurar
+      }
+      _origShowState(state);
+    };
   }
 
   function closeItinerarioView() {
@@ -298,6 +313,11 @@ const mapaItinerario = {
     if (view) view.style.display = 'none';
     if (appContent) appContent.style.display = '';
     if (inputBar) inputBar.style.display = '';
+
+    // Restaurar showState si fue interceptado
+    if (window.showState !== window._showStateOriginal && typeof window._showStateOriginal === 'function') {
+      window.showState = window._showStateOriginal;
+    }
 
     // Volver a bitácora
     if (typeof showState === 'function') showState('bitacora');

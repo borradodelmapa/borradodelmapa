@@ -88,6 +88,7 @@
 
 <!-- ═══ VISTA ITINERARIO (ruta enriquecida) ═══ -->
 <div class="itin-view" id="itin-view" style="display:none">
+  <button class="itin-mobile-back" id="itin-mobile-back-btn" aria-label="Volver" onclick="document.dispatchEvent(new CustomEvent('itin:close'))">←</button>
   <div class="itin-layout">
     <div class="itin-map-col" id="itin-map-container"></div>
     <div class="itin-cards-col" id="itin-cards-container"></div>
