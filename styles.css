@@ -2734,15 +2734,10 @@ body {
     height: auto;
     border-left: none;
     border-top: 1px solid rgba(240,180,41,.15);
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    padding: 12px 8px;
-    gap: 12px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
+    flex-direction: column;
   }
   .itin-cards-col .itin-header {
     display: none;
@@ -2752,6 +2747,11 @@ body {
     flex-direction: row;
     flex-wrap: nowrap;
     gap: 12px;
+    overflow-x: auto;
+    padding: 12px 8px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    flex-shrink: 0;
   }
   .itin-cards-col .itin-day-sep {
     writing-mode: vertical-lr;
@@ -2800,8 +2800,63 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 20px;
+  padding: 12px 16px;
   border-bottom: 1px solid rgba(240,180,41,.1);
+  flex-shrink: 0;
+}
+.itin-header-info { flex: 1; min-width: 0; }
+.itin-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.itin-btn {
+  background: none;
+  border: 1px solid rgba(240,180,41,.3);
+  color: var(--dorado);
+  font-size: 12px;
+  font-family: var(--font-tight, 'Inter Tight', sans-serif);
+  font-weight: 700;
+  letter-spacing: .06em;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: background .15s;
+}
+.itin-btn:hover { background: rgba(240,180,41,.1); }
+.itin-btn-save { background: rgba(212,160,23,.15); border-color: var(--dorado); }
+.itin-btn-maps { font-size: 16px; padding: 4px 8px; }
+.itin-btn-share { font-size: 15px; padding: 4px 8px; }
+
+/* ── Sección extras (antes de salir, info práctica, tips) ── */
+.itin-extras {
+  padding: 16px 20px 80px;
+  border-top: 1px solid rgba(240,180,41,.08);
+  margin-top: 8px;
+}
+.itin-extras .guide-section,
+.itin-extras .guide-tips { margin-bottom: 16px; }
+.itin-extras .guide-section-label,
+.itin-extras .guide-tips-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .15em;
+  color: var(--dorado);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(212,160,23,.15);
+  display: block;
+}
+.itin-extras .guide-info-block {
+  font-size: 13px;
+  color: rgba(244,239,230,.7);
+  line-height: 1.6;
+  margin-bottom: 10px;
 }
 .itin-back {
   background: none;

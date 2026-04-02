@@ -630,10 +630,15 @@ const salma = {
         const prevStopsCount = this.currentRoute?.stops?.length || 0;
         this.currentRoute = data.route;
         if (!data._hadDraft || data._isBlocks) {
-          // Ruta nueva o ruta de bloques: render completo
+          // Ruta nueva o ruta de bloques: abrir vista itinerario
           this._removeLoading();
           try {
-            guideRenderer.render(data.route, isEdit ? { saved: true } : {});
+            if (typeof window.openItinerarioView === 'function') {
+              window.openItinerarioView(data.route, isEdit ? this.currentRouteId : null,
+                Object.assign(isEdit ? { saved: true } : {}, { fromChat: true }));
+            } else {
+              guideRenderer.render(data.route, isEdit ? { saved: true } : {});
+            }
           } catch (renderErr) {
             console.error('Error renderizando guía:', renderErr);
           }
@@ -892,11 +897,14 @@ const salma = {
                 if (evt.route && evt.route.stops) {
                   this.currentRoute = evt.route;
                   try {
-                    guideRenderer.render(evt.route);
+                    if (typeof window.openItinerarioView === 'function') {
+                      window.openItinerarioView(evt.route, null, { fromChat: true });
+                    } else {
+                      guideRenderer.render(evt.route);
+                    }
                   } catch (renderErr) {
                     console.error('Error renderizando guía draft:', renderErr);
                   }
-                  this._scrollToBottom();
                 }
               }
 
@@ -1014,15 +1022,15 @@ const salma = {
 
     this._initChat();
     const title = routeData.title || routeData.name || 'Tu ruta';
-    this._addSalmaBubble('Aquí tienes tu guía de ' + title + '. Si quieres cambiar algo, dímelo. También puedo crearte la ruta completa para Google Maps en un momento.');
-    guideRenderer.render(routeData, { saved: true, showGmapsOffer: true });
-    // Scroll al inicio de la guía, no al final
-    const guideCard = document.querySelector('.guide-card');
-    if (guideCard) {
-      setTimeout(() => guideCard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
-    }
-
+    this._addSalmaBubble('Aquí tienes tu guía de ' + title + '. Si quieres cambiar algo, dímelo.');
     showState('chat');
+
+    // Abrir vista itinerario enriquecida
+    if (typeof window.openItinerarioView === 'function') {
+      window.openItinerarioView(routeData, this.currentRouteId, { saved: true, fromChat: true });
+    } else {
+      guideRenderer.render(routeData, { saved: true, showGmapsOffer: true });
+    }
 
     // Si no está enriquecida, enriquecer ahora en background
     const isEnriched = docData && docData.enriched === true;
@@ -1040,9 +1048,11 @@ const salma = {
     const id = await guardarGuia(this.currentRoute);
     if (id) {
       this.currentRouteId = id;
-      // Quitar botón guardar de la guide-card
+      // Quitar botón guardar (guide-card o itinerario)
       const btn = document.getElementById('guide-save-btn');
       if (btn) btn.remove();
+      const itinBtn = document.getElementById('itin-save-btn');
+      if (itinBtn) itinBtn.remove();
       showToast('Guía guardada en Mis Viajes');
     }
     // Si id es null → el modal de registro se ha abierto (guardarGuia lo maneja)

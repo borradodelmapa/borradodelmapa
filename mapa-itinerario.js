@@ -17,7 +17,7 @@ const mapaItinerario = {
   },
 
   // ═══ INIT ═══
-  init(containerId, stops, routeData) {
+  init(containerId, stops, routeData, options = {}) {
     this._container = document.getElementById(containerId);
     if (!this._container || !stops || !stops.length) return;
 
@@ -26,6 +26,9 @@ const mapaItinerario = {
     this._activeIdx = -1;
     this._container.innerHTML = '';
 
+    const country = routeData.country || routeData.region || '';
+    const mapsUrl = this._fullRouteGmapsUrl(stops, country);
+
     // Header de la ruta
     const header = document.createElement('div');
     header.className = 'itin-header';
@@ -33,7 +36,12 @@ const mapaItinerario = {
       <button class="itin-back" id="itin-back-btn">&larr;</button>
       <div class="itin-header-info">
         <div class="itin-title">${this._esc(routeData.title || routeData.name || 'Tu ruta')}</div>
-        <div class="itin-meta">${this._totalDays(stops)} días · ${stops.length} paradas · ${this._esc((routeData.country || routeData.region || '').toUpperCase())}</div>
+        <div class="itin-meta">${this._totalDays(stops)} días · ${stops.length} paradas · ${this._esc(country.toUpperCase())}</div>
+      </div>
+      <div class="itin-header-actions">
+        <a class="itin-btn itin-btn-maps" href="${mapsUrl}" target="_blank" rel="noopener" title="Abrir en Google Maps">🗺️</a>
+        ${options.saved ? '' : '<button class="itin-btn itin-btn-save" id="itin-save-btn">GUARDAR</button>'}
+        <button class="itin-btn itin-btn-share" id="itin-share-btn" title="Compartir">⤴</button>
       </div>
     `;
     this._container.appendChild(header);
@@ -64,9 +72,34 @@ const mapaItinerario = {
 
     this._container.appendChild(scroll);
 
+    // Extras: antes de salir, info práctica, tips (reutiliza guide-renderer)
+    if (typeof guideRenderer !== 'undefined') {
+      const extrasHtml = [
+        guideRenderer._renderPreDeparture(routeData.pre_departure || null),
+        guideRenderer._renderPracticalInfo(routeData.practical_info || null),
+        guideRenderer._renderTips(routeData.tips || null),
+      ].join('');
+      if (extrasHtml.trim()) {
+        const extras = document.createElement('div');
+        extras.className = 'itin-extras';
+        extras.innerHTML = extrasHtml;
+        this._container.appendChild(extras);
+      }
+    }
+
     // Botón volver
     document.getElementById('itin-back-btn')?.addEventListener('click', () => {
       document.dispatchEvent(new CustomEvent('itin:close'));
+    });
+
+    // Botón guardar
+    document.getElementById('itin-save-btn')?.addEventListener('click', () => {
+      if (typeof salma !== 'undefined') salma.guardar();
+    });
+
+    // Botón compartir
+    document.getElementById('itin-share-btn')?.addEventListener('click', () => {
+      this._handleShare(routeData);
     });
 
     // Escuchar clicks en marcadores del mapa
@@ -76,6 +109,26 @@ const mapaItinerario = {
 
     // Enriquecer con Places API en paralelo
     this._enrichAll(stops);
+  },
+
+  // ═══ COMPARTIR ═══
+  _handleShare(routeData) {
+    const id = typeof salma !== 'undefined' ? salma.currentRouteId : null;
+    if (!id) {
+      if (typeof showToast !== 'undefined') showToast('Guarda la ruta primero para poder compartirla');
+      if (typeof salma !== 'undefined') salma.guardar();
+      return;
+    }
+    const url = window.location.origin + '/' + id;
+    if (navigator.share) {
+      navigator.share({ title: routeData.title || routeData.name || 'Mi ruta', url }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(url).then(() => {
+        if (typeof showToast !== 'undefined') showToast('Link copiado');
+      }).catch(() => {
+        if (typeof showToast !== 'undefined') showToast('Link: ' + url);
+      });
+    }
   },
 
   // ═══ CREAR CARD ═══
@@ -242,6 +295,26 @@ const mapaItinerario = {
     return n;
   },
 
+  // ═══ GOOGLE MAPS RUTA COMPLETA ═══
+  _fullRouteGmapsUrl(stops, country) {
+    const valid = (stops || []).filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
+    if (valid.length < 2) {
+      if (valid.length === 1) return 'https://www.google.com/maps?q=' + valid[0].lat + ',' + valid[0].lng;
+      return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(country || 'ruta');
+    }
+    const sampled = this._sampleWaypoints(valid, 25);
+    const segments = sampled.map(p => encodeURIComponent(p.headline || p.name) + '/@' + p.lat + ',' + p.lng).join('/');
+    return 'https://www.google.com/maps/dir/' + segments;
+  },
+
+  _sampleWaypoints(arr, max) {
+    if (arr.length <= max) return arr;
+    const step = arr.length / max;
+    const result = [];
+    for (let i = 0; i < max; i++) result.push(arr[Math.floor(i * step)]);
+    return result;
+  },
+
   // ═══ DESTROY ═══
   destroy() {
     document.removeEventListener('itin:marker-click', this._onMarkerClick);
@@ -252,27 +325,20 @@ const mapaItinerario = {
   },
 };
 
-// ═══ PUENTE: interceptar renderDiario para abrir vista itinerario ═══
+// ═══ VISTA ITINERARIO — apertura/cierre ═══
 (function() {
-  if (typeof bitacoraRenderer === 'undefined') return;
+  let _openedFromChat = false;
 
-  const _originalRenderDiario = bitacoraRenderer.renderDiario.bind(bitacoraRenderer);
+  function openItinerarioView(routeData, docId, options = {}) {
+    _openedFromChat = !!options.fromChat;
 
-  bitacoraRenderer.renderDiario = function(routeData, docId, notes, photos, docData) {
-    if (!routeData || !routeData.stops || !routeData.stops.length) {
-      // Sin stops, usar la vista original
-      return _originalRenderDiario(routeData, docId, notes, photos, docData);
-    }
-
-    // Abrir vista itinerario enriquecida
-    openItinerarioView(routeData, docId);
-  };
-
-  function openItinerarioView(routeData, docId) {
     const view = document.getElementById('itin-view');
     const appContent = document.getElementById('app-content');
     const inputBar = document.getElementById('app-input-bar');
     if (!view) return;
+
+    // Limpiar guide-cards del chat si las hay
+    document.querySelectorAll('.guide-card').forEach(el => el.remove());
 
     // Ocultar contenido principal y barra de input
     if (appContent) appContent.style.display = 'none';
@@ -282,7 +348,7 @@ const mapaItinerario = {
     // Inicializar mapa y cards
     const stops = routeData.stops;
     mapaRuta.init('itin-map-container', stops);
-    mapaItinerario.init('itin-cards-container', stops, routeData);
+    mapaItinerario.init('itin-cards-container', stops, routeData, options);
 
     // Asegurar que el mapa se dimensiona bien
     setTimeout(() => mapaRuta.invalidateSize(), 200);
@@ -319,10 +385,24 @@ const mapaItinerario = {
       window.showState = window._showStateOriginal;
     }
 
-    // Volver a bitácora
-    if (typeof showState === 'function') showState('bitacora');
+    // Solo volver a bitácora si veníamos de ella (no del chat)
+    if (!_openedFromChat && typeof showState === 'function') showState('bitacora');
   }
 
-  // Escuchar cierre desde el botón back de las cards
+  // Puente con bitacoraRenderer (Mis Viajes)
+  if (typeof bitacoraRenderer !== 'undefined') {
+    const _originalRenderDiario = bitacoraRenderer.renderDiario.bind(bitacoraRenderer);
+    bitacoraRenderer.renderDiario = function(routeData, docId, notes, photos, docData) {
+      if (!routeData || !routeData.stops || !routeData.stops.length) {
+        return _originalRenderDiario(routeData, docId, notes, photos, docData);
+      }
+      openItinerarioView(routeData, docId, { saved: true });
+    };
+  }
+
+  // Exponer globalmente para que salma.js pueda llamarlo
+  window.openItinerarioView = openItinerarioView;
+
+  // Escuchar cierre desde el botón back
   document.addEventListener('itin:close', closeItinerarioView);
 })();
