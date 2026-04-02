@@ -1271,8 +1271,9 @@ function injectGoogleMapsLink(reply, userLocation, message) {
   //    Extraer destino: la palabra/s después de "a/hasta/hacia" cortando en "desde/en/por/con"
   const destPatterns = [
     /\ba\s+([\wáéíóúñ]+(?:\s+[\wáéíóúñ]+)?)\s+desde/i,                           // "a Málaga desde..."
-    /(?:ir|llegar|viajar)\s+(?:a|hasta|hacia)\s+([\wáéíóúñ\s]+?)(?:\s+(?:desde|en\s|por\s|con\s|,)|$)/i, // "ir a Málaga en taxi"
-    /desde\s+[\wáéíóúñ\s]+?\s+(?:a|hasta|hacia)\s+([\wáéíóúñ]+(?:\s+[\wáéíóúñ]+)?)/i, // "desde X a Y"
+    /(?:ir|llegar|viajar)\s+(?:al?\s|hasta\s|hacia\s)([\wáéíóúñ\s]+?)(?:\s+(?:desde|en\s|por\s|con\s|,)|$)/i, // "ir a/al Málaga en taxi"
+    /desde\s+[\wáéíóúñ\s]+?\s+(?:al?\s|hasta\s|hacia\s)([\wáéíóúñ\s]{3,40})/i, // "desde X a/al Y"
+    /taxi\s+(?:desde\s+[\wáéíóúñ\s]+?\s+)?(?:al?\s|hasta\s|hacia\s)([\wáéíóúñ\s]+?)(?:\s+(?:de la|del|desde|en\s|por\s|con\s|,)|$)/i, // "taxi ... al centro de la ciudad"
   ];
   for (const pat of destPatterns) {
     const m = message.match(pat);
@@ -1324,7 +1325,7 @@ function injectGoogleMapsLink(reply, userLocation, message) {
 
   // Extraer origen del mensaje: "desde X" → usar X como origen en vez de GPS
   let origin = `${userLocation.lat},${userLocation.lng}`;
-  const fromMatch = message.match(/desde\s+([\wáéíóúñÁÉÍÓÚÑ\s]{3,40}?)(?:\s+(?:a\s|hasta\s|hacia\s|en\s+taxi|en\s+coche|por|con|,)|$)/i);
+  const fromMatch = message.match(/desde\s+([\wáéíóúñÁÉÍÓÚÑ\s]{3,40}?)(?:\s+(?:al?\s|hasta\s|hacia\s|en\s+taxi|en\s+coche|por|con|,)|$)/i);
   if (fromMatch) {
     const fromPlace = fromMatch[1].trim();
     if (fromPlace.length >= 3 && !/^(un|una|el|la|los|las|mi|tu|su|aqui|ahi|alli|taxi|coche|bus|tren)$/i.test(fromPlace)) {
