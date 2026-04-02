@@ -74,7 +74,7 @@ const mapaItinerario = {
       }
 
       // Card
-      const card = this._createCard(stop, i);
+      const card = this._createCard(stop, i, country);
       scroll.appendChild(card);
       this._cards.push(card);
     });
@@ -150,7 +150,7 @@ const mapaItinerario = {
   },
 
   // ═══ CREAR CARD ═══
-  _createCard(stop, index) {
+  _createCard(stop, index, country) {
     const card = document.createElement('div');
     card.className = 'itin-card';
     card.dataset.index = index;
@@ -160,9 +160,10 @@ const mapaItinerario = {
     const horas = stop.estimated_hours || stop.duracion_horas || null;
     const km = stop.km_from_previous || 0;
 
-    const mapsNavUrl = (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && Math.abs(stop.lng) > 0.01)
+    const hasCoords = stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && Math.abs(stop.lng) > 0.01;
+    const mapsNavUrl = hasCoords
       ? `https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}&travelmode=driving`
-      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(stop.name || stop.headline || '')}`;
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([stop.name || stop.headline, country].filter(Boolean).join(', '))}`;
 
     card.innerHTML = `
       <div class="itin-card-photo" id="itin-photo-${index}">
@@ -330,7 +331,7 @@ const mapaItinerario = {
       return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(country || 'ruta');
     }
     const sampled = this._sampleWaypoints(valid, 25);
-    const segments = sampled.map(p => encodeURIComponent(p.headline || p.name) + '/@' + p.lat + ',' + p.lng).join('/');
+    const segments = sampled.map(p => p.lat + ',' + p.lng).join('/');
     return 'https://www.google.com/maps/dir/' + segments;
   },
 
