@@ -3577,8 +3577,14 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         return new Response(JSON.stringify({ error: 'user_id required' }), { status: 400, headers: corsH });
       }
 
-      // Pack Viajero: 9.99€ = 999 céntimos
-      const PACK = { name: 'viajero', amount: 999, coins: 25, currency: 'eur' };
+      // Packs disponibles — Starter, Viajero, Explorador
+      const PACKS = {
+        starter:   { name: 'starter',   amount: 499,  coins: 10,  currency: 'eur' },
+        viajero:   { name: 'viajero',   amount: 999,  coins: 25,  currency: 'eur' },
+        explorador:{ name: 'explorador', amount: 1999, coins: 60,  currency: 'eur' },
+      };
+      const packKey = (payBody.pack || 'viajero').toLowerCase();
+      const PACK = PACKS[packKey] || PACKS.viajero;
 
       try {
         // Crear PaymentIntent en Stripe

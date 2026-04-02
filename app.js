@@ -2410,13 +2410,39 @@ function openCoinsModal() {
         <div id="stripe-card-errors" class="stripe-card-errors"></div>
       </div>
 
-      <!-- Pack + botón pagar -->
+      <!-- Selector de pack -->
+      <div class="coins-packs" id="coins-packs">
+        <label class="coins-pack" data-pack="starter" data-coins="10" data-price="4,99€" data-price-raw="499">
+          <input type="radio" name="coins-pack" value="starter">
+          <div class="coins-pack-inner">
+            <div class="coins-pack-coins">10 <span>coins</span></div>
+            <div class="coins-pack-name">Starter</div>
+            <div class="coins-pack-price">4,99€</div>
+          </div>
+        </label>
+        <label class="coins-pack coins-pack-featured" data-pack="viajero" data-coins="25" data-price="9,99€" data-price-raw="999">
+          <input type="radio" name="coins-pack" value="viajero" checked>
+          <div class="coins-pack-inner">
+            <div class="coins-pack-badge">Popular</div>
+            <div class="coins-pack-coins">25 <span>coins</span></div>
+            <div class="coins-pack-name">Viajero</div>
+            <div class="coins-pack-price">9,99€</div>
+          </div>
+        </label>
+        <label class="coins-pack" data-pack="explorador" data-coins="60" data-price="19,99€" data-price-raw="1999">
+          <input type="radio" name="coins-pack" value="explorador">
+          <div class="coins-pack-inner">
+            <div class="coins-pack-coins">60 <span>coins</span></div>
+            <div class="coins-pack-name">Explorador</div>
+            <div class="coins-pack-price">19,99€</div>
+          </div>
+        </label>
+      </div>
+
+      <!-- Botón pagar -->
       <div class="coins-modal-plan">
         <div class="coins-modal-plan-row">
-          <div>
-            <div class="coins-modal-plan-name">Pack Viajero</div>
-            <div class="coins-modal-plan-note">25 coins · no caducan</div>
-          </div>
+          <div class="coins-modal-plan-note" id="coins-plan-note">25 coins · no caducan</div>
           <button class="coins-modal-pay" id="coins-pay-btn" disabled>9,99€</button>
         </div>
         <div class="stripe-test-badge">MODO PRUEBA · no se cobrará</div>
@@ -2426,7 +2452,7 @@ function openCoinsModal() {
         <span>Procesando pago...</span>
       </div>
       <div id="stripe-success" class="stripe-success" style="display:none">
-        ✓ ¡25 coins añadidos a tu cuenta!
+        ✓ ¡<span id="stripe-success-coins">25</span> coins añadidos!
       </div>
 
       <!-- Acordeón: qué puedes hacer -->
@@ -2457,6 +2483,22 @@ function openCoinsModal() {
     const open = body.classList.toggle('open');
     arrow.style.transform = open ? 'rotate(90deg)' : '';
   });
+
+  // Selección de pack — actualiza botón y nota
+  overlay.querySelectorAll('.coins-pack').forEach(label => {
+    label.addEventListener('click', () => {
+      overlay.querySelectorAll('.coins-pack').forEach(l => l.classList.remove('selected'));
+      label.classList.add('selected');
+      label.querySelector('input').checked = true;
+      const payBtn = document.getElementById('coins-pay-btn');
+      const noteEl = document.getElementById('coins-plan-note');
+      if (payBtn) payBtn.textContent = label.dataset.price;
+      if (noteEl) noteEl.textContent = label.dataset.coins + ' coins · no caducan';
+    });
+  });
+  // Marcar viajero como seleccionado por defecto
+  const defaultPack = overlay.querySelector('.coins-pack-featured');
+  if (defaultPack) defaultPack.classList.add('selected');
 
   // Stripe Elements — formulario de tarjeta integrado
   initStripeCard(overlay);
@@ -2510,16 +2552,25 @@ function initStripeCard(overlay) {
     loadingEl.style.display = 'flex';
 
     try {
+      // Leer pack seleccionado del modal
+      const selectedLabel = overlay.querySelector('.coins-pack.selected') || overlay.querySelector('.coins-pack-featured');
+      const selectedPack = selectedLabel ? selectedLabel.dataset.pack : 'viajero';
+      const selectedCoins = parseInt(selectedLabel ? selectedLabel.dataset.coins : '25', 10);
+      const selectedPrice = selectedLabel ? selectedLabel.dataset.price : '9,99€';
+
       // 1. Pedir PaymentIntent al worker
       const res = await fetch(window.SALMA_API + '/create-payment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           user_id: currentUser.uid,
-          pack: 'viajero'
+          pack: selectedPack
         })
       });
-      const { client_secret } = await res.json();
+      const payData = await res.json();
+      if (!payData.client_secret) throw new Error(payData.error || 'Error creando pago');
+      const { client_secret, coins: coinsFromServer } = payData;
+      const coinsToAdd = coinsFromServer || selectedCoins;
 
       // 2. Confirmar pago con Stripe
       const { error, paymentIntent } = await stripe.confirmCardPayment(client_secret, {
@@ -2536,29 +2587,33 @@ function initStripeCard(overlay) {
 
       if (paymentIntent.status === 'succeeded') {
         // 3. Actualizar saldo en Firestore + local
-        const newSaldo = (currentUser.coins_saldo || 0) + 25;
+        const newSaldo = (currentUser.coins_saldo || 0) + coinsToAdd;
         try {
           await db.collection('users').doc(currentUser.uid).update({
-            coins_saldo: newSaldo
+            coins_saldo: newSaldo,
+            isPremium: true,
           });
         } catch (e) {
           console.error('Error actualizando coins en Firestore:', e);
         }
         currentUser.coins_saldo = newSaldo;
+        currentUser.isPremium = true;
         updateHeader();
 
-        // Mostrar éxito
+        // Mostrar éxito con los coins correctos
+        const coinsSpan = document.getElementById('stripe-success-coins');
+        if (coinsSpan) coinsSpan.textContent = coinsToAdd;
         loadingEl.style.display = 'none';
         successEl.style.display = 'flex';
 
         // Actualizar el saldo en el modal
         const valEl = overlay.querySelector('.coins-modal-saldo-val');
-        if (valEl) valEl.textContent = currentUser.coins_saldo + ' coins';
+        if (valEl) valEl.textContent = newSaldo + ' coins';
 
         // Cerrar modal tras 2s
         setTimeout(() => {
           overlay.remove();
-          showToast('¡25 Salma Coins añadidos!');
+          showToast('¡' + coinsToAdd + ' Salma Coins añadidos!');
         }, 2000);
       }
     } catch (e) {
