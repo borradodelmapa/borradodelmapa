@@ -2045,20 +2045,27 @@ async function guardarGuiaDirecto(routeData) {
       }
     } catch (_) {}
 
-    // Incrementar contador de rutas gratis usadas (si aplica)
+    // Contabilizar uso de ruta — gratis (3 primeras) o descontar 2 coins
     try {
       const usadas = currentUser.rutas_gratis_usadas || 0;
       const coins = currentUser.coins_saldo || 0;
       if (usadas < 3) {
-        // Todavía tiene gratis — gastar una
+        // Ruta gratuita — gastar una de las 3 incluidas
         const newUsadas = usadas + 1;
-        await db.collection('users').doc(currentUser.uid).update({
-          rutas_gratis_usadas: newUsadas
-        });
+        await db.collection('users').doc(currentUser.uid).update({ rutas_gratis_usadas: newUsadas });
         currentUser.rutas_gratis_usadas = newUsadas;
         updateHeader();
+      } else if (coins >= 2) {
+        // Descontar 2 coins (coste de ruta IA según modelo de negocio)
+        const newCoins = coins - 2;
+        await db.collection('users').doc(currentUser.uid).update({ coins_saldo: newCoins });
+        currentUser.coins_saldo = newCoins;
+        updateHeader();
+        showToast('−2 Salma Coins · saldo: ' + newCoins);
+      } else {
+        // Sin gratis y sin coins — la ruta ya está guardada, pero avisar
+        showToast('Sin Salma Coins. Recarga para seguir creando rutas.');
       }
-      // TODO: si no tiene gratis, descontar coins aquí
     } catch (e) {
       console.warn('Error actualizando contador rutas:', e);
     }
