@@ -977,10 +977,27 @@ const salma = {
     try {
       if (docData && docData.itinerarioIA) {
         routeData = JSON.parse(docData.itinerarioIA);
+        // Refrescar copia offline cada vez que se carga una guía
+        if (docId) {
+          try {
+            const existing = JSON.parse(localStorage.getItem('offline_route_' + docId) || 'null');
+            localStorage.setItem('offline_route_' + docId, JSON.stringify({ ...(existing || {}), ...docData, id: docId, _savedAt: (existing?._savedAt) || Date.now() }));
+          } catch (_) {}
+        }
       } else if (docId && window.currentUser) {
-        const doc = await db.collection('users').doc(window.currentUser.uid)
-          .collection('maps').doc(docId).get();
-        if (doc.exists) routeData = JSON.parse(doc.data().itinerarioIA);
+        try {
+          const doc = await db.collection('users').doc(window.currentUser.uid)
+            .collection('maps').doc(docId).get();
+          if (doc.exists) routeData = JSON.parse(doc.data().itinerarioIA);
+        } catch (netErr) {
+          // Sin red — intentar desde localStorage
+          const cached = localStorage.getItem('offline_route_' + docId);
+          if (cached) {
+            const d = JSON.parse(cached);
+            if (d.itinerarioIA) routeData = JSON.parse(d.itinerarioIA);
+          }
+          if (!routeData) throw netErr;
+        }
       }
     } catch (e) {
       console.error('Error parseando guía:', e);
