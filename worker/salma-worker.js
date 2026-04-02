@@ -1234,8 +1234,8 @@ function sanitizeInventedUrls(text) {
     if (url.includes('thefork.com') || url.includes('thefork.es')) return url;
     // Booking — viene de buscar_hotel
     if (url.includes('booking.com')) return url;
-    // Kiwi — viene de buscar_vuelos
-    if (url.includes('kiwi.com')) return url;
+    // Skyscanner — enlace de reserva de vuelos (Duffel)
+    if (url.includes('skyscanner.es') || url.includes('skyscanner.com')) return url;
     // Rentalcars/DiscoverCars — viene de buscar_coche
     if (url.includes('rentalcars.com') || url.includes('discovercars.com')) return url;
     // Apps de transporte — SOLO URLs cortas inyectadas por el worker (no deep links inventados por IA)
@@ -2332,11 +2332,57 @@ async function executeSalmaActionsParallel(actions, env, userLocation) {
   return results.filter(r => r !== null);
 }
 
+// Parsear duración ISO 8601 "PT18H30M" → número de horas (ej. 18.5)
+function parseDurationHours(d) {
+  if (!d) return null;
+  const m = d.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
+  if (!m) return null;
+  return Math.round((parseInt(m[1] || 0) + parseInt(m[2] || 0) / 60) * 10) / 10;
+}
+
 // Dispatcher individual — un switch por tipo de acción
 async function executeSalmaAction(action, env, userLocation) {
   switch (action.type) {
-    case 'SEARCH_FLIGHTS':
-      return await searchFlightsKiwi(action, env.KIWI_API_KEY);
+    case 'SEARCH_FLIGHTS': {
+      // Usamos Duffel (mismo proveedor que buscar_vuelos tool)
+      const duffelResult = await buscarVuelosDuffel({
+        origen: action.origin,
+        destino: action.destination,
+        fecha_ida: action.date,
+        fecha_vuelta: action.return_date || null,
+        adultos: action.adults || 1
+      }, env.DUFFEL_ACCESS_TOKEN);
+
+      if (duffelResult.error) return { type: 'flights', error: duffelResult.error };
+
+      // Adaptar formato Duffel → formato esperado por _renderFlightResults
+      const currency = action.currency || 'EUR';
+      const flights = (duffelResult.vuelos || []).map(v => {
+        const parts = v.precio ? v.precio.split(' ') : ['', currency];
+        return {
+          airlines: v.aerolinea,
+          origin: v.origen,
+          destination: v.destino,
+          departure: v.salida,
+          arrival: v.llegada,
+          duration_h: parseDurationHours(v.duracion),
+          stops: v.escalas,
+          price: parseFloat(parts[0]) || null,
+          currency: parts[1] || currency,
+          booking_link: duffelResult.enlace_reserva || null
+        };
+      });
+
+      return {
+        type: 'flights',
+        origin: action.origin,
+        destination: action.destination,
+        date: action.date,
+        return_date: action.return_date || null,
+        currency,
+        flights
+      };
+    }
     case 'SEARCH_HOTELS':
       return await searchHotelsPlaces(action, env.GOOGLE_PLACES_KEY, userLocation);
     case 'SEARCH_PLACES':
@@ -2350,59 +2396,7 @@ async function executeSalmaAction(action, env, userLocation) {
 }
 
 // ═══ KIWI TEQUILA v2 — Búsqueda de vuelos ═══
-// params: { origin, destination, date, return_date?, currency?, adults? }
-// origin/destination → IATA code (ej. "MAD", "BKK") o nombre de ciudad
-async function searchFlightsKiwi(params, apiKey) {
-  if (!apiKey) return { type: 'flights', error: 'No KIWI_API_KEY configurada' };
-  const { origin, destination, date, return_date, currency = 'EUR', adults = 1 } = params;
-  if (!origin || !destination || !date) {
-    return { type: 'flights', error: 'Faltan parámetros: origin, destination, date' };
-  }
-
-  // Kiwi usa DD/MM/YYYY
-  const fmtDate = d => d.split('-').reverse().join('/');
-
-  const qs = new URLSearchParams({
-    fly_from: origin,
-    fly_to: destination,
-    date_from: fmtDate(date),
-    date_to: fmtDate(date),
-    currency,
-    adults: String(adults),
-    limit: '5',
-    sort: 'price',
-    partner: 'picky',
-  });
-  if (return_date) {
-    qs.set('return_from', fmtDate(return_date));
-    qs.set('return_to', fmtDate(return_date));
-  }
-
-  const res = await fetch(`https://api.tequila.kiwi.com/v2/search?${qs}`, {
-    headers: { apikey: apiKey },
-  });
-  if (!res.ok) {
-    const errText = await res.text().catch(() => '');
-    return { type: 'flights', error: `Kiwi ${res.status}: ${errText.slice(0, 100)}` };
-  }
-  const data = await res.json();
-
-  const flights = (data.data || []).slice(0, 5).map(f => ({
-    id: f.id,
-    origin: `${f.cityFrom} (${f.flyFrom})`,
-    destination: `${f.cityTo} (${f.flyTo})`,
-    departure: f.local_departure,
-    arrival: f.local_arrival,
-    duration_h: f.duration?.departure ? Math.round(f.duration.departure / 3600 * 10) / 10 : null,
-    airlines: [...new Set(f.airlines || [])].join(', '),
-    price: f.price,
-    currency,
-    stops: f.route ? f.route.length - 1 : 0,
-    booking_link: f.deep_link || null,
-  }));
-
-  return { type: 'flights', origin, destination, date, return_date: return_date || null, currency, flights };
-}
+// (searchFlightsKiwi eliminado — Kiwi no da API keys. Usamos Duffel via executeSalmaAction)
 
 // ═══ GOOGLE PLACES — Búsqueda de hoteles ═══
 // params: { city?, lat?, lng?, budget?, adults?, checkin?, checkout? }
