@@ -124,10 +124,19 @@ const mapaItinerario = {
   _handleShare(routeData) {
     const id = typeof salma !== 'undefined' ? salma.currentRouteId : null;
     if (!id) {
-      if (typeof showToast !== 'undefined') showToast('Guarda la ruta primero para poder compartirla');
-      if (typeof salma !== 'undefined') salma.guardar();
+      // Guardar primero y luego compartir al terminar
+      if (typeof salma !== 'undefined') {
+        salma.guardar().then(() => {
+          const newId = salma.currentRouteId;
+          if (newId) this._doShare(routeData, newId);
+        });
+      }
       return;
     }
+    this._doShare(routeData, id);
+  },
+
+  _doShare(routeData, id) {
     const url = window.location.origin + '/' + id;
     if (navigator.share) {
       navigator.share({ title: routeData.title || routeData.name || 'Mi ruta', url }).catch(() => {});
