@@ -2805,11 +2805,21 @@ body {
   flex-shrink: 0;
 }
 .itin-header-info { flex: 1; min-width: 0; }
-.itin-header-actions {
+
+/* ── Barra de acciones flotante (siempre visible) ── */
+.itin-action-bar {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 1010;
   display: flex;
   align-items: center;
   gap: 6px;
-  flex-shrink: 0;
+  background: rgba(5,5,5,.82);
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(212,160,23,.22);
+  backdrop-filter: blur(10px);
 }
 .itin-btn {
   background: none;
@@ -2826,9 +2836,10 @@ body {
   display: inline-flex;
   align-items: center;
   transition: background .15s;
+  white-space: nowrap;
 }
 .itin-btn:hover { background: rgba(240,180,41,.1); }
-.itin-btn-save { background: rgba(212,160,23,.15); border-color: var(--dorado); }
+.itin-btn-save { background: rgba(212,160,23,.18); border-color: var(--dorado); }
 .itin-btn-maps { font-size: 16px; padding: 4px 8px; }
 .itin-btn-share { font-size: 15px; padding: 4px 8px; }
 

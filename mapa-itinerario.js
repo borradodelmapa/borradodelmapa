@@ -29,7 +29,7 @@ const mapaItinerario = {
     const country = routeData.country || routeData.region || '';
     const mapsUrl = this._fullRouteGmapsUrl(stops, country);
 
-    // Header de la ruta
+    // Header de la ruta (título + volver — desktop)
     const header = document.createElement('div');
     header.className = 'itin-header';
     header.innerHTML = `
@@ -38,13 +38,23 @@ const mapaItinerario = {
         <div class="itin-title">${this._esc(routeData.title || routeData.name || 'Tu ruta')}</div>
         <div class="itin-meta">${this._totalDays(stops)} días · ${stops.length} paradas · ${this._esc(country.toUpperCase())}</div>
       </div>
-      <div class="itin-header-actions">
+    `;
+    this._container.appendChild(header);
+
+    // Barra de acciones flotante — visible siempre (móvil y desktop)
+    const itinView = document.getElementById('itin-view');
+    if (itinView) {
+      const existingBar = itinView.querySelector('.itin-action-bar');
+      if (existingBar) existingBar.remove();
+      const actionBar = document.createElement('div');
+      actionBar.className = 'itin-action-bar';
+      actionBar.innerHTML = `
         <a class="itin-btn itin-btn-maps" href="${mapsUrl}" target="_blank" rel="noopener" title="Abrir en Google Maps">🗺️</a>
         ${options.saved ? '' : '<button class="itin-btn itin-btn-save" id="itin-save-btn">GUARDAR</button>'}
         <button class="itin-btn itin-btn-share" id="itin-share-btn" title="Compartir">⤴</button>
-      </div>
-    `;
-    this._container.appendChild(header);
+      `;
+      itinView.appendChild(actionBar);
+    }
 
     // Contenedor scroll de cards
     const scroll = document.createElement('div');
@@ -322,6 +332,9 @@ const mapaItinerario = {
     this._cards = [];
     this._activeIdx = -1;
     if (this._container) this._container.innerHTML = '';
+    // Limpiar barra de acciones flotante
+    const bar = document.getElementById('itin-view')?.querySelector('.itin-action-bar');
+    if (bar) bar.remove();
   },
 };
 
@@ -337,8 +350,9 @@ const mapaItinerario = {
     const inputBar = document.getElementById('app-input-bar');
     if (!view) return;
 
-    // Limpiar guide-cards del chat si las hay
+    // Limpiar guide-cards del chat y loading/retry si los hay
     document.querySelectorAll('.guide-card').forEach(el => el.remove());
+    if (typeof salma !== 'undefined' && typeof salma._removeLoading === 'function') salma._removeLoading();
 
     // Ocultar contenido principal y barra de input
     if (appContent) appContent.style.display = 'none';
