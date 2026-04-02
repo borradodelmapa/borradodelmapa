@@ -1129,16 +1129,18 @@ const salma = {
           }
 
           // Si el chat está abierto, insertar burbuja
-          const area = document.getElementById('chat-area');
+          const area = this._getChatArea();
           if (area) {
             const bubble = document.createElement('div');
-            bubble.className = 'chat-msg salma-msg narrator-msg';
-            bubble.innerHTML = '<div class="msg-content">' +
-              '<div class="narrator-poi-name">📍 ' + poi.name + '</div>' +
-              narData.narrative +
-              '</div>';
+            bubble.className = 'msg msg-salma narrator-msg';
+            bubble.innerHTML = `
+              <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma · narrador</span></div>
+              <div class="msg-body-salma">
+                <div class="narrator-poi-name">📍 ${poi.name}</div>
+                ${narData.narrative}
+              </div>`;
             area.appendChild(bubble);
-            bubble.scrollIntoView({ behavior: 'smooth' });
+            this._scrollToBottom(false);
             // Narrador habla automático solo si voz está activada
             if (localStorage.getItem('salma_voice') === 'true') {
               const narText = narData.narrative;

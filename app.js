@@ -626,31 +626,54 @@ async function renderProfile() {
 
 async function _loadProfileGuides() {
   if (!currentUser) return;
+  const grid = document.getElementById('viajes-grid');
+  if (!grid) return;
   try {
     const snap = await db.collection('users').doc(currentUser.uid)
       .collection('maps').orderBy('createdAt', 'desc').get();
-    const grid = document.getElementById('viajes-grid');
-    if (!grid) return;
 
     const allGuides = [];
     snap.forEach(doc => allGuides.push({ id: doc.id, data: doc.data() }));
 
     for (const g of allGuides) {
+      // Actualizar copia offline al cargar desde Firestore
+      try {
+        const existing = JSON.parse(localStorage.getItem('offline_route_' + g.id) || 'null');
+        if (existing) localStorage.setItem('offline_route_' + g.id, JSON.stringify({ ...existing, ...g.data, id: g.id, _savedAt: existing._savedAt }));
+      } catch (_) {}
       grid.appendChild(_createGuideCard(g, g.data));
     }
   } catch (e) {
-    console.error('Error cargando guías:', e);
+    // Sin conexión — cargar desde localStorage
+    console.warn('[offline] Firestore falló, cargando desde localStorage:', e.message);
+    const offlineKeys = Object.keys(localStorage).filter(k => k.startsWith('offline_route_'));
+    if (offlineKeys.length === 0) {
+      grid.innerHTML = '<p style="color:rgba(244,239,230,.35);text-align:center;padding:32px 16px">Sin conexión y sin guías descargadas.</p>';
+      return;
+    }
+    const banner = document.createElement('div');
+    banner.className = 'offline-banner';
+    banner.textContent = '📵 Sin conexión · mostrando guías guardadas localmente';
+    grid.before(banner);
+    const offlineGuides = offlineKeys
+      .map(k => { try { return JSON.parse(localStorage.getItem(k)); } catch(_) { return null; } })
+      .filter(Boolean)
+      .sort((a, b) => (b._savedAt || 0) - (a._savedAt || 0));
+    for (const g of offlineGuides) {
+      grid.appendChild(_createGuideCard({ id: g.id }, g, true));
+    }
   }
 }
 
-function _createGuideCard(doc, d) {
+function _createGuideCard(doc, d, isOffline) {
   const card = document.createElement('div');
-  card.className = 'viaje-card';
+  card.className = 'viaje-card' + (isOffline ? ' viaje-card-offline' : '');
   const photo = d.cover_image || destPhoto(d.destino || d.country || d.nombre || '');
+  const offlineBadge = isOffline ? '<span class="viaje-card-offline-badge">📵 offline</span>' : '';
   card.innerHTML = `
     <div class="viaje-card-img" style="background-image:url('${escapeHTML(photo)}')"></div>
     <div class="viaje-card-body">
-      <div class="viaje-card-title">${escapeHTML(d.nombre || 'Mi ruta')}</div>
+      <div class="viaje-card-title">${escapeHTML(d.nombre || 'Mi ruta')} ${offlineBadge}</div>
       <div class="viaje-card-meta">${d.num_dias || d.dias || '?'} DÍAS · ${escapeHTML((d.destino || '').toUpperCase())}</div>
     </div>
     <button class="viaje-card-delete" data-doc-id="${doc.id}" title="Eliminar guía">✕</button>`;
@@ -669,6 +692,8 @@ function _createGuideCard(doc, d) {
       const slug = d.slug;
       if (slug) await db.collection('public_guides').doc(slug).delete();
       await db.collection('users').doc(currentUser.uid).collection('maps').doc(doc.id).delete();
+      // Limpiar copia offline
+      try { localStorage.removeItem('offline_route_' + doc.id); } catch (_) {}
       card.remove();
       showToast('Guía eliminada');
     } catch (err) {
@@ -2006,6 +2031,19 @@ async function guardarGuiaDirecto(routeData) {
 
     const docRef = await db.collection('users').doc(currentUser.uid).collection('maps').add(ruta);
     showToast('Guía guardada');
+
+    // Guardar copia offline en localStorage (disponible sin conexión)
+    try {
+      const offlineData = { id: docRef.id, ...ruta, _savedAt: Date.now() };
+      localStorage.setItem('offline_route_' + docRef.id, JSON.stringify(offlineData));
+      // Mantener solo las últimas 5 guías offline para no saturar storage
+      const offlineKeys = Object.keys(localStorage).filter(k => k.startsWith('offline_route_'));
+      if (offlineKeys.length > 5) {
+        const sorted = offlineKeys.map(k => ({ k, t: JSON.parse(localStorage.getItem(k) || '{}')._savedAt || 0 }))
+          .sort((a, b) => a.t - b.t);
+        sorted.slice(0, sorted.length - 5).forEach(({ k }) => localStorage.removeItem(k));
+      }
+    } catch (_) {}
 
     // Incrementar contador de rutas gratis usadas (si aplica)
     try {
