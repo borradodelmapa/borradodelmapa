@@ -1215,18 +1215,19 @@ function injectGoogleMapsLink(reply, userLocation, message) {
   // Extraer destino: primero del mensaje del usuario, luego de la respuesta
   let dest = null;
 
-  // 1. Del mensaje: "ir al aeropuerto", "a la torre eiffel", "al taj mahal"
-  const msgDest = message.match(/(?:a[l ]?\s*(?:la\s+)?)(aeropuerto|estación|terminal|torre eiffel|taj mahal|coliseo|big ben|sagrada familia|alhambra|machu picchu|[\w\sáéíóúñ]+(?:airport|station|terminal))/i);
-  if (msgDest) dest = msgDest[1].trim();
+  // 1. Del mensaje: "ir al aeropuerto de X", "a la torre eiffel", "al taj mahal"
+  const msgDestFull = message.match(/(?:a[l ]?\s*(?:la\s+)?)(aeropuerto\s+(?:de\s+)?[\w\sáéíóúñ]+|estación\s+(?:de\s+)?[\w\sáéíóúñ]+|terminal\s+[\w\sáéíóúñ]+|torre eiffel|taj mahal|coliseo|big ben|sagrada familia|alhambra|machu picchu|[\w\sáéíóúñ]+(?:airport|station|terminal))/i);
+  const msgDestSimple = message.match(/(?:a[l ]?\s*(?:la\s+)?)(aeropuerto|estación|terminal)/i);
+  if (msgDestFull) dest = msgDestFull[1].trim();
+  else if (msgDestSimple) dest = msgDestSimple[1].trim();
 
-  // 2. Si solo dice "aeropuerto" genérico, buscar el nombre completo en la respuesta de Claude
+  // 2. Si dice "aeropuerto" sin nombre específico, buscar el nombre real en la respuesta de Claude
   if (dest && /^aeropuerto$/i.test(dest)) {
-    const realAirport = reply.match(/\*\*(?:Aeropuerto|Airport)[^*]*?\*\*/i);
+    // Buscar **Samui Airport**, **Aeropuerto de Málaga**, etc.
+    const realAirport = reply.match(/\*\*([\w\sáéíóúñ'-]*(?:Airport|Aeropuerto)[\w\sáéíóúñ'-]*)\*\*/i)
+      || reply.match(/\*\*(?:Aeropuerto|Airport)[^*]*?\*\*/i);
     if (realAirport) {
-      dest = realAirport[0].replace(/\*\*/g, '').replace(/\s*[-—].*/, '').trim();
-    } else {
-      const airportName = reply.match(/(?:Aeropuerto|Airport)\s+(?:de\s+|Internacional\s+)?([A-ZÁÉÍÓÚÑ][\w\sáéíóúñ'-]+?)(?:\s*[-—(+\n])/i);
-      if (airportName) dest = 'Aeropuerto ' + airportName[1].trim();
+      dest = (realAirport[1] || realAirport[0]).replace(/\*\*/g, '').replace(/\s*[-—].*/, '').trim();
     }
   }
 
