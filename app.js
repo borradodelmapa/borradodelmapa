@@ -637,10 +637,14 @@ async function _loadProfileGuides() {
     snap.forEach(doc => allGuides.push({ id: doc.id, data: doc.data() }));
 
     for (const g of allGuides) {
-      // Actualizar copia offline al cargar desde Firestore
+      // Sincronizar copia offline: guardar SIEMPRE al cargar desde Firestore
+      // (permite abrir guías sin conexión aunque el dispositivo sea nuevo)
       try {
         const existing = JSON.parse(localStorage.getItem('offline_route_' + g.id) || 'null');
-        if (existing) localStorage.setItem('offline_route_' + g.id, JSON.stringify({ ...existing, ...g.data, id: g.id, _savedAt: existing._savedAt }));
+        localStorage.setItem('offline_route_' + g.id, JSON.stringify({
+          ...g.data, id: g.id,
+          _savedAt: existing?._savedAt || Date.now()
+        }));
       } catch (_) {}
       grid.appendChild(_createGuideCard(g, g.data));
     }
@@ -671,15 +675,20 @@ function _createGuideCard(doc, d, isOffline) {
   card.className = 'viaje-card' + (isOffline ? ' viaje-card-offline' : '');
   const photo = d.cover_image || destPhoto(d.destino || d.country || d.nombre || '');
   const offlineBadge = isOffline ? '<span class="viaje-card-offline-badge">📵 offline</span>' : '';
+  const isCached = !isOffline && !!localStorage.getItem('offline_route_' + doc.id);
   card.innerHTML = `
     <div class="viaje-card-img" style="background-image:url('${escapeHTML(photo)}')"></div>
     <div class="viaje-card-body">
       <div class="viaje-card-title">${escapeHTML(d.nombre || 'Mi ruta')} ${offlineBadge}</div>
       <div class="viaje-card-meta">${d.num_dias || d.dias || '?'} DÍAS · ${escapeHTML((d.destino || '').toUpperCase())}</div>
     </div>
-    <button class="viaje-card-delete" data-doc-id="${doc.id}" title="Eliminar guía">✕</button>`;
+    <button class="viaje-card-delete" data-doc-id="${doc.id}" title="Eliminar guía">✕</button>
+    <button class="viaje-card-dl${isCached ? ' viaje-card-dl-saved' : ''}" data-doc-id="${doc.id}" title="${isCached ? 'Disponible sin conexión' : 'Guardar para leer sin conexión'}">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
+    </button>`;
   card.addEventListener('click', (e) => {
     if (e.target.closest('.viaje-card-delete')) return;
+    if (e.target.closest('.viaje-card-dl')) return;
     if (d.source === 'kv-nivel2' && d.slug) {
       window.location.href = '/destinos/' + d.slug + '.html';
       return;
@@ -699,6 +708,18 @@ function _createGuideCard(doc, d, isOffline) {
       showToast('Guía eliminada');
     } catch (err) {
       showToast('Error al eliminar');
+    }
+  });
+  card.querySelector('.viaje-card-dl').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const btn = e.currentTarget;
+    try {
+      localStorage.setItem('offline_route_' + doc.id, JSON.stringify({ ...d, id: doc.id, _savedAt: Date.now() }));
+      btn.classList.add('viaje-card-dl-saved');
+      btn.title = 'Disponible sin conexión';
+      showToast('Guía guardada para leer sin conexión');
+    } catch (_) {
+      showToast('No hay espacio suficiente en el dispositivo');
     }
   });
   return card;
@@ -2037,13 +2058,6 @@ async function guardarGuiaDirecto(routeData) {
     try {
       const offlineData = { id: docRef.id, ...ruta, _savedAt: Date.now() };
       localStorage.setItem('offline_route_' + docRef.id, JSON.stringify(offlineData));
-      // Mantener solo las últimas 5 guías offline para no saturar storage
-      const offlineKeys = Object.keys(localStorage).filter(k => k.startsWith('offline_route_'));
-      if (offlineKeys.length > 5) {
-        const sorted = offlineKeys.map(k => ({ k, t: JSON.parse(localStorage.getItem(k) || '{}')._savedAt || 0 }))
-          .sort((a, b) => a.t - b.t);
-        sorted.slice(0, sorted.length - 5).forEach(({ k }) => localStorage.removeItem(k));
-      }
     } catch (_) {}
 
     // Contabilizar uso de ruta — gratis (3 primeras) o descontar 2 coins

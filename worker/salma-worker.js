@@ -4242,7 +4242,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     ctx.waitUntil((async () => {
       let allText = '';  // Texto acumulado de TODAS las iteraciones
       const MAX_TOOL_ITERATIONS = 5;  // Seguridad: máximo 5 tool calls por turno
-      const longRoute = false; // DESACTIVADO temporalmente — bloques paralelos necesitan fix
+      const longRoute = isLongRoute(message); // Rutas ≥8 días → generación por bloques paralelos
 
       try {
         // ── RUTA LARGA (≥8 días): generación por bloques paralelos ──
