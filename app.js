@@ -2967,7 +2967,14 @@ function formatMessage(str) {
 
   let html = escapeHTML(raw);
   // URLs sueltas → enlaces clicables (onclick fuerza apertura externa en PWA)
-  html = html.replace(/([a-zA-Z][a-zA-Z0-9+.-]*:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href);return false;">$1</a>');
+  html = html.replace(/([a-zA-Z][a-zA-Z0-9+.-]*:\/\/[^\s<]+)/g, function(_, url) {
+    var label = url;
+    if (url.indexOf('google.com/maps') !== -1) label = '📍 Abrir en Google Maps';
+    else if (url.indexOf('booking.com') !== -1) label = '🏨 Ver en Booking';
+    else if (url.indexOf('kiwi.com') !== -1) label = '✈️ Ver vuelo';
+    else if (url.indexOf('thefork') !== -1) label = '🍴 Ver en TheFork';
+    return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href);return false;">' + label + '</a>';
+  });
   // Teléfonos internacionales: +XX XXX XXX XXX (con espacios, guiones o puntos)
   html = html.replace(/(\+\d{1,3}[ .-]?\d{1,4}[ .-]?\d{2,4}[ .-]?\d{2,4}[ .-]?\d{0,4})/g, (match) => {
     const clean = match.replace(/[\s.-]/g, '').trim();
