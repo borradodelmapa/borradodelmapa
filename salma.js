@@ -1832,9 +1832,10 @@ const salma = {
     if (!this._checkRate()) return;
 
     const body = {
-      messages: [...(this._history || []), { role: 'user', content: msg }],
-      location: this._userLocation || null,
-      country_code: this._copilotCountry || '',
+      message: msg,
+      history: this._history || [],
+      user_location: this._userLocation || null,
+      country: this._copilotCountry || '',
     };
 
     try {

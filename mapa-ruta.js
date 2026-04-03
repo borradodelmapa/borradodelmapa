@@ -189,6 +189,7 @@ const mapaRuta = {
       styles: darkStyle,
       disableDefaultUI: true,
       zoomControl: true,
+      zoomControlOptions: { position: google.maps.ControlPosition.TOP_LEFT },
       gestureHandling: 'greedy',
       mapTypeId: 'roadmap',
     });
@@ -196,42 +197,27 @@ const mapaRuta = {
     // Traffic layer
     new google.maps.TrafficLayer().setMap(this._map);
 
-    // Advanced Markers numerados por día
-    const { AdvancedMarkerElement } = google.maps.marker || {};
+    // Legacy markers numerados por día (no requieren Map ID)
     this._markers = valid.map((stop, i) => {
       const color = this._dayColors[((stop.day || 1) - 1) % this._dayColors.length];
-      const pin = document.createElement('div');
-      pin.className = 'itin-marker-pin';
-      pin.style.cssText = `background:${color};width:32px;height:32px;border-radius:50% 50% 50% 0;
-        transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;
-        border:2px solid rgba(255,255,255,.8);box-shadow:0 2px 8px rgba(0,0,0,.4);`;
-      pin.innerHTML = `<span style="transform:rotate(45deg);color:#fff;font-size:12px;font-weight:700;font-family:monospace">${i + 1}</span>`;
-
-      let marker;
-      if (AdvancedMarkerElement) {
-        marker = new AdvancedMarkerElement({
-          map: this._map,
-          position: { lat: stop.lat, lng: stop.lng },
-          title: stop.headline || stop.name || `Parada ${i + 1}`,
-          content: pin,
-        });
-        marker.addListener('click', () => {
-          this.highlightMarker(i);
-          document.dispatchEvent(new CustomEvent('itin:marker-click', { detail: { index: i } }));
-        });
-      } else {
-        // Fallback: legacy marker
-        marker = new google.maps.Marker({
-          map: this._map,
-          position: { lat: stop.lat, lng: stop.lng },
-          title: stop.headline || stop.name || `Parada ${i + 1}`,
-          label: { text: String(i + 1), color: '#fff', fontSize: '12px', fontWeight: '700' },
-        });
-        marker.addListener('click', () => {
-          this.highlightMarker(i);
-          document.dispatchEvent(new CustomEvent('itin:marker-click', { detail: { index: i } }));
-        });
-      }
+      const marker = new google.maps.Marker({
+        map: this._map,
+        position: { lat: stop.lat, lng: stop.lng },
+        title: stop.headline || stop.name || `Parada ${i + 1}`,
+        label: { text: String(i + 1), color: '#fff', fontSize: '12px', fontWeight: '700' },
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          fillColor: color,
+          fillOpacity: 1,
+          strokeColor: '#fff',
+          strokeWeight: 2,
+          scale: 14,
+        },
+      });
+      marker.addListener('click', () => {
+        this.highlightMarker(i);
+        document.dispatchEvent(new CustomEvent('itin:marker-click', { detail: { index: i } }));
+      });
       marker._latLng = { lat: stop.lat, lng: stop.lng };
       return marker;
     });
