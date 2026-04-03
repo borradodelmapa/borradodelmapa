@@ -1,0 +1,335 @@
+{
+  "pais": "Azerbaiyán",
+  "codigo": "az",
+  "destinos": [
+    {
+      "id": "baku",
+      "nombre": "Bakú",
+      "tipo": "ciudad",
+      "region": "Bakú (capital)",
+      "descripcion": "Capital moderna junto al mar Caspio con arquitectura futurista contrastando con la ciudad vieja medieval. Centro económico y cultural del país con museos, galerías y vida nocturna. Punto de entrada obligatorio para la mayoría de viajeros.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Vuelo internacional al Aeropuerto Internacional Heydar Aliyev (Baku), a 25km del centro. Autobús/taxi a ciudad: 30-45 min, 5-15 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Icherisheher (casco viejo): 15-25 EUR/noche",
+        "medio": "Hoteles 3* en Nizami/Bulbul: 40-70 EUR/noche",
+        "comfort": "Hoteles 4-5* en el Bulevar o Flame Towers: 100-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasear por Icherisheher, murallas y puertas (gratis)",
+        "Subir a Flame Towers con vistas al Caspio (8 EUR)",
+        "Visitar Palacio de los Shirvanshah (3 EUR)",
+        "Recorrer el Bulevar costero (gratis)",
+        "Museo de la Alfombra Azerbayana (3 EUR)"
+      ],
+      "donde_comer": "Plov (arroz con carne), kebab, caviar. Precios: comida callejera 3-5 EUR, restaurantes medios 10-20 EUR. Zona de Nizami Square para turistas, mercado de Taza Bazaar para locales.",
+      "consejo_local": "Compra el Baku Card de transporte por 3 días (5 EUR) para usar metro, autobús y teleférico. El metro es muy barato (0,3 EUR) y seguro.",
+      "plan_b_lluvia": "Museos cubiertos: Museo de Alfombras, Museo de Arte Moderno de Azerbaiyán, Centro Heydar Aliyev.",
+      "keywords": [
+        "Baku",
+        "Bacu",
+        "Icherisheher",
+        "Old City",
+        "Flame Towers",
+        "Bulevar",
+        "Caspio"
+      ]
+    },
+    {
+      "id": "ganja",
+      "nombre": "Ganja",
+      "tipo": "ciudad",
+      "region": "Ganja (provincia de Ganja-Qazakh)",
+      "descripcion": "Segunda ciudad más importante, centro cultural e histórico con un ritmo más lento que Bakú. Famosa por su mercado tradicional, arquitectura otomana y como base para excursiones a montañas cercanas del Cáucaso.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Bakú: autobús directo (3-4 horas, 8-12 EUR) o minibús compartido (3 horas, 10 EUR). Tren de noche disponible.",
+      "donde_dormir": {
+        "mochilero": "Hostales pequeños o guesthouses: 12-18 EUR/noche",
+        "medio": "Hoteles 3* en zona central: 30-50 EUR/noche",
+        "comfort": "Hoteles modernos: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer el Bazar de Ganja con sus especias y artesanías (gratis)",
+        "Visitar la Mezquita de Juma (gratis)",
+        "Paseo por el Parque Ashraf Samedi (gratis)",
+        "Explorar casas con arquitectura otomana tradicional (gratis)",
+        "Excursión a las cataratas de Lahij (día completo, 30-40 EUR con guía)"
+      ],
+      "donde_comer": "Kebab local, dumplings (qutab), sopa de lenteja. Mercado central para comida barata (2-4 EUR), restaurantes tradicionales 5-10 EUR.",
+      "consejo_local": "Ganja es mucho menos turística que Bakú, los precios son más bajos y los locales más amables. Perfecta para entender la vida real azerbayana.",
+      "plan_b_lluvia": "Pasar tiempo en el bazar cubierto, visitar tiendas de artesanías, cafeterías locales.",
+      "keywords": [
+        "Ganja",
+        "Ganca",
+        "Ganja Bazaar",
+        "segunda ciudad",
+        "mercado"
+      ]
+    },
+    {
+      "id": "sheki",
+      "nombre": "Sheki",
+      "tipo": "histórico",
+      "region": "Shaki (provincia de Shaki-Zaqatala)",
+      "descripcion": "Pueblo medieval en las montañas del norte conocido por su arquitectura tradicional y el famoso Palacio de Shaki. Centro histórico de ruta comercial de la Seda con bazares auténticos y productos artesanales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-junio, septiembre-octubre",
+      "como_llegar": "Desde Bakú: autobús o minibús (4-5 horas, 12-15 EUR). Desde Ganja: 3 horas, 10 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses tradicionales: 15-25 EUR/noche",
+        "medio": "Hoteles 3* en centro: 35-55 EUR/noche",
+        "comfort": "Resorts boutique con vistas: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Palacio de Shaki con vidrieras tradicionales (3 EUR)",
+        "Bazar tradicional de Shaki (gratis)",
+        "Caravanserai histórico (2 EUR)",
+        "Senderismo a pueblos circundantes (gratis o con guía local 20-30 EUR)",
+        "Visita a talleres de seda y cerámica (gratis/compras voluntarias)"
+      ],
+      "donde_comer": "Shaki halva (dulce local), kebab de montaña, verduras locales. Restaurantes tradicionales 4-8 EUR, en bazares 2-5 EUR.",
+      "consejo_local": "Llega al bazar antes del mediodía para ver la actividad máxima. El halva de Shaki es famoso en todo el país, compra en tiendas locales, no en tiendas turísticas.",
+      "plan_b_lluvia": "Dentro del Palacio hay tours guiados detallados, cafeterías en el bazar cubierto, tiendas de artesanía.",
+      "keywords": [
+        "Shaki",
+        "Sheki",
+        "Palacio Shaki",
+        "ruta seda",
+        "medieval",
+        "caravanserai"
+      ]
+    },
+    {
+      "id": "lahij",
+      "nombre": "Lahij",
+      "tipo": "rural",
+      "region": "Lahij (provincia de Ismailli)",
+      "descripcion": "Pequeño pueblo de montaña conocido mundialmente por sus trabajos en cobre martillado a mano. Localidad turística pero auténtica, perfecta para entender artesanía tradicional y vida rural del Cáucaso.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Bakú: coche de alquiler o tour organizado (2 horas, 30-40 EUR). Desde Ganja: 1,5 horas directas.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en el pueblo: 15-20 EUR/noche",
+        "medio": "Pequeños hoteles: 30-50 EUR/noche",
+        "comfort": "Resort boutique con vistas de río: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Talleres de cobre artesanal, ver artesanos trabajar (gratis, compras opcionales)",
+        "Senderismo por el río Lahij (gratis)",
+        "Tiendas de souvenirs hechos a mano (precios según producto 5-50 EUR)",
+        "Fotografía de arquitectura tradicional caucásica (gratis)",
+        "Almuerzo en casa de una familia local (10-15 EUR con anfitrión)"
+      ],
+      "donde_comer": "Comida casera con verduras locales, trucha fresca del río. Guesthouses sirven comidas tradicionales 8-12 EUR.",
+      "consejo_local": "Negocia los precios del cobre pero respeta el trabajo artesanal. El pueblo es pequeño y camina con cuidado en las escaleras empinadas. Mejor visitarlo como excursión de medio día desde Bakú o Ganja.",
+      "plan_b_lluvia": "Las galerias de artesanía están cubiertas, perfectas para lluvia. Pasar tiempo observando trabajadores.",
+      "keywords": [
+        "Lahij",
+        "cobre artesanal",
+        "artesanía",
+        "pueblo montaña",
+        "Ismailli"
+      ]
+    },
+    {
+      "id": "baku-gobustan",
+      "nombre": "Gobustan",
+      "tipo": "naturaleza",
+      "region": "Gobustan (provincia de Absheron)",
+      "descripcion": "Reserva de arte rupestre con petroglifos de 5.000 años, volcanes de lodo activos únicos en el mundo y paisaje desértico espectacular. Sitio Patrimonio de la UNESCO accesible como excursión de día desde Bakú.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, octubre",
+      "como_llegar": "Desde Bakú: coche de alquiler (1 hora, 25-35 EUR) o tour organizado (25-40 EUR incluye entrada).",
+      "donde_dormir": {
+        "mochilero": "Dormir en Bakú y excursión de día",
+        "medio": "Guesthouses cercanos en Absheron: 30-45 EUR/noche",
+        "comfort": "Resorts en Bakú cercanos a Gobustan: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo de Gobustan con petroglifos y exposiciones (3 EUR)",
+        "Senderismo entre rocas con grabados (gratis)",
+        "Volcanes de lodo: caminar y fotografiar (gratis, lleva ropa que pueda mancharse)",
+        "Visita al Monumento Culturhistórico (2 EUR)"
+      ],
+      "donde_comer": "Cafetería pequeña en museo (comidas básicas 4-6 EUR). Mejor comer en Bakú antes o después.",
+      "consejo_local": "Los volcanes de lodo son impresionantes pero lentos; fotografía principal al atardecer. Lleva agua abundante, no hay sombra. Los petroglifos no son fáciles de ver, una guía local (15-20 EUR) ayuda a interpretarlos.",
+      "plan_b_lluvia": "El museo cubre lluvia, pero mejor no ir en lluvia fuerte por los accesos de tierra.",
+      "keywords": [
+        "Gobustan",
+        "volcanes lodo",
+        "petroglifos",
+        "arte rupestre",
+        "UNESCO",
+        "Absheron"
+      ]
+    },
+    {
+      "id": "baku-isla-absheron",
+      "nombre": "Absheron",
+      "tipo": "naturaleza",
+      "region": "Península de Absheron",
+      "descripcion": "Península desértica al norte de Bakú con playas de arena, salinas tradicionales y pueblos pesqueros auténticos. Menos turística que el centro, ideal para playas y vida costera local del Caspio.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Bakú centro: autobús/marshrutka 1-1,5 horas hacia pueblos como Mardakan o Bilajari (2-5 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en pueblos costeros: 12-20 EUR/noche",
+        "medio": "Hoteles pequeños en playas: 30-50 EUR/noche",
+        "comfort": "Resorts de playa con vistas: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de arena del Caspio, baño (gratis)",
+        "Pueblo de Mardakan con torres históricas (gratis mirar, museo 2 EUR)",
+        "Salinas tradicionales y fotografía (gratis)",
+        "Pesca recreativa o crucero en el Caspio (20-40 EUR)",
+        "Mercado de pescado en pueblos (gratis mirar, compras según interés)"
+      ],
+      "donde_comer": "Pescado fresco a la parrilla, sopas de pescado. Restaurantes costeros 8-15 EUR, comida callejera 3-6 EUR.",
+      "consejo_local": "Las playas de Absheron son públicas pero poco conocidas por turistas internacionales. El agua del Caspio es más salada que el océano, muy flotante. Negocia precios de pescado fresco directamente con pescadores.",
+      "plan_b_lluvia": "Mercados cubiertos, pueblos tienen bazares pequeños, cafeterías tradicionales.",
+      "keywords": [
+        "Absheron",
+        "playas Caspio",
+        "Mardakan",
+        "pescado fresco",
+        "península",
+        "salinas"
+      ]
+    },
+    {
+      "id": "lahij-isfahan",
+      "nombre": "Isfahn",
+      "tipo": "naturaleza",
+      "region": "Isfahn (provincia de Ismailli)",
+      "descripcion": "Parque nacional de alta montaña con bosques alpinos, lagos glaciares y fauna salvaje caucásica. Destino para senderistas y amantes de naturaleza, menos conocido pero con paisajes espectaculares comparables a los Alpes.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Bakú: coche de alquiler o tour (2,5 horas, 40-60 EUR). Desde Ismailli: 1,5 horas.",
+      "donde_dormir": {
+        "mochilero": "Camping básico o refugios de montaña: 10-15 EUR/noche",
+        "medio": "Guesthouses en pueblos base (Lahij, Ismailli): 30-50 EUR/noche",
+        "comfort": "Resorts de montaña con vistas: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a lagos alpinos (día completo, gratis con equipo propio)",
+        "Sendero de Turismo de Isfahn (6-8 horas, gratis)",
+        "Observación de fauna caucásica: ciervos, águilas (gratis, paciencia requerida)",
+        "Fotografía de paisajes de montaña (gratis)",
+        "Campamento en montaña (10-15 EUR noche básico)"
+      ],
+      "donde_comer": "Comida en guesthouses base (8-12 EUR), llevar provisiones para montaña. Pueblos pequeños con tiendas básicas.",
+      "consejo_local": "El parque no es muy infraestructurado; contrata un guía local en Lahij o Ismailli (30-50 EUR día). Las rutas no están bien señalizadas. Mejor ir junio-agosto cuando hay acceso completo.",
+      "plan_b_lluvia": "Lluvia en montaña es peligrosa en senderos; mejor no hacer rutas largas en mal tiempo. Basarse en pueblos de valle.",
+      "keywords": [
+        "Isfahn",
+        "Ismailli",
+        "montaña caucásica",
+        "senderismo",
+        "lagos alpinos",
+        "bosque"
+      ]
+    },
+    {
+      "id": "quba-rojo",
+      "nombre": "Quba y Rojo (Masazir)",
+      "tipo": "naturaleza",
+      "region": "Quba (provincia de Quba)",
+      "descripcion": "Pueblo de montaña en el norte con arquitectura tradicional y acceso a bosques de hayas. Cercano está el pueblo de Rojo (Masazir), famoso por sus casas rojas y ubicación pintoresca en el Cáucaso.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Bakú: autobús o minibús a Quba (3-4 horas, 12-15 EUR). Quba a Rojo: 30 min en coche.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Quba: 15-25 EUR/noche",
+        "medio": "Hoteles pequeños: 35-60 EUR/noche",
+        "comfort": "Resorts boutique: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por Quba (gratis)",
+        "Senderismo en bosques de hayas (gratis)",
+        "Pueblo de Rojo: fotografía de casas rojas (gratis)",
+        "Visita a bazar local (gratis)",
+        "Excursión a fuentes de aguas termales cercanas (10-20 EUR con transporte)"
+      ],
+      "donde_comer": "Comida casera en guesthouses (8-12 EUR), restaurantes locales 5-10 EUR. Trucha local fresca.",
+      "consejo_local": "Rojo es muy pequeño y muy fotogénico pero sin servicios turísticos desarrollados. Mejor como excursión de Quba. Los guesthouses locales son familiares y auténticos.",
+      "plan_b_lluvia": "Bazares cubiertos en Quba, pasar tiempo en cafeterías locales.",
+      "keywords": [
+        "Quba",
+        "Rojo",
+        "Masazir",
+        "bosques hayas",
+        "pueblo rojo",
+        "montaña norte"
+      ]
+    },
+    {
+      "id": "barda-ciudad-antigua",
+      "nombre": "Barda (Excursión arqueológica)",
+      "tipo": "histórico",
+      "region": "Barda (provincia de Barda)",
+      "descripcion": "Ciudad histórica en la llanura de Karabaj con ruinas de períodos medievales, aqueductos antiguos y sitios arqueológicos. Menos conocida que Sheki pero con gran valor histórico, accesible como excursión desde Ganja.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-junio, septiembre-octubre",
+      "como_llegar": "Desde Bakú: autobús/coche (3 horas, 20 EUR). Desde Ganja: 1,5 horas, 5-10 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses simples: 12-18 EUR/noche",
+        "medio": "Hoteles pequeños: 25-40 EUR/noche",
+        "comfort": "Resorts cercanos Ganja: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas de la ciudad medieval (gratis, difíciles de localizar)",
+        "Arqueología: restos de murallas y estructuras (gratis)",
+        "Museo local de Barda (2 EUR)",
+        "Paisaje agrícola y vida rural (gratis)",
+        "Bazar moderno de Barda (gratis)"
+      ],
+      "donde_comer": "Comida local en pequeños restaurantes 4-8 EUR.",
+      "consejo_local": "Barda es confusa para navegar sin guía; contrata uno en Ganja (20-30 EUR) o en museo. Muy poco turismo internacional, lo que lo hace más auténtico pero menos infraestructurado.",
+      "plan_b_lluvia": "El museo está cubierto. Resto de sitios son al aire libre.",
+      "keywords": [
+        "Barda",
+        "arqueología",
+        "ciudad medieval",
+        "Karabaj",
+        "ruinas",
+        "aqueducto"
+      ]
+    },
+    {
+      "id": "lankaran-sur",
+      "nombre": "Lankaran",
+      "tipo": "ciudad",
+      "region": "Lankaran (provincia de Lankaran)",
+      "descripcion": "Ciudad costera en el sur junto al mar Caspio, punto de salida hacia el bosque tropical de Talish. Puerto histórico con fortaleza, vida local auténtica y acceso a naturaleza subtropical única en Azerbaiyán.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "Desde Bakú: autobús (4-5 horas, 15-20 EUR). Desde Ganja: coche (4 horas, más complejo).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses costeros: 15-25 EUR/noche",
+        "medio": "Hoteles 3*: 40-65 EUR/noche",
+        "comfort": "Resorts de playa: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Fortaleza de Lankaran (2 EUR)",
+        "Playas del Caspio sur (gratis)",
+        "Bazar de Lankaran (gratis)",
+        "Bosque de Talish: senderismo subtropical (gratis o 20-30 EUR con guía)",
+        "Pesca en el Caspio o crucero costero (25-40 EUR)"
+      ],
+      "donde_comer": "Pescado fresco del Caspio, comida local. Restaurantes costeros 7-12 EUR, comida callejera 3-5 EUR.",
+      "consejo_local": "Lankaran es calurosa y húmeda en verano, mejor visitarla en primavera u otoño. El bosque de Talish es el único bosque subtropical del país, muy especial para fauna y flora.",
+      "plan_b_lluvia": "Mercados cubiertos, fortaleza cubierta parcialmente, cafeterías.",
+      "keywords": [
+        "Lankaran",
+        "Caspian",
+        "puerto",
+        "fortaleza",
+        "Talish",
+        "sur",
+        "subtropical"
+      ]
+    }
+  ]
+}

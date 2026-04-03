@@ -1,0 +1,357 @@
+{
+  "pais": "Países Bajos",
+  "codigo": "nl",
+  "destinos": [
+    {
+      "id": "amsterdam",
+      "nombre": "Amsterdam",
+      "tipo": "ciudad",
+      "region": "Holanda Septentrional",
+      "descripcion": "Capital de los Países Bajos con canales icónicos, museos de clase mundial y barrios bohemios. Centro neurálgico para explorar el país con excelentes conexiones de transporte. Combina arquitectura medieval, cultura alternativa y vida nocturna.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde el aeropuerto de Ámsterdam (AMS): tren directo 15 min, 10 EUR. Autobús 45 min, 6 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel en Jordaan o De Pijp, 25-35 EUR/noche",
+        "medio": "Pequeño hotel 3* en Canal Ring o Grachtengordel, 80-120 EUR/noche",
+        "comfort": "Hotel 4* centro histórico, 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en bicicleta por los canales (gratis si tienes bici alquilada, 12-15 EUR/día)",
+        "Museo Van Gogh (20 EUR, reservar online)",
+        "Anne Frank House (14 EUR, llegar temprano o reservar)",
+        "Barrio Rojo y coffeeshops (observación libre, consumo opcional)",
+        "Vondelpark picnic (gratis)",
+        "Mercado Albert Cuyp (gratis entrada, compra comida local 2-5 EUR)"
+      ],
+      "donde_comer": "Panqueques holandesas (pannenkoeken) 6-10 EUR en Café de Jaren. Arenques frescos (haring) 2-3 EUR en puestos callejeros. Croquetas y frituras en Frites van Piet. Presupuesto: 15-25 EUR/comida.",
+      "consejo_local": "Alquila una bicicleta de segunda mano en una tienda local por 50-70 EUR (mejor que 12-15 EUR/día). Los museos importantes requieren reserva online con semanas de anticipación en temporada alta.",
+      "plan_b_lluvia": "Museos de lluvia: Rijksmuseum, Stedelijk Museum. Visita el barrio judío histórico (Jodenbuurt). Prueba las saunas holandesas.",
+      "keywords": [
+        "Amsterdam",
+        "Ámsterdam",
+        "Canals",
+        "Canales",
+        "Canal Ring",
+        "Grachtengordel",
+        "Jordaan",
+        "De Pijp",
+        "Anne Frank",
+        "Van Gogh",
+        "Barrio Rojo"
+      ]
+    },
+    {
+      "id": "rotterdam",
+      "nombre": "Róterdam",
+      "tipo": "ciudad",
+      "region": "Holanda Meridional",
+      "descripcion": "Puerto moderno reinventado tras la WWII con arquitectura contemporánea audaz y escena artística vibrant. Menos turístico que Ámsterdam pero con más carácter alternativo. Excelente base para explorar la región.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Ámsterdam: tren directo 1 hora, 15-25 EUR. Desde Bruselas: tren 1,5 horas, 20-30 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel en Witte de With district, 22-30 EUR/noche",
+        "medio": "Hotel 3* cerca de Blaak Market, 70-100 EUR/noche",
+        "comfort": "Boutique hotel Kop van Zuid, 130-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Blaak Market y Cube Houses (entrada gratis a patio, interior casas 3 EUR)",
+        "Museo Boijmans Van Beuningen (15 EUR, miércoles entrada reducida 8 EUR)",
+        "Paseo por Witte de With: galerías y street art (gratis)",
+        "Euromast tower (12 EUR descuento tarde)",
+        "Rio Maas walk paseo ribereño (gratis)",
+        "Fotomovies en Fenix Food Factory (ambiente, comida local)"
+      ],
+      "donde_comer": "Frituras y bitterballen en paradas callejeras (3-5 EUR). Región famosa por pinchos y tapas. Fenix Food Factory alberga varios puestos 8-15 EUR. Presupuesto: 12-20 EUR/comida.",
+      "consejo_local": "Róterdam tiene una energía más relajada que Ámsterdam. Los jueves nocturnos en galerías de Witte de With hay vino gratis y ambiente artístico.",
+      "plan_b_lluvia": "Museo Boijmans es excelente. Visita mercados cubiertos como Fenix o Markthal. Catacumbas submarinas (Tunnel) bajo el Maas.",
+      "keywords": [
+        "Rotterdam",
+        "Róterdam",
+        "Cube Houses",
+        "Blaak",
+        "Witte de With",
+        "Modern",
+        "Puerto",
+        "Port"
+      ]
+    },
+    {
+      "id": "delft",
+      "nombre": "Delft",
+      "tipo": "histórico",
+      "region": "Holanda Meridional",
+      "descripcion": "Pueblito medieval perfectamente conservado con canales tranquilos, cerámica azul de Delft y conexión histórica con la Edad de Oro holandesa. Ideal para escapar de multitudes manteniendo arquitectura y encanto.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Róterdam: tren 15 min, 3-5 EUR. Desde Ámsterdam: tren 1 hora, 15-20 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel De Delftse Pauw, 24-32 EUR/noche",
+        "medio": "Pequeño hotel junto canal, 65-90 EUR/noche",
+        "comfort": "Hotel Vermeer (histórico), 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por canales y plazas (gratis)",
+        "Museo Prinsenhof (7 EUR, historia holandesa)",
+        "Fabrica de cerámica Royal Delft (entrada + demostración 12 EUR)",
+        "Iglesia Oude Kerk (3 EUR)",
+        "Market Square en mercado (miércoles y sábados, compra cerámica local)"
+      ],
+      "donde_comer": "Specials holandeses en Koffie & Toko de Loeiers (croquetas 2,50 EUR). Pannenkoeken en cafés junto al canal (6-9 EUR). Presupuesto: 10-18 EUR/comida.",
+      "consejo_local": "La cerámica es cara pero auténtica. Busca tiendas pequeñas en callejones en vez de tiendas turísticas grandes. El mejor horario es antes de las 10am o después de las 16h cuando los tour groups se van.",
+      "plan_b_lluvia": "Museo Prinsenhof es completo. Visita la fabrica de cerámica (interior). Toma té holandés en cafeterías.",
+      "keywords": [
+        "Delft",
+        "Delftware",
+        "Ceramica",
+        "Cerámica azul",
+        "Canals",
+        "Prinsenhof",
+        "Vermeer",
+        "Histórico"
+      ]
+    },
+    {
+      "id": "la-haya",
+      "nombre": "La Haya (Den Haag)",
+      "tipo": "ciudad",
+      "region": "Holanda Meridional",
+      "descripcion": "Sede del gobierno holandés con museos de arte excepcionales, parques verdes amplios y playa accesible. Mezcla de política, cultura y relajación junto al mar. Menos abarrotada que Ámsterdam.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Róterdam: tren 30 min, 5-8 EUR. Desde Ámsterdam: tren 1 hora, 15-20 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel en Scheveningen beach area, 25-33 EUR/noche",
+        "medio": "Hotel 3* Centrum, 75-105 EUR/noche",
+        "comfort": "Hotel junto playa Scheveningen, 140-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Mauritshuis (13 EUR, colección Rembrandt y Vermeer)",
+        "Playa Scheveningen y paseo marítimo (gratis entrada, consumo en bares)",
+        "Peace Palace tours (biblioteca internacional, 12 EUR con guía)",
+        "Parque Haagse Bos (gratis)",
+        "Beachvolleyball en Scheveningen (alquiler equipo 10 EUR/hora)"
+      ],
+      "donde_comer": "Pescado fresco en puestos beach Scheveningen (4-7 EUR). Kibbeling (pescado frito) es especialidad local. Presupuesto playa: 10-15 EUR. Restaurantes Centrum: 15-25 EUR.",
+      "consejo_local": "Scheveningen beach tiene vida nocturna vibrante con beach clubs (entrada libre, consumición mínima 8 EUR). Evita el centro de la ciudad en horas trabajo (muy oficial y gris).",
+      "plan_b_lluvia": "Museos de arte indoor. Galería Kunsthal. Visita Peace Palace aunque sea desde fuera.",
+      "keywords": [
+        "La Haya",
+        "Den Haag",
+        "The Hague",
+        "Scheveningen",
+        "Mauritshuis",
+        "Beach",
+        "Playa",
+        "Política"
+      ]
+    },
+    {
+      "id": "giethoorn",
+      "nombre": "Giethoorn",
+      "tipo": "rural",
+      "region": "Overijssel",
+      "descripcion": "Aldea campestre sin carreteras, solo canales y bicicletas. Villorrio flotante rodeado de naturaleza con casas tradicionales de techo de paja. Experiencia única para desconectar del turismo masivo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Ámsterdam: tren 2 horas (Zwolle) + autobús 30 min (20 EUR total). Desde Róterdam: tren + autobús 3,5 horas.",
+      "donde_dormir": {
+        "mochilero": "Hostel Giethoorn Backpackers, 28-35 EUR/noche",
+        "medio": "Cabaña junto canal, 70-100 EUR/noche",
+        "comfort": "Hotel tradicional De Harmonie, 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Alquiler canoa/kayak y exploración acuática (20-30 EUR/día)",
+        "Recorrido bicicleta entre pueblos (alquiler 10-15 EUR/día)",
+        "Granja tradicional visita (5 EUR entrada)",
+        "Paseo a pie por diques naturales (gratis)",
+        "Avistamiento aves en reserva natural Weerribben (gratis, prismáticos rentables)"
+      ],
+      "donde_comer": "Panquekas en granjas (8-12 EUR). Pescado fresco local en restaurantes junto canal (15-20 EUR). Presupuesto: 12-20 EUR/comida.",
+      "consejo_local": "No hay prisa aquí. La gente alquila barcos pequeños (patos eléctricos) por 30-40 EUR/hora si quieres evitar pedalear. Llega temprano para evitar grupos de día.",
+      "plan_b_lluvia": "Lluvia hace los canales más atmosféricos. Museos pequeños de etnografía local. Cafés cálidos junto al fuego.",
+      "keywords": [
+        "Giethoorn",
+        "Canales",
+        "Sin carreteras",
+        "Bicicleta",
+        "Rural",
+        "Naturaleza",
+        "Cabaña"
+      ]
+    },
+    {
+      "id": "kinderdijk",
+      "nombre": "Kinderdijk",
+      "tipo": "histórico",
+      "region": "Holanda Meridional",
+      "descripcion": "Red de 19 molinos holandeses del siglo XIX en completo funcionamiento, Patrimonio UNESCO. Símbolo de la ingeniería hidráulica holandesa que permitió ganar tierra al mar. Acceso fácil desde Róterdam.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Róterdam: autobús 30 min, 4 EUR. Desde Ámsterdam: tren a Róterdam + autobús 2 horas.",
+      "donde_dormir": {
+        "mochilero": "Mejor base en Róterdam (15 min), hostel 22-30 EUR",
+        "medio": "Hotel pequeño en pueblo Nieuw-Lekkerland cercano, 65-85 EUR",
+        "comfort": "Recurso a Róterdam, hotel 130+ EUR"
+      },
+      "que_hacer": [
+        "Paseo entre molinos (gratis)",
+        "Visita interior molino funcionando (5-7 EUR con entrada museo)",
+        "Crucero en barco por paisaje (12 EUR, 45 min)",
+        "Fotografía de molinos iluminados al atardecer (gratis)",
+        "Picnic en diques (compra en tiendas locales)"
+      ],
+      "donde_comer": "Pequeño café junto molinos (té/café 2,50 EUR). Presupuesto: mejor llevar comida picnic (5-10 EUR).",
+      "consejo_local": "Visita 2-3 horas antes del atardecer para luz de fotografía. La mayoría de turistas hacen excursión de día desde Róterdam, por eso el atardecer está casi vacío.",
+      "plan_b_lluvia": "Los molinos funcionan todo el año. Lluvia añade atmósfera. Lleva paraguas para fotos dramáticas.",
+      "keywords": [
+        "Kinderdijk",
+        "Molinos",
+        "Mills",
+        "UNESCO",
+        "Holandés",
+        "Agua",
+        "Ingeneria"
+      ]
+    },
+    {
+      "id": "utrecht",
+      "nombre": "Utrecht",
+      "tipo": "ciudad",
+      "region": "Utrecht",
+      "descripcion": "Cuarta ciudad más grande, centro ferroviario y estudiante vibrante. Canales con terrazas debajo del nivel del agua, catedral gótica y atmósfera menos turística que Ámsterdam. Punto de conexión para explorar el interior.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Ámsterdam: tren directo 45 min, 8-12 EUR. Desde Róterdam: tren 1 hora, 12-18 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel Uppelink, 23-32 EUR/noche",
+        "medio": "Hotel 3* junto canal, 70-95 EUR/noche",
+        "comfort": "Boutique hotel Smit, 120-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Catedral Dom y Torre Dom (subida 95 escalones, 12,50 EUR)",
+        "Paseo canales con terrazas (gratis, consumo en bares 3-5 EUR)",
+        "Museo Central (arte holandés, 20 EUR)",
+        "Mercado callejero miércoles y sábados (gratis entrada)",
+        "Distillery Hoogtij touring (cerveza local, 8 EUR con degustación)"
+      ],
+      "donde_comer": "Stroopwafels (gofres caramelo) en mercado 2-3 EUR. Restaurantes junto canal 12-20 EUR. Presupuesto: 12-18 EUR/comida.",
+      "consejo_local": "Utrecht es donde viven los estudiantes holandeses, mucho más barato y menos pretencioso que Ámsterdam. La Torre Dom es visible desde muy lejos para orientarse.",
+      "plan_b_lluvia": "Museo Central es excelente. Visita el claustro Dom (protegido). Cafés acogedores en callejones.",
+      "keywords": [
+        "Utrecht",
+        "Dom",
+        "Canales",
+        "Estudiante",
+        "Catedral",
+        "Central",
+        "Ferrocarril"
+      ]
+    },
+    {
+      "id": "texel",
+      "nombre": "Isla de Texel",
+      "tipo": "isla",
+      "region": "Holanda Septentrional",
+      "descripcion": "Isla frente a la costa norte con playas de arena, dunas y naturaleza salvaje. Accesible por ferry desde Den Helder. Ideal para ciclismo, senderismo y desconexión completa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Ámsterdam: tren a Den Helder 1,5 horas (15 EUR) + ferry 20 min (8 EUR, bicis incluidas). Total 23 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel/campamento De Bakkerij, 28-38 EUR/noche",
+        "medio": "Hotel pequeño pueblo Den Burg, 75-105 EUR/noche",
+        "comfort": "Hotel junto playa, 140-190 EUR/noche"
+      },
+      "que_hacer": [
+        "Ciclismo por carril bici isla (alquiler bici 10-12 EUR/día)",
+        "Playa Paal 17 con aguas cálidas relativas (gratis)",
+        "Faro Ecomare y santuario aves (12 EUR, observación sellos)",
+        "Senderismo por dunas naturales (gratis)",
+        "Visita molino De Schorren (3 EUR)"
+      ],
+      "donde_comer": "Pescado ahumado en mercado 4-6 EUR. Café de playa con pulpo 12-18 EUR. Presupuesto: 10-20 EUR/comida.",
+      "consejo_local": "Texel es accesible pero apenas turística comparado con destinos principales. Alquila bici antes de subir al ferry. Las playas del lado norte son más salvajes.",
+      "plan_b_lluvia": "Lluvia en isla es común, lleva impermeable. Museo marítimo de Texel. Paseos entre dunas son hermosos incluso con viento.",
+      "keywords": [
+        "Texel",
+        "Isla",
+        "Island",
+        "Ferry",
+        "Playas",
+        "Dunas",
+        "Naturaleza",
+        "Ciclismo"
+      ]
+    },
+    {
+      "id": "zaanse-schans",
+      "nombre": "Zaanse Schans",
+      "tipo": "histórico",
+      "region": "Holanda Septentrional",
+      "descripcion": "Museo al aire libre con molinos, casas tradicionales y artesanía holandesa del siglo XVII. Experiencia inmersiva en la Edad de Oro. Muy accesible desde Ámsterdam como excursión.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Ámsterdam: tren 15 min + autobús 5 min (5 EUR total) o tren directo 30 min (4 EUR).",
+      "donde_dormir": {
+        "mochilero": "Mejor base en Ámsterdam, no hay alojamiento en Zaanse",
+        "medio": "Base Ámsterdam, 80-120 EUR",
+        "comfort": "Base Ámsterdam, 150+ EUR"
+      },
+      "que_hacer": [
+        "Entrada sitio (gratis, pequeños museos internos 2-5 EUR cada uno)",
+        "Fabrica queso demostración (4 EUR entrada)",
+        "Molino funcionando (entrada dentro de ticket general 7 EUR)",
+        "Taller artesanía relojería o cerámica (observación gratis, compra si interesa)",
+        "Paseo entre molinos y casas (gratis, sin ruido de tráfico)"
+      ],
+      "donde_comer": "Pancake house en sitio (pannekoeken 8-12 EUR). Mejor opción: picnic comprado en Ámsterdam.",
+      "consejo_local": "Dirígete a molinos específicos: relojería, molienda queso. Evita fin de semana si es posible (autobuses escolares). Abre 08:30-17:00, cierra lunes algunos meses.",
+      "plan_b_lluvia": "Museos cubiertos funcionan igual. Lluvia hace más atmosférico.",
+      "keywords": [
+        "Zaanse Schans",
+        "Molinos",
+        "Museo aire libre",
+        "Queso",
+        "Artesanía",
+        "Holandés",
+        "Edad Oro"
+      ]
+    },
+    {
+      "id": "marken",
+      "nombre": "Marken",
+      "tipo": "isla",
+      "region": "Holanda Septentrional",
+      "descripcion": "Pueblito piscatoria en pequeña isla con casas tradicionales de color verde y madera. Atmosfera de cuento de hadas con puerto de barcas pesqueras. Fácil acceso desde Ámsterdam pero sorprendentemente tranquilo.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Ámsterdam: autobús 30 min (6 EUR) o ferry desde Volendam (2 EUR). Conecta con Volendam por dique peatonal (ciclable).",
+      "donde_dormir": {
+        "mochilero": "Base mejor en Ámsterdam o Volendam (30 min), 22-30 EUR",
+        "medio": "Pequeño hotel en isla, 85-120 EUR/noche",
+        "comfort": "Hotel único isla, 150+ EUR"
+      },
+      "que_hacer": [
+        "Paseo alrededor isla (gratis, 1 hora)",
+        "Puerto de barcas tradicionales (observación libre, fotos de pescadores)",
+        "Museo casa tradicional (3 EUR entrada)",
+        "Telesilla (cable car) a Volendam conexión (1 EUR)",
+        "Picnic junto puerto (compra pan/queso locales 5-8 EUR)"
+      ],
+      "donde_comer": "Anguila ahumada (paling) especialidad local 5-7 EUR. Pescado fresco en pequeños restaurantes 12-18 EUR. Presupuesto bajo si llevas provisiones.",
+      "consejo_local": "Marken es demasiado pequeño para pernoctar (caro, limitado). Haz excursión de Ámsterdam o combina con Volendam cercano. Los pescadores vuelven 16:00-18:00 (mejor hora para atmósfera).",
+      "plan_b_lluvia": "Lluvia le da carácter neerlandés auténtico. Cafés pequeños con chimenea. Paseo con paraguas es pintoresco.",
+      "keywords": [
+        "Marken",
+        "Isla",
+        "Pueblito",
+        "Pescadores",
+        "Puerto",
+        "Tradicional",
+        "Holandés",
+        "Volendam"
+      ]
+    }
+  ]
+}

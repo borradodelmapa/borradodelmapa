@@ -1,0 +1,328 @@
+{
+  "pais": "Yibuti",
+  "codigo": "dj",
+  "destinos": [
+    {
+      "id": "djibouti-ciudad",
+      "nombre": "Djibouti Ciudad",
+      "tipo": "ciudad",
+      "region": "Región de Djibouti",
+      "descripcion": "Capital portuaria con arquitectura colonial francesa, mercados activos y acceso directo al Mar Rojo. Punto de entrada obligatorio donde convergen culturas árabe, africana y francesa. Base logística para explorar el resto del país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Aeropuerto Internacional Ambouli, 30 km: taxi/shuttle 15-25 EUR, 45 min. O ferry desde Adén (Yemen) si procede.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses zona Plateau du Serpent: 20-35 EUR/noche",
+        "medio": "Hotel 3-4 estrellas centro: 60-100 EUR/noche",
+        "comfort": "Hotel Sheraton o similares: 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado central (Marché Central) y zocos: gratis",
+        "Paseo por el Corniche al atardecer: gratis",
+        "Museo de Djibouti (etnografía, historia colonial): 3-5 EUR",
+        "Catedral Sacré-Cœur (arquitectura colonial): gratis",
+        "Baño en playa Siesta: gratis"
+      ],
+      "donde_comer": "Cocina djiboutiana (carnero grillé, cous-cous), frutas tropicales. Zona Puerto: pescado fresco 5-10 EUR. Restaurantes franceses Plateau: 15-30 EUR. Street food 2-4 EUR.",
+      "consejo_local": "El mercado es más animado al atardecer; negocia precios pero con respeto. Lleva efectivo (francos de Yibuti o EUR), los cajeros automáticos son limitados.",
+      "plan_b_lluvia": "Museo de Djibouti, compras en comercios cubiertos, cafeterías tradicionales con té y juegos locales",
+      "keywords": [
+        "Djibouti City",
+        "capital Yibuti",
+        "puerto",
+        "corniche",
+        "mercado",
+        "Plateau"
+      ]
+    },
+    {
+      "id": "lac-assal",
+      "nombre": "Lago Assal",
+      "tipo": "naturaleza",
+      "region": "Región de Tadjourah",
+      "descripcion": "Lago hipersalino a 155 metros bajo el nivel del mar, el segundo punto más bajo de la Tierra. El agua es tan densa que flota naturalmente, comparable al Mar Muerto. Paisaje lunar desértico casi sin vida vegetal.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Djibouti Ciudad: coche alquilado (30-50 EUR/día) o tour organizado (35-60 EUR), 90 km, 2 horas. Carretera asfaltada en buen estado.",
+      "donde_dormir": {
+        "mochilero": "Campamento básico cercano: 15-25 EUR/noche (ducha fría, sin electricidad)",
+        "medio": "No hay opción, dormir en Djibouti Ciudad o Tadjourah",
+        "comfort": "No hay opción, hotel en Djibouti Ciudad"
+      },
+      "que_hacer": [
+        "Baño flotante en el lago: gratis",
+        "Caminata por la orilla desértica: gratis",
+        "Fotografía al atardecer: gratis",
+        "Visita aldea Assal (salineros locales): gratis/donativo pequeño"
+      ],
+      "donde_comer": "Llevar agua y snacks desde la ciudad. En aldea Assal: té y alimentos muy básicos. Mejor comer antes de partir.",
+      "consejo_local": "Lleva protección solar extrema (factor 50+), gafas y sombrero. El agua entra en ojos y piel; ducha con agua dulce al salir. Sin infraestructura turística: viaja con tour o con provisiones propias.",
+      "plan_b_lluvia": "Raro lluvia en esta zona. Si ocurre, traslada a Djibouti Ciudad o Tadjourah.",
+      "keywords": [
+        "Lac Assal",
+        "Lake Assal",
+        "hipersalino",
+        "punto más bajo",
+        "flotación natural",
+        "desierto"
+      ]
+    },
+    {
+      "id": "bab-el-mandeb",
+      "nombre": "Bab-el-Mandeb (Estrecho de Bab-el-Mandeb)",
+      "tipo": "naturaleza",
+      "region": "Región de Obock",
+      "descripcion": "Estrecho estratégico que une el Mar Rojo con el océano Índico. Escenario de importancia geopolítica mundial con acantilados dramáticos, aguas turquesas y presencia de delfines. Acceso limitado pero espectacular desde el norte.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Djibouti Ciudad hacia Obock: coche alquilado 45-70 EUR/día, 130 km, 3-4 horas. Requiere permiso local o tour organizado (50-80 EUR).",
+      "donde_dormir": {
+        "mochilero": "Obock guesthouse básica: 20-30 EUR/noche",
+        "medio": "Obock hotel pequeño: 40-60 EUR/noche",
+        "comfort": "No hay, base desde Djibouti Ciudad"
+      },
+      "que_hacer": [
+        "Mirador del estrecho (Punta de Ras Siyan): gratis",
+        "Paseo por acantilados: gratis",
+        "Avistamiento de delfines (según temporada): gratis/tour 25-40 EUR",
+        "Snorkel en aguas cercanas (equipo propio): gratis"
+      ],
+      "donde_comer": "En Obock: cocina local muy básica, pescado fresco 4-8 EUR. Llevar provisiones desde ciudad.",
+      "consejo_local": "Zona poco desarrollada turísticamente. Los locales hablan árabe, francés limitado. Coordina con tour operador si viajas independiente. Seguridad: zona relativamente estable pero aislada.",
+      "plan_b_lluvia": "Raro; si ocurre, permanece en Obock o regresa a Djibouti.",
+      "keywords": [
+        "Bab el Mandeb",
+        "Mandeb Strait",
+        "Obock",
+        "acantilados",
+        "Mar Rojo"
+      ]
+    },
+    {
+      "id": "tadjourah",
+      "nombre": "Tadjourah",
+      "tipo": "ciudad",
+      "region": "Región de Tadjourah",
+      "descripcion": "Puerto histórico de pescadores en el Mar Rojo con arquitectura otomana residual y comunidad Afar tradicional. Punto base para excursiones a cañones y paisajes desérticos del interior. Atmósfera más auténtica y menos turística que la capital.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Djibouti Ciudad: coche alquilado 35-50 EUR/día, 70 km, 1.5 horas. O autobús local 5 EUR, 2.5 horas (menos cómodo).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 15-25 EUR/noche",
+        "medio": "Hotel Tadjourah Palace o similar: 40-70 EUR/noche",
+        "comfort": "No hay opción de lujo; base desde Djibouti Ciudad si lo requieres"
+      },
+      "que_hacer": [
+        "Paseo por puerto pesquero: gratis",
+        "Playa local (baño): gratis",
+        "Excursión a Cañón de Daamal (tour 30-50 EUR): paisaje geológico único",
+        "Visita a aldea Afar cercana: gratis/donativo"
+      ],
+      "donde_comer": "Cocina de pescadores: mero fresco, langosta asequible 6-15 EUR. Mercado local. Café tradicional árabe 0.50 EUR.",
+      "consejo_local": "Tadjourah es menos ajena al viajero que Obock. Los restaurantes de la playa son punto de encuentro local. Pregunta por guías locales para cañones: no hay senderos formales.",
+      "plan_b_lluvia": "Raro en esta región semidesértica. Si ocurre: paseos cubiertos por pueblo, cafeterías locales.",
+      "keywords": [
+        "Tadjoura",
+        "Tadjoura City",
+        "puerto rojo",
+        "Afar",
+        "cañones",
+        "pescado"
+      ]
+    },
+    {
+      "id": "isla-moucha",
+      "nombre": "Isla Moucha",
+      "tipo": "isla",
+      "region": "Archipiélago de Musha",
+      "descripcion": "Isla coralina en el Mar Rojo con playas vírgenes de arena blanca y arrecifes de coral intactos. Acceso limitado a tours; paraíso para snorkel y buceo con biodiversidad marina excepcional. Ambiente deshabitado salvo por estaciones de investigación.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Djibouti Ciudad o Tadjourah: excursión en barco organizada (60-100 EUR, 2-3 horas). Salidas principalmente desde Puerto Djibouti.",
+      "donde_dormir": {
+        "mochilero": "Camping básico isla (si disponible): 20 EUR/noche",
+        "medio": "Tours de día; sin alojamiento",
+        "comfort": "Tours de día desde Djibouti Ciudad"
+      },
+      "que_hacer": [
+        "Snorkel arrecife coralino: gratis (tour incluye parada)",
+        "Buceo (certificado): 60-90 EUR",
+        "Playa de arena blanca: gratis",
+        "Observación de peces tropicales y tortugas: gratis"
+      ],
+      "donde_comer": "Tour incluye almuerzo o llevar provisiones. Picnic en playa. Agua potable limitada; llevar suficiente.",
+      "consejo_local": "Isla protegida: respeta arrecifes, no toques coral. Tour es prácticamente obligatorio. Lleva protección solar extrema y snorkel propio si buceas regularmente. Mareas afectan acceso; confirma horarios con operador.",
+      "plan_b_lluvia": "Raro en temporada recomendada. Si mar está agitado, tour se cancela; reintenta otro día.",
+      "keywords": [
+        "Moucha Island",
+        "Isla de Moucha",
+        "archipiélago",
+        "coral",
+        "buceo",
+        "snorkel",
+        "mar rojo"
+      ]
+    },
+    {
+      "id": "canion-daamal",
+      "nombre": "Cañón de Daamal (Daallo)",
+      "tipo": "montaña",
+      "region": "Región de Tadjourah",
+      "descripcion": "Cañón profundo de paredes rojas en el desierto interior con oasis escondido y formaciones geológicas espectaculares. Destino de trekking con poca infraestructura turística, requiere guía local. Uno de los paisajes más dramáticos de Yibuti.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Tadjourah: coche 4x4 alquilado (50-70 EUR) o tour organizado (80-120 EUR, 1.5 horas). Carretera sin asfaltar.",
+      "donde_dormir": {
+        "mochilero": "Campamento en cañón (tour organiza): 20-30 EUR/noche",
+        "medio": "No hay; base desde Tadjourah (guesthouse 40-70 EUR)",
+        "comfort": "No hay; base desde Djibouti o Tadjourah"
+      },
+      "que_hacer": [
+        "Trekking al fondo del cañón: gratis (requiere guía 20-40 EUR)",
+        "Baño en oasis: gratis",
+        "Fotografía de formaciones geológicas: gratis",
+        "Encuentro con nómadas locales: gratis"
+      ],
+      "donde_comer": "Tour incluye comidas básicas o llevar provisiones. Agua del oasis (verificar limpieza). Cocina de campamento: arroz, verduras, té local.",
+      "consejo_local": "Guía es obligatorio, no es sendero marcado. Trae agua extra (2-3 litros mínimo), protección solar, botas cómodas. Clima extremo: muy caluroso de día, frío de noche. Nómadas Afar son amables pero hablan poco inglés/francés.",
+      "plan_b_lluvia": "Raro; si ocurre, cañón puede ser peligroso por flujos. Reprograma excursión.",
+      "keywords": [
+        "Daallo Canyon",
+        "Daamal Gorge",
+        "cañón rojo",
+        "oasis",
+        "trekking",
+        "formaciones"
+      ]
+    },
+    {
+      "id": "ghoubbet-kharab",
+      "nombre": "Golfo de Ghoubbet-Kharab",
+      "tipo": "naturaleza",
+      "region": "Región de Tadjourah",
+      "descripcion": "Bahía semi-cerrada del Mar Rojo con acantilados volcánicos negros que descienden verticalmente. Agua calma ideal para snorkel, delfines ocasionales, y atmósfera apocalíptica única. Acceso principalmente por tour desde Tadjourah.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Tadjourah: barco con tour 40-70 EUR, 1 hora. O desde Djibouti con tour especializado 60-90 EUR.",
+      "donde_dormir": {
+        "mochilero": "Excursión de día; sin alojamiento",
+        "medio": "Excursión de día desde Tadjourah",
+        "comfort": "Excursión de día desde Djibouti"
+      },
+      "que_hacer": [
+        "Snorkel en bahía: gratis",
+        "Fotografía acantilados volcánicos: gratis",
+        "Avistamiento de delfines: gratis",
+        "Baño en agua termal (según disponibilidad): gratis"
+      ],
+      "donde_comer": "Tour incluye almuerzo o llevar snacks. Agua a bordo.",
+      "consejo_local": "Acantilados son espectaculares pero no hay playas. Snorkel directo desde barco. Aguas frías (termoclina); traje de baño recomendado. Delfines no garantizados pero frecuentes.",
+      "plan_b_lluvia": "Si mar agitado, tour se cancela. Raro lluvia.",
+      "keywords": [
+        "Ghoubbet",
+        "Kharab Gulf",
+        "volcánico",
+        "acantilados negros",
+        "delfines",
+        "snorkel"
+      ]
+    },
+    {
+      "id": "arta",
+      "nombre": "Arta",
+      "tipo": "rural",
+      "region": "Región de Arta",
+      "descripcion": "Pequeña población en el interior montañoso con mercado local auténtico y acceso a paisajes de savana semiárida. Punto menos visitado que ofrece experiencia de Yibuti rural sin turismo masivo. Zona Afar tradicional.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Djibouti Ciudad: coche alquilado 35-50 EUR, 65 km, 1.5 horas. Carretera asfaltada.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse muy básica: 15-20 EUR/noche",
+        "medio": "Hotel Arta pequeño: 30-45 EUR/noche",
+        "comfort": "Base desde Djibouti Ciudad"
+      },
+      "que_hacer": [
+        "Mercado local (viernes): gratis",
+        "Caminata por savana cercana: gratis",
+        "Encuentro con pastores nómadas: gratis",
+        "Observación de aves: gratis"
+      ],
+      "donde_comer": "Cocina local muy básica: carne, pan, verduras. 3-6 EUR comida. Café árabe. Higiene variable; verificar establecimiento.",
+      "consejo_local": "Arta es punto de paso más que destino turístico. El mercado viernes es el mejor momento. Pocos servicios; lleva dinero efectivo. Personal no habla inglés; francés limitado. Más auténtico pero menos cómodo.",
+      "plan_b_lluvia": "Raro; si ocurre, mercado se traslada cubierto.",
+      "keywords": [
+        "Arta",
+        "mercado",
+        "interior",
+        "savana",
+        "Afar",
+        "nómadas"
+      ]
+    },
+    {
+      "id": "parque-nacional-day-forest",
+      "nombre": "Bosque de Day (Parque Nacional Day Forest)",
+      "tipo": "naturaleza",
+      "region": "Región de Arta",
+      "descripcion": "Uno de los últimos bosques de altura de Yibuti con vegetación endémica única. Refugio de aves y fauna salvaje en cota 1500m. Acceso restringido y escasamente turístico; requiere permisos. Ecosistema frágil y especial.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Arta: coche 4x4 alquilado 60-80 EUR, 50 km, 2.5 horas. O tour organizado desde Djibouti (90-140 EUR). Carretera sin asfaltar, difícil.",
+      "donde_dormir": {
+        "mochilero": "Campamento rústico (si organizado): 20-30 EUR/noche",
+        "medio": "Base desde Arta (guesthouse 30-45 EUR)",
+        "comfort": "Base desde Djibouti Ciudad"
+      },
+      "que_hacer": [
+        "Trekking por bosque: gratis (requiere guía 30-50 EUR)",
+        "Observación de aves endémicas: gratis",
+        "Fotografía flora: gratis",
+        "Picnic en altura: gratis"
+      ],
+      "donde_comer": "Tour/guía incluye comidas o llevar provisiones. Agua disponible en bosque.",
+      "consejo_local": "Requiere permiso oficial del Ministerio de Medio Ambiente (coordina con tour operador). Guía local esencial. Temperatura más fresca que costa. Lleva abrigo para atardecer. Biodiversidad poco conocida: observa con cuidado.",
+      "plan_b_lluvia": "Lluvia posible en altura; bosque se vuelve resbaladizo. Calzado resistente obligatorio.",
+      "keywords": [
+        "Day Forest",
+        "Bosque de Day",
+        "parque nacional",
+        "altura",
+        "endemismo",
+        "aves",
+        "1500m"
+      ]
+    },
+    {
+      "id": "piscinas-naturales-djibouti",
+      "nombre": "Piscinas Termales Naturales de Obock y alrededores",
+      "tipo": "naturaleza",
+      "region": "Región de Obock",
+      "descripcion": "Géiseres y piscinas de agua caliente natural en zonas desérticas cercanas a Obock. Fenómeno geotérmico raro en la región, acceso irregular según actividad sísmica. Experiencia única de baños minerales en paisaje lunar.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Obock: coche 4x4 y guía local (50-80 EUR), 30-40 km, 1.5-2 horas. Carretera muy difícil, 4x4 obligatorio.",
+      "donde_dormir": {
+        "mochilero": "Base desde Obock (guesthouse 20-30 EUR/noche)",
+        "medio": "Base desde Obock (hotel 40-60 EUR/noche)",
+        "comfort": "Base desde Djibouti Ciudad"
+      },
+      "que_hacer": [
+        "Baño en agua termal: gratis",
+        "Fotografía géiseres y vapor: gratis",
+        "Caminata lunar: gratis",
+        "Encuentro con guías locales: incluido tour"
+      ],
+      "donde_comer": "Llevar agua y provisiones desde Obock. Sin servicios en zona.",
+      "consejo_local": "Actividad sísmica determina acceso: confirma disponibilidad con locales. Agua muy caliente; enfriar antes de entrar. Sin infraestructura; aventura para viajero experimentado. Guía local imprescindible.",
+      "plan_b_lluvia": "Raro; zona semidesértica. Lluvia no afecta mucho.",
+      "keywords": [
+        "piscinas termales",
+        "géiseres",
+        "aguas calientes",
+        "Obock",
+        "geotermia",
+        "baños"
+      ]
+    }
+  ]
+}

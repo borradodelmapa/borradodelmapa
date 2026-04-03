@@ -1,0 +1,337 @@
+{
+  "pais": "Uruguay",
+  "codigo": "uy",
+  "destinos": [
+    {
+      "id": "montevideo",
+      "nombre": "Montevideo",
+      "tipo": "ciudad",
+      "region": "Montevideo (capital)",
+      "descripcion": "Capital y principal puerta de entrada a Uruguay, con vibrante escena cultural, mercados antiguos y paseos ribereños. Centro neurálgico para transporte y punto de partida ideal. Mezcla de arquitectura colonial, art decó y moderna con vida nocturna activa.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Aeropuerto Internacional Carrasco (45 min en autobús, 3-4 EUR) o terminal de autobuses desde países vecinos",
+      "donde_dormir": {
+        "mochilero": "Hostal en Ciudad Vieja o Pocitos: 18-25 EUR/noche",
+        "medio": "Hotel 3 estrellas en Centro o Parque Batlle: 50-80 EUR/noche",
+        "comfort": "Hotel 4-5 estrellas en Pocitos/Punta Carretas: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Explorar Ciudad Vieja y Plaza Independencia (gratis)",
+        "Paseo por la Rambla de Montevideo (gratis)",
+        "Mercado del Puerto para tapas y artesanía (5-15 EUR)",
+        "Museo Gurvich o Museo Nacional de Artes Visuales (3-5 EUR)",
+        "Café en barrio de Cordón (4-8 EUR)"
+      ],
+      "donde_comer": "Asado y chivitos (sándwich típico) en Mercado del Puerto; cervecerías en Cordón; promedio 10-18 EUR por menú. Zona recomendada: Ciudad Vieja y Avenida 18 de Julio.",
+      "consejo_local": "Anda en horario matutino al Mercado del Puerto; después de las 15h se vacía. El mate es cultura local, aprende a compartirlo correctamente.",
+      "plan_b_lluvia": "Museos (Garvich, MNAV, Museo Torres García), librerías en Cordón, café cubierto en mercados",
+      "keywords": [
+        "Montevideo",
+        "Ciudad Vieja",
+        "Rambla",
+        "Pocitos",
+        "Cordón",
+        "Plaza Independencia",
+        "Mercado del Puerto"
+      ]
+    },
+    {
+      "id": "punta-del-este",
+      "nombre": "Punta del Este",
+      "tipo": "playa",
+      "region": "Maldonado (Departamento de Maldonado)",
+      "descripcion": "Centro turístico costero con playas de arena blanca, marina de lujo y vida nocturna. A 140 km de Montevideo, es accesible para mochileros fuera de temporada alta. Combina playa, compras y gastronomía.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a febrero (alta), octubre-noviembre, marzo-abril (recomendado)",
+      "como_llegar": "Desde Montevideo en autobús: 2.5h, 8-12 EUR (Copsa, Turil)",
+      "donde_dormir": {
+        "mochilero": "Hostal en zona Centro o Avenida Gorlero: 22-32 EUR/noche",
+        "medio": "Hotel 3 estrellas alejado del centro: 60-100 EUR/noche",
+        "comfort": "Resort frente a playa o Península: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas Brava y Mansa (gratis)",
+        "Paseo por Faro de Punta del Este (gratis)",
+        "Isla de Lobos (tour en barco, 25-35 EUR)",
+        "Casapueblo museo y atardecer (8 EUR)",
+        "Compras en Avenida Gorlero (gratis)"
+      ],
+      "donde_comer": "Pescado fresco, ceviches, comida casual en zona Centro; desde 12-30 EUR. Restaurantes más lujosos en puerto: 35-60 EUR. Zona: Avenida Gorlero y costanera.",
+      "consejo_local": "Evita enero si viajas con presupuesto ajustado: precios se triplican. Playa Brava es para surfistas, Mansa para nadar. Las mejores compras en off-season (marzo-mayo).",
+      "plan_b_lluvia": "Casapueblo (museo y arte), compras en Avenida Gorlero, cafeterías con vista al mar cubierta",
+      "keywords": [
+        "Punta del Este",
+        "Maldonado",
+        "Playa Brava",
+        "Playa Mansa",
+        "Faro",
+        "Casapueblo",
+        "Isla de Lobos"
+      ]
+    },
+    {
+      "id": "colonia-del-sacramento",
+      "nombre": "Colonia del Sacramento",
+      "tipo": "histórico",
+      "region": "Colonia (Departamento de Colonia)",
+      "descripcion": "Pueblo colonial portugués del siglo XVII con calles adoquinadas, museos y arquitectura preservada. A 180 km de Montevideo, es una escapada histórica corta y fotogénica con ambiente bohemio.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año, mejor abril-mayo y septiembre-octubre",
+      "como_llegar": "Autobús desde Montevideo: 3.5h, 12-15 EUR (Turil, COT). Tambien ferri desde Buenos Aires, Argentina (1h, 25-40 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal en Barrio Histórico: 20-28 EUR/noche",
+        "medio": "Hotel 3 estrellas: 50-80 EUR/noche",
+        "comfort": "Hotel boutique con vista al río: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por Barrio Histórico y calles adoquinadas (gratis)",
+        "Museo Portugués (5 EUR)",
+        "Faro y paseo costanero (gratis)",
+        "Iglesia Matriz (gratis)",
+        "Cafeterías y galerías de arte (gratis entrada, consumo opcional)"
+      ],
+      "donde_comer": "Comida portuguesa y local: cazuela de mariscos, empanadas. Rango 10-22 EUR. Zona recomendada: Calle España y Avenida General Flores con vista al río.",
+      "consejo_local": "Recorre el Barrio Histórico al atardecer; menos turistas y mejor luz. El río Plata es marrón pero los atardeceres compensan. Muchos museos cierran lunes.",
+      "plan_b_lluvia": "Museos (Portugués, Americano, Azulejos), galerías de arte, cafeterías históricas",
+      "keywords": [
+        "Colonia del Sacramento",
+        "Barrio Historico",
+        "Colonia",
+        "casco historico",
+        "Rio de la Plata",
+        "Faro"
+      ]
+    },
+    {
+      "id": "rocha-costa",
+      "nombre": "Rocha (Costa)",
+      "tipo": "playa",
+      "region": "Rocha (Departamento de Rocha)",
+      "descripcion": "Zona costera con playas salvajes, lagunas y fauna. Incluye pueblos como Punta del Diablo y Cabo Polonio. Destino de mochileros aventureros, menos comercial que Punta del Este pero más accesible que parques remotos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a marzo, septiembre a octubre",
+      "como_llegar": "Desde Montevideo en autobús a Punta del Diablo: 4.5h, 15-18 EUR (Núñez). O a Rocha ciudad (3.5h, 12 EUR) y luego local.",
+      "donde_dormir": {
+        "mochilero": "Hostal en Punta del Diablo: 18-25 EUR/noche",
+        "medio": "Posada o casa alquilada: 45-70 EUR/noche",
+        "comfort": "Hotel o cabaña con servicios: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de Punta del Diablo (gratis, optimo para surf)",
+        "Laguna de Castillos (laguna natural, gratis)",
+        "Cabo Polonio faro y atardecer (acceso gratis, tour opcional 20-30 EUR)",
+        "Avistamiento de fauna marina (pingüinos, lobos de mar, septiembre-noviembre)",
+        "Caminatas costeras (gratis)"
+      ],
+      "donde_comer": "Comida casual, pescado fresco en parrillas del pueblo. Rango 10-20 EUR. Punta del Diablo: zonas frente a playa y calle principal.",
+      "consejo_local": "Punta del Diablo es de surfers; Cabo Polonio es más aislado (sin luz eléctrica, estilo bohemio). Febrero es pico de turismo y precios. Las playas salvajes son arriesgadas para nadar; respeta advertencias.",
+      "plan_b_lluvia": "Visitas a laguna desde interior, museos en pueblo de Rocha, cafeterías locales",
+      "keywords": [
+        "Rocha",
+        "Punta del Diablo",
+        "Cabo Polonio",
+        "costa atlantica",
+        "Laguna de Castillos",
+        "playas salvajes"
+      ]
+    },
+    {
+      "id": "salto",
+      "nombre": "Salto",
+      "tipo": "naturaleza",
+      "region": "Salto (Departamento de Salto)",
+      "descripcion": "Termas termales y cascadas fluviales en el norte. Acceso a aguas termales naturales a bajo costo y paisaje de río Arapey. Centro menor turístico pero auténtico para relajación y naturaleza.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año (termas especialmente en invierno, junio-agosto)",
+      "como_llegar": "Desde Montevideo en autobús: 6-7h, 20-25 EUR (Núñez, Turil). O desde Colonia: 4h, 15 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostal o casa de huéspedes: 16-22 EUR/noche",
+        "medio": "Hotel 3 estrellas en zona termal: 45-65 EUR/noche",
+        "comfort": "Resort con termas incluidas: 90-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Termas de Arapey (aguas termales naturales, 10-15 EUR entrada)",
+        "Salto Grande cascada (gratis, caminata corta)",
+        "Parque Bartolomé Hidalgo (parque natural, gratis)",
+        "Piscina natural del Río Uruguay (gratis)",
+        "Paseo por ciudad (mercado de pulgas los sábados)"
+      ],
+      "donde_comer": "Parrilla local, comida casera. Rango 8-16 EUR. Zona centro, sin particularidades; calidad más que ubicación.",
+      "consejo_local": "Las termas son públicas y rústicas, no spa lujoso. El agua es caliente todo el año. Mejor visitarlas a media mañana o temprano para evitar familias locales a la tarde.",
+      "plan_b_lluvia": "Museos locales, compras en centro, visita a termas bajo techo",
+      "keywords": [
+        "Salto",
+        "Termas Arapey",
+        "Salto Grande",
+        "aguas termales",
+        "norte Uruguay"
+      ]
+    },
+    {
+      "id": "carmen-de-vibora",
+      "nombre": "Carmelo y zona vitivinícola",
+      "tipo": "rural",
+      "region": "Soriano (Departamento de Soriano)",
+      "descripcion": "Región vitivinícola menor pero accesible del litoral oeste con bodegas pequeñas, paisaje rural y arquitectura típica. Alternativa más tranquila y barata a La Rioja argentina.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo a mayo (vendimia), septiembre a noviembre",
+      "como_llegar": "Desde Colonia en autobús: 1.5h, 6-8 EUR. O desde Montevideo: 4h, 16-20 EUR.",
+      "donde_dormir": {
+        "mochilero": "Posada rural o hostal pequeño: 18-25 EUR/noche",
+        "medio": "Hotel rural o estancia: 50-75 EUR/noche",
+        "comfort": "Hotel con bodega anexa: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita a bodegas (tours con cata 15-25 EUR)",
+        "Paseo por viñedos (a caballo o caminata, 20-35 EUR)",
+        "Balneario Carmelo playas fluviales (gratis)",
+        "Gastronomía local: asado + vino (15-25 EUR)",
+        "Artesanía local y tiendas"
+      ],
+      "donde_comer": "Asado con vinos locales; chivitos. Rango 12-22 EUR. Restaurantes en Carmelo centro y en estancias; muchos requieren reserva.",
+      "consejo_local": "Las bodegas son pequeñas y familiares; llama antes de visitar. El vino uruguayo es muy bueno y barato (6-15 EUR botella). Los tours suelen incluir almuerzo.",
+      "plan_b_lluvia": "Bodegas cubiertas, compras de vino, gastronomía en restaurantes, museos locales",
+      "keywords": [
+        "Carmelo",
+        "Soriano",
+        "vino Uruguay",
+        "viñedos",
+        "zona vitivinicola",
+        "Balneario"
+      ]
+    },
+    {
+      "id": "merced-es",
+      "nombre": "Mercedes y río Negro",
+      "tipo": "naturaleza",
+      "region": "Soriano (Departamento de Soriano)",
+      "descripcion": "Pueblo pequeño en el río Negro con acceso a naturaleza ribereña, avistamiento de aves y pesca. Destino auténtico para naturalistas y viajeros que evitan circuitos turísticos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a noviembre (avifauna)",
+      "como_llegar": "Desde Montevideo en autobús: 4h, 15-18 EUR (COT, Núñez). O desde Carmelo: 2h, 10 EUR.",
+      "donde_dormir": {
+        "mochilero": "Posada o casa de huéspedes: 16-22 EUR/noche",
+        "medio": "Hotel pequeño: 40-60 EUR/noche",
+        "comfort": "Estancia o lodge con servicios: 80-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Avistamiento de aves (tours con guía local 25-40 EUR)",
+        "Paseo en bote por río Negro (30-50 EUR)",
+        "Pesca (si licencia, con guía 50+ EUR)",
+        "Caminata ribereña (gratis)",
+        "Museo Paleontológico (3 EUR)"
+      ],
+      "donde_comer": "Pescado fresco, comida casera. Rango 8-16 EUR. Restaurantes junto al río.",
+      "consejo_local": "Es un pueblo muy tranquilo; cierra temprano. Mejor ir en grupo o con guía local. La avifauna es espectacular en primavera (septiembre-octubre). Lleva binoculares.",
+      "plan_b_lluvia": "Museo Paleontológico, paseos cubiertos, conversaciones locales en restaurantes",
+      "keywords": [
+        "Mercedes",
+        "Rio Negro",
+        "avifauna",
+        "naturaleza",
+        "pesca",
+        "ornitologia"
+      ]
+    },
+    {
+      "id": "punta-pirata",
+      "nombre": "Punta Pirata y sierra de las ánimas",
+      "tipo": "montaña",
+      "region": "Tacuarembó (Departamento de Tacuarembó)",
+      "descripcion": "Zona de sierras boscosas en el noreste con cascadas, caminatas y paisaje selvático menor pero accesible. Centro de naturaleza para trekking moderado y evasión de turismo masivo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo a octubre",
+      "como_llegar": "Desde Montevideo en autobús a Tacuarembó: 5h, 18-22 EUR. Luego autobús local o tour (2h más, 10-15 EUR) o auto alquilado.",
+      "donde_dormir": {
+        "mochilero": "Hostal en Tacuarembó o cabaña rural: 18-26 EUR/noche",
+        "medio": "Posada o estancia cercana: 50-75 EUR/noche",
+        "comfort": "Lodge con actividades: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Caminata a cascadas de Punta Pirata (gratis, 2-3h moderado)",
+        "Piscina natural Salto del Penitente (gratis)",
+        "Trekking en Sierra de las Ánimas (tour guiado 35-50 EUR)",
+        "Observación de fauna (aves, carpinteros, pumas avistamientos raros)",
+        "Picnic en naturaleza (gratis, organiza tu comida)"
+      ],
+      "donde_comer": "Comida casera y parrilla en Tacuarembó. Rango 8-15 EUR. Lleva snacks para el trekking.",
+      "consejo_local": "El acceso a Punta Pirata requiere 4x4 en lluvia; confirma estado del camino. Las cascadas son mejores en primavera (octubre-noviembre). No hay servicios en la sierra; autorresponsabilidad total.",
+      "plan_b_lluvia": "Museos de Tacuarembó, parrillas, exploración del pueblo",
+      "keywords": [
+        "Tacuarembó",
+        "Punta Pirata",
+        "Sierra de las Animas",
+        "cascadas",
+        "trekking",
+        "noreste Uruguay"
+      ]
+    },
+    {
+      "id": "minas-de-lavalleja",
+      "nombre": "Minas y sierra de Minas",
+      "tipo": "montaña",
+      "region": "Lavalleja (Departamento de Lavalleja)",
+      "descripcion": "Pueblo histórico en zona serrana con cascadas, miradores y arte local. Centro cultural menor pero accesible para trekking suave y exploración de minas históricas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo a octubre",
+      "como_llegar": "Desde Montevideo en autobús: 2.5h, 10-13 EUR (Núñez, Turil). Pueblo pequeño, accesible en día.",
+      "donde_dormir": {
+        "mochilero": "Hostal o casa de huéspedes: 18-24 EUR/noche",
+        "medio": "Hotel pequeño: 45-65 EUR/noche",
+        "comfort": "Posada o casa de alquiler: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Salto del Penitente cascada (gratis, caminata fácil 1h)",
+        "Mirador de Minas (gratis, vista panorámica)",
+        "Galerías de arte local (gratis entrada, consumo opcional 0-30 EUR)",
+        "Caminata por sierra (rutas marcadas, gratis)",
+        "Plaza principal y tiendas artesanales"
+      ],
+      "donde_comer": "Comida casera, asado, chivitos. Rango 8-16 EUR. Restaurantes en plaza principal.",
+      "consejo_local": "Minas es un pueblo artístico muy pequeño; gente local vive del turismo cultural. Las vistas desde miradores son espectaculares. Muchas galerías cierran lunes.",
+      "plan_b_lluvia": "Galerías de arte, museos locales, cafeterías artísticas",
+      "keywords": [
+        "Minas",
+        "Lavalleja",
+        "Sierra de Minas",
+        "arte",
+        "cascadas",
+        "centro-este Uruguay"
+      ]
+    },
+    {
+      "id": "garzón-maldonado",
+      "nombre": "Garzón (ruta del vino interior)",
+      "tipo": "rural",
+      "region": "Maldonado (Departamento de Maldonado)",
+      "descripcion": "Pueblo rural en interior de Maldonado con bodegas boutique, comida local y paisaje vinícola menos conocido. Alternativa tranquila a Punta del Este para viajeros interesados en vino y gastronomía.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "marzo a mayo, septiembre a noviembre",
+      "como_llegar": "Desde Punta del Este en autobús o auto alquilado: 1h, 6-10 EUR. O desde Montevideo: 2.5h, 12-15 EUR.",
+      "donde_dormir": {
+        "mochilero": "Posada rural pequeña: 20-28 EUR/noche",
+        "medio": "Hotel rural: 50-75 EUR/noche",
+        "comfort": "Estancia o cabaña gourmet: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita a bodegas pequeñas (cata y tour 15-25 EUR)",
+        "Restaurante local Garzón (reserva obligatoria, comida 40-60 EUR)",
+        "Paseo rural y campo abierto (gratis)",
+        "Compra de vinos locales (6-20 EUR botella)",
+        "Fotografía de paisajes vinícolas (gratis)"
+      ],
+      "donde_comer": "Restaurante Garzón es famoso (reserva días antes); comida exquisita 40-60 EUR. Otras opciones locales más modestas 12-20 EUR.",
+      "consejo_local": "Garzón es destino gastronómico serious; la mayoría viene por el restaurante. Las bodegas son pequeñas y cerradas sin reserva. El vino es caro aquí pero de calidad.",
+      "plan_b_lluvia": "Restaurante Garzón (cubierto), bodegas interiores, compras de vino",
+      "keywords": [
+        "Garzon",
+        "ruta del vino",
+        "bodegas",
+        "Maldonado interior",
+        "gastronomia",
+        "vino"
+      ]
+    }
+  ]
+}

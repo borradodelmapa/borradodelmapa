@@ -1,0 +1,340 @@
+{
+  "pais": "Eslovaquia",
+  "codigo": "sk",
+  "destinos": [
+    {
+      "id": "bratislava",
+      "nombre": "Bratislava",
+      "tipo": "ciudad",
+      "region": "Región de Bratislava, oeste",
+      "descripcion": "Capital compacta con casco antiguo medieval, castillo que domina la ciudad y vistas al Danubio. Centro cultural y gastronómico de Eslovaquia, punto de entrada natural para la mayoría de viajeros. Fácil de explorar a pie en 2-3 días.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Punto de entrada principal: aeropuerto M.R. Štefánik (9 km). Bus/taxi al centro: 30 min, 2-5 EUR. Desde Viena: 1 hora en bus (3-5 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal en Staré Mesto o Nové Mesto: 12-18 EUR/noche",
+        "medio": "Hotel de 3 estrellas centro: 40-70 EUR/noche",
+        "comfort": "Hotel 4 estrellas o Danube view: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Bratislava y vistas (gratis mirador exterior, 10 EUR interior)",
+        "Casco antiguo (Staré Mesto): paseo gratis, Ayuntamiento histórico",
+        "Puente UFO con restaurante giratorio (8 EUR entrada + comida)",
+        "Iglesia Azul (Kostol Alžbety): 2 EUR",
+        "Museos: Historia judía, arqueología (3-5 EUR cada uno)"
+      ],
+      "donde_comer": "Bryndzové halušky (papas con queso) y kapustnica (sopa de col). Rango 6-15 EUR plato principal. Mejores zonas: Staré Mesto (turístico pero auténtico), Nové Mesto (más local, barato).",
+      "consejo_local": "Descarga el mapa offline de Bratislava: los callejones del casco antiguo son fáciles de perder. Los viernes por la noche el ambiente de pubs es mejor que en fin de semana.",
+      "plan_b_lluvia": "Museos (Galería Nacional, Museo de la Ciudad), cafés de Staré Mesto, compras en Aupark mall.",
+      "keywords": [
+        "Bratislava",
+        "BTS",
+        "capital eslovaca",
+        "Staré Mesto",
+        "castillo Bratislava",
+        "casco antiguo",
+        "Danubio"
+      ]
+    },
+    {
+      "id": "vysoké-tatry",
+      "nombre": "Vysoké Tatry (Altos Tatras)",
+      "tipo": "montaña",
+      "region": "Región noreste (Prešov)",
+      "descripcion": "Cadena montañosa más alta de Eslovaquia con picos alpinos, lagos glaciares y senderismo de clase mundial. Base ideal en Starý Smokovec o Tatranská Lomnica para acceso a rutas de todos los niveles. Imprescindible para senderistas.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio-septiembre (senderismo), diciembre-marzo (esquí)",
+      "como_llegar": "Desde Bratislava: 5-6 horas en bus (12-15 EUR) vía Poprad. Tren desde Poprad a Tatranská Lomnica: 1 hora, 3 EUR. O coche alquilado (40 EUR/día).",
+      "donde_dormir": {
+        "mochilero": "Hostal o cabaña de montaña: 15-22 EUR/noche",
+        "medio": "Hotel 3 estrellas en Starý Smokovec: 50-80 EUR/noche",
+        "comfort": "Resort con spa (Aqua Park): 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Rysy (pico 2499m): 4 horas, vistas tripartitas (Eslovaquia-Polonia-Hungría), gratis",
+        "Lago Štrbské Pleso: paseo 2 horas, gratis",
+        "Skalnate Pleso: teleférico + caminata 3 horas (12 EUR teleférico)",
+        "Dolina Pięciu Stawów (ruta de 5 lagos): 5-6 horas, duro pero espectacular, gratis",
+        "Escalada rock climbing: guías locales (30-50 EUR por medio día)"
+      ],
+      "donde_comer": "Bryndzové halušky, gulaš, trucha fresca. Rango 7-14 EUR. Mejores zonas: refugios de montaña (Sliezsky dom, CHATA pod Soliskom) ofrecen comida en altitud.",
+      "consejo_local": "Descarga aplicación: TatraMaps. Los refugios de montaña venden agua (1 EUR) pero son caros. Lleva cantimplora. El tiempo cambia en 30 minutos: siempre lleva chaqueta aunque haga sol.",
+      "plan_b_lluvia": "Museo de la Historia de Tatras en Tatranská Lomnica (4 EUR), aqua parques, visitas a pueblos como Ždiar (artesanía local).",
+      "keywords": [
+        "Vysoké Tatry",
+        "Altos Tatras",
+        "Rysy",
+        "Smokoviec",
+        "senderismo Tatras",
+        "Štrbské Pleso",
+        "montañas Eslovaquia"
+      ]
+    },
+    {
+      "id": "zvolen-kremnica",
+      "nombre": "Zvolen y Kremnica",
+      "tipo": "histórico",
+      "region": "Región central (Banská Bystrica)",
+      "descripcion": "Zvolen posee uno de los castillos renacentistas más bellos de Europa Central. Kremnica es pueblo medieval de minería de oro con murallas intactas y moneda de euro acuñada allí. Perfecta pareja de destinos para historia sin aglomeraciones.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Bratislava: 2 horas en tren (10 EUR) a Zvolen. Kremnica: bus desde Zvolen 1 hora (3 EUR). O coche alquilado desde Bratislava (60 km).",
+      "donde_dormir": {
+        "mochilero": "Hostal en Zvolen o Kremnica: 12-16 EUR/noche",
+        "medio": "Hotel 3 estrellas: 35-55 EUR/noche",
+        "comfort": "Apartamento turístico con carácter: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Zvolen: tour interior + galerías de arte (7 EUR)",
+        "Casco antiguo Kremnica: murallas y torres (gratis paseo)",
+        "Iglesia de Santa Catalina Kremnica (interior): 2 EUR",
+        "Casa de la Moneda (Kremnica Mint museum): 6 EUR, entrada interactiva",
+        "Mina de oro abandonada visitable: tours organizados (12 EUR)"
+      ],
+      "donde_comer": "Goulash eslovaco, bryndzové halušky, jurel ahumado (especialidad local). Rango 5-12 EUR. Kremnica tiene cafés tradicionales con encanto en la plaza mayor.",
+      "consejo_local": "Kremnica fue donde se acuñó la moneda euro eslvaca: busca el museo de la moneda, es mejor de lo que suena. Zvolen atrae menos turismo alemán que Tatras, precios locales reales.",
+      "plan_b_lluvia": "Museo de la Ciudad (Zvolen), Museo de la Minería (Kremnica), iglesias interiores.",
+      "keywords": [
+        "Zvolen",
+        "Kremnica",
+        "castillo Zvolen",
+        "oro Kremnica",
+        "moneda euro",
+        "murallas medievales",
+        "centro Eslovaquia"
+      ]
+    },
+    {
+      "id": "liptovska-mara",
+      "nombre": "Liptovská Mara y región de Liptov",
+      "tipo": "naturaleza",
+      "region": "Centro de Eslovaquia (Žilina)",
+      "descripcion": "Lago artificial recreativo en entorno de montaña baja, con playas de arena, senderismo y pueblos bucólicos cercanos. Menos conocido que Tatras pero igual de accesible, perfecto para relax y agua.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-agosto (baño), mayo-septiembre (senderismo)",
+      "como_llegar": "Desde Bratislava: 3 horas en coche (90 km) o bus vía Žilina (4 horas, 8 EUR). Desde Tatras: 1,5 horas en coche.",
+      "donde_dormir": {
+        "mochilero": "Camping o cabaña: 12-18 EUR/noche",
+        "medio": "Hotel familiar 2-3 estrellas: 35-60 EUR/noche",
+        "comfort": "Resort con playa privada: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Liptovská Mara: baño, paddling, gratis acceso (parking 2 EUR)",
+        "Senderismo lacustre (ruta 15 km alrededor del lago): gratis",
+        "Pueblos cercanos Liptovský Mikuláš: iglesia de madera (gratis)",
+        "Kayak alquiler (8 EUR/hora)",
+        "Orava Castle excursión (40 km, castillo 7 EUR)"
+      ],
+      "donde_comer": "Trucha fresca del lago, sopa de pescado. Rango 6-11 EUR. Chiringuitos en playa con precios inflados, mejor en pueblos cercanos.",
+      "consejo_local": "El lago se congela en invierno. Mayo y junio: agua aún fría pero menos turismo. Agosto: lleno de familias eslovacas, pero buena vibra local.",
+      "plan_b_lluvia": "Cuevas de Demänovská (30 km): stalactitas, tour 1,5 horas (8 EUR).",
+      "keywords": [
+        "Liptovská Mara",
+        "Liptov",
+        "lago Liptov",
+        "playas Eslovaquia",
+        "senderismo Liptov",
+        "Liptovský Mikuláš"
+      ]
+    },
+    {
+      "id": "orava-castle",
+      "nombre": "Castillo de Orava (Oravský Podzamok)",
+      "tipo": "histórico",
+      "region": "Noroeste (Žilina)",
+      "descripcion": "Castillo de cuento de hadas suspendido sobre un acantilado en la orilla del río. Una de las fortalezas medievales más espectaculares de Centroeuropa, escenario de películas de Drácula. Merece viaje de un día.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Bratislava: 3 horas en coche (160 km, ruta M6). Bus a Dolný Kubín luego taxi (1 EUR). O desde Tatras: 2 horas en coche hacia noroeste.",
+      "donde_dormir": {
+        "mochilero": "Pueblo Oravský Podzamok o cercano: 15-22 EUR/noche",
+        "medio": "Pousada local en Dolný Kubín: 40-70 EUR/noche",
+        "comfort": "Hotel rural con carácter: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour del castillo interior completo: 8 EUR, audioguía en inglés",
+        "Vistas exteriores desde el río (gratis)",
+        "Museo de brujas y folklore (parte del castillo): 8 EUR",
+        "Fotografía al atardecer desde el puente: gratis",
+        "Senderismo río Orava: paseo 2-3 horas gratis"
+      ],
+      "donde_comer": "Comida típica en restaurante del pueblo o castillo. Rango 7-13 EUR. El restaurante del castillo es turístico pero con vistas.",
+      "consejo_local": "Visita al atardecer para fotos épicas con luz dorada. La entrada de fotografía 'selfie' no existe pero piden fotos con drones. El castillo estuvo en filme 'Nosferatu'.",
+      "plan_b_lluvia": "Museo interior del castillo es bastante extenso (1,5 horas), cuevas cercanas.",
+      "keywords": [
+        "Orava Castle",
+        "Oravský Podzamok",
+        "castillo Orava",
+        "fortaleza medieval",
+        "Drácula Eslovaquia",
+        "noroeste"
+      ]
+    },
+    {
+      "id": "banská-stiavnica",
+      "nombre": "Banská Štiavnica",
+      "tipo": "histórico",
+      "region": "Centro-sur (Banská Bystrica)",
+      "descripcion": "Pueblo minero UNESCO con arquitectura barroca, lagos artificiales de montaña creados en el siglo XVI para minería, y museos especializados. Joyas oculta con carácter auténtico y sin masificación.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Bratislava: 1,5 horas en coche (90 km) vía Zvolen. Bus desde Zvolen 1 hora (5 EUR). Tren a Zvolen luego bus.",
+      "donde_dormir": {
+        "mochilero": "Hostal o guest house: 14-20 EUR/noche",
+        "medio": "Hotel pequeño en plaza: 45-70 EUR/noche",
+        "comfort": "Casa rural restaurada: 75-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour minas de oro-plata abandonadas: 7 EUR, guía incluido (1,5 horas)",
+        "Museo de minería al aire libre (open air): 5 EUR, 2-3 horas paseo",
+        "Iglesia Ursulines (barroquismo): 2 EUR",
+        "Lagos de montaña Vodná Nádrž: senderismo circular 4 horas, gratis",
+        "Castillo ruinas Vyhne cercano: excursión 1 hora, gratis"
+      ],
+      "donde_comer": "Bryndzové halušky, trucha ahumada. Rango 5-11 EUR. Tabernas auténticas en plaza.",
+      "consejo_local": "Los lagos fueron creados con ingeniería hidráulica medieval para impulsar máquinas de minas. Aún funcionan parcialmente. Menos visitas en mayo-junio (mejor para fotos).",
+      "plan_b_lluvia": "Museos de minería (interiores), iglesias, cafés en plazas porticadas.",
+      "keywords": [
+        "Banská Štiavnica",
+        "minería oro",
+        "Lagos Štiavnica",
+        "UNESCO Eslovaquia",
+        "pueblo minero",
+        "barroco eslovaco"
+      ]
+    },
+    {
+      "id": "levoca-spis",
+      "nombre": "Levoča y región de Spiš",
+      "tipo": "histórico",
+      "region": "Noreste (Prešov)",
+      "descripcion": "Pueblo medieval fortificado con plaza renacentista perfecta y iglesia con retablo gótico monumental. Acceso fácil a castillo de Spišský Podhradie (uno de los mayores de Europa) y castillo de Ľubovňa. Triada histórica excepcional.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Bratislava: 4 horas en coche (270 km). Bus a Poprad (5 horas, 12 EUR) + auto local o bus 30 min (3 EUR). Desde Tatras: 1,5 horas en coche.",
+      "donde_dormir": {
+        "mochilero": "Hostal en Levoča: 14-18 EUR/noche",
+        "medio": "Hotel plaza: 50-80 EUR/noche",
+        "comfort": "Alojamiento rural con encanto (Spišské Podhradie): 70-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Casco antiguo Levoča: paseo gratis (murallas, plaza, Ayuntamiento renacentista)",
+        "Iglesia Santiago (retablo 18m gótico): 3 EUR",
+        "Castillo Spišský Podhradie: tour 1,5 horas (8 EUR), vistas monumentales",
+        "Castillo Ľubovňa: 10 EUR, menos visitado, colecciones únicas",
+        "Senderismo entre castillos (Spišský Podhradie a Ľubovňa): 3 horas, gratis"
+      ],
+      "donde_comer": "Bryndzové halušky, pirohy de carne. Rango 5-10 EUR. Plaza de Levoča con restaurantes locales.",
+      "consejo_local": "Levoča fue importantísima en Edad Media (ruta comercial). Los castillos están 'feos' arquitectónicamente pero imponentes. Visita Tatranská Magúra pueblo cercano (artesanía 100% local).",
+      "plan_b_lluvia": "Iglesia interior es espectacular (retablo), museos locales.",
+      "keywords": [
+        "Levoča",
+        "Spišský Podhradie",
+        "Spiš",
+        "castillo Spišský",
+        "Ľubovňa",
+        "noreste Eslovaquia",
+        "medieval"
+      ]
+    },
+    {
+      "id": "velka-fatra",
+      "nombre": "Veľká Fatra (Gran Fatra)",
+      "tipo": "montaña",
+      "region": "Centro-norte (Žilina)",
+      "descripcion": "Cordillera menos concurrida que Tatras, con picos alpinos, cañones y senderismo puro. Ideal para viajeros buscando naturaleza sin infraestructura turística masiva. Acceso desde pueblos pequeños de montaña.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Bratislava: 2,5 horas en coche (150 km) a Vrbové o Turčianske Teplice. Bus desde Bratislava vía Žilina (3,5 horas, 10 EUR).",
+      "donde_dormir": {
+        "mochilero": "Cabaña de montaña básica: 14-20 EUR/noche",
+        "medio": "Guest house en Vrbové o Turčianske Teplice: 40-70 EUR/noche",
+        "comfort": "Hotel termal (Turčianske Teplice): 80-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Prírodný Kľúčik canyon: 5 horas, duro, gratis",
+        "Pico Tŕstená (1913m): 4 horas, vistas continentales, gratis",
+        "Aguas termales Turčianske Teplice: 6-10 EUR entrada piscinas",
+        "Cuevas Demänovská: 30 km, tour 8 EUR",
+        "Rafting río Turiec (nivel bajo): 15 EUR media día"
+      ],
+      "donde_comer": "Comida casera en guest houses (10-12 EUR set menu). Pocas opciones, mejor cocinar o llevar comida.",
+      "consejo_local": "No hay infraestructura turística. Trae comida y agua. Los hoteles termales son base mejor que cabañas montaña (ducha caliente, comida). Mapas offline imprescindibles.",
+      "plan_b_lluvia": "Aguas termales Turčianske Teplice, pueblos cercanos.",
+      "keywords": [
+        "Veľká Fatra",
+        "Gran Fatra",
+        "senderismo Fatra",
+        "Prírodný Kľúčik",
+        "Vrbové",
+        "montañas centro"
+      ]
+    },
+    {
+      "id": "dunajec-gorge",
+      "nombre": "Dunajec Gorge (Pieniny) - Excursión desde Eslovaquia",
+      "tipo": "naturaleza",
+      "region": "Norte (frontera con Polonia)",
+      "descripcion": "Cañón espectacular del río Dunajec en frontera Polonia-Eslovaquia, accesible desde pueblos eslovacos. Rafting entre acantilados de 300m es una de las mejores experiencias fluviales de Europa Central.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde pueblos norteños eslovacos (Ľubovňa, Spišský Štvrtok): 1-1,5 horas en coche (40-50 km). Tours organizados desde Bratislava: 8-10 horas (40-60 EUR todo incluido).",
+      "donde_dormir": {
+        "mochilero": "Guest house lado eslovaco: 14-20 EUR/noche",
+        "medio": "Hotel pequeño Spišský Štvrtok: 45-75 EUR/noche",
+        "comfort": "Resort cercano: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Rafting Dunajec (2 horas, clase I-II): 12-18 EUR con guía local",
+        "Senderismo acantilados (lado eslovaco/polaco): gratis",
+        "Castillo Niedzica (lado polaco): 8 EUR entrada",
+        "Aguas termales Pieniny (lado polaco): 5 EUR"
+      ],
+      "donde_comer": "Pueblos cercanos ofrecen bryndzové halušky. Rango 5-10 EUR. Lleva pícnic para el viaje.",
+      "consejo_local": "Necesitas pasaporte para lado polaco (frontera abierta Schengen). El rafting es apto para cualquier edad/condición física. Primavera: agua fría y rápida. Verano: calmada.",
+      "plan_b_lluvia": "Senderismo es posible en lluvia ligera (paisaje espectacular). Tours cubiertos existen pero menos épicos.",
+      "keywords": [
+        "Dunajec Gorge",
+        "Pieniny",
+        "rafting Dunajec",
+        "frontera Polonia",
+        "cañón",
+        "norte Eslovaquia",
+        "excursión"
+      ]
+    },
+    {
+      "id": "bardejov",
+      "nombre": "Bardejov",
+      "tipo": "histórico",
+      "region": "Noreste (Prešov)",
+      "descripcion": "Pueblo gótico medieval compacto con plaza porticada intacta y 24 iglesias de varios credos (católica, ortodoxa, evangélica). UNESCO por arquitectura urbana única. Menos turístico que otros sitios históricos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Bratislava: 4,5 horas en coche (300 km) vía Košice. Bus a Košice (5 horas, 13 EUR) + bus local 30 min (3 EUR). Desde Levoča: 1,5 horas.",
+      "donde_dormir": {
+        "mochilero": "Hostal pequeño: 14-18 EUR/noche",
+        "medio": "Hotel plaza: 45-70 EUR/noche",
+        "comfort": "Hotel con carácter: 75-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Casco antiguo UNESCO: paseo gratis (arquitectura intacta)",
+        "Iglesia San Egido (católica gótica): 2 EUR",
+        "Iglesia Ortodoxa de Madera: 2 EUR, iconos únicos",
+        "Museo de la Ciudad/Iconos: 3 EUR",
+        "Spas termales cercanos (20 km): Bardejovské Kúpele (5 EUR)"
+      ],
+      "donde_comer": "Especialidad: kapustnica (sopa col), pirohy. Rango 5-9 EUR. Plaza con tabernas auténticas.",
+      "consejo_local": "Bardejov fue frontera imperio austro-húngaro. La plaza es casi idéntica a 1900. Pocos turistas extranjeros = buenos precios y vida local real.",
+      "plan_b_lluvia": "Iglesias interiores, museos, cafés.",
+      "keywords": [
+        "Bardejov",
+        "plaza Bardejov",
+        "UNESCO Bardejov",
+        "iglesias Bardejov",
+        "gótico medieval",
+        "noreste"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,341 @@
+{
+  "pais": "Malí",
+  "codigo": "ml",
+  "destinos": [
+    {
+      "id": "timbuktu",
+      "nombre": "Tombuctú",
+      "tipo": "histórico",
+      "region": "Región de Tombuctú",
+      "descripcion": "Ciudad legendaria a orillas del Níger, famosa por sus mezquitas de adobe del siglo XIV y su rol histórico como centro de comercio y conocimiento islámico. Patrimonio UNESCO con arquitectura única y atmósfera desértica. Visitarla requiere flexibilidad: acceso y seguridad dependen de la situación política actual.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bamako en vuelo doméstico (1h, 60-100 EUR) o barco por el Níger (3-4 días, 30-50 EUR). También accesible por carretera 4x4 con guía local (12-15h, 80-120 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicas, 15-25 EUR/noche",
+        "medio": "Pequeños hoteles con ventilador, 30-50 EUR/noche",
+        "comfort": "Hotel Azalai o similar, 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita a la Mezquita de Djinguereber (entrada libre, con guía recomendado 10 EUR)",
+        "Paseo en barco al atardecer por el Níger (15-20 EUR)",
+        "Museo de Tombuctú y tumba de Alfa Mahi (5 EUR)",
+        "Explorar el barrio antiguo a pie y mercado local (gratis)"
+      ],
+      "donde_comer": "Comida local simple: arroz con pescado (3-5 EUR), sopa de cacahuete (2-3 EUR). Restaurantes en el centro cercanos a la mezquita principal.",
+      "consejo_local": "Contrata un guía local en cuanto llegues; conocen los barrios seguros y evitan sorpresas. Los precios bajan significativamente si negocias en francés o bambara.",
+      "plan_b_lluvia": "Viaja en seco (nov-feb). En temporada de lluvia, acceso muy complicado. Usa el tiempo para museos interiores y mercado cubierto.",
+      "alerta_seguridad": "Zona de conflicto armado activo. Consulta avisos de viaje antes de partir. Viaja solo con agencias especializadas y guías confiables. Évita movimiento nocturno.",
+      "keywords": [
+        "Timbuktu",
+        "Tombouctou",
+        "Djinguereber",
+        "ciudad de los 333 santos",
+        "centro islámico medieval",
+        "Níger"
+      ]
+    },
+    {
+      "id": "djenné",
+      "nombre": "Djenné",
+      "tipo": "histórico",
+      "region": "Región de Segou",
+      "descripcion": "Pequeña ciudad medieval famosa por su Gran Mezquita de adobe, la más grande del mundo hecha con este material. Patrimonio UNESCO con calles estrechas y arquitectura típica saheliana. Mercado vibrante los lunes y parada cultural imprescindible.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bamako en minibús compartido (6-8h, 15-20 EUR) vía Segou (3-4h, 8-12 EUR). También accesible desde Mopti (3h, 10-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses tradicionales, 12-20 EUR/noche",
+        "medio": "Pequeños hoteles con aire acondicionado, 25-40 EUR/noche",
+        "comfort": "Campement Djenné o similar, 45-65 EUR/noche"
+      },
+      "que_hacer": [
+        "Subir a la Gran Mezquita al amanecer (15 EUR con guía, vistas espectaculares)",
+        "Mercado de los lunes (gratis, lleno de vida local)",
+        "Paseo en piragua por el Bani al atardecer (20-30 EUR por grupo)",
+        "Explorar barrios a pie y museo arqueológico (3 EUR)"
+      ],
+      "donde_comer": "Arroz y salsas locales (3-4 EUR), brochetas de carne (2-3 EUR), pan de maíz. Tiendas de comida en la plaza principal muy económicas.",
+      "consejo_local": "Llega el domingo si quieres ver el mercado del lunes en todo su esplendor. Los precios suben un 30-40% durante el pico de visitantes.",
+      "plan_b_lluvia": "En época seca (nov-feb) no hay problema. Si llueve, pasea por el museo interior o negocia una visita privada a la mezquita.",
+      "keywords": [
+        "Djenne",
+        "Gran Mezquita",
+        "adobe",
+        "ciudad medieval",
+        "mercado lunes",
+        "Bani",
+        "patrimonio UNESCO"
+      ]
+    },
+    {
+      "id": "mopti",
+      "nombre": "Mopti",
+      "tipo": "ciudad",
+      "region": "Región de Mopti",
+      "descripcion": "Puerto fluvial en el Níger y puerta de entrada a la región de Dogón. Centro de tránsito importante pero con carácter propio: mezquita grande, mercado caótico y vida ribereña. Base ideal para excursiones a pueblos cercanos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bamako en minibús (8-10h, 20-25 EUR) o vuelo doméstico (1h, 70-100 EUR). Desde Djenné (3h, 10-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Auberges básicas, 15-22 EUR/noche",
+        "medio": "Campement Kanaga o similar, 30-45 EUR/noche",
+        "comfort": "Hotel Sevare, 55-75 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en barco por el Níger y Bani (20-30 EUR)",
+        "Mercado tradicional y puerto fluvial (gratis)",
+        "Visita a pueblos pigmeos cercanos (Plateau Dogon, 50-80 EUR con guía)",
+        "Museo etnográfico local (3-5 EUR)"
+      ],
+      "donde_comer": "Poisson braise (pescado a la brasa, 4-6 EUR), arroz con legumbres (3-4 EUR). Mercado de comida callejera muy activo.",
+      "consejo_local": "Mopti es punto de partida para treks en la región Dogon; reserva con guías locales directamente (no agencias internacionales) para ahorrar 40-50%.",
+      "plan_b_lluvia": "En seco es mejor. En lluvia, permanece un día extra y disfruta de la vida lenta del río.",
+      "keywords": [
+        "Mopti",
+        "puerto Níger",
+        "Bani",
+        "Dogon base",
+        "ciudad fluvial",
+        "mercado caótico"
+      ]
+    },
+    {
+      "id": "region-dogon",
+      "nombre": "Región de Dogon (Bandiagara)",
+      "tipo": "rural",
+      "region": "Acantilado de Bandiagara",
+      "descripcion": "Meseta elevada con aldeas tradicionales Dogon suspendidas en acantilados de 500m. Cultura viva, arquitectura vernácula única y paisajes especulares. Requiere trekking físico pero es la experiencia cultural más auténtica de Malí.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Mopti en vehículo 4x4 hasta Bandiagara (2h, 25-35 EUR), luego a pie o en burro. Trek base 4 días desde Bandiagara o Endé.",
+      "donde_dormir": {
+        "mochilero": "Campamentos Dogon o casas de familia, 10-15 EUR/noche",
+        "medio": "Pequeños campamentos con básicos, 20-30 EUR/noche",
+        "comfort": "Campement Koro o Sanga con sanitarios decentes, 40-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Trek de 4 días por el acantilado visitando aldeas (guía obligatorio, 40-60 EUR total)",
+        "Ceremonia Dama (solo en enero, requiere invitación local, variable)",
+        "Visita a museos etnográficos de aldeas (3-5 EUR cada uno)",
+        "Observación de vida cotidiana: cosecha, mercados, danzas (gratis)"
+      ],
+      "donde_comer": "Comida de familia en casas Dogon (incluida en trek, 8-12 EUR/día), platos tradicionales de sorgo y millón. Agua potable debe llevarla desde Mopti.",
+      "consejo_local": "Un guía Dogon hablante de francés es imprescindible y muy barato (15-20 EUR/día). Los Dogon son reservados: respeta espacios sagrados (algunos acantilados prohibidos) y pide permiso antes de fotografiar.",
+      "plan_b_lluvia": "Evita época de lluvias. El acantilado es intransitable de junio a septiembre.",
+      "alerta_seguridad": "Zona potencialmente inestable. Consulta situación actual. Usa guías especializados y evita viajar solo.",
+      "keywords": [
+        "Dogon",
+        "Bandiagara",
+        "acantilado",
+        "aldeas tradicionales",
+        "trek",
+        "arquitectura vernácula",
+        "Dama",
+        "arquitectura Dogon"
+      ]
+    },
+    {
+      "id": "bamako",
+      "nombre": "Bamako",
+      "tipo": "ciudad",
+      "region": "Región de Bamako",
+      "descripcion": "Capital y mayor ciudad, a orillas del Níger. Centro cultural dinámico con museos, galerías, vida nocturna y starting point obligatorio. Menos turística que otros destinos pero fundamental para entender el país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Aeropuerto internacional (Senou, 15km). Taxi o minibús desde aeropuerto (30-45 min, 5-10 EUR). También conexión desde Senegal, Burkina Faso.",
+      "donde_dormir": {
+        "mochilero": "Auberges Marché, 15-25 EUR/noche",
+        "medio": "Hotels tipo La Maison, 35-55 EUR/noche",
+        "comfort": "Azalai Marakala o Radisson Blu, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional (arqueología y etnografía, 3 EUR)",
+        "Mercado de Djinguereber y callejuelas antiguas (gratis)",
+        "Paseo en barco por el Níger al atardecer (20-25 EUR)",
+        "Galerías de arte en el barrio de Hamdallaye (gratis, precios de arte variables)",
+        "Mercado artesanal de Souvenirs (negociación recomendada)"
+      ],
+      "donde_comer": "Arroz jollof, carne asada, sopa de cacahuete (4-6 EUR en mercado). Restaurantes franceses en Hamdallaye (15-25 EUR). Brochetas callejeras (2-3 EUR).",
+      "consejo_local": "Malí Mojo, barrio al norte, tiene mejor vida nocturna. Negocia todo en mercados; los precios iniciales son el triple. Retírate del centro antes de oscurecer.",
+      "plan_b_lluvia": "Lluvia jun-sep. Ciudad con museos interiores, compras, vida cultural cubierta.",
+      "alerta_seguridad": "Ciudad generalmente segura en zonas turísticas de día. Evita ciertas áreas después de oscurecer. Mantén bajo perfil.",
+      "keywords": [
+        "Bamako",
+        "capital Mali",
+        "Níger",
+        "Djinguereber",
+        "Hamdallaye",
+        "Marche",
+        "vida nocturna"
+      ]
+    },
+    {
+      "id": "segou",
+      "nombre": "Ségou",
+      "tipo": "ciudad",
+      "region": "Región de Ségou",
+      "descripcion": "Ciudad tranquila a orillas del Níger, capital histórica con palacios coloniales y ambiente relajado. Menos concurrida que Bamako pero con carácter, ideal como parada intermedia o para descanso entre treks.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bamako en minibús compartido (3-4h, 8-12 EUR). Desde Djenné (3-4h, 10-15 EUR). Desde Mopti (4h, 15-20 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses, 12-18 EUR/noche",
+        "medio": "Campement Djinguereber o Segou, 25-40 EUR/noche",
+        "comfort": "Hotel de la Paix, 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en barco por el Níger (15-20 EUR)",
+        "Museo de la Memoria ORTM (historia colonial, 3 EUR)",
+        "Palacios de terracota Chiroma (gratis, acceso local)",
+        "Mercado y vida ribereña (gratis)",
+        "Pueblo de tejedores de Markala (5km, 10 EUR en taxi)"
+      ],
+      "donde_comer": "Poisson braise (5-7 EUR), arroz con verduras (3-4 EUR). Restaurantes con vistas al río, 8-12 EUR.",
+      "consejo_local": "Ségou es menos cara que Bamako en un 30-40%. Ideal para descansar entre viajes intensos. Los lugareños son amables; negocia precios con sonrisa.",
+      "plan_b_lluvia": "Clima bueno nov-feb. Paseos interiores si llueve.",
+      "keywords": [
+        "Segou",
+        "Ségou",
+        "Níger",
+        "capital histórica",
+        "tejedores",
+        "palacios",
+        "vida tranquila"
+      ]
+    },
+    {
+      "id": "kayes",
+      "nombre": "Kayes",
+      "tipo": "ciudad",
+      "region": "Región de Kayes",
+      "descripcion": "Frontera con Senegal a orillas del río Senegal. Puerta de entrada alternativa desde Dakar, menos conocida que otras rutas. Valor como punto de tránsito cultural y base para explorar poblaciones del río.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bamako en minibús (8-10h, 20-25 EUR). Desde Dakar (Senegal) en taxi compartido (5-6h, 20-25 EUR). Desde frontera en bote por Senegal.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicas, 10-15 EUR/noche",
+        "medio": "Pequeños hoteles, 20-30 EUR/noche",
+        "comfort": "Hotel Relais de Kayes, 40-50 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en barco por río Senegal (15-20 EUR)",
+        "Fort de Medine (historia colonial, 2 EUR)",
+        "Mercado local y puerto (gratis)",
+        "Pueblo de Kayes y vida ribereña (exploración a pie, gratis)"
+      ],
+      "donde_comer": "Pescado del Senegal (5-7 EUR), arroz local (3-4 EUR). Pequeños mercados de comida.",
+      "consejo_local": "Kayes es esencialmente un punto de tránsito. Útil si cruzas desde Senegal. No es destino de parada larga; máximo una noche.",
+      "plan_b_lluvia": "En seco es mejor. Lluvia afecta el río.",
+      "alerta_seguridad": "Frontera segura. Zona controlada. Menos problemas que interior.",
+      "keywords": [
+        "Kayes",
+        "río Senegal",
+        "frontera",
+        "Fort de Medine",
+        "punto tránsito",
+        "oeste Mali"
+      ]
+    },
+    {
+      "id": "gao",
+      "nombre": "Gao",
+      "tipo": "ciudad",
+      "region": "Región de Gao",
+      "descripcion": "Ciudad histórica en el este, antigua capital del imperio Songhai. Punto de partida para Tombuctú y región de Timbuktu. Menos visitada pero importante centro islámico con mezquita notable.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bamako en vuelo doméstico (2h, 90-130 EUR) o en barco lento por Níger (5-7 días, 40-60 EUR). En 4x4 desde Mopti (8-10h, muy difícil en seco).",
+      "donde_dormir": {
+        "mochilero": "Campements simples, 15-22 EUR/noche",
+        "medio": "Pequeños hoteles, 25-40 EUR/noche",
+        "comfort": "Hotel Atlantis o Azalai, 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Mezquita de Djinguereber (con guía, 10 EUR)",
+        "Museo regional (arqueología, 3 EUR)",
+        "Paseo en barco por el Níger (20-25 EUR)",
+        "Mercado local (gratis)",
+        "Palacio del gobernador (exteriores, gratis)"
+      ],
+      "donde_comer": "Arroz con pesca (4-6 EUR), sopa de pollo (3-4 EUR). Comida callejera simple.",
+      "consejo_local": "Gao se usa principalmente como base para Tombuctú. Solo vale la pena parar si tienes conexión fácil. La seguridad depende de situación política.",
+      "plan_b_lluvia": "Evita lluvia. Seco nov-feb.",
+      "alerta_seguridad": "Zona potencialmente inestable, conflictos intermitentes. Consulta avisos de viaje. No recomendado viajar solo.",
+      "keywords": [
+        "Gao",
+        "Songhai",
+        "imperio",
+        "Níger",
+        "este Mali",
+        "Tombuktu base"
+      ]
+    },
+    {
+      "id": "dia-islas-niger",
+      "nombre": "Islas del Níger (Dia, Manat)",
+      "tipo": "isla",
+      "region": "Región de Segou/Mopti",
+      "descripcion": "Pequeñas islas fluviales en el Níger con pueblos tradicionales, vida ribereña intacta y avifauna. Acceso por barco desde Mopti o Ségou. Experiencia lenta y auténtica, ideal para fotógrafos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Mopti en barco privado (1-2h, 30-50 EUR) o compartido (más barato, 10-15 EUR). Desde Ségou también accesible.",
+      "donde_dormir": {
+        "mochilero": "Casas de familia o campamentos básicos, 12-18 EUR/noche",
+        "medio": "Pequeños campamentos, 25-35 EUR/noche",
+        "comfort": "Campement Dia, 45-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseos en piragua observando pájaros (15-20 EUR)",
+        "Vida cotidiana en pueblos (gratis, fotogénico)",
+        "Pesca artesanal (observar o participar, variable)",
+        "Atardecer desde la piragua (incluido en paseos)"
+      ],
+      "donde_comer": "Arroz con pescado (3-5 EUR), comida casera en familias. Agua debe llevar desde Mopti.",
+      "consejo_local": "Islas requieren barco privado si quieres flexibilidad. Contrata en Mopti directamente (más barato). Trae protector solar y binoculares.",
+      "plan_b_lluvia": "Seco es mejor. Lluvia complica navegación.",
+      "keywords": [
+        "Dia",
+        "islas Níger",
+        "Manat",
+        "pueblos fluviales",
+        "avifauna",
+        "piragua",
+        "vida ribereña"
+      ]
+    },
+    {
+      "id": "siby-wassoulou",
+      "nombre": "Región de Wassoulou/Siby",
+      "tipo": "montaña",
+      "region": "Región de Kulikoro",
+      "descripcion": "Área montañosa poco visitada al suroeste con pueblos Wassoulou, músicas tradicionales vivas y paisajes verdes. Menos infraestructura pero auténtico Mali profundo. Ideal para aventureros off-road.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bamako en minibús (2-3h hasta Siby, 8-12 EUR). Luego en 4x4 o a pie hacia pueblos interiores. Requiere paciencia.",
+      "donde_dormir": {
+        "mochilero": "Casas de familia, 8-12 EUR/noche",
+        "medio": "Pequeños campamentos, 15-25 EUR/noche",
+        "comfort": "Lodges privados (pocos), 40-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo entre pueblos (gratis con guía local, 15-20 EUR/día)",
+        "Sesiones de música wassoulou en pueblos (libre, donación recomendada 5-10 EUR)",
+        "Encuentros con familias locales (gratis)",
+        "Piscinas naturales en ríos (gratis)"
+      ],
+      "donde_comer": "Comida campesina: arroz, salsas, verduras (2-3 EUR). Muy básico pero auténtico.",
+      "consejo_local": "Wassoulou es música viva aquí. Pregunta en pueblos por ensayos o celebraciones. Los lugareños son acogedores si llegas tranquilo y con respeto.",
+      "plan_b_lluvia": "Lluvia junio-septiembre. Seco mejor. Lodo dificulta acceso.",
+      "keywords": [
+        "Wassoulou",
+        "Siby",
+        "montaña",
+        "música tradicional",
+        "pueblos",
+        "aventura",
+        "Mali profundo"
+      ]
+    }
+  ]
+}

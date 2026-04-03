@@ -1,0 +1,340 @@
+{
+  "pais": "San Vicente y las Granadinas",
+  "codigo": "vc",
+  "destinos": [
+    {
+      "id": "kingstown",
+      "nombre": "Kingstown",
+      "tipo": "ciudad",
+      "region": "San Vicente",
+      "descripcion": "Capital portuaria con mercado colorido, arquitectura colonial y acceso a ferrys hacia las Granadinas. Centro logístico y punto de entrada principal. Base ideal para explorar el archipiélago.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a abril",
+      "como_llegar": "aeropuerto Argyle (30 km): taxi o autobus local 1 hora, 10-15 EUR",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en el centro histórico, 25-40 EUR/noche",
+        "medio": "Hotel 2-3 estrellas en Kingstown, 60-100 EUR/noche",
+        "comfort": "Resort boutique frente a la bahía, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer el Mercado de Kingstown (gratis)",
+        "Visitar Fort Charlotte con vistas panorámicas (3 EUR)",
+        "Paseo por el malecón y playa de Indian Bay (gratis)",
+        "Catedral de San Jorge (gratis)",
+        "Tomar ferry a Bequia o Mustique (20-35 EUR)"
+      ],
+      "donde_comer": "Comida criolla local en el mercado (arepa, pescado frito): 5-8 EUR. Restaurantes en el malecón para algo más formal: 12-20 EUR. Zona de Young Island para marisco fresco.",
+      "consejo_local": "El mercado es más auténtico y barato los viernes y sábados por la mañana. Evita pasear solo de noche por las calles interiores.",
+      "plan_b_lluvia": "Museo de San Vicente y las Granadinas, explorar tiendas de artesanía, visitar iglesias históricas",
+      "keywords": [
+        "Kingstown",
+        "Kingston",
+        "capital SVG",
+        "puerto",
+        "centro",
+        "Indian Bay",
+        "Fort Charlotte"
+      ]
+    },
+    {
+      "id": "bequia",
+      "nombre": "Bequia",
+      "tipo": "isla",
+      "region": "Granadinas Exteriores",
+      "descripcion": "Segunda isla más grande, tranquila y bohemia con playas de arena blanca. Refugio ideal para mochileros y viajeros que buscan ritmo lento caribeño sin masificación. Puerto Princess Margaret es el corazón turístico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "enero a marzo, junio a julio",
+      "como_llegar": "Ferry desde Kingstown 1 hora, 15 EUR. O vuelo charter si urgencia.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse local o beachfront shack, 20-35 EUR/noche",
+        "medio": "Hotel pequeño tipo Bequia Beachfront, 50-80 EUR/noche",
+        "comfort": "Resort boutique o villa privada, 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Princess Margaret (gratis)",
+        "Snorkel en Moonhole (gratis o 5 EUR con guía local)",
+        "Senderismo a Spring Bay (gratis)",
+        "Paseo por el puerto pesquero tradicional (gratis)",
+        "Excursión a Canouan o Mustique en barco (25-50 EUR)"
+      ],
+      "donde_comer": "Pescado a la parrilla en pequeños comedores del puerto: 7-12 EUR. Restaurantes beachfront tipo Mac's Pizzeria o Bequia Beach Club: 15-25 EUR. Compra fruta en el mercadillo local.",
+      "consejo_local": "Los ferries no tienen horario fijo, pueden retrasarse horas. Pregunta en el puerto el día anterior. Los locales son muy amables, puedes conseguir tours privados hablando directamente con pescadores.",
+      "plan_b_lluvia": "Explorar pueblos interiores como Paget Farm, visitar taller de artesanía, relajarse en bar local con cafecito",
+      "keywords": [
+        "Bequia",
+        "Princess Margaret Bay",
+        "Granadinas",
+        "isla pequeña",
+        "tranquila",
+        "bohemia",
+        "mochileros"
+      ]
+    },
+    {
+      "id": "mustique",
+      "nombre": "Mustique",
+      "tipo": "isla",
+      "region": "Granadinas Exteriores",
+      "descripcion": "Isla privada de lujo frecuentada por celebridades, pero accesible a mochileros con playas públicas. Basil's Bar es el único espacio turístico democrático. Paisaje caribeño pristino y agua cristalina.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a marzo",
+      "como_llegar": "Ferry desde Kingstown o Bequia 30-50 minutos, 20-30 EUR",
+      "donde_dormir": {
+        "mochilero": "Alojamiento prácticamente inexistente; visita como excursión de día desde otra isla",
+        "medio": "Villa rental (contacta en Basil's Bar), 150-250 EUR/noche",
+        "comfort": "Resort privado o villa de lujo, 300+ EUR/noche"
+      },
+      "que_hacer": [
+        "Pasar el día en Basil's Beach Bar (gratis entrada, consumición mínima 10 EUR)",
+        "Snorkel en Britannia Bay (gratis)",
+        "Caminar por playas públicas (gratis)",
+        "Avistar tortugas (gratis con suerte)"
+      ],
+      "donde_comer": "Basil's Bar es prácticamente la única opción para turistas de un día; hamburguesas, ensaladas, pescado: 15-25 EUR. Ambiente festivo con música en vivo.",
+      "consejo_local": "Solo hay una tienda y un bar públicos. Trae efectivo en dólares o euros porque el cambio es caro. Los ferries salen temprano, comprueba horarios en Kingstown.",
+      "plan_b_lluvia": "Vuelve en el ferry anterior, la isla es mejor con buen tiempo",
+      "keywords": [
+        "Mustique",
+        "Britannia Bay",
+        "Basil's Bar",
+        "isla privada",
+        "celebridades",
+        "lujo",
+        "Granadinas"
+      ]
+    },
+    {
+      "id": "canouan",
+      "nombre": "Canouan",
+      "tipo": "isla",
+      "region": "Granadinas Interiores",
+      "descripcion": "Isla volcánica pequeña con playas tranquilas, arrecife de coral intacto y montañas cubiertas de vegetación. Menos turística que Bequia, ideal para snorkel y buceo. Autenticidad caribeña garantizada.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a abril",
+      "como_llegar": "Ferry desde Kingstown 1,5 horas, 12-18 EUR",
+      "donde_dormir": {
+        "mochilero": "Guesthouse local o beach cottage, 20-30 EUR/noche",
+        "medio": "Tamarind Hotel o similar, 50-80 EUR/noche",
+        "comfort": "Resorts de lujo tipo Grenadine Grenadines (limitados), 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife local (gratis o 5-10 EUR con guía)",
+        "Caminar a Mahault Bay (gratis)",
+        "Buceo en Grand Bay (30-60 EUR con instructor)",
+        "Pesca artesanal con locales (negocia precio)",
+        "Senderismo a Mount Royal (gratis)"
+      ],
+      "donde_comer": "Frutos de mar frescos en pequeños comedores: 6-10 EUR. Restaurant Ashley's para algo más formal: 12-18 EUR. Compra en tienda de abarrotes local y prepara picnic.",
+      "consejo_local": "La isla es tan pequeña y tranquila que el mejor entretenimiento es charlar con los locales. El arrecife está en excelente estado; lleva snorkel tuyo si puedes.",
+      "plan_b_lluvia": "Explora pueblos interiores, visita iglesia local, descansa en cabaña",
+      "keywords": [
+        "Canouan",
+        "Canouan Island",
+        "Granadinas",
+        "snorkel",
+        "arrecife",
+        "volcánica",
+        "tranquila"
+      ]
+    },
+    {
+      "id": "union-island",
+      "nombre": "Union Island",
+      "tipo": "isla",
+      "region": "Granadinas Exteriores",
+      "descripcion": "Isla montañosa con puerto activo, playas remotas y acceso a islas desiertas cercanas como Toddy Head. Punto de partida para aventuras de isla en isla. Menos desarrollada pero auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a marzo, julio",
+      "como_llegar": "Ferry desde Kingstown 2 horas, 18-25 EUR",
+      "donde_dormir": {
+        "mochilero": "Lambi's Guest House, 25-35 EUR/noche",
+        "medio": "Clifton Beach Hotel, 60-90 EUR/noche",
+        "comfort": "Palm Island Resort (isla vecina), 150-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Clifton (gratis)",
+        "Excursión a Toddy Head o Palm Island (15-40 EUR barco)",
+        "Subida a Coconut Ridge (gratis, vistas 360°)",
+        "Snorkel en Frigate Island (gratis o con guía 20 EUR)",
+        "Paseo por puerto pesquero (gratis)"
+      ],
+      "donde_comer": "Comida criolla auténtica en comedores locales: 5-8 EUR. Fresh catch (el pescado del día): 10-15 EUR. Mercado para frutas tropicales.",
+      "consejo_local": "Union es más 'real' que otras Granadinas porque no está sobreexplotada. Los ferries pueden ser inestables con mar picada, toma pastilla si mareas.",
+      "plan_b_lluvia": "Permanece en la isla explorando senderos, descansa en alojamiento",
+      "keywords": [
+        "Union Island",
+        "Clifton",
+        "Granadinas",
+        "puerto",
+        "isla montañosa",
+        "Toddy Head",
+        "aventura"
+      ]
+    },
+    {
+      "id": "dark-island",
+      "nombre": "Dark Island y Petite Mustique",
+      "tipo": "isla",
+      "region": "Granadinas Exteriores",
+      "descripcion": "Pequeñas islas desiertas accesibles en excursión de día desde Bequia o Union. Playas vírgenes, snorkel excepcional y sensación de aventura. Ideal para mochileros que buscan lo inesperado.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a marzo",
+      "como_llegar": "Excursión en barco desde Bequia 30 minutos, 25-40 EUR. O desde Union Island 20 minutos, 20-30 EUR",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento; excursión de día desde otra isla",
+        "medio": "N/A",
+        "comfort": "N/A"
+      },
+      "que_hacer": [
+        "Snorkel en aguas cristalinas (gratis una vez allí)",
+        "Nadar en playas desiertas (gratis)",
+        "Picnic en la playa (trae comida de otra isla)",
+        "Buceo (40-70 EUR con instructor si contratas en Bequia)"
+      ],
+      "donde_comer": "Trae comida de la isla desde la que partas. Los operadores de barcos a veces ofrecen almuerzo (incluido en tour 35-45 EUR).",
+      "consejo_local": "Negocia directamente con pescadores locales en Bequia para tours privados más baratos que operadores turísticos. Lleva protección solar máxima.",
+      "plan_b_lluvia": "Cancela el tour, el mar picada hace imposible disfrutar",
+      "keywords": [
+        "Dark Island",
+        "Petite Mustique",
+        "isla desierta",
+        "snorkel",
+        "excursion",
+        "Granadinas"
+      ]
+    },
+    {
+      "id": "la-soufriere",
+      "nombre": "La Soufrière",
+      "tipo": "montaña",
+      "region": "San Vicente",
+      "descripcion": "Volcán activo más alto de las Antillas menores (1.234 m). Senderismo desafiante con vistas de la costa y islas vecinas. Última erupción 2021, pero seguro para visitas. Imprescindible para amantes de naturaleza.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a marzo, julio",
+      "como_llegar": "Desde Kingstown: autobús a pueblo de Soufrière (45 min, 3 EUR) + caminata 5-7 horas ida y vuelta",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en pueblo Soufrière, 20-30 EUR/noche",
+        "medio": "No hay opciones de hotel en la zona",
+        "comfort": "Hotel en Kingstown y excursión de día, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Ascenso a la cumbre (gratis, pero contrata guía local 30-50 EUR recomendado)",
+        "Vistas panorámicas de la isla y Granadinas (gratis)",
+        "Fotografía de paisaje volcánico (gratis)",
+        "Baño en Lake of Sorrows en descenso (gratis)"
+      ],
+      "donde_comer": "En el pueblo antes de subir: comida simple en comedores: 5-8 EUR. Trae agua y snacks para la cumbre.",
+      "consejo_local": "Sube temprano (salida 5-6 AM) para evitar calor extremo y nubes. Un guía local es esencial; no es fácil orientarse. La erupción de 2021 modificó la ruta.",
+      "plan_b_lluvia": "Pospón, las nubes te impiden ver la vista",
+      "keywords": [
+        "La Soufriere",
+        "Soufriere",
+        "volcán",
+        "senderismo",
+        "cumbre",
+        "San Vicente",
+        "activo"
+      ]
+    },
+    {
+      "id": "wallilabou-bay",
+      "nombre": "Wallilabou Bay",
+      "tipo": "playa",
+      "region": "San Vicente Occidental",
+      "descripcion": "Bahía serena y poco concurrida en la costa oeste de San Vicente. Escenario de rodaje de Piratas del Caribe, con restos de película convertidos en atracción. Buena base para snorkel cercano.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a abril",
+      "como_llegar": "Desde Kingstown: autobús o taxi 45 minutos, 6-12 EUR",
+      "donde_dormir": {
+        "mochilero": "Wallilabou Bay Resort (presupuesto bajo), 35-50 EUR/noche",
+        "medio": "Beachfront cottage, 70-100 EUR/noche",
+        "comfort": "Resort boutique pequeño, 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita a set de Piratas del Caribe abandonado (gratis acceso, bar/comida pago)",
+        "Snorkel frente a la playa (gratis o 15-20 EUR con equipo)",
+        "Caminar por la playa (gratis)",
+        "Buceo (40-60 EUR con instructor)"
+      ],
+      "donde_comer": "Wallilabou Bay Dive Shop tiene pequeño restaurante con pescado fresco: 12-18 EUR. Opciones locales sencillas en carretera principal.",
+      "consejo_local": "La playa misma es más interesante que el set de Piratas (que está algo deteriorado). Mejor para relaxarse que para acción.",
+      "plan_b_lluvia": "Explora tiendas y pueblos cercanos, descansa con lluvia tropical",
+      "keywords": [
+        "Wallilabou",
+        "Wallilabou Bay",
+        "Pirates of the Caribbean",
+        "playa",
+        "snorkel",
+        "buceo",
+        "costa oeste"
+      ]
+    },
+    {
+      "id": "tobago-cays",
+      "nombre": "Tobago Cays",
+      "tipo": "isla",
+      "region": "Granadinas Exteriores",
+      "descripcion": "Archipiélago de 5 islas desiertas con parque marino protegido. Agua turquesa, arrecife virgen y fauna marina abundante. Parada clásica en cruceros pero accesible a mochileros. Lo mejor de las Granadinas para buceo y snorkel.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a marzo",
+      "como_llegar": "Excursión de día desde Union Island (1 hora barco, 30-40 EUR) o desde Bequia (2 horas, 45-60 EUR)",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento; excursión de día",
+        "medio": "N/A",
+        "comfort": "N/A"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife protegido (gratis una vez allí)",
+        "Buceo en aguas profundas (50-80 EUR certificado)",
+        "Avistamiento de tortugas y peces (gratis)",
+        "Picnic en isla desierta (trae comida de otra isla)"
+      ],
+      "donde_comer": "Trae comida de tu isla base. Algunos tours incluyen almuerzo (check con operador).",
+      "consejo_local": "El parque cuesta 5 EUR tarifa de conservación (paga en el tour). Visita con mar tranquila porque si hay olas altas no se puede disfrutar el snorkel.",
+      "plan_b_lluvia": "Cancela tour, el snorkel requiere agua clara",
+      "keywords": [
+        "Tobago Cays",
+        "Cays",
+        "Grenadines",
+        "arrecife",
+        "parque marino",
+        "snorkel",
+        "buceo",
+        "tortugas"
+      ]
+    },
+    {
+      "id": "carriacou",
+      "nombre": "Carriacou (excursión)",
+      "tipo": "isla",
+      "region": "Granadinas, técnicamente parte de Granada",
+      "descripcion": "Isla hermana de Granada con playas tranquilas y auténtica vida local. Menos turística que las Granadinas de SVG. Excursión interesante para variar paisaje y conocer otra isla caribeña.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a marzo",
+      "como_llegar": "Ferry desde Union Island 1,5 horas, 15-25 EUR",
+      "donde_dormir": {
+        "mochilero": "Carriacou no justifica alojamiento; excursión de día desde Union",
+        "medio": "Si te quedas: guesthouse en Hillsborough, 30-50 EUR/noche",
+        "comfort": "Coconut Beach Resort, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Anse La Roche (gratis)",
+        "Paseo por pueblos costeros (gratis)",
+        "Snorkel local (gratis o con guía 15-20 EUR)",
+        "Senderismo a White Island (gratis con barquero local)"
+      ],
+      "donde_comer": "Seafood fresco en comedores locales Hillsborough: 6-10 EUR. Ambiente auténtico sin turismo organizado.",
+      "consejo_local": "Carriacou es más 'local' porque no es parte de SVG. Ferry puede cancelarse con mal tiempo. Habla con ferrys en Union sobre horarios.",
+      "plan_b_lluvia": "Regresa a Union Island si el mar está agitado",
+      "keywords": [
+        "Carriacou",
+        "isla",
+        "Granada",
+        "Hillsborough",
+        "excursion",
+        "autentica",
+        "playas"
+      ]
+    }
+  ]
+}

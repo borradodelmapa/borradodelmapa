@@ -1,0 +1,331 @@
+{
+  "pais": "Armenia",
+  "codigo": "am",
+  "destinos": [
+    {
+      "id": "erevan",
+      "nombre": "Ereván",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital y mayor ciudad de Armenia, con arquitectura soviética rosa, plazas amplias y museos de clase mundial. Centro cultural y punto de partida para explorar el país, con vida nocturna, gastronomía y acceso a transporte nacional.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Vuelo internacional a Zvartnots Airport (40 min al centro en autobús 201, 0,20 EUR) o desde Georgia/Irán en autobús.",
+      "donde_dormir": {
+        "mochilero": "Hostal compartido en Kentron, 12-18 EUR/noche",
+        "medio": "Hotel boutique 3* en Abovyan Street, 35-50 EUR/noche",
+        "comfort": "Hotel 4* en Northern Avenue, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Plaza de la República y fuentes danzantes (gratis)",
+        "Museo de Historia de Armenia (3 EUR)",
+        "Cascadas de Ereván (2 EUR entrada + cable car 1 EUR)",
+        "Catedral de Gregorio Iluminador (gratis)",
+        "Mercado de Vernissage los fines de semana (gratis mirar, compra a negociar)",
+        "Galería Nacional (2 EUR)"
+      ],
+      "donde_comer": "Prueba lula (pastel de carne), khash (sopa invernal) y cognac armenio. Precios: comida local 3-8 EUR, restaurante medio 10-20 EUR. Barrios: Kentron, Northern Avenue.",
+      "consejo_local": "Camina hacia el norte por Abovyan Street al atardecer: la luz sobre la arquitectura es perfecta para fotos. Los cafés no cierran hasta las 23:00 y son muy sociales.",
+      "plan_b_lluvia": "Museos cubiertos (Genocidio Armenio, Matenadarán de manuscritos), cafeterías literarias en Konditori.",
+      "keywords": [
+        "Yerevan",
+        "Erevan",
+        "capital Armenia",
+        "Kentron",
+        "Republic Square",
+        "Cascade"
+      ]
+    },
+    {
+      "id": "khor-virap",
+      "nombre": "Khor Virap",
+      "tipo": "histórico",
+      "region": "Ararat",
+      "descripcion": "Monasterio del siglo XVII construido sobre la prisión donde fue encarcelado San Gregorio, con vistas directas al Monte Ararat en la frontera turca. Uno de los sitios más sagrados del cristianismo armenio y más fotogénicos del país.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-junio, septiembre",
+      "como_llegar": "Desde Ereván en marshrutka (minibús) hacia Artashat, 1 hora, 1,50 EUR. O tour desde Ereván 20-30 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Artashat, 10-15 EUR/noche",
+        "medio": "Pequeño hotel en Artashat, 20-30 EUR/noche",
+        "comfort": "Resort cerca de Khor Virap (Silks Road), 60-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar el monasterio y descender a la cripta (2 EUR entrada)",
+        "Fotografiar el Monte Ararat desde la terraza del monasterio (gratis)",
+        "Caminata corta alrededor del complejo (gratis)",
+        "Pícnic con vistas al Ararat"
+      ],
+      "donde_comer": "Pequeño comedero junto al monasterio con khash y platos simples, 2-5 EUR. Mejor traer provisiones desde Ereván.",
+      "consejo_local": "Llega antes de las 9:00 para evitar tours masivos de Ereván. El Ararat es más visible por las mañanas; por las tardes hay más bruma.",
+      "plan_b_lluvia": "El monasterio es parcialmente cubierto; igualmente visitable pero sin vistas del Ararat.",
+      "keywords": [
+        "Khor Virap",
+        "San Gregorio",
+        "Monte Ararat",
+        "monasterio Armenia",
+        "Artashat"
+      ]
+    },
+    {
+      "id": "geghard",
+      "nombre": "Monasterio de Geghard",
+      "tipo": "histórico",
+      "region": "Kotayk",
+      "descripcion": "Monasterio medieval parcialmente excavado en la roca con arquitectura única del siglo IV-XIII. Patrimonio de la UNESCO con acústica extraordinaria, ubicado en un cañón escénico a 40 km de Ereván.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "Marshrutka desde Ereván hacia Garni (45 min, 1,50 EUR), luego 3 km a pie o minibús local. O tour desde Ereván 25-35 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Garni, 12-18 EUR/noche",
+        "medio": "Small hotel en Garni, 25-35 EUR/noche",
+        "comfort": "Resort boutique, 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour guiado por el monasterio y sus cámaras (3 EUR entrada + 10 EUR guía recomendado)",
+        "Fotografía de la arquitectura excavada (gratis)",
+        "Concierto informal aprovechando la acústica (gratis)",
+        "Caminata al río Azat (gratis)"
+      ],
+      "donde_comer": "Cafés simples en Garni, 3-6 EUR. La mayoría de viajeros visitan desde Ereván o como excursión con Garni.",
+      "consejo_local": "Contrata un guía local en la entrada (10 EUR): explica los detalles arquitectónicos y la acústica de forma que no descubrirías solo. Lleva botella de agua.",
+      "plan_b_lluvia": "Las cámaras internas son secas; el monasterio es totalmente visitable bajo lluvia.",
+      "keywords": [
+        "Geghard",
+        "Geghardt",
+        "monasterio Geghard",
+        "cañón Azat",
+        "patrimonio UNESCO",
+        "Kotayk"
+      ]
+    },
+    {
+      "id": "garni",
+      "nombre": "Templo de Garni",
+      "tipo": "histórico",
+      "region": "Kotayk",
+      "descripcion": "Único templo pagano prehelenístico de Armenia, reconstruido en los años 70, ubicado en la cima de una montaña con vistas espectaculares del cañón Azat. Frecuentemente visitado junto a Geghard.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "Marshrutka desde Ereván a Garni (45 min, 1,50 EUR). El templo está a 2 km del pueblo, accesible a pie o taxi local (1-2 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Garni, 12-18 EUR/noche",
+        "medio": "Small hotel, 25-35 EUR/noche",
+        "comfort": "Resort, 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar el templo helenístico (2 EUR entrada)",
+        "Fotografía de las vistas del cañón Azat (gratis)",
+        "Caminata al río Azat y piscinas naturales (gratis, 1-2 horas ida y vuelta)",
+        "Talleres de cerámica tradicional en Garni (10-15 EUR)"
+      ],
+      "donde_comer": "Comederos en el pueblo, 3-7 EUR. Restaurante 'Garni' tiene vistas del templo, 8-15 EUR.",
+      "consejo_local": "Tras visitar el templo, baja al río Azat: hay piscinas naturales pequeñas donde puedes bañarte en verano. La mayoría de turistas no lo sabe.",
+      "plan_b_lluvia": "El templo está al aire libre; bajo lluvia es menos recomendable.",
+      "keywords": [
+        "Garni",
+        "templo helenístico",
+        "cañon Azat",
+        "Armenia prehelenica",
+        "Kotayk"
+      ]
+    },
+    {
+      "id": "tatev",
+      "nombre": "Monasterio de Tatev",
+      "tipo": "histórico",
+      "region": "Syunik",
+      "descripcion": "Monasterio medieval espectacular en el acantilado de Tatev (siglo IX), accesible por el teleférico más largo del mundo (5.7 km). Ubicado en el sur remoto, requiere dedicación pero ofrece soledad, arquitectura medieval y vistas dramáticas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Marshrutka desde Ereván a Goris (5-6 horas, 6-8 EUR). Luego marshrutka a Tatev (45 min, 1,50 EUR) o teleférico (15 EUR). Total desde Ereván 25-30 EUR + entrada.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Tatev o Goris, 10-15 EUR/noche",
+        "medio": "Small hotel en Goris, 25-35 EUR/noche",
+        "comfort": "Arequipa Eco-lodge Tatev (único en el sitio), 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Teleférico Wings of Tatev (15 EUR ida y vuelta)",
+        "Exploración del monasterio medieval (2 EUR entrada)",
+        "Caminata por los acantilados (gratis)",
+        "Iglesia de San Pablo (arquitectura del IX), fotografía (gratis)"
+      ],
+      "donde_comer": "Restaurante básico en Tatev, 5-10 EUR. Mejor comer en Goris y subir. Prueba la sopa de verduras y cordero armenio.",
+      "consejo_local": "El teleférico funciona en días de buen clima; consulta antes. La zona es remota: lleva agua y snacks. De noche la soledad del monasterio es casi mística.",
+      "plan_b_lluvia": "El teleférico no funciona con viento/lluvia fuerte. Alternativa: acceso a pie desde el pueblo (caminata 1-2 horas).",
+      "keywords": [
+        "Tatev",
+        "monasterio Tatev",
+        "Wings of Tatev",
+        "teleférico Armenia",
+        "Syunik",
+        "Goris"
+      ]
+    },
+    {
+      "id": "sevan",
+      "nombre": "Lago Seván y Monasterio de Sevanavank",
+      "tipo": "naturaleza",
+      "region": "Gegharkunik",
+      "descripcion": "Lago de montaña más grande de Eurasia rodeado de playas y con el histórico monasterio de Sevanavank en una península. Destino de relax con baño estival, pícnics y vistas alpinas, a 1 hora de Ereván.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Marshrutka desde Ereván a Sevan pueblo (1,5 horas, 1,50 EUR). O a Sevanavank directamente (mismo precio).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Sevan pueblo, 10-15 EUR/noche",
+        "medio": "Hotel pequeño frente al lago, 25-40 EUR/noche",
+        "comfort": "Resort Ajania o similares, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Monasterio de Sevanavank (2 EUR entrada)",
+        "Baño en el lago en verano (gratis)",
+        "Pícnic en las playas (gratis)",
+        "Senderismo alrededor de la península del monasterio (gratis, 1-2 horas)",
+        "Cena de pescado local en restaurantes junto al lago"
+      ],
+      "donde_comer": "Restaurantes especializados en trucha y carpa del lago, 10-20 EUR por plato. Barrio de Sevan pueblo frente al agua.",
+      "consejo_local": "El agua en junio es fría (15-18°C); en julio-agosto más agradable (20-22°C). Lleva toalla de microfibra. Los jueves hay menos turistas que fines de semana.",
+      "plan_b_lluvia": "El monasterio es visitable con lluvia ligera. En lluvia fuerte, mejor quedarse en cafés del pueblo.",
+      "keywords": [
+        "Sevan",
+        "lago Sevan",
+        "Sevanavank",
+        "monasterio Sevan",
+        "playas Armenia",
+        "trucha sevan"
+      ]
+    },
+    {
+      "id": "dilijan",
+      "nombre": "Dilijan",
+      "tipo": "naturaleza",
+      "region": "Tavush",
+      "descripcion": "Pueblo de montaña en el bosque con arquitectura tradicional, aguas termales y rutas de senderismo. Conocido como 'la Suiza armenio' por su verdor y clima fresco, ideal para desconexión y caminatas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Marshrutka desde Ereván (1,5 horas, 2 EUR) o desde Sevan (1 hora, 1,50 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en el centro, 12-18 EUR/noche",
+        "medio": "Hotel boutique pequeño, 30-45 EUR/noche",
+        "comfort": "Resort de montaña Dilijan (Parz Lich o similar), 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a Haghartsin Monastery (2-3 horas ida y vuelta, gratis)",
+        "Visita a Agartz Monastery (1 hora a pie, gratis entrada pero donativo sugerido)",
+        "Baño en piscinas termales (5-8 EUR)",
+        "Paseo por el centro histórico restaurado (gratis)",
+        "Ruta al lago Parz Lich (30 min a pie desde el pueblo, gratis)"
+      ],
+      "donde_comer": "Restaurantes con comida casera armenio-caucásica, 5-12 EUR. Pan tradicional y queso local recomendado. Centro del pueblo y alrededores.",
+      "consejo_local": "Alquila una bicicleta (3-5 EUR/día) para explorar los monasterios cercanos. El aire es más fresco que en Ereván; lleva chaqueta ligera incluso en verano.",
+      "plan_b_lluvia": "Lluvia es frecuente pero ligera; perfecto para caminar con impermeables. Los monasterios son totalmente accesibles.",
+      "keywords": [
+        "Dilijan",
+        "Diljan",
+        "Suiza armenia",
+        "Haghartsin",
+        "bosque Dilijan",
+        "Tavush"
+      ]
+    },
+    {
+      "id": "noravank",
+      "nombre": "Monasterio de Noravank",
+      "tipo": "histórico",
+      "region": "Vayots Dzor",
+      "descripcion": "Monasterio medieval del siglo XIII en un cañón espectacular de paredes rojas, con arquitectura única de la Toscana armenia. Ubicado en el sur de Armenia, combina historia y paisaje dramático.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "Marshrutka desde Ereván a Yeghegnadzor (2,5 horas, 3 EUR), luego minibús a Areni/Noravank (30 min, 1 EUR). O tour desde Ereván 30-40 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Yeghegnadzor o Areni, 10-15 EUR/noche",
+        "medio": "Small hotel en Yeghegnadzor, 20-30 EUR/noche",
+        "comfort": "Resort boutique, 60-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita del monasterio (2 EUR entrada)",
+        "Fotografía del cañón y arquitectura (gratis)",
+        "Caminata por el cañón hacia el río (gratis, 1-2 horas)",
+        "Iglesia de San Prkich y panteones adyacentes (incluido en entrada)",
+        "Degustación de vino en bodega de Areni (opcional, 10-15 EUR)"
+      ],
+      "donde_comer": "Restaurante junto a Noravank, 5-10 EUR. En Areni, degustación de vino y comida 15-25 EUR. Especialidad: conservas de nueces y frutas locales.",
+      "consejo_local": "Combina con la bodega de Areni (a 10 km) para probar vino armenio tradicional en una cueva prehistórica. El monasterio al atardecer es mágico.",
+      "plan_b_lluvia": "Visitable con lluvia, pero el cañón puede tener escorrentía; cuidado con caminos mojados.",
+      "keywords": [
+        "Noravank",
+        "monasterio Noravank",
+        "cañón Amaghu",
+        "Vayots Dzor",
+        "Areni",
+        "bodega Armenia"
+      ]
+    },
+    {
+      "id": "goris",
+      "nombre": "Goris",
+      "tipo": "ciudad",
+      "region": "Syunik",
+      "descripcion": "Pequeña ciudad en el sur con arquitectura soviética colorida y rocas formaciones inusuales alrededor. Base ideal para explorar Tatev, Alfabet Hill y la región de Syunik de forma independiente.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Marshrutka desde Ereván (5-6 horas, 6-8 EUR). O desde Geghard/Garni en una ruta circular (8-10 horas con paradas).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses, 10-15 EUR/noche",
+        "medio": "Hotel pequeño en el centro, 25-35 EUR/noche",
+        "comfort": "Hotel Mayas o similar, 60-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Exploración de la ciudad y sus casas coloridas (gratis)",
+        "Alfabet Hill (Alphabet Park) con letra gigante de Mesrop Mashtots (gratis, 20 min a pie)",
+        "Teleférico a Tatev desde aquí (ver entrada Tatev)",
+        "Caminatas por los alrededores de rocas y formaciones (gratis)",
+        "Mercado local (gratis mirar)"
+      ],
+      "donde_comer": "Restaurantes simples, 4-10 EUR. Comida casera y cordero. Especialidad local: lavash (pan armenio) recién hecho.",
+      "consejo_local": "Goris es menos turístico que Ereván: perfectamente auténtico. Hospédate en guesthouses locales; los dueños conocen excursiones personalizadas. Pregunta por rutas a Meghri no oficiales.",
+      "plan_b_lluvia": "La ciudad es totalmente funcional bajo lluvia; las caminatas se adaptan a zonas cubiertas o más cortas.",
+      "keywords": [
+        "Goris",
+        "Gorys",
+        "Alphabet Park",
+        "Syunik",
+        "sur Armenia",
+        "rocas Goris"
+      ]
+    },
+    {
+      "id": "lori",
+      "nombre": "Región de Lori: Akdamar, Haghpat y Sanahin",
+      "tipo": "histórico",
+      "region": "Lori",
+      "descripcion": "Región norteña con tres monasterios medievales UNESCO (Haghpat y Sanahin especialmente). Paisaje verde de montañas, pueblos remotos y arquitectura medieval menos visitada que el sur, ideal para viajeros que buscan autenticidad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Marshrutka desde Ereván a Vanadzor (2,5 horas, 2,50 EUR). Luego a Haghpat/Sanahin (45 min, 1,50 EUR). O tour desde Ereván 35-50 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Haghpat o Akdamar, 10-15 EUR/noche",
+        "medio": "Small hotel en Vanadzor, 20-30 EUR/noche",
+        "comfort": "Guesthouse rural boutique, 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Monasterio de Haghpat (2 EUR entrada)",
+        "Monasterio de Sanahin en el cañón (2 EUR entrada)",
+        "Caminata entre monasterios (1-2 horas, gratis)",
+        "Iglesia de Akdamar (gratis)",
+        "Puente medieval de piedra (gratis)"
+      ],
+      "donde_comer": "Guesthouses suelen ofrecer comida casera, 3-8 EUR. Restaurantes simples en pueblos, 5-10 EUR. Especialidad: queso y pan fresco.",
+      "consejo_local": "Esta región es mucho menos visitada que Geghard/Sevan. La soledad de los monasterios es genuina. Contrata guesthouse que organice caminatas: el paisaje entre monasterios es hermoso.",
+      "plan_b_lluvia": "Monasterios parcialmente cubiertos; caminatas se adaptan con impermeables.",
+      "keywords": [
+        "Lori",
+        "Haghpat",
+        "Sanahin",
+        "Akdamar",
+        "región Lori",
+        "monasterios norte Armenia"
+      ]
+    }
+  ]
+}

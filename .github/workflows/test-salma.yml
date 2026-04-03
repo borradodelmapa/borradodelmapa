@@ -1,0 +1,33 @@
+name: Salma Weekly Tests
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'  # Lunes 8:00 UTC
+  workflow_dispatch:      # Permite lanzarlo a mano desde GitHub
+
+jobs:
+  test:
+    name: Test Salma comportamiento
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Tests KV + comportamiento (sin rutas)
+        run: node worker/test-salma.js --no-route
+        env:
+          WORKER_URL: https://salma-api.paco-defoto.workers.dev
+
+      - name: Resumen en GitHub
+        if: always()
+        run: |
+          echo "## Salma Weekly Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "Worker: https://salma-api.paco-defoto.workers.dev" >> $GITHUB_STEP_SUMMARY
+          echo "Fecha: $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY

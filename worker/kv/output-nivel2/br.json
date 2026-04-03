@@ -1,0 +1,346 @@
+{
+  "pais": "Brasil",
+  "codigo": "br",
+  "destinos": [
+    {
+      "id": "rio-de-janeiro",
+      "nombre": "Río de Janeiro",
+      "tipo": "ciudad",
+      "region": "Sudeste",
+      "descripcion": "Capital cultural de Brasil con playas icónicas, montañas de granito y vida urbana intensa. Combina naturaleza salvaje dentro de la ciudad con una escena artística y gastronómica de clase mundial. Centro neurálgico para explorar la costa atlántica.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "abril-junio, septiembre-octubre",
+      "como_llegar": "Vuelo internacional directo a Galeão (GIG) desde Europa, 10-12h, 500-800 EUR. Desde Brasilia: avión 2h (100 EUR) o autobús 24h (40 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel en Lapa o Santa Teresa, 15-25 EUR/noche",
+        "medio": "Hotel 3* en Botafogo o Leblon, 60-100 EUR/noche",
+        "comfort": "Hotel 4-5* en Copacabana o Ipanema, 150-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Pão de Açúcar + teleférico (8 EUR)",
+        "Playa de Copacabana y paseo por la costa (gratis)",
+        "Museo de Arte Moderno (10 EUR)",
+        "Favela Santa Marta con guía local (20 EUR)",
+        "Cristo Redentor en tren desde Corcovado (25 EUR)"
+      ],
+      "donde_comer": "Acarajé frito en Copacabana (3-5 EUR), feijoada en Lapa (8-12 EUR), poke bowls frescos en Leblon (12-15 EUR). Mejor zona: barrio de Lapa para bares tradicionales.",
+      "consejo_local": "Evita llevar objetos de valor visibles. Las favelas del sur como Santa Marta son seguras solo con tours autorizados. La playa de Ipanema es mejor para la puesta de sol que Copacabana.",
+      "plan_b_lluvia": "Museos (MASP, Nacional), galerías en Santa Teresa, shopping Leblon, cines en Botafogo",
+      "keywords": [
+        "Río",
+        "RJ",
+        "Copacabana",
+        "Ipanema",
+        "Lapa",
+        "Botafogo",
+        "Cristo Redentor",
+        "Pão de Açúcar"
+      ]
+    },
+    {
+      "id": "florianopolis",
+      "nombre": "Florianópolis",
+      "tipo": "isla",
+      "region": "Sur",
+      "descripcion": "Isla subtropical con 42 playas de arena blanca, olas para surf y una localidad en plena transformación. Mezcla de playas turísticas con pueblos bohemios, lagoas de agua dulce y acceso a naturaleza salvaje. Punto de partida para explorar el sur de Brasil.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "octubre-abril (verano)",
+      "como_llegar": "Vuelo desde Río de Janeiro 2h (80-150 EUR) o São Paulo 1.5h (60-120 EUR). Autobús desde Curitiba 5h (25 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel en Lagoa da Conceição, 12-20 EUR/noche",
+        "medio": "Posada en Ponta das Canas o Campeche, 50-80 EUR/noche",
+        "comfort": "Resort en Praia Mole o Joaquina, 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Surf en Praia Mole o Joaquina (lecciones 30-40 EUR)",
+        "Senderismo a Lagoinha do Leste (gratis, 4h ida/vuelta)",
+        "Observación de delfines en Puerto Belo (25 EUR)",
+        "Lagoa da Conceição a pie o bicicleta (alquiler 8 EUR)",
+        "Playas tranquilas de Campeche y Armação (gratis)"
+      ],
+      "donde_comer": "Peixe frito (pez frito) fresco en Lagoa (12-18 EUR), acevichado en Campeche (10-15 EUR), açaí bowl en Lagoa (5-7 EUR). Mejor zona: restaurantes frente al mar en Lagoa da Conceição.",
+      "consejo_local": "Alquila una bicicleta en Lagoa da Conceição, es el corazón bohemio. Las playas de Lagoa son más protegidas; las de la costa océano tienen olas fuertes. Julio es invierno australiano, agua fría pero bien.",
+      "plan_b_lluvia": "Museos del centro, tiendas de artesanía, cafés en Lagoa da Conceição, açaiterías, mercados locales",
+      "keywords": [
+        "Floripa",
+        "SC",
+        "Lagoa da Conceição",
+        "Praia Mole",
+        "Campeche",
+        "isla de Santa Catarina"
+      ]
+    },
+    {
+      "id": "iguazu",
+      "nombre": "Cataratas de Iguazú",
+      "tipo": "naturaleza",
+      "region": "Sur, frontera con Argentina y Paraguay",
+      "descripcion": "Uno de los sistemas de cascadas más espectaculares del mundo, compartido con Argentina. Las cataratas brasileñas ofrecen vistas panorámicas desde la pasarela; el lado argentino brinda proximidad dramática. Reserva de selva tropical con fauna abundante.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "agosto-octubre, abril-mayo",
+      "como_llegar": "Vuelo desde Río de Janeiro a Puerto Iguazú (PIA) 3.5h (150-250 EUR) o desde São Paulo 2h (80-150 EUR). Autobús de larga distancia desde Curitiba 12h (35 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel en Puerto Iguazú (lado argentino), 13-20 EUR/noche",
+        "medio": "Hotel 3* en el parque brasileño, 70-100 EUR/noche",
+        "comfort": "Resort Belmond Das Cataratas (dentro del parque), 250-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasarela panorámica Parque Nacional brasileño (35 EUR)",
+        "Salto Macuco en barco desde Brasil (80 EUR, incluye catamarán)",
+        "Exploración lado argentino, Garganta del Diablo (15 EUR + autobús)",
+        "Senderismo en la selva, Sendero Macuco (gratis con entrada parque)",
+        "Sobrevuelo en helicóptero (180-250 EUR)"
+      ],
+      "donde_comer": "Filete de surubí (pez local) en Puerto Iguazú (14-18 EUR), chivito argentino (12-16 EUR), frutas tropicales frescas (3-5 EUR). Mejor zona: Avenida Brasil en Puerto Iguazú.",
+      "consejo_local": "Ve primero al lado brasileño para las vistas panorámicas, luego al argentino para la intensidad. Lluvia repentina es normal; lleva capa. El Salto Macuco te moja completamente, bien necesario en días calurosos. Visado argentino es necesario si eres ciudadano de fuera del Mercosur.",
+      "plan_b_lluvia": "Centro de visitantes, museo Yacyretá (acceso a presa),ercado de artesanía en Puerto Iguazú",
+      "keywords": [
+        "Iguazu",
+        "Iguassu",
+        "cataratas",
+        "Parque Nacional",
+        "Macuco",
+        "Garganta del Diablo"
+      ]
+    },
+    {
+      "id": "salvador",
+      "nombre": "Salvador",
+      "tipo": "ciudad",
+      "region": "Nordeste",
+      "descripcion": "Primera capital de Brasil, epicentro cultural afrobrasileño con arquitectura colonial intacta, playas de agua cálida y ritmo de música constante. Cuna del candomblé, capoeira y carnaval; authenticity pura sin la masificación de Río.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-agosto, noviembre-diciembre",
+      "como_llegar": "Vuelo desde Río 2.5h (80-140 EUR) o São Paulo 2h (70-130 EUR). Autobús de larga distancia desde Brasilia 36h (50 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel en Pelourinho, 10-18 EUR/noche",
+        "medio": "Pousada colonial en Pelourinho, 50-80 EUR/noche",
+        "comfort": "Hotel en Ondina o Barra, 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Barrio Pelourinho a pie, arquitectura colonial (gratis)",
+        "Elevador Lacerda al puerto (2 EUR)",
+        "Playa de Farol da Barra (gratis)",
+        "Clase de capoeira en escuela local (20-30 EUR/sesión)",
+        "Museo Afro-Brasileiro (8 EUR)"
+      ],
+      "donde_comer": "Acarajé con camarones en la playa (3-5 EUR), moqueca de peixe bahiana (12-16 EUR), cocada blanca de coco (2-3 EUR). Mejor zona: restaurantes en Pelourinho o frente al mar en Barra.",
+      "consejo_local": "Pelourinho tiene vendedores agresivos; negocia precios y mantén compostura. Las noches de jueves a domingo hay música en vivo en todos lados. La playa es segura de día; evita la noche. Julio hay Festa de Iemanjá (deidad marina).",
+      "plan_b_lluvia": "Museos (Afro-Brasileiro, Orixás), iglesias coloniales, compras en Pelourinho, capoeira cubierta",
+      "keywords": [
+        "Bahia",
+        "BA",
+        "Pelourinho",
+        "Lacerda",
+        "Ondina",
+        "Barra",
+        "capoeira",
+        "afrobrasileño"
+      ]
+    },
+    {
+      "id": "manaus",
+      "nombre": "Manaos",
+      "tipo": "naturaleza",
+      "region": "Norte, Amazonas",
+      "descripcion": "Puerta de acceso a la selva amazónica, ciudad singular en mitad de la jungla. Punto de partida para cruceros fluviales, inmersiones en la biodiversidad y encuentros con comunidades indígenas. Teatro Amazonas es testigo de Belle Époque.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "julio-enero (aguas bajas), menos mosquitos",
+      "como_llegar": "Vuelo desde Brasilia 5h (100-180 EUR), São Paulo 6h (120-200 EUR) o Río 7h (150-250 EUR). Avión es prácticamente obligatorio.",
+      "donde_dormir": {
+        "mochilero": "Hostel en Ponta Negra, 12-20 EUR/noche",
+        "medio": "Hotel 3* en centro o Ponta Negra, 60-100 EUR/noche",
+        "comfort": "Ecolodge en la selva (incluye tours), 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Confluencia de ríos Negro y Solimões (gratis mirando, tours 40-60 EUR)",
+        "Crucero río Amazonas 3-5 días (desde 500 EUR todo incluido)",
+        "Comunidad indígena Tukano (día completo 80-120 EUR)",
+        "Teatro Amazonas, tour + función (20-80 EUR)",
+        "Piscina natural en Igarapé (15-30 EUR)"
+      ],
+      "donde_comer": "Pirarucu grillado (pez gigante, 15-20 EUR), açaí puro (3-5 EUR), tucupi con jambu (10-12 EUR). Mejor zona: Ponta Negra para turistas; centro para locales.",
+      "consejo_local": "Los cruceros de 3-5 días son la verdadera experiencia; excursiones de un día son turísticas. Botas impermeables obligatorias. Repelente contra mosquitos de marca fuerte. Las aguas bajas (jul-ene) permiten más avistamientos de fauna. Negocia precio en el puerto.",
+      "plan_b_lluvia": "Teatro Amazonas, museos, mercado Ver-o-Peso, shoppings, cafés",
+      "keywords": [
+        "Amazonas",
+        "AM",
+        "Ponta Negra",
+        "río Negro",
+        "Solimões",
+        "selva amazónica"
+      ]
+    },
+    {
+      "id": "lenços-maranhenses",
+      "nombre": "Lençóis Maranhenses",
+      "tipo": "naturaleza",
+      "region": "Nordeste, Maranhão",
+      "descripcion": "Parque nacional con dunas blancas intercaladas con lagunas de agua dulce azul turquesa, paisaje surrealista único en el mundo. Acceso desde pueblo costero de Barreirinhas, requiere tours guiados en 4x4 o barco.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre (aguas claras, arena seca)",
+      "como_llegar": "Vuelo desde Brasilia a São Luís (SLZ) 2h (80-150 EUR), luego autobús 5h a Barreirinhas (20 EUR) o vuelo privado a Barreirinhas (consultar operadores).",
+      "donde_dormir": {
+        "mochilero": "Hostel o pousada en Barreirinhas, 15-25 EUR/noche",
+        "medio": "Pousada turística en Barreirinhas, 60-90 EUR/noche",
+        "comfort": "Resort eco en Barreirinhas, 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour dunas y lagunas en 4x4 (día completo 50-70 EUR)",
+        "Excursión río Preguiças en barco (60-80 EUR)",
+        "Senderismo entre lagunas (incluido en tours)",
+        "Baño en Lagoa Azul o Lagoa da Betânia (incluido en tours)",
+        "Visita pueblo tradicional Atins (tour 40 EUR)"
+      ],
+      "donde_comer": "Peixe na brasa (pez a la brasa, 12-16 EUR), camarones guisados (14-18 EUR), ceviche local (10-14 EUR). Mejor zona: restaurantes frente al río en Barreirinhas.",
+      "consejo_local": "La mejor vista es desde el aire; contrata un vuelo aéreo si presupuesto lo permite (200-300 EUR). Los tours de 4x4 son agotadores pero espectaculares. Lleva gafas de sol y protección solar triple. Las lagunas son de agua dulce, nadar es seguro.",
+      "plan_b_lluvia": "Imposible explorar dunas en lluvia. Quédate en Barreirinhas, visita pueblos cercanos o reschedule.",
+      "keywords": [
+        "Lençóis",
+        "Maranhão",
+        "MA",
+        "Barreirinhas",
+        "dunas",
+        "lagunas",
+        "lagoa azul"
+      ]
+    },
+    {
+      "id": "ouro-preto",
+      "nombre": "Ouro Preto",
+      "tipo": "histórico",
+      "region": "Minas Gerais, Sudeste",
+      "descripcion": "Pueblo colonial de montaña preservado intacto, cuna del movimiento libertario Inconfidência Mineira. Iglesias barrocas de fachada dorada, casas de piedra en laberintos de callejuelas, atmósfera de siglo XVIII. Patrimonio UNESCO.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-noviembre",
+      "como_llegar": "Autobús desde Belo Horizonte 2h (10-15 EUR), desde Brasilia 10h (35-50 EUR). Tren turístico desde Belo Horizonte fines de semana (50 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel en centro, 12-18 EUR/noche",
+        "medio": "Pousada colonial, 50-80 EUR/noche",
+        "comfort": "Hotel boutique en mansión colonial, 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo a pie por el casco histórico (gratis)",
+        "Iglesia de São Francisco de Assis (8 EUR)",
+        "Casa de Tiradentes, museo (5 EUR)",
+        "Mina de oro colonial (tour 20-30 EUR, incluye descenso)",
+        "Museu da Inconfidência (8 EUR)"
+      ],
+      "donde_comer": "Broa de milho (pan de maíz, 2-3 EUR), tutu de feijão (papilla de frijol, 5-7 EUR), queijo mineiro con goiabada (8-10 EUR). Mejor zona: restaurantes en Praça Tiradentes.",
+      "consejo_local": "La ciudad es pequeña; un día es técnicamente suficiente, pero el ambiente nocturno vale la pena. Las iglesias cierran 17h. Las cuestas son empinadas, buen calzado es obligatorio. Diciembre-enero hay lluvia y deslizamientos; evita.",
+      "plan_b_lluvia": "Iglesias (abiertas), museos, cafés, librerías antiguas, quedarse en hostel (ambiente social)",
+      "keywords": [
+        "Minas Gerais",
+        "MG",
+        "Tiradentes",
+        "barroco",
+        "colonial",
+        "oro",
+        "inconfidência"
+      ]
+    },
+    {
+      "id": "foz-amazonica",
+      "nombre": "Alter do Chão",
+      "tipo": "playa",
+      "region": "Norte, Pará",
+      "descripcion": "Caribeño de agua dulce en la Amazonía: playas blancas en islas fluviales, agua cálida y comunidad relajada. Alternativa más tranquila a Manaos para acceder a la selva, con menos turismo masivo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre-noviembre (playas visibles, agua baja)",
+      "como_llegar": "Vuelo a Santarém desde Brasilia (3h, 100-180 EUR) o Manaos (1.5h, 80-150 EUR), luego barco-taxi río Tapajós 30min (5 EUR) o autobús local 1h (2 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel frente al río, 10-15 EUR/noche",
+        "medio": "Pousada rústica, 40-70 EUR/noche",
+        "comfort": "Resort eco-turístico, 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de isla Buffet e isla do Amor (gratis + barco 5-15 EUR)",
+        "Piscina natural Igarapé da Floresta (15 EUR con guide)",
+        "Kayak en el río Tapajós (25-40 EUR)",
+        "Visita comunidad indígena (50-80 EUR día completo)",
+        "Barco nocturno busca delfines rosados (40-60 EUR)"
+      ],
+      "donde_comer": "Pirarucu assado (50 EUR por kilo, compartir), camaron guisado (12-15 EUR), açaí verde (3 EUR). Mejor zona: restaurantes en la orilla del río, Praia do Pincel.",
+      "consejo_local": "Es el destino amazónico más relajado de Brasil. Las playas desaparecen cuando las aguas suben (diciembre-julio). Los meses correctos (ago-nov) son ideales. Más tranquilo y auténtico que Manaos.",
+      "plan_b_lluvia": "Pesca en río, cafés, compras locales, quedar en hamaca, visitas cubiertas a comunidades",
+      "keywords": [
+        "Alter do Chão",
+        "Pará",
+        "PA",
+        "Tapajós",
+        "Santarém",
+        "playas amazónicas",
+        "delfines rosados"
+      ]
+    },
+    {
+      "id": "fernando-de-noronha",
+      "nombre": "Fernando de Noronha",
+      "tipo": "isla",
+      "region": "Nordeste, Pernambuco",
+      "descripcion": "Archipiélago remoto con playas vírgenes, avistamiento de tortugas marinas y buceo excepcional. Acceso limitado (cuota diaria de turistas), naturaleza preservada y atmósfera de aislamiento. Premium para amantes del océano.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "septiembre-marzo (aguas cálidas, menos lluvia)",
+      "como_llegar": "Vuelo desde Recife (REC) 1h (100-180 EUR), solo dos vuelos diarios. Requiere permiso ambiental (50-80 EUR por día).",
+      "donde_dormir": {
+        "mochilero": "Pousada simple en Vila do Remédios, 60-100 EUR/noche",
+        "medio": "Pousada confortable, 100-150 EUR/noche",
+        "comfort": "Resort eco de lujo, 250-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en Baía dos Golfinhos (150-200 EUR certificado)",
+        "Observación de tortugas marinas anidando (50 EUR tour)",
+        "Paseo a pie playas vírgenes Conceição y Leão (gratis)",
+        "Snorkel Baía de Santo Antonio (30-50 EUR",
+        "Punto de vista Pico Alto (gratis, senderismo)"
+      ],
+      "donde_comer": "Langosta fresca (25-35 EUR), pez vela a la brasa (20-25 EUR), agua de coco (2-3 EUR). Caro; pocas opciones. Mejor zona: Vila do Remédios.",
+      "consejo_local": "La cuota diaria ambiental es obligatoria. Los precios son los más altos de Brasil. El acceso de turistas está controlado; reserva con meses de anticipación. El buceo es excepcional, mejor de Sudamérica. Las tortugas desovan sep-dic.",
+      "plan_b_lluvia": "Buceo igualmente (bajo el agua no importa), snorkel cubierto, descanso en pousada",
+      "keywords": [
+        "Fernando de Noronha",
+        "Noronha",
+        "PE",
+        "Pernambuco",
+        "buceo",
+        "tortugas",
+        "archipiélago"
+      ]
+    },
+    {
+      "id": "jericoacoara",
+      "nombre": "Jericoacoara",
+      "tipo": "playa",
+      "region": "Nordeste, Ceará",
+      "descripcion": "Pueblo de pescadores transformado en destino mochilero sin vehículos motorizados, calles de arena, duna gigante al atardecer. Playas salvajes, lagoas, kitesurf de clase mundial y ambiente bohemio-aventurero.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre-abril",
+      "como_llegar": "Desde Fortaleza (FOR): autobús 5.5h (15-25 EUR) o tour privado 4x4 (40 EUR/persona). Aeropuerto regional Parnaíba (2.5h autobús).",
+      "donde_dormir": {
+        "mochilero": "Hostel en centro, 12-20 EUR/noche",
+        "medio": "Pousada rústica en arena, 50-90 EUR/noche",
+        "comfort": "Resort eco-boutique, 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Atardecer duna de Pôr do Sol (gratis, caminata)",
+        "Kitesurf lecciones Praia do Westerly (50-70 EUR)",
+        "Paseo en barco Lagoa Jijoca y Lagoa Parnaíba (25-40 EUR)",
+        "Senderismo dunas hacia Jijoca (tour 40 EUR)",
+        "Buceo en arrecife (80-120 EUR)"
+      ],
+      "donde_comer": "Peixe frito con arroz (12-16 EUR), camarones al ajo (14-18 EUR), açaí (4-6 EUR). Único lugar del Nordeste sin vehículos a motor; comida fresca diaria. Mejor zona: restaurantes plaza central.",
+      "consejo_local": "El pueblo tiene cero coches motorizados; transportes a pie, bicicleta o carreta. El viento es fuerte por la tarde. Octubre-noviembre son más ventosos (ideal kitesurf). Aguas tranquilas enero-abril. La duna es mejor al atardecer.",
+      "plan_b_lluvia": "Cafés, tiendas artesanía, clases de yoga, hammacas, piscinas naturales protegidas",
+      "keywords": [
+        "Jeri",
+        "Ceará",
+        "CE",
+        "Parnaíba",
+        "kitesurf",
+        "duna",
+        "lagoas",
+        "bohemio"
+      ]
+    }
+  ]
+}

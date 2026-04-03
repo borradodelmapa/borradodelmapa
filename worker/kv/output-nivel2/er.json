@@ -1,0 +1,331 @@
+{
+  "pais": "Eritrea",
+  "codigo": "er",
+  "destinos": [
+    {
+      "id": "asmara",
+      "nombre": "Asmara",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital de Eritrea con arquitectura italiana bien preservada de los años 30-40, diseño urbano racional y clima templado. Centro histórico con edificios Art Déco, mercados autóctonos y vida cotidiana auténtica. Punto de partida lógico para explorar el país.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Aeropuerto Internacional de Asmara. Vuelos desde El Cairo, Jartum o Addis Abeba (2-3 horas). Coste aproximado: 80-150 EUR. Desde el aeropuerto al centro: taxi 5-10 EUR o autobús local 1-2 EUR (30-45 min).",
+      "donde_dormir": {
+        "mochilero": "Hostels/guesthouses básicas (Gezira, downtown): 15-25 EUR/noche",
+        "medio": "Hoteles 3 estrellas (Asmara Palace, Sunshine): 40-70 EUR/noche",
+        "comfort": "Hoteles 4+ estrellas (Semenawi Bahti, Kempinski): 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer el centro histórico y arquitectura italiana (gratis)",
+        "Visitar el Museo Nacional de Eritrea (3 EUR)",
+        "Paseo por el Mercado Central (Medeber) (gratis)",
+        "Catedral de Asmara y Mezquita Al-Kulayfa (gratis)",
+        "Cena en restaurantes de Harnet Avenue (10-20 EUR)"
+      ],
+      "donde_comer": "Injera eritrea, stufato, tibs de cordero. Rango: 5-15 EUR en comedores locales; 15-30 EUR en restaurantes. Zona: Harnet Avenue para restaurantes turísticos, barrio de Nefasit para comida local.",
+      "consejo_local": "El efectivo (nakfa eritreo) es obligatorio; los cajeros automáticos son limitados y a menudo no funcionan. Lleva USD o EUR en efectivo. Los domingos la ciudad está muy tranquila.",
+      "plan_b_lluvia": "Museos interiores, cafeterías tradicionales con café eritreo, galerías de arte locales.",
+      "keywords": [
+        "Asmara",
+        "capital Eritrea",
+        "Harnet Avenue",
+        "arquitectura italiana",
+        "centro histórico",
+        "mercado medeber"
+      ]
+    },
+    {
+      "id": "massawa",
+      "nombre": "Massawa",
+      "tipo": "playa",
+      "region": "Noreste (costa del Mar Rojo)",
+      "descripcion": "Puerto histórico en el Mar Rojo con playas, arrecifes de coral y ruinas otomanas. Mezcla de arquitectura colonial y mercado autóctonos frente al mar. Base para buceo y excursiones a islas cercanas.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Asmara: autobús (Debub Express, 3-4 horas, 8-12 EUR) o coche de alquiler (2,5 horas, 40 EUR de combustible). Tren histórico también opera ocasionalmente.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses cerca del puerto (Ghimja, Al-Noor): 20-30 EUR/noche",
+        "medio": "Hoteles 3 estrellas (Massawa Hotel, Red Sea): 50-80 EUR/noche",
+        "comfort": "Resort con vista al mar (Dahlak): 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por la ciudad antigua y puerto otomano (gratis)",
+        "Snorkel/buceo en arrecifes locales (25-50 EUR por inmersión)",
+        "Excursión a Islas Dahlak (Dissei, Nocra): bote desde puerto (80-150 EUR grupo)",
+        "Visitar la Mezquita del Sultán (gratis)",
+        "Playas locales de Torbarya y Gahelo (gratis)"
+      ],
+      "donde_comer": "Pescado fresco, camarones, langosta (en temporada). Rango: 8-20 EUR en comedores del puerto; 20-40 EUR en restaurantes. Zona: muelle norte para pescadería fresca, centro para restaurantes.",
+      "consejo_local": "Las islas Dahlak se cierran en temporada de lluvia (junio-septiembre). Negocia precios de botes directamente con pescadores en el puerto, sale más barato que agencias.",
+      "plan_b_lluvia": "Museos interiores (Museo de Guerra), mercados cubiertos, cafés con vistas al puerto.",
+      "keywords": [
+        "Massawa",
+        "Mar Rojo",
+        "puerto",
+        "Dahlak",
+        "buceo",
+        "arrecifes",
+        "playas eritrea"
+      ]
+    },
+    {
+      "id": "keren",
+      "nombre": "Keren",
+      "tipo": "ciudad",
+      "region": "Centro-Norte",
+      "descripcion": "Segunda ciudad de Eritrea con fuerte carácter local, mercados vibrantes y autenticidad. Punto de conexión entre la costa y las tierras altas, con clima más fresco. Menos turismo que Asmara, más vida real.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Asmara: autobús (2 horas, 5-8 EUR) o coche alquilado. Desde Massawa: autobús vía Asmara (5-6 horas, 12 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses (Asmara, Keren): 15-25 EUR/noche",
+        "medio": "Hoteles 2-3 estrellas (Keren Hotel, Nyala): 30-50 EUR/noche",
+        "comfort": "No hay opciones de lujo; máximo 3 estrellas en la zona"
+      },
+      "que_hacer": [
+        "Mercado de Keren (Medeber): compra local y observación (gratis)",
+        "Catedral Copta de Keren (gratis)",
+        "Excursión a Nacfa (zona histórica de guerrilla, requiere guía local): 40-60 EUR",
+        "Paseo por la Av. Harnet (gratis)",
+        "Visita a pueblos cercanos en Anseba (valles, 30-50 EUR con guía)"
+      ],
+      "donde_comer": "Injera, shiro, carne a la parrilla. Rango: 4-10 EUR. Zona: mercado central para comedores locales, avenida principal para restaurantes.",
+      "consejo_local": "Keren tiene menos comodidades turísticas que Asmara; trae medicamentos básicos. El mercado es mejor por la mañana (7-10 AM).",
+      "plan_b_lluvia": "Mercados cubiertos, iglesias, café local, tiendas de artesanías.",
+      "keywords": [
+        "Keren",
+        "segunda ciudad",
+        "mercado",
+        "Anseba",
+        "Nacfa",
+        "tierras altas"
+      ]
+    },
+    {
+      "id": "nefasit",
+      "nombre": "Nefasit",
+      "tipo": "montaña",
+      "region": "Centro (tierras altas)",
+      "descripcion": "Pueblo en las montañas cercano a Asmara con vistas panorámicas, aire fresco y arquitectura rural. Punto de trekking y escapada del calor urbano. Acceso fácil desde la capital para una excursión de día.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Asmara: taxi colectivo (30-45 min, 2-3 EUR) o a pie/caminata (3-4 horas).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses muy básicas: 12-20 EUR/noche",
+        "medio": "Hospedaje rural simple: 20-35 EUR/noche",
+        "comfort": "Sin opciones de lujo; turismo rural"
+      },
+      "que_hacer": [
+        "Senderismo por las montañas de Seraï (gratis)",
+        "Visita a pueblos locales y vida rural (gratis)",
+        "Observación de vistas al amanecer/atardecer (gratis)",
+        "Picnic con productos locales (5-10 EUR)"
+      ],
+      "donde_comer": "Comida casera eritrea en hospedajes. Rango: 5-10 EUR. Lléva snacks desde Asmara.",
+      "consejo_local": "Nefasit es principalmente una excursión de día desde Asmara, no un destino de estadía prolongada. Las noches pueden ser frías (15-18°C).",
+      "plan_b_lluvia": "Quédate en hospedaje local con vistas desde la ventana; camina entre nubes.",
+      "keywords": [
+        "Nefasit",
+        "montañas",
+        "tierras altas",
+        "Asmara",
+        "trekking",
+        "vistas"
+      ]
+    },
+    {
+      "id": "mendefera",
+      "nombre": "Mendefera",
+      "tipo": "rural",
+      "region": "Sur (Debub)",
+      "descripcion": "Pueblo de las tierras altas del sur, auténtico y poco turístico, con cultivos de café y vistas montañosas. Menos infraestructura pero acceso a la vida rural eritrea genuina.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Asmara: autobús (3-4 horas, 10 EUR) via Keren o directamente sur. Coche alquilado: 2,5 horas.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses muy básicas: 12-20 EUR/noche",
+        "medio": "Hospedaje rural: 20-35 EUR/noche",
+        "comfort": "Sin opciones; infraestructura limitada"
+      },
+      "que_hacer": [
+        "Caminatas por paisajes rurales de Debub (gratis)",
+        "Visita a plantaciones de café locales (gratis o 5 EUR con guía)",
+        "Observación de vida agrícola (gratis)",
+        "Mercado local (gratis)"
+      ],
+      "donde_comer": "Comida aldeana: injera, verduras locales. Rango: 4-8 EUR en comedores básicos. Hospedajes ofrecen comidas caseras.",
+      "consejo_local": "Mendefera es destino muy poco turístico; no hay servicios de lujo. Ideal para viajeros buscando autenticidad extrema. Trae dinero en efectivo (nakfa).",
+      "plan_b_lluvia": "Quédate en hospedaje con anfitriones locales; experiencias culturales improvisadas.",
+      "keywords": [
+        "Mendefera",
+        "Debub",
+        "tierras altas sur",
+        "café",
+        "rural",
+        "auténtico"
+      ]
+    },
+    {
+      "id": "filfil",
+      "nombre": "Filfil",
+      "tipo": "playa",
+      "region": "Norte (costa del Mar Rojo)",
+      "descripcion": "Playa remota en el norte, acceso difícil pero recompensado con solitud, arrecifes vírgenes y pocos turistas. Para viajeros independientes que buscan aventura y naturaleza sin infraestructura.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Asmara: viaje complicado. Opción 1: Autobús a Massawa, luego bote o coche 4x4 al norte (4-6 horas total, 60-100 EUR). Requiere logística y guía local.",
+      "donde_dormir": {
+        "mochilero": "Campamento improviso o hospedaje muy básico: 10-20 EUR/noche",
+        "medio": "Posadas simples (pocas opciones): 25-40 EUR/noche",
+        "comfort": "Sin opciones; destino rústico"
+      },
+      "que_hacer": [
+        "Buceo/snorkel en arrecifes vírgenes (30-50 EUR)",
+        "Caminatas costeras (gratis)",
+        "Avistamiento de fauna marina (gratis)",
+        "Pesca tradicional con locales (negociar)"
+      ],
+      "donde_comer": "Pescado fresco cocinado por locales. Rango: 10-20 EUR. Lléva provisiones desde Massawa o Asmara.",
+      "consejo_local": "Filfil es una aventura, no un destino turístico. Requiere 4x4, guía local y flexibilidad. No hay servicios médicos; trae botiquín completo.",
+      "plan_b_lluvia": "No recomendado viajar en temporada de lluvia (junio-septiembre) a esta zona.",
+      "keywords": [
+        "Filfil",
+        "playa remota",
+        "Mar Rojo norte",
+        "arrecifes",
+        "aventura",
+        "buceo"
+      ]
+    },
+    {
+      "id": "nacfa",
+      "nombre": "Nacfa",
+      "tipo": "histórico",
+      "region": "Centro-Norte (Anseba)",
+      "descripcion": "Pueblo emblemático de la lucha de independencia eritrea, centro histórico de guerrilla. Acceso limitado pero posible con guía. Importancia histórica y arqueológica, paisaje de montañas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Keren: 4x4 obligatorio (2-3 horas, 50-80 EUR) o con tour organizado. Requiere aviso previo a autoridades locales (preguntar en Asmara o Keren).",
+      "donde_dormir": {
+        "mochilero": "Hospedaje muy básico (pocas opciones): 15-25 EUR/noche",
+        "medio": "Hospedaje simple: 25-40 EUR/noche",
+        "comfort": "Sin opciones de confort"
+      },
+      "que_hacer": [
+        "Recorrido histórico con guía local (20-40 EUR)",
+        "Caminatas por valles de Anseba (gratis)",
+        "Visita a pueblos rurales (gratis)",
+        "Entrevistas con locales sobre historia (gratis)"
+      ],
+      "donde_comer": "Comida aldeana. Rango: 5-10 EUR. Hospedajes ofrecen pensión completa.",
+      "consejo_local": "Nacfa no es fácil de visitar; requiere autorizaciones informales y transporte 4x4. La recompensa es autenticidad histórica y paisajes intactos. Viaja con respeto.",
+      "plan_b_lluvia": "Evita en temporada de lluvia (junio-septiembre); las carreteras se vuelven intransitables.",
+      "keywords": [
+        "Nacfa",
+        "historia",
+        "guerrilla",
+        "Anseba",
+        "Eritrea independencia",
+        "montañas"
+      ]
+    },
+    {
+      "id": "adulis",
+      "nombre": "Adulis (ruinas)",
+      "tipo": "histórico",
+      "region": "Noreste (costa, cerca de Massawa)",
+      "descripcion": "Ruinas de antiguo puerto aksumita (siglos I-VII) con hallazgos arqueológicos importantes. Sitio histórico remoto en la costa, acceso complicado pero arqueológicamente valioso.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Massawa: excursión con bote o 4x4 (1,5-2 horas, 50-100 EUR con guía) o tour desde Asmara (60-100 EUR).",
+      "donde_dormir": {
+        "mochilero": "Excursión de día desde Massawa es lo recomendado",
+        "medio": "Hospedaje en Massawa es base (ver Massawa)",
+        "comfort": "Sin alojamiento en Adulis"
+      },
+      "que_hacer": [
+        "Visita a ruinas y museo arqueológico (5-10 EUR entrada)",
+        "Arqueología e historia aksumita (con guía: 20-30 EUR)",
+        "Caminata costera (gratis)",
+        "Fotografía de ruinas y paisaje (gratis)"
+      ],
+      "donde_comer": "Lléva provisiones desde Massawa; no hay servicios en Adulis.",
+      "consejo_local": "Adulis es poco visitado y poco mantenido; requiere interés arqueológico genuino. Abre solo bajo demanda; coordina con guías en Massawa.",
+      "plan_b_lluvia": "Evita en temporada húmeda; acceso es difícil con mal tiempo.",
+      "keywords": [
+        "Adulis",
+        "ruinas",
+        "Aksumita",
+        "arqueología",
+        "puerto antiguo",
+        "Massawa"
+      ]
+    },
+    {
+      "id": "duub",
+      "nombre": "Duub (Dubbe)",
+      "tipo": "isla",
+      "region": "Archipiélago Dahlak (Mar Rojo)",
+      "descripcion": "Isla del archipiélago Dahlak con playas prístinas, snorkel excepcional y baja afluencia turística. Acceso solo por bote desde Massawa, experiencia de aislamiento y naturaleza.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Massawa: bote privado o tour (80-150 EUR grupo, 4-5 horas ida y vuelta) o acampar en la isla (acuerdo con pescadores locales).",
+      "donde_dormir": {
+        "mochilero": "Camping en playa (arreglo con pescadores): 20-30 EUR/noche",
+        "medio": "Sin alojamiento; campamento es única opción",
+        "comfort": "Sin opciones"
+      },
+      "que_hacer": [
+        "Snorkel en arrecifes (equipo: 20-30 EUR o lleva el tuyo)",
+        "Buceo (guía: 50-80 EUR)",
+        "Playas solitarias (gratis)",
+        "Observación de tortugas marinas (gratis, estacional)"
+      ],
+      "donde_comer": "Lléva provisiones desde Massawa. Los pescadores locales pueden cocinar pescado fresco (10-20 EUR).",
+      "consejo_local": "Duub requiere acampada o arreglo con residentes locales (pescadores). No hay servicios turísticos. Trae agua suficiente, protector solar, repelente de insectos.",
+      "plan_b_lluvia": "Cierra en temporada de lluvia (junio-septiembre); no hay viajes.",
+      "keywords": [
+        "Duub",
+        "Dahlak",
+        "isla",
+        "Mar Rojo",
+        "snorkel",
+        "buceo",
+        "playa remota"
+      ]
+    },
+    {
+      "id": "assab",
+      "nombre": "Assab (Asab)",
+      "tipo": "playa",
+      "region": "Sur (costa del Mar Rojo)",
+      "descripcion": "Puerto sureño en el Mar Rojo, menos visitado que Massawa, con playas, calor extremo y autenticidad. Punto de conexión comercial con Yibuti y Arabia Saudí, ambiente diferente.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero (muy caluroso resto del año)",
+      "como_llegar": "Desde Asmara: autobús (6-8 horas, 15-20 EUR) via Mendefera y Adi Keyh. O vuelo interno (poco frecuente). Acceso complicado; mejor vía Massawa como excursión.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses portuarias: 20-30 EUR/noche",
+        "medio": "Hoteles 2-3 estrellas (Assab Hotel): 40-60 EUR/noche",
+        "comfort": "Sin opciones de lujo"
+      },
+      "que_hacer": [
+        "Paseo por puerto y mercado (gratis)",
+        "Playas locales: Ras Fatumah (gratis)",
+        "Buceo/snorkel (40-70 EUR con guía)",
+        "Vida portuaria y observación (gratis)"
+      ],
+      "donde_comer": "Pescado fresco, camarones. Rango: 8-20 EUR en comedores del puerto. Zona: muelle para comida fresca, centro para restaurantes.",
+      "consejo_local": "Assab es muy caluroso (40°C+) excepto noviembre-febrero. No hay mucho turismo infraestructurado; vai por autenticidad. Documentación puede ser complicada en puertos.",
+      "plan_b_lluvia": "Evita junio-septiembre por lluvia erratica y calor extremo.",
+      "keywords": [
+        "Assab",
+        "Asab",
+        "puerto sur",
+        "Mar Rojo sur",
+        "playas",
+        "calor"
+      ]
+    }
+  ]
+}

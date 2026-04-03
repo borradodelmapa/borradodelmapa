@@ -1,0 +1,334 @@
+{
+  "pais": "Camboya",
+  "codigo": "kh",
+  "destinos": [
+    {
+      "id": "siem-reap",
+      "nombre": "Siem Reap",
+      "tipo": "histórico",
+      "region": "Noroeste",
+      "descripcion": "Puerta de entrada a Angkor, el mayor complejo de templos del mundo. La ciudad colonial combina templos jemer, vida nocturna backpacker y mercados tradicionales. Imprescindible para entender la historia de Camboya.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Phnom Penh: autobús (6h, 8-12 EUR) o vuelo (1h, 30-80 EUR). Desde Tailandia: autobús desde Bangkok (10-12h, 15-25 EUR)",
+      "donde_dormir": {
+        "mochilero": "Habitación compartida en hostal zona Pub Street: 5-10 EUR/noche",
+        "medio": "Boutique hotel Old Town: 35-60 EUR/noche",
+        "comfort": "Resort con piscina Seam Reap Boutique: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Angkor Wat al amanecer (entrada 37 EUR/día)",
+        "Templo Ta Prohm (incluido pase Angkor)",
+        "Ton Le Sap, lago flotante (tour 15-25 EUR)",
+        "Mercado nocturno de Siem Reap (gratis)",
+        "Masaje tailandés tradicional (5-10 EUR)"
+      ],
+      "donde_comer": "Fish Amok y sopa jemer en Pub Street (platos 3-8 EUR). Mercado central para comer como locales (1-3 EUR). Restaurantes de comida fusion en zona French Quarter (10-20 EUR)",
+      "consejo_local": "Compra el pase de Angkor por 3 días (62 EUR) aunque solo vayas 2; la multitud de turistas es menor y ves templos menos conocidos. Evita tours en grupo, alquila moto o contrata conductor privado (10-15 EUR/día)",
+      "plan_b_lluvia": "Museos (National Museum, Angkor National Museum), talleres de seda, cursos de cocina jemer (20-30 EUR)",
+      "keywords": [
+        "Angkor Wat",
+        "templos jemer",
+        "Pub Street",
+        "Tonle Sap",
+        "Old Town",
+        "Siem Reap city"
+      ]
+    },
+    {
+      "id": "phnom-penh",
+      "nombre": "Phnom Penh",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital caótica y vibrante en el río Mekong. Palacios reales, mercados bulliciosos, gastrería colonial francesa y una historia reciente impactante. Centro logístico y punto de partida ideal.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bangkok: autobús (12h, 12-20 EUR) o vuelo (1h, 40-100 EUR). Desde Vietnam: autobús desde Ho Chi Minh (6h, 8-12 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal zona BKK1: 6-12 EUR/noche",
+        "medio": "Hotel colonial Dara Reang Sey: 30-50 EUR/noche",
+        "comfort": "Sofitel Plaza: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Palacio Real (entrada 10 EUR)",
+        "Templo de la Plata (incluido con pase Palacio)",
+        "Tuol Sleng Genocide Museum (5 EUR)",
+        "Mercado central Psar Thmey (gratis)",
+        "Crucero al atardecer por río Mekong (15-25 EUR)"
+      ],
+      "donde_comer": "Amok y Lok Lak en Street 240 (3-7 EUR). Restaurantes franceses en Riverfront (15-30 EUR). Comida callejera en Psar O Russei (1-2 EUR)",
+      "consejo_local": "El Palacio Real cierra a mediodía. Visita primero por la mañana. Evita hablar de política jemer; es tema sensible. Tuk-tuk a medida: negocia antes (2-4 EUR por trayecto)",
+      "plan_b_lluvia": "Museos cerrados (National Museum, War Remnants), cines, spas tradicionales",
+      "keywords": [
+        "Palacio Real",
+        "Mekong",
+        "BKK1",
+        "Riverfront",
+        "Tuol Sleng",
+        "Psar Thmey"
+      ]
+    },
+    {
+      "id": "battambang",
+      "nombre": "Battambang",
+      "tipo": "ciudad",
+      "region": "Noroeste",
+      "descripcion": "Segunda ciudad, auténtica y con menos turismo que Siem Reap. Arquitectura colonial francesa intacta, mercados artesanales y acceso a pueblos rurales. Ideal para viajeros que buscan Camboya real.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Siem Reap: minibús (3h, 6-10 EUR). Desde Phnom Penh: autobús (12h, 12-18 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal Bambu Battambang: 6-10 EUR/noche",
+        "medio": "Boutique villa Tara Boat: 40-70 EUR/noche",
+        "comfort": "Nhek House: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en tren de bambú (7 EUR, 2h)",
+        "Templo Wat Banan (entrada libre)",
+        "Templo Phnom Sampeau (entrada 3 EUR)",
+        "Mercado central (gratis)",
+        "Tours rurales en bici a pueblos cercanos (15-20 EUR)"
+      ],
+      "donde_comer": "Khmer en Riverside (2-5 EUR). Pollo asado y sopa de pescado en mercados (1-3 EUR). Cafés franceses en centro antiguo (4-8 EUR)",
+      "consejo_local": "El tren de bambú funciona solo si hay pasajeros; ve por la mañana. Los templos al atardecer desde Phnom Sampeau ofrecen vistas espectaculares del Mekong. Alquila bici (2 EUR/día) para explorar",
+      "plan_b_lluvia": "Mercados cubiertos, workshops de seda, visita a talleres artesanales",
+      "keywords": [
+        "tren de bambú",
+        "Phnom Sampeau",
+        "Wat Banan",
+        "arquitectura colonial",
+        "mercado artesanal"
+      ]
+    },
+    {
+      "id": "sihanoukville",
+      "nombre": "Sihanoukville",
+      "tipo": "playa",
+      "region": "Suroeste",
+      "descripcion": "Único puerto marítimo y acceso a playas e islas. Atmosfera relajada pese al desarrollo turístico. Base para isla-hopping y inmersión en vida de playa camboyana.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Phnom Penh: autobús (4-5h, 8-12 EUR). Desde Tailandia: minibús desde Koh Chang (3h, 15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal Independent: 8-12 EUR/noche",
+        "medio": "Guest house frente playa Okhidot: 25-40 EUR/noche",
+        "comfort": "Resort Sokha Beach: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Isla Koh Rong en ferry (45 min, 20 EUR ida y vuelta)",
+        "Snorkel y buceo (25-45 EUR/día)",
+        "Playa Victory Beach (gratis)",
+        "Mercado noche Serendipity Beach (gratis)",
+        "Viaje isla-hopping Koh Rong Saloem (60-80 EUR, 2 días)"
+      ],
+      "donde_comer": "Mariscos frescos en Ochheuteal Beach (5-12 EUR). Comida callejera (1-3 EUR). Restaurantes internacionales en Serendipity (10-20 EUR)",
+      "consejo_local": "Las islas son el atractivo real; la ciudad en sí es turística. Koh Rong es mejor que Sihanoukville mismo. Viaja entre islas en ferry matutino para evitar la sal marina de la tarde",
+      "plan_b_lluvia": "Mercados cubiertos, spas, películas en cines",
+      "keywords": [
+        "Koh Rong",
+        "Koh Rong Saloem",
+        "Serendipity Beach",
+        "puerto marítimo",
+        "isla-hopping"
+      ]
+    },
+    {
+      "id": "koh-rong",
+      "nombre": "Koh Rong",
+      "tipo": "isla",
+      "region": "Suroeste",
+      "descripcion": "Isla de arena blanca y arrecifes de coral. Excelente para buceo, snorkel y vida de mochilero desconectado. Menos desarrollada que Tailandia pero con infraestructura suficiente.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Sihanoukville: ferry 45 minutos (20 EUR ida y vuelta). Desde Koh Rong Saloem: speedboat privado (15-30 EUR)",
+      "donde_dormir": {
+        "mochilero": "Beach bungalow Koh Rong Hostel: 8-15 EUR/noche",
+        "medio": "Resort con aire acondicionado 4 Eco Lodge: 45-70 EUR/noche",
+        "comfort": "Koh Rong Resort: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo PADI Open Water (300-350 EUR, 3-4 días)",
+        "Snorkel diario (20-30 EUR)",
+        "Nadar en bioluminiscencia nocturna (gratis, noches claras)",
+        "Kayak entre manglares (15-25 EUR)",
+        "Descanso en playa (gratis)"
+      ],
+      "donde_comer": "Mariscos a la parrilla en chiringuitos (5-10 EUR). Comida compartida con resorts (10-15 EUR). Bebidas alcohólicas en Beach bars (2-4 EUR)",
+      "consejo_local": "Trae efectivo; pocos ATM. El buceo es mucho más barato que en Tailandia. Bioluminiscencia solo en noches sin luna; pregunta en tu alojamiento. El transporte a otras playas es lento; planifica un movimiento por día",
+      "plan_b_lluvia": "Deportes acuáticos cubiertos, spas, descanso en bungalow",
+      "keywords": [
+        "Koh Rong island",
+        "buceo",
+        "snorkel",
+        "arrecife coral",
+        "bioluminiscencia",
+        "isla tropical"
+      ]
+    },
+    {
+      "id": "mondulkiri",
+      "nombre": "Mondulkiri",
+      "tipo": "naturaleza",
+      "region": "Noreste",
+      "descripcion": "Provincia montañosa con cascadas, bosques y elephant sanctuaries éticos. Destino para ecoturismo genuino lejos del circuito principal. Paisaje completamente diferente al resto de Camboya.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Phnom Penh: minibús (5-6h, 15-20 EUR). Desde Siem Reap: ruta compleja; mejor via Phnom Penh",
+      "donde_dormir": {
+        "mochilero": "Guesthouse sen Monorom: 8-12 EUR/noche",
+        "medio": "Boutique lodge Mondulkiri Project: 35-60 EUR/noche",
+        "comfort": "Terres Rouges Lodge: 80-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Elephant Sanctuary (tour 65-100 EUR, 4h)",
+        "Cascada Bukkit (entrada 3 EUR, senderismo)",
+        "Cascada Romchek (entrada libre)",
+        "Trekking bosque tropical (20-40 EUR/día)",
+        "Pueblo indígena Bunong (tour cultural 25-35 EUR)"
+      ],
+      "donde_comer": "Comida local en mercado (1-3 EUR). Restaurantes de turismo en sen Monorom (5-10 EUR). Barbacoa local en lodges (8-12 EUR)",
+      "consejo_local": "Elige santuarios éticos que no hagan paseos a elefantes; busca 'elephant interaction' responsable. La carretera es terrible; el viaje es agotador pero vale la pena. Trae repelente y vacúnate contra malaria",
+      "plan_b_lluvia": "Visitas a pueblos indígenas, spas termales, descanso en lodge",
+      "keywords": [
+        "elephant sanctuary",
+        "cascadas",
+        "bosque tropical",
+        "Bunong",
+        "trekking",
+        "Mondulkiri province"
+      ]
+    },
+    {
+      "id": "sre-pok-river",
+      "nombre": "Río Sre Pok y Ratanakiri",
+      "tipo": "naturaleza",
+      "region": "Noreste",
+      "descripcion": "Zona remota con lago volcánico y comunidades indígenas. Turismo muy bajo; experiencia de aventura pura. Ideal para viajeros que buscan lo no visto.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Mondulkiri: minibús a Ban Lung (4-5h, 10-15 EUR). Desde Phnom Penh: complejo; mejor via Mondulkiri",
+      "donde_dormir": {
+        "mochilero": "Community guesthouse: 7-12 EUR/noche",
+        "medio": "Eco lodge Terres Rouges: 40-70 EUR/noche",
+        "comfort": "Ratanakiri Boutique Resort: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Yak Loum Lake, lago volcánico (entrada 2 EUR, senderismo)",
+        "Viaje Sre Pok en bote (tour 40-60 EUR)",
+        "Cascada Kachon (entrada libre)",
+        "Aldea indígena Tompuon (tour 30-40 EUR)",
+        "Mercado de Ban Lung (gratis)"
+      ],
+      "donde_comer": "Comida local en ban Lung market (1-2 EUR). Restaurantes básicos de turismo (3-8 EUR). Sin opciones fancy",
+      "consejo_local": "Ratanakiri y Mondulkiri se visitan juntas. Los pueblos indígenas esperan respetar su cultura; no hagas turismo de explotación. Malaria zona roja; malaria prophylaxis recomendado",
+      "plan_b_lluvia": "Permanencia en lodge, tours interiores a pueblos, descanso",
+      "keywords": [
+        "Yak Loum Lake",
+        "Ratanakiri",
+        "Ban Lung",
+        "indígena Tompuon",
+        "rio Sre Pok",
+        "aventura remota"
+      ]
+    },
+    {
+      "id": "kampong-thom",
+      "nombre": "Kampong Thom",
+      "tipo": "rural",
+      "region": "Centro-Este",
+      "descripcion": "Pueblo en el Mekong, punto estratégico entre norte y sur. Templos antiguos, vida fluvial auténtica y parada práctica sin pretensiones turísticas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Phnom Penh: autobús (3-4h, 6-10 EUR). Desde Siem Reap: autobús (4-5h, 8-12 EUR). Punto intermedio natural",
+      "donde_dormir": {
+        "mochilero": "Guesthouse central: 6-10 EUR/noche",
+        "medio": "Mekong Crossing Boutique: 30-50 EUR/noche",
+        "comfort": "Tara Boat: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Templo Sambor Prei Kuk (entrada 5 EUR, senderismo)",
+        "Paseo en bote por Mekong (15-25 EUR)",
+        "Templo Nokor Bachey (entrada libre)",
+        "Mercado fluvial (gratis)",
+        "Paseo nocturno por pueblo (gratis)"
+      ],
+      "donde_comer": "Khmer en mercado (1-3 EUR). Mariscos frescos en Riverside (4-8 EUR)",
+      "consejo_local": "Parada ideal si viajas entre norte y sur. No es destino en sí, sino experiencia de viaje jemer. Sambor Prei Kuk es conjunto de templos poco conocido; mejor que Angkor para arqueología seria",
+      "plan_b_lluvia": "Permanencia en alojamiento, compras en mercado cubierto",
+      "keywords": [
+        "Sambor Prei Kuk",
+        "templos",
+        "Mekong",
+        "viaje Camboya",
+        "Nokor Bachey"
+      ]
+    },
+    {
+      "id": "kep",
+      "nombre": "Kep",
+      "tipo": "playa",
+      "region": "Suroeste",
+      "descripcion": "Pueblo costero tranquilo y bohemio. Menos turístico que Sihanoukville, con playas rocosas y atmósfera de relax. Mercado de cangrejos y paseos marítimos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Sihanoukville: minibús (2h, 5-8 EUR). Desde Phnom Penh: autobús vía Kampot (6-7h, 10-15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse Kep: 7-12 EUR/noche",
+        "medio": "Boutique hotel Kep Sokha: 35-50 EUR/noche",
+        "comfort": "Sailing Club Kep: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo al atardecer en El Muelle (gratis)",
+        "Isla Koh Tonsay en bote privado (10-15 EUR)",
+        "Mercado de cangrejos Kep Market (gratis, comprar si quieres)",
+        "Senderismo Crest Route (entrada 3 EUR)",
+        "Snorkel privado (20-30 EUR)"
+      ],
+      "donde_comer": "Cangrejos frescos en Kep Market cocinados en lugar (5-10 EUR). Restaurantes con vistas (10-20 EUR). Comida local en mercado (1-3 EUR)",
+      "consejo_local": "Kep es mejor para descanso que actividades. El mercado de cangrejos es experiencia local real; come allí, no en restaurantes. Las playas no son espectaculares; ve por la atmósfera",
+      "plan_b_lluvia": "Spas, mercado, restaurantes",
+      "keywords": [
+        "Kep",
+        "mercado cangrejos",
+        "Koh Tonsay",
+        "pueblo costero",
+        "tranquilo",
+        "Crest Route"
+      ]
+    },
+    {
+      "id": "kampot",
+      "nombre": "Kampot",
+      "tipo": "ciudad",
+      "region": "Suroeste",
+      "descripcion": "Pueblo colonial en río con arquitectura francesa decadente. Centro artístico y gastronómico emergente. Acceso a Kep y montañas de pimienta. Destino alternativo auténtico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Phnom Penh: autobús (4-5h, 8-12 EUR). Desde Kep: minibús (45 min, 2-3 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal Tara Boat: 7-12 EUR/noche",
+        "medio": "Guesthouse Memento Kampot: 25-40 EUR/noche",
+        "comfort": "Rikitikitavi Boutique Resort: 80-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo riverside por Riverside Road (gratis)",
+        "Tour Bokor National Park (40-60 EUR, día completo)",
+        "Plantaciones pimienta con cata (tour 30-40 EUR)",
+        "Galería de arte y artesanía (gratis, compra opcional)",
+        "Kayak en río Preaek Tuek Chhu (20-30 EUR)"
+      ],
+      "donde_comer": "Bouillabaisse y comida franco-jemer en Rosewood Cafe (10-15 EUR). Street food en mercado (1-3 EUR). Cócteles en jardín de restaurantes riverside (5-10 EUR)",
+      "consejo_local": "Kampot tiene comunidad artística expatriada fuerte; la gastrería es buena para Camboya. Las plantaciones de pimienta son experiencia genuina. Bokor es excursión de día pero requiere levantarse temprano",
+      "plan_b_lluvia": "Galerías, spas, cocteles riverside",
+      "keywords": [
+        "Kampot",
+        "arquitectura colonial",
+        "pimienta",
+        "Bokor",
+        "río",
+        "artístico",
+        "gastronómico"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,398 @@
+{
+  "pais": "Argentina",
+  "codigo": "ar",
+  "destinos": [
+    {
+      "id": "buenos-aires",
+      "nombre": "Buenos Aires",
+      "tipo": "ciudad",
+      "region": "Buenos Aires",
+      "descripcion": "Capital cosmopolita con arquitectura europea, tango, gastronomía de clase mundial y vida nocturna intensa. Centro cultural y económico del país, punto de entrada obligatorio para la mayoría de viajeros. Barrios históricos como La Boca y San Telmo ofrecen contraste con la modernidad de Recoleta y Palermo.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "marzo a mayo, septiembre a noviembre",
+      "como_llegar": "Llegada internacional al Aeropuerto de Ministro Pistarini (35 km): autobús (1 hora, 10-15 EUR), taxi/Uber (35-45 EUR), tren (1,5 horas, 3 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal en San Telmo, La Boca o Flores: 18-28 EUR/noche",
+        "medio": "Hotel 3* en Recoleta, Palermo o San Nicolás: 50-80 EUR/noche",
+        "comfort": "Hotel 4-5* en Recoleta o Barrio Norte: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Teatro Colón (visita guiada, 10 EUR)",
+        "Mercado de San Telmo (domingos, gratis)",
+        "Paseo La Boca - Caminito (gratis)",
+        "Cementerio de la Recoleta (gratis)",
+        "Espectáculo de tango con cena (45-80 EUR)",
+        "MALBA - museo de arte (12 EUR)"
+      ],
+      "donde_comer": "Asados y parrillas en cualquier barrio (15-25 EUR), bifes en La Boca y San Telmo, pizzas porteñas (2-4 EUR), dulce de leche y facturas. Zona económica: alrededor de Corrientes; zona cara: Recoleta.",
+      "consejo_local": "Evita mostrar celular/dinero en La Boca después del atardecer. Los cafés clásicos (Tortoni, Richmond) son caros pero imprescindibles. Come asado el fin de semana.",
+      "plan_b_lluvia": "Museos cerrados (MALBA, Bellas Artes gratis), cines en las cadenas (2-8 EUR), compras en Galerías Pacífico, ferias de artesanías bajo techo.",
+      "keywords": [
+        "CABA",
+        "La Boca",
+        "San Telmo",
+        "Recoleta",
+        "Palermo",
+        "Tango",
+        "Asado",
+        "Teatro Colón",
+        "Caminito",
+        "Portenos"
+      ]
+    },
+    {
+      "id": "mendoza",
+      "nombre": "Mendoza",
+      "tipo": "rural",
+      "region": "Cuyo",
+      "descripcion": "Capital mundial del vino argentino con bodegas de clase mundial en el Valle de Uco. Regiones vitícolas accesibles a pie o en bicicleta, degustaciones premium y paisaje de viñedos al pie de los Andes. Punto ideal para combinar enología, gastronomía y naturaleza.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "marzo a mayo, septiembre a octubre",
+      "como_llegar": "Desde Buenos Aires: vuelo (2,5 horas, 30-80 EUR low-cost), autobús (15 horas, 25-40 EUR). Desde Mendoza ciudad a bodegas: tour compartido (60-100 EUR incluye degustaciones)",
+      "donde_dormir": {
+        "mochilero": "Hostal en Mendoza ciudad: 20-30 EUR/noche",
+        "medio": "Hotel 3* o lodge en Maipú/Luján: 50-80 EUR/noche",
+        "comfort": "Wine lodge con bodega: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour bodega Malbec con degustación (40-70 EUR)",
+        "Cicloturismo por viñedos (50-80 EUR incluye bike)",
+        "Aconcagua base camp - día completo (80-120 EUR)",
+        "Parque General San Martín Mendoza (gratis)",
+        "Pueblo de Maipú - degustación artesanal (10-30 EUR)"
+      ],
+      "donde_comer": "Asados locales con vino Malbec (20-30 EUR), empanadas mendocinas (1-2 EUR), bodegas con menú degustación (35-60 EUR). Zona cara: restaurantes en bodegas premium.",
+      "consejo_local": "Las bodegas abren de 9 a 17h, llama antes para tours. El vino es barato pero calidad/precio es excelente. Renta bicicleta en Mendoza ciudad (10 EUR/día) para explorar Maipú sin guía.",
+      "plan_b_lluvia": "Visita las bodegas igual (son cubiertas), compra vino en tiendas especializadas, come en restaurantes con vista a los Andes.",
+      "keywords": [
+        "Mendoza",
+        "Vino",
+        "Malbec",
+        "Valle de Uco",
+        "Maipú",
+        "Luján de Cuyo",
+        "Aconcagua",
+        "Bodega",
+        "Degustacion"
+      ]
+    },
+    {
+      "id": "salta",
+      "nombre": "Salta",
+      "tipo": "ciudad",
+      "region": "Noroeste",
+      "descripcion": "Capital colonial del norte con arquitectura barroca, iglesias históricas y centro bien preservado. Punto base para explorar paisajes espectaculares: Serranías del Hornocal, Purmamarca y la Quebrada de Humahuaca. Cultura local fuerte y gastronomía regional única.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril a mayo, septiembre a octubre",
+      "como_llegar": "Desde Buenos Aires: vuelo (2 horas, 40-100 EUR), autobús (18 horas, 30-45 EUR). Desde Salta a Purmamarca: autobús (1,5 horas, 3 EUR) o tour (35-50 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal en centro histórico: 18-28 EUR/noche",
+        "medio": "Hotel 3* cerca Plaza 9 de Julio: 45-75 EUR/noche",
+        "comfort": "Hotel 4* o estancia colonial: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Catedral y Basílica de Salta (gratis)",
+        "Serranías del Hornocal - Paleta del Pintor día completo (80-100 EUR con guía)",
+        "Purmamarca y Cerro de los Siete Colores (gratis, tour 30-40 EUR)",
+        "Salinas Grandes - excursión (70-90 EUR)",
+        "MAAM - museo arqueológico (10 EUR)"
+      ],
+      "donde_comer": "Empanadas salteñas (1-2 EUR), locro (guiso regional, 8-12 EUR), tamales, choripán. Mercado Central para comida barata. Restaurantes en Plaza 9 de Julio más caros (15-25 EUR).",
+      "consejo_local": "Ve a Purmamarca sin tour si quieres ahorrar - autobús es barato y Cerro de los Siete Colores se ve desde el pueblo. Serranías del Hornocal requiere guía (caminos no marcados). Prueba la cerveza artesanal local.",
+      "plan_b_lluvia": "Iglesias y museos cerrados, compras en mercado local, cocina de café, recorre galerías de arte en el centro.",
+      "keywords": [
+        "Salta",
+        "Noroeste",
+        "Purmamarca",
+        "Cerro Siete Colores",
+        "Serranías Hornocal",
+        "Quebrada Humahuaca",
+        "Salinas Grandes",
+        "Empanadas",
+        "Colonial"
+      ]
+    },
+    {
+      "id": "bariloche",
+      "nombre": "San Carlos de Bariloche",
+      "tipo": "montaña",
+      "region": "Patagonia Norte",
+      "descripcion": "Puerta a los lagos patagónicos con montañas nevadas, bosques de Nothofagus y lagos cristalinos. Destino activo con trekking, esquí invernal, kayak y rutas panorámicas. Centro de una región de trekking de clase mundial con acceso a parques nacionales.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "diciembre a febrero (verano), julio a agosto (esquí)",
+      "como_llegar": "Desde Buenos Aires: vuelo (2,5 horas, 50-120 EUR), autobús (24 horas, 40-55 EUR). Desde Bariloche a Cerro Campanario: teleférico (25 EUR ida/vuelta)",
+      "donde_dormir": {
+        "mochilero": "Hostal o cabaña en centro: 22-35 EUR/noche",
+        "medio": "Hotel 3* cerca del lago: 60-90 EUR/noche",
+        "comfort": "Refugio o lodge de montaña: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Parque Nacional Nahuel Huapi - Circuito Chico (caminata, gratis)",
+        "Teleférico Cerro Campanario (25 EUR)",
+        "Trekking a Laguna de los Tres Picos (gratis, 6 horas)",
+        "Cruce de Lagos a Chile (150 EUR, todo incluido)",
+        "Rafting río Limay (50-70 EUR)"
+      ],
+      "donde_comer": "Chocolate artesanal barilochense (5-10 EUR), truchas patagónicas (18-28 EUR), asados locales. Zona cara: Mitre (calle principal). Zona económica: callecitas paralelas.",
+      "consejo_local": "Compra un boleto de autobús para el Circuito Chico (3 EUR) y baja donde quieras para hacer trekking. El cruce de Lagos a Puerto Varas (Chile) es épico pero caro. Noviembre-diciembre llueve mucho.",
+      "plan_b_lluvia": "Museos de montaña, compra chocolate, visita la Cervecería Blest o Weizen (locales de cerveza artesanal), paseos cortos en bosque cubierto.",
+      "keywords": [
+        "Bariloche",
+        "Patagonia",
+        "Nahuel Huapi",
+        "Lagos",
+        "Trekking",
+        "Circuito Chico",
+        "Cerro Campanario",
+        "Chocolate",
+        "Montaña"
+      ]
+    },
+    {
+      "id": "puerto-iguazu",
+      "nombre": "Puerto Iguazú",
+      "tipo": "naturaleza",
+      "region": "Misiones",
+      "descripcion": "Cataratas del Iguazú, una de las maravillas naturales del mundo con 275 cascadas de agua en la frontera con Brasil y Paraguay. Selva subtropical con flora y fauna única. Acceso a tres países (Argentina, Brasil, Paraguay) desde un mismo punto.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a mayo, septiembre a octubre",
+      "como_llegar": "Desde Buenos Aires: vuelo (2 horas, 40-100 EUR), autobús (18 horas, 35-50 EUR). Desde Puerto Iguazú a Cataratas: autobús local (5 min, 0,3 EUR) o taxi (15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal en centro: 20-30 EUR/noche",
+        "medio": "Hotel 3* con vista a Paraná: 50-80 EUR/noche",
+        "comfort": "Resort en Cataratas: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Parque Nacional Iguazú lado Argentina (25 EUR)",
+        "Garganta del Diablo - circuito superior e inferior (incluido en entrada)",
+        "Paseo en lancha (60-80 EUR, opcional)",
+        "Parque Nacional Iguazú lado Brasil - día (40 EUR, incluye transporte)",
+        "Ruinas de San Ignacio (30 EUR, excursión)"
+      ],
+      "donde_comer": "Chipá (pan de queso local, 1-2 EUR), surubí (pez local, 15-22 EUR), asados en centro. Restaurantes en cataratas caros (20-35 EUR). Come en pueblo Puerto Iguazú.",
+      "consejo_local": "Entra temprano a las cataratas (07:00) para fotos sin multitud. Lleva poncho o bolsa plástica - te mojas de verdad en lancha. El lado brasileño es mejor para fotos panorámicas (45 min de Iguazú).",
+      "plan_b_lluvia": "Las cataratas lucen igual o mejor con lluvia (más agua). Visita lado brasileño igual. Compras de artesanía en centro.",
+      "keywords": [
+        "Iguazu",
+        "Iguazu Falls",
+        "Cataratas",
+        "Misiones",
+        "Garganta Diablo",
+        "Selva",
+        "Paraná",
+        "Frontera Brasil"
+      ]
+    },
+    {
+      "id": "cordoba",
+      "nombre": "Córdoba",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Segunda ciudad de Argentina con importante herencia jesuita, arquitectura colonial y centro histórico Patrimonio UNESCO. Base accesible para explorar las sierras del centro: embalses, pueblos andinos y trekking. Vida estudiantil activa y buena gastronomía.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "marzo a mayo, septiembre a octubre",
+      "como_llegar": "Desde Buenos Aires: vuelo (1,5 horas, 25-70 EUR), autobús (9 horas, 15-30 EUR), tren (8 horas, 20-35 EUR). Desde Córdoba a Sierras: autobús o auto rentado",
+      "donde_dormir": {
+        "mochilero": "Hostal en Nueva Córdoba: 18-28 EUR/noche",
+        "medio": "Hotel 3* centro: 45-70 EUR/noche",
+        "comfort": "Hotel 4* Barrio Historico: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Catedral Metropolitana (gratis)",
+        "Manzana Jesuita - iglesia y museo (8 EUR)",
+        "Paseo Buen Pastor - iglesia reconvertida (gratis)",
+        "Excursión a Embalse San Roque (día completo, 50-70 EUR o autobús)",
+        "Trekking Cerro Chamoso (gratis, 3 horas)"
+      ],
+      "donde_comer": "Milanesa cordobesa (15-20 EUR), empanadas, locro, choripán. Av. Hipólito Yrigoyen barato (8-15 EUR). Zona cara: barrio Nueva Córdoba.",
+      "consejo_local": "Nueva Córdoba es barrio joven con mejor oferta gastronómica que centro histórico. Las sierras son accesibles en autobús pero auto rentado da más libertad (30-40 EUR/día). Visita pueblos de las sierras: Cosquín, La Falda.",
+      "plan_b_lluvia": "Iglesias y museos cerrados, shopping en Paseo Buen Pastor, bares de café.",
+      "keywords": [
+        "Cordoba",
+        "Jesuita",
+        "Centro",
+        "Manzana Jesuita",
+        "Sierras",
+        "Nueva Cordoba",
+        "Embalse",
+        "Patrimonio UNESCO"
+      ]
+    },
+    {
+      "id": "la-pampa-bosques",
+      "nombre": "El Bolsón",
+      "tipo": "montaña",
+      "region": "Patagonia",
+      "descripcion": "Pueblo hippie en bosques de Chubut con ambiente alternativo, artesanía local, cultivos de lúpulo y acceso a trekking en la Comarca Andina. Mercado artesanal vibrante, arquitectura de madera y naturaleza sin masificación turística. Alternativa más barata y relajada a Bariloche.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a febrero, septiembre a octubre",
+      "como_llegar": "Desde Bariloche: autobús (2 horas, 5-8 EUR). Desde Buenos Aires: autobús (24 horas, 40-60 EUR). Local: minibús a miradores (2 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal o cabaña: 18-28 EUR/noche",
+        "medio": "Hotel o posada de madera: 50-80 EUR/noche",
+        "comfort": "Cabaña privada con vistas: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado artesanal de El Bolsón (jueves/viernes, gratis)",
+        "Cascada Azul trekking (gratis, 1,5 horas)",
+        "Laguna Torre (trekking, 6 horas, gratis)",
+        "Cervecería local artesanal - visita y degustación (15-25 EUR)",
+        "Paseo a Miradores (40-60 EUR con guía o camina)"
+      ],
+      "donde_comer": "Trucha (15-22 EUR), productos de granja local, cerveza artesanal (3-5 EUR), pizza de leña (8-12 EUR), té de hierbas silvestres. Come en pubs locales, no en cadenas.",
+      "consejo_local": "El mercado artesanal viernes es mejor que jueves. Hay guías locales que hacen trekking por menos que agencias. La cerveza El Bolsón es barata comparada a bares turísticos. Diciembre-enero es muy lleno.",
+      "plan_b_lluvia": "Café con wifi, tiendas de artesanía cubierta, lectura, cervecería local.",
+      "keywords": [
+        "El Bolson",
+        "Patagonia",
+        "Comarca Andina",
+        "Bohemio",
+        "Artesania",
+        "Cascada Azul",
+        "Cerveceria",
+        "Alternativo"
+      ]
+    },
+    {
+      "id": "la-boca-buenos-aires-inmersion",
+      "nombre": "Tafí del Valle",
+      "tipo": "montaña",
+      "region": "Noroeste",
+      "descripcion": "Valle de montaña en Tucumán a 2.000 metros de altura, alejado de turismo masivo, con pueblos andinos genuinos, arqueología y trekking fácil. Naturaleza de transición entre yungas y puna con población criolla. Ideal para viajeros buscando autenticidad sin infraestructura masiva.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a noviembre, marzo a abril",
+      "como_llegar": "Desde Tucumán ciudad: autobús (2,5 horas, 5-8 EUR). Desde Buenos Aires a Tucumán: vuelo (2,5 horas, 30-80 EUR) o autobús (16 horas, 25-40 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal o casa de familia: 15-25 EUR/noche",
+        "medio": "Hotel pequeño o estancia: 40-65 EUR/noche",
+        "comfort": "Lodge de montaña: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a Laguna del Siete Colores (gratis, 4 horas)",
+        "Paseo a pueblos andinos cercanos - Amaicha (transporte local, 2 EUR)",
+        "Pucará de Aconquija - ruinas arqueológicas (gratis, caminata)",
+        "Observación de cóndores en Ruta 9 (gratis)",
+        "Compra de artesanía local directamente a tejedoras"
+      ],
+      "donde_comer": "Empanadas locales (1-2 EUR), locro, tamales, queso fresco. Casas de familia sirven comida tradicional (8-12 EUR). No hay restaurantes caros - la infraestructura es mínima.",
+      "consejo_local": "Alójate en familia local - mejor comida y conexión. Necesitas vehículo propio o guía para explorar bien (alquilar auto 30 EUR/día). Lleva abrigo - noches frías a esta altura incluso en verano.",
+      "plan_b_lluvia": "Lluvia es rara, pero si hay, hay juegos de mesa en hospedajes, paseos por pueblo.",
+      "keywords": [
+        "Tafi del Valle",
+        "Tucuman",
+        "Andino",
+        "Montaña",
+        "Arqueologia",
+        "Amaicha",
+        "Puna",
+        "Autentico",
+        "Pueblos"
+      ]
+    },
+    {
+      "id": "la-paloma-uruguay",
+      "nombre": "Mar del Plata",
+      "tipo": "playa",
+      "region": "Buenos Aires",
+      "descripcion": "Principal balneario costero argentino a 400 km de Buenos Aires, con playas amplias, paseo marítimo, puerto pesquero activo y vida nocturna. Menos caro que destinos de lujo pero con infraestructura turística completa. Escape de fin de semana o paso hacia península Valdés.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde Buenos Aires: autobús (5,5 horas, 12-20 EUR), auto rentado (400 km). Desde Mar del Plata a Península Valdés: excursión o seguir de allí",
+      "donde_dormir": {
+        "mochilero": "Hostal en centro o playa: 20-30 EUR/noche",
+        "medio": "Hotel 3* frente al mar: 50-80 EUR/noche",
+        "comfort": "Hotel 4-5* con vista playa: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Bristol o Playa Grande (gratis)",
+        "Paseo Marítimo - mercado de pescado (gratis)",
+        "Faro de Punta Mogotes (entrada, 3 EUR)",
+        "Acuario y Museo del Mar (12 EUR)",
+        "Excursión a Balneario Ostende - playas menos concurridas (transporte local)"
+      ],
+      "donde_comer": "Mariscos frescos en puerto (merluza, calamar, 15-22 EUR), rabas (calamares fritos, 8-12 EUR), pizzas. Puerto es barato y auténtico. Calle Mitre turística y cara.",
+      "consejo_local": "Enero es pico - ve diciembre o febrero si quieres playas menos llenas y precios más bajos. El mercado de pescado al atardecer es vida real - come allí. Tren desde Buenos Aires es muy barato (5 EUR) pero lento (8 horas).",
+      "plan_b_lluvia": "Museos cerrados, pesca desde puerto, cafés y shopping.",
+      "keywords": [
+        "Mar del Plata",
+        "Playa",
+        "Balneario",
+        "Costa",
+        "Verano",
+        "Merluza",
+        "Puerto",
+        "Faro"
+      ]
+    },
+    {
+      "id": "peninsula-valdes",
+      "nombre": "Península Valdés",
+      "tipo": "naturaleza",
+      "region": "Patagonia Sur",
+      "descripcion": "Reserva natural con fauna marina única: ballenas francas, elefantes marinos, pingüinos y orca. Paisaje árido patagónico con playas protegidas. Imprescindible para observación de vida silvestre sin destino específico - solo desde Puerto Madryn o Puerto Pyramides.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a noviembre (ballenas), noviembre a marzo (orcas)",
+      "como_llegar": "Desde Buenos Aires a Puerto Madryn: vuelo (3 horas, 50-120 EUR) o autobús (18 horas, 40-60 EUR). Desde Puerto Madryn a Península: tour (80-120 EUR) o auto rentado (150+ EUR/día)",
+      "donde_dormir": {
+        "mochilero": "Hostal en Puerto Madryn: 20-30 EUR/noche",
+        "medio": "Hotel 3* Puerto Madryn o Pyramides: 60-90 EUR/noche",
+        "comfort": "Resort en Península: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour Península Valdés completo - ballenas y fauna (80-120 EUR, 6 horas)",
+        "Avistamiento de ballenas francas (junio-octubre, incluido en tour)",
+        "Buceo con leones marinos - Puerto Madryn (120 EUR)",
+        "Trekking Punta Loma (gratis, 2 horas)",
+        "Paseo en bote a Puerto Pyramides (40-60 EUR)"
+      ],
+      "donde_comer": "Mariscos frescos (centolla, erizo, 20-35 EUR), trucha, cordero patagónico (25-35 EUR). Puerto Madryn más opciones. Península cara.",
+      "consejo_local": "Reserva tour con adelanto - se llenan. Junio-octubre es temporada de ballenas (julio-agosto mejor). No necesitas tour privado - compartidos son baratos y buena onda. Puerto Madryn tiene más servicios que Península.",
+      "plan_b_lluvia": "Tours de fauna van igual (lluvia no afecta). Museo Oceanográfico en Puerto Madryn (10 EUR).",
+      "keywords": [
+        "Peninsula Valdes",
+        "Ballenas",
+        "Leones Marinos",
+        "Puerto Madryn",
+        "Fauna",
+        "Pingüinos",
+        "Orcas",
+        "Patagonia"
+      ]
+    },
+    {
+      "id": "jujuy-ruta-9",
+      "nombre": "Tilcara",
+      "tipo": "histórico",
+      "region": "Noroeste",
+      "descripcion": "Pueblo colonial en Quebrada de Humahuaca (Patrimonio UNESCO) con arqueología precolombina, arte local y gastronomía tradicional. Pueblo artístico auténtico sin masificación de Purmamarca pero con buena infraestructura. Centro cultural de la región andina argentina.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a mayo, septiembre a octubre",
+      "como_llegar": "Desde Salta: autobús (2,5 horas, 8-12 EUR). Desde Buenos Aires a Salta: vuelo (2 horas, 40-100 EUR) + autobús. Buses locales conectan pueblos de la Quebrada (5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal o albergue: 18-26 EUR/noche",
+        "medio": "Hotel pequeño: 40-65 EUR/noche",
+        "comfort": "Posada con patio: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Pucará de Tilcara - fortaleza precolombina (7 EUR, vistas panorámicas)",
+        "Museo de Arqueología (8 EUR)",
+        "Paseo por pueblo - iglesia y plazas (gratis)",
+        "Balneario de Puente (playa fluvial, gratis)",
+        "Trekking a Paleta del Pintor (15 EUR con guía o gratis sin)"
+      ],
+      "donde_comer": "Empanadas jujeñas (1-2 EUR), locro, tamales, pastel de choclo (10-15 EUR). Restaurantes turísticos en plaza caros (18-25 EUR). Come con locales en almacenes.",
+      "consejo_local": "Tilcara es más artístico y vivo que Purmamarca - mejor para hospedarse. Pucará merece subir (30 min) para vistas. Combina con Maimará y Paleta del Pintor en día desde Salta.",
+      "plan_b_lluvia": "Museos cerrados, artesanía en galerías, cafés locales.",
+      "keywords": [
+        "Tilcara",
+        "Quebrada Humahuaca",
+        "Pucara",
+        "Jujuy",
+        "Arqueologia",
+        "Andino",
+        "Patrimonio UNESCO",
+        "Empanadas"
+      ]
+    }
+  ]
+}

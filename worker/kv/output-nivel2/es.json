@@ -1,0 +1,391 @@
+{
+  "pais": "España",
+  "codigo": "es",
+  "destinos": [
+    {
+      "id": "barcelona",
+      "nombre": "Barcelona",
+      "tipo": "ciudad",
+      "region": "Cataluña",
+      "descripcion": "Capital catalana con arquitectura modernista única (Gaudí), playas urbanas y vida cultural intensa. Mezcla de barrios bohemios como el Gótico y Born con zonas modernas. Centro de transporte, gastronomía y vida nocturna en la costa mediterránea.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo, junio, septiembre, octubre",
+      "como_llegar": "Desde Madrid: tren AVE 2,5h (25-45€), vuelo 1h (20-60€), bus 7h (15-30€). Aeropuerto internacional a 12km.",
+      "donde_dormir": {
+        "mochilero": "Albergue en Raval o Born: 18-28€/noche",
+        "medio": "Apartamento en Eixample o Gràcia: 60-90€/noche",
+        "comfort": "Hotel 4* en Paseo de Gracia: 150-250€/noche"
+      },
+      "que_hacer": [
+        "Sagrada Familia (15€, reserva online)",
+        "Park Güell (10€, ir antes de las 8:30 para evitar colas)",
+        "Barrio Gótico y La Rambla (gratis)",
+        "Montjuïc con teleférico y museo MNAC (6€ teleférico)",
+        "Playa de la Barceloneta (gratis)",
+        "Mercat de la Boqueria para comer (5-12€)"
+      ],
+      "donde_comer": "Tapas en Born o Gràcia (8-15€ por ración), escalivada y calcots en invierno, paella en zona de playa. Evitar La Rambla (turístico caro).",
+      "consejo_local": "Compra el T-Casual de 10 viajes en metro (11,35€) en lugar de tickets sueltos. Las mejores vistas de la ciudad desde Bunkers del Carmel (gratis, al atardecer).",
+      "plan_b_lluvia": "MNAC o Fundació Joan Miró (12€ cada uno), Mercat de la Boqueria, cines de VO en Gràcia.",
+      "keywords": [
+        "Barcelona, Barna, BCN",
+        "Gaudí, Sagrada Familia",
+        "Gòtic, Born, Eixample, Gràcia",
+        "modernisme català",
+        "playa urbana",
+        "tapas catalanas"
+      ]
+    },
+    {
+      "id": "madrid",
+      "nombre": "Madrid",
+      "tipo": "ciudad",
+      "region": "Comunidad de Madrid",
+      "descripcion": "Capital española con tres grandes museos (Prado, Reina Sofía, Thyssen), vida nocturna legendaria y barrios con mucho carácter. Centro administrativo y cultural del país con parques amplios y gastronomía de todas las regiones.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril, mayo, septiembre, octubre",
+      "como_llegar": "Puerta de entrada principal de España. Desde Barcelona: AVE 2,5h (25-45€), vuelo 1h (20-50€). Dos aeropuertos principales.",
+      "donde_dormir": {
+        "mochilero": "Albergue en Malasaña o Chueca: 20-30€/noche",
+        "medio": "Apartamento en Sol o Lavapies: 55-80€/noche",
+        "comfort": "Hotel 4* en Retiro o Salamanca: 120-200€/noche"
+      },
+      "que_hacer": [
+        "Museos del Triángulo del Arte: Prado, Reina Sofía, Thyssen (15€ cada uno, algunos gratis 18-20h)",
+        "Parque del Retiro y Jardín Botánico (6€, o pasear gratis)",
+        "Barrio de La Latina y Palacio Real (20€ interior, gratis fachada)",
+        "Plaza Mayor y Mercado de San Miguel (comer, no solo mirar)",
+        "Malasaña y Chueca para vida bohemia (gratis)"
+      ],
+      "donde_comer": "Bocadillos de calamares en Sol (3-5€), cocido madrileño en tabernas clásicas (12-18€), raciones en bares de Malasaña (6-10€). Mercado de San Miguel para aperitivos (2-8€ por pincho).",
+      "consejo_local": "El metro de Madrid es el mejor transporte: bono de 10 viajes (12,20€). Come la comida principal a las 14h y cena después de las 21h (los españoles salen después). La mejor horchata en San Isidro.",
+      "plan_b_lluvia": "Museos tienen aire acondicionado; CaixaForum (8€) es espectacular. Galerías comerciales en Gran Vía.",
+      "keywords": [
+        "Madrid, MAD",
+        "Prado, Reina Sofía, Thyssen",
+        "Retiro, La Latina",
+        "Malasaña, Chueca",
+        "Plaza Mayor",
+        "Sol, Lavapiés"
+      ]
+    },
+    {
+      "id": "granada",
+      "nombre": "Granada",
+      "tipo": "histórico",
+      "region": "Andalucía",
+      "descripcion": "Cuna de la arquitectura islámica española con la Alhambra como joya principal. Ciudad universitaria con ambiente bohemio, bares de tapas baratos y vistas de la Sierra Nevada. Epicentro de la cultura morisca medieval.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril, mayo, octubre, noviembre",
+      "como_llegar": "Desde Madrid: autobús 7h (15-25€), vuelo 1h (30-60€), tren 4h (30-50€). Desde Barcelona: vuelo 1,5h (25-50€), autobús 11h (25-40€).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Albaicín o centro: 18-26€/noche",
+        "medio": "Apartamento riad en Albaicín: 50-75€/noche",
+        "comfort": "Hotel cerca de Plaza Nueva: 100-160€/noche"
+      },
+      "que_hacer": [
+        "Alhambra y Generalife (15€, compra con antelación online para evitar colas)",
+        "Albaicín a pie (barrio medieval gratis, mirador de San Nicolás al atardecer gratis)",
+        "Capilla Real con sepulcros católicos (5€)",
+        "Monasterio de la Cartuja (5€)",
+        "Paseo por el Darro y miradores nocturnos (gratis)",
+        "Barrio del Realejo para arte callejero (gratis)"
+      ],
+      "donde_comer": "Tapas gratis (o muy baratas 2-3€) con bebida en bares de Calle Navas y Realejo. Chivo con cerveza (3€ tapa). Mercado de San Agustín para comida de pie (5-10€).",
+      "consejo_local": "En Granada aún se regala tapa con cada bebida en muchos bares: ve a los locales, no turísticos. El Albaicín es un laberinto: piérdete, no sigas mapas. Para la Alhambra, compra entrada 3 días antes online (evita 2h de cola).",
+      "plan_b_lluvia": "Catedral y Capilla Real (8€), museos de Bellas Artes y Arqueológico, hammam árabe Al Ándatus (25€).",
+      "keywords": [
+        "Granada, Grenade",
+        "Alhambra, Generalife",
+        "Albaicín, barrio medieval",
+        "tapas baratas",
+        "Sierra Nevada",
+        "islámica, morisca",
+        "Realejo"
+      ]
+    },
+    {
+      "id": "sevilla",
+      "nombre": "Sevilla",
+      "tipo": "ciudad",
+      "region": "Andalucía",
+      "descripcion": "Capital andaluza con la tercera catedral más grande de Europa, flamenco auténtico y ambiente festivo. Patrias del flamenco y la tauromaquia con barrios coloridos junto al Guadalquivir. Gastronomía rica y noche intensa.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "marzo, abril, octubre, noviembre",
+      "como_llegar": "Desde Madrid: AVE 2,5h (25-50€), autobús 6h (15-30€), vuelo 1h (25-60€). Desde Granada: autobús 3h (10-18€), tren 3h (15-35€).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Triana o Santa Cruz: 20-28€/noche",
+        "medio": "Apartamento en Triana o Arenal: 55-85€/noche",
+        "comfort": "Hotel 4* cerca de Catedral: 110-180€/noche"
+      },
+      "que_hacer": [
+        "Catedral y Giralda (12€, con vistas desde arriba)",
+        "Real Alcázar (14€, palacios y jardines)",
+        "Barrio de Santa Cruz paseo sin meta (gratis)",
+        "Triana para flamenco en bares (entrada 10-15€ con consumición)",
+        "Torre del Oro y paseo por Guadalquivir (3€ torre, paseo gratis)",
+        "Plaza de España (gratis, espectacular al atardecer)",
+        "Mercado de Triana (gratis pasear, comer 5-12€)"
+      ],
+      "donde_comer": "Espinacas con garbanzos, rabo de toro, pescaito frito (8-15€). Bares en Triana y Santa Cruz (3-6€ tapa). Vinos locales jerez y manzanilla (2-3€ copa).",
+      "consejo_local": "El flamenco de taberna (peña) es más auténtico y barato que los espectáculos turísticos. Ve a Triana después de las 23h para ver flamenco real. La Semana Santa es épica pero abarrotada (reserva con meses de anticipación).",
+      "plan_b_lluvia": "Museo de Bellas Artes (1,5€, martes-sábado), Basílica de la Macarena, Centro Cerámica Triana.",
+      "keywords": [
+        "Sevilla, Seville",
+        "Catedral, Giralda",
+        "Real Alcázar",
+        "Santa Cruz, Triana",
+        "flamenco",
+        "Guadalquivir",
+        "tauromaquia"
+      ]
+    },
+    {
+      "id": "san-sebastian",
+      "nombre": "San Sebastián",
+      "tipo": "ciudad",
+      "region": "País Vasco",
+      "descripcion": "Destino gastronómico número uno de España con pintxos de nivel mundial. Ciudad costera con tres playas urbanas (Concha, Ondarreta, Zurriola) y gastronomía accesible. Capital cultural vasca con txoko (bares gastronómicos locales).",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio, julio, septiembre",
+      "como_llegar": "Desde Madrid: autobús 6h (20-35€), tren 5h (30-60€), vuelo 1h (40-80€). Desde Barcelona: autobús 7h (20-35€), vuelo 1h (30-70€).",
+      "donde_dormir": {
+        "mochilero": "Albergue en centro: 25-35€/noche",
+        "medio": "Apartamento en Parte Vieja o Gros: 70-110€/noche",
+        "comfort": "Hotel frente a playa Concha: 140-220€/noche"
+      },
+      "que_hacer": [
+        "Playas Concha, Ondarreta, Zurriola (gratis, agua fría)",
+        "Parte Vieja (casco antiguo): bares de pintxos (1-2€ cada uno)",
+        "Monte Igueldo con funicular y vistas (3,15€ ida y vuelta)",
+        "Paseo de la Concha y Peine del Viento (gratis)",
+        "Museo de San Telmo (6€)",
+        "Bares de txoko para probar sidra (5-10€)"
+      ],
+      "donde_comer": "Pintxos en Parte Vieja (1-3€): jamón ibérico, anchoas, mariscos. Come saltando de bar en bar. Menú del día 12-18€ en restaurantes. Sidra con tortilla de patatas es obligatorio.",
+      "consejo_local": "Los pintxos son para comerlos de pie, saltando de bar en bar: toma 10-15 y gastarás 20-25€. La playa Zurriola es la más local (menos turismo). Come entre las 13h y 14h para menús económicos.",
+      "plan_b_lluvia": "Museos (San Telmo, contemporáneo), bares de pintxos, galerías de Parte Vieja, cines en VO.",
+      "keywords": [
+        "San Sebastián, Donostia, San Seba",
+        "pintxos, txoko",
+        "playas Concha",
+        "gastronomía vasca",
+        "Parte Vieja",
+        "sidra",
+        "anchoas"
+      ]
+    },
+    {
+      "id": "valencia",
+      "nombre": "Valencia",
+      "tipo": "ciudad",
+      "region": "Comunidad Valenciana",
+      "descripcion": "Ciudad de la paella junto al Mediterráneo con arquitectura futurista de la Ciudad de las Artes y las Ciencias. Playas accesibles desde el centro, comida barata y ambiente desenfadado. Centro de experimentación gastronómica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril, mayo, septiembre, octubre",
+      "como_llegar": "Desde Madrid: AVE 1,5h (20-40€), vuelo 1h (25-60€), autobús 4h (15-30€). Desde Barcelona: autobús 3h (15-25€), tren 3h (25-40€).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Ruzafa: 20-28€/noche",
+        "medio": "Apartamento en Ruzafa o centro: 50-80€/noche",
+        "comfort": "Hotel cerca de Ciudad de las Artes: 100-160€/noche"
+      },
+      "que_hacer": [
+        "Ciudad de las Artes y las Ciencias: Museos Oceanográfico y Ciencias (27€ entrada combinada)",
+        "Playas Malvarrosa o Cabañal (gratis, arena fina)",
+        "Huerta de Valencia en bici (ruta turística o libre, 10-15€ bici alquiler)",
+        "Barrio de Ruzafa para vida local (gratis pasear, bares 3-8€)",
+        "Mercado Central (gratis pasear, comer 5-12€)",
+        "Turia Park: paseo ajardinado sobre antiguo río (gratis, 9km)"
+      ],
+      "donde_comer": "Paella (10-20€ en restaurante, 5-8€ en mercado), arròs a banda, esgarraet. Bares en Ruzafa para pinchos (2-4€). Agua de horchata con fartons (3€).",
+      "consejo_local": "La paella de mediodía es mejor que la de cena y más barata. Ve al Mercado Central a comer, no solo mirar. Las playas están a 20 minutos a pie desde el centro. Evita comer paella en los restaurantes de playa (turístico caro).",
+      "plan_b_lluvia": "Museos de la Ciudad de las Artes (cubiertos), Museo de Bellas Artes (gratis), bares de Ruzafa.",
+      "keywords": [
+        "Valencia, Valéncia",
+        "paella, arròs",
+        "Ciudad de las Artes",
+        "playas Malvarrosa",
+        "Ruzafa",
+        "Turia Park",
+        "Mercado Central",
+        "huerta"
+      ]
+    },
+    {
+      "id": "cordoba",
+      "nombre": "Córdoba",
+      "tipo": "histórico",
+      "region": "Andalucía",
+      "descripcion": "Ciudad patrimonio con la Mezquita-Catedral como obra maestra islámica medieval. Puente Romano sobre el Guadalquivir con barrio judío (Judería) laberíntico. Menos turística que Granada, más auténtica y manejable.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo, abril, octubre, noviembre",
+      "como_llegar": "Desde Madrid: tren 2h (15-40€), autobús 3h (12-25€). Desde Sevilla: tren 45 min (8-15€), autobús 1,5h (5-12€). Desde Granada: autobús 3h (10-18€).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Judería: 18-26€/noche",
+        "medio": "Apartamento riad cerca de Mezquita: 45-70€/noche",
+        "comfort": "Parador (hotel histórico): 100-150€/noche"
+      },
+      "que_hacer": [
+        "Mezquita-Catedral (15€, imprescindible al amanecer)",
+        "Judería paseo medieval (gratis)",
+        "Puente Romano y Torre de Calahorra (8€ torre, puente gratis)",
+        "Palacio de Viana (8€, patios andaluces espectaculares)",
+        "Ribera del Guadalquivir (gratis)",
+        "Alcázar de los Reyes Cristianos (5€)"
+      ],
+      "donde_comer": "Espinacas con garbanzos, rabo de toro, salmorejo (versión cordobesa del gazpacho, 4-6€). Jamón ibérico. Bares en Judería (2-4€ tapa gratis con bebida).",
+      "consejo_local": "Entra a la Mezquita muy temprano (8h abre) para verla casi vacía. La Judería es un laberinto: piérdete, sus plazas pequeñas son gemas. El salmorejo de Espejo (pueblo cercano) es el más auténtico, pero Córdoba tiene bueno.",
+      "plan_b_lluvia": "Museos de Bellas Artes y Arqueológico, sinagoga Maimonides.",
+      "keywords": [
+        "Córdoba, Cordoba",
+        "Mezquita-Catedral, islámica",
+        "Judería, barrio judío",
+        "Puente Romano",
+        "Guadalquivir",
+        "salmorejo",
+        "Viana"
+      ]
+    },
+    {
+      "id": "ibiza",
+      "nombre": "Ibiza",
+      "tipo": "isla",
+      "region": "Islas Baleares",
+      "descripcion": "Isla de fiesta mundial pero con calas vírgenes, gastronomía hippy-gourmet y pueblos blancos. Más allá de la vida nocturna de Playa d'en Bossa y Pacha hay playas salvajes, inmersión en naturaleza y ambiente desenfadado.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo, junio, septiembre",
+      "como_llegar": "Desde Madrid: vuelo 2h (40-100€), ferry + autobús no es viable. Desde Barcelona: vuelo 1h (30-80€), ferry 9h (40-60€) + autobús 2h. Desde Valencia: ferry 6h (30-50€).",
+      "donde_dormir": {
+        "mochilero": "Hostal en Dalt Vila (barrio antiguo): 30-50€/noche",
+        "medio": "Apartamento en San Antonio o calas: 70-110€/noche",
+        "comfort": "Resort en Playa d'en Bossa: 150-300€/noche"
+      },
+      "que_hacer": [
+        "Dalt Vila (casco antiguo fortificado gratis, vistas al atardecer)",
+        "Calas Xaracà, Benirrás, Conta (gratis, aguas turquesas)",
+        "Playa d'en Bossa para ver ambiente de clubs (gratis, clubs 30-60€ entrada + consumición)",
+        "Pueblo de Santa Eulalia (bohemio, gratis)",
+        "Salinas de Ibiza (gratis pasear)",
+        "Paseo marítimo de San Antonio (gratis, mercadillo hippy sábados)"
+      ],
+      "donde_comer": "Pescado a la sal (18-25€), tapas del Mediterráneo (3-5€), sofrito ibicenco. Bares en Dalt Vila con vistas (8-15€). Mercadillos hippy de San Antonio para comida étnica (4-10€).",
+      "consejo_local": "La mayoría del turismo está en 1-2 zonas (Playa d'en Bossa, pacha). Alquila moto o coche y descubre calas desconocidas al norte. Come en tabernillas locales en pueblos, no en frente de playa. En mayo-junio clima perfecto, precios bajos, poca aglomeración.",
+      "plan_b_lluvia": "Museos de Dalt Vila, tiendas hippy, clubs (actúan igual con lluvia).",
+      "keywords": [
+        "Ibiza, Eivissa",
+        "calas, playas",
+        "Dalt Vila, patrimonio",
+        "Playa d'en Bossa, clubs",
+        "San Antonio, hippy",
+        "salinas",
+        "fiesta, electrónica"
+      ]
+    },
+    {
+      "id": "ronda",
+      "nombre": "Ronda",
+      "tipo": "rural",
+      "region": "Andalucía",
+      "descripcion": "Pueblo blanco espectacular sobre acantilados con el Puente Nuevo colgante sobre garganta. Destino rural con arquitectura andaluza pura, corridas de toros históricas y vinos de montaña. Parada entre Granada y Málaga.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril, mayo, octubre",
+      "como_llegar": "Desde Granada: autobús 2h (8-15€), coche alquilado 2h. Desde Sevilla: autobús 2,5h (12-20€). Desde Málaga: autobús 2h (8-15€).",
+      "donde_dormir": {
+        "mochilero": "Casa rural o pensión: 25-40€/noche",
+        "medio": "Hotel pequeño en casco: 60-90€/noche",
+        "comfort": "Parador o hotel spa: 120-180€/noche"
+      },
+      "que_hacer": [
+        "Puente Nuevo y paseos sobre acantilados (gratis, espectacular)",
+        "Barrio antiguo y Palacio Mondragón (5€ palacio, barrio gratis)",
+        "Plaza de Toros histórica (7€, una de las más viejas de España)",
+        "Iglesia de Santa María (2€)",
+        "Puenta Vieja romana (gratis)",
+        "Senderos en El Tajo (barranco, gratis)"
+      ],
+      "donde_comer": "Rabo de toro, espinacas con garbanzos, quesos de montaña (8-15€ menú). Vinos dulces locales de Ronda. Bares pequeños sin turismo (menú 9-12€).",
+      "consejo_local": "Ronda es pequeña y se ve en 3-4h, pero merece quedarse a dormir para verla sin turistas al atardecer y temprano. Los miradores sobre El Tajo son más espectaculares desde abajo (senderos, 1h).",
+      "plan_b_lluvia": "Plaza de Toros museo, iglesias, museos pequeños.",
+      "keywords": [
+        "Ronda, pueblos blancos",
+        "Puente Nuevo, acantilados",
+        "El Tajo, garganta",
+        "tauromaquia",
+        "vinos montaña",
+        "Andalucía rural"
+      ]
+    },
+    {
+      "id": "mallorca",
+      "nombre": "Mallorca",
+      "tipo": "isla",
+      "region": "Islas Baleares",
+      "descripcion": "Isla más grande de Baleares con playas paradisiacas, sierra de Tramuntana para senderismo y pueblos medievales. Destino versátil para playa, naturaleza y cultura. Accesible y con vida local más allá de zonas turísticas.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo, junio, septiembre, octubre",
+      "como_llegar": "Desde Madrid: vuelo 2h (30-80€). Desde Barcelona: vuelo 1h (25-70€), ferry 7h (40-60€). Desde Valencia: ferry 8h (30-50€).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Palma: 25-35€/noche",
+        "medio": "Apartamento en Palma o Pollença: 60-95€/noche",
+        "comfort": "Hotel 4* en playa: 120-200€/noche"
+      },
+      "que_hacer": [
+        "Catedral y Palacio Real de La Almudaina en Palma (8€ catedral, 8€ palacio)",
+        "Playas Formentor, Pollença, Es Trenc (gratis, más silvestres al norte)",
+        "Serra de Tramuntana senderismo (ruta Sóller-Deià, gratis, 4h)",
+        "Pueblos Valldemossa y Deià (bohemios, gratis pasear)",
+        "Grutas de Drach (15€, espectáculo de luz dentro)",
+        "Paseo por Palma y Lonja (gratis)",
+        "Mercado Olivar de Palma (gratis pasear, comer 5-10€)"
+      ],
+      "donde_comer": "Tumbet (verduras asadas), sobrasada (embutido balear), langostinos. Menú del día en Palma (12-18€). Pescado fresco en pueblos de norte (15-25€).",
+      "consejo_local": "Alquila coche para explorar el norte (Sóller, Valldemossa, Deià): el tren de Sóller es bonito pero caro (15€). Las mejores playas están al norte y este (menos turismo que sur). Come en bares de Palma fuera del centro turístico.",
+      "plan_b_lluvia": "Museos de Palma, Grutas de Drach (cubierto), tiendas, pueblos.",
+      "keywords": [
+        "Mallorca, Majorque",
+        "Palma, catedral",
+        "Serra Tramuntana, senderismo",
+        "playas norte",
+        "Deià, Valldemossa",
+        "Pollença",
+        "Grutas Drach"
+      ]
+    },
+    {
+      "id": "bilbao",
+      "nombre": "Bilbao",
+      "tipo": "ciudad",
+      "region": "País Vasco",
+      "descripcion": "Ciudad industrial reinventada con el Museo Guggenheim como icono arquitectónico. Casco Viejo con basílicas y bares de pintxos. Gastronomía de calidad, modernidad y tradición conviviendo. Acceso a naturaleza vasca cercana.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo, junio, septiembre, octubre",
+      "como_llegar": "Desde Madrid: AVE 5h (30-60€), vuelo 1h (40-80€), autobús 5h (20-40€). Desde Barcelona: vuelo 1,5h (30-70€), autobús 8h (25-45€).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Casco Viejo: 22-32€/noche",
+        "medio": "Apartamento en Abando o Casco Viejo: 60-90€/noche",
+        "comfort": "Hotel 4* cerca de Guggenheim: 110-170€/noche"
+      },
+      "que_hacer": [
+        "Guggenheim (15€, arquitectura Frank Gehry imprescindible)",
+        "Casco Viejo medieval y Basílicas (gratis pasear, museos 3-5€)",
+        "Bares de pintxos (1,5-3€ cada uno)",
+        "Museo de Bellas Artes (6€)",
+        "Puente de Vizcaya (acceso peatonal gratis, subida 2,40€)",
+        "Paseo por Estuary Park (gratis)",
+        "Playa Getxo (15km, accesible en metro)"
+      ],
+      "donde_comer": "Pintxos en Casco Viejo (1,5-3€): anchoas, jamón ibérico, oreja de cerdo. Caldo gallego, marmitako (pescado con patatas, 12-18€). Bonito del norte (temporada, 15-22€).",
+      "consejo_local": "El Guggenheim desde fuera es gratis de ver (la cubierta de titanio es el espectáculo). Si no entras, ahórrate 15€. Los pintxos en Casco Viejo son el desayuno local: ve entre 9-11h. Getxo (playa) es fácil en metro, menos turístico.",
+      "plan_b_lluvia": "Guggenheim (museo), Museo de Bellas Artes, Museo Etnográfico, bares de pintxos cubiertos.",
+      "keywords": [
+        "Bilbao, Bilbo",
+        "Guggenheim, arquitectura",
+        "Casco Viejo, medieval",
+        "pintxos, txoko",
+        "Puente Vizcaya",
+        "Getxo, playa",
+        "gastronomía vasca"
+      ]
+    }
+  ]
+}

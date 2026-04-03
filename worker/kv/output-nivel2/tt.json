@@ -1,0 +1,329 @@
+{
+  "pais": "Trinidad y Tobago",
+  "codigo": "tt",
+  "destinos": [
+    {
+      "id": "port-of-spain",
+      "nombre": "Port of Spain",
+      "tipo": "ciudad",
+      "region": "Noroeste de Trinidad",
+      "descripcion": "Capital vibrante con mercados coloridos, arquitectura colonial y una escena cultural intensa. Centro neurálgico para Carnaval y punto de partida para explorar el país. Mezcla de historia caribeña, gastronomía criolla y vida urbana auténtica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "enero a abril, julio a noviembre",
+      "como_llegar": "Aeropuerto Piarco (5 km): taxi/Uber 12-18 EUR, autobús local 1-2 EUR (30 min), rental car desde 30 EUR/día",
+      "donde_dormir": {
+        "mochilero": "Guesthouse o Airbnb en Woodbrook/St. Ann's: 35-55 EUR/noche",
+        "medio": "Hotel 3 estrellas en centro (Hilton, Crowne Plaza): 80-120 EUR/noche",
+        "comfort": "Resort de lujo en Northern Range: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer Queen's Park Savannah (gratis)",
+        "Visitar Red House y arquitectura colonial (gratis)",
+        "Mercado de frutas y especias en Ariapita Avenue (gratis, comida local 5-10 EUR)",
+        "Museo de Trinidad y Tobago (8 EUR)",
+        "Calypso y live music en clubs locales (10-20 EUR entrada)"
+      ],
+      "donde_comer": "Arepa, doubles (chickpea fritters), curry duck en mercadillos callejeros (3-8 EUR). Zonas: Ariapita Avenue, Woodbrook. Restaurantes: Tamnak Thai, Tinto (gama media 15-25 EUR).",
+      "consejo_local": "El Carnaval (febrero-marzo) llena la ciudad pero multiplica precios y llena hoteles: si no es tu objetivo, evita esas fechas. Los martes de Carnaval (calypso competitivo) son imprescindibles.",
+      "plan_b_lluvia": "Museo de Vidrio Stollmeyer's Castle, galería de arte The Gallery Cafe, shopping en Long Circular Mall",
+      "keywords": [
+        "Port-of-Spain",
+        "POS",
+        "Trinidad capital",
+        "Ariapita",
+        "Woodbrook",
+        "Carnaval Trinidad"
+      ]
+    },
+    {
+      "id": "tobago-main",
+      "nombre": "Tobago (Isla Completa)",
+      "tipo": "isla",
+      "region": "Isla de Tobago (nordeste)",
+      "descripcion": "Isla más tranquila y turística con playas de arena blanca, arrecifes de coral intactos y ritmo de vida caribeño relajado. Menos desarrollada que Trinidad pero con mejor infraestructura turística. Ideal para buceo, snorkel y descanso.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "enero a abril, julio a noviembre",
+      "como_llegar": "Ferry desde Port of Spain (2,5 horas, 15 EUR) o vuelo interno (20 minutos, 50-80 EUR). Rental car esencial: 35-45 EUR/día",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Scarborough o Pigeon Point: 40-60 EUR/noche",
+        "medio": "Resorts medianos (Kariwak Village, Magdalena): 90-140 EUR/noche",
+        "comfort": "Resort de playa (Hilton, Sofitel): 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en Pigeon Point (playa 2 EUR, equipo alquiler 15 EUR)",
+        "Buceo en Speyside (escuelas locales 80-120 EUR por inmersión)",
+        "Senderismo Tobago Forest Reserve (gratis, guía 30-40 EUR)",
+        "Playa de Englishman's Bay (gratis)",
+        "Tobago Cays (tour 60 EUR, incluye snorkel)"
+      ],
+      "donde_comer": "Pescado a la parrilla, shark and bake (sándwich frito), vegetales locales en playas (8-15 EUR). Zona: Scarborough y chiringuitos de playa. Restaurants: Seahorse Inn, Cafe Cacao (15-30 EUR).",
+      "consejo_local": "Renta un 4x4 o auto alto: las carreteras secundarias hacia playas remotas son rough. Llena el depósito en Scarborough; hay pocas gasolineras.",
+      "plan_b_lluvia": "Visitar Scarborough Fort, Tobago Museum, interior de la isla hacia Windward Road, cafés locales",
+      "keywords": [
+        "Tobago",
+        "Pigeon Point",
+        "Scarborough",
+        "Speyside",
+        "Englishman's Bay",
+        "Tobago Cays"
+      ]
+    },
+    {
+      "id": "maracas-bay",
+      "nombre": "Maracas Bay",
+      "tipo": "playa",
+      "region": "Noroeste de Trinidad (Noreste)",
+      "descripcion": "Playa de arena negra volcanic con olas para surfear, aguas cálidas y energía playera auténtica. Fin de semana es punto de encuentro local, entre semana es más tranquila. Famosa por los 'shark and bake' (sándwiches fritos de tiburón) que se venden en la playa.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a abril, julio a noviembre",
+      "como_llegar": "Desde Port of Spain: coche de alquiler (1 hora, 30 EUR/día) o taxi (40-60 EUR, negocia precio). Autobús local 2-3 EUR (90 min, poco frecuente)",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento en la playa; bases en Blanchisseuse (10 km) o Port of Spain",
+        "medio": "Sin opciones; visita como excursión desde Port of Spain",
+        "comfort": "Sin opciones; visita como excursión"
+      },
+      "que_hacer": [
+        "Surf o body surfing en las olas (gratis, tabla alquiler 20 EUR)",
+        "Shark and bake (sándwich 5-8 EUR, comido en la arena)",
+        "Nado en aguas cálidas (gratis)",
+        "Fotografía del atardecer (gratis)",
+        "Snorkel en aguas claras (gratis equipo personal)"
+      ],
+      "donde_comer": "Shark and bake es el plato (5-8 EUR). También hay puestos de cocido local, bebidas. Chiringuitos en la playa; no hay restaurantes formales.",
+      "consejo_local": "Ve un viernes o fin de semana para sentir la energía auténtica. Ten cuidado con tus pertenencias: es un lugar popular pero hay robos ocasionales. Lleva dinero en efectivo para los vendedores.",
+      "plan_b_lluvia": "La lluvia rápida es común pero pasa; espera o regresa a Port of Spain. Playas alternativas: Las Cuevas (norte, más protegida).",
+      "keywords": [
+        "Maracas Bay",
+        "Maracas",
+        "shark and bake",
+        "playa Trinidad",
+        "arena negra"
+      ]
+    },
+    {
+      "id": "asa-wright",
+      "nombre": "Asa Wright Nature Centre",
+      "tipo": "naturaleza",
+      "region": "Montañas de Arima, Centro-norte de Trinidad",
+      "descripcion": "Reserva de 600 hectáreas de selva tropical intacta con más de 400 especies de aves. Centro de investigación activo con senderos bien mantenidos, lodge y comederos de aves. Oasis para observación de fauna silvestre y senderismo en bosque nuboso.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril (menos lluvia)",
+      "como_llegar": "Desde Port of Spain: coche de alquiler (1,5 horas, ruta curva/montañosa, 40 EUR taxi o Uber negocia 50-70 EUR). Autobús a Arima + taxi local (3 horas total, 15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Lodge en Asa Wright (cabañas básicas compartidas): 60-80 EUR/noche (incluye comidas)",
+        "medio": "Lodge Asa Wright (habitaciones privadas): 120-150 EUR/noche (incluye comidas y guía)",
+        "comfort": "Lodges privados cercanos o suite Asa Wright: 180-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderos de selva con guía naturalista (incluido en lodge, 30-50 EUR sin lodge)",
+        "Comederos de aves y observación (gratis para huéspedes del lodge)",
+        "Fotografía de fauna (gratis)",
+        "Visita sin pernocta: entrada + tour (50 EUR)",
+        "Piscina natural (gratis para huéspedes)"
+      ],
+      "donde_comer": "Lodge ofrece comida casera criolla incluida en el precio. Almuerzo y cena (vegetariano disponible). Fuera del lodge: pueblo de Arima tiene comedores locales (8-12 EUR).",
+      "consejo_local": "Reserva con antelación; el lodge tiene capacidad limitada. Lleva binoculares propios si tienes. El mejor horario para aves es al amanecer (5:30-7:30 am). Las carreteras son muy curvas: si conduces, ve lento.",
+      "plan_b_lluvia": "La lluvia atrae más fauna. El lodge tiene biblioteca, galería y áreas cubiertas. Bosque nuboso es espeso, la lluvia ligera no detiene los senderos.",
+      "keywords": [
+        "Asa Wright",
+        "naturaleza Trinidad",
+        "observación aves",
+        "selva tropical",
+        "Arima Valley"
+      ]
+    },
+    {
+      "id": "northern-range",
+      "nombre": "Northern Range (Senderismo)",
+      "tipo": "montaña",
+      "region": "Cordillera norte de Trinidad",
+      "descripcion": "Cadena montañosa cubierta de selva primaria con senderos de varios niveles, cascadas y vistas panorámicas. Punto más alto es Cerro del Aripo (942 m). Mejor para trekking que Asa Wright con menos turismo masivo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a abril",
+      "como_llegar": "Desde Port of Spain: coche hacia Blanchisseuse o Arima (1-1,5 horas, 30 EUR rental car). Puntos de acceso: Arima (sur), Blanchisseuse (norte)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Blanchisseuse: 45-65 EUR/noche",
+        "medio": "Casita o lodge pequeño en Arima/Blanchisseuse: 80-110 EUR/noche",
+        "comfort": "Resort fuera de la montaña (Port of Spain): 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Cerro del Aripo (8-10 horas, requiere guía 50-70 EUR)",
+        "Sendero de Maracas Falls (3 horas, gratis con guía local 30-40 EUR)",
+        "Cascada Paria (fácil, 1,5 horas, gratis)",
+        "Wildlife spotting: zarigüeyas, mapaches, serpientes (gratis con guía)",
+        "Fotografía de paisaje y flora (gratis)"
+      ],
+      "donde_comer": "Pueblos: Blanchisseuse, Arima. Comedores locales 8-15 EUR. Lleva bocadillos si haces trekking completo. Agua abundante en arroyos.",
+      "consejo_local": "Es recomendable guía local no solo por seguridad sino para identificar fauna y flora. Los senderos no siempre están claros. Comienza temprano (antes de las 6 am) para evitar lluvia de tarde.",
+      "plan_b_lluvia": "Senderos cortos en Blanchisseuse (pueblo costero con playas), visita pueblos locales, hammocks bajo techos",
+      "keywords": [
+        "Northern Range",
+        "Cerro Aripo",
+        "trekking Trinidad",
+        "Blanchisseuse",
+        "Maracas Falls"
+      ]
+    },
+    {
+      "id": "san-fernando",
+      "nombre": "San Fernando",
+      "tipo": "ciudad",
+      "region": "Sur de Trinidad",
+      "descripcion": "Segunda ciudad de Trinidad, menos turística que Port of Spain pero más auténtica. Puerto comercial con mercado de especias, gastronomía criolla genuina y vida local sin filtro turístico. Punto de partida hacia playas del sur como Mayaro y Oropouche.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a abril, julio a noviembre",
+      "como_llegar": "Desde Port of Spain: autobús (1,5 horas, 3-4 EUR) o coche de alquiler (50 EUR/día, 1,5 horas). Desde Tobago: ferry + autobús (4 horas, 20 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse céntrico: 40-60 EUR/noche",
+        "medio": "Hotel 3 estrellas: 75-110 EUR/noche",
+        "comfort": "Resort fuera del centro: 130-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de especias Malabar (gratis, compra 5-15 EUR)",
+        "Naparima Green Square (paseo gratis)",
+        "Templo hindú Waterloo (gratis, respeta códigos de vestimenta)",
+        "Playas cercanas: Mayaro (25 km, coche o tour 40 EUR)",
+        "Oropouche Swamp birdwatching (tour 60 EUR con guía)"
+      ],
+      "donde_comer": "Curries locales, roti, dhalpuri (pan relleno). Comedores en mercado 5-10 EUR. Restaurantes: La Boucan (criolla), Bootleggers (25-35 EUR). Zona: Downtown.",
+      "consejo_local": "San Fernando es más local y menos pulida que POS; eso es su valor. El mercado es caótico pero auténtico. Evita el downtown muy de noche (seguridad). Buses locales frecuentes y baratos.",
+      "plan_b_lluvia": "Mercados cubiertos, cafés locales, templos interiores, shopping en centro comercial Promenade",
+      "keywords": [
+        "San Fernando",
+        "SF",
+        "sur Trinidad",
+        "Malabar",
+        "segunda ciudad",
+        "Mayaro"
+      ]
+    },
+    {
+      "id": "bocas-islands",
+      "nombre": "Bocas del Dragón (Islas Hueca)",
+      "tipo": "isla",
+      "region": "Noroeste de Trinidad (frente a Venezuela)",
+      "descripcion": "Archipiélago de pequeñas islas con aguas turquesas, snorkel impresionante y pocos turistas. Acceso principalmente por tour desde Chaguaramas o Puerto Gaspar. Fauna marina, coral y peces tropicales en aguas cristalinas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "febrero a abril",
+      "como_llegar": "Tours desde Puerto Gaspar (30 min puerto, 80-120 EUR tour completo incluye snorkel y comida) o Chaguaramas (boot privado 100-150 EUR). No hay acceso público a isla; solo tour.",
+      "donde_dormir": {
+        "mochilero": "Alojarse en Chaguaramas/Puerto Gaspar y hacer tour de día",
+        "medio": "Hotel en Chaguaramas: 80-120 EUR/noche",
+        "comfort": "Resort Chaguaramas: 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour a Bocas del Dragón (snorkel incluido: 80-120 EUR)",
+        "Snorkel en isla Dragon (gratis con tour)",
+        "Avistamiento de delfines (probable incluido en tour)",
+        "Fotografía submarina (cámara 30 EUR alquiler)",
+        "Lunch en isla Carrera (incluido en tour)"
+      ],
+      "donde_comer": "Tours incluyen almuerzo: asado, ensalada, bebida. Chaguaramas tiene restaurants de playa (15-30 EUR). Compra snacks antes de tour.",
+      "consejo_local": "Reserva tour con operador reputado (Island Properties, Powerboat Tours). Las condiciones del mar pueden cancelar tours (mar brava); pregunta estado. Mejor horario: mañana temprano.",
+      "plan_b_lluvia": "Si el mar está rough, tours se cancelan. Alternativa: Chaguaramas mismo tiene playas, bares y marina.",
+      "keywords": [
+        "Bocas del Dragon",
+        "Hueca Islands",
+        "Chaguaramas",
+        "snorkel Trinidad",
+        "islas noroeste"
+      ]
+    },
+    {
+      "id": "pitch-lake",
+      "nombre": "Pitch Lake (Lago de Asfalto)",
+      "tipo": "naturaleza",
+      "region": "Sur de Trinidad (La Brea)",
+      "descripcion": "Fenómeno geológico único: lago natural de asfalto líquido de 46 hectáreas. Puedes caminar sobre la superficie y flotar en él (es más denso que el agua). Una de las dos únicas en el mundo. Experiencia surrealista e irrepetible.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a abril",
+      "como_llegar": "Desde San Fernando: coche 30 km (30 min, 25 EUR taxi fijo o rental car). Desde Port of Spain: 2 horas en coche (50 EUR). Tour organizado desde POS: 100-120 EUR (incluye transporte y guía).",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento; visita como excursión desde San Fernando o Port of Spain",
+        "medio": "Sin alojamiento local; bases en San Fernando",
+        "comfort": "Resort en POS y excursión de día"
+      },
+      "que_hacer": [
+        "Caminar y flotar en asfalto líquido (incluido en entrada 10 EUR)",
+        "Baño mineral/sulfuroso (gratis, trapo para limpiar 5 EUR)",
+        "Fotografía (gratis)",
+        "Tour guiado (guía recomendado 20-30 EUR extra)",
+        "Centro de visitantes (gratis, información sobre geología)"
+      ],
+      "donde_comer": "Vendedores en entrada: agua, bebidas (2-5 EUR). Pueblo La Brea cercano: comedores locales (8-12 EUR). Lleva picnic si lo prefieres.",
+      "consejo_local": "Es viscoso: usa ropa vieja, chanclas que no importa perder. El asfalto mancha; trae toalla. Mejor ir por mañana. No es peligroso pero es lento moverse.",
+      "plan_b_lluvia": "Visitable con lluvia; el asfalto no cambia. Lluvia temprana es beneficio (menos calor).",
+      "keywords": [
+        "Pitch Lake",
+        "La Brea",
+        "asfalto natural",
+        "lago Trinidad",
+        "fenómeno geológico"
+      ]
+    },
+    {
+      "id": "morne-blanc",
+      "nombre": "Morne Blanc (Cascadas y Selva)",
+      "tipo": "naturaleza",
+      "region": "Centro-este de Trinidad (Arouca)",
+      "descripcion": "Reserva forestal con cascadas accesibles, senderos bien marcados y menos multitud que Asa Wright. Cascadas de agua dulce donde puedes nadar. Punto de partida para trekking moderado sin necesidad de camping.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a abril, julio a noviembre",
+      "como_llegar": "Desde Port of Spain: coche a Arouca (1 hora, 30 EUR) o taxi (35-50 EUR). Desde Arima (30 min). Autobús poco frecuente.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse Arouca: 45-65 EUR/noche",
+        "medio": "Pequeño lodge: 80-120 EUR/noche",
+        "comfort": "Excursión desde POS; resort en capital"
+      },
+      "que_hacer": [
+        "Sendero a Morne Blanc Waterfall (2 horas, gratis, guía recomendado 30 EUR)",
+        "Baño en piscina natural (gratis)",
+        "Birdwatching (gratis con binoculares)",
+        "Fotografía flora y fauna (gratis)",
+        "Picnic en cascada (comida propia)"
+      ],
+      "donde_comer": "Arouca tiene comedores locales (8-12 EUR). Lleva picnic y agua. No hay amenities en cascada.",
+      "consejo_local": "Menos turístico que Asa Wright. Guía local recomendado para identificar fauna y encontrar mejor ruta. Rocas resbaladizas en época de lluvia.",
+      "plan_b_lluvia": "Lluvia aumenta caudal de cascadas (hermoso) pero hace camino más difícil. Ve temprano antes de lluvia de tarde.",
+      "keywords": [
+        "Morne Blanc",
+        "Arouca",
+        "cascadas Trinidad",
+        "selva centro-este",
+        "senderismo fácil"
+      ]
+    },
+    {
+      "id": "caroni-swamp",
+      "nombre": "Caroni Swamp (Manglares y Ibis Escarlata)",
+      "tipo": "naturaleza",
+      "region": "Sur de Trinidad (Caroni)",
+      "descripcion": "Humedal de 6,000 hectáreas con bosque de manglar, avifauna única y atardecer espectacular. Famoso por el ibis escarlata (ave nacional roja brillante). Tours en bote por canales estrechos entre manglares con observación de pájaros y caimanes.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "septiembre a marzo (concentración de aves)",
+      "como_llegar": "Desde Port of Spain: coche a Caroni (45 min, 25 EUR) o taxi (40-60 EUR). Tours organizados desde POS (80-100 EUR todo incluido). Desde San Fernando: más cercano (30 min).",
+      "donde_dormir": {
+        "mochilero": "No hay; visita como excursión desde Port of Spain o San Fernando",
+        "medio": "Hotel en San Fernando: 75-110 EUR/noche",
+        "comfort": "Resort en Port of Spain"
+      },
+      "que_hacer": [
+        "Tour en bote (entrada 20-30 EUR + bote privado 40-60 EUR, o tour grupal 70-100 EUR)",
+        "Avistamiento de ibis escarlata al atardecer (incluido en tour)",
+        "Fotografía de aves (gratis, cámara de zoom recomendada)",
+        "Avistamiento de caimanes (incluido en tour)",
+        "Centro de visitantes Visitor Centre (5 EUR, información)"
+      ],
+      "donde_comer": "Tours no incluyen comida; come antes en Caroni o San Fernando. Refrescos vendidos en entrada (2-4 EUR). Lleva agua.",
+      "consejo_local": "Tours al atardecer (4-6 pm) son imprescindibles: ibis regresan a dormidero en mass (espectáculo). Lleva repelente de insectos fuerte. Ropa oscura para no asustar aves.",
+      "plan_b_lluvia": "Visitables con lluvia; el bote continúa. Lluvia puede diluir experiencia visual.",
+      "keywords": [
+        "Caroni Swamp",
+        "Caroni",
+        "manglar Trinidad",
+        "ibis escarlata",
+        "atardecer Caroni"
+      ]
+    }
+  ]
+}

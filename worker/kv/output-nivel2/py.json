@@ -1,0 +1,340 @@
+{
+  "pais": "Paraguay",
+  "codigo": "py",
+  "destinos": [
+    {
+      "id": "asuncion",
+      "nombre": "Asunción",
+      "tipo": "ciudad",
+      "region": "Central",
+      "descripcion": "Capital y puerta de entrada a Paraguay, ubicada a orillas del río Paraná. Centro administrativo y cultural con museos coloniales, mercados tradicionales y vida nocturna. Punto de partida obligatorio para la mayoría de viajeros.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Aeropuerto internacional Silvio Pettirossi (ASU), a 15 km del centro. Autobús local 30A/30B: 0,60 EUR, 30 min. Taxi: 15-20 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel en barrio San Blas o centro: 10-15 EUR/noche",
+        "medio": "Hostal 3-4 estrellas en Barrio Brasil: 30-50 EUR/noche",
+        "comfort": "Hotel céntrico 4-5 estrellas (Aguazú, Palma Real): 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo del Barro: arte tradicional paraguayo (3 EUR)",
+        "Catedral Metropolitana: arquitectura colonial (gratis)",
+        "Mercado Cuatro: artesanía y souvenirs (gratis, regateo)",
+        "Paseo por Costanera: vista al río Paraná (gratis)",
+        "Museo Nacional de Bellas Artes (2 EUR)"
+      ],
+      "donde_comer": "Chipa guasú, sopa paraguaya, parrilla de carne. Barrio San Blas tiene comedores locales: 3-6 EUR. Calle Palma para restaurantes algo más caros: 10-15 EUR.",
+      "consejo_local": "Los bancos cierran a las 17h. Retira efectivo guaraní por la mañana. Los mercados (especialmente Cuatro) son más seguros antes del mediodía.",
+      "plan_b_lluvia": "Museos cubiertos, paseos en galerías comerciales, cafés en Barrio Brasil, cine",
+      "keywords": [
+        "Asuncion",
+        "capital",
+        "Costanera",
+        "Barrio Brasil",
+        "San Blas",
+        "Catedral",
+        "Mercado Cuatro"
+      ]
+    },
+    {
+      "id": "iguazu-puerto-iguazu",
+      "nombre": "Puerto Iguazú y Cataratas del Iguazú",
+      "tipo": "naturaleza",
+      "region": "Misiones (frontera Argentina-Paraguay-Brasil)",
+      "descripcion": "Uno de los conjuntos de cascadas más espectaculares del mundo. Aunque las cataratas están técnicamente en Argentina y Brasil, Puerto Iguazú (Argentina) es la base principal. Desde Paraguay se accede en 4h vía Encarnación.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a agosto (menos lluvia, menos mosquitos)",
+      "como_llegar": "Desde Asunción: ruta a Encarnación (5h, bus: 20-25 EUR). Desde Encarnación a Puerto Iguazú (4h, bus: 15-18 EUR). O vuelo directo Asunción-Iguazú (1h, 80-120 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel en Puerto Iguazú: 12-18 EUR/noche",
+        "medio": "Hotel 3 estrellas Iguazú: 35-55 EUR/noche",
+        "comfort": "Resort 4-5 estrellas con vistas: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Parque Nacional Iguazú (lado Argentina): 22 EUR",
+        "Pasarelas inferiores y superiores: caminatas (incluido en entrada)",
+        "Excursión al lado brasileño (Parque Nacional do Iguaçu): 25 EUR extra",
+        "Isla San Martín: bote + caminata (30 EUR)",
+        "Aventura Raft en rápidos menores (40 EUR)"
+      ],
+      "donde_comer": "Comidas típicas locales en Puerto Iguazú: 6-10 EUR. Restaurantes con vistas: 15-25 EUR. Prueba la tilapia a la parrilla.",
+      "consejo_local": "Entra al parque temprano (8am) antes de que lleguen los tour grupales. Lleva impermeable de verdad, las Cataratas salpican mucho. El lado argentino es mejor que el brasileño para ver la magnitud.",
+      "plan_b_lluvia": "Visita museos de Iguazú, pueblos cercanos como Oberá, compras duty-free",
+      "keywords": [
+        "Iguazu",
+        "Cataratas",
+        "Puerto Iguazu",
+        "Argentina",
+        "Misiones",
+        "cascadas",
+        "Paraná"
+      ]
+    },
+    {
+      "id": "encarnacion",
+      "nombre": "Encarnación",
+      "tipo": "ciudad",
+      "region": "Itapúa",
+      "descripcion": "Ciudad ribereña en el río Paraná, puerto fluvial activo y punto de conexión con Argentina (Posadas). Famosa por su carnaval y ambiente bohemio de frontera. Buena base para explorar la región misionera.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "febrero (carnaval), mayo a septiembre",
+      "como_llegar": "Desde Asunción en bus directo: 5h, 20-25 EUR. Desde Buenos Aires (Argentina): 4h en bus cruzando el río.",
+      "donde_dormir": {
+        "mochilero": "Hostel centro: 10-14 EUR/noche",
+        "medio": "Hotel 3 estrellas centro: 25-40 EUR/noche",
+        "comfort": "Hotel 4 estrellas con piscina: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por la Costanera: paseo ribereño gratuito",
+        "Cruce a Posadas (Argentina) a pie por puente: gratis, vistas panorámicas",
+        "Iglesia de la Anunciación: arquitectura colonial (gratis)",
+        "Mercado municipal: artesanías (gratis, compras)",
+        "Festival de Carnaval (febrero): desfiles y comparsas (gratis entrada calles)"
+      ],
+      "donde_comer": "Surubí (pez local) a la parrilla, empanadas, chipa. Restaurantes en Costanera: 5-10 EUR. Comida argentina en Posadas es algo más cara.",
+      "consejo_local": "Encarnación es puerta a la región misionera rica en ruinas jesuíticas. El carnaval es intenso pero ruidoso—busca quieto si lo prefieres. Febrero es muy cálido.",
+      "plan_b_lluvia": "Cruce a Argentina, compras, iglesias coloniales",
+      "keywords": [
+        "Encarnacion",
+        "Itapua",
+        "Costanera",
+        "Posadas",
+        "frontera",
+        "Parana",
+        "Carnaval"
+      ]
+    },
+    {
+      "id": "jesuits-ruins-region",
+      "nombre": "Región de Ruinas Jesuíticas (Itapúa)",
+      "tipo": "histórico",
+      "region": "Itapúa",
+      "descripcion": "Conjunto de misiones jesuitas del siglo XVII reconocidas por UNESCO. Incluye Trinidad, Jesús y San Cosme y Damián. Testimonio arqueológico de la ocupación española y colonización religiosa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Base en Encarnación. Buses locales o tour de agencia hacia Trinidad (45 min, 5-8 EUR). Jesús está a 15 km (10 min, 3 EUR).",
+      "donde_dormir": {
+        "mochilero": "Encarnación (ver entrada), o posadas en pueblos cercanos: 12-18 EUR/noche",
+        "medio": "Encarnación o estancia rural: 30-45 EUR/noche",
+        "comfort": "Encarnación: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas de Trinidad: templo y estructuras coloniales (4 EUR entrada)",
+        "Ruinas de Jesús: iglesia y residencia jesuita (3 EUR)",
+        "San Cosme y Damián: pueblo colonial intacto (gratis)",
+        "Museos locales con artefactos jesuitas: 2-3 EUR",
+        "Excursión de un día: todas 3 ruinas (tour agencia: 40-50 EUR)"
+      ],
+      "donde_comer": "Pueblos muy pequeños, come en Encarnación o en comedores básicos locales: 3-5 EUR.",
+      "consejo_local": "Las ruinas son espectaculares pero poco turísticas—tendrás el lugar casi solo. Visita Trinidad primero (la mejor preservada), luego Jesús. San Cosme es el pueblo más pintoresco.",
+      "plan_b_lluvia": "Museos cubiertos, exploración de pueblos coloniales",
+      "keywords": [
+        "ruinas jesuitas",
+        "Trinidad",
+        "Jesus",
+        "San Cosme",
+        "UNESCO",
+        "misiones coloniales",
+        "Itapua"
+      ]
+    },
+    {
+      "id": "ciudad-del-este",
+      "nombre": "Ciudad del Este",
+      "tipo": "ciudad",
+      "region": "Alto Paraná",
+      "descripcion": "Capital comercial de la triple frontera (Paraguay-Argentina-Brasil). Conocida por compras duty-free y mercados. Punto de acceso a las cataratas desde el lado paraguayo, aunque menos turístico que el lado argentino.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Asunción: vuelo 1h (80-120 EUR) o bus 8h (25-30 EUR). Desde Encarnación: bus 4h (12-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel centro: 12-16 EUR/noche",
+        "medio": "Hotel 3 estrellas: 30-45 EUR/noche",
+        "comfort": "Hotel 4 estrellas: 60-95 EUR/noche"
+      },
+      "que_hacer": [
+        "Compras en Paseo La Galería y mercados (gratis)",
+        "Puentes internacionales: caminata gratis entre países",
+        "Parque Nacional Iguazú (lado paraguayo): entrada más barata (10-12 EUR) pero vistas inferiores que Argentina",
+        "Foz do Iguazu (Brasil): compras y comida brasileña",
+        "Posadas (Argentina): cruce fronterizo"
+      ],
+      "donde_comer": "Comida paraguaya, brasileña y argentina en la zona de fronteras. Precios variados: 4-12 EUR. Centro comercial con food courts.",
+      "consejo_local": "Ciudad del Este es principalmente comercial y fronteriza, no un destino turístico per se. La mayoría pasa solo un día. Si quieres ver Iguazú desde el lado paraguayo, es más barato pero menos espectacular. Ten cuidado con bolsos en mercados.",
+      "plan_b_lluvia": "Compras en galerías cubiertas, cruce a Brasil o Argentina",
+      "keywords": [
+        "Ciudad del Este",
+        "triple frontera",
+        "Foz do Iguazu",
+        "compras",
+        "duty-free",
+        "Alto Parana"
+      ]
+    },
+    {
+      "id": "iguazu-national-park",
+      "nombre": "Parque Nacional Iguazú (Lado Paraguayo)",
+      "tipo": "naturaleza",
+      "region": "Alto Paraná",
+      "descripcion": "Acceso al lado paraguayo de las cataratas. Menos infraestructura turística que Argentina/Brasil pero más tranquilo y económico. Buena opción si ya estás en Ciudad del Este.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Desde Ciudad del Este: taxi o moto-taxi a la entrada, 15 km (20-30 EUR). O bus local (2 EUR, 30 min).",
+      "donde_dormir": {
+        "mochilero": "Ciudad del Este (ver entrada)",
+        "medio": "Ciudad del Este",
+        "comfort": "Ciudad del Este"
+      },
+      "que_hacer": [
+        "Entrada al parque: 10-12 EUR",
+        "Senderos secundarios: caminatas cortas (incluido)",
+        "Vistas panorámicas desde el lado paraguayo",
+        "Menos multitudes que lado argentino"
+      ],
+      "donde_comer": "Pequeños restaurantes en entrada del parque: 5-8 EUR. Mejor comer en Ciudad del Este.",
+      "consejo_local": "El lado paraguayo ofrece vistas distintas pero menos espectaculares que Argentina. Úsalo si quieres una experiencia más local y barata, no si es tu primera vez en Iguazú.",
+      "plan_b_lluvia": "Vuelve a Ciudad del Este",
+      "keywords": [
+        "Iguazu Paraguay",
+        "parque nacional",
+        "cataratas",
+        "lado paraguayo",
+        "Alto Parana"
+      ]
+    },
+    {
+      "id": "san-juan-bautista",
+      "nombre": "San Juan Bautista",
+      "tipo": "rural",
+      "region": "Misiones",
+      "descripcion": "Pueblo colonial intacto en la región de misiones jesuitas. Menos turístico que Trinidad pero con arquitectura auténtica, iglesia colonial del siglo XVIII y atmósfera de pueblo pequeño paraguayo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Encarnación: bus local a San Juan Bautista (1h, 3-4 EUR). O como parada intermedia hacia Trinidad.",
+      "donde_dormir": {
+        "mochilero": "Posada básica en pueblo: 10-14 EUR/noche",
+        "medio": "Estancia rural cercana: 25-40 EUR/noche",
+        "comfort": "Encarnación (30 km): 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Iglesia colonial: arquitectura y arte religioso (gratis)",
+        "Plaza central: paseo y observación local (gratis)",
+        "Tienda de artesanías locales (gratis mirar, compras opcionales)",
+        "Caminata por calles empedradas: fotografía de arquitectura (gratis)",
+        "Conversación con locales en plazas (gratis)"
+      ],
+      "donde_comer": "Comida básica en comedores locales: 3-5 EUR. Poca oferta pero auténtico.",
+      "consejo_local": "San Juan Bautista es parada obligatoria si buscas Paraguay auténtico sin turismo masivo. Llega por la mañana, come, y continúa hacia Trinidad. Es un pueblo vivo, no un museo.",
+      "plan_b_lluvia": "Iglesia, tiendas locales, conversación en bares",
+      "keywords": [
+        "San Juan Bautista",
+        "Misiones",
+        "pueblo colonial",
+        "iglesia",
+        "arquitectura"
+      ]
+    },
+    {
+      "id": "gran-chaco",
+      "nombre": "Gran Chaco",
+      "tipo": "naturaleza",
+      "region": "Región Occidental",
+      "descripcion": "Vasta región de sabana, monte bajo y paisaje desértico. Hábitat de jaguares, capybaras y comunidades indígenas. Destino para viajeros aventureros que buscan naturaleza virgen y culturas originarias. Acceso difícil pero genuino.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a octubre (seco)",
+      "como_llegar": "Desde Asunción: ruta Transchaco (500 km, 10h en auto 4x4, no es bus regular). Agencias en Asunción organizan tours: 200-350 EUR (incluye vehículo, guía, camping). O conducir propio auto 4x4.",
+      "donde_dormir": {
+        "mochilero": "Camping en tours organizados: incluido",
+        "medio": "Posada en Filadelfia (capital chaqueña): 20-35 EUR/noche",
+        "comfort": "Lodge ecoturístico en Chaco (Iberá, Laguna Blanca): 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari terrestre: observación de fauna y aves (70-100 EUR tour)",
+        "Encuentro con comunidades indígenas Chamacoco y Toba (tour guiado)",
+        "Caminata nocturna: observación de vida nocturna (50 EUR)",
+        "Observatorio de jaguares y pumas (con suerte) (gratis en tour)",
+        "Visita a Filadelfia: pueblo menonita (gratis paseo)"
+      ],
+      "donde_comer": "Filadelfia: restaurantes menonitas con asados y comida casera (6-10 EUR). En el Chaco profundo comes lo que traiga el tour.",
+      "consejo_local": "El Gran Chaco es hermoso pero desafiante. Haz tour con agencia especializada, no solo. Lleva repelente de insectos industrial. La mejor época es invierno boreal (junio-agosto), cuando es menos insoportable el calor.",
+      "plan_b_lluvia": "En seco no llueve. En estación húmeda (nov-abril) muchas rutas se cierran.",
+      "keywords": [
+        "Gran Chaco",
+        "Chaco Paraguayo",
+        "Filadelfia",
+        "safari",
+        "jaguares",
+        "indigenas",
+        "desierto"
+      ]
+    },
+    {
+      "id": "ibera-wetlands",
+      "nombre": "Esteros del Iberá",
+      "tipo": "naturaleza",
+      "region": "Corrientes (Argentina frontera)",
+      "descripcion": "Humedales de importancia internacional con fauna única: yapok, venados de los pantanos, yacarés. Aunque está en Argentina, es accesible desde Encarnación y forma parte de la experiencia regional. Menos masificado que Iguazú.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Encarnación: cruce a Paso de la Patria (Argentina, 30 min en auto), luego 1h más a Carlos Pellegrini en Iberá. O viaja desde Asunción a Corrientes, Argentina (8h bus).",
+      "donde_dormir": {
+        "mochilero": "Posada básica Carlos Pellegrini: 15-20 EUR/noche",
+        "medio": "Lodge 3 estrellas Iberá: 40-65 EUR/noche",
+        "comfort": "Lodge ecoturístico 4 estrellas: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Navegación en canoa por esteros (60-80 EUR tour 4h)",
+        "Observación de fauna acuática y aves (incluido en tour)",
+        "Caminata por islas (30 EUR)",
+        "Visita a colonia de caimanes (incluido)",
+        "Fotografía de naturaleza (gratis, equipo propio)"
+      ],
+      "donde_comer": "Restaurantes en Carlos Pellegrini: comida criolla argentina, 8-12 EUR. Muchos lodges incluyen comidas.",
+      "consejo_local": "Iberá es la joya de humedales menos conocida del MERCOSUR. Los guías son excelentes. Lleva binoculares y zoom fotográfico. Es territorio argentino pero acceso fácil desde Paraguay.",
+      "plan_b_lluvia": "Tours en bote cubierto igual funcionan",
+      "excursion_desde": true,
+      "keywords": [
+        "Esteros del Ibera",
+        "Corrientes",
+        "Argentina",
+        "humedales",
+        "fauna",
+        "canoa",
+        "yacare"
+      ]
+    },
+    {
+      "id": "villarrica",
+      "nombre": "Villarrica",
+      "tipo": "ciudad",
+      "region": "Guairá",
+      "descripcion": "Pueblo colonial histórico en las sierras de Guairá. Menos turístico que Asunción o Encarnación, con arquitectura conservada y acceso a paisajes serranos. Base para excursiones a saltos y naturaleza.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Asunción: bus directo 4h (18-22 EUR). O vía Coronel Oviedo (más conexiones).",
+      "donde_dormir": {
+        "mochilero": "Hostel/posada pueblo: 10-14 EUR/noche",
+        "medio": "Hotel 2-3 estrellas: 25-40 EUR/noche",
+        "comfort": "Estancia rural cercana: 50-75 EUR/noche"
+      },
+      "que_hacer": [
+        "Iglesia colonial: arquitectura del siglo XVI (gratis)",
+        "Salto de Guairá: cascada cercana, senderismo (5 EUR entrada)",
+        "Miradores serranos: vistas panorámicas (gratis caminata)",
+        "Artesanías locales en plaza (gratis mirar)",
+        "Caminatas por sierra de Guairá (con guía: 30-40 EUR)"
+      ],
+      "donde_comer": "Comida criolla en comedores: 4-6 EUR. Especialidades locales: chipa, empanadas. Pocas opciones turísticas.",
+      "consejo_local": "Villarrica es parada perfecta si vienes de Asunción hacia el sur. No es destino per se sino experiencia de pueblo auténtico. Los paisajes serranos son realmente bonitos y casi sin turismo.",
+      "plan_b_lluvia": "Iglesia, paseos cubiertos, visitas a tiendas de artesanías",
+      "keywords": [
+        "Villarrica",
+        "Guiara",
+        "pueblo colonial",
+        "sierra",
+        "iglesia",
+        "saltos"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,358 @@
+{
+  "pais": "Australia",
+  "codigo": "au",
+  "destinos": [
+    {
+      "id": "sydney",
+      "nombre": "Sydney",
+      "tipo": "ciudad",
+      "region": "Nueva Gales del Sur",
+      "descripcion": "Capital de NSW con la icónica Ópera y el Puente del Puerto. Centro cultural y gastronómico con playas urbanas como Bondi y Coogee. Punto de entrada principal para la mayoría de viajeros independientes.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "septiembre a noviembre, febrero a marzo",
+      "como_llegar": "Aeropuerto Internacional Kingsford Smith: vuelos internacionales directos, 9-14h desde Europa, 150-400 EUR. Transporte al centro: tren 15 min (6 EUR), taxi 45-55 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostal en Backpackers Hill (Kings Cross) o Bondi: 25-35 EUR/noche",
+        "medio": "Hotel 3* en Darling Harbour o Surry Hills: 70-110 EUR/noche",
+        "comfort": "Hotel 4* en The Rocks o Barangaroo: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Ópera de Sydney (entrada 40 EUR, tours incluidos)",
+        "Bondi Beach y paseo costero a Coogee (gratis)",
+        "Puente del Puerto: BridgeClimb 290 EUR o paseo gratuito",
+        "Taronga Zoo (45 EUR)",
+        "Royal Botanic Garden (entrada gratuita)",
+        "Mercadillos de Glebe y Paddington (domingos, gratis)"
+      ],
+      "donde_comer": "Fish & chips en Fisho o Mary's en el CBD (12-20 EUR), cafeterías de specialty coffee en Surry Hills (5-8 EUR), mariscos frescos en Rocks (25-40 EUR por plato). Barrios clave: Darling Harbour, The Rocks, Surry Hills.",
+      "consejo_local": "Las playas tienen zonas vigiladas; baña solo entre las banderas rojas y blancas. Bondi al atardecer es caótico: ve por la mañana temprano si buscas tranquilidad.",
+      "plan_b_lluvia": "Museos como el Museo Australiano (18 EUR) o Art Gallery of NSW (entrada gratuita permanentes), compras en Pitt Street Mall, cafeterías y cines.",
+      "keywords": [
+        "Sydney NSW",
+        "Bondi Beach",
+        "Opera House",
+        "Harbour Bridge",
+        "The Rocks",
+        "Surry Hills",
+        "Darling Harbour"
+      ]
+    },
+    {
+      "id": "gran-barrera-coralina",
+      "nombre": "Gran Barrera de Coral",
+      "tipo": "playa",
+      "region": "Queensland",
+      "descripcion": "Mayor arrecife de coral del mundo, declarado Patrimonio de la UNESCO. Imprescindible para bucear y hacer snorkel. Base principal: Cairns o Port Douglas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a octubre (agua más clara, menos medusas)",
+      "como_llegar": "Desde Sydney: vuelo Qantas/Jetstar a Cairns 3h (80-150 EUR). Desde Cairns centro: tranvía a Marina (5 min, 3 EUR) o taxi (12 EUR). Tours diarios desde puertos.",
+      "donde_dormir": {
+        "mochilero": "Hostal Cairns Central o Port Douglas Backpackers: 22-30 EUR/noche",
+        "medio": "Hotel 3* en Cairns Esplanade: 65-95 EUR/noche",
+        "comfort": "Resort en Port Douglas o Hamilton Island: 180-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour snorkel/buceo diario (Outer Reef Tours desde Cairns: 150-200 EUR buceo, 85 EUR snorkel)",
+        "Paseo por Cairns Esplanade (gratis)",
+        "Rainforest Cableway: Kuranda Scenic Railway (50 EUR)",
+        "Isla Verde (Green Island): ferry + entrada 110 EUR",
+        "Buceo nocturno en Cairns (90 EUR)"
+      ],
+      "donde_comer": "Pescado fresco en Abbott Street (Cairns centro): 18-28 EUR. Mariscos en Port Douglas: 25-40 EUR. Cafeterías en Esplanade: 8-12 EUR. Prueba la barramundi local.",
+      "consejo_local": "Reserva tours la noche anterior, no el día: salen temprano (6-7am). Trae protector solar SPF 50+; el sol del trópico es brutal. Las medusas (boxfish) son peligrosas en verano; nada solo entre octubre-mayo.",
+      "plan_b_lluvia": "Rainforest Exploration Centre (museo), Skyrail Rainforest Cableway cubierto, museos en Cairns, piscina natural del Lagoon de Cairns.",
+      "keywords": [
+        "Great Barrier Reef",
+        "GBR",
+        "Cairns",
+        "Port Douglas",
+        "snorkel",
+        "buceo",
+        "Outer Reef",
+        "arrecife coral"
+      ]
+    },
+    {
+      "id": "uluru-kata-tjuta",
+      "nombre": "Uluru y Kata Tjuta",
+      "tipo": "desierto",
+      "region": "Territorio del Norte",
+      "descripcion": "Monolito sagrado rojo del corazón de Australia, Patrimonio UNESCO. Centro espiritual Anangu con puesta de sol espectacular. Experiencia esencial del outback australiano.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo a mayo, agosto a octubre (16-28°C)",
+      "como_llegar": "Desde Sydney: vuelo a Alice Springs 2.5h (100-180 EUR), luego alquiler coche 450km a Uluru 5h (coche desde 40 EUR/día). Autobús Greyhound: 22h, 60 EUR. Vuelo directo a Uluru (Ayers Rock) desde Alice Springs 1h (120 EUR).",
+      "donde_dormir": {
+        "mochilero": "Desert Gardens Hotel o camping en Uluru: 30-50 EUR/noche",
+        "medio": "Uluru Ayers Rock Resort (3*): 85-140 EUR/noche",
+        "comfort": "Longitude 131 (lodge de lujo): 350-500 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo al atardecer Uluru (camino de 10km, entrada parque 38 EUR/3 días)",
+        "Caminata Kata Tjuta Valley of the Winds (6km, incluida con entrada parque)",
+        "Tour Anangu con guía indígena (85 EUR, muy recomendado)",
+        "Salida del sol en Uluru (gratis, llega 1h antes)",
+        "Museo Cultural Uluru (20 EUR)"
+      ],
+      "donde_comer": "Centro de visitantes de Uluru: 15-25 EUR por comida. Resort Yulara: restaurantes de 20-50 EUR. Tiendas con víveres básicos a precios altos. Lleva agua (3L mínimo) y snacks.",
+      "consejo_local": "No subas a Uluru: es sagrado para los Anangu y fue oficialmente prohibido en 2019. Los tours indígenas son far superior a los genéricos. La puesta de sol es hacia el oeste, pero el hotel está al este: sal temprano.",
+      "plan_b_lluvia": "Museo Cultural, centro de visitantes (climatizado), tours indoor en el resort, conducir hasta Kings Canyon (2.5h) para alternativa.",
+      "keywords": [
+        "Uluru",
+        "Ayers Rock",
+        "Kata Tjuta",
+        "Alice Springs",
+        "outback",
+        "desierto rojo",
+        "Aboriginal",
+        "monolito"
+      ]
+    },
+    {
+      "id": "melbourne",
+      "nombre": "Melbourne",
+      "tipo": "ciudad",
+      "region": "Victoria",
+      "descripcion": "Capital cultural australiana con arte callejero, café gourmet y escena gastronómica world-class. Punto de partida para la Great Ocean Road y Dandenong Ranges.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre a noviembre, enero a marzo",
+      "como_llegar": "Aeropuerto Tullamarine: 23km, tren SkyBus 8 EUR (30 min) o taxi 40-50 EUR. Desde Sydney: vuelo 1h (80-140 EUR) o coach 12h (30 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal en Carlton o Fitzroy: 24-32 EUR/noche",
+        "medio": "Hotel 3* en CBD o Southbank: 65-100 EUR/noche",
+        "comfort": "Hotel 4* en St Kilda o Docklands: 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Laneway art (callejones con murales, gratis)",
+        "NGV International Museum (entrada gratuita permanentes)",
+        "Tranvía histórico #35 (15 EUR, recorrido nostálgico)",
+        "Queen Victoria Market (mercado, gratis entrada, compra 10-30 EUR)",
+        "Yarra River Walk (gratis)",
+        "St Kilda Beach y Luna Park (playa gratis, parque 5 EUR entrada)"
+      ],
+      "donde_comer": "Laneways gastronómicas: Hosier Lane, AC/DC Lane (20-35 EUR). Little Italy en Carlton (pasta 15-22 EUR). Mariscos en St Kilda: 25-40 EUR. Cafeterías de specialty coffee por toda la ciudad: 4-6 EUR.",
+      "consejo_local": "Los mejores restaurantes no tienen placas visibles; pregunta en hostales. El clima cambia rápidamente: lleva capas. Domingo es día de mercados; no pierdas Queen Vic.",
+      "plan_b_lluvia": "National Gallery of Victoria, Australian Museum of Moving Image, cafeterías y tiendas de ropa en Toorak Road, cines indie.",
+      "keywords": [
+        "Melbourne VIC",
+        "Laneways",
+        "Street art",
+        "CBD",
+        "Southbank",
+        "Fitzroy",
+        "St Kilda",
+        "Queen Victoria Market"
+      ]
+    },
+    {
+      "id": "great-ocean-road",
+      "nombre": "Great Ocean Road",
+      "tipo": "naturaleza",
+      "region": "Victoria",
+      "descripcion": "Ruta costera de 243km con acantilados espectaculares, los Doce Apóstoles y playas salvajes. Una de las rutas escénicas más famosas del mundo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Melbourne: alquiler coche (40 EUR/día) o tour organizado (95-120 EUR incluye transporte, 1-2 días). Salida desde Melbourne 1.5h a Torquay (inicio ruta).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Lorne o Apollo Bay: 28-38 EUR/noche",
+        "medio": "Hotel 3* en Lorne: 70-110 EUR/noche",
+        "comfort": "Resort en Bells Beach o Apollo Bay: 140-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Doce Apóstoles (Twelve Apostles, entrada 13 EUR parking, vistas gratis)",
+        "Lorne Beach y bosque templado (gratis)",
+        "Cape Byron lighthouse walk (8km, gratis)",
+        "Bells Beach: olas y surf culture (gratis)",
+        "Erskine Falls: cascada cerca de Lorne (gratis)",
+        "Shotover Canyon: avistamiento de koalas y vida silvestre (gratis)"
+      ],
+      "donde_comer": "Lorne: Fish & chips 15 EUR, cafés costeros 8-12 EUR. Apollo Bay: restaurantes 20-35 EUR. Picnic en paradas con vistas (compra en Melbourne).",
+      "consejo_local": "Maneja lento por la costa; los miradores improvisados son peligrosos. Lluvia frecuente; la ruta es mejor en despejado. Los Doce Apóstoles amanecen mejores al amanecer; ve temprano o cuando sale el sol.",
+      "plan_b_lluvia": "Lorne Foreshore (paseo techado), café/restaurante indoor, vuelve si es tormenta (acantilados cerrados por viento).",
+      "keywords": [
+        "Great Ocean Road",
+        "Twelve Apostles",
+        "Lorne",
+        "Apollo Bay",
+        "Bells Beach",
+        "Victoria coast",
+        "acantilados"
+      ]
+    },
+    {
+      "id": "tasmania-hobart",
+      "nombre": "Tasmania - Hobart",
+      "tipo": "isla",
+      "region": "Tasmania",
+      "descripcion": "Isla salvaje con naturaleza prístina, whisky famoso y MONA (museo arte contemporáneo). Menos turística que el continente pero igual de espectacular.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Melbourne: vuelo 1h (60-120 EUR) o ferry Spirit of Tasmania 11h (80-150 EUR, incluye camarote). Desde Sydney: vuelo 2.5h (120-200 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal en city center: 26-35 EUR/noche",
+        "medio": "Hotel 3* en Salamanca: 75-110 EUR/noche",
+        "comfort": "Hotel 4* en Battery Point: 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "MONA (Museum of Old and New Art): 25 EUR, arte provocador",
+        "Paseo Salamanca (gratis)",
+        "Mount Wellington hike: vistas 360° (gratis, 4km)",
+        "Bonorong Wildlife Park: koalas, wombats (25 EUR)",
+        "Cradle Mountain National Park (entrada 45 EUR, 1.5h desde Hobart)",
+        "Distería Overeem (whisky australiano, degustación 20 EUR)"
+      ],
+      "donde_comer": "Seafood en Salamanca waterfront: 22-35 EUR. Meat pie (comida típica): 6-10 EUR. Cafés Hobart: 6-9 EUR. Trufa local en restaurantes premium.",
+      "consejo_local": "MONA es perturbador e inmersivo; no es museo convencional. Alquila coche para Cradle Mountain (40 EUR/día). El clima es impredecible; lluvia repentina es normal.",
+      "plan_b_lluvia": "MONA (muy recomendado igual), museos indoor, tiendas Salamanca, whisky tours, cines.",
+      "keywords": [
+        "Tasmania",
+        "Hobart",
+        "MONA",
+        "Salamanca",
+        "Cradle Mountain",
+        "whisky",
+        "wombats",
+        "wildlife"
+      ]
+    },
+    {
+      "id": "cairns-daintree",
+      "nombre": "Daintree Rainforest",
+      "tipo": "naturaleza",
+      "region": "Queensland",
+      "descripcion": "Selva tropical más antigua del planeta (180 millones años), Patrimonio UNESCO. Biodiversidad extrema y pueblos indígenas. Acceso desde Cairns.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre (menos lluvia, menos mosquitos)",
+      "como_llegar": "Desde Cairns: alquiler coche (40 EUR/día) o tour organizado (120-160 EUR, 1 día). Conducir 80km norte 1.5h a Mossman, luego ferry Daintree (1 EUR).",
+      "donde_dormir": {
+        "mochilero": "Mossman Gorge Centro o Daintree Eco-lodge: 35-50 EUR/noche",
+        "medio": "Hotel 3* en Port Douglas (base): 70-110 EUR/noche",
+        "comfort": "Eco-resort en Daintree: 160-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Mossman Gorge: baño en piscina natural (entrada 14 EUR)",
+        "Caminata guiada Daintree con aborígenes (100 EUR, imprescindible)",
+        "Crocodile spotting Daintree River (tour 65 EUR)",
+        "Cape Tribulation walk: playas remotas (gratis)",
+        "Malanda Falls (cascada de agua dulce, entrada 8 EUR)"
+      ],
+      "donde_comer": "Mossman: cafés y fish & chips (12-20 EUR). Daintree: restaurantes caros de eco-lodges (35-50 EUR). Lleva snacks.",
+      "consejo_local": "Los tours indígenas son mucho mejor que los genéricos; aprenderás sobre bush tucker y medicina tradicional. Nunca nades en agua dulce (cocodrilos de agua dulce son letales). Los mosquitos son brutales; repelente de insectos obligatorio.",
+      "plan_b_lluvia": "Tours cubiertos tipo Skyrail o Kuranda Scenic Railway, museos rainforest, espera a buen tiempo para river cruises.",
+      "keywords": [
+        "Daintree",
+        "rainforest",
+        "Mossman Gorge",
+        "Cape Tribulation",
+        "Queensland tropical",
+        "selva antigua",
+        "cocodrilos"
+      ]
+    },
+    {
+      "id": "perth-oeste",
+      "nombre": "Perth",
+      "tipo": "ciudad",
+      "region": "Australia Occidental",
+      "descripcion": "Ciudad aislada en la costa oeste con playas urbanas pristinas, clima mediterráneo y acceso a Rottnest Island (quokkas). La más remota del mundo desarrollado.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre a noviembre, febrero a abril",
+      "como_llegar": "Vuelo desde Sydney/Melbourne 5-5.5h (120-200 EUR). Desde Sydney: coach 40h, 50 EUR. Aeropuerto a Perth: tren 40 min (5 EUR) o taxi 40 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostal en Northbridge: 24-33 EUR/noche",
+        "medio": "Hotel 3* en CBD o East Perth: 65-100 EUR/noche",
+        "comfort": "Hotel 4* en South Perth: 140-210 EUR/noche"
+      },
+      "que_hacer": [
+        "Rottnest Island: ferry (28 EUR) + bici (15 EUR alquiler) + playas + quokkas (gratis verlos)",
+        "Kings Park: parque urbano 400 hectáreas (gratis)",
+        "Scarborough Beach y Cottesloe Beach (playas gratis)",
+        "Perth Mint: acuñación de monedas oro (18 EUR)",
+        "Swan River walk (gratis)",
+        "Art Gallery of Western Australia (entrada gratuita)"
+      ],
+      "donde_comer": "Northbridge: cafés y comida internacional (12-20 EUR). Cottesloe Beach: fish & chips 15 EUR. Especialidad: rock lobster 35-50 EUR. Cafeterías specialty coffee: 5-7 EUR.",
+      "consejo_local": "Rottnest Island es imprescindible; los quokkas son adorables pero no los toques. Alquila bici, no lo hagas a pie. Perth es cara pero playas son world-class. El aislamiento lo hace único.",
+      "plan_b_lluvia": "Art Gallery, museos, cafés Northbridge, compras en Hay Street, cines.",
+      "keywords": [
+        "Perth WA",
+        "Rottnest Island",
+        "quokkas",
+        "Cottesloe Beach",
+        "Kings Park",
+        "Swan River",
+        "Australia Occidental"
+      ]
+    },
+    {
+      "id": "blue-mountains",
+      "nombre": "Blue Mountains",
+      "tipo": "montaña",
+      "region": "Nueva Gales del Sur",
+      "descripcion": "Montañas azules a 90km de Sydney con senderos, cascadas y formaciones rocosas icónicas (Three Sisters). Escape de la ciudad en 2 horas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre a noviembre, febrero a marzo",
+      "como_llegar": "Desde Sydney: tren regional 2h (12 EUR) a Katoomba. En coche alquiler (40 EUR/día) o tour diario organizado (85 EUR incluye transporte y guía).",
+      "donde_dormir": {
+        "mochilero": "Hostal Katoomba o Leura: 26-36 EUR/noche",
+        "medio": "Hotel 3* en Katoomba: 70-110 EUR/noche",
+        "comfort": "Boutique resort Leura: 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Echo Point: vistas Three Sisters (gratis)",
+        "Scenic World: ferrocarril funicular (58 EUR todo incluido)",
+        "Wentworth Falls walk: cascada 4km (gratis)",
+        "Prince Henry Cliff Walk: 5.5km (gratis)",
+        "Leura village: tiendas y cafés pintorescos (compra 15-30 EUR)",
+        "Scenic lookouts (gratis)"
+      ],
+      "donde_comer": "Leura: cafés y brunch gourmet (12-22 EUR). Katoomba: kebabs y fish & chips (10-16 EUR). Picnic en miradores.",
+      "consejo_local": "Las Three Sisters se ven mejor desde Echo Point al amanecer o atardecer. Los senderos pueden ser fangosos; lleva botas. Leura es linda pero cara; come mejor en Katoomba.",
+      "plan_b_lluvia": "Scenic World (techado), Leura Cascades (paseo corto), museos Katoomba, cafés, Indoor entertainment.",
+      "keywords": [
+        "Blue Mountains",
+        "Katoomba",
+        "Leura",
+        "Three Sisters",
+        "Echo Point",
+        "NSW",
+        "Wentworth Falls"
+      ]
+    },
+    {
+      "id": "byron-bay",
+      "nombre": "Byron Bay",
+      "tipo": "playa",
+      "region": "Nueva Gales del Sur",
+      "descripcion": "Pueblo bohemio costero con ambiente hippie, surfistas y vida alternativa. El punto más oriental de Australia con faros icónicos y mercadillos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Sydney: coach (12h, 40 EUR) o vuelo a Gold Coast (2h, 60 EUR) + alquiler coche (80km, 1h). Desde Brisbane: coche alquiler (2.5h, 160km).",
+      "donde_dormir": {
+        "mochilero": "Hostal Byron Bay Hostel o Aquarius Backpackers: 26-35 EUR/noche",
+        "medio": "Hotel 3* en Main Beach: 70-110 EUR/noche",
+        "comfort": "Resort o B&B Bangalow: 150-210 EUR/noche"
+      },
+      "que_hacer": [
+        "Byron Bay Lighthouse: paseo coastal (gratis)",
+        "Cape Byron walk: avistamiento ballenas (gratis, junio-octubre)",
+        "Playas para surfear: The Pass, Wategos (gratis)",
+        "Mercadillo Byron Markets (primer domingo mes, gratis entrada)",
+        "Minyon Falls: cascada en selva (tour 120 EUR o DIY hike)",
+        "Hot yoga y meditación (clases 15-20 EUR)"
+      ],
+      "donde_comer": "Main Street: cafés boho (8-14 EUR), restaurantes vegetarianos (18-28 EUR), fish & chips (14 EUR). Pizza in Bayside (12 EUR). Mercado comida local domingos.",
+      "consejo_local": "Byron es caro y turístico en temporada (diciembre-febrero); ve fuera de eso. Los mercadillos (mercadillos de farmers) son excelentes para vivres frescos. El ambiente es muy hippie/wellness; mucho yoga y comida vegana.",
+      "plan_b_lluvia": "Museos, galerías, cafés, compras en Main Street, yoga indoor, spas.",
+      "keywords": [
+        "Byron Bay",
+        "NSW",
+        "hippie",
+        "surfers",
+        "lighthouse",
+        "Cape Byron",
+        "Main Street",
+        "mercados"
+      ]
+    }
+  ]
+}

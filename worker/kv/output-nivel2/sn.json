@@ -1,0 +1,349 @@
+{
+  "pais": "Senegal",
+  "codigo": "sn",
+  "destinos": [
+    {
+      "id": "dakar",
+      "nombre": "Dakar",
+      "tipo": "ciudad",
+      "region": "Cap-Vert",
+      "descripcion": "Capital cosmopolita con museos de arte africano, mercados vibrantes y playas urbanas. Punto de entrada obligatorio para la mayoría de viajeros independientes. Centro cultural y político del país con arquitectura colonial y modernista mezcladas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Aeropuerto Blaise Diagne (DSS), a 50 km: autobús (1 hora, 5-8 EUR) o taxi (30-40 EUR)",
+      "donde_dormir": {
+        "mochilero": "Albergue en Plateau o Medina: 15-25 EUR/noche",
+        "medio": "Hotel 2-3 estrellas en Plateau: 40-70 EUR/noche",
+        "comfort": "Hotel 4+ estrellas en Almadies: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Musée Théodore Monod (arte africano, 5 EUR)",
+        "Île de Gorée (ferri 1 EUR, sitio histórico esclavista, gratis)",
+        "Mercado Kermel (libre, regateo)",
+        "Monumento African Renaissance (mirador, 5 EUR)",
+        "Playa de Ngor (gratis)"
+      ],
+      "donde_comer": "Thieboudienne (arroz con pescado, 3-5 EUR) en restaurantes locales. Zona HLM para comida auténtica, Le Lagon en Plateau para comida internacional.",
+      "consejo_local": "Negocia siempre los precios de taxi antes de entrar. El ferri a Île de Gorée sale cada 30 min pero puede haber colas en temporada alta; ve temprano.",
+      "plan_b_lluvia": "Explora museos (Musée de la Femme, Musée IFAN), galerías de arte en Plateau, o pasa tiempo en cafés del barrio de Mermoz.",
+      "keywords": [
+        "capital",
+        "Goree",
+        "Plateau",
+        "Medina",
+        "Almadies",
+        "arte africano",
+        "puerto"
+      ]
+    },
+    {
+      "id": "saint-louis",
+      "nombre": "Saint-Louis",
+      "tipo": "histórico",
+      "region": "Saint-Louis",
+      "descripcion": "Segunda ciudad histórica de Senegal con arquitectura colonial francesa impecable en la isla del río Senegal. Punto de partida para safaris en el Delta del Senegal y avistamiento de aves. Atmósfera bohemia con galerías de arte y casas coloniales restauradas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Dakar: autobús (4-5 horas, 8-12 EUR) o minibús (3-4 horas, 10-15 EUR). Operadores: Ndiaga Ndiaye, Dem Dikk.",
+      "donde_dormir": {
+        "mochilero": "Albergue en île: 12-20 EUR/noche",
+        "medio": "Guesthouse colonial: 35-60 EUR/noche",
+        "comfort": "Hotel Palais des Gouverneurs o similar: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por la isla (libre)",
+        "Safari en el Delta del Senegal con pajareros locales (40-60 EUR/día)",
+        "Visita a Langue de Barbarie (punta de arena, 5 EUR)",
+        "Mercado local Guet N'dar (gratis, regateo)",
+        "Galerías de arte en la île (gratuitas)"
+      ],
+      "donde_comer": "Yassa (pollo con limón, 3-5 EUR), mafé en comedores locales. Zona de la isla tiene restaurantes turísticos (8-15 EUR). Para presupuesto, come donde comen los locales en Sor.",
+      "consejo_local": "Contrata guías locales de Delta a través de tu alojamiento; son más baratos (30-40 EUR) que agencias. El mejor avistamiento de pájaros es al amanecer.",
+      "plan_b_lluvia": "Explora las casas coloniales (algunas con exposiciones interiores), pasa tiempo en cafés de la île, o visita el cementerio histórico.",
+      "keywords": [
+        "Saint Louis",
+        "arquitectura colonial",
+        "Delta Senegal",
+        "île",
+        "pajaros",
+        "río Senegal",
+        "bohemio"
+      ]
+    },
+    {
+      "id": "casamance-kaolack",
+      "nombre": "Kaolack",
+      "tipo": "rural",
+      "region": "Kaolack",
+      "descripcion": "Puerta de entrada a la región de Casamance con auténtica vida rural senegalesa. Mercado tradicional dinámico y punto de conexión para explorar pueblos de etnias Mandinka y Jola. Centro de comercio de cacahuetes y cultura local preservada.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Dakar: autobús (3-4 horas, 6-10 EUR) o minibús directo (3 horas, 8-12 EUR). Luego Kaolack es base para Casamance.",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes básica: 10-15 EUR/noche",
+        "medio": "Guesthouse decente: 25-40 EUR/noche",
+        "comfort": "Hotel pequeño: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado Kaolack (libre, ver mañana temprano)",
+        "Aldea de Wassu (piedras megalíticas, 2 EUR)",
+        "Pirogue por el río Saloum (15-30 EUR/día)",
+        "Visita a pueblos Jola cercanos (libre, respeta costumbres)",
+        "Mercado de sal en Tambacounda (gratis)"
+      ],
+      "donde_comer": "Mafé de cacahuete (2-4 EUR), yassa de pollo en comedores del mercado. Comida sencilla pero auténtica; presupuesto muy bajo.",
+      "consejo_local": "Kaolack es punto de paso, no destino final. Duerme aquí y sal temprano a Casamance. Los minibús locales (car rapides) conectan con pueblos pequeños; negocia precios.",
+      "plan_b_lluvia": "Explora el mercado cubierto, visita tiendas de artesanía local, o descansa en la guesthouse.",
+      "keywords": [
+        "Kaolack",
+        "Casamance",
+        "mercado",
+        "rural",
+        "Mandinka",
+        "Jola",
+        "Saloum"
+      ]
+    },
+    {
+      "id": "ziguinchor",
+      "nombre": "Ziguinchor",
+      "tipo": "ciudad",
+      "region": "Casamance",
+      "descripcion": "Capital de Casamance con ambiente distinto al resto del país: influencias criollas, mercados coloridos y vida riverña. Puerto en el río Casamance con paisajes tropicales, islas cercanas y gastronomía única basada en pescado y marisco.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Kaolack: minibús (3-4 horas, 8-12 EUR) o desde Dakar: autobús directo (8 horas, 12-18 EUR). Operadores Ndiaga Ndiaye, Dem Dikk.",
+      "donde_dormir": {
+        "mochilero": "Albergue o casa de huéspedes: 12-18 EUR/noche",
+        "medio": "Guesthouse o hotel 2 estrellas: 30-50 EUR/noche",
+        "comfort": "Hotel Auberge Kankouran: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por el puerto y río (gratis)",
+        "Mercado Tilène (libre, mañana temprano)",
+        "Excursión a Île de Carabane (pirogue 20-30 EUR ida/vuelta)",
+        "Visita a playas cercanas: Cap Skirring (día completo, 15-25 EUR)",
+        "Aldeas de artesanía en Casamance (5-10 EUR con guía)"
+      ],
+      "donde_comer": "Rouget (pargo) grillé (4-6 EUR), huîtres (ostras, 5-8 EUR), calamar a la plancha. Especialidad local: sauce de cacahuete con pescado. Zona del puerto para auténtico, restaurantes turísticos en centro.",
+      "consejo_local": "Casamance es más cara que otras regiones pero ofrece mejor comida. Los lugareños hablan francés mejor aquí. Renta una bicicleta (3 EUR/día) para explorar.",
+      "plan_b_lluvia": "Visita el museo regional (si abre), explora mercados cubiertos, o siéntate en cafés ribereños.",
+      "keywords": [
+        "Ziguinchor",
+        "Casamance",
+        "río",
+        "criollo",
+        "Carabane",
+        "pescado",
+        "tropical"
+      ]
+    },
+    {
+      "id": "ile-carabane",
+      "nombre": "Île de Carabane",
+      "tipo": "isla",
+      "region": "Casamance",
+      "descripcion": "Isla con ruinas de fuerte colonial, playas tranquilas y aldeas de pescadores. Destino de lento viaje con pirogues, manglares y vida aislada auténtica. Perfecto para descansar y desconectar después de ciudades.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Ziguinchor: pirogue desde puerto (30-45 min, 20-30 EUR ida/vuelta o incluida en tours). Tours desde Ziguinchor: 40-60 EUR.",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes local: 15-20 EUR/noche",
+        "medio": "Guesthouse rústica: 30-45 EUR/noche",
+        "comfort": "Lodge ecológico: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas del fuerte colonial (libre, exploración)",
+        "Playa de la isla (gratis)",
+        "Paseo en pirogue por manglares (15-25 EUR)",
+        "Visita a aldea de pescadores (libre)",
+        "Pesca o snorkel (30-50 EUR con guía)"
+      ],
+      "donde_comer": "Pescado fresco del día cocinado en casa de huéspedes (4-8 EUR). Marisco limitado; come lo que haya disponible. Muy básico pero sabroso.",
+      "consejo_local": "No hay ATM ni tienda: trae dinero en efectivo desde Ziguinchor. La isla es pequeña (caminable en 1-2 horas). Duerme temprano; no hay mucho que hacer de noche.",
+      "plan_b_lluvia": "Descansa en alojamiento, pesca local, o juega con niños de la aldea.",
+      "keywords": [
+        "Carabane",
+        "isla",
+        "fuerte",
+        "manglares",
+        "pescadores",
+        "aislada",
+        "pirogue"
+      ]
+    },
+    {
+      "id": "senegal-oriental-tambacounda",
+      "nombre": "Tambacounda",
+      "tipo": "ciudad",
+      "region": "Tambacounda",
+      "descripcion": "Puerta al este y sur de Senegal, cerca del río Senegal y frontera con Mali. Punto de acceso para safaris en Niokolo-Koba y exploración del Sahel. Menos turística, con mercados auténticos y conexión con culturas del interior.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Desde Dakar: autobús (8-10 horas, 12-18 EUR) o tren Dakar-Tambacounda (14 horas, 15-25 EUR, más atmosférico). Minibús desde Kaolack (6 horas, 10-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue o casa simple: 10-15 EUR/noche",
+        "medio": "Hotel 2 estrellas: 25-40 EUR/noche",
+        "comfort": "Hotel Keur Samba: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado Tambacounda (libre, mañana)",
+        "Río Senegal (paseo gratis)",
+        "Parque Niokolo-Koba (entrada 15-20 EUR, safari 60-100 EUR/día con guía)",
+        "Aldea de Wassoulou (gratis, 20 km)",
+        "Pesca de cocodrilo en río (25-40 EUR)"
+      ],
+      "donde_comer": "Cuscús de mijo (2-3 EUR), pez gato a la parrilla (3-5 EUR), dulce de tamarindo. Comida más variada que occidente. Restaurantes simples; presupuesto bajo.",
+      "consejo_local": "Tambacounda es calurosa; viaja en horarios frescos. Contrata safaris en Niokolo-Koba a través de guías locales, no desde Dakar (más barato). El río Senegal es hermoso al atardecer.",
+      "plan_b_lluvia": "Visita mercado, descansa en hotel, o lee en cafés locales.",
+      "keywords": [
+        "Tambacounda",
+        "Niokolo-Koba",
+        "safari",
+        "Senegal oriental",
+        "río Senegal",
+        "Sahel",
+        "Mali"
+      ]
+    },
+    {
+      "id": "lac-rose",
+      "nombre": "Lac Rosé (Retba)",
+      "tipo": "naturaleza",
+      "region": "Thiès",
+      "descripcion": "Lago de agua salada con tonalidad rosada por algas y minerales. Espectáculo visual único con pirogues de recolectores de sal. Excursión fácil desde Dakar, icónica pero atestada de tours organizados; mejor visitarla de forma independiente.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo (color más intenso)",
+      "como_llegar": "Desde Dakar: minibús o taxi compartido (1.5 horas, 5-8 EUR) a Tamié, luego moto-taxi (3 EUR). En auto o tour (20-40 EUR).",
+      "donde_dormir": {
+        "mochilero": "Camping rústico junto al lago: 8-12 EUR/noche",
+        "medio": "Guesthouse en pueblo: 25-35 EUR/noche",
+        "comfort": "Eco-lodge: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en el lago (gratis, agua muy salada y flotante)",
+        "Fotografía al amanecer/atardecer (gratis)",
+        "Tour de pirogues de sal (10-20 EUR con barquero)",
+        "Visita a duna de arena (gratis, escalable)",
+        "Compra de sal a recolectores (5 EUR/kg)"
+      ],
+      "donde_comer": "Ceibogá (restaurante local simple) con pescado, arroz (3-5 EUR). Opciones limitadas; trae snacks desde Dakar.",
+      "consejo_local": "Llega al amanecer para fotos y evitar multitudes de tours. Báñate en un rincón tranquilo; lleva toalla. Negocia precios de pirogua directo con barqueros locales, no mediante resorts.",
+      "plan_b_lluvia": "El lago es visible incluso en nublado. Si lluvia fuerte, regresa a Dakar.",
+      "keywords": [
+        "Lac Rose",
+        "Retba",
+        "agua rosada",
+        "sal",
+        "excursion Dakar",
+        "naturaleza",
+        "duna"
+      ]
+    },
+    {
+      "id": "joal-fadiouth",
+      "nombre": "Joal-Fadiouth",
+      "tipo": "playa",
+      "region": "Thiès",
+      "descripcion": "Pueblo de pescadores costero con playas de conchas y puerto tradicional. Puedes cruzar a pie a la isla de Fadiouth durante marea baja. Atmósfera auténtica sin turismo masivo, ideal para relajarse y observar vida costera local.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Dakar: minibús (2-3 horas, 5-8 EUR). Desde Saint-Louis: minibús hacia el sur (3 horas, 8-10 EUR).",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes simple: 10-15 EUR/noche",
+        "medio": "Guesthouse: 25-40 EUR/noche",
+        "comfort": "Eco-lodge pequeño: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Caminar a Fadiouth en marea baja (gratis, 30 min)",
+        "Playas de conchas (gratis)",
+        "Pesca artesanal con pescadores (observación libre o 10-15 EUR para participar)",
+        "Mercado de pescado al amanecer (gratis)",
+        "Visita a iglesia católica en Fadiouth (libre)"
+      ],
+      "donde_comer": "Yassa y tieboudienne con pescado fresco (3-6 EUR) en comedores junto al puerto. Presupuesto muy bajo. Restaurantes turísticos: 8-12 EUR.",
+      "consejo_local": "Consulta horarios de mareas locales para cruzar a Fadiouth sin mojarte. Ve al mercado de pescado al amanecer (5-6 AM) para ver la vida real. Trae dinero en efectivo.",
+      "plan_b_lluvia": "Permanece en Fadiouth o Joal, explora aldeas interiores, o descansa.",
+      "keywords": [
+        "Joal",
+        "Fadiouth",
+        "playa",
+        "conchas",
+        "pescadores",
+        "marea",
+        "puerto",
+        "costa"
+      ]
+    },
+    {
+      "id": "bassari-pays-basari",
+      "nombre": "Bassari (Pays Basari)",
+      "tipo": "montaña",
+      "region": "Tambacounda",
+      "descripcion": "Región montañosa en el sureste con etnias Bassari y Bedik. Senderos por colinas, cascadas y aldeas tradicionales preservadas. Destino aventurero con poco turismo, ideal para senderismo y contacto cultural auténtico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Desde Tambacounda: minibús a Kedougou (4-5 horas, 10-15 EUR), luego moto-taxi o a pie. Tours desde Dakar: 150-200 EUR/3 días.",
+      "donde_dormir": {
+        "mochilero": "Albergue en Kedougou: 12-18 EUR/noche",
+        "medio": "Lodge rústico: 30-50 EUR/noche",
+        "comfort": "Ecolodge de calidad: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderos en Bassari (10-20 EUR/día con guía)",
+        "Cascadas de Dindefelo y Bandafassi (15-25 EUR)",
+        "Visita a aldeas Bedik (gratis, respeta protocolo)",
+        "Mercado de Kedougou (gratis)",
+        "Escalada de colinas (gratis o 5-10 EUR con guía)"
+      ],
+      "donde_comer": "Comida local en aldeas: mafé, cuscús, sopa de hoja. 2-4 EUR. En Kedougou: restaurantes simples (3-6 EUR). Muy básico pero auténtico.",
+      "consejo_local": "Contrata guías locales Bassari a través del alojamiento (más barato y mejor). Respeta costumbres: pide permiso antes de fotografiar. Ve en grupo o con guía (seguridad).",
+      "plan_b_lluvia": "Senderos pueden encharcarse; consulta localmente. Alterna con exploración de aldeas.",
+      "keywords": [
+        "Bassari",
+        "Pays Basari",
+        "Kedougou",
+        "montaña",
+        "senderismo",
+        "Bedik",
+        "cascadas",
+        "tribu"
+      ]
+    },
+    {
+      "id": "sine-saloum",
+      "nombre": "Sine-Saloum (Delta)",
+      "tipo": "naturaleza",
+      "region": "Kaolack, Fatick",
+      "descripcion": "Delta laberíntico de ríos, manglares e islas. Reserva natural con fauna y avistamiento de cocodrilos, peces y pájaros. Pirogues tradicionales, pueblos isleños y ecosistema único. Menos visitado que otros deltas de África occidental.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Kaolack: tour operador (30-50 EUR/día) o minibús a pueblos cercanos (Foundiougne, Tambacounda). Pirogue privada: 40-80 EUR/día.",
+      "donde_dormir": {
+        "mochilero": "Albergue en pueblo ribereño: 12-18 EUR/noche",
+        "medio": "Guesthouse con vistas: 30-50 EUR/noche",
+        "comfort": "Lodge ecológico del delta: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en pirogue (40-70 EUR/día con guía)",
+        "Avistamiento de pájaros (incluido en safari)",
+        "Visita a islas habitadas (5-10 EUR con guía)",
+        "Pesca deportiva (50-100 EUR)",
+        "Exploración de manglares (gratis o con tour)"
+      ],
+      "donde_comer": "Pescado grillé, ostras frescas (5-10 EUR), sopa de marisco (4-6 EUR) en alojamientos o aldeas. Comida sencilla pero excelente.",
+      "consejo_local": "Contrata guías locales desde tu alojamiento, no desde Kaolack. Madruga para aves y cocodrilos. Lleva binoculares. Mejor época: transición octubre-noviembre.",
+      "plan_b_lluvia": "Safari igual, pero menos avistamiento. Alternativamente, explora pueblos isleños a pie.",
+      "keywords": [
+        "Sine-Saloum",
+        "delta",
+        "manglares",
+        "pirogue",
+        "cocodrilos",
+        "pájaros",
+        "islas",
+        "safari"
+      ]
+    }
+  ]
+}

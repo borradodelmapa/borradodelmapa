@@ -1,0 +1,331 @@
+{
+  "pais": "Tonga",
+  "codigo": "to",
+  "destinos": [
+    {
+      "id": "nuku-alofa",
+      "nombre": "Nuku'alofa",
+      "tipo": "ciudad",
+      "region": "Tongatapu",
+      "descripcion": "Capital de Tonga y punto de entrada principal, mezcla de arquitectura colonial británica con vida tongana auténtica. Centro administrativo donde encontrar servicios, cambio de dinero y compras. Base logística ideal para explorar el archipiélago.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "aeropuerto internacional Fua'amotu (20km): taxi/autobús 25-35 EUR, 45 min",
+      "donde_dormir": {
+        "mochilero": "guesthouses/hostales en Nuku'alofa central: 25-40 EUR/noche",
+        "medio": "pequeños hoteles de 2-3 estrellas: 60-100 EUR/noche",
+        "comfort": "hoteles con vistas al puerto: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasear por el mercado central (gratis)",
+        "Visitar el Palacio Real desde el exterior (gratis)",
+        "Recorrer los templos metodistas y católicos (gratis)",
+        "Playa de Pangaimotu: lancha desde puerto (15 EUR)",
+        "Museo de Tonga (5 EUR)"
+      ],
+      "donde_comer": "Fish & chips en cafés locales (5-8 EUR), platillos tonganos con taro/ñame (8-12 EUR), zona portuaria con comedores de comida local",
+      "consejo_local": "El mercado principal cierra a las 15:00, ve temprano. Los bancos solo abren mañana y miércoles por la tarde.",
+      "plan_b_lluvia": "Compras en Westpac o pequeñas tiendas, café en Billfish Cafe, museos interiores",
+      "keywords": [
+        "Nuku alofa",
+        "capital Tonga",
+        "puerto",
+        "Tongatapu",
+        "centro administrativo"
+      ]
+    },
+    {
+      "id": "vava-u",
+      "nombre": "Vava'u",
+      "tipo": "isla",
+      "region": "Vava'u",
+      "descripcion": "Archipiélago de 170 islas en el norte, epicentro del turismo de buceo y avistamiento de ballenas jorobadas. Aguas cristalinas, cuevas submarinas y playas remotas en islas deshabitadas. Destino imprescindible para buceadores y amantes del mar.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "julio a octubre (ballenas), abril a septiembre (buceo)",
+      "como_llegar": "desde Nuku'alofa: vuelo local (30 min, 80-120 EUR) o ferry nocturno (14h, 50 EUR)",
+      "donde_dormir": {
+        "mochilero": "guesthouses locales: 30-50 EUR/noche",
+        "medio": "resorts pequeños frente a playa: 80-140 EUR/noche",
+        "comfort": "resorts boutique con spa: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en cuevas submarinas (60-90 EUR/inmersión)",
+        "Avistamiento de ballenas jorobadas (50-80 EUR, julio-octubre)",
+        "Tours por islas remotas con playa privada (40-70 EUR)",
+        "Snorkel en coral gardens (30-50 EUR)",
+        "Kayak por lagunas (25-40 EUR)"
+      ],
+      "donde_comer": "Fresh tuna y mahi-mahi en beachfront (12-18 EUR), panadería local con pasteles (3-5 EUR), algunos resorts incluyen comida",
+      "consejo_local": "Reserva buceo 1-2 días antes. Las ballenas llegan hasta octubre pero pico es agosto-septiembre. El pulpo rojo (tako) es manjar local.",
+      "plan_b_lluvia": "Visitar cuevas terrestres, masajes en spa, talleres artesanales en poblado",
+      "keywords": [
+        "Vava u",
+        "archipiélago norte",
+        "ballenas",
+        "buceo",
+        "cuevas",
+        "Neiafu"
+      ]
+    },
+    {
+      "id": "ha-apai",
+      "nombre": "Ha'apai",
+      "tipo": "isla",
+      "region": "Ha'apai",
+      "descripcion": "Archipiélago central con paisaje tranquilo, playas blancas sin multitudes y vida tongana sin turistificar. Islas pequeñas conectadas por botes locales, ideal para viajeros que buscan autenticidad y ritmo lento.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Nuku'alofa: vuelo (1h, 90-130 EUR) o ferry (8h, 35 EUR)",
+      "donde_dormir": {
+        "mochilero": "beach fales (cabañas locales): 25-45 EUR/noche",
+        "medio": "pequeños resorts familiares: 60-100 EUR/noche",
+        "comfort": "resorts con piscina: 110-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife local (gratis desde playa, tour 25 EUR)",
+        "Tours a islas desiertas (30-50 EUR)",
+        "Pesca local con pescadores (40-60 EUR/día)",
+        "Caminar por pueblos locales (gratis)",
+        "Avistamiento de mantas rayas (60 EUR, temporada)"
+      ],
+      "donde_comer": "Coconut bread, taro chips vendidos en mercado (2-3 EUR), pescado fresco en roadside (8-12 EUR), comer con familias locales a través de tours",
+      "consejo_local": "Ha'apai es el lugar más puro para ver Tonga sin influencias turísticas. Los ferries entre islas son informales: sé flexible con horarios. Trae protector solar alto, hay pocos servicios.",
+      "plan_b_lluvia": "Artesanías locales, taller de tejido de pandano, preparación de comidas con locales",
+      "keywords": [
+        "Ha apai",
+        "archipiélago central",
+        "playas desiertas",
+        "Lifuka",
+        "autentico"
+      ]
+    },
+    {
+      "id": "eua",
+      "nombre": "Eua",
+      "tipo": "naturaleza",
+      "region": "Eua",
+      "descripcion": "Isla más antigua geológicamente con bosques tropicales, acantilados espectaculares y biodiversidad única. Trekking entre naturaleza intacta, cuevas de calcita y vistas al océano desde acantilados de 60m. Destino para senderistas y naturalistas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Nuku'alofa: vuelo (50 min, 100-140 EUR) o ferry con conexión",
+      "donde_dormir": {
+        "mochilero": "guesthouses simples: 28-45 EUR/noche",
+        "medio": "bungalows con vistas: 70-110 EUR/noche",
+        "comfort": "resorts ecológicos: 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Trek a Toafa Cliffs (4h, gratis pero guía recomendado 40 EUR)",
+        "Cueva de Ana Kai (gratis entrada, 15 EUR con guía)",
+        "Playa de arena negra en Uluaki (gratis)",
+        "Birdwatching en bosque (gratis o con naturista local 35 EUR)",
+        "Cascada de Vaipe (trek moderado, gratis)"
+      ],
+      "donde_comer": "Comida casera tongana en lodges (10-15 EUR), panadería local (3 EUR), pocas opciones de restaurantes",
+      "consejo_local": "Eua es pequeña y tranquila; alquila coche (30 EUR/día) o bici (5 EUR). Los senderos no están señalizados, un guía local vale la pena. Sin farmacia ni cajero, trae efectivo.",
+      "plan_b_lluvia": "Cuevas (interiores), visitas a aldeas locales, compra de artesanías",
+      "keywords": [
+        "Eua",
+        "isla geologica",
+        "acantilados",
+        "senderismo",
+        "naturaleza",
+        "bosque tropical"
+      ]
+    },
+    {
+      "id": "tongatapu",
+      "nombre": "Tongatapu (interior)",
+      "tipo": "rural",
+      "region": "Tongatapu",
+      "descripcion": "Isla principal de Tonga fuera de la capital: aldeas rurales auténticas, playas tranquilas en el sur, monumento megalítico de Ha'amonga. Viajes de un día desde Nuku'alofa para ver vida tongana genuina.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Nuku'alofa: minibús/rental car (30-60 min según destino, 2-8 EUR en transporte público)",
+      "donde_dormir": {
+        "mochilero": "aldea de Pangaimotu o similares: 20-35 EUR/noche",
+        "medio": "bungalows en sur: 50-85 EUR/noche",
+        "comfort": "resorts en playas: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Ver Ha'amonga 'a Maui (monumento de 5 toneladas, gratis)",
+        "Laguna de freshwater (snorkel, gratis o 15 EUR con tour)",
+        "Playa de Limualofa (gratis)",
+        "Mercado de aldea en Navutoka (gratis, algunos souvenirs)",
+        "Iglesias metodistas locales (gratis, respetuoso horario)"
+      ],
+      "donde_comer": "Taro, platano frito, coconut curry en comedores locales (6-10 EUR), panadería con lu pulu (bollo de taro, 1-2 EUR)",
+      "consejo_local": "Alquila bici o coche en Nuku'alofa. Los pueblos cierran temprano (18:00). Lleva moneda pequeña: en zonas rurales sin cambio.",
+      "plan_b_lluvia": "Museos pequeños en pueblos, compra de artesanías en cooperativas, visita a iglesias",
+      "keywords": [
+        "Tongatapu rural",
+        "isla principal",
+        "Ha amonga",
+        "aldeas",
+        "megalito"
+      ]
+    },
+    {
+      "id": "kao",
+      "nombre": "Kao",
+      "tipo": "montaña",
+      "region": "Vava'u",
+      "descripcion": "Isla volcánica al norte de Vava'u, punto más alto de Tonga con vistas panorámicas. Trekking exigente pero rewarding hacia la cumbre, bosque tropical y playas vírgenes. Destino para aventureros con buen estado físico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "julio a octubre",
+      "como_llegar": "desde Nuku'alofa: vuelo a Vava'u (80-120 EUR) + bote a Kao (35-50 EUR)",
+      "donde_dormir": {
+        "mochilero": "guesthouses en pueblo Kao: 25-40 EUR/noche",
+        "medio": "bungalows: 60-95 EUR/noche",
+        "comfort": "resorts pequeños: 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Trek a cumbre de Kao (6-8h, moderado-difícil, gratis pero guía 50 EUR recomendado)",
+        "Snorkel en arrecife local (25-35 EUR)",
+        "Playa de Vakatauloa (gratis)",
+        "Exploración de pueblos locales (gratis)",
+        "Pesca tradicional con locales (45 EUR)"
+      ],
+      "donde_comer": "Pescado fresco, taro y coco (8-12 EUR en resorts), comida casera en stalls (5-8 EUR)",
+      "consejo_local": "El trek es difícil, lluvia frecuente, trae botas. Pocos servicios, lleva agua. Los lugareños pueden actuar de guía improvisado por 35 EUR.",
+      "plan_b_lluvia": "Quedarse en playa cubierta, exploración en bote, compra de artesanías en pueblo",
+      "keywords": [
+        "Kao",
+        "volcan",
+        "cumbre",
+        "senderismo",
+        "Vava u norte",
+        "aventura"
+      ]
+    },
+    {
+      "id": "pangaimotu",
+      "nombre": "Pangaimotu",
+      "tipo": "playa",
+      "region": "Tongatapu",
+      "descripcion": "Isla-playa a 20 min en bote desde Nuku'alofa, combinación perfecta de accesibilidad y naturaleza. Resort único en la isla, snorkel inmediato en arrecife, sándwich de viaje perfecto de 1 día.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Nuku'alofa: bote desde puerto (10-15 min, 15-20 EUR)",
+      "donde_dormir": {
+        "mochilero": "day-pass sin dormir (25 EUR incluye snorkel)",
+        "medio": "bungalow en Pangaimotu Resort: 90-130 EUR/noche",
+        "comfort": "bungalow premium con agua dulce privada: 140-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife de coral (incluido en day-pass)",
+        "Nadar en playa de arena blanca (gratis)",
+        "Paseo en kayak (25 EUR)",
+        "Comida en resort (buffet 20 EUR)",
+        "Atardecer desde playa (gratis)"
+      ],
+      "donde_comer": "Buffet en Pangaimotu Resort (20-25 EUR), snacks en bar de playa (5-10 EUR), comer antes del viaje es opción",
+      "consejo_local": "Venimos como day-trip: no necesitas dormir. La isla tiene un único resort + casa del guarda. El snorkel es mejor de mañana. Protector solar es imprescindible.",
+      "plan_b_lluvia": "Quedarse en piscina del resort, interior del bar/restaurant, kayak de todos modos",
+      "keywords": [
+        "Pangaimotu",
+        "isla playa",
+        "Tongatapu",
+        "snorkel arrecife",
+        "day trip"
+      ]
+    },
+    {
+      "id": "teleki-wharf",
+      "nombre": "Tonga y Hopping de islas menores",
+      "tipo": "isla",
+      "region": "Varias",
+      "descripcion": "Exploración de archipiélagos remotos via hopping de islas menores deshabitadas y semi-habitadas. Accesible principalmente desde Vava'u o Ha'apai, requiere flexibilidad y tiempo. Para viajeros que buscan autenticidad extrema.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "julio a octubre",
+      "como_llegar": "desde Vava'u o Ha'apai: botes locales/ferries (precios variables 20-60 EUR según distancia)",
+      "donde_dormir": {
+        "mochilero": "beach fales en islas con alojamiento: 20-40 EUR/noche",
+        "medio": "resorts remotos (pocos): 70-120 EUR/noche",
+        "comfort": "tours privados + camping o guesthouses: 150+ EUR/día"
+      },
+      "que_hacer": [
+        "Snorkel en arrecifes vírgenes (gratis desde playa)",
+        "Camping en isla desierta (con tour 60-100 EUR/día)",
+        "Pesca con pescadores locales (50 EUR)",
+        "Exploración de cuevas submarinas (80 EUR con equipo)",
+        "Recolección de conchas y observación de fauna (gratis)"
+      ],
+      "donde_comer": "Pescado a la brasa en playa (lo que traes), coco fresco, comida provista por tours",
+      "consejo_local": "No hay servicios: llevar agua, comida, protector. Los botes son informales, sin horarios fijos. Requiere español/adaptabilidad. Solo apto para aventureros reales.",
+      "plan_b_lluvia": "Imposible plan B aquí, elige día estable o cambia a islas habitadas",
+      "keywords": [
+        "hopping islas",
+        "islas remotas",
+        "archipiélagos",
+        "Vava u Ha apai",
+        "deshabitadas"
+      ]
+    },
+    {
+      "id": "nukualofa-mercado",
+      "nombre": "Nuku'alofa - Mercados y vida local",
+      "tipo": "ciudad",
+      "region": "Tongatapu",
+      "descripcion": "Experiencia inmersiva en mercados de Nuku'alofa: compra de productos frescos, artesanías locales, interacción genuina con vendedores tonganos. Espacio donde pasan la mañana todos los locales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "ubicado en centro de Nuku'alofa (a pie desde cualquier hotel)",
+      "donde_dormir": {
+        "mochilero": "guesthouses cercanas: 25-40 EUR/noche",
+        "medio": "hoteles en centro: 60-100 EUR/noche",
+        "comfort": "hoteles con vistas: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Compra en mercado Talamahu (gratis, regateo ligero)",
+        "Mercado de artesanías para tapa y lava-lavas (5-30 EUR por pieza)",
+        "Desayuno en comedores locales al mercado (5-8 EUR)",
+        "Charla con vendedoras locales (gratis, ellas encantadas)",
+        "Compra de frutas exóticas: mango, papaya, coco (1-2 EUR kilo)"
+      ],
+      "donde_comer": "Comedores al lado del mercado: lu pulu (bollo taro), raw fish (8-12 EUR), pipi (sopa de camarón)",
+      "consejo_local": "Llega antes de las 9:00 AM, después se despuebla. Los martes y jueves hay más variedad. Paga en pa'anga local (mejor cambio que en bancos oficiales).",
+      "plan_b_lluvia": "Ir de todas formas, mercado tiene estructura, comprar y comer en comedores interiores",
+      "keywords": [
+        "Nuku alofa mercado",
+        "Talamahu",
+        "vida local",
+        "artesanias",
+        "compras"
+      ]
+    },
+    {
+      "id": "lifou-futuna",
+      "nombre": "Futuna (excursión desde Tonga)",
+      "tipo": "isla",
+      "region": "Wallis y Futuna (Francia)",
+      "descripcion": "Pequeña colonia francesa con carácter polinésico, accesible desde Tonga. Playas tranquilas, volcán dormido Kolofou y atmósfera franco-tropical única. Opción para viajeros que buscan experiencia multicultural breve.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Nuku'alofa: vuelo a Futuna (conexión via Fiji generalmente, 150-220 EUR total) o ferry a Samoa (14h + vuelo interno)",
+      "excursion_desde": true,
+      "donde_dormir": {
+        "mochilero": "guesthouses locales: 35-50 EUR/noche",
+        "medio": "pequeños hoteles: 70-110 EUR/noche",
+        "comfort": "resorts: 120-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking volcán Kolofou (5-6h, 35 EUR con guía)",
+        "Playa de Asua (gratis)",
+        "Exploración de pueblos con iglesia blanca (gratis)",
+        "Snorkel en arrecife local (25 EUR)",
+        "Museo pequeño de cultura (3 EUR)"
+      ],
+      "donde_comer": "Francés y polinésico: cassoulet (15 EUR), poisson cru (12 EUR), comida casera en guesthouses (10-14 EUR)",
+      "consejo_local": "Futuna es MÁS auténtica que Tonga para viajeros pero menos desarrollada. Moneda es francos CFP. Llevar EUR/USD para cambiar. Ambiente tranquilo, sin multitudes.",
+      "plan_b_lluvia": "Museos, mercado local, cafés con ambiente francés",
+      "keywords": [
+        "Futuna",
+        "Wallis Futuna",
+        "Francia",
+        "excursion Tonga",
+        "volcan",
+        "Polynesie"
+      ]
+    }
+  ]
+}

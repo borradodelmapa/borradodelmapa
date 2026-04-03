@@ -1,0 +1,349 @@
+{
+  "pais": "Marruecos",
+  "codigo": "ma",
+  "destinos": [
+    {
+      "id": "marrakech",
+      "nombre": "Marrakech",
+      "tipo": "ciudad",
+      "region": "Marruecos Central",
+      "descripcion": "Ciudad imperial con medina laberíntica, palacios históricos y la icónica Plaza Jemaa el-Fnaa. Centro cultural y gastronómico donde conviven tradición y modernidad. Punto de partida ideal para excursiones al Atlas y Sáhara.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "desde Rabat en vuelo (1h, 40-80 EUR) o autobús (8h, 15-25 EUR). Aeropuerto propio con conexiones internacionales.",
+      "donde_dormir": {
+        "mochilero": "Riad en medina o hostal en Gueliz: 15-25 EUR/noche",
+        "medio": "Riad tradicional reformado o hotel 3* en Gueliz: 40-80 EUR/noche",
+        "comfort": "Riad de lujo o resort: 120-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer medina y Plaza Jemaa el-Fnaa (gratis)",
+        "Palacio Bahía (5 EUR)",
+        "Jardines de Menara (3 EUR)",
+        "Mercado de especias y teñidería (gratis)",
+        "Museo Bereber (8 EUR)",
+        "Excursión Atlas y pueblos de montaña (35-50 EUR con tour)"
+      ],
+      "donde_comer": "Tajín de cordero y cuscús en riads de medina (8-15 EUR). Prueba harira y pasteles de dátil. Come en la medina o en cafés de Gueliz para turistas con más variedad.",
+      "consejo_local": "Entra a los riads después de las 18h para esquivar grupos de tour. La medina de noche es más auténtica y segura de lo que parece.",
+      "plan_b_lluvia": "Museos (Bahía, Bereber, Menara cubierto), souks cubiertos, spas hammam",
+      "keywords": [
+        "Marrakesh",
+        "medina",
+        "Jemaa el-Fnaa",
+        "Plaza Mayor",
+        "riads",
+        "Gueliz",
+        "Hivernage"
+      ]
+    },
+    {
+      "id": "fes",
+      "nombre": "Fes",
+      "tipo": "histórico",
+      "region": "Marruecos Norte",
+      "descripcion": "Capital intelectual y espiritual, hogar de la medina más grande del mundo árabe y cuna del Corán. Laberintos de callejones donde el tiempo se detiene, con tenerías tradicionales y mezquitas centenarias. Esencial para entender Marruecos profundo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre a mayo",
+      "como_llegar": "desde Rabat en autobús (5h, 12-20 EUR) o tren (4.5h, 20-35 EUR). Vuelo directo desde algunas capitales europeas.",
+      "donde_dormir": {
+        "mochilero": "Riad o hostal en Fes Medina: 13-22 EUR/noche",
+        "medio": "Riad reformado con patio: 35-70 EUR/noche",
+        "comfort": "Riad de lujo o hotel con vistas: 100-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Medina a pie (gratis, contrata guía local 15-20 EUR)",
+        "Tenerías de Chouara (gratis ver desde arriba, 5 EUR acceso)",
+        "Mezquita Al-Qarawiyyin (solo exterior, gratis)",
+        "Madraza Bou Inania (5 EUR)",
+        "Museo de Arte Marroquí (3 EUR)",
+        "Souks de telas y cuero (gratis pasear, comprar según presupuesto)"
+      ],
+      "donde_comer": "Pastilla de pichón, cuscús de viernes y sopa de lentejas. Precio: 6-12 EUR en fondas de medina. Come en pequeños restaurantes locales, no en turísticos.",
+      "consejo_local": "Contrata un guía en la puerta de la medina (negocia 15 EUR por 2-3h). Sin guía te perderás las historias reales. Lleva monedas para propinas pequeñas.",
+      "plan_b_lluvia": "Madrazas, mezquitas, museos, souks cubiertos de textiles",
+      "keywords": [
+        "Fez",
+        "Fes Medina",
+        "Fes Jdida",
+        "tenerías",
+        "souks",
+        "Al-Qarawiyyin",
+        "Bou Inania"
+      ]
+    },
+    {
+      "id": "atlas-trekking",
+      "nombre": "Montañas del Atlas",
+      "tipo": "montaña",
+      "region": "Marruecos Central",
+      "descripcion": "Cadena montañosa con picos nevados, pueblos amazigh aislados y rutas de trekking de varios días. El Monte Toubkal (4.167m) es el pico más alto del Magreb. Escapada perfecta para senderistas y aventureros.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre (invierno nieve cierra rutas)",
+      "como_llegar": "desde Marrakech en minibús hacia Imlil (1.5h, 3-5 EUR). Agencias ofrecen tours con transporte y guía (70-120 EUR/día todo incluido).",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en aldeas (12-18 EUR) o acampar con porteadores",
+        "medio": "Guesthouse con comidas: 25-40 EUR/noche",
+        "comfort": "Lodge de montaña: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Ascenso Toubkal (20 EUR con guía obligatorio, 2 días)",
+        "Trekking Imlil-Aremd (gratis ruta, 8 EUR guía recomendado)",
+        "Visitar pueblos amazigh (gratis)",
+        "Dormir en refugio de montaña (15-25 EUR)",
+        "Paseo a mula (25-40 EUR/día)"
+      ],
+      "donde_comer": "Tajín de verduras y carne, pan de masa madre. Costo: 4-8 EUR en guesthouses. Incluido en paquetes de trekking.",
+      "consejo_local": "Contrata porteadores (10-15 EUR/día): alivian carga y apoyas economía local. Guía es obligatorio en Toubkal. Lleva litros de agua, no confíes en fuentes.",
+      "plan_b_lluvia": "Baja a pueblos para explorar artesanías, visita mercados locales",
+      "keywords": [
+        "Toubkal",
+        "Imlil",
+        "trekking",
+        "senderismo",
+        "picos",
+        "Aremd",
+        "alto atlas"
+      ]
+    },
+    {
+      "id": "sahara-merzouga",
+      "nombre": "Desierto de Merzouga",
+      "tipo": "desierto",
+      "region": "Marruecos Este",
+      "descripcion": "Dunas de arena dorada de 150 metros donde dormir bajo las estrellas es obligatorio. Poblado Amazigh y acceso a rutas bereberes ancestrales. La experiencia del Sáhara sin días de trek intenso.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "desde Fes en 4x4 tour (350-400 km, 2 días con paradas: 60-100 EUR). O minibús + conexiones: 25-40 EUR total pero 20-24h.",
+      "donde_dormir": {
+        "mochilero": "Campamento con tienda beduina y comida: 30-45 EUR/noche",
+        "medio": "Campamento semi-lujo (baño en tienda): 50-80 EUR/noche",
+        "comfort": "Resort desierto (piscina, comidas gourmet): 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo camellos al atardecer (25-35 EUR)",
+        "Noche en campamento bajo estrellas (incluido en alojamiento)",
+        "Paseo camellos al amanecer (25-35 EUR)",
+        "Visita pueblo Amazigh (gratis)",
+        "Laguna Dayet Srji (gratis, visita con tour)"
+      ],
+      "donde_comer": "Tajín cocinado en arena, cuscús de viernes, dátiles frescos. Precio: incluido en campamentos (8-12 EUR valor). Agua limitada, conserva botellas.",
+      "consejo_local": "La mayoría de tours desde Fes incluyen parada en Midelt y Ifrane. No tengas prisa, disfruta las paradas. Los campamentos inflados 'de lujo' son iguales que básicos: enfócate en experiencia, no en lujos.",
+      "plan_b_lluvia": "Rara en esta época. Si llueve, quedate en pueblo o vuelve a Fes.",
+      "keywords": [
+        "Merzouga",
+        "Sahara",
+        "dunas Erg Chebbi",
+        "camellos",
+        "beduinos",
+        "desierto",
+        "acampada"
+      ]
+    },
+    {
+      "id": "chefchaouen",
+      "nombre": "Chefchaouen",
+      "tipo": "ciudad",
+      "region": "Marruecos Noroeste",
+      "descripcion": "Pueblo azul enclavado en montañas con casas pintadas en tonos azul marino y cielo. Atmósfera mística y tranquila lejos del turismo masivo. Punto de partida para senderismo en el Rif.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre, octubre a abril sin lluvia",
+      "como_llegar": "desde Fes en minibús (4h, 10-15 EUR) o Tánger (2.5h, 8-12 EUR). Carreteras montañosas pero bien mantenidas.",
+      "donde_dormir": {
+        "mochilero": "Riad o hostal medina: 12-20 EUR/noche",
+        "medio": "Riad reformado: 30-50 EUR/noche",
+        "comfort": "Riad de lujo o guesthouse montaña: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo medina azul al atardecer (gratis)",
+        "Subida a Kasbah (2 EUR)",
+        "Trekking Pico Tissouka (20-30 EUR con guía)",
+        "Visita pueblos Rif cercanos (gratis, 5-10 EUR con tour)",
+        "Relajarse en cafés con vistas (2-3 EUR té)"
+      ],
+      "donde_comer": "Cuscús, tajín de pollo, sopa harira. Precio: 5-10 EUR en fondas. Muchas opciones vegetarianas. Come en plazas pequeñas, no en terrazas panorámicas caras.",
+      "consejo_local": "Llega antes de las 16h para fotos del pueblo azul sin masas. Sube a la Kasbah al atardecer. Evita fin de semana si vienes en temporada alta.",
+      "plan_b_lluvia": "Medina cubierta, spas hammam, cafés acogedor con té",
+      "keywords": [
+        "Chaouen",
+        "pueblo azul",
+        "Rif",
+        "medina",
+        "Kasbah",
+        "senderismo",
+        "montañas"
+      ]
+    },
+    {
+      "id": "essaouira",
+      "nombre": "Essaouira",
+      "tipo": "playa",
+      "region": "Marruecos Atlántico",
+      "descripcion": "Puerto pesquero bohemio con playa ventosa, medina pasada de moda y vida bohemia. Centro de windsurf y kitesurfing. Mezcla de viajeros, artistas y locales sin pretensiones.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Marrakech en autobús (2.5h, 8-12 EUR) o taxi compartido (2h, 10-15 EUR). Carretera buena y segura.",
+      "donde_dormir": {
+        "mochilero": "Hostal o riad medina: 13-22 EUR/noche",
+        "medio": "Riad con vistas o hotel 3*: 35-60 EUR/noche",
+        "comfort": "Hotel frente al mar o riad de lujo: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por puerto y mercado de pescado (gratis, ve por la mañana)",
+        "Playa (gratis, fuerte viento normal)",
+        "Medina a pie (gratis)",
+        "Windsurf o kitesurfing (30-50 EUR/día clases)",
+        "Isla de Mogador en bote (10-15 EUR)",
+        "Paseo costero al atardecer (gratis)"
+      ],
+      "donde_comer": "Pescado fresco a la parrilla, mejillones en salsa. Precio: 8-15 EUR en comedores de puerto. Come donde comen locales, no en terrazas turísticas.",
+      "consejo_local": "Compra pescado fresco en el puerto por la mañana a precio de ganga y come en la playa. El viento es constante: ven preparado. Medina es pequeña, 2h suficiente.",
+      "plan_b_lluvia": "Medina cubierta, museos, spas, comidas en cafés",
+      "keywords": [
+        "Essaouira",
+        "puerto",
+        "playa",
+        "windsurf",
+        "Mogador",
+        "bohemio",
+        "atlántico"
+      ]
+    },
+    {
+      "id": "kasbah-ait-benhaddou",
+      "nombre": "Kasbah Aït Benhaddou",
+      "tipo": "histórico",
+      "region": "Marruecos Central",
+      "descripcion": "Caserones de adobe apilados en ladera, patrimonio UNESCO y conjunto arquitectónico amazigh mejor preservado. Usado en decenas de películas, transita entre realidad y cine.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "desde Marrakech en tour (80-120 km, medio día 35-60 EUR con paradas). O minibús a Ouarzazate (3.5h, 15 EUR) y conexión local.",
+      "donde_dormir": {
+        "mochilero": "Alojamiento en pueblo (10-18 EUR/noche)",
+        "medio": "Guesthouse o riad: 25-45 EUR/noche",
+        "comfort": "Resort o hotel Ouarzazate (ciudad cercana): 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita kasbah y recorrido medina (gratis, guía local 10-15 EUR recomendado)",
+        "Fotos desde colinas (gratis, ve al atardecer)",
+        "Café con vista (2-4 EUR)",
+        "Tienda artesanía berebere (precios negociables, 5-50 EUR)"
+      ],
+      "donde_comer": "Tajín en cafés con vista. Precio: 6-10 EUR. Come mientras esperas el atardecer para fotos.",
+      "consejo_local": "Llega después de las 15h cuando salen los tours de día. Atardecer es mejor para fotos desde colinas (sube 20 min antes del ocaso). Guía local vale cada EUR.",
+      "plan_b_lluvia": "Visita rápida, foto y continúa a Ouarzazate",
+      "keywords": [
+        "Ait Benhaddou",
+        "Kasbah",
+        "adobe",
+        "UNESCO",
+        "película",
+        "cine",
+        "medina berebere"
+      ]
+    },
+    {
+      "id": "ifranie-azrou",
+      "nombre": "Ifrane y Azrou",
+      "tipo": "naturaleza",
+      "region": "Marruecos Central",
+      "descripcion": "Pequeño pueblo de montaña con arquitectura suiza y clima fresco (2000m). Rodeado de bosques de cedros y lagunas. Parada tranquila en ruta Fes-Merzouga sin turismo concentrado.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "desde Fes en minibús (2h, 5-8 EUR) hacia Merzouga. Directamente en ruta.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse: 12-20 EUR/noche",
+        "medio": "Hotel 3*: 30-50 EUR/noche",
+        "comfort": "Resort de montaña: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo parque Ifrane (gratis)",
+        "Laguna Dayet Aoua (gratis)",
+        "Bosque de cedros Azrou (gratis, visit monos berberiscos)",
+        "Senderismo en bosques (gratis)",
+        "Mercado local Azrou (viernes, gratis)"
+      ],
+      "donde_comer": "Cuscús, verduras locales. Precio: 5-8 EUR. Comida casera en guesthouses incluida.",
+      "consejo_local": "No es destino en sí, es parada ideal entre Fes y Merzouga. Gana altitud (refresco) y oxígeno mental. Los monos de cedros son amistosos pero no les des comida.",
+      "plan_b_lluvia": "Sigue viaje a Merzouga o vuelve a Fes, es solo parada",
+      "keywords": [
+        "Ifrane",
+        "Azrou",
+        "cedros",
+        "bosque",
+        "laguna",
+        "monos",
+        "parada ruta"
+      ]
+    },
+    {
+      "id": "tangier",
+      "nombre": "Tánger",
+      "tipo": "ciudad",
+      "region": "Marruecos Noroeste",
+      "descripcion": "Puerto histórico en estrecho de Gibraltar donde cruzaban imperios. Medina bohemia, cafés literarios y playas cercanas. Puerta de entrada desde España con aires internacionales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde España (ferry Tarifa 1h 15min, 25-40 EUR) o vuelos directos. Autobús a otras ciudades marroquíes (10-30 EUR según destino).",
+      "donde_dormir": {
+        "mochilero": "Hostal o riad medina: 12-22 EUR/noche",
+        "medio": "Riad o hotel 3*: 35-65 EUR/noche",
+        "comfort": "Hotel frente al mar o riad de lujo: 90-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Medina a pie (gratis)",
+        "Mirador con vistas a España (gratis)",
+        "Playa Tánger (gratis)",
+        "Museo de Arte Marroquí (3 EUR)",
+        "Playa Asilah cercana (20 min, gratis)",
+        "Ferry a España contemplación (25-40 EUR)"
+      ],
+      "donde_comer": "Sopa de pescado, brochetas, cuscús. Precio: 5-12 EUR. Come en medina, no en boulevares turísticos.",
+      "consejo_local": "Medina es segura y auténtica a cualquier hora. Evita taxis blancos, usa app o negocia antes. Gibraltar visible desde playa.",
+      "plan_b_lluvia": "Medina cubierta, cafés bohemios, museos, spas",
+      "keywords": [
+        "Tangier",
+        "Tanger",
+        "Tánger",
+        "Gibraltar",
+        "medina",
+        "puerto",
+        "bohemio"
+      ]
+    },
+    {
+      "id": "draa-dades-gorges",
+      "nombre": "Gargantas Dades y Todra",
+      "tipo": "naturaleza",
+      "region": "Marruecos Este",
+      "descripcion": "Cañones y gargantas espectaculares con paredes de roca rosa y pueblos amazigh encajados. Rutas de trekking accesibles y piscinas naturales. Paisaje salvaje y pocos turistas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "desde Marrakech hacia Merzouga, parada en ruta (200 km, 4-5h con paradas). Tour combinado: 50-80 EUR. O minibús Ouarzazate hacia gargantas.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en pueblos: 12-20 EUR/noche",
+        "medio": "Guesthouse o pequeño hotel: 25-40 EUR/noche",
+        "comfort": "Ecolodge de montaña: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking Garganta Todra (gratis, 2-3h)",
+        "Baño en piscinas naturales (gratis)",
+        "Trekking Garganta Dades (gratis, 3-4h)",
+        "Visita pueblos amazigh (gratis)",
+        "Paseo caballo/mula (20-30 EUR)"
+      ],
+      "donde_comer": "Tajín cocinado en fuego. Precio: 5-8 EUR en guesthouses. Comida casera mejor que restaurantes.",
+      "consejo_local": "No esperes señalización: pide indicaciones a locales. Las gargantas son 15km una de otra. Agua abundante, es seguro para piscinas. Mejor parada lenta sin tours acelerados.",
+      "plan_b_lluvia": "Lluvia puede hacer rutas peligrosas: camina solo si ves flujo bajando en las gargantas",
+      "keywords": [
+        "Dades",
+        "Todra",
+        "gargantas",
+        "cañones",
+        "trekking",
+        "piscinas naturales",
+        "rosa"
+      ]
+    }
+  ]
+}

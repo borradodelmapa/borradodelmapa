@@ -1,0 +1,337 @@
+{
+  "pais": "Argelia",
+  "codigo": "dz",
+  "destinos": [
+    {
+      "id": "argel",
+      "nombre": "Argel",
+      "tipo": "ciudad",
+      "region": "Provincia de Argel, norte",
+      "descripcion": "Capital y mayor puerto del país, con arquitectura colonial francesa, la Casbah Patrimonio de la UNESCO y playas mediterráneas. Centro cultural y punto de entrada obligatorio para la mayoría de viajeros. Mezcla de modernidad y historia en un entorno costero.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Aeropuerto Internacional Houari Boumediene (40 km), taxi/shuttle 25-40 EUR, 1 hora. Vuelos desde Europa desde 50 EUR con Air Algérie o compañías low-cost",
+      "donde_dormir": {
+        "mochilero": "Albergues en Casbah o Bab el-Oued, 15-25 EUR/noche",
+        "medio": "Hoteles 3* en centro, 40-60 EUR/noche",
+        "comfort": "Hoteles 4* con vistas al Mediterráneo, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer Casbah a pie (gratis, pero contratar guía 15-20 EUR recomendado)",
+        "Mezquita Ketchaoua y Basílica Notre-Dame d'Afrique (entrada 3-5 EUR)",
+        "Paseo por corniche y playas de Sidi Fredj (gratis)",
+        "Museo Nacional de Argelia (5 EUR)",
+        "Barrio de Bab el-Oued para vida local (gratis)"
+      ],
+      "donde_comer": "Couscous, pescado fresco y pasteles tradicionales. Rango 4-8 EUR. Zona de Bab el-Oued para mercados y cafés locales, corniche para restaurantes de marisco.",
+      "consejo_local": "Visita la Casbah temprano (7-8 am) antes de que se llene. Las calles cambian completamente después del anochecer y pueden ser confusas.",
+      "plan_b_lluvia": "Museo Nacional, galerías de arte en el centro, cafés tradicionales en Bab el-Oued",
+      "keywords": [
+        "Argel",
+        "Algiers",
+        "Casbah",
+        "capital argelia",
+        "Bab el-Oued",
+        "corniche"
+      ]
+    },
+    {
+      "id": "tassili-n-ajjer",
+      "nombre": "Tassili n'Ajjer",
+      "tipo": "desierto",
+      "region": "Wilaya de Djanet, suroeste",
+      "descripcion": "Meseta desértica con pinturas rupestres neolíticas de 10.000 años (Patrimonio UNESCO) y formaciones rocosas espectaculares. Destino premium para trekking en desierto con acceso controlado. Experiencia remota y geológicamente única.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Vuelo interno Argel-Djanet (Air Algérie) 150-200 EUR ida, 2 horas. Luego vehículo 4x4 con guía obligatorio desde Djanet (40 km), 2-3 horas, 40-60 EUR por persona",
+      "donde_dormir": {
+        "mochilero": "Campamentos en desierto con tienda beduina, 20-30 EUR/noche (incluye comidas)",
+        "medio": "Eco-lodges en Djanet, 45-65 EUR/noche",
+        "comfort": "Lodges con comodidades, 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a Archei y Tin Taharirt (paisaje de arcos naturales, 6-7 horas)",
+        "Visita cuevas con pinturas rupestres de 6000-10000 años (incluido en tour)",
+        "Senderismo al atardecer en Jabbaren (4 horas, espectacular)",
+        "Observación de estrellas en el desierto (gratis, noches claras)",
+        "Interacción con comunidades tuareg (negociable, 5-10 EUR)"
+      ],
+      "donde_comer": "Tagine, dátiles, pan árabe. Rango 3-6 EUR. La mayoría de tours incluyen comidas en el desierto.",
+      "consejo_local": "Lleva protección solar agresiva y 2-3 litros de agua por día. El guía es obligatorio y sabe dónde están realmente los sitios arqueológicos (muchos no están señalizados).",
+      "plan_b_lluvia": "Lluvia rara en desierto, pero vientos pueden parar tours. Explora el pueblo de Djanet, tiendas de artesanía tuareg.",
+      "keywords": [
+        "Tassili",
+        "Djanet",
+        "pintura rupestre",
+        "desierto Sahara",
+        "Archei",
+        "trekking desierto"
+      ]
+    },
+    {
+      "id": "timgad",
+      "nombre": "Timgad",
+      "tipo": "histórico",
+      "region": "Wilaya de Batna, zona media",
+      "descripcion": "Ruinas romanas de Thamugas (siglo II) con arquitectura clásicamente preservada, incluye templos, teatro y teatro pequeño. Patrimonio UNESCO declarado como 'Pompeya del norte de África'. Menos concurrido que otros yacimientos argelinos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre a mayo",
+      "como_llegar": "Desde Argel: autobús o coche alquilado (400 km, 6-7 horas, 15-25 EUR en autobús). O vuelo a Batna (150 EUR) + taxi al yacimiento (20 EUR, 1 hora)",
+      "donde_dormir": {
+        "mochilero": "Alojamientos en pueblo de Timgad, 12-18 EUR/noche",
+        "medio": "Hotel 2-3* en Batna (30 km), 30-45 EUR/noche",
+        "comfort": "Boutique hotels Batna, 60-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido guiado por ruinas romanas (10-15 EUR, 2-3 horas)",
+        "Ascenso a fortaleza bereber cercana (libre, panorámicas)",
+        "Museo arqueológico local (3 EUR)",
+        "Fotografía de mosaicos y estructuras al atardecer (gratis)",
+        "Exploración autónoma de teatros y templos (gratis)"
+      ],
+      "donde_comer": "Comida local en pequeños restaurantes en el pueblo: tajín, cuscús. Rango 3-5 EUR. Pocos restaurantes turísticos.",
+      "consejo_local": "Llega temprano (7-8 am) para evitar calor y tener mejor luz fotográfica. El sitio es enorme y requiere 3-4 horas mínimo para explorarlo adecuadamente.",
+      "plan_b_lluvia": "Museo arqueológico tiene cobertura, exploración de pueblo de Timgad",
+      "keywords": [
+        "Timgad",
+        "Thamugas",
+        "ruinas romanas",
+        "Pompeya Africa",
+        "Batna",
+        "yacimiento arqueológico"
+      ]
+    },
+    {
+      "id": "djemila",
+      "nombre": "Djemila",
+      "tipo": "histórico",
+      "region": "Wilaya de Sétif, zona media",
+      "descripcion": "Ruinas romanas de Cuicul en meseta elevada (900 m) con templos, basílicas cristianas tempranas y mosaicos intactos. Patrimonio UNESCO con una de las mejores colecciones de mosaicos de Argelia. Menos visitado que Timgad, más íntimo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Desde Argel: autobús a Sétif (300 km, 5 horas, 12-18 EUR), luego minibús a Djemila (35 km, 1 hora, 3-5 EUR). O coche alquilado desde Argel (6 horas, 60-80 EUR)",
+      "donde_dormir": {
+        "mochilero": "Alojamientos básicos en Djemila o Sétif, 10-15 EUR/noche",
+        "medio": "Hotel 2-3* en Sétif, 30-40 EUR/noche",
+        "comfort": "Hotel 3-4* Sétif, 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita guiada de ruinas romanas (10-15 EUR, 2.5 horas)",
+        "Museo de mosaicos in-situ (3 EUR)",
+        "Trekking suave por meseta con vistas (gratis)",
+        "Fotografía de templos y basílicas cristianas (gratis)",
+        "Exploración de necrópolis romana (libre, 1 hora)"
+      ],
+      "donde_comer": "Restaurante de museo o pequeños locales. Cuscús y carnes. Rango 3-5 EUR. Muy pocos restaurantes turísticos.",
+      "consejo_local": "El yacimiento es elevado y hace viento; lleva chaqueta. Los mosaicos son los mejores de Argelia, foto especialmente en el Museo de Mosaicos.",
+      "plan_b_lluvia": "Museo de mosaicos completamente cubierto, pueblos cercanos",
+      "keywords": [
+        "Djemila",
+        "Cuicul",
+        "ruinas romanas",
+        "mosaicos",
+        "Setif",
+        "sitio arqueológico"
+      ]
+    },
+    {
+      "id": "sahara-erg-chech",
+      "nombre": "Erg Chech (Desierto Sahara)",
+      "tipo": "desierto",
+      "region": "Wilaya de Tamanrasset, sur",
+      "descripcion": "Dunas de arena dorada del Sahara profundo con oasis y cultura tuareg auténtica. Centro en Tamanrasset como base para expediciones de 4x4. Menos infraestructura que Tassili pero más inmersión desértica pura.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Vuelo Argel-Tamanrasset (Air Algérie) 180-250 EUR, 2.5 horas. Tours en 4x4 con agencias locales desde 50-80 EUR/día (incluye transporte, guía, comidas)",
+      "donde_dormir": {
+        "mochilero": "Campamentos en desierto con tiendas, 18-25 EUR/noche (con comidas)",
+        "medio": "Guesthouses en Tamanrasset, 30-45 EUR/noche",
+        "comfort": "Eco-lodges Sahara, 60-85 EUR/noche"
+      },
+      "que_hacer": [
+        "Expedición 4x4 a dunas y oasis (60-90 EUR, día completo)",
+        "Cena beduina bajo estrellas (incluida en tour)",
+        "Visita a campamentos tuareg y mercados locales (gratis con guía)",
+        "Trekking a Assekrem (pico sagrado, 2400 m, agotador pero espectacular, 100+ EUR 2 días)",
+        "Observación de estrellas en desierto profundo (gratis)"
+      ],
+      "donde_comer": "Tagine, cuscús, dátiles, té tuareg. Rango 3-5 EUR. Los tours incluyen comidas. Restaurantes locales muy básicos en pueblo.",
+      "consejo_local": "El sur es remoto; todos los tours deben reservarse previamente. Las temperaturas varían 30°C entre día y noche. Turags son muy acogedores si respetas su cultura.",
+      "plan_b_lluvia": "Rarísimo. Vientos pueden parar tours. Explora pueblo de Tamanrasset, mercado local.",
+      "keywords": [
+        "Tamanrasset",
+        "Erg Chech",
+        "Sahara",
+        "desierto profundo",
+        "tuareg",
+        "Assekrem"
+      ]
+    },
+    {
+      "id": "bejaia",
+      "nombre": "Béjaïa",
+      "tipo": "playa",
+      "region": "Wilaya de Béjaïa, costa norte",
+      "descripcion": "Puerto mediterráneo costero con playas de arena, puerto histórico y montañas de Cabilia al fondo. Menos abarrotado que Argel, con vida local auténtica y acceso a la naturaleza cercana. Puerta de entrada a la región de Cabilia.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Argel: autobús (230 km, 4-5 horas, 10-15 EUR) o coche alquilado. Vuelo interno raro pero posible.",
+      "donde_dormir": {
+        "mochilero": "Albergues y hospedajes locales, 12-18 EUR/noche",
+        "medio": "Hoteles 2-3* frente al mar, 35-50 EUR/noche",
+        "comfort": "Hoteles 4* con piscina, 65-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de Béjaïa (gratis, agua clara para snorkel)",
+        "Puerto histórico y paseo marítimo (gratis)",
+        "Senderismo a Cabilia (acceso a montañas, 8-10 EUR guía opcional, 4-5 horas)",
+        "Visita a mercado local de pescado (gratis, fotogénico)",
+        "Restaurante con vista al mar al atardecer (10-15 EUR comida)"
+      ],
+      "donde_comer": "Pescado fresco grillado, paella local, pulpo. Rango 5-10 EUR. Restaurantes en corniche con vistas al Mediterráneo.",
+      "consejo_local": "Béjaïa es mucho más relajada que Argel. Los lugareños en el puerto venden pescado del día directamente; negocia precios. Las playas se llenan en fin de semana.",
+      "plan_b_lluvia": "Mercados cubiertos, exploración del pueblo, museos locales",
+      "keywords": [
+        "Bejaia",
+        "Béjaïa",
+        "playa Argelia",
+        "Cabilia",
+        "puerto",
+        "Mediterráneo"
+      ]
+    },
+    {
+      "id": "Constantine",
+      "nombre": "Constantine (Qostantina)",
+      "tipo": "ciudad",
+      "region": "Wilaya de Constantine, noreste",
+      "descripcion": "Ciudad histórica en acantilados sobre el Oued Rhummel con puentes espectaculares y arquitectura otomana. Capital cultural del noreste argelino con museos, medinas tradicionales y casbah. Menos turística que Argel pero igual de interesante.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Desde Argel: autobús (431 km, 7 horas, 15-20 EUR) o vuelo Air Algérie (160-200 EUR, 1.5 horas). Coche alquilado desde Argel (8 horas).",
+      "donde_dormir": {
+        "mochilero": "Albergues en medina, 13-20 EUR/noche",
+        "medio": "Hoteles 3* centro, 35-50 EUR/noche",
+        "comfort": "Hoteles 4* con vistas a acantilados, 60-85 EUR/noche"
+      },
+      "que_hacer": [
+        "Puente Sidi M'Cid (icónico, gratis para cruzar, fotos espectaculares)",
+        "Medina antigua y Casbah (exploración libre, 2 horas, gratis)",
+        "Museo Gustave Mercier (5 EUR, arqueología local)",
+        "Caminata en acantilados y vistas panorámicas (gratis)",
+        "Mercado de abastos (Souk el-Qasba) para artesanía (negociable)"
+      ],
+      "donde_comer": "Tajín, brochetas, pasta local. Rango 4-7 EUR. Callejuelas de medina tienen restaurantes económicos.",
+      "consejo_local": "Constantine es famosa por dulces tipo makrout. Compra en el souk. El puente Sidi M'Cid es impresionante a la hora dorada; llega antes del atardecer.",
+      "plan_b_lluvia": "Museo, medina cubierta (callejuelas protegidas), cafés tradicionales",
+      "keywords": [
+        "Constantine",
+        "Qostantina",
+        "puente Sidi M'Cid",
+        "medina",
+        "casbah",
+        "acantilados"
+      ]
+    },
+    {
+      "id": "tamanrasset",
+      "nombre": "Tamanrasset",
+      "tipo": "ciudad",
+      "region": "Wilaya de Tamanrasset, sur",
+      "descripcion": "Pueblo-base en el corazón del Sahara (1400 m) rodeado de montañas y con cultura tuareg dominante. Centro de logística para expediciones desérticas y punto de encuentro de beduinos. Atmósfera autêntica de oasis remoto.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Vuelo Argel-Tamanrasset (180-250 EUR, 2.5 horas). Autobús desde Argel (70+ horas, no recomendado). Base para tours al Sahara.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicos, 12-20 EUR/noche",
+        "medio": "Hoteles 2-3*, 30-45 EUR/noche",
+        "comfort": "Eco-lodges, 50-75 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado local tuareg (gratis, artesanía)",
+        "Tours 4x4 al Sahara (desde 60 EUR/día)",
+        "Visita a taller de tejedores tuareg (gratis, compra opcional)",
+        "Trekking a Assekrem (pico sagrado 2400 m, 2 días 100+ EUR)",
+        "Observación de estrellas (gratis)"
+      ],
+      "donde_comer": "Tajín, cuscús, dátiles, camello (ocasionalmente). Rango 2-5 EUR. Mercados y pequeños restaurantes.",
+      "consejo_local": "Tamanrasset es punto de partida obligatorio, no destino final. Organiza tours días antes en agencias locales. El pueblo es muy pequeño; infraestructura turística limitada.",
+      "plan_b_lluvia": "Rarísimo. Mercado local, cafés, exploración de gentes",
+      "keywords": [
+        "Tamanrasset",
+        "Hoggar",
+        "Sahara profundo",
+        "tuareg",
+        "Assekrem",
+        "oasis remoto"
+      ]
+    },
+    {
+      "id": "casbah-argel",
+      "nombre": "Casbah de Argel",
+      "tipo": "histórico",
+      "region": "Barrio antiguo de Argel",
+      "descripcion": "Barrio medieval UNESCO en laberinto de callejuelas empinadas sobre el puerto, con arquitectura otomana, mezquitas y palacios paladianos. Corazón cultural de Argelia y palimpsesto histórico de imperios. Experiencia inmersiva de vida local.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "En el corazón de Argel; accesible a pie desde centro (15 minutos) o taxi (2-3 EUR)",
+      "donde_dormir": {
+        "mochilero": "Alojamientos en Casbah misma, 15-25 EUR/noche",
+        "medio": "Hoteles 3* zona adyacente, 40-60 EUR/noche",
+        "comfort": "Hoteles en centro (fuera Casbah), 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour guiado por callejuelas (15-20 EUR, 2-3 horas recomendado)",
+        "Mezquita Ketchaoua (3-5 EUR entrada)",
+        "Palacios obreros (algunos abiertos al público, gratis)",
+        "Exploración libre de mercados (gratis)",
+        "Observación de vida cotidiana desde terrazas (gratis)"
+      ],
+      "donde_comer": "Pasteles, café árabe, comida callejera. Rango 2-4 EUR. Pequeños locales en callejuelas, sin pretensión.",
+      "consejo_local": "La Casbah puede ser confusa sin guía; las calles se parecen. Visita temprano (7-8 am) cuando está tranquilo y más fotogénico. Respeta espacios religiosos.",
+      "plan_b_lluvia": "Las callejuelas tienen cobertura parcial. Cafés tradicionales ofrecen refugio.",
+      "keywords": [
+        "Casbah",
+        "medina Argel",
+        "UNESCO",
+        "barrio antiguo",
+        "Ketchaoua",
+        "arquitectura otomana"
+      ]
+    },
+    {
+      "id": "ghardaia",
+      "nombre": "Ghardaïa",
+      "tipo": "ciudad",
+      "region": "Wilaya de Ghardaia, sur (Región del Mzab)",
+      "descripcion": "Ciudad oasis en el desierto con arquitectura berebere única y vida comunitaria tradicional. Centro de la región del Mzab (5 pueblos conectados) con una de las culturas más auténticas de Argelia. Menos turística que otros destinos desérticos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Argel: autobús (600 km, 9-10 horas, 20-25 EUR) o vuelo (150-180 EUR, 1.5 horas). Coche alquilado (10-12 horas, 80-100 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales locales, 12-18 EUR/noche",
+        "medio": "Hoteles 2-3*, 30-45 EUR/noche",
+        "comfort": "Eco-lodges, 55-75 EUR/noche"
+      },
+      "que_hacer": [
+        "Exploración de medina de Ghardaia (gratis, 3-4 horas)",
+        "Visita a pueblos del Mzab cercanos en tour (40-50 EUR, día completo)",
+        "Mercado de dátiles (mejor de Argelia, precios al por mayor, gratis)",
+        "Taller artesanal de tejido (gratis, compra opcional)",
+        "Observación de puesta de sol desde terrazas (gratis)"
+      ],
+      "donde_comer": "Tajín, cuscús, dátiles, leche de camella. Rango 2-5 EUR. Mercados para comida preparada, restaurantes locales.",
+      "consejo_local": "Los mzabitas son muy hospitalarios pero conservadores; respeta la ropa modesta. El mercado de dátiles es impresionante en octubre-noviembre. La medina es muy empinada; calzado cómodo.",
+      "plan_b_lluvia": "Rarísimo en sur. Mercados y cafés cubiertos.",
+      "keywords": [
+        "Ghardaia",
+        "Mzab",
+        "oasis",
+        "desierto",
+        "medina",
+        "dátiles",
+        "cultura berebere"
+      ]
+    }
+  ]
+}

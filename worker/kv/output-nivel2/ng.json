@@ -1,0 +1,334 @@
+{
+  "pais": "Nigeria",
+  "codigo": "ng",
+  "destinos": [
+    {
+      "id": "lagos",
+      "nombre": "Lagos",
+      "tipo": "ciudad",
+      "region": "Suroeste (estado de Lagos)",
+      "descripcion": "Metrópolis caótica de 15 millones de habitantes, epicentro cultural y económico de Nigeria. Centro de arte contemporáneo, gastronomía, vida nocturna y emprendimiento digital africano. Imprescindible para entender el pulse actual del país.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "desde Abuja: vuelo 1h (EUR 40-80) o carretera 9h (EUR 15-25). Desde exterior: aeropuerto internacional Murtala Muhammed.",
+      "donde_dormir": {
+        "mochilero": "hostales/guest houses en Yaba, Surulere: EUR 12-18/noche",
+        "medio": "hoteles 3* en VI (Victoria Island), Ikoyi: EUR 40-70/noche",
+        "comfort": "hoteles 4-5* Lekki, VI: EUR 120-250/noche"
+      },
+      "que_hacer": [
+        "Galería de arte en Lekki Arts Corridor (EUR 5-10 entrada)",
+        "Mercado de artesanía en Lekki Market (libre, negociar precios)",
+        "Playa de Lekki o Bar Beach (libre)",
+        "Museo Nacional de Lagos - exposiciones sobre historia yoruba (EUR 3)",
+        "Vida nocturna en Shisha lounges de VI (EUR 10-20 consumición)"
+      ],
+      "donde_comer": "Jollof rice, suya (brochetas), akara, mofongo. Rango EUR 2-5 comidas callejeras, EUR 8-15 restaurantes locales. Zona: Yaba, Surulere para comida auténtica; VI para internacional.",
+      "consejo_local": "No viajes solo de noche ni cruces la laguna en lanchas informales. Las colas de tráfico son legendarias: viaja temprano o tarde. Lleva efectivo en nairas, los cajeros de VI tienen límites diarios.",
+      "plan_b_lluvia": "Museos (Nacional, Lekki Conservation Centre), galerías de arte, cafés y librerías en Yaba, cines en Ikoyi.",
+      "keywords": [
+        "Lagos Nigeria",
+        "VI",
+        "Victoria Island",
+        "Ikoyi",
+        "Lekki",
+        "Yaba",
+        "Surulere",
+        "Murtala Muhammed"
+      ]
+    },
+    {
+      "id": "ibadan",
+      "nombre": "Ibadán",
+      "tipo": "histórico",
+      "region": "Suroeste (estado de Oyo)",
+      "descripcion": "Segunda ciudad más grande, histórica capital yoruba con arquitectura colonial y calles laberínticas. Centro de educación (Universidad de Ibadán), artesanía tradicional y gastronomía auténtica. Menos caótica que Lagos, más accesible.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "desde Lagos: autobús 2h (EUR 5-8), minibús compartido 2.5h (EUR 4-6). Desde Abuja: carretera 6h (EUR 12-18).",
+      "donde_dormir": {
+        "mochilero": "guest houses en GRA (Government Reserved Area): EUR 10-15/noche",
+        "medio": "hoteles 2-3* cerca de Mapo Hall: EUR 25-40/noche",
+        "comfort": "hoteles 3-4* Jericho: EUR 60-100/noche"
+      },
+      "que_hacer": [
+        "Palacio del Olubadan - residencia tradicional yoruba (EUR 5, con guía)",
+        "Forestal de Ibadán - bosque con vistas (libre, EUR 2 guía local)",
+        "Mercado de Bodija - artesanía textil y cerámica (libre, negociar)",
+        "Catedral de San Andrés - arquitectura colonial (libre)",
+        "Taller de indigo en Adire - teñido textil tradicional (EUR 8-12 taller)"
+      ],
+      "donde_comer": "Akamu (papilla), efo riro (sopa de verduras), moin-moin (tamal). Rango EUR 1-3 puestos callejeros, EUR 5-8 restaurantes. Zona: mercados para auténtico, GRA para opciones modernas.",
+      "consejo_local": "Contrata un guía local en GRA para recorrer el casco antiguo sin perderte (EUR 8-12/día). Las calles son confusas pero seguras. Visita el Palacio al mediodía cuando está más activo.",
+      "plan_b_lluvia": "Museos (Universidad de Ibadán tiene pequeña colección), talleres de artesanía cubiertos, cafeterías universitarias.",
+      "keywords": [
+        "Ibadan",
+        "Oyo",
+        "Olubadan",
+        "GRA Ibadan",
+        "Bodija",
+        "Jericho",
+        "yoruba"
+      ]
+    },
+    {
+      "id": "osun-osogbo",
+      "nombre": "Osun-Osogbo",
+      "tipo": "naturaleza",
+      "region": "Suroeste (estado de Osun)",
+      "descripcion": "Bosque sagrado UNESCO a orillas del río Osun, santuario de la cultura yoruba. Esculturas de Henry Matombi, rituales tradicionales y piscinas naturales. Uno de los pocos lugares donde la espiritualidad africana es central y accesible.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a enero",
+      "como_llegar": "desde Ibadán o Lagos: autobús/minibús a Osogbo (2.5-3h, EUR 6-10), luego taxi local al bosque (EUR 2-3). Desde Osogbo: 15 min en auto.",
+      "donde_dormir": {
+        "mochilero": "posadas cerca del bosque o en Osogbo centro: EUR 8-12/noche",
+        "medio": "guesthouses Osogbo: EUR 20-30/noche",
+        "comfort": "hoteles Osogbo: EUR 50-80/noche"
+      },
+      "que_hacer": [
+        "Caminata guiada por el bosque sagrado (EUR 5 entrada + EUR 10 guía)",
+        "Piscinas naturales del río Osun (libre)",
+        "Santuario de Osun - templo central con ofrendas (libre)",
+        "Galerías de arte con esculturas de Matombi (libre)",
+        "Festival Osun Oshogbo si viajas en agosto (libre, observar ritualmente)"
+      ],
+      "donde_comer": "Sopa de cabra, fufu de plátano, pescado ahumado del río. Rango EUR 1.50-3 comidas locales. Zona: puestos en entrada del bosque, restaurantes en Osogbo centro.",
+      "consejo_local": "Respeta las normas del santuario: no fotografíes ofrendas sin permiso, viste con modestia (sin hombros descubiertos). Los guías locales (sacerdotes) añaden mucho contexto cultural. Mejor ir con grupo pequeño.",
+      "plan_b_lluvia": "El bosque es bonito incluso mojado. Visita el mercado de Osogbo o galerías de arte bajo techo en el centro.",
+      "keywords": [
+        "Osun-Osogbo",
+        "Osogbo",
+        "bosque sagrado",
+        "río Osun",
+        "Henry Matombi",
+        "yoruba santuario"
+      ]
+    },
+    {
+      "id": "calabar",
+      "nombre": "Calabar",
+      "tipo": "ciudad",
+      "region": "Sureste (estado de Cross River)",
+      "descripcion": "Puerto histórico colonial en el rio Cross, capital del comercio de esclavos. Ahora destino menos conocido con arquitectura victoriana, gastronomía única y acceso a la selva tropical. Puerta de entrada a la diversidad étnica del sureste.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "desde Lagos/Abuja: vuelo 2h (EUR 60-100) o carretera 14h (EUR 20-30). Aeropuerto de Calabar.",
+      "donde_dormir": {
+        "mochilero": "hostales cerca del río: EUR 10-15/noche",
+        "medio": "hoteles 2-3* Calabar center: EUR 25-45/noche",
+        "comfort": "hoteles frente al río: EUR 70-120/noche"
+      },
+      "que_hacer": [
+        "Paseo histórico por arquitectura colonial (libre)",
+        "Museo de Calabar - artefactos históricos yoruba/efik (EUR 3)",
+        "Santuario de chimpancés de Afi Mountain - 1h desde Calabar (EUR 15 entrada)",
+        "Crucero por el río Cross al atardecer (EUR 8-12)",
+        "Mercado de Watt - artesanía local (libre, negociar precios)"
+      ],
+      "donde_comer": "Moambe (sopa de cacahuete), pepper soup de pescado, plantanos. Rango EUR 2-4 locales, EUR 8-12 restaurantes. Zona: waterfront para pescado fresco.",
+      "consejo_local": "Calabar es más relajada que Lagos pero mucho menos turística: los precios suben si eres evidente. Negocia todo. El puerto es el corazón cultural real, mejor que las zonas modernas.",
+      "plan_b_lluvia": "Museos, paseos cubiertos por arquitectura colonial, cafeterías junto al río.",
+      "keywords": [
+        "Calabar",
+        "Cross River",
+        "puerto colonial",
+        "río Cross",
+        "Efik",
+        "Afi Mountain"
+      ]
+    },
+    {
+      "id": "oshogbo-arte",
+      "nombre": "Oshogbo (Escena de Arte)",
+      "tipo": "ciudad",
+      "region": "Suroeste (estado de Osun)",
+      "descripcion": "Centro contemporáneo de arte africano con galerías, estudios de artistas vivos y movimiento cultural pulsante. Menos saturada de turismo que Lagos pero igual de creativa. Hub de artistas plásticos, músicos y diseñadores.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "desde Lagos/Ibadán: minibús 2.5h (EUR 5-8). Desde Osun-Osogbo: 15 min en taxi (EUR 2).",
+      "donde_dormir": {
+        "mochilero": "posadas de artistas o guesthouses: EUR 9-14/noche",
+        "medio": "pequeños hoteles: EUR 22-35/noche",
+        "comfort": "hoteles boutique: EUR 55-85/noche"
+      },
+      "que_hacer": [
+        "Galerías de arte independientes (libre, precios para comprar varían)",
+        "Talleres de artistas - conocer creadores en vivo (libre, propina EUR 5-10)",
+        "Mercado Owu - artesanía moderna (libre, negociar)",
+        "Actuaciones de música tradicional o samba (EUR 5-8 entrada)",
+        "Clases de batik o cerámica con artistas locales (EUR 15-25)"
+      ],
+      "donde_comer": "Jollof, egusi soup, sopa de maní. Rango EUR 1.50-3 auténtica, EUR 6-10 cafés de artistas. Zona: alrededor de galerías.",
+      "consejo_local": "Las mejores galerías no tienen señales: camina y haz amigos, te mostrarán dónde está la acción real. Los viernes hay actuaciones en espacios informales, pregunta en tu alojamiento.",
+      "plan_b_lluvia": "Talleres bajo techo, galerías, cafés de artistas locales.",
+      "keywords": [
+        "Osogbo arte",
+        "galerías Nigeria",
+        "artistas Osun",
+        "escena cultural"
+      ]
+    },
+    {
+      "id": "zuma-rock",
+      "nombre": "Zuma Rock y Abuja",
+      "tipo": "montaña",
+      "region": "Centro (Territorio Capital Federal)",
+      "descripcion": "Roca monolítica icónica de 725m en las afueras de Abuja, símbolo nacional. Abuja en sí es la capital moderna planificada con museos y parques. Base logística importante con buen acceso aéreo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Abuja: aeropuerto internacional Nnamdi Azikiwe. Zuma Rock: 45 min en taxi desde centro Abuja (EUR 8-12).",
+      "donde_dormir": {
+        "mochilero": "guesthouses en Wuse/Garki: EUR 12-18/noche",
+        "medio": "hoteles 3* CBD: EUR 35-60/noche",
+        "comfort": "hoteles 4-5* Maitama: EUR 100-180/noche"
+      },
+      "que_hacer": [
+        "Senderismo a Zuma Rock - subida 1.5h (libre, contratar guía local EUR 8)",
+        "Museo Nacional de Abuja (EUR 3)",
+        "Parque Millennium - vista de la ciudad (libre)",
+        "Mercado Wuse - compras y artesanía (libre, negociar)",
+        "Mezquita Nacional y Catedral Nacional - arquitectura moderna (libre)"
+      ],
+      "donde_comer": "Suya, tuwo, migas de maíz. Rango EUR 1.50-2.50 callejero, EUR 5-8 restaurantes locales. Zona: Wuse Market para auténtico, CBD para diverso.",
+      "consejo_local": "Abuja es cara para Nigeria y menos auténtica. Úsala como hub de transporte. Zuma Rock se ve mejor al atardecer. Lleva agua para la subida, no hay sombra.",
+      "plan_b_lluvia": "Museos, galerías, centros comerciales cubiertos.",
+      "keywords": [
+        "Zuma Rock",
+        "Abuja",
+        "monolito",
+        "capital Nigeria",
+        "Nnamdi Azikiwe"
+      ]
+    },
+    {
+      "id": "mambilla-plateau",
+      "nombre": "Meseta de Mambilla",
+      "tipo": "montaña",
+      "region": "Noreste (estado de Taraba)",
+      "descripcion": "Altitud de 1500m, clima fresco y paisajes de prados alpinos en el trópico. Trekking en naturaleza pura, cascadas, avifauna rara. Uno de los pocos lugares con clima templado en Nigeria.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a enero",
+      "como_llegar": "desde Abuja o Lagos: vuelo a Jalingo (capital de Taraba) + 3h en auto (EUR 40-60 vuelo + EUR 15 auto). O carretera directa 10h desde Abuja (EUR 20-25).",
+      "donde_dormir": {
+        "mochilero": "lodge básico en Gembu: EUR 8-12/noche",
+        "medio": "guesthouses con vistas: EUR 20-30/noche",
+        "comfort": "lodges de ecoturismo: EUR 50-80/noche"
+      },
+      "que_hacer": [
+        "Trekking en la meseta - senderos con guía (EUR 8-12 guía/día)",
+        "Cascada de Ngel - 2h de caminata (libre)",
+        "Avistamiento de aves - zona de biodiversidad (guía EUR 10-15)",
+        "Pueblos yoruba tradicionales en la meseta (libre, respetar privacidad)",
+        "Fotografía de paisaje alpino (libre)"
+      ],
+      "donde_comer": "Maíz, frijoles, tubérculos locales, pollo campestre. Rango EUR 2-4 comidas caseras. Pocas opciones comerciales, mejor comer en tu alojamiento.",
+      "consejo_local": "Es remoto y poco turístico: lleva dinero en efectivo, no hay cajeros. Los lugareños son acogedores pero no hablan inglés fluidamente. Aclimatación importante por altitud. Mejor octubre-enero para senderos secos.",
+      "plan_b_lluvia": "Los paisajes son hermosos en llovizna. Actividades bajo techo en alojamiento. En estación de lluvia es prácticamente inaccesible.",
+      "keywords": [
+        "Mambilla",
+        "Taraba",
+        "meseta",
+        "montaña",
+        "Gembu",
+        "trekking Nigeria"
+      ]
+    },
+    {
+      "id": "benin-edo",
+      "nombre": "Benín (Ciudad)",
+      "tipo": "histórico",
+      "region": "Sur (estado de Edo)",
+      "descripcion": "Antigua capital del Reino de Benín (siglos XII-XIX), centro de bronces benines y patrimonio Unesco. Museo dedicado a restitución de artefactos, arquitectura colonial y mercados dinámicos. Patrimonio cultural diferente al yoruba.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "desde Lagos: autobús 4h (EUR 8-12) o vuelo 1h (EUR 50-80). Desde Ibadán: 3h en minibús (EUR 8-10).",
+      "donde_dormir": {
+        "mochilero": "guesthouses en centro: EUR 10-15/noche",
+        "medio": "hoteles 2-3*: EUR 25-40/noche",
+        "comfort": "hoteles 3-4*: EUR 60-100/noche"
+      },
+      "que_hacer": [
+        "Museo de Benín City - bronces y artefactos históricos (EUR 4)",
+        "Palacio Real de Benín - visitas guiadas (EUR 8 + EUR 10 guía)",
+        "Mercado Oba - artesanía tradicional (libre, negociar)",
+        "Caminata histórica por casco antiguo (EUR 10-12 guía)",
+        "Galerías de arte moderno (libre)"
+      ],
+      "donde_comer": "Banga soup (sopa de palma), edikang ikong (sopa de verduras), pescado salado. Rango EUR 1.50-3 callejero, EUR 5-8 restaurantes. Zona: mercados para auténtico.",
+      "consejo_local": "El Palacio Real requiere permisos de los custodios: ve temprano y sé respetuoso. La ciudad es menos caótica que Lagos pero igualmente interesante. Los bronces son réplicas modernas (los originales están en museos occidentales).",
+      "plan_b_lluvia": "Museos, galerías cubiertos, templos.",
+      "keywords": [
+        "Benin City",
+        "Edo",
+        "reino Benín",
+        "bronces",
+        "Oba"
+      ]
+    },
+    {
+      "id": "jos-plateau",
+      "nombre": "Meseta de Jos",
+      "tipo": "montaña",
+      "region": "Centro-Norte (estado de Plateau)",
+      "descripcion": "Altitud refrescante (1200m), mercadillos de artesanía de las etnias Berom y Hausa, y paisajes de sabana. Centro de turismo de safari informal y museos etnológicos. Menos visitada que Mambilla pero igual de hermosa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "desde Abuja: carretera 3h (EUR 8-12) o autobús directo 3.5h (EUR 10-15). Desde Lagos: vuelo + auto (EUR 60-100 total).",
+      "donde_dormir": {
+        "mochilero": "guesthouses centrales: EUR 10-16/noche",
+        "medio": "hoteles 2-3*: EUR 25-40/noche",
+        "comfort": "hoteles con vista a la meseta: EUR 60-90/noche"
+      },
+      "que_hacer": [
+        "Mercadillo de Jos - artesanía Hausa y Berom (libre, negociar)",
+        "Jardín Zoológico de Jos (EUR 4)",
+        "Museos Etnológicos - arte y objetos tradicionales (EUR 2-3)",
+        "Trekking en la meseta con vistas (EUR 8-10 guía)",
+        "Cascada de Gurara - 30 min desde Jos (libre + EUR 5 guía)"
+      ],
+      "donde_comer": "Migas, tuwo con sopa de cacahuete, pollo ahumado. Rango EUR 1.50-3 auténtico, EUR 5-8 restaurantes. Zona: mercadillo para comida callejera.",
+      "consejo_local": "Jos tiene cierto historial de conflictos comunitarios, pero el turismo es seguro si respetas límites. El mercadillo es el punto focal: negocia con respeto. Octubre-febrero es mejor para el clima.",
+      "plan_b_lluvia": "Museos, mercadillo bajo techo parcial, jardín zoológico tiene áreas cubiertas.",
+      "keywords": [
+        "Jos",
+        "Plateau",
+        "meseta Jos",
+        "Hausa",
+        "Berom",
+        "artesanía Nigeria"
+      ]
+    },
+    {
+      "id": "lekki-conservation-centre",
+      "nombre": "Centro de Conservación de Lekki",
+      "tipo": "naturaleza",
+      "region": "Suroeste (estado de Lagos)",
+      "descripcion": "Santuario de fauna tropical cerca de Lagos con monos, cocodrilos y aves en un bosque de 78 hectáreas. Escapada de naturaleza a 1h del caos urbano, con senderismo accesible y educación ambiental.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "desde centro de Lagos: taxi/Uber 1-1.5h según tráfico (EUR 15-25). Ubicado en la península de Lekki.",
+      "donde_dormir": {
+        "mochilero": "hostales en Lekki: EUR 12-18/noche",
+        "medio": "hoteles 3* Lekki: EUR 40-65/noche",
+        "comfort": "hoteles Lekki Ikoyi: EUR 100-150/noche"
+      },
+      "que_hacer": [
+        "Caminata guiada por senderos (EUR 8 entrada + EUR 8 guía)",
+        "Canoa en la laguna Lekki (EUR 12-15)",
+        "Observación de monos y cocodrilos (incluido en entrada)",
+        "Fotografía de aves - zona de migración (libre con entrada)",
+        "Paseo en el puente colgante (incluido)"
+      ],
+      "donde_comer": "Cafetería en el centro: EUR 5-10, no hay opciones en el bosque. Lleva snacks.",
+      "consejo_local": "Mejor ir temprano (7-9am) para ver más fauna. Los guías son naturalistas expertos, pregunta todo. Los monos son acostumbrados a humanos pero sigue las instrucciones.",
+      "plan_b_lluvia": "La canoa no funciona con lluvia fuerte, pero los senderos son accesibles. Lleva impermeable.",
+      "keywords": [
+        "Lekki Conservation",
+        "fauna Lagos",
+        "santuario tropical",
+        "monos Nigeria",
+        "laguna Lekki"
+      ]
+    }
+  ]
+}

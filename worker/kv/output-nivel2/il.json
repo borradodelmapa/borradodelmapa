@@ -1,0 +1,354 @@
+{
+  "pais": "Israel",
+  "codigo": "il",
+  "destinos": [
+    {
+      "id": "jerusalen",
+      "nombre": "Jerusalén",
+      "tipo": "histórico",
+      "region": "Palestina/Centro",
+      "descripcion": "Capital histórica y espiritual de tres religiones, con la Ciudad Vieja amurallada que concentra el Muro de las Lamentaciones, la Cúpula de la Roca y la Basílica del Santo Sepulcro. Centro neurálgico de Israel con gastronomía, mercados y vida política intensa. Imprescindible para entender la complejidad del territorio.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde el aeropuerto Ben Gurión en Tel Aviv: autobús directo (1h, 5-8 EUR) o tren (1h, 6 EUR)",
+      "donde_dormir": {
+        "mochilero": "Albergues en Barrio Armenio o Jaffa Gate: 20-35 EUR/noche",
+        "medio": "Hotel en Nueva Jerusalén: 60-100 EUR/noche",
+        "comfort": "Hotel boutique en Rehavia: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer Ciudad Vieja a pie (gratis)",
+        "Muro de las Lamentaciones y Cúpula de la Roca (gratis, pero esperas)",
+        "Mercado Mahane Yehuda (gratis)",
+        "Vía Dolorosa (gratis)",
+        "Museo de Israel (15 EUR)",
+        "Yad Vashem - Museo del Holocausto (16 EUR)"
+      ],
+      "donde_comer": "Hummus y sabíches en Mahane Yehuda, shawarma en callejuelas, cafés en Rechavia. 5-15 EUR por comida principal.",
+      "consejo_local": "Entra a la Ciudad Vieja por Jaffa Gate temprano (8 AM) para evitar multitudes. Los viernes a las 14h se complica todo. El shabbat (viernes noche-sábado) cierra mucho, pero algunos barrios tienen vida.",
+      "plan_b_lluvia": "Museos: Museo de Israel, Yad Vashem, Museo de Torre de David. Mercado cubierto de Mahane Yehuda.",
+      "keywords": [
+        "Jerusalem",
+        "Ciudad Vieja",
+        "Muro de Lamentaciones",
+        "Santo Sepulcro",
+        "Cúpula de la Roca",
+        "Rehavia",
+        "Barrio Armenio"
+      ]
+    },
+    {
+      "id": "tel-aviv",
+      "nombre": "Tel Aviv",
+      "tipo": "ciudad",
+      "region": "Costa Central",
+      "descripcion": "Metrópolis moderna y progresista con playas urbanas, vida nocturna, gastronomía de clase mundial y arquitectura Bauhaus. Principal puerta de entrada a Israel y punto de partida para explorar el norte y sur. Atmósfera liberal y cosmopolita.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre-abril (demasiado calor mayo-septiembre)",
+      "como_llegar": "Aeropuerto Ben Gurión (30 min en tren directo, 6 EUR o autobús, 5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Albergues en Neve Tzedek o centro: 25-40 EUR/noche",
+        "medio": "Hotel en Florentin o playa: 70-120 EUR/noche",
+        "comfort": "Hotel 5* frente a playa: 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por playas de Gordon y Nordau (gratis)",
+        "Paseo marítimo de Tel Aviv (gratis)",
+        "Mercado Carmel (gratis)",
+        "Barrio Neve Tzedek con arte callejero (gratis)",
+        "Museo de Arte de Tel Aviv (12 EUR)",
+        "Vida nocturna en Florentin (bebidas: 8-12 EUR)"
+      ],
+      "donde_comer": "Falafel en Carmel, hummus en Tatiana, fine dining en Neve Tzedek. 8-25 EUR por comida. Mercado de comida en Carmel.",
+      "consejo_local": "Ve a las playas entre semana para evitar aglomeración. Los bares y restaurants no abren hasta las 19h. El viernes por la tarde es cuando cierra casi todo (shabbat).",
+      "plan_b_lluvia": "Museo de Arte, Museo de la Diáspora, café en Carmel, compras en Azrieli Center.",
+      "keywords": [
+        "Tel Aviv",
+        "Aviv",
+        "TLV",
+        "playas",
+        "Neve Tzedek",
+        "Carmel",
+        "vida nocturna",
+        "Bauhaus"
+      ]
+    },
+    {
+      "id": "mar-muerto",
+      "nombre": "Mar Muerto",
+      "tipo": "playa",
+      "region": "Este",
+      "descripcion": "Lago salado más bajo del mundo (-430m) donde flotas sin esfuerzo. Punto de encuentro entre Israel, Palestina y Jordania con paisajes desérticos únicos y resorts de spa. Experiencia surrealista imposible de replicar.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre-abril",
+      "como_llegar": "desde Jerusalén: autobús (45 min, 4-5 EUR) o desde Tel Aviv (1h30, 6-8 EUR)",
+      "donde_dormir": {
+        "mochilero": "En Jericó o Ein Gedi (hostales): 25-35 EUR/noche",
+        "medio": "Resort en orilla del Mar Muerto: 90-140 EUR/noche",
+        "comfort": "Resort spa de lujo: 200-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Flotar en el Mar Muerto (gratis si vas a playa pública)",
+        "Playa Ein Gedi (gratis)",
+        "Masada - fortaleza romana (20 EUR + teleférico 10 EUR)",
+        "Cascadas de Ein Gedi (gratis, 2h de senderismo)",
+        "Mineral mud de En Bokeq (5 EUR entrada)"
+      ],
+      "donde_comer": "Resorts tienen restaurantes. Comida local en Jericó (hummus, comida árabe): 6-12 EUR.",
+      "consejo_local": "Flota sin ansiedad, es imposible hundirse. Lleva toalla porque el agua es pegajosa. Entra lentamente, es salado hasta quemar los ojos. Masada se ve mejor al amanecer.",
+      "plan_b_lluvia": "Cuevas de Qumrán, museo de la zona, spa cubierto en resorts.",
+      "keywords": [
+        "Dead Sea",
+        "Mar Muerto",
+        "flotación",
+        "Masada",
+        "Ein Gedi",
+        "Jericó",
+        "desértico"
+      ]
+    },
+    {
+      "id": "galilea",
+      "nombre": "Galilea y Mar de Galilea",
+      "tipo": "naturaleza",
+      "region": "Norte",
+      "descripcion": "Región verde y montañosa con lagos, pueblos históricos y senderismo. Centro de la vida de Jesús con Cafarnaúm, Tiberiades y pueblos pintorescos. Contrasta con el desierto y ofrece actividades outdoor variadas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "marzo-mayo, septiembre-octubre",
+      "como_llegar": "desde Tel Aviv: autobús a Tiberiades (2h, 10-12 EUR) o a Nazaret (2h30, 12 EUR)",
+      "donde_dormir": {
+        "mochilero": "Albergues en Tiberiades o Nazaret: 22-35 EUR/noche",
+        "medio": "Hotel en Tiberiades frente al lago: 60-100 EUR/noche",
+        "comfort": "Kibbutz resort o hotel boutique: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo en Montes de Galilea (gratis)",
+        "Mar de Galilea paseo en barco (25-40 EUR)",
+        "Cafarnaúm - ruinas (gratis)",
+        "Iglesia de la Multiplicación de los Panes (gratis)",
+        "Nazaret - Basílica de la Anunciación (gratis)",
+        "Reserva natural de Hula (entrada 5-10 EUR)"
+      ],
+      "donde_comer": "Truchas del Mar de Galilea en Tiberiades (12-18 EUR), hummus árabe en Nazaret (5-8 EUR).",
+      "consejo_local": "Tiberiades es punto base, pero muy turístico. Nazaret es más auténtico y barato. Los kibutz ofrecen comidas caseras a buen precio si te hospedas allí.",
+      "plan_b_lluvia": "Museos en Tiberiades (Museo del Barco Antiguo, 8 EUR), iglesias cubiertas en Nazaret.",
+      "keywords": [
+        "Galilea",
+        "Tiberiades",
+        "Nazaret",
+        "Mar de Galilea",
+        "Cafarnaúm",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "eilat",
+      "nombre": "Eilat",
+      "tipo": "playa",
+      "region": "Sur",
+      "descripcion": "Única salida de Israel al Mar Rojo con arrecifes de coral intactos y buceo de clase mundial. Punto de tránsito a Jordania y Egipto con playas tropicales y vida marina excepcional. Resort pero con alternativas mochileras.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre-marzo",
+      "como_llegar": "desde Tel Aviv: vuelo (1h, 30-80 EUR) o autobús (5h, 15-25 EUR)",
+      "donde_dormir": {
+        "mochilero": "Albergues en centro: 25-40 EUR/noche",
+        "medio": "Hotel en paseo marítimo: 80-130 EUR/noche",
+        "comfort": "Resort de lujo frente al mar: 160-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo y snorkel (25-80 EUR según actividad)",
+        "Acuario de coral (25 EUR)",
+        "Playa Laguna (gratis)",
+        "Excursión Jordania - Petra (70-100 EUR tour de día)",
+        "Crucero al atardecer (35-50 EUR)"
+      ],
+      "donde_comer": "Restaurantes de pescado en malecón (15-30 EUR), falafel barato en barrio viejo (5-8 EUR).",
+      "consejo_local": "Eilat es caro. Los mejores arrecifes están en Laguna, entrada gratis. Para Petra, contrata en hostal (más barato que resorts). El agua es perfecta oct-nov y feb-mar.",
+      "plan_b_lluvia": "Acuario, museo de cristal subacuático (Underwater Observatory), tiendas en centro.",
+      "keywords": [
+        "Eilat",
+        "Mar Rojo",
+        "arrecife coral",
+        "buceo",
+        "snorkel",
+        "Petra",
+        "tropical"
+      ]
+    },
+    {
+      "id": "jaffa",
+      "nombre": "Jaffa (Yafo)",
+      "tipo": "ciudad",
+      "region": "Costa Central",
+      "descripcion": "Puerto histórico milenario anexionado a Tel Aviv con casco antiguo de piedra, galerías de arte, restaurantes y vistas al mar. Barrio bohemio donde convergen culturas árabes, judías y de expatriados. Más auténtico que Tel Aviv central.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre-abril",
+      "como_llegar": "desde Tel Aviv centro: tranvía rojo (15 min, 2 EUR) o a pie (40 min)",
+      "donde_dormir": {
+        "mochilero": "Airbnb en Jaffa o albergues cercanos: 30-50 EUR/noche",
+        "medio": "Hotel boutique en casco antiguo: 80-120 EUR/noche",
+        "comfort": "Hotel de diseño: 150-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por callejuelas de casco antiguo (gratis)",
+        "Iglesia ortodoxa de San Pedro (gratis, 5 EUR donativo sugerido)",
+        "Galerías de arte (gratis entrada)",
+        "Mercado de antigüedades los jueves (gratis)",
+        "Mirador (gratis)",
+        "Playas de Jaffa (gratis)"
+      ],
+      "donde_comer": "Hummus y sabíches en mercado (5-8 EUR), restaurantes de pescado en puerto (20-35 EUR), cafés artesanos (3-5 EUR café).",
+      "consejo_local": "Jaffa es pequeña, se recorre en 2-3 horas. El atardecer es el mejor momento. Los jueves hay mercado de antigüedades. Evita callejuelas oscuras de noche.",
+      "plan_b_lluvia": "Galerías de arte cubiertas, mercados, museos pequeños.",
+      "keywords": [
+        "Jaffa",
+        "Yafo",
+        "puerto antiguo",
+        "Tel Aviv Jaffa",
+        "casco antiguo",
+        "arte",
+        "bohemio"
+      ]
+    },
+    {
+      "id": "haifa",
+      "nombre": "Haifa",
+      "tipo": "ciudad",
+      "region": "Norte",
+      "descripcion": "Puerto norteño con playa y barrios en terraza hacia el Mediterráneo. Centro de los Bahá'í con Jardines Colgantes y comunidad multicultural. Alternativa más relajada y auténtica que Tel Aviv, con vistas espectaculares.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "septiembre-junio",
+      "como_llegar": "desde Tel Aviv: tren (1h30, 8-10 EUR) o autobús (1h30, 10-12 EUR)",
+      "donde_dormir": {
+        "mochilero": "Albergues en Hadar: 22-35 EUR/noche",
+        "medio": "Hotel en Carmel o playa: 70-110 EUR/noche",
+        "comfort": "Hotel con vista al puerto: 130-190 EUR/noche"
+      },
+      "que_hacer": [
+        "Jardines Bahá'í (entrada gratuita, reserva en línea, 2h visita guiada)",
+        "Teleférico Carmelit (4 EUR ida/vuelta)",
+        "Playas de Bat Galim (gratis)",
+        "Cuevas del Wadi Nisnas (gratis)",
+        "Museo de Arte Tikotin (10 EUR)",
+        "Mercado de Wadi Nisnas (gratis)"
+      ],
+      "donde_comer": "Falafel en Wadi Nisnas (5 EUR), hummus casero (6-8 EUR), restaurantes de pescado en puerto (18-28 EUR).",
+      "consejo_local": "Los Jardines Bahá'í son el atractivo estrella pero necesitan reserva. Haifa es la ciudad más 'normal' y menos turística. El mercado de Wadi Nisnas es auténtico y barato.",
+      "plan_b_lluvia": "Museos (Arte, Historia), Jardines Bahá'í cubiertos parcialmente, compras en mercado.",
+      "keywords": [
+        "Haifa",
+        "Jardines Bahá'í",
+        "puerto",
+        "Carmel",
+        "Wadi Nisnas",
+        "Mediterráneo",
+        "multicultural"
+      ]
+    },
+    {
+      "id": "negev-desierto",
+      "nombre": "Negev - Desierto y Mitzpe Ramón",
+      "tipo": "desierto",
+      "region": "Sur",
+      "descripcion": "Vasto desierto de color ocre con cráter geológico espectacular. Mitzpe Ramón es pueblo base para trekking, avistamiento de estrellas y experiencias desérticas. Paisajes que parecen marcianos con pocas multitudes.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre-abril",
+      "como_llegar": "desde Tel Aviv: autobús a Mitzpe Ramón (4h30, 20-25 EUR) o vuelo a Eilat y conexión (1h)",
+      "donde_dormir": {
+        "mochilero": "Albergues en Mitzpe Ramón: 25-40 EUR/noche",
+        "medio": "Hotel pequeño: 70-100 EUR/noche",
+        "comfort": "Desert lodge con glamping: 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Cráter de Mitzpe Ramón trekking (gratis)",
+        "Mirador del cráter (gratis)",
+        "Senderismo en Negev (gratis)",
+        "Avistamiento de estrellas noche (tours 40-60 EUR)",
+        "Museo de la Naturaleza (10 EUR)",
+        "Acampada en desierto (tours 80-120 EUR)"
+      ],
+      "donde_comer": "Comida simple en Mitzpe Ramón (10-15 EUR), picnics en desierto, café israelí (3-5 EUR).",
+      "consejo_local": "Mitzpe Ramón es pueblo pequeño, llega con provisiones o compra en supermercado. Los atardeceres en el cráter son increíbles. El desierto de noche es oscuridad total: alucinante.",
+      "plan_b_lluvia": "Museo de Naturaleza, cafeterías, tours interiores de la zona.",
+      "keywords": [
+        "Negev",
+        "desierto",
+        "Mitzpe Ramón",
+        "cráter",
+        "trekking",
+        "estrellas",
+        "desértico"
+      ]
+    },
+    {
+      "id": "safed",
+      "nombre": "Safed (Tzfat)",
+      "tipo": "histórico",
+      "region": "Galilea Alta",
+      "descripcion": "Pueblo medieval de piedra en la montaña más alta de Galilea, conocido como capital de la Cábala. Laberinto de callejuelas, galerías de arte, mezquitas y sinagogas. Atmósfera artística y mística con vistas panormáicas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "marzo-mayo, septiembre-noviembre",
+      "como_llegar": "desde Tiberiades: autobús (1h, 8 EUR) o desde Tel Aviv (3h30, 18 EUR)",
+      "donde_dormir": {
+        "mochilero": "Albergues y posadas pequeñas: 28-40 EUR/noche",
+        "medio": "Pequeños hoteles de piedra: 75-110 EUR/noche",
+        "comfort": "Hotel boutique: 120-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por barrio artístico y galerías (gratis)",
+        "Sinagoga del Ari (gratis)",
+        "Mirador (gratis)",
+        "Paseo por callejuelas medievales (gratis)",
+        "Museo de Cábala (entrada variable)",
+        "Cafés artísticos (bebida 4-6 EUR)"
+      ],
+      "donde_comer": "Hummus casero, panecillos árabes en panaderías (3-5 EUR), restaurantes pequeños (12-18 EUR).",
+      "consejo_local": "Safed es ideal como excursión desde Tiberiades. Las callejuelas son intrincadas, fácil perderse (pero es parte de la magia). Frío en invierno, lleva chaqueta.",
+      "plan_b_lluvia": "Galerías de arte, museos, cafés, sinagogas.",
+      "keywords": [
+        "Safed",
+        "Tzfat",
+        "Cábala",
+        "pueblo medieval",
+        "Galilea",
+        "artístico",
+        "místico"
+      ]
+    },
+    {
+      "id": "ein-gedi",
+      "nombre": "Ein Gedi - Reserva y Cascadas",
+      "tipo": "naturaleza",
+      "region": "Este",
+      "descripcion": "Oasis en mitad del desierto con cascadas de agua dulce y senderos entre acantilados. Punto de base para Masada y descanso del calor desértico con senderismo accesible. Flora y fauna única en orilla del Mar Muerto.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre-abril",
+      "como_llegar": "desde Jerusalén: autobús directo (1h30, 8-10 EUR) o desde Tel Aviv (2h, 10-12 EUR)",
+      "donde_dormir": {
+        "mochilero": "Kibbutz Ein Gedi hostel: 35-50 EUR/noche",
+        "medio": "Kibbutz bungalow o hotel: 85-130 EUR/noche",
+        "comfort": "Kibbutz spa resort: 160-240 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a cascadas (gratis con entrada reserva)",
+        "Entrada a Reserva Natural (15 EUR)",
+        "David Spring Trail (2h, gratis)",
+        "Piscina natural (gratis si sube desde reserva)",
+        "Masada excursión (desde Ein Gedi: 1h)",
+        "Playa del Mar Muerto (gratis)"
+      ],
+      "donde_comer": "Restaurante del kibbutz (comida completa 18-25 EUR), picnic en senderos, cafetería básica.",
+      "consejo_local": "El sendero a cascadas es en río (agua fresquísima). Lleva bañador y sandalias. Muy turístico pero vale. Mejor ir temprano. El kibbutz es opción sosegada para dormir.",
+      "plan_b_lluvia": "Masada si la lluvia es ligera, museo/sauna cubierta del kibbutz.",
+      "keywords": [
+        "Ein Gedi",
+        "cascadas",
+        "oasis",
+        "desierto",
+        "Mar Muerto",
+        "senderismo",
+        "agua dulce"
+      ]
+    }
+  ]
+}

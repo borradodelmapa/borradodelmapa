@@ -1,0 +1,338 @@
+{
+  "pais": "Palaos",
+  "codigo": "pw",
+  "destinos": [
+    {
+      "id": "koror",
+      "nombre": "Koror",
+      "tipo": "ciudad",
+      "region": "Estado de Koror",
+      "descripcion": "Principal hub turístico y comercial de Palaos, donde llegan la mayoría de vuelos internacionales. Centro neurálgico para organizar excursiones a arrecifes, islas y buceo. Concentra la mayoría de servicios turísticos, restaurantes y alojamiento.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "vuelo internacional a Aeropuerto de Román Tmetuchl (ROR), 1 hora desde Asia del Este, 50-200 EUR según origen",
+      "donde_dormir": {
+        "mochilero": "guesthouses y hostales en centro: 35-60 EUR/noche",
+        "medio": "hoteles mid-range cerca del puerto: 80-150 EUR/noche",
+        "comfort": "Palau Pacific Resort, Taj Coral Reef: 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por el puerto Old Koror y mercado de pescado (gratis)",
+        "Buceo en Peleliu Corner y Blue Corner (60-90 EUR)",
+        "Excursión a Rock Islands con snorkel (45-70 EUR)",
+        "Museo de Belau (5 EUR, arqueología y cultura local)",
+        "Cena con vistas al atardecer en restaurantes del puerto (15-25 EUR)"
+      ],
+      "donde_comer": "Comida local: ulimang (ensalada de marisco), taro y frutas tropicales. Restaurantes en el puerto: 12-20 EUR. Zona de Sunset Strip con opciones asiáticas y fusión.",
+      "consejo_local": "Regatear taxis si no hay contador fijo; los operadores de tours a las islas salen desde los muelles muy temprano (6-7 AM), llega con tiempo.",
+      "plan_b_lluvia": "Museo de Belau, compras en Koror Town Center, snorkel en acuarios naturales protegidos más cercanos",
+      "keywords": [
+        "Koror Town",
+        "puerto principal",
+        "hub turístico",
+        "Sunset Strip",
+        "mercado de pescado"
+      ]
+    },
+    {
+      "id": "rock-islands",
+      "nombre": "Rock Islands (Archipiélago de Islas de Piedra)",
+      "tipo": "isla",
+      "region": "Centro-sur de Palaos",
+      "descripcion": "Patrimonio UNESCO con 200+ islas de piedra caliza emergiendo del agua, piscinas de agua dulce, playas vírgenes y buceo de clase mundial. Accesible solo por tour desde Koror, es el corazón del turismo en Palaos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "tour desde Koror, salida en barca 6-7 AM, 4-8 horas según itinerario, 50-100 EUR incluido snorkel",
+      "donde_dormir": {
+        "mochilero": "no hay alojamiento en las islas; dormir en Koror (ver arriba)",
+        "medio": "no hay",
+        "comfort": "no hay"
+      },
+      "que_hacer": [
+        "Snorkel en Jellyfish Lake (sin aguavivas peligrosas, libre de depredadores): 50-70 EUR",
+        "Buceo en Blue Corner, Peleliu Corner: 80-120 EUR",
+        "Paseo en kayak entre islas y cuevas: 40-60 EUR",
+        "Playa de Ngardmau Island y Long Beach: incluido en tour",
+        "Excursión fotográfica al atardecer: 60-80 EUR"
+      ],
+      "donde_comer": "Los tours incluyen picnic. Refrigerios y agua en la barca. Llevar snacks propios. Restaurantes solo en Koror.",
+      "consejo_local": "Las aguas son agresivas si llueve mucho (escorrentía); mejor salir días claros. Jellyfish Lake es mágico al atardecer pero muy concurrido; ve temprano. Protector solar biodegradable obligatorio.",
+      "plan_b_lluvia": "Tours de buceo en lugares protegidos más cerca de Koror; snorkel en German Channel",
+      "keywords": [
+        "Jellyfish Lake",
+        "Blue Corner",
+        "Peleliu Corner",
+        "Long Beach",
+        "kayak",
+        "Ngardmau"
+      ]
+    },
+    {
+      "id": "palau-national-marine-sanctuary",
+      "nombre": "Palau National Marine Sanctuary (Santuario Marino Nacional)",
+      "tipo": "naturaleza",
+      "region": "Aguas de Palaos",
+      "descripcion": "Red de arrecifes protegidos y canales con fauna marina excepcional: tiburones, mantarrayas, tortugas y peces de colores. Visita obligatoria para buceadores avanzados y snorkelistas interesados en conservación marina.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "excursión en barca desde Koror, 30-60 minutos, incluida en tours de buceo/snorkel 60-120 EUR",
+      "donde_dormir": {
+        "mochilero": "basarse en Koror",
+        "medio": "basarse en Koror",
+        "comfort": "basarse en Koror"
+      },
+      "que_hacer": [
+        "Buceo en German Channel (tiburones de puntas negras): 80-100 EUR",
+        "Buceo en Ngemelis Island (corales sanos, fauna): 70-90 EUR",
+        "Snorkel en New Drop Off (100 m caída): 45-65 EUR",
+        "Observación de mantarrayas (temporada: junio-noviembre): 70-100 EUR",
+        "Tour fotográfico macro con experto: 90-120 EUR"
+      ],
+      "donde_comer": "Incluido en tours. Restaurantes solo en Koror tras regreso.",
+      "consejo_local": "Necesitas certificación PADI mínima (Open Water) para muchos buceos. Si no la tienes, opciones limitadas a snorkel. German Channel es tranquilo incluso con tiburones; no tienen hábito de atacar.",
+      "plan_b_lluvia": "Buceo en sitios cubiertos/canales protegidos más cerca de Koror",
+      "keywords": [
+        "German Channel",
+        "buceo",
+        "tiburones",
+        "Ngemelis",
+        "arrecife",
+        "New Drop Off",
+        "mantarrayas"
+      ]
+    },
+    {
+      "id": "babeldaob",
+      "nombre": "Babeldaob (Isla Principal)",
+      "tipo": "naturaleza",
+      "region": "Norte y centro de Palaos",
+      "descripcion": "Isla más grande de Palaos con selva tropical, cascadas, poblados tradicionales y arqueología. Menos turística que Rock Islands, permite conocer la Palaos más auténtica y natural.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "puente desde Koror (carretera principal), 15-30 minutos en taxi/coche alquilado, 10-15 EUR taxi",
+      "donde_dormir": {
+        "mochilero": "guesthouses en Ngerchelong o Airai: 30-50 EUR/noche",
+        "medio": "hoteles en Airai o Ngetbeset: 70-110 EUR/noche",
+        "comfort": "Palau Eco-Lodges (si abiertos): 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Cascadas de Ngerchelong y senderismo en selva (15 EUR guía): 2-3 horas",
+        "Observatorio de Ngardmau (vistas de la selva desde torres): 5 EUR entrada",
+        "Pueblo tradicional de Ngerchelong, visita a casas de bai (asambleas): gratis con guía local (10-15 EUR)",
+        "Senderismo al Lago Ngardmau: 3-4 horas (15-20 EUR guía)",
+        "Carretera panorámica hasta el sur (Airai, Melekeok): gratis"
+      ],
+      "donde_comer": "Restaurantes pequeños en pueblos: 8-15 EUR. Comida local en casas de huéspedes. Llevar provisiones desde Koror.",
+      "consejo_local": "Los guías locales son imprescindibles en la selva; no hay señalización clara. Muchas atracciones requieren contacto previo. Alquila coche si prefieres libertad (30-50 EUR/día).",
+      "plan_b_lluvia": "La selva es exuberante con lluvia; buceo/snorkel más seguro en Koror",
+      "keywords": [
+        "Babeldaob Island",
+        "selva tropical",
+        "Ngerchelong",
+        "Airai",
+        "Melekeok",
+        "cascadas",
+        "arqueología"
+      ]
+    },
+    {
+      "id": "peleliu",
+      "nombre": "Peleliu (Isla y Guerra IIGM)",
+      "tipo": "histórico",
+      "region": "Sur de Palaos",
+      "descripcion": "Isla histórica donde ocurrió una de las batallas más sangrientas de la IIGM (batalla de Peleliu). Búnkeres, cañones y cementerios históricos junto a arrecifes de buceo pristinos. Para interesados en historia y buceo avanzado.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "ferry desde Koror (Peleliu Water Taxi), 45 minutos, 25-35 EUR ida y vuelta",
+      "donde_dormir": {
+        "mochilero": "Peleliu Guest House: 25-40 EUR/noche",
+        "medio": "Peleliu Island Hotel: 60-90 EUR/noche",
+        "comfort": "opciones limitadas, reservar con anticipación"
+      },
+      "que_hacer": [
+        "Tour a bunkers y restos de guerra (2-3 horas, 20-30 EUR con guía local)",
+        "Cementerio de guerra japonés: entrada libre, respeto obligatorio",
+        "Buceo en Peleliu Corner (famoso): 70-90 EUR",
+        "Snorkel en arrecife junto a playas: 40-60 EUR",
+        "Museo informal en la residencia del Chief: 5-10 EUR propina"
+      ],
+      "donde_comer": "Opciones limitadas. Restaurante pequeño en el puerto: 10-15 EUR. Llevar provisiones desde Koror.",
+      "consejo_local": "Respetar sitios históricos de guerra; muchos palauanos tienen historias familiares sobre ello. Los guías locales son historiadores de facto. Ferry regresa el mismo día; no hay mucho alojamiento.",
+      "plan_b_lluvia": "Buceo protegido en sitios cubiertos; museos cerrados en lluvia fuerte",
+      "keywords": [
+        "Peleliu Island",
+        "IIGM",
+        "batalla",
+        "bunkers",
+        "Peleliu Corner",
+        "historia",
+        "buceo"
+      ]
+    },
+    {
+      "id": "kayangel",
+      "nombre": "Kayangel (Atol Remoto)",
+      "tipo": "isla",
+      "region": "Noroeste de Palaos",
+      "descripcion": "Atolón remoto con solo 100 habitantes, agua cristalina y arrecife intacto. Destino para viajeros que buscan aislamiento total y buceo de tiburones grises de arrecife sin multitudes.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "tour en barca desde Koror (chárter), 1.5-2 horas, 120-180 EUR por persona",
+      "donde_dormir": {
+        "mochilero": "no hay alojamiento oficial; day trip desde Koror",
+        "medio": "no hay",
+        "comfort": "no hay"
+      },
+      "que_hacer": [
+        "Buceo en arrecife de Kayangel (tiburones grises): 100-150 EUR",
+        "Snorkel en laguna interior: 50-80 EUR",
+        "Visita al poblado tradicional y mercadillo local: gratis",
+        "Fotografía de arrecife virgen: incluido en tour",
+        "Picnic en la playa: incluido en tour"
+      ],
+      "donde_comer": "Picnic en la barca. Opciones muy limitadas en la isla. Llevar agua y snacks.",
+      "consejo_local": "Solo accesible con tour privado y condiciones de mar óptimas. Los tiburones grises son abundantes pero no agresivos. Población amable; compra artesanías locales (apoyo a comunidad).",
+      "plan_b_lluvia": "Difícil llegar con mar agitado; tours se cancelan. Replanificar para otro día.",
+      "keywords": [
+        "Kayangel Atoll",
+        "remoto",
+        "tiburones grises",
+        "arrecife virgen",
+        "aislamiento",
+        "buceo avanzado"
+      ]
+    },
+    {
+      "id": "angaur",
+      "nombre": "Angaur (Isla Arqueológica)",
+      "tipo": "histórico",
+      "region": "Sur de Palaos",
+      "descripcion": "Isla remota con ruinas arqueológicas de origen incierto (posiblemente imperio Sonsorol) y restos de IIGM. Destino alternativo y menos visitado que Peleliu con buceo de tiburones de arrecife.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "ferry desde Koror o Peleliu (Angaur Water Taxi), 1-1.5 horas, 25-40 EUR, poco frecuente (2-3 veces/semana)",
+      "donde_dormir": {
+        "mochilero": "muy pocas opciones; day trip recomendado",
+        "medio": "no hay",
+        "comfort": "no hay"
+      },
+      "que_hacer": [
+        "Ruinas arqueológicas y tour histórico (2 horas, 15-25 EUR con guía)",
+        "Buceo en Angaur Wall (tiburones de arrecife): 70-100 EUR",
+        "Snorkel en laguna: 40-60 EUR",
+        "Visita a restos de IIGM: incluido en tour histórico",
+        "Senderismo en la isla: 1-2 horas (gratis)"
+      ],
+      "donde_comer": "Tienda pequeña con provisiones. Llevar comida desde Koror.",
+      "consejo_local": "Ferry es poco confiable; mejor contratar barca privada desde Koror. Arqueología es misterio: nadie sabe origen de ruinas. Menos turístico que Peleliu, mucho más auténtico.",
+      "plan_b_lluvia": "Ferry no sale con mar agitado; viaje arriesgado en mal tiempo",
+      "keywords": [
+        "Angaur Island",
+        "arqueología",
+        "ruinas",
+        "tiburones",
+        "buceo",
+        "IIGM",
+        "remoto"
+      ]
+    },
+    {
+      "id": "belau-national-museum",
+      "nombre": "Belau National Museum (Museo Nacional)",
+      "tipo": "histórico",
+      "region": "Koror",
+      "descripcion": "Museo con colecciones de artefactos palaauanos, arte tradicional, esqueletos paleolíticos y objetos de guerra. Esencial para entender historia y cultura local sin hacer excursiones externas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "a pie desde centro de Koror, 10-15 minutos, gratis",
+      "donde_dormir": {
+        "mochilero": "alojamiento en Koror (ver destino Koror)",
+        "medio": "alojamiento en Koror",
+        "comfort": "alojamiento en Koror"
+      },
+      "que_hacer": [
+        "Colección de arte y artefactos tradicionales: 5 EUR entrada",
+        "Sala de historia IIGM y objetos históricos: incluido entrada",
+        "Exposición temporal (varía): incluido entrada",
+        "Tienda de regalos con artesanía local: 5-20 EUR",
+        "Charla con personal sobre etnografía (si disponible): gratis"
+      ],
+      "donde_comer": "Sin cafetería. Restaurantes en centro de Koror a 10 minutos: 10-20 EUR.",
+      "consejo_local": "Horario reducido (cierra domingos a menudo); verificar en línea. Colecciones pequeñas pero valiosas. Personal amable y conocedor.",
+      "plan_b_lluvia": "Ideal para días lluviosos; completamente cubierto",
+      "keywords": [
+        "Belau National Museum",
+        "historia",
+        "arqueología",
+        "arte tradicional",
+        "cultura palauana"
+      ]
+    },
+    {
+      "id": "ngerumekaol-waterfall",
+      "nombre": "Ngerumekaol Waterfall (Cascada de Airai)",
+      "tipo": "naturaleza",
+      "region": "Airai, sur de Babeldaob",
+      "descripcion": "Cascada de agua dulce en el corazón de la selva, accesible por senderismo moderado. Lugar fresco y menos concurrido para darse un baño en agua dulce rodeado de flora tropical.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril (menos lluvia, mejor visibilidad)",
+      "como_llegar": "desde Koror, taxi/coche a Airai (20 minutos, 15 EUR), senderismo 20-30 minutos, 10-20 EUR con guía local",
+      "donde_dormir": {
+        "mochilero": "día trip desde Koror",
+        "medio": "día trip desde Koror",
+        "comfort": "día trip desde Koror"
+      },
+      "que_hacer": [
+        "Senderismo a la cascada (30-40 minutos): guía 10-20 EUR",
+        "Baño en piscina natural de agua dulce: gratis",
+        "Fotografía en la selva: gratis",
+        "Picnic en la cascada: traer provisiones",
+        "Observación de flora y fauna tropical: gratis (guía opcional)"
+      ],
+      "donde_comer": "Llevar comida desde Koror. Picnic junto a la cascada es lo común.",
+      "consejo_local": "Ir muy temprano (7-8 AM) antes del calor. Sendero puede ser resbaladizo; botas con agarre imprescindibles. Agua dulce es real (rareza en Palaos); traer recipiente.",
+      "plan_b_lluvia": "Sendero intransitable si lluvia fuerte; senderismo peligroso en barro resbaladizo",
+      "keywords": [
+        "Ngerumekaol",
+        "cascada",
+        "agua dulce",
+        "Airai",
+        "selva tropical",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "ngeshtafuang-underwater-tunnel",
+      "nombre": "Ngeshtafuang Underwater Tunnel (Túnel Submarino)",
+      "tipo": "naturaleza",
+      "region": "Sur de Palaos, Rock Islands",
+      "descripcion": "Tunel de roca bajo el agua que buceadores pueden atravesar, conectando dos lagos subacuáticos diferentes. Sitio único y emocionante para buceadores avanzados e intermedios con experiencia en cuevas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "tour de buceo desde Koror, 1-2 horas en barca, 80-120 EUR incluido buceo",
+      "donde_dormir": {
+        "mochilero": "basarse en Koror",
+        "medio": "basarse en Koror",
+        "comfort": "basarse en Koror"
+      },
+      "que_hacer": [
+        "Buceo en el túnel (solo con experiencia): 90-140 EUR",
+        "Snorkel alrededor si no buceas: 45-70 EUR",
+        "Buceo en los lagos subacuáticos: incluido en tour",
+        "Fotografía submarina en sitio: 100-150 EUR con fotógrafo",
+        "Parada de snorkel en Rock Islands: incluido"
+      ],
+      "donde_comer": "Incluido en tour (picnic en barca). Restaurantes en Koror tras regreso.",
+      "consejo_local": "Requiere certificación PADI Cavern o Advanced; algunos operadores enseñan en el lugar. Corriente puede ser fuerte; ir con operador de confianza.",
+      "plan_b_lluvia": "Tours se pueden reprogramar con mal tiempo",
+      "keywords": [
+        "Ngeshtafuang",
+        "túnel submarino",
+        "cueva",
+        "buceo avanzado",
+        "lago subacuático",
+        "Rock Islands"
+      ]
+    }
+  ]
+}

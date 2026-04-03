@@ -1,0 +1,343 @@
+{
+  "pais": "Irán",
+  "codigo": "ir",
+  "destinos": [
+    {
+      "id": "isfahan",
+      "nombre": "Isfahán",
+      "tipo": "histórico",
+      "region": "Irán Central",
+      "descripcion": "Ciudad imperial con la Plaza Naqsh-e Jahan, una de las plazas más grandes del mundo, rodeada de mezquitas y palacios de la dinastía Safaví. Centro cultural y artístico del país con bazares auténticos y arquitectura islámica excepcional. Imprescindible para entender la historia persa.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "octubre a noviembre, marzo a abril",
+      "como_llegar": "desde Teherán en autobús (6-7 horas, 15-25 EUR) o vuelo interno (1 hora, 40-70 EUR)",
+      "donde_dormir": {
+        "mochilero": "Albergue tradicional o casa de huéspedes en bazaar: 8-15 EUR/noche",
+        "medio": "Hotel 3* en centro histórico: 25-45 EUR/noche",
+        "comfort": "Hotel 4-5* con vistas a la plaza: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Plaza Naqsh-e Jahan y Mezquita del Imam (gratis entrada, 3 EUR fotografia)",
+        "Puente Si-o-Seh Pol al atardecer (gratis)",
+        "Bazar de Isfahán, compra de alfombras y cerámica (5-500 EUR según artículo)",
+        "Palacio Chehel Sotoun (4 EUR)",
+        "Río Zayanderud y parques ribereños (gratis)"
+      ],
+      "donde_comer": "Prueba el fesenjan (estofado de pollo con granada) y kebab koobideh. Comer en el bazar o restaurantes locales: 2-6 EUR por comida. Zona de restaurantes alrededor de la plaza Naqsh-e Jahan.",
+      "consejo_local": "Visita la plaza Naqsh-e Jahan al amanecer para evitar multitudes y ver la luz dorada en las fachadas. Los mejores bazares están en los callejones laterales, no en los principales.",
+      "plan_b_lluvia": "Museos interiores (Museo de Alfombras, Museo de Arte Islámico, 3-5 EUR cada uno), cafés tradicionales con toldos, interior de las mezquitas.",
+      "keywords": [
+        "Isfahan",
+        "Naqsh-e Jahan",
+        "Maidan Naqsh",
+        "Chehel Sotoun",
+        "Si-o-Seh Pol",
+        "bazar"
+      ]
+    },
+    {
+      "id": "teheran",
+      "nombre": "Teherán",
+      "tipo": "ciudad",
+      "region": "Teherán (norte)",
+      "descripcion": "Capital y puerta de entrada, con museos de clase mundial (Museo Nacional, Museo de Arte Islámico) y un contraste fascinante entre barrios tradicionales y modernos. Punto de partida obligado para entender el Irán contemporáneo y acceso a todas las rutas del país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre a octubre, abril a mayo",
+      "como_llegar": "Teherán Imam Khomeini Airport a centro en metro/taxi: 45 min, 5-15 EUR",
+      "donde_dormir": {
+        "mochilero": "Albergue en barrio Shemiran: 10-18 EUR/noche",
+        "medio": "Hotel 3* zona Vali Asr: 30-50 EUR/noche",
+        "comfort": "Hotel 4* en norte (Elahieh, Farmanieh): 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional de Irán (5 EUR, cerrado lunes)",
+        "Palacio Golestán (5 EUR, barrio histórico)",
+        "Bazaar Tajrish y subida al telecabina de Darband (gratis teleférico parte alta, 2 EUR ida y vuelta)",
+        "Museo de Arte Islámico (5 EUR)",
+        "Paseo por barrio de Shemiran (gratis)"
+      ],
+      "donde_comer": "Kabob koobideh en puestos callejeros (1-2 EUR), ash reshteh (sopa de lentejas), dizi (estofado). Zona de restaurantes en Vali Asr y Shemiran: 3-8 EUR por comida.",
+      "consejo_local": "Evita el tráfico de 7-9h y 16-18h. Los mejores bazares están al norte en Tajrish, no en el centro antiguo. El norte es más liberal, el sur más conservador.",
+      "plan_b_lluvia": "Museos interiores (hay muchos y excelentes), bazares cubiertos (Bazar Tajrish tiene secciones techadas), cafeterías modernas en Vali Asr.",
+      "keywords": [
+        "Tehran",
+        "Golestan",
+        "National Museum",
+        "Vali Asr",
+        "Darband",
+        "norte"
+      ]
+    },
+    {
+      "id": "persepolis",
+      "nombre": "Persépolis",
+      "tipo": "histórico",
+      "region": "Fars (cerca de Shiraz)",
+      "descripcion": "Ruinas de la capital del Imperio Persa Aqueménida (500 a.C.), con palacios, escalinatas talladas y relieves extraordinarios. Patrimonio de la Humanidad que revela la grandeza del imperio persa antiguo. Generalmente se visita como excursión desde Shiraz.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a noviembre, marzo a abril",
+      "como_llegar": "desde Shiraz en tour compartido (15 EUR), taxi privado (30-50 EUR) o autobús local (2 EUR + 1.5 EUR entrada ruinas). 70 km, 1.5 horas",
+      "donde_dormir": {
+        "mochilero": "En Shiraz, no en el sitio (ver Shiraz)",
+        "medio": "En Shiraz, no en el sitio",
+        "comfort": "En Shiraz, no en el sitio"
+      },
+      "que_hacer": [
+        "Recorrido por ruinas y palacios (1.5 EUR entrada)",
+        "Escalinata de las Naciones Unidas (Apadana) (incluido)",
+        "Tumba de Darío I en Naqsh-e Rostam (5 km, incluido o visita posterior)",
+        "Visita guiada en inglés (10-15 EUR adicionales)"
+      ],
+      "donde_comer": "Pícnic recomendado desde Shiraz (comida rápida 2-3 EUR) o restaurante básico en la entrada (4-6 EUR). Mejor comer en Shiraz.",
+      "consejo_local": "Llega temprano (7h) para evitar tour groups. El sitio es enorme, dedica al menos 3-4 horas. Hay poco sombreado, lleva agua abundante. Contrata guía en el sitio (mejora mucho la experiencia).",
+      "plan_b_lluvia": "Las ruinas están al aire libre; si llueve mucho, visita Naqsh-e Rostam (más cubierto) o regresa a Shiraz.",
+      "keywords": [
+        "Persepolis",
+        "Persepoli",
+        "Apadana",
+        "Naqsh-e Rostam",
+        "ruinas persas",
+        "imperio aqueménida"
+      ]
+    },
+    {
+      "id": "shiraz",
+      "nombre": "Shiraz",
+      "tipo": "histórico",
+      "region": "Fars (sur)",
+      "descripcion": "Ciudad de poetas, jardines y vino histórico, con mausoleos de Hafez y Saadi, jardines persas tradicionales y proximidad a Persépolis. Centro cultural sofisticado del sur con bazares auténticos y ambiente menos turístico que Isfahán.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a noviembre, marzo a abril",
+      "como_llegar": "desde Teherán en vuelo (2 horas, 60-100 EUR) o autobús (18 horas, 20-35 EUR). Desde Isfahán en autobús (12-14 horas, 20-30 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guest house tradicional en zona histórica: 10-15 EUR/noche",
+        "medio": "Hotel 3* centro: 25-40 EUR/noche",
+        "comfort": "Hotel 4-5* jardín: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Mausoleo de Hafez (gratis, donativo 1 EUR)",
+        "Mausoleo de Saadi (gratis, donativo 1 EUR)",
+        "Jardín Eram (3 EUR, jardín histórico espectacular)",
+        "Mezquita Nasir-ol-Molk (pink mosque) (4 EUR, reserva al amanecer)",
+        "Bazaar Bazar-e Vakil (gratis exploración)",
+        "Excursión a Persépolis (ver entrada dedicada)"
+      ],
+      "donde_comer": "Zarooni (carne asada con especias), khoresht-e fesenjan. Comidas en bazaar: 2-4 EUR. Restaurantes auténticos en callejones históricos: 4-8 EUR.",
+      "consejo_local": "La Mezquita Nasir-ol-Molk es más hermosa al amanecer (5:30-6:30h) cuando la luz rosa ilumina los azulejos. Llega con guía o 15 min antes. Los jardines cierran al atardecer.",
+      "plan_b_lluvia": "Mezquita Nasir-ol-Molk (interior techado), bazares cubiertos, museos (Museo de Arte Persa, 3 EUR), casas tradicionales con patio interior.",
+      "keywords": [
+        "Shiraz",
+        "Hafez",
+        "Saadi",
+        "pink mosque",
+        "Nasir-ol-Molk",
+        "Eram garden",
+        "jardines persas"
+      ]
+    },
+    {
+      "id": "tabriz",
+      "nombre": "Tabriz",
+      "tipo": "histórico",
+      "region": "Azerbaiyán Oriental (noroeste)",
+      "descripcion": "Antigua capital comercial de Persia con uno de los bazares cubiertos más grandes del mundo (Patrimonio UNESCO). Centro de producción de alfombras tradicionales y punto de partida para la región del Azerbaiyán iraní con arquitectura única.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre (inviernos muy fríos)",
+      "como_llegar": "desde Teherán en autobús (12-14 horas, 25-40 EUR) o vuelo (2 horas, 80-120 EUR). Desde el noroeste (Turquía) es accesible por frontera terrestre.",
+      "donde_dormir": {
+        "mochilero": "Guest house centro: 10-18 EUR/noche",
+        "medio": "Hotel 3* Tabriz: 30-50 EUR/noche",
+        "comfort": "Hotel 4* centro histórico: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Bazaar Tabriz (gratis exploración, compra alfombras: 50-500 EUR)",
+        "Iglesia de San Sarkis (iglesia armenia, 2 EUR)",
+        "Museo Tabriz (2 EUR, arte islámico)",
+        "Paseo por barrio armenio histórico (gratis)",
+        "Torre del Reloj (Jaame Mosque) (gratis)"
+      ],
+      "donde_comer": "Ash Reshteh Sabzi (sopa típica del norte), kehrizkand (bizcocho local). Puestos en el bazar: 2-3 EUR. Restaurantes locales: 3-6 EUR por comida.",
+      "consejo_local": "El bazar es laberinto; entra con mapa o guía. Es más tranquilo que bazares turísticos pero muy auténtico. Los mejores talleres de alfombras son en callejones laterales, negocia precios.",
+      "plan_b_lluvia": "Bazar cubierto (ideal para días lluviosos), iglesias armenias (interiores), museos.",
+      "keywords": [
+        "Tabriz",
+        "bazar",
+        "alfombras",
+        "Tabriz bazaar",
+        "Armenia",
+        "noroeste"
+      ]
+    },
+    {
+      "id": "kashan",
+      "nombre": "Kashan",
+      "tipo": "histórico",
+      "region": "Irán Central (ruta a Isfahán)",
+      "descripcion": "Oasis histórico conocido por cerámica fina y casas tradicionales con patios interiores espectaculares (Borujerdi House, Tabatabaei House). Parada estratégica entre Teherán e Isfahán con bazares artesanales auténticos y menos turismo que destinos mayores.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a noviembre, marzo a abril",
+      "como_llegar": "desde Teherán en autobús (3-4 horas, 10-15 EUR). Parada natural rumbo a Isfahán (autobús directo Teherán-Isfahán pasa por Kashan, 8-10 horas, 20-30 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guest house en casco antiguo: 10-16 EUR/noche",
+        "medio": "Hotel 3* centro: 25-40 EUR/noche",
+        "comfort": "Casa tradicional convertida en hotel: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Borujerdi House (4 EUR, arquitectura tradicional espectacular)",
+        "Tabatabaei House (3 EUR, patios con luz natural)",
+        "Bazaar de Kashan (gratis, cerámica y textiles)",
+        "Piscinas termales de Fin (4 EUR, histórico y relajante)",
+        "Taller de cerámica artesanal (gratis ver, compra desde 2 EUR)"
+      ],
+      "donde_comer": "Carne guisada con membrillo, pan tandoori casero. Comedores locales: 2-4 EUR. Mercado: fruta seca, pistachos (muy baratos).",
+      "consejo_local": "Alquila una casa tradicional para dormir (experiencia auténtica, mismo precio que hotel). Los talleres de cerámica permiten ver maestros trabajando; es más auténtico que tiendas de souvenirs.",
+      "plan_b_lluvia": "Casas tradicionales tienen patios techados, piscinas termales de Fin (interiores parcialmente), bazares parcialmente cubiertos.",
+      "keywords": [
+        "Kashan",
+        "casas tradicionales",
+        "Borujerdi",
+        "Tabatabaei",
+        "cerámica",
+        "piscinas Fin"
+      ]
+    },
+    {
+      "id": "yazd",
+      "nombre": "Yazd",
+      "tipo": "desierto",
+      "region": "Yazd (centro)",
+      "descripcion": "Ciudad desértica con arquitectura de barro única, templos zoroastristas y torres de viento ancestrales (badgirs) que enfrían pasivamente las casas. Centro de producción de seda y alfombras con bazares atmosféricos y callejones laberínticos. Una de las ciudades más antiguas del mundo habitadas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a noviembre, marzo a abril (verano extremadamente caluroso)",
+      "como_llegar": "desde Isfahán en autobús (8-9 horas, 18-28 EUR). Desde Shiraz en autobús (8-10 horas, 20-30 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guest house tradicional con patio: 10-16 EUR/noche",
+        "medio": "Hotel 3* en casco antiguo: 30-50 EUR/noche",
+        "comfort": "Casa histórica convertida en hotel boutique: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por laberinto de callejones tradicionales (gratis)",
+        "Templo del Fuego Zoroastrista (Ateshkade) (2 EUR, culto vivo)",
+        "Torre del Silencio (Dakhma) (3 EUR, cementerio zoroastrista)",
+        "Bazaar de Yazd y taller de seda (gratis ver, compra desde 5 EUR)",
+        "Mezquita Jameh y minaretes gemelos (2 EUR)",
+        "Excursión a dunas de Kalut o Mesr (con operador, 30-50 EUR)"
+      ],
+      "donde_comer": "Yazdi specialty: carne con dátiles, sopa de lentejas con pasas. Comedores en bazaar: 2-4 EUR. Restaurantes tradicionales: 4-7 EUR.",
+      "consejo_local": "Duerme en casa tradicional con patio para entender cómo funcionan los badgirs (torres de viento). El bazar es mejor al atardecer (menos calor, luz dorada). Alquila bicicleta para explorar las dunas cercanas.",
+      "plan_b_lluvia": "Las lluvias son muy raras aquí. Si ocurren, usa callejones (sombra) y cafés con toldos.",
+      "keywords": [
+        "Yazd",
+        "zoroastrism",
+        "badgir",
+        "desierto",
+        "seda",
+        "Dakhma",
+        "Torre del Silencio"
+      ]
+    },
+    {
+      "id": "qeshm",
+      "nombre": "Isla de Qeshm",
+      "tipo": "isla",
+      "region": "Golfo Pérsico (sur)",
+      "descripcion": "Mayor isla del Golfo Pérsico con playas, acantilados de barro (Geospark), snorkel en arrecifes de coral vírgenes y fauna marina única. Menos desarrollada que destinos costeros del Golfo, con ambiente relajado y oportunidades para buceo y naturaleza marina intacta.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril (verano extremadamente caluroso)",
+      "como_llegar": "desde Bandar Abbas en ferry (3-4 horas, 8 EUR) o en vuelo interno desde Teherán (3 horas, 100-150 EUR). Bandar Abbas es accesible desde Shiraz (4-5 horas, 12-20 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guest house Qeshm Town: 12-20 EUR/noche",
+        "medio": "Resort modesto playa: 40-60 EUR/noche",
+        "comfort": "Resort con piscina: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecifes Hormuz (con operador, 40-60 EUR día completo)",
+        "Geospark y acantilados de barro (tour 25-35 EUR)",
+        "Playa Darband (gratis, baja concurrencia)",
+        "Cueva Shandol (2 EUR, estalactitas)",
+        "Avistamiento de delfines (tour amanecer, 30-45 EUR)"
+      ],
+      "donde_comer": "Pescado fresco a la parrilla, camarones, hummus. Restaurantes locales puerto: 4-8 EUR. Piscina/resorts tienen restaurantes más caros (8-15 EUR).",
+      "consejo_local": "Trae tu propio equipo de snorkel de Teherán (es caro en la isla). Los corales son mejores en Hormiaz Island (viaje de 30 min en bote). Octubre es ideal: agua cálida, sin huracanes.",
+      "plan_b_lluvia": "Lluvia rara. Si pasa, visita la cueva interior Shandol o pasea por pueblo.",
+      "keywords": [
+        "Qeshm",
+        "Isla Qeshm",
+        "Golfo Pérsico",
+        "snorkel",
+        "coral",
+        "Hormiaz",
+        "buceo"
+      ]
+    },
+    {
+      "id": "anzali",
+      "nombre": "Anzali",
+      "tipo": "playa",
+      "region": "Golfo de Caspio (norte)",
+      "descripcion": "Pueblo pesquero en la costa del Mar Caspio con lagunas costeras, humedales ricos en aves migratorias y una experiencia auténtica lejos del turismo. Acceso a playas vírgenes del Mar Caspio y bosques tropicales de Irán en el Talesh. Centro de pesca y mariscos frescos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "desde Teherán en autobús a Rasht (6-7 horas, 15-25 EUR), luego minibús a Anzali (1 hora, 2-3 EUR). Alternativa: vuelo Teherán-Rasht (1 hora, 60-100 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guest house Anzali: 12-18 EUR/noche",
+        "medio": "Hotel 3* frente a laguna: 35-55 EUR/noche",
+        "comfort": "Resort balneario con spa: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en bote por lagunas (tour 2 horas, 15-25 EUR, avistamiento de aves)",
+        "Playa del Caspio (gratis, menos concurrida que playas del sur)",
+        "Pescadería local y compra de mariscos frescos (2-4 EUR kg)",
+        "Visita a pueblo de Masuleh en Talesh (30 min, arquitectura escalonada tradicional, 2 EUR entrada)",
+        "Senderismo en bosques de Talesh (gratis)"
+      ],
+      "donde_comer": "Gambas y camarones a la parrilla (muy frescos, 3-6 EUR), caviar caspio (12-30 EUR para pequeña cantidad), khoresht mahi (sopa de pescado). Mejor en restaurantes puerto.",
+      "consejo_local": "Compra mariscos frescos directamente a pescadores al amanecer (50% más barato). El agua del Caspio es fría incluso en verano (20°C). Visita Masuleh en el mismo viaje; los pueblos de Talesh son increíbles pero requieren tiempo.",
+      "plan_b_lluvia": "En norte llueve más; si llueve, visita museos Rasht (cercano) o permanece en restaurantes locales.",
+      "keywords": [
+        "Anzali",
+        "Caspio",
+        "laguna",
+        "Rasht",
+        "Masuleh",
+        "Talesh",
+        "mariscos",
+        "pesca"
+      ]
+    },
+    {
+      "id": "alamut",
+      "nombre": "Castillo de Alamut",
+      "tipo": "montaña",
+      "region": "Talesh (noroeste, cerca de Rasht)",
+      "descripcion": "Ruinas del legendario castillo de los Asesinos (hashashins) en una cima montañosa con vista panorámica de los bosques de Talesh. Senderismo moderado a través de vegetación exuberante y pueblos tradicionales. Destino de aventura combina historia medieval, naturaleza y exclusividad lejos de atracciones masivas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre (invierno tiene nieve)",
+      "como_llegar": "desde Rasht en minibús a Gazor Khan (1.5 horas, 3-4 EUR), luego senderismo de 2.5-3 horas a castillo (1,000m ascenso). Mejor contratar tour desde Rasht (30-50 EUR con guía)",
+      "donde_dormir": {
+        "mochilero": "Guest house Gazor Khan: 12-18 EUR/noche",
+        "medio": "Hotel Rasht (usar como base): 35-55 EUR/noche",
+        "comfort": "Resort Rasht: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a ruinas del castillo (2-3 horas ida y vuelta, 1,000m ascenso, gratis acceso ruinas)",
+        "Vista panorámica desde cumbre (incluido en senderismo)",
+        "Visita a pueblos Talesh en ruta (arquitectura tradicional, gratis)",
+        "Fotografía de bosques de pino y valles (gratis)"
+      ],
+      "donde_comer": "Come en Gazor Khan antes/después (comida simple 3-4 EUR). En senderismo lleva pícnic.",
+      "consejo_local": "Contrata guía en Rasht (imprescindible, rutas no están marcadas y paisaje confunde). La subida es fuerte; inicia temprano (6h) para terminar antes del anochecer. Lleva agua abundante y repelente de insectos.",
+      "plan_b_lluvia": "Si llueve mucho, caminos se ponen peligrosos. Postpone o cambia a trekking alternativo en bosques más bajos.",
+      "keywords": [
+        "Alamut",
+        "castillo",
+        "hashashins",
+        "senderismo",
+        "Talesh",
+        "montaña",
+        "Gazor Khan",
+        "trekking"
+      ]
+    }
+  ]
+}

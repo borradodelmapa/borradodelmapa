@@ -1,0 +1,338 @@
+{
+  "pais": "Mauritania",
+  "codigo": "mr",
+  "alerta_seguridad": "Mauritania tiene zonas de riesgo de seguridad en el norte y noreste. Se recomienda verificar situación actual antes de viajar y evitar las áreas fronterizas con Argelia y Mali.",
+  "destinos": [
+    {
+      "id": "chinguetti",
+      "nombre": "Chinguetti",
+      "tipo": "histórico",
+      "region": "Adrar, norte",
+      "descripcion": "Antigua ciudad caravanera del siglo 13 en pleno Sáhara con arquitectura tradicional y bibliotecas manuscritas centenarias. Punto de partida para expediciones desérticas y experiencia auténtica de vida en oasis. Patrimonio UNESCO por sus estructuras de piedra y minarete icónico.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Nuakchott: vuelo a Araouane o Atar (2h, 100-150 EUR), luego 4WD hasta Chinguetti (6h, 200-250 EUR compartido). Ruta terrestre no recomendada en temporada baja.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse local o auberge: 15-25 EUR/noche",
+        "medio": "Casa de huéspedes tradicional con patio: 30-50 EUR/noche",
+        "comfort": "Campamento de lujo tipo Sahara Lodge: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar bibliotecas manuscritas de familias mauritanas (gratuito, propina esperada)",
+        "Subir al minarete para vistas del oasis (gratuito)",
+        "Excursión al cañón de Araouane y formaciones rocosas (30-50 EUR con guía local)",
+        "Paseo en camello al atardecer (20-30 EUR)"
+      ],
+      "donde_comer": "Tagine de cabra, cuscús, pan plano mauritano. Comedores locales: 5-8 EUR. Busca casas que ofrecen cena comunitaria (8-12 EUR), única forma de comer después de anochecer.",
+      "consejo_local": "Lleva dinero en efectivo (Ouguiya), no hay cajeros. Los dueños de guesthouse pueden cambiar EUR. Las temperaturas nocturnas caen mucho en invierno, pide mantas extra.",
+      "plan_b_lluvia": "Rara en el Sáhara; si ocurre, los caminos se cortan. Quédate en el pueblo, visita museos locales improvisados, toma té con nómadas.",
+      "keywords": [
+        "Chinguetti",
+        "Chingui",
+        "Adrar",
+        "oasis desértico",
+        "caravanas",
+        "manuscritos",
+        "Sahara mauritano",
+        "minarete"
+      ]
+    },
+    {
+      "id": "banc-arguin",
+      "nombre": "Banc d'Arguin",
+      "tipo": "naturaleza",
+      "region": "Costa noroeste",
+      "descripcion": "Parque nacional marino UNESCO con archipiélago de 38 islas, punto de parada migratorio de 2 millones de aves. Aldeas de pescadores nómadas Imraguen, ecosistema costero único y biodiversidad excepcional. Acceso controlado para conservación.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Nuakchott: carretera a Nouadhibou (5h, 40 EUR en bus compartido), luego barco desde puerto de Imiraguen (2-3h, 50-80 EUR). Requiere permiso del parque (gratuito, solicitado en Nuakchott).",
+      "donde_dormir": {
+        "mochilero": "Campamento en isla o cabaña de pescador: 20-35 EUR/noche",
+        "medio": "Alojamiento en cabaña rústica con mosquitero: 40-60 EUR/noche",
+        "comfort": "Lodge ecoturístico con baño privado: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Observación de aves en kayak o bote (30-50 EUR con guía)",
+        "Snorkel en arrecifes de coral (gratis si nadas desde isla)",
+        "Visita a aldea de pescadores Imraguen, pesca tradicional (20-30 EUR para participar)",
+        "Pesca deportiva (150-200 EUR día completo)"
+      ],
+      "donde_comer": "Pescado recién capturado, pulpo, erizos de mar. Comedores en aldea: 6-10 EUR. Lleva provisiones de Nouadhibou, oferta limitada en parque.",
+      "consejo_local": "Las mareas son extremas; coordina actividades con pescadores locales que conocen horarios. Lleva gafas de sol y protector solar, no hay sombra en islas. El parque requiere guía obligatorio, no se permite entrada libre.",
+      "plan_b_lluvia": "Poco probable. Si hay vientos fuertes, cancela travesías marinas. Quédate en isla, observa aves desde refugio, dibuja o lee.",
+      "keywords": [
+        "Banc d'Arguin",
+        "Banco Arguin",
+        "parque marino",
+        "Imraguen",
+        "aves migratorias",
+        "archipiélago",
+        "pesca tradicional",
+        "UNESCO"
+      ]
+    },
+    {
+      "id": "nouakchott",
+      "nombre": "Nuakchot (capital)",
+      "tipo": "ciudad",
+      "region": "Costa central",
+      "descripcion": "Capital más joven de África (fundada 1960) en la costa atlántica, puerta de entrada para la mayoría de viajeros. Mercado de Nouakchott, puerto pesquero, museo nacional y vida cotidiana mauritana. Centro logístico para explorar el interior desértico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Aéroport Nouakchott-Oumtounsy (15 km centro): taxi 10-15 EUR o autobús 1-2 EUR. Vuelos internacionales de Europa.",
+      "donde_dormir": {
+        "mochilero": "Albergue tipo auberge en barrio Arafat: 15-25 EUR/noche",
+        "medio": "Hotel 2-3 estrellas (Tamanart, Ghallab): 40-70 EUR/noche",
+        "comfort": "Hotel 4 estrellas (Meridien, Novotel): 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Nouakchott: especias, textiles, artesanía (gratuito, regateo esperado)",
+        "Paseo por puerto pesquero de Cansado al atardecer (gratuito)",
+        "Museo Nacional: arte, etnografía mauritana (5 EUR)",
+        "Playa de Aya: baño y puesta de sol (gratuito)"
+      ],
+      "donde_comer": "Macarroni, arroz con carne, mejillones. Comedores callejeros: 3-5 EUR. Restaurantes medios: 12-20 EUR. Busca barrio Medina para auténtica comida local.",
+      "consejo_local": "No camines solo después de anochecer en barrios periféricos. Evita fotografiar policía o edificios públicos. Cambia dinero en casas de cambio del mercado, mejor que bancos. El agua del grifo no es potable.",
+      "plan_b_lluvia": "Raras, pero puede haber vientos de polvo. Quédate en museos, cafeterías, compras en supermercado o centro comercial Aziza.",
+      "keywords": [
+        "Nuakchott",
+        "Nouakchott",
+        "capital",
+        "costa atlántica",
+        "Cansado",
+        "mercado",
+        "puerto pesquero",
+        "Arafat"
+      ]
+    },
+    {
+      "id": "atar",
+      "nombre": "Atar",
+      "tipo": "ciudad",
+      "region": "Adrar, norte",
+      "descripcion": "Puerta de entrada al Sáhara mauritano desde el sur, ciudad de conexiones y mercado local auténtico. Base para expediciones a Chinguetti, Oualata y formaciones rocosas. Atmósfera de pueblo desértico puro sin turismo masivo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "Desde Nuakchott: bus (13-16h, 40-60 EUR) o vuelo (2h, 150 EUR). Carretera asfaltada pero larga.",
+      "donde_dormir": {
+        "mochilero": "Auberge simple: 12-20 EUR/noche",
+        "medio": "Guesthouse con habitación doble: 25-40 EUR/noche",
+        "comfort": "Hotel Adrar o similar: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado tradicional de Atar (gratuito)",
+        "Visita a minas de hierro (tour con agencia local: 30-50 EUR)",
+        "Excursión al cañón de Araouane (full day: 60-100 EUR)",
+        "Subida a montaña Guelix al atardecer (gratuito, 1h a pie)"
+      ],
+      "donde_comer": "Sopa de verduras, carne guisada, té mauritano. Comedores: 4-7 EUR. Poco variado, come donde ves a locales.",
+      "consejo_local": "Atar es punto de conexión; la mayoría de viajeros no pasan más de una noche. Negocia con transportistas de 4WD para excursiones desde aquí. Agua del grifo no potable.",
+      "plan_b_lluvia": "Rara; si llueve, espera a que se seque la carretera antes de partir.",
+      "keywords": [
+        "Atar",
+        "Adrar",
+        "puerta Sahara",
+        "minas hierro",
+        "cañón Araouane",
+        "mercado",
+        "base expediciones"
+      ]
+    },
+    {
+      "id": "oualata",
+      "nombre": "Oualata",
+      "tipo": "histórico",
+      "region": "Hodh el Gharbi, este",
+      "descripcion": "Antigua ciudad comercial del siglo 11, patrimonio UNESCO por su arquitectura de barro decorada con patrones geométricos únicos. Ubicada en frontera con Mali, menos visitada que Chinguetti pero igualmente auténtica. Experiencia remota y aventurera.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Nuakchott: vía Atar (24h total). O desde Timbutú (Mali, 2-3 días en 4WD). No hay vuelos directos. Ruta difícil, requiere operador local o 4WD propio.",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes local: 15-25 EUR/noche",
+        "medio": "Guesthouse con patio: 30-50 EUR/noche",
+        "comfort": "Ninguno disponible; acampar o lodge improvisado: 40-60 EUR"
+      },
+      "que_hacer": [
+        "Recorrido arquitectónico por callejas del pueblo (gratuito)",
+        "Visita biblioteca manuscritos familiares (5-10 EUR propina)",
+        "Taller artesanal de tejeduría (observación gratuita, compra de tejidos)",
+        "Paseo al pozo histórico y zona agrícola (gratuito)"
+      ],
+      "donde_comer": "Leche cuajada, dátiles, carne seca. Comedores locales: 4-6 EUR. Comida muy limitada; come cuando hay oportunidad. Lleva snacks de reserva.",
+      "consejo_local": "Oualata es remoto; la mayoría de guesthouse no tienen agua caliente ni electricidad 24h. Lleva linterna frontal. Los dueños pueden ser cautelosos con extranjeros; sé respetuoso. Este es el Mauritania auténtico.",
+      "plan_b_lluvia": "Poco probable en temporada seca. Si ocurre, las pistas se cierran días.",
+      "keywords": [
+        "Oualata",
+        "Walata",
+        "patrimonio UNESCO",
+        "arquitectura barro",
+        "frontera Mali",
+        "comercio histórico",
+        "tejidos"
+      ]
+    },
+    {
+      "id": "kaedi",
+      "nombre": "Kaédi",
+      "tipo": "ciudad",
+      "region": "Gorgol, sureste",
+      "descripcion": "Segunda ciudad más grande del país, en la ribera del Senegal con influencia subsahariana. Menos enfocada en turismo que la costa norte, oferece perspectiva diferente de Mauritania. Mercado colorido y acceso a valle fértil.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "Desde Nuakchott: bus (16h, 50-70 EUR) o vuelo (3h con parada, 180 EUR). Carretera polvorienta pero transitable.",
+      "donde_dormir": {
+        "mochilero": "Auberge: 12-20 EUR/noche",
+        "medio": "Guesthouse: 25-40 EUR/noche",
+        "comfort": "Hotel Kaedi: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Kaédi (gratuito, regateo)",
+        "Paseo ribera Río Senegal (gratuito)",
+        "Visita aldea de pescadores (guía local 20-30 EUR)",
+        "Excursión a parque natural Diawling (gratis entrada, tour 40-60 EUR)"
+      ],
+      "donde_comer": "Pescado del Senegal, arroz, verduras locales. Comida más variada que norte por proximidad a Senegal. Comedores: 5-10 EUR. Restaurantes: 15-25 EUR.",
+      "consejo_local": "Kaédi es puerta a Senegal; muchos viajeros usan como parada antes de cruzar frontera. Ambiente más relajado que ciudades desérticas. Moneda: Ouguiya pero algunos aceptan francos CFA.",
+      "plan_b_lluvia": "Posible julio-septiembre; ciudad está más preparada que zonas desérticas.",
+      "keywords": [
+        "Kaédi",
+        "Kaedi",
+        "Río Senegal",
+        "sureste",
+        "mercado",
+        "frontera Senegal",
+        "subsahariano"
+      ]
+    },
+    {
+      "id": "dakhlet-nouadhibou",
+      "nombre": "Dakhlet-Nouadhibou",
+      "tipo": "ciudad",
+      "region": "Dakhlet-Nouadhibou, noroeste",
+      "descripcion": "Puerto pesquero más importante de Mauritania con arquitectura colonial española, ubicado en península. Base para acceso a Banc d'Arguin y zona de laguna única. Atmósfera fronteriza e industrial pero interesante para ver economía mauritana real.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Nuakchott: bus (5h, 40 EUR) o vuelo (2h, 120 EUR). Carretera costera asfaltada.",
+      "donde_dormir": {
+        "mochilero": "Auberge o hostal: 15-25 EUR/noche",
+        "medio": "Hotel guesthouse: 35-55 EUR/noche",
+        "comfort": "Hotel Tamanart Nouadhibou: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour por puerto pesquero (gratuito, observación desde distancia)",
+        "Playa de Cansado: atardecer y baño (gratuito)",
+        "Paseo zona francesa colonial (gratuito)",
+        "Excursión a laguna y observación de flamencos (30-50 EUR)"
+      ],
+      "donde_comer": "Pescado fresco, camarones, mejillones. Comedores portuarios: 6-10 EUR. Restaurantes: 15-30 EUR. Busca en zona antigua junto al puerto.",
+      "consejo_local": "Nouadhibou tiene reputación de zona tensa; no pasees solo de noche. La mayoría usa como punto de tránsito a Banc d'Arguin. Permiso de parque se obtiene aquí o Nuakchott.",
+      "plan_b_lluvia": "Poco probable. Viento fuerte sí afecta actividades marinas.",
+      "keywords": [
+        "Nouadhibou",
+        "Dakhlet",
+        "puerto pesquero",
+        "flamencos",
+        "laguna",
+        "colonial español",
+        "costa noroeste"
+      ]
+    },
+    {
+      "id": "tiris-zemmour",
+      "nombre": "Tiris Zemmour",
+      "tipo": "desierto",
+      "region": "Noreste remoto",
+      "descripcion": "Región desértica pura fronteriza con Sáhara Occidental y Argelia, territorio virgen con formaciones rocosas espectaculares y silencio absoluto. Solo para viajeros experimentados en desierto. Requerimientos especiales: operador, permisos, 4WD obligatorio.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde Atar o Nouakchott: requiere 4WD propio o tour operado (1000-1500 EUR 5 días para grupo). Carreteras sin marcar, solo posible con guía.",
+      "donde_dormir": {
+        "mochilero": "Campamento en desierto: 30-40 EUR/noche (incluido en tour)",
+        "medio": "Campamento con tiendas beduinas: 50-70 EUR/noche",
+        "comfort": "Campamento de lujo con baño privado: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking entre formaciones rocosas (incluido en tour)",
+        "Acampada bajo estrellas (gratuito, parte del tour)",
+        "Visita a campamento nómada Saharawi (20-30 EUR propina)",
+        "Fotografía de desierto y puestas de sol (gratuito)"
+      ],
+      "donde_comer": "Comidas preparadas por tour operador: cuscús, tagine, té. Incluido en paquete (30-40 EUR diarios).",
+      "consejo_local": "Este es verdadero Sáhara remoto; solo accesible con operador de confianza. Lleva agua extra, protector solar, gafas. Nómadas Saharawi pueden ser desconfiados, sé respetuoso. Permisos especiales a veces requeridos.",
+      "plan_b_lluvia": "Cierre de carreteras; rara pero posible. Viaja solo en temporada seca confirmada.",
+      "keywords": [
+        "Tiris Zemmour",
+        "desierto remoto",
+        "Sáhara Occidental",
+        "nómadas Saharawi",
+        "formaciones rocosas",
+        "noreste mauritano"
+      ]
+    },
+    {
+      "id": "rosso",
+      "nombre": "Rosso",
+      "tipo": "ciudad",
+      "region": "Trarza, sur",
+      "descripcion": "Pequeño pueblo fronterizo en Río Senegal, punto de cruce hacia Senegal. Mercado fronterizo animado y acceso a aves y vida ribereña. Destino secundario pero auténtico para viajeros que exploran el sur.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "Desde Nuakchott: bus (10h, 30-40 EUR) o desde Kaédi (4h, 15-20 EUR). Carretera polvorienta.",
+      "donde_dormir": {
+        "mochilero": "Auberge simple: 10-18 EUR/noche",
+        "medio": "Guesthouse: 20-35 EUR/noche",
+        "comfort": "No hay; campsite: 40-50 EUR"
+      },
+      "que_hacer": [
+        "Cruce de frontera Río Senegal (experiencia cultural, gratuito)",
+        "Mercado fronterizo (gratuito, regateo)",
+        "Paseo ribera (gratuito)",
+        "Observación de aves (gratuito, lleva binoculares)"
+      ],
+      "donde_comer": "Comida fronteriza: arroz, pescado, verduras. Comedores: 3-5 EUR. Oferta limitada, come rápido.",
+      "consejo_local": "Rosso es principalmente punto de tránsito a Senegal. No es destino para pasar días; la mayoría pasa algunas horas. Puesto fronterizo puede ser caótico; mantén documentos a mano.",
+      "plan_b_lluvia": "Posible en verano; si llueve, Río Senegal crece y travesía se complica.",
+      "keywords": [
+        "Rosso",
+        "Senegal frontera",
+        "Río Senegal",
+        "mercado fronterizo",
+        "cruce",
+        "sur mauritano"
+      ]
+    },
+    {
+      "id": "tichitt",
+      "nombre": "Tichitt",
+      "tipo": "histórico",
+      "region": "Hodh el Chargui, este",
+      "descripcion": "Pueblo histórico escalonado en acantilado del Sahel, patrimonio UNESCO por arquitectura vernácula de piedra. Menos conocido que Oualata, igual de auténtico. Vistas panorámicas del valle y vida local sin turismo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Atar: 4WD (12-14h, requiere operador local 200-300 EUR). Ruta muy difícil, casi solo en temporada seca.",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes: 15-25 EUR/noche",
+        "medio": "Guesthouse con patio: 30-50 EUR/noche",
+        "comfort": "No hay; acampar o casa local: 40-60 EUR"
+      },
+      "que_hacer": [
+        "Paseo por casco antiguo de piedra escalonada (gratuito)",
+        "Vistas desde el acantilado (gratuito)",
+        "Visita pozo histórico (gratuito)",
+        "Taller artesanal de tejedores (observación gratuita)"
+      ],
+      "donde_comer": "Leche, dátiles, sopa. Muy limitado, come lo disponible. Comedores: 3-5 EUR.",
+      "consejo_local": "Tichitt requiere planificación seria: acceso difícil, servicios básicos mínimos, sin agua caliente. Lleva provisiones, agua, medicinas. Pero es el Mauritania menos turístico de esta lista.",
+      "plan_b_lluvia": "Carreteras intransitables; solo en época seca.",
+      "keywords": [
+        "Tichitt",
+        "Tichit",
+        "Hodh",
+        "acantilado",
+        "patrimonio UNESCO",
+        "piedra escalonada",
+        "este mauritano"
+      ]
+    }
+  ]
+}

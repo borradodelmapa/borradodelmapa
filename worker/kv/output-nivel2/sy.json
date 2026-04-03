@@ -1,0 +1,348 @@
+{
+  "pais": "Siria",
+  "codigo": "sy",
+  "alerta_general": "A partir de 2011, Siria está en conflicto armado activo. El turismo internacional está suspendido. Los datos que siguen son informativos sobre destinos históricos, pero NO se recomienda viajar al país en la actualidad.",
+  "destinos": [
+    {
+      "id": "damasco",
+      "nombre": "Damasco",
+      "tipo": "ciudad",
+      "region": "Damasco (capital)",
+      "descripcion": "Capital y ciudad más antigua continuamente habitada del mundo. Centro histórico con medina laberíntica, mezquita Omeya, caravasares y bazares de importancia mundial. Punto de entrada principal y base logística para cualquier viaje en Siria.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Aeropuerto Internacional de Damasco (DAM), vuelos desde Estambul, Beirut, Ammán. Duración: 1-3h. Coste aprox. 80-200 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales en medina vieja: 15-25 EUR/noche",
+        "medio": "Hotel 3* en Malki o Mezzeh: 40-80 EUR/noche",
+        "comfort": "Hotel 4-5* (Cham Palace, Sheraton): 100-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Medina vieja (gratis, acceso libre)",
+        "Mezquita Omeya (1-2 EUR)",
+        "Museo Nacional Sirio (5 EUR)",
+        "Caravasares y bazares (gratis, compras opcionales)",
+        "Callejear por Bab Touma y barrio cristiano (gratis)"
+      ],
+      "donde_comer": "Hummus, falafel, shawarma en bazares: 2-5 EUR. Restaurantes tradicionales en medina: 8-15 EUR. Zona: Bab Sharqi, Straight Street (Dariyya).",
+      "consejo_local": "Llega a la medina antes de las 08:00 para evitar aglomeraciones. Los bazares cierran 13:00-16:00. Negocia precios en souvenirs, especialmente textiles y especias.",
+      "plan_b_lluvia": "Museo Nacional, souks cubiertos (Souq al-Hamidiyya), cafés tradicionales de té.",
+      "alerta_seguridad": "Conflicto activo desde 2011. Viaje NO recomendado.",
+      "keywords": [
+        "Damascene",
+        "Damascus",
+        "medina",
+        "Omeya",
+        "Bab Sharqi",
+        "Straight Street",
+        "Al-Hamidiyya"
+      ]
+    },
+    {
+      "id": "palmira",
+      "nombre": "Palmira",
+      "tipo": "histórico",
+      "region": "Homs (desierto, 240 km nordeste de Damasco)",
+      "descripcion": "Ruinas greco-romanas excepcionales en medio del desierto sirio. Templo de Bel, Gran Columnata y necrópolis son patrimonio UNESCO. Uno de los yacimientos arqueológicos más importantes de Oriente Medio.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Damasco: autobús o coche privado, 4-5h, 15-30 EUR. Tren también disponible pero lento.",
+      "donde_dormir": {
+        "mochilero": "Guest houses básicas: 20-30 EUR/noche",
+        "medio": "Hotel Palmyra, Zenobia: 45-75 EUR/noche",
+        "comfort": "Recientemente dañado por conflicto, opciones limitadas: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Templo de Bel (3 EUR)",
+        "Gran Columnata y ágora (incluido)",
+        "Teatro romano (gratis)",
+        "Necrópolis y torres funerarias (gratis)",
+        "Museo de Palmira (2 EUR)"
+      ],
+      "donde_comer": "Falafel, kebab en puestos callejeros: 2-4 EUR. Restaurantes pequeños: 8-12 EUR. Agua embotellada esencial (desierto).",
+      "consejo_local": "Madruga: el sitio es enorme y el calor es extremo en mediodía. Lleva protección solar extrema. Mejor visitarlo desde Damasco en excursión de 2 días.",
+      "plan_b_lluvia": "Museo de Palmira, café en pueblo. Lluvia rara pero posible en invierno.",
+      "alerta_seguridad": "Palmira fue epicentro de combates 2015-2017 y 2018. Seguridad muy incierta. Viaje NO recomendado.",
+      "keywords": [
+        "Palmyra",
+        "Tadmur",
+        "Templo Bel",
+        "Columnata",
+        "necrópolis",
+        "desierto sirio",
+        "UNESCO"
+      ]
+    },
+    {
+      "id": "alepo",
+      "nombre": "Alepo",
+      "tipo": "ciudad",
+      "region": "Aleppo (norte, 350 km de Damasco)",
+      "descripcion": "Segunda ciudad más grande, histórica encrucijada comercial entre Asia, Europa y África. Medina espectacular, ciudadela medieval y bazares legendarios. Centro de la seda ruta.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Damasco: autobús 5-6h, 10-20 EUR. Avión 1h, 50-100 EUR. Carretera principal bien conectada.",
+      "donde_dormir": {
+        "mochilero": "Hostales y casas de huéspedes: 15-25 EUR/noche",
+        "medio": "Hotel 3* Aleppo Cham Palace: 45-70 EUR/noche",
+        "comfort": "Hotel 4* (antes del conflicto): 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Ciudadela de Alepo (2 EUR, vistas panorámicas)",
+        "Medina y bazares (gratis, compras opcionales)",
+        "Mezquita de Zakariya (1 EUR)",
+        "Museo Nacional de Alepo (3 EUR)",
+        "Khan al-Wazir y caravasares (gratis)"
+      ],
+      "donde_comer": "Kufta (albóndigas), kabab, sopa de lenteja: 3-6 EUR. Restaurantes en medina: 10-18 EUR. Especialidad: dulces de Alepo (pistacho).",
+      "consejo_local": "Los bazares de Alepo son laberintos: el norte es textiles/ropa, el sur es especias/food. Negocia precios. Café tradicional es imprescindible.",
+      "plan_b_lluvia": "Museos, bazares cubiertos, cafés interiores.",
+      "alerta_seguridad": "Alepo sufrió asedio 2012-2016, devastada. Reconstrucción lenta. Seguridad muy comprometida. Viaje NO recomendado.",
+      "keywords": [
+        "Aleppo",
+        "Halab",
+        "citadel",
+        "medina",
+        "bazaar",
+        "Khan",
+        "seda ruta"
+      ]
+    },
+    {
+      "id": "bosra",
+      "nombre": "Bosra",
+      "tipo": "histórico",
+      "region": "Daraa (sur, 140 km de Damasco)",
+      "descripcion": "Antigua ciudad romana y primeros asentamientos cristianos en Arabia. Teatro romano mejor conservado de Oriente Medio, incluido en UNESCO. Destino arqueológico clave pero menos saturado que Palmira.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Damasco: autobús a Daraa (2h, 5-8 EUR), luego taxi local a Bosra (30 min, 3-5 EUR). También coches privados desde Damasco (3h, 40-60 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guest houses en Daraa: 15-20 EUR/noche",
+        "medio": "Hotel pequeño Daraa: 30-50 EUR/noche",
+        "comfort": "Opciones limitadas, mejor base en Damasco (día completo)"
+      },
+      "que_hacer": [
+        "Teatro romano (2 EUR)",
+        "Iglesia ortodoxa de Bosra (gratis)",
+        "Murallas antiguas (gratis)",
+        "Museo local (1 EUR)",
+        "Paseo por ruinas (gratis)"
+      ],
+      "donde_comer": "Puestos callejeros y cafeterías básicas: 2-4 EUR. Mejor comer en Daraa o llevar picnic.",
+      "consejo_local": "Visita como excursión de día desde Damasco. El teatro es impresionante al atardecer. Muy pocos turistas; local y auténtico.",
+      "plan_b_lluvia": "Iglesias interiores, museos pequeños.",
+      "alerta_seguridad": "Zona sur (Daraa) ha sido teatroterror y conflicto rebelde. Seguridad variable. Viaje NO recomendado.",
+      "keywords": [
+        "Bostra",
+        "Busra",
+        "teatro romano",
+        "Daraa",
+        "primera iglesia",
+        "Arabia Petraea"
+      ]
+    },
+    {
+      "id": "krak-de-chevalieres",
+      "nombre": "Krak de Chevaliers",
+      "tipo": "histórico",
+      "region": "Homs (oeste, 160 km de Damasco)",
+      "descripcion": "Fortaleza cruzada del siglo XII mejor preservada del mundo. Vista espectacular sobre llanura siria. Patrimonio UNESCO. Arquitectura militar medieval intacta, experiencia de época única.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Damasco: autobús a Homs (2h, 5-10 EUR), luego taxi/coche privado a castillo (45 min, 15-25 EUR). O tour privado desde Damasco (4-5h ida vuelta, 60-100 EUR).",
+      "donde_dormir": {
+        "mochilero": "Pueblo cercano Qalaat al-Hosn: 15-20 EUR/noche",
+        "medio": "Hospedaje básico local: 25-40 EUR/noche",
+        "comfort": "Mejor dormir en Homs o Damasco (día completo)"
+      },
+      "que_hacer": [
+        "Fortaleza completa (2 EUR entrada)",
+        "Torres defensivas (incluido)",
+        "Capilla de cruzados (incluido)",
+        "Vistas panorámicas (gratis)",
+        "Museos pequeños internos (incluido)"
+      ],
+      "donde_comer": "Pequeño restaurante en castillo o pueblo: 5-10 EUR. Mejor llevar provisiones.",
+      "consejo_local": "Lleva agua abundante. Las vistas mejores a última hora de tarde. El castillo es enorme: dedica mínimo 2-3 horas. Pocos turistas fuera de temporada.",
+      "plan_b_lluvia": "Interior del castillo está cubierto en muchas áreas.",
+      "alerta_seguridad": "Zona de transición, conflicto cercano 2011-2018. Seguridad mejorada pero aún incierta. Viaje NO recomendado.",
+      "keywords": [
+        "Crac des Chevaliers",
+        "Qalaat al-Hosn",
+        "fortaleza cruzada",
+        "castillo medieval",
+        "UNESCO"
+      ]
+    },
+    {
+      "id": "latakia",
+      "nombre": "Latakia",
+      "tipo": "playa",
+      "region": "Latakia (costa mediterránea, 400 km de Damasco)",
+      "descripcion": "Principal puerto y ciudad costera siria. Playas, paseo marítimo (Corniche) y Museo Nacional. Punto de acceso a costa mediterránea, mezcla de historia (Laodicea antigua) y playa moderna.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre (playa), abril-octubre general",
+      "como_llegar": "Desde Damasco: autobús 6-7h, 15-25 EUR. Vuelo más raro. Carretera costera pintoresca.",
+      "donde_dormir": {
+        "mochilero": "Hostales y habitaciones: 20-30 EUR/noche",
+        "medio": "Hotel 3* en Corniche: 50-80 EUR/noche",
+        "comfort": "Hotel 4* Méridien, Cham: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas del Mediterráneo (gratis)",
+        "Paseo Corniche (gratis)",
+        "Museo Nacional Latakia (2 EUR)",
+        "Fortaleza de Saladin en Qalaat al-Marqab (15 km, 2 EUR)",
+        "Casco antiguo y mercado (gratis)"
+      ],
+      "donde_comer": "Pescado y marisco fresco: 10-20 EUR. Hummus, falafel: 2-4 EUR. Restaurantes Corniche: 12-25 EUR. Café árabe imprescindible.",
+      "consejo_local": "Latakia es puerto militarizado, acceso a costas puede ser restringido. Los locales son amables. Mejor época para playa: junio-septiembre (calor extremo).",
+      "plan_b_lluvia": "Museos, casco antiguo, cafés interiores.",
+      "alerta_seguridad": "Latakia es bastión gubernamental, relativamente más estable, pero conflicto muy cercano. Viaje NO recomendado.",
+      "keywords": [
+        "Lattakia",
+        "Laodicea",
+        "puerto",
+        "playa",
+        "Corniche",
+        "Mediterráneo",
+        "Qalaat Marqab"
+      ]
+    },
+    {
+      "id": "maalula",
+      "nombre": "Maaloula",
+      "tipo": "rural",
+      "region": "Rif de Damasco (norte, 55 km de Damasco)",
+      "descripcion": "Pueblo cristiano donde aún se habla arameo antiguo (idioma de Jesús). Iglesias rupestres, aldea colgante en acantilados, conexión viva con cristianismo primitivo. Excursión cultural única desde capital.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Desde Damasco: minibús o taxi compartido (1h 15 min, 3-5 EUR). Tour privado (2h ida vuelta, 30-50 EUR). Ruta muy accesible.",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes en pueblo: 20-30 EUR/noche",
+        "medio": "Hospedaje sencillo: 30-50 EUR/noche",
+        "comfort": "Mejor base en Damasco (excursión día)"
+      },
+      "que_hacer": [
+        "Iglesia de Santa Tecla (rupestre, gratis acceso)",
+        "Iglesia de Nostra Señora (interior iglesia, 1 EUR)",
+        "Paseo por aldea colgante (gratis)",
+        "Hablar con locales en arameo (experiencia, gratis)",
+        "Café tradicional con vistas (2-3 EUR)"
+      ],
+      "donde_comer": "Comida casera siria preparada por familias locales: 5-10 EUR. Falafel, maqluba: 2-4 EUR. Pocos restaurantes, opciones limitadas.",
+      "consejo_local": "Los habitantes hablan arameo como lengua materna. Presenciar oficio religioso es hermoso pero respeta horarios. Mejor mañana temprano antes de tour groups.",
+      "plan_b_lluvia": "Interiores iglesias, casas de té.",
+      "alerta_seguridad": "Maaloula fue tomada por rebeldes 2013, reconquistada. Ahora relativamente segura pero historial reciente de conflicto. Viaje NO recomendado.",
+      "keywords": [
+        "Ma'loula",
+        "arameo",
+        "Santa Tecla",
+        "iglesia rupestre",
+        "idioma antiguo",
+        "aldea cristiana"
+      ]
+    },
+    {
+      "id": "tartus",
+      "nombre": "Tartus",
+      "tipo": "playa",
+      "region": "Tartus (costa, 30 km sur de Latakia)",
+      "descripcion": "Segundo puerto sirio, ciudad costera más pequeña y tranquila que Latakia. Fortaleza cruzada de Tartus (Château de Tortose), iglesia de Nuestra Señora. Playas menos desarrolladas, acceso más local.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Latakia: minibús 45 min, 2-4 EUR. Desde Damasco: autobús 7h, 20-30 EUR. Carretera costera.",
+      "donde_dormir": {
+        "mochilero": "Habitaciones en centro: 18-28 EUR/noche",
+        "medio": "Hotel 2-3*: 35-60 EUR/noche",
+        "comfort": "Hotel más grande, opciones limitadas: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Fortaleza de Tartus (1 EUR)",
+        "Iglesia de Nuestra Señora (gratis)",
+        "Playas (gratis)",
+        "Paseo por puerto (gratis)",
+        "Museo arqueológico pequeño (1 EUR)"
+      ],
+      "donde_comer": "Pescado fresco: 8-15 EUR. Mezze y kebab: 3-5 EUR. Restaurantes puerto: 10-20 EUR.",
+      "consejo_local": "Mucho menos turístico que Latakia. Mejor para experimentar vida local costera real. Puerto activo, observa movimientos militares.",
+      "plan_b_lluvia": "Interior iglesia, museo.",
+      "alerta_seguridad": "Puerto militar importante. Área relativamente más estable pero muy controlada. Acceso a ciertas zonas restringido. Viaje NO recomendado.",
+      "keywords": [
+        "Tartous",
+        "Tortosa",
+        "Château Tortose",
+        "fortaleza cruzada",
+        "puerto",
+        "iglesia Nuestra Señora"
+      ]
+    },
+    {
+      "id": "hama",
+      "nombre": "Hama",
+      "tipo": "ciudad",
+      "region": "Hama (norte, 280 km de Damasco)",
+      "descripcion": "Ciudad histórica en río Orontes, famosa por norias de agua (noria = rueda hidráulica gigante). Arquitectura árabe clásica, mercados auténticos, menos turismo que Alepo. Punto intermedio para norte de Siria.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Damasco: autobús 4h, 8-12 EUR. Desde Alepo: autobús 2h, 5-8 EUR. Ruta principal norte-sur.",
+      "donde_dormir": {
+        "mochilero": "Hostales: 15-25 EUR/noche",
+        "medio": "Hotel 2-3*: 35-60 EUR/noche",
+        "comfort": "Hotel 4*: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Norias de Hama (gratis observación, algunas con acceso interior 1-2 EUR)",
+        "Medina y bazares (gratis)",
+        "Museo Nacional (2 EUR)",
+        "Mezquita al-Nuri (1 EUR)",
+        "Paseo por río Orontes (gratis)"
+      ],
+      "donde_comer": "Kibbeh, hummus, falafel: 2-4 EUR. Restaurantes tradicionales: 8-15 EUR. Especialidad: dulces locales.",
+      "consejo_local": "Las norias funcionan mejor en primavera/verano con más caudal de agua. Muy auténtico, pocos turistas extranjeros. Mercados cierren al mediodía.",
+      "plan_b_lluvia": "Museos, bazares cubiertos.",
+      "alerta_seguridad": "Hama fue centro de conflicto militar 2011-2018, parcialmente devastada. Reconstrucción en curso. Seguridad mejorada pero riesgos persisten. Viaje NO recomendado.",
+      "keywords": [
+        "norias",
+        "noria de Hama",
+        "Orontes",
+        "medina",
+        "bazaar",
+        "rueda hidráulica"
+      ]
+    },
+    {
+      "id": "qusair",
+      "nombre": "Qusair",
+      "tipo": "histórico",
+      "region": "Homs (este, 160 km de Damasco)",
+      "descripcion": "Pequeña ciudad histórica en ruta hacia Palmira. Castillo y fortaleza árabe, punto de parada estratégico. Menos visitada que Palmira pero con interés arquitectónico, experiencia más local.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Damasco: ruta Homs-Palmira, parada intermedia (3h, 10-15 EUR). O desde Homs directo (1h, 5-8 EUR). Coche privado recomendado.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje muy básico: 15-20 EUR/noche",
+        "medio": "Hotel pequeño: 25-45 EUR/noche",
+        "comfort": "Mejor base en Homs o Damasco"
+      },
+      "que_hacer": [
+        "Castillo de Qusair (1 EUR)",
+        "Murallas históricas (gratis)",
+        "Paseo por pueblo antiguo (gratis)",
+        "Museos locales pequeños (1 EUR)"
+      ],
+      "donde_comer": "Puestos callejeros: 2-4 EUR. Restaurantes sencillos: 5-10 EUR.",
+      "consejo_local": "Parada rápida entre Damasco y Palmira. Muy pocos turistas, experiencia auténtica. Castillo ofrece vistas panorámicas sobre llanura.",
+      "plan_b_lluvia": "Castillo interior, cafés.",
+      "alerta_seguridad": "Qusair fue asediada 2013, escenario de combates intensos. Ahora controlada pero infraestructura dañada. Viaje NO recomendado.",
+      "keywords": [
+        "Qusayr",
+        "castillo Qusair",
+        "Homs",
+        "fortaleza árabe",
+        "Palmira ruta"
+      ]
+    }
+  ]
+}

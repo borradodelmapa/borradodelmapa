@@ -1,0 +1,380 @@
+{
+  "pais": "India",
+  "codigo": "in",
+  "destinos": [
+    {
+      "id": "delhi",
+      "nombre": "Delhi",
+      "tipo": "histórico",
+      "region": "Norte",
+      "descripcion": "Capital india que mezcla caos urbano, historia mogol y cultura contemporánea. Punto de entrada obligatorio con monumentos icónicos como la Puerta de la India y la Jama Masjid. Imprescindible para entender la India moderna.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Aeropuerto Internacional Indira Gandhi: vuelos internacionales directos, 30-45 min en metro/taxi al centro (3-8 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Paharganj, Saket: 8-15 EUR/noche",
+        "medio": "3 estrellas en Connaught Place, South Delhi: 30-50 EUR/noche",
+        "comfort": "Hoteles 5 estrellas en New Delhi: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Fuerte Rojo y Jama Masjid (gratis entrada, 5 EUR templo)",
+        "Puerta de India y paseo por Connaught Place (gratis)",
+        "Raj Ghat, templo Birla Mandir (gratis)",
+        "Mercado de Chandni Chowk (gratis, compras)",
+        "Tumba de Humayun (5 EUR)"
+      ],
+      "donde_comer": "Parantha Wali Gali para parathas vegetales (0.5-1 EUR), Old Delhi para comida callejera, South Delhi para restaurantes modernos (5-15 EUR). Prueba dal makhani, chole bhature.",
+      "consejo_local": "Evita Paharganj si buscas autenticidad; es turístico. Mejor en Karol Bagh o Saket. Usa metro en hora punta, es caótico pero rápido.",
+      "plan_b_lluvia": "Museos (National Museum 5 EUR), centros comerciales cubiertos, cafés de Hauz Khas Village",
+      "keywords": [
+        "Nueva Delhi",
+        "Old Delhi",
+        "Paharganj",
+        "Connaught Place",
+        "Fuerte Rojo",
+        "Jama Masjid",
+        "Puerta India"
+      ]
+    },
+    {
+      "id": "agra",
+      "nombre": "Agra",
+      "tipo": "histórico",
+      "region": "Uttar Pradesh",
+      "descripcion": "Hogar del Taj Mahal, el monumento más icónico de India y Patrimonio UNESCO. Más allá del Taj, Agra ofrece el imponente Fuerte de Agra y la ciudad fantasma de Fatehpur Sikri. Viaje obligatorio para cualquier viajero.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Delhi en tren (Shatabdi Express 2.5 horas, 10-15 EUR) o autobús (4-5 horas, 5-10 EUR). También vuelos internos (1 hora, 30-50 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales cerca del Taj Mahal, Fatehpur Sikri Road: 7-12 EUR/noche",
+        "medio": "3 estrellas en zona del Taj o centro: 25-40 EUR/noche",
+        "comfort": "Resorts 5 estrellas con vistas al Taj: 100-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Taj Mahal al atardecer (17 EUR, imprescindible entrada con tiempo)",
+        "Fuerte de Agra (8 EUR)",
+        "Fatehpur Sikri, ciudad abandona (8 EUR, a 40 km)",
+        "Templo Kailash (gratis)",
+        "Paseo en bote por el Yamuna al atardecer (5 EUR)"
+      ],
+      "donde_comer": "Petha (dulce local) en tiendas callejeras (1-2 EUR), Mughlai food: biryani, kebabs (3-8 EUR). Amar Vilas o Panna II para restaurantes con vistas al Taj (10-20 EUR).",
+      "consejo_local": "Entra al Taj Mahal temprano (6 AM) para evitar multitudes y capturar luz dorada. Compra entrada con 3 días de anticipación online. Evita a mediodía cuando está abarrotado.",
+      "plan_b_lluvia": "Fuerte de Agra tiene zonas cubiertas, museos locales, tiendas de mármol incrustado (compra souvenirs auténticos)",
+      "keywords": [
+        "Taj Mahal",
+        "Fuerte Agra",
+        "Fatehpur Sikri",
+        "Yamuna",
+        "Mughal",
+        "arquitectura Mogol"
+      ]
+    },
+    {
+      "id": "jaipur",
+      "nombre": "Jaipur",
+      "tipo": "histórico",
+      "region": "Rajastán",
+      "descripcion": "La Ciudad Rosa fundada en 1727, famosa por su arquitectura uniforme color rosa y el espectacular Palacio de los Vientos. Punto de entrada a Rajastán con palacios, fortalezas y mercados bulliciosos. Triángulo de Oro completado (Delhi-Agra-Jaipur).",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Delhi en tren (4-5 horas, 8-12 EUR) o autobús (5-6 horas, 5-10 EUR). Desde Agra en tren (4 horas, 10-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Old City, cerca de Bapu Bazaar: 7-12 EUR/noche",
+        "medio": "3 estrellas en New City, C-Scheme: 25-40 EUR/noche",
+        "comfort": "Palacios-hotel (Rambagh Palace, Jai Mahal) 4-5 estrellas: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Palacio de los Vientos (Hawa Mahal) (4 EUR)",
+        "Fuerte de Nahargarh al atardecer (4 EUR, vistas ciudad completa)",
+        "City Palace, todavía habitado (8 EUR)",
+        "Mercado de Bapu Bazaar (gratis, regateo)",
+        "Observatorio Jantar Mantar UNESCO (8 EUR)"
+      ],
+      "donde_comer": "Dal bati churma (especialidad Rajastán, 2-3 EUR), ghatia y momos. Laxmi Mishthan Bhandar para dulces lokales (1-2 EUR). Restaurantes en New City: 8-15 EUR. Prueba lassi en Old City (0.5 EUR).",
+      "consejo_local": "La City Palace sigue siendo residencia real; horarios pueden variar. Compra los boletos combinados (Hawa Mahal + Jantar Mantar + City Palace) si visitas los 3. Evita mercados después de las 18 h.",
+      "plan_b_lluvia": "Museo Albert Hall, tiendas de artesanía (joyería, bloques de impresión), cafés tradicionales",
+      "keywords": [
+        "Ciudad Rosa",
+        "Hawa Mahal",
+        "Palacio Vientos",
+        "City Palace",
+        "Jantar Mantar",
+        "Nahargarh",
+        "Bapu Bazaar"
+      ]
+    },
+    {
+      "id": "varanasi",
+      "nombre": "Varanasi",
+      "tipo": "histórico",
+      "region": "Uttar Pradesh",
+      "descripcion": "La ciudad sagrada del hinduismo a orillas del Ganges, donde peregrinos realizan abluciones rituales y se crematan a los difuntos. Espiritualidad pura, caos absoluto y momentos profundamente transformadores. Imprescindible para entender India.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Delhi en tren nocturno (10-12 horas, 12-20 EUR) o avión (1 hora, 40-80 EUR). Desde Agra en tren (6-8 horas, 10-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Assi Ghat area: 6-10 EUR/noche",
+        "medio": "Guest houses con vistas al Ganges en Dashashwamedh: 20-35 EUR/noche",
+        "comfort": "Hoteles 4-5 estrellas en Cantonment: 60-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Arati del Ganges al atardecer en Dashashwamedh Ghat (gratis, llega 1 hora antes)",
+        "Paseo en bote por el Ganges al amanecer (5 EUR, observa cremaciones desde lejos con respeto)",
+        "Templo Kashi Vishwanath (gratis)",
+        "Templo Durga (gratis)",
+        "Recorrido a pie por Ghats (gratis con guía local, 10-15 EUR)"
+      ],
+      "donde_comer": "Comida callejera en los ghats: lassi, chaat, jalebi (1-2 EUR). Parampara o Brown Bread Bakery para restaurantes vegetarianos (5-10 EUR). Prueba puri sabzi local.",
+      "consejo_local": "Madruga para el arati y amanecer; son los mejores momentos. Contratar un barquero confiable es crucial. No fotos de cremaciones; muestra respeto. Llena botellas de agua en tienda, no bebas del Ganges.",
+      "plan_b_lluvia": "Templos cubiertos, visita Sarnath (15 km, antiguos sitios budistas, 3 EUR entrada), ashrams locales, museos",
+      "keywords": [
+        "Ganges",
+        "Ghats",
+        "Arati",
+        "Templos",
+        "Cremaciones",
+        "Dashashwamedh",
+        "Assi Ghat",
+        "espiritualidad"
+      ]
+    },
+    {
+      "id": "goa",
+      "nombre": "Goa",
+      "tipo": "playa",
+      "region": "Costa Oeste",
+      "descripcion": "Antiguo enclave portugués con playas de arena dorada, ambiente relajado y fiesta nocturna. Herencia arquitectónica portuguesa, iglesias blancas y estilo de vida más occidental que el resto de India. Perfecto para relajarse después de ciudades caóticas.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Vuelos internos desde Delhi (2.5 horas, 30-60 EUR) o Bangalore (1 hora, 25-50 EUR). Desde Mumbai en tren (12 horas, 10-20 EUR) o autobús (13 horas, 8-12 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Baga, Anjuna: 8-15 EUR/noche",
+        "medio": "Resort 3 estrellas en Vagator, Calangute: 30-50 EUR/noche",
+        "comfort": "Resorts 5 estrellas frente al mar: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas: Anjuna, Baga, Vagator (gratis)",
+        "Mercado de Anjuna miércoles (gratis, artesanía, ropa, comida)",
+        "Basílica de Bom Jesus UNESCO (gratis)",
+        "Fuerte Aguada (3 EUR, vistas)",
+        "Spice Plantations tour (15-20 EUR)"
+      ],
+      "donde_comer": "Fish curry rice (especialidad Goa, 3-5 EUR), prawn balchao. Shacks en playas: 5-12 EUR. Tito's o Mambo's para ambiente de fiesta. Vino portugués barato (2-4 EUR).",
+      "consejo_local": "Goa es caro comparado con el resto de India. Evita diciembre-enero (temporada pico, muy abarrotado). Las mejores noches son martes (Anjuna) y jueves (Baga). Compra ropa de hippie en mercados, no en tiendas.",
+      "plan_b_lluvia": "Spice plantations (cubierto parcialmente), iglesias, tiendas de artesanía, cafés portugueses",
+      "keywords": [
+        "Baga",
+        "Anjuna",
+        "Vagator",
+        "Calangute",
+        "Fuerte Aguada",
+        "mercado",
+        "playas",
+        "influencia portuguesa"
+      ]
+    },
+    {
+      "id": "udaipur",
+      "nombre": "Udaipur",
+      "tipo": "histórico",
+      "region": "Rajastán",
+      "descripcion": "La 'Venecia de Oriente' con palacios reflejados en lagos, arquitectura elegante y atmósfera romántica. Ciudad amurallada con mercados tradicionales y templos. Una de las ciudades más bonitas de Rajastán, ideal para parejas y fotógrafos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Jaipur en autobús (8-10 horas, 10-15 EUR) o tren (12 horas, 8-12 EUR). Desde Delhi en avión + autobús (5 horas total, 50-80 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales lakeside en Old City: 8-12 EUR/noche",
+        "medio": "Guest houses con vistas al lago: 25-40 EUR/noche",
+        "comfort": "City Palace, Taj Lake Palace (resort dentro del lago): 100-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en bote por Lake Pichola (5 EUR, Taj Lake Palace, City Palace)",
+        "City Palace (8 EUR, arquitectura combinada hindu-mogol)",
+        "Templo Jagdish (gratis)",
+        "Paseo por Old City y Bada Bazaar (gratis, mercado local)",
+        "Sunset Garden (gratis, puesta de sol)"
+      ],
+      "donde_comer": "Gatte ki sabzi, laal maas (curry rojo Rajasthani, 3-5 EUR). Restaurantes con vistas al lago: 10-20 EUR. Cafés en lakeside para bebidas tradicionales (1-2 EUR).",
+      "consejo_local": "El City Palace sigue siendo residencia parcial; acceso limitado. Los mejores paseos en bote son al atardecer. No pierdas el mercado nocturno (18:00+). Negocia precios en tiendas.",
+      "plan_b_lluvia": "City Palace (parcialmente cubierto), templos interiores, mercados, tiendas de arte tradicional",
+      "keywords": [
+        "Lake Pichola",
+        "City Palace",
+        "Taj Lake Palace",
+        "Jagdish",
+        "Bada Bazaar",
+        "Venecia Oriente",
+        "romántico"
+      ]
+    },
+    {
+      "id": "amritsar",
+      "nombre": "Amritsar",
+      "tipo": "histórico",
+      "region": "Punjab",
+      "descripcion": "Centro espiritual del sikhismo con el templo dorado más sagrado (Golden Temple). Atmósfera devocional intensa, cocina punjabi auténtica y la ceremonia de la Puerta Wagah. Experiencia cultural profunda alejada del circuito turístico típico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Delhi en tren (10-12 horas, 10-15 EUR) o avión (1 hora, 40-80 EUR). Desde Jaipur en tren (12-14 horas, 12-18 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales cerca del Golden Temple: 6-10 EUR/noche",
+        "medio": "Guest houses en zona comercial: 20-30 EUR/noche",
+        "comfort": "Hoteles 4 estrellas: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Golden Temple (gratis, abierto 24h, comida en langar gratis)",
+        "Ceremonia Puerta Wagah (gratis, 15 km, frontera India-Pakistán)",
+        "Jallianwala Bagh memorial (3 EUR)",
+        "Paseo por bazares locales: Hall Bazaar (gratis, textiles y joyería)",
+        "Templo Durgiana (gratis)"
+      ],
+      "donde_comer": "Comida sikh en langar (gratis en Golden Temple, mejor experiencia). Punjab food: makki roti, sarson da saag, chole bhature (2-4 EUR). Restaurantes: amritsari kulcha (3-5 EUR). Lassi: 0.5 EUR.",
+      "consejo_local": "Cúbrete la cabeza en el Golden Temple (pañuelos gratuitos). La comida del langar es ritual comunitario, no turismo. Llega temprano a Wagah (6 AM) para buen sitio. La ciudad es muy segura.",
+      "plan_b_lluvia": "Golden Temple (cubierto), museos locales, tiendas de textiles, templos interiores",
+      "keywords": [
+        "Golden Temple",
+        "Templo Dorado",
+        "Wagah",
+        "Harmandir Sahib",
+        "Punjab",
+        "Jallianwala Bagh",
+        "espiritualidad sikh"
+      ]
+    },
+    {
+      "id": "jaipur-pushkar",
+      "nombre": "Pushkar",
+      "tipo": "histórico",
+      "region": "Rajastán",
+      "descripcion": "Pueblo sagrado con un lago único y templos hindúes, famoso por la Feria de Camellos (noviembre) donde se reúnen criadores de toda India. Atmósfera espiritual, mercados nómadas y experiencia desconectada del turismo de masas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre (feria camellos), octubre a marzo",
+      "como_llegar": "Desde Jaipur en autobús (3 horas, 3-5 EUR) o taxi compartido (4 EUR). Desde Delhi vía Jaipur (6-7 horas total).",
+      "donde_dormir": {
+        "mochilero": "Hostales budget en bazaar principal: 6-10 EUR/noche",
+        "medio": "Guest houses lakeside: 20-30 EUR/noche",
+        "comfort": "Resorts tradicionales (haveli): 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Feria de Camellos (noviembre, gratis entrada aunque hay tur de pago)",
+        "Templo Brahma (único en mundo, gratis)",
+        "Paseo alrededor del lago sagrado (gratis)",
+        "Savitri Temple en colina (gratis, vistas)",
+        "Mercados bazaar para artesanía nómada (gratis, compras)"
+      ],
+      "donde_comer": "Comida rajasthani: dal bati, ker sangri (2-3 EUR). Restaurantes turísticos con vistas al lago: 5-10 EUR. Café callejero: 0.5-1 EUR.",
+      "consejo_local": "Noviembre para la Feria es increíble pero lleno; reserva con anticipación. Fuera de feria, es pueblo tranquilo y mucho más auténtico. Los lugareños en Pushkar son vegetarianos estrictos; no hay carne.",
+      "plan_b_lluvia": "Templos (cubiertos), mercados, casas de artesanos locales, cafés",
+      "keywords": [
+        "Feria Camellos",
+        "Templo Brahma",
+        "Pushkar Lake",
+        "nómadas",
+        "Rajastán",
+        "lago sagrado"
+      ]
+    },
+    {
+      "id": "darjeeling",
+      "nombre": "Darjeeling",
+      "tipo": "montaña",
+      "region": "Bengala Occidental",
+      "descripcion": "Estación de montaña en el Himalaya con plantaciones de té, vistas del Kanchenjunga y clima templado. Influencia británica colonial, mercados tibetanos y ferrocarril de juguete UNESCO. Escape perfecto del calor indio.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre a noviembre, marzo a mayo",
+      "como_llegar": "Desde Kolkata en tren (10-14 horas, 8-12 EUR) o jeep compartido (6 horas, 10-15 EUR). Desde Delhi vía Kolkata (8 horas tren + 10 horas jeep, 30-50 EUR total).",
+      "donde_dormir": {
+        "mochilero": "Hostales en bazaar principal: 8-12 EUR/noche",
+        "medio": "Guest houses coloniales: 25-40 EUR/noche",
+        "comfort": "Heritage hotels (Windamere Hotel, Mahakal): 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Tiger Hill al amanecer (5 EUR con guía, vistas Kanchenjunga)",
+        "Ferrocarril de juguete (Toy Train) (5 EUR, recorrido 2 horas)",
+        "Plantación de té + degustación (8-12 EUR con tour)",
+        "Mercado tibetano de Darjeeling (gratis)",
+        "Monasterio Bhutia (gratis)"
+      ],
+      "donde_comer": "Momos tibetanos (2-3 EUR), thukpa (sopa tibetana, 2-3 EUR), comida nepalí. Restaurantes: 5-12 EUR. Té Darjeeling en cafés: 1-2 EUR.",
+      "consejo_local": "Tiger Hill requiere levantarse a las 4 AM. El Toy Train es lento pero experiencia romántica; compra boletos con anticipación. Las mejores vistas son octubre-noviembre. Lleva abrigo incluso en 'verano'.",
+      "plan_b_lluvia": "Museos locales (Himalayan Museum), tiendas de artesanía tibetana, cafés de té, monasterios",
+      "keywords": [
+        "Toy Train",
+        "Kanchenjunga",
+        "plantaciones té",
+        "Tiger Hill",
+        "montaña Himalaya",
+        "tibetano",
+        "colonial"
+      ]
+    },
+    {
+      "id": "khajuraho",
+      "nombre": "Khajuraho",
+      "tipo": "histórico",
+      "region": "Madhya Pradesh",
+      "descripcion": "Templos medievales UNESCO con intrincadas esculturas eróticas hindúes y jainistas (siglos X-XI). Arquitectura espectacular y contenido controvertido combinado con tranquilidad pueblerina. Fuera del circuito turístico típico pero imprescindible culturalmente.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Vuelos internos desde Delhi (1.5 horas, 40-70 EUR) o Varanasi (1 hora, 40-70 EUR). Desde Delhi en tren (8 horas, 10-15 EUR) pero itinerario complicado.",
+      "donde_dormir": {
+        "mochilero": "Hostales básicos en pueblo: 6-10 EUR/noche",
+        "medio": "3 estrellas cercanas a templos: 25-35 EUR/noche",
+        "comfort": "Resorts 4-5 estrellas con piscina: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Templos Occidentales (10 EUR, las más famosas esculturas)",
+        "Templos Orientales (5 EUR)",
+        "Templos del Sur (3 EUR)",
+        "Paseo nocturno con luz (templos iluminados, mágico, gratis)",
+        "Museo arqueológico local (3 EUR)"
+      ],
+      "donde_comer": "Comida regional Madhya Pradesh: jalebi y imarti (dulces, 1-2 EUR), dal baafla. Restaurantes básicos: 4-8 EUR. La oferta es limitada; come temprano.",
+      "consejo_local": "Las esculturas eróticas son religiosas, no pornográficas; contexto cultural importa. Visita templos temprano para luz dorada y evitar grupos. El pueblo es pequeño y tranquilo; perfecto para descansar después de caos.",
+      "plan_b_lluvia": "Museos cubiertos, templos tienen pasillos con techo parcial",
+      "keywords": [
+        "templos eróticos",
+        "UNESCO",
+        "esculturas medievales",
+        "templos Occidentales",
+        "arquitectura jainista",
+        "arte hindú"
+      ]
+    },
+    {
+      "id": "mumbai",
+      "nombre": "Mumbai",
+      "tipo": "ciudad",
+      "region": "Maharashtra",
+      "descripcion": "La capital financiera y cinematográfica de India con Bollywood, arquitectura colonial, mercados caóticos y contrastes extremos. Puerta de entrada común con energía frenética. Imprescindible para entender India moderna, aunque no es destino de relajación.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Aeropuerto Indira Gandhi (vuelos internacionales), tren desde Delhi (24 horas, 15-25 EUR) o vuelo (2 horas, 30-80 EUR). Hub de transporte principal.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Fort, Colaba: 10-15 EUR/noche",
+        "medio": "3 estrellas en Bandra, Colaba: 30-50 EUR/noche",
+        "comfort": "Hoteles 5 estrellas (Taj Mahal Palace): 100-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Puerta de India (gratis)",
+        "Paseo por Marine Drive al atardecer (gratis)",
+        "Templo Mani Bhawan, residencia Gandhi (3 EUR)",
+        "Elephant Caves (UNESCO, 5 EUR, a 10 km)",
+        "Mercado Chor Bazaar (gratis, antigüedades, regateo)"
+      ],
+      "donde_comer": "Dosa (5-8 EUR), pav bhaji (2-3 EUR). Restaurantes en Bandra: 10-20 EUR. Vada pav callejero: 1 EUR. Darshan café para chai tradicional.",
+      "consejo_local": "Mumbai es caro y estresante; no es destino de lujo relajado. Usa metro/autobús si quieres experiencia local real. Bandra es barrio más cool. Evita zonas de slum sin guía local.",
+      "plan_b_lluvia": "Museos (Prince of Wales), galerías de arte, tiendas, cafés, cines",
+      "keywords": [
+        "Bollywood",
+        "Puerta India",
+        "Marine Drive",
+        "Colaba",
+        "Bandra",
+        "Elephant Caves",
+        "Fort",
+        "capital financiera"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,350 @@
+{
+  "pais": "Dinamarca",
+  "codigo": "dk",
+  "destinos": [
+    {
+      "id": "copenhague",
+      "nombre": "Copenhague",
+      "tipo": "ciudad",
+      "region": "Región Capital (Hovedstaden)",
+      "descripcion": "Capital nórdica con canales pintorescos, arquitectura moderna y vibrante escena gastronómica. Centro cultural y económico donde confluyen diseño escandinavo, museos de clase mundial y vida nocturna cosmopolita. Punto de entrada principal para la mayoría de viajeros independientes.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "aeropuerto de Kastrup está a 8km; tren al centro en 12-15 min (4 EUR), taxi/autobús también disponibles",
+      "donde_dormir": {
+        "mochilero": "Albergues en Nørrebro, Vesterbro: 25-35 EUR/noche",
+        "medio": "Hoteles 3 estrellas en Nyhavn, Indre By: 80-120 EUR/noche",
+        "comfort": "Hoteles 4-5 estrellas en Slotsholmen, Klareboderne: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Nyhavn y paseo por canales (gratis)",
+        "Palacio de Amalienborg y cambio de guardia (gratis)",
+        "Museo Nationalmuseet (15 EUR)",
+        "Tivoli Gardens (entrada 15-20 EUR, atracciones adicionales)",
+        "Christiania, comuna alternativa (gratis)",
+        "Stroget, calle peatonal comercial (gratis)",
+        "Smørrebrød en food market (Torvehallerne: 8-12 EUR)"
+      ],
+      "donde_comer": "Smørrebrød (sándwiches abiertos: 8-15 EUR), comida nórdica moderna en Nørrebro (15-30 EUR plato), street food en Torvehallerne market (8-20 EUR), cerveza local Carlsberg en bares de Vesterbro (5-8 EUR)",
+      "consejo_local": "Compra la Copenhagen Card (24/48/72h) si planeas museos; incluye transporte ilimitado y entrada a atracciones. Renta una bicicleta (10-15 EUR/día) para moverte como danés.",
+      "plan_b_lluvia": "Museos cerrados (SMK, Thorvaldsen), cines, cafés en Café Noir o pastelerías, visita cubierta a Tivoli o Legoland Billund (día excursión)",
+      "keywords": [
+        "Copenhagen",
+        "København",
+        "Nyhavn",
+        "Nørrebro",
+        "Vesterbro",
+        "Strøget",
+        "Amalienborg",
+        "Christiania"
+      ]
+    },
+    {
+      "id": "aarhus",
+      "nombre": "Aarhus",
+      "tipo": "ciudad",
+      "region": "Región Central (Midtjylland)",
+      "descripcion": "Segunda ciudad de Dinamarca con ambiente universitario joven, museos innovadores y acceso a playas del Kattegat. Centro cultural dinámico con arquitectura medieval en el casco antiguo y escena artística contemporánea en rápido crecimiento.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Tren desde Copenhague: 4h, 30-50 EUR; autobús FlixBus: 5-6h, 15-25 EUR",
+      "donde_dormir": {
+        "mochilero": "Albergues en Latinerkvarteret: 22-30 EUR/noche",
+        "medio": "Hoteles 3 estrellas en centro: 70-100 EUR/noche",
+        "comfort": "Hoteles 4 estrellas cerca catedral: 120-170 EUR/noche"
+      },
+      "que_hacer": [
+        "ARoS Kunstmuseum, instalación 'Your Rainbow Panorama' (15 EUR, vistas panorámicas gratis)",
+        "Den Gamle By, museo de pueblo al aire libre (18 EUR)",
+        "Catedral de Aarhus, siglo XIII (gratis)",
+        "Playas de Møllestrand y Ballehage (gratis)",
+        "Paseo por Latinerkvarteret, barrio antiguo (gratis)",
+        "Moesgård Museum, arqueología y etnografía (18 EUR)"
+      ],
+      "donde_comer": "Cafés en Latinerkvarteret (desayuno 6-10 EUR), Smørrebrød en Street Food (10-15 EUR), restaurants en Skolebakken (platos principales 15-28 EUR), cerveza local en Braukunst o J. Coué",
+      "consejo_local": "Visita Aarhus de miércoles a viernes para noches tardías y mejor ambiente; el fin de semana es más tranquilo. ARoS al atardecer para mejor luz en el panorama arcoíris.",
+      "plan_b_lluvia": "Den Gamle By está parcialmente cubierto, museos (ARoS, Moesgård, Occupation Museum), cines, galerías de arte en barrio Godsbanen",
+      "keywords": [
+        "Aarhus",
+        "Århus",
+        "Latinerkvarteret",
+        "ARoS",
+        "Den Gamle By",
+        "Møllestrand",
+        "Midtjylland"
+      ]
+    },
+    {
+      "id": "odense",
+      "nombre": "Odense",
+      "tipo": "ciudad",
+      "region": "Región de Selandia (Fyn)",
+      "descripcion": "Tercera ciudad, cuna de Hans Christian Andersen, con canales románticos y ambiente medieval preservado. Destino accesible y menos saturado que Copenhague, perfecto para viajeros que buscan autenticidad danesa a ritmo lento.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Tren desde Copenhague: 1h 20min, 20-35 EUR; desde Aarhus: 1h 30min, 15-25 EUR",
+      "donde_dormir": {
+        "mochilero": "Albergues en centro: 20-28 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 65-95 EUR/noche",
+        "comfort": "Hoteles 4 estrellas: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "H.C. Andersen's Hus, museo biografía (12 EUR)",
+        "H.C. Andersen's Childhood Home (8 EUR)",
+        "Catedral de Odense, siglo XIII (gratis)",
+        "Paseo por Munke Mølestræde, calle medieval (gratis)",
+        "Brandts, museo de arte moderno (12 EUR)",
+        "Paseo en bote por canales (8-15 EUR)"
+      ],
+      "donde_comer": "Smørrebrød tradicional en Sortebror (10-14 EUR), comida nórdica en Sorella (20-30 EUR plato), pastelerías en Jernbanegade, pizza y cafés varios (8-15 EUR)",
+      "consejo_local": "Visita en mayo para el Festival de H.C. Andersen. La ciudad es pequeña y caminable; dedica un día completo pero sin prisas. Los canales son más bonitos al atardecer.",
+      "plan_b_lluvia": "Museos dedicados a Andersen, Brandts, galerías de arte, paseo cubierto en centro comercial",
+      "keywords": [
+        "Odense",
+        "Odense",
+        "Hans Christian Andersen",
+        "Munke Mølestræde",
+        "Fyn",
+        "Brandts"
+      ]
+    },
+    {
+      "id": "bornholm",
+      "nombre": "Bornholm",
+      "tipo": "isla",
+      "region": "Bornholm (Bornholm)",
+      "descripcion": "Isla rocosa en el Báltico con acantilados dramáticos, pueblos pesqueros pintorescos y arte rock escandinavo único. Destino perfecto para escapes naturales, senderismo costero y desconexión sin sacrificar comodidad.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-agosto",
+      "como_llegar": "Ferry desde Copenhague (7h) o vuelo desde Aarhus (40min, 80-120 EUR). Ferry: 35-60 EUR ida, 12-15h en coche incluido",
+      "donde_dormir": {
+        "mochilero": "Albergues en Rønne o Nexø: 25-32 EUR/noche",
+        "medio": "Hoteles 3 estrellas en Rønne, Svaneke: 75-110 EUR/noche",
+        "comfort": "Resort en Gudhjem o Svaneke: 130-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Acantilado Mols Bjerge y sendero costero (gratis)",
+        "Roca de Hammershus, ruinas castillo (gratis acceso, mirador)",
+        "Faro de Dueodde (gratis exterior, 5 EUR interior)",
+        "Pueblos de Svaneke y Gudhjem, arquitectura típica (gratis pasear)",
+        "Playa de Dueodde, arena blanca (gratis)",
+        "Ruta cicloturismo alrededor de isla (bici rental 10-15 EUR/día)"
+      ],
+      "donde_comer": "Arenque ahumado fresco en Nexø (8-12 EUR), restaurantes de pescado en Gudhjem (18-30 EUR), smørrebrød en café locales (10-14 EUR), pan especial de Bornholm 'rundstykker' en panaderías",
+      "consejo_local": "Renta bicicleta para recorrer la isla; las carreteras son excelentes y planas. Lleva cámara para atardeceres en Gudhjem y Hammershus. El ferry es parte del viaje, no un obstáculo.",
+      "plan_b_lluvia": "Museo de Arte de Bornholm, museos de historia local, cafés costeros con vistas, paseos cortos entre pueblos",
+      "keywords": [
+        "Bornholm",
+        "Rønne",
+        "Gudhjem",
+        "Svaneke",
+        "Hammershus",
+        "Dueodde",
+        "acantilados"
+      ]
+    },
+    {
+      "id": "ribe",
+      "nombre": "Ribe",
+      "tipo": "histórico",
+      "region": "Región Sur de Dinamarca (Syddanmark)",
+      "descripcion": "Pueblo medieval más antiguo de Escandinavia (siglo VIII) con calles adoquinadas intactas y arquitectura de cuento. Destino compacto perfecto para experiencia de viaje lento en una jornada desde Copenhague o como base para explorar Jutlandia sur.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Tren desde Copenhague: 3h 20min, 25-40 EUR; autobús: 3h, 15-20 EUR. Está en ruta hacia Bornholm",
+      "donde_dormir": {
+        "mochilero": "Albergue Ribe Vandrehjem: 28-35 EUR/noche",
+        "medio": "Hoteles pequeños en centro: 70-100 EUR/noche",
+        "comfort": "Hotel Dagmar (histórico): 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo a pie por casco medieval (gratis)",
+        "Catedral de Ribe, siglo XII (gratis exterior, 5 EUR interior)",
+        "Museo de Ribe (10 EUR)",
+        "Torre del Vigilante y vistas (3 EUR)",
+        "Rio Ribe, paseo ribereño (gratis)",
+        "Visita guiada nocturna al pueblo (10-15 EUR, reservar)"
+      ],
+      "donde_comer": "Restaurant Den Gamle Kro (comida danesa clásica, 15-28 EUR plato), cafés en plaza central (8-12 EUR), smørrebrød en delis (10-14 EUR), bakery tradicional para desayuno",
+      "consejo_local": "Visita el pueblo por la mañana temprano (antes de las 10:00) para evitar excursiones de autobús de turismo. Duerme si es posible para disfrutar al atardecer cuando se vacía.",
+      "plan_b_lluvia": "Museos Ribe (pequeños pero completos), cathedral, cafés acogedores con chimenea, paseo bajo paraguas (el pueblo es más atmosférico con lluvia)",
+      "keywords": [
+        "Ribe",
+        "pueblo medieval",
+        "Dinamarca antigua",
+        "Syddanmark",
+        "Jutlandia",
+        "casco antiguo"
+      ]
+    },
+    {
+      "id": "skagen",
+      "nombre": "Skagen",
+      "tipo": "playa",
+      "region": "Región Norte de Dinamarca (Nordjylland)",
+      "descripcion": "Pueblo pesquero en el extremo norte donde el Mar del Norte y el Báltico convergen. Lugar de peregrinación para viajeros que quieren alcanzar el punto más boreal de Dinamarca con playas desérticas y luz nórdica única.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-agosto (luz permanente)",
+      "como_llegar": "Tren desde Copenhague a Frederikshavn (5h, 35-60 EUR), luego autobús a Skagen (45min, 10 EUR). Total 5h 45min",
+      "donde_dormir": {
+        "mochilero": "Albergues en Skagen: 28-36 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 90-130 EUR/noche",
+        "comfort": "Resort beachfront: 150-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Grenen, punto confluencia de mares (gratis, piscina natural 5 EUR)",
+        "Iglesia enterrada (Den Tilsandede Kirke) (4 EUR entrada)",
+        "Playas Råbjerg Mile con dunas (gratis)",
+        "Museo de arte Skagen Kunstmuseum (10 EUR)",
+        "Puerto pesquero y subasta de pescado matutina (gratis espectador)",
+        "Faro de Grenen (gratis exterior)"
+      ],
+      "donde_comer": "Pescado fresco en restaurants puerto (20-32 EUR plato principal), smørrebrød con arenque en Poul Henriksen (12-16 EUR), pan de cerveza local, cafés en Sct. Laurentiivej",
+      "consejo_local": "Llega por la mañana para ver la subasta de pescado (5:30-7:30am) en el puerto; es experiencia auténtica. Salta en el piscina natural de Grenen con seguridad (solo en verano, personal presente).",
+      "plan_b_lluvia": "Museo de Arte Skagen, museo de rescate marino, cafés costeros, iglesia enterrada protegida",
+      "keywords": [
+        "Skagen",
+        "Grenen",
+        "confluencia de mares",
+        "Dinamarca norte",
+        "Nordjylland",
+        "playa arenque"
+      ]
+    },
+    {
+      "id": "malmo",
+      "nombre": "Malmö (excursión Suecia)",
+      "tipo": "ciudad",
+      "region": "Escania, Suecia",
+      "descripcion": "A solo 35 minutos en tren desde Copenhague. Ciudad portuaria sueca con parques verdes, arquitectura moderna (Turning Torso) y vida cultural vibrante. Perfecta excursión de un día o base alternativa más barata que Copenhague.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Tren desde Copenhague Hovedbanegård: 35min, 13-20 EUR (Öresund train, billete EUR válido)",
+      "donde_dormir": {
+        "mochilero": "Albergues Malmö: 20-28 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 60-90 EUR/noche",
+        "comfort": "Hoteles 4 estrellas: 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Stortorget, plaza central medieval (gratis)",
+        "Castillo de Malmö, museo (8 EUR)",
+        "Turning Torso (exterior gratis, interior 5 EUR si abierto)",
+        "Parque Pildamm con lago (gratis)",
+        "Ribera del puerto y museo moderno (gratis pasear)",
+        "Iglesia de San Petri (gratis)"
+      ],
+      "donde_comer": "Smørrebrød sueco en Söders Värm (10-14 EUR), comida nórdica en Bloom in the Park (25-35 EUR), cafés Åkachan, pizzas, kebabs (8-12 EUR). Suecia es más cara que Dinamarca.",
+      "consejo_local": "Malmö es complemento a Copenhague, no destino principal. Pasa medio día o usa como base una noche para ahorrar hoteles. Los precios suecos son más altos; come en cafés no en restaurantes.",
+      "plan_b_lluvia": "Castillo de Malmö, museos, galerías de arte, cafés, shopping en centro comercial",
+      "keywords": [
+        "Malmö",
+        "Malmo",
+        "Suecia",
+        "Öresund",
+        "Turning Torso",
+        "excursión desde Copenhague"
+      ]
+    },
+    {
+      "id": "frederiksberg-jardines",
+      "nombre": "Frederiksberg (Parques y Palacios)",
+      "tipo": "histórico",
+      "region": "Región Capital (Hovedstaden)",
+      "descripcion": "Municipio anexo a Copenhague con parques reales de diseño, palacio barroco y ambiente aristocrático más tranquilo. Escape verde ideal sin salir del área metropolitana, accesible en metro desde centro.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre (parques en floración)",
+      "como_llegar": "Metro desde Copenhague centro: 15-20min, tarjeta transporte válida (incluida en Copenhagen Card)",
+      "donde_dormir": {
+        "mochilero": "Albergues cercanos en Copenhague (dormir allí)",
+        "medio": "Hoteles 3 estrellas: 80-120 EUR/noche",
+        "comfort": "Hoteles 4 estrellas: 130-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Frederiksberg Slotshave (parque palacio real) (gratis)",
+        "Parque Frederiksberg con zoo (12 EUR entrada zoo)",
+        "Amalienborg Theatre, teatro al aire libre (espectáculos 8-15 EUR)",
+        "Café en Mælkevejen, paseo de cafés (8-12 EUR café)",
+        "Tívoli Bakken, parque de atracciones histórico (gratis entrada, atracciones pagadas)",
+        "Kanaler del parque, paseo pedestre (gratis)"
+      ],
+      "donde_comer": "Cafés aristocráticos en Mælkevejen (10-15 EUR), restaurantes en Frederiksberg (15-25 EUR), heladerías danesas, panaderías",
+      "consejo_local": "Dedica una mañana o tarde, no es destino de día completo. Combina con Tívoli Bakken o como escape verde desde Copenhague centro. Desayuna en café parque.",
+      "plan_b_lluvia": "Zoo cubierto parcialmente, teatros, paseos bajo los árboles (parque boscoso), cafés acogedores",
+      "keywords": [
+        "Frederiksberg",
+        "Slotshave",
+        "parques",
+        "Bakken",
+        "aristocracia danesa"
+      ]
+    },
+    {
+      "id": "hirtshals",
+      "nombre": "Hirtsals",
+      "tipo": "playa",
+      "region": "Región Norte de Dinamarca (Nordjylland)",
+      "descripcion": "Puerto pesquero activo con acuario, playas rocosas y punto de salida para ferries a Noruega y Suecia. Base alternativa para explorar norte de Jutlandia con ambiente auténtico de pueblo de pescadores.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio-agosto",
+      "como_llegar": "Tren desde Aalborg: 1h, 10-15 EUR. Desde Copenhague: 6h total con transbordos",
+      "donde_dormir": {
+        "mochilero": "Albergues: 26-32 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 75-110 EUR/noche",
+        "comfort": "Resort waterfront: 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Acuario Nordsøen Oceanarium (16 EUR)",
+        "Puerto y lonja de pescado (gratis, temprano por mañana)",
+        "Playas rocosas y piscina natural (gratis)",
+        "Sendero costero hacia Frederikshavn (gratis)",
+        "Museo naval (8 EUR)",
+        "Faro de Hirtsals (3 EUR si entra)"
+      ],
+      "donde_comer": "Pescado ahumado fresco en puesto puerto (8-12 EUR), restaurants pescado (16-28 EUR plato), smørrebrød simple en cafés (10-14 EUR), helado danés",
+      "consejo_local": "Visita por la mañana temprano para ver actividad puerto auténtica. Usa como base para día norte Jutlandia (Skagen, Frederikshavn). No es destino para días largos.",
+      "plan_b_lluvia": "Acuario interior, museo naval, cafés, shopping mínimo",
+      "keywords": [
+        "Hirtsals",
+        "Hirtshals",
+        "puerto pescado",
+        "Nordjylland",
+        "playa rocosa",
+        "Oceanarium"
+      ]
+    },
+    {
+      "id": "billund",
+      "nombre": "Billund (Legoland y naturaleza)",
+      "tipo": "ciudad",
+      "region": "Región Central (Midtjylland)",
+      "descripcion": "Pueblo danés famoso mundialmente por Legoland, pero también punto de acceso a bosques de Gribskov y lagos. Destino versátil que combina atracciones familiares con naturaleza virgen de Jutlandia central.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo-octubre (Legoland abierto)",
+      "como_llegar": "Tren desde Copenhague a Vejers (3h, 35 EUR), luego autobús a Billund (30min, 8 EUR). Total 3h 30min. Vuelos también disponibles.",
+      "donde_dormir": {
+        "mochilero": "Albergue cerca Legoland: 28-35 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 80-120 EUR/noche",
+        "comfort": "Hotel Legoland (oficial): 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Legoland Billund (entrada 48 EUR, precios varían por temporada)",
+        "Bosque Gribskov, senderismo (gratis, senderos marcados)",
+        "Lagos para pesca deportiva (gratis o pequeña cuota)",
+        "Museo Lego House (20 EUR)",
+        "Pueblo de Billund tradicional (gratis pasear)",
+        "Parque infantil público y piscina (4-8 EUR)"
+      ],
+      "donde_comer": "Cafés en Legoland (precios elevados 12-18 EUR), restaurants pueblo (14-24 EUR), supermercados para picnic (7-12 EUR), bakery tradicionais",
+      "consejo_local": "Si vienes sin niños, salta Legoland; los bosques de Gribskov son la verdadera joya. Picnic barato en natura. Si tienes familia, Legoland merece 1 día pero no es barato.",
+      "plan_b_lluvia": "Legoland parcialmente cubierto, museo indoor, cafés, shopping mínimo",
+      "keywords": [
+        "Billund",
+        "Legoland",
+        "Gribskov",
+        "bosques",
+        "Midtjylland",
+        "naturaleza Jutlandia"
+      ]
+    }
+  ]
+}

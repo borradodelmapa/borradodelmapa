@@ -1,0 +1,356 @@
+{
+  "pais": "Yemen",
+  "codigo": "ye",
+  "alerta_general": "Yemen está en conflicto activo desde 2014. El Ministerio de Asuntos Exteriores desaconseja viajar a todo el país. Los siguientes destinos se listan por valor histórico y cultural, pero NO son seguros para viajeros independientes en la actualidad.",
+  "destinos": [
+    {
+      "id": "sanaa",
+      "nombre": "Sanaa",
+      "tipo": "histórico",
+      "region": "noroeste, zona controlada por hutíes",
+      "descripcion": "Capital histórica con medina UNESCO declarada Patrimonio de la Humanidad. Casas-torre de 7-8 pisos con fachadas de piedra y vidrieras, mercados antiguos intactos desde el siglo XV. Centro cultural y comercial de Yemen durante siglos.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "octubre a marzo (evitar calor extremo)",
+      "como_llegar": "vuelos internacionales limitadísimos; históricamente desde Adén vía carretera (6-7h, 50-80 EUR en minibús compartido) o desde Aeropuerto Internacional de Sanaa si reabre",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes tradicionales en medina: 10-20 EUR/noche",
+        "medio": "Pequeños hoteles familiares (Qasr Sheba zona): 25-40 EUR/noche",
+        "comfort": "Hotel Al-Saleh o similares: 50-80 EUR/noche (raramente disponibles)"
+      },
+      "que_hacer": [
+        "Recorrer medina antigua a pie (gratis)",
+        "Mezquita al-Qaid (entrada: 2-3 EUR, observar desde fuera si no eres musulmán)",
+        "Mercado de Suq al-Qat (gratis, ver vendedores de qat)",
+        "Bab al-Yemen puerta sur (gratis)",
+        "Hammam tradicional (5-8 EUR)"
+      ],
+      "donde_comer": "Fuul (puré de habas), sopa de carne, pan yemení. Restaurantes en medina: 2-4 EUR por plato. Evitar agua del grifo.",
+      "consejo_local": "Los mejores detalles arquitectónicos están en plantas altas; negocia con locales para subir a casas-torre privadas (propina 2-5 EUR). El qat es parte de la cultura pero costoso (15-30 EUR).",
+      "plan_b_lluvia": "Refugiarse en hammams, visitar museos privados en casas-torre cerradas, mercados cubiertos",
+      "alerta_seguridad": "Control hutí, conflicto activo, cortes de electricidad frecuentes, acceso muy limitado. NO RECOMENDADO.",
+      "keywords": [
+        "Sanaa",
+        "Sana'a",
+        "medina antigua",
+        "Qaid",
+        "Suq al-Qat",
+        "Bab Yemen",
+        "casas-torre yemení"
+      ]
+    },
+    {
+      "id": "aden",
+      "nombre": "Adén",
+      "tipo": "ciudad",
+      "region": "sur, costa del Golfo de Adén",
+      "descripcion": "Puerto estratégico histórico con arquitectura colonial británica, playas cercanas y bahía espectacular. Punto de entrada histórico a Yemen y puerta hacia el Índico. Menos deteriorada que Sanaa pero con inseguridad extrema.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Aeropuerto de Adén (vuelos muy limitados desde Oriente Medio); desde Sanaa en minibús (12h, 40-60 EUR, muy peligroso actualmente)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Crater o Steamer Point: 12-20 EUR/noche",
+        "medio": "Hotel Gold Mohur o similares: 30-50 EUR/noche",
+        "comfort": "Aden Movenpick (cuando funciona): 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Crater barrio antiguo (gratis, caminar)",
+        "Playas de Sirah y Gold Mohur (gratis)",
+        "Puerto y paseo marítimo (gratis)",
+        "Museo Militar de Adén (3-5 EUR, si está abierto)",
+        "Piccadilly Circus colonial (gratis, fotografía)"
+      ],
+      "donde_comer": "Pescado fresco, shakshouka, nan. Restaurantes portuarios: 3-6 EUR. Evitar calle de noche.",
+      "consejo_local": "Crater es donde viven pescadores; negocia con ellos para salidas en bote (15-30 EUR). Las mejores vistas son al atardecer desde el borde de la bahía.",
+      "plan_b_lluvia": "Museo, paseos por Crater cubiertos, hammams",
+      "alerta_seguridad": "Zona actualmente más estable que norte, pero conflicto en áreas próximas, presencia militar, bandas criminales. ALTO RIESGO.",
+      "keywords": [
+        "Aden",
+        "Adén",
+        "Crater",
+        "Gold Mohur",
+        "puerto",
+        "bahía",
+        "colonial"
+      ]
+    },
+    {
+      "id": "socotra",
+      "nombre": "Socotra",
+      "tipo": "isla",
+      "region": "archipiélago en el Índico, sureste de Yemen",
+      "descripcion": "Isla desértica única con flora endémica ('Galápagos del Índico'), playas vírgenes de arena blanca y cañones de piedra arenisca roja. Aislada, con población pequeña y ecosistema extremadamente frágil. Acceso extremadamente limitado y difícil.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "octubre a abril (verano: monzones destructivos)",
+      "como_llegar": "Ferry desde Adén (14-18h, 30-50 EUR, muy irregular) o vuelo chárter privado (800-1500 EUR). Prácticamente impracticable actualmente.",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes en Hadiboh: 15-25 EUR/noche",
+        "medio": "Socotra Dive Centre o ecolodges: 40-60 EUR/noche",
+        "comfort": "Resort de lujo (raramente disponible): 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Desierto Rub al-Khali trekking (guía obligatorio: 30-50 EUR/día)",
+        "Playa Laguna de Diksam (gratis, acceso con 4x4)",
+        "Cañones Wadi Dharbat (10-20 EUR con guía)",
+        "Snorkel/submarinismo Índico (50-80 EUR/inmersión)",
+        "Observación de fauna endémica: dragón de Socotra (gratis con caminata)"
+      ],
+      "donde_comer": "Pescado, arroz, pan plano yemení. Restaurantes Hadiboh: 2-4 EUR. Provisiones muy limitadas, llevar snacks.",
+      "consejo_local": "Negocia directamente con pescadores locales para expediciones marítimas (más barato que tours). Diciembre-febrero: ventanas de buenas condiciones; marzo: tormentas. Trae protección solar extrema.",
+      "plan_b_lluvia": "Durante monzones, no se puede viajar. Dentro de temporada: explorar cavernas, quedarse en pueblo",
+      "alerta_seguridad": "Aislada, inestabilidad política, presencia militar. Acceso prácticamente cerrado actualmente. EXTREMADAMENTE PELIGROSO.",
+      "keywords": [
+        "Socotra",
+        "Soqotra",
+        "isla",
+        "dragón",
+        "Hadiboh",
+        "Diksam",
+        "Índico"
+      ]
+    },
+    {
+      "id": "taiz",
+      "nombre": "Taiz",
+      "tipo": "ciudad",
+      "region": "centro-sur, montañas",
+      "descripcion": "Segunda ciudad histórica, centro intelectual y cultural. Situado en meseta montañosa a 1.400m con clima más templado. Mercados antiguos, mezquitas y casas tradicionales, aunque muy dañado por conflicto.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Adén en minibús (6-7h, 20-30 EUR) o desde Sanaa (4-5h, 15-25 EUR). Carreteras muy inseguras.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicas: 10-15 EUR/noche",
+        "medio": "Hotel al-Waha o similares: 20-35 EUR/noche",
+        "comfort": "Hotel Taiz Tower (si está operativo): 45-65 EUR/noche"
+      },
+      "que_hacer": [
+        "Fortaleza de Qahira (entrada: 2-3 EUR, vistas)",
+        "Mercado tradicional Suq al-Talh (gratis)",
+        "Mezquita al-Ashrafiyya (gratis, observar)",
+        "Cementerio histórico (gratis, genealogía)",
+        "Paseo por medina (gratis)"
+      ],
+      "donde_comer": "Sopa de carne, fatira (pan relleno), miel local. Comedores locales: 2-3 EUR.",
+      "consejo_local": "Taiz fue centro de impresión y saber; pregunta en mezquitas por bibliotecas privadas que pueden visitarse. Clima agradable permite caminatas nocturnas.",
+      "plan_b_lluvia": "Museos, mercados cubiertos, hammams",
+      "alerta_seguridad": "Línea de frente activa, combates frecuentes, ciudad muy dañada. EXTREMADAMENTE PELIGROSO.",
+      "keywords": [
+        "Taiz",
+        "Taez",
+        "Qahira",
+        "fortaleza",
+        "medina",
+        "montaña",
+        "intelectual"
+      ]
+    },
+    {
+      "id": "ibb",
+      "nombre": "Ibb",
+      "tipo": "montaña",
+      "region": "centro-sur, tierras altas",
+      "descripcion": "Pueblos en las montañas altas de Yemen (1.800-2.000m) con terrazas agrícolas ancestrales, vegetación verde única, clima fresco. Centro de producción de café yemení histórico. Paisaje verde en contraste con desierertos del resto del país.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Taiz en minibús (2-3h, 10-15 EUR) o desde Sanaa (4h, 15-20 EUR). Carreteras montañosas sinuosas.",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes familiares: 8-12 EUR/noche",
+        "medio": "Small hotels: 15-25 EUR/noche",
+        "comfort": "Ecolodges rústicos: 35-50 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking por terrazas (gratis, con guía local 15-25 EUR/día)",
+        "Plantaciones de café (tours 10-15 EUR con agricultor local)",
+        "Pueblos de piedra (Yarim, Al-Mishnah): paseos gratis",
+        "Cascadas y pozas naturales (gratis)",
+        "Mercado de café local (gratis, compra directa 30-50 EUR/kg)"
+      ],
+      "donde_comer": "Café yemení puro, pan, miel. Cocina casera con locales: 2-4 EUR. Café en ceremonias locales (gratis si invitan).",
+      "consejo_local": "Familias agrícolas ofrecen alojamiento rústico + comida por 10-15 EUR; experiencia auténtica. El mejor café para comprar es directamente a productores, no en tiendas.",
+      "plan_b_lluvia": "Lluvia es rara pero ocurre; quedarse en pueblo, visitar hogares locales, cocina comunitaria",
+      "alerta_seguridad": "Aunque rural, hay acceso limitado y zonas de control variable. Inseguridad por bandas. RIESGO ALTO.",
+      "keywords": [
+        "Ibb",
+        "montaña",
+        "terrazas",
+        "café yemení",
+        "Yarim",
+        "tierras altas",
+        "agricultura"
+      ]
+    },
+    {
+      "id": "mukalla",
+      "nombre": "Mukalla",
+      "tipo": "ciudad",
+      "region": "sureste, costa de Hadramawt",
+      "descripcion": "Puerto histórico en la costa de Hadramawt con arquitectura coral blanca única, mercados de especias, y puerta al valle interior de Hadramawt. Menos dañada que otras ciudades, con ambiente más comercial y marinero.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Vuelos internacionales limitados (desde Adén 6-8h en minibús, 30-50 EUR). Acceso muy restringido actualmente.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses puerto: 12-18 EUR/noche",
+        "medio": "Hotel Mukalla Gate o Hadramawt: 25-40 EUR/noche",
+        "comfort": "Resort costero (raramente disponible): 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo marítimo al atardecer (gratis)",
+        "Mercado de especias Suq al-Balah (gratis)",
+        "Playa Khuraybah (gratis)",
+        "Fuerte histórico al-Ghaydah (entrada: 2 EUR)",
+        "Barcos pesqueros en puerto (fotos, negociar pequeño viaje: 15-25 EUR)"
+      ],
+      "donde_comer": "Langosta, camarones, pescado. Restaurantes puerto: 4-7 EUR. Mercado de especias: compra de cardamomo, incienso barato.",
+      "consejo_local": "El mercado de especias es mejor por la mañana temprano (6-8h). Negocia con marineros para paseos cortos en bote (150-200 EUR/grupo).",
+      "plan_b_lluvia": "Mercados cubiertos, museos, paseos urbanos",
+      "alerta_seguridad": "Presencia de grupos extremistas, control variable, inseguridad nocturna. RIESGO MUY ALTO.",
+      "keywords": [
+        "Mukalla",
+        "Hadramawt",
+        "puerto",
+        "especias",
+        "coral",
+        "marinero"
+      ]
+    },
+    {
+      "id": "wadi-hadramawt",
+      "nombre": "Wadi Hadramawt",
+      "tipo": "naturaleza",
+      "region": "sureste interior, valle",
+      "descripcion": "Valle fluvial verde en mitad del desierto, con pueblos de adobe tradicionales, oasis y vegetación de palmeras dátiles. Ruta histórica de la Ruta de la Seda. Paisaje único de contraste entre desierto rojo y oasis.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Mukalla en minibús (3-4h, 15-25 EUR) o desde Sanaa (10-12h, 40-60 EUR, muy peligroso)",
+      "donde_dormir": {
+        "mochilero": "Casas en pueblos Shibam/Seiyun: 10-15 EUR/noche",
+        "medio": "Small hotels en Seiyun: 20-30 EUR/noche",
+        "comfort": "Ecolodges rústicos: 40-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Shibam: pueblos de torres adobe (UNESCO, entrada: 2 EUR)",
+        "Seiyun: palacio al-Kathiri (entrada: 3-5 EUR)",
+        "Trekking por wadi (gratis con guía local: 20-30 EUR/día)",
+        "Oasis de palmeras (gratis)",
+        "Cementerios históricos de poetas (gratis)"
+      ],
+      "donde_comer": "Miel local, dátiles, pan; comida con familias: 2-3 EUR. Restaurantes Seiyun: 3-5 EUR.",
+      "consejo_local": "Alojarse en casas de familias locales es más barato y auténtico. Los mejores momentos para fotos de torres Shibam son al amanecer y atardecer. Diciembre-enero: mejor clima.",
+      "plan_b_lluvia": "Explorar interiores de casas, museos privados, cocina local",
+      "alerta_seguridad": "Al-Qaeda ha operado en la región; control variable, seguridad impredecible. EXTREMADAMENTE PELIGROSO.",
+      "keywords": [
+        "Hadramawt",
+        "Shibam",
+        "Seiyun",
+        "wadi",
+        "valle",
+        "oasis",
+        "torres adobe"
+      ]
+    },
+    {
+      "id": "marib",
+      "nombre": "Marib (Ma'rib)",
+      "tipo": "histórico",
+      "region": "este, desierto",
+      "descripcion": "Ruinas de la antigua capital de Sabá, una de las ciudades más importantes de Arabia Antigua. Templos, murallas y artefactos arqueológicos del reino de la Reina de Saba. Ubicado en desierto árido, acceso extremadamente difícil.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Sanaa en 4x4 con guía (6-8h, 80-150 EUR todo incluido). Carretera desértica, muy peligrosa, requiere permisos especiales.",
+      "donde_dormir": {
+        "mochilero": "Campamento básico o guesthouse pueblo: 15-25 EUR/noche",
+        "medio": "Ecolodge rústico si existe: 35-50 EUR/noche",
+        "comfort": "Resort (raramente disponible): 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas del Templo de Awwam (entrada: 5 EUR si cobra)",
+        "Muralla antigua (gratis)",
+        "Museo local (3-5 EUR)",
+        "Recorrido arqueológico guiado (incluido en tour)",
+        "Desierto circundante trekking (gratis)"
+      ],
+      "donde_comer": "Comida llevar desde Sanaa recomendada. En pueblo: pan, carne seca, dátiles: 2-3 EUR.",
+      "consejo_local": "Contratar guía arqueológico local hace la experiencia mucho más valiosa (20-30 EUR). Lleva abundante agua. Los mejores vestigios están en zona desértica exterior; no hay carreteras claras.",
+      "plan_b_lluvia": "Lluvia prácticamente imposible; llevar protección extrema del calor",
+      "alerta_seguridad": "Zona de presencia de Al-Qaeda y bandas armadas. Acceso cerrado frecuentemente. EXTREMADAMENTE PELIGROSO.",
+      "keywords": [
+        "Marib",
+        "Ma'rib",
+        "Sabá",
+        "Reina de Saba",
+        "templo Awwam",
+        "arqueología",
+        "desierto"
+      ]
+    },
+    {
+      "id": "dhamar",
+      "nombre": "Dhamar",
+      "tipo": "ciudad",
+      "region": "centro, montañas",
+      "descripcion": "Antigua ciudad comercial en las tierras altas con arquitectura tradicional de piedra, mercados históricos y producción de cerámica. Centro artesanal importante, menos visitado que Sanaa pero con carácter local auténtico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Sanaa en minibús (3-4h, 10-15 EUR) o desde Ibb (2h, 8-12 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 8-12 EUR/noche",
+        "medio": "Small hotels: 15-25 EUR/noche",
+        "comfort": "Hotel Dhamar (si funciona): 35-50 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de cerámica local (gratis, compra directa 5-20 EUR por pieza)",
+        "Mezquita al-Ashrafiyya (entrada: 2 EUR)",
+        "Paseo por medina tradicional (gratis)",
+        "Taller de alfarería (entrada: 5-10 EUR, hacer cerámica: 15-30 EUR)",
+        "Mirador montañoso (gratis)"
+      ],
+      "donde_comer": "Sopa de frijoles, pan local, miel. Comedores: 2-3 EUR.",
+      "consejo_local": "Los alfareros permiten ver todo el proceso de producción; algunos enseñan a tornear cerámica. Compra directamente en talleres (más barato que mercado).",
+      "plan_b_lluvia": "Refugiarse en talleres y casas de artesanos cubiertos",
+      "alerta_seguridad": "Conflicto en regiones próximas, control variable. RIESGO MUY ALTO.",
+      "keywords": [
+        "Dhamar",
+        "cerámica",
+        "alfarería",
+        "mercado",
+        "medina",
+        "montaña",
+        "artesanía"
+      ]
+    },
+    {
+      "id": "yemen-aventura-deserto",
+      "nombre": "Desiertos de Yemen (Rub al-Khali y Wahiba)",
+      "tipo": "desierto",
+      "region": "este y sureste, desierto arábigo",
+      "descripcion": "Vastos desiertos de arena roja y blanca con dunas enormes. Rub al-Khali ('Cuarto Vacío') es el desierto de arena más grande de Arabia. Experiencia de naturaleza extrema, nómadas beduinos, cielos estrellados sin contaminación lumínica.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Tours desde Sanaa, Mukalla o Seiyun. Requiere 4x4 con guía beduino (100-200 EUR/día para grupo). Acceso muy limitado actualmente.",
+      "donde_dormir": {
+        "mochilero": "Campamento beduino bajo estrellas: 20-30 EUR/noche",
+        "medio": "Campamento con tiendas mejoradas: 40-60 EUR/noche",
+        "comfort": "Resort de desierto (muy raro): 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Sandboarding en dunas (incluido en tour)",
+        "Paseos con camellos (30-50 EUR/día)",
+        "Campfire con beduinos y comida tradicional (incluido)",
+        "Observación astronómica (gratis, cielo limpio)",
+        "Trekking entre dunas (gratis con guía)"
+      ],
+      "donde_comer": "Comidas beduinas: arroz, carne, pan. Té nómada. Incluido en tour (10-15 EUR/día extra si tour no lo incluye).",
+      "consejo_local": "Negocia directamente con tribus beduinas para experiencias inmersivas (más barato que operadores). Historias de nómadas son oro puro: escúchalas. Lleva protección solar extrema y agua abundante.",
+      "plan_b_lluvia": "Lluvia es rara pero ocurre en invierno; acampar en wadi, esperar depresión de tormenta",
+      "alerta_seguridad": "Zonas semi-anárquicas con presencia de grupos extremistas. Secuestros han ocurrido. EXTREMADAMENTE PELIGROSO.",
+      "keywords": [
+        "desierto",
+        "Rub al-Khali",
+        "Wahiba",
+        "dunas",
+        "beduino",
+        "arena",
+        "nómada"
+      ]
+    }
+  ]
+}

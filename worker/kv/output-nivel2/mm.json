@@ -1,0 +1,345 @@
+{
+  "pais": "Birmania (Myanmar)",
+  "codigo": "mm",
+  "destinos": [
+    {
+      "id": "bagan",
+      "nombre": "Bagan",
+      "tipo": "histórico",
+      "region": "Región de Mandalay",
+      "descripcion": "Llanura con más de 2.000 templos y pagodas datados entre los siglos XI y XIII. Es uno de los principales sitios arqueológicos de Asia Sudoriental y ofrece vistas espectaculares al amanecer desde globos aerostáticos o desde los templos. Imprescindible para entender la historia cultural de Myanmar.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Desde Yangón en vuelo (1,5 horas, 50-80 EUR) o autobús nocturno (12-14 horas, 15-25 EUR). También accesible desde Mandalay en autobús (5 horas, 10-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guest houses en Nueva Bagan o Nyaung-U: 8-15 EUR/noche",
+        "medio": "Hoteles mid-range con piscina: 25-50 EUR/noche",
+        "comfort": "Resorts con vistas a templos: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Amanecer desde Shwesandaw o Pyathada (gratis)",
+        "Recorrido en bicicleta por los templos (gratis o alquiler 2-3 EUR/día)",
+        "Paseo en globo aerostático (150-250 EUR)",
+        "Visita a Ananda Temple y Dhammayangyi Temple (entrada al sitio: 15 EUR/3 días)",
+        "Navegación por el río Irrawaddy al atardecer (8-15 EUR)"
+      ],
+      "donde_comer": "Shan noodles y curries birmanos. Come en puestos callejeros (1-2 EUR) o restaurants cercanos a Tharabar Gate. Prueba el té de hoja fermentada (laphet).",
+      "consejo_local": "Compra el pase de 3 días para el parque arqueológico nada más llegar. Alquila una bicicleta e ignora los tours organizados: los templos son accesibles y menos abarrotados temprano.",
+      "plan_b_lluvia": "Visita museos locales, el taller de lacas birmanas o mercados cubiertos en Nueva Bagan.",
+      "keywords": [
+        "Bagan",
+        "templos Myanmar",
+        "pagodas birmanas",
+        "Nyaung U",
+        "Nueva Bagan",
+        "Shwesandaw",
+        "Ananda"
+      ]
+    },
+    {
+      "id": "yangon",
+      "nombre": "Yangón",
+      "tipo": "ciudad",
+      "region": "Región de Yangón",
+      "descripcion": "Capital comercial y mayor ciudad de Myanmar, con arquitectura colonial británica, monasterios activos y la icónica Pagoda Shwedagon. Es punto de entrada y salida para la mayoría de viajeros, con buena infraestructura y vida nocturna.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Aeropuerto internacional de Yangón (YIA). Desde el aeropuerto al centro en minibús compartido (3-5 EUR, 1 hora) o taxi (15-20 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostels en Thakaeta o Downtown: 8-12 EUR/noche",
+        "medio": "Hotels en Kyaikto o Pansodan: 30-60 EUR/noche",
+        "comfort": "Savoy Hotel o similares: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Pagoda Shwedagon al atardecer (8 EUR entrada)",
+        "Paseo por Bogyoke Aung San Market (gratis, compras 5-20 EUR)",
+        "Crucero al atardecer por el río Yangón (10-15 EUR)",
+        "Visita a Sule Pagoda y Downtown colonial (gratis/3 EUR)",
+        "Monasterio Kyaik Thalay Oo (gratis)"
+      ],
+      "donde_comer": "Comida de calle en 19th Street (mohinga, 1-2 EUR) o restaurants en Yangon Heritage para curries birmanos de calidad (8-12 EUR). Barrio de Little India para chai y snacks.",
+      "consejo_local": "Llega a Shwedagon 30 minutos antes del atardecer para evitar aglomeraciones. Los taxis no tienen taxímetro: negocia precios antes. El Downtown es mejor explorar a pie.",
+      "plan_b_lluvia": "Visita museos como el Museo Nacional o National Art Museum. Mercados cubiertos o centros comerciales modernos.",
+      "keywords": [
+        "Yangon",
+        "Rangoon",
+        "Shwedagon",
+        "Bogyoke Market",
+        "Downtown Yangon",
+        "río Yangón",
+        "Sule Pagoda"
+      ]
+    },
+    {
+      "id": "inle-lake",
+      "nombre": "Lago Inle",
+      "tipo": "naturaleza",
+      "region": "Estado Shan",
+      "descripcion": "Lago de montaña a 900m de altitud rodeado de pueblos tradicionales, aldeas flotantes y jardines de hortalizas sobre el agua. La cultura local del pueblo Intha y sus técnicas de pesca únicas lo convierten en un destino culturalmente auténtico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Yangón en vuelo (1 hora, 60-90 EUR) o desde Bagan en autobús (8-10 horas, 20-30 EUR). Aterrizaje en Heho, luego minibús a Nyaungshwe (1,5 horas, 3-5 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guest houses en Nyaungshwe: 8-14 EUR/noche",
+        "medio": "Hotels con vista al lago: 30-60 EUR/noche",
+        "comfort": "Resort resorts flotantes: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour en bote por el lago visitando aldeas flotantes (8-12 EUR con remero/guide)",
+        "Visita a monasterios Shwe Indein y Phaung Daw Oo (3 EUR)",
+        "Mercado flotante de Ywama al amanecer (incluido en tour)",
+        "Trekking a pueblos de la montaña Shan (15-20 EUR con guide)",
+        "Visita a taller de cigarros birmanos y telar de seda (gratis/5 EUR)"
+      ],
+      "donde_comer": "Curries de agua dulce con pescado local en restaurants del pueblo (3-6 EUR). Come en guesthouses o en Maing Thauk para auténtico Intha cuisine. Evita los restaurants turísticos de la orilla principal.",
+      "consejo_local": "Negocia el precio del bote antes de subir. Algunos guides fuerzan paradas en tiendas de souvenirs: pide un itinerario claro. Mejor visitar aldeas a primera hora antes de que lleguen los tours masivos.",
+      "plan_b_lluvia": "Visita mercados locales cubiertos, talleres artesanales o monasterios (menos frecuentados con lluvia).",
+      "keywords": [
+        "Inle Lake",
+        "Lago Inle",
+        "Nyaungshwe",
+        "aldeas flotantes",
+        "Ywama",
+        "Phaung Daw Oo",
+        "pueblo Intha"
+      ]
+    },
+    {
+      "id": "mandalay",
+      "nombre": "Mandalay",
+      "tipo": "ciudad",
+      "region": "Región de Mandalay",
+      "descripcion": "Segunda ciudad de Myanmar y corazón cultural con monasterios activos, ruinas de palacios reales y acceso a varios sitios históricos cercanos. Centro tradicional de aprendizaje budista con monjes y artesanía local.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Desde Yangón en vuelo (1,5 horas, 50-80 EUR) o autobús (15 horas, 20-35 EUR). Desde Bagan en autobús (5 horas, 10-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guest houses en Zay Cho Quarter: 8-12 EUR/noche",
+        "medio": "Hotels en 26th Street: 25-50 EUR/noche",
+        "comfort": "Mandalay Hill Resort o similares: 80-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Amanecer desde Mandalay Hill (3 EUR entrada, vista de la ciudad)",
+        "Monasterio Shwenandaw (Monasterio de Oro) gratis con propina",
+        "Palacio Real de Mandalay (3 EUR)",
+        "Excursión de día a Amarapura, Sagaing e Inwa (tour guiado 12-15 EUR o alquiler bicicleta 3 EUR)",
+        "Visita a taller de hojas de oro y textiles (gratis, tiendas anexas)"
+      ],
+      "donde_comer": "Shan noodles y Mandalay curry en puestos de la zona de mercado (1-2 EUR). Restaurants en 26th Street para comida más completa (4-8 EUR). Prueba el té de hoja fermentada.",
+      "consejo_local": "Mandalay Hill requiere subida a pie o en auto-rickshaw a mitad de camino. La puesta de sol es más bonita que el amanecer desde allí. Los sitios de excursión diaria (Amarapura, Sagaing) se visitan mejor en bicicleta o con guide económico.",
+      "plan_b_lluvia": "Museos interiores, monasterios (menos visitados) o talleres artesanales bajo techo.",
+      "keywords": [
+        "Mandalay",
+        "Mandalay Hill",
+        "Shwenandaw",
+        "Palacio Real",
+        "Amarapura",
+        "Sagaing",
+        "26th Street"
+      ]
+    },
+    {
+      "id": "hsipaw",
+      "nombre": "Hsipaw",
+      "tipo": "rural",
+      "region": "Estado Shan",
+      "descripcion": "Pueblo de montaña auténtico en la región Shan con poca presencia turística, perfecto para trekking, visitas a aldeas locales y experiencias de homestay. Atmósfera más tranquila y precios mucho más bajos que destinos principales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Mandalay en minibús (5-6 horas, 8-12 EUR) o desde Lashio en pickup compartido (2 horas, 3-5 EUR). Camino montañoso con vistas espectaculares.",
+      "donde_dormir": {
+        "mochilero": "Guest houses y homestays: 6-10 EUR/noche",
+        "medio": "Pequeños hoteles locales: 15-25 EUR/noche",
+        "comfort": "Resort boutique (escasos): 40-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a pueblos Shan e Hmong (full day con guide 10-15 EUR)",
+        "Visita a hot springs de Natsaung (gratis, 30 min caminata)",
+        "Paseo en bicicleta por terrenos rurales (alquiler 2 EUR/día)",
+        "Experiencia de homestay con comida local (10-15 EUR noche)",
+        "Visita a monasterio local Mahamunidar (donativo)"
+      ],
+      "donde_comer": "Comida casera en homestays (incluida) o pequeños restaurants locales (2-4 EUR). La cocina es más simple pero auténtica. Pide curries de vegetales y arroz.",
+      "consejo_local": "Contrata guides locales en tu guest house: son más baratos que en agencias. Las aldeas Shan aceptan bien visitantes si viajas sin prisa. Algunos trekkings cruzan zonas de minas: usa guides certificados.",
+      "plan_b_lluvia": "Los trekkings se hacen más difíciles. Visita monasterios o pasa tiempo en cafés locales conociendo gente.",
+      "keywords": [
+        "Hsipaw",
+        "Hsipaw",
+        "trekking Shan",
+        "pueblos Shan",
+        "hot springs Natsaung",
+        "homestay Myanmar",
+        "Mahamunidar"
+      ]
+    },
+    {
+      "id": "ngapali-beach",
+      "nombre": "Playa Ngapali",
+      "tipo": "playa",
+      "region": "División de Rakhine",
+      "descripcion": "Playa de arena blanca relativamente poco desarrollada en la costa de Bengala, con aguas tranquilas y resorts dispersos. Es la opción de playa más accesible para viajeros independientes en Myanmar con infraestructura básica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Yangón en vuelo a Thandwe (1 hora, 70-100 EUR) o vía Bagan en vuelo (requiere conexión). Desde el aeropuerto al pueblo de Ngapali en taxi (30 min, 8-10 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en pueblo de Ngapali: 10-18 EUR/noche",
+        "medio": "Beach bungalows simples: 30-60 EUR/noche",
+        "comfort": "Resorts beachfront: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en playa y snorkel (gratis)",
+        "Tour en bote a isla cercana (12-18 EUR con pescador local)",
+        "Caminata por la playa al atardecer (gratis)",
+        "Visita a pueblo de pescadores y mercado local (gratis)",
+        "Masaje en playa o en guesthouses (8-15 EUR)"
+      ],
+      "donde_comer": "Mariscos frescos grillados en el pueblo (4-8 EUR el plato). Come directamente con los pescadores o en pequeños restaurants de playa. Prueba camarones, pez y cangrejo.",
+      "consejo_local": "Ngapali no tiene mucha vida nocturna ni entretenimiento: es ideal para descanso. El agua es más clara de febrero a marzo. Algunos hoteles presionan sobre servicios: confirma precios antes.",
+      "plan_b_lluvia": "Lluvia es rara en temporada alta. Si llueve, descansa en tu alojamiento o visita pueblos cercanos en bicicleta.",
+      "keywords": [
+        "Ngapali",
+        "Ngapali Beach",
+        "playa Myanmar",
+        "Thandwe",
+        "Rakhine",
+        "playas birmanas",
+        "buceo Myanmar"
+      ]
+    },
+    {
+      "id": "kyaikto",
+      "nombre": "Kyaikto (Golden Rock)",
+      "tipo": "histórico",
+      "region": "Región de Mon",
+      "descripcion": "Sitio de peregrinación con una enorme roca dorada equilibrada en la cima de una montaña, accesible solo por teleférico o caminata. Es uno de los lugares más sagrados del budismo birmano con vistas espectaculares.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Yangón en autobús (3-4 horas, 8-12 EUR) a Kyaikto, luego minibús a la base de la montaña (30 min, 1 EUR). Ascenso en teleférico (5 EUR ida y vuelta).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en pueblo base de Kyaikto: 8-12 EUR/noche",
+        "medio": "Hoteles simples en Kyaikto: 20-35 EUR/noche",
+        "comfort": "Resort Kinpun (a mitad de camino): 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Ascenso en teleférico a Golden Rock (5 EUR)",
+        "Circunvalación del rock y fotos (gratis)",
+        "Amanecer o atardecer desde la cima (incluido con entrada)",
+        "Visita a pagodas menores alrededor (gratis)",
+        "Meditación o ritual de oro en la roca (donativo)"
+      ],
+      "donde_comer": "Comedores simples en la cima y en la base. Comida monástica o vegetariana (2-3 EUR). Evita subir con hambre: lleva snacks.",
+      "consejo_local": "Sube temprano en la mañana para evitar aglomeraciones y calor. El teleférico funciona hasta las 16:00. Muchos peregrinos duermen allí: reserva con anticipación en días de festival.",
+      "plan_b_lluvia": "La roca permanece visible en lluvias ligeras. Cielos cerrados ocurren en junio-septiembre (temporada no recomendada).",
+      "keywords": [
+        "Kyaikto",
+        "Golden Rock",
+        "Kyaikhto",
+        "Kyaikto Mon State",
+        "roca dorada",
+        "peregrinación budista",
+        "teleférico Kyaikto"
+      ]
+    },
+    {
+      "id": "mingun",
+      "nombre": "Mingun (excursión desde Mandalay)",
+      "tipo": "histórico",
+      "region": "Región de Mandalay",
+      "descripcion": "Pueblo ribereño con una enorme pagoda inacabada (Pahtodawgyi) y el mayor campanario de bronce del mundo. Accesible por crucero fluvial desde Mandalay, ofrece una experiencia más tranquila que el centro urbano.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Desde Mandalay en crucero por el río Irrawaddy (1,5-2 horas, 8-12 EUR). Salida a las 9:00 desde Mandalay Palace dock. Regreso a las 15:00 aproximadamente.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Mingun (pocas opciones): 8-12 EUR/noche",
+        "medio": "Mejor dormir en Mandalay y hacer excursión de día",
+        "comfort": "Crucero lujoso con noche incluida: 150-300 EUR"
+      },
+      "que_hacer": [
+        "Crucero por el río Irrawaddy (incluido en tarifa)",
+        "Visita a Pagoda Pahtodawgyi (3 EUR)",
+        "Campanario Mingun Bell (3 EUR o incluido)",
+        "Caminata por pueblo local (gratis)",
+        "Visita a monasterio Settawya (gratis)"
+      ],
+      "donde_comer": "Comedores básicos en Mingun (2-4 EUR) o comida empacada desde Mandalay. Algunos cruceros incluyen almuerzo.",
+      "consejo_local": "Reserva el crucero la noche anterior en tu hotel. El río baja niveles mayo-junio: verifica operatividad. Combina con Amarapura para excursión de día más completa desde Mandalay.",
+      "plan_b_lluvia": "Los cruceros operan en lluvias ligeras. Lleva capa impermeable.",
+      "keywords": [
+        "Mingun",
+        "Pahtodawgyi",
+        "Mingun Bell",
+        "crucero Irrawaddy",
+        "río Irrawaddy",
+        "excursión Mandalay"
+      ]
+    },
+    {
+      "id": "mawlamyine",
+      "nombre": "Mawlamyine",
+      "tipo": "ciudad",
+      "region": "Estado Mon",
+      "descripcion": "Tercera ciudad de Myanmar, menos turística que Yangón y Mandalay, con arquitectura colonial, monasterios activos y puerto fluvial. Punto de partida para explorar la región Mon autónoma y cercana a la frontera tailandesa.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Yangón en autobús (9-10 horas, 12-18 EUR) o vuelo (50 min, 60-80 EUR). También accesible desde Kyaikto en minibús (4 horas, 6-10 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en centro: 8-12 EUR/noche",
+        "medio": "Hotels básicos: 25-45 EUR/noche",
+        "comfort": "Strand Hotel (histórico): 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Caminata por barrio colonial (gratis)",
+        "Visita a Kyaikmaraw Pagoda (2 EUR)",
+        "Paseo en bote por el río Salween (8-12 EUR)",
+        "Mercado local y paseo portuario (gratis)",
+        "Visita a monasterio Seindon (gratis)"
+      ],
+      "donde_comer": "Comida Mon y birmana en mercado (1-3 EUR). Restaurants en el puerto para mariscos frescos (5-10 EUR). Menos turístico que otros destinos.",
+      "consejo_local": "Mawlamyine es una ciudad real, no un destino turístico. Esto la hace más auténtica pero con menos infraestructura. Buen punto de parada si viajas a/desde Tailandia.",
+      "plan_b_lluvia": "Mercados cubiertos, templos o descanso en café local.",
+      "keywords": [
+        "Mawlamyine",
+        "Moulmein",
+        "Mawlamyine",
+        "región Mon",
+        "río Salween",
+        "arquitectura colonial",
+        "puerto Myanmar"
+      ]
+    },
+    {
+      "id": "putao",
+      "nombre": "Putao",
+      "tipo": "montaña",
+      "region": "Estado Kachin",
+      "descripcion": "Pueblo remoto en las montañas del norte de Myanmar, accesible solo por vuelo, con trekking a picos nevados, pueblos montañosos y naturaleza virgen. Destino para viajeros aventureros con presupuesto flexible.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Solo vuelo desde Mandalay a Putao (1,5 horas, 100-140 EUR). Requiere permiso especial de viaje (trámite en Yangón o Mandalay, 5-10 EUR). Infraestructura limitada.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses muy básicas: 12-18 EUR/noche",
+        "medio": "Pequeños hoteles locales: 30-50 EUR/noche",
+        "comfort": "Opciones limitadas: 60-100 EUR/noche máximo"
+      },
+      "que_hacer": [
+        "Trekking a Hkakabo Razi o glaciares (multi-día, requiere guide 40-50 EUR/día)",
+        "Visita a pueblos Kachin y Lisu (day trek 15-20 EUR)",
+        "Trekking a cascadas locales (8-12 EUR con guide)",
+        "Exploración de naturaleza virgen (gratis caminar, guide 15-20 EUR)",
+        "Visita a mercado local y pueblo (gratis)"
+      ],
+      "donde_comer": "Comida extremadamente básica en Putao (3-5 EUR). Opciones limitadas. Lleva snacks extras desde ciudades más grandes.",
+      "consejo_local": "Putao requiere planificación previa. Guías certificados son caros pero necesarios (trekking de altura). Clima impredecible: lleva equipo para frío y lluvia. Pocos turistas llegan aquí.",
+      "plan_b_lluvia": "Lluvias frecuentes mayo-septiembre hacen inaccesible para trekking. Visita en temporada seca.",
+      "keywords": [
+        "Putao",
+        "Hkakabo Razi",
+        "montañas Kachin",
+        "trekking Myanmar",
+        "glaciares Myanmar",
+        "pueblos Lisu",
+        "norte Myanmar"
+      ]
+    }
+  ]
+}

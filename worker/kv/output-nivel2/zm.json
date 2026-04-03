@@ -1,0 +1,324 @@
+{
+  "pais": "Zambia",
+  "codigo": "zm",
+  "destinos": [
+    {
+      "id": "victoria-falls",
+      "nombre": "Cataratas Victoria",
+      "tipo": "naturaleza",
+      "region": "Provincia Occidental",
+      "descripcion": "Una de las cascadas más grandes del mundo, compartida con Zimbabue, donde el río Zambezi cae 108 metros creando un espectáculo natural de vapor y ruido ensordecedor. Es el punto de partida para aventuras extremas como bungee jumping y rafting en aguas bravas. Imprescindible para cualquier viajero que busque naturaleza salvaje.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "desde Lusaka (capital): vuelo 2h (80-120 EUR) o autobús 18h (35-50 EUR). Desde Livingstone es lo más común.",
+      "donde_dormir": {
+        "mochilero": "hostales en Livingstone (lado zimbabuo) o albergues básicos: 15-25 EUR/noche",
+        "medio": "lodges de 3 estrellas con vista: 50-100 EUR/noche",
+        "comfort": "resorts con spa y piscina: 150-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en Devil's Pool (piscina natural en el borde, 15 EUR)",
+        "Bungee jumping desde el puente: 130-160 EUR",
+        "Rafting en el Zambezi clase IV-V: 60-100 EUR",
+        "Senderismo por el bosque de niebla (gratuito con entrada parque: 20 EUR)",
+        "Cena en crucero al atardecer: 40-60 EUR"
+      ],
+      "donde_comer": "Pizza, carnes asadas y comida fusión en Livingstone (lado zambiano). Rango 10-25 EUR. Zona recomendada: frente al río en el centro de Livingstone.",
+      "consejo_local": "Visita el lado zambiano para una experiencia menos turística y más local que el lado zimbabuo, aunque las vistas son similares. Las comidas en Zambia son más baratas.",
+      "plan_b_lluvia": "Museos locales, spa en los hoteles, tour por la ciudad colonial de Livingstone",
+      "keywords": [
+        "victoria falls",
+        "cataratas victoria",
+        "Livingstone",
+        "Zambezi",
+        "Devil's Pool"
+      ]
+    },
+    {
+      "id": "south-luangwa",
+      "nombre": "Parque Nacional South Luangwa",
+      "tipo": "naturaleza",
+      "region": "Provincia Oriental",
+      "descripcion": "Uno de los mejores destinos de safari en África del Sur con una alta densidad de vida salvaje: leones, jirafas, búfalos y elefantes. El río Luangwa es un corredor de vida salvaje y ofrece safaris a pie únicos que no encontrarás en otros parques. Excelente relación calidad-precio comparado con otros safaris africanos.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "desde Lusaka: vuelo charter 1.5h (150-250 EUR) o autobús 12h + taxi local (40-60 EUR total). Acceso vía Chipata.",
+      "donde_dormir": {
+        "mochilero": "campamentos básicos con tienda: 20-35 EUR/noche",
+        "medio": "lodges de safari con lodge room: 60-120 EUR/noche",
+        "comfort": "lodges de lujo con todo incluido: 250-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en vehículo abierto al amanecer: 40-60 EUR/día",
+        "Safari a pie con guía especializado: 30-50 EUR",
+        "Crucero nocturno por el río Luangwa: 35-50 EUR",
+        "Pesca en el río (con permiso): 50-80 EUR/día",
+        "Fotografía de fauna desde hide (escondite): 20-30 EUR"
+      ],
+      "donde_comer": "Comida local zambia en los lodges (nyama choma, nshima). Generalmente incluida en paquetes. 15-20 EUR si se paga aparte. En Mfuwe village: comida local barata (5-8 EUR).",
+      "consejo_local": "Los safaris a pie son lo que hace especial este parque: muchos guías locales especializados caminan contigo a metros de los animales. Reserva con operadores locales para ahorrar.",
+      "plan_b_lluvia": "Visitas a pueblos locales, pesca, naturales del río, fotografía de aves",
+      "keywords": [
+        "South Luangwa",
+        "safari Zambia",
+        "Luangwa river",
+        "Mfuwe",
+        "safari a pie"
+      ]
+    },
+    {
+      "id": "lower-zambezi",
+      "nombre": "Parque Nacional Lower Zambezi",
+      "tipo": "naturaleza",
+      "region": "Provincia Central",
+      "descripcion": "Un parque remoto y menos visitado que South Luangwa, ideal para safaris genuinos sin multitudes. El río Zambezi es el protagonista, con campamentos en las riberas donde ves elefantes bañarse desde tu tienda. Perfecta fusión de aventura, naturaleza y aislamiento controlado.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a noviembre",
+      "como_llegar": "desde Lusaka: autobús + lancha (12h total, 40-60 EUR) o vuelo charter (150 EUR). Acceso vía Chirundu.",
+      "donde_dormir": {
+        "mochilero": "campamentos con tiendas bajo las estrellas: 25-40 EUR/noche",
+        "medio": "lodges riverside rusticos pero cómodos: 80-140 EUR/noche",
+        "comfort": "lodges flotantes y de lujo: 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en canoa por el río: 50-70 EUR/día",
+        "Safari en vehículo por la llanura aluvial: 40-60 EUR",
+        "Pesca de tilapia y catfish: 60-100 EUR",
+        "Senderismo guiado por la ribera: 30-40 EUR",
+        "Observación de aves desde lancha: 35-50 EUR"
+      ],
+      "donde_comer": "Carnes de caza local y pescado fresco del río. Los lodges sirven comida excelente. 12-18 EUR en comedores compartidos.",
+      "consejo_local": "Este parque requiere más planificación que South Luangwa pero la recompensa es soledad genuina. Contrata con operadores locales que trabajan directo desde campamentos ribereños.",
+      "plan_b_lluvia": "Pesca intensiva, lectura junto al río, juegos de mesa en campamentos, observación de aves",
+      "keywords": [
+        "Lower Zambezi",
+        "Zambezi river",
+        "Chirundu",
+        "safari remoto",
+        "canoe safari"
+      ]
+    },
+    {
+      "id": "lusaka",
+      "nombre": "Lusaka",
+      "tipo": "ciudad",
+      "region": "Provincia Lusaka (Centro)",
+      "descripcion": "La capital de Zambia es el hub de transporte y punto de entrada para la mayoría de viajeros. No es destino de playa pero ofrece museos, vida nocturna, mercados auténticos y es base ideal para organizar safaris. Menos caótica que otras capitales africanas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Aeropuerto Internacional Harry Mwanga Nkumbula (punto de entrada principal). Desde otras ciudades: autobús intercity 8-18h (25-60 EUR).",
+      "donde_dormir": {
+        "mochilero": "hostales en Kabulonga o Woodlands: 12-20 EUR/noche",
+        "medio": "hoteles de 3 estrellas céntrales: 40-80 EUR/noche",
+        "comfort": "hoteles de negocio: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional Zambia (historia y arte): 5 EUR",
+        "Mercado de Kalingalinga (mercado local auténtico): gratuito",
+        "National Assembly Building (arquitectura moderna): 8 EUR tour",
+        "Paseo por Cairo Road (avenida principal con tiendas): gratuito",
+        "Vida nocturna en Kabulonga (bares y clubs): drinks 3-6 EUR"
+      ],
+      "donde_comer": "Nshima con relish (plato nacional), chicken nando's, comida india. Rango 5-15 EUR. Zona: Arcades (centro comercial), Kabulonga (restaurantes modernos).",
+      "consejo_local": "No es un destino turístico tradicional pero crucial para logística. Pasa 1-2 días, usa para cambiar dinero, reservar safaris y descansar. El mercado de Kalingalinga es donde ves la Zambia real.",
+      "plan_b_lluvia": "Museos cubiertos, centros comerciales, viajes a Victoria Falls desde aquí en tren nocturno",
+      "keywords": [
+        "Lusaka",
+        "capital Zambia",
+        "Kabulonga",
+        "Woodlands",
+        "Cairo Road",
+        "aeropuerto"
+      ]
+    },
+    {
+      "id": "kafue-national-park",
+      "nombre": "Parque Nacional Kafue",
+      "tipo": "naturaleza",
+      "region": "Provincia Central",
+      "descripcion": "El parque más grande de Zambia, dos veces más que el Serengeti, con baja densidad de turismo y alta diversidad de fauna. Menos visitado que South Luangwa pero igualmente rewarding para avistamiento de fauna y fotografía. Ideal para viajeros que buscan wilderness genuino.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "desde Lusaka: autobús + taxi (10h, 40-60 EUR) o vuelo charter (120-180 EUR). Acceso vía Livingstone o Kazungula.",
+      "donde_dormir": {
+        "mochilero": "campamentos rusticos: 20-30 EUR/noche",
+        "medio": "lodges en sabana: 70-130 EUR/noche",
+        "comfort": "lodges de safari premium: 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en vehículo: 45-65 EUR/día",
+        "Pesca de tilapia: 50-80 EUR",
+        "Senderismo en naturaleza: 30-45 EUR",
+        "Bird watching (330+ especies): 25-40 EUR",
+        "Caza fotográfica (no letal): 40-60 EUR"
+      ],
+      "donde_comer": "Nyama choma (carnes asadas), pescado del río Kafue. Incluido en lodges. 10-15 EUR si compras aparte.",
+      "consejo_local": "Este parque es enorme y poco señalizado: contratar operador local es obligatorio, no hables de entrar por tu cuenta. Las mejores wildlife viewing son en la sección norte (Busanga Plains).",
+      "plan_b_lluvia": "Pesca, birdwatching, naturales interiores, exploración de pueblos locales",
+      "keywords": [
+        "Kafue National Park",
+        "Busanga Plains",
+        "Zambia safari",
+        "Kafue river"
+      ]
+    },
+    {
+      "id": "livingstone",
+      "nombre": "Livingstone",
+      "tipo": "ciudad",
+      "region": "Provincia Occidental",
+      "descripcion": "Pueblo colonial en la orilla del Zambezi, con herencia histórica ligada a David Livingstone. Base perfecta para aventuras en Victoria Falls sin el caos turístico puro. Mezcla de historia, mercados locales, vida lenta y acceso a actividades extremas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "desde Lusaka: vuelo 2h (80-120 EUR) o autobús 18h (35-50 EUR). Desde Victoria Falls (lado zimbabuo): 10 min en taxi (2 EUR).",
+      "donde_dormir": {
+        "mochilero": "backpackers hostels Mukuni Park o Taita: 12-20 EUR/noche",
+        "medio": "hoteles coloniales con carácter: 45-90 EUR/noche",
+        "comfort": "riverside lodges: 120-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Livingstone (artefactos coloniales): 8 EUR",
+        "Caminata por Old Town (arquitectura colonial): gratuito",
+        "Mercado de Maramba (artesanías locales): gratuito, regateo esperado",
+        "Crucero al atardecer en el Zambezi: 30-50 EUR",
+        "Visita a Victoria Falls desde aquí: 25 EUR entrada parque"
+      ],
+      "donde_comer": "Nyama choma, pizzas, samosas. Rango 6-18 EUR. Zona recomendada: Mosi-oa-Tunya Road (calle principal), mercado de comida callejera.",
+      "consejo_local": "Alojate en Livingstone en vez de en alojamientos caros de Victoria Falls. Es más barato, más local y tienes acceso igual a las cataratas. Los comerciantes del mercado son agresivos pero amables.",
+      "plan_b_lluvia": "Museo, mercados cubiertos, bares y restaurantes, compras en tiendas",
+      "keywords": [
+        "Livingstone",
+        "Mosi-oa-Tunya",
+        "Victoria Falls base",
+        "Zambezi river",
+        "colonial town"
+      ]
+    },
+    {
+      "id": "chipata",
+      "nombre": "Chipata",
+      "tipo": "ciudad",
+      "region": "Provincia Oriental",
+      "descripcion": "Pueblo fronterizo con Malaui que sirve como acceso a South Luangwa National Park. Menos turística que Livingstone, ofrece una experiencia más local. Base económica y auténtica para explorar la fauna de la región oriental.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "desde Lusaka: autobús 12h (30-45 EUR) o vuelo doméstico (80-120 EUR). Desde South Luangwa: taxi 2h (15-20 EUR).",
+      "donde_dormir": {
+        "mochilero": "hostales básicos: 10-15 EUR/noche",
+        "medio": "hoteles locales: 30-60 EUR/noche",
+        "comfort": "lodges hacia South Luangwa: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado principal (productos locales): gratuito",
+        "Visita frontera con Malaui (paseo): gratuito",
+        "Comida en mercado de comida callejera: 3-6 EUR",
+        "Relajación en alojamientos antes/después de safari: gratuito",
+        "Compras de artesanía local: 5-25 EUR"
+      ],
+      "donde_comer": "Nsima, relish, chicken. Comida local auténtica. 4-8 EUR en mercados.",
+      "consejo_local": "Chipata no tiene atractivos turísticos per se, pero es el gateway a South Luangwa. Muchos safaris arrancan desde aquí. Pasa una noche para aclimatarte y arreglar detalles logísticos.",
+      "plan_b_lluvia": "Relación con los locales, exploración del pueblo, organización de tours",
+      "keywords": [
+        "Chipata",
+        "Luangwa gateway",
+        "Malaui border",
+        "Eastern Province"
+      ]
+    },
+    {
+      "id": "lake-kariba",
+      "nombre": "Lago Kariba",
+      "tipo": "naturaleza",
+      "region": "Provincia Sur",
+      "descripcion": "El mayor lago artificial de África, creado por la presa de Kariba, con pesca excepcional y cruceros panorámicos. Menos concurrido que Victoria Falls, ofrece tranquilidad y oportunidad de avistamiento de fauna acuática. Experiencia más relajada y contemplativa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a noviembre",
+      "como_llegar": "desde Lusaka: autobús + taxi (8-10h, 35-55 EUR) o vuelo charter (120-180 EUR). Acceso vía Siavonga.",
+      "donde_dormir": {
+        "mochilero": "hostales en Siavonga: 12-18 EUR/noche",
+        "medio": "lodges de pesca: 50-100 EUR/noche",
+        "comfort": "resorts con todo incluido: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Pesca de tilapia y black bass: 60-120 EUR/día",
+        "Crucero por el lago al atardecer: 35-60 EUR",
+        "Avistamiento de elefantes en Matusadona (lado zimbabuo, excursión): 80 EUR",
+        "Baño y relajación en playas de Siavonga: gratuito",
+        "Birdwatching desde lancha: 30-50 EUR"
+      ],
+      "donde_comer": "Pescado fresco del lago (tilapia) preparado local. 8-15 EUR. Restaurantes en Siavonga village.",
+      "consejo_local": "Kariba es más tranquilo que Victoria Falls y ofrece pesca de clase mundial. Si eres pescador o buscas relax lejos de la multitud, aquí es el lugar. Los lodges frecuentemente ofrecen paquetes todo incluido.",
+      "plan_b_lluvia": "Lectura junto al lago, juegos, bares interiores, compras en tiendas",
+      "keywords": [
+        "Lake Kariba",
+        "Siavonga",
+        "pesca Zambia",
+        "embalse"
+      ]
+    },
+    {
+      "id": "isles-of-siankaba",
+      "nombre": "Isles of Siankaba / Zambezi Upper",
+      "tipo": "naturaleza",
+      "region": "Provincia Occidental",
+      "descripcion": "Grupo de islas remotas en el Zambezi superior, entre Kazungula y Victoria Falls, con lodges de lujo y actividades de navegación. Experiencia de aislamiento absoluto con acceso a naturaleza salvaje, ideal para parejas y amantes de la soledad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "desde Livingstone: lancha privada 2h (incluida en lodge) o desde Kazungula: 1.5h. Acceso solo vía operador de lodge.",
+      "donde_dormir": {
+        "mochilero": "no hay opciones mochilero, mínimo lodge medio",
+        "medio": "lodges con cabañas conectadas: 150-250 EUR/noche",
+        "comfort": "eco-lodges de lujo: 300-500 EUR/noche"
+      },
+      "que_hacer": [
+        "Canoeing en aguas tranquilas del Zambezi: 40-70 EUR",
+        "Safari en isla buscando fauna: 50-80 EUR",
+        "Pesca de tigerfish: 80-130 EUR",
+        "Picnic en isla privada: 50 EUR",
+        "Observación de puestas de sol desde lancha: 30-50 EUR"
+      ],
+      "donde_comer": "Comida gourmet preparada en lodges (incluida generalmente). Fusión de cocina africana e internacional. 20-30 EUR si pagues aparte.",
+      "consejo_local": "Este es lujo de safari suave, no es barato pero es único. Perfecta luna de miel o celebración. Requiere reserva con anticipación y mínimo 2 noches.",
+      "plan_b_lluvia": "Canoeing interior, lectura de ebooks, observación de aves desde cobertura",
+      "keywords": [
+        "Siankaba",
+        "Upper Zambezi",
+        "Zambezi islands",
+        "Kazungula",
+        "luxury lodge"
+      ]
+    },
+    {
+      "id": "kasanka-national-park",
+      "nombre": "Parque Nacional Kasanka",
+      "tipo": "naturaleza",
+      "region": "Provincia Central",
+      "descripcion": "Pequeño parque pero excepcional por la migración anual de murciélagos (10 millones) entre octubre-noviembre, uno de los espectáculos naturales más surreales de África. Además ofrece safari convencional y birdwatching. Destino único y poco conocido para viajeros avanzados.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a noviembre (murciélagos), junio a septiembre (safari regular)",
+      "como_llegar": "desde Lusaka: autobús + taxi (6-8h, 30-45 EUR) o vuelo charter (100-150 EUR). Acceso vía Serenje.",
+      "donde_dormir": {
+        "mochilero": "campamentos básicos: 18-28 EUR/noche",
+        "medio": "lodge rustico con servicios: 60-100 EUR/noche",
+        "comfort": "no hay opciones de lujo, máximo lodge confortable: 100-150 EUR"
+      },
+      "que_hacer": [
+        "Observación de murciélagos al atardecer (temporada): 30-50 EUR",
+        "Safari en vehículo: 45-65 EUR/día",
+        "Birdwatching (400+ especies): 25-40 EUR",
+        "Senderismo por sabana: 20-30 EUR",
+        "Fotografía de naturaleza: 40-60 EUR"
+      ],
+      "donde_comer": "Comida simple pero nutritiva en lodge: nshima, carnes locales. 10-14 EUR.",
+      "consejo_local": "Si visitas en octubre-noviembre, el espectáculo de murciélagos es irrepetible: millones salen al atardecer en nubes que oscurecen el cielo. Reserva con mucha anticipación. El resto del año es safari regular sin gran densidad turística.",
+      "plan_b_lluvia": "Birdwatching intenso bajo lluvia, lectura, juegos de mesa",
+      "keywords": [
+        "Kasanka",
+        "bat migration",
+        "murciélagos Zambia",
+        "Serenje",
+        "parque nacional"
+      ]
+    }
+  ]
+}

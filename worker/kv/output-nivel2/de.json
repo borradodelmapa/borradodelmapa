@@ -1,0 +1,223 @@
+{
+  "pais": "Alemania",
+  "codigo": "de",
+  "destinos": [
+    {
+      "id": "berlin",
+      "nombre": "Berlín",
+      "tipo": "ciudad",
+      "region": "Brandeburgo",
+      "descripcion": "Capital política y cultural de Alemania con historia fascinante, museos de clase mundial y escena artística vibrante. Mezcla de modernidad, historia de guerra fría y vida nocturna cosmopolita en una ciudad de dimensiones gigantes.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Vuelos internacionales a Berlin Brandeburg (EUR 40-80 desde otras ciudades alemanas en tren regional)",
+      "donde_dormir": {
+        "mochilero": "Albergue EUR 15-20/noche",
+        "medio": "Airbnb/hotel EUR 40-70/noche",
+        "comfort": "Hotel 4 estrellas EUR 100-150/noche"
+      },
+      "que_hacer": [
+        "Visitar Puerta de Brandeburgo y Reichstag",
+        "Recorrer East Side Gallery",
+        "Explorar museos de la Isla de los Museos",
+        "Pasear por Kreuzberg y Friedrichshain"
+      ],
+      "donde_comer": "Döner kebab EUR 4-5, currywurst EUR 3-4, cerveza EUR 2-3, restaurante típico EUR 15-25",
+      "consejo_local": "Compra el WelcomeCard para transporte ilimitado y descuentos en museos",
+      "plan_b_lluvia": "Visitar museos cubiertos, catacumbas, galerías de arte underground",
+      "keywords": [
+        "historia",
+        "museos",
+        "arte",
+        "vida nocturna",
+        "capital"
+      ]
+    },
+    {
+      "id": "munich",
+      "nombre": "Múnich",
+      "tipo": "ciudad",
+      "region": "Baviera",
+      "descripcion": "Capital bávara elegante con arquitectura baroque, cervecerías tradicionales y acceso a los Alpes. Combina sofisticación urbana con tradiciones bávaras auténticas y es puerta de entrada a la región alpina.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "Tren desde Berlín EUR 80-120 (6h), vuelos EUR 30-60",
+      "donde_dormir": {
+        "mochilero": "Albergue EUR 18-25/noche",
+        "medio": "Hotel 3 estrellas EUR 50-80/noche",
+        "comfort": "Hotel 4 estrellas EUR 120-180/noche"
+      },
+      "que_hacer": [
+        "Visitar Marienplatz y Neuschwanstein Castle (día completo)",
+        "Recorrer Englischer Garten",
+        "Pasear por Maximilianstrasse",
+        "Visitar cervecería Hofbräuhaus"
+      ],
+      "donde_comer": "Pretzel EUR 2-3, Schweinshaxe EUR 18-25, cerveza weiss EUR 4-5, comida rápida EUR 6-10",
+      "consejo_local": "Octubre ofrece Oktoberfest, reserva alojamiento con meses de anticipación",
+      "plan_b_lluvia": "Museos de la Residenz, Deutsches Museum, teatros y ópera",
+      "keywords": [
+        "Baviera",
+        "tradición",
+        "cerveza",
+        "castillos",
+        "Alpes"
+      ]
+    },
+    {
+      "id": "heidelberg",
+      "nombre": "Heidelberg",
+      "tipo": "ciudad",
+      "region": "Baden-Württemberg",
+      "descripcion": "Ciudad universitaria romántica a orillas del Neckar con ruinas del castillo dominando el skyline. Perfecta para viajeros buscando atmósfera medieval, estudiantes y paisajes fluviales pintorescos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Tren desde Berlín EUR 70-100 (6h), desde Múnich EUR 40-60 (4h)",
+      "donde_dormir": {
+        "mochilero": "Albergue EUR 16-22/noche",
+        "medio": "Hotel pequeño EUR 45-65/noche",
+        "comfort": "Hotel 4 estrellas EUR 90-140/noche"
+      },
+      "que_hacer": [
+        "Subir a castillo de Heidelberg",
+        "Pasear por Altstadt medieval",
+        "Crucero por río Neckar",
+        "Recorrer Philosopher's Walk con vistas"
+      ],
+      "donde_comer": "Schnitzel EUR 12-18, Leberkäse EUR 6-8, cerveza local EUR 3-4, comida de estudiante EUR 7-10",
+      "consejo_local": "Los martes y jueves hay mercado tradicional en Marktplatz",
+      "plan_b_lluvia": "Museos de la universidad, biblioteca Palatina, galerías interiores",
+      "keywords": [
+        "romántico",
+        "medieval",
+        "universidad",
+        "río",
+        "castillo"
+      ]
+    },
+    {
+      "id": "colonia",
+      "nombre": "Colonia",
+      "tipo": "ciudad",
+      "region": "Renania del Norte-Westfalia",
+      "descripcion": "Ciudad ribereña con la impresionante Catedral Gótica Patrimonio UNESCO y ambiente bohemio. Ubicada en el Rin, ofrece vida nocturna intensa, museos diversos y vibrante escena cultural.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Tren desde Berlín EUR 50-80 (5h), desde Múnich EUR 60-90 (7h)",
+      "donde_dormir": {
+        "mochilero": "Albergue EUR 15-20/noche",
+        "medio": "Hotel 3 estrellas EUR 40-60/noche",
+        "comfort": "Hotel 4 estrellas EUR 80-120/noche"
+      },
+      "que_hacer": [
+        "Visitar Catedral de Colonia",
+        "Pasear por orilla del Rin",
+        "Explorar barrio de Altstadt",
+        "Visitar museos de arte e historia"
+      ],
+      "donde_comer": "Currywurst EUR 3-4, Mühlheim EUR 8-12, Kölsch cerveza EUR 2-3, comida típica EUR 15-20",
+      "consejo_local": "Compra el Kölner Ticket para transporte ilimitado y descuentos",
+      "plan_b_lluvia": "Museos del Rin, Philharmonie, zona comercial cubierta, galerías de arte",
+      "keywords": [
+        "catedral",
+        "Rin",
+        "arte",
+        "bohemio",
+        "patrimonio"
+      ]
+    },
+    {
+      "id": "dresde",
+      "nombre": "Dresde",
+      "tipo": "ciudad",
+      "region": "Sajonia",
+      "descripcion": "La Florencia del Elba combina arquitectura barroca espectacular, galerías de arte de calidad mundial y ubicación estratégica en el valle del Elba. Capital cultural reconstruida con elegancia tras la Segunda Guerra Mundial.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Tren desde Berlín EUR 25-40 (2h), desde Múnich EUR 70-100 (7h)",
+      "donde_dormir": {
+        "mochilero": "Albergue EUR 14-18/noche",
+        "medio": "Hotel 3 estrellas EUR 35-55/noche",
+        "comfort": "Hotel 4 estrellas EUR 70-110/noche"
+      },
+      "que_hacer": [
+        "Visitar Frauenkirche",
+        "Recorrer Zwinger Palace y galerías",
+        "Pasear por orilla del Elba",
+        "Visitar Schloss residencia"
+      ],
+      "donde_comer": "Sauerbraten EUR 12-18, sopa de cerveza EUR 4-6, café y strudel EUR 5-7, comida rápida EUR 6-9",
+      "consejo_local": "Los domingos hay conciertos en iglesias, la entrada es gratuita o muy barata",
+      "plan_b_lluvia": "Galerías de arte Alte Meister, museos históricos, piscinas termales cercanas",
+      "keywords": [
+        "barroco",
+        "arte",
+        "Elba",
+        "reconstrucción",
+        "cultura"
+      ]
+    },
+    {
+      "id": "rothenburg-ob-der-tauber",
+      "nombre": "Rothenburg ob der Tauber",
+      "tipo": "pueblo",
+      "region": "Baviera",
+      "descripcion": "Pueblo amurallado medieval perfectamente preservado que parece sacado de un cuento de hadas. Ubicado en la ruta romántica de Baviera, ofrece encanto absoluto y es imprescindible para viajeros que buscan Alemania tradicional.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Tren a Steinach, luego autobús EUR 15-25 desde Múnich o Frankfurt (3-4h total)",
+      "donde_dormir": {
+        "mochilero": "Albergue/guesthouse EUR 20-28/noche",
+        "medio": "Hotel pequeño EUR 50-75/noche",
+        "comfort": "Hotel 4 estrellas EUR 100-150/noche"
+      },
+      "que_hacer": [
+        "Recorrer murallas medievales completas",
+        "Visitar ayuntamiento y torre",
+        "Pasear por calles adoquinadas",
+        "Tienda de juguetes Käthe Wohlfahrt"
+      ],
+      "donde_comer": "Schnitzel EUR 14-20, pan de jengibre EUR 3-4, café típico EUR 3-4, comida rápida EUR 6-8",
+      "consejo_local": "Llega temprano para evitar multitudes de tour groups, el mejor momento es antes de las 9am",
+      "plan_b_lluvia": "Iglesia St. Jakob, museos medievales cubiertos, tiendas de recuerdos",
+      "keywords": [
+        "medieval",
+        "amurallado",
+        "cuento de hadas",
+        "ruta romántica",
+        "tradicional"
+      ]
+    },
+    {
+      "id": "hamburg",
+      "nombre": "Hamburgo",
+      "tipo": "ciudad",
+      "region": "Hamburgo",
+      "descripcion": "Mayor puerto de Alemania con canales pintorescos, música en vivo abundante y vida cosmopolita. Ciudad de agua con mercados tradicionales, gastronomía variada y escena artística vibrante en los distritos alternativos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "Tren desde Berlín EUR 25-40 (2h), vuelos EUR 40-70",
+      "donde_dormir": {
+        "mochilero": "Albergue EUR 16-22/noche",
+        "medio": "Hotel 3 estrellas EUR 50-75/noche",
+        "comfort": "Hotel 4 estrellas EUR 100-150/noche"
+      },
+      "que_hacer": [
+        "Visitar Miniatur Wunderland",
+        "Recorrer puerto y Speicherstadt",
+        "Pasear por Reeperbahn (zona roja)",
+        "Explorar mercado de pescado dominical"
+      ],
+      "donde_comer": "Fischbrötchen EUR 4-6, Labskaus EUR 12-16, cerveza EUR 3-4, comida internacional EUR 15-25",
+      "consejo_local": "El mercado de pescado (Fischmarkt) abre domingo 5-9:30am, es auténtico y caótico",
+      "plan_b_lluvia": "Miniatur Wunderland (reserva online), museos de arte, zoológico cubierto",
+      "keywords": [
+        "puerto",
+        "canales",
+        "música en vivo",
+        "cosmopolita",
+        "gastronomía"
+      ]
+    }
+  ]
+}

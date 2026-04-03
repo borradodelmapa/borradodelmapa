@@ -1,0 +1,336 @@
+{
+  "pais": "Antigua y Barbuda",
+  "codigo": "ag",
+  "destinos": [
+    {
+      "id": "st-johns",
+      "nombre": "Saint John's",
+      "tipo": "ciudad",
+      "region": "Antigua, costa norte",
+      "descripcion": "Capital y principal puerto de entrada, con arquitectura colonial, museos y vida local concentrada. Centro neuralágico para organizar el resto del viaje y punto de partida para excursiones. Acceso directo a playas cercanas y vida urbana caribeña.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "aeropuerto V.C. Bird International (ANU) a 12 km, taxi o autobús local 30 min, 15-25 EUR",
+      "donde_dormir": {
+        "mochilero": "Hostales/guesthouses en centro: 40-65 EUR/noche",
+        "medio": "Hotels 3 estrellas en Dickenson Bay: 90-140 EUR/noche",
+        "comfort": "Resorts frente al mar: 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo de Antigua y Barbuda en el Courthouse (gratis/donativo)",
+        "Catedral de Saint John (gratis)",
+        "Paseo por el puerto histórico y markets locales (gratis)",
+        "Playa de Dickenson Bay a 5 km (gratis)",
+        "Tours organizados a islas vecinas (50-80 EUR)"
+      ],
+      "donde_comer": "Comida local: fungee, saltfish cakes, macaroni pie. Rango 8-15 EUR comidas típicas. Market Street y zona del puerto para food stands auténticos.",
+      "consejo_local": "El mercado principal funciona mejor temprano (antes de 10:00). Los sábados hay más animación local pero menos turistas entre semana.",
+      "plan_b_lluvia": "Museo Nacional, iglesias coloniales, compras en Heritage Quay mall, cafés locales cubiertos.",
+      "keywords": [
+        "Saint Johns",
+        "capital Antigua",
+        "V.C. Bird airport",
+        "Dickenson Bay",
+        "puerto"
+      ]
+    },
+    {
+      "id": "english-harbour",
+      "nombre": "English Harbour & Falmouth",
+      "tipo": "histórico",
+      "region": "Antigua, costa sur",
+      "descripcion": "Puerto histórico del siglo XVIII con arsenal naval restaurado, pueblos coloniales pintorescos y una de las marinas más importantes del Caribe. Punto de parada obligada para navegantes y punto base para explorar la costa sur.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde St. John's: coche alquilado 45 min (30 EUR día) o tour organizados (40-60 EUR). Autobús local hasta Falmouth (1,5 EUR, 1h).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Falmouth: 50-75 EUR/noche",
+        "medio": "Hotels boutique en English Harbour: 120-180 EUR/noche",
+        "comfort": "Resorts y villas privadas: 200-350 EUR/noche"
+      },
+      "que_fazer": [
+        "Nelson's Dockyard Museum (12 EUR, entrada y tours 2-3h)",
+        "Climb Shirley Heights Lookout para vistas 360° (gratis, donativo sugerido 3 EUR)",
+        "Snorkel o buceo en pecios cercanos (40-80 EUR)",
+        "Paseo por pueblos coloniales Falmouth y English Harbour (gratis)",
+        "Paseo en barco al atardecer (35-50 EUR)"
+      ],
+      "donde_comer": "Frutos de mar fresco en restaurantes de puerto. Rango 15-30 EUR. Sunset spots con vistas a la marina como Abracadabra o The Mainbrace.",
+      "consejo_local": "Los jueves por la noche hay fiestas en Shirley Heights con vistas increíbles al atardecer y rum punch. Llega antes del anochecer si quieres buen sitio.",
+      "plan_b_lluvia": "Nelson's Dockyard tiene cobertura parcial, museos y galerías de arte en Falmouth, cafés históricos.",
+      "keywords": [
+        "English Harbour",
+        "Nelson Dockyard",
+        "Falmouth",
+        "Shirley Heights",
+        "costa sur Antigua",
+        "patrimonio naval"
+      ]
+    },
+    {
+      "id": "barbuda",
+      "nombre": "Barbuda (isla hermana)",
+      "tipo": "isla",
+      "region": "Isla de Barbuda, norte del archipiélago",
+      "descripcion": "Isla gemela menos poblada con playas vírgenes, laguna con flamencos y fauna marina. Destino para viajeros que buscan tranquilidad total y naturaleza auténtica, lejos del turismo masivo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Antigua: ferry (90 min, 40 EUR ida y vuelta, horarios limitados) o vuelo doméstico (15 min, 60-90 EUR). Ferries más frecuentes en fin de semana.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses familiares: 45-70 EUR/noche",
+        "medio": "Small hotels: 80-130 EUR/noche",
+        "comfort": "Resorts beachfront: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Pink Sand Beach (gratis)",
+        "Laguna de Barbuda para ver flamencos (tour 30-50 EUR con guía local)",
+        "Snorkel en arrecife de coral (35-60 EUR)",
+        "Visita a Codrington pueblo (gratis, exploracion independiente)",
+        "Bird Island para observación de aves (20-40 EUR)"
+      ],
+      "donde_comer": "Pescado fresco a la parrilla, langosta cuando está en temporada. Rango 12-25 EUR. Muy pocas opciones, la mayoría basada en guesthouses.",
+      "consejo_local": "No hay cajeros automáticos en Barbuda. Trae efectivo de Antigua. El transporte es limitado; contrata un guía local con coche por 60-80 EUR el día.",
+      "plan_b_lluvia": "Las playas son menos atractivas con lluvia. Mejora visita a pueblos, museos locales, descanso en alojamiento.",
+      "keywords": [
+        "Barbuda",
+        "Pink Sand",
+        "flamencos",
+        "isla vecina",
+        "laguna",
+        "Codrington",
+        "naturaleza"
+      ]
+    },
+    {
+      "id": "half-moon-bay",
+      "nombre": "Half Moon Bay & North Coast",
+      "tipo": "playa",
+      "region": "Antigua, costa noreste",
+      "descripcion": "Playa salvaje en forma de media luna con olas moderadas y acceso sin aglomeración de turistas masivos. Zona rural con encanto auténtico, ideal para surfistas casuales y viajeros independientes.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde St. John's: coche alquilado 30 min (30 EUR/día) o tour (25-40 EUR). No hay autobús directo.",
+      "donde_dormir": {
+        "mochilero": "Ningún alojamiento en la playa misma; basarse en St. John's o English Harbour",
+        "medio": "Ningún alojamiento en la playa misma",
+        "comfort": "Ningún alojamiento en la playa misma"
+      },
+      "que_hacer": [
+        "Baño y snorkel en aguas turquesas (gratis)",
+        "Surf o bodyboard en olas moderadas (alquiler tabla 15 EUR/día)",
+        "Picnic en playa desierta (compra en St. John's)",
+        "Fotografía de paisaje natural (gratis)",
+        "Senderismo en acantilados cercanos (gratis)"
+      ],
+      "donde_comer": "Sin opciones en la playa. Trae comida de St. John's o come en pueblos cercanos (8-15 EUR).",
+      "consejo_local": "Menos conocida que Dickenson Bay. Ideal para evitar multitudes. El aparcamiento es libre pero hay pocos coches. Trae agua y protección solar.",
+      "plan_b_lluvia": "No es destino para lluvia. Aplázalo o busca otra playa más protegida como Dickenson Bay.",
+      "keywords": [
+        "Half Moon Bay",
+        "costa noreste",
+        "playa salvaje",
+        "surf Antigua",
+        "naturaleza"
+      ]
+    },
+    {
+      "id": "indian-town-point",
+      "nombre": "Indian Town Point & Rock Islands",
+      "tipo": "naturaleza",
+      "region": "Antigua, noreste",
+      "descripcion": "Formaciones rocosas espectaculares donde se cree fue el primer contacto entre Colón y los pueblos indígenas. Snorkel entre peñas volcánicas y cuevas marinas. Zona poco turística pero con belleza geológica única.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a abril",
+      "como_llegar": "Desde St. John's: coche alquilado 35 min (30 EUR/día). Tour operadores ofrecen excursiones (40-60 EUR con snorkel).",
+      "donde_dormir": {
+        "mochilero": "Sin alojamiento en zona; basarse en St. John's",
+        "medio": "Sin alojamiento en zona; basarse en St. John's",
+        "comfort": "Sin alojamiento en zona; basarse en St. John's"
+      },
+      "que_hacer": [
+        "Snorkel entre rocas y arrecife (35-50 EUR con tour o gratis en independiente)",
+        "Exploración de cuevas marinas accesibles (gratis desde agua)",
+        "Senderismo en acantilados (gratis)",
+        "Fotografía de formaciones geológicas (gratis)",
+        "Observación de aves marinas (gratis)"
+      ],
+      "donde_comer": "Sin opciones. Lleva snacks y agua. Come en pueblos cercanos o St. John's (8-15 EUR).",
+      "consejo_local": "El agua es profunda y las corrientes pueden ser fuertes. No es para principiantes en snorkel. Mejor ir con tour local la primera vez.",
+      "plan_b_lluvia": "Con lluvia, las aguas son turbias. Aplázalo a día despejado.",
+      "keywords": [
+        "Indian Town",
+        "Rock Islands",
+        "Colon",
+        "snorkel Antigua",
+        "formaciones rocosas",
+        "cuevas marinas"
+      ]
+    },
+    {
+      "id": "long-bay",
+      "nombre": "Long Bay Beach",
+      "tipo": "playa",
+      "region": "Antigua, costa sur",
+      "descripcion": "Playa larga y tranquila con arena blanca y aguas calmadas. Menos concurrida que Dickenson Bay pero con servicios básicos. Ideal para descanso puro y natación segura.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde St. John's: coche alquilado 25 min (30 EUR/día) o autobús local (1,5 EUR, 45 min). Tour operator (20-35 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses cercanos en zona: 50-70 EUR/noche",
+        "medio": "Small hotels playa: 90-130 EUR/noche",
+        "comfort": "Beachfront resorts: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño y natación en aguas tranquilas (gratis)",
+        "Snorkel ligero frente a playa (equipo 10-15 EUR alquiler)",
+        "Picnic playero (compras en St. John's)",
+        "Paseo a pie por costa (gratis)",
+        "Observación de atardecer (gratis)"
+      ],
+      "donde_comer": "Pequeños chiringuitos en playa: mariscos y snacks 10-20 EUR. Opciones limitadas; mejor comer en St. John's o llevar comida.",
+      "consejo_local": "Playa perfecta para familias y nadadores casuales. Sin olas peligrosas. Frecuentada por locales en fines de semana.",
+      "plan_b_lluvia": "Playa aburrida con lluvia. Mejor otro destino.",
+      "keywords": [
+        "Long Bay",
+        "playa tranquila",
+        "aguas calmadas",
+        "familia",
+        "sur Antigua"
+      ]
+    },
+    {
+      "id": "st-barths-excursion",
+      "nombre": "Saint Barthélemy (excursión)",
+      "tipo": "isla",
+      "region": "Islas de Sotavento, norte de las Antillas Menores",
+      "descripcion": "Isla francesa hermana y lujosa con arquitectura colorida, playas sofisticadas y gastronomía francesa. Accesible en barco desde Antigua para una excursión de día. Destino para viajeros que buscan contacto multicultural y lujo casual.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Ferry desde St. John's: 1h 45min (30-50 EUR ida/vuelta) o barco privado (200-400 EUR compartido). Salidas por la mañana, regreso al atardecer.",
+      "donde_dormir": {
+        "mochilero": "Sin opción de pasar la noche económicamente. Día completo desde Antigua.",
+        "medio": "Sin opción de pasar la noche económicamente. Día completo desde Antigua.",
+        "comfort": "Hoteles en Gustavia: 250-500 EUR/noche (muy caro para mochileros)"
+      },
+      "que_hacer": [
+        "Paseo por Gustavia (capital, gratis)",
+        "Compras en mercado artesanal (precios variables)",
+        "Playa Shell Beach o Flamands (gratis)",
+        "Restaurantes franceses (40-100 EUR plato principal)",
+        "Visita a iglesia de St. Barthélemy (gratis)"
+      ],
+      "donde_comer": "Gastronomía francesa auténtica pero cara. Rango 15-30 EUR para comidas ligeras, 50-100 EUR cenas. Tiendas de almuerzo más asequibles.",
+      "consejo_local": "Mejor hacer como excursión del día que pernoctar (muy caro). El ferry sale temprano; apunta salida con antelación. Lleva pasaporte válido.",
+      "plan_b_lluvia": "Con lluvia, el viaje en ferry puede cancelarse. Comprueba condiciones marítimas.",
+      "keywords": [
+        "Saint Barths",
+        "Saint Barthelemy",
+        "excursion Antigua",
+        "isla francesa",
+        "Gustavia",
+        "lujo caribeño"
+      ],
+      "excursion_desde": true
+    },
+    {
+      "id": "montserrat-sailing",
+      "nombre": "Montserrat (excursión en vela)",
+      "tipo": "isla",
+      "region": "Islas de Sotavento, sur de Antigua",
+      "descripcion": "Isla volcánica con volcán activo parcialmente cubierto por ceniza. Paisaje posapocalíptico y exclusivo para viajeros aventureros. Accesible solo en tour de vela o barco; la capital abandonada ofrece una experiencia única en el Caribe.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a abril",
+      "como_llegar": "Desde St. John's: tour en barco/vela (120-180 EUR, 6-8h incluyendo navegación, comida y snorkel).",
+      "donde_dormir": {
+        "mochilero": "No hay turismo de pernoctación; solo excursiones de día.",
+        "medio": "No hay turismo de pernoctación; solo excursiones de día.",
+        "comfort": "No hay turismo de pernoctación; solo excursiones de día."
+      },
+      "que_hacer": [
+        "Navegación a vela con vistas al volcán (incluido en tour)",
+        "Snorkel en arrecife de Montserrat (incluido)",
+        "Almuerzo buffet a bordo (incluido)",
+        "Fotos del paisaje desolado (gratis)",
+        "Interpretación geológica del guía (incluido)"
+      ],
+      "donde_comer": "Almuerzo incluido en tour (buffet típico caribeño). Sin opciones en tierra (isla deshabitada turísticamente).",
+      "consejo_local": "El volcán sigue activo pero estable. La isla es zona de exclusión parcial; los tours respetan límites. Mejor en días con mar calmo.",
+      "plan_b_lluvia": "Con mar agitado, el tour se cancela. Poco probable en diciembre-abril pero posible.",
+      "keywords": [
+        "Montserrat",
+        "volcan",
+        "tour vela",
+        "isla abandonada",
+        "posapocaliptico",
+        "geologia"
+      ],
+      "excursion_desde": true
+    },
+    {
+      "id": "devil's bridge",
+      "nombre": "Devil's Bridge & Eastern Shore",
+      "tipo": "naturaleza",
+      "region": "Antigua, costa este",
+      "descripcion": "Puente natural de piedra caliza erosionado por el mar, formación geológica espectacular. Zona costera salvaje con piscinas naturales de agua dulce y acantilados. Destino para senderismo y naturaleza pura.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a abril",
+      "como_llegar": "Desde St. John's: coche alquilado 30 min (30 EUR/día) o tour (30-50 EUR). No hay autobús directo.",
+      "donde_dormir": {
+        "mochilero": "Sin alojamiento en zona; basarse en St. John's",
+        "medio": "Sin alojamiento en zona; basarse en St. John's",
+        "comfort": "Sin alojamiento en zona; basarse en St. John's"
+      },
+      "que_hacer": [
+        "Senderismo a Devil's Bridge (15-20 min, gratis)",
+        "Fotos del puente natural (gratis)",
+        "Baño en piscinas de agua dulce (gratis)",
+        "Exploración de acantilados (gratis)",
+        "Observación geológica (gratis)"
+      ],
+      "donde_comer": "Sin opciones. Lleva agua y snacks. Come en pueblos cercanos o St. John's (8-15 EUR).",
+      "consejo_local": "La ruta está marcada pero es terreno rocoso. Lleva calzado deportivo. Los vientos pueden ser fuertes; cuidado con fotos en el borde.",
+      "plan_b_lluvia": "Rocas resbaladizas con lluvia. Aplázalo.",
+      "keywords": [
+        "Devil's Bridge",
+        "costa este",
+        "puente natural",
+        "acantilados",
+        "geologia",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "boggy-peak",
+      "nombre": "Boggy Peak (Senderismo)",
+      "tipo": "montaña",
+      "region": "Antigua, interior",
+      "descripcion": "Punto más alto de Antigua con vistas panorámicas a las islas vecinas y el archipiélago. Senderismo moderado de media jornada. Destino para viajeros activos que buscan perspectiva del territorio.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a abril (menos lluvia)",
+      "como_llegar": "Desde St. John's: coche alquilado 25 min hacia Bethesda (30 EUR/día). Tour con guía (50-70 EUR incluye transporte y guía).",
+      "donde_dormir": {
+        "mochilero": "Sin alojamiento en cumbre; basarse en St. John's",
+        "medio": "Sin alojamiento en cumbre; basarse en St. John's",
+        "comfort": "Sin alojamiento en cumbre; basarse en St. John's"
+      },
+      "que_hacer": [
+        "Senderismo a cumbre Boggy Peak (1.5-2h ida y vuelta, gratis con guía 50-70 EUR)",
+        "Vistas panorámicas 360° (gratis)",
+        "Fotografía de islas y océano (gratis)",
+        "Observación de vegetación local (gratis)",
+        "Picnic en cumbre (comida propia)"
+      ],
+      "donde_comer": "Sin opciones en montaña. Lleva snacks y agua abundante. Come antes en St. John's.",
+      "consejo_local": "La ruta es corta pero empinada en tramos. Mejor con guía local para no perderse. Salida temprana (antes de 8:00) para evitar calor.",
+      "plan_b_lluvia": "Con nubes, las vistas se pierden. Mejor día despejado.",
+      "keywords": [
+        "Boggy Peak",
+        "senderismo Antigua",
+        "cumbre",
+        "vistas panoramicas",
+        "interior",
+        "montana"
+      ]
+    }
+  ]
+}

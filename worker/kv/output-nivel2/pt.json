@@ -1,0 +1,351 @@
+{
+  "pais": "Portugal",
+  "codigo": "pt",
+  "destinos": [
+    {
+      "id": "lisboa",
+      "nombre": "Lisboa",
+      "tipo": "ciudad",
+      "region": "Área Metropolitana de Lisboa",
+      "descripcion": "Capital portuguesa con colinas, azulejos históricos y barrios bohemios. Centro de transportes y punto de entrada ideal para explorar el país. Mezcla de arquitectura medieval, modernista y contemporánea con vida nocturna accesible.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Aeropuerto Internacional de Humberto Delgado a 7 km. Metro/Autobús desde el aeropuerto: 30 min, 1,50 EUR. Trenes desde otras ciudades portuguesas llegan a Estación Santa Apolónia.",
+      "donde_dormir": {
+        "mochilero": "Dormitorio en hostal (Alfama, Príncipe Real): 20-28 EUR/noche",
+        "medio": "Apartamento o guesthouse (Belém, Bairro Alto): 50-80 EUR/noche",
+        "comfort": "Hotel 3-4 estrellas (Zona Marquês, Baixa): 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por Alfama y Castelo de São Jorge (gratis caminar, entrada castillo 10 EUR)",
+        "Tranvía 28 clásico por la ciudad (6 EUR)",
+        "Torre de Belém y Mosteiro dos Jerónimos (8 EUR entrada combinada)",
+        "Mirador de Graça y Mirador da Senhora do Monte (gratis)",
+        "Pastel de Nata en Pastéis de Belém (1,50 EUR)"
+      ],
+      "donde_comer": "Bacalao à Brás, Francesinha, Pastel de Nata. Menú del día en tascos: 8-12 EUR. Zona Ribeira para restaurantes, Bairro Alto para ambiente, Príncipe Real para opciones modernas.",
+      "consejo_local": "El Tranvía 28 va abarrotado de turistas: sube en la parada de Graça (no en el centro) para evitar multitudes. Come después de las 20:00 para conseguir mesas en restaurantes populares.",
+      "plan_b_lluvia": "Museu Nacional de Arte Antiga (5 EUR), Museu do Azulejo (5 EUR), MAAT (arquitectura moderna), cafeterías en Chiado.",
+      "keywords": [
+        "Lisboa",
+        "Lisbon",
+        "Alfama",
+        "Belém",
+        "Bairro Alto",
+        "Príncipe Real",
+        "7 colinas",
+        "Tejo"
+      ]
+    },
+    {
+      "id": "porto",
+      "nombre": "Oporto (Porto)",
+      "tipo": "ciudad",
+      "region": "Norte",
+      "descripcion": "Segunda ciudad portuguesa con casco antiguo laberíntico, bodegas de Oporto en la ribera del Duero y ambiente más auténtico que Lisboa. Punto de partida para viajes al Duero y norte de Portugal.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Lisboa en tren: 3h, 25-40 EUR. Desde Barcelona o Madrid: vuelos baratos o buses nocturnos. Autobús nocturno desde Lisboa: 8-12 EUR, 6h.",
+      "donde_dormir": {
+        "mochilero": "Dormitorio en Ribeira o Miragaia: 18-26 EUR/noche",
+        "medio": "Apartamento centro (Comercial, Clérigos): 45-75 EUR/noche",
+        "comfort": "Hotel 3-4 estrellas (Ribeira, Baixa): 85-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Casco antiguo (Ribeira) y puente Luís I (gratis caminar, subir al puente 5 EUR)",
+        "Bodegas de Oporto en Vila Nova de Gaia con degustación (10-15 EUR)",
+        "Livraria Lello (6 EUR entrada, descuentable en compra)",
+        "Torre de los Clérigos (5 EUR)",
+        "Paseo fluvial y Ponte da Arrábida (gratis)"
+      ],
+      "donde_comer": "Francesinha (sándwich típico), Tripa à Moda do Porto, Caldo verde. Menú del día: 8-11 EUR. Comer en Ribeira es más caro; tabernas en Cedofeita más auténticas.",
+      "consejo_local": "Las bodegas de Oporto son en Vila Nova de Gaia (lado opuesto del río). La mayoría incluyen degustación gratuita si compras la botella; evita los tours masivos y entra directamente.",
+      "plan_b_lluvia": "Livraria Lello (una de las librerías más bonitas del mundo), Serralves (museo de arte moderno, 5 EUR), Museu de Serralves.",
+      "keywords": [
+        "Porto",
+        "Oporto",
+        "Ribeira",
+        "Duero",
+        "Clérigos",
+        "Francesinha",
+        "bodegas",
+        "Luís I"
+      ]
+    },
+    {
+      "id": "covilha-castelo-rodrigo",
+      "nombre": "Covilhã y Castelo Rodrigo",
+      "tipo": "rural",
+      "region": "Serra da Estrela / Frontera Este",
+      "descripcion": "Pueblos montañosos en la región más salvaje de Portugal, con vistas glaciales y arquitectura medieval intacta. Destino para viajeros que buscan naturaleza auténtica lejos del turismo masivo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Lisboa en bus (Rede Expressos): 4-5h, 15-20 EUR. Desde Oporto: 3h, 12-18 EUR. Imprescindible coche de alquiler o car-sharing para explorar la zona.",
+      "donde_dormir": {
+        "mochilero": "Casa rural o pequeño hostal: 20-30 EUR/noche",
+        "medio": "Quinta (casa rural rústica) con desayuno: 40-60 EUR/noche",
+        "comfort": "Boutique hotel rural: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Castelo Rodrigo: pueblo abandonado restaurado con ruinas medievales (gratis)",
+        "Senderismo por la Serra da Estrela (gratis)",
+        "Lagoas da Serra da Estrela (lagos glaciales, entrada 3 EUR)",
+        "Manantial de agua natural (gratis)",
+        "Queijo da Serra (queso local) en mercadillos de los pueblos (2-4 EUR)"
+      ],
+      "donde_comer": "Queso de montaña, caldo verde, carne a la brasa en caseros. Restaurante en pueblo: 12-18 EUR. Compra en tiendas locales de productores.",
+      "consejo_local": "Castelo Rodrigo es un pueblo fantasma casi deshabitado. La mejor hora es al atardecer cuando se vacía de turistas. Lleva agua y comida desde Covilhã.",
+      "plan_b_lluvia": "Museos locales de artesanía en Covilhã, paseos por pueblo bajo techo, visitas a quesería tradicional.",
+      "keywords": [
+        "Covilha",
+        "Castelo Rodrigo",
+        "Serra da Estrela",
+        "montaña",
+        "pueblos medievales",
+        "queso",
+        "frontera"
+      ]
+    },
+    {
+      "id": "sintra",
+      "nombre": "Sintra",
+      "tipo": "histórico",
+      "region": "Área Metropolitana de Lisboa (Cascais)",
+      "descripcion": "Pueblo montañoso con palacios románticos, bosques misticos y paisajes que parecen de cuento. Patrimonio de la Humanidad con fácil acceso desde Lisboa, ideal para excursión de un día.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Tren desde Lisboa Estación de Rossio: 30 min, 2,60 EUR. Regresa el mismo día o duerme en Sintra para evitar multitudes de tour operadores.",
+      "donde_dormir": {
+        "mochilero": "Hostal pequeño en Sintra pueblo: 25-35 EUR/noche",
+        "medio": "Casa rural o guesthouse: 50-80 EUR/noche",
+        "comfort": "Hotel boutique: 90-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Palácio Nacional de Pena (14 EUR, vistas panorámicas)",
+        "Quinta da Regaleira (10 EUR, jardines místicos y cuevas)",
+        "Castelo dos Mouros ruinas (8,50 EUR)",
+        "Paseo por Parque da Pena (gratis)",
+        "Senderismo por el bosque entre palacios (gratis)"
+      ],
+      "donde_comer": "Pastel de queijo (queso), caldo verde. Restaurantes en Sintra pueblo: 12-18 EUR. Tascas cercanas a la estación más baratas que centro turístico.",
+      "consejo_local": "Sube caminando desde el pueblo hasta Pena (45 min) en lugar de coger el bus turístico (7 EUR). Llega antes de las 10:00 para evitar las masas. El bosque es lo mejor gratis.",
+      "plan_b_lluvia": "Palácio da Regaleira (tiene partes cubiertas), Museu de Arte Moderna (5 EUR), cafeterías bajo techo.",
+      "keywords": [
+        "Sintra",
+        "Pena",
+        "Regaleira",
+        "romántico",
+        "palacios",
+        "mágico",
+        "excursión desde Lisboa"
+      ]
+    },
+    {
+      "id": "nazare",
+      "nombre": "Nazaré",
+      "tipo": "playa",
+      "region": "Centro / Leiria",
+      "descripcion": "Pueblo de pescadores con playa espectacular y olas gigantes en invierno. Punto de partida para explorar la costa central portuguesa con autenticidad sin masificar.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre-marzo (olas grandes), junio-septiembre (playa tranquila)",
+      "como_llegar": "Desde Lisboa en bus (Rede Expressos): 2h, 8-12 EUR. Desde Oporto: 2h 30min, 10-15 EUR. Tren a Valado + bus 20 min, 3 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostal frente al mar: 22-30 EUR/noche",
+        "medio": "Apartamento con vista (segunda línea playa): 45-70 EUR/noche",
+        "comfort": "Hotel 3 estrellas frente al mar: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Ver olas gigantes desde el acantilado (gratis, octubre-marzo)",
+        "Playa de Nazaré para baño seguro (gratis)",
+        "Fortín de Nazaré y vista panorámica (gratis)",
+        "Ascensor de Nazaré antiguamente (ahora caminable, gratis)",
+        "Museu da Nazaré (4 EUR, historia de surfistas de olas gigantes)"
+      ],
+      "donde_comer": "Arroz de marisco, Caldeirada (sopa de pescado), Pastel de Nata. Restaurantes en primera línea: 14-20 EUR. Tascas en casco antiguo: 9-12 EUR.",
+      "consejo_local": "En invierno (noviembre-febrero) las olas alcanzan 20+ metros. Sube al acantilado al amanecer si quieres fotos sin multitudes de surfistas. Las mejores vistas sin pagar nada.",
+      "plan_b_lluvia": "Museu da Nazaré, cafeterías con chimenea, paseos cubiertos por el pueblo, compras en tiendas locales.",
+      "keywords": [
+        "Nazaré",
+        "playa",
+        "olas gigantes",
+        "Atlántico",
+        "pueblo pescador",
+        "Big Wave",
+        "costa centro"
+      ]
+    },
+    {
+      "id": "obidos",
+      "nombre": "Óbidos",
+      "tipo": "histórico",
+      "region": "Centro / Leiria",
+      "descripcion": "Pueblo medieval amurallado con callejuelas blancas y tiendas de artesanía. Conservado como museo viviente, es uno de los pueblos más bonitos de Portugal aunque masificado en temporada alta.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Bus desde Lisboa (Rede Expressos): 1h 30min, 7-10 EUR. Tren a Caldas da Rainha + bus 10 min, 5 EUR total. Desde Nazaré: bus directo 45 min, 4 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostal en pueblo o cercano: 25-35 EUR/noche",
+        "medio": "Casa rural dentro o fuera muralla: 45-70 EUR/noche",
+        "comfort": "Posada histórica dentro muralla: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Muralla medieval y paseo completo (gratis, 30 min)",
+        "Iglesia de Santa María (gratis entrada)",
+        "Castillo (entrada muralla incluida, gratis caminar)",
+        "Callejuelas y tiendas de artesanía local (gratis)",
+        "Vino local (Licor de Cereja) en tascos: 1-2 EUR por copa"
+      ],
+      "donde_comer": "Comida tradicional portuguesa, Cereja (licor local), Pastel de Nata. Restaurantes en pueblo: 12-18 EUR. Mercadillo de comida en plaza central.",
+      "consejo_local": "Llega antes de las 10:00 para evitar buses turísticos masivos. El pueblo es pequeño (20 min para recorrerlo), así que visita temprano y ve a Nazaré después. Come fuera de pueblo es más barato.",
+      "plan_b_lluvia": "Cafeterías en plaza central, tiendas de artesanía cubiertas, iglesia.",
+      "keywords": [
+        "Óbidos",
+        "Obidos",
+        "medieval",
+        "muralla",
+        "blanco",
+        "artesanía",
+        "cereja",
+        "excursión"
+      ]
+    },
+    {
+      "id": "algarve-lagos",
+      "nombre": "Algarve (Lagos, Silves)",
+      "tipo": "playa",
+      "region": "Algarve / Sur",
+      "descripcion": "Región costera del sur con acantilados dorados, playas ocultas y pueblos de pescadores. Menos turístico que el este del Algarve, con mejor relación calidad-precio y acceso a calas salvajes.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Lisboa en bus directo (Rede Expressos): 4h, 15-20 EUR. Desde Faro (aeropuerto): bus 1h, 6 EUR. Tren Lisboa-Faro: 3h, 25-35 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostal en Lagos o Silves: 20-28 EUR/noche",
+        "medio": "Apartamento con cocina (centro pueblo): 40-65 EUR/noche",
+        "comfort": "Hotel 3-4 estrellas frente al mar: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de acantilados (Marinha, Porto de Mós): gratis",
+        "Kayak en calas (25-35 EUR por tour)",
+        "Castillo de Silves (5 EUR)",
+        "Paseo de barco de pesca al atardecer (20-30 EUR)",
+        "Camino costero entre calas (gratis)"
+      ],
+      "donde_comer": "Arroz de marisco, pulpo a la parrilla, sardinas. Restaurantes primera línea: 15-22 EUR. Mercadillos de pescado fresco mañana, cascos antiguos más económicos.",
+      "consejo_local": "Lagos es la puerta de entrada turística, pero Silves (30 km este) es más auténtica. Las mejores calas requieren caminar 20-30 min desde el aparcamiento. Lleva agua.",
+      "plan_b_lluvia": "Museu Arqueológico (Silves, 4 EUR), cafeterías con vista, compras en tiendas locales, museos de artesanía.",
+      "keywords": [
+        "Algarve",
+        "Lagos",
+        "Silves",
+        "acantilados dorados",
+        "playas",
+        "calas",
+        "sur",
+        "Marinha"
+      ]
+    },
+    {
+      "id": "aveiro-costa-brava",
+      "nombre": "Aveiro y Costa da Brava",
+      "tipo": "playa",
+      "region": "Centro / Aveiro",
+      "descripcion": "Ciudad costera con canales de agua salada, paseo en barcas típicas y playas salvajes cercanas. Equilibrio perfecto entre pueblo auténtico y playas vírgenes sin masificación.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Lisboa en tren: 2h 30min, 20-30 EUR. Desde Oporto: 1h, 8-15 EUR. Bus desde cualquier ciudad costera: 2-4h.",
+      "donde_dormir": {
+        "mochilero": "Hostal en Aveiro centro: 22-30 EUR/noche",
+        "medio": "Guesthouse en pueblo o apartamento: 40-65 EUR/noche",
+        "comfort": "Hotel 3 estrellas frente a canales: 75-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en barco moliceiro por los canales (15 EUR, 45 min)",
+        "Playa de Barra (arena, diques, gratis)",
+        "Costa da Brava (calas pequeñas, senderos gratis)",
+        "Paseo por Ria de Aveiro (gratis)",
+        "Museo de Arte Moderna (MAAT, entrada 5 EUR)"
+      ],
+      "donde_comer": "Anguila a la brasa, Caldeirada, arroz de marisco. Restaurantes en puerto: 14-20 EUR. Mercadillo de pescado a precio de productor por la mañana.",
+      "consejo_local": "Alquila una bicicleta (3-5 EUR/día) para explorar los alrededores y pueblos de salinas. Los barcazos turísticos masivos tienen horarios fijos; evítalos yendo a primera hora.",
+      "plan_b_lluvia": "Museu de Arte Moderna, museo local de artesanía, cafeterías calorosas, tiendas de cerámica artesanal.",
+      "keywords": [
+        "Aveiro",
+        "barcaza moliceiro",
+        "canales",
+        "Costa da Brava",
+        "Ria",
+        "playa",
+        "salinas"
+      ]
+    },
+    {
+      "id": "peneda-geres",
+      "nombre": "Parque Nacional Peneda-Gerês",
+      "tipo": "naturaleza",
+      "region": "Norte / Minho",
+      "descripcion": "Único parque nacional de Portugal con montañas, cascadas, aldeas de piedra y caminos antiguos. Destino imprescindible para senderistas con acceso a paisajes vírgenes y tradición rural intacta.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Oporto en bus: 2h 30min, 10-15 EUR. Desde Braga: 1h, 6-8 EUR. Imprescindible coche o caravana para explorar parque internamente.",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes en pueblo (Caldas do Gerês): 25-35 EUR/noche",
+        "medio": "Albergue rural o quinta: 40-60 EUR/noche",
+        "comfort": "Hotel termal o posada: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Trilho da Levada (6 km, gratis)",
+        "Cascada de Arado (5 km caminata, gratis)",
+        "Aldea de Lindoso con castillo (gratis acceso)",
+        "Camino Romano antiguo (gratis)",
+        "Termas de Caldas do Gerês (piscinas naturales, 2 EUR)"
+      ],
+      "donde_comer": "Cabra frita, caldo verde, trucha de río. Restaurantes locales: 10-15 EUR. Compra en tiendas de pueblo para picnic.",
+      "consejo_local": "Caldas do Gerês es base cómoda, pero verdad está en pueblos como Lindoso (10 km). Los senderos están poco señalizados; descarga mapas offline. Lleva provisiones.",
+      "plan_b_lluvia": "Museu de Tecelagem (tejeduría, 2 EUR en Lindoso), paseos cortos bajo acantilados, cafeterías en Caldas.",
+      "keywords": [
+        "Peneda-Gerês",
+        "parque nacional",
+        "senderismo",
+        "cascadas",
+        "Lindoso",
+        "montaña",
+        "Minho",
+        "trilhos"
+      ]
+    },
+    {
+      "id": "monsanto",
+      "nombre": "Monsanto",
+      "tipo": "rural",
+      "region": "Centro Interno / Castelo Branco",
+      "descripcion": "Pueblo construido entre enormes rocas de granito, villas encaramadas en acantilados. Uno de los pueblos más singulares de Europa, auténtico y prácticamente sin turismo de masas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Lisboa en bus (Rede Expressos) a Idanha-a-Nova: 3h 30min, 12-16 EUR. Desde Idanha-a-Nova en taxi: 15 EUR. Coche imprescindible para explorar región.",
+      "donde_dormir": {
+        "mochilero": "Pequeño hostal o casa de huéspedes: 20-30 EUR/noche",
+        "medio": "Casa rural en pueblo: 35-55 EUR/noche",
+        "comfort": "Posada rústica: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por pueblo entre rocas gigantes (gratis)",
+        "Subida a Castillo (5 min, gratis)",
+        "Vistas panorámicas desde lo alto (gratis)",
+        "Fotografía y exploración del diseño urbano único (gratis)",
+        "Comida en tasco local (5-8 EUR)"
+      ],
+      "donde_comer": "Comida casera portuguesa, sopa de piedra tradicional. Un solo restaurante en pueblo: 8-12 EUR. Tienda de pueblo para picnic.",
+      "consejo_local": "Es un pueblo fantasma vivo (200 habitantes). Las casas parecen abandonadas pero están habitadas. Camina lentamente por las callejuelas. El único restaurante abre variable.",
+      "plan_b_lluvia": "No hay plan B: el pueblo está al aire libre. Lluvia añade atmósfera mística.",
+      "keywords": [
+        "Monsanto",
+        "rocas gigantes",
+        "granito",
+        "pueblo singular",
+        "auténtico",
+        "arquitectura única",
+        "interior Portugal"
+      ]
+    }
+  ]
+}

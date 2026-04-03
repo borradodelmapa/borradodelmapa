@@ -1,0 +1,351 @@
+{
+  "pais": "Líbano",
+  "codigo": "lb",
+  "destinos": [
+    {
+      "id": "beirut",
+      "nombre": "Beirut",
+      "tipo": "ciudad",
+      "region": "Beirut Metropolitano",
+      "descripcion": "Capital cosmopolita con arquitectura premoderna, museos de nivel mundial y una escena gastronómica vibrante. Centro cultural y artístico del Líbano con galerías, librerías y cafés de referencia regional. Mezcla de influencias otomanas, francesas y modernas en una ciudad en reconstrucción.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Beirut es el punto de entrada principal: aeropuerto Rafic Hariri. Vuelos internacionales desde Europa (3-5h).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Gemmayze/Mar Mikhael: 20-35 EUR/noche",
+        "medio": "Hoteles boutique en Achrafieh/Hamra: 60-100 EUR/noche",
+        "comfort": "Hoteles 5* en Centro/Verdun: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Museos Nacionales (gratis primer domingo de mes, 5 EUR otros días)",
+        "Paseo por cornisa Manara (gratis)",
+        "Barrio artístico de Gemmayze con murales callejeros (gratis)",
+        "Galería de arte Sursock (8 EUR)",
+        "Café y shisha en Hamra o Achrafieh (3-8 EUR)"
+      ],
+      "donde_comer": "Hummus, fattoush y kibbeh en comedores locales de Hamra (4-10 EUR). Restaurantes modernos en Gemmayze (15-30 EUR). Pastelería francesa tradicional: 2-4 EUR.",
+      "consejo_local": "Evita viernes y sábados noche en los bares principales si buscas tranquilidad. Martes es día de museos gratuitos.",
+      "plan_b_lluvia": "Pasar día en museos, librerías Samir Kassir o Virgin Megastore. Café cubierto en Hamra.",
+      "alerta_seguridad": "Situación de seguridad variable. Evita el sur de Beirut (Hezbollah), el Valle de Bekaa y frontera sur. Consulta actualizaciones de embajada antes de viajar.",
+      "keywords": [
+        "Beirut",
+        "Beyrouth",
+        "Hamra",
+        "Gemmayze",
+        "Achrafieh",
+        "Mar Mikhael",
+        "capital Líbano"
+      ]
+    },
+    {
+      "id": "baalbek",
+      "nombre": "Baalbek",
+      "tipo": "histórico",
+      "region": "Valle de Bekaa",
+      "descripcion": "Complejo de templos romanos de los siglos I-II, Patrimonio UNESCO con las ruinas más monumentales del Medio Oriente. El templo de Baco es uno de los mejor preservados del mundo romano. Atmósfera única entre las montañas del Bekaa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Beirut: coche alquilado (2h, 80-120 km), autobús local (3h, 5-8 EUR) o taxi colectivo (3-4h, 10 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedajes básicos en Baalbek centro: 15-25 EUR/noche",
+        "medio": "Hotels locales decentes: 40-60 EUR/noche",
+        "comfort": "No hay opciones 5*. Hotel Palmyra o similar: 70-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido templos romanos (15 EUR entrada)",
+        "Templo de Baco (incluido entrada)",
+        "Vistas desde terraza superior (gratis con entrada)",
+        "Pueblo de Baalbek, souks locales (gratis)",
+        "Excursión a Anieh o cedros cercanos (15-20 EUR con guía)"
+      ],
+      "donde_comer": "Mezze libanés tradicional, pollo grillado y fattoush en restaurantes locales (5-12 EUR). Pequeños comedores cerca de souks (3-6 EUR).",
+      "consejo_local": "Llega temprano antes de grupos turísticos organizados. El sitio es mejor visto al atardecer. Las tiendas de souvenirs piden precios altos: negocia.",
+      "plan_b_lluvia": "Ruinas son visibles con lluvia. Pasa a sitio cubierto en pueblo o cafés locales.",
+      "alerta_seguridad": "Valle de Bekaa tiene presencia de Hezbollah. Consulta situación actual. Evita frontera norte hacia Siria.",
+      "keywords": [
+        "Baalbek",
+        "templos romanos",
+        "Baco",
+        "Bekaa Valley",
+        "ruinas romanas",
+        "UNESCO"
+      ]
+    },
+    {
+      "id": "trípoli",
+      "nombre": "Trípoli (Tarabulus)",
+      "tipo": "ciudad",
+      "region": "Norte",
+      "descripcion": "Segunda ciudad del país con medina medieval auténtica, souks fragantes y mezquitas otomanas. Menos visitada que Beirut pero con carácter más tradicional. Puerta de entrada al norte libanés con vida callejera vibrante.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo-mayo, septiembre-noviembre",
+      "como_llegar": "Desde Beirut: coche alquilado (1.5h, 85 km), autobús/van local (2h, 5 EUR) o taxi compartido (2-2.5h, 8 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales/hospedajes en medina: 18-28 EUR/noche",
+        "medio": "Hotels en centro moderno: 45-70 EUR/noche",
+        "comfort": "Hotel Raoudha: 90-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Medina de Trípoli y souks (gratis, compra opcional)",
+        "Mezquita Al-Mansuri (2 EUR, sarcófago cruzado)",
+        "Ciudadela Saint-Gilles/Qalaat Sinjil (3 EUR)",
+        "Khan El-Khayyateen (gratis acceso, artesanía)",
+        "Paseo ribera Nahr Abu Ali (gratis)"
+      ],
+      "donde_comer": "Manakish, fattoush y sopas en pequeños comedores (3-6 EUR). Shawarma y falafel en callejones souks (2-4 EUR). Pastelería árabe: 1-2 EUR.",
+      "consejo_local": "Visita medina por la mañana temprano antes de cierre tiendas. Viernes es día de descanso: muchos locales cerrados. No hagas fotos sin permiso en zonas religiosas.",
+      "plan_b_lluvia": "Souks cubiertos. Museo de Trípoli o Khan interior.",
+      "alerta_seguridad": "Zonas marginales del norte pueden ser inseguras. Evita alrededores de Bab El-Tabbaneh. Consulta situación.",
+      "keywords": [
+        "Trípoli",
+        "Tarabulus",
+        "Tripoli",
+        "medina",
+        "souks",
+        "norte Líbano",
+        "Qalaat Sinjil"
+      ]
+    },
+    {
+      "id": "cedros-qadisha",
+      "nombre": "Cedros de Dios (Qadisha Valley)",
+      "tipo": "montaña",
+      "region": "Monte Líbano Norte",
+      "descripcion": "Reserva de cedros milenarios en las montañas, símbolo nacional en la bandera libanesa. Valle de Qadisha con monasterios antiguos encaramados en acantilados. Senderismo alpino entre bosques y vistas del Mediterráneo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre (invierno con nieve)",
+      "como_llegar": "Desde Beirut o Trípoli: coche alquilado hacia Bsharri (1.5h desde Trípoli, 100 km). Autobús a Bsharri (2.5h, 8-10 EUR), luego taxi a bosque (10 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedajes en Bsharri: 20-30 EUR/noche",
+        "medio": "Hotels en Bsharri o Qadisha: 50-80 EUR/noche",
+        "comfort": "Resort/lodge montaña: 100-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Reserva de Cedros (entrada 8 EUR, senderismo 2-3h)",
+        "Valle de Qadisha trekking (gratis, con guía 40-50 EUR)",
+        "Monasterio Qadisha o Mar Antonios (3-5 EUR)",
+        "Mirador Bsharri (gratis)",
+        "Cascadas de Qadisha (gratis con senderismo)"
+      ],
+      "donde_comer": "Comida casera libanesa en posadas de montaña (8-15 EUR). Carnes a la parrilla locales (12-20 EUR). Thé y dulces árabes: 2-3 EUR.",
+      "consejo_local": "Necesitas guía para Valle Qadisha (pronto claridad con guías en Bsharri). Cedros cerrados frecuentemente por nieve invierno. Lleva equipo senderismo decente.",
+      "plan_b_lluvia": "Bajo nube es hermoso pero peligroso. Cancela senderismo. Café en pueblo o museo Gibran.",
+      "keywords": [
+        "Cedros",
+        "Cedars",
+        "Qadisha",
+        "Bsharri",
+        "Valle Qadisha",
+        "monasterios",
+        "Monte Líbano"
+      ]
+    },
+    {
+      "id": "sidón",
+      "nombre": "Sidón (Saida)",
+      "tipo": "ciudad",
+      "region": "Litoral Sur",
+      "descripcion": "Puerto histórico fenicio con castillo del mar rodeado de aguas, medina con mezquitas y souks. Menos abarrotado que Tiro pero con igual encanto. Playa cercana y comida marina excepcional.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-noviembre",
+      "como_llegar": "Desde Beirut: coche alquilado (1h, 40 km), autobús/van (1.5h, 4-6 EUR) o taxi colectivo (1.5-2h, 7 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedajes en medina: 18-28 EUR/noche",
+        "medio": "Hotels junto mar: 50-80 EUR/noche",
+        "comfort": "Seaside hotel: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo del Mar/Qalaat El-Bahr (3 EUR, fotos excepcionales)",
+        "Medina y souks (gratis)",
+        "Museos: Arqueológico o Souk (4-5 EUR cada uno)",
+        "Playa de Sidón (gratis)",
+        "Restaurantes pescado junto mar (comer: actividad)"
+      ],
+      "donde_comer": "Pescado a la parrilla fresco, humus de camarones y arak en restaurantes junto mar (15-25 EUR). Comida local en medina (5-10 EUR). Jugo de caña: 1-2 EUR.",
+      "consejo_local": "Come pescado al atardecer en los restaurantes de mar frente castillo. El souks cierran pronto 18h. Negocia precios si compras.",
+      "plan_b_lluvia": "Medina cubierta con souks. Museos interiores.",
+      "alerta_seguridad": "Sur de Líbano tiene tensión. Evita zonas marcadas restringidas. Consulta actualización de seguridad.",
+      "keywords": [
+        "Sidón",
+        "Saida",
+        "Sayda",
+        "castillo mar",
+        "fenicio",
+        "souks",
+        "litoral sur"
+      ]
+    },
+    {
+      "id": "tiro",
+      "nombre": "Tiro (Tyre)",
+      "tipo": "ciudad",
+      "region": "Litoral Sur",
+      "descripcion": "Puerto fenicio antiguo con ruinas greco-romanas en la playa, columnas y mosaicos. Medina tradicional y playas con resorts. Patrimonio UNESCO con menos turismo que otros sitios costeros.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-junio, septiembre-octubre",
+      "como_llegar": "Desde Beirut: coche (1.5h, 85 km), autobús/van (2-2.5h, 5-7 EUR). Desde Sidón: coche (45 min).",
+      "donde_dormir": {
+        "mochilero": "Hospedajes en centro: 20-30 EUR/noche",
+        "medio": "Hotels en medina o playa: 55-85 EUR/noche",
+        "comfort": "Resort con playa: 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas arqueológicas Tiro (entrada 8 EUR)",
+        "Playa con columnas romanas (gratis)",
+        "Medina tradicional (gratis)",
+        "Museo arqueológico local (3 EUR)",
+        "Snorkel/buceo playas cercanas (30-50 EUR tours)"
+      ],
+      "donde_comer": "Pescado grillado, camarones y pulpo en restaurantes playa (12-20 EUR). Comida libanesa tradicional (6-12 EUR). Pastelería marina: 2-3 EUR.",
+      "consejo_local": "Las ruinas están esparcidas: algunas en playa, otras en ciudad. Alquila bicicleta (5 EUR) para recorrer. Playas públicas gratuitas con mucho local verano.",
+      "plan_b_lluvia": "Medina cubierta. Museo. Pasea entre ruinas incluso con lluvia.",
+      "alerta_seguridad": "Sur de Líbano: zona de tensión política. Evita el Líbano meridional más allá de Tiro. Consulta embajada.",
+      "keywords": [
+        "Tiro",
+        "Tyre",
+        "Tyro",
+        "fenicio",
+        "ruinas romanas",
+        "playa",
+        "arqueología"
+      ]
+    },
+    {
+      "id": "valle-bekaa-vinos",
+      "nombre": "Valle de Bekaa (tours de vino)",
+      "tipo": "rural",
+      "region": "Valle de Bekaa",
+      "descripcion": "Principal región vitivinícola de Oriente Medio con bodegas boutique. Tours de viña, degustación de vinos libaneses internacionalmente reconocidos y gastronomía local. Paisaje de montañas fértiles.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre-octubre (cosecha)",
+      "como_llegar": "Desde Beirut: coche alquilado (1.5h hacia Zahle o Anjar). Autobús (2h, 5-8 EUR). Mejor con coche para tours viña.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes en Zahle: 20-30 EUR/noche",
+        "medio": "Hotels rurales o Zahle: 55-85 EUR/noche",
+        "comfort": "Resort bodega: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Tours bodega Chateau Musar o Chateau Ksara (25-40 EUR, incluye degustación)",
+        "Visita viñedos (incluido en tours)",
+        "Ruinas Anjar (UNESCO, 5 EUR)",
+        "Río Litani kayak (25-35 EUR)",
+        "Cena gastronómica en bodega (30-50 EUR)"
+      ],
+      "donde_comer": "Tabbouleh fresco, cabra a la parrilla y quesos locales. Arak anisado con meze (10-20 EUR). Vinos locales: 8-40 EUR botella.",
+      "consejo_local": "Bodegas requieren reserva previa. Tours generalmente mediodía. Combina visita Zahle (ciudad ribera bonita) con una bodega. Arak puro: bebe con moderación.",
+      "plan_b_lluvia": "Tours interiores en bodegas. Degustación cubierta.",
+      "alerta_seguridad": "Bekaa es zona sensible. Consulta situación. Algunos tours pueden estar limitados.",
+      "keywords": [
+        "Bekaa",
+        "vino",
+        "Bekaa Valley",
+        "Zahle",
+        "Chateau Musar",
+        "Ksara",
+        "viña"
+      ]
+    },
+    {
+      "id": "jbeil",
+      "nombre": "Jbeil (Byblos)",
+      "tipo": "histórico",
+      "region": "Litoral Norte",
+      "descripcion": "Ciudad costera más antigua del mundo continuamente habitada (5000+ años). Castillo cruzado, puerto fenicio y medina atmosférica. Playa y restaurantes junto mar con vistas del castillo iluminado.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Beirut: coche alquilado (30 min, 37 km) o autobús/van (45 min, 3-5 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedajes medina: 22-35 EUR/noche",
+        "medio": "Hotels junto mar: 65-100 EUR/noche",
+        "comfort": "Boutique hotel con vistas: 130-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Jbeil (5 EUR, vistas mar)",
+        "Ruinas arqueológicas junto castillo (incluido entrada)",
+        "Medina con souks (gratis)",
+        "Puerto fenicio (gratis)",
+        "Paseo por cornisa al atardecer (gratis)"
+      ],
+      "donde_comer": "Hummus, fattoush y pescado en restaurantes medina y mar (10-20 EUR). Comida callejera (3-6 EUR). Café árabe: 1-2 EUR.",
+      "consejo_local": "Llega temprano para evitar grupos turísticos diurnos. Castillo mejor al atardecer cuando se ilumina. Medina es puro paseo: no hay museos cerrados, todo abierto.",
+      "plan_b_lluvia": "Medina cubierta con souks. Castillo visible con lluvia.",
+      "keywords": [
+        "Jbeil",
+        "Byblos",
+        "Bíblos",
+        "castillo",
+        "fenicio",
+        "medina",
+        "litoral",
+        "más antigua ciudad"
+      ]
+    },
+    {
+      "id": "anjar",
+      "nombre": "Anjar (ruinas omeyas)",
+      "tipo": "histórico",
+      "region": "Valle de Bekaa",
+      "descripcion": "Ciudad omeya del siglo VIII Patrimonio UNESCO en ruinas. Estructura urbana romana completamente preservada en plano. Menos visitada que Baalbek pero arquitectura igual de impresionante y atmósfera más tranquila.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Beirut: coche alquilado (1h, 60 km). Desde Baalbek: coche (45 min). Autobús desde Beirut (1.5-2h, 5-7 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedajes Anjar o Zahle cercano: 20-30 EUR/noche",
+        "medio": "Hotel Zahle: 50-75 EUR/noche",
+        "comfort": "Resort Bekaa: 100-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas arqueológicas omeyas (5 EUR)",
+        "Columnas y murallas (incluido)",
+        "Museo pequeño (incluido entrada)",
+        "Fotografía arquitectura (gratis)",
+        "Excursión a Zahle o Chateau Ksara cercano (opcional)"
+      ],
+      "donde_comer": "Comida en café local junto ruinas (5-8 EUR). Mejor comer en Zahle cercano (10-15 EUR). Opciones limitadas en Anjar.",
+      "consejo_local": "Visita a primera hora mañana antes calor. Lleva agua, hay poca sombra. Estructura omeya es única: lee cartel información para entender plano ciudad.",
+      "plan_b_lluvia": "Ruinas visibles con lluvia. Vueltas bajo lluvia son difíciles pero posibles.",
+      "keywords": [
+        "Anjar",
+        "Umayyad",
+        "omeya",
+        "ruinas",
+        "UNESCO",
+        "Bekaa"
+      ]
+    },
+    {
+      "id": "douma-gruta",
+      "nombre": "Gruta de Jeita (Jeita Grotto)",
+      "tipo": "naturaleza",
+      "region": "Litoral norte de Beirut",
+      "descripcion": "Caverna de piedra caliza subterránea con lago interior. Accesible en bote por galería inferior. Patrimonio natural espectacular con estalactitas y estalagmitas. Atracción turística principal para familias.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "marzo-noviembre (invierno con desborde agua)",
+      "como_llegar": "Desde Beirut: coche (30 min, 23 km) o autobús/van (45 min, 4-6 EUR). Taxi desde Jbeil (15 min, 15 EUR).",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento en gruta. Hospedajes Jbeil cercano: 22-30 EUR",
+        "medio": "Hotels Jbeil o Biblos: 60-90 EUR/noche",
+        "comfort": "Resort Jbeil: 120-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Galería superior andando (incluido entrada 15 EUR)",
+        "Bote en galería inferior con lago (incluido)",
+        "Fotografía caverna (permitido)",
+        "Café entrada (2-4 EUR)",
+        "Excursión a Jbeil o playa cercana después"
+      ],
+      "donde_comer": "Café y snacks en entrada (3-6 EUR). Restaurante entrada (8-15 EUR). Mejor comer en Jbeil después.",
+      "consejo_local": "No es caro pero algo turístico. Bote interior es corto (10-15 min). Lleva chaqueta: gruta fría 15°C incluso verano. Evita invierno por crecida agua.",
+      "plan_b_lluvia": "Cerrada por riesgo crecida. Invierno no es opción.",
+      "keywords": [
+        "Jeita",
+        "gruta",
+        "caverna",
+        "grotto",
+        "subterránea",
+        "lago",
+        "estalagmitas"
+      ]
+    }
+  ]
+}

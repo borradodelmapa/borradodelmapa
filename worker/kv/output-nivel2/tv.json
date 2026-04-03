@@ -1,0 +1,321 @@
+{
+  "pais": "Tuvalu",
+  "codigo": "tv",
+  "destinos": [
+    {
+      "id": "funafuti",
+      "nombre": "Funafuti",
+      "tipo": "isla",
+      "region": "Atolón de Funafuti (capital)",
+      "descripcion": "Capital y principal punto de entrada a Tuvalu, esta isla alberga el único aeropuerto internacional del país. Es el centro administrativo y comercial donde se concentra la mayoría de servicios turísticos y la vida local.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "vuelo internacional desde Fiji (Nadi) a Funafuti International Airport, aproximadamente 4-5 horas, 400-600 EUR",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicas, 40-60 EUR/noche",
+        "medio": "Small hotels o resorts modestos, 80-120 EUR/noche",
+        "comfort": "Funafuti Lagoon Resort o similares, 150-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en la laguna de Funafuti (gratis con equipamiento propio)",
+        "Visita a la Catedral de Nuestra Señora (gratis)",
+        "Buceo con operadores locales (80-120 EUR)",
+        "Paseo por el mercado local y observación de la vida cotidiana (gratis)",
+        "Playa de Fongafale (gratis)"
+      ],
+      "donde_comer": "Comida local: pescado a la parrilla, pulpo, platos de coco. Rango 8-15 EUR. Restaurantes en la zona céntrica cercana al puerto y mercado.",
+      "consejo_local": "El dinero en efectivo es esencial; hay pocos cajeros automáticos y muchos lugares no aceptan tarjeta. Llega con dólares australianos o USD.",
+      "plan_b_lluvia": "Visita museos locales como el Tuvalu National Library o tiendas de artesanía; descansa en tu alojamiento y come en restaurantes cubiertos.",
+      "keywords": [
+        "Funafuti Atoll",
+        "capital de Tuvalu",
+        "Fongafale",
+        "aeropuerto internacional",
+        "laguna de Funafuti"
+      ]
+    },
+    {
+      "id": "nukufetau",
+      "nombre": "Nukufetau",
+      "tipo": "isla",
+      "region": "Atolón de Nukufetau",
+      "descripcion": "Atolón remoto y menos visitado que ofrece una experiencia auténtica de la vida insular polinesia. Perfecto para quienes buscan tranquilidad y contacto real con la cultura local.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Ferry desde Funafuti (cuando está disponible, frecuencia irregular), 8-12 horas, 30-50 EUR, o vuelo chárter compartido (150-200 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hospedaje comunitario o casas de huéspedes, 35-50 EUR/noche",
+        "medio": "Small guesthouses, 60-90 EUR/noche",
+        "comfort": "No hay opciones de lujo; máximo 90-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel y buceo en arrecifes vírgenes (gratis con equipo propio, 70 EUR con guía)",
+        "Pesca local con pescadores (60-80 EUR por media jornada)",
+        "Caminata por las islas del atolón (gratis)",
+        "Visita a la aldea tradicional y observación de tejido de velas (gratis)",
+        "Nado en aguas cristalinas (gratis)"
+      ],
+      "donde_comer": "Cocina completamente local: pescado fresco, coco, taro. Rango 5-10 EUR. Restaurantes familiares o en casas de huéspedes.",
+      "consejo_local": "No hay tienda de comida; el suministro depende del barco. Lleva snacks y dinero en efectivo. La gente aquí es extremadamente amable pero pocos hablan inglés fluido.",
+      "plan_b_lluvia": "Aprende a tejer velas con mujeres locales, juega con niños, lee en la veranda. Es un lugar donde la lluvia forma parte del ritmo natural.",
+      "keywords": [
+        "Nukufetau Atoll",
+        "atolón remoto",
+        "vida tradicional",
+        "arrecife vírgenes",
+        "menos turismo"
+      ]
+    },
+    {
+      "id": "nanumea",
+      "nombre": "Nanumea",
+      "tipo": "isla",
+      "region": "Atolón de Nanumea",
+      "descripcion": "Atolón septentrional con playas pristinas y comunidades aisladas. Acceso complicado pero recompensa con una experiencia completamente fuera del circuito turístico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Ferry irregular desde Funafuti (cuando llega, 12-16 horas, 40-60 EUR) o vuelo chárter (200+ EUR)",
+      "donde_dormir": {
+        "mochilero": "Hospedaje local, 30-50 EUR/noche",
+        "medio": "Guesthouses básicas, 50-80 EUR/noche",
+        "comfort": "No disponible; máximo 80 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en aguas turquesas (gratis)",
+        "Observación de aves marinas (gratis)",
+        "Paseos en canoa tradicional (50-70 EUR)",
+        "Visita a aldeas locales (gratis)",
+        "Recolección de conchas y exploración de playas (gratis)"
+      ],
+      "donde_comer": "Comida típica polinesia: pescado, coco, plátanos. Rango 4-8 EUR. Solo opciones en alojamientos o casas locales.",
+      "consejo_local": "Este atolón es prácticamente autosuficiente; no esperes servicios turísticos. El contacto humano es la mayor riqueza del viaje.",
+      "plan_b_lluvia": "Quédate en tu alojamiento, participa en actividades comunitarias, aprende palabras de tuvaliano.",
+      "keywords": [
+        "Nanumea Atoll",
+        "norte de Tuvalu",
+        "playas aisladas",
+        "comunidad local",
+        "auténtico"
+      ]
+    },
+    {
+      "id": "vaitupu",
+      "nombre": "Vaitupu",
+      "tipo": "isla",
+      "region": "Atolón de Vaitupu",
+      "descripcion": "Segundo atolón más grande con una estructura comunitaria muy desarrollada. Ofrece equilibrio entre accesibilidad y autenticidad, con mejor infraestructura que atolones remotos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Ferry desde Funafuti (irregular, 6-10 horas, 30-50 EUR) o vuelo chárter compartido (150-200 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses comunitarias, 40-60 EUR/noche",
+        "medio": "Small hotels, 70-100 EUR/noche",
+        "comfort": "Resorts pequeños, 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo y snorkel en el atolón (gratis con equipo, 70-100 EUR con operador)",
+        "Visita al pueblo principal (gratis)",
+        "Pesca costera con locales (60-80 EUR)",
+        "Exploración de islotes del atolón (gratis)",
+        "Clases de cocina local (40-60 EUR)"
+      ],
+      "donde_comer": "Comida local variada: pulpo, pez loro, verduras de coco. Rango 6-12 EUR. Restaurantes y comedores en el pueblo principal.",
+      "consejo_local": "Vaitupu tiene mejor acceso a provisiones que otros atolones. La comunidad es acogedora pero planifica con anticipación.",
+      "plan_b_lluvia": "Visita tiendas artesanales, participa en talleres de tejeduría, come en espacios cubiertos.",
+      "keywords": [
+        "Vaitupu Atoll",
+        "segundo atolón",
+        "comunidad desarrollada",
+        "buceo",
+        "pesca"
+      ]
+    },
+    {
+      "id": "nui",
+      "nombre": "Nui",
+      "tipo": "isla",
+      "region": "Atolón de Nui",
+      "descripcion": "Atolón histórico con conexión cultural fuerte. Menos visitado que Funafuti pero con mejor infraestructura que atolones norteños. Ideal para conocer la vida tuvaliana lejos del turismo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Ferry desde Funafuti (irregular, 8-12 horas, 35-55 EUR) o chárter compartido (150-200 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hospedaje familiar, 35-55 EUR/noche",
+        "medio": "Guesthouses, 60-90 EUR/noche",
+        "comfort": "Pequeños resorts, 90-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en aguas claras (gratis)",
+        "Exploración de aldeas históricas (gratis)",
+        "Pesca tradicional (55-75 EUR)",
+        "Caminatas por el atolón (gratis)",
+        "Observación de fauna marina (gratis)"
+      ],
+      "donde_comer": "Pescado fresco, taro, coco. Rango 5-10 EUR. Principalmente en alojamientos y comedores locales.",
+      "consejo_local": "Nui tiene más conectividad familiar entre islas; es fácil conocer gente. Pregunta sobre historias locales; la gente adora compartir.",
+      "plan_b_lluvia": "Descansa, socializa con locales, aprende sobre artesanía tradicional en espacios cubiertos.",
+      "keywords": [
+        "Nui Atoll",
+        "vida local",
+        "atolón histórico",
+        "comunidad acogedora"
+      ]
+    },
+    {
+      "id": "niulao",
+      "nombre": "Niulao (Nukulaelae)",
+      "tipo": "isla",
+      "region": "Atolón de Nukulaelae",
+      "descripcion": "Atolón sureño pequeño con investigación científica en curso. Acceso muy limitado pero experiencia profunda para curiosos sobre ecología marina y cambio climático.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Ferry muy irregular desde Funafuti (12+ horas, 50+ EUR) o chárter privado (250+ EUR)",
+      "donde_dormir": {
+        "mochilero": "Alojamiento local muy limitado, 40-60 EUR/noche",
+        "medio": "Guesthouses, 60-100 EUR/noche",
+        "comfort": "No disponible; máximo 100 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife intacto (gratis)",
+        "Visita a proyectos de investigación (con permiso, gratis)",
+        "Observación de aves y tortugas (gratis)",
+        "Caminatas por playa (gratis)",
+        "Fotografía de naturaleza (gratis)"
+      ],
+      "donde_comer": "Comida muy básica: pescado, coco. Rango 4-8 EUR. Solo en alojamientos.",
+      "consejo_local": "Este es un destino para científicos o naturalistas serios. Confirmación anticipada de acceso es esencial; no es turismo convencional.",
+      "plan_b_lluvia": "Observa fauna desde interior, lee sobre cambio climático, conversa con investigadores locales.",
+      "keywords": [
+        "Nukulaelae Atoll",
+        "investigación científica",
+        "ecología marina",
+        "acceso limitado"
+      ]
+    },
+    {
+      "id": "tuvalu-excursion-fiji",
+      "nombre": "Isla de Ovalau (Fiji)",
+      "tipo": "isla",
+      "region": "Fiji (excursión desde Tuvalu)",
+      "descripcion": "Isla histórica en Fiji con más infraestructura turística y vida nocturna. Punto de conexión conveniente antes de volar a Tuvalu o alternativa si el clima en Tuvalu es difícil.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Vuelo de Tuvalu a Fiji (Nadi), luego ferry a Ovalau, 6 horas total, 200-250 EUR",
+      "excursion_desde": true,
+      "donde_dormir": {
+        "mochilero": "Backpackers, 25-40 EUR/noche",
+        "medio": "Small hotels, 60-100 EUR/noche",
+        "comfort": "Resorts, 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita a Levuka (pueblo histórico, gratis)",
+        "Snorkel en arrecifes fiyanos (40-60 EUR)",
+        "Caminata a cataratas (30 EUR)",
+        "Vida nocturna en bares locales (5-15 EUR por bebida)"
+      ],
+      "donde_comer": "Comida fiyana y occidental. Rango 8-20 EUR. Mejor selección que en Tuvalu.",
+      "consejo_local": "Ovalau es puerto histórico; vale la pena 2 días si tienes tiempo. Es puerta de entrada más cómoda a Polinesia.",
+      "plan_b_lluvia": "Bares, cafés, museos, tiendas de souvenirs.",
+      "keywords": [
+        "Ovalau",
+        "Fiji excursion",
+        "Levuka",
+        "puerta a Polinesia",
+        "descanso antes de Tuvalu"
+      ]
+    },
+    {
+      "id": "tepuka-savilivili",
+      "nombre": "Tepuka Savilivili (Funafuti)",
+      "tipo": "naturaleza",
+      "region": "Atolón de Funafuti",
+      "descripcion": "Pequeña isla deshabitada dentro del atolón de Funafuti, accesible como excursión de día. Punto de referencia para entender la geología de atolones de coral y observar aves.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Bote desde Funafuti (30 minutos a 1 hora, 20-40 EUR con operador local)",
+      "donde_dormir": null,
+      "que_hacer": [
+        "Snorkel en aguas cristalinas (gratis con equipo propio)",
+        "Observación de aves marinas (gratis)",
+        "Exploración de geología de coral (gratis)",
+        "Fotografía (gratis)",
+        "Almuerzo picnic (trae comida, gratis)"
+      ],
+      "donde_comer": "Trae tu propio picnic desde Funafuti. Es excursión de día; regresa para cenar.",
+      "consejo_local": "Negocia directamente con pescadores en Funafuti para mejor precio en bote. Lleva protector solar extremo.",
+      "plan_b_lluvia": "Pospón esta excursión; el mar puede ser peligroso con mal tiempo.",
+      "keywords": [
+        "Tepuka",
+        "isla deshabitada",
+        "excursion Funafuti",
+        "snorkel",
+        "aves marinas"
+      ]
+    },
+    {
+      "id": "lagoon-diving",
+      "nombre": "Circuito de buceo en lagunas (multi-atolón)",
+      "tipo": "naturaleza",
+      "region": "Varias lagunas de Tuvalu",
+      "descripcion": "Experiencia combinada de buceo y snorkel en múltiples lagunas, accesible mediante operadores locales. Los arrecifes de Tuvalu son menos conocidos que el Caribe pero igualmente espectaculares.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Organizado desde Funafuti con operadores locales, transporte por bote incluido",
+      "donde_dormir": {
+        "mochilero": "Alojamiento base en Funafuti, 40-60 EUR/noche",
+        "medio": "Hotel en Funafuti, 80-120 EUR/noche",
+        "comfort": "Resort, 150-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo PADI en lagunas (100-150 EUR por inmersión, incluye guía)",
+        "Snorkel en arrecifes (gratis con equipo propio, 30-50 EUR con tour)",
+        "Observación de peces tropicales (gratis durante inmersión)",
+        "Fotografía submarina (40-60 EUR con guía especializado)",
+        "Lecciones de buceo para principiantes (200-300 EUR PADI basic)"
+      ],
+      "donde_comer": "Carne fresca diaria entre inmersiones. Rango 8-15 EUR. Operadores proveen refrigerios.",
+      "consejo_local": "Tuvalu es destino de buceo subestimado; corales sanos, poca sobrepesca. Operadores locales son muy seguros pero pequeños; máx 4 personas por grupo.",
+      "plan_b_lluvia": "Buceo de aguas profundas (mejor visibilidad con mal tiempo superficial). Clases de teoría en tierra.",
+      "keywords": [
+        "buceo Tuvalu",
+        "snorkel",
+        "lagunas",
+        "arrecife coral",
+        "vida marina"
+      ]
+    },
+    {
+      "id": "cultura-polinesia",
+      "nombre": "Experiencia cultural inmersiva (multi-atolón)",
+      "tipo": "cultural",
+      "region": "Atolones varios",
+      "descripcion": "Programa de inmersión cultural con estancias en casas locales, participación en vida diaria y aprendizaje de tradiciones. Organizado por operadores comunitarios, no agencias internacionales.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "abril a octubre (evita festivales si buscas tranquilidad)",
+      "como_llegar": "Contacta operadores culturales desde Funafuti; desplazamientos incluidos",
+      "donde_dormir": {
+        "mochilero": "Casa de familia local, 50-70 EUR/noche (incluye comidas)",
+        "medio": "Guesthouse con programa cultural, 80-120 EUR/noche",
+        "comfort": "Lodge con actividades culturales, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Tejido tradicional de velas y ropa (gratis, participación)",
+        "Clases de cocina local (40-60 EUR)",
+        "Aprendizaje de lengua tuvaliana (30-50 EUR)",
+        "Participación en pesca diaria (gratis)",
+        "Ceremonias y celebraciones locales (gratis)",
+        "Historias orales y tradiciones (gratis)"
+      ],
+      "donde_comer": "Comida casera tuvaliana diaria. Incluida en hospedaje. Sabores auténticos, mucho coco y pescado.",
+      "consejo_local": "La paciencia es clave; la vida funciona a ritmo diferente. Aprende saludos en tuvaliano; la gente lo aprecia enormemente.",
+      "plan_b_lluvia": "Días perfectos para artesanía interior, historias familiares, descanso.",
+      "keywords": [
+        "inmersion cultural",
+        "vida local",
+        "artesanía tuvaliana",
+        "cocina tradicional",
+        "familias locales"
+      ]
+    }
+  ]
+}

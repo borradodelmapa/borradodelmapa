@@ -1,0 +1,345 @@
+{
+  "pais": "Colombia",
+  "codigo": "co",
+  "destinos": [
+    {
+      "id": "cartagena",
+      "nombre": "Cartagena",
+      "tipo": "histórico",
+      "region": "Caribe (Bolívar)",
+      "descripcion": "Ciudad amurallada colonial con calles empedradas, plazas coloridas y arquitectura española perfectamente conservada. Centro histórico Patrimonio UNESCO con ambiente bohemio, gastronomía caribeña y acceso a playas cercanas. Punto de partida ideal para islas y playas del Caribe colombiano.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "diciembre a marzo, julio a agosto",
+      "como_llegar": "Vuelo desde Bogotá (1h, 30-80 EUR) o autobús desde Santa Marta (4h, 10-15 EUR). Aeropuerto internacional Rafael Núñez.",
+      "donde_dormir": {
+        "mochilero": "Hostal en Getsemaní o San Diego, 12-20 EUR/noche",
+        "medio": "Hotel 3* en centro histórico o Bocagrande, 40-70 EUR/noche",
+        "comfort": "Hotel boutique colonial, resort en Bocagrande, 100-200+ EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por murallas amuralladas (gratis)",
+        "Playa Playa Blanca en isla de Rosario (excursión de día, 15-25 EUR)",
+        "Barrio Getsemaní: street art y vida local (gratis)",
+        "Castillo San Felipe de Barajas (entrada 8 EUR)",
+        "Paseo por atardecer en Bocagrande (gratis)"
+      ],
+      "donde_comer": "Comida caribeña local: ajiaco, arepa con queso, ceviche. Centro histórico y Getsemaní: 5-12 EUR menú principal. Mercado Bazurto para comida auténtica barata.",
+      "consejo_local": "Visita Getsemaní por la mañana antes de que lleguen los tours. El atardecer en las murallas es gratis y espectacular; evita restaurantes de turistas en zona antigua.",
+      "plan_b_lluvia": "Museo del Oro Zenu (entrada 10 EUR), Museo Naval, galerías de arte en Getsemaní, cafés históricos.",
+      "keywords": [
+        "Cartagena de Indias",
+        "ciudad amurallada",
+        "Caribe colombiano",
+        "Getsemaní",
+        "San Diego",
+        "Bocagrande",
+        "Islas del Rosario"
+      ]
+    },
+    {
+      "id": "santa-marta",
+      "nombre": "Santa Marta",
+      "tipo": "playa",
+      "region": "Caribe (Magdalena)",
+      "descripcion": "Puerto costero y puerta de entrada a la Ciudad Perdida. Playas cercanas, ambiente más relajado que Cartagena, y centro logístico para trekking. Acceso a parques nacionales de montaña y playa combinados.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a marzo, julio a agosto",
+      "como_llegar": "Vuelo desde Bogotá (2h, 40-100 EUR) o autobús desde Cartagena (4h, 10-15 EUR). También desde Bogotá directo en bus (16h, 25-40 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal en centro, 10-16 EUR/noche",
+        "medio": "Hotel 3* zona playa, 30-50 EUR/noche",
+        "comfort": "Resort en Playa Blanca o Taganga, 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking Ciudad Perdida, 4-5 días (180-250 EUR con guía)",
+        "Playa Cristal en Parque Tayrona (entrada 18 EUR, acceso a playas incluidas)",
+        "Taganga: pequeño pueblo playero con buceo (gratis paseo, buceo 40-60 EUR)",
+        "Minca: pueblo de montaña con cascadas (excursión día, 20-30 EUR)"
+      ],
+      "donde_comer": "Frutos del mar frescos, bandeja paisa, arepas. Junto al malecón: 5-10 EUR. Taganga y Minca más caros pero de calidad. Mercados locales para comida barata.",
+      "consejo_local": "Duerme en Taganga en lugar de Santa Marta centro si buscas playa. La Ciudad Perdida conviene 4 días: es intenso pero imprescindible. Contrata con operadores establecidos.",
+      "plan_b_lluvia": "Museo Tayrona (entrada 6 EUR), pueblos de montaña (Minca, Marinka), cafeterías locales.",
+      "keywords": [
+        "Santa Marta",
+        "Ciudad Perdida",
+        "Tayrona",
+        "Taganga",
+        "Minca",
+        "Caribe",
+        "trekking"
+      ]
+    },
+    {
+      "id": "bogota",
+      "nombre": "Bogotá",
+      "tipo": "ciudad",
+      "region": "Andina (Cundinamarca)",
+      "descripcion": "Capital de Colombia a 2.600m de altitud con museos de clase mundial, gastronomía en desarrollo, y vida urbana vibrante. Centro cultural y económico con barrios bohemios, vida nocturna intensa y excelente oferta gastronómica. Acceso a parques nacionales cercanos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "todo el año (clima frío y lluvioso; lluvia concentrada abril-mayo y octubre-noviembre)",
+      "como_llegar": "Aeropuerto El Dorado (entrada internacional principal). Autobús de otras ciudades (ej: desde Medellín 10h, 20-35 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal La Candelaria o Chapinero, 12-18 EUR/noche",
+        "medio": "Hotel 3* Zona Rosa o Usaquén, 35-60 EUR/noche",
+        "comfort": "Hotel 4-5* Zona Rosa, Usaquén, 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo del Oro (entrada 18 EUR, colección más grande de oro prehispánico)",
+        "La Candelaria: barrio histórico con Palacio Presidencial (gratis recorrido exterior)",
+        "Monserrate: santuario en montaña a 3.150m (teleférico 8 EUR ida/vuelta)",
+        "Barrio Usaquén: domingo con feria de artesanos (gratis)",
+        "Museo Botánico (entrada 5 EUR)"
+      ],
+      "donde_comer": "Cocina colombiana contemporánea y nueva cocina latinoamericana. Usaquén y Zona Rosa: 10-25 EUR. Comida callejera en La Candelaria: 3-5 EUR. Restaurantes high-end: 30-50 EUR.",
+      "consejo_local": "Zona Rosa es turística pero segura y vibrante de noche. Evita La Candelaria después del anochecer. Usaquén domingo mañana es imprescindible. El soroche (mal de altitud) es real: descansa primer día.",
+      "plan_b_lluvia": "Museos (Oro, Botánico, Memoria, Monserrate interior), cafeterías, galerías, cines.",
+      "keywords": [
+        "Bogotá",
+        "La Candelaria",
+        "Zona Rosa",
+        "Usaquén",
+        "Monserrate",
+        "capital",
+        "museos"
+      ]
+    },
+    {
+      "id": "medellin",
+      "nombre": "Medellín",
+      "tipo": "ciudad",
+      "region": "Andina (Antioquia)",
+      "descripcion": "Ciudad transformada con clima perpetuo de primavera (2.400m), arte urbano masivo, metro-cable, y resurgimiento cultural. Barrio de Comuna 13 es emblema de regeneración social. Punto de partida para plantaciones de café cercanas y pueblos coloniales.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "todo el año (lluvia dispersa)",
+      "como_llegar": "Vuelo desde Bogotá (1h, 30-70 EUR) o autobús (10h, 20-35 EUR). Aeropuerto Olaya Herrera o José María Córdova.",
+      "donde_dormir": {
+        "mochilero": "Hostal Parque Berrío o Laureles, 11-17 EUR/noche",
+        "medio": "Hotel 3* Laureles o Parque Arvi, 35-55 EUR/noche",
+        "comfort": "Hotel boutique El Poblado, 70-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Comuna 13: tour de street art y escaleras coloridas (15-25 EUR con guía local)",
+        "Metro-cable y Parque Arví: teleférico y senderismo (2 EUR metro, vistas panorámicas)",
+        "Plaza Botero: 23 esculturas de Fernando Botero (gratis, museo 10 EUR entrada)",
+        "Barrio Laureles: vida local, parque bolívar (gratis)",
+        "Pueblos cercanos: Guatapé y La Ceja (excursión día, 30-40 EUR)"
+      ],
+      "donde_comer": "Bandeja paisa (especialidad antioqueña), empanadas, sancocho. El Poblado: 8-15 EUR. Laureles más barato y auténtico: 5-10 EUR. Restaurantes nuevos onda: 20-35 EUR.",
+      "consejo_local": "El Poblado es seguro pero turístico; Laureles es donde viven los locales y es auténtico. Comuna 13 requiere guía acreditado (no vayas solo). Evita el centro por la noche.",
+      "plan_b_lluvia": "Museo Antioquia, Casa Museo Fernando Botero, Parque Arví (hay cable), tiendas y cafés, vida nocturna.",
+      "keywords": [
+        "Medellín",
+        "Comuna 13",
+        "El Poblado",
+        "Laureles",
+        "Parque Arvi",
+        "arte urbano",
+        "metro-cable"
+      ]
+    },
+    {
+      "id": "eje-cafetero",
+      "nombre": "Eje Cafetero (Región cafetera)",
+      "tipo": "rural",
+      "region": "Andina (Quindío, Risaralda, Caldas)",
+      "descripcion": "Región montañosa de plantaciones de café con pueblos coloniales bien conservados como Salento y Manizales. Paisaje de 'coffee triangle' con haciendas cafeteras accesibles, naturaleza exuberante, y cultura cafetera auténtica. Clima perpetuo de primavera.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "todo el año (menos lluvia diciembre a febrero)",
+      "como_llegar": "Vuelo a Armenia (1h desde Bogotá, 40-80 EUR) o Pereira. Autobús desde Medellín (3h, 10-15 EUR) o Bogotá (8h, 25-40 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal en Salento o Manizales, 10-15 EUR/noche",
+        "medio": "Posada colonial o hacienda cafetiera, 35-60 EUR/noche",
+        "comfort": "Hacienda cafetiera de lujo, 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Haciendas cafeteras con tours de producción (20-35 EUR, incluye degustación)",
+        "Salento: pueblo colonial, jeeps/willys a Valle de Cocora (día completo, 30-40 EUR)",
+        "Mirador de Salento (gratis)",
+        "Valle de Cocora: palmas de cera (entrada 10 EUR, senderismo 3-5h)",
+        "Reserva natural Río Blanco (entrada 5 EUR, cascadas y bosque)"
+      ],
+      "donde_comer": "Trucha local, bandeja paisa, ajiaco, empanadas. Salento: 6-12 EUR. Haciendas incluyen comida en paquetes. Pequeños restaurantes locales muy económicos.",
+      "consejo_local": "Alójate en Salento, es el punto central. Los jeeps a Cocora son una experiencia única y pintoresca. Lleva abrigo: está a 1.600m y hace frío por las mañanas. Camina entre cafetales con los dueños.",
+      "plan_b_lluvia": "Haciendas cafeteras (tours interiores), pueblos coloniales, museos locales, cafés.",
+      "keywords": [
+        "Eje Cafetero",
+        "Salento",
+        "Valle de Cocora",
+        "Manizales",
+        "Armenia",
+        "café",
+        "palmas de cera",
+        "haciendas"
+      ]
+    },
+    {
+      "id": "tayrona",
+      "nombre": "Parque Nacional Tayrona",
+      "tipo": "naturaleza",
+      "region": "Caribe (Magdalena)",
+      "descripcion": "Parque donde selva tropical desciende directamente a playas de arena blanca y agua turquesa. Combinación única de ecosistemas: playas, selva y montaña. Acceso fácil desde Santa Marta, ideal para trekking de un día o acampar.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a marzo, julio a agosto",
+      "como_llegar": "Desde Santa Marta: autobús local (30 min, 2 EUR) o tour organizado. Entrada por pueblos Gaira o El Zaino (entrada 18 EUR).",
+      "donde_dormir": {
+        "mochilero": "Campamento en parque (12-15 EUR/noche) o hostal Santa Marta cercano",
+        "medio": "Camping Eco parque o posada cercana, 30-50 EUR/noche",
+        "comfort": "Resort Tayrona cercano, 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Arrecifes: senderismo 1h desde entrada (gratis con entrada)",
+        "Playa La Piscina: agua cristalina (senderismo 3h desde Arrecifes)",
+        "Campamento Cañaveral (todo el día interno)",
+        "Snorkel en aguas cercanas (25-35 EUR con guía)",
+        "Avistamiento de vida silvestre: monos, aves, iguanas (gratis durante caminatas)"
+      ],
+      "donde_comer": "Restaurantes en entrada de parque y pueblos cercanos: 8-15 EUR. Dentro del parque muy caro. Lleva snacks y agua.",
+      "consejo_local": "Entra temprano (6-7am) para evitar multitudes. No nades solo. La corriente es fuerte. Lleva buen calzado de agua. El campamento es una experiencia; reserva con anticipación.",
+      "plan_b_lluvia": "Los senderos siguen con lluvia; la selva es húmeda siempre. Lleva impermeable. Si hay alerta de clima, consulta con parques nacionales.",
+      "keywords": [
+        "Tayrona",
+        "parque nacional",
+        "playas",
+        "selva",
+        "Magdalena",
+        "trekking",
+        "camping"
+      ]
+    },
+    {
+      "id": "guatape",
+      "nombre": "Guatapé",
+      "tipo": "naturaleza",
+      "region": "Andina (Antioquia)",
+      "descripcion": "Pueblo playero junto a embalse artificial rodeado de montañas, famoso por 'La Piedra' (roca con escaleras que sube 740 pasos). Arquitectura colorida, vida tranquila, y excelente para senderismo y acuáticos. Excursión clásica desde Medellín.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año (menos lluvia enero-febrero)",
+      "como_llegar": "Desde Medellín en jeep o tour (2h, 25-35 EUR) o autobús público (2,5h, 8 EUR). Retorno igual.",
+      "donde_dormir": {
+        "mochilero": "Hostal en pueblo, 12-18 EUR/noche",
+        "medio": "Posada colorida o cabaña, 40-70 EUR/noche",
+        "comfort": "Resort/lodge con vistas, 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "La Piedra del Peñol: subida de 740 escaleras, vista 360° (entrada 4,5 EUR)",
+        "Playas del embalse y paseos en bote (15-25 EUR por hora)",
+        "Caminatas en montañas cercanas (gratis o con guía 20-30 EUR)",
+        "Pueblo: arquitectura colorida, iglesia (gratis)",
+        "Kayak en embalse (20-30 EUR)"
+      ],
+      "donde_comer": "Trucha fresca, mojarras, comida local. Junto al agua: 8-12 EUR. Restaurantes principal: 10-15 EUR. Muy comible y barato.",
+      "consejo_local": "Hazlo como excursión de 1-2 días desde Medellín. Sube La Piedra al amanecer si duermes allí: es mágico. El pueblo es pequeño; la verdadera magia es la naturaleza.",
+      "plan_b_lluvia": "La Piedra con lluvia es peligrosa por escaleras mojadas. Actividades acuáticas interiores, pueblo, museos locales.",
+      "keywords": [
+        "Guatapé",
+        "La Piedra del Peñol",
+        "embalse",
+        "playas",
+        "Antioquia",
+        "excursión Medellín"
+      ]
+    },
+    {
+      "id": "san-andres",
+      "nombre": "San Andrés (Isla)",
+      "tipo": "isla",
+      "region": "Caribe insular (Archipiélago de San Andrés)",
+      "descripcion": "Isla caribeña con playas de arena blanca, arrecife de coral, y cultura raizal única. Buceo y snorkel excepcionales, ambiente relajado, y gastronomía caribeña auténtica. Destino para sumergirse en ambiente caribeño puro.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a marzo, julio a agosto (huracanes septiembre-octubre)",
+      "como_llegar": "Vuelo desde Bogotá (2h, 60-120 EUR), Cartagena (45min, 50-100 EUR) o Medellín (2h, 60-120 EUR). Aeropuerto Gustavo Rojas Pinilla.",
+      "donde_dormir": {
+        "mochilero": "Hostal/posada centro-norte, 15-22 EUR/noche",
+        "medio": "Hotel 3* zona playa, 50-80 EUR/noche",
+        "comfort": "Resort playa, 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife de coral (15-25 EUR con operador)",
+        "Buceo certificado (45-70 EUR por inmersión, o curso 150-200 EUR)",
+        "Playa Spratt Bight: arena blanca (gratis)",
+        "Cay Johnnie Pieper: isla pequeña con snorkel (25-35 EUR tour)",
+        "Avistamiento de tortugas marinas (tours específicos, 30-40 EUR)"
+      ],
+      "donde_comer": "Conch (caracol), fresh fish, arroz con coco, pan de huevo. Frente al mar: 10-18 EUR. Muy auténtico y fresco. Mercado local para compras.",
+      "consejo_local": "Los habitantes son raizales (cultura propia). Respeta la cultura local. El snorkel es mejor en ciertas épocas (menos algas). Negocia precios con operadores locales.",
+      "plan_b_lluvia": "Museos locales (Casa Museo Raizal), pueblos internos, compras, descanso en resort.",
+      "keywords": [
+        "San Andrés",
+        "isla",
+        "Caribe",
+        "buceo",
+        "snorkel",
+        "arrecife coral",
+        "playas",
+        "raizal"
+      ]
+    },
+    {
+      "id": "barichara",
+      "nombre": "Barichara",
+      "tipo": "histórico",
+      "region": "Andina (Santander)",
+      "descripcion": "Pueblo colonial en meseta montañosa, declarado Patrimonio de Humanidad, con calles de piedra inmaculadas y arquitectura blanca. Destino tranquilo para senderismo y vida lenta. Punto de partida para Camino Real a San Gil (trekking de 6h).",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año (menos lluvia enero-febrero)",
+      "como_llegar": "Desde Bogotá en autobús (6-7h, 20-30 EUR) o vuelo a Bucaramanga (1h) + autobús local (2h). Desde San Gil en jeep (45min, 8 EUR).",
+      "donde_dormir": {
+        "mochilero": "Posada/hostal en pueblo, 12-18 EUR/noche",
+        "medio": "Hotel colonial 3*, 40-65 EUR/noche",
+        "comfort": "Hacienda o hotel boutique, 80-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por calles de piedra y plaza principal (gratis)",
+        "Camino Real a San Gil: trekking 6h (gratis, con guía 20-30 EUR)",
+        "Capilla de Inmaculada (pequeño templo, gratis)",
+        "Taller artesanal de cerámica (tours gratis, compra opcional)",
+        "Miradores naturales en montañas cercanas (gratis)"
+      ],
+      "donde_comer": "Comida santandereana: hormigas culonas, ajiaco, tamales. Restaurantes plaza: 7-12 EUR. Muy barato y casero.",
+      "consejo_local": "Viene a descansar y caminar. No hay 'atracciones' sino vida tranquila. El Camino Real es mágico: haz con otros viajeros. Deambula sin rumbo fijo.",
+      "plan_b_lluvia": "Las calles drenadas bien. Cafés cozy, galerías de arte, talleres artesanales, lectura.",
+      "keywords": [
+        "Barichara",
+        "Patrimonio Humanidad",
+        "pueblos coloniales",
+        "Santander",
+        "Camino Real",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "leticia",
+      "nombre": "Leticia (Amazonía)",
+      "tipo": "naturaleza",
+      "region": "Amazónica (Amazonas)",
+      "descripcion": "Puerta de entrada colombiana a la Amazonía. Paseos por río, avistamiento de fauna (monos, delfines rosados, jaguares), visitas a comunidades indígenas, y exuberancia selvática. Destino para experimentar la selva tropical con comodidad relativa.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "julio a septiembre, diciembre a enero (agua más baja y playas visibles)",
+      "como_llegar": "Vuelo desde Bogotá (2h, 80-150 EUR) o desde Medellín/Cartagena (con conexión). Único acceso: avión. Aeropuerto Alfredo Vásquez Cobo.",
+      "donde_dormir": {
+        "mochilero": "Hostal/posada, 13-20 EUR/noche",
+        "medio": "Hotel 3* centro, 45-75 EUR/noche",
+        "comfort": "Lodge en selva (30-60km), 100-200+ EUR/noche (todo incluido)"
+      },
+      "que_hacer": [
+        "Paseo río Amazonas en bote (observación fauna, 30-50 EUR día completo)",
+        "Avistamiento delfín rosado y gris (incluido en tours, 40-60 EUR)",
+        "Visita comunidad indígena Tikuna (tours 50-80 EUR con respeto cultural)",
+        "Parque Nacional Amacayacu (entrada 20 EUR, tours internos)",
+        "Pueblos fronterizos: Tabatinga (Brasil), Santa Rosa (Perú) (paseos fronterizos gratis o 5 EUR)"
+      ],
+      "donde_comer": "Piraña, tucunaré, paiche (peces amazónicos), yuca, plátano. Restaurantes de paso: 8-15 EUR. Tours incluyen comidas.",
+      "consejo_local": "Contrata con operadores acreditados para tours. La fauna es real pero toma tiempo verla. Lleva repelente fuerte. El lodge inmersivo vale la pena si presupuesto permite.",
+      "plan_b_lluvia": "La selva es húmeda siempre. Los tours funcionan con lluvia. Lleva impermeable. Pueblos interiores, museos.",
+      "keywords": [
+        "Leticia",
+        "Amazonía",
+        "rio Amazonas",
+        "delfín rosado",
+        "Tikuna",
+        "selva",
+        "biodiversidad"
+      ]
+    }
+  ]
+}

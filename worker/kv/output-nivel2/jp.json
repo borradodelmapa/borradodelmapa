@@ -1,0 +1,341 @@
+{
+  "pais": "Japón",
+  "codigo": "jp",
+  "destinos": [
+    {
+      "id": "tokio",
+      "nombre": "Tokio",
+      "tipo": "ciudad",
+      "region": "Kanto (Este)",
+      "descripcion": "Capital de Japón con 14 millones de habitantes, epicentro de tecnología, moda y gastronomía. Barrios como Shibuya, Shinjuku y Asakusa ofrecen experiencias radicalmente diferentes en pocos kilómetros. Punto de entrada obligatorio por su aeropuerto internacional y centro de transportes hacia todo el país.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "marzo-mayo, septiembre-noviembre",
+      "como_llegar": "Desde Narita/Haneda: tren Narita Express (60 min, 30 EUR) o Keisei Skyliner (41 min, 25 EUR)",
+      "donde_dormir": {
+        "mochilero": "Capsule hotel o dormitorio: 25-40 EUR/noche",
+        "medio": "Business hotel (Tokyu Stay, APA Hotel): 50-80 EUR/noche",
+        "comfort": "Hotel de cadena o ryokan moderno: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Cruzar el Shibuya Crossing (gratis)",
+        "Templo Senso-ji en Asakusa (gratis)",
+        "Parque Yoyogi y Meiji Shrine (gratis)",
+        "Mercado Tsukiji Outer Market (gratis pasear, comida 10-20 EUR)",
+        "Observatorio de Tokio o Tokyo Skytree (15-20 EUR)",
+        "Barrio de Harajuku y Takeshita Street (gratis)"
+      ],
+      "donde_comer": "Ramen en Shibuya (8-12 EUR), sushi en Tsukiji (12-25 EUR), tonkatsu en Shinjuku (10-15 EUR). Prueba conveini (tiendas 24h) para desayunos baratos (5-8 EUR). Mejor zona: Ginza para premium, Shibuya/Shinjuku para casual.",
+      "consejo_local": "Compra un Suica/Pasmo card en el aeropuerto; ahorra dinero en transportes y funciona en máquinas de vending. Los transportes públicos son puntuales hasta el segundo, no necesitas seguir a multitudes turísticas.",
+      "plan_b_lluvia": "Teamlab Borderless (museo digital inmersivo, 30 EUR), comercios subterráneos de Shinjuku, Museo de Tokio",
+      "keywords": [
+        "Tokyo",
+        "Shibuya",
+        "Shinjuku",
+        "Asakusa",
+        "Ginza",
+        "Harajuku",
+        "Roppongi"
+      ]
+    },
+    {
+      "id": "kioto",
+      "nombre": "Kioto",
+      "tipo": "histórico",
+      "region": "Kansai (Oeste)",
+      "descripcion": "Antigua capital imperial con 2.000 templos, geishas y arquitectura tradicional. Es el corazón cultural de Japón, con barrios como Gion donde viven las geishas y templos como Fushimi Inari con miles de torii rojos. Accesible desde Tokio en 2h15 de tren.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril (flores), noviembre (otoño)",
+      "como_llegar": "Desde Tokio: Shinkansen (2h15, 120 EUR), o autobús nocturno (8h, 30-40 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostel o machiya (casa tradicional convertida): 30-50 EUR/noche",
+        "medio": "Hotel ryokan sin baño privado: 60-90 EUR/noche",
+        "comfort": "Ryokan con baño privado y kaiseki: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Fushimi Inari (torii rojos, gratis, amanecer ideal)",
+        "Arashiyama bamboo grove (gratis, madruga)",
+        "Templo Kinkaku-ji (7 EUR)",
+        "Gion district paseo vespertino (gratis)",
+        "Templo Ryoan-ji (7 EUR)",
+        "Marcha por senderos rurales entre templos (gratis)"
+      ],
+      "donde_comer": "Kaiseki (cena formal, 50-100 EUR), tofu yudofu en Arashiyama (12-18 EUR), ramen en Pontocho (10 EUR), matcha y postres en casas de té (8-12 EUR). Mejor zona: Gion para atmósfera, mercado Nishiki para variedad.",
+      "consejo_local": "Ve a Fushimi Inari antes de las 6:30 AM para evitar colas de horas. Renta una bicicleta (8 EUR/día) para recorrer Arashiyama y zonas rurales sin aglomeraciones.",
+      "plan_b_lluvia": "Museo Nacional de Kioto, templos cubiertos (Ryoan-ji, Kinkaku-ji), Nishiki Market para comprar recuerdos",
+      "keywords": [
+        "Kyoto",
+        "Gion",
+        "Arashiyama",
+        "Fushimi",
+        "Kinkaku",
+        "geishas",
+        "templos"
+      ]
+    },
+    {
+      "id": "osaka",
+      "nombre": "Osaka",
+      "tipo": "ciudad",
+      "region": "Kansai (Oeste)",
+      "descripcion": "Segunda ciudad de Japón, mucho más relajada y barata que Tokio y Kioto. Conocida por su gastronomía callejera (takoyaki, okonomiyaki), castillo histórico y vida nocturna en Dotonbori. Centro de tránsito ideal para explorar la región de Kansai.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo-mayo, octubre-noviembre",
+      "como_llegar": "Desde Kioto: JR Limited Express (75 min, 12 EUR). Desde Tokio: Shinkansen (2h45, 120 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostel o capsule: 25-40 EUR/noche",
+        "medio": "Business hotel: 45-70 EUR/noche",
+        "comfort": "Hotel moderno con vistas: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Osaka Castle (10 EUR)",
+        "Dotonbori street food tour (come mientras paseas, 15-25 EUR)",
+        "Shinsekai district para okonomiyaki (12-15 EUR)",
+        "Umeda Sky Building vistas nocturnas (18 EUR)",
+        "Templo Sumiyoshi Taisha (gratis)"
+      ],
+      "donde_comer": "Takoyaki en Dotonbori (6-8 EUR), okonomiyaki en Shinsekai (10-14 EUR), ramen Tonkotsu (9-12 EUR), kushikatsu (brochetas fritas, 1-2 EUR c/u). Mejor zona: Dotonbori y Shinsekai para auténtico local, Umeda para restaurantes de cadena.",
+      "consejo_local": "Osaka es donde los viajeros locales comen de verdad, no para instagram. Prueba cualquier puesto callejero; el estándar de higiene es excelente y los precios son 20-30% más baratos que Tokio.",
+      "plan_b_lluvia": "Museos subterráneos, Umeda Sky Building interior, Dotonbori techado con comercios",
+      "keywords": [
+        "Osaka",
+        "Dotonbori",
+        "Shinsekai",
+        "Umeda",
+        "Sumiyoshi",
+        "takoyaki",
+        "okonomiyaki"
+      ]
+    },
+    {
+      "id": "hiroshima",
+      "nombre": "Hiroshima",
+      "tipo": "histórico",
+      "region": "Chugoku (Centro-Oeste)",
+      "descripcion": "Ciudad reconstruida tras la bomba atómica de 1945, con un museo y memorial de importancia mundial. El Parque Conmemorativo de la Paz es profundo y educativo. Acceso a la isla de Miyajima con el famoso torii rojo flotante está a 30 min de distancia.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo-mayo, octubre-noviembre",
+      "como_llegar": "Desde Osaka: JR Limited Express (1h45, 35 EUR). Desde Tokio: Shinkansen (4h, 110 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostel: 28-45 EUR/noche",
+        "medio": "Hotel ryokan o business hotel: 50-80 EUR/noche",
+        "comfort": "Hotel con vistas al parque: 85-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Hiroshima Peace Memorial Park y Museum (12 EUR)",
+        "Isla de Miyajima: torii rojo de Itsukushima Shrine (entrada gratis, santuario 9 EUR)",
+        "Senderismo en Miyajima hasta la cima (gratis)",
+        "Okonomiyaki de Hiroshima (8-12 EUR por unidad)",
+        "Castillo de Hiroshima reconstruido (9 EUR)"
+      ],
+      "donde_comer": "Okonomiyaki Hiroshima-style con noodles (8-12 EUR), anago-meshi (arroz con anguila, 12-15 EUR), sushi fresco en Miyajima (15-25 EUR). Mejor zona: Nagarekawa para restaurantes de okonomiyaki, puerto de Miyajima para anguila.",
+      "consejo_local": "Llega a Miyajima al atardecer para ver el torii iluminado sin multitudes diurnas. El museo es intenso emocionalmente; tómate tu tiempo y respeta el silencio.",
+      "plan_b_lluvia": "Peace Memorial Museum (interior completo), Castillo de Hiroshima, tiendas de recuerdos en Miyajima",
+      "keywords": [
+        "Hiroshima",
+        "Miyajima",
+        "Peace Memorial",
+        "Itsukushima",
+        "torii rojo",
+        "okonomiyaki"
+      ]
+    },
+    {
+      "id": "takayama",
+      "nombre": "Takayama",
+      "tipo": "rural",
+      "region": "Chubu (Centro)",
+      "descripcion": "Pequeño pueblo de montaña en los Alpes Japoneses con arquitectura tradicional intacta, mercados matutinos auténticos y acceso a aldeas gasho-zukuri (casas con techo de paja) de Shirakawa-go. Atmosfera pre-industrial que desaparece en otros lugares.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Tokio: Shinkansen a Nagoya (1h45, 110 EUR) + Limited Express a Takayama (2h30, 40 EUR). Alternativa autobús nocturno desde Tokio (8h, 35-45 EUR)",
+      "donde_dormir": {
+        "mochilero": "Minshuku o hostel: 35-55 EUR/noche",
+        "medio": "Ryokan pequeño sin baño privado: 60-90 EUR/noche",
+        "comfort": "Ryokan con kaiseki y baño privado: 110-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado matutino Takayama Jinya (gratis)",
+        "Casco antiguo con tiendas de sake (probar gratis en destilerías)",
+        "Excursión a Shirakawa-go (autobús 50 min, 10 EUR ida, casas 5-8 EUR entrada)",
+        "Gassho-zukuri Museum (5 EUR)",
+        "Senderismo en Alpes Japoneses (gratis, mapas en turismo)"
+      ],
+      "donde_comer": "Hoba miso (carne/verduras cocinadas en hoja, 12-18 EUR), fideos Hida (10-14 EUR), sake local (8-15 EUR botella pequeña). Mejor zona: cerca del mercado matutino para auténtico local.",
+      "consejo_local": "Despiértate antes de las 6 AM para el mercado; a las 10 AM ya empieza a vaciarse. Las destilerías de sake ofrecen degustaciones gratis si compras.",
+      "plan_b_lluvia": "Museos interiores, destilerías de sake con visita guiada (10-15 EUR), tiendas de artesanía local",
+      "keywords": [
+        "Takayama",
+        "Shirakawa-go",
+        "Alpes Japoneses",
+        "gasho-zukuri",
+        "mercado matutino",
+        "sake"
+      ]
+    },
+    {
+      "id": "nara",
+      "nombre": "Nara",
+      "tipo": "histórico",
+      "region": "Kansai (Oeste)",
+      "descripcion": "Ciudad antigua rodeada de parques con ciervos salvajes que pasean libremente entre templos. Todai-ji alberga el Buda de bronce más grande de Japón. Accesible desde Kioto u Osaka en 45 min, perfecta como excursión de un día o parada corta.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "marzo-mayo, octubre-noviembre",
+      "como_llegar": "Desde Kioto: JR Limited Express (45 min, 12 EUR). Desde Osaka: Kintetsu Nara Line (40 min, 12 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostel: 30-45 EUR/noche",
+        "medio": "Hotel ryokan compacto: 50-75 EUR/noche",
+        "comfort": "Ryokan tradicional: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Nara Park con ciervos salvajes (gratis)",
+        "Todai-ji Temple con Buda gigante (10 EUR)",
+        "Kasuga Taisha Shrine (entrada 10 EUR, interior 5 EUR extra)",
+        "Senderismo por montaña (gratis)",
+        "Mercado de artesanía tradicional (gratis pasear)"
+      ],
+      "donde_comer": "Kakinoha-zushi (sushi envuelto en hoja de caqui, 10-12 EUR), gachas de sésamo (6-8 EUR), ramen (9-12 EUR). Mejor zona: cerca de estación para rápido, templos para quietud.",
+      "consejo_local": "Lleva galletas para ciervos (vendidas en parque, 1-2 EUR); son asertivos pero educados. Evita mediodía si no quieres multitudes de turistas con autobús.",
+      "plan_b_lluvia": "Templos cubiertos (Todai-ji es enorme), museos interiores de arte",
+      "keywords": [
+        "Nara",
+        "ciervos",
+        "Todai-ji",
+        "Kasuga",
+        "Nara Park",
+        "Buda gigante"
+      ]
+    },
+    {
+      "id": "hakone",
+      "nombre": "Hakone",
+      "tipo": "naturaleza",
+      "region": "Kanto (Este)",
+      "descripcion": "Resort de montaña con aguas termales (onsen) vistas al Monte Fuji desde algunos puntos. Accesible desde Tokio en 1h30 como excursión de fin de semana. Ofrece experiencia de onsen auténtico y naturaleza sin alejarse mucho de la capital.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre (otoño claro), marzo-abril (primavera)",
+      "como_llegar": "Desde Tokio: tren JR a Hakone-Yumoto (1h30, 25 EUR) o autobús directo (2h, 20 EUR)",
+      "donde_dormir": {
+        "mochilero": "Capsule hotel o albergue: 40-60 EUR/noche",
+        "medio": "Ryokan sin baño privado: 80-120 EUR/noche",
+        "comfort": "Ryokan con onsen privado y kaiseki: 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Onsen (baño termal público, 10-15 EUR entrada diaria)",
+        "Teleférico sobre el volcán Owakudani (16 EUR ida-vuelta)",
+        "Lago Ashi con vistas al Fuji (gratis)",
+        "Museo de arte al aire libre (18 EUR)",
+        "Senderismo (gratis)"
+      ],
+      "donde_comer": "Tofu en agua termal (yudofu, 12-18 EUR), huevos cocidos en agua volcánica (2-3 EUR), ramen (10 EUR). Mejor zona: cerca del onsen principal.",
+      "consejo_local": "Compra el 'Hakone Free Pass' (60 EUR por 3 días) si planeas múltiples actividades; incluye transporte ilimitado e incluso el teleférico. Visita el onsen al atardecer para ver el monte Fuji iluminado.",
+      "plan_b_lluvia": "Onsen interior (mejor con lluvia), museos techados",
+      "keywords": [
+        "Hakone",
+        "onsen",
+        "Monte Fuji",
+        "Owakudani",
+        "Lago Ashi",
+        "aguas termales"
+      ]
+    },
+    {
+      "id": "nagano-matsumoto",
+      "nombre": "Nagano / Matsumoto",
+      "tipo": "montaña",
+      "region": "Chubu (Centro)",
+      "descripcion": "Región montañosa de los Alpes Japoneses con esquí, senderismo y el famoso castillo de Matsumoto (castillo negro único). Nagano es puerta de entrada a parques nacionales. Ideal para naturaleza activa lejos de multitudes.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre-octubre (senderismo), enero-febrero (esquí)",
+      "como_llegar": "Desde Tokio: Shinkansen a Matsumoto (2h15, 85 EUR) o Nagano (1h15, 75 EUR)",
+      "donde_dormir": {
+        "mochilero": "Minshuku o albergue de montaña: 40-65 EUR/noche",
+        "medio": "Business hotel o ryokan: 60-95 EUR/noche",
+        "comfort": "Resort con onsen: 110-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo Matsumoto negro (10 EUR)",
+        "Senderismo en Alpes Japoneses (gratis, rutas para todos los niveles)",
+        "Lago Kamikochi (entrada 8 EUR)",
+        "Templo de los Monos de Nieve (Jigokudani, 12 EUR)",
+        "Esquí en resorts de Nagano (50-80 EUR/día forfait)"
+      ],
+      "donde_comer": "Ramen de Nagano (soy oscuro, 10-12 EUR), fideos soba (10-14 EUR), montaña (comida típica de cabaña, 15-20 EUR). Mejor zona: centro de Matsumoto.",
+      "consejo_local": "Si haces senderismo, alquila en minshuku local; son más baratos que hoteles urbanos y sirven cena casera. Los monos de nieve en Jigokudani son reales pero requieren paciencia; ve a primeras horas.",
+      "plan_b_lluvia": "Castillo Matsumoto interior, museos de arte, tiendas de artesanía",
+      "keywords": [
+        "Nagano",
+        "Matsumoto",
+        "Alpes Japoneses",
+        "Kamikochi",
+        "castillo negro",
+        "monos nieve"
+      ]
+    },
+    {
+      "id": "fukuoka",
+      "nombre": "Fukuoka",
+      "tipo": "ciudad",
+      "region": "Kyushu (Sur)",
+      "descripcion": "Mayor ciudad de la isla de Kyushu, puerto histórico y centro de gastronomía local. Ramen Hakata distintivo, Yatai (puestos callejeros) únicos, y acceso a playas y volcanes de Kyushu. Mucho menos turístico que Tokio o Kioto.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo-mayo, octubre-noviembre",
+      "como_llegar": "Desde Tokio: vuelo directo (2h, 80-150 EUR) o Shinkansen hasta Nagoya + Limited Express (6h total, 180 EUR). Desde Hiroshima: Limited Express (2h30, 45 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostel o capsule: 25-45 EUR/noche",
+        "medio": "Hotel moderno: 55-85 EUR/noche",
+        "comfort": "Hotel cuatro estrellas o ryokan: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Hakata Ramen Alley (probar ramen Tonkotsu, 10-12 EUR)",
+        "Yatai (puestos callejeros nocturnos, 8-15 EUR por plato)",
+        "Templo Dazaifu (7 EUR)",
+        "Castillo de Fukuoka (9 EUR)",
+        "Playas cercanas en Itoshima (40 min en tren, gratis)"
+      ],
+      "donde_comer": "Ramen Hakata con caldo tonkotsu (10-12 EUR), torisoboro (pollo picado, 9-11 EUR), mentaiko (hueva de bacalao frita, 8-10 EUR). Mejor zona: Ramen Alley para auténtico, Yatai riverside por la noche.",
+      "consejo_local": "Los Yatai son lo más local que verás en Japón; cena allí, chatea con locales. El ramen Hakata es legendario; prueba varios puestos para encontrar tu favorito.",
+      "plan_b_lluvia": "Templos interiores, Yatai bajo techo, museos de arte asiático",
+      "keywords": [
+        "Fukuoka",
+        "Hakata",
+        "ramen tonkotsu",
+        "yatai",
+        "Kyushu",
+        "mentaiko"
+      ]
+    },
+    {
+      "id": "kanazawa",
+      "nombre": "Kanazawa",
+      "tipo": "histórico",
+      "region": "Chubu (Centro-Norte)",
+      "descripcion": "Castillo intacto, jardín Kenroku-en (uno de los tres mejores de Japón) y geishas en distrito histórico. Menos turístico que Kioto pero con igual belleza. Centro artesanal con cerámica y laca tradicional que puedes comprar directamente.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, octubre-noviembre",
+      "como_llegar": "Desde Tokio: Shinkansen a Kanazawa (2h30, 135 EUR). Desde Osaka: tren Limited Express (3h30, 70 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostel o minshuku: 35-55 EUR/noche",
+        "medio": "Ryokan compacto: 70-100 EUR/noche",
+        "comfort": "Ryokan tradicional con kaiseki: 120-190 EUR/noche"
+      },
+      "que_hacer": [
+        "Kenroku-en Garden (9 EUR)",
+        "Castillo de Kanazawa (10 EUR)",
+        "Higashi Chaya district (geishas, gratis pasear, casas museo 3-5 EUR)",
+        "Mercado Omicho (gratis, comida 10-20 EUR)",
+        "Museo de Arte Moderno (18 EUR, con vistas al jardín)"
+      ],
+      "donde_comer": "Jibu-ni (pollo estofado local, 15-20 EUR), kaga ryori (cocina Kanazawa, 50-100 EUR kaiseki), camarones de agua dulce (12-18 EUR). Mejor zona: Omicho Market para fresco, Higashi Chaya para atmósfera.",
+      "consejo_local": "Visita el Kenroku-en al atardecer; la multitud se va y la luz es perfecta. El mercado Omicho es menos turístico que Tsukiji de Tokio pero igual de vívido.",
+      "plan_b_lluvia": "Museo de Arte Moderno (excepcional), casas museo en Higashi Chaya, tiendas de artesanía cubierta",
+      "keywords": [
+        "Kanazawa",
+        "Kenroku-en",
+        "Higashi Chaya",
+        "castillo",
+        "omicho",
+        "geishas"
+      ]
+    }
+  ]
+}

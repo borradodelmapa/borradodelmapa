@@ -1,0 +1,333 @@
+{
+  "pais": "Chile",
+  "codigo": "cl",
+  "destinos": [
+    {
+      "id": "san-pedro-de-atacama",
+      "nombre": "San Pedro de Atacama",
+      "tipo": "desierto",
+      "region": "Región de Antofagasta",
+      "descripcion": "Oasis en el desierto más árido del mundo, punto base para explorar salares, geiseres y formaciones rocosas únicas. Centro neurálgico para astronómicos y trekkers con acceso a paisajes lunares y cielos estrellados sin contaminación lumínica.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Desde Santiago en avión a Calama (2h, 40-80 EUR), luego minibus a San Pedro (2h, 10 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal compartido + desayuno: 15-25 EUR/noche",
+        "medio": "Hotel 3 estrellas: 50-80 EUR/noche",
+        "comfort": "Lodge boutique con piscina: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour Valle de la Luna (25 EUR, atardecer espectacular)",
+        "Geyser del Tatio al amanecer (35 EUR)",
+        "Lagunas Altiplánicas: Miñiques, Miscanti (30 EUR)",
+        "Stargazing tour (40 EUR)",
+        "Trekking Cordillera (gratis si vas solo, difícil sin guía)"
+      ],
+      "donde_comer": "Empanadas de pino y trucha a 3-5 EUR. Ceviche en Licantún (8 EUR). Calle Caracoles es la principal con restaurantes turísticos (12-20 EUR plato). Probar choclo con queso local.",
+      "consejo_local": "Los tours salen muy temprano (4-5am). Lleva termo de agua y protección solar extrema. Los precios bajan un 20% si negocias directamente en los hostales en temporada baja.",
+      "plan_b_lluvia": "Museo arqueológico local (5 EUR), taller de cerámica con artesanos, visitar iglesia colonial del 1577, cafeterías y galerías de arte en Caracoles",
+      "keywords": [
+        "atacama",
+        "san pedro atacama",
+        "valle de la luna",
+        "tatio",
+        "lagunas altiplánicas",
+        "caracoles"
+      ]
+    },
+    {
+      "id": "torres-del-paine",
+      "nombre": "Parque Nacional Torres del Paine",
+      "tipo": "montaña",
+      "region": "Región de Magallanes",
+      "descripcion": "Macizo de granito con picos icónicos, lagos glaciares y senderos de trekking de clase mundial en la Patagonia. Referencia mundial para senderismo con acceso a rutas desde 2 horas hasta la épica W Trek de 5 días.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde Santiago en avión a Punta Arenas (3.5h, 60-100 EUR), minibus a Puerto Natales (5h, 15 EUR), luego bus al parque (1.5h, 5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Refugio básico con camas compartidas: 35-50 EUR/noche",
+        "medio": "Refugio con baño privado: 70-100 EUR/noche",
+        "comfort": "Hotel Explora o similares con todo incluido: 250-350 EUR/noche"
+      },
+      "que_hacer": [
+        "W Trek completo (5 días, 200-400 EUR con guía/refugios prepagados)",
+        "Día 1: Mirador Torres (6h, gratis entrada parque 80 EUR)",
+        "Laguna Nordenskjöld (2h, gratis)",
+        "Salto Grande (1.5h, gratis)",
+        "Circuito O completo (9 días, para mochileros experimentados)"
+      ],
+      "donde_comer": "Puerto Natales es la base con restaurantes. Cordero patagónico 15-25 EUR. Pulpería Artesanal para comida casera (10 EUR). En el parque llevar avituallamiento propio; refugios ofrecen comida cara (25-40 EUR cena).",
+      "consejo_local": "El clima cambia cada 20 minutos; lleva abrigo incluso en verano austral. Reserva refugios con 2-3 meses de anticipación en temporada alta. W Trek es más concurrido que Circuito O pero menos exigente.",
+      "plan_b_lluvia": "Catamarán por fiordo Última Esperanza desde Puerto Natales (60 EUR), visita Cueva del Milodon (10 EUR), museo de la ciudad",
+      "keywords": [
+        "torres",
+        "paine",
+        "patagonia",
+        "w trek",
+        "puerto natales",
+        "trekking"
+      ]
+    },
+    {
+      "id": "atacama-salt-flat",
+      "nombre": "Salar de Atacama y Flamingos",
+      "tipo": "desierto",
+      "region": "Región de Antofagasta",
+      "descripcion": "El mayor depósito de litio del mundo con lagunas rosas y verdes donde anidan flamencos andinos. Excursión inmersiva en un ecosistema desértico con fauna y flora única sin necesidad de trekking intenso.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde San Pedro de Atacama (45 min, tours desde 25 EUR) o tour completo desde Calama",
+      "donde_dormir": {
+        "mochilero": "San Pedro de Atacama es base (15-25 EUR/noche)",
+        "medio": "Hotel en San Pedro (50-80 EUR/noche)",
+        "comfort": "Lodge boutique (120-180 EUR/noche)"
+      },
+      "que_hacer": [
+        "Laguna Cejar baño en agua salada 27°C (20 EUR)",
+        "Ojos del Salar: piscinas naturales (incluido en tour)",
+        "Laguna Tebinquinche avistamiento flamencos (15 EUR)",
+        "Laguna Chaxa observatorio de aves (entrada salar 80 EUR)",
+        "Fotografía al atardecer (gratis)"
+      ],
+      "donde_comer": "Comer en San Pedro antes o después. En el salar solo hay kioscos con bocadillos caros (10-15 EUR). Llevar refrigerio propio.",
+      "consejo_local": "El agua de Laguna Cejar es hipersalina: flota sin poder nadar. Lleva bañador y toalla. No toques los flamencos; son sensibles y huyen fácilmente.",
+      "plan_b_lluvia": "Visitas a pueblos cercanos: Socaire (2h), pueblo pre-hispánico con iglesia colonial. Taller artesanal de textiles.",
+      "keywords": [
+        "salar",
+        "flamingos",
+        "lagunas",
+        "cejar",
+        "laguna rosa",
+        "litio"
+      ]
+    },
+    {
+      "id": "valle-de-la-luna",
+      "nombre": "Valle de la Luna (Ischigualasto)",
+      "tipo": "desierto",
+      "region": "Región de Antofagasta",
+      "descripcion": "Formaciones geológicas de colores imposibles con capas de minerales que crean paisaje alienígena. Destino clave para geología y fotografía con senderos entre acantilados rojos, verdes y naranjas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Desde San Pedro de Atacama (45 min, 25 EUR en tour grupal) o excursión privada (80-100 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal San Pedro (15-25 EUR/noche)",
+        "medio": "Hotel San Pedro (50-80 EUR/noche)",
+        "comfort": "Lodge (120-180 EUR/noche)"
+      },
+      "que_hacer": [
+        "Circuito Valle de la Luna (2-3h guiado, 25 EUR incluido entrada)",
+        "Atardecer desde Anfiteatro (gratis)",
+        "Fotografía de formaciones rocosas (gratis)",
+        "Trekking los acantilados (libre sin guía, señalizado)"
+      ],
+      "donde_comer": "Tour incluye parada para picnic. Llevar comida desde San Pedro o comprar en tiendas locales (5-8 EUR sándwich)",
+      "consejo_local": "El atardecer (17-18h) ilumina mejor los colores. Tours salen 14-15h desde San Pedro. Protector solar y gafas de sol obligatorios.",
+      "plan_b_lluvia": "Rara vez llueve aquí. Si sucede, retrasa visita o recorre museos locales en San Pedro.",
+      "keywords": [
+        "valle luna",
+        "ischigualasto",
+        "formaciones rocosas",
+        "colores",
+        "arco iris"
+      ]
+    },
+    {
+      "id": "isla-de-pascua",
+      "nombre": "Isla de Pascua (Rapa Nui)",
+      "tipo": "isla",
+      "region": "Región de Valparaíso (Polinesia)",
+      "descripcion": "Tierra remota en el Pacífico con moáis megalíticos y ruinas de una civilización polinesia fascinante. Museo de clase mundial, paisaje volcánico y playas de arena negra con energía única.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Santiago en avión a Mataveri (5.5h, 120-200 EUR). Vuelos LATAM principal operador.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje familiar o hostal: 30-50 EUR/noche",
+        "medio": "Hotel 3 estrellas: 80-120 EUR/noche",
+        "comfort": "Alaria Hotel o similares: 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Parque Nacional Rapa Nui entrada (80 EUR válida 10 días, acceso a todos los sitios)",
+        "Ahu Tongariki (15 moáis restaurados, amanecer espectacular)",
+        "Volcán Rano Raraku cantera de moáis (incluido en entrada)",
+        "Museo Antropológico (15 EUR extra, moái original)",
+        "Puna Pau plataforma ceremonial (incluido)"
+      ],
+      "donde_comer": "Hanga Roa pueblo principal: empanadas 5 EUR, ceviches 10-15 EUR. Restaurante Kona Kai (25 EUR). Atún y mariscos frescos. Supermercados caros (precios 30% arriba continental).",
+      "consejo_local": "Renta auto o negocia tours (60-80 EUR día completo, 3-4 personas). Guías locales imprescindibles para historias Rapa Nui. El idioma es español/rapa nui; inglés limitado fuera turismo.",
+      "plan_b_lluvia": "Museo Antropológico (3h mínimo), iglesia de Hanga Roa, taller cerámica con artesanos locales, galerías de arte",
+      "keywords": [
+        "rapa nui",
+        "moai",
+        "pascua",
+        "polinesia",
+        "hanga roa",
+        "ahu tongariki"
+      ]
+    },
+    {
+      "id": "puerto-varas",
+      "nombre": "Puerto Varas y Región de los Lagos",
+      "tipo": "ciudad",
+      "region": "Región de Los Lagos",
+      "descripcion": "Ciudad con arquitectura alemana a orillas de lago Llanquihue y volcán Osorno de fondo. Centro para explorar ruta de los siete lagos, volcanes y bosques templados con buena infraestructura viajero independiente.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a marzo",
+      "como_llegar": "Desde Santiago en bus (14h, 40-60 EUR) o avión a Puerto Montt (2.5h, 50-90 EUR) + bus local (1h, 5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal con cocina compartida: 20-30 EUR/noche",
+        "medio": "Hotel 3 estrellas: 60-90 EUR/noche",
+        "comfort": "Hotel con vistas al lago: 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Sendero Costanera paseo ribereño (gratis)",
+        "Subida volcán Osorno (guía recomendado 80 EUR)",
+        "Saltos del río Petrohué desde Pucón (20 EUR)",
+        "Laguna Todos Los Santos (tour barco + senderismo 40 EUR)",
+        "Mercado Costanera artesanía y comida local (gratis)"
+      ],
+      "donde_comer": "Curanto cazuela de mariscos y carne (12-18 EUR). Cerveza artesanal local (5 EUR). Pastelería alemana en tiendas históricas (8-12 EUR pastel). Costanera para mariscos frescos.",
+      "consejo_local": "El volcán Osorno se sube mejor desde noviembre a abril. Mercado Costanera cierra 18h; ir temprano. Puerto Varas es base ideal para Pucón (2.5h este) sin quedarse allí.",
+      "plan_b_lluvia": "Museo Antropológico, iglesia del Sagrado Corazón, galerías de arte, cafeterías tradicionales, museo de la ciudad",
+      "keywords": [
+        "puerto varas",
+        "osorno",
+        "llanquihue",
+        "lagos",
+        "pucón",
+        "arquitectura alemana"
+      ]
+    },
+    {
+      "id": "valparaiso",
+      "nombre": "Valparaíso",
+      "tipo": "ciudad",
+      "region": "Región de Valparaíso",
+      "descripcion": "Puerto histórico en acantilados con callejones coloridos, arte callejero y vista al Pacífico. Destino bohemio con museos, galerías y vida nocturna vibrante; base perfecta para explorar costa central.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Desde Santiago en bus (2h, 8-15 EUR) o tren (2.5h, 10-20 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal en centro o Cerro Alegre: 20-35 EUR/noche",
+        "medio": "Hotel 3 estrellas: 60-90 EUR/noche",
+        "comfort": "Hotel con vista al puerto: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Cerro Alegre y Cerro Concepción exploración a pie (gratis, street art)",
+        "Ascensores históricos: Concepción, Artillería (1-2 EUR cada uno)",
+        "Plaza Sotomayor monumento naval (gratis)",
+        "Museo de Bellas Artes (5 EUR)",
+        "Playa Ancha paseo costero (gratis)"
+      ],
+      "donde_comer": "Ceviches en mercado de pescado (8-12 EUR). Restaurantes Cerro Alegre caros pero vistas (20-30 EUR). Anticuchos en Calle Prat (5-8 EUR). Empanadas y sándwiches populares (3-5 EUR).",
+      "consejo_local": "Los cerros son laberinto; lleva mapa. Evita callejones oscuros de noche. Mejor explorar con luz natural. Fin de semana es caótico; ir entre semana.",
+      "plan_b_lluvia": "Museos (Bellas Artes, Naval, Museo Lord Cochrane), librerías históricas, cafeterías tradicionales, Armada naval visitable",
+      "keywords": [
+        "valparaiso",
+        "cerro alegre",
+        "concepción",
+        "puerto",
+        "ascensores",
+        "street art"
+      ]
+    },
+    {
+      "id": "pucón",
+      "nombre": "Pucón",
+      "tipo": "montaña",
+      "region": "Región de La Araucanía",
+      "descripcion": "Aventura extrema y deportes al aire libre: volcán Villarrica para ascenso, rafting, kayak en lagos y canyoning en ríos. Centro neozelandés de América Latina para mochileros deportistas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a marzo",
+      "como_llegar": "Desde Santiago bus (10h, 35-55 EUR) o desde Puerto Varas bus (2.5h, 8 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal con cocina: 20-35 EUR/noche",
+        "medio": "Hotel 3 estrellas: 70-100 EUR/noche",
+        "comfort": "Resort de aventura: 130-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Ascenso volcán Villarrica (guía obligatorio 120-150 EUR, 8h)",
+        "Rafting clase III-IV (45 EUR)",
+        "Canyoning (60 EUR)",
+        "Kayak lago Villarrica (30 EUR)",
+        "Termas de Pucón natural pools (15 EUR)"
+      ],
+      "donde_comer": "Ceviche y truchas en restaurantes costanera (12-18 EUR). Asados parrillas (15 EUR). Supermercado para picnics (8-15 EUR comida día). Cafés para desayuno 5-8 EUR.",
+      "consejo_local": "Pucón es caro y turístico (estilo mochilero neozelandés). Ascenso volcán es agotador pero accesible sin experiencia. Reserva con 1-2 días anticipación.",
+      "plan_b_lluvia": "Visita termas geotermales (15 EUR), museos locales, taller de cerámica, excursión a cuevas cercanas (menos demandante que volcán)",
+      "keywords": [
+        "pucón",
+        "villarrica",
+        "aventura",
+        "rafting",
+        "volcán",
+        "deportes extremos"
+      ]
+    },
+    {
+      "id": "la-serena",
+      "nombre": "La Serena y Valle del Elqui",
+      "tipo": "playa",
+      "region": "Región de Coquimbo",
+      "descripcion": "Ciudad costera con playas de arena blanca y observatorios astronómicos en el valle interior. Combinación de astronomía, piscos locales y vida playera tranquila sin masificación turística.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Santiago bus (5h, 20-35 EUR) o vuelo (1.5h, 50-100 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal en centro: 20-30 EUR/noche",
+        "medio": "Hotel 3 estrellas playa: 70-100 EUR/noche",
+        "comfort": "Resort boutique: 150-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Grande paseo costero (gratis)",
+        "Observatorio Mamalluca tour nocturno (35 EUR desde Vicuña)",
+        "Destilería pisco tours y degustación (15 EUR)",
+        "Feria Artesanal mercado local (gratis)",
+        "Canyoning río Elqui (50 EUR)"
+      ],
+      "donde_comer": "Cebiches frescos en Mercado (10-15 EUR). Empanadas de queso y pasas región (3 EUR). Pisco Sour (8 EUR). Restaurantes playa 20-30 EUR. Frutas tropicales baratas en ferias.",
+      "consejo_local": "Valle del Elqui (Vicuña, Paihuano) es 1.5h interior; clima seco ideal astronomía. Tours nocturnos salen con poca luz lunar (consulta fases). Pisco tours incluyen degustación generosa.",
+      "plan_b_lluvia": "Raro aquí. Museo arqueológico, iglesia San Francisco, visita a bodegas de pisco cerradas, galerías de arte",
+      "keywords": [
+        "serena",
+        "elqui",
+        "pisco",
+        "playa",
+        "astronomía",
+        "observatorios"
+      ]
+    },
+    {
+      "id": "atacama-geisers",
+      "nombre": "Geyser del Tatio",
+      "tipo": "naturaleza",
+      "region": "Región de Antofagasta",
+      "descripcion": "Campo geotérmico más alto del mundo a 4,320m con géiseres activos y aguas termales en paisaje nevado. Experiencia única en amanecer rodeado de vapor en altitud extrema.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre (invierno boreal para actividad geotérmica)",
+      "como_llegar": "Desde San Pedro de Atacama (90 min, salida 4am, 35 EUR tour grupal)",
+      "donde_dormir": {
+        "mochilero": "San Pedro hostal (15-25 EUR/noche)",
+        "medio": "San Pedro hotel (50-80 EUR/noche)",
+        "comfort": "San Pedro lodge (120-180 EUR/noche)"
+      },
+      "que_hacer": [
+        "Géiseres amanecer (incluido en tour 35 EUR)",
+        "Aguas termales baño (incluido)",
+        "Fotografía vapor contraluz (gratis)",
+        "Trekking leve entre géiseres (gratis, guiado)"
+      ],
+      "donde_comer": "Tour incluye desayuno campestre café té pan. Llevar bañador y toalla. Comida tras tour en San Pedro.",
+      "consejo_local": "Salida muy temprana (3:30am) desde San Pedro. Lleva ropa abrigo extremo: amanecer es -8 a -5°C. El baño en termales es lo mejor: agua 40°C.",
+      "plan_b_lluvia": "Tours cancelan si hay nieve en accesos. Revisar con hospedaje día anterior. Alternativa: Laguna Chaxa observatorio flamencos.",
+      "keywords": [
+        "tatio",
+        "geisers",
+        "géiseres",
+        "geotérmico",
+        "aguas termales",
+        "altura"
+      ]
+    }
+  ]
+}

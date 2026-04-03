@@ -1,0 +1,344 @@
+{
+  "pais": "Vanuatu",
+  "codigo": "vu",
+  "destinos": [
+    {
+      "id": "port-vila",
+      "nombre": "Port Vila",
+      "tipo": "ciudad",
+      "region": "Efate",
+      "descripcion": "Capital y puerta de entrada a Vanuatu, con mercado local vibrante, paseo marítimo y acceso a playas cercanas. Centro logístico donde organizar excursiones a otras islas y punto de partida para viajes independientes. Mezcla de cultura melanesia moderna con infraestructura turística básica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "aeropuerto internacional de Bauerfield (VLI) a 10 km, taxi/shuttle 5-8 EUR, 20 min",
+      "donde_dormir": {
+        "mochilero": "Hostales y guesthouses simples, 25-40 EUR/noche",
+        "medio": "Hotels 2-3 estrellas o bungalows, 60-100 EUR/noche",
+        "comfort": "Resort beachfront o hotel top, 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado local de Port Vila (gratis)",
+        "Snorkel en Irikiki Island (15 EUR)",
+        "Paseo por Chief's Nakamal cultural village (gratis)",
+        "Playa de Erakor (gratis)",
+        "Sunset catamarán cruise (30-40 EUR)"
+      ],
+      "donde_comer": "Comida local en el mercado (arroz, pescado, carne a la parrilla) 3-6 EUR. Zona de restaurantes en Main Street y waterfront con opciones occidentales 10-20 EUR. Probar lap lap y comida melanesia.",
+      "consejo_local": "El mercado es más barato por la mañana y cierra temprano. Cambiar dinero en el banco antes de explorar islas remotas.",
+      "plan_b_lluvia": "Museos locales, visitar nakalais (espacios culturales), compras en artesanía local",
+      "keywords": [
+        "Port Vila",
+        "Efate",
+        "capital Vanuatu",
+        "Vila",
+        "Bauerfield",
+        "Main Street"
+      ]
+    },
+    {
+      "id": "tanna-yasur",
+      "nombre": "Isla de Tanna y Volcán Yasur",
+      "tipo": "naturaleza",
+      "region": "Tafea",
+      "descripcion": "Hogar del volcán Yasur, uno de los volcanes más accesibles del mundo con erupciones regulares visibles de noche. La isla combina actividad volcánica espectacular con playas de arena negra y cultura de cargo cult en Yaohnanen. Experiencia de naturaleza cruda que pocos destinos ofrecen.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Vuelo desde Port Vila (40 min, 80-120 EUR), ferry (6 horas, 25 EUR). Luego taxi o tour organizado al volcán (8 EUR directo, 50-70 EUR con guía)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicas cerca de volcán, 20-35 EUR/noche",
+        "medio": "Bungalows con servicios, 50-80 EUR/noche",
+        "comfort": "Eco-lodges aislados, 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Subida volcán Yasur con guía local (50-70 EUR)",
+        "Caminata a playas de arena negra (gratis)",
+        "Visita a aldea Yaohnanen y cultura cargo cult (15-20 EUR)",
+        "Snorkel en Port Resolution (20 EUR)",
+        "Senderismo por selva tropical (gratis)"
+      ],
+      "donde_comer": "Comida simple en lodges y pequeños restaurantes. Pescado a la parrilla, taro, carne local 5-10 EUR. Pocas opciones refinadas, traer snacks.",
+      "consejo_local": "La subida al volcán es mejor al atardecer para ver erupciones nocturnas. Llevar linternas. El camino es arduo y la montaña es impredecible: guía local es obligatorio.",
+      "plan_b_lluvia": "Explorar la aldea de Yaohnanen, hacer snorkel en días con lluvia ligera, descansar en bungalow y charlar con locales",
+      "keywords": [
+        "Yasur",
+        "Tanna",
+        "volcán activo",
+        "Tafea",
+        "cargo cult",
+        "arena negra",
+        "erupción"
+      ]
+    },
+    {
+      "id": "espiritu-santo",
+      "nombre": "Isla de Espíritu Santo",
+      "tipo": "isla",
+      "region": "Sanma",
+      "descripcion": "Isla más grande de Vanuatu con arrecifes de coral intactos, playas remotas y restos de naves hundidas de la II Guerra Mundial. Acceso a Blue Lagoon y buceo de clase mundial. Centro para exploración de naturaleza poco alterada y arqueología de guerra.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Vuelo desde Port Vila a Luganville (35 min, 70-100 EUR). Desde Luganville, tours/taxis a destinos (10-30 EUR según zona)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Luganville, 25-40 EUR/noche",
+        "medio": "Eco-lodges y resorts pequeños, 70-110 EUR/noche",
+        "comfort": "Beach resorts privados, 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Blue Lagoon tour con snorkel (30-50 EUR)",
+        "Buceo en arrecife y naves WWII (60-100 EUR)",
+        "Senderismo a Champagne Beach (gratis)",
+        "Excursión a Tutuba Falls (20-30 EUR)",
+        "Visita a mercado de Luganville (gratis)"
+      ],
+      "donde_comer": "Restaurantes en Luganville con opciones locales e internacionales 8-18 EUR. Pescado fresco diario, comida melanesia. Resorts tienen restaurante propio.",
+      "consejo_local": "Espíritu Santo es grande; alquilar jeep (40-60 EUR/día) o tours es imprescindible. Los arrecifes son espectaculares pero requieren snorkel o buceo certificado.",
+      "plan_b_lluvia": "Visitas culturales a aldeas, mercado de Luganville, relajarse en lodges con vistas, explorar caminos locales a pie",
+      "keywords": [
+        "Espiritu Santo",
+        "Luganville",
+        "Blue Lagoon",
+        "Champagne Beach",
+        "buceo",
+        "WWII",
+        "Sanma"
+      ]
+    },
+    {
+      "id": "ambrym-lava",
+      "nombre": "Isla de Ambrym",
+      "tipo": "naturaleza",
+      "region": "Malampa",
+      "descripcion": "Isla volcánica con lava fields accesibles a pie, volcán Benbow con actividad geotérmica y aldeas tradicionales. Destino para viajeros aventureros que buscan lo poco explorado turísticamente y experiencias auténticas de naturaleza brutal.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Vuelo desde Port Vila a Ambrym (45 min, 100-140 EUR) o ferry (5 horas, 20-30 EUR). Tours locales necesarios (50-80 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicas, 20-30 EUR/noche",
+        "medio": "Bungalows tradicionales con servicios, 50-80 EUR/noche",
+        "comfort": "Eco-lodge con comodidades, 100-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Caminata lava fields con guía (40-60 EUR)",
+        "Ascenso volcán Benbow (50-70 EUR)",
+        "Visita aldea Fanla para ver artesanía (gratis entrada, propina)",
+        "Senderismo en selva virgen (gratis con guía local)",
+        "Observación geotérmica (incluido en tours)"
+      ],
+      "donde_comer": "Comida muy básica en guesthouses y aldeas. Arroz, pescado, taro. 4-8 EUR. Pocas opciones de restaurante formal.",
+      "consejo_local": "Ambrym es una de las islas menos turísticas de Vanuatu. Los guías locales son esenciales; sin ellos es peligroso. Prepararse para condiciones rusticas extremas.",
+      "plan_b_lluvia": "Refugiarse en guesthouses, hablar con residentes sobre historia, observar volcán a distancia si hay fumarolas visibles",
+      "keywords": [
+        "Ambrym",
+        "volcán Benbow",
+        "lava",
+        "Malampa",
+        "geotérmica",
+        "remoto",
+        "aventura extrema"
+      ]
+    },
+    {
+      "id": "pentecost-bungy",
+      "nombre": "Isla de Pentecost y Bungy Original",
+      "tipo": "naturaleza",
+      "region": "Torba",
+      "descripcion": "Hogar del bungy jumping tradicional melanesio (nagol), un ritual ancestral realizado con lianas. Experiencia única en el mundo que mezcla adrenalina con cultura viva. Ideal para viajeros que buscan algo diferente del turismo masificado.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a mayo (bungy season)",
+      "como_llegar": "Vuelo desde Port Vila a Pentecost (40 min, 80-120 EUR). Tours operadores organizan transporte a aldeas (incluido en paquete 150-250 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en aldeas, 25-40 EUR/noche",
+        "medio": "Bungalows con servicios básicos, 60-90 EUR/noche",
+        "comfort": "Eco-lodges privados, 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Observar nagol (bungy tradicional) o participar (150-250 EUR si está permitido)",
+        "Caminata guiada por aldea (gratis con hospedaje)",
+        "Snorkel en playas cercanas (20-30 EUR)",
+        "Aprender técnicas tradicionales de construcción (gratis, cultural exchange)",
+        "Fotografía de ritual (respetar con propina)"
+      ],
+      "donde_comer": "Comida básica en aldeas, generalmente incluida o muy barata (3-8 EUR). Opciones limitadas, traer snacks.",
+      "consejo_local": "El bungy solo se practica en abril-mayo. Visitar fuera de esa época es posible pero menos espectacular. Respetar completamente la ceremonia y aldea.",
+      "plan_b_lluvia": "Las lluvias interrumpen el bungy. En otros meses, explorar aldea, hacer senderismo, hablar con habitantes, aprender cultura.",
+      "keywords": [
+        "Pentecost",
+        "nagol",
+        "bungy",
+        "tradicional",
+        "Torba",
+        "ritual melanesio",
+        "aventura cultural"
+      ]
+    },
+    {
+      "id": "epi-volcano",
+      "nombre": "Isla de Epi",
+      "tipo": "naturaleza",
+      "region": "Shefa",
+      "descripcion": "Isla tranquila con volcán Kuwae y acceso a arrecifes de coral poco visitados. Destino ideal para viajeros que buscan tranquilidad sin sacrificar naturaleza. Excelente para snorkel y desconexión completa del turismo masivo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Ferry desde Port Vila a Epi (3 horas, 15-20 EUR). Desde puerto, transporte local a lodges (5-10 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales, 20-35 EUR/noche",
+        "medio": "Bungalows beachfront, 50-75 EUR/noche",
+        "comfort": "Eco-resort privado, 100-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife Coral Garden (gratis si acceso desde playa)",
+        "Senderismo a volcán Kuwae (30-40 EUR con guía)",
+        "Pesca local con pescadores (20-30 EUR)",
+        "Exploración de aldeas (gratis)",
+        "Buceo relajado en arrecife (40-60 EUR)"
+      ],
+      "donde_comer": "Comida casera en guesthouses, 5-10 EUR. Pescado fresco, verduras locales. Pocas opciones de restaurante.",
+      "consejo_local": "Epi es perfecta para viajeros que valoran paz sobre infraestructura. No hay mucho que 'hacer', pero eso es el punto. Ideal para descansar después de islas volcánicas activas.",
+      "plan_b_lluvia": "Pasar tiempo en aldea, aprender artesanía local, descansar en bungalow con vistas al mar",
+      "keywords": [
+        "Epi",
+        "Kuwae",
+        "volcán",
+        "Shefa",
+        "tranquilo",
+        "arrecife",
+        "desconexión"
+      ]
+    },
+    {
+      "id": "malekula-museo",
+      "nombre": "Isla de Malekula",
+      "tipo": "isla",
+      "region": "Malampa",
+      "descripcion": "Isla segunda más grande, hogar de museo de cultura melanesia y aldeas remotas con tradiciones ancestrales intactas. Acceso a restos arqueológicos y pueblos que mantienen costumbres pre-coloniales. Destino para etnografía aplicada.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Vuelo desde Port Vila a Malekula (35 min, 70-100 EUR). Desde Lakatoi, tours a aldeas (20-40 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Lakatoi, 25-35 EUR/noche",
+        "medio": "Bungalows con servicios, 60-90 EUR/noche",
+        "comfort": "Eco-lodge privado, 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Vanuatu Cultural Centre (15 EUR)",
+        "Visita a aldea Maskelynes con ritual de fuego (30-50 EUR)",
+        "Senderismo a playas remotas (gratis)",
+        "Exploración de ruinas pre-coloniales (gratis con guía local)",
+        "Snorkel en arrecife Lakatoi (25-35 EUR)"
+      ],
+      "donde_comer": "Comida local en Lakatoi y aldeas, 5-12 EUR. Pescado, taro, frutas tropicales. Restaurantes pequeños.",
+      "consejo_local": "Malekula tiene tradiciones muy fuertes; pedir permiso antes de fotografiar personas o aldeas. Los aldeanos valoran el respeto sobre el turismo.",
+      "plan_b_lluvia": "Museo cultural (lo mejor en día lluvioso), exploración de Lakatoi, conversar con locales en cafés",
+      "keywords": [
+        "Malekula",
+        "Malampa",
+        "museo cultural",
+        "aldeas",
+        "Lakatoi",
+        "ritual fuego",
+        "etnografía"
+      ]
+    },
+    {
+      "id": "hideaway-island",
+      "nombre": "Hideaway Island",
+      "tipo": "isla",
+      "region": "Efate",
+      "descripcion": "Pequeña isla marina con arrecife de coral accesible, santuario submarino con fauna diversa y centro de entrenamientos de buceo. Día de playa y snorkel desde Port Vila sin necesidad de viaje lejano. Ideal para no buceadores que quieren arrecife fácilmente accesible.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año (mejor mayo-octubre)",
+      "como_llegar": "Desde Port Vila, ferry a Hideaway Island (15 min, 8-12 EUR). Salidas frecuentes desde waterfront",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento overnight; día trip desde Port Vila",
+        "medio": "Día completo con almuerzo incluido en resorts, 40-60 EUR",
+        "comfort": "Paquete premium con actividades, 80-120 EUR"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife coralino (incluido en entrada)",
+        "Buceo certificado (40-80 EUR según nivel)",
+        "Observación submarina (gratis desde playa/snorkel)",
+        "Playa y descanso (incluido)",
+        "Paseo por santuario marino (incluido)"
+      ],
+      "donde_comer": "Restaurante en isla con opciones locales e internacionales, 10-25 EUR. Bebidas 3-8 EUR.",
+      "consejo_local": "Perfecto para día desde Port Vila cuando el clima es bueno. Traer bloqueador solar y ir temprano. El arrecife es espectacular pero frágil; no tocar corales.",
+      "plan_b_lluvia": "Si llueve fuerte, es mejor quedarse en Port Vila. Mar turbio hace snorkel pobre.",
+      "keywords": [
+        "Hideaway Island",
+        "Efate",
+        "snorkel",
+        "arrecife coral",
+        "día trip",
+        "submarino"
+      ]
+    },
+    {
+      "id": "emae-cascadas",
+      "nombre": "Isla de Emae",
+      "tipo": "naturaleza",
+      "region": "Shefa",
+      "descripcion": "Isla pequeña con cascadas de agua dulce y arrecife privado. Destino de bajo perfil para snorkel tranquilo y naturaleza intacta. Menos visitada que otras islas, ideal para buscar autenticidad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Ferry desde Port Vila a Emae (2.5 horas, 12-15 EUR) o charter privado. Transporte local en isla (5-8 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses rusticas, 20-30 EUR/noche",
+        "medio": "Bungalows beachfront, 50-70 EUR/noche",
+        "comfort": "Eco-resort aislado, 100-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife privado (gratis con hospedaje)",
+        "Caminata a cascadas de agua dulce (15-20 EUR con guía)",
+        "Pesca local (20-30 EUR)",
+        "Exploración de aldea (gratis)",
+        "Relajación en playa (gratis)"
+      ],
+      "donde_comer": "Comida casera en guesthouses/resort, incluida o 5-12 EUR. Pescado fresco, verduras.",
+      "consejo_local": "Emae es muy pequeña y tranquila. Ideal para desconectar completamente. Pocas facilidades, muchas playas vacías.",
+      "plan_b_lluvia": "Descansar en guesthouse, hablar con residentes, exploración a pie con lluvia ligera",
+      "keywords": [
+        "Emae",
+        "Shefa",
+        "cascadas",
+        "arrecife privado",
+        "tranquilo",
+        "relajación",
+        "remoto"
+      ]
+    },
+    {
+      "id": "aneityum-sur",
+      "nombre": "Isla de Aneityum",
+      "tipo": "isla",
+      "region": "Tafea",
+      "descripcion": "Isla más meridional de Vanuatu con playas vírgenes, arrecife intacto y cultura prácticamente inalterada. Extremadamente remota con pocos visitantes, requiere esfuerzo pero recompensa con naturaleza prístina y autenticidad total.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Vuelo desde Port Vila a Tanna, luego conexión a Aneityum (contactar operadores locales, 120-180 EUR total). O ferry desde Tanna (6 horas, 25 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses muy básicas, 20-30 EUR/noche",
+        "medio": "Bungalows rústicos, 50-70 EUR/noche",
+        "comfort": "Eco-lodge aislado, 100-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife vírgenes (gratis desde playa)",
+        "Caminata por playas desiertas (gratis)",
+        "Buceo (60-100 EUR con operador remoto)",
+        "Visita a aldeas (gratis, traer regalos)",
+        "Exploración de naturaleza intacta (gratis)"
+      ],
+      "donde_comer": "Comida muy básica en guesthouses, 5-10 EUR. Principalmente pescado y verduras locales. Traer snacks.",
+      "consejo_local": "Aneityum es para viajeros resistentes. Infraestructura mínima, acceso difícil, pocos turistas por razón. La recompensa es soledad absoluta.",
+      "plan_b_lluvia": "Refugiarse en guesthouse, exploración local, adaptarse a ritmo de isla completamente",
+      "keywords": [
+        "Aneityum",
+        "Tafea",
+        "sur Vanuatu",
+        "remoto",
+        "arrecife virgen",
+        "playas desiertas",
+        "autenticidad"
+      ]
+    }
+  ]
+}

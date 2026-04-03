@@ -1,0 +1,348 @@
+{
+  "pais": "Nueva Zelanda",
+  "codigo": "nz",
+  "destinos": [
+    {
+      "id": "auckland",
+      "nombre": "Auckland",
+      "tipo": "ciudad",
+      "region": "Región de Auckland, Isla Norte",
+      "descripcion": "Mayor ciudad de Nueva Zelanda, punto de entrada principal con museos de clase mundial, galerías y vida nocturna activa. Centro cosmopolita que funciona como hub para explorar el norte. Ubicada entre dos puertos con playas accesibles a 30 minutos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a febrero (verano)",
+      "como_llegar": "llegada internacional: aeropuerto de Auckland (AKL). Centro a 25 km, taxi/Uber 30-40 EUR, autobús 3 EUR (50 min).",
+      "donde_dormir": {
+        "mochilero": "albergues en Ponsonby, City Centre: 25-35 EUR/noche",
+        "medio": "apartamentos o hoteles en Ponsonby, Devonport: 70-110 EUR/noche",
+        "comfort": "hoteles boutique en City Centre, Takapuna: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Subir a Sky Tower (gratis desde afuera, 25 EUR entrada)",
+        "Museo de Nueva Zelanda Te Papa (12 EUR, muchas exposiciones gratis)",
+        "Paseo por Mission Bay y playas cercanas (gratis)",
+        "Mercadillo de Ponsonby Road (gratis, sábados)",
+        "Ferry a Waitemata Harbour (8 EUR ida y vuelta)"
+      ],
+      "donde_comer": "Ponsonby Road para cafeterías artesanales (8-15 EUR), Britomart Market para comida internacional (10-20 EUR), fish and chips de Takapuna (12-18 EUR)",
+      "consejo_local": "Descarga la app Hop Card para el transporte público: es obligatoria y más barata que comprar billetes sueltos. Los viernes y sábados por la noche Ponsonby es el epicentro social.",
+      "plan_b_lluvia": "Museo Te Papa, galerías de arte en Britomart, cines, cafeterías y bares cubiertos en Myers Park area",
+      "keywords": [
+        "Auckland",
+        "Aotearoa",
+        "CBD",
+        "Ponsonby",
+        "Mission Bay",
+        "Sky Tower",
+        "Te Papa",
+        "Devonport"
+      ]
+    },
+    {
+      "id": "rotorua",
+      "nombre": "Rotorua",
+      "tipo": "naturaleza",
+      "region": "Región de Bay of Plenty, Isla Norte",
+      "descripcion": "Capital geotérmica de Nueva Zelanda con géiseres, piscinas termales y cultura maorí viva. Olor a azufre característico que desaparece tras 1-2 días. Acceso directo a actividades de aventura y tradición indígena sin pretensiones turísticas excesivas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre a mayo (evita invierno húmedo)",
+      "como_llegar": "desde Auckland en autobús (FlixBus, Intercity): 4-5 horas, 15-35 EUR. Coche alquilado: 200 km, 2.5 horas.",
+      "donde_dormir": {
+        "mochilero": "albergues tipo Kiwi Paka, Rotorua Central: 22-32 EUR/noche",
+        "medio": "moteles y B&Bs en Tutanekai Street: 65-95 EUR/noche",
+        "comfort": "lodges y resorts termales tipo Polynesian Spa: 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Géiser Pohutu (Rotorua Geothermal Area): 16 EUR",
+        "Piscinas termales Kuirau Park (gratis)",
+        "Paseo por redwood forest (5 EUR o gratis desde carretera)",
+        "Experiencia cultural maorí en Te Puia (18 EUR incluye artes y oficios)",
+        "Rafting en Kaituna River (50-70 EUR, 1-2 horas)"
+      ],
+      "donde_comer": "Rotorua Night Market (jueves, comida local barata: 8-12 EUR), Cafe Kino para vegetarianos (10-15 EUR), Fish & Chip shops tradicionales (12 EUR)",
+      "consejo_local": "Las piscinas termales públicas de Kuirau Park son gratuitas pero frías en bordes; las de Polynesian Spa son caras pero auténticas. Ve al mercado nocturno: mejor precio y ambiente local que restaurantes turísticos.",
+      "plan_b_lluvia": "Te Puia (interior), Museo de Rotorua, saunas termales cubiertos, bares temáticos",
+      "keywords": [
+        "Rotorua",
+        "Pohutu",
+        "geothermal",
+        "maori",
+        "hot springs",
+        "redwoods",
+        "Kuirau",
+        "Te Puia"
+      ]
+    },
+    {
+      "id": "wellington",
+      "nombre": "Wellington",
+      "tipo": "ciudad",
+      "region": "Capital de Nueva Zelanda, Isla Norte",
+      "descripcion": "Capital cultural y política con arte callejero, cafeterías de especialidad y una vibrante escena independiente. Mucho más auténtica que Auckland para viajeros buscando ambiente local. Ubicación estratégica para cruzar al ferry hacia Isla Sur.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "desde Auckland en autobús (Intercity): 9 horas, 25-50 EUR. Vuela si tienes prisa: 1 hora, desde 40 EUR.",
+      "donde_dormir": {
+        "mochilero": "albergues en Cuba Street, Te Aro: 23-33 EUR/noche",
+        "medio": "apartamentos en Newtown, Mount Cook: 70-100 EUR/noche",
+        "comfort": "hoteles frente al puerto, Lambton Quay: 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Cuba Street: arte callejero, tiendas vintage y cafeterías (gratis paseo)",
+        "Museo Te Papa (12 EUR, muchas secciones gratis)",
+        "Botanic Gardens (gratis, vistas panorámicas)",
+        "Funicular a Botanic Gardens (2.50 EUR)",
+        "Paseo por el puerto y waterfront (gratis)"
+      ],
+      "donde_comer": "Cuba Street para cafés especializados (5-12 EUR), Newtown para curry/comida india (10-15 EUR), capital gourmet con buenos restaurants (25-40 EUR platos principales)",
+      "consejo_local": "Wellington es la capital de cafés de especialidad: el café local es excelente y barato comparado con precios de resorts. El viento es legendario, lleva chaqueta siempre. El ferry a Picton (Isla Sur) es impresionante: vale la pena hacerlo de día.",
+      "plan_b_lluvia": "Te Papa (museo completo), tiendas vintage de Cuba Street, librerías, bares y restaurantes cubiertos",
+      "keywords": [
+        "Wellington",
+        "Aotearoa capital",
+        "Cuba Street",
+        "Te Aro",
+        "Newtown",
+        "Te Papa",
+        "ferry Picton"
+      ]
+    },
+    {
+      "id": "queenstown",
+      "nombre": "Queenstown",
+      "tipo": "montaña",
+      "region": "Otago, Isla Sur",
+      "descripcion": "Capital mundial del turismo de aventura con bungee jumping, saltos en paracaídas y deportes extremos. Lago Wakatipu espectacular rodeado de montañas. Mejor como base para explorar Central Otago que como destino en sí mismo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre (esquí), diciembre a febrero (verano)",
+      "como_llegar": "vuelo desde Auckland o Wellington: 2-2.5 horas, desde 50 EUR. Desde Dunedin en autobús: 5 horas, 20-40 EUR.",
+      "donde_dormir": {
+        "mochilero": "albergues en Mall Street, City Centre: 25-38 EUR/noche",
+        "medio": "moteles en Fernhill, Arrowtown cercano: 80-120 EUR/noche",
+        "comfort": "lodges de lujo con vistas al lago: 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Bungee jumping AJ Hackett (gratis ver, salto 195 EUR)",
+        "Jet boat en Shotover River (80-100 EUR, 30 min)",
+        "Senderismo Ben Lomond Track (gratis, 6-8 horas)",
+        "Paseo por Arrowtown (pueblo vecino con otoño dorado): gratis",
+        "Wine tours por Central Otago (tours guiados desde 70 EUR)"
+      ],
+      "donde_comer": "Rua Ramen para noodles (12-15 EUR), Kiwi cuisine en restaurantes centrales (20-35 EUR), food courts en centro (10-18 EUR)",
+      "consejo_local": "Queenstown es un tourism trap de precios altos. Basa ahí pero haz escapadas a Arrowtown, Wanaka y Glenorchy. Los tours extremos son más baratos si los reservas en albergues que directamente.",
+      "plan_b_lluvia": "Wine tastings cubiertos en Central Otago, museos y galerias, bares de aprés-ski",
+      "keywords": [
+        "Queenstown",
+        "Wakatipu",
+        "bungee",
+        "adventure capital",
+        "Arrowtown",
+        "Central Otago",
+        "Shotover"
+      ]
+    },
+    {
+      "id": "milford-sound",
+      "nombre": "Milford Sound",
+      "tipo": "naturaleza",
+      "region": "Fiordland, Isla Sur",
+      "descripcion": "Fiordo espectacular en el Parque Nacional de Fiordland con cascadas y glaciares accesibles por crucero. Una de las 8 maravillas naturales del mundo. Requiere día entero pero es imprescindible si estás en Isla Sur.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año, evita tormenta (frecuentes en invierno)",
+      "como_llegar": "desde Queenstown (120 km, 2 horas en coche alquilado) o tours desde Queenstown/Te Anau (80-120 EUR incluido crucero). Bus Full Day desde Queenstown: 150-180 EUR.",
+      "donde_dormir": {
+        "mochilero": "Te Anau tiene albergues: 20-30 EUR/noche. Milford mismo no tiene alojamiento de mochilero.",
+        "medio": "moteles Te Anau: 70-100 EUR/noche",
+        "comfort": "Milford Lodge (ubicación única): 180-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Crucero Milford Sound (30-50 EUR, 2 horas, obligatorio)",
+        "Milford Track tramping (34-90 km en 1-4 días, reserva anticipada)",
+        "Paseo Key Summit (4-5 horas, gratuito)",
+        "Chasm Walk (30 min, gratis)",
+        "Fotografía de cascadas y glaciares (gratis)"
+      ],
+      "donde_comer": "Milford Lodge tiene cafetería (caros: 15-25 EUR). Te Anau tiene opciones normales (10-20 EUR). Lleva comida si haces trekking.",
+      "consejo_local": "Reserva el crucero con anticipación (1-2 meses en temporada alta). El viaje por Milford Road (120 km) es igual de bonito que el fiordo: no te duermas en el coche. Vete temprano para evitar masas turísticas.",
+      "plan_b_lluvia": "Igualmente válido: las cascadas bajan más con lluvia. Lleva capa impermeable.",
+      "keywords": [
+        "Milford Sound",
+        "Fiordland",
+        "fiordo",
+        "crucero",
+        "Milford Road",
+        "Te Anau",
+        "tramping"
+      ]
+    },
+    {
+      "id": "tongariro",
+      "nombre": "Tongariro National Park",
+      "tipo": "montaña",
+      "region": "Región de Manawatu, Isla Norte",
+      "descripcion": "Parque Nacional con volcanes activos, piscinas de color esmeralda y senderismo de clase mundial. El Tongariro Alpine Crossing es una de las mejores caminatas de día en el mundo. Acceso gratuito a la mayoría de senderos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril (evita nieve en invierno)",
+      "como_llegar": "desde Auckland en autobús a Turangi/National Park Village (5-6 horas, 30-50 EUR). Coche alquilado desde Auckland: 300 km, 4 horas.",
+      "donde_dormir": {
+        "mochilero": "albergues National Park Village: 24-34 EUR/noche",
+        "medio": "motel Turangi, cabañas parque: 70-100 EUR/noche",
+        "comfort": "lodges en Turangi: 130-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Tongariro Alpine Crossing (19.4 km, 7-8 horas, gratis pero debes reservar transporte: 40-60 EUR)",
+        "Blue Lake Walk (1.5 horas, gratis)",
+        "Whakapapanui Stream Walk (2 horas, gratis)",
+        "Chateau Tongariro resort tour (vistas, 10 EUR)",
+        "Fishing en río Tongariro (20 EUR por permiso diario)"
+      ],
+      "donde_comer": "National Park Village: opciones limitadas (10-18 EUR). Turangi tiene más variedad (12-20 EUR). Lleva snacks para el Crossing.",
+      "consejo_local": "Reserva el Tongariro Alpine Crossing con DOC o un operador 1-2 semanas antes. El transporte shuttle es obligatorio: está incluido en 40-60 EUR. Comienza temprano (7 AM) para terminar antes de oscurecer. Red Crater Lake es lo más espectacular a mitad de ruta.",
+      "plan_b_lluvia": "Los senderos más cortos (Blue Lake, Whakapapanui) siguen siendo accesibles. El Crossing se cancela con mal tiempo.",
+      "keywords": [
+        "Tongariro",
+        "volcán",
+        "Alpine Crossing",
+        "New Zealand",
+        "hiking",
+        "emerald lakes",
+        "Turangi"
+      ]
+    },
+    {
+      "id": "franz-josef",
+      "nombre": "Franz Josef Glacier",
+      "tipo": "naturaleza",
+      "region": "West Coast, Isla Sur",
+      "descripcion": "Glaciar espectacular en la Costa Oeste accesible a pie mediante senderos y tours. Pueblo pequeño rodeado de bosque primario y montañas. Experiencia única de Nueva Zelanda: glaciares a baja altitud.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "desde Queenstown en autobús (West Coast Explorer): 5-6 horas, 30-50 EUR. Desde Wanaka: 4 horas, 25-40 EUR.",
+      "donde_dormir": {
+        "mochilero": "albergues tipo YHA Franz Josef: 22-32 EUR/noche",
+        "medio": "moteles Main Road: 75-110 EUR/noche",
+        "comfort": "lodges de lujo: 150-230 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo al Glaciar desde Main Road car park (2 horas, gratis)",
+        "Lake Walk (3 horas, gratis)",
+        "Glacier Valley Walk (1.5 horas, gratis)",
+        "Guiado en hielo Glacier Hiking (tour obligatorio: 100-200 EUR)",
+        "Heli-Hike (experiencia premium: 600 EUR+)"
+      ],
+      "donde_comer": "Main Road tiene cafés y restaurantes (12-22 EUR). De Little Blue Cafe para desayunos (10-15 EUR).",
+      "consejo_local": "El paseo simple al glaciar es gratis y impresionante. Los tours guiados sobre el hielo son caros pero cada vez más necesarios (cambio climático hace el hielo más peligroso). El pueblo es muy pequeño: todo está en Main Road.",
+      "plan_b_lluvia": "Los senderos siguen accesibles con ropa adecuada. Los tours guiados se cancelen solo en lluvia extrema.",
+      "keywords": [
+        "Franz Josef",
+        "glacier",
+        "West Coast",
+        "hiking",
+        "hielo",
+        "bosque primario",
+        "Nueva Zelanda"
+      ]
+    },
+    {
+      "id": "abel-tasman",
+      "nombre": "Abel Tasman National Park",
+      "tipo": "playa",
+      "region": "Tasman, Isla Sur",
+      "descripcion": "Parque costero con playas doradas, selva tropical y acceso a islas. Combinación rara: naturaleza salvaje con playas de arena fina. Perfecto para kayak y trekking combinado. Menos concurrido que otras atracciones principales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a marzo (verano)",
+      "como_llegar": "desde Nelson (30 km, 1 hora en coche): alquila coche o autobús desde aeropuerto Nelson. Desde Picton en ferry: 3.5 horas.",
+      "donde_dormir": {
+        "mochilero": "albergues Motueka o Nelson: 22-32 EUR/noche. Campings en parque: 10-15 EUR",
+        "medio": "moteles en Motueka: 70-100 EUR/noche",
+        "comfort": "lodges frente al mar: 140-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Abel Tasman Coast Track tramping (34-51 km en 3-4 días o día completo con transporte: 50-80 EUR)",
+        "Kayak en la bahía (tours desde 70 EUR para 1 día)",
+        "Paseo Observation Deck (1 hora, gratis)",
+        "Anchorage Beach (playa accesible a pie 30 min, gratis)",
+        "Snorkel y pesca (equipo alquilado: 20-40 EUR)"
+      ],
+      "donde_comer": "Motueka tiene opciones básicas (10-15 EUR). Durante el trekking, prepara tu comida. Pocas cafeterías dentro del parque.",
+      "consejo_local": "El Coast Track es famoso pero abarrotado en verano: considera ir en hombro (septiembre-octubre, abril-mayo). El kayak es más flexible: puedes hacer punto de salida en mañana o tarde sin reserva.",
+      "plan_b_lluvia": "El trekking es factible pero desafiante. El kayak se cancela en mar agitado.",
+      "keywords": [
+        "Abel Tasman",
+        "parque",
+        "coast track",
+        "kayak",
+        "playas",
+        "Motueka",
+        "tramping"
+      ]
+    },
+    {
+      "id": "wanaka",
+      "nombre": "Wanaka",
+      "tipo": "naturaleza",
+      "region": "Otago Central, Isla Sur",
+      "descripcion": "Pueblo de montaña y lago con acceso a trekking sin multitudes, esquí invernal y vistas alpinas. Mucho más relajado que Queenstown pero con infraestructura similar. Base para explorar Southern Lakes sin turismo masivo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre (esquí), diciembre a febrero (verano)",
+      "como_llegar": "desde Queenstown en coche/autobús (90 km, 1.5 horas, 15-35 EUR). Desde Dunedin: 4 horas, 30-50 EUR.",
+      "donde_dormir": {
+        "mochilero": "albergues Wanaka Backpackers: 23-33 EUR/noche",
+        "medio": "moteles Main Road, cabañas: 70-110 EUR/noche",
+        "comfort": "lodges de montaña: 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruta The Neck (paseo 1.5 horas, gratis, vistas lago)",
+        "Roy's Peak Track (8-10 horas, gratis, puesta de sol espectacular)",
+        "Lake Wanaka Centre (10 EUR, aviones históricos)",
+        "Esquí Cardrona Mountain en invierno (50-80 EUR forfait)",
+        "Paseo por Lakeside (gratis)"
+      ],
+      "donde_comer": "Kika (café local bueno: 8-14 EUR), Francesca's Kitchen para almuerzo (12-18 EUR), Kendra's para pizzas (14-20 EUR)",
+      "consejo_local": "Wanaka es ideal para viajeros que quieren naturaleza sin el circus de Queenstown. Roy's Peak es viral en Instagram pero empieza a las 6 AM para evitar multitudes de tarde. El pueblo es pequeño: todo está a pie.",
+      "plan_b_lluvia": "Lake Wanaka Centre está cubierto. Bares y cafés cubiertos. El senderismo es difícil con mal tiempo.",
+      "keywords": [
+        "Wanaka",
+        "Roy's Peak",
+        "lago",
+        "montaña",
+        "esquí",
+        "Cardrona",
+        "Southern Lakes"
+      ]
+    },
+    {
+      "id": "coromandel",
+      "nombre": "Coromandel Peninsula",
+      "tipo": "playa",
+      "region": "Auckland Region, Isla Norte",
+      "descripcion": "Península costera con playas de arena negra volcánica, aguas termales de playa y bosque primario. Escapada relajada desde Auckland accesible en transporte público. Menos visitada que Isla Sur pero igualmente bonita.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a febrero, septiembre a octubre",
+      "como_llegar": "desde Auckland en autobús (InterCity) a Coromandel Town o Thames (2-3 horas, 20-35 EUR). Coche alquilado: 100 km, 1.5 horas.",
+      "donde_dormir": {
+        "mochilero": "albergues Coromandel Town, Hahei: 22-32 EUR/noche",
+        "medio": "moteles, cabañas: 75-110 EUR/noche",
+        "comfort": "resorts costeros: 140-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Cathedral Cove (playa y cueva, 10 EUR parking)",
+        "Hot Water Beach (aguas termales en la playa, 12 EUR, marea baja solo)",
+        "Paseo por bosque primario Kauaeranga Valley (gratis)",
+        "Kayak en bahías (tours 50-80 EUR)",
+        "Snorkel en arrecifes (gratis o tours 60 EUR)"
+      ],
+      "donde_comer": "Hahei Beach Store para fish & chips (12 EUR), Little Gem Cafe en Coromandel (10-15 EUR), opciones limitadas pero de calidad",
+      "consejo_local": "Hot Water Beach solo es accesible 2-3 horas alrededor de marea baja: consulta tablas antes. Cathedral Cove es muy bonita pero concurrida al mediodía. Nada en playas designadas por posibles peces escorpión.",
+      "plan_b_lluvia": "Bosques y senderismo son factibles. Las playas pierden atractivo con lluvia.",
+      "keywords": [
+        "Coromandel",
+        "península",
+        "Cathedral Cove",
+        "Hot Water Beach",
+        "aguas termales",
+        "playas",
+        "Hahei"
+      ]
+    }
+  ]
+}

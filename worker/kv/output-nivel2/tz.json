@@ -1,0 +1,329 @@
+{
+  "pais": "Tanzania",
+  "codigo": "tz",
+  "destinos": [
+    {
+      "id": "serengeti",
+      "nombre": "Serengeti",
+      "tipo": "naturaleza",
+      "region": "Noroeste",
+      "descripcion": "La mayor concentración de fauna africana con migraciones masivas de ñus y cebras. El ecosistema intacto más grande de África permite observar depredadores y presas en su hábitat natural. Imprescindible para safari de vida silvestre seria.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio-octubre, enero-febrero",
+      "como_llegar": "Desde Dar es Salaam: vuelo interno a Seronera (1.5h, 150-250 EUR) o desde Arusha (1h, 120-200 EUR). También por carretera desde Arusha (8-10h, 50 EUR en minibús).",
+      "donde_dormir": {
+        "mochilero": "Campamento básico/albergue de Seronera o campamento salvaje: 30-50 EUR/noche",
+        "medio": "Lodge mediocre (Serena, Sopa): 150-250 EUR/noche",
+        "comfort": "Lodge de lujo (Four Seasons, Singita): 400-800 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en game drive (30-50 EUR/día con operador local)",
+        "Caminata a pie con guía (40 EUR)",
+        "Fotografía de migración (junio-octubre)",
+        "Visita a poblado maasai (20 EUR)"
+      ],
+      "donde_comer": "Comida cara dentro de lodges (25-40 EUR). Lleva snacks desde Arusha. En campamentos come lo que preparen o trae comida propia.",
+      "consejo_local": "Negocia safaris de grupo en Arusha antes de llegar, sale 60% más barato. Los game drives propios del lodge son sobreprecio turístico.",
+      "plan_b_lluvia": "El Serengeti funciona en lluvia, pero visibilidad peor. Mejor hacer trekking en las colinas o visitar el cráter del Ngorongoro.",
+      "keywords": [
+        "Serengeti",
+        "safari Tanzania",
+        "migración ñus",
+        "Seronera",
+        "Grumeti"
+      ]
+    },
+    {
+      "id": "kilimanjaro",
+      "nombre": "Monte Kilimanjaro",
+      "tipo": "montaña",
+      "region": "Noroeste",
+      "descripcion": "La montaña más alta de África (5,895m) con rutas de trekking accesibles sin experiencia técnica. El ascenso atraviesa cinco zonas climáticas en 5-7 días. Objetivo de senderistas independientes con presupuesto.",
+      "dias_recomendados": 7,
+      "mejor_epoca": "julio-septiembre, enero-febrero",
+      "como_llegar": "Desde Dar es Salaam: vuelo a Kilimanjaro Airport (1h, 100-150 EUR) o Arusha (1.5h, 50 EUR en minibús). La mayoría arranca desde Arusha o Moshi (base de montaña).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Moshi/Arusha: 15-25 EUR. En montaña: campamentos del operador (incluido en paquete)",
+        "medio": "Hotel Moshi: 40-70 EUR/noche",
+        "comfort": "Resort premont (Moshi): 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Ascenso Kilimanjaro ruta Marangu (5-6 días, 400-600 EUR operador)",
+        "Ruta Machame más desafiante (6-7 días, 500-700 EUR)",
+        "Caminata de aclimatación en colinas de Moshi (gratis/20 EUR con guía)",
+        "Visita plantaciones de café (15 EUR)"
+      ],
+      "donde_comer": "En Moshi: ugali, chapati, carne guisada (3-5 EUR). En montaña: comida del campamento (monótona, incluida). Lleva snacks energéticos.",
+      "consejo_local": "La altitude mata más que la montaña es difícil. Sube lentamente, duerme bajo donde subes, toma diamox preventivamente. Muchos operadores presionan para ir rápido.",
+      "plan_b_lluvia": "Los trekking siguen igual lluvia o no. Febrero-marzo son más lluviosos, afecta menos a rutas altas. Baja visibilidad en cumbre.",
+      "keywords": [
+        "Kilimanjaro",
+        "Kili",
+        "Marangu",
+        "Machame",
+        "Uhuru Peak",
+        "trekking Tanzania"
+      ]
+    },
+    {
+      "id": "zanzibar",
+      "nombre": "Zanzibar",
+      "tipo": "isla",
+      "region": "Océano Índico",
+      "descripcion": "Isla de especias con playas de agua turquesa, Stone Town histórico y mergulho/snorkel de clase mundial. Centro multicultural árabe-africano con arquitectura suahili centenaria. Destino principal para relajarse post-safari.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio-octubre, enero-febrero",
+      "como_llegar": "Desde Dar es Salaam: ferry (2-2.5h, 40-50 EUR ida) o vuelo (30 min, 80-150 EUR). Desde el norte: ferry desde Pemba (10h, 30 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue Stone Town o Nungwi: 12-20 EUR/noche",
+        "medio": "Hotel 3 estrellas Stone Town/Uroa: 50-100 EUR/noche",
+        "comfort": "Resort playa o boutique Stone Town: 150-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido Stone Town casco histórico (gratis, o 15 EUR con guía)",
+        "Spice tour en interior (20 EUR)",
+        "Snorkel/buceo arrecife (35-50 EUR)",
+        "Excursión Prison Island (25 EUR)",
+        "Puesta de sol en bote tradicional dhow (20 EUR)"
+      ],
+      "donde_comer": "Mariscos frescos en paseo marítimo de Stone Town (5-10 EUR). Uroa Beach: restaurantes playa (8-15 EUR). Prueba pulpo a la zanzibarí, pilau (arroz especiado).",
+      "consejo_local": "Stone Town se masifica al caer el sol con tours. Come al atardecer en restaurante local, no en mesa de turismo. El spice tour es turístico pero útil si no tienes tiempo.",
+      "plan_b_lluvia": "Abril-mayo lluvia fuerte. Stone Town funciona; playas tienen menos gente pero mar agitado. Snorkel afectado.",
+      "keywords": [
+        "Zanzibar",
+        "Stone Town",
+        "Spice Island",
+        "Nungwi",
+        "Uroa",
+        "Pemba",
+        "Unguja"
+      ]
+    },
+    {
+      "id": "crater-ngorongoro",
+      "nombre": "Cráter del Ngorongoro",
+      "tipo": "naturaleza",
+      "region": "Noroeste",
+      "descripcion": "Cráter volcánico caldera de 20km de diámetro con ecosistema cerrado y fauna densa. Paisaje de otro planeta donde ver leones, búfalos y rinocerontes en corto radio. Más concentrado que Serengeti, menos tiempo requerido.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-octubre, enero-febrero",
+      "como_llegar": "Desde Arusha: 1.5-2h en carretera (40-60 km, 30 EUR minibús o tour). Acceso desde Serengeti (2h) o como parada hacia Moshi.",
+      "donde_dormir": {
+        "mochilero": "Campamento salvaje cerca cráter: 25-40 EUR/noche",
+        "medio": "Lodge borde cráter (Ngorongoro Sopa, Rhino Lodge): 80-150 EUR/noche",
+        "comfort": "Lodge de lujo (Ngorongoro Crater Lodge): 350-500 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en fondo del cráter (45 EUR con operador, 6-8h)",
+        "Caminata con maasai (20 EUR, 2h)",
+        "Viewpoint del borde (entrada área: 40 EUR, gratis mirar desde afuera)",
+        "Visita aldea maasai (25 EUR)"
+      ],
+      "donde_comer": "Lodges tienen restaurante. En Karatu (entrada del cráter): comedores locales, ugali, verduras (3-5 EUR). Trae snacks al safari.",
+      "consejo_local": "No necesitas lodge caro del borde. Hay campamentos 5 EUR más baratos fuera del cráter, mismo acceso. El safari del fondo es obligatorio (tarifa fija), no es tour privado.",
+      "plan_b_lluvia": "Abril-mayo lluvia. Safari sigue viable, caminos embarrados pero pasables. Menos turistas, más fauna visible.",
+      "keywords": [
+        "Ngorongoro",
+        "crater",
+        "caldera",
+        "Karatu",
+        "rinoceronte negro",
+        "safari corto"
+      ]
+    },
+    {
+      "id": "arusha",
+      "nombre": "Arusha",
+      "tipo": "ciudad",
+      "region": "Noroeste",
+      "descripcion": "Hub de safaris de Tanzania con acceso a Kilimanjaro, Serengeti y Ngorongoro. Ciudad de mercado dinámico, base logística obligatoria. Punto de encuentro para trekkers y aventureros independientes.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Desde Dar es Salaam: vuelo (1h, 100-150 EUR) o minibús (10h, 25-40 EUR). Desde Kilimanjaro Airport: 1h en coche (30-50 EUR compartido).",
+      "donde_dormir": {
+        "mochilero": "Albergue Arusha Backpackers, Ngurdoto Mountain: 12-18 EUR/noche",
+        "medio": "Hotel 3 estrellas (Mount Meru, Arusha Hotel): 50-90 EUR/noche",
+        "comfort": "Resort (Serena, Meliá): 150-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Arusha (gratis, compra artesanía)",
+        "Paseo by Night con guía seguridad (20 EUR)",
+        "Visita Museo Natural (12 EUR)",
+        "Organizar safari/Kilimanjaro (operadores locales, 20% cheaper)",
+        "Compras recuerdos y provisiones para trekking"
+      ],
+      "donde_comer": "Calle Sokoine: pequeños locales, nyama choma (carne a la brasa) 4-6 EUR. The Blue Heron (turístico pero bueno): 10-15 EUR. Stalls callejeros: mitai (carne cruda marinada) 2 EUR.",
+      "consejo_local": "Negocia safaris Kilimanjaro cara a cara en operadores, no por agencia. Arusha Express (minibús de línea a Dar) sale temprano, es barato y seguro. Evita calles oscuras de noche.",
+      "plan_b_lluvia": "Arusha no tiene atractivos inherentes. Si llueve, quédate en albergue, organiza actividades, come y planifica siguiente etapa.",
+      "keywords": [
+        "Arusha",
+        "safari hub",
+        "Kilimanjaro gateway",
+        "mercado",
+        "operadores safari"
+      ]
+    },
+    {
+      "id": "dar-es-salaam",
+      "nombre": "Dar es Salaam",
+      "tipo": "ciudad",
+      "region": "Costa",
+      "descripcion": "Capital económica y principal ciudad costera de Tanzania con playas, mercado de Kariakoo y Museos de Buques. Punto de entrada obligatorio con carácter de ciudad real, no turística. Descuida pero auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "julio-septiembre (seco), noviembre-diciembre (cálido seco)",
+      "como_llegar": "Vuelo desde Africa del Sur/Europa o Kenya (conecta). Minibús desde Morogoro (7h, 15-25 EUR), desde Songea (16h, 40 EUR). Ferry desde Zanzibar (2h, 40 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue Dar Hostel, Kunduchi Beach: 12-20 EUR/noche",
+        "medio": "Hotel Coliseum, Oyster Bay: 60-100 EUR/noche",
+        "comfort": "Serena, Hilton, Sofitel: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado Kariakoo (gratis, compras)",
+        "Museo Nacional (8 EUR)",
+        "Museo de la Aldea (gratis)",
+        "Playas Kunduchi (norte, microbús 20 min, 1 EUR)",
+        "Paseo Cornisa marina (gratis)"
+      ],
+      "donde_comer": "Kariakoo: comida callejera local, carne y verduras (2-4 EUR). Seaside restaurants Oysterbay: camarones, pez (10-20 EUR). Biryani (arroz especiado) es plato típico.",
+      "consejo_local": "Dar no es bonita pero es real. El puerto de Paje tiene ferries a Zanzibar más baratos que agencias turísticas (+10 EUR diferencia). Minibús Dar-Morogoro es más barato que cualquier agencia.",
+      "plan_b_lluvia": "Noviembre-diciembre lluvia corta. Abril-mayo lluvia larga. Playas menos atractivas pero ciudad funciona igual. Buena época para museos interiores.",
+      "keywords": [
+        "Dar es Salaam",
+        "Dar",
+        "Kariakoo",
+        "capital",
+        "costa",
+        "Tanzania hub"
+      ]
+    },
+    {
+      "id": "moshi",
+      "nombre": "Moshi",
+      "tipo": "ciudad",
+      "region": "Noroeste",
+      "descripcion": "Pueblo base alternativo a Arusha para Kilimanjaro, más tranquilo y con mejores operadores locales de trekking. Base agrícola rodeada de plantaciones de café con acceso igual de rápido a montaña.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "julio-septiembre, enero-febrero",
+      "como_llegar": "Desde Arusha: 1.5h minibús (30 EUR). Desde Kilimanjaro Airport: 45 min (25 EUR). Desde Dar: vuelo o 12h minibús.",
+      "donde_dormir": {
+        "mochilero": "Albergue Kilimagic, Shah: 12-18 EUR/noche",
+        "medio": "Hotel Kilimanjaro Region, Keys: 40-70 EUR/noche",
+        "comfort": "Yoho Kilimanjaro, Springlands Resort: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Caminata plantaciones café (gratis con anfitrión o 15 EUR guía)",
+        "Mercado local (gratis, compras)",
+        "Museo Kilimanjaro (8 EUR)",
+        "Visita cascadas y piscinas naturales (20 EUR con guía)",
+        "Organizar trekking Kilimanjaro (operadores 50 EUR cheaper que Arusha)"
+      ],
+      "donde_comer": "Main Street: ugali, sukuma wiki (verduras), carne 3-4 EUR. Thai y Indian en calle Uru (5-8 EUR). Café en plantaciones durante visita (incluido o 2 EUR).",
+      "consejo_local": "Moshi tiene operadores más honestos que Arusha. Umbrella Organization certificada es estándar. Negocia con conductores locales para viajes a Arusha, 5 EUR menos.",
+      "plan_b_lluvia": "Febrero-marzo lluvia fuerte, pero base permanece accesible. Trekking se hace igual, menos turistas. Cafeterales verde brillante en lluvia.",
+      "keywords": [
+        "Moshi",
+        "Kilimanjaro",
+        "base montaña",
+        "café Tanzania",
+        "trekking hub"
+      ]
+    },
+    {
+      "id": "rutas-montes-usudzungwa",
+      "nombre": "Montes Usudzungwa",
+      "tipo": "naturaleza",
+      "region": "Centro",
+      "descripcion": "Montaña salvaje entre Dar y Iringa con senderos de trekking remoto, primates endémicos y cascadas. Alternativa a rutas sobreturísticas con bosque subtropical intacto. Destino serio para senderistas independientes.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-octubre",
+      "como_llegar": "Desde Dar: minibús a Iringa (10-12h, 30-40 EUR) y desde Iringa hasta entrada Usudzungwa (2h, 15 EUR). Parada en Morogoro también válida (6h desde Dar).",
+      "donde_dormir": {
+        "mochilero": "Campamento Kidatu Gateway (entrada parque): 20-30 EUR/noche, guesthouse Iringa: 15-25 EUR/noche",
+        "medio": "Guesthouse Iringa o Morogoro: 30-50 EUR/noche",
+        "comfort": "No hay opciones comfort, máximo lodge rural: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking cascada Sanje (2 días, 40 EUR con guía parque obligatorio)",
+        "Senda Mwanihana (ruta difícil, 3 días, 60 EUR con guía)",
+        "Avistamiento primates endémicos (durante trek)",
+        "Baño en piscinas naturales (gratis)"
+      ],
+      "donde_comer": "Aldea Kidatu: comida básica (3-4 EUR). En trek: trae comida o campamento la proporciona. Iringa: restaurantes medianos (5-10 EUR).",
+      "consejo_local": "Parque es poco visitado, infraestructura mínima. Lleva agua suficiente, provisiones y linterna. Guía de parque es obligatorio pero barato. No hay celdas móviles.",
+      "plan_b_lluvia": "Noviembre-abril lluvia, senderos embarrados y resbaladizos. Junio-septiembre mejor. Lluvia también acarrea caudal de cascadas más espectacular.",
+      "keywords": [
+        "Usudzungwa",
+        "Sanje",
+        "trekking remoto",
+        "primates",
+        "cascadas",
+        "selva tropical"
+      ]
+    },
+    {
+      "id": "pemba",
+      "nombre": "Pemba",
+      "tipo": "isla",
+      "region": "Océano Índico",
+      "descripcion": "Isla hermana de Zanzibar, menos turística con buceo de coral espectacular y playas vacías. Economía basada en clavo y coco, atmósfera más rural africana que turística. Destino alternativo para los que buscan Zanzibar sin turismo masivo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-octubre, enero-febrero",
+      "como_llegar": "Desde Dar es Salaam: vuelo (1h, 100-150 EUR). Desde Zanzibar: ferry lento (10-12h, 30-40 EUR) o vuelo (30 min, 80 EUR). Minibús local desde Mkoani puerto.",
+      "donde_dormir": {
+        "mochilero": "Albergue Chake Chake o guesthouse rural: 12-20 EUR/noche",
+        "medio": "Hotel Pemba (Chake Chake): 50-80 EUR/noche",
+        "comfort": "Lodge playa (Pemba Beach, Manta): 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo y snorkel arrecife (35-50 EUR con operador)",
+        "Paseo en bote tradicional dhow (20-30 EUR)",
+        "Visita aldeas especiería (20 EUR con guía)",
+        "Playa Msingizini o Ngezi (gratis, transporte 5 EUR)"
+      ],
+      "donde_comer": "Chake Chake: arroz y carne (3-5 EUR). Restaurantes playa Manta: camarones, pulpo (10-15 EUR). Fruta fresca tropical en mercado (1-2 EUR).",
+      "consejo_local": "Pemba es pescadores y especierías, no resort. Infraestructura turística mínima pero funcionante. El ferry Dar-Pemba es más cómodo que ferry Zanzibar-Pemba.",
+      "plan_b_lluvia": "Abril-mayo lluvia fuerte. Mar agitado, buceo limitado. Playas más solitarias. Mejor junio en adelante.",
+      "keywords": [
+        "Pemba",
+        "isla buceo",
+        "arrecife coral",
+        "especias",
+        "Chake Chake",
+        "Manta"
+      ]
+    },
+    {
+      "id": "tanga",
+      "nombre": "Tanga",
+      "tipo": "ciudad",
+      "region": "Noreste",
+      "descripcion": "Puerto histórico en frontera con Kenya con playas poco visitadas y acceso a arrecifes coralinos. Centro administrativo agradable con arquitectura colonial. Punto de salida a Isla de Pemba y alternativa a costa norte estándar.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "julio-octubre, enero-febrero",
+      "como_llegar": "Desde Dar es Salaam: minibús 12h (35 EUR) o vuelo (1.5h, 120 EUR). Desde Arusha: 8h minibús (40 EUR). Bus desde Moshi es opción.",
+      "donde_dormir": {
+        "mochilero": "Albergue Tanga o guesthouse: 12-20 EUR/noche",
+        "medio": "Hotel Tanga City (Moshi Street): 50-80 EUR/noche",
+        "comfort": "Amaan Palace Hotel: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo puerto y arquitectura colonial (gratis)",
+        "Buceo/snorkel Arrecife Ushongo (30 EUR con operador)",
+        "Playas cercanas Amboni (25 EUR transport y entrada)",
+        "Visita cascadas Amboni (20 EUR con guía)",
+        "Ferry a Pemba (puerto, 40 EUR)"
+      ],
+      "donde_comer": "Waterfront: pescado fresco a la parrilla (6-10 EUR). Sokoine Street: locales tradicionales (3-4 EUR). Prueban el octopus a la tanganesa.",
+      "consejo_local": "Tanga es punto de descanso entre ruta norte y Pemba, no destino final. El puerto es punto salida barato a Pemba. Puedes llegar a Moshi desde Tanga en minibús (4h, 20 EUR) cruzando norte.",
+      "plan_b_lluvia": "Abril-mayo lluvia, puerto sigue activo. Arrecife de buceo afectado por sedimento. Mejor junio-septiembre.",
+      "keywords": [
+        "Tanga",
+        "costa norte",
+        "puerto colonial",
+        "Pemba gateway",
+        "buceo Ushongo",
+        "Amboni"
+      ]
+    }
+  ]
+}

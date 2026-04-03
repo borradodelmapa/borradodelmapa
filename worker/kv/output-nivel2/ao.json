@@ -1,0 +1,335 @@
+{
+  "pais": "Angola",
+  "codigo": "ao",
+  "destinos": [
+    {
+      "id": "luanda",
+      "nombre": "Luanda",
+      "tipo": "ciudad",
+      "region": "Luanda (costa norte)",
+      "descripcion": "Capital de Angola, puerto atlántico con arquitectura colonial portuguesa y modernista. Centro administrativo y cultural donde comienza la mayoría de viajes. Punto de entrada obligatorio con acceso a playas cercanas y vida urbana vibrante.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Aeropuerto Internacional de Luanda (4km del centro). Vuelos internacionales desde Lisboa, Sudáfrica. Taxi/colectivo: 5-15 EUR, 30-45 min.",
+      "donde_dormir": {
+        "mochilero": "Albergues en Maianga/Rangel: 20-35 EUR/noche",
+        "medio": "Hoteles 3* en Baixa: 60-100 EUR/noche",
+        "comfort": "Hoteles 4-5* en Miramar: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por la Baía de Luanda y Igreja de Nossa Senhora da Nazaré (gratis)",
+        "Museo de Antropología (3 EUR)",
+        "Fortaleza de São Miguel, Mausoléu de Agostinho Neto (5 EUR)",
+        "Playas de Corimba y Ilha de Cabra (gratis, ferry 2 EUR)"
+      ],
+      "donde_comer": "Frutos de mar frescos (camarão grelhado), moluscos. Restaurantes en Baixa/Miramar: 8-20 EUR. Mercados de rua para comida local barata (2-5 EUR).",
+      "consejo_local": "Llega con efectivo en dólares o kwanzas; los cajeros son limitados y los bancos lentos. El centro histórico (Baixa) es seguro de día, evita de noche.",
+      "plan_b_lluvia": "Museos, mercados cubiertos (Mercado de Benfica), galerías de arte en Maianga, cines locales.",
+      "keywords": [
+        "Luanda",
+        "capital",
+        "Baixa",
+        "Miramar",
+        "Maianga",
+        "Baía de Luanda",
+        "Fortaleza São Miguel"
+      ]
+    },
+    {
+      "id": "benguela",
+      "nombre": "Benguela",
+      "tipo": "playa",
+      "region": "Benguela (costa central)",
+      "descripcion": "Puerto colonial en la costa central con playas extensas y atmósfera relajada. Punto de partida para la Ruta Escénica hacia el sur y exploración de la costa menos turística. Menos desarrollada que Luanda pero auténtica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Luanda: autobús ( Guerra, Macon) 6-8 horas, 20-30 EUR. Vuela desde Luanda (1h, 80-120 EUR) si hay disponibilidad.",
+      "donde_dormir": {
+        "mochilero": "Hospedarias locales: 15-25 EUR/noche",
+        "medio": "Pousadas costeras: 40-70 EUR/noche",
+        "comfort": "Hoteles junto al mar: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Benguela, paseo por el malecón (gratis)",
+        "Mercado de pesca al amanecer (gratis, fotos con permiso)",
+        "Excursión a Baía Azul y pueblos de pescadores (15-30 EUR con guía)",
+        "Tren de vapor a Lobito (cuando funciona, 5 EUR)"
+      ],
+      "donde_comer": "Peixe fresco à grelhada, arroz de marisco. Restaurantes junto a la playa: 6-15 EUR. Comida callejera en el mercado: 2-4 EUR.",
+      "consejo_local": "El atardecer sobre la bahía es espectacular; ve a última hora. Las playas son seguras de día pero desoladas; no andes solo al anochecer.",
+      "plan_b_lluvia": "Visita el Museu da Benguela (pequeño, 2 EUR), explora el centro histórico, come en restaurantes locales.",
+      "keywords": [
+        "Benguela",
+        "playa",
+        "costa central",
+        "Baía Azul",
+        "Lobito",
+        "malecón",
+        "pesca"
+      ]
+    },
+    {
+      "id": "namibe",
+      "nombre": "Namibe",
+      "tipo": "desierto",
+      "region": "Namibe (suroeste)",
+      "descripcion": "Puerta al Desierto del Namibe con playas áridas y formaciones geológicas únicas. Destino aventurero para viajeros con ganas de explorar paisajes extremos y comunidades locales aisladas. Menos infraestructura, más autenticidad.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Desde Benguela: autobús 12-14 horas, 25-40 EUR. Desde Luanda: vuelo + autobús (más caro). Carretera EN1, no siempre en buen estado.",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes: 12-20 EUR/noche",
+        "medio": "Pousadas: 35-60 EUR/noche",
+        "comfort": "Hoteles: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Desierto del Namibe, dunas y arenas coloridas (excursión guiada 30-50 EUR)",
+        "Playa Morena, acantiladosrroscos (gratis)",
+        "Pueblos de pescadores: Tombwa, Lucira (gratis, respeta privacidad)",
+        "Fósiles en las formaciones geológicas (con guía local 20 EUR)"
+      ],
+      "donde_comer": "Pescado, langostinos secos. Restaurantes básicos: 5-12 EUR. Comerina (bebida local de maíz fermentado) en bares locales.",
+      "consejo_local": "Lleva agua abundante, protector solar y repelente. Los guías locales son esenciales para las dunas; no intentes explorar solo. Moneda: lleva kwanzas.",
+      "plan_b_lluvia": "Llueve poco; el viento es el problema principal. Visita museos locales, come en hospederías, charla con pescadores.",
+      "keywords": [
+        "Namibe",
+        "desierto",
+        "dunas",
+        "Tombwa",
+        "Playa Morena",
+        "suroeste",
+        "Namibe Desert"
+      ]
+    },
+    {
+      "id": "huila",
+      "nombre": "Huíla (Lubango)",
+      "tipo": "montaña",
+      "region": "Huíla (meseta central)",
+      "descripcion": "Meseta de montaña con clima fresco, paisajes verdes y capital regional Lubango con mercados vibrantes. Contraste radical con la costa, punto de acceso a la región de cafés. Menos visitada, con cultura local intacta.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a agosto",
+      "como_llegar": "Desde Namibe: autobús 6-8 horas, 15-25 EUR. Desde Luanda: autobús 18-20 horas, 35-50 EUR. También vuelos internos (caros).",
+      "donde_dormir": {
+        "mochilero": "Albergues/hospedarias: 15-25 EUR/noche",
+        "medio": "Hoteles locales: 40-70 EUR/noche",
+        "comfort": "Hoteles mejor equipados: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Lubango, artesanía local y textiles (gratis, negociar precios)",
+        "Cascada de Humpata (15km, 20 EUR con guía o DIY con transporte local)",
+        "Monumento a Patrício Lumumba, vistas de la meseta (gratis)",
+        "Pueblos cercanos: Sá da Bandeira, caminatas por la región (variable)"
+      ],
+      "donde_comer": "Huevos, quesos de la región, verduras frescas. Restaurantes: 6-14 EUR. Café local (excelente): 1 EUR.",
+      "consejo_local": "El clima es más fresco (14-20°C); trae abrigo. Los lugareños son amables pero menos acostumbrados a turismo. Lubango es segura de día.",
+      "plan_b_lluvia": "Visita mercados cubiertos, explora la ciudad a pie, prueba cafés locales, descansa (la altitud afecta).",
+      "keywords": [
+        "Huila",
+        "Lubango",
+        "meseta",
+        "montaña",
+        "café",
+        "Humpata",
+        "mercado"
+      ]
+    },
+    {
+      "id": "kwanza-sul",
+      "nombre": "Kwanza Sul",
+      "tipo": "naturaleza",
+      "region": "Kwanza Sul (centro-sur)",
+      "descripcion": "Región selvática con ríos, biodiversidad y pueblos tradicionales. Acceso a la Reserva de Iona y ecosistemas únicos. Destino para naturalistas y aventureros que aceptan infraestructura limitada.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Desde Luanda: autobús a Sumbe (4-5 horas, 15-20 EUR), luego transporte local. No hay infraestructura de turismo organizado establecida.",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes en Sumbe: 12-20 EUR/noche",
+        "medio": "Pousadas: 30-50 EUR/noche",
+        "comfort": "Hoteles: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Río Kwanza, pesca y observación de cocodrilos (25-40 EUR con guía local)",
+        "Bosques de palmera y fauna local (excursiones con guía, 15-30 EUR)",
+        "Pueblos tradicionales: Caculo, vida cotidiana local (gratis, respeta costumbres)",
+        "Playas cercanas de río (gratis)"
+      ],
+      "donde_comer": "Pescado de río, alimentos de subsistencia. Muy básico: 3-8 EUR. Trae provisiones desde Luanda si exiges variedad.",
+      "consejo_local": "Infraestructura turística casi nula; necesitas guía local. Malaria: profilaxis obligatoria. Viaja con otra persona, no solo.",
+      "plan_b_lluvia": "Los ríos suben; las caminatas pueden ser peligrosas. Quédate en pueblos, interactúa con comunidades, aprende sobre vida local.",
+      "keywords": [
+        "Kwanza Sul",
+        "Sumbe",
+        "río Kwanza",
+        "naturaleza",
+        "selva",
+        "Iona"
+      ]
+    },
+    {
+      "id": "soyo",
+      "nombre": "Soyo",
+      "tipo": "histórico",
+      "region": "Zaire (extremo norte)",
+      "descripcion": "Puerto histórico en el norte, cuna del reino del Congo. Ruinas coloniales y vestigios de la historia angoleña temprana. Destino muy poco visitado con auténtica atmósfera portuaria y patrimonio olvidado.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Desde Luanda: autobús 6-8 horas (Imbondeiro), 20-30 EUR. Carretera EN1 hacia el norte, después desvío.",
+      "donde_dormir": {
+        "mochilero": "Hospedarias: 10-18 EUR/noche",
+        "medio": "Pousadas locales: 25-45 EUR/noche",
+        "comfort": "Hoteles: 40-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas de Pinda, fortaleza colonial (gratis, con guía local 5-10 EUR)",
+        "Iglesia de São Salvador (gratis)",
+        "Puerto y mercado de pescado (gratis, fotos con permiso)",
+        "Playas cercanas desiertas (gratis)"
+      ],
+      "donde_comer": "Pescado fresco, camarones. Restaurantes muy básicos: 4-10 EUR. Comida de mercado: 2-3 EUR.",
+      "consejo_local": "Pocos extranjeros; la gente es curiosa pero amable. No hay turismo organizado; contrata guía en el puerto. Viaja con luz del día.",
+      "plan_b_lluvia": "Lluvia tropical fuerte; quédate en hospederías, descansa, come en restaurantes locales.",
+      "keywords": [
+        "Soyo",
+        "Zaire",
+        "norte",
+        "ruinas",
+        "Congo",
+        "Pinda",
+        "puerto histórico"
+      ]
+    },
+    {
+      "id": "quicama",
+      "nombre": "Parque Nacional de Quicama",
+      "tipo": "naturaleza",
+      "region": "Luanda (costa sur)",
+      "descripcion": "Reserva natural cerca de Luanda con fauna (búfalos, elefantes reintroducidos, aves) y playas vírgenes. Accesible como excursión desde la capital. Ideal para observación de naturaleza sin alejarse demasiado.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Luanda: coche alquilado o tour operador (60-80 EUR), 1,5-2 horas hacia el sur (EN1).",
+      "donde_dormir": {
+        "mochilero": "Campamentos básicos dentro del parque: 15-25 EUR/noche",
+        "medio": "Lodge en la periferia: 50-80 EUR/noche",
+        "comfort": "No hay; hospédate en Luanda y haz excursión diaria"
+      },
+      "que_hacer": [
+        "Safari en 4x4 (guía obligatorio, 40-60 EUR/día)",
+        "Observación de aves (gratis con entrada)",
+        "Playas del parque, baño (entrada 5-10 EUR)",
+        "Visita a centro de reintroducción de elefantes (incluido en tour)"
+      ],
+      "donde_comer": "Campamento tiene comida básica (8-15 EUR). Mejor come en Luanda antes o después.",
+      "consejo_local": "Reserva guía con agencia de Luanda antes de ir. El parque está siendo restaurado; fauna aún recuperándose. Lluvia afecta acceso.",
+      "plan_b_lluvia": "Playas cubiertas o cancela y regresa a Luanda. Malaria: profilaxis recomendada.",
+      "keywords": [
+        "Quicama",
+        "parque nacional",
+        "safari",
+        "elefantes",
+        "naturaleza",
+        "playas",
+        "Luanda Sur"
+      ]
+    },
+    {
+      "id": "cabinda",
+      "nombre": "Cabinda",
+      "tipo": "ciudad",
+      "region": "Cabinda (enclave norte)",
+      "descripcion": "Enclave independiente al norte, con atmósfera única y comercio activo. Acceso a selvas de Mayombe y frontera con Congo. Menos turístico, con carácter distinto del resto de Angola.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Desde Luanda: vuelo interno (2-3 horas, 100-150 EUR) o autobús 12+ horas (agotador). Vuelos desde Kinshasa (Congo) también posibles.",
+      "donde_dormir": {
+        "mochilero": "Albergues: 15-25 EUR/noche",
+        "medio": "Hoteles 2-3*: 40-70 EUR/noche",
+        "comfort": "Hoteles 4*: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Puerto y mercado (gratis, fotos discretas)",
+        "Selva de Mayombe, caminatas (30-50 EUR con guía)",
+        "Playas cercanas: Baía de Cabinda (gratis)",
+        "Exploración urbana, vida local diferenciada (gratis)"
+      ],
+      "donde_comer": "Influencias congoleñas, pescado. Restaurantes: 6-15 EUR.",
+      "consejo_local": "Cabinda tiene historia de conflicto político; es segura ahora pero evita política. Guías locales esenciales para la selva. Dólar o kwanza.",
+      "plan_b_lluvia": "Clima tropical; lluvia frecuente. Visita mercados, come en restaurantes, explora la ciudad.",
+      "keywords": [
+        "Cabinda",
+        "enclave",
+        "norte",
+        "Mayombe",
+        "selva",
+        "puerto",
+        "Congo"
+      ]
+    },
+    {
+      "id": "iona",
+      "nombre": "Reserva de Iona",
+      "tipo": "desierto",
+      "region": "Namibe (desierto sur)",
+      "descripcion": "Parque nacional remoto en el suroeste, uno de los desiertos más áridos de África. Accesible solo con 4x4 y guía. Destino extremo para aventureros con presupuesto y logística dispuestos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "julio a agosto",
+      "como_llegar": "Desde Namibe: 4x4 alquilado (120-180 EUR/día) + guía obligatorio (40-60 EUR/día). 4-6 horas de conducción off-road.",
+      "donde_dormir": {
+        "mochilero": "Campamento básico en la reserva: 20-30 EUR/noche (trae tienda)",
+        "medio": "Lodge rústico (si disponible): 60-100 EUR/noche",
+        "comfort": "No disponible; solo campamento"
+      },
+      "que_hacer": [
+        "Safari en 4x4: leones, jirafas, antílopes (incluido con logística)",
+        "Caminatas en dunas al amanecer (con guía, incluido)",
+        "Observación de aves desérticas (gratis con estancia)",
+        "Fotografía de paisaje extremo (gratis)"
+      ],
+      "donde_comer": "Comida de campamento (muy básica, 10-15 EUR/comida). Trae provisiones de Namibe.",
+      "consejo_local": "Iona requiere planificación seria: combustible, agua, guía, permisos. No viajes solo. Fauna peligrosa: respeta distancias. Extreme heat.",
+      "plan_b_lluvia": "Lluvia casi nula; calor es el desafío. Viaja temprano en mañana, descansa en calor.",
+      "keywords": [
+        "Iona",
+        "reserva",
+        "desierto",
+        "safari",
+        "sur",
+        "vida silvestre",
+        "extremo"
+      ]
+    },
+    {
+      "id": "sumbe-costa",
+      "nombre": "Costa de Sumbe y Mossâmedes",
+      "tipo": "playa",
+      "region": "Kwanza Sul (costa central)",
+      "descripcion": "Playas vírgenes y pueblos costeros con autenticidad local intacta. Menos desarrolladas que Benguela pero igual de hermosas. Acceso a pequeños puertos de pesca y comunidades tradicionales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Luanda: autobús a Sumbe (4-5 horas, 15-25 EUR). Desde Benguela: autobús (5-6 horas, 15-20 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedarias en Sumbe: 12-20 EUR/noche",
+        "medio": "Pousadas: 35-60 EUR/noche",
+        "comfort": "Hoteles costeros: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de Sumbe: Baia Azul (gratis)",
+        "Mossâmedes, exploración (gratis, 40km de Sumbe)",
+        "Pesca con pescadores locales (negocia 20-30 EUR para excursión)",
+        "Atardecer en el malecón (gratis)"
+      ],
+      "donde_comer": "Peixe fresco, arroz de marisco, mariscos. Restaurantes: 6-14 EUR. Mercado: 2-4 EUR.",
+      "consejo_local": "Playas desiertas y seguras, pero no camines solo al anochecer. Negocio de pesca es vida aquí; sé respetuoso con fotos.",
+      "plan_b_lluvia": "Lluvia tropical; quédate en hospedería, come fresco del mercado, lee.",
+      "keywords": [
+        "Sumbe",
+        "Mossâmedes",
+        "playa",
+        "costa",
+        "pesca",
+        "Kwanza Sul",
+        "vírgenes"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,390 @@
+{
+  "pais": "Noruega",
+  "codigo": "no",
+  "destinos": [
+    {
+      "id": "fiordo-geirangerfjord",
+      "nombre": "Geirangerfjord",
+      "tipo": "naturaleza",
+      "region": "Møre og Romsdal, Noruega Occidental",
+      "descripcion": "Uno de los fiordos más espectaculares de Noruega con acantilados de 1.500 metros, cascadas que caen directamente al agua y glaciares en las alturas. Es Patrimonio de la UNESCO y ofrece navegación, senderismo y fotografía de clase mundial.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Oslo: vuelo + autobús a Geirangerfjord (4h total, 80-120 EUR), o autobús directo desde Oslo (12h, 40-60 EUR). Base más cercana: Ålesund (1,5h en autobús).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Geirangerfjord o Ålesund (60-90 EUR/noche)",
+        "medio": "Hotel 3* en Geirangerfjord o Ålesund (120-180 EUR/noche)",
+        "comfort": "Hotel 4* con vistas al fiordo (200-300 EUR/noche)"
+      },
+      "que_hacer": [
+        "Crucero por el fiordo (90-150 EUR, 2h)",
+        "Senderismo a Trollstigen o Dalsnibba (gratis, senderos marcados)",
+        "Kayak en el fiordo (80-120 EUR, 3-4h)",
+        "Visita a las cascadas de Seven Sisters (gratis desde el crucero)"
+      ],
+      "donde_comer": "Pescado fresco, bacalao y mariscos locales. Rango 120-180 EUR por comida principal. Restaurantes junto al puerto en Geirangerfjord o Ålesund.",
+      "consejo_local": "Viaja por Trollstigen Road en coche de alquiler (autopista con 11 curvas cerradas espectaculares). Los cruceros nocturnos en verano son menos concurridos que los diurnos.",
+      "plan_b_lluvia": "Museos de Ålesund (Jugendstil architecture), senderismo en senderos menos populares con niebla dramática.",
+      "keywords": [
+        "Geirangerfjord",
+        "Geirangerfjorden",
+        "fiordo noruego",
+        "Ålesund",
+        "Trollstigen",
+        "Seven Sisters waterfall",
+        "UNESCO fjord"
+      ]
+    },
+    {
+      "id": "oslo-capital",
+      "nombre": "Oslo",
+      "tipo": "ciudad",
+      "region": "Østlandet, Noruega Oriental",
+      "descripcion": "Capital de Noruega con arquitectura moderna (Ópera de Oslo), museos de clase mundial (Munch, Vikingos), gastronomía nórdica de vanguardia y fácil acceso a naturaleza. Centro neurálgico para comenzar y terminar viajes por el país.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "todo el año, pero mayo-septiembre para explorar a pie",
+      "como_llegar": "Aeropuerto de Gardermoen a 60km: tren Flytog (20 min, 12 EUR) o autobús (45 min, 7 EUR) al centro.",
+      "donde_dormir": {
+        "mochilero": "Albergue en Grünerløkka o Sentrum (60-100 EUR/noche)",
+        "medio": "Hotel 3* en Sentrum o Grünerløkka (130-180 EUR/noche)",
+        "comfort": "Hotel 4-5* en Sentrum o Barcode (220-350 EUR/noche)"
+      },
+      "que_hacer": [
+        "Museo de la Ópera de Oslo: acceso gratuito a la azotea (vistas 360°)",
+        "Museo del Barco Vikingo (120 EUR)",
+        "Paseo por Vigeland Park: esculturas monumentales (gratis)",
+        "Gastronomía nórdica en Grünerløkka (menú degustación 150-200 EUR)",
+        "Isla de Hovedøya: kayak, ruinas y bosque (gratis)"
+      ],
+      "donde_comer": "Cocina nórdica moderna, sushi fusion, comida callejera. Rango 80-200 EUR comida principal. Barrios Grünerløkka (casual), Ferner Brachen (hipster), Sentrum (clásico).",
+      "consejo_local": "Compra el Oslo Pass (descuentos en museos y transporte gratis). Los viernes a partir de las 19h muchos museos son gratis. Viaja en invierno para auroras boreales o esquí cercano.",
+      "plan_b_lluvia": "Museos (Munch, Historia Natural, Resistencia), baños termales, shoppings cubiertos en Sentrum.",
+      "keywords": [
+        "Oslo",
+        "capital noruega",
+        "Ópera Oslo",
+        "Sentrum",
+        "Grünerløkka",
+        "Vigeland Park",
+        "Barco Vikingo",
+        "museos Oslo"
+      ]
+    },
+    {
+      "id": "lofoten-islas",
+      "nombre": "Islas Lofoten",
+      "tipo": "isla",
+      "region": "Nordland, Noruega Ártica",
+      "descripcion": "Archipiélago espectacular en el Ártico con picos dentados, pueblos de pescadores tradicionales y acceso a auroras boreales. Senderismo de ensueño, cod fishing y cultura Sami, muy popular entre mochileros que buscan Noruega 'auténtica'.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio-agosto (luz del día 24h), diciembre-febrero (auroras boreales)",
+      "como_llegar": "Desde Tromsø: vuelo a Leknes (1,5h, 80-120 EUR) + autobús (2h, 25 EUR). O autobús desde Tromsø (4,5h, 40 EUR) vía ruta escénica E10.",
+      "donde_dormir": {
+        "mochilero": "Albergue o cabaña (rorbuer) en Reine o Svolvær (70-120 EUR/noche)",
+        "medio": "Rorbuer tradicionales renovadas (140-200 EUR/noche)",
+        "comfort": "Hotel con vistas al fiordo o cabaña de lujo (200-300 EUR/noche)"
+      },
+      "que_hacer": [
+        "Senderismo Reinebringen: pico con vistas (gratis, 1,5h, difícil)",
+        "Paseo por pueblos de pescadores Reine y Å (gratis)",
+        "Pesca de bacalao en el fiordo (120-180 EUR, 5-6h)",
+        "Avistamiento de águilas y fauna ártica (80-120 EUR, guiado)",
+        "Kayak en el fiordo (100-150 EUR, medio día)"
+      ],
+      "donde_comer": "Bacalao, halibut ahumado, delicias árticas. Rango 100-150 EUR comida. Restaurantes en Reine, Svolvær y Henningsvær.",
+      "consejo_local": "Alquila un coche para explorar a tu ritmo (carreteras bien mantenidas). En invierno, la nieve y el hielo hacen los senderos más peligrosos pero las auroras son espectaculares. Los alojamientos se agotan en verano, reserva con anticipación.",
+      "plan_b_lluvia": "Museos de pesca en Svolvær, tiendas de artesanía local, cafeterías con vistas dramáticas a pesar del clima.",
+      "keywords": [
+        "Lofoten",
+        "islas Lofoten",
+        "Reine",
+        "Svolvær",
+        "E10 route",
+        "cod fishing",
+        "Reinebringen",
+        "Henningsvær",
+        "auroras boreales Lofoten"
+      ]
+    },
+    {
+      "id": "tromso-artica",
+      "nombre": "Tromsø",
+      "tipo": "ciudad",
+      "region": "Troms og Finnmark, Noruega Ártica",
+      "descripcion": "Puerta a las auroras boreales y punto de partida para aventuras árticas (snowmobiling, trineos con huskies, avistamiento de ballenas). Ofrece cultura local, cafeterías de clase mundial y vida nocturna vibrante, es el mejor balance entre aventura y comodidad en el Ártico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre-marzo (auroras), junio-agosto (Midnight Sun)",
+      "como_llegar": "Vuelo desde Oslo/Bergen (2-3h, 100-180 EUR). Bus desde Nordkapp (6h, 60 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue en centro (70-110 EUR/noche)",
+        "medio": "Hotel 3* en Sentrum (130-180 EUR/noche)",
+        "comfort": "Hotel 4-5* o cabaña con vistas a auroras (200-350 EUR/noche)"
+      },
+      "que_hacer": [
+        "Caza de auroras boreales (120-200 EUR, 4-5h nocturno, operadores locales)",
+        "Paseo en trineo con huskies (150-220 EUR, 2-3h)",
+        "Avistamiento de ballenas orcas (180-250 EUR, 5-6h)",
+        "Teleférico Fjellheisen: vistas 360° y restaurante en la cima (gratis acceso, 80 EUR teleférico ida-vuelta)",
+        "Museo Polaria: aéquarium ártico y experiencias interactivas (150 EUR)"
+      ],
+      "donde_comer": "Bacalao, halibut, carne de reno. Rango 120-200 EUR comida. Barrio Sentrum tiene mejores opciones. Cafeterías nórdicas excelentes (Arctic Cathedral Café).",
+      "consejo_local": "Si vienes por auroras, revisa pronósticos de actividad solar antes (sitio NOAA). Octubre-noviembre y febrero-marzo tienen más horas de oscuridad pero menos turistas. Las tours de auroras desde hoteles son caras; negocia con guías independientes.",
+      "plan_b_lluvia": "Museo Polar, Acuario Polaria, baños termales al aire libre (experiencia surrealista), cafeterías con buena wifi.",
+      "keywords": [
+        "Tromsø",
+        "Tromso",
+        "auroras boreales",
+        "Midnight Sun",
+        "Arctic",
+        "mushing",
+        "whale watching",
+        "Fjellheisen",
+        "Polaria",
+        "Sentrum"
+      ]
+    },
+    {
+      "id": "bergen-costa",
+      "nombre": "Bergen",
+      "tipo": "ciudad",
+      "region": "Hordaland, Noruega Occidental",
+      "descripcion": "Segunda ciudad de Noruega, puerta de entrada a los fiordos con arquitectura Hanseática en Bryggen, mercado de pescado tradicional y fácil acceso a naturaleza. Clima más húmedo pero menos turístico que Oslo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Vuelo desde Oslo (1,5h, 60-100 EUR), o tren Bergen Railway (7h, 50-100 EUR, muy escénico).",
+      "donde_dormir": {
+        "mochilero": "Albergue en centro (65-95 EUR/noche)",
+        "medio": "Hotel 3* en Sentrum (120-170 EUR/noche)",
+        "comfort": "Hotel 4* con vistas al puerto (180-250 EUR/noche)"
+      },
+      "que_hacer": [
+        "Bryggen: paseo por casas hanseáticas y tiendas (gratis)",
+        "Mercado de pescado Fish Market: probar seafood fresco (50-100 EUR)",
+        "Teleférico Fløibanen: vistas de la ciudad y senderismo (80 EUR ida-vuelta)",
+        "Museo Hanseático (100 EUR, 30 min)",
+        "Paseo por barrio de Sandviken: casas tradicionales (gratis)"
+      ],
+      "donde_comer": "Seafood fresco, sopa de pescado, pan tradición noruego. Rango 100-160 EUR comida. Fish Market es imprescindible (20-40 EUR por plato).",
+      "consejo_local": "Llueve frecuentemente; lleva impermeable. El teleférico Fløibanen ofrece vistas mejores que el Monten Funicular. Compra pan en Solstrand Bakery (local tradicional).",
+      "plan_b_lluvia": "Museos (Edvard Grieg House, Resistance Museum), acuario de aguas frías, cafeterías en Bryggen.",
+      "keywords": [
+        "Bergen",
+        "Bryggen",
+        "Hanseático",
+        "Fish Market",
+        "Fløibanen",
+        "fiordos",
+        "puerto Bergen",
+        "casas históricas"
+      ]
+    },
+    {
+      "id": "preikestolen-pulpito",
+      "nombre": "Preikestolen (Púlpito de Roca)",
+      "tipo": "naturaleza",
+      "region": "Rogaland, Noruega del Sur",
+      "descripcion": "Acantilado de 604 metros con plataforma plana en la cima, uno de los destinos más fotografiados de Noruega. Senderismo accesible en 2 horas, vistas espectaculares del fiordo Lysefjord y base perfecta para explorar el sur.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Stavanger: autobús (1,5h, 35 EUR) o coche alquilado. O tren desde Oslo a Stavanger (8h, 50-100 EUR) + autobús al trailhead.",
+      "donde_dormir": {
+        "mochilero": "Albergue en Tau o Stavanger (60-90 EUR/noche)",
+        "medio": "Hotel 3* en Stavanger (110-150 EUR/noche)",
+        "comfort": "Hotel 4* en Stavanger o cabaña cerca de Preikestolen (160-240 EUR/noche)"
+      },
+      "que_hacer": [
+        "Senderismo Preikestolen (gratis, 2h ida-vuelta, moderado)",
+        "Crucero por Lysefjord: avistamiento de aguilas y cascadas (120-150 EUR, 2h)",
+        "Escalada en roca con guía (180-250 EUR, 4-5h, para experimentados)",
+        "Pesca de salmón (150-220 EUR media día)"
+      ],
+      "donde_comer": "Mariscos, salmón, comida ligera en cafés. Rango 80-130 EUR. Lleva picnic desde Stavanger (más barato).",
+      "consejo_local": "Comienza el senderismo muy temprano (7am) para evitar multitudes. El terreno es rocoso pero bien marcado. Hay baños en el trailhead. En lluvia, el sendero se vuelve resbaladizo.",
+      "plan_b_lluvia": "Crucero por Lysefjord (menos afectado que senderismo), museos en Stavanger, tiendas de souvenir.",
+      "keywords": [
+        "Preikestolen",
+        "Pulpit Rock",
+        "acantilado",
+        "Lysefjord",
+        "Stavanger",
+        "senderismo Preikestolen",
+        "hiking rock"
+      ]
+    },
+    {
+      "id": "nordkapp-cabo-norte",
+      "nombre": "Nordkapp (Cabo Norte)",
+      "tipo": "naturaleza",
+      "region": "Finnmark, Extremo Norte Noruega",
+      "descripcion": "Punto más septentrional de Europa continental (71°N), experiencia surrealista con Midnight Sun en verano y auroras en invierno. Carretera escénica E69, pequeño pueblo ártico y monumento icónico, ideal para aventureros que buscan límites geográficos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-julio (Midnight Sun), diciembre-enero (auroras, oscuridad total)",
+      "como_llegar": "Desde Tromsø: autobús (6h, 60 EUR) o coche alquilado. Desde Honningsvåg: autobús local (2h, 25 EUR). Carretera E69 espectacular pero frecuentemente cerrada por nieve en invierno.",
+      "donde_dormir": {
+        "mochilero": "Albergue en Honningsvåg (70-110 EUR/noche)",
+        "medio": "Hotel 3* en Honningsvåg o cabaña (130-180 EUR/noche)",
+        "comfort": "Cabaña de lujo con vistas árticas (200-300 EUR/noche)"
+      },
+      "que_hacer": [
+        "Visita al monumento Nordkapp y faro (60 EUR entrada museo)",
+        "Senderismo costero y fotografía de paisaje (gratis)",
+        "Observación del Midnight Sun (junio-julio, gratis)",
+        "Avistamiento de aves árticas (100-150 EUR, guiado)",
+        "Viaje a Magoya: pueblo pesquero tradicional (gratis)"
+      ],
+      "donde_comer": "King crab (elaborado localmente), bacalao, comida ártica. Rango 100-160 EUR. Pocos restaurantes; lleva provisiones desde Tromsø.",
+      "consejo_local": "La carretera E69 es una aventura en sí; ciérrala en invierno, comprueba condiciones. El monumento Nordkapp es turístico pero la experiencia de estar en el extremo norte vale. Magoya es más auténtico y menos concurrido.",
+      "plan_b_lluvia": "Museo en Honningsvåg, cafés, observación de ballenas (también en lluvia con equipo adecuado).",
+      "keywords": [
+        "Nordkapp",
+        "North Cape",
+        "Cabo Norte",
+        "E69",
+        "Midnight Sun",
+        "Honningsvåg",
+        "extremo norte",
+        "71°N",
+        "artico"
+      ]
+    },
+    {
+      "id": "sognefjord-mayor",
+      "nombre": "Sognefjord",
+      "tipo": "naturaleza",
+      "region": "Sogn og Fjordane, Noruega Occidental",
+      "descripcion": "El fiordo más largo y profundo de Noruega (205km), con glaciares de marea, pueblos tradicionales en sus brazos y múltiples opciones de senderismo y agua. Base ideal para combinar naturaleza, cultura y aventura sin depender demasiado de grandes ciudades.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Bergen: autobús (3h, 40 EUR) a Balestrand o Flåm. Tren Flåm Railway es experiencia en sí (20 EUR, 1h espectacular).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Flåm, Balestrand o Sogndal (65-110 EUR/noche)",
+        "medio": "Hotel 3* o cabaña tradicional (120-180 EUR/noche)",
+        "comfort": "Hotel con vistas a glaciar o fiordo (180-280 EUR/noche)"
+      },
+      "que_hacer": [
+        "Tren Flåm Railway: 20km en tren a través de 20 túneles, paisajes espectaculares (240 EUR, ida-vuelta)",
+        "Crucero Sognefjord desde Flåm (100-150 EUR, 2-3h)",
+        "Senderismo a Glacier Briksdal (accesible, 100 EUR guiado o gratis por tu cuenta)",
+        "Kayak en rama Nærøyfjord, Patrimonio UNESCO (120-180 EUR)",
+        "Ciclismo en rail-trail Rallarvegen: 41km descenso (guiado 180 EUR con bici)"
+      ],
+      "donde_comer": "Trucha, salmón de granja, carne de cordero local. Rango 90-150 EUR. Flåm tiene más opciones que pueblos pequeños.",
+      "consejo_local": "Reserva tren Flåm con semanas de anticipación en verano. Nærøyfjord es más salvaje y menos turístico que Geirangerfjord. Los senderos están bien señalizados pero requieren cierto nivel de forma física.",
+      "plan_b_lluvia": "Tren Flåm igual funciona en lluvia (dramático con niebla), pueblos para explorar galerías y tiendas de artesanía.",
+      "keywords": [
+        "Sognefjord",
+        "Fiordo de Sogn",
+        "Flåm",
+        "Balestrand",
+        "Nærøyfjord",
+        "Briksdal glacier",
+        "tren Flåm",
+        "Rallarvegen"
+      ]
+    },
+    {
+      "id": "islas-vesteralen",
+      "nombre": "Islas Vesterålen",
+      "tipo": "isla",
+      "region": "Nordland, Noruega Ártica",
+      "descripcion": "Archipiélago más tranquilo que Lofoten con avistamiento de ballenas (orcas y jorobadas), pueblos pescadores auténticos y senderismo sin multitudes. Excelente para observadores de vida silvestre y viajeros que buscan experiencias menos turísticas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-octubre (ballenas), septiembre-febrero (auroras)",
+      "como_llegar": "Desde Tromsø o Lofoten: autobús E10 (4-5h, 40-60 EUR) a Andenes o Stokmarknes. Ferry desde Lofoten (1h, 20 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue o cabaña rústica (65-110 EUR/noche)",
+        "medio": "Hotel o cabaña renovada en Andenes (120-170 EUR/noche)",
+        "comfort": "Cabaña de lujo con vistas al mar (180-280 EUR/noche)"
+      },
+      "que_hacer": [
+        "Avistamiento de ballenas: orcas, jorobadas (200-280 EUR, 5-6h, temporada mayo-septiembre)",
+        "Senderismo Andenes (gratis, 1-2h, no difícil)",
+        "Visita a fábrica de producción de bacalao (60 EUR, 1h)",
+        "Pesca en el archipiélago (150-220 EUR media día)",
+        "Espeleología en cuevas costeras (100-150 EUR, guiado)"
+      ],
+      "donde_comer": "Ballena, bacalao, mariscos frescos. Rango 90-140 EUR. Restaurantes en Andenes son los mejores.",
+      "consejo_local": "Andenes es la capital mundial de avistamiento de orcas orcinus. Las compañías de whale watching garantizan reembolso si no ves ballenas. Reserva con anticipación en temporada alta.",
+      "plan_b_lluvia": "Visitas a museos locales, fábrica de bacalao, senderismo en días nublados (las ballenas salen igual).",
+      "keywords": [
+        "Vesterålen",
+        "Andenes",
+        "avistamiento ballenas",
+        "orcas",
+        "whale watching",
+        "islas Vesteralen",
+        "Stokmarknes",
+        "artico noruego"
+      ]
+    },
+    {
+      "id": "stavanger-sur",
+      "nombre": "Stavanger",
+      "tipo": "ciudad",
+      "region": "Rogaland, Noruega del Sur",
+      "descripcion": "Cuarta ciudad más grande de Noruega con carácter portuario, gastronomía experimental, vida nocturna vibrante y acceso a Preikestolen y otros acantilados. Menos turística que Oslo/Bergen pero con infraestructura completa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Vuelo desde Oslo/Bergen (1,5h, 70-120 EUR), o tren Oslo-Stavanger (8h, 50-100 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue en centro (60-100 EUR/noche)",
+        "medio": "Hotel 3* en Sentrum (110-160 EUR/noche)",
+        "comfort": "Hotel 4* o boutique (170-250 EUR/noche)"
+      },
+      "que_hacer": [
+        "Catedral de Stavanger + casco antiguo (gratis paseo)",
+        "Museo de Petróleo Norwegian (140 EUR, 2-3h)",
+        "Paseo costero Bystranda: playa y cafeterías (gratis)",
+        "Restaurantes de clase mundial: Fine Dining 150-250 EUR/menú)",
+        "Punto de partida a Preikestolen (2h en autobús)"
+      ],
+      "donde_comer": "Cocina nórdica moderna, ingredientes frescos, experimentos culinarios. Rango 100-220 EUR. Barrio Gamle Stavanger tiene opciones casuales.",
+      "consejo_local": "Stavanger tiene más vida nocturna que ciudades similares en Noruega. Los restaurantes son más asequibles que Oslo/Bergen. Es una buena base para explorar Preikestolen sin prisas.",
+      "plan_b_lluvia": "Museo de Petróleo, galerías de arte, cafés y bares, shopping.",
+      "keywords": [
+        "Stavanger",
+        "Catedral Stavanger",
+        "Gamle Stavanger",
+        "petróleo museo",
+        "Bystranda",
+        "cocina nórdica",
+        "sur Noruega",
+        "Rogaland"
+      ]
+    },
+    {
+      "id": "alesund-art-nouveau",
+      "nombre": "Ålesund",
+      "tipo": "ciudad",
+      "region": "Møre og Romsdal, Noruega Occidental",
+      "descripcion": "Ciudad de Art Nouveau con 58 edificios modernistas, puerto de pesca tradicional y acceso directo a Geirangerfjord. Punto de partida menos turístico que Bergen para explorar los fiordos occidentales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Vuelo desde Oslo (1,5h, 80-120 EUR) o Bergen (1h, 60-100 EUR). Bus desde Geirangerfjord (1,5h, 35 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue en centro (65-100 EUR/noche)",
+        "medio": "Hotel 3* (110-160 EUR/noche)",
+        "comfort": "Hotel 4* o con vistas al puerto (170-250 EUR/noche)"
+      },
+      "que_hacer": [
+        "Paseo arquitectónico Art Nouveau (gratis, 1-2h)",
+        "Teleférico Aksla: mirador con vistas 360° (70 EUR ida-vuelta, o senderismo gratis 30 min)",
+        "Museo Art Nouveau (80 EUR)",
+        "Crucero por fiordos cercanos (100-150 EUR, 3h)",
+        "Paseo por puerto y mercado de pescado (gratis)"
+      ],
+      "donde_comer": "Camarones, bacalao, platillos de mar. Rango 90-150 EUR. Restaurantes junto al puerto Brosundet.",
+      "consejo_local": "Ålesund es la capital mundial de Art Nouveau después de reconstrucción en 1906 tras incendio. Compra mapa arquitectónico en turismo. Es menos concurrido que Geirangerfjord pero igual de hermoso.",
+      "plan_b_lluvia": "Museo Art Nouveau, cafeterías con vistas al puerto, tiendas de artesanía, galerías de arte.",
+      "keywords": [
+        "Ålesund",
+        "Aalesund",
+        "Art Nouveau",
+        "Aksla",
+        "puerto Ålesund",
+        "arquitectura modernista",
+        "fiordos Møre og Romsdal"
+      ]
+    }
+  ]
+}

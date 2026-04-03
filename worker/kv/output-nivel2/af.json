@@ -1,0 +1,347 @@
+{
+  "pais": "Afganistán",
+  "codigo": "af",
+  "alerta_general": "Afganistán presenta riesgo de seguridad significativo. Se recomienda consultar avisos del ministerio de asuntos exteriores antes de viajar. Los destinos listados son de relevancia histórica y cultural, pero el viaje requiere planificación experta y guías locales.",
+  "destinos": [
+    {
+      "id": "kabul",
+      "nombre": "Kabul",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital y principal puerta de entrada, con museos de arte islámico, mercados tradicionales y arquitectura de diferentes épocas. Centro neurálgico para organizar viajes por el país, aunque requiere precaución. Punto de partida obligatorio para la mayoría de visitantes.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a junio, septiembre a octubre",
+      "como_llegar": "Aeropuerto Internacional Hamid Karzai (vuelos desde Estambul, Doha, Islamabad): 3-4 horas desde Estambul, 80-200 EUR",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en zona de Shar-e Naw: 15-25 EUR/noche",
+        "medio": "Hoteles de cadena local (Serena, Intercontinental): 50-120 EUR/noche",
+        "comfort": "Intercontinental Kabul o similares con seguridad: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional de Afganistán (3 EUR, colecciones de arte islámico)",
+        "Bazar de Kabul, especialmente Chicken Street para artesanías (gratis entrada, compras variables)",
+        "Mezquita Azul (gratis, respetar horarios de oración)",
+        "Jardín Babur, parque histórico con vistas (2 EUR)",
+        "Monumento de Amanullah Khan (gratis)"
+      ],
+      "donde_comer": "Kabob afgano en mercados locales (3-5 EUR), Afghan bread (naan) fresco, té con cardamomo. Evitar agua del grifo. Zonas seguras: hoteles y restaurantes establecidos en Shar-e Naw",
+      "consejo_local": "Contrata un guía local de confianza a través de tu alojamiento; las dinámicas de seguridad cambian frecuentemente. Los afganos son hospitalarios pero la situación requiere sentido común extremo.",
+      "plan_b_lluvia": "Museos cubiertos, bazares techados, cafés locales en hoteles",
+      "alerta_seguridad": "Riesgo elevado de atentados, secuestros y enfrentamientos. Evita manifestaciones, viaja con seguridad contratada, consulta embajada antes de partir.",
+      "keywords": [
+        "Kabul",
+        "capital afgana",
+        "Shar-e Naw",
+        "Chicken Street",
+        "museo nacional",
+        "bazar kabul"
+      ]
+    },
+    {
+      "id": "bamiyan",
+      "nombre": "Bamiyan",
+      "tipo": "histórico",
+      "region": "Centro (región montañosa)",
+      "descripcion": "Provincia conocida históricamente por los colosos de Buda (destruidos en 2001), hoy importante por sus acantilados de arenisca roja, budas de fresco tallados en roca y patrimonio de la Ruta de la Seda. Centro cultural-arqueológico con menos inseguridad que Kabul.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Kabul en 4x4 privado (250 km): 6-8 horas, 120-150 EUR con chofer. Vuelos domésticos si operan (2 horas, 80-120 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales básicos: 10-18 EUR/noche",
+        "medio": "Bamiyan Hotel o similares: 30-60 EUR/noche",
+        "comfort": "Bamiyan Silk Road Hotel: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Nichos de los Budas y paredes de acantilados (gratis, entrada con guía recomendado)",
+        "Caminata por acantilados de arenisca roja (gratis, contrata guía local)",
+        "Museo arqueológico de Bamiyan (3 EUR)",
+        "Aldea tradicional de Bamiyan y mercado local (gratis)",
+        "Senderismo hacia lagos cercanos (gratis, 4-5 horas)"
+      ],
+      "donde_comer": "Kabob de cordero, sopa de lentejas (dhal), pan casero. 3-6 EUR comidas básicas. Mercado central para productos frescos. Agua embotellada esencial.",
+      "consejo_local": "Visita con guía acreditado; las excavaciones arqueológicas continúan. Los locales son muy acogedores. No hay mala voluntad histórica hacia visitantes, a diferencia de otras regiones.",
+      "plan_b_lluvia": "Museo local cubierto, artesanías en aldeas, té con familias locales",
+      "alerta_seguridad": "Menor riesgo que Kabul pero zona remota sin servicios médicos avanzados. Requiere organización previa con agencia local acreditada.",
+      "keywords": [
+        "Bamiyan",
+        "Budas Bamiyan",
+        "acantilados rojos",
+        "ruta seda",
+        "arqueología",
+        "provincia bamiyan"
+      ]
+    },
+    {
+      "id": "herat",
+      "nombre": "Herat",
+      "tipo": "histórico",
+      "region": "Oeste",
+      "descripcion": "Ciudad histórica de la Ruta de la Seda con basares tradicionales, mezquita de Viernes con azulejos turquesas, y fortaleza antigua. Centro cultural persa con arquitectura medieval y artesanías textiles. Menos visitada que Bamiyan pero igualmente significativa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre a noviembre, marzo a mayo",
+      "como_llegar": "Desde Kabul: vuelo doméstico (2 horas, 80-120 EUR) o 4x4 (720 km, 16+ horas, no recomendado por carreteras). Desde Irán fronterizo si se abre (240 km desde Irán).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses centro: 12-20 EUR/noche",
+        "medio": "Herat Hotel o Marco Polo: 40-80 EUR/noche",
+        "comfort": "Marco Polo Hotel (mejor opción): 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Mezquita Viernes de Herat, azulejos azules (gratis, respetar horarios oración)",
+        "Bazar de Herat, especialmente zona de tejidos (gratis entrada, compras locales 5-50 EUR)",
+        "Fortaleza de Herat/Arg (2 EUR, vistas ciudad)",
+        "Mausoleo de Ghori (gratis)",
+        "Taller de alfombras y tejidos artesanales (gratis observar, compras desde 100 EUR)"
+      ],
+      "donde_comer": "Kabob de carne molida, sopa regional, fruta seca local. 4-7 EUR comidas. Mercado fresco con frutas del oeste. Té verde obligatorio.",
+      "consejo_local": "La artesanía textil es excepcional; los tejedores venden directamente en talleres sin intermediarios. Los bazares son más seguros que en Kabul.",
+      "plan_b_lluvia": "Bazares techados, talleres artesanales cubiertos, museos locales",
+      "alerta_seguridad": "Oeste de Afganistán tiene riesgos variables. Consulta actualizaciones de seguridad locales. Frontera con Irán históricamente tensa.",
+      "keywords": [
+        "Herat",
+        "oeste afganistan",
+        "ruta seda",
+        "mezquita herat",
+        "bazares",
+        "tejidos persas"
+      ]
+    },
+    {
+      "id": "jalalabad",
+      "nombre": "Jalalabad",
+      "tipo": "ciudad",
+      "region": "Este",
+      "descripcion": "Puerta de entrada oriental, ciudad en llanura con clima subtropical úniço en Afganistán. Punto de acceso desde Pakistán (Peshawar) y base para explorar valles y cascadas de la región. Menos turístico pero culturalmente auténtico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Kabul en 4x4 (140 km): 4-5 horas, 60-100 EUR con chofer. Desde Peshawar (Pakistán) en 4x4 (80 km): 3-4 horas si frontera abierta.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicas: 10-15 EUR/noche",
+        "medio": "Spinghar Hotel: 30-50 EUR/noche",
+        "comfort": "Spinghar Hotel habitaciones mejores: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Bazar de Jalalabad (gratis entrada, compras y observación)",
+        "Parque Saraj Bagh, espacio verde central (gratis)",
+        "Cascadas de Sarai (día completo excursión, 15-20 EUR con guía)",
+        "Piscina natural de Adiala (15 km, 3-4 EUR entrada, agradable en calor)",
+        "Mercado de frutas y especias (gratis observar)"
+      ],
+      "donde_comer": "Kabob, sopa de garbanzos (gratis en hoteles), fruta tropical única: mangos, papaya. 3-5 EUR comidas. Mercado central para snacks frescos.",
+      "consejo_local": "Clima cálido diferente al resto del país. Trae ropa ligera. Los bazares son auténticos pero menos organizados que Herat o Bamiyan.",
+      "plan_b_lluvia": "Bazares cubiertos, hoteles, tiendas de artesanías",
+      "alerta_seguridad": "Este presenta riesgos elevados por presencia de grupos armados. Restringe movimientos a zona urbana, evita viajes nocturnos, contrata seguridad local.",
+      "keywords": [
+        "Jalalabad",
+        "este afganistan",
+        "puerta oriental",
+        "peshawar",
+        "Saraj Bagh",
+        "cascadas"
+      ]
+    },
+    {
+      "id": "mazar-e-sharif",
+      "nombre": "Mazar-e Sharif",
+      "tipo": "histórico",
+      "region": "Norte",
+      "descripcion": "Ciudad del norte con mezquita azul de mármol (Santuario de Alí), una de las más hermosas de Asia Central. Centro cultural de tradición sufí con mercados antiguos y feria anual colorida. Menos insegura que Kabul.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo (Nowruz), mayo a junio, septiembre a octubre",
+      "como_llegar": "Desde Kabul: vuelo doméstico (1.5 horas, 80-120 EUR) o 4x4 privado (350 km, 8-10 horas, 100-140 EUR con chofer)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 12-18 EUR/noche",
+        "medio": "Marco Polo Hotel o Bactria: 40-70 EUR/noche",
+        "comfort": "Marco Polo Hotel: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Mezquita Azul/Santuario de Alí (gratis entrada, donativos bienvenidos, respetar oración)",
+        "Mercado antiguo de Mazar (gratis entrada, compras artesanales 5-100 EUR)",
+        "Tumba de Rabia Balkhi (poeta, gratis)",
+        "Feria de Nowruz si viajas en marzo (gratis acceso, caballos y lucha tradicional)",
+        "Paseo por parques centrales (gratis)"
+      ],
+      "donde_comer": "Kabob bokhara (especialidad local), sopa de lentejas, pan tandoori. 4-6 EUR comidas. Mercado para frutas secas y dátiles. Té con cardamomo.",
+      "consejo_local": "La feria de Nowruz en marzo es espectacular pero abarrotada. Fuera de festividades, es ciudad más relajada. Los locales son muy hospitalarios.",
+      "plan_b_lluvia": "Mercados cubiertos, mezquita interior, museos, cafés locales",
+      "alerta_seguridad": "Norte más estable que sur/este históricamente, pero inseguridad sigue siendo riesgo. Consulta situación actual antes de partir.",
+      "keywords": [
+        "Mazar-e Sharif",
+        "Mazari Sharif",
+        "mezquita azul",
+        "santuario ali",
+        "nowruz",
+        "norte afganistan"
+      ]
+    },
+    {
+      "id": "kunduz",
+      "nombre": "Kunduz",
+      "tipo": "ciudad",
+      "region": "Nordeste",
+      "descripcion": "Ciudad histórica en ruta comercial entre Samarcanda y India. Centro de intercambio cultural con bazares auténticos y ruinas arqueológicas cercanas. Menos visitada, con atmósfera local genuina pero mayor volatilidad.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a junio, septiembre a octubre",
+      "como_llegar": "Desde Kabul: vuelo doméstico (1 hora, 60-100 EUR) o 4x4 (350 km, 8-9 horas, 90-130 EUR con chofer)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicas: 10-15 EUR/noche",
+        "medio": "Kunduz Hotel: 30-50 EUR/noche",
+        "comfort": "Opciones limitadas, máximo 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Bazar histórico de Kunduz (gratis entrada, artesanías locales)",
+        "Ruinas de Kunduz antiguo (gratis con guía local)",
+        "Paseo por caravanserais tradicionales (gratis)",
+        "Mercado de especias (gratis observar)",
+        "Taller de vidrio soplado artesanal (gratis ver, compras desde 10 EUR)"
+      ],
+      "donde_comer": "Kabob local, pan fresco, nueces y frutas secas. 3-5 EUR comidas básicas. Especias del bazar. Té verde sin parar.",
+      "consejo_local": "Kunduz es más auténtica pero menos infraestructura turística. Habla persa/dari, no inglés extendido. Negocia precios en bazares.",
+      "plan_b_lluvia": "Bazares, caravanserais cubiertos, talleres artesanales",
+      "alerta_seguridad": "Nordeste históricamente ha tenido inseguridad variable. Verifica antes de ir. Menos internacional que Mazar.",
+      "keywords": [
+        "Kunduz",
+        "nordeste afganistan",
+        "ruta seda",
+        "bazares kunduz",
+        "especias",
+        "caravanserais"
+      ]
+    },
+    {
+      "id": "ghazni",
+      "nombre": "Ghazni",
+      "tipo": "histórico",
+      "region": "Sur",
+      "descripcion": "Antigua capital imperial (siglo X-XI) con minaretes históricos y patrimonio islámico medieval. Carrefour de rutas comerciales con museos arqueológicos. Menos accesible pero de incalculable valor histórico para interesados en arquitectura islámica.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a mayo, septiembre a octubre",
+      "como_llegar": "Desde Kabul en 4x4 privado (150 km): 5-6 horas, 70-100 EUR con chofer. Sin vuelos domésticos regulares.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses muy básicas: 8-12 EUR/noche",
+        "medio": "Ghazni Hotel: 25-40 EUR/noche",
+        "comfort": "Opciones limitadas, máximo 40-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Minarete de Masud III (5 EUR entrada, vistas ciudad)",
+        "Minarete de Bahramshah (5 EUR, arquitectura medieval)",
+        "Museo de Ghazni (3 EUR, artefatos islámicos)",
+        "Ruinas de ciudadela (gratis con guía local)",
+        "Bazares tradicionales (gratis entrada, compras locales)"
+      ],
+      "donde_comer": "Kabob de cordero, sopa cebada, pan tandoori. 2-4 EUR comidas. Mercado local muy auténtico. Agua embotellada esencial.",
+      "consejo_local": "Requiere planificación experta. Infraestructura mínima. Los historiadores arquitectónicos encontrarán valor excepcional. Pocos viajeros occidentales.",
+      "plan_b_lluvia": "Museos cubiertos, bazares techados, ruinas protegidas",
+      "alerta_seguridad": "Sur de Afganistán presenta riesgo elevado de inseguridad. Solo para viajeros con experiencia en zonas de conflicto y organización con agencias locales acreditadas.",
+      "keywords": [
+        "Ghazni",
+        "Ghaznavi",
+        "sur afganistan",
+        "minaretes",
+        "patrimonio islámico",
+        "arqueología"
+      ]
+    },
+    {
+      "id": "panjshir",
+      "nombre": "Valle del Panjshir",
+      "tipo": "naturaleza",
+      "region": "Nordeste (montañas)",
+      "descripcion": "Valle alpino con ríos claros, aldeas tradicionales tajik y montañas escarpadas. Esencial para senderismo y experiencia de vida rural auténtica. Históricamente menos inseguro que otras regiones; centro de resistencia con comunidades acogedoras.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Kabul en 4x4 privado (100 km): 3-4 horas, 80-120 EUR con chofer. Carretera mejorada recientemente.",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes rurales/homestay: 15-25 EUR/noche",
+        "medio": "Panjshir Hotel o guesthouses mejorados: 30-50 EUR/noche",
+        "comfort": "Opciones limitadas en naturaleza, máximo 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo por valles alpinos (gratis, guía local 30-50 EUR/día)",
+        "Acampada y noche en aldeas rurales (20-30 EUR con familia local)",
+        "Pesca en ríos de aguas claras (gratis, equipo a llevar)",
+        "Observación de vida tradicional tajik (gratis, respetar privacidad)",
+        "Caminata a lagos alpinos de altura (gratis con guía, 2-3 días)"
+      ],
+      "donde_comer": "Comidas caseras en aldeas: sopas, pan casero, queso local, yogur. 5-10 EUR pensión completa en homestay. Frutas frescas abundantes en estación.",
+      "consejo_local": "Los tajik del Panjshir son muy acogedores con viajeros. Lleva dinero en efectivo, no hay cajeros. Prepárate para ausencia de WiFi. Guía bilingüe esencial.",
+      "plan_b_lluvia": "Permanece en aldeas, actividades interiores con familias locales, observación del paisaje desde refugio",
+      "alerta_seguridad": "Menos riesgo que regiones sur/este, pero remoto sin servicios médicos. Mejor organizar con agencia local de confianza. Consulta embajada.",
+      "keywords": [
+        "Panjshir",
+        "valle panjshir",
+        "nordeste montaña",
+        "tajik",
+        "senderismo afganistan",
+        "trekking"
+      ]
+    },
+    {
+      "id": "kandahar",
+      "nombre": "Kandahar",
+      "tipo": "ciudad",
+      "region": "Sur",
+      "descripcion": "Segunda ciudad histórica de Afganistán, capital de Pashtunistán. Centro comercial antiguo con bazares y relevancia histórica como ruta comercial hacia India. Zona de mayor volatilidad pero esencial para entender cultura pashto.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "marzo a mayo, octubre a noviembre",
+      "como_llegar": "Desde Kabul: vuelo doméstico (2 horas, 100-140 EUR) o 4x4 privado (500 km, 12+ horas, no recomendado por carretera)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses muy básicas: 10-15 EUR/noche",
+        "medio": "Kandahar Serena: 40-70 EUR/noche",
+        "comfort": "Kandahar Serena Hotel: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Bazar de Kandahar (gratis entrada, artesanías pashto)",
+        "Mausoleo de Ahmad Shah Durrani (fundador imperio Durrani, gratis)",
+        "Mezquita de Cuarenta Columnas (gratis, respetar oración)",
+        "Ruinas de Chaman (arqueología cercana, gratis con guía local)",
+        "Observación de bazares de especias (gratis)"
+      ],
+      "donde_comer": "Kabob Kandahari (especialidad), sopa pashto, pan naan. 3-5 EUR comidas. Mercados intensos con frutas secas. Té Kandahari especial.",
+      "consejo_local": "Kandahar es más conservadora culturalmente. Respeta códigos de vestuario. Los bazares requieren negociación. Pocos viajeros occidentales, curiosidad local.",
+      "plan_b_lluvia": "Bazares techados, mausoleos cubiertos, hoteles seguros",
+      "alerta_seguridad": "Sur de Afganistán presenta riesgo muy elevado. Solo para organizaciones, trabajadores humanitarios o periodistas con experiencia. NO recomendado para viajeros independientes.",
+      "keywords": [
+        "Kandahar",
+        "sur afganistan",
+        "pashto",
+        "bazares kandahar",
+        "Ahmad Shah Durrani",
+        "especia"
+      ]
+    },
+    {
+      "id": "samangan",
+      "nombre": "Samangán",
+      "tipo": "histórico",
+      "region": "Nordeste",
+      "descripcion": "Provincia remota con sitios arqueológicos cercanos (Airtam, Takht-i Rostam). Centro de patrimonio budista antiguoe importancia en la Ruta de la Seda. Destinación verdaderamente fuera de rutas convencionales para arqueólogos y viajeros especializados.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Mazar-e Sharif en 4x4 privado (250 km): 7-8 horas, 100-140 EUR con chofer. Sin vuelos domésticos regulares.",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes muy básicas: 8-12 EUR/noche",
+        "medio": "Samangan Hotel: 20-35 EUR/noche",
+        "comfort": "Opciones mínimas, máximo 35-50 EUR/noche"
+      },
+      "que_hacer": [
+        "Sitio arqueológico Airtam (budista, gratis con guía arqueólogo local)",
+        "Ruinas de Takht-i Rostam (fortaleza sasánida, gratis)",
+        "Cuevas Bamyan menores y sitios de monasterios (gratis exploración)",
+        "Mercado local de Samangán (gratis observar)",
+        "Paseos rurales por aldeas (gratis, con respeto a comunidades)"
+      ],
+      "donde_comer": "Comidas muy básicas: sopa, pan, kabob simple. 2-3 EUR comidas. Mercado local muy limitado. Trae snacks de Kabul si puedes.",
+      "consejo_local": "Samangán es destino para arqueólogos y especialistas, no turismo convencional. Infraestructura mínima. Guía bilingüe imprescindible. Muy auténtico, muy remoto.",
+      "plan_b_lluvia": "Estancia en aldeas, observación de vida rural, museos muy básicos si existen",
+      "alerta_seguridad": "Remoto sin presencia de seguridad internacional. Solo recomendado con guía experto local acreditado y organización previa. Zona de riesgo variable.",
+      "keywords": [
+        "Samangan",
+        "Samanghan",
+        "nordeste remoto",
+        "Airtam",
+        "arqueología budista",
+        "ruta seda"
+      ]
+    }
+  ]
+}

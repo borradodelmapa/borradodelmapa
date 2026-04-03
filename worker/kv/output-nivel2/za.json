@@ -1,0 +1,330 @@
+{
+  "pais": "Sudáfrica",
+  "codigo": "za",
+  "destinos": [
+    {
+      "id": "ciudad-del-cabo",
+      "nombre": "Ciudad del Cabo",
+      "tipo": "ciudad",
+      "region": "Western Cape",
+      "descripcion": "Capital legislativa y puerta de entrada principal, famosa por la Montaña de la Mesa, playas vírgenes y escena cultural vibrante. Centro neurálgico para viajeros independientes con infraestructura turística establecida. Combina naturaleza espectacular, gastronomía de clase mundial y vida urbana cosmopolita.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "septiembre a noviembre, marzo a mayo",
+      "como_llegar": "aeropuerto internacional O.R. Tambo (Johannesburgo) - vuelo 2h (80-150 EUR) o Aeropuerto de Ciudad del Cabo directo desde Europa (vuelos largos 600-900 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostel en Backeberg, Bo-Kaap o Camps Bay: 18-30 EUR/noche",
+        "medio": "Guest house en Constantia Nek o Sea Point: 50-90 EUR/noche",
+        "comfort": "Hotel en V&A Waterfront o Camps Bay: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Subir Montaña de la Mesa a pie (gratis, 3-4h)",
+        "Paseo por V&A Waterfront (gratis)",
+        "Playa de Muizenberg (gratis)",
+        "Isla de Robben Island - excursión guiada (20 EUR)",
+        "Cape Point - Ruta de senderismo (gratis)"
+      ],
+      "donde_comer": "Comida local: bunny chow (empanada de pan), boerewors; zona recomendada Bree Street o Long Street; rango 8-25 EUR",
+      "consejo_local": "Evita V&A Waterfront para comer si el presupuesto es ajustado; come en Bree Street o en food courts de Watershed donde es más barato. La Montaña de la Mesa es mejor al amanecer sin neblina.",
+      "plan_b_lluvia": "Museo de Sudáfrica, galería Zeitz MOCAA, mercado bohemio de Neighbourgoods",
+      "keywords": [
+        "Cape Town",
+        "Table Mountain",
+        "Camps Bay",
+        "Bo-Kaap",
+        "V&A Waterfront",
+        "Signal Hill"
+      ]
+    },
+    {
+      "id": "kruger-national-park",
+      "nombre": "Parque Nacional Kruger",
+      "tipo": "naturaleza",
+      "region": "Limpopo y Mpumalanga",
+      "descripcion": "Uno de los mayores parques de vida silvestre de África con los Cinco Grandes. Acceso económico para mochileros mediante entrada diaria sin tour obligatorio y campings baratos. Experiencia de safari sin las colas de destinos más saturados.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre (animales concentrados en agua)",
+      "como_llegar": "Desde Johannesburgo: vuelo a Skukuza (1h, 60-100 EUR) o autobús a Malelane gate (5h, 25 EUR)",
+      "donde_dormir": {
+        "mochilero": "Camping SANParks en Kruger: 15-25 EUR/noche",
+        "medio": "Rest camp básico en Kruger (cabaña): 40-70 EUR/noche",
+        "comfort": "Lodge privado fuera del parque: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari autónomo en auto rentado (25 EUR entrada diaria)",
+        "Caminar por senderos autoguidados en el parque (gratis con entrada)",
+        "Game drive al atardecer (incluido en camping)",
+        "Observación de aves (gratis)"
+      ],
+      "donde_comer": "Comida básica en rest camps (rango 10-18 EUR); llevar picnic es más económico; braai (barbacoa) en el camping",
+      "consejo_local": "Renta auto solo si tienes experiencia; los animales son menos asustadizos temprano. Entra por Malelane (menos turistas) en lugar de Kruger Gate. Lleva binoculares y paciencia: los Cinco Grandes no aparecen por demanda.",
+      "plan_b_lluvia": "Museo en Skukuza, observación de aves desde el alojamiento, lectura de guías de fauna",
+      "keywords": [
+        "safari",
+        "Big Five",
+        "Skukuza",
+        "Malelane",
+        "Kruger",
+        "wildlife"
+      ]
+    },
+    {
+      "id": "jardines-de-kirstenbosch",
+      "nombre": "Jardines Botánicos Kirstenbosch",
+      "tipo": "naturaleza",
+      "region": "Western Cape",
+      "descripcion": "Jardín botánico espectacular integrado en bosque nativo con vistas a la Montaña de la Mesa. Paseos relajados entre flora única del Cabo sin prisas turísticas masivas. Ideal para descansar entre actividades más intensas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "septiembre a octubre (flores en primavera), todo el año es hermoso",
+      "como_llegar": "Desde Ciudad del Cabo centro: minibus (20 min, 2 EUR) o tour privado (15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Dormir en Ciudad del Cabo, visita de día",
+        "medio": "Dormir en Ciudad del Cabo, visita de día",
+        "comfort": "Dormir en Ciudad del Cabo, visita de día"
+      },
+      "que_hacer": [
+        "Paseo entre jardines y senderos (entrada 12 EUR)",
+        "Picnic en el césped con vistas a la montaña (lleva comida, gratis)",
+        "Conciertos de verano los domingos (15-20 EUR)",
+        "Fotografía de flora única del Fynbos (gratis)"
+      ],
+      "donde_comer": "Restaurante del jardín (caro); mejor traer picnic de Ciudad del Cabo",
+      "consejo_local": "Ve a media mañana para evitar grupos de tour. Compra picnic en Woolworths antes de entrar (más barato que dentro). Trae tablas de madera para sentarse en el césped.",
+      "plan_b_lluvia": "El jardín es bonito incluso bajo lluvia suave; los cafés cubiertos son refugio",
+      "keywords": [
+        "Kirstenbosch",
+        "botánico",
+        "jardines",
+        "Fynbos",
+        "Table Mountain views"
+      ]
+    },
+    {
+      "id": "cape-winelands",
+      "nombre": "Viñedos del Cabo (Winelands)",
+      "tipo": "rural",
+      "region": "Western Cape",
+      "descripcion": "Valle de viñedos con pueblos coloniales y bodegas accesibles. Más barato que destinos vinícolas europeos con vinos de calidad mundial. Acceso mediante tour en grupo económico u alquiler de bicicleta para explorar independientemente.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a marzo (vendimia), octubre a noviembre",
+      "como_llegar": "Desde Ciudad del Cabo: minibus a Stellenbosch (1h, 3 EUR) o tour grupal (35-50 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostel en Stellenbosch: 20-30 EUR/noche",
+        "medio": "Guest house en Franschhoek: 55-85 EUR/noche",
+        "comfort": "Hotel bodega en Paarl: 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Cata en bodega económica Warwick (10-15 EUR, con copa)",
+        "Alquiler bicicleta y ruta entre viñedos (15 EUR bici + gasolina = gratis)",
+        "Paseo por pueblos coloniales Stellenbosch y Franschhoek (gratis)",
+        "Paseo por Boschendal Estate (gratis entrada, pago cata)",
+        "Mercado de granjeros en Stellenbosch sábado (gratis)"
+      ],
+      "donde_comer": "Braai y comida local en Stellenbosch: 12-20 EUR; Franschhoek más caro (20-35 EUR)",
+      "consejo_local": "No hagas cata en cada bodega (agotador). Elige 2-3 máximo. La bicicleta es mejor forma de explorar sin gastar. Stellenbosch es más local que Franschhoek (más turístico).",
+      "plan_b_lluvia": "Visita pueblos cubiertos, museos de vino, cafés locales",
+      "keywords": [
+        "Winelands",
+        "Stellenbosch",
+        "Franschhoek",
+        "Paarl",
+        "bodegas",
+        "wine"
+      ]
+    },
+    {
+      "id": "blyde-river-canyon",
+      "nombre": "Cañón de Blyde River",
+      "tipo": "naturaleza",
+      "region": "Mpumalanga",
+      "descripcion": "Espectacular garganta fluvial con vistas de acantilados vertiginosos y Three Rondavels. Menos concurrido que otros destinos naturales sudafricanos. Acceso mediante coche de alquiler o tours baratos desde Hoedspruit.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "agosto a octubre",
+      "como_llegar": "Desde Johannesburgo: auto rentado (5-6h, 40 EUR/día) o tour grupal (80-120 EUR)",
+      "donde_dormir": {
+        "mochilero": "Camping o hostel en Hoedspruit: 18-28 EUR/noche",
+        "medio": "Guest house en Graskop: 45-70 EUR/noche",
+        "comfort": "Lodge en Panorama Route: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Miradores del cañón y Three Rondavels (gratis, parking 3 EUR)",
+        "Senderismo Waterfall Trail (gratis)",
+        "Swadini Canyon Ride - paseo en bote (30 EUR)",
+        "Adventure activities - tirolesa, rappel (40-60 EUR)"
+      ],
+      "donde_comer": "Pequeñas ciudades como Graskop: carne a la parrilla 10-18 EUR; evita restaurantes de carretera",
+      "consejo_local": "Renta auto solo 1-2 días para el cañón; es más económico que tours completos. Los miradores principales se ven en 4-5 horas. La neblina matinal es común pero desaparece al mediodía.",
+      "plan_b_lluvia": "Pueblos artesanales de Graskop (tiendas locales), museos pequeños, cafés con vistas",
+      "keywords": [
+        "Blyde River",
+        "Three Rondavels",
+        "Mpumalanga",
+        "Panorama Route",
+        "cañón"
+      ]
+    },
+    {
+      "id": "hermanus",
+      "nombre": "Hermanus",
+      "tipo": "playa",
+      "region": "Western Cape",
+      "descripcion": "Pueblo costero famoso por avistamiento de ballenas desde la orilla (junio-noviembre). Combina naturaleza marina, playas tranquilas y vida de pueblo pequeño sin saturación turística de Ciudad del Cabo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre (temporada de ballenas)",
+      "como_llegar": "Desde Ciudad del Cabo: minibus (2h, 8 EUR) o coche rentado (120 km)",
+      "donde_dormir": {
+        "mochilero": "Hostel Hermanus: 20-30 EUR/noche",
+        "medio": "Guest house De Kelders: 50-80 EUR/noche",
+        "comfort": "Hotel frente al mar Birkenhead: 110-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Whale Watching desde tierra (gratis, desde paseos)",
+        "Paseo costero Cliff Path (gratis, 12 km)",
+        "Excursión en bote para ballenas (45-70 EUR)",
+        "Playa De Kelders (gratis)",
+        "Cueva Arnolds (museo pequeño, 3 EUR)"
+      ],
+      "donde_comer": "Mariscos y pescado: rango 12-22 EUR; restaurantes en Main Road",
+      "consejo_local": "No necesitas tour de bote si vas en junio-julio; las ballenas están tan cerca que se ven desde tierra. Evita fin de semana si buscas tranquilidad. Lleva prismáticos.",
+      "plan_b_lluvia": "Museos locales, cafés con vista, mercados artesanales",
+      "keywords": [
+        "Hermanus",
+        "ballenas",
+        "whale watching",
+        "De Kelders",
+        "Cliff Path"
+      ]
+    },
+    {
+      "id": "drakensberg-mountains",
+      "nombre": "Montañas Drakensberg",
+      "tipo": "montaña",
+      "region": "KwaZulu-Natal",
+      "descripcion": "Cordillera espectacular con senderismo de clase mundial, arte rupestre Zulú antiguo y pueblos base económicos. Alternativa a Himalaya o Alpes con presupuesto reducido y menos tráfico de trekking.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre a noviembre, marzo a mayo",
+      "como_llegar": "Desde Johannesburgo: vuelo a Durban (2h, 60 EUR) + minibus a Bergville (3h, 12 EUR) o auto (8h total)",
+      "donde_dormir": {
+        "mochilero": "Camping o backpackers en Bergville: 15-25 EUR/noche",
+        "medio": "Guest house en Bergville: 40-70 EUR/noche",
+        "comfort": "Lodge de montaña: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Amphitheatre Trail (gratis, 4h, moderado)",
+        "Catarata Tugela (gratis con entrada parque, 6 EUR)",
+        "Visita arte rupestre Zulú (5 EUR con guía local)",
+        "Cadena Drakensberg Backpackers Trek (3 días, 100-150 EUR todo incluido)",
+        "Piscina natural Cathedral Pool (gratis)"
+      ],
+      "donde_comer": "Comida básica en Bergville: 8-15 EUR; llevar provisiones es recomendable",
+      "consejo_local": "Paga guía local Zulú para arte rupestre (cuesta poco y aprenderás historia real). Los senderos principales no necesitan permiso especial. Lleva agua: 2-3 litros mínimo.",
+      "plan_b_lluvia": "Los senderos se cierran con lluvia fuerte; espera en hospedaje, visita pueblos locales",
+      "keywords": [
+        "Drakensberg",
+        "Amphitheatre",
+        "Tugela",
+        "senderismo",
+        "KwaZulu-Natal",
+        "hiking"
+      ]
+    },
+    {
+      "id": "johannesburgo",
+      "nombre": "Johannesburgo",
+      "tipo": "ciudad",
+      "region": "Gauteng",
+      "descripcion": "Puerta de entrada por su aeropuerto principal. Barrios como Maboneng ofrecen arte urbano, museos y gastronomía local sin que sea obligatorio quedarse mucho tiempo. Evita el turismo masivo de Ciudad del Cabo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año, octubre a noviembre agradable",
+      "como_llegar": "Aeropuerto O.R. Tambo es la entrada principal para vuelos internacionales",
+      "donde_dormir": {
+        "mochilero": "Hostel en Maboneng o Braamfontein: 18-28 EUR/noche",
+        "medio": "Guest house en Parkhurst: 50-80 EUR/noche",
+        "comfort": "Hotel en Sandton: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Galería urbana y street art Maboneng (gratis)",
+        "Museo de Apartheid (12 EUR)",
+        "Soweto Township tour (25-40 EUR con guía local)",
+        "Mercado de granjeros de Rosebank (gratis entrada)",
+        "Galería Javett art (entrada variable)"
+      ],
+      "donde_comer": "Maboneng: comida local y fusion 10-20 EUR; Soweto: auténtico 8-15 EUR",
+      "consejo_local": "No te pierdas en barrios desconocidos de noche. Maboneng de día es seguro y vibrante. Los taxis compartidos son baratos (1-2 EUR) pero confusos; usa Uber o minibús turístico. Visita Soweto solo con guía.",
+      "plan_b_lluvia": "Museos interiores (Apartheid, Geología), centros comerciales, cafés",
+      "keywords": [
+        "Johannesburg",
+        "Joburg",
+        "Maboneng",
+        "Soweto",
+        "Apartheid Museum",
+        "JNB"
+      ]
+    },
+    {
+      "id": "isimangaliso-wetland-park",
+      "nombre": "Parque Humedal Isimangaliso",
+      "tipo": "naturaleza",
+      "region": "KwaZulu-Natal",
+      "descripcion": "Patrimonio de la UNESCO con lagunas, playas prístinas y avistamiento de animales. Menos visitado que Kruger pero igualmente rico en fauna. Acceso económico mediante camping y tours guiados baratos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre (clima seco)",
+      "como_llegar": "Desde Durban: minibus a St. Lucia (2h, 10 EUR) o auto alquilado (160 km)",
+      "donde_dormir": {
+        "mochilero": "Camping SANParks: 15-22 EUR/noche",
+        "medio": "Cabañas básicas en parque: 40-65 EUR/noche",
+        "comfort": "Lodge privado en zona: 85-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en bote Hippo and Crocodile Tour (25 EUR)",
+        "Caminata guiada por fauna (15-20 EUR)",
+        "Playa Charters Creek (gratis)",
+        "Snorkel en Maputaland (40 EUR con operador local)",
+        "Avistamiento de aves (gratis con binoculares propios)"
+      ],
+      "donde_comer": "Comida en St. Lucia pueblo: 10-18 EUR; picnic en parque recomendado",
+      "consejo_local": "Los hipopótamos son visibles al atardecer. No andes solo de noche cerca de agua. Los tours en bote son obligatorios para el lagoon; negocia precios en temporada baja.",
+      "plan_b_lluvia": "Interior de hospedajes, observación de fauna desde cobertura, museos pequeños",
+      "keywords": [
+        "Isimangaliso",
+        "St. Lucia",
+        "humedal",
+        "hipopótamos",
+        "UNESCO",
+        "KwaZulu-Natal"
+      ]
+    },
+    {
+      "id": "cape-agulhas",
+      "nombre": "Cabo de Agulhas",
+      "tipo": "playa",
+      "region": "Western Cape",
+      "descripcion": "Punto geográfico donde confluyen Atlántico e Índico. Pueblo tranquilo con playas salvajes, menos turístico que Cape Point. Destino para viajeros que buscan autenticidad costera lejos de circuitos trillados.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Ciudad del Cabo o Hermanus: auto (200 km, 3.5h) o tour privado (60 EUR)",
+      "donde_dormir": {
+        "mochilero": "Camping o cabañas básicas: 18-28 EUR/noche",
+        "medio": "Guest house: 45-75 EUR/noche",
+        "comfort": "Hotel costero: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitante al punto Cape Agulhas (entrada parque 8 EUR, incluye acceso a playas)",
+        "Senderismo costero (gratis)",
+        "Avistamiento de ballenas estacional (gratis desde tierra)",
+        "Pesca recreativa (gratis si tienes línea)",
+        "Paseo por pueblo de Agulhas (gratis)"
+      ],
+      "donde_comer": "Restaurantes de pescado local: 12-20 EUR; comida muy auténtica, pocos turistas",
+      "consejo_local": "Es un destino de paso entre Ciudad del Cabo y Hermanus, no necesita 2 noches. El agua es fría incluso en verano. Vete por la tarde para atardecer sobre el punto.",
+      "plan_b_lluvia": "El clima es variable; incluso con lluvia, los acantilados son hermosos y menos concurridos",
+      "keywords": [
+        "Cape Agulhas",
+        "Agulhas",
+        "punto geográfico",
+        "playas",
+        "Atlántico",
+        "Índico"
+      ]
+    }
+  ]
+}

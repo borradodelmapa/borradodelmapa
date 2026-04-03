@@ -1,0 +1,339 @@
+{
+  "pais": "Comoras",
+  "codigo": "km",
+  "destinos": [
+    {
+      "id": "moroni",
+      "nombre": "Moroni",
+      "tipo": "ciudad",
+      "region": "Gran Comora",
+      "descripcion": "Capital y principal puerto de entrada del país, ubicada en la costa noroeste de Gran Comora. Centro administrativo y comercial donde confluyen culturas árabes, africanas e hindúes. Base imprescindible para explorar las islas y punto de partida para excursiones marítimas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Aeropuerto Internacional de Moroni (HAH) con vuelos desde Mauricio o Tanzania. 1-2 horas de vuelo, 150-300 EUR. Ferry desde Zanzibar (8-12 horas, 80-120 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses y hostales locales: 20-35 EUR/noche",
+        "medio": "Hoteles pequeños de 2-3 estrellas: 50-80 EUR/noche",
+        "comfort": "Hoteles beachfront tipo Le Galawa Beach Resort: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por el puerto y mercado central (gratis)",
+        "Visita a la Mezquita del Viernes, arquitectura tradicional (gratis)",
+        "Snorkel en playas cercanas como Playa Itsandra (5-10 EUR)",
+        "Tour gastronómico por barrio de Hamahamet (gratis exploración)",
+        "Subida al mirador de Moroni al atardecer (gratis)"
+      ],
+      "donde_comer": "Arroz con pescado, langosta, pulpo a la parrilla. Rango 5-15 EUR por comida. Zona de mercado (barato y auténtico) o restaurantes en waterfront (más caro). Probar calamar fresco.",
+      "consejo_local": "Los precios se negocian incluso en pequeñas tiendas. Llega al mercado temprano (7-8 AM) para mejor selección de pescado fresco y menos calor.",
+      "plan_b_lluvia": "Museos locales (Museo Nacional, aunque pequeño), visita a mercados cubiertos, exploración de medinas y callejones históricos, cafés tradicionales.",
+      "keywords": [
+        "Morony",
+        "capital Comoras",
+        "puerto principal",
+        "Hamahamet",
+        "mercado central",
+        "Mezquita del Viernes"
+      ]
+    },
+    {
+      "id": "anjouan",
+      "nombre": "Anjouan (Nzwani)",
+      "tipo": "isla",
+      "region": "Anjouan",
+      "descripcion": "Segunda isla más grande, conocida por sus plantaciones de vainilla, clavo y ylang-ylang. Ofrece montañas boscosas, cascadas y pueblos costeros auténticos con menos turismo que Gran Comora. Ideal para senderismo y experiencias rurales genuinas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Ferry desde Moroni a Mutsamudu (puerto principal de Anjouan): 2-3 horas, 25-40 EUR. Vuelos domésticos disponibles (30-50 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Mutsamudu y pueblos costeros: 15-25 EUR/noche",
+        "medio": "Pequeños hoteles: 35-55 EUR/noche",
+        "comfort": "Resorts costeros como Anjouan Beach Hotel: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a cascadas Cascade de Sima (10 EUR guía incluido)",
+        "Visita a plantaciones de especias con tour local (15-20 EUR)",
+        "Buceo y snorkel en arrecife de Mutsamudu (25-35 EUR)",
+        "Paseo por pueblos costeros como Domoni y Sima (gratis)",
+        "Trekking a Pic Ntingui si hay guía (20-30 EUR)"
+      ],
+      "donde_comer": "Pescado fresco a la parrilla, arroz con especias locales, carne de cabra. Rango 4-12 EUR. Comer en pequeños comedores junto al puerto de Mutsamudu para autenticidad.",
+      "consejo_local": "Anjouan es más auténtica y menos turística que Gran Comora, pero los servicios son básicos. Lleva efectivo en EUR o CFP, hay pocos cajeros. Los locales son muy amables con viajeros independientes.",
+      "plan_b_lluvia": "Exploración de pueblos medievales (Domoni tiene ruinas de mezquita histórica), visita a almacenes de especias cubiertos, cafés locales.",
+      "keywords": [
+        "Nzwani",
+        "Mutsamudu",
+        "vainilla",
+        "clavo",
+        "Domoni",
+        "plantaciones especias",
+        "cascadas"
+      ]
+    },
+    {
+      "id": "moheli",
+      "nombre": "Moheli (Mwali)",
+      "tipo": "isla",
+      "region": "Moheli",
+      "descripcion": "Isla más pequeña y menos desarrollada del archipiélago, ideal para buceo con tortugas marinas, playas vírgenes y parque marino protegido. Destino para viajeros que buscan tranquilidad extrema y naturaleza intacta.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Ferry desde Moroni a Fomboni (capital de Moheli): 3-4 horas, 30-45 EUR. Vuelos domésticos muy limitados (consultar disponibilidad).",
+      "donde_dormir": {
+        "mochilero": "Pequeños guesthouses en Fomboni: 12-20 EUR/noche",
+        "medio": "Hoteles básicos con encanto: 30-45 EUR/noche",
+        "comfort": "Resorts ecológicos pequeños: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo con tortugas verdes y águilas marinas (50-70 EUR por inmersión)",
+        "Snorkel en Parque Marino Moheli (25 EUR entrada + guía 15-20 EUR)",
+        "Playa de Itsamia, buceo nocturno de manta rayas (40-60 EUR)",
+        "Senderismo a Pic Moheli (pedir guía local, 20-25 EUR)",
+        "Visita a centro de cría de tortugas (gratis o donación)"
+      ],
+      "donde_comer": "Pescado y mariscos frescos, pulpo. Rango 3-10 EUR. Hay muy pocos restaurantes, comer en guesthouses o con familias locales es común.",
+      "consejo_local": "Moheli es muy remota y tranquila; servicios mínimos. Lleva dinero efectivo, no hay cajeros confiables. La mejor época para ver tortugas es junio-octubre. Avisa con antelación si quieres buceo.",
+      "plan_b_lluvia": "Exploración de pueblos costeros a pie, visita a aldeas rurales para experiencia cultural, descanso y lectura en guesthouses con vistas al mar.",
+      "keywords": [
+        "Mwali",
+        "Fomboni",
+        "tortugas marinas",
+        "parque marino",
+        "buceo",
+        "playas vírgenes",
+        "Itsamia"
+      ]
+    },
+    {
+      "id": "grande-comore-montana",
+      "nombre": "Mont Karthala",
+      "tipo": "montaña",
+      "region": "Gran Comora",
+      "descripcion": "Volcán activo de 2.361 metros, uno de los volcanes más activos del mundo. Senderismo de alta dificultad con recompensas visuales espectaculares: vistas del cráter, bosques nubosos y panoramas de las tres islas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre (estación seca)",
+      "como_llegar": "Desde Moroni: 1 hora en taxi/coche a pueblo base Itsandra (15-25 EUR). Luego caminata de 6-8 horas hasta cima.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Itsandra: 15-25 EUR/noche",
+        "medio": "Pequeños hoteles base: 30-50 EUR/noche",
+        "comfort": "Resort en Itsandra: 60-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Ascenso a Mont Karthala con guía obligatorio (40-60 EUR guía)",
+        "Trekking a bosque nuboso Karthala (gratis con guía incluido)",
+        "Fotografía del cráter y vistas del archipiélago (gratis)",
+        "Exploración de pueblos costeros cercanos Itsandra (gratis)",
+        "Baños termales naturales (si disponibles, gratis)"
+      ],
+      "donde_comer": "Arroz, pescado, frutas tropicales en Itsandra. Rango 4-8 EUR. Llevar snacks para la subida. Agua abundante es esencial.",
+      "consejo_local": "Contrata guía obligatoriamente en Itsandra. Empieza el ascenso muy temprano (5-6 AM) para estar abajo antes del anochecer. Clima cambia drásticamente con altitud: lleva abrigo.",
+      "plan_b_lluvia": "El volcán se cierra frecuentemente por lluvia o actividad. Exploración de pueblos costeros, playas de Itsandra, visita a mercados locales.",
+      "keywords": [
+        "Karthala",
+        "volcán activo",
+        "Itsandra",
+        "cima 2361m",
+        "senderismo montaña",
+        "cráter",
+        "bosque nuboso"
+      ]
+    },
+    {
+      "id": "mutsamudu",
+      "nombre": "Mutsamudu",
+      "tipo": "ciudad",
+      "region": "Anjouan",
+      "descripcion": "Principal ciudad portuaria de Anjouan con carácter histórico árabe. Puerto colonial pintoresco con arquitectura swahili tradicional, mercado vibrante y punto de partida para explorar la isla. Menos turística que Moroni pero más accesible que pueblos rurales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Ferry desde Moroni: 2-3 horas, 25-40 EUR. Taxi desde puerto: gratis a centro.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses junto al puerto: 15-25 EUR/noche",
+        "medio": "Hoteles pequeños con vistas al mar: 35-50 EUR/noche",
+        "comfort": "Resorts cercanos: 60-85 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por puerto y medina histórica (gratis)",
+        "Exploración de mezquitas y arquitectura swahili (gratis)",
+        "Mercado central de Mutsamudu (gratis, comprar especias)",
+        "Snorkel en playas cercanas desde puerto (15-25 EUR)",
+        "Cena de pescado fresco en restaurantes portuarios (gratis exploración)"
+      ],
+      "donde_comer": "Langosta, camarones, pulpo a la parrilla. Rango 6-15 EUR. Restaurantes frente al mar son mejores. Probar calamar local.",
+      "consejo_local": "Mutsamudu es punto de parada para muchos viajeros. El puerto es caótico pero seguro. Negocia precios de tours y transporte antes de partir.",
+      "plan_b_lluvia": "Exploración de medina cubierta, mercados, cafés tradicionales, visita a museos locales si existen.",
+      "keywords": [
+        "puerto Anjouan",
+        "medina swahili",
+        "arquitectura árabe",
+        "mercado especias",
+        "Domoni cercano"
+      ]
+    },
+    {
+      "id": "itsandra",
+      "nombre": "Itsandra",
+      "tipo": "playa",
+      "region": "Gran Comora",
+      "descripcion": "Pueblo costero tranquilo base para ascenso a Mont Karthala, con playas de arena negra volcánica y vistas al océano Índico. Centro de actividades de trekking pero también destino en sí mismo para relajación.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Moroni: 1 hora en taxi (15-25 EUR). Carretera costera pintoresca.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses junto a la playa: 15-25 EUR/noche",
+        "medio": "Hoteles pequeños: 35-50 EUR/noche",
+        "comfort": "Resort Itsandra: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Baños en playa de arena negra (gratis)",
+        "Snorkel desde playa (equipo 15-20 EUR)",
+        "Preparación para ascenso a Karthala (guía 40-60 EUR)",
+        "Paseos costeros al atardecer (gratis)",
+        "Pesca con pescadores locales (negociar precio, 20-30 EUR)"
+      ],
+      "donde_comer": "Pescado fresco, camarones, arroz. Rango 5-12 EUR. Comer en guesthouses o pequeños restaurantes junto a playa.",
+      "consejo_local": "Itsandra es tranquilo y auténtico. El acceso a playas es público pero pide permiso en guesthouses. Agua de mar puede ser fría debido a corrientes.",
+      "plan_b_lluvia": "Exploración de pueblos cercanos a pie, descanso en guesthouses, lectura, encuentros con locales.",
+      "keywords": [
+        "playa arena negra",
+        "base Karthala",
+        "pueblo costero",
+        "tranquilo",
+        "Moroni cercano"
+      ]
+    },
+    {
+      "id": "fomboni",
+      "nombre": "Fomboni",
+      "tipo": "ciudad",
+      "region": "Moheli",
+      "descripcion": "Capital de Moheli, pequeña y tranquila, punto de entrada a la isla. Centro de actividades de buceo y snorkel con acceso a parque marino protegido. Ideal para buceadores y amantes del ecosistema marino intacto.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Ferry desde Moroni: 3-4 horas, 30-45 EUR. Desde Anjouan: 2 horas, 25-35 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 12-20 EUR/noche",
+        "medio": "Hoteles pequeños: 30-45 EUR/noche",
+        "comfort": "Eco-resorts: 65-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en parque marino Moheli (50-70 EUR por inmersión)",
+        "Snorkel con tortugas marinas (25-35 EUR)",
+        "Visita a centro de conservación de tortugas (donación 5-10 EUR)",
+        "Exploración de pueblos costeros cercanos (gratis)",
+        "Tours nocturnos a playas de anidación de tortugas (20-30 EUR)"
+      ],
+      "donde_comer": "Pescado, camarones, pulpo. Rango 3-10 EUR. Servicios limitados, comer con familias o guesthouses es común.",
+      "consejo_local": "Fomboni es remota. Confirma vuelos/ferries con antelación. No hay cajeros, lleva EUR/CFP. Mejor época tortugas: junio-octubre. Organizaciones de buceo locales son fiables.",
+      "plan_b_lluvia": "Exploración de pueblos interiores, descanso en guesthouses, encuentros con conservacionistas locales.",
+      "keywords": [
+        "Mwali capital",
+        "parque marino",
+        "tortugas",
+        "buceo",
+        "snorkel",
+        "islote remoto"
+      ]
+    },
+    {
+      "id": "domoni",
+      "nombre": "Domoni",
+      "tipo": "histórico",
+      "region": "Anjouan",
+      "descripcion": "Pueblo costero medieval con restos de arquitectura swahili antigua, incluyendo ruinas de mezquita histórica. Sitio arqueológico importante con menos turismo que otros destinos, ideal para viajeros interesados en historia del Índico.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Mutsamudu en Anjouan: 30-40 minutos en taxi (10-15 EUR). Carretera costera.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicas: 12-20 EUR/noche",
+        "medio": "Hoteles pequeños: 25-40 EUR/noche",
+        "comfort": "No hay opciones comfort, mejor base en Mutsamudu"
+      },
+      "que_hacer": [
+        "Exploración de ruinas de mezquita histórica (gratis)",
+        "Paseo por medina antigua (gratis)",
+        "Visita a mercado local (gratis, comprar especias)",
+        "Baño en playa cercana (gratis)",
+        "Fotografía de arquitectura colonial (gratis)"
+      ],
+      "donde_comer": "Pescado simple, arroz. Rango 3-7 EUR. Muy pocas opciones, comer junto a port o en pequeños comedores locales.",
+      "consejo_local": "Domoni es destino de medio día desde Mutsamudu. Ruinas requieren exploración a pie; pide guía local si quieres contexto histórico.",
+      "plan_b_lluvia": "Exploración cubierta de medina, descanso en guesthouses, encuentros con locales.",
+      "keywords": [
+        "ruinas medievales",
+        "mezquita histórica",
+        "arquitectura swahili",
+        "Anjouan",
+        "sitio arqueológico"
+      ]
+    },
+    {
+      "id": "pemba-excursion",
+      "nombre": "Pemba (Excursión desde Comoras)",
+      "tipo": "isla",
+      "region": "Exterior - Tanzania",
+      "descripcion": "Isla tanzana cercana (ferry desde Comoras), famosa por buceo de clase mundial en arrecifes intactos y playas paradisíacas. Complemento perfecto a viaje por Comoras con mejor infraestructura turística.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Ferry desde Moroni a Zanzibar (8-12 horas, 80-120 EUR), luego ferry Zanzibar a Pemba (2-3 horas, 30-50 EUR). Alternativa: vuelos domésticos Moroni-Zanzibar (150-200 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Chake Chake: 25-35 EUR/noche",
+        "medio": "Hoteles pequeños: 50-75 EUR/noche",
+        "comfort": "Resorts ecológicos: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en arrecife Pemba (50-80 EUR por inmersión)",
+        "Snorkel en playas cercanas (20-30 EUR)",
+        "Visita a Wete y pueblos costeros (gratis exploración)",
+        "Paseo en dhow tradicional (25-40 EUR)",
+        "Exploración de manglares (15-25 EUR)"
+      ],
+      "donde_comer": "Pescado fresco, camarones, pilau. Rango 5-15 EUR. Mejores opciones que en Comoras, mercado más desarrollado.",
+      "consejo_local": "Pemba es destino popular entre buceadores. Reserva tours con antelación. Mejor buceo en canales entre islotes. Visa de Tanzania requerida (30 USD).",
+      "plan_b_lluvia": "Exploración de pueblos interiores, museos locales, descanso en resorts.",
+      "keywords": [
+        "Tanzania",
+        "Pemba",
+        "buceo mundial",
+        "Chake Chake",
+        "arrecife",
+        "excursion desde Comoras",
+        "Zanzibar conexión"
+      ],
+      "excursion_desde": true
+    },
+    {
+      "id": "mayotte-excursion",
+      "nombre": "Mayotte (Excursión desde Comoras)",
+      "tipo": "isla",
+      "region": "Exterior - Francia",
+      "descripcion": "Isla francesa del archipiélago comoriano, con infraestructura turística superior, laguna de arrecife espectacular y playas protegidas. Acceso más fácil y servicios de calidad europea, ideal para complementar viaje a Comoras.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Ferry desde Moroni a Mayotte (1.5-2 horas, 50-70 EUR). Vuelos disponibles desde Moroni (100-150 EUR, menos frecuentes).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Mamoudzou: 35-50 EUR/noche",
+        "medio": "Hoteles pequeños: 60-90 EUR/noche",
+        "comfort": "Resorts beachfront: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en laguna arrecife (30-45 EUR tours)",
+        "Buceo (50-75 EUR inmersión)",
+        "Paseo en catamarán (35-50 EUR)",
+        "Exploración de Mamoudzou, capital (gratis)",
+        "Playas protegidas como N'Gouja (gratis)"
+      ],
+      "donde_comer": "Comida francesa y local, mejor calidad. Rango 10-25 EUR. Infraestructura restauración superior a Comoras.",
+      "consejo_local": "Mayotte es francesa, precios superiores pero servicios fiables. Ferry es opción barata vs vuelo. Documentación: pasaporte válido.",
+      "plan_b_lluvia": "Exploración de museos, compras en Mamoudzou, descanso en resorts, spa.",
+      "keywords": [
+        "Mayotte",
+        "Francia",
+        "laguna arrecife",
+        "Mamoudzou",
+        "excursion",
+        "playas protegidas"
+      ],
+      "excursion_desde": true
+    }
+  ]
+}

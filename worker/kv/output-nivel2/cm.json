@@ -1,0 +1,315 @@
+{
+  "pais": "Camerún",
+  "codigo": "cm",
+  "destinos": [
+    {
+      "id": "yaounde",
+      "nombre": "Yaoundé",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital y centro cultural de Camerún con museos, mercados vibrantes y vida nocturna. Punto de entrada principal para la mayoría de viajeros y base para explorar el país. Mezcla de arquitectura colonial, mercados tradicionales y escena gastronómica diversa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Aeropuerto Internacional Nsimalen (40 km): taxi compartido 20-30 EUR, 1 hora. Bus desde otras ciudades: 8-15 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Bastos o Melen: 15-25 EUR/noche",
+        "medio": "Hoteles 2-3 estrellas en Yaoundé: 40-70 EUR/noche",
+        "comfort": "Hoteles 4 estrellas (Hilton, Sofitel): 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional de Camerún (5 EUR)",
+        "Mercado Mokolo - compras y artesanía local (gratis)",
+        "Catedral de Yaoundé y Palacio Presidencial (gratis, vistas exteriores)",
+        "Senderismo en Parc de la Vallée (gratis)"
+      ],
+      "donde_comer": "Camerún: fufu, ndole, pollo a la brasa. Zona Bastos para restaurantes modernos (8-15 EUR), comedores locales (3-5 EUR), Quartier Général para mercado de comida callejera.",
+      "consejo_local": "Los taxis sin taxímetro son la norma: negocia el precio antes de subir. Los lunes el tráfico es caótico.",
+      "plan_b_lluvia": "Museos, mercados cubiertos (Mokolo), cafeterías y bares en Bastos",
+      "keywords": [
+        "Yaounde",
+        "capital camerun",
+        "Bastos",
+        "Melen",
+        "Mokolo"
+      ]
+    },
+    {
+      "id": "monte-camerun",
+      "nombre": "Monte Camerún",
+      "tipo": "montaña",
+      "region": "Región Suroeste",
+      "descripcion": "Volcán activo de 4.095 m, la montaña más alta de África Occidental con vistas espectaculares desde la cumbre. Senderismo desafiante pero accesible para viajeros con experiencia. Ecosistemas únicos a diferentes altitudes.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde Yaoundé a Douala en autobús (3 horas, 12 EUR), luego a Buea (1 hora, 5 EUR). Desde Buea al punto de inicio: taxi colectivo (3 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Buea: 12-20 EUR/noche",
+        "medio": "Hoteles en Buea (Hilltop Hotel): 35-55 EUR/noche",
+        "comfort": "Boutique hotels en Buea: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Ascenso al Monte Camerún 2 días (guía obligatorio: 60-80 EUR)",
+        "Visita a Limbe Beach y jardín botánico (8 EUR)",
+        "Senderismo en las faldas del volcán (gratis)"
+      ],
+      "donde_comer": "Buea: sopa de pescado, plantain frito, fufu. Mercado Molyko (4-6 EUR), restaurantes en la calle principal (6-10 EUR).",
+      "consejo_local": "Contrata guía en Buea la noche anterior. Comienza el ascenso a las 5 AM para evitar nubes. Lleva agua en abundancia.",
+      "plan_b_lluvia": "Visita Limbe, sus playas y el jardín botánico. Explora pueblos alrededor de Buea.",
+      "keywords": [
+        "Mount Cameroon",
+        "Buea",
+        "volcán camerun",
+        "Limbe",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "douala",
+      "nombre": "Douala",
+      "tipo": "ciudad",
+      "region": "Litoral",
+      "descripcion": "Puerto más grande de Camerún y segunda ciudad, con vida callejera intensa, mercados caóticos y una escena musical vibrante. Centro económico con barrios históricos como Akwa y Bonanjo. Puerta de acceso al sur del país.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Autobús desde Yaoundé (3 horas, 12 EUR). Aeropuerto Internacional (10 km): taxi 15-20 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Akwa: 14-22 EUR/noche",
+        "medio": "Hoteles 2-3 estrellas (Pullman, Ibis): 45-75 EUR/noche",
+        "comfort": "Hoteles 4+ estrellas: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado Artesanal de Douala - compras y artesanía (gratis)",
+        "Paseo por Bonanjo y Akwa - historia colonial (gratis)",
+        "Catedral de Douala (gratis)",
+        "Mercado de pescado New Bell (gratis, amanecer)"
+      ],
+      "donde_comer": "Pollo, Ndole, Sopa de pescado. Mercados callejeros (3-5 EUR), restaurantes en Akwa (8-12 EUR), bares con música viva (10-15 EUR).",
+      "consejo_local": "Douala es caótica y menos segura que Yaoundé de noche. Evita los barrios periféricos tras el anochecer. Los martes hay conciertos en bares de Akwa.",
+      "plan_b_lluvia": "Mercados cubiertos, museos, cafeterías en Akwa",
+      "keywords": [
+        "Douala",
+        "puerto camerun",
+        "Akwa",
+        "Bonanjo",
+        "litoral"
+      ]
+    },
+    {
+      "id": "kribi",
+      "nombre": "Kribi",
+      "tipo": "playa",
+      "region": "Sur",
+      "descripcion": "Principal destino de playa de Camerún con arena blanca, aguas cálidas y cascadas cercanas como Campo Ma'an. Pueblito costero relajado con mariscos frescos y ambiente de resort tranquilo. Base para excursiones a la selva tropical cercana.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a febrero, julio a agosto",
+      "como_llegar": "Desde Douala en autobús (5 horas, 12 EUR) o desde Yaoundé (7 horas, 15 EUR). Carretera en buen estado.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses cerca de la playa: 16-25 EUR/noche",
+        "medio": "Hoteles beachfront (Kribi Beach Hotel): 50-80 EUR/noche",
+        "comfort": "Resorts y eco-lodges: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de Kribi (gratis)",
+        "Cascadas de Campo Ma'an (8 EUR entrada, guía 25 EUR)",
+        "Snorkel en islas cercanas (35 EUR con tour)",
+        "Senderismo en selva tropical con guía local (30-50 EUR)"
+      ],
+      "donde_comer": "Mariscos frescos (langosta, camarones), Camerún local. Restaurantes en la playa (12-20 EUR), mercado de pescado (gratis para mirar, barato para comprar).",
+      "consejo_local": "Las playas son tranquilas entre semana. Los fines de semana llegan cameruneses de Douala. El agua tiene corrientes: nada en zonas vigiladas.",
+      "plan_b_lluvia": "Excursiones a la selva (aún mejor con lluvia), visita a pueblos costeros cercanos",
+      "keywords": [
+        "Kribi",
+        "playa camerun",
+        "Campo Ma'an",
+        "costa camerun",
+        "cascadas"
+      ]
+    },
+    {
+      "id": "parque-nacional-waza",
+      "nombre": "Parque Nacional Waza",
+      "tipo": "naturaleza",
+      "region": "Extremo Norte",
+      "descripcion": "Zona de safari con elefantes, leones, jirafas y aves en un ecosistema de sabana. Uno de los pocos lugares en Camerún para ver vida silvestre en cantidad. Requerido transporte 4x4 y guía, pero experiencia única africana.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a marzo",
+      "como_llegar": "Desde Yaoundé a Garoua en avión (1 hora, 60-90 EUR) o autobús (12 horas, 25 EUR). De Garoua al parque: tour organizado (70-100 EUR) o taxi colectivo (10 EUR + alquiler vehículo 80-120 EUR/día).",
+      "donde_dormir": {
+        "mochilero": "Campamentos básicos en/cerca parque: 15-25 EUR/noche",
+        "medio": "Lodges cercanos a Garoua: 40-70 EUR/noche",
+        "comfort": "Eco-lodges con servicios: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en 4x4 (obligatorio, 60-100 EUR por día)",
+        "Avistamiento de elefantes y leones (incluido en safari)",
+        "Fotografía de aves (gratis, equipo propio)",
+        "Caminata nocturna guiada (20-30 EUR)"
+      ],
+      "donde_comer": "Garoua: pollo, arroz, sopas. Lodges ofrecen comida (10-15 EUR), restaurantes en pueblo (5-8 EUR).",
+      "consejo_local": "Contrata tour con guía experimentado desde Garoua. Los mejores avistamientos son al amanecer. Lleva binoculares.",
+      "plan_b_lluvia": "Safari en lluvia es posible pero difícil. Visita pueblos locales, museos de Garoua.",
+      "keywords": [
+        "Waza",
+        "safari camerun",
+        "Garoua",
+        "elefantes",
+        "vida silvestre"
+      ]
+    },
+    {
+      "id": "foumban",
+      "nombre": "Foumban",
+      "tipo": "histórico",
+      "region": "Región Oeste",
+      "descripcion": "Capital cultural y artística del reino Bamun con palacio histórico, mercados de artesanía y tradiciones bien preservadas. Centro de producción de máscaras y esculturas de madera. Menos turístico que otros destinos pero auténtico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Yaoundé en autobús a Bafoussam (4 horas, 10 EUR), luego a Foumban (1 hora, 5 EUR). Total: 5-6 horas, 15 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 12-18 EUR/noche",
+        "medio": "Pequeños hoteles: 25-40 EUR/noche",
+        "comfort": "Eco-lodge Foumban Palace: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Palacio Real del Sultán (5 EUR, visita con guía 10 EUR extra)",
+        "Mercado de artesanía - máscaras y esculturas (gratis mirar, comprar 15-100 EUR)",
+        "Museo de Arte Bamun (3 EUR)",
+        "Visita a talleres de artesanos locales (gratis)"
+      ],
+      "donde_comer": "Comida Bamun: sopa arachide, fufu, pescado. Mercado local (3-5 EUR), pequeños restaurantes (5-8 EUR).",
+      "consejo_local": "Negocia precios en artesanía con respeto. Los artesanos aceptan comisiones. Visita el palacio con guía local para historias auténticas.",
+      "plan_b_lluvia": "Museos, talleres de artesanos cubiertos, exploración de mercados",
+      "keywords": [
+        "Foumban",
+        "Bamun",
+        "arte camerun",
+        "palacio",
+        "artesania"
+      ]
+    },
+    {
+      "id": "limbe",
+      "nombre": "Limbe",
+      "tipo": "playa",
+      "region": "Suroeste",
+      "descripcion": "Pueblo costero más relajado que Kribi con playas negras volcánicas, jardín botánico espectacular y cercanía al Monte Camerún. Atmósfera colonial inglesa y punto de partida ideal para ascensos montañosos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a febrero, julio a agosto",
+      "como_llegar": "Desde Douala en autobús (2.5 horas, 8 EUR) o desde Buea (30 minutos, 3 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en pueblo: 13-20 EUR/noche",
+        "medio": "Hoteles beachfront (Limbe Beach Club): 40-65 EUR/noche",
+        "comfort": "Eco-resorts: 75-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Jardín Botánico de Limbe (8 EUR)",
+        "Playas de arena negra (gratis)",
+        "Senderismo a Idenau y vistas costeras (gratis)",
+        "Snorkel en aguas volcánicas (25-35 EUR con tour)"
+      ],
+      "donde_comer": "Mariscos, plantain. Restaurantes en playa (10-15 EUR), street food (3-5 EUR).",
+      "consejo_local": "Limbe es más tranquilo de noche que Douala. El agua está más fría que en otras playas por corrientes volcánicas. Ideal base para Monte Camerún.",
+      "plan_b_lluvia": "Jardín botánico es hermoso incluso con lluvia. Cafeterías y exploración del pueblo.",
+      "keywords": [
+        "Limbe",
+        "playa volcánica",
+        "jardín botánico",
+        "suroeste camerun"
+      ]
+    },
+    {
+      "id": "campo",
+      "nombre": "Campo",
+      "tipo": "naturaleza",
+      "region": "Sur",
+      "descripcion": "Pequeño pueblo costal en la punta sureña de Camerún con selva tropical intacta, cascadas (Campo Ma'an) y vida marina. Destino aventurero para exploradores dispuestos a carreteras difíciles. Ecoturismo auténtico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a marzo",
+      "como_llegar": "Desde Kribi en autobús (2-3 horas, 8 EUR, carretera accidentada) o tour organizado.",
+      "donde_dormir": {
+        "mochilero": "Cabañas rústicas locales: 14-20 EUR/noche",
+        "medio": "Eco-lodges simples: 30-50 EUR/noche",
+        "comfort": "Eco-lodges con servicios (Mvomo Ecolodge): 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Cascadas de Campo Ma'an (8 EUR entrada)",
+        "Excursiones a selva tropical (40-60 EUR con guía)",
+        "Snorkel en río y costa (30 EUR)",
+        "Avistamiento de aves (gratis con binoculares propios)"
+      ],
+      "donde_comer": "Pescado fresco, platano, sopas locales. Lodges ofrecen comida (12-18 EUR), tiendas locales (4-6 EUR).",
+      "consejo_local": "Llegada requiere 4x4 en temporada de lluvia. Mejor ir con tour desde Kribi. Lleva repelente de mosquitos y botas de trekking.",
+      "plan_b_lluvia": "Las cascadas mejoran con lluvia. Exploración de selva más verde.",
+      "keywords": [
+        "Campo",
+        "sur camerun",
+        "cascadas",
+        "selva tropical",
+        "Ma'an"
+      ]
+    },
+    {
+      "id": "yaounde-dia-excursion",
+      "nombre": "Montaña Fako (excursión desde Buea)",
+      "tipo": "montaña",
+      "region": "Suroeste",
+      "descripcion": "Cumbre secundaria del Monte Camerún con vistas panorámicas sin requerir ascenso técnico. Senderismo moderado a través de bosques nubosos. Alternativa más accesible al pico principal.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde Buea en taxi (30 km, 15 EUR) o tour organizado (40 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedaje en Buea: 12-20 EUR/noche",
+        "medio": "Hotel en Buea: 35-55 EUR/noche",
+        "comfort": "Boutique en Buea: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a Montaña Fako (guía 40-50 EUR, sin obligación)",
+        "Vistas de bosque nuboso (gratis)",
+        "Fotografía de paisaje (gratis)",
+        "Pequeñas caminatas interpretativas (gratis)"
+      ],
+      "donde_comer": "En Buea: fufu, sopa de carne. Restaurantes 6-10 EUR.",
+      "consejo_local": "Menos concurrido que el pico principal. Niebla es común pero trae vistas mágicas. Alojamiento en Buea es base mejor que en la montaña.",
+      "plan_b_lluvia": "Las vistas nubosas crean atmósfera mística. Exploración de senderos secundarios.",
+      "keywords": [
+        "Fako",
+        "Buea",
+        "senderismo",
+        "bosque nuboso",
+        "vistas"
+      ]
+    },
+    {
+      "id": "parque-nacional-dja",
+      "nombre": "Parque Nacional Dja",
+      "tipo": "naturaleza",
+      "region": "Este",
+      "descripcion": "Selva tropical primaria protegida por UNESCO con biodiversidad excepcional incluyendo gorilas, elefantes de bosque y pangolínes. Uno de los parques más preservados de África Central. Difícil acceso pero recompensador para ecoturismos serios.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "enero a marzo",
+      "como_llegar": "Desde Yaoundé a Batouri (8 horas, 20 EUR en autobús), luego a Lomié (3 horas, 10 EUR). Tour organizados desde Yaoundé (200-300 EUR todo incluido).",
+      "donde_dormir": {
+        "mochilero": "Campamentos en/cerca parque: 15-25 EUR/noche",
+        "medio": "Eco-lodges básicos: 35-60 EUR/noche",
+        "comfort": "Eco-lodge Dja Camp: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo guiado en selva (50-80 EUR/día con guía)",
+        "Avistamiento de gorilas (opcional, requiere suerte y tiempo)",
+        "Canoa en río Dja (30-50 EUR)",
+        "Observación de aves (gratis con binoculares)"
+      ],
+      "donde_comer": "Comida de campamento o eco-lodges (12-18 EUR), compras en pueblos cercanos (4-6 EUR).",
+      "consejo_local": "Requiere autorización del ministerio (tour organizado lo gestiona). Paciencia para avistamientos. Mosquitos abundantes: repelente fuerte es esencial.",
+      "plan_b_lluvia": "Selva en lluvia es mejor para vida silvestre. Caminos difíciles pero posibles con guía.",
+      "keywords": [
+        "Dja",
+        "selva camerun",
+        "gorilas",
+        "biodiversidad",
+        "UNESCO",
+        "Lomié"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,335 @@
+{
+  "pais": "Kirguistán",
+  "codigo": "kg",
+  "destinos": [
+    {
+      "id": "lago-issyk-kul",
+      "nombre": "Lago Issyk-Kul",
+      "tipo": "naturaleza",
+      "region": "Provincia de Issyk-Kul, norte central",
+      "descripcion": "Segundo lago de montaña más alto del mundo (1.607m), rodeado de picos nevados y pueblos tradicionales. Punto de partida para trekking, observación de aves y baños termales. El agua salada nunca se congela completamente pese a la altitud.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "desde Biskek en autobús (4-5h, 3-5 EUR) o minibús compartido (4-5h, 4-6 EUR); taxi privado 50-70 EUR",
+      "donde_dormir": {
+        "mochilero": "guest houses familiares en Karakol o Cholpon-Ata: 8-12 EUR/noche",
+        "medio": "pequeños hoteles junto al lago: 20-35 EUR/noche",
+        "comfort": "resorts en Cholpon-Ata: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a Jyrgalan Valley (2-3 días, gratis con guía local 30-40 EUR/día)",
+        "Baños termales en Bokonbaevo (gratis o 2-3 EUR entrada)",
+        "Senderismo alrededor de picos como Peak Lenin desde Karakol (guía 40-60 EUR/día)",
+        "Observación de aves migratorias (gratis desde orillas)",
+        "Visita a petroglifos de Tamga (libre, donativo sugerido 2-3 EUR)"
+      ],
+      "donde_comer": "Sopa de carne (shorba) y pan tandoori en Karakol. Comedores locales 2-4 EUR por comida. Zona de mercado central recomendada para auténticos platos kirguises.",
+      "consejo_local": "Lleva agua y protección solar: la altitud y el reflejo del agua queman rápido. Los 'marshrutkas' (minibuses) salen cuando se llenan, no a horario fijo.",
+      "plan_b_lluvia": "Visita el museo de la región en Karakol o explora pueblos cercanos como Jyrgalan con cafeterías locales",
+      "keywords": [
+        "Issyk Kul",
+        "Karakol",
+        "Cholpon-Ata",
+        "Bokonbaevo",
+        "trekking",
+        "lago alpino"
+      ]
+    },
+    {
+      "id": "pico-khan-tengri",
+      "nombre": "Montañas Tian Shan - Pico Khan Tengri",
+      "tipo": "montaña",
+      "region": "Provincia de Naryn, sureste",
+      "descripcion": "Tercera montaña más alta del mundo (6.995m) y una de las más técnicas. Punto de encuentro de fronteras Kirguistán-China-Kazajistán. Base de montaña accesible incluso para no alpinistas con aclimatación.",
+      "dias_recomendados": 10,
+      "mejor_epoca": "julio a agosto",
+      "como_llegar": "desde Biskek: autobús a Karakol (5h, 5 EUR), luego tour organizado a base de Khan Tengri (5-7 días, 500-800 EUR incluido transporte, acampada, guía)",
+      "donde_dormir": {
+        "mochilero": "campamentos de base con tiendas: 25-40 EUR/noche (incluido en tour)",
+        "medio": "lodges de montaña en Naryn: 30-50 EUR/noche",
+        "comfort": "resorts en Bishkek antes/después: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Ascenso a base de Khan Tengri (3.100m, aclimatación 3-4 días, gratis con tour)",
+        "Trekking alrededor de picos: Pico Chapi, Pico Elbrus (4-7 días, 400-600 EUR con guía)",
+        "Fotografía de glaciares y picos alpinos (gratis)",
+        "Observación de fauna: pikas, argalíes, marmotas (gratis)"
+      ],
+      "donde_comer": "Comidas preparadas en campamentos (incluidas en tour). En pueblos base: mutton stew y plov 2-3 EUR",
+      "consejo_local": "Reserva con operadores reputados 2-3 meses antes. El mal de altura es real: aclimatiza en Karakol primero.",
+      "plan_b_lluvia": "Refugio en campamento con actividades interiores; en mal tiempo extremo, descenso a pueblos base",
+      "keywords": [
+        "Khan Tengri",
+        "Tian Shan",
+        "montañismo",
+        "glaciares",
+        "6995m",
+        "alpinismo"
+      ]
+    },
+    {
+      "id": "osh",
+      "nombre": "Osh",
+      "tipo": "ciudad",
+      "region": "Provincia de Osh, sur",
+      "descripcion": "Segunda ciudad más grande, centro comercial histórico en ruta de la Seda con bazar caótico y auténtico. Base ideal para explorar el sur: Valle de Fergana, mercados, arquitectura local.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a mayo, septiembre a octubre",
+      "como_llegar": "desde Biskek: vuelo (45 min, 40-60 EUR) o autobús/minibús (12-14h, 20-30 EUR)",
+      "donde_dormir": {
+        "mochilero": "guest houses en barrio viejo: 10-15 EUR/noche",
+        "medio": "hoteles céntricos: 25-40 EUR/noche",
+        "comfort": "hoteles modernos zona nueva: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Bazar Jayma (libre, compra cerámica y especias por 3-10 EUR)",
+        "Mezquita Sulayman Too en montaña (libre, vistas de ciudad)",
+        "Paseo por río Ak-Buura (gratis)",
+        "Museo Regional (2 EUR entrada)",
+        "Mercado de frutas y especias (gratis"
+      ],
+      "donde_comer": "Laghman (fideos locales), samsa, tandoori kebab. Bazares 2-5 EUR por plato. Zona Jayma imprescindible para auténtico.",
+      "consejo_local": "El bazar es caótico pero seguro. Regatea en precios de souvenirs (espera 30-50% descuento). Viernes y sábados son días pico.",
+      "plan_b_lluvia": "Museo Regional, cafeterías del bazar cubierto, compras en tiendas de la ciudad vieja",
+      "keywords": [
+        "Osh",
+        "Fergana",
+        "bazar Jayma",
+        "Sulayman Too",
+        "sur Kirguistán",
+        "ruta seda"
+      ]
+    },
+    {
+      "id": "bishkek",
+      "nombre": "Biskek",
+      "tipo": "ciudad",
+      "region": "Provincia de Chuy, norte",
+      "descripcion": "Capital moderna pero relajada con parques amplios, bazar histórico y vida local auténtica. Punto de entrada y salida para la mayoría de viajeros; merece 2-3 días para explorar a pie.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "aeropuerto internacional Manas (30km): taxi 10-15 EUR, autobús 1-2 EUR, 45min-1h",
+      "donde_dormir": {
+        "mochilero": "hostales/guest houses barrio Panfilov: 10-18 EUR/noche",
+        "medio": "hoteles centro: 30-50 EUR/noche",
+        "comfort": "hoteles 4-5 estrellas: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Bazar Osh (libre, souvenirs 2-15 EUR)",
+        "Parque Ala-Too con paseos al atardecer (gratis)",
+        "Museos: Museo Nacional de Historia (3 EUR), Museo Etnográfico (2-3 EUR)",
+        "Paseos por barrio Panfilov (gratis)",
+        "Tea House At Naryn y comedores locales (2-5 EUR)"
+      ],
+      "donde_comer": "Plov, shorba, mantuu. Comedores 2-5 EUR. Bazar Osh para ambiente auténtico. Cafeterías del parque Ala-Too para observación de gente.",
+      "consejo_local": "Biskek es segura pero monótona. La mayoría viajeros la usan como punto de paso. Las mejores vistas al atardecer desde colina Tunduk (minibús 0.30 EUR).",
+      "plan_b_lluvia": "Museos, cafeterías, shopping en centros comerciales de la ciudad nueva",
+      "keywords": [
+        "Bishkek",
+        "Tunduk",
+        "bazar Osh",
+        "Ala-Too",
+        "capital Kirguistán"
+      ]
+    },
+    {
+      "id": "karakol",
+      "nombre": "Karakol",
+      "tipo": "ciudad",
+      "region": "Provincia de Issyk-Kul, este",
+      "descripcion": "Pueblo alpino en punta este del lago Issyk-Kul, base perfecta para trekkings de montaña y exploración de glaciares. Mercado tradicional, arquitectura rusa y acceso a Jyrgalan Valley.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "desde Biskek: minibús a Karakol (5-6h, 5-7 EUR vía ruta norte alrededor del lago)",
+      "donde_dormir": {
+        "mochilero": "guest houses familiares: 10-15 EUR/noche",
+        "medio": "pequeños hoteles: 25-35 EUR/noche",
+        "comfort": "lodge de montaña: 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a Jyrgalan Valley (2 días, 40-50 EUR con guía)",
+        "Senderismo al Glaciar Turgen (día completo, 30-40 EUR guía)",
+        "Visita a mermelada tradicional (gratis, compra 3-5 EUR)",
+        "Mercado de caballos los viernes (gratis observación)",
+        "Baños termales cercanos (2-3 EUR)"
+      ],
+      "donde_comer": "Sopa de carne, noodles con verduras, pan tandoori. Mercado y comedores locales 2-4 EUR. Restaurantes turísticos 5-10 EUR.",
+      "consejo_local": "Contrata guías en guest houses (más barato que tours operados). Acceso a trekkings que no encontrarás desde Biskek.",
+      "plan_b_lluvia": "Exploración del pueblo, mercado cubierto, visitas a casas locales con té",
+      "keywords": [
+        "Karakol",
+        "Jyrgalan",
+        "Glaciar Turgen",
+        "este Issyk-Kul",
+        "trekking alpino"
+      ]
+    },
+    {
+      "id": "son-kul",
+      "nombre": "Lago Song-Kul",
+      "tipo": "naturaleza",
+      "region": "Provincia de Naryn, centro-sur",
+      "descripcion": "Lago alpino a 3.016m en altiplano remoto, accesible solo en verano. Experiencia genuina de vida nómada con familias kirguises, yurtas y caballos. Muy pocos turistas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "julio a agosto",
+      "como_llegar": "desde Biskek: vía Naryn (8-10h, 10-15 EUR). Tours organizados desde Biskek (3-4 días, 300-500 EUR todo incluido) más prácticos para independientes",
+      "donde_dormir": {
+        "mochilero": "yurtas con familias kirguises: 15-25 EUR/noche (incluye comidas)",
+        "medio": "campamentos turísticos con yurtas: 30-50 EUR/noche",
+        "comfort": "lodge de montaña cercano: 60-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseos a caballo por altiplano (40-60 EUR/día con guía)",
+        "Trekking alrededor del lago (día completo, gratis sin guía)",
+        "Observación de vida nómada y ordeño de ovejas (gratis con anfitrión)",
+        "Fotografía de puesta de sol sobre agua (gratis)",
+        "Pesca de trucha (2-3 EUR licencia diaria)"
+      ],
+      "donde_comer": "Comidas con familia anfitriona: cordero asado, sopa, quesillo. Incluido en alojamiento. Té con leche constante.",
+      "consejo_local": "Solo accesible junio-septiembre; en otros meses están nevados los pasos. Lleva ropa de abrigo incluso en verano.",
+      "plan_b_lluvia": "Permanencia en yurta con actividades interiores; en nieve, el acceso se corta",
+      "keywords": [
+        "Song-Kul",
+        "lago alpino",
+        "nómadas",
+        "yurta",
+        "altiplano",
+        "3016m",
+        "Naryn"
+      ]
+    },
+    {
+      "id": "naryn-ciudad",
+      "nombre": "Naryn",
+      "tipo": "ciudad",
+      "region": "Provincia de Naryn, sur-centro",
+      "descripcion": "Pequeña capital regional en cruce de rutas hacia Khan Tengri, Song-Kul y Talas. Punto base para montañismo extremo con servicios básicos y guías especializados.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "desde Biskek: minibús (8-9h, 8-10 EUR) o viaje combinado con otras paradas",
+      "donde_dormir": {
+        "mochilero": "guest houses: 10-15 EUR/noche",
+        "medio": "pequeños hoteles: 20-30 EUR/noche",
+        "comfort": "no hay opciones de lujo",
+        "nota": "limitado, reserva con antelación"
+      },
+      "que_hacer": [
+        "Organización de expediciónes a Khan Tengri (tours 500-800 EUR)",
+        "Trekking a Song-Kul (tours 300-500 EUR)",
+        "Mercado local (gratis, compras 2-5 EUR)",
+        "Visita a río Naryn (gratis)",
+        "Compras de equipo de montaña (tiendas locales)"
+      ],
+      "donde_comer": "Comedores locales simples. Plov, carne. 2-4 EUR por comida. Opciones limitadas.",
+      "consejo_local": "Naryn es punto de paso, no destino principal. Contrata operadores aquí para montañismo si no lo hiciste en Biskek.",
+      "plan_b_lluvia": "Mal tiempo cierra accesos a montaña; espera en el pueblo o regresa",
+      "keywords": [
+        "Naryn",
+        "Khan Tengri",
+        "Song-Kul",
+        "montañismo",
+        "base alpina"
+      ]
+    },
+    {
+      "id": "cholpon-ata",
+      "nombre": "Cholpon-Ata",
+      "tipo": "playa",
+      "region": "Provincia de Issyk-Kul, norte",
+      "descripcion": "Pueblo de playa en costa norte del lago, con petroglifos antiguos y balnearios termales. Menos auténtico que Karakol pero más turístico y accesible.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "desde Biskek: minibús (3-4h, 3-5 EUR) o taxi compartido (3-4h, 5-8 EUR)",
+      "donde_dormir": {
+        "mochilero": "guest houses y hostales: 12-18 EUR/noche",
+        "medio": "hoteles junto a playa: 30-50 EUR/noche",
+        "comfort": "resorts: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en lago Issyk-Kul (gratis)",
+        "Visita a petroglifos de la edad de bronce (2-3 EUR entrada)",
+        "Baños termales (3-5 EUR)",
+        "Paseos por playa (gratis)",
+        "Museos arqueológicos pequeños (2 EUR)"
+      ],
+      "donde_comer": "Pescado frito del lago, noodles, ensaladas. Restaurantes turísticos 5-10 EUR. Comedores locales 3-5 EUR.",
+      "consejo_local": "Agua del lago es salada y nunca se congela. Playa arenosa decente pero no es rival del Mediterráneo.",
+      "plan_b_lluvia": "Museo, baños termales interiores, cafeterías",
+      "keywords": [
+        "Cholpon-Ata",
+        "playa Issyk-Kul",
+        "petroglifos",
+        "baños termales",
+        "norte lago"
+      ]
+    },
+    {
+      "id": "talas",
+      "nombre": "Talas Valley",
+      "tipo": "rural",
+      "region": "Provincia de Talas, noroeste",
+      "descripcion": "Valle verde y aislado al norte, menos turístico que Issyk-Kul. Montañas verdosas, pueblos tradicionales, trekking de bajo perfil y encuentros auténticos con comunidades rurales.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "desde Biskek: minibús a Talas pueblo (3-4h, 3-5 EUR), luego transporte local",
+      "donde_dormir": {
+        "mochilero": "guest houses en pueblos: 10-15 EUR/noche",
+        "medio": "pequeños hoteles Talas pueblo: 20-30 EUR/noche",
+        "comfort": "no hay opciones de lujo",
+        "nota": "aislado, reserva con anticipación"
+      },
+      "que_hacer": [
+        "Trekking a Pico Manas (3-4 días, 50-80 EUR con guía)",
+        "Senderismo en bosques de pino (gratis)",
+        "Visita a pueblos tradicionales y casas (gratis, hospedaje 15 EUR)",
+        "Observación de aves (gratis)",
+        "Paseos a caballo por valley (40-60 EUR/día)"
+      ],
+      "donde_comer": "Comidas caseras con anfitriones. Cordero, sopa. Incluido en hospedaje. Comedores pueblos 2-4 EUR.",
+      "consejo_local": "Región muy poco turística, casi sin señalización. Contrata guía local obligatoriamente (muy baratos, 20-30 EUR/día).",
+      "plan_b_lluvia": "Permanencia en pueblos con actividades interiores; lluvia puede bloquear caminos",
+      "keywords": [
+        "Talas",
+        "valle verde",
+        "Manas",
+        "rural Kirguistán",
+        "noroeste",
+        "nómadas"
+      ]
+    },
+    {
+      "id": "arslanbob",
+      "nombre": "Arslanbob",
+      "tipo": "naturaleza",
+      "region": "Provincia de Jalal-Abad, suroeste",
+      "descripcion": "Pueblo remoto rodeado del mayor bosque de nogales del mundo, en montañas de Sulaiman. Trekking de bosque, cascadas, vida rural y menos turismo que Issyk-Kul.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "desde Osh: minibús a Jalal-Abad (3h, 3 EUR), luego minibús/taxi a Arslanbob (2-3h, 3-5 EUR). Acceso complicado; considera tour desde Osh.",
+      "donde_dormir": {
+        "mochilero": "guest houses locales: 10-15 EUR/noche",
+        "medio": "pequeños hoteles: 20-30 EUR/noche",
+        "comfort": "no hay",
+        "nota": "muy limitado"
+      },
+      "que_hacer": [
+        "Trekking a cascadas (día completo, gratis sin guía)",
+        "Paseos por bosque de nogales (gratis)",
+        "Observación de aves (gratis)",
+        "Recolección de nueces en temporada (gratis, venta 1-2 EUR/kg)",
+        "Picnic rural en bosque (gratis + comida llevada)"
+      ],
+      "donde_comer": "Comida casera simple. Nogales crudas (2-3 EUR/kg). Restaurantes nulos; cocina local en casas.",
+      "consejo_local": "Muy poco turístico y difícil de acceder. Contrata guía en pueblo (gratis si haces compras en hospedaje) o libro-guía local.",
+      "plan_b_lluvia": "Permanencia en pueblo o regreso a Jalal-Abad",
+      "keywords": [
+        "Arslanbob",
+        "bosque nogales",
+        "cascadas",
+        "suroeste",
+        "Jalal-Abad",
+        "trekking bosque"
+      ]
+    }
+  ]
+}

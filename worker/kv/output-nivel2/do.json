@@ -1,0 +1,332 @@
+{
+  "pais": "República Dominicana",
+  "codigo": "do",
+  "destinos": [
+    {
+      "id": "santo-domingo",
+      "nombre": "Santo Domingo",
+      "tipo": "histórico",
+      "region": "Costa Sur",
+      "descripcion": "Capital del país y primera ciudad europea en América, con la Zona Colonial mejor preservada del Caribe. Centro cultural, gastronómico y punto de partida logístico ideal. Mezcla de historia colonial, vida urbana y vida nocturna caribeña.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Las Americas International Airport (aeropuerto principal). Desde Europa: conexión usual. En ciudad: metro, gua-gua (minibús) o a pie en Zona Colonial.",
+      "donde_dormir": {
+        "mochilero": "Hostel en Zona Colonial o Ciudad Nueva: 15-25 EUR/noche",
+        "medio": "Hotel boutique Zona Colonial o Naco: 50-90 EUR/noche",
+        "comfort": "Resort o hotel 4 estrellas Naco/Piantini: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Explorar Zona Colonial a pie: Catedral Primada, Alcázar de Colón (gratis/5 EUR)",
+        "Paseo Marítimo y malecón al atardecer (gratis)",
+        "Museo de las Casas Reales o Casa de Teatro (5-8 EUR)",
+        "Vida nocturna en Zona Colonial: bares y merengue (bebidas 2-5 EUR)"
+      ],
+      "donde_comer": "Comida criolla típica: mofongo, sancocho, huevos rellenos. Zona Colonial tiene restaurantes turísticos (12-20 EUR) pero también comedores locales (4-8 EUR). Calle Las Damas es la mejor zona.",
+      "consejo_local": "Compra un boleto de 'turista' del metro (tarjeta recargable) en lugar de pagos sueltos. La Zona Colonial es segura de día; evita después de medianoche fuera del centro turístico.",
+      "plan_b_lluvia": "Museos de la ciudad (Museo del Hombre Dominicano, Museo de Arte Moderno), centros comerciales o cafés tradicionales en Zona Colonial.",
+      "keywords": [
+        "santo domingo",
+        "zona colonial",
+        "capital dominicana",
+        "alcazar colon",
+        "catedral primada",
+        "naco",
+        "piantini"
+      ]
+    },
+    {
+      "id": "punta-cana",
+      "nombre": "Punta Cana",
+      "tipo": "playa",
+      "region": "Sureste",
+      "descripcion": "Destino de playa por excelencia con arena blanca, aguas turquesas y arrecifes de coral cercanos. Infraestructura turística consolidada pero con opciones independientes más allá de resorts all-inclusive. Punto de entrada frecuente para viajeros.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Aeropuerto Internacional de Punta Cana (40 min desde ciudad). Autobús Expreso Bávaro desde Santo Domingo (2.5 horas, 5-8 EUR) o viajes compartidos (8-12 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel o casa privada Bavaro/Cabeza de Toro: 20-35 EUR/noche",
+        "medio": "Hotel independiente frente al mar o primera línea: 60-100 EUR/noche",
+        "comfort": "Resort de lujo o villa privada: 150-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de arena blanca: Playa Bávaro, Playa Blanca (gratis)",
+        "Snorkel en arrecife de coral o isla Saona (30-50 EUR con guía)",
+        "Cenote Ojo Agua: piscina natural subterránea (8 EUR entrada)",
+        "Kitesurf o paddleboard en Laguna Gri-Gri (40-80 EUR)"
+      ],
+      "donde_comer": "Pescado fresco a la parrilla, langosta, ceviche. Playa y pueblo de Bávaro tienen comedores locales (5-12 EUR) y restaurantes turísticos (15-30 EUR). Evita resorts all-inclusive si buscas comida auténtica.",
+      "consejo_local": "Alquila un scooter o moto (25-40 EUR/día) para explorar más allá de la playa principal. Las playas más bonitas están fuera del circuito de resorts. Negocia precios de tours en la calle, no en hoteles.",
+      "plan_b_lluvia": "Visita pueblos cercanos (Higüey, Bávaro pueblo), tiendas de artesanía local, o espera a que pase (lluvia tropical = corta).",
+      "keywords": [
+        "punta cana",
+        "bavaro",
+        "playa bavaro",
+        "arrecife coral",
+        "cenote",
+        "isla saona",
+        "cabeza de toro",
+        "punta cana resort"
+      ]
+    },
+    {
+      "id": "la-romana",
+      "nombre": "La Romana",
+      "tipo": "playa",
+      "region": "Sureste",
+      "descripcion": "Pueblo costero auténtico con playas cercanas, menos saturado que Punta Cana. Puerto de salida para isla Saona y punto de acceso a cuevas y parques naturales. Mezcla de vida local caribeña y turismo moderado.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Desde Punta Cana: gua-gua o viaje compartido (1.5 horas, 5 EUR). Desde Santo Domingo: autobús (2.5 horas, 6-8 EUR). Aeropuerto regional menor.",
+      "donde_dormir": {
+        "mochilero": "Hostel o casa en pueblo de La Romana: 15-25 EUR/noche",
+        "medio": "Hotel frente al mar o casa rentada: 50-80 EUR/noche",
+        "comfort": "Resort o villa con vistas: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas locales: Playa El Portillo, Playa Minitas (gratis)",
+        "Excursión a Isla Saona con snorkel (45-70 EUR)",
+        "Parque Nacional del Este: senderismo y cuevas (25-40 EUR)",
+        "Cuevas de Nueba Rosa con agua cristalina (gratis, acceso libre)"
+      ],
+      "donde_comer": "Pescado del día, langosta, congrí (arroz con judías). Mercado municipal y comedores con vista al puerto (6-10 EUR). Restaurantes en marina turística (15-25 EUR).",
+      "consejo_local": "La vida local está en el puerto pesquero, no en la zona turística. Compra fruta y snacks en el mercado. Llega a Isla Saona temprano si vas por tu cuenta (las excursiones son saturadas).",
+      "plan_b_lluvia": "Explora el pueblo a pie, mercado local, iglesia o viaja a Santo Domingo (1.5 horas de gua-gua).",
+      "keywords": [
+        "la romana",
+        "isla saona",
+        "puerto pesquero",
+        "parque nacional este",
+        "minitas",
+        "el portillo"
+      ]
+    },
+    {
+      "id": "jarabacoa",
+      "nombre": "Jarabacoa",
+      "tipo": "montaña",
+      "region": "Cordillera Central",
+      "descripcion": "Principal destino de montaña: cascadas, senderismo, ríos y clima fresco a 600m de altitud. Centro de aventura con tirolesas, rafting y tours a picos dominicanos. Ideal para escapar del calor y la masa turística.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Santo Domingo: gua-gua (2.5 horas, 5-7 EUR) o viaje compartido (8-10 EUR). Desde Punta Cana: más complicado (4+ horas), mejor pasar por Santo Domingo.",
+      "donde_dormir": {
+        "mochilero": "Hostel o lodge básico: 15-30 EUR/noche",
+        "medio": "Hotel o casa rural: 40-70 EUR/noche",
+        "comfort": "Lodge ecológico o resort boutique: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Cascada de Jiménoa (5 EUR entrada, senderismo fácil)",
+        "Salto de Bayano: cascada de 60m (gratis, acceso libre)",
+        "Rafting en Río Yaque (35-50 EUR con guía)",
+        "Senderismo a Pico Duarte o picos cercanos (40-80 EUR con guía)"
+      ],
+      "donde_comer": "Comida de montaña: papas, huevos, quesos locales, trucha. Comedores sencillos (5-10 EUR) y restaurantes turísticos (12-20 EUR). La comida es más barata que en playas.",
+      "consejo_local": "Lleva repelente de mosquitos y ropa para lluvias. Los mejores guías de senderismo están fuera de hoteles: pregunta en hostels. El pueblo es tranquilo y amigable; camina sin miedo.",
+      "plan_b_lluvia": "Las cascadas tienen más agua (es bonito). Visita el pueblo, toma café local en cafés caseros o haz yoga/meditación en lodges.",
+      "keywords": [
+        "jarabacoa",
+        "cascada jimenoa",
+        "pico duarte",
+        "salto bayano",
+        "rio yaque",
+        "rafting",
+        "montana dominicana"
+      ]
+    },
+    {
+      "id": "puerto-plata",
+      "nombre": "Puerto Plata",
+      "tipo": "playa",
+      "region": "Costa Norte",
+      "descripcion": "Puerto histórico en la costa norte con playas, malecón restaurado y acceso a montañas. Menos abarrotado que el sureste, con mezcla de turismo y vida local genuina. Punto de salida a Isla Isabela y Sosúa.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Santo Domingo: gua-gua (4 horas, 8-10 EUR). Desde Santiago: 1 hora (4 EUR). Aeropuerto local regional.",
+      "donde_dormir": {
+        "mochilero": "Hostel en Long Beach: 15-28 EUR/noche",
+        "medio": "Hotel con vista al malecón: 45-75 EUR/noche",
+        "comfort": "Resort o villa: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo Marítimo (malecón): recorrido a pie con vistas (gratis)",
+        "Playa Long Beach y playas cercanas (gratis)",
+        "Teleférico a Pico Isabel de Torres (10 EUR ida-vuelta, vistas panorámicas)",
+        "Museo de Ámbar Dominicano (5 EUR entrada)",
+        "Excursión a Isla Isabela: ruinas de fortaleza (30-50 EUR)"
+      ],
+      "donde_comer": "Pescado a la parrilla, ceviche, conch salad. Comedores en malecón (6-12 EUR) y restaurantes oceanfront (15-25 EUR). Noche de viernes: ambiente local.",
+      "consejo_local": "Puerto Plata se está renovando pero sigue siendo más auténtico que resorts del sur. Los precios son más bajos. Evita el área del puerto (droga) de noche; quédate en Long Beach.",
+      "plan_b_lluvia": "Museo de Ámbar, arte local, tiendas de artesanía o sube al teleférico (puede ser bonito con nubes).",
+      "keywords": [
+        "puerto plata",
+        "long beach",
+        "malecón",
+        "pico isabel torres",
+        "isla isabela",
+        "amber museum",
+        "costa norte"
+      ]
+    },
+    {
+      "id": "sosua",
+      "nombre": "Sosúa",
+      "tipo": "playa",
+      "region": "Costa Norte",
+      "descripcion": "Pequeña bahía de playa semicircular con agua tranquila, buena para snorkel. Pueblo turístico consolidado pero sin el masificación de resorts del sur. Buena base para explorar costa norte.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Puerto Plata: gua-gua (30 min, 1.50 EUR). Desde Santiago: 1.5 horas (4 EUR). Desde Santo Domingo: conexión via Puerto Plata o Santiago.",
+      "donde_dormir": {
+        "mochilero": "Hostel: 15-25 EUR/noche",
+        "medio": "Hotel frente a playa: 50-80 EUR/noche",
+        "comfort": "Resort o villa con vista: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa semicircular de Sosúa: snorkel en arrecife cercano (gratis)",
+        "Buceo: tiendas locales (60-100 EUR por inmersión)",
+        "Paseo a Cabarete (15 min): pueblo de kitesurfistas (gratis)"
+      ],
+      "donde_comer": "Comida internacional y criolla. Frente a playa hay restaurantes con vistas (12-18 EUR). Calle Principal tiene opciones locales (5-10 EUR).",
+      "consejo_local": "Sosúa es pequeño: lo ves en 1-2 días. Usa como base para explorar Cabarete, Cofresí o Laguna Gri-Gri. El snorkel desde la playa es bueno sin necesidad de tours.",
+      "plan_b_lluvia": "Viaja a Cabarete o Puerto Plata (30 min en gua-gua). La lluvia tropical es corta.",
+      "keywords": [
+        "sosua",
+        "bahia sosua",
+        "playa semicircular",
+        "snorkel",
+        "costa norte dominicana",
+        "cabarete cercano"
+      ]
+    },
+    {
+      "id": "cabarete",
+      "nombre": "Cabarete",
+      "tipo": "playa",
+      "region": "Costa Norte",
+      "descripcion": "Capital mundial del kitesurf y windsurfing con atmósfera de pueblo playero desenfadado. Playas con viento constante, bares de playa, vida nocturna joven. Mezcla de aventura acuática y comunidad internacional bohemia.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a octubre (viento para kitesurf); diciembre a abril (clima)",
+      "como_llegar": "Desde Sosúa: gua-gua (15 min, 1.50 EUR). Desde Puerto Plata: 45 min (3-4 EUR). Desde Santo Domingo: 5+ horas.",
+      "donde_dormir": {
+        "mochilero": "Hostel o casa compartida: 18-30 EUR/noche",
+        "medio": "Hotel o casa vacacional: 50-90 EUR/noche",
+        "comfort": "Resort o villa: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Kitesurf o lecciones (80-120 EUR por sesión de 3 horas)",
+        "Playa Cabarete: relax y bares (gratis)",
+        "Paseo a Laguna Gri-Gri (tour incluye snorkel y ceviche, 35-50 EUR)",
+        "Conciertos y bares de playa al atardecer (bebidas 3-6 EUR)"
+      ],
+      "donde_comer": "Comida internacional, fish tacos, ceviche. Bares de playa (8-15 EUR) y restaurantes (12-20 EUR). Atmósfera relajada, no formal.",
+      "consejo_local": "Cabarete es caro comparado con resto del país pero más barato que Punta Cana. La comunidad de kitesurf es muy amigable. Las mejores horas de viento son tarde (14:00-18:00).",
+      "plan_b_lluvia": "Lluvia tropical = pasa rápido. Relájate en bar, ve a Sosúa o haz yoga.",
+      "keywords": [
+        "cabarete",
+        "kitesurf",
+        "windsurfing",
+        "laguna grigri",
+        "playa cabarete",
+        "bohemio",
+        "costa norte"
+      ]
+    },
+    {
+      "id": "las-terrenas",
+      "nombre": "Las Terrenas",
+      "tipo": "playa",
+      "region": "Península de Samaná",
+      "descripcion": "Pueblo costero pintoresco en punta de península con playas vírgenes cercanas, comunidad internacional creativa y precio accesible. Centro de buceo, playas tranquilas y acceso a Samaná Bay.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Desde Santo Domingo: gua-gua (4 horas, 7-9 EUR) o viaje compartido (12 EUR). Acceso por carretera sinuosa pero pintoresca.",
+      "donde_dormir": {
+        "mochilero": "Hostel o casa compartida: 18-28 EUR/noche",
+        "medio": "Hotel frente a playa: 50-85 EUR/noche",
+        "comfort": "Resort boutique o villa: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas cercanas: Playa Jackson, Playa Bonita (gratis, algunos requieren paseo en bote 10-15 EUR)",
+        "Buceo en arrecife (65-90 EUR por inmersión)",
+        "Senderismo a cascada (tours 35-50 EUR)",
+        "Tour a Samaná Bay: avistamiento de ballenas (enero-marzo, 70-100 EUR)"
+      ],
+      "donde_comer": "Comida francesa, italiana e internacional (influencia europea). Pescado fresco (10-18 EUR). Pueblo pequeño pero buena gastronomía. Street food 3-6 EUR.",
+      "consejo_local": "Las Terrenas atrae viajeros bohemios y expatriados. El pueblo es seguro y amigable. Las carreteras hacia allí son muy malas; usa gua-gua, no rentes auto.",
+      "plan_b_lluvia": "Buceo (lluvia no afecta), exploración de pueblo, galerías de arte local.",
+      "keywords": [
+        "las terrenas",
+        "samana peninsula",
+        "playa jackson",
+        "playa bonita",
+        "buceo",
+        "ballenas"
+      ]
+    },
+    {
+      "id": "samana",
+      "nombre": "Samaná",
+      "tipo": "playa",
+      "region": "Península de Samaná",
+      "descripcion": "Pueblo pintoresco en bahía protegida, famoso por avistamiento de ballenas jorobadas (enero-marzo). Playas cercanas, ambiente relajado y acceso a cuevas y parques marinos. Menos desarrollado que Punta Cana, más auténtico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "enero a marzo (ballenas); noviembre a mayo (clima)",
+      "como_llegar": "Desde Santo Domingo: gua-gua (4 horas, 8 EUR) o viaje compartido (12-15 EUR). Desde Las Terrenas: gua-gua (1.5 horas, 3 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel o casa rentada: 15-28 EUR/noche",
+        "medio": "Hotel frente a bahía: 50-85 EUR/noche",
+        "comfort": "Resort o villa con vistas: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Avistamiento de ballenas jorobadas (enero-marzo): tour 60-90 EUR",
+        "Playa Las Galeras: playas vírgenes cercanas (gratis + paseo en bote 20 EUR)",
+        "Cayo Levantado (Bacardi Island): snorkel y playa (45-70 EUR tour)",
+        "Parque Nacional de Samaná: senderos naturales (15-25 EUR)"
+      ],
+      "donde_comer": "Pescado fresco, langosta, sopa de pescado. Malecón tiene restaurantes con vistas (10-18 EUR). Mercado local para comida auténtica (4-8 EUR).",
+      "consejo_local": "Si visitas en temporada de ballenas (enero-marzo), reserva tours con anticipación. Samaná es pequeño; puedes explorar todo a pie o en bote local. El pueblo es seguro.",
+      "plan_b_lluvia": "Viaja a Las Galeras o Las Terrenas (transporte fácil). La lluvia tropical es corta.",
+      "keywords": [
+        "samana",
+        "ballenas jorobadas",
+        "cayo levantado",
+        "playa galeras",
+        "bacardi island",
+        "peninsula samana"
+      ]
+    },
+    {
+      "id": "santiago",
+      "nombre": "Santiago de los Caballeros",
+      "tipo": "ciudad",
+      "region": "Cibao (norte interior)",
+      "descripcion": "Segunda ciudad del país: centro cultural, gastronómico e histórico del norte. Menos turístico que Santo Domingo, con museos, arquitectura colonial y vida local auténtica. Punto de conexión ideal para explorar costa norte.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Santo Domingo: gua-gua (2 horas, 5-6 EUR) o viaje compartido (10 EUR). Desde Puerto Plata: 1 hora (4 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel: 15-25 EUR/noche",
+        "medio": "Hotel céntrico: 40-70 EUR/noche",
+        "comfort": "Hotel boutique o resort: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Centro histórico: arquitectura colonial y Plaza Duarte (gratis)",
+        "Museo de la Restauración Nacional (4 EUR entrada)",
+        "Monumento a los Héroes de la Restauración (escalada con vistas, 2 EUR)",
+        "Parque Central: ambiente local, tiendas y cafés (gratis)"
+      ],
+      "donde_comer": "Gastronomía criolla y regional: queso de freír, huevos rellenos, carne. Mercado local (4-8 EUR) y restaurantes (8-15 EUR). La comida es más barata que en turísticas.",
+      "consejo_local": "Santiago no es destino turístico per se, pero es imprescindible para entender la vida real dominicana. Los domingos hay actividad en el parque central. Habla con locales; son muy amables.",
+      "plan_b_lluvia": "Museos, compras en mercado, cafés locales o viaja a costa (30 min a Puerto Plata).",
+      "keywords": [
+        "santiago",
+        "santiago de los caballeros",
+        "monumento heroes",
+        "plaza duarte",
+        "centro norte",
+        "cibao"
+      ]
+    }
+  ]
+}

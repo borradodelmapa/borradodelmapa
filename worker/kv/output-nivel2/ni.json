@@ -1,0 +1,350 @@
+{
+  "pais": "Nicaragua",
+  "codigo": "ni",
+  "destinos": [
+    {
+      "id": "granada",
+      "nombre": "Granada",
+      "tipo": "ciudad",
+      "region": "Pacífico Central",
+      "descripcion": "Ciudad colonial a orillas del Lago de Nicaragua con arquitectura colorida, iglesias barrocas y mercados vibrantes. Centro histórico bien conservado y punto de partida para islas y volcanes. Ideal para combinar cultura, naturaleza y vida nocturna.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Managua en autobús directo (3 horas, 5-7 EUR) o desde el aeropuerto internacional (90 min en shuttle compartido, 15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedajes en Calle Atravesada, Casa de Huéspedes Mombacho (8-12 EUR/noche)",
+        "medio": "Hotel colonial con patio, Hotel Plaza Colón (40-60 EUR/noche)",
+        "comfort": "Resort con vista al lago, Hotel Darío (80-120 EUR/noche)"
+      },
+      "que_hacer": [
+        "Paseo por casco histórico y Convento de San Francisco (gratis)",
+        "Excursión a las Isletas del Lago de Nicaragua (15-20 EUR, 4 horas)",
+        "Ascenso al Volcán Mombacho con tirolesa (40 EUR)",
+        "Mercado Central de Granada (gratis, compra de souvenirs)",
+        "Crucero al atardecer por el lago (25 EUR)"
+      ],
+      "donde_comer": "Comedores del mercado: gallo pinto, casados (3-5 EUR). Restaurantes coloniales en casco histórico: ceviche, rondón (10-18 EUR). Zona recomendada: Calle Atravesada.",
+      "consejo_local": "Llega a las 6 AM al mercado central si quieres ver el ambiente más auténtico. Por la noche, evita las calles oscuras lejos del centro histórico.",
+      "plan_b_lluvia": "Visita el Convento San Francisco, museos locales, o toma un tour gastronómico cubierto.",
+      "keywords": [
+        "Granada",
+        "Calle Atravesada",
+        "Isletas",
+        "Mombacho",
+        "lago de Nicaragua",
+        "colonial"
+      ]
+    },
+    {
+      "id": "san-juan-del-sur",
+      "nombre": "San Juan del Sur",
+      "tipo": "playa",
+      "region": "Pacífico Sur",
+      "descripcion": "Pueblo playero relajado con arena volcánica, olas para surfear y acceso a playas vírgenes. Atmósfera bohemia con mucha vida nocturna y viajeros independientes. Punto de partida para reservas naturales y avistamiento de ballenas.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Managua en autobús (5-6 horas, 8-12 EUR) o desde Granada en bus (4 horas, 7 EUR). Carretera Panamericana Sur hacia Rivas.",
+      "donde_dormir": {
+        "mochilero": "Hostales en centro, Fuego Brew Co Hostel (10-15 EUR/noche)",
+        "medio": "Cabañas con vista al mar, Hotel Barrio Café (45-65 EUR/noche)",
+        "comfort": "Resort beachfront, Pelican Eyes (90-140 EUR/noche)"
+      },
+      "que_hacer": [
+        "Surf en playas cercanas: Playa Hermosa, Maderas (15-25 EUR clases)",
+        "Avistamiento de ballenas jorobadas (70 EUR, julio-octubre)",
+        "Senderismo en Refugio de Vida Silvestre La Flor (gratis, tortugas anidando sept-nov)",
+        "Paseo en bote al atardecer (20 EUR)",
+        "Yoga y meditación en playas (gratis o clases 10 EUR)"
+      ],
+      "donde_comer": "Cevichería local, fresh fish (6-10 EUR). Fuego Brew Co para pizzas (10-14 EUR). Mercado de mariscos en muelle: langosta fresca (12-20 EUR). Comida de calle: pupusas (1-2 EUR).",
+      "consejo_local": "Las olas más consistentes son en la mañana. Los mejores atardeceres son desde el puerto. Reserva tours con operadores locales, no a través de agencias internacionales.",
+      "plan_b_lluvia": "Tours por pueblos cercanos, kayak en manglares, talleres de artesanía local cubiertos.",
+      "keywords": [
+        "San Juan del Sur",
+        "SJDS",
+        "playas",
+        "surf",
+        "ballenas",
+        "Hermosa",
+        "bohemio"
+      ]
+    },
+    {
+      "id": "ometepe",
+      "nombre": "Isla de Ometepe",
+      "tipo": "isla",
+      "region": "Lago de Nicaragua",
+      "descripcion": "Isla en forma de dos volcanes unidos por una franja de tierra en mitad del lago. Senderos volcánicos, playas de arena negra, petroglifos precolombinos y ambiente tranquilo sin masas turísticas. Ideal para naturaleza y aventura.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Ferry desde Granada (2-3 horas, 7 EUR) o desde San Jorge (30 min, 3 EUR). Llegada a Moyogalpa o Altagracia.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes en Moyogalpa, Casa Blanca (8-12 EUR/noche)",
+        "medio": "Bungalow con patio, Finca del Cisne (35-50 EUR/noche)",
+        "comfort": "Hotel con vista volcánica, La Hacienda Merida (70-100 EUR/noche)"
+      },
+      "que_hacer": [
+        "Ascenso Volcán Concepción (6-8 horas, 20 EUR guía, difícil)",
+        "Volcán Maderas (4-5 horas, 15 EUR, lago en cráter)",
+        "Playa Santo Domingo: arena negra, piscina natural (gratis)",
+        "Petroglifos precolombinos en El Pozo (3 EUR)",
+        "Cicloturismo por la isla (bicicleta alquiler 5 EUR/día)"
+      ],
+      "donde_comer": "Comedores locales en Moyogalpa: casados, gallo pinto (3-5 EUR). Restaurantes en playas: pescado fresco (8-12 EUR). Frutas tropicales en mercado (muy barato).",
+      "consejo_local": "Lleva repelente anti-mosquitos fuerte. El ferry puede ser lento pero es experiencia auténtica. Alquila moto si quieres recorrer la isla rápido (10-15 EUR/día).",
+      "plan_b_lluvia": "Camina entre pueblos, visita talleres artesanales, disfruta de cafeterías locales.",
+      "keywords": [
+        "Ometepe",
+        "Moyogalpa",
+        "Altagracia",
+        "volcán Concepción",
+        "volcán Maderas",
+        "lago Nicaragua",
+        "isla"
+      ]
+    },
+    {
+      "id": "big-corn-island",
+      "nombre": "Big Corn Island",
+      "tipo": "isla",
+      "region": "Caribe",
+      "descripcion": "Isla caribeña con playas de arena blanca, arrecifes de coral, buceo de clase mundial y comunidad rastafari auténtica. Ambiente relajado de isla tropical sin exceso de turismo. Perfecto para submarinismo, pesca y desconexión.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "febrero a abril, septiembre a octubre",
+      "como_llegar": "Vuelo desde Managua a Big Corn Island (1 hora, 120-180 EUR) o ferry desde Bluefields (4 horas, 15 EUR). Vuelos más frecuentes desde Bluefields.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje simple, Driftwood (12-18 EUR/noche)",
+        "medio": "Bungalow beachfront, Yemaya Island Hideaway (50-75 EUR/noche)",
+        "comfort": "Resort con buceo, Big Corn Island Bungalows (85-130 EUR/noche)"
+      },
+      "que_hacer": [
+        "Buceo en arrecifes (35-50 EUR por inmersión)",
+        "Snorkel en Little Corn Island (20 EUR, tour diario)",
+        "Pesca deportiva (90 EUR)",
+        "Playas Playa Picnic, Playa Blanca (gratis)",
+        "Tours en bote para avistamiento de delfines (40 EUR)"
+      ],
+      "donde_comer": "Fresh fish, langosta, caracol (8-15 EUR). Comida caribeña: rondon, hudut (5-10 EUR). Comedores junto al muelle. Frutas tropicales en mercadillos.",
+      "consejo_local": "Little Corn Island es aún más tranquila pero sin servicios; toma ferry diario (5 EUR). Los precios suben mucho en temporada alta. Trae efectivo, pocas tarjetas funcionan.",
+      "plan_b_lluvia": "Buceo (el mejor clima es bajo el agua), visitas a comunidades locales, talleres de cocina criolla.",
+      "keywords": [
+        "Big Corn Island",
+        "Caribe",
+        "arrecife",
+        "buceo",
+        "Little Corn",
+        "Bluefields",
+        "rastafari"
+      ]
+    },
+    {
+      "id": "leon",
+      "nombre": "León",
+      "tipo": "ciudad",
+      "region": "Pacífico Norte",
+      "descripcion": "Segunda ciudad de Nicaragua con universidad, iglesia catedral UNESCO, murales callejeros y tradición revolucionaria. Centro cultural menos turístico que Granada pero igual de histórico. Acceso a playas, volcanes y reservas naturales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Managua en autobús directo (1.5 horas, 2-3 EUR) o desde Granada en bus (5-6 horas, 8 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedaje en centro, Casa Sibu (8-12 EUR/noche)",
+        "medio": "Hotel colonial, El Convento (40-55 EUR/noche)",
+        "comfort": "Boutique hotel, Albergue La Posada (70-100 EUR/noche)"
+      },
+      "que_hacer": [
+        "Catedral Metropolitana y ascenso a cupla (3 EUR, vistas panorámicas)",
+        "Tour de murales y arte callejero (guía local 15 EUR)",
+        "Volcán Cerro Negro: sandboarding (35-50 EUR)",
+        "Playa Las Peñitas (30 min autobús, 2 EUR): playas tranquilas",
+        "Museo de la Revolución (5 EUR)"
+      ],
+      "donde_comer": "Comida local barata en mercado central (2-4 EUR). Restaurantes centro: tipico nicaragüeño (8-12 EUR). Especialidad: gallo pinto, indio viejo, nacatamal.",
+      "consejo_local": "El volcán Cerro Negro se escala mejor con tour organizado, no solo. Los murales tienen historia política; un guía local explica el contexto. Llueve más aquí que en Granada.",
+      "plan_b_lluvia": "Museos, iglesias, cafeterías, escritores locales en librerías.",
+      "keywords": [
+        "León",
+        "catedral",
+        "murales",
+        "revolución",
+        "Cerro Negro",
+        "Las Peñitas",
+        "universidad"
+      ]
+    },
+    {
+      "id": "reserva-bosawas",
+      "nombre": "Reserva de la Biosfera Bosawás",
+      "tipo": "naturaleza",
+      "region": "Atlántico Norte",
+      "descripcion": "Una de las mayores selvas tropicales intactas de América Central con comunidades indígenas, jaguares, monos y ríos. Experiencia de ecoturismo profundo y aventura real. Muy poco visitada, requiere planificación seria.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "marzo a mayo",
+      "como_llegar": "Desde Managua a Puerto Príncipe en autobús (4-5 horas, 8 EUR), luego bote río Patuca hacia comunidades (varía, contactar guía local). Acceso complicado, requiere organizar con operadores.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje comunitario en aldeas indígenas (15-25 EUR/noche, básico)",
+        "medio": "Albergue eco-lodge, Pulmahana Lodge (50-80 EUR/noche)",
+        "comfort": "Lodge boutique río adentro, Sapling Lodge (100-150 EUR/noche, todo incluido)"
+      },
+      "que_hacer": [
+        "Senderismo en selva virgen con guía (40 EUR por día)",
+        "Avistamiento de fauna: jaguares, monos, tucanes (incluido en tours)",
+        "Campamento con comunidades miskito (tour comunitario 60 EUR)",
+        "Pesca de río (20 EUR)",
+        "Kayak en lagunas internas (30 EUR)"
+      ],
+      "donde_comer": "Comida preparada por comunidades locales: pescado, plátano, cacao (incluido en alojamiento). Escasa oferta de restaurantes; acuerda comidas con anfitriones.",
+      "consejo_local": "Solo viaja si tienes experiencia en selva. Mosquitos y humedad extrema. Reserva tours con Fundación del Río o guías comunitarios, no con operadores lejanos. Dinero en efectivo solamente.",
+      "plan_b_lluvia": "Lluvia constante en selva; forma parte de la experiencia. Los ríos crecen pero tours se ajustan. Trae impermeable de calidad.",
+      "keywords": [
+        "Bosawás",
+        "selva",
+        "miskito",
+        "indígena",
+        "río Patuca",
+        "ecotourismo",
+        "jaguares",
+        "atlántico"
+      ]
+    },
+    {
+      "id": "san-carlos",
+      "nombre": "San Carlos",
+      "tipo": "ciudad",
+      "region": "Sureste",
+      "descripcion": "Pueblo fluvial en confluencia de ríos con fuerte presencia histórica, fortaleza colonial y acceso a exploración del río San Juan y frontera con Costa Rica. Menos turístico que Granada pero clave para aventura fluvial.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Desde Managua en autobús (5-6 horas, 8 EUR) o desde Granada en bote fluvial (8 horas, 20 EUR). Acceso difícil pero accesible.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje simple, Albergue del Río (10-15 EUR/noche)",
+        "medio": "Hotel con vistas al río, Hotel Carlos (40-55 EUR/noche)",
+        "comfort": "Eco-lodge fluvial, Refugio Bartola (75-110 EUR/noche)"
+      },
+      "que_hacer": [
+        "Fuerte de San Carlos: historia colonial (3 EUR entrada)",
+        "Crucero río San Juan hacia refugio Bartola (80-100 EUR, full day)",
+        "Aventura en rápidos clase II (35 EUR)",
+        "Observación de cocodrilos al atardecer desde bote (25 EUR)",
+        "Frontera natural Costa Rica: paseo a Río Colorado (40 EUR)"
+      ],
+      "donde_comer": "Comida de río: sopa de pescado, rondón (6-10 EUR). Comedores locales junto muelle. Frutas tropicales frescas (muy barato).",
+      "consejo_local": "San Carlos es puerta a selva profunda. Contrata tours fluviales directamente con operadores locales. El viaje en autobús es largo pero la recompensa es soledad genuina.",
+      "plan_b_lluvia": "Tours cubiertos, visitas históricas, navegación río incluso con lluvia (experiencia atmosférica).",
+      "keywords": [
+        "San Carlos",
+        "río San Juan",
+        "Bartola",
+        "frontera",
+        "fortaleza",
+        "fluvial",
+        "cocodrilos",
+        "sureste"
+      ]
+    },
+    {
+      "id": "masaya",
+      "nombre": "Masaya",
+      "tipo": "ciudad",
+      "region": "Pacífico Central",
+      "descripcion": "Pueblo artesanal a 30 min de Managua especializado en cerámica, hamacas y artesanía. Mercado de artesanías genuino, iglesias coloniales y acceso a laguna volcánica. Ideal para día de compras desde la capital sin perder autenticidad.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Managua en autobús local (45 min, 0.5 EUR) o taxi compartido (30 min, 2 EUR). Muy cercano para excursión desde capital.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje central, Hospedería del Pueblo (12-18 EUR/noche)",
+        "medio": "Hotel colonial, Hotel Masaya (35-50 EUR/noche)",
+        "comfort": "Resort con vistas volcánicas, Hotel Masaya Eco-Lodge (60-90 EUR/noche)"
+      },
+      "que_hacer": [
+        "Mercado Artesanal: compra directa de artesanos (negociable, 5-50 EUR piezas)",
+        "Laguna de Masaya: paseo en bote, avifauna (20 EUR)",
+        "Iglesia de Santiago (gratis)",
+        "Taller de cerámica: clase y compra (30-40 EUR)",
+        "Fortaleza del Coyotepe: ruinas y museo (3 EUR)"
+      ],
+      "donde_comer": "Comida típica Nicaragua: nacatamal, gallo pinto (3-5 EUR). Pupuserías (1-2 EUR). Comedores mercado central. Restaurantes: fritanga, carne asada (8-12 EUR).",
+      "consejo_local": "Compra en mercado, no en tiendas turísticas caras. Los artesanos son amables y negocian precio justo. Mejor ir martes a jueves para menos turistas.",
+      "plan_b_lluvia": "Talleres cubiertos de artesanía, museos interiores, compra de recuerdos.",
+      "keywords": [
+        "Masaya",
+        "artesanía",
+        "mercado",
+        "cerámica",
+        "hamacas",
+        "laguna",
+        "Coyotepe",
+        "volcánico"
+      ]
+    },
+    {
+      "id": "esteli",
+      "nombre": "Estelí",
+      "tipo": "ciudad",
+      "region": "Montaña Norte",
+      "descripcion": "Pueblo serrano de montaña conocido por tabaco, murales políticos y aires frescos. Centro cultural para artistas locales, tiendas de tabaco auténticas y acceso a reservas naturales montañosas. Diferente a playas y volúmenes turísticos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Managua en autobús directo (2.5-3 horas, 3-4 EUR) o desde León (2 horas, 2 EUR). Ruta Panamericana Norte.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje estudiantes, Casa Blanca (8-12 EUR/noche)",
+        "medio": "Hotel montaña, Hotel Mesón de Don Alfonso (40-60 EUR/noche)",
+        "comfort": "Finca boutique, Tierra y Fuego (70-100 EUR/noche)"
+      },
+      "que_hacer": [
+        "Tour de murales con artistas locales (15-20 EUR)",
+        "Fábrica de cigarros Plasencia: visita y degustación (25 EUR)",
+        "Reserva Natural Miraflor: senderismo (guía local 20 EUR)",
+        "Galería de arte y galerías locales (gratis entrada)",
+        "Tiendas de tabaco premium: compra directa de productores (negocia)"
+      ],
+      "donde_comer": "Comida casera en hospedajes (5-8 EUR). Restaurantes: platos típicos montaña (8-12 EUR). Comedores locales (3-5 EUR). Especialidades: quesillo, indio viejo.",
+      "consejo_local": "Habla con huéspedes en hospedaje sobre murales; los artistas a veces ofrecen tours personales. Precio tabaco más justo que en tiendas turísticas. Aire fresco es alivio después de playas calurosas.",
+      "plan_b_lluvia": "Museos, galerías, interior fábricas cigarros, cafeterías.",
+      "keywords": [
+        "Estelí",
+        "tabaco",
+        "murales",
+        "montaña",
+        "Miraflor",
+        "norte",
+        "arte",
+        "fresco"
+      ]
+    },
+    {
+      "id": "reserva-indio-maiz",
+      "nombre": "Reserva Biológica Indio Maíz",
+      "tipo": "naturaleza",
+      "region": "Sureste",
+      "descripcion": "Selva tropical virgen en río San Juan con fauna exceptcional: perezosos, jaguares, caimanes. Experiencia de ecoturismo selvático sin infraestructura turística masiva. Acceso solo con guía y tour organizado.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "febrero a mayo",
+      "como_llegar": "Desde San Carlos en bote río San Juan (2-3 horas hasta entrada, incluido en tour). Tours salen de San Carlos con operadores locales. Planificación previa necesaria.",
+      "donde_dormir": {
+        "mochilero": "Cabaña campo en río (20-30 EUR/noche, básica)",
+        "medio": "Lodge comunitario, Sarapiquí Eco Lodge (60-90 EUR/noche)",
+        "comfort": "Lodge con confort, Tortuguero Lodge (100-150 EUR/noche, todo incluido)"
+      },
+      "que_hacer": [
+        "Senderismo selvático con guía especializado (30 EUR por día)",
+        "Observación nocturna de fauna (20 EUR)",
+        "Kayak en laguna interna (25 EUR)",
+        "Bote río observación cocodrilos caimanes (30 EUR)",
+        "Fotografía naturaleza (gratis, equipo propio)"
+      ],
+      "donde_comer": "Comidas incluidas en lodge: pescado, arroz, vegetales locales. Nada de restaurantes; todo acuerdo previo con operador turístico.",
+      "consejo_local": "Reserva tours con semanas de anticipación. Lleva repelente potente y ropa mangalarga. Jaguares rara vez se ven pero selva es ruidosa y viva. Mejor en madrugada para fauna.",
+      "plan_b_lluvia": "Lluvia es frecuente; tours se adaptan. Río es navegable incluso con lluvia; parte de atmósfera selvática.",
+      "keywords": [
+        "Indio Maíz",
+        "selva",
+        "río San Juan",
+        "reserva biológica",
+        "jaguares",
+        "ecotourismo",
+        "sureste",
+        "naturaleza"
+      ]
+    }
+  ]
+}

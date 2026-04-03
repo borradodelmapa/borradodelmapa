@@ -1,0 +1,336 @@
+{
+  "pais": "Benín",
+  "codigo": "bj",
+  "destinos": [
+    {
+      "id": "porto-novo",
+      "nombre": "Porto-Novo",
+      "tipo": "histórico",
+      "region": "Litoral",
+      "descripcion": "Capital oficial de Benín con arquitectura colonial portuguesa y brasileña bien conservada. Centro cultural con museos que narran la historia de la trata de esclavos y la independencia. Punto de partida lógico para explorar el sur del país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "desde Cotonú en taxi compartido o autobús, 45 minutos, 2-3 EUR",
+      "donde_dormir": {
+        "mochilero": "Guest house tipo casa de huéspedes, 15-25 EUR/noche",
+        "medio": "Hotel 2-3 estrellas, 40-60 EUR/noche",
+        "comfort": "Hotel Akanodji o similar, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer la Rue de France y arquitectura colonial (gratis)",
+        "Musée Ethnographique de Porto-Novo (3 EUR)",
+        "Paseo por el puerto y mercado local (gratis)",
+        "Iglesia de Nuestra Señora de la Inmaculada Concepción (1 EUR)"
+      ],
+      "donde_comer": "Alloco (plátano frito), arroz con frijoles y pescado. 2-5 EUR por comida. Zona del puerto y callejuelas del centro colonial.",
+      "consejo_local": "Visita Porto-Novo temprano en la mañana antes del calor; los locales son muy amables si saludas en francés. Los museos abren de forma irregular, pregunta en tu alojamiento.",
+      "plan_b_lluvia": "Explorar los museos interiores, visitar el mercado cubierto o refugiarte en una cafetería local.",
+      "keywords": [
+        "Porta Nova",
+        "capital oficial",
+        "arquitectura colonial",
+        "museos esclavitud",
+        "Rue de France",
+        "puerto"
+      ]
+    },
+    {
+      "id": "cotonú",
+      "nombre": "Cotonú",
+      "tipo": "ciudad",
+      "region": "Litoral",
+      "descripcion": "Puerta de entrada principal de Benín y mayor ciudad del país. Centro comercial y de transportes con vida nocturna animada, mercados caóticos y playas cercanas. Necesario pasar por aquí pero no requiere estancia larga.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "aeropuerto internacional Cadjèhoun, taxi 10-15 EUR al centro",
+      "donde_dormir": {
+        "mochilero": "Auberge tipo backpackers, 20-30 EUR/noche",
+        "medio": "Hôtel Aledjo o Novotel, 50-80 EUR/noche",
+        "comfort": "Hôtel Beninois o Sheraton, 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por el Wharf (muelle portuario) al atardecer (gratis)",
+        "Mercado Dantokpa: artesanía y caos organizado (gratis, haggling esperado)",
+        "Playa de Cotonú con vendedores locales (gratis)",
+        "Museo de Historia de Abomey (visita desde Cotonú)"
+      ],
+      "donde_comer": "Fufu, okra soup, brochetas de carne. 2-4 EUR comida callejera, 8-15 EUR restaurante. Zona del Wharf y alrededores del mercado Dantokpa.",
+      "consejo_local": "Cotonú puede parecer caótica y agobiante: es normal. Ve al Wharf al atardecer para relajarte. El tráfico es intenso; usa taxi en lugar de andar largas distancias.",
+      "plan_b_lluvia": "Refugiarse en el museo, cafeterías con aire acondicionado o compras en supermercados.",
+      "keywords": [
+        "Cotonou",
+        "puerto principal",
+        "aeropuerto",
+        "Dantokpa market",
+        "Wharf",
+        "entrada"
+      ]
+    },
+    {
+      "id": "abomey",
+      "nombre": "Abomey",
+      "tipo": "histórico",
+      "region": "Zou",
+      "descripcion": "Antigua capital del Reino de Dahomey con palacios reales y museos que documentan la historia del imperio de guerreras. Imprescindible para entender la historia regional y ver arquitectura vernácula beninesa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "desde Cotonú en autobús o taxi compartido (minibus), 2 horas, 5-8 EUR",
+      "donde_dormir": {
+        "mochilero": "Hôtel Kéa o guest house local, 15-25 EUR/noche",
+        "medio": "Hôtel Alidja, 35-50 EUR/noche",
+        "comfort": "Hôtel La Merveille, 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Musée de Abomey (Palacios Reales): 5 EUR, imprescindible 2-3 horas",
+        "Templo de Zinsou (santuario tradicional vudú) con guía local, 3 EUR",
+        "Recorrido a pie por barrios tradicionales (gratis)",
+        "Mercado local Akpakpa (gratis, compras opcionales)"
+      ],
+      "donde_comer": "Riz gras, pollo al vudú (literal), sopa de cacahuete. 2-4 EUR comida. Restaurantes simples cerca del museo; mercado para comida callejera.",
+      "consejo_local": "Contrata un guía local en el museo (3-5 EUR extra): añade mucho contexto sobre las guerreras y la historia del reino. El museo cierra a las 17:00, llega temprano.",
+      "plan_b_lluvia": "El museo está cubierto; pasar más tiempo dentro. Alternativamente, visitar talleres de artesanos.",
+      "keywords": [
+        "Abomey",
+        "Dahomey",
+        "palacios reales",
+        "museo",
+        "guerreras",
+        "vudú",
+        "imperio"
+      ]
+    },
+    {
+      "id": "ganvie",
+      "nombre": "Ganvié",
+      "tipo": "rural",
+      "region": "Atlantique",
+      "descripcion": "Pueblo lacustre construido sobre el agua en la laguna de Nokoué. Único por su arquitectura sobre pilares y vida tradicional. Experiencia auténtica e inmersiva en la forma de vida beninesa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "desde Cotonú en taxi a Abomey-Calavi (30 min, 3 EUR), luego lancha privada o grupo (2-5 EUR por persona, 30 min)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse flotante básica, 20-30 EUR/noche",
+        "medio": "Maison Ganvié o Ganvié Campement, 40-60 EUR/noche",
+        "comfort": "Ganvié Ecolodge, 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido en canoa por las calles de agua (5-10 EUR con guía, 1-2 horas)",
+        "Visita a escuela local y comunidades (con respeto, 3-5 EUR voluntario)",
+        "Pesca al amanecer con pescadores locales (15-20 EUR)",
+        "Observación de aves en la laguna (gratis desde canoa)"
+      ],
+      "donde_comer": "Pescado fresco, sopa de cabra, maíz hervido. 3-6 EUR en guesthouses. Probar comida directamente con habitantes locales.",
+      "consejo_local": "Negocia el precio de la lancha ANTES de salir. Las fotos de niños: pide permiso. La mejor época es seca (menos olor a agua estancada). Lleva repelente de mosquitos.",
+      "plan_b_lluvia": "La lluvia es parte del encanto; las canoas son seguras. Alternativamente, pasar tiempo en la guesthouse con locales.",
+      "keywords": [
+        "Ganvié",
+        "pueblo lacustre",
+        "laguna Nokoué",
+        "sobre agua",
+        "pilares",
+        "canoa",
+        "autenticidad"
+      ]
+    },
+    {
+      "id": "ouidah",
+      "nombre": "Ouidah",
+      "tipo": "histórico",
+      "region": "Atlantique",
+      "descripcion": "Puerto colonial histórico donde comenzó la trata de esclavos. Museos dedicados a este pasado, templos vudú activos y playas con atmósfera nostálgica. Imprescindible para comprender la historia atlántica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "desde Cotonú en minibús, 50 minutos, 2-3 EUR",
+      "donde_dormir": {
+        "mochilero": "Auberge beninoise, 15-25 EUR/noche",
+        "medio": "Hôtel le Coco Beach, 40-60 EUR/noche",
+        "comfort": "Hôtel Aledjo Ouidah, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Musée de Ouidah (esclavitud): 3 EUR, 1-2 horas",
+        "Templo de Pitón (santuario serpiente sagrada): 2 EUR",
+        "Cementerio de esclavos con monumento: gratis",
+        "Playa y Boca del río: gratis",
+        "Puerta de No Retorno (monumento histórico): gratis"
+      ],
+      "donde_comer": "Pescado a la parrilla, camarones, pulpo. 3-6 EUR en comedores locales. Restaurantes en la playa más caros (10-15 EUR).",
+      "consejo_local": "El vudú aquí no es turístico: es vivo y respetado. Asiste a ceremonias solo si eres invitado. El museo es potente emocionalmente; tómate tiempo. Pasea por calles viejas al atardecer.",
+      "plan_b_lluvia": "Museos interiores, explorar templos cubiertos, café en la playa bajo techo.",
+      "keywords": [
+        "Ouidah",
+        "Whydah",
+        "puerto colonial",
+        "esclavitud",
+        "vudú",
+        "serpiente sagrada",
+        "historia"
+      ]
+    },
+    {
+      "id": "pendjari",
+      "nombre": "Parque Nacional de Pendjari",
+      "tipo": "naturaleza",
+      "region": "Atacora",
+      "descripcion": "Reserva de vida salvaje del norte con elefantes, leones, búfalos y antílopes. Safari guiado en uno de los últimos espacios salvajes de África occidental. Destino esencial para ver megafauna.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a febrero (seco)",
+      "como_llegar": "desde Cotonú a Parakou en autobús (6 horas, 10-12 EUR), luego a Tanguiéta (3 horas, 5 EUR), entrada parque a 30 km",
+      "donde_dormir": {
+        "mochilero": "Campamentos básicos en parque, 20-30 EUR/noche",
+        "medio": "Hôtel Tanguiéta o Pendjari Lodge, 50-70 EUR/noche",
+        "comfort": "Pendjari Safari Lodge, 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari guiado en 4x4 (obligatorio con guía): 30-50 EUR por persona/día",
+        "Caminata nocturna guiada: 15-25 EUR",
+        "Avistamiento de aves: gratis durante safaris",
+        "Piscina natural de Pendjari: gratis"
+      ],
+      "donde_comer": "Comida básica en lodges; platos benineses simples. 5-8 EUR en campamentos, 15-25 EUR en lodges. Llevar snacks desde Cotonú es inteligente.",
+      "consejo_local": "La mejor vista de fauna es temprano por la mañana. Los guías locales conocen patrones; déjate guiar. Lleva binoculares y repelente. El parque es genuino, no parque temático: paciencia.",
+      "plan_b_lluvia": "Safaris reducidos pero operativos; lluvia trae más fauna a beber. Actividades bajo techo en lodge.",
+      "keywords": [
+        "Pendjari",
+        "safari",
+        "vida salvaje",
+        "elefantes",
+        "leones",
+        "Atacora",
+        "naturaleza"
+      ]
+    },
+    {
+      "id": "natitingou",
+      "nombre": "Natitingou",
+      "tipo": "rural",
+      "region": "Atacora",
+      "descripcion": "Pueblo de montaña con paisaje de cordilleras de Atacora. Base para senderismo, pueblos Somba con arquitectura defensiva única y mercados auténticos. Escenario montañoso poco turístico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "desde Cotonú a Parakou en autobús (6 horas, 10 EUR), luego a Natitingou (4 horas, 7 EUR)",
+      "donde_dormir": {
+        "mochilero": "Auberge Atacora, 15-25 EUR/noche",
+        "medio": "Hôtel Natitingou, 35-50 EUR/noche",
+        "comfort": "Gîte de Montagne, 60-85 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a pueblos Somba (pirogues): 10-15 EUR con guía, 4-5 horas",
+        "Visita a aldea Somba con arquitectura defensiva de barro: 3 EUR por acceso",
+        "Mercado local semanal (jueves): gratis",
+        "Cascada de Pénéssoulou: 5 EUR, 2 horas excursión"
+      ],
+      "donde_comer": "Foufou, cuscús de mijo, carne guisada. 2-4 EUR comida local. Mercado para alimentos frescos.",
+      "consejo_local": "Contrata un guía Somba en el pueblo: añade contexto cultural. Las casas defensivas están realmente habitadas; respeta privacidad. El mercado jueves es mejor que otros días.",
+      "plan_b_lluvia": "Explorar mercados cubiertos, visitas a talleres de artesanos bajo techo.",
+      "keywords": [
+        "Natitingou",
+        "Atacora",
+        "Somba",
+        "montaña",
+        "senderismo",
+        "arquitectura defensiva",
+        "rural"
+      ]
+    },
+    {
+      "id": "kandi",
+      "nombre": "Kandi",
+      "tipo": "ciudad",
+      "region": "Alibori",
+      "descripcion": "Ciudad fronteriza al norte con mercados animados y acceso a la región del Niger. Punto de partida para explorar el norte sahelio de Benín y comunidades menos visitadas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "desde Cotonú a Parakou en autobús (6 horas), luego a Kandi (4 horas), 15-18 EUR total",
+      "donde_dormir": {
+        "mochilero": "Hôtel Alidja básico, 15-25 EUR/noche",
+        "medio": "Hôtel Kandi, 40-60 EUR/noche",
+        "comfort": "Hôtel Bocouta, 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado central Kandi: gratis, caos organizado",
+        "Paseo por río Niger (desde punto de vista): gratis",
+        "Excursión a comunidades de pastores Fulani: 10-15 EUR con guía",
+        "Mezquita Jinguereber (histórica): gratis"
+      ],
+      "donde_comer": "Tutifruti (comida pastores), arroz con salsa de man, cabra. 2-3 EUR callejera. Mercado para frutas y verduras frescas.",
+      "consejo_local": "Kandi es puerta al Sahel: experimenta el cambio climático y cultural. Los Fulani son ganaderos nómadas; respeta tradiciones. La ciudad es tranquila y segura.",
+      "plan_b_lluvia": "Exploración del mercado cubierto, interacción con locales en espacios techados.",
+      "keywords": [
+        "Kandi",
+        "frontera",
+        "Niger",
+        "norte",
+        "Alibori",
+        "Sahel",
+        "mercado",
+        "Fulani"
+      ]
+    },
+    {
+      "id": "parakou",
+      "nombre": "Parakou",
+      "tipo": "ciudad",
+      "region": "Borgou",
+      "descripcion": "Segundo mayor centro urbano del país, nodo de transporte regional. Mercados extensos y vida local auténtica. Útil como punto de paso hacia norte o parques, sin ser destino por sí mismo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "desde Cotonú en autobús directo, 6 horas, 10-12 EUR",
+      "donde_dormir": {
+        "mochilero": "Auberge Parakou, 15-25 EUR/noche",
+        "medio": "Hôtel le Bénin o similar, 40-60 EUR/noche",
+        "comfort": "Hôtel Parakou Récréation, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado Parakou (enorme): gratis",
+        "Paseo por centro histórico: gratis",
+        "Museo Regional (si abierto): 2-3 EUR",
+        "Mercado artesanal local: negociación"
+      ],
+      "donde_comer": "Comida típica beninesa, garbanzo frito, sopa roja. 2-4 EUR. Zona de mercado y callejuelas del centro.",
+      "consejo_local": "Parakou es un paso práctico, no un destino turístico. Buen lugar para cambiar dinero y comprar provisiones antes de norte. La vida nocturna existe pero es local, no para mochileros.",
+      "plan_b_lluvia": "Exploración de mercados interiores y tiendas.",
+      "keywords": [
+        "Parakou",
+        "Borgou",
+        "centro norte",
+        "mercado",
+        "nodo transporte",
+        "segundo mayor"
+      ]
+    },
+    {
+      "id": "grand-popo",
+      "nombre": "Grand-Popo",
+      "tipo": "playa",
+      "region": "Mono",
+      "descripcion": "Pueblo costero tranquilo con playa de arena negra volcánica y vibrante tradición de piraguismo. Alternativa más relajada que Ouidah con menos turismo. Experiencia auténtica de costa beninesa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "desde Cotonú en minibús a Ouidah (45 min, 2 EUR), luego otro minibús a Grand-Popo (1 hora, 2 EUR)",
+      "donde_dormir": {
+        "mochilero": "Auberge de plage, 15-25 EUR/noche",
+        "medio": "Hôtel Grand-Popo o similares, 40-60 EUR/noche",
+        "comfort": "Cocotiers Beach Resort, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por la playa con piraguistas: gratis",
+        "Tour en piragua tradicional: 10-15 EUR con remero",
+        "Baño en laguna: gratis",
+        "Atardecer en playa: gratis",
+        "Visita a talleres de construcción de piraguas: gratis"
+      ],
+      "donde_comer": "Pescado a la parrilla fresco, camarones, sopa de coco. 4-8 EUR. Restaurantes pequeños en playa con tablas rústicas.",
+      "consejo_local": "Grand-Popo es para relajarse, no para ajetreo. Los piraguistas son amables pero comerciales: negocia precios. Nada es caro aquí comparado con occidente. Observa la construcción artesanal de piraguas.",
+      "plan_b_lluvia": "Paseos bajo lluvia tropical (mágicos), interacción en guesthouses con otros viajeros.",
+      "keywords": [
+        "Grand-Popo",
+        "playa negra",
+        "piraguismo",
+        "costa",
+        "Mono",
+        "tranquilo",
+        "auténtico"
+      ]
+    }
+  ]
+}

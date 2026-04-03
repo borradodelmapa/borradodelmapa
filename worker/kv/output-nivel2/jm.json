@@ -1,0 +1,323 @@
+{
+  "pais": "Jamaica",
+  "codigo": "jm",
+  "destinos": [
+    {
+      "id": "montego-bay",
+      "nombre": "Montego Bay",
+      "tipo": "playa",
+      "region": "Noroeste",
+      "descripcion": "Principal hub turístico de Jamaica con playas de arena blanca y arrecife de coral. Punto de entrada para la mayoría de viajeros con vuelos internacionales directos. Centro de vida nocturna y punto de partida para el Caribe occidental.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a marzo",
+      "como_llegar": "Aeropuerto Internacional de Montego Bay (MBJ) recibe vuelos internacionales directos. Traslado en taxi: 20 minutos, 15-25 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales en centro: 20-35 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas: 60-120 EUR/noche",
+        "comfort": "Resorts y villas: 150-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en Doctor's Cave Beach (gratis entrada playa, 10 EUR entrada)",
+        "Paseo por Hip Strip para vida nocturna y bares",
+        "Excursión a Dunn's River Falls (30 minutos, 25 EUR entrada)",
+        "Buceo en arrecife (50-80 EUR)"
+      ],
+      "donde_comer": "Comida criolla jamaicana: ackee and saltfish, jerk chicken. Rango 5-15 EUR plato. Centro y Hip Strip tienen mejor oferta de restaurantes.",
+      "consejo_local": "Montego Bay es turístico pero inseguro fuera de zonas de playa. Evita pasear solo por la noche en el centro. Los taxis sin registro son más baratos pero menos seguros.",
+      "plan_b_lluvia": "Visitar museos locales, tiendas de artesanía o centros comerciales cubiertos en centro.",
+      "keywords": [
+        "MoBay",
+        "Montego",
+        "Doctor's Cave",
+        "Hip Strip",
+        "Coral Gardens"
+      ]
+    },
+    {
+      "id": "negril",
+      "nombre": "Negril",
+      "tipo": "playa",
+      "region": "Occidente",
+      "descripcion": "Pueblo costero relajado con 11 km de playa de arena blanca y atmósfera bohemia. Popular entre viajeros independientes por su ambiente más tranquilo que Montego Bay y mejores opciones de alojamiento económico. Centro de buceo y vida marina.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Montego Bay: autobús público (1,5 horas, 3-4 EUR) o minibús privado (1 hora, 8-12 EUR). Desde aeropuerto MBJ: transfer directo (90 minutos, 40 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedajes y pequeños hoteles: 20-40 EUR/noche",
+        "medio": "Hoteles 3 estrellas beach: 70-110 EUR/noche",
+        "comfort": "Resort villas: 120-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Seven Mile Beach: nadar y tomar el sol (gratis)",
+        "Snorkel en arrecife (5 EUR entrada, 20 EUR snorkel tour)",
+        "Rick's Cafe: acantilado de 12 metros para saltar al atardecer (5 EUR entrada)",
+        "Buceo (60-90 EUR)",
+        "Laguna subterránea Royal Palm Reserve (25 EUR)"
+      ],
+      "donde_comer": "Fish, conch salad, jerk pork. Rango 6-12 EUR plato. West End tiene restaurantes con vistas al mar. Street food más barato cerca de beach.",
+      "consejo_local": "El mejor atardecer es desde Rick's Cafe pero llena a las 16:30. Llega antes o ve a otro acantilado. Los precios en la playa son dobles que en el pueblo.",
+      "plan_b_lluvia": "Visitar la laguna subterránea, hacer masajes en spas locales o ir de compras en centro comercial.",
+      "keywords": [
+        "Seven Mile Beach",
+        "West End",
+        "Rick's Cafe",
+        "negril jamaica",
+        "bohemia caribeña"
+      ]
+    },
+    {
+      "id": "kingston",
+      "nombre": "Kingston",
+      "tipo": "ciudad",
+      "region": "Sureste",
+      "descripcion": "Capital de Jamaica, centro cultural y musical del país. Cuna del reggae, con museos dedicados a Bob Marley y la historia afrocaribeña. Menos turístico que las playas pero auténtico para quien busca entender Jamaica real.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Montego Bay: vuelo interno (50 minutos, 80-120 EUR) o autobús (4-5 horas, 8-12 EUR). Aeropuerto Norman Manley: taxi 20 EUR al centro.",
+      "donde_dormir": {
+        "mochilero": "Hostales Downtown: 25-40 EUR/noche",
+        "medio": "Hoteles New Kingston: 60-100 EUR/noche",
+        "comfort": "Boutique hotels: 110-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Bob Marley Museum: casa de Bob (20 EUR entrada)",
+        "National Gallery of Jamaica: arte caribeño (10 EUR)",
+        "Hope Zoo: fauna local (15 EUR)",
+        "Caminar por Trench Town: barrio histórico (tour guiado 25-35 EUR)",
+        "Devon House: mansión colonial histórica (10 EUR)"
+      ],
+      "donde_comer": "Ackee, escovitch fish, goat curry. Rango 5-12 EUR plato. New Kingston tiene más opciones turísticas. Downtown más auténtico pero menos seguro.",
+      "consejo_local": "Kingston tiene áreas peligrosas (Downtown, Trench Town de noche). Contrata guías locales para barrios históricos. La mayoría de turistas no sale de New Kingston.",
+      "plan_b_lluvia": "Museos son la mejor opción. Devon House tiene cafés cubiertos. National Gallery es interior.",
+      "keywords": [
+        "reggae",
+        "Bob Marley",
+        "capital jamaica",
+        "Trench Town",
+        "New Kingston",
+        "cultura caribeña"
+      ]
+    },
+    {
+      "id": "ocho-rios",
+      "nombre": "Ocho Ríos",
+      "tipo": "playa",
+      "region": "Noreste",
+      "descripcion": "Pueblo costero con playas decentes y como base para visitar las cataratas de Dunn's River, principal atracción natural de Jamaica. Menos desarrollado que Montego pero más turístico que Negril. Buena zona intermedia.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a marzo",
+      "como_llegar": "Desde Montego Bay: autobús (2 horas, 4-5 EUR) o minibús privado (1,5 horas, 12-15 EUR). Desde Kingston: autobús (2,5 horas, 6-8 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedajes modestos: 22-38 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 70-120 EUR/noche",
+        "comfort": "All-inclusive resorts: 150-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Dunn's River Falls: cataratas en escalones (30 EUR entrada)",
+        "Island Grill Beach: playa privada (5 EUR entrada)",
+        "Snorkel en Main Beach (gratis, tours 25-40 EUR)",
+        "Rainforest Adventures: canopy tour (80 EUR)",
+        "Dolphin Cove: parque marino interactivo (40-70 EUR)"
+      ],
+      "donde_comer": "Jerk chicken, langosta, pez espada. Rango 8-15 EUR plato. Main Street tiene comida criolla local. Resort tiene precios turísticos.",
+      "consejo_local": "Dunn's River gets packed 11am-2pm. Ve temprano o al atardecer. Los tours combinados (Dunn's River + snorkel) salen más baratos que comprar por separado.",
+      "plan_b_lluvia": "Dolphin Cove es techado parcialmente. Island Grill tiene áreas cubiertas. Dunn's River es viable incluso con lluvia.",
+      "keywords": [
+        "Dunn's River",
+        "cataratas jamaica",
+        "Ocho Rios",
+        "Dolphin Cove",
+        "Rainforest Adventures"
+      ]
+    },
+    {
+      "id": "blue-mountains",
+      "nombre": "Blue Mountains",
+      "tipo": "montaña",
+      "region": "Sureste",
+      "descripcion": "Cadena montañosa famosa por producir el café azul más caro del mundo. Trekking hacia Peak, pueblos de montaña auténticos con vistas espectaculares. Escapa del turismo masivo de playas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a marzo (clima seco)",
+      "como_llegar": "Desde Kingston: autobús a Papine (45 minutos, 1 EUR), luego jeepney a Newry o Abbey Green (1 hora, 3-5 EUR). Total 5-10 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses de montaña: 25-45 EUR/noche",
+        "medio": "Eco-lodges: 70-110 EUR/noche",
+        "comfort": "Boutique mountain resorts: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Blue Mountain Peak trek: salida 2am, 6 horas (guía local 60 EUR)",
+        "Visitas a plantaciones de café (15-25 EUR tour)",
+        "Caminar por pueblos locales (gratis, exploración libre)",
+        "Cascadas Cold Spring (gratis acceso)",
+        "Fotografía de vista (gratis)"
+      ],
+      "donde_comer": "Comida criolla rural: ackee, yam, curry cabra. Rango 4-8 EUR plato. Opciones limitadas fuera de lodges.",
+      "consejo_local": "El trek al pico requiere acclimatación y buen nivel físico. La niebla es común, no es garantizado ver vistas. Contrata guía local en Papine, no online.",
+      "plan_b_lluvia": "Las montañas están casi siempre nubladas. Las tours de café funcionan lluvia o no. El trekking se cancela si hay riesgo.",
+      "keywords": [
+        "Blue Mountain Peak",
+        "café azul",
+        "trekking jamaica",
+        "montañas",
+        "plantaciones café"
+      ]
+    },
+    {
+      "id": "port-antonio",
+      "nombre": "Port Antonio",
+      "tipo": "playa",
+      "region": "Noreste",
+      "descripcion": "Pueblo portuario histórico en costa noreste con playas menos desarrolladas que occidente. Punto de acceso a río Río Grande y cataratas escondidas. Ambiente más local y menos turístico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Montego Bay: autobús (3,5 horas, 8-10 EUR). Desde Ocho Ríos: autobús (1,5 horas, 4-5 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses pequeños: 20-35 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 65-110 EUR/noche",
+        "comfort": "Eco-resorts: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Frenchman's Cove (5 EUR entrada)",
+        "Rio Grande rafting: bamboo raft tour (40 EUR)",
+        "Navy Island: excursión isla (20 EUR tour)",
+        "Reach Falls: cascada río (gratis acceso, tour 25 EUR)",
+        "Paseo histórico por puerto (gratis)"
+      ],
+      "donde_comer": "Pescado fresco, escovitch fish, red snapper. Rango 6-12 EUR. Muelles tienen pescado directo. Pueblo auténtico sin precios turísticos.",
+      "consejo_local": "Port Antonio es tranquilo pero lento. Si vienes de playas turísticas, el cambio es grande. El rafting en bambú es experiencia única jamaicana.",
+      "plan_b_lluvia": "Reach Falls se ve mejor con lluvia (caudal mayor). Rafting se cancela con lluvia fuerte.",
+      "keywords": [
+        "Port Antonio",
+        "Rio Grande",
+        "Frenchman's Cove",
+        "rafting bambú",
+        "noreste jamaica"
+      ]
+    },
+    {
+      "id": "black-river",
+      "nombre": "Black River",
+      "tipo": "naturaleza",
+      "region": "Suroeste",
+      "descripcion": "Zona húmeda con mangles y avistamiento de cocodrilos. Safari en bote por el río Black más largo de Jamaica. Ecosistema único menos visitado que playas principales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Negril: autobús (1,5 horas, 3-4 EUR). Desde Montego Bay: minibús (2,5 horas, 8-10 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedajes pequeños: 20-30 EUR/noche",
+        "medio": "Hoteles 2-3 estrellas: 50-85 EUR/noche",
+        "comfort": "Eco-lodges: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en bote río Black: avistamiento cocodrilo (25-35 EUR tour)",
+        "Playa Black Sand: arena negra volcánica (gratis)",
+        "Caminata mangles (incluida en tour)",
+        "Observación aves (tour 30 EUR)"
+      ],
+      "donde_comer": "Pescado de río, camarones, conch. Rango 5-10 EUR. Opciones limitadas, principalmente comedores locales.",
+      "consejo_local": "El safari de cocodrilo es la única razón de venir. Llega temprano en la mañana (7am) para mejor avistamiento. Los cocodrilos americanos son tímidos.",
+      "plan_b_lluvia": "El safari funciona con lluvia, incluso es mejor (aves más activas). El río crece con lluvia pero tours aún operan.",
+      "keywords": [
+        "Black River",
+        "cocodrilo",
+        "safari",
+        "mangles",
+        "río negro jamaica"
+      ]
+    },
+    {
+      "id": "treasure-beach",
+      "nombre": "Treasure Beach",
+      "tipo": "playa",
+      "region": "Suroeste",
+      "descripcion": "Pueblo costero tranquilo sin resorts masivos, con playas de arena oscura y atmósfera alternativa. Popular entre artistas y viajeros que buscan autenticidad. Lejos del turismo convencional.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Montego Bay: minibús (4 horas, 10-12 EUR). Desde Negril: minibús via Santa Cruz (2,5 horas, 8-10 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses y hospedajes: 22-40 EUR/noche",
+        "medio": "Casas de alquiler, small hotels: 70-110 EUR/noche",
+        "comfort": "Villas con vistas: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo playas (Calabash Bay, Great Bay): gratis",
+        "Snorkel off-shore (25-40 EUR tour)",
+        "Visita pueblos de pescadores locales (gratis)",
+        "Kayak (20 EUR alquiler/día)",
+        "Sunset desde cualquier playa (gratis)"
+      ],
+      "donde_comer": "Pescado fresco a la parrilla, conch soup, escovitch. Rango 6-12 EUR. Comedores locales tienen precios locales. No hay cadenas.",
+      "consejo_local": "Treasure Beach es para descansar, no para actividades. La oferta turística es limitada pero auténtica. Alquila bicicleta (5 EUR/día) para explorar pueblos.",
+      "plan_b_lluvia": "Actividades se adaptan a lluvia. La playa es gris así que lluvia o no se parece igual.",
+      "keywords": [
+        "Treasure Beach",
+        "Calabash Bay",
+        "playas oscuras",
+        "auténtica jamaica",
+        "alternativa"
+      ]
+    },
+    {
+      "id": "hell",
+      "nombre": "Hell",
+      "tipo": "naturaleza",
+      "region": "Noroeste",
+      "descripcion": "Formación geológica dramática de piedra caliza dentada junto al mar en Hanover. Paisaje surrealista y poco visitado. Atracción natural curiosa para amantes de geología y fotografía.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "diciembre a marzo",
+      "como_llegar": "Desde Montego Bay: auto alquilado o taxi (45 minutos, 30-50 EUR). Desde Negril: auto alquilado (1,5 horas, 25-35 EUR en combustible).",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento local, dormir en Montego o Negril",
+        "medio": "No hay alojamiento local",
+        "comfort": "No hay alojamiento local"
+      },
+      "que_hacer": [
+        "Caminar entre rocas (gratis, 1 hora)",
+        "Fotografía paisaje (gratis)",
+        "Baño en pequeñas piscinas (gratis)",
+        "Snorkel en aguas claras (25 EUR tour)"
+      ],
+      "donde_comer": "No hay restaurantes. Llevar comida y agua desde Montego o Negril.",
+      "consejo_local": "Hell es visita de medio día máximo. Lleva zapatos con suela gruesa (rocas afiladas). La mejor luz es tarde (5pm). No hay servicios.",
+      "plan_b_lluvia": "Rocas pueden ser resbaladizas con lluvia. Visita factible pero cuidado.",
+      "keywords": [
+        "Hell Jamaica",
+        "piedra caliza",
+        "Hanover",
+        "formación geológica",
+        "paisaje dramatico"
+      ]
+    },
+    {
+      "id": "morant-bay",
+      "nombre": "Morant Bay",
+      "tipo": "histórico",
+      "region": "Sureste",
+      "descripcion": "Pueblo histórico donde ocurrió la rebelión de Morant Bay (1865), evento crucial en historia jamaicana. Centro de educación y memoria histórica poco visitado por turistas internacionales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Kingston: autobús (90 minutos, 3-4 EUR). Desde Port Antonio: autobús (2,5 horas, 5-7 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicos: 18-30 EUR/noche",
+        "medio": "Hoteles pequeños: 50-80 EUR/noche",
+        "comfort": "No hay opciones de comfort, mejor dormir en Kingston o Port Antonio"
+      },
+      "que_hacer": [
+        "Morant Bay Rebellion Site: monumento histórico (gratis)",
+        "Iglesia local histórica (gratis)",
+        "Museo local: historia rebeldía (5-10 EUR si está abierto)",
+        "Paseo pueblo auténtico (gratis)"
+      ],
+      "donde_comer": "Comida criolla local barata. Rango 4-8 EUR. Pocos restaurantes, principalmente comedores.",
+      "consejo_local": "Morant Bay es parada educativa, no turística. Población local es amable. Sitio no es espectacular visualmente pero histórico importante. Trae guía o lee sobre rebelión antes.",
+      "plan_b_lluvia": "Museo es interior si está abierto. Iglesia tiene techo. Visita funciona bajo lluvia.",
+      "keywords": [
+        "Morant Bay",
+        "rebelión 1865",
+        "historia jamaica",
+        "Paul Bogle",
+        "memoria africana"
+      ]
+    }
+  ]
+}

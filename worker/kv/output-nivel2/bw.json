@@ -1,0 +1,320 @@
+{
+  "pais": "Botsuana",
+  "codigo": "bw",
+  "destinos": [
+    {
+      "id": "delta-del-okavango",
+      "nombre": "Delta del Okavango",
+      "tipo": "naturaleza",
+      "region": "Noroeste de Botsuana",
+      "descripcion": "Humedal de 15.000 km² donde confluyen ríos y lagunas, creando un ecosistema único con abundante vida salvaje. Punto obligatorio para safaris en Botsuana con oportunidades de ver elefantes, leones y hipopótamos. Acceso por Maun, el hub principal para expediciones.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a octubre (seco)",
+      "como_llegar": "Desde Gaborone en vuelo doméstico a Maun (1h, 80-120 EUR) o autobús (12h, 25 EUR). De Maun: mokoro (piragua tradicional) o bote motorizado hacia campamentos en el delta (2-4h, 150-300 EUR con operador).",
+      "donde_dormir": {
+        "mochilero": "Campamentos básicos en el delta o albergues en Maun (15-40 EUR/noche)",
+        "medio": "Lodges con tiendas o cabañas sencillas (80-150 EUR/noche)",
+        "comfort": "Lodges de lujo con guías privados (250-500+ EUR/noche)"
+      },
+      "que_hacer": [
+        "Safaris en mokoro al atardecer (80-120 EUR/día con guía local)",
+        "Game drives nocturnos (100-150 EUR/día)",
+        "Bird watching y fotografía de fauna (gratis desde campamento, guías especializados 50-80 EUR)",
+        "Visita a comunidades San locales (30-50 EUR con operador comunitario)"
+      ],
+      "donde_comer": "En Maun: carnes asadas y pap (gachas de maíz) en mercados locales (3-8 EUR). En lodges: menú fijo incluido o 15-30 EUR por comida. Probar nile perch y kudu.",
+      "consejo_local": "Los mokoros son lentos pero ofrecen fauna más cercana que los botes motorizados. Contrata guías locales San directamente en pueblos pequeños para economizar y apoyar comunidades.",
+      "plan_b_lluvia": "Visitar Maun: mercadillos, museo de Botsuana, visita a la reserva privada de aves cercana.",
+      "keywords": [
+        "Okavango",
+        "Delta",
+        "Maun",
+        "mokoro",
+        "safari Botsuana",
+        "humedales africanos"
+      ]
+    },
+    {
+      "id": "parque-nacional-chobe",
+      "nombre": "Parque Nacional Chobe",
+      "tipo": "naturaleza",
+      "region": "Noreste de Botsuana, frontera con Zambia",
+      "descripcion": "Segundo mayor parque nacional de Botsuana con concentración de elefantes (120.000+) y acceso fácil por Kasane. Alternativa menos cara y más accesible que el Delta para safaris autogestionados.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Gaborone: vuelo doméstico a Kasane (2h, 90-140 EUR) o autobús a Nata (8h, 20 EUR) + conexión a Kasane (2h más). Desde Victoria Falls (Zimbabue): 1h de coche (20 EUR, transporte compartido).",
+      "donde_dormir": {
+        "mochilero": "Campamentos del parque o albergues Kasane (12-35 EUR/noche)",
+        "medio": "Casas de huéspedes con vistas al río (50-100 EUR/noche)",
+        "comfort": "Lodges con guía incluido (150-250 EUR/noche)"
+      },
+      "que_hacer": [
+        "Safari por carretera en vehículo propio alquilado (35-50 EUR/día coche)",
+        "Cruceros por el río Chobe (40-60 EUR/2h, mejor para elefantes en atardecer)",
+        "Game walk con guía ranger (25-40 EUR)",
+        "Visita a Sedudu Island (gratis desde orilla, 10 EUR en bote)"
+      ],
+      "donde_comer": "Kasane tiene restaurantes básicos (5-12 EUR comida local). Carnes asadas en Kubu Lodge o similares (15-25 EUR). Mercado de pescado fresco en la orilla.",
+      "consejo_local": "Alquila coche en Kasane en lugar de tours grupales para mayor flexibilidad. El río es mejor que la carretera para ver elefantes; toma crucero al atardecer.",
+      "plan_b_lluvia": "Recorre el pueblo de Kasane, visita mercados, cruza a Victoria Falls por puente (Zimbabue, requiere visado).",
+      "keywords": [
+        "Chobe",
+        "Kasane",
+        "elefantes",
+        "río Chobe",
+        "safari Botsuana norte"
+      ]
+    },
+    {
+      "id": "pan-de-makgadikgadi",
+      "nombre": "Pans de Makgadikgadi",
+      "tipo": "desierto",
+      "region": "Centro de Botsuana",
+      "descripcion": "Inmensas salinas blancas en seco y zona de herbazales estacionales con fauna migrante. Experiencia única de paisaje lunar africano y puestas de sol espectaculares. Menos turístico que Delta.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "julio a octubre (seco), noviembre a marzo (humedal con aves)",
+      "como_llegar": "Desde Gaborone a Nata (9h autobús, 22 EUR). De Nata a Makgadikgadi (2h, 30-50 EUR con operador o 15 EUR autobús local).",
+      "donde_dormir": {
+        "mochilero": "Campamentos básicos en las pans (15-30 EUR/noche)",
+        "medio": "Lodges sencillos tipo desert camp (60-100 EUR/noche)",
+        "comfort": "Eco-lodges con experiencias 4x4 (180-300 EUR/noche)"
+      },
+      "que_hacer": [
+        "Safari en 4x4 por las salinas blancas (80-120 EUR/día con guía)",
+        "Quad biking por las pans (60-100 EUR/2h)",
+        "Observación de vida silvestre estacional (gratis desde campamento)",
+        "Fotografía de puesta de sol en paisaje desolado (gratis)"
+      ],
+      "donde_comer": "Opciones limitadas; come en el lodge o trae suministros de Nata. BBQ en campamentos (incluido o 10-20 EUR). Agua potable importante: trae repuestos.",
+      "consejo_local": "Visita en seco para ver las salinas blancas puras. Si vas en temporada de lluvia (nov-mar), vuelven a llenarse las lagunas y llegan aves migratorias: diferentes pero igual de impresionantes.",
+      "plan_b_lluvia": "Nata Sanctuary cercano para observación de aves; regresa a Nata para explorar pueblo y compras.",
+      "keywords": [
+        "Makgadikgadi",
+        "pans",
+        "salinas blancas",
+        "Nata",
+        "desierto Botsuana"
+      ]
+    },
+    {
+      "id": "gaborone",
+      "nombre": "Gaborone",
+      "tipo": "ciudad",
+      "region": "Sureste, capital",
+      "descripcion": "Capital y puerta de entrada principal con museos, vida urbana y servicios. Punto de conexión para transporte doméstico e internacional, aunque carece de atractivos naturales propios.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a septiembre",
+      "como_llegar": "Llegada: vuelos internacionales desde Johannesburgo (1h, 50-90 EUR), Luanda, Windhoek. Autobús desde Johannesburgo (10h, 25-40 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergues en el centro (18-35 EUR/noche)",
+        "medio": "Hoteles 3 estrellas en CBD (50-90 EUR/noche)",
+        "comfort": "Hoteles cadena como Gaborone Sun (120-180 EUR/noche)"
+      },
+      "que_hacer": [
+        "Museo Nacional de Botsuana (gratuito o 2-5 EUR donativo, 1-2h)",
+        "Gaborone Game Reserve safari (30-50 EUR con guía, 2h)",
+        "Paseo por el Parque Estatal de Phokoetsano (gratis)",
+        "Mercado de Okahandja (gratis, artesanías, 5-20 EUR souvenirs)"
+      ],
+      "donde_comer": "African Sun: carnes locales (8-15 EUR). Mokolodi: francés casual (15-30 EUR). Mercado: comida callejera pap y relish (2-4 EUR). Zona recomendada: Broadhurst para restaurantes.",
+      "consejo_local": "No necesitas pasar días aquí. Usa para cambios de transporte y una noche. El Gaborone Game Reserve es pequeño pero suficiente si no tienes tiempo para Chobe o Delta.",
+      "plan_b_lluvia": "Museos cubiertos, compras en The Game City mall, visitas a galerías de arte local.",
+      "keywords": [
+        "Gaborone",
+        "capital Botsuana",
+        "CBD",
+        "Broadhurst",
+        "Mokolodi"
+      ]
+    },
+    {
+      "id": "francistown",
+      "nombre": "Francistown",
+      "tipo": "ciudad",
+      "region": "Noreste de Botsuana",
+      "descripcion": "Segunda ciudad del país, punto de conexión hacia Chobe y norte. Menos turística que Gaborone pero con servicios suficientes y atmósfera local más auténtica.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a septiembre",
+      "como_llegar": "Desde Gaborone: autobús (7-8h, 20 EUR) o vuelo doméstico (1h, 70-100 EUR). Desde Kasane: autobús (3h, 15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergues y casas de huéspedes (15-30 EUR/noche)",
+        "medio": "Hoteles locales (40-70 EUR/noche)",
+        "comfort": "Hotel President o similares (100-150 EUR/noche)"
+      },
+      "que_hacer": [
+        "Museo de Francistown (2-3 EUR, historia local, 1h)",
+        "Paseo por centro histórico y tiendas tradicionales (gratis)",
+        "Visita a mercadillos de artesanía (gratis entrada, 5-30 EUR compras)",
+        "Pesca en embalse de Motswari si tiempo lo permite (15-40 EUR)"
+      ],
+      "donde_comer": "Restaurantes en Main Mall: carnes asadas (6-12 EUR). Comida callejera: nshima, seswaa (2-4 EUR). Zonas: Main Street y área mercado.",
+      "consejo_local": "Francistown es parada práctica pero no destino final. Usa para tomar autobús hacia norte o para cambiar dinero en mejor tasa que Gaborone.",
+      "plan_b_lluvia": "Centro comercial cubierto, tiendas, mercados bajo techo.",
+      "keywords": [
+        "Francistown",
+        "segunda ciudad",
+        "norte Botsuana",
+        "hub transporte"
+      ]
+    },
+    {
+      "id": "reserva-moremi",
+      "nombre": "Reserva de Fauna Moremi",
+      "tipo": "naturaleza",
+      "region": "Noreste, dentro del Delta del Okavango",
+      "descripcion": "Zona de protección dentro del Delta con acceso más regulado y menos turismo que zonas abiertas. Concentración de fauna predadora y bosques intactos, ideal para quienes buscan safari auténtico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Maun: tours operados (obligatorios) de 2-4 días en mokoro o bote (250-400 EUR con alojamiento). Requiere reserva previa con operador.",
+      "donde_dormir": {
+        "mochilero": "Campamentos básicos dentro de Moremi (30-50 EUR/noche en tours groupales)",
+        "medio": "Lodges sencillos del Delta cercanos (80-150 EUR/noche)",
+        "comfort": "Lodges privados con guías exclusivos (200-400+ EUR/noche)"
+      },
+      "que_hacer": [
+        "Safaris guiados en mokoro matutinos/vespertinos (incluidos en tours)",
+        "Game drives nocturnos (50-100 EUR adicionales)",
+        "Observación de aves (20+ especies diarias, guías especializados +30 EUR)",
+        "Fotografía de fauna predadora (leones, leopardos, hienas)"
+      ],
+      "donde_comer": "Comidas incluidas en todos los tours. Menús típicos: carnes asadas, vegetales locales, arroz. Bebidas trae tu propia cerveza/agua.",
+      "consejo_local": "Los safaris en Moremi son más caro pero menos masificados que Delta central. Mejor relación fauna/turistas. Lleva binoculares buenos y paciencia; los avistamientos requieren tiempo.",
+      "plan_b_lluvia": "Moremi sigue operativo con lluvias; paisaje más verde pero menos fauna visible. Regresa a Maun para descanso.",
+      "keywords": [
+        "Moremi",
+        "Delta Okavango",
+        "safari privado",
+        "fauna africana",
+        "mokoro"
+      ]
+    },
+    {
+      "id": "nata-santuario-aves",
+      "nombre": "Nata y Santuario de Aves",
+      "tipo": "naturaleza",
+      "region": "Centro-norte de Botsuana",
+      "descripcion": "Pueblo pequeño y santuario de aves con lagunas estacionales que albergan miles de flamencos y otras aves migratorias. Parada económica entre Gaborone y norte.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril (aguas llenas, aves migratorias)",
+      "como_llegar": "Desde Gaborone: autobús (9h, 22 EUR). Desde Francistown: autobús (4h, 12 EUR). El santuario está a 8 km del pueblo: 10-15 EUR en taxi compartido.",
+      "donde_dormir": {
+        "mochilero": "Albergues y casas de huéspedes en pueblo (12-25 EUR/noche)",
+        "medio": "Nata Lodge (60-90 EUR/noche)",
+        "comfort": "Jack's Camp o similares en zona (120-200 EUR/noche)"
+      },
+      "que_hacer": [
+        "Visita al Santuario de Aves de Nata (3-5 EUR entrada, 2h)",
+        "Caminar por senderos (gratis, guías disponibles 15-25 EUR)",
+        "Observación de flamencos (mejor binoculares, gratis)",
+        "Visita a Nata Estancia cercana si interesa vida rural (5-10 EUR)"
+      ],
+      "donde_comer": "Comida en pueblo: pap, carnes asadas (3-6 EUR). En lodges: menú turístico (12-20 EUR). Mercado local para snacks.",
+      "consejo_local": "Nata es parada de paso útil en ruta norte. No necesita días completos, 3-4 horas bastan. Las aguas suben noviembre-marzo con lluvia; mejor época para aves.",
+      "plan_b_lluvia": "Lluvia aumenta atractivo (aguas llenas, más aves). Usa para descansar en pueblo.",
+      "keywords": [
+        "Nata",
+        "santuario aves",
+        "flamencos",
+        "lagunas",
+        "aves migratorias"
+      ]
+    },
+    {
+      "id": "livingstone-excursion",
+      "nombre": "Livingstone (Zambia - excursión desde Botsuana)",
+      "tipo": "naturaleza",
+      "region": "Zambia, frontera norte (excursión desde Kasane)",
+      "descripcion": "Cataratas Victoria y pueblo turístico en Zambia, accesible desde Kasane (Botsuana) en medio día. Experiencias de aventura y vista de una de las cataratas más grandes del mundo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a noviembre",
+      "como_llegar": "Desde Kasane (Botsuana): puente a Victoria Falls Zimbabue (10 min, 5 EUR) y cruzar a Livingstone Zambia. Autobús o taxi compartido (1h total desde Kasane, 15-25 EUR). Requiere visado Zambia (40-50 USD).",
+      "donde_dormir": {
+        "mochilero": "Albergues Livingstone (15-35 EUR/noche)",
+        "medio": "Guest houses (50-100 EUR/noche)",
+        "comfort": "The Royal Livingstone (150-250 EUR/noche)"
+      },
+      "que_hacer": [
+        "Visita Cataratas Victoria desde lado Zambia (15-20 EUR entrada, 2h)",
+        "Bungee jumping desde puente (50-80 EUR, 3 minutos pura adrenalina)",
+        "Paseo en bote Devil's Pool (30-50 EUR, piscina natural en borde catarata)",
+        "Gorge swing (40-60 EUR, columpio sobre cañón)"
+      ],
+      "donde_comer": "Restaurantes turísticos en Livingstone (8-20 EUR). The Pudding Shop: comida local casual. Brat und Wurst: brasas alemanas.",
+      "consejo_local": "Visto desde Zambia las cataratas son más impresionantes (más volumen de agua visible). El Devil's Pool es seguro pero requiere nado. Ten cuidado con precios de tours: negocia directamente en hostels.",
+      "plan_b_lluvia": "Lluvia intensa hace cataratas más espectaculares pero puentes actividades pueden cerrarse. Verifica condiciones.",
+      "keywords": [
+        "Victoria Falls",
+        "Livingstone",
+        "Zambia",
+        "cataratas",
+        "bungee",
+        "aventura"
+      ],
+      "excursion_desde": true
+    },
+    {
+      "id": "kalahari-central",
+      "nombre": "Reserva Kalahari Central (CKGR)",
+      "tipo": "desierto",
+      "region": "Centro-sur de Botsuana",
+      "descripcion": "Vasta región desértica poco turística con fauna salvaje (leones, licaones) y oportunidad de experimentar Botsuana auténtica. Para viajeros con presupuesto mayor y espíritu aventurero.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "julio a octubre",
+      "como_llegar": "Acceso complicado: requiere 4x4 de alquiler (150-200 EUR/día) desde Gaborone o tours desde Maun (800-1200 EUR/2 días). Ruta: Gaborone a Rakops (7h) + entrada Kalahari.",
+      "donde_dormir": {
+        "mochilero": "Campamentos básicos (15-30 EUR/noche)",
+        "medio": "San Camp o similares (100-180 EUR/noche)",
+        "comfort": "Jack's Camp o Tau Camp (250-400+ EUR/noche)"
+      },
+      "que_hacer": [
+        "Safaris con guías San locales (150-250 EUR/día con operador)",
+        "Caminatas de rastreo animal (50-100 EUR/2h con guía)",
+        "Observación de estrellas (gratis desde campamento, sin contaminación lumínica)",
+        "Aprender técnicas de supervivencia San (20-50 EUR)"
+      ],
+      "donde_comer": "Campamentos incluyen comidas BBQ. Comida callejera inexistente; autosuficiencia importante. Agua potable: trae reservas.",
+      "consejo_local": "CKGR es para viajeros con tiempo y presupuesto. Acceso limitado por rutas de arena; no recomendable sin experiencia en safari o guía. Contacta con operadores meses antes.",
+      "plan_b_lluvia": "Acceso muy limitado en época de lluvia (nov-marzo). Evita esa temporada para CKGR.",
+      "keywords": [
+        "Kalahari",
+        "CKGR",
+        "desierto",
+        "San people",
+        "Rakops",
+        "aventura extrema"
+      ]
+    },
+    {
+      "id": "harare-excursion",
+      "nombre": "Victoria Falls (Zimbabue - excursión desde Chobe)",
+      "tipo": "naturaleza",
+      "region": "Zimbabue, frontera norte (excursión desde Kasane/Botsuana)",
+      "descripcion": "Acceso adicional a Cataratas Victoria desde lado zimbabuense. Experiencias diferentes: vistas más cercanas, actividades extremas. Alternativa a Livingstone con regulaciones zimbabuenses.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a noviembre",
+      "como_llegar": "Desde Kasane: cruzar puente a Victoria Falls Zimbabue (10 minutos a pie o 5 EUR taxi, requiere pasaporte y visado Zimbabue 30-50 USD en frontera).",
+      "donde_dormir": {
+        "mochilero": "Albergues en town (12-30 EUR/noche)",
+        "medio": "Guest houses (40-80 EUR/noche)",
+        "comfort": "The Elephant Camp (150-250 EUR/noche)"
+      },
+      "que_hacer": [
+        "Paseo por Cataratas (10 EUR entrada parque zimbabuense, 2h)",
+        "White water rafting Zambezi (35-60 EUR, ráfidas clase IV-V)",
+        "Helicoptero sobre cataratas (150-200 EUR, 10 minutos)",
+        "Sunset cruise en Zambezi (25-40 EUR, 1.5h)"
+      ],
+      "donde_comer": "The Livingstone Arms o similar: comida occidental (8-20 EUR). Mercado local: comida barata zimbabuense.",
+      "consejo_local": "Lado Zimbabue: actividades más extremas y deportivas. Lado Zambia: experiencia de cataratas más completa. Los dos lados ofrecen perspectivas distintas de las cataratas.",
+      "plan_b_lluvia": "Actividades acuáticas mejoran con lluvia. Rafting puede suspenderse en aguas altas peligrosas.",
+      "keywords": [
+        "Victoria Falls",
+        "Zimbabue",
+        "rafting",
+        "aventura",
+        "cataratas"
+      ],
+      "excursion_desde": true
+    }
+  ]
+}

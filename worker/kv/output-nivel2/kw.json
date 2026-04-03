@@ -1,0 +1,343 @@
+{
+  "pais": "Kuwait",
+  "codigo": "kw",
+  "destinos": [
+    {
+      "id": "ciudad-de-kuwait",
+      "nombre": "Ciudad de Kuwait",
+      "tipo": "ciudad",
+      "region": "Governorado de la Capital",
+      "descripcion": "Centro neurálgico del país con rascacielos modernos, museos de clase mundial y una bahía renovada. Combina arquitectura contemporánea con patrimonio islámico y es el punto de entrada obligatorio para cualquier viajero. La Marina y el centro comercial ofrecen experiencias urbanas contrastadas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Aeropuerto Internacional de Kuwait (KIA) a 15 km. Taxi/Uber: 10-15 EUR, 30 min. Autobús público: 1-2 EUR, 45 min.",
+      "donde_dormir": {
+        "mochilero": "Hostal o hotel básico en Salmiya: 25-40 EUR/noche",
+        "medio": "Hotel 3-4 estrellas en Marina o centro: 60-120 EUR/noche",
+        "comfort": "Hotel 5 estrellas (Sheraton, Hilton): 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Torres de Kuwait - mirador y museo (3 EUR)",
+        "Gran Mezquita - arquitectura islámica contemporánea (gratis, horarios restringidos)",
+        "Paseo marítimo de la Corniche - caminar y ver puesta de sol (gratis)",
+        "Museo Nacional de Kuwait - historia y arte islámico (5 EUR)",
+        "Souk Al-Manara - compras y ambiente local (gratis)"
+      ],
+      "donde_comer": "Probar kebab kuwaití, hummus, y pescado fresco en restaurantes locales del Souk o Salmiya. Rango: 5-15 EUR por comida. Evitar carne de cerdo (ilegal). Zona Salmiya tiene mejor oferta de restaurantes internacionales.",
+      "consejo_local": "Los viernes el Souk cierra por la mañana. Muchos restaurantes no abren hasta las 12:00. El horario de compras es nocturno (después de las 17:00) en verano. Lleva efectivo para pequeños gastos.",
+      "plan_b_lluvia": "Museos interiores (Nacional, de Arte), centros comerciales (The Avenues, Marina Mall), o relajarse en un hammam tradicional.",
+      "keywords": [
+        "Kuwait City",
+        "KuwaitCity",
+        "Capital",
+        "Marina",
+        "Corniche",
+        "Torres Kuwait",
+        "Gran Mezquita",
+        "Salmiya",
+        "Souk"
+      ]
+    },
+    {
+      "id": "isla-de-failaka",
+      "nombre": "Isla de Failaka",
+      "tipo": "isla",
+      "region": "Golfo Pérsico",
+      "descripcion": "Isla histórica a 40 km de la costa con ruinas arqueológicas, playas vírgenes y una atmósfera relajada. Punto de encuentro entre culturas antiguas y destino de escape para los kuwaití. Ideal para buceo, snorkel y exploración de restos de civilizaciones antiguas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Ferry desde Puerto de Kuwait (Marina). Ferry: 2-3 EUR, 30-45 min. Salidas frecuentes (verificar horarios). Alternativa: barco privado desde marinas locales (60-100 EUR).",
+      "donde_dormir": {
+        "mochilero": "Campamento o alojamiento básico: 20-35 EUR/noche",
+        "medio": "Resort pequeño o guesthouse: 50-80 EUR/noche",
+        "comfort": "Resort Failaka Beach: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas arqueológicas de Qal'at Al-Khiran - fortaleza antigua (gratis)",
+        "Buceo y snorkel - arrecifes coralinos (30-50 EUR con operador)",
+        "Playa de Failaka - baños y relajación (gratis)",
+        "Museo arqueológico de la isla - hallazgos locales (3 EUR)",
+        "Exploración de bunkers de la Guerra del Golfo (gratis)"
+      ],
+      "donde_comer": "Restaurantes básicos en el puerto con pescado fresco. Rango: 8-20 EUR. Llevar snacks adicionales es recomendable. Agua disponible en tiendas del puerto.",
+      "consejo_local": "Trae tu propio equipo de snorkel de calidad; el alquilado suele ser básico. El ferry es más frecuente por la mañana. Lleva abundante protector solar: el sol es intenso y no hay sombra en playas.",
+      "plan_b_lluvia": "Refugiarse en el museo, explorar ruinas cubiertas o regresar al continente.",
+      "keywords": [
+        "Failaka",
+        "isla Failaka",
+        "Qal'at",
+        "Khiran",
+        "buceo Kuwait",
+        "arqueología Kuwait",
+        "playas isla"
+      ]
+    },
+    {
+      "id": "souk-al-mubarakiya",
+      "nombre": "Souk Al-Mubarakiya",
+      "tipo": "histórico",
+      "region": "Centro de Kuwait City",
+      "descripcion": "Mercado tradicional del siglo XIX restaurado, corazón de la cultura y comercio local. Laberinto de tiendas de especias, textiles, oro y artesanía donde se mezclan turistas y kuwaití. Experiencia auténtica de vida urbana árabe sin artificios.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo (preferible tardes)",
+      "como_llegar": "A pie desde torres Kuwait o centro. A pie: 10-15 min desde Marina. Taxi: 2-3 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hotel básico en centro (Farwaniya): 30-45 EUR/noche",
+        "medio": "Hotel 3 estrellas en zona Salmiya (cercano): 70-100 EUR/noche",
+        "comfort": "Hotel 4-5 estrellas Marina: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Comprar especias, dátiles y café árabe (5-30 EUR según compra)",
+        "Probar comida callejera: falafel, kebab, hummus (3-8 EUR)",
+        "Regatear en tiendas de oro y textiles (sin límite de gasto)",
+        "Fotografía de arquitectura restaurada (gratis)",
+        "Mezquita Al-Mubarakiya - interior decorado (gratis, horarios restringidos)"
+      ],
+      "donde_comer": "Standartes de comida kuwaití: Al Reef Bakery (pan fresco), Al Boom Seafood (pescado). Rango: 5-15 EUR. Zona concéntrica: mejor por la tarde.",
+      "consejo_local": "Abre a partir de las 16:00 en verano, 15:00 en invierno. Viernes es mejor día (menos negocios, más vida social). Traer bolsa reutilizable: comprarás más de la cuenta.",
+      "plan_b_lluvia": "Parte cubierta del Souk tiene estructura protegida. Explorar interiorismo de tiendas.",
+      "keywords": [
+        "Mubarakiya",
+        "Souk Kuwait",
+        "mercado tradicional",
+        "especias Kuwait",
+        "Farwaniya",
+        "centro histórico"
+      ]
+    },
+    {
+      "id": "sabiyah",
+      "nombre": "Sabiyah (Al-Sabiyah)",
+      "tipo": "desierto",
+      "region": "Norte, frontera con Irak",
+      "descripcion": "Pueblo desértico en las afueras del norte con playas silenciosas y autenticidad extrema. Poco visitado por turistas, ofrece una visión del Kuwait rural y costero. Ideal para viajeros que buscan alejarse de la urbanización y experimentar la vida beduina.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Kuwait City en coche de alquiler o taxi negociado. Coche alquilado: 40-60 EUR/día. Distancia: 120 km, 90 min. Taxi negociado: 60-80 EUR ida.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse local o cabaña simple: 25-40 EUR/noche",
+        "medio": "Resort pequeño de playa: 60-90 EUR/noche",
+        "comfort": "No hay opciones de lujo; máximo 4 estrellas simple: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas vírgenes de Sabiyah - baños y soledad (gratis)",
+        "Paseo por el pueblo - arquitectura vernácula (gratis)",
+        "Avistamiento de aves en marismas costeras (gratis, madrugada)",
+        "Fotografía de atardeceres desérticos (gratis)",
+        "Compra en mercado local - productos frescos (5-15 EUR)"
+      ],
+      "donde_comer": "Restaurantes locales muy básicos con pescado fresco. Rango: 6-12 EUR. Opciones limitadas; considerar llevar comida desde Kuwait City.",
+      "consejo_local": "Carretera sin mucha señalización; usa GPS. Noche cae rápido: planifica horarios. Agua potable disponible pero gas escaso. Zona cercana a frontera: no acercarse sin información actualizada.",
+      "plan_b_lluvia": "Regresar a Kuwait City o refugiarse en guesthouse. Pocas actividades alternas.",
+      "keywords": [
+        "Sabiyah",
+        "Al-Sabiyah",
+        "norte Kuwait",
+        "playas desierto",
+        "pueblos rurales Kuwait",
+        "costa norte"
+      ]
+    },
+    {
+      "id": "marinas-kuwaitias",
+      "nombre": "Marinas y Puertos de Marina Beach",
+      "tipo": "playa",
+      "region": "Este, Golfo Pérsico",
+      "descripcion": "Zona costera moderna con playas arenosas, paseo marítimo lujoso y agua cálida. Punto de encuentro entre residentes internacionales y kuwaití. Alternativa segura y accesible para playas sin necesidad de viajar lejos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "A pie desde centro o Salmiya. Taxi/Uber: 3-5 EUR desde torres Kuwait, 15 min.",
+      "donde_dormir": {
+        "mochilero": "Hostal en Salmiya cercano: 25-40 EUR/noche",
+        "medio": "Hotel 3-4 estrellas frente a mar: 80-130 EUR/noche",
+        "comfort": "Resort 5 estrellas (Hilton, Sheraton Marina): 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en playa pública - entrada gratuita (gratis)",
+        "Paseo por Marina Mall - compras y entretenimiento (gratis pasear, gasto variable)",
+        "Cine en Marina Mall - películas en inglés (10-15 EUR entrada)",
+        "Jet ski o actividades acuáticas - alquiler (40-80 EUR/hora)",
+        "Cena con vistas al atardecer - restaurantes variados (15-40 EUR)"
+      ],
+      "donde_comer": "Cadenas internacionales y locales. Rango: 10-25 EUR. Zona Marina tiene variedad de cines, pizzerías, comida rápida y árabe. Para auténtico, evitar Marina y buscar Salmiya.",
+      "consejo_local": "Piscina es más segura que playa para turistas no acostumbrados. Viernes es día familiar: muy concurrido. Mejor ir en semana o madrugada.",
+      "plan_b_lluvia": "Marina Mall tiene 100+ tiendas y ocio interior. Cines disponibles.",
+      "keywords": [
+        "Marina Beach",
+        "Marina Kuwait",
+        "playas Kuwait",
+        "Marina Mall",
+        "Salmiya",
+        "Corniche",
+        "golf pérsico"
+      ]
+    },
+    {
+      "id": "isla-de-bubian",
+      "nombre": "Isla de Bubián",
+      "tipo": "isla",
+      "region": "Noreste, Golfo Pérsico",
+      "descripcion": "Isla poco desarrollada con ecosistemas naturales preservados y playas salvajes. Zona de paso de aves migratorias y hábitat de fauna marina. Destino para viajeros de naturaleza que buscan Kuwait menos urbanizado.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Acceso limitado; requerir permisos. Generalmente vía tour operador desde Kuwait City. Opción: ferry privado o tour (60-100 EUR por persona).",
+      "donde_dormir": {
+        "mochilero": "Camping autorizado (si aplica): 15-25 EUR/noche",
+        "medio": "No hay alojamiento permanente; día de viaje sugerido",
+        "comfort": "Tour desde Kuwait con retorno el mismo día"
+      },
+      "que_hacer": [
+        "Observación de aves - especies migratorias (gratis con acceso)",
+        "Snorkel en aguas naturales (20-30 EUR equipo)",
+        "Caminata por playas vírgenes (gratis)",
+        "Fotografía de fauna marina (gratis)",
+        "Exploración de hábitats costeros (gratis)"
+      ],
+      "donde_comer": "Sin servicios gastronómicos; llevar provisiones propias. Agua embotellada esencial.",
+      "consejo_local": "Acceso es difícil y requiere permisos ambientales. Mejor via tour operador. Lleva mucha agua, protector solar extremo y binoculares para aves.",
+      "plan_b_lluvia": "Tour puede posponerse. Contactar operador por alternativas.",
+      "keywords": [
+        "Bubian",
+        "isla Bubian",
+        "naturaleza Kuwait",
+        "aves migratorias",
+        "islas deshabitadas",
+        "ecosistemas Kuwait"
+      ]
+    },
+    {
+      "id": "waha-desert-park",
+      "nombre": "Waha Desert Park y Desierto de Al-Raudhatain",
+      "tipo": "naturaleza",
+      "region": "Noroeste",
+      "descripcion": "Oasis desértico y parque natural con vegetación, vida silvestre y paisaje árido típico. Refugio fresco en medio del desierto con piscinas naturales. Experiencia auténtica del ecosistema desértico kuwaití.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Kuwait City en coche alquilado. Distancia: 80 km, 75 min. Coche alquilado: 40-60 EUR/día. Taxi compartido: 15-20 EUR por persona.",
+      "donde_dormir": {
+        "mochilero": "Camping en parque (autorizado): 15-25 EUR/noche",
+        "medio": "Resort cercano en Jahra: 50-80 EUR/noche",
+        "comfort": "No hay opciones de lujo; mejor base en Kuwait City"
+      },
+      "que_hacer": [
+        "Caminar por oasis Al-Raudhatain (gratis)",
+        "Avistamiento de fauna desértica - gacelas, aves (gratis)",
+        "Picnic en zonas designadas (gratis)",
+        "Fotografía de paisaje árido (gratis)",
+        "Visita a pozo natural de agua (gratis)"
+      ],
+      "donde_comer": "Servicios mínimos en parque. Llevar picnic desde Kuwait City. Agua disponible pero limitada.",
+      "consejo_local": "Parque cierra al atardecer. Entra temprano. Temperaturas extremas en verano (imposible). Trae agua en cantidad. Protección solar máxima.",
+      "plan_b_lluvia": "Poco probable lluvia; si ocurre, retirarse. Zona puede volverse peligrosa.",
+      "keywords": [
+        "Waha",
+        "Al-Raudhatain",
+        "oasis Kuwait",
+        "desierto Kuwait",
+        "parque natural",
+        "Jahra"
+      ]
+    },
+    {
+      "id": "shuwaikh-puerto",
+      "nombre": "Puerto de Shuwaikh y Zona Industrial",
+      "tipo": "ciudad",
+      "region": "Oeste",
+      "descripcion": "Zona portuaria e industrial con astilleros tradicionales y vida local auténtica. Menos turístico pero revelador de la economía kuwaití y comercio marítimo. Punto de interés para viajeros curiosos sobre la realidad no pulida del país.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Kuwait City en taxi. Distancia: 10 km. Taxi/Uber: 4-6 EUR, 15 min.",
+      "donde_dormir": {
+        "mochilero": "Alojamiento en Shuwaikh o zona cercana: 30-45 EUR/noche",
+        "medio": "Hotel básico en zona: 60-90 EUR/noche",
+        "comfort": "Mejor opción: viajar desde Kuwait City centro"
+      },
+      "que_hacer": [
+        "Observación de astilleros tradicionales (gratis desde exterior)",
+        "Mercado de pescado matutino - subasta y compra (gratis)",
+        "Caminata por zona industrial - fotografía (gratis)",
+        "Restaurante local de pescado fresco (10-20 EUR)",
+        "Interacción con trabajadores locales - almuerzo compartido (5-10 EUR)"
+      ],
+      "donde_comer": "Restaurantes de pescado simples, muy auténticos. Rango: 7-18 EUR. Mercado de pescado con puestos de comida rápida.",
+      "consejo_local": "Mercado de pescado abre 5:00-9:00 AM. Mejor ir temprano. Zona industrial puede ser poco segura al atardecer; evitar noche. No ingresar a áreas restringidas de puertos.",
+      "plan_b_lluvia": "Actividades principalmente al aire libre; regresar a Kuwait City.",
+      "keywords": [
+        "Shuwaikh",
+        "puerto Kuwait",
+        "astilleros",
+        "mercado pescado",
+        "zona industrial",
+        "comercio marítimo"
+      ]
+    },
+    {
+      "id": "jahra-fuerte",
+      "nombre": "Jahra y Fuerte de Jahra (Red Fort)",
+      "tipo": "histórico",
+      "region": "Oeste",
+      "descripcion": "Pueblo histórico con fortaleza restaurada que resiste sitio famoso. Centro de la batalla del Jahra en 1920. Mezcla de arqueología, historia de guerras y vida pequeña ciudad kuwaití. Relevante para entender historia regional.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Kuwait City en coche alquilado o taxi. Distancia: 50 km, 50 min. Taxi negociado: 30-40 EUR ida.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Jahra: 25-35 EUR/noche",
+        "medio": "Hotel pequeño: 50-80 EUR/noche",
+        "comfort": "Mejor base en Kuwait City; Jahra como día"
+      },
+      "que_hacer": [
+        "Visita Fuerte de Jahra (Red Fort) - museo y arquitectura (2 EUR)",
+        "Caminata por murallas restauradas (gratis)",
+        "Mercado local Jahra - compras de dátiles y especias (variable)",
+        "Fotografía de arquitectura defensiva (gratis)",
+        "Almuerzo en restaurante local (8-15 EUR)"
+      ],
+      "donde_comer": "Restaurantes locales con comida kuwaití tradicional. Rango: 6-15 EUR. Platos de arroz, carne y pescado.",
+      "consejo_local": "Fuerte abre 8:00-12:00 y 16:00-19:00 (verificar). Viernes cierra. Calor intenso: ir temprano. Historia es importante para comprender Kuwait; vale la pena.",
+      "plan_b_lluvia": "Interior del fuerte parcialmente cubierto. Mercado tiene porciones techadas.",
+      "keywords": [
+        "Jahra",
+        "Red Fort",
+        "fuerte Jahra",
+        "Red Fort Kuwait",
+        "historia Kuwait",
+        "batalla 1920",
+        "arqueología"
+      ]
+    },
+    {
+      "id": "ahmadi-zona-petrolifera",
+      "nombre": "Ahmadi y Zona Petrolífera",
+      "tipo": "ciudad",
+      "region": "Sur",
+      "descripcion": "Ciudad modelo planificada para trabajadores petroleros con arquitectura británica y museos especializados. Reflejo de la era de oro del petróleo kuwaití. Interesante para viajeros de historia industrial y arquitectura del siglo XX.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Kuwait City en coche alquilado o taxi. Distancia: 50 km, 45 min. Taxi/Uber: 15-20 EUR. Coche alquilado: 40-60 EUR/día.",
+      "donde_dormir": {
+        "mochilero": "Alojamiento básico en Ahmadi o zona: 30-45 EUR/noche",
+        "medio": "Hotel 3 estrellas: 70-110 EUR/noche",
+        "comfort": "Mejor base en Kuwait City; Ahmadi como excursión"
+      },
+      "que_hacer": [
+        "Museo del Petróleo de Kuwait - historia industrial (5 EUR)",
+        "Caminata por barrio de trabajadores - arquitectura colonial (gratis)",
+        "Parque Ahmadi - jardines y plazas (gratis)",
+        "Fotografía de infraestructura petrolera desde distancia segura (gratis)",
+        "Restaurante local con vistas (10-20 EUR)"
+      ],
+      "donde_comer": "Restaurantes variados en Ahmadi. Rango: 8-18 EUR. Cocina kuwaití e internacional.",
+      "consejo_local": "Muchas zonas de refinerías son de acceso restringido. No intentar acceder a instalaciones petroleras. Museo es lo más accesible. Zona puede parecer abandonada pero es segura.",
+      "plan_b_lluvia": "Museo interior está cubierto completamente.",
+      "keywords": [
+        "Ahmadi",
+        "petroleo Kuwait",
+        "zona petrolera",
+        "KOC",
+        "museo petroleo",
+        "arquitectura colonial",
+        "industria petrolifera"
+      ]
+    }
+  ]
+}

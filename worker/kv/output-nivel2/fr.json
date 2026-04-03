@@ -1,0 +1,357 @@
+{
+  "pais": "Francia",
+  "codigo": "fr",
+  "destinos": [
+    {
+      "id": "paris",
+      "nombre": "París",
+      "tipo": "ciudad",
+      "region": "Île-de-France",
+      "descripcion": "Capital francesa con museos de clase mundial (Louvre, Orsay), arquitectura icónica (Torre Eiffel, Notre-Dame) y vida cultural intensa. Punto de entrada lógico para la mayoría de viajeros independientes. Centro neurálgico para explorar Francia.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Aeropuertos: CDG (30 km, RER B 12€, 35 min) u Orly (14 km, RER C 12€, 30 min). Desde fuera: tren Eurostar o vuelos internacionales.",
+      "donde_dormir": {
+        "mochilero": "Hostal en Marais/Bastille, 25-40€/noche",
+        "medio": "Hotel 2-3 estrellas Centro/Rive Gauche, 70-120€/noche",
+        "comfort": "Hotel 4 estrellas Champs-Élysées/8º arrondissement, 180-300€/noche"
+      },
+      "que_hacer": [
+        "Louvre y museos (entrada 17€, gratis -26 años EU)",
+        "Catedral Notre-Dame exterior (acceso gratuito zona)",
+        "Paseo Sena y Île de la Cité (gratis)",
+        "Montmartre barrio artístico (gratis)",
+        "Versalles día completo (18€ palacio + jardines)"
+      ],
+      "donde_comer": "Crêpes (5-8€), café con croissant (3-5€), bistró tradicional (12-20€ plato). Barrios: Marais, Saint-Michel, Montmartre.",
+      "consejo_local": "Compra el Paris Visite (2-6 días, transporte ilimitado) si planeas muchos museos. Evita restaurantes en Champs-Élysées: 3x más caro.",
+      "plan_b_lluvia": "Museos (Louvre, Orsay, Pompidou), galerías subterráneas, cafés literarios, cines con subtítulos",
+      "keywords": [
+        "París",
+        "Paris",
+        "Eiffel",
+        "Louvre",
+        "Notre Dame",
+        "Marais",
+        "Montmartre",
+        "Versalles",
+        "Rive Gauche"
+      ]
+    },
+    {
+      "id": "lyon",
+      "nombre": "Lyon",
+      "tipo": "ciudad",
+      "region": "Auvergne-Rhône-Alpes",
+      "descripcion": "Segunda ciudad francesa con gastronomía excepcional, confluencia de ríos Rhône y Saône, y centro histórico medieval bien preservado. Punto de partida ideal para Provenza y Alpes. Menos turismo de masas que París.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-junio, septiembre",
+      "como_llegar": "Tren desde París (2h 15min, 30-60€), autobús FlixBus (5h, 10-20€). Aeropuerto local con conexiones europeas.",
+      "donde_dormir": {
+        "mochilero": "Hostal Vieux Lyon, 22-35€/noche",
+        "medio": "Hotel 2-3 estrellas Presqu'île, 60-100€/noche",
+        "comfort": "Hotel 4 estrellas Confluence, 140-200€/noche"
+      },
+      "que_hacer": [
+        "Vieux Lyon paseo medieval (gratis)",
+        "Basílica Notre-Dame de Fourvière teleférico (10€ ida/vuelta)",
+        "Museo Confluences entrada 10€",
+        "Traboules pasajes secretos (gratis)",
+        "Parc de la Tête d'Or lago y zoo (6€ zoo, parque gratis)"
+      ],
+      "donde_comer": "Quenelles, saucisson lyonnais, gratinée. Bouchons tradicionales (15-25€ menú). Zona: Vieux Lyon, Presqu'île.",
+      "consejo_local": "Los bouchones (pequeños restaurantes) cierran lunes-martes. Ve temprano (12h) para asegurar mesa sin reserva. El traboule más largo es el del 27 rue Saint-Jean.",
+      "plan_b_lluvia": "Museos (Confluences, Beaux-Arts), gastronomía en bouchones, teatros, arquitectura de traboules cubiertas",
+      "keywords": [
+        "Lyon",
+        "Rhône",
+        "Vieux Lyon",
+        "Fourvière",
+        "Confluence",
+        "gastronomía francesa"
+      ]
+    },
+    {
+      "id": "provenza",
+      "nombre": "Provenza (Aix-en-Provence/Avignon)",
+      "tipo": "rural",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "descripcion": "Región de campos de lavanda, pueblos históricos y mercados coloridos. Aix-en-Provence ofrece arquitectura barroca; Avignon posee el Palacio de los Papas. Centro cultural con ritmo de vida más lento que París.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio-julio (lavanda), septiembre-octubre",
+      "como_llegar": "Tren desde Lyon a Avignon (1h, 15-35€) o Aix (2h 15min, 35-65€). Tren París-Avignon directo (2h 40min, TGV 50-100€).",
+      "donde_dormir": {
+        "mochilero": "Hostal Avignon/Aix, 20-32€/noche",
+        "medio": "Hotel 2-3 estrellas centro, 55-90€/noche",
+        "comfort": "Mas provenzal (granja-hotel) Luberon, 120-180€/noche"
+      },
+      "que_hacer": [
+        "Palacio de los Papas Avignon (12€)",
+        "Puente de Aviñón Pont d'Avignon (5€)",
+        "Campos de lavanda Valensole en coche/tour (tours 30-50€)",
+        "Pueblos Luberon: Lourmarin, Ménerbes (gratis, paseos)",
+        "Mercado tradicional Aix-en-Provence martes-jueves-sábado (gratis)"
+      ],
+      "donde_comer": "Ratatouille, bouillabaisse (Marsella cercana), melones de Cavaillon. Precio medio 12-18€. Zona: plazas centrales Avignon, Aix.",
+      "consejo_local": "Alquila un coche 2-3 días (30-45€/día) para explorar pueblos del Luberon sin estar atado a transporte público. Julio es pico de turismo y calor: junio mejor.",
+      "plan_b_lluvia": "Museos (Musée Réattu Arles, Fondation Vasarely Aix), compras en Avignon, catas de vino interior, arquitectura medieval cubierta",
+      "keywords": [
+        "Provenza",
+        "Avignon",
+        "Aix-en-Provence",
+        "lavanda",
+        "Luberon",
+        "Pont d'Avignon",
+        "Palais des Papes"
+      ]
+    },
+    {
+      "id": "costa-azul",
+      "nombre": "Costa Azul (Niza, Cannes, Antibes)",
+      "tipo": "playa",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "descripcion": "Litoral mediterráneo con playas, clima templado todo año y pueblos costeros glamorosos. Niza es la base ideal con transporte a toda la costa. Vida de playa con acceso a montaña.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo, septiembre-octubre (verano masificado y caro)",
+      "como_llegar": "Tren desde París (5h 30min, 50-120€ TGV), desde Avignon (3h, 25-60€), desde Lyon (4h 30min, 40-80€). Aeropuerto Niza con vuelos europeos.",
+      "donde_dormir": {
+        "mochilero": "Hostal Niza/Antibes, 25-40€/noche",
+        "medio": "Hotel 2-3 estrellas paseo marítimo Niza, 70-120€/noche",
+        "comfort": "Hotel 4 estrellas Cannes/Antibes, 180-300€/noche"
+      },
+      "que_hacer": [
+        "Playa Niza (gratuita, guijarros)",
+        "Paseo de los Ingleses Niza (gratis)",
+        "Vieux Nice casco antiguo (gratis)",
+        "Antibes muralla medieval y museo Picasso (12€)",
+        "Excursión Île Sainte-Marguerite ferry desde Cannes (15€ ferry)",
+        "Mercado Cours Saleya Niza frutas/flores (gratis mirar)"
+      ],
+      "donde_comer": "Ensalada niçoise, pan con tomate, bouillabaisse, socca. Frappé de gaseosa local. 10-16€ menú medio. Zona: Vieux Nice, puertos Antibes/Cannes.",
+      "consejo_local": "Las playas son de guijarros no arena: lleva chanclas. Niza es más auténtica que Cannes, menos inflada. Tren costero conecta todo (9€ día ilimitado).",
+      "plan_b_lluvia": "Museos (Matisse Niza, Musée de l'Annonciade Saint-Tropez), galerías de arte, castillos medievales interior, tiendas antigüedades",
+      "keywords": [
+        "Costa Azul",
+        "Côte d'Azur",
+        "Niza",
+        "Nice",
+        "Cannes",
+        "Antibes",
+        "Promenade des Anglais",
+        "Vieux Nice"
+      ]
+    },
+    {
+      "id": "mont-saint-michel",
+      "nombre": "Mont-Saint-Michel",
+      "tipo": "histórico",
+      "region": "Normandía",
+      "descripcion": "Abadía medieval en islote rocoso rodeado de bahía de mareas espectaculares. Uno de los monumentos más icónicos de Francia. Experiencia de peregrinaje sin ser religioso.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre (evitar julio-agosto masificación)",
+      "como_llegar": "Tren París a Pontorson (3h 20min, 35-70€), luego autobús 15 min (5€) o a pie 2h. Desde Normandía (Rouen, Caen): 1h 30min tren.",
+      "donde_dormir": {
+        "mochilero": "Hostal en Pontorson/Dol-de-Bretagne, 20-30€/noche",
+        "medio": "Hotel 2-3 estrellas Pontorson/Cancale, 55-85€/noche",
+        "comfort": "Hotel 4 estrellas o posada Mont-Saint-Michel, 150-250€/noche"
+      },
+      "que_hacer": [
+        "Abadía Mont-Saint-Michel entrada 12€ (incluye acceso islote)",
+        "Bahía y mareas (libre, ve con guía de horarios)",
+        "Bahía a caballo tours (40-60€, 1h 30min)",
+        "Pueblo medieval callejuelas (gratis, incluido en entrada abadía)",
+        "Observatorio mareas Mont-Saint-Michel (gratis desde distancia)"
+      ],
+      "donde_comer": "Omeleta de la Mère Poulard (especialidad Mont, 15-20€), mejillones, manzana normanda. Precio alto en Mont, come en Pontorson (8-14€).",
+      "consejo_local": "Entra a la abadía a primera hora (8h) antes de llegada de masas. Las mareas son espectáculo: consulta horarios. Aléjate del Mont al atardecer para evitar turistas.",
+      "plan_b_lluvia": "Museos y tienda de sovenires interior Mont-Saint-Michel, abadía interior techada, pueblos cercanos Dinan/Dinard cubiertos",
+      "keywords": [
+        "Mont-Saint-Michel",
+        "Mont Saint Michel",
+        "abadía",
+        "Normandía",
+        "bahía",
+        "islote",
+        "mareas"
+      ]
+    },
+    {
+      "id": "bretana",
+      "nombre": "Bretaña (Quimper, Vannes, Saint-Malo)",
+      "tipo": "costa",
+      "region": "Bretaña",
+      "descripcion": "Región costera con pueblos amurallados, costa rocosa dramática y cultura celta fuerte. Gastronomía única (crepes, sidra) y menos turismo que Normandía. Ideal para senderismo costero.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo-junio, septiembre",
+      "como_llegar": "Tren París a Quimper (4h 15min, 40-85€) o Vannes (3h, 45-80€). Desde Mont-Saint-Michel: 2h 30min Dinan-Quimper.",
+      "donde_dormir": {
+        "mochilero": "Hostal Quimper/Vannes, 20-30€/noche",
+        "medio": "Hotel 2-3 estrellas centro histórico, 50-85€/noche",
+        "comfort": "Hotel 4 estrellas o casa de piedra rural, 120-180€/noche"
+      },
+      "que_hacer": [
+        "Saint-Malo murallas medieval (gratis acceso)",
+        "Quimper catedral y casco antiguo (gratis)",
+        "Vannes paseo ribera y puerto (gratis)",
+        "Senderismo GR34 costa rocosa (gratis)",
+        "Isla Île de Bréhat ferry desde Paimpol (10€ ferry + senderismo gratis)",
+        "Mercado tradicional sábado Quimper (gratis mirar)"
+      ],
+      "donde_comer": "Crepes saladas/dulces (6-10€), sidra local, mejillones bretones, queso Camembert. Zona: plazas históricas Quimper/Vannes.",
+      "consejo_local": "Alquila bicicleta (15€/día) para explorar costa sin coche. Las creperías auténticas no tienen menú: siguen receta propia. Sidra bretona vale cada céntimo.",
+      "plan_b_lluvia": "Museos (Musée de Bretagne Rennes), galerías de arte, creperías cubiertas, tiendas artesanía textil",
+      "keywords": [
+        "Bretaña",
+        "Brittany",
+        "Saint-Malo",
+        "Quimper",
+        "Vannes",
+        "crepes",
+        "sidra",
+        "costa rocosa"
+      ]
+    },
+    {
+      "id": "valle-loira",
+      "nombre": "Valle del Loira (Amboise, Blois, Chambord)",
+      "tipo": "histórico",
+      "region": "Centro",
+      "descripcion": "Región de castillos renacentistas junto al río Loira. Patrimonio histórico denso (Chambord, Villandry, Fontainebleau). Ideal para viaje cultural con ritmo tranquilo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre",
+      "como_llegar": "Tren París a Amboise (1h 40min, 20-45€), Blois (1h 30min, 20-45€). Desde París es excursión de 1-2 días o base 2-3 noches.",
+      "donde_dormir": {
+        "mochilero": "Hostal Amboise/Blois, 20-30€/noche",
+        "medio": "Hotel 2-3 estrellas centro, 55-85€/noche",
+        "comfort": "Château-hotel rural Loire, 140-220€/noche"
+      },
+      "que_hacer": [
+        "Castillo Chambord entrada 16€ (parques gratis alrededor)",
+        "Castillo Villandry entrada 14€ + jardines 9€",
+        "Castillo Amboise entrada 13€",
+        "Castillo Blois entrada 12€",
+        "Bicicleta junto al Loira ruta de 50km (gratis, alquileres 15-25€/día)",
+        "Castillo Fontainebleau desde París (1h tren, entrada 16€)"
+      ],
+      "donde_comer": "Rillettes (paté), quesos Loire, vinos locales. Menú turístico 12-18€. Zona: centros Amboise, Blois, pueblos castillos.",
+      "consejo_local": "Compra pase de múltiples castillos (Chambord+Villandry+Blois 42€) si visitas 3+. La ruta en bici es mejor que castillo por castillo: ve 2-3 y explora paisaje.",
+      "plan_b_lluvia": "Interiores castillos (museos, galerías), tiendas de antigüedades Amboise, vinerías con cata, documentales en alojamientos",
+      "keywords": [
+        "Valle del Loira",
+        "Loire Valley",
+        "Chambord",
+        "Amboise",
+        "Blois",
+        "Villandry",
+        "castillos renacentistas"
+      ]
+    },
+    {
+      "id": "alsacia",
+      "nombre": "Alsacia (Estrasburgo, Colmar, Ribeauvillé)",
+      "tipo": "rural",
+      "region": "Grand Est",
+      "descripcion": "Región fronteriza con Alemania con pueblos de cuento (Colmar, Ribeauvillé), viñedos escénicos y Navidad espectacular en Estrasburgo. Arquitectura de entramado de madera única.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-junio, septiembre, diciembre (Navidad Estrasburgo)",
+      "como_llegar": "Tren París a Estrasburgo (2h 15min TGV, 45-90€), desde Lyon (3h, 35-70€). Autobús FlixBus más barato pero lento (8-12€).",
+      "donde_dormir": {
+        "mochilero": "Hostal Estrasburgo/Colmar, 22-35€/noche",
+        "medio": "Hotel 2-3 estrellas centro histórico, 60-100€/noche",
+        "comfort": "Hotel 4 estrellas o viña-posada Alsacia, 130-200€/noche"
+      },
+      "que_hacer": [
+        "Estrasburgo casco antiguo y Catedral (gratis paseo, entrada catedral 7€)",
+        "Colmar Pequeña Venecia (gratis paseo)",
+        "Ruta del Vino Alsacia cicloturismo (gratis, alquileres 15-20€/día)",
+        "Pueblos viticultores Ribeauvillé, Riquewihr (gratis)",
+        "Museo Unterlinden Colmar (10€)",
+        "Cata de vino en bodega (10-20€ por cata)"
+      ],
+      "donde_comer": "Flammekuchen/Tarte alsaciana (8-12€), foie gras, vino blanco local, cerveza artesana. Precio bueno: 12-18€ menú.",
+      "consejo_local": "Visita Colmar y pueblos en lunes-martes: los domingos turistas alemanes llenan todo. La Ruta del Vino es mejor en bici que a pie (50km total).",
+      "plan_b_lluvia": "Museos (Musée Unterlinden, Musée de l'Œuvre Notre-Dame Estrasburgo), galerías arte, tiendas antigüedades, catas de vino interior",
+      "keywords": [
+        "Alsacia",
+        "Alsace",
+        "Estrasburgo",
+        "Colmar",
+        "Pequeña Venecia",
+        "Ruta del Vino",
+        "Riquewihr",
+        "entramado madera"
+      ]
+    },
+    {
+      "id": "chamonix-alpes",
+      "nombre": "Chamonix-Mont-Blanc",
+      "tipo": "montaña",
+      "region": "Auvergne-Rhône-Alpes",
+      "descripcion": "Capital del alpinismo con vistas al Mont-Blanc y glaciares espectaculares. Punto de partida para senderismo, escalada y esquí. Experiencia de montaña auténtica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre (verano), diciembre-marzo (esquí)",
+      "como_llegar": "Tren desde París a Lyon (2h 15min) + tren local Sallanches-Chamonix (1h 30min). Total: 5-6h, 80-120€. Desde Ginebra (1h coche/transporte, 15€ bus).",
+      "donde_dormir": {
+        "mochilero": "Albergue/hostal Chamonix, 30-45€/noche",
+        "medio": "Hotel 2-3 estrellas centro, 70-120€/noche",
+        "comfort": "Hotel 4 estrellas con vistas Mont-Blanc, 180-280€/noche"
+      },
+      "que_hacer": [
+        "Teleférico Aiguille du Midi (40€ ida/vuelta, vistas glaciares)",
+        "Senderismo Mer de Glace (gratis, acceso glaciar 10€)",
+        "Caminata Tour du Mont-Blanc (3-4 días, gratis sendero)",
+        "Paseo Vallée Blanche (guía obligatorio, 150-200€)",
+        "Escalada principiantes (guía 100-150€/día)",
+        "Paseo centro pueblo y mercado (gratis)"
+      ],
+      "donde_comer": "Fondue de queso saboyano, raclette, tartiflette, crepes. Menú típico 14-22€. Zona: centro Chamonix.",
+      "consejo_local": "El teleférico se llena en mediodía: sube a primera hora (7-8h). El senderismo es gratis pero requiere aclimatación: no subestimes altitud. Alquileres de montaña 25-50€/día.",
+      "plan_b_lluvia": "Museo de Chamonix, spas termales cercanos (Sallanches), tiendas alpinismo, cines locales, café-lecturas en hoteles",
+      "keywords": [
+        "Chamonix",
+        "Mont-Blanc",
+        "Alpes",
+        "glaciar",
+        "Mer de Glace",
+        "escalada",
+        "teleférico Aiguille du Midi"
+      ]
+    },
+    {
+      "id": "burdeos",
+      "nombre": "Burdeos",
+      "tipo": "ciudad",
+      "region": "Nueva Aquitania",
+      "descripcion": "Puerto histórico con arquitectura del siglo XVIII, vinos de clase mundial y espíritu joven. Mezcla de elegancia clásica y vida moderna. Puerta a La Rochelle y Costa Atlántica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "Tren desde París (2h 15min TGV, 35-80€), desde Niza (8h + conexiones, 80-150€). Autobús FlixBus desde París (5h, 10-20€).",
+      "donde_dormir": {
+        "mochilero": "Hostal centro/Gambetta, 24-35€/noche",
+        "medio": "Hotel 2-3 estrellas Vieux Burdeos, 60-100€/noche",
+        "comfort": "Hotel 4 estrellas paseo Garona, 140-220€/noche"
+      },
+      "que_hacer": [
+        "Paseo Garona y espejo de agua (gratis)",
+        "Vieux Burdeos (gratis paseo)",
+        "Catedral Saint-André (gratis exterior, 7€ interior)",
+        "Cité du Vin museo vino (20€, experiencias con vino incluidas)",
+        "Musée d'Aquitaine (5€)",
+        "Cata de vino bodegas (15-30€ según bodega)"
+      ],
+      "donde_comer": "Canelés (pasteles típicos, 3-4€), huevos a la moda, entrecot Burdeos. Menú 12-18€. Zona: muelles Garona, Vieux Burdeos.",
+      "consejo_local": "Las bodegas del Médoc están fuera ciudad: necesitas coche o tour (45-60€). El vino local es excelente y barato: compra en tienda (8-15€ buen vino).",
+      "plan_b_lluvia": "Cité du Vin (museo completo), galerías de arte, tiendas gastronomía, cines, bodegas subterráneas visita interior",
+      "keywords": [
+        "Burdeos",
+        "Bordeaux",
+        "vino",
+        "Garona",
+        "Médoc",
+        "Vieux Burdeos",
+        "Cité du Vin",
+        "canelés"
+      ]
+    }
+  ]
+}

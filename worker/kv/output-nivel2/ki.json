@@ -1,0 +1,318 @@
+{
+  "pais": "Kiribati",
+  "codigo": "ki",
+  "destinos": [
+    {
+      "id": "tarawa",
+      "nombre": "Tarawa",
+      "tipo": "isla",
+      "region": "Archipiélago de Gilbert",
+      "descripcion": "Capital y principal hub de Kiribati, ubicada en un atolón con playas de arena blanca y aguas turquesas. Punto de entrada obligatorio para casi todos los viajeros, con infraestructura básica y acceso a excursiones marinas. Centro cultural y administrativo donde se concentra la mayoría de servicios turísticos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Vuelo internacional a Bonriki International Airport desde Fiji (2h, 400-600 EUR) o desde Kiribati (si ya estás en el país, ferry local 50 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse básica o albergue: 25-40 EUR/noche",
+        "medio": "Hotel de 2-3 estrellas tipo Otintaai Hotel: 60-100 EUR/noche",
+        "comfort": "Kiribati Hotel o similar: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en las aguas de Tarawa (gratis desde playas, 30-50 EUR con guía)",
+        "Visita a Betio (restos de la II Guerra Mundial, 15 EUR con guía)",
+        "Paseo por South Tarawa y mercado local (gratis)",
+        "Pesca deportiva o tours en bote (80-150 EUR)"
+      ],
+      "donde_comer": "Pescado fresco, taro y coco son base de la cocina local. Restaurantes en Betio y Bairiki: 8-20 EUR. Prueba el te (comida tradicional envuelta en hojas de coco).",
+      "consejo_local": "Llega pronto a Tarawa porque los vuelos internacionales suelen retrasarse; usa ese tiempo para aclimatarte. El mercado local (Betio Market) es más auténtico que cualquier tienda turística.",
+      "plan_b_lluvia": "Visita museos locales, explora el mercado cubierto o quédate en la habitación descansando (el calor y humedad son intensos).",
+      "keywords": [
+        "Tarawa",
+        "South Tarawa",
+        "Betio",
+        "capital Kiribati",
+        "Bonriki",
+        "Gilbert Islands"
+      ]
+    },
+    {
+      "id": "christmas-island-kiribati",
+      "nombre": "Kiritimati (Christmas Island)",
+      "tipo": "isla",
+      "region": "Archipiélago de Line",
+      "descripcion": "La isla más grande de Kiribati, famosa por su laguna interior de agua dulce y pesca de peces gato. Destino para viajeros que buscan algo más remoto que Tarawa, con oportunidad de ver vida silvestre y practicar pesca. Menos desarrollada pero con encanto salvaje.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "marzo a octubre",
+      "como_llegar": "Vuelo desde Tarawa a Cassidy International Airport (2.5h, 300-450 EUR) o vuelo desde Hawái (5h, 600-900 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse local tipo Kiritimati Guesthouse: 30-50 EUR/noche",
+        "medio": "Lagoon Resort o cabaña privada: 70-120 EUR/noche",
+        "comfort": "Pacific Treelodge o lodge boutique: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Pesca de peces gato en la laguna (60-100 EUR con guía)",
+        "Snorkel en arrecifes vírgenes (gratis desde playas)",
+        "Observación de aves migratorias (gratis, mejor con guía local 40 EUR)",
+        "Paseo en bote por la laguna interior (50 EUR)"
+      ],
+      "donde_comer": "Pescado fresco todos los días. Guesthouses sirven comida local. Presupuesto: 10-25 EUR por comida. Las verduras son limitadas; trae snacks si tienes restricciones dietéticas.",
+      "consejo_local": "Lleva efectivo en AUD (dólares australianos) porque los cajeros son raros. La pesca es seria aquí: si no te interesa, el destino pierde encanto.",
+      "plan_b_lluvia": "Lee un libro bajo techo, nada en la laguna (es segura aunque llueva) o negocia una excursión corta con un local.",
+      "keywords": [
+        "Kiritimati",
+        "Christmas Island",
+        "Line Islands",
+        "laguna interior",
+        "pesca peces gato"
+      ]
+    },
+    {
+      "id": "butaritari",
+      "nombre": "Butaritari",
+      "tipo": "isla",
+      "region": "Archipiélago de Gilbert",
+      "descripcion": "Atolón virgen en el norte de Gilbert con playas intactas, vida marina exuberante y mínima infraestructura turística. Ideal para quienes buscan autenticidad y naturaleza pura sin masificación. Requiere planificación previa pero ofrece experiencias únicas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Vuelo desde Tarawa a Butaritari (1.5h, 200-300 EUR) o ferry local irregular (consultar en Tarawa)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse local o family stay: 25-35 EUR/noche",
+        "medio": "Butaritari Lodge o cabaña mejorada: 60-90 EUR/noche",
+        "comfort": "Eco-lodge tipo Abemama: 120-180 EUR/noche (requiere reserva previa)"
+      },
+      "que_hacer": [
+        "Snorkel en arrecifes sin tocar (gratis desde playa)",
+        "Pesca en bote (40-80 EUR)",
+        "Caminar por playas desiertas (gratis)",
+        "Visita a poblados locales y vida cotidiana (gratis con respeto)"
+      ],
+      "donde_comer": "Comida cocinada por guesthouses o poblacionales. Taro, pescado, coco. 8-15 EUR por comida. Trae provisiones de Tarawa si tienes necesidades especiales.",
+      "consejo_local": "No hay tienda, no hay wifi fiable, no hay hospital. Esto no es turismo de lujo sino aventura genuina. Avisa a alguien en Tarawa dónde vas.",
+      "plan_b_lluvia": "En Butaritari llueve pero es corto. Aprovecha para dormir o conversar con locals en casa.",
+      "keywords": [
+        "Butaritari",
+        "Gilbert Islands",
+        "atolon virgen",
+        "playa intacta",
+        "vida local autentica"
+      ]
+    },
+    {
+      "id": "abemama",
+      "nombre": "Abemama",
+      "tipo": "isla",
+      "region": "Archipiélago de Gilbert",
+      "descripcion": "Atolón histórico donde Robert Louis Stevenson pasó tiempo, famoso por sus playas rosadas (arena con pigmento coralino) y arrecifes espectaculares. Destino niche para viajeros literarios o que buscan historia colonial con naturaleza de clase mundial.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "marzo a octubre",
+      "como_llegar": "Vuelo desde Tarawa a Abemama (1h, 180-250 EUR) o ferry irregular (consultar en puerto de Tarawa)",
+      "donde_dormir": {
+        "mochilero": "Family guesthouse: 30-45 EUR/noche",
+        "medio": "Abemama Guesthouse o cabaña: 70-110 EUR/noche",
+        "comfort": "Resort boutique si está disponible: 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecifes de coral intactos (gratis)",
+        "Caminata por playas rosadas (gratis)",
+        "Visita a sitios relacionados con Stevenson (gratis)",
+        "Pesca tradicional con locals (60 EUR)"
+      ],
+      "donde_comer": "Pescado fresco y coco. Guesthouses cocinan. 10-18 EUR por comida. La comida es sencilla pero auténtica.",
+      "consejo_local": "Las playas rosadas son reales pero el color es sutil, no rosa chicle. Mejor verlas en luz de tarde. Lleva protector solar SPF 50+.",
+      "plan_b_lluvia": "Descansa en bungalow (la brisa tropical sigue siendo agradable) o explora pueblos locales bajo techo.",
+      "keywords": [
+        "Abemama",
+        "playas rosadas",
+        "Robert Louis Stevenson",
+        "Gilbert Islands",
+        "arrecife coral"
+      ]
+    },
+    {
+      "id": "makin",
+      "nombre": "Makin",
+      "tipo": "isla",
+      "region": "Archipiélago de Gilbert Norte",
+      "descripcion": "Atolón remoto en el extremo norte con historia de batalla en la II Guerra Mundial y playas vírgenes. Muy pocas visitas, infraestructura mínima, ideal para aventureros que aceptan cierta incomodidad a cambio de soledad total.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Vuelo desde Tarawa (2h, 250-350 EUR) frecuencia irregular, mejor consultar con Air Kiribati",
+      "donde_dormir": {
+        "mochilero": "Family stay o guesthouse muy básica: 20-30 EUR/noche",
+        "medio": "Cabaña privada si hay disponible: 50-80 EUR/noche",
+        "comfort": "No hay opciones de comfort reales; es camping o hospedaje local"
+      },
+      "que_hacer": [
+        "Exploración de restos de guerra (gratis)",
+        "Snorkel en aguas claras (gratis)",
+        "Caminata por playas desiertas (gratis)",
+        "Fotografía de vida marina y fauna local (gratis)"
+      ],
+      "donde_comer": "Muy básico: pescado, taro, coco. Prepara comidas en guesthouse o come con locales. 8-12 EUR. Trae snacks de Tarawa.",
+      "consejo_local": "Makin es para aventureros de verdad, no para turistas. No esperes confort ni servicios. Pero verás Kiribati auténtico.",
+      "plan_b_lluvia": "Refugio total en guesthouse. Las lluvias pueden ser intensas; asegúrate que el techumbre es firme.",
+      "keywords": [
+        "Makin",
+        "II Guerra Mundial",
+        "Gilbert Islands norte",
+        "remoto",
+        "playas desiertas"
+      ]
+    },
+    {
+      "id": "betio-extenso",
+      "nombre": "Betio (Excursión desde Tarawa)",
+      "tipo": "histórico",
+      "region": "Tarawa",
+      "descripcion": "Pequeña isla occidental de Tarawa con ruinas y memoriales de la batalla de Tarawa (1943). Sitio histórico de primer orden para interesados en II Guerra Mundial, con bunkers, cañones y museo local. A solo 30 minutos en ferry desde Tarawa.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Ferry desde South Tarawa a Betio (30 min, 2-5 EUR) o bote privado (40-60 EUR)",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento; regresa a Tarawa",
+        "medio": "No hay alojamiento; regresa a Tarawa",
+        "comfort": "No hay alojamiento; regresa a Tarawa"
+      },
+      "que_hacer": [
+        "Tour guiado de bunkers y fortines (30-50 EUR con guía)",
+        "Visita a museo local (5 EUR entrada)",
+        "Fotografía de ruinas y vistas históricas (gratis)",
+        "Snorkel cercano a restos de barcos hundidos (gratis o con tour 60 EUR)"
+      ],
+      "donde_comer": "Tiendas y vendedoras de comida callejera en Betio town. Pescado y arroz. 5-10 EUR. O come antes/después en Tarawa.",
+      "consejo_local": "Contrata un guía local (preguntar en Tarawa): cuentan historias que no encontrarás en placas. Los bunkers son estables pero oscuros; lleva linterna.",
+      "plan_b_lluvia": "La mayoría de atracciones son exteriores. Si llueve fuerte, pospón o limítate a visita rápida al museo.",
+      "keywords": [
+        "Betio",
+        "Batalla Tarawa",
+        "WWII",
+        "bunkers",
+        "memoriales",
+        "restos barcos hundidos"
+      ]
+    },
+    {
+      "id": "abaiang",
+      "nombre": "Abaiang",
+      "tipo": "isla",
+      "region": "Archipiélago de Gilbert",
+      "descripcion": "Atolón grande con pueblos tradicionales intactos, playas largas y arrecife de barrera perfectamente formado. Menos visitado que Tarawa pero más accesible que islotes remotos, ofrece balance entre autenticidad y practicidad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo a octubre",
+      "como_llegar": "Ferry desde Tarawa a Abaiang (2-3h, 10-15 EUR) o vuelo privado (consultar con Air Kiribati)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse local: 25-40 EUR/noche",
+        "medio": "Cabaña mejorada tipo Abaiang Lodge: 60-90 EUR/noche",
+        "comfort": "Eco-lodge privado (requiere reserva): 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife de barrera (gratis)",
+        "Paseo a pueblos costeros (gratis)",
+        "Caminata por playa norte (gratis)",
+        "Observación de atardecer desde playa (gratis)"
+      ],
+      "donde_comer": "Comida cocinada en guesthouses. Pescado diario, taro, verduras limitadas. 10-16 EUR por comida. Come con la familia de tu guesthouse para experiencia auténtica.",
+      "consejo_local": "El ferry es irregular; compra pasaje en Tarawa un día antes. Lleva efectivo porque Abaiang no tiene cajero. Las mañanas son calmas; perfecto para snorkel.",
+      "plan_b_lluvia": "Busca refugio bajo techos locales, conversa con gente, come comida casera.",
+      "keywords": [
+        "Abaiang",
+        "atolon grande",
+        "pueblos tradicionales",
+        "arrecife barrera",
+        "playa larga"
+      ]
+    },
+    {
+      "id": "kiritimati-phoenix",
+      "nombre": "Islas Phoenix (excursión remota)",
+      "tipo": "naturaleza",
+      "region": "Archipiélago de Phoenix",
+      "descripcion": "Grupo de atolones casi deshabitados protegidos como área marina. Únicamente accesible mediante crucero privado o expedición especializada. Para viajeros con presupuesto alto y obsesionados con lugares intactos sin tocar.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Crucero desde Kiritimati o Tarawa (7-10 días, 3000-5000 EUR por persona) o expedición privada de lujo",
+      "donde_dormir": {
+        "mochilero": "No hay opción presupuesto; no accesible a mochileros",
+        "medio": "Crucero confortable de clase media (raro): 2500-4000 EUR",
+        "comfort": "Crucero de lujo: 5000-10000 EUR"
+      },
+      "que_hacer": [
+        "Snorkel en aguas vírgenes sin competencia (incluido en crucero)",
+        "Observación de fauna marina y aves (incluido)",
+        "Fotografía submarina (equipo privado o alquiler: 100-200 EUR/día)",
+        "Exploración de atolones deshabitados (incluido)"
+      ],
+      "donde_comer": "Comidas incluidas en crucero. Cocina variada, piscina, bar a bordo.",
+      "consejo_local": "Phoenix Islands es inversión seria. Planifica con 6 meses de anticipación. El operador más conocido es Coral Expeditions o similar desde Fiji.",
+      "plan_b_lluvia": "En el mar, las tormentas son reales. El crucero se posiciona según el clima.",
+      "keywords": [
+        "Phoenix Islands",
+        "area marina protegida",
+        "atolones deshabitados",
+        "crucero expedicion",
+        "submarinismo"
+      ]
+    },
+    {
+      "id": "merkara",
+      "nombre": "Merkara",
+      "tipo": "isla",
+      "region": "Islas Phoenix",
+      "descripcion": "Atolón aislado del grupo Phoenix con restos de infraestructura colonial británica abandonada. Acceso muy limitado, requiere permiso especial. Para historiadores y arqueólogos aficionados dispuestos a acampar en la nada.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Solo via crucero privado desde Kiribati (contactar operadores en Tarawa) o expedición especializada",
+      "donde_dormir": {
+        "mochilero": "Camping bajo carpas (incluido en expedición): 0 EUR (pagado en paquete)",
+        "medio": "Cabaña temporal si la expedición la organiza: incluido en paquete",
+        "comfort": "Solo crucero de lujo: 5000-8000 EUR la expedición completa"
+      },
+      "que_hacer": [
+        "Exploración de ruinas coloniales (gratis en situ)",
+        "Fotografía de historia abandonada (gratis)",
+        "Snorkel en laguna intacta (gratis)",
+        "Investigación arqueológica casual (gratis)"
+      ],
+      "donde_comer": "Comidas acarreadas por expedición o campismo básico.",
+      "consejo_local": "Merkara no es turismo; es aventura arqueológica. Necesitas permiso del gobierno de Kiribati (coordina en Tarawa). Lleva agua, comida, tienda de campaña, linterna.",
+      "plan_b_lluvia": "Tienda resistente es obligatoria. Sin ella, no vayas.",
+      "keywords": [
+        "Merkara",
+        "ruinas coloniales",
+        "islas Phoenix",
+        "arqueologia",
+        "atolon abandonado"
+      ]
+    },
+    {
+      "id": "nonouti",
+      "nombre": "Nonouti",
+      "tipo": "isla",
+      "region": "Archipiélago de Gilbert",
+      "descripcion": "Atolón central con playas amplias, arrecifes protegidos y comunidad local acogedora. Menos remoto que el norte pero menos turístico que Tarawa. Punto medio ideal para quienes quieren escapar pero con acceso a servicios básicos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Ferry desde Tarawa (4-5h, 15-20 EUR) o vuelo privado (consultar aerolíneas locales)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse local: 25-35 EUR/noche",
+        "medio": "Cabaña privada o lodge: 60-95 EUR/noche",
+        "comfort": "Resort pequeño si hay: 120-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en laguna protegida (gratis)",
+        "Paseo por pueblos locales (gratis)",
+        "Pesca con inhabitants (50 EUR con guía)",
+        "Observación de puesta de sol en playa amplia (gratis)"
+      ],
+      "donde_comer": "Comida local preparada en guesthouses. Pescado fresco, taro. 10-15 EUR. Los locales son acogedores; come con ellos si te invitan.",
+      "consejo_local": "El ferry es más lento pero más barato que vuelo. Nonouti es menos concurrida que Tarawa pero ofrece lo esencial. Ideal si tienes 2-3 días.",
+      "plan_b_lluvia": "Refugio en guesthouse, interactúa con locals, descansa.",
+      "keywords": [
+        "Nonouti",
+        "atolon central",
+        "Gilbert Islands",
+        "playa amplia",
+        "comunidad acogedora"
+      ]
+    }
+  ]
+}

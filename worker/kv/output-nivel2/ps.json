@@ -1,0 +1,392 @@
+{
+  "pais": "Palestina",
+  "codigo": "ps",
+  "alerta_seguridad": "Situación política compleja. Consulta avisos de tu gobierno antes de viajar. El acceso y movimiento entre zonas está restringido.",
+  "destinos": [
+    {
+      "id": "belen",
+      "nombre": "Belén",
+      "tipo": "histórico",
+      "region": "Cisjordania",
+      "descripcion": "Cuna del cristianismo y hogar de la Iglesia de la Natividad, uno de los sitios más antiguos del mundo cristiano. La ciudad combina sitios religiosos de importancia global con mercados vibrantes y arquitectura palestina tradicional. Es el corazón espiritual para millones de peregrinos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre-noviembre, marzo-abril",
+      "como_llegar": "Desde Jerusalén en taxi compartido (sherut) o autobús EGGED 231: 1.5 horas, 3-5 EUR. Desde Ramala: autobús directo 1 hora, 2 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales y casas de huéspedes: 15-25 EUR/noche",
+        "medio": "Pequeños hoteles 2-3 estrellas: 35-60 EUR/noche",
+        "comfort": "Hoteles 4 estrellas o resorts: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Iglesia de la Natividad - interior gratuito con donativo sugerido (5 EUR)",
+        "Mercado de Belén (free)",
+        "Iglesia de Santa Catalina (3 EUR)",
+        "Campo de los Pastores (2 EUR)",
+        "Callejear por la Medina (free)",
+        "Gruta de la Leche (2 EUR)"
+      ],
+      "donde_comer": "Hummus, maqluba y falafel en el mercado viejo: 3-6 EUR. Restaurantes en Manger Street: 8-15 EUR. Prueba el café palestino tradicional (1 EUR).",
+      "consejo_local": "Llega a la Iglesia de la Natividad muy temprano (antes de las 8h) para evitar multitudes de tour groups. Las mejores vistas de la ciudad se ven desde el tejado de la iglesia griega ortodoxa.",
+      "plan_b_lluvia": "Explora las cuevas de la zona, visita tiendas de artesanía local, entra en la Iglesia de Santa Catalina (interior)",
+      "keywords": [
+        "Belen",
+        "Bethlehem",
+        "Iglesia Natividad",
+        "Church of Nativity",
+        "Manger Street",
+        "Medina",
+        "Palestina"
+      ]
+    },
+    {
+      "id": "jerusalen-este",
+      "nombre": "Jerusalén Este (Palestina)",
+      "tipo": "histórico",
+      "region": "Territorio disputado",
+      "descripcion": "La Ciudad Vieja palestina con la Explanada de las Mezquitas, la Mezquita de Al-Aqsa y el Domo de la Roca. Centro de importancia religiosa islámica y judía, con callejuelas medievales, bazares y arquitectura osmana. Acceso complicado pero imprescindible para comprender la región.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre-noviembre, marzo-abril",
+      "como_llegar": "Desde Ramala: autobús 218 o 219 (45 min, 2 EUR). A pie desde Jerusalén Oeste es posible pero requiere pasar checkpoints.",
+      "donde_dormir": {
+        "mochilero": "Hostales en la Medina: 12-20 EUR/noche",
+        "medio": "Hoteles pequeños zona palestina: 30-50 EUR/noche",
+        "comfort": "Hoteles 3-4 estrellas: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Explanada de las Mezquitas - vista exterior gratuita, interior con restricciones",
+        "Domo de la Roca (10 EUR, acceso limitado a musulmanes)",
+        "Mezquita de Al-Aqsa (3 EUR)",
+        "Viacrucis - Vía Dolorosa (free)",
+        "Bazar palestino (free)",
+        "Museo de la Ciudad Vieja (2 EUR)"
+      ],
+      "donde_comer": "Humus y falafel en puestos callejeros: 2-4 EUR. Restaurantes tradicionales palestinos: 6-12 EUR. Mansaf (plato nacional): 8-10 EUR.",
+      "consejo_local": "Los viernes el acceso a la Explanada es muy restringido. Ve entre semana, temprano. Respeta el código de vestimenta (hombros y rodillas cubiertas). Los horarios de apertura cambian según festividades islámicas.",
+      "plan_b_lluvia": "Explora las tiendas y bazares cubiertos de la Medina, visita museos pequeños, come en restaurantes tradicionales",
+      "keywords": [
+        "Jerusalem Este",
+        "East Jerusalem",
+        "Al-Quds",
+        "Ciudad Vieja",
+        "Old City",
+        "Medina",
+        "Explanada Mezquitas",
+        "Temple Mount"
+      ]
+    },
+    {
+      "id": "ramala",
+      "nombre": "Ramala",
+      "tipo": "ciudad",
+      "region": "Cisjordania central",
+      "descripcion": "Capital de facto palestina y principal centro urbano moderno, con vida nocturna, galerías de arte, cafés y comercio. Punto de entrada y base logística para explorar Cisjordania. Centro administrativo y cultural de Palestina.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre-octubre, abril-mayo",
+      "como_llegar": "Desde Jerusalén: autobús 218 o servicio compartido: 45 min, 3-5 EUR. Desde el aeropuerto Ben Gurion (Israel): autobús directo 1.5 horas, 8 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales en zona centro: 18-28 EUR/noche",
+        "medio": "Hoteles 2-3 estrellas: 40-70 EUR/noche",
+        "comfort": "Hoteles 4 estrellas: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Al-Manara Square - plaza central (free)",
+        "Galería de Arte Palestino (2-3 EUR entrada)",
+        "Yasser Arafat Memorial (5 EUR)",
+        "Mercado tradicional de Al-Balad (free)",
+        "Cafés y vida nocturna en el centro (5-10 EUR bebida)",
+        "Tiendas de artesanía palestina (libre, compra opcional)"
+      ],
+      "donde_comer": "Shawarma y falafel: 3-5 EUR. Restaurantes palestinos e internacionales: 8-15 EUR. Café tradicional: 1-2 EUR. Zona recomendada: alrededor de Al-Manara.",
+      "consejo_local": "Ramala es la base práctica para explorar Cisjordania. Ten en cuenta que muchas atracciones cierran viernes-sábado. Los viernes por la noche hay vida nocturna activa en los bares locales.",
+      "plan_b_lluvia": "Compras en el centro comercial local, cafés y galerías de arte, restaurantes",
+      "keywords": [
+        "Ramallah",
+        "Ramala",
+        "Al-Manara",
+        "Cisjordania",
+        "West Bank",
+        "capital palestina"
+      ]
+    },
+    {
+      "id": "jerico",
+      "nombre": "Jericó",
+      "tipo": "histórico",
+      "region": "Cisjordania oriental",
+      "descripcion": "Una de las ciudades más antiguas del mundo y punto más bajo de la tierra. Combina arqueología bíblica con naturaleza desértica: ruinas de Jericó Antigua, Montaña de la Tentación y acceso al Río Jordán. Clima tropical subtropical único en la región.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre-noviembre, febrero-marzo",
+      "como_llegar": "Desde Ramala: autobús directo 1 hora, 2-3 EUR. Desde Jerusalén: autobús 231 a Belén y luego conexión, 1.5 horas.",
+      "donde_dormir": {
+        "mochilero": "Hostales y casas de huéspedes: 12-18 EUR/noche",
+        "medio": "Hoteles 2-3 estrellas: 30-50 EUR/noche",
+        "comfort": "Resorts y hoteles 4 estrellas: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Tell es-Sultan (Jericó Antigua): 3 EUR",
+        "Montaña de la Tentación - teleférico: 3 EUR ida/vuelta",
+        "Río Jordán - sitio bautismal: free",
+        "Monasterio de la Tentación (1 EUR)",
+        "Parque arqueológico: 2 EUR",
+        "Palmeral de Jericó - paseo (free)"
+      ],
+      "donde_comer": "Comida palestina tradicional muy económica: 3-5 EUR. Restaurantes con vistas al Valle del Jordán: 8-12 EUR. Dátiles locales y frutas tropicales en mercado: 1-3 EUR.",
+      "consejo_local": "Jericó es muy calurosa en verano (hasta 45°C). Ve en meses frescos. El teleférico a la Montaña de la Tentación ofrece vistas espectaculares del Río Jordán e Israel.",
+      "plan_b_lluvia": "Rara en Jericó. Si llueve, visita museos pequeños o el interior del sitio arqueológico",
+      "keywords": [
+        "Jerico",
+        "Jericho",
+        "Tell Sultan",
+        "Montaña Tentacion",
+        "Rio Jordan",
+        "arqueologia",
+        "mas bajo tierra"
+      ]
+    },
+    {
+      "id": "hebrón",
+      "nombre": "Hebrón",
+      "tipo": "histórico",
+      "region": "Cisjordania meridional",
+      "descripcion": "Segunda ciudad más sagrada del islam y sitio de gran importancia religiosa judía. Centro histórico con mezquita de Abraham, mercado medieval y arquitectura tradicional palestina. Situación política compleja pero fascinante para entender el conflicto.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre-noviembre, abril-mayo",
+      "como_llegar": "Desde Belén: autobús directo 45 min, 2 EUR. Desde Ramala: autobús con conexión 1.5-2 horas, 3-4 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales y casas de huéspedes: 10-16 EUR/noche",
+        "medio": "Hoteles pequeños: 25-45 EUR/noche",
+        "comfort": "Hoteles 3 estrellas: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Mezquita de Abraham/Santuario de Ibrahimi: 2 EUR",
+        "Mercado viejo (Shuhada Street): free",
+        "Museo de Hebrón: 2 EUR",
+        "Barrio antiguo y callejuelas: free",
+        "Viñedos locales - excursión: 5-10 EUR",
+        "Talleres de vidrio soplado tradicional: free ver, comprar 5-20 EUR"
+      ],
+      "donde_comer": "Comida palestina muy barata: 2-4 EUR. Restaurantes con especialidades locales: 5-10 EUR. Uvas locales de calidad mundial, dátiles y pan fresco.",
+      "consejo_local": "Hebrón tiene una atmósfera tensa debido a la presencia militar. Los guías locales ayudan mucho a comprender la historia. Visita temprano por la mañana. La ropa tradicional palestina es común aquí.",
+      "plan_b_lluvia": "Explora mercados cubiertos, talleres de vidrio bajo techo, museos",
+      "keywords": [
+        "Hebron",
+        "Hebrón",
+        "Al-Khalil",
+        "Abraham",
+        "mercado",
+        "Cisjordania",
+        "sagrada"
+      ]
+    },
+    {
+      "id": "belén-alia-y-campos-refugiados",
+      "nombre": "Campos de Refugiados de Belén y Aida",
+      "tipo": "histórico",
+      "region": "Cisjordania",
+      "descripcion": "Campos de refugiados palestinos que son comunidades vibrantes con historia, murales políticos y vida cotidiana auténtica. Visita guiada por residentes ofrece perspectiva única del conflicto palestino-israelí. Gesto de solidaridad y educación.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Desde Belén a pie: 2 km, 30 min. O taxi: 2 EUR. Desde Ramala: autobús a Belén, luego taxi local.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Belén cercanos: 15-25 EUR/noche",
+        "medio": "Hoteles en Belén: 35-60 EUR/noche",
+        "comfort": "Hoteles en Belén: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Mural de Bansky y arte de protesta: free",
+        "Visita guiada por residentes del campo: 15-25 EUR/persona",
+        "Talleres comunitarios de arte: 5-10 EUR",
+        "Centro de documentación y memoria: 3 EUR",
+        "Interact con residentes locales: free",
+        "Fotografia (con permiso): free"
+      ],
+      "donde_comer": "Comida casera palestina en locales comunitarios: 5-8 EUR. Cafés muy económicos: 1-2 EUR.",
+      "consejo_local": "Siempre visita con guía local responsable de un tour operator ético. Los residentes valoran la curiosidad respetuosa. No hagas fotos sin permiso. Esto no es un zoo humano, es una comunidad.",
+      "plan_b_lluvia": "Las visitas continúan. Aprovecha para estar en interiores comunitarios",
+      "keywords": [
+        "campos refugiados",
+        "Aida camp",
+        "Dheisheh",
+        "murales Banksy",
+        "Belén",
+        "resistencia palestina",
+        "solidaridad"
+      ]
+    },
+    {
+      "id": "nabulus",
+      "nombre": "Nablús",
+      "tipo": "ciudad",
+      "region": "Cisjordania central",
+      "descripcion": "Corazón comercial e industrial palestino con mercado medieval intact, jabonería tradicional y arquitectura osmana. Ciudad menos turística que Belén pero auténtica y vital. Centro de producción artesanal palestina.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre-octubre, abril-mayo",
+      "como_llegar": "Desde Ramala: autobús directo 1.5 horas, 3 EUR. Desde Jerusalén: combinación autobús 1h + minibús 1h, 5 EUR total.",
+      "donde_dormir": {
+        "mochilero": "Hostales y guesthouses: 12-18 EUR/noche",
+        "medio": "Hoteles pequeños 2 estrellas: 25-40 EUR/noche",
+        "comfort": "Hoteles 3-4 estrellas: 50-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Medina (casco antiguo): free",
+        "Souk el-Qaysariya - mercado tradicional: free",
+        "Visita a jabonería artesanal: free, compra opcional 3-8 EUR",
+        "Mezquita de An-Nasr: free",
+        "Museo arqueológico: 2 EUR",
+        "Talleres de artesanos locales: free"
+      ],
+      "donde_comer": "Kunafa (dulce local con queso): 2-3 EUR. Comida palestina: 3-6 EUR. Restaurantes: 8-12 EUR. Nablús es famosa por su kunafa y humus especial.",
+      "consejo_local": "La Medina es mejor explorada por la mañana antes del mediodía. Compra kunafa fresca de los maestros pasteleros locales. Los palestinos locales son muy acogedores con viajeros genuinos.",
+      "plan_b_lluvia": "Mercados y tiendas cubiertas del souk, cafés tradicionales, interior de tiendas artesanales",
+      "keywords": [
+        "Nablus",
+        "Nabulus",
+        "Nablús",
+        "Medina",
+        "jaboneria",
+        "kunafa",
+        "mercado medieval",
+        "Cisjordania"
+      ]
+    },
+    {
+      "id": "monte-gerizim",
+      "nombre": "Monte Gerizim y Samaritanos",
+      "tipo": "montaña",
+      "region": "Cisjordania central",
+      "descripcion": "Montaña sagrada con vistas panorámicas de Cisjordania, hogar de la comunidad samaritana (grupo religioso milenario). Combinación única de naturaleza, historia antigua y comunidad religiosa viva. Espiritualidad y arqueología.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre-noviembre, marzo-abril",
+      "como_llegar": "Desde Nablús: taxi 5 EUR o a pie 1h. Autobús local desde Nablús centro: 1 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje en Nablús: 12-18 EUR/noche",
+        "medio": "Hotel en Nablús: 25-40 EUR/noche",
+        "comfort": "Hotel en Nablús: 50-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas de la Mezquita de Justiniano: 2 EUR",
+        "Vistas panorámicas desde la cumbre: free",
+        "Visita a comunidad samaritana - con guía: 10-15 EUR",
+        "Ritual samaritano de Pascua (si coincide - marzo/abril): free presenciar",
+        "Museo samaritano: 3 EUR",
+        "Senderismo en la montaña: free"
+      ],
+      "donde_comer": "Comer en Nablús y subir la montaña. O pícnic con vistas: 5-10 EUR.",
+      "consejo_local": "La comunidad samaritana es muy pequeña (menos de 900 personas en Palestina e Israel). Respeta sus creencias. Visita con guía que explique su fe antigua. El atardecer desde la cumbre es espectacular.",
+      "plan_b_lluvia": "Las vistas pueden no ser claras. Visita el museo cubierto de los samaritanos",
+      "keywords": [
+        "Gerizim",
+        "Monte Gerizim",
+        "samaritanos",
+        "Nablús",
+        "montaña sagrada",
+        "panoramicas",
+        "arqueologia"
+      ]
+    },
+    {
+      "id": "misfat-el-qibli",
+      "nombre": "Misfat El-Qibli",
+      "tipo": "rural",
+      "region": "Cisjordania norte",
+      "descripcion": "Pequeño pueblo agrícola en la montaña con arquitectura de piedra blanca intacta y terrazas olívícolas. Turismo rural auténtico con posadas ecológicas y cocina de granja. Experiencia de vida palestina tradicional.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "septiembre-octubre, abril-mayo",
+      "como_llegar": "Desde Ramala: autobús a Nablús (1.5h, 3 EUR) + taxi local o hiking desde pueblo cercano (2h a pie, gratis).",
+      "donde_dormir": {
+        "mochilero": "Albergue ecológico Misfat: 20-28 EUR/noche",
+        "medio": "Posada tradicional con huerto: 35-50 EUR/noche",
+        "comfort": "Eco-lodge mejorado: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo por terrazas de olivos: free",
+        "Recolección de olivos (temporada): free/parte de hospedaje",
+        "Cocina palestina casera taller: 10-15 EUR",
+        "Visita a prensa de aceite tradicional: free",
+        "Paseos por el pueblo: free",
+        "Fotografía de paisaje: free"
+      ],
+      "donde_comer": "Comida casera de granja es parte del hospedaje. Bebidas y aperitivos locales: 2-4 EUR.",
+      "consejo_local": "Misfat requiere planificación previa - no hay alojamiento casual. Contacta ahead. La experiencia es lenta, relajante y muy lejos del turismo de masas. Ideal para conectar con la vida agrícola palestina.",
+      "plan_b_lluvia": "Lluvia rara pero posible en invierno. Cocina cubierta, historias locales, juegos tradicionales",
+      "keywords": [
+        "Misfat",
+        "pueblo rural",
+        "olivos",
+        "terrazas",
+        "ecologico",
+        "granja",
+        "tradicional palestino"
+      ]
+    },
+    {
+      "id": "mar-muerto-palestina",
+      "nombre": "Mar Muerto (Palestina)",
+      "tipo": "playa",
+      "region": "Cisjordania oriental",
+      "descripcion": "Punto más bajo de la tierra con aguas hipersalinas donde no se hunde nadie. Playas palestinas con menos infraestructura turística que el lado israelí pero más auténticas. Experiencia única de flotación natural.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre-marzo (verano insoportable, 45°C+)",
+      "como_llegar": "Desde Jericó: autobús o taxi 20 min hacia el sur, 5 EUR. Desde Ramala: auto/taxi con conductor.",
+      "donde_dormir": {
+        "mochilero": "Resort económico o camping: 15-25 EUR/noche",
+        "medio": "Resort 2-3 estrellas: 40-70 EUR/noche",
+        "comfort": "Resort 4-5 estrellas: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño flotante en aguas hipersalinas: free (acceso a playa)",
+        "Mud therapy (lodo medicinal): free o máscara especial 3 EUR",
+        "Senderismo costero: free",
+        "Visita Ain Gedi (lado israelí - requiere cruce): 10 EUR",
+        "Atardecer desde la orilla: free",
+        "Fotografía de mineral de sal: free"
+      ],
+      "donde_comer": "Restaurantes básicos en resorts: 8-15 EUR. Puestos callejeros: 3-5 EUR.",
+      "consejo_local": "El Mar Muerto es la experiencia de baño flotante más fácil del mundo - es imposible hundirse. Pero cuidado: no meterse la cara (duele). Lleva toalla y chanclas. El lado palestino es menos desarrollado pero más barato y auténtico.",
+      "plan_b_lluvia": "No llueve en el desierto. El calor es el principal desafío",
+      "keywords": [
+        "Mar Muerto",
+        "Dead Sea",
+        "hipersalino",
+        "flotacion",
+        "lodo",
+        "mas bajo tierra",
+        "playas palestinas"
+      ]
+    },
+    {
+      "id": "jenin-palestina",
+      "nombre": "Jenín y el norte de Cisjordania",
+      "tipo": "ciudad",
+      "region": "Cisjordania norte",
+      "descripcion": "Ciudad industrial palestina en el norte con historia de resistencia e historia compleja. Menos visitada que Belén pero vital para entender Palestina contemporánea. Teatro comunitario y vida cultural activa.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "septiembre-octubre, abril-mayo",
+      "como_llegar": "Desde Ramala: autobús directo 1.5-2 horas, 3-4 EUR. Desde Nablús: autobús 45 min, 2 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 12-18 EUR/noche",
+        "medio": "Hoteles pequeños: 25-40 EUR/noche",
+        "comfort": "Hotel 3 estrellas: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Teatro Jenin - performances culturales: 5-10 EUR",
+        "Mercado central: free",
+        "Museo de la ciudad: 2 EUR",
+        "Paseos por zonas residenciales: free",
+        "Cafés locales y vida urbana: 2-4 EUR",
+        "Talleres de artistas locales: free"
+      ],
+      "donde_comer": "Comida palestina tradicional muy barata: 3-5 EUR. Restaurantes: 6-10 EUR.",
+      "consejo_local": "Jenín es ciudad real palestina sin escenario turístico. El Teatro Jenin es notable por su trabajo cultural en contexto difícil. Viaja con actitud respetuosa y ganas de aprender sobre Palestina contemporánea.",
+      "plan_b_lluvia": "Teatro cubierto, cafés, mercados, museos",
+      "keywords": [
+        "Jenin",
+        "Jenin",
+        "norte Cisjordania",
+        "teatro",
+        "resistencia",
+        "urbano palestino"
+      ]
+    }
+  ]
+}

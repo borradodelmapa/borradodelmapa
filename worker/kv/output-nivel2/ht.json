@@ -1,0 +1,346 @@
+{
+  "pais": "Haití",
+  "codigo": "ht",
+  "alerta_seguridad": "Haití presenta altos niveles de inseguridad, criminalidad y inestabilidad política. El Ministerio de Asuntos Exteriores desaconseja viajar a la mayoría de regiones. Solo se considera relativamente más seguro viajar con tours organizados o en grupos. Evitar Port-au-Prince, zonas rurales aisladas y desplazamientos nocturnos.",
+  "destinos": [
+    {
+      "id": "jacmel",
+      "nombre": "Jacmel",
+      "tipo": "ciudad",
+      "region": "Sureste, costa",
+      "descripcion": "Puerto colonial con arquitectura criolla preservada, playas cercanas y acceso a cascadas. Centro cultural con galerías, festivales anuales y ambiente menos tumultuoso que Port-au-Prince. Es el destino más seguro y visitado para viajeros independientes en Haití.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Port-au-Prince: minibús/tap-tap (3-4 horas, 8-12 EUR) o vuelo doméstico (30 min, 80-120 EUR). Carretera montañosa, salidas tempranas recomendadas.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse/hostal básico: 20-35 EUR/noche",
+        "medio": "Hotel 3 estrellas con aire acondicionado: 50-80 EUR/noche",
+        "comfort": "Resort frente al mar: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasear por Rue de Chateau y arquitectura colonial (gratis)",
+        "Playas de Jacmel y Côte Follet (gratis, entrada a algunas 5 EUR)",
+        "Cascada Bassin Bleu (excursión guiada 25-40 EUR)",
+        "Galería de arte local y mercado de artesanías (gratis entrada)",
+        "Festival del Carnaval si viajas en febrero (gratis)",
+        "Isla de la Gonave - tour de día completo (60-80 EUR)"
+      ],
+      "donde_comer": "Langosta fresca, ceviche, dumplings locales. Rango 5-15 EUR/plato. Restaurantes en la costa: Cyvadier, Florita's Beach Bar. Mercado central para comida callejera (2-4 EUR).",
+      "consejo_local": "Los tap-taps son caóticos pero culturales; negocia precio antes de subir. Jacmel es más cara que otras ciudades porque es turística, pero sigue siendo accesible. Evita caminar solo de noche.",
+      "plan_b_lluvia": "Visitar galerías de arte, museos locales (Musée Egée), comprar artesanías en tiendas cubiertas, comer en restaurantes con vistas a la bahía.",
+      "keywords": [
+        "Jacmel",
+        "puerto colonial",
+        "Côte Follet",
+        "Bassin Bleu",
+        "arquitectura criolla",
+        "cascadas",
+        "playas Jacmel"
+      ]
+    },
+    {
+      "id": "ile-a-vache",
+      "nombre": "Île-à-Vache",
+      "tipo": "isla",
+      "region": "Sureste, frente a Les Cayes",
+      "descripcion": "Isla con playas de arena blanca, arrecifes de coral y ambiente tranquilo, menos desarrollada que Jacmel. Ideal para buceo, snorkel y desconexión. Acceso por ferry desde Les Cayes.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Port-au-Prince a Les Cayes: minibús (4-5 horas, 12-18 EUR). Desde Les Cayes a Île-à-Vache: ferry (30-45 min, 8-12 EUR). Los horarios son irregulares; confirmar día anterior.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse isla: 25-40 EUR/noche",
+        "medio": "Pequeño resort familiar: 60-90 EUR/noche",
+        "comfort": "Resort con buceo incluido: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife local (gratis desde playa)",
+        "Buceo con operadores locales (40-70 EUR buceo recreativo)",
+        "Playas vírgenes: Plage Madame, Baie du Grand Fond (gratis)",
+        "Paseo en bote a islotes cercanos (20-30 EUR)",
+        "Pesca nocturna con linterna tradicional (25-35 EUR)"
+      ],
+      "donde_comer": "Pescado a la brasa, camarones, konch. Rango 6-12 EUR/plato. Comedores locales en el muelle principal. Compra pescado fresco matutino en puerto.",
+      "consejo_local": "Traer dinero en efectivo (gourdes/USD); no hay cajeros en la isla. La isla es pequeña; en 2-3 días ves lo principal. El ferry puede cancelarse sin aviso si hay mal mar.",
+      "plan_b_lluvia": "Buceo (mejor con lluvia ligera), visitar pueblos locales, jugar dominó en comedores, descansar en bungalow.",
+      "keywords": [
+        "Île-à-Vache",
+        "Vache Island",
+        "Les Cayes",
+        "buceo Haiti",
+        "arrecife coral",
+        "playas vírgenes",
+        "Baie du Grand Fond"
+      ]
+    },
+    {
+      "id": "les-cayes",
+      "nombre": "Les Cayes",
+      "tipo": "ciudad",
+      "region": "Sureste, costa sur",
+      "descripcion": "Tercera ciudad de Haití con puerto activo, punto de partida a Île-à-Vache y acceso a Parc Naturel de la Selle. Menos turística que Jacmel pero con buena infraestructura. Puerta a la región sur.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Port-au-Prince: minibús (4-5 horas, 12-18 EUR). Desde Jacmel: minibús a través del interior (4-5 horas, 10-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal básico: 18-30 EUR/noche",
+        "medio": "Hotel familiar: 40-65 EUR/noche",
+        "comfort": "Hotel con vista al puerto: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Muelle y paseo frente al mar (gratis)",
+        "Mercado local de pescado (gratis)",
+        "Excursión a Île-à-Vache (30-50 EUR con operador)",
+        "Buceo en arrecife Kayman Bank (50-80 EUR)",
+        "Baño en playas cercanas: Cavaillon (gratis, entrada local 3 EUR)"
+      ],
+      "donde_comer": "Pescado guisado, arroz con mariscos, patés. Rango 4-10 EUR/plato. Comedores portuarios económicos (3-5 EUR), restaurantes en Rue Geffrard.",
+      "consejo_local": "Les Cayes es principalmente un hub de transporte; gasta 1-2 noches y dirígete a la isla o Jacmel. El puerto es caótico pero seguro durante el día.",
+      "plan_b_lluvia": "Visitar mercados locales, museo pequeño (si existe), comer en restaurantes con aire acondicionado.",
+      "keywords": [
+        "Les Cayes",
+        "Cayes",
+        "Les Cayez",
+        "puerto sur",
+        "Île-à-Vache base",
+        "Cavaillon",
+        "pesca Haiti"
+      ]
+    },
+    {
+      "id": "port-au-prince",
+      "nombre": "Port-au-Prince",
+      "tipo": "ciudad",
+      "region": "Oeste, capital",
+      "descripcion": "Capital caótica con museos, galerías y vida cultural haitiana auténtica. Punto de entrada obligatorio pero requiere cautela. Incluye barrios históricos como la Ciudad Vieja y mercados tradicionales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Aeropuerto Toussaint Louverture (única opción internacional). Taxi autorizado desde aeropuerto: 30-45 EUR (15 km).",
+      "donde_dormir": {
+        "mochilero": "Guesthouse Pétion-Ville: 25-40 EUR/noche",
+        "medio": "Hotel seguro zona alta: 60-90 EUR/noche",
+        "comfort": "Resort con seguridad 24/7: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Musée du Palais National (entrada 5 EUR, exteriores gratis)",
+        "Galería de arte local (Ateliers Internationaux de Recherche, gratis-10 EUR)",
+        "Mercado de Fer (Marché de Fer) - arquitectura de hierro 1891 (gratis, entrada 3 EUR)",
+        "Castillo San Felipe (ruinas coloniales, 5-8 EUR)",
+        "Catedral de Port-au-Prince (gratis)"
+      ],
+      "donde_comer": "Griot (cerdo guisado), dumplings, tassot de boeuf. Rango 5-15 EUR/plato. Evitar comedores callejeros (riesgo sanitario). Restaurantes en Pétion-Ville más seguros: Kaaba, Spaghetteria (10-20 EUR).",
+      "consejo_local": "Contratar guía local para museos (10-15 EUR). No llevar cámaras visibles. Moverte en taxi, nunca a pie de noche. La Ciudad Vieja es histórica pero peligrosa sin guía local.",
+      "plan_b_lluvia": "Museos, galerías, compras en zonas seguras de Pétion-Ville, cafeterías.",
+      "alerta_seguridad": "Port-au-Prince tiene criminalidad alta, secuestros en barrios periféricos y pandillas activas. Viajar solo no es recomendado. Usar transporte privado, hospedarse en Pétion-Ville o Tabarre, evitar la Ciudad Vieja tras caída del sol.",
+      "keywords": [
+        "Port-au-Prince",
+        "PAP",
+        "capital Haiti",
+        "Pétion-Ville",
+        "Marché de Fer",
+        "Palais National",
+        "Ciudad Vieja"
+      ]
+    },
+    {
+      "id": "cap-haitien",
+      "nombre": "Cap-Haïtien",
+      "tipo": "ciudad",
+      "region": "Norte, costa norte",
+      "descripcion": "Segunda ciudad con histórica importancia (era París de las Antillas). Acceso a Citadelle Henry (fortaleza monumental) y playas del norte. Centro cultural de la costa norte con galerías y arquitectura colonial.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Port-au-Prince: vuelo doméstico (1 hora, 80-120 EUR) o minibús (6-8 horas, 15-20 EUR). Vuelo más seguro y práctico para mochileros.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse: 20-35 EUR/noche",
+        "medio": "Hotel pequeño: 45-70 EUR/noche",
+        "comfort": "Resort costa norte: 100-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Citadelle Henry - fortaleza del siglo XIX (entrada 10 EUR, subida 1 hora a pie)",
+        "Palacio de Sans-Souci ruinas (cercano, gratis)",
+        "Playas: Labadee, Cormier, Caracol (gratis-5 EUR entrada local)",
+        "Paseo por la avenida histórica (gratis)",
+        "Excursión a Ramiers y Île de la Tortue (60-90 EUR tour)"
+      ],
+      "donde_comer": "Lambi (caracol), pescado relleno, tasso. Rango 5-12 EUR/plato. Restaurantes frente al mar en Rue 18 de Avril. Mercado para provisiones locales.",
+      "consejo_local": "La Citadelle es la mayor atracción pero extenuante en calor; ir temprano (6-7 AM). Los taxis locales negocian precio. Cap-Haïtien es más tranquilo que Port-au-Prince pero igual requiere prudencia.",
+      "plan_b_lluvia": "Visitar museos locales (si están abiertos), explorar galerías, comer en restaurantes con aire acondicionado.",
+      "alerta_seguridad": "Cap-Haïtien es más segura que Port-au-Prince pero requiere precauciones: no caminar solo de noche, usar taxis registrados, evitar zonas periféricas.",
+      "keywords": [
+        "Cap-Haïtien",
+        "Cap-Haitien",
+        "Citadelle Henry",
+        "Sans-Souci",
+        "norte Haiti",
+        "Labadee",
+        "fortaleza"
+      ]
+    },
+    {
+      "id": "ile-tortue",
+      "nombre": "Île de la Tortue",
+      "tipo": "isla",
+      "region": "Norte, mar del Caribe",
+      "descripcion": "Isla histórica refugio de piratas, con playas remotas y vida sencilla. Pocos turistas, acceso limitado pero experiencia auténtica. Para viajeros aventureros que buscan aislamiento.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Cap-Haïtien: bote privado (1-1.5 horas, 40-60 EUR persona o 100-150 EUR grupo). Ferry informal irregular; preguntar en puerto.",
+      "donde_dormir": {
+        "mochilero": "Casa de familia con cama: 15-25 EUR/noche",
+        "medio": "Pequeño guesthouse: 35-50 EUR/noche",
+        "comfort": "Resort isla (limitado): 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas vírgenes: Port Liberté, Anse à Cheval (gratis)",
+        "Ruinas de fuerte pirata (Fort Liberté, gratis)",
+        "Snorkel desde playa (gratis)",
+        "Paseo en bote a islotes cercanos (20-30 EUR)",
+        "Interacción con comunidades locales de pescadores (gratis)"
+      ],
+      "donde_comer": "Pescado fresco diario, langosta estacional, cocos. Rango 3-8 EUR/plato. Básico: come donde come la gente local. Sin opciones turísticas.",
+      "consejo_local": "Isla muy aislada; llevar efectivo (USD/gourdes), medicinas básicas, protector solar. El bote regresa al atardecer; confirmar horarios. Muy pocas comodidades; es verdadera aventura.",
+      "plan_b_lluvia": "Permanecer en alojamiento, paseos cortos entre chaparrones, conversar con locales.",
+      "keywords": [
+        "Île de la Tortue",
+        "Tortuga Island",
+        "Tortue",
+        "piratas Haiti",
+        "Port Liberté",
+        "norte remoto"
+      ]
+    },
+    {
+      "id": "morne-rouge",
+      "nombre": "Morne-Rouge",
+      "tipo": "montaña",
+      "region": "Centro-oeste, interior",
+      "descripcion": "Pueblo montañoso con plantaciones de café, paisajes rurales y vida campesina auténtica. Destino para viajeros que buscan el Haití rural, lejos de turismo. Temperaturas frescas y vistas panorámicas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde Port-au-Prince: minibús/tap-tap (2.5-3 horas, 8-12 EUR). Carretera de montaña sinuosa.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje rural: 15-25 EUR/noche",
+        "medio": "Pequeña posada montañosa: 30-45 EUR/noche",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Caminatas por plantaciones de café (gratis con permiso local)",
+        "Visita a cascada Saut-Mathurine (excursión 2-3 horas, 10-15 EUR guía)",
+        "Mercado campesino semanal (gratis, mercadería local)",
+        "Vistas panorámicas desde altura (gratis)",
+        "Interacción con familias productoras de café (gratis)"
+      ],
+      "donde_comer": "Maíz, frijoles, verduras locales, carne estofada. Rango 2-5 EUR/plato. Comedores básicos en plaza principal.",
+      "consejo_local": "Pueblo sin turismo estándar; espera comodidades mínimas. Los locales son amables con extranjeros curiosos. Traer dinero efectivo; no hay cajeros. Necesitas curiosidad cultural, no comodidad.",
+      "plan_b_lluvia": "Las montañas llueven regularmente; llevar capa impermeable. Las cascadas están mejor con lluvia; caminar con precaución.",
+      "keywords": [
+        "Morne-Rouge",
+        "café Haiti",
+        "montaña rural",
+        "saut-mathurine",
+        "campesino",
+        "interior Haiti"
+      ]
+    },
+    {
+      "id": "kenscoff",
+      "nombre": "Kenscoff",
+      "tipo": "montaña",
+      "region": "Oeste, montañas cercanas a PaP",
+      "descripcion": "Pueblo de montaña a 1500m cerca de Port-au-Prince con clima fresco, vistas de la capital y mercado de flores. Escapada rápida desde PaP. Acceso fácil para viajeros con poco tiempo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Port-au-Prince (Pétion-Ville): taxi o minibús (30-40 min, 8-12 EUR). Carretera de montaña muy serpentinante.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje montaña: 20-30 EUR/noche",
+        "medio": "Posada pequeña: 40-60 EUR/noche",
+        "comfort": "Resort montañoso: 80-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de flores local (gratis, comprar flores 1-3 EUR)",
+        "Vistas panorámicas de Port-au-Prince y bahía (gratis)",
+        "Caminatas por montaña (gratis)",
+        "Casetas de comida local (gratis entrada)",
+        "Fotos de paisaje (gratis)"
+      ],
+      "donde_comer": "Sopas de verdura, maíz, frijoles locales. Rango 2-4 EUR/plato. Comedores junto al mercado.",
+      "consejo_local": "Es viaje de medio día; combina con Port-au-Prince. Clima fresco es descanso de calor de la capital. No es destino turístico, es escapada local.",
+      "plan_b_lluvia": "Lluvia común en montaña; coger café caliente en comedores locales, comprar flores, visita breve.",
+      "keywords": [
+        "Kenscoff",
+        "Kensoff",
+        "montaña Port-au-Prince",
+        "flores Haiti",
+        "clima fresco",
+        "escapada PaP"
+      ]
+    },
+    {
+      "id": "la-saline",
+      "nombre": "Salinas de La Saline",
+      "tipo": "naturaleza",
+      "region": "Suroeste, costa sudoeste",
+      "descripcion": "Salinas con ecosistema único, paisaje árido y playas aisladas. Zona de reserva natural con pocos visitantes. Para viajeros interesados en ecosistemas y naturaleza especializada.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Les Cayes: minibús/4x4 (1.5-2 horas, 10-15 EUR). Requiere 4x4 en época de lluvia.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse Les Cayes base (0 EUR desplazamiento día)",
+        "medio": "Guesthouse Les Cayes base (0 EUR desplazamiento día)",
+        "comfort": "Guesthouse Les Cayes base (0 EUR desplazamiento día)"
+      },
+      "que_hacer": [
+        "Caminata por salinas (gratis con guía local 15-20 EUR)",
+        "Observación de aves y vida silvestre (gratis)",
+        "Fotografía de paisaje árido (gratis)",
+        "Playas vírgenes cercanas (gratis)",
+        "Interacción con trabajadores de sal (gratis)"
+      ],
+      "donde_comer": "Viaje de día desde Les Cayes. Llevar agua y snacks.",
+      "consejo_local": "Zona muy remota; requiere 4x4 y guía local. No es atracción turística formal; es exploración genuina. Lleva protector solar extremo; paisaje sin sombra.",
+      "plan_b_lluvia": "Posponer; carreteras intransitables y paisaje sin protección.",
+      "keywords": [
+        "La Saline",
+        "salinas Haiti",
+        "suroeste",
+        "ecosistema árido",
+        "playas remotas",
+        "reserva natural"
+      ]
+    },
+    {
+      "id": "jaragua",
+      "nombre": "Parque Nacional La Visite - Jaragua",
+      "tipo": "naturaleza",
+      "region": "Sureste, montañas",
+      "descripcion": "Parque nacional montañoso con senderos, picos escénicos y vegetación de altura. Acceso desde Jacmel o región sur. Para senderistas y amantes de naturaleza. Uno de los espacios naturales mejor preservados de Haití.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo (enero-febrero mejor)",
+      "como_llegar": "Desde Jacmel: jeep/minibús a pueblo de entrada (2-2.5 horas, 15-25 EUR). Requiere transporte privado.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje pueblo cercano: 20-30 EUR/noche",
+        "medio": "Cabaña parque (limitado): 40-60 EUR/noche",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Sendero Pic Jaragua (senderismo 4-5 horas, 20-30 EUR guía obligatorio)",
+        "Caminatas menores por bosque nuboso (15-25 EUR guía)",
+        "Observación de flora y fauna endémica (gratis con guía)",
+        "Vistas panorámicas desde picos (gratis)",
+        "Acampada (si equipado, 10 EUR autorización parque)"
+      ],
+      "donde_comer": "Alojamiento incluye comida básica. Llevar snacks. Rango comida parque 5-10 EUR.",
+      "consejo_local": "Requiere buen nivel físico. Los guías son obligatorios y viven en comunidades cercanas (apoya económico local). Clima montañoso: llevar abrigo. Las mejores vistas al amanecer.",
+      "plan_b_lluvia": "Senderismo en lluvia es difícil pero posible con cuidado. Niebla común; vistas reducidas.",
+      "keywords": [
+        "Jaragua",
+        "La Visite",
+        "parque nacional Haiti",
+        "Pic Jaragua",
+        "montaña sureste",
+        "senderismo",
+        "bosque nuboso"
+      ]
+    }
+  ]
+}

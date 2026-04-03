@@ -1,0 +1,326 @@
+{
+  "pais": "Canadá",
+  "codigo": "ca",
+  "destinos": [
+    {
+      "id": "cataratas-del-niagara",
+      "nombre": "Cataratas del Niágara",
+      "tipo": "naturaleza",
+      "region": "Ontario",
+      "descripcion": "Espectáculo natural de cascadas masivas en la frontera con EE.UU., con vistas desde ambos lados. Combina naturaleza pura con infraestructura turística bien desarrollada. Imprescindible al menos una vez en la vida.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Toronto en autobús o tren (1,5-2 horas, 15-25 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Niagara Falls ON: 25-35 EUR/noche",
+        "medio": "Hotels 3 estrellas: 60-90 EUR/noche",
+        "comfort": "Resort con vistas a cataratas: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Hornblower Niagara Cruises - paseo en barco bajo las cataratas (20 EUR)",
+        "Journey Behind the Falls - túnel bajo la cascada (15 EUR)",
+        "Table Rock viewpoint - mirador gratuito",
+        "Niagara Parks Power Station - historia de energía hidráulica (12 EUR)"
+      ],
+      "donde_comer": "Fish and chips local en restaurantes de River Street, poutine tradicional (10-15 EUR), buffets chinos económicos (8-12 EUR)",
+      "consejo_local": "Ve al atardecer desde el lado canadiense; el lado estadounidense tiene mejor iluminación nocturna. Compra las entradas de atracciones con descuento en museos lokales antes de ir.",
+      "plan_b_lluvia": "Visita los museos de cera y acuarios cubiertos, o explora pueblos vecinos como Niagara-on-the-Lake",
+      "keywords": [
+        "Niagara Falls",
+        "cataratas Niagara",
+        "Hornblower",
+        "Fallsview",
+        "cascadas"
+      ]
+    },
+    {
+      "id": "vancouver",
+      "nombre": "Vancouver",
+      "tipo": "ciudad",
+      "region": "Columbia Británica",
+      "descripcion": "Metrópolis costera con montañas y playas, perfecta para combinar naturaleza urbana con senderismo. Una de las ciudades más habitables del mundo con escena culinaria multicultural. Excelente base para explorar la costa del Pacífico.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Toronto: vuelo (6 horas, 80-150 EUR) o tren VIA (4 días, 180-350 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales Gastown/Downtown: 30-40 EUR/noche",
+        "medio": "Hotels Kitsilano o Yaletown: 80-120 EUR/noche",
+        "comfort": "Hotels waterfront West End: 180-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Stanley Park - parque forestal gratuito de 405 hectáreas con senderos",
+        "Granville Island Public Market - mercado tradicional (entrada gratuita)",
+        "Sendero Seawall - paseo costero de 8,8 km (gratis)",
+        "Vancouver Art Gallery (15 EUR)",
+        "Grouse Mountain - teleférico y vistas (32 EUR)"
+      ],
+      "donde_comer": "Dim sum en Chinatown (8-12 EUR), fish and chips en Granville Island (12-16 EUR), pho vietnamita en Strathcona (10-14 EUR), restaurantes de cocina de fusión en Yaletown (20-35 EUR)",
+      "consejo_local": "El Seawall es mejor por la mañana antes de las muchedumbres. Compra una Compass Card para transporte público (descuentos significativos). El mercado de Granville Island está repleto los fines de semana; ve entre semana.",
+      "plan_b_lluvia": "Vancouver llueve mucho; visita museos (Museum of Vancouver, Science World), Chinatown cubierto o cafés independientes de Gastown",
+      "keywords": [
+        "Vancouver BC",
+        "Gastown",
+        "Kitsilano",
+        "Stanley Park",
+        "Granville Island",
+        "Seawall"
+      ]
+    },
+    {
+      "id": "parque-nacional-banff",
+      "nombre": "Parque Nacional Banff",
+      "tipo": "montaña",
+      "region": "Alberta",
+      "descripcion": "Parque de montañas espectaculares con lagos turquesas, glaciares y fauna silvestre. Acceso a cientos de kilómetros de senderos para todos los niveles. Uno de los parques nacionales más icónicos de Norteamérica.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Calgary en coche (1,5 horas, gasolina ~15 EUR) o autobús Megabus (2 horas, 20-35 EUR)",
+      "donde_dormir": {
+        "mochilero": "HI hostels Banff/Lake Louise: 35-50 EUR/noche",
+        "medio": "Hotels Banff Avenue: 90-140 EUR/noche",
+        "comfort": "Fairmont hotels Lake Louise: 250-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Lago Louise - senderismo alrededor del lago (gratis, 3,6 km)",
+        "Moraine Lake - caminata y vistas turquesas (gratis, 1,4 km)",
+        "Sendero Johnston Canyon - cascada accesible (gratis, 2,7 km)",
+        "Icefields Parkway scenic drive (gratis, gasolina y paradas)",
+        "Caverna de Lake Agnes - senderismo de montaña (gratis, 6,4 km)"
+      ],
+      "donde_comer": "Banff Avenue tiene cafés y pizzerías (10-15 EUR), Lake Louise Lodge para comidas económicas (12-18 EUR), preparar picnic en supermercados locales es lo más económico",
+      "consejo_local": "Llega a Moraine Lake antes de las 8 de la mañana o no encontrarás aparcamiento en julio-agosto. El oso es real: guarda comida y haz ruido. La entrada al parque es gratuita con pase anual canadiense (70 EUR).",
+      "plan_b_lluvia": "Banff está en montaña; incluso en lluvia hay senderos. Visita el Banff Upper Hot Springs (18 EUR) o explora el pueblo de Banff",
+      "keywords": [
+        "Banff Alberta",
+        "Lake Louise",
+        "Moraine Lake",
+        "Icefields Parkway",
+        "Rocky Mountains"
+      ]
+    },
+    {
+      "id": "montreal",
+      "nombre": "Montreal",
+      "tipo": "ciudad",
+      "region": "Quebec",
+      "descripcion": "Ciudad bilíngüe con arquitectura europea, vida nocturna vibrante y escena artística. Centro cultural de Canadá con gastronomía única (bagels, poutine quebequense). Barrios variados para explorar a pie.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Toronto en autobús (5-6 horas, 30-50 EUR) o tren VIA (4,5 horas, 40-80 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales Plateau Mont-Royal o Latin Quarter: 28-38 EUR/noche",
+        "medio": "Hotels Old Montreal: 75-110 EUR/noche",
+        "comfort": "Hotels Downtown/Griffintown: 140-210 EUR/noche"
+      },
+      "que_hacer": [
+        "Vieux-Montréal (Old Montreal) - paseo histórico gratuito",
+        "Basílica Notre-Dame - arquitectura impresionante (15 EUR)",
+        "Mont-Royal - mirador y parque con vistas (gratis)",
+        "Musée des Beaux-Arts - arte moderno y antiguo (15 EUR, miércoles gratis)",
+        "Jean-Talon Market - mercado local tradicional (gratis, comer caro)"
+      ],
+      "donde_comer": "Bagels St-Viateur (2-3 EUR), poutine quebequense en calle (8-12 EUR), restaurantes étnicos en Plateau (12-18 EUR), brunch dominical (16-25 EUR)",
+      "consejo_local": "Muchos restaurantes dicen 'Apportez votre vin' - puedes traer alcohol de la tienda de licores local. El metro es eficiente; compra un carnet de 10 viajes (20 EUR). Habla francés; la gente aprecia el esfuerzo.",
+      "plan_b_lluvia": "Túnel subterráneo (RÉSO) conecta tiendas y museos. Visita galerías de arte en Plateau o pasa tiempo en cafés de barrio",
+      "keywords": [
+        "Montreal Quebec",
+        "Vieux-Montreal",
+        "Plateau Mont-Royal",
+        "Old Montreal",
+        "Latin Quarter"
+      ]
+    },
+    {
+      "id": "toronto",
+      "nombre": "Toronto",
+      "tipo": "ciudad",
+      "region": "Ontario",
+      "descripcion": "Metrópolis multicultural con Lago Ontario, arquitectura variada y escena gastronómica diversa. Acceso a Cataratas del Niágara y punto de entrada común. Barrios con carácter muy distintos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Aeropuerto Pearson es hub principal; acceso desde todo el mundo",
+      "donde_dormir": {
+        "mochilero": "Hostales Queen West o Kensington: 26-35 EUR/noche",
+        "medio": "Hotels Distillery District o Harbourfront: 70-100 EUR/noche",
+        "comfort": "Hotels Downtown/Entertainment: 140-200 EUR/noche"
+      },
+      "que_hacer": [
+        "CN Tower - torre icónica con vistas (20 EUR entrada, visor de piso de vidrio 10 EUR extra)",
+        "Ripley's Aquarium - acuario interactivo (25 EUR)",
+        "Kensington Market - mercado bohemio y graffiti (gratis)",
+        "Toronto Islands - ferry a parques e islas (8 EUR ida/vuelta)",
+        "Art Gallery of Ontario (20 EUR, miércoles después de 18h descuento)"
+      ],
+      "donde_comer": "Tacos en Kensington (5-8 EUR), dim sum en Chinatown (10-15 EUR), peameal bacon sandwich en St. Lawrence (8-10 EUR), restaurantes variados en Entertainment District (15-30 EUR)",
+      "consejo_local": "PRESTO card para transporte público (descuentos significativos). Evita King Street los fines de semana (muy turístico). Las islas de Toronto son donde van los locales a relajarse.",
+      "plan_b_lluvia": "Interior del Underground PATH, museos (Royal Ontario Museum, Aga Khan), cines",
+      "keywords": [
+        "Toronto Ontario",
+        "CN Tower",
+        "Kensington Market",
+        "Chinatown",
+        "Distillery District"
+      ]
+    },
+    {
+      "id": "whistler-blackcomb",
+      "nombre": "Whistler Blackcomb",
+      "tipo": "montaña",
+      "region": "Columbia Británica",
+      "descripcion": "Resort de montaña más grande de Norteamérica con esquí en invierno y senderismo en verano. Pueblo resort con cafeterías y tiendas. Acceso desde Vancouver para aventura alpina.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a marzo (esquí), junio a septiembre (senderismo)",
+      "como_llegar": "Desde Vancouver en autobús Greyhound o coche (2-2,5 horas, 25-35 EUR autobús, gasolina si conduces)",
+      "donde_dormir": {
+        "mochilero": "Hostales Whistler Village o Creekside: 40-60 EUR/noche",
+        "medio": "Condos compartidos o hotels 3 estrellas: 100-150 EUR/noche",
+        "comfort": "Resort hotels o chalets de lujo: 200-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Peak 2 Peak Gondola - teleférico panorámico (32 EUR)",
+        "Sendero Joffre Lakes - lago turquesa (gratis, 12 km)",
+        "Garibaldi Lake - excursión de montaña (gratis, 9 km)",
+        "Whistler Mountain Bike Park - descenso en bicicleta (35-50 EUR)",
+        "Esquí Whistler-Blackcomb - forfaits diarios (80-120 EUR)"
+      ],
+      "donde_comer": "Pubs en Village (12-18 EUR), cafés independientes en Whistler (10-16 EUR), supermercados para picnic (autocatering)",
+      "consejo_local": "Fuera de temporada (abril-mayo, octubre-noviembre) los precios bajan drásticamente. El pueblo es caro; compra comida en supermercados. Muchas rutas de senderismo comienzan desde estacionamientos de trasporte público.",
+      "plan_b_lluvia": "Museo de Whistler, spas, galerías de arte, o vuelta a Vancouver",
+      "keywords": [
+        "Whistler Blackcomb",
+        "Whistler BC",
+        "Peak 2 Peak",
+        "Joffre Lakes",
+        "Garibaldi Lake"
+      ]
+    },
+    {
+      "id": "victoria-bc",
+      "nombre": "Victoria",
+      "tipo": "ciudad",
+      "region": "Columbia Británica",
+      "descripcion": "Capital provincial con arquitectura británica, jardines impecables y ambiente relajado. Ubicada en Isla de Vancouver con acceso a naturaleza costera. Pequeña pero sofisticada.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Vancouver en ferry (3-4 horas, 50-70 EUR) o hidroala (2 horas, 70-90 EUR), o vuelo (25 minutos, 60-100 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales Fernwood o Downtown: 32-42 EUR/noche",
+        "medio": "Hotels Beacon Hill: 85-125 EUR/noche",
+        "comfort": "Fairmont Empress Hotel o seaside resorts: 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Parlamento de Columbia Británica - edificio histórico (visita guiada 10 EUR)",
+        "Jardines Butchart - 22 hectáreas botánicas (30 EUR)",
+        "Inner Harbour - paseo costero gratuito",
+        "Museum of History - museo local (15 EUR)",
+        "Whale watching - avistamiento de orcas (80-120 EUR, excursión de 3-4 horas)"
+      ],
+      "donde_comer": "Afternoon tea en Fairmont (40-50 EUR, experiencia), fish and chips en mercados (12-15 EUR), restaurantes étnicos en Chinatown (12-20 EUR)",
+      "consejo_local": "Los jardines Butchart son hermosos pero muy turísticos; visita temprano. El avistamiento de orcas no es garantizado pero es común en julio-septiembre. Victoria es pequeña; todo está a pie o en autobús.",
+      "plan_b_lluvia": "Museos, cafés, compras en tiendas antiguas, té en interior",
+      "keywords": [
+        "Victoria BC",
+        "Butchart Gardens",
+        "Inner Harbour",
+        "Fairmont Empress",
+        "Isla Vancouver"
+      ]
+    },
+    {
+      "id": "ottawa",
+      "nombre": "Ottawa",
+      "tipo": "ciudad",
+      "region": "Ontario",
+      "descripcion": "Capital nacional con museos de clase mundial, Parlamento histórico y paseos fluviales. Menos caótico que Toronto pero con infraestructura completa. Buena base para explorar la región de Ontario.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Toronto en autobús (4,5-5 horas, 25-40 EUR) o coche (4,5 horas, gasolina ~25 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales Byward Market: 28-38 EUR/noche",
+        "medio": "Hotels Downtown/Centretown: 75-110 EUR/noche",
+        "comfort": "Hotels Château Laurier: 150-230 EUR/noche"
+      },
+      "que_hacer": [
+        "Parlamento de Canadá - tour gratuito con reserva previa",
+        "Museo Canadiense de Historia - colecciones importantes (15 EUR)",
+        "National Gallery of Canada - arte visual (16 EUR)",
+        "Paseo de la Capital - ruta paisajística en bici o a pie (gratis)",
+        "Canal Rideau - esquí invernal, patinaje, paseo (gratis)"
+      ],
+      "donde_comer": "Byward Market - food stalls y restaurantes (10-18 EUR), Shawarma en Byward (6-9 EUR, especialidad local), Elgin Street para cenas variadas (15-28 EUR)",
+      "consejo_local": "Los museos nacionales son muy buenos pero pueden ser lentos. El canal Rideau es patrimonio de la UNESCO; es hermoso para patinar en invierno. Ottawa es menos cara que Toronto.",
+      "plan_b_lluvia": "Excelentes museos interiores; pasa días enteros en galerías",
+      "keywords": [
+        "Ottawa Ontario",
+        "Parlamento Canada",
+        "Byward Market",
+        "National Gallery",
+        "Canal Rideau"
+      ]
+    },
+    {
+      "id": "parque-nacional-jasper",
+      "nombre": "Parque Nacional Jasper",
+      "tipo": "montaña",
+      "region": "Alberta",
+      "descripcion": "Parque hermano de Banff con menos aglomeración, paisajes similares de montaña alpina. Acceso a glaciares, lagos y fauna silvestre. Mejor para quienes buscan naturaleza más tranquila.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Calgary en coche (4 horas, gasolina ~35 EUR) o tren VIA (3 horas, 60-90 EUR). Carretera Icefields desde Banff (3 horas)",
+      "donde_dormir": {
+        "mochilero": "HI hostels Jasper: 35-50 EUR/noche",
+        "medio": "Hotels Jasper townsite: 80-130 EUR/noche",
+        "comfort": "Fairmont Jasper Park Lodge: 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Glaciar Athabasca - paseo guiado en hielo (100-130 EUR)",
+        "Maligne Lake - catamarán o senderismo (35 EUR barco, gratis senderismo)",
+        "Sendero Valley of Five Lakes - circular de montaña (gratis, 8,3 km)",
+        "Caverna Maligne - formaciones geológicas (50 EUR)",
+        "Edith Cavell Lake - senderismo alpino (gratis, 5,5 km)"
+      ],
+      "donde_comer": "Jasper townsite tiene opciones (12-20 EUR), supermercados para picnic",
+      "consejo_local": "Mucho menos concurrido que Banff. El glaciar Athabasca retrocede; visítalo si es posible. Wildlife es real - osos, alces, ciervos. La entrada al parque es gratuita con pase anual (70 EUR).",
+      "plan_b_lluvia": "Cavernas Maligne son interiores. Exploración de pueblos o vuelta a etapas previas",
+      "keywords": [
+        "Jasper Alberta",
+        "Athabasca Glacier",
+        "Maligne Lake",
+        "Icefields Parkway",
+        "Rocky Mountains"
+      ]
+    },
+    {
+      "id": "quebec-city",
+      "nombre": "Quebec City",
+      "tipo": "histórico",
+      "region": "Quebec",
+      "descripcion": "Ciudad amurallada con arquitectura colonial francesa, Patrimonio de la UNESCO. Atmósfera europea en Norteamérica. Cultura quebequense concentrada en casco histórico. Francófona, diferente a resto de Canadá.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Montreal en autobús (3 horas, 15-25 EUR) o tren VIA (3 horas, 30-60 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales Vieux-Quebec o Saint-Jean-Baptiste: 30-40 EUR/noche",
+        "medio": "Hotels Old City: 85-130 EUR/noche",
+        "comfort": "Fairmont Frontenac o hotels históricos: 180-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Vieux-Québec - paseo por calles adoquinadas (gratis)",
+        "Catedral de Sainte-Anne - arquitectura religiosa (entrada de donativo)",
+        "Montmorency Falls - cascada cercana (parque gratuito, teleférico 13 EUR)",
+        "Isla de Orleans - ciclismo y pueblos rurales (gratis, alquiler bici 20-30 EUR/día)",
+        "Funicular Vieux-Québec - vistas y acceso (8 EUR ida/vuelta)"
+      ],
+      "donde_comer": "Tourtière quebequense (10-14 EUR), poutine tradicional (8-12 EUR), restaurantes Rue Saint-Louis (18-30 EUR), cafés franceses (5-8 EUR)",
+      "consejo_local": "El francés es predominante; muy poco inglés fuera de zonas turísticas. Vieux-Québec es pequeño pero encantador; camina sin mapa. Muchas escaleras y callejones; buen calzado importante.",
+      "plan_b_lluvia": "Museos (Musée de la Civilisation, Musée des Beaux-Arts), cafés cozy, tiendas de artesanía",
+      "keywords": [
+        "Quebec City",
+        "Vieux-Quebec",
+        "Old Quebec",
+        "Montmorency Falls",
+        "Isla Orleans"
+      ]
+    }
+  ]
+}

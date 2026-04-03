@@ -1,0 +1,334 @@
+{
+  "pais": "Togo",
+  "codigo": "tg",
+  "destinos": [
+    {
+      "id": "lome",
+      "nombre": "Lomé",
+      "tipo": "ciudad",
+      "region": "Región Marítima",
+      "descripcion": "Capital y puerta de entrada a Togo, con playas urbanas, mercados vibrantes y museos que documentan la historia colonial y contemporánea del país. Centro de vida nocturna y gastronomía de Togo, punto de partida lógico para explorar el país.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Vuelo internacional al Aeropuerto Internacional de Lomé (TLI). Conexiones desde París, Casablanca o Accra. Duración: 2-6h. Coste: 150-400 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Quartier Administratif, 15-30 EUR/noche",
+        "medio": "Hoteles 3* en Plateau, 40-70 EUR/noche",
+        "comfort": "Hoteles 4* frente al mar (Sarakawa, Ibis), 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Lomé y paseo marítimo (gratis)",
+        "Mercado central de Lomé - textiles, artesanía (gratis, negociable)",
+        "Museu Nacional de Togo - arte y arqueología (3 EUR)",
+        "Monumento a los Independientes (gratis)",
+        "Barrio de Kodjoviakope - vida local auténtica (gratis)"
+      ],
+      "donde_comer": "Probar akoume (gachas de maíz), fufu y pescado a la parrilla. Rangos: callejero 2-4 EUR, medio 8-15 EUR, superior 20-35 EUR. Zona recomendada: Quartier Administratif y frente al mar.",
+      "consejo_local": "El mercado es más barato y genuino después de las 16h cuando los vendedores bajan precios. Evita pasear solo de noche en la playa.",
+      "plan_b_lluvia": "Museos, mercados cubiertos, cafés con Wi-Fi en el centro.",
+      "keywords": [
+        "Lome",
+        "Lomé",
+        "capital",
+        "playas urbanas",
+        "Kodjoviakope",
+        "mercado central",
+        "Museu Nacional"
+      ]
+    },
+    {
+      "id": "kpalime",
+      "nombre": "Kpalimé",
+      "tipo": "naturaleza",
+      "region": "Región de Plateaux",
+      "descripcion": "Centro montañoso de Togo rodeado de plantaciones de cacao, cascadas y bosques tropicales. Base ideal para senderismo, encuentros con comunidades rurales y experiencias agroturísticas auténticas, lejos del turismo de masas.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Lomé en minibús (120 km, 3-4h, 8-12 EUR) o coche alquilado (más cómodo, 40-60 EUR/día). Carreteras con baches.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses familiares, 12-20 EUR/noche",
+        "medio": "Hoteles locales con jardín (Hotel Kpalimé), 25-45 EUR/noche",
+        "comfort": "Ecolodges en las colinas (Cascade de Kpalimé), 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Cascada de Kpalimé y piscina natural (gratis)",
+        "Senderismo en el Parque de la Biodiversidad de Togodo (guía local 20-30 EUR/grupo)",
+        "Visita a plantaciones de cacao y degustación (5-10 EUR)",
+        "Pueblo de Kpalimé: artesanía local y tiendas (negociable)",
+        "Excursión al Monte Gemi (mejor vista del país, 6h, 15 EUR con guía)"
+      ],
+      "donde_comer": "Comida casera togolesa: akoume, okra, pollo guisado. Restaurantes básicos 4-8 EUR, comidas en casa de locales 6-12 EUR. Busca comedores locales fuera del centro.",
+      "consejo_local": "Contrata un guía local en el pueblo (disponibles en guesthouses), son baratos y te llevarán a lugares que no encontrarías en guías. Las mejores vistas al atardecer desde Monte Gemi requieren salir al amanecer.",
+      "plan_b_lluvia": "Visitas a plantaciones de cacao bajo techo, artesanía en talleres locales, cafés con vista a la montaña.",
+      "keywords": [
+        "Kpalime",
+        "Kpalimé",
+        "montaña",
+        "cascadas",
+        "cacao",
+        "senderismo",
+        "Togodo",
+        "Monte Gemi"
+      ]
+    },
+    {
+      "id": "toliara",
+      "nombre": "Toliara (Excursión a Benin)",
+      "tipo": "playa",
+      "region": "Frontera con Benin",
+      "descripcion": "Pequeño puerto costero fronterizo con playas tranquilas y acceso a la Ruta de los Esclavos en Benin vecino. Punto de partida para explorar sitios históricos de importancia global sin aglomeraciones turísticas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Lomé en minibús (200 km, 4-5h, 12-18 EUR) o autobús nocturno (8-15 EUR). También conexión desde Kpalimé (100 km, 3h).",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes junto al puerto, 10-18 EUR/noche",
+        "medio": "Pequeños hoteles locales, 20-35 EUR/noche",
+        "comfort": "Hoteles frente al mar (raramente disponibles), 40-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas locales tranquilas (gratis)",
+        "Exploración del puerto pesquero (gratis)",
+        "Excursión a Benin: Ruta de los Esclavos desde Ouidah (día completo, 30-50 EUR con guía desde Toliara o 50-80 EUR desde Benin)"
+      ],
+      "donde_comer": "Pescado fresco grillé, langostinos, fufu. Comedores locales 3-6 EUR, restaurantes básicos 8-12 EUR. Puerto tiene opciones baratas y frescas.",
+      "consejo_local": "Toliara es muy pequeño; la mayoría de viajeros hace parada de una noche antes de cruzar a Benin. Los documentos para Benin se tramitan fácilmente en la frontera o en Lomé. Lleva efectivo, pocos cajeros.",
+      "plan_b_lluvia": "Museos locales (si existen), cafés, exploración del pueblo a pie.",
+      "keywords": [
+        "Toliara",
+        "Toliare",
+        "puerto",
+        "playa",
+        "frontera",
+        "ruta esclavos",
+        "Benin"
+      ]
+    },
+    {
+      "id": "atakpame",
+      "nombre": "Atakpamé",
+      "tipo": "ciudad",
+      "region": "Región Central",
+      "descripcion": "Centro regional poco visitado con mercados auténticos, arquitectura colonial y acceso a cascadas cercanas. Parada práctica en la ruta hacia el norte, refrescante por su altitud y ambiente menos turístico que Lomé.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Lomé en minibús (150 km, 3-4h, 10-15 EUR) o desde Kpalimé (100 km, 2-3h, 8-12 EUR). Cruce de carreteras principales norte-sur.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicas, 12-20 EUR/noche",
+        "medio": "Hoteles locales, 25-40 EUR/noche",
+        "comfort": "Hotel Atakpamé (mejor opción), 45-65 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado central de Atakpamé (gratis, compra interesante)",
+        "Cascada de Cascada de Atakpamé (5 km, accesible en taxi local, 3 EUR)",
+        "Iglesia Católica de arquitectura colonial (gratis)",
+        "Paseo por barrios residenciales y vida local (gratis)"
+      ],
+      "donde_comer": "Comida togolesa tradicional, caldos y pescado. Comedores 3-6 EUR, pequeños hoteles 8-15 EUR. Mercado ofrece comidas baratas y frescas.",
+      "consejo_local": "Atakpamé es más un punto de paso que destino final, pero su mercado es uno de los más auténticos del país. Ideal si viajas en minibús entre norte y sur.",
+      "plan_b_lluvia": "Mercados cubiertos, cafés, exploración interior de la ciudad.",
+      "keywords": [
+        "Atakpame",
+        "Atakpamé",
+        "mercado",
+        "cascada",
+        "central",
+        "parada"
+      ]
+    },
+    {
+      "id": "sokode",
+      "nombre": "Sokodé",
+      "tipo": "ciudad",
+      "region": "Región Central",
+      "descripcion": "Segunda ciudad de Togo con auténtica vida urbana togolesa, mercados coloridos y acceso a tradiciones del norte del país. Menos visitada que Lomé pero con infraestructura suficiente para mochileros.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Lomé en minibús (300 km, 6-7h, 15-22 EUR) o desde Atakpamé (150 km, 3-4h, 10-15 EUR). Carreteras de calidad media.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses, 10-18 EUR/noche",
+        "medio": "Hoteles locales, 22-38 EUR/noche",
+        "comfort": "Hotel Sokodé o similares, 40-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Sokodé - textiles y cerámica (gratis, compras negociables)",
+        "Festivales culturales si coincides (verificar fechas, entrada 0-10 EUR)",
+        "Exploración de barrios tradicionales (gratis)",
+        "Excursión a aldeas cercanas (guía local 15-25 EUR)"
+      ],
+      "donde_comer": "Fufu, akoume, caldos de carne. Comedores 3-5 EUR, restaurantes 8-12 EUR. Mercado central es más barato.",
+      "consejo_local": "Sokodé es la puerta al norte cultural de Togo. Si viajas en minibús nocturno desde Lomé, llegarás por la mañana. Los mercados tienen mejor oferta martes y viernes.",
+      "plan_b_lluvia": "Mercados cubiertos, museos locales (pequeños), cafés interiores.",
+      "keywords": [
+        "Sokode",
+        "Sokodé",
+        "segunda ciudad",
+        "mercado",
+        "norte",
+        "central"
+      ]
+    },
+    {
+      "id": "lac-togo",
+      "nombre": "Lac Togo (Lago Togo)",
+      "tipo": "naturaleza",
+      "region": "Región Marítima",
+      "descripcion": "Laguna costera única con aldeas de pescadores sobre pilotes, manglares y vida acuática excepcional. Experiencia auténtica del Togo rural accesible como excursión desde Lomé sin necesidad de desplazamientos largos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Lomé: taxi colectivo a Togoville (30 km, 1h, 4-6 EUR). Desde allí, bote tradicional con pescadores locales (negociable, 20-40 EUR/grupo para tour de 4-5h).",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes en Togoville, 12-20 EUR/noche",
+        "medio": "Pequeños alojamientos con comida incluida, 25-40 EUR/noche",
+        "comfort": "Ecolodges (escasos), 50-80 EUR/noche si existen"
+      },
+      "que_hacer": [
+        "Tour en piragua por el lago observando aldeas (20-40 EUR con guía)",
+        "Visita a aldeas de pescadores sobre pilotes (incluido en tour, fotografía respetosa)",
+        "Observación de aves en manglares (incluido en tour)",
+        "Compra de pescado fresco de pescadores (gratis, negociable)"
+      ],
+      "donde_comer": "Pescado fresco grillé, sopa de pescado. Comedores en Togoville 4-8 EUR. Algunos tours incluyen almuerzo.",
+      "consejo_local": "Contrata un boatman local directamente en Togoville, es más barato que tours organizados desde Lomé. Lleva protector solar y sombrero, el reflejo del agua es intenso. Mejor visita al atardecer para fotografía.",
+      "plan_b_lluvia": "La lluvia rara vez impide los tours en piragua, lleva impermeable ligero.",
+      "keywords": [
+        "Lac Togo",
+        "lago",
+        "Togoville",
+        "pesca",
+        "manglares",
+        "piragua",
+        "aldeas"
+      ]
+    },
+    {
+      "id": "hohoe",
+      "nombre": "Hohoe",
+      "tipo": "naturaleza",
+      "region": "Región Volta",
+      "descripcion": "Puerta a la Región de Volta con cascadas, montañas y acceso a Ghana fronterizo. Centro para senderismo y experiencias rurales inmersivas con alojamientos ecoturísticos emergentes.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Lomé en minibús (250 km, 5-6h, 15-20 EUR) o desde Kpalimé (130 km, 3-4h, 10-15 EUR). Carreteras montañosas.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses, 12-22 EUR/noche",
+        "medio": "Ecolodges emergentes, 30-50 EUR/noche",
+        "comfort": "Ecolodges con vistas, 55-85 EUR/noche"
+      },
+      "que_hacer": [
+        "Cascada de Wli (más alta de Togo, 5 km senderismo, 5 EUR entrada + 15 EUR guía)",
+        "Cascada de Agumatsa (más accesible, 3 EUR entrada)",
+        "Senderismo en el bosque de Volta (8-10 EUR con guía)",
+        "Excursión a Ghana: Kumasi o playas (día completo, pasaporte requerido)"
+      ],
+      "donde_comer": "Comida rural togolesa, frutas frescas. Comedores 3-6 EUR, ecolodges 12-18 EUR.",
+      "consejo_local": "Las cascadas son mejores después de lluvia reciente (más caudal) pero también más peligrosas. Los guías locales son obligatorios en Wli por seguridad y son baratos. Muchos mochileros extienden desde aquí a Ghana.",
+      "plan_b_lluvia": "Cascadas con más caudal, explora pueblos locales, visitas a comunidades rurales.",
+      "keywords": [
+        "Hohoe",
+        "Hoho",
+        "cascadas",
+        "Wli",
+        "Agumatsa",
+        "Volta",
+        "montaña",
+        "Ghana"
+      ]
+    },
+    {
+      "id": "tsevie",
+      "nombre": "Tsevié",
+      "tipo": "rural",
+      "region": "Región Marítima",
+      "descripcion": "Pueblo rural pequeño accesible desde Lomé, conocido por cerámica tradicional y vida rural auténtica. Experiencia cultural inmersiva sin infraestructura turística masiva, ideal para viajeros que buscan lo genuino.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Lomé en taxi colectivo (40 km, 1-1.5h, 3-5 EUR). Excursión fácil de un día.",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes familiares si necesario, 10-15 EUR/noche",
+        "medio": "Guesthouses básicas, 15-25 EUR/noche",
+        "comfort": "Alojamiento es limitado; la mayoría hace excursión desde Lomé"
+      },
+      "que_hacer": [
+        "Talleres de cerámica tradicional (demostraciones gratuitas, 10-30 EUR por taller si compras)",
+        "Vida rural: campos, mercadillos locales (gratis)",
+        "Iglesia local de arquitectura colonial (gratis)",
+        "Comidas en casa de locales (negociable, 8-15 EUR)"
+      ],
+      "donde_comer": "Comida casera togolesa. Comedores rurales 3-5 EUR, casas de huéspedes 8-12 EUR.",
+      "consejo_local": "Tsevié es pequeño; la mayoría de turistas la visita como excursión de medio día desde Lomé combinada con Togoville. Los alfareros trabajan mejor en las mañanas. Negocia precios de artesanía con respeto.",
+      "plan_b_lluvia": "Visitas interiores a talleres, comidas con familias.",
+      "keywords": [
+        "Tsevie",
+        "Tsevié",
+        "cerámica",
+        "artesanía",
+        "rural",
+        "talleres"
+      ]
+    },
+    {
+      "id": "vogan",
+      "nombre": "Vogan",
+      "tipo": "rural",
+      "region": "Región Marítima",
+      "descripcion": "Aldea costera con playas tranquilas y comunidades de pescadores tradicionales. Alternativa más tranquila a Lomé para experimentar vida de playa auténtica con menos infraestructura pero más autenticidad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Lomé en taxi colectivo (35 km, 1-1.5h, 3-5 EUR). Carreteras costeras variables.",
+      "donde_dormir": {
+        "mochilero": "Casas junto a la playa, 10-18 EUR/noche",
+        "medio": "Guesthouses pequeñas, 20-35 EUR/noche",
+        "comfort": "Alojamientos son muy básicos; este es destino de bajo presupuesto"
+      },
+      "que_hacer": [
+        "Playa tranquila (gratis)",
+        "Observación de pescadores y vida local (gratis)",
+        "Caminatas al atardecer por la costa (gratis)",
+        "Compra de pescado fresco a pescadores (4-8 EUR kilo)"
+      ],
+      "donde_comer": "Pescado grillé y mariscos muy baratos y frescos. Comedores junto a la playa 4-7 EUR.",
+      "consejo_local": "Vogan es auténtica experiencia de playa rural sin desarrollo. No hay vida nocturna; es para quien busca relax y naturaleza. El pescado es el alimento local más fresco y barato del país.",
+      "plan_b_lluvia": "Playas con lluvia siguen siendo experiencia interesante; explora pueblos interiores.",
+      "keywords": [
+        "Vogan",
+        "playa rural",
+        "pescadores",
+        "tranquilo",
+        "costa"
+      ]
+    },
+    {
+      "id": "mango",
+      "nombre": "Mango",
+      "tipo": "ciudad",
+      "region": "Región Savanes",
+      "descripcion": "Puerta norte a Togo cerca de Burkina Faso, con mercados coloridos y acceso a paisajes de sabana. Destino para viajeros que continúan hacia Sahel africano o exploran el Togo menos visitado.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Sokodé en minibús (200 km, 4-5h, 15-20 EUR) o desde Lomé en minibús nocturno (500 km, 8-10h, 25-35 EUR). Parada de transito hacia Burkina Faso.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicas, 10-18 EUR/noche",
+        "medio": "Hoteles locales, 20-35 EUR/noche",
+        "comfort": "Alojamiento limitado, 35-50 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Mango - sabana local (gratis, compras negociables)",
+        "Vida fronteriza con Burkina Faso (exploración libre)",
+        "Paisajes de sabana (excursiones con locales)",
+        "Museu de Mango si existe (variable)"
+      ],
+      "donde_comer": "Mil (grano de sorgo), caldos, carne. Comedores 3-5 EUR. Mercado ofrece opciones baratas.",
+      "consejo_local": "Mango es principalmente parada de tránsito. Si cruzas a Burkina Faso, los documentos se tramitan en Ouagadougou o ciudades fronterizas. El clima es seco y cálido; hidratación esencial.",
+      "plan_b_lluvia": "Mercados cubiertos, cafés, descanso en hotel.",
+      "keywords": [
+        "Mango",
+        "norte",
+        "Savanes",
+        "Burkina Faso",
+        "frontera",
+        "sabana",
+        "mercado"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,334 @@
+{
+  "pais": "Barbados",
+  "codigo": "bb",
+  "destinos": [
+    {
+      "id": "bridgetown",
+      "nombre": "Bridgetown",
+      "tipo": "ciudad",
+      "region": "San Miguel",
+      "descripcion": "Capital y principal puerto de entrada a Barbados, con mercados locales auténticos, museos y arquitectura colonial británica. Centro neurálgico para acceder a servicios, transporte y la vida real de la isla. Imprescindible para entender la cultura barbadiana lejos de las playas turísticas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Aeropuerto Internacional Grantley Adams (BGI) a 15 km: taxi/uber 25-35 EUR o autobús 3 EUR (30-40 minutos)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en el centro o St. James: 40-60 EUR/noche",
+        "medio": "Hotel de 3 estrellas (Hilton Barbados, Coral Reef Club nearby): 80-130 EUR/noche",
+        "comfort": "Resort de lujo (Sandy Lane, Four Seasons): 250-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar Garrison Historic Area y Fort Savannah (gratis/pequeña entrada)",
+        "Recorrer Bridgetown Market para comida local y souvenirs (gratis)",
+        "Barbados Museum & Historical Society (8 EUR)",
+        "St. Michael's Cathedral (gratis)"
+      ],
+      "donde_comer": "Fish cakes, cou-cou y macarrones de ensalada en Bridgetown Market. Rango: 5-15 EUR. Zona: Garrison o centro comercial The Boardwalk",
+      "consejo_local": "Ve al mercado temprano (7-9 AM) para encontrar comida más fresca y menos turistas. Los viernes hay ambiente más local en los bares nocturnos del centro.",
+      "plan_b_lluvia": "Museos interiores (Garrison, Barbados Museum), shopping en malls climatizados (The Boardwalk, Sunset Crest)",
+      "keywords": [
+        "Bridgetown",
+        "Bridge Town",
+        "capital barbados",
+        "Garrison",
+        "San Miguel",
+        "puerto"
+      ]
+    },
+    {
+      "id": "bathsheba",
+      "nombre": "Bathsheba",
+      "tipo": "playa",
+      "region": "San José",
+      "descripcion": "Playa salvaje en la costa este con olas gigantes y atmósfera rústica, lejos del turismo masivo. Ideal para quienes buscan autenticidad: pequeños pueblos, surfistas locales y paisajes áridos únicos. Contrasta radicalmente con las playas occidentales comerciales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril (menos olas peligrosas)",
+      "como_llegar": "Desde Bridgetown en autobús (ruta 3): 45 minutos, 3 EUR. O taxi compartido: 8-12 EUR. Carretera sinuosa pero bien señalizada.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse simple en Bathsheba: 35-50 EUR/noche",
+        "medio": "Pequeño hotel local (Atlantis Hotel): 70-100 EUR/noche",
+        "comfort": "Resort boutique (Round House, St. Nicholas Abbey nearby): 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en la playa (cuidado con olas fuertes, solo para nadadores experimentados)",
+        "Caminar por los acantilados y paisaje árido costero (gratis)",
+        "Observar surfistas locales (gratis)",
+        "Visitar St. Nicholas Abbey rum distillery (10 EUR, incluye degustación)"
+      ],
+      "donde_comer": "Pescado fresco y mariscos en pequeños comedores locales. Rango: 8-20 EUR. Zona: en la misma playa o pueblo de Bathsheba",
+      "consejo_local": "No entres en el agua si no eres nadador fuerte: las olas son impredecibles. La playa es más segura en primavera. El camarero del pequeño bar local te dará los mejores tips sobre el área.",
+      "plan_b_lluvia": "St. Nicholas Abbey rum distillery y jardines (cubierto y con degustación), o visitar pueblos cercanos como Punta Gorda",
+      "keywords": [
+        "Bathsheba",
+        "Bathsheva",
+        "costa este",
+        "San Jose",
+        "olas",
+        "acantilados",
+        "playa salvaje"
+      ]
+    },
+    {
+      "id": "oistins",
+      "nombre": "Oistins",
+      "tipo": "playa",
+      "region": "Cristo",
+      "descripcion": "Pueblo de pescadores con playa accesible, mercado vibrante y una atmósfera auténtica que atrae a locales más que a turistas. El Oistins Bay Fish Fry de viernes es un evento social imprescindible: comida callejera, música en vivo y ambiente genuino.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Desde Bridgetown en autobús (ruta 10): 30 minutos, 2.50 EUR. O taxi: 12-15 EUR. Ubicado al sur de la isla.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Oistins o Christ Church: 40-60 EUR/noche",
+        "medio": "Hotel pequeño (South Coast): 70-110 EUR/noche",
+        "comfort": "Resort costero (Cobblers Cove, Maxwell): 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Oistins Bay Fish Fry los viernes: comida, música en vivo, ambiente local (gratis entrada, comida 10-20 EUR)",
+        "Baño en la playa tranquila (gratis)",
+        "Mercado de pescadores y compra de pescado fresco (gratis)",
+        "Paseo por el pueblo y playas cercanas (gratis)"
+      ],
+      "donde_comer": "Fish cakes, marisados grillados y mofongo en el Fish Fry del viernes. Rango: 8-18 EUR. Zona: Oistins Bay directamente en la arena",
+      "consejo_local": "El Fish Fry comienza alrededor de las 7 PM los viernes y se llena rápidamente. Ve entre las 7-8 PM para vivir el ambiente puro. Los vendedores ambulantes ofrecen cerveza fría a buenos precios.",
+      "plan_b_lluvia": "Mercado de pescadores cubierto, pequeños bares locales en el pueblo, o desplazarse a atracciones interiores cercanas",
+      "keywords": [
+        "Oistins",
+        "Oystins",
+        "Fish Fry",
+        "Cristo",
+        "costa sur",
+        "pueblo pescadores",
+        "mercado"
+      ]
+    },
+    {
+      "id": "carlisle-bay",
+      "nombre": "Carlisle Bay / St. James",
+      "tipo": "playa",
+      "region": "San Jacobo",
+      "descripcion": "Bahía con playas doradas y restos de naufragios sumergidos, perfecta para snorkel y buceo. Ofrece una mezcla de playas turísticas accesibles con la posibilidad de explorar patrimonio submarino sin necesidad de salir de la isla.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Bridgetown en autobús (ruta 1 o 2): 20 minutos, 2 EUR. Playas: Carlisle Bay, Accra, Needham's Point. Acceso caminando desde Bridgetown también.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en St. James o cerca de la playa: 45-65 EUR/noche",
+        "medio": "Hotel 3 estrellas (Hilton Barbados, Coral Reef Club): 90-150 EUR/noche",
+        "comfort": "Resort beachfront (Sandals, Sandy Lane): 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en los naufragios de Carlisle Bay (tours desde 25 EUR)",
+        "Baño en playas tranquilas (gratis)",
+        "Buceo certificado (tours desde 80 EUR)",
+        "Visitar Fort Garrison y paseo histórico (gratis)"
+      ],
+      "donde_comer": "Beachfront restaurants con pescado fresco, rango: 12-30 EUR. Zona: Carlisle Bay beachfront o Back Street",
+      "consejo_local": "Los naufragios son poco profundos (5-10 metros) y visibles incluso para esnorkelistas principiantes. Contrata operadores locales certificados en lugar de grandes tour operators: son más baratos y igual de seguros.",
+      "plan_b_lluvia": "Buceo en piscinas cubiertas locales, museos en Bridgetown cercano, compras en The Boardwalk",
+      "keywords": [
+        "Carlisle Bay",
+        "St. James",
+        "naufragios",
+        "snorkel",
+        "playas doradas",
+        "buceo",
+        "Needham's Point"
+      ]
+    },
+    {
+      "id": "holetown",
+      "nombre": "Holetown",
+      "tipo": "ciudad",
+      "region": "San Jacobo",
+      "descripcion": "Pueblos colonial costera con puerto histórico, tiendas y restoranes de nivel medio. Menos concurrida que las playas turísticas masivas, pero con servicios completos. Punto base sensato para explorar la costa oeste sin depender de Bridgetown.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Desde Bridgetown en autobús (ruta 1): 30 minutos, 2.50 EUR. O taxi: 15-20 EUR. Costa oeste, 20 km al norte.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse o alojamiento básico: 50-70 EUR/noche",
+        "medio": "Hotel pequeño (Tropical Sunset Beach Resort): 90-130 EUR/noche",
+        "comfort": "Resort costa oeste (Sandy Lane, Coral Reef Club): 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por el puerto y arquitectura colonial (gratis)",
+        "Compras en tiendas locales y duty-free (variable)",
+        "Baño en playa Holetown (gratis)",
+        "Visitar iglesia histórica St. James Parish Church (gratis)"
+      ],
+      "donde_comer": "Restaurantes locales con pescado y mariscos, rango: 10-25 EUR. Zona: centro de Holetown o frente a playa",
+      "consejo_local": "Holetown es mucho más tranquilo que Bridgetown pero con todos los servicios. Los autobuses locales pasan cada 30 minutos. Los viernes por la noche hay más vida nocturna local en bares del centro.",
+      "plan_b_lluvia": "Compras cubiertas, cafés y restoranes interiores, o desplazarse a atracciones cercanas",
+      "keywords": [
+        "Holetown",
+        "Hole Town",
+        "St. James",
+        "costa oeste",
+        "puerto colonial",
+        "tiendas"
+      ]
+    },
+    {
+      "id": "crane-beach",
+      "nombre": "Crane Beach",
+      "tipo": "playa",
+      "region": "Cristo",
+      "descripcion": "Una de las playas más hermosas de Barbados con arena rosada y aguas tranquilas, ubicada al sur. Forma un anfiteatro natural con acantilados. Accesible pero con menos turismo masivo que el norte, ideal para quien busca belleza sin multitudes.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Desde Bridgetown en autobús (ruta 10 o taxi compartido): 45 minutos, 3-15 EUR. Ubicada al sur, acceso desde pueblo St. Philip.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Cristo Church o St. Philip: 45-65 EUR/noche",
+        "medio": "Hotel pequeño cerca de la playa: 80-130 EUR/noche",
+        "comfort": "Crane Resort (resort de lujo): 150-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño y relajación en la playa (gratis)",
+        "Fotografía de paisajes y acantilados (gratis)",
+        "Snorkel en aguas tranquilas (gratis o tours 20-30 EUR)",
+        "Paseo por acantilados y senderos (gratis)"
+      ],
+      "donde_comer": "Restaurantes en resort Crane o pueblos cercanos, rango: 12-35 EUR. Zona: en el mismo resort o tiendas pequeñas en St. Philip",
+      "consejo_local": "Las aguas en Crane son mucho más tranquilas que en la costa este. Ve a media mañana para evitar grupos de tour operators. La puesta de sol desde los acantilados es espectacular.",
+      "plan_b_lluvia": "Paseos cubiertos en pueblos cercanos, tiendas de artesanía, o retorno a zonas con más servicios",
+      "keywords": [
+        "Crane Beach",
+        "Crane",
+        "arena rosada",
+        "Cristo",
+        "acantilados",
+        "sur",
+        "St. Philip"
+      ]
+    },
+    {
+      "id": "bathsheba-rum-distillery",
+      "nombre": "St. Nicholas Abbey / Rum Distillery",
+      "tipo": "histórico",
+      "region": "San José",
+      "descripcion": "Plantación histórica y destilería de ron con jardines, construcciones coloniales y museo. Oferece un salto a la historia azucarera y la producción de ron barbadiano. Parada educativa que mezcla patrimonio, bebida local y paisajes rurales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Bathsheba a 2 km: taxi local 5 EUR. O desde Bridgetown: autobús + taxi, 60 minutos, 8-12 EUR total",
+      "donde_dormir": {
+        "mochilero": "En Bathsheba (ver entrada Bathsheba)",
+        "medio": "Pequeños hoteles en St. Joseph o cercanos: 70-100 EUR/noche",
+        "comfort": "St. Nicholas Abbey property (posibilidad de alojamiento): 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour guiado por la plantación y casa histórica (10 EUR)",
+        "Degustación de ron (incluida en tour)",
+        "Recorrido por jardines tropicales (gratis con entrada)",
+        "Compra de ron y souvenirs (variable)"
+      ],
+      "donde_comer": "Café pequeño en la propiedad, rango: 8-15 EUR. O volver a Bathsheba para comer pescado fresco",
+      "consejo_local": "El tour dura 90 minutos. Los tours salen con grupos pequeños, así que la experiencia es íntima. La degustación de ron es generosa. Compra botellas allí: son más baratas que en tiendas.",
+      "plan_b_lluvia": "Los tours se hacen igualmente (edificios principales están cubiertos)",
+      "keywords": [
+        "St. Nicholas Abbey",
+        "Abbey",
+        "destilería ron",
+        "plantación",
+        "San Jose",
+        "colonial",
+        "historia azucarera"
+      ]
+    },
+    {
+      "id": "bathsheba-bridgetown-camino",
+      "nombre": "East Coast Road (Ruta Costera Este)",
+      "tipo": "naturaleza",
+      "region": "San José - Saliente de Andrés",
+      "descripcion": "Ruta de carretera costera panorámica que atraviesa la costa este menos turística, con vistas salvajes, pueblos auténticos y paisajes áridos únicos. Recorrido imprescindible para entender la diversidad geográfica de Barbados más allá de playas occidentales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "En autobús desde Bridgetown (ruta 3): 60 minutos hasta el final. O alquilar scooter/auto (30-50 EUR/día) y hacer el recorrido a tu ritmo.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en pueblos de la ruta (Bathsheba, St. Andrew): 35-55 EUR/noche",
+        "medio": "Pequeños hoteles rurales: 60-100 EUR/noche",
+        "comfort": "Resort boutique cercano: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Conducir/autobús por la costa este contemplando paisajes (gratis)",
+        "Paradas en pueblos pequeños: Consett Bay, Sallient, Punta Gorda (gratis)",
+        "Fotografía de acantilados y olas (gratis)",
+        "Visitas a iglesias rurales y tiendas locales (gratis)"
+      ],
+      "donde_comer": "Pequeños comedores locales en pueblos de la ruta. Rango: 6-14 EUR. Zona: cualquier pueblo en la ruta",
+      "consejo_local": "La carretera es sinuosa pero segura. Lleva agua y snacks. Los autobuses locales paran a demanda en cualquier punto. El paisaje es tan impresionante como poco conocido: es donde ves el verdadero Barbados.",
+      "plan_b_lluvia": "La ruta es manejable incluso con lluvia (es la costa menos lluviosa), pero lleva paraguas. Paradas en cafés o tiendas cubiertas de pueblos.",
+      "keywords": [
+        "East Coast",
+        "costa este",
+        "carretera panorámica",
+        "San Jose",
+        "St. Andrew",
+        "paisaje rural",
+        "acantilados"
+      ]
+    },
+    {
+      "id": "sp-george-valley",
+      "nombre": "Harrison's Cave & Interior",
+      "tipo": "naturaleza",
+      "region": "San Andrés",
+      "descripcion": "Reserva natural con cascadas, cuevas y vegetación tropical dentro de la isla. Único lugar montañoso de Barbados con auténtica selva interior. Tren acuático (boating ride) y senderismo ofrecen una cara muy diferente a las playas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril (menos lluvia)",
+      "como_llegar": "Desde Bridgetown en autobús + taxi: 45 minutos, 12-15 EUR. O tour organizado desde hotel: 20-40 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en pueblos cercanos (Bathsheba, Salient): 40-60 EUR/noche",
+        "medio": "Hotel rural pequeño: 70-110 EUR/noche",
+        "comfort": "Resort cercano (St. Nicholas Abbey area): 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Tren acuático en Harrison's Cave (8 EUR, incluido en entrada)",
+        "Entrada a la reserva natural y cascadas (8 EUR)",
+        "Senderismo en senderos designados (gratis con entrada)",
+        "Baño en piscinas naturales de agua dulce (gratis con entrada)"
+      ],
+      "donde_comer": "Pequeño café en la entrada de Harrison's Cave. Rango: 5-12 EUR. O comer en Bathsheba próximo.",
+      "consejo_local": "Es la única atracción 'natural interior' de Barbados real. Ve temprano (9-10 AM) para evitar tours grandes. El paseo en bote dentro de la cueva es la experiencia principal: no es largo pero es único.",
+      "plan_b_lluvia": "Harrison's Cave funciona incluso con lluvia y ofrece un ambiente más misterioso. Lleva ropa que se pueda mojar.",
+      "keywords": [
+        "Harrison's Cave",
+        "cascadas",
+        "interior",
+        "San Andres",
+        "reserva natural",
+        "cueva",
+        "bote"
+      ]
+    },
+    {
+      "id": "st-andrew-south",
+      "nombre": "St. Andrew / Salient South",
+      "tipo": "rural",
+      "region": "San Andrés",
+      "descripcion": "Pueblos rurales interior y sur de la isla donde la vida es lenta y auténtica. Plantaciones residuales, tiendas locales, gente amable. Ideal para viajeros independientes que quieren alejarse de cualquier turistización y ver Barbados real.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Desde Bridgetown en autobús (ruta 3 o 10): 50-70 minutos, 3 EUR. Alquilar scooter para libertad (30-40 EUR/día).",
+      "donde_dormir": {
+        "mochilero": "Guesthouse muy básica en pueblo: 35-50 EUR/noche",
+        "medio": "Pequeño hotel rural: 60-100 EUR/noche",
+        "comfort": "No hay opciones cómodas; mejor buscas alojamiento en Bathsheba o Bridgetown"
+      },
+      "que_hacer": [
+        "Paseos por pueblos y campos (gratis)",
+        "Compras en tiendas locales (variable)",
+        "Conversaciones con locales en bares pequeños (gratis)",
+        "Fotografía de vida rural (gratis)"
+      ],
+      "donde_comer": "Comedores caseros muy locales con comida criolla. Rango: 5-10 EUR. Zona: centros de pueblos",
+      "consejo_local": "No hay atracción 'turística' oficial. El valor está en la autenticidad. Los locales son amables si saludas. Lleva efectivo: pocos lugares aceptan tarjetas. Come en casas con comida típica: es donde comes mejor y más barato.",
+      "plan_b_lluvia": "Pasos en bares y cafés locales. El clima es seco en el sur, así que lluvia es rara.",
+      "keywords": [
+        "St. Andrew",
+        "Sallient",
+        "rural",
+        "interior",
+        "pueblos pequenos",
+        "autentique",
+        "vida local"
+      ]
+    }
+  ]
+}

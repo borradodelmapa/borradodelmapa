@@ -1,0 +1,328 @@
+{
+  "pais": "Micronesia",
+  "codigo": "fm",
+  "destinos": [
+    {
+      "id": "pohnpei",
+      "nombre": "Pohnpei",
+      "tipo": "isla",
+      "region": "Estado de Pohnpei",
+      "descripcion": "La isla más grande de Micronesia, centro cultural y administrativo del país. Destino principal para acceso a ruinas de Nan Madol y buceo en arrecifes vírgenes. Punto de entrada más común para viajeros independientes.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Vuelo desde Guam o Honolulu a Aeropuerto Internacional de Pohnpei (PNI). Duración: 3-5 horas desde Guam. Coste aproximado: 250-400 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses familiares en Kolonia: 40-70 EUR/noche",
+        "medio": "Hotels pequeños (Cliff Rainbow Hotel): 90-130 EUR/noche",
+        "comfort": "Resorts con vistas (Ohonua Resort): 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita a ruinas de Nan Madol, ciudad abandonada del siglo XIII (entrada: 5 EUR)",
+        "Buceo en arrecifes de Palikir y Nett (tours: 80-120 EUR)",
+        "Senderismo en selva tropical hacia cascadas (guía local: 50-70 EUR)",
+        "Snorkel en Pwunso Reef (acceso libre/tour 40 EUR)"
+      ],
+      "donde_comer": "Cocina micronesia: arroz con pescado, camarones enlatados locales. Kolonia tiene comedores chinos, japoneses e hindúes. Rango: 8-20 EUR por comida. Zona: centro de Kolonia.",
+      "consejo_local": "Las ruinas de Nan Madol requieren bote y guía local obligatorio. Reserva con antelación en época alta. Los mosquitos son agresivos; lleva repelente fuerte.",
+      "plan_b_lluvia": "Museos locales (Pohnpei State Museum), compras en tiendas de artesanía, comidas en restaurantes cubiertos.",
+      "keywords": [
+        "Pohnpei",
+        "Kolonia",
+        "Nan Madol",
+        "arrecife",
+        "buceo",
+        "selva tropical"
+      ]
+    },
+    {
+      "id": "chuuk",
+      "nombre": "Chuuk (Truk)",
+      "tipo": "isla",
+      "region": "Estado de Chuuk",
+      "descripcion": "Destino de buceo legendario con pecios japoneses de la Segunda Guerra Mundial en lagunas intactas. Centro vital para buceadores avanzados y arqueólogos submarinos. Experiencia única imposible de replicar.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Vuelo desde Pohnpei con Airlines of Micronesia (1 hora, 120-150 EUR) o desde Guam con conexión (4-5 horas, 300-450 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses cercanas a muelles (35-60 EUR/noche)",
+        "medio": "Hotels con servicios de buceo (Truk Stop Hotel): 100-150 EUR/noche",
+        "comfort": "Resorts flotantes de buceo (Blue Lagoon Resort): 180-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en pecios de buques de guerra japoneses (tours diarios: 120-180 EUR, certificado requerido)",
+        "Snorkel en lagunas internas (tour: 60-80 EUR)",
+        "Visita a pueblos locales en canoa (tour cultural: 50-70 EUR)",
+        "Buceo recreativo en arrecife de barrera (75-120 EUR)"
+      ],
+      "donde_comer": "Pescado fresco, mariscos. Comidas en hoteles o comedores simples. Rango: 10-25 EUR. Pocos restaurantes con ambiente; cocina básica pero auténtica.",
+      "consejo_local": "Chuuk es famosa pero menos desarrollada. Trae efectivo (muchos lugares no aceptan tarjeta). Los pecios están entre 20-60m de profundidad; necesitas certificación de buceo.",
+      "plan_b_lluvia": "Visitas culturales a aldeas, compras de artesanía local, películas/lectura en hotel.",
+      "keywords": [
+        "Chuuk",
+        "Truk",
+        "pecios",
+        "buceo",
+        "laguna",
+        "WWII",
+        "arrecife"
+      ]
+    },
+    {
+      "id": "kosrae",
+      "nombre": "Kosrae",
+      "tipo": "isla",
+      "region": "Estado de Kosrae",
+      "descripcion": "Isla menos conocida pero altamente recomendada para independientes: naturaleza virgen, arrecife intacto, ruinas arqueológicas y gente cálida. Perfecto para evadir turismo de masas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Vuelo desde Pohnpei (1 hora, 100-140 EUR) o conexión vía Guam. Aeropuerto pequeño, transporte limitado.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses familiares en Tafunsak: 35-55 EUR/noche",
+        "medio": "Kosrae Nautilus Resort: 100-140 EUR/noche",
+        "comfort": "ECO Resort con vistas al océano: 130-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a ruinas de Lelu (fortaleza antigua, entrada: 3 EUR)",
+        "Snorkel en arrecife virgen (tour o acceso libre desde playas: gratis-50 EUR)",
+        "Buceo en Blue Lagoon (tours: 80-120 EUR)",
+        "Visita a aldea tradicional y mercado local (gratis)"
+      ],
+      "donde_comer": "Comida casera micronesia: calamansi, coco, pescado. Pocas opciones formales. Rango: 8-18 EUR. Come en guesthouses o tiendas locales.",
+      "consejo_local": "Renta una bicicleta o coche (único transporte fiable). La isla da una vuelta en 2 horas. Hospedajes ofrecen almuerzo si avisa. Pocas turbas turísticas.",
+      "plan_b_lluvia": "Paseos en pueblo, descanso en hospedaje, visita a museo local.",
+      "keywords": [
+        "Kosrae",
+        "Lelu",
+        "arrecife",
+        "ruinas",
+        "Tafunsak",
+        "naturaleza"
+      ]
+    },
+    {
+      "id": "yap",
+      "nombre": "Yap",
+      "tipo": "isla",
+      "region": "Estado de Yap",
+      "descripcion": "Isla cultural única donde se conservan tradiciones ancestrales, dinero de piedra y ceremonia de bienvenida. Menos turística que otras, ofrece inmersión genuina en vida micronesia.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Vuelo desde Guam con United Airlines (3 horas, 280-380 EUR). Única conexión desde Guam directo.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Colonia: 40-65 EUR/noche",
+        "medio": "Manta Ray Bay Hotel: 110-150 EUR/noche",
+        "comfort": "Yap Pacific Resort: 140-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo con mantas rayas (octubre-mayo, tours: 100-150 EUR)",
+        "Visita a aldea tradicional con guía (tour cultural: 60-80 EUR, obligatorio)",
+        "Snorkel en Blue Magic Channel (tour: 50-70 EUR)",
+        "Observación de dinero de piedra (Rai stones) en aldeas (gratis con guía)"
+      ],
+      "donde_comer": "Gastronomía tradicional: taro, coco, langosta. Restaurantes simples en Colonia. Rango: 10-22 EUR. Comida auténtica sin pretensiones.",
+      "consejo_local": "Se requiere guía local para cualquier actividad cultural (ley local). Las mantas rayas son espectaculares en temporada. El dinero de piedra (Rai) es cultural, no turístico.",
+      "plan_b_lluvia": "Museos de tradiciones, talleres de artesanía, compras de souvenirs únicos.",
+      "keywords": [
+        "Yap",
+        "mantas rayas",
+        "dinero de piedra",
+        "cultura",
+        "Colonia",
+        "buceo"
+      ]
+    },
+    {
+      "id": "palau",
+      "nombre": "Palau",
+      "tipo": "isla",
+      "region": "Archipiélago de Palau",
+      "descripcion": "Aunque técnicamente independiente desde 1994, históricamente parte de Micronesia. Destino de buceo de clase mundial con Jellyfish Lake y Rock Islands. Altamente recomendado para buceadores.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "septiembre a noviembre, marzo a mayo",
+      "como_llegar": "Vuelo desde Manila o Taipei a Aeropuerto de Palau (ROR). Duración: 2-3 horas. Coste: 150-300 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Koror: 50-80 EUR/noche",
+        "medio": "Hotels medianos (Palau Pacific Resort): 120-180 EUR/noche",
+        "comfort": "Resorts premium (Palau Royal Resort): 200-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en Blue Corner y German Channel (tours: 90-140 EUR)",
+        "Visita a Jellyfish Lake (medusas no urticantes, tour: 50-80 EUR)",
+        "Tour en Rock Islands y Kayak en manglares (60-100 EUR)",
+        "Snorkel en arrecife (tours: 40-70 EUR)"
+      ],
+      "donde_comer": "Cocina diversa: filipina, japonesa, local. Koror tiene buenos restaurantes. Rango: 12-30 EUR. Zona: centro de Koror.",
+      "consejo_local": "Palau cobra entrada ambiental (50 USD). Viaja con operador turístico de confianza. El buceo es muy bueno pero las corrientes pueden ser fuertes.",
+      "plan_b_lluvia": "Museos de historia, compras, descanso en resort.",
+      "keywords": [
+        "Palau",
+        "buceo",
+        "Rock Islands",
+        "Koror",
+        "Jellyfish Lake",
+        "arrecife"
+      ],
+      "excursion_desde": true
+    },
+    {
+      "id": "ulithi-atoll",
+      "nombre": "Ulithi Atoll",
+      "tipo": "isla",
+      "region": "Estado de Yap",
+      "descripcion": "Atolón remoto administrado por Yap con vida tradicional intacta. Acceso limitado requiere planificación, pero recompensa con autenticidad y buceo virgen.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Ferry desde Yap (Colonia) cada 2 semanas, 4-6 horas (30-50 EUR). Requiere coordinación previa con operadores locales.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje comunitario: 30-50 EUR/noche",
+        "medio": "Guesthouses básicas: 50-80 EUR/noche",
+        "comfort": "Opciones limitadas; mejor hospedarse en Yap e ir de excursión"
+      },
+      "que_hacer": [
+        "Buceo en aguas vírgenes (con operador de Yap, 100-150 EUR)",
+        "Snorkel en arrecife comunitario (gratis o donación)",
+        "Vida de aldea tradicional (observación, participación con permiso)",
+        "Pesca tradicional (tours con pescadores locales: 50-80 EUR)"
+      ],
+      "donde_comer": "Comida completamente local: pez, coco, taro. Alojamiento incluye comidas. Rango: incluido en hospedaje.",
+      "consejo_local": "Planificación obligatoria: ferries no son regulares. Lleva dinero en efectivo. La vida aquí es lenta y tradicional; no hay tiendas ni servicios.",
+      "plan_b_lluvia": "Actividades internas en aldea, historias con ancianos, descanso.",
+      "keywords": [
+        "Ulithi",
+        "atolón",
+        "Yap",
+        "remoto",
+        "tradicional",
+        "buceo virgen"
+      ]
+    },
+    {
+      "id": "weno-chuuk",
+      "nombre": "Weno (Chuuk)",
+      "tipo": "isla",
+      "region": "Estado de Chuuk, Laguna de Chuuk",
+      "descripcion": "Isla principal de la laguna de Chuuk, centro administrativo y punto de partida para buceo en pecios. Menos turística que Pohnpei pero con infraestructura suficiente.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Vuelo desde Pohnpei (1 hora, 120-150 EUR) o Guam con conexión.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Weno: 35-60 EUR/noche",
+        "medio": "Truk Stop Hotel (mejor opción): 100-150 EUR/noche",
+        "comfort": "Blue Lagoon Dive Resort: 180-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en pecios específicos (Shinkoku Maru, tours: 120-180 EUR)",
+        "Snorkel en áreas protegidas de laguna (tours: 60-80 EUR)",
+        "Visita a memorials de WWII (entrada: 5 EUR)",
+        "Paseos en bote por aldeas de palafitos (tour: 50-70 EUR)"
+      ],
+      "donde_comer": "Pescado fresco diario. Restaurantes en hoteles o comedores locales. Rango: 10-20 EUR.",
+      "consejo_local": "Weno es más compacta que Pohnpei. El alojamiento con buceo integrado es más económico que tours separados.",
+      "plan_b_lluvia": "Descanso en hotel, preparación de equipo, visitas culturales",
+      "keywords": [
+        "Weno",
+        "Chuuk",
+        "pecios",
+        "WWII",
+        "buceo"
+      ]
+    },
+    {
+      "id": "majuro",
+      "nombre": "Majuro",
+      "tipo": "isla",
+      "region": "Islas Marshall",
+      "descripcion": "Capital de Islas Marshall, históricamente parte de Micronesia. Hub de transporte regional con museo de historia nuclear. Punto de conexión útil para viajeros.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Vuelo desde Guam (2 horas, 200-350 EUR) o conexión desde otras islas. Majuro es hub aéreo regional.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 45-70 EUR/noche",
+        "medio": "Marshall Islands Resort: 110-150 EUR/noche",
+        "comfort": "Outrigger Marshall Islands: 160-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo de Alele (historia y cultura, entrada: 5 EUR)",
+        "Snorkel en arrecife local (tours: 50-80 EUR)",
+        "Paseos en bote a islas cercanas (tour: 60-90 EUR)",
+        "Visita a mercado local y tiendas de artesanía (gratis)"
+      ],
+      "donde_comer": "Comida internacional y local. Rango: 12-25 EUR. Centro tiene opciones variadas.",
+      "consejo_local": "Majuro es punto de tránsito, no destino final. Los precios son altos (isla importa todo). Buena base para explorar Islas Marshall.",
+      "plan_b_lluvia": "Museos, compras, descanso en hotel.",
+      "keywords": [
+        "Majuro",
+        "Islas Marshall",
+        "nuclear",
+        "arrecife",
+        "hub"
+      ],
+      "excursion_desde": true
+    },
+    {
+      "id": "ngerulmud",
+      "nombre": "Ngerulmud",
+      "tipo": "histórico",
+      "region": "Palau, Babeldaob",
+      "descripcion": "Capital administrativa de Palau en la isla principal. Centro político con arquitectura moderna y acceso a parques naturales de Babeldaob. Menos turístico pero importante para context.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "Desde Koror en coche/tour (1 hora, 40-60 EUR con tour) o alquiler de auto.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje en Koror, viaje de día",
+        "medio": "Hotel en Babeldaob cercano: 90-130 EUR/noche",
+        "comfort": "Resort en la zona: 140-190 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita al Capitolio (arquitectura moderna, tours guiados: 20 EUR)",
+        "Senderismo en Babeldaob National Park (gratis, senderos señalizados)",
+        "Cascadas y piscinas naturales (tour: 50-80 EUR)",
+        "Viewpoint de Ngerulmud (entrada: gratuita)"
+      ],
+      "donde_comer": "Restaurantes limitados; mejor comer en Koror. Rango: 15-30 EUR.",
+      "consejo_local": "Requiere transporte propio o tour. La capital no es destino turístico en sí, pero parada interesante en viaje a Babeldaob.",
+      "plan_b_lluvia": "Museos de Ngerelmud, tours interiores.",
+      "keywords": [
+        "Ngerulmud",
+        "Palau",
+        "capital",
+        "Babeldaob",
+        "naturaleza"
+      ],
+      "excursion_desde": true
+    },
+    {
+      "id": "pikelot",
+      "nombre": "Pikelot Island",
+      "tipo": "isla",
+      "region": "Palau",
+      "descripcion": "Isla remota de Palau con ruinas de torre de piedra antigua de origen desconocido. Destino para viajeros aventureros con interés arqueológico. Acceso difícil pero singular.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "Tour en bote desde Koror (2 horas de viaje, 80-120 EUR). Solo accesible con operador autorizado.",
+      "donde_dormir": {
+        "mochilero": "Día desde Koror",
+        "medio": "Día desde Koror",
+        "comfort": "Día desde resort de Koror"
+      },
+      "que_hacer": [
+        "Visita a torres de piedra antigua (entrada incluida en tour)",
+        "Snorkel en aguas claras alrededor (incluido en tour)",
+        "Fotos de paisaje y ruinas (gratis)",
+        "Investigación arqueológica personal (observación)"
+      ],
+      "donde_comer": "Picnic/snacks traídos de Koror. Incluir agua.",
+      "consejo_local": "Tour de día completo. Lleva protección solar alta. Las ruinas son misteriosas; la historia exacta se desconoce. Pocos turistas llegan aquí.",
+      "plan_b_lluvia": "Dificultoso en mal clima; mejor reprogramar tour.",
+      "keywords": [
+        "Pikelot",
+        "ruinas",
+        "torre",
+        "arqueología",
+        "remoto",
+        "Palau"
+      ],
+      "excursion_desde": true
+    }
+  ]
+}

@@ -1,0 +1,322 @@
+{
+  "pais": "Bielorrusia",
+  "codigo": "by",
+  "destinos": [
+    {
+      "id": "minsk",
+      "nombre": "Minsk",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital de Bielorrusia con arquitectura soviética masiva, plazas amplias y museos de historia. Centro político y cultural donde se concentran la mayoría de servicios turísticos. Punto de entrada obligado para la mayoría de viajeros independientes.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Aeropuerto Nacional de Minsk (MSQ): vuelos desde Europa, 30-45 min en autobús/taxi (EUR 3-12). Desde Varsovia en autobús (EUR 15-25, 8-10 horas).",
+      "donde_dormir": {
+        "mochilero": "Hostal en Raion Oktyabrski o Leninski: EUR 12-18/noche",
+        "medio": "Hotel 3* zona centro: EUR 40-70/noche",
+        "comfort": "Hotel 4* near Independence Square: EUR 90-150/noche"
+      },
+      "que_hacer": [
+        "Plaza de la Independencia y Catedral de la Asunción (gratis)",
+        "Museo Nacional de Historia y Cultura de Bielorrusia (EUR 5)",
+        "Paseo por la Avenida Nezavisimosti (gratis)",
+        "Biblioteca Nacional: arquitectura futurista (EUR 3)",
+        "Mercado de Komarovsky (gratis)"
+      ],
+      "donde_comer": "Comida bielorrusa tradicional (sopas de remolacha, dumplings): EUR 4-8 en comedores locales. Zona de restaurantes en Oktyabrski District.",
+      "consejo_local": "Lleva efectivo: muchos lugares pequeños no aceptan tarjeta. El metro es muy barato (EUR 0,30) y eficiente.",
+      "plan_b_lluvia": "Museos, biblioteca nacional, centros comerciales subterráneos conectados.",
+      "keywords": [
+        "Minsk",
+        "capital Bielorrusia",
+        "Plaza Nezavisimosti",
+        "Avenida Independencia"
+      ]
+    },
+    {
+      "id": "brest",
+      "nombre": "Brest",
+      "tipo": "histórico",
+      "region": "Suroeste",
+      "descripcion": "Fortaleza histórica de Brest, monumento a la resistencia soviética en WWII con museos y espacios abiertos. Ubicada en la frontera con Polonia, es un punto de entrada alternativo y referencia histórica crucial.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Minsk en tren (EUR 8-12, 3.5-4 horas) o autobús (EUR 10-15, 4-5 horas). Desde Varsovia (Polonia) en tren (EUR 15-25, 4-5 horas).",
+      "donde_dormir": {
+        "mochilero": "Hostal o habitación privada: EUR 10-15/noche",
+        "medio": "Hotel 3* centro: EUR 30-50/noche",
+        "comfort": "Hotel 4*: EUR 70-100/noche"
+      },
+      "que_hacer": [
+        "Complejo de la Fortaleza de Brest (EUR 6)",
+        "Museo de Historia y Cultura de Brest (EUR 3)",
+        "Paseo por la ribera del río Bug (gratis)",
+        "Iglesia Ortodoxa de Santa Nicolás (gratis)",
+        "Mercado central de Brest (gratis)"
+      ],
+      "donde_comer": "Especialidades bielorrusas, carnes ahumadas: EUR 3-7 en restaurantes locales. El restaurante Belaya Vezha es referencia.",
+      "consejo_local": "Visita la fortaleza al atardecer: hay menos turistas y la luz es perfecta. Los museos son muy densos en información histórica.",
+      "plan_b_lluvia": "Museos cubiertos de la fortaleza, interior de iglesias.",
+      "keywords": [
+        "Brest Fortress",
+        "Brest",
+        "fortaleza",
+        "WWII",
+        "frontera Polonia"
+      ]
+    },
+    {
+      "id": "grodno",
+      "nombre": "Grodno",
+      "tipo": "histórico",
+      "region": "Noroeste",
+      "descripcion": "Ciudad medieval en la frontera con Lituania con arquitectura renacentista, castillos y atmósfera de Europa Central. Menos turística que Minsk pero con más carácter histórico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Minsk en tren (EUR 10-15, 4.5-5.5 horas) o autobús (EUR 12-18, 5-6 horas). Desde Vilna (Lituania) en autobús (EUR 10, 2 horas).",
+      "donde_dormir": {
+        "mochilero": "Hostal o guesthouse: EUR 10-16/noche",
+        "medio": "Hotel 3*: EUR 35-55/noche",
+        "comfort": "Hotel superior: EUR 75-110/noche"
+      },
+      "que_hacer": [
+        "Castillo Inferior (Nижний замок): visita guiada (EUR 4)",
+        "Catedral de Santa María Magdalena (gratis)",
+        "Paseo por la calle Soviétskaya (gratis)",
+        "Monasterio de Santo Domingo (EUR 2)",
+        "Puente sobre el Neman y vista panorámica (gratis)"
+      ],
+      "donde_comer": "Cocina bielorrusa y lituania fusionada: EUR 4-8. La zona vieja es turística; come en callejuelas laterales.",
+      "consejo_local": "Alquila bicicleta para explorar los alrededores: hay senderos junto al río muy bonitos que pocos turistas conocen.",
+      "plan_b_lluvia": "Museos del castillo, iglesias, cafés cubiertos.",
+      "keywords": [
+        "Grodno",
+        "Hrodna",
+        "castillo medieval",
+        "frontera Lituania",
+        "Neman"
+      ]
+    },
+    {
+      "id": "vitebsk",
+      "nombre": "Vitebsk",
+      "tipo": "histórico",
+      "region": "Nordeste",
+      "descripcion": "Ciudad histórica en el río Dvina con herencia artística, museos del pintor Chagall y arquitectura variada. Menos visitada que otros destinos pero con patrimonio cultural genuino.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Minsk en tren (EUR 10-14, 4-5 horas) o autobús (EUR 12-16, 5-6 horas). Desde Moscú en tren (EUR 20-30, 8-10 horas).",
+      "donde_dormir": {
+        "mochilero": "Hostal local: EUR 9-14/noche",
+        "medio": "Hotel 3*: EUR 30-50/noche",
+        "comfort": "Hotel 4*: EUR 65-95/noche"
+      },
+      "que_hacer": [
+        "Museo de Marc Chagall (EUR 4)",
+        "Museo de Vitebsk (EUR 3)",
+        "Iglesia de Santa María Magdalena (gratis)",
+        "Catedral de la Asunción (gratis)",
+        "Paseo por la ribera del Dvina (gratis)"
+      ],
+      "donde_comer": "Comida local bielorrusa en pequeños comedores: EUR 3-6. Mercado central para productos frescos.",
+      "consejo_local": "El Festival de Arte de Vitebsk (julio) llena la ciudad de vida. Fuera de esto, es tranquilo. Muchos locales hablan ruso, no inglés.",
+      "plan_b_lluvia": "Museos, iglesias, biblioteca local.",
+      "keywords": [
+        "Vitebsk",
+        "Chagall",
+        "Dvina",
+        "arte",
+        "ciudad cultural"
+      ]
+    },
+    {
+      "id": "moguiliov",
+      "nombre": "Moguiliov",
+      "tipo": "ciudad",
+      "region": "Centro-Este",
+      "descripcion": "Ciudad renacentista en el río Dniéper con catedrales barrocas, poco turística pero auténtica. Punto de parada agradable entre Minsk y ciudades del este.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Minsk en tren (EUR 7-10, 2.5-3 horas) o autobús (EUR 8-12, 2.5-3.5 horas).",
+      "donde_dormir": {
+        "mochilero": "Guesthouse básico: EUR 9-13/noche",
+        "medio": "Hotel 2-3*: EUR 28-45/noche",
+        "comfort": "Hotel superior: EUR 60-85/noche"
+      },
+      "que_hacer": [
+        "Catedral de Santa María (gratis)",
+        "Iglesia de San Nicolás (gratis)",
+        "Paseo por el centro histórico (gratis)",
+        "Monumento de la Victoria (gratis)",
+        "Parque central junto al Dniéper (gratis)"
+      ],
+      "donde_comer": "Comida casera bielorrusa muy barata: EUR 2-5. Mercado de alimentos en la plaza central.",
+      "consejo_local": "Usa esta ciudad como parada de medio día entre Minsk y el este, no como destino principal. Los locales son muy amables con los pocos viajeros que llegan.",
+      "plan_b_lluvia": "Iglesias, cafés locales cubiertos.",
+      "keywords": [
+        "Mogilyov",
+        "Moguilev",
+        "Dniepr",
+        "barroco",
+        "ciudad tranquila"
+      ]
+    },
+    {
+      "id": "polotsk",
+      "nombre": "Polotsk",
+      "tipo": "histórico",
+      "region": "Nordeste",
+      "descripcion": "Una de las ciudades más antiguas de Bielorrusia (fundada siglo VI) con monasterios, iglesias de piedra blanca y un pequeño centro medieval. Viaje en el tiempo a la historia esclava.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Minsk en autobús (EUR 12-16, 4-5 horas). Desde Vitebsk en autobús (EUR 5-8, 1.5 horas, más fácil).",
+      "donde_dormir": {
+        "mochilero": "Guesthouse local: EUR 10-14/noche",
+        "medio": "Hotel pequeño: EUR 30-45/noche",
+        "comfort": "Limitado; opción mejor en Vitebsk"
+      },
+      "que_hacer": [
+        "Monasterio de la Santísima Virgen (EUR 2)",
+        "Iglesia de Santa Sofía (gratis)",
+        "Catedral de la Resurrección (gratis)",
+        "Museo de la Tipografía (EUR 2)",
+        "Paseo por las calles medievales (gratis)"
+      ],
+      "donde_comer": "Muy básico; comer en Vitebsk es mejor opción. Comedores locales EUR 2-4.",
+      "consejo_local": "Es un pueblo turístico desde el punto de vista arqueológico/religioso, pero sin infraestructura. Visita como excursión desde Vitebsk.",
+      "plan_b_lluvia": "Museos religiosos, iglesias.",
+      "keywords": [
+        "Polotsk",
+        "Polock",
+        "antiguo",
+        "siglo VI",
+        "arquitectura eslava"
+      ]
+    },
+    {
+      "id": "mir",
+      "nombre": "Castillo de Mir",
+      "tipo": "histórico",
+      "region": "Centro (Minsk region)",
+      "descripcion": "Castillo renacentista fortificado (Patrimonio UNESCO) en medio de la campiña, uno de los pocos castillos intactos de la región. Excursión perfecta de un día desde Minsk.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Minsk: autobús local a Mir (EUR 3-5, 2 horas) + caminata o taxi local de Mir pueblo al castillo (EUR 2-3). Opción: tour organizado (EUR 25-35).",
+      "donde_dormir": {
+        "mochilero": "Hospedaje muy limitado en Mir; mejor quedarse en Minsk",
+        "medio": "Hotel en Minsk, visita de día",
+        "comfort": "Hotel en Minsk, visita de día"
+      },
+      "que_hacer": [
+        "Visita guiada del castillo (EUR 4-5, incluida en tour)",
+        "Paseo por el parque y alrededores (gratis)",
+        "Mercado de artesanía local (gratis)"
+      ],
+      "donde_comer": "Muy limitado en Mir. Lleva comida desde Minsk o come en café muy básico (EUR 2-3).",
+      "consejo_local": "Combina visita a Mir con Nesvizh en el mismo día: están a 40 km, puedes hacer tour circular desde Minsk.",
+      "plan_b_lluvia": "Interior del castillo (museos), fotografía desde el exterior.",
+      "keywords": [
+        "Mir Castle",
+        "castillo Mir",
+        "UNESCO",
+        "renacentista",
+        "fortaleza"
+      ]
+    },
+    {
+      "id": "nesvizh",
+      "nombre": "Nesvizh",
+      "tipo": "histórico",
+      "region": "Centro-Sur (Minsk region)",
+      "descripcion": "Mansión y castillo palatino rodeado de parques (Patrimonio UNESCO) en arquitectura barroca. Pueblo pequeño con mucho encanto y menos visitado que Mir.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Minsk en autobús local (EUR 4-6, 2.5-3 horas). Desde Brest en autobús (EUR 8-12, 3-4 horas). Mejor con tour circular que incluya Mir.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Nesvizh pueblo: EUR 11-16/noche",
+        "medio": "Hotel pequeño o Minsk (excursión de día)",
+        "comfort": "Hotel en Minsk, excursión de día"
+      },
+      "que_hacer": [
+        "Castillo Radziwill (visita guiada, EUR 5-6)",
+        "Parques y jardines alrededor (gratis con entrada al castillo)",
+        "Iglesia Corpus Christi (EUR 2)",
+        "Paseo por el pueblo (gratis)"
+      ],
+      "donde_comer": "Café en la plaza del pueblo (EUR 2-4). Mejor opción en Mir o volver a Minsk.",
+      "consejo_local": "La guía en ruso/inglés es casi obligatoria para entender la arquitectura. Los interiores son impresionantes pero necesitas tiempo.",
+      "plan_b_lluvia": "Interior del castillo y sus habitaciones, iglesias.",
+      "keywords": [
+        "Nesvizh",
+        "Nesvizh Castle",
+        "Radziwill",
+        "barroco",
+        "UNESCO",
+        "parques"
+      ]
+    },
+    {
+      "id": "pripyat",
+      "nombre": "Pripyat (Zona de Chernóbil)",
+      "tipo": "histórico",
+      "region": "Norte (región de Chernóbil)",
+      "descripcion": "Ciudad fantasma evacuada tras el desastre de Chernóbil en 1986. Acceso controlado solo con tour oficial desde Minsk. Experiencia única y sobria de historia soviética y tragedia.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Minsk SOLO con tour autorizado (EUR 180-250, incluye transporte, guía, dosímetro). Agencias: Chernobyl Tours, Chernobyl Way (8-10 horas de viaje total).",
+      "donde_dormir": {
+        "mochilero": "Tour de un día desde Minsk",
+        "medio": "Tour de un día desde Minsk",
+        "comfort": "Tour de un día desde Minsk (algunos tours ofrecen 2 días, EUR 350-450)"
+      },
+      "que_hacer": [
+        "Recorrido guiado por Pripyat: viviendas abandonadas, parque de atracciones, escuela (incluido en tour)",
+        "Central Nuclear de Chernóbil: vista exterior (incluido en tour)",
+        "Monumento de Chernóbil en Minsk (gratis, alternativa menos intensa)"
+      ],
+      "donde_comer": "Incluido en el tour. Comida en lodge dentro de la zona.",
+      "consejo_local": "Lleva abrigo incluso en verano: la zona es fría. No es un parque temático: respeta las reglas de seguridad y radiación. Muchos tours son especulativos; elige agencias serias.",
+      "plan_b_lluvia": "Los tours operan en lluvia ligera. Lluvia fuerte: reprogramación.",
+      "keywords": [
+        "Chernobyl",
+        "Pripyat",
+        "nuclear",
+        "ciudad fantasma",
+        "zona de exclusión"
+      ],
+      "alerta_seguridad": "Zona de exclusión con radiación residual. SOLO tours autorizados. Restricciones médicas: embarazo, niños < 18 años, ciertas condiciones."
+    },
+    {
+      "id": "braslav",
+      "nombre": "Braslav (Lagos)",
+      "tipo": "naturaleza",
+      "region": "Noroeste",
+      "descripcion": "Parque Nacional de Lagos de Braslav con 30+ lagos conectados, bosques y pequeño pueblo. Naturaleza tranquila y actividades acuáticas: única zona natural importante de Bielorrusia.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Minsk en autobús (EUR 15-20, 4-5 horas). Desde Grodno en autobús (EUR 8-12, 2.5 horas, más cercano).",
+      "donde_dormir": {
+        "mochilero": "Guesthouse o camping: EUR 10-15/noche",
+        "medio": "Pequeño hotel o resort: EUR 40-60/noche",
+        "comfort": "Resort con lago: EUR 75-110/noche"
+      },
+      "que_hacer": [
+        "Paseo en bote por los lagos (EUR 5-10)",
+        "Senderismo en el parque (gratis)",
+        "Baño/natación en lagos de agua dulce (gratis)",
+        "Pesca (gratis si es personal; EUR 5 guía)",
+        "Ciclismo alrededor de lagos (EUR 8-12 alquiler bicicleta)"
+      ],
+      "donde_comer": "Pescado local y comida casera en guesthouses: EUR 3-6. Poco variado; come en hospedaje.",
+      "consejo_local": "Los lagos son muy poco profundos y cálidos en julio-agosto. Perfecto para nadar. Lleva repelente: hay mosquitos. Haz senderismo temprano (5-7 am) para evitar bichos.",
+      "plan_b_lluvia": "Senderismo con buen equipo, estadía en hospedaje con chimenea, lecturas sobre naturaleza local.",
+      "keywords": [
+        "Braslav",
+        "Lagos Braslav",
+        "parque nacional",
+        "lagos",
+        "naturaleza"
+      ]
+    }
+  ]
+}

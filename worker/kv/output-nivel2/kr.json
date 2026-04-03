@@ -1,0 +1,373 @@
+{
+  "pais": "Corea del Sur",
+  "codigo": "kr",
+  "destinos": [
+    {
+      "id": "seul",
+      "nombre": "Seúl",
+      "tipo": "ciudad",
+      "region": "Provincia de Seúl",
+      "descripcion": "Capital de 10 millones de habitantes con mezcla de templos antiguos, rascacielos modernos y vida nocturna intensa. Centro económico y cultural donde sucede todo lo importante del país. Punto de partida obligatorio para cualquier viaje por Corea del Sur.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "punto de entrada principal: Incheon Airport a 60km; tren/autobús directo 1h, 10-15 EUR",
+      "donde_dormir": {
+        "mochilero": "hostel compartido Gangnam/Hongdae: 15-25 EUR/noche",
+        "medio": "hotel 3* Myeongdong/Itaewon: 50-80 EUR/noche",
+        "comfort": "hotel 4-5* Gangnam: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Palacio Gyeongbokgung (entrada: 3 EUR)",
+        "Barrio de Hongdae (arte callejero, gratis)",
+        "Torre N Seoul (vistas panorámicas: 10 EUR)",
+        "Templo Jogyesa (meditación, gratis)",
+        "Mercado Namdaemun (compras, variable)",
+        "Han River Park ciclismo (alquiler bici: 5 EUR)"
+      ],
+      "donde_comer": "Bibimbap (5-8 EUR), Tteokbokki (2-4 EUR), Samgyeopsal (barbacoa: 8-15 EUR). Zonas: Hongdae para jóvenes, Myeongdong para turistas, Gangnam para moderno.",
+      "consejo_local": "Compra una tarjeta T-money en cualquier convenience store (CU, GS25): viajes ilimitados metro/autobús, pago sin efectivo. El metro es más rápido que Uber.",
+      "plan_b_lluvia": "Museos (Museo Nacional: 9 EUR), centros comerciales cubiertos (Myeongdong), PC bangs (cibercafés), noraebang (karaoke)",
+      "keywords": [
+        "Seoul",
+        "Seúl",
+        "Gangnam",
+        "Myeongdong",
+        "Hongdae",
+        "Itaewon",
+        "Jongno",
+        "capital"
+      ]
+    },
+    {
+      "id": "busan",
+      "nombre": "Busán",
+      "tipo": "playa",
+      "region": "Región de Gyeongsang",
+      "descripcion": "Mayor puerto del país y segunda ciudad, con playas amplias, montañas costeras y ambiente menos frenético que Seúl. Centro gastronómico con excelentes mercados y acceso directo al Estrecho de Corea. Perfecta como base para explorar el sureste.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-agosto (playas), octubre-noviembre (clima)",
+      "como_llegar": "desde Seúl: KTX tren 3h, 30-40 EUR o autobús 5h, 15-20 EUR",
+      "donde_dormir": {
+        "mochilero": "hostel Haeundae/Gwangalli: 18-28 EUR/noche",
+        "medio": "hotel 3* Songdo/Nampo: 45-75 EUR/noche",
+        "comfort": "hotel 4* Haeundae beach: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Haeundae (gratis, tiendas de surf: 15 EUR/día)",
+        "Templo Beomeosa (montaña, senderismo gratis)",
+        "Mercado Jagalchi (mariscos frescos, variable)",
+        "Puente Gwangan (vistas atardecer, gratis)",
+        "Busan Tower (8 EUR)",
+        "Gamcheon Culture Village (arte callejero, gratis pero con tiendas)"
+      ],
+      "donde_comer": "Sashimi/hoe (8-15 EUR), Nakji bokkeum (pulpo salteado: 6-10 EUR), Seafood hotpot. Jagalchi Market y Millak Food Street son imprescindibles.",
+      "consejo_local": "Ve a Haeundae playa a media tarde: menos turistas chinos por la mañana, mejor puesta de sol. Los mejores restaurantes de mariscos no están en las calles principales.",
+      "plan_b_lluvia": "Centros comerciales (Lotte World Busan, Shinsegae), acuarios (Sea World: 19 EUR), cines con películas en versión original",
+      "keywords": [
+        "Busan",
+        "Haeundae",
+        "Gangnam",
+        "Nampo",
+        "puerto",
+        "playa"
+      ]
+    },
+    {
+      "id": "gyeongju",
+      "nombre": "Gyeongju",
+      "tipo": "histórico",
+      "region": "Región de Gyeongsang",
+      "descripcion": "Antigua capital con templos de la dinastía Silla, tumbas reales excavadas y palacios en ruinas diseminados por el valle. Museo al aire libre donde la historia está entre arrozales. Mucho menos masificada que Seúl pero con igual profundidad cultural.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Seúl: KTX 2h40m + metro local, 40-50 EUR. O desde Busán: tren 1h, 10 EUR",
+      "donde_dormir": {
+        "mochilero": "guesthouse centro: 20-30 EUR/noche",
+        "medio": "hotel 3* centro histórico: 40-60 EUR/noche",
+        "comfort": "resort termal Bomun: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Bulguksa Temple (7 EUR, tren directo desde estación)",
+        "Seokguram Grotto (senderismo 1h30, entrada: 4 EUR)",
+        "Tumba Cheomseongdae (observatorio antiguo, gratis)",
+        "Palacio Donggung (reconstrucción, 5 EUR)",
+        "Ruta en bici por el valle (alquiler: 5 EUR/día)",
+        "Museo Nacional Gyeongju (5 EUR)"
+      ],
+      "donde_comer": "Bibimbap local (4 EUR), caldo de hueso (2-4 EUR). Pequeñas tiendas alrededor de los templos; sin pretensiones, muy auténtico.",
+      "consejo_local": "Sube a Bulguksa al atardecer para evitar grupos. Los mejores guesthouses están en las callejuelas detrás de la estación, no en la calle principal.",
+      "plan_b_lluvia": "Museo Nacional (cubierto, 5 EUR), Andong Folk Village (31km, reconstrucción de arquitectura antigua tradicional)",
+      "keywords": [
+        "Gyeongju",
+        "Bulguksa",
+        "Seokguram",
+        "Donggung",
+        "capital antigua",
+        "Silla"
+      ]
+    },
+    {
+      "id": "jeonju",
+      "nombre": "Jeonju",
+      "tipo": "histórico",
+      "region": "Región de Jeolla del Norte",
+      "descripcion": "Cuna de la cocina coreana tradicional y de la dinastía Joseon, con barrio histórico inmaculadamente preservado y más de 700 años de arquitectura hanok (casas tradicionales). Centro gastronómico sin rival donde probar bibimbap original y comida casera de verdad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Seúl: KTX 2h15m, 35-45 EUR. O desde Busán: autobús 3h30m, 15 EUR",
+      "donde_dormir": {
+        "mochilero": "hanok guesthouse barrio viejo: 25-35 EUR/noche",
+        "medio": "hotel 3* moderna: 50-75 EUR/noche",
+        "comfort": "hanok boutique hotel: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Jeonju Hanok Village paseo (gratis)",
+        "Jeondong Cathedral (arquitectura histórica, gratis)",
+        "Taller de cerámica tradicional (15-25 EUR)",
+        "Templo Gyeonggijeon (3 EUR)",
+        "Museos del papel/arte (3-5 EUR cada uno)",
+        "Tour gastronómico bibimbap y sinseollo (clase: 30 EUR)"
+      ],
+      "donde_comer": "Jeonju bibimbap (6-8 EUR, mejor en restaurantes humildes del barrio viejo), sinseollo (braseado de carnes: 12-18 EUR), kimchi tteokguk. Cada callejuela tiene comedores de abuelas.",
+      "consejo_local": "Duerme en un hanok del barrio viejo: despierta sin ruido, desayuna tradicional, hablás con dueños que saben todo. Cero turismo de masas comparado con Seúl.",
+      "plan_b_lluvia": "Estudios de taller interior (cerámica, papel), museos pequeños, cines, noraebang",
+      "keywords": [
+        "Jeonju",
+        "Hanok Village",
+        "bibimbap",
+        "Jeolla",
+        "historia"
+      ]
+    },
+    {
+      "id": "incheon",
+      "nombre": "Incheon",
+      "tipo": "ciudad",
+      "region": "Provincia de Incheon",
+      "descripcion": "Puerto internacional con islas pintoresques, mercado gastronómico histórico y zona de arte contemporáneo. Punto de entrada pero a menudo ignorado; tiene suficiente para 1-2 días sin necesidad de viajar a Seúl. Islote de Ganghwa con templos y naturaleza.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "punto de entrada: Incheon Airport. Metro directo al centro 1h, 9 EUR",
+      "donde_dormir": {
+        "mochilero": "hostel zona puerto: 15-25 EUR/noche",
+        "medio": "hotel 3* Chinatown: 45-70 EUR/noche",
+        "comfort": "hotel 4* airport: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado Sinpo (comida callejera, variable)",
+        "Chinatown paseo (gratis, tiendas)",
+        "Ganghwa Island templos (ferry 1h, gratis + entrada templo 3 EUR)",
+        "Zona artística Songwon (galerías, gratis)",
+        "Puerto Incheon (vistas, gratis)",
+        "Parque Moon Tail (naturaleza cercana, gratis)"
+      ],
+      "donde_comer": "Jjamppong (sopa de mariscos picante: 8-12 EUR), jiaozi chino (5-7 EUR), hotcakes chinos. Mercado Sinpo es el corazón gastronómico.",
+      "consejo_local": "Si tienes escala larga en el airport, toma metro a Incheon en lugar de pagar hotel caro. Una mañana en el Chinatown vale la pena.",
+      "plan_b_lluvia": "Centros comerciales, museo de arte, cines, cafés temáticos",
+      "keywords": [
+        "Incheon",
+        "Chinatown",
+        "Ganghwa",
+        "puerto",
+        "airport"
+      ]
+    },
+    {
+      "id": "demilitarized-zone",
+      "nombre": "Zona Desmilitarizada (DMZ)",
+      "tipo": "histórico",
+      "region": "Frontera norte",
+      "descripcion": "La frontera más militarizada del mundo separando Norte y Sur; accesible solo con tours autorizados. Paisaje surreal congelado en el tiempo, búnkers, líneas de alambre y aldea de Panmunjom donde se mantienen negociaciones. Experiencia única y profundamente histórica.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "marzo-octubre (inviernos duros)",
+      "como_llegar": "desde Seúl: tour organizado obligatorio, 8-10h totales. Autobús pick-up desde hotel o estación, incluido. Costo: 80-120 EUR",
+      "donde_dormir": {
+        "mochilero": "no hay; tour de día desde Seúl",
+        "medio": "no hay; tour de día desde Seúl",
+        "comfort": "no hay; tour de día desde Seúl"
+      },
+      "que_hacer": [
+        "Observatorio Dora (vistas a Corea del Norte, incluido)",
+        "Panmunjom/JSA (zona de negociación, incluido en tour premium)",
+        "Museo DMZ e historia (incluido)",
+        "Túnel de invasión 3er (31km norte: 5 EUR extra)",
+        "Aldea de paz Imjingak (memorial, gratis)"
+      ],
+      "donde_comer": "Tiendas de conveniencia en zona tour, comida básica. Trae tu propio almuerzo o come antes de partir.",
+      "consejo_local": "Necesitas pasaporte válido para entrar. Algunos tours permiten cruzar la línea real de armisticio; vale totalmente la pena pagar el extra. No se permiten cámaras profesionales.",
+      "plan_b_lluvia": "La mayoría de tours operen con lluvia (zona abierta). Comprueba con operador.",
+      "keywords": [
+        "DMZ",
+        "Zona desmilitarizada",
+        "Panmunjom",
+        "Corea del Norte",
+        "frontera"
+      ]
+    },
+    {
+      "id": "jeju-island",
+      "nombre": "Isla de Jeju",
+      "tipo": "isla",
+      "region": "Provincia de Jeju",
+      "descripcion": "Isla volcánica subtropical a 100km del continente con playas de arena negra, acantilados de lava y el pico Hallasan. Réquiem turístico pero con senderos naturales impresionantes alejados de la multitud. Centro de buceo y punto de partida para exploradores.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, octubre-noviembre",
+      "como_llegar": "desde Seúl: vuelo 1h, 35-60 EUR. O desde Busán: ferry 3h, 25 EUR",
+      "donde_dormir": {
+        "mochilero": "guesthouse Jeju City/Seogwipo: 20-35 EUR/noche",
+        "medio": "hotel 3*: 60-90 EUR/noche",
+        "comfort": "resort playa: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Hallasan (pico 1950m, 5-6h, gratis, entrada: 3 EUR)",
+        "Acantilados Oedolgae (senderismo costero, gratis)",
+        "Playa Hyeopjae (arena negra, gratis, alquiler tabla: 12 EUR)",
+        "Cuevas de lava (Manjangul: 5 EUR)",
+        "Sendero Olle Trail (58km total, 20 secciones, marcado, gratis)",
+        "Mercado Jeju tradicional (comida, variable)"
+      ],
+      "donde_comer": "Abalone fresca (12-20 EUR), marisco asado a la parrilla, fideos de trigo sarraceno. Restaurantes junto al puerto; muy auténtico.",
+      "consejo_local": "Alquila un coche barato (25 EUR/día) o toma autobús: los taxis son carísimos. El Olle Trail es perfecto para independientes; cada sección 2-3h con señalización impecable.",
+      "plan_b_lluvia": "Cuevas (cubiertas), museos, centros comerciales, parques temáticos (costosos)",
+      "keywords": [
+        "Jeju",
+        "Hallasan",
+        "Olle Trail",
+        "volcán",
+        "isla"
+      ]
+    },
+    {
+      "id": "nami-island",
+      "nombre": "Isla de Nami",
+      "tipo": "naturaleza",
+      "region": "Provincia de Gyeonggi",
+      "descripcion": "Isla pequeña en forma de media luna en el río Han famosa por sus avenidas de árboles y escenas de doramas (series). Parque temático natural con paseos serenos, ciclovías y opciones de actividades acuáticas. Escapada fácil de Seúl sin necesidad de hospedarse.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo (flores), octubre-noviembre (otoño)",
+      "como_llegar": "desde Seúl: tren a Gapyeong (1h, 5 EUR) + autobús/tranvía (20min, 2 EUR) o tour directo (40 EUR)",
+      "donde_dormir": {
+        "mochilero": "no es necesario; viaje de día desde Seúl",
+        "medio": "no es necesario; viaje de día desde Seúl",
+        "comfort": "resort en la isla (caro): 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo avenida de árboles (gratis)",
+        "Ciclovía alrededor isla (alquiler bici: 8 EUR/día)",
+        "Tarzan Aventura (parque cuerdas: 15 EUR)",
+        "Cafés temáticos Danhyang (gratis entrada, consumición)",
+        "Paseo barco pequeño (5 EUR)",
+        "Pesca de truchas (15 EUR)"
+      ],
+      "donde_comer": "Restaurantes mediocres en la isla; trae picnic desde Seúl. O cómete algo antes de ir.",
+      "consejo_local": "Ve a mitad de semana para evitar colas. Las fotos más bonitas al amanecer; llegá temprano. La isla es pequeña: 3-4h suficientes.",
+      "plan_b_lluvia": "Cafés cubiertos, museos temáticos mediocres, compras",
+      "keywords": [
+        "Nami",
+        "isla",
+        "doramas",
+        "Han River",
+        "naturaleza"
+      ]
+    },
+    {
+      "id": "sokcho",
+      "nombre": "Sokcho",
+      "tipo": "montaña",
+      "region": "Región de Gangwon",
+      "descripcion": "Puerta de entrada a Seoraksan, montaña sagrada con picos escarpados, templos entre acantilados y senderos de dificultad variable. Puerto pesquero auténtico sin turismo de masas; ambiente de pueblo costero con mercado activo. Ideal para senderismo serio.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre-octubre (otoño espectacular), mayo-junio",
+      "como_llegar": "desde Seúl: autobús 2h30m-3h, 15 EUR. O desde Busán: autobús 4h, 20 EUR",
+      "donde_dormir": {
+        "mochilero": "hostel/guesthouse Sokcho centro: 18-28 EUR/noche",
+        "medio": "hotel 3* junto playa: 50-80 EUR/noche",
+        "comfort": "resort montaña Seoraksan: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Seoraksan National Park entrada (3 EUR, múltiples senderos)",
+        "Sendero Gwongeumseong (2h, vistas picos, incluida entrada)",
+        "Templo Sinheungsa dentro parque (3 EUR)",
+        "Teleférico Seoraksan (8 EUR ida/vuelta, acceso rápido altura)",
+        "Mercado de pescado Sokcho (gastronomía, variable)",
+        "Playa Sokcho (gratis)"
+      ],
+      "donde_comer": "Sanggyetang (sopa ginseng pollo: 12 EUR), jumbo squid grilled (15 EUR), marisco fresco mercado. Pequeños restaurantes junto al puerto.",
+      "consejo_local": "Duerme en Sokcho, no en lodges caros de montaña. El transporte es rápido y barato. Seoraksan puede se muy concurrido los fines de semana: ir entre semana.",
+      "plan_b_lluvia": "Museos locales, mercado interior, cafés, cines",
+      "keywords": [
+        "Sokcho",
+        "Seoraksan",
+        "montaña",
+        "Gangwon",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "andong",
+      "nombre": "Andong",
+      "tipo": "rural",
+      "region": "Región de Gyeongsang del Norte",
+      "descripcion": "Pueblo tradicional coreano preservado con aldea folk (Hahoe Village) donde viven artistas y artesanos, arquitectura Joseon pura y fiestas de máscaras tradicionales. Sin pretensiones turísticas masivas; vida rural genuina a 2 horas de Seúl. Centro de textiles y tradición.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "septiembre-octubre (festival de máscaras), abril-mayo",
+      "como_llegar": "desde Seúl: KTX 2h, 35 EUR + autobús local 20min. O desde Gyeongju: tren 1h, 10 EUR",
+      "donde_dormir": {
+        "mochilero": "guesthouse Hahoe Village: 20-30 EUR/noche",
+        "medio": "hotel 3* centro: 45-70 EUR/noche",
+        "comfort": "hanok resort: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Hahoe Folk Village paseo (4 EUR, 2-3h)",
+        "Museos artesanías (máscaras, papel: 3-5 EUR)",
+        "Taller de cortinas papel hanji (20 EUR)",
+        "Paseo fluvial Nakdong (gratis)",
+        "Templo Bongjeong (montaña cercana, gratis)",
+        "Festival de máscaras (octubre, gratis entrada aldea)"
+      ],
+      "donde_comer": "Andong Jjimdak (pollo guisado: 8-12 EUR), sopa de soja roja, bibimbap local. Pequeños comedores sin nombre; come con abuelas.",
+      "consejo_local": "El mejor museo de máscaras no está en la aldea principal: pregunta en tu guesthouse. Los artesanos en sus casas enseñan más que los sitios turísticos.",
+      "plan_b_lluvia": "Museos, talleres cubiertos, cines",
+      "keywords": [
+        "Andong",
+        "Hahoe",
+        "folk village",
+        "tradición",
+        "máscaras"
+      ]
+    },
+    {
+      "id": "daegu",
+      "nombre": "Daegu",
+      "tipo": "ciudad",
+      "region": "Región de Gyeongsang del Norte",
+      "descripcion": "Tercera ciudad más grande, menos turística que Seúl/Busán pero con escena contemporánea activa, museos de arte moderno y mercados auténticos. Centro de industria textil con historia industrial recuperada. Base estratégica para explorar montañas cercanas como Palgongsan.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Seúl: KTX 2h, 35 EUR. O desde Busán: tren 1h, 10 EUR. O desde Gyeongju: tren 1h, 8 EUR",
+      "donde_dormir": {
+        "mochilero": "hostel centro: 16-26 EUR/noche",
+        "medio": "hotel 3* Dongseongro: 50-75 EUR/noche",
+        "comfort": "hotel 4*: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Daegu Modern Art Museum (6 EUR)",
+        "Ziptouching Palgongsan (tirolesa: 15 EUR)",
+        "Templo Donghwasa (senderismo montaña 40min, gratis entrada)",
+        "Mercado Yangnyeong (medicinas y especias, gratis)",
+        "Seomun Market (comida callejera, variable)",
+        "Peatonal Dongseongro (compras, gratis)"
+      ],
+      "donde_comer": "Ttarattsang (sopa de órganos: 6-8 EUR), sujebi (fideos caseros: 4 EUR), salteado de espinas. Seomun Market es la joya para comer barato.",
+      "consejo_local": "Daegu es donde van los coreanos, no turistas extranjeros. Mucho más barato y auténtico que Seúl. El metro es limpísimo y eficiente.",
+      "plan_b_lluvia": "Museos, centros comerciales, cafés art déco (distrito histórico), noraebang",
+      "keywords": [
+        "Daegu",
+        "Dongseongro",
+        "Palgongsan",
+        "mercados",
+        "textiles"
+      ]
+    }
+  ]
+}

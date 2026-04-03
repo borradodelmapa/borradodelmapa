@@ -1,0 +1,325 @@
+{
+  "pais": "Bután",
+  "codigo": "bt",
+  "destinos": [
+    {
+      "id": "paro",
+      "nombre": "Paro",
+      "tipo": "histórico",
+      "region": "Paro, valle occidental",
+      "descripcion": "Puerta de entrada a Bután con el único aeropuerto internacional. Centro cultural con el famoso Nido del Tigre (Taktsang) encaramado en acantilados a 3.120m. Base ideal para explorar el valle y acceder a otros destinos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "marzo-mayo, septiembre-noviembre",
+      "como_llegar": "vuelo internacional a Paro Airport desde Bangkok, Delhi o Katmandú (2-4 horas, 400-600 EUR). Desde el aeropuerto al centro 1h en coche (50 EUR).",
+      "donde_dormir": {
+        "mochilero": "homestay local + guesthouse pequeña: 20-35 EUR/noche",
+        "medio": "hotel de 3 estrellas: 60-100 EUR/noche",
+        "comfort": "resort local o Amankora: 250-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a Taktsang Monastery (5h, entrada 5 EUR + guía obligatorio 20-30 EUR)",
+        "Monasterio de Kyichu (entrada 5 EUR)",
+        "Ruinas del Drukyel Dzong con vistas al Chomolhari (libre)",
+        "Mercado local de Paro (gratis)",
+        "Museo de Arte Bhutaní (5 EUR)"
+      ],
+      "donde_comer": "Ema datshi (queso con chile picante) y momos. Rango: 3-8 EUR/plato. Zona recomendada: cerca del dzong o mercado. Restaurantes locales con comida casera.",
+      "consejo_local": "Contratar guía es obligatorio en Bután (desde 20 EUR/día). Pregunta por guías que hablen español o buen inglés. El senderismo a Taktsang sale mucho más fácil y seguro si madrugaas y evitas las 11-14h.",
+      "plan_b_lluvia": "Monasterio de Kyichu (cubierto), museo, pasear por el pueblo, comer en casa de un local (se puede organizar con guesthouses).",
+      "keywords": [
+        "Paro Valley",
+        "Taktsang",
+        "Nido del Tigre",
+        "aeropuerto",
+        "Paro Dzong"
+      ]
+    },
+    {
+      "id": "thimphu",
+      "nombre": "Thimphu",
+      "tipo": "ciudad",
+      "region": "Thimphu, valle central",
+      "descripcion": "Capital de Bután a 2.334m, con arquitectura tradicional, templos modernos y un ambiente sorprendentemente cosmopolita. Centro administrativo y cultural donde conviven mercados, museos y monasterios sin la masificación de otros destinos asiáticos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo-mayo, septiembre-noviembre",
+      "como_llegar": "desde Paro en coche 1,5h (80 EUR con conductor incluido). O autobús público 3 EUR pero menos flexible.",
+      "donde_dormir": {
+        "mochilero": "guesthouse central: 25-40 EUR/noche",
+        "medio": "hotel 3 estrellas: 70-110 EUR/noche",
+        "comfort": "resort o Amankora: 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Tashichho Dzong (fortaleza-monasterio, entrada 5 EUR)",
+        "Memorial Chorten (entrada libre)",
+        "Monasterio de Phajoding trek (4h, 20 EUR guía)",
+        "Museo Nacional (5 EUR)",
+        "Mercado de Thimphu (viernes-domingo, libre)"
+      ],
+      "donde_comer": "Ema datshi, puerco con rábano picante, areces (salsa de frutos secos). Rango: 4-10 EUR/plato. Zona: Norzin Lam (avenida principal) tiene restaurantes locales y cafés.",
+      "consejo_local": "El mercado del fin de semana es donde ves la Bután real: agricultores, monjes, gente local. No es turístico. Abre sábado-domingo temprano (6am).",
+      "plan_b_lluvia": "Museos, templos cubiertos, comprar recuerdos, comer en restaurante, visitar el cine local.",
+      "keywords": [
+        "Thimphu city",
+        "capital",
+        "Tashichho Dzong",
+        "mercado",
+        "Phajoding"
+      ]
+    },
+    {
+      "id": "punakha",
+      "nombre": "Punakha",
+      "tipo": "histórico",
+      "region": "Punakha, valle central",
+      "descripcion": "Valle fértil y accesible desde Thimphu (2h) con el espectacular Punakha Dzong entre dos ríos. Menos turístico que Paro pero igualmente impresionante, ideal para senderismo y ver vida rural bhutaní auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo-mayo, septiembre-noviembre",
+      "como_llegar": "desde Thimphu en coche 2h pasando Dochula Pass (3.150m). Coste: 100 EUR con conductor. Autobús público 5 EUR (más lento).",
+      "donde_dormir": {
+        "mochilero": "guesthouse rural: 20-35 EUR/noche",
+        "medio": "hotel pequeño: 50-85 EUR/noche",
+        "comfort": "resort Amankora o Malu Resort: 200-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Punakha Dzong (entrada 5 EUR, fotos espectaculares al atardecer)",
+        "Trek a Chimi Lhakhang (templo del falo, 3h ida-vuelta, 15 EUR guía)",
+        "Senderismo por el valle (múltiples rutas, gratis)",
+        "Puente colgante sobre el río Mo Chu (libre)",
+        "Ferries locales en el río (2-3 EUR)"
+      ],
+      "donde_comer": "Especialidad: areces (pasta de frutos secos con chiles). Rango: 3-7 EUR. Zona: pequeño pueblo cerca del dzong, restaurantes muy locales y auténticos.",
+      "consejo_local": "La mayoría de turistas pasan rápido camino a Bumthang. Si duermes aquí, tienes el dzong casi solo al atardecer. El trek a Chimi Lhakhang es fácil (sin guía técnico) pero la guía te explica la cultura.",
+      "plan_b_lluvia": "Dzong (es enorme y cubierto en su mayoría), pueblos cercanos, galerías de arte local.",
+      "keywords": [
+        "Punakha Dzong",
+        "Chimi Lhakhang",
+        "Dochula Pass",
+        "valle fértil",
+        "dos ríos"
+      ]
+    },
+    {
+      "id": "bumthang",
+      "nombre": "Bumthang",
+      "tipo": "montaña",
+      "region": "Bumthang, centro-este",
+      "descripcion": "Región montañosa remota con cuatro valles separados, templos antiguos y paisajes sin turismo masivo. Destino para viajeros que buscan autenticidad, senderismo desafiante y encuentros con comunidades locales.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, octubre-noviembre",
+      "como_llegar": "desde Thimphu 7h en coche cruzando Bumthang Pass (3.800m+). Coste: 150-200 EUR con conductor. O vuelo interno Thimphu-Bumthang 45 min (250 EUR, no diario).",
+      "donde_dormir": {
+        "mochilero": "guesthouse en Jakar: 20-30 EUR/noche",
+        "medio": "hotel pequeño: 50-80 EUR/noche",
+        "comfort": "Amankora o Bhutan Kuen Nyam: 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Jambey Lhakhang (templo del siglo VII, entrada 5 EUR + danza ritual si hay festival)",
+        "Tamshing Monastery (entrada 5 EUR, arte mural antiguo)",
+        "Trek a Membartsho (lago sagrado, 6h, 25 EUR guía)",
+        "Ura Valley paseo (gratis, paisaje de arrozales)",
+        "Mercado de Jakar (viernes, gratis)"
+      ],
+      "donde_comer": "Emas, quesos locales, carne de yak. Rango: 3-7 EUR. Zona: Jakar pueblo, muy local, pocas opciones pero auténticas.",
+      "consejo_local": "La carretera a Bumthang es larga y montañosa. Algunos viajeros la hacen lenta (2 días) parando en Trongsa. La región es conocida por hacer cerveza de trigo rojo (hongkong): pide en guesthouses.",
+      "plan_b_lluvia": "Monasterios (cubiertos), pueblos, mercado local, comer en casa de locales.",
+      "keywords": [
+        "Bumthang Valley",
+        "Jakar",
+        "Jambey Lhakhang",
+        "Tamshing",
+        "Ura Valley"
+      ]
+    },
+    {
+      "id": "haa-valley",
+      "nombre": "Haa Valley",
+      "tipo": "rural",
+      "region": "Haa, sur-oeste",
+      "descripcion": "Valle remoto en el extremo suroeste, casi desconocido por turistas, con la tasa más alta de precipitaciones de Bután pero también de biodiversidad. Pueblo de Haa es el punto de acceso para senderismo y inmersión cultural profunda.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, octubre (menos lluvia)",
+      "como_llegar": "desde Paro 2,5h en coche hacia el sur, luego carretera de montaña. Requiere 4x4 o conductor experimentado. Coste: 120 EUR. Pocos autobuses públicos (8 EUR, muy lento).",
+      "donde_dormir": {
+        "mochilero": "homestay en Haa: 15-25 EUR/noche",
+        "medio": "pequeño guesthouse: 40-60 EUR/noche",
+        "comfort": "Bhutan Farmstay o similar: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a Jile Druk Nunnery (2h, gratis)",
+        "Paseos por el valle entre arrozales (libre)",
+        "Visita a casa local de agricultores (se organiza con hospedaje, 5-10 EUR)",
+        "Monasterio local (entrada 2 EUR)",
+        "Fotografía de paisaje y pájaros (libre)"
+      ],
+      "donde_comer": "Comida casera bhutaní cocinada por locales. Rango: 3-6 EUR (incluido en homestay). Zona: Haa pueblo, muy pocas opciones comerciales.",
+      "consejo_local": "Haa es tan remoto que es fácil sentirse como el único turista. El valle llueve constantemente pero eso lo hace increíblemente verde. Lleva impermeable bueno.",
+      "plan_b_lluvia": "Mantenerse en casa local comiendo y aprendiendo a cocinar, paseos cortos cubiertos.",
+      "keywords": [
+        "Haa Valley",
+        "Haa pueblo",
+        "remoto",
+        "biodiversidad",
+        "arrozales"
+      ]
+    },
+    {
+      "id": "trongsa",
+      "nombre": "Trongsa",
+      "tipo": "histórico",
+      "region": "Trongsa, centro",
+      "descripcion": "Pueblo pequeño encaramado en un acantilado con el impresionante Trongsa Dzong. Parada estratégica hacia Bumthang o el este. Menos turístico que Paro, con vistas espectaculares y un dzong de tamaño monumental.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "marzo-mayo, septiembre-noviembre",
+      "como_llegar": "desde Thimphu 4,5h en coche (110 EUR). O desde Paro 6h (140 EUR). Parada natural entre oeste y este.",
+      "donde_dormir": {
+        "mochilero": "guesthouse en el pueblo: 20-30 EUR/noche",
+        "medio": "hotel pequeño: 50-75 EUR/noche",
+        "comfort": "Bhutan Kuen Nyam o similar: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Trongsa Dzong (entrada 5 EUR, arquitectura impresionante)",
+        "Museum of the Divine Madness (museo privado, 5 EUR)",
+        "Viewpoint al dzong (libre)",
+        "Paseo por el pueblo (gratis)",
+        "Choekor Goemba si tienes tiempo (entrada 3 EUR)"
+      ],
+      "donde_comer": "Comida bhutaní estándar. Rango: 3-6 EUR. Zona: pueblo principal, pocas opciones pero suficientes.",
+      "consejo_local": "El dzong es gigantesco y merece 2-3 horas. Las vistas desde el exterior son mejores que desde dentro. Muchos viajeros lo visitan rápido al pasar: quédate un poco más.",
+      "plan_b_lluvia": "Dzong (cubierto principalmente), museo, pueblo.",
+      "keywords": [
+        "Trongsa Dzong",
+        "acantilado",
+        "pueblo pequeño",
+        "paso central"
+      ]
+    },
+    {
+      "id": "phobjikha-valley",
+      "nombre": "Phobjikha Valley",
+      "tipo": "naturaleza",
+      "region": "Wangdue Phodrang, oeste-centro",
+      "descripcion": "Único valle completamente plano de Bután a 2.600m con humedal protegido donde invernan grúas de cuello negro (octubre-marzo). Destino de senderismo suave, biodiversidad y serenidad sin mucho turismo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre-marzo (grúas), junio-septiembre (flores)",
+      "como_llegar": "desde Punakha 1,5h en coche hacia el norte (70 EUR). O desde Thimphu 3h vía Dochula (100 EUR).",
+      "donde_dormir": {
+        "mochilero": "guesthouse en Gangtey: 20-30 EUR/noche",
+        "medio": "hotel pequeño: 50-80 EUR/noche",
+        "comfort": "Dewachen Resort: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Trek Phobjikha Valley (3-4h fácil, libre, observación de aves con binoculares)",
+        "Gangtey Goemba (monasterio en el promontorio, entrada 5 EUR)",
+        "Paseo a caballo (opcional, 20-30 EUR/hora)",
+        "Birdwatching (octubre-marzo, grúas garantizadas, gratis)",
+        "Picnic con vistas (organizable, 5-10 EUR)"
+      ],
+      "donde_comer": "Comida casera. Rango: 3-6 EUR. Zona: Gangtey pueblo, muy local.",
+      "consejo_local": "Si vienes octubre-marzo, las grúas salen al amanecer desde el humedal. Madruga y lleva binoculares. El trek es muy fácil y perfecto para descansar después de Punakha.",
+      "plan_b_lluvia": "Monasterio cubierto, paseos cortos, comer en guesthouse.",
+      "keywords": [
+        "Phobjikha Valley",
+        "humedal",
+        "grúas",
+        "Gangtey",
+        "plano"
+      ]
+    },
+    {
+      "id": "modichholing",
+      "nombre": "Modichholing",
+      "tipo": "rural",
+      "region": "Wangdue Phodrang, oeste-centro",
+      "descripcion": "Pequeño pueblo rural entre Punakha y Phobjikha con el encantador monasterio de Chimi Lhakhang (templo del falo) y bosques de pinos. Destino para senderismo tranquilo, encuentros con agricultores y paradas naturales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "marzo-mayo, octubre-noviembre",
+      "como_llegar": "desde Punakha 30 min en coche hacia Phobjikha (40 EUR). O a pie: trek de 3-4h entre Punakha y Modichholing (15 EUR guía).",
+      "donde_dormir": {
+        "mochilero": "homestay: 18-28 EUR/noche",
+        "medio": "pequeño guesthouse: 45-65 EUR/noche",
+        "comfort": "farmstay con servicios: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Trek a Chimi Lhakhang desde aquí (3h ida-vuelta, 15 EUR guía)",
+        "Paseos por campos de arroz (gratis)",
+        "Visita a casa de agricultores (se negocia, 5 EUR)",
+        "Picnic en natura (gratis)",
+        "Fotografía de paisaje (libre)"
+      ],
+      "donde_comer": "Comida casera de host. Rango: 3-5 EUR. Zona: pueblo mismo, muy pocas opciones.",
+      "consejo_local": "Muchos viajeros hacen el trek de 2-3 días entre Punakha-Modichholing-Phobjikha. Es uno de los mejores treks suaves de Bután. Negocia con tu guesthouse.",
+      "plan_b_lluvia": "Casa local, comer, descansar.",
+      "keywords": [
+        "Modichholing",
+        "rural",
+        "Chimi Lhakhang",
+        "arrozales",
+        "trek"
+      ]
+    },
+    {
+      "id": "druk-path-trek",
+      "nombre": "Druk Path Trek",
+      "tipo": "montaña",
+      "region": "Paro-Thimphu, zona norte",
+      "descripcion": "Trek de 5-6 días a través de paso de montaña a 4.600m conectando Paro y Thimphu. Uno de los treks más duros y satisfactorios de Bután con vistas alpinas, lagos glaciares y escaso turismo.",
+      "dias_recomendados": 6,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "inicio en Paro (salida puntual desde guesthouse). Retorno a Thimphu. Requiere guía obligatorio (40-50 EUR/día) y porteador si llevas poco equipaje (25 EUR/día).",
+      "donde_dormir": {
+        "mochilero": "acampada con carpas (incluidas en paquete trek): 50-80 EUR/día todo incluido",
+        "medio": "igual que mochilero",
+        "comfort": "igual pero agencias premium: 100-150 EUR/día"
+      },
+      "que_hacer": [
+        "Senderismo 5-6 días (trekking técnico medio-alto, incluido)",
+        "Paso Druk Pass a 4.600m (vistas de Himalayas)",
+        "Lagos glaciares Jela Tso (helados incluso en verano)",
+        "Acampada en altura (experiencia)",
+        "Fauna y flora alpina (observación)"
+      ],
+      "donde_comer": "Comida de campamento preparada por cocinero trek. Rango: incluido en paquete. Principalmente pasta, sopas, verduras.",
+      "consejo_local": "No es para principiantes. Altitude es dura, especialmente noches. Aclimatación en Paro 1-2 días antes. Muchos viajeros bajan del trek a mitad por soroche (mal de altura). Necesitas buena forma.",
+      "plan_b_lluvia": "Trek se puede retrasar pero no cancelar (es tu único transporte). Lluvia en alta montaña es peligrosa: habrá días parados en campamento.",
+      "keywords": [
+        "Druk Path",
+        "trek alpino",
+        "4600m",
+        "lagos glaciares",
+        "desafiante"
+      ]
+    },
+    {
+      "id": "taktshang-excursion",
+      "nombre": "Taktshang Monastery Excursion (Nido del Tigre)",
+      "tipo": "histórico",
+      "region": "Paro, norte",
+      "descripcion": "Icónico monasterio encaramado en acantilado vertical a 3.120m. Aunque administrativamente en Paro, merece destinación propia por su trek específico y relevancia cultural. Símbolo de Bután en fotografía mundial.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "marzo-mayo, septiembre-noviembre",
+      "como_llegar": "desde Paro pueblo 1h en coche al inicio del trek (40 EUR) o a pie desde pueblo (1h). Trek 2-3h ida-vuelta desde entrada.",
+      "donde_dormir": {
+        "mochilero": "dormir en Paro pueblo (ver Paro)",
+        "medio": "ídem",
+        "comfort": "ídem"
+      },
+      "que_hacer": [
+        "Trek a Taktshang (5h total ida-vuelta, entrada 5 EUR + guía obligatorio 20-30 EUR)",
+        "Cafetería de montaña a mitad del ascenso (té de mantequilla 2 EUR)",
+        "Foto desde mirador de entrada (libre)",
+        "Interior del monasterio si está abierto (parte incluida en entrada)",
+        "Vistas de valle de Paro desde altura (libre)"
+      ],
+      "donde_comer": "Té de mantequilla (salted butter tea) en cafetería de trek (2 EUR). Almuerzo mejor antes en Paro.",
+      "consejo_local": "Madruga muchísimo (salida 6-7am) para evitar multitudes de tarde y calor. Guía es obligatorio pero elige uno que no vaya rápido: el trek merece disfrutar. Lleva agua suficiente.",
+      "plan_b_lluvia": "Trek se cancela por peligro de deslizamientos. Pon plan B: monasterio de Kyichu en Paro o espera 1-2 días.",
+      "keywords": [
+        "Taktsang",
+        "Nido del Tigre",
+        "acantilado",
+        "monasterio",
+        "icónico"
+      ]
+    }
+  ]
+}

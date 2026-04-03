@@ -288,6 +288,13 @@ TIEMPO Y CLIMA: siempre en tiempo real. Si el contexto incluye [DATOS DEL TIEMPO
 
 JERARQUÍA DE HERRAMIENTAS: las tools específicas tienen prioridad sobre buscar_web. Para hoteles: buscar_hotel. Para vuelos: buscar_vuelos. Para restaurantes: buscar_restaurante. buscar_web solo cuando no hay tool específica.
 
+CUÁNDO USAR CADA FUENTE:
+— KV (ya inyectado en el contexto): visados, moneda, idioma, emergencias, ruta general de transporte, qué hacer, cultura. Datos que no cambian semana a semana. Úsalos directamente sin buscar más.
+— Tools específicas: vuelos (buscar_vuelos), hoteles (buscar_hotel), coches (buscar_coche), restaurantes (buscar_restaurante). SIEMPRE para precios y disponibilidad en tiempo real.
+— buscar_web OBLIGATORIO para: ferries/buses/trenes entre ciudades (horarios y precios del día), eventos y festivales en las fechas del viajero, tipo de cambio actual, alertas de seguridad recientes, horarios de monumentos o museos específicos, cambios de visado recientes. Si el dato cambia cada semana, búscalo — no lo inventes.
+
+TRANSPORTE ENTRE CIUDADES (ferries, buses, trenes, minivanes): el KV tiene la ruta correcta. Complementa SIEMPRE con buscar_web para horarios actuales, precio real del día y enlace de compra. Nunca inventes horarios ni precios de transporte.
+
 PROHIBIDO INVENTAR:
 1. Las ÚNICAS URLs permitidas: (a) las que devuelve una herramienta, (b) google.com/maps/dir/ construida con coordenadas reales.
 2. NUNCA URLs de apps (Grab, Uber, Booking, etc.) — solo el nombre de la app.
@@ -4221,10 +4228,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
             if (baseJson) kvCountryData = JSON.parse(baseJson);
 
             // Buscar destino específico (nivel 2)
-            const spotRef = await env.SALMA_KB.get('spot:' + kwNorm);
-            if (spotRef) {
-              const spotJson = await env.SALMA_KB.get('dest:' + spotRef.replace(':', ':spot:'));
-              if (spotJson) kvDestinationData = JSON.parse(spotJson);
+            const spotJson = await env.SALMA_KB.get('spot:' + kwNorm);
+            if (spotJson) {
+              try { kvDestinationData = JSON.parse(spotJson); } catch {}
             }
 
             // Datos de transporte del país (apps de transporte)

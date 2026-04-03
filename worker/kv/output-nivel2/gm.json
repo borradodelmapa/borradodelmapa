@@ -1,0 +1,325 @@
+{
+  "pais": "Gambia",
+  "codigo": "gm",
+  "destinos": [
+    {
+      "id": "banjul",
+      "nombre": "Banjul",
+      "tipo": "ciudad",
+      "region": "Región Occidental",
+      "descripcion": "Capital de Gambia, pequeña pero vibrante con mercados coloridos, museos y puerto pintoresco. Centro administrativo donde comienza la mayoría de viajes, con acceso al aeropuerto internacional. Mezcla de arquitectura colonial y africana con ambiente auténtico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Aeropuerto Internacional Yundum a 27 km: taxi/shuttle 10-15 EUR, 45 minutos",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Bakau: 20-30 EUR/noche",
+        "medio": "Hotels en Banjul/Bakau: 45-70 EUR/noche",
+        "comfort": "Resorts en Fajara: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer Albert Market para compras y artesanía local (gratis entrada, 2-3 EUR souvenirs)",
+        "Visitar National Museum of Gambia (3 EUR entrada)",
+        "Pasear por el puerto de Denton Bridge (gratis)",
+        "Explorar barrio de Bakau con casas coloniales (gratis)"
+      ],
+      "donde_comer": "Benachin (plato nacional de arroz), 2-4 EUR. Comer en mercados o restaurantes de Bakau. Prueba fish and chips en chiringuitos locales.",
+      "consejo_local": "El Albert Market es caótico pero auténtico: negocia precios, evita horarios de midday heat (12-15h), lleva efectivo.",
+      "plan_b_lluvia": "Museos y compras en mercados cubiertos, cafeterías tradicionales",
+      "keywords": [
+        "Banjul",
+        "Bakau",
+        "Albert Market",
+        "capital Gambia",
+        "aeropuerto"
+      ]
+    },
+    {
+      "id": "serrekunda",
+      "nombre": "Serrekunda",
+      "tipo": "ciudad",
+      "region": "Región Occidental",
+      "descripcion": "Ciudad más poblada de Gambia, verdadero corazón comercial y cultural. Centro neurálgico para transporte local, mercados masivos y vida cotidiana gambiana sin filtros. Punto de conexión para viajes a otras regiones.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Banjul: minibus/shared taxi 30 minutos, 0.5 EUR. Desde aeropuerto: taxi directo 20-25 EUR",
+      "donde_dormir": {
+        "mochilero": "Guesthouses barrio Latrikunda: 18-28 EUR/noche",
+        "medio": "Hotels zona central: 40-60 EUR/noche",
+        "comfort": "Hotels Kotu Beach nearby: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido por Serrekunda Market, el más grande del país (gratis, regateo en souvenirs)",
+        "Visitar Arch 22 monument en Kotu, 5 minutos en taxi (1 EUR entrada)",
+        "Comprar en tiendas de ropa y artesanía (presupuesta 10-50 EUR)",
+        "Comer en mercado callejero local (2-3 EUR por comida)"
+      ],
+      "donde_comer": "Yassa chicken (pollo en salsa de limón), 3-5 EUR. Warung dominafood en mercado. Restaurantes de comida rápida local con buen precio.",
+      "consejo_local": "Serrekunda es un caos organizado: no es bonito pero es real Gambia. Los shared taxis salen cuando se llenan, no hay horarios. Perfecto para logística pero no para quedarse.",
+      "plan_b_lluvia": "Compras en mercados cubiertos, tiendas comerciales",
+      "keywords": [
+        "Serrekunda",
+        "Kotu",
+        "Arch 22",
+        "mayor ciudad",
+        "mercado central"
+      ]
+    },
+    {
+      "id": "kololi",
+      "nombre": "Kololi",
+      "tipo": "playa",
+      "region": "Región Occidental",
+      "descripcion": "Principal zona de playa para turistas y mochileros con restaurantes beachfront, bares y vida nocturna. Acceso directo a playas tranquilas, infraestructura turística completa sin ser masificada. Ambiente internacional pero menos formal que resorts.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Banjul: minibus 30 minutos, 0.5 EUR. Desde Serrekunda: taxi 10 minutos, 1-2 EUR",
+      "donde_dormir": {
+        "mochilero": "Beachfront hostels/guesthouses: 25-40 EUR/noche",
+        "medio": "3-star hotels playa: 50-80 EUR/noche",
+        "comfort": "Resort beachfront: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en playas seguras (gratis)",
+        "Paseo por malecón al atardecer (gratis)",
+        "Excursión a Oyster Creek para manglares (organizada, 15-20 EUR)",
+        "Masaje en playa (10-15 EUR)",
+        "Restaurantes beachfront (10-20 EUR por comida)"
+      ],
+      "donde_comer": "Fresh fish grillé, 8-12 EUR. Restaurantes con vista al mar en Kololi Beach Strip. Prueba jollof rice. Precios 1.5x más altos que Serrekunda.",
+      "consejo_local": "Kololi es donde concentran los turistas. Las playas son seguras pero nada salvaje. Al atardecer es cuando se llena de viajeros en bares. Negocia precios en restaurantes si pides comida sin bebidas.",
+      "plan_b_lluvia": "Bares y restaurantes cubiertos, masajes en interior",
+      "keywords": [
+        "Kololi",
+        "Kotu Beach",
+        "playa turística",
+        "beachfront",
+        "Gambia Beach"
+      ]
+    },
+    {
+      "id": "tanji",
+      "nombre": "Tanji",
+      "tipo": "playa",
+      "region": "Región Occidental",
+      "descripcion": "Pueblo pesquero auténtico con playas vírgenes y mercado de pesca activo. Contraste total con resorts: ves la vida real gambiana. Excelente para fotografía, observación cultural y playas tranquilas sin turistas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Kololi: minibus/shared taxi 45 minutos, 2-3 EUR. Desde Serrekunda: 1 hora, 3 EUR",
+      "donde_dormir": {
+        "mochilero": "Beachfront lodges básicos: 20-30 EUR/noche",
+        "medio": "Guesthouses con aire: 40-60 EUR/noche",
+        "comfort": "Eco-lodges con servicios: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar mercado de pesca al amanecer (5:30-7am, gratis pero respetuoso)",
+        "Baño en playa virgen (gratis)",
+        "Paseo por pueblo (gratis)",
+        "Cena de pescado fresco en chiringuitos locales (5-8 EUR)",
+        "Snorkeling cerca (organizado, 20-25 EUR)"
+      ],
+      "donde_comer": "Pescado grillé del día, 6-10 EUR. Restaurantes sin nombre pero excelentes. Cerveza local casera. Atmosfera muy local, sin turistas.",
+      "consejo_local": "El mercado de pesca es especial: ir muy temprano, llevar cámara con permiso, no interferir. Los lugareños venden el pescado recién capturado a precios locales. Come en el sitio mismo si quieres lo mejor.",
+      "plan_b_lluvia": "Refugiarse en chiringuitos locales, observar la pesca desde dentro",
+      "keywords": [
+        "Tanji",
+        "pueblo pesquero",
+        "mercado pesca",
+        "playa local",
+        "autentico"
+      ]
+    },
+    {
+      "id": "kaur-river-gambia",
+      "nombre": "Kaur / Río Gambia",
+      "tipo": "naturaleza",
+      "region": "Región Central",
+      "descripcion": "Excursión por el río Gambia en barca observando vida silvestre: hipopótamos, cocodrilos, aves acuáticas. Experiencia inmersiva en naturaleza sin aglomeraciones. Paisaje salvaje de la Gambia interior.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Serrekunda: minibus a Kaur 2-3 horas, 5-8 EUR. Desde Banjul: 3 horas, 8 EUR",
+      "donde_dormir": {
+        "mochilero": "Lodges rústicos en Kaur: 25-35 EUR/noche",
+        "medio": "Guesthouses con baño privado: 45-70 EUR/noche",
+        "comfort": "Eco-lodges con servicios: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido en barca por río Gambia (8-10 horas, 30-40 EUR por grupo pequeño)",
+        "Avistamiento de hipopótamos y aves (incluido en recorrido)",
+        "Visita a pueblos ribereños (incluido)",
+        "Caminata por naturaleza local (gratis, con guía local 15 EUR)"
+      ],
+      "donde_comer": "Comida local en pueblos ribereños durante excursión. Pescado del río. Llevar snacks propios es recomendado. Precios 4-7 EUR en comedores locales.",
+      "consejo_local": "Las excursiones en río se cierran en agosto-octubre por lluvias. Lleva protección solar extrema: el reflejo del agua quema. Los hipopótamos son impredecibles: escucha al guía siempre.",
+      "plan_b_lluvia": "Visitas a pueblos, exploración a pie, descanso",
+      "keywords": [
+        "Kaur",
+        "Rio Gambia",
+        "safari acuatico",
+        "hipopoatamos",
+        "cocodrilos",
+        "naturaleza"
+      ]
+    },
+    {
+      "id": "abuko-nature-reserve",
+      "nombre": "Abuko Nature Reserve",
+      "tipo": "naturaleza",
+      "region": "Región Occidental",
+      "descripcion": "Reserva natural protegida con monos, aves y cocodrilos en hábitat natural. Parque accesible a corta distancia, ideal para observación de fauna sin viaje largo. Senderos bien mantenidos con guías especializados.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Kololi: minibus 20 minutos, 1-2 EUR. Desde Serrekunda: 30 minutos, 2-3 EUR",
+      "donde_dormir": {
+        "mochilero": "Guesthouses cercanas en Lamin: 20-30 EUR/noche",
+        "medio": "Hotels zona Lamin/Brufut: 45-70 EUR/noche",
+        "comfort": "Resorts cercanos: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Caminata guiada por reserva (2-3 horas, 10 EUR entrada + 15 EUR guía opcional)",
+        "Observación de monos patas y otros primates (incluido)",
+        "Birdwatching con binoculares (incluido)",
+        "Visita a crocodile pools (incluido)",
+        "Fotografía natural (traer cámara buena, sin flash)"
+      ],
+      "donde_comer": "Restaurante en entrada de reserva: comidas 5-8 EUR. Llevar agua y snacks. Picnic posible.",
+      "consejo_local": "Ir temprano (7-9am) para más actividad animal. Los guías son biólogos locales: muy recomendable contratarlos para explicaciones. Monos son acostumbrados a humanos pero no tocarlos.",
+      "plan_b_lluvia": "Senderos más cortos, menos avistamientos pero abierto",
+      "keywords": [
+        "Abuko Nature Reserve",
+        "monos",
+        "cocodrilos",
+        "aves",
+        "parque natural"
+      ]
+    },
+    {
+      "id": "tendaba",
+      "nombre": "Tendaba",
+      "tipo": "naturaleza",
+      "region": "Región Norte",
+      "descripcion": "Lodge y punto de observación en el río Gambia interior, zona menos turística y más salvaje. Acceso a ecosistema de manglares y avistamiento de fauna. Experiencia más aventurera que Kaur con menos infraestructura.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Banjul: minibus hacia norte 2.5-3 horas, 8-12 EUR. Ferry incluido en ruta",
+      "donde_dormir": {
+        "mochilero": "Tendaba Camp básico: 30-40 EUR/noche",
+        "medio": "Tendaba Camp con servicios: 60-90 EUR/noche",
+        "comfort": "Lodges eco-turismo: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Excursión en barca por río (incluida con alojamiento)",
+        "Caminata por manglares (guiada, 15-20 EUR)",
+        "Observación de aves especializadas (binoculares propios)",
+        "Interacción con comunidades locales (gratis)",
+        "Pesca recreativa (organizada, 25-35 EUR)"
+      ],
+      "donde_comer": "Comida incluida en lodge. Cocina local simple pero buena. Fish and rice predominante. Restaurante muy básico pero cálido.",
+      "consejo_local": "Tendaba es punto de partida para aventureros reales. La infraestructura es minimal. Lleva repelente antimosquitos fuerte. Ferry pueden retrasarse por mareas. Desconexión total de tecnología.",
+      "plan_b_lluvia": "Permanencia en lodge con observación desde cubierta",
+      "keywords": [
+        "Tendaba",
+        "manglares",
+        "rio interior",
+        "ecoturismo",
+        "menos touristico"
+      ]
+    },
+    {
+      "id": "kiang-west-national-park",
+      "nombre": "Kiang West National Park",
+      "tipo": "naturaleza",
+      "region": "Región Central",
+      "descripcion": "Parque nacional con sabana, bosque deciduo y avifauna espectacular. Menos visitado que otras reservas, con diversidad ecológica única. Experiencia de safari africano real sin animales peligrosos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Banjul: minibus a Kaur o Soma 2-2.5 horas, 8 EUR. Luego guía local arrancan",
+      "donde_dormir": {
+        "mochilero": "Alojamientos en Soma: 20-30 EUR/noche",
+        "medio": "Guesthouses con servicios: 40-60 EUR/noche",
+        "comfort": "Eco-lodges: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari a pie con guía especialista (4-6 horas, 35-50 EUR por grupo)",
+        "Birdwatching intensivo (más de 250 especies, binoculares necesarios)",
+        "Fotografía de naturaleza (traer cámara de zoom)",
+        "Exploración de ecosistemas variados (incluida en tour)",
+        "Camping opcional en parque (consentimiento oficial)"
+      ],
+      "donde_comer": "Comidas sencillas en pueblos cercanos o llevar picnic. Precios 4-6 EUR. Agua embotellada esencial.",
+      "consejo_local": "Es parque poco conocido: contactar con guías locales antes. Mejor para birdwatchers serios. Caminos sin marcar. No es paseo casual sino expedición de verdad.",
+      "plan_b_lluvia": "Recorridos más cortos, enfoque en aves en cobertura forestal",
+      "keywords": [
+        "Kiang West National Park",
+        "safari",
+        "aves",
+        "sabana",
+        "bosque deciduo"
+      ]
+    },
+    {
+      "id": "brufut",
+      "nombre": "Brufut",
+      "tipo": "rural",
+      "region": "Región Occidental",
+      "descripcion": "Pueblo costero tradicional con mercado de arte auténtico, esculturas de madera y artesanía. Contraste entre turismo y vida local. Punto cultural donde artistas locales venden directamente sin intermediarios.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Kololi: minibus 25 minutos, 1-2 EUR. Desde Serrekunda: 30 minutos, 2 EUR",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Brufut: 25-35 EUR/noche",
+        "medio": "Hotels pequeños con servicios: 50-75 EUR/noche",
+        "comfort": "Resorts cercanos Kotu: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por mercado de artesanía y esculturas (gratis, 5-50 EUR por pieza)",
+        "Compra de arte directo a artistas (negocia precios, 10-100 EUR)",
+        "Entrevistas con artistas locales (gratis, propina bienvenida)",
+        "Caminata por pueblo (gratis)",
+        "Comida en comedores locales (3-5 EUR)"
+      ],
+      "donde_comer": "Benachin y yassa locales, 3-6 EUR. Comedores sin nombre pero auténticos. Cerveza local fresca.",
+      "consejo_local": "Los artistas de Brufut son maestros: si compras escultura, negocia pero respeta su trabajo. Muchos han expuesto internacionalmente. Ir sin dinero en efectivo es error: efectivo es reina aqui.",
+      "plan_b_lluvia": "Compras bajo techo en talleres cubiertos",
+      "keywords": [
+        "Brufut",
+        "artesania",
+        "esculturas",
+        "arte local",
+        "pueblo artistas"
+      ]
+    },
+    {
+      "id": "juffureh-james-island",
+      "nombre": "Juffureh / James Island",
+      "tipo": "histórico",
+      "region": "Región Norte",
+      "descripcion": "Sitios históricos relacionados con tráfico de esclavos y comercio colonial. James Island: ruinas de fuerte británico. Juffureh: pueblo natal de Kunta Kinteh (ficción/realidad de Raíces). Importancia histórica profunda.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Banjul: minibus a Albreda 1.5 horas, 5 EUR. Luego piragua a James Island (10 minutos, 5-10 EUR ida/vuelta)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Albreda: 20-30 EUR/noche",
+        "medio": "Hotels en Albreda: 45-65 EUR/noche",
+        "comfort": "Resorts en Serrekunda + viaje diario"
+      },
+      "que_hacer": [
+        "Visita a ruinas de fuerte en James Island (barca + entrada, 15 EUR total)",
+        "Recorrido histórico con guía local (20 EUR, muy recomendado)",
+        "Visita a Juffureh village y museo cultural (5 EUR)",
+        "Paseo por puerto y pueblo (gratis)",
+        "Conversaciones con historiadores locales (propina bienvenida)"
+      ],
+      "donde_comer": "Restaurantes en Albreda con vistas al río, 6-10 EUR. Pescado local. Atmósfera histórica.",
+      "consejo_local": "La historia es muy sensible: guías locales contextualizan bien la tragedia. James Island está en ruinas pero el impacto emocional es fuerte. Piragua puede tener retrasos por mareas.",
+      "plan_b_lluvia": "Museo de Juffureh cubierto, tours redactados en pueblo",
+      "keywords": [
+        "Juffureh",
+        "James Island",
+        "historia",
+        "esclavitud colonial",
+        "Raices",
+        "fuerte britanico"
+      ]
+    }
+  ]
+}

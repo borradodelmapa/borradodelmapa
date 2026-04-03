@@ -1,0 +1,332 @@
+{
+  "pais": "Chad",
+  "codigo": "td",
+  "destinos": [
+    {
+      "id": "n-djamena",
+      "nombre": "N'Djamena",
+      "tipo": "ciudad",
+      "region": "Capital, región del Río Chari",
+      "descripcion": "Capital y puerta de entrada a Chad, situada a orillas del río Chari. Centro administrativo con mercados tradicionales, museos y vida urbana local. Punto de partida obligatorio para explorar el país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Vuelo internacional al Aeropuerto Internacional Hassan Djamous (punto de entrada principal)",
+      "donde_dormir": {
+        "mochilero": "Alojamientos básicos en barrio Millénaire, 15-25 EUR/noche",
+        "medio": "Hotels de cadena local tipo Novotel, 50-80 EUR/noche",
+        "comfort": "Radisson Blu o similares, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado Central (gratis)",
+        "Museo Nacional de Chad (3 EUR)",
+        "Paseo por el río Chari al atardecer (gratis)",
+        "Barrio de Kabalaye y artesanía local (gratis)"
+      ],
+      "donde_comer": "Restaurantes locales en barrio Moursal: millet, carne asada y sopa de cacahuete. Rango 5-15 EUR. Street food en mercado central por 2-4 EUR.",
+      "consejo_local": "Los bancos y cambios de moneda cierran a las 15h, cambia dinero por la mañana. El tráfico es caótico, camina o usa taxis locales.",
+      "plan_b_lluvia": "Museo Nacional (aire acondicionado), compras en mercados cubiertos, visita a mezquitas locales abiertas al público.",
+      "keywords": [
+        "N'Djamena",
+        "Ndjamena",
+        "capital Chad",
+        "Chari",
+        "Millénaire",
+        "Mercado Central",
+        "Kabalaye"
+      ]
+    },
+    {
+      "id": "lago-chad",
+      "nombre": "Lago Chad",
+      "tipo": "naturaleza",
+      "region": "Norte, frontera con Nigeria, Camerún y Níger",
+      "descripcion": "Antiguo lago interior ahora fragmentado, ecosistema crítico para aves migratorias y fauna. Visitas a islas y pueblos de pescadores con vida tradicional intacta. Acceso limitado por inseguridad en algunas zonas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde N'Djamena: 4WD alquilado con guía (500-700 EUR para grupo) o autobús local (12-15 EUR, 8 horas) hasta Bol.",
+      "donde_dormir": {
+        "mochilero": "Alojamientos comunitarios en Bol, 12-20 EUR/noche",
+        "medio": "Campamentos turísticos básicos, 35-50 EUR/noche",
+        "comfort": "Lodge de safari (si abierto), 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en bote por el lago (25-40 EUR)",
+        "Visita a pueblos de pescadores Kanuri y Buduma (gratis con guía local)",
+        "Observación de aves migratorias (gratis)",
+        "Pesca tradicional con habitantes locales (40 EUR)"
+      ],
+      "donde_comer": "Pescado fresco del lago (tilapia, capitán) en restaurantes de Bol. Rango 4-10 EUR. Mercado local con arroz, verduras y dátiles.",
+      "consejo_local": "Contrata siempre guía local certificado. El lago se reduce cada año, algunos islotes desaparecen. Lleva protección solar extrema.",
+      "plan_b_lluvia": "Visitas a museos de historia lacustre en Bol, artesanía local, reuniones con comunidades en cobertizos tradicionales.",
+      "alerta_seguridad": "Zona cercana a grupos armados y tráfico de drogas. Consulta situación actual, viaja con agencia local registrada, evita moverte de noche.",
+      "keywords": [
+        "Lago Chad",
+        "Lake Chad",
+        "Bol",
+        "islas Chad",
+        "Buduma",
+        "Kanuri",
+        "pescadores"
+      ]
+    },
+    {
+      "id": "zakouma-parque",
+      "nombre": "Parque Nacional de Zakouma",
+      "tipo": "naturaleza",
+      "region": "Este, región de Gueledjedoum",
+      "descripcion": "Principal reserva de fauna de Chad con elefantes, jirafas, leones y antílopes. Safari tradicional en 4WD con guías experimentados. Uno de los pocos espacios protegidos en el Sahel.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde N'Djamena: vuelo chárter (450-600 EUR por persona) o 4WD (10-12 horas, 400-550 EUR alquiler + combustible). Acceso también desde Sarh.",
+      "donde_dormir": {
+        "mochilero": "Campamento básico en parque, 20-30 EUR/noche",
+        "medio": "Campamento con tiendas confortables, 50-70 EUR/noche",
+        "comfort": "Lodge de safari Zakouma (reservar adelante), 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en 4WD al amanecer (50 EUR por 4h)",
+        "Caminata guiada nocturna (30 EUR)",
+        "Observación de aves en pozos de agua (gratis con guía)",
+        "Visita a centro de investigación de elefantes (10 EUR)"
+      ],
+      "donde_comer": "Comidas en lodges del parque: carne asada, verduras locales. Rango 12-20 EUR. Lleva snacks de N'Djamena para picnics.",
+      "consejo_local": "El parque cierva en época de lluvias (junio-octubre). Llega antes de las 6h para safari. Los mejores avistamientos son primeras 3 horas de luz.",
+      "plan_b_lluvia": "Centro de interpretación del parque, fotografia de aves, caminatas cortas cerca de campamento.",
+      "alerta_seguridad": "Zona de actividad de bandidos ocasionalmente. Viaja con operadores establecidos, no te alejes de guías.",
+      "keywords": [
+        "Zakouma",
+        "parque nacional",
+        "safari Chad",
+        "elefantes",
+        "Gueledjedoum",
+        "fauna Sahel"
+      ]
+    },
+    {
+      "id": "tibesti-desierto",
+      "nombre": "Montañas Tibesti",
+      "tipo": "montaña",
+      "region": "Extremo norte, desierto del Sahara",
+      "descripcion": "Cordillera volcánica con cimas hasta 3.445m en pleno Sahara. Paisajes lunares, antiguos depósitos de agua (ouadis) y restos arqueológicos. Destinación para aventureros extremos, muy remota.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde N'Djamena: expedición con operador especializado (1.500-2.500 EUR por persona, 6-7 días) incluye transporte 4WD, camping y guías.",
+      "donde_dormir": {
+        "mochilero": "Camping bajo las estrellas (incluido en expedición)",
+        "medio": "Expedición con tiendas Bereber, 60-100 EUR/noche",
+        "comfort": "Expedición luxury con cocinero y personal, 150-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Ascenso a Emi Koussi (3.445m, 150 EUR guía)",
+        "Caminata por ouadis con agua permanente (gratis)",
+        "Observación de pinturas rupestres (gratis con guía)",
+        "Campamento en cráter volcánico (gratis, experiencia)"
+      ],
+      "donde_comer": "Comidas campestres preparadas por personal expedición. Rango incluido en paquete. Lleva suministros altos en calorías.",
+      "consejo_local": "Solo accesible con operador profesional. Requiere nivel de fitness alto. Las noches son glaciales (bajo 0°C), lleva equipo de abrigo extremo.",
+      "plan_b_lluvia": "No existe plan B: no se viaja en mal tiempo. Reprograma o explorador ouadis cercanos a campamento.",
+      "alerta_seguridad": "Zona de riesgo alto: presencia histórica de grupos insurgentes y tráfico. Solo viaja con operador con permiso gubernamental y escolta. Consulta embajada.",
+      "keywords": [
+        "Tibesti",
+        "Emi Koussi",
+        "montaña Sahara",
+        "volcanes Chad",
+        "ouadi",
+        "arqueología Sahara"
+      ]
+    },
+    {
+      "id": "abechequidos",
+      "nombre": "Abeché",
+      "tipo": "histórico",
+      "region": "Este, región de Ouaddaï",
+      "descripcion": "Antigua capital sultanal con arquitectura sudanesa-saheliana. Centro histórico con palacios, mercados y vida tradicional. Puerta de entrada a exploración de este de Chad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde N'Djamena: vuelo doméstico (120-160 EUR, 1,5h) o autobús/minibús (25-35 EUR, 10-12h).",
+      "donde_dormir": {
+        "mochilero": "Auberges simples centro histórico, 15-25 EUR/noche",
+        "medio": "Hotel Abeché o similar, 45-60 EUR/noche",
+        "comfort": "Lodges turísticos (pocos), 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Palacio del Sultán (5 EUR entrada, tours disponibles)",
+        "Mercado central de Abeché (gratis)",
+        "Mezquita Al-Hakim (gratis, respeta horarios oración)",
+        "Recorrido por barrios históricos (gratis, con guía local 15 EUR)"
+      ],
+      "donde_comer": "Comida local: tereré (pan de maíz), bouille (papilla), carne asada. Rango 4-12 EUR en mercados y pequeños restaurantes.",
+      "consejo_local": "El mercado es más vivo por la mañana temprano. Mucha población local no habla francés fluido, aprende frases Árabe/Árabe chadiano.",
+      "plan_b_lluvia": "Museos locales, talleres de artesanía cubiertos, visitas a mezquitas históricas.",
+      "alerta_seguridad": "Zona relativamente estable pero cerca de región de conflicto. Camina acompañado, evita zonas periféricas después de oscuridad.",
+      "keywords": [
+        "Abeché",
+        "Abeche",
+        "Ouaddaï",
+        "palacio sultán",
+        "capital histórica",
+        "mercado este Chad"
+      ]
+    },
+    {
+      "id": "mao-kanem",
+      "nombre": "Mao",
+      "tipo": "rural",
+      "region": "Noroeste, región de Kanem",
+      "descripcion": "Pequeña ciudad en borde del desierto, centro de intercambio camelero tradicional. Acceso a caravanas de sal de Bilma y vida nómada del Sahara. Auténtica Chad sin turismo convencional.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde N'Djamena: minibús (30-40 EUR, 8-10h) o 4WD alquilado (350-450 EUR). Carreteras sin asfaltar.",
+      "donde_dormir": {
+        "mochilero": "Auberges simples, 12-18 EUR/noche",
+        "medio": "Hotel básico con mosquitero, 25-40 EUR/noche",
+        "comfort": "Sin opciones, camping con operador"
+      },
+      "que_hacer": [
+        "Mercado de camellos (gratis, visita temprano)",
+        "Paseo por aldeas Kanembou locales (gratis con guía 10 EUR)",
+        "Visita a pozos de agua tradicionales (gratis)",
+        "Compra de sal de Bilma en origen (variable, 20-50 EUR kg)"
+      ],
+      "donde_comer": "Cuscús, sopa de cacahuete, pan local. Rango 3-8 EUR. Mercado central con frutas secas y dátiles.",
+      "consejo_local": "Trae efectivo en CFA, no hay cajeros. El mercado de camellos es animadísimo los viernes. Respeta la fotografia: pide permiso siempre.",
+      "plan_b_lluvia": "Artesanía local en casas, reuniones con jefes de caravana, documentación oral de historias nómadas.",
+      "keywords": [
+        "Mao",
+        "Kanem",
+        "camellos",
+        "sal Bilma",
+        "nómadas",
+        "mercado camelero"
+      ]
+    },
+    {
+      "id": "sarh-logone",
+      "nombre": "Sarh",
+      "tipo": "ciudad",
+      "region": "Sur, región de Logone Oriental",
+      "descripcion": "Segunda ciudad más grande, junto al río Logone. Centro de comercio agrícola y punto de partida para explorar sur de Chad. Menos caótica que N'Djamena, más auténtica.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde N'Djamena: vuelo doméstico (100-140 EUR, 1h) o autobús (20-30 EUR, 8-10h). Desde Camerún: acceso por frontera de Kousseri.",
+      "donde_dormir": {
+        "mochilero": "Auberges cerca del río, 15-25 EUR/noche",
+        "medio": "Hotels local, 40-60 EUR/noche",
+        "comfort": "No hay opciones comfort, máximo medio rango"
+      },
+      "que_hacer": [
+        "Paseo por el río Logone al atardecer (gratis)",
+        "Mercado de Sarh (gratis)",
+        "Museo de Sarh (si abierto, 3 EUR)",
+        "Visita a pueblos cercanos de etnia Sara (15 EUR con guía)"
+      ],
+      "donde_comer": "Pescado del río Logone, sorgho, verduras locales. Rango 5-12 EUR en restaurantes frente al río.",
+      "consejo_local": "Sarh es puerta a sur agrícola. El río es hermoso al atardecer pero no nadar por bilharzia. Toma vacunas contra fiebre amarilla.",
+      "plan_b_lluvia": "Visitas a iglesias locales, exploración de barrios residenciales, compras de artesanía local.",
+      "keywords": [
+        "Sarh",
+        "Logone Oriental",
+        "río Logone",
+        "segunda ciudad",
+        "sur Chad"
+      ]
+    },
+    {
+      "id": "ouadai-guera",
+      "nombre": "Guera (región)",
+      "tipo": "montaña",
+      "region": "Centro-sur, región de Guera",
+      "descripcion": "Meseta rocosa con pueblos tradicionales, vistas panorámicas y comunidades Hadjeraï. Trekking entre terrazas agrícolas y aldeas en colinas. Ruta menos conocida, auténtica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde N'Djamena: minibús a Mongo (35-45 EUR, 6-8h), luego local guide para exploración. 4WD acceso limitado.",
+      "donde_dormir": {
+        "mochilero": "Estancia en casas de familia (10-15 EUR/noche) o campamento simple",
+        "medio": "Lodge básico en Mongo, 30-45 EUR/noche",
+        "comfort": "Sin opciones"
+      },
+      "que_hacer": [
+        "Trekking entre aldeas Hadjeraï (gratis, guía local 20 EUR)",
+        "Visita a mercados semanales de pueblos (gratis)",
+        "Observación de paisaje terraceado (gratis)",
+        "Fotografía de vida rural y retratos (paga modelos locales 5 EUR)"
+      ],
+      "donde_comer": "Comida casera en aldeas: mijo, sorgo, verduras. Rango 3-8 EUR con familias locales.",
+      "consejo_local": "Dependes de guías locales. Lleva agua abundante. Las aldeas viven en ritmo solar: levántate temprano, come tarde.",
+      "plan_b_lluvia": "Estancia en casa de familia, aprendizaje de técnicas agrícolas, documentación fotográfica desde interior.",
+      "keywords": [
+        "Guera",
+        "Mongo",
+        "Hadjerai",
+        "montaña central",
+        "trekking",
+        "terrazas agrícolas"
+      ]
+    },
+    {
+      "id": "derkle-ennedi",
+      "nombre": "Ennedi (región)",
+      "tipo": "desierto",
+      "region": "Nordeste, región de Ennedi",
+      "descripcion": "Meseta de arenisca con cañones, oasis y depósitos de agua (guelta). Paisaje exótico con arqueología y vida nómada. Acceso limitado, requiere 4WD y permisos.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde N'Djamena: expedición con operador (800-1.200 EUR por persona, 4-5 días) o vuelo + 4WD. Acceso también desde Chad/Sudán frontera.",
+      "donde_dormir": {
+        "mochilero": "Camping en canyon (incluido en expedición)",
+        "medio": "Expedición con tiendas, 50-80 EUR/noche",
+        "comfort": "Expedición mejorada, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Excursión a guelta de Archei (gratis con guía expedición)",
+        "Trekking en canyon (gratis)",
+        "Observación de inscripciones rupestres (gratis con guía)",
+        "Encuentro con pastores nómados (gratis, trae pequeños regalos)"
+      ],
+      "donde_comer": "Comidas de expedición. Lleva bebidas y snacks suficientes. Rango incluido en paquete.",
+      "consejo_local": "Las agencias locales pueden tramitar permisos especiales. Ennedi es destino para aventureros, no para comodidad.",
+      "plan_b_lluvia": "No viable en lluvias. Viaja solo en estación seca.",
+      "alerta_seguridad": "Frontera con Sudán inestable. Solo con operador registrado. Permisos gubernamentales obligatorios.",
+      "keywords": [
+        "Ennedi",
+        "guelta Archei",
+        "Derkle",
+        "cañones arenisca",
+        "arte rupestre",
+        "desierto nordeste"
+      ]
+    },
+    {
+      "id": "fianga-mayo-lere",
+      "nombre": "Región de Fianga y Mayo-Lere",
+      "tipo": "rural",
+      "region": "Sur, región de Mayo-Lere",
+      "descripcion": "Zona agrícola de transición a Camerún con etnias diversas (Moundang, Musey). Pueblos artesanales, mercados locales auténticos y acceso a parques cercanos. Menos turística, muy accesible desde Camerún.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Sarh: minibús (15-20 EUR, 3-4h) o desde Camerún (Yaoundé-Douala): autobús a frontera, luego local.",
+      "donde_dormir": {
+        "mochilero": "Auberges simples, 12-20 EUR/noche",
+        "medio": "Hotel básico, 30-45 EUR/noche",
+        "comfort": "Sin opciones"
+      },
+      "que_hacer": [
+        "Mercado semanal de Fianga (gratis)",
+        "Visita a talleres artesanales de cerámica (gratis, compra local)",
+        "Caminatas a aldeas cercanas (gratis, guía 12 EUR)",
+        "Interacción con agricultores locales (gratis)"
+      ],
+      "donde_comer": "Comida camerunesa-chadiana: aracachis, verduras locales, carne de caza. Rango 4-10 EUR.",
+      "consejo_local": "Zona cosmopolita con influencias camerunesas. Francés es más hablado aquí. Mercado es muy genuino, no turístico.",
+      "plan_b_lluvia": "Talleres cubiertos, artesanía local, visitas a iglesias y centros comunitarios.",
+      "keywords": [
+        "Fianga",
+        "Mayo-Lere",
+        "sur Chad",
+        "Moundang",
+        "mercado artesanía",
+        "frontera Camerún"
+      ]
+    }
+  ]
+}

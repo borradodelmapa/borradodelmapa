@@ -1,0 +1,341 @@
+{
+  "pais": "Bahamas",
+  "codigo": "bs",
+  "destinos": [
+    {
+      "id": "nassau-paradise-island",
+      "nombre": "Nassau y Paradise Island",
+      "tipo": "ciudad",
+      "region": "Nueva Providencia",
+      "descripcion": "Capital y principal puerta de entrada a Bahamas, con playas urbanas, centro histórico colonial y vida nocturna. Punto de partida ideal para explorar el archipiélago y gestionar trámites de viaje. Mezcla de turismo masivo y auténtica vida bahamesa en los barrios locales.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Aeropuerto internacional Lynden Pindling (NAS). Desde Europa: 1-2 escalas, 8-12 horas totales. Vuelos desde 400-700 EUR. Taxis al centro: 25 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Downtown Nassau: 35-50 EUR/noche",
+        "medio": "Hotels 3-4 estrellas en Paradise Island o Cable Beach: 100-180 EUR/noche",
+        "comfort": "Resorts de lujo en Paradise Island: 250-500+ EUR/noche"
+      },
+      "que_hacer": [
+        "Straw Market (gratis, regateo de artesanías)",
+        "Fort Fincastle con vistas 360° (gratis)",
+        "Playa Cable Beach (gratis)",
+        "Snorkel en arrecifes cercanos (30-50 EUR/tour)",
+        "Blue Lagoon Island day trip (70-100 EUR con transporte)"
+      ],
+      "donde_comer": "Conch salad fresco en Arawak Cay (Fish Fry): 8-12 EUR. Restaurantes en Nassau Straw Market. Comida local vs. turística desde 15 EUR.",
+      "consejo_local": "Evita Overhill y Some Like It Hot (zonas peligrosas de noche). El Straw Market cierra a las 17h. Negocia precios en taxis antes de subir.",
+      "plan_b_lluvia": "Atlantis Resort (acceso día: 50 EUR), museos en Downtown, compras en Nassau Straw Market bajo techo.",
+      "keywords": [
+        "Nassau",
+        "Paradise Island",
+        "New Providence",
+        "capital Bahamas",
+        "Atlantis",
+        "Cable Beach",
+        "Straw Market"
+      ]
+    },
+    {
+      "id": "exuma",
+      "nombre": "Exuma",
+      "tipo": "isla",
+      "region": "Exuma Cays",
+      "descripcion": "Archipiélago de islas turquesas con playas vírgenes, aguas crystallinas y fauna marina única. Destino icónico para snorkel, buceo y relajación sin masas. Las Pig Beach y Thunderball Grotto son mundialmente famosas.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a junio",
+      "como_llegar": "Vuelo desde Nassau a George Town (45 min, 60-120 EUR ida/vuelta). Ferry: 2-3 horas (35-50 EUR). Coches de alquiler en George Town: 40-60 EUR/día.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en George Town: 50-80 EUR/noche",
+        "medio": "Pequeños resorts en Thunderball Grotto o Staniel Cay: 120-200 EUR/noche",
+        "comfort": "Resorts boutique con playa privada: 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Pig Beach: nada con cerdos salvajes (tour 60-80 EUR)",
+        "Thunderball Grotto snorkel (45-70 EUR)",
+        "Swimming Pigs con tour combinado (80-120 EUR)",
+        "Playa en Compass Cay (free, tours desde 50 EUR)",
+        "Buceo en Thunderball: 100-150 EUR"
+      ],
+      "donde_comer": "Grouper fresco en restaurantes de George Town: 12-20 EUR. Comida local en Ed's Edgewater Restaurant. Supermercados para picnics en playas: 10-15 EUR.",
+      "consejo_local": "Lleva snorkel propio o alquila (15 EUR/día), es más barato. Los tours de Pig Beach salen muy temprano (6-7h). Visita Compass Cay antes del mediodía para menos turistas.",
+      "plan_b_lluvia": "Buceo (mejor con mal tiempo), exploraciones terrestres en George Town, museos locales.",
+      "keywords": [
+        "Exuma",
+        "Exuma Cays",
+        "Pig Beach",
+        "Thunderball Grotto",
+        "George Town",
+        "Swimming Pigs",
+        "Compass Cay"
+      ]
+    },
+    {
+      "id": "eleuthera",
+      "nombre": "Eleuthera",
+      "tipo": "isla",
+      "region": "Eleuthera",
+      "descripcion": "Isla alargada con playas salvajes en ambos lados (Atlántico rosa vs Caribe turqueso), pueblos auténticos y escaso turismo masivo. Ideal para quien busca tranquilidad, snorkel y naturaleza sin ruido.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "octubre a junio",
+      "como_llegar": "Vuelo Nassau a North Eleuthera (35 min, 50-100 EUR). Ferry desde Nassau: 6 horas (50 EUR). Alquiler de coche: 45-65 EUR/día.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Dunmore Town o Gregory Town: 45-75 EUR/noche",
+        "medio": "Pequeños resorts costeros: 100-160 EUR/noche",
+        "comfort": "Beachfront cottages boutique: 180-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Pink Sand Beach (gratis)",
+        "Snorkel en Current Cut (30-50 EUR con tour)",
+        "Buceo en arrecifes (80-120 EUR)",
+        "Lighthouse Beach en Gregory Town (gratis)",
+        "Visitantes de tortugas marinas en temporada (free)"
+      ],
+      "donde_comer": "Pescado fresco en restaurantes locales: 10-18 EUR. Especialidades en frutas tropicales. Supermercados pequeños en pueblos principales.",
+      "consejo_local": "El transporte local es por minibús (2-4 EUR/trayecto). Alquila coche para flexibilidad. Pink Sand Beach es real: arena color rosa por coral roto. Reserva hoteles con anticipación en temporada alta.",
+      "plan_b_lluvia": "Exploración de pueblos, compras de artesanías locales, aventuras de buceo indoor.",
+      "keywords": [
+        "Eleuthera",
+        "Pink Sand Beach",
+        "Gregory Town",
+        "Dunmore Town",
+        "North Eleuthera",
+        "Current Cut"
+      ]
+    },
+    {
+      "id": "andros",
+      "nombre": "Andros",
+      "tipo": "naturaleza",
+      "region": "Andros",
+      "descripcion": "Isla más grande de Bahamas, famosa por la Barrera de Coral más grande del hemisferio oeste y biodiversidad marina excepcional. Destino para buceadores serios, pesca con mosca y aventureros que quieren lo auténtico.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a noviembre (menos turistas), mejor buceo octubre a marzo",
+      "como_llegar": "Vuelo desde Nassau a Andros Town (40 min, 70-110 EUR). Ferry: 2 horas (45 EUR). Alquiler de coche limitado: 50-70 EUR/día.",
+      "donde_dormir": {
+        "mochilero": "Eco-lodges básicos: 60-90 EUR/noche",
+        "medio": "Resort pequeño con buceo: 130-200 EUR/noche",
+        "comfort": "Luxury lodge con todo incluido: 250-400+ EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en Andros Wall (100-150 EUR)",
+        "Pesca con mosca en flats (200-300 EUR/día)",
+        "Snorkel en Blue Holes (60-90 EUR)",
+        "Observación de pájaros (tours con guía local: 50 EUR)",
+        "Playa Piccans (gratis)"
+      ],
+      "donde_comer": "Comida local en posadas familiares: 8-15 EUR. Pescado a la parrilla en restaurantes costeros. Opciones limitadas, planifica compras.",
+      "consejo_local": "Andros es salvaje y poco turístico: infraestructura mínima. Reserva buceo/tours con anticipación. Sin ATM en algunas zonas: trae efectivo. Ideal para conservacionistas, no para playas masivas.",
+      "plan_b_lluvia": "Buceo (perfecto con mal tiempo), exploración de Blue Holes, pesca interior.",
+      "keywords": [
+        "Andros",
+        "Andros Wall",
+        "Andros Barrier Reef",
+        "Blue Holes",
+        "pesca con mosca",
+        "buceo técnico",
+        "ecoturismo"
+      ]
+    },
+    {
+      "id": "abacos",
+      "nombre": "Abacos",
+      "tipo": "isla",
+      "region": "Abacos",
+      "descripcion": "Archipiélago pintoresco con pueblos coloniales (Harbour Island, Hope Town), marinas de lujo y playas tranquilas. Popular entre navegantes y gente adinerada, pero con pueblos auténticos y opciones de viajero independiente.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Vuelo Nassau a Marsh Harbour (60 min, 80-140 EUR). Ferry desde Nassau: 4.5 horas (60 EUR). Bote local: 25-35 EUR entre islas.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Marsh Harbour: 55-85 EUR/noche",
+        "medio": "Small resorts en Hope Town o Elbow Cay: 120-200 EUR/noche",
+        "comfort": "Beachfront resorts de lujo: 220-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Harbour Island paseo histórico (gratis)",
+        "Hope Town Lighthouse subida (gratis, donativo)",
+        "Snorkel en arrecifes cercanos (50-80 EUR)",
+        "Playa Tahiti (gratis)",
+        "Buceo recreativo (90-140 EUR)"
+      ],
+      "donde_comer": "Conch fresco en Hope Town: 12-20 EUR. Restaurantes en Marsh Harbour desde 15 EUR. Bares con vista al mar.",
+      "consejo_local": "Hope Town y Harbour Island son pueblos turísticos caros. Marsh Harbour es más asequible. Los ferries entre islas son frecuentes y baratos. Mejor para navegantes y viajeros con presupuesto medio-alto.",
+      "plan_b_lluvia": "Exploración de pueblos coloniales, tiendas, galerías de arte.",
+      "keywords": [
+        "Abacos",
+        "Harbour Island",
+        "Hope Town",
+        "Elbow Cay",
+        "Marsh Harbour",
+        "faro Hope Town",
+        "vela"
+      ]
+    },
+    {
+      "id": "long-island",
+      "nombre": "Long Island",
+      "tipo": "isla",
+      "region": "Long Island",
+      "descripcion": "Isla alargada y poco visitada con playas salvajes, Blue Holes naturales y cavernas. Destino para aventureros que buscan exploración y contacto con naturaleza sin infraestructura turística pesada.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Vuelo desde Nassau a Stella Maris (90 min, 100-150 EUR). Alquiler de coche: 50-70 EUR/día. Transporte local limitado.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses pequeñas: 50-75 EUR/noche",
+        "medio": "Resort pequeño con servicios básicos: 100-160 EUR/noche",
+        "comfort": "Stella Maris Resort Club: 180-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Dean's Blue Hole buceo/snorkel (120-180 EUR con tour)",
+        "Playa Conchs Bar (gratis)",
+        "Cueva Thunderball y cenotes (50-80 EUR)",
+        "Snorkel en arrecifes cercanos (40-70 EUR)",
+        "Observación de aves (free)"
+      ],
+      "donde_comer": "Comida casera en posadas locales: 10-15 EUR. Supermercados pequeños en Stella Maris. Opciones limitadas, compra provisiones.",
+      "consejo_local": "Long Island es remota: infraestructura mínima. Dean's Blue Hole es el hoyo azul más profundo accesible. Contrata tours locales para exploración segura. Ideal para viajeros autosuficientes.",
+      "plan_b_lluvia": "Exploración de cenotes y cavernas, buceo, pesca.",
+      "keywords": [
+        "Long Island",
+        "Dean's Blue Hole",
+        "Stella Maris",
+        "Thunderball Grotto",
+        "cenotes",
+        "exploración"
+      ]
+    },
+    {
+      "id": "bimini",
+      "nombre": "Bimini",
+      "tipo": "isla",
+      "region": "Bimini",
+      "descripcion": "Pequeña isla cercana a Florida famosa por pesca deportiva, naufragios para buceo y el misterio de Bimini Road (formación submarina antigua). Destino para buceadores y aficionados a la pesca.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a septiembre (pesca), marzo a junio (buceo)",
+      "como_llegar": "Vuelo Nassau a Bimini (50 min, 80-120 EUR). Ferry Ft. Lauderdale-Bimini: 2 horas (70 EUR). Closest a Florida: 80 km.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Alice Town: 55-80 EUR/noche",
+        "medio": "Resort pequeño: 110-170 EUR/noche",
+        "comfort": "Bimini Bay Resort: 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en Bimini Road (100-150 EUR)",
+        "Naufragio SS Sapona buceo (120-170 EUR)",
+        "Pesca deportiva (250-400+ EUR/día)",
+        "Snorkel en arrecifes (50-80 EUR)",
+        "Playas locales (gratis)"
+      ],
+      "donde_comer": "Pescado fresco local: 12-18 EUR. Restaurantes pequeños en Alice Town. Bares con ambiente local.",
+      "consejo_local": "Bimini está orientada a pesca deportiva de EE.UU. Baja infraestructura para viajeros independientes. Mejor para buceadores serios y pescadores. Los precios son altos.",
+      "plan_b_lluvia": "Buceo (mejor con mal tiempo), exploración de pueblos, naufragios submarinos.",
+      "keywords": [
+        "Bimini",
+        "Bimini Road",
+        "Alice Town",
+        "SS Sapona",
+        "pesca",
+        "buceo naufragios"
+      ]
+    },
+    {
+      "id": "cat-island",
+      "nombre": "Cat Island",
+      "tipo": "isla",
+      "region": "Cat Island",
+      "descripcion": "Isla tranquila y verde con playas vírgenes, monasterio abandonado en la cumbre y comunidades auténticas. Destino para quien busca solitud y belleza natural sin desarrollo turístico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "Vuelo Nassau a Arthur Town (50 min, 70-120 EUR). Ferry: 5 horas (55 EUR). Alquiler de coche: 50-65 EUR/día.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 50-70 EUR/noche",
+        "medio": "Resort pequeño: 100-150 EUR/noche",
+        "comfort": "Banyan Bay Boutique Hotel: 160-240 EUR/noche"
+      },
+      "que_hacer": [
+        "Monasterio abandonado (The Hermitage) senderismo (gratis, 90 min)",
+        "Playa Bennett's Harbour (gratis)",
+        "Snorkel en arrecifes cercanos (50-75 EUR)",
+        "Exploración de pueblos (gratis)",
+        "Buceo en el Atlántico (100-140 EUR)"
+      ],
+      "donde_comer": "Comida casera en posadas: 10-14 EUR. Pescado fresco en restaurants pequeños. Supermercados básicos.",
+      "consejo_local": "Cat Island es remota y tranquila. El monasterio en la cumbre es una caminata histórica; ve temprano para evitar calor. Infraestructura turística mínima, ideal para introvertidos.",
+      "plan_b_lluvia": "Senderismo (el clima puede no detener), exploración de pueblos, buceo.",
+      "keywords": [
+        "Cat Island",
+        "The Hermitage",
+        "monasterio",
+        "Arthur Town",
+        "Bennett's Harbour",
+        "tranquilo"
+      ]
+    },
+    {
+      "id": "freeport-grand-bahama",
+      "nombre": "Freeport y Grand Bahama",
+      "tipo": "ciudad",
+      "region": "Grand Bahama",
+      "descripcion": "Segunda ciudad más grande con playas, actividades acuáticas y puerto de cruceros. Menos auténtica que Nassau pero con buena infraestructura y opciones de resort asequibles.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Vuelo Nassau a Freeport (1 hora, 70-130 EUR). Ferry Nassau-Freeport: 3 horas (50 EUR). Alquiler de coche: 40-60 EUR/día.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Freeport: 50-75 EUR/noche",
+        "medio": "Resort de cadena: 100-160 EUR/noche",
+        "comfort": "Bahama Reef Resort o similar: 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Xanadu (gratis)",
+        "Snorkel con tiburones (80-120 EUR)",
+        "Dive de arrecife (100-150 EUR)",
+        "Jardín Botánico (15 EUR)",
+        "Playa Junkanoo (gratis)"
+      ],
+      "donde_comer": "Comida variada en restaurantes de Freeport: 12-25 EUR. Opciones más caras que islas pequeñas pero más variedad.",
+      "consejo_local": "Freeport es turística pero menos caótica que Nassau. Los tours con tiburones son seguros y memorables. Mejor como base para explorar Grand Bahama que como destino per se.",
+      "plan_b_lluvia": "Jardín Botánico, tiendas, actividades interiores.",
+      "keywords": [
+        "Freeport",
+        "Grand Bahama",
+        "Xanadu Beach",
+        "tiburones",
+        "puerto cruceros",
+        "segunda ciudad"
+      ]
+    },
+    {
+      "id": "inagua",
+      "nombre": "Inagua",
+      "tipo": "naturaleza",
+      "region": "Inagua",
+      "descripcion": "Isla remota en el sur famosa por flamencos salvajes en Parque Nacional y vida silvestre intacta. Destino para ornitólogos y aventureros dispuestos a aislamiento total.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a junio (aves)",
+      "como_llegar": "Vuelo Nassau a Matthew Town (2 horas, 150-220 EUR). Ferry: 8-10 horas (muy lento). Alquiler de coche difícil: negociar localmente.",
+      "donde_dormir": {
+        "mochilero": "Posadas locales básicas: 50-65 EUR/noche",
+        "medio": "Resort pequeño: 90-130 EUR/noche",
+        "comfort": "Opciones limitadas: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Parque Nacional Inagua flamencos (25 EUR entrada + guía 50 EUR)",
+        "Observación de aves (free con binoculares propios)",
+        "Playas solitarias (gratis)",
+        "Exploración de salinas históricas (gratis)",
+        "Snorkel en arrecifes vírgenes (negociar con locales)"
+      ],
+      "donde_comer": "Comida local muy básica: 8-12 EUR. Supermercados mínimos. Trae snacks. Pesca local diaria.",
+      "consejo_local": "Inagua es el destino más aislado de Bahamas. Sin turismo de masas. Flamencos son la atracción principal. Contrata guía local en parque. Ideal para naturalistas, no para comodidad.",
+      "plan_b_lluvia": "Observación de aves indoor, exploración comunitaria, pesca.",
+      "keywords": [
+        "Inagua",
+        "flamencos",
+        "Parque Nacional",
+        "Matthew Town",
+        "vida silvestre",
+        "remoto",
+        "observación aves"
+      ]
+    }
+  ]
+}

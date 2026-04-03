@@ -1,0 +1,314 @@
+{
+  "pais": "Mauricio",
+  "codigo": "mu",
+  "destinos": [
+    {
+      "id": "port-louis",
+      "nombre": "Port Louis",
+      "tipo": "ciudad",
+      "region": "Noroeste",
+      "descripcion": "Capital y principal puerto de Mauricio, mezcla colonial británico-francés con mercados vibrantes y museos. Centro administrativo donde llegan los vuelos internacionales y punto de partida lógico. Imprescindible para entender la historia multicultural de la isla.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a diciembre",
+      "como_llegar": "desde el aeropuerto Sir Seewoosagur Ramgoolam: taxi 70 EUR, autobús 2-3 EUR, 45-60 min",
+      "donde_dormir": {
+        "mochilero": "hostels en Caudan Waterfront: 20-35 EUR/noche",
+        "medio": "3-estrellas zona centro: 60-100 EUR/noche",
+        "comfort": "4-5 estrellas Caudan o Colonnades: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado central (Grand Bazaar): explorar especias, textiles y souvenirs (gratis)",
+        "Museo de la Historia Natural: esqueleto de dodo (5 EUR)",
+        "Caudan Waterfront: paseo, tiendas y restaurantes junto al puerto (gratis paseo)",
+        "Catedral de St Louis: arquitectura colonial (gratis)"
+      ],
+      "donde_comer": "Comida hindú y criolla en puestos del mercado (2-5 EUR), restaurantes frente al puerto (15-30 EUR). Prueba dholl puri y alouda.",
+      "consejo_local": "El mercado cierra a las 17h, visita por la mañana. Los taxis negocian precio, acuerda antes de subir.",
+      "plan_b_lluvia": "Museos, compras en el centro comercial Caudan, visita a galerías de arte",
+      "keywords": [
+        "Port Louis",
+        "capital Mauricio",
+        "Caudan Waterfront",
+        "mercado central",
+        "dodo"
+      ]
+    },
+    {
+      "id": "belle-mare",
+      "nombre": "Belle Mare",
+      "tipo": "playa",
+      "region": "Este",
+      "descripcion": "Playa de arena blanca con aguas turquesas y menos turismo que el norte. Ideal para buceo, snorkel y relajarse en un entorno autêntico sin masificación. Zona tranquila perfecta para viajeros que buscan playa genuina.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "desde Port Louis: autobús 10-15 EUR, 90-120 min, o taxi 50-70 EUR",
+      "donde_dormir": {
+        "mochilero": "guest houses locales: 25-40 EUR/noche",
+        "medio": "resort pequeño o apartamento: 70-120 EUR/noche",
+        "comfort": "resort de playa: 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife cercano (equipo de alquiler 20 EUR)",
+        "Buceo con PADI (certificación 400-500 EUR, inmersión 80 EUR)",
+        "Paseo por la playa y relajación (gratis)",
+        "Paseo en bote al Palmar Tropical (50 EUR aproximado)"
+      ],
+      "donde_comer": "Restaurantes de playa con mariscos frescos (15-25 EUR). Puestos de comida rápida criolla (5-8 EUR). Specialidad: pescado a la parrilla y briyani.",
+      "consejo_local": "Viaja al amanecer si tomas autobús, las aguas son calmadas por la mañana. Lleva protección solar fuerte.",
+      "plan_b_lluvia": "Visita pueblos cercanos, museos locales, tiendas de artesanía",
+      "keywords": [
+        "Belle Mare",
+        "Este Mauricio",
+        "playa turquesa",
+        "snorkel arrecife"
+      ]
+    },
+    {
+      "id": "ile-aux-cerfs",
+      "nombre": "Île aux Cerfs",
+      "tipo": "isla",
+      "region": "Este (frente a costa)",
+      "descripcion": "Pequeña isla deshabitada con playas vírgenes, aguas cristalinas y actividades acuáticas. Accesible en excursión desde el este de Mauricio. Destino de día perfecto para ver lo mejor marino de la isla sin comprometer tiempo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "desde Belle Mare o Trou d'Eau Douce: bote 25-40 EUR ida y vuelta, 30-45 min",
+      "donde_dormir": {
+        "mochilero": "no hay alojamiento, visita de día",
+        "medio": "no hay alojamiento",
+        "comfort": "no hay alojamiento"
+      },
+      "que_hacer": [
+        "Snorkel en aguas claras (equipo incluido o alquiler 15 EUR)",
+        "Baño en playas de arena blanca (gratis)",
+        "Paseo por la isla a pie (gratis)",
+        "Avistamiento de peces y coral (gratis)"
+      ],
+      "donde_comer": "Paquete de almuerzo criollo en el bote (10-15 EUR) o restaurant en la isla (15-25 EUR). Traer bebidas es más barato.",
+      "consejo_local": "Reserva con operadores locales en Trou d'Eau Douce, más baratos que hoteles. Lleva toalla y cámara estanca.",
+      "plan_b_lluvia": "No recomendado visitar con mal tiempo, reprograma para otro día",
+      "keywords": [
+        "Ile aux Cerfs",
+        "isla Mauricio",
+        "snorkel arrecife",
+        "playa virgen"
+      ]
+    },
+    {
+      "id": "black-river-gorges",
+      "nombre": "Black River Gorges",
+      "tipo": "naturaleza",
+      "region": "Sur-Oeste",
+      "descripcion": "Parque nacional con selva tropical, cascadas y senderos de trekking en el interior montañoso. Hogar de fauna y flora endémica de Mauricio. Esencial para viajeros que buscan naturaleza salvaje lejos de playas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a diciembre",
+      "como_llegar": "desde Port Louis: auto alquilado o taxi 60-80 EUR, 90 min hasta el parque",
+      "donde_dormir": {
+        "mochilero": "Chamarel o Plaine Champagne: guesthouses 30-50 EUR/noche",
+        "medio": "habitaciones rurales con servicios: 70-120 EUR/noche",
+        "comfort": "resort en Chamarel: 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking Piton de la Petite Riviere Noire: 3h, 8 EUR entrada parque",
+        "Camino hacia Coloured Earths (gratis, desde carretera)",
+        "Senderismo hasta cascadas (gratis con entrada parque)",
+        "Avistamiento de fauna endémica (gratis)"
+      ],
+      "donde_comer": "Chamarel: restaurantes con vistas de la isla (20-35 EUR). Comida criolla en puestos locales (5-10 EUR). Prueba pescado al coco.",
+      "consejo_local": "Empieza caminatas temprano, el clima es impredecible. Alquila auto, no hay transporte público fiable.",
+      "plan_b_lluvia": "Las cascadas están mejor después de lluvia, pero senderos pueden ser resbaladizos. Camina con cuidado o visita puntos de vista desde carretera.",
+      "keywords": [
+        "Black River Gorges",
+        "parque nacional",
+        "trekking Mauricio",
+        "cascadas",
+        "selva tropical"
+      ]
+    },
+    {
+      "id": "grand-baie",
+      "nombre": "Grand Baie",
+      "tipo": "playa",
+      "region": "Noroeste",
+      "descripcion": "Principal destino turístico de Mauricio con playas arenosas, resorts y vida nocturna. Centro de actividades acuáticas: buceo, pesca, navegación. Punto de partida para excursiones a islas cercanas del norte.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "desde Port Louis: autobús 5-8 EUR, 45-60 min, o taxi 35-50 EUR",
+      "donde_dormir": {
+        "mochilero": "guesthouses en Grand Baie o Pereybere: 30-50 EUR/noche",
+        "medio": "apartamento o resort pequeño: 80-140 EUR/noche",
+        "comfort": "resort frente playa: 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en playa y snorkel en arrecife cercano (gratis)",
+        "Excursión a islas del norte: Îles Plates, Gabriel (50-80 EUR, 1 día)",
+        "Buceo (80-150 EUR por inmersión)",
+        "Paseo nocturno por la bahía (gratis)"
+      ],
+      "donde_comer": "Restaurantes frente playa con mariscos (20-40 EUR). Puestos de comida rápida (5-8 EUR). Bares con happy hour (5-10 EUR bebida).",
+      "consejo_local": "Grand Baie es turístico: busca guesthouses en Pereybere cercana, más barato y auténtico. Negocia precios de botes.",
+      "plan_b_lluvia": "Tiendas, spas, cine, bares. La zona no es tan afectada por lluvia como el este.",
+      "keywords": [
+        "Grand Baie",
+        "Noroeste Mauricio",
+        "playas norte",
+        "islas cercanas",
+        "vida nocturna"
+      ]
+    },
+    {
+      "id": "chamarel",
+      "nombre": "Chamarel",
+      "tipo": "naturaleza",
+      "region": "Suroeste",
+      "descripcion": "Pueblo rural famoso por sus espectaculares tierras de colores (Coloured Earths) y cascada. Panorámicas de toda la isla desde la altura. Zona tranquila para experimentar Mauricio auténtica, lejos del turismo de masas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a diciembre",
+      "como_llegar": "desde Port Louis: auto alquilado 60-80 EUR, 90 min. Taxi con conductor 70-100 EUR",
+      "donde_dormir": {
+        "mochilero": "guesthouses en Chamarel: 30-50 EUR/noche",
+        "medio": "casa de campo o pequeno resort: 80-130 EUR/noche",
+        "comfort": "resort con vistas panorámicas: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Coloured Earths (tierra multicolor, entrada 8 EUR, 30 min)",
+        "Chamarel Falls: cascada 100m (entrada 8 EUR con Coloured Earths)",
+        "Paseo panorámico miradores (gratis)",
+        "Visita a granja de venados de Rusa (entrada 10 EUR)"
+      ],
+      "donde_comer": "Restaurantes con vistas panorámicas (25-40 EUR). Restaurant local Chef Paul famoso (30 EUR). Comida criolla auténtica.",
+      "consejo_local": "Ve temprano a Coloured Earths antes del calor. Las tierras de color cambian según la hora del día y la luz solar.",
+      "plan_b_lluvia": "Las vistas pueden quedar nubladas. Visita pese a todo, pero el paisaje es mejor sin nubes.",
+      "keywords": [
+        "Chamarel",
+        "Coloured Earths",
+        "cascada",
+        "suroeste Mauricio",
+        "vistas panorámicas"
+      ]
+    },
+    {
+      "id": "rodrigues",
+      "nombre": "Rodrigues",
+      "tipo": "isla",
+      "region": "Isla hermana a 560 km",
+      "descripcion": "Isla gemela de Mauricio, mucho menos turística y más auténtica. Playas salvajes, laguna virgen, buceo excepcional. Destino para viajeros independientes que buscan huir del turismo. Requiere 2-3 días mínimo para justificar viaje.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre a abril",
+      "como_llegar": "desde Mauritius: vuelo (Air Mauritius) 100-150 EUR ida y vuelta, 1h, o ferry 30 EUR, 4-5h",
+      "donde_dormir": {
+        "mochilero": "guesthouses locales: 35-60 EUR/noche",
+        "medio": "bungalows o apartamentos: 80-150 EUR/noche",
+        "comfort": "resort pequeño: 180-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Excursión laguna: snorkel en aguas cristalinas (40-60 EUR)",
+        "Buceo en arrecife virgen (90-120 EUR)",
+        "Senderismo sendero costero (gratis)",
+        "Visita cueva Patate: estalactitas subterráneas (8 EUR)"
+      ],
+      "donde_comer": "Comida criolla en pequeños restaurantes (8-15 EUR). Frutos de mar frescos (15-25 EUR). Mercado local para picnic (muy barato).",
+      "consejo_local": "Rodríguez es mucho menos turística que Mauricio. Alquila auto para independencia. Los lugareños son amables pero hablan menos inglés.",
+      "plan_b_lluvia": "Buceo es posible. Visita cuevas, pueblos, explora la isla. Clima variable.",
+      "keywords": [
+        "Rodrigues",
+        "isla hermana",
+        "buceo virgen",
+        "laguna",
+        "menos turismo"
+      ]
+    },
+    {
+      "id": "trou-aux-cerfs",
+      "nombre": "Trou aux Cerfs",
+      "tipo": "montaña",
+      "region": "Centro",
+      "descripcion": "Cráter volcánico dormido en el corazón de Mauricio con lagos de agua dulce y vistas de 360 grados. Hiking corto accesible, zona tranquila del interior. Combinable con visita a Curepipe cercana.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a diciembre",
+      "como_llegar": "desde Port Louis: autobús hacia Curepipe 8-12 EUR, 60 min. Taxi 40-60 EUR. Trou aux Cerfs está en Curepipe.",
+      "donde_dormir": {
+        "mochilero": "en Curepipe: guesthouses 25-45 EUR/noche",
+        "medio": "apartamento o pequeño hotel: 60-100 EUR/noche",
+        "comfort": "hotel Curepipe: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo alrededor del cráter: 1-2h (gratis)",
+        "Vistas panorámicas desde los miradores (gratis)",
+        "Paseo junto al lago interno (gratis)",
+        "Visita Curepipe: mercado, jardines botánicos (gratis paseo)"
+      ],
+      "donde_comer": "Curepipe: restaurantes indios y criollos (10-20 EUR). Mercado local para snacks (2-5 EUR). Té en cafés locales (2-3 EUR).",
+      "consejo_local": "Hace más frío en altura. Lleva chaqueta. Las mañanas son brumosas, visita al mediodía para vistas claras.",
+      "plan_b_lluvia": "Zona nublada en clima lluvioso. Aún así puedes caminar, pero vistas limitadas.",
+      "keywords": [
+        "Trou aux Cerfs",
+        "crater volcanico",
+        "Curepipe",
+        "centro Mauricio",
+        "lago interior"
+      ]
+    },
+    {
+      "id": "flic-en-flac",
+      "nombre": "Flic-en-Flac",
+      "tipo": "playa",
+      "region": "Oeste",
+      "descripcion": "Playa larga y tranquila en la costa oeste, protegida del viento. Mezcla de turismo y vida local, con buenos restaurantes y acceso a senderismo de Black River Gorges. Alternativa más relajada a Grand Baie.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "desde Port Louis: autobús 6-10 EUR, 60-80 min. Taxi 50-70 EUR",
+      "donde_dormir": {
+        "mochilero": "guesthouses: 30-50 EUR/noche",
+        "medio": "apartamento o pequeño resort: 70-120 EUR/noche",
+        "comfort": "resort frente playa: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en playa protegida (gratis)",
+        "Snorkel en arrecife cercano (equipo alquiler 20 EUR)",
+        "Paseo al atardecer (gratis)",
+        "Paseo en bote o surfing si hay olas (40-60 EUR)"
+      ],
+      "donde_comer": "Restaurantes frente playa con vista al atardecer (20-35 EUR). Puestos de comida criolla (5-10 EUR). Happy hour en bares (5-8 EUR).",
+      "consejo_local": "La brisa del oeste hace de esta playa la más cómoda en días calurosos. Ideal base para explorar Black River Gorges.",
+      "plan_b_lluvia": "Tiendas locales, spas, caminata en bosques cercanos. Playa oeste es menos afectada.",
+      "keywords": [
+        "Flic-en-Flac",
+        "Oeste Mauricio",
+        "playa protegida",
+        "atardecer",
+        "familia"
+      ]
+    },
+    {
+      "id": "tamarin",
+      "nombre": "Tamarin",
+      "tipo": "playa",
+      "region": "Noroeste",
+      "descripcion": "Pueblo costero tranquilo en el oeste, famoso por avistamiento de delfines y surfing. Mucho menos turístico que Grand Baie, más auténtico. Ideal para viajeros que buscan experiencia local junto al mar.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre (delfines), octubre a marzo (swell para surfistas)",
+      "como_llegar": "desde Port Louis: autobús 6-10 EUR, 60 min. Taxi 45-65 EUR",
+      "donde_dormir": {
+        "mochilero": "guesthouses: 25-45 EUR/noche",
+        "medio": "apartamento: 60-100 EUR/noche",
+        "comfort": "resort pequeño: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Excursión avistamiento delfines: 40-70 EUR, 3-4h (mejor mayo-octubre)",
+        "Surfing (clases 50 EUR, tabla alquiler 20 EUR/día)",
+        "Baño en playa (gratis)",
+        "Caminata costera (gratis)"
+      ],
+      "donde_comer": "Restaurantes con mariscos frescos (15-30 EUR). Puestos de comida local (5-8 EUR). Bares con música en vivo algunos días.",
+      "consejo_local": "Los delfines se ven mejor al amanecer. Negocia precio de botes directamente con marineros locales.",
+      "plan_b_lluvia": "Playa puede estar agitada. Buen swell para surfistas pero no seguro para baño.",
+      "keywords": [
+        "Tamarin",
+        "delfines",
+        "surfing",
+        "Noroeste",
+        "tranquilo local"
+      ]
+    }
+  ]
+}

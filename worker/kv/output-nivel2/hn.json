@@ -1,0 +1,328 @@
+{
+  "pais": "Honduras",
+  "codigo": "hn",
+  "destinos": [
+    {
+      "id": "la-ceiba",
+      "nombre": "La Ceiba",
+      "tipo": "playa",
+      "region": "Atlántico",
+      "descripcion": "Principal puerto caribeño de Honduras con acceso a la Barrera de Coral Mesoamericana y punto de partida para la Bahía de Honduras. Centro de buceo y avistamiento de manatíes, con vida nocturna activa y mezcla de culturas garífunas y mestizas.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Tegucigalpa en vuelo (1h, 80-120 EUR) o autobús (12h, 25-35 EUR). Aeropuerto internacional La Ceiba.",
+      "donde_dormir": {
+        "mochilero": "Hostales o pensiones en barrio Magnolia: 12-18 EUR/noche",
+        "medio": "Hoteles 3 estrellas en zona centro: 35-55 EUR/noche",
+        "comfort": "Resorts frente al mar (Cocolobo, Mangrove Bight): 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en la Barrera de Coral (35-50 EUR)",
+        "Tour a Punta Sal para ver manatíes (25-40 EUR)",
+        "Playa Bonita y piscinas naturales de río (gratis/10 EUR con guía)",
+        "Festival Garifuna (noviembre)"
+      ],
+      "donde_comer": "Comida caribeña: hudut (pescado en caldo), cassava bread, conch. Rango 3-12 EUR. Barrio Magnolia tiene comedores locales baratos; zona Puerto tiene opciones turísticas.",
+      "consejo_local": "La Ceiba es acceso principal a cayos no turísticos; negocia directamente con capitanes de botes locales para mejores precios que agencias. Martes y sábados hay más botes disponibles.",
+      "plan_b_lluvia": "Visita museos locales (Museo de La Ceiba), mercado público para artesanía, o espera a que llueva y ve a cataratas cercanas como Pulhapanzak (desde La Ceiba, 1h en autobús).",
+      "keywords": [
+        "Ceiba",
+        "Caribbean Honduras",
+        "Garifuna",
+        "Mesoamerican Reef",
+        "Punta Sal",
+        "manatíes"
+      ]
+    },
+    {
+      "id": "roatan",
+      "nombre": "Roatán",
+      "tipo": "isla",
+      "region": "Islas de la Bahía",
+      "descripcion": "Isla caribeña con buceo de clase mundial, playas de arena blanca y comunidad local vibrante. Centro de inmersión en arrecifes, avistamiento de tortugas y tiburones ballena, con costo de vida más bajo que otros destinos de buceo en Centroamérica.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Ferry desde La Ceiba (1.5h, 30-40 EUR) o vuelo desde Tegucigalpa (1h, 100-150 EUR). Ferry es opción económica.",
+      "donde_dormir": {
+        "mochilero": "Hostales en West Bay o Coxen Hole: 15-22 EUR/noche",
+        "medio": "Hoteles 2-3 estrellas: 40-60 EUR/noche",
+        "comfort": "Resorts con acceso a playa (Half Moon Bay Resort): 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Inmersiones en arrecife (30-50 EUR por buceo)",
+        "Certificación de buceo PADI Open Water (250-300 EUR)",
+        "Playa West Bay (gratis)",
+        "Snorkel con tortugas (20-35 EUR)",
+        "Parque marino Gumbalimba"
+      ],
+      "donde_comer": "Mariscos frescos: ceviche, grilled fish, lobster. Rango 5-15 EUR. West Bay y Coxen Hole tienen comedores de pescadores económicos; West Harbour es más turístico.",
+      "consejo_local": "Los buzos certificados pagan menos por inmersiones; negocia paquetes de 5-10 buceos con operadores locales (no agencias). Las corrientes cambian rápido; pregunta a locales qué sitios están buenos el día que vayas.",
+      "plan_b_lluvia": "Buceo en mal tiempo sigue siendo posible con guías locales; alternatively, visita Town Centre Market, tiendas de artesanía o cafeterías para escuchar historias de piratas.",
+      "keywords": [
+        "Roatan Island",
+        "West Bay",
+        "Bay Islands",
+        "Mesoamerican Barrier Reef",
+        "buceo",
+        "diving"
+      ]
+    },
+    {
+      "id": "copan-ruinas",
+      "nombre": "Copán Ruinas",
+      "tipo": "histórico",
+      "region": "Occidente (Copán)",
+      "descripcion": "Sitio arqueológico maya de clase mundial con estelas intricadas, jeroglíficos tallados y plazas ceremoniales. Pueblo colonial adyacente es base perfecta para explorar ruinas y naturaleza circundante sin ajetreo turístico masivo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Tegucigalpa en autobús (8-10h, 20-30 EUR) a San Pedro Sula, luego a Copán (3h, 8-12 EUR). O vuelo a San Pedro Sula (2h, 60-90 EUR) + autobús.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes en pueblo: 12-18 EUR/noche",
+        "medio": "Hoteles locales tipo Marina Copán: 35-50 EUR/noche",
+        "comfort": "Hacienda San Lucas (boutique con vistas): 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas de Copán con guía arqueológico (20 EUR entrada + 15-25 EUR guía)",
+        "Museo de Escultura Maya (10 EUR)",
+        "Macaw Mountain Bird Park (15 EUR)",
+        "Senderismo a Cascada de Agua Blanca (gratis con acceso a terreno local)"
+      ],
+      "donde_comer": "Comida regional: tamales, sopa de pollo, plátanos. Rango 2-8 EUR. Mercado central es barato; restaurantes en plaza principal son más caros pero con vistas.",
+      "consejo_local": "Entra a las ruinas temprano (7 AM abre) para evitar calor y multitudes. Los guías locales en la entrada son fiables; negocia antes de entrar. Lleva agua abundante.",
+      "plan_b_lluvia": "Las ruinas siguen visitables con lluvia (lleva capa). Alterna con museo interior o visita pueblo artesanal de San Ignacio cercano (20 min en camión).",
+      "keywords": [
+        "Copan",
+        "ruinas mayas",
+        "stelae",
+        "Maya archaeology",
+        "Occidente Honduras",
+        "hieroglyphics"
+      ]
+    },
+    {
+      "id": "utila",
+      "nombre": "Utila",
+      "tipo": "isla",
+      "region": "Islas de la Bahía",
+      "descripcion": "Isla más pequeña y económica de las Bay Islands con buceo asequible, comunidad mochilera establecida y playas tranquilas. Centro de inmersiones presupuestarias con operadores independientes y vida local genuina.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Ferry desde La Ceiba (1h, 25-30 EUR) o vuelo regional. Ferry es más cómodo que lancha rápida.",
+      "donde_dormir": {
+        "mochilero": "Hostales estilo mochilero (Bayview, Utila Lodge): 10-16 EUR/noche",
+        "medio": "Pequeños hoteles: 30-45 EUR/noche",
+        "comfort": "Resorts (Laguna Beach Resort): 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Inmersiones PADI (certificación: 200-250 EUR, buceos sueltos: 25-35 EUR)",
+        "Snorkel en arrecife cercano (gratis desde playa)",
+        "Avistamiento de tiburones ballena (estacional, noviembre-marzo)",
+        "Playa East Harbour (gratis)"
+      ],
+      "donde_comer": "Cocina caribeña y comida mochilera. Rango 2-10 EUR. Comedores locales cerca del muelle; cafeterías de hostales ofrecen precios de mochilero.",
+      "consejo_local": "Utila atrae a buceadores que se quedan meses; los operadores hacen descuentos por paquetes largos (10+ buceos). Pregunta en hostales por últimas noticias de avistamientos de tiburones ballena.",
+      "plan_b_lluvia": "Lluvia no detiene buceo. Si clima severo, explora tiendas locales, come en comedores comunitarios o descansa en hostal social (muy activos).",
+      "keywords": [
+        "Utila Island",
+        "Bay Islands",
+        "whale sharks",
+        "budget diving",
+        "Islas de la Bahia",
+        "backpacker"
+      ]
+    },
+    {
+      "id": "gracias",
+      "nombre": "Gracias",
+      "tipo": "montaña",
+      "region": "Lempira (Occidente)",
+      "descripcion": "Pueblo colonial en las montañas occidentales, punto de acceso a Parque Nacional Montaña Celaque (picos sobre 2600m). Atmosfera tranquila con arquitectura colonial y trails de senderismo sin ajetreo turístico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Tegucigalpa vía San Pedro Sula (6h combinado, 30-40 EUR total) o directamente en autobús (8-10h, 25-35 EUR).",
+      "donde_dormir": {
+        "mochilero": "Pensiones locales: 10-15 EUR/noche",
+        "medio": "Hotel colonial (Hotel Mejía): 25-40 EUR/noche",
+        "comfort": "Posada del Bosque (nature lodge): 50-75 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a Montaña Celaque (2 días, 45 EUR con guía + entrada parque)",
+        "Pueblo colonial walking tour (gratis o 10 EUR con guía local)",
+        "Aguas Termales de Gracias (gratis, 30 min a pie)",
+        "Iglesia de la Merced (entrada gratis)"
+      ],
+      "donde_comer": "Comida de montaña: sopa de verduras, quesadillas, tamales. Rango 2-7 EUR. Comedores en mercado central; restaurantes en plaza principal para comida más elaborada.",
+      "consejo_local": "Contrata guía en pueblo (hostal o alcaldía municipal) antes de ascender Montaña Celaque; la ruta es segura pero sin señalización clara. Inicia ascenso a las 5 AM para evitar lluvia de tarde.",
+      "plan_b_lluvia": "Lluvia en montaña es probable; lleva poncho. Explora pueblo colonial, iglesias y aguas termales (funcionan en lluvia). Come en comedores locales.",
+      "keywords": [
+        "Gracias",
+        "Celaque",
+        "Lempira",
+        "mountain hiking",
+        "colonial town",
+        "Honduras montaña"
+      ]
+    },
+    {
+      "id": "om-tara",
+      "nombre": "Omoa",
+      "tipo": "histórico",
+      "region": "Cortés (Caribe)",
+      "descripcion": "Pequeño puerto caribeño con fuerte colonial español (Fortaleza de San Fernando) y acceso a playas calmadas. Destino poco masificado con historia pirata y arquitectura colonial, ideal para viajeros que buscan algo auténtico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Puerto Cortés en autobús local (1h, 3-5 EUR) o desde La Ceiba (2.5h, 10-15 EUR). O desde San Pedro Sula (3h, 10-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedajes básicos: 10-15 EUR/noche",
+        "medio": "Hotels pequeños: 25-40 EUR/noche",
+        "comfort": "Beachfront resorts (escasos): 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Fortaleza de San Fernando (5 EUR entrada)",
+        "Playa Omoa para nadar (gratis)",
+        "Snorkel en arrecife cercano (15-25 EUR)",
+        "Museo de la Fortaleza (incluido en entrada)"
+      ],
+      "donde_comer": "Mariscos frescos, ceviche, pescado frito. Rango 4-12 EUR. Restaurantes en la playa ofrecen buena relación precio-calidad; mercado local para comida barata.",
+      "consejo_local": "Omoa es acceso rápido a la costa desde Honduras occidental; muchos viajeros la saltan porque es pequeña, pero la fortaleza justifica el desvío. Camina por las murallas al atardecer.",
+      "plan_b_lluvia": "Fortaleza protege del clima; visita museo. Lluvia genera playas más salvajes; come en restaurante frente al mar mientras llueve.",
+      "keywords": [
+        "Omoa",
+        "Fortaleza San Fernando",
+        "Caribbean Honduras",
+        "colonial fort",
+        "pirate history",
+        "Cortés"
+      ]
+    },
+    {
+      "id": "tela",
+      "nombre": "Tela",
+      "tipo": "playa",
+      "region": "Atlántico",
+      "descripcion": "Pueblo playero en la costa caribeña con acceso a lagunas costeras, ríos y parques protegidos. Centro de turismo comunitario donde puedes quedarte en lodges locales y participar en tours ecológicos con beneficio directo para comunidades.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde La Ceiba en autobús (1.5h, 3-5 EUR) o desde Tegucigalpa vía San Pedro Sula (8-10h total, 20-30 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedajes en pueblo: 12-18 EUR/noche",
+        "medio": "Hoteles locales: 30-50 EUR/noche",
+        "comfort": "Lodges ecológicos (Punta Izopo, Laguna Madre): 60-95 EUR/noche"
+      },
+      "que_hacer": [
+        "Punta Izopo National Park (tour con guía local, 20-30 EUR)",
+        "Laguna Madre (kayak/lancha, 25-35 EUR)",
+        "Garinex Cultural Tour (15-25 EUR)",
+        "Avistamiento de manatíes (similar a La Ceiba, 20-35 EUR)"
+      ],
+      "donde_comer": "Cocina garífuna: hudut, cassava, conch soup. Rango 3-10 EUR. Comedores en mercado; restaurantes pequeños en la playa.",
+      "consejo_local": "Tela tiene 3 barrios: San Juan (histórico, más garífuna), Nueva Tela (moderno, más turístico) y zona de playa. Alójate en Nueva Tela pero come y explora San Juan. Operadores locales ofrecen tours más auténticos que agencias.",
+      "plan_b_lluvia": "Parques se siguen visitando; lluvia no cierra acceso. Come bajo techo en comedores, descansa en hostal y prepárate para salidas al atardecer.",
+      "keywords": [
+        "Tela",
+        "Garifuna",
+        "Punta Izopo",
+        "Laguna Madre",
+        "Caribbean Honduras",
+        "mangrove"
+      ]
+    },
+    {
+      "id": "pulhapanzak",
+      "nombre": "Pulhapanzak",
+      "tipo": "naturaleza",
+      "region": "Yoro (Centro-norte)",
+      "descripcion": "Cascada de 43 metros en plena selva donde puedes nadar bajo la caída de agua. Accesible en día desde La Ceiba o como parada hacia/desde ella, con bajos costos de entrada y posibilidad de tours comunitarios.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre (caudal máximo), viable año redondo",
+      "como_llegar": "Desde La Ceiba en autobús hacia Yoro (1h, 3-5 EUR), luego transporte local (30 min, 2-3 EUR) o tour organizado (15-20 EUR). Entrada a cascada: 8 EUR.",
+      "donde_dormir": {
+        "mochilero": "Lodge ecoturístico cerca de cascada: 15-25 EUR/noche (pocas opciones)",
+        "medio": "Mejor hacer excursión de día desde La Ceiba o Tela",
+        "comfort": "Mejor hacer excursión de día desde La Ceiba o Tela"
+      },
+      "que_hacer": [
+        "Baño en cascada (8 EUR entrada)",
+        "Senderismo en selva circundante (gratis con entrada)",
+        "Observación de aves (gratis o con guía local 15 EUR)",
+        "Fotografía (cascada es fotogénica, especialmente mañana)"
+      ],
+      "donde_comer": "Comida básica en puesto de entrada o lleva picnic. Rango 2-5 EUR. Mejor comer en La Ceiba antes de venir.",
+      "consejo_local": "Llega temprano (7-8 AM) para cascada con menos gente. El agua es fría; trae muda. Pulhapanzak es excursión, no destino base, pero merece el desvío si estás en región.",
+      "plan_b_lluvia": "Lluvia aumenta caudal (mejor para fotos) pero puede hacer río peligroso. Consulta localmente antes de bajar.",
+      "keywords": [
+        "Pulhapanzak",
+        "cascada",
+        "waterfall",
+        "Honduras nature",
+        "Yoro",
+        "swimming"
+      ]
+    },
+    {
+      "id": "pico-bonito",
+      "nombre": "Parque Nacional Pico Bonito",
+      "tipo": "naturaleza",
+      "region": "Atlántico (Yoro)",
+      "descripcion": "Parque montañoso con selva tropical, ríos caudalosos y biodiversidad extrema. Acceso desde La Ceiba con trails para trekking, observación de vida silvestre y cascadas internas, ideal para amantes de naturaleza sin infraestructura turística pesada.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde La Ceiba (30 min en transporte local o tour, 10-15 EUR transporte + 15 EUR entrada parque).",
+      "donde_dormir": {
+        "mochilero": "Lodge Río Cangrejal (eco-lodge básico): 25-35 EUR/noche",
+        "medio": "Lodge Río Cangrejal (habitación privada): 40-60 EUR/noche",
+        "comfort": "Pico Bonito Lodge (resort dentro parque): 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Estadio (fácil, 2h, gratis con entrada)",
+        "Senderismo Cataratas (moderado, 4h, gratis)",
+        "Rafting en Río Cangrejal (25-40 EUR)",
+        "Observación de fauna (guía obligatorio, 20-30 EUR)"
+      ],
+      "donde_comer": "Comida en lodge; variada según operador. Rango 8-15 EUR. Lleva snacks para trails.",
+      "consejo_local": "Contrata guía en entrada del parque; no hay senderos claros sin guía. Lleva mucho agua, repelente fuerte (mosquitos, garrapatas) y zapatos de trekking. Lluvia es común; no detiene actividad pero hace senderos resbaladizos.",
+      "plan_b_lluvia": "Lluvia es normal en parque; selva sigue hermosa mojada. Reduce distancia de trek si lluvia es fuerte. Come en lodge y descansa.",
+      "keywords": [
+        "Pico Bonito",
+        "Parque Nacional",
+        "rainforest",
+        "Yoro",
+        "biodiversity",
+        "Rio Cangrejal",
+        "trekking"
+      ]
+    },
+    {
+      "id": "garifuna-barahona",
+      "nombre": "Barahona",
+      "tipo": "rural",
+      "region": "Cortés (Caribe)",
+      "descripcion": "Pueblo garífuna auténtico con ritmo de vida local genuino, playas tranquilas y acceso a cayos cercanos sin masificación turística. Destino para viajeros que buscan inmersión cultural real, no postureo de turismo de playa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Desde Puerto Cortés en lancha/bote local (45 min, 10-15 EUR) o desde La Ceiba (complejo: 3-4h combinado, 25-35 EUR). Transporte es informal pero funciona.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes locales (donas de casa alquilan cuartos): 10-15 EUR/noche",
+        "medio": "Posadas pequeñas: 20-35 EUR/noche",
+        "comfort": "Resorts remotos (pocos): 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Exploración de pueblo y vida local (gratis)",
+        "Tour a cayos cercanos (lancha local, 20-35 EUR)",
+        "Pesca local o comida comunitaria (15-25 EUR)",
+        "Snorkel en arrecife (15-30 EUR)"
+      ],
+      "donde_comer": "Comida garífuna: hudut, cassava, pescado. Rango 2-8 EUR. Come en casa de locals si hospedas en hostal comunitario.",
+      "consejo_local": "Barahona no tiene servicios turísticos establecidos; eso es su fortaleza. Habla español y respeta costumbres locales. Negocia transporte directamente con pescadores locales, no agencias (no existen).",
+      "plan_b_lluvia": "Lluvia es riesgo para botes a cayos; espera o alterna con exploración de pueblo. Clima tropical: lluvia pasa rápido.",
+      "keywords": [
+        "Barahona",
+        "Garifuna village",
+        "authentic",
+        "Caribbean life",
+        "Cortés",
+        "remote beach"
+      ]
+    }
+  ]
+}

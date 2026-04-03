@@ -1,0 +1,329 @@
+{
+  "pais": "Costa Rica",
+  "codigo": "cr",
+  "destinos": [
+    {
+      "id": "san-jose",
+      "nombre": "San José",
+      "tipo": "ciudad",
+      "region": "Valle Central",
+      "descripcion": "Capital y principal hub de transporte de Costa Rica, con museos de calidad (Oro, Jade), gastronomía variada y barrios con carácter como Barrio Escalante. Punto obligatorio para conexiones nacionales e internacionales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "punto de entrada principal (aeropuerto Juan Manuel Gálvez), bases de autobuses para todo el país",
+      "donde_dormir": {
+        "mochilero": "hostales en Barrio Escalante o Downtown: 15-25 EUR/noche",
+        "medio": "hoteles 3* en Barrio Escalante o La Sabana: 40-70 EUR/noche",
+        "comfort": "hoteles boutique en Barrio Escalante: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo del Oro Precolombino (entrada: 10 EUR)",
+        "Museo del Jade (entrada: 10 EUR)",
+        "Paseo por Barrio Escalante y cafeterías locales (gratis)",
+        "Mercado Central para compra de souvenirs y comida callejera (gratis)"
+      ],
+      "donde_comer": "Barrio Escalante: cocina de fusión costarricense, 8-20 EUR por plato. Downtown: comedores locales, 4-8 EUR.",
+      "consejo_local": "Evita caminar solo de noche fuera de Barrio Escalante. Los colectivos (minibuses) son el transporte local más barato (0,80 EUR) pero ruidosos y lentos.",
+      "plan_b_lluvia": "Museos (Jade, Oro, Perez Zeledón), galerías de arte en Barrio Escalante, cines.",
+      "keywords": [
+        "San Jose",
+        "SJO",
+        "capital",
+        "Barrio Escalante",
+        "Downtown",
+        "La Sabana",
+        "Museo Oro",
+        "Museo Jade"
+      ]
+    },
+    {
+      "id": "monteverde",
+      "nombre": "Monteverde",
+      "tipo": "montaña",
+      "region": "Cordillera de Tilarán (Guanacaste)",
+      "descripcion": "Pueblo de montaña a 1.500m de altura en medio de bosque nuboso con visibilidad de dos océanos en días despejados. Referencia mundial para aviturismo y senderismo en bosque primario intacto.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "desde San José: autobús directo o conexión vía Puntarenas (4-6h, 15-25 EUR). Carretera de tierra, jeepbus desde Tilarán (1,5h, 10 EUR).",
+      "donde_dormir": {
+        "mochilero": "hostales en pueblo: 18-28 EUR/noche",
+        "medio": "posadas y cabinas locales: 40-70 EUR/noche",
+        "comfort": "lodges eco con vista: 90-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Reserva Monteverde (entrada: 20 EUR, imprescindible)",
+        "Senderismo en Bosque Nuboso (senderos gratuitos desde carreteras)",
+        "Canopy tour (35-50 EUR)",
+        "Observación de quetzal (tour guiado: 25-40 EUR)"
+      ],
+      "donde_comer": "Pueblo céntrico: comida casera costarricense, 7-15 EUR. Restaurantes turísticos en alojamientos: 15-25 EUR.",
+      "consejo_local": "Llega con luz solar; el acceso nocturno es peligroso. La neblina es constante, lleva impermeable. El quetzal se ve mejor al amanecer (contratar tour la noche anterior).",
+      "plan_b_lluvia": "La lluvia define Monteverde, lleva buenos impermeables. Museos locales, visitas a fincas de café cercanas.",
+      "keywords": [
+        "Monteverde",
+        "Bosque Nuboso",
+        "Cloud Forest",
+        "Quetzal",
+        "Canopy",
+        "Tilarán"
+      ]
+    },
+    {
+      "id": "la-fortuna-arenal",
+      "nombre": "La Fortuna y Volcán Arenal",
+      "tipo": "naturaleza",
+      "region": "Zona norte (Alajuela)",
+      "descripcion": "Pueblo base para acceder al Volcán Arenal (activo hasta 2010, aún impresionante) y aguas termales naturales. Lago Arenal es referencia de aventura: senderismo, kayak, avistamiento de fauna.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "enero a marzo",
+      "como_llegar": "desde San José: autobús a Ciudad Quesada luego a La Fortuna (5-6h, 20-30 EUR). O vuelo (1h, 70-90 EUR ida).",
+      "donde_dormir": {
+        "mochilero": "hostales en La Fortuna: 16-26 EUR/noche",
+        "medio": "cabinas familiares: 40-65 EUR/noche",
+        "comfort": "ecolodges con piscina termal: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Volcán Arenal (tours guiados: 35-60 EUR, imprescindible)",
+        "Aguas termales naturales de Tabacón (entrada: 25 EUR)",
+        "Kayak en Lago Arenal (tours: 45-70 EUR)",
+        "Mirador de Arenal al atardecer (gratis desde carreteras)"
+      ],
+      "donde_comer": "La Fortuna: comida casera costarricense, típicas casados, 6-14 EUR. Restaurantes turísticos: 15-30 EUR.",
+      "consejo_local": "El volcán es mejor visto al atardecer en días despejados; la nube suele cubrirlo por la mañana. Las aguas termales son sobrevaloradas; baña naturalmente en Río Celeste (gratis).",
+      "plan_b_lluvia": "Río Celeste Waterfall (sigue siendo hermoso, 30 EUR tour). Cavernas Venado. Museos locales.",
+      "keywords": [
+        "Arenal",
+        "Volcán Arenal",
+        "La Fortuna",
+        "aguas termales",
+        "Lago Arenal",
+        "Tabacón"
+      ]
+    },
+    {
+      "id": "manuel-antonio",
+      "nombre": "Manuel Antonio",
+      "tipo": "playa",
+      "region": "Pacífico Central (Puntarenas)",
+      "descripcion": "Parque Nacional con 3 playas vírgenes rodeadas de selva tropical, perezosos, monos y fauna marina. Perfecta combinación de playa y naturaleza a 3h de San José.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "julio a noviembre (lluvia, menos turismo), diciembre a abril (seco)",
+      "como_llegar": "desde San José: autobús directo o conexión vía Puntarenas (5h, 15-20 EUR). Alternativa: vuelo desde San José (1h, 60-80 EUR ida).",
+      "donde_dormir": {
+        "mochilero": "hostales en Quepos: 15-25 EUR/noche",
+        "medio": "cabinas y hoteles 2-3* en pueblo: 35-70 EUR/noche",
+        "comfort": "resorts y hoteles con vista: 100-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Parque Nacional Manuel Antonio (entrada: 16 EUR)",
+        "Senderismo en selva (tours: 25-40 EUR)",
+        "Playa virgen y snorkel (gratis desde parque)",
+        "Avistamiento de perezosos y monos (gratis dentro parque o tours: 30-50 EUR)"
+      ],
+      "donde_comer": "Quepos: comida local, mariscos frescos, 8-18 EUR. Restaurantes turísticos en parque: 12-25 EUR.",
+      "consejo_local": "Entra al parque muy temprano (7am) para evitar multitudes. No lleves bolso al parque: los monos son ladrones expertos. Las playas no son para olas grandes (busca Jacó si quieres surf).",
+      "plan_b_lluvia": "La lluvia es breve en Manuel Antonio. Paseos en bote por manglares. Pesca deportiva. Compras en Quepos.",
+      "keywords": [
+        "Manuel Antonio",
+        "Quepos",
+        "Parque Nacional",
+        "selva",
+        "playas",
+        "perezosos",
+        "monos"
+      ]
+    },
+    {
+      "id": "puerto-viejo-cahuita",
+      "nombre": "Puerto Viejo de Talamanca",
+      "tipo": "playa",
+      "region": "Caribe (Limón)",
+      "descripcion": "Pueblo de costa caribeña con mezcla cultural afrocaribeña, playas de arena negra, arrecife coralino y ambiente relajado. Base para explorar Cahuita, Manzanillo y la Reserva de La Amistad.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "septiembre a noviembre (lluvia, menos turismo), diciembre a marzo (seco)",
+      "como_llegar": "desde San José: autobús directo (4-5h, 15-20 EUR). Alternativa: vía Limón ciudad (bus o carro alquilado).",
+      "donde_dormir": {
+        "mochilero": "hostales y casas de huéspedes: 14-24 EUR/noche",
+        "medio": "cabinas locales y pequeños hoteles: 35-60 EUR/noche",
+        "comfort": "eco-lodges y resorts: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en Arrecife de Cahuita (tours: 25-35 EUR)",
+        "Senderismo Parque Nacional Cahuita (entrada: 5 EUR)",
+        "Playas (gratis)",
+        "Visita a Manzanillo y Reserva de La Amistad (tours: 30-50 EUR)"
+      ],
+      "donde_comer": "Comida caribeña local: rice and beans, pescado frito, 6-14 EUR. Restaurantes en playa: 12-22 EUR.",
+      "consejo_local": "El agua es cálida todo el año. Los arrecifes están degradados (cambio climático), pero aún vale la pena. Evita caminar solo de noche fuera del pueblo central. Los precios son más altos que en Pacífico.",
+      "plan_b_lluvia": "Las lluvias son cortas. Visita museos locales, tiendas de souvenirs, relájate en cafés.",
+      "keywords": [
+        "Puerto Viejo",
+        "Cahuita",
+        "Caribe",
+        "Talamanca",
+        "arrecife",
+        "Manzanillo",
+        "afrocaribeño"
+      ]
+    },
+    {
+      "id": "ojochal-uvita",
+      "nombre": "Ojochal y Uvita (Zona Sur)",
+      "tipo": "playa",
+      "region": "Pacífico Sur (Puntarenas)",
+      "descripcion": "Pueblo de costa sur con playa salvaje, Marino Ballena (famoso por la cola de ballena formada en marea baja) y comunidad artística y eco-turística. Menos masificado que Manuel Antonio.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "desde San José: autobús a Uvita (8-9h, 20-25 EUR) o vuelo + transporte (70 EUR + 10 EUR). Desde Manuel Antonio: autobús o carro alquilado (3h, 30 EUR).",
+      "donde_dormir": {
+        "mochilero": "hostales en Ojochal: 16-26 EUR/noche",
+        "medio": "cabinas eco: 40-70 EUR/noche",
+        "comfort": "eco-lodges con vista: 90-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Marino Ballena National Park (entrada: 16 EUR, imprescindible en marea baja)",
+        "Senderismo y cascadas (tours: 25-40 EUR)",
+        "Playa y natación (gratis)",
+        "Visita a pueblos artísticos y talleres locales (gratis)"
+      ],
+      "donde_comer": "Comida vegetariana y fusión en Ojochal, 8-16 EUR. Mariscos en Uvita, 10-20 EUR.",
+      "consejo_local": "La cola de ballena de Marino Ballena solo aparece en marea baja específica (consulta horarios). Ojochal es más tranquilo y artístico que Uvita (turístico). Renta carro para explorar la zona.",
+      "plan_b_lluvia": "Sigue siendo visitables en lluvia. Mercadillos y tiendas de artesanía local.",
+      "keywords": [
+        "Ojochal",
+        "Uvita",
+        "Marino Ballena",
+        "Cola de Ballena",
+        "Pacífico Sur",
+        "zona sur"
+      ]
+    },
+    {
+      "id": "arenal-rio-celeste",
+      "nombre": "Río Celeste y Volcán Tenorio",
+      "tipo": "naturaleza",
+      "region": "Zona norte (Alajuela)",
+      "descripcion": "Río de agua turquesa intenso alimentado por fuentes termales subterráneas. Parque Nacional Volcán Tenorio con senderismo en bosque nuboso y piscinas naturales. Menos visitado que Arenal pero igualmente impresionante.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a marzo",
+      "como_llegar": "desde La Fortuna: tour operador (1h, 35 EUR incluido guía). O desde San José vía Ciudad Quesada (5h, 25 EUR).",
+      "donde_dormir": {
+        "mochilero": "hostales en pueblos cercanos: 16-26 EUR/noche",
+        "medio": "cabinas locales: 40-65 EUR/noche",
+        "comfort": "eco-lodges del área: 80-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Volcán Tenorio (entrada parque: 10 EUR)",
+        "Baño en Río Celeste (gratis)",
+        "Mirador y senderos (gratis)",
+        "Aguas termales naturales (gratis)"
+      ],
+      "donde_comer": "Pulperías y comedores en pueblos cercanos, 5-12 EUR. Comida en lodges: 12-20 EUR.",
+      "consejo_local": "El color turquesa es real: causado por alga microscópica (sulfuro). Es mejor visitarlo en tour operado desde La Fortuna. Lleva impermeable y botas de senderismo.",
+      "plan_b_lluvia": "La lluvia no afecta el color del río. Sigue siendo hermoso pero fangoso.",
+      "keywords": [
+        "Rio Celeste",
+        "Celeste",
+        "Volcan Tenorio",
+        "agua turquesa",
+        "aguas termales",
+        "zona norte"
+      ]
+    },
+    {
+      "id": "santa-elena-monteverde-norte",
+      "nombre": "Santa Elena (alrededores Monteverde)",
+      "tipo": "montaña",
+      "region": "Cordillera de Tilarán (Guanacaste)",
+      "descripcion": "Pueblo más alto de Costa Rica (1.645m) con Reserva Santa Elena privada (bosque nuboso puro). Menos visitado que Monteverde pero con igual biodiversidad y vistas de dos océanos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "desde Monteverde: carro alquilado (30min, 10 EUR) o a pie (1,5h). Desde San José: misma ruta que Monteverde.",
+      "donde_dormir": {
+        "mochilero": "hospedajes locales: 15-22 EUR/noche",
+        "medio": "posadas: 35-60 EUR/noche",
+        "comfort": "eco-lodges: 70-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Reserva Santa Elena (entrada: 15 EUR, menos concurrida que Monteverde)",
+        "Senderismo de bosque nuboso (gratis dentro reserva)",
+        "Observación de fauna (tours: 20-35 EUR)",
+        "Vistas de océanos desde miradores (gratis)"
+      ],
+      "donde_comer": "Pequeños restaurantes en pueblo, 6-14 EUR. Comida casera.",
+      "consejo_local": "Santa Elena es la alternativa barata y menos turística a Monteverde. La visibilidad de dos océanos depende del clima y neblina. Combina fácilmente con Monteverde si alquilas carro.",
+      "plan_b_lluvia": "Típico de bosque nuboso; la lluvia es constante. Impermeables obligatorios.",
+      "keywords": [
+        "Santa Elena",
+        "Reserva Santa Elena",
+        "bosque nuboso",
+        "montaña",
+        "dos oceanos"
+      ]
+    },
+    {
+      "id": "dominical-ojochal",
+      "nombre": "Dominical",
+      "tipo": "playa",
+      "region": "Pacífico Sur (Puntarenas)",
+      "descripcion": "Pueblo bohemio de playa con olas para surfistas, comunidad alternativa, restaurantes de comida vegetariana y ambiente relajado. Base para Ojochal, Marino Ballena y Nauyaca Waterfall.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a noviembre (lluvia, olas perfectas), diciembre a abril (seco)",
+      "como_llegar": "desde San José: autobús directo (7-8h, 18-22 EUR). Desde Uvita: autobús local (30min, 2 EUR). Desde Manuel Antonio: carro alquilado (3h, 30 EUR).",
+      "donde_dormir": {
+        "mochilero": "hostales centrales: 14-24 EUR/noche",
+        "medio": "cabinas y hostels: 30-60 EUR/noche",
+        "comfort": "eco-lodges: 70-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Surf (lecciones: 25-35 EUR, tabla alquiler: 10 EUR/día)",
+        "Cascadas Nauyaca (tours: 40-50 EUR)",
+        "Playa y natación (gratis)",
+        "Visita a Ojochal (15min en carro): galerías, tiendas artísticas"
+      ],
+      "donde_comer": "Comida vegetariana y fusión, 7-16 EUR. Tacos y comida local, 4-10 EUR. Café local: 2-4 EUR.",
+      "consejo_local": "Dominical es pequeño pero auténtico. Las olas son fuertes; consulta condiciones antes de entrar al agua. Hay drogas en la zona (evita): se nota en el comportamiento de ciertos turistas. Camina de día.",
+      "plan_b_lluvia": "La lluvia es breve. Visita cascadas (especialmente con lluvia). Cafés y tiendas locales.",
+      "keywords": [
+        "Dominical",
+        "Pacífico Sur",
+        "surf",
+        "bohemio",
+        "vegetariano",
+        "olas"
+      ]
+    },
+    {
+      "id": "tortuguero",
+      "nombre": "Tortuguero",
+      "tipo": "naturaleza",
+      "region": "Caribe Norte (Limón)",
+      "descripcion": "Pueblo únicamente accesible por río o avión (sin carreteras), en medio de canales y selva caribeña. Parque Nacional famoso por anidación de tortugas verdes. Experiencia completamente diferente al resto de Costa Rica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "julio a octubre (anidación de tortugas), diciembre a marzo (menos lluvia)",
+      "como_llegar": "desde San José: vuelo a Tortuguero (45min, 80-100 EUR) o jeepbus + lancha desde Guápiles (5h total, 30-40 EUR). Regreso igual.",
+      "donde_dormir": {
+        "mochilero": "hostales locales: 20-35 EUR/noche",
+        "medio": "lodges pequeños: 50-100 EUR/noche (generalmente con comidas incluidas)",
+        "comfort": "lodges eco con servicios: 120-200 EUR/noche (con comidas incluidas)"
+      },
+      "que_hacer": [
+        "Parque Nacional Tortuguero (entrada: 15 EUR)",
+        "Tours en bote por canales (25-40 EUR)",
+        "Observación de tortugas (estacional, tours: 20-35 EUR)",
+        "Senderismo en selva (gratis dentro parque)"
+      ],
+      "donde_comer": "Comida casera costarricense en lodges y restaurantes locales, 10-18 EUR (muchos lodges incluyen comidas).",
+      "consejo_local": "Planifica con anticipación: pocas camas y acceso limitado. Los tours en bote al amanecer son mejores para fauna. La temporada de anidación (junio-octubre) es especial pero hay más lluvia y lodo.",
+      "plan_b_lluvia": "Típico de zona caribeña. Los tours siguen operando. Lleva impermeable robusto.",
+      "keywords": [
+        "Tortuguero",
+        "Caribe",
+        "canales",
+        "tortugas",
+        "parque nacional",
+        "selva"
+      ]
+    }
+  ]
+}

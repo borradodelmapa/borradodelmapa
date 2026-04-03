@@ -1,0 +1,328 @@
+{
+  "pais": "San Marino",
+  "codigo": "sm",
+  "destinos": [
+    {
+      "id": "ciudad-de-san-marino",
+      "nombre": "Ciudad de San Marino",
+      "tipo": "histórico",
+      "region": "Centro",
+      "descripcion": "Capital medieval fortificada en lo alto de Monte Titano, con tres torres emblemáticas y murallas intactas. Centro histórico compacto con plazas empedradas, callejones estrechos y vistas panorámicas de la región de Emilia-Romaña. Punto de partida obligatorio para cualquier viajero en San Marino.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Rimini (Italia): autobús directo 25 min (5-8 EUR), o coche de alquiler 30 min (sin peaje)",
+      "donde_dormir": {
+        "mochilero": "hostal o habitación en guesthouse en centro histórico: 40-60 EUR/noche",
+        "medio": "hotel 3 estrellas con vistas: 70-100 EUR/noche",
+        "comfort": "hotel boutique medieval: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Subir a las tres torres (Guaita, Cesta, Montale): 5 EUR cada una o 12 EUR las tres",
+        "Pasear murallas y callejones medievales: gratis",
+        "Museo de la Tortura y Museo del Crimen: 7-8 EUR cada uno",
+        "Visitar Basílica de San Marino y Iglesia de San Francisco: gratis",
+        "Comprar sellos y monedas de coleccionista en oficina de correos: gratis ver"
+      ],
+      "donde_comer": "Restaurantes de pasta fresca (tortelini, passatelli) y carne a la parrilla: 12-20 EUR. Zona vieja alrededor de Piazza della Libertà. Evitar bares turísticos en calles principales.",
+      "consejo_local": "Entra por la Porta della Rocca temprano (antes de las 10) para evitar multitudes de tours. Las mejores vistas sin pagar están en los miradores gratuitos entre Torres.",
+      "plan_b_lluvia": "Museos interiores (Museo de la República, Museo de las Ceras), cafeterías en callejones, o ir a Borgo Maggiore en teleférico (2 EUR)",
+      "keywords": [
+        "San Marino città",
+        "monte titano",
+        "rocca guaita",
+        "centro histórico",
+        "torres medievales",
+        "piazza della libertà",
+        "Repubblica di San Marino"
+      ]
+    },
+    {
+      "id": "borgo-maggiore",
+      "nombre": "Borgo Maggiore",
+      "tipo": "histórico",
+      "region": "Centro",
+      "descripcion": "Segundo pueblo medieval de San Marino, ubicado en las faldas de Monte Titano. Menos turístico que la ciudad capital pero con mercados auténticos, iglesia barroca y acceso por teleférico histórico. Experiencia más local sin perder el ambiente medieval.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Ciudad de San Marino: teleférico 1,5 min (2 EUR ida) o caminata 20 min (gratis)",
+      "donde_dormir": {
+        "mochilero": "guesthouse local: 35-50 EUR/noche",
+        "medio": "hotel pequeño: 60-85 EUR/noche",
+        "comfort": "no hay opciones de alto lujo aquí"
+      },
+      "que_hacer": [
+        "Subir en teleférico histórico: 2 EUR",
+        "Pasear mercado semanal (jueves y domingos): gratis",
+        "Visitar Iglesia de San Giacomo: gratis",
+        "Comprar cerámica local en tiendas artesanales: 10-40 EUR",
+        "Vistas desde plaza principal: gratis"
+      ],
+      "donde_comer": "Pizzas y platos locales simples en bares de plaza: 8-15 EUR. Restaurante Titano con vistas decentes: 15-25 EUR plato principal.",
+      "consejo_local": "Ven en jueves o domingo si puedes para ver el mercado tradicional. El teleférico es una experiencia en sí misma, construido en 1970 pero con vistas excelentes.",
+      "plan_b_lluvia": "Iglesias, tiendas artesanales cubiertas, cafés locales sin tourists",
+      "keywords": [
+        "Borgo Maggiore",
+        "mercado san marino",
+        "teleférico",
+        "funivia",
+        "monte titano base"
+      ]
+    },
+    {
+      "id": "domagnano",
+      "nombre": "Domagnano",
+      "tipo": "rural",
+      "region": "Occidente",
+      "descripcion": "Pueblo rural montañoso con vistas espectaculares de los Apeninos y el valle. Centro de producción de cerámica y textiles sammarineses tradicionales. Menos visitado que la capital pero con auténticas tiendas artesanales y ambiente tranquilo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Ciudad de San Marino: autobús línea A o B 15 min (1,5 EUR) o coche de alquiler 15 min",
+      "donde_dormir": {
+        "mochilero": "guesthouse rural: 40-55 EUR/noche",
+        "medio": "casa rural pequeña: 65-90 EUR/noche",
+        "comfort": "agriturismo con servicio: 100-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar talleres de cerámica y comprar directamente: 15-60 EUR por pieza",
+        "Taller de cestería o textiles: 20-30 EUR (requiere reserva)",
+        "Paseo por pueblos vecinos de montaña: gratis",
+        "Fotografía de paisajes: gratis"
+      ],
+      "donde_comer": "Trattorias familiares con comida casera: 10-18 EUR. Especialidad: coniglio in umido (conejo estofado).",
+      "consejo_local": "Para por los talleres de cerámica sin reserva previa (mañana 9-13h). Los artesanos son receptivos y venden directo, sin márgenes de tienda turística.",
+      "plan_b_lluvia": "Talleres cerrados, compras en tiendas artesanales, o volver a la ciudad de San Marino",
+      "keywords": [
+        "Domagnano",
+        "cerámica sammarinesa",
+        "talleres artesanales",
+        "zona rural",
+        "vistas apeninos"
+      ]
+    },
+    {
+      "id": "serravalle",
+      "nombre": "Serravalle",
+      "tipo": "histórico",
+      "region": "Occidente",
+      "descripcion": "Pueblo medieval con murallas bien conservadas en la zona baja de San Marino. Menos turístico que la capital con auténticas callejuelas, pequeños bares locales y una atmósfera tranquila. Punto de entrada natural si vienes desde Rímini.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Rímini: autobús directo 35 min (6 EUR) o coche 40 min; desde Ciudad de San Marino: autobús 20 min (1,5 EUR)",
+      "donde_dormir": {
+        "mochilero": "guesthouse en pueblo: 38-50 EUR/noche",
+        "medio": "hotel pequeño: 60-80 EUR/noche",
+        "comfort": "hotel rural con comodidades: 90-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasear murallas y puertas medievales (Porta di Sotto, Porta di Sopra): gratis",
+        "Visitar Iglesia de Santa Caterina (interior barroco): gratis",
+        "Museos locales menores: 3-5 EUR",
+        "Compras en tiendas locales sin mark-up turístico: variable"
+      ],
+      "donde_comer": "Bares y trattorias autóctonos en plazas: 10-16 EUR. Vino local Sangiovese: 12-20 EUR botella en tienda.",
+      "consejo_local": "Serravalle es la puerta trasera de San Marino. Menos fotos Instagram aquí, más gente local tomando café. Perfecto para viajeros que buscan evitar rutas turísticas obvias.",
+      "plan_b_lluvia": "Iglesias, cafés, museos pequeños",
+      "keywords": [
+        "Serravalle",
+        "Serravalle San Marino",
+        "pueblo medieval",
+        "puerta occidente",
+        "murallas"
+      ]
+    },
+    {
+      "id": "faetano",
+      "nombre": "Faetano",
+      "tipo": "rural",
+      "region": "Sur",
+      "descripcion": "Municipio rural en la zona sur con paisajes agrícolas tradicionales y vistas de la llanura de Emilia-Romaña. Poco turístico, ideal para desconectar. Punto de partida para caminatas en naturaleza.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Ciudad de San Marino: autobús línea C 25 min (2 EUR) o coche 25 min",
+      "donde_dormir": {
+        "mochilero": "guesthouse rural: 40-50 EUR/noche",
+        "medio": "agriturismo básico: 65-85 EUR/noche",
+        "comfort": "agriturismo con restaurante: 95-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo en Caminos Rurales de San Marino: gratis",
+        "Visitar pequeño museo local (si abierto): 2-3 EUR",
+        "Fotografía rural y naturaleza: gratis",
+        "Probar comida de granja en agriturismos: 12-20 EUR"
+      ],
+      "donde_comer": "Agriturismos con comida casera de granja: 14-22 EUR. Especializados en productos locales sin pretensiones.",
+      "consejo_local": "Este es San Marino auténtico, no de postal. Viene gente local a comer, no turistas. Reserva en agriturismo si quieres comer bien.",
+      "plan_b_lluvia": "Dentro en agriturismo, caminatas cortas bajo techo",
+      "keywords": [
+        "Faetano",
+        "zona rural San Marino",
+        "agriturismos",
+        "agricultura tradicional",
+        "caminos rurales"
+      ]
+    },
+    {
+      "id": "acquaviva",
+      "nombre": "Acquaviva",
+      "tipo": "rural",
+      "region": "Sur",
+      "descripcion": "Pueblo más pequeño y tranquilo de San Marino, prácticamente desconocido para turistas. Zona verde con arquitectura rural sammarinesa pura. Ideal para quien busca evitar rutas turísticas completamente.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Ciudad de San Marino: autobús línea C 30 min (2 EUR) o coche 30 min",
+      "donde_dormir": {
+        "mochilero": "no hay alojamiento de mochilero; opción más barata es agriturismo: 50-70 EUR/noche",
+        "medio": "agriturismo: 70-100 EUR/noche",
+        "comfort": "agriturismo de calidad: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por pueblo y alrededores: gratis",
+        "Fotografía rural: gratis",
+        "Visita a iglesia local: gratis",
+        "Caminata a pueblos vecinos: gratis"
+      ],
+      "donde_comer": "Pocos lugares; principalmente en agriturismo (reserva anticipada): 15-25 EUR. Bar-tienda local muy básico.",
+      "consejo_local": "Acquaviva no es un destino, es un lugar para parar si pasas. Pero eso es lo que lo hace especial: cero turismo, cero multitudes, 100% paz.",
+      "plan_b_lluvia": "Vuelve a la ciudad o quédate en agriturismo",
+      "keywords": [
+        "Acquaviva",
+        "Acquaviva d'Urbino",
+        "pueblo tranquilo",
+        "sin turismo",
+        "rural auténtico"
+      ]
+    },
+    {
+      "id": "rimini-excursion",
+      "nombre": "Rímini (excursión desde San Marino)",
+      "tipo": "playa",
+      "region": "Emilia-Romaña (Italia) - Excursión",
+      "descripcion": "Principal playa Adriática cercana a San Marino, a solo 30 km. Paseos marítimos históricos, playas de arena, vida nocturna y gastronomía italiana de costa. Base alternativa o complemento a San Marino para mochileros.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre (baño), abril-mayo, septiembre-octubre (visita)",
+      "como_llegar": "desde San Marino: autobús directo 45 min (8-10 EUR) o coche alquiler 50 min. Regresa a San Marino fácilmente.",
+      "excursion_desde": true,
+      "donde_dormir": {
+        "mochilero": "hostal en centro: 30-45 EUR/noche",
+        "medio": "hotel 2-3 estrellas: 50-80 EUR/noche",
+        "comfort": "hotel frente al mar: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa y baño: gratis",
+        "Paseo marítimo (Lungomare): gratis",
+        "Castillo de Rímini (Rocca Malatestiana): 8 EUR",
+        "Templo Malatestiano (arquitectura renacentista): gratis",
+        "Puente de Tiberio (romano, 20 AD): gratis"
+      ],
+      "donde_comer": "Mariscos y pasta al marisco: 12-22 EUR. Piadina (comida rápida local): 3-5 EUR. Helado italiano: 2-4 EUR.",
+      "consejo_local": "Rímini es de turismo de playa masivo. Busca hoteles lejos del paseo principal. Come en callecitas detrás de la playa, no en el paseo. Mejor en baja temporada.",
+      "plan_b_lluvia": "Museos (Rocca, Museo Fellini), cines, compras, cafés italianos",
+      "keywords": [
+        "Rimini",
+        "Rimini Italia",
+        "playa Adriática",
+        "excursión",
+        "Lungomare"
+      ]
+    },
+    {
+      "id": "urbino-excursion",
+      "nombre": "Urbino (excursión desde San Marino)",
+      "tipo": "histórico",
+      "region": "Marcas (Italia) - Excursión",
+      "descripcion": "Joya arquitectónica renacentista a 50 km de San Marino, Patrimonio UNESCO. Palacio Ducal, callejuelas empedradas y atmósfera intelectual renacentista pura. Complemento perfecto medieval-renacentista a San Marino.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde San Marino: autobús 60-75 min (10-12 EUR) o coche alquiler 60 min (gasolina ~6 EUR). Menos frecuencia de autobús; mejor coche alquiler.",
+      "excursion_desde": true,
+      "donde_dormir": {
+        "mochilero": "hostal o guesthouse: 40-55 EUR/noche",
+        "medio": "hotel pequeño: 60-90 EUR/noche",
+        "comfort": "hotel histórico: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Palacio Ducal (Palazzo Ducale): 12 EUR",
+        "Pasear centro histórico y callejones: gratis",
+        "Iglesia de San Domenico: gratis",
+        "Galería Nacional de las Marcas: 8 EUR",
+        "Fortezza (vistas 360°): 3 EUR"
+      ],
+      "donde_comer": "Restaurantes renacentistas en plazas principales: 14-24 EUR. Trufa negra (especialidad de zona): 20-40 EUR en platos. Pasta al ragù: 10-16 EUR.",
+      "consejo_local": "Urbino es pequeño y se hace en 4-5 horas. Visita por la mañana temprano. Por la tarde, menos multitudes. Come en restaurantes pequeños fuera de la piazza principal.",
+      "plan_b_lluvia": "Museos (Palacio Ducal, Galería), iglesias, cafés históricos",
+      "keywords": [
+        "Urbino",
+        "Urbino Italia",
+        "Palazzo Ducale",
+        "Renacentista",
+        "UNESCO",
+        "excursión"
+      ]
+    },
+    {
+      "id": "san-leo-excursion",
+      "nombre": "San Leo (excursión desde San Marino)",
+      "tipo": "histórico",
+      "region": "Emilia-Romaña (Italia) - Excursión",
+      "descripcion": "Fortaleza medieval espectacular en roca aislada a 20 km de San Marino. Pueblo amurallado compacto con una de las fortalezas mejor conservadas de Italia. Vistas panorámicas excepcionales. Fácil day trip.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde San Marino: coche alquiler 25 min (gasolina ~3 EUR), o autobús/taxi (menos frecuente, 15 EUR taxi)",
+      "excursion_desde": true,
+      "donde_dormir": {
+        "mochilero": "guesthouse pequeño: 45-60 EUR/noche",
+        "medio": "hotel pequeño: 65-95 EUR/noche",
+        "comfort": "hotel rural: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Fortaleza de San Leo (entrada interior): 10 EUR",
+        "Paseo murallas y vistas: gratis",
+        "Iglesia de San Leo (románica): gratis",
+        "Fotografía desde ángulos del pueblo: gratis"
+      ],
+      "donde_comer": "Pequeños restaurantes en plaza principal: 12-20 EUR. Especiales: pasta casera, carne a la parrilla. Prescindir de bares turísticos obvios.",
+      "consejo_local": "San Leo se hace en 2-3 horas máximo. Ve de San Marino a media tarde, come, ve fortaleza al atardecer, vuelve. Coche alquiler imprescindible.",
+      "plan_b_lluvia": "Iglesia, museo fortaleza interior, cafés",
+      "keywords": [
+        "San Leo",
+        "San Leo Italia",
+        "fortaleza",
+        "pueblo medieval",
+        "excursión corta"
+      ]
+    },
+    {
+      "id": "montefeltro-montanas",
+      "nombre": "Montaña de Montefeltro - Caminatas (accesible desde San Marino)",
+      "tipo": "montaña",
+      "region": "Zona Noroccidental",
+      "descripcion": "Región montañosa de los Apeninos con rutas de senderismo variadas, pueblos medievales dispersos y naturaleza poco turística. Acceso desde San Marino para caminantes. Combinación de historia y naturaleza.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre (junio-agosto calor extremo)",
+      "como_llegar": "desde San Marino: coche alquiler hacia Pennabilli o San Marino Città (45-60 min). Requiere coche propio o tour operador. Base en Pennabilli (30 km) o pueblos cercanos.",
+      "donde_dormir": {
+        "mochilero": "agriturismo o guesthouse rural: 45-65 EUR/noche",
+        "medio": "agriturismo con comidas: 75-110 EUR/noche",
+        "comfort": "agriturismo de calidad: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo variado CAI (ruta de 4-6h): gratis (mapas 5 EUR)",
+        "Visita a Pennabilli (pueblo histórico): gratis paseo",
+        "Mirador Balze Rosse: gratis",
+        "Fotografía de paisajes montañosos: gratis",
+        "Formas geológicas y cañones: gratis"
+      ],
+      "donde_comer": "Agriturismos con comida de montaña: 16-26 EUR. Especiales: setas silvestres (en temporada), embutidos de cabra, quesos locales.",
+      "consejo_local": "Necesitas mapas CAI (5 EUR en tiendas) o app Komoot descargada offline. Lleva agua y avituallamientos. Agriturismos cierran temprano; cena en lugar donde duermes.",
+      "plan_b_lluvia": "Lluvia en montaña es habitual: caminatas cortas o quedarse en agriturismo con comida local extendida",
+      "keywords": [
+        "Montefeltro",
+        "senderismo San Marino",
+        "Apeninos",
+        "Pennabilli",
+        "caminatas montaña",
+        "rutas CAI"
+      ]
+    }
+  ]
+}

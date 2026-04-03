@@ -1,0 +1,347 @@
+{
+  "pais": "Georgia",
+  "codigo": "ge",
+  "destinos": [
+    {
+      "id": "tbilisi",
+      "nombre": "Tiflis",
+      "tipo": "ciudad",
+      "region": "Región de Tiflis",
+      "descripcion": "Capital de Georgia con arquitectura que mezcla lo antiguo y lo moderno, baños de azufre históricos y una vibrante escena gastronómica. Centro neurálgico para acceder al resto del país. Punto de partida obligatorio con museos, galerías y vida nocturna.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Aeropuerto Internacional de Tiflis (35 km): metro/minibús 1 hora, 2-4 EUR",
+      "donde_dormir": {
+        "mochilero": "Hostales en Vake/Old Town: 12-18 EUR/noche",
+        "medio": "Guesthouses en Saburtalo: 25-40 EUR/noche",
+        "comfort": "Hoteles centro histórico: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Baños de azufre en Abanotubani (5 EUR, sunset es mejor)",
+        "Fortaleza de Narikala (gratis, vistas panorámicas)",
+        "Casco antiguo: Calle Shardeni (gratis paseo)",
+        "Museos: Arte Moderno y Arqueología (3-5 EUR)",
+        "Mercado Dechy en Metekhi (gratis, mercadillo local)"
+      ],
+      "donde_comer": "Khachapuri (queso fundido en pan, 2-4 EUR) y khinkali (ravioli georgiano, 1-2 EUR) en Shardeni. Mercado Dechy para comida local barata. Rango general 3-8 EUR por comida.",
+      "consejo_local": "Los baños de azufre privados son mejores que los públicos pero costarán 10-15 EUR. Ve al atardecer para ver toda la ciudad iluminada desde Narikala.",
+      "plan_b_lluvia": "Museos (Arqueología tiene excelentes artefactos antiguos), cafés literarios en Vake, tiendas de recuerdos en Old Town",
+      "keywords": [
+        "Tiflis",
+        "Tbilisi",
+        "capital Georgia",
+        "Metekhi",
+        "Narikala",
+        "baños de azufre",
+        "Old Town",
+        "Vake",
+        "Saburtalo"
+      ]
+    },
+    {
+      "id": "kazbegi",
+      "nombre": "Kazbegi",
+      "tipo": "montaña",
+      "region": "Caucasia (Mtskheta-Mtianeti)",
+      "descripcion": "Pueblo alpino en el corazón del Cáucaso con la Iglesia de la Trinidad flotando sobre la montaña (5200 m). Punto de partida para rutas de senderismo intensas y vistas espectaculares. Acceso a la garganta del río Terek y paisajes salvajes.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Tbilisi: minibús/marshrutka (3.5 horas, 8-12 EUR) o excursión de día (20-30 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses de montaña: 15-20 EUR/noche",
+        "medio": "Casas rurales con vistas: 25-35 EUR/noche",
+        "comfort": "Lodges boutique: 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a Iglesia de la Trinidad (2-3 horas, ruta marcada, gratis)",
+        "Garganta del Terek trekking (día completo, gratis)",
+        "Subida a Kazbek (día y medio, guía recomendado 30-50 EUR)",
+        "Cascos de glaciar antiguo (media hora, gratis)",
+        "Piscina de agua caliente natural en el valle (gratis)"
+      ],
+      "donde_comer": "Comida casera georgiana en guesthouses (8-12 EUR). Khashlamá (estofado tradicional) y pan. Tienda general con lo básico en el pueblo.",
+      "consejo_local": "La ruta a la Iglesia de la Trinidad por la tarde es más tranquila que por la mañana. Lleva agua y protección solar: el reflejo del hielo quema. Contrata guía si haces Kazbek a causa de crevasses.",
+      "plan_b_lluvia": "Visita casas guesthouses tradicionales, piscina de agua caliente, paseos por el pueblo, observación de pájaros del Cáucaso",
+      "keywords": [
+        "Kazbegi",
+        "Kazbegi",
+        "Trinity Church",
+        "Iglesia de la Trinidad",
+        "Kazbek",
+        "trekking Cáucaso",
+        "Svaneti neighbor"
+      ]
+    },
+    {
+      "id": "mtskheta",
+      "nombre": "Mtskheta",
+      "tipo": "histórico",
+      "region": "Mtskheta-Mtianeti",
+      "descripcion": "Antigua capital de Georgia (primera mitad del cristianismo) con los monasterios más sagrados del país. Fácil excursión desde Tbilisi o parada en ruta a Kazbegi. Iglesia Jvari y Catedral Svetitskhovloba Patrimonio UNESCO.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Tbilisi: marshrutka (30-45 min, 1-2 EUR) o a pie desde cerca",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 15-20 EUR/noche",
+        "medio": "Pequeños hoteles: 25-35 EUR/noche",
+        "comfort": "No hay opciones premium en el pueblo"
+      },
+      "que_hacer": [
+        "Monasterio Jvari en la colina (30 min caminata, gratis, vistas del valle)",
+        "Catedral Svetitskhovloba interior (gratis)",
+        "Confluencia de ríos Aragvi y Mtkvari (paseo gratis)",
+        "Mercadillo de souvenirs en el centro (gratis mirar)",
+        "Iglesia de Samtavisi (5 km, taxi 3-5 EUR)"
+      ],
+      "donde_comer": "Comida casera en guesthouses (6-10 EUR). Carne a la parrilla tradicional (pkhali) 3-5 EUR. Muy pocas opciones de restaurantes.",
+      "consejo_local": "Visítalo como excursión de medio día desde Tbilisi. Los monasterios tienen mejores vistas al final de la tarde. Es un lugar de peregrinación importante, así que respeta los horarios y la vestimenta modesta.",
+      "plan_b_lluvia": "Catedral Svetitskhovloba (interior cubierto), mercadillos techados, café local",
+      "keywords": [
+        "Mtskheta",
+        "patrimonio UNESCO",
+        "Jvari",
+        "Svetitskhovloba",
+        "capital antigua",
+        "monasterios Georgia"
+      ]
+    },
+    {
+      "id": "gonio-sarpi",
+      "nombre": "Gonio y Sarpi",
+      "tipo": "playa",
+      "region": "Abjasia (Gonio) / Samegrelo (Sarpi)",
+      "descripcion": "Pueblos costeros en el Mar Negro con playas de guijarros negros volcánicos. Gonio tiene una fortaleza histórica. Atmósfera bohemia y tranquila, lejos del bullicio de Tbilisi. Paradas ideales ruta Bakú-Istanbul.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Tbilisi: minibús (5-6 horas, 8-12 EUR). Desde Kutaisi (2 horas, 6-8 EUR). Batumi está más cerca (15 km).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en primera línea: 12-18 EUR/noche",
+        "medio": "Pequeños hoteles con vistas mar: 20-35 EUR/noche",
+        "comfort": "No hay opciones premium, máximo 40-50 EUR"
+      },
+      "que_hacer": [
+        "Fortaleza de Gonio (2 EUR, vistas del río Achara)",
+        "Playas de Gonio y Sarpi (gratis, arena negra volcánica)",
+        "Paseo por acantilados de Sarpi (gratis, pista a pie)",
+        "Monasterio de Sarpi (gratis, siglo VI)",
+        "Observación de delfines (tours 15-25 EUR, octubre-mayo mejor)"
+      ],
+      "donde_comer": "Pescado a la parrilla (10-15 EUR). Mejillones frescos (5-8 EUR). Restaurantes con vistas al mar. Chakhokhbili (estofado de carne, 5-8 EUR). Rango 8-15 EUR por comida.",
+      "consejo_local": "Sarpi tiene olas para windsurf, Gonio es más tranquilo. El agua es fría incluso en verano. Las playas no son de arena, sino de guijarros volcánicos negros (lleva chanclas robustas).",
+      "plan_b_lluvia": "Fortaleza Gonio (interior cubierto), museos locales, café frente al mar con vistas",
+      "keywords": [
+        "Gonio",
+        "Sarpi",
+        "Mar Negro",
+        "playa Georgia",
+        "Achara",
+        "fortaleza Gonio",
+        "costa Cáucaso"
+      ]
+    },
+    {
+      "id": "batumi",
+      "nombre": "Batumi",
+      "tipo": "playa",
+      "region": "Adjara",
+      "descripcion": "Principal resort costero de Georgia con paseo marítimo moderno, casinos y vida nocturna. Mezcla de arquitectura soviética y moderna. Puerto fronterizo con Turquía. Base para playas y bosques tropicales cercanos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Tbilisi: minibús (5-6 horas, 8-12 EUR). Desde Kutaisi (2 horas, 6-8 EUR). Aeropuerto local.",
+      "donde_dormir": {
+        "mochilero": "Hostales cerca playa: 15-22 EUR/noche",
+        "medio": "Hoteles paseo marítimo: 35-55 EUR/noche",
+        "comfort": "Hoteles 4-5 estrellas: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo marítimo (1.5 km, gratis, ver arquitectura ecléctica)",
+        "Botánico (7 EUR, jardín de 3 hectáreas con plantas tropicales)",
+        "Castillo de Sarpi/Gonio excursion (mismo día, 15 km)",
+        "Playas públicas (gratis)",
+        "Parque Ajaria Agmashenebeli (gratis, zona verde del centro)"
+      ],
+      "donde_comer": "Restaurantes turísticos en paseo: 12-20 EUR. Comida local en callejuelas: 5-10 EUR. Pescado fresco recomendado (10-15 EUR). Cadenas internacionales presentes.",
+      "consejo_local": "Batumi es la puerta a Turquía (cruce fronterizo). El bosque lluvioso subtropical de Sarpi está muy cerca (25 km). El agua es más cálida aquí que en otros puntos de la costa.",
+      "plan_b_lluvia": "Museos locales, Botánico (techado parcialmente), centros comerciales, casinos",
+      "keywords": [
+        "Batumi",
+        "resort Georgia",
+        "Mar Negro",
+        "costa turística",
+        "Adjara",
+        "paseo marítimo",
+        "casino Batumi"
+      ]
+    },
+    {
+      "id": "svaneti",
+      "nombre": "Svaneti",
+      "tipo": "montaña",
+      "region": "Samegrelo-Zemo Svaneti",
+      "descripcion": "Región montañosa aislada famosa por torres defensivas medievales y pueblos de montaña intactos. Paisajes espectaculares del Alto Cáucaso. Principales pueblos: Mestia y Ushguli. Trekking serio en ambiente poco turístico.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Tbilisi: minibús a Zugdidi (8 horas, 12 EUR) + minibús a Mestia (2 horas, 5 EUR). O vuela a Mestia (1 hora, 40-60 EUR desde Tbilisi).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses de montaña: 15-20 EUR/noche",
+        "medio": "Casas tradicionales svan: 25-40 EUR/noche",
+        "comfort": "Boutique lodges: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Mestia-Ushguli (3 días, espectacular, gratis, guía 30-50 EUR recomendado)",
+        "Excursión a glaciar Shdugra (día entero, guía recomendado)",
+        "Museo de Mestia (3 EUR, artefactos svan históricos)",
+        "Paseo por pueblos torres (gratis)",
+        "Escalada en roca en Baki (guía 40-60 EUR)"
+      ],
+      "donde_comer": "Comida casera en guesthouses (8-12 EUR). Khachapuri de queso svan (3-5 EUR). Carne a la parrilla (5-8 EUR). Poca variedad de restaurantes.",
+      "consejo_local": "La ruta Mestia-Ushguli es de trekking serio: trae equipamiento adecuado. Las torres son símbolos de prestigio familiar. La carretera a Ushguli es espectacular pero peligrosa en mal tiempo.",
+      "plan_b_lluvia": "Museo de Mestia, casas guesthouses tradicionales, exploración de pueblos cercanos, café local",
+      "keywords": [
+        "Svaneti",
+        "Mestia",
+        "Ushguli",
+        "torres svan",
+        "Alto Cáucaso",
+        "trekking Georgia",
+        "montaña medieval"
+      ]
+    },
+    {
+      "id": "kutaisi",
+      "nombre": "Kutaisi",
+      "tipo": "ciudad",
+      "region": "Imereti",
+      "descripcion": "Segunda ciudad de Georgia con monasterios antiguos y una ubicación ideal para explorar el oeste. Centro histórico con arquitectura auténtica, menos turístico que Tbilisi. Base para Gonio, Sarpi y cuevas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Tbilisi: minibús (3.5 horas, 6-10 EUR). Desde Batumi (2 horas, 6-8 EUR). Tren de noche disponible.",
+      "donde_dormir": {
+        "mochilero": "Hostales centro: 12-18 EUR/noche",
+        "medio": "Guesthouses: 20-35 EUR/noche",
+        "comfort": "Hoteles 3-4 estrellas: 40-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Monasterio Bagrati (gratis, vistas de la ciudad)",
+        "Monasterio Gelati (3 EUR, mosaicos medievales sorprendentes)",
+        "Cuevas de Prometheus (7 EUR + barca subterránea 5 EUR, espectacular)",
+        "Paseo por río Rioni (gratis)",
+        "Mercado central (gratis, vida local auténtica)"
+      ],
+      "donde_comer": "Khachapuri de queso (2-4 EUR). Khinkali (1-2 EUR). Estofados (pkhali, 3-5 EUR). Rango 3-8 EUR por comida. Menos turístico que Tbilisi.",
+      "consejo_local": "Kutaisi es mucho más relajado que Tbilisi y el dinero cunde más. Las cuevas de Prometheus son increíbles pero la barca subterránea es el verdadero highlight.",
+      "plan_b_lluvia": "Monasterios (parcialmente cubiertos), museos locales, cuevas (seco), café tradicional",
+      "keywords": [
+        "Kutaisi",
+        "Imereti",
+        "segunda ciudad",
+        "Bagrati",
+        "Gelati",
+        "cuevas Prometheus",
+        "centro-oeste Georgia"
+      ]
+    },
+    {
+      "id": "vardzia",
+      "nombre": "Vardzia",
+      "tipo": "histórico",
+      "region": "Samtskhe-Javakheti",
+      "descripcion": "Ciudad-monasterio excavada en roca del siglo XII con 600 cuevas conectadas. Monumento arquitectónico único en el mundo. Ubicado junto al río Mtkvari. Combinable con Akhaltsikhe en una ruta del sur.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Gori/Zugdidi: minibús a Akhaltsikhe (1.5 horas, 3-5 EUR) + taxi a Vardzia (30 km, 15-25 EUR). Desde Tbilisi (200 km, 10-12 EUR en minibús).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Akhaltsikhe: 12-18 EUR/noche",
+        "medio": "Hoteles pequeños: 20-35 EUR/noche",
+        "comfort": "No hay opciones premium"
+      },
+      "que_hacer": [
+        "Exploración de cuevas Vardzia (entrada 3 EUR, 2-3 horas caminando)",
+        "Iglesia principal de Vardzia (incluida entrada)",
+        "Vistas desde acantilados (gratis)",
+        "Paseo por río Mtkvari (gratis)",
+        "Fortaleza de Akhaltsikhe (5 km, 2 EUR + reconstrucción moderna)"
+      ],
+      "donde_comer": "Comida básica en guesthouses (6-10 EUR). Restaurante junto Vardzia (8-12 EUR). Khachapuri y carnes locales.",
+      "consejo_local": "Lleva zapatos de senderismo: las cuevas requieren caminar por rocas irregulares. El río Mtkvari es la frontera con Turquía. Los monasterios tienen horarios limitados, pregunta en tu guesthouse.",
+      "plan_b_lluvia": "Exploración de cuevas más lentos (están protegidas), fortaleza de Akhaltsikhe, museos locales",
+      "keywords": [
+        "Vardzia",
+        "monasterio cueva",
+        "siglo XII",
+        "cueva excavada",
+        "Akhaltsikhe",
+        "Samtskhe-Javakheti",
+        "Mtkvari"
+      ]
+    },
+    {
+      "id": "gori-uplistsikhe",
+      "nombre": "Gori y Uplistsikhe",
+      "tipo": "histórico",
+      "region": "Shida Kartli",
+      "descripcion": "Gori es la ciudad natal de Stalin con museo dedicado. Uplistsikhe es una ciudad-cueva del siglo I. Conjunto histórico fascinante en el corazón de Georgia. Parada ideal en ruta hacia el sur o Kazbegi.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Tbilisi: minibús (1.5-2 horas, 2-4 EUR). Desde Kazbegi o sur es ruta lógica.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses Gori: 12-18 EUR/noche",
+        "medio": "Hoteles pequeños: 20-30 EUR/noche",
+        "comfort": "No hay opciones premium"
+      },
+      "que_hacer": [
+        "Museo Stalin en Gori (3 EUR, única museo Stalin fuera de Rusia, controvertido)",
+        "Fortaleza Gori (1 EUR, vistas de la ciudad)",
+        "Uplistsikhe ciudad-cueva (3 EUR, 60 cuevas excavadas, trekking 2-3 horas)",
+        "Iglesia en Uplistsikhe (incluida entrada)",
+        "Paseo por río Mtkvari (gratis)"
+      ],
+      "donde_comer": "Comida casera en guesthouses (6-10 EUR). Khachapuri y carnes (3-8 EUR). Mercado central para snacks (1-3 EUR).",
+      "consejo_local": "El museo Stalin es controvertido pero históricamente importante. Uplistsikhe es un patrimonio menos conocido pero espectacular. Gori tiene interés principalmente por estos sitios específicos.",
+      "plan_b_lluvia": "Museo Stalin (cubierto), fortaleza de Gori (parcialmente cubierta), café local",
+      "keywords": [
+        "Gori",
+        "Uplistsikhe",
+        "cueva antigua",
+        "museo Stalin",
+        "fortaleza Gori",
+        "siglo I",
+        "Shida Kartli"
+      ]
+    },
+    {
+      "id": "sighnaghi",
+      "nombre": "Sighnaghi",
+      "tipo": "rural",
+      "region": "Kakheti",
+      "descripcion": "Pueblo pintoresco en lo alto de una colina con murallas medievales intactas, vistas al valle de Alazani y bodegas de vino. Atmósfera auténtica con calles empedradas y arquitectura antigua preservada. Centro de la región vinícola georgiana.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre (vendimia septiembre)",
+      "como_llegar": "Desde Tbilisi: minibús a Telavi (2-2.5 horas, 4-6 EUR) + taxi a Sighnaghi (30 km, 15-20 EUR) o marshrutka (45 min, 2-3 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en el centro: 15-22 EUR/noche",
+        "medio": "Hoteles pequeños con terrazas: 25-40 EUR/noche",
+        "comfort": "Boutique hotels: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por murallas medievales (gratis, vistas espectaculares del valle)",
+        "Tours de bodegas locales (20-40 EUR, degustación incluida)",
+        "Iglesia Natividad de María (gratis)",
+        "Mirador de la ciudad al atardecer (gratis)",
+        "Visita a viñedos cercanos (gratis recorrido, degustación 5-10 EUR)"
+      ],
+      "donde_comer": "Comida casera en guesthouses (7-12 EUR). Khachapuri y quesos locales (3-6 EUR). Vinos de la región (5-15 EUR botella). Rango 8-15 EUR por comida.",
+      "consejo_local": "El vino es excelente y barato. Muchos guesthouses ofrecen cenas tradicionales con vino casero. Los atardeceres desde las murallas son inolvidables. La vendimia en septiembre es el mejor momento.",
+      "plan_b_lluvia": "Museos locales, tiendas artesanales, degustación de vinos en bodegas cubiertas",
+      "keywords": [
+        "Sighnaghi",
+        "Kakheti",
+        "vino Georgia",
+        "murallas medievales",
+        "valle Alazani",
+        "bodega georgiana",
+        "pueblo pintoresco"
+      ]
+    }
+  ]
+}

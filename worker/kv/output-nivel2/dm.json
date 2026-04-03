@@ -1,0 +1,350 @@
+{
+  "pais": "Dominica",
+  "codigo": "dm",
+  "destinos": [
+    {
+      "id": "rosalie",
+      "nombre": "Rosalie",
+      "tipo": "naturaleza",
+      "region": "Noroeste, parroquia de Saint Andrew",
+      "descripcion": "Pueblo costero tranquilo conocido como la puerta de entrada a las playas de arena volcánica negra y acceso a la costa salvaje del norte. Base perfecta para explorar la naturaleza sin masificación turística.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a marzo",
+      "como_llegar": "Desde Roseau (capital) en autobús local: 45 minutos, 3-5 EUR. O coche de alquiler: 1 hora.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales o casas de huéspedes: 40-60 EUR/noche",
+        "medio": "Boutique hotels pequeños: 70-100 EUR/noche",
+        "comfort": "Resorts costeros: 130-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Rosalie Beach, nadar en aguas calmadas (gratis)",
+        "Senderismo hasta Syndicate Estate y cascadas (gratis o 10 EUR con guía)",
+        "Snorkel en aguas cercanas (20-30 EUR)",
+        "Observación de aves tropicales en la zona (gratis o 15 EUR con guía)"
+      ],
+      "donde_comer": "Restaurantes locales sirven pescado fresco, callaloo soup y plantains. Precios: 8-15 EUR por plato. Comer en la zona de playa es lo más auténtico.",
+      "consejo_local": "Rosalie es un secreto bien guardado entre los dominicanos. Llega temprano para disfrutar de la playa sin gente y pregunta por cascadas locales no señalizadas.",
+      "plan_b_lluvia": "Explorar pueblos cercanos como Marigot o visitar galerías de arte local cubierto en Roseau (30 min en autobús).",
+      "keywords": [
+        "Rosalie Beach",
+        "north coast",
+        "volcanic black sand",
+        "Saint Andrew"
+      ]
+    },
+    {
+      "id": "trafalgar",
+      "nombre": "Trafalgar",
+      "tipo": "naturaleza",
+      "region": "Centro-oeste, parroquia de Saint Paul",
+      "descripcion": "Hogar de las famosas Trafalgar Falls, cascadas gemelas en un bosque tropical lush. Es la atracción natural más accesible desde Roseau y punto de partida para trekking en la selva.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año, mejor octubre-noviembre",
+      "como_llegar": "Desde Roseau en autobús local o taxi compartido: 20 minutos, 2-3 EUR. Coche de alquiler: 10 EUR de gasolina.",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento in situ, dormir en Roseau (30 min) o Laudat: 35-55 EUR/noche",
+        "medio": "Pequeños hoteles en Laudat cercano: 65-85 EUR/noche",
+        "comfort": "Resorts temáticos en zona de Morne Bruce: 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Trafalgar Falls Trail: senderismo fácil 1 hora (gratis, parking 2 EUR)",
+        "Baño en piscinas naturales bajo las cascadas (gratis)",
+        "Freshwater Lake Trail: trekking más desafiante 3-4 horas (gratis con guía local 20 EUR)",
+        "Fotografía de fauna tropical y aves endémicas (gratis)"
+      ],
+      "donde_comer": "En Laudat (5 km) hay pequeños restaurantes locales: 7-12 EUR. Llevar snacks es recomendable. Agua en la tienda de Trafalgar village.",
+      "consejo_local": "Ve temprano por la mañana para evitar el calor y la posible lluvia de tarde. Las cascadas se ven mejor entre 9 y 11 am. Lleva repelente de mosquitos.",
+      "plan_b_lluvia": "El área se vuelve resbaladiza pero sigue siendo hermosa. Reduce distancia del trek o visita el pueblo de Laudat para artesanía local.",
+      "keywords": [
+        "Trafalgar Falls",
+        "cascadas gemelas",
+        "Laudat",
+        "Freshwater Lake",
+        "trekking"
+      ]
+    },
+    {
+      "id": "scott-head",
+      "nombre": "Scott's Head",
+      "tipo": "playa",
+      "region": "Suroeste, parroquia de Scott's Head",
+      "descripcion": "Pequeño pueblito costero en la punta sur de Dominica con playas de arena oscura, arrecifes coralinos intactos y aguas tranquilas ideales para snorkel. Uno de los mejores spots de buceo del Caribe.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Roseau en autobús local: 1 hora 15 minutos, 4-6 EUR. Coche alquiler: 45 km, 1 hora, 15 EUR gasolina.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses tipo casa: 45-65 EUR/noche",
+        "medio": "Pequeños hoteles beachfront: 75-110 EUR/noche",
+        "comfort": "Resorts boutique: 140-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en Scott's Head Marine Reserve: arrecifes de coral (gratis entrada, 25-40 EUR con tour)",
+        "Buceo certificado PADI en múltiples puntos (60-120 EUR por inmersión)",
+        "Playa Champagne: piscina natural calentada por gases volcánicos (gratis)",
+        "Senderismo Scott's Head Headland: vistas panorámicas 30 minutos (gratis)"
+      ],
+      "donde_comer": "Restaurantes frente al mar: pescado fresco, ensalada de pulpo, ceviche. 10-18 EUR por plato. Recomendado comer al atardecer con vista a Martinica.",
+      "consejo_local": "Scott's Head es pequeño y tranquilo. Los buceadores locales conocen los mejores spots; negocia directamente en la playa por mejores precios. Come en 'locally owned' antes que en cadenas turísticas.",
+      "plan_b_lluvia": "Lluvia ligera es frecuente pero pasa rápido. Visita el pueblo, mercado local o viaja 30 min a Soufrière para ver fumarolas geotérmicas.",
+      "keywords": [
+        "Scott's Head",
+        "Marine Reserve",
+        "Champagne Beach",
+        "snorkel",
+        "southwest peninsula"
+      ]
+    },
+    {
+      "id": "bataka-lake",
+      "nombre": "Bataka Lake",
+      "tipo": "naturaleza",
+      "region": "Centro-norte, parroquia de Saint John",
+      "descripcion": "Lago montañoso a 1100m rodeado de selva tropical intacta, con senderismo desafiante y vistas espectaculares. Destino para viajeros serios que buscan naturaleza pura sin infraestructura turística.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre a noviembre, febrero a marzo",
+      "como_llegar": "Desde Roseau: viaje en autobús a Pont Casse (45 min, 3 EUR) + trekking 2-3 horas. Recomendable guía local (30-40 EUR).",
+      "donde_dormir": {
+        "mochilero": "Alojamiento en Pont Casse o pueblos base: 35-50 EUR/noche",
+        "medio": "Pequeños lodges ecológicos: 60-85 EUR/noche",
+        "comfort": "No hay opciones comfort cerca; hospedarse en Roseau (25 km) y hacer día completo"
+      },
+      "que_hacer": [
+        "Bataka Lake Trek: senderismo desafiante 4-5 horas ida y vuelta (gratis con guía 35 EUR)",
+        "Observación de aves endémicas y cisnes (gratis)",
+        "Camping salvaje en zona controlada (gratis con permiso local)",
+        "Fotografía de flora tropical única (gratis)"
+      ],
+      "donde_comer": "No hay restaurantes en zona. Llevar comida y agua suficiente. En Pont Casse hay pequeñas tiendas básicas (5-8 EUR por almuerzo simple).",
+      "consejo_local": "Necesitas guía local obligatorio, no intentes ir solo. La ruta es difícil, exigente y fácil perderse. Lleva calzado de trekking serio.",
+      "plan_b_lluvia": "No es recomendable con lluvia por seguridad. Cambia planes a Trafalgar o Freshwater Lake que son más seguros.",
+      "keywords": [
+        "Bataka Lake",
+        "trekking",
+        "Pont Casse",
+        "mountain lake",
+        "hiking"
+      ]
+    },
+    {
+      "id": "morne-trois-pitons",
+      "nombre": "Morne Trois Pitons National Park",
+      "tipo": "naturaleza",
+      "region": "Centro-sur, parroquias múltiples",
+      "descripcion": "Parque nacional UNESCO con volcanes activos, lago hirviente, Valle de Desolación y bosque nublado. Centro de biodiversidad del Caribe con ecosistemas únicos y senderismo épico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre a noviembre, febrero a abril",
+      "como_llegar": "Desde Roseau en autobús a Laudat (20 min, 2 EUR) o Giraudel. Entrada parque: 5 EUR. Tour guiado: 40-60 EUR por persona.",
+      "donde_dormir": {
+        "mochilero": "Albergues en Laudat o Giraudel: 40-60 EUR/noche",
+        "medio": "Pequeños ecolodges: 70-100 EUR/noche",
+        "comfort": "Resorts en altitud: 120-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Boiling Lake Trail: trekking intenso 6-7 horas ida y vuelta (gratis + 5 EUR parque, guía recomendado 40 EUR)",
+        "Titou Gorge: baño en piscinas naturales (gratis + 5 EUR parque)",
+        "Freshwater Lake: senderismo fácil-medio, vistas de volcanes (gratis)",
+        "Valle de Desolación: paisaje volcánico único (incluido en tour Boiling Lake)"
+      ],
+      "donde_comer": "Pocas opciones dentro del parque. Laudat tiene pequeños restaurantes: 8-12 EUR. Llevar snacks y agua es esencial.",
+      "consejo_local": "Boiling Lake es físicamente demandante, requiere buena condición. Comienza muy temprano (6am) para terminar antes de lluvia. No intentes hacerlo sin guía.",
+      "plan_b_lluvia": "Lluvia es frecuente en altitud. Hace el trek más difícil pero posible. Cambia a Titou Gorge si hay mucha lluvia (más seguro).",
+      "keywords": [
+        "Morne Trois Pitons",
+        "Boiling Lake",
+        "volcán",
+        "UNESCO",
+        "trekking",
+        "Laudat",
+        "geothermal"
+      ]
+    },
+    {
+      "id": "calibishie",
+      "nombre": "Calibishie",
+      "tipo": "playa",
+      "region": "Noreste, parroquia de Saint Andrew",
+      "descripcion": "Pueblo costero tranquilo con playas de arena oscura, pueblos de pescadores auténticos y acceso a isla de Cabrits. Mezcla perfecta de playa, cultura local y naturaleza sin turismo masivo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Roseau en autobús local: 1 hora 15 minutos, 4-5 EUR. Coche alquiler: 50 km, 1.5 horas.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 45-65 EUR/noche",
+        "medio": "Pequeños hoteles: 75-105 EUR/noche",
+        "comfort": "Resorts boutique: 130-190 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Calibishie: baño y descanso en arena volcánica (gratis)",
+        "Snorkel en arrecifes locales (gratis o 20-30 EUR con operador)",
+        "Excursión a Cabrits Island: tour en bote (40-60 EUR)",
+        "Observación de pueblo de pescadores y vida local auténtica (gratis)"
+      ],
+      "donde_comer": "Restaurantes locales en primera línea de playa: pescado fresco, huevos de tortuga (cuando está en temporada), arroz y frijoles. 9-16 EUR por plato.",
+      "consejo_local": "Calibishie es más auténtica y menos turística que el sur. La gente es amable; pregunta por tours locales en pequeños negocios de playa, no en hoteles.",
+      "plan_b_lluvia": "Lluvia tropical pasa rápido. Explora el pueblo, mercado local o haz excursión corta a pueblos cercanos.",
+      "keywords": [
+        "Calibishie",
+        "northeast coast",
+        "fishing village",
+        "Cabrits Island",
+        "black sand beach"
+      ]
+    },
+    {
+      "id": "cabrits-national-park",
+      "nombre": "Cabrits National Park",
+      "tipo": "histórico",
+      "region": "Noroeste, parroquia de Saint Andrew",
+      "descripcion": "Parque histórico con ruinas de fuerte del siglo XVIII en península con vistas panorámicas al océano. Combina arqueología, naturaleza marina intacta y senderismo con vista de cuatro islas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Roseau en autobús a Portsmouth (1 hora, 4 EUR), luego taxi corto a Cabrits (5 min, 5 EUR) o caminando 30 min. Entrada parque: 5 EUR.",
+      "donde_dormir": {
+        "mochilero": "Albergues en Portsmouth o Calibishie: 45-65 EUR/noche",
+        "medio": "Pequeños hoteles en Portsmouth: 70-95 EUR/noche",
+        "comfort": "Resorts: 120-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Sendero Fuerte Shirley: trekking fácil-medio 1.5 horas, ruinas y vistas (gratis + 5 EUR parque)",
+        "Snorkel en zona marina protegida (gratis en parque o 25-35 EUR tour)",
+        "Observación de arrecife intacto desde tierra (gratis)",
+        "Fotografía de vistas panorámicas de cuatro islas (gratis)"
+      ],
+      "donde_comer": "Portsmouth (5 km) tiene restaurantes: 8-15 EUR. En zona de parque solo snacks. Callaloo soup es especialidad local.",
+      "consejo_local": "Lleva agua suficiente (no hay en parque). Fuerte Shirley tiene historia colonial importante. Termina trek antes de 2pm para evitar lluvia de tarde.",
+      "plan_b_lluvia": "Trek sigue siendo posible pero puede ser resbaladizo en ruinas. Lluvia ligera es normal. Snorkel es mejor con cielo despejado.",
+      "keywords": [
+        "Cabrits National Park",
+        "Fort Shirley",
+        "Portsmouth",
+        "archaeology",
+        "marine reserve"
+      ]
+    },
+    {
+      "id": "soufriere",
+      "nombre": "Soufrière",
+      "tipo": "naturaleza",
+      "region": "Suroeste, parroquia de Saint Mark",
+      "descripcion": "Pueblo geotérmico con fumarolas volcánicas activas, sulfataras y paisaje lunar. Uno de los pocos lugares en el Caribe donde puedes tocar volcanes activos y ver azufre siendo extraído como en el siglo XIX.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "septiembre a noviembre, febrero a abril",
+      "como_llegar": "Desde Roseau en autobús a Soufrière: 1 hora, 3-4 EUR. Coche: 30 km, 45 minutos. Entrada zona geotérmica: gratis, guía local recomendado (20-30 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Soufrière: 40-60 EUR/noche",
+        "medio": "Pequeños hoteles: 65-90 EUR/noche",
+        "comfort": "No hay comfort; hospedarse en Scott's Head (20 km) o Roseau"
+      },
+      "que_hacer": [
+        "Recorrido por fumarolas y campos de azufre (gratis o 20 EUR con guía)",
+        "Fotografía de paisaje volcánico único (gratis)",
+        "Baño en aguas termales naturales calientes (gratis)",
+        "Visita a pueblito auténtico sin turismo (gratis)"
+      ],
+      "donde_comer": "Pocas opciones, restaurants simples: 7-11 EUR. Comida criolla básica. Ir con hambre leve es recomendable.",
+      "consejo_local": "Soufrière es muy auténtico y poco turístico. Olor a azufre es fuerte. Usa zapatos cerrados resistentes, no chanclas. Respeta zona de minería activa.",
+      "plan_b_lluvia": "Funciona incluso con lluvia; el azufre no desaparece. Lluvia puede hacer piso resbaladizo pero atractivo sigue visible.",
+      "keywords": [
+        "Soufrière",
+        "sulfataras",
+        "volcán activo",
+        "geothermal",
+        "azufre"
+      ]
+    },
+    {
+      "id": "portsmouth",
+      "nombre": "Portsmouth",
+      "tipo": "ciudad",
+      "region": "Noroeste, parroquia de Saint Andrew",
+      "descripcion": "Segunda ciudad de Dominica con puerto histórico, mercado local vibrante y punto de partida para explorar norte. Puerto más accesible que Roseau con autenticidad y ambiente caribeño genuino.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Roseau en autobús local: 1 hora, 4 EUR. Coche alquiler: 40 km, 1 hora.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 45-65 EUR/noche",
+        "medio": "Pequeños hoteles: 70-95 EUR/noche",
+        "comfort": "Resorts: 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado local Portsmouth: observación y compra de frutas/vegetales frescos (gratis)",
+        "Paseo costero y espigón histórico (gratis)",
+        "Excursión a Cabrits National Park: 5 km (5 EUR entrada + tour 20-40 EUR)",
+        "Playa local: baño y descanso (gratis)"
+      ],
+      "donde_comer": "Mercado central: comida criolla auténtica 6-10 EUR. Restaurantes costeros: 10-16 EUR. Ackee and saltfish es plato típico, pruébalo en mercado.",
+      "consejo_local": "Portsmouth es real y sin filtro turístico. Mercado abre temprano (5am), ve antes de 8am para ver movimiento. Evita amanecer para fotos, que la gente trabaja.",
+      "plan_b_lluvia": "Lluvia es corta. Mercado sigue funcionando. Excursión a Cabrits es mejor con sol.",
+      "keywords": [
+        "Portsmouth",
+        "second city",
+        "mercado",
+        "puerto",
+        "north dominica"
+      ]
+    },
+    {
+      "id": "roseau",
+      "nombre": "Roseau",
+      "tipo": "ciudad",
+      "region": "Suroeste, capital",
+      "descripcion": "Capital histórica con arquitectura colonial, mercado local colorido y punto de entrada principal. Base logística para explorar Dominica con galerías de arte, museos y vida creativa local.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Punto de entrada por puerto de cruceros o barcos desde otras islas. Aeropuerto Douglas-Charles: 45 km (1 hora en taxi/autobús, 15-20 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses centro: 50-70 EUR/noche",
+        "medio": "Pequeños hoteles: 80-120 EUR/noche",
+        "comfort": "Resorts: 140-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado Central Roseau: compra, observación, gastronomía (gratis)",
+        "Museo Dominica: historia de isla (5 EUR entrada)",
+        "Botánico Gardens: paseo tranquilo entre plantas tropicales (5 EUR)",
+        "Artisan Fair: compra artesanía local y souvenirs (gratis entrada, compra opcional)"
+      ],
+      "donde_comer": "Restaurantes costeros: fresh fish, sopa de calaloo. Mercado: comida criolla 6-12 EUR. Restaurantes: 12-22 EUR. Zona de puerto es mejor para comer.",
+      "consejo_local": "Roseau es punto de partida, no destino para quedarse. Ve a mercado temprano, evita zona de puerto de noche. Usa Roseau para logística, explora el resto de isla.",
+      "plan_b_lluvia": "Lluvia frecuente pero ciudad sigue funcionando. Museos y galerías son cobertura. Mercado es casi todo bajo techo.",
+      "keywords": [
+        "Roseau",
+        "capital",
+        "puerto",
+        "Dominica City",
+        "mercado central",
+        "colonial"
+      ]
+    },
+    {
+      "id": "layou-river",
+      "nombre": "Layou River",
+      "tipo": "naturaleza",
+      "region": "Oeste, parroquia de Saint Paul",
+      "descripcion": "Río pictórico con tubing natural entre selva, piscinas de agua dulce y acceso a cascadas remotas. Actividad auténtica que los dominicanos locales disfrutan sin infraestructura turística pesada.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "septiembre a noviembre, febrero a mayo",
+      "como_llegar": "Desde Roseau en autobús a Layou village (45 min, 3 EUR). Tours locales desde playa o pregunta en pueblo: 25-35 EUR incluye transporte y tubing.",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento en Layou, dormir en Roseau (30 km) o zona centro: 50-70 EUR/noche",
+        "medio": "Pequeños hoteles cercanos: 75-100 EUR/noche",
+        "comfort": "Resorts en zona: 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "River tubing Layou: flotación 2-3 horas (25-35 EUR con operador local)",
+        "Senderismo a cascadas río arriba (gratis o 15 EUR con guía)",
+        "Baño en piscinas naturales de agua dulce (gratis)",
+        "Observación de flora tropical y aves (gratis)"
+      ],
+      "donde_comer": "Pocas opciones in situ. Comer antes en Roseau o llevar snacks. Pequeños puestos de comida local en pueblo: 6-10 EUR.",
+      "consejo_local": "Layou River es experiencia local genuina. Negocia directamente con operadores locales en Layou village, no con tour operators turísticos. Trae cámara en bolsa impermeable.",
+      "plan_b_lluvia": "Lluvia aumenta caudal del río, puede hacer tubing más emocionante. NO vayas si hay flood warning reciente.",
+      "keywords": [
+        "Layou River",
+        "tubing",
+        "river tubing",
+        "cascadas",
+        "água dulce",
+        "west coast"
+      ]
+    }
+  ]
+}

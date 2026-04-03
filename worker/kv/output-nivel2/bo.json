@@ -1,0 +1,336 @@
+{
+  "pais": "Bolivia",
+  "codigo": "bo",
+  "destinos": [
+    {
+      "id": "la-paz",
+      "nombre": "La Paz",
+      "tipo": "ciudad",
+      "region": "Departamento de La Paz",
+      "descripcion": "Capital administrativa de Bolivia a 3.650 metros de altitud, conocida por su mercado de brujería, teleféricos y arquitectura colonial. Punto de partida para la mayoría de viajeros independientes y hub de transporte nacional.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Aeropuerto Internacional de La Paz (El Alto) desde cualquier capital sudamericana: 1 hora de vuelo desde Bogotá (150 EUR), 2 horas desde Lima (120 EUR). Autobús desde frontera: 12-16 horas (40 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel zona San Miguel o Sopocachi: 12-18 EUR/noche",
+        "medio": "Hotel 3 estrellas Centro o Zona Sur: 40-60 EUR/noche",
+        "comfort": "Hotel boutique Zona Sur (Calacoto): 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Brujería (gratis)",
+        "Teleférico Línea Roja vistas ciudad (3 EUR)",
+        "Basílica de San Francisco (2 EUR)",
+        "Mirador Killi Killi (gratis)",
+        "Calle Jaén museos coloniales (5 EUR total)"
+      ],
+      "donde_comer": "Salteñas de desayuno (0,8 EUR), caldo de papa (1,50 EUR), anticuchos. Zona Sopocachi para restaurantes variados (5-12 EUR plato).",
+      "consejo_local": "Llega un día antes para aclimatarse a los 3.650 metros. El soroche (mal de altura) es real. Bebe té de hoja de coca al llegar.",
+      "plan_b_lluvia": "Visita museos: Museo Nacional de Etnografía, Museo de Oro, o galerías de arte en San Miguel.",
+      "keywords": [
+        "capital boliviana",
+        "La Paz city",
+        "ciudad del altiplano",
+        "Sopocachi",
+        "San Miguel",
+        "Zona Sur",
+        "teleféricos"
+      ]
+    },
+    {
+      "id": "salar-de-uyuni",
+      "nombre": "Salar de Uyuni",
+      "tipo": "desierto",
+      "region": "Departamento de Oruro y Potosí",
+      "descripcion": "Largest salt flat en el mundo (10.500 km²) con reflejos como espejo en época de lluvia. Destino icónico sudamericano accesible desde Uyuni pueblo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a febrero (lluvia, reflejos), julio a octubre (seco, blanco puro)",
+      "como_llegar": "Desde La Paz a Uyuni: autobús nocturno 10-12 horas (25 EUR) o avión 1,5 horas (80 EUR). Tours desde Uyuni: día completo 30-50 EUR por persona.",
+      "donde_dormir": {
+        "mochilero": "Uyuni pueblo, hostel: 12-16 EUR/noche",
+        "medio": "Hotel 3 estrellas Uyuni: 35-50 EUR/noche",
+        "comfort": "Hotel de sal Playa Blanca (dentro salar): 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour día completo Salar (30-50 EUR incluye guía, vehículo, gasolina)",
+        "Fotospots reflejos y perspectiva (incluido en tour)",
+        "Cementerio de Trenes (gratis, cerca Uyuni)",
+        "Ojos de agua caliente (incluido en tours)",
+        "Laguna colorada (tour 2 días: 80-100 EUR)"
+      ],
+      "donde_comer": "Uyuni: comida simple y económica (2-5 EUR). Tours incluyen almuerzo en pequeñas tiendas del salar (básico). Cena en pueblo: locro de papa, fideos (3-6 EUR).",
+      "consejo_local": "Contrata tours directamente en Uyuni, no desde La Paz (50% más caro). El reflejo es mejor después de lluvia. Lleva protección solar alta, el blanco refleja intensamente.",
+      "plan_b_lluvia": "Lluvia es buena (reflejos perfectos). Si hay tormenta peligrosa, visita Cementerio de Trenes o museos en Uyuni.",
+      "keywords": [
+        "Salar",
+        "salt flat",
+        "Uyuni",
+        "espejo de agua",
+        "desierto blanco",
+        "laguna colorada"
+      ]
+    },
+    {
+      "id": "lake-titicaca",
+      "nombre": "Lago Titicaca",
+      "tipo": "naturaleza",
+      "region": "Departamento de La Paz",
+      "descripcion": "Lago navegable más alto del mundo (3.810m) compartido con Perú. Copacabana es pueblo base para islas flotantes Uros y Isla del Sol, ambas accesibles en día.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a noviembre",
+      "como_llegar": "Desde La Paz a Copacabana: autobús 3,5-4 horas (8 EUR). Desde Puno (Perú): minibús 3 horas (6 EUR). Tours a islas desde Copacabana: día completo 25-40 EUR.",
+      "donde_dormir": {
+        "mochilero": "Copacabana, hostel Lakeside: 10-15 EUR/noche",
+        "medio": "Hotel 3 estrellas Copacabana: 30-45 EUR/noche",
+        "comfort": "Hotel frente lago Copacabana: 60-85 EUR/noche"
+      },
+      "que_hacer": [
+        "Islas flotantes Uros (tour 4-5 horas: 25 EUR, viaje en bote casero)",
+        "Isla del Sol trekking y ruinas (tour día: 35 EUR, incluye bote)",
+        "Basílica de Copacabana (2 EUR)",
+        "Huma Marca ruinas (gratis, 30 min camino)",
+        "Paseo muelle Copacabana (gratis)"
+      ],
+      "donde_comer": "Trucha fresca del lago (6-10 EUR). Copacabana zona puerto: restaurantes turísticos (4-8 EUR). Desayuno café + pan (1,50 EUR).",
+      "consejo_local": "Uros es turístico pero vale la pena: la cultura uru es real. Negocia precio en puerto (grupos pequeños: 20-30 EUR). Isla del Sol mejor sin tour: baja en ferry y explora libremente.",
+      "plan_b_lluvia": "Visita Basílica Copacabana, galerías locales o come trucha en restaurantes del puerto.",
+      "keywords": [
+        "Titicaca",
+        "Copacabana",
+        "islas flotantes",
+        "Uros",
+        "Isla del Sol",
+        "lago andino",
+        "Puno frontera"
+      ]
+    },
+    {
+      "id": "sucre",
+      "nombre": "Sucre",
+      "tipo": "histórico",
+      "region": "Departamento de Chuquisaca",
+      "descripcion": "Capital constitucional con arquitectura colonial perfectamente preservada, iglesias blancas y plazas tranquilas. Punto base para dinosaurios en Cal Orko y pueblos indígenas cercanos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde La Paz: autobús nocturno 11-13 horas (20 EUR) o vuelo 1,5 horas (80 EUR). Desde Cochabamba: autobús 5-6 horas (15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Centro histórico hostel: 11-16 EUR/noche",
+        "medio": "Hotel 3 estrellas Plaza: 35-50 EUR/noche",
+        "comfort": "Hotel Heritage colonial: 70-95 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo Centro Histórico y plazas (gratis)",
+        "Catedral Metropolitana (1,50 EUR)",
+        "Cal Orko huellas dinosaurio (tour 3-4 horas: 25 EUR)",
+        "Museo de la Recoleta (2 EUR)",
+        "Iglesia San Felipe (1 EUR)"
+      ],
+      "donde_comer": "Empanadas salteñas (0,80 EUR), carne a la olla, queso local. Zona Plaza 25 de Mayo restaurantes (4-8 EUR). Cafés coloniales para café + pastel (2-4 EUR).",
+      "consejo_local": "Sucre es la ciudad más bonita de Bolivia pero poco concurrida. Camina sin prisa. El tour Cal Orko vale la pena: huellas de dinosaurio reales en cantera activa.",
+      "plan_b_lluvia": "Museos (Recoleta, Textil, Etnografía) y cafés coloniales para quedarse dentro.",
+      "keywords": [
+        "Sucre",
+        "capital constitucional",
+        "blanca de América",
+        "sucre city",
+        "Cal Orko",
+        "colonial"
+      ]
+    },
+    {
+      "id": "santa-cruz-de-la-sierra",
+      "nombre": "Santa Cruz de la Sierra",
+      "tipo": "ciudad",
+      "region": "Departamento de Santa Cruz",
+      "descripcion": "Ciudad comercial más grande y cálida de Bolivia, punto acceso a Jesuitas misiones, Noel Kempff Mercado y Amazonia. Menos turística que La Paz pero nodo importante.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde La Paz: vuelo 1,5 horas (70 EUR) o autobús 19-20 horas (30 EUR). Hub para Madidi, Pampas, misiones Jesuitas.",
+      "donde_dormir": {
+        "mochilero": "Zona Centro hostel: 13-18 EUR/noche",
+        "medio": "Hotel 3 estrellas: 40-55 EUR/noche",
+        "comfort": "Hotel 4 estrellas Zona Norte: 75-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Catedral Metropolitana (gratis)",
+        "Paseo Parque Vaca Diez (gratis)",
+        "Museo de Arte Contemporáneo MAAC (3 EUR)",
+        "Plaza 24 de Septiembre paseo (gratis)",
+        "Tour misiones Jesuitas (días completos: 50-80 EUR)"
+      ],
+      "donde_comer": "Asado de carne (plato nacional), arroz con queso. Zona Centro mercados (2-4 EUR). Restaurantes modernos Zona Norte (6-12 EUR).",
+      "consejo_local": "Santa Cruz es hub pero no destino principal. Úsala como base para excursiones Jesuitas o Amazonia. La ciudad en sí es plana y calurosa.",
+      "plan_b_lluvia": "Museos y mercados cubiertos. Permanece en hotel o viaja día siguiente.",
+      "keywords": [
+        "Santa Cruz",
+        "SCZ",
+        "ciudad comercial",
+        "Jesuitas",
+        "Amazonia puerta"
+      ]
+    },
+    {
+      "id": "madidi-amazonia",
+      "nombre": "Parque Nacional Madidi / Amazonia",
+      "tipo": "naturaleza",
+      "region": "Departamento de La Paz",
+      "descripcion": "Una de las zonas más biodiversas del planeta: selva virgen, ríos, jaguares, anacondas. Accesible desde Rurrenabaque con tours de 3-7 días en alojamiento tipo lodge.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio a octubre (agua baja, fauna más visible)",
+      "como_llegar": "Desde La Paz a Rurrenabaque: vuelo 45 min (100 EUR) o autobús 18-20 horas (30 EUR). Tours desde Rurrenabaque: 3 días 200-300 EUR (incluye transporte río, alojamiento, guía).",
+      "donde_dormir": {
+        "mochilero": "Lodge básico selva: 60-80 EUR/noche (tours incluyen)",
+        "medio": "Lodge confort selva: 80-120 EUR/noche",
+        "comfort": "Lodge premium (Chalalan): 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour selva 3-4 días con guía (200-300 EUR incluye alojamiento, comidas, transporte río)",
+        "Avistamiento fauna (jaguares, anacondas, monos, aves): incluido en tours",
+        "Pesca pirañas (incluido)",
+        "Caminatas nocturnas (incluido)",
+        "Baño río seguro (incluido)"
+      ],
+      "donde_comer": "Comida típica amazónica en lodges: pescado, plátano, arroz. Tours incluyen todas las comidas. Rurrenabaque: pollo (3 EUR), pescado (4-6 EUR).",
+      "consejo_local": "Contrata tours en Rurrenabaque directamente con operadores locales (Madidi, Yacumá, Magri tours), no desde La Paz. Lleva repelente fuerte, ropa impermeable y medicinas diarrea.",
+      "plan_b_lluvia": "Lluvia es normal en Amazonia. Tours operan igual. Trae poncho impermeable.",
+      "keywords": [
+        "Madidi",
+        "Rurrenabaque",
+        "Amazonia boliviana",
+        "selva",
+        "Parque Nacional",
+        "biodiversidad"
+      ]
+    },
+    {
+      "id": "cochabamba",
+      "nombre": "Cochabamba",
+      "tipo": "ciudad",
+      "region": "Departamento de Cochabamba",
+      "descripcion": "Ciudad central, punto base para Parque Tunari, Cristo de la Concordia (tercera estatua más grande mundo) y mercados indígenas. Menos turística que La Paz, vida local auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde La Paz: autobús 4-5 horas (12 EUR) o vuelo 45 min (70 EUR). Desde Sucre: autobús 5-6 horas (15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Centro hostel: 10-15 EUR/noche",
+        "medio": "Hotel 3 estrellas Zona Centro: 30-45 EUR/noche",
+        "comfort": "Hotel 4 estrellas: 65-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Cristo de la Concordia mirador (3 EUR teleférico, incluye vista)",
+        "Parque Tunari trekking (gratis, sin guía o tour 25 EUR)",
+        "Mercado La Cancha (gratis paseo, compra artesanía)",
+        "Paseo Prado zona central (gratis)",
+        "Iglesia San Francisco (1 EUR)"
+      ],
+      "donde_comer": "Cazuela (guiso local), huminta (maíz envuelto), anticuchos. Mercado La Cancha comida local (2-3 EUR). Restaurantes Prado (4-8 EUR).",
+      "consejo_local": "Cochabamba es ciudad viva sin ajetreo turístico. El Cristo es obligatorio pero ve en teleférico (evita caminar 1 hora con peso). Mercado La Cancha es caótico pero auténtico.",
+      "plan_b_lluvia": "Mercados cubiertos, iglesias, museos coloniales.",
+      "keywords": [
+        "Cochabamba",
+        "Cristo de la Concordia",
+        "Tunari",
+        "mercado",
+        "zona central Bolivia"
+      ]
+    },
+    {
+      "id": "potosi",
+      "nombre": "Potosí",
+      "tipo": "histórico",
+      "region": "Departamento de Potosí",
+      "descripcion": "Ciudad minera histórica a 3.967 metros, una vez la ciudad más rica del mundo. Minas de plata activas visitables con tour. Arquitectura colonial decadente, atractivo para historia.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Sucre: autobús 3-4 horas (12 EUR). Desde La Paz: autobús 12-14 horas (25 EUR). Tours a minas: 3-4 horas (25-35 EUR incluye equipo, guía, minero locales).",
+      "donde_dormir": {
+        "mochilero": "Centro histórico hostel: 10-15 EUR/noche",
+        "medio": "Hotel 3 estrellas: 30-45 EUR/noche",
+        "comfort": "Hotel colonial: 60-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour minas de plata activas (25-35 EUR, equipo incluido, 3-4 horas)",
+        "Monumento Cerro de Potosí mirador (gratis, camino 1 hora o teleférico 2 EUR)",
+        "Iglesia San Francisco (2 EUR)",
+        "Museo Nacional de la Moneda (2 EUR)",
+        "Paseo Centro Histórico (gratis)"
+      ],
+      "donde_comer": "Empanadas de plata (3 EUR), caldo de papa, queso. Comida simple (2-4 EUR). Restaurantes turísticos zona central (4-8 EUR).",
+      "consejo_local": "Tours minas son reales y algo crudos: trabajadores de verdad, condiciones difíciles. Negocia directamente con mineros sobre ganancias justas. Lleva caramelos/dinero extra para repartir entre mineros.",
+      "plan_b_lluvia": "Museos y iglesias. El tour minas a veces se cancela por seguridad en lluvia fuerte.",
+      "keywords": [
+        "Potosí",
+        "minas plata",
+        "ciudad minera",
+        "cerro potosi",
+        "histórico",
+        "altitud"
+      ]
+    },
+    {
+      "id": "oruro",
+      "nombre": "Oruro",
+      "tipo": "cultural",
+      "region": "Departamento de Oruro",
+      "descripcion": "Ciudad minera en altiplano, famosa por Carnaval de Oruro (Patrimonio UNESCO, febrero-marzo) con danzas folclóricas. Fuera de Carnaval es ciudad tranquila.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "febrero a marzo (Carnaval), mayo a octubre (resto año)",
+      "como_llegar": "Desde La Paz: autobús 3-4 horas (8 EUR) o tren (histórico pero lento). Desde Cochabamba: autobús 4 horas (12 EUR). Durante Carnaval: transporte saturado, reserva con anticipación.",
+      "donde_dormir": {
+        "mochilero": "Hostel Centro: 12-17 EUR/noche",
+        "medio": "Hotel 3 estrellas: 35-50 EUR/noche",
+        "comfort": "Hotel 4 estrellas: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Carnaval Oruro febrero-marzo (entrada 30-100 EUR según zona)",
+        "Santuario Virgen del Socavón iglesia (1 EUR)",
+        "Museo de la Etnografía (2 EUR)",
+        "Paseo mina Ito Ito (tour guiado 20 EUR)",
+        "Mercado tradicional (gratis paseo)"
+      ],
+      "donde_comer": "Charque (carne seca), picante de papa. Comida local (2-4 EUR). Restaurantes centro (4-8 EUR). Durante Carnaval: precios 2-3x más caros.",
+      "consejo_local": "Carnaval es el único motivo real para visitar. Si no es Carnaval, pasa de largo hacia La Paz o Cochabamba. La ciudad sin fiesta es gris y peligrosa después oscuro.",
+      "plan_b_lluvia": "Lluvia no afecta Carnaval (es espectáculo callejero). Otros días: museos.",
+      "keywords": [
+        "Oruro",
+        "Carnaval",
+        "Patrimonio UNESCO",
+        "danzas",
+        "Socavón",
+        "altiplano"
+      ]
+    },
+    {
+      "id": "tiwanaku",
+      "nombre": "Tiwanaku",
+      "tipo": "histórico",
+      "region": "Departamento de La Paz",
+      "descripcion": "Ruinas de civilización preincaica (1200 BCE - 1000 CE) en altiplano. Templo del Sol, Puerta del Sol y monolitos impactantes. Sitio Patrimonio UNESCO, accesible como excursión día desde La Paz.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde La Paz: autobús a pueblo Tiwanaku 1,5 horas (3 EUR), tours desde agencias La Paz (30-50 EUR día completo incluye transporte, guía, entrada).",
+      "donde_dormir": {
+        "mochilero": "La Paz base (Tiwanaku día completo)",
+        "medio": "La Paz base",
+        "comfort": "La Paz base o lodge Tiwanaku rústico 40-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas Templo del Sol (entrada 10 EUR)",
+        "Puerta del Sol (incluida entrada)",
+        "Monolitos y esculturas (incluidas)",
+        "Museo Arqueológico sitio (2 EUR adicional)",
+        "Tour guiado información civilización Tiahuanaco (incluido en tours)"
+      ],
+      "donde_comer": "Pueblo Tiwanaku restaurantes simples (3-5 EUR). Base en La Paz para mejor comida.",
+      "consejo_local": "Contrata tour desde La Paz (menos caro que ir solo): incluye transporte, guía bilingüe, paradas arqueológicas extra (Puma Punku). Las ruinas son impactantes pero necesitan contexto histórico (guía vale la pena).",
+      "plan_b_lluvia": "Ruinas se visitan igual. Lluvia añade atmósfera mística.",
+      "keywords": [
+        "Tiwanaku",
+        "Tiahuanaco",
+        "ruinas",
+        "Puerta del Sol",
+        "preincaica",
+        "altiplano"
+      ]
+    }
+  ]
+}

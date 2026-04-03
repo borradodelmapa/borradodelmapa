@@ -1,0 +1,354 @@
+{
+  "pais": "Somalia",
+  "codigo": "so",
+  "destinos": [
+    {
+      "id": "mogadishu",
+      "nombre": "Mogadiscio",
+      "tipo": "ciudad",
+      "region": "Banaadir",
+      "descripcion": "Capital y mayor ciudad de Somalia, ubicada en la costa del Océano Índico. Centro político, económico y cultural del país con mercados tradicionales, playas y arquitectura colonial italiana. Punto de entrada principal para viajeros independientes.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "vuelo internacional desde Nairobi (2h, 200-400 EUR), Addis Abeba (2h, 180-350 EUR) o Djibouti (1.5h, 150-300 EUR)",
+      "donde_dormir": {
+        "mochilero": "hostales y guesthouses en Hamar: 25-40 EUR/noche",
+        "medio": "hoteles boutique en Lido Beach: 60-100 EUR/noche",
+        "comfort": "resorts de seguridad gestionada (Serena, Jamal): 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasear por el Mercado Central (Bakaara Market) - gratis",
+        "Playa de Lido Beach - baño y relajación (gratis)",
+        "Monumento del Faro - vistas al puerto (gratis)",
+        "Museo Nacional de Somalia - historia y arte (5-10 EUR)",
+        "Casco antiguo (Hamar) - arquitectura colonial (gratis)"
+      ],
+      "donde_comer": "Pescado fresco en Lido Beach, injera y platos etíopes en barrio Hamar. Rango: 3-8 EUR por comida principal. Evitar vendedores callejeros, comer en restaurantes establecidos.",
+      "consejo_local": "Contrata un guía local acreditado para moverte por la ciudad; la seguridad mejora significativamente con acompañamiento. Los taxis sin taxímetro son negociables.",
+      "plan_b_lluvia": "Visitar museos interiores, mercados cubiertos o cafeterías tradicionales para tomar té y café somalí",
+      "alerta_seguridad": "Mogadiscio ha mejorado en seguridad pero sigue siendo ciudad de alto riesgo. Requiere viaje con operadores autorizados, evitar zonas sur y oeste, no circular de noche, mantener perfil bajo.",
+      "keywords": [
+        "Mogadiscio",
+        "Mogadishu",
+        "capital Somalia",
+        "Hamar",
+        "Lido Beach",
+        "Bakaara",
+        "puerto"
+      ]
+    },
+    {
+      "id": "bosaso",
+      "nombre": "Boosaaso",
+      "tipo": "ciudad",
+      "region": "Bari (Puntlandia)",
+      "descripcion": "Puerto comercial estratégico en la costa nororiental con mercados vibrantes y acceso al Golfo de Adén. Menos restrictivo que Mogadiscio con buena infraestructura hotelera y punto de partida para exploraciones costeras.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "vuelo desde Mogadiscio (1h, 120-200 EUR), Addis Abeba (3h escalas, 250-400 EUR) o Yemen vecino (ferry ilegal, no recomendado)",
+      "donde_dormir": {
+        "mochilero": "guesthouses simples zona puerto: 20-35 EUR/noche",
+        "medio": "hoteles locales (Safari, Taaj): 50-80 EUR/noche",
+        "comfort": "hoteles con seguridad privada: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por el Puerto (Bosaso Port) - observar tráfico marino (gratis)",
+        "Mercado de Pescado y Especias - comercio tradicional (gratis)",
+        "Playa de Bosaso - baño y puestas de sol (gratis)",
+        "Monumento de los Mártires - perspectiva local (gratis)",
+        "Isla de Abd - excursión en bote (20-40 EUR por grupo)"
+      ],
+      "donde_comer": "Langosta y pez espada frescos en restaurantes del puerto. Rango: 4-10 EUR. Zona recomendada: paseo marítimo (corniche).",
+      "consejo_local": "Los precios en hoteles bajan significativamente fuera de temporada (julio-septiembre). El puerto es más seguro que el interior; evita alejarte demasiado de zonas establecidas.",
+      "plan_b_lluvia": "Mercados interiores, cafeterías con vistas al puerto, o simplemente descansar en hotel con seguridad",
+      "alerta_seguridad": "Boosaaso es más estable que Mogadiscio pero sigue siendo zona con riesgos. Requiere precauciones: no circular de noche, evitar disputas entre clanes, mantener discretión.",
+      "keywords": [
+        "Boosaaso",
+        "Bosaso",
+        "Bari",
+        "Puntlandia",
+        "puerto",
+        "Golfo Aden",
+        "corniche"
+      ]
+    },
+    {
+      "id": "kismayo",
+      "nombre": "Kismayo",
+      "tipo": "ciudad",
+      "region": "Bajo Juba",
+      "descripcion": "Puerto histórico en la costa sur con playas prístinas y patrimonio swahili. Menos visitado que Mogadiscio con ambiente más relajado y autenticidad cultural, aunque requiere más cautela de seguridad.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "enero a marzo",
+      "como_llegar": "vuelo desde Mogadiscio (1.5h, 100-180 EUR) o viaje por carretera (8-10h, 50-100 EUR en minibús compartido)",
+      "donde_dormir": {
+        "mochilero": "casas de huéspedes locales: 15-30 EUR/noche",
+        "medio": "hoteles con patio (Kismayo, Baydabo): 40-70 EUR/noche",
+        "comfort": "resorts privados con seguridad: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Fortaleza de Kismayo - ruinas coloniales (gratis)",
+        "Playas de arena blanca - baño y descanso (gratis)",
+        "Mercado tradicional - vida local y artesanías (gratis)",
+        "Arrecife de coral - snorkel (30-50 EUR con operador local)",
+        "Isla Amu - excursión costera (40-60 EUR)"
+      ],
+      "donde_comer": "Pez espada, langosta y mariscos frescos. Rango: 3-7 EUR. Restaurantes básicos pero auténticos en mercado y waterfront.",
+      "consejo_local": "Llega con contactos locales o a través de tour operator; el viaje independiente puro aquí es más arriesgado. Los lugareños son generalmente acogedores si muestras respeto.",
+      "plan_b_lluvia": "Explorar ruinas interiores, mercados cubiertos, o descansar en hotel tradicional con stories de la gente local",
+      "alerta_seguridad": "Kismayo ha mejorado pero requiere máxima cautela. Zona de históricos conflictos. Viaja solo con guía de confianza, evita la noche, no fotografíes sin permiso.",
+      "keywords": [
+        "Kismayo",
+        "Kismaayo",
+        "Bajo Juba",
+        "fortaleza",
+        "playas",
+        "puerto swahili",
+        "coral"
+      ]
+    },
+    {
+      "id": "hargeisa",
+      "nombre": "Hargeisa",
+      "tipo": "ciudad",
+      "region": "Woqooyi Galbeed (Somalilandia)",
+      "descripcion": "Capital de Somalilandia (región autónoma) en el noroeste, más segura y desarrollada que el sur. Centro administrativo, comercial y cultural con mercados dinámicos, museos y vida moderna. Puerta de entrada a la región norte.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "vuelo desde Addis Abeba (2h, 180-300 EUR), Djibouti (1.5h, 150-250 EUR) o Mogadiscio (2h, 150-250 EUR). Carretera desde Djibouti (12h, 40-80 EUR minibús)",
+      "donde_dormir": {
+        "mochilero": "guesthouses barrio Aadan Cadaade: 20-35 EUR/noche",
+        "medio": "hoteles con servicios (Damal, Ambassador): 50-85 EUR/noche",
+        "comfort": "hoteles premium (Jamal Palace, Mansions): 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional de Somalilandia - historia regional (3-5 EUR)",
+        "Mercado de Sheikh Ali Maye - comercio tradicional y artesanías (gratis)",
+        "Paseo por el centro - arquitectura y vida moderna (gratis)",
+        "Monumento de la Independencia - símbolo local (gratis)",
+        "Mirador de Arda - vistas panorámicas (gratis)"
+      ],
+      "donde_comer": "Carne a la parrilla, injera, platos etíopes y somalíes. Rango: 2-6 EUR. Zona: mercado principal y avenida central.",
+      "consejo_local": "Hargeisa es significativamente más segura que el sur. Puedes moverte con menos restricciones. Los somalilanders están orgullosos de su autonomía; respeta su identidad política.",
+      "plan_b_lluvia": "Museo interior, cafeterías y restaurantes, compras en mercado cubierto",
+      "keywords": [
+        "Hargeisa",
+        "Somalilandia",
+        "Woqooyi Galbeed",
+        "noroeste",
+        "mercado Sheikh Ali Maye",
+        "museo",
+        "capital regional"
+      ]
+    },
+    {
+      "id": "berbera",
+      "nombre": "Berbera",
+      "tipo": "playa",
+      "region": "Togdheer (Somalilandia)",
+      "descripcion": "Puerto costero histórico en el Golfo de Adén con playas tranquilas y patrimonio comercial ancestral. Destino de playa auténtico lejos de masificación, ideal para relajación y exploración de arquitectura colonial.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre a abril",
+      "como_llegar": "desde Hargeisa en minibús (3-4h, 10-20 EUR), Addis Abeba con vuelo (2h escala, 200-350 EUR) o carretera desde Djibouti (20h, 60-100 EUR)",
+      "donde_dormir": {
+        "mochilero": "casas de huéspedes junto al puerto: 15-30 EUR/noche",
+        "medio": "hoteles costeros (Berbera, Red Sea): 40-70 EUR/noche",
+        "comfort": "resorts privados con piscina: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas del Golfo de Adén - baño y relax (gratis)",
+        "Puerto antiguo - arquitectura colonial (gratis)",
+        "Mercado tradicional - comercio local (gratis)",
+        "Snorkel en arrecifes cercanos (25-45 EUR con guide)",
+        "Excursión a las montañas Ogo - senderismo (40-60 EUR)"
+      ],
+      "donde_comer": "Pez espada, langosta, camarones frescos. Rango: 3-6 EUR. Restaurantes frente al mar con ambiente local.",
+      "consejo_local": "Berbera es tranquila pero menos infraestructurada que Hargeisa. Lleva efectivo (no hay cajeros), negocia precios con calma, y disfruta del ritmo lento.",
+      "plan_b_lluvia": "Explorar ruinas y arquitectura colonial interior, mercados, o simplemente descansar en playa con lluvia (paradójicamente bonito)",
+      "keywords": [
+        "Berbera",
+        "Golfo Aden",
+        "playa",
+        "puerto colonial",
+        "Somalilandia",
+        "arrecife coral",
+        "montañas Ogo"
+      ]
+    },
+    {
+      "id": "laascaanood",
+      "nombre": "Laascaanood",
+      "tipo": "ciudad",
+      "region": "Sool (Puntlandia/zona disputada)",
+      "descripcion": "Ciudad histórica del interior con fuerte importancia cultural y comercial. Mercados tradicionales, pozo histórico y puerta al desierto somalí. Destino auténtico para viajeros que buscan experiencia fuera de ruta.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "desde Hargeisa en minibús (4-5h, 15-25 EUR) o desde Bosaso (carretera 8h, 20-30 EUR)",
+      "donde_dormir": {
+        "mochilero": "guesthouses básicas: 12-25 EUR/noche",
+        "medio": "hoteles simples con servicios: 30-50 EUR/noche",
+        "comfort": "no hay opciones de comfort; máximo hoteles con seguridad privada: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Pozo Laas Caanood - sitio histórico icónico (gratis)",
+        "Mercado tradicional - productos locales y ganadería (gratis)",
+        "Museos comunitarios - historia local (2-3 EUR)",
+        "Paseos por el desierto circundante (guía recomendado, 30-50 EUR/día)",
+        "Interacción con nómadas locales (gratis, si hablas árabe/somalí)"
+      ],
+      "donde_comer": "Carne a la parrilla, té con canela, productos lácteos nómadas. Rango: 2-4 EUR. Restaurantes básicos sin menú escrito.",
+      "consejo_local": "Laascaanood está en zona históricamente disputada pero ha mejorado. Viaja con referencias locales. Los nómadas y mercaderes son hospitalarios pero requieren respeto cultural.",
+      "plan_b_lluvia": "Día interior en guesthouses, té y conversación, explorar mercado cubierto",
+      "alerta_seguridad": "Zona fronteriza con tensiones políticas residuales. Requiere discreción total. Evita fotos de militares, no hables de política, mantén perfil bajo.",
+      "keywords": [
+        "Laascaanood",
+        "Laas Caanood",
+        "Sool",
+        "pozo histórico",
+        "desierto",
+        "interior",
+        "mercado nómada"
+      ]
+    },
+    {
+      "id": "galkacyo",
+      "nombre": "Galkacyo",
+      "tipo": "ciudad",
+      "region": "Mudug (frontera Puntlandia-Somalia Central)",
+      "descripcion": "Ciudad estratégica en la costa central, dividida administrativamente pero punto de tránsito importante. Acceso a playas norteñas, mercados animados y punto de conexión entre norte y sur del país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "vuelo desde Mogadiscio (1.5h, 100-180 EUR) o Bosaso (1h, 80-150 EUR). Minibús desde Hargeisa (6-7h, 25-40 EUR)",
+      "donde_dormir": {
+        "mochilero": "guesthouses en zona de mercado: 18-32 EUR/noche",
+        "medio": "hoteles locales (Samara, Central): 45-75 EUR/noche",
+        "comfort": "resorts con seguridad: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de Mudug - baño y paseos (gratis)",
+        "Mercado central - vida comercial auténtica (gratis)",
+        "Puerto de Galkacyo - observar tráfico marino (gratis)",
+        "Excursión a aldeas costeras cercanas (20-40 EUR con transporte)",
+        "Avistamiento de fauna marina (camarones, peces grandes) - snorkel (30-50 EUR)"
+      ],
+      "donde_comer": "Mariscos, carne, platos etíopes. Rango: 3-6 EUR. Restaurantes básicos pero seguros en zona céntrica.",
+      "consejo_local": "Galkacyo tiene división administrativa visible pero es tranquila para movimiento. La gente es hospitalaria. Negocia todos los precios de transporte antes de subir.",
+      "plan_b_lluvia": "Mercados interiores, cafeterías, descanso en hotel",
+      "alerta_seguridad": "Galkacyo es más segura que sur pero requiere cautela estándar. La división política es visible pero pacífica. Evita temas políticos.",
+      "keywords": [
+        "Galkacyo",
+        "Galkcayo",
+        "Mudug",
+        "costa central",
+        "playas",
+        "puerto",
+        "mercado"
+      ]
+    },
+    {
+      "id": "jowhar",
+      "nombre": "Jowhar",
+      "tipo": "rural",
+      "region": "Banaadir/Shabeellaha Dhexe",
+      "descripcion": "Ciudad pequeña entre Mogadiscio y el interior, centro agrícola y fluvial del Shabeelle. Destino para viajeros que quieren experiencia rural sin alejarse demasiado de seguridad relativa. Mercados de frutas y verduras, ríos y vida tradicional.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a marzo",
+      "como_llegar": "minibús desde Mogadiscio (2-3h, 8-15 EUR)",
+      "donde_dormir": {
+        "mochilero": "casas de huéspedes familiares: 12-22 EUR/noche",
+        "medio": "hoteles rurales: 30-50 EUR/noche",
+        "comfort": "opciones limitadas; máximo hoteles con patio: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Río Shabeelle - paseos a orilla (gratis)",
+        "Mercado agrícola local - frutas y verduras frescas (gratis)",
+        "Paseos por plantaciones y huertos (gratis con permiso)",
+        "Visitas a aldeas vecinas - vida rural (gratis)",
+        "Interacción con agricultores y mercaderes locales (gratis)"
+      ],
+      "donde_comer": "Frutas tropicales, verduras locales, platos de arroz. Rango: 2-4 EUR. Comedores comunitarios sin lujos pero auténticos.",
+      "consejo_local": "Jowhar es un respiro rural genuino. La gente es más casual que en ciudades. Aprende algunas palabras en somalí; abre puertas. El río es hermoso pero pregunta sobre seguridad antes de nadar.",
+      "plan_b_lluvia": "Interior de mercados, casas locales, aprender sobre cultivos",
+      "keywords": [
+        "Jowhar",
+        "Jowar",
+        "Shabeelle",
+        "río",
+        "agricultura",
+        "rural",
+        "mercado agrícola"
+      ]
+    },
+    {
+      "id": "kismayo-peninsula",
+      "nombre": "Península de Ras Kamboni",
+      "tipo": "naturaleza",
+      "region": "Bajo Juba",
+      "descripcion": "Parque nacional y reserva marina en el extremo sur de Somalia con playas vírgenes, manglares y biodiversidad única. Ecosistema protegido ideal para observación de vida marina y naturaleza intacta.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a marzo",
+      "como_llegar": "desde Kismayo en bote (1-2h, 50-80 EUR) o en lancha desde Mogadiscio con tour operator (4-5h, 150-250 EUR)",
+      "donde_dormir": {
+        "mochilero": "campamentos básicos o alojamiento en lodges simples: 30-50 EUR/noche",
+        "medio": "lodge ecoturismo: 70-100 EUR/noche",
+        "comfort": "resorts marineros con seguridad: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecifes de coral intactos (40-60 EUR con guía)",
+        "Paseos en kayak por manglares (30-50 EUR)",
+        "Avistamiento de tortugas marinas (seasonal, gratis si suerte)",
+        "Playa virgen - baño y relajación (gratis)",
+        "Observación de pájaros y fauna marina (gratis con guía)"
+      ],
+      "donde_comer": "Pescado fresco a la parrilla, ceviche. Rango: 4-8 EUR. Preparado en lodges o campamentos.",
+      "consejo_local": "Ras Kamboni requiere acceso mediante tour operator; el viaje independiente no es viable. La mejor época es después de lluvias cortas cuando el agua es calmada.",
+      "plan_b_lluvia": "Manglares caminables incluso con lluvia, exploración interior",
+      "alerta_seguridad": "Acceso restringido por protección de parque y seguridad. Solo viaja con operadores autorizados. La zona es aislada pero relativamente más segura bajo supervisión.",
+      "keywords": [
+        "Ras Kamboni",
+        "parque nacional",
+        "reserva marina",
+        "manglares",
+        "coral",
+        "biodiversidad",
+        "Bajo Juba"
+      ]
+    },
+    {
+      "id": "las-anod-montanas",
+      "nombre": "Montañas Ogo-Harar",
+      "tipo": "montaña",
+      "region": "Somalilandia/Etiopía frontera",
+      "descripcion": "Cadena montañosa que separa Somalia de Etiopía con paisajes espectaculares, aldeas en altura y biodiversidad única. Senderismo en terrenos vírgenes, vistas panorámicas del Cuerno de África y encuentros con comunidades pastorales de montaña.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "desde Hargeisa o Laascaanood con guía local y transporte 4x4 (4-6h, 60-100 EUR)",
+      "donde_dormir": {
+        "mochilero": "campamentos básicos o casas de pastores: 15-30 EUR/noche",
+        "medio": "lodges de montaña rústicos: 40-70 EUR/noche",
+        "comfort": "sin opciones; máximo alojamiento seguro en pueblos base"
+      },
+      "que_hacer": [
+        "Senderismo de altura - vistas panorámicas (gratis con guía)",
+        "Visitas a aldeas de montaña - vida pastural (gratis)",
+        "Observación de fauna alpina (hienas, antílopes) (gratis)",
+        "Fotografía de paisajes (gratis)",
+        "Recolección de hierbas aromáticas con lugareños (educativo, gratis)"
+      ],
+      "donde_comer": "Carne de cabra, leche fresca, productos lácteos nómadas. Rango: 2-4 EUR. Comidas preparadas en aldeas o campamentos.",
+      "consejo_local": "Las montañas Ogo requieren guía experimentado obligatoriamente. El acceso es de verdadera aventura; caminos no marcados, clima variable. Vale cada minuto de esfuerzo.",
+      "plan_b_lluvia": "Clima montañoso impredecible; aclimatación y descanso en aldeas, exploración de cuevas si es seguro",
+      "alerta_seguridad": "Zona remota fronteriza. Requiere permiso local y guía de confianza. Terreno escarpado y aislado: buen estado físico esencial.",
+      "keywords": [
+        "montañas Ogo",
+        "Harar",
+        "senderismo",
+        "altura",
+        "pastores",
+        "frontera Etiopía",
+        "panorámicas",
+        "aldeas alpinas"
+      ]
+    }
+  ]
+}

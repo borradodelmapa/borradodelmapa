@@ -1,0 +1,355 @@
+{
+  "pais": "Hungría",
+  "codigo": "hu",
+  "destinos": [
+    {
+      "id": "budapest",
+      "nombre": "Budapest",
+      "tipo": "ciudad",
+      "region": "Centro, orilla del Danubio",
+      "descripcion": "Capital histórica con arquitectura austro-húngara, baños termales y vistas del Danubio. Combinación de Buda (colinas, castillo) y Pest (vida urbana, gastronomía). Punto de entrada ideal para explorar el país.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Aeropuerto Ferenc Liszt (BUD) a 16 km: autobús 100E (30 min, 3 EUR) o minibús privado (25-40 EUR). Estación de tren Keleti para conexiones internacionales.",
+      "donde_dormir": {
+        "mochilero": "Dormitorios en hostales de Pest (Ruin bars area): 12-18 EUR/noche",
+        "medio": "Hoteles 3* en Distrito VII o XIII: 50-80 EUR/noche",
+        "comfort": "Hoteles 4-5* vista al Danubio (Buda): 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Baños Széchenyi (termal, 18 EUR)",
+        "Castillo de Buda y Bastión de los Pescadores (gratis acceso exterior, 10 EUR interior)",
+        "Crucero por el Danubio al atardecer (12-15 EUR)",
+        "Sinagoga de Dohány (8 EUR)",
+        "Explorar ruin bars en el Distrito VII (4-6 EUR entrada)"
+      ],
+      "donde_comer": "Goulash y sopa de pescado (Halászlé) en pubs tradicionales, 6-10 EUR por plato. Zona recomendada: alrededor de la Plaza Vörösmarty y Kazinczy utca (restaurantes y bares)",
+      "consejo_local": "Compra el Budapest Card para transporte ilimitado y descuentos en museos (48h: 28 EUR). Los baños termales cierran temprano (18-19h), ve por la mañana o early afternoon.",
+      "plan_b_lluvia": "Museos (Museo Aquincum, Galería Nacional), cafeterías históricas (Café Gerbeaud), compras en la calle Váci",
+      "keywords": [
+        "Buda",
+        "Pest",
+        "Danubio",
+        "baños termales",
+        "Széchenyi",
+        "Puente de las Cadenas",
+        "Parlamento",
+        "Ruin bars"
+      ]
+    },
+    {
+      "id": "balaton",
+      "nombre": "Lago Balatón",
+      "tipo": "playa",
+      "region": "Transdanubio, suroeste",
+      "descripcion": "Mayor lago de agua dulce de Europa Central, popular para playas, windsurf y navegación. Pueblos pintorescos alrededor con viñedos locales. Perfecto para relajarse lejos de ciudades grandes.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-agosto (agua tibia), mayo-septiembre (tolerable)",
+      "como_llegar": "Desde Budapest: tren regional (2h, 8-12 EUR) a Siófok o Balatonfüred. Autobús directo (2.5h, 6-9 EUR). Coche alquilado (140 km, 1.5h).",
+      "donde_dormir": {
+        "mochilero": "Pensiones y hostales en Siófok o Balatonfüred: 15-22 EUR/noche",
+        "medio": "Hoteles 3* junto al lago: 55-75 EUR/noche",
+        "comfort": "Resorts de playa con spa: 100-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Siófok (gratis, deckchairs 3 EUR)",
+        "Windsurf o vela (escuelas desde 40 EUR/hora)",
+        "Pueblos vinícolas: Badacsony y Tihany (degustaciones, 5-8 EUR)",
+        "Visita a la Abadía de Tihany (6 EUR)",
+        "Paseo en barco por el lago (8-12 EUR)"
+      ],
+      "donde_comer": "Pescado fresco del lago (fogash), vinos locales. Restaurantes junto a la playa: 8-15 EUR por plato principal. Mejor zona: paseo marítimo de Siófok o Balatonfüred.",
+      "consejo_local": "El agua está más cálida (22-24°C) a finales de julio/agosto. Siófok es más joven y animado; Balatonfüred es más tranquilo y familiar. Visita bodegas pequeñas fuera de julio para evitar multitudes.",
+      "plan_b_lluvia": "Museos en Tihany, tiendas de souvenirs y bodegas cubiertas, cafés junto al agua",
+      "keywords": [
+        "Siófok",
+        "Balatonfüred",
+        "Tihany",
+        "Badacsony",
+        "agua dulce",
+        "playas",
+        "vinos locales",
+        "navegación"
+      ]
+    },
+    {
+      "id": "eger",
+      "nombre": "Eger",
+      "tipo": "histórico",
+      "region": "Norte, cuenca de Eger",
+      "descripcion": "Pueblo medieval famoso por la Batalla de Eger (1552) contra los otomanos y por sus vinos (Egri Bikavér). Arquitectura barroca, castillo bien conservado y bodegas en el barrio del Valle de las Mujeres Hermosas (Szépasszony-völgy).",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Budapest: tren directo (2.5h, 10-14 EUR) o autobús (2h 45min, 8-10 EUR). Desde Miskolc: 1h en tren (5 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales y guest houses: 14-20 EUR/noche",
+        "medio": "Hoteles 3* en centro: 45-65 EUR/noche",
+        "comfort": "Pequeños hoteles boutique: 80-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Eger (7 EUR, vistas panorámicas)",
+        "Minaret otomano (3 EUR, acceso a la cima)",
+        "Basílica de Eger (gratis)",
+        "Bodegas en Szépasszony-völgy: degustaciones y vino casero (3-8 EUR/bodega)",
+        "Baños termales Eger Fürdő (8 EUR)"
+      ],
+      "donde_comer": "Egri Bikavér (vino tinto local), paprika stew. Tabernas tradicionales: 7-12 EUR por plato. Mejor zona: plaza central (Dobó tér) y callejuelas adyacentes.",
+      "consejo_local": "Ve a las bodegas del Valle antes del anochecer; muchas cierran a las 18h. El vino de garrafón es barato (0.5L: 2-3 EUR) y el dueño suele invitarte a probar mientras llena. El castillo tiene excelentes vistas al atardecer.",
+      "plan_b_lluvia": "Iglesia Minorita, museo del vino, bodegas subterráneas, tiendas de artesanía local",
+      "keywords": [
+        "Egri Bikavér",
+        "castillo",
+        "batalla otomana",
+        "vinos",
+        "Szépasszony-völgy",
+        "baños termales",
+        "Dobó tér",
+        "minaret"
+      ]
+    },
+    {
+      "id": "miskolc",
+      "nombre": "Miskolc",
+      "tipo": "naturaleza",
+      "region": "Norte, Montañas del Norte",
+      "descripcion": "Tercera ciudad más grande, punto de acceso a las Montañas del Norte. Famosa por la cueva de Lillafüred (estalactitas), senderismo y naturaleza. Menos turística que Budapest pero auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Budapest: tren directo (2h 30min, 12-16 EUR). Autobús regional desde Eger (1h, 5 EUR) o Budapest (4h, 10-12 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales y habitaciones en casas locales: 13-18 EUR/noche",
+        "medio": "Hoteles 3* en centro: 40-60 EUR/noche",
+        "comfort": "Hoteles con spa: 75-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Cueva de Lillafüred (acceso + guía: 10 EUR)",
+        "Castillo de Diósgyőr (7 EUR)",
+        "Senderismo en Montañas del Norte: Bükk (gratis, rutas marcadas)",
+        "Baños termales Miskolctapolca (9 EUR)",
+        "Pequeño lago artificial Hámor (gratis)"
+      ],
+      "donde_comer": "Comida casera húngara, carnes a la parrilla. Restaurantes locales: 6-11 EUR por plato. Zona céntrica: alrededor de Széchenyi utca.",
+      "consejo_local": "La cueva de Lillafüred es imprescindible pero reserva con antelación en verano. Los baños termales al aire libre de Tapolca (piscina en la naturaleza) son únicos. Miskolc es mucho más barata que Budapest.",
+      "plan_b_lluvia": "Cueva de Lillafüred (completamente cubierta), museos locales, compras en centro comercial Miskolc Plaza",
+      "keywords": [
+        "Lillafüred",
+        "cueva",
+        "Diósgyőr",
+        "baños termales",
+        "senderismo",
+        "Bükk",
+        "Tapolca",
+        "naturaleza"
+      ]
+    },
+    {
+      "id": "pecs",
+      "nombre": "Pécs",
+      "tipo": "histórico",
+      "region": "Sur, Mecsek",
+      "descripcion": "Ciudad más cálida de Hungría, patrimonio UNESCO con iglesia cristiana primitiva subterránea. Vida cultural activa, museos, galerías y mercado tradicional. Acceso a senderismo en montaña Mecsek.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo-octubre",
+      "como_llegar": "Desde Budapest: autobús directo (5h, 12-15 EUR) o tren (5h 30min, 18-24 EUR). Desde Balaton: 2h en coche.",
+      "donde_dormir": {
+        "mochilero": "Hostales centro histórico: 14-19 EUR/noche",
+        "medio": "Hoteles 3*: 45-70 EUR/noche",
+        "comfort": "Hoteles con vistas a Mecsek: 85-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Catacumbas paleocristianas UNESCO (8 EUR + guía)",
+        "Catedral de Pécs (4 EUR)",
+        "Museo de Cerámica Zsolnay (5 EUR)",
+        "Plaza Széchenyi (gratis, mercado diario)",
+        "Senderismo Mecsek (gratis, múltiples rutas)"
+      ],
+      "donde_comer": "Fiambre de Pécs (salami local), paprika. Restaurantes en plaza central: 8-13 EUR por plato. Zona recomendada: Széchenyi utca y alrededores.",
+      "consejo_local": "Pécs fue capital europea de la cultura en 2010; hay muchas galerías de arte pequeñas (varias gratis o 2-3 EUR). El mercado de la mañana (plaza Széchenyi) es donde los locales compran comida fresca. Menos turista que Budapest pero con más carácter.",
+      "plan_b_lluvia": "Museos (Zsolnay, Arte Moderno), galerías de arte, catacumbas, cafés históricos en Széchenyi",
+      "keywords": [
+        "Pécs",
+        "catacumbas",
+        "UNESCO",
+        "Zsolnay",
+        "Mecsek",
+        "cerámica",
+        "mercado",
+        "capital cultural"
+      ]
+    },
+    {
+      "id": "visegrád",
+      "nombre": "Visegrado",
+      "tipo": "histórico",
+      "region": "Centro norte, Bend del Danubio",
+      "descripcion": "Pueblo medieval en un acantilado sobre el Danubio con castillo en ruinas y vistas espectaculares. Punto de parada ideal en una ruta por el Bend del Danubio (Pilis-Visegrád-Nagymaros).",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Budapest: autobús 880 (1h 20min, 3-4 EUR) o barco fluvial (3h lento, 8-12 EUR, muy romántico). Tren hasta Nagymaros y ferry (2h total).",
+      "donde_dormir": {
+        "mochilero": "Guest houses pequeños: 16-22 EUR/noche",
+        "medio": "Hoteles 3* con vista río: 50-75 EUR/noche",
+        "comfort": "Pequeños resorts con spa: 90-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Visegrado (ruinas): acceso 6 EUR",
+        "Torre Salomón (mirador): 4 EUR",
+        "Paseo ribereño del Danubio (gratis)",
+        "Crucero fluvial por el Bend (8-12 EUR)",
+        "Museos pequeños locales (2-3 EUR cada uno)"
+      ],
+      "donde_comer": "Pescado fresco, trucha. Pequeños restaurantes junto al río: 9-14 EUR por plato. Mejor zona: paseo junto al agua.",
+      "consejo_local": "El viaje en barco desde Budapest es tan hermoso como el destino. Ve en primavera/otoño para evitar turistas masivos de verano. La Torre Salomón tiene las mejores vistas (sube de noche si es posible).",
+      "plan_b_lluvia": "Museos interiores, cafés con vista, paseo bajo techo por ribera protegida",
+      "keywords": [
+        "Visegrado",
+        "Bend del Danubio",
+        "castillo",
+        "Torre Salomón",
+        "Pilis",
+        "río",
+        "medieval",
+        "vistas"
+      ]
+    },
+    {
+      "id": "esztergom",
+      "nombre": "Esztergom",
+      "tipo": "histórico",
+      "region": "Centro norte, frontera con Eslovaquia",
+      "descripcion": "Antigua capital real, famosa por su basílica enorme (Székesegyház) junto al Danubio y puente a Eslovaquia. Centro histórico compacto y accesible, menos abarrotado que Visegrado.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Budapest: tren directo (1h 15min, 5-7 EUR) o autobús (1h 30min, 3-4 EUR). Desde Visegrado: 30 min en autobús.",
+      "donde_dormir": {
+        "mochilero": "Hostales pequeños, guest houses: 15-21 EUR/noche",
+        "medio": "Hoteles 3*: 45-70 EUR/noche",
+        "comfort": "Hoteles frente río: 85-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Basílica de Esztergom (subida: 7 EUR, interior gratis)",
+        "Palacio Primado y Museo (8 EUR)",
+        "Paseo junto al Danubio y puente a Eslovaquia (gratis)",
+        "Sinagoga histórica (3 EUR)",
+        "Crucero fluvial opcional (8-10 EUR)"
+      ],
+      "donde_comer": "Carnes húngaras, pescado local. Restaurantes en centro: 8-12 EUR por plato. Zona: alrededor de la basílica y Széchenyi tér.",
+      "consejo_local": "La basílica es la más grande de Hungría; las vistas desde la cúpula valen los 7 EUR y 200 escalones. Esztergom es muy tranquila comparada con Visegrado; perfecta para un viaje pausado.",
+      "plan_b_lluvia": "Interior de la basílica, museo del palacio, sinagoga, cafés con vista al río",
+      "keywords": [
+        "Esztergom",
+        "basílica",
+        "Székesegyház",
+        "Danubio",
+        "Palacio Primado",
+        "Eslovaquia",
+        "antigua capital"
+      ]
+    },
+    {
+      "id": "tihany",
+      "nombre": "Tihany (Península)",
+      "tipo": "naturaleza",
+      "region": "Transdanubio, lago Balatón norte",
+      "descripcion": "Península sobre el Balatón con abadía medieval, vulcanes dormidos y senderos espectaculares. Mezcla de historia y naturaleza, menos turística que el lado sur del lago.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Budapest: tren a Balatonfüred (2h, 10 EUR), ferry o autobús a Tihany (30 min, 2 EUR). Desde Balaton sur: ferry (30 min, 3 EUR) o autobús alrededor (1h).",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes, pequeños hostales: 16-23 EUR/noche",
+        "medio": "Hoteles 3* con vistas al lago: 60-85 EUR/noche",
+        "comfort": "Pequeños resorts: 100-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Abadía de Tihany (7 EUR interior, exterior gratis)",
+        "Lagos volcánicos interiores: Inner Lake y Outer Lake (acceso libre, senderos)",
+        "Senderismo por la península (gratis, múltiples rutas)",
+        "Playas públicas (gratis)",
+        "Vistas panorámicas desde los acantilados (gratis)"
+      ],
+      "donde_comer": "Pescado del Balatón, ensaladas locales. Restaurantes pequeños: 8-13 EUR por plato. Mejor zona: calle principal cerca de la abadía.",
+      "consejo_local": "Los lagos volcánicos interiores son visibles pero no bañables; el sendero es fácil (2-3h). La abadía tiene la mejor vista al atardecer. Tihany es un día perfecto combinado con Balatonfüred o Siófok.",
+      "plan_b_lluvia": "Interior de la abadía, museos pequeños, tiendas de cerámica local, cafés bajo techo",
+      "keywords": [
+        "Tihany",
+        "abadía",
+        "Balatón",
+        "lagos volcánicos",
+        "península",
+        "senderos",
+        "acantilados",
+        "naturaleza"
+      ]
+    },
+    {
+      "id": "szeged",
+      "nombre": "Szeged",
+      "tipo": "ciudad",
+      "region": "Sur, Tisza",
+      "descripcion": "Segunda ciudad más grande, conocida como la 'Atenas de la Gran Llanura' por su arquitectura y vida cultural. Catedral imponente, mercado tradicional y ambiente universitario animado. Acceso a la Ruta Danubio-Tisza.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Budapest: tren directo (2h 45min-3h, 12-16 EUR) o autobús (3h, 10-12 EUR). Desde Pécs: autobús (2.5h, 8-10 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales centro: 14-20 EUR/noche",
+        "medio": "Hoteles 3* junto al río: 50-75 EUR/noche",
+        "comfort": "Hoteles 4*: 95-135 EUR/noche"
+      },
+      "que_hacer": [
+        "Catedral de Szeged (5 EUR)",
+        "Dóm tér (plaza principal, gratis, mercado)",
+        "Sinagoga de Szeged (4 EUR)",
+        "Paseo junto al Tisza (gratis, muy bonito al atardecer)",
+        "Museos: Móra Ferenc, Museu de Óptica (3-4 EUR cada uno)"
+      ],
+      "donde_comer": "Paprika, carnes guisadas (pörkölt), salami de Szeged. Restaurantes: 8-13 EUR por plato. Mejor zona: Dóm tér y ribera del Tisza.",
+      "consejo_local": "Szeged tiene un festival de ópera al aire libre en julio (entrada: 10-25 EUR). El mercado de la mañana (Dóm tér) es vibrante y barato. La ciudad es más relajada que Budapest con más vida local visible.",
+      "plan_b_lluvia": "Catedral, sinagoga, museos, tiendas de cerámica, cafés históricos",
+      "keywords": [
+        "Szeged",
+        "Atenas de la Llanura",
+        "Tisza",
+        "Dóm tér",
+        "catedral",
+        "sinagoga",
+        "ópera",
+        "mercado"
+      ]
+    },
+    {
+      "id": "holloko",
+      "nombre": "Hollókő",
+      "tipo": "rural",
+      "region": "Centro norte, Montañas del Norte",
+      "descripcion": "Pueblo folclórico viviente declarado UNESCO, donde la arquitectura y tradiciones campesinas del siglo XVIII se mantienen intactas. Casas pintadas, gastronomía regional y vida rural auténtica. Destino perfecto para escapar de lo turístico.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-octubre, Pascua (tradiciones)",
+      "como_llegar": "Desde Budapest: transporte indirecto vía Salgótarján. Mejor opción: alquilar coche o tour organizado (2h 30min, 15 EUR en gasolina). Tren a Salgótarján (2h, 10 EUR) + autobús local (40 min, 2 EUR).",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes locales (no hay hostales): 18-25 EUR/noche",
+        "medio": "Pequeños hoteles rurales, guest houses: 50-70 EUR/noche",
+        "comfort": "Albergues con carácter: 85-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por el pueblo y arquitectura tradicional (gratis)",
+        "Museo de Hollókő (4 EUR, vida campesina)",
+        "Compra de cerámica y artesanía local (precios variables)",
+        "Senderismo en Montañas del Norte (gratis, rutas marcadas)",
+        "Gastronomía regional en casas locales (talleres de cocina: 20-30 EUR)"
+      ],
+      "donde_comer": "Comida casera tradicional (paprika stew, pan casero). Restaurantes locales/casas: 7-11 EUR por plato. Mejor opción: comer en casa de huéspedes.",
+      "consejo_local": "Es un pueblo viviente, no un museo; come con las familias locales si es posible. En Pascua (abril) hay procesiones tradicionales espectaculares. Necesitas coche propio o tour para visitar (transporte público limitado). Lleva efectivo; no todos aceptan tarjeta.",
+      "plan_b_lluvia": "Interior del museo, talleres artesanales cubiertos, casas de huéspedes con chimenea",
+      "keywords": [
+        "Hollókő",
+        "UNESCO",
+        "pueblo folclórico",
+        "arquitectura tradicional",
+        "cerámica",
+        "artesanía",
+        "vida rural",
+        "Pascua"
+      ]
+    }
+  ]
+}

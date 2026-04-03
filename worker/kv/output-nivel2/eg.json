@@ -1,0 +1,340 @@
+{
+  "pais": "Egipto",
+  "codigo": "eg",
+  "destinos": [
+    {
+      "id": "giza",
+      "nombre": "Giza",
+      "tipo": "histórico",
+      "region": "Gran Cairo",
+      "descripcion": "Hogar de las Pirámides de Giza y la Gran Esfinge, los monumentos más emblemáticos del antiguo Egipto. Imprescindible para cualquier viajero que quiera entender la civilización faraónica. La mayoría visita como excursión desde El Cairo, pero merece tiempo propio.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde El Cairo en metro línea 2 o taxi compartido (20-30 min, 0,50-2 EUR). También hay tours organizados.",
+      "donde_dormir": {
+        "mochilero": "Guest house en Giza pueblo (10-15 EUR/noche)",
+        "medio": "Hotel 3 estrellas con vista a pirámides (40-70 EUR/noche)",
+        "comfort": "Resort de lujo con vistas (100-200 EUR/noche)"
+      },
+      "que_hacer": [
+        "Visitar las Pirámides de Khufu, Khafre y Menkaure (12 EUR entrada)",
+        "Ver la Gran Esfinge al atardecer (gratis desde fuera del recinto, 12 EUR entrada)",
+        "Recorrer el Museo de la Barca Solar (6 EUR)",
+        "Paseo en camello por el plateau (10-20 EUR por hora)"
+      ],
+      "donde_comer": "Probar koshari (pasta con lentejas y salsa picante, 1-2 EUR) en cafeterías locales. Zona de Mena House tiene restaurantes turísticos (15-30 EUR). Comprar en la tienda local cerca de Nazlet El-Samman.",
+      "consejo_local": "Entra a las pirámides temprano (8 AM) para evitar multitudes y calor. Si quieres entrar dentro de Khufu, compra entrada adicional (7 EUR) pero espera colas largas.",
+      "plan_b_lluvia": "Visita el Museo de la Barca Solar o el Solar Boat Museum (interior, con aire acondicionado)",
+      "keywords": [
+        "piramides",
+        "giza",
+        "khufu",
+        "khafre",
+        "esfinge",
+        "great pyramid",
+        "gizeh"
+      ]
+    },
+    {
+      "id": "luxor",
+      "nombre": "Luxor",
+      "tipo": "histórico",
+      "region": "Alto Egipto",
+      "descripcion": "La antigua Tebas, con el Valle de los Reyes y el Templo de Karnak. Es el corazón arqueológico del Egipto faraónico y prácticamente un museo al aire libre. Imprescindible para entender la historia dinástica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Vuelo desde El Cairo (1 hora, 30-80 EUR) o autobús nocturno (10-12 horas, 15-25 EUR). Recomendado vuelo para aprovechar tiempo.",
+      "donde_dormir": {
+        "mochilero": "Hostal en West Bank (12-20 EUR/noche)",
+        "medio": "Hotel 3 estrellas frente al Nilo (35-60 EUR/noche)",
+        "comfort": "Resort con piscina (80-150 EUR/noche)"
+      },
+      "que_hacer": [
+        "Valle de los Reyes: tumbas de faraones (16 EUR entrada general, +6 EUR Tutankamón)",
+        "Templo de Karnak (9 EUR)",
+        "Templo de Luxor (7 EUR)",
+        "Valle de las Reinas (3 EUR)",
+        "Crucero en feluca por el Nilo (15-25 EUR por 2 horas)"
+      ],
+      "donde_comer": "Comer en West Bank en restaurantes locales pequeños (5-10 EUR). Probar guisado de cordero y ta'ama (habas fritas). La Corniche tiene restaurantes más turísticos (15-25 EUR).",
+      "consejo_local": "Contrata un guía local en West Bank (10-15 EUR por día, muy recomendado). Muchas tumbas son iguales; un guía marca la diferencia. Empieza temprano para evitar el calor brutal del mediodía.",
+      "plan_b_lluvia": "Visita el Museo de Luxor o el Museo de la Momificación (interior)",
+      "keywords": [
+        "luxor",
+        "thebes",
+        "valley of the kings",
+        "karnak",
+        "west bank",
+        "valle reyes",
+        "templo karnak"
+      ]
+    },
+    {
+      "id": "asuan",
+      "nombre": "Asuán",
+      "tipo": "ciudad",
+      "region": "Alto Egipto",
+      "descripcion": "Punto fronterizo con Sudán en el extremo sur del Nilo, con templos nubios únicos y islas fluviales. Puerta de entrada a la Nubia y lugar de referencia para comprender la historia de la región.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Vuelo desde El Cairo (2,5 horas, 40-100 EUR) o tren/autobús desde Luxor (3-4 horas, 15-30 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal cerca del souk (10-18 EUR/noche)",
+        "medio": "Hotel 3 estrellas frente al Nilo (30-50 EUR/noche)",
+        "comfort": "Resort en Elefantina Island (80-140 EUR/noche)"
+      },
+      "que_hacer": [
+        "Templo de Abu Simbel: excursión de madrugada (40-50 EUR con agencia o 20 EUR autobús público)",
+        "Paseo en feluca por Cataratas del Nilo (10-15 EUR)",
+        "Isla de Elefantina: museos y vistas (3-5 EUR)",
+        "Templo de Filé en Agilkia Island (10 EUR)",
+        "Paseo por el souk nubio (gratis)"
+      ],
+      "donde_comer": "Restaurantes en la orilla con vistas al Nilo (8-15 EUR). Probar tilapia a la parrilla. El souk tiene puestos de comida callejera muy baratos (1-3 EUR).",
+      "consejo_local": "Abu Simbel merece el viaje madrugador, pero comprueba horarios de autobús público el día anterior. Es más barato que tour pero hay menos flexibilidad.",
+      "plan_b_lluvia": "Visita el Museo Nubio (9 EUR, aire acondicionado)",
+      "keywords": [
+        "aswan",
+        "asuan",
+        "abu simbel",
+        "philae",
+        "nubia",
+        "nilo",
+        "cataratas"
+      ]
+    },
+    {
+      "id": "el-cairo",
+      "nombre": "El Cairo",
+      "tipo": "ciudad",
+      "region": "Bajo Egipto",
+      "descripcion": "La capital, caótica y energética, con el Museo Egipcio y barrios históricos como Islamic Cairo. Centro neurálgico para cambios de dinero, visados y transporte a otros destinos. Necesaria como punto de entrada/salida.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Aeropuerto Internacional de El Cairo. Hub de entrada a Egipto.",
+      "donde_dormir": {
+        "mochilero": "Hostal en Downtown Cairo (12-20 EUR/noche)",
+        "medio": "Hotel 3 estrellas en Zamalek (40-70 EUR/noche)",
+        "comfort": "Hotel 5 estrellas en Nile Hilton (150-250 EUR/noche)"
+      },
+      "que_hacer": [
+        "Museo Egipcio: momias y artefactos faraónicos (12 EUR)",
+        "Ciudadela de Saladino: vistas y Mezquita de Muhammad Ali (9 EUR)",
+        "Bazar Khan el-Khalili: mercado histórico (gratis, comprar opcional)",
+        "Barrio Copto: iglesias y sinagoga Ben Ezra (gratis/donativo)",
+        "Paseo por el Nilo al atardecer (gratis)"
+      ],
+      "donde_comer": "Downtown tiene cafeterías locales muy baratas (2-5 EUR). Probar koshari, falafel y ta'ama. Zamalek tiene restaurantes más turísticos (15-30 EUR). Street food en Khan el-Khalili (1-3 EUR).",
+      "consejo_local": "El Cairo es caótico pero seguro en zonas turísticas. Usa Uber o taxi blanco con taxímetro para moverte. No intentes conducir si no conoces la ciudad.",
+      "plan_b_lluvia": "El Museo Egipcio es imprescindible. También visita galerías de arte en Zamalek o cafeterías históricas como Fishawi.",
+      "keywords": [
+        "cairo",
+        "el cairo",
+        "cairo",
+        "nilo",
+        "museo egipcio",
+        "khan khalili",
+        "islamic cairo"
+      ]
+    },
+    {
+      "id": "alejandria",
+      "nombre": "Alejandría",
+      "tipo": "ciudad",
+      "region": "Bajo Egipto",
+      "descripcion": "Puerto mediterráneo con ambiente costal diferente al resto de Egipto, herencia gricoromana y moderna. Menos turística que Giza pero con historia rica y playas. Escapada de fin de semana desde El Cairo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a junio, septiembre a octubre",
+      "como_llegar": "Tren rápido desde El Cairo (2 horas, 2-6 EUR) o autobús (3 horas, 2-4 EUR). Muy accesible.",
+      "donde_dormir": {
+        "mochilero": "Hostal en Raml Station (12-18 EUR/noche)",
+        "medio": "Hotel 3 estrellas cerca de la cornisa (35-60 EUR/noche)",
+        "comfort": "Resort en la costa (80-130 EUR/noche)"
+      },
+      "que_hacer": [
+        "Fortaleza Qaitbay: castillo en el puerto (6 EUR)",
+        "Museo Greco-Romano (8 EUR)",
+        "Catacombs of Kom el-Shoqafa (5 EUR)",
+        "Biblioteca Bibliotheca Alexandrina (5 EUR, moderna)",
+        "Paseo por la Corniche y playas (gratis)"
+      ],
+      "donde_comer": "Mariscos frescos en la Corniche (10-20 EUR). Probar pulpo y pez espada a la parrilla. Restaurantes locales en el centro (5-12 EUR).",
+      "consejo_local": "Alejandría es más relajada que El Cairo. La Corniche es perfecta para pasear al atardecer. El viaje en tren desde Cairo es cómodo y barato.",
+      "plan_b_lluvia": "Biblioteca Alexandrina, Museo Greco-Romano o las catacumbas (todo interior)",
+      "keywords": [
+        "alexandria",
+        "alejandria",
+        "mediterranean",
+        "qaitbay",
+        "corniche",
+        "porto",
+        "grecia"
+      ]
+    },
+    {
+      "id": "abydos",
+      "nombre": "Abydos",
+      "tipo": "histórico",
+      "region": "Alto Egipto",
+      "descripcion": "Templos poco visitados pero extraordinarios, especialmente el Templo de Seti I con jeroglíficos en perfecto estado. Menos turístico que Luxor pero igual de impresionante. Requiere excursión desde Luxor o Qena.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Luxor: tour organizado (30-40 EUR) o minibús a Qena (1,5 horas, 3 EUR) y taxi a Abydos (10-15 EUR). Mejor con agencia.",
+      "donde_dormir": {
+        "mochilero": "No hay hostales en Abydos; dormir en Luxor o Qena (10-20 EUR)",
+        "medio": "Abydos tiene 1-2 hoteles pequeños (20-35 EUR/noche) o excursión de día desde Luxor",
+        "comfort": "Resort en Luxor + excursión"
+      },
+      "que_hacer": [
+        "Templo de Seti I con jeroglíficos intactos (10 EUR)",
+        "Templo de Ramses II (10 EUR, mismo ticket)",
+        "Osirión subterráneo (gratis con entrada)"
+      ],
+      "donde_comer": "Muy pocas opciones. Come en Luxor o lleva snacks. Hay un café pequeño en el pueblo (2-5 EUR).",
+      "consejo_local": "Abydos es mucho menos concurrido que Luxor. Si buscas autenticidad y menos turismo, es mejor que muchos sitios más famosos. Contrata guía en Luxor.",
+      "plan_b_lluvia": "Templos tienen techos en algunas áreas. Plan B: volver a Luxor.",
+      "keywords": [
+        "abydos",
+        "seti i",
+        "templo seti",
+        "jeroglíficos",
+        "osirion",
+        "dendera"
+      ]
+    },
+    {
+      "id": "siwa",
+      "nombre": "Siwa",
+      "tipo": "desierto",
+      "region": "Desierto Occidental",
+      "descripcion": "Oasis aislado en el desierto occidental con cultura única, arquitectura tradicional y templanza de Amón. Destino fuera de ruta para mochileros aventureros. Acceso complicado pero recompensante.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Mersa Matruh (autobús, 8 horas, 10-15 EUR) o desde El Cairo (tours privados 2-3 días, 80-150 EUR). Muy remoto.",
+      "donde_dormir": {
+        "mochilero": "Siwa tiene pocos hostales; casa tradicional o eco-lodge (15-25 EUR/noche)",
+        "medio": "Eco-lodge con comodidades (30-50 EUR/noche)",
+        "comfort": "Resort en construcción o viajes desde Mersa Matruh"
+      },
+      "que_hacer": [
+        "Templo del Oráculo de Amón (2 EUR)",
+        "Laguna de Cleopatra: baño natural (gratis)",
+        "Montaña de los Muertos: tumbas antiguas (3 EUR)",
+        "Paseos por el oasis (gratis)",
+        "Tour en 4x4 por dunas (25-40 EUR)"
+      ],
+      "donde_comer": "Restaurantes locales muy básicos (3-8 EUR). Comida simple pero fresca. Compra provisiones en el pueblo.",
+      "consejo_local": "Siwa es un viaje lento. Lleva dinero en efectivo (pocas opciones de pago). La gente es amable pero habla árabe principalmente. Deja tiempo para aclimatarte.",
+      "plan_b_lluvia": "Lluvia es muy rara. Plan B: paseos por el oasis bajo techo",
+      "keywords": [
+        "siwa",
+        "siwa oasis",
+        "oracle amun",
+        "western desert",
+        "desierto occidental",
+        "laguna cleopatra"
+      ]
+    },
+    {
+      "id": "hurghada",
+      "nombre": "Hurghada",
+      "tipo": "playa",
+      "region": "Mar Rojo",
+      "descripcion": "Resort de playa en el Mar Rojo con snorkel y buceo de clase mundial. Centro turístico moderno pero menos caro que Sharm El-Sheikh. Buena para descanso y actividades acuáticas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "Vuelo desde El Cairo (6 horas en autobús, 12-20 EUR) o vuelo (1 hora, 30-80 EUR). Vuelo recomendado.",
+      "donde_dormir": {
+        "mochilero": "Hostal en el centro (15-20 EUR/noche)",
+        "medio": "Resort all-inclusive 3 estrellas (40-80 EUR/noche)",
+        "comfort": "Resort 5 estrellas con playa privada (120-250 EUR/noche)"
+      },
+      "que_hacer": [
+        "Snorkel en arrecifes (15-30 EUR por tour)",
+        "Buceo SCUBA (40-70 EUR por inmersión)",
+        "Paseo en barco al atardecer (10-20 EUR)",
+        "Desert quad tour (30-50 EUR)",
+        "Playa (gratis, pero resort cobra acceso)"
+      ],
+      "donde_comer": "Restaurantes turísticos en Marina (12-25 EUR). Comida local más barata en el centro (5-10 EUR). All-inclusive proporciona comida.",
+      "consejo_local": "Hurghada es para buceo. Si no buceas, es solo una playa cara. Marina es zona turística desarrollada. El centro es más local y barato.",
+      "plan_b_lluvia": "Lluvia rara. Buceo es posible en cualquier clima. Pasar día en resort o visitar Museo de Hurghada.",
+      "keywords": [
+        "hurghada",
+        "hurgada",
+        "mar rojo",
+        "red sea",
+        "buceo",
+        "snorkel",
+        "resort"
+      ]
+    },
+    {
+      "id": "saqqara",
+      "nombre": "Saqqara",
+      "tipo": "histórico",
+      "region": "Gran Cairo",
+      "descripcion": "Necrópolis antigua con la Pirámide Escalonada de Zoser y tumbas de nobles. Menos turístico que Giza pero arqueológicamente igual o más importante. Fácil excursión desde El Cairo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde El Cairo en autobús público (1,5 horas, 1 EUR) o tour organizado (30-40 EUR). El autobús es una aventura local.",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento en Saqqara; visitar como excursión desde El Cairo",
+        "medio": "Día desde El Cairo",
+        "comfort": "Día desde El Cairo"
+      },
+      "que_hacer": [
+        "Pirámide Escalonada de Zoser (13 EUR entrada)",
+        "Mastabas y tumbas antiguas (incluido en entrada)",
+        "Museo de Imhotep (5 EUR)",
+        "Paseo por la necrópolis (gratis con entrada)"
+      ],
+      "donde_comer": "Restaurante de turistas cerca de la entrada (10-15 EUR) o vuelve a El Cairo. Lleva agua.",
+      "consejo_local": "Saqqara es enorme. Alquila bicicleta o contrata guía para no perderte. La Pirámide Escalonada es de 2.650 años y la más antigua estructura de piedra del mundo.",
+      "plan_b_lluvia": "Museo de Imhotep está cubierto",
+      "keywords": [
+        "saqqara",
+        "saqqarah",
+        "zoser",
+        "djoser",
+        "piramide escalonada",
+        "mastabas",
+        "imhotep"
+      ]
+    },
+    {
+      "id": "sinai-dahab",
+      "nombre": "Dahab",
+      "tipo": "playa",
+      "region": "Península del Sinaí",
+      "descripcion": "Pueblo de playa en el Sinaí menos desarrollado que Sharm El-Sheikh, con buceo, free diving y ambiente relajado. Mezcla de backpackers y viajeros independientes. Vibe más local.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Vuelo a Sharm El-Sheikh (3 horas desde El Cairo, 40-100 EUR) + taxi/autobús a Dahab (1 hora, 5-10 EUR). O ferry desde Hurghada.",
+      "donde_dormir": {
+        "mochilero": "Bedouin camp o hostal simple (10-15 EUR/noche)",
+        "medio": "Hotel pequeño (25-45 EUR/noche)",
+        "comfort": "Resort (60-110 EUR/noche)"
+      },
+      "que_hacer": [
+        "Buceo y free diving (30-50 EUR por inmersión)",
+        "Blue Hole: snorkel o buceo (20-40 EUR)",
+        "Paseo por playas (gratis)",
+        "Paseo en camello al atardecer (10-15 EUR)",
+        "Paseo en barco (15-25 EUR)"
+      ],
+      "donde_comer": "Restaurantes de bedouin camps básicos pero auténticos (5-10 EUR). Probar seafood fresco. El Mashraba es zona de backpackers con precios bajos.",
+      "consejo_local": "Dahab es más barato y menos superficial que Sharm. El Blue Hole puede ser peligroso; asegúrate de un guía competente. Muchos viajeros se quedan más tiempo del planeado.",
+      "plan_b_lluvia": "Lluvia rara. Buceo posible en cualquier clima",
+      "keywords": [
+        "dahab",
+        "sinai",
+        "peninsula sinai",
+        "blue hole",
+        "buceo",
+        "free diving",
+        "red sea"
+      ]
+    }
+  ]
+}

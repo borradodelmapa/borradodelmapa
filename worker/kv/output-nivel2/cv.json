@@ -1,0 +1,344 @@
+{
+  "pais": "Cabo Verde",
+  "codigo": "cv",
+  "destinos": [
+    {
+      "id": "praia-santiago",
+      "nombre": "Praia, Santiago",
+      "tipo": "ciudad",
+      "region": "Santiago, isla de Santiago",
+      "descripcion": "Capital de Cabo Verde y principal puerta de entrada. Centro administrativo con mercados tradicionales, museos coloniales y vida urbana auténtica. Base logística ideal para organizar el resto del viaje.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a junio",
+      "como_llegar": "Aeropuerto Internacional Amilcar Cabral (40 km). Taxi colectivo 30 minutos, 5-8 EUR. Vuelos desde Lisboa o conexiones internacionales.",
+      "donde_dormir": {
+        "mochilero": "Pensão/albergue en Plateau, 20-35 EUR/noche",
+        "medio": "Hotel 2-3 estrellas en Achada Grande, 50-80 EUR/noche",
+        "comfort": "Hotel 4 estrellas (Praia ou Sucupira), 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado Municipal de Sucupira (gratis, compras)",
+        "Museu Etnográfico (2 EUR, historia local)",
+        "Paseo por Plateau y arquitectura colonial (gratis)",
+        "Mercado de pesca al atardecer (gratis)",
+        "Iglesia de Nossa Senhora da Graça (gratis)"
+      ],
+      "donde_comer": "Cachupa (plato nacional), arroz con pescado. Callejones de Plateau, 4-8 EUR. Restaurantes en la avenida principal.",
+      "consejo_local": "Evita el mercado después de oscurecer. Los taxis colectivos ('aluguel') son caóticos pero funcionales: negocia el precio antes de subir.",
+      "plan_b_lluvia": "Museos cerrados, recorre la ciudad a pie bajo techo, visita galerías de arte local en Achada Grande.",
+      "keywords": [
+        "Praia",
+        "Santiago",
+        "capital",
+        "Plateau",
+        "Achada Grande",
+        "mercado",
+        "Sucupira"
+      ]
+    },
+    {
+      "id": "sal-santa-maria",
+      "nombre": "Santa Maria, Sal",
+      "tipo": "playa",
+      "region": "Sal, isla de Sal",
+      "descripcion": "Playa de arena blanca y aguas turquesas, principal destino de playa de Cabo Verde. Pueblo costero relajado con infraestructura turística básica y ambiente tranquilo fuera de temporada alta.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a junio",
+      "como_llegar": "Avión desde Praia (1 hora, 60-100 EUR) o ferry Praia-Tarrafal-Sal (6-8 horas, 25-40 EUR). Aeropuerto de Sal también recibe vuelos internacionales directos.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje/pensión en pueblo, 25-40 EUR/noche",
+        "medio": "Resort boutique, 60-100 EUR/noche",
+        "comfort": "Resort todo incluido, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Santa Maria (gratis, baño y relax)",
+        "Snorkel/buceo (30-50 EUR con operador local)",
+        "Excursión Pedra Lume (salina flotante, 15 EUR + transporte)",
+        "Windsurf/kitesurf si hay viento (40-60 EUR/día)",
+        "Paseo al atardecer por el pueblo (gratis)"
+      ],
+      "donde_comer": "Pesca fresca, arroz con camarones, langosta. Restaurantes frente a la playa, 8-15 EUR. Mercado de pesca por la mañana para comprar fresco.",
+      "consejo_local": "El agua es tibia todo el año pero mai frio de noviembre a febrero. En temporada alta (julio-agosto) precios suben 50%. Alquila una moto (10-15 EUR/día) para explorar la isla.",
+      "plan_b_lluvia": "Lluvia rara. Si hay viento fuerte, retírate a Pedra Lume o explora pueblos del interior (Santa Maria vieja, ruinas coloniales).",
+      "keywords": [
+        "Santa Maria",
+        "Sal",
+        "playa",
+        "resort",
+        "salina",
+        "Pedra Lume",
+        "windsurf"
+      ]
+    },
+    {
+      "id": "santo-antao-ribeira-grande",
+      "nombre": "Ribeira Grande, Santo Antão",
+      "tipo": "montaña",
+      "region": "Santo Antão, isla de Santo Antão",
+      "descripcion": "Pueblo montañoso en un barranco espectacular, punto base para senderismo de clase mundial. Valle agrícola verde con vistas de acantilados, ideal para caminatas independientes entre pueblos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre a junio",
+      "como_llegar": "Ferry desde São Vicente (Mindelo) a Porto Novo (1 hora, 8-12 EUR). Minibús/taxi a Ribeira Grande (30 min, 3-5 EUR).",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes/pensión, 20-30 EUR/noche",
+        "medio": "Pousada en el pueblo, 40-60 EUR/noche",
+        "comfort": "Ecolodge en el barranco, 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Ribeira Grande a Paul (5 horas, gratis, paisaje increíble)",
+        "Caminata Ribeira Grande a Garça (4 horas, gratis, vistas de acantilados)",
+        "Visita a cultivos de caña y rom local (10-15 EUR con guía)",
+        "Baño en piscinas naturales Paul (gratis)",
+        "Exploración del pueblo colonial (gratis)"
+      ],
+      "donde_comer": "Cachupa, arroz con verduras, carne guisada. Pequeños restaurantes, 5-8 EUR. Pide 'comida casera' en pensiones.",
+      "consejo_local": "Lleva mucha agua para el senderismo (no hay fuentes). Los senderos no están marcados; pregunta en el pueblo o contrata guía local (20-30 EUR/día). El clima cambia rápido: capa de lluvia imprescindible.",
+      "plan_b_lluvia": "Lluvia frecuente en invierno (senderismo igualmente posible). Pausa para visitar destilerías de caña de rum y museos locales.",
+      "keywords": [
+        "Santo Antao",
+        "Ribeira Grande",
+        "Paul",
+        "senderismo",
+        "barranco",
+        "montaña",
+        "acantilados",
+        "Paul"
+      ]
+    },
+    {
+      "id": "sao-vicente-mindelo",
+      "nombre": "Mindelo, São Vicente",
+      "tipo": "ciudad",
+      "region": "São Vicente, isla de São Vicente",
+      "descripcion": "Antigua capital colonial con puerto importante, puerto franco y escena cultural vibrante. Mezcla de arquitectura portuguesa colonial, vida marina y tradición de música cabo-verdiana.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a junio",
+      "como_llegar": "Avión desde Praia (45 min, 60-90 EUR) o ferry Praia-Tarrafal-São Vicente (10+ horas, 30-50 EUR). Conexiones internas con interislas.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje centro histórico, 25-40 EUR/noche",
+        "medio": "Hotel 2-3 estrellas en Plateau, 50-80 EUR/noche",
+        "comfort": "Hotel 4 estrellas puerto, 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo Puerto Histórico y Forte Real (gratis)",
+        "Mercado Municipal (gratis, compras y atmósfera)",
+        "Museu do Tabanco (2-3 EUR, historia colonial)",
+        "Iglesia Matriz de Nossa Senhora da Luz (gratis)",
+        "Bares de música tradional al atardecer (entrada 0-5 EUR, consumición 3-8 EUR)"
+      ],
+      "donde_comer": "Arroz con marisco, pastel de queso local. Restaurantes puerto y centro Plateau, 6-12 EUR. Mercado para comida callejera.",
+      "consejo_local": "Mindelo es el hub musical de Cabo Verde: pregunta dónde hay actuaciones en vivo. El carnaval (febrero-marzo) es espectacular pero masificado. Mercado ruidoso y caótico: ideal de mañana.",
+      "plan_b_lluvia": "Museos, bares con música, tiendas de artesanía. El viento puede ser fuerte: es normal.",
+      "keywords": [
+        "Mindelo",
+        "Sao Vicente",
+        "São Vicente",
+        "puerto",
+        "colonial",
+        "música",
+        "Plateau",
+        "carnaval"
+      ]
+    },
+    {
+      "id": "brava-fogo",
+      "nombre": "Brava e Fogo",
+      "tipo": "isla",
+      "region": "Islas de Sotavento",
+      "descripcion": "Dos islas verde exuberantes en el sur con volcán activo y pueblos auténticos alejados de turismo masivo. Fogo destaca por su volcán y vino local; Brava por sus acantilados y vibrante comunidad de migrantes retornados.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a junio",
+      "como_llegar": "Ferry desde Praia a Fogo (2 horas, 12-18 EUR) y a Brava (3 horas, 15-20 EUR). Conexión interislas de Fogo a Brava (30 min, 5-8 EUR). Vuelos internos disponibles.",
+      "donde_dormir": {
+        "mochilero": "Pensión en pueblo (São Filipe o Santa Filipa), 20-35 EUR/noche",
+        "medio": "Pousada con carácter, 45-70 EUR/noche",
+        "comfort": "Ecolodge con vistas volcán, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Ascenso volcán Pico de Fogo (7-8 horas, 30-50 EUR con guía obligatorio)",
+        "Visita viñedos y degustación vino Fogo (10-20 EUR)",
+        "Caminata Brava (acantilados Santa Filipa a Nossa Senhora, 3 horas, gratis)",
+        "Pueblos coloniales: São Filipe y Furna (gratis, atmósfera)",
+        "Baños naturales en cuevas lava (gratis)"
+      ],
+      "donde_comer": "Espetada (carne a la brasa), arroz con pescado. Fogo: vino local. Pequeños restaurantes, 6-12 EUR.",
+      "consejo_local": "Fogo es volátil (erupciones recientes en 2014): confirma estado antes de subir. Brava es 'la isla de los caboverdianos' con menos turismo. Minibuses caóticos entre pueblos; negocia precio antes de subir. Vino de Fogo es malo pero icónico: prueba por curiosidad.",
+      "plan_b_lluvia": "Lluvia frecuente. Pasa a pueblos interiores, visita destilerías de caña, descansa en pensiones.",
+      "keywords": [
+        "Brava",
+        "Fogo",
+        "volcan",
+        "Pico de Fogo",
+        "vino",
+        "Santa Filipa",
+        "Sao Filipe",
+        "lava"
+      ]
+    },
+    {
+      "id": "boa-vista-playa",
+      "nombre": "Boa Vista",
+      "tipo": "playa",
+      "region": "Boa Vista, isla de Boa Vista",
+      "descripcion": "Isla tranquila con playas desiertas y dunas de arena blanca, menos desarrollada que Sal. Destino para quienes buscan aislamiento, 4x4 y biodiversidad marina (tortugas anidantes).",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a junio",
+      "como_llegar": "Ferry desde Praia a Boa Vista (3 horas, 15-20 EUR) o avión interislas (30 min, 50-80 EUR). Aeropuerto local con conexiones limitadas.",
+      "donde_dormir": {
+        "mochilero": "Pensión en Sal Rei, 25-40 EUR/noche",
+        "medio": "Pousada o resort pequeño, 60-90 EUR/noche",
+        "comfort": "Resort playero, 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Sal Rei y playas vírgenes cercanas (gratis, baño)",
+        "Excursión 4x4 dunas y playas interiores (30-60 EUR con operador)",
+        "Observación tortugas anidantes (octubre-mayo, 20-40 EUR con guía)",
+        "Snorkel en arrecife (25-40 EUR)",
+        "Pueblo Sal Rei: mercado y arquitectura (gratis)"
+      ],
+      "donde_comer": "Pesca fresca, arroz con camarones. Restaurantes Sal Rei, 7-12 EUR. Compra en mercado local para picnics en playa.",
+      "consejo_local": "Boa Vista es más salvaje que Sal: infraestructura limitada. Alquila 4x4 (50-80 EUR/día) si quieres explorar playas remotas. Tortugas de octubre a mayo: oportunidad única pero requiere guía autorizado.",
+      "plan_b_lluvia": "Lluvia rara. Usa el tiempo para explorar pueblo y compras.",
+      "keywords": [
+        "Boa Vista",
+        "Sal Rei",
+        "playa",
+        "dunas",
+        "tortugas",
+        "desierto",
+        "virgen"
+      ]
+    },
+    {
+      "id": "maio-isla",
+      "nombre": "Maio",
+      "tipo": "isla",
+      "region": "Maio, isla de Maio",
+      "descripcion": "Isla plana, árida y poco poblada con playas extensas y auténtica vida rural. Ideal para ciclismo, caminatas solitarias y encuentros con la población local cabo-verdiana tradicional.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a junio",
+      "como_llegar": "Ferry desde Praia a Maio (1 hora, 10-15 EUR). Aeropuerto local con conexiones irregulares.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje en Porto Inglés, 20-30 EUR/noche",
+        "medio": "Pousada simple, 40-60 EUR/noche",
+        "comfort": "Resort aislado (raro), 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Cicloturismo isla completa (bicicleta 8-12 EUR/día, rutas gratis)",
+        "Playas Baía da Luz y Praia Real (gratis)",
+        "Caminata a pueblos interiores (gratis, conoce vida rural)",
+        "Pesca local con pescadores locales (10-20 EUR)",
+        "Mercado Porto Inglés (gratis, atmósfera auténtica)"
+      ],
+      "donde_comer": "Arroz con pescado, cachupa. Restaurantes sencillos, 5-10 EUR. Come donde comen los locales.",
+      "consejo_local": "Maio es tranquila pero muy básica: sin vida nocturna, tiendas limitadas. Es el lugar para 'desconectar' pero requiere tolerancia a la soledad. Lleva dinero en efectivo: sin ATMs confiables.",
+      "plan_b_lluvia": "Lluvia rara. Pausa en pensión, descansa.",
+      "keywords": [
+        "Maio",
+        "Porto Ingles",
+        "cicloturismo",
+        "rural",
+        "playa desierta",
+        "tranquilo"
+      ]
+    },
+    {
+      "id": "sal-pedra-lume",
+      "nombre": "Pedra Lume, Sal (excursión)",
+      "tipo": "desierto",
+      "region": "Sal, isla de Sal",
+      "descripcion": "Salina flotante natural en el norte de Sal donde flota como el Mar Muerto. Paisaje desértico espectacular y experiencia única de flotación en agua hipersalina.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a junio",
+      "como_llegar": "Desde Santa Maria (30 km, 40 min en coche, 15-25 EUR ida/vuelta) o excursión con operador (30-50 EUR todo incluido).",
+      "donde_dormir": {
+        "mochilero": "Excursión día desde Santa Maria",
+        "medio": "Excursión día desde Santa Maria",
+        "comfort": "Excursión día desde Santa Maria"
+      },
+      "que_hacer": [
+        "Baño en agua hipersalina (flotación, gratis con entrada)",
+        "Entrada salina histórica + museo (8-10 EUR)",
+        "Fotografía de paisaje desértico (gratis)",
+        "Desayuno/almuerzo en cafetería (5-12 EUR)"
+      ],
+      "donde_comer": "Cafetería básica en entrada: sándwiches, refrescos, 5-10 EUR.",
+      "consejo_local": "Lleva bañador y toalla. El agua arde los ojos: no bucees. Protección solar imprescindible (arena blanca refleja mucho). Mejor ir a primera hora (menos aglomeración).",
+      "plan_b_lluvia": "Lluvia rara. Salina funciona con cualquier tiempo.",
+      "keywords": [
+        "Pedra Lume",
+        "salina",
+        "flotante",
+        "mar muerto",
+        "Sal",
+        "excursion"
+      ]
+    },
+    {
+      "id": "tarrafal-santiago",
+      "nombre": "Tarrafal, Santiago",
+      "tipo": "playa",
+      "region": "Santiago, isla de Santiago",
+      "descripcion": "Pueblo costero tranquilo al norte de Santiago con playa de arena negra y ambiente auténtico. Punto de parada en ferry interislas con buena relación precio-atmósfera.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a junio",
+      "como_llegar": "Minibús desde Praia (1.5 horas, 3-5 EUR). Ferry a/desde otras islas para interislas.",
+      "donde_dormir": {
+        "mochilero": "Pensión en pueblo, 20-35 EUR/noche",
+        "medio": "Pousada simple, 45-65 EUR/noche",
+        "comfort": "Resort playero pequeño, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Tarrafal (arena negra, gratis)",
+        "Fortaleza de Alcatrazes (historia colonial, 2 EUR)",
+        "Paseo pueblo al atardecer (gratis)",
+        "Baño en piscina natural (gratis)",
+        "Mercado local (gratis, compras)"
+      ],
+      "donde_comer": "Pesca fresca, arroz. Restaurantes puerto, 6-12 EUR.",
+      "consejo_local": "Tarrafal es parada de ferry, no destino final. Bueno para 1 noche si cruzas islas. Lluvia más frecuente que en el este (Sal, Boa Vista).",
+      "plan_b_lluvia": "Fortaleza, mercado, pausa antes de ferry.",
+      "keywords": [
+        "Tarrafal",
+        "Santiago",
+        "playa negra",
+        "ferry",
+        "fortaleza",
+        "Alcatrazes"
+      ]
+    },
+    {
+      "id": "sao-niculau",
+      "nombre": "São Nicolau",
+      "tipo": "isla",
+      "region": "São Nicolau, isla de São Nicolau",
+      "descripcion": "Isla verde y montañosa, poco turística, ideal para senderismo independiente y encuentros auténticos. Pueblos coloniales como Ribeira Brava con arquitectura intacta.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre a junio",
+      "como_llegar": "Ferry desde Mindelo (São Vicente) (3-4 horas, 12-18 EUR). Pocas conexiones: confirma horarios antes.",
+      "donde_dormir": {
+        "mochilero": "Pensión en Ribeira Brava, 20-35 EUR/noche",
+        "medio": "Pousada pueblo, 45-70 EUR/noche",
+        "comfort": "Ecolodge, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Ribeira Brava a Tarrafal (4 horas, gratis, bosque verde)",
+        "Exploración pueblo colonial Ribeira Brava (gratis, arquitectura)",
+        "Caminata a Pico do Morro (2 horas, vistas, gratis)",
+        "Baño natural en playa Tarrafal de Ribeira Brava (gratis)"
+      ],
+      "donde_comer": "Cachupa, arroz con verduras. Pensiones y pequeños restaurantes, 5-10 EUR.",
+      "consejo_local": "São Nicolau es la isla más verde pero requiere logística de ferry (pocas salidas). Es el destino perfecto para quienes buscan 'Cabo Verde sin turismo'. No hay ATMs fiables: trae dinero efectivo.",
+      "plan_b_lluvia": "Lluvia más frecuente (isla verde). Senderismo igualmente posible. Pausa en pueblos.",
+      "keywords": [
+        "Sao Nicolau",
+        "São Nicolau",
+        "Ribeira Brava",
+        "senderismo",
+        "verde",
+        "colonial",
+        "Tarrafal"
+      ]
+    }
+  ]
+}

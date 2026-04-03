@@ -1,0 +1,334 @@
+{
+  "pais": "Montenegro",
+  "codigo": "me",
+  "destinos": [
+    {
+      "id": "kotor",
+      "nombre": "Kotor",
+      "tipo": "histórico",
+      "region": "Costa de Boka",
+      "descripcion": "Ciudad medieval amurallada en el fondo de la bahía más septentrional del Mediterráneo, rodeada de montañas escarpadas. Su casco antiguo con palacios venecianos, iglesias ortodoxas y fortalezas es Patrimonio UNESCO. Punto de partida ideal para explorar la costa de Boka.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Podgorica en autobús (2h, 5-8 EUR) o coche de alquiler (130 km)",
+      "donde_dormir": {
+        "mochilero": "Hostal o habitación en guesthouse centro: 20-30 EUR/noche",
+        "medio": "Boutique hotel en casco antiguo: 50-80 EUR/noche",
+        "comfort": "Hotel 4* con vistas a la bahía: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Subir a la Fortaleza de San Juan para vistas panorámicas (libre/2h de senderismo)",
+        "Pasear por las murallas medievales (5 EUR, 2h)",
+        "Visitar la Catedral de San Trífón y Iglesia de Santa María del Lago (donativo)",
+        "Baño en playas cercanas como Perast (libre)",
+        "Kayak por la bahía de Boka (25-40 EUR/día con equipamiento)"
+      ],
+      "donde_comer": "Pulpo a la parrilla, mejillones frescos, queso local. Restaurantes frente al puerto: 8-15 EUR plato principal. Zona recomendada: Stara Varos (casco antiguo)",
+      "consejo_local": "Sube a la fortaleza al atardecer, no al mediodía. Evita julio-agosto por masificación. El agua de la bahía es increíblemente clara para nadar.",
+      "plan_b_lluvia": "Museos marítimos, iglesias, cafés con vistas en puestos cubiertos, paseos interiores por callejuelas del casco antiguo",
+      "keywords": [
+        "Kotor",
+        "Cattaro",
+        "Boka Bay",
+        "Boka Kotorska",
+        "casco antiguo",
+        "murallas medievales",
+        "Fortaleza San Juan"
+      ]
+    },
+    {
+      "id": "budva",
+      "nombre": "Budva",
+      "tipo": "playa",
+      "region": "Costa de Riviera",
+      "descripcion": "Principal destino de playa de Montenegro con casco antiguo fortificado, vida nocturna vibrante y acceso a calas vírgenes. Centro neurálgico para viajeros independientes que buscan playa, gastronomía y ambiente. Base perfecta para explorar la costa sur.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-junio, septiembre",
+      "como_llegar": "desde Podgorica en autobús (2.5h, 6-10 EUR) o coche alquilado (180 km). También desde Kotor en autobús (1h, 3 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal o apartamento pequeño: 18-28 EUR/noche",
+        "medio": "Hotel 3* en primera línea o casco antiguo: 45-70 EUR/noche",
+        "comfort": "Hotel 4* con playa privada: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Mogren (libre, 400m de arena)",
+        "Snorkel en calas cercanas como Jaz o Ploče (libre/25 EUR tour)",
+        "Casco antiguo y murallas (libre, paseo 1h)",
+        "Visita a islotes cercanos en barco (25-35 EUR/día)",
+        "Senderismo a Cetina (1h, libre) para vistas de la costa"
+      ],
+      "donde_comer": "Camarones frescos, corvina a la sal, palacintas de queso. Zona del puerto viejo: 10-18 EUR plato. Teterías y chiringuitos en playas: 2-5 EUR bebidas",
+      "consejo_local": "Las playas se llenan de turistas de crucero entre 10-14h. Nada por la mañana temprano o al atardecer. Los apartamentos son mejor relación calidad-precio que hoteles.",
+      "plan_b_lluvia": "Museos locales, cines, galerías de arte, compras en mercado central, cafés tradicionales en casco antiguo",
+      "keywords": [
+        "Budva",
+        "Budva town",
+        "Riviera",
+        "playas Budva",
+        "Mogren",
+        "casco antiguo Budva",
+        "vida nocturna"
+      ]
+    },
+    {
+      "id": "durmitor",
+      "nombre": "Parque Nacional de Durmitor",
+      "tipo": "montaña",
+      "region": "Norte de Montenegro",
+      "descripcion": "Macizo montañoso con 48 picos de más de 2000m, lagos glaciares pristinos y el famoso cañón del río Tara. Destino imprescindible para senderismo, escalada y naturaleza salvaje. Pueblo base Žabljak es el más alto de Montenegro (1470m).",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "desde Podgorica en autobús (3.5h, 8-12 EUR) o coche alquilado (290 km, carretera montañosa espectacular). Desde Kotor (4h). Llega a Žabljak",
+      "donde_dormir": {
+        "mochilero": "Guesthouse rural en Žabljak: 22-32 EUR/noche",
+        "medio": "Hotel montaña 3* en Žabljak: 50-75 EUR/noche",
+        "comfort": "Lodge o cabaña rústica de lujo: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo al Pico Bobotov (8h ida/vuelta, 1200m ganancia, libre)",
+        "Lagos glaciares Černo Jezero y Ribčevo Jezero (5-7h, libre)",
+        "Cañón del Tara desde Đilas (paseo fácil de 2h, libre)",
+        "Rafting en Tara (35-50 EUR, 1-2 días)",
+        "Visita a Morača Monastery (libre, 30 min desde carretera principal)"
+      ],
+      "donde_comer": "Cordero asado, trucha fresca de montaña, queso de oveja casero. Restaurantes Žabljak: 8-14 EUR. Comida de montaña rústica y abundante",
+      "consejo_local": "Lleva capas de ropa: el tiempo cambia rápidamente. Los lagos glaciares no están señalizados; consigue mapa o guía local. La carretera desde Kotor es espectacular pero tiene curvas infinitas.",
+      "plan_b_lluvia": "Museo de Durmitor, pueblos tradicionales cercanos, iglesias ortodoxas, interior en cafés locales",
+      "keywords": [
+        "Durmitor",
+        "Zabljak",
+        "Tara Canyon",
+        "Bob's Peak",
+        "Bobotov Kuk",
+        "montaña Montenegro",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "perast",
+      "nombre": "Perast",
+      "tipo": "histórico",
+      "region": "Bahía de Boka",
+      "descripcion": "Pueblo marinero pintoresco con palacetes venecianos frente al agua, dos islotes con iglesias barrocas (Gospa od Škrpjela y Sveti Đorđe) y montañas como telón de fondo. Destino tranquilo ideal para fotógrafos y viajeros que buscan autenticidad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Kotor en autobús (30 min, 2 EUR) o coche alquilado. Desde Podgorica (2.5h)",
+      "donde_dormir": {
+        "mochilero": "Habitación en casa privada: 25-35 EUR/noche",
+        "medio": "Boutique hotel frente al mar: 60-90 EUR/noche",
+        "comfort": "Villa con vistas a los islotes: 110-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Bote a Gospa od Škrpjela (Iglesia de la Virgen en la Roca, 10 EUR ida/vuelta, 1h)",
+        "Paseo por el paseo marítimo (libre, 2h)",
+        "Iglesia Sveti Nikolajevska y su interior barroco (donativo)",
+        "Natación en playas frente al pueblo (libre)",
+        "Excursión de senderismo a Stari Grad y vista de 360º (libre, 3h)"
+      ],
+      "donde_comer": "Percebes, pulpo, branzino. Restaurantes en la línea de costa: 12-20 EUR plato. Cafés: 2-3 EUR café",
+      "consejo_local": "El pueblo se vacía después de las 18h en temporada baja. Los botes a los islotes salen según demanda; mejor ir por la mañana. Fotografía al atardecer desde el paseo marítimo.",
+      "plan_b_lluvia": "Iglesias, museos privados (colecciones privadas), lectura en cafés frente al mar",
+      "keywords": [
+        "Perast",
+        "islotes Perast",
+        "Gospa od Skrpjela",
+        "bahía Boka",
+        "pueblos costeros"
+      ]
+    },
+    {
+      "id": "cetinje",
+      "nombre": "Cetinje",
+      "tipo": "histórico",
+      "region": "Centro histórico",
+      "descripcion": "Antigua capital de Montenegro (hasta 1918), pueblo medieval sobre una meseta a 900m de altura con palacios, monasterios ortodoxos y atmósfera histórica única. Menos turístico que Kotor, ofrece una visión más auténtica de Montenegro.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "desde Kotor en autobús (1.5h, 4 EUR) o coche alquilado (40 km, carretera de montaña con vistas espectaculares). Desde Podgorica (1h)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse tradicional: 20-28 EUR/noche",
+        "medio": "Hotel 3* en el centro: 40-65 EUR/noche",
+        "comfort": "Posada restaurada o mansión histórica: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Monasterio de Cetinje (libre/donativo, visita 1h)",
+        "Palacio del Rey Nikola (5 EUR, museo histórico)",
+        "Paseo por la plaza central y palacios venecianos (libre)",
+        "Iglesia Ortodoxa (donativo, arquitectura interior)",
+        "Senderismo a Lovćen y mausoleo de Njegos (10-15h o 2h en coche + 30 min senderismo fácil)"
+      ],
+      "donde_comer": "Guiso de cordero, burek, queso casero. Restaurantes tradicionales: 7-12 EUR. Cafés de pueblo: 1.50-2.50 EUR",
+      "consejo_local": "Visita el monasterio por la mañana. La carretera desde Kotor sube 900m en pocos km: si conduces, ve lentamente y alerta en curvas. Muy pocos turistas; es un viaje auténtico.",
+      "plan_b_lluvia": "Interiores de iglesias, museos, archivos históricos, librerías antiguas",
+      "keywords": [
+        "Cetinje",
+        "capital histórica",
+        "Cetinja",
+        "monasterios",
+        "Lovćen",
+        "Njegos"
+      ]
+    },
+    {
+      "id": "ostrog",
+      "nombre": "Monasterio de Ostrog",
+      "tipo": "histórico",
+      "region": "Centro de Montenegro",
+      "descripcion": "Monasterio ortodoxo tallado en una pared de roca vertical a 900m de altura, uno de los sitios más sagrados del Mediterráneo. Destino de peregrinación con vistas vertiginosas y acceso por sendero espectacular. Imprescindible para arte, fe y fotografía.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "desde Podgorica en coche alquilado (45 km, 50 min). Base en Nikšić (20 km, autobús 3-4 EUR) o Podgorica. Última parte: carretera de montaña o senderismo 2km (1h)",
+      "donde_dormir": {
+        "mochilero": "En Nikšić: hostal o guesthouse: 18-25 EUR/noche",
+        "medio": "En Nikšić o Podgorica: hotel 3*: 35-55 EUR/noche",
+        "comfort": "Podgorica: hotel 4*: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Peregrinaje a pie al monasterio (2h senderismo fácil, libre)",
+        "Visita al monasterio: iglesia superior e inferior (donativo 5 EUR recomendado)",
+        "Fotografía de vistas panorámicas desde el acantilado (libre)",
+        "Baño en fuentes sagradas del monasterio (libre)",
+        "Senderismo a miradores cercanos (libre, 1-3h)"
+      ],
+      "donde_comer": "En Nikšić: comida tradicional bosnia-serbia. 6-10 EUR plato. Alojamiento con desayuno incluido es lo habitual",
+      "consejo_local": "Lleva calzado de senderismo firme; el camino es rocoso. Vaya temprano para evitar calor y grupos. El monasterio es muy venerado; respeta el silencio y viste decentemente (pantalones/falda larga)",
+      "plan_b_lluvia": "Iglesias en pueblos bases, museos de Nikšić, interior",
+      "keywords": [
+        "Ostrog",
+        "monasterio Ostrog",
+        "Ostroska Manastir",
+        "santuario ortodoxo",
+        "acantilado sagrado"
+      ]
+    },
+    {
+      "id": "tara-canyon",
+      "nombre": "Cañón del Tara",
+      "tipo": "naturaleza",
+      "region": "Norte de Montenegro",
+      "descripcion": "Uno de los cañones más profundos de Europa (1300m) con río turquesa y paredes verticales de roca. Destino top para rafting, senderismo y naturaleza extrema. Accesible desde Žabljak o pueblos base en el cañón.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "desde Žabljak en coche alquilado (30 km, 1h) o tours organizados (35-50 EUR). Desde Podgorica (3h en coche). Pueblo base: Scepan Polje o Brštanovica",
+      "donde_dormir": {
+        "mochilero": "Albergue rural en Brštanovica: 20-28 EUR/noche",
+        "medio": "Cabaña junto al cañón: 45-70 EUR/noche",
+        "comfort": "Lodge con servicios: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Rafting en Tara de 18-35 km (50-80 EUR/persona, 1-2 días)",
+        "Caminata Đurđevića Tara puente-miradores (2-3h, libre)",
+        "Senderismo por el cañón rim trail (4-6h, libre)",
+        "Salto en tirolina sobre el cañón (40-60 EUR)",
+        "Pesca de trucha en el río (guía local, 50-60 EUR/día)"
+      ],
+      "donde_comer": "Trucha fresca, estofado montañés. Restaurantes base: 8-15 EUR. Comida de campamento en rafting incluida",
+      "consejo_local": "Reserva el rafting con antelación en julio-agosto. El agua es fría incluso en verano; trae traje de baño. Mejor de mayo a junio por caudal perfecto.",
+      "plan_b_lluvia": "El cañón se puede visitar incluso con lluvia. Senderismo de baja altura, interior en cabañas",
+      "keywords": [
+        "Tara Canyon",
+        "Rio Tara",
+        "Tara River",
+        "rafting Montenegro",
+        "cañon"
+      ]
+    },
+    {
+      "id": "ulcinj",
+      "nombre": "Ulcinj",
+      "tipo": "playa",
+      "region": "Costa de Riviera Sur",
+      "descripcion": "Playa más meridional de Montenegro con arena roja única, atmosfera bohemia y comunidad internacional. Menos desarrollada que Budva, con playas vírgenes cercanas y ambiente relajado. Puerta a Albania con historia otomana.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "desde Budva en autobús (1h, 3 EUR) o coche alquilado (35 km). Desde Podgorica (2h). Desde Albania (Saranda, 30 min en barco o carretera)",
+      "donde_dormir": {
+        "mochilero": "Apartamento o habitación privada: 18-26 EUR/noche",
+        "medio": "Hotel 3* en la playa: 40-65 EUR/noche",
+        "comfort": "Resort con playa privada: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa grande de Ulcinj: arena roja (libre, 2 km)",
+        "Isla de Ada Bojana (santuario natural, 5 EUR, playas nudistas y naturales)",
+        "Casco antiguo con murallas (libre, 1h paseo)",
+        "Snorkel en calas vírgenes (libre o 20-30 EUR tour)",
+        "Visita a la fortaleza de Balšić (donativo, vistas)"
+      ],
+      "donde_comer": "Pescado fresco, pulpo, camarones. Restaurantes playa: 10-16 EUR. Chiringuitos: 2-4 EUR. Comida más barata que Budva",
+      "consejo_local": "Ada Bojana es un santuario de aves; sé discreto. La arena roja de las playas es natural y se lava. Comunidad muy acogedora; pregunta en hostales por recomendaciones.",
+      "plan_b_lluvia": "Casco antiguo, museos, cafés bohemios, compras en mercado",
+      "keywords": [
+        "Ulcinj",
+        "playa roja",
+        "Ada Bojana",
+        "Riviera sur",
+        "playas naturales"
+      ]
+    },
+    {
+      "id": "podgorica",
+      "nombre": "Podgorica",
+      "tipo": "ciudad",
+      "region": "Centro de Montenegro",
+      "descripcion": "Capital de Montenegro, hub de transporte y punto base. Menos turística que la costa pero con mercados, museos, vida nocturna y auténtica atmósfera local. Punto de entrada lógico para explorar el país.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre-mayo (muy caliente en verano)",
+      "como_llegar": "Aeropuerto internacional (10 km, autobús 2 EUR, taxi 15-20 EUR). Tren/autobús desde Belgrado (11h/8h), Bar (15 min)",
+      "donde_dormir": {
+        "mochilero": "Hostal en centro: 16-24 EUR/noche",
+        "medio": "Hotel 3* céntrico: 35-55 EUR/noche",
+        "comfort": "Hotel 4* con servicios: 75-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por río Morača y parques (libre)",
+        "Mercado Morski Organ (compra y observación, libre)",
+        "Museo de Arte Contemporáneo (3 EUR)",
+        "Mezquita de Osman Pasha y arquitectura otomana (libre/donativo)",
+        "Vida nocturna en Stara Varos (bares/clubes, 3-8 EUR bebida)"
+      ],
+      "donde_comer": "Kajmak con pan, guiso de cordero, palacintas, kofta. Mercados: 3-6 EUR. Restaurantes: 8-15 EUR. Vida de cafetería muy local",
+      "consejo_local": "No es turística; es auténtica. Los conductores son agresivos; camina o usa taxi. Mejor base para dormir que destino a pasar días. Mercados tienen precios de verdad.",
+      "plan_b_lluvia": "Museos, galerías de arte, cines, shopping, vida de café interior",
+      "keywords": [
+        "Podgorica",
+        "capital",
+        "hub",
+        "mercados",
+        "Morska organ",
+        "Stara Varos"
+      ]
+    },
+    {
+      "id": "bay-boka",
+      "nombre": "Bahía de Boka (Boka Kotorska)",
+      "tipo": "playa",
+      "region": "Costa de Boka",
+      "descripcion": "Bahía navegable única donde 4 pueblos costeros (Kotor, Perast, Risan, Orahovac) crean un destino de combinación perfecta. Paisaje tipo fiordo noruego en Mediterráneo. Imprescindible navegar por la bahía para apreciar su belleza.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Base en Kotor (autobús desde Podgorica 2h, 5-8 EUR). Tours en barco desde Kotor (25-40 EUR)",
+      "donde_dormir": {
+        "mochilero": "En Kotor o Perast: 20-30 EUR/noche",
+        "medio": "En Kotor o Perast: 50-80 EUR/noche",
+        "comfort": "En Kotor o Perast: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Crucero de día completo por la bahía con barco (35-50 EUR)",
+        "Kayak en la bahía (30-45 EUR/día)",
+        "Visita a los 4 pueblos: Kotor, Perast, Risan, Orahovac (autobús local 2 EUR)",
+        "Baño en Gospa od Škrpjela (acceso barco + iglesia 10 EUR)",
+        "Senderismo de montaña con vistas a la bahía (libre, 4-6h)"
+      ],
+      "donde_comer": "Mejillones, pulpo, branzino, gambas. Restaurantes costeros: 10-18 EUR. Especialidades de mar",
+      "consejo_local": "La bahía se ve mejor desde el agua en barco que desde tierra. Contrata un tour con parada en islotes. El agua es limpia para nadar en cualquier punto.",
+      "plan_b_lluvia": "Museos en pueblos, iglesias, paseos entre pueblos en autobús",
+      "keywords": [
+        "Boka Kotorska",
+        "Boka Bay",
+        "bahía",
+        "fiordo Mediterráneo",
+        "pueblos costeros"
+      ]
+    }
+  ]
+}

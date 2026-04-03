@@ -1,0 +1,342 @@
+{
+  "pais": "Zimbabue",
+  "codigo": "zw",
+  "destinos": [
+    {
+      "id": "victoria-falls",
+      "nombre": "Cataratas Victoria",
+      "tipo": "naturaleza",
+      "region": "Provincia de Matabeleland North",
+      "descripcion": "Una de las mayores cascadas del mundo (1.708 metros de ancho), compartida con Zambia. Imprescindible para senderismo, avistamiento de animales y adrenalina. El rugido del agua y la niebla permanente crean un espectáculo natural único.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Harare en avión (1,5 horas, 120-200 EUR) o autobús (18 horas, 25-40 EUR). Desde Bulawayo en autobús (7 horas, 15-25 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Victoria Falls town + casas de huéspedes: 12-20 EUR/noche",
+        "medio": "Lodges de 3 estrellas cerca de las cataratas: 50-100 EUR/noche",
+        "comfort": "Lodges de lujo con vistas a las cataratas: 150-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Caminata por el Puente del Diablo (gratis, vistas espectaculares)",
+        "Rafting en el río Zambeze (30-50 EUR, adrenalina máxima)",
+        "Paseo en helicóptero sobre las cataratas (100-150 EUR)",
+        "Safari nocturno en parques cercanos (25-40 EUR)",
+        "Bungee jumping desde el puente Victoria Falls (80-120 EUR)"
+      ],
+      "donde_comer": "Comida local: sadza (papilla de maíz) con relish, carne de caza. En Victoria Falls town: The Three Monkeys (carnes a la parrilla, 10-15 EUR), comidas callejeras (2-5 EUR). Zona turística: overpriced pero variado.",
+      "consejo_local": "Ve al Jardín de la Lluvia al atardecer antes de cruzar el puente: menos turistas, mejor luz y sin aglomeraciones. Lleva chubasquero para la caminata.",
+      "plan_b_lluvia": "Visita el Museo de las Cataratas Victoria o el Zoológico de Victoria Falls, o aprovecha para hacer compras en la localidad.",
+      "keywords": [
+        "Victoria Falls",
+        "Vic Falls",
+        "cataratas Zambeze",
+        "Mosi-oa-Tunya",
+        "puente Victoria Falls",
+        "rafting Zambeze"
+      ]
+    },
+    {
+      "id": "hwange-national-park",
+      "nombre": "Parque Nacional Hwange",
+      "tipo": "naturaleza",
+      "region": "Matabeleland North",
+      "descripcion": "El mayor parque nacional de Zimbabue con más de 14.600 km². Uno de los mejores safaris de África con grandes rebaños de elefantes, leones y búfalos. Accesible y menos masificado que Kruger.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "desde Victoria Falls en coche de alquiler (3 horas, 50-80 EUR/día) o tour organizado (60-100 EUR/día). Desde Bulawayo en autobús (5 horas, 10-15 EUR) + transporte interno.",
+      "donde_dormir": {
+        "mochilero": "Campamentos del parque con tiendas básicas: 15-25 EUR/noche",
+        "medio": "Lodges medianos dentro del parque: 60-120 EUR/noche",
+        "comfort": "Lodges de safari de lujo: 150-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Game drive guiado (35-70 EUR/tour, 3-4 horas)",
+        "Caminata a pie con guarda forestal (25-40 EUR, 2-3 horas)",
+        "Observación nocturna de animales (30-50 EUR)",
+        "Fotografía de vida salvaje (gratis si tienes equipo)",
+        "Acampada bajo las estrellas en el parque (incluido en alojamiento)"
+      ],
+      "donde_comer": "En lodges: comida local e internacional (15-25 EUR). Si acampas: compra en Main Camp o lleva provisiones de Victoria Falls. Las tiendas son básicas.",
+      "consejo_local": "Ve en junio-julio: menos turistas, mejor avistamiento y precios más bajos. En septiembre el agua es escasa, concentrando animales en fuentes (bueno para fotos).",
+      "plan_b_lluvia": "Las lluvias (nov-mar) no son problema para safaris, pero los caminos pueden ser intransitables. Los meses secos son obligatorios.",
+      "keywords": [
+        "Hwange",
+        "safari Zimbabwe",
+        "parque nacional Hwange",
+        "elefantes africanos",
+        "game drive",
+        "Main Camp"
+      ]
+    },
+    {
+      "id": "great-zimbabwe",
+      "nombre": "Gran Zimbabue",
+      "tipo": "histórico",
+      "region": "Provincia de Masvingo",
+      "descripcion": "Ruinas de una ciudad medieval (siglos XI-XV) con arquitectura de piedra seca única. Centro del imperio medieval de Zimbabue y patrimonio UNESCO. Fundamental para entender la historia africana precolonial.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "desde Harare en autobús a Masvingo (5 horas, 12-18 EUR), luego minibús o taxi a las ruinas (1 hora, 3-5 EUR). Desde Bulawayo en autobús (6 horas, 15-20 EUR).",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes en Masvingo: 10-18 EUR/noche",
+        "medio": "Great Zimbabwe Hotel (cerca de ruinas): 40-70 EUR/noche",
+        "comfort": "Sweet Waters Lodges: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita guiada a las ruinas (10 EUR entrada + guía 15 EUR, 2 horas)",
+        "Museo de Gran Zimbabue (5 EUR, artefactos y contexto histórico)",
+        "Caminata por la ciudadela (gratis, vistas panorámicas)",
+        "Fotografía de arquitectura medieval (gratis)",
+        "Visita a Masvingo town para contexto colonial"
+      ],
+      "donde_comer": "En Masvingo: restaurantes locales con sadza, ndiwo (verduras) (3-8 EUR). En Great Zimbabwe Hotel: comida cara pero cómoda (12-20 EUR). Compra en mercado de Masvingo.",
+      "consejo_local": "Contrata un guía en las ruinas: el contexto histórico vale completamente la pena. Las ruinas sin contexto son solo piedras. Ve temprano para evitar calor y turistas.",
+      "plan_b_lluvia": "Las ruinas se pueden visitar con lluvia (son piedra), pero el camino de acceso puede ser fangoso. Mejor evitar noviembre-marzo.",
+      "keywords": [
+        "Great Zimbabwe",
+        "Gran Zimbabwe",
+        "ruinas Zimbabwe",
+        "arquitectura medieval",
+        "patrimonio UNESCO",
+        "imperio Zimbabue",
+        "Masvingo"
+      ]
+    },
+    {
+      "id": "lake-kariba",
+      "nombre": "Lago Kariba",
+      "tipo": "naturaleza",
+      "region": "Kariba District, Mashonaland West",
+      "descripcion": "El mayor embalse de África por volumen, con vistas espectaculares y vida salvaje abundante. Pesca de tigre, avistamiento de elefantes y botes son las actividades principales. Menos conocido pero más tranquilo que Victoria Falls.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Harare en coche de alquiler (5 horas, 50-80 EUR/día) o autobús (6-7 horas, 12-18 EUR) a Kariba town. Desde Victoria Falls en coche (4 horas, 40-60 EUR/día).",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes en Kariba town: 12-20 EUR/noche",
+        "medio": "Lodges pequeños en la orilla: 50-90 EUR/noche",
+        "comfort": "Safari lodges con bote privado: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Pesca de tigre (25-50 EUR/día con guía)",
+        "Crucero por el lago al atardecer (15-30 EUR, avistamiento de elefantes)",
+        "Snorkeling o nado (gratis, pero necesitas guía local)",
+        "Visita a isla Spurwing (25-40 EUR, vida salvaje)",
+        "Fotografía de hipopótamos y aves (gratis desde orilla)"
+      ],
+      "donde_comer": "Pescado fresco del lago (8-15 EUR en restaurantes locales). Kariba town tiene tiendas básicas y restaurantes modestos (4-10 EUR). Lleva provisiones si estás en un lodge remoto.",
+      "consejo_local": "El mejor avistamiento de elefantes es desde bote al atardecer en las zonas remotas (Sanyati, Bumi Hills). Evita la gasolinera de Kariba town para cambio de dinero (tasa mala).",
+      "plan_b_lluvia": "El lago se puede disfrutar con lluvia, pero los botes pueden no funcionar si hay mal tiempo. Mejor en estación seca.",
+      "keywords": [
+        "Kariba",
+        "lago Kariba",
+        "tigres pesca",
+        "embalse Kariba",
+        "elefantes Kariba",
+        "Sanyati",
+        "Bumi Hills"
+      ]
+    },
+    {
+      "id": "motopos-national-park",
+      "nombre": "Parque Nacional Matobo",
+      "tipo": "montaña",
+      "region": "Matabeleland Sur",
+      "descripcion": "Formaciones rocosas graníticas espectaculares con arte rupestre de 2.000 años (pintura rupestre san/bosquimana). Senderismo, paisajes dramáticos y historia cultural africana. Menos conocido que Victoria Falls pero igualmente valioso.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "desde Bulawayo en coche de alquiler (1,5 horas, 40-60 EUR/día) o autobús a Matobo (1,5 horas, 5-8 EUR) + taxi local. Desde Harare en autobús a Bulawayo (5 horas, 15-20 EUR) + Bulawayo a Matobo.",
+      "donde_dormir": {
+        "mochilero": "Campamento del parque: 12-18 EUR/noche",
+        "medio": "Matobo Hills Lodge: 50-80 EUR/noche",
+        "comfort": "Amalinda Lodge: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Caminata guiada a sitios de arte rupestre (20-30 EUR, 3 horas)",
+        "Senderismo por formaciones rocosas (gratis, 2-4 horas)",
+        "Visita a la tumba de Cecil Rhodes (5 EUR, vistas panorámicas)",
+        "Avistamiento de águilas y aves (gratis)",
+        "Fotografía de paisajes y arte rupestre (gratis)"
+      ],
+      "donde_comer": "En Matobo Hills Lodge: comida decente (12-18 EUR). En Bulawayo antes/después: más opciones. En parque: campamento con tiendas básicas, mejor llevar provisiones.",
+      "consejo_local": "Contrata un guía local para el arte rupestre: sin explicación cultural, es fácil pasar por alto detalles importantes. Los lugareños saben historias que no está en libros.",
+      "plan_b_lluvia": "El senderismo en rocas mojadas es peligroso. Mejor evitar nov-mar. En lluvia, solo visita arte rupestre protegido bajo rocas.",
+      "keywords": [
+        "Matobo",
+        "Motopos",
+        "arte rupestre",
+        "formaciones rocosas",
+        "Cecil Rhodes",
+        "pintura san",
+        "senderismo Zimbabwe"
+      ]
+    },
+    {
+      "id": "eastern-highlands",
+      "nombre": "Tierras Altas del Este (Eastern Highlands)",
+      "tipo": "montaña",
+      "region": "Manicaland",
+      "descripcion": "Cadena montañosa con paisajes verdes, cascadas y clima fresco. Zona agrícola con plantaciones de té y cultivos. Trekking, observación de aves y escapada del calor de las tierras bajas. Destino subestimado.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "desde Harare en autobús a Mutare (5 horas, 15-20 EUR) o coche de alquiler (4,5 horas, 50-80 EUR/día). Desde Mutare en minibús a pueblos como Nyanga (2 horas, 5-8 EUR).",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes en Nyanga, Chimanimani: 12-20 EUR/noche",
+        "medio": "Posadas en pueblos: 35-60 EUR/noche",
+        "comfort": "Lodges con vistas: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a cascadas Bridal Veil (gratis, 1-2 horas)",
+        "Caminata a Chimanimani (25-50 EUR con guía, 1-2 días)",
+        "Visita a plantaciones de té (5-10 EUR tours educativos)",
+        "Observación de aves (gratis, zona de alta biodiversidad)",
+        "Piscinas naturales en cascadas (gratis)"
+      ],
+      "donde_comer": "Comida casera en posadas (6-12 EUR). Té fresco y productos locales. En Mutare: más opciones variadas (5-15 EUR). Zona rural pero cómoda.",
+      "consejo_local": "El mejor hiking es en Chimanimani, pero requiere aclimatación (2.000 m). Nyanga es más accesible. Trae repelente: moscas negras en estación húmeda.",
+      "plan_b_lluvia": "Las lluvias (nov-marzo) hacen senderismo difícil pero paisajes verdes espectaculares. Evita si buscas trekking de montaña.",
+      "keywords": [
+        "Eastern Highlands",
+        "Nyanga",
+        "Chimanimani",
+        "cascadas Bridal Veil",
+        "trekking Zimbabwe",
+        "plantaciones té",
+        "Mutare"
+      ]
+    },
+    {
+      "id": "bulawayo",
+      "nombre": "Bulawayo",
+      "tipo": "ciudad",
+      "region": "Matabeleland Sur",
+      "descripcion": "Segunda ciudad de Zimbabue con arquitectura colonial bien preservada, museo de calidad y mercados animados. Puerta de entrada a Matobo y Victoria Falls. Centro cultural ndebele con poco turismo de masas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "desde Harare en autobús (5-6 horas, 15-20 EUR) o avión (1,5 horas, 80-140 EUR). Desde Victoria Falls en coche de alquiler (3 horas, 40-60 EUR/día) o autobús (5 horas, 12-18 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales céntricos: 12-20 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 40-70 EUR/noche",
+        "comfort": "Cresta Churchill Hotel o Bulawayo Club: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional de Zimbabue (5 EUR, arte y arqueología)",
+        "Paseo por el centro colonial (gratis, arquitectura histórica)",
+        "Mercado de Main (gratis, artesanía local y ambiente)",
+        "Parque Natural de Khami Ruins (8 EUR, ruinas + paisaje)",
+        "Galería Amanzi (entrada variable, arte contemporáneo)"
+      ],
+      "donde_comer": "Restaurant Cattlemen's (carne a la parrilla, 12-20 EUR), Egg Factory (comidas rápidas, 4-8 EUR), mercado callejero (2-5 EUR). Zona de Fife Street: mejor oferta.",
+      "consejo_local": "Bulawayo es tranquila y segura para explorar a pie. El museo es realmente bueno y vale la pena. Câmbiate dinero en el banco antes de salir (tasas malas en mercados).",
+      "plan_b_lluvia": "La ciudad es ideal para lluvia: museos, shopping, cafés. El museo es imprescindible de todas formas.",
+      "keywords": [
+        "Bulawayo",
+        "segunda ciudad Zimbabwe",
+        "arquitectura colonial",
+        "museo nacional",
+        "Khami Ruins",
+        "Fife Street"
+      ]
+    },
+    {
+      "id": "lake-chivero",
+      "nombre": "Lago Chivero",
+      "tipo": "naturaleza",
+      "region": "Harare Metropolitan",
+      "descripcion": "Embalse a 35 km de Harare con vida salvaje, botes y picnic en la orilla. Destino de escape para capitalinos con hipopótamos, aves y safaris cortos. Alternativa accesible a parques nacionales lejanos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Harare en coche de alquiler (45 min, 40-60 EUR/día), autobús o taxi (1 hora, 3-5 EUR).",
+      "donde_dormir": {
+        "mochilero": "Campamentos en el parque: 10-15 EUR/noche",
+        "medio": "Lodges pequeños: 35-60 EUR/noche",
+        "comfort": "Island Sands Safari Lodge: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Crucero por el lago (15-25 EUR, avistamiento hipopótamos)",
+        "Picnic en la orilla (gratis, lleva comida)",
+        "Pesca (15-30 EUR/día con guía)",
+        "Game drive corto (20-30 EUR, 2 horas)",
+        "Observación de aves (gratis)"
+      ],
+      "donde_comer": "En lodges: comida cara pero decente (12-20 EUR). Lleva provisiones de Harare para picnic. Restaurantes básicos en zona de entrada.",
+      "consejo_local": "Es principalmente para harareños en fin de semana: ir entre semana es más tranquilo. No sustituye un safari real pero es bueno para un día.",
+      "plan_b_lluvia": "Perfectamente accesible con lluvia, aunque botes pueden tener problemas. Mejor para picnic que para actividades acuáticas.",
+      "keywords": [
+        "Chivero",
+        "lago Chivero",
+        "safari Harare",
+        "hipopótamos Zimbabwe",
+        "embalse Harare",
+        "picnic Zimbabwe"
+      ]
+    },
+    {
+      "id": "harare",
+      "nombre": "Harare",
+      "tipo": "ciudad",
+      "region": "Provincia de Harare",
+      "descripcion": "Capital de Zimbabue con vida urbana, mercados, museos y gastronomía. Punto de entrada para la mayoría de viajeros. Centro administrativo con barrios variados, aunque infraestructura limitada.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "desde Sudáfrica (2-4 horas en coche), Botswana (6 horas autobús) o vuelos internacionales. Aeropuerto internacional a 15 km del centro (taxi 10-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Avondale: 10-18 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 40-70 EUR/noche",
+        "comfort": "Rainbow Towers o Meikles Hotel: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional de Zimbabue (5 EUR, arte y arqueología)",
+        "Paseo por jardín botánico (entrada gratis, caminar)",
+        "Mercado de Mbare (gratis, artesanía local y ambiente caótico)",
+        "Galerías de arte (Amanzi Gallery, entrada variable)",
+        "Shopping en Avondale y centro comercial (gratis mirar)"
+      ],
+      "donde_comer": "Restaurants variados en Avondale (8-20 EUR). Comida callejera en mercados (2-5 EUR). Tariro (cocina local innovadora, 10-15 EUR). Southern Sun buffet (12 EUR).",
+      "consejo_local": "Evita Mbare de noche. Avondale es zona segura y turística. Cambio de dinero en bancos, no en calles. Taxis informales pueden no ser seguros: usa Uber si es posible.",
+      "plan_b_lluvia": "Ideal para lluvia: museos, galerías, shopping. La ciudad es mejor para lluvias que para viajes de campo.",
+      "keywords": [
+        "Harare",
+        "capital Zimbabwe",
+        "Avondale",
+        "Mbare",
+        "museo nacional",
+        "jardín botánico",
+        "vida nocturna Harare"
+      ]
+    },
+    {
+      "id": "chinhoyi-caves",
+      "nombre": "Cuevas de Chinhoyi",
+      "tipo": "naturaleza",
+      "region": "Mashonaland West",
+      "descripcion": "Sistema de cuevas con lagos subterráneos cristalinos. Piscinas naturales azules (Ponds) de agua clara para buceo y natación. Accesible desde Harare como excursión de un día. Poco turístico pero espectacular.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Harare en coche de alquiler (2 horas, 40-60 EUR/día) o con tour organizado (50-80 EUR/persona). Autobús a Chinhoyi (2,5 horas, 10-15 EUR) + minibús/taxi al sitio (3-5 EUR).",
+      "donde_dormir": {
+        "mochilero": "Chinhoyi town: casas de huéspedes básicas: 10-15 EUR/noche",
+        "medio": "Chinhoyi Caves Hotel (dentro del parque): 50-80 EUR/noche",
+        "comfort": "Lodges cercanos en Mashonaland: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en Ponds (25-40 EUR con instructor, certificación necesaria)",
+        "Natación en aguas azules (gratis con entrada al parque 5 EUR)",
+        "Snorkeling (gratis si sabes)",
+        "Caminata por las cuevas (incluido en entrada, 1 hora con guía)",
+        "Fotografía subacuática (gratis si tienes equipo)"
+      ],
+      "donde_comer": "Chinhoyi Caves Hotel: comida decente pero cara (12-18 EUR). Chinhoyi town: restaurantes básicos (4-10 EUR). Mejor llevar picnic.",
+      "consejo_local": "El buceo requiere certificado PADI. Si no lo tienes, nada y snorkling son suficientes. El agua es fría (mejor neopreno). Los lagos son profundos pero seguros con equipo.",
+      "plan_b_lluvia": "El buceo y natación no se ven afectados por lluvia. Ideal para clima lluvioso.",
+      "keywords": [
+        "Chinhoyi",
+        "cuevas Chinhoyi",
+        "Ponds",
+        "buceo Zimbabwe",
+        "lagos subterráneos",
+        "natación cuevas",
+        "Mashonaland West"
+      ]
+    }
+  ]
+}

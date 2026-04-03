@@ -1,0 +1,328 @@
+{
+  "pais": "Kenia",
+  "codigo": "ke",
+  "destinos": [
+    {
+      "id": "nairobi",
+      "nombre": "Nairobi",
+      "tipo": "ciudad",
+      "region": "Centro, Provincia de Nairobi",
+      "descripcion": "Capital keniana y punto de entrada obligatorio con museo nacional de calidad, mercados vibrantes y vida nocturna. Centro administrativo desde donde se organizan safaris y se conecta con el resto del país. Barrios como Westlands y Karen ofrecen infraestructura segura para mochileros.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre, enero a febrero",
+      "como_llegar": "Aeropuerto Internacional Jomo Kenyatta (40 km): autobús (1,5h, 3-5 EUR), taxi/Uber (30-40 EUR), matatu (45 min, 1-2 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Westlands/Karen: 12-18 EUR/noche",
+        "medio": "Hoteles 3* en Nairobi Central: 50-80 EUR/noche",
+        "comfort": "Hoteles 4-5* en Westlands: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional de Kenia (5 EUR, 2-3h)",
+        "David Sheldrick Wildlife Trust - orfanato de elefantes (15 EUR, 11h, requiere reserva)",
+        "Mercado de Maasai Market (regateo, sin entrada, 2-3h)",
+        "Nairobi National Park (25 EUR, safari 2h desde ciudad)",
+        "Giraffe Centre en Karen (15 EUR, alimentar jirafas)"
+      ],
+      "donde_comer": "Ugali, nyama choma y samosas. Barrio de Westlands tiene restaurantes internacionales (8-15 EUR). Mercados callejeros: comida local por 2-4 EUR. Evitar agua del grifo.",
+      "consejo_local": "Los matatus (minibuses) son caóticos pero baratos. Negocia siempre en Maasai Market, los precios iniciales triplican lo justo. Nairobi es segura en zonas turísticas pero no andes solo de noche.",
+      "plan_b_lluvia": "Museo Nacional, centros comerciales (The Hub, Westgate), cines en Westlands",
+      "keywords": [
+        "Nairobi",
+        "capital de Kenia",
+        "Westlands",
+        "Karen",
+        "Jomo Kenyatta Airport",
+        "CBD"
+      ]
+    },
+    {
+      "id": "masai-mara",
+      "nombre": "Masai Mara National Reserve",
+      "tipo": "naturaleza",
+      "region": "Suroeste, región del Valle del Rift",
+      "descripcion": "Reserva de fauna más icónica de Kenia con concentración excepcional de leones, elefantes, cebras y ñus. La migración anual de ñus (julio-octubre) es espectáculo mundial. Accesible para independientes con safaris compartidos o renta de vehículos con conductor.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "julio a octubre (migración), diciembre a marzo (animales dispersos pero paisaje verde)",
+      "como_llegar": "Desde Nairobi: autobús (5-6h, 15-25 EUR) o avión doméstico (1h, 60-100 EUR). Carretera polvorienta pero transitable.",
+      "donde_dormir": {
+        "mochilero": "Campamentos básicos en Sekenani/Talek: 25-40 EUR/noche (incluye comidas)",
+        "medio": "Lodges modestos (Mara Serena, Keekorok): 80-120 EUR/noche",
+        "comfort": "Lodges de lujo (Four Seasons, Angama): 300-500 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en 4x4 (grupo compartido 60-80 EUR/día, privado 120-150 EUR/día)",
+        "Caminata con guía Maasai (30-50 EUR)",
+        "Encuentro cultural Maasai villages (20-30 EUR)",
+        "Avistamiento de aves (actividad incluida en safaris)"
+      ],
+      "donde_comer": "Lodges sirven comidas incluidas. Restaurantes en pueblos cercanos (Sekenani, Talek): nyama choma, ugali (4-8 EUR). Compra provisiones en Nairobi.",
+      "consejo_local": "Agosto-septiembre es la migración más espectacular pero el lodge está lleno; julio y octubre son mejores para evitar multitudes. Los safaris a pie al atardecer ofrecen fotografía mejor que a primera hora.",
+      "plan_b_lluvia": "Carreteras se vuelven intransitables en lluvia fuerte (abril-mayo). Si llueve, enfócate en jungla cercana y avistamiento de aves. Evita viajes en noviembre-abril por ese riesgo.",
+      "keywords": [
+        "Masai Mara",
+        "safari Kenia",
+        "migración ñus",
+        "Sekenani",
+        "Talek",
+        "leones",
+        "elefantes"
+      ]
+    },
+    {
+      "id": "mombasa",
+      "nombre": "Mombasa",
+      "tipo": "playa",
+      "region": "Costa, Provincia de la Costa",
+      "descripcion": "Puerto histórico con medina árabe colorida, playas cercanas y acceso a arrecifes coralinos. Punto de entrada al turismo de playa keniano con atmósfera más relajada que Nairobi. Centro cultural con influencia suahili milenaria.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre, enero a febrero",
+      "como_llegar": "Desde Nairobi: autobús (12-14h, 20-30 EUR), vuelo doméstico (1h, 60-100 EUR). Desde Dar es Salaam (Tanzania): autobús (6h, 15-20 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Old Town: 12-20 EUR/noche",
+        "medio": "Hoteles en Mombasa Island/Nyali: 40-70 EUR/noche",
+        "comfort": "Resorts en Nyali Beach: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Fuerte Jesús - fortaleza portuguesa (8 EUR, 1-2h)",
+        "Paseo por Old Town/medina (libre, 2-3h, compra en tiendas locales)",
+        "Playa Nyali (libre, natación y relax)",
+        "Snorkel en arrecife coralino (20-30 EUR desde agencias)"
+      ],
+      "donde_comer": "Gastronomía suahili: arroz con coco, camarones, pescado asado. Old Town tiene pequeños restaurantes (4-10 EUR). Evita comer en la playa por seguridad.",
+      "consejo_local": "Old Town es seguro de día pero no andes solo de noche. Los precios turísticos en playas son dobles; come donde comen locales. Negocia con taxis y matatus.",
+      "plan_b_lluvia": "Fuerte Jesús cubre lluvia. Mercados cerrados (Fort Jesus Market). Cafeterías en Old Town.",
+      "keywords": [
+        "Mombasa",
+        "Mombase",
+        "playa Kenia",
+        "Old Town",
+        "Fuerte Jesus",
+        "costa suahili",
+        "Nyali"
+      ]
+    },
+    {
+      "id": "diani-beach",
+      "nombre": "Diani Beach",
+      "tipo": "playa",
+      "region": "Costa Sur, provincia de la Costa",
+      "descripcion": "Playa de arena blanca al sur de Mombasa con agua turquesa y snorkel de clase mundial en arrecife. Pueblo costero con ambiente internacional pero auténtico, accesible y con variedad de alojamiento presupuestario.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a octubre, enero a febrero",
+      "como_llegar": "Desde Mombasa: matatu (1-1,5h, 2-3 EUR), taxi (30-40 EUR). Desde Nairobi: autobús directo (13-15h, 20-30 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales/casas en Diani: 15-25 EUR/noche",
+        "medio": "Hoteles pequeños en Diani Road: 50-80 EUR/noche",
+        "comfort": "Resorts beachfront: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife coralino (15-25 EUR, medio día)",
+        "Paseo por Diani Beach (libre, arena blanca 5 km)",
+        "Visita a Wasini Island - aldea costera con cueva marina (30 EUR con almuerzo)",
+        "Avistamiento de delfines (40-50 EUR)"
+      ],
+      "donde_comer": "Restaurantes de pescado fresco en Diani Road (8-15 EUR). Cervecería local Mahindra para ambiente (5-8 EUR cerveza). Comida callejera en mercado de Diani.",
+      "consejo_local": "El coral está frágil; usa zapatos de agua en el arrecife. Las mareas afectan snorkel; pregunta horarios locales. Playa segura pero no dejes cosas solas.",
+      "plan_b_lluvia": "Wasini Island funciona con lluvia. Visita tiendas de artesanía en Diani Road. Piscinas en hoteles.",
+      "keywords": [
+        "Diani",
+        "Diani Beach",
+        "playa blanca",
+        "snorkel arrecife",
+        "costa sur",
+        "Wasini Island"
+      ]
+    },
+    {
+      "id": "kisumu",
+      "nombre": "Kisumu",
+      "tipo": "ciudad",
+      "region": "Oeste, cuenca del Lago Victoria",
+      "descripcion": "Ciudad portuaria en Lago Victoria con atmósfera local auténtica lejos del circuito turístico principal. Acceso a islas lacustres (Crescent Island con hipopótamos), pueblos Luo y mercados vibrantes. Punto de conexión a Uganda.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Nairobi: autobús (5-6h, 15-20 EUR), avión doméstico (1h, 60-100 EUR). Desde Uganda: cruce fronterizo terrestre (6h).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Centro: 12-18 EUR/noche",
+        "medio": "Hoteles pequeños: 40-60 EUR/noche",
+        "comfort": "Hoteles con vista al lago: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Crucero lago Victoria (20-30 EUR, 2-3h, avistamiento hipopótamos)",
+        "Crescent Island - isla privada con jirafas, leones (25 EUR)",
+        "Mercado de pescado (libre, mañana temprano, mercado auténtico)",
+        "Museo de Kisumu (5 EUR, historia Luo)"
+      ],
+      "donde_comer": "Tilapia y perca del lago (nyama samaki). Restaurantes al borde del agua (8-12 EUR). Comida callejera en mercado (2-3 EUR).",
+      "consejo_local": "Kisumu es destino poco turístico pero seguro. Los cruceros al lago salen mejor desde el puerto a primera hora. El agua del lago no es segura para nadar (bilharzia).",
+      "plan_b_lluvia": "Museo de Kisumu, mercados cerrados. Lluvia de marzo a mayo es intensa.",
+      "keywords": [
+        "Kisumu",
+        "Lago Victoria",
+        "Crescent Island",
+        "hipopotamos",
+        "costa oeste",
+        "pueblos Luo"
+      ]
+    },
+    {
+      "id": "nakuru",
+      "nombre": "Lago Nakuru National Park",
+      "tipo": "naturaleza",
+      "region": "Valle del Rift central",
+      "descripcion": "Parque con lago alcalino rodeado de flamencos rosados (paisaje único) y fauna diversa. Alternativa más accesible y barata que Masai Mara con vistas espectaculares. Punto de parada entre Nairobi y otras reservas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Nairobi: autobús/matatu (2-2,5h, 8-12 EUR), coche alquilado. Ruta hacia Masai Mara o Samburu.",
+      "donde_dormir": {
+        "mochilero": "Campamentos: 20-35 EUR/noche",
+        "medio": "Lodges locales: 50-80 EUR/noche",
+        "comfort": "Lake Nakuru Lodge: 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en 4x4 (30-50 EUR compartido, 80-100 EUR privado)",
+        "Caminata por el lago (15-20 EUR con guía)",
+        "Avistamiento de rinocerontes negros (actividad en safari)"
+      ],
+      "donde_comer": "Lodges incluyen comidas. Pequeños restaurantes en Nakuru town cercano (4-8 EUR). Compra provisiones en Nairobi.",
+      "consejo_local": "La concentración de flamencos varía por estación y alcalinidad del lago. Julio-octubre es mejor. Los safaris a pie son más personales que en Masai Mara.",
+      "plan_b_lluvia": "Safari desde vehículo (menos caminatas mojadas). Parque cierra si lluvia es muy fuerte.",
+      "keywords": [
+        "Nakuru",
+        "Lago Nakuru",
+        "flamencos",
+        "Valle del Rift",
+        "rinocerontes negros"
+      ]
+    },
+    {
+      "id": "amboseli",
+      "nombre": "Amboseli National Park",
+      "tipo": "naturaleza",
+      "region": "Sur, frontera con Tanzania",
+      "descripcion": "Parque con vista al Kilimanjaro nevado (más clara que desde Tanzania) y manadas enormes de elefantes. Llanuras áridas con concentración de fauna excepcional. Acceso independiente más fácil que Masai Mara, parque menos concurrido.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Nairobi: autobús (5-6h, 15-25 EUR), avión doméstico (1h, 60-100 EUR). Desde Mombasa: ruta larga (12h+).",
+      "donde_dormir": {
+        "mochilero": "Campamentos básicos: 20-35 EUR/noche",
+        "medio": "Lodges modestos: 60-90 EUR/noche",
+        "comfort": "Amboseli Serena: 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en 4x4 (40-60 EUR compartido, 100-130 EUR privado)",
+        "Caminata Maasai (30-40 EUR)",
+        "Visita Oltulelei Cultural Centre (10 EUR)",
+        "Fotografía del Kilimanjaro (mejor entre 7-10am)"
+      ],
+      "donde_comer": "Lodges incluyen pensión completa. Restaurantes en Amboseli village (5-10 EUR). Agua disponible en lodges.",
+      "consejo_local": "El Kilimanjaro es visible mejor en estación seca y por mañana. Amboseli es más salado y árido que otros parques pero ofrece una experiencia diferente. Menos abarrotado que Masai Mara.",
+      "plan_b_lluvia": "Abril-mayo lluvia fuerte. Carreteras se vuelven difíciles. Evita esos meses.",
+      "keywords": [
+        "Amboseli",
+        "Kilimanjaro",
+        "elefantes",
+        "sur Kenia",
+        "parque nacional",
+        "llanuras áridas"
+      ]
+    },
+    {
+      "id": "el-bajio-ke",
+      "nombre": "El Bajío (Rift Valley Lakes)",
+      "tipo": "naturaleza",
+      "region": "Valle del Rift centro-sur",
+      "descripcion": "Conjunto de lagos alcalinos (Nakuru, Naivasha, Nairobi) con paisaje volcánico único y fauna de agua dulce (Naivasha) y salada (Nakuru). Ruta accesible entre Nairobi y reservas del sur. Lagos ofrecen hiking, birdwatching y relax.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Nairobi: autobús/matatu a lo largo de la carretera principal (1-2h por lago, 5-10 EUR). Ruta hacia Masai Mara o Nakuru.",
+      "donde_dormir": {
+        "mochilero": "Campamentos Naivasha: 15-25 EUR/noche",
+        "medio": "Lodges en Naivasha: 50-80 EUR/noche",
+        "comfort": "Resorts en Naivasha: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Crucero Lago Naivasha (20-25 EUR, cocos, aves)",
+        "Caminata por Crescent Island (entrada 10 EUR)",
+        "Visita a granja Elsamere (8 EUR, Casa de la leona nacida en libertad)",
+        "Pesca o birdwatching (30-40 EUR)"
+      ],
+      "donde_comer": "Lodges alrededor del lago (10-15 EUR). Restaurantes en pueblo Naivasha (4-8 EUR). Fruta local en mercados.",
+      "consejo_local": "Naivasha es agua dulce, segura para hipopótamos (observa distancia). El Rift es zona geológicamente activa; algunos volcanes cercanos se pueden visitar a pie.",
+      "plan_b_lluvia": "Lagos crecen con lluvia. Cruceros funcionan igual. Senderos pueden ser barro.",
+      "keywords": [
+        "Valle del Rift",
+        "Lagos alcalinos",
+        "Naivasha",
+        "Crescent Island",
+        "Elsamere",
+        "cocodrilos hipopotamos"
+      ]
+    },
+    {
+      "id": "samburu",
+      "nombre": "Samburu National Reserve",
+      "tipo": "naturaleza",
+      "region": "Norte árido",
+      "descripcion": "Reserva desértica en río Ewaso Nyiro con fauna única adaptada al árido: cebras reticuladas, antílopes gerenuk. Paisaje espectacular de montañas de lava roja y fauna concentrada en el río. Menos turismo que Masai Mara, experiencia más salvaje.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Nairobi: autobús (5-6h, 15-25 EUR) o avión doméstico (1,5h, 80-120 EUR). Ruta hacia norte o este de Kenia.",
+      "donde_dormir": {
+        "mochilero": "Campamentos básicos: 25-40 EUR/noche",
+        "medio": "Lodges modestos: 70-100 EUR/noche",
+        "comfort": "Samburu Serena, Larsen's Tented Camp: 180-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en 4x4 (40-60 EUR compartido, 100-130 EUR privado)",
+        "Caminata con guía Samburu (30-40 EUR, cultura nómada)",
+        "Avistamiento de cebra reticulada y antílope gerenuk (en safari)",
+        "Caminata al río Ewaso Nyiro (incluida en safari)"
+      ],
+      "donde_comer": "Lodges incluyen pensión completa. Carnes y vegetales simples. Restaurantes en Samburu town (4-8 EUR).",
+      "consejo_local": "Samburu es uno de los últimos pueblos nómadas de Kenia; interactuar respetuosamente con comunidades locales enriquece la experiencia. Clima muy seco; hidratación constante. Menos visitado = fauna menos acostumbrada a vehículos = avistamientos más auténticos.",
+      "plan_b_lluvia": "Lluvia rara. Río aumenta de caudal pero safaris siguen siendo posibles.",
+      "keywords": [
+        "Samburu",
+        "norte Kenia",
+        "cebra reticulada",
+        "desierto",
+        "río Ewaso Nyiro",
+        "pueblos nómadas",
+        "gerenuk"
+      ]
+    },
+    {
+      "id": "mount-kenya",
+      "nombre": "Mount Kenya",
+      "tipo": "montaña",
+      "region": "Centro-norte, cordillera de Kenya",
+      "descripcion": "Segunda montaña más alta de África (5.199m) con glaciares y ecosistemas variados. Senderismo de varios días accesible sin experiencia técnica. Paisaje alpino único en East Africa con bosques nubosos y fauna de altura.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "enero a febrero, agosto a octubre",
+      "como_llegar": "Desde Nairobi: autobús (2-3h a Nanyuki, 8-12 EUR), luego a gate del parque (1h). Renta 4x4 con conductor (60-80 EUR/día desde Nairobi).",
+      "donde_dormir": {
+        "mochilero": "Campamentos en montaña: 20-30 EUR/noche (incluye cocinero)",
+        "medio": "Mountain lodges (Met Station, Teleki Valley): 50-80 EUR/noche",
+        "comfort": "The Bothy, Mountain Rock: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo ruta Naro Moru (3-4 días, 200-300 EUR con guía oficial)",
+        "Senderismo ruta Chogoria (4 días, similar precio)",
+        "Caminata corta al Point Lenana sin ascenso técnico (3 días, 180-250 EUR)"
+      ],
+      "donde_comer": "Lodges incluyen pensión. Restaurantes en Nanyuki town (5-8 EUR). Compra provisiones en Nairobi o Nanyuki.",
+      "consejo_local": "Guías locales acreditados son obligatorios (evita guías no registrados). Altitud afecta; aclimatación es crucial. Ruta Point Lenana es más accesible que cumbre técnica. Lleva abrigo: noches glaciales a 4000m.",
+      "plan_b_lluvia": "Abril-mayo lluvia fuerte; octubre-noviembre lluvia ligera. Evita abril-mayo para trekking.",
+      "keywords": [
+        "Mount Kenya",
+        "Monte Kenya",
+        "montaña Kenya",
+        "trekking",
+        "Point Lenana",
+        "Naro Moru",
+        "Chogoria"
+      ]
+    }
+  ]
+}

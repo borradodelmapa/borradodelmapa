@@ -1,0 +1,335 @@
+{
+  "pais": "Ucrania",
+  "codigo": "ua",
+  "alerta_seguridad": "Desde febrero de 2022, existe conflicto armado activo en Ucrania. La mayoría de zonas turísticas están fuera de las áreas de combate, pero la situación es volátil. Consulta avisos oficiales antes de viajar. Los destinos listados se basan en relevancia pre-conflicto y para cuando sea seguro viajar.",
+  "destinos": [
+    {
+      "id": "kiev",
+      "nombre": "Kyiv (Kiev)",
+      "tipo": "ciudad",
+      "region": "Kyiv Oblast, norte",
+      "descripcion": "Capital ucraniana con arquitectura soviética y austrohúngara, monasterios dorados y vida nocturna vibrant. Centro cultural e histórico imprescindible para entender Ucrania moderna.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Punto de entrada principal. Aeropuerto internacional Boryspil (40km): autobús/metro 45min (3-5 EUR), taxi 15-20 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Podil, Shevchenko: 12-18 EUR/noche",
+        "medio": "Apartamentos o 3* en centro (Khreschatyk): 40-70 EUR/noche",
+        "comfort": "Hoteles 4-5* (Fairmont, Hilton): 100-200+ EUR/noche"
+      },
+      "que_hacer": [
+        "Monasterio de las Cuevas (Pechersk) - entrada 4 EUR",
+        "Plaza de la Independencia (Maidan) - gratis",
+        "Catedral de Santa Sofía (UNESCO) - 5 EUR",
+        "Paseo por Podil (barrio histórico) - gratis",
+        "Mercado de Zhytomyrska - gratis, compras baratas"
+      ],
+      "donde_comer": "Borscht ucraniano, varenyky (empanadillas), pechenia. Restaurantes locales en Podil: 4-8 EUR por plato. Zonas: Andriyivskiy Uzviz (calle artística), Khreschatyk.",
+      "consejo_local": "El metro es rapidísimo y cuesta 0.25 EUR por viaje. Las estaciones son palacios subterráneos increíbles. Compra un bono de 10 viajes. Evita discusiones políticas.",
+      "plan_b_lluvia": "Museos: Museo Nacional de Arte, Museo de la Historia de Ucrania. Galerías de arte en Podil. Centro comercial Mega, cines.",
+      "keywords": [
+        "Kiev",
+        "Kyiv",
+        "capital de Ucrania",
+        "Maidan",
+        "Podil",
+        "Pechersk",
+        "monasterio"
+      ]
+    },
+    {
+      "id": "lviv",
+      "nombre": "Lviv",
+      "tipo": "ciudad histórica",
+      "region": "Lviv Oblast, oeste",
+      "descripcion": "Joya arquitectónica con centro medieval (UNESCO), plazas empedradas y cafés bohemios. Capital cultural ucraniana con fuerte herencia centroeuropea, perfecta para mochileros.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Kyiv: vuelo 1.5h (20-40 EUR low-cost) o autobús 11h (10-15 EUR). Tren: 10-12h (8-12 EUR). Aeropuerto local a 6km: autobús/taxi 2-5 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Stare Misto (casco viejo): 10-16 EUR/noche",
+        "medio": "Apartamentos o pensiones: 30-50 EUR/noche",
+        "comfort": "Hoteles 3-4* cerca de plaza: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Ayuntamiento y Plaza del Mercado (Rynok) - gratis vistas desde torre (3 EUR)",
+        "Catedral Latina - 2 EUR",
+        "Museo de Artes Aplicadas - 3 EUR",
+        "Recorrido por callejones medievales - gratis",
+        "Café Lviv para probar café tradicional - 1.5 EUR"
+      ],
+      "donde_comer": "Borscht, varenyky, carne a la ucraniana. Restaurantes en Stare Misto y alrededor de Rynok: 3-6 EUR por plato. Prueba pelmeni (ravioles). Cafés con espresso de especialidad.",
+      "consejo_local": "Lviv es mucho más barata y relajada que Kyiv. La gente habla más ucraniano/polaco que ruso. El café local es excelente; los hipsters locales son muy amables con mochileros.",
+      "plan_b_lluvia": "Museos: Museo de la Historia de Lviv, Museo de Arte Ucraniano. Catacumbas de los Dominicos (bajo tierra). Tiendas de artesanía en Stare Misto.",
+      "keywords": [
+        "Lvov",
+        "Lviv",
+        "oeste de Ucrania",
+        "Stare Misto",
+        "Rynok",
+        "medieval",
+        "centroeuropeo"
+      ]
+    },
+    {
+      "id": "odesa",
+      "nombre": "Odesa",
+      "tipo": "playa",
+      "region": "Odesa Oblast, sur",
+      "descripcion": "Puerto bohemio en el Mar Negro con playas, arquitectura neoclásica, vida nocturna intensa y mercado de alimentos caótico. Vibe cosmopolita y relajada ideal para viajeros independientes.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Kyiv: vuelo 2h (15-35 EUR low-cost) o autobús 8h (10-18 EUR). Tren: 9-10h (8-15 EUR). Aeropuerto a 10km: autobús/marshrutka 0.5 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Moldavanka (barrio artístico) o Primorski: 10-14 EUR/noche",
+        "medio": "Apartamentos junto a playas o centro: 25-45 EUR/noche",
+        "comfort": "Hoteles 4* con vistas al mar: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Escalinata de Potemkin - gratis (icónica, 192 escalones)",
+        "Paseo por Primorski Boulevard - gratis",
+        "Playas Lanzheron y Arcadia - gratis, tumbonas 2-3 EUR",
+        "Catacombs de Odesa - 4 EUR (mina de piedra submarina)",
+        "Mercado Privoz - gratis (caótico, colorido, compras baratas)"
+      ],
+      "donde_comer": "Mariscos frescos, caviar, morcilla local (krovyanka). Restaurantes en Primorski: 5-10 EUR. Mercado Privoz: huevos de pescado, frutas a 1-2 EUR. Barras de playa en Arcadia: 3-6 EUR.",
+      "consejo_local": "Odesa es rusa de corazón (la gente habla ruso). El mercado Privoz es abrumador pero auténtico; ve a primera hora. Las playas son mejores en julio-agosto pero muy abarrotadas. Arcadia es el barrio de playa party.",
+      "plan_b_lluvia": "Museo Arqueológico, Museo de Arte Occidental y Oriental. Catacumbas (bajo tierra). Paseos por Moldavanka. Cines y bares.",
+      "keywords": [
+        "Odessa",
+        "Odesa",
+        "Mar Negro",
+        "playa",
+        "Escalinata Potemkin",
+        "Primorski",
+        "puerto"
+      ]
+    },
+    {
+      "id": "kamianets-podilskyi",
+      "nombre": "Kamianets-Podilskyi",
+      "tipo": "histórico",
+      "region": "Khmelnytskyi Oblast, centro-oeste",
+      "descripcion": "Pequeña ciudad medieval rodeada de acantilados y un río, con fortaleza del siglo XIV y atmósfera de cuento de hadas. Joya oculta para mochileros que evitan rutas masivas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Lviv: autobús 3.5h (5-8 EUR). Desde Kyiv: autobús/tren 7-8h (10-15 EUR). Marshrutka barata desde ciudades cercanas.",
+      "donde_dormir": {
+        "mochilero": "Hostales y guesthouses: 10-12 EUR/noche",
+        "medio": "Apartamentos de propietarios locales: 20-35 EUR/noche",
+        "comfort": "Pequeños hoteles locales: 40-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo Medioeval - 3 EUR (vistas espectaculares desde murallas)",
+        "Caminata alrededor de los acantilados - gratis",
+        "Puente Turk (histórico) - gratis",
+        "Bazares callejeros - gratis",
+        "Iglesias ortodoxas (Svyato-Mikhailivska) - gratis"
+      ],
+      "donde_comer": "Comida casera ucraniana, carne a la parrilla. Restaurantes modestos: 2-4 EUR por plato. Pequeños cafés locales muy baratos. Prueba plov (arroz con carne).",
+      "consejo_local": "Este es un lugar donde verás Ucrania real: turismo mínimo, vida local genuina. Alquiladores de bicicletas ofrecen paseos por los acantilados por 10-15 EUR. El castillo al atardecer es inolvidable.",
+      "plan_b_lluvia": "Iglesias interiores. Pequeños museos locales. Cafés y librerías. Explora barrios residenciales a pie.",
+      "keywords": [
+        "Kamianets Podilskyi",
+        "castillo medieval",
+        "fortaleza",
+        "acantilados",
+        "río Smotrych"
+      ]
+    },
+    {
+      "id": "chernivsty",
+      "nombre": "Chernivtsi",
+      "tipo": "ciudad histórica",
+      "region": "Chernivtsi Oblast, suroeste",
+      "descripcion": "Ciudad con arquitectura austrohúngara colorida, universidad histórica (Patrimonio UNESCO) y ambiente estudiantil relajado. Parada transitable entre Lviv y Rumania.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Lviv: autobús 5h (7-12 EUR). Desde Kyiv: autobús 11-12h (15-20 EUR). Tren de larga distancia disponible.",
+      "donde_dormir": {
+        "mochilero": "Hostales en centro: 10-14 EUR/noche",
+        "medio": "Apartamentos locales: 20-35 EUR/noche",
+        "comfort": "Hoteles 3-4*: 45-75 EUR/noche"
+      },
+      "que_hacer": [
+        "Universidad de Chernivtsi (Patrimonio UNESCO) - 2 EUR entrada, arquitectura legendaria",
+        "Plaza Central (Tsentralna) - gratis",
+        "Iglesia de la Exaltación - 1 EUR",
+        "Paseo por barrios históricos - gratis",
+        "Mercado local - gratis"
+      ],
+      "donde_comer": "Comida bukoviniense (mezcla ucraniano-rumana-turca), mici (carnes picadas), mamaliga (polenta). Restaurantes: 3-5 EUR. Cafés estudiantiles muy baratos.",
+      "consejo_local": "La universidad es tan bella que la visita sola vale el viaje. La ciudad es tranquila, llena de estudiantes, y muy barata. Muchos hablamos un poco de inglés/polaco aquí.",
+      "plan_b_lluvia": "Museo de Arte, interior de iglesias y monasterios. Librerías y cafés acogedores.",
+      "keywords": [
+        "Chernivtsi",
+        "Czernowitz",
+        "universidad",
+        "austrohúngaro",
+        "Bukowina"
+      ]
+    },
+    {
+      "id": "yaremche",
+      "nombre": "Yaremche",
+      "tipo": "naturaleza",
+      "region": "Ivano-Frankivsk Oblast, Cárpatos",
+      "descripcion": "Pueblo de montaña en los Cárpatos con cascadas, ríos cristalinos y senderismo accesible. Base perfecta para explorar naturaleza sin complicaciones técnicas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Lviv: autobús 4-5h (8-12 EUR). Desde Ivano-Frankivsk: autobús 1h (2-3 EUR). Marshrutka compartida muy barata.",
+      "donde_dormir": {
+        "mochilero": "Hostales y guesthouses de montaña: 12-16 EUR/noche",
+        "medio": "Pequeños hoteles/cabanias: 25-40 EUR/noche",
+        "comfort": "Resort pequeño: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Cascada Prut - 0.5h caminata, gratis",
+        "Río Prut y sus pozas - gratis (baño)",
+        "Sendero a la cascada Probiy - 1.5h, gratis",
+        "Tirolina/zip-line local - 10-15 EUR",
+        "Paseos en caballo - 15-20 EUR por hora"
+      ],
+      "donde_comer": "Comida de montaña ucraniana, trucha fresca, sopa de hongos. Pequeños restaurantes y cabanas: 4-7 EUR. Come donde alojes.",
+      "consejo_local": "Yaremche es el punto de partida para todo tipo de senderismo en Cárpatos. Los locales alquilan habitaciones en casas privadas muy baratas. El agua es potable de las fuentes.",
+      "plan_b_lluvia": "Las montañas nubladas siguen siendo hermosas. Cafés con vistas. Exploración de pueblos cercanos (Tatariv, Mykulychyn). Compras de artesanía local.",
+      "keywords": [
+        "Yaremche",
+        "Carpatos",
+        "cascadas",
+        "Prut",
+        "senderismo",
+        "montaña"
+      ]
+    },
+    {
+      "id": "ivano-frankivsk",
+      "nombre": "Ivano-Frankivsk",
+      "tipo": "ciudad",
+      "region": "Ivano-Frankivsk Oblast, centro-oeste",
+      "descripcion": "Ciudad compacta y amigable, punto de entrada a los Cárpatos y ciudades históricas vecinas. Centro bien conservado, gente acogedora, excelente relación precio-valor.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Lviv: autobús 2.5h (5-8 EUR). Desde Kyiv: vuelo 2h (20-35 EUR) o autobús 10h (12-18 EUR). Autobuses a Yaremche desde aquí.",
+      "donde_dormir": {
+        "mochilero": "Hostales en centro: 10-13 EUR/noche",
+        "medio": "Apartamentos céntricos: 22-38 EUR/noche",
+        "comfort": "Hoteles 3-4*: 45-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Plaza de la Independencia - gratis, bonito",
+        "Iglesia de Preobrazhensky - 1 EUR",
+        "Catedral de la Asunción - gratis",
+        "Museo de Arte Local - 2 EUR",
+        "Paseos por barrios históricos - gratis"
+      ],
+      "donde_comer": "Comida carpática, hongos de bosque, trucha. Restaurantes en plaza: 4-7 EUR. Cafés estudiantiles muy económicos.",
+      "consejo_local": "Parada estratégica para montaña. Hay buen café y mercados locales. La ciudad es segura y amigable, ideal para acclimarse antes de Cárpatos.",
+      "plan_b_lluvia": "Museos interiores, cafés, tiendas. Autobús a Yaremche para explorar desde allí.",
+      "keywords": [
+        "Ivano-Frankivsk",
+        "IFO",
+        "Cárpatos",
+        "centro-oeste"
+      ]
+    },
+    {
+      "id": "poltava",
+      "nombre": "Poltava",
+      "tipo": "ciudad histórica",
+      "region": "Poltava Oblast, centro-este",
+      "descripcion": "Ciudad histórica donde ocurrió la batalla de Poltava (1709), con arquitectura neoclásica, parques y atmósfera tranquila. Ruta alternativa menos turística hacia el este.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Kyiv: tren 4-5h (5-10 EUR) o autobús 3.5h (6-10 EUR). Desde Kharkiv: autobús 2h (4-6 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales: 10-12 EUR/noche",
+        "medio": "Apartamentos: 20-30 EUR/noche",
+        "comfort": "Hoteles 3*: 35-55 EUR/noche"
+      },
+      "que_hacer": [
+        "Catedral de la Asunción - 1 EUR",
+        "Monumento a la Batalla de Poltava - gratis",
+        "Parque Korolenko - gratis, hermoso",
+        "Museo de Historia Local - 2 EUR",
+        "Paseos junto al río Vorskla - gratis"
+      ],
+      "donde_comer": "Comida ucraniana estándar, muy barata. Restaurantes: 3-5 EUR. Mercados locales con productos frescos.",
+      "consejo_local": "Poltava es tranquila y auténtica, sin influencia turística. Perfecto para conocer Ucrania central lejos de rutas masivas. Buenas conexiones hacia Kharkiv.",
+      "plan_b_lluvia": "Museos interiores, iglesias, cafés.",
+      "keywords": [
+        "Poltava",
+        "batalla",
+        "histórico",
+        "centro-este",
+        "tranquilo"
+      ]
+    },
+    {
+      "id": "kharkiv",
+      "nombre": "Kharkiv",
+      "tipo": "ciudad",
+      "region": "Kharkiv Oblast, noreste",
+      "descripcion": "Segunda ciudad ucraniana, dinámica y universitaria con plazas enormes, vida nocturna intensa y fácil acceso hacia el este y norte. Centro cultural emergente.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Kyiv: tren 4h (8-12 EUR) o autobús 3.5h (8-14 EUR). Vuelo 1.5h (15-30 EUR low-cost). Aeropuerto a 15km: autobús/marshrutka 2-4 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales en centro (Kvadrat, Plekhova): 11-16 EUR/noche",
+        "medio": "Apartamentos: 25-45 EUR/noche",
+        "comfort": "Hoteles 4*: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Plaza de la Libertad (Ploshcha Svobody) - gratis, gigante",
+        "Catedral de la Anunciación - gratis",
+        "Museo de Arte de Kharkiv - 3 EUR",
+        "Parque Gorky - gratis",
+        "Bar Street (vida nocturna) - gratis entrar"
+      ],
+      "donde_comer": "Comida ucraniana, shashlik (brochetas), carne local. Restaurantes: 4-8 EUR. Bar Street tiene opciones baratas. Cafés muy económicos.",
+      "consejo_local": "Kharkiv es más rusa que Lviv pero muy acogedora. La plaza principal es surreal de grande. Tiene movida nocturna buena. Punto de partida para Poltava o Este.",
+      "plan_b_lluvia": "Museos, cines, tiendas, cafés. Interior de iglesias.",
+      "keywords": [
+        "Kharkiv",
+        "Jarkov",
+        "segunda ciudad",
+        "Plaza Libertad",
+        "noreste",
+        "dinámico"
+      ]
+    },
+    {
+      "id": "bukovel",
+      "nombre": "Bukovel",
+      "tipo": "montaña",
+      "region": "Ivano-Frankivsk Oblast, Cárpatos",
+      "descripcion": "Resort de esquí y montaña más grande de Ucrania con teleféricos, senderismo estival y vistas Carpáticas espectaculares. Base para exploración de alta montaña accesible.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre (verano), diciembre a febrero (esquí)",
+      "como_llegar": "Desde Ivano-Frankivsk: autobús 1.5h (3-5 EUR). Desde Yaremche: autobús 1h (2-3 EUR). Marshrutka compartida.",
+      "donde_dormir": {
+        "mochilero": "Hostales y guesthouses base: 14-18 EUR/noche",
+        "medio": "Apartamentos en base: 30-50 EUR/noche",
+        "comfort": "Resort hotels: 60-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Teleférico a cumbre (1.4km) - 8 EUR (ida), vistas de 360°",
+        "Sendero circular desde cumbre - gratis, 2h",
+        "Trail biking de montaña - alquiler bici 15-20 EUR",
+        "Paragliding - 40-60 EUR con instructor",
+        "Piscinas naturales en bosque - gratis"
+      ],
+      "donde_comer": "Comida de montaña, trucha, hongos. Restaurantes en base: 5-10 EUR. Cafés en cumbre caros (10-15 EUR) pero vistas valen.",
+      "consejo_local": "Bukovel es turístico pero accesible. El teleférico es seguro y emocionante. En verano hay mucho más tráfico. La cumbre 1.4km es caminable sin experiencia.",
+      "plan_b_lluvia": "Teleférico permite vistas incluso nubladas. Cafés en base. Exploración de pueblos Carpáticos cercanos.",
+      "keywords": [
+        "Bukovel",
+        "Carpatos",
+        "esquí",
+        "teleférico",
+        "montaña",
+        "resort"
+      ]
+    }
+  ]
+}

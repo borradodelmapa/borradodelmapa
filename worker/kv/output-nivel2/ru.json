@@ -1,0 +1,343 @@
+{
+  "pais": "Rusia",
+  "codigo": "ru",
+  "destinos": [
+    {
+      "id": "san-petersburgo",
+      "nombre": "San Petersburgo",
+      "tipo": "histórico",
+      "region": "Noroeste",
+      "descripcion": "La segunda ciudad más importante de Rusia, fundada por Pedro el Grande en 1703. Destaca por su arquitectura palaciega, canales, museos de clase mundial como el Hermitage y su patrimonio cultural incomparable. Es el punto de entrada más accesible para viajeros independientes desde Europa.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "vuelo desde Moscú (1h, 40-80 EUR) o tren (4h, 25-50 EUR). Desde Europa: vuelos directos desde principales capitales (100-200 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel en Nevsky Prospekt o Sennaya: 12-18 EUR/noche",
+        "medio": "Hotel 3* en centro o Vasilevskiy Ostrov: 40-70 EUR/noche",
+        "comfort": "Hotel 4-5* Hermitage area: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Hermitage (museo gratis primer jueves de mes, 15 EUR otros días)",
+        "Paseo por canales en bote (12-15 EUR)",
+        "Palacio de Invierno y Plaza del Palacio (gratis)",
+        "Catedral de Kazán y Iglesia del Salvador sobre la Sangre Derramada (5-6 EUR)",
+        "Peterhof Palace excursión de día (30 km, 10 EUR entrada + transporte)"
+      ],
+      "donde_comer": "Blini, pelmeni y sopas tradicionales. Rango: 3-8 EUR en cafés locales, 12-20 EUR en restaurantes. Nevsky Prospekt y barrio de Sennaya para opciones económicas.",
+      "consejo_local": "Compra el Hermitage Card para acceso sin filas y múltiples museos (40 EUR por 3 días). Las noches blancas (mayo-junio) son mágicas pero caras; considera junio temprano.",
+      "plan_b_lluvia": "Hermitage y otros museos ocupan días enteros. Galerías subterráneas del metro de San Petersburgo (belleza de las estaciones, 0,50 EUR).",
+      "keywords": [
+        "San Petersburg",
+        "SPB",
+        "Neva",
+        "Nevsky Prospekt",
+        "Hermitage",
+        "Palacio de Invierno",
+        "Vasilevskiy"
+      ]
+    },
+    {
+      "id": "moscu",
+      "nombre": "Moscú",
+      "tipo": "histórico",
+      "region": "Centro",
+      "descripcion": "Capital de Rusia, centro político y cultural. El Kremlin, la Catedral de San Basilio y la Plaza Roja son iconos mundiales. Hub de transporte principal para conectar con otros destinos rusos y punto de entrada obligado para muchos viajeros.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Aeropuerto Domodedovo o Sheremetyevo: metro directo al centro (35 min, 0,70 EUR). Trenes desde San Petersburgo (4-5h, 30-60 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel en Arbat o Kitay-Gorod: 10-16 EUR/noche",
+        "medio": "Hotel 3* cerca de Teatralnaya: 35-60 EUR/noche",
+        "comfort": "Hotel 4-5* Red Square area: 90-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Kremlin y Catedral de San Basilio (Plaza Roja, gratis)",
+        "Basílica de San Basilio entrada (8 EUR)",
+        "Museo Estatal Pushkin (10 EUR)",
+        "Metro de Moscú (palacios subterráneos, 0,70 EUR el trayecto)",
+        "Parque Gorky (gratis, bicicletas y patines de alquiler disponibles)"
+      ],
+      "donde_comer": "Borscht, shashlik y vodka local. 4-10 EUR en puestos callejeros y cafés. Arbat Viejo para ambiente turístico pero caras. Barrio de Kitay-Gorod para precios locales.",
+      "consejo_local": "El metro es más barato y rápido que taxi. Compra tarjeta Troika reutilizable. Evita Plaza Roja después de las 20h (control muy estricto). Las stávkirovkas (iglesias de madera) en arrabales valen el viaje.",
+      "plan_b_lluvia": "Metro es una atracción en sí. Museos Pushkin, Lenin Mausoleum. Galerías de arte en barrio de Meshchansky.",
+      "keywords": [
+        "Moscow",
+        "Kremlin",
+        "Red Square",
+        "San Basilio",
+        "Plaza Roja",
+        "Arbat",
+        "Kitay-Gorod"
+      ]
+    },
+    {
+      "id": "lago-baikal",
+      "nombre": "Lago Baikal",
+      "tipo": "naturaleza",
+      "region": "Siberia Sur",
+      "descripcion": "El lago más profundo del mundo (1.642m) y uno de los más antiguos. Ecosistema único con fauna endémica. Acceso desde Irkutsk para senderismo, avistamiento de fauna y experiencia de la Siberia remota.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio a septiembre (invierno: febrero-marzo si quieres hielo)",
+      "como_llegar": "Vuelo Moscú-Irkutsk (4h, 80-150 EUR). Desde Irkutsk: autobús o minibús a Listvyanka (70 km, 2h, 5-8 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Listvyanka: 12-18 EUR/noche",
+        "medio": "Hotel 3* Listvyanka u Olkhon: 30-50 EUR/noche",
+        "comfort": "Resort en orilla del lago: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo en costa de Baikal (gratis)",
+        "Crucero por el lago desde Listvyanka (40-80 EUR de día completo)",
+        "Isla de Olkhon: chamanes, vistas (ferry 5 EUR + hospedaje)",
+        "Observatorio de fauna en Listvyanka (gratis)",
+        "Pesca o kayak (alquiler: 20-35 EUR)"
+      ],
+      "donde_comer": "Omul ahumado (pez endémico del Baikal), sopa de pescado. 3-6 EUR en cafés locales. Listvyanka tiene más oferta que Olkhon.",
+      "consejo_local": "La isla de Olkhon es mística pero básica (sin wifi, pocos servicios). Visítala si buscas aislamiento. Listvyanka es más cómoda. En verano, mosquitos brutales: repelente imprescindible.",
+      "plan_b_lluvia": "Museo de la Madera de Listvyanka. Viaje en Trans-Siberian railway hasta aquí es en sí una experiencia.",
+      "keywords": [
+        "Baikal",
+        "Listvyanka",
+        "Olkhon",
+        "Irkutsk",
+        "omul",
+        "Siberia",
+        "lago más profundo"
+      ]
+    },
+    {
+      "id": "altai",
+      "nombre": "Montañas Altai",
+      "tipo": "montaña",
+      "region": "Siberia Sur, frontera Kazajstán-Mongola",
+      "descripcion": "Cadena montañosa de 2.000 km con picos de 4.500m, lagos alpinos y ecosistemas prístinos. Paraíso para trekking, acampada y naturaleza salvaje. Acceso desde Gorno-Altaysk, capital regional.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "julio a septiembre",
+      "como_llegar": "Vuelo Moscú-Barnaul (3h, 70-120 EUR) o Gorno-Altaysk. Autobús desde Barnaul a Gorno-Altaysk (4h, 10 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergues en Gorno-Altaysk: 10-15 EUR/noche",
+        "medio": "Casa rural (guesthouse) en aldeas: 20-35 EUR/noche",
+        "comfort": "Lodge en montaña: 50-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking Belukha (pico más alto Altai, 4.506m, 8-10 días, contratación guía 500-700 EUR)",
+        "Ruta lago Akkol (3-4 días, gratis+ refugio 5 EUR/noche)",
+        "Río Katun kayaking (1-2 días, 30-50 EUR con guía)",
+        "Senderismo día completo a cascadas (gratis, solo costo transporte local)",
+        "Visita aldeas Telengit y Kazajo (encuentro cultural, gratis)"
+      ],
+      "donde_comer": "Carne de oveja, lacteos caseros, setas silvestres. 2-4 EUR en aldeas. Gorno-Altaysk tiene restaurantes: 5-12 EUR.",
+      "consejo_local": "La temporada es corta (julio-septiembre). Los pases de montaña requieren permiso especial (gestiona en Gorno-Altaysk, gratis pero papeleo). Lleva equipo robusto: clima extremo.",
+      "plan_b_lluvia": "Museos etnográficos en Gorno-Altaysk. Aguas termales de Chemal.",
+      "keywords": [
+        "Altai",
+        "Belukha",
+        "Gorno-Altaysk",
+        "Katun",
+        "trekking",
+        "picos",
+        "Siberia Sur"
+      ]
+    },
+    {
+      "id": "transsiberiano",
+      "nombre": "Ferrocarril Transiberiano",
+      "tipo": "histórico",
+      "region": "Múltiples (Moscú-Vladivostok)",
+      "descripcion": "Uno de los viajes en tren más legendarios del mundo (9.289 km). Conecta Moscú con el Pacífico atravesando Siberia, Kazajstán y regiones remotas. Experiencia inmersiva en la vastedad rusa y cultura local.",
+      "dias_recomendados": 7,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Empieza en estación Kazanskaya (Moscú). Billetes en RZD (ferrocarriles rusos) o agencias: 200-400 EUR (clase 3) a 600-1200 EUR (clase 1).",
+      "donde_dormir": {
+        "mochilero": "Litera clase 3 (compartida 4 camas): 200-300 EUR",
+        "medio": "Litera clase 2 (compartida 2-4 camas): 400-700 EUR",
+        "comfort": "Cabina privada clase 1: 800-1.200 EUR"
+      },
+      "que_hacer": [
+        "Viaje en tren mismo (observar paisaje, gente local)",
+        "Paradas en ciudades: Yekaterinburg (día), Novosibirsk (día), Irkutsk (conexión a Baikal)",
+        "Encontrarse con vendedores locales en estaciones (artesanía, comida)",
+        "Ver el monumento de los Urales",
+        "Conversar con pasajeros (llevá vodka para hacer amigos)"
+      ],
+      "donde_comer": "Comedor del tren (caro pero experiencia): 10-15 EUR. Vende vendedores en estaciones (barato, 1-3 EUR). Lleva snacks.",
+      "consejo_local": "Compra billetes con antelación (2-3 meses antes en temporada alta). Elige clase 2 si es presupuesto ajustado. En paradas largas, baja a explorar (15-30 min en ciudades grandes). Socializar es parte de la experiencia.",
+      "plan_b_lluvia": "Es un tren: el clima no afecta. Interior comunitario, dormir, leer, películas en laptop.",
+      "keywords": [
+        "Trans-Siberian",
+        "Transiberiano",
+        "RZD",
+        "tren Moscú",
+        "Vladivostok",
+        "Yekaterinburg",
+        "Novosibirsk"
+      ]
+    },
+    {
+      "id": "kazan",
+      "nombre": "Kazán",
+      "tipo": "histórico",
+      "region": "Volga (Centro-Este)",
+      "descripcion": "Capital del Tatarstán con fusión de culturas islámica y ortodoxa. El Kremlin Kazan es Patrimonio UNESCO. Centro histórico vibrante, mezquitas, iglesias y gastronomía única. Parada estratégica en ruta Moscú-Transsiberiano.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Tren desde Moscú (12h, 30-70 EUR) o vuelo (1h, 50-100 EUR). Autobús también disponible (12h, 20-35 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel cerca de Kremlin: 10-15 EUR/noche",
+        "medio": "Hotel 3* centro: 30-50 EUR/noche",
+        "comfort": "Hotel 4* Kremlin area: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Kremlin Kazan y murallas (7 EUR entrada, vistas gratis desde fuera)",
+        "Mezquita Kul-Sharif (gratis, fotogénica)",
+        "Catedral de la Anunciación (gratis, ortodoxa)",
+        "Paseo por casco antiguo y río Kazanka (gratis)",
+        "Museo Tatar (7 EUR)"
+      ],
+      "donde_comer": "Tatar plov, chak-chak (postre miel), kumis (bebida de yegua fermentada). 3-6 EUR en cafés. Barrio junto al Kremlin es turístico pero auténtico.",
+      "consejo_local": "Kazán es menos conocida que Moscú/San Petersburgo pero igualmente rica culturalmente. Los tártaros son hospitalarios. Lleva efectivo (algunos lugares no aceptan tarjeta).",
+      "plan_b_lluvia": "Museos interactivos. Piscina termal del complejo Riviera.",
+      "keywords": [
+        "Kazan",
+        "Kremlin",
+        "Tatarstan",
+        "Kul-Sharif",
+        "casco antiguo",
+        "Volga"
+      ]
+    },
+    {
+      "id": "ekaterimburgo",
+      "nombre": "Ekaterimburgo",
+      "tipo": "histórico",
+      "region": "Urales",
+      "descripcion": "Puerta a Asia, ciudad histórica donde fue ejecutada la familia real Romanov (1918). Centro cultural con museos, teatro y vida nocturna. Punto estratégico en el Transiberiano, marca simbólica entre Europa y Asia.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Tren desde Moscú (26-33h, 40-100 EUR) o vuelo (2h, 60-130 EUR). Parada obligada en Transiberiano.",
+      "donde_dormir": {
+        "mochilero": "Hostel centro: 10-16 EUR/noche",
+        "medio": "Hotel 3* zona de Leninsky: 35-55 EUR/noche",
+        "comfort": "Hotel 4* centro: 80-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Monumento de los Límites Europa-Asia (8 km fuera, 2 EUR en minibús)",
+        "Iglesia en la Sangre Derramada (5 EUR, tumba simbólica Romanov)",
+        "Museo de Historia Ekaterimburgo (gratis)",
+        "Teatro de Ópera y Ballet (16-25 EUR entrada)",
+        "Plaza de 1905 (centro histórico, gratis)"
+      ],
+      "donde_comer": "Comida urálica: pelmeni, sopa de champiñones, carne. 3-8 EUR en cafés. Barrio de Varvarka para restaurantes históricos.",
+      "consejo_local": "Es más de paso que destino per se, pero merece 1-2 días. La iglesia en la Sangre es emotiva. El monumento Europa-Asia es turístico pero icónico. Gente local amable pero menos cosmopolita que Moscú.",
+      "plan_b_lluvia": "Museos de historia local. Compras en GUM (tienda histórica soviética).",
+      "keywords": [
+        "Ekaterinburg",
+        "Yekaterinburg",
+        "Urales",
+        "Europa-Asia",
+        "Romanov",
+        "Transiberiano"
+      ]
+    },
+    {
+      "id": "novosibirsk",
+      "nombre": "Novosibirsk",
+      "tipo": "histórico",
+      "region": "Siberia Central",
+      "descripcion": "Mayor ciudad de Siberia, punto crucial en Transiberiano. Centro cultural y académico con museos de calidad, teatro de clase mundial y vida urbana siberiana auténtica. Pasarela hacia la Siberia oriental.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Tren Transiberiano (45-55h desde Moscú, 80-150 EUR) o vuelo (3h, 80-150 EUR). Parada histórica obligada.",
+      "donde_dormir": {
+        "mochilero": "Hostel Leninsky: 10-16 EUR/noche",
+        "medio": "Hotel 3* centro: 30-50 EUR/noche",
+        "comfort": "Hotel 4* a rio Ob: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Teatro de la Ópera y Ballet (hermoso, 12-20 EUR)",
+        "Museo de Arte Estatal (8 EUR)",
+        "Puente sobre río Ob (vistas, gratis)",
+        "Paseo por avenida Krasniy Prospekt (compras y atmósfera)",
+        "Parque Skorokhodov (descanso, gratis)"
+      ],
+      "donde_comer": "Sopa de pescado siberiana, pelmenitsa (sopa de pelmeni). 2-6 EUR en cafés. Avenida central tiene opciones turísticas a 8-15 EUR.",
+      "consejo_local": "Novosibirsk es punto de escala, rara vez destino final. Pero merece la parada. Ciudad limpia y amable. Si tomas el Transiberiano de día, verás parada aquí.",
+      "plan_b_lluvia": "Museos ocupan horas. Cines locales si hay subtítulos en inglés (dudoso).",
+      "keywords": [
+        "Novosibirsk",
+        "Siberia",
+        "Ob",
+        "teatro",
+        "Transiberiano",
+        "Academia"
+      ]
+    },
+    {
+      "id": "vladivostok",
+      "nombre": "Vladivostok",
+      "tipo": "ciudad",
+      "region": "Extremo Oriente (costa Pacífica)",
+      "descripcion": "Punto terminal del Transiberiano en el Pacífico. Puerto histórico con arquitectura soviética junto a modernidad. Punto de conexión a Japón y Corea. Atmósfera única de frontera oriental rusa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Tren Transiberiano terminal (Moscú-Vladivostok, 146h, 200-500 EUR) o vuelo desde Moscú (7h, 150-300 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel Primorsky: 12-18 EUR/noche",
+        "medio": "Hotel 3* cerca de estación: 35-55 EUR/noche",
+        "comfort": "Hotel 4* Golden Horn: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Monumento 'Стыдь перевой' (Puertas del sol, en punta): gratis, vistas bahía",
+        "Estación de trenes histórica (arquitectura, gratis)",
+        "Museo de historia y arte (8 EUR)",
+        "Ferry a isla de Russky (20 minutos, 2 EUR, puentes colgantes)",
+        "Paseo por bahía de Golden Horn (gratis, malecón bonito)"
+      ],
+      "donde_comer": "Mariscos frescos (camarones, cangrejo), sushi no es realmente local pero disponible. 4-10 EUR en cafés. 15-25 EUR en restaurantes seafood.",
+      "consejo_local": "Vladivostok no es destino de semanas, es culminación del Transiberiano. Requiere visa rusa (ojo con restricciones actuales post-2022). Paseá por bahía al atardecer.",
+      "plan_b_lluvia": "Museos. Acuario de Vladivostok si aún funciona (verificar). Compras en centro Torgovy.",
+      "keywords": [
+        "Vladivostok",
+        "Transiberiano",
+        "Golden Horn",
+        "Pacífico",
+        "Bahía",
+        "Extremo Oriente",
+        "Japón"
+      ]
+    },
+    {
+      "id": "sotchi",
+      "nombre": "Sochi",
+      "tipo": "playa",
+      "region": "Cáucaso Occidental (costa del Mar Negro)",
+      "descripcion": "Único balneario subtropical de Rusia en costa del Mar Negro. Infierno arquitectónico (Juegos Olímpicos 2014) pero playas, montañas cáucaso y clima tropical único. Destino de relax post-Transiberiano.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre (julio-agosto muy caluroso y abarrotado)",
+      "como_llegar": "Vuelo desde Moscú (2,5h, 60-120 EUR) o tren (27-30h, 80-200 EUR). Aeropuerto Internaciononal Sochi-Adler.",
+      "donde_dormir": {
+        "mochilero": "Hostel Khosta (barrio): 10-15 EUR/noche",
+        "medio": "Guesthouse privada zona Rosa Khutor: 30-50 EUR/noche",
+        "comfort": "Resort 4-5* malecón: 100-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas del Mar Negro (gratis, tumbonas 2-4 EUR)",
+        "Parque dendrológioco Sochi (5 EUR, parque tropical)",
+        "Rosa Khutor (complejo Juegos Olímpicos, teleférico 15 EUR, vistas cáucaso)",
+        "Cascada de Agura (senderismo 2h desde centro, gratis)",
+        "Río Mzymta kayaking o tubing (20-30 EUR)"
+      ],
+      "donde_comer": "Khachapuri (pan con queso georgiano), khinkali, mariscos frescos. 3-8 EUR en chiringuitos playa. Barrio viejo de Sochi (gratis pasear, ambiente 60s-70s).",
+      "consejo_local": "Sochi es caótica, pero las montañas cercanas (Rosa Khutor, Krasnaya Polyana) son bonitas. Evita julio-agosto si buscas tranquilidad. Marzo-abril: primavera cáucaso espectacular pero agua fría.",
+      "plan_b_lluvia": "Juegos Olímpicos complejo (Bolshoy Sochi) turismo (verificar acceso). Museos de arte. Compras en galerias modernas.",
+      "keywords": [
+        "Sochi",
+        "Sotchi",
+        "Mar Negro",
+        "Rosa Khutor",
+        "playas",
+        "Cáucaso",
+        "subtropical"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,323 @@
+{
+  "pais": "Sudán",
+  "codigo": "sd",
+  "alerta_general": "Sudán enfrenta inestabilidad política y conflicto armado desde 2023. El turismo internacional está prácticamente paralizado. Los destinos listados son relevantes históricamente pero NO se recomienda viajar actualmente.",
+  "destinos": [
+    {
+      "id": "jartum",
+      "nombre": "Jartum",
+      "tipo": "ciudad",
+      "region": "Centro (confluencia del Nilo Blanco y Azul)",
+      "descripcion": "Capital sudanesa en la confluencia de dos ramales del Nilo. Centro administrativo y cultural donde convergen mercados caóticos, museos nacionales y la vida cotidiana sudanesa. Punto de entrada obligatorio para casi todos los viajeros.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Aeropuerto Internacional de Jartum es la puerta principal. Vuelos desde El Cairo (1h, 80-120 EUR), Estambul o Dubái.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Al-Balad: 15-25 EUR/noche",
+        "medio": "Hoteles de 3 estrellas en Jartum Norte: 40-70 EUR/noche",
+        "comfort": "Hoteles internacionales (Hilton, Meridien): 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional de Sudán (gratis/2 EUR): artefactos nubios y momias",
+        "Paseo por la confluencia del Nilo (gratis): miradores desde puentes",
+        "Mercado de Omdurman (gratis): caos controlado de artesanías y especias",
+        "Mezquita del Mahdi en Omdurman (gratis/respeto cultural)"
+      ],
+      "donde_comer": "Koshari (pasta/lentejas, 2-3 EUR) en Al-Balad. Falafel y pan sudanés en callejones de Omdurman. Pescado del Nilo en restaurantes de Jartum Norte (8-15 EUR).",
+      "consejo_local": "Los jueves y viernes los mercados cierran temprano. El dinero es inestable: cambia en el mercado negro, no en bancos oficiales (si es legal/posible).",
+      "plan_b_lluvia": "Museos (Nacional, Etnográfico). Cafeterías tradicionales con narguile.",
+      "alerta_seguridad": "Conflicto armado activo desde 2023. Zonas de Jartum bajo control de milicias. NO RECOMENDADO actualmente.",
+      "keywords": [
+        "Khartoum",
+        "capital Sudan",
+        "Nilo",
+        "Omdurman",
+        "confluencia"
+      ]
+    },
+    {
+      "id": "merowe",
+      "nombre": "Merowe",
+      "tipo": "histórico",
+      "region": "Nubia Central (norte del Nilo)",
+      "descripcion": "Centro de la antigua Nubia con templos griegos y pirámides de la época de Candaces. Punto acceso a Jebel Barkal y la región arqueológica más importante de Sudán. Mucho menos visitada que Egipto.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Jartum en autobús (4-5 horas, 20-25 EUR) o 4x4 con conductor. Vuelos privados disponibles.",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes locales: 12-20 EUR/noche",
+        "medio": "Merowe Hotel (básico): 30-50 EUR/noche",
+        "comfort": "Opciones limitadas; mejor dormir en Jartum y excursión de día"
+      },
+      "que_hacer": [
+        "Jebel Barkal (3 EUR): pirámides y templo de Amun, acceso a pie 30 min",
+        "Museos locales de arqueología (2 EUR): artefactos nubios",
+        "Paseo por el Nilo al atardecer (gratis): barca alquilada 10-15 EUR",
+        "Pueblo nubio local: té con nómadas, intercambio cultural (gratis)"
+      ],
+      "donde_comer": "Fuul (habas) y acarajé (buñuelo) en cafeterías callejeras (1-2 EUR). Pescado del Nilo en pequeños restaurantes (5-8 EUR). Agua de cebada local refrescante.",
+      "consejo_local": "Llega antes del mediodía para evitar calor extremo. Contrata guía local en Merowe (10-20 EUR/día) para acceso a zonas arqueológicas y historias.",
+      "plan_b_lluvia": "Lluvia rara. Plan B: museos locales o esperar bajo árboles con nómadas.",
+      "alerta_seguridad": "Zona menos afectada que Jartum pero sigue siendo de riesgo. Movimiento de grupos armados no controlados.",
+      "keywords": [
+        "Jebel Barkal",
+        "Nubia",
+        "pyramids Sudan",
+        "Nile temples",
+        "Candace"
+      ]
+    },
+    {
+      "id": "kassala",
+      "nombre": "Kassala",
+      "tipo": "montaña",
+      "region": "Este (cerca de Eritrea)",
+      "descripcion": "Oasis montañoso en el este con montañas de granito (Taka), atmósfera menos desértica y acceso a la frontera con Eritrea. Mucho más fresco y verdoso que Jartum, con vida local auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Jartum en autobús (10-12 horas, 30-40 EUR) o vuelo doméstico (1h, 60-100 EUR). Carreteras básicas.",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes cerca del mercado: 10-18 EUR/noche",
+        "medio": "Kassala Hotel: 25-40 EUR/noche",
+        "comfort": "Opciones limitadas"
+      },
+      "que_hacer": [
+        "Montañas Taka (gratis entrada, guía local 15 EUR): senderismo con vistas",
+        "Mercado central de Kassala (gratis): mercadería etíope y local",
+        "Fuente de Kassala (gratis): monumento histórico",
+        "Aldeas nómadas cercanas (gratis/propina): conocer la vida beduina"
+      ],
+      "donde_comer": "Injera etíope (pan fermentado, 2-4 EUR) en restaurantes. Doro (pollo guisado, 3-5 EUR). Agua de tamarindo local. Frutas tropicales del mercado (piña, mango, 0.5-1 EUR).",
+      "consejo_local": "Kassala es puerta a Eritrea (frontera a 50 km). Clima más templado por altitud. Los locales hablan árabe, tigré y amárico.",
+      "plan_b_lluvia": "Lluvia estacional en julio-agosto. Clima seco octubre-abril. Mercados cubiertos si hay lluvia.",
+      "alerta_seguridad": "Zona de tránsito de refugiados eritreos e etíopes. Menos conflicto directo que Jartum pero inestabilidad regional.",
+      "keywords": [
+        "Kassala Sudan",
+        "Taka mountains",
+        "Nile",
+        "oasis",
+        "Eritrea border"
+      ]
+    },
+    {
+      "id": "atbara",
+      "nombre": "Atbara",
+      "tipo": "ciudad",
+      "region": "Nubia Central (confluencia del Nilo Atbara)",
+      "descripcion": "Antigua ciudad ferroviaria en la confluencia del Nilo Atbara. Centro industrial histórico con menos turismo que Merowe pero importante para entender Sudán moderno. Acceso a excavaciones arqueológicas cercanas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Jartum en autobús (5-6 horas, 15-20 EUR) o como parada en ruta a Merowe.",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes: 12-18 EUR/noche",
+        "medio": "Atbara Hotel (básico): 25-40 EUR/noche",
+        "comfort": "Limitado"
+      },
+      "que_hacer": [
+        "Estación de tren histórica (gratis): arquitectura colonial británica",
+        "Mercado local (gratis): vida cotidiana sudanesa",
+        "Río Atbara (gratis): paseos al atardecer",
+        "Aldeas cercanas (guía 10-15 EUR): arqueología espontánea"
+      ],
+      "donde_comer": "Fuul y pan sudanés (1-2 EUR). Carne a la parrilla en puestos callejeros (3-5 EUR). Té nubio con menta.",
+      "consejo_local": "Atbara es punto de conexión entre norte y sur. Menos turística, más auténtica. Los viajeros la usan como parada, no destino.",
+      "plan_b_lluvia": "Lluvia rara. Mercados cubiertos.",
+      "alerta_seguridad": "Conflicto más limitado que Jartum pero presente. Zona de tránsito militar.",
+      "keywords": [
+        "Atbara",
+        "Nile Atbara confluence",
+        "railway",
+        "Sudan"
+      ]
+    },
+    {
+      "id": "desierto-bayuda",
+      "nombre": "Desierto de Bayuda",
+      "tipo": "desierto",
+      "region": "Centro-norte (entre Jartum y Merowe)",
+      "descripcion": "Desierto árido sin carreteras entre los dos principales centros. Experiencia de desierto sahareño genuino con campamentos nómadas. Solo accesible con 4x4 y guía.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Desde Jartum o Merowe en 4x4 alquilado con conductor (8-10 horas cruzando, 150-200 EUR todo incluido). Agencias en Jartum organizan.",
+      "donde_dormir": {
+        "mochilero": "Campamento beduino bajo estrellas: 30-50 EUR/noche (incluye comida)",
+        "medio": "Campamento con tienda privada: 50-80 EUR/noche",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Cruce del desierto (experiencia pura, gratis después de pagar transporte)",
+        "Campamento nómada (gratis/intercambio cultural): café y té",
+        "Observación de estrellas (gratis): sin contaminación lumínica",
+        "Pozos de agua (parada): conocer infraestructura del desierto"
+      ],
+      "donde_comer": "Comidas cocinadas por nómadas en campamento: estofado, pan, dátiles. Agua hervida. Comida incluida en paquete (si se contrata agencia).",
+      "consejo_local": "No viajes solo. Contrata guía a través de agencia en Jartum. El desierto de Bayuda es traversía larga; muchos viajeros lo hacen como trayecto entre Jartum y Merowe.",
+      "plan_b_lluvia": "Lluvia rara (menos de 5mm anuales). Tormentas de arena posibles octubre-febrero: la jeep continúa.",
+      "alerta_seguridad": "Zona con presencia de grupos armados no estatales. Viajes en convoy con agencia oficial recomendados. Riesgo de secuestros.",
+      "keywords": [
+        "Bayuda desert",
+        "Sahara Sudan",
+        "nomad camps",
+        "4x4 crossing"
+      ]
+    },
+    {
+      "id": "puerto-sudan",
+      "nombre": "Puerto Sudán",
+      "tipo": "playa",
+      "region": "Rojo (costa del Mar Rojo)",
+      "descripcion": "Único puerto sudanés en el Mar Rojo. Acceso a arrecifes coralinos, buceo y vida marina. Ciudad costera caótica con menos infraestructura pero playas y aguas cálidas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre a mayo",
+      "como_llegar": "Desde Jartum en vuelo doméstico (2h, 80-120 EUR) o autobús (12h, 30-40 EUR, muy incómodo). Vuelos desde Eritrea o Arabia Saudita también llegan.",
+      "donde_dormir": {
+        "mochilero": "Hostales cercanos al puerto: 15-25 EUR/noche",
+        "medio": "Hoteles de 2-3 estrellas frente al mar: 40-70 EUR/noche",
+        "comfort": "Red Sea Diving Resort (all-inclusive): 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en arrecifes coralinos (40-60 EUR/inmersión): biodiversidad marina",
+        "Snorkel desde playa (gratis/alquiler de equipo 5-10 EUR)",
+        "Mercado de pescado (gratis): madrugada frenética",
+        "Barcos pesqueros locales (15-30 EUR): pesca tradicional"
+      ],
+      "donde_comer": "Pescado fresco cocinado a la parrilla (5-10 EUR) en puestos callejeros cercanos al puerto. Mariscos diversos (langosta, camarones, 15-25 EUR). Pan y fuul de desayuno (1-2 EUR).",
+      "consejo_local": "Agua del Mar Rojo es cálida todo el año (23-28°C). Contrata operadores de buceo establecidos (Red Sea Diving, Coral House Divers). Junio-agosto agua muy caliente y turbia.",
+      "plan_b_lluvia": "Lluvia rara. Posibles tormentas de arena. Buceo es posible pero con menor visibilidad.",
+      "alerta_seguridad": "Puerto estratégico con presencia militar. Menos conflicto que Jartum pero restricciones de movimiento y permisos.",
+      "keywords": [
+        "Port Sudan",
+        "Red Sea",
+        "diving",
+        "coral reefs",
+        "fishing"
+      ]
+    },
+    {
+      "id": "musawarat-es-sufra",
+      "nombre": "Musawarat es-Sufra",
+      "tipo": "histórico",
+      "region": "Nubia Central (desierto entre Merowe y Atbara)",
+      "descripcion": "Sitio arqueológico remoto con templos nubianos de la época de Candaces. Gran León de Musawarat es símbolo importante. Accesible solo con 4x4, muy pocos visitantes.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Merowe o Atbara en 4x4 alquilado con conductor (2-3 horas, 60-100 EUR). Agencias en Jartum organizan excursiones de 2 días.",
+      "donde_dormir": {
+        "mochilero": "Campamento cercano o dormir en Merowe: 12-20 EUR/noche",
+        "medio": "Campamento con tienda privada en sitio: 30-50 EUR/noche",
+        "comfort": "Dormir en Merowe y excursión de día (80-120 EUR)"
+      },
+      "que_hacer": [
+        "Templos nubianos (gratis/guía local 15-20 EUR): fotografía de antiguos",
+        "Gran León de Musawarat (gratis): esculturas de arenisca",
+        "Acuario antiguo subterráneo (gratis): misterio arqueológico",
+        "Desierto circundante (gratis): trekking"
+      ],
+      "donde_comer": "Picnic preparado en Merowe o llevado de Jartum. Agua abundante. Restaurantes no existen en el sitio.",
+      "consejo_local": "Contrata guía arqueológico en Merowe (15-25 EUR) para entender contexto. El sitio está poco excavado; es experiencia de arqueología real, no turismos preparados.",
+      "plan_b_lluvia": "Lluvia rara. Arena del desierto: protégete.",
+      "alerta_seguridad": "Zona remota con presencia ocasional de grupos armados. Viaja con agencia o guía local acreditado.",
+      "keywords": [
+        "Musawarat es-Sufra",
+        "Lion",
+        "Nubian temples",
+        "archaeology Sudan"
+      ]
+    },
+    {
+      "id": "soba-east",
+      "nombre": "Soba East",
+      "tipo": "histórico",
+      "region": "Centro (cerca de Jartum)",
+      "descripcion": "Ruinas de la antigua capital del reino de Alwa (siglo VI-XV). Poco restaurado, muy arqueológico. Escapada de Jartum para entender historia preislámica sudanesa.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Jartum en taxi o autobús local (20 km, 1 hora, 5-10 EUR). O contrata guía en Jartum (incluye transporte, 40-60 EUR).",
+      "donde_dormir": {
+        "mochilero": "Dormir en Jartum, excursión de día (ahorras alojamiento)",
+        "medio": "Dormir en Jartum: 40-70 EUR/noche",
+        "comfort": "Dormir en Jartum: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas de iglesia cristiana (gratis/guía 10 EUR): primer cristianismo en Sudán",
+        "Acueductos antiguos (gratis): ingeniería histórica",
+        "Museo de Soba East (pequeño, gratis/donativo): cerámicas y artefactos",
+        "Aldea local (gratis): interacción con comunidades locales"
+      ],
+      "donde_comer": "Fuente en Soba: agua. Mejor comer en Jartum antes o después.",
+      "consejo_local": "Soba East está menos conocida que Merowe pero igual de importante históricamente. Menos touristificada = experiencia más cruda.",
+      "plan_b_lluvia": "Lluvia rara. Museos cubiertos.",
+      "alerta_seguridad": "A 20 km de Jartum, en zona más controlada pero sigue siendo Sudán conflictivo.",
+      "keywords": [
+        "Soba",
+        "Alwa kingdom",
+        "Christian Nubia",
+        "archaeological site"
+      ]
+    },
+    {
+      "id": "naga",
+      "nombre": "Naqa",
+      "tipo": "histórico",
+      "region": "Nubia Central (desierto entre Merowe y Atbara)",
+      "descripcion": "Sitio arqueológico con templos grecoegipcios de la época Meroíta. Menos remoto que Musawarat. Pirámides y templos de arenisca roja. Accesible en excursión desde Merowe.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Merowe en 4x4 alquilado con conductor (1.5-2 horas, 50-80 EUR). Agencias en Jartum organizan excursiones de 3 días cubriendo Naqa + Musawarat.",
+      "donde_dormir": {
+        "mochilero": "Merowe: 12-20 EUR/noche; excursión de día",
+        "medio": "Merowe Hotel: 30-50 EUR/noche; excursión de día",
+        "comfort": "Dormir en Merowe y excursión: 40-50 EUR/noche"
+      },
+      "que_hacer": [
+        "Templo de Amun (gratis/guía 10-15 EUR): arquitectura grecoegipcia",
+        "Pirámides meroítas (gratis): fotografía de estructuras antiguas",
+        "Mercado de camellos cercano (gratis): observar comercio tradicional",
+        "Trekking en el desierto (gratis): paisaje árido"
+      ],
+      "donde_comer": "Picnic llevado. Agua. Restaurantes no existen.",
+      "consejo_local": "Naqa es menos conocida que Merowe pero muy similar en importancia. Muchos combinan ambas en ruta. El mercado de camellos es auténtico, no turístico.",
+      "plan_b_lluvia": "Lluvia rara. Arena potencial.",
+      "alerta_seguridad": "Zona remota. Viaja con agencia o guía local.",
+      "keywords": [
+        "Naqa",
+        "Naga",
+        "Meroitic pyramids",
+        "temple Amun",
+        "Sudan archaeology"
+      ]
+    },
+    {
+      "id": "khartum-norte",
+      "nombre": "Jartum Norte (Khartoum North)",
+      "tipo": "ciudad",
+      "region": "Centro (norte del Nilo)",
+      "descripcion": "Barrio moderno de Jartum con cafeterías, galerías y vida más cosmopolita. Zona de artesanías y talleres de artistas. Menos caótica que Omdurman pero más auténtica que centro.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "A pie o en taxi desde Jartum centro (20 minutos, 2-3 EUR). Puentes y carreteras conectan los barrios.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Jartum Norte: 20-30 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 50-80 EUR/noche",
+        "comfort": "Hoteles internacionales: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Galería de arte Sudanés (entrada 2-3 EUR): arte contemporáneo",
+        "Mercado de artesanías (gratis): compra de souvenirs auténticos",
+        "Cafeterías Nescafé (gratis entrada, 1-2 EUR bebida): vida local moderna",
+        "Paseo por el Nilo (gratis): vistas desde puentes modernos"
+      ],
+      "donde_comer": "Restaurantes de comida sudanesa moderna (5-15 EUR). Cafés con Wi-Fi (café 1-2 EUR). Cadenas internacionales limitadas (10-25 EUR).",
+      "consejo_local": "Jartum Norte es donde viven expatriados y clase media sudanesa. Más seguro que Omdurman. Mejor zona para sentir Sudán moderno versus turístico.",
+      "plan_b_lluvia": "Cafés cubiertos y galerías.",
+      "alerta_seguridad": "Conflicto en curso. Movimiento limitado incluso en zonas 'seguras'.",
+      "keywords": [
+        "Khartoum North",
+        "Khartoum 2",
+        "arte Sudan",
+        "cafes",
+        "artesanías"
+      ]
+    }
+  ]
+}

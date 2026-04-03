@@ -1,0 +1,351 @@
+{
+  "pais": "Serbia",
+  "codigo": "rs",
+  "destinos": [
+    {
+      "id": "belgrado",
+      "nombre": "Belgrado",
+      "tipo": "ciudad",
+      "region": "Serbia Central",
+      "descripcion": "Capital cosmopolita donde confluyen los ríos Danubio y Sava, con arquitectura austro-húngara, soviética y moderna mezclada. Centro cultural y de transporte perfecto para empezar viaje por Serbia. Vida nocturna intensa en barcos-bar flotantes y barrios bohemios.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a septiembre, abril y octubre",
+      "como_llegar": "punto de entrada principal, aeropuerto internacional Nikola Tesla a 12km. Taxis ~15 EUR, autobús 2.50 EUR.",
+      "donde_dormir": {
+        "mochilero": "dormitorios compartidos en Dorćol, Beton Hala: 15-20 EUR",
+        "medio": "hoteles 3* en Savamala, Vračar: 50-80 EUR",
+        "comfort": "hoteles 4-5* centro: 120-200 EUR"
+      },
+      "que_hacer": [
+        "Fortaleza de Kalemegdan (gratis entrada, vistas de ríos)",
+        "Iglesia de San Sava (gratis, arquitectura ortodoxa)",
+        "Barrio Bohemio Dorćol, galerías de arte (gratis)",
+        "Museo de Historia Moderna (5 EUR)",
+        "Vida nocturna en barcos-bar Danubio (copas 3-5 EUR)"
+      ],
+      "donde_comer": "Platos típicos: cevapcici, pljeskavica (sándwich serbio), rakija. Rango: 5-15 EUR comida en mercados, 20-40 EUR restaurantes. Zona Knez Mihaila es turística, Beton Hala más local.",
+      "consejo_local": "La mayoría de museos cierran lunes. Los bares-barco abren al atardecer, llena después de medianoche. Metro gratis si compras billete transporte público (1.30 EUR 90min).",
+      "plan_b_lluvia": "Museos cerrados (Museo Tesla, Museo Aviación), iglesias, cafés tradicionales en casco viejo",
+      "keywords": [
+        "Beograd",
+        "Kalemegdan",
+        "Dorćol",
+        "Savamala",
+        "Danubio",
+        "Sava",
+        "barcos-bar",
+        "fortaleza"
+      ]
+    },
+    {
+      "id": "nis",
+      "nombre": "Niš",
+      "tipo": "histórico",
+      "region": "Serbia Sur",
+      "descripcion": "Segunda ciudad, punto de conexión hacia Bulgaria, Grecia y Macedonia. Torre de calaveras otomana del siglo XIX, fortaleza histórica y mercado tradicional bien conservado. Base excelente para explorar sur de Serbia.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "desde Belgrado en autobús: 4 horas, 10-15 EUR. Tren: 5-6 horas, 8-12 EUR.",
+      "donde_dormir": {
+        "mochilero": "Niš Hostel, dormitorios: 12-16 EUR",
+        "medio": "hoteles 3* centro: 35-60 EUR",
+        "comfort": "Hotel Ambasador: 80-120 EUR"
+      },
+      "que_hacer": [
+        "Torre de Calaveras Ćele Kula (2 EUR, única en Europa)",
+        "Fortaleza Niška Tvrdjava (2 EUR, entrada)",
+        "Mercado tradicional Pijaca (gratis paseo)",
+        "Parque Bubnjik (gratis, vistas ciudad)",
+        "Monumento Gavrilo Principe (gratis)"
+      ],
+      "donde_comer": "Especialidades regionales, sopa de pescado, ajvar. Rango: 4-10 EUR mercados, 15-25 EUR restaurantes. Zona Pijaca y calles laterales más auténticas.",
+      "consejo_local": "Niš es punto de tránsito, pero vale 1-2 días. Hospedadores locales son muy amables con independientes. Prueba la brandy de ciruela casera.",
+      "plan_b_lluvia": "Torre de Calaveras (interior), cafés históricos en Pijaca",
+      "keywords": [
+        "Nis",
+        "Niška Tvrdjava",
+        "Ćele Kula",
+        "calaveras",
+        "fortaleza",
+        "mercado"
+      ]
+    },
+    {
+      "id": "kotor",
+      "nombre": "Kotor (Bahía de Kotor)",
+      "tipo": "playa",
+      "region": "Litoral Adriático (Montenegro frontera)",
+      "descripcion": "Pueblito medieval en la bahía más profunda del Adriático, rodeado de acantilados. Murallas venecianas, laberinto de callejuelas y playas cercanas. Excursión fácil desde Serbia pero ubicado en Montenegro.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "desde Belgrado en autobús: 10-12 horas, 25-35 EUR. Desde Niš más corto: 6-8 horas. Mejor: vuelo Belgrado-Podgorica (40-80 EUR), luego autobús 2 horas.",
+      "donde_dormir": {
+        "mochilero": "hosteles Old Town: 18-25 EUR",
+        "medio": "posadas locales: 50-80 EUR",
+        "comfort": "hoteles boutique: 100-160 EUR"
+      },
+      "que_hacer": [
+        "Paseo murallas (1.50 EUR acceso)",
+        "Iglesia de San Nicolás (libre)",
+        "Playas: Perast, Orahovac (gratis)",
+        "Excursión bote a Islas Gospa od Škrpjela (15 EUR)",
+        "Sendero costero Kotor-Prčanj (gratis, 2h)"
+      ],
+      "donde_comer": "Mariscos frescos (pulpo, langosta), risotto de mariscos. Rango: 8-15 EUR frente al mar, 20-35 EUR restaurantes premium. Callejuelas viejas con vistas bahía.",
+      "consejo_local": "Llega temprano para aparcar y evitar masas de turismo. Las vistas mejores antes de 11am y después de 18h. Prueba la spoja (esponja) como entrada.",
+      "plan_b_lluvia": "Iglesias, museos pequeños, cafés, compras artesanía en Old Town",
+      "keywords": [
+        "Boka Kotorska",
+        "Bocche di Cattaro",
+        "murallas venecianas",
+        "Perast",
+        "Orahovac",
+        "Gospa od Škrpjela",
+        "Adriático",
+        "Montenegro"
+      ]
+    },
+    {
+      "id": "obrenovac",
+      "nombre": "Garganta del Danubio (Đerdap)",
+      "tipo": "naturaleza",
+      "region": "Serbia Este",
+      "descripcion": "Cañón más largo de Europa entre Serbia y Rumania, acantilados de 300m y rápidos fluviales. Parque Nacional Đerdap ofrece senderos, pueblos históricos y cruceros por el río. Destino naturalista fuera de ruta turística.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Belgrado en autobús a Kladovo: 4-5 horas, 12-18 EUR. Luego local 1-2 EUR a puntos de acceso.",
+      "donde_dormir": {
+        "mochilero": "habitaciones casas locales en Kladovo: 15-20 EUR",
+        "medio": "posadas rurales: 35-55 EUR",
+        "comfort": "Hotel Danube en Kladovo: 70-100 EUR"
+      },
+      "que_hacer": [
+        "Sendero Miroc viewpoint (gratis, 4h ida-vuelta)",
+        "Crucero garganta Danubio (20-30 EUR, 2-3h)",
+        "Fortaleza Golubac en ruta (3 EUR entrada)",
+        "Pueblo medieval Sokobanja (gratis paseo)",
+        "Pesca o baño en río (gratis)"
+      ],
+      "donde_comer": "Trucha fresca del Danubio, sopa de pescado serbio. Rango: 5-10 EUR casas locales, 15-25 EUR restaurantes. Kladovo tiene opciones modestas.",
+      "consejo_local": "Las vistas mejores desde el lado serbio al atardecer. Lleva agua y protección solar, senderos poco sombra. Los transbordadores locales son baratos (1-2 EUR).",
+      "plan_b_lluvia": "Iglesias en pueblos, museos locales, crucero cubierto en bote",
+      "keywords": [
+        "Đerdap",
+        "Danubio",
+        "garganta",
+        "cañón",
+        "Kladovo",
+        "Golubac",
+        "Miroc",
+        "parque nacional"
+      ]
+    },
+    {
+      "id": "kalemegdan-novi-sad",
+      "nombre": "Novi Sad",
+      "tipo": "ciudad",
+      "region": "Voivodina",
+      "descripcion": "Tercera ciudad, centro cultural de Voivodina. Fortaleza Petrovaradin sobre Danubio, arquitectura austro-húngara conservada y festival EXIT (agosto). Atmósfera más relajada que Belgrado, perfecta para pausa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre, festival EXIT agosto",
+      "como_llegar": "desde Belgrado en autobús: 1.5-2 horas, 5-8 EUR. Tren: 2 horas, 5-7 EUR. Frecuencia alta.",
+      "donde_dormir": {
+        "mochilero": "dormitorios Danube hostel: 14-18 EUR",
+        "medio": "hoteles 3* centro: 40-70 EUR",
+        "comfort": "Hotel Vojvodina 4*: 90-140 EUR"
+      },
+      "que_hacer": [
+        "Fortaleza Petrovaradin (1.50 EUR, laberinto dentro)",
+        "Paseo Danubio desde fortaleza (gratis)",
+        "Plaza Libertad arquitectura austro-húngara (gratis)",
+        "Sinagoga restaurada (visita concertada, 3 EUR)",
+        "Festival EXIT agosto (entrada 30-80 EUR día)"
+      ],
+      "donde_comer": "Especialidad: kulen (embutido ahumado), paprikaš de pollo. Rango: 4-8 EUR mercados y cantinas, 15-30 EUR restaurantes. Pijaca (mercado) más local que centro.",
+      "consejo_local": "Novi Sad es tranquilo y accesible a pie. Festival EXIT transforma ciudad en agosto pero precios suben 50%. Mejor visitar mayo-julio o septiembre.",
+      "plan_b_lluvia": "Museos, catacumbas fortaleza, cafés literatura en Zmaj Jovina",
+      "keywords": [
+        "Petrovaradin",
+        "EXIT festival",
+        "Danubio",
+        "Voivodina",
+        "Pijaca",
+        "Zmaj Jovina",
+        "fortaleza",
+        "austro-húngara"
+      ]
+    },
+    {
+      "id": "studenica",
+      "nombre": "Monasterio Studenica",
+      "tipo": "histórico",
+      "region": "Serbia Central",
+      "descripcion": "Monasterio medieval serbio del siglo XII, Patrimonio UNESCO, en valle verde rodeado de montañas. Iglesia de mármol blanco, mosaicos y frescos intactos. Lugar de peregrinación y naturaleza en equilibrio.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "desde Belgrado 2 opciones: autobús a Čačak (2h, 8 EUR) + local a monasterio (1h, 3 EUR). O excursión privada 30-40 EUR. Mejor: coche alquilado.",
+      "donde_dormir": {
+        "mochilero": "posadas en Čačak o cercanas: 15-20 EUR",
+        "medio": "Studenica guesthouse (reserva): 40-60 EUR",
+        "comfort": "Čačak hotel 3*: 50-80 EUR"
+      },
+      "que_hacer": [
+        "Visita monasterio (gratis, donativo sugerido)",
+        "Sendero valle (gratis, 1-2h)",
+        "Iglesia de Mármol Blanco interior (gratis)",
+        "Fotografía frescos y mosaicos (gratis)",
+        "Picnic en prados monasterio (gratis)"
+      ],
+      "donde_comer": "Comida casera de monjes a veces (reserva previa). En Čačak: especialidades regionales 5-12 EUR. En monasterio: café monacal simple.",
+      "consejo_local": "Lleva ropa modesta (cubrir hombros, rodillas). Los monjes son amables con visitantes pero respeta horas de oración. Mejor ir mañana.",
+      "plan_b_lluvia": "Interior iglesia, claustro cubierto parcial, monasterio abierto todo clima",
+      "keywords": [
+        "Studenica",
+        "monasterio medieval",
+        "UNESCO",
+        "mármol blanco",
+        "fresco",
+        "Čačak",
+        "serbio ortodoxo"
+      ]
+    },
+    {
+      "id": "drvengrad",
+      "nombre": "Drvengrad (Pueblo Madera)",
+      "tipo": "rural",
+      "region": "Serbia Oeste",
+      "descripcion": "Pueblo artístico construido por cineasta Emir Kusturica, arquitectura tradicional de madera. Museos, galerías y atmósfera bohemia. Ejemplo único de reconstrucción cultural y turismo creativo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "desde Belgrado 3-4 horas complejo: autobús a Užice (3h, 12 EUR) + local a Drvengrad (45min, 3 EUR). Mejor: excursión privada 40-50 EUR o coche alquilado.",
+      "donde_dormir": {
+        "mochilero": "habitaciones guesthouse pueblo: 20-30 EUR",
+        "medio": "posada madera Drvengrad: 50-80 EUR",
+        "comfort": "Hotel Drvengrad: 90-140 EUR"
+      },
+      "que_hacer": [
+        "Paseo pueblo arquitectura madera (gratis)",
+        "Museo Kusturica (5 EUR entrada)",
+        "Galerías arte y tiendas artesanía (gratis ver)",
+        "Cine al aire libre noches (si hay función)",
+        "Fotografía callejuelas pintorescos (gratis)"
+      ],
+      "donde_comer": "Restaurante pueblo comida casera serbio-bosnia. Rango: 8-15 EUR menú día. Oferta limitada pero cuidada, ambiente familiar.",
+      "consejo_local": "Drvengrad es destino minoritario, requiere logística pero vale por experiencia única. Menos abarrotado que Kotor. Mejor viernes-domingo para más vida.",
+      "plan_b_lluvia": "Museos, galerías interiores, cafés madera, cine",
+      "keywords": [
+        "Drvengrad",
+        "Emir Kusturica",
+        "arquitectura madera",
+        "Užice",
+        "pueblo artístico",
+        "bohemia",
+        "Serbia Oeste"
+      ]
+    },
+    {
+      "id": "zlatibar-tara",
+      "nombre": "Montaña Tara / Zlatibor",
+      "tipo": "montaña",
+      "region": "Serbia Oeste",
+      "descripcion": "Macizo montañoso verde con senderos, lagos y pueblos tradicionales. Tara: parque nacional con cañón río Drina y naturaleza virgen. Zlatibor: destino más accesible con vistas panorámicas y actividades.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "desde Belgrado a Užice (3h, 12 EUR) + autobús local a Tara o Zlatibor (1-1.5h, 3-5 EUR).",
+      "donde_dormir": {
+        "mochilero": "casas rurales Tara: 15-25 EUR",
+        "medio": "guesthouses Zlatibor: 40-65 EUR",
+        "comfort": "Hotel montaña 3*: 80-120 EUR"
+      },
+      "que_hacer": [
+        "Sendero cañón Drina Tara (gratis, 4-6h)",
+        "Miradores Tara Stonehenge (gratis)",
+        "Paseos caballo Zlatibor (25-40 EUR/hora)",
+        "Lago Perućac (gratis, baño)",
+        "Tirolina bosque (15-25 EUR)"
+      ],
+      "donde_comer": "Trucha de río, ajvar, queso de cabra. Rango: 6-12 EUR casas rurales, 15-25 EUR restaurantes. Oferta simple pero abundante.",
+      "consejo_local": "Tara requiere mejor forma física, senderos bien marcados. Llevar agua. Poblados muy rurales, pocos servicios. Mejor reservar alojamiento rural con comida.",
+      "plan_b_lluvia": "Pueblos tradicionales, visitas locales, casas rurales confortables, senderismo nublado",
+      "keywords": [
+        "Tara",
+        "Zlatibor",
+        "montaña",
+        "Drina",
+        "cañón",
+        "senderismo",
+        "parque nacional",
+        "Serbia Oeste"
+      ]
+    },
+    {
+      "id": "sokobanja",
+      "nombre": "Sokobanja",
+      "tipo": "naturaleza",
+      "region": "Serbia Este",
+      "descripcion": "Pueblo balneario en cañón de piedra arenisca, con aguas termales naturales y arquitectura austro-húngara. Destino de retiro lejos del turismo masivo, perfecto para descanso y senderismo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "desde Belgrado a Sokobanja: autobús directo 4 horas, 12-15 EUR. O desde Niš 2.5 horas, 8 EUR.",
+      "donde_dormir": {
+        "mochilero": "habitaciones casas locales: 16-22 EUR",
+        "medio": "hotels termales 3*: 45-75 EUR",
+        "comfort": "Hotel Sokobanja Resort: 100-160 EUR"
+      },
+      "que_hacer": [
+        "Balneario aguas termales (8-12 EUR entrada día)",
+        "Sendero cañón Sokobanja (gratis, 2-3h)",
+        "Miradores acantilados arenisca (gratis)",
+        "Iglesia Monumento (gratis visita)",
+        "Paseo pueblo arquitectura vieja (gratis)"
+      ],
+      "donde_comer": "Comida serbio-turca mezclada, sopas, guisos. Rango: 5-10 EUR mercados, 12-20 EUR restaurantes. Poco turístico, barato.",
+      "consejo_local": "Sokobanja es para descanso y relax, no acción. Las aguas termales son reales pero modestas. Ideal pausa entre Belgrado y frontera oriental.",
+      "plan_b_lluvia": "Balnearios cubiertos, iglesias, cafés, masajes termales",
+      "keywords": [
+        "Sokobanja",
+        "termales",
+        "aguas calientes",
+        "cañón",
+        "arenisca",
+        "balneario",
+        "Austria-Hungría",
+        "Serbia Este"
+      ]
+    },
+    {
+      "id": "ivo-andric-visegrad",
+      "nombre": "Višegrad (Puente sobre el Drina)",
+      "tipo": "histórico",
+      "region": "Frontera Serbia-Bosnia",
+      "descripcion": "Pueblito en frontera Bosnia-Serbia, famoso por puente otomano de piedra (1577) inmortalizado en novela de Ivo Andrić. Vistas río Drina y atmósfera de época. Acceso fácil desde Serbia Este.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Niš en autobús: 4-5 horas, 15 EUR. Desde Belgrado: 6-7 horas. Mejor desde ruta Sokobanja-Niš.",
+      "donde_dormir": {
+        "mochilero": "casas particulares: 15-20 EUR",
+        "medio": "posadas pueblo: 40-60 EUR",
+        "comfort": "Hotel Višegrad 3*: 70-100 EUR"
+      },
+      "que_hacer": [
+        "Puente Mehmed Paša (gratis, fotografía)",
+        "Paseo riverside (gratis, vistas)",
+        "Museo Ivo Andrić (3 EUR, pequeño)",
+        "Café en pié de puente (copas 2-3 EUR)",
+        "Baño río Drina (gratis)"
+      ],
+      "donde_comer": "Trucha Drina, cevapcici, ajvar. Rango: 4-8 EUR casas, 10-18 EUR restaurantes. Ribera con vistas puente ideal.",
+      "consejo_local": "Cruzar puente a Bosnia es posible (sin sello si volvés a Serbia). Pueblo quieto, mejor tarde para fotos doradas puente. Muy poco turismo de masas.",
+      "plan_b_lluvia": "Museo Andrić, cafés al cubierto, compras artesanía local",
+      "keywords": [
+        "Višegrad",
+        "Mehmed Paša",
+        "Drina",
+        "puente otomano",
+        "Ivo Andrić",
+        "Bosnia",
+        "frontera"
+      ]
+    }
+  ]
+}

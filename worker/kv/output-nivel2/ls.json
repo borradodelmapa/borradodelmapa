@@ -1,0 +1,332 @@
+{
+  "pais": "Lesoto",
+  "codigo": "ls",
+  "destinos": [
+    {
+      "id": "maseru",
+      "nombre": "Maseru",
+      "tipo": "ciudad",
+      "region": "Distrito de Maseru",
+      "descripcion": "Capital de Lesoto situada a orillas del río Orange, punto de entrada principal para la mayoría de viajeros. Centro administrativo y comercial con mercados tradicionales, museos y acceso a transporte hacia el resto del país. Base logística ideal para organizar excursiones a las montañas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre a noviembre, marzo a mayo",
+      "como_llegar": "aeropuerto internacional de Maseru (MSU) o frontera terrestre desde Sudáfrica (Bloemfontein 350km, 4-5h en coche)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse o backpackers: 25-40 EUR/noche",
+        "medio": "Hotel de 3 estrellas: 50-80 EUR/noche",
+        "comfort": "Hotel internacional (Maseru Sun, Lesotho Sun): 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado tradicional de Maseru (gratis)",
+        "Museo Nacional de Lesoto (3-4 EUR)",
+        "Catedral de Nuestra Señora de Maseru (gratis)",
+        "Paseo por el río Orange (gratis)",
+        "Tiendas de artesanía local en el centro (precios variables)"
+      ],
+      "donde_comer": "Probar papa (maíz cocido con judías), leche agria (masikhonyana) y carnes a la brasa. Rango: 3-8 EUR por comida. Zona: centroAvenida Principal y mercado",
+      "consejo_local": "Llega temprano a los mercados (antes de las 9am) para ver la mayor variedad. Los precios de los taxis colectivos son negociables pero fija el precio antes de subir.",
+      "plan_b_lluvia": "Museo Nacional, tiendas de artesanía en galerías cubiertas, cafeterías locales",
+      "keywords": [
+        "Masaru",
+        "capital Lesoto",
+        "mercado Maseru",
+        "centro administrativo",
+        "puerta de entrada"
+      ]
+    },
+    {
+      "id": "malealea",
+      "nombre": "Malealea",
+      "tipo": "rural",
+      "region": "Distrito de Leribe",
+      "descripcion": "Pueblo montañoso y remoto conocido como epicentro del turismo aventurero independiente en Lesoto. Centro de trekking a caballo, caminatas y experiencias rurales auténticas con comunidades locales Basotho. Acceso a cascadas y paisajes espectaculares del altiplano.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre a noviembre, febrero a abril",
+      "como_llegar": "Desde Maseru: minibús o coche de alquiler (2-3h, 45km, 8-15 EUR en transporte público). Carretera montañosa sin asfaltar en tramos finales",
+      "donde_dormir": {
+        "mochilero": "Malealea Lodge o guesthouses comunitarias: 20-35 EUR/noche",
+        "medio": "Malealea Lodge habitaciones estándar: 40-60 EUR/noche",
+        "comfort": "Malealea Lodge suites: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a caballo de 1-3 días (35-80 EUR/día incluyendo guía y caballo)",
+        "Senderismo a cascada de Malealea (6 EUR con guía local)",
+        "Visita a aldeas Basotho y hogares locales (gratis con hospedaje)",
+        "Cascada de Ts'ehlanyane (8 EUR entrada)",
+        "Pesca de trucha (15 EUR por medio día)"
+      ],
+      "donde_comer": "Comida casera Basotho en lodges: papa, manteiga de maní, verduras locales. Rango: 5-12 EUR. Restaurante de Malealea Lodge es opción principal. Llevar snacks desde Maseru si prefieres opciones variadas",
+      "consejo_local": "Los caballos de Lesoto son pequeños pero resistentes; si tienes experiencia ecuestre, avisa para rutas más exigentes. Reserva con antelación en temporada alta (octubre-noviembre). El dinero en efectivo es esencial, no hay cajeros automáticos.",
+      "plan_b_lluvia": "Senderos cubiertos en bosques, visitas a aldeas bajo techo, cursos de cocina Basotho en el lodge",
+      "keywords": [
+        "Malealea Lodge",
+        "trekking a caballo",
+        "pueblos remotos",
+        "altiplano Lesoto",
+        "experiencia rural"
+      ]
+    },
+    {
+      "id": "tsehlanyane",
+      "nombre": "Parque Nacional Ts'ehlanyane",
+      "tipo": "naturaleza",
+      "region": "Distrito de Leribe",
+      "descripcion": "Único parque nacional de Lesoto, protege bosques antiguos, cascadas y cañones en las montañas del norte. Destino clave para senderismo de múltiples días y avistamiento de fauna montañosa como babuinos y aves rapaces. Acceso controlado preserva la naturaleza.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre a noviembre, febrero a abril",
+      "como_llegar": "Desde Maseru a Leribe (2h en minibús, 10 EUR) + taxi local al parque (1h, 5 EUR). Total: 3h desde Maseru",
+      "donde_dormir": {
+        "mochilero": "Campamento básico en parque o guesthouses Leribe: 15-25 EUR/noche",
+        "medio": "Ts'ehlanyane National Park Lodge: 35-55 EUR/noche",
+        "comfort": "Ikhaya Lodge (cercano): 60-85 EUR/noche"
+      },
+      "que_hacer": [
+        "Entrada parque nacional: 4 EUR",
+        "Senderismo a cascada principal (3h, gratis con entrada)",
+        "Trekking multidia Ts'ehlanyane (35-50 EUR con guía)",
+        "Avistamiento de babuinos y aves (gratis)",
+        "Pesca de trucha en piscinas naturales (8 EUR)"
+      ],
+      "donde_comer": "Lleva provisiones desde Leribe (supermercados básicos). En lodge del parque: comidas sencillas 8-15 EUR. Cocina comunitaria si acampas",
+      "consejo_local": "Las aguas del parque bajan rápidamente con lluvias; confirma estado de senderos con rangers antes de partir. Lleva repelente de insectos y protección solar fuerte (altitud 2000m+)",
+      "plan_b_lluvia": "Senderos de bosque más cortos, refugios naturales en cañones, visita a centro de visitantes",
+      "keywords": [
+        "Ts'ehlanyane",
+        "parque nacional Lesoto",
+        "cascada Ts'ehlanyane",
+        "senderismo montaña",
+        "bosque antiguo"
+      ]
+    },
+    {
+      "id": "thabantsonja",
+      "nombre": "Thabantsonja (Highlands)",
+      "tipo": "montaña",
+      "region": "Distrito de Berea",
+      "descripcion": "Región de altiplanos vírgenes entre 2500-3400 metros con pueblos de montaña intocables y vistas panorámicas de los Drakensbergs. Centro para trekking desafiante, comunidades Basotho auténticas y experiencia de alta montaña sin masificación turística.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril (junio-agosto hay nieve)",
+      "como_llegar": "Desde Maseru a Teyateyaneng (1.5h, 12 EUR) + coche 4x4 o minibús hacia altiplanos (2h, 10 EUR). Requiere transporte especial en temporada lluviosa",
+      "donde_dormir": {
+        "mochilero": "Hospedaje comunitario o campamento: 15-30 EUR/noche",
+        "medio": "Guesthouse montaña (Ramotseme): 35-50 EUR/noche",
+        "comfort": "Mafadi Hut o albergue mejorado: 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking de altura 2-4 días (40-60 EUR/día con guía obligatorio)",
+        "Subida a Thabang (3482m, punto más alto) (50 EUR con guía)",
+        "Visita a pueblos de montaña remotos (gratis)",
+        "Senderismo panorámico de día completo (15 EUR con guía)",
+        "Fotografía de paisajes (gratis)"
+      ],
+      "donde_comer": "Comida en albergues de montaña: papa, verduras, carne seca. Rango: 6-10 EUR. Lleva snacks de Maseru, las opciones son limitadas",
+      "consejo_local": "Guía montañero es obligatorio y recomendable (caminos poco marcados). Aclimatación es importante; comienza en altitudes más bajas. Dinero en efectivo: sin bancos ni tiendas cerca",
+      "plan_b_lluvia": "Permanece en albergues, camina en valles bajos, interact con comunidades locales",
+      "keywords": [
+        "Thabantsonja",
+        "Highlands",
+        "altiplano",
+        "trekking altura",
+        "Thabang",
+        "montaña Lesoto"
+      ]
+    },
+    {
+      "id": "morija",
+      "nombre": "Morija",
+      "tipo": "histórico",
+      "region": "Distrito de Leribe",
+      "descripcion": "Primer sitio de asentamiento de misioneros europeos en Lesoto (1833) con historia colonial bien documentada. Museo Morija, monumentos históricos y la famosa cave art (grabados rupestres). Centro cultural que combina historia y arte.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año (evitar lluvias diciembre-enero)",
+      "como_llegar": "Desde Maseru: minibús a Morija (1h, 8 EUR) o coche de alquiler (60km, 1h 15m)",
+      "donde_dormir": {
+        "mochilero": "Morija Guesthouse: 20-30 EUR/noche",
+        "medio": "Morija Museum & Archives accommodation: 35-50 EUR/noche",
+        "comfort": "Malealea Lodge (transferencia 1h): 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Morija Museum: 4 EUR (arte, historia, etnografía)",
+        "Archivo de Morija: 2 EUR (registros históricos coloniales)",
+        "Cuevas con arte rupestre (5 EUR con guía local)",
+        "Iglesia histórica de Morija (gratis)",
+        "Festival de Morija (julio, entrada 5 EUR) - música y arte"
+      ],
+      "donde_comer": "Pequeños comedores locales cerca del museo: papa, guisos, frutas. Rango: 2-5 EUR. Opción mejor en cafés del museo (5-8 EUR)",
+      "consejo_local": "El Morija Arts & Cultural Festival (julio) es evento principal; llena alojamiento. El museo es relativamente pequeño, dedica 2-3 horas máximo",
+      "plan_b_lluvia": "Museo y archivo están cubiertos. Lluvias intensas pueden hacer inaccesibles los sitios de cuevas",
+      "keywords": [
+        "Morija",
+        "historia colonial",
+        "museo Morija",
+        "arte rupestre",
+        "misión cristiana",
+        "primer asentamiento"
+      ]
+    },
+    {
+      "id": "roma",
+      "nombre": "Roma",
+      "tipo": "rural",
+      "region": "Distrito de Maseru",
+      "descripcion": "Pequeño centro rural próximo a la frontera sudafricana con acceso a ríos, senderismo de día y experiencias de pueblo pequeño Basotho. Punto base menos turístico que Malealea pero con menos aglomeración de visitantes y más interacción local auténtica.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "septiembre a mayo",
+      "como_llegar": "Desde Maseru: minibús (45m, 5 EUR) o coche alquiler hacia el oeste (25km)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse local Roma: 18-28 EUR/noche",
+        "medio": "Small inn o casa de huéspedes: 30-45 EUR/noche",
+        "comfort": "Linked a alojamientos Maseru o Malealea"
+      },
+      "que_hacer": [
+        "Senderismo a cataratas del río Caledon (gratis, 3h)",
+        "Visita a aldeas Basotho cercanas (gratis)",
+        "Pesca en río Caledon (5 EUR permiso)",
+        "Mercado local (gratis)",
+        "Caminata rural de observación (gratis)"
+      ],
+      "donde_comer": "Comedores locales tradicionales: papas, verduras, carne. Rango: 2-4 EUR. Opciones muy limitadas; lleva snacks",
+      "consejo_local": "Roma es destino tranquilo fuera de rutas turísticas principales. Ideal si buscas menos turismo que Malealea pero con menos servicios",
+      "plan_b_lluvia": "Permanece en pueblo, visita almacenes locales, interactúa con residentes",
+      "keywords": [
+        "Roma",
+        "pueblo rural",
+        "río Caledon",
+        "frontera Sudáfrica",
+        "senderismo local"
+      ]
+    },
+    {
+      "id": "oxbow",
+      "nombre": "Oxbow",
+      "tipo": "montaña",
+      "region": "Distrito de Butha-Buthe",
+      "descripcion": "Estación de esquí única en Sudáfrica (junio-agosto) ubicada a 2800m con vistas espectaculares a altiplanos. En verano es base para trekking de alta montaña y punto de partida hacia cimas como Thabantsonja. Infraestructura básica pero acceso a naturaleza salvaje.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "julio-agosto (esquí), septiembre-abril (trekking)",
+      "como_llegar": "Desde Maseru: coche alquiler o tour (3.5h, 80km de ruta montañosa). Conducción exigente en altitude",
+      "donde_dormir": {
+        "mochilero": "Oxbow Lodge dormitorios: 25-35 EUR/noche",
+        "medio": "Oxbow Lodge habitaciones: 45-65 EUR/noche",
+        "comfort": "Oxbow Lodge suite: 75-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Entrada a estación esquí (solo en temporada junio-agosto): 15-25 EUR/día",
+        "Trekking de día desde Oxbow (gratis con alojamiento)",
+        "Senderismo a cimas cercanas (guía 20-30 EUR/día)",
+        "Vistas panorámicas y fotografía (gratis)",
+        "Esquí o snowboard (equipo de alquiler 25-40 EUR/día)"
+      ],
+      "donde_comer": "Oxbow Lodge restaurant es único lugar en zona. Comidas: 10-18 EUR. Comida tradicional Basotho o internacional básico",
+      "consejo_local": "Carretera a Oxbow es desafiante (montaña, curvas, altitud); no recomendado para conductores inexpertos. Mejor opción: tour desde Maseru. Altitude requiere aclimatación",
+      "plan_b_lluvia": "Lluvia/niebla es común; senderismo limitado. Esperar en lodge con vistas (si hay visibilidad)",
+      "keywords": [
+        "Oxbow",
+        "estación esquí",
+        "2800m",
+        "trekking altura",
+        "altiplano norte",
+        "Butha-Buthe"
+      ]
+    },
+    {
+      "id": "sehlabathebe",
+      "nombre": "Sehlabathebe",
+      "tipo": "naturaleza",
+      "region": "Distrito de Qacha's Nek",
+      "descripcion": "Parque nacional remoto en el sureste con lagos de altitud, flora alpina única y trekking desafiante en paisaje virgen. Menos visitado que Ts'ehlanyane, requiere logística más compleja pero ofrece soledad y naturaleza sin contaminar.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Maseru a Qacha's Nek (4h, 120km, minibús 15 EUR) + coche 4x4 al parque (1.5h, 20 EUR). Requiere coordinación previa",
+      "donde_dormir": {
+        "mochilero": "Campamento básico parque: 12-20 EUR/noche",
+        "medio": "Sehlabathebe Lodge (rústico): 35-50 EUR/noche",
+        "comfort": "Liimited - Sehlabathebe es destino básico"
+      },
+      "que_hacer": [
+        "Entrada parque: 3 EUR",
+        "Trekking multidia 2-4 días (30-50 EUR/día con guía)",
+        "Senderismo diario a lagos (gratis con entrada)",
+        "Avistamiento de fauna alpina (gratis)",
+        "Fotografía de paisaje (gratis)"
+      ],
+      "donde_comer": "Albergue parque sirve comidas básicas (8-12 EUR). Lleva provisiones de Qacha's Nek o Maseru",
+      "consejo_local": "Sehlabathebe es destino para trekkers experimentados; infraestructura es mínima. Guía obligatorio. Aislamiento es total, sin comunicación móvil",
+      "plan_b_lluvia": "Camina en valles bajos, campamento refugiado, provisiones limitadas - requiere flexibilidad",
+      "keywords": [
+        "Sehlabathebe",
+        "parque nacional sur",
+        "lago altitud",
+        "trekking remoto",
+        "Qacha's Nek",
+        "flora alpina"
+      ]
+    },
+    {
+      "id": "thaba-bosiu",
+      "nombre": "Thaba Bosiu",
+      "tipo": "histórico",
+      "region": "Distrito de Maseru",
+      "descripcion": "Montaña histórica fortaleza de King Moshoeshoe I, fundador de Lesoto en 1824. Arqueología visible, museos con artefactos, y narrativa fascinante de resistencia frente colonización. Lugar simbólico para entender identidad nacional Basotho.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "septiembre a mayo",
+      "como_llegar": "Desde Maseru: minibús a Thaba-Bosiu (30km, 45m, 6 EUR) o coche alquiler (40m)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse Teyateyaneng (cercano, 15km): 20-30 EUR/noche",
+        "medio": "Guesthouse local: 35-50 EUR/noche",
+        "comfort": "Maseru (día visitante desde capital): sin alojamiento en sitio"
+      },
+      "que_hacer": [
+        "Entrada a Thaba Bosiu: 3 EUR",
+        "Museo arqueológico: 2 EUR (artefactos, historia)",
+        "Senderismo a cima fortaleza (gratis con entrada, 1h)",
+        "Vistas panorámicas (gratis)",
+        "Guía histórico local (recomendado, 5-10 EUR)"
+      ],
+      "donde_comer": "Museu pequeño con café básico (3-5 EUR) o comer en Teyateyaneng (15km): comedores locales 3-6 EUR",
+      "consejo_local": "La historia de Moshoeshoe I es central en Lesoto; aprender previamente enriquece visita. Museo es pequeño pero informativo. Senderismo a cima es moderado",
+      "plan_b_lluvia": "Museo cubierto, cima accesible incluso con lluvia (pero vista limitada)",
+      "keywords": [
+        "Thaba Bosiu",
+        "Moshoeshoe I",
+        "fortaleza",
+        "historia Lesoto",
+        "montaña sagrada",
+        "arqueología"
+      ]
+    },
+    {
+      "id": "afriski",
+      "nombre": "AfriSki Mountain Resort",
+      "tipo": "montaña",
+      "region": "Distrito de Butha-Buthe",
+      "descripcion": "Centro de esquí y actividades de montaña más desarrollado en región, con infraestructura para invierno (junio-agosto) y verano. Punto base para trekking de altura, actividades de aventura y alojamiento con servicios modernos en medio de naturaleza alpina.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "julio-agosto (esquí), septiembre-mayo (trekking)",
+      "como_llegar": "Desde Maseru: coche alquiler o tour (4h, 100km, carretera montañosa desafiante). Tour recomendado",
+      "donde_dormir": {
+        "mochilero": "AfriSki dormitorios/budget: 30-40 EUR/noche",
+        "medio": "AfriSki habitaciones estándar: 50-75 EUR/noche",
+        "comfort": "AfriSki chalets/suites: 90-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Esquí/snowboard (temporada): 20-30 EUR/día + equipo 25 EUR",
+        "Trekking de día (gratis, senderos del resort)",
+        "Mountain biking verano (10-20 EUR/día alquiler)",
+        "Actividades aventura (zipline, tirolesa): 15-25 EUR",
+        "Senderismo panorámico guiado: 20-30 EUR"
+      ],
+      "donde_comer": "Restaurante AfriSki: comidas 12-25 EUR. Bar y cafetería también disponibles. Menú es más variado que lodge básicos",
+      "consejo_local": "AfriSki es más turístico/desarrollado que otros destinos Lesoto; infraestructura superior pero ambiente menos auténtico. Carretera muy exigente en invierno; transporte organizado es esencial",
+      "plan_b_lluvia": "Resort tiene actividades cubiertas: spa, restaurante, entretenimiento interior",
+      "keywords": [
+        "AfriSki",
+        "estación esquí",
+        "2712m",
+        "resort montaña",
+        "trekking",
+        "actividades aventura"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,346 @@
+{
+  "pais": "República Checa",
+  "codigo": "cz",
+  "destinos": [
+    {
+      "id": "praga",
+      "nombre": "Praga",
+      "tipo": "ciudad | histórico",
+      "region": "Bohemia Central",
+      "descripcion": "Capital medieval con el Castillo de Praga, el Puente de Carlos y la Plaza de la Ciudad Vieja. Centro histórico UNESCO con arquitectura gótica y barroca intacta. Punto de entrada natural y base para explorar Bohemia.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Aeropuerto Václav Havel (PRG): 30 km. Autobús AirportExpress 60 min (9 EUR), tren 30 min (12 EUR), taxi 30 EUR.",
+      "donde_dormir": {
+        "mochilero": "Albergue en Staré Město o Vinohrady: 12-18 EUR/noche",
+        "medio": "Hotel 3* en Nové Město o Vinohrady: 45-75 EUR/noche",
+        "comfort": "Hotel 4* centro histórico o Petřín: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Praga y catedral de San Vito (gratis entrada terrenos, 15 EUR catedral)",
+        "Puente de Carlos y Torre de Pólvora (gratis cruce, 4 EUR torre)",
+        "Plaza de la Ciudad Vieja, Reloj Astronómico y barrio judío (gratis plaza, 15 EUR museo judío)",
+        "Cementerio monumental de Vyšehrad (gratis)",
+        "Crucero por el río Moldava al atardecer (15-20 EUR)"
+      ],
+      "donde_comer": "Goulash checo y trdelník (postre enrollado). Rango: 8-15 EUR plato principal. Restaurantes en callejones de Staré Město evitar, mejor Vinohrady o Žižkov.",
+      "consejo_local": "Evita Puente de Carlos entre 10:00-17:00 por aglomeración. Sube temprano o al atardecer. La mayoría de museos cierra lunes.",
+      "plan_b_lluvia": "Museos (Galería Nacional, Museo de la Cerveza Checa: 10-12 EUR), catacumbas subterráneas, cines o cafés tradicionales.",
+      "keywords": [
+        "Prague",
+        "Praha",
+        "castillo",
+        "puente carlos",
+        "ciudad vieja",
+        "vinohrady",
+        "mala strana",
+        "petrin"
+      ]
+    },
+    {
+      "id": "cesky-krumlov",
+      "nombre": "Český Krumlov",
+      "tipo": "histórico | ciudad",
+      "region": "Bohemia del Sur",
+      "descripcion": "Pueblo medieval en herradura junto al río Moldava con castillo renacentista y casco antiguo preservado. Escenario de cuento de hadas con apenas 13.000 habitantes. Parada obligada en ruta sur desde Praga.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre (evitar agosto por turismo masivo)",
+      "como_llegar": "Desde Praga: tren directo 3h 30 min (120 CZK = 5 EUR) o autobús 3h (80-100 CZK = 3-4 EUR). Desde Linz (Austria): tren 2h (250 CZK = 10 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue en casco antiguo: 15-20 EUR/noche",
+        "medio": "Pensión familiar o guesthouse: 35-55 EUR/noche",
+        "comfort": "Hotel junto al río: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Krumlov con museo y vistas (200 CZK = 8 EUR)",
+        "Paseo por casco antiguo y Plaza de Svornosti (gratis)",
+        "Paseo en bote/canoa río Moldava (200-300 CZK = 8-12 EUR por 2-3h)",
+        "Mirador desde castillo o puente panorámico (gratis)",
+        "Museo de la Marioneta (150 CZK = 6 EUR)"
+      ],
+      "donde_comer": "Cervecería tradicional Krčma v Šatlavské ulici (sótano medieval, 80-150 CZK = 3-6 EUR plato). Trout frito local.",
+      "consejo_local": "Llega antes de las 10:00 o después de las 17:00 para evitar autobuses turísticos. Duerme en el pueblo, no en Česká Budějovice (30 min).",
+      "plan_b_lluvia": "Visita museo de la marioneta, catacumbas bajo castillo o películas en cine local. Los paseos por el casco antiguo son bonitos incluso lloviendo.",
+      "keywords": [
+        "Cesky Krumlov",
+        "Český Krumlov",
+        "Krumau",
+        "castillo krumlov",
+        "moldava",
+        "bohemia sur"
+      ]
+    },
+    {
+      "id": "kutna-hora",
+      "nombre": "Kutná Hora",
+      "tipo": "histórico | ciudad",
+      "region": "Bohemia Central",
+      "descripcion": "Ciudad minera medieval de plata con arquitectura gótica y renacentista única. Catedral de Santa Bárbara y la infame Iglesia de los Huesos (Sedlec Ossuary). Patrimonio UNESCO a 1 hora de Praga, perfecta para excursión de día.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Desde Praga: tren directo 1h (90 CZK = 3,50 EUR) o autobús 1h 15 min (80 CZK = 3 EUR). Base en Praga, día completo.",
+      "donde_dormir": {
+        "mochilero": "No recomendado dormir aquí (pequeño pueblo). Base en Praga.",
+        "medio": "Si se queda: guesthouse 30-50 EUR/noche",
+        "comfort": "Hotel pequeño 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Iglesia de los Huesos de Sedlec (150 CZK = 6 EUR, espeluznante decoración con huesos)",
+        "Catedral de Santa Bárbara (100 CZK = 4 EUR)",
+        "Casco antiguo y Plaza Náměstí (gratis)",
+        "Moneda medieval: Museo de la Moneda (80 CZK = 3 EUR)",
+        "Columnata de Italia (1,5 km): mirador con arquitectura italiana"
+      ],
+      "donde_comer": "Pequeñas cervecerías en casco antiguo. Rango: 60-120 CZK (2,50-5 EUR) por plato principal. Goulash checo tradicional.",
+      "consejo_local": "Visita la Iglesia de los Huesos PRIMERO por la mañana antes que los turistas. Cattedrale de Santa Bárbara merece 30 min de contemplación por su tamaño interior.",
+      "plan_b_lluvia": "Museo de la Moneda está cubierto. La Iglesia de los Huesos también. Perfecto para lluvia.",
+      "keywords": [
+        "Kutna Hora",
+        "Kutná Hora",
+        "sedlec",
+        "iglesia huesos",
+        "catedral barbara",
+        "moneda medieval",
+        "ossuary"
+      ]
+    },
+    {
+      "id": "ceske-budejovice",
+      "nombre": "České Budějovice",
+      "tipo": "ciudad",
+      "region": "Bohemia del Sur",
+      "descripcion": "Capital regional bohemia del sur, conocida por su cervecería Budweiser Budvar (la original, no la americana). Plaza renacentista gigante y punto de conexión hacia Krumlov y Austria. Menos turística que Praga pero auténtica.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Praga: tren directo 2h 15 min (200 CZK = 8 EUR) o autobús 2h 30 min (100-150 CZK = 4-6 EUR). Desde Krumlov: tren 30 min (50 CZK = 2 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue centro histórico: 14-18 EUR/noche",
+        "medio": "Guesthouse cerca plaza: 40-60 EUR/noche",
+        "comfort": "Hotel 3* centro: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita cervecería Budweiser Budvar con degustación (tours 9:00-17:00, 200 CZK = 8 EUR)",
+        "Plaza Náměstí Přemysla Otakara IV más grande de Centroeuropa (gratis)",
+        "Torres de Blatská y negra con vistas (80 CZK = 3 EUR)",
+        "Paseo por río Moldava (gratis)"
+      ],
+      "donde_comer": "Cervecería Budweiser Budvar: cerveza checa original a 25-40 CZK (1-1,60 EUR). Restaurante en plaza: rango 100-200 CZK (4-8 EUR).",
+      "consejo_local": "Los checos beben Budvar con orgullo nacional. Prueba la de barril en la fábrica. No es 'Budweiser' americano, es completamente diferente.",
+      "plan_b_lluvia": "Tour de cervecería cubierto. Museos pequeños o paseo cubierto por soportales de la plaza.",
+      "keywords": [
+        "Ceske Budejovice",
+        "České Budějovice",
+        "budvar",
+        "budweiser",
+        "plaza otakara",
+        "cerveceria"
+      ]
+    },
+    {
+      "id": "telc",
+      "nombre": "Telč",
+      "tipo": "histórico | ciudad",
+      "region": "Moravia",
+      "descripcion": "Pueblo renacentista perfecto con plaza simétrica y espejo de agua frente al castillo. Patrimonio UNESCO con apenas 6.000 habitantes. Menos conocido que Krumlov pero igualmente espectacular y más auténtico.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Praga: tren (conecta con Havlíčkův Brod) 2h 30 min (200 CZK = 8 EUR) o autobús 2h 45 min (120 CZK = 5 EUR). Desde České Budějovice: autobús 1h 15 min (80 CZK = 3 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue pequeño: 15-20 EUR/noche",
+        "medio": "Pensión en plaza: 45-70 EUR/noche",
+        "comfort": "Hotel junto castillo: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Plaza Náměstí Zachariáše z Hradce con espejo de agua (gratis, fotogénico)",
+        "Castillo de Telč con interior renacentista (200 CZK = 8 EUR, tours en checo/inglés)",
+        "Paseo a pie por murallas y catedral (gratis)",
+        "Galería de arte moderno (100 CZK = 4 EUR)"
+      ],
+      "donde_comer": "Restaurantes pequeños en plaza. Rango: 100-180 CZK (4-7 EUR) por plato. Sopas tradicionales checas.",
+      "consejo_local": "Fotografía de la plaza más bonita al atardecer desde el castillo mirando hacia la plaza (punto de vista clásico). Come temprano (17:30) o tarde (21:00) para evitar grupos.",
+      "plan_b_lluvia": "Tour del castillo cubierto. La plaza sigue siendo bella con lluvia (reflejo más dramático en el espejo de agua).",
+      "keywords": [
+        "Telc",
+        "Telč",
+        "plaza simetrica",
+        "castillo telc",
+        "renacentista",
+        "espejo agua",
+        "unesco"
+      ]
+    },
+    {
+      "id": "olomouc",
+      "nombre": "Olomouc",
+      "tipo": "ciudad | histórico",
+      "region": "Moravia",
+      "descripcion": "Segunda ciudad importante de Moravia con plaza barroca impresionante, patrimonio UNESCO y múltiples torres de defensa. Centro universitario vibrant con vida nocturna, menos turístico que Praga pero culturalmente rico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Praga: tren directo 2h (250-300 CZK = 10-12 EUR) o autobús 2h 45 min (150 CZK = 6 EUR). Desde Telč: tren 1h (80 CZK = 3 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue universidad: 16-22 EUR/noche",
+        "medio": "Guesthouse Hanácké náměstí: 50-75 EUR/noche",
+        "comfort": "Hotel 3* centro: 85-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Plaza Hanácké náměstí con columnata barroca (gratis)",
+        "Subida Torre Unidas (101 metros, 60 CZK = 2,50 EUR vista ciudad)",
+        "Catedral de San Venceslao (gratis entrada)",
+        "Castillo Arzobispal (150 CZK = 6 EUR)",
+        "Viejo Ayuntamiento y museo de arte medieval (150 CZK = 6 EUR)",
+        "Paseo río Morava (gratis)"
+      ],
+      "donde_comer": "Cervecería tradicional Moravský Kníže (100-150 CZK = 4-6 EUR). Especiales: reggae pie (empanada moravia) y queso de cabra local.",
+      "consejo_local": "Olomouc es parada perfecta entre Praga y Polonia/Eslovaquia. La vida universitaria significa más bares y vida nocturna que otros pueblos checoslovacos.",
+      "plan_b_lluvia": "Museos de arte, castillo arzobispal, viejo ayuntamiento o cafés. Centro completamente accesible con paraguas.",
+      "keywords": [
+        "Olomouc",
+        "hanácké náměstí",
+        "plaza barroca",
+        "moravia",
+        "torres",
+        "venceslao"
+      ]
+    },
+    {
+      "id": "karlovy-vary",
+      "nombre": "Karlovy Vary",
+      "tipo": "ciudad | naturaleza",
+      "region": "Bohemia Occidental",
+      "descripcion": "Spa resort de lujo del siglo XIX en valle entre montañas con aguas termales minerales. Arquitectura belle époque, paseos por bosques de pinos y galerías comerciales. Capital mundial del turismo de salud pero accesible también como turista sin tratamiento.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre, diciembre-febrero (spa season)",
+      "como_llegar": "Desde Praga: autobús directo 2h (150-180 CZK = 6-7 EUR) o tren 2h 45 min (240 CZK = 9,50 EUR). Desde Plzeň: autobús 45 min (60 CZK = 2,50 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue colinas: 18-25 EUR/noche",
+        "medio": "Hotel pequeño fuera centro: 60-90 EUR/noche",
+        "comfort": "Hotel spa histórico: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Beber aguas termales minerales de fuentes públicas (gratis)",
+        "Paseo Colonnade (paseo histórico 2 km entre galerías comerciales, gratis)",
+        "Castillo Loučeň de día (excursión 40 km, 200 CZK = 8 EUR)",
+        "Telefórico a Diana Tower (150 CZK = 6 EUR, vistas sobre ciudad)",
+        "Museo vidrio de Bohemia (200 CZK = 8 EUR)"
+      ],
+      "donde_comer": "Restaurantes spa caros (200-400 CZK = 8-16 EUR), mejor buscar locales fuera centro principal. Oplatky (barquillos dulces locales) 30-50 CZK (1-2 EUR).",
+      "consejo_local": "Las aguas termales están disponibles gratis en numerosas fuentes públicas por toda la ciudad. Trae vaso o compra uno. No necesitas spa de lujo.",
+      "plan_b_lluvia": "Museo de vidrio, paseos cubiertos en colonnade, spas termales (perfecto para lluvia), cines o galerías.",
+      "keywords": [
+        "Karlovy Vary",
+        "Carlsbad",
+        "karlovka",
+        "termales",
+        "spa",
+        "geyser",
+        "bohemia occidental"
+      ]
+    },
+    {
+      "id": "plzen",
+      "nombre": "Plzeň",
+      "tipo": "ciudad",
+      "region": "Bohemia Occidental",
+      "descripcion": "Cuna de la cerveza Pilsner Urquell, ciudad industrial medieval con plaza renacentista y catedral gótica. Centro importante menos turístico que Praga con tour de cervecería que merece visita. Conexión natural hacia Alemania.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Praga: tren directo 1h 30 min (150 CZK = 6 EUR) o autobús 2h (100-130 CZK = 4-5 EUR). Desde Karlovy Vary: autobús 45 min (60 CZK = 2,50 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue centro: 16-20 EUR/noche",
+        "medio": "Hotel 3* plaza: 55-80 EUR/noche",
+        "comfort": "Hotel 4* centro histórico: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Cervecería Pilsner Urquell tour con degustación (250 CZK = 10 EUR, visita fábrica original)",
+        "Plaza Náměstí Republiky con Catedral de San Bartolomé (gratis plaza, 50 CZK = 2 EUR torre 102m)",
+        "Sinagoga más grande de Europa Central (150 CZK = 6 EUR)",
+        "Museo Occidental de Bohemia (100 CZK = 4 EUR)"
+      ],
+      "donde_comer": "Cervecería Gambrinus: cerveza Pilsner Urquell 25-40 CZK (1-1,60 EUR) de barril. Restaurantes plaza: 100-180 CZK (4-7 EUR).",
+      "consejo_local": "Pilsner Urquell es la cerveza de Plzeň, punto final. La cervecería ocupa catacumbas medieval bajo la ciudad. La visita incluye almacenaje histórico subterráneo.",
+      "plan_b_lluvia": "Tour cervecería cubierto, catedral, sinagoga, museos. Centro completamente visitable sin salir.",
+      "keywords": [
+        "Plzen",
+        "Plzeň",
+        "pilsner",
+        "urquell",
+        "cerveza",
+        "sinagoga",
+        "catedral bartolomé"
+      ]
+    },
+    {
+      "id": "moravsky-kras",
+      "nombre": "Moravský Kras",
+      "tipo": "naturaleza | montaña",
+      "region": "Moravia",
+      "descripcion": "Región kárstica con cuevas espectaculares, gargantas y sistemas subterráneos. Puertas de la perdición (Propast) y cuevas de Pustna Son los atractivos principales. Naturaleza salvaje poco conocida, perfecta para senderismo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre (cuevas frías, 10°C año redondo)",
+      "como_llegar": "Desde Olomouc: tren 30 min a Blansko (80 CZK = 3 EUR), luego autobús o taxi 15 km a cuevas (100 CZK = 4 EUR). Base en Blansko o Boskovice.",
+      "donde_dormir": {
+        "mochilero": "Albergue Blansko: 16-20 EUR/noche",
+        "medio": "Guesthouse rural Boskovice: 45-70 EUR/noche",
+        "comfort": "Hotel pequeño Blansko: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Cuevas Propast (tour guiado 1h, 200 CZK = 8 EUR)",
+        "Cuevas Punkva (tour guiado con paseo en bote subterráneo 2h, 300 CZK = 12 EUR)",
+        "Garganta Macocha (mirador 140m sobre río, cable aéreo o senderismo, 100 CZK = 4 EUR)",
+        "Senderismo rutas entre cuevas y bosques (gratis)",
+        "Castillo Pernštejn cerca (250 CZK = 10 EUR)"
+      ],
+      "donde_comer": "Pequeños restaurantes en Blansko. Rango: 100-160 CZK (4-6,50 EUR). Comidas de senderista.",
+      "consejo_local": "Las cuevas mantienen 10°C año redondo. Trae chaqueta incluso en verano. Los tours guiados en checo son más baratos pero en inglés se entiende bien. Reserva tours por la mañana.",
+      "plan_b_lluvia": "Tours de cuevas son perfectos porque están subterráneos. La lluvia no afecta. Gargantas pueden ser resbaladizas pero senderismo es viable.",
+      "keywords": [
+        "moravský kras",
+        "propast",
+        "punkva",
+        "cuevas",
+        "macocha",
+        "garganta",
+        "karstico",
+        "blansko"
+      ]
+    },
+    {
+      "id": "cesky-raj",
+      "nombre": "Český Ráj",
+      "tipo": "naturaleza | montaña",
+      "region": "Bohemia Central Norte",
+      "descripcion": "Parque natural con castillos en acantilados, formaciones rocosas de arenisca y bosques densos. Rutas de senderismo espectaculares conectando castillos Trosky, Valdštejn y Kost. Imprescindible para trekking en República Checa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Praga: tren a Turnov (1h 15 min, 150 CZK = 6 EUR), luego senderismo o autobús a pueblos base (Turnov o Jičín, 40-80 CZK = 1,50-3 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue Turnov o Jičín: 16-22 EUR/noche",
+        "medio": "Guesthouse rural en parque: 50-80 EUR/noche",
+        "comfort": "Hotel pequeño Turnov: 85-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo ruta Trosky-Valdštejn-Kost castillos (8-10 km, 4-5h, gratis)",
+        "Castillo Trosky con torres (200 CZK = 8 EUR entrada)",
+        "Castillo Valdštejn (150 CZK = 6 EUR)",
+        "Castillo Kost (180 CZK = 7 EUR)",
+        "Cañón Prachov (gratis), formaciones rocosas naturales",
+        "Escalada o via ferrata en acantilados (guía 1.000+ CZK = 40+ EUR)"
+      ],
+      "donde_comer": "Posadas rurales en ruta. Rango: 80-140 CZK (3-5,50 EUR). Emparedados y bebidas para trek.",
+      "consejo_local": "Descarga mapas offline de senderos. Señalización excelente pero fácil desviarse. Los castillos se cierran 17:00-18:00. Camina temprano para entradas sin prisa.",
+      "plan_b_lluvia": "Las rutas siguen siendo transitables pero rocas resbaladizas. Mejor hacer senderismo suave o visitar pueblos base (Turnov). Los castillos están abiertos en lluvia.",
+      "keywords": [
+        "ceský ráj",
+        "český raj",
+        "trosky",
+        "valdstejn",
+        "kost",
+        "senderismo",
+        "castillos",
+        "arenisca",
+        "turnov"
+      ]
+    }
+  ]
+}

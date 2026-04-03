@@ -1,0 +1,352 @@
+{
+  "pais": "Filipinas",
+  "codigo": "ph",
+  "destinos": [
+    {
+      "id": "manila",
+      "nombre": "Manila",
+      "tipo": "ciudad",
+      "region": "Luzon, Región de la Capital Nacional",
+      "descripcion": "Capital y puerta de entrada principal a Filipinas, con mezcla de arquitectura colonial española, modernidad y caos urbano típico asiático. Centro cultural y gastronómico con museos, mercados y vida nocturna intensa. Punto obligatorio para llegar y desde donde conectar con otros destinos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Aeropuerto Internacional Ninoy Aquino (destino principal). Desde Europa: vuelos con escalas, 15-20 horas aprox. Coste variable (400-900 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Malate, Ermita o Binondo: 12-20 EUR/noche",
+        "medio": "Hoteles 3 estrellas en Makati o Bonifacio Global City: 35-60 EUR/noche",
+        "comfort": "Hoteles 4-5 estrellas en BGC o Makati: 80-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Intramuros y Fort Santiago (5 EUR, gratis domingos)",
+        "Rizal Park (gratis)",
+        "Museo Nacional (8 EUR)",
+        "Mercado de Quiapo para compras locales (gratis)",
+        "Casa Manila (3 EUR)"
+      ],
+      "donde_comer": "Binondo para comida china local, Makati para restaurantes internacionales. Probar adobo, sinigang, lechon. Rango: 2-15 EUR por comida típica, 15-40 EUR restaurantes mejores.",
+      "consejo_local": "Evita conducir si no estás acostumbrado: el tráfico es caótico. Usa Grab (app de taxi). Los museos cierran los lunes.",
+      "plan_b_lluvia": "Visita centros comerciales (SM Mall of Asia, Ayala Center), cinemas, o museos.",
+      "keywords": [
+        "Manila",
+        "Intramuros",
+        "Makati",
+        "BGC",
+        "Binondo",
+        "Quiapo"
+      ]
+    },
+    {
+      "id": "palawan-coron",
+      "nombre": "Coron, Palawan",
+      "tipo": "isla",
+      "region": "Palawan, Visayas",
+      "descripcion": "Archipiélago con lagos subterráneos únicos en el mundo y arrecifes de coral prístinos. Destino imprescindible para buceo, snorkel y exploración de islas vírgenes. Mezcla perfecta de aventura, naturaleza y turismo independiente sin masificación extrema.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Desde Manila: vuelo a Puerto Princesa (1.5h, 40-80 EUR) + 5h en autobús o minivan a Coron (10-15 EUR). Alternativa: ferry desde Manila (13h, 30-50 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales y guesthouses en Coron town: 10-18 EUR/noche",
+        "medio": "Hotels pequeños con aire acondicionado: 25-45 EUR/noche",
+        "comfort": "Resorts de isla con bungalows: 70-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Lago Kayangan (entrada 100 PHP=2 EUR, snorkel gratis)",
+        "Twin Lagoon tour (tour privado 60-100 EUR/persona)",
+        "Snorkel en arrecife Barracuda o Lusong (tours desde 25 EUR)",
+        "Buceo en pecios (certificación PADI 350-400 EUR)",
+        "Island hopping de un día (tours 30-50 EUR)",
+        "Maquinit Hot Spring (2 EUR entrada)"
+      ],
+      "donde_comer": "Coron town tiene warungs simples y restaurantes. Probar fresh seafood, tsilong manok, pancit. Rango: 2-5 EUR en locales, 10-20 EUR en restaurantes turísticos.",
+      "consejo_local": "Compra snorkel barato en Manila, aquí es 5x más caro. Los tours salen temprano (6-7am), no duermas. Lleva protector solar fuerte (SPF50+).",
+      "plan_b_lluvia": "Visita el pueblo, aprende buceo en piscina, visita museos locales o quédate en resort.",
+      "keywords": [
+        "Coron",
+        "Palawan",
+        "Kayangan Lake",
+        "Barracuda Lake",
+        "Twin Lagoon",
+        "Lusong Gunboat",
+        "buceo Filipinas"
+      ]
+    },
+    {
+      "id": "boracay",
+      "nombre": "Boracay",
+      "tipo": "playa",
+      "region": "Aklan, Visayas",
+      "descripcion": "Isla de fama mundial con 4km de playa blanca, aguas turquesas y ambiente festivo. Punto de encuentro de viajeros independientes con infraestructura desarrollada, bares nocturnos y deportes acuáticos. Cara comparada con otras islas, pero accesible y bien organizada.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Vuelo desde Manila a Caticlan (1h, 50-90 EUR) + ferry a Boracay (30 min, 2-3 EUR) o desde Cebu (45min, 35-70 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Station 1 o 2: 15-25 EUR/noche",
+        "medio": "Hotels pequeños o beachfront: 40-70 EUR/noche",
+        "comfort": "Resorts 4 estrellas con vistas al mar: 100-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Relajarse en White Beach (gratis)",
+        "Windsurf y kitesurf (lecciones 40-60 EUR)",
+        "Island hopping a Crocodile Island (tours 25-35 EUR)",
+        "Puesta de sol en Punta Bulan (gratis)",
+        "Buceo (certificación 350-400 EUR, inmersión 35-50 EUR)",
+        "Vida nocturna en beach bars (drinks 3-8 EUR)"
+      ],
+      "donde_comer": "White Beach tiene multitud de restaurants. Probar kinilaw, fresh fish, mango shakes. Rango: 3-8 EUR en puestos callejeros, 15-40 EUR en restaurantes.",
+      "consejo_local": "Station 1 es turístico pero céntrico. Station 3 más tranquilo y local. Evita temporada de tifones (junio-noviembre). Negocia precios en tiendas.",
+      "plan_b_lluvia": "Centros comerciales, masajes, yoga, o simplemente esperar: muchas lluvias son cortas.",
+      "keywords": [
+        "Boracay",
+        "White Beach",
+        "Station 1",
+        "Station 2",
+        "Aklan",
+        "windsurf",
+        "fiesta"
+      ]
+    },
+    {
+      "id": "cebu-ciudad",
+      "nombre": "Cebu Ciudad",
+      "tipo": "ciudad",
+      "region": "Cebu, Visayas",
+      "descripcion": "Segunda ciudad más grande de Filipinas, hub de transporte regional con historia colonial y mezcla de modernidad. Punto estratégico para explorar Visayas sin ser tan turístico como Boracay. Buena base para buceo, islas cercanas y vida urbana auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Vuelo desde Manila (1h, 50-100 EUR). Ferry desde otras islas: Dumaguete (2h), Bohol (1.5h).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Cebu IT Park o Banilad: 12-20 EUR/noche",
+        "medio": "Hotels en downtown o Cebu IT Park: 30-50 EUR/noche",
+        "comfort": "Resorts 4 estrellas: 70-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Basílica Menor del Santo Niño (gratis)",
+        "Fuerte San Pedro (3 EUR)",
+        "Carbon Market para compras locales (gratis)",
+        "Taoist Temple en Cebu (3 EUR)",
+        "Snorkel con whale sharks en Oslob, día completo (tours desde 35 EUR)",
+        "Isla de Nalusuan para buceo (tours 50-70 EUR)"
+      ],
+      "donde_comer": "Downtown para comida local barata, Cebu IT Park para opciones variadas. Probar lechon, sinuglaw, danggit. Rango: 2-6 EUR comida callejera, 10-25 EUR restaurantes.",
+      "consejo_local": "Whale sharks en Oslob son garantizados pero controvertidos (animales cautivos de facto). Considera alternativas en Panagsama Beach. El tráfico es intenso por las tardes.",
+      "plan_b_lluvia": "Centros comerciales (SM City, Ayala), museos, o buceo (funciona con lluvia).",
+      "keywords": [
+        "Cebu",
+        "Cebu City",
+        "whale sharks",
+        "lechon cebu",
+        "Oslob",
+        "buceo"
+      ]
+    },
+    {
+      "id": "bohol-panglao",
+      "nombre": "Bohol y Panglao",
+      "tipo": "isla",
+      "region": "Bohol, Visayas",
+      "descripcion": "Isla con paisajes únicos (Chocolate Hills), biodiversidad rica (tarsier enanos), arrecifes coralinos y playas tranquilas. Menos abarrotada que Boracay pero con buena infraestructura. Combina naturaleza, buceo y tranquilidad perfectamente.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Ferry desde Cebu a Tagbilaran (1.5h, 8-12 EUR) o desde Dumaguete (2h, 10-15 EUR). Vuelo a Cebu + ferry.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Alona Beach o Tagbilaran: 12-22 EUR/noche",
+        "medio": "Beachfront hotels en Panglao: 35-60 EUR/noche",
+        "comfort": "Resorts en Panglao o Bohol: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Chocolate Hills (tours 20-35 EUR, viewpoint 2 EUR)",
+        "Tarsier Sanctuary en Corella (15 EUR, incluido guía)",
+        "Snorkel en Balicasag Island (island hopping 30-40 EUR)",
+        "Buceo en Panglao (certificación 350-400 EUR)",
+        "Río Loboc en bote (tours 25-40 EUR)",
+        "Visita templo hindu y cuevas (tours 30 EUR)"
+      ],
+      "donde_comer": "Alona Beach tiene mucho turismo (precios altos). Tagbilaran es más local y barato. Probar dinuguan, bistek, fresh fish. Rango: 2-5 EUR local, 12-30 EUR turístico.",
+      "consejo_local": "Los Chocolate Hills son mostaza (faltan lluvia y verdor): visitalos antes de final de mayo. El tarsier sanctuary es crowded a las 8am, ve tarde. Lleva efectivo (muchos lugares no aceptan tarjeta).",
+      "plan_b_lluvia": "Cuevas de Bohol, museos, o simplemente disfruta playas tranquilas.",
+      "keywords": [
+        "Bohol",
+        "Panglao",
+        "Chocolate Hills",
+        "tarsier",
+        "Alona Beach",
+        "buceo",
+        "Balicasag"
+      ]
+    },
+    {
+      "id": "siargao-cloud-9",
+      "nombre": "Siargao",
+      "tipo": "isla",
+      "region": "Surigao del Norte, Mindanao",
+      "descripcion": "Isla de surfistas con olas mundiales (Cloud 9), playas tranquilas y ambiente hippie-casual. Menos estructurada que Boracay pero con suficiente infraestructura. Perfecta para surfistas, mochileros y viajeros que buscan menos turismo masivo.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "septiembre a octubre (olas), diciembre a febrero (buen clima)",
+      "como_llegar": "Vuelo a Butuan o Surigao desde Manila (1.5-2h, 60-100 EUR) + ferry a Siargao (2-3h, 15-25 EUR) o ferry desde Cebu (12h, 35-50 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en General Luna: 10-18 EUR/noche",
+        "medio": "Beach resorts pequeños: 30-50 EUR/noche",
+        "comfort": "Resorts boutique o villas: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Surf en Cloud 9 (lecciones 40-60 EUR, acceso a playa gratis)",
+        "Island hopping a Dako Island (tours 35-50 EUR)",
+        "Laguna Sugba (tours 30-45 EUR)",
+        "Palanglao Cave (tours 40-60 EUR)",
+        "Relax en playas tranquilas (gratis)",
+        "Stand-up paddle en lagunas (alquiler 20-35 EUR)"
+      ],
+      "donde_comer": "General Luna y Dapa tienen warungs simples y algunos restaurantes. Probar fish and chips locales, adobo, bicol express. Rango: 2-6 EUR comida local, 12-25 EUR restaurantes.",
+      "consejo_local": "Cloud 9 es famosa pero olas gigantes solo septiembre-octubre: otros meses más manejable. General Luna es el centro, pero hay playas más tranquilas al norte. Carreteras sin asfaltar frecuentes.",
+      "plan_b_lluvia": "Cuevas, exploración de pueblo, yoga o espera (olas mejoran con lluvia).",
+      "keywords": [
+        "Siargao",
+        "Cloud 9",
+        "General Luna",
+        "surf",
+        "Dako Island",
+        "Laguna Sugba",
+        "Mindanao"
+      ]
+    },
+    {
+      "id": "sagano-rice-terraces",
+      "nombre": "Batanes",
+      "tipo": "naturaleza",
+      "region": "Batanes, Luzon del Norte",
+      "descripcion": "Archipiélago remoto entre Filipinas y Taiwán con paisajes de película: acantilados verdes, pueblos de arquitectura única y naturaleza salvaje intacta. Destino para viajeros aventureros buscando lo auténtico. Pocos turistas, localidad auténtica, transporte complicado.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "marzo a mayo",
+      "como_llegar": "Vuelo desde Manila a Basco (1h, 80-150 EUR) o ferry desde Calinog, Iloilo (22h, 40-60 EUR, frecuencia irregular). Clima impredecible puede cancelar vuelos.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales en Basco: 15-25 EUR/noche",
+        "medio": "Pequeños hotels o family-run: 30-50 EUR/noche",
+        "comfort": "Resort único Fundación Pacita: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Driving tour de Sabtang Island (tours guiados 50-70 EUR)",
+        "Senderismo a Naidi Point y acantilados (gratis)",
+        "Visita pueblos locales: Basco, Mahatao (gratis)",
+        "Snorkel en aguas frías (tours 40-60 EUR)",
+        "Danza y cultura local (muchas fiestas locales libres)"
+      ],
+      "donde_comer": "Pocas opciones. Basco tiene restaurantes simples. Comida casera típica en guesthouses. Probar laing, sagisilao. Rango: 3-8 EUR comidas simples, 15-25 EUR restaurantes.",
+      "consejo_local": "Viaja con flexibilidad: ferries y vuelos se cancelan frecuentemente por clima. No hay cadenas de supermercados: compra en Manila. Las carreteras son roughas. Renta moto o auto con conductor (40-60 EUR/día).",
+      "plan_b_lluvia": "Muy frecuente: simplemente adapta actividades indoor (artesanía local, museos) o espera.",
+      "keywords": [
+        "Batanes",
+        "Basco",
+        "Sabtang",
+        "acantilados",
+        "remoto",
+        "aventura",
+        "Luzon"
+      ]
+    },
+    {
+      "id": "el-nido-palawan",
+      "nombre": "El Nido, Palawan",
+      "tipo": "playa",
+      "region": "Palawan, Visayas",
+      "descripcion": "Pueblo de playa rodeado de karst espectaculares y acceso a 4 lagunas paradisíacas. Destino buceo y snorkel de clase mundial con isla hopping organizadas. Menos remoto que Coron pero igualmente hermoso, con mezcla perfecta de aventura y comodidad.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Vuelo desde Manila a Puerto Princesa (1.5h, 40-80 EUR) + 5.5h en minivan a El Nido (25-35 EUR) o ferry lento desde Puerto Princesa (10-12h, 15-25 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en pueblo: 12-22 EUR/noche",
+        "medio": "Beachfront hotels o guesthouses: 40-70 EUR/noche",
+        "comfort": "Resorts con vistas a mar: 90-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Laguna Grande tour (full day tours 45-70 EUR, grupo)",
+        "Laguna Pequeña snorkel (tours 40-60 EUR)",
+        "Nacpan Beach trek (medio día 30-40 EUR o DIY gratis)",
+        "Beach hopping privado en kayak (tours 50-80 EUR)",
+        "Buceo en arrecife (certificación 350-400 EUR, inmersión 50 EUR)",
+        "Sunset at Corong-Corong Beach (gratis)"
+      ],
+      "donde_comer": "Calle principal de El Nido con multitud de opciones. Probar tuna kinilaw, lechon kawali, sinigang. Rango: 3-7 EUR comida local, 15-40 EUR turístico.",
+      "consejo_local": "Los tours 'A', 'B', 'C' estandarizados salen de agencias: compara precios (varían 20-30%). Tours privados más caros pero mejor. Compra protector solar aquí es más barato que resorts.",
+      "plan_b_lluvia": "Tours a cuevas, masajes, yoga, o espera (lluvia tropical suele ser corta).",
+      "keywords": [
+        "El Nido",
+        "Palawan",
+        "laguna",
+        "karst",
+        "Big Lagoon",
+        "Small Lagoon",
+        "island hopping",
+        "buceo"
+      ]
+    },
+    {
+      "id": "vigan",
+      "nombre": "Vigan",
+      "tipo": "histórico",
+      "region": "Ilocos Sur, Luzon",
+      "descripcion": "Patrimonio UNESCO con arquitectura colonial española intacta, calles de piedra y templos. Destino para viajeros interesados en historia y cultura. Menos popular que Manila pero igualmente importante para entender Filipinas. Tranquilo y fácil de recorrer a pie.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Manila: vuelo a Laoag (1.5h, 60-100 EUR) + 1h en minivan a Vigan (10-15 EUR) o bus directo desde Manila (10-12h, 20-35 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en casco histórico: 12-20 EUR/noche",
+        "medio": "Hotels coloniales pequeños: 30-50 EUR/noche",
+        "comfort": "Vigan Heritage Hotel o similar: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por casco histórico a pie (gratis)",
+        "Iglesia de Vigan (free entrada, donación opcional)",
+        "Museo Ayala (5 EUR)",
+        "Mercado Salcedo para artesanías locales (gratis)",
+        "Kalesa (carruaje) rides por pueblo (5-10 EUR por corta duración)",
+        "Pottery workshop tours (30-40 EUR incluido clase)"
+      ],
+      "donde_comer": "Restaurantes tradicionales en Plaza Burgos y calles principales. Probar empanada ilocana, bagnet, lumpiang Shanghai. Rango: 2-5 EUR empanadas, 8-20 EUR platos principales.",
+      "consejo_local": "Mejor el atardecer para fotos: luz dorada en fachadas coloniales. La mayoría de atracciones están en el casco, puedes hacerlo en medio día. Visita Pottery Village en San Juan cercano (15 min en jeepney, 1 EUR).",
+      "plan_b_lluvia": "Museos, artesanía indoors, iglesias, o simplemente pasea: lluvias son cortas.",
+      "keywords": [
+        "Vigan",
+        "Ilocos",
+        "colonial",
+        "UNESCO",
+        "empanada",
+        "bagnet",
+        "Calle Crisologo"
+      ]
+    },
+    {
+      "id": "dumaguete",
+      "nombre": "Dumaguete",
+      "tipo": "ciudad",
+      "region": "Negros Oriental, Visayas",
+      "descripcion": "Ciudad costera tranquila y estudiosa (universidad importante) con vida local auténtica, buceo accesible y ambiente relajado. Menos turístico que Cebu pero buena base para explorar Visayas sur. Ideal para viajeros buscando pace lento y conexión con gente local.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Vuelo desde Manila a Dumaguete (1.5h, 70-110 EUR) o ferry desde Cebu (2.5-3h, 10-15 EUR) o Bohol (2h, 10-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en centro o Rizal Boulevard: 12-20 EUR/noche",
+        "medio": "Hotels pequeños: 30-50 EUR/noche",
+        "comfort": "Resorts con vista al mar: 70-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por Rizal Boulevard (gratis)",
+        "Buceo en Apo Island (day trip 60-80 EUR tour, 25 EUR entrada isla)",
+        "Snorkel en aguas cercanas (tours desde 30 EUR)",
+        "Visita Iglesia de Santa Catalina (gratis)",
+        "Mercado tradicional de comida (gratis)",
+        "Excursión a Danjugan Island para buceo (tours 80-120 EUR)"
+      ],
+      "donde_comer": "Rizal Boulevard y barrios de estudiantes con opciones locales baratas. Probar champorado, taho, inasal na manok. Rango: 2-5 EUR comida callejera, 10-20 EUR restaurantes.",
+      "consejo_local": "Apo Island es el must: asegúrate de hacer snorkel/buceo (tortugas marinas casi garantizadas). Dumaguete es base para buceo técnico avanzado (Dauin). Ritmo lento: perfecto para recuperarse después de destinos ajetraeados.",
+      "plan_b_lluvia": "Buceo (mejor con lluvia), cafés con wifi, iglesias o museos.",
+      "keywords": [
+        "Dumaguete",
+        "Apo Island",
+        "Rizal Boulevard",
+        "buceo",
+        "tortuga marina",
+        "Negros Oriental"
+      ]
+    }
+  ]
+}

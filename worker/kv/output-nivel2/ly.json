@@ -1,0 +1,345 @@
+{
+  "pais": "Libia",
+  "codigo": "ly",
+  "alerta_seguridad_general": "Libia tiene restricciones de viaje significativas debido a inestabilidad política y seguridad. Consulta tu gobierno antes de viajar. Muchas zonas son desaconsejadas.",
+  "destinos": [
+    {
+      "id": "tripoli",
+      "nombre": "Trípoli",
+      "tipo": "ciudad | histórico",
+      "region": "Noroeste, costa mediterránea",
+      "descripcion": "Capital y mayor ciudad de Libia, punto de entrada principal. Mezcla de arquitectura otomana, italiana y moderna en la Medina antigua. Centro administrativo y cultural con museos y mercados tradicionales.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Vuelo internacional a Aeropuerto de Trípoli (TIP). Conexiones desde Europa (Túnez, Malta). Desde Malta en ferry ~4h (€40-80).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Medina o Tarik al-Shati: €15-25/noche",
+        "medio": "Hoteles 3 estrellas centro: €40-70/noche",
+        "comfort": "Hoteles 4-5 estrellas frente al mar: €80-150/noche"
+      },
+      "que_hacer": [
+        "Medina de Trípoli - paseo por callejuelas (gratis)",
+        "Castillo Rojo (Qasr al-Hamra) - arquitectura otomana (€2)",
+        "Museo Nacional de Libia - mosaicos romanos (€3)",
+        "Souk al-Mushir - mercado tradicional (gratis, compras desde €5)",
+        "Paseo marítimo de Corniche (gratis)"
+      ],
+      "donde_comer": "Couscous, pasta a la libia, seafood en Medina. €4-8 comida local, €15-25 restaurante. Mejores zonas: puerto viejo, Tarik al-Shati.",
+      "consejo_local": "Negocia precios en souks. Evita fotografiar edificios gubernamentales. Mejor moverse en taxi que a pie solo de noche.",
+      "plan_b_lluvia": "Museos cubiertos, cafés en Medina, compras en souk climatizado.",
+      "alerta_seguridad": "Consulta avisos de viaje actualizados. Algunos barrios fuera del centro pueden no ser seguros para turistas.",
+      "keywords": [
+        "Tripoli",
+        "Tarabulus",
+        "Medina",
+        "Castillo Rojo",
+        "puerto"
+      ]
+    },
+    {
+      "id": "leptis-magna",
+      "nombre": "Leptis Magna",
+      "tipo": "histórico | ruinas",
+      "region": "Noroeste, costa (100km de Trípoli)",
+      "descripcion": "Una de las ruinas romanas mejor preservadas del mundo. Teatro, foro, basílica y arco de Septimio Severo en la costa. Patrimonio UNESCO que rivalizaba con Cartago.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Trípoli: Coche alquilado (~€30-40/día) o tour guiado (~€50-80). Bus a Khoms (~1.5h, €3-5) y taxi local (~€15). Duración total: 3-4h.",
+      "donde_dormir": {
+        "mochilero": "Alojamiento en Khoms cercano: €12-20/noche",
+        "medio": "Hotel 3 estrellas Khoms: €35-50/noche",
+        "comfort": "Resort Leptis o Khoms: €60-100/noche"
+      },
+      "que_hacer": [
+        "Recorrido por ruinas romanas (€5 entrada)",
+        "Teatro romano - vistas al Mediterráneo (incluido en entrada)",
+        "Arco de Septimio Severo - fotografía (incluido)",
+        "Basílica paleocristiana y mosaicos (incluido)",
+        "Museosite con artefactos (€2 adicional)"
+      ],
+      "donde_comer": "Restaurante en entrance site o en Khoms (€4-6 comida). Opciones básicas pero adecuadas.",
+      "consejo_local": "Lleva agua y protección solar. Las ruinas no tienen sombra. Mejor ir temprano (8am). Guía local mejora experiencia (€10-15).",
+      "plan_b_lluvia": "lluvia rara; refugiarse en museo site.",
+      "alerta_seguridad": "Zona generalmente más segura que Trípoli pero confirma situación actual. Viaja con tour organizado si es posible.",
+      "keywords": [
+        "Leptis Magna",
+        "Lepcis Magna",
+        "ruinas romanas",
+        "Khoms",
+        "teatro romano",
+        "Septimio Severo"
+      ]
+    },
+    {
+      "id": "sabratha",
+      "nombre": "Sabratha",
+      "tipo": "histórico | playa",
+      "region": "Noroeste, costa (70km oeste de Trípoli)",
+      "descripcion": "Tercera ciudad fenicia-romana importante. Teatro bien conservado frente al mar, templos y necrópolis. Menos masificada que Leptis Magna. UNESCO.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Trípoli: Coche alquilado (~€30-40/día) o tour (~€45-70). Bus local (~1.5h, €2-4). Taxi compartido desde puerto (~€10-15).",
+      "donde_dormir": {
+        "mochilero": "Hostales Sabratha o pueblos vecinos: €10-18/noche",
+        "medio": "Hotel 2-3 estrellas junto ruinas: €30-45/noche",
+        "comfort": "Resort con vistas ruinas: €55-90/noche"
+      },
+      "que_hacer": [
+        "Teatro romano frente al Mediterráneo (€4 entrada)",
+        "Templo de Isis y Serapis (incluido)",
+        "Basílica paleocristiana y mosaicos (incluido)",
+        "Playa pequeña junto ruinas (gratis)",
+        "Paseo por necrópolis (incluido)"
+      ],
+      "donde_comer": "Pescado fresco, couscous en chiringuitos junto playa. €3-5 comida, €10-15 restaurante. Zona puerto.",
+      "consejo_local": "Menos turistas que Leptis. Teatro es espectacular al atardecer. Nada en playa si hace calor.",
+      "plan_b_lluvia": "lluvia improbable; museo pequeño en site.",
+      "alerta_seguridad": "Más aislado que Leptis; confirma seguridad. Mejor con tour o grupo.",
+      "keywords": [
+        "Sabratha",
+        "teatro romano",
+        "fenicia",
+        "Isis Serapis",
+        "costa Libia"
+      ]
+    },
+    {
+      "id": "cirene",
+      "nombre": "Cirene",
+      "tipo": "histórico | montaña",
+      "region": "Noreste, meseta (200km de Bengazi)",
+      "descripcion": "Antigua ciudad griega en la Jebel Akhdar (Montaña Verde). Ateneo, acrópolis y templos griegos a 600m de altitud. Una de las 5 ciudades grecas de Cirenaica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre (clima más fresco en montaña)",
+      "como_llegar": "Desde Bengazi: Coche alquilado (~€40/día) o tour guiado (~€60-90). Carretera ~3.5h. Difícil sin vehículo propio.",
+      "donde_dormir": {
+        "mochilero": "Alojamiento pueblo Shahhat cercano: €10-15/noche",
+        "medio": "Guesthouse Jebel Akhdar: €25-40/noche",
+        "comfort": "Hotel ecoturismo si disponible: €45-70/noche"
+      },
+      "que_hacer": [
+        "Templo de Zeus y Ateneo (€4 entrada)",
+        "Acrópolis griega y vistas meseta (incluido)",
+        "Santuario de Apolo (incluido)",
+        "Museo site con esculturas (€2)",
+        "Sendero por Jebel Akhdar (gratis)"
+      ],
+      "donde_comer": "Comida libia básica en Shahhat (€3-5). Pocas opciones turísticas. Llevar snacks.",
+      "consejo_local": "Más frío que costa. Lleva abrigo. Pueblo Shahhat tradicional cerca. Pocos turistas.",
+      "plan_b_lluvia": "Lluvia posible en montaña. Museo site cubierto.",
+      "alerta_seguridad": "Noreste más inestable históricamente. Confirma seguridad actual. Considera tour con guía local.",
+      "keywords": [
+        "Cyrene",
+        "Cirena",
+        "Shahhat",
+        "Jebel Akhdar",
+        "templo Zeus",
+        "griega"
+      ]
+    },
+    {
+      "id": "benghazi",
+      "nombre": "Bengazi",
+      "tipo": "ciudad | playa",
+      "region": "Noreste, costa",
+      "descripcion": "Segunda ciudad de Libia. Puerto importante en costa de Cirenaica. Base para explorar noreste (Cirene, Al Qubbah). Menos turística que Trípoli pero con playas cercanas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Vuelo desde Trípoli (~1.5h, €60-100). Ferry menos común. Taxi desde aeropuerto (~€10).",
+      "donde_dormir": {
+        "mochilero": "Hostales centro: €12-20/noche",
+        "medio": "Hoteles 3 estrellas: €35-55/noche",
+        "comfort": "Hoteles 4 estrellas frente al mar: €70-120/noche"
+      },
+      "que_hacer": [
+        "Paseo marítimo Corniche (gratis)",
+        "Playa Al Qubbah - 20km sur (gratis, taxi €5)",
+        "Mercado Benina tradicional (gratis, compras €5-20)",
+        "Fort Benghazi - arquitectura italiana (gratis entrada)",
+        "Museo de Cirenaica (€3)"
+      ],
+      "donde_comer": "Pasta, seafood, couscous. €4-7 comida local, €12-20 restaurante. Corniche y puerto.",
+      "consejo_local": "Base menos convencional pero buena para evitar masas. Playas cercanas más tranquilas.",
+      "plan_b_lluvia": "Museos, mercados cubiertos, cafés.",
+      "alerta_seguridad": "Situación variable. Consulta avisos actualizados. Centro generalmente más seguro.",
+      "keywords": [
+        "Benghazi",
+        "Bengasi",
+        "Cyrenaica",
+        "Al Qubbah",
+        "puerto"
+      ]
+    },
+    {
+      "id": "ubari",
+      "nombre": "Ubari",
+      "tipo": "desierto | naturaleza",
+      "region": "Sur, Sahara (600km Trípoli)",
+      "descripcion": "Puerta al desierto del Sahara. Lagos de agua dulce rodeados de palmeras en mitad del desierto (Ubari Lake, Gaetrun). Caravanas, dunas y campamento beduino.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo (junio-agosto >45°C)",
+      "como_llegar": "Desde Trípoli: Vuelo a Ghat/Sabha (~1h, €80-120) + jeep 4x4 (~4h, €100-150/día). O drive directo ~10h (difícil, requiere experiencia).",
+      "donde_dormir": {
+        "mochilero": "Campamento beduino: €15-25/noche (todo incluido)",
+        "medio": "Lodge con tiendas/habitaciones: €40-60/noche",
+        "comfort": "Resort turístico Si disponible: €70-100/noche"
+      },
+      "que_hacer": [
+        "Ubari Lake - baño en agua dulce desierto (gratis)",
+        "Gaetrun Lake - fotografía dunas (gratis)",
+        "Safari jeep por dunas (€40-60/día)",
+        "Noche en campamento beduino con fuego (incluido alojamiento)",
+        "Atardecer Sahara (incluido)"
+      ],
+      "donde_comer": "Comida beduina: cordero, pan, dátiles, té. €6-10/día incluido en campamento. Restaurantes básicos en pueblo.",
+      "consejo_local": "Reserva con agencia local en Trípoli o Ghat. Agua y protección solar esencial. Nómadas Tuareg aún viven en zona.",
+      "plan_b_lluvia": "Lluvia muy rara. Posibles tormentas de arena (viajes se cancelan).",
+      "alerta_seguridad": "Sur es más remoto. Tour organizado esencial. Confirma seguridad. Evita si hay inestabilidad reportada.",
+      "keywords": [
+        "Ubari",
+        "Sahara",
+        "Ubari Lake",
+        "Gaetrun",
+        "desierto Libia",
+        "jeep safari",
+        "beduino"
+      ]
+    },
+    {
+      "id": "ghat",
+      "nombre": "Ghat",
+      "tipo": "desierto | pueblo",
+      "region": "Suroeste, Sahara (1000km Trípoli, frontera Argelia)",
+      "descripcion": "Pueblo antiguo en oasis del Sahara. Base para Tadrart Acacus (sitio UNESCO con arte rupestre prehistórico). Arquitectura tradicional y paisaje desértico extremo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Vuelo Trípoli-Ghat (~2h, €100-130). O 4x4 desde Trípoli (~14h, agencia €150-200). Acceso limitado por seguridad.",
+      "donde_dormir": {
+        "mochilero": "Alojamiento básico Ghat: €12-18/noche",
+        "medio": "Guesthouse oasis: €30-45/noche",
+        "comfort": "Lodge turístico con comodidades: €60-90/noche"
+      },
+      "que_hacer": [
+        "Tadrart Acacus - arte rupestre 12,000 años (excursión €80-120)",
+        "Paseo pueblo de Ghat tradicional (gratis)",
+        "Acantilado Tadrart - trekking (€50-80/día)",
+        "Oasis y palmeras (gratis)",
+        "Mercado tradicional (gratis, compras €5+)"
+      ],
+      "donde_comer": "Comida beduina, couscous, dátiles. €4-6 comida, €10-15 restaurante. Opciones muy limitadas.",
+      "consejo_local": "Pueblo muy auténtico, pocos turistas. Guía beduino local mejora experiencia. Trae cash en efectivo (no hay cajeros).",
+      "plan_b_lluvia": "Extremadamente raro. Tormentas arena pueden bloquear viajes.",
+      "alerta_seguridad": "Frontera Argelia, zona remota. Seguridad variable. Solo con tour organizado y confirmación actualizada.",
+      "keywords": [
+        "Ghat",
+        "Tadrart Acacus",
+        "arte rupestre",
+        "Sahara Libia",
+        "oasis",
+        "Tuareg"
+      ]
+    },
+    {
+      "id": "derna",
+      "nombre": "Derna",
+      "tipo": "ciudad | playa",
+      "region": "Noreste, costa (300km Bengazi)",
+      "descripcion": "Puerto costero en Cirenaica oriental. Playas rocosas, medina antigua en acantilado. Menos visitado que ciudades principales. Punto histórico ruta costera.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Bengazi: Coche alquilado (~€35/día) ~4h. Bus local (~€4-6). O desde Túnez (200km, más complicado).",
+      "donde_dormir": {
+        "mochilero": "Guesthouse centro: €10-16/noche",
+        "medio": "Hotel 2-3 estrellas: €25-40/noche",
+        "comfort": "Hotel con vistas mar: €50-75/noche"
+      },
+      "que_hacer": [
+        "Paseo medina antigua en acantilado (gratis)",
+        "Playa Derna - baño (gratis)",
+        "Cuevas en costa (gratis, exploración con cuidado)",
+        "Puerto de pescadores (gratis)",
+        "Mirador acantilado al atardecer (gratis)"
+      ],
+      "donde_comer": "Seafood fresco, pasta. €3-5 comida, €8-12 restaurante. Puerto para mejor pescado.",
+      "consejo_local": "Muy auténtico, pocos turistas occidentales. Gente amable. Playas más salvajes que resorts.",
+      "plan_b_lluvia": "lluvia posible invierno. Medina cubierta.",
+      "alerta_seguridad": "Noreste variable. Confirma situación. Menos desarrollado turísticamente = menos infraestructura de seguridad.",
+      "keywords": [
+        "Derna",
+        "Derne",
+        "costa Cirenaica",
+        "medina",
+        "acantilado",
+        "puerto"
+      ]
+    },
+    {
+      "id": "zuwarah",
+      "nombre": "Zuwara",
+      "tipo": "playa | pueblo",
+      "region": "Noroeste, costa (120km oeste Trípoli, frontera Túnez)",
+      "descripcion": "Pueblo costero bereber con playas tranquilas. Base para playas occidentales de Libia. Pescado fresco, pocos turistas, acceso fácil desde Túnez.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Trípoli: Coche alquilado (~€30/día) ~2h. Bus (~€4). O desde Djerba Túnez (cercano, posible cruce frontera).",
+      "donde_dormir": {
+        "mochilero": "Guesthouse pueblo: €10-15/noche",
+        "medio": "Hotel 2-3 estrellas: €25-40/noche",
+        "comfort": "Resort playa: €50-80/noche"
+      },
+      "que_hacer": [
+        "Playa Zuwara - baño (gratis)",
+        "Mercado pescado fresco (gratis, compras €5-15)",
+        "Paseo puerto (gratis)",
+        "Playas cercanas Mellitah, Reguba (gratis, coche)",
+        "Comida con pescadores (€10-15)"
+      ],
+      "donde_comer": "Pescado grillé, couscous marino, mezze. €5-8 comida, €12-18 restaurante. Mejor puerto.",
+      "consejo_local": "Comunidad bereber. Pueblos pesqueros auténticos. Menos desarrollo turístico = experiencia más local.",
+      "plan_b_lluvia": "lluvia posible. Cafés cubiertos, mercado.",
+      "alerta_seguridad": "Frontera, zona histórica de tránsito migratorio. Confirma situación. Generalmente tranquilo para turismo.",
+      "keywords": [
+        "Zuwara",
+        "Zuwarah",
+        "playa Libia",
+        "bereber",
+        "puerto",
+        "Mellitah"
+      ]
+    },
+    {
+      "id": "al-qubbah",
+      "nombre": "Al Qubbah",
+      "tipo": "playa | naturaleza",
+      "region": "Noreste, costa (80km Bengazi)",
+      "descripcion": "Playa virgen y natural con vegetación costera. Formaciones rocosas, agua clara. Excursión fácil desde Bengazi. Menos conocida que Sabratha/Leptis.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Bengazi: Taxi (~20km, €5-8). O alquiler coche (~€30/día). ~30 min.",
+      "donde_dormir": {
+        "mochilero": "No hay; visita desde Bengazi o acampada salvaje (gratis, con riesgos)",
+        "medio": "Vuelve a Bengazi (€40-55/noche)",
+        "comfort": "Hotel Bengazi + día en playa"
+      },
+      "que_hacer": [
+        "Baño playa virgen (gratis)",
+        "Fotografía formaciones rocosas (gratis)",
+        "Snorkel agua clara (gratis, equipo €5-10 alquiler)",
+        "Picnic con vistas (€5-10)",
+        "Paseo acantilado (gratis)"
+      ],
+      "donde_comer": "Llevar comida/snacks. Ningún restaurante en playa. Opciones Bengazi.",
+      "consejo_local": "Playa salvaje, pocos turistas. Lleva agua y protección. Vete temprano para evitar multitudes locales.",
+      "plan_b_lluvia": "lluvia rara. Viento posible.",
+      "alerta_seguridad": "Acceso fácil desde Bengazi. Excursión segura día completo.",
+      "keywords": [
+        "Al Qubbah",
+        "Qubbah",
+        "playa virgen",
+        "Bengazi",
+        "rocas",
+        "snorkel"
+      ]
+    }
+  ]
+}

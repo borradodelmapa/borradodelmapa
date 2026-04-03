@@ -1,0 +1,366 @@
+{
+  "pais": "Indonesia",
+  "codigo": "id",
+  "destinos": [
+    {
+      "id": "bali",
+      "nombre": "Bali",
+      "tipo": "isla",
+      "region": "Islas de la Sonda",
+      "descripcion": "Isla de playas volcánicas, templos hindúes y arrozales en terrazas. Centro cultural y turístico de Indonesia con infraestructura desarrollada para viajeros independientes. Combina playa, senderismo y vida nocturna en zonas como Ubud y Seminyak.",
+      "dias_recomendados": 7,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "vuelo internacional a Denpasar (aeropuerto Ngurah Rai). Desde Europa 16-20h con 1-2 escalas, 350-600 EUR. Alternativa: ferry desde Java.",
+      "donde_dormir": {
+        "mochilero": "Hostal compartido en Ubud/Seminyak: 8-15 EUR/noche",
+        "medio": "Guesthouse con AC en Canggu/Ubud: 20-40 EUR/noche",
+        "comfort": "Resort con piscina en Seminyak/Sanur: 60-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Templo Tanah Lot al atardecer (gratis entrada a zona, fotos pagadas)",
+        "Arrozales de Tegallalang en Ubud (gratis)",
+        "Senderismo volcán Batur salida 3am (25-30 EUR con guía)",
+        "Playas de Seminyak y Uluwatu (gratis)",
+        "Inmersión con snórkel en Amed (30-40 EUR)"
+      ],
+      "donde_comer": "Nasi goreng, soto ayam, babi guling. Ubud tiene warungs auténticos (3-5 EUR). Seminyak mezcla local con international (8-20 EUR). Comer en mercados = 2-4 EUR.",
+      "consejo_local": "El transporte público es caótico; alquila scooter (5-8 EUR/día) pero ten cuidado con el tráfico. Evita playas principales al mediodía, ve a las 6am o 4pm.",
+      "plan_b_lluvia": "Templos interiores (Goa Gajah), museos (Museo Bali), spas y clases de yoga. La lluvia es cálida y breve.",
+      "keywords": [
+        "Denpasar",
+        "Ubud",
+        "Seminyak",
+        "Canggu",
+        "Sanur",
+        "Uluwatu",
+        "arrozales",
+        "templos",
+        "playas",
+        "Bali island"
+      ]
+    },
+    {
+      "id": "yogyakarta",
+      "nombre": "Yogyakarta",
+      "tipo": "histórico",
+      "region": "Java Central",
+      "descripcion": "Puerta a Borobudur y Prambanan, dos de los templos budista e hindú más antiguos del mundo. Centro cultural javanés con artesanía tradicional y gastronomía auténtica. Base ideal para explorar Java Central sin multitudes turísticas excesivas.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Vuelo desde Yakarta (1h, 40-80 EUR) o desde Bali (2h escala, 60-100 EUR). Bus desde Yakarta 12h (15-25 EUR). Tren desde Surabaya 8h (20-30 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal en Prawirotaman: 10-18 EUR/noche",
+        "medio": "Guesthouse en Malioboro o Prawirotaman: 20-35 EUR/noche",
+        "comfort": "Hotel boutique centro: 50-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Borobudur templo budista al amanecer (15 EUR, salida 4am desde ciudad)",
+        "Prambanan templo hindú al atardecer (12 EUR)",
+        "Mercado Malioboro caminando (gratis, compras 5-30 EUR)",
+        "Taller de batik tradicional (10-20 EUR con artesano)",
+        "Volcán Merapi senderismo (30-40 EUR con guía)"
+      ],
+      "donde_comer": "Gudeg (pollo guisado), soto ayam, satay. Callejuela de comida en Malioboro (3-6 EUR). Restaurantes clase media en Prawirotaman (6-12 EUR).",
+      "consejo_local": "Compra el combo ticket Borobudur+Prambanan en entrada (27 EUR, más barato). Alquila bici o contrata transporte compartido para templos. No confíes en 'taxis amigos'.",
+      "plan_b_lluvia": "Talleres de arte (batik, marionetas), museos locales, paseos por callejuelas viejas de Kotagede. Los templos se ven igual con nubes.",
+      "keywords": [
+        "Yogya",
+        "Malioboro",
+        "Borobudur",
+        "Prambanan",
+        "Prawirotaman",
+        "Merapi",
+        "batik",
+        "templos",
+        "Java central"
+      ]
+    },
+    {
+      "id": "lombok",
+      "nombre": "Lombok",
+      "tipo": "playa",
+      "region": "Islas de la Sonda",
+      "descripcion": "Isla hermana de Bali con playas vírgenes, menos turismo masivo y acceso a las Islas Gili. Playas de arena blanca en el norte y volcán Rinjani para senderismo. Alternativa más tranquila y auténtica a Bali.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Vuelo desde Bali a Mataram (1h, 30-50 EUR) o ferry desde Bali 4-5h (20-35 EUR). Desde Yakarta vuelo directo 2h (80-120 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal en Gili Trawangan o Senggigi: 12-20 EUR/noche",
+        "medio": "Guesthouse en Senggigi o Kuta Lombok: 25-40 EUR/noche",
+        "comfort": "Resort con vista al mar: 60-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Islas Gili (Trawangan, Air, Meno): snórkel y buceo (35-50 EUR tour)",
+        "Volcán Rinjani senderismo 2-3 días (60-100 EUR guiado)",
+        "Playas de Kuta Lombok y Pink Beach (gratis)",
+        "Cascada Tiu Kelep (15 EUR con guía local)",
+        "Buceo en el arrecife de Gili Air (40-60 EUR)"
+      ],
+      "donde_comer": "Ikan bakar (pescado a la parrilla), nasi kuning, sambal. Gili Air tiene restaurantes frente al mar (8-15 EUR). Senggigi más turístico (10-20 EUR).",
+      "consejo_local": "Las Islas Gili no tienen motorolas permitidas, hay bici y botes. Ducha con agua salada en playas de Gili. En Rinjani, lleva mucha agua (fuentes limitadas).",
+      "plan_b_lluvia": "Explorar pueblos locales, clases de cocina con familias, templos hinduistas, mercados de Mataram. Lluvia tropical no dura todo el día.",
+      "keywords": [
+        "Mataram",
+        "Gili Trawangan",
+        "Gili Air",
+        "Senggigi",
+        "Kuta Lombok",
+        "Rinjani",
+        "Pink Beach",
+        "arrecife",
+        "Lombok island"
+      ]
+    },
+    {
+      "id": "jakarta",
+      "nombre": "Yakarta",
+      "tipo": "ciudad",
+      "region": "Java Occidental",
+      "descripcion": "Capital de Indonesia, puerta de entrada habitual y punto de conexión obligatorio. Caótica pero vibrante, con museos, gastronomía callejera excepcional y vida nocturna. Mejor visitarla como tránsito de 1-2 días que como destino principal.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Aeropuerto internacional Soekarno-Hatta. Desde Europa 16-22h con 1-2 escalas, 400-700 EUR. Metro/taxi 30-60 min al centro (2-8 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal en Kota Tua o Menteng: 12-22 EUR/noche",
+        "medio": "Guesthouse en Menteng/Blok M: 25-50 EUR/noche",
+        "comfort": "Hotel 4* en CBD: 70-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Kota Tua (Ciudad Vieja) paseo histórico (gratis)",
+        "Museo Nacional (5 EUR entrada)",
+        "Monumento Nacional Monas (3 EUR subida)",
+        "Mercado nocturno Senayan (gratis, comida 3-8 EUR)",
+        "Barrio artístico en Tebet (galerías gratis)"
+      ],
+      "donde_comer": "Gado-gado, soto banjar, lumpia, bakso. Senayan night market (2-4 EUR). Kota Tua warung tradicional (4-8 EUR). Zona Blok M más cara (10-30 EUR).",
+      "consejo_local": "Evita Yakarta en horas punta (7-10am, 4-7pm). Usa Grab (app) en lugar de taxi, es más barato y seguro. Sólo 1-2 días máximo es suficiente.",
+      "plan_b_lluvia": "Museos (hay varios), templos, compras en centros comerciales. Lluvia tropical = inundaciones en zonas bajas, evita Kota Tua con lluvia.",
+      "keywords": [
+        "Jakarta",
+        "Kota Tua",
+        "Monas",
+        "Senayan",
+        "Blok M",
+        "Menteng",
+        "capital",
+        "aeropuerto",
+        "puerta entrada"
+      ]
+    },
+    {
+      "id": "ubud",
+      "nombre": "Ubud",
+      "tipo": "rural",
+      "region": "Bali Central",
+      "descripcion": "Corazón cultural de Bali, famoso por arrozales en terrazas, artesanía tradicional y vida bohemia. Mercados de arte, templos hindúes y gastronomía vegana/internacional. Ideal para retiros de yoga y desconexión.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Desde aeropuerto Bali en taxi/Grab 1.5h (15-25 EUR) o bus (5 EUR). Desde pueblos costeros 1-2h en scooter/coche alquilado.",
+      "donde_dormir": {
+        "mochilero": "Hostal o homestay: 10-18 EUR/noche",
+        "medio": "Villa con AC en zonas residenciales: 25-45 EUR/noche",
+        "comfort": "Resort/villa lujo: 80-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Arrozales de Tegallalang senderismo (gratis, café con vista 3 EUR)",
+        "Templo Goa Gajah (15 EUR)",
+        "Mercado tradicional de Ubud (gratis, compras 5-30 EUR)",
+        "Bosque de monos Monkey Forest (8 EUR, ten cuidado con pertenencias)",
+        "Clases de yoga/meditación (10-20 EUR por clase)"
+      ],
+      "donde_comer": "Nasi goreng, warung bowl, comida vegetariana/vegana abundante. Mercado (2-4 EUR). Café boutique (5-10 EUR). Restaurantes en carreteras principales (8-20 EUR).",
+      "consejo_local": "Ubud atrae yoga digital nomads, es más caro que costa. Por las mañanas los arrozales están mágicos y vacíos. Evita Monkey Forest si llevas objetos sueltos.",
+      "plan_b_lluvia": "Talleres de arte, librerías, cafés, explorar templos cercanos a pie. Lluvia tropical = buena para fotos de arrozales.",
+      "keywords": [
+        "Ubud",
+        "arrozales",
+        "Tegallalang",
+        "Monkey Forest",
+        "Goa Gajah",
+        "yoga",
+        "mercado",
+        "bohemio",
+        "Bali central"
+      ]
+    },
+    {
+      "id": "islas-gili",
+      "nombre": "Islas Gili",
+      "tipo": "playa",
+      "region": "Estrecho de Lombok",
+      "descripcion": "Trío de islas pequeñas sin motocicletas: Gili Trawangan (fiesta), Gili Air (equilibrio), Gili Meno (tranquilidad). Snórkel y buceo excepcionales con arrecifes intactos. Atmósfera de retiro sin contaminación acústica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Ferry desde Bali (Seminyak/Sanur) 2-3h (25-40 EUR). Desde Lombok (Bangsal) 30-60 min (10-15 EUR). Speedboat privado 45 min (60-100 EUR para grupo).",
+      "donde_dormir": {
+        "mochilero": "Bungalow básico en Gili Air/Meno: 15-25 EUR/noche",
+        "medio": "Guesthouse con ventilador: 30-50 EUR/noche",
+        "comfort": "Resort boutique con AC/piscina: 70-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Snórkel en arrecife (gratis desde playa, tour 25-35 EUR)",
+        "Buceo PADI certificación (200-250 EUR curso completo)",
+        "Ciclo en bicicleta alrededor de la isla (alquiler 5 EUR)",
+        "Puesta de sol con paddle board (20-30 EUR)",
+        "Tortuga marina en Gili Air (avistamiento gratis desde playa)"
+      ],
+      "donde_comer": "Pescado a la parrilla, satay, bebidas de coco. Frente al mar en Gili Trawangan (10-18 EUR). Gili Air más local (6-12 EUR). Gili Meno básico (5-10 EUR).",
+      "consejo_local": "El agua es cristalina pero hay erizos de mar, usa zapatos de neopreno. La comida es cara (importada en bote). Trae efectivo, pocos ATMs. Tráfico de botes de turismo = piscina de insectos.",
+      "plan_b_lluvia": "Bajo techo es difícil, pero el snórkel funciona igual. La isla es tan pequeña que lluvia = resguardarse en café/hostal. Mejor: ir con buen pronóstico.",
+      "keywords": [
+        "Gili Trawangan",
+        "Gili Air",
+        "Gili Meno",
+        "snorkel",
+        "buceo",
+        "arrecife",
+        "tortugas",
+        "sin motorolas",
+        "islas"
+      ]
+    },
+    {
+      "id": "surabaya-bromo",
+      "nombre": "Volcán Bromo",
+      "tipo": "montaña",
+      "region": "Java Oriental",
+      "descripcion": "Volcán activo espectacular en el Parque Nacional Bromo Tengger Semeru. Acceso desde Surabaya con paisaje lunar, amanecer desde miradores y senderismo en caldera. Uno de los volcanes más accesibles y fotografiados de Indonesia.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Surabaya (1h en coche, 60-80 EUR con tour). Vuelo a Surabaya desde Yakarta 1h (60-100 EUR) o Bali 1.5h (40-80 EUR). Tren desde Yogyakarta 10h (20-40 EUR).",
+      "donde_dormir": {
+        "mochilero": "Cemoro Lawang hostal base: 12-20 EUR/noche",
+        "medio": "Guesthouse con calefacción en pueblo: 25-40 EUR/noche",
+        "comfort": "Resort con vistas volcánicas: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Amanecer desde mirador Penanjakan (15 EUR entrada, salida 2am)",
+        "Senderismo volcán Bromo 2h (gratis desde pueblo, caballo opcional 10 EUR)",
+        "Caldera Tengger paseo (incluido en tour)",
+        "Volcán Ijen azufre azul (tour combinado 50-80 EUR)"
+      ],
+      "donde_comer": "Comida local simple en Cemoro Lawang (5-8 EUR). Pocas opciones, trae snacks. Surabaya tiene más variedad (6-15 EUR).",
+      "consejo_local": "Hace frío en la cima (traer abrigo). El polvo de azufre es irritante, mascarilla recomendada. Tour nocturno es estándar pero agotador, descansa antes. Caballos mal cuidados, considera caminar.",
+      "plan_b_lluvia": "Nubes pueden bloquear vistas. Mejor visita en estación seca. Si lluvia: ve igualmente, puede limpiar un poco la visibilidad.",
+      "keywords": [
+        "Bromo",
+        "Tengger",
+        "volcán",
+        "Surabaya",
+        "Cemoro Lawang",
+        "amanecer",
+        "caldera",
+        "Ijen",
+        "Java oriental"
+      ]
+    },
+    {
+      "id": "komodo-flores",
+      "nombre": "Islas Komodo",
+      "tipo": "naturaleza",
+      "region": "Nusa Tenggara",
+      "descripcion": "Hogar del dragón de Komodo, lagarto gigante único del mundo. Islas remotas con playas rosadas, snórkel de clase mundial y paisajes desérticos. Acceso desde Flores con tours de varios días en velero entre islas.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a agosto (estación seca)",
+      "como_llegar": "Vuelo a Labuan Bajo (Flores) desde Bali 1h (80-120 EUR) o Yakarta 2h escalas (100-150 EUR). Tour en velero/boat 3-4 días desde ahí (400-800 EUR todo incluido).",
+      "donde_dormir": {
+        "mochilero": "Hostal en Labuan Bajo base: 12-20 EUR/noche",
+        "medio": "Guesthouse Labuan Bajo: 25-40 EUR/noche",
+        "comfort": "Resort o crucero privado: 100-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari dragón de Komodo (incluido en tour, 25 EUR entrada parque)",
+        "Snórkel Manta Point (raya manta, incluido en tour)",
+        "Playa Rosa Pantai Merah (tour obligatorio)",
+        "Senderismo Rinca isla segunda (2h, gratis con tour)",
+        "Sunset cruise velero (incluido en tour)"
+      ],
+      "donde_comer": "Pescado fresco a diario en los tours (incluido). Labuan Bajo tiene warung (5-10 EUR) y restaurante turístico (12-30 EUR).",
+      "consejo_local": "Los dragones son impredecibles, respeta distancias. Tours multi-día son necesarios, comparar opiniones de operadores. Febrero-abril mar agitada, julio-agosto mejor. Trae protector solar extremo.",
+      "plan_b_lluvia": "Mar agitado dificulta navegación. Mejor evitar estación húmeda. Tours pueden adaptarse pero con limitaciones.",
+      "keywords": [
+        "Komodo",
+        "dragón",
+        "Labuan Bajo",
+        "Flores",
+        "snorkel",
+        "manta",
+        "velero",
+        "Rinca",
+        "Nusa Tenggara"
+      ]
+    },
+    {
+      "id": "padang-sumatra",
+      "nombre": "Padang/Sumatra Occidental",
+      "tipo": "playa",
+      "region": "Sumatra",
+      "descripcion": "Destino de surfistas con olas consistentes y playas sin turismo masivo. Pueblos costeros auténticos, comida minangkabau deliciosa y acceso a selva tropical. Menos visitado que Java/Bali, ideal para viajeros que buscan autenticidad.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "marzo a octubre",
+      "como_llegar": "Vuelo desde Yakarta 1.5h (50-100 EUR) o Singapur 2h (80-150 EUR). Ferry desde Malasia (Penang) 6h (40-60 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal/homestay Padang: 10-18 EUR/noche",
+        "medio": "Guesthouse costero: 20-35 EUR/noche",
+        "comfort": "Resort playa: 50-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Surf en Padang o Mentawai (50-100 EUR alquiler/lecciones)",
+        "Islas Mentawai tour (3 días mínimo, 300-600 EUR)",
+        "Mercado de peces Padang (gratis observar, compras 10-30 EUR)",
+        "Trekking selva tropical (30-50 EUR con guía)",
+        "Playas vírgenes lago Maninjau (viaje 3h + entrada 5 EUR)"
+      ],
+      "donde_comer": "Rendang (carne especiada), gulai tambusu, lumpia. Warung (3-6 EUR). Rumah makan Padang estilo (6-12 EUR). Pescado fresco local (5-10 EUR).",
+      "consejo_local": "Padang es puerta a Mentawai, islas con playas y buceo excepcionales pero caro. Menos turismo = infraestructura básica. Acceso a selva de Sumatra desde aquí.",
+      "plan_b_lluvia": "Selva jungla = lluvia tropical abundante. Mejor visitar estación seca. Lluvia = buena para refrescarse, no impide actividades.",
+      "keywords": [
+        "Padang",
+        "Mentawai",
+        "surf",
+        "Sumatra",
+        "rendang",
+        "selva",
+        "Maninjau",
+        "Oeste Sumatra",
+        "playas"
+      ]
+    },
+    {
+      "id": "banda-aceh",
+      "nombre": "Banda Aceh",
+      "tipo": "histórico",
+      "region": "Sumatra Septentrional",
+      "descripcion": "Reconstruida tras tsunami 2004, capital de Aceh con historia fascinante, mezquita Baiturrahman icónica y playas vírgenes cercanas. Acceso a islas Simeulue para buceo y vida marina intacta. Destino responsable y fuera de rutas turísticas masivas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Vuelo desde Yakarta 2h (70-120 EUR) o Kuala Lumpur 1.5h (60-110 EUR). Ferry desde Penang Malasia 6h (35-50 EUR). Poco frecuente, reservar con anticipación.",
+      "donde_dormir": {
+        "mochilero": "Hostal Banda Aceh: 10-18 EUR/noche",
+        "medio": "Guesthouse local: 20-35 EUR/noche",
+        "comfort": "Hotel en centro: 45-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Mezquita Baiturrahman arquitectura (gratis entrada respetando horarios)",
+        "Museo tsunami 2004 (5 EUR, impactante)",
+        "Islas Simeulue buceo (tour 2-3 días, 300-500 EUR)",
+        "Playas Iboih snórkel (día completo 40-60 EUR)",
+        "Mercado tradicional Aceh (gratis, compras 3-10 EUR)"
+      ],
+      "donde_comer": "Rendang aceh (más picante que Padang), gulai, roti aceh. Warung (3-7 EUR). Restaurante locales (6-12 EUR). Carne/pescado abundante.",
+      "consejo_local": "Aceh es región musulmana conservadora, respeta normas (no alcohol público, ropa modesta). Turismo responsable apoyando reconstrucción. Islas Simeulue merecen viaje, buceo increíble.",
+      "plan_b_lluvia": "Templos/museos. Lluvia tropical pero temporada menos lluviosa Nov-Mar. Mejor evitar abril-octubre.",
+      "keywords": [
+        "Banda Aceh",
+        "Aceh",
+        "tsunami",
+        "Baiturrahman",
+        "Simeulue",
+        "buceo",
+        "norte Sumatra",
+        "isla",
+        "responsable"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,336 @@
+{
+  "pais": "Singapur",
+  "codigo": "sg",
+  "destinos": [
+    {
+      "id": "marina-bay",
+      "nombre": "Marina Bay",
+      "tipo": "ciudad",
+      "region": "Centro de Singapur",
+      "descripcion": "Corazón financiero y cultural de Singapur con el icónico Marina Bay Sands, Gardens by the Bay y paseos por la bahía. Epicentro de vida nocturna, compras de lujo y eventos culturales. Centro neurálgico donde convergen modernidad, arquitectura futurista y entretenimiento.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a febrero, julio a agosto",
+      "como_llegar": "Aeropuerto Changi - MRT/tren directo 30min (4 EUR) o taxi 25-30 EUR",
+      "donde_dormir": {
+        "mochilero": "Hostal en Chinatown o Arab Quarter 25-45 EUR/noche",
+        "medio": "Hotel 3-4 estrellas Marina Bay 80-150 EUR/noche",
+        "comfort": "Marina Bay Sands o Fullerton Hotel 300-500 EUR/noche"
+      },
+      "que_hacer": [
+        "Marina Bay Sands Sky Deck (57 EUR, vistas 360°)",
+        "Gardens by the Bay - Supertrees iluminados gratis, Conservatories 28 EUR",
+        "Paseo nocturno por Marina Bay Waterfront gratis",
+        "ArtScience Museum (19 EUR)",
+        "Singapore Flyer - noria gigante (33 EUR)",
+        "Compras en ION Orchard y shopping malls"
+      ],
+      "donde_comer": "Hawker centers cerca de Marina Bay (pollo arroz satay, laksa, dim sum 3-8 EUR). Zona: Clarke Quay para restaurantes y bares. Franquicia de comida rápida premium en el Sands.",
+      "consejo_local": "Visita Marina Bay al atardecer para ver la transición luz natural a iluminación artificial de los edificios. Los hawker centers tienen comida mejor y más barata que restaurantes turísticos.",
+      "plan_b_lluvia": "Museos interiores (ArtScience, National Gallery), shopping en ION Orchard o Marina Bay Sands, visite acuarios indoor",
+      "keywords": [
+        "Marina Bay Sands",
+        "Gardens by the Bay",
+        "Supertrees",
+        "Singapore Flyer",
+        "Clarke Quay",
+        "centro de Singapur"
+      ]
+    },
+    {
+      "id": "chinatown",
+      "nombre": "Chinatown",
+      "tipo": "histórico",
+      "region": "Centro-sur de Singapur",
+      "descripcion": "Barrio histórico con arquitectura colonial preservada, templos antiguos y mercados tradicionales. Centro cultural vibrante con tiendas de artesanía, galerías de arte y vida callejera auténtica. Contraste fascinante entre Singapur moderno y su patrimonio.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a febrero, julio a agosto",
+      "como_llegar": "MRT estación Chinatown, a 15 min del centro (1.50 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Chinatown o Outram 22-38 EUR/noche",
+        "medio": "Boutique hotels 60-100 EUR/noche",
+        "comfort": "Heritage hotels convertidos 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por calles de arquitectura colonial gratis",
+        "Templo Thian Hock Keng (gratis)",
+        "Mercado de Pagoda Street y Smith Street gratis",
+        "Chinese Heritage Centre (8 EUR)",
+        "Compras de artesanía y antiques en tiendas tradicionales",
+        "Café Kopi en kopitiam (cafés locales tradicionales)"
+      ],
+      "donde_comer": "Restaurantes de dim sum en Smith Street, comida de calle (pollo arroz, mee goreng, carilla 3-6 EUR). Área de hawker en Pagoda Street para auténtica gastronomía local.",
+      "consejo_local": "Los mejores dim sum se sirven hasta mediodía, ve temprano. Las librerías anticuarias en Chinatown tienen hallazgos únicos si disfrutas de raridades.",
+      "plan_b_lluvia": "Chinese Heritage Centre y tiendas cubiertas, cafés y librerías",
+      "keywords": [
+        "Chinatown",
+        "Thian Hock Keng",
+        "Pagoda Street",
+        "Smith Street",
+        "patrimonio chino"
+      ]
+    },
+    {
+      "id": "orchard-road",
+      "nombre": "Orchard Road",
+      "tipo": "ciudad",
+      "region": "Centro-norte de Singapur",
+      "descripcion": "Avenida principal de compras con tiendas de lujo, malls de lujo y entretenimiento. Centro comercial más importante de Asia del Sureste con marcas internacionales y locales. Zona vibrante con vida nocturna, cafés y gastronomía de calidad.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "MRT estación Orchard, 20 min desde Marina Bay (1.50 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Dhoby Ghaut o Little India 28-45 EUR/noche",
+        "medio": "Hotels 3-4 estrellas Orchard 70-120 EUR/noche",
+        "comfort": "Hotels 5 estrellas (Mandarin Oriental, Four Seasons) 250-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Shopping en ION Orchard, Ngee Ann City, Wisma Atria gratis",
+        "Paseo por Orchard Road observar arquitectura y vida urbana gratis",
+        "Visite librerías (Kinokuniya) y tiendas especializadas",
+        "Cafés y restaurantes con observación de gente",
+        "Peluquerías y spas (masajes 35-70 EUR/hora)"
+      ],
+      "donde_comer": "Restaurantes de cadena y independientes 15-40 EUR. Hawker center bajo ION Orchard para comida barata (5-10 EUR). Cafeterías de especialidad.",
+      "consejo_local": "Los grandes sales de Orchard ocurren en enero/febrero y julio/agosto. Fuera de horario punta evitas multitudes. Muchos restaurantes tienen terraza con aire libre.",
+      "plan_b_lluvia": "Malls conectados entre sí sin necesidad de salir a la calle, cines, spa y entretenimiento interior",
+      "keywords": [
+        "Orchard Road",
+        "ION Orchard",
+        "compras Singapur",
+        "Ngee Ann City",
+        "shopping malls"
+      ]
+    },
+    {
+      "id": "sentosa",
+      "nombre": "Isla Sentosa",
+      "tipo": "isla",
+      "region": "Sur de Singapur",
+      "descripcion": "Isla resort con playas artificiales, parques temáticos y entretenimiento. Universal Studios Singapore, Resorts World Sentosa y actividades acuáticas. Escape relajante desde el centro urbano con infraestructura de lujo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a febrero, julio a agosto",
+      "como_llegar": "MRT a Dhoby Ghaut, tranvía o cable car Sentosa (15 EUR ida-vuelta), 15 min desde centro",
+      "donde_dormir": {
+        "mochilero": "Hostales en isla o islas cercanas 40-60 EUR/noche",
+        "medio": "Resorts 3-4 estrellas en Sentosa 100-180 EUR/noche",
+        "comfort": "Sentosa Resort & Spa, Hard Rock Hotel 250-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Universal Studios Singapore (parque temático 80-100 EUR)",
+        "Playa artificial Siloso Beach gratis",
+        "SEA Aquarium (37 EUR)",
+        "Adventure Cove Waterpark (35 EUR)",
+        "Monumento Merlion en Sentosa (10 EUR)",
+        "Paseos y cicloturismo por la isla gratis"
+      ],
+      "donde_comer": "Restaurantes en Resorts World 20-50 EUR. Food court con opciones locales 8-15 EUR. Picnic en playas permitido.",
+      "consejo_local": "La entrada a Sentosa es cara pero ya incluye acceso a playas. Compra combo de atracciones (Universal + aquarium) para ahorrar. Los atardeceres en Siloso Beach son espectaculares sin costo extra.",
+      "plan_b_lluvia": "Aquarium interior, Universal Studios (parcialmente cubierto), spa y entretenimiento indoor",
+      "keywords": [
+        "Sentosa Island",
+        "Universal Studios Singapore",
+        "playa Siloso",
+        "SEA Aquarium",
+        "resorts"
+      ]
+    },
+    {
+      "id": "little-india",
+      "nombre": "Little India",
+      "tipo": "histórico",
+      "region": "Centro-norte de Singapur",
+      "descripcion": "Barrio indio vibrante con templos, tiendas de especias, joyería y ropa colorida. Atmósfera auténtica con vendedores callejeros, restaurantes familiares y vida local intensa. Mergansah cultural completamente diferente al resto de Singapur.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a febrero, julio a agosto",
+      "como_llegar": "MRT estación Little India, 10 min desde Orchard (1.50 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Little India 25-40 EUR/noche",
+        "medio": "Hotels boutique 65-110 EUR/noche",
+        "comfort": "Hotels de lujo cercanos (Orchard) 180-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por Serangoon Road observar tiendas y arquitectura gratis",
+        "Templo Sri Veeramakaliamman gratis",
+        "Tipi Mustafa mosque visitables gratis",
+        "Shopping de especias, ropas y joyería",
+        "Compra de henna y joyería tradicional",
+        "Observe vida diaria y dinámica local"
+      ],
+      "donde_comer": "Restaurantes indios auténticos 8-18 EUR por plato. Comida de calle (briyani, dosa, idli 3-6 EUR). Pastelería india con sweets locales. Muy recomendado después de compras.",
+      "consejo_local": "Regatear en tiendas de especias y joyería es normal y esperado. Visite templos con respeto (descalzarse, cubrirse). El barrio tiene energía única en domingos.",
+      "plan_b_lluvia": "Tiendas cubiertas de especias, shopping interior, templos visitables",
+      "keywords": [
+        "Little India",
+        "Serangoon Road",
+        "Sri Veeramakaliamman",
+        "barrio indio",
+        "especias"
+      ]
+    },
+    {
+      "id": "arab-quarter",
+      "nombre": "Arab Quarter (Kampong Glam)",
+      "tipo": "histórico",
+      "region": "Centro-norte de Singapur",
+      "descripcion": "Barrio histórico árabe/malayo con arquitectura colonial, tiendas de telas, perfumes y artesanía. Atmósfera vintage con cafés tradicionales, restaurantes y vida comunitaria. Zona estética y bohemia auténtica dentro de Singapur.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a febrero, julio a agosto",
+      "como_llegar": "MRT estación Bugis, 10 min desde Chinatown (1.50 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Kampong Glam 26-42 EUR/noche",
+        "medio": "Boutique hotels 70-120 EUR/noche",
+        "comfort": "Heritage hotels 160-240 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita Masjid Sultan (Blue Mosque) gratis",
+        "Paseo por Haji Lane (tiendas vintage y boutiques) gratis",
+        "Compra de perfumes y aromas en tiendas tradicionales",
+        "Paseo arquitectónico por calles históricas gratis",
+        "Cafés y galerías de arte",
+        "Compra de telas y artesanías locales"
+      ],
+      "donde_comer": "Restaurantes árabes/malayos 10-22 EUR. Cafés tradicionales con café árabe y pasteles. Compra comida de calle en Haji Lane (kebab, falafel 4-7 EUR).",
+      "consejo_local": "Haji Lane es la calle más fotogénica con arquitectura colorida y tiendas independientes. Ve a primera hora para mejor luz de fotos. Los perfumistas pueden personalizarte fragancias.",
+      "plan_b_lluvia": "Tiendas y galerías cubiertas, cafés interiores, Masjid Sultan",
+      "keywords": [
+        "Arab Quarter",
+        "Kampong Glam",
+        "Haji Lane",
+        "Masjid Sultan",
+        "barrio árabe"
+      ]
+    },
+    {
+      "id": "botanic-gardens",
+      "nombre": "Singapore Botanic Gardens",
+      "tipo": "naturaleza",
+      "region": "Centro-este de Singapur",
+      "descripcion": "Jardín botánico de 74 hectáreas con plantas tropicales, lagos, y jardines temáticos. Patrimonio UNESCO con flora diversa de Asia tropical. Espacio verde tranquilo perfecto para escapar del caos urbano.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a febrero, julio a agosto",
+      "como_llegar": "MRT estación Botanic Gardens (línea Downtown), 20 min desde Marina Bay (1.50 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales cerca (Bukit Timah) 30-45 EUR/noche",
+        "medio": "Hotels 3-4 estrellas 75-130 EUR/noche",
+        "comfort": "Hotels de lujo cercanos 200-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Entrada y paseo completo gratis",
+        "Jardín de orquídeas (zona libre acceso)",
+        "Paseo por jardines temáticos gratis",
+        "Jardín de plantas medicinales",
+        "Picnic en céspedes permitido gratis",
+        "Fotografía de flora tropical",
+        "Visita al Jacob Ballas Children's Garden (5 EUR si entra)"
+      ],
+      "donde_comer": "Cafeterías dentro del jardín 8-15 EUR. Picnic en céspedes (compra en supermercado cercano). Restaurantes fuera del jardín 12-25 EUR.",
+      "consejo_local": "Los jardines abren temprano (5am) y los primeros horarios son muy tranquilos sin aglomeración. Mejor amanecer desde el jardín que cualquier otro lugar en Singapur. Ve entre semana para soledad.",
+      "plan_b_lluvia": "Muchas áreas cubiertas, galerías de plantas interiores, invernaderos",
+      "keywords": [
+        "Botanic Gardens",
+        "Singapore Botanic Gardens",
+        "jardín botánico",
+        "naturaleza Singapur",
+        "orquídeas"
+      ]
+    },
+    {
+      "id": "bukit-timah-nature-reserve",
+      "nombre": "Bukit Timah Nature Reserve",
+      "tipo": "naturaleza",
+      "region": "Centro-norte de Singapur",
+      "descripcion": "Reserva natural con selva tropical primaria y senderos de senderismo. Última zona de bosque virgen en Singapur con flora y fauna diversa. Contraste verde y natural a 20 min del centro urbano.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a febrero, julio a agosto",
+      "como_llegar": "MRT estación Botanic Gardens, bus o taxi 10 min (8 EUR), o MRT Clementi + bus",
+      "donde_dormir": {
+        "mochilero": "Hostales en Bukit Timah o Botanic 28-42 EUR/noche",
+        "medio": "Hotels 3-4 estrellas área 70-120 EUR/noche",
+        "comfort": "Hotels de lujo 180-260 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a cima de Bukit Timah (157m, 2.5 km ida-vuelta) gratis",
+        "Avistamiento de fauna (monos, pájaros) gratis",
+        "Fotografía de naturaleza tropical",
+        "Senderos alternativos Forest Walk",
+        "Picnic en áreas designadas"
+      ],
+      "donde_comer": "Sin comedores en la reserva. Compra viandas en 7-eleven cerca o come en Botanic Gardens después. Hidratación esencial.",
+      "consejo_local": "Ve temprano (6:30am) para evitar calor y fauna menos activa. Lleva agua abundante (2 litros). El camino a la cima es empinado pero corto. Ropa cómoda de senderismo esencial.",
+      "plan_b_lluvia": "Senderos pueden ser resbaladizos, ve si la lluvia es leve. Con lluvia fuerte, mejor otro día o Botanic Gardens",
+      "keywords": [
+        "Bukit Timah",
+        "selva tropical",
+        "senderismo Singapur",
+        "naturaleza primaria",
+        "reserva natural"
+      ]
+    },
+    {
+      "id": "pulau-ubin",
+      "nombre": "Pulau Ubin",
+      "tipo": "isla",
+      "region": "Noreste de Singapur",
+      "descripcion": "Isla rústica sin desarrollar con cicloturismo, manglares y aldea de pescadores. Último rincón 'kampung' (aldea tradicional) de Singapur con playas rocosas y naturales. Experiencia local auténtica lejos del turismo masivo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a febrero, julio a agosto",
+      "como_llegar": "MRT a Tanah Merah, ferry 10 min (3 EUR). Total 30-40 min desde centro. Bicicleta alquilada en isla (5-8 EUR/día)",
+      "donde_dormir": {
+        "mochilero": "Cabañas/chalets rústicos en isla 45-70 EUR/noche (reserva online)",
+        "medio": "Sin opciones, duerme en Singapur y día de excursión",
+        "comfort": "Hotels Changi/Pasir Ris cercanos 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Alquilar bicicleta y cicloturismo (5-8 EUR) gratis transporte",
+        "Visita aldea Pulau Ubin gratis",
+        "Sendero Mangrove gratis",
+        "Playa rocosa Ketam gratis",
+        "Restaurante de pescado fresco 15-30 EUR",
+        "Pesca de camarones si interesa"
+      ],
+      "donde_comer": "Restaurantes de pescado fresco en puerto (camarón asado, pez 15-30 EUR). Llevar provisiones de Singapur es opción económica.",
+      "consejo_local": "Este es el Singapur 'verdadero' que muchos turistas ignoran. Ferry sale regularmente pero hay horarios, verifica antes. Ideal para escapada de medio día.",
+      "plan_b_lluvia": "lluvia tropical es normal, lleva capa impermeable. Cicloturismo aún posible si lluvia es leve",
+      "keywords": [
+        "Pulau Ubin",
+        "isla Singapur",
+        "cicloturismo",
+        "kampung",
+        "aldea de pescadores"
+      ]
+    },
+    {
+      "id": "east-coast-park",
+      "nombre": "East Coast Park",
+      "tipo": "naturaleza",
+      "region": "Este de Singapur",
+      "descripcion": "Parque costero de 15 km con playas, ciclocarriles y zonas verdes. Centro de ocio local con agua segura para natación y actividades acuáticas. Alternativa a playas de Sentosa más económica y auténtica.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a febrero, julio a agosto",
+      "como_llegar": "MRT a Bedok, bus o taxi 10 min (6 EUR). Total 25-30 min desde centro",
+      "donde_dormir": {
+        "mochilero": "Hostales en Bedok 28-45 EUR/noche",
+        "medio": "Hotels 3-4 estrellas 70-120 EUR/noche",
+        "comfort": "Hotels de lujo Pasir Ris 180-260 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa segura y natación gratis",
+        "Cicloturismo alquilar bicicleta (8-12 EUR/día)",
+        "Paseos costeros gratis",
+        "Picnic en céspedes permitido gratis",
+        "Deportes acuáticos (windsurf, kayak 30-50 EUR)",
+        "Observación de atardecer sobre el mar"
+      ],
+      "donde_comer": "Hawker centers en East Coast Road comida local 5-10 EUR. Restaurantes de mariscos 20-35 EUR. BBQ zones disponibles (alquiler).",
+      "consejo_local": "Este es donde van los locales a nadar, no turistas. Fin de semana está lleno, ve entre semana. Las aves acuáticas son comunes, observa sin molestar.",
+      "plan_b_lluvia": "Áreas cubiertas, hawker centers, paseos interiores parciales",
+      "keywords": [
+        "East Coast Park",
+        "playa Singapur",
+        "cicloturismo",
+        "Bedok",
+        "parque costero"
+      ]
+    }
+  ]
+}

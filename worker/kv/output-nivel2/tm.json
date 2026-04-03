@@ -1,0 +1,333 @@
+{
+  "pais": "Turkmenistán",
+  "codigo": "tm",
+  "destinos": [
+    {
+      "id": "ashgabat",
+      "nombre": "Asjabad",
+      "tipo": "ciudad",
+      "region": "Ahal",
+      "descripcion": "Capital moderna con arquitectura monumental, mármol blanco y plazas gigantescas diseñadas por el presidente. Centro administrativo y punto de entrada obligatorio para la mayoría de viajeros. Mezcla de Soviet tardío y megalomanía arquitectónica única en Asia Central.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Puerta de entrada principal: vuelo internacional al Aeropuerto Internacional de Asjabad. Desde ciudades vecinas: autobús desde Irán (12-14h, 20-30 EUR) o Uzbekistán (8-10h, 15-25 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en barrio residencial Berkarar: 15-25 EUR/noche",
+        "medio": "Hoteles 3* en centro (Ak Saray area): 40-70 EUR/noche",
+        "comfort": "Hoteles internacionales (Hyatt, Sofitel): 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer a pie las plazas del centro (Monumento a la Neutralidad, Palacio de los Turkmenos) - gratis",
+        "Museo Nacional de Turkmenistán (3-4 EUR)",
+        "Bazar de Berkarar para ver vida local y comida tradicional (gratis)",
+        "Parque de diversiones Ashgabat en las afueras (5 EUR entrada)",
+        "Paseo por la Avenida Saradar al atardecer - gratis"
+      ],
+      "donde_comer": "Plov (arroz con carne), shurvah (sopa), manti (bollos). Rango: 3-8 EUR en bazares, 15-40 EUR en restaurantes. Zona barata: mercado Berkarar; zona mid-range: centro en calle Turkmenbashi.",
+      "consejo_local": "Los turistas necesitan permiso de registro (OVIR) en 3 días. Regístrate en tu hotel. Las fotos de edificios gubernamentales están prohibidas; presta atención a las señales.",
+      "plan_b_lluvia": "Museo Nacional (cerrado algunos lunes), paseos en centros comerciales, café en hoteles internacionales.",
+      "keywords": [
+        "Ashkhabad",
+        "Ashkhabat",
+        "capital",
+        "Ak Saray",
+        "Monumento Neutralidad",
+        "centro ciudad"
+      ]
+    },
+    {
+      "id": "sarahs",
+      "nombre": "Sarahs",
+      "tipo": "histórico",
+      "region": "Ahal",
+      "descripcion": "Antigua ciudad de la Ruta de la Seda con restos del antiguo imperio persa aqueménida. Ruinas arqueológicas a cielo abierto y museo local con artefactos de 2500 años. Destino esencial para arqueología sin grandes aglomeraciones.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo-mayo, septiembre-noviembre",
+      "como_llegar": "Desde Asjabad: autobús o marshrutka (minibús compartido) 280 km, 5-7h, 10-15 EUR. También se puede ir en taxi compartido (30-40 EUR por persona).",
+      "donde_dormir": {
+        "mochilero": "Pequeños guesthouses familiares: 10-15 EUR/noche",
+        "medio": "Hotel Oasis o similar (si disponible): 25-40 EUR/noche",
+        "comfort": "Opciones limitadas; mejor alojarse en Asjabad e ir en excursión de día"
+      },
+      "que_hacer": [
+        "Explorar ruinas de la fortaleza aqueménida de Geek Tepe (entrada 2-3 EUR)",
+        "Museo Arqueológico local con tesoros de la Ruta de la Seda (2 EUR)",
+        "Caminar entre los túmulos y estructuras antiguas (gratis)",
+        "Visita a taller de alfombras tradicionales (gratis, compra opcional)"
+      ],
+      "donde_comer": "Comida simple en pequeños restaurantes locales: 3-5 EUR. Especializados en shurvah y pan tandoori. Trae snacks desde Asjabad si lo prefieres.",
+      "consejo_local": "Contratar un guía local (5-10 EUR por grupo) mejora enormemente la experiencia; sin él es difícil entender qué estás viendo.",
+      "plan_b_lluvia": "Museo cubierto, retorno a Asjabad para actividades interiores.",
+      "keywords": [
+        "Sarahs",
+        "Sarahy",
+        "arqueología",
+        "Ruta Seda",
+        "ruinas persas",
+        "Geek Tepe",
+        "Ahal"
+      ]
+    },
+    {
+      "id": "mary",
+      "nombre": "Mary",
+      "tipo": "histórico",
+      "region": "Ahal",
+      "descripcion": "Oasis histórico con una de las fortalezas mejor conservadas de la Ruta de la Seda (Merv antiguo). Sitio arqueológico UNESCO con restos de ciudades superpuestas de 5000 años. Punto clave del comercio entre China y Occidente.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo-mayo, septiembre-octubre",
+      "como_llegar": "Desde Asjabad: autobús/marshrutka 375 km, 7-9h, 15-20 EUR. O vuelo doméstico (1h, 60-100 EUR si hay disponibilidad). Tren nocturno también disponible (12h, 20-30 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses al lado de las ruinas: 12-18 EUR/noche",
+        "medio": "Hotel Mary o Margustan: 30-50 EUR/noche",
+        "comfort": "Hotel Margush (mejor opción): 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Explorar Merv Ancient City UNESCO (entrada 5 EUR, imprescindible guía 10-15 EUR)",
+        "Subir a las murallas de la Ciudadela Erk Kala (incluido en entrada)",
+        "Visita al Mausoleo de Sultan Sanjar (s. XII) - gratis (incluido)",
+        "Paseo en 4x4 o caballo por el oasis (40-60 EUR para grupo pequeño)",
+        "Museo Mary con hallazgos locales (2 EUR)"
+      ],
+      "donde_comer": "Shurvah, plov, kebab. 3-6 EUR en bazares. Restaurante del hotel para opciones europeas (15-25 EUR). El bazar local tiene comida auténtica barata.",
+      "consejo_local": "Las ruinas abarcan un área enorme. Alquila un coche o contrata un taxi para el día (20-30 EUR) si quieres cubrirlo todo. Lleva mucha agua.",
+      "plan_b_lluvia": "Museo, exploración limitada de ruinas cubiertas, retorno a Asjabad.",
+      "keywords": [
+        "Mary",
+        "Merv",
+        "ruinas",
+        "Ruta Seda",
+        "Sultaniya",
+        "Erk Kala",
+        "arqueología"
+      ]
+    },
+    {
+      "id": "turpan-depression",
+      "nombre": "Depresión del Turpán",
+      "tipo": "desierto",
+      "region": "Balcán",
+      "descripcion": "Segunda depresión más baja del mundo (−105m bajo el nivel del mar). Paisaje lunar de acantilados de arcilla, salinas y colinas erosionadas. Destino para viajeros aventureros que buscan naturaleza extrema poco visitada.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre-abril (verano insoportable: 50°C+)",
+      "como_llegar": "Desde Asjabad: vehículo con guía (4x4 recomendado) 300 km, 6-8h, 60-100 EUR en grupo. Alternativamente: autobús a Balkanabat y taxi local (no es fácil).",
+      "donde_dormir": {
+        "mochilero": "Yurtas o guesthouses básicas en Turpan: 15-20 EUR/noche",
+        "medio": "Hotel Balkan o similar en Balkanabat (cercanía): 30-50 EUR/noche",
+        "comfort": "Tours organizados con alojamiento incluido: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Conducir/caminar por paisaje de la depresión (mirador de Kow-Ata) - gratis",
+        "Nadar en lago subterráneo de aguas termales Kow-Ata (entrada 3-5 EUR)",
+        "Senderismo en acantilados erosionados (gratis)",
+        "Atardecer en la depresión - gratis pero espectacular",
+        "Fotografía de paisaje lunar"
+      ],
+      "donde_comer": "Pocas opciones; mejor llevar comida desde Asjabad. Pequeñas fondas locales en Turpan: 4-6 EUR.",
+      "consejo_local": "Las carreteras son malas; contrata un 4x4 con conductor local que conozca. El lago Kow-Ata es la atracción más accesible; el resto requiere paciencia y tiempo.",
+      "plan_b_lluvia": "Difícil viajar en lluvia en esta zona; mejor reprogramar o quedarse en hotel en Asjabad.",
+      "keywords": [
+        "Turpan",
+        "depresión geográfica",
+        "Kow-Ata",
+        "lago subterráneo",
+        "Balcán",
+        "desierto"
+      ]
+    },
+    {
+      "id": "balkanabat",
+      "nombre": "Balkanabat",
+      "tipo": "ciudad",
+      "region": "Balcán",
+      "descripcion": "Puerta de acceso a la Depresión del Turpán y centro petrolero moderno. Base logística menos turística que Asjabad pero más auténtica. Punto de partida para explorar la región desértica occidental.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre-abril",
+      "como_llegar": "Desde Asjabad: autobús/marshrutka 470 km, 9-11h, 20-30 EUR. Vuelo doméstico (1.5h, 70-120 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 15-20 EUR/noche",
+        "medio": "Hotel Balkan: 40-60 EUR/noche",
+        "comfort": "Hotel turcomano (mejor disponibilidad): 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Bazar local para comida y artesanías (gratis)",
+        "Monumento a los mártires de la independencia (gratis)",
+        "Paseos por la ciudad relativamente moderna (gratis)",
+        "Preparación de excursiones a la Depresión del Turpán"
+      ],
+      "donde_comer": "Plov, kebab, shurvah. 3-6 EUR en bazares. Restaurantes: 10-20 EUR.",
+      "consejo_local": "Balkanabat es principalmente una base; no es un destino en sí. Usa una noche para aclimatarte y organizar excursiones a la Depresión del Turpán.",
+      "plan_b_lluvia": "Bazar cubierto, paseos en centro comercial si existe, retorno a Asjabad.",
+      "keywords": [
+        "Balkanabat",
+        "Balkan",
+        "Nebitdag",
+        "petrolero",
+        "oeste Turkmenistán",
+        "base"
+      ]
+    },
+    {
+      "id": "avaza",
+      "nombre": "Avaza",
+      "tipo": "playa",
+      "region": "Ahal (mar Caspio)",
+      "descripcion": "Única zona costera de Turkmenistán en el Mar Caspio. Resort estatal con playas de arena, aguas salobres y desarrollo turístico moderno pero artificial. Alternativa de descanso si pasas tiempo en el país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre (verano caluroso: 35-40°C)",
+      "como_llegar": "Desde Asjabad: autobús/marshrutka 340 km, 6-7h, 15-20 EUR. Taxi compartido: 30-40 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales o guesthouses fuera del resort: 15-25 EUR/noche",
+        "medio": "Hotels en Avaza resort (Caspian, Balkan): 50-80 EUR/noche",
+        "comfort": "Avaza resort premium (Turkmenbashi Palace): 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Natación en Mar Caspio (entrada al resort: 5 EUR, solo si se requiere)",
+        "Paseos en playa (gratis)",
+        "Centro comercial y restaurantes del resort (compra/comida: 15-40 EUR)",
+        "Deportes acuáticos si hay disponibles (alquiler: 20-50 EUR)"
+      ],
+      "donde_comer": "Restaurantes del resort con comida turca, asiática, europea: 20-60 EUR. Bazares locales afuera: 5-10 EUR.",
+      "consejo_local": "Avaza es un resort planificado, no una ciudad auténtica. Es artificial pero seguro. El agua del Caspio es salada pero baja en salinidad (apta para bañarse).",
+      "plan_b_lluvia": "Centro comercial cubierto, cines si existen, permanencia en hoteles.",
+      "keywords": [
+        "Avaza",
+        "Caspio",
+        "playa",
+        "resort",
+        "Mar Caspio",
+        "costa"
+      ]
+    },
+    {
+      "id": "nebitdag",
+      "nombre": "Nebitdag (Balkanabat)",
+      "tipo": "naturaleza",
+      "region": "Balcán",
+      "descripcion": "Colinas cárcagas quemadas con cráteres de gas naturales que arden permanentemente. Fenómeno geológico espectacular conocido como 'Puerta del Infierno' (aunque esta es en Uzbekistán, versiones similares existen aquí). Atracción para amantes de geología y fotografía nocturna.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre-abril (mejor visibilidad nocturna)",
+      "como_llegar": "Desde Balkanabat: taxi local 30-50 km, 45-60 minutos, 15-25 EUR ida y vuelta. O incluido en tours desde Asjabad.",
+      "donde_dormir": {
+        "mochilero": "Dormir en Balkanabat y hacer excursión de día",
+        "medio": "Dormir en Balkanabat",
+        "comfort": "Dormir en Balkanabat o Asjabad"
+      },
+      "que_hacer": [
+        "Fotografía de cráteres ardientes al anochecer (gratis)",
+        "Caminata entre cráteres (gratis, requiere cuidado y guía)",
+        "Observación nocturna de llamas (gratis)",
+        "Recogida de minerales/rocas vulcánicas (si permitido)"
+      ],
+      "donde_comer": "Llevar comida desde Balkanabat o Asjabad; no hay restaurantes cerca.",
+      "consejo_local": "La mejor fotografía es al atardecer. Los cráteres no son tan visibles de día. Necesitas transporte con faros; los taxis locales no son ideales. Contrata a través de tu guesthouse.",
+      "plan_b_lluvia": "Las lluvias en esta zona son raras; si las hay, es peligroso aproximarse a los cráteres.",
+      "keywords": [
+        "Nebitdag",
+        "cráteres gas",
+        "fuego natural",
+        "geología",
+        "Balcán",
+        "fenómeno"
+      ]
+    },
+    {
+      "id": "yerbent",
+      "nombre": "Yerbent",
+      "tipo": "naturaleza",
+      "region": "Ahal",
+      "descripcion": "Desfiladero dramático en las montañas Köpet Dag con paredes de hasta 200m de altura. Punto de referencia natural único y frontera entre Turkmenistán e Irán. Caminata de senderismo accesible pero espectacular.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Asjabad: vehículo con guía 120 km, 2-3h, 40-60 EUR. Requiere coordinación previa y pase de seguridad (el guía lo gestiona).",
+      "donde_dormir": {
+        "mochilero": "Excursión de día desde Asjabad",
+        "medio": "Excursión de día desde Asjabad",
+        "comfort": "Tours organizados con transporte desde Asjabad"
+      },
+      "que_hacer": [
+        "Senderismo en el desfiladero (2-3h, gratis)",
+        "Fotografía de paredes rocosas (gratis)",
+        "Picnic en el desfiladero (compra comida en Asjabad)",
+        "Observación de fauna local si hay (aves, posibles punzás)"
+      ],
+      "donde_comer": "Llevar comida desde Asjabad; no hay servicios en el sitio.",
+      "consejo_local": "Es una zona fronteriza; necesitas permiso. Contrata con un guesthouse o tour operator que maneje los permisos. No intentes ir por tu cuenta.",
+      "plan_b_lluvia": "Cancelar y reprogramar; no es seguro en lluvia por riesgos de alud.",
+      "keywords": [
+        "Yerbent",
+        "desfiladero",
+        "montañas Köpet Dag",
+        "frontera Iran",
+        "senderismo",
+        "naturaleza"
+      ]
+    },
+    {
+      "id": "konye-urgench",
+      "nombre": "Kunya-Urgench",
+      "tipo": "histórico",
+      "region": "Ahal (norte)",
+      "descripcion": "Antigua ciudad de la Ruta de la Seda con monumentos islámicos medieval (minaretes, mausoleos) parcialmente restaurados. Sitio UNESCO pero menos concurrido que Samarcanda en Uzbekistán. Importante para historia turcomana.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "marzo-mayo, septiembre-noviembre",
+      "como_llegar": "Desde Asjabad: autobús/marshrutka 500 km, 10-12h, 25-35 EUR. Alternativamente: tour de 2 días desde Asjabad incluye transporte (80-120 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses simples: 12-18 EUR/noche",
+        "medio": "Hotel Urgench o similar: 30-50 EUR/noche",
+        "comfort": "Tours incluyen alojamiento mid-range: 80-120 EUR"
+      },
+      "que_hacer": [
+        "Exploración de Mausoleo de Turabeg Khanum (entrada 3-5 EUR)",
+        "Subida a Minarete de Kutlug Timur (1-2 EUR extra)",
+        "Visita a otros mausoleos (Pakhlavan Mahmud, etc.) - incluidos",
+        "Museo local con artefactos de la Ruta de la Seda (2 EUR)",
+        "Paseo por ruinas de la ciudad antigua (gratis)"
+      ],
+      "donde_comer": "Comida turcomana tradicional: 3-6 EUR. Restaurantes: 10-20 EUR.",
+      "consejo_local": "No es tan conocido como Samarkanda pero tiene arquitectura igual de valiosa. Los tours desde Asjabad incluyen guía en inglés, lo que facilita mucho la experiencia.",
+      "plan_b_lluvia": "Museo cubierto, exploración limitada de monumentos con techo.",
+      "keywords": [
+        "Kunya-Urgench",
+        "Konye-Urgench",
+        "UNESCO",
+        "minarete",
+        "mausoleo",
+        "Ruta Seda",
+        "norte"
+      ]
+    },
+    {
+      "id": "darvaza",
+      "nombre": "Darvaza (excursión desde Uzbekistán)",
+      "tipo": "desierto",
+      "region": "Frontera Turkmenistán-Uzbekistán",
+      "descripcion": "Cráter ardiente de gas natural más famoso de Asia Central (Puerta del Infierno). Aunque ubicado técnicamente en Uzbekistán, es el destino más icónico de la región. Accesible desde Asjabad con visas múltiples o como excursión desde Uzbekistán.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre-abril",
+      "como_llegar": "Desde Asjabad: Requiere visa Uzbekistán. Alternativa: tour desde Asjabad que negocia paso fronterizo (muy caro, 200-300 EUR). Recomendado: obtener visa Uzbekistán en Asjabad y viajar directamente (autobús/tour 10-12h).",
+      "donde_dormir": {
+        "mochilero": "Campamento base en Darvaza o Ashgabat (tour incluye): 20-30 EUR/noche en carpas",
+        "medio": "Guesthouses en Ahal (Uzbekistán) cercano: 25-40 EUR/noche",
+        "comfort": "Tours organizados con tiendas de campaña premium: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Fotografía del cráter al anochecer (espectacular) - gratis",
+        "Caminata alrededor del borde (gratis)",
+        "Noche bajo las estrellas (gratis con campamento)",
+        "Filmación/fotografía nocturna de las llamas"
+      ],
+      "donde_comer": "Tours incluyen comida. Si vas por tu cuenta: llevar comida desde Ashgabat (Uzbekistán).",
+      "consejo_local": "Este cráter está técnicamente en Uzbekistán. Más fácil acceso desde Uzbekistán. Desde Turkmenistán requiere negociación fronteriza o visa múltiple. Consulta embajada antes de intentarlo.",
+      "plan_b_lluvia": "Cancelar viaje; no hay alternativas cubiertas y el terreno es peligroso en lluvia.",
+      "keywords": [
+        "Darvaza",
+        "cráter",
+        "Puerta Infierno",
+        "gas natural",
+        "frontera",
+        "Uzbekistán"
+      ]
+    }
+  ]
+}

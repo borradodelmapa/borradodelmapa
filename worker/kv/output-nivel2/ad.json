@@ -1,0 +1,334 @@
+{
+  "pais": "Andorra",
+  "codigo": "ad",
+  "destinos": [
+    {
+      "id": "andorra-la-vella",
+      "nombre": "Andorra la Vella",
+      "tipo": "ciudad",
+      "region": "Parroquia de Andorra",
+      "descripcion": "Capital y principal centro urbano de Andorra, ubicada a 1.023 m de altitud. Centro de compras duty-free, vida nocturna y punto de partida para acceder al resto del país. Mezcla de arquitectura tradicional y moderna con vistas a las montañas circundantes.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre, diciembre-febrero",
+      "como_llegar": "Entrada principal desde España (Seo de Urgel, 45 km, autobús 45 min, 15 EUR) o Francia (Toulouse, 200 km, coche 2.5h). El transporte público es limitado; se recomienda coche o autobús.",
+      "donde_dormir": {
+        "mochilero": "Hostel o apartamento compartido, 25-40 EUR/noche",
+        "medio": "Hotel 3* o apartamento privado, 60-100 EUR/noche",
+        "comfort": "Hotel 4* centro, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Iglesia de Santa Coloma (gratis, románica del XII)",
+        "Centro histórico y paseo ribereño Gran Valira (gratis)",
+        "Casa de la Vall, parlamento tradicional (5 EUR, visita guiada)",
+        "Compras en Avinguda Meritxell (tiendas duty-free, gratis entrada)",
+        "Museu Nacional d'Andorra (7 EUR)"
+      ],
+      "donde_comer": "Trucha y perdiz de montaña, escalivada (verdura asada). Rango 12-25 EUR plato principal. Zona Meritxell para turistas, callejuelas detrás para locales.",
+      "consejo_local": "Los precios duty-free son reales pero no esperes grandes descuentos en electrónica; aprovecha en perfumería y cosméticos. Come en las tabernas pequeñas del casco viejo, no en las avenidas principales.",
+      "plan_b_lluvia": "Museu Nacional, compras en Meritxell, terrazas cubiertas, spa Caldea (centro termal de aguas calientes a 15 min)",
+      "keywords": [
+        "Andorra city",
+        "la Vella",
+        "capital andorrana",
+        "Meritxell",
+        "Casco viejo",
+        "Santa Coloma"
+      ]
+    },
+    {
+      "id": "ordino-arcalis",
+      "nombre": "Ordino y Arcalís",
+      "tipo": "montaña",
+      "region": "Parroquia de Ordino",
+      "descripcion": "Pueblo de montaña tradicional en el norte con acceso a la estación de esquí de Arcalís y rutas de senderismo espectaculares. Es el punto de partida para el Pic de Casamanya y el Coma Pedrosa (pico más alto de Andorra). Auténtico y menos masificado que Andorra la Vella.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre (senderismo), diciembre-marzo (esquí)",
+      "como_llegar": "Desde Andorra la Vella: coche 30 min (25 km), autobús local 45 min (6 EUR). No hay servicio de autobús directo desde frontera.",
+      "donde_dormir": {
+        "mochilero": "Pensión o refugio de montaña, 30-50 EUR/noche",
+        "medio": "Hotel rural 3*, 70-110 EUR/noche",
+        "comfort": "Hotel montaña con vistas, 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Coma Pedrosa (2.946m, senderismo 5h ida/vuelta, gratis)",
+        "Pic de Casamanya (2.740m, 3h, gratis)",
+        "Estación de esquí Arcalís (forfait día 48 EUR, invierno)",
+        "Ruta circular Arinsal-Coma Pedrosa (día completo, gratis)",
+        "Refugio de Comapedrosa (almuerzo montaña, 20-30 EUR)"
+      ],
+      "donde_comer": "Caldereta de cordero, trinxat (puré de patata y col). Rango 15-30 EUR. Tabernas y restaurants en Ordino pueblo.",
+      "consejo_local": "Si haces Coma Pedrosa, sal antes de las 8 AM; el pico se llena y el descenso con piedras sueltas es complicado de noche. El refugio solo abre fines de semana en temporada baja.",
+      "plan_b_lluvia": "Pueblo de Ordino (iglesia, tiendas artesanales), ruta corta a Arinsal por valle (menos expuesta), café local",
+      "keywords": [
+        "Ordino",
+        "Arcalis",
+        "Coma Pedrosa",
+        "senderismo Andorra",
+        "montaña",
+        "esqui Arcalis"
+      ]
+    },
+    {
+      "id": "soldeu-grau-roig",
+      "nombre": "Soldeu y Grau Roig",
+      "tipo": "montaña",
+      "region": "Parroquia de Canillo",
+      "descripcion": "Principal estación de esquí de Andorra con pistas modernas y acceso a Grau Roig. Centro de turismo de montaña con infraestructura hotelera, tiendas y restaurantes. Punto base ideal para esquiadores y senderistas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre-marzo (esquí), julio-septiembre (senderismo)",
+      "como_llegar": "Desde Andorra la Vella: coche 45 min (40 km), autobús local 1h (8 EUR). Desde Francia (Pas de la Casa): coche 20 min.",
+      "donde_dormir": {
+        "mochilero": "Apartamento compartido o albergue, 35-60 EUR/noche",
+        "medio": "Hotel 3* en Soldeu, 80-130 EUR/noche",
+        "comfort": "Resort 4* con spa, 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Esquí/snowboard en Soldeu-Grau Roig (forfait día 48 EUR)",
+        "Telecabina hacia Pic de Casamanya en verano (gratis con senderismo)",
+        "Ruta lago de les Truites (4h, gratis, inicio en Grau Roig)",
+        "Bike park en Grau Roig (verano, 30 EUR día completo)",
+        "Tirolina Viu Canillo (adrenalina, 45 EUR)"
+      ],
+      "donde_comer": "Carne a la brasa, patatas a lo pobre. Rango 18-35 EUR. Restaurants en base de pistas con vistas panorámicas.",
+      "consejo_local": "En invierno, los forfaits combinados Soldeu-Grau Roig son obligatorios (48 EUR); compra en taquillas antes de 9 AM. En verano, el lake trek es mejor por la tarde cuando hace más calor arriba.",
+      "plan_b_lluvia": "Centro comercial Soldeu, restaurantes de montaña, telecabina (si no llueve mucho), piscina cubierta",
+      "keywords": [
+        "Soldeu",
+        "Grau Roig",
+        "estacion esqui",
+        "Canillo",
+        "senderismo lago",
+        "bike park"
+      ]
+    },
+    {
+      "id": "arinsal-erts",
+      "nombre": "Arinsal y Erts",
+      "tipo": "montaña",
+      "region": "Parroquia de La Massana",
+      "descripcion": "Pueblo de montaña auténtico con acceso a la estación de Pal-Arinsal, menos comercial que Soldeu. Base de senderismo con el Coma Pedrosa, rutas fluviales y ambiente más tranquilo. Ideal para viajeros que buscan montaña sin masificación.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre (senderismo), enero-marzo (esquí)",
+      "como_llegar": "Desde Andorra la Vella: coche 40 min (30 km), autobús local 50 min (7 EUR). Desde Ordino: 20 min coche.",
+      "donde_dormir": {
+        "mochilero": "Refugio o apartamento rural, 28-45 EUR/noche",
+        "medio": "Hotel rural 3*, 65-105 EUR/noche",
+        "comfort": "Hotel montaña con servicios, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Coma Pedrosa desde Arinsal (5h, gratis, ruta alternativa)",
+        "Ruta de ríos Arinsal-Erts (senderismo fácil 3h, gratis)",
+        "Estación de esquí Pal-Arinsal (forfait 45 EUR, invierno)",
+        "Paseo al Refugio de Comapedrosa (2h, gratis)",
+        "Ruta circular Arinsal-Sispony (mediodía, gratis)"
+      ],
+      "donde_comer": "Trucha fresca, escalivada, pan de coca. Rango 12-22 EUR. Tabernas tradicionales en pueblo.",
+      "consejo_local": "Erts es más tranquilo que Arinsal para dormir; desde aquí accedes a la ruta de ríos que es preciosa. La tienda de pueblo cierra a las 19h, compra provisiones antes.",
+      "plan_b_lluvia": "Pueblo de Erts (iglesia antigua), tienda de artesanías, refugios con chimenea, comida de montaña",
+      "keywords": [
+        "Arinsal",
+        "Erts",
+        "Pal Arinsal",
+        "La Massana",
+        "rios",
+        "senderismo tranquilo"
+      ]
+    },
+    {
+      "id": "pas-de-la-casa",
+      "nombre": "Pas de la Casa",
+      "tipo": "montaña",
+      "region": "Parroquia de Canillo",
+      "descripcion": "Frontera natural entre Andorra y Francia (2.408 m). Centro comercial de montaña con duty-free, acceso a las pistas de Grau Roig y ruta del GRP (Gran Recorrido). Punto de entrada desde Francia y base para travesías de montaña.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre (senderismo), febrero-marzo (esquí)",
+      "como_llegar": "Desde Francia (Hospitalet-près-l'Andorre): coche 45 min (40 km). Desde Andorra la Vella: coche 1h (52 km), autobús 1.5h (10 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue o apartamento, 32-55 EUR/noche",
+        "medio": "Hotel 3*, 75-120 EUR/noche",
+        "comfort": "Hotel 4*, 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Compras duty-free (tabaco, alcohol, perfume, gratis entrada)",
+        "Ruta GRP Andorra (Gran Recorrido 7 días, o etapas aisladas)",
+        "Pic de Casamanya desde Grau Roig (1.5h, gratis)",
+        "Esquí en Grau Roig (forfait 45 EUR)",
+        "Frontera Francia-Andorra (fotos, gratis)"
+      ],
+      "donde_comer": "Comida rápida y acogedora, jamón serrano, quesos. Rango 12-28 EUR. Restaurantes junto a carretera principal.",
+      "consejo_local": "Pas de la Casa es principalmente comercial; para dormir mejor opta por Grau Roig o Soldeu más abajo. Los precios duty-free son reales pero compara con tu país. La carretera desde Francia es montañosa y cerrada en invierno sin cadenas.",
+      "plan_b_lluvia": "Tiendas duty-free, restaurantes, cibercafé, spa en Grau Roig",
+      "keywords": [
+        "Pas de la Casa",
+        "frontera",
+        "duty free",
+        "Canillo",
+        "GRP",
+        "Grau Roig"
+      ]
+    },
+    {
+      "id": "escaldes-engordany",
+      "nombre": "Escaldes-Engordany",
+      "tipo": "ciudad",
+      "region": "Parroquia de Escaldes-Engordany",
+      "descripcion": "Parroquia junto a Andorra la Vella, centro comercial y termal con aguas calientes naturales. Hogar del spa más famoso de Andorra (Caldea). Base cómoda para compras y relax.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Adyacente a Andorra la Vella, a 5-10 min a pie o 5 min en autobús local (gratis o 1 EUR).",
+      "donde_dormir": {
+        "mochilero": "Apartamento o hostel, 30-50 EUR/noche",
+        "medio": "Hotel 3*, 70-120 EUR/noche",
+        "comfort": "Hotel 4* con spa, 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Caldea spa termal (entrada 2h desde 38 EUR, hasta 8h)",
+        "Compras en centro comercial (gratis entrada)",
+        "Paseo ribereño río Valira (gratis)",
+        "Iglesia de Sant Esteve (románica, gratis)",
+        "Mirador del Juclar (corta caminata, vistas, gratis)"
+      ],
+      "donde_comer": "Fusión internacional y tradicional. Rango 15-30 EUR. Avenida principal con opciones variadas.",
+      "consejo_local": "Caldea es cara pero las aguas calientes en invierno merecen la pena; usa toalla/piscina del hotel si puedes. Los hoteles de Escaldes son más nuevos y cómodos que los de Andorra la Vella.",
+      "plan_b_lluvia": "Caldea (ideal para lluvia), compras, museos próximos en Andorra la Vella",
+      "keywords": [
+        "Escaldes",
+        "Engordany",
+        "Caldea",
+        "spa termal",
+        "aguas calientes",
+        "compras"
+      ]
+    },
+    {
+      "id": "la-massana",
+      "nombre": "La Massana",
+      "tipo": "rural",
+      "region": "Parroquia de La Massana",
+      "descripcion": "Pueblo rural montañoso en el oeste, puerta a Arinsal y al Coma Pedrosa. Menos turístico, más auténtico, con tradición ganadera y arquitectura preservada. Base alternativa a Arinsal para explorar el norte.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Andorra la Vella: coche 35 min (25 km), autobús 50 min (7 EUR).",
+      "donde_dormir": {
+        "mochilero": "Pensión o apartamento rural, 25-40 EUR/noche",
+        "medio": "Hotel rural 3*, 60-95 EUR/noche",
+        "comfort": "Hotel montaña, 110-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a Arinsal (1h, gratis)",
+        "Ruta de la Capella de Sorpe (mediodía, gratis)",
+        "Paseo por pueblo (iglesia, tiendas locales, gratis)",
+        "Acceso a rutas Coma Pedrosa desde aquí (gratis)",
+        "Compras artesanía local (precios 20-80 EUR)"
+      ],
+      "donde_comer": "Cocina rural casera, carnes guisadas. Rango 12-20 EUR. Tabernas en plaza del pueblo.",
+      "consejo_local": "La Massana es punto base infrautilizado; aquí encuentras el Andorra más auténtico sin ruido turístico. Come donde ven locales, no turistas.",
+      "plan_b_lluvia": "Pueblo (compras, iglesia), café local, tiendas artesanía, comida en restaurante",
+      "keywords": [
+        "La Massana",
+        "pueblo rural",
+        "autentico",
+        "Arinsal acceso",
+        "ganaderia"
+      ]
+    },
+    {
+      "id": "sant-julia-loria",
+      "nombre": "Sant Julià de Lòria",
+      "tipo": "rural",
+      "region": "Parroquia de Sant Julià de Lòria",
+      "descripcion": "Pueblo tradicional en el sur con la iglesia románica más antigua de Andorra (Sant Martí de la Cortinada, XII). Acceso a Arinsal por el oeste y punto de tránsito hacia España. Menos masificado, ideal para arquitectura tradicional.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Andorra la Vella: coche 25 min (15 km), autobús 40 min (6 EUR).",
+      "donde_dormir": {
+        "mochilero": "Pensión o apartamento, 28-45 EUR/noche",
+        "medio": "Hotel rural 3*, 65-100 EUR/noche",
+        "comfort": "Casa rural con servicios, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Iglesia de Sant Martí de la Cortinada (románica XII, entrada gratis, donativo sugerido 2 EUR)",
+        "Paseo por pueblo y arquitectura tradicional (gratis)",
+        "Ruta a la Serrera (senderismo mediodía, gratis)",
+        "Frontera española cercana (Ordino, 15 km)",
+        "Tienda artesanía local (precios 15-50 EUR)"
+      ],
+      "donde_comer": "Cocina rural, cordero, verduras de temporada. Rango 12-22 EUR. Tabernas en pueblo.",
+      "consejo_local": "Sant Julià es el punto de entrada/salida menos conocido; si vienes desde España (La Seu d'Urgell) entra por aquí y explora el norte en reversa hacia Ordino.",
+      "plan_b_lluvia": "Iglesia, pueblo, compras, café local",
+      "keywords": [
+        "Sant Julia de Loria",
+        "Cortinada",
+        "iglesia romanica",
+        "sur Andorra",
+        "pueblo antiguo"
+      ]
+    },
+    {
+      "id": "nagol-lamia",
+      "nombre": "Nágol y Llámia (Lagos de Tristaina)",
+      "tipo": "montaña",
+      "region": "Parroquia de Ordino",
+      "descripcion": "Ruta alpina clásica hacia los lagos glaciares de Tristaina con vistas espectaculares. Caminata moderada-alta que integra naturaleza salvaje y agua cristalina. Uno de los trekkings más hermosos de Andorra.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "julio-septiembre",
+      "como_llegar": "Desde Ordino: coche 20 min (12 km) a Arinsal, inicio de ruta. Desde Andorra la Vella: coche 50 min total (35 km).",
+      "donde_dormir": {
+        "mochilero": "Alojamiento en Ordino/Arinsal, 30-50 EUR/noche",
+        "medio": "Hotel en Ordino, 70-110 EUR/noche",
+        "comfort": "Hotel montaña con vistas, 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruta Lagos de Tristaina (6-7h ida/vuelta, gratis, nivel medio-alto)",
+        "Baño en los lagos (frío, gratis)",
+        "Pesca en temporada (permiso 20 EUR)",
+        "Fotografía de flora alpina y picos circundantes (gratis)",
+        "Picnic en refugio natural (provisiones propias)"
+      ],
+      "donde_comer": "Lleva provisiones (bocadillos, frutos secos, agua); hay fuente en las montañas. Almuerza en refugio o junto a los lagos.",
+      "consejo_local": "Esta ruta requiere nivel físico moderado y botas de montaña. Partiendo antes de las 7 AM, regresas a las 17h. La nieve persiste hasta julio en las zonas altas.",
+      "plan_b_lluvia": "Ruta más corta a Coma Pedrosa con mejor protección de lluvia (menos expuesta)",
+      "keywords": [
+        "Tristaina",
+        "lagos",
+        "Nagol",
+        "Llämia",
+        "senderismo alpino",
+        "treking Ordino"
+      ]
+    },
+    {
+      "id": "reunio-gresca",
+      "nombre": "Reunió y Gresca (Frontera Francia)",
+      "tipo": "montaña",
+      "region": "Parroquia de Canillo",
+      "descripcion": "Zona montañosa en el extremo noreste con frontera natural con Francia. Base para rutas del GRP y acceso a picos fronteriznos. Menos visitada, para senderistas experimentados que buscan soledad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "julio-septiembre",
+      "como_llegar": "Desde Pas de la Casa: coche 20 min (10 km). Desde Andorra la Vella: coche 1.5h (55 km). Acceso también desde Francia.",
+      "donde_dormir": {
+        "mochilero": "Refugio de montaña o apartamento Pas de la Casa, 32-55 EUR/noche",
+        "medio": "Hotel Grau Roig/Soldeu cercano, 75-130 EUR/noche",
+        "comfort": "Resort montaña, 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruta GRP etapas Reunió-Gresca (senderismo 5-7h, gratis)",
+        "Picos fronterizos Pico de Carroi (2.334m, 4h, gratis)",
+        "Travesía a Andorra o Francia (experiencia fronteriza, gratis)",
+        "Fotografía alpina y fauna (marmotas, gratis)",
+        "Picnic con vistas a Francia (provisiones propias)"
+      ],
+      "donde_comer": "Provisions en Pas de la Casa antes; en montaña llevar bocadillos. Rango comidas: 0 EUR (picnic) a 25 EUR (refugio).",
+      "consejo_local": "Zona para senderistas serios; rutas no siempre marcadas. Mapa y brújula obligatorios. Refugios cierran muchos días entre semana.",
+      "plan_b_lluvia": "Ruta en Pas de la Casa más baja, compras, spa Grau Roig",
+      "keywords": [
+        "Reunio",
+        "Gresca",
+        "frontera Francia",
+        "GRP",
+        "Carroi",
+        "senderismo avanzado"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,353 @@
+{
+  "pais": "Timor Oriental",
+  "codigo": "tl",
+  "destinos": [
+    {
+      "id": "dili",
+      "nombre": "Dili",
+      "tipo": "ciudad",
+      "region": "Distrito de Dili",
+      "descripcion": "Capital de Timor Oriental con puerto natural, mercados vibrantes y arquitectura colonial portuguesa. Centro logístico principal y punto de entrada para la mayoría de viajeros. Combina historia reciente, vida urbana local y acceso a playas cercanas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Aeropuerto Internacional Nicolau Lobato (DIL). Vuelos internacionales desde Indonesia, Australia. Transporte interno: taxis, minibuses locales (microlets).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses familiares o albergues: 15-25 EUR/noche",
+        "medio": "Hoteles 2-3 estrellas centro o Motael: 40-70 EUR/noche",
+        "comfort": "Resort o hotel 4 estrellas frente al mar: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasear por el Mercado Tradicional de Dili (gratis)",
+        "Visita al Monumento Nacional/Xanana Statue (gratis)",
+        "Playa de Areia Branca - baño y puesta de sol (gratis)",
+        "Museo de la Resistencia de Timor Oriental (2-3 EUR)",
+        "Iglesia Catedral de Dili (gratis)"
+      ],
+      "donde_comer": "Arroz con caldo, pepes (salsa local), café de Timor. Restaurantes chinos y portugueses en el centro. Presupuesto 3-8 EUR por comida. Zona: Avenida de Portugal y callejuelas del mercado.",
+      "consejo_local": "Los microlets salen cuando están llenos, no por horario. Negocia el precio antes de subir. El efectivo (USD o dólares timorenses) es esencial, pocos cajeros.",
+      "plan_b_lluvia": "Museos interiores, mercados cubiertos, cafés locales, compras en tiendas de artesanía",
+      "keywords": [
+        "capital",
+        "porto",
+        "puerto natural",
+        "Motael",
+        "Avenida Portugal",
+        "mercado",
+        "resistencia"
+      ]
+    },
+    {
+      "id": "atauro",
+      "nombre": "Isla de Atauro",
+      "tipo": "isla",
+      "region": "Frente a Dili",
+      "descripcion": "Isla volcánica con arrecifes de coral intactos, avistamiento de cetáceos y buceo de clase mundial. Población local acogedora y escasa infraestructura turística la hacen ideal para viajeros independientes que buscan autenticidad marina.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Ferry desde Dili (45 minutos a 1 hora, 5-7 EUR). Barcos salen cuando hay pasajeros suficientes. Puerto de Dili calle Avenida de Portugal.",
+      "donde_dormir": {
+        "mochilero": "Casas familiares en Bebora o Beloi: 12-20 EUR/noche",
+        "medio": "Pequeños alojamientos básicos con baño privado: 25-40 EUR/noche",
+        "comfort": "Dive resort (Atauro Dive Centre): 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo con arrecife (operadores locales 30-50 EUR/inmersión)",
+        "Avistamiento de delfines - excursiones en bote (25-40 EUR)",
+        "Snorkel desde la playa (gratis o equipo 10 EUR)",
+        "Caminar por pueblos locales Bebora y Beloi (gratis)",
+        "Pesca nocturna con linterna tradicional (20-30 EUR)"
+      ],
+      "donde_comer": "Pescado fresco, arroz, verduras locales. Pocos restaurantes; come en casas de familia o pequeños warung. 2-5 EUR por comida. Trae snacks de Dili.",
+      "consejo_local": "Lleva efectivo de Dili; no hay cajeros en la isla. El agua potable es limitada. Abril-mayo lluvia fuerte pero menos turistas. Negocia alojamiento una vez en la isla, suele haber descuento.",
+      "plan_b_lluvia": "Permanecer en interiores con familias locales, caminatas cortas protegidas, descanso",
+      "keywords": [
+        "Atauro",
+        "arrecife",
+        "coral",
+        "buceo",
+        "delfines",
+        "Bebora",
+        "Beloi",
+        "volcánica"
+      ]
+    },
+    {
+      "id": "cristo-rei",
+      "nombre": "Cristo Rei y Tibar",
+      "tipo": "histórico",
+      "region": "A 10 km de Dili",
+      "descripcion": "Estatua de Cristo Rei (copia más pequeña que la de Río) en península sagrada con vistas sobre Dili y el Estrecho de Wetar. Lugar de peregrinación local y vistas panorámicas del atardecer. Fácil día completo desde la capital.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre (tardes claras)",
+      "como_llegar": "Taxi desde Dili (15-20 minutos, 10-15 EUR ida y vuelta con espera). O microlet hasta Tibar (1 EUR) y caminar 2 km cuesta arriba.",
+      "donde_dormir": {
+        "mochilero": "Día excursión desde Dili recomendado",
+        "medio": "Día excursión desde Dili recomendado",
+        "comfort": "Día excursión desde Dili recomendado"
+      },
+      "que_hacer": [
+        "Subida a la estatua Cristo Rei (gratis)",
+        "Panorámica desde la cima (gratis)",
+        "Baño en playa de Tibar antes de subir (gratis)",
+        "Fotografía al atardecer (gratis)",
+        "Capilla en la base (gratis, respeta horarios)"
+      ],
+      "donde_comer": "Pequeño warung en Tibar al pie. Comida local simple 2-3 EUR. Mejor llevar agua y snacks desde Dili.",
+      "consejo_local": "Sube temprano para evitar multitudes locales del fin de semana. El atardecer es espectacular pero lleno; mejor ir por la tarde temprano y bajar al atardecer.",
+      "plan_b_lluvia": "Cancela y repite día. La niebla anula vistas completamente.",
+      "keywords": [
+        "Cristo Rei",
+        "estatua",
+        "Tibar",
+        "mirador",
+        "vista panorámica",
+        "playa Tibar",
+        "peregrinación"
+      ]
+    },
+    {
+      "id": "baucau",
+      "nombre": "Baucau",
+      "tipo": "ciudad",
+      "region": "Este de Timor Oriental",
+      "descripcion": "Segunda ciudad más grande, ubicada en colinas con arquitectura portuguesa bien conservada y mercado local autóctonos. Centro cultural con acceso a las montañas de Letefoho y playas de Vemasse. Menos turística que Dili pero con infraestructura básica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Minibús desde Dili (5-6 horas, 12-15 EUR). Autopista costera. Microlets locales dentro de Baucau.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses simples: 15-22 EUR/noche",
+        "medio": "Hotel básico con agua caliente: 35-55 EUR/noche",
+        "comfort": "Hotel Baucau Resort (opción principal 4 estrellas): 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado tradicional y vida local (gratis)",
+        "Iglesia Católica (gratis)",
+        "Caminata a pueblos de montaña cercanos (gratis)",
+        "Playa de Vemasse - 30 km hacia el este (8 EUR taxi)",
+        "Fortaleza holandesa ruinas en colinas (gratis)"
+      ],
+      "donde_comer": "Arroz local, pesca del día, verduras. Warung alrededor del mercado 2-4 EUR. Restaurantes chinos 5-8 EUR. Mercado abierto temprano para comer local.",
+      "consejo_local": "Baucau es montaña; es más fresco que Dili por la noche. Los microlets al este hacia Vemasse y Lospalos salen desde la estación de microlets al pie. Llega a Baucau antes de las 15:00 para cambios de conexión.",
+      "plan_b_lluvia": "Exploración del casco antiguo, museos locales, descanso en warung cubiertos",
+      "keywords": [
+        "Baucau",
+        "ciudad este",
+        "colinas",
+        "portugués",
+        "montaña",
+        "Vemasse",
+        "mercado"
+      ]
+    },
+    {
+      "id": "lospalos",
+      "nombre": "Lospalos y región Este",
+      "tipo": "rural",
+      "region": "Punta este de Timor Oriental",
+      "descripcion": "Pueblo remoto en las colinas con acceso a montañas vírgenes, cascadas y culturas tradicionales de Fataluku. Destino para viajeros aventureros que quieren alejarse de rutas trilladas y conectar con naturaleza intacta.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Minibús desde Baucau (2-3 horas, 6-8 EUR) o Dili (9-10 horas con transbordos). Caminos irregulares. Paciencia requerida.",
+      "donde_dormir": {
+        "mochilero": "Casas familiares o albergues muy básicos: 10-15 EUR/noche",
+        "medio": "Alojamiento simple con baño: 20-30 EUR/noche",
+        "comfort": "Opciones limitadas; mejor alojamiento en Baucau y visitar Lospalos como excursión"
+      },
+      "que_hacer": [
+        "Caminata a cascadas de Fatolulu (gratis, guía local 10-15 EUR recomendado)",
+        "Exploración de aldeas Fataluku (gratis)",
+        "Camino de montaña a Tutuala (gratis)",
+        "Baño en río de montaña (gratis)",
+        "Mercado local (gratis)"
+      ],
+      "donde_comer": "Arroz, yuca, verduras de la región. Muy básico. Warung 2-3 EUR. Trae snacks desde ciudades mayores.",
+      "consejo_local": "Lospalos es punto final de ruta; no hay mucho más al este. Negocia con conductores locales para excursiones a cascadas. Mucha gente local no habla inglés; aprende frases en tétum. Aclimatación a altitud importante.",
+      "plan_b_lluvia": "Caminos intransitables. Mejor aplazar a otra fecha. Actividades interiores muy limitadas.",
+      "keywords": [
+        "Lospalos",
+        "este extremo",
+        "montaña",
+        "Fataluku",
+        "rural",
+        "cascadas",
+        "remoto",
+        "auténtico"
+      ]
+    },
+    {
+      "id": "manatuto",
+      "nombre": "Manatuto y costa norte",
+      "tipo": "playa",
+      "region": "Centro-norte, costa norte",
+      "descripcion": "Pequeño pueblo costero con playas semidesiertas, tortugas marinas anidando (temporada), y acceso a arrecifes cercanos. Destino tranquilo para buceo y snorkel con muy pocos turistas y infraestructura mínima.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a febrero (anidación de tortugas); junio-agosto (clima seco)",
+      "como_llegar": "Minibús desde Dili o Baucau (2-3 horas, 6-8 EUR) hacia Manatuto. Luego taxi a playas específicas (Wetarlulik, Barique) o caminata.",
+      "donde_dormir": {
+        "mochilero": "Casas de familia o albergue muy básico: 12-18 EUR/noche",
+        "medio": "Alojamiento simple con baño: 25-35 EUR/noche",
+        "comfort": "Opciones muy limitadas; Manatuto Resort si opera: 60-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife cercano (gratis o equipo 10 EUR)",
+        "Observación de anidamiento de tortugas (temporada, guía 15-20 EUR)",
+        "Caminar playa vacía (gratis)",
+        "Pesca nocturna con linterna (20-30 EUR con local)",
+        "Exploración de pueblos costeros (gratis)"
+      ],
+      "donde_comer": "Pescado fresco, arroz, caldo local. Warung muy básico 2-4 EUR. Trae provisiones desde Dili o Baucau.",
+      "consejo_local": "Manatuto es tranquilo porque pocos turistas llegan. Negocia alojamiento in situ. Octubre-febrero: tortugas anidan de noche; avisa a tu host y podrías acompañar. Agua potable escasa; trae botellas.",
+      "plan_b_lluvia": "Playas y actividades acuáticas imposibles. Cancela y rescalendar.",
+      "keywords": [
+        "Manatuto",
+        "costa norte",
+        "playa",
+        "tortugas",
+        "arrecife",
+        "Wetarlulik",
+        "snorkel",
+        "tranquilo"
+      ]
+    },
+    {
+      "id": "hatubuilico",
+      "nombre": "Hatubuilico y montañas centrales",
+      "tipo": "montaña",
+      "region": "Centro de Timor Oriental",
+      "descripcion": "Región montañosa de dificil acceso con pueblos Tetun tradicionales y paisajes de selva sin tocar. Destino para trekking de varios días y inmersión cultural profunda con locales que rara vez ven turistas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "4x4 con conductor desde Baucau o minibús hasta pueblo base, luego a pie. 6-8 horas dependiendo del punto de partida. 30-50 EUR con guía y transporte.",
+      "donde_dormir": {
+        "mochilero": "Casa de familia en pueblos de montaña: 10-15 EUR/noche",
+        "medio": "Alojamiento básico con hamaca o cama simple: 15-25 EUR/noche",
+        "comfort": "No disponible; llevar tienda es opción"
+      },
+      "que_hacer": [
+        "Trekking de 3-4 días entre pueblos (guía obligatorio 20-30 EUR/día)",
+        "Baños en cascadas de montaña (gratis)",
+        "Observación de fauna (pájaros, insectos únicos de Timor, gratis)",
+        "Hospedaje comunitario y comidas con familias (gratis, trae pequeños regalos)",
+        "Fotografía de paisajes sin alterar (gratis)"
+      ],
+      "donde_comer": "Lo que preparan las familias: arroz, yuca, hierbas silvestres, caldo. Muy básico pero abundante. Sin warung. Incluye en pago a familia.",
+      "consejo_local": "Necesitas guía local; no es seguro ni viable solo. Contrata en Baucau a través de hospedaje. Lleva brújula, mapa, repelente de mosquitos. Las montañas pueden ser nubladas; visibilidad limitada. Ropa impermeable esencial.",
+      "plan_b_lluvia": "Trekking en lluvia es difícil y peligroso. Reprograma; caminos pueden inundarse.",
+      "keywords": [
+        "Hatubuilico",
+        "montaña",
+        "trekking",
+        "selva",
+        "Tetun",
+        "comunidad",
+        "cascadas",
+        "altitud"
+      ]
+    },
+    {
+      "id": "dilli-beach-complex",
+      "nombre": "Área de playas cercanas a Dili",
+      "tipo": "playa",
+      "region": "Alrededores de Dili (oeste y este)",
+      "descripcion": "Conjunto de playas accesibles en día completo desde Dili: Areia Branca, Bailoro, Liquisa, Ermera. Baños seguros, snorkel básico y pueblos costeros con vida local. Ideal para días de descanso sin viajar lejos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Microlet/taxi desde Dili. Areia Branca (10 minutos, 2 EUR), Bailoro (15 minutos, 3 EUR), Liquisa (1.5 horas oeste, 5 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en pueblos costeros: 15-25 EUR/noche",
+        "medio": "Hotel pequeño junto a playa: 35-50 EUR/noche",
+        "comfort": "Resort en Liquisa: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en playas seguras vigiladas localmente (gratis)",
+        "Snorkel con equipo alquilado (10-15 EUR equipo)",
+        "Caminata por pueblos costeros (gratis)",
+        "Comida de pescado fresco en warung de playa (3-5 EUR)",
+        "Puesta de sol (gratis)"
+      ],
+      "donde_comer": "Pescado a la parrilla, arroz. Warungs justo en playa. 3-6 EUR por comida. Ambiente muy local.",
+      "consejo_local": "Liquisa es la mejor opción en cantidad de servicios. Areia Branca abarrotada fines de semana. Ve temprano. Nada en zonas con gente local; aguas profundas rápidamente.",
+      "plan_b_lluvia": "Cancela o pospón. Lluvia arruina experiencia.",
+      "keywords": [
+        "playa",
+        "Dili",
+        "Areia Branca",
+        "Liquisa",
+        "Bailoro",
+        "cercano",
+        "seguro",
+        "día"
+      ]
+    },
+    {
+      "id": "jaco-island",
+      "nombre": "Isla de Jaco",
+      "tipo": "isla",
+      "region": "Noroeste de Dili",
+      "descripcion": "Islote deshabitado con arrecife virgen, tortugas marinas y poca presencia turística. Acceso solo en embarcación privada; requiere planificación pero recompensa con buceo intacto y soledad completa.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Chárter de barco desde Dili (operadores en puerto, 80-120 EUR barco completo para 4-6 personas, 2 horas cada lado). O contacta dive operators en Dili.",
+      "donde_dormir": {
+        "mochilero": "Día excursión desde Dili recomendado",
+        "medio": "Día excursión desde Dili recomendado",
+        "comfort": "Día excursión desde Dili recomendado"
+      },
+      "que_hacer": [
+        "Buceo y snorkel en arrecife (20-40 EUR si incluido en operador de buceo)",
+        "Observación de tortugas marinas (gratis si visible)",
+        "Caminata por isla pequeña (gratis)",
+        "Fotografía de coral intacto (gratis)",
+        "Pesca y avistamiento marino (gratis)"
+      ],
+      "donde_comer": "Lleva provisiones desde Dili. Picnic en isla.",
+      "consejo_local": "Jaco es isla virgen; no hay servicios. Únete a grupo de buceo si viaja solo para compartir costos. Clima puede cambiar rápido; confirma mar calma antes de partir.",
+      "plan_b_lluvia": "Cancela completamente. Mar revuelto, navegación peligrosa.",
+      "keywords": [
+        "Jaco",
+        "isla",
+        "arrecife virgen",
+        "buceo",
+        "tortugas",
+        "intacto",
+        "remoto",
+        "chárter"
+      ]
+    },
+    {
+      "id": "timor-leste-wilderness",
+      "nombre": "Trekking transversal: Ermera a Aileu",
+      "tipo": "naturaleza",
+      "region": "Montañas centrales",
+      "descripcion": "Caminata multidia a través de montañas de Timor atravesando pueblos Tetun, bosques nublados y altitud hasta 2.960 m. Aventura de inmersión completa en naturaleza virgen e interacción cultural auténtica. Solo para trekkers experimentados.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Minibús desde Dili a Ermera (2 horas, 5 EUR), inicio de trekking. Salida desde Aileu con minibús a Dili (1.5 horas, 4 EUR).",
+      "donde_dormir": {
+        "mochilero": "Campamento o casa de familia en ruta: 10-20 EUR/noche",
+        "medio": "Alojamiento básico comunitario: 15-25 EUR/noche",
+        "comfort": "No disponible en ruta; llevar tienda"
+      },
+      "que_hacer": [
+        "Trekking guiado 4 días (guía obligatorio 25-35 EUR/día)",
+        "Observación de paisajes de montaña nublada (gratis)",
+        "Baños en manantiales de montaña (gratis)",
+        "Comida con comunidades locales (incluido con alojamiento)",
+        "Fotografía de flora única de Timor (gratis)"
+      ],
+      "donde_comer": "Familias en ruta preparan comida. Arroz, verduras, caldo. Muy básico. Sin opciones de compra en ruta; negocia todo con guía.",
+      "consejo_local": "Este trekking es serio; necesita buena forma física y experiencia en montaña. Contrata guía obligatoriamente en Ermera u Aileu antes. Llevar brújula, mapa, repelente fuerte. Altitud causa soroche ligero. Aclimatación importante.",
+      "plan_b_lluvia": "No viable en lluvia; cancela y reprograma. Senderos se hacen intransitables.",
+      "keywords": [
+        "trekking",
+        "multidia",
+        "montaña",
+        "transversal",
+        "Ermera",
+        "Aileu",
+        "nublado",
+        "aventura"
+      ]
+    }
+  ]
+}

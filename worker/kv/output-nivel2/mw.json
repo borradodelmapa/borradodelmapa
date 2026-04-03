@@ -1,0 +1,339 @@
+{
+  "pais": "Malaui",
+  "codigo": "mw",
+  "destinos": [
+    {
+      "id": "lake-malawi",
+      "nombre": "Lago Malaui",
+      "tipo": "playa",
+      "region": "Centro y Sur",
+      "descripcion": "Gigantesco lago de agua dulce que ocupa un tercio del país, con playas de arena blanca, aguas cristalinas y más de 1.000 especies de peces endémicas. Punto central para la mayoría de viajeros independientes que buscan relajación, snorkel y vida en la playa.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Lilongüe en autobús (4-5 horas, 8-12 EUR) o en minibús colectivo (6-8 EUR). Los pueblos principales son Cape Maclear, Nkhata Bay y Mangochi.",
+      "donde_dormir": {
+        "mochilero": "hostales y casas de huéspedes junto al agua, 6-10 EUR/noche",
+        "medio": "bungalows y lodges familiares, 25-40 EUR/noche",
+        "comfort": "resorts con vistas al lago, 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel y buceo con miles de especies de peces (10-25 EUR)",
+        "Kayak o vela en el lago (8-15 EUR)",
+        "Visitar la isla de Mumbo, reserva marina protegida (gratis acceso, tours 15-20 EUR)",
+        "Relajarse en playas de arena blanca (gratis)",
+        "Pesca nocturna tradicional con lugareños (10-15 EUR)"
+      ],
+      "donde_comer": "Chambo a la parrilla (pez típico del lago, 3-5 EUR), nshima con verduras locales, Nsima House en Nkhata Bay es referencia. Rango 2-8 EUR por comida principal.",
+      "consejo_local": "El agua del lago es tan limpia que la beben los locales directamente. En temporada alta (julio-agosto) hay demasiados turistas en Cape Maclear; Nkhata Bay es más tranquilo y igual de bonito.",
+      "plan_b_lluvia": "Visitas a mercados locales, talleres de artesanía, museos pequeños, o quedarte en el hostal jugando a juegos de mesa y conociendo otros viajeros.",
+      "keywords": [
+        "Lake Malawi",
+        "Malawi Lake",
+        "Cape Maclear",
+        "Nkhata Bay",
+        "Mangochi",
+        "Liwonde",
+        "snorkel",
+        "playas"
+      ]
+    },
+    {
+      "id": "lilongwe",
+      "nombre": "Lilongüe",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital moderna y caótica con mercados bulliciosos, arte callejero y vida urbana auténtica. Punto de entrada obligatorio para la mayoría de viajeros, aunque pocos se quedan más de uno o dos días.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "vuelos internacionales desde Johannesburgo, Dar es Salaam o Lusaka. Autobús desde Blantyre (3-4 horas, 8 EUR) o desde Mzuzu (4 horas, 10 EUR).",
+      "donde_dormir": {
+        "mochilero": "hostales en Old Town, 8-12 EUR/noche",
+        "medio": "guesthouses en City Center, 20-35 EUR/noche",
+        "comfort": "hoteles modernos (Capital Hotel, Sunbird), 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Lilongüe (gratis, regateo seguro)",
+        "Museo Nacional (4 EUR)",
+        "Galería de arte local y murales en Old Town (gratis)",
+        "Parque Kanengo para observar pájaros (gratis)",
+        "Visitar talleres de artesanos y tiendas de souvenirs (precios variables)"
+      ],
+      "donde_comer": "Nshima con relish (2-3 EUR), comida rápida callejera, restaurantes en City Center con opciones occidentales (8-15 EUR). Evitar comer en la calle si no estás acostumbrado.",
+      "consejo_local": "Old Town es la zona más auténtica pero menos segura de noche; City Center es más limpio y turístico. Usa taxis registrados (Uber no funciona bien). Los taxis negocian precio antes de subir.",
+      "plan_b_lluvia": "Mercados cubiertos, museos, cafés, paseos cortos bajo paraguas por City Center.",
+      "keywords": [
+        "Lilongwe",
+        "Lilongüe",
+        "capital",
+        "Old Town",
+        "City Center",
+        "Kanengo",
+        "mercado"
+      ]
+    },
+    {
+      "id": "mzuzu",
+      "nombre": "Mzuzu",
+      "tipo": "ciudad",
+      "region": "Norte",
+      "descripcion": "Segunda ciudad del país y punto de partida hacia el norte, más relajada que Lilongüe. Base para explorar las montañas de Nyika, el lago en Nkhata Bay y reservas naturales del norte.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Lilongüe en autobús (4-5 horas, 10-12 EUR) o desde Nkhata Bay en minibús (2 horas, 6 EUR).",
+      "donde_dormir": {
+        "mochilero": "hostales básicos cerca del mercado, 7-10 EUR/noche",
+        "medio": "guesthouses familiares, 18-28 EUR/noche",
+        "comfort": "hoteles con servicios, 40-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Mzuzu para compras auténticas (gratis, regateo)",
+        "Paseo por el centro de la ciudad y parques (gratis)",
+        "Visitar fábrica local de cerveza o artesanía (8-12 EUR)",
+        "Excursión corta a Viphya Plateau para senderismo (gratis)"
+      ],
+      "donde_comer": "Comida callejera, nsima local, restaurantes básicos. Rango 2-6 EUR. La comida en restaurantes para turistas es escasa.",
+      "consejo_local": "Mzuzu es mucho más barato que Lilongüe para comer y alojarse. Es el mejor sitio para cambiar dinero antes de ir al norte remoto.",
+      "plan_b_lluvia": "Mercado cubierto, cafés locales, descanso.",
+      "keywords": [
+        "Mzuzu",
+        "norte",
+        "segunda ciudad",
+        "Viphya",
+        "mercado"
+      ]
+    },
+    {
+      "id": "nyika-plateau",
+      "nombre": "Meseta de Nyika",
+      "tipo": "montaña",
+      "region": "Norte",
+      "descripcion": "Parque nacional de alta montaña (2.400 metros) con paisajes de prado alpino, fauna salvaje y vistas espectaculares del valle. Destino para senderistas que buscan naturaleza virgen con pocos turistas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "desde Mzuzu en minibús hacia Rumphi (2 horas, 6 EUR), luego en 4x4 al parque. Se requiere permiso y guía (20-30 EUR total). Mejor contratar desde Mzuzu (tour 50-80 EUR con todo incluido).",
+      "donde_dormir": {
+        "mochilero": "campings en el parque con tiendas básicas, 8-15 EUR/noche",
+        "medio": "bungalows rústicos del parque, 20-30 EUR/noche",
+        "comfort": "no hay opciones de lujo; mejores opciones en Rumphi (30-40 EUR)"
+      },
+      "que_hacer": [
+        "Senderismo a Jalawe Peak (2.600 m, gratis con entrada)",
+        "Caminatas por el prado alpino y observación de fauna (gratis)",
+        "Camping bajo las estrellas (gratis si tienes tienda)",
+        "Fotografía de paisaje de montaña (gratis)",
+        "Visitas a poblados locales e interacción con pastores (gratis)"
+      ],
+      "donde_comer": "Lleva comida desde Mzuzu. En el parque hay refugios básicos con comida local simple (4-6 EUR). Agua del arroyo es segura.",
+      "consejo_local": "El clima cambia rápidamente en la montaña; lleva capas. Los guías locales son imprescindibles y hacen la experiencia mucho mejor. Junio es el mejor mes: menos lluvia y vistas claras.",
+      "plan_b_lluvia": "Difícil: el parque se vuelve borroso. Mejor bajar a Rumphi y intentar otro día.",
+      "keywords": [
+        "Nyika",
+        "montaña",
+        "parque nacional",
+        "Jalawe Peak",
+        "senderismo",
+        "alpino"
+      ]
+    },
+    {
+      "id": "liwonde",
+      "nombre": "Parque Nacional Liwonde",
+      "tipo": "naturaleza",
+      "region": "Centro",
+      "descripcion": "Principal reserva de fauna del país con elefantes, hipopótamos, antílopes y abundancia de aves a orillas del río Shire. Safari accesible a presupuesto medio con buenos avistamientos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Lilongüe en autobús a Mangochi (4 horas, 8 EUR), luego en minibús a Liwonde (1 hora, 4 EUR). También directo en coche desde Lilongüe (150 km, 5-6 horas).",
+      "donde_dormir": {
+        "mochilero": "campings básicos del parque, 10-15 EUR/noche",
+        "medio": "lodges modestos con vistas al río, 30-50 EUR/noche",
+        "comfort": "lodges de clase media-alta, 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari guiado en 4x4 (15-25 EUR por persona)",
+        "Crucero por el río Shire para hipopótamos y aves (12-18 EUR)",
+        "Senderismo a pie con guía (10-15 EUR)",
+        "Avistamiento de pájaros (gratis con entrada al parque, 6 EUR/día)",
+        "Paseos nocturnos para fauna nocturna (10 EUR)"
+      ],
+      "donde_comer": "Comida en los lodges (8-12 EUR). Los alojamientos básicos ofrecen comida simple (4-5 EUR). Lleva snacks de Lilongüe.",
+      "consejo_local": "Junio-julio es mejor para elefantes (agua escasa). Enero-febrero hay más verde pero más mosquitos. Los guías del parque son muy buenos; negocia directamente en lugar de tours organizados desde Lilongüe (más caros).",
+      "plan_b_lluvia": "Los safaris funcionan igual. El río está más lleno, mejores avistamientos de hipopótamos. Las únicas opciones cubiertas son el río y los lodges.",
+      "keywords": [
+        "Liwonde",
+        "safari",
+        "elefantes",
+        "hipopótamos",
+        "río Shire",
+        "fauna",
+        "aves"
+      ]
+    },
+    {
+      "id": "blantyre",
+      "nombre": "Blantyre",
+      "tipo": "ciudad",
+      "region": "Sur",
+      "descripcion": "Tercera ciudad más grande, puerta de entrada desde Mozambique y Zimbabwe. Menos turística que Lilongüe pero con buena infraestructura, mercados auténticos y punto de partida hacia el sur.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "vuelos desde Johannesburgo o Lilongüe. Autobús desde Lilongüe (4 horas, 8 EUR), desde Harare/Zimbabwe (8 horas, 20 EUR) o desde Mozambique (Tete, 6 horas, 15 EUR).",
+      "donde_dormir": {
+        "mochilero": "hostales en Limbe, 8-12 EUR/noche",
+        "medio": "guesthouses, 22-35 EUR/noche",
+        "comfort": "hoteles como Kumbali Lodge, 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Blantyre (gratis, regateo)",
+        "Museo de Blantyre y galería de arte (3 EUR)",
+        "Paseos por las colinas cercanas (gratis)",
+        "Visita al sitio histórico de Mandala (1 EUR)",
+        "Exploración de barrios locales sin tours (gratis)"
+      ],
+      "donde_comer": "Comida callejera excelente, restaurantes variados en Limbe. Rango 3-10 EUR. Nsima, chambo, relish de verduras.",
+      "consejo_local": "Blantyre suena peligrosa pero no lo es si te mueves de día y evitas ciertas áreas de noche. Es más barata y auténtica que Lilongüe. La mayoría de viajeros apenas se paran; es su pérdida.",
+      "plan_b_lluvia": "Mercados cubiertos, museos, cafés, compras.",
+      "keywords": [
+        "Blantyre",
+        "sur",
+        "Limbe",
+        "mercado",
+        "tercera ciudad",
+        "Mozambique"
+      ]
+    },
+    {
+      "id": "nkhata-bay",
+      "nombre": "Nkhata Bay",
+      "tipo": "playa",
+      "region": "Norte",
+      "descripcion": "Pueblo pintoresco en el lago del norte, más tranquilo y auténtico que Cape Maclear. Pequeño puerto de pescadores con vista a las montañas, playas vírgenes y ambiente relajado.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Mzuzu en minibús (2 horas, 6 EUR) o desde Cape Maclear en lancha lenta (8-12 horas, 20 EUR, solo en buen tiempo).",
+      "donde_dormir": {
+        "mochilero": "hostales junto al agua, 7-11 EUR/noche",
+        "medio": "bungalows de madera, 20-35 EUR/noche",
+        "comfort": "resorts pequeños con vistas, 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel desde la playa (gratis)",
+        "Paseos en bote tradicional (5-10 EUR)",
+        "Senderismo a Viphya Plateau (día completo, 15-20 EUR con guía)",
+        "Visita a pueblos locales de pescadores (gratis)",
+        "Pesca nocturna con luces (10 EUR)"
+      ],
+      "donde_comer": "Chambo fresco a la parrilla (4 EUR), nsima, restaurantes en los hostales. Rango 3-8 EUR. El Nsima House es famoso.",
+      "consejo_local": "Nkhata Bay es el mejor lugar para conocer a otros mochileros. Los hostales aquí tienen ambiente social fuerte. Es menos turístico y más barato que Cape Maclear pero igual de hermoso.",
+      "plan_b_lluvia": "Las playas no son ideales pero el pueblo es pequeño y sociable. Juegos, lectura, conversación con lugareños.",
+      "keywords": [
+        "Nkhata Bay",
+        "norte",
+        "lago",
+        "pescadores",
+        "tranquilo",
+        "playas"
+      ]
+    },
+    {
+      "id": "cape-maclear",
+      "nombre": "Cape Maclear",
+      "tipo": "playa",
+      "region": "Centro",
+      "descripcion": "Pueblo turístico más popular en el lago con playas hermosas, snorkel excepcional y buena infraestructura de hostales. Punto de concentración de mochileros internacionales; ideal para socializar.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Lilongüe en autobús a Mangochi (4 horas, 8 EUR), luego minibús local (1 hora, 3 EUR). Total 7-8 EUR desde capital.",
+      "donde_dormir": {
+        "mochilero": "hostales con áreas comunes, 7-12 EUR/noche",
+        "medio": "bungalows y chalets, 25-45 EUR/noche",
+        "comfort": "resorts frente al agua, 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en la costa (gratis o 5 EUR con tour guiado)",
+        "Tours a isla de Mumbo, reserva marina (15-20 EUR)",
+        "Clases de buceo PADI (150-200 EUR certificado)",
+        "Paddleboard y kayak (8-12 EUR/hora)",
+        "Paseos en bote al atardecer (10 EUR)"
+      ],
+      "donde_comer": "Restaurantes turísticos pero buenos. Chambo, nsima, opciones vegetarianas. Rango 5-12 EUR. Calidad alta para Malaui.",
+      "consejo_local": "Julio-agosto es alta temporada y muy concurrido; febrero-abril está vacío pero es húmedo. Las tarifas suben 30-40% en picos. El snorkel aquí es realmente excepcional.",
+      "plan_b_lluvia": "Buceo bajo agua, actividades cubiertas en hostales, videojuegos, piscina.",
+      "keywords": [
+        "Cape Maclear",
+        "playas",
+        "snorkel",
+        "buceo",
+        "Mumbo",
+        "turístico",
+        "mochileros"
+      ]
+    },
+    {
+      "id": "mulanje-mountain",
+      "nombre": "Montaña Mulanje",
+      "tipo": "montaña",
+      "region": "Sur",
+      "descripcion": "Macizo montañoso de 3.000+ metros, conocido como el 'Matterhorn africano'. Destino para senderistas experimentados con vistas dramáticas, mesetas alpinas y escaladas desafiantes.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "desde Blantyre en autobús a Mulanje pueblo (2 horas, 5 EUR), luego a pie o en taxi a la entrada de montaña (1 hora, 3 EUR). Mejor contratar guía desde Blantyre (40-60 EUR).",
+      "donde_dormir": {
+        "mochilero": "campings en la montaña o refugios básicos, 10-15 EUR/noche",
+        "medio": "guesthouses en pueblo de Mulanje, 18-28 EUR/noche",
+        "comfort": "no hay; mejor Blantyre y viaje diario"
+      },
+      "que_hacer": [
+        "Senderismo a Sapitwa Peak, 3.002 m (gratis con entrada, 6 EUR/día)",
+        "Trekking multiday por mesetas (gratis con entrada)",
+        "Escalada técnica Chambe Peak (guía obligatorio, 20 EUR)",
+        "Observación de flora alpina única (gratis)",
+        "Fotografía de vistas panorámicas (gratis)"
+      ],
+      "donde_comer": "Lleva comida. Refugios ofrecen nsima básica (3-4 EUR). Agua de montaña segura.",
+      "consejo_local": "Requiere buen nivel de senderismo y acclimatación. Los guías son obligatorios y imprescindibles. Junio es mejor: menos nubes. Es más salvaje y menos turístico que Nyika.",
+      "plan_b_lluvia": "Peligroso en lluvia fuerte; baja a pueblo y espera o reschedule. Las nubes borran completamente la montaña.",
+      "keywords": [
+        "Mulanje",
+        "montaña",
+        "Sapitwa Peak",
+        "escalada",
+        "3000m",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "dedza",
+      "nombre": "Dedza",
+      "tipo": "rural",
+      "region": "Centro-Sur",
+      "descripcion": "Pueblo tradicional rural en las tierras altas centrales, punto de parada entre Lilongüe y Blantyre. Acceso a paisajes rurales auténticos, cerámica local y vida campesina.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "desde Lilongüe en autobús (3 horas, 6 EUR) o desde Blantyre (3 horas, 6 EUR). Parada lógica en cualquier ruta norte-sur.",
+      "donde_dormir": {
+        "mochilero": "guesthouses muy básicas, 6-9 EUR/noche",
+        "medio": "guesthouses modestas, 15-22 EUR/noche",
+        "comfort": "no hay; mejor no dormir aquí"
+      },
+      "que_hacer": [
+        "Visita a talleres de cerámica tradicional (gratis, compras 5-15 EUR)",
+        "Senderismo a Dedza Peak (2.157 m, gratis)",
+        "Mercado local y vida rural (gratis)",
+        "Fotografía de paisajes y gente (gratis)",
+        "Comida en casas de familia (negociar, 5-8 EUR)"
+      ],
+      "donde_comer": "Comida casera rural muy auténtica. Nsima, relish de verduras, no hay restaurantes formales. 2-4 EUR.",
+      "consejo_local": "No es un destino turístico; es un sitio real donde los mochileros apenas se paran. Eso lo hace valioso. Los alojamientos son básicos pero limpios.",
+      "plan_b_lluvia": "Cerámica bajo techo, mercado, comer en casa de locales.",
+      "keywords": [
+        "Dedza",
+        "rural",
+        "cerámica",
+        "agricultura",
+        "autónomo",
+        "highlands"
+      ]
+    }
+  ]
+}

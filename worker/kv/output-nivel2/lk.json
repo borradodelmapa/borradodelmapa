@@ -1,0 +1,327 @@
+{
+  "pais": "Sri Lanka",
+  "codigo": "lk",
+  "destinos": [
+    {
+      "id": "colombo",
+      "nombre": "Colombo",
+      "tipo": "ciudad",
+      "region": "Occidente",
+      "descripcion": "Capital y principal puerta de entrada de Sri Lanka, mezcla de arquitectura colonial británica con modernidad. Centro económico con vida nocturna, gastronomía variada y museos. Punto de partida lógico para explorar el resto del país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Aeropuerto Internacional de Bandaranaike (40 km): autobús/tren (2-3h, 3-8 EUR) o tuk-tuk/taxi (1h, 20-30 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Pettah o Fort: 15-25 EUR/noche",
+        "medio": "Hotel 3* en Galle Face o Mount Lavinia: 40-70 EUR/noche",
+        "comfort": "Hotel 4-5* frente al mar: 100-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por el Galle Face Green y costa (gratis)",
+        "Museo Nacional de Colombo (3 EUR)",
+        "Templo Gangaramaya (5 EUR)",
+        "Mercado de Pettah (gratis, compras)",
+        "Barrio de Mount Lavinia (tren histórico desde Colombo Fort)"
+      ],
+      "donde_comer": "Curry sri lankés en Pettah (4-6 EUR), seafood en Mount Lavinia (15-25 EUR), hoppers y kottu roti en cualquier parte (2-4 EUR)",
+      "consejo_local": "Los hoteles 5* de Colombo tienen playas privadas con acceso libre para huéspedes; algunos permiten day pass por 10-15 EUR",
+      "plan_b_lluvia": "Museo Nacional, templos interiores, compras en Colombo City Centre, cafés tradicionales",
+      "keywords": [
+        "Colombo City",
+        "Fort",
+        "Galle Face",
+        "Pettah",
+        "Mount Lavinia",
+        "capital"
+      ]
+    },
+    {
+      "id": "kandy",
+      "nombre": "Kandy",
+      "tipo": "montaña",
+      "region": "Centro",
+      "descripcion": "Segunda ciudad más importante, ubicada a 500m de altitud en las montañas centrales. Corazón cultural y espiritual con el famoso Templo de la Reliquia del Diente y el lago pintoresco. Base perfecta para explorar plantaciones de té y naturaleza.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Desde Colombo: tren (5-6h, 10 EUR clase turista, vistas espectaculares) o autobús (4-5h, 6-8 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en el lago o ciudad vieja: 12-20 EUR/noche",
+        "medio": "Hotel 3* con vistas al lago: 35-60 EUR/noche",
+        "comfort": "Resort en las colinas: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Templo de la Reliquia del Diente - Sri Dalada Maligawa (15 EUR)",
+        "Paseo alrededor del lago Kandy (gratis)",
+        "Espectáculo de danza tradicional (10-15 EUR)",
+        "Jardín Botánico de Peradeniya (5 EUR)",
+        "Taller de cocina sri lankesa (12-20 EUR)"
+      ],
+      "donde_comer": "Curry tradicional en restaurantes locales (5-8 EUR), seafood en el lago (12-20 EUR), buffet de curry en guesthouses (8-12 EUR)",
+      "consejo_local": "La ceremonia de puja en el templo al atardecer es más auténtica y menos abarrotada que a primera hora; entra 30 minutos antes",
+      "plan_b_lluvia": "Templo cubierto, jardín botánico (está bajo techo parcialmente), museos locales, cafés con vistas al lago",
+      "keywords": [
+        "Kandy City",
+        "Temple of the Tooth",
+        "Peradeniya",
+        "Kandy Lake",
+        "highlands"
+      ]
+    },
+    {
+      "id": "sigiriya",
+      "nombre": "Sigiriya",
+      "tipo": "histórico",
+      "region": "Centro-Norte",
+      "descripcion": "Fortaleza del siglo V tallada en una roca de 200m con vistas panorámicas espectaculares. Patrimonio de la UNESCO con frescos antiguos, jardines y una experiencia de trekking moderado. Imprescindible para historia y fotografía.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Kandy: tren o autobús a Dambulla (2-3h, 5 EUR) + tuk-tuk a Sigiriya (30 min, 8 EUR); o tour desde Kandy (8-12 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Dambulla o pueblo de Sigiriya: 14-22 EUR/noche",
+        "medio": "Hotel 3* en el área: 40-70 EUR/noche",
+        "comfort": "Resort temático: 90-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Subida a Sigiriya Rock (37 EUR entrada)",
+        "Templo Cueva de Dambulla (15 minutos en tuk-tuk, 5 EUR)",
+        "Jardines antiguos y piscina del rey (incluido en entrada)",
+        "Mirador al amanecer (madrugar, mejor luz para fotos)"
+      ],
+      "donde_comer": "Comida sri lankesa en restaurantes cercanos (6-10 EUR), arroz y curry en pequeños locales (4-6 EUR)",
+      "consejo_local": "Sube a primera hora (antes de las 7:30) para evitar multitudes y calor; el amanecer desde la cima es memorable",
+      "plan_b_lluvia": "La subida es posible con lluvia (no es un trekking técnico); lleva buen calzado. El Templo Cueva de Dambulla es totalmente cubierto",
+      "keywords": [
+        "Sigiriya Rock",
+        "Lion Rock",
+        "Dambulla",
+        "fortaleza antigua",
+        "UNESCO"
+      ]
+    },
+    {
+      "id": "nuwara-eliya",
+      "nombre": "Nuwara Eliya",
+      "tipo": "montaña",
+      "region": "Centro",
+      "descripcion": "Estación de montaña a 1900m con clima fresco, arquitectura victoriana y plantaciones de té en los alrededores. Escape perfecto del calor, con trekking a Lagos Gregory y Pidurutalagala, y visitas a fábricas de té.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a marzo",
+      "como_llegar": "Desde Kandy: tren a Nanu Oya (4h, 8 EUR) + tuk-tuk a Nuwara Eliya (30 min, 6-8 EUR); o autobús directo (4-5h, 7 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse victoriana: 14-24 EUR/noche",
+        "medio": "Hotel colonial restaurado: 45-80 EUR/noche",
+        "comfort": "Resort de lujo: 120-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour por plantaciones de té y fábrica (10-15 EUR con degustación)",
+        "Trekking a Pidurutalagala (pico más alto, 2243m, gratis, 4-5h)",
+        "Paseo alrededor del Lago Gregory (gratis)",
+        "Golf en el Royal Golf Club (40-60 EUR si tienes licencia)"
+      ],
+      "donde_comer": "Afternoon tea inglés (8-12 EUR), comida sri lankesa con especias suaves (6-10 EUR), pan fresco en panadería local",
+      "consejo_local": "Lleva abrigo: por la noche baja a 10-15°C; es la única parte de Sri Lanka donde necesitarás ropa de abrigo genuinamente",
+      "plan_b_lluvia": "Visita a fábricas de té (cubiertas), hotel con chimenea, cafés locales; la niebla añade atmósfera",
+      "keywords": [
+        "Nuwara Eliya",
+        "Little England",
+        "plantaciones de te",
+        "Gregory Lake",
+        "highlands"
+      ]
+    },
+    {
+      "id": "ella",
+      "nombre": "Ella",
+      "tipo": "montaña",
+      "region": "Centro",
+      "descripcion": "Pueblo de montaña en los highlands con trekking espectacular, vistas de cascadas y el famoso tren turístico. Pequeño, bohemio y perfecto para mochileros, con acceso a Ravana Falls y Nine Arch Bridge.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a abril, agosto a septiembre",
+      "como_llegar": "Desde Nuwara Eliya: tren pintoresco (3-4h, 5 EUR, una de las mejores vías de tren del mundo) o autobús (3h, 5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Backpackers o guesthouse pequeña: 10-18 EUR/noche",
+        "medio": "Guesthouse con vista: 25-45 EUR/noche",
+        "comfort": "Resort de montaña: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a Little Adam's Peak (1.5h, gratis, vistas de 360°)",
+        "Ravana Falls (30 min caminata, gratis)",
+        "Nine Arch Bridge (tren histórico cruza a las 9:55 y 16:05, gratis verlo pasar)",
+        "Tren a Demodara y vuelta (ruta circular, 8 EUR)",
+        "Senderismo al páramo de Ella Gap (gratis)"
+      ],
+      "donde_comer": "Comida mochilera internacional (4-7 EUR), curry local (5-8 EUR), pizza en cafés occidentalizados (6-10 EUR)",
+      "consejo_local": "Despiértate a las 5:30 para el trekking a Little Adam's Peak; tienes la cima solo para ti hasta las 7am",
+      "plan_b_lluvia": "Tren a Demodara, explorar el pueblo, cafés locales; la niebla crea paisajes dramáticos para fotografía",
+      "keywords": [
+        "Ella",
+        "Ravana Falls",
+        "Nine Arch Bridge",
+        "Little Adam's Peak",
+        "backpacker"
+      ]
+    },
+    {
+      "id": "mirissa",
+      "nombre": "Mirissa",
+      "tipo": "playa",
+      "region": "Sur",
+      "descripcion": "Playa de arena blanca en la costa sur con avistamiento de ballenas (ballenas azules de junio a octubre), vida nocturna relajada y resorts boutique. Alternativa tranquila a Unawatuna, con buena mezcla de relax y actividad.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril para el clima; junio a octubre para ballenas",
+      "como_llegar": "Desde Colombo: tren a Matara (3-4h, 8 EUR) + tuk-tuk a Mirissa (30 min, 5 EUR); o autobús directo (5h, 8 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse cerca de la playa: 12-22 EUR/noche",
+        "medio": "Resort boutique: 40-75 EUR/noche",
+        "comfort": "Resort de lujo con piscina: 100-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Avistamiento de ballenas en barco (40-60 EUR, 4-5h, mejor junio-octubre)",
+        "Playa y baño (gratis)",
+        "Snorkel en el arrecife cercano (20-30 EUR)",
+        "Visita a Matara Mirissa por la carretera costera (gratis, vistas)",
+        "Cena en la playa al atardecer (restaurante beach club, 15-25 EUR)"
+      ],
+      "donde_comer": "Seafood fresco (15-30 EUR), curry en locales pequeños (5-8 EUR), desayuno inglés en cafés (6-10 EUR)",
+      "consejo_local": "Los tours de ballenas salen muy temprano (5:30am); contrata directamente en la playa en lugar de tu hotel (mitad de precio)",
+      "plan_b_lluvia": "Playa bajo sombrilla, spa, películas en guesthouses, resguardo en restaurantes cubiertos",
+      "keywords": [
+        "Mirissa",
+        "Mirissa Beach",
+        "whale watching",
+        "playa sur",
+        "Matara"
+      ]
+    },
+    {
+      "id": "unawatuna",
+      "nombre": "Unawatuna",
+      "tipo": "playa",
+      "region": "Sur",
+      "descripcion": "Bahía protegida con playa tranquila, fuerte histórico (Galle Fort) y arrecife de coral cercano. Combina historia, playa relajada y snorkel; más turístico que Mirissa pero con más infraestructura y vida nocturna.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Colombo: tren a Galle (2.5-3h, 8 EUR, vistas costeras espectaculares) + tuk-tuk a Unawatuna (10 min, 3 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en la bahía: 12-20 EUR/noche",
+        "medio": "Hotel 3* con vista al mar: 35-60 EUR/noche",
+        "comfort": "Resort de playa: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Galle Fort (Patrimonio UNESCO, 15 EUR, 1-2h paseo)",
+        "Snorkel en el arrecife (gratis desde la playa o 25 EUR con guía)",
+        "Playa de arena y baño (gratis)",
+        "Paseo por el fuerte al atardecer (incluido en entrada)",
+        "Paseo costero de Unawatuna a Jungle Beach (1.5h, gratis)"
+      ],
+      "donde_comer": "Seafood en restaurants playa (18-30 EUR), curry en Galle town (6-10 EUR), smoothies beach (3-5 EUR)",
+      "consejo_local": "El snorkel es mejor con marea baja y poco después del amanecer; los peces de arrecife están más activos",
+      "plan_b_lluvia": "Galle Fort está cubierto en su mayoría; museos, tiendas de souvenirs, cafés bajo techo",
+      "keywords": [
+        "Unawatuna",
+        "Galle",
+        "Galle Fort",
+        "bahia protegida",
+        "snorkel",
+        "UNESCO"
+      ]
+    },
+    {
+      "id": "arugam-bay",
+      "nombre": "Arugam Bay",
+      "tipo": "playa",
+      "region": "Este",
+      "descripcion": "Playa de surfistas en la costa oriental, famosa por olas consistentes y ambiente relajado de pueblito. Mucho menos turístico que el sur, con estuario, laguna y vida salvaje cercana. Para mochileros aventureros.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a septiembre (mejor oleaje)",
+      "como_llegar": "Desde Colombo: autobús a Ampara (7-8h, 12 EUR) + tuk-tuk a Arugam Bay (45 min, 8 EUR); poco directo pero vale la pena",
+      "donde_dormir": {
+        "mochilero": "Guesthouse/hostal: 10-18 EUR/noche",
+        "medio": "Small hotel: 25-45 EUR/noche",
+        "comfort": "Resort surfer: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Surf (tablas de alquiler 10 EUR/día)",
+        "Laguna de Arugam (kayak 15 EUR/h, observación de aves)",
+        "Playa relax (gratis)",
+        "Senderismo a Pottuvil Lagoon (gratis, guía local recomendado 15 EUR)"
+      ],
+      "donde_comer": "Curry pescado (8-12 EUR), raciones pequeñas en comedores locales (4-6 EUR), fruta fresca",
+      "consejo_local": "Es un pueblo muy pequeño; trae efectivo en rupias, no hay cajeros 24/7; el mejor oleaje es temprano por la mañana",
+      "plan_b_lluvia": "Laguna en kayak (con lluvia es mejor, menos calor), explorar el pueblo, descanso",
+      "keywords": [
+        "Arugam Bay",
+        "Pottuvil",
+        "surf",
+        "laguna",
+        "costa este",
+        "relajado"
+      ]
+    },
+    {
+      "id": "polonnaruwa",
+      "nombre": "Polonnaruwa",
+      "tipo": "histórico",
+      "region": "Centro-Norte",
+      "descripcion": "Antigua capital medieval con restos arqueológicos de templos, estupas y palacios bien conservados. Patrimonio UNESCO, menos abarrotada que Sigiriya, con cicloturismo entre ruinas y paisaje más abierto y árido.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Dambulla: tuk-tuk directo (1h, 10 EUR) o autobús (1.5h, 5 EUR); desde Kandy: autobús (3h, 8 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en pueblo: 12-20 EUR/noche",
+        "medio": "Hotel 3*: 30-50 EUR/noche",
+        "comfort": "Resort temático: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido arqueológico en bicicleta alquilada (alquiler 5 EUR/día, entrada sitio 37 EUR)",
+        "Templo de Gal Viharaya (incluido en entrada, Buda reclinado de 14m)",
+        "Palacio Real y estanques antiguos (incluido)",
+        "Mirador en Rankoth Vehera (estupa blanca, vistas)",
+        "Tour guiado especializado (25-35 EUR/grupo pequeño)"
+      ],
+      "donde_comer": "Comida simple en el pueblo (4-7 EUR), picnic llevado desde Dambulla",
+      "consejo_local": "Alquila bicicleta y recorre el sitio a tu ritmo; es enorme y la bicicleta permite cubrir más en menos tiempo sin aglomeración",
+      "plan_b_lluvia": "Recorrido mismo es posible; lleva impermeable; menos turistas lluvia",
+      "keywords": [
+        "Polonnaruwa",
+        "Pollonaruwa",
+        "ruinas antiguas",
+        "UNESCO",
+        "capital medieval",
+        "cicloturismo"
+      ]
+    },
+    {
+      "id": "horton-plains",
+      "nombre": "Horton Plains",
+      "tipo": "naturaleza",
+      "region": "Centro",
+      "descripcion": "Páramo de altitud (2300m) con trekking circular de 9.5km por bosque nublado, cascadas y acantilados de World's End. Ecosistema único de Sri Lanka, flora y fauna endémica, y vistas espectaculares.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a marzo, agosto a septiembre",
+      "como_llegar": "Desde Nuwara Eliya: tuk-tuk a puerta de entrada (1h, 10 EUR); o desde Ohiya station en tren (2.5h, 8 EUR) + tuk-tuk",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Nuwara Eliya (base): 14-24 EUR/noche",
+        "medio": "Hotel 3* en Nuwara Eliya: 45-80 EUR/noche",
+        "comfort": "Resort de montaña: 120-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking circular World's End (9.5km, 3-4h, 37 EUR entrada parque + guía 20-30 EUR recomendado)",
+        "Baker's Falls (cascada dentro del trekking)",
+        "Observation Point (mirador)",
+        "Fotografía de flora endémica"
+      ],
+      "donde_comer": "Desayuno/almuerzo en lodge entrada parque (8-12 EUR), picnic casero recomendado",
+      "consejo_local": "Entra antes de las 7am: la niebla desaparece a media mañana y tienes vistas claras; lleva impermeable y abrigo",
+      "plan_b_lluvia": "La niebla es espesa en lluvia (a veces niebla es norma); aún es bonito pero visibilidad limitada",
+      "keywords": [
+        "Horton Plains",
+        "World's End",
+        "páramo",
+        "trekking",
+        "Baker's Falls",
+        "naturaleza"
+      ]
+    }
+  ]
+}

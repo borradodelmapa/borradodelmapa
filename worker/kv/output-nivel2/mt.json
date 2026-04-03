@@ -1,0 +1,335 @@
+{
+  "pais": "Malta",
+  "codigo": "mt",
+  "destinos": [
+    {
+      "id": "valletta",
+      "nombre": "Valletta",
+      "tipo": "histórico",
+      "region": "Malta central",
+      "descripcion": "Capital de Malta, Patrimonio de la UNESCO con arquitectura barroca, calles estrechas y fortificaciones del siglo XVI. Centro cultural y administrativo donde convergen historia mediterránea, museos de calidad y vistas al Gran Puerto. Punto de entrada lógico para entender Malta.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "desde Aeropuerto Internacional (8 km): autobús línea 2 o taxi (20 EUR), 30 minutos",
+      "donde_dormir": {
+        "mochilero": "Hostal en Valletta o Sliema cercano: 20-30 EUR/noche",
+        "medio": "Hotel 3 estrellas en Valletta: 50-80 EUR/noche",
+        "comfort": "Boutique hotel o palacio convertido: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasear calles de Upper Barrakka (gratis)",
+        "Catedral Metropolitana (5 EUR)",
+        "Museo Nacional de Arqueología (8 EUR)",
+        "Vistas desde The Saluting Battery (7 EUR)",
+        "Mirador de Lower Barrakka (gratis)"
+      ],
+      "donde_comer": "Arancini, rabbit stew (coniglio), pasta. Restaurantes en Republic Street o Strait Street: 8-15 EUR plato principal. Cafés baratos en callejones interiores.",
+      "consejo_local": "Sube a Upper Barrakka al atardecer para ver cañonazos de mediodia si hay ceremonias. Los lunes y jueves hay menos turistas masivos.",
+      "plan_b_lluvia": "Museos (Arqueología, Bellas Artes), iglesia de St. John, galerías de arte en callejones",
+      "keywords": [
+        "capital malta",
+        "valleta",
+        "valletta harbour",
+        "barrakka gardens",
+        "catedral",
+        "puerto grande",
+        "patrimonio unesco"
+      ]
+    },
+    {
+      "id": "mdina",
+      "nombre": "Mdina",
+      "tipo": "histórico",
+      "region": "Malta central",
+      "descripcion": "Antigua capital amurallada en la colina, conocida como 'Ciudad del Silencio' por sus calles tranquilas y atmosféricas. Arquitectura medieval intacta, palacios nobles y vistas panorámicas de toda la isla. Experiencia de viaje en el tiempo sin multitudes si visitas fuera de pico.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "desde Valletta: autobús línea 50/51 (2 EUR), 30 minutos. Alternativa: desde Sliema en auto alquilado",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Rabat (pueblo adyacente): 25-35 EUR/noche",
+        "medio": "Hotel boutique en Mdina: 60-90 EUR/noche",
+        "comfort": "Palazzo histórico convertido en hotel: 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasear murallas y calles medievales (gratis)",
+        "Catedral Metropolitana de Mdina (5 EUR)",
+        "Palacio Falson (8 EUR)",
+        "Mirador de Bastion (gratis)",
+        "Catacombs de Rabat (7 EUR)"
+      ],
+      "donde_comer": "Pastizzi (empanadas locales, 1-2 EUR), comida en pequeños restaurantes tradicionales: 10-14 EUR. Terraza con vistas a la llanura: 15-20 EUR.",
+      "consejo_local": "Entra por la Puerta Vilhena al anochecer cuando los turistas se van. El pueblo está casi vacío a las 19:00 y es mágico. Evita mediodías de verano.",
+      "plan_b_lluvia": "Iglesia Parroquial cubierta, Museo de Historia Natural, tiendas de souvenirs en calles techadas",
+      "keywords": [
+        "mdina",
+        "ciudad silencio",
+        "silent city",
+        "rabat",
+        "capital antigua",
+        "arquitectura medieval"
+      ]
+    },
+    {
+      "id": "comino",
+      "nombre": "Isla de Comino (Blue Lagoon)",
+      "tipo": "isla",
+      "region": "norte de Malta",
+      "descripcion": "Isla pequeña despoblada con playas turquesas intactas y agua cristalina. Punto de parada para snorkel y baño en aguas claras, accesible por ferry desde Cirkewwa. Ideal para combinar con isla de Gozo en el mismo día.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "desde Cirkewwa (norte de Malta): ferry (5 EUR ida/vuelta), 15 minutos. Autobús desde Valletta línea 301 (2 EUR), 45 minutos hasta Cirkewwa",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento en Comino; hospedarse en Mellieha o Cirkewwa: 30-40 EUR/noche",
+        "medio": "Hotel en Mellieha cercano: 60-90 EUR/noche",
+        "comfort": "Resort en Mellieha: 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en Blue Lagoon (gratis acceso, 5-10 EUR hamacas)",
+        "Snorkel (gratis, alquilar equipo 15 EUR)",
+        "Santa Maria Caves (acceso gratis, visita en barco 10 EUR)",
+        "Playa de Lantern Point (gratis)",
+        "Senderismo por la isla (gratis)"
+      ],
+      "donde_comer": "Kioscos en playa: 10-15 EUR. Llevar picnic es más economico. Restaurantes en Mellieha o Cirkewwa para cena.",
+      "consejo_local": "Lleva dinero en efectivo para los kioscos y hamacas (no hay cajeros). Ir antes de las 10:00 o después de las 16:00 para evitar multitudes. Julio-agosto es caótico.",
+      "plan_b_lluvia": "Día de lluvia no es viable para Comino; usar ese día para Mdina o Valletta",
+      "keywords": [
+        "blue lagoon",
+        "comino",
+        "kemmuna",
+        "playas malta",
+        "snorkel malta",
+        "isla turquesa"
+      ]
+    },
+    {
+      "id": "gozo",
+      "nombre": "Isla de Gozo",
+      "tipo": "isla",
+      "region": "noroeste de Malta",
+      "descripcion": "Isla rural más tranquila que Malta, con pueblos auténticos, acantilados espectaculares y playas desconocidas. Atmosfera más lenta, perfecta para desconectar y explorar naturaleza sin masificación turística.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "desde Cirkewwa: ferry (10 EUR ida/vuelta), 25 minutos. Alquiler auto en Gozo recomendado (35-50 EUR/día)",
+      "donde_dormir": {
+        "mochilero": "Hostal/guesthouse en Victoria o Xlendi: 28-40 EUR/noche",
+        "medio": "Hotel rural en Victoria o Xaghra: 65-95 EUR/noche",
+        "comfort": "Resort boutique en Xlendi o Dwejra: 130-190 EUR/noche"
+      },
+      "que_hacer": [
+        "Acantilados de Dwejra y Azure Window (gratis)",
+        "Santuario de Ta' Pinu iglesia (gratis)",
+        "Senderismo en rutas costeras (gratis)",
+        "Playa Ramla Bay (gratis, 2 EUR hamacas)",
+        "Cueva Calypso (5 EUR entrada)"
+      ],
+      "donde_comer": "Coniglio (conejo local), queso Gozo, vino local. Restaurantes en Victoria o Xlendi: 12-18 EUR. Mercado de Victoria para picnic barato.",
+      "consejo_local": "Alquila auto o moto; el transporte público es lento. El pueblo de Xaghra tiene los mejores restaurantes a mejores precios. Dwejra al atardecer sin turistas es magnífico.",
+      "plan_b_lluvia": "Iglesia de Ta' Pinu, pueblos interiores (Victoria, Xaghra), tiendas de artesanía local",
+      "keywords": [
+        "gozo",
+        "ghawdex",
+        "isla gozo",
+        "dwejra",
+        "xlendi",
+        "ramla bay",
+        "azure window"
+      ]
+    },
+    {
+      "id": "sliema",
+      "nombre": "Sliema y Paceville",
+      "tipo": "ciudad",
+      "region": "norte de Malta",
+      "descripcion": "Centro turístico y de compras moderno con paseo marítimo, playas rocosas y vida nocturna vibrante. Base práctica cerca de Valletta con tiendas, cafés y fácil acceso a transporte. Menos histórico pero funcional para independientes.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "año redondo",
+      "como_llegar": "desde Valletta: autobús línea 12/13 (2 EUR), 20 minutos. Desde aeropuerto: autobús línea 13 (3 EUR), 40 minutos",
+      "donde_dormir": {
+        "mochilero": "Hostal en Sliema: 22-35 EUR/noche",
+        "medio": "Hotel 3 estrellas: 55-85 EUR/noche",
+        "comfort": "Resort frente al mar: 140-210 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo marítimo Sliema (gratis)",
+        "Baño en playas rocosas (gratis)",
+        "Compras en The Point Shopping Mall (gratis navegar)",
+        "Vida nocturna en Paceville (bares/discotecas 5-15 EUR entrada)",
+        "Ferries a Valletta desde Sliema (2 EUR)"
+      ],
+      "donde_comer": "Cadenas internacionales y restaurantes locales: 10-20 EUR. Heladería Arctowski (especialidad local): 4-6 EUR. Mercado en Sliema.",
+      "consejo_local": "Sliema es cara y turística; usa como base de practicidad pero come en zonas menos obvias (calles paralelas). Paceville es caótico pero gratuito para pasear.",
+      "plan_b_lluvia": "The Point Shopping Mall, cafés cubiertos, cines, bares interiores",
+      "keywords": [
+        "sliema",
+        "paceville",
+        "dragonara",
+        "paseo maritimo",
+        "playas malta",
+        "tiendas malta"
+      ]
+    },
+    {
+      "id": "popeye-village",
+      "nombre": "Popeye Village y Bahía de Anchor",
+      "tipo": "playa",
+      "region": "noroeste de Malta",
+      "descripcion": "Pueblo temático construido para la película Popeye, ahora atracción curiosa y pintoresca con playas tranquilas. Experiencia kitsch pero auténtica de arquitectura colorida junto a bahía protegida apta para baño y snorkel.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "desde Valletta: autobús línea 50 (2 EUR), 45 minutos hasta Mellieha, luego caminata 15 minutos o taxi local (5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Mellieha: 25-35 EUR/noche",
+        "medio": "Hotel en Mellieha: 60-90 EUR/noche",
+        "comfort": "Resort Mellieha Bay: 120-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Entrada a Popeye Village (6 EUR)",
+        "Baño en Anchor Bay (gratis)",
+        "Snorkel en la bahía (gratis, equipo 15 EUR)",
+        "Fotos con casitas coloridas (incluido en entrada)",
+        "Caminata costera (gratis)"
+      ],
+      "donde_comer": "Restaurante dentro de Popeye Village: 12-18 EUR (sobreprecio). Mejor comer en Mellieha antes/después.",
+      "consejo_local": "Popeye Village es una trampa turística pero el sitio es fotogénico y la bahía genuinamente bonita. Paga entrada solo si quieres fotos; la playa es libre. Evita mediodía.",
+      "plan_b_lluvia": "Visita rápida a Mellieha pueblo, iglesia parroquial",
+      "keywords": [
+        "popeye village",
+        "anchor bay",
+        "mellieha",
+        "playas norte malta",
+        "bahía"
+      ]
+    },
+    {
+      "id": "dingli",
+      "nombre": "Dingli y Acantilados de Dingli",
+      "tipo": "naturaleza",
+      "region": "sur de Malta",
+      "descripcion": "Punto más elevado de Malta con acantilados espectaculares de 250 metros sobre el mar. Panorama de toda la isla, Gozo y Sicilia en días claros. Senderismo accesible y atmósfera tranquila lejos del turismo de playa.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "desde Valletta: autobús línea 50/51 (2 EUR), 40 minutos. Auto alquilado más práctico",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento en Dingli; hospedarse en Valletta o Mdina cercana",
+        "medio": "Hotel en Mdina (15 km): 60-90 EUR/noche",
+        "comfort": "Boutique en Mdina: 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo en acantilados (gratis)",
+        "Radar Station mirador (gratis acceso exterior)",
+        "Observatorio de Dingli (5 EUR)",
+        "Fotos panorámicas (gratis)",
+        "Caminata de los Acantilados hacia el sur (gratis)"
+      ],
+      "donde_comer": "No hay opciones en Dingli; llevar picnic o comer en Mdina/Rabat cercana",
+      "consejo_local": "Ven al atardecer, no al mediodía. Trae agua y abrigo (viento fuerte). Las mejores vistas son desde caminos sin cercar, lejos del radar. Junio-agosto hace mucho calor.",
+      "plan_b_lluvia": "Día de lluvia no recomendado; acantilados peligrosos cuando llueve",
+      "keywords": [
+        "dingli",
+        "acantilados dingli",
+        "highest point malta",
+        "vistas panorámicas",
+        "senderismo malta"
+      ]
+    },
+    {
+      "id": "blue-grotto",
+      "nombre": "Blue Grotto (Gruta Azul)",
+      "tipo": "naturaleza",
+      "region": "sur de Malta",
+      "descripcion": "Cueva marina con agua luminiscente azul turquesa, solo accesible por bote desde playa de Wied iz-Zurrieq. Experiencia geológica única y baño en agua cristalina dentro de la cueva. Breve pero memorable.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "mayo a septiembre (olas calmadas)",
+      "como_llegar": "desde Valletta: autobús línea 38/39 (2 EUR), 50 minutos hasta Wied iz-Zurrieq",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Zurrieq: 24-32 EUR/noche",
+        "medio": "Hotel rural cerca: 50-75 EUR/noche",
+        "comfort": "Hotel de playa (escaso en zona): 100-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Excursión en bote a Blue Grotto (10-15 EUR)",
+        "Baño en la cueva (incluido)",
+        "Playa de Wied iz-Zurrieq (gratis)",
+        "Vistas desde acantilados de Wied iz-Zurrieq (gratis)",
+        "Caminata costera (gratis)"
+      ],
+      "donde_comer": "Pequeños chiringuitos en playa: 8-12 EUR. Restaurants en Zurrieq pueblo: 10-15 EUR",
+      "consejo_local": "El bote sale cuando se llena (máx. 10-15 personas); ir temprano. Si hay olas, los botes no salen (octubre-abril riesgo alto). No es peligroso pero sí claustrofóbico.",
+      "plan_b_lluvia": "Día de lluvia o olas fuertes: la cueva no es accesible; usar ese día para Dingli o Valletta",
+      "keywords": [
+        "blue grotto",
+        "gruta azul",
+        "grotta azzurra",
+        "wied iz-zurrieq",
+        "cuevas malta",
+        "baño cuevas"
+      ]
+    },
+    {
+      "id": "marsaxlokk",
+      "nombre": "Marsaxlokk (Pueblo de Pescadores)",
+      "tipo": "playa",
+      "region": "sureste de Malta",
+      "descripcion": "Pueblo de pescadores tradicional con bahía tranquila, barcas de colores típicas (luzzu) y mercado de pescado auténtico. Atmosfera mediterránea genuina, menos turístico que Valletta, con restaurantes de mariscos frescos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "desde Valletta: autobús línea 2/4 (2 EUR), 35 minutos. Desde Sliema: autobús línea 33 (2 EUR), 45 minutos",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Marsaxlokk: 26-35 EUR/noche",
+        "medio": "Hotel pequeño: 55-85 EUR/noche",
+        "comfort": "Resort con vistas a bahía: 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por bahía y barcas (gratis)",
+        "Mercado de pescado (gratis ver, 5-10 EUR comprar)",
+        "Baño en bahía (gratis)",
+        "Caminata costera hacia Delimara (gratis)",
+        "Fotografía de luzzu al atardecer (gratis)"
+      ],
+      "donde_comer": "Restaurantes de pescado fresco: 15-25 EUR plato principal. Calamares, langostinos, octopus locales. Mejor comer en la bahía. Mercado por la mañana: pescado fresco barato (cocinar en alojamiento).",
+      "consejo_local": "Ven domingo por la mañana para mercado lleno. Evita restaurantes en primera fila (turísticos); come en calles laterales. El vino local Marsaxlokk es bueno y barato.",
+      "plan_b_lluvia": "Mercado cubierto parcialmente, cafés interiores, paseo rápido",
+      "keywords": [
+        "marsaxlokk",
+        "marsascala",
+        "pueblo pescadores",
+        "luzzu",
+        "bahía malta",
+        "pescado fresco"
+      ]
+    },
+    {
+      "id": "hypogeum-tarxien",
+      "nombre": "Hipogeo de Ħal Saflieni y Templos de Tarxien",
+      "tipo": "histórico",
+      "region": "sur de Malta",
+      "descripcion": "Sitios arqueológicos neolíticos únicos: el Hipogeo es una estructura subterránea de 3500 años (Patrimonio UNESCO) y Tarxien es complejo de templos megalíticos. Experiencia arqueológica profunda y diferente del turismo típico.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "año redondo",
+      "como_llegar": "desde Valletta: autobús línea 2/4 (2 EUR), 30 minutos hasta Paola. Caminata 10 minutos o taxi local (5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en zona sur (Paola/Fgura): 24-32 EUR/noche",
+        "medio": "Hotel pequeño: 50-75 EUR/noche",
+        "comfort": "Resort en Valletta/Sliema cercano: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita guiada Hipogeo (incluida, 15 EUR entrada, grupos limitados)",
+        "Templos de Tarxien (5 EUR)",
+        "Museo local pequeño (3 EUR)",
+        "Caminata por zona arqueológica (gratis)"
+      ],
+      "donde_comer": "Zona residencial, pocas opciones cerca. Comer en Valletta o Paola pueblo cercano: 8-14 EUR",
+      "consejo_local": "El Hipogeo requiere reserva previa (máx. 10 personas por turno); es claustrofóbico pero impresionante. Ir temprano en mañana. Guía en inglés. Cámaras sin flash.",
+      "plan_b_lluvia": "Interior protegido; perfecta opción para lluvia",
+      "keywords": [
+        "hipogeo",
+        "hal saflieni",
+        "tarxien",
+        "templos neolíticos",
+        "arqueología malta",
+        "prehistoria"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,362 @@
+{
+  "pais": "México",
+  "codigo": "mx",
+  "destinos": [
+    {
+      "id": "ciudad-de-mexico",
+      "nombre": "Ciudad de México",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital cosmopolita con museos de clase mundial, gastronomía punta, barrios bohemios y arqueología prehispánica. Centro Histórico Patrimonio UNESCO con ruinas aztecas, mercados tradicionales y vida cultural intensa. Punto de entrada natural con mejor infraestructura y transporte del país.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Aeropuerto Internacional Benito Juárez, conexiones globales. Desde el aeropuerto: metro (línea A) 40min a Centro, 0,50€; taxi/Uber 10-15€",
+      "donde_dormir": {
+        "mochilero": "Hostales en La Condesa, Roma Norte: 15-25€/noche",
+        "medio": "Airbnb o hoteles 2-3* en Coyoacán, Polanco: 40-70€/noche",
+        "comfort": "Hoteles 4-5* Centro Histórico o Polanco: 100-200€/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional de Antropología (8€)",
+        "Palacio Nacional con murales de Diego Rivera (gratis)",
+        "Templo Mayor ruinas aztecas (5€)",
+        "Xochimilco trajineras en canales (15€ por grupo)",
+        "Barrio de Coyoacán y Casa Azul de Frida Kahlo (8€)",
+        "Mercado de La Merced y Mercado de Abastos (gratis, comprar)"
+      ],
+      "donde_comer": "Tacos al pastor en puestos callejeros (1-2€), mole en Coyoacán, seafood en Polanco. Rango: 2-30€ por comida. Zonas: Centro Histórico mercados, Roma Norte restaurantes modernos, Coyoacán cocina tradicional",
+      "consejo_local": "El Metro es caótico pero baratísimo (0,50€ por viaje). Compra el Tarjeta de Viajero recargable. Evita viajar en hora punta (7-9am, 6-8pm). Los barrios como La Condesa están seguros de día.",
+      "plan_b_lluvia": "Museos: Frida Kahlo, Tamayo, Palacio de Bellas Artes. Metro recorrido temático. Cines, cafeterías en condesa",
+      "keywords": [
+        "CDMX",
+        "Tenochtitlan",
+        "Centro Histórico",
+        "Coyoacán",
+        "Polanco",
+        "Roma",
+        "Condesa",
+        "Zócalo",
+        "Templo Mayor"
+      ]
+    },
+    {
+      "id": "playa-del-carmen",
+      "nombre": "Playa del Carmen",
+      "tipo": "playa",
+      "region": "Quintana Roo, Riviera Maya",
+      "descripcion": "Pueblo de playa con arena blanca, cenotes cercanos y vida nocturna. Punto de partida para Cozumel, Tulum y reservas naturales. Mezcla de turismo masivo con acceso a naturaleza auténtica del Caribe mexicano.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde CDMX: vuelo 2h (40-80€) o ADO bus 22h (35-50€). Aeropuerto Cancún 45min en autobús (5€) o Uber (20€)",
+      "donde_dormir": {
+        "mochilero": "Hostales zona 5ta Avenida: 12-20€/noche",
+        "medio": "Hoteles pequeños Playa Turtle, El Faro: 35-60€/noche",
+        "comfort": "Resorts beachfront o Playacar: 80-150€/noche"
+      },
+      "que_hacer": [
+        "Snorkel cenote Xcel-Há (35€ parque)",
+        "Isla Cozumel ferry (12€) buceo arrecife",
+        "Xcaret parque ecológico (60€)",
+        "Tulum ruinas mayas 45min al sur (15€ entrada)",
+        "Playa Paradise o Mamitas Beach Club (gratis playa, bebidas de pago)",
+        "Quinta Avenida paseo shops y restaurantes (gratis)"
+      ],
+      "donde_comer": "Ceviche fresco, pescado a la sal, tacos de camarón. Rango: 3-25€ por comida. Zona: Quinta Avenida turística y callejones laterales más locales. Mercado local y cocinerías para presupuesto bajo",
+      "consejo_local": "Quinta Avenida es una trampa turística. Come fuera de la avenida principal en 'callejones'. Compra protector solar aquí (caro pero inevitable). Playa pública al norte es más local que la zona resort",
+      "plan_b_lluvia": "Museos MUSA arrecife sumergido (snorkel o buceo), piscinas en hoteles, shopping centre La Vela, cines",
+      "keywords": [
+        "Riviera Maya",
+        "Quinta Avenida",
+        "cenotes",
+        "Playacar",
+        "Xcaret",
+        "Xcel-Há",
+        "Tulum",
+        "Cozumel"
+      ]
+    },
+    {
+      "id": "oaxaca-city",
+      "nombre": "Oaxaca",
+      "tipo": "ciudad",
+      "region": "Oaxaca",
+      "descripcion": "Centro cultural con gastronomía oaxaqueña de élite, artesanías, festividades indígenas y arquitectura colonial. Capital del mezcal y los moles. Acceso a pueblos mágicos y tradiciones vivas. Uno de los destinos más auténticos para viajeros independientes.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "octubre a diciembre, Día de Muertos (nov)",
+      "como_llegar": "Desde CDMX: vuelo 1h (30-60€) o ADO bus 9h (25-40€). Aeropuerto local a centro: taxi 8€ o autobús 1,50€",
+      "donde_dormir": {
+        "mochilero": "Hostales Centro, Xochimilco: 10-18€/noche",
+        "medio": "Hoteles coloniales Centro: 30-50€/noche",
+        "comfort": "Boutique hotels Etla, Jalatlaco: 70-120€/noche"
+      },
+      "que_hacer": [
+        "Zócalo y Catedral (gratis)",
+        "Iglesia Santo Domingo museo de oro (4€)",
+        "Mercado 20 de Noviembre comida y artesanías (gratis)",
+        "Pueblo de Tlacolula ruinas Zapotecas 35km (7€ entrada)",
+        "Hierve el Agua cascadas petrificadas (4€)",
+        "Teotitlán del Valle tejedores y mezcal (tour gratis, compras voluntarias)"
+      ],
+      "donde_comer": "Mole negro, tlayudas, chapulines, memela. Rango: 2-20€ por comida. Zona: Mercado 20 de Noviembre para auténtico y barato, restaurantes Centro para turistas, cocinerías locales",
+      "consejo_local": "El mezcal de los pueblos es 5 veces más barato que en la ciudad. Negocia precios en mercados. Si llueve, los pueblos se ponen intransitables; mejor quedarse en Oaxaca. Día de Muertos es espectáculo pero abarrotado y caro.",
+      "plan_b_lluvia": "Museos textiles, cocina y etnografía. Talleres de mezcal. Iglesias. Cafeterías y librerías",
+      "keywords": [
+        "Oaxaca de Juárez",
+        "mole",
+        "mezcal",
+        "Tlacolula",
+        "Hierve el Agua",
+        "Día de Muertos",
+        "artesanía",
+        "Centro Histórico"
+      ]
+    },
+    {
+      "id": "tulum",
+      "nombre": "Tulum",
+      "tipo": "histórico",
+      "region": "Quintana Roo, Riviera Maya",
+      "descripcion": "Ruinas mayas frente al mar caribe en acantilado, arqueología con playa. Pueblito bohemio con eco-cabañas, cenotes y reservas naturales. Ideal para arqueología, naturaleza y alternativa a Cancún-Playa del Carmen.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Playa del Carmen: colectivo 1h (3€) o ADO (8€). Desde Cancún: ADO 2h (12€). Uber desde Playa 35€",
+      "donde_dormir": {
+        "mochilero": "Eco-cabañas, hostales pueblo Tulum: 15-30€/noche",
+        "medio": "Hoteles pequeños playa o pueblo: 40-80€/noche",
+        "comfort": "Resorts eco boutique beachfront: 100-180€/noche"
+      },
+      "que_hacer": [
+        "Ruinas Tulum entrada y playa (5€)",
+        "Cenote Dos Ojos buceo o snorkel (25€)",
+        "Playa Paraíso (gratis)",
+        "Sian Ka'an reserva biosfera tour (80€ con guía)",
+        "Cenote Claro snorkel (15€)",
+        "Pueblo Tulum tiendas y restaurantes (gratis paseo)"
+      ],
+      "donde_comer": "Tacos de pescado, ceviche, carne asada. Rango: 3-20€. Zona: Pueblo Tulum avenida central mercados y fondas locales, playa restaurantes turísticos. Súper local: fondas de comida corrida 4-6€",
+      "consejo_local": "Las ruinas al atardecer son mágicas pero abarrotadas. Entra temprano (9am) o tarde (4pm). Los resorts 'eco' en playa son caros; el pueblo es más barato y auténtico. Cenotes privados son estafas; Dos Ojos es oficial.",
+      "plan_b_lluvia": "Cenotes son indoor. Pueblo interior shopping y restaurantes. Parques ecoarqueológicos cubiertos",
+      "keywords": [
+        "Tulum ruins",
+        "Zona Arqueológica",
+        "cenotes",
+        "Dos Ojos",
+        "Sian Kaan",
+        "playa caribe",
+        "pueblo bohemio"
+      ]
+    },
+    {
+      "id": "guanajuato",
+      "nombre": "Guanajuato",
+      "tipo": "histórico",
+      "region": "Guanajuato, Bajío",
+      "descripcion": "Ciudad colonial con callejones subterráneos, minería histórica y arquitectura colorida en ladera. Festival Cervantino importante y gastronomía regional. Destino artístico auténtico sin masificación de resorts.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre (Festival Cervantino) a marzo",
+      "como_llegar": "Desde CDMX: ADO/Primera Plus 4.5h (20-35€) o vuelo 1h (30-50€). Bus a centro histórico 2€",
+      "donde_dormir": {
+        "mochilero": "Hostales Centro: 12-20€/noche",
+        "medio": "Hoteles coloniales: 35-60€/noche",
+        "comfort": "Boutique hotels patrimonio: 70-130€/noche"
+      },
+      "que_hacer": [
+        "Callejones subterráneos tour (5€)",
+        "Mina de oro San Cayetano (4€)",
+        "Basílica y Plaza de la Paz (gratis)",
+        "Museo Momias (5€)",
+        "Teatro Juárez (4€ entrada)",
+        "Paseo nocturno callejoneadas (gratis, propina)"
+      ],
+      "donde_comer": "Enchiladas mineras, carne en consomé, dulces de leche. Rango: 3-18€. Zona: Plazas Centro (turístico), calle Sopena y laterales (local)",
+      "consejo_local": "Los callejoneadas (grupos cantando) son gratis pero espera propina 3-5€. Octubre Festival Cervantino = masificado y caro. Visita junio-agosto para descuento y autenticidad. Sube a los miradores al atardecer.",
+      "plan_b_lluvia": "Museos abundantes, iglesias, mina cubierta, teatro, cafeterías en callejones",
+      "keywords": [
+        "Guanajuato capital",
+        "callejones",
+        "momias",
+        "Cervantino",
+        "minas",
+        "colonial",
+        "ladera",
+        "Basílica de Guanajuato"
+      ]
+    },
+    {
+      "id": "merida",
+      "nombre": "Mérida",
+      "tipo": "ciudad",
+      "region": "Yucatán",
+      "descripcion": "Capital yucateca con influencia maya y architecture colonial, gastronomía única, cenotes cercanos. Destino más seguro y relajado, menos turístico que Quintana Roo, acceso a Chichén Itzá y ruinas mayas.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde CDMX: vuelo 1.5h (40-70€) o ADO 20h (40-60€). Desde Playa del Carmen: ADO 5h (20€)",
+      "donde_dormir": {
+        "mochilero": "Hostales Paseo Montejo: 12-20€/noche",
+        "medio": "Hoteles coloniales Centro: 35-60€/noche",
+        "comfort": "Hoteles boutique Paseo Montejo: 70-120€/noche"
+      },
+      "que_hacer": [
+        "Plaza Mayor y Catedral (gratis)",
+        "Paseo Montejo paseo histórico (gratis)",
+        "Chichén Itzá 120km tour de día (25€ entrada ruinas + tour)",
+        "Cenote Ik Kil (8€)",
+        "Dzibilchaltún ruinas y cenote 15km (5€)",
+        "Mercado Lucas de Galvez comida local (gratis)"
+      ],
+      "donde_comer": "Cochinita pibil, sopa de lima, relleno negro, panuchos. Rango: 2-15€. Zona: Mercado Lucas comida yucateca auténtica 3-6€, Paseo Montejo restaurantes turísticos",
+      "consejo_local": "Mérida es LA puerta a ruinas mayas sin el caos. Los precios son 30% más bajos que Riviera Maya. Domingo hay festival en Plaza Mayor gratis. El transport local es baratísimo. Chichén Itzá tour organizado desde aquí cuesta menos.",
+      "plan_b_lluvia": "Museos MAYAN, Gran Museo, iglesias coloniales, galerías arte, cines",
+      "keywords": [
+        "Mérida Yucatán",
+        "Chichén Itzá",
+        "cenotes",
+        "Paseo Montejo",
+        "colonial",
+        "cochinita pibil",
+        "ruinas mayas"
+      ]
+    },
+    {
+      "id": "san-cristobal-chiapas",
+      "nombre": "San Cristóbal de Las Casas",
+      "tipo": "ciudad",
+      "region": "Chiapas",
+      "descripcion": "Pueblo colonial en altiplano con fuerte identidad indígena, artesanía y comunidades mayas vivas. Mercado colorido, iglesias arquitectónicas y acceso a pueblos indígenas y selva Lacandona. Atmósfera bohemia y alternativa.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "septiembre a abril",
+      "como_llegar": "Desde CDMX: vuelo 2h (50-80€) o ADO 15h (40-60€). Desde Mérida: ADO 12h (35€). Centro: taxi/colectivo 3€",
+      "donde_dormir": {
+        "mochilero": "Hostales Centro: 10-18€/noche",
+        "medio": "Hoteles coloniales: 30-55€/noche",
+        "comfort": "Posadas boutique y ecolodges cercanos: 60-110€/noche"
+      },
+      "que_hacer": [
+        "Catedral y Zócalo (gratis)",
+        "Iglesia Santo Domingo museo textil (2€)",
+        "Mercado indígena Lupita Campesina (gratis, compras)",
+        "Pueblo San Juan Chamula temazcal (4€ entrada)",
+        "Cascadas Agua Azul 60km (gratis)",
+        "Cañón del Sumidero tour barco (18€)"
+      ],
+      "donde_comer": "Mole rojo, tacos de carne, sopa de chaya, queso Oaxaca. Rango: 2-15€. Zona: Zócalo turístico, calles laterales (Guadalupe, Real) y mercado para local",
+      "consejo_local": "Chiapas tiene alertas de seguridad en ciertas zonas. San Cristóbal ciudad es segura de día. Evita Champotón y comunidades sin guía. Tours organizados para Sumidero y Chamula son obligatorios. Aclimatación a 2100m: tómate tiempo.",
+      "plan_b_lluvia": "Lluvia en montaña es constante. Iglesias, museos, mercado cubierto, cafeterías",
+      "keywords": [
+        "San Cristóbal",
+        "Chiapas",
+        "indígena maya",
+        "Chamula",
+        "Sumidero",
+        "Agua Azul",
+        "colonial",
+        "Zócalo"
+      ]
+    },
+    {
+      "id": "puerto-vallarta",
+      "nombre": "Puerto Vallarta",
+      "tipo": "playa",
+      "region": "Jalisco, Pacífico",
+      "descripcion": "Pueblito costero Pacífico con malecón bohemio, gastronomía seafood, playas tranquilas y vibes LGBT-friendly. Alternativa a Caribe masificado con arquitectura colonial conservada. Base para Bahía de Banderas.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde CDMX: vuelo 2.5h (40-80€) o ADO 13h (30-50€). Desde aeropuerto a centro: bus (8€) o Uber (15€)",
+      "donde_dormir": {
+        "mochilero": "Hostales Viejo Vallarta: 14-22€/noche",
+        "medio": "Hoteles playa: 40-70€/noche",
+        "comfort": "Beachfront resorts y condos: 90-160€/noche"
+      },
+      "que_hacer": [
+        "Malecón paseo gratis atardecer",
+        "Playa Conchas Chinas snorkel (gratis)",
+        "Bahía de Banderas tour barco (40€)",
+        "Old Town compras arte y tiendas (gratis)",
+        "Playa Mismaloya cine y playas (gratis)",
+        "Mercado Río Cuale artesanía (gratis)"
+      ],
+      "donde_comer": "Ceviches, camarones al ajillo, huachinango, tostadas. Rango: 4-25€. Zona: Old Town (Viejo Vallarta) turístico, mercados para barato, Emiliano Zapata restaurantes locales",
+      "consejo_local": "Vallarta es caro pero menos que resorts. Avoid July-August calor extremo. Emiliano Zapata y alrededores más locales. Malecón para puesta de sol es cliché pero gratis. Playas norte son más tranquilas que sur.",
+      "plan_b_lluvia": "Lluvia es breve. Museos, galerías, shopping centro, cines",
+      "keywords": [
+        "Puerto Vallarta",
+        "Bahía de Banderas",
+        "Old Town",
+        "malecón",
+        "Pacífico",
+        "Jalisco",
+        "LGBT friendly"
+      ]
+    },
+    {
+      "id": "bacalar",
+      "nombre": "Bacalar",
+      "tipo": "playa",
+      "region": "Quintana Roo",
+      "descripcion": "Laguna de siete colores en pueblo tranquilo, alternativa a Playa del Carmen. Vibes hippie, cenotes sumergidos, agua dulce-salada y acceso a selva. Destino en alza para viajeros independientes buscando autenticidad.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "Desde Playa del Carmen: ADO 3h (15€). Desde Chetumal: colectivo 30min (2€). Desde Cancún: ADO 3.5h (20€)",
+      "donde_dormir": {
+        "mochilero": "Eco-cabañas y hostales: 12-25€/noche",
+        "medio": "Hoteles pequeños waterfront: 35-65€/noche",
+        "comfort": "Eco-resorts y posadas boutique: 80-140€/noche"
+      },
+      "que_hacer": [
+        "Laguna paseo gratis (kayak alquiler 10€)",
+        "Cenote Azul snorkel sumergido (gratis)",
+        "Fuerte de San Felipe museo (2€)",
+        "Cayo Paloma isla excursión (30€ tour)",
+        "Balneario Xul-Ha cenote (gratis entrada, propina a cuidador)",
+        "Paseo pueblo y mercado (gratis)"
+      ],
+      "donde_comer": "Pescado frito, ceviche, tacos, comida yucateca. Rango: 3-18€. Zona: Avenida central mercado y fonditas locales baratas, waterfront restaurantes turísticos",
+      "consejo_local": "Bacalar es el futuro del turismo Quintana Roo antes de masificarse. Aún hay 2-3 años tranquilo. La laguna cambia colores según hora y nubosidad. Centros turísticos caros; come en fondas locales. Agua dulce sorprende (no es salada).",
+      "plan_b_lluvia": "Cenotes techos naturales, museo fuerte, compras pueblo, kayak cubierto parcial",
+      "keywords": [
+        "Bacalar",
+        "laguna siete colores",
+        "cenote azul",
+        "Chetumal",
+        "Quintana Roo",
+        "eco-turismo",
+        "kayak"
+      ]
+    },
+    {
+      "id": "xcaret-xel-ha",
+      "nombre": "Xcaret y Xel-Há (Parques Ecológicos)",
+      "tipo": "naturaleza",
+      "region": "Quintana Roo, Riviera Maya",
+      "descripcion": "Parques ecoarqueológicos con cenotes, snorkel, playas y ruinas integradas. Xcaret enfocado en cultura y entretenimiento; Xel-Há en naturaleza y snorkel. Paquetes todoincluido con comida y transporte. Ideal para naturaleza sin presupuesto mochilero.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Playa del Carmen: shuttle hoteles (10€) o ADO (5€). Xcaret 45km sur, Xel-Há 55km. Desde Cancún: ADO 1.5h (12€)",
+      "donde_dormir": {
+        "mochilero": "Hotel dentro parque (caro) o campings cercanos: 30-50€/noche",
+        "medio": "Hoteles Riviera Maya cercanos: 50-90€/noche",
+        "comfort": "Resorts parque con buffet incluido: 120-250€/noche"
+      },
+      "que_hacer": [
+        "Xcaret: cenote nado, río subterráneo, shows nocturnos, playas, cavernas (60€ día completo)",
+        "Xel-Há: snorkel arrecife, cenotes, playas, grutas (50€ todoincluido)",
+        "Ambos: buceo certificado, tirolesa, caverna (pagos extras 20-50€)",
+        "Pueblito maya en Xcaret reenacción (incluido)",
+        "Shows folclóricos nocturnos (incluido)"
+      ],
+      "donde_comer": "Buffets incluidos en entrada. Calidad media. Snacks y bebidas de pago. Rango: comida incluida + 10-20€ extras. Zonas: múltiples en parques",
+      "consejo_local": "Xcaret es Disneyland maya: caro pero completo. Xel-Há mejor para snorkel puro. Entrada todo incluido paga comida mediocre; trae snacks. Snorkel es el highlight, no la playa. Evita meses pico (Navidad, Semana Santa). Cenotes son el punto fuerte.",
+      "plan_b_lluvia": "Lluvia tropical rápida. Cenotes bajo techo parcial. Shows nocturnos cubiertos. Cuevas interiores",
+      "keywords": [
+        "Xcaret",
+        "Xel-Há",
+        "parque ecoarqueológico",
+        "cenotes",
+        "snorkel",
+        "Riviera Maya",
+        "todoincluido",
+        "shows mayas"
+      ]
+    }
+  ]
+}

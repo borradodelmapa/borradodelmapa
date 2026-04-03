@@ -1,0 +1,333 @@
+{
+  "pais": "Túnez",
+  "codigo": "tn",
+  "destinos": [
+    {
+      "id": "medina-tunis",
+      "nombre": "Medina de Túnez",
+      "tipo": "histórico",
+      "region": "Túnez (capital)",
+      "descripcion": "Casco antiguo medieval con zoco laberíntico, mezquitas centenarias y palacios tradicionales. Patrimonio UNESCO donde perderse entre bazares de especias, telas y artesanía. Punto de entrada natural para entender la Túnez auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "En la capital, caminando desde Avda. Bourguiba o autobús local (1-2 EUR)",
+      "donde_dormir": {
+        "mochilero": "Riad (casa tradicional) 20-30 EUR/noche",
+        "medio": "Hotel boutique medina 40-60 EUR/noche",
+        "comfort": "Hotel 4* cerca medina 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Zoco de especias y textiles (gratis, regateo esperado)",
+        "Mezquita Az-Zitouna, patio abierto (gratis)",
+        "Dar Ben Abdallah museo vida tradición (4 EUR)",
+        "Paseo atardecer sobre murallas (gratis)",
+        "Compra artesanía local en souks (5-50 EUR)"
+      ],
+      "donde_comer": "Brik (pastel frito relleno 2-3 EUR), tajín, couscous. Callejuelas dentro medina, restaurantes tradicionales 8-15 EUR",
+      "consejo_local": "Entra a la medina antes de las 10am, después se llena de tours. Los riads ofrecen desayuno incluido y son más auténticos que hoteles",
+      "plan_b_lluvia": "Museos: Bardo (arqueología, 5 EUR), Dar Lasram (arte islámico)",
+      "keywords": [
+        "Tunis medina",
+        "Tunis souks",
+        "zona antigua Túnez",
+        "Zitouna",
+        "Dar Ben Abdallah"
+      ]
+    },
+    {
+      "id": "djerba",
+      "nombre": "Isla de Djerba",
+      "tipo": "isla",
+      "region": "Sur (Medenina)",
+      "descripcion": "Isla frente a la costa sureña con playas tranquilas, pueblos blancos y azules de arquitectura bereber, y el símbolo del Faro de Gellala. Destino de playa accesible sin el turismo masivo de las costas norte.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a mayo, septiembre a octubre",
+      "como_llegar": "Avión desde Túnez a Djerba (1h, 40-80 EUR) o autobús + transbordador desde Zarzis (4h, 15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse Houmt Souk 25-35 EUR/noche",
+        "medio": "Hotel 3* playa 50-70 EUR/noche",
+        "comfort": "Resort todo incluido 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas: Sidi Mahares, Ras Rmel (gratis)",
+        "Faro de Gellala y vistas al mar (gratis)",
+        "Pueblo Houmt Souk paseo y compra artesanía (gratis)",
+        "Sinagoga Ghriba en Erriadh (2 EUR)",
+        "Mercado de peces al atardecer Houmt Souk (gratis)"
+      ],
+      "donde_comer": "Pescado fresco a la parrilla 12-18 EUR, brochetas, pasta. Restaurantes borde de playa Sidi Mahares, mercado gastronómico Houmt Souk",
+      "consejo_local": "Alquila una bicicleta o moto para explorar pueblos pequeños. Los precios bajan fuera de julio-agosto. Evita restaurantes en zona turística principal",
+      "plan_b_lluvia": "Museo etnográfico (3 EUR), exploración pueblos blancos cubiertos",
+      "keywords": [
+        "Djerba",
+        "Jerba",
+        "Houmt Souk",
+        "Erriadh",
+        "Gellala",
+        "playas Túnez sur"
+      ]
+    },
+    {
+      "id": "kairouan",
+      "nombre": "Kairouan",
+      "tipo": "histórico",
+      "region": "Centro (Sidi Bouzid)",
+      "descripcion": "Cuarta ciudad santa del Islam con medina compacta, Gran Mezquita de Uqba y zoco de alfombras tradicionales. Centro espiritual tunecino menos visitado que Túnez pero igual de auténtico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Autobús desde Túnez (2.5h, 8 EUR) o tren (3h, 5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Riad tradicional 20-30 EUR/noche",
+        "medio": "Hotel medina 35-50 EUR/noche",
+        "comfort": "Hotel 3* fuera medina 70-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Gran Mezquita de Uqba, patio sin entrada (gratis para no musulmanes)",
+        "Medina y souks (gratis)",
+        "Zoco de alfombras y negociación (gratis entrada, 20-500 EUR alfombras)",
+        "Mausoleo de Sidi Sahib (3 EUR)",
+        "Pozo de Bir Barouta con camellos (5 EUR)"
+      ],
+      "donde_comer": "Maklouba (pasta rellena), chorba (sopa), café tradicional. Souks y pequeños restaurantes 6-12 EUR",
+      "consejo_local": "Kairouan es seria y religiosa, viste respetuoso. Las alfombras son regateable pero auténticas; pregunta por artesanos en sus casas vs souks turísticos",
+      "plan_b_lluvia": "Museo Raqqada en las afueras (4 EUR, arte islámico)",
+      "keywords": [
+        "Kairouan",
+        "Qairouan",
+        "Uqba",
+        "alfombras Kairouan",
+        "mezquita sagrada Túnez"
+      ]
+    },
+    {
+      "id": "desierto-sahara",
+      "nombre": "Desierto del Sáhara (Tataouine-Douz)",
+      "tipo": "desierto",
+      "region": "Sur extremo (Tataouine y Kébili)",
+      "descripcion": "Puerta al Sáhara con oasis, casbas bereber de adobe y acceso a dunas infinitas. Punto base para safaris en 4x4, campamentos bajo estrellas y encuentro con nómadas. Experiencia surreal del desierto sin viajar a Argelia o Mali.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Autobús desde Túnez a Tataouine (7-8h, 20-25 EUR) o vuelo a Tozeur + autobús (total 10h, 60-80 EUR)",
+      "donde_dormir": {
+        "mochilero": "Campamento nómada Douz 20-30 EUR/noche",
+        "medio": "Hotel oasis Tataouine 40-60 EUR/noche",
+        "comfort": "Ecolodge desierto (Douz) 90-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari jeep dunas Douz (40-60 EUR día completo)",
+        "Trekking camello al atardecer (30 EUR)",
+        "Visita kasbas bereber (gratis pueblo, guía 15-25 EUR)",
+        "Festival de Douz (marzo, con camellos)",
+        "Noche en campamento bajo estrellas (incluida en safaris)"
+      ],
+      "donde_comer": "Tajín de carne y verduras, pan pita, dátiles frescos. Campamentos y pequeños restaurantes Douz 8-15 EUR. Cena con beduinos en tienda nómada",
+      "consejo_local": "Reserva safaris a través de guesthouses locales, no agencias turísticas (mitad de precio). Lleva protección solar extrema. La mejor época es invierno aunque hace frío noches",
+      "plan_b_lluvia": "En desierto llueve rara vez; riesgo es tormentas de arena. Quédate en pueblo, visita mercado local y casbas cubiertos",
+      "keywords": [
+        "Sahara",
+        "Douz",
+        "Tataouine",
+        "desierto Túnez",
+        "safaris camello",
+        "dunas Sáhara",
+        "campamento beduino"
+      ]
+    },
+    {
+      "id": "tozeur",
+      "nombre": "Tozeur",
+      "tipo": "rural",
+      "region": "Suroeste (Kébili)",
+      "descripcion": "Oasis en el borde del Sáhara con palmares infinitos, arquitectura de ladrillo rojo únicos y puerta a canyons y montañas rocosas. Base cultural menos comercial que Douz con acceso a paisajes deseado de cine.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Autobús desde Túnez (6h, 18 EUR), vuelo (1h, 50-70 EUR) o desde Djerba (8h, 25 EUR)",
+      "donde_dormir": {
+        "mochilero": "Riad palmeral 25-35 EUR/noche",
+        "medio": "Hotel oasis 45-65 EUR/noche",
+        "comfort": "Spa resort 100-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Palmeraie: paseo a pie o palmera (gratis entrada, guía 12 EUR)",
+        "Medina arquitectura roja (gratis)",
+        "Canyon Tamerza o Mides (30 EUR con guía)",
+        "Piscina natural Naftis (10 EUR)",
+        "Mercado local jueves (gratis)"
+      ],
+      "donde_comer": "Dátiles rellenos, tajín, chorba de dátiles. Restaurantes en medina y hoteles 10-16 EUR, dátiles frescos mercado 3 EUR kg",
+      "consejo_local": "El palmeral es enorme; no intentes recorrerlo sin guía local (desorientador). Los dátiles de Tozeur son los mejores Túnez; compra directamente en fincas",
+      "plan_b_lluvia": "Museos: Musée des Arts et Traditions (3 EUR), Musée du Cinéma (películas rodadas aquí)",
+      "keywords": [
+        "Tozeur",
+        "Tózar",
+        "oasis Sáhara",
+        "palmeraie",
+        "arquitectura roja Túnez",
+        "canyon Tamerza"
+      ]
+    },
+    {
+      "id": "hammamet",
+      "nombre": "Hammamet",
+      "tipo": "playa",
+      "region": "Nordeste (Nabeul)",
+      "descripcion": "Balneario costero clásico con playas amplias, medina compacta amurallada y acceso a zonas menos turísticas al sur. Principal destino de playa para viajeros independientes evitando masas de Sousse.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a junio, septiembre a octubre",
+      "como_llegar": "Autobús desde Túnez (1.5h, 6 EUR) o tren (1.5h, 4 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse medina 22-32 EUR/noche",
+        "medio": "Hotel 3* playa 50-75 EUR/noche",
+        "comfort": "Resort playa 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas: Piscina Natural, Plage Nord (gratis)",
+        "Medina: zoco, puertas antiguas (gratis)",
+        "Fortaleza Kasbah (3 EUR, vistas)",
+        "Parque Ichkeul excursión (20 EUR con transporte)",
+        "Paseo borde de mar al atardecer (gratis)"
+      ],
+      "donde_comer": "Pescado fresco a la sal 15-20 EUR, brochetas, salade méchouia. Borde de playa y medina 10-18 EUR, chiringuitos baratos 5-8 EUR",
+      "consejo_local": "Hammamet tiene dos caras: turística norteamericana vs medina auténtica. Duerme en medina, evita zona hotelera de resort. Precios suben agosto",
+      "plan_b_lluvia": "Musée du Nabeul cerámica local (3 EUR), souks cubiertos",
+      "keywords": [
+        "Hammamet",
+        "Hammamet medina",
+        "playas Hammamet",
+        "Kasbah",
+        "zona turística Túnez",
+        "nordeste"
+      ]
+    },
+    {
+      "id": "sidi-bou-said",
+      "nombre": "Sidi Bou Saïd",
+      "tipo": "histórico",
+      "region": "Nordeste (Ben Arous, cerca Túnez)",
+      "descripcion": "Pueblo clifftop de casas blancas y azules encaramado sobre el Mediterráneo, galería de arte bohemia y café tradicional. Postal idílica a 20km de Túnez, evitando el ruido urbano pero sin dejar la capital.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "septiembre a mayo",
+      "como_llegar": "Tren TGM desde Túnez (45 min, 1.50 EUR) o taxi/autobús (30 min, 10 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse pueblo 30-45 EUR/noche",
+        "medio": "Boutique hotel 60-85 EUR/noche",
+        "comfort": "Villa con vista 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo calles blancas y azules fotografia (gratis)",
+        "Café Nasr (café tradicional desde 1921, 3 EUR café)",
+        "Galerías arte y tiendas (gratis entrada, compra 10-100 EUR)",
+        "Terraza con vista Mediterráneo (gratis, bebida 4-6 EUR)",
+        "Escalada hacia Faro (gratis)"
+      ],
+      "donde_comer": "Café y pasteles árabes 3-5 EUR, menú fijo restaurantes 15-22 EUR. Opción cara y turística vs pequeños cafés locales",
+      "consejo_local": "Evita mediodía (tour groups). Mejor temprano mañana o final tarde. El café Nasr es turístico pero mítico; siéntate 30 min sin prisa",
+      "plan_b_lluvia": "Tiendas de artesanía, galerías artistas cubiertas, salones de té",
+      "keywords": [
+        "Sidi Bou Said",
+        "Sidi Bousaid",
+        "pueblo azul blanco",
+        "Nasr café",
+        "vista Mediterráneo Túnez"
+      ]
+    },
+    {
+      "id": "mahdia",
+      "nombre": "Mahdia",
+      "tipo": "playa",
+      "region": "Centro costa (Sfax)",
+      "descripcion": "Puerto pesquero auténtico con medina costera, playas tranquilas y menos turismo que Hammamet. Centro histórico fatimí con fortaleza y acceso a tradiciones marítimas vivas sin infraestructura masiva.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a junio, septiembre a octubre",
+      "como_llegar": "Autobús desde Túnez (3.5h, 12 EUR) o desde Hammamet (2h, 8 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse puerto 20-28 EUR/noche",
+        "medio": "Hotel 3* 45-60 EUR/noche",
+        "comfort": "Hotel playa 90-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Medina puerto y fortaleza Borj El Kébir (3 EUR)",
+        "Playas Mahdia y El Habibi (gratis)",
+        "Museo mosaicos islámicos (4 EUR)",
+        "Mercado de peces al atardecer (gratis, sensorial)",
+        "Paseo puerto pesquero (gratis)"
+      ],
+      "donde_comer": "Pez fresco grillado 14-18 EUR, fritos marinos, couscous de pescado. Puerto y medina 8-14 EUR, chiringuitos 4-6 EUR",
+      "consejo_local": "Mahdia es seria y trabajadora, no turística artificialmente. Los pescadores venden pez directo muy barato. Pregunta por guías locales en guesthouses, no agencias",
+      "plan_b_lluvia": "Museo, souks cubiertos, exploración medina interior",
+      "keywords": [
+        "Mahdia",
+        "Mehedya",
+        "puerto pesquero Túnez",
+        "medina costa",
+        "Borj El Kebir"
+      ]
+    },
+    {
+      "id": "la-marsa",
+      "nombre": "La Marsa y Cartago",
+      "tipo": "histórico",
+      "region": "Nordeste (Ben Arous, cerca Túnez)",
+      "descripcion": "Conjunto histórico: ruinas de Cartago antigua (enemiga Roma) + pueblo costero La Marsa tranquilo. Importancia arqueológica con playas accesibles, ideal media jornada desde Túnez.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Tren TGM desde Túnez hacia La Marsa (1h, 2 EUR) o Cartago Byrsa (45 min, 2 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse La Marsa 25-35 EUR/noche",
+        "medio": "Hotel La Marsa 50-70 EUR/noche",
+        "comfort": "Boutique hotel 100-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas Cartago: Byrsa, Villas romanas, Teatro (9 EUR entrada combinada)",
+        "Musée Túnez site (5 EUR, mosaicos)",
+        "Playas La Marsa (gratis)",
+        "Paseo borde costero La Marsa (gratis)",
+        "Mercado peces/fruta local La Marsa (gratis)"
+      ],
+      "donde_comer": "Pescado costero La Marsa 12-16 EUR, gazpachos, ensaladas. Borde playa y mercado 6-12 EUR",
+      "consejo_local": "Visita ruinas temprano antes calor. El museo es pequeño. La Marsa es balneario local, no turístico; auténtico para comida",
+      "plan_b_lluvia": "Museo interno, exploración ruinas (parcialmente cubierto)",
+      "keywords": [
+        "Cartago",
+        "La Marsa",
+        "ruinas romanas Túnez",
+        "Byrsa",
+        "teatro Cartago",
+        "playas Túnez nordeste"
+      ]
+    },
+    {
+      "id": "tabarka",
+      "nombre": "Tabarka",
+      "tipo": "playa",
+      "region": "Noroeste (Jendouba)",
+      "descripcion": "Pueblo costero montañoso con acantilados, arrecifes coralinos, pescas tradicionales y menos turismo que costa este. Punto más occidental, acceso a montañas Dorsal y playas vírgenes, aunque requiere más tiempo de viaje.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Autobús desde Túnez (5.5h, 16 EUR) o desde Argelia (Annaba, 3h, 12 EUR frontera cercana)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse pueblo 22-32 EUR/noche",
+        "medio": "Hotel costa 50-70 EUR/noche",
+        "comfort": "Resort Tabarka 100-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas acantilados Spiage Chems, Alycia (gratis)",
+        "Buceo arrecife coral (50-80 EUR inmersión guiada)",
+        "Fuerte español ruinas (gratis entrada)",
+        "Pesca tradicional con pescadores locales (20-35 EUR)",
+        "Senderismo Dorsal montañas (gratis, o guía 15 EUR)"
+      ],
+      "donde_comer": "Pez roca a la parrilla, pulpo, gambas. Restaurantes borde playa 12-18 EUR, mercado local 5-8 EUR",
+      "consejo_local": "Tabarka es destino para viajeros lentos; menos turismo = menos infraestructura. Pregunta por esnórquel/buceo en guesthouses. Verano calor extremo",
+      "plan_b_lluvia": "Exploración pueblo, tiendas artesanía, cafés tradicionales",
+      "keywords": [
+        "Tabarka",
+        "costa noroeste Túnez",
+        "buceo coral",
+        "acantilados",
+        "Dorsal montañas",
+        "Fuerte español"
+      ]
+    }
+  ]
+}

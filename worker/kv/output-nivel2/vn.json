@@ -3,254 +3,344 @@
   "codigo": "vn",
   "destinos": [
     {
-      "id": "hanoi",
-      "nombre": "Hanói",
+      "id": "ha-noi",
+      "nombre": "Hanoi",
       "tipo": "ciudad",
       "region": "Norte",
-      "descripcion": "Capital caótica y adictiva. El casco antiguo (Old Quarter) tiene 36 calles temáticas que llevan siglos vendiendo lo mismo. Comida callejera de primer nivel, cerveza a 0.25€ en las esquinas de Bia Hoi, y la mejor base para el norte.",
+      "descripcion": "Capital milenaria con arquitectura francesa, templos antiguos y caos urbano controlado. Centro cultural y punto de entrada para explorar el norte de Vietnam. Mezcla perfecta de historia, gastronomía callejera y vida local auténtica.",
       "dias_recomendados": 3,
-      "mejor_epoca": "Octubre a diciembre (seco, fresco)",
-      "como_llegar": "Aeropuerto Noi Bai, 45 min al centro. Grab ~8€. Bus 86 al casco antiguo ~1.50€.",
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Punto de entrada principal: vuelo internacional al aeropuerto Noi Bai (4 km). Autobús o taxi al centro (30-45 min, 2-8 EUR). O en tren desde China (12-14h, 20-40 EUR).",
       "donde_dormir": {
-        "mochilero": "Hostel en Old Quarter: 5-8€/noche (Little Hanoi Hostel, Old Quarter View)",
-        "medio": "Hotel boutique Old Quarter: 20-35€/noche",
-        "comfort": "Hotel 4★ Hoan Kiem: 50-80€/noche"
+        "mochilero": "Hostel en Old Quarter, 8-15 EUR/noche",
+        "medio": "Hotel boutique 3* en Ba Dinh o Hoan Kiem, 25-40 EUR/noche",
+        "comfort": "Hotel 4-5* en centro, 60-120 EUR/noche"
       },
       "que_hacer": [
-        "Perderte por el Old Quarter a pie (gratis)",
-        "Templo de la Literatura (1€)",
-        "Tren Street — verlo pasar a las 15:30 y 19:30 (gratis)",
-        "Tour street food nocturno (15-20€ con guía)"
+        "Pasear por Old Quarter y Hoan Kiem Lake (gratis)",
+        "Templo del Literatura (Văn Miếu) y Universidad Imperial (5 EUR)",
+        "Mausoleo de Ho Chi Minh y Palacio Presidencial (3 EUR)",
+        "Museo de Etnología de Vietnam (5 EUR)",
+        "Clase de cocina vietnamita (15-20 EUR)",
+        "Noche de títeres de agua tradicionales (4-8 EUR)"
       ],
-      "donde_comer": "Bun cha en Hang Quat (1.50€), pho en Bat Dan (1€), egg coffee en Giang Café. Zona Hang Buom para cenar variado.",
-      "consejo_local": "Los domingos cierran el tráfico alrededor del lago Hoan Kiem y se llena de vida local. Mejor momento para vivirlo.",
-      "plan_b_lluvia": "Museo de Etnología (excelente), cafés escondidos en el Old Quarter, clase de cocina vietnamita (~20€).",
-      "keywords": ["hanoi", "hanói", "ha noi", "old quarter", "hoan kiem", "casco antiguo hanoi"]
+      "donde_comer": "Pho, banh mi, cha ca en Old Quarter. Desde 1 EUR platos callejeros hasta 15 EUR restaurantes. Mejor zona: Ta Hien Street y alrededores.",
+      "consejo_local": "Madruga para ver Hanoi antes del caos de tráfico. A las 6am el Old Quarter es mágico. Evita taxis blancos sin taxímetro; usa Grab app.",
+      "plan_b_lluvia": "Museos (Etnología, Bellas Artes, Historia), galerías de arte en Hanoi Old Quarter, compras en Trang Tien Plaza cubierto.",
+      "keywords": [
+        "Hà Nội",
+        "hanoi vietnam",
+        "old quarter",
+        "hoan kiem",
+        "temple of literature",
+        "agua de títeres"
+      ]
     },
     {
-      "id": "ha-long",
-      "nombre": "Ha Long Bay",
+      "id": "bahia-ha-long",
+      "nombre": "Bahía de Ha Long",
       "tipo": "naturaleza",
       "region": "Norte",
-      "descripcion": "Más de 1.600 islas de roca caliza sobre agua verde esmeralda. El crucero de 2 días es el clásico, pero Lan Ha Bay (lado sur) tiene lo mismo con menos turismo masivo.",
+      "descripcion": "Patrimonio UNESCO con 1.600+ islotes de piedra caliza. Imprescindible hacer un crucero de 1-2 días entre formaciones rocosas, cuevas y playas vírgenes. Espectáculo natural que justifica por sí solo viajar a Vietnam.",
       "dias_recomendados": 2,
-      "mejor_epoca": "Octubre a diciembre (cielos claros)",
-      "como_llegar": "Desde Hanói: bus a Tuan Chau ~4h (~8€) o shuttle del crucero incluido. Grab privado ~50€.",
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Hanoi: autobús directo a Halong City (3-4h, 5-8 EUR) o tour organizado con recogida (8-10h, 15-25 EUR). Ferry o crucero desde el puerto.",
       "donde_dormir": {
-        "mochilero": "Crucero básico 1 noche: 60-80€ todo incluido",
-        "medio": "Crucero 2 noches con kayak: 120-180€",
-        "comfort": "Crucero premium (Heritage Line, Paradise): 250-400€"
+        "mochilero": "Crucero budget en camarote compartido, 35-50 EUR/noche (incluye comidas)",
+        "medio": "Crucero 3* con camarote privado, 60-90 EUR/noche",
+        "comfort": "Crucero lujo o resort en tierra, 120-250 EUR/noche"
       },
       "que_hacer": [
-        "Crucero 2D/1N con kayak y cueva (desde 60€)",
-        "Kayak por Lan Ha Bay (incluido en cruceros o ~15€ independiente)",
-        "Cueva Sung Sot — impresionante pero masificada (5€)",
-        "Cat Ba Island como base alternativa (más independiente)"
+        "Crucero de 2 días y 1 noche por la bahía (60-150 EUR según lujo)",
+        "Kayak entre islotes (incluido en crucero o 20 EUR extra)",
+        "Cueva de Sung Sot (incluido en tour)",
+        "Baño en playas de islotes",
+        "Pesca de camarones nocturnos (20-30 EUR)",
+        "Paseo por pueblo flotante (incluido o 5 EUR)"
       ],
-      "donde_comer": "En el crucero todo incluido. En Cat Ba pueblo: marisco fresco en el paseo marítimo, 5-10€/persona.",
-      "consejo_local": "Evita los cruceros de 1 día desde Hanói — llegas agotado, ves poco. Mínimo 1 noche. Lan Ha Bay > Ha Long Bay para evitar masas.",
-      "plan_b_lluvia": "La niebla sobre las islas tiene su encanto, pero si llueve fuerte los cruceros pueden cancelar. Ten flexibilidad.",
-      "keywords": ["ha long", "halong", "ha long bay", "bahia halong", "lan ha", "cat ba", "tuan chau"]
+      "donde_comer": "Comidas incluidas en cruceros (mariscos frescos). En tierra, restaurantes frente al mar en Halong City (8-15 EUR platos).",
+      "consejo_local": "Reserva crucero con varios días de anticipación online (más barato). Evita tours de 1 día: la bahía merece dormir allí. Mejor época es octubre-noviembre.",
+      "plan_b_lluvia": "Los cruceros funcionan con lluvia. Si hay tormenta extrema, visita mina de carbón abandonada o museo de la zona desde Halong City.",
+      "keywords": [
+        "Ha Long Bay",
+        "halong",
+        "karst",
+        "crucero",
+        "islotes",
+        "sung sot cave",
+        "patrimonio UNESCO"
+      ]
     },
     {
       "id": "sapa",
       "nombre": "Sapa",
       "tipo": "montaña",
-      "region": "Norte (Lao Cai)",
-      "descripcion": "Terrazas de arroz en laderas vertiginosas y aldeas de minorías étnicas (Hmong, Dao). El trekking aquí es de los mejores del sudeste asiático. Turismo masivo en el pueblo, autenticidad en las caminatas.",
-      "dias_recomendados": 3,
-      "mejor_epoca": "Septiembre-octubre (arroz maduro, dorado) o marzo-mayo (verde intenso)",
-      "como_llegar": "Desde Hanói: tren nocturno a Lao Cai (~6€ litera) + bus a Sapa 1h (~2€). Bus directo nocturno ~12€, 6h.",
-      "donde_dormir": {
-        "mochilero": "Homestay en aldeas (Ta Van, Lao Chai): 5-10€/noche con cena",
-        "medio": "Hotel en Sapa pueblo: 15-30€/noche",
-        "comfort": "Hotel con vistas (Topas Ecolodge): 80-150€/noche"
-      },
-      "que_hacer": [
-        "Trekking 2 días con homestay en aldea Hmong (30-50€ con guía local)",
-        "Fansipan en teleférico (25€) o trekking 2 días (con guía obligatorio ~60€)",
-        "Mercado de Bac Ha los domingos (auténtico, 1.5h de Sapa)",
-        "Caminata independiente Sapa → Ta Van → Lao Chai (gratis, 4h)"
-      ],
-      "donde_comer": "En homestays la cena está incluida (comida casera excelente). En Sapa pueblo: Hill Station tiene buena comida local modernizada, 5-8€/plato.",
-      "consejo_local": "Contrata guías de las propias aldeas, no de agencias del pueblo. El dinero va directo a las comunidades y la experiencia es infinitamente mejor.",
-      "plan_b_lluvia": "Los senderos se convierten en toboganes de barro. Lleva botas impermeables o cómpralas allí por 3€. Si llueve mucho, día de baños termales en Sapa.",
-      "keywords": ["sapa", "sa pa", "terrazas arroz", "hmong", "fansipan", "lao cai", "ta van", "bac ha"]
-    },
-    {
-      "id": "ninh-binh",
-      "nombre": "Ninh Binh",
-      "tipo": "naturaleza",
       "region": "Norte",
-      "descripcion": "Ha Long Bay terrestre: formaciones kársticas entre arrozales y ríos. Menos turistas que Ha Long, más barato, y lo puedes hacer por libre en moto o bici. Tam Coc y Trang An son los highlights.",
-      "dias_recomendados": 2,
-      "mejor_epoca": "Mayo-junio (arroz verde, calor soportable) o septiembre (arroz dorado)",
-      "como_llegar": "Desde Hanói: bus 2h (~4€) o tren 2.5h (~5€). Grab ~30€.",
-      "donde_dormir": {
-        "mochilero": "Homestay en Tam Coc: 6-10€/noche",
-        "medio": "Hotel con vistas a karst: 15-30€/noche",
-        "comfort": "Tam Coc Garden Resort: 50-80€/noche"
-      },
-      "que_hacer": [
-        "Barca por Tam Coc — 3 cuevas en río entre arrozales (3€ + propina al remero)",
-        "Trang An boat tour — más largo y espectacular (5€)",
-        "Mua Cave — subida de 500 escalones, vistas panorámicas (2€)",
-        "Bici por los arrozales alrededor de Tam Coc (bici gratis en muchos hostels)"
-      ],
-      "donde_comer": "Cabra asada (dê nướng) es la especialidad local. Restaurantes en la calle principal de Tam Coc, 3-5€/persona.",
-      "consejo_local": "Alquila una moto y recorre la carretera de Tam Coc a Trang An pasando por Bich Dong pagoda. Esa ruta de 20 km es lo mejor de Ninh Binh y no sale en las guías.",
-      "plan_b_lluvia": "Las barcas funcionan con lluvia ligera (más atmosférico). Si llueve fuerte, Bai Dinh Pagoda (el complejo budista más grande de Vietnam) está cubierto.",
-      "keywords": ["ninh binh", "tam coc", "trang an", "mua cave", "bich dong", "ha long terrestre"]
-    },
-    {
-      "id": "phong-nha",
-      "nombre": "Phong Nha",
-      "tipo": "naturaleza",
-      "region": "Centro (Quang Binh)",
-      "descripcion": "Sistema de cuevas más grande del mundo. Son Doong es la cueva más grande del planeta (tour de 4 días, 3.000€). Pero Paradise Cave y la propia Phong Nha Cave son brutales y accesibles. Zona rural, tranquila, pocos turistas.",
+      "descripcion": "Pueblo de montaña a 1.600m con vistas de terrazas de arroz, pueblos de minorías étnicas (H'mong, Dao) y senderos espectaculares. Centro para trekking y encuentros culturales auténticos en el norte.",
       "dias_recomendados": 3,
-      "mejor_epoca": "Febrero a agosto (seco)",
-      "como_llegar": "Desde Hanói: vuelo a Dong Hoi (1h, desde 25€) + bus/taxi 45 min a Phong Nha. Bus nocturno desde Hanói ~12€, 10h.",
+      "mejor_epoca": "septiembre a noviembre, febrero a marzo",
+      "como_llegar": "Desde Hanoi: tren nocturno Hanoi-Lao Cai (8-10h, 20-50 EUR según clase), luego minibús a Sapa (1h, 3 EUR). O autobús directo (8-10h, 15-25 EUR).",
       "donde_dormir": {
-        "mochilero": "Phong Nha Farmstay dormitorio: 6-8€/noche",
-        "medio": "Homestay o bungalow con río: 15-25€/noche",
-        "comfort": "Chay Lap Farmstay: 50-90€/noche"
+        "mochilero": "Guesthouse en pueblo, 12-18 EUR/noche",
+        "medio": "Hotel 3* con vistas, 30-50 EUR/noche",
+        "comfort": "Resort boutique en montaña, 70-120 EUR/noche"
       },
       "que_hacer": [
-        "Paradise Cave — 31 km de largo, pasarela de 1 km dentro (10€)",
-        "Phong Nha Cave en barca (6€)",
-        "Dark Cave — tirolina + kayak + baño de barro (20€, diversión pura)",
-        "Moto a Abandoned Valley y Botanical Garden (gratis la ruta, 3€ entrada jardín)"
+        "Trekking de 1-2 días con guía local a pueblos H'mong/Dao (35-50 EUR con alojamiento)",
+        "Ruta del Fansipan (3.143m) en teleférico o a pie (15 EUR teleférico, gratis senderismo)",
+        "Paseo por mercado matutino de Sapa (gratis)",
+        "Contemplar terrazas de arroz al atardecer (gratis)",
+        "Visita a pueblos de minorías étnicas con guía (15-25 EUR)"
       ],
-      "donde_comer": "Opciones limitadas. Phong Nha Farmstay tiene buen restaurante. Pub with Cold Beer (nombre real) es punto de encuentro de mochileros. 3-6€/comida.",
-      "consejo_local": "Si tienes presupuesto para UNA experiencia única en Vietnam, haz el tour de Tu Lan Cave (2 días, ~300€). Es el Son Doong de los mortales.",
-      "plan_b_lluvia": "Las cuevas son el plan B perfecto — están techadas por definición. Dark Cave es igualmente divertido con lluvia.",
-      "keywords": ["phong nha", "son doong", "paradise cave", "dark cave", "dong hoi", "quang binh", "tu lan"]
-    },
-    {
-      "id": "hue",
-      "nombre": "Hué",
-      "tipo": "histórico",
-      "region": "Centro",
-      "descripcion": "Antigua capital imperial. La Ciudadela amurallada, tumbas imperiales a lo largo del Río del Perfume, y la mejor comida de Vietnam según muchos locales. Ciudad tranquila con mucho que ver.",
-      "dias_recomendados": 2,
-      "mejor_epoca": "Febrero a abril (seco, templado). Centro Vietnam llueve mucho oct-dic.",
-      "como_llegar": "Desde Danang: tren 2.5h (~5€, ruta escénica por Hai Van Pass). Vuelo Hanói-Hué desde 20€.",
-      "donde_dormir": {
-        "mochilero": "Hostel centro: 5-7€/noche",
-        "medio": "Hotel río Perfume: 15-30€/noche",
-        "comfort": "Azerai La Residence: 80-150€/noche (colonial francés)"
-      },
-      "que_hacer": [
-        "Ciudadela Imperial (5€ — mínimo 3 horas)",
-        "Tumba de Tu Duc en bici (3€ entrada + bici gratis del hostel)",
-        "Moto por Hai Van Pass hasta Danang (50 km, la mejor carretera costera de Vietnam)",
-        "Barco al atardecer por el Río del Perfume (2-3€ compartido)"
-      ],
-      "donde_comer": "Bun bo Hue (sopa picante, especialidad local) en cualquier puesto callejero por 1€. Banh khoai (crepe crujiente) en Hang Me Me. Mercado Dong Ba para desayuno local.",
-      "consejo_local": "El Hai Van Pass en moto de Hué a Danang (o viceversa) es probablemente la mejor experiencia en carretera de todo Vietnam. Hazlo con calma, para en cada mirador.",
-      "plan_b_lluvia": "La Ciudadela tiene partes cubiertas. Curso de cocina (Hue es la capital gastronómica). Cafés con vistas al río.",
-      "keywords": ["hue", "hué", "ciudadela hue", "hai van pass", "rio perfume", "tumbas imperiales"]
-    },
-    {
-      "id": "hoi-an",
-      "nombre": "Hoi An",
-      "tipo": "histórico",
-      "region": "Centro",
-      "descripcion": "Puerto comercial del siglo XVI perfectamente conservado. Farolillos, casas de madera, sastres que te hacen un traje a medida en 24h, y playa a 4 km. Turístico pero con razón. De noche es mágico.",
-      "dias_recomendados": 3,
-      "mejor_epoca": "Febrero a mayo (seco, calor agradable)",
-      "como_llegar": "Aeropuerto Danang (30 min). Grab desde Danang ~6€. Desde Hué: bus ~4h (~5€) o tren+taxi.",
-      "donde_dormir": {
-        "mochilero": "Hostel casco antiguo: 5-8€/noche",
-        "medio": "Homestay con piscina en An Bang: 15-25€/noche",
-        "comfort": "Hotel boutique río Thu Bon: 40-80€/noche"
-      },
-      "que_hacer": [
-        "Casco antiguo con ticket de 5 atracciones (5€)",
-        "Playa An Bang — relax, bares de playa, surf (gratis)",
-        "Hacerte ropa a medida — traje completo desde 60€, vestido desde 25€",
-        "Bici a Tra Que herb village — huerta orgánica + clase cocina (10€)"
-      ],
-      "donde_comer": "Cao lau (fideos solo de Hoi An) en Morning Glory (~3€). Banh mi en Banh Mi Phuong — el mejor de Vietnam según Bourdain (0.80€). White Rose dumplings en restaurante homónimo.",
-      "consejo_local": "El 14 de cada mes lunar apagan las luces eléctricas y todo se ilumina con farolillos y velas. Coincide con luna llena. Planifica estar esa noche.",
-      "plan_b_lluvia": "Sesión de sastrería + fitting. Curso de cocina. Hoi An inunda en temporada de lluvias (oct-nov), es parte de su encanto pero complica moverse.",
-      "keywords": ["hoi an", "hoian", "farolillos", "an bang", "casco antiguo hoi an", "tra que", "danang"]
+      "donde_comer": "Comida casera de minorías en homestays de trekking. En Sapa: pho, maíz local. Precios 2-5 EUR. Mejor en cafés con vistas.",
+      "consejo_local": "Contrata guía local en hostel (evita tours masivos). Duerme en pueblo durante trekking para experiencia auténtica. Lluvia es frecuente; lleva chubasquero.",
+      "plan_b_lluvia": "Visita pueblos más bajos en la niebla (más auténtico). Museos pequeños, cafés locales, mercado. La niebla en montaña es atmosférica, no desaprovechable.",
+      "keywords": [
+        "Sa Pa",
+        "sapa trekking",
+        "fansipan",
+        "terraces",
+        "minorías étnicas",
+        "hmong",
+        "dao"
+      ]
     },
     {
       "id": "ho-chi-minh",
-      "nombre": "Ho Chi Minh (Saigón)",
+      "nombre": "Ciudad Ho Chi Minh (Saigón)",
       "tipo": "ciudad",
       "region": "Sur",
-      "descripcion": "Motor económico de Vietnam. Más moderna, más caótica y más intensa que Hanói. Vida nocturna en Bui Vien, historia reciente en el Museo de la Guerra, y la mejor comida del sur. Punto de entrada al Delta del Mekong.",
+      "descripcion": "Metrópolis vibrante del sur, caótica y adictiva, con historia de guerra, arquitectura colonial y vida nocturna intensa. Puerta de entrada del sur y centro para tours a Mekong y Camboya.",
       "dias_recomendados": 3,
-      "mejor_epoca": "Diciembre a abril (seco). Mayo-noviembre llueve cada tarde pero para rápido.",
-      "como_llegar": "Aeropuerto Tan Son Nhat, 30 min al centro. Grab ~4€. Metro línea 1 operativa (2€).",
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Aeropuerto Tan Son Nhat (7 km): taxi regulado (6-8 EUR), Grab (4-6 EUR) o autobús (1 EUR). Trenes desde norte (30h+, 25-60 EUR). Autobús desde Camboya/otros países.",
       "donde_dormir": {
-        "mochilero": "Hostel Bui Vien/Pham Ngu Lao: 5-8€/noche",
-        "medio": "Hotel D1: 20-40€/noche",
-        "comfort": "Hotel 4-5★ D1: 60-120€/noche"
+        "mochilero": "Hostel en District 1 (Ben Thanh area), 10-16 EUR/noche",
+        "medio": "Hotel 3* céntrico, 25-40 EUR/noche",
+        "comfort": "Hotel 4-5* frente a río, 80-150 EUR/noche"
       },
       "que_hacer": [
-        "Museo de los Vestigios de Guerra (2€ — impactante)",
-        "Túneles de Cu Chi en medio día (15-25€ tour)",
-        "Bui Vien Street de noche (gratis, cerveza 0.50€)",
-        "Mercado Ben Thanh de día + Night Market (regatear siempre)"
+        "Museo de Remanentes de Guerra (5 EUR, impactante)",
+        "Palacio de la Reunificación (5 EUR)",
+        "Basílica de Notre-Dame y Oficina Central de Correos (gratis exterior)",
+        "Mercado de Ben Thanh (gratis pasear, compras baratas)",
+        "Paseo por río Saigón al atardecer (gratis o 10 EUR en bote)",
+        "Tour a mercados flotantes del Mekong (15-25 EUR)",
+        "Paseo nocturno por Bui Vien Street (gratis)"
       ],
-      "donde_comer": "Banh mi en Banh Mi Huynh Hoa (1€, colas justificadas). Pho en Pho Hoa Pasteur. Com tam (arroz roto) en cualquier puesto del D4 por 1.50€. Rooftop bars en D1 para vistas.",
-      "consejo_local": "El D4 (Distrito 4) es el secreto peor guardado: comida callejera increíble, cero turistas, a 5 min en moto del D1. Ve a cenar allí al menos una noche.",
-      "plan_b_lluvia": "Los chaparrones duran 30-60 min. Espera en un café (café con leche condensada = ca phe sua da). Museo de Bellas Artes o Saigon Skydeck si llueve todo el día.",
-      "keywords": ["ho chi minh", "saigon", "saigón", "hcmc", "sgn", "bui vien", "cu chi", "distrito 1", "ben thanh", "mekong"]
+      "donde_comer": "Com tam (arroz roto, 1-2 EUR), bánh mì (1-2 EUR), cámaras en Bui Vien. Desde callejero hasta 25 EUR en restaurantes. Mejor zona: Nguyen Hue Walking Street.",
+      "consejo_local": "Evita quejas sobre turismo de guerra; es historia. Usa Grab para taxis, no pidas en calle. Mercados flotantes más auténticos lejos de tours masivos (pregunta en hostel).",
+      "plan_b_lluvia": "Museos, compras en centros comerciales, cafés tradicionales, películas en cines con aire acondicionado.",
+      "keywords": [
+        "Ho Chi Minh City",
+        "Saigon",
+        "HCMC",
+        "district 1",
+        "ben thanh",
+        "reunification palace",
+        "war museum"
+      ]
     },
     {
-      "id": "dalat",
-      "nombre": "Da Lat",
-      "tipo": "montaña",
-      "region": "Tierras Altas Centrales",
-      "descripcion": "La ciudad de la eterna primavera a 1.500m de altitud. Clima fresco, plantaciones de café, cascadas, y ambiente de luna de miel vietnamita. Buena pausa del calor costero. Capital del café especialidad de Vietnam.",
-      "dias_recomendados": 2,
-      "mejor_epoca": "Noviembre a marzo (seco y fresco, 15-25°C)",
-      "como_llegar": "Vuelo desde HCMC (50 min, desde 20€). Bus desde HCMC: 7h (~8€). Bus desde Nha Trang: 4h (~5€).",
+      "id": "delta-mekong",
+      "nombre": "Delta del Mekong",
+      "tipo": "rural",
+      "region": "Sur",
+      "descripcion": "Red de canales, islas y humedales. Vida ribereña vietnamita en barcas, huertos flotantes y mercados acuáticos. Día o dos desde Ho Chi Minh para experimentar Vietnam rural sin turismo extremo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Ho Chi Minh: tour de día completo (12-18 EUR, 8-10h salida matutina) o minibús a Can Tho (4h, 5-8 EUR) y tour desde allí.",
       "donde_dormir": {
-        "mochilero": "Hostel centro: 5-7€/noche",
-        "medio": "Hotel con vistas al lago: 15-30€/noche",
-        "comfort": "Ana Mandara Villas: 80-150€/noche"
+        "mochilero": "Homestay en pueblo ribereño, 15-25 EUR/noche",
+        "medio": "Hotel 3* en Can Tho, 20-35 EUR/noche",
+        "comfort": "Resort en islas, 50-100 EUR/noche"
       },
       "que_hacer": [
-        "Ruta de cascadas en moto: Elephant Falls + Datanla + Pongour (moto 5€/día, entradas 1-2€ cada una)",
-        "Tour de café especialidad — fincas locales (10-15€)",
-        "Canyoning en Datanla Falls con Highland Sport (65€, adrenalina pura)",
-        "Mercado nocturno + pizza vietnamita (banh trang nuong, 0.50€)"
+        "Tour en bote por canales y mercados flotantes (12-25 EUR según duración)",
+        "Paseo en bote privado al amanecer (30-50 EUR en pequeño grupo)",
+        "Visita a granjas de cocoteros y de cría de cocodrilos (5-15 EUR)",
+        "Degustación de frutas tropicales (gratis en tour o 5 EUR)",
+        "Paseo en bicicleta por pueblos rurales (10-20 EUR con guía)"
       ],
-      "donde_comer": "Banh trang nuong (pizza vietnamita) en el mercado nocturno. Lau (hotpot) en cualquier restaurante local por 5€/persona. Café: La Viet o The Married Beans para especialidad.",
-      "consejo_local": "Alquila moto y haz la ruta desde Da Lat hasta Nha Trang por carretera de montaña (140 km). Es la segunda mejor ruta en moto de Vietnam después de Hai Van Pass.",
-      "plan_b_lluvia": "Tour de cafés (Da Lat tiene los mejores de Vietnam). Crazy House (arquitectura surrealista, 2€). Invernaderos de flores.",
-      "keywords": ["dalat", "da lat", "tierras altas", "central highlands", "cascadas dalat", "cafe vietnam"]
+      "donde_comer": "Sopa de tortuga, bagre a la parrilla, miel de abeja en restaurantes flotantes (5-12 EUR). Mejor fresco en mercados matutinos.",
+      "consejo_local": "Madruga para ver mercados flotantes antes de mediodía (se vacían). Tours de tour operators masivos son genéricos; contrata guía local en Can Tho.",
+      "plan_b_lluvia": "Los tours funcionan con lluvia. Visitas cubiertas a granjas y mercados bajo techo.",
+      "keywords": [
+        "mekong delta",
+        "can tho",
+        "mercados flotantes",
+        "canales",
+        "cai be",
+        "vida rural"
+      ]
+    },
+    {
+      "id": "da-nang-hoi-an",
+      "nombre": "Da Nang y Hoi An",
+      "tipo": "playa",
+      "region": "Centro",
+      "descripcion": "Da Nang: ciudad costera moderna con playas amplias. Hoi An: pueblo costero antiguo con arquitectura preservada, linternas tradicionales y atmósfera relajada. Uno de los destinos más accesibles y hermosos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "agosto a diciembre",
+      "como_llegar": "Vuelo desde Hanoi o Ho Chi Minh a Da Nang (3h, 40-80 EUR). Tren desde Hanoi (16-20h, 30-80 EUR). Autobús (12-14h, 20-35 EUR). Hoi An a 30 km: autobús local (1h, 2 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostel en Da Nang playa o Hoi An viejo, 10-15 EUR/noche",
+        "medio": "Hotel 3* con playa, 25-50 EUR/noche",
+        "comfort": "Resort 4-5* frente a mar, 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de Da Nang: My Khe, Non Nuoc (gratis)",
+        "Templo Cao Dai en Da Nang (5 EUR, arquitectura única)",
+        "Paseo por casco antiguo de Hoi An (gratis, pequeño para tamaño)",
+        "Clase de cocina en Hoi An (12-15 EUR)",
+        "Lanterna tradition en Hoi An al atardecer (gratis)",
+        "Isla de Cham en bote (15-20 EUR, snorkel)",
+        "Paseo en bicicleta por pueblos cercanos (15-25 EUR con guía)"
+      ],
+      "donde_comer": "Cao Lau (especialidad Hoi An, 3-5 EUR), banh mi, camarones al ajillo. Restaurantes en Hoi An 5-15 EUR, más caro que norte.",
+      "consejo_local": "Hoi An es pequeño y puede cubrirse en medio día. Mejor dormir allí para vivirlo sin día-tripper. Pide comer donde comen locales, no turistas.",
+      "plan_b_lluvia": "Tiendas, cafés, museos de Hoi An. Da Nang tiene más opciones cubiertas (centros comerciales, templos).",
+      "keywords": [
+        "da nang",
+        "hoi an",
+        "ancient town",
+        "my khe beach",
+        "cao lau",
+        "lanterns",
+        "cham island"
+      ]
+    },
+    {
+      "id": "nha-trang",
+      "nombre": "Nha Trang",
+      "tipo": "playa",
+      "region": "Centro-Sur",
+      "descripcion": "Playa y pueblo costero relajado, con buceo y snorkel de calidad. Menos turístico que Da Nang, más alternativo. Buena base para islas y vida playera sin pretensiones.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a septiembre",
+      "como_llegar": "Autobús desde Ho Chi Minh (5-6h, 8-12 EUR) o Da Nang (6h, 8-12 EUR). Tren desde Ho Chi Minh (7-8h, 15-40 EUR). Vuelo raro (caro).",
+      "donde_dormir": {
+        "mochilero": "Hostel o guesthouse en Tran Phu beach, 10-15 EUR/noche",
+        "medio": "Hotel 3* con vistas, 25-45 EUR/noche",
+        "comfort": "Resort en playa o islas, 60-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Tran Phu y baño (gratis)",
+        "Tour de buceo o snorkel a islas (25-45 EUR, 1 día)",
+        "Templo Po Nagar (3 EUR)",
+        "Parque Vinpearl Island (entrada 30 EUR, incluye atracciones)",
+        "Paseo en bote al atardecer (15-25 EUR)",
+        "Bar hopping en Tran Phu Street (bebidas 2-5 EUR)"
+      ],
+      "donde_comer": "Mariscos frescos en restaurantes de playa (8-15 EUR), pho local (2 EUR). Mejor zona: Tran Phu seafront.",
+      "consejo_local": "Nha Trang es muy mochilero/alternativo. Relájate aquí sin planificar. Buceo es bueno pero hay mejores lugares (Phu Quoc).",
+      "plan_b_lluvia": "Parques temáticos cubiertos, centros comerciales, museos locales.",
+      "keywords": [
+        "nha trang",
+        "beach",
+        "diving",
+        "snorkel",
+        "islands",
+        "tran phu",
+        "vinpearl"
+      ]
     },
     {
       "id": "phu-quoc",
       "nombre": "Phu Quoc",
       "tipo": "isla",
-      "region": "Sur (Golfo de Tailandia)",
-      "descripcion": "La isla más grande de Vietnam. Playas de arena blanca, snorkel decente, fábricas de salsa de pescado y plantaciones de pimienta. Se ha desarrollado rápido (resort-ización), pero el norte y este de la isla mantienen carácter.",
+      "region": "Sur",
+      "descripcion": "Isla grande del sur con playas prístinas, buceo/snorkel de clase mundial, pueblos de pescadores y jungla interior. Menos turística que Nha Trang, más relajada y auténtica.",
       "dias_recomendados": 3,
-      "mejor_epoca": "Noviembre a marzo (seco, mar en calma)",
-      "como_llegar": "Vuelo directo desde HCMC (1h, desde 20€) o Hanói. Ferry desde Ha Tien/Rach Gia (~2.5h, 10€).",
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Vuelo Ho Chi Minh-Phu Quoc (1h, 50-100 EUR) o ferry desde Ha Tien (2-3h, 8-12 EUR). Vuelo es rápido pero caro.",
       "donde_dormir": {
-        "mochilero": "Hostel/bungalow Long Beach: 8-12€/noche",
-        "medio": "Resort playa norte: 25-50€/noche",
-        "comfort": "Resort 5★ Ong Lang: 80-200€/noche"
+        "mochilero": "Bungalow o guesthouse en Long Beach, 12-20 EUR/noche",
+        "medio": "Resort 3* en playa, 35-60 EUR/noche",
+        "comfort": "Resort lujo 4-5*, 100-200 EUR/noche"
       },
       "que_hacer": [
-        "Snorkel en islas del sur — tour en barco (15€ con almuerzo)",
-        "Playa Sao Beach (la más bonita, gratis)",
-        "Visitar fábricas de nuoc mam (salsa de pescado) y pimienta (gratis)",
-        "Mercado nocturno Dinh Cau — marisco a la parrilla (5-10€)"
+        "Playas vírgenes: Long, Sao, Khem, Ong Lang (gratis)",
+        "Snorkel/buceo (25-50 EUR, mejor que Nha Trang)",
+        "Prisión histórica de Phu Quoc (5 EUR)",
+        "Paseo en bote a islas cercanas (20-30 EUR)",
+        "Fábrica de salsa de pescado (5 EUR)",
+        "Caminar por jungla (gratis con mapa, o 15 EUR con guía)"
       ],
-      "donde_comer": "Mercado nocturno Dinh Cau: elige marisco vivo, te lo cocinan. 5-10€ por persona. Crab House en Long Beach para cangrejo con pimienta (especialidad local).",
-      "consejo_local": "El norte de la isla (Ganh Dau, Rach Vem) tiene playas mucho más tranquilas que Long Beach. Alquila moto y explora. La puesta de sol desde Ong Lang Beach es mejor que la de Long Beach.",
-      "plan_b_lluvia": "Fábricas de nuoc mam y pimienta son cubiertas. Vinpearl Safari (zoo, 20€). O simplemente spa + cervezas viendo llover.",
-      "keywords": ["phu quoc", "phú quốc", "long beach", "sao beach", "ong lang", "isla vietnam", "golfo tailandia"]
+      "donde_comer": "Marisco fresco en Long Beach (10-20 EUR). Pho y comida local (3-5 EUR). No hay mucha sofisticación gastronómica.",
+      "consejo_local": "Renta scooter (3-5 EUR/día) para explorar isla. Long Beach es la más turística; prueba Sao o Khem para menos gente. Tormenta en aguas profundas es riesgo de tifón.",
+      "plan_b_lluvia": "Lluvia monsónica es riesgo real; visita entre nov-mayo. Si llueve: prisión histórica, museos, pueblos.",
+      "keywords": [
+        "phu quoc",
+        "island",
+        "long beach",
+        "sao beach",
+        "snorkling",
+        "diving",
+        "khem beach"
+      ]
+    },
+    {
+      "id": "hanoi-sapa-crucer",
+      "nombre": "Ruta Norte: Hanoi-Sapa-Ha Long",
+      "tipo": "montaña",
+      "region": "Norte",
+      "descripcion": "Circuito clásico del norte: capital milenaria, montañas de minorías étnicas, bahía natural. Combina cultura, naturaleza y encuentros auténticos en 7-10 días.",
+      "dias_recomendados": 7,
+      "mejor_epoca": "septiembre a noviembre, febrero a marzo",
+      "como_llegar": "Basada en Hanoi como entrada (vuelo internacional). Conexiones internas: tren, autobús, minibús.",
+      "donde_dormir": {
+        "mochilero": "Mix de hostels y guesthouses, 10-18 EUR/noche",
+        "medio": "Hotels 3* y cruceros mid-range, 35-60 EUR/noche",
+        "comfort": "Hotels 4* y cruceros premium, 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Hanoi: museos, Old Quarter, templos (días 1-2)",
+        "Sapa trekking con guía local (días 3-4, 35-50 EUR)",
+        "Ha Long Bay crucero (días 5-6, 60-150 EUR)",
+        "Tren nocturno entre ciudades (incluido en presupuesto)"
+      ],
+      "donde_comer": "Variado según zona: capital, comida minorías en montaña, mariscos en costa. Presupuesto 5-15 EUR/día.",
+      "consejo_local": "Este circuito es estándar pero merece serlo. Mejor en pequeños grupos o solo. Contrata guías locales, no tours mega-operadores.",
+      "plan_b_lluvia": "Todos los destinos tienen opciones cubiertas. Lluvia en Sapa es común y hermosa.",
+      "keywords": [
+        "norte vietnam",
+        "circuito norte",
+        "hanoi sapa halong",
+        "ruta tradicional"
+      ]
+    },
+    {
+      "id": "mekong-camboya",
+      "nombre": "Extension: Mekong a Camboya",
+      "tipo": "rural",
+      "region": "Sur",
+      "descripcion": "Extensión desde delta del Mekong hacia Camboya (Siem Reap o Phnom Penh). Vida acuática, templos jemer y conexión con Indochina. Posibilidad de cruzar frontera por río.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Ho Chi Minh a Can Tho (4h, 5-8 EUR). Tour o minibús a frontera con Camboya (Chau Doc, 4-5h, 5-8 EUR). Ferry a Camboya (4-6h, 15-25 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Chau Doc o a bordo ferry, 12-18 EUR/noche",
+        "medio": "Hotel 3* Chau Doc, 20-35 EUR/noche",
+        "comfort": "Resort, 50-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour por canales fronterizos Chau Doc (10-15 EUR)",
+        "Mercados flotantes (incluido en tour)",
+        "Ferry a Camboya por río (experiencia única, 15-25 EUR)",
+        "Templos jemeres si llega a Siem Reap"
+      ],
+      "donde_comer": "Comida vietnamita y jemer. Más barato en Chau Doc (3-5 EUR), más caro en ferry.",
+      "consejo_local": "La ruta por agua es más lenta pero auténtica. Visados Camboya en frontera. Mejor en grupo pequeño.",
+      "plan_b_lluvia": "Ferry funciona con lluvia. Compra protección.",
+      "keywords": [
+        "chau doc",
+        "frontera",
+        "cambodia",
+        "ferry",
+        "mekong",
+        "siem reap"
+      ]
     }
   ]
 }

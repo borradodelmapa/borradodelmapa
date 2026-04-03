@@ -1,0 +1,328 @@
+{
+  "pais": "Mozambique",
+  "codigo": "mz",
+  "destinos": [
+    {
+      "id": "isla-de-mozambique",
+      "nombre": "Isla de Mozambique",
+      "tipo": "isla",
+      "region": "Nampula",
+      "descripcion": "Isla histórica con arquitectura colonial portuguesa, mezquitas y fuerte de piedra del siglo XVI. Centro cultural y comercial durante siglos, combina patrimonio islámico y portugués. Punto de partida ideal para explorar el norte de Mozambique con estructura turística establecida.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "desde Maputo: vuelo a Namputo (1h30, 60-100 EUR) + autobus/minibus a Ilha (2h, 5-8 EUR). Alternativamente ferry desde Lumbo (3h).",
+      "donde_dormir": {
+        "mochilero": "guesthouses familiares en Stone Town, 15-25 EUR/noche",
+        "medio": "hoteles boutique coloniales, 40-70 EUR/noche",
+        "comfort": "resort de lujo con vistas al océano, 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido por Stone Town y Fortaleza de San Sebastião (gratis/2 EUR entrada)",
+        "Visita a mezquitas históricas (libre acceso)",
+        "Snorkel en arrecife coralino cercano (15-25 EUR con operador local)",
+        "Atardecer desde el puerto antiguo (gratis)"
+      ],
+      "donde_comer": "Restaurantes de mariscos frescos en el puerto, 8-15 EUR por plato. Probar peri-peri camarones y pulpo grillado. Zona del puerto es la más auténtica.",
+      "consejo_local": "La isla es pequeña (2km x 400m), caminable en 30min. El mejor atardecer es desde el lado oeste. Negocia precios de tours directamente con pescadores locales, salen 50% más barato que agencias.",
+      "plan_b_lluvia": "Museo de la Isla (si está abierto), explorar arquitectura interior de casarrones, visitar escuelas coránicas, comprar artesanía local en el mercado techado.",
+      "keywords": [
+        "Ilha de Mocambique",
+        "Stone Town",
+        "Fortaleza San Sebastian",
+        "patrimonio colonial",
+        "norte de Mozambique"
+      ]
+    },
+    {
+      "id": "inhambane",
+      "nombre": "Inhambane",
+      "tipo": "playa",
+      "region": "Gaza",
+      "descripcion": "Pueblo costero colonial con playas vírgenes y agua cálida. Principal punto de encuentro de ballenas jorobadas (junio-noviembre) y centro de buceo y pesca. Atmósfera relajada con arquitectura portuguesa y mercado tradicional activo.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio a noviembre (avistamiento de ballenas)",
+      "como_llegar": "desde Maputo: vuelo (1h, 80-120 EUR) o bus (7h, 15-25 EUR). Desde Tofo: minibus (1h30, 3-5 EUR).",
+      "donde_dormir": {
+        "mochilero": "backpacker lodges y casas de huéspedes, 12-20 EUR/noche",
+        "medio": "pousadas coloniales, 35-60 EUR/noche",
+        "comfort": "resorts de playa, 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Avistamiento de ballenas desde barco (40-80 EUR, junio-nov)",
+        "Buceo en arrecife (25-50 EUR por inmersión)",
+        "Paseo por el puerto y mercado tradicional (gratis)",
+        "Playa de Tofo a 20min (snorkel con whale sharks, 30-50 EUR)"
+      ],
+      "donde_comer": "Frutos de mar fresco en restaurantes del puerto, 10-18 EUR. Probar arroz con marisco y caldo de peixe. El puerto al atardecer es la mejor zona para comer barato.",
+      "consejo_local": "Junio-noviembre es temporada de ballenas jorobadas: contrata tours con operadores locales certificados, no con agencias turísticas infladas. Los precios bajan si vas con otros viajeros.",
+      "plan_b_lluvia": "Museo de la Catedral (colonial), taller de artesanía local, restaurantes con vistas cubiertos, explorar mercado central.",
+      "keywords": [
+        "Inhambane",
+        "ballenas jorobadas",
+        "playa Tofo",
+        "buceo",
+        "whale shark",
+        "Gaza"
+      ]
+    },
+    {
+      "id": "tofo",
+      "nombre": "Tofo",
+      "tipo": "playa",
+      "region": "Gaza",
+      "descripcion": "Pueblo playero de backpackers con encuentros de whale sharks (tiburones ballena) de noviembre a marzo. Centro mundial de avistamiento de tiburones ballena en aguas someras. Playa arenosa con infraestructura turística básica pero creciente.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a marzo (whale sharks)",
+      "como_llegar": "desde Inhambane: minibus (1h30, 3-5 EUR) o bici/moto (25km, 30 EUR alquiler). Desde Maputo: 8h en bus (20-30 EUR) + transferencia.",
+      "donde_dormir": {
+        "mochilero": "backpackers y beach cabanas, 10-18 EUR/noche",
+        "medio": "guesthouses con piscina, 30-50 EUR/noche",
+        "comfort": "eco-resorts de lujo, 70-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel con whale sharks (25-40 EUR, nov-mar)",
+        "Buceo en arrecife coralino (30-55 EUR inmersión)",
+        "Paseo por playa virgen (gratis)",
+        "Puesta de sol desde roca de Tofo (gratis)"
+      ],
+      "donde_comer": "Restaurantes playeros informales, 8-14 EUR plato principal. Peri-peri camarones y ceviche. Zona de la playa principal más barata que resorts.",
+      "consejo_local": "El avistamiento de whale sharks depende mucho de las mareas y la visibilidad. Ve en pequeños grupos (máx 3 personas por guía) para mejores experiencias. Los operadores locales sin certificado son 30% más baratos pero menos seguros.",
+      "plan_b_lluvia": "Clases de buceo PADI (teoría en tierra), cursos de surf (playas cercanas menos afectadas), masajes locales, descanso en alojamiento comunitario.",
+      "keywords": [
+        "Tofo",
+        "whale shark",
+        "tiburon ballena",
+        "snorkel",
+        "buceo",
+        "playa virgen"
+      ]
+    },
+    {
+      "id": "vilanculos",
+      "nombre": "Vilanculos",
+      "tipo": "playa",
+      "region": "Inhambane",
+      "descripcion": "Puerta de entrada al archipiélago de Bazaruto con playas intactas, resorts de buceo y cruceros de delfines. Infraestructura turística consolidada con acceso a islas deshabitadas. Centro de pesca tradicional con vida marina excepcional.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Inhambane: bus (2h30, 8-12 EUR) o vuelo charter (30min, 150-250 EUR). Desde Maputo: 6h en bus (25-35 EUR).",
+      "donde_dormir": {
+        "mochilero": "guesthouses de pueblo, 15-25 EUR/noche",
+        "medio": "hoteles playeros, 45-75 EUR/noche",
+        "comfort": "resorts de buceo con all-inclusive, 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Crucero de delfines y avistamiento marino (30-50 EUR)",
+        "Tour a isla de Bazaruto (picnic en playa virgen, 60-90 EUR)",
+        "Buceo en sitios nombrados (40-70 EUR inmersión)",
+        "Paseo por pueblo pesquero al amanecer (gratis)"
+      ],
+      "donde_comer": "Peixaria (mercado de pescado) con restaurantes anexos, 10-16 EUR. Langosta grillada, tilapia, arroz con mariscos. Más auténtico y barato que resorts.",
+      "consejo_local": "Los tours a islas incluyen snorkel pero lleva tu propio equipo si buceas. Acuerda precios antes de embarcar. La mejor época sin lluvia es junio-octubre.",
+      "plan_b_lluvia": "Museos locales pequeños, clases de cocina tradicional, descanso en resort con piscina, compras de artesanía en mercado cubierto.",
+      "keywords": [
+        "Vilanculos",
+        "Bazaruto",
+        "delfines",
+        "isla virgen",
+        "buceo",
+        "archipiélago"
+      ]
+    },
+    {
+      "id": "gorongosa",
+      "nombre": "Parque Nacional de Gorongosa",
+      "tipo": "naturaleza",
+      "region": "Sofala",
+      "descripcion": "Parque de conservación en recuperación con llanuras de sabana, ríos y biodiversidad excepcional. Proyecto de restauración ambiental premiado internacionalmente. Safari asequible con oportunidades de avistamiento de elefantes, búfalos y leones.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a noviembre",
+      "como_llegar": "desde Maputo: vuelo a Sofala (1h30, 80-120 EUR) + transferencia (2h, 40-60 EUR). O bus a Inchope (5h) + transferencia.",
+      "donde_dormir": {
+        "mochilero": "campamento básico con tiendas, 20-35 EUR/noche",
+        "medio": "lodge dentro del parque, 60-100 EUR/noche",
+        "comfort": "eco-lodge premium, 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari guiado en vehículo (50-90 EUR por 4h)",
+        "Senderismo naturalista (20-40 EUR con guía)",
+        "Avistamiento de aves (100+ especies, gratis con guía del lodge)",
+        "Caminata nocturna (30-50 EUR)"
+      ],
+      "donde_comer": "Restaurante del lodge con buffet, 15-25 EUR. Comida local, carne a la brasa, verduras. Único restaurante en zona.",
+      "consejo_local": "El parque está siendo restaurado activamente; la densidad de fauna aumenta cada año. Contrata guías del parque (hablantes de inglés) en la entrada, no agencias privadas. La mejor época es cuando hay menos lluvia (junio-octubre).",
+      "plan_b_lluvia": "Senderismo en zonas boscosas protegidas, observación de aves desde lodge, voluntariado con proyecto de restauración (previa coordinación), documentales en lodge.",
+      "keywords": [
+        "Gorongosa",
+        "safari",
+        "parque nacional",
+        "elefantes",
+        "conservacion",
+        "Sofala",
+        "sabana"
+      ]
+    },
+    {
+      "id": "matobo",
+      "nombre": "Matobo",
+      "tipo": "montaña",
+      "region": "Manica",
+      "descripcion": "Paisaje montañoso rocoso con formaciones graníticas únicas, senderos de senderismo y vistas panorámicas. Cercano a la frontera con Zimbabwe. Zona rural poco visitada con autenticidad cultural preservada.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "desde Maputo: vuelo a Chimoio (1h30, 70-100 EUR) + bus/transfer (2h, 30-50 EUR). O bus directo desde Maputo (7h, 20-30 EUR).",
+      "donde_dormir": {
+        "mochilero": "alojamiento con familia local, 12-20 EUR/noche",
+        "medio": "guesthouses rurales, 30-50 EUR/noche",
+        "comfort": "eco-lodge montañoso, 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo en formaciones rocosas (gratis o 5-10 EUR con guía local)",
+        "Visita a comunidades locales y artesanía (gratis)",
+        "Observación de aves (150+ especies, gratis o 15 EUR con guía)",
+        "Acampada bajo las estrellas (5-15 EUR)"
+      ],
+      "donde_comer": "Comedores rurales en pueblos cercanos, 5-10 EUR. Comida casera local, maíz, frijoles, carne. Poco variado pero auténtico.",
+      "consejo_local": "Contrata guías locales en el pueblo principal (no turísticos, muy baratos). Las mejores vistas son al amanecer desde cimas principales. El lugar es seguro pero remoto; avisa a alguien de tus planes.",
+      "plan_b_lluvia": "Exploración de cuevas locales, visita a mercados cubiertos, descanso en alojamiento, talleres artesanales con familias locales.",
+      "keywords": [
+        "Matobo",
+        "montaña",
+        "senderismo",
+        "rocas graníticas",
+        "Manica",
+        "Chimoio",
+        "naturaleza rural"
+      ]
+    },
+    {
+      "id": "maputo",
+      "nombre": "Maputo",
+      "tipo": "ciudad",
+      "region": "Maputo",
+      "descripcion": "Capital colonial portuguesa con arquitectura art deco, museos, mercados y vida urbana vibrante. Punto de entrada principal con infraestructura turística completa. Mercados tradicionales, vida nocturna y gastronomía variada.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a septiembre",
+      "como_llegar": "aeropuerto internacional Matopos (destino principal de entrada). Transporte urbano con minibús (0,50-1 EUR), taxi (5-15 EUR), uber (3-8 EUR).",
+      "donde_dormir": {
+        "mochilero": "albergues en Baixa, 15-25 EUR/noche",
+        "medio": "hoteles coloniales en Baixa, 45-70 EUR/noche",
+        "comfort": "hoteles 4-5 estrellas, 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por Baixa (centro colonial): Catedral, Palacio de Gobierno (gratis)",
+        "Museo de la Revolución (5 EUR entrada)",
+        "Mercado de Xipamanine (artesanía, bebidas, gratis)",
+        "Paseo en la Bahía (ferry a Catembe o crucero, 5-20 EUR)",
+        "Museu de Moçambique (8 EUR)"
+      ],
+      "donde_comer": "Avenida Vladimir Lenin (mercado gastronómico) y restaurantes en Baixa, 8-20 EUR. Probar peri-peri, matapa (cacahuete), camarones grillados. Mercado central más barato.",
+      "consejo_local": "Maputo es cara comparada con resto del país pero necesaria para transporte. No necesitas más de 2 días. La Baixa es segura de día; evita noche excepto restaurantes principales. El fin de semana hay vida nocturna en Polana.",
+      "plan_b_lluvia": "Museos interiores, compras en Shoprite (supermercado moderno), cines, restaurantes con vistas interiores, exploración de bairros residenciales.",
+      "keywords": [
+        "Maputo",
+        "capital",
+        "Baixa",
+        "colonial",
+        "mercado Xipamanine",
+        "Bahia",
+        "arte deco"
+      ]
+    },
+    {
+      "id": "beira",
+      "nombre": "Beira",
+      "tipo": "ciudad",
+      "region": "Sofala",
+      "descripcion": "Segunda ciudad portuaria con herencia colonial y acceso a playas cercanas. Centro de distribución para viajes al norte. Mercado tradicional dinámico y puerto histórico con poca infraestructura turística pero auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "desde Maputo: vuelo (1h, 80-120 EUR) o bus (11h, 25-40 EUR). Desde Gorongosa: bus (2h, 10-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "albergues básicos, 12-18 EUR/noche",
+        "medio": "hoteles coloniales, 35-60 EUR/noche",
+        "comfort": "hoteles frente al mar, 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por puerto y arquitectura colonial (gratis)",
+        "Mercado central de Beira (artesanía, bebidas, gratis)",
+        "Playa de Beira (cercana, gratis)",
+        "Museo de Historia (si está abierto, 3 EUR)"
+      ],
+      "donde_comer": "Restaurantes portuarios, 8-14 EUR. Frutos de mar fresco, arroz de marisco. Mercado central tiene comedores económicos.",
+      "consejo_local": "Beira no es destino turístico principal pero sirve para conectar norte/sur. El puerto es animado por la mañana (compra de pescado). Visita solo de paso; el turismo aquí es inexistente pero seguro.",
+      "plan_b_lluvia": "Exploración de interiores coloniales, museos (si funcionan), descanso en hotel, compras en mercado cubierto.",
+      "keywords": [
+        "Beira",
+        "puerto",
+        "Sofala",
+        "colonial",
+        "segunda ciudad",
+        "norte de Mozambique"
+      ]
+    },
+    {
+      "id": "nampula",
+      "nombre": "Nampula",
+      "tipo": "ciudad",
+      "region": "Nampula",
+      "descripcion": "Tercera ciudad del país, hub regional para viajes al norte. Mercado tradicional grande, mezcla cultural con comunidades islámicas. Punto de conexión para Isla de Mozambique y otras islas del norte.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Maputo: vuelo (2h, 100-150 EUR) o bus (24h, 40-60 EUR). Desde Beira: vuelo (1h30, 80-120 EUR).",
+      "donde_dormir": {
+        "mochilero": "guesthouses simples, 12-20 EUR/noche",
+        "medio": "hoteles locales, 30-50 EUR/noche",
+        "comfort": "hoteles con aire acondicionado, 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado central de Nampula (artesanía, especias, gratis)",
+        "Iglesia y mezquitas (arquitectura, gratis)",
+        "Catedral de Nampula (gratis)",
+        "Paseo por bairros tradicionales (gratis)"
+      ],
+      "donde_comer": "Mercado central con comedores, 4-8 EUR. Comida local, arroz, judías. Restaurantes formales, 10-15 EUR.",
+      "consejo_local": "Nampula es hub de transporte, no destino final. Pasa máximo 1 noche aquí. El mercado es mejor por la mañana. La ciudad es segura y amigable pero sin atractivos turísticos mayores.",
+      "plan_b_lluvia": "Descanso en hotel, exploración de mercado cubierto, compras de artesanía, comidas en interior.",
+      "keywords": [
+        "Nampula",
+        "hub norte",
+        "mercado",
+        "ciudad",
+        "Isla de Mozambique conexion"
+      ]
+    },
+    {
+      "id": "inhaca",
+      "nombre": "Isla de Inhaca",
+      "tipo": "isla",
+      "region": "Gaza",
+      "descripcion": "Isla pequeña cercana a Maputo con playas vírgenes, arrecife coralino y vida marina. Parque marino protegido con snorkel accesible. Destino de fácil acceso para escapada de fin de semana desde capital.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "desde Maputo: ferry desde puerto (30-45 min, 5-8 EUR) o barco privado (charter, 150-300 EUR grupo).",
+      "donde_dormir": {
+        "mochilero": "cabanas básicas con familia local, 15-25 EUR/noche",
+        "medio": "guesthouses en playa, 40-65 EUR/noche",
+        "comfort": "eco-lodge, 80-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife coralino (gratis o 10-20 EUR con guía)",
+        "Caminata por playa y dunas (gratis)",
+        "Pesca tradicional con pescadores locales (negociable, 20-40 EUR)",
+        "Observación de tortugas marinas (según estación, gratis)"
+      ],
+      "donde_comer": "Restaurantes playeros informales, 10-16 EUR. Frutos de mar fresco, camarones, pulpo. Mercado pequeño con provisiones.",
+      "consejo_local": "Inhaca es isla volcánica con historia. Lleva snorkel propio si tienes. El ferry tiene horarios limitados; verifica antes. El arrecife está protegido (no pisar corales).",
+      "plan_b_lluvia": "Descanso en cabaña, exploración interior de isla, juegos locales, lectura, pesca desde tierra.",
+      "keywords": [
+        "Inhaca",
+        "isla",
+        "Maputo cercano",
+        "arrecife",
+        "playa",
+        "parque marino"
+      ]
+    }
+  ]
+}

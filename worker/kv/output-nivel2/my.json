@@ -1,0 +1,351 @@
+{
+  "pais": "Malasia",
+  "codigo": "my",
+  "destinos": [
+    {
+      "id": "kuala-lumpur",
+      "nombre": "Kuala Lumpur",
+      "tipo": "ciudad",
+      "region": "Selangor",
+      "descripcion": "Capital y centro económico con torres Petronas icónicas, mercados tradicionales y vida nocturna vibrante. Punto de entrada principal para la mayoría de viajeros independientes con buena red de transporte. Mezcla de modernidad, cultura malaya y comida callejera de calidad.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "marzo a abril, septiembre a octubre",
+      "como_llegar": "llegada internacional directa al KLIA. Tren Aeropuerto Express al centro: 60 min, 12 EUR",
+      "donde_dormir": {
+        "mochilero": "dormitorio compartido en hostales de Bukit Bintang: 12-18 EUR/noche",
+        "medio": "hotel 3* en Sentral o KLCC: 30-50 EUR/noche",
+        "comfort": "hotel 4-5* Petronas, Pavilion: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Torres Petronas (gratis desde afuera, entrada torre: 15 EUR)",
+        "Mercado Petaling Street (gratis, regateo incluido)",
+        "Templo Thean Hou (gratis)",
+        "Barrio chino nocturno en Jalan Alor (cena: 3-6 EUR)",
+        "Parque Perdana (gratis)"
+      ],
+      "donde_comer": "Laksa en Jalan Alor, nasi lemak en puestos callejeros, dim sum en Petaling Street. Rango 2-8 EUR por comida. Zona recomendada: Bukit Bintang y alrededores.",
+      "consejo_local": "Evita Jalan Alor antes de las 19:00 cuando cierra al tráfico. Compra el Touch 'n Go card para transporte (reembolsable).",
+      "plan_b_lluvia": "Berjaya Times Square (centro comercial gigante), Aquaria KLCC (acuario), SPice Market en Pavilion.",
+      "keywords": [
+        "KL",
+        "Kuala Lumpur",
+        "Petronas",
+        "KLCC",
+        "Bukit Bintang",
+        "Chinatown",
+        "Jalan Alor",
+        "Sentral"
+      ]
+    },
+    {
+      "id": "george-town",
+      "nombre": "Georgetown (Penang)",
+      "tipo": "histórico",
+      "region": "Penang",
+      "descripcion": "Patrimonio UNESCO con arquitectura colonial británica, templos chinos antiguos y escena de arte callejero mundial. Destino favorito de mochileros por su autenticidad, precio asequible y comida de fama internacional. Capital culinaria de Malasia.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde KL en autobús (4-5 horas, 8-12 EUR) o avión (1h, 30-50 EUR). Ferry desde Kuala Kedah (2.5h, 5 EUR)",
+      "donde_dormir": {
+        "mochilero": "dormitorio en Georgetown, Armenian Street: 10-15 EUR/noche",
+        "medio": "hotel boutique Heritage: 25-40 EUR/noche",
+        "comfort": "Eastern & Oriental Hotel (histórico): 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Free Walking Tour (propina 5-10 EUR)",
+        "Templo Kek Lok Si (gratis, teleférico: 4 EUR)",
+        "Murales de arte callejero en casco antiguo (gratis)",
+        "Tioman Island day trip o snorkel (20-30 EUR)",
+        "Ferris wheel Penang (6 EUR)"
+      ],
+      "donde_comer": "Asam laksa penang (3-4 EUR), char kway teow (2-3 EUR), nasi kuning. Mejor zona: Lebuh Chulia y Jalan Penang. Comida callejera 2-5 EUR.",
+      "consejo_local": "Alojate en Georgetown (casco antiguo), no en Batu Ferringhi. Los tours de comida a pie son mucho más auténticos que cualquier restaurante.",
+      "plan_b_lluvia": "Penang Museum, Pinang Peranakan Mansion, Browse librerías y galerías de Armenian Street.",
+      "keywords": [
+        "Penang",
+        "Georgetown",
+        "Lebuh Chulia",
+        "Kek Lok Si",
+        "Street art",
+        "Comida callejera",
+        "Casco antiguo",
+        "UNESCO"
+      ]
+    },
+    {
+      "id": "islas-perhentian",
+      "nombre": "Islas Perhentian",
+      "tipo": "isla",
+      "region": "Terengganu",
+      "descripcion": "Archipiélago paradisíaco con playas vírgenes, snorkel asequible y vida relajada. Ideal para viajeros que buscan desconectar con acceso fácil a arrecifes coralinos y tortugas marinas. Menos masificado que Koh Samui pero igual de hermoso.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "marzo a octubre (verano del noreste)",
+      "como_llegar": "Desde KL a Kuala Besut en autobús (5h, 12 EUR), luego ferry (45 min, 8 EUR)",
+      "donde_dormir": {
+        "mochilero": "bungalow basico en playa: 15-25 EUR/noche",
+        "medio": "resort pequeño con baño privado: 30-50 EUR/noche",
+        "comfort": "resort establecido con piscina: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en Tuna Alley (5 EUR con barco)",
+        "Mergansatser y avistamiento de tortugas (8-12 EUR tour)",
+        "Senderismo a Teluk Dalam (gratis)",
+        "Playa Long Beach (gratis)",
+        "Inmersión en aguas cristalinas (25-35 EUR por buceo)"
+      ],
+      "donde_comer": "Seafood fresco (camarones, pez loro). Restaurantes playa 5-12 EUR por comida. Oferta limitada, pero suficiente.",
+      "consejo_local": "Lleva efectivo (pocas cosas aceptan tarjeta). Los viernes sale ferries a horas raras. El agua más cálida de junio a septiembre pero lluvia ocasional.",
+      "plan_b_lluvia": "Juegos de mesa en hostales, explorar senderos de selva, leer en bungalow, masaje tailandés local.",
+      "keywords": [
+        "Perhentian Kecil",
+        "Perhentian Besar",
+        "snorkel",
+        "arrecife",
+        "tortugas",
+        "buceo",
+        "playas",
+        "Terengganu"
+      ]
+    },
+    {
+      "id": "cameron-highlands",
+      "nombre": "Cameron Highlands",
+      "tipo": "montaña",
+      "region": "Pahang",
+      "descripcion": "Meseta a 1500m con plantaciones de té, clima fresco y senderos de selva tropical. Escapada obligatoria desde el calor de la costa para viajeros independientes que quieren naturaleza accesible. Vistas de niebla matutina y aire puro.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "enero a marzo, agosto a septiembre",
+      "como_llegar": "Desde KL en autobús (3-4 horas, 8-10 EUR) a Tapah, luego a Tanah Rata (30 min, 2 EUR)",
+      "donde_dormir": {
+        "mochilero": "hostal en Tanah Rata: 12-18 EUR/noche",
+        "medio": "guesthouse con chimenea: 25-40 EUR/noche",
+        "comfort": "resort colonial histórico: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Mossy Forest Trail (gratis, 2h)",
+        "Plantación de té Sungai Palas (visita guiada 5 EUR)",
+        "Strawberry picking (6-8 EUR por kilo)",
+        "BOH Tea Plantation tour (8 EUR)",
+        "Hermitage Waterfall trek (gratis)"
+      ],
+      "donde_comer": "Trucha de agua dulce, vegetales frescos de la montaña. Rango 4-10 EUR. Zona: Main Street de Tanah Rata.",
+      "consejo_local": "El clima es impredecible; lleva abrigo incluso en verano. Los viajes en minibús local son aventura garantizada pero auténtica (2 EUR).",
+      "plan_b_lluvia": "Visita mercados locales, prueba el té fresco en cafés, museos de la zona, cocina en tu guesthouse.",
+      "keywords": [
+        "Cameron Highlands",
+        "Tanah Rata",
+        "Brinchang",
+        "plantación de té",
+        "Mossy Forest",
+        "montaña",
+        "clima fresco"
+      ]
+    },
+    {
+      "id": "malaca",
+      "nombre": "Malaca",
+      "tipo": "histórico",
+      "region": "Malaca",
+      "descripcion": "Patrimonio portugués, holandés e inglés con arquitectura roja característica, museos y vida nocturna ribereña. Destino histórico más accesible que Georgetown, perfecto para viaje de 2 días desde KL o paso obligatorio hacia Singapur.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde KL en autobús directo (2.5h, 6-8 EUR). Tren también disponible.",
+      "donde_dormir": {
+        "mochilero": "hostal en casco antiguo: 10-16 EUR/noche",
+        "medio": "hotel boutique junto al río: 25-45 EUR/noche",
+        "comfort": "resort de playa o histórico: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por casco antiguo rojo (gratis)",
+        "Iglesia de San Pablo (gratis)",
+        "Fortaleza A Famosa (gratis, exterior)",
+        "Museo Maritim (5 EUR)",
+        "Jonker Walk Night Market (gratis, comida 2-5 EUR)"
+      ],
+      "donde_comer": "Cendol (5 EUR), satay, seafood fresco. Rango 3-8 EUR. Mejor en Jonker Street o riviera.",
+      "consejo_local": "La Jonker Walk de viernes es mucho mejor que la de otros días. Camina de noche cuando baja el calor y se ilumina todo.",
+      "plan_b_lluvia": "Museos (Peranakan, Sultanah Zainal Abidin), galerías de arte, compras en Jonker Street.",
+      "keywords": [
+        "Malacca",
+        "Melaka",
+        "Jonker Street",
+        "casco antiguo",
+        "rojo portugués",
+        "Fortaleza A Famosa",
+        "UNESCO"
+      ]
+    },
+    {
+      "id": "kuala-lumpur-kl-forest-eco-park",
+      "nombre": "Kuching (Sarawak)",
+      "tipo": "ciudad",
+      "region": "Sarawak",
+      "descripcion": "Puerta a la selva de Borneo con cultura indígena Dayak y acceso a orangutanes y vida silvestre única. Menos turística que Sabah pero con mejor infraestructura; ideal para viajeros que quieren selva sin sacrificar confort.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Vuelo desde KL (2h, 40-80 EUR) o desde Singapur. Avión es la opción realista.",
+      "donde_dormir": {
+        "mochilero": "hostal en Downtown: 12-18 EUR/noche",
+        "medio": "hotel 3* junto al río: 30-50 EUR/noche",
+        "comfort": "resort selva o hotel lujo: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Semenggoh Wildlife Centre (orangutanes, 5 EUR)",
+        "Santuario de gatos en Downtown (gratis)",
+        "Paseo ribereño (gratis)",
+        "Bau Longhouse day trip (25-35 EUR incluye comida)",
+        "Mercado de Kuching (gratis)"
+      ],
+      "donde_comer": "Sarawak laksa, midin fern (helecho salvaje), kopi luwak. Rango 3-8 EUR. Zona: Main Bazaar.",
+      "consejo_local": "Los longhouse tours auténticos parten desde Kuching. Negocia directamente en el waterfront para mejores precios.",
+      "plan_b_lluvia": "Museos (Sarawak Museum, Textile Museum), compras en Main Bazaar, tours gastronómicos.",
+      "keywords": [
+        "Kuching",
+        "Sarawak",
+        "Borneo",
+        "orangutanes",
+        "Dayak",
+        "selva",
+        "longhouse",
+        "vida silvestre"
+      ]
+    },
+    {
+      "id": "pulau-sipadan",
+      "nombre": "Pulau Sipadan",
+      "tipo": "isla",
+      "region": "Sabah",
+      "descripcion": "Buceo de clase mundial con visibilidad excepcional, tiburones punta blanca y tortugas marinas. Destino premium pero imprescindible para buceadores; se requiere permiso diario limitado pero cuesta de comprar es mínimo.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "marzo a mayo, septiembre a noviembre",
+      "como_llegar": "Desde KL a Tawau en avión (2.5h, 50-100 EUR), luego 90 min en lancha (15 EUR)",
+      "donde_dormir": {
+        "mochilero": "resort básico en Semporna antes de isla (15-25 EUR/noche)",
+        "medio": "resort en Sipadan o Mabul: 50-80 EUR/noche",
+        "comfort": "resorts de lujo: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en Sipadan (60 EUR por buceo, 3 dives/día máximo)",
+        "Snorkel en Mabul (15 EUR)",
+        "Isla de tortugas (20 EUR tour)",
+        "Documentales sobre vida marina en resort",
+        "Reef conservation (participar en limpiezas: gratis)"
+      ],
+      "donde_comer": "Seafood fresco en resort. Rango 8-15 EUR. Oferta limitada pero buena calidad.",
+      "consejo_local": "Necesitas certificado PADI o hacer curso abierto antes (100 EUR). Solo 120 buzos/día en Sipadan; llega temprano. Mabul es alternativa más barata.",
+      "plan_b_lluvia": "Snorkel house reef, mantenimiento de equipo, cursos PADI, explorar pueblos locales Bajau.",
+      "keywords": [
+        "Sipadan",
+        "Mabul",
+        "Tawau",
+        "Semporna",
+        "buceo",
+        "tiburones",
+        "arrecife",
+        "Sabah"
+      ]
+    },
+    {
+      "id": "kinabalu-park",
+      "nombre": "Kinabalu Park",
+      "tipo": "montaña",
+      "region": "Sabah",
+      "descripcion": "Montaña icónica de 4095m con ascenso accesible incluso para principiantes y flora alpina única. Punto culminante de Borneo con senderos bien mantenidos y alojamiento en la montaña. Experiencia épica sin necesidad de alpinismo técnico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "marzo a mayo, septiembre a noviembre",
+      "como_llegar": "Desde Kota Kinabalu en minibús (90 min, 10 EUR) a parque. Entrance en Kundasang.",
+      "donde_dormir": {
+        "mochilero": "dorm en Kundasang Village: 15-20 EUR/noche",
+        "medio": "Laban Rata mountain lodge (requiere reserva): 60 EUR/noche",
+        "comfort": "Poring Hot Springs resort: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Ascenso a Kinabalu (30 EUR entrada, 40-60 EUR guía obligatorio)",
+        "Poring Hot Springs (10 EUR)",
+        "Senderismo en bosque tropical (gratis con entrada al parque)",
+        "Butterfly Park (3 EUR)",
+        "Observación de aves al amanecer (gratis)"
+      ],
+      "donde_comer": "Comida casera en alojamientos pequeños, 5-10 EUR. Opciones limitadas; lleva snacks.",
+      "consejo_local": "El ascenso requiere salida a las 2-3 AM; muchos viajeros se arrepienten de no aclimatarse bien. Pasa una noche en Kundasang primero.",
+      "plan_b_lluvia": "Poring Hot Springs springs, senderos de bosque bajo (menos afectados), museo del parque.",
+      "keywords": [
+        "Kinabalu",
+        "Mount Kinabalu",
+        "Kundasang",
+        "Poring",
+        "4095m",
+        "ascenso",
+        "alpinismo",
+        "Sabah"
+      ]
+    },
+    {
+      "id": "kota-kinabalu",
+      "nombre": "Kota Kinabalu",
+      "tipo": "ciudad",
+      "region": "Sabah",
+      "descripcion": "Capital de Sabah y puerta a la aventura en Borneo con playas decentes, mercados tradicionales y acceso a islas cercanas. Centro de operaciones para buceo, montaña y selva con infraestructura moderna.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo a mayo, septiembre a noviembre",
+      "como_llegar": "Vuelo internacional a KKIA. Aerobús al centro (1h, 5 EUR) o taxi (30 EUR).",
+      "donde_dormir": {
+        "mochilero": "hostal en Downtown: 12-18 EUR/noche",
+        "medio": "hotel 3* Waterfront: 35-55 EUR/noche",
+        "comfort": "resort beachfront: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Islas Tunku Abdul Rahman National Park (30 EUR con snorkel y comida)",
+        "Sunset al atardecer desde Signal Hill (gratis)",
+        "Mercado de pescado y Filipinas Market (gratis)",
+        "Sabah Museum (4 EUR)",
+        "Playa Tanjung Aru (gratis)"
+      ],
+      "donde_comer": "Seafood en waterfront, nasi lemak, laksa sabah. Rango 3-12 EUR. Mejor en waterfront o mercados.",
+      "consejo_local": "Kota Kinabalu es cara comparada con Península; planifica bien presupuesto. Los tours se venden por todos lados pero compara precios.",
+      "plan_b_lluvia": "Sabah Museum, compras en KK Plaza, piscinas de hotel, documentales sobre vida salvaje.",
+      "keywords": [
+        "Kota Kinabalu",
+        "KK",
+        "KKIA",
+        "Sabah",
+        "Borneo",
+        "waterfront",
+        "Tunku Abdul Rahman"
+      ]
+    },
+    {
+      "id": "taman-negara",
+      "nombre": "Taman Negara",
+      "tipo": "naturaleza",
+      "region": "Pahang, Terengganu, Kelantan",
+      "descripcion": "Selva virgen más antigua de Malasia con senderos canopy walks, avifauna excepcional y ríos tropicales. Experiencia inmersiva en naturaleza primaria sin lujos; acceso a través de Kuala Tahan o Kuantan. Imprescindible para naturalistas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "enero a marzo, agosto a septiembre",
+      "como_llegar": "Desde KL a Kuantan en autobús (3h, 8 EUR), luego a Kuala Tahan (2h, 5 EUR), barco a parque (gratis con entrada).",
+      "donde_dormir": {
+        "mochilero": "dormitorio en Mutiara Resort: 15-25 EUR/noche",
+        "medio": "bungalow básico en parque: 30-50 EUR/noche",
+        "comfort": "Mutiara Resort habitación privada: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Canopy walkway (15 EUR)",
+        "Jungle trekking con guía (20-30 EUR por grupo)",
+        "Noche de avifauna (25 EUR)",
+        "Tanam Negara lake cruise (15 EUR)",
+        "Gua Gajah exploration (10 EUR)"
+      ],
+      "donde_comer": "Comida básica pero suficiente en lodge. Rango 5-10 EUR. Lleva snacks propios.",
+      "consejo_local": "Los guías son obligatorios para ciertos senderos. Contrata con el parque directamente, no con middlemen. Sanguijuelas en monzón; usa repelente.",
+      "plan_b_lluvia": "Senderos cubiertos, interior de alojamientos, documentales sobre selva, pesca en río.",
+      "keywords": [
+        "Taman Negara",
+        "Kuala Tahan",
+        "selva tropical",
+        "canopy walk",
+        "avifauna",
+        "Pahang"
+      ]
+    }
+  ]
+}

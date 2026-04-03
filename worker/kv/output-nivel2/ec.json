@@ -1,0 +1,338 @@
+{
+  "pais": "Ecuador",
+  "codigo": "ec",
+  "destinos": [
+    {
+      "id": "quito",
+      "nombre": "Quito",
+      "tipo": "ciudad",
+      "region": "Sierra norte",
+      "descripcion": "Capital ubicada a 2.850m en los Andes, con centro histórico colonial declarado Patrimonio de la UNESCO. Punto de partida obligatorio para acceder a la Amazonía y la costa, con buena infraestructura de mochileros y vida nocturna en La Mariscal.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a agosto, diciembre a enero",
+      "como_llegar": "vuelo internacional a Mariscal Sucre. Desde aeropuerto a centro: autobús 2€, taxi 8-10€ (30 min)",
+      "donde_dormir": {
+        "mochilero": "Hostales en La Mariscal: 12-18€/noche",
+        "medio": "Hoteles centro histórico o Floresta: 40-60€/noche",
+        "comfort": "Hoteles 4* Cumbayá: 80-120€/noche"
+      },
+      "que_hacer": [
+        "Centro histórico con iglesias coloniales (gratis/8€ entrada)",
+        "Teleférico a 4.100m (12€)",
+        "Museo Antropológico Nacional (7€)",
+        "Barrio Floresta para arte callejero y cafés (gratis)",
+        "Paseo por Quito antiguo (gratis)"
+      ],
+      "donde_comer": "Comida típica (locro, cevichocaldo): 3-5€. Zona La Mariscal para restaurantes variados (5-12€). Pan de yuca y coffee en cafés locales.",
+      "consejo_local": "El soroche (mal de altura) es real: tómate tiempo el primer día, evita bebidas alcohólicas y toma té de coca. La ciudad es segura en día pero evita solos por la noche fuera del centro turístico.",
+      "plan_b_lluvia": "Museos cerrados (Antropológico, Bernardi, carmelitas). Cines en centros comerciales. Cafés en La Mariscal.",
+      "keywords": [
+        "Quito",
+        "capital Ecuador",
+        "La Mariscal",
+        "centro histórico",
+        "teleférico",
+        "altura"
+      ]
+    },
+    {
+      "id": "galapagos",
+      "nombre": "Islas Galápagos",
+      "tipo": "isla",
+      "region": "Océano Pacífico",
+      "descripcion": "Archipiélago único con fauna endémica (iguanas, leones marinos, tortugas gigantes) que inspiró a Darwin. Caro pero imprescindible para naturalistas; visitable sin tours caros alojándose en las islas.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "junio a agosto, enero a marzo",
+      "como_llegar": "Vuelo desde Quito a Galápagos (Baltra o San Cristóbal): 150-250€ ida/vuelta con Avianca/LATAM (2h). Requiere TCC (20€) y control migratorio.",
+      "donde_dormir": {
+        "mochilero": "Puerto Ayora/San Cristóbal, hostales básicos: 20-30€/noche",
+        "medio": "Hoteles isleños: 50-80€/noche",
+        "comfort": "Lodges naturales: 120-180€/noche"
+      },
+      "que_hacer": [
+        "Snorkel con tortugas y leones marinos (tour 40-60€ o gratis desde playas)",
+        "Caminata a El Chato (tortugas gigantes) en Santa Cruz (gratis)",
+        "Playa Ochoa, Lobería (gratis)",
+        "Centro de crianza de tortugas Charles Darwin (15€)",
+        "Puerto Ayora paseo costero (gratis)"
+      ],
+      "donde_comer": "Ceviche y pescado a la sal (6-10€). Mercadillos locales en Puerto Ayora para comida casera (4-7€). Caro comparado con continente.",
+      "consejo_local": "No necesitas crucero: alójate en Puerto Ayora y haz tours diarios (40-60€). La fauna no te huye: mantén distancia respetable. Lleva snorkel propio para ahorrar. La TCC dura 90 días.",
+      "plan_b_lluvia": "Lluvia rara pero si hay: snorkel desde playas, museos locales, paseos cubiertos en puertos.",
+      "keywords": [
+        "Galapagos",
+        "Galápagos",
+        "Darwin",
+        "tortugas",
+        "leones marinos",
+        "Puerto Ayora",
+        "islas"
+      ]
+    },
+    {
+      "id": "cuenca",
+      "nombre": "Cuenca",
+      "tipo": "ciudad",
+      "region": "Sierra sur",
+      "descripcion": "Segunda ciudad colonial del país, rodeada de montañas, con arquitectura barroca intacta y universidad que atrae mochileros. Excelente base para rutas en la Sierra y punto de entrada a Perú.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio a agosto, octubre a noviembre",
+      "como_llegar": "Bus desde Quito (10h, 20-30€) o vuelo nacional (1h, 60-90€). Desde Guayaquil bus 4h (15€).",
+      "donde_dormir": {
+        "mochilero": "Centro histórico/El Vecindario: 12-18€/noche",
+        "medio": "Hoteles centro: 40-60€/noche",
+        "comfort": "Casas coloniales convertidas en hoteles: 80-120€/noche"
+      },
+      "que_hacer": [
+        "Catedral Nueva y Vieja (gratis)",
+        "Mercado de San Francisco (gratis)",
+        "Ingapirca (ruinas incas, 1h de bus): 10€",
+        "Mirador de Turi (gratis)",
+        "Fábrica de sombreros de Paja Toquilla (15€ con taller)"
+      ],
+      "donde_comer": "Locro cuencano, caldo de patas: 2-4€. Restaurantes tipo medio en Calle Larga (6-10€). Pastel de choclo con queso.",
+      "consejo_local": "El agua es excelente; puedes beber del grifo. Los universitarios hacen que sea una ciudad joven: vida nocturna barata. Ideal para pasar 4-5 días sin aburrir.",
+      "plan_b_lluvia": "Museos (Pumapungo, Remigio Crespo): 3€ cada uno. Galerías de arte en calles del centro. Cafés tradicionales.",
+      "keywords": [
+        "Cuenca",
+        "Cuenca Ecuador",
+        "colonial",
+        "Sierra sur",
+        "Ingapirca",
+        "Paja Toquilla"
+      ]
+    },
+    {
+      "id": "amazon-iacute-a-ecuatoriana",
+      "nombre": "Amazonía Ecuatoriana",
+      "tipo": "naturaleza",
+      "region": "Oriente",
+      "descripcion": "Selva tropical virgen accesible desde Quito, con lodges comunitarios, avistamiento de fauna (jaguares, anacondas, delfines rosados) y pueblos indígenas. Mejor relación precio-naturaleza que Perú o Colombia.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "septiembre a diciembre, febrero a mayo",
+      "como_llegar": "Vuelo desde Quito a Coca (1h, 100-150€) o a Tena (30 min, 80€). Desde Tena: tubing o canoa. Desde Coca: cruceros río Napo (todo incluido 4 días desde 400€).",
+      "donde_dormir": {
+        "mochilero": "Lodges comunitarios en Tena/Puyo: 25-40€/noche (sin comidas)",
+        "medio": "Lodges pequeños Coca: 60-100€/noche (comidas incluidas)",
+        "comfort": "Lodges Napo (Sacha, Sani): 200-300€/noche (todo incluido)"
+      },
+      "que_hacer": [
+        "Tubing en río Napo (10-15€)",
+        "Caminatas nocturnas para ver fauna (15€)",
+        "Visita a comunidades indígenas Quichua (20€)",
+        "Kayak en lagunas (20€)",
+        "Mirador desde canoa (gratis con lodge)"
+      ],
+      "donde_comer": "Trucha, yuca, patacones: 3-6€. Los lodges incluyen comida. Tena/Puyo tienen restaurantes básicos (5-8€).",
+      "consejo_local": "Lleva repelente de mosquitos fuerte (DEET 30%). Los viajes independientes desde Tena/Puyo son más baratos que cruceros premium. Culebras, no jaguares, es lo que verás probablemente.",
+      "plan_b_lluvia": "La lluvia es parte de la experiencia; no hay plan B real. Pero no impide actividades. Trae capa de lluvia.",
+      "keywords": [
+        "Amazonía",
+        "Oriente",
+        "Coca",
+        "Tena",
+        "Napo",
+        "selva tropical",
+        "fauna"
+      ]
+    },
+    {
+      "id": "otavalo",
+      "nombre": "Otavalo",
+      "tipo": "rural",
+      "region": "Sierra norte",
+      "descripcion": "Pueblo indígena Otavaleño famoso por mercado artesanal (textiles, cerámica) cada sábado. Accesible desde Quito en excursión de un día, pero vale la pena pernoctar para acceder a laguna Cuicocha y mercadillos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Bus desde Quito (2h, 3€) sale cada 15 min desde terminal norte. Regreso igual.",
+      "donde_dormir": {
+        "mochilero": "Hostales centro: 12-16€/noche",
+        "medio": "Hoteles pequeños: 35-50€/noche",
+        "comfort": "Haciendas convertidas en lodges: 70-100€/noche"
+      },
+      "que_hacer": [
+        "Mercado de Otavalo sábado (gratis)",
+        "Laguna Cuicocha caminata (7€ entrada + 2€ canoa)",
+        "Peguche cascada (gratis)",
+        "Visita a taller textil indígena (gratis pero con intención de compra)",
+        "Espejo de agua (gratis)"
+      ],
+      "donde_comer": "Hornado, fritada: 3-5€. Mercado lleno de comida callejera (1-2€). Jugos naturales.",
+      "consejo_local": "Ve sábado temprano (6am) para mercado tranquilo, antes de turistas. Negocia precios con vendedores. Las artesanías de aquí son genuinas.",
+      "plan_b_lluvia": "El mercado no se suspende. Visita telares cubiertos, museos locales.",
+      "keywords": [
+        "Otavalo",
+        "mercado",
+        "artesanías",
+        "indígena",
+        "Cuicocha",
+        "textiles"
+      ]
+    },
+    {
+      "id": "montanita",
+      "nombre": "Montañita",
+      "tipo": "playa",
+      "region": "Costa",
+      "descripcion": "Pueblo costero surfer con playas anchas, olas consistentes y vida nocturna juvenil. Mucho más barato y relajado que playas del norte; ideal para mochileros que buscan playa + ambiente.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a abril (olas mejores junio a octubre)",
+      "como_llegar": "Bus desde Guayaquil (3h, 4-6€) o desde Quito (8h, 15€). Desde Santa Elena (30 min, 1€).",
+      "donde_dormir": {
+        "mochilero": "Hostales frente al mar: 12-18€/noche",
+        "medio": "Hoteles pequeños: 35-55€/noche",
+        "comfort": "Hoteles boutique: 80-120€/noche"
+      },
+      "que_hacer": [
+        "Surf lecciones (20-30€) o playa gratis",
+        "Snorkel en Isla de la Plata (60€ tour) o desde playa (gratis)",
+        "Paseo a Ayampe pueblo vecino (gratis)",
+        "Atardecer en playa (gratis)",
+        "Caminata a Salinas pueblo cercano (gratis)"
+      ],
+      "donde_comer": "Ceviches, langostinos: 4-8€. Comida en la arena (2-3€). Vida nocturna con shots baratos (1-2€ cada uno).",
+      "consejo_local": "Diciembre a marzo es temporada alta y lluvia ocasional. Junio a octubre es seco pero frío en el agua. Ten cuidado con el 'turismo sexual' y drogas que rondan bares nocturnos.",
+      "plan_b_lluvia": "Lluvia rara pero cuando hay: interior tiendas, bares, dormir siesta. Playas tienen olas incluso con lluvia.",
+      "keywords": [
+        "Montanita",
+        "Montañita",
+        "surf",
+        "playa",
+        "Costa",
+        "fiesta",
+        "mochileros"
+      ]
+    },
+    {
+      "id": "baños",
+      "nombre": "Baños",
+      "tipo": "montaña",
+      "region": "Sierra central",
+      "descripcion": "Pueblo en quebrada rodeado de cascadas y selva nubosa, base para deportes extremos (canopy, rafting, canyoning) y puente a la Amazonía. Atmosférico y lejano de circuito turístico masivo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre a diciembre",
+      "como_llegar": "Bus desde Quito (5h, 8€) hasta Ambato, luego Baños (2h más, 3€). Desde Puyo (1h, 2€).",
+      "donde_dormir": {
+        "mochilero": "Hostales casco antiguo: 10-15€/noche",
+        "medio": "Hoteles con vistas cascada: 40-60€/noche",
+        "comfort": "Ecolodges en alrededores: 70-100€/noche"
+      },
+      "que_hacer": [
+        "Cascada de agua blanca caminata (gratis)",
+        "Swing at the end of the world (5€)",
+        "Canopy forest (30-40€)",
+        "Rafting en río Pastaza (25-35€)",
+        "Caminata a Pailón del Diablo (15€ con guía o gratis sin)"
+      ],
+      "donde_comer": "Trucha local: 5-8€. Frutas tropicales (piña, naranja): 0.50€. Mercado central para comida barata.",
+      "consejo_local": "Baños es peligro de derrumbes ocasionales (2006, 2008); consulta situación actual. Pero ahora es seguro. Lluvia es constante: trae capa. Pueblo amigable con mochileros.",
+      "plan_b_lluvia": "La lluvia es característica. Baños tiene cines, bares, museos. Las cascadas están mejor con lluvia.",
+      "keywords": [
+        "Baños",
+        "cascadas",
+        "deportes extremos",
+        "swing",
+        "canopy",
+        "rafting"
+      ]
+    },
+    {
+      "id": "esmeraldas-playa",
+      "nombre": "Atacames / Costa Esmeraldas",
+      "tipo": "playa",
+      "region": "Costa norte",
+      "descripcion": "Playas con palmeras, pueblos costeros tranquilos y acceso a reserva ecológica. Menos turístico que Montañita, más relajado y genuino; buena opción para desconectar.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "julio a octubre",
+      "como_llegar": "Bus desde Quito (5-6h, 12€) directo a Atacames. Desde Esmeraldas (1.5h, 2€).",
+      "donde_dormir": {
+        "mochilero": "Hospedajes básicos: 10-15€/noche",
+        "medio": "Hoteles: 30-50€/noche",
+        "comfort": "Lodges costeros: 60-90€/noche"
+      },
+      "que_hacer": [
+        "Playa Atacames paseo (gratis)",
+        "Playa Tortuguita (gratis)",
+        "Reserva Ecológica Cayapas-Mataje tour (30€ con guía)",
+        "Pesca de camarón con pescadores (20€)",
+        "Buceo (40€ tour)"
+      ],
+      "donde_comer": "Camarones al ajillo, encebollado: 4-7€. Cebiches frescos: 3-5€. Mercado de mariscos.",
+      "consejo_local": "Atmósfera más relajada que Montañita, menos turismo de fiesta. Playas negras por arena volcánica (fría al nadar). Malecón seguro durante el día.",
+      "plan_b_lluvia": "Lluvia frecuente pero pasa rápido. Playas mejores con lluvia. Bares cubiertos.",
+      "keywords": [
+        "Atacames",
+        "Esmeraldas",
+        "Costa norte",
+        "playas",
+        "camarones",
+        "tranquilo"
+      ]
+    },
+    {
+      "id": "mindo",
+      "nombre": "Mindo",
+      "tipo": "naturaleza",
+      "region": "Pululahua/nube",
+      "descripcion": "Pueblito en bosque nuboso, paraíso para observación de aves (700 especies) a 1.5h de Quito. Tubing en río, tirolesas y tranquilidad; excursión de un día o 2-3 noches.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Bus desde Quito terminal norte (2h, 3€). Camina desde parada 2km hasta pueblo.",
+      "donde_dormir": {
+        "mochilero": "Hostales/cabañas: 12-18€/noche",
+        "medio": "Lodges pequeños: 40-60€/noche",
+        "comfort": "Ecolodges cloud forest: 80-120€/noche"
+      },
+      "que_hacer": [
+        "Bird watching tours (30-50€ con guía local)",
+        "Tubing en río Mindo (15-20€)",
+        "Tirolesas (20€)",
+        "Caminata a cascadas (10€ entrada parque)",
+        "Mariposario (8€)"
+      ],
+      "donde_comer": "Trucha fresca: 5-8€. Comida casera en lodges. Mercadillo pequeño para frutas tropicales.",
+      "consejo_local": "Lluvia diaria garantizada; trae capa impermeable. Binoculares propios si eres ornitólogo. Guías locales son muy baratos (15€/4h) y mejores que tours de Quito.",
+      "plan_b_lluvia": "Lluvia es parte de la experiencia. Avistamientos mejoran con lluvia. Actividades interiores: mariposas, exposiciones.",
+      "keywords": [
+        "Mindo",
+        "bosque nuboso",
+        "aves",
+        "tubing",
+        "Pichincha",
+        "ecoturismo"
+      ]
+    },
+    {
+      "id": "ibarra-laguna",
+      "nombre": "Ibarra / Laguna San Pablo",
+      "tipo": "ciudad",
+      "region": "Sierra norte",
+      "descripcion": "Capital provincial tranquila en los Andes, puerta norte a Colombia. Laguna San Pablo cercana para trekking, baños termales y pueblos indígenas; alternativa a Otavalo menos turística.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Bus desde Quito (2.5h, 4€) o desde Otavalo (1h, 1€). Acceso a Colombia (Tulcán) bus 2h (2€).",
+      "donde_dormir": {
+        "mochilero": "Hostales centro: 12-16€/noche",
+        "medio": "Hoteles: 35-50€/noche",
+        "comfort": "Haciendas: 70-100€/noche"
+      },
+      "que_hacer": [
+        "Laguna San Pablo caminata circular (gratis)",
+        "Baños termales El Tejar (5€ entrada)",
+        "Mercado de Ibarra (gratis)",
+        "Bosque Protector Balsas caminata (gratis)",
+        "Paseo a Pimampiro pueblo (bus 45 min, 2€)"
+      ],
+      "donde_comer": "Empanadas de verde, bolones: 1-2€. Cevichocaldo: 3€. Cafeterías con café local.",
+      "consejo_local": "Mucho menos masificado que Otavalo. Laguna San Pablo tiene pueblos indígenas Otavalo alrededor pero sin mercado turístico. Excelente para calma.",
+      "plan_b_lluvia": "Bañarse en agua caliente (baños termales). Mercadillos cubiertos. Cafés.",
+      "keywords": [
+        "Ibarra",
+        "Laguna San Pablo",
+        "Sierra norte",
+        "baños termales",
+        "frontera Colombia"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,328 @@
+{
+  "pais": "Brunéi",
+  "codigo": "bn",
+  "destinos": [
+    {
+      "id": "bandar-seri-begawan",
+      "nombre": "Bandar Seri Begawan",
+      "tipo": "ciudad",
+      "region": "Brunei-Muara",
+      "descripcion": "Capital de Brunéi, compacta y ordenada, con la imponente Mezquita Jame Asr Hassanil Bolkiah como punto focal. Centro administrativo y comercial donde se concentran museos, mercados flotantes y arquitectura colonial. Punto de partida obligado para explorar el país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Llegada por aeropuerto internacional (BIA), 20 minutos en taxi (15 EUR) o autobús (1 EUR) al centro",
+      "donde_dormir": {
+        "mochilero": "Hostales en Kampong Ayer, 20-30 EUR/noche",
+        "medio": "Hoteles 3 estrellas en centro, 50-80 EUR/noche",
+        "comfort": "Hoteles 4-5 estrellas (Radisson, Sheraton), 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Mezquita Jame Asr Hassanil Bolkiah (gratis, horarios limitados)",
+        "Mercado flotante de Kampong Ayer (gratis, tours en bote 15-25 EUR)",
+        "Museo de Brunéi (2 EUR)",
+        "Palacio Istana Nurul Iman (exterior, gratis)",
+        "Paseo por Waterfront (gratis)"
+      ],
+      "donde_comer": "Nasi kuning, roti canai, satay en mercados ambulantes (2-5 EUR). Zona Jalan Pemancha para restaurantes locales, Waterfront para opciones más caras.",
+      "consejo_local": "Visita el mercado flotante al atardecer cuando llegan menos turistas. La mayoría de restaurantes cierran temprano después de las 21:00.",
+      "plan_b_lluvia": "Museos interiores (Museo Brunéi, Brunei Museum), centros comerciales, piscinas techadas",
+      "keywords": [
+        "BSB",
+        "capital",
+        "Kampong Ayer",
+        "Jame Asr Hassanil Bolkiah",
+        "Waterfront",
+        "mercado flotante"
+      ]
+    },
+    {
+      "id": "kampong-ayer",
+      "nombre": "Kampong Ayer",
+      "tipo": "histórico",
+      "region": "Brunei-Muara",
+      "descripcion": "Pueblo flotante milenario sobre el río Brunei con casas tradicionales de madera sobre pilotes. Comunidad viva donde conviven pescadores, comerciantes y familias en un entorno casi sin cambios. Experiencia cultural auténtica a 10 minutos del centro.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Bandar Seri Begawan, taxi (5 EUR) o a pie hasta embarcadero, bote local (1 EUR) o tour privado (20-30 EUR)",
+      "donde_dormir": {
+        "mochilero": "Alojamiento en casas de familia (homestay), 20-35 EUR/noche",
+        "medio": "Casas flotantes remodeladas, 50-70 EUR/noche",
+        "comfort": "Resorts sobre el agua con servicios modernos, 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido en bote motorizado por canales (10-20 EUR)",
+        "Visita a Escuela Flotante (5 EUR)",
+        "Compra de artesanías en tiendas locales",
+        "Fotografía al atardecer (gratis)",
+        "Cena en restaurante flotante"
+      ],
+      "donde_comer": "Pescado fresco a la parrilla, fideos de huevo locales en pequeños comedores flotantes (3-8 EUR). Restaurante Aminah's Café para vistas al río.",
+      "consejo_local": "Lleva efectivo, muchos lugares no aceptan tarjeta. El atardecer es la mejor hora, cuando el pueblo cobra vida tras la siesta.",
+      "plan_b_lluvia": "Tours en bote cubiertos, visita a museo flotante, compra en tiendas bajo techo",
+      "keywords": [
+        "Water Village",
+        "pueblo flotante",
+        "casas sobre pilotes",
+        "río Brunei",
+        "Aminah's Café"
+      ]
+    },
+    {
+      "id": "tutong",
+      "nombre": "Tutong",
+      "tipo": "playa",
+      "region": "Tutong",
+      "descripcion": "Pueblo costero tranquilo con playas vírgenes y arena blanca a 45 km al oeste de la capital. Punto de acceso a la naturaleza de Brunéi con menos turismo que otras zonas. Ideal para escapar de la capital y conectar con la vida local.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Bandar Seri Begawan, autobús (2 EUR, 1 hora) o taxi compartido (10 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses simples, 25-40 EUR/noche",
+        "medio": "Hoteles modestos, 45-65 EUR/noche",
+        "comfort": "Resorts con vista al mar, 90-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Tutong (gratis)",
+        "Senderismo en Luau Luit (bosque de manglares, gratis)",
+        "Mercado local matutino (gratis)",
+        "Pesca en el río Tutong (tours 30-40 EUR)",
+        "Playa de Sungai Liang para acampar"
+      ],
+      "donde_comer": "Pescado a la sal, camarones locales en pequeños restaurantes junto a la playa (4-10 EUR). Comida fresca en mercado matutino a precios muy bajos.",
+      "consejo_local": "Tutong es más auténtico que turístico; pregunta en tu alojamiento dónde van los locales a comer, no en guías turísticas.",
+      "plan_b_lluvia": "Museo de Tutong, senderismo en senderos bajo dosel forestal, mercados cubiertos",
+      "keywords": [
+        "Tutong Beach",
+        "Luau Luit",
+        "Sungai Liang",
+        "costa occidental",
+        "playas tranquilas"
+      ]
+    },
+    {
+      "id": "taman-negara-brunei",
+      "nombre": "Taman Negara Brunei",
+      "tipo": "naturaleza",
+      "region": "Temburong",
+      "descripcion": "Parque nacional primario con selva tropical antigua, ríos cristalinos y ecosistema casi intacto. Acceso limitado y controlado lo mantiene pristino. Experiencia de naturaleza pura para senderistas y observadores de fauna.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Bandar Seri Begawan, mini-bus a Limbang (Malasia, 1 hora, 5 EUR), luego bote río arriba (2 horas, 15-20 EUR). Requiere permiso previo.",
+      "donde_dormir": {
+        "mochilero": "Cabañas básicas del parque, 30-50 EUR/noche (todo incluido con comidas)",
+        "medio": "Bungalows con baño privado, 60-100 EUR/noche",
+        "comfort": "Eco-lodge con servicios, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo (Bukit Patoi, 4-5 horas, gratis con entrada)",
+        "Observación de vida silvestre (aves, mamíferos, 20-30 EUR con guía)",
+        "Baño en piscinas naturales (gratis)",
+        "Acampada (10-15 EUR por tienda)",
+        "Fotografía de naturaleza"
+      ],
+      "donde_comer": "Comida local básica incluida en alojamiento parque. Platos de arroz, vegetales, carne. Tiendita pequeña con snacks (precios turísticos).",
+      "consejo_local": "Lleva repelente de insectos potente, más por mosquitos que por sanguijuelas. El río es más seguro que las sendas a medianoche.",
+      "plan_b_lluvia": "Senderos bajo dosel, observación de fauna desde refugios, fotografía de plantas tropicales",
+      "keywords": [
+        "Taman Negara",
+        "selva virgen",
+        "Temburong",
+        "parque nacional",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "bangar",
+      "nombre": "Bangar",
+      "tipo": "rural",
+      "region": "Temburong",
+      "descripcion": "Pueblo fronterizo en el distrito oriental aislado de Temburong, rodeado de selva. Punto de salida a Taman Negara y acceso a vida rural auténtica de Brunéi. Destino para viajeros que buscan alejarse de rutas turísticas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Bandar Seri Begawan, mini-bus a Limbang (Malasia), bote río arriba a Bangar (3 horas total, 20-25 EUR)",
+      "donde_dormir": {
+        "mochilero": "Casas de familia, 20-30 EUR/noche",
+        "medio": "Pequeños hoteles simples, 40-60 EUR/noche",
+        "comfort": "No hay opciones de lujo; mejor dormir en Parque Nacional o volver a Bandar"
+      },
+      "que_hacer": [
+        "Exploración del pueblo a pie (gratis)",
+        "Mercado local (gratis)",
+        "Caminata a cascadas cercanas (20-30 EUR con guía local)",
+        "Observación de vida rural bruneiana",
+        "Compra de artesanías locales"
+      ],
+      "donde_comer": "Fideos locales, arroz con curry en pequeños comedores (2-5 EUR). Opciones muy limitadas; come antes de viajar.",
+      "consejo_local": "Bangar es principalmente un punto de transito; no tiene mucho que ofrecer más allá de la experiencia de estar en un pueblo remoto genuino.",
+      "plan_b_lluvia": "Mercado local, exploración de calles del pueblo bajo lluvia, preparación para Taman Negara",
+      "keywords": [
+        "Temburong",
+        "frontera",
+        "pueblo remoto",
+        "río Temburong",
+        "Limbang"
+      ]
+    },
+    {
+      "id": "jerudong-park",
+      "nombre": "Jerudong Park",
+      "tipo": "playa",
+      "region": "Brunei-Muara",
+      "descripcion": "Parque de playa con arena blanca, piscina, y instalaciones deportivas a 20 km de la capital. Lugar de ocio de locales con ambiente familiar relajado. Mejor opción de playa cercana para baño sin aventurarse lejos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Bandar Seri Begawan, taxi (8-12 EUR, 30 minutos) o autobús (2 EUR, 45 minutos)",
+      "donde_dormir": {
+        "mochilero": "Acampada en el parque, 10-15 EUR/noche",
+        "medio": "Guesthouses en pueblos cercanos, 40-60 EUR/noche",
+        "comfort": "Resorts de Brunei-Muara, 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en playa (1-2 EUR entrada parque)",
+        "Piscina olímpica (3 EUR)",
+        "Fútbol playa, voleibol (gratis con entrada)",
+        "Picnic en la playa (gratis)",
+        "Paseo al atardecer"
+      ],
+      "donde_comer": "Comida rápida en kioscos del parque, barbacoa con amigos locales. Precios muy accesibles (2-6 EUR). Mejor traer tu propio picnic.",
+      "consejo_local": "Es el lugar donde van las familias bruneanas los fines de semana; ve entre semana para más tranquilidad.",
+      "plan_b_lluvia": "Piscinas cubiertas, áreas techadas para picnic, compras en tiendita del parque",
+      "keywords": [
+        "Jerudong",
+        "playa",
+        "piscina olímpica",
+        "parque costero",
+        "ocio local"
+      ]
+    },
+    {
+      "id": "kuala-belait",
+      "nombre": "Kuala Belait",
+      "tipo": "ciudad",
+      "region": "Belait",
+      "descripcion": "Pueblo industrial basado en petróleo en la costa occidental con menos turismo que Bandar. Punto de acceso a playas salvajes y selva de la región de Belait. Alternativa menos turística para explorar interior de Brunéi.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Bandar Seri Begawan, autobús (4 EUR, 3 horas) o taxi (30-40 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales básicos, 25-35 EUR/noche",
+        "medio": "Hoteles 3 estrellas, 50-70 EUR/noche",
+        "comfort": "Hotel Belait o similar, 90-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Kuala Belait (gratis)",
+        "Senderismo en bosques cercanos (gratis o 15-20 EUR con guía)",
+        "Mercado local (gratis)",
+        "Observación de aves en manglares",
+        "Visita a pozos petrolíferos abandonados (tours 20-30 EUR)"
+      ],
+      "donde_comer": "Seafood fresco en restaurantes junto a la costa, curry locales (5-12 EUR). Mercado nocturno con opciones baratas.",
+      "consejo_local": "Kuala Belait es punto de salida ideal para Ulu Temburong si vienes del oeste, evitando dobles viajes a Bandar.",
+      "plan_b_lluvia": "Museo Oil and Gas, mercados cubiertos, restaurantes con vista al mar",
+      "keywords": [
+        "Kuala Belait",
+        "Belait",
+        "costa occidental",
+        "industria petrolera",
+        "playas remotas"
+      ]
+    },
+    {
+      "id": "ulu-temburong",
+      "nombre": "Ulu Temburong National Park",
+      "tipo": "naturaleza",
+      "region": "Temburong",
+      "descripcion": "Reserva forestal con dosel de 50 metros, pasarelas aéreas y vida silvestre rica. Acceso mediante teleféricos y plataformas sobre el bosque. Experiencia inmersiva en ecosistema tropical desde perspectivas únicas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Tours organizados desde Bandar Seri Begawan (60-100 EUR por persona, incluye transporte, almuerzo, entrada). Ruta: Bandar > Limbang (Malasia) > bote río arriba 1 hora",
+      "donde_dormir": {
+        "mochilero": "Acampada en parque, 15-20 EUR/noche",
+        "medio": "Lodge básico en parque, 50-80 EUR/noche",
+        "comfort": "Dormir en Bandar y excursión diaria (no hay alojamiento premium aquí)"
+      },
+      "que_hacer": [
+        "Pasarelas canopy (incluido en entrada del parque)",
+        "Senderismo a cascadas (gratis con entrada)",
+        "Baño en pozos naturales (gratis)",
+        "Observación de vida silvestre (tours con guía 20-30 EUR)",
+        "Fotografía de naturaleza"
+      ],
+      "donde_comer": "Comidas incluidas en tours (almuerzo típico local). Snacks en lodge.",
+      "consejo_local": "Los tours organizados desde Bandar son la forma práctica de visitarlo sin arreglar tu propio transporte. Retraso de lluvia es común.",
+      "plan_b_lluvia": "Caminar bajo dosel es posible incluso con lluvia; lleva ropa impermeable",
+      "keywords": [
+        "Ulu Temburong",
+        "canopy",
+        "pasarelas aéreas",
+        "selva tropical",
+        "Temburong"
+      ]
+    },
+    {
+      "id": "limbang",
+      "nombre": "Limbang (excursión a Sarawak)",
+      "tipo": "ciudad",
+      "region": "Sarawak, Malasia",
+      "descripcion": "Pequeña ciudad malaya que bordea Brunéi, punto fronterizo con mercados locales y vida cotidiana auténtica. Fácil cruce para viajeros que buscan expandir su viaje regional.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "excursion_desde": true,
+      "como_llegar": "Desde Bandar Seri Begawan, mini-bus directo a Limbang (1 hora, 5 EUR) o desde Kuala Belait (30 min, 2 EUR). Frontera terrestre/fluvial.",
+      "donde_dormir": {
+        "mochilero": "Hostales, 20-30 EUR/noche",
+        "medio": "Hoteles simples, 40-60 EUR/noche",
+        "comfort": "Hotel Limbang o guesthouses, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado local Limbang (gratis)",
+        "Bote tours por río Limbang (10-20 EUR)",
+        "Visita a pueblo indígena Iban (tours 30-40 EUR)",
+        "Shopping de artesanías (negociable)",
+        "Gastronomía malaya"
+      ],
+      "donde_comer": "Laksa sarawak, mee goreng, satay en mercado y callejuelas (2-6 EUR). Mejor relación precio-calidad que Brunéi.",
+      "consejo_local": "Limbang es paso obligado si vas a Taman Negara; aprovecha para explorar mercados locales. Dinero malayo se usa aquí.",
+      "plan_b_lluvia": "Mercados cubiertos, museos locales, tiendas de artesanías",
+      "keywords": [
+        "Limbang",
+        "Sarawak",
+        "frontera",
+        "excursion",
+        "río Limbang"
+      ]
+    },
+    {
+      "id": "seria",
+      "nombre": "Seria",
+      "tipo": "rural",
+      "region": "Belait",
+      "descripcion": "Pueblo industrial de petróleo en la costa con pocos turistas y acceso a playas vírgenes cercanas. Destino alternativo para viajeros que buscan escapar del circuito turístico estándar. Punto de partida para senderos en la región de Belait.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Kuala Belait, autobús (1 EUR, 30 min) o taxi (10 EUR). Desde Bandar Seri Begawan, autobús directo (5 EUR, 3.5 horas)",
+      "donde_dormir": {
+        "mochilero": "Casas de familia, 20-30 EUR/noche",
+        "medio": "Pequeños hoteles, 40-60 EUR/noche",
+        "comfort": "Opciones limitadas, mejor ir a Kuala Belait"
+      },
+      "que_hacer": [
+        "Playa Sungai Liang para acampar (gratis)",
+        "Senderismo en bosques cercanos (gratis)",
+        "Mercado local (gratis)",
+        "Bote por río Belait (tours 15-25 EUR)",
+        "Visita a pozos petrolíferos históricos (tours 20-30 EUR)"
+      ],
+      "donde_comer": "Comida local en pequeños comedores (2-5 EUR). Opciones limitadas; come en Kuala Belait si buscas variedad.",
+      "consejo_local": "Seria es más un punto de paso que un destino; útil si vienes de Limbang y quieres evitar Bandar o explorar Belait.",
+      "plan_b_lluvia": "Mercados cubiertos, exploración de arquitectura colonial británica, museos locales",
+      "keywords": [
+        "Seria",
+        "Belait",
+        "pueblo petrolero",
+        "playas remotas",
+        "costa occidental"
+      ]
+    }
+  ]
+}

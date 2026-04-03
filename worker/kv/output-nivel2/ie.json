@@ -1,0 +1,405 @@
+{
+  "pais": "Irlanda",
+  "codigo": "ie",
+  "destinos": [
+    {
+      "id": "dublin",
+      "nombre": "Dublín",
+      "tipo": "ciudad",
+      "region": "Dublín (Este)",
+      "descripcion": "Capital irlandesa con patrimonio medieval, pubs históricos y vida cultural vibrante. Centro neurálgico para explorar el país con excelentes conexiones de transporte. Imprescindible para museos, literatura y gastronomía moderna.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Punto de entrada principal: vuelos internacionales al Aeropuerto de Dublín. Desde el aeropuerto al centro: autobús (1h, 6-10 EUR), tren (30 min, 12 EUR) o taxi (20-30 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue tipo HI Hostel o Generator Hostel, 20-35 EUR/noche",
+        "medio": "Hotel 3* en Temple Bar o Grafton Street, 70-120 EUR/noche",
+        "comfort": "Hotel 4* en St. Stephen's Green, 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Temple Bar y pubs tradicionales (gratis entrada, cervezas 6-8 EUR)",
+        "Trinity College y Libro de Kells (15 EUR entrada)",
+        "Guinness Storehouse (22 EUR entrada)",
+        "Christ Church Cathedral (8 EUR)",
+        "Paseo por Grafton Street y St. Stephen's Green (gratis)",
+        "Museo Nacional de Irlanda (gratis)"
+      ],
+      "donde_comer": "Soda y pan tostado (5 EUR), fish and chips en Beshoff (8-12 EUR), comida moderna en Merrion Row (15-25 EUR). Zona Temple Bar cara pero atmosférica, Stoneybatter más local y barato.",
+      "consejo_local": "Los pubs son más baratos al mediodía (happy hour). Ve a Temple Bar por la atmósfera pero come en Stoneybatter o Smithfield para mejor relación precio-calidad. El transporte público con Leap Card (tarjeta) es más barato que billetes sueltos.",
+      "plan_b_lluvia": "National Museum of Ireland, Irish Museum of Modern Art, cine en Temple Bar, librerías antiguas en Parnell Street.",
+      "keywords": [
+        "Dublin",
+        "Temple Bar",
+        "Trinity College",
+        "Guinness",
+        "Grafton Street",
+        "Libro de Kells",
+        "Liffey"
+      ]
+    },
+    {
+      "id": "acantilados-moher",
+      "nombre": "Acantilados de Moher",
+      "tipo": "naturaleza",
+      "region": "Condado de Clare (Oeste)",
+      "descripcion": "Espectaculares acantilados de 214m sobre el Atlántico, extensión de 14km de paisaje salvaje. Una de las atracciones naturales más icónicas de Irlanda con vistas que justifican el viaje. Ideal para caminatas y fotografía.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre (junio mejor luz)",
+      "como_llegar": "Desde Dublín: tour organizado (12-15 horas, 50-70 EUR) o autobús + conexión local. Opción independiente: tren a Ennis (2.5h, 15 EUR) + bus local a Moher (1h, 10 EUR). Coche alquilado es más flexible (gasolina aprox 15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Doolin (pueblo cercano), 22-32 EUR/noche",
+        "medio": "Hotel en Doolin o Liscannor, 65-100 EUR/noche",
+        "comfort": "Hotel con vista en acantilados, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Cliff Walk (sendero de 8km, gratis, 2-3 horas)",
+        "Visitor Centre (gratis entrada general, exposición pagada 7 EUR)",
+        "Fotografía al atardecer (gratis)",
+        "Sendero a O'Brien's Tower (2 EUR entrada torre)",
+        "Paseo por pueblo de Doolin (gratis)"
+      ],
+      "donde_comer": "Fish and chips en Doolin (10-15 EUR), sopa irlandesa (8 EUR), Guinness en McGann's pub (6 EUR). Caro en la cafetería del Visitor Centre, mejor comer en el pueblo.",
+      "consejo_local": "Llega temprano para evitar multitudes y conseguir parking. El clima cambia rápidamente, lleva chaqueta impermeable incluso en verano. Las mejores fotos son al atardecer (20:00-21:00 en junio). Si hay tormenta, los acantilados son todavía más espectaculares.",
+      "plan_b_lluvia": "Visita el Visitor Centre con exposición interior, explora Doolin y sus cuevas, ve al Burren (paisaje kárstico cercano).",
+      "keywords": [
+        "Cliffs of Moher",
+        "Moher",
+        "Clare",
+        "acantilados",
+        "Doolin",
+        "Atlántico",
+        "Burren"
+      ]
+    },
+    {
+      "id": "ring-of-kerry",
+      "nombre": "Ring of Kerry",
+      "tipo": "ruta | naturaleza",
+      "region": "Condado de Kerry (Suroeste)",
+      "descripcion": "Carretera circular de 179km bordeando la Península de Iveragh con montañas, lagos y costa atlántica. Uno de los recorridos escénicos más bonitos de Irlanda, ideal para coche alquilado o tour. Múltiples pueblos y paradas naturales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Base en Killarney. Desde Dublín: vuelo (1h, 30-60 EUR) + alquiler coche, o autobús (3.5h, 15-25 EUR) + coche alquilado (35-50 EUR/día). Tren a Killarney disponible (3h, 20 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Killarney, 20-30 EUR/noche",
+        "medio": "Hotel en Killarney o pueblos costeros (Dingle, Sneem), 60-100 EUR/noche",
+        "comfort": "Hotel 4* en Killarney, 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Conducir el Ring completo (7-8 horas con paradas)",
+        "Muckross House (10 EUR entrada)",
+        "Lakes of Killarney boat tour (15 EUR)",
+        "Dunloe Gap walk (sendero gratis, 2h)",
+        "Pueblo de Dingle con playa (gratis pasear)",
+        "Valentia Island (coche + 5 EUR ferry)",
+        "Staig Fort (ruinas históricas, gratis)"
+      ],
+      "donde_comer": "Coddle dublín (plato típico, 12 EUR), Boxty (panqueca irlandesa, 10-12 EUR), cordero local (15-20 EUR), helado en Dingle (5 EUR). Más barato en pueblos pequeños que en Killarney.",
+      "consejo_local": "Conduce en sentido antihorario para tener mejores vistas y paradas a la izquierda. La ruta es turística pero vale la pena. Llena gasolina en Killarney (más cara en ruta). Para evitar autobuses turísticos masivos, sal muy temprano (7:00) o haz la ruta en sentido opuesto.",
+      "plan_b_lluvia": "Visita interiores como Muckross House, pubs en Killarney, exploración de pueblos costeros con tiendas y cafeterías.",
+      "keywords": [
+        "Ring of Kerry",
+        "Killarney",
+        "Dingle",
+        "Iveragh",
+        "Kerry",
+        "Lakes",
+        "Sneem",
+        "ruta circular"
+      ]
+    },
+    {
+      "id": "galway",
+      "nombre": "Galway",
+      "tipo": "ciudad",
+      "region": "Condado de Galway (Oeste)",
+      "descripcion": "Ciudad costera bohemia y colorida con ambiente artístico, vida nocturna vibrante y base para explorar Connemara e Islas Aran. Centro cultural irlandés con calles llenas de murales, tiendas vintage y pubs con música en vivo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Dublín: autobús directo (2.5h, 10-15 EUR), tren (2.5h, 20-30 EUR) o coche alquilado (210km, 2.5h). Aeropuerto de Galway a 10km (taxi 15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue type Kinlay House, 22-35 EUR/noche",
+        "medio": "Hotel en Salthill o centro, 70-110 EUR/noche",
+        "comfort": "Hotel 4* The g, 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por calles Quay Street y Shop Street (gratis, música callejera)",
+        "St. Nicholas' Collegiate Church (gratis)",
+        "Spanish Arch (gratis, restos antiguos)",
+        "Connemara Marble Shop (entrada museo 6 EUR)",
+        "Salthill Prom paseo costero (gratis, 1.5km)",
+        "Tour a Islas Aran (ferry 15-20 EUR ida/vuelta)",
+        "Connemara day trip (tour 45-60 EUR)"
+      ],
+      "donde_comer": "Caldo de salmón (10 EUR), mejillones (12 EUR), fish and chips (10-12 EUR), café tradicional (4-6 EUR). McDonagh's famoso por fish and chips (12 EUR), pubs económicos en Quay Street.",
+      "consejo_local": "Galway es más joven y alternativa que Dublín, con menos turismo masivo. Ve a los pubs al atardecer para música en vivo genuina. El pueblo se llena en julio-agosto, mejor en mayo-junio. Alquila bici para moverte (8 EUR/día).",
+      "plan_b_lluvia": "Museo de Historia Natural de Galway, tiendas vintage en Quay Street, pubs con sesiones de música en vivo, cine.",
+      "keywords": [
+        "Galway",
+        "Connemara",
+        "Aran Islands",
+        "Quay Street",
+        "bohemio",
+        "bohemian",
+        "Costa Oeste",
+        "música en vivo"
+      ]
+    },
+    {
+      "id": "islas-aran",
+      "nombre": "Islas Aran",
+      "tipo": "isla",
+      "region": "Bahía de Galway (Oeste)",
+      "descripcion": "Tres islas de piedra caliza (Inishmore, Inishmaan, Inisheer) con cultura gaélica viva, ruinas antiguas y paisaje árido único. Acceso por ferry desde Galway, sin coches, ideal para desconexión y senderismo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Galway: ferry Aran Island Ferries (40-45 min, 15-20 EUR ida/vuelta) o vuelo (10 min, 45 EUR). Salidas múltiples diarias desde Rossaveel o Galway.",
+      "donde_dormir": {
+        "mochilero": "Albergue en Inishmore (Kilronan), 25-35 EUR/noche",
+        "medio": "Cama de granja o guesthouse, 60-90 EUR/noche",
+        "comfort": "Hotel pequeño en Inishmore, 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Dun Aengus fortress (ruina prehistórica, gratis)",
+        "Dun Eochla y Dun Eoghanachta (otras fortalezas, gratis)",
+        "Senderismo circular en Inishmore (10km, gratis, 3-4h)",
+        "Iglesia de San Benén (ruina, gratis)",
+        "Paseo por Kilronan pueblo (gratis)",
+        "Alquiler bici para explorar (8-12 EUR/día)",
+        "Pesca local (tour 30-50 EUR)"
+      ],
+      "donde_comer": "Estofado irlandés (12 EUR), langosta fresca (20-30 EUR), pan casero (5 EUR), té y scones (6 EUR). Tiendas pequeñas con comida básica. Restaurantes caros, mejor llevar algo.",
+      "consejo_local": "Inishmore es la más turística, Inishmaan la más auténtica y menos visitada. El idioma local es gaélico, el inglés se habla pero descubrirás la Irlanda verdadera aquí. Las ruinas de Dun Aengus son impresionantes pero sin barandillas, cuidado con niños. Lleva ropa impermeable.",
+      "plan_b_lluvia": "Museos pequeños, pubs locales, exploración de pueblos interiores, descanso en alojamiento.",
+      "keywords": [
+        "Aran Islands",
+        "Inishmore",
+        "Inishmaan",
+        "Dun Aengus",
+        "Kilronan",
+        "gaélico",
+        "islas de piedra",
+        "cultura"
+      ]
+    },
+    {
+      "id": "cork",
+      "nombre": "Cork",
+      "tipo": "ciudad",
+      "region": "Condado de Cork (Sur)",
+      "descripcion": "Segunda ciudad de Irlanda con carácter independiente, arquitectura georgiana, mercados vibrantes y excelente punto de partida para Ruta de Whiskey. Menos turística que Dublín con comunidad local más auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Dublín: autobús directo (3h, 12-18 EUR), tren (2h 20min, 25-35 EUR) o coche (240km, 2.5h). Vuelo también disponible (1h, 40-80 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue type Bru Cork Hostel, 20-32 EUR/noche",
+        "medio": "Hotel en ciudad, 70-100 EUR/noche",
+        "comfort": "Hotel 4* River Lee, 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "English Market (mercado cubierto, gratis entrada, 1h paseo)",
+        "Cork City Hall (tours 5 EUR o gratis exposición)",
+        "St. Fin Barre's Cathedral (4 EUR entrada)",
+        "Shandon Steeple campanario (5 EUR, vistas ciudad)",
+        "Galería de Arte Crawford (gratis entrada)",
+        "Paseo por calles Oliver Plunkett y Patrick Street (gratis)",
+        "Whiskey Heritage Tour (30-40 EUR)"
+      ],
+      "donde_comer": "Productos frescos del English Market (8-15 EUR), cordero a la irlandesa (15 EUR), seafood chowder (10-12 EUR), cafés locales (5-8 EUR). Market Lane para carne y queso de calidad.",
+      "consejo_local": "Cork es más local que Dublín, con menos turismo concentrado. La gente aquí es amable y orgullosa de su independencia. Prueba la comida del English Market, es más barato y auténtico que restaurantes. La cerveza local es Beamish, prúebala en pubs tradicionales.",
+      "plan_b_lluvia": "English Market interior, museos, Crawford Gallery, shopping en Patrick Street, sesiones de música en pubs.",
+      "keywords": [
+        "Cork",
+        "English Market",
+        "Shandon",
+        "Beamish",
+        "sur de Irlanda",
+        "Cork City",
+        "mercado"
+      ]
+    },
+    {
+      "id": "dingle",
+      "nombre": "Dingle",
+      "tipo": "ciudad | playa",
+      "region": "Condado de Kerry (Suroeste)",
+      "descripcion": "Pueblo costero colorido en Península de Dingle con aire relajado, playas de arena, pubs con música tradicional y gastronomía moderna. Más auténtico que otros pueblos costeros, base para senderismo y exploración de paisaje salvaje.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Killarney: coche alquilado (70km, 1.5h, 35-50 EUR/día) o bus local (2h, 10 EUR). Desde Dublín es destino largo (350km, 4h coche).",
+      "donde_dormir": {
+        "mochilero": "Albergue Dingle Harbour Hostel, 22-32 EUR/noche",
+        "medio": "Guesthouse en pueblo, 70-100 EUR/noche",
+        "comfort": "Hotel Pax House, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por puerto y playas (gratis)",
+        "Senderismo a Coumeenoole Beach (5km, gratis, 1.5h)",
+        "Dunbeg Fort (runa del siglo V, gratis, 30 min paseo)",
+        "Blasket Islands day tour (45 EUR, ferry + bote)",
+        "Dingle Dolphin Tours (20 EUR, avistamiento de delfines)",
+        "Taller de tejer lana local (demo gratis, artesanía 30-50 EUR)",
+        "Senderismo Monte Brandon (8km, gratis, 4h)"
+      ],
+      "donde_comer": "Pescado fresco del día (18-25 EUR), camarones (16 EUR), salmón ahumado (14 EUR), pan de soda (5 EUR). Dick Mack's pub (bebidas 6-8 EUR). El Garretán y The Chart House para comida de calidad media-alta.",
+      "consejo_local": "Dingle es imprescindible en el circuito turístico pero mantiene autenticidad. Todos los pubs tienen música en vivo por las noches (genuina, no para turistas). El delfín Fungie es famoso pero es turismo caro; más vale ver ballenas en tours regulares. Ve temprano para aparcar.",
+      "plan_b_lluvia": "Taller de tejidos, pubs con música, tiendas de arte local, exploración de pueblos pequeños cercanos.",
+      "keywords": [
+        "Dingle",
+        "Península de Dingle",
+        "Coumeenoole",
+        "Dunbeg",
+        "Fungie",
+        "Kerry",
+        "pueblo costero",
+        "Dingle Harbour"
+      ]
+    },
+    {
+      "id": "belfast",
+      "nombre": "Belfast",
+      "tipo": "ciudad",
+      "region": "Irlanda del Norte (Noreste)",
+      "descripcion": "Capital de Irlanda del Norte con historia turbulenta transformada en ciudad moderna cultural. Murales del Conflicto, arquitectura victoriana, museos impactantes. Destino que cambia perspectiva sobre Irlanda, más industrial y auténtico que turístico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Dublín: tren (2h, 20-35 EUR), autobús (2h, 10-15 EUR) o vuelo (1h, 30-60 EUR). Crucero del Titanic disponible desde otros puertos.",
+      "donde_dormir": {
+        "mochilero": "Albergue type Hostel Belfast, 20-30 EUR/noche",
+        "medio": "Hotel 3* en centro, 70-100 EUR/noche",
+        "comfort": "Titanic Hotel (histórico), 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Murales del Conflicto tour (black taxi tour, 15-20 EUR, 2h)",
+        "Titanic Museum (15 EUR entrada)",
+        "City Hall (tours gratis, reserva)",
+        "Botanic Gardens (gratis, 7 hectáreas)",
+        "Queen's University campus (gratis paseo)",
+        "Ulster Museum (gratis entrada general)",
+        "Cathedral Quarter murales y callejones (gratis)"
+      ],
+      "donde_comer": "Champ (puré de patata, 8 EUR), coddle (8-10 EUR), pan de soda (5 EUR), café local (4 EUR). Restaurants en Cathedral Quarter, Union Street o Botanic Avenue.",
+      "consejo_local": "Belfast es segura en centro pero lee sobre zonas a evitar. Los tours en black taxi son la mejor forma de entender el Conflicto. La gente es hospitalaria si te interesas genuinamente por la historia. Los pubs tienen sesiones de música más lentas que en Dublín, más íntimas.",
+      "plan_b_lluvia": "Museos interiores (Titanic, Ulster), Botanic Gardens con invernaderos, shopping, pubs tradicionales.",
+      "keywords": [
+        "Belfast",
+        "Titania",
+        "Conflicto",
+        "murales",
+        "Irlanda del Norte",
+        "Northern Ireland",
+        "Cathedral Quarter",
+        "histories"
+      ]
+    },
+    {
+      "id": "giant-causeway",
+      "nombre": "Giant's Causeway",
+      "tipo": "naturaleza",
+      "region": "Irlanda del Norte (Noreste), Condado de Antrim",
+      "descripcion": "Formación geológica única de 40,000 columnas hexagonales de basalto en costa atlántica. Patrimonio UNESCO, ruta costera espectacular (Causeway Coastal Route). Inusual y fotogénico, justifica viaje desde Belfast o Dublín.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Belfast: coche alquilado (60km, 1.5h, 35-50 EUR/día) o tour organizado (45-60 EUR). Desde Dublín es posible en día largo (120km, 2h + tour).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Bushmills o Portrush, 22-32 EUR/noche",
+        "medio": "Guesthouse costera, 70-100 EUR/noche",
+        "comfort": "Hotel en Portrush (balneario), 110-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitor Centre (8 EUR entrada, exposición geología)",
+        "Caminar sobre columnas hexagonales (gratis, 1-2h)",
+        "Causeway Coastal Path caminata (10km, gratis, 3h)",
+        "Dunluce Castle ruinas cercanas (gratis, 30 min)",
+        "Carrick-a-Rede Rope Bridge (7 EUR, puente colgante)",
+        "Playas de Portrush para baño (gratis)",
+        "Destilería de Bushmills tour (20 EUR, whisky degustación)"
+      ],
+      "donde_comer": "Fish and chips en Bushmills (12 EUR), sopa de marisco (10 EUR), cerveza artesanal local (6-8 EUR), café costera (5 EUR). Mejor llevar picnic.",
+      "consejo_local": "El Visitor Centre es caro por poco contenido. Es mejor saltarlo y directamente ver las columnas. El paisaje es más espectacular en días despejados. La marea baja revela más detalle de las columnas. Ve temprano para evitar gente. Portrush es balneario típico británico con diversiones cliché pero ambiente local.",
+      "plan_b_lluvia": "Visitor Centre interior, Dunluce Castle exploración, Bushmills destilería, pubs costeros.",
+      "keywords": [
+        "Giant's Causeway",
+        "columnas hexagonales",
+        "basalto",
+        "Antrim",
+        "Portrush",
+        "costa norte",
+        "UNESCO"
+      ]
+    },
+    {
+      "id": "wicklow",
+      "nombre": "Wicklow",
+      "tipo": "naturaleza | montaña",
+      "region": "Condado de Wicklow (Sureste)",
+      "descripcion": "Montañas verdes de Wicklow con monasterios antiguos (Glendalough), lagos glaciares y pueblos de campo. Escape perfecto desde Dublín a 1 hora, ideal para senderismo y cultura celta sin abandonar la cercanía.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Dublín: coche alquilado (50km, 1.5h, 35-50 EUR/día), autobús local (1.5-2h, 8-12 EUR), o tour organizado (40-55 EUR). Tren a Bray + autobús local también.",
+      "donde_dormir": {
+        "mochilero": "Albergue en Laragh (pueblo de Glendalough), 22-32 EUR/noche",
+        "medio": "Guesthouse en pueblos (Glendalough, Avoca), 65-100 EUR/noche",
+        "comfort": "Hotel rural con vistas, 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Glendalough monasterio y lagos (gratis sitio, visitor centre 3 EUR)",
+        "Senderismo Upper Lake trail (3km, gratis, 1h)",
+        "Senderismo Wicklow Mountains (múltiples rutas, gratis)",
+        "Powerscourt Estate (16 EUR entrada, jardines + casa)",
+        "Glendalough mina de oro vikinga (8 EUR)",
+        "Avoca Mills tejidos artesanales (gratis ver, tienda cara)",
+        "Excursión a Glenveagh National Park (si tiempo)"
+      ],
+      "donde_comer": "Estofado de ciervo (14 EUR), trucha fresca (16 EUR), sopa de champiñones (8 EUR), pan casero (5 EUR). Pubs rurales baratos, restaurantes en pueblos pequeños (12-18 EUR).",
+      "consejo_local": "Glendalough es increíblemente popular, llega antes de 9:00 o después de 16:00. El sitio monástico es gratis, el visitor centre caro. Las rutas de senderismo son magnificas y poco concurridas. El Valle es lugar de peregrinación celta antigua, la energía es real.",
+      "plan_b_lluvia": "Visitor centre interior, Powerscourt Estate casas interiores, compras artesanales, pubs calentitos.",
+      "keywords": [
+        "Wicklow",
+        "Glendalough",
+        "monasterio",
+        "lagos",
+        "montañas",
+        "senderismo",
+        "valle sagrado",
+        "Irlanda verdadera"
+      ]
+    },
+    {
+      "id": "westport",
+      "nombre": "Westport",
+      "tipo": "ciudad | naturaleza",
+      "region": "Condado de Mayo (Oeste)",
+      "descripcion": "Pueblo portuario costero con arquitectura de ensanche planeado, base para subir monte Croagh Patrick (peregrinación sagrada). Menos turístico que Galway, con vida local auténtica y acceso a Connemara y paisaje costero salvaje.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre (julio peligroso por peregrinos)",
+      "como_llegar": "Desde Galway: coche alquilado (90km, 1.5h, 35-50 EUR/día), autobús (2h, 12 EUR). Desde Dublín: autobús directo (3.5h, 15-20 EUR) o coche (220km, 2.5h).",
+      "donde_dormir": {
+        "mochilero": "Albergue Westport Hostel, 22-32 EUR/noche",
+        "medio": "Hotel pequeño en High Street, 70-100 EUR/noche",
+        "comfort": "Hotel 4* Westport House o costero, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Subir Croagh Patrick (764m, gratis, 2-3h ascenso)",
+        "Clare Island ferry excursión (15 EUR)",
+        "Westport House tours (10 EUR, mansión histórica)",
+        "Paseo costero en Achill Head (gratis)",
+        "Parque Westport House (gratis zonas, pago atracción)",
+        "Senderismo en Achill Peninsula (gratis, múltiples rutas)",
+        "Pesca de salmón tour (40-60 EUR)"
+      ],
+      "donde_comer": "Salmón fresco (20 EUR), mejillones de Clew Bay (14 EUR), pan de soda (5 EUR), caldo (8 EUR). El Quay taverna en puerto barata (12-16 EUR). Mercadillo de alimentos algunos días.",
+      "consejo_local": "Croagh Patrick es sagrado, si subes respeta el lugar. En julio hay peregrinaje masivo, ve otro mes. El pueblo tiene vida local genuina en pubs tradicionales. Achill Island merece día completo de exploración. El clima es cambiante, siempre lleva chaqueta.",
+      "plan_b_lluvia": "Westport House interior, exploración de pueblos pequeños en península, pubs con música, tiendas locales.",
+      "keywords": [
+        "Westport",
+        "Croagh Patrick",
+        "peregrinación",
+        "Mayo",
+        "Achill Island",
+        "Clew Bay",
+        "pueblo portuario"
+      ]
+    }
+  ]
+}

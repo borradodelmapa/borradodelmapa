@@ -1,0 +1,335 @@
+{
+  "pais": "Maldivas",
+  "codigo": "mv",
+  "destinos": [
+    {
+      "id": "male",
+      "nombre": "Malé",
+      "tipo": "ciudad",
+      "region": "Atolón de Kaafu",
+      "descripcion": "Capital y único punto de entrada a Maldivas, pequeña pero dinámica con mercados locales, mezquitas y vida callejera auténtica. Centro de conexión obligatorio para redistribuirse hacia otros atolones. Base práctica para entender la cultura maldiva antes de llegar a resorts.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Aeropuerto Internacional Ibrahim Nasir (MLE) a 1,6 km: ferry rápido 12 minutos (2-3 EUR) o speedboat privado 10 minutos (25-50 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guest house familiar + dormitorio compartido, 20-40 EUR/noche",
+        "medio": "Pequeño hotel local 3 estrellas en Henveiru, 50-80 EUR/noche",
+        "comfort": "Resort island de lujo en Atolón de Kaafu accesible desde Malé, 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de pescado y frutas en mañana (gratis)",
+        "Mezquita Viernes (Hukuru Miskiy), mezquita más antigua, entrada libre",
+        "Paseo por el muro del puerto al atardecer (gratis)",
+        "Museo Nacional de Maldivas (5 EUR)",
+        "Parque artificial con vistas al océano (gratis)"
+      ],
+      "donde_comer": "Comida maldiva: garudhiya (sopa de atún), mas huni (crepes saladas). Rango 3-8 EUR en dhoni (bote) o puestecillos. Zona: zona del puerto y callejuelas de Henveiru.",
+      "consejo_local": "Llega temprano a mercados antes de las 08:00. El ajetreo matutino es lo más auténtico. Evita viernes tarde (hora de rezo).",
+      "plan_b_lluvia": "Museo Nacional, cafés locales, compras en Male City Centre, explorar galerías de arte en edificios coloniales",
+      "keywords": [
+        "Male",
+        "Malé",
+        "capital Maldivas",
+        "Henveiru",
+        "Kaafu",
+        "Male City Centre",
+        "puerto"
+      ]
+    },
+    {
+      "id": "south-ari-atoll",
+      "nombre": "Atolón Sur de Ari",
+      "tipo": "isla",
+      "region": "Atolón de Ari (Sur)",
+      "descripcion": "Atolón más accesible para independientes con islas locales habitadas (Dhigurah, Mathiveri, Mandhoo) donde hospedarse sin resort de lujo. Arrecifes de coral intactos y vida marina abundante a precio accesible. Punto de equilibrio entre turismo y autenticidad.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "marzo a mayo, octubre a noviembre",
+      "como_llegar": "Desde Malé: ferry rápido a Dhigurah 2,5 horas (15-20 EUR) o speedboat 1,5 horas (40-60 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guest house en Dhigurah o Mathiveri, 25-45 EUR/noche",
+        "medio": "Small hotel local con aire acondicionado en isla habitada, 60-100 EUR/noche",
+        "comfort": "Resort boutique semi-privado, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en casa de coral (gratis desde playa, o excursión 20-30 EUR)",
+        "Buceo de arrecife (25-40 EUR por inmersión)",
+        "Paseo nocturno para ver plancton bioluminiscente (15-25 EUR)",
+        "Visita a isla de arena blanca deshabitada (20 EUR tour)",
+        "Pesca local en dhoni (30-50 EUR)"
+      ],
+      "donde_comer": "Atún fresco a la parrilla, curry de pescado. Comedores locales 5-12 EUR. Restaurantes guesthouses 8-15 EUR. Mercadillos en tarde en Dhigurah.",
+      "consejo_local": "Dhigurah es la isla más animada socialmente; Mathiveri más tranquila. Ferry local sale a horas irregulares: pregunta día anterior. Trae dinero en efectivo, pocos cajeros.",
+      "plan_b_lluvia": "Piscina natural en laguna interior, clases de cocina maldiva en guesthouse, descanso y spa tradicional",
+      "keywords": [
+        "Ari Atoll South",
+        "Dhigurah",
+        "Mathiveri",
+        "Mandhoo",
+        "Boduthiladoo",
+        "snorkel Ari"
+      ]
+    },
+    {
+      "id": "banana-reef",
+      "nombre": "Banana Reef y Arrecifes de Kaafu",
+      "tipo": "naturaleza",
+      "region": "Atolón de Kaafu",
+      "descripcion": "Sistema de arrecifes coralinos accesibles desde guesthouses de Malé en excursión de día. Spots de buceo y snorkel reconocidos con tortugas, tiburones nodriza y peces loro. Base para buceadores independientes sin necesidad de resort.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo a mayo, octubre a noviembre",
+      "como_llegar": "Desde Malé: excursión organizada 35-50 EUR (incluye transporte y equipo) o speedboat alquilado 100 EUR + combustible",
+      "donde_dormir": {
+        "mochilero": "Guest house Malé, 20-40 EUR (duermes en capital, salida temprana)",
+        "medio": "Pequeño hotel Malé, 50-80 EUR",
+        "comfort": "Resort island cercano Kaafu, 150-250 EUR"
+      },
+      "que_hacer": [
+        "Snorkel en Banana Reef (incluido en tour 35-50 EUR)",
+        "Buceo certificado dos inmersiones (60-80 EUR)",
+        "Avistamiento de tiburones nodriza (incluido en tour)",
+        "Fotografía subacuática (gratis con tu cámara)",
+        "Exploración de canales de coral"
+      ],
+      "donde_comer": "Lunch típico en barco tras inmersión (5-10 EUR incluido en tour). Cena en Malé tras regreso.",
+      "consejo_local": "Reserva tours noche anterior en guesthouses, son más baratos que directamente. Corriente fuerte a primera hora, mejor ir por tarde. Lleva traje de buceo de 3mm aunque sea tropical.",
+      "plan_b_lluvia": "Mar picado cancela snorkel; reprograma para día siguiente o explora museos de Malé",
+      "keywords": [
+        "Banana Reef",
+        "Kaafu Atoll",
+        "arrecife coralino",
+        "buceo Maldivas",
+        "snorkel Kaafu",
+        "tiburon nodriz"
+      ]
+    },
+    {
+      "id": "addu-city",
+      "nombre": "Addu City (Gan)",
+      "tipo": "ciudad",
+      "region": "Atolón de Addu (Sur extremo)",
+      "descripcion": "Segunda ciudad de Maldivas en atolón Sur, accesible por avión desde Malé. Base para explorar arrecifes menos saturados y vida local desconocida para turismo de resort. Punto de partida para buceo técnico y pecios hundidos históricos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "Desde Malé: vuelo interno 45 minutos (50-80 EUR con Maldivian Air) o ferry rápido 5,5 horas (25-35 EUR, opción lenta)",
+      "donde_dormir": {
+        "mochilero": "Guest house en Gan, 25-50 EUR/noche",
+        "medio": "Hotel local 3 estrellas Gan, 70-110 EUR/noche",
+        "comfort": "Resort island privado cercano, 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en pecios de IIWW (British Loyalty, Maldive Victory) 50-70 EUR",
+        "Snorkel en arrecifes internos (20-30 EUR)",
+        "Paseo por Gan observando vida local (gratis)",
+        "Playa de Hithadhoo con restos históricos británicos (gratis)",
+        "Avistamiento de manta rayas (variable según temporada, 40-60 EUR)"
+      ],
+      "donde_comer": "Curry de atún, rihaakuru (pasta de atún), garudhiya. Dhooni restaurantes flotantes 8-15 EUR. Locales en casco antiguo 5-10 EUR.",
+      "consejo_local": "Addu es muy tranquilo; si buscas movimiento nocturno, no es para ti. Mejor base para buceadores técnicos que para snorkel casual. Vuelo es más rápido pero caro; ferry es cultural.",
+      "plan_b_lluvia": "Visita mercado local, exploración de ruinas británicas (fuerte de IIWW), cafés con locales",
+      "keywords": [
+        "Addu City",
+        "Gan",
+        "atolon Addu",
+        "pecie IIWW",
+        "Hithadhoo",
+        "British Loyalty",
+        "buceo tecnico"
+      ]
+    },
+    {
+      "id": "felidhoo-vaavu",
+      "nombre": "Atolón Vaavu (Felidhoo)",
+      "tipo": "isla",
+      "region": "Atolón de Vaavu (Centro-Sur)",
+      "descripcion": "Atolón central menos visitado que Ari pero con infraestructura local creciente. Islas como Felidhoo y Keyodhoo ofrecen buceo de pared vertical, vida marina intacta y acceso a dhoni locales económicos. Ideal para independientes que quieren evitar rutas turísticas saturadas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "marzo a mayo, octubre a noviembre",
+      "como_llegar": "Desde Malé: ferry a Felidhoo 3,5 horas (20-28 EUR) o speedboat 2 horas (50-70 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guest house Felidhoo, 20-40 EUR/noche",
+        "medio": "Pequeño hotel local, 50-80 EUR/noche",
+        "comfort": "Resort island semiprivado, 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo de pared en Miyaru Faru (40-60 EUR)",
+        "Snorkel en laguna interna (15-25 EUR)",
+        "Pesca nocturna con luz (30 EUR)",
+        "Visita isla deshabitada Fenfushi (15-20 EUR tour)",
+        "Exploración de pueblo local a pie (gratis)"
+      ],
+      "donde_comer": "Pescado a la sal, mas huni, curry de leche de coco. Comedores locales 5-10 EUR. Pocos restaurantes turísticos, come donde comen locales.",
+      "consejo_local": "Felidhoo es más auténtico que Ari Sur pero requiere flexibilidad con horarios de ferry. Menos gringos significa precios más justos. Farmacia pequeña pero medicinas básicas disponibles.",
+      "plan_b_lluvia": "Mercado local, conversación en guesthouses, descanso en hamaca, observación de vida marina desde muelle",
+      "keywords": [
+        "Vaavu Atoll",
+        "Felidhoo",
+        "Keyodhoo",
+        "buceo pared",
+        "atolon central",
+        "pesca nocturna"
+      ]
+    },
+    {
+      "id": "baa-atoll",
+      "nombre": "Atolón de Baa",
+      "tipo": "naturaleza",
+      "region": "Atolón de Baa (Norte-Centro)",
+      "descripcion": "Reserva de la biosfera UNESCO con avistamiento de mantas rayas garantizado en temporada (octubre-noviembre). Atolón con islas habitadas como Eydhafushi y Felidhoo con guesthouses asequibles. Ideal para naturalistas que no quieren pagar precios de resort.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "octubre a noviembre (mantas rayas)",
+      "como_llegar": "Desde Malé: ferry rápido a Eydhafushi 2,5 horas (15-20 EUR) o speedboat 1,5 horas (40-60 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guest house Eydhafushi, 25-45 EUR/noche",
+        "medio": "Hotel local Eydhafushi, 60-100 EUR/noche",
+        "comfort": "Resort manta island, 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Avistamiento de mantas rayas (55-75 EUR tour, octubre-noviembre)",
+        "Snorkel en Hanifaru Lagoon (reserva UNESCO, incluido en tour)",
+        "Buceo de arrecife (45-65 EUR)",
+        "Exploración de mercado local Eydhafushi (gratis)",
+        "Pesca diurna (25-40 EUR)"
+      ],
+      "donde_comer": "Atún marinado, ensalada de algas, curry de pulpo. Restaurante local 6-12 EUR. Estalls callejeros 3-6 EUR.",
+      "consejo_local": "Octubre-noviembre es pico de mantas pero también pico de turismo. Reserva con antelación. Lluvia moderada pero rara vez cancela tours. Eydhafushi tiene la mejor vida nocturna de atolones Norte-Centro.",
+      "plan_b_lluvia": "Mercados cubiertos, tiendas de artesanía local, clases de buceo en piscina, cine en isla",
+      "keywords": [
+        "Baa Atoll",
+        "Hanifaru",
+        "Eydhafushi",
+        "manta ray",
+        "biosfera UNESCO",
+        "buceo manta"
+      ]
+    },
+    {
+      "id": "thaa-atoll",
+      "nombre": "Atolón de Thaa",
+      "tipo": "isla",
+      "region": "Atolón de Thaa (Centro)",
+      "descripcion": "Atolón remoto con infraestructura turística limitada pero auténtica, sin resorts de lujo invasivos. Islas como Villingili y Kandooma ofrecen buceo virgen y vida local sin filtro. Para viajeros que buscan Maldivas pre-turismo de masas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "marzo a abril, octubre a noviembre",
+      "como_llegar": "Desde Malé: ferry a Villingili 4,5 horas (20-28 EUR). Acceso complicado, mejor consultar horarios con antelación.",
+      "donde_dormir": {
+        "mochilero": "Guest house familiar Villingili, 20-40 EUR/noche",
+        "medio": "Pequeño hotel, 50-80 EUR/noche",
+        "comfort": "Ningún resort de lujo; resorts boutique cercanos, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo de arrecife virgen (35-55 EUR)",
+        "Snorkel independiente desde playa (gratis)",
+        "Pesca con pescadores locales (25-35 EUR)",
+        "Caminata por isla observando vida cotidiana (gratis)",
+        "Cena con familia local (por hospedaje, gratis)"
+      ],
+      "donde_comer": "Comida casera maldiva si duermes en guesthouse. Restaurantes escasos; negocia cenas con hospedero. 5-10 EUR por comida local.",
+      "consejo_local": "Thaa es puntos de partida ideal si buscas escondite absoluto. Ferry irregular: confirma 48h antes. No hay cajeros; trae efectivo. Locales muy abiertos con turistas si eres respetuoso.",
+      "plan_b_lluvia": "Juegos de mesa en guesthouse, historias con anfitriones, lectura, caminatas cubiertas por lluvia (no es problema local)",
+      "keywords": [
+        "Thaa Atoll",
+        "Villingili",
+        "Kandooma",
+        "atolon remoto",
+        "buceo virgen",
+        "vida local"
+      ]
+    },
+    {
+      "id": "laamu-atoll",
+      "nombre": "Atolón de Laamu",
+      "tipo": "isla",
+      "region": "Atolón de Laamu (Sur-Centro)",
+      "descripcion": "Atolón histórico donde se mezcla islam conservador, patrimonio arqueológico y buceo de clase mundial. Islas como Gan y Kandooma con guesthouses locales. Menos turismo que Ari pero con acceso respetable, ideal para culturales y buceadores.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "marzo a mayo, octubre a noviembre",
+      "como_llegar": "Desde Malé: ferry a Gan (isla principal) 5,5 horas (25-35 EUR) o speedboat 3,5 horas (60-80 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guest house Gan, 25-45 EUR/noche",
+        "medio": "Hotel local, 60-100 EUR/noche",
+        "comfort": "Resort semiprivado, 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo de arrecife con peces Napoleón (45-65 EUR)",
+        "Visita isla arqueológica de Kandooma (incluido en tours)",
+        "Snorkel en laguna (15-25 EUR)",
+        "Exploración de mercado Gan (gratis)",
+        "Paseo por puerto tradicional (gratis)"
+      ],
+      "donde_comer": "Curry de leche de coco, atún ahumado, pan de trigo local. Comedores 6-12 EUR. Restaurantes turísticos evitables.",
+      "consejo_local": "Laamu es más conservador religiosa y socialmente; viste modestamente. Ferry desde Malé es largo pero espectacular. Menos hablantes de inglés que en Ari pero gente más abierta.",
+      "plan_b_lluvia": "Sitios arqueológicos bajo techado, museos locales, descanso en guesthouse con té y conversación",
+      "keywords": [
+        "Laamu Atoll",
+        "Gan Laamu",
+        "Kandooma",
+        "arqueologia Maldivas",
+        "buceo peces napoleon"
+      ]
+    },
+    {
+      "id": "north-ari-atoll",
+      "nombre": "Atolón Norte de Ari",
+      "tipo": "isla",
+      "region": "Atolón de Ari (Norte)",
+      "descripcion": "Mitad norte del atolón Ari con infraestructura mejorada respecto a Sur pero menos saturado que resorts privados. Islas como Ukulhas y Rasdhoo con vida de backpackers internacional, buceo accesible y atmósfera de pueblo playero.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "marzo a mayo, octubre a noviembre",
+      "como_llegar": "Desde Malé: ferry a Ukulhas 2 horas (12-18 EUR) o speedboat 1,5 horas (45-65 EUR)",
+      "donde_dormir": {
+        "mochilero": "Backpackers guesthouse Ukulhas, 20-35 EUR/noche",
+        "medio": "Hotel local, 50-85 EUR/noche",
+        "comfort": "Resort cercano Ari Norte, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel desde playa (gratis)",
+        "Buceo en resort vecino como day-pass (45-65 EUR)",
+        "Pesca nocturna con luz (25-35 EUR)",
+        "Tour a isla deshabitada (20-30 EUR)",
+        "Exploración de pueblo y tiendas locales (gratis)"
+      ],
+      "donde_comer": "Curry de atún, garudhiya, mas huni. Cafeterías de backpackers 4-8 EUR. Poco turístico = precios justos.",
+      "consejo_local": "Ukulhas es el Hostel Central de Maldivas; ruidoso pero social. Rasdhoo más tranquilo. Ari Norte fue donde empezó backpacker boom; tiene energía de traveler hub pero perdiendo encanto.",
+      "plan_b_lluvia": "Juegos de mesa en hostels, intercambio de historias con viajeros, cine en isla, cafés cubiertos",
+      "keywords": [
+        "North Ari Atoll",
+        "Ukulhas",
+        "Rasdhoo",
+        "backpackers Maldivas",
+        "buceo accesible"
+      ]
+    },
+    {
+      "id": "meemu-atoll",
+      "nombre": "Atolón de Meemu",
+      "tipo": "isla",
+      "region": "Atolón de Meemu (Centro)",
+      "descripcion": "Atolón pequeño y tranquilo con turismo incipiente, ideal para quien quiere escapar completamente del circuito. Islas habitadas con guesthouses básicas, arrecifes vírgenes y contacto directo con pescadores. Autenticidad pura a cambio de menos comodidades.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Malé: ferry a Meedhoo 5 horas (25-32 EUR). Acceso más complicado; requiere investigación previa.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse muy básica Meedhoo, 15-30 EUR/noche",
+        "medio": "Guest house con baño privado, 40-65 EUR/noche",
+        "comfort": "Resort cercano (fuera atolón), 120-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel independiente (gratis)",
+        "Pesca con pescadores locales (arreglo directo, 20-30 EUR)",
+        "Caminata por isla (gratis)",
+        "Observación de construcción de barcos tradiciones (gratis)",
+        "Cena casera con familia local (gratis si hospedaje)"
+      ],
+      "donde_comer": "Comida casera; coordina con guesthouse. Pocos restaurantes. 4-8 EUR.",
+      "consejo_local": "Meemu no es para comodidad; es para inmersión. Poca infraestructura = aventura real. Islanders muy humildes; paciencia y respeto abren puertas. Dinero en efectivo esencial.",
+      "plan_b_lluvia": "Estadía indoor con familia, lectura, juegos, descanso genuino",
+      "keywords": [
+        "Meemu Atoll",
+        "Meedhoo",
+        "atolon tranquilo",
+        "pesca tradicional",
+        "vida autentica"
+      ]
+    }
+  ]
+}

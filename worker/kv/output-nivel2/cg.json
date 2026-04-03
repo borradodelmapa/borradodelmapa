@@ -1,0 +1,326 @@
+{
+  "pais": "Congo",
+  "codigo": "cg",
+  "alerta_general": "República del Congo tiene zonas de conflicto activo y riesgos de seguridad. Viaja solo si estás informado y evita regiones al norte y este. Consulta con tu embajada antes de partir.",
+  "destinos": [
+    {
+      "id": "brazzaville",
+      "nombre": "Brazzaville",
+      "tipo": "ciudad",
+      "region": "Pool, margen derecha del río Congo",
+      "descripcion": "Capital y puerta de entrada principal, ubicada frente a Kinshasa. Centro administrativo con museos, mercados coloniales y vida urbana congoleña. Punto logístico esencial para acceder al resto del país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre (seca)",
+      "como_llegar": "Vuelo internacional a Maya-Maya o Aéroport de Brazzaville, o barco desde Kinshasa (RDC, 1h, 5-10 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Poto-Poto: 20-35 EUR/noche",
+        "medio": "Hoteles 2-3 estrellas zona centro: 50-100 EUR/noche",
+        "comfort": "Hoteles internacionales (Memling, Azur): 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Musée du Présidial (historia de Congo, 2 EUR)",
+        "Paseo por el río Congo al atardecer (gratis)",
+        "Mercado de Kinshasa/barrio de Poto-Poto (gratis, compras)",
+        "Catedral Sacré-Cœur (gratis)",
+        "Musée de la Gorilla (2 EUR)"
+      ],
+      "donde_comer": "Poisson braisé (pez asado), cassava y plátanos en los mercados. Rango: 3-8 EUR comida local, 15-25 EUR restaurante turístico. Zona Poto-Poto para comida callejera.",
+      "consejo_local": "Cruza al lado congoleño (Kinshasa) un día si tienes visa RDC: el contraste es brutal y vale la pena. Negocia taxis siempre antes de subir.",
+      "plan_b_lluvia": "Museos cubiertos, mercados bajo techo, cafeterías de Poto-Poto con vistas al río.",
+      "keywords": [
+        "Brazza",
+        "capital Congo",
+        "Poto-Poto",
+        "río Congo",
+        "Kinshasa frente"
+      ]
+    },
+    {
+      "id": "parc-odzala-kokoua",
+      "nombre": "Parque Nacional Odzala-Kokoua",
+      "tipo": "naturaleza",
+      "region": "Nordeste (Sangha, cerca frontera Camerún/CAR)",
+      "descripcion": "Reserva de bosque tropical intacto con gorilas occidentales, elefantes de bosque y biodiversidad única. Uno de los últimos bosques primarios de Central Africa. Requiere permiso y guía obligatorio.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "enero a mayo, septiembre a octubre (menos lluvia, gorilas más activos)",
+      "como_llegar": "Brazzaville > vuelo charter a Likouela (1.5h, 400-500 EUR ida/vuelta) o barcaza río Ogooué (3-4 días, muy complicado). Agencias locales organizan todo.",
+      "donde_dormir": {
+        "mochilero": "Campamentos básicos en el parque: 60-100 EUR/noche (incluye comidas)",
+        "medio": "Campamento Lango (tiendas con servicios): 120-150 EUR/noche",
+        "comfort": "Odzala Discovery Camps: 200-300 EUR/noche (todo incluido)"
+      },
+      "que_hacer": [
+        "Trekking a gorilas (guía obligatorio, 150-250 EUR)",
+        "Observación de elefantes de bosque (gratis con guía)",
+        "Canoa por río Sangha (20-40 EUR)",
+        "Night walks (fauna nocturna, 30 EUR)",
+        "Fotografía de primates y fauna"
+      ],
+      "donde_comer": "Comida de campamento incluida (cassava, pescado, verduras locales). Rango integrado en alojamiento.",
+      "consejo_local": "Lleva repelente de insectos fuerte, botas de trekking impermeables y paciencia: los gorilas no garantizan avistamiento. El viaje de entrada es agotador, pero compensa.",
+      "plan_b_lluvia": "Los trekkings se hacen igual (lluvia = bosque más activo). Noches en campamento con observación de fauna nocturna.",
+      "alerta_seguridad": "Zona remota, acceso limitado. Viaja solo con operadores registrados. Riesgo mínimo en parque (bien patrullado) pero carreteras de acceso pueden ser inseguras.",
+      "keywords": [
+        "Odzala",
+        "gorilas Congo",
+        "bosque tropical",
+        "Sangha",
+        "trekking primates"
+      ]
+    },
+    {
+      "id": "pointe-noire",
+      "nombre": "Pointe-Noire",
+      "tipo": "playa",
+      "region": "Kouilou, costa atlántica",
+      "descripcion": "Puerto principal y único acceso real a playas del Atlántico. Menos bullicioso que Brazzaville, con atmósfera de puerto africano auténtico. Base para explorar costa y Parque Nacional Conkouati.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre (seco, menos olas)",
+      "como_llegar": "Brazzaville > autobús (12-14h, 25-35 EUR, carreteras malas) o vuelo doméstico (1h, 80-120 EUR). Tren lentísimo no es opción práctica.",
+      "donde_dormir": {
+        "mochilero": "Pensiones en barrio Lumumba: 18-30 EUR/noche",
+        "medio": "Hoteles Puerto (2 estrellas): 50-80 EUR/noche",
+        "comfort": "Hotel Equateur, Sofitel Pointe-Noire: 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Pointe-Noire (gratis, aguas fuertes)",
+        "Mercado de pescado matutino (gratis)",
+        "Paseo por puerto y barrios locales (gratis)",
+        "Excursión a Conkouati (gorilas, elefantes, 50-80 EUR día)",
+        "Piscina pública malecón (5 EUR)"
+      ],
+      "donde_comer": "Calamar fresco, pez espada, cangrejo. Mercado puerto: 4-7 EUR. Restaurantes turísticos: 15-25 EUR. Zona Puerto Lumumba.",
+      "consejo_local": "Las playas tienen corrientes fuertes; nada solo en zonas vigiladas. El puerto es fascinante temprano (5-7h), caótico pero auténtico.",
+      "plan_b_lluvia": "Mercados bajo techo, visita a museos portuarios, cafés en malecón.",
+      "keywords": [
+        "Pointe Noire",
+        "costa Congo",
+        "puerto",
+        "Kouilou",
+        "playa Atlántico"
+      ]
+    },
+    {
+      "id": "conkouati-douli",
+      "nombre": "Parque Nacional Conkouati-Douli",
+      "tipo": "naturaleza",
+      "region": "Kouilou, costa suroeste",
+      "descripcion": "Parque costero con manglares, playas, gorilas y fauna marina. Menor presión turística que Odzala pero igualmente interesante. Acceso desde Pointe-Noire es factible.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Pointe-Noire > vehículo 4x4 (2-3h, 40-60 EUR) o a pie parcialmente. Operadores locales en Pointe-Noire.",
+      "donde_dormir": {
+        "mochilero": "Campamentos básicos parque: 40-70 EUR/noche",
+        "medio": "Guesthouse en entrada parque: 60-100 EUR/noche",
+        "comfort": "Eco-lodges asociados: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a gorilas (guía, 80-150 EUR)",
+        "Observación de cocodrilos y fauna (gratis con entrada)",
+        "Caminatas por manglares (30 EUR)",
+        "Playa Douli (entrada parque, gratis dentro)",
+        "Avistamiento de tortugas marinas (octubre-marzo, 40 EUR)"
+      ],
+      "donde_comer": "Pescado local, verduras. Comidas en guesthouse: 8-12 EUR. Lleva snacks desde Pointe-Noire.",
+      "consejo_local": "Menos visitado que Odzala, pero guías menos experimentados. Combina con Pointe-Noire en un viaje de 4-5 días.",
+      "plan_b_lluvia": "Actividades en manglares, observación nocturna de fauna.",
+      "keywords": [
+        "Conkouati",
+        "manglares Congo",
+        "gorilas costa",
+        "Douli",
+        "parque marino"
+      ]
+    },
+    {
+      "id": "owando",
+      "nombre": "Owando",
+      "tipo": "rural",
+      "region": "Cuvette, río Ogooué central",
+      "descripcion": "Pueblo fluvial en el corazón de Congo, punto de paso hacia parques del norte. Atmósfera auténtica de pueblos de río, comercio local de caucho y maderas. Hub logístico para aventureros.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Brazzaville > barcaza río Ogooué (2-3 días, 30-50 EUR, muy lento) o autobús Impfondo (8h, 15-25 EUR, carreteras pésimas). Vuelo charter privado (no hay líneas regulares).",
+      "donde_dormir": {
+        "mochilero": "Pensiones locales: 15-25 EUR/noche",
+        "medio": "Hotel básico Owando: 35-50 EUR/noche",
+        "comfort": "Pocas opciones; mejor base en Brazzaville o Pointe-Noire"
+      },
+      "que_hacer": [
+        "Paseo por mercado y puerto fluvial (gratis)",
+        "Observación de vida local (gratis)",
+        "Conexiones a excursiones bosque (80-150 EUR con operadores)",
+        "Barco exploración río Ogooué (40 EUR)"
+      ],
+      "donde_comer": "Cassava, pez braseado, plátanos hervidos. 3-6 EUR comida local. Restaurantes muy básicos.",
+      "consejo_local": "No es destino turístico; es parada funcional. Vale la pena una noche para sentir Congo profundo. Trae dinero en efectivo (poco cambio de tarjetas).",
+      "plan_b_lluvia": "Río aumenta nivel; navegación más lenta. Mercados bajo techo.",
+      "alerta_seguridad": "Zona remota, servicios médicos limitados. Mantén precaución en movimientos nocturnos.",
+      "keywords": [
+        "Owando",
+        "Ogooué",
+        "río Congo",
+        "Cuvette",
+        "pueblo fluvial"
+      ]
+    },
+    {
+      "id": "impfondo",
+      "nombre": "Impfondo",
+      "tipo": "rural",
+      "region": "Sangha, norte fronterizo",
+      "descripcion": "Pueblo más al norte, punto de entrada a reservas de bosque primario y acceso a trekking. Base para aventureros serios que evitan rutas turísticas. Conexión con Camerún y CAR cercana.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a mayo",
+      "como_llegar": "Brazzaville > autobús (2 días, 30-40 EUR, muy difícil) o barcaza río Sangha (4+ días, 40-60 EUR). Vuelos charter rara vez. No es fácil acceso.",
+      "donde_dormir": {
+        "mochilero": "Pensiones locales: 12-20 EUR/noche",
+        "medio": "Hotel Sangha (rústico): 30-50 EUR/noche",
+        "comfort": "Ninguno; base desde capital"
+      },
+      "que_hacer": [
+        "Trekking independiente bosque (con guía contratado, 50-100 EUR)",
+        "Avistamiento de fauna nocturna (30 EUR)",
+        "Paseo mercado local (gratis)",
+        "Excursiones río Sangha (40-80 EUR)",
+        "Fotografía de naturaleza primaria"
+      ],
+      "donde_comer": "Comida muy local, básica. 3-5 EUR. Suministros limitados; trae snacks.",
+      "consejo_local": "Para mochileros hardcore. Seguridad y servicios mínimos. Habla con viajeros en Brazzaville que acaban de volver antes de ir.",
+      "plan_b_lluvia": "Senderos intransitables; lluvia arrecia junio-octubre. Viaja enero-abril.",
+      "alerta_seguridad": "Muy remoto, cerca de zonas de conflicto pasado. Riesgos de seguridad reales. Solo para viajeros experimentados con contactos locales.",
+      "keywords": [
+        "Impfondo",
+        "Sangha norte",
+        "bosque primario",
+        "trekking remoto",
+        "frontera CAR"
+      ]
+    },
+    {
+      "id": "lac-tele",
+      "nombre": "Lago Télé (Réserve de Biosphère Télé-Likouala)",
+      "tipo": "naturaleza",
+      "region": "Likouala, extremo norte",
+      "descripcion": "Región pantanosa de selva intacta con biodiversidad excepcional. Uno de los ecosistemas menos tocados de Africa Central. Acceso extremadamente difícil pero recompensa para naturalistas.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "enero a abril",
+      "como_llegar": "Brazzaville > Impfondo (2 días, arriba) > barcaza río Likouala (2-3 días, 60-100 EUR, condiciones básicas). Requiere planificación meses antes.",
+      "donde_dormir": {
+        "mochilero": "Campamentos básicos parque: 50-80 EUR/noche",
+        "medio": "Ninguno",
+        "comfort": "Ninguno"
+      },
+      "que_hacer": [
+        "Canoa por ríos pantanosos (guía obligatorio, incluido)",
+        "Avistamiento de fauna única (calaos, búfalos, crocodrilos)",
+        "Fotografía de ecosistema intacto",
+        "Noches campamento bajo estrellas"
+      ],
+      "donde_comer": "Comidas campamento (pescado local, verduras, arroz). Incluido alojamiento.",
+      "consejo_local": "Extremadamente remoto. Solo operadores muy especializados. Contacta agencias Congo-Brazzaville o proveedores internacionales (Wilderness Travel).",
+      "plan_b_lluvia": "Lluvia es norma; empaca impermeable robusto. Diciembre-mayo es mejor.",
+      "alerta_seguridad": "Aislado, servicios médicos a días de distancia. Solo para aventureros con póliza evacuación médica.",
+      "keywords": [
+        "Télé",
+        "Likouala",
+        "reserva biosfera",
+        "pantanos Congo",
+        "ecosistema intacto"
+      ]
+    },
+    {
+      "id": "cascade-diyongo",
+      "nombre": "Cascadas de Diyongo",
+      "tipo": "naturaleza",
+      "region": "Pool, sur",
+      "descripcion": "Cascadas en bosque secundario relativamente accesible desde Brazzaville. Paisaje verde, río claro, fauna local. Opción de día completo para mochileros con pocos días.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Brazzaville > minibús a Diyongo (1.5h, 10-15 EUR) > caminata guiada (1h, 20 EUR con guía local).",
+      "donde_dormir": {
+        "mochilero": "Base Brazzaville (día completo)",
+        "medio": "Base Brazzaville",
+        "comfort": "Base Brazzaville"
+      },
+      "que_hacer": [
+        "Trekking a cascadas (20 EUR guía)",
+        "Baño en piscina natural (gratis)",
+        "Observación de fauna: pájaros, monos (gratis)",
+        "Picnic junto cascada"
+      ],
+      "donde_comer": "Lleva comida desde Brazzaville o compra en pueblo Diyongo. Sándwich/snacks: 5-8 EUR.",
+      "consejo_local": "Excelente para aclimatarse y ver paisaje sin viaje épico. Guías locales en el pueblo; negocia precio antes. Seguro y cerca.",
+      "plan_b_lluvia": "Cascadas más caudalosas pero camino resbaladizo. Doable con precaución.",
+      "keywords": [
+        "Diyongo",
+        "cascadas Congo",
+        "Pool",
+        "día desde Brazzaville",
+        "bosque cercano"
+      ]
+    },
+    {
+      "id": "vili-plateau",
+      "nombre": "Meseta de Batéké (Vilidrome/Plateau Batéké)",
+      "tipo": "naturaleza",
+      "region": "Pool/Plateaux, sureste",
+      "descripcion": "Altiplano con sabana, bosques de galería y vistas panorámicas. Menos conocido que otros destinos; fauna variada incluyendo búfalos y antílopes. Acceso desde Brazzaville.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Brazzaville > minibús a Kimpese (2h, 15 EUR) > a pie o con transportista local (variable). Requiere negociación en Brazzaville.",
+      "donde_dormir": {
+        "mochilero": "Pensión Kimpese: 15-25 EUR/noche",
+        "medio": "Eco-lodge Batéké (si opera): 50-80 EUR/noche",
+        "comfort": "Base Brazzaville"
+      },
+      "que_hacer": [
+        "Trekking sabana (guía, 30-50 EUR)",
+        "Observación de antílopes y búfalos (gratis con trekking)",
+        "Vistas panorámicas (gratis)",
+        "Visita aldeas Batéké locales (15 EUR)"
+      ],
+      "donde_comer": "En Kimpese: comida local 4-6 EUR. Lleva snacks para trekking.",
+      "consejo_local": "Poco visitado por turistas. Comunidades locales acostumbradas a ecoturismo. Buen complemento a Brazzaville.",
+      "plan_b_lluvia": "Caminos fangosos; mejor junio-septiembre.",
+      "keywords": [
+        "Batéké",
+        "meseta",
+        "sabana Congo",
+        "plateau",
+        "Kimpese"
+      ]
+    },
+    {
+      "id": "kinsuka",
+      "nombre": "Kinsuka (Piscinas Naturales del Congo)",
+      "tipo": "naturaleza",
+      "region": "Pool, oeste",
+      "descripcion": "Piscinas naturales de agua clara en bosque tropical cerca de Brazzaville. Destino local poco masificado, ideal para refrescarse y ver bosque de transición.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Brazzaville > minibús + caminata (1.5-2h total, 15 EUR). Operadores locales ofertan excursiones (25-40 EUR todo incluido).",
+      "donde_dormir": {
+        "mochilero": "Base Brazzaville (día completo)",
+        "medio": "Base Brazzaville",
+        "comfort": "Base Brazzaville"
+      },
+      "que_hacer": [
+        "Baño en piscinas naturales (gratis)",
+        "Caminata bosque (guía, 15-25 EUR)",
+        "Observación de primates y aves (gratis)",
+        "Picnic naturista"
+      ],
+      "donde_comer": "Lleva picnic desde Brazzaville o compra en camino. 5-10 EUR.",
+      "consejo_local": "Lleno de congoleños los fines de semana; mejor entre semana. No tiene infraestructura turística; muy local y auténtico.",
+      "plan_b_lluvia": "Piscinas aumentan nivel; seguras pero caminos fangosos.",
+      "keywords": [
+        "Kinsuka",
+        "piscinas naturales",
+        "bosque Brazzaville",
+        "día completo",
+        "agua clara"
+      ]
+    }
+  ]
+}

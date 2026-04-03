@@ -1,0 +1,319 @@
+{
+  "pais": "Burkina Faso",
+  "codigo": "bf",
+  "destinos": [
+    {
+      "id": "ouagadougou",
+      "nombre": "Ouagadougou",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital y principal hub de entrada a Burkina Faso. Centro administrativo, comercial y cultural con mercados tradicionales, museos y vida nocturna concentrada. Punto de partida lógico para explorar el país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Aeropuerto Internacional Ouagadougou (vueltas desde París, Dakar, Accra). Vuelos desde Europa 8-12 horas + conexión. Tren desde Mali (24h, 50-80 EUR)",
+      "donde_dormir": {
+        "mochilero": "Albergue Auberge Marco Polo o similar: 15-25 EUR/noche",
+        "medio": "Hotel Splendid o Azalai: 50-80 EUR/noche",
+        "comfort": "Onomo Hotel Ouagadougou: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Rood Woko (compras, artesanía local, gratis)",
+        "Museo Nacional de Burkina Faso (historia y arte, 3 EUR)",
+        "Paseo por Avenue Kwame Nkrumah y vida nocturna en Koulouba (gratis/10-20 EUR)",
+        "Visita a talleres de artesanos en Gorom-Gorom (negociación de precios, 0-50 EUR)"
+      ],
+      "donde_comer": "Riz gras, sauce d'arachide, fufu. Comer en comedores locales 2-5 EUR, restaurantes touristiques 8-15 EUR. Zona de Koulouba para ambiente, Zogona para auténtico.",
+      "consejo_local": "Negocia precios en mercados sin agresividad; los vendedores responden mejor a paciencia. Lleva efectivo (francos CFA), pocos cajeros aceptan tarjeta.",
+      "plan_b_lluvia": "Museos, mercados cubiertos, cafés tradicionales, compras en tiendas. La lluvia es breve, el calor es el factor principal.",
+      "keywords": [
+        "Ouaga",
+        "capital Burkina",
+        "Ouagadougou Burkina Faso",
+        "Koulouba",
+        "Rood Woko"
+      ]
+    },
+    {
+      "id": "bobo-dioulasso",
+      "nombre": "Bobo-Dioulasso",
+      "tipo": "ciudad",
+      "region": "Oeste",
+      "descripcion": "Segunda ciudad del país y joya cultural menos turística que Ouagadougou. Centro artesanal con mercado colorido, arquitectura colonial francesa y atmósfera más relajada. Centro de producción de algodón y artesanía textil.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Ouagadougou en minibús/autobús (7-8 horas, 20-30 EUR). Carreteras en buen estado, múltiples compañías.",
+      "donde_dormir": {
+        "mochilero": "Campement Kamboinse o Auberge le Carrefour: 18-28 EUR/noche",
+        "medio": "Hotel Bobo ou Hôtel Dafara: 45-65 EUR/noche",
+        "comfort": "Hotel Laico: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado central (textiles, artesanía, cerámica, gratis)",
+        "Visita a talleres de tejedores en Guiro (observación y compra, 0-100 EUR)",
+        "Paseo por barrio colonial y Mezquita de Dioulassoba (gratis)",
+        "Visita a cascadas de Karfiguela, 35 km sur (acampada, senderismo, 20-50 EUR)"
+      ],
+      "donde_comer": "Sopa de mil hojas, tô de sorgo, griot de pollo. Comedores 3-6 EUR, restaurantes 10-20 EUR. Comer cerca del mercado para auténtico.",
+      "consejo_local": "El mercado es más auténtico y menos agresivo que Ouaga. Muchos mochileros se quedan más días de lo planeado por la atmósfera. Los tejedores aceptan visitantes en talleres.",
+      "plan_b_lluvia": "Talleres cubiertos, museo local, cafés, exploración de barrios coloniales a pie.",
+      "keywords": [
+        "Bobo-Dioulasso",
+        "segunda ciudad",
+        "Bobo Burkina",
+        "mercado Bobo",
+        "Guiro"
+      ]
+    },
+    {
+      "id": "mopti",
+      "nombre": "Mopti",
+      "tipo": "ciudad",
+      "region": "Norte (frontera Mali)",
+      "descripcion": "Ciudad portuaria en el río Níger, punto de conexión con Mali. Mercado flotante, vida ribereña intensa y embarcadero tradicional. Menos turística pero esencial para entender comercio fluvial del Sahel.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Ouagadougou en minibús (12-14 horas, 30-40 EUR). Desde Bobo (8 horas, 25 EUR). Carretera deteriorada, viajes nocturnos.",
+      "donde_dormir": {
+        "mochilero": "Campement Toguna o Auberge Mali: 15-25 EUR/noche",
+        "medio": "Hotel Komoguel: 40-60 EUR/noche",
+        "comfort": "Hôtel Djenné ou Segou Lodge: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en piragua por el Níger y mercado flotante (negociable, 30-60 EUR grupo)",
+        "Mercado central de Mopti (gratis)",
+        "Visita a pueblo de Djenné (UNESCO, 8 km, 40 EUR excursión)",
+        "Observación de aves en delta interior (guía local, 50-80 EUR/día)"
+      ],
+      "donde_comer": "Pescado del Níger, fufu, riz au poisson. Comedores 2-5 EUR, restaurantes 8-15 EUR. Comer en borde del río.",
+      "consejo_local": "Mopti es puerta a Mali, pero viajeros independientes la evitan por inestabilidad actual del país. Aún así es accesible desde Burkina. Negocia precios de botes antes de subir.",
+      "plan_b_lluvia": "Mercados cubiertos, visitas a talleres artesanales, vida en muelle (protegida).",
+      "alerta_seguridad": "Zona fronteriza con Mali; verifica situación de seguridad actual. Algunos guías turísticos están paralizados. Consulta embajada.",
+      "keywords": [
+        "Mopti Burkina",
+        "rio Niger",
+        "mercado flotante",
+        "Djenné",
+        "Sahel"
+      ]
+    },
+    {
+      "id": "banfora",
+      "nombre": "Banfora",
+      "tipo": "naturaleza",
+      "region": "Suroeste",
+      "descripcion": "Puerta a la región más verde de Burkina con cascadas, piscinas naturales y montañas. Centro ideal para senderismo, baños en agua dulce y escape del desierto saheliano. Menos turística que destinos vecinos de Mali.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bobo-Dioulasso en minibús (3-4 horas, 10-15 EUR). Desde Ouagadougou (11 horas, 30 EUR). Carreteras aceptables.",
+      "donde_dormir": {
+        "mochilero": "Campement Sambara o Auberge les Cascades: 15-25 EUR/noche",
+        "medio": "Hotel Caniama ou Gara Bougou: 40-60 EUR/noche",
+        "comfort": "Hotel le Roche: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Cascadas de Karfiguela (senderismo, baño, entrada 5 EUR)",
+        "Cascadas de Domes (menos turísticas, 8 EUR, guía 15 EUR)",
+        "Lago de Tengrela (picnic, aves, 30 km, excursión 50 EUR)",
+        "Piscina natural de Gara Bougou (baño libre, gratis)"
+      ],
+      "donde_comer": "Trucha de cultivo local, sopa de calabaza, bouillie. Comedores 3-6 EUR, restaurantes 10-18 EUR. Probar comida riverside.",
+      "consejo_local": "Lleva repelente de mosquitos; la zona es más húmeda. Las cascadas tienen menos agua de mayo a octubre pero es más fresco. Contrata guías locales en alojamiento.",
+      "plan_b_lluvia": "En estación de lluvia (mayo-octubre) sigue lloviendo, pero es mejor época para cascadas. Actividades indoor: visitas a pueblos, artesanía local.",
+      "keywords": [
+        "Banfora Burkina",
+        "cascadas",
+        "Karfiguela",
+        "Tengrela",
+        "suroeste"
+      ]
+    },
+    {
+      "id": "gao",
+      "nombre": "Gao (Mali)",
+      "tipo": "histórico",
+      "region": "Noreste (Mali fronterizo)",
+      "descripcion": "Ciudad histórica en el Níger frontera con Mali. Centro de imperio Songhai, arquitectura antigua y mercado sahariano. Excursión desde Burkina con acceso desde Mopti o Timbuktu.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a enero",
+      "como_llegar": "Desde Mopti (Burkina) por río o carretera a Mali (negociable, 100+ km, 50-100 EUR guía + transporte). Muy complejo sin organización previa.",
+      "donde_dormir": {
+        "mochilero": "Campement Gao: 20-30 EUR/noche",
+        "medio": "Hôtel Atlantique: 50-70 EUR/noche",
+        "comfort": "Azalai Hotel Gao: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Gao (gratis)",
+        "Tumbas de Askia en Gao (patrimonio UNESCO, 5 EUR)",
+        "Paseo por río Níger (gratis)",
+        "Visita a pueblo cercano de Diafarabe (negociable)"
+      ],
+      "donde_comer": "Pescado del Níger, riz gras, té tradicional. Comedores 2-5 EUR, restaurantes 8-12 EUR.",
+      "consejo_local": "Gao está en Mali, muy inestable últimamente. Muchos tour operators no operan. Solo para viajeros muy experimentados y con tiempo flexible.",
+      "plan_b_lluvia": "Clima seco; lluvia rara. Calor es factor principal.",
+      "alerta_seguridad": "Mali en norte está afectado por conflictos. VERIFICAR situación actual antes de viajar. EVITAR si no hay seguridad confirmada.",
+      "excursion_desde": true,
+      "keywords": [
+        "Gao Mali",
+        "Tumbas Askia",
+        "Songhai",
+        "Niger",
+        "frontera Burkina"
+      ]
+    },
+    {
+      "id": "loropeni",
+      "nombre": "Ruinas de Loropeni",
+      "tipo": "histórico",
+      "region": "Suroeste (Poni)",
+      "descripcion": "Sitio arqueológico UNESCO único en Sahel con ruinas de fortificación del siglo XI. Poco visitado, requiere esfuerzo pero ofrece historia profunda y paisaje sereno. Centro de investigación de comercio de oro histórico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Banfora en jeep/moto-taxi (1.5-2 horas, 20-40 EUR). Desde Gaoua (30 km, 15 EUR). Carretera de tierra.",
+      "donde_dormir": {
+        "mochilero": "Campement Loropeni ou hospedaje en Gaoua: 15-25 EUR/noche",
+        "medio": "Gaoua: Hotel Gaoua ou Hôtel du Bani: 40-60 EUR/noche",
+        "comfort": "Gaoua: Campement Dogona: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita a ruinas con guía arqueológico (entrada + guía 20 EUR)",
+        "Senderismo en paisaje de pródigos (gratis)",
+        "Visita a pueblos cercanos de tradición oral (gratis)",
+        "Observación de aves y naturaleza"
+      ],
+      "donde_comer": "Comer en Gaoua o Banfora; pocos servicios en Loropeni. Lleva snacks.",
+      "consejo_local": "Las ruinas son poco conocidas; es viaje de verdadero explorador. Contrata guía local para contexto arqueológico. No hay mucha infraestructura turística.",
+      "plan_b_lluvia": "Estructura es resistente; se puede visitar con lluvia. Difícil acceso en estación de lluvia (julio-septiembre).",
+      "keywords": [
+        "Loropeni UNESCO",
+        "ruinas arqueologicas",
+        "Poni",
+        "comercio oro",
+        "fortificacion"
+      ]
+    },
+    {
+      "id": "nazinga",
+      "nombre": "Santuario de Nazinga",
+      "tipo": "naturaleza",
+      "region": "Centro-Sur",
+      "descripcion": "Reserva de fauna con elefantes, antílopes y aves. Única zona protegida de Burkina con avistamiento fiable de megafauna. Poco turismo, mucha autenticidad en safaris de pequeña escala.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Ouagadougou en minibús a Kombissiri (120 km, 3 horas, 15 EUR), luego jeep/taxi a Nazinga (40 km, 1 hora, 25-40 EUR).",
+      "donde_dormir": {
+        "mochilero": "Campement Nazinga: 20-30 EUR/noche",
+        "medio": "Hôtel Nazinga ou Campement Poro: 45-70 EUR/noche",
+        "comfort": "Lodge Nazinga: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en jeep abierto (guía incluido, 40-70 EUR/medio día)",
+        "Senderismo a pie con guía (30-60 EUR)",
+        "Observación de aves (ornitólogos, 50-80 EUR/día)",
+        "Acampada junto al río (en temporada, 35 EUR)"
+      ],
+      "donde_comer": "Comedores en campamentos 5-10 EUR. Cocina simple pero abundante.",
+      "consejo_local": "Lleva binoculares. Fotografía al amanecer. Elefantes suelen estar en puntos de agua al anochecer. Contrata guía de la comunidad local.",
+      "plan_b_lluvia": "Safaris se hacen en estación seca. Lluvia (mayo-octubre) limita pero activa la flora.",
+      "keywords": [
+        "Nazinga",
+        "santuario fauna",
+        "elefantes Burkina",
+        "safari",
+        "reserva"
+      ]
+    },
+    {
+      "id": "dori",
+      "nombre": "Dori",
+      "tipo": "rural",
+      "region": "Nordeste (Sahel)",
+      "descripcion": "Pueblo saheliano profundo, lejos de turismo. Centro nómada con mercado camellos y ganadería. Viaje inmersivo a Sahel real sin infrastructure turística; solo para mochileros aventureros.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde Ouagadougou en minibús (10-12 horas, 35-50 EUR, ruta muy árida).",
+      "donde_dormir": {
+        "mochilero": "Auberge Sahel o hospedaje local: 12-20 EUR/noche",
+        "medio": "Hotel Dori ou Campement: 35-50 EUR/noche",
+        "comfort": "Hotel Tidiane: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de camellos y ganado (gratis, observación)",
+        "Paseo por pueblo (gratis)",
+        "Visita a campamentos nómadas (guía local 20-40 EUR)",
+        "Puesta de sol en el Sahel (gratis)"
+      ],
+      "donde_comer": "Riz au lait de chamelle, carne de camello, fufu. Comedores 2-4 EUR. Muy limitado.",
+      "consejo_local": "Dori es lugar de paso para saharauis, no destino turístico. La belleza es en simplicidad. Prepárate para comodidad mínima. Mucho polvo.",
+      "plan_b_lluvia": "Lluvia es rara. Calor y polvo son factores principales. Mejor en seco.",
+      "keywords": [
+        "Dori Burkina",
+        "Sahel",
+        "nómadas",
+        "mercado camellos",
+        "nordeste"
+      ]
+    },
+    {
+      "id": "po",
+      "nombre": "Po",
+      "tipo": "rural",
+      "region": "Centro-Sur (Nahouri)",
+      "descripcion": "Pueblo de tradición arquitectónica única (arquitectura de tierra característica). Zona de artesanía con cerámica y tejidos. Verdadera inmersión cultural sin flujo turístico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Ouagadougou en minibús a Pô (120 km, 3-4 horas, 15-20 EUR).",
+      "donde_dormir": {
+        "mochilero": "Campement Pô ou gîte local: 14-22 EUR/noche",
+        "medio": "Auberge Pô: 40-55 EUR/noche",
+        "comfort": "No hay opción comfort; máximo medio"
+      },
+      "que_hacer": [
+        "Visita a talleres de cerámica (gratis, compra opcional 10-50 EUR)",
+        "Paseo arquitectónico por pueblo (gratis, guía local 10 EUR)",
+        "Mercado local (gratis)",
+        "Visita a aldea de tejidores (gratis, compra 5-100 EUR)"
+      ],
+      "donde_comer": "Sopa de millo, tô, carne local. Comedores 2-4 EUR. Auténtico y simple.",
+      "consejo_local": "Pô es punto de parada entre Ouaga y Bobo para quien explora. Poco conocido. Los artesanos son amables con fotógrafos. Negocia precios pero con respeto.",
+      "plan_b_lluvia": "Actividades protegidas en talleres. Lluvia refuerza belleza paisajística.",
+      "keywords": [
+        "Po Burkina",
+        "cerámica",
+        "arquitectura tierra",
+        "tejidos",
+        "Nahouri"
+      ]
+    },
+    {
+      "id": "ouahigouya",
+      "nombre": "Ouahigouya",
+      "tipo": "ciudad",
+      "region": "Norte (Yatenga)",
+      "descripcion": "Capital regional con mercado importante y centro de comercio de algodón. Punto de acceso a proyectos de reforestación de zaï. Menos turístico que Bobo pero con vida cultural intensa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Ouagadougou en minibús (100 km, 2-3 horas, 10-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Auberge Ouahigouya ou Campement: 15-25 EUR/noche",
+        "medio": "Hôtel Auberge Yatenga: 40-60 EUR/noche",
+        "comfort": "Hotel Ouahigouya: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado central (gratis, compras 5-100 EUR)",
+        "Visita a proyectos de zaï/reforestación con ONG local (guía 15-30 EUR)",
+        "Paseo por barrios tradicionales (gratis)",
+        "Visita a talleres de artesanía textil (gratis, compra)"
+      ],
+      "donde_comer": "Carne guisada, fufu, riz au lait. Comedores 3-6 EUR, restaurantes 10-15 EUR.",
+      "consejo_local": "Ouahigouya es importante para agricultura saheliana. Muchos proyectos de permacultura operan cerca. Si interesa sustentabilidad, pregunta en alojamientos por visitas.",
+      "plan_b_lluvia": "Lluvia beneficia agricultura; buena época para ver proyectos verdes.",
+      "keywords": [
+        "Ouahigouya",
+        "Yatenga",
+        "mercado algodón",
+        "zaï",
+        "norte Burkina"
+      ]
+    }
+  ]
+}

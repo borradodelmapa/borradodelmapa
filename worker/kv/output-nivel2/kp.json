@@ -1,0 +1,329 @@
+{
+  "pais": "Corea del Norte",
+  "codigo": "kp",
+  "alerta_general": "Corea del Norte es un destino altamente restringido. Los viajes turísticos solo se permiten con agencias autorizadas y bajo vigilancia constante. La independencia real no existe. Los datos que siguen reflejan lo que sería posible en escenarios hipotéticos o tours controlados.",
+  "destinos": [
+    {
+      "id": "pyongyang",
+      "nombre": "Pyongyang",
+      "tipo": "ciudad",
+      "region": "provincia de Pyongyang",
+      "descripcion": "Capital y único punto de entrada turística real del país. Centro político y administrativo con arquitectura monumental soviética y parades ideológicas. Único lugar donde tours internacionales tienen acceso regulado, aunque siempre acompañados.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "vuelo internacional desde Beijing (China), 2 horas, 250-400 EUR, o tren desde Beijing, 24 horas, 150-200 EUR. Solo posible con agencia autorizada.",
+      "donde_dormir": {
+        "mochilero": "Hotel Yanggakdo Island (4 estrellas obligatorio): 100-150 EUR/noche, asignado por agencia",
+        "medio": "Hotel Koryo (5 estrellas, mejor ubicación): 120-180 EUR/noche",
+        "comfort": "Mausoleum Palace o similares (raro acceso): 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Mausoleo de Kim Il-sung (gratis con tour)",
+        "Plaza Kim Il-sung (gratis, observación)",
+        "Monumento a la Fundación (gratis)",
+        "Metro de Pyongyang, estaciones decoradas (5 EUR con guía)",
+        "Circo estatal (40-60 EUR con entrada controlada)",
+        "Torre Juche (5 EUR, entrada limitada)"
+      ],
+      "donde_comer": "Cocina norcoreana básica: kimchi, bibimbap, sopa de carne. Comedores en hoteles asignados, 15-30 EUR/comida. No hay libertad de elegir restaurante.",
+      "consejo_local": "Los guías están entrenados para desviar preguntas políticas. Las fotos de líderes defectuosas o irrespetuosas son prohibidas. Lleva dinero en efectivo: tarjetas no funcionan.",
+      "plan_b_lluvia": "Museos de arte revolucionario (interior), cines de propaganda estatal",
+      "alerta_seguridad": "Régimen autoritario. Vigilancia total. Sin libertad de movimiento. Turismo solo con agencias. Riesgo extremo si cometes infracciones ideológicas.",
+      "keywords": [
+        "Pyongyang",
+        "P'yongyang",
+        "capital",
+        "Juche Tower",
+        "plaza central",
+        "metro"
+      ]
+    },
+    {
+      "id": "demilitarized-zone",
+      "nombre": "Zona Desmilitarizada (DMZ)",
+      "tipo": "histórico",
+      "region": "frontera norte con Corea del Sur",
+      "descripcion": "Línea de separación más militarizada del mundo entre dos Coreas. Visible desde la localidad de Kaesong o puntos fronterizos. Símbolo de la división política más importante de Asia.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Pyongyang a Kaesong en coche, 2-3 horas, incluido en tour de agencia, 80-150 EUR",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento independiente en Kaesong. Se regresa a Pyongyang o se duerme en hotel de Kaesong asignado: 80-120 EUR",
+        "medio": "Hotel Kaesong (básico, controlado): 100-140 EUR/noche",
+        "comfort": "Sin opciones de confort en la zona"
+      },
+      "que_hacer": [
+        "Observatorio de frontera (gratis con tour, fotos limitadas)",
+        "Panmunjom (punto de encuentro entre Coreas, solo con permiso especial)",
+        "Monumento a la Guerra de Corea (gratis)",
+        "Puente Thongil (vista desde lejos, gratis)"
+      ],
+      "donde_comer": "Comedores básicos en Kaesong con comida norcoreana simple. 10-20 EUR/comida. Oferta limitada.",
+      "consejo_local": "La DMZ es la frontera más tensa del mundo. Los militares están en alerta máxima. No intentes cruzar ni tomar fotos de soldados. Solo observa desde puntos asignados.",
+      "plan_b_lluvia": "Museos históricos de guerra en Kaesong",
+      "alerta_seguridad": "Zona militar activa. Acceso extremadamente restringido. Solo tours guiados autorizados. Cualquier intento de cruce es delito grave.",
+      "keywords": [
+        "DMZ",
+        "Demilitarized Zone",
+        "Kaesong",
+        "frontera",
+        "Corea del Sur",
+        "Panmunjom"
+      ]
+    },
+    {
+      "id": "mount-paektu",
+      "nombre": "Monte Paektu",
+      "tipo": "montaña",
+      "region": "frontera noreste con China",
+      "descripcion": "Montaña sagrada norcoreana (2.744 m), lugar de nacimiento legendario de la nación. Acceso limitado y controlado. Hermoso lago volcánico en la cumbre cuando hay acceso.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-agosto (nieve bloquea el acceso en invierno)",
+      "como_llegar": "Desde Pyongyang a Samjiyon en avión (120 EUR) o tren (24+ horas). Luego en coche a base de la montaña, 1 hora, 50 EUR. Acceso solo con tour autorizado.",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes en Samjiyon: 60-80 EUR/noche",
+        "medio": "Hotel Samjiyon (básico): 80-120 EUR/noche",
+        "comfort": "Sin opciones de confort, infraestructura limitada"
+      },
+      "que_hacer": [
+        "Senderismo a lago Chon (Heaven Lake) en cumbre, 3 horas (incluido en tour)",
+        "Monumento de Kim Jong-il en la base (gratis)",
+        "Caminata por bosques de montaña (incluido)"
+      ],
+      "donde_comer": "Comida básica en lodge o tienda de montaña. 8-15 EUR. Opciones muy limitadas.",
+      "consejo_local": "El acceso a Paektu depende de permisos políticos y condiciones climáticas. Lleva abrigo incluso en verano. La altitud es real (pueden haber problemas de aclimatación).",
+      "plan_b_lluvia": "Niebla es frecuente. Visita museos de la base o pueblos cercanos.",
+      "alerta_seguridad": "Acceso limitado y con permiso. Frontera con China. No es senderismo libre.",
+      "keywords": [
+        "Paektu",
+        "Paekdu",
+        "monte",
+        "montaña sagrada",
+        "lago Chon",
+        "Samjiyon"
+      ]
+    },
+    {
+      "id": "kaesong-ciudad",
+      "nombre": "Kaesong (ciudad histórica)",
+      "tipo": "histórico",
+      "region": "provincia Hwanghae del Sur",
+      "descripcion": "Antigua capital medieval de Corea (dinastía Goryeo). Centro histórico con templos, murallas y arquitectura antigua. Zona desmilitarizada parcial, acceso limitado pero menos vigilado que Pyongyang.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Pyongyang en coche, 2-3 horas, incluido en tour de agencia, 80-150 EUR",
+      "donde_dormir": {
+        "mochilero": "Hotel Kaesong (básico): 80-120 EUR/noche",
+        "medio": "Hotel Kaesong: 100-140 EUR/noche",
+        "comfort": "Sin opciones superiores"
+      },
+      "que_hacer": [
+        "Templo Singye (budista, s. XII, entrada 5 EUR)",
+        "Muralla de Kaesong (restos medievales, gratis)",
+        "Puerta Namdaemun (reconstruida, gratis)",
+        "Casa tradicional coreana museo (5 EUR)"
+      ],
+      "donde_comer": "Gachas de cebada, sopa de carne, kimchi local. Comedores en hotel, 12-20 EUR/comida.",
+      "consejo_local": "Kaesong tiene más libertad de movimiento que Pyongyang, pero guías siguen presentes. La arquitectura medieval es genuina pero está restaurada oficialmente.",
+      "plan_b_lluvia": "Museos interiores de historia medieval",
+      "alerta_seguridad": "Zona fronteriza. Vigilancia presente pero menos que en capital.",
+      "keywords": [
+        "Kaesong",
+        "Gaeseong",
+        "medieval",
+        "Goryeo",
+        "capital antigua",
+        "Singye"
+      ]
+    },
+    {
+      "id": "wonsan",
+      "nombre": "Wonsan",
+      "tipo": "playa",
+      "region": "provincia Kangwon",
+      "descripcion": "Puerto costero en costa este. Acceso muy limitado. Playas recreativas para élites norcoreanas. Complejidad política extrema.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "julio-agosto",
+      "como_llegar": "Desde Pyongyang en tren, 3-4 horas, 30-50 EUR. Tours rara vez incluyen Wonsan.",
+      "donde_dormir": {
+        "mochilero": "Sin opciones viables para mochileros",
+        "medio": "Hotel Wonsan (si se permite acceso): 100-150 EUR/noche",
+        "comfort": "Sin información disponible"
+      },
+      "que_hacer": [
+        "Playa de Wonsan (acceso controlado, gratis observación)",
+        "Museo local (raro acceso, 5 EUR)",
+        "Paseo por puerto (vigilado)"
+      ],
+      "donde_comer": "Pescado local, comida marina. Restaurantes estatales, 15-25 EUR.",
+      "consejo_local": "Wonsan es casi imposible visitar como turista independiente. Acceso militar. No esperes libertad.",
+      "plan_b_lluvia": "Museos de historia local",
+      "alerta_seguridad": "Zona militar restringida. Acceso excepcional incluso para turistas con tour.",
+      "keywords": [
+        "Wonsan",
+        "Wonsan",
+        "costa este",
+        "playa",
+        "puerto",
+        "Kangwon"
+      ]
+    },
+    {
+      "id": "kumgang-mountains",
+      "nombre": "Montañas Kumgang (Monte Diamante)",
+      "tipo": "naturaleza",
+      "region": "provincia Kangwon",
+      "descripcion": "Parque nacional con paisajes montañosos y cascadas. Zona de desarrollo turístico (ahora cerrada a turistas internacionales). Era accesible desde Corea del Sur pero está paralizado desde 2008.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre-octubre",
+      "como_llegar": "Desde Pyongyang, acceso muy limitado. Tours desde China a través de frontera ocasionalmente, 200+ EUR. Actualmente prácticamente inaccesible.",
+      "donde_dormir": {
+        "mochilero": "Resort cerrado al turismo internacional",
+        "medio": "Resort Kumgang (cerrado): historicamente 80-120 EUR/noche",
+        "comfort": "Mismo resort, cerrado"
+      },
+      "que_hacer": [
+        "Senderismo en montañas (si fuera accesible)",
+        "Cascadas (Manpok, Kuryong)",
+        "Vistas panorámicas (si tours reanudaran)"
+      ],
+      "donde_comer": "Historicamente, restaurantes en resort. Hoy no disponible.",
+      "consejo_local": "Kumgang está de facto cerrado desde 2008 por tensiones políticas. No esperes poder visitarlo.",
+      "plan_b_lluvia": "Zona generalmente inaccesible actualmente",
+      "alerta_seguridad": "Cerrado a turismo internacional desde 2008. No visitable actualmente.",
+      "keywords": [
+        "Kumgang",
+        "Kumgangsan",
+        "monte diamante",
+        "parque nacional",
+        "cascadas"
+      ]
+    },
+    {
+      "id": "myohyangsan-mountains",
+      "nombre": "Montañas Myohyangsan",
+      "tipo": "naturaleza",
+      "region": "provincia Pyongyang-namdo",
+      "descripcion": "Montañas sagradas del centro con monasterios budistas antiguos y paisajes boscosos. Templo internacional de Hyangsan. Acceso más abierto que otras zonas rurales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Pyongyang en coche, 1.5-2 horas, 60-100 EUR incluido en tours",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes Myohyangsan: 60-90 EUR/noche",
+        "medio": "Hotel Myohyang (básico): 80-120 EUR/noche",
+        "comfort": "Sin opciones superiores"
+      },
+      "que_hacer": [
+        "Templo Pohyonsa (budista, s. XI, entrada 5 EUR)",
+        "Senderismo a cascada Rimyongpok (2 horas, incluido)",
+        "Museo internacional de regalos (propaganda, entrada 5 EUR)",
+        "Caminata por bosques de pinos (incluido)"
+      ],
+      "donde_comer": "Comida vegetariana budista, sopa de montaña. 10-20 EUR en comedores.",
+      "consejo_local": "Las montañas son reales y hermosas. La comida es mejor aquí que en ciudades. Los monjes ocasionalmente interactúan si lo permite el guía.",
+      "plan_b_lluvia": "Templos cubiertos, museos interiores",
+      "alerta_seguridad": "Menos restricción que capital pero vigilancia presente. Acceso controlado.",
+      "keywords": [
+        "Myohyangsan",
+        "montañas sagradas",
+        "Pohyonsa",
+        "templo budista",
+        "bosques"
+      ]
+    },
+    {
+      "id": "sinuiju",
+      "nombre": "Sinuiju",
+      "tipo": "ciudad",
+      "region": "provincia Pyongyang-bukdo",
+      "descripcion": "Ciudad fronteriza con China (río Yalu). Principal puerta de entrada de comercio. Menos vigilancia turística que capital. Vistas del lado chino del río.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Pyongyang en tren, 6-8 horas, 40-80 EUR. Algunos tours incluyen parada fronteriza.",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes local: 60-80 EUR/noche",
+        "medio": "Hotel Sinuiju (básico): 80-120 EUR/noche",
+        "comfort": "Sin opciones"
+      },
+      "que_hacer": [
+        "Puente de la Amistad con China (foto desde lado NK, gratis)",
+        "Río Yalu vistas (gratis)",
+        "Monumento revolucionario (gratis)",
+        "Paseo por ciudad (limitado)"
+      ],
+      "donde_comer": "Comida fronteriza con influencia china. Fideos, dumplings. 8-15 EUR.",
+      "consejo_local": "Sinuiju es donde contactos chinos más ocasionalmente se ven. La atmósfera es menos tensa que capital. Puedes ver el lado chino del río y contrastar.",
+      "plan_b_lluvia": "Museos locales interiores",
+      "alerta_seguridad": "Frontera con China. Vigilancia moderada. Acceso típicamente incluido en tours desde China.",
+      "keywords": [
+        "Sinuiju",
+        "Sinuiju",
+        "frontera China",
+        "río Yalu",
+        "comercio"
+      ]
+    },
+    {
+      "id": "chilbosan-beach",
+      "nombre": "Playa Chilbosan",
+      "tipo": "playa",
+      "region": "provincia Hwanghae del Sur",
+      "descripcion": "Balneario recreativo para clase trabajadora norcoreana. Playa cercana a Pyongyang. Acceso turístico muy raro y altamente controlado.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "julio-agosto",
+      "como_llegar": "Desde Pyongyang en coche, 1-2 horas, 50-80 EUR si tour lo incluye (raro)",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes: 50-70 EUR/noche",
+        "medio": "Resort Chilbosan (raro acceso): 80-120 EUR/noche",
+        "comfort": "Sin opciones"
+      },
+      "que_hacer": [
+        "Baño en playa (entrada controlada, incluida)",
+        "Paseo costera (vigilado, gratis)",
+        "Restaurante de playa (15-25 EUR)"
+      ],
+      "donde_comer": "Marisco, kimchi, arroz. 12-20 EUR.",
+      "consejo_local": "Si logras acceso, es uno de los pocos lugares donde ves a norcoreanos en ocio. La playa es pequeña. El agua es tibia en verano.",
+      "plan_b_lluvia": "Restaurantes cubiertos",
+      "alerta_seguridad": "Acceso excepcional incluso para tours. No esperes visitarlo como mochilero.",
+      "keywords": [
+        "Chilbosan",
+        "playa",
+        "balneario",
+        "costa oeste",
+        "Hwanghae"
+      ]
+    },
+    {
+      "id": "nampo-city",
+      "nombre": "Nampo",
+      "tipo": "ciudad",
+      "region": "provincia Hwanghae del Sur",
+      "descripcion": "Puerto comercial importante en costa oeste. Presa de Nampo hidroeléctrica. Acceso muy limitado. Zona industrial menos turística.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Pyongyang en coche, 1.5 horas, 60-100 EUR si se permite acceso",
+      "donde_dormir": {
+        "mochilero": "Sin alojamiento viables para independientes",
+        "medio": "Hotel Nampo (si acceso): 80-120 EUR/noche",
+        "comfort": "Sin información"
+      },
+      "que_hacer": [
+        "Presa de Nampo (observación desde lejos, gratis)",
+        "Puerto (observación controlada, gratis)",
+        "Monumento a la construcción (gratis)"
+      ],
+      "donde_comer": "Comida portuaria simple. 10-18 EUR.",
+      "consejo_local": "Nampo es puerto industrial. Pocas atracciones turísticas. El acceso es excepcional incluso en tours. La presa es impresionante desde distancia.",
+      "plan_b_lluvia": "Museos locales si accesibles",
+      "alerta_seguridad": "Zona militar y portuaria. Acceso muy restringido. Rara vez visitada por turistas.",
+      "keywords": [
+        "Nampo",
+        "Nampo City",
+        "puerto",
+        "presa hidroeléctrica",
+        "costa oeste"
+      ]
+    }
+  ]
+}
