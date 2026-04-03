@@ -76,7 +76,7 @@ const mapaRuta = {
     const valid = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
     if (!valid.length) { el.style.display = 'none'; return; }
 
-    const KEY = 'AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA';
+    const KEY = 'AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
     // offsetWidth/offsetHeight puede ser 0 si el contenedor aún no se ha pintado
     const w = el.offsetWidth > 10 ? el.offsetWidth : 640;
     const h = el.offsetHeight > 10 ? el.offsetHeight : 380;
