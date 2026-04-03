@@ -142,24 +142,11 @@ function updateBottomBar() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
       ${currentUser && (currentUser.coins_saldo || 0) > 0 ? `<span class="bottom-tab-coins">${currentUser.coins_saldo}</span>` : ''}
+    </button>
+    <button class="bottom-tab ${sosReady ? 'bottom-tab-sos' : 'bottom-tab-sos-off'}" id="tab-sos" aria-label="SOS Emergencia">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>SOS</span>
     </button>`;
-
-  // Botón SOS flotante
-  let sosBtn = document.getElementById('sos-fab');
-  if (!sosBtn) {
-    sosBtn = document.createElement('button');
-    sosBtn.id = 'sos-fab';
-    sosBtn.className = 'sos-fab';
-    sosBtn.setAttribute('aria-label', 'SOS Emergencia');
-    sosBtn.innerHTML = `<span class="sos-fab-text">SOS</span>`;
-    document.body.appendChild(sosBtn);
-    sosBtn.addEventListener('click', () => {
-      if (!currentUser) { window._afterLogin = 'profile'; openModal('login'); return; }
-      const contacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim());
-      if (contacts.length > 0) { showSOSConfirm(); } else { renderSOSConfig(); }
-    });
-  }
-  sosBtn.className = `sos-fab ${sosReady ? 'sos-fab-ready' : 'sos-fab-off'}`;
 
   document.getElementById('tab-home').addEventListener('click', () => showState('welcome'));
   document.getElementById('tab-chat').addEventListener('click', () => {
@@ -172,6 +159,11 @@ function updateBottomBar() {
     showState('rutas');
   });
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
+  document.getElementById('tab-sos').addEventListener('click', () => {
+    if (!currentUser) { window._afterLogin = 'profile'; openModal('login'); return; }
+    const contacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim());
+    if (contacts.length > 0) { showSOSConfirm(); } else { renderSOSConfig(); }
+  });
 }
 
 function handleAvatarClick() {
@@ -497,8 +489,8 @@ async function renderProfile() {
         </div>
 
         <div class="profile-section" id="prof-narrator">
-          <span class="profile-section-icon">📍</span>
-          <span class="profile-section-label">GPS y narrador</span>
+          <span class="profile-section-icon">🧭</span>
+          <span class="profile-section-label">Copiloto</span>
           <button class="profile-info-btn" id="prof-narrator-info" onclick="event.stopPropagation()">i</button>
           <label class="profile-toggle" onclick="event.stopPropagation()">
             <input type="checkbox" id="narrator-toggle" ${typeof salma !== 'undefined' && salma._narratorActive ? 'checked' : ''}>
@@ -592,7 +584,7 @@ async function renderProfile() {
       const ok = await salma.startNarrator();
       if (ok === false) {
         e.target.checked = false;
-        alert('Para usar el narrador, permite las notificaciones en tu navegador.');
+        alert('Para usar el Copiloto, permite las notificaciones en tu navegador.');
       }
     } else {
       salma.stopNarrator();
@@ -606,7 +598,7 @@ async function renderProfile() {
     showInfoPopup('Aquí puedes organizar las fotos de todos tus viajes. Crear galerías nuevas. Y hacer videos para compartir con tus amigos en redes sociales o como quieras.');
   });
   document.getElementById('prof-narrator-info').addEventListener('click', () => {
-    showInfoPopup('Si estás cerca de un punto de interés cultural, Salma te manda una notificación y te cuenta la historia. Así no te pierdes nada. Info actualizada de más de 190 países.');
+    showInfoPopup('Copiloto activa el GPS, el narrador de puntos de interés y la navegación con Google Maps. Salma te avisa cuando te acercas a un lugar especial y te guía en ruta. Disponible con Salma Coins.');
   });
   document.getElementById('prof-help').addEventListener('click', () => renderSalmaCan());
   document.getElementById('prof-sos').addEventListener('click', () => {
@@ -1940,6 +1932,7 @@ auth.onAuthStateChanged(async (user) => {
 
     startTrackingLastPosition();
     _checkSOSQueue();
+    _restoreCopilotState();
 
     updateHeader();
 
@@ -2691,6 +2684,74 @@ function initStripeCard(overlay) {
 }
 
 window.openCoinsModal = openCoinsModal;
+
+// ═══ COPILOTO — toggle con lógica de Coins ═══
+
+async function toggleCopilot() {
+  if (!currentUser) { window._afterLogin = 'profile'; openModal('login'); return; }
+
+  const copilotActive = typeof mapaRuta !== 'undefined' && mapaRuta._copilotActive;
+
+  if (copilotActive) {
+    // Desactivar
+    if (typeof mapaRuta !== 'undefined') mapaRuta.deactivateCopilot();
+    if (typeof salma !== 'undefined') salma.stopNarrator();
+    showToast('Copiloto desactivado');
+    return;
+  }
+
+  // Activar — comprobar si ya pagó hoy
+  const hoy = new Date().toISOString().slice(0, 10);
+  const copilotData = currentUser.copilot_data || {};
+
+  if (copilotData.activated_date === hoy) {
+    // Ya pagó hoy — activar sin cobrar
+    _doCopilotActivate();
+    return;
+  }
+
+  // Comprobar coins
+  const coins = currentUser.coins_saldo || 0;
+  if (coins < 1) {
+    showToast('Necesitas 1 Salma Coin para activar el Copiloto');
+    openCoinsModal();
+    return;
+  }
+
+  // Descontar 1 coin y guardar
+  try {
+    const newCoins = coins - 1;
+    await db.collection('users').doc(currentUser.uid).update({
+      coins_saldo: newCoins,
+      copilot_data: { activated_date: hoy }
+    });
+    currentUser.coins_saldo = newCoins;
+    currentUser.copilot_data = { activated_date: hoy };
+    updateBottomBar();
+    showToast('Copiloto activado · −1 Salma Coin · saldo: ' + newCoins);
+    _doCopilotActivate();
+  } catch (e) {
+    console.warn('Error activando Copiloto:', e);
+    showToast('Error al activar Copiloto. Inténtalo de nuevo.');
+  }
+}
+
+function _doCopilotActivate() {
+  if (typeof mapaRuta !== 'undefined') mapaRuta.activateCopilot();
+  if (typeof salma !== 'undefined') salma.startNarrator();
+}
+
+// Al cargar la app, restaurar estado Copiloto si ya se activó hoy
+function _restoreCopilotState() {
+  if (!currentUser) return;
+  const hoy = new Date().toISOString().slice(0, 10);
+  const copilotData = currentUser.copilot_data || {};
+  if (copilotData.activated_date === hoy) {
+    if (typeof mapaRuta !== 'undefined') mapaRuta._copilotActive = true;
+  }
+}
+
+window.toggleCopilot = toggleCopilot;
 
 // ═══ UTILIDADES ═══
 

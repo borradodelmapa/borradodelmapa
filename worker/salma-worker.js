@@ -3205,7 +3205,23 @@ export default {
           duration: l.duration?.text || '',
         }));
 
-        return new Response(JSON.stringify({ polyline, legs }), {
+        // Steps detallados — solo si se pide (?steps=1)
+        const includeSteps = url.searchParams.get('steps') === '1';
+        let steps = [];
+        if (includeSteps) {
+          steps = (route.legs || []).flatMap(leg =>
+            (leg.steps || []).map(s => ({
+              instruction: s.html_instructions?.replace(/<[^>]*>/g, '') || '',
+              distance: s.distance?.text || '',
+              duration: s.duration?.text || '',
+              maneuver: s.maneuver || '',
+              end_location: s.end_location || null,
+            }))
+          );
+        }
+
+        const payload = includeSteps ? { polyline, legs, steps } : { polyline, legs };
+        return new Response(JSON.stringify(payload), {
           headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' }
         });
       } catch (e) {

@@ -1824,6 +1824,56 @@ const salma = {
     }
     this._rateTimes.push(now);
     return true;
+  },
+
+  // ═══ SEND DESDE COPILOTO (chat bottom sheet en itin-view) ═══
+  async sendFromCopilot(msg, onChunk) {
+    if (!msg || this._streaming) return;
+    if (!this._checkRate()) return;
+
+    const body = {
+      messages: [...(this._history || []), { role: 'user', content: msg }],
+      location: this._userLocation || null,
+      country_code: this._copilotCountry || '',
+    };
+
+    try {
+      const res = await fetch(window.SALMA_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) return;
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let fullText = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6).trim();
+          if (data === '[DONE]') continue;
+          try {
+            const parsed = JSON.parse(data);
+            const delta = parsed.choices?.[0]?.delta?.content || '';
+            if (delta) { fullText += delta; if (onChunk) onChunk(fullText); }
+          } catch {}
+        }
+      }
+
+      // Actualizar historial
+      this._history.push({ role: 'user', content: msg });
+      this._history.push({ role: 'assistant', content: fullText });
+      if (this._history.length > 20) this._history = this._history.slice(-20);
+
+    } catch (e) {
+      if (onChunk) onChunk('Error conectando con Salma. Inténtalo de nuevo.');
+    }
   }
 };
 
