@@ -1,0 +1,324 @@
+{
+  "pais": "Santo Tomé y Príncipe",
+  "codigo": "st",
+  "destinos": [
+    {
+      "id": "sao-tome-ciudad",
+      "nombre": "São Tomé (ciudad)",
+      "tipo": "ciudad",
+      "region": "Isla de Santo Tomé",
+      "descripcion": "Capital y principal puerto del país, con arquitectura colonial portuguesa, mercados locales y una bahía pintoresca. Centro neurálgico donde llegan vuelos internacionales y base logística para explorar el país. Mezcla de vida cotidiana africana con influencias europeas en sus calles.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "llegada internacional por el Aeropuerto Internacional de São Tomé; desde otras islas, ferri local (si funciona) o vuelos domésticos",
+      "donde_dormir": {
+        "mochilero": "casa de huéspedes/pensión + 25-40 EUR/noche",
+        "medio": "hotel pequeño + 50-80 EUR/noche",
+        "comfort": "Pestana Equador o similar + 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por el Palacio de Presidencia y centro histórico (gratis)",
+        "Mercado de São Tomé para artesanías y frutas tropicales (5-15 EUR)",
+        "Playa de São Tomé para baño al atardecer (gratis)",
+        "Iglesia de Nossa Senhora da Graça (gratis)",
+        "Museo Nacional (3-5 EUR)"
+      ],
+      "donde_comer": "Arroz de marisco, cacimba (sandía), peixe à sassissi (pescado en salsa de coco). Rango 8-20 EUR. Restaurantes en la Avenida Marginal y zona centro.",
+      "consejo_local": "El Mercado Central abre muy temprano (6am); ve a primera hora para ver la actividad real y conseguir mejores precios. Los taxis sin taxímetro, negocia el precio antes.",
+      "plan_b_lluvia": "Museo Nacional, mercados cubiertos, cafés locales para café y bolo de chuva (pastel de lluvia)",
+      "keywords": [
+        "Sao Tome",
+        "capital",
+        "porto",
+        "palacio",
+        "mercado central",
+        "Avenida Marginal"
+      ]
+    },
+    {
+      "id": "praia-brava",
+      "nombre": "Praia Brava",
+      "tipo": "playa",
+      "region": "Noroeste de Santo Tomé",
+      "descripcion": "Playa salvaje de arena negra volcánica a 10 km de São Tomé con olas fuertes y paisaje primario. Destino para viajeros que buscan naturaleza sin infraestructura turística, ideal para senderismo costero y observación del atardecer. Punto de partida para excursiones a plantaciones de cacao abandonadas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde São Tomé en taxi privado (15-20 EUR) o a pie/autoestop (2-3 horas). Camino de tierra sin marcar, mejor con guía local.",
+      "donde_dormir": {
+        "mochilero": "Acampar o hospedaje en cabaña rústica + 15-30 EUR/noche",
+        "medio": "no hay",
+        "comfort": "no hay"
+      },
+      "que_hacer": [
+        "Baño en la playa (gratis, oleaje fuerte)",
+        "Senderismo costero hasta Praia das Conchas (gratis)",
+        "Explorar ruinas de plantación de cacao (gratis con guía local 15-25 EUR)",
+        "Fotografía de sunset (gratis)"
+      ],
+      "donde_comer": "Casi no hay servicios; lleva comida desde São Tomé. Pescado fresco si encuentras pescadores locales (10-15 EUR)",
+      "consejo_local": "La playa es peligrosa para baño sin experiencia; el oleaje es fuerte y hay corrientes. Las ruinas de la plantación 'Roça Belo Monte' son fascinantes pero requieren guía local.",
+      "plan_b_lluvia": "No recomendado, el camino es intransitable. Posponer visita.",
+      "keywords": [
+        "Praia Brava",
+        "arena negra",
+        "playa silvestre",
+        "roça",
+        "plantacion",
+        "oleaje"
+      ]
+    },
+    {
+      "id": "roca-sao-joao",
+      "nombre": "Roça São João (plantación histórica)",
+      "tipo": "histórico",
+      "region": "Centro de Santo Tomé",
+      "descripcion": "Antigua plantación de cacao del siglo XIX, ahora parcialmente habitada, que representa la historia colonial y agraria del país. Recorre mansiones abandonadas, casas de trabajadores y paisajes de selva tropical con árboles de cacao. Experiencia única de arqueología industrial tropical sin restauración moderna.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde São Tomé en taxi o colectivo (1.5-2 horas, 8-12 EUR). Camino de tierra, mejor en 4x4 tras lluvias.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje en la roça + 20-35 EUR/noche",
+        "medio": "no hay regular",
+        "comfort": "no hay"
+      },
+      "que_hacer": [
+        "Tour guiado por la plantación y mansión (15-25 EUR con guía local)",
+        "Senderismo entre árboles de cacao (gratis)",
+        "Observar vista panorámica desde la mansión (gratis)",
+        "Charla con habitantes locales sobre historia (gratis)"
+      ],
+      "donde_comer": "Comida casera preparada en la roça (8-12 EUR). Trae snacks desde São Tomé como respaldo.",
+      "consejo_local": "Negocia el precio del guía antes; algunos turistas pagan más. La mansión principal es inestable en algunos puntos, camina con cuidado.",
+      "plan_b_lluvia": "Las ruinas se ven mejor bajo lluvia (atmósfera misteriosa), pero los caminos se vuelven fangosos. Lleva botas.",
+      "keywords": [
+        "Roça",
+        "plantacion cacao",
+        "colonial",
+        "mansión",
+        "arqueología industrial",
+        "Sao Joao"
+      ]
+    },
+    {
+      "id": "pico-sao-tome",
+      "nombre": "Pico de São Tomé (senderismo)",
+      "tipo": "montaña",
+      "region": "Centro-sur de Santo Tomé",
+      "descripcion": "Pico más alto de la isla (2.024m) con selva tropical densa, helechos gigantes y vistas de 360° de los océanos. Ruta de senderismo exigente de día completo que atraviesa ecosistemas diversos desde plantaciones hasta bosque nublado. Destino para senderistas con experiencia y resistencia física.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Desde São Tomé, taxi hasta pueblo de Trindade (1.5 horas, 12-15 EUR), luego camina a punto de inicio de sendero o contrata 4x4 adicional (20-30 EUR).",
+      "donde_dormir": {
+        "mochilero": "Acampar o casa de huéspedes en Trindade + 15-25 EUR/noche",
+        "medio": "no hay",
+        "comfort": "no hay"
+      },
+      "que_hacer": [
+        "Ascenso al Pico de São Tomé (6-8 horas ida/vuelta, gratis pero con guía obligatorio 30-50 EUR)",
+        "Fotografía de nebulina en la cumbre (gratis)",
+        "Observación de aves endémicas (gratis con guía)"
+      ],
+      "donde_comer": "Lleva provisiones (barras energéticas, agua, frutas secas). No hay servicios en ruta.",
+      "consejo_local": "Guía OBLIGATORIO; no hay sendero marcado y es fácil perderse. Empieza muy temprano (5am) para llegar a la cumbre antes del mediodía cuando suben nubes. La niebla baja rápidamente.",
+      "plan_b_lluvia": "Descartado si llueve; demasiado peligroso. La visibilidad desaparece.",
+      "keywords": [
+        "Pico Santo Tome",
+        "2024m",
+        "cumbre",
+        "senderismo",
+        "selva tropical",
+        "montaña"
+      ]
+    },
+    {
+      "id": "principe-isla",
+      "nombre": "Isla de Príncipe",
+      "tipo": "isla",
+      "region": "Isla de Príncipe (separada)",
+      "descripcion": "Isla hermana más pequeña (142 km²) y menos desarrollada, con playas vírgenes, selva intacta y apenas 7.000 habitantes. Acceso limitado pero una de las experiencias más auténticas para viajeros aventureros. Mezcla de playa tropical deserta con naturaleza primaria casi sin turismo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde São Tomé en avión (12 minutos, 60-90 EUR) o ferri irregular (2-4 horas, 30-50 EUR, horarios impredecibles). Vuelo más confiable.",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes en Santo António + 25-40 EUR/noche",
+        "medio": "pequeño hotel + 50-75 EUR/noche",
+        "comfort": "no hay opciones turísticas de nivel"
+      },
+      "que_hacer": [
+        "Playa de Santo António (gratis)",
+        "Senderismo a Pico de Príncipe (5-6 horas con guía, 25-40 EUR guía)",
+        "Piscina natural 'Boca de Inferno' (gratis)",
+        "Explorar selva tropical a pie (gratis, mejor con guía 20-30 EUR)"
+      ],
+      "donde_comer": "Pescado fresco, arroz con vegetales. Restaurantes muy básicos, 7-15 EUR. Santo António es el único pueblo con servicios.",
+      "consejo_local": "El ferri no funciona regularmente; confirma con autoridades portuarias días antes. La isla es verdaderamente aislada y tranquila, ideal si buscas soledad total. Efectivo obligatorio (sin cajeros).",
+      "plan_b_lluvia": "Las selvas están más exuberantes tras lluvia, pero senderos intransitables. Mejor esperar o explorar playas.",
+      "keywords": [
+        "Principe",
+        "isla pequena",
+        "Santo Antonio",
+        "aislada",
+        "virgen",
+        "Pico Principe"
+      ]
+    },
+    {
+      "id": "praia-governador",
+      "nombre": "Praia do Governador",
+      "tipo": "playa",
+      "region": "Suroeste de Santo Tomé",
+      "descripcion": "Playa relativamente accesible a 8 km de São Tomé con arena blanca y aguas calmadas, ideal para bañarse. Menos frecuentada que playas cercanas pero con servicios básicos. Punto de partida para snorkel y pesca local.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde São Tomé en taxi (15 minutos, 5-8 EUR) o a pie (1.5 horas).",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes cercana + 20-35 EUR/noche",
+        "medio": "pequeño resort + 60-90 EUR/noche",
+        "comfort": "no hay"
+      },
+      "que_hacer": [
+        "Baño en mar (gratis)",
+        "Snorkel básico (gratis, o alquiler de equipo 10-15 EUR)",
+        "Conversación con pescadores locales (gratis)",
+        "Picnic con frutas tropicales (5-10 EUR)"
+      ],
+      "donde_comer": "Pescado a la parrilla, marisco fresco en pequeños chiringuitos junto a playa. 8-18 EUR. Trae provisiones de São Tomé.",
+      "consejo_local": "Negocia el snorkel con pescadores locales en lugar de operadores turísticos; es mucho más barato y auténtico. Las mejores vistas coralinas están a 20-30 minutos remando.",
+      "plan_b_lluvia": "Playa sigue accesible pero sin vistas submarinas claras.",
+      "keywords": [
+        "Praia Governador",
+        "playa blanca",
+        "snorkel",
+        "pesca",
+        "accesible",
+        "baño"
+      ]
+    },
+    {
+      "id": "museu-nacional",
+      "nombre": "Museo Nacional (São Tomé)",
+      "tipo": "histórico",
+      "region": "Centro de Santo Tomé",
+      "descripcion": "Pequeño museo con colecciones de arte tradicional santotomense, artefactos coloniales y exposiciones sobre historia de plantaciones. Menos conocido que museos de otros países africanos pero esencial para entender la herencia cultural local. Colecciones modestas pero auténticas sin curación comercial.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "En el centro de São Tomé, caminable desde hoteles centrales o taxi (3-5 EUR).",
+      "donde_dormir": {
+        "mochilero": "hotel cercano + 25-40 EUR/noche",
+        "medio": "hotel centro + 50-80 EUR/noche",
+        "comfort": "hotel 3-4 estrellas + 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour guiado por museo (3-5 EUR entrada, guía adicional 10-15 EUR)",
+        "Observación de arte local y máscaras (incluido entrada)",
+        "Lectura de paneles sobre historia colonial (incluido)"
+      ],
+      "donde_comer": "En la zona centro, múltiples opciones de 8-20 EUR alrededor del museo.",
+      "consejo_local": "El museo abre de forma irregular; verifica horarios con tu hotel. Las colecciones son pequeñas pero los trabajadores hablan con pasión sobre historia local.",
+      "plan_b_lluvia": "Perfecto para días de lluvia.",
+      "keywords": [
+        "Museo Nacional",
+        "arte",
+        "colonial",
+        "artefatos",
+        "historia",
+        "cultura"
+      ]
+    },
+    {
+      "id": "rota-cacau",
+      "nombre": "Ruta del Cacao (experiencia agro-turística)",
+      "tipo": "rural",
+      "region": "Centro y norte de Santo Tomé",
+      "descripcion": "Recorrido por varias roças (plantaciones) de cacao visitando procesos de cultivo, fermentación y secado tradicional. Experiencia agro-turística enfocada en el grano que hizo histórica la isla. Incluye catación de chocolate artesanal y charlas sobre sostenibilidad actual del cacao.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre (cosecha)",
+      "como_llegar": "Desde São Tomé con operador local o taxi contratado (tours de 1-2 días, 50-100 EUR incluido transporte).",
+      "donde_dormir": {
+        "mochilero": "Dormir en roça + 20-40 EUR/noche",
+        "medio": "hotel en pueblo cercano + 50-70 EUR/noche",
+        "comfort": "no hay"
+      },
+      "que_hacer": [
+        "Cosecha de vainas de cacao (participativo, gratis)",
+        "Fermentación y secado de granos (demostrativo, gratis)",
+        "Catación de chocolate y café local (5-10 EUR)",
+        "Charla sobre historia y futuro del cacao (gratis con operador)"
+      ],
+      "donde_comer": "Comida casera en roça o pueblo rural, 7-15 EUR.",
+      "consejo_local": "La cosecha es octubre-noviembre principalmente; si vas junio-septiembre verás preparación pero no pico. Negocia con pequeños productores en lugar de operadores 'turísticos' si quieres precio justo.",
+      "plan_b_lluvia": "Ideal para ver procesos de secado bajo techo; lluvia no afecta visitas.",
+      "keywords": [
+        "cacao",
+        "roça",
+        "plantacion",
+        "fermentacion",
+        "chocolate",
+        "agro-turismo"
+      ]
+    },
+    {
+      "id": "ponta-rosa",
+      "nombre": "Ponta Rosa (naturaleza silvestre)",
+      "tipo": "naturaleza",
+      "region": "Noreste de Santo Tomé",
+      "descripcion": "Reserva natural con manglares, aves endémicas y selva tropical sin acceso turístico infraestructurado. Destino para ornitólogos y biólogos aficionados interesados en biodiversidad tropical genuina. Requiere movilidad propia o guía especializado.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde São Tomé en 4x4 (2-3 horas, 40-60 EUR) o a través de operador especializado.",
+      "donde_dormir": {
+        "mochilero": "Acampar o pequeña cabaña rústica + 15-30 EUR/noche",
+        "medio": "no hay",
+        "comfort": "no hay"
+      },
+      "que_hacer": [
+        "Observación de aves (gratis, mejor con guía ornitólogo 25-40 EUR)",
+        "Caminata por manglar (gratis)",
+        "Fotografía de fauna tropical (gratis)"
+      ],
+      "donde_comer": "Llevar provisiones desde São Tomé.",
+      "consejo_local": "Los caminos no están marcados; un guía local o especializado es casi obligatorio. La biodiversidad es real pero requiere paciencia; no es safari de vida silvestre visible.",
+      "plan_b_lluvia": "Parcialmente accesible pero caminos muy fangosos.",
+      "keywords": [
+        "Ponta Rosa",
+        "manglar",
+        "aves",
+        "naturaleza",
+        "biodiversidad",
+        "reserva"
+      ]
+    },
+    {
+      "id": "trindade-pueblo",
+      "nombre": "Trindade (pueblo rural)",
+      "tipo": "rural",
+      "region": "Centro-sur de Santo Tomé",
+      "descripcion": "Pueblo rural pequeño que sirve como base para acceder al Pico de São Tomé y explorar la región interior. Experiencia de vida cotidiana santotomense auténtica sin presencia turística significativa. Punto de encuentro con comunidades locales y punto de inicio para senderismo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde São Tomé en taxi colectivo (1.5-2 horas, 8-12 EUR) o privado (15-20 EUR).",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes + 15-30 EUR/noche",
+        "medio": "pequeña pensión + 35-50 EUR/noche",
+        "comfort": "no hay"
+      },
+      "que_hacer": [
+        "Paseo por pueblo (gratis)",
+        "Conversación con habitantes locales (gratis)",
+        "Compra de artesanías y productos locales (5-15 EUR)",
+        "Base para subida a Pico (ver destino separado)"
+      ],
+      "donde_comer": "Comida casera, arroz, pescado, vegetales locales. 6-12 EUR en casa de huéspedes.",
+      "consejo_local": "Trindade es parada obligatoria para quienes suben el Pico, pero vale la pena pasar al menos una tarde en el pueblo para ver vida rural genuina.",
+      "plan_b_lluvia": "Pueblo totalmente accesible.",
+      "keywords": [
+        "Trindade",
+        "pueblo",
+        "rural",
+        "base",
+        "Pico",
+        "vida local"
+      ]
+    }
+  ]
+}

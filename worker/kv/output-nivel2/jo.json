@@ -1,0 +1,333 @@
+{
+  "pais": "Jordania",
+  "codigo": "jo",
+  "destinos": [
+    {
+      "id": "petra",
+      "nombre": "Petra",
+      "tipo": "histórico",
+      "region": "Ma'an, sur",
+      "descripcion": "Ciudad nabatea tallada en roca rosada del siglo I a.C., declarada Patrimonio de la Humanidad. Accesible a pie o a caballo, combina arqueología de clase mundial con senderismo en cañones espectaculares. Imprescindible para cualquier viajero independiente en Jordania.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre, noviembre, marzo, abril",
+      "como_llegar": "desde Amán: autobús JETT (3h, 8-10 EUR) o coche de alquiler (3.5h, gasolina ~15 EUR). Desde Aqaba: minibús (2h, 5 EUR)",
+      "donde_dormir": {
+        "mochilero": "hostal en Wadi Musa (pueblo junto a Petra): 12-18 EUR/noche",
+        "medio": "hotel 3* en Wadi Musa: 40-70 EUR/noche",
+        "comfort": "resort 5* (Movenpick, Petra): 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Cañón del Siq hasta el Tesoro (gratis con entrada, 27 EUR)",
+        "Sendero al Monasterio Ad-Deir (gratis, ~3h ida y vuelta)",
+        "Senderismo en Wadi Muthlim hacia el Tesoro alternativo (gratis, sin multitudes)"
+      ],
+      "donde_comer": "Hummus, mansaf (cordero en yogur), kebab. 5-8 EUR menú típico. Busca comedores locales en la calle principal de Wadi Musa, evita restaurantes turísticos frente al sitio arqueológico.",
+      "consejo_local": "Entra a Petra a primera hora (antes de las 7:30) para evitar multitudes. El sendero al Monasterio es agotador pero menos concurrido que el Tesoro. Lleva mínimo 2L de agua.",
+      "plan_b_lluvia": "Visita el Museo de Petra (5 EUR) o explora los alrededores de Wadi Musa a pie. La lluvia es rara pero posible de noviembre a febrero.",
+      "keywords": [
+        "Petra",
+        "Wadi Musa",
+        "Tesoro",
+        "Ad-Deir",
+        "Monasterio",
+        "nabateo",
+        "rock city"
+      ]
+    },
+    {
+      "id": "wadi-rum",
+      "nombre": "Wadi Rum",
+      "tipo": "desierto",
+      "region": "Aqaba, sur",
+      "descripcion": "Desierto de arenisca roja con formaciones rocosas monumentales. Accesible en jeep o a caballo, ofrece campamentos beduinos donde dormir bajo las estrellas. Experiencia de deserto auténtica sin estar completamente aislado.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre, noviembre, marzo, abril",
+      "como_llegar": "desde Amán: autobús + conexión (5-6h total, 10-12 EUR) o coche alquilado (4h, ~20 EUR gasolina). Desde Petra: minibús a Aqaba luego a Wadi Rum (3h total, 8 EUR)",
+      "donde_dormir": {
+        "mochilero": "campamento beduino básico con tienda: 20-30 EUR (incluye cena y desayuno)",
+        "medio": "campamento con tienda privada y baño: 40-60 EUR",
+        "comfort": "eco-lodge tipo Bedouin Lifestyle (tienda luxury): 80-120 EUR"
+      },
+      "que_hacer": [
+        "Safari en jeep con beduino (4h: 30-40 EUR)",
+        "Trekking a caballo al atardecer (2h: 20-25 EUR)",
+        "Escalada en roca con guía local (día completo: 60-80 EUR)"
+      ],
+      "donde_comer": "Comida beduina: pan casero, hummus, mansaf. Incluido en paquete campamento. Cena alrededor del fuego. 5-10 EUR si comes en pueblo de Rum.",
+      "consejo_local": "Negocia el precio del safari y paquete campamento directamente en el Visitor Center (no en agencias de Amán, cobran comisión). Los beduinos suelen ser flexibles si viajas solo o en grupo pequeño.",
+      "plan_b_lluvia": "Lluvia rara pero posible: los campamentos tienen tiendas resistentes. Puedes hacer caminatas cortas entre rocas o explorar pueblos cercanos como Aqaba.",
+      "keywords": [
+        "Wadi Rum",
+        "desert",
+        "red sand",
+        "beduino",
+        "jeep safari",
+        "Lawrence de Arabia",
+        "camping desierto"
+      ]
+    },
+    {
+      "id": "amman",
+      "nombre": "Amán",
+      "tipo": "ciudad",
+      "region": "norte-central",
+      "descripcion": "Capital caótica pero vibrante con barrios históricos en colinas (Downtown), vida nocturna y gastronomía moderna (Abdoun, Jabal Amman). Punto de entrada obligado con museos de calidad y auténtica atmósfera urbana árabe.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre, noviembre, abril, mayo",
+      "como_llegar": "Aeropuerto Queen Alia (AQJ): taxi compartido/Uber (~15-20 EUR, 45min), autobús JETT (3 EUR, 1h). Punto de partida hacia todos lados.",
+      "donde_dormir": {
+        "mochilero": "hostal en Downtown (Jabal Amman): 15-22 EUR/noche",
+        "medio": "hotel boutique en Jabal Amman: 45-75 EUR/noche",
+        "comfort": "hotel 4-5* (Four Seasons, InterContinental): 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Arqueológico de Jordania (6 EUR, colecciones nabateas y islámicas)",
+        "Downtown: Grand Husseini Mosque + Souq tradicional (gratis)",
+        "Ciudadela Romana (Jebel al-Qal'a): ruinas romano-omeyas (3 EUR, vistas de la ciudad)"
+      ],
+      "donde_comer": "Mansaf, falafel, shawarma. 3-6 EUR comida callejera; 8-15 EUR restaurante local. Busca en Jabal Amman (cafeterías modernas) o Downtown (comedores auténticos). Evita Abdoun si tienes presupuesto ajustado.",
+      "consejo_local": "Downtown de noche puede estar menos turístico pero más auténtico. El souq cierra alrededor de las 19h. Los taxis nocturnos: usa Uber o negocia antes. El transporte público (minibús rojo) es barato (0.30 EUR) pero caótico.",
+      "plan_b_lluvia": "Museos (costo bajo), cafeterías en Jabal Amman, cines locales. La lluvia en invierno es común pero no paraliza la ciudad.",
+      "keywords": [
+        "Amman",
+        "Amán",
+        "Downtown",
+        "Jabal Amman",
+        "Abdoun",
+        "Ciudadela Romana",
+        "Husseini Mosque",
+        "capital"
+      ]
+    },
+    {
+      "id": "mar-muerto",
+      "nombre": "Mar Muerto",
+      "tipo": "playa",
+      "region": "oeste, frontera con Palestina/Israel",
+      "descripcion": "Lago salado más bajo del mundo (-430m) con aguas densas donde flota naturalmente. Playas con resort todo incluido pero también acceso público económico. Única en el mundo por su flotabilidad y aguas minerales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre, noviembre, febrero, marzo",
+      "como_llegar": "desde Amán: minibús/taxi a Sweimeh o Aman Beach (50km, 1h, 5-8 EUR). Coche alquiler recomendado para flexibilidad.",
+      "donde_dormir": {
+        "mochilero": "camping basic o habitación en Sweimeh: 15-25 EUR/noche",
+        "medio": "hotel 3* con acceso a playa (Amman Beach Hotel): 50-80 EUR",
+        "comfort": "resort todo incluido (Dead Sea Marriott, Movenpick): 120-200 EUR"
+      },
+      "que_hacer": [
+        "Flotar en el Mar Muerto (gratis en playa pública, 2-3 EUR si pagas sunbed)",
+        "Baño de lodo mineral (incluido en entrada a playas privadas o DIY en orillas)",
+        "Visita Wadi Zarka Ma'in (cascadas termales, 10 EUR)"
+      ],
+      "donde_comer": "Hummus, pescado fresco local, smoothies. 5-8 EUR. Los resorts incluyen comida. En pueblos como Sweimeh hay opciones económicas.",
+      "consejo_local": "No nades si tienes heridas abiertas (agua salada quema). El lodo es gratis en algunas orillas pero menos refinado. Las mejores aguas son en mañana temprano antes de calor extremo. Llevar chanclas: el suelo es salado y áspero.",
+      "plan_b_lluvia": "Lluvia rara en Mar Muerto. Si hay, los resorts tienen piscina temperada y spa.",
+      "keywords": [
+        "Mar Muerto",
+        "Dead Sea",
+        "flotabilidad",
+        "lodo mineral",
+        "playa",
+        "Sweimeh",
+        "Aman Beach",
+        "agua salada"
+      ]
+    },
+    {
+      "id": "jerash",
+      "nombre": "Jerash",
+      "tipo": "histórico",
+      "region": "norte",
+      "descripcion": "Ruinas greco-romanas mejor conservadas fuera de Italia, con teatro, templos y calles columnadas intactas. A 50km de Amán, es excursión fácil de día o parada natural hacia el norte.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril, mayo, octubre, noviembre",
+      "como_llegar": "desde Amán: minibús desde North Bus Station (30km, 30min, 0.80 EUR). Coche alquilado: 30min. Vuelta fácil en minibús de ida y vuelta (2 EUR total).",
+      "donde_dormir": {
+        "mochilero": "hostal en Jerash pueblo: 12-18 EUR/noche (pocas opciones, mejor como día completo desde Amán)",
+        "medio": "hotel 2-3* en Jerash: 30-50 EUR/noche",
+        "comfort": "hotel rural en montañas cercanas: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido por ruinas arqueológicas (8 EUR entrada, 2-3h autodidacta o guía 15 EUR)",
+        "Teatro Sur y Templo de Zeus (incluidos, vistas panorámicas)",
+        "Paseo por Cardo Máximo (avenida principal colonnada, gratis dentro del sitio)"
+      ],
+      "donde_comer": "Shawarma, falafel, ensaladas. 3-5 EUR. En entrada del sitio hay comedores básicos. Mejor comer antes en Amán o después regresando.",
+      "consejo_local": "Compra entrada combi con Ajlun Castle (cercano, misma dirección) por 13 EUR total. Entra temprano para evitar calor. Las ruinas son enormes: dedica al menos 2h. Pocos turistas respecto a Petra.",
+      "plan_b_lluvia": "Las estructuras son sólidas, visita es posible. Lleva capa o paraguas.",
+      "keywords": [
+        "Jerash",
+        "Gerasa",
+        "ruinas romanas",
+        "greco-romanas",
+        "teatro",
+        "Cardo Maximo",
+        "templos",
+        "norte Jordania"
+      ]
+    },
+    {
+      "id": "ajlun-castle",
+      "nombre": "Castillo de Ajlun",
+      "tipo": "histórico",
+      "region": "norte",
+      "descripcion": "Fortaleza del siglo XII Ayyubí en montaña boscosa con vistas panorámicas al Valle del Jordán. Menos turístico que Jerash pero igualmente auténtico, permite combinar historia con senderismo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril, mayo, octubre, noviembre",
+      "como_llegar": "desde Jerash: minibús o taxi (15km, 20min, 2-3 EUR). Desde Amán: minibús a Ajlun pueblo (60km, 1.5h, 2 EUR) + taxi al castillo (5 EUR). Ideal combinar con Jerash en día de montaña.",
+      "donde_dormir": {
+        "mochilero": "guesthouse en Ajlun pueblo: 15-22 EUR/noche",
+        "medio": "hotel rural: 40-60 EUR/noche",
+        "comfort": "eco-lodge en bosque: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Qala'at Ar-Rabad (5 EUR, torres de 7m, armería medieval)",
+        "Senderismo en bosques de pinos circundantes (gratis, senderos informales)",
+        "Vistas al Valle del Jordán desde murallas (incluidas con entrada)"
+      ],
+      "donde_comer": "Comida casera en guesthouses. 4-6 EUR. El pueblo tiene pocos restaurantes, mejor llevar snacks o comer en Jerash.",
+      "consejo_local": "El castillo es pequeño (30min exploración rápida). Dedica tiempo al senderismo en bosques si vienes. Clima más fresco que en valles bajos. Los meses de verano son muy calurosos en la cumbre.",
+      "plan_b_lluvia": "Los senderos pueden encharcarse. La estructura está cubierta parcialmente. Viable con cuidado.",
+      "keywords": [
+        "Ajlun",
+        "castillo",
+        "Qala'at Ar-Rabad",
+        "Ayyubi",
+        "fortaleza",
+        "montaña",
+        "bosque",
+        "norte"
+      ]
+    },
+    {
+      "id": "aqaba",
+      "nombre": "Aqaba",
+      "tipo": "playa",
+      "region": "sur, costa",
+      "descripcion": "Único puerto marítimo de Jordania en el Mar Rojo con arrecifes de coral inmediatos a la orilla. Base para buceo/snorkel de clase mundial y puerta de entrada a Wadi Rum. Mezcla de resorts con acceso a playa pública.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre, noviembre, marzo, abril",
+      "como_llegar": "desde Amán: autobús JETT (4.5h, 12 EUR) o vuelo local (1h, 60-100 EUR). Desde Petra: minibús (2h, 5 EUR). Desde Wadi Rum: minibús (1h, 5 EUR).",
+      "donde_dormir": {
+        "mochilero": "hostal o guesthouse básico: 15-25 EUR/noche",
+        "medio": "hotel beachfront 3-4*: 50-80 EUR/noche",
+        "comfort": "resort todo incluido o 5*: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel/buceo en arrecife de coral (20-30 EUR snorkel tour, 60-80 EUR buceo certificado)",
+        "Playa pública cercana al muelle (gratis)",
+        "Visita a Isla de Pharaon (fortaleza cruzada, tour barco 25 EUR)"
+      ],
+      "donde_comer": "Pescado fresco, hummus, ensaladas. 6-10 EUR restaurante local; 12-20 EUR turístico. El paseo marítimo (Corniche) tiene opciones variadas.",
+      "consejo_local": "Para buceo/snorkel, contrata operador directamente en puerto, no a través de hotel (más barato). El agua es tibia todo el año. Si vienes solo, los tours se llenan con otros viajeros. Agosto es muy caluroso y caro.",
+      "plan_b_lluvia": "Lluvia rara. Visita museo, souq local o cafeterías.",
+      "keywords": [
+        "Aqaba",
+        "Mar Rojo",
+        "playa",
+        "coral",
+        "buceo",
+        "snorkel",
+        "puerto",
+        "Pharaon",
+        "sur"
+      ]
+    },
+    {
+      "id": "umm-qais",
+      "nombre": "Umm Qais",
+      "tipo": "histórico",
+      "region": "norte, frontera con Siria e Israel",
+      "descripcion": "Ruinas greco-romanas en acantilado con vistas panorámicas al Valle del Jordán, Lago Tiberiades y Golan. Menos concurrido que Jerash pero con ubicación espectacular. Base para explorar norte montañoso.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril, mayo, octubre, noviembre",
+      "como_llegar": "desde Amán: minibús a Irbid (60km, 1.5h, 1.50 EUR) + taxi a Umm Qais (30km, 45min, 15-20 EUR compartido). Mejor alquilar coche. Desde Jerash: coche (1.5h).",
+      "donde_dormir": {
+        "mochilero": "guesthouse en Umm Qais: 15-20 EUR/noche (pocas opciones)",
+        "medio": "hotel boutique cercano: 40-60 EUR/noche",
+        "comfort": "ecolodge con vistas: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas greco-romanas y museo local (5 EUR)",
+        "Viewpoint al Valle del Jordán (gratis, incluido con entrada)",
+        "Caminata en acantilados y pueblos beduinos circundantes (gratis)"
+      ],
+      "donde_comer": "Comida casera en guesthouses. 4-6 EUR. Lleva snacks; pocas opciones de restaurante turístico.",
+      "consejo_local": "Ven al atardecer para mejores vistas. El acceso es difícil sin vehículo propio; negocia taxi desde Irbid. Pocos turistas extranjeros, atmósfera local auténtica.",
+      "plan_b_lluvia": "Viable, pero las vistas se oscurecen. Las ruinas son visitables.",
+      "keywords": [
+        "Umm Qais",
+        "Gadara",
+        "greco-romano",
+        "valle Jordan",
+        "acantilado",
+        "vistas",
+        "norte montañoso"
+      ]
+    },
+    {
+      "id": "wadi-zarqa-main",
+      "nombre": "Wadi Zarka Ma'in",
+      "tipo": "naturaleza",
+      "region": "oeste, junto Mar Muerto",
+      "descripcion": "Cañón con cascadas termales de agua caliente que descienden hacia el Mar Muerto. Senderismo en entorno desértico con recompensa de baños termales naturales. Menos conocido que Petra pero accesible como día desde Mar Muerto.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre, diciembre, enero, febrero, marzo",
+      "como_llegar": "desde Amán: taxi/minibús a Sweimeh (50km, 1h, 8 EUR) + caminata (empezar desde entrada de cañón). Mejor con coche. Desde Mar Muerto: 30km en coche.",
+      "donde_dormir": {
+        "mochilero": "camping o guesthouse en Sweimeh: 15-22 EUR/noche",
+        "medio": "hotel en Sweimeh o Mar Muerto: 40-60 EUR/noche",
+        "comfort": "resort en Mar Muerto con acceso: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Caminata en cañón hasta cascadas termales (gratis, 2-3h, moderado)",
+        "Baño en piscinas termales naturales (gratis)",
+        "Fotografía del paisaje árido contrastando agua"
+      ],
+      "donde_comer": "Lleva agua y snacks. Pocos comedores en zona. Comer en Sweimeh antes o después.",
+      "consejo_local": "El cañón es estrecho y hay partes resbaladizas. Entra con guía si no estás seguro (15-20 EUR desde Sweimeh). El agua termal es caliente (40-45°C), refrescante en días cálidos. Mejor en invierno/primavera cuando hace calor moderado.",
+      "plan_b_lluvia": "Lluvia rara pero posible invierno. El cañón puede tener corrientes. Verifica condiciones.",
+      "keywords": [
+        "Wadi Zarka Main",
+        "cascadas termales",
+        "hot springs",
+        "cañón",
+        "Mar Muerto",
+        "senderismo",
+        "piscinas naturales"
+      ]
+    },
+    {
+      "id": "dana",
+      "nombre": "Dana y Wadi Dana",
+      "tipo": "naturaleza",
+      "region": "sur-central, entre Petra y Mar Muerto",
+      "descripcion": "Reserva natural con cañón profundo y biodiversidad única, pueblo tradicional de piedra. Senderismo de dificultad variada con vistas a múltiples ecosistemas. Parada ideal entre Petra y Mar Muerto.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre, noviembre, marzo, abril",
+      "como_llegar": "desde Petra: minibús a Qadisiyah (30km, 45min, 3 EUR) + taxi/caminata a Dana (10km). Desde Mar Muerto: minibús hacia Petra con parada en Dana (2h, 5 EUR). Mejor coche alquilado.",
+      "donde_dormir": {
+        "mochilero": "guesthouse o campamento en Dana: 20-28 EUR/noche",
+        "medio": "Dana Guest House o Rummana: 50-75 EUR/noche",
+        "comfort": "Feynan Ecolodge (solar, minería abandonda): 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo en Wadi Dana (gratis, 2h-día completo según dificultad)",
+        "Visita Feynan (sitio arqueológico, rutas de trekking eco)",
+        "Exploración pueblo tradicional de Dana (gratis)"
+      ],
+      "donde_comer": "Comida casera en guesthouses (7-10 EUR). Incluido en paquetes eco. Hummus, vegetales, pan casero.",
+      "consejo_local": "Dana es punto de entrada a Feynan Ecolodge (experiencia premium de senderismo). El pueblo es pequeño pero auténtico. Lleva agua abundante para caminatas. Las vistas cambian radicalmente en cortas distancias (montaña a desierto).",
+      "plan_b_lluvia": "Viables caminatas cortas. Lluvia rara pero posible invierno.",
+      "keywords": [
+        "Dana",
+        "Wadi Dana",
+        "Feynan",
+        "reserva natural",
+        "senderismo",
+        "cañón",
+        "pueblo tradicional",
+        "biodiversidad"
+      ]
+    }
+  ]
+}

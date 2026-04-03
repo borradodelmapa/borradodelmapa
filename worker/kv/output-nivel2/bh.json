@@ -1,0 +1,346 @@
+{
+  "pais": "Baréin",
+  "codigo": "bh",
+  "destinos": [
+    {
+      "id": "manama-centro",
+      "nombre": "Mánama (Centro histórico y Corniche)",
+      "tipo": "ciudad",
+      "region": "Capital, Gobernación de la Capital",
+      "descripcion": "Capital y puerto principal de Baréin, con un centro histórico compacto mezcla de arquitectura tradicional y rascacielos modernos. El Corniche ofrece vistas al Golfo Pérsico y acceso a mercados, museos y vida local concentrada. Base imprescindible para explorar el país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "aeropuerto internacional de Baréin está a 4km, taxi/autobús 3-5 EUR, 20-30 min",
+      "donde_dormir": {
+        "mochilero": "Hostales en zona de Adliya o Juffair, 20-35 EUR/noche",
+        "medio": "Hoteles 3 estrellas en Corniche o Seef, 50-80 EUR/noche",
+        "comfort": "Hoteles 4-5 estrellas en Manama City o Four Seasons, 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer el zoco de Mánama (gratis)",
+        "Visitar Bab al-Bahrain y Corniche (gratis)",
+        "Museo Nacional de Baréin (5 EUR)",
+        "Paseo por Adliya y Al Fateh Grand Mosque (gratis)",
+        "Mercado de pescado tradicional (gratis)"
+      ],
+      "donde_comer": "Comida de calle en zocos: shawarma 3-4 EUR, restaurantes libaneses en Adliya 8-15 EUR, pescado fresco en el puerto 10-20 EUR",
+      "consejo_local": "Visita el zoco temprano (7-9 AM) antes de que cierre al mediodía por el calor, y vuelve al atardecer cuando reabre",
+      "plan_b_lluvia": "Museos (Nacional, Al Farabi), compras en City Center o Seef Mall, cafés tradicionales",
+      "keywords": [
+        "Manama",
+        "Mánama",
+        "capital",
+        "Corniche",
+        "zoco",
+        "Adliya",
+        "Juffair",
+        "Bab al-Bahrain"
+      ]
+    },
+    {
+      "id": "muharraq-isla",
+      "nombre": "Muharraq (Isla y patrimonio histórico)",
+      "tipo": "histórico",
+      "region": "Gobernación de Muharraq, norte",
+      "descripcion": "Segunda ciudad más importante, conectada a Mánama por puente. Centro histórico preservado con arquitectura tradicional de perlas, casas de coral y madera, y mercado de pescado auténtico. Menos turística que Mánama pero más cultural.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Mánama en autobús (línea 1, 2) 1-2 EUR, 30-40 min; taxi 5-7 EUR",
+      "donde_dormir": {
+        "mochilero": "Pocos hostales, guesthouses básicas 25-40 EUR/noche",
+        "medio": "Hoteles pequeños en zona histórica 45-70 EUR/noche",
+        "comfort": "Hoteles 4 estrellas 90-140 EUR/noche (opciones limitadas)"
+      },
+      "que_hacer": [
+        "Recorrer el casco histórico y casas de perlas restauradas (gratis)",
+        "Mercado de pescado de Muharraq (gratis, mejor 6-8 AM)",
+        "Mezquita del Profeta Muhammad (gratis, respetar horarios)",
+        "Museo de la Casa de Pearls (4 EUR)",
+        "Paseo por la costa al atardecer (gratis)"
+      ],
+      "donde_comer": "Mercado de pescado: pescado a la parrilla 8-12 EUR, restaurantes locales de comida bareiní 6-10 EUR, cafés tradicionales con kahwa 2-3 EUR",
+      "consejo_local": "El mercado de pescado es más auténtico y barato que cualquier restaurante; llega antes de las 8 AM para ver la actividad real",
+      "plan_b_lluvia": "Museos pequeños, cafés cubiertos en el centro histórico, compras en souk cubierto",
+      "keywords": [
+        "Muharraq",
+        "isla",
+        "perlas",
+        "histórico",
+        "centro antiguo",
+        "mercado de pescado"
+      ]
+    },
+    {
+      "id": "al-areen-wildlife",
+      "nombre": "Al Areen Wildlife Park",
+      "tipo": "naturaleza",
+      "region": "Sur, Gobernación del Sur",
+      "descripcion": "Santuario dedicado a la conservación de la gacela árabe y vida silvestre del Golfo. Única reserva natural significativa de Baréin con centro educativo y recorridos. Experiencia de fauna desértica en un país pequeño.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Mánama en coche alquilado 30-40 km, 45-60 min (20-30 EUR alquiler); taxi compartido 15-20 EUR",
+      "donde_dormir": {
+        "mochilero": "Dormir en Mánama y día de excursión",
+        "medio": "Pequeños hoteles en pueblos cercanos 40-60 EUR/noche",
+        "comfort": "No hay opciones; mejor opción: Mánama"
+      },
+      "que_hacer": [
+        "Recorrido en jeep o a pie entre gacelas árabes (10 EUR entrada)",
+        "Centro de visitantes y exhibiciones (incluido en entrada)",
+        "Fotografía de fauna desértica",
+        "Picnic en las áreas designadas (gratis)",
+        "Observación de pájaros (gratis)"
+      ],
+      "donde_comer": "Café básico en el parque 4-6 EUR, picnic propio recomendado, restaurantes en pueblos cercanos 8-12 EUR",
+      "consejo_local": "Lleva agua abundante, protector solar y llega temprano (8-9 AM) cuando la fauna es más activa; los animales descansan con el calor del mediodía",
+      "plan_b_lluvia": "Los recorridos funcionan igual en lluvia (rara), pero llevar impermeable; la actividad de fauna no se altera",
+      "keywords": [
+        "Al Areen",
+        "gacela árabe",
+        "fauna",
+        "reserva natural",
+        "santuario",
+        "vida silvestre"
+      ]
+    },
+    {
+      "id": "al-fateh-mosque",
+      "nombre": "Gran Mezquita Al Fateh",
+      "tipo": "histórico",
+      "region": "Mánama, zona administrativa",
+      "descripcion": "Mezquita más grande de Baréin (1987) con arquitectura islámica moderna espectacular y domo dorado icónico. Única mezquita del país con visitas permitidas para no musulmanes en horarios específicos. Símbolo arquitectónico nacional.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde el centro de Mánama en autobús (línea 1, 2) 1 EUR, 15 min; taxi 3-4 EUR",
+      "donde_dormir": {
+        "mochilero": "Hospedarse en Mánama centro",
+        "medio": "Hospedarse en Mánama centro",
+        "comfort": "Hospedarse en Mánama centro"
+      },
+      "que_hacer": [
+        "Visita guiada del interior (gratis con donation sugerida 2-5 EUR)",
+        "Fotografía exterior del domo y arquitectura (gratis)",
+        "Museo islámico adjunto (gratis)",
+        "Observar la oración si es horario permitido (respetuosamente)",
+        "Paseo por jardines circundantes (gratis)"
+      ],
+      "donde_comer": "No hay restaurantes en el lugar; comer en Mánama centro a 10-15 min",
+      "consejo_local": "Visita en viernes tarde o sábado por la mañana cuando hay menos actividad religiosa pero la mezquita está abierta; lleva ropa modesta cubriendo hombros y rodillas",
+      "plan_b_lluvia": "Se puede visitar en lluvia (rara); ir temprano cuando hay menos gente y fotografía más clara",
+      "keywords": [
+        "Al Fateh",
+        "Gran Mezquita",
+        "mezquita",
+        "domo dorado",
+        "arquitectura islámica",
+        "Manama"
+      ]
+    },
+    {
+      "id": "karbabad-playa",
+      "nombre": "Karabad Beach (Playas del Noroeste)",
+      "tipo": "playa",
+      "region": "Noroeste, Gobernación del Norte",
+      "descripcion": "Playas de arena fina en la costa noroeste cercanas a la ciudad. Agua cálida del Golfo Pérsico, resorts moderados y ambiente local menos masificado. Punto principal para baño y descanso playero desde Mánama.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "marzo a mayo, septiembre a octubre",
+      "como_llegar": "Desde Mánama en coche alquilado 20 km, 25-30 min (20-30 EUR alquiler); autobús línea 15 2 EUR, 45 min",
+      "donde_dormir": {
+        "mochilero": "Guesthouses o hostales en zona de playa 25-35 EUR/noche",
+        "medio": "Hoteles 3 estrellas junto a playa 60-90 EUR/noche",
+        "comfort": "Resorts 4-5 estrellas en la costa 110-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en el Golfo Pérsico (gratis)",
+        "Snorkel en aguas cercanas (equipo: 15-25 EUR alquiler)",
+        "Paseos por la arena al atardecer (gratis)",
+        "Cafés de playa y shisha (4-6 EUR bebida)",
+        "Observación de botes de pesca y vida local"
+      ],
+      "donde_comer": "Restaurantes de mariscos en la playa 12-20 EUR plato principal, comida de calle junto a playas 4-7 EUR, cafés con vistas 6-10 EUR",
+      "consejo_local": "El agua es cálida pero turbia comparada con otros destinos; la mejor visibilidad para snorkel es en invierno (noviembre-febrero) cuando el agua está más clara",
+      "plan_b_lluvia": "Lluvia muy rara; si llueve, los cafés cubiertos funcionan normalmente y el clima sigue siendo cálido",
+      "keywords": [
+        "Karabad",
+        "playa",
+        "costa",
+        "Golfo Pérsico",
+        "noroeste",
+        "baño",
+        "snorkel"
+      ]
+    },
+    {
+      "id": "qal-at-bahrain",
+      "nombre": "Fuerte de Bahréin (Qal'at al-Bahrain)",
+      "tipo": "histórico",
+      "region": "Noroeste, cerca de Muharraq",
+      "descripcion": "Fuerte del siglo XVI con capas arqueológicas de 4,500 años que revelan ocupación desde la era Dilmun. Sitio UNESCO con museo y excavaciones activas. Mejor ejemplo del patrimonio histórico de Baréin en un solo lugar.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Mánama en taxi 15 km, 20-25 min (10-12 EUR); autobús no directo",
+      "donde_dormir": {
+        "mochilero": "Hospedarse en Mánama o Muharraq",
+        "medio": "Hospedarse en Mánama o Muharraq",
+        "comfort": "Hospedarse en Mánama"
+      },
+      "que_hacer": [
+        "Recorrido del fuerte y murallas (6 EUR entrada)",
+        "Museo arqueológico en la base (incluido)",
+        "Exploración de capas históricas (gratis con entrada)",
+        "Fotografía del fuerte al atardecer (gratis)",
+        "Vistas del Golfo desde las alturas (gratis)"
+      ],
+      "donde_comer": "Café pequeño en entrada (4-6 EUR), mejor comer en Mánama o Muharraq",
+      "consejo_local": "Las excavaciones arqueológicas continúan; pregunta a los guardias qué hallazgos recientes hay; el atardecer es la mejor hora para fotografía y temperaturas",
+      "plan_b_lluvia": "Se visita cubierto; llevar impermeable para explorar las ruinas expuestas",
+      "keywords": [
+        "Qal'at al-Bahrain",
+        "fuerte",
+        "UNESCO",
+        "arqueología",
+        "Dilmun",
+        "histórico",
+        "excavaciones"
+      ]
+    },
+    {
+      "id": "tree-of-life",
+      "nombre": "Árbol de la Vida (The Tree of Life)",
+      "tipo": "naturaleza",
+      "region": "Centro-sur, desierto",
+      "descripcion": "Árbol de 400 años aislado en el desierto sin fuente visible de agua, símbolo de resistencia y misterio local. Pequeño pero icónico; acceso gratuito y experiencia desértica auténtica en un país urbano.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Mánama en coche alquilado 40 km, 45-60 min (20-30 EUR alquiler); taxi compartido 20-25 EUR",
+      "donde_dormir": {
+        "mochilero": "Día de excursión desde Mánama",
+        "medio": "Día de excursión desde Mánama",
+        "comfort": "Día de excursión desde Mánama"
+      },
+      "que_hacer": [
+        "Fotografía del árbol (gratis)",
+        "Picnic bajo la sombra (gratis)",
+        "Caminata corta alrededor (gratis)",
+        "Exploración del desierto circundante (gratis)",
+        "Visita al pequeño café/tienda de recuerdos (bebida 3-4 EUR)"
+      ],
+      "donde_comer": "Café muy básico junto al árbol 3-5 EUR bebida, picnic propio recomendado",
+      "consejo_local": "Llegada temprano en la mañana (7-8 AM) para evitar calor extremo y ver el árbol sin multitudes; el amanecer desde el desierto es memorable",
+      "plan_b_lluvia": "Lluvia casi nula en la zona desértica; raro encontrar mal tiempo",
+      "keywords": [
+        "Tree of Life",
+        "árbol de la vida",
+        "desierto",
+        "símbolo",
+        "naturaleza",
+        "misterio"
+      ]
+    },
+    {
+      "id": "pearl-monuments",
+      "nombre": "Monumentos de las Perlas y comercio histórico",
+      "tipo": "histórico",
+      "region": "Mánama, Muharraq",
+      "descripcion": "Ruta por los vestigios de la industria perlífera que enriqueció Baréin (siglos XVI-XX). Casas de comerciantes restauradas, plazas y museos temáticos. Historia económica y cultural del país concentrada en itinerario compacto.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Itinerario a pie en Muharraq (gratis) y Mánama (conexión 5-10 min autobús 1 EUR)",
+      "donde_dormir": {
+        "mochilero": "Mánama 20-35 EUR/noche",
+        "medio": "Mánama 50-80 EUR/noche",
+        "comfort": "Mánama 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Casa de las Perlas en Muharraq (5 EUR)",
+        "Museo de buceo de perlas (4 EUR)",
+        "Recorrido autónomo por casas históricas (gratis)",
+        "Visita a colecciones privadas de perlas (con cita previa, gratis)",
+        "Documentales en museos sobre la historia (incluido en entrada)"
+      ],
+      "donde_comer": "Restaurantes locales con comida tradicional bareiní 8-15 EUR, cafés históricos 3-5 EUR",
+      "consejo_local": "Habla con los dueños de las casas restauradas; muchos comparten historias familiares sobre el apogeo de las perlas; algunos ofrecen café tradición sin costo",
+      "plan_b_lluvia": "Ruta completamente cubierta disponible en zocos interiores y museos",
+      "keywords": [
+        "perlas",
+        "comercio",
+        "historia",
+        "buceo",
+        "Muharraq",
+        "Manama",
+        "patrimonio económico"
+      ]
+    },
+    {
+      "id": "saudi-causeway-excursion",
+      "nombre": "Excursión: Puente Causeway a Arabia Saudita",
+      "tipo": "ciudad",
+      "region": "Frontera norte",
+      "descripcion": "Puente de 25 km hacia Arabia Saudita conectando Baréin con la región de Khobar. Viaje de día a pueblos costeros saudíes, compras y experiencia de cruce fronterizo único en la región.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Mánama en taxi 30-40 EUR cruce bilateral; coche alquilado recomendado (documentación: pasaporte válido, seguro internacional, carnet conducir)",
+      "donde_dormir": {
+        "mochilero": "Dormir en Baréin, día de excursión",
+        "medio": "Dormir en Baréin, día de excursión",
+        "comfort": "Posible hotel en Khobar 60-100 EUR/noche si se extiende"
+      },
+      "que_hacer": [
+        "Cruce del puente Causeway (gratis, inspección de aduanas)",
+        "Compras en Khobar (sin IVA comparado con Baréin, 10-30% ahorro)",
+        "Comida seafood en restaurantes saudíes (8-15 EUR)",
+        "Paseo por Corniche de Khobar (gratis)",
+        "Retorno a Baréin antes de anochecer"
+      ],
+      "donde_comer": "Restaurantes árabes e internacionales en Khobar 10-20 EUR, más barato que Baréin",
+      "consejo_local": "Verificar requisitos de visa saudita con anticipación (ciudadanos UE: visado electrónico disponible); el cruce en fin de semana es lento, mejor ir entre semana; documentación del coche obligatoria",
+      "plan_b_lluvia": "Lluvia rara en la zona; se puede cruzar sin problemas",
+      "keywords": [
+        "Causeway",
+        "Arabia Saudita",
+        "Khobar",
+        "frontera",
+        "puente",
+        "excursion",
+        "compras"
+      ],
+      "excursion_desde": true,
+      "alerta_seguridad": "Verificar restricciones de viaje a Arabia Saudita según nacionalidad; documentación de entrada/salida estricta"
+    },
+    {
+      "id": "cycling-route-manama",
+      "nombre": "Ruta ciclista y Seef (zona moderna)",
+      "tipo": "ciudad",
+      "region": "Este de Mánama",
+      "descripcion": "Zona moderna y comercial con paseos costeros cicla-friendly, mall, playas privadas y vida contemporánea de Baréin. Contraste con centro histórico; acceso a actividades acuáticas y compras organizadas.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde centro de Mánama en autobús línea 1,2 2 EUR, 15 min; taxi 4-5 EUR; a pie 30 min",
+      "donde_dormir": {
+        "mochilero": "Hostales en zona 20-30 EUR/noche",
+        "medio": "Hoteles cercanos 50-70 EUR/noche",
+        "comfort": "Hoteles 4-5 estrellas en Seef 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Ciclocarril (bike path) libre 10 km (alquiler bici 8-12 EUR día)",
+        "Paseo por Seef Mall (gratis, compras opcionales)",
+        "Playas privadas con acceso público (algunas 5 EUR entrada)",
+        "Cafés y restaurantes modernos (8-20 EUR)",
+        "Deportes acuáticos: jetski, windsurf (30-60 EUR hora)"
+      ],
+      "donde_comer": "Restaurantes modernos en Seef 12-25 EUR, cafés 5-8 EUR, comida rápida 5-10 EUR",
+      "consejo_local": "El carril bici es un estándar bairení bien mantenido; pedalea al atardecer cuando el calor baja y la luz es mejor; reserva deportes acuáticos con anticipación en fin de semana",
+      "plan_b_lluvia": "Lluvia rara; si ocurre, el mall funciona como alternativa cubierta",
+      "keywords": [
+        "Seef",
+        "ciclismo",
+        "bike path",
+        "moderno",
+        "playas",
+        "mall",
+        "deportes acuáticos",
+        "zona este"
+      ]
+    }
+  ]
+}

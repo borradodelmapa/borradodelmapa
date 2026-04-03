@@ -1,0 +1,327 @@
+{
+  "pais": "Esuatini",
+  "codigo": "sz",
+  "destinos": [
+    {
+      "id": "ezulwini-valley",
+      "nombre": "Valle de Ezulwini",
+      "tipo": "naturaleza",
+      "region": "Hhohho (noroeste)",
+      "descripcion": "Centro cultural y natural de Esuatini con montañas verdes, cascadas y tradiciones swazi. Alberga museos, mercados artesanales y pueblos tradicionales. Base ideal para explorar el norte del país.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Mbabane (capital): minibús o coche alquilado, 30-40 min, 2-5 EUR en minibús o 40-60 EUR/día alquiler",
+      "donde_dormir": {
+        "mochilero": "Backpackers o guesthouses: 15-25 EUR/noche",
+        "medio": "Lodges boutique: 40-70 EUR/noche",
+        "comfort": "Resorts de lujo: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar Mantenga Craft & Cultural Village (entrada 3-4 EUR, artesanía tradicional)",
+        "Senderismo a Magogo Falls y Mbuna Falls (gratis, senderos naturales)",
+        "Mercado artesanal de Ezulwini (gratis, compras locales)",
+        "Visita a pueblos tradicionales swazi (5-10 EUR con guía local)"
+      ],
+      "donde_comer": "Comida swazi tradicional (empanadillas de maíz, carne a la brasa): 3-8 EUR. Restaurantes en Mbabane cercana o lodges locales.",
+      "consejo_local": "Negocia precios en mercados artesanales; los lugareños esperan reggateo. Ve temprano al mercado para mejores selecciones.",
+      "plan_b_lluvia": "Museos locales (Swazi Museum 3 EUR), compras en tiendas artesanales cubiertas, cafés en lodges.",
+      "keywords": [
+        "Ezulwini",
+        "Valle de Ezulwini",
+        "Hhohho",
+        "Swazi culture",
+        "Mantenga",
+        "cascadas Esuatini"
+      ]
+    },
+    {
+      "id": "mbabane",
+      "nombre": "Mbabane",
+      "tipo": "ciudad",
+      "region": "Hhohho (noroeste)",
+      "descripcion": "Capital administrativa de Esuatini, compacta y accesible. Centro de servicios, transporte y compras, aunque sin grandes monumentos. Punto de partida para explorar el norte.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde aeropuerto internacional King Mswati III (20 km): taxi/Uber 15-25 EUR, 25-35 min. O desde Johannesburgo (Sudáfrica): autobús 8-10 EUR, 4-5 horas.",
+      "donde_dormir": {
+        "mochilero": "Hostales y guesthouses: 18-28 EUR/noche",
+        "medio": "Hoteles de negocios: 45-70 EUR/noche",
+        "comfort": "Hoteles boutique: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado central de Mbabane (gratis, productos locales y artesanía)",
+        "Visita al Palacio Real (no acceso interior, solo exterior, gratis)",
+        "Shoping en Mbabane Mall (gratis entrada, compras modernas)",
+        "Caminar por barrios históricos: Old Town (gratis, arquitectura colonial)"
+      ],
+      "donde_comer": "Comida sudafricana, india y swazi. Rango 5-15 EUR. Restaurantes en Old Town y cerca del mall.",
+      "consejo_local": "Mbabane es cara comparada con resto de país. Compra lo que necesites y dirígete a otros destinos. Los miércoles hay mercado ampliado.",
+      "plan_b_lluvia": "Museos interiores, cafés, centros comerciales, oficinas de agencias de viaje para reservar tours.",
+      "keywords": [
+        "Mbabane",
+        "capital",
+        "Hhohho",
+        "Old Town",
+        "Mbabane Mall",
+        "King Mswati III airport"
+      ]
+    },
+    {
+      "id": "hlane-royal-national-park",
+      "nombre": "Parque Nacional Hlane Royal",
+      "tipo": "naturaleza",
+      "region": "Lubombo (este)",
+      "descripcion": "Reserva de vida silvestre con elefantes, leones, búfalos y aves. Safaris guiados por senderos o vehículo en un entorno más accesible que grandes parques africanos. Ideal para avistamiento sin multitudes.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto (estación seca, mejor avistamiento)",
+      "como_llegar": "Desde Mbabane: coche alquilado o tour organizado, 2 horas (120 km), 40-60 EUR alquiler + gasolina o 35-50 EUR en tour compartido",
+      "donde_dormir": {
+        "mochilero": "Camping en parque: 8-12 EUR/noche (básico)",
+        "medio": "Bandas (cabaña tradicional swazi): 35-50 EUR/noche",
+        "comfort": "Lodges privados: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari guiado a pie (3-4 horas, 15-20 EUR con guía local)",
+        "Safari en vehículo (2-3 horas, 20-30 EUR compartido)",
+        "Caminata nocturna (observe vida nocturna, 15-20 EUR)",
+        "Observación de aves (gratis, comunal, amanecer recomendado)"
+      ],
+      "donde_comer": "Lodges tienen restaurantes; comida local 8-15 EUR. Lleva snacks si acampas. Agua abundante.",
+      "consejo_local": "Reserva safari con anticipación, especialmente en vacaciones. Lleva binoculares; la luz de atardecer es mejor para fotografía.",
+      "plan_b_lluvia": "Safaris funcionan incluso con lluvia (fauna más activa). Trae impermeable. Actividades interiores limitadas; mejor aplazar.",
+      "keywords": [
+        "Hlane Royal",
+        "safari Esuatini",
+        "elefantes",
+        "vida silvestre",
+        "Lubombo",
+        "reserva nacional"
+      ]
+    },
+    {
+      "id": "mbuluzi-river-canyon",
+      "nombre": "Cañón del Río Mbuluzi",
+      "tipo": "naturaleza",
+      "region": "Lubombo (este)",
+      "descripcion": "Garganta fluvial profunda con acantilados, agua turquesa y oportunidades de senderismo. Menos conocido que otros destinos, ideal para naturaleza tranquila y fotografía.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre (agua clara, menos crecidas)",
+      "como_llegar": "Desde Mbabane: coche alquilado, 1.5-2 horas (100 km), ruta hacia Siteki. 40-60 EUR alquiler.",
+      "donde_dormir": {
+        "mochilero": "Camping cercano o Siteki guesthouses: 15-20 EUR/noche",
+        "medio": "Lodges en ruta: 40-60 EUR/noche",
+        "comfort": "Sin opciones de lujo en zona; mejor alojarse en Mbabane"
+      },
+      "que_hacer": [
+        "Senderismo a mirador del cañón (2 horas, gratis, vistas espectaculares)",
+        "Baño en piscinas naturales (gratis, agua fría)",
+        "Fotografía de acantilados y vegetación (gratis)",
+        "Picnic con vistas (gratis, lleva provisiones)"
+      ],
+      "donde_comer": "Pocas opciones locales. Lleva comida desde Mbabane o Siteki. Agua embotellada recomendada.",
+      "consejo_local": "Acceso puede ser difícil si llueve; confirmá estado de caminos. Pregunta en Siteki por mejores miradores y senderos seguros.",
+      "plan_b_lluvia": "Ruta potencialmente peligrosa con lluvia. Aplaza o limítate a vistas desde carretera.",
+      "keywords": [
+        "Mbuluzi River",
+        "canyon",
+        "garganta",
+        "Siteki",
+        "Lubombo",
+        "senderismo Esuatini"
+      ]
+    },
+    {
+      "id": "sibebe-rock",
+      "nombre": "Roca Sibebe",
+      "tipo": "montaña",
+      "region": "Hhohho (noroeste)",
+      "descripcion": "Segunda roca más grande del mundo (500 metros de altura), con vista de 360º desde la cima. Ascenso moderado muy popular para senderismo y amanecer.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre (temperaturas frescas en altura)",
+      "como_llegar": "Desde Mbabane: minibús o coche alquilado hacia Mbabane Este, 20-30 km, 30-45 min. 3-5 EUR minibús o 40-60 EUR alquiler.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en pueblos cercanos: 15-25 EUR/noche",
+        "medio": "Lodges piedmont: 40-65 EUR/noche",
+        "comfort": "Mejor alojarse en Mbabane (30 min) o Ezulwini"
+      },
+      "que_hacer": [
+        "Ascenso a Sibebe Rock (2-3 horas ida, 5 EUR entrada parque, vistas 360º)",
+        "Amanecer desde cima (madruga, gratis una vez pagada entrada)",
+        "Senderismo a base de roca (1 hora, gratis dentro entrada)",
+        "Fotografía de paisaje (gratis)"
+      ],
+      "donde_comer": "Sin opciones en roca. Come en pueblos cercanos (3-8 EUR) o lleva provisiones.",
+      "consejo_local": "Sube temprano para evitar calor y multitudes. Cima ventosa; lleva chaqueta. Agua abundante recomendada.",
+      "plan_b_lluvia": "Caminos pueden ser resbaladizos; sube con cuidado o aplaza. Riesgo de relámpagos en cima.",
+      "keywords": [
+        "Sibebe",
+        "Sibebe Rock",
+        "roca monolítica",
+        "senderismo",
+        "Mbabane este",
+        "vista panorámica"
+      ]
+    },
+    {
+      "id": "manzini",
+      "nombre": "Manzini",
+      "tipo": "ciudad",
+      "region": "Manzini (centro)",
+      "descripcion": "Segunda ciudad de Esuatini, centro comercial e industrial. Menos turística que Mbabane pero con mercados auténticos y vida local. Base para explorar centro-sur del país.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Mbabane: minibús compartido, 1 hora, 3-4 EUR. O coche alquilado 45-50 EUR/día.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 15-25 EUR/noche",
+        "medio": "Hoteles locales: 35-55 EUR/noche",
+        "comfort": "Hoteles de negocios: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado central de Manzini (gratis, productos y artesanía local)",
+        "Visita a fábrica de artesanía local (gratis o 2-3 EUR)",
+        "Caminar barrio histórico (gratis, arquitectura interesante)",
+        "Compras en tiendas locales (gratis entrada)"
+      ],
+      "donde_comer": "Comida swazi y sudafricana. 4-10 EUR. Restaurantes alrededor mercado y Manzini Mall.",
+      "consejo_local": "Manzini es más barata que Mbabane. Mercado es agresivo pero seguro; negocia precios. Evita zona de estación nocturna por seguridad.",
+      "plan_b_lluvia": "Mercados techados, centros comerciales, restaurantes interiores.",
+      "keywords": [
+        "Manzini",
+        "Manzini City",
+        "segunda ciudad",
+        "mercado central",
+        "Manzini region",
+        "comercio"
+      ]
+    },
+    {
+      "id": "forbes-reef",
+      "nombre": "Forbes Reef (Arrecife de Forbes)",
+      "tipo": "excursion_desde",
+      "region": "Lubombo (este, frontera con Mozambique)",
+      "descripcion": "Afloramiento rocoso en frontera con Mozambique, zona de pesca y vida silvestre. Acceso complicado pero ofrece experiencia fuera de ruta. Mejor visitado con tour local.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Desde Mbabane: coche alquilado hacia Siteki y frontera este, 2.5-3 horas (140 km). 40-60 EUR alquiler + gasolina.",
+      "donde_dormir": {
+        "mochilero": "Camping o guesthouses en Siteki: 12-18 EUR/noche",
+        "medio": "Guesthouses Siteki: 30-45 EUR/noche",
+        "comfort": "No disponible en zona; regresa a Mbabane"
+      },
+      "que_hacer": [
+        "Observación de aves (gratis, zona con 300+ especies)",
+        "Pesca local (20-30 EUR con pescador local)",
+        "Senderismo en arrecife (gratis, vistas de Mozambique)",
+        "Fotografía de vida silvestre (gratis)"
+      ],
+      "donde_comer": "Siteki tiene opciones básicas (4-8 EUR). Lleva provisiones para arrecife.",
+      "consejo_local": "Zona muy remota y poco turística. Contrata guía en Siteki (10-15 EUR). Comprobá seguridad actual en frontera antes de viajar.",
+      "plan_b_lluvia": "Caminos pobres en lluvia. Aplaza o explora Siteki como alternativa.",
+      "keywords": [
+        "Forbes Reef",
+        "arrecife",
+        "Siteki",
+        "frontera Mozambique",
+        "vida silvestre",
+        "pesca"
+      ]
+    },
+    {
+      "id": "piggs-peak",
+      "nombre": "Piggs Peak",
+      "tipo": "montaña",
+      "region": "Hhohho (noroeste)",
+      "descripcion": "Pueblo montañoso de altura (1200 m) en montañas de pino, fresco y tranquilo. Conocido por artesanía local (vidrio, cerámica). Centro para senderismo y escapes de calor.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a septiembre (temperatura fresca)",
+      "como_llegar": "Desde Mbabane: coche alquilado o minibús, 1.5-2 horas (80 km norte). 40-60 EUR alquiler o 5-7 EUR minibús.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 15-25 EUR/noche",
+        "medio": "Lodges boutique: 45-70 EUR/noche",
+        "comfort": "Resorts: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita a tiendas de artesanía (vidrio soplado, cerámica, 5-30 EUR compra)",
+        "Senderismo en bosques de pino (gratis, senderos marcados)",
+        "Mercadillo local (gratis, productos artesanales)",
+        "Fotografía de bosque de montaña (gratis)"
+      ],
+      "donde_comer": "Restaurantes en Piggs Peak y lodges: 6-12 EUR. Comida típica swazi de montaña.",
+      "consejo_local": "Mejor visitao como parada entre Mbabane y Mozambique. Tiendas de vidrio son el atractivo principal; negocia precios.",
+      "plan_b_lluvia": "Ideal para lluvias; bosque espeso, aire fresco. Mejor senderismo con agua.",
+      "keywords": [
+        "Piggs Peak",
+        "montaña Hhohho",
+        "artesanía vidrio",
+        "Mbabane norte",
+        "bosque pino",
+        "cerámica"
+      ]
+    },
+    {
+      "id": "magwegwe-traditional-village",
+      "nombre": "Magwegwe Traditional Village",
+      "tipo": "rural",
+      "region": "Manzini (centro)",
+      "descripcion": "Aldea tradicional swazi viviente con casas circulares de paja. Experiencia cultural inmersiva con familia local. Menos turístico que otras atracciones, auténtico encuentro cultural.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Manzini: coche alquilado o minibús local, 45-60 min. 3-5 EUR minibús o 40-50 EUR alquiler.",
+      "donde_dormir": {
+        "mochilero": "Alojamiento en aldea con familia: 20-30 EUR/noche (todo incluido)",
+        "medio": "Guesthouses cercanas: 30-50 EUR/noche",
+        "comfort": "Mejor alojarse en Manzini (20 km)"
+      },
+      "que_hacer": [
+        "Tour guiado por aldea con familia (1.5-2 horas, 10-15 EUR)",
+        "Demostración de cocina tradicional swazi (gratis o 5 EUR)",
+        "Danza y música local (5-10 EUR si hay actuación)",
+        "Compra de artesanía local (5-30 EUR)"
+      ],
+      "donde_comer": "Comida casera swazi preparada en aldea (8-12 EUR, incluida en algunos tours). Auténtica y deliciosa.",
+      "consejo_local": "Contrata tour a través de guesthouses en Manzini. No llegues sin previso; asegura con familia. Fotógrafos deben pedir permiso (a veces cobran 2-5 EUR extra).",
+      "plan_b_lluvia": "Aldeas siguen abiertas; mudos se vuelven más auténticos. Lleva impermeable.",
+      "keywords": [
+        "Magwegwe",
+        "aldea tradicional",
+        "cultura swazi",
+        "pueblo",
+        "vida local",
+        "inmersión cultural"
+      ]
+    },
+    {
+      "id": "gobila-lake",
+      "nombre": "Lago Gobila",
+      "tipo": "naturaleza",
+      "region": "Manzini/Shiselweni (sur)",
+      "descripcion": "Embalse en el río Great Usutu, tranquilo y poco conocido. Ideal para birdwatching, pesca y descanso. Experiencia rural sin multitudes turísticas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Desde Manzini: coche alquilado sur hacia Shiselweni, 1.5-2 horas (90 km). 40-60 EUR alquiler.",
+      "donde_dormir": {
+        "mochilero": "Camping rústico: 8-12 EUR/noche",
+        "medio": "Lodges básicos: 30-50 EUR/noche",
+        "comfort": "Sin opciones de lujo; mejor Manzini"
+      },
+      "que_hacer": [
+        "Observación de aves (gratis, 150+ especies)",
+        "Pesca (5-15 EUR con pescador local)",
+        "Paseo en bote (10-20 EUR, 1-2 horas)",
+        "Picnic en orilla (gratis, paisaje tranquilo)"
+      ],
+      "donde_comer": "Lodges tienen restaurante básico (5-10 EUR). Lleva provisiones desde Manzini.",
+      "consejo_local": "Muy pocos turistas; llama con anticipación a lodges. Mejor para naturalistas y ornitólogos. Infraestructura mínima.",
+      "plan_b_lluvia": "Agua turbia en lluvias. Actividades siguen, menos vistas. Mejor en estación seca.",
+      "keywords": [
+        "Gobila",
+        "lago",
+        "embalse",
+        "Usutu",
+        "Shiselweni",
+        "birdwatching",
+        "pesca"
+      ]
+    }
+  ]
+}

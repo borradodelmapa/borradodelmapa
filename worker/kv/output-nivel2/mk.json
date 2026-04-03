@@ -1,0 +1,325 @@
+{
+  "pais": "Macedonia del Norte",
+  "codigo": "mk",
+  "destinos": [
+    {
+      "id": "skopje",
+      "nombre": "Skopje",
+      "tipo": "ciudad",
+      "region": "Región de Skopje",
+      "descripcion": "Capital y mayor ciudad del país, mezcla de arquitectura otomana, comunista y moderna. Centro neurálgico con museos, galerías y vida nocturna. Punto de partida ideal para explorar el resto del país.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde aeropuerto internacional de Skopje: autobús (30 min, 2 EUR) o taxi (15 min, 10-15 EUR). Centro conectado con transporte público.",
+      "donde_dormir": {
+        "mochilero": "hostel en Old Bazaar o Bit Pazar: 12-18 EUR/noche",
+        "medio": "hotel 3* en centro: 40-60 EUR/noche",
+        "comfort": "hotel 4-5* cerca del río: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasear por Old Bazaar, mercado osmanlí (gratis)",
+        "Museo de Macedonia Antigua (3 EUR)",
+        "Iglesia de San Pantelejmon (libre)",
+        "Fortaleza de Skopje con vistas (gratis)",
+        "Galería Nacional (2 EUR)"
+      ],
+      "donde_comer": "Comida macedónica: burek, ajvar, tavče gravče. 3-8 EUR por plato. Zona Old Bazaar para auténtico, calles peatonales para moderno.",
+      "consejo_local": "Compra un ticket de transporte de 24h (1 EUR). La ciudad es plana y el río es perfecto para andar al atardecer sin turistas.",
+      "plan_b_lluvia": "Museos cubiertos (Museo de Macedonia, Galería Nacional) o café en Old Bazaar.",
+      "keywords": [
+        "Скопје",
+        "Skopje City",
+        "Old Bazaar",
+        "Bit Pazar",
+        "Vodno",
+        "capital Macedonia"
+      ]
+    },
+    {
+      "id": "ohrid",
+      "nombre": "Ohrid",
+      "tipo": "playa",
+      "region": "Región de Pelagonia",
+      "descripcion": "Joya del lago Ohrid, patrimonio UNESCO con arquitectura medieval, iglesias bizantinas y playas de agua dulce. Destino bohemio con ambiente de pueblo de pescadores y vistas montañosas espectaculares.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "desde Skopje: autobús directo (4 horas, 5-7 EUR) o coche alquilado (360 km, 3.5h). Estación de autobús cerca del casco histórico.",
+      "donde_dormir": {
+        "mochilero": "hostel/habitación en Old Town: 14-20 EUR/noche",
+        "medio": "hotel frente al lago: 50-80 EUR/noche",
+        "comfort": "resort con piscina privada: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasear por Old Town medieval (gratis)",
+        "Iglesia de San Juan de Kaneo (libre)",
+        "Baño en el lago (gratis)",
+        "Castillo de Samuel con vistas (2 EUR)",
+        "Reserva natural de Galičica, senderismo (gratis)"
+      ],
+      "donde_comer": "Trucha del lago, pez espada, espaguetis con ajvar. 5-10 EUR en restaurantes del puerto. Mejor atardecer comiendo en la orilla.",
+      "consejo_local": "Evita el paseo marítimo principal (muy turístico) y sube a las callejuelas del Old Town. El lago es perfecto para nadar a las 6 de la tarde.",
+      "plan_b_lluvia": "Museo de Ícones (3 EUR), iglesias cubiertas, café en Old Town.",
+      "keywords": [
+        "Охрид",
+        "Lake Ohrid",
+        "Old Town Ohrid",
+        "San Juan Kaneo",
+        "playa dulce Macedonia"
+      ]
+    },
+    {
+      "id": "bitola",
+      "nombre": "Bitola",
+      "tipo": "histórico",
+      "region": "Región de Pelagonia",
+      "descripcion": "Segunda ciudad más importante, conocida como 'Ciudad de los Consulados' por su herencia otomana y moderna arquitectura balcánica. Menos turística que Ohrid con auténtica vida local y museos de calidad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Skopje: autobús (3 horas, 5-6 EUR) o coche. Desde Ohrid: autobús o coche (1.5h, 8 EUR). Estación central bien ubicada.",
+      "donde_dormir": {
+        "mochilero": "hostel céntrico: 12-16 EUR/noche",
+        "medio": "hotel 3* en Shirok Sokak: 35-55 EUR/noche",
+        "comfort": "hotel boutique: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por Shirok Sokak, paseo principal (gratis)",
+        "Museo Nacional (3 EUR)",
+        "Yacimiento arqueológico de Heraclea (4 EUR)",
+        "Iglesia de San Demetrio (libre)",
+        "Café en la calle principal al atardecer (gratis)"
+      ],
+      "donde_comer": "Kebab macedónico, pastilla con huevo, sopa de tripa. 3-7 EUR. Shirok Sokak tiene todos los restaurantes y es la zona más auténtica.",
+      "consejo_local": "Bitola es donde van los macedonios a pasar el fin de semana, no turistas. Vuelve a las 20h cuando llena de gente local comiendo helado.",
+      "plan_b_lluvia": "Museo Nacional cubierto, compras en comercios tradicionales.",
+      "keywords": [
+        "Битола",
+        "Bitola City",
+        "Shirok Sokak",
+        "Heraclea",
+        "Consulados"
+      ]
+    },
+    {
+      "id": "lago-prespa",
+      "nombre": "Lago Prespa",
+      "tipo": "naturaleza",
+      "region": "Región de Pelagonia (frontera este)",
+      "descripcion": "Lago alpino a 849m de altitud compartido con Grecia y Albania. Destino tranquilo para observación de aves, senderismo y desconexión total. Isla de San Aqueleo con iglesia medieval y monasterio abandonado.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "desde Bitola: coche alquilado (1.5 horas, 45 km) o tours organizados (12-20 EUR). Desde Skopje: coche (4.5h, más complicado con autobús).",
+      "donde_dormir": {
+        "mochilero": "habitación rural en Ohrid o Bitola, visita diaria (14-18 EUR)",
+        "medio": "posada rústica Prespa Eco Camp: 45-65 EUR/noche",
+        "comfort": "no hay opciones; base en Ohrid o Bitola y excursión"
+      },
+      "que_hacer": [
+        "Senderismo alrededor del lago (gratis)",
+        "Bote a Isla de San Aqueleo (8 EUR)",
+        "Observación de aves (gratis, llevar prismáticos)",
+        "Pesca tradicional con locales (gratis, solo mirar)",
+        "Picnic con vistas (costo de comida)"
+      ],
+      "donde_comer": "Pescado fresco, pan casero en pequeñas posadas. 4-6 EUR. Oferta muy limitada, come antes de ir.",
+      "consejo_local": "Ven en primavera o otoño. Lleva prismáticos para aves acuáticas. El pueblo de Pretor es el base del lago.",
+      "plan_b_lluvia": "Difícil, es un destino outdoor. Planifica días claros.",
+      "keywords": [
+        "Prespa",
+        "Lake Prespa",
+        "Ohrid-Prespa",
+        "San Aqueleo",
+        "ornitología Macedonia"
+      ]
+    },
+    {
+      "id": "tetovo",
+      "nombre": "Tetovo",
+      "tipo": "montaña",
+      "region": "Región de Pelagonia (noroeste)",
+      "descripcion": "Puerta de acceso a los Alpes de Shanina, monte Korab (pico más alto de los Balcanes a 2,764m). Mezcla de cultura turca y natural, con la icónica Mezquita de Tekkia con fachada de azulejos coloridos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "desde Skopje: autobús (2 horas, 4-5 EUR) o coche alquilado (130 km, 2h). Desde Ohrid: autobús vía Skopje o coche directo (2.5h).",
+      "donde_dormir": {
+        "mochilero": "hostel o habitación en centro: 12-16 EUR/noche",
+        "medio": "hotel 3*: 35-55 EUR/noche",
+        "comfort": "resort en falda de montaña: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Mezquita de Tekkia (gratis, donativo opcional)",
+        "Paseo por casco antiguo turco (gratis)",
+        "Senderismo a Korab (16-20 EUR con guía, 6h)",
+        "Estación de esquí Popova Sapka en verano (gratis pasear, lift 3-5 EUR)",
+        "Baños termales de Pena (5 EUR)"
+      ],
+      "donde_comer": "Comida turca-macedonia: menemen, pastilla, döner. 3-6 EUR. Centro antiguo con comedores tradicionales.",
+      "consejo_local": "Si subes a Korab, empieza muy pronto (6-7am). Necesitas guía certificado. La Mezquita de Tekkia es de obligatoria entrada descalzo.",
+      "plan_b_lluvia": "Museo de la ciudad, paseos cubiertos, café en bazar antiguo.",
+      "keywords": [
+        "Тетово",
+        "Tetovo City",
+        "Korab",
+        "Tekkia Mosque",
+        "Popova Sapka"
+      ]
+    },
+    {
+      "id": "kavadarci",
+      "nombre": "Kavadarci",
+      "tipo": "rural",
+      "region": "Región de Pelagonia (central)",
+      "descripcion": "Centro productor de tabaco histórico ahora reconvertido en destino de turismo rural y enológico. Viñedos, bodegas tradicionales y gastronomía auténtica. Ideal para desconectar del turismo masivo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "desde Skopje: autobús (2 horas, 4 EUR) o coche (175 km, 2h). Desde Ohrid: coche vía Bitola (2.5h).",
+      "donde_dormir": {
+        "mochilero": "casa de huéspedes tradicional: 14-18 EUR/noche",
+        "medio": "wine lodge: 50-70 EUR/noche",
+        "comfort": "resort rural con piscina: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita y cata en bodega Tikves (8-12 EUR con cata)",
+        "Senderismo en viñedos (gratis)",
+        "Taller de cocina macedónica tradicional (15-20 EUR)",
+        "Paseo a caballo (20-30 EUR/hora)",
+        "Mercado agrícola domingo por la mañana (gratis)"
+      ],
+      "donde_comer": "Comida de granja: ajvar casero, carne a la parrilla, vino local. 5-8 EUR. Restaurantes en casas de piedra con huerta propia.",
+      "consejo_local": "Los locales hablan poco inglés, lleva fraseario. Las bodegas cierran a las 14h, ve por la mañana. Domingo es día de mercado campesino.",
+      "plan_b_lluvia": "Visitas interiores a bodegas, cocina tradicional.",
+      "keywords": [
+        "Кавадарци",
+        "Kavadarci wine",
+        "Tikves",
+        "viñedos Macedonia",
+        "tabaco histórico"
+      ]
+    },
+    {
+      "id": "mavrovo",
+      "nombre": "Mavrovo",
+      "tipo": "montaña",
+      "region": "Región de Pelagonia (noroeste)",
+      "descripcion": "Parque Nacional y estación de esquí/senderismo en los Alpes de Shanina. Lagos glaciares, monasterios en el bosque, y biodiversidad única. Centro perfecto para trekking y vida salvaje.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "julio-agosto, diciembre-febrero",
+      "como_llegar": "desde Tetovo: coche o autobús local (1.5h, 5-6 EUR). Desde Skopje: coche alquilado (2.5h, 180 km). Acceso por carretera montañosa sinuosa.",
+      "donde_dormir": {
+        "mochilero": "habitación en lodge de montaña: 16-20 EUR/noche",
+        "medio": "lodge rústico con chimenea: 50-70 EUR/noche",
+        "comfort": "resort esquí: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a lago Mavrovo (gratis, 3-4h)",
+        "Monasterio de San Nicolás sumergido parcialmente (gratis)",
+        "Observación de vida silvestre (osos, lince, águila) (gratis)",
+        "Esquí o snow-hiking en invierno (lift 5-8 EUR/día)",
+        "Picnic en bosques alpinos (costo de comida)"
+      ],
+      "donde_comer": "Truchas del río, setas silvestres, pan casero. 6-10 EUR. Limitadísima oferta, come en pueblo base o lleva provisiones.",
+      "consejo_local": "En verano el parque es tranquilo, ve en julio-agosto. En invierno es más concurrido. El monasterio solo es visible cuando el nivel del lago baja (otoño).",
+      "plan_b_lluvia": "La montaña se cierra con mal tiempo. Planifica días claros.",
+      "keywords": [
+        "Маврово",
+        "Mavrovo National Park",
+        "Lake Mavrovo",
+        "trekking Balcanes",
+        "San Nicolás"
+      ]
+    },
+    {
+      "id": "krusevo",
+      "nombre": "Kruševo",
+      "tipo": "histórico",
+      "region": "Región de Pelagonia (sur)",
+      "descripcion": "Pueblo histórico sobre montaña a 1.300m, significativo por la rebelión de Ilinden 1903. Arquitectura tradicional bien preservada, museos de guerra, gastronomía auténtica y vistas espectaculares.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "desde Bitola: coche o autobús (45 min, 30 km, 3-4 EUR). Desde Skopje: coche (3.5h, 230 km). Carretera empinada pero bien señalizada.",
+      "donde_dormir": {
+        "mochilero": "habitación en casa tradicional: 14-18 EUR/noche",
+        "medio": "hotel pequeño con vistas: 40-60 EUR/noche",
+        "comfort": "opciones limitadas, mejor base en Bitola"
+      },
+      "que_hacer": [
+        "Iglesia de San Nicolás (libre)",
+        "Museo de Ilinden dedicado a rebelión (3 EUR)",
+        "Paseo arquitectónico Old Town (gratis)",
+        "Monumento a Ilinden en cima (gratis)",
+        "Mirador con vistas a tres países (gratis)"
+      ],
+      "donde_comer": "Frikadelki (albóndigas), pastilla macedónica, ajvar. 4-7 EUR. Pocas opciones, come en restaurante principal del pueblo.",
+      "consejo_local": "Kruševo es muy pequeño (100 habitantes). Es visita de 3-4 horas desde Bitola. No pases la noche a menos que quieras soledad pura.",
+      "plan_b_lluvia": "En montaña puede nublarse rápido. Ve pronto por la mañana para vistas.",
+      "keywords": [
+        "Крушево",
+        "Krusevo Ilinden",
+        "pueblo montaña Macedonia",
+        "rebelión 1903"
+      ]
+    },
+    {
+      "id": "gevgelija",
+      "nombre": "Gevgelija",
+      "tipo": "playa",
+      "region": "Región de Pelagonia (sur)",
+      "descripcion": "Pueblo termal junto al río Vardar, puerta a Grecia y con aguas termales cercanas. Destino relajante con baños naturales, pequeños viñedos y gastronomía simple. Menos conocido que Ohrid.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "desde Skopje: autobús o coche (2 horas, 100 km, 4-5 EUR). Desde Bitola: coche vía Prilep (1.5h). Última parada antes de Grecia.",
+      "donde_dormir": {
+        "mochilero": "habitación en pueblo: 12-16 EUR/noche",
+        "medio": "hotel spa pequeño: 35-55 EUR/noche",
+        "comfort": "resort termal: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Baños termales naturales de Kumanovo (5-8 EUR entrada)",
+        "Paseo junto al río Vardar (gratis)",
+        "Pequeñas bodegas locales (visita gratis, cata opcional)",
+        "Baño en río (gratis, agua dulce)",
+        "Café en plaza del pueblo (2-3 EUR)"
+      ],
+      "donde_comer": "Ajvar, queso fresco, fruta de huerta. 3-6 EUR. Comedores familiares sin pretensiones.",
+      "consejo_local": "Gevgelija es un lugar de paso hacia Grecia. No es un destino per se. Useful si esperas autobús o quieres relajarte un día.",
+      "plan_b_lluvia": "Baños termales cubiertos, café interior.",
+      "keywords": [
+        "Gevgelija",
+        "Грaвгелија",
+        "aguas termales Macedonia",
+        "Vardar"
+      ]
+    },
+    {
+      "id": "pelister",
+      "nombre": "Parque Nacional de Pelister",
+      "tipo": "naturaleza",
+      "region": "Región de Pelagonia (sur)",
+      "descripcion": "Segundo parque nacional más importante con pino macedónico único, lagos alpinos de alta montaña y ecosistema único en Balcanes. Senderismo intenso y naturaleza virgen. Menos turístico que Mavrovo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "julio-septiembre",
+      "como_llegar": "desde Bitola: coche alquilado a pueblo de Brajčino (45 min, 25 km) y senderismo. Autobús local a Brajčino (45 min, 3 EUR). Acceso solo a pie desde pueblo.",
+      "donde_dormir": {
+        "mochilero": "habitación en Brajčino o Bitola, caminata diaria (14-18 EUR)",
+        "medio": "refugio de montaña Molika (50-70 EUR/noche)",
+        "comfort": "mejor base en Bitola, excursión diaria"
+      },
+      "que_hacer": [
+        "Senderismo a lago Pelister (gratis, 4-5h)",
+        "Observación de flora endémica única (gratis)",
+        "Montaña Baba con vistas (gratis, 6-7h)",
+        "Acampada salvaje permitida (gratis)",
+        "Fotografía de fauna (lince, oso, halcón)"
+      ],
+      "donde_comer": "Pan casero y agua en refugio o Brajčino (4-6 EUR). Lleva provisiones desde Bitola.",
+      "consejo_local": "Necesitas guía para rutas menos marcadas. El pino macedónico solo existe aquí. Acampa en refugio si quieres experiencia completa.",
+      "plan_b_lluvia": "La montaña se cierra con mal tiempo. Senderismo requiere clima estable.",
+      "keywords": [
+        "Пелистер",
+        "Pelister National Park",
+        "pino macedónico",
+        "trekking Balcanes sur",
+        "Baba mountain"
+      ]
+    }
+  ]
+}

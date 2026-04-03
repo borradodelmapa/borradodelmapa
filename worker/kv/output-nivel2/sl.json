@@ -1,0 +1,325 @@
+{
+  "pais": "Sierra Leona",
+  "codigo": "sl",
+  "destinos": [
+    {
+      "id": "freetown",
+      "nombre": "Freetown",
+      "tipo": "ciudad",
+      "region": "Western Area",
+      "descripcion": "Capital y mayor ciudad de Sierra Leona, ubicada en una bahía natural. Centro histórico con arquitectura colonial, mercados vibrantes y museos dedicados a la historia de esclavos. Punto de entrada obligatorio para acceder al país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Vuelo internacional a Lungi International Airport (FNA), luego ferry o lancha rápida a Freetown (ferry 45 min, 5 EUR; lancha 10 min, 15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales/guesthouses en Crab Island o Freetown Central: 15-25 EUR/noche",
+        "medio": "Hoteles 3 estrellas en Downtown o Fourah Bay: 35-60 EUR/noche",
+        "comfort": "Hoteles 4-5 estrellas (Radisson Blu, Cape Sierra): 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar Sierra Leone National Museum (Historia de esclavitud, 3 EUR)",
+        "Subir a Cotton Tree Hill para vistas panorámicas de la bahía (gratis)",
+        "Explorar mercado de Fish Market o Sani Brook Market (regateo incluido, gratis)",
+        "Ferry a Banana Island para playas cercanas (15 EUR ida y vuelta, snorkel 20 EUR)"
+      ],
+      "donde_comer": "Arroz con pescado salado (dish nacional), cassava bread, pepper soup. Barrio de Crab Island para restaurantes turísticos (8-15 EUR). Zona de Lumley Beach para comida callejera barata (2-5 EUR)",
+      "consejo_local": "El ferry desde Lungi es caótico: llega 2 horas antes y lleva poco equipaje. La ciudad es segura en zonas turísticas diurnas, pero evita Kroo Bay y Goderich Road después de anochecer.",
+      "plan_b_lluvia": "Museos cerrados: visita Cotton Tree Hill durante pausa de lluvia o pasa el día en cafés locales probando café y té de jengibre",
+      "keywords": [
+        "Freetown",
+        "FTN",
+        "capital",
+        "Lungi",
+        "Crab Island",
+        "Cotton Tree",
+        "Fish Market",
+        "Fourah Bay"
+      ]
+    },
+    {
+      "id": "goderich-beach",
+      "nombre": "Goderich Beach",
+      "tipo": "playa",
+      "region": "Western Area",
+      "descripcion": "Playa de arena negra volcánica a 30 km de Freetown, con olas consistentes ideales para principiantes en surf. Menos turística que otras playas y con auténtica vida costera local.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Freetown en taxi colectivo (gele gele) hacia Goderich (1h, 2-3 EUR) o alquilar moto (40 EUR/día)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales frente a playa: 12-20 EUR/noche",
+        "medio": "Resort pequeño tipo Goderich Beach Resort: 30-50 EUR/noche",
+        "comfort": "No hay opciones 4+ estrellas; mejor quedarse en Freetown y visitar como excursión"
+      },
+      "que_hacer": [
+        "Surf (clases con instructores locales, 25-35 EUR)",
+        "Caminar por playa al atardecer (gratis)",
+        "Almorzar pescado fresco con pescadores locales (5-8 EUR)",
+        "Bañarse en el océano con precaución (corrientes fuertes, gratis)"
+      ],
+      "donde_comer": "Arroz de coco, pescado a la parrilla, okra stew. Puestos en la playa operados por mujeres locales (4-7 EUR). Agua sin filtrar: compra en botellas cerradas (0,5 EUR)",
+      "consejo_local": "Negocia el precio del taxi antes de subir. Las olas son fuertes: entra solo si nadas bien. El mejor momento es entre las 6-8am antes de que lleguen turistas.",
+      "plan_b_lluvia": "Las lluvias intensas hacen peligrosas las olas; recorre el pueblo a pie o aprende de pescadores sobre técnicas de pesca tradicionales",
+      "keywords": [
+        "Goderich",
+        "playa negra",
+        "arena negra",
+        "surf Sierra Leona",
+        "Western Area beach"
+      ]
+    },
+    {
+      "id": "peninsula-sierra-leona",
+      "nombre": "Península de Sierra Leona",
+      "tipo": "naturaleza",
+      "region": "Western Area",
+      "descripcion": "Reserva forestal virgen con senderos hacia playas aisladas (Tokeh Beach, Bureh Beach) y vistas oceánicas. Biodiversidad intacta con palmeras, monos y aves tropicales. Ideal para senderismo sin multitudes.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Freetown en taxi hacia Tokeh (45 min, 3 EUR) o contratar guide privado para toda la península (60 EUR/día)",
+      "donde_dormir": {
+        "mochilero": "Beach camps rústicos en Tokeh o Bureh: 15-25 EUR/noche",
+        "medio": "Tokeh Beach Resort o small lodges: 40-70 EUR/noche",
+        "comfort": "Stays en Freetown, excursión diaria desde allí"
+      },
+      "que_hacer": [
+        "Senderismo en selva tropical hacia Tokeh Beach (3h, gratis, hire guide 20 EUR)",
+        "Nadar en playas vírgenes (gratis)",
+        "Avistamiento de monos y pájaros (gratis con atención)",
+        "Acampar en la playa bajo las estrellas (12 EUR/noche)"
+      ],
+      "donde_comer": "Arroz, cassava, pescado fresco. Lodge en Tokeh prepara comidas (7-12 EUR). Lleva snacks desde Freetown; tiendas escasas",
+      "consejo_local": "Contrata un guía local en Freetown ANTES de ir (25-30 EUR/día); los caminos no están marcados y es fácil perderse. Cuidado con piruanas (peces pequeños que muerden) en agua dulce.",
+      "plan_b_lluvia": "Los senderos se vuelven lodosos: camina solo en puntos altos o quédate en la playa leyendo",
+      "keywords": [
+        "Peninsula",
+        "Tokeh Beach",
+        "Bureh Beach",
+        "selva",
+        "trekking",
+        "biodiversidad"
+      ]
+    },
+    {
+      "id": "islands-bay",
+      "nombre": "Islas Banana y Turtle",
+      "tipo": "isla",
+      "region": "Western Area",
+      "descripcion": "Archipiélago cercano a Freetown con playas de arena blanca, snorkel y restos de fortalezas coloniales. Banana Island es accesible y tiene infraestructura; Turtle Island es más salvaje.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Freetown: ferry desde Crab Island (15 min, 5 EUR) o lancha privada (30 EUR)",
+      "donde_dormir": {
+        "mochilero": "Beach lodges rústicos en Banana Island: 25-40 EUR/noche",
+        "medio": "Banana Island Resort: 50-80 EUR/noche",
+        "comfort": "Mejor dormir en Freetown y visitar como excursión de día"
+      },
+      "que_hacer": [
+        "Snorkel (equipo 10 EUR, corales vivos)",
+        "Visitar ruinas de fortaleza colonial (gratis, guía local 10 EUR)",
+        "Caminar playa y recoger conchas (gratis)",
+        "Puesta de sol desde la playa (gratis)"
+      ],
+      "donde_comer": "Arroz con salsa roja, caballa fresca. Restaurantes en lodge (8-15 EUR). Lleva agua desde Freetown",
+      "consejo_local": "El ferry en fin de semana está abarrotado de lugareños: ve entre semana. Turtle Island es más aislada pero requiere boat privado (60-80 EUR) y es para senderismo, no playas.",
+      "plan_b_lluvia": "Las islas son pequeñas; un aguacero rápido es normal. Visita ruinas aunque llueva",
+      "keywords": [
+        "Banana Island",
+        "Turtle Island",
+        "islas",
+        "snorkel",
+        "fortaleza",
+        "playa blanca"
+      ]
+    },
+    {
+      "id": "kenema",
+      "nombre": "Kenema",
+      "tipo": "ciudad",
+      "region": "Eastern Province",
+      "descripcion": "Segunda ciudad importante de Sierra Leona, centro de comercio de diamantes y acceso a mercados locales auténticos. Punto de partida para la región este y cercana a Kailahun.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Freetown en autobus (8-10h, 15-20 EUR) o minibus compartido hacia Kailahun (mismo precio, más paradas)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en central: 10-18 EUR/noche",
+        "medio": "Kenema Hotel o similares: 25-40 EUR/noche",
+        "comfort": "Pocas opciones; mejor en Freetown"
+      },
+      "que_hacer": [
+        "Explorar Kenema Market (mercado de diamantes, textiles, especias) - gratis, fotos discretas",
+        "Visitar museo de diamantes (3 EUR, pequeño)",
+        "Comer comida local en mercado (3-5 EUR)",
+        "Pasear por barrios coloniales (gratis)"
+      ],
+      "donde_comer": "Jollof rice, sopa de maní, cassava leaves con pescado salado. Mercado para comida callejera auténtica (3-6 EUR). Restaurantes turísticos carecen de variedad",
+      "consejo_local": "Llega durante mercadillo (jueves-domingo) para ver el movimiento de gemas. La seguridad es aceptable en centro, pero no pasees solo de noche.",
+      "plan_b_lluvia": "El mercado bajo techo es perfecto para lluvia; aprovecha para explorar textiles y especias",
+      "keywords": [
+        "Kenema",
+        "diamantes",
+        "mercado",
+        "Eastern Province",
+        "ciudad comercial"
+      ]
+    },
+    {
+      "id": "kailahun",
+      "nombre": "Kailahun",
+      "tipo": "rural",
+      "region": "Eastern Province",
+      "descripcion": "Pueblo en frontera con Guinea, acceso a paisajes verdes, aldeas Mende tradicionales y selva. Menos turístico, auténtico encuentro con vida rural sierra leonesa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Kenema en minibus (4h, 5-7 EUR) o desde Guinea si vienes de allí",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicas: 10-15 EUR/noche",
+        "medio": "Kailahun Guesthouse: 20-30 EUR/noche",
+        "comfort": "No existe"
+      },
+      "que_hacer": [
+        "Visitar aldeas Mende cercanas (camina con guía, gratis + 15 EUR guide)",
+        "Senderismo en selva hacia Guinea (con guide, 20 EUR)",
+        "Participar en ceremonia comunitaria si hay (RESPETUOSO, gratis, lleva pequeño regalo)",
+        "Comprar artesanía local en mercado (5-20 EUR piezas)"
+      ],
+      "donde_comer": "Cassava bread, sopa de cacahuete, vegetales de hoja. Casas-restaurante improvisadas (3-5 EUR). Come con las familias si te invitan; es honor",
+      "consejo_local": "Kailahun sufrió durante la guerra: sé sensible. La gente es muy acogedora si eres respetuoso. Trae dólares en efectivo; no hay ATM. Contrata guide local en Kenema antes de ir.",
+      "plan_b_lluvia": "Las carreteras se vuelven intransitables; quédate en guesthouse escuchando historias locales",
+      "keywords": [
+        "Kailahun",
+        "Mende",
+        "rural",
+        "aldeas",
+        "frontera Guinea",
+        "auténtico"
+      ]
+    },
+    {
+      "id": "bo",
+      "nombre": "Bo",
+      "tipo": "ciudad",
+      "region": "Southern Province",
+      "descripcion": "Tercera ciudad de Sierra Leona con mercado tradicional importante, arquitectura colonial y punto de acceso a la región sur. Centro cultural menos visitado que Freetown con vida local vibrante.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Freetown en autobus (10h, 18-25 EUR) o desde Kenema en minibus (6h, 10 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Bo Town: 12-20 EUR/noche",
+        "medio": "Bo City Hotel o similar: 30-45 EUR/noche",
+        "comfort": "Pocas opciones premium"
+      },
+      "que_hacer": [
+        "Explorar Bo Central Market (mercado cubierto, gratis entrada, fotos discretas)",
+        "Visitar iglesia anglicana colonial (gratis)",
+        "Pasear barrio de Aoma Road (viviendas tradicionales, gratis)",
+        "Comer en mercado con locales (4-7 EUR)"
+      ],
+      "donde_comer": "Cassava leaves con pescado, gachas de harina de maíz, sopa de lentejas. Bo Market es el mejor lugar (3-5 EUR). Restaurantes turísticos en centro (8-12 EUR)",
+      "consejo_local": "Bo es tranquilo y seguro. Los lugareños son curiosos pero no acosadores. Visita mercado por la mañana (7-10am) cuando hay más movimiento y menos calor.",
+      "plan_b_lluvia": "El mercado bajo techo es ideal; lluvia no es problema",
+      "keywords": [
+        "Bo",
+        "Southern Province",
+        "mercado",
+        "ciudad colonial",
+        "Aoma Road"
+      ]
+    },
+    {
+      "id": "tiwai-island",
+      "nombre": "Tiwai Island",
+      "tipo": "naturaleza",
+      "region": "Southern Province",
+      "descripcion": "Isla de conservación en río Moa con selva primaria intacta, primates raros (pequeños hipopótamos enanos, colobos rojos) y birdwatching excepcional. Reserva privada pequeña pero con alta biodiversidad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Bo en taxi hacia Mattru Jong (3h, 5 EUR), luego bote privado hacia isla (45 min, 40 EUR ida/vuelta)",
+      "donde_dormir": {
+        "mochilero": "Tiwai Island Lodge (único alojamiento): 50-70 EUR/noche todo incluido",
+        "medio": "Tiwai Island Lodge habitación estándar: 70-100 EUR/noche",
+        "comfort": "Tiwai Island Lodge suite: 100-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Guías naturalistas en selva (incluido en lodge, avistamiento de primates raros)",
+        "Canoeing en río Moa (incluido, observación de hipopótamos enanos)",
+        "Birdwatching (guía especializado +30 EUR)",
+        "Paseo nocturno en selva (30 EUR, criaturas crepusculares)"
+      ],
+      "donde_comer": "Comidas incluidas en lodge (desayuno, almuerzo, cena). Cocina casera sierra leonesa. Agua filtrada segura",
+      "consejo_local": "Reserva con anticipación; el lodge es pequeño (máx 20 huéspedes). Llevar binoculares y cámara con zoom es ESENCIAL. Los hipopótamos enanos son tímidos pero te sorprenderán.",
+      "plan_b_lluvia": "Los recorridos se hacen incluso con lluvia; la selva es más activa. Lleva capa impermeable",
+      "keywords": [
+        "Tiwai Island",
+        "naturaleza",
+        "primates",
+        "hipopotamo enano",
+        "birdwatching",
+        "rio Moa"
+      ]
+    },
+    {
+      "id": "sherbro-beach",
+      "nombre": "Sherbro Beach / Sherbro Island",
+      "tipo": "playa",
+      "region": "Southern Province",
+      "descripcion": "Playa virgen en isla remota con aldeas de pescadores, tortugas marinas anidando (temporada), y vida costera intacta. Una de las playas menos alteradas de Sierra Leona.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero (tortugas: octubre-noviembre)",
+      "como_llegar": "Desde Bo hacia Gbangbangou en minibus (3h, 5 EUR), luego bote privado hacia Sherbro (1.5h, 50-80 EUR)",
+      "donde_dormir": {
+        "mochilero": "Sherbro Beach Lodge (rústico): 25-40 EUR/noche",
+        "medio": "Sherbro Beach Resort (si está abierto): 50-80 EUR/noche",
+        "comfort": "No existe"
+      },
+      "que_hacer": [
+        "Caminar playa y observar anidación de tortugas si es temporada (gratis, respetuoso)",
+        "Nadar en playa (gratis, vigilancia tiburones es rara pero pregunta)",
+        "Pesca con aldeanos (15-25 EUR incluye almuerzo)",
+        "Snorkel frente a isla (gratis)"
+      ],
+      "donde_comer": "Pescado fresco diario, arroz con salsa de coco, okra. Aldeanos cocinan si pagas por ingredientes (8-12 EUR comida completa)",
+      "consejo_local": "Lleva efectivo completo; no hay tiendas. El bote debe negociarse en Gbangbangou antes de ir. Respetar nidos de tortugas es OBLIGATORIO.",
+      "plan_b_lluvia": "Las playas remotas se vuelven peligrosas en lluvia fuerte; quédate bajo techo compartiendo historias con pescadores",
+      "keywords": [
+        "Sherbro",
+        "playa virgen",
+        "tortugas anidacion",
+        "isla remota",
+        "pescadores"
+      ]
+    },
+    {
+      "id": "fouta-djallon-excursion",
+      "nombre": "Excursión a Fouta Djallon (Guinea)",
+      "tipo": "naturaleza",
+      "region": "Frontera (Guinea)",
+      "descripcion": "Meseta montañosa en Guinea con cascadas espectaculares (Ditinn Falls), paisajes verdes exuberantes y pueblos Peul tradicionales. Excursión de 3-4 días desde Sierra Leona (Kailahun o Mamou).",
+      "dias_recomendados": 4,
+      "mejor_epoca": "octubre a mayo",
+      "como_llegar": "Desde Kailahun cruzar frontera caminando hacia Gueckedou (Guinea), 2h a pie con guía (5 EUR). Luego minibus hacia Mamou (3h, 5 EUR). Tour desde Mamou hacia cascadas (2-3 días, 60-100 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Mamou o aldeas Fouta: 8-15 EUR/noche",
+        "medio": "Lodge turístico en Mamou: 25-40 EUR/noche",
+        "comfort": "No existe; camping bajo vigilancia de guía"
+      },
+      "que_hacer": [
+        "Senderismo hacia Ditinn Falls (cascadas espectaculares, 4h trek, 25 EUR guide)",
+        "Visitar aldeas Peul y mercados locales (gratis, pequeño regalo respectuoso)",
+        "Bañarse en piscinas naturales de cascadas (gratis)",
+        "Cabalgata en caballos Peul (30 EUR/día)"
+      ],
+      "donde_comer": "Arroz, sopa de maní, pollo grilled. En aldeas se prepara comida simple (5-8 EUR). Lleva purificador de agua",
+      "consejo_local": "Necesitas VISADO de Guinea (o permiso de tránsito). La frontera con Sierra Leona es informal pero lleva pasaporte. Hiring local guide en Kailahun es más seguro y barato que en Guinea.",
+      "plan_b_lluvia": "Fouta es muy verde pero senderos se vuelven resbaladizos; las vistas entre nieblas son hermosas pero visibilidad limitada",
+      "keywords": [
+        "Fouta Djallon",
+        "Guinea",
+        "cascadas",
+        "Ditinn",
+        "Peul",
+        "excursion",
+        "meseta"
+      ]
+    }
+  ]
+}

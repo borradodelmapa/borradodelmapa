@@ -1,0 +1,332 @@
+{
+  "pais": "Arabia Saudita",
+  "codigo": "sa",
+  "destinos": [
+    {
+      "id": "riyadh",
+      "nombre": "Riyadh",
+      "tipo": "ciudad",
+      "region": "Riyadh",
+      "descripcion": "Capital moderna con rascacielos futuristas, museos de clase mundial y vida nocturna creciente tras las reformas recientes. Centro de negocios y punto de entrada principal para la mayoría de viajeros independientes. Punto de partida lógico para explorar el país.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Aeropuerto Internacional de Riyadh (RUH): vuelos internacionales directos, 45 minutos al centro en taxi/Uber (15-20 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Al Olaya o Downtown: 25-40 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas en Diplomatic Quarter: 60-100 EUR/noche",
+        "comfort": "Hoteles 5 estrellas (Four Seasons, Fairmont): 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional de Arabia Saudita (gratis con entrada 15 EUR)",
+        "Kingdom Centre y vistas desde el mirador (10 EUR)",
+        "Al Diriyah UNESCO site, palacio histórico (7 EUR)",
+        "Al Bujairi Courtyard para gastronomía tradicional (gratis acceso, comida 8-15 EUR)",
+        "Paseo nocturno por Boulevard y Riyadh Gallery (gratis)"
+      ],
+      "donde_comer": "Comida saudí tradicional (kabsa, shawarma): 4-8 EUR. Al Baik para pollo frito rápido (3 EUR). Zona gastronómica: Olaya Street y Boulevard. Restaurantes internacionales más caros (15-30 EUR).",
+      "consejo_local": "El viernes es el día de descanso; muchos comercios cierran al mediodía. Descarga la app Uber antes de llegar. Las mujeres viajeras deben llevar abayas (se venden en el centro).",
+      "plan_b_lluvia": "Museos (Nacional, de Arte Moderno), galerías comerciales cubiertas, cines en centros comerciales",
+      "keywords": [
+        "riyadh",
+        "Riad",
+        "kingdom centre",
+        "al diriyah",
+        "olaya street",
+        "diplomatic quarter"
+      ]
+    },
+    {
+      "id": "jeddah",
+      "nombre": "Jeddah",
+      "tipo": "playa",
+      "region": "Meca",
+      "descripcion": "Principal puerta de entrada al Mar Rojo con playas históricas, corniche costero renovado y arquitectura colonial antigua en el barrio de Al Balad. Menos restringida culturalmente que otras ciudades y con acceso a arrecifes de coral para buceo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Riyadh: vuelo 1 hora (30-50 EUR) o autobús 9 horas (15-25 EUR). Aeropuerto Internacional de Jeddah (JED)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Al Balad o zona portuaria: 20-35 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas en Corniche: 50-90 EUR/noche",
+        "comfort": "Hoteles 5 estrellas con vistas al mar: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Al Balad (casco antiguo) para arquitectura colonial y souks (gratis)",
+        "Red Sea Mall o Corniche paseo (gratis)",
+        "Buceo en arrecifes de coral del Mar Rojo (60-100 EUR tour)",
+        "Fontana King Fahd, la más alta del mundo (gratis vista desde lejos)",
+        "Museo Saud Al-Sowayket (entrada 5 EUR)"
+      ],
+      "donde_comer": "Pescado fresco y ceviches de mariscos: 8-15 EUR. Souks de Al Balad para comida callejera (3-5 EUR). Corniche tiene restaurantes internacionales más caros (15-25 EUR).",
+      "consejo_local": "Al Balad es más auténtico de noche cuando baja el calor. Los saudíes son más relajados en Jeddah; el código de vestimenta es menos estricto que en Riyadh. El buceo requiere permisos especiales pero muchos tours ya los manejan.",
+      "plan_b_lluvia": "Museos, Centros comerciales (Red Sea Mall), compras en souks de Al Balad",
+      "keywords": [
+        "jeddah",
+        "al balad",
+        "corniche",
+        "mar rojo",
+        "red sea",
+        "buceo"
+      ]
+    },
+    {
+      "id": "al-ula",
+      "nombre": "Al-Ula",
+      "tipo": "histórico",
+      "region": "Medina",
+      "descripcion": "Sitio arqueológico monumental con tumbas nabateas (similar a Petra de Jordania), ruinas antiguas de caravanas y paisajes desérticos de arenisca roja. Declarado Patrimonio UNESCO y accesible sin restricciones de viaje especiales desde 2019.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Riyadh: vuelo 1.5 horas (40-60 EUR) o autobús 7 horas (20-30 EUR). Aeropuerto regional de Al-Ula",
+      "donde_dormir": {
+        "mochilero": "Hostales o guesthouses básicas en pueblo: 25-40 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas en zona nueva: 70-110 EUR/noche",
+        "comfort": "Resorts lujo (desértico) Habitas o similar: 180-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Sitio arqueológico de Madain Salih (entrada 15 EUR, tour guiado 60 EUR)",
+        "Jabal Al Fil (rock formation) senderismo (gratis)",
+        "Wadi Rum-like desert landscape tours (50-80 EUR)",
+        "Museo de Al-Ula (entrada 8 EUR)",
+        "Atardecer en Jabal Al Khardah (gratis)"
+      ],
+      "donde_comer": "Comida beduina (zarb, cuscús): 6-12 EUR. Pocas opciones; la mayoría de hoteles ofrecen buffet. Mercado local para frutas y pan (2-4 EUR).",
+      "consejo_local": "Alquila 4x4 o contrata tour; no hay transporte público. El sitio es enorme; necesitas 2 días mínimo. Lleva abundante agua y protección solar. Mejor ir con agencia que gestione permisos de acceso a zonas arqueológicas.",
+      "plan_b_lluvia": "Museos locales, compras en mercados cubiertos, tours fotográficos de formaciones rocosas desde protección",
+      "keywords": [
+        "al-ula",
+        "madain salih",
+        "nabateo",
+        "unesco",
+        "arqueologia",
+        "deserto"
+      ]
+    },
+    {
+      "id": "medina",
+      "nombre": "Medina (Ciudad del Profeta)",
+      "tipo": "histórico",
+      "region": "Medina",
+      "descripcion": "Segunda ciudad más sagrada del Islam con la Mezquita del Profeta (no musulmanes solo pueden ver desde afuera pero la arquitectura es impresionante). Medina vieja tiene souks históricos, museos islámicos y atmósfera más tranquila que La Meca. Accesible solo durante el Hajj/Umrah o con permisos especiales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Riyadh: vuelo 1 hora (35-55 EUR) o autobús 6 horas (18-28 EUR). Acceso restringido a musulmanes en zona de la Mezquita",
+      "donde_dormir": {
+        "mochilero": "Guesthouses cerca de zona vieja: 30-50 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas: 60-100 EUR/noche",
+        "comfort": "Hoteles 5 estrellas de lujo: 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Exterior Mezquita del Profeta y puertas (gratis)",
+        "Mercado de Qubaa (gratis, compras 5-20 EUR)",
+        "Montaña de Ohod senderismo (gratis)",
+        "Cementerio de Baqi (gratis, solo acceso limitado)",
+        "Museo de Medina (entrada 8 EUR)"
+      ],
+      "donde_comer": "Comida árabe saudí similar a Riyadh: 5-12 EUR. Pocas opciones de alcohol/turísticas. Restaurantes en hoteles más caros (15-25 EUR).",
+      "consejo_local": "No-musulmanes no pueden entrar a la Mezquita; respeta distancias y horarios de oración. La ciudad es más conservadora; vístete con cuidado. Muchos locales hablan inglés solo en hoteles.",
+      "plan_b_lluvia": "Museos islámicos, compras en mercados cubiertos, descanso en hotel",
+      "keywords": [
+        "medina",
+        "madinah",
+        "al-madinah",
+        "mezquita profeta",
+        "sacro",
+        "islam"
+      ]
+    },
+    {
+      "id": "tabuk",
+      "nombre": "Tabuk",
+      "tipo": "naturaleza",
+      "region": "Tabuk",
+      "descripcion": "Puerta de entrada al noroeste de Arabia con acceso a Laguna Roja única, desierto montañoso y senderismo de nivel variado. Menos visitada pero con paisajes desérticos espectaculares y calidad de vida más relajada.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Riyadh: vuelo 2.5 horas (50-75 EUR) o autobús 14 horas (25-40 EUR). Aeropuerto de Tabuk (TUU)",
+      "donde_dormir": {
+        "mochilero": "Hostales básicas o guesthouses: 20-30 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 40-70 EUR/noche",
+        "comfort": "Hoteles 4 estrellas: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Laguna Roja (Red Lagoon) tour senderismo (40-60 EUR con guía)",
+        "Fuerte histórico de Tabuk (entrada 5 EUR)",
+        "Desierto blanco (White Sands) (gratis acceso, 50 EUR tour 4x4)",
+        "Montañas Al Hajar senderismo (gratis, 40 EUR con guía)",
+        "Playas del Mar Rojo en alrededores (gratis)"
+      ],
+      "donde_comer": "Comida local desértica: 5-10 EUR. Pocas opciones de restaurantes; algunos hoteles ofrecen menú diario. Mercado central para frutas y frutos secos (2-5 EUR).",
+      "consejo_local": "Pocas señales en inglés; alquila guía o tour. Tabuk es puerta a Jordania (Aqaba) si tienes visa. El agua es recurso escaso; respétalo.",
+      "plan_b_lluvia": "Museos locales, mercados cubiertos, descanso en hotel",
+      "keywords": [
+        "tabuk",
+        "red lagoon",
+        "laguna roja",
+        "desierto blanco",
+        "noroeste"
+      ]
+    },
+    {
+      "id": "ksa-abha",
+      "nombre": "Abha",
+      "tipo": "montaña",
+      "region": "Asir",
+      "descripcion": "Ciudad de montaña en las alturas del sur de Arabia con clima más fresco, arquitectura tradicional colorida y acceso a telesférico espectacular. Región Asir es la más verde de Saudi y contrasta con desiertos del norte. Base para trekking y exploración rural.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre a abril",
+      "como_llegar": "Desde Riyadh: vuelo 2 horas (45-70 EUR) o autobús 12 horas (20-35 EUR). Aeropuerto de Abha (ABT)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en zona vieja: 25-40 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas: 50-85 EUR/noche",
+        "comfort": "Resorts en montaña: 110-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Telesférico de Abha (Cable Car) vistas (8 EUR ida y vuelta)",
+        "Mercado tradicional Al Souk (gratis, compras 5-15 EUR)",
+        "Senderismo en Jabal Saudah (montaña más alta) (gratis, 50 EUR con guía)",
+        "Aldea tradicional de Al Habala (tour 60 EUR)",
+        "Fuerte de Al-Qasr (entrada 3 EUR)"
+      ],
+      "donde_comer": "Comida regional Asir (zarb, miel local): 6-12 EUR. Restaurantes en hoteles (12-20 EUR). Mercado para frutas y quesos locales (3-8 EUR).",
+      "consejo_local": "El clima es más templado; espera lluvia en estación de monzones (julio-agosto). Comunidad local más amable y menos restrictiva. Buen lugar para conocer Arabia rural lejos de ciudades grandes.",
+      "plan_b_lluvia": "Museos, compras en mercados cubiertos, cafés tradicionales",
+      "keywords": [
+        "abha",
+        "asir",
+        "telesferrico",
+        "montaña",
+        "jabal saudah",
+        "verde"
+      ]
+    },
+    {
+      "id": "ksa-dammam",
+      "nombre": "Dammam",
+      "tipo": "playa",
+      "region": "Región Oriental",
+      "descripcion": "Centro portuario en el Golfo Pérsico con infraestructura moderna, acceso a islas (Karan, Safaniyah) y vida más cosmopolita por influencia petrolera. Playas menos desarrolladas que Jeddah pero auténticas y con menos turismo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Riyadh: vuelo 1.5 horas (30-50 EUR) o autobús 4 horas (12-20 EUR). Aeropuerto de Dammam (DMM)",
+      "donde_dormir": {
+        "mochilero": "Hostales en centro: 25-40 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas en Corniche: 55-90 EUR/noche",
+        "comfort": "Hoteles 5 estrellas: 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Corniche de Dammam paseo y playas (gratis)",
+        "Isla de Karan tour (buceo y pesca) (80-120 EUR)",
+        "Mercado de Dammam (gratis, compras 5-15 EUR)",
+        "Parque Aramco (acceso limitado, algunos tours disponibles)",
+        "Centro comercial The Avenues (gratis acceso, compras variables)"
+      ],
+      "donde_comer": "Pescado fresco y mariscos: 8-15 EUR. Comida levantina y árabe: 5-10 EUR. Restaurantes en hoteles más caros (15-25 EUR). Zona costera tiene opciones variadas.",
+      "consejo_local": "Población más expat-friendly que otras ciudades. Playas están segregadas por género en horarios. Buena base si necesitas cambiar moneda o comprar en centros comerciales.",
+      "plan_b_lluvia": "Centros comerciales cubiertos, museos, cines",
+      "keywords": [
+        "dammam",
+        "golfo persico",
+        "corniche",
+        "isla karan",
+        "oriental"
+      ]
+    },
+    {
+      "id": "ksa-buraydah",
+      "nombre": "Buraydah",
+      "tipo": "rural",
+      "region": "Qassim",
+      "descripcion": "Ciudad central en la región agrícola de Qassim con dátiles y palmeras de renombre mundial, mercados tradicionales auténticos y arquitectura de adobe. Escasamente visitada por turistas pero auténtica y accesible para viajeros que quieren alejar de rutas turísticas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Riyadh: autobús 4 horas (10-18 EUR) o vuelo 45 minutos (35-55 EUR). Aeropuerto regional de Buraydah",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 20-35 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 40-70 EUR/noche",
+        "comfort": "Hoteles 4 estrellas: 85-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de dátiles Al Jouf (gratis, compras 3-8 EUR/kg)",
+        "Mercado tradicional central (gratis, compras variadas)",
+        "Huertos de palmeras tour (gratis acceso, 30 EUR con guía local)",
+        "Museo regional (entrada 3 EUR)",
+        "Paseo por zona antigua de adobe (gratis)"
+      ],
+      "donde_comer": "Especializados en dátiles rellenos, miel, frutos secos: 3-8 EUR. Comida saudí local (zarb): 6-12 EUR. Pocas opciones turísticas; come donde lo hace la gente local.",
+      "consejo_local": "Auténtica vida rural saudí; la comunidad es menos acostumbrada a turistas pero amable. Mejor parada corta desde Riyadh que base de 2+ noches. Probablemente el mejor lugar para comprar dátiles de calidad.",
+      "plan_b_lluvia": "Mercados cubiertos, descanso en hotel, museos",
+      "keywords": [
+        "buraydah",
+        "qassim",
+        "datiles",
+        "palmera",
+        "rural",
+        "agricultor"
+      ]
+    },
+    {
+      "id": "ksa-khobar",
+      "nombre": "Al-Khobar",
+      "tipo": "playa",
+      "region": "Región Oriental",
+      "descripcion": "Vecina a Dammam, ciudad portuaria moderna con paseo marítimo renovado, vida nocturna más liberal y acceso a islas del Golfo. Menos religiosa que otras ciudades saudíes y con comunidad expat amplia que hace la viajería más fácil.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Riyadh: vuelo 1.5 horas (30-50 EUR) o autobús 4.5 horas (15-25 EUR). Desde Dammam: 30 minutos en taxi (10 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en centro: 25-40 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas: 60-95 EUR/noche",
+        "comfort": "Hoteles 5 estrellas: 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Corniche Al-Khobar paseo (gratis)",
+        "Playas públicas (acceso segregado por género) (gratis)",
+        "Centro comercial The Avenues (gratis, compras variables)",
+        "Mercado tradicional (gratis, compras 5-15 EUR)",
+        "Tours a isla de Tarut (60-100 EUR)"
+      ],
+      "donde_comer": "Restaurantes internacionales más accesibles que en ciudades conservadoras: 10-20 EUR. Comida árabe: 6-12 EUR. Zona costera concentra opciones.",
+      "consejo_local": "La ciudad es más relajada para viajeros; más fácil encontrar bares en hoteles. Población expatriada grande (filipinas, indios, occidentales) hace comunicación más sencilla. Buena alternativa a Dammam.",
+      "plan_b_lluvia": "Centros comerciales, museos, cines",
+      "keywords": [
+        "khobar",
+        "al-khobar",
+        "corniche",
+        "golfo persico",
+        "playa",
+        "moderna"
+      ]
+    },
+    {
+      "id": "ksa-neom",
+      "nombre": "NEOM / The Line (en desarrollo)",
+      "tipo": "ciudad",
+      "region": "Tabuk",
+      "descripcion": "Proyecto futurista de ciudad sostenible en construcción (fase de apertura turística 2025+). Aunque aún está en construcción, comienzan a permitirse tours guiados limitados de este ambicioso proyecto de reurbanismo saudí. Novedad para viajeros que buscan experiencias inusuales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Riyadh: vuelo a Tabuk (2.5 horas, 50-75 EUR) + autobús/tour 1.5 horas. Tours solo con agencia especializada",
+      "donde_dormir": {
+        "mochilero": "Aún sin alojamiento; base en Tabuk cercano (25-40 EUR/noche)",
+        "medio": "Proyectado para futuro; ahora Tabuk (40-70 EUR/noche)",
+        "comfort": "Proyectado para futuro; ahora Tabuk (90-150 EUR/noche)"
+      },
+      "que_hacer": [
+        "Tour guiado The Line (acceso controlado, 120-200 EUR con agencia)",
+        "Vistas de desarrollo del proyecto (gratis desde zonas permitidas)",
+        "Tours de sostenibilidad (80-150 EUR)"
+      ],
+      "donde_comer": "Infraestructura turística mínima. Comer en Tabuk ciudad (5-15 EUR)",
+      "consejo_local": "Acceso muy restringido y solo con tours autorizados. Infraestructura turística aún limitada. Mejor visitarlo en 2026+ cuando esté más desarrollado. Ahorá es más novedad que destino consolidado.",
+      "plan_b_lluvia": "Tours interiores de exposiciones del proyecto",
+      "keywords": [
+        "neom",
+        "the line",
+        "futurista",
+        "nuevo",
+        "desarrollo",
+        "sostenible"
+      ]
+    }
+  ]
+}

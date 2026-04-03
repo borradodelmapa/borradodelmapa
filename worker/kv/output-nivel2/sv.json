@@ -1,0 +1,315 @@
+{
+  "pais": "El Salvador",
+  "codigo": "sv",
+  "destinos": [
+    {
+      "id": "san-salvador",
+      "nombre": "San Salvador",
+      "tipo": "ciudad",
+      "region": "Departamento de San Salvador",
+      "descripcion": "Capital y puerta de entrada al país, centro cultural y administrativo. Ofrece museos de calidad, mercados auténticos y vida urbana centroamericana sin exceso de turismo. Punto logístico ideal para organizar el resto del viaje.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Aeropuerto Internacional Monseñor Óscar Arnulfo Romero (40 km): autobús 138 ($0,25) 1h, taxi $25-30, transfer privado $35-40",
+      "donde_dormir": {
+        "mochilero": "Albergues en Barrio Escalante: $12-18/noche",
+        "medio": "Hoteles 3* en Zona Rosa: $40-70/noche",
+        "comfort": "Hoteles 4-5* Centro Histórico: $90-150/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional de Antropología (gratis primer domingo, $3 otros días)",
+        "Barrio Escalante: galerías, arte callejero y vida nocturna (gratis)",
+        "Mercado Central: compras y gastronomía local (gratis, gasto según compra)",
+        "Monumento al Divino Salvador del Mundo ($1 acceso a mirador)"
+      ],
+      "donde_comer": "Pupusas en comedores locales ($1-2), comida típica en Barrio Escalante ($5-12), mercados gastronómicos con platos variados ($3-8)",
+      "consejo_local": "Evita el centro histórico después del anochecer. Barrio Escalante es seguro y concentra lo mejor de restaurantes independientes.",
+      "plan_b_lluvia": "Museos (Antropología, Arte), galerías en Barrio Escalante, centros comerciales",
+      "keywords": [
+        "capital",
+        "SASA",
+        "Barrio Escalante",
+        "Zona Rosa",
+        "Centro Histórico"
+      ]
+    },
+    {
+      "id": "suchitoto",
+      "nombre": "Suchitoto",
+      "tipo": "histórico",
+      "region": "Departamento de Cuscatlán",
+      "descripcion": "Pueblo colonial pintoresco con arquitectura bien conservada, vistas al lago Suchitlán y ambiente bohemio. Centro creativo con galerías de arte, artesanías y vida local auténtica sin masificación turística.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde San Salvador: autobús 129 ($0,50) 1,5h, taxi colectivo ($2) o transporte privado ($30-35)",
+      "donde_dormir": {
+        "mochilero": "Hostales pequeños en centro: $15-22/noche",
+        "medio": "Hoteles posada estilo colonial: $35-60/noche",
+        "comfort": "Haciendas boutique y casas restauradas: $80-120/noche"
+      },
+      "que_hacer": [
+        "Recorrer casco histórico y plazas principales (gratis)",
+        "Galerías de arte y museos comunitarios: Museo de Amor ($2), galería de esculturas (gratis)",
+        "Tour en lancha al lago Suchitlán y cascadas ($15-20 por persona)",
+        "Cerámica y artesanías en talleres locales (compra desde $5)"
+      ],
+      "donde_comer": "Restaurantes familiares con comida típica ($4-7), comedores locales ($2-4), cafés de especialidad en plaza ($3-6)",
+      "consejo_local": "Ve a primera hora para ver el pueblo sin gente, o al atardecer en la plaza. Los jueves-domingos hay más movimiento cultural.",
+      "plan_b_lluvia": "Galerías y museos, talleres de cerámica, cafés coloniales",
+      "keywords": [
+        "Suchitoto",
+        "pueblo colonial",
+        "lago Suchitlan",
+        "arte",
+        "Cuscatlan"
+      ]
+    },
+    {
+      "id": "el-tunco",
+      "nombre": "El Tunco",
+      "tipo": "playa",
+      "region": "Departamento de La Libertad",
+      "descripcion": "Pueblito costero con olas de clase mundial para surfistas principiantes y avanzados, ambiente relajado con hostales y restaurantes baratos. Mezcla perfecta de naturaleza, acción y vida de mochilero.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "marzo a octubre (mejor swell)",
+      "como_llegar": "Desde San Salvador: autobús 102 ($1) 1,5h a Santa Tecla, luego local a playa ($0,50), o transfer directo ($25-30)",
+      "donde_dormir": {
+        "mochilero": "Hostales frente a playa: $12-18/noche",
+        "medio": "Bungalows y cabañas: $30-50/noche",
+        "comfort": "Resorts boutique con piscina: $70-110/noche"
+      },
+      "que_hacer": [
+        "Surf lecciones y olas (lecciones $15-25, tabla rental $5-8/día)",
+        "Piscinas naturales en rocas (gratis)",
+        "Buceo y snórquel ($35-50 tour incluido equipo)",
+        "Caminata a El Zonte beach ($3 combi local)"
+      ],
+      "donde_comer": "Comida de playa en chiringuitos ($4-8), tacos y ceviche ($3-6), restaurantes con vistas ($8-15)",
+      "consejo_local": "Los mejores desayunos están en los hostales desde las 6am. Pregunta a locales sobre olas antes de entrar.",
+      "plan_b_lluvia": "Piscinas naturales cubiertas, pueblos cercanos, descanso",
+      "keywords": [
+        "El Tunco",
+        "surfing",
+        "playa",
+        "La Libertad",
+        "olas"
+      ]
+    },
+    {
+      "id": "perquin",
+      "nombre": "Perquín",
+      "tipo": "montaña",
+      "region": "Departamento de Morazán",
+      "descripcion": "Pueblo montañoso a 1600m con clima fresco, historia revolucionaria, panorámicas y naturaleza exuberante. Centro de la cordillera oriental salvadoreña ideal para trekking, café y encuentros con comunidades locales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde San Salvador: autobús 4 a San Miguel ($2) 3h, luego autobús local a Perquín ($1,50) 1,5h más. Total 5h aprox.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes básicos: $10-15/noche",
+        "medio": "Posadas pequeñas con vistas: $25-40/noche",
+        "comfort": "Eco-lodges y casas campestres: $60-90/noche"
+      },
+      "que_hacer": [
+        "Museo de la Revolución Salvadoreña ($2)",
+        "Caminata a cascadas Las Pilas (gratis acceso, guía local $15)",
+        "Recorrido por plantaciones de café con degustación ($10-15)",
+        "Visita a comunidades artesanas de barro (gratis, compra opcional)"
+      ],
+      "donde_comer": "Comida típica en comedores ($3-5), pupusas y tamales ($1-2), cafés locales ($2-4)",
+      "consejo_local": "El clima puede cambiar rápido; lleva impermeable. Los mejores cafés se venden directo en las fincas, pregunta en tu hospedaje.",
+      "plan_b_lluvia": "Museo, talleres artesanales, cafés cubiertos",
+      "keywords": [
+        "Perquin",
+        "Morazan",
+        "montaña",
+        "cafe",
+        "revolucion"
+      ]
+    },
+    {
+      "id": "ruta-las-flores",
+      "nombre": "Ruta de las Flores",
+      "tipo": "rural",
+      "region": "Departamento de Ahuachapán",
+      "descripcion": "Circuito de pueblos montañosos de colores, mercados artesanales, cafeterías con cultura local y cascadas. Ideal para viajeros que buscan lo auténtico lejos de circuitos masificados.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde San Salvador: autobús 249 a Ahuachapán ($1,50) 2,5h, luego moverse entre pueblos con autobús local ($0,50 cada trayecto) o renta moto ($25-35/día)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Ataco: $12-18/noche",
+        "medio": "Posadas familiares: $25-45/noche",
+        "comfort": "Hoteles boutique en Ataco: $70-100/noche"
+      },
+      "que_hacer": [
+        "Recorrer pueblos: Ataco, Ahuachapán, Nahuizalco a pie (gratis)",
+        "Mercados artesanales y galerías (compra desde $2)",
+        "Cascada El Salto con baño ($5 entrada a zona)",
+        "Visitas a productores de café, chocolate y frutas ($10-15 con degustación)"
+      ],
+      "donde_comer": "Comedores rurales ($3-5), cafeterías con productos locales ($4-8), mercados gastronómicos",
+      "consejo_local": "Los jueves y domingos hay más oferta en mercados. Alquila moto o encuentra colectivo compartido entre pueblos; es más rápido que esperar autobús.",
+      "plan_b_lluvia": "Tiendas artesanales, cafeterías, museos locales",
+      "keywords": [
+        "Ruta Flores",
+        "Ataco",
+        "Nahuizalco",
+        "Ahuachapan",
+        "artesania"
+      ]
+    },
+    {
+      "id": "la-costa-del-balsamo",
+      "nombre": "Costa del Bálsamo",
+      "tipo": "playa",
+      "region": "Departamento de La Libertad",
+      "descripcion": "Litoral con playas vírgenes, pueblos costeros tranquilos y mangles. Alternativa a El Tunco para quienes buscan playa más sosegada con acceso a naturaleza salvaje.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde San Salvador: autobús 102 a Santa Tecla, luego local a Chiltiupán ($0,50) o Nuevo Cuscatlán. Transfer privado $25-30.",
+      "donde_dormir": {
+        "mochilero": "Cabañas rústicas y hospedajes: $10-18/noche",
+        "medio": "Hoteles familiares con servicios: $30-50/noche",
+        "comfort": "Resorts eco-chic: $80-130/noche"
+      },
+      "que_hacer": [
+        "Playas El Palmarcito, Mizata (gratis acceso)",
+        "Buceo y snórquel ($30-45 tour)",
+        "Kayak en manglares ($20-35)",
+        "Avistamiento de tortugas (estacional, $15-25)"
+      ],
+      "donde_comer": "Comedores de mariscos junto playa ($5-10), ceviche fresco ($4-7), almuerzos típicos ($3-5)",
+      "consejo_local": "Pregunta en tu hospedaje sobre las playas más limpias; varían según marea. Ve temprano para evitar basura que trae el mar.",
+      "plan_b_lluvia": "Visitas a pueblos costeros, actividades cubiertas",
+      "keywords": [
+        "Costa Balsamo",
+        "playas",
+        "manglares",
+        "Chiltiupan",
+        "Mizata"
+      ]
+    },
+    {
+      "id": "lago-coatepeque",
+      "nombre": "Lago Coatepeque",
+      "tipo": "naturaleza",
+      "region": "Departamento de Santa Ana",
+      "descripcion": "Lago volcánico con aguas termales, vistas de volcanes y pueblos costeros con gastronomía local fuerte. Menos turístico que otros lagos, con auténtica oferta de ocio familiar salvadoreño.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde San Salvador: autobús 201 a Santa Ana ($1) 1,5h, luego local a pueblo del lago ($0,75) 45 min. Transfer privado $30-35.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes en pueblos: $12-18/noche",
+        "medio": "Hoteles frente lago: $35-55/noche",
+        "comfort": "Resorts con piscina y servicios: $70-110/noche"
+      },
+      "que_hacer": [
+        "Paseos en lancha y baños en el lago (lancha compartida $3-5 por persona)",
+        "Pesca (equipo alquiler $10-15, guía $20)",
+        "Visita a balnearios termales ($2-5)",
+        "Caminata a orilla del lago (gratis)"
+      ],
+      "donde_comer": "Comedores de pescado y mariscos ($5-10), tilapia grillada ($6-8), refrescos locales",
+      "consejo_local": "Los fines de semana es zona de picnic familiar salvadoreño; ve entre semana si buscas tranquilidad.",
+      "plan_b_lluvia": "Pueblos costeros, comercios, descanso",
+      "keywords": [
+        "Lago Coatepeque",
+        "volcan",
+        "aguas termales",
+        "Santa Ana"
+      ]
+    },
+    {
+      "id": "parque-nacional-el-impossible",
+      "nombre": "Parque Nacional El Imposible",
+      "tipo": "naturaleza",
+      "region": "Departamento de Ahuachapán",
+      "descripcion": "Bosque húmedo tropical con cañones, cascadas y biodiversidad única de Centroamérica. Imprescindible para trekking serio y observación de fauna: quetzales, jaguares y aves endémicas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Ahuachapán: autobús local a Tacuba ($1) 1,5h, luego 10 km a entrada del parque (moto-taxi $5-8, a pie es posible)",
+      "donde_dormir": {
+        "mochilero": "Hospedajes en Tacuba: $12-18/noche",
+        "medio": "Eco-lodges cercanos: $35-60/noche",
+        "comfort": "Cabañas con servicios en zona: $60-95/noche"
+      },
+      "que_hacer": [
+        "Trekking a Cascada El Imposible (4-5h, gratis con entrada parque $3-5)",
+        "Senderismo Peñon Redondo (2h, incluido)",
+        "Avistamiento de aves temprano (gratis, opcional guía $15-25)",
+        "Canyoning y rappel (tours operados $40-60)"
+      ],
+      "donde_comer": "Comedores en Tacuba ($3-5), para llevar al parque, poca oferta gastronómica en el parque",
+      "consejo_local": "Lleva abundante agua, protección solar y repelente. Es parque remoto; ve con guía local para seguridad y fauna.",
+      "plan_b_lluvia": "Senderos cubiertos, pueblos cercanos",
+      "keywords": [
+        "El Imposible",
+        "parque nacional",
+        "trekking",
+        "Ahuachapan",
+        "bosque"
+      ]
+    },
+    {
+      "id": "la-palma",
+      "nombre": "La Palma",
+      "tipo": "rural",
+      "region": "Departamento de Chalatenango",
+      "descripcion": "Pueblo montañoso a 1400m famoso por artesanías (tablas de madera pintadas), clima fresco y acceso a senderos remotos. Punto de partida para explorar la montaña salvadoreña no turística.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde San Salvador: autobús 125 ($1,50) 2h a Chalatenango, luego local a La Palma ($0,75) 1h más. Transfer privado $30-35.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes simples: $10-15/noche",
+        "medio": "Posadas pequeñas: $25-40/noche",
+        "comfort": "Eco-lodges y casas rurales: $55-85/noche"
+      },
+      "que_hacer": [
+        "Talleres de artesanía y compra de tablas pintadas ($5-30 según tamaño)",
+        "Caminata a mirador Peñon Redondo (2h, gratis con guía local $15)",
+        "Visita a centro cultural con historia local (gratis/donativo)",
+        "Trekking a pueblos vecinos (gratis, recomendable guía)"
+      ],
+      "donde_comer": "Comedores típicos ($2-4), pupusas ($1-1,50), postres y café local ($1-3)",
+      "consejo_local": "Compra artesanía directamente con artesanos, mejor precio y apoya local. Clima frío; lleva suéter.",
+      "plan_b_lluvia": "Talleres artesanales cubiertos, tiendas",
+      "keywords": [
+        "La Palma",
+        "artesania",
+        "tablas pintadas",
+        "Chalatenango",
+        "montaña"
+      ]
+    },
+    {
+      "id": "isla-de-meanguerita",
+      "nombre": "Isla de Meanguera",
+      "tipo": "isla",
+      "region": "Departamento de La Unión",
+      "descripcion": "Pequeña isla con playas tranquilas, comunidades de pescadores y acceso a arrecifes de coral. Última frontera turística salvadoreña sin infraestructura masiva.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde San Salvador: autobús 303 a La Unión ($2,50) 3,5h, luego lancha desde puerto ($15-20 por persona, 45 min)",
+      "donde_dormir": {
+        "mochilero": "Hospedajes básicos en isla: $12-18/noche",
+        "medio": "Cabañas familiares: $30-50/noche",
+        "comfort": "Resorts eco: $70-110/noche (pocas opciones)"
+      },
+      "que_hacer": [
+        "Playas vírgenes y baños libres (gratis)",
+        "Snórquel en arrecifes ($15-25 tour guiado)",
+        "Pesca artesanal (tour $20-30)",
+        "Avistamiento de fauna marina estacional ($15-25)"
+      ],
+      "donde_comer": "Comedores de pescado fresco ($5-10), mariscos locales ($6-12), opciones limitadas",
+      "consejo_local": "Confirma horarios de lancha antes de ir; son irregulares. Lleva efectivo, no hay cajeros. Mejor visitarlo como excursión de día desde La Unión.",
+      "plan_b_lluvia": "Pocas opciones; mejor ir otro día",
+      "keywords": [
+        "Meanguera",
+        "isla",
+        "Union",
+        "playas",
+        "arrecife"
+      ]
+    }
+  ]
+}

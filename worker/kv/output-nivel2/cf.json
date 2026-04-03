@@ -1,0 +1,325 @@
+{
+  "pais": "República Centroafricana",
+  "codigo": "cf",
+  "alerta_seguridad_general": "La República Centroafricana tiene advertencias de viaje de múltiples gobiernos debido a conflicto armado, inestabilidad política y criminalidad. El turismo es extremadamente limitado. Los destinos listados son relevantes históricamente pero requieren evaluación cuidadosa de seguridad actual antes de viajar.",
+  "destinos": [
+    {
+      "id": "bangui",
+      "nombre": "Bangui",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital y principal puerta de entrada del país, ubicada a orillas del río Ubangui. Centro administrativo y comercial donde se concentran la mayoría de servicios turísticos. Punto de partida logístico para explorar el país, aunque la situación de seguridad requiere precaución constante.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Vuelo internacional al Aeropuerto Internacional de Bangui (BGF) desde París, Bruselas o países vecinos. Duración 4-6 horas. Costo 400-800 EUR. También accesible por carretera desde Camerún (8h) o República Democrática del Congo (12h) pero no recomendado para independientes.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicas, Barrio Nîmber: 20-35 EUR/noche",
+        "medio": "Hoteles de negocios, Barrio de la Gare: 50-80 EUR/noche",
+        "comfort": "Hotel Tropicana o similares: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Catedral de Bangui (gratis, entrada 2 EUR)",
+        "Museo de la República Centroafricana (5 EUR, cerrado frecuentemente)",
+        "Paseo por el río Ubangui al atardecer (gratis)",
+        "Mercado Centrale (gratis, compras locales)"
+      ],
+      "donde_comer": "Comida local: cassava, fufu, brochetas. Rango 3-8 EUR. Restaurantes en Barrio Banda y cerca de la Catedral. Evitar agua del grifo.",
+      "consejo_local": "Los taxis colectivos ('taxi-brousse') parten por la mañana temprano desde Gare Centrale. Llevar efectivo en EUR o USD, pocos cajeros funcionan. No caminar de noche en barrios periféricos.",
+      "plan_b_lluvia": "Mercados cubiertos, catedral, museos (si están abiertos). Descansar en hotel es la mejor opción.",
+      "alerta_seguridad": "Bangui ha experimentado episodios recurrentes de violencia. Solo visitar con tour operador de confianza o si tienes contactos locales. Evitar tras las 18:00.",
+      "keywords": [
+        "Bangui",
+        "capital CAR",
+        "Ubangui",
+        "Catedral",
+        "Gare Centrale",
+        "Banda",
+        "PK5"
+      ]
+    },
+    {
+      "id": "odzala-kokoua",
+      "nombre": "Parque Nacional Odzala-Kokoua",
+      "tipo": "naturaleza",
+      "region": "Nordeste",
+      "descripcion": "Una de las reservas de selva tropical más prístinas de África Central, hogar de gorilas occidentales, elefantes de bosque y fauna diversa. Ecosistema de humedales y bosque primario excepcional. Requiere acceso restringido y operadores especializados.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "enero a marzo, julio a agosto",
+      "como_llegar": "Desde Bangui: vuelo charter a Mboki (2h, 800-1200 EUR por persona en grupo) + viaje por río o carretera muy difícil (3-4h). Acceso generalmente solo a través de tours operados. No recomendado para viajeros completamente independientes.",
+      "donde_dormir": {
+        "mochilero": "No hay opción, solo campamentos de operador",
+        "medio": "Campamento Lango o Odzala Champalimaud Research Station (no turismo regular): 150-250 EUR/noche todo incluido",
+        "comfort": "Odzala Discovery Camps (reserva anticipada): 250-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo para observar gorilas (guía obligatorio, 150-200 EUR)",
+        "Recorridos en canoa por humedales (100 EUR)",
+        "Observación de fauna nocturna (gratis con tour)"
+      ],
+      "donde_comer": "Comida incluida en paquetes de operador. Si vas independiente: caza local, raíces, pescado. Muy limitado fuera de campamentos.",
+      "consejo_local": "Reservar con semanas de anticipación. La mayoría de viajeros llega a través de operadores del Congo (Brazzaville) que ofrecen paquetes transfronterizos. Llevar repelente de insectos premium.",
+      "plan_b_lluvia": "Observación de aves desde campamento, descanso, talleres comunitarios si disponibles",
+      "alerta_seguridad": "Zona remota con presencia ocasional de grupos armados. Solo visitar a través de operadores establecidos con protocolo de seguridad.",
+      "keywords": [
+        "Odzala-Kokoua",
+        "gorilas",
+        "selva tropical",
+        "Mboki",
+        "Sangha",
+        "elefantes africanos"
+      ]
+    },
+    {
+      "id": "bouar",
+      "nombre": "Bouar",
+      "tipo": "ciudad",
+      "region": "Noroeste",
+      "descripcion": "Segunda ciudad importante del país, ubicada en región de colinas y rocas graníticas. Centro comercial del noroeste y base para explorar la región de Nouragues. Menos tensa que Bangui pero acceso más difícil.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bangui: minibús compartido ('taxi-brousse') 6-8h, 25-35 EUR. Carretera aceptable en estación seca. Camión o furgoneta posible en estación lluviosa (9-12h). O vuelo charter si presupuesto permite.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 15-25 EUR/noche",
+        "medio": "Hoteles de paso (Bouar, Central): 35-50 EUR/noche",
+        "comfort": "Muy limitado, mejor opción es Bangui o guesthouses limpias"
+      },
+      "que_hacer": [
+        "Rocas de granito (gratis, senderismo local 10-20 EUR con guía)",
+        "Mercado local (gratis)",
+        "Cascadas cercanas de Bouar (15-30 EUR con guía)"
+      ],
+      "donde_comer": "Comida de mercado: arroz, sopa, carne. 2-5 EUR. Pocos restaurantes formales. Comida casera en guesthouses.",
+      "consejo_local": "Bouar es punto de paso más que destino en sí. Venir con guía o contacto local. Transporte es impredecible; partir muy temprano.",
+      "plan_b_lluvia": "Mercado cubierto, descansar, conocer pobladores locales",
+      "alerta_seguridad": "Zona más estable que otras regiones, pero aún requiere cautela. No viajar de noche entre ciudades.",
+      "keywords": [
+        "Bouar",
+        "noroeste CAR",
+        "rocas graníticas",
+        "colinas",
+        "Nouragues"
+      ]
+    },
+    {
+      "id": "bambari",
+      "nombre": "Bambari",
+      "tipo": "ciudad",
+      "region": "Este",
+      "descripcion": "Tercera ciudad, ubicada en región de sabana y bosque. Centro comercial del este y acceso a la región del Ouaka. Punto de tránsito hacia reservas de fauna del este. Menos infraestructura turística que Bangui.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bangui: minibús 8-10h, 30-40 EUR (depende de seguridad de ruta). Vuelo charter disponible pero costoso (600-1000 EUR). No viajar por carretera sin convoy seguro.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 15-25 EUR/noche",
+        "medio": "Hoteles básicos: 30-45 EUR/noche",
+        "comfort": "Muy limitado"
+      },
+      "que_hacer": [
+        "Mercado de Bambari (gratis)",
+        "Río Ouaka (paseos, gratis con guía local)",
+        "Exploración de sabana con guía local (20-40 EUR)"
+      ],
+      "donde_comer": "Comida local de mercado: yuca, pescado, carne. 2-5 EUR. Cocineros locales en guesthouses.",
+      "consejo_local": "Bambari es principalmente un punto de paso para otros destinos o para investigadores. El turismo independiente es raro; mejor venir con contacto local o operador.",
+      "plan_b_lluvia": "Permanecer en guesthouses, explorar mercados",
+      "alerta_seguridad": "Zona de conflicto activo en periodos recientes. Verificar situación actual antes de viajar. No recomendado para viajeros sin experiencia.",
+      "keywords": [
+        "Bambari",
+        "este CAR",
+        "Ouaka",
+        "sabana",
+        "comercio"
+      ]
+    },
+    {
+      "id": "bossembele",
+      "nombre": "Bossémelé",
+      "tipo": "rural",
+      "region": "Centro-Oeste",
+      "descripcion": "Pueblo pequeño en el río Ubangui, conocido como punto de partida para cruceros fluviales y exploración de la cuenca. Ofrece experiencia auténtica de vida ribereña. Accesible pero muy remoto.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bangui: minibús o coche alquilado 4-5h, 20-30 EUR. O tour fluvial desde Bangui (2-3 días, 150-300 EUR todo incluido).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses ribereñas: 15-20 EUR/noche",
+        "medio": "Campamentos fluviales simples: 40-60 EUR/noche",
+        "comfort": "Eco-lodges si disponibles: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Crucero en piragua por el Ubangui (60-100 EUR por día)",
+        "Pesca local (gratis o 10-20 EUR con guía)",
+        "Exploración de pueblos ribereños (gratis con guía local)"
+      ],
+      "donde_comer": "Pescado fresco del río, plátanos, yuca. 3-6 EUR. Cocineros comunitarios.",
+      "consejo_local": "Negociar con capitanes de piragua para cruceros; hay mucha flexibilidad en precios y duración. Llevar agua filtrada. La vida río arriba es lenta; permitir tiempo para acclimatarse.",
+      "plan_b_lluvia": "Permanencia forzada en pueblo (lo cual es la experiencia). Juegos comunitarios, conversación.",
+      "alerta_seguridad": "Zona más segura que ciudades, pero aislada. En caso de emergencia, acceso limitado.",
+      "keywords": [
+        "Bossémelé",
+        "Ubangui",
+        "río",
+        "crucero fluvial",
+        "pueblos ribereños"
+      ]
+    },
+    {
+      "id": "bangassou",
+      "nombre": "Bangassou",
+      "tipo": "ciudad",
+      "region": "Sudeste",
+      "descripcion": "Ciudad en región sudeste, cercana a frontera con República Democrática del Congo. Punto de acceso a reservas de fauna del sudeste (Manovo-Gunda St. Floris). Centro histórico con arquitectura colonial. Muy remota y difícil de acceder.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a febrero",
+      "como_llegar": "Desde Bangui: vuelo charter (2-3h, 800-1200 EUR) o carretera extremadamente difícil (18-24h, no recomendado). Acceso frecuentemente cortado por inseguridad.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses muy básicas: 15-25 EUR/noche",
+        "medio": "Hoteles de paso: 30-45 EUR/noche",
+        "comfort": "Muy limitado"
+      },
+      "que_hacer": [
+        "Arquitectura colonial (gratis, paseo)",
+        "Mercado local (gratis)",
+        "Safaris hacia Manovo (requiere operador, 100-200 EUR/día)"
+      ],
+      "donde_comer": "Carne de caza, pescado, raíces. 2-6 EUR. Muy limitado formalmente.",
+      "consejo_local": "Bangassou requiere planificación seria y verificación de seguridad. Mejor accedido vía DRC si es posible. Comunidad expatriada muy pequeña.",
+      "plan_b_lluvia": "Permanecer en pueblo, explorar historia colonial",
+      "alerta_seguridad": "Zona de alto riesgo. Conflicto armado persistente en región. Solo para viajeros experimentados con contactos locales sólidos.",
+      "keywords": [
+        "Bangassou",
+        "sudeste CAR",
+        "Manovo-Gunda",
+        "frontera RDC",
+        "safari"
+      ]
+    },
+    {
+      "id": "manovo-gunda-st-floris",
+      "nombre": "Parque Nacional Manovo-Gunda St. Floris",
+      "tipo": "naturaleza",
+      "region": "Nordeste",
+      "descripcion": "Uno de los parques más importantes de África Central, patrimonio mundial de la UNESCO. Sabana, bosque y sistemas fluviales con fauna diversa: leones, elefantes, búfalos, jirafas. Prácticamente no accesible turísticamente debido a inseguridad.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "enero a febrero",
+      "como_llegar": "Desde Bangassou: expedición con operador especializado. Acceso por carretera y a pie muy difícil (requiere vehículo 4x4 y equipo). No hay transporte regular. Estimado 15-20h en malas condiciones.",
+      "donde_dormir": {
+        "mochilero": "Campamentos de campo básicos (solo a través de operador): 50-80 EUR/noche",
+        "medio": "Campamentos de operador con equipamiento: 100-150 EUR/noche",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Game drives en vehículo 4x4 (obligatorio con guía, 150-250 EUR/día)",
+        "Caminatas de naturaleza (con guardaparques, 50-100 EUR)",
+        "Observación de aves (gratis con expedición)"
+      ],
+      "donde_comer": "Comidas campestres preparadas por equipo de operador. Incluido en paquete.",
+      "consejo_local": "Este parque es viable solo para naturalistas dedicados y fotógrafos de fauna. Requiere operador profesional, vehículo robusto y equipo de campamento. Reservar meses en avance.",
+      "plan_b_lluvia": "Campamento y observación de fauna desde vehículo cubierto. Lluvia intensifica observación nocturna.",
+      "alerta_seguridad": "Zona remota con presencia histórica de grupos armados. Solo accesible a través de operadores con seguridad. Verificar situación actual.",
+      "keywords": [
+        "Manovo-Gunda St. Floris",
+        "safari",
+        "leones",
+        "elefantes",
+        "UNESCO",
+        "sabana africana"
+      ]
+    },
+    {
+      "id": "kembe",
+      "nombre": "Kembe",
+      "tipo": "rural",
+      "region": "Centro",
+      "descripcion": "Pueblo pequeño en la cuenca del Ubangi, centro de comunidades indígenas y tradicionales. Acceso a exploración de vida local auténtica, artesanía y naturaleza. Muy poco visitado por turistas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bangui: combinación de minibús y piragua (6-8h total, 25-40 EUR). O charter de helicóptero si presupuesto permite. Acceso depende de estación.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje comunitario: 10-20 EUR/noche",
+        "medio": "Eco-lodges simples: 30-50 EUR/noche",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Inmersión cultural con comunidades locales (gratis con hospedador, o 20-30 EUR tour formal)",
+        "Artesanía tradicional: aprender a hacer cerámica o cestería (15-25 EUR)",
+        "Pesca y recolección tradicional (10-15 EUR con guía)"
+      ],
+      "donde_comer": "Comida local de subsistencia: yuca, pescado, insectos comestibles. 2-4 EUR. Vegetariano limitado.",
+      "consejo_local": "Kembe es viaje para viajeros lentos y interesados en etnografía. Paciencia y flexibilidad son esenciales. Traductores locales muy útiles.",
+      "plan_b_lluvia": "Actividades culturales interiores, conversación, aprendizaje de idiomas locales",
+      "alerta_seguridad": "Comunidad pequeña y estable. Riesgo bajo comparado con ciudades. Pero aislamiento significa emergencias médicas son graves.",
+      "keywords": [
+        "Kembe",
+        "comunidades indígenas",
+        "Ubangi",
+        "artesanía",
+        "vida tradicional"
+      ]
+    },
+    {
+      "id": "bangui-mercados",
+      "nombre": "Bangui - Mercados y Vida Urbana",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Experiencia concentrada en mercados tradicionales, vida callejera y comercio de Bangui. Mercado Centrale y barrios residenciales ofrecen inmersión en vida cotidiana centroafricana. Menos enfoque turístico, más antropología urbana.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Integrado en visita a Bangui. A pie desde centro; taxis para barrios lejanos (1-3 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Bangui cerca de mercados: 20-35 EUR/noche",
+        "medio": "Hoteles medianos: 50-80 EUR/noche",
+        "comfort": "Hoteles superiores: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado Centrale: productos locales, artesanía, tejidos (gratis paseo, 20-50 EUR compras)",
+        "Barrio Nîmber: vida residencial, pequeños negocios (gratis paseo con guía local)",
+        "Mercado de Pikine: ropa, zapatos, objetos (gratis paseo)",
+        "Comida callejera: probar specialidades locales (1-3 EUR cada)"
+      ],
+      "donde_comer": "Comida callejera en Mercado Centrale: mofongo, brochetas, sopa de cacahuete. 2-4 EUR. Restaurantes informales en barrios: 5-10 EUR.",
+      "consejo_local": "Los mercados son más seguros durante el día (8:00-17:00). Llevar poco dinero en efectivo, dejar joyas en hotel. Negociar precios es normal. Fotógrafos deben pedir permiso.",
+      "plan_b_lluvia": "Mercados cubiertos, cafés, guesthouses",
+      "alerta_seguridad": "Los mercados pueden ser congestionados; vigilar pertenencias. Barrios residenciales de día son seguros; no caminar de noche.",
+      "keywords": [
+        "Bangui mercados",
+        "Centrale",
+        "Pikine",
+        "vida urbana",
+        "compras",
+        "comida callejera"
+      ]
+    },
+    {
+      "id": "nola",
+      "nombre": "Nola",
+      "tipo": "rural",
+      "region": "Sudoeste",
+      "descripcion": "Pueblo fronterizo con Camerún, pequeño y muy poco visitado. Acceso a región forestal del sudoeste y comunidades indígenas pigmeas (Aka). Oportunidad rara para investigadores y viajeros antropológicamente interesados.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "enero a febrero",
+      "como_llegar": "Desde Bangui: minibús muy difícil (12-16h, 35-50 EUR, poco fiable). Mejor acceso desde Camerún (Batouri): 6-8h, 30-40 EUR. Carretera en mal estado.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje comunitario: 10-20 EUR/noche",
+        "medio": "Guesthouses locales: 20-35 EUR/noche",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Encuentro con comunidades Aka pigmeas (requiere guía cultural, 30-50 EUR)",
+        "Senderismo en bosque tropical (20-30 EUR con guía)",
+        "Mercado local (gratis paseo)"
+      ],
+      "donde_comer": "Comida local: caza menor, frutas silvestres, tubérculos. 2-4 EUR. Muy limitado formalmente.",
+      "consejo_local": "Nola requiere tiempo y sensibilidad cultural. Las comunidades Aka tienen contacto limitado con turistas; respetar privacidad. Viajes deben coordinarse a través de autoridades locales o anthropologists.",
+      "plan_b_lluvia": "Actividades interiores con comunidades, aprendizaje de idiomas locales",
+      "alerta_seguridad": "Zona remota pero generalmente estable. Aislamiento es riesgo principal. Verificar seguridad fronteriza con Camerún.",
+      "keywords": [
+        "Nola",
+        "pygmies Aka",
+        "sudoeste CAR",
+        "frontera Camerún",
+        "bosque tropical",
+        "antropología"
+      ]
+    }
+  ]
+}

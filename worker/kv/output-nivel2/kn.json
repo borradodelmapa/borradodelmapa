@@ -1,0 +1,339 @@
+{
+  "pais": "San Cristóbal y Nieves",
+  "codigo": "kn",
+  "destinos": [
+    {
+      "id": "basseterre",
+      "nombre": "Basseterre",
+      "tipo": "ciudad",
+      "region": "San Cristóbal, costa noroeste",
+      "descripcion": "Capital y puerto principal de San Cristóbal y Nieves. Centro administrativo y comercial donde llegan la mayoría de viajeros, con mercado local, arquitectura colonial y acceso a playas cercanas. Punto de partida lógico para explorar la isla.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Aeropuerto Internacional Robert L. Bradshaw (30 min en coche, 25-35 EUR), o ferry desde Nevis (45 min, 10 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en centro histórico: 40-60 EUR/noche",
+        "medio": "Hoteles 3 estrellas en Basseterre o playas cercanas: 80-120 EUR/noche",
+        "comfort": "Resorts en Frigate Bay: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasear por Independence Square (gratis)",
+        "Visitar mercado local The Circus (gratis, mejor martes-viernes)",
+        "Recorrer Brimstone Hill Fortress (15 EUR, 30 min en coche)",
+        "Playa Frigate Bay (gratis, 10 min)",
+        "Museo Nacional (8 EUR)"
+      ],
+      "donde_comer": "Comida criolla (pollo, pescado, arroz con frijoles) en puestos del mercado (3-8 EUR). Restaurantes en el muelle con vistas: 12-20 EUR. PalO, Carambola para comer local.",
+      "consejo_local": "El mercado cierra entre 13:00-14:00 h. Los sábados por la mañana hay vida de mercado auténtica pero con menos turistas entre semana.",
+      "plan_b_lluvia": "Museo Nacional, tiendas en Bay Road, ir a Frigate Bay si lluvia es puntual",
+      "keywords": [
+        "Basseterre",
+        "capital",
+        "The Circus",
+        "Independence Square",
+        "puerto",
+        "mercado"
+      ]
+    },
+    {
+      "id": "brimstone-hill",
+      "nombre": "Brimstone Hill Fortress",
+      "tipo": "histórico",
+      "region": "San Cristóbal, noroeste",
+      "descripcion": "Fortaleza del siglo XVII en lo alto de una colina con vistas panorámicas de toda la isla y el Caribe. Patrimonio de la UNESCO con bien conservadas estructuras de piedra volcánica. Imprescindible para entender la historia militar colonial.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Basseterre: coche de alquiler (45 min, 50 EUR/día) o tour compartido (30 EUR ida y vuelta)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en pueblos cercanos Capisterre o Sandy Point: 35-55 EUR/noche",
+        "medio": "Pequeños hoteles rurales: 70-100 EUR/noche",
+        "comfort": "Resorts en Frigate Bay o Basseterre (30 min): 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido por la fortaleza con audioguía (15 EUR, 2-3 horas)",
+        "Mirador de 360 grados (incluido en entrada)",
+        "Senderismo por el sitio arqueológico (gratis)",
+        "Museo en la fortaleza (incluido)",
+        "Fotografía al atardecer (gratis)"
+      ],
+      "donde_comer": "Cafetería pequeña en la fortaleza (sándwiches, bebidas 5-10 EUR). Mejor llevar picnic o bajar a pueblos cercanos. Road Town o Capisterre tienen comedores locales (8-15 EUR).",
+      "consejo_local": "Ve temprano en la mañana (8:00-9:00) para evitar grupos de crucero. La subida es empinada pero corta; lleva agua y sombrero.",
+      "plan_b_lluvia": "Visitar en primeras horas antes de que suban nubes, o reprogramar: el sitio pierde encanto sin vistas",
+      "keywords": [
+        "Brimstone Hill",
+        "fortaleza",
+        "UNESCO",
+        "vistas panoramicas",
+        "historia colonial",
+        "arqueologia"
+      ]
+    },
+    {
+      "id": "nevis-isla",
+      "nombre": "Isla de Nevis",
+      "tipo": "isla",
+      "region": "Nevis, territorio independiente de la federación",
+      "descripcion": "Isla hermana más pequeña y menos turística, con playas de arena negra y dorada, hot springs geotérmicos, y senderismo en volcán Nevis. Atmósfera más tranquila y auténtica que San Cristóbal.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Ferry desde Basseterre (45 min, 10 EUR) o vuelo interno (15 min, 80 EUR). Ferry llega a Charlestown.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Charlestown o Oualie Beach: 45-65 EUR/noche",
+        "medio": "Pequeños hoteles: 80-120 EUR/noche",
+        "comfort": "Beachfront resorts: 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Nevis Peak (5-6 horas ida y vuelta, guía recomendado 45 EUR)",
+        "Playas Oualie y Pinneys (gratis)",
+        "Hot springs geotérmicos en Oualie (gratis, agua tibia natural)",
+        "Ruinas de plantaciones de azúcar (gratis, historia)",
+        "Snorkel en arrecifes cerca de la costa (gratis o 25 EUR con equipo)"
+      ],
+      "donde_comer": "Mariscos frescos en Charlestown y Oualie Beach (10-18 EUR). Pollo guisado, arroz con frijoles. Sunshine's Beach Bar en Oualie sirve conch salad (12 EUR). Comida más local, menos cara que San Cristóbal.",
+      "consejo_local": "Alquila un 4x4 o moto si quieres flexibilidad; los taxis son caros. El volcán se puede subir pero requiere buen estado físico y un guía fiable.",
+      "plan_b_lluvia": "Visitar Charlestown, museos locales, o quedarse en playas protegidas del suroeste",
+      "keywords": [
+        "Nevis",
+        "isla hermana",
+        "Charlestown",
+        "Nevis Peak",
+        "Oualie Beach",
+        "hot springs",
+        "playas negras"
+      ]
+    },
+    {
+      "id": "frigate-bay",
+      "nombre": "Frigate Bay",
+      "tipo": "playa",
+      "region": "San Cristóbal, sureste",
+      "descripcion": "Complejo de playas de arena dorada con agua turquesa, separadas por una lengua de tierra que une laguna de agua dulce con el océano. Centro de vacaciones con infraestructura pero todavía accesible para independientes.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Basseterre: coche (10 min, 20-30 EUR) o taxi (15 EUR)",
+      "donde_dormir": {
+        "mochilero": "No hay opciones muy económicas; hostales en Basseterre más cercano",
+        "medio": "Condominios y hoteles 3 estrellas: 100-150 EUR/noche",
+        "comfort": "Resorts: 180-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Nadar y snorkel (gratis, arrecifes cercanos)",
+        "Paseo por la laguna (gratis)",
+        "Voleibol de playa (gratis si hay gente)",
+        "Sunset drinks en bares de playa (bebida 5-10 EUR)",
+        "Esquí acuático y parasailing (40-60 EUR)"
+      ],
+      "donde_comer": "Bares y restaurantes en la playa: comidas 12-25 EUR. Timothy Beach Resort tiene comedores accesibles. Comida más turística y cara que en Basseterre.",
+      "consejo_local": "La playa sur es más tranquila; la norte tiene más bares. Madruga para tener arena para ti solo.",
+      "plan_b_lluvia": "Las lluvias suelen ser cortas. Hay bares cubiertos. Alternativa: volver a Basseterre.",
+      "keywords": [
+        "Frigate Bay",
+        "playa",
+        "resort",
+        "laguna",
+        "snorkel",
+        "agua turquesa"
+      ]
+    },
+    {
+      "id": "black-rocks",
+      "nombre": "Black Rocks",
+      "tipo": "playa",
+      "region": "San Cristóbal, noroeste",
+      "descripcion": "Playas de arena negra volcánica con arrecifes para snorkel, menos turísticas que Frigate Bay. Parte de la costa noroccidental con vistas hacia Saba y San Eustaquio. Ideal para viajeros que buscan tranquilidad.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Basseterre: coche hacia Dieppe Bay (25 min, 40 EUR) o tour compartido (20-25 EUR)",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento en la playa; hospedarse en Basseterre o Dieppe Bay",
+        "medio": "Pequeños hoteles en Dieppe Bay: 70-100 EUR/noche",
+        "comfort": "Resorts en Basseterre cercanos: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecifes (gratis, equipo 15-20 EUR)",
+        "Fotografía de rocas volcánicas (gratis)",
+        "Paseo por la costa (gratis)",
+        "Buceo con operadores locales (80-120 EUR)",
+        "Observación de puesta de sol (gratis)"
+      ],
+      "donde_comer": "Pocos restaurantes en la playa misma. Dieppe Bay tiene comedores locales (8-15 EUR). Llevar comida es opción práctica.",
+      "consejo_local": "Las corrientes pueden ser fuertes. Consulta con lugareños antes de nadar. El snorkel es mejor con guía local que sabe dónde están los peces.",
+      "plan_b_lluvia": "Playas del oeste suelen ser más protegidas. O visitar sitios históricos en lugar de playa.",
+      "keywords": [
+        "Black Rocks",
+        "arena negra",
+        "snorkel",
+        "arrecife",
+        "volcanico",
+        "Dieppe Bay"
+      ]
+    },
+    {
+      "id": "charleston-nevis",
+      "nombre": "Charlestown (Nevis)",
+      "tipo": "ciudad",
+      "region": "Nevis, costa occidental",
+      "descripcion": "Capital de Nevis, puerto histórico con arquitectura colonial bien preservada, mercado tradicional y museo de Alexander Hamilton. Punto de entrada a Nevis con ambiente más local y menos comercializado que Basseterre.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Ferry desde Basseterre (45 min, 10 EUR) o vuelo interno (15 min, 80 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses cerca del puerto: 45-65 EUR/noche",
+        "medio": "Hoteles pequeños: 80-120 EUR/noche",
+        "comfort": "Beachfront o colonial hotels: 140-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por arquitectura colonial (gratis)",
+        "Museo de Alexander Hamilton (4 EUR)",
+        "Mercado local (gratis, mejor lunes-sábado)",
+        "Iglesia de St. Thomas (gratis)",
+        "Paseo por el puerto y muelle (gratis)"
+      ],
+      "donde_comer": "Comida criolla auténtica en comedores locales (8-12 EUR). Mariscos frescos en Sunshine's o cerca del muelle (12-18 EUR). Mercado tiene frutas y snacks locales (2-5 EUR).",
+      "consejo_local": "Charlestown es pequeña; se recorre en 1-2 horas. Es la puerta de entrada a Nevis, así que combina con playas o senderismo de la isla.",
+      "plan_b_lluvia": "Museos y tiendas, mercado cubierto. No afecta mucho a un viaje de día.",
+      "keywords": [
+        "Charlestown",
+        "Nevis",
+        "capital",
+        "puerto",
+        "mercado",
+        "Alexander Hamilton",
+        "colonial"
+      ]
+    },
+    {
+      "id": "southeast-peninsula",
+      "nombre": "Southeast Peninsula",
+      "tipo": "naturaleza",
+      "region": "San Cristóbal, sureste",
+      "descripcion": "Península árida con playas salvajes, lagunas de sal y una carretera pintorezca que cruza paisaje desértico. Zona menos visitada con playas vírgenes y ecosistemas únicos de manglares.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Basseterre: coche de alquiler (20 min, 50 EUR/día) o tour compartido (25-35 EUR)",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento en la península; hospedarse en Basseterre",
+        "medio": "Hoteles en Basseterre o Frigate Bay: 80-120 EUR/noche",
+        "comfort": "Resorts: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido en coche por la carretera escénica (gratis, gasolina)",
+        "Playas vírgenes como Banana Bay (gratis)",
+        "Lagunas de sal (gratis, fotografía)",
+        "Senderismo por paisaje desértico (gratis)",
+        "Avistamiento de aves y vida silvestre (gratis)"
+      ],
+      "donde_comer": "No hay restaurantes en la península. Llevar comida y agua es esencial. Alternativa: comer en Basseterre antes o después.",
+      "consejo_local": "La carretera está bien pero es de única vía en partes. Necesitas coche propio o tour; taxis cobran mucho. Lleva mucha agua y protector solar: hay poco árbol.",
+      "plan_b_lluvia": "La lluvia es rara aquí pero cuando llega, la carretera puede tener charcos. Mejor evitar con lluvia fuerte.",
+      "keywords": [
+        "Southeast Peninsula",
+        "playas salvajes",
+        "lagunas de sal",
+        "paisaje arido",
+        "Banana Bay",
+        "carretera esconica"
+      ]
+    },
+    {
+      "id": "sandy-point-town",
+      "nombre": "Sandy Point Town",
+      "tipo": "rural",
+      "region": "San Cristóbal, suroeste",
+      "descripcion": "Pueblo pesquero auténtico en la costa suroeste, poco turístico, con playas tranquilas y vida local genuina. Parada recomendada para viajeros que quieren salir de circuitos turísticos estándar.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Basseterre: coche (35 min, 50 EUR/día) o taxi (25-30 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses muy básicas: 35-50 EUR/noche",
+        "medio": "Pequeños hoteles: 60-90 EUR/noche",
+        "comfort": "Hostales o casas de alquiler: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por pueblo y muelle (gratis)",
+        "Playas locales (gratis)",
+        "Observar pescadores locales (gratis)",
+        "Comer con pescadores (comida 8-12 EUR)",
+        "Atardecer en la costa (gratis)"
+      ],
+      "donde_comer": "Comedores y small restaurants con comida casera (8-15 EUR). Pescado fresco del día. Mercado local con frutas (2-5 EUR). Ambiente muy local, precios bajos.",
+      "consejo_local": "Es un pueblo donde se vive del turismo limitado y pesca. Los lugareños son amables pero reservados. Respeta ritmo local. No hay mucho que hacer pero eso es el atractivo.",
+      "plan_b_lluvia": "Refugiarse en guesthouses o mercado cubierto. Buen punto de parada entre Basseterre y Brimstone Hill.",
+      "keywords": [
+        "Sandy Point",
+        "pueblo pesquero",
+        "costa suroeste",
+        "local",
+        "autentico",
+        "tranquilo"
+      ]
+    },
+    {
+      "id": "old-road-town",
+      "nombre": "Old Road Town",
+      "tipo": "histórico",
+      "region": "San Cristóbal, costa occidental",
+      "descripcion": "Pueblo histórico donde desembarcó Colón en 1493 y se asentaron los primeros colonos. Arquitectura colonial y monumento histórico en sitio arqueológico. Menos turístico que Basseterre.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Basseterre: coche (15 min, 30 EUR) o taxi (12 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 40-60 EUR/noche",
+        "medio": "Pequeños hoteles: 70-100 EUR/noche",
+        "comfort": "Resort en Basseterre cercano: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Sitio arqueológico Columbus Landing (gratis o 2-3 EUR)",
+        "Paseo por pueblos históricos (gratis)",
+        "Iglesia local (gratis)",
+        "Playa Old Road (gratis)",
+        "Fotografía de arquitectura colonial (gratis)"
+      ],
+      "donde_comer": "Comedores locales (8-14 EUR). Comida casera criolla. Pocos turistas, precios más bajos. Llevar dinero en efectivo: pocos aceptan tarjeta.",
+      "consejo_local": "Old Road no es un destino de actividades sino de historia y autenticidad. Se recorre rápido pero es buena parada en ruta a otros lugares. Habla con lugareños: tienen historias locales fascinantes.",
+      "plan_b_lluvia": "Visitas rápidas cubierto. No es un destino que dependa del clima.",
+      "keywords": [
+        "Old Road",
+        "Columbus",
+        "historico",
+        "colonial",
+        "arqueologia",
+        "primer asentamiento"
+      ]
+    },
+    {
+      "id": "cayon-excursion-anguila",
+      "nombre": "Excursión a Anguila",
+      "tipo": "isla",
+      "region": "Caribeño, cercano a San Cristóbal",
+      "descripcion": "Isla vecina con algunas de las playas más bonitas del Caribe (Shoal Bay, Meads Bay). Día de excursión recomendado para viajeros con más tiempo e interés en playas vírgenes de lujo asequible.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Ferry desde Basseterre (25 min, 17 EUR) o desde Nevis. Conexión desde San Cristóbal con parada en Nevis (total 1.5 horas, 25 EUR)",
+      "excursion_desde": true,
+      "donde_dormir": {
+        "mochilero": "Guesthouses en The Valley: 60-85 EUR/noche",
+        "medio": "Hoteles pequeños: 100-150 EUR/noche",
+        "comfort": "Beach resorts: 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Shoal Bay (gratis, agua clara)",
+        "Playa Meads Bay (gratis, arena fina)",
+        "Snorkel (equipo 20 EUR)",
+        "Paseo por The Valley (gratis)",
+        "Restaurantes en playas (16-30 EUR)"
+      ],
+      "donde_comer": "Anguila es más cara que San Cristóbal. Restaurantes de playa: 18-35 EUR. Small local restaurants: 12-20 EUR. Comida de mercado más económica.",
+      "consejo_local": "Los horarios de ferry pueden cambiar. Confirma antes de ir. Es mejor hacer esto como excursión de día que dormir allá si presupuesto es limitado. Las playas justifican la visita.",
+      "plan_b_lluvia": "Ferry puede no funcionar con mal tiempo. Ten plan B en San Cristóbal.",
+      "keywords": [
+        "Anguila",
+        "excursion",
+        "Shoal Bay",
+        "Meads Bay",
+        "ferry",
+        "playas Caribe"
+      ]
+    }
+  ]
+}

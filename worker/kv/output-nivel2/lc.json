@@ -1,0 +1,336 @@
+{
+  "pais": "Santa Lucía",
+  "codigo": "lc",
+  "destinos": [
+    {
+      "id": "pitons-soufriere",
+      "nombre": "Pitons de Soufrière",
+      "tipo": "naturaleza",
+      "region": "Soufrière, suroeste",
+      "descripcion": "Dos picos volcánicos declarados Patrimonio de la UNESCO que dominan la costa. Ideal para senderismo, snorkel en aguas termales y vistas panorámicas del Caribe. Es el ícono más reconocible de Santa Lucía y punto de partida para explorar la zona volcánica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "desde Castries (capital): autobús o taxi compartido 45-60 min, 15-25 EUR; o tour privado 50-80 EUR",
+      "donde_dormir": {
+        "mochilero": "guesthouses en Soufrière: 35-55 EUR/noche",
+        "medio": "pequeños hoteles boutique: 70-120 EUR/noche",
+        "comfort": "resorts con vistas a los Pitons: 150-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a Gros Piton (2-3 horas, 10 EUR entrada)",
+        "Baños termales de Diamond Falls (8 EUR entrada + guía 25 EUR)",
+        "Snorkel o buceo en Soufrière Bay (40-60 EUR tour)",
+        "Recorrer el pueblo de pescadores (gratis)"
+      ],
+      "donde_comer": "Pescado a la parrilla, curry de pulpo, provisiones locales (platos 8-15 EUR). Comer en la costa o en puestos locales de Soufrière town.",
+      "consejo_local": "Contrata un guía local para los Pitons: conocen rutas alternas menos concurridas y evitas los grupos de cruceros. Madruga para subir antes del calor.",
+      "plan_b_lluvia": "Visitar el parque arqueológico de Pigeon Island o explorar el volcán de lodo (Sulphur Springs) en la misma zona.",
+      "keywords": [
+        "Pitons",
+        "Gros Piton",
+        "Petit Piton",
+        "Soufrière",
+        "volcán",
+        "UNESCO",
+        "picos gemelos"
+      ]
+    },
+    {
+      "id": "marigot-bay",
+      "nombre": "Marigot Bay",
+      "tipo": "playa",
+      "region": "Costa oeste central",
+      "descripcion": "Bahía protegida con playa de arena dorada rodeada de vegetación tropical y colinas. Punto de partida ideal para explorar el sur y punto de anclaje histórico para navegantes. Menos abarrotada que otras playas del norte.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "desde Castries: autobús 30-40 min (4-6 EUR) o taxi 20-30 EUR; está entre la capital y Soufrière",
+      "donde_dormir": {
+        "mochilero": "hostales y guesthouses cercanos: 40-60 EUR/noche",
+        "medio": "pequeños hoteles frente a playa: 80-140 EUR/noche",
+        "comfort": "resorts con marina: 160-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en la bahía y snorkel (gratis desde la playa)",
+        "Alquiler de kayak o tabla de paddle (20-35 EUR/hora)",
+        "Tour en barco a Pigeon Island (incluido en algunos tours)",
+        "Paseo al atardecer alrededor de la bahía (gratis)"
+      ],
+      "donde_comer": "Mariscos frescos, roti, ensaladas tropicales (10-20 EUR). Restaurantes frente a playa con precios algo elevados; mejor buscar puestos locales en el pueblo.",
+      "consejo_local": "Llega temprano para tener la bahía más tranquila. Los yates anclados aquí son piezas de la película 'Doctor No'; los locales conocen todas las historias.",
+      "plan_b_lluvia": "Visitar las tiendas y restaurantes cubiertos alrededor de la bahía o ir a Pigeon Island (actividad interior en la marina).",
+      "keywords": [
+        "Marigot",
+        "bahía",
+        "playa oeste",
+        "marina",
+        "navegación",
+        "protected bay"
+      ]
+    },
+    {
+      "id": "pigeon-island",
+      "nombre": "Pigeon Island",
+      "tipo": "isla",
+      "region": "Gros Islet, norte",
+      "descripcion": "Isla histórica convertida en parque nacional, conectada por un istmo a tierra firme. Combina playas tranquilas, restos arqueológicos de una fortaleza francesa y vistas panorámicas. Base perfecta para explorar el norte de la isla.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "desde Castries: autobús a Gros Islet (40 min, 4 EUR) + acceso gratis a Pigeon Island (incluido en el parque); o taxi 30-40 EUR",
+      "donde_dormir": {
+        "mochilero": "guesthouses en Gros Islet: 35-50 EUR/noche",
+        "medio": "hoteles pequeños: 65-110 EUR/noche",
+        "comfort": "resorts con playa propia: 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Acceso al Parque Nacional de Pigeon Island (gratis con entrada general 5 EUR)",
+        "Senderismo a la fortaleza francesa (1 hora, vistas 360°)",
+        "Playas de arena blanca y snorkel (gratis)",
+        "Museo de historia pirata y colonial (incluido en entrada)"
+      ],
+      "donde_comer": "Pescado frito, dumplings, bebidas locales (8-18 EUR). Hay pequeño snack-bar en el parque; mejor llevar provisiones desde Gros Islet.",
+      "consejo_local": "Ve un viernes por la noche a Gros Islet town (Fish Fry): es el auténtico punto de encuentro local con música, comida de calle y ambiente. No es turístico, es real.",
+      "plan_b_lluvia": "Visitar el museo de la isla (cubierto) o ir al pueblo de Gros Islet para explorar tiendas y mercado local.",
+      "keywords": [
+        "Pigeon Island",
+        "parque nacional",
+        "fortaleza",
+        "isla artificial",
+        "Gros Islet",
+        "Fish Fry",
+        "playas norte"
+      ]
+    },
+    {
+      "id": "morne-fortune",
+      "nombre": "Morne Fortune",
+      "tipo": "histórico",
+      "region": "Castries, sur inmediato",
+      "descripcion": "Colina histórica con monumentos de batallas franco-británicas, mirador con vistas de 360° a Castries y la costa. Importante para entender la historia contada de la isla y punto fotográfico clave. Acceso fácil desde la capital.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "desde Castries centro: taxi 5-10 min (8-12 EUR) o a pie desde algunos barrios 20-30 min",
+      "donde_dormir": {
+        "mochilero": "quedarse en Castries, 40-60 EUR/noche",
+        "medio": "pequeños hoteles en la colina o Castries: 70-120 EUR/noche",
+        "comfort": "vistas desde hoteles en Castries: 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Mirador de 360° (gratis)",
+        "Visita a monumentos históricos (gratis, señalización clara)",
+        "Foto al atardecer (gratis)",
+        "Recorrido a pie por los jardines de la colina (gratis)"
+      ],
+      "donde_comer": "Comer en Castries antes de subir; opciones limitadas en la colina. Pequeño café/snack bar en la cima (5-10 EUR).",
+      "consejo_local": "Sube al atardecer (después de las 16:00) para fotos de oro y evitar el calor del mediodía. La vista nocturna de Castries iluminada vale la pena.",
+      "plan_b_lluvia": "Las vistas se pierden con nubes; mejor visitar museos en Castries en su lugar.",
+      "keywords": [
+        "Morne Fortune",
+        "mirador",
+        "Castries",
+        "vistas",
+        "batallas",
+        "monumento",
+        "histórico"
+      ]
+    },
+    {
+      "id": "rodney-bay",
+      "nombre": "Rodney Bay",
+      "tipo": "playa",
+      "region": "Gros Islet, norte",
+      "descripcion": "Playa de 1 km con arena blanca y aguas calmadas, ideal para familias y principiantes. Marina deportiva y vida nocturna. Principal concentración de infraestructura turística de la isla, pero menos abarrotada que destinos del Caribe norte.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "desde Castries: autobús directo a Rodney Bay (50 min, 4 EUR) o taxi compartido (30-40 EUR)",
+      "donde_dormir": {
+        "mochilero": "hostales y guesthouses: 45-70 EUR/noche",
+        "medio": "hoteles 3* frente a playa: 90-150 EUR/noche",
+        "comfort": "resorts todo incluido: 180-320 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño y snorkel en la bahía (gratis)",
+        "Alquiler de tabla de paddle o kayak (25-40 EUR/hora)",
+        "Paseo por la marina y tiendas (gratis)",
+        "Watersports (parasailing 50 EUR, jet ski 80 EUR/30 min)"
+      ],
+      "donde_comer": "Pizzas, mariscos, comida internacional (12-25 EUR en restaurantes). Mercado de comida local al atardecer con precios más bajos (7-12 EUR).",
+      "consejo_local": "Los jueves hay 'jump-up' (fiesta callejera) en Rodney Bay Village: música, comida, cerveza, ambiente caótico y divertido. Evita viernes y sábados si buscas playa tranquila.",
+      "plan_b_lluvia": "Rodney Bay Village tiene tiendas, galerías y bares cubiertos. O visitar museos en Castries.",
+      "keywords": [
+        "Rodney Bay",
+        "playa norte",
+        "marina",
+        "Gros Islet",
+        "watersports",
+        "vida nocturna",
+        "arena blanca"
+      ]
+    },
+    {
+      "id": "diamante-falls",
+      "nombre": "Diamond Falls Botanical Garden",
+      "tipo": "naturaleza",
+      "region": "Soufrière, suroeste",
+      "descripcion": "Jardín botánico tropical con cascada teñida de minerales, baños termales minerales y piscina de agua caliente natural. Fusiona naturaleza volcánica con flora caribeña. Parada complementaria ideal para un día en Soufrière.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "desde Soufrière town: a pie 15 min (gratis) o taxi 5 EUR; incluido en tours de Soufrière (25-40 EUR por tour)",
+      "donde_dormir": {
+        "mochilero": "quedarse en Soufrière: 35-55 EUR/noche",
+        "medio": "hoteles en Soufrière: 70-120 EUR/noche",
+        "comfort": "resorts temáticos: 140-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Entrada al jardín y cascada (8 EUR entrada)",
+        "Baño en piscinas termales mineras (incluido en entrada)",
+        "Paseo por flora tropical etiquetada (incluido)",
+        "Fotos con la cascada de aguas minerales (gratis)"
+      ],
+      "donde_comer": "Pequeño café en la entrada con jugos y bocadillos (5-8 EUR). Mejor comer en Soufrière town antes de entrar.",
+      "consejo_local": "Las aguas termales de Diamond Falls salen a 37-40°C; perfectas después de caminar. Lleva traje de baño bajo la ropa para cambiar rápido.",
+      "plan_b_lluvia": "Los jardines están bien drenados. La cascada con lluvia es aún más espectacular (mayor caudal). Visita sin problema.",
+      "keywords": [
+        "Diamond Falls",
+        "cascada",
+        "jardín botánico",
+        "aguas termales",
+        "Soufrière",
+        "minerales",
+        "sulfúrico"
+      ]
+    },
+    {
+      "id": "vieques-bay-diving",
+      "nombre": "Anse Chastanet & Anse des Pitons",
+      "tipo": "playa",
+      "region": "Soufrière, suroeste",
+      "descripcion": "Playas gemelas con arena volcánica negra, arrecife de coral cercano a tierra y buceo excepcional sin necesidad de bote. Las mejores playas para snorkel en aguas poco profundas y acceso a centenares de especies de peces.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "desde Soufrière: taxi 10-15 EUR o a pie desde el pueblo 20 min; desde Castries taxi compartido + conexión local",
+      "donde_dormir": {
+        "mochilero": "guesthouses básicas cercanas: 40-65 EUR/noche",
+        "medio": "pequeños hoteles: 80-140 EUR/noche",
+        "comfort": "Anse Chastanet Resort: 200-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel desde la playa (equipo alquiler 15-25 EUR)",
+        "Buceo PADI certificado (80-120 EUR por inmersión)",
+        "Paseo entre las dos playas (gratis)",
+        "Observación de tortugas marinas (estacional, gratis)"
+      ],
+      "donde_comer": "Pequeños restaurantes en la playa con pescado fresco, ensaladas (10-18 EUR). El resort tiene opciones más caras (20-35 EUR).",
+      "consejo_local": "El snorkel desde la orilla es tan bueno como en Belice o Gran Cayman, pero sin multitudes. Los corales están vivos porque el área está protegida.",
+      "plan_b_lluvia": "Las playas se inundan con lluvia fuerte. En mal tiempo, ir a buceo con escuela local (el agua suele estar clara bajo la superficie).",
+      "keywords": [
+        "Anse Chastanet",
+        "Anse des Pitons",
+        "arena negra volcánica",
+        "snorkel",
+        "buceo",
+        "arrecife",
+        "tortugas"
+      ]
+    },
+    {
+      "id": "des-cartier-rainforest",
+      "nombre": "Rainforest Trail (Des Cartier)",
+      "tipo": "naturaleza",
+      "region": "Interior central",
+      "descripcion": "Sendero de trekking a través de selva tropical intacta con cascadas, piscinas naturales y fauna endémica. Camino menos transitado que captura la verdadera Santa Lucía selvática lejos de playas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "desde Castries: taxi con guía local al punto de salida (40-60 EUR); o contratar tour con agencia (70-100 EUR incluye guía y transporte)",
+      "donde_dormir": {
+        "mochilero": "excursión de día desde Castries o Pigeon Island",
+        "medio": "quedarse en Castries o pueblos cercanos: 70-120 EUR/noche",
+        "comfort": "hoteles base en Castries: 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo (2-4 horas según ruta, gratis entrada pero necesita guía 30-50 EUR)",
+        "Piscinas naturales y cascadas (gratis)",
+        "Observación de aves y fauna tropical (binoculares recomendados)",
+        "Fotografía de plantas endémicas (gratis)"
+      ],
+      "donde_comer": "Llevar agua y snacks; algunos guías incluyen almuerzo de campismo. Comer en Castries antes de partir.",
+      "consejo_local": "Contrata un guía que sea naturalista certificado (no solo 'conocedor local'). La diferencia entre ver un árbol y aprender sobre 30 especies es enorme.",
+      "plan_b_lluvia": "La lluvia hace los senderos resbaladizos. Mejor no ir si se espera lluvia fuerte. Los guías cancelan por seguridad.",
+      "keywords": [
+        "Des Cartier",
+        "rainforest",
+        "selva tropical",
+        "cascadas",
+        "trekking",
+        "senderismo interior",
+        "fauna"
+      ]
+    },
+    {
+      "id": "castries-mercado",
+      "nombre": "Castries (Centro Histórico & Mercado)",
+      "tipo": "ciudad",
+      "region": "Noroeste (capital)",
+      "descripcion": "Capital colorida con mercados vibrantes, arquitectura colonial y puerta de entrada obligatoria. El mercado es el corazón donde la población local se reúne: frutas, especias, artesanías. Centro logístico para tours y transporte.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "punto de entrada principal (aeropuerto Hewanorra a 1 hora en bus/taxi 25-40 EUR; aeropuerto George F.L. Charles a 15 min taxi 8-15 EUR)",
+      "donde_dormir": {
+        "mochilero": "hostales en el centro o Morne Fortune: 40-65 EUR/noche",
+        "medio": "hoteles 3* en el centro: 80-140 EUR/noche",
+        "comfort": "resorts en Vigie Beach o alrededores: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado principal (gratis, compra/exploración)",
+        "Catedral de Castries (gratis entrada)",
+        "Morne Fortune y vistas (ver entrada aparte, 5-10 EUR)",
+        "Paseo en Pigeon Island Park (cercano, incluido)"
+      ],
+      "donde_comer": "Mercado con comida local barata (6-10 EUR): rotis, curry, pescado. Restaurantes en el centro (15-25 EUR). Evita comer solos en calles poco iluminadas de noche.",
+      "consejo_local": "El mercado es mejor de martes a viernes por la mañana (6:00-11:00). Domingos está cerrado. Los vendedores hablan patois; aprende saludos básicos.",
+      "plan_b_lluvia": "Muchas tiendas cubiertas en el mercado. Museos cerrados en lluvia fuerte. Mejor día para paseos logísticos (hacer tours, bancos, cambio).",
+      "keywords": [
+        "Castries",
+        "capital",
+        "mercado",
+        "centro histórico",
+        "catedral",
+        "puerto",
+        "entrada"
+      ]
+    },
+    {
+      "id": "savannes-bay",
+      "nombre": "Savannes Bay & Bréa",
+      "tipo": "playa",
+      "region": "Sur (Choiseul)",
+      "descripcion": "Playa rural poco turística con arena dorada, vegetación costera virgen y pueblo de pescadores auténtico. Acceso a nidadas de tortugas marinas (estacional). Destino para viajeros que buscan lo menos 'turístico' posible.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "marzo a octubre (anidación de tortugas); diciembre a abril (clima general)",
+      "como_llegar": "desde Castries: autobús a Choiseul (1.5-2 horas, 6-8 EUR) + taxi local a Savannes Bay (15-25 EUR) o combinado taxi/moto (30-50 EUR)",
+      "donde_dormir": {
+        "mochilero": "guesthouses muy básicas en Choiseul: 30-50 EUR/noche",
+        "medio": "pequeño hotel en Choiseul o Bréa: 60-100 EUR/noche",
+        "comfort": "opciones limitadas; mejor opción desde Vieux Fort a 30 min: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en playa virgen (gratis)",
+        "Observación de tortugas anidando (noche, guía 40-60 EUR, estacional)",
+        "Explorar pueblo de pescadores (gratis)",
+        "Caminata costera a Bréa (gratis, 30 min)"
+      ],
+      "donde_comer": "Muy limitado; mejor negociar con locales para cocinar pescado fresco (15-20 EUR). Llevar provisiones desde Castries es recomendable.",
+      "consejo_local": "Este es el Santa Lucía que los turistas no ven. No hay wifi, no hay mucho comercio, pero los lugareños son amables si muestras respeto. Las mujeres que anidan tortugas guían tours nocturnos genuinamente (no es un espectáculo).",
+      "plan_b_lluvia": "Playa parcialmente protegida por acantilados. El pueblo tiene espacios cubiertos. Día perfecto para conocer a locales y jugar dominó en la tienda de Ron.",
+      "keywords": [
+        "Savannes Bay",
+        "Bréa",
+        "Choiseul",
+        "tortuga marina",
+        "playa rural",
+        "auténtico",
+        "pescadores",
+        "sur"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,336 @@
+{
+  "pais": "Mongolia",
+  "codigo": "mn",
+  "destinos": [
+    {
+      "id": "ulan-bator",
+      "nombre": "Ulán Bator",
+      "tipo": "ciudad",
+      "region": "Centro (Töv)",
+      "descripcion": "Capital y principal puerta de entrada a Mongolia, mezcla de arquitectura soviética, templos budistas y modernidad. Centro cultural y comercial donde se concentran museos, mercados y vida nocturna. Base obligatoria para organizar excursiones al desierto y montañas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Aeropuerto Internacional de Chinggis Khaan (45 km): taxi/autobús 1h, 15-25 EUR",
+      "donde_dormir": {
+        "mochilero": "Dorm en hostel (Peace Avenue, Sukhbaatar): 12-18 EUR/noche",
+        "medio": "Hotel 3 estrellas (centro): 40-60 EUR/noche",
+        "comfort": "Hotel 4+ estrellas (Peace Avenue): 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Monasterio de Ganden (gratis, entrada 5 EUR)",
+        "Museo Nacional de Mongolia (8 EUR, abre 10h)",
+        "Mercado Naran Tuul - comprar souvenirs y ropa (gratis)",
+        "Parque Bogd Khan (entrada 3 EUR, senderismo gratis)",
+        "Plaza de Sukhbaatar y Parlamento (gratis)",
+        "Templo de Choijin Lama (10 EUR)"
+      ],
+      "donde_comer": "Khorkhog (carne en piedra caliente), buuz (empanadillas), tsuivan (fideos). Mercados callejeros 2-4 EUR. Restaurantes locales Peace Avenue 5-10 EUR. Cadenas internacionales 12-20 EUR.",
+      "consejo_local": "Ve al Naran Tuul al anochecer, está lleno de gente local. Evita taxis amarillos sin taxímetro: usa Yandex Taxi app.",
+      "plan_b_lluvia": "Museos de historia natural, Museo de las Artes, cafés en Peace Avenue, compras en centro comercial Peace Center",
+      "keywords": [
+        "Ulan Bator",
+        "Ulaanbaatar",
+        "UB",
+        "Peace Avenue",
+        "Sukhbaatar",
+        "capital Mongolia",
+        "Ganden"
+      ]
+    },
+    {
+      "id": "gobi-desierto",
+      "nombre": "Desierto del Gobi",
+      "tipo": "desierto",
+      "region": "Sur (Ömnögovi, Dundgovi)",
+      "descripcion": "Uno de los desiertos más accesibles de Asia, con formaciones rocosas espectaculares, camellos de Bactria y yacimientos paleontológicos. Ideal para safari en 4x4, acampar bajo estrellas y experimentar vida nómada. Punto de partida principal: Dalanzadgad.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Ulán Bator a Dalanzadgad: vuelo interno 1h (80-120 EUR) o jeep compartido 16h (30-40 EUR)",
+      "donde_dormir": {
+        "mochilero": "Ger camp básico (Dalanzadgad): 20-30 EUR/noche",
+        "medio": "Ger camp con baño privado (Three Camel Lodge estándar): 50-80 EUR/noche",
+        "comfort": "Ger camp de lujo (Three Camel Lodge suite, Gobi Mirage): 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en 4x4 por Khongoryn Els - dunas de arena (gratis con ger camp)",
+        "Senderismo a Yolyn Am - garganta con hielo permanente (5 EUR entrada)",
+        "Excursión a camellos de Bactria (10-15 EUR)",
+        "Observación de estrellas nocturna (gratis)",
+        "Visita a Flaming Cliffs - yacimiento de dinosaurios (15 EUR entrada)"
+      ],
+      "donde_comer": "Mutton stew, airag (leche de yegua fermentada), leche con té. Ger camps incluyen comida. Dalanzadgad: restaurantes 8-12 EUR. Carne de camello en mercado local 6-10 EUR.",
+      "consejo_local": "Negocia con conductores de jeep en Dalanzadgad antes de unirte a grupo: es 30% más barato que reservar desde UB. Lleva protector solar y gafas de sol sin excepción.",
+      "plan_b_lluvia": "Permanece en ger camp con actividades indoor (cocinar con nómadas, aprender sobre cultura), visita mercado de Dalanzadgad cubierto",
+      "keywords": [
+        "Gobi",
+        "Desierto Gobi",
+        "Dalanzadgad",
+        "Khongoryn Els",
+        "Yolyn Am",
+        "Flaming Cliffs",
+        "dinosaurios"
+      ]
+    },
+    {
+      "id": "terelj",
+      "nombre": "Parque Nacional de Terelj",
+      "tipo": "naturaleza",
+      "region": "Norte (Töv)",
+      "descripcion": "Montañas escénicas con bosques de pinos, ríos cristalinos y formaciones rocosas icónicas a 90 km de Ulán Bator. Destino accesible para senderismo, equitación y vida en ger. Menos turístico que el Gobi pero igual de espectacular.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Ulán Bator en jeep compartido 2h (15-25 EUR) o tour organizado incluido (40-60 EUR)",
+      "donde_dormir": {
+        "mochilero": "Ger camp básico (Terelj Eco Camp): 25-35 EUR/noche",
+        "medio": "Ger camp con comodidades (Peace and Quiet Ger Camp): 50-70 EUR/noche",
+        "comfort": "Ger camp boutique (Terelj Wellness Camp): 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a Turtle Rock - formación icónica (gratis)",
+        "Monasterio de Arshan - templo budista en montaña (5 EUR entrada)",
+        "Equitación por valles (20 EUR por 4h)",
+        "Escalada en rocas (con guía 30 EUR)",
+        "Baño en aguas termales de Arshan (gratis acceso natural)"
+      ],
+      "donde_comer": "Comida incluida en ger camps: cordero asado, sopa, verduras. Restaurantes locales cerca parque 6-10 EUR. Picnic en montaña organizado por camps.",
+      "consejo_local": "Camina temprano por la mañana para ver menos otros turistas y avistar fauna. El monasterio de Arshan requiere respeto: cubre los hombros y rodillas.",
+      "plan_b_lluvia": "Permanece en ger camp disfrutando de vistas lluviosas (son hermosas), juegos de mesa, conversación con nómadas, lectura en ambiente natural",
+      "keywords": [
+        "Terelj",
+        "Turtle Rock",
+        "Arshan",
+        "parque nacional",
+        "montañas Mongolia",
+        "senderismo Terelj"
+      ]
+    },
+    {
+      "id": "lago-khuvsgul",
+      "nombre": "Lago Khövsgöl",
+      "tipo": "naturaleza",
+      "region": "Norte (Khövsgöl)",
+      "descripcion": "Lago alpino pristino de agua cristalina rodeado de bosques de taiga, hogar de renos y pueblos nómadas. Segundo lago más profundo de Asia, ideal para trekking, canotaje y sumergirse en naturaleza salvaje. Requiere más tiempo pero es espectacular.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "julio a agosto",
+      "como_llegar": "Desde Ulán Bator a Mörön: vuelo 1.5h (100-150 EUR) o jeep 12h (25-35 EUR); luego jeep/autobús a Khövsgöl 2h (15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Ger camp simple (Khövsgöl Sunrise Camp): 20-30 EUR/noche",
+        "medio": "Ger camp con servicios (Khövsgöl Nature Lodge): 45-70 EUR/noche",
+        "comfort": "Lodge de madera (Khövsgöl Eco Resort): 90-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking alrededor del lago (8-10 días completo, 2-3 días parcial - gratis)",
+        "Canotaje o kayak (30 EUR por día)",
+        "Excursión a aldea de renos Tsaatan (requiere guía, 150 EUR por 2 días)",
+        "Observación de fauna: ciervos, osos (gratis, mejor con guía 20 EUR)",
+        "Baño en agua glacial (gratis)"
+      ],
+      "donde_comer": "Comida incluida en ger camps. Piscado local: omul (pez de lago). Mörön tiene restaurantes básicos 5-8 EUR. Comida deshidratada para trekking.",
+      "consejo_local": "Visita antes de julio si quieres menos mosquitos, pero julio-agosto tiene mejor clima. Contrata guía local para Tsaatan: es acceso controlado a pueblo indígena.",
+      "plan_b_lluvia": "Ger camps tienen estufas de leña confortables. Actividades indoor: artesanía con nómadas, aprendizaje de idioma mongol, lectura con vistas de lago",
+      "keywords": [
+        "Khövsgöl",
+        "Khuvsgul",
+        "Mörön",
+        "Tsaatan",
+        "renos",
+        "taiga",
+        "lago Mongolia"
+      ]
+    },
+    {
+      "id": "orkhon-valley",
+      "nombre": "Valle de Orkhon",
+      "tipo": "rural",
+      "region": "Centro-norte (Övörkhangai)",
+      "descripcion": "Patrimonio de la Humanidad: valle histórico con cascada de Orkhon de 24m, ruinas del imperio Mongol y tradición nómada viva. Menos concurrido que Terelj pero igualmente hermoso, con oportunidades de interacción con familias nómadas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Ulán Bator a Arvayheer: jeep 5h (20-30 EUR) o minibús 6h (12 EUR); luego jeep/caballo a Orkhon 2h (20 EUR)",
+      "donde_dormir": {
+        "mochilero": "Ger camp básico (Nomadic Journeys simple): 20-30 EUR/noche",
+        "medio": "Ger camp familiar (Nomadic Expeditions standard): 50-80 EUR/noche",
+        "comfort": "Ger camp de lujo (Nomadic Expeditions premium): 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a cascada de Orkhon (gratis, 4h ida/vuelta)",
+        "Equitación por valle (25 EUR por 4h)",
+        "Visita a ruinas del imperio Mongol (10 EUR con guía)",
+        "Interacción con familia nómada (incluido en tours, 15-20 EUR si privado)",
+        "Excursión a aguas termales de Tsenkher (gratis acceso, 20 EUR con jeep)"
+      ],
+      "donde_comer": "Comida incluida en ger camps. Cordero asado, súp de verduras, leche/té. Arvayheer: restaurantes 6-10 EUR. Picnics en campo.",
+      "consejo_local": "Llega a la cascada temprano (antes de 8am) para evitar otros turistas. Si visitas familia nómada, lleva pequeños regalos (azúcar, té, jabón).",
+      "plan_b_lluvia": "El valle sigue siendo hermoso bajo lluvia. Quédate en ger con fuego encendido, juegos locales, historias de guía sobre imperio Mongol",
+      "keywords": [
+        "Orkhon",
+        "Orkhon Valley",
+        "cascada Orkhon",
+        "Arvayheer",
+        "imperio Mongol",
+        "Tsenkher"
+      ]
+    },
+    {
+      "id": "karakorum",
+      "nombre": "Karakórum (Harhorin)",
+      "tipo": "histórico",
+      "region": "Centro-norte (Övörkhangai)",
+      "descripcion": "Antigua capital del imperio Mongol (siglo XIII), hoy ruinas arqueológicas con monasterio budista restaurado. Sitio histórico imprescindible para entender la historia de Genghis Khan y la Ruta de la Seda.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Ulán Bator a Harhorin: jeep/minibús 6-7h (20 EUR) o incluido en tour de Orkhon Valley",
+      "donde_dormir": {
+        "mochilero": "Ger camp (Karakorum Peace Guesthouse): 20-25 EUR/noche",
+        "medio": "Ger camp con baño (Karakorum Community Eco-lodge): 40-50 EUR/noche",
+        "comfort": "Hotel (no hay opciones de lujo, mejor incluir en tour Orkhon)"
+      },
+      "que_hacer": [
+        "Museo de Karakórum (15 EUR entrada)",
+        "Senderismo entre ruinas (gratis)",
+        "Monasterio de Erdene Zuu - templo budista restaurado (10 EUR entrada)",
+        "Museo de la Ruta de la Seda (5 EUR)",
+        "Visita guiada a excavaciones (con guía 20 EUR)"
+      ],
+      "donde_comer": "Harhorin es pueblo pequeño. Ger camps incluyen comida. Restaurantes locales 6-10 EUR. Opciones limitadas: trae snacks desde Arvayheer.",
+      "consejo_local": "Combina con Orkhon Valley (están a 1.5h): dedica 1 día a Karakórum, 2 a Orkhon. El monasterio requiere respeto: no fotografíes en interior sin permiso.",
+      "plan_b_lluvia": "Lluvia da aspecto romántico a ruinas. Permanece en museo, lee sobre historia, entrevista a guía local",
+      "keywords": [
+        "Karakórum",
+        "Harhorin",
+        "capital Mongol",
+        "Erdene Zuu",
+        "Ruta Seda",
+        "imperio Mongol"
+      ]
+    },
+    {
+      "id": "khustain-nuruu",
+      "nombre": "Parque Nacional Khustain Nuruu",
+      "tipo": "naturaleza",
+      "region": "Centro (Töv)",
+      "descripcion": "Santuario de caballos Przewalski (especie casi extinta), con montañas escénicas a 100 km de Ulán Bator. Mejor lugar de Asia para ver estos caballos salvajes en semi-libertad y aprender sobre conservación.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Ulán Bator en jeep compartido/tour 2.5h (20-30 EUR) o tour organizado (40-50 EUR incluido)",
+      "donde_dormir": {
+        "mochilero": "Ger camp simple (Khustain Camp): 25-30 EUR/noche",
+        "medio": "Ger camp (Hustain Nuruu Protected Area Camp): 45-60 EUR/noche",
+        "comfort": "No disponible, visita como día completo desde Ulán Bator"
+      },
+      "que_hacer": [
+        "Safari a pie/jeep para ver caballos Przewalski (25 EUR con guía obligatorio)",
+        "Senderismo en montaña (gratis con entrada parque)",
+        "Observación de fauna: gacelas, águilas (gratis)",
+        "Centro de visitantes con información de conservación (gratis)"
+      ],
+      "donde_comer": "Comida incluida en ger camps. Ulán Bator ofrece más opciones si haces tour día: come antes de partir.",
+      "consejo_local": "Contrata guía antes de entrar al parque (obligatorio). Los caballos son tímidos: camina lentamente, sin ruido. Mejor verlos al anochecer.",
+      "plan_b_lluvia": "Los caballos siguen siendo visibles bajo lluvia. Centro de visitantes tiene exhibiciones indoor sobre programa de conservación",
+      "keywords": [
+        "Khustain",
+        "Hustain",
+        "caballos Przewalski",
+        "parque nacional",
+        "fauna Mongolia"
+      ]
+    },
+    {
+      "id": "bayan-zag",
+      "nombre": "Bayan Zag (Red Cliffs)",
+      "tipo": "desierto",
+      "region": "Sur (Ömnögovi)",
+      "descripcion": "Formaciones rocosas rojas espectaculares en el Gobi, conocidas como Flaming Cliffs. Yacimiento paleontológico de dinosaurios. Accesible como excursión desde Dalanzadgad, menos visitado que otros sitios del Gobi.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Dalanzadgad en jeep 1h (15 EUR) o con tour desde ger camp (incluido)",
+      "donde_dormir": {
+        "mochilero": "Ger camp compartido (Bayan Zag Nomadic Camp): 20-30 EUR/noche",
+        "medio": "Ger camp (Bayan Zag Eco Camp): 40-60 EUR/noche",
+        "comfort": "Mejor alojarse en Dalanzadgad (opciones más cómodas)"
+      },
+      "que_hacer": [
+        "Senderismo entre Red Cliffs (gratis, 2-3h)",
+        "Fotografía al atardecer (mejor hora, gratis)",
+        "Exploración de zona paleontológica (10 EUR entrada)",
+        "Acampada bajo estrellas con fuego (incluido en ger camps)"
+      ],
+      "donde_comer": "Ger camps incluyen comida. Dalanzadgad a 1h ofrece más opciones 8-12 EUR.",
+      "consejo_local": "Visita al atardecer cuando las rocas se tiñen de rojo intenso. No hay mucha agua: trae botella desde Dalanzadgad.",
+      "plan_b_lluvia": "Las rocas tienen aspecto dramático bajo lluvia. Permanece en ger con vistas del paisaje mojado",
+      "keywords": [
+        "Bayan Zag",
+        "Red Cliffs",
+        "Flaming Cliffs",
+        "Gobi rojo",
+        "dinosaurios"
+      ]
+    },
+    {
+      "id": "gorkhi-terelj",
+      "nombre": "Monasterio de Gorkhi Terelj",
+      "tipo": "histórico",
+      "region": "Norte (Töv)",
+      "descripcion": "Monasterio budista restaurado en montañas del norte, con monjes residentes y arquitectura tradicional. Ofrece experiencia espiritual y acceso a naturaleza más auténtica que complejos turísticos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Ulán Bator a Nalaikh: jeep/minibús 1h (8 EUR); luego a monasterio 1.5h a pie o caballo (25 EUR caballo)",
+      "donde_dormir": {
+        "mochilero": "Albergue monástico (Gorkhi Terelj Monastery Guesthouse): 15-25 EUR/noche",
+        "medio": "Ger camp cercano (Gorkhi Terelj Camp): 35-50 EUR/noche",
+        "comfort": "Mejor opción Terelj Park (30 min lejos): 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Ceremonia matinal en monasterio (7am, gratis, respeto requerido)",
+        "Taller de meditación budista con monjes (donativo 10-20 EUR)",
+        "Senderismo en montañas circundantes (gratis)",
+        "Cena con monjes y conversación cultural (incluida en albergue)"
+      ],
+      "donde_comer": "Comida vegetariana en monasterio (incluida). Sencilla pero nutritiva: sopa, pan, verduras. Donativo sugerido 5-10 EUR.",
+      "consejo_local": "Llega antes de anochecer. Respeta horarios monásticos: levántate temprano, silencio después de 9pm. Las cerillas están en monasterio.",
+      "plan_b_lluvia": "Permanece en monasterio con monjes, aprende sobre budismo tibetano, lee, medita",
+      "keywords": [
+        "Gorkhi",
+        "Terelj",
+        "monasterio",
+        "budismo",
+        "monjes",
+        "retiro espiritual"
+      ]
+    },
+    {
+      "id": "naadam-festival",
+      "nombre": "Festival Naadam",
+      "tipo": "cultural",
+      "region": "Centro (Ulán Bator)",
+      "descripcion": "Festival tradicional anual (11-15 de julio) con competiciones de lucha libre mongol, carreras de caballos y tiro con arco. Celebración cultural más importante del país, donde confluyen nómadas de todo Mongolia.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "11-15 de julio (fechas fijas)",
+      "como_llegar": "Festival se celebra en Ulán Bator. Llega antes del 10 de julio.",
+      "donde_dormir": {
+        "mochilero": "Dorm en hostel (muy lleno, reserva 2 meses antes): 15-25 EUR/noche",
+        "medio": "Hotel 3 estrellas (reserva con anticipación): 60-100 EUR/noche",
+        "comfort": "Hotel 4+ estrellas (también lleno): 150-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Lucha libre mongol - competición nacional (20-50 EUR entrada según gradas)",
+        "Carreras de caballos (10-30 km, abiertas al público, gratis acceso)",
+        "Tiro con arco tradicional (10-20 EUR entrada)",
+        "Espectáculos folclóricos y desfile de apertura (15 EUR)",
+        "Zona de gers de nómadas visitantes (gratis explorar)"
+      ],
+      "donde_comer": "Puestos de comida callejera: buuz, khorkhog, leche con té. 2-5 EUR. Restaurantes saturados: come en mercados. Airag (leche fermentada) 1-2 EUR.",
+      "consejo_local": "Compra entradas al menos 2 semanas antes (sold out el festival). Lleva efectivo: no todos aceptan tarjeta. Baños públicos son caóticos: valora ger camp.",
+      "plan_b_lluvia": "Festival continúa bajo lluvia (es resistente a clima). Lleva chubasquero.",
+      "keywords": [
+        "Naadam",
+        "festival",
+        "lucha libre",
+        "Mongolia",
+        "cultural",
+        "julio",
+        "caballos"
+      ]
+    }
+  ]
+}

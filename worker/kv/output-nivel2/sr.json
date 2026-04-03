@@ -1,0 +1,344 @@
+{
+  "pais": "Surinam",
+  "codigo": "sr",
+  "destinos": [
+    {
+      "id": "paramaribo",
+      "nombre": "Paramaribo",
+      "tipo": "ciudad",
+      "region": "Distrito de Paramaribo",
+      "descripcion": "Capital colonial holandesa con arquitectura de madera única en Sudamérica, fusión de culturas caribeñas y europeas. Centro cultural y punto de entrada obligatorio con mercados vibrantes, museos y vida nocturna. Patrimonio UNESCO por su casco histórico bien conservado.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "febrero-abril, agosto-octubre",
+      "como_llegar": "Aeropuerto Internacional Johan Adolf Pengel, vuelos desde Ámsterdam o Guyana. 45 min desde el aeropuerto al centro en autobús (EUR 2-3) o taxi (EUR 15-20).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Letichstraat o Near Miss: EUR 15-25/noche",
+        "medio": "Hotels en Waterkant o Promenade: EUR 40-70/noche",
+        "comfort": "Boutique hotels en casco histórico: EUR 80-150/noche"
+      },
+      "que_hacer": [
+        "Recorrer casco histórico con casas de madera (gratis)",
+        "Catedral de Madera (entrada EUR 5)",
+        "Mercado Centrale (compra de especias y artesanías, gratis explorar)",
+        "Museo de Surinam (EUR 4)",
+        "Paseo por Waterkant al atardecer (gratis)",
+        "Templo hindú Sri Maha Lakshmi (EUR 2)"
+      ],
+      "donde_comer": "Comida local: arepa, pom, roti. Rango EUR 3-8 en cafés callejeros. Zona Letichstraat para comer barato; Waterkant para restaurantes.",
+      "consejo_local": "Visita el mercado Centrale muy temprano (6-7am) antes de que se llene y haga calor insoportable. Las casas de madera son frágiles: mira pero toca con cuidado.",
+      "plan_b_lluvia": "Museos (Surinam Museum, Kunsthalle), compras en New Market bajo techo, cafés de madera tradicionales.",
+      "keywords": [
+        "Paramaribo",
+        "capital Surinam",
+        "Waterkant",
+        "casco histórico",
+        "casas de madera holandesas",
+        "catedral madera"
+      ]
+    },
+    {
+      "id": "interior-selva-tropenbos",
+      "nombre": "Interior de la Selva (Tropenbos)",
+      "tipo": "naturaleza",
+      "region": "Distrito de Sipaliwini",
+      "descripcion": "Selva virgen amazónica con investigación científica en Tropenbos. Acceso a biodiversidad intacta, avistamiento de fauna rara y vida indígena Amerindia. Centro de investigación abierto a visitantes con guías expertos.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "febrero-abril, agosto-septiembre",
+      "como_llegar": "Desde Paramaribo: vuelo charter a Sipaliwini (EUR 100-150 ida/vuelta) + 1h en lancha. O autobús a Atjoni (8h, EUR 10-15) + barco (3-4h más).",
+      "donde_dormir": {
+        "mochilero": "Albergues en Tropenbos o lodges básicos indígenas: EUR 20-35/noche",
+        "medio": "Eco-lodges con baño privado: EUR 50-80/noche",
+        "comfort": "Lodges con comodidades: EUR 100-150/noche"
+      },
+      "que_hacer": [
+        "Caminatas guiadas por la selva (EUR 25-40/día)",
+        "Avistamiento nocturno de fauna (EUR 15-30)",
+        "Piragüismo por ríos Korantijn y Corantijn (EUR 30-50)",
+        "Interacción con comunidades indígenas (EUR 10-20)",
+        "Observación de aves (gratis con guía local incluido)"
+      ],
+      "donde_comer": "Comida casera amazónica en lodges (incluida en paquetes EUR 15-25/día). Arroz, pescado de río, yuca. Lleva snacks desde Paramaribo.",
+      "consejo_local": "Contrata siempre guías locales indígenas: conocen senderos secretos y fauna. Lleva repelente de mosquitos industrial, no el turístico. La selva es mojada siempre: ropa impermeable es esencial.",
+      "plan_b_lluvia": "Las lluvia son normales aquí. Enfócate en senderismo temprano, rio después. Lluvia espesa cancela algunas actividades: pregunta en el lodge.",
+      "keywords": [
+        "selva amazónica",
+        "Tropenbos",
+        "interior Surinam",
+        "Sipaliwini",
+        "jungle lodge",
+        "biodiversidad",
+        "indígenas"
+      ]
+    },
+    {
+      "id": "nature-island-galibi",
+      "nombre": "Galibi (Nature Island)",
+      "tipo": "isla",
+      "region": "Distrito de Marowijne",
+      "descripcion": "Reserva marina y terrestre en la desembocadura del río Corantijn con anidación de tortugas marinas (marzo-agosto). Playas vírgenes, hábitat de vida silvestre y aldeas Arawak. Uno de los pocos lugares donde ver tortugas anidando en América del Sur.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo-agosto (anidación de tortugas)",
+      "como_llegar": "Desde Paramaribo: minibús a Albina (5-6h, EUR 8-12) + lancha a Galibi (45 min, EUR 15-25). Organiza el transporte desde tu lodge.",
+      "donde_dormir": {
+        "mochilero": "Eco-lodges básicos tipo cabaña: EUR 25-40/noche",
+        "medio": "Eco-lodges con facilidades: EUR 50-80/noche",
+        "comfort": "Galibi Nature Resort: EUR 100-130/noche"
+      },
+      "que_hacer": [
+        "Observación nocturna de tortugas desovando (EUR 20-35, marzo-agosto)",
+        "Caminata por playa virgen (gratis)",
+        "Snorkel en arrecife (EUR 15-25)",
+        "Visita a comunidad Arawak (EUR 10-15)",
+        "Avistamiento de aves (gratis con binoculares propios)"
+      ],
+      "donde_comer": "Pescado fresco, camarones, comida casera. EUR 5-10 en alojamientos. Opciones limitadas: come en tu lodge.",
+      "consejo_local": "La anidación de tortugas es aleatorio: puede no haber actividad incluso en temporada. Negocia con anticipación en Albina con barceros locales. Lleva caja seca: la isla es mojada.",
+      "plan_b_lluvia": "Lluvia fuerte cancela tours nocturnos. Usa el día para explorar playas, buscar conchas, descansar. Lluvia es breve, espera a la tarde.",
+      "keywords": [
+        "Galibi",
+        "Nature Island",
+        "tortugas marinas",
+        "Marowijne",
+        "anidacion",
+        "playa virgenes",
+        "Arawak"
+      ]
+    },
+    {
+      "id": "lelydorp",
+      "nombre": "Lelydorp",
+      "tipo": "ciudad",
+      "region": "Distrito de Wanica",
+      "descripcion": "Segunda ciudad de Surinam con mercados locales auténticos, mercadillos nocturnos y vida de clase trabajadora. Menos turística que Paramaribo pero con comida más barata y experiencia real del país. Centro de comercio regional.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "febrero-abril, agosto-octubre",
+      "como_llegar": "Desde Paramaribo: minibús compartido (50 min, EUR 2-3) o taxi (EUR 25-30). Autobús regular sale cada 30 min desde Paramaribo.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: EUR 15-25/noche",
+        "medio": "Hotels pequeños: EUR 35-55/noche",
+        "comfort": "Business hotels: EUR 60-90/noche"
+      },
+      "que_hacer": [
+        "Explorar mercados locales (gratis)",
+        "Mercadillo nocturno en avenida central (gratis, compras por cuenta propia)",
+        "Templos hindús (gratis, respetar horarios)",
+        "Mezquita Al Quran (gratis si hay tour disponible)",
+        "Paseo por barrio residencial de Lelydorp"
+      ],
+      "donde_comer": "Comida china, hindú, criolla. Roti, biryani, noodles. EUR 2-5 en comedores. Mejor comida por menor precio que Paramaribo.",
+      "consejo_local": "Lelydorp es real, sin filtro turístico. Los locals son muy amables. Avoid walking solo de noche en ciertas areas; toma taxi desde 19:00.",
+      "plan_b_lluvia": "Mercados cubiertos, compras, cafés. Lluvia no es problema aquí.",
+      "keywords": [
+        "Lelydorp",
+        "segunda ciudad",
+        "mercado local",
+        "comida barata",
+        "Wanica",
+        "vida real Surinam"
+      ]
+    },
+    {
+      "id": "kaieteur-falls",
+      "nombre": "Cataratas Kaieteur",
+      "tipo": "naturaleza",
+      "region": "Región de Potaro-Sipaliwini",
+      "descripcion": "Una de las cataratas más altas del mundo (226m) en lo profundo de la selva, accesible solo por aviación. Paisaje espectacular, aislamiento total y selva virgen. Experiencia mística pero cara y dependiente del clima.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "febrero-abril, agosto-octubre (mejor visibilidad)",
+      "como_llegar": "Desde Paramaribo: vuelo charter (30-45 min, EUR 180-250 ida/vuelta). Solo operadores locales Kasikasima o Roraima Tours. Mínimo 4 personas.",
+      "donde_dormir": {
+        "mochilero": "Campamento básico cerca de cataratas: EUR 30-50/noche",
+        "medio": "Kaieteur Guest House (si abre): EUR 60-80/noche",
+        "comfort": "Tour de día completo es lo normal, sin pernocta estándar"
+      },
+      "que_hacer": [
+        "Observación de cascadas desde miradores (incluido en tour EUR 180-250)",
+        "Senderismo hacia base de cascada (EUR 20-30 extra)",
+        "Fotografía (lleva equipo impermeable)",
+        "Avistamiento de golondrinas y aves raras (gratis con tour)"
+      ],
+      "donde_comer": "Pack lunch preparado por operador. Incluido en tour o EUR 10-15. Agua y snacks: lleva extras.",
+      "consejo_local": "Las nubes cobren la cascada después de 11am. Sale muy temprano (5-6am) para fotos. Clima impredecible: puede cancelarse sin previo. Contrata con operador que reembolse si cancela.",
+      "plan_b_lluvia": "Lluvia y nubes cierran vuelos. Es riesgo calculado. Toma el tour con expectativa de que pueda no volar.",
+      "keywords": [
+        "Kaieteur",
+        "cataratas",
+        "cascadas",
+        "mundo alto",
+        "aviacion",
+        "selva profunda",
+        "Potaro"
+      ]
+    },
+    {
+      "id": "orinoco-delta",
+      "nombre": "Delta del Orinoco (Waini y Barima)",
+      "tipo": "naturaleza",
+      "region": "Distrito de Waini y Barima",
+      "descripcion": "Pantanales y delta selvático donde confluyen ríos, hábitat de caimanes, pirañas y aves acuáticas. Zona remota con aldeas Warao y Lokono. Menos visitada que Galibi pero igualmente auténtica y ecológica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "febrero-abril, agosto-octubre",
+      "como_llegar": "Desde Paramaribo: minibús a Waini o Barima (3-4h, EUR 6-10) + lancha privada (EUR 40-80 compartida). Organiza desde Paramaribo con tour operator.",
+      "donde_dormir": {
+        "mochilero": "Campamento comunitario indígena: EUR 20-30/noche",
+        "medio": "Eco-lodge flotante: EUR 45-70/noche",
+        "comfort": "Lodge con comodidades: EUR 80-120/noche"
+      },
+      "que_hacer": [
+        "Paseos en bote por canales (EUR 25-40/día)",
+        "Pesca (EUR 15-25)",
+        "Observación de caimanes y fauna nocturna (EUR 20-30)",
+        "Visita a aldeas indígenas Warao (EUR 10-15)",
+        "Avistamiento de aves (EUR 15 con guía)"
+      ],
+      "donde_comer": "Pescado fresco, yuca, plátano. EUR 5-10. Comida tradicional en alojamientos.",
+      "consejo_local": "Mosquitos son legendarios aquí: repelente potente es obligatorio. Los Warao son pescadores respetuosos: aprende saludos básicos. El delta se inunda en temporada: pregunta niveles antes de ir.",
+      "plan_b_lluvia": "Lluvia no cancela tours. Lleva impermeable y bolsa seca. Los mosquitos empeoran con lluvia.",
+      "keywords": [
+        "Delta Orinoco",
+        "Waini",
+        "Barima",
+        "pantanal",
+        "indigena Warao",
+        "caimanes",
+        "rio"
+      ]
+    },
+    {
+      "id": "brownsberg",
+      "nombre": "Reserva Natural Brownsberg",
+      "tipo": "naturaleza",
+      "region": "Distrito de Saramacca",
+      "descripcion": "Reserva protegida con senderismo, cascadas y piscinas naturales. Altitud moderada con vista sobre la selva, acceso fácil desde Paramaribo. Punto de entrada perfecto para naturaleza sin aventura extrema.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "febrero-abril, agosto-octubre",
+      "como_llegar": "Desde Paramaribo: minibús a Lelydorp (50 min, EUR 2) + taxi a entrada Brownsberg (30 min más, EUR 15-25). O tour desde Paramaribo (EUR 50-70 con transporte).",
+      "donde_dormir": {
+        "mochilero": "Campamento básico en reserva: EUR 15-25/noche",
+        "medio": "Cabaña con baño: EUR 40-60/noche",
+        "comfort": "Cabaña con aire acondicionado: EUR 70-100/noche"
+      },
+      "que_hacer": [
+        "Senderismo a cascadas (EUR 10-15 con guía, 2-3h)",
+        "Baño en piscinas naturales (gratis)",
+        "Observación de aves (EUR 15-20 con guía)",
+        "Miradores de selva (gratis)",
+        "Pícnic en naturaleza (trae tu comida EUR 10-15)"
+      ],
+      "donde_comer": "Restaurante básico en entrada (EUR 5-10). Lleva snacks y agua. El comedor del lodge ofrece almuerzo por EUR 8-12.",
+      "consejo_local": "El senderismo matutino es mejor: menos calor y más vida silvestre activa. Las cascadas bajan con lluvia: pregunta antes de subir. El parque cierra a las 16:00, planifica salidas temprano.",
+      "plan_b_lluvia": "Lluvia hace senderos resbaladizos pero no los cierra. Usa botas impermeable. Las cascadas suben de caudal: bonus.",
+      "keywords": [
+        "Brownsberg",
+        "reserva natural",
+        "cascadas",
+        "Saramacca",
+        "senderismo fácil",
+        "piscinas naturales",
+        "cerca Paramaribo"
+      ]
+    },
+    {
+      "id": "coronie",
+      "nombre": "Coronie (Playas)",
+      "tipo": "playa",
+      "region": "Distrito de Coronie",
+      "descripcion": "Playas tranquilas con pueblos de pescadores auténticos, manglares y acceso a la costa atlántica. Menos turística que playas del Caribe, con ambiente local y comunidades Creole y Hindú traditionelles.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "febrero-abril, agosto-octubre",
+      "como_llegar": "Desde Paramaribo: minibús a Totness o Coronie Town (2-3h, EUR 5-8). Carretera costera accesible.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Totness: EUR 20-30/noche",
+        "medio": "Pequeños hotels junto playa: EUR 40-60/noche",
+        "comfort": "Beach resorts: EUR 70-110/noche"
+      },
+      "que_hacer": [
+        "Paseo por playa (gratis)",
+        "Baño (vigilancia limitada, nada muy temprano o al atardecer)",
+        "Visita a aldea de pescadores (gratis)",
+        "Comida de mariscos fresco (EUR 8-15)",
+        "Exploración de manglares (EUR 15-25 con bote)"
+      ],
+      "donde_comer": "Camarones, pesca del día, ceviche. EUR 8-15 en comedores costeros. Muy fresco, muy barato.",
+      "consejo_local": "Las playas surinamesas no son del Caribe clásico: el agua es marrón por sedimento fluvial (sin riesgo). Los locales nadan de día solamente. Intenta comida con familia Creole para receta auténtica.",
+      "plan_b_lluvia": "Lluvia breve. Explora pueblos, come en comedores cubiertos. El agua no es problema.",
+      "keywords": [
+        "Coronie",
+        "playa",
+        "costa atlantica",
+        "Totness",
+        "pescado fresco",
+        "pueblo local",
+        "manglares"
+      ]
+    },
+    {
+      "id": "apoera-corantijn",
+      "nombre": "Apoera y Río Corantijn",
+      "tipo": "rural",
+      "region": "Distrito de Paramaribo / Marowijne",
+      "descripcion": "Pueblo fronterizo con Guyana a lo largo del río Corantijn, acceso a comunidades Arawak aisladas y fauna silvestre. Punto de salida para exploración más profunda. Experiencia rural pura sin turismo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "febrero-abril, agosto-octubre",
+      "como_llegar": "Desde Paramaribo: minibús a Apoera (4-5h, EUR 8-12). Ruta costera, accesible todo el año.",
+      "donde_dormir": {
+        "mochilero": "Habitación en casa local: EUR 15-25/noche",
+        "medio": "Pequeño guesthouse: EUR 30-45/noche",
+        "comfort": "Apoera Eco-Lodge (si disponible): EUR 60-80/noche"
+      },
+      "que_hacer": [
+        "Observación de río Corantijn (gratis)",
+        "Paseo en bote por río (EUR 20-35 con pescador local)",
+        "Visita a comunidad Arawak (EUR 10-15)",
+        "Pesca (EUR 15-25)",
+        "Exploración de manglares y bosque (EUR 15-25)"
+      ],
+      "donde_comer": "Comida casera, pescado, yuca. EUR 4-8 en comedores. Muy auténtico, basado en disponibilidad diaria.",
+      "consejo_local": "Apoera es punto de paso a Guyana (ilegal sin papeles). Los locales son muy amables pero privados: respeta espacios. Trae efectivo: sin cajeros automáticos.",
+      "plan_b_lluvia": "Lluvia cancela algunos paseos en bote. Descansa, come, prepara equipo.",
+      "keywords": [
+        "Apoera",
+        "Corantijn",
+        "frontera Guyana",
+        "Arawak",
+        "rio",
+        "pueblo rural",
+        "pesca"
+      ]
+    },
+    {
+      "id": "matarapi",
+      "nombre": "Matarapi (Saramaka Maroon Village)",
+      "tipo": "cultural",
+      "region": "Distrito de Saramacca",
+      "descripcion": "Aldea tradicional Maroon (descendientes de esclavos cimarrones) con cultura única, artesanía y tradiciones vivas. Acceso limitado a río Saramacca, comunidad cerrada pero abierta a visitantes respetuosos con guía local.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "febrero-abril, agosto-octubre",
+      "como_llegar": "Desde Paramaribo: minibús a Lelydorp (50 min) + minibús local hacia Saramaka (1-2h más) + bote por río Saramacca (1-2h, EUR 30-50). Complejo: contrata tour desde Paramaribo.",
+      "donde_dormir": {
+        "mochilero": "Campamento comunitario: EUR 20-30/noche",
+        "medio": "Eco-lodge con familia: EUR 40-60/noche",
+        "comfort": "Saramaka River Lodge (lujos relativos): EUR 80-120/noche"
+      },
+      "que_hacer": [
+        "Inmersión cultural Maroon (EUR 30-50 con guía comunitario)",
+        "Artesanía y taller de tejido (EUR 15-25)",
+        "Baile y música tradicional (EUR 10-20)",
+        "Comida casera Maroon (EUR 8-15)",
+        "Paseo en bote por río (EUR 20-30)"
+      ],
+      "donde_comer": "Comida Maroon: yuca, pescado, sopa de maní. EUR 6-12. Compartida con familia anfitriona.",
+      "consejo_local": "Los Maroons tienen historia de resistencia y orgullo: respeta territorio y pregunta antes de fotografiar. No entres sin guía local: es comunidad privada. Dress respectfully (no pantalones cortos extremos).",
+      "plan_b_lluvia": "Lluvia intensifica experiencia river: es normal. Talleres de artesanía funcionan bajo techo.",
+      "keywords": [
+        "Matarapi",
+        "Saramaka",
+        "Maroon",
+        "cultura afro",
+        "rio Saramacca",
+        "artesania",
+        "tradicion"
+      ]
+    }
+  ]
+}

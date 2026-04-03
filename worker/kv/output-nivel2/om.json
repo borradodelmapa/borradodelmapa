@@ -1,0 +1,325 @@
+{
+  "pais": "Omán",
+  "codigo": "om",
+  "destinos": [
+    {
+      "id": "muscat",
+      "nombre": "Mascate",
+      "tipo": "ciudad",
+      "region": "Gobernación de Mascate",
+      "descripcion": "Capital de Omán con una mezcla única de arquitectura tradicional y moderna, puertos históricos y museos de calidad. Centro neurálgico para acceso a playas, mercados auténticos y la Gran Mezquita. Base ideal para explorar la costa norte.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Aeropuerto internacional de Mascate (MCT): vuelos desde Europa 6-8h, desde 400-600 EUR ida y vuelta. Taxis o autobús local.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Ruwi o Old Town: 15-25 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas en Qurum: 50-90 EUR/noche",
+        "comfort": "Resorts frente al mar en The Muscat Bay: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Gran Mezquita de Mascate (gratuito, horario limitado)",
+        "Souq Mutrah (mercado tradicional, gratuito)",
+        "Paseo por Corniche de Mascate (gratuito)",
+        "Playas de Qurum o Shatti Al Qurum (gratuito)",
+        "Museo Nacional de Omán (5 EUR)",
+        "Tours de snorkel en Daymanyat Islands (30-50 EUR)"
+      ],
+      "donde_comer": "Prueba shuwa (carne especiada), biryani y mariscos frescos. Rango: 3-8 EUR en comedores locales, 15-30 EUR en restaurantes turísticos. Zona recomendada: Qurum o souq.",
+      "consejo_local": "El souq de Mutrah es mejor al atardecer cuando baja el calor. Lleva poco efectivo en euros o retira riales omaníes (1 EUR ≈ 0.44 OMR).",
+      "plan_b_lluvia": "Museo Nacional, centros comerciales de Qurum o visita interior de la Gran Mezquita.",
+      "keywords": [
+        "Muscat",
+        "Mascate",
+        "Corniche",
+        "Mutrah",
+        "Qurum",
+        "capital de Oman"
+      ]
+    },
+    {
+      "id": "wadi-shab",
+      "nombre": "Wadi Shab",
+      "tipo": "naturaleza",
+      "region": "Gobernación de Musandam",
+      "descripcion": "Cañón espectacular con piscinas naturales de agua turquesa rodeadas de acantilados. Accesible para senderismo de dificultad baja-media con recompensa de baño en aguas cristalinas. Uno de los wadis más fotogénicos de Omán.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Mascate: 2h en coche alquilado (40-50 EUR/día) o tour compartido (25-35 EUR). Entrada al wadi: 3 EUR.",
+      "donde_dormir": {
+        "mochilero": "Camping o alojamiento básico en Qurayyat cercano: 12-20 EUR/noche",
+        "medio": "Pequeños hoteles en Qurayyat: 35-60 EUR/noche",
+        "comfort": "Resort en Qurayyat o día como excursión desde Mascate"
+      },
+      "que_hacer": [
+        "Senderismo en Wadi Shab (2-3h, gratuito tras entrada)",
+        "Baño en las piscinas naturales (gratuito)",
+        "Fotografía de acantilados y cascadas (gratuito)",
+        "Exploración de la cueva interior del wadi (parte de la ruta)"
+      ],
+      "donde_comer": "Pequeña tienda de snacks al inicio del wadi. Mejor llevar provisiones desde Qurayyat. Comidas locales: 3-5 EUR.",
+      "consejo_local": "Entra al wadi antes de las 10 a.m. para evitar multitudes. Lleva calzado de agua; hay rocas resbaladizas. El río puede tener caudal variable según la estación.",
+      "plan_b_lluvia": "Wadi Tiwi (alternativa similar 30 min más cerca) o playa de Qurayyat.",
+      "keywords": [
+        "Wadi Shab",
+        "wadi",
+        "piscinas naturales",
+        "canyoning",
+        "senderismo Oman"
+      ]
+    },
+    {
+      "id": "jebel-akhdar",
+      "nombre": "Jebel Akhdar",
+      "tipo": "montaña",
+      "region": "Gobernación de Al Dakhiliyah",
+      "descripcion": "Meseta montañosa a 2.000 metros con vistas panorámicas, pueblos tradicionales y terrazas de granadas y albaricoques. Clima fresco contrastante con el resto de Omán. Ideal para trekking y fotografía de paisajes.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Mascate: 3h en coche alquilado (40-50 EUR/día) hasta Nizwa, luego 1.5h a Jebel Akhdar. Tours organizados: 60-80 EUR.",
+      "donde_dormir": {
+        "mochilero": "Albergues en pueblos locales: 15-25 EUR/noche",
+        "medio": "Pequeños hoteles en Saiq o Birkat Al Mawz: 40-70 EUR/noche",
+        "comfort": "Alaya Resort (ecolodge boutique): 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking Wadi Ghul (5-6h, gratuito)",
+        "Senderismo en terrazas agrícolas (gratuito)",
+        "Visita a pueblos tradicionales como Saiq (gratuito)",
+        "Mirador del atardecer en Saiq plateau (gratuito)",
+        "Excursión a granjas locales (3-5 EUR)"
+      ],
+      "donde_comer": "Comida casera omaní en lodges locales o Alaya Resort. Rango: 5-8 EUR comidas locales, 20-30 EUR en resort.",
+      "consejo_local": "La carretera es sinuosa; evita conducir de noche. Mejor llevar ropa de abrigo incluso en invierno. Neblina frecuente por la mañana.",
+      "plan_b_lluvia": "Exploración de pueblos interiores, visita a granjas locales o regreso a Nizwa.",
+      "keywords": [
+        "Jebel Akhdar",
+        "Green Mountain",
+        "Saiq",
+        "Wadi Ghul",
+        "trekking montaña"
+      ]
+    },
+    {
+      "id": "nizwa",
+      "nombre": "Nizwa",
+      "tipo": "histórico",
+      "region": "Gobernación de Al Dakhiliyah",
+      "descripcion": "Antigua capital omaní con fortaleza icónica, souq tradicional vibrante y atmósfera auténtica. Centro cultural y comercial histórico que conserva su carácter original. Punto de partida para explorar las montañas de Jebel Akhdar.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Mascate: 2.5h en coche alquilado (40-50 EUR/día) o autobús local (5-7 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales básicos en centro: 12-20 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 40-65 EUR/noche",
+        "comfort": "Boutique hotels en zona histórica: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Fortaleza de Nizwa (3 EUR)",
+        "Souq tradicional de Nizwa (gratuito, mercadería autóctona)",
+        "Subasta matutina de cabras en mercado de ganado (gratuito, 6-7 a.m.)",
+        "Museo de Nizwa (2 EUR)",
+        "Paseo por medina antigua (gratuito)"
+      ],
+      "donde_comer": "Probar halwa omaní (dulce local), kebabs y pan tandoori. Rango: 2-5 EUR en comedores locales, 10-20 EUR en restaurantes turísticos.",
+      "consejo_local": "Visita el souq antes de las 11 a.m., especialmente el viernes para la subasta de ganado. El mercado es auténtico y menos turístico que Mascate.",
+      "plan_b_lluvia": "Museo de Nizwa, interior de la fortaleza o viajes a Bahla (30 min) para otra fortaleza.",
+      "keywords": [
+        "Nizwa",
+        "fortaleza",
+        "souq",
+        "mercado de ganado",
+        "interior Oman"
+      ]
+    },
+    {
+      "id": "musandam",
+      "nombre": "Musandam",
+      "tipo": "playa",
+      "region": "Gobernación de Musandam",
+      "descripcion": "Península aislada con acantilados espectaculares sobre el Golfo Pérsico, pequeños pueblos de pescadores y playas vírgenes. Acceso a los fiordos del Golfo de Oman mediante botes. Menos turístico que el resto del país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Mascate: 3.5h en coche alquilado (50 EUR/día) hasta Khasab. Vuelos directos a Khasab también disponibles (45 min, 60-100 EUR).",
+      "donde_dormir": {
+        "mochilero": "Alojamiento básico en Khasab: 15-25 EUR/noche",
+        "medio": "Pequeños hoteles en Khasab: 45-75 EUR/noche",
+        "comfort": "Musandam Diving Centre o Six Senses Musandam (si abierto): 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour en bote a los fiordos (dhow cruise, 25-40 EUR)",
+        "Avistamiento de delfines (25-35 EUR)",
+        "Buceo o snorkel (30-50 EUR)",
+        "Playa de Khasab (gratuito)",
+        "Fuerte de Khasab (2 EUR)"
+      ],
+      "donde_comer": "Pescado fresco, biryani de mariscos. Rango: 4-7 EUR en comedores locales, 15-25 EUR en restaurantes costeros.",
+      "consejo_local": "Los tours en bote son mejor por la tarde para luz dorada. Khasab es caro para Omán; presupuesta bien. Algunos tours incluyen almuerzo.",
+      "plan_b_lluvia": "Fuerte de Khasab, exploración del pueblo o regreso anticipado.",
+      "keywords": [
+        "Musandam",
+        "Khasab",
+        "fiordos",
+        "Golfo Persico",
+        "buceo Oman"
+      ]
+    },
+    {
+      "id": "wahiba-sands",
+      "nombre": "Wahiba Sands",
+      "tipo": "desierto",
+      "region": "Gobernación de Ash Sharqiyah",
+      "descripcion": "Vasto campo de dunas doradas de arena con oasis tradicionales y campamentos beduinos. Experiencia de desierto auténtica sin artificialidad turística extrema. Ideal para safaris en 4x4, trekking y noches bajo las estrellas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Mascate: 3-4h en coche alquilado (50 EUR/día) hasta entrada de Wahiba. Tours con conductores locales: 70-100 EUR por día.",
+      "donde_dormir": {
+        "mochilero": "Campamentos básicos en dunas: 20-35 EUR/noche (tienda compartida)",
+        "medio": "Campamentos turísticos cómodos: 60-90 EUR/noche (tienda privada)",
+        "comfort": "Desert camps de lujo: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en 4x4 por dunas (30-50 EUR)",
+        "Senderismo en dunas (gratuito con alojamiento)",
+        "Cena beduina tradicional (15-25 EUR)",
+        "Observación de estrellas (gratuito)",
+        "Visita a oasis de Mintirib (incluido en tours)"
+      ],
+      "donde_comer": "Almuerzo y cena en campamento con platos omaníes. Rango: 10-15 EUR por comida en campamentos.",
+      "consejo_local": "Reserva campamento con antelación. Los precios suben si llegas sin reserva. El mejor momento es al atardecer para fotografía de dunas doradas.",
+      "plan_b_lluvia": "Interior del Wadi Ghul o playas del este (Ras Al Jinz).",
+      "keywords": [
+        "Wahiba Sands",
+        "Ramlat Al Wahiba",
+        "desierto",
+        "campamento beduino",
+        "safari"
+      ]
+    },
+    {
+      "id": "ras-al-jinz",
+      "nombre": "Ras Al Jinz",
+      "tipo": "naturaleza",
+      "region": "Gobernación de Ash Sharqiyah",
+      "descripcion": "Reserva natural donde desovan tortugas marinas verde entre junio y agosto. Playas vírgenes y pequeño ecoturismo responsable. Experiencia única de vida silvestre poco masificada.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a agosto (desove), también octubre a abril",
+      "como_llegar": "Desde Mascate: 4-4.5h en coche alquilado (50 EUR/día) o tour organizado (60-80 EUR). Desde Sur: 2.5h.",
+      "donde_dormir": {
+        "mochilero": "Ras Al Jinz Research Centre basic rooms: 25-40 EUR/noche",
+        "medio": "Ras Al Jinz Turtle Reserve lodges: 60-85 EUR/noche",
+        "comfort": "Sur o alojamiento costero cercano: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour nocturno de desove de tortugas (10-15 EUR, junio-agosto)",
+        "Caminata por playa (gratuito)",
+        "Observación de paisaje marino (gratuito)",
+        "Visita a centro de investigación (entrada incluida en tour)"
+      ],
+      "donde_comer": "Comida básica en alojamiento de reserva o Sur cercano. Rango: 5-10 EUR.",
+      "consejo_local": "Si vas en junio-agosto para ver desove, reserva tour con guía a través de Ras Al Jinz Research Centre. Tours nocturnos salen 21:00-22:00. Sin desove, es menos atractivo.",
+      "plan_b_lluvia": "Playas de Sur o Wadi Darbat.",
+      "keywords": [
+        "Ras Al Jinz",
+        "tortugas marinas",
+        "desove",
+        "reserva natural",
+        "este Oman"
+      ]
+    },
+    {
+      "id": "sur",
+      "nombre": "Sur",
+      "tipo": "ciudad",
+      "region": "Gobernación de Ash Sharqiyah",
+      "descripcion": "Puerto histórico en la costa este famoso por construcción de barcos dhow tradicionales y arquitectura de piedra coralina. Atmósfera más relajada que Mascate. Base para excursiones a Ras Al Jinz o Wadi Darbat.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Mascate: 5-5.5h en coche alquilado (50 EUR/día) o autobús local (10-12 EUR). Desde Ras Al Jinz: 1h.",
+      "donde_dormir": {
+        "mochilero": "Hostales o habitaciones básicas: 15-25 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 45-70 EUR/noche",
+        "comfort": "Resort frente al mar: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Astilleros tradicionales de dhows (gratuito observar)",
+        "Paseo por medina histórica (gratuito)",
+        "Fuerte de Sur (3 EUR)",
+        "Playa de Sur (gratuito)",
+        "Tour en bote al atardecer (15-25 EUR)"
+      ],
+      "donde_comer": "Pescado fresco, mariscos en puerto. Rango: 4-7 EUR en comedores, 12-20 EUR en restaurantes costeros.",
+      "consejo_local": "Visita los astilleros de dhows por la mañana cuando los carpinteros trabajan. El puerto es auténtico y no está demasiado orientado al turismo.",
+      "plan_b_lluvia": "Fuerte de Sur, exploración de medina o viaje a Wadi Darbat.",
+      "keywords": [
+        "Sur",
+        "dhows",
+        "puerto",
+        "astilleros",
+        "este Oman"
+      ]
+    },
+    {
+      "id": "wadi-darbat",
+      "nombre": "Wadi Darbat",
+      "tipo": "naturaleza",
+      "region": "Gobernación de Ash Sharqiyah",
+      "descripcion": "Wadi espectacular con cascadas, lagos de agua dulce y vegetación abundante en medio del desierto. Senderismo accesible con recompensa de baño en piscinas naturales. Menos masificado que Wadi Shab.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Sur: 1-1.5h en coche alquilado. Desde Mascate: 5.5h. Tour compartido desde Sur: 20-30 EUR.",
+      "donde_dormir": {
+        "mochilero": "Alojamiento en Sur (30 min): 15-25 EUR/noche",
+        "medio": "Hoteles en Sur: 45-70 EUR/noche",
+        "comfort": "Resort costero en Sur: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo al wadi (1.5-2h, gratuito)",
+        "Baño en cascadas y piscinas naturales (gratuito)",
+        "Paseo por zonas de vegetación (gratuito)",
+        "Fotografía de paisaje (gratuito)",
+        "Avistamiento de aves y fauna (gratuito)"
+      ],
+      "donde_comer": "Llevar provisiones desde Sur. Pequeña tienda básica al inicio: 3-5 EUR snacks.",
+      "consejo_local": "Entra antes de las 10 a.m. para evitar calor. El wadi puede tener agua variable según lluvia reciente. Mejor en invierno.",
+      "plan_b_lluvia": "Playa de Sur o fuerte histórico.",
+      "keywords": [
+        "Wadi Darbat",
+        "cascadas",
+        "piscinas naturales",
+        "senderismo este"
+      ]
+    },
+    {
+      "id": "sohar",
+      "nombre": "Sohar",
+      "tipo": "histórico",
+      "region": "Gobernación de Batinah",
+      "descripcion": "Puerto histórico en la costa norte donde nació el legendario Simbad el marino. Fortaleza costera auténtica, menos turístico que Mascate. Base para exploración de la costa norte y acceso a Musandam.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Mascate: 2-2.5h en coche alquilado (40-50 EUR/día) o autobús local (4-6 EUR).",
+      "donde_dormir": {
+        "mochilero": "Alojamiento básico: 12-20 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 40-65 EUR/noche",
+        "comfort": "Resort costero: 85-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Fuerte de Sohar (3 EUR)",
+        "Paseo por puerto histórico (gratuito)",
+        "Playa de Sohar (gratuito)",
+        "Museo de Sohar (2 EUR)",
+        "Exploración de medina (gratuito)"
+      ],
+      "donde_comer": "Pescado fresco, biryani local. Rango: 3-6 EUR en comedores, 10-18 EUR en restaurantes.",
+      "consejo_local": "Sohar es mucho menos turístico que Mascate; los precios son más bajos. Buena parada si vas hacia Musandam o como día desde Mascate.",
+      "plan_b_lluvia": "Interior del fuerte, museo o regreso a Mascate.",
+      "keywords": [
+        "Sohar",
+        "Simbad",
+        "puerto histórico",
+        "fortaleza",
+        "norte Oman"
+      ]
+    }
+  ]
+}

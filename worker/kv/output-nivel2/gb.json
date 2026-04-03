@@ -1,0 +1,413 @@
+{
+  "pais": "Reino Unido",
+  "codigo": "gb",
+  "destinos": [
+    {
+      "id": "Londres",
+      "nombre": "Londres",
+      "tipo": "ciudad",
+      "region": "Inglaterra",
+      "descripcion": "Capital británica con museos de clase mundial, mercados dinámicos y arquitectura que mezcla lo medieval con lo moderno. Punto de entrada lógico para la mayoría de viajeros. Centro de transporte para explorar el resto del país.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Vuelos internacionales a Heathrow, Gatwick o Stansted. Si vienes de Europa continental: Eurostar desde París (2h 15m, 50-150 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergues en King's Cross, Camden, Shoreditch: 20-35 EUR/noche",
+        "medio": "Airbnb o pequeños hoteles en Bethnal Green, Elephant & Castle: 60-90 EUR/noche",
+        "comfort": "Hoteles en South Kensington, Mayfair, Westminster: 150-300+ EUR/noche"
+      },
+      "que_hacer": [
+        "British Museum (gratis)",
+        "National Gallery (gratis)",
+        "Trafalgar Square y paseo por Westminster (gratis)",
+        "Borough Market (gratis recorrer, comida 8-15 EUR)",
+        "Camden Market y Portobello Road (gratis, compras variable)",
+        "Tower Bridge y St. Paul's Cathedral (8-18 EUR)",
+        "Mercadillos callejeros en mercados como Brick Lane (gratis)"
+      ],
+      "donde_comer": "Fish & chips en barras tradicionales (8-12 EUR). Curry en Brick Lane (10-15 EUR). Brunch en cafés de Shoreditch (12-18 EUR). Mercados de comida en Borough y Old Street.",
+      "consejo_local": "Compra una Oyster Card o usa contactless: mucho más barato que billetes sueltos. El transporte público es cara pero eficiente. Muchos museos principales son gratis: aprovéchalo.",
+      "plan_b_lluvia": "Museos (British Museum, V&A, Natural History gratis o 10-15 EUR). Galerías de arte. Librerías históricas como Foyles. Pubs tradicionales.",
+      "keywords": [
+        "London",
+        "Londres",
+        "City",
+        "West End",
+        "Westminster",
+        "South Bank",
+        "East London",
+        "Shoreditch",
+        "Camden"
+      ]
+    },
+    {
+      "id": "Edimburgo",
+      "nombre": "Edimburgo",
+      "tipo": "ciudad",
+      "region": "Escocia",
+      "descripcion": "Capital escocesa encaramada en colinas con castillo medieval y arquitectura georgiana bien conservada. Atmósfera más bohemia y auténtica que Londres. Punto base ideal para explorar las Highlands.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a septiembre, agosto para festival internacional",
+      "como_llegar": "Vuelo desde Londres (1h 20m, 40-100 EUR). Autobús desde Londres (7-8h, 15-40 EUR con Megabus/FlixBus). Tren desde Londres (4h 30m, 50-120 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergues en Old Town, Grassmarket: 18-28 EUR/noche",
+        "medio": "Airbnb en Leith o Southside: 50-75 EUR/noche",
+        "comfort": "Boutique hotels en New Town, Royal Mile: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Edinburgh Castle (15 EUR)",
+        "Royal Mile paseo (gratis)",
+        "Calton Hill al atardecer (gratis)",
+        "Camera Obscura and World of Illusions (13 EUR)",
+        "Arthur's Seat senderismo (gratis, 45m subida)",
+        "Leith Walk y puerto (gratis)",
+        "National Museum of Scotland (gratis)"
+      ],
+      "donde_comer": "Haggis tradicional (10-14 EUR). Salmón ahumado local. Bares de whisky en Old Town (4-6 EUR trago). Cafés en Broughton Street.",
+      "consejo_local": "Sube a Arthur's Seat al amanecer o atardecer: las vistas despejadas valen la pena. Evita la Royal Mile durante el día si buscas tranquilidad, explórala de madrugada. El acento local es difícil: no tengas vergüenza de pedir que repitan.",
+      "plan_b_lluvia": "Museos gratis (National Museum, Scottish National Gallery). Real Mary King's Close (tour subterráneo). Whisky tours. Librerías antiguas.",
+      "keywords": [
+        "Edinburgh",
+        "Edimburgo",
+        "Old Town",
+        "New Town",
+        "Castle",
+        "Royal Mile",
+        "Leith",
+        "Grassmarket"
+      ]
+    },
+    {
+      "id": "isla-de-skye",
+      "nombre": "Isla de Skye",
+      "tipo": "isla",
+      "region": "Escocia (Highlands)",
+      "descripcion": "Paisajes de montañas dramáticas, acantilados de basalto y pueblos costeros pintorescos. Acceso fácil en coche o autobús desde Edimburgo. Paraíso para senderismo y fotografía.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre (clima más seco)",
+      "como_llegar": "Desde Edimburgo: autobús directo (6-7h, 20-35 EUR) o coche alquilado (5h). Desde Glasgow: autobús (5h, 18-30 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergues en Portree: 20-30 EUR/noche",
+        "medio": "Guesthouses familiares en Portree, Dunvegan: 55-75 EUR/noche",
+        "comfort": "Pequeños hoteles en Portree, converted crofts: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Old Man of Storr senderismo (gratis, 1h)",
+        "Fairy Pools natación/senderismo (gratis)",
+        "Portree paseo puerto (gratis)",
+        "Dunvegan Castle (13 EUR)",
+        "Neist Point lighthouse (gratis)",
+        "Trotternish Ridge (gratis senderismo)",
+        "Kilt Rock acantilados (gratis)"
+      ],
+      "donde_comer": "Mariscos frescos en restaurantes de Portree (12-18 EUR). Fish & chips de calidad (10-14 EUR). Pubs rurales con comida casera (10-15 EUR).",
+      "consejo_local": "Alquila coche si puedes: es imprescindible para llegar a lugares remotos. El clima cambia en minutos: lleva capas. Los autobuses son frecuentes pero lentos. Compra provisiones en Portree si te vas a pueblos pequeños.",
+      "plan_b_lluvia": "Museos locales pequeños. Tiendas de artesanía. Pubs y cafés (mucho tiempo local). Conducir por Road to the Isles es bonito incluso con lluvia.",
+      "keywords": [
+        "Skye",
+        "Isle of Skye",
+        "Portree",
+        "Old Man of Storr",
+        "Fairy Pools",
+        "Dunvegan",
+        "Trotternish",
+        "Neist Point"
+      ]
+    },
+    {
+      "id": "lake-district",
+      "nombre": "Lake District",
+      "tipo": "naturaleza",
+      "region": "Inglaterra (Noroeste)",
+      "descripcion": "Región de lagos y montañas ondulantes en el Noroeste. Paraíso para senderismo de media dificultad y vistas alpinas. Acceso fácil desde Manchester o desde Londres (4-5h).",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Londres: tren a Windermere (3h 30m, 40-80 EUR) + autobús local. Desde Manchester: tren (1h 30m, 20-50 EUR). Coche alquilado es ideal.",
+      "donde_dormir": {
+        "mochilero": "Albergues YHA en Windermere, Ambleside: 22-35 EUR/noche",
+        "medio": "Guesthouses en Windermere, Bowness: 50-75 EUR/noche",
+        "comfort": "Pequeños hoteles, inns rurales: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Catbells senderismo (gratis, 1h 30m)",
+        "Cruces en barcaza por Windermere Lake (8-14 EUR)",
+        "Scafell Pike cumbre (gratis, 3-4h)",
+        "Ambleside paseo y mercado (gratis)",
+        "Dove Cottage casa museo (9 EUR)",
+        "Beatrix Potter Gallery (9 EUR)",
+        "Waterhead a Walla Crag (gratis, fácil)"
+      ],
+      "donde_comer": "Fish & chips locales (8-12 EUR). Steak pies tradicionales (10-14 EUR). Cerveza local en pubs de pueblo. Cafés de montaña abiertos solo en día.",
+      "consejo_local": "Windermere es el pueblo turístico principal pero es caro y masificado. Ambleside es mejor base: más local, igual de céntrica, más carácter. Los mejores senderismos salen temprano: sal antes de las 8am para evitar multitudes.",
+      "plan_b_lluvia": "Museos pequeños (Dove Cottage, Beatrix Potter). Castillos como Kendal. Galerías de arte. Conducir es bonito incluso mojado. Spas termales.",
+      "keywords": [
+        "Lake District",
+        "Windermere",
+        "Ambleside",
+        "Bowness",
+        "Catbells",
+        "Scafell Pike",
+        "Grasmere",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "Bath",
+      "nombre": "Bath",
+      "tipo": "histórico",
+      "region": "Inglaterra (Suroeste)",
+      "descripcion": "Ciudadanía romana con arquitectura georgiana intacta declarada Patrimonio. Termas termales y paisaje de piedra dorada. Acceso fácil desde Londres o Bristol.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Desde Londres: tren directo (1h 20m-1h 40m, 30-70 EUR). Desde Bristol: tren (12 min, 5-12 EUR) o autobús (30 min, 3-8 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergues en centro: 20-30 EUR/noche",
+        "medio": "Guesthouses georgianas: 55-80 EUR/noche",
+        "comfort": "Boutique hotels, spa hotels: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Roman Baths (16 EUR)",
+        "Bath Abbey (gratis exterior, 6 EUR interior)",
+        "Royal Crescent paseo fotografía (gratis)",
+        "Circus arquitectura (gratis)",
+        "Sally Lunn's House museo (4 EUR)",
+        "Thermal Bath Spa (36-50 EUR baño)",
+        "Paseo por rio Avon (gratis)"
+      ],
+      "donde_comer": "Sally Lunn's bun dulce tipical (5 EUR). Fish & chips (9-13 EUR). Comida italiana en barrios tranquilos (12-18 EUR). Cafés geórgicos.",
+      "consejo_local": "Bath es pequeño y se ve en un día fácilmente. Sube a Caludon Park por las mañanas temprano: las vistas de la ciudad entera son espectaculares y sin gente. Come fuera del centro: misma comida, mitad de precio.",
+      "plan_b_lluvia": "Roman Baths (interior). Abbey interior. Museos. Galerías. Paseo cubierto bajo soportales geórgicos. Spas termales.",
+      "keywords": [
+        "Bath",
+        "Roman Baths",
+        "Royal Crescent",
+        "Bath Abbey",
+        "Sally Lunn",
+        "Avon",
+        "Georgian",
+        "Thermals"
+      ]
+    },
+    {
+      "id": "Oxford",
+      "nombre": "Oxford",
+      "tipo": "ciudad",
+      "region": "Inglaterra (Centro)",
+      "descripcion": "Universidad medieval con 30+ colegios, pubs centenarios y paseos en barca por el río Cherwell. Más auténtico y menos masificado que Cambridge. Fácil día o fin de semana desde Londres.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a octubre (evita exámenes finales en mayo-junio)",
+      "como_llegar": "Desde Londres: tren (58-70 min, 15-40 EUR). Desde Londres Paddington es directo. Autobús Megabus (1h 30m, 5-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergues en Jericho: 20-30 EUR/noche",
+        "medio": "Guesthouses near colleges: 50-75 EUR/noche",
+        "comfort": "Boutique hotels High Street: 110-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en barca Cherwell (14-18 EUR, 1h)",
+        "Christ Church College (13 EUR)",
+        "Bodleian Library (gratis exterior, 5 EUR tours)",
+        "Radcliffe Camera fotografía (gratis)",
+        "Botanical Garden (10 EUR)",
+        "Mercado Covered Market (gratis)",
+        "University Church (5 EUR, vistas)"
+      ],
+      "donde_comer": "Fish & chips (8-11 EUR). Pubs en Queniington o Jericho (10-15 EUR). Eagle & Child pub histórico (10-14 EUR). Cafés universitarios.",
+      "consejo_local": "Llega antes de las 10am o después de las 4pm para evitar grupos turísticos masivos. Los colegios cierran a veces por exámenes: verifica online. Jericho es el barrio estudiante real, con mejor vida local que el centro.",
+      "plan_b_lluvia": "Bibliotecas (Bodleian, interior). Museos pequeños (Ashmolean arte gratis). Pubs centenarios. Oxford stories en salas de lectura.",
+      "keywords": [
+        "Oxford",
+        "Universidad",
+        "Cherwell",
+        "Christ Church",
+        "Bodleian",
+        "Radcliffe Camera",
+        "punting",
+        "colegios"
+      ]
+    },
+    {
+      "id": "Snowdonia",
+      "nombre": "Snowdonia",
+      "tipo": "montaña",
+      "region": "Gales (Norte)",
+      "descripcion": "Macizo montañoso con picos alpinos, lagos glaciares y senderismo técnico. Paisaje más salvaje que Lake District. Base en Caernarfon o Betws-y-Coed para acceso norte/sur.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre (nieve posible en invierno)",
+      "como_llegar": "Desde Londres: tren a Caernarfon (4h 30m, 40-80 EUR) + autobús local. Desde Manchester: tren a Llanberis (2h 30m, 25-60 EUR). Coche alquilado recomendado.",
+      "donde_dormir": {
+        "mochilero": "Albergues en Llanberis, Caernarfon: 20-32 EUR/noche",
+        "medio": "Guesthouses en Betws-y-Coed, Caernarfon: 50-75 EUR/noche",
+        "comfort": "Country inns, converted mountain lodges: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Snowdon Peak cumbre (gratis senderismo 5-6h, o tren de montaña 15 EUR ida-vuelta)",
+        "Llanberis Path (gratis)",
+        "Tryfan ridge (gratis, técnico)",
+        "Pero Glace Pass senderismo (gratis, 2h)",
+        "Caernarfon Castle (11 EUR)",
+        "Caernarfon Town paseo (gratis)",
+        "Lago Idwal glaciar (gratis)"
+      ],
+      "donde_comer": "Pastel galés (Welsh cakes) 2-3 EUR. Fish & chips de calidad (9-13 EUR). Estofados galeses (10-14 EUR). Cider local.",
+      "consejo_local": "No intentes Snowdon en mal tiempo: la niebla reduce visibilidad a metros. Betws-y-Coed es más bonito que Llanberis pero más turístico. El acento galés es raro de entender al principio. Compra agua/provisiones en pueblos antes de subir.",
+      "plan_b_lluvia": "Castillos galeses (Caernarfon, Conwy). Museos de minería. Galerías de arte. Conducir por carreteras de montaña es espectacular incluso mojado.",
+      "keywords": [
+        "Snowdonia",
+        "Snowdon",
+        "Llanberis",
+        "Caernarfon",
+        "Betws-y-Coed",
+        "Tryfan",
+        "Gales",
+        "montaña"
+      ]
+    },
+    {
+      "id": "Cotswolds",
+      "nombre": "Cotswolds",
+      "tipo": "rural",
+      "region": "Inglaterra (Centro-Oeste)",
+      "descripcion": "Pueblos de piedra dorada, verdes valles ondulantes y mercados tradicionales intactos. Senderismo accesible entre pueblos. Escapada perfecta para desconectar.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Londres: tren a Moreton-in-Marsh (1h 30m, 20-50 EUR) + autobús local. Desde Birmingham: tren a Stratford-upon-Avon (30 min, 10-25 EUR). Mejor con coche alquilado.",
+      "donde_dormir": {
+        "mochilero": "Albergues en Chipping Campden, Moreton-in-Marsh: 22-35 EUR/noche",
+        "medio": "Guesthouses rurales, bed & breakfast: 50-80 EUR/noche",
+        "comfort": "Country inns, small hotels: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Chipping Campden Market Hall paseo (gratis)",
+        "Bourton-on-the-Water río (gratis)",
+        "Senderismo Cotswolds Way tramos (gratis)",
+        "Bibury Rose Cottage fotografía (gratis, foto clásica)",
+        "Painswick Rococo Garden (8 EUR)",
+        "Sudeley Castle (13 EUR)",
+        "Mercados de granjeros (gratis recorrer)"
+      ],
+      "donde_comer": "Comida casera en pubs rurales (10-15 EUR). Cream tea (6-9 EUR). Quesos locales. Comida de mercados.",
+      "consejo_local": "Los pueblos más fotografiados (Bibury, Bourton) están llenos de turistas entre 11am-3pm. Explora pueblos secundarios como Winchcombe o Stow-on-the-Wold. El senderismo entre pueblos es la mejor manera de verlos sin multitudes.",
+      "plan_b_lluvia": "Pueblos interior (tiendas, librerías). Castillos (Sudeley). Museos pequeños. Los Cotswolds brillan con lluvia: atmosférico.",
+      "keywords": [
+        "Cotswolds",
+        "Chipping Campden",
+        "Bourton-on-Water",
+        "Bibury",
+        "Stow-on-the-Wold",
+        "Painswick",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "cornualles-costa",
+      "nombre": "Cornualles (Costa)",
+      "tipo": "playa",
+      "region": "Inglaterra (Suroeste)",
+      "descripcion": "Costas de acantilados de película, playas de arena dorada y pueblos pesqueros bohemios. Fangst Falmouth y St Ives son bases ideales. Surf en Perranporth o Watergate Bay.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre (mayo y octubre también buenos, menos gente)",
+      "como_llegar": "Desde Londres: tren a Penzance (5h 15m, 40-100 EUR). Desde Exeter: tren (2h, 25-60 EUR). Autobús Megabus largo pero barato (8-9h, 15-35 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergues en Falmouth, St Ives: 20-35 EUR/noche",
+        "medio": "Guesthouses en Padstow, Newquay: 55-80 EUR/noche",
+        "comfort": "Seaside hotels, beach lodges: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas (Fistral, Watergate Bay, Porthcurno): natación/fotos (gratis)",
+        "Senderismo South West Coast Path (gratis)",
+        "Minack Theatre acantilado (14 EUR entrada espectáculo, gratis visita)",
+        "St Michael's Mount castillo isla (10 EUR)",
+        "Mercadillo pesquero Falmouth (gratis)",
+        "Tiendas de arte Penzance (gratis mirar)",
+        "Acuario National Maritime (13 EUR)"
+      ],
+      "donde_comer": "Mariscos frescos en mercadillos (10-16 EUR). Fish & chips legendarios (8-12 EUR). Pastel cornuallés (Cornish pasty 3-5 EUR). Cerveza local.",
+      "consejo_local": "St Ives es precioso pero caro y lleno. Falmouth es mejor base: más barato, más vida local, acceso a playas iguales. El South West Coast Path es el mejor senderismo de la región: incluso tramos cortos valen la pena. Ve al amanecer a Fistral para eludir multitudes de turistas.",
+      "plan_b_lluvia": "Minack Theatre (interior con vistas). Museos marineros. Galerías de arte (Cornualles tiene muchas). Paseos en acantilados son bonitos incluso mojados.",
+      "keywords": [
+        "Cornwall",
+        "Cornualles",
+        "St Ives",
+        "Falmouth",
+        "Newquay",
+        "playas",
+        "Minack",
+        "coast path",
+        "pesca"
+      ]
+    },
+    {
+      "id": "york",
+      "nombre": "York",
+      "tipo": "histórico",
+      "region": "Inglaterra (Norte)",
+      "descripcion": "Ciudad medieval amurallada intacta con calles empedradas, mercados históricos y catedral gótica espectacular. Más auténtica que Bath, igual de bella. Base para explorar el norte.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Desde Londres: tren directo (2h, 30-80 EUR). Desde Edimburgo: tren (2h 15m, 40-80 EUR). Desde Manchester: tren (1h 30m, 20-50 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergues en Walmgate, centro: 20-32 EUR/noche",
+        "medio": "Guesthouses en barrio histórico: 50-75 EUR/noche",
+        "comfort": "Pequeños hoteles medievales: 110-170 EUR/noche"
+      },
+      "que_hacer": [
+        "York Minster catedral (13 EUR o gratis exterior)",
+        "Paseo muralla completa (gratis, 2h)",
+        "The Shambles calle medieval (gratis)",
+        "York Castle Museum (13 EUR)",
+        "Mercadillos Newgate Market (gratis)",
+        "Paseo rio Ouse (gratis)",
+        "National Railway Museum (gratis)"
+      ],
+      "donde_comer": "Ploughman's lunch (8-11 EUR). Yorkshire pudding (10-14 EUR). Fish & chips (9-13 EUR). Chocolate local (York es famosa por Kit Kat, Rowntrees).",
+      "consejo_local": "Sube a la muralla al atardecer: las vistas de la catedral con luz dorada son excepcionales. The Shambles es Instagram pero vale la pena si vas temprano (antes 8am). Come en pubs de barrio: misma comida, mitad precio que turistas en Shambles.",
+      "plan_b_lluvia": "York Minster interior. Museos (Railway, Castle). Librerías antiguas Brontë. Chocolate shops. Pubs medievales.",
+      "keywords": [
+        "York",
+        "Minster",
+        "Shambles",
+        "muralla",
+        "medieval",
+        "catedral",
+        "railway museum",
+        "norte de Inglaterra"
+      ]
+    },
+    {
+      "id": "belfast-irlanda-norte",
+      "nombre": "Belfast",
+      "tipo": "ciudad",
+      "region": "Irlanda del Norte",
+      "descripcion": "Capital revitalizada con galerías de arte, pubs tradicionales y historia industrial. Punto de salida para la Calzada de los Gigantes y Antrim Coast. Vibrante vida local, menos turismo de masas que Londres.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Londres: vuelo (1h 20m, 40-120 EUR). Desde Dublín: autobús (2h, 10-20 EUR) o tren (2h, 20-50 EUR). Desde Glasgow: ferry + autobús (6-7h, 40-80 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergues en Cathedral Quarter: 18-28 EUR/noche",
+        "medio": "Guesthouses en Queens Quarter: 50-70 EUR/noche",
+        "comfort": "Boutique hotels Titanic Quarter: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Titanic Museum (16 EUR, industrial historia)",
+        "Murales políticos Falls Road/Shankill (gratis tour guiado, 10-15 EUR)",
+        "Cathedral Quarter paseo (gratis)",
+        "Ulster Museum (gratis)",
+        "Botanic Gardens (gratis)",
+        "Merchant Hotel pubs (drinks 4-6 EUR)",
+        "Queen's University arquitectura (gratis)"
+      ],
+      "donde_comer": "Irish stew (10-13 EUR). Soda bread (2-3 EUR). Mariscos frescos (12-18 EUR). Cerveza Guinness auténtica (4-5 EUR pinta). Pubs con músicas en vivo.",
+      "consejo_local": "Los murales de los tabiques no son peligrosos ahora, pero ve con respeto y preferiblemente con tour local que te explique la historia. Cathedral Quarter es el barrio con vida nocturna y cafés modernos. Queen's Quarter es más estudiante y local. La gente de Belfast es muy amable si empiezas conversación.",
+      "plan_b_lluvia": "Museos (Titanic, Ulster). Librerías antiguas. Pubs (Belfast tiene los mejores pubs de Irlanda). Galerías de arte.",
+      "keywords": [
+        "Belfast",
+        "Irlanda del Norte",
+        "Titanic",
+        "murales",
+        "Cathedral Quarter",
+        "Queens Quarter",
+        "giant's causeway"
+      ]
+    }
+  ]
+}

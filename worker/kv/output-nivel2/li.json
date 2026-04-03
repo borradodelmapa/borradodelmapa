@@ -1,0 +1,332 @@
+{
+  "pais": "Liechtenstein",
+  "codigo": "li",
+  "destinos": [
+    {
+      "id": "vaduz",
+      "nombre": "Vaduz",
+      "tipo": "ciudad",
+      "region": "Liechtenstein central",
+      "descripcion": "Capital y centro administrativo de Liechtenstein, ubicada en el valle del Rin. Combina modernidad con castillo medieval y galerías de arte de clase mundial. Punto de partida lógico para explorar el país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Vuelo a Zurich (80 km, 1.5h en tren/autobús, 15-25 EUR) o entrada directa por carretera desde Suiza/Austria",
+      "donde_dormir": {
+        "mochilero": "Albergue o pensión en barrios periféricos: 35-50 EUR/noche",
+        "medio": "Hotel 3 estrellas centro: 80-120 EUR/noche",
+        "comfort": "Hotel 4 estrellas con vistas castillo: 140-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Vaduz (gratis exterior, interior privado pero visitable con tour guiado 15 EUR)",
+        "Liechtenstein National Museum (entrada 10 EUR)",
+        "Catedral de San Florín (gratis)",
+        "Kunstmuseum Liechtenstein: arte moderno y contemporáneo (12 EUR)",
+        "Paseo por casco antiguo y Herrengasse (gratis)"
+      ],
+      "donde_comer": "Käsespätzle (pasta con queso local) y Fleischknack (embutido). Rango 12-25 EUR platos principales. Zona casco antiguo alrededor de Städtle.",
+      "consejo_local": "El Castillo no admite público general pero se ve perfectamente desde la ciudad. Compra la Liechtenstein Card (válido todo el país) si planeas varios museos.",
+      "plan_b_lluvia": "Liechtenstein National Museum o Kunstmuseum Liechtenstein",
+      "keywords": [
+        "capital",
+        "castillo",
+        "museos",
+        "Städtle",
+        "casco antiguo"
+      ]
+    },
+    {
+      "id": "schaan",
+      "nombre": "Schaan",
+      "tipo": "ciudad",
+      "region": "Liechtenstein central",
+      "descripcion": "Segunda ciudad del país, base más asequible que Vaduz. Pueblo tradicional liechtensteinés con acceso directo a rutas de montaña y el valle del Rin. Ideal para presupuesto bajo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Desde Vaduz: 10 min en autobús (3 EUR) o 15 min a pie. Desde Suiza/Austria: entrada directa por carretera",
+      "donde_dormir": {
+        "mochilero": "Pensión rural o albergue: 30-45 EUR/noche",
+        "medio": "Hotel 2-3 estrellas: 60-90 EUR/noche",
+        "comfort": "Hotel 3-4 estrellas con vistas: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Iglesia de San Pedro y San Pablo (gratis)",
+        "Paseo por centro histórico (gratis)",
+        "Ruta de senderismo a Liechtenstein Park (gratis, 2h)",
+        "Acceso a pistas ciclismo valle del Rin (gratis)",
+        "Visita bodegas locales (catas 8-15 EUR)"
+      ],
+      "donde_comer": "Comida local liechtensteinesa más barata que Vaduz. Rango 10-20 EUR. Especialidad: Ribelmais (polenta con queso).",
+      "consejo_local": "Schaan es donde viven los locals. Menos turístico que Vaduz, mejor precio y más auténtico.",
+      "plan_b_lluvia": "Visitar bodegas locales o museo pequeño de arte sacro",
+      "keywords": [
+        "segunda ciudad",
+        "pueblo tradicional",
+        "presupuesto",
+        "centro histórico"
+      ]
+    },
+    {
+      "id": "malbun",
+      "nombre": "Malbun",
+      "tipo": "montaña",
+      "region": "Appenzell Alps (este)",
+      "descripcion": "Única estación de esquí de Liechtenstein a 2000m, rodeada de alpes espectaculares. Senderismo de alta montaña en verano, esquí en invierno. Acceso a la ruta de los Tres Países (Liechtenstein-Suiza-Austria).",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre (verano), diciembre a marzo (esquí)",
+      "como_llegar": "Desde Vaduz: autobús 21 (50 min, 5 EUR) o coche alquilado (1h). Subida serpentina de montaña.",
+      "donde_dormir": {
+        "mochilero": "Albergue de montaña o pensión: 40-60 EUR/noche",
+        "medio": "Hotel 3 estrellas: 80-120 EUR/noche",
+        "comfort": "Resort alpino 4 estrellas: 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Sareis (1h, gratis)",
+        "Ruta de los Tres Países con vistas a Appenzell Alps (gratis, 4h)",
+        "Naafkopf Trek (2h, gratis)",
+        "Esquí de fondo en invierno (pistas gratis)",
+        "Acceso pistas esquí (forfait diario 40-60 EUR)",
+        "Picnic alpino con vistas (gratis)"
+      ],
+      "donde_comer": "Restaurante Alpina o Berghaus: fondue de queso y carnes a la parrilla. Rango 18-30 EUR. Menú conjunto Liechtenstein-Suiza-Austria disponible.",
+      "consejo_local": "Ve temprano (antes de 10h) para evitar excursionistas. Las vistas al atardecer son mejores que al mediodía. Descarga mapas offline: sin señal en la montaña.",
+      "plan_b_lluvia": "Refugio con fondue y vista a través de nubes, o bajar a Schaan",
+      "keywords": [
+        "esqui",
+        "montaña",
+        "alpes",
+        "tres países",
+        "trekking",
+        "sareis"
+      ]
+    },
+    {
+      "id": "triesenberg",
+      "nombre": "Triesenberg",
+      "tipo": "rural",
+      "region": "Liechtenstein oeste",
+      "descripcion": "Pueblo histórico en terraza a 900m con arquitectura walser (alemánica medieval). Vida rural intacta, panorámicas del valle del Rin y senderos bucólicos. Destino para desconectar.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Vaduz: autobús 10 (30 min, 4 EUR) o coche (25 min)",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes rural: 35-50 EUR/noche",
+        "medio": "Pequeño hotel: 70-100 EUR/noche",
+        "comfort": "Alojamiento boutique con vistas: 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por pueblo medieval (gratis)",
+        "Iglesia parroquial siglo XVII (gratis, abierta)",
+        "Walser Heritage Trail (5h, gratis)",
+        "Picnic con panorámicas (gratis)",
+        "Visita a casas tradicionales restauradas (gratis exterior, interior privado)",
+        "Fotografía de arquitectura medieval (gratis)"
+      ],
+      "donde_comer": "Comida casera en posadas locales. Especialidad: Rösti y sopas. Rango 12-22 EUR. Único restaurante principal: Gasthof zum Löwen.",
+      "consejo_local": "Idealmente combina con ruta de senderismo circular hasta Steg. Evita fines de semana si prefieres tranquilidad.",
+      "plan_b_lluvia": "Refugiarse en Gasthof Löwen con sopa caliente y vino local",
+      "keywords": [
+        "pueblo medieval",
+        "walser",
+        "rural",
+        "arquitectura",
+        "terraza",
+        "tradición"
+      ]
+    },
+    {
+      "id": "steg",
+      "nombre": "Steg",
+      "tipo": "rural",
+      "region": "Liechtenstein oeste",
+      "descripcion": "Pueblo remoto en alta montaña (1300m) accesible solo a pie o en invierno en coche. Comunidad pequeña donde el tiempo se detiene. Mejor opción para soledad extrema.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Triesenberg a pie (2h, gratis) o desde Schellenberg en invierno con coche (1.5h)",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes única (Steg): 40-60 EUR/noche, reserva obligatoria",
+        "medio": "Idem (sin opciones alternativas)",
+        "comfort": "Idem"
+      },
+      "que_hacer": [
+        "Senderismo a Säntis (4h, gratis)",
+        "Observación de flora alpina (gratis)",
+        "Picnic con vistas (gratis)",
+        "Fotografía de paisaje (gratis)",
+        "Descanso en silencio (gratis)"
+      ],
+      "donde_comer": "Única posada local sirve comida casera sencilla. Rango 14-20 EUR. Productos locales.",
+      "consejo_local": "Lleva provisiones extras. El pueblo tiene una tienda mínima. La única conexión es a pie desde Triesenberg o via Schellenberg (más larga). Reserva alojamiento con anticipación.",
+      "plan_b_lluvia": "No recomendado en lluvia: caminos se vuelven peligrosos. Mejor permanecer en Triesenberg.",
+      "keywords": [
+        "aislado",
+        "montaña alta",
+        "comunidad pequeña",
+        "senderos",
+        "Säntis"
+      ]
+    },
+    {
+      "id": "balzers",
+      "nombre": "Balzers",
+      "tipo": "naturaleza",
+      "region": "Liechtenstein norte",
+      "descripcion": "Garganta espectacular y reserva natural en el norte. Río Samina crea cañón con senderismo técnico y vistas de acantilados. Acceso desde Schellenberg.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Vaduz: autobús a Schellenberg (30 min, 4 EUR), luego 30 min a pie hasta entrada garganta",
+      "donde_dormir": {
+        "mochilero": "Albergue en Schellenberg: 35-50 EUR/noche",
+        "medio": "Pequeño hotel Schellenberg: 70-100 EUR/noche",
+        "comfort": "Hotel Schellenberg o bajar a Schaan: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruta garganta Balzers (3h ida y vuelta, gratis)",
+        "Fotografía de acantilados (gratis)",
+        "Observación de aves rapaces (gratis)",
+        "Picnic en ribera (gratis)",
+        "Trekking técnico opcional con cuerda (gratis o 30 EUR con guía)"
+      ],
+      "donde_comer": "Restaurante en Schellenberg o llevar provisiones. Rango 15-25 EUR si cenas en pueblo.",
+      "consejo_local": "La garganta puede tener agua alta en primavera. Comprueba nivel antes de entrar. Botas de montaña recomendadas.",
+      "plan_b_lluvia": "Rocas resbaladizas. Posponer a día seco. Alternativa: senderismo suave en valle.",
+      "keywords": [
+        "garganta",
+        "cañón",
+        "samina",
+        "acantilados",
+        "trekking técnico",
+        "naturaleza"
+      ]
+    },
+    {
+      "id": "bendern",
+      "nombre": "Bendern",
+      "tipo": "ciudad",
+      "region": "Liechtenstein sur",
+      "descripcion": "Pueblo-frontera en el sur junto a Suiza. Acceso a viñedos liechtensteineses del Rin y arquitectura tradicional. Punto de partida para explorar el sur del país.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "agosto a octubre (vendimia)",
+      "como_llegar": "Desde Vaduz: autobús 11 (35 min, 4 EUR) o coche (25 min)",
+      "donde_dormir": {
+        "mochilero": "Pensión pequeña: 35-50 EUR/noche",
+        "medio": "Hotel rural: 70-100 EUR/noche",
+        "comfort": "Hotel con viñedo: 110-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita a bodegas vitivinícolas (cata 8-12 EUR)",
+        "Paseo por centro histórico (gratis)",
+        "Ruta vinos del Rin (5h, gratis)",
+        "Picnic en viñedos (gratis)",
+        "Iglesia parroquial (gratis)"
+      ],
+      "donde_comer": "Comida regional con vinos locales. Rango 15-28 EUR. Especialidad: embutidos y quesos con vino blanco Liechtenstein.",
+      "consejo_local": "El vino blanco local (Completer) es delicioso y barato (8-15 EUR botella). Visita bodegas por la tarde después de senderismo.",
+      "plan_b_lluvia": "Visita bodega y cata interior",
+      "keywords": [
+        "sur",
+        "viñedos",
+        "vino",
+        "frontera",
+        "arquitectura",
+        "bodegas"
+      ]
+    },
+    {
+      "id": "nendeln",
+      "nombre": "Nendeln",
+      "tipo": "histórico",
+      "region": "Liechtenstein central-sur",
+      "descripcion": "Pueblo histórico con sitios arqueológicos romanos y medievales. Acceso a rutas de senderismo hacia Liechtenstein Park. Base alternativa a Schaan.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Desde Vaduz: autobús 10 (20 min, 3.5 EUR) o coche (15 min)",
+      "donde_dormir": {
+        "mochilero": "Casa de huéspedes: 35-50 EUR/noche",
+        "medio": "Hotel 2-3 estrellas: 70-100 EUR/noche",
+        "comfort": "Hotel 3 estrellas: 100-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo sitios arqueológicos romanos (gratis con mapa)",
+        "Iglesia parroquial antigua (gratis)",
+        "Liechtenstein Park (acceso gratis, museo 5 EUR)",
+        "Senderismo valle Rin (gratis)",
+        "Visita a ruinas medievales cercanas (gratis)"
+      ],
+      "donde_comer": "Posadas locales con cocina tradicional. Rango 12-22 EUR.",
+      "consejo_local": "Menos turístico que Vaduz. Perfecto para combinar arqueología con senderismo. Descarga mapas de sitios romanos en oficina turismo.",
+      "plan_b_lluvia": "Museo pequeño en Liechtenstein Park",
+      "keywords": [
+        "arqueología",
+        "romano",
+        "medieval",
+        "ruinas",
+        "histórico",
+        "centro"
+      ]
+    },
+    {
+      "id": "schellenberg",
+      "nombre": "Schellenberg",
+      "tipo": "montaña",
+      "region": "Liechtenstein norte",
+      "descripcion": "Pueblo de montaña a 770m acceso a Balzers y rutas alpinas del norte. Base alternativa para exploración menos turística de cimas y gargantas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Vaduz: autobús 10 (35 min, 4 EUR) o coche (30 min)",
+      "donde_dormir": {
+        "mochilero": "Albergue o pensión: 35-50 EUR/noche",
+        "medio": "Hotel pequeño: 70-100 EUR/noche",
+        "comfort": "Hotel con vistas alpes: 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruta a Balzers garganta (30 min caminata + 3h garganta, gratis)",
+        "Senderismo a Naafkopf (2h, gratis)",
+        "Fotografía de alpes (gratis)",
+        "Tirolina o actividades adrenalina (30-50 EUR)"
+      ],
+      "donde_comer": "Restaurante principal: Krone. Rango 16-26 EUR. Comida alpina.",
+      "consejo_local": "Base menos conocida para actividades norte. Más tranquilo que Malbun.",
+      "plan_b_lluvia": "Bajar a valle o visita interior",
+      "keywords": [
+        "norte",
+        "montaña",
+        "alpes",
+        "balzers",
+        "trekking"
+      ]
+    },
+    {
+      "id": "excursion_appenzell",
+      "nombre": "Appenzell (Suiza) - Excursión",
+      "tipo": "rural",
+      "region": "Suiza este (frontera Liechtenstein)",
+      "descripcion": "Pueblo suizo tradicional a 30 min de Liechtenstein. Arquitectura colorida y cultura alpina. Imprescindible si buscas comparar estilos regionales o ampliar base de operaciones.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Schellenberg: autobús a Heiden o Appenzell (50 min-1h, 8-12 EUR suizos ≈ 8-12 EUR). Desde Triesenberg: caminata 2h (frontera directa).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Appenzell: 40-60 EUR/noche",
+        "medio": "Hotel 3 estrellas: 90-130 EUR/noche",
+        "comfort": "Hotel 4 estrellas: 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo casco antiguo Appenzell (gratis)",
+        "Museo Appenzell (entrada 10 CHF ≈ 10 EUR)",
+        "Senderismo a Säntis (4h desde Appenzell, gratis)",
+        "Queso Appenzell en cooperativa (cata+compra 15-20 CHF)"
+      ],
+      "donde_comer": "Comida alpina suiza. Rango 18-30 CHF (≈18-30 EUR). Especialidad: Älplermagronen.",
+      "consejo_local": "Suiza es cara. Usa transporte conjunto Liechtenstein-Suiza. Cambio EUR-CHF 1:1 aproximado.",
+      "plan_b_lluvia": "Museo o bodega local",
+      "keywords": [
+        "Suiza",
+        "Appenzell",
+        "excursión",
+        "frontera",
+        "pueblo tradicional",
+        "Säntis"
+      ],
+      "excursion_desde": true
+    }
+  ]
+}

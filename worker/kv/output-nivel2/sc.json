@@ -1,0 +1,346 @@
+{
+  "pais": "Seychelles",
+  "codigo": "sc",
+  "destinos": [
+    {
+      "id": "mahe-victoria",
+      "nombre": "Mahé y Victoria",
+      "tipo": "isla",
+      "region": "Isla de Mahé, noroeste del archipiélago",
+      "descripcion": "La isla más grande de Seychelles con la capital Victoria, punto de entrada obligatorio. Centro administrativo y comercial donde se concentran tiendas, mercados y servicios esenciales. Base logística ideal para organizar excursiones a otras islas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a mayo, septiembre a octubre",
+      "como_llegar": "Vuelo internacional al Aeropuerto Internacional de Mahé (SEZ). Desde Europa: 10-12 horas con escalas. Coste aproximado: 500-900 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Victoria o Beau Vallon: 40-70 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas en Beau Vallon: 80-150 EUR/noche",
+        "comfort": "Resorts de lujo en Beau Vallon o Anse aux Pins: 200-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Victoria (gratis, mañana)",
+        "Paseo por el puerto y vista al Océano Índico (gratis)",
+        "Parque Nacional Morne Seychellois - senderismo (5 EUR)",
+        "Playa de Beau Vallon (gratis)",
+        "Jardín Botánico de Victoria (3 EUR)"
+      ],
+      "donde_comer": "Comida criolla (curry de pez loro, sopa de pulpo) en el mercado o restaurantes locales. Rango: 5-20 EUR. Zona recomendada: alrededor del mercado o Independence Avenue.",
+      "consejo_local": "Ve al mercado de Victoria antes de las 11:00 - después está prácticamente vacío. Los taxis son caros; usa el minibús local (0,60 EUR) o alquila un coche.",
+      "plan_b_lluvia": "Visita el Museo de Historia Natural de Seychelles o pasa tiempo en cafeterías locales probando chai y gateau (pasteles criollos).",
+      "keywords": [
+        "Mahe",
+        "Victoria",
+        "capital",
+        "Beau Vallon",
+        "mercado",
+        "puerto",
+        "Morne Seychellois"
+      ]
+    },
+    {
+      "id": "praslin-anse-lazio",
+      "nombre": "Praslin y Anse Lazio",
+      "tipo": "isla",
+      "region": "Isla de Praslin, norte del archipiélago",
+      "descripcion": "Segunda isla más grande con playas de arena blanca y aguas cristalinas. Anse Lazio es una de las playas más espectaculares de Seychelles con rocas graníticas características. Ideal para buceo, snorkel y descanso.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a mayo, septiembre a octubre",
+      "como_llegar": "Ferry desde Mahé (Beau Vallon): 45 minutos, 17 EUR. O vuelo: 15 minutos, 80-120 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Baie Sainte Anne: 45-75 EUR/noche",
+        "medio": "Hoteles pequeños en Grand Anse: 90-160 EUR/noche",
+        "comfort": "Resorts en Anse Lazio o Côte d'Or: 180-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Anse Lazio - baño y snorkel (gratis)",
+        "Buceo en arrecifes próximos (40-80 EUR con operador local)",
+        "Valle de Mai - Patrimonio de la UNESCO, palmeras Coco de Mer (20 EUR)",
+        "Playa de Anse Georgette (gratis, pero acceso privado desde resort)",
+        "Paseo por Grand Anse (gratis)"
+      ],
+      "donde_comer": "Pescado fresco grillé, pulpo al coco. Rango: 8-25 EUR. Restaurantes en Grand Anse y Baie Sainte Anne.",
+      "consejo_local": "Ansa Lazio es abarrotada a mediodía - ve temprano o al final de la tarde. El Valle de Mai es obligatorio pero paga la entrada completa: merece la pena.",
+      "plan_b_lluvia": "Visita el Valle de Mai incluso con lluvia (es más tranquilo). Los arbustos de Coco de Mer siguen visibles.",
+      "keywords": [
+        "Praslin",
+        "Anse Lazio",
+        "Valle de Mai",
+        "Coco de Mer",
+        "Grand Anse",
+        "Baie Sainte Anne",
+        "segunda isla"
+      ]
+    },
+    {
+      "id": "la-digue-anse-source-argent",
+      "nombre": "La Digue y Anse Source d'Argent",
+      "tipo": "isla",
+      "region": "Isla de La Digue, este del archipiélago",
+      "descripcion": "Isla pequeña y tranquila famosa por la playa más fotografiada de Seychelles con rocas graníticas icónicas. Ambiente relajado, sin vehículos motorizados, perfecto para viajeros que buscan paz y playas espectaculares.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a mayo, septiembre a octubre",
+      "como_llegar": "Ferry desde Mahé (Puerto Victoria): 1 hora, 25 EUR. O desde Praslin: 15 minutos, 4,50 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses y habitaciones privadas: 40-80 EUR/noche",
+        "medio": "Pequeños hoteles: 90-150 EUR/noche",
+        "comfort": "Resorts boutique: 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Anse Source d'Argent - playa icónica (gratis, 5 EUR entrada si vas solo a la playa)",
+        "Alquiler de bicicleta - recorrer la isla (5 EUR/día)",
+        "Snorkel en Anse Cocos (gratis)",
+        "Paseo en carreta de bueyes (ambiente local, 10 EUR)",
+        "Playa de Anse Union (gratis, más tranquila)"
+      ],
+      "donde_comer": "Comida criolla casera. Rango: 6-18 EUR. Come donde comen los locales, pequeños restaurantes sin rótulo oficial.",
+      "consejo_local": "Llega a Anse Source d'Argent antes de las 10:00 para evitar los cruceros. No hay cajeros - trae efectivo de Mahé o Praslin.",
+      "plan_b_lluvia": "La isla es pequeña - pasea bajo la lluvia (es tropical, pasa rápido) o relájate en una guesthouse.",
+      "keywords": [
+        "La Digue",
+        "Anse Source d'Argent",
+        "rocas graníticas",
+        "bicicletas",
+        "isla tranquila",
+        "Anse Union",
+        "Anse Cocos"
+      ]
+    },
+    {
+      "id": "curieuse-marine-park",
+      "nombre": "Isla Curieuse y Marine Park",
+      "tipo": "naturaleza",
+      "region": "Parque marino entre Praslin y La Digue",
+      "descripcion": "Reserva marina protegida con tortugas gigantes, senderos en la selva y aguas vírgenes para buceo y snorkel. Antigua colonia de leprosos, ahora museo al aire libre con restos históricos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a mayo, septiembre a octubre",
+      "como_llegar": "Excursión en bote desde Praslin o La Digue: 30 minutos, 25-50 EUR con operador turístico.",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento - visita de día desde Praslin o La Digue",
+        "medio": "No hay alojamiento - visita de día desde Praslin o La Digue",
+        "comfort": "No hay alojamiento - visita de día desde Praslin o La Digue"
+      },
+      "que_hacer": [
+        "Snorkel y buceo en arrecifes (incluido en tour, 40-80 EUR)",
+        "Senderismo en la selva con guía (10 EUR extra)",
+        "Observación de tortugas gigantes (gratis, dentro del recorrido)",
+        "Visita al museo de la antigua colonia de leprosos (gratis con entrada)",
+        "Playa aislada (gratis)"
+      ],
+      "donde_comer": "Pícnic incluido en la mayoría de tours. Trae agua y snacks de la isla anterior.",
+      "consejo_local": "Contrata un tour con un operador local de Praslin - mucho más barato que desde tu resort. Lleva buen protector solar: no hay sombra en algunas playas.",
+      "plan_b_lluvia": "El buceo puede ser riesgoso con olas - pregunta al guía. El senderismo es posible incluso bajo lluvia.",
+      "keywords": [
+        "Curieuse",
+        "Marine Park",
+        "tortugas gigantes",
+        "arrecife",
+        "snorkel",
+        "buceo",
+        "historia leprosos"
+      ]
+    },
+    {
+      "id": "bird-island",
+      "nombre": "Bird Island",
+      "tipo": "naturaleza",
+      "region": "Isla remota al norte del archipiélago",
+      "descripcion": "Isla de vida silvestre con millones de aves, incluidas fragatas y golondrinas. Experiencia de naturaleza inmersiva lejos del turismo masivo, ideal para observadores de pájaros y fotógrafos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a noviembre (menos lluvia)",
+      "como_llegar": "Vuelo desde Mahé con Zil Air: 30 minutos, 150-200 EUR (requiere reserva previa). O excursión en barco: 4-5 horas, 80-120 EUR.",
+      "donde_dormir": {
+        "mochilero": "Lodge básico en la isla (si se pernocta): 120-180 EUR/noche",
+        "medio": "Lodge estándar: 180-250 EUR/noche",
+        "comfort": "Lodge mejorado: 250-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Observación de aves (guía incluido, gratis con entrada)",
+        "Fotografía de fauna silvestre (gratis)",
+        "Paseo por senderos marcados (gratis)",
+        "Playa deshabitada (gratis)",
+        "Picnic (incluido o trae comida)"
+      ],
+      "donde_comer": "Comidas básicas incluidas en tours de día. Si pernoctas, la comida está en el lodge (20-30 EUR meals).",
+      "consejo_local": "Visita entre mayo y noviembre - las aves anidan entonces. Lleva binoculares. La isla es privada y requiere reserva con operador autorizado.",
+      "plan_b_lluvia": "Las aves siguen activas bajo lluvia. Lleva impermeable y cámara protegida.",
+      "keywords": [
+        "Bird Island",
+        "aves",
+        "fragatas",
+        "observacion ornitologica",
+        "fauna",
+        "vida silvestre",
+        "isla remota"
+      ]
+    },
+    {
+      "id": "silhouette-island",
+      "nombre": "Silhouette Island",
+      "tipo": "naturaleza",
+      "region": "Isla noroccidental, frente a Mahé",
+      "descripcion": "Tercera isla más grande con montaña central, selva virgen y playas vírgenes. Menos turística que Praslin o La Digue, ideal para senderismo y naturaleza sin aglomeraciones.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a mayo, septiembre a octubre",
+      "como_llegar": "Ferry desde Mahé (Puerto Victoria): 45 minutos, 17 EUR. O excursión en barco privado: 35-50 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses modestas (limitadas): 60-100 EUR/noche",
+        "medio": "Hilton Seychelles Silhouette Island Resort: 120-200 EUR/noche",
+        "comfort": "Hilton Seychelles Silhouette Island Resort (suite): 250-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo en la selva - Pico Silhouette (20 EUR con guía)",
+        "Snorkel en arrecifes locales (gratis o 30 EUR con operador)",
+        "Playa de Anse Pierrot (gratis)",
+        "Observación de cangrejos terrestres (gratis, noche)",
+        "Pesca local (40 EUR con pescador local)"
+      ],
+      "donde_comer": "Comida criolla en pequeños restaurantes. Rango: 8-20 EUR. La mayoría de visitantes comen en el resort.",
+      "consejo_local": "Silhouette está menos promocionada pero es espectacular. Alquila un bote local en lugar de tours caros. Trae efectivo - pocos sitios aceptan tarjeta.",
+      "plan_b_lluvia": "El senderismo es posible pero lodo abundante. Usa botas. La playa sigue siendo accesible.",
+      "keywords": [
+        "Silhouette",
+        "tercera isla",
+        "senderismo",
+        "montaña",
+        "selva virgen",
+        "arrecife",
+        "cangrejos"
+      ]
+    },
+    {
+      "id": "baie-ternay-marine-park",
+      "nombre": "Baie Ternay Marine Park",
+      "tipo": "naturaleza",
+      "region": "Parque marino en Mahé, costa noroeste",
+      "descripcion": "Parque marino protegido ideal para buceo y snorkel con arrecifes intactos y peces tropicales. Menor afluencia que playas principales, agua cristalina y acceso fácil desde Beau Vallon.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a mayo, septiembre a octubre",
+      "como_llegar": "Desde Beau Vallon (Mahé): 10 minutos en taxi (5 EUR) o autobús local (0,60 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Beau Vallon: 40-70 EUR/noche",
+        "medio": "Hoteles pequeños en zona: 80-150 EUR/noche",
+        "comfort": "Resorts en Beau Vallon: 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel libre en el parque (gratis, 5 EUR entrada opcional)",
+        "Buceo con operador local (40-80 EUR)",
+        "Paseo en bote entre arrecifes (20-30 EUR con local)",
+        "Picnic en playa (gratis, trae comida)",
+        "Fotografía submarina (gratis)"
+      ],
+      "donde_comer": "Restaurantes en Beau Vallon cercanos. Rango: 10-30 EUR.",
+      "consejo_local": "Es gratis entrar al parque pero paga algo al guardián local. El snorkel aquí es tan bueno como en islas remotas pero sin costo de ferry.",
+      "plan_b_lluvia": "El parque es accesible incluso con olas - pregunta al operador local si es seguro bucear.",
+      "keywords": [
+        "Baie Ternay",
+        "Marine Park",
+        "Mahé",
+        "snorkel",
+        "arrecife",
+        "buceo",
+        "Beau Vallon"
+      ]
+    },
+    {
+      "id": "vallee-mai-coco-mer",
+      "nombre": "Vallée de Mai (detalle específico)",
+      "tipo": "naturaleza",
+      "region": "Isla de Praslin, zona central",
+      "descripcion": "Patrimonio de la UNESCO: bosque primitivo con palmeras Coco de Mer endémicas (cocos más grandes del mundo). Senderismo educativo con guías especializados entre flora única de Seychelles.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Desde Praslin - autobús o taxi: 10 minutos, 1-5 EUR. Ferry desde Mahé + transporte local: 2 horas total.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Grand Anse: 45-75 EUR/noche",
+        "medio": "Hoteles pequeños: 90-160 EUR/noche",
+        "comfort": "Resorts en Praslin: 180-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo guiado en el bosque (20 EUR, incluye guía)",
+        "Fotografía de Coco de Mer y flora endémica (gratis extra)",
+        "Observación de loro negro de Praslin (Praslin Black Parrot) - raro (gratis, suerte)",
+        "Paseo autónomo por senderos (gratis después de pagar entrada)",
+        "Información en centro de visitantes (gratis)"
+      ],
+      "donde_comer": "Sin restaurantes en el parque. Come en Grand Anse antes o después.",
+      "consejo_local": "Contrata un guía local (5-10 EUR extra) - explican la botánica endémica. Las frutas de Coco de Mer caen - no te sientes bajo los árboles.",
+      "plan_b_lluvia": "El bosque es húmedo siempre - la lluvia no importa. De hecho, es más verde y frondoso.",
+      "keywords": [
+        "Vallée de Mai",
+        "Coco de Mer",
+        "UNESCO",
+        "Praslin",
+        "palmeras endémicas",
+        "loro negro",
+        "bosque primitivo"
+      ]
+    },
+    {
+      "id": "anse-intendance",
+      "nombre": "Anse Intendance",
+      "tipo": "playa",
+      "region": "Mahé, costa sureste",
+      "descripcion": "Playa virgen con olas fuertes, arena negra y vegetación tropical. Menos turística que Beau Vallon, perfecta para surfers y viajeros que buscan autenticidad y soledad.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre (olas)",
+      "como_llegar": "Desde Victoria (Mahé): taxi o minibús 20-30 minutos, 5-10 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en pueblos cercanos: 40-70 EUR/noche",
+        "medio": "Pequeños hoteles: 80-140 EUR/noche",
+        "comfort": "Banyan Tree Seychelles (resort de lujo cercano): 250-450 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño y relajación en playa (gratis, cuidado con las olas)",
+        "Surf (tabla propia o alquiler 15-25 EUR)",
+        "Paseo al atardecer (gratis)",
+        "Picnic (trae comida de Victoria)",
+        "Fotografía de naturaleza (gratis)"
+      ],
+      "donde_comer": "No hay restaurantes en la playa. Come antes en Victoria o pueblos cercanos (5-15 EUR).",
+      "consejo_local": "Las olas pueden ser peligrosas - no es buena para nadar en temporada alta. Ve a disfrutar del paisaje, no a nadar. Vigilancia de seguridad: ve de día.",
+      "plan_b_lluvia": "Es la estación de lluvia cuando hay olas. Sigue siendo espectacular pero impredecible.",
+      "keywords": [
+        "Anse Intendance",
+        "playa virgen",
+        "arena negra",
+        "surf",
+        "soledad",
+        "Mahé",
+        "olas"
+      ]
+    },
+    {
+      "id": "denis-island",
+      "nombre": "Denis Island",
+      "tipo": "isla",
+      "region": "Isla remota al norte, 90 km de Mahé",
+      "descripcion": "Isla privada exclusiva para buceo, pesca y relajación. Arrecifes espectaculares, biodiversidad marina excepcional y total aislamiento. Destino premium para viajeros con presupuesto alto.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril (mejor para buceo)",
+      "como_llegar": "Vuelo charter desde Mahé con Zil Air: 45 minutos, 350-450 EUR (solo con reserva en lodge).",
+      "donde_dormir": {
+        "mochilero": "No accesible - solo resort de lujo",
+        "medio": "No accesible - solo resort de lujo",
+        "comfort": "Denis Island Lodge (all-inclusive): 350-600 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en arrecifes (incluido en paquete all-inclusive o 60-100 EUR extra)",
+        "Pesca en alta mar (incluido o 80-150 EUR)",
+        "Snorkel (gratis para huéspedes)",
+        "Paseos en la isla y observación de vida silvestre (gratis)",
+        "Relajación total en playa deshabitada (gratis)"
+      ],
+      "donde_comer": "Todo incluido en el lodge - comida muy buena. Opción de pedir cenas especiales.",
+      "consejo_local": "Solo para viajeros con presupuesto generoso. No hay tours de día - solo alojamiento. La experiencia compensa el precio si amas buceo o pesca.",
+      "plan_b_lluvia": "Buceo en aguas profundas es posible incluso con lluvia. El lodge tiene actividades interiores.",
+      "keywords": [
+        "Denis Island",
+        "isla privada",
+        "buceo premium",
+        "pesca",
+        "arrecife",
+        "resort exclusivo",
+        "norte Seychelles"
+      ]
+    }
+  ]
+}

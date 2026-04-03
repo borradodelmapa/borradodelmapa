@@ -1,0 +1,339 @@
+{
+  "pais": "Moldavia",
+  "codigo": "md",
+  "destinos": [
+    {
+      "id": "chisinau",
+      "nombre": "Chisináu",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital moldava con arquitectura soviética, parques amplios y vida nocturna activa. Centro neurálgico para transportes y punto de entrada para la mayoría de viajeros. Mezcla de modernidad post-soviética con espacios verdes bien mantenidos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Punto de entrada principal. Aeropuerto Internacional a 15 km. Autobús/taxi al centro: 30-45 min, 3-8 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel: 12-18 EUR/noche",
+        "medio": "Hotel 3 estrellas: 35-55 EUR/noche",
+        "comfort": "Hotel 4+ estrellas: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por Avenida Stefán cel Mare (gratis)",
+        "Museo Nacional de Historia de Moldavia (5 EUR)",
+        "Monasterio de Noul Neamț en las afueras (5 EUR)",
+        "Parque de la Catedral y Iglesia de la Asunción (gratis)",
+        "Mercado Central Piața Centrală (gratis)"
+      ],
+      "donde_comer": "Mamaliga (polenta), ciorba (sopa), vino local. Rango: 5-12 EUR plato principal. Zona: Stefan cel Mare y barrio antiguo.",
+      "consejo_local": "Compra vino moldavo en cualquier tienda: relación calidad-precio insuperable en Europa (2-5 EUR botellas excelentes). Los taxistas pueden no tener cambio, asegúrate de llevar efectivo exacto.",
+      "plan_b_lluvia": "Museos cubiertos, cafeterías en Piața Marii Adunări Naționale, cine local",
+      "keywords": [
+        "Chisinau",
+        "capital moldavia",
+        "Avenida Stefan cel Mare",
+        "Piața Centrală",
+        "Noul Neamț"
+      ]
+    },
+    {
+      "id": "orheiul-vechi",
+      "nombre": "Orheiul Vechi",
+      "tipo": "histórico",
+      "region": "Centro-norte",
+      "descripcion": "Complejo arqueológico en acantilado sobre el río Nistru con ruinas medievales, iglesia tallada en roca y monasterio abandonado. Uno de los pocos sitios históricos de importancia genuina de Moldavia con vistas espectaculares.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Chisináu: autobús a Orhei (1 h, 2-3 EUR), luego taxi o a pie 3 km hasta el sitio (5-10 EUR taxi).",
+      "donde_dormir": {
+        "mochilero": "Casa rural/guesthouse en Orhei: 15-20 EUR/noche",
+        "medio": "Hotel en Orhei: 30-40 EUR/noche",
+        "comfort": "No disponible en la zona, hospedarse en Chisináu"
+      },
+      "que_hacer": [
+        "Subir al acantilado con ruinas (gratis)",
+        "Iglesia tallada en roca de Piatra Albă (gratis)",
+        "Monasterio de Butuc en el sitio (donativo sugerido 2 EUR)",
+        "Vistas del río Nistru desde los acantilados (gratis)",
+        "Fotografía de la formación geológica (gratis)"
+      ],
+      "donde_comer": "Comidas caseras en guesthouses locales (5-8 EUR). Poca oferta gastronómica formal, mejor comer en Orhei pueblo.",
+      "consejo_local": "Lleva agua y sombrero: no hay servicios en el sitio. Los caminos pueden estar encharcados después de lluvia; el mejor acceso es desde el lado sur del acantilado.",
+      "plan_b_lluvia": "Posponer visita. Si es imprescindible, desde abajo sin subir al acantilado.",
+      "keywords": [
+        "Orheiul Vechi",
+        "Orhei",
+        "acantilado",
+        "Nistru",
+        "ruinas medievales",
+        "iglesia tallada",
+        "arqueología"
+      ]
+    },
+    {
+      "id": "milestii-mici",
+      "nombre": "Milestii Mici",
+      "tipo": "rural",
+      "region": "Sur-centro",
+      "descripcion": "Bodegas de vino subterráneas más grandes del mundo (200 km de galerías) con degustación y almacenamiento histórico. Experiencia única en moldavia que combina turismo enológico con patrimonio industrial soviético.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Desde Chisináu: tour organizado (50-80 EUR, incluye transporte y degustación) o autobús a Caul (45 min, 2 EUR) + taxi (10 EUR). 30 km al sur.",
+      "donde_dormir": {
+        "mochilero": "Chisináu día de ida y vuelta",
+        "medio": "Chisináu día de ida y vuelta",
+        "comfort": "Chisináu día de ida y vuelta"
+      },
+      "que_hacer": [
+        "Tour guiado de bodegas subterráneas (35-50 EUR, 2-3 horas)",
+        "Degustación de vinos (incluida en tour)",
+        "Visita a la colección de vinos antiguos (incluida)",
+        "Paseo por galerías principales (incluida)",
+        "Fotos en las galerías (incluida)"
+      ],
+      "donde_comer": "Tour incluye degustación con pan y queso. Para comida completa, hacerla antes o después en Chisináu.",
+      "consejo_local": "Reserva tour con anticipación, especialmente fines de semana. La temperatura dentro es constante (10-12°C), lleva abrigo incluso en verano. Los tours en inglés no siempre están disponibles; combina con francés o ruso.",
+      "plan_b_lluvia": "Perfecto para lluvia, actividad completamente cubierta",
+      "keywords": [
+        "Milestii Mici",
+        "bodegas subterráneas",
+        "vino moldavo",
+        "túneles",
+        "degustación",
+        "200 km galerías"
+      ]
+    },
+    {
+      "id": "transnistria",
+      "nombre": "Transnistria (Región de Tiraspol)",
+      "tipo": "histórico",
+      "region": "Este",
+      "descripcion": "Territorio separatista con capital Tiraspol: experiencia única de enclave post-soviético congelado en el tiempo con monumentos comunistas, moneda propia y atmósfera surrealista. Destino de viajero aventurero más que turístico convencional.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Chisináu: autobús directo a Tiraspol (1,5 h, 3-5 EUR) o tour organizado (50-100 EUR). No requiere visa separada para entrada por día.",
+      "donde_dormir": {
+        "mochilero": "Hotel básico en Tiraspol: 15-25 EUR/noche",
+        "medio": "Hotel decente en Tiraspol: 30-50 EUR/noche",
+        "comfort": "Hotel Sherif o Aquamarin: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Plaza Suvorov y monumento soviético (gratis)",
+        "Museo de Historia y Cultura de Transnistria (3 EUR)",
+        "Paseo por avenida Lenina (gratis)",
+        "Iglesia Ortodoxa de Tiraspol (gratis)",
+        "Parque central junto al río Nistru (gratis)"
+      ],
+      "donde_comer": "Cafeterías locales: carne a la parrilla, sopa. 4-8 EUR plato. Zona: calle Lenina. Aceptan rublos transnistrios (cambio difícil fuera).",
+      "consejo_local": "Lleva pasaporte. Algunos viajeros reportan requieren registro en 'aduanas' locales (trámite de 30 min, gratuito). No hagas fotos de edificios militares o policiales. La moneda local no es intercambiable fuera; gasta lo que cambies.",
+      "plan_b_lluvia": "Museos y paseo por calles principales cubierto parcialmente",
+      "alerta_seguridad": "Región de reconocimiento limitado internacionalmente. Situación política delicada aunque viajeros individuales no reportan problemas de seguridad. Recomendable avisar embajada antes de visitar.",
+      "keywords": [
+        "Tiraspol",
+        "Transnistria",
+        "región separatista",
+        "Moldavia Este",
+        "soviético",
+        "enclave post-soviético"
+      ]
+    },
+    {
+      "id": "soroca",
+      "nombre": "Soroca",
+      "tipo": "histórico",
+      "region": "Norte",
+      "descripcion": "Pueblo histórico en el río Nistru con fortaleza medieval sobre colinas y vistas al río. Menos turístico que otros destinos pero con carácter auténtico y buena base para explorar el norte de Moldavia.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Chisináu: autobús (2,5 h, 4-6 EUR) o taxi compartido (1,5 h, 8-10 EUR). 160 km al norte.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse local: 15-20 EUR/noche",
+        "medio": "Hotel Nistrul: 35-50 EUR/noche",
+        "comfort": "Hotel Nistrul (mejor opción): 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Subida a Fortaleza Soroca (gratis, vista panorámica)",
+        "Exploración de ruinas interiores (gratis)",
+        "Paseo por orilla del Nistru (gratis)",
+        "Mercado local y pueblo (gratis)",
+        "Iglesia de la Asunción en el pueblo (gratis)"
+      ],
+      "donde_comer": "Comida casera moldava en pequeños restaurantes. 5-10 EUR plato. Zona: plaza central y orilla del río.",
+      "consejo_local": "La fortaleza está parcialmente en ruinas pero accesible. Vistas mejores al atardecer. Hay gitanos romaníes en el pueblo; evita discusiones sobre dinero. El lugar es mucho menos turístico que Orhei: más auténtico pero menos infraestructura.",
+      "plan_b_lluvia": "Visita interior de fortaleza (parcialmente cubierta), paseo por pueblo",
+      "keywords": [
+        "Soroca",
+        "fortaleza",
+        "Nistru",
+        "norte Moldavia",
+        "río",
+        "medieval"
+      ]
+    },
+    {
+      "id": "ialoveni",
+      "nombre": "Ialoveni (Bodega Purcari)",
+      "tipo": "rural",
+      "region": "Sur",
+      "descripcion": "Pueblo vinícola con acceso a bodega histórica Purcari (1827), una de las más antiguas de Moldavia. Alternativa más auténtica a Milestii Mici con experiencia menos masificada y vinos de calidad superior.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Desde Chisináu: autobús a Ialoveni (45 min, 2-3 EUR) + taxi a bodega Purcari (3 km, 5-8 EUR). O tour organizado (40-70 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en pueblo: 15-20 EUR/noche",
+        "medio": "Ialoveni no tiene hotel decente; mejor Chisináu",
+        "comfort": "Chisináu, hacer visita de día"
+      },
+      "que_hacer": [
+        "Tour bodega Purcari (25-35 EUR, 1,5-2 h)",
+        "Degustación de vinos (incluida)",
+        "Paseo por viñedos (gratis)",
+        "Museo de la bodega (incluido)",
+        "Compra de vino a productor directo (muy barato)"
+      ],
+      "donde_comer": "Comida campestre con queso y pan en bodega (10-15 EUR). Restaurantes en pueblo: 5-10 EUR plato.",
+      "consejo_local": "Purcari es bodega seria, no turística. El vino Purcari Negru de Mare es su especialidad. Compra directamente en bodega: mismo vino cuesta 3x más en tiendas de Chisináu. Menos infraestructura turística pero más auténtico.",
+      "plan_b_lluvia": "Tour en bodega (cubierto), cata interior",
+      "keywords": [
+        "Ialoveni",
+        "Purcari",
+        "bodega",
+        "vino moldavo",
+        "1827",
+        "viñedos",
+        "degustación"
+      ]
+    },
+    {
+      "id": "cantemir",
+      "nombre": "Cantemir",
+      "tipo": "rural",
+      "region": "Sur",
+      "descripcion": "Pueblo agrícola en región vinícola con acceso a bodegas Vatra y Cricova. Menos visitado que otros destinos enológicos pero con experiencia más genuina entre viñedos y productores locales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Chisináu: autobús (1,5 h, 3 EUR) a Cantemir pueblo. Bodegas a 5 km: taxi o a pie. 70 km al sur.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse rural: 12-18 EUR/noche",
+        "medio": "Casa de huéspedes: 25-35 EUR/noche",
+        "comfort": "Chisináu día de ida y vuelta"
+      },
+      "que_hacer": [
+        "Bodega Vatra tour (20 EUR, 2 h)",
+        "Degustación en Vatra (incluida)",
+        "Paseo por viñedos (gratis)",
+        "Visita a productores locales (negociable)",
+        "Mercado agrícola en pueblo (gratis)"
+      ],
+      "donde_comer": "Comida casera con productores locales. 4-8 EUR plato. Muy poca oferta formal, mejor organizar con hospedaje.",
+      "consejo_local": "Vatra es bodega pequeña, familiar. Directores suelen hablar inglés. Los viñedos alrededor son hermosos; pide a hospedaje rutas a pie. Menos turístico que Milestii Mici: ventaja si quieres evitar grupos.",
+      "plan_b_lluvia": "Bodega cubierta, compra de vino en tienda local",
+      "keywords": [
+        "Cantemir",
+        "Vatra",
+        "viñedos",
+        "bodega",
+        "sur Moldavia",
+        "productor local"
+      ]
+    },
+    {
+      "id": "ungheni",
+      "nombre": "Ungheni",
+      "tipo": "ciudad",
+      "region": "Oeste",
+      "descripcion": "Pueblo fronterizo sobre río Prut con Rumania. Menos turístico que Chisináu pero punto estratégico para cruzar a Rumania o explorar oeste moldavo. Arquitectura austro-húngara decadente y atmósfera fronteriza única.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Chisináu: autobús (1,5 h, 3-5 EUR). 110 km al oeste. Puente fronterizo directo a Galaţi, Rumania.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse: 12-18 EUR/noche",
+        "medio": "Hotel Prut: 30-45 EUR/noche",
+        "comfort": "Hotel Prut: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Puente sobre Prut, vista a Rumania (gratis)",
+        "Paseo por orilla del río (gratis)",
+        "Arquitectura austro-húngara en centro (gratis)",
+        "Iglesia Ortodoxa del pueblo (gratis)",
+        "Mercado local (gratis)"
+      ],
+      "donde_comer": "Comida moldava-rumana, 5-10 EUR plato. Zona: plaza central y orilla río. Cafeterías pequeñas.",
+      "consejo_local": "Punto de salida a Rumania si cruzas. Menos turístico significa menos servicios pero precios más bajos. Puedes cruzar puente a pie hacia Galaţi (no es tour turístico, es paso fronterizo real).",
+      "plan_b_lluvia": "Paseo cubierto por calles principales, cafeterías",
+      "keywords": [
+        "Ungheni",
+        "frontera Prut",
+        "Rumania",
+        "oeste Moldavia",
+        "austro-húngaro",
+        "puente"
+      ]
+    },
+    {
+      "id": "balti",
+      "nombre": "Bălți",
+      "tipo": "ciudad",
+      "region": "Norte",
+      "descripcion": "Segunda ciudad de Moldavia con mercados animados, iglesias históricas y atmósfera provincial auténtica. Base para explorar norte menos turístico y punto de conexión a regiones rurales interiores.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Chisináu: autobús (2 h, 4-6 EUR) o taxi compartido (1,5 h, 8-10 EUR). 150 km al norte.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse: 14-20 EUR/noche",
+        "medio": "Hotel Nistrul o Alystra: 30-50 EUR/noche",
+        "comfort": "Hotel Alystra: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado central Piața Centrală (gratis)",
+        "Iglesia de la Natividad (gratis)",
+        "Monumento a Ștefan cel Mare (gratis)",
+        "Paseo por parques (gratis)",
+        "Ayuntamiento y plaza (gratis)"
+      ],
+      "donde_comer": "Comida moldava auténtica, 5-10 EUR plato. Zona: Piața Centrală y calles adyacentes. Mercado de comida callejera.",
+      "consejo_local": "Bălți es mucho menos turístico que Chisináu. Los locales son amables con extranjeros pero poco acostumbrados al turismo. Mercado es donde ocurre la vida real del pueblo. Wifi en cafeterías variable.",
+      "plan_b_lluvia": "Mercado cubierto, iglesias, cafeterías, museos locales",
+      "keywords": [
+        "Balti",
+        "Bălți",
+        "segunda ciudad",
+        "norte Moldavia",
+        "mercado",
+        "auténtico"
+      ]
+    },
+    {
+      "id": "codru",
+      "nombre": "Parque Nacional Codru",
+      "tipo": "naturaleza",
+      "region": "Centro",
+      "descripcion": "Bosque primario de 5,500 hectáreas (único en Europa del Este) con rutas de senderismo, biodiversidad única y monasterio dentro. Destinación rara en Moldavia para turismo de naturaleza genuino.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Chisináu: autobús a Vatra o Ialoveni (45-60 min, 2-3 EUR) + taxi/a pie al parque (8-15 EUR taxi, 5 km). 60 km centro-sur.",
+      "donde_dormir": {
+        "mochilero": "Cabaña en parque o guesthouse cercano: 15-25 EUR/noche",
+        "medio": "Guesthouse en pueblo cercano: 25-35 EUR/noche",
+        "comfort": "Chisináu día de ida y vuelta"
+      },
+      "que_hacer": [
+        "Sendero principal del parque (gratis, 3-4 km)",
+        "Monasterio Călugăreni dentro del parque (gratis)",
+        "Rutas de naturaleza (gratis)",
+        "Fotografía de flora y fauna (gratis)",
+        "Picnic en claro del bosque (gratis)"
+      ],
+      "donde_comer": "Llevar comida desde Chisináu. Guesthouse cercano ofrece comidas caseras (8-12 EUR). Sin opciones formales en parque.",
+      "consejo_local": "Parque es poco visitado, poca infraestructura turística pero entornos prístinos. Lleva agua, comida y buenos zapatos. Monasterio está activo; respeta horarios de culto. Mapas disponibles en entrada del parque.",
+      "plan_b_lluvia": "Senderos cubiertos parcialmente por bosque, monasterio cubierto",
+      "keywords": [
+        "Codru",
+        "parque nacional",
+        "bosque primario",
+        "naturaleza",
+        "monasterio Călugăreni",
+        "senderismo",
+        "biodiversidad"
+      ]
+    }
+  ]
+}

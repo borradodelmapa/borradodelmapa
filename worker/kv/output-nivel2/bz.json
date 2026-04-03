@@ -1,0 +1,329 @@
+{
+  "pais": "Belice",
+  "codigo": "bz",
+  "destinos": [
+    {
+      "id": "cayes-ambergris",
+      "nombre": "Ambergris Caye",
+      "tipo": "isla",
+      "region": "Distrito de Orange Walk",
+      "descripcion": "La isla más grande de Belice con acceso directo a la Barrera de Coral. Centro de buceo y snorkel de primer nivel con vida marina abundante. Base ideal para explorar cayes vecinas y arrecifes intactos.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Belize City: vuelo doméstico 15 min (35-50 EUR) o ferry rápido 90 min (20-30 EUR). Aeropuerto propio.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes básicos en San Pedro + casas de huéspedes: 25-40 EUR/noche",
+        "medio": "Pequeños resorts y hoteles de 3 estrellas: 60-100 EUR/noche",
+        "comfort": "Resorts beachfront y condo de lujo: 120-200+ EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en Hol Chan Marine Reserve (15 EUR, 2 horas)",
+        "Buceo en arrecife coralino y Blue Hole Day Trip (80-120 EUR)",
+        "Paseo en golf cart por San Pedro pueblo (gratis)",
+        "Pesca de tarpon o bonito (60-100 EUR media jornada)",
+        "Kayak en manglares cercanos (40-60 EUR)"
+      ],
+      "donde_comer": "Ceviches frescos, pescado a la parrilla, tacos de camarón. Rango 8-25 EUR platos principales. Zona de Barrier Reef Drive tiene mejor relación calidad-precio que frente de playa.",
+      "consejo_local": "Alquila golf cart en lugar de taxi (40 EUR/día vs 5 EUR por carrera). La isla es pequeña pero dispersa. Los mejores atardeceres son desde pier local, no playa.",
+      "plan_b_lluvia": "Visita museo de MARCO (arte moderno), explora galerías de San Pedro, taller de cerámica local o snorkel interior si cielo despejado",
+      "keywords": [
+        "Ambergris",
+        "San Pedro",
+        "Belize Barrier Reef",
+        "cayes belice",
+        "isla belice",
+        "buceo belice"
+      ]
+    },
+    {
+      "id": "caye-caulker",
+      "nombre": "Caye Caulker",
+      "tipo": "isla",
+      "region": "Distrito de Belize",
+      "descripcion": "Isla alternativa más tranquila y económica que Ambergris, con ambiente relajado de mochileros. Acceso a mismos arrecifes pero con carácter más bohemio y auténtico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Belize City: ferry rápido 45 min (13-18 EUR) o vuelo 10 min (40 EUR). Multiple líneas de ferry diarias.",
+      "donde_dormir": {
+        "mochilero": "Hostales y casas básicas: 15-30 EUR/noche",
+        "medio": "Hoteles pequeños y guesthouses: 40-70 EUR/noche",
+        "comfort": "Resorts y villas: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Split Beach (gratis, lugar de reunión central)",
+        "Snorkel Hol Chan Marine Reserve (20 EUR, compartido)",
+        "Swimming with nurse sharks y rajitas (25-35 EUR tour)",
+        "Pesca artesanal (50 EUR)",
+        "Bicicleta por la isla (8 EUR alquiler/día)"
+      ],
+      "donde_comer": "Conch ceviche, huevos rellenos, tacos. 5-15 EUR platos principales. Las fondas en calles traseras más baratas que frente de playa.",
+      "consejo_local": "No hay carros, caminatas de 10 min máximo. Compra provisiones en supermercado chino para snacks baratos. Tour compartido siempre más económico que privado.",
+      "plan_b_lluvia": "Visita taller de artesanía local, biblioteca comunitaria, bares tranquilos con películas o come en fondas locales",
+      "keywords": [
+        "Caye Caulker",
+        "Caulker",
+        "Split",
+        "isla mochilera belice",
+        "cayes economicas"
+      ]
+    },
+    {
+      "id": "san-ignacio",
+      "nombre": "San Ignacio",
+      "tipo": "ciudad",
+      "region": "Distrito de Cayo",
+      "descripcion": "Pueblo colonial en la selva baja de las Montañas Mayas, centro para exploración de ruinas mayas y cuevas. Base más económica para turismo de naturaleza que las cayes.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Belize City: autobús 3 horas (8-12 EUR) o coche alquilado 2,5 horas (40-60 EUR gasolina). Autobuses frecuentes.",
+      "donde_dormir": {
+        "mochilero": "Hostales y hospedajes: 15-25 EUR/noche",
+        "medio": "Hoteles locales y lodges pequeños: 35-70 EUR/noche",
+        "comfort": "Jungle lodges y resorts temáticos: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas de Cahal Pech (7 EUR entrada + 2 EUR guía)",
+        "Actun Tunichil Muknal cave tubing (50-65 EUR, 5 horas)",
+        "Xunantunich ruinas mayas (8 EUR entrada + barca 1 EUR)",
+        "Kayak en río Macal (30-50 EUR)",
+        "Merida Village tour arqueológico (25 EUR)"
+      ],
+      "donde_comer": "Huevos rellenos, tacos de pollo, sopa de hueso. 4-12 EUR platos. Eva's Restaurant y fonda San Ignacio en plaza central.",
+      "consejo_local": "Contrata guía local en hostal, no en tours comerciales. Los mejores tours son desde hospedajes pequeños. La comida más barata es en mercado de mañana.",
+      "plan_b_lluvia": "Museo de San Ignacio, tiendas artesanales, bibliotecas o túneles subterráneos de Xunantunich (accesibles con lluvia)",
+      "keywords": [
+        "San Ignacio",
+        "Cayo",
+        "Cahal Pech",
+        "Actun Tunichil",
+        "cueva belice",
+        "ruinas mayas belice"
+      ]
+    },
+    {
+      "id": "placencia",
+      "nombre": "Placencia",
+      "tipo": "playa",
+      "region": "Distrito de Toledo",
+      "descripcion": "Pueblo de pescadores en península tranquila con playa de arena, acceso a cayes cercanas y barrera coralina. Mezcla de playa relajada y actividades de snorkel a corta distancia.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a marzo",
+      "como_llegar": "Desde Belize City: autobús + barca 5-6 horas total (25-35 EUR) o vuelo doméstico 45 min (60 EUR). Combinación de transporte necesaria.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes en pueblo: 20-35 EUR/noche",
+        "medio": "Hoteles pequeños Main Street: 45-80 EUR/noche",
+        "comfort": "Beachfront resorts y villas: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa pública Placencia (gratis)",
+        "Snorkel en Silk Cayes (45-60 EUR tour)",
+        "Pesca diaria con pescadores locales (30-50 EUR)",
+        "Kayak en manglares Lagoon (35-50 EUR)",
+        "Caminata por Main Street y dock al atardecer (gratis)"
+      ],
+      "donde_comer": "Hudut (empanada frita local), ceviche, pescado frito. 5-15 EUR platos principales. Fonda Patricia famosa por desayunos.",
+      "consejo_local": "Main Street es el dock, no la playa principal. La mejor comida local está en casas de hospedaje, no restaurantes turísticos. Ve temprano a snorkel para evitar grupos grandes.",
+      "plan_b_lluvia": "Explora tiendas de artesanía garinagu, taller de cocina local, visita palmeral cercano o descansa en hamaca cubierta",
+      "keywords": [
+        "Placencia",
+        "Placencia village",
+        "peninsula belice",
+        "playa belice",
+        "Toledo"
+      ]
+    },
+    {
+      "id": "mountain-pine-ridge",
+      "nombre": "Mountain Pine Ridge",
+      "tipo": "naturaleza",
+      "region": "Distrito de Cayo",
+      "descripcion": "Bosque de pinos a 600-900m de altitud con cascadas, ríos cristalinos y cuevas. Única zona montañosa de Belice, menos visitada que arrecife pero igualmente espectacular.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde San Ignacio: coche alquilado o tour 1,5 horas (carretera sin asfalto), 50-100 EUR. Requiere vehículo propio o tour organizado.",
+      "donde_dormir": {
+        "mochilero": "Campings y hospedajes básicos: 20-30 EUR/noche",
+        "medio": "Lodges dentro bosque: 50-100 EUR/noche",
+        "comfort": "Eco-lodges premium: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Hidden Valley Falls / Thousand Foot Falls (15 EUR + 2 EUR entrada)",
+        "Big Rock Falls piscina natural (gratis, requiere hike 30 min)",
+        "Río on Pools swim holes (gratis)",
+        "Senderismo en bosque (guía 25-40 EUR recomendado)",
+        "Observación de aves temprano (guía 35-50 EUR)"
+      ],
+      "donde_comer": "Opciones limitadas. Lodges ofrecen comidas. Lleva snacks desde San Ignacio. Rango 10-20 EUR comidas en lodges.",
+      "consejo_local": "Necesitas coche propio o tour. Caminos intransitables con lluvia torrencial. Llega temprano para cascadas con menos gente. Lleva repelente de insectos.",
+      "plan_b_lluvia": "Cuevas subterráneas accesibles incluso con lluvia, senderismo por bosque cubierto o estadía en lodge con hamaca y lectura",
+      "keywords": [
+        "Mountain Pine Ridge",
+        "Hidden Valley Falls",
+        "Thousand Foot Falls",
+        "bosque belice",
+        "cascadas belice",
+        "Cayo"
+      ]
+    },
+    {
+      "id": "xunantunich",
+      "nombre": "Xunantunich",
+      "tipo": "histórico",
+      "region": "Distrito de Cayo",
+      "descripcion": "Ruinas mayas de mediano tamaño con vista panorámica del valle desde El Castillo. Acceso fácil desde San Ignacio, escalable en medio día.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde San Ignacio: coche, taxi o bicicleta 9 km (15 min auto, 60 min bici). 25-40 EUR taxi ida/vuelta o incluido en tour.",
+      "donde_dormir": {
+        "mochilero": "Opción base en San Ignacio",
+        "medio": "Opción base en San Ignacio",
+        "comfort": "Opción base en San Ignacio"
+      },
+      "que_hacer": [
+        "Subida a El Castillo (23m de altura, vista 360 grados) - gratis con entrada",
+        "Exploración de estructuras alrededor (A-6, B-1, plaza central)",
+        "Museo arqueológico pequeño en entrada (incluido precio)",
+        "Fotografía de valle desde cima (gratis)",
+        "Guía arqueológico local (20-30 EUR)"
+      ],
+      "donde_comer": "Caseta de comida en entrada rústica. 3-6 EUR empanadas y refrescos. Mejor comer antes o después en San Ignacio.",
+      "consejo_local": "Ve temprano para evitar grupos organizados. Las vistas desde arriba mejor antes de las 2 pm. Subida de escalones gastados pero segura.",
+      "plan_b_lluvia": "Accesible incluso con lluvia ligera, piedras resbalosas con lluvia fuerte. Museo cubierto es opción.",
+      "keywords": [
+        "Xunantunich",
+        "El Castillo belice",
+        "ruinas mayas Cayo",
+        "sitio arqueologico belice"
+      ]
+    },
+    {
+      "id": "hopkins",
+      "nombre": "Hopkins",
+      "tipo": "playa",
+      "region": "Distrito de Stann Creek",
+      "descripcion": "Pueblo garinagu auténtico con playa tranquila y menos turismo que Placencia. Centro para sumergirse en cultura garinagu y acceso a arrecife.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Belize City: autobús 2,5 horas (12-16 EUR). Desde Placencia: autobús o taxi bicicleta 1 hora (8 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedajes locales: 18-30 EUR/noche",
+        "medio": "Pequeños hoteles: 40-70 EUR/noche",
+        "comfort": "Eco-lodges y resorts: 80-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa pública gratis",
+        "Snorkel en arrecife cercano (35-50 EUR)",
+        "Clase de cocina garinagu con local (30 EUR)",
+        "Paseo por pueblo y dock (gratis)",
+        "Kayak en laguna (30-45 EUR)",
+        "Observación de camarones al atardecer (gratis)"
+      ],
+      "donde_comer": "Hudut, tapou (sopa de pescado), johnny cakes. 5-12 EUR. Come en fondas de residentes, no restaurantes turísticos.",
+      "consejo_local": "Elige hospedaje con familia local, incluyen desayuno delicioso. Preguntar dónde comen los pescadores da las mejores opciones. Seguro y tranquilo, sin prisa.",
+      "plan_b_lluvia": "Aprende a cocinar con abuela local, visita tienda de artesanía, escucha historias de pescadores en dock cubierto",
+      "keywords": [
+        "Hopkins",
+        "Garinagu",
+        "cultura garinagu belice",
+        "playa segura belice",
+        "Stann Creek"
+      ]
+    },
+    {
+      "id": "caye-chapel-jungle",
+      "nombre": "Caracol",
+      "tipo": "histórico",
+      "region": "Distrito de Cayo",
+      "descripcion": "Ruinas mayas más grandes de Belice en lo profundo de la selva. Sitio arqueológico extenso con pirámide alta y contexto selvático auténtico.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde San Ignacio: tour organizado 1,5 horas (90-120 EUR) o coche alquilado + guía. Ruta de selva, no accesible solo.",
+      "donde_dormir": {
+        "mochilero": "Base en San Ignacio",
+        "medio": "Base en San Ignacio",
+        "comfort": "Base en San Ignacio o Mountain Pine Ridge"
+      },
+      "que_hacer": [
+        "Senderismo entre estructuras arqueológicas (incluido en tour)",
+        "Subida a pirámide Sky Palace (20+ metros)",
+        "Guía arqueológico narrado (incluido en tour organizado)",
+        "Observación de vida silvestre en ruta (aves, monos)",
+        "Fotografía de ruinas con selva de fondo"
+      ],
+      "donde_comer": "Lunch incluido en la mayoría de tours (empanadas, sándwich, agua). Trae snacks adicionales.",
+      "consejo_local": "Contrata tour desde hospedaje de San Ignacio, no agencia turística. Temprano es mejor para evitar calor y multitudes. Lluvia hace lodo pero sitio accesible.",
+      "plan_b_lluvia": "Los bosques son más verdes y vida silvestre más visible. Barro añade desafío pero experiencia más auténtica.",
+      "keywords": [
+        "Caracol",
+        "ruinas caracol belice",
+        "piramide belice",
+        "Cayo selva",
+        "sitio arqueologico remoto"
+      ]
+    },
+    {
+      "id": "dangringa",
+      "nombre": "Dangriga",
+      "tipo": "ciudad",
+      "region": "Distrito de Stann Creek",
+      "descripcion": "Puerto garinagu con carácter auténtico, menos turístico. Punto de partida para cayes del sur y acceso a cultura local genuina.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Belize City: autobús 2 horas (10-14 EUR). Hub de transporte con buses a todas direcciones.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes básicos: 15-25 EUR/noche",
+        "medio": "Hoteles pequeños: 35-60 EUR/noche",
+        "comfort": "Resorts frente mar: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Exploración de puerto y dock (gratis)",
+        "Visita a mercado local temprano (gratis, experiencia local)",
+        "Ferry a South Water Caye (25-35 EUR ida/vuelta)",
+        "Paseo por calles históricas garinagu (gratis)",
+        "Playa local (gratis)"
+      ],
+      "donde_comer": "Tapou, hudut, ceviche. 5-10 EUR. Mercado central tiene comida local más barata y auténtica.",
+      "consejo_local": "Es punto de paso, no destino final. Pero pasar una noche permite experiencia garinagu sin turismo masivo. Mercado de mañana es lo mejor.",
+      "plan_b_lluvia": "Museo de Dangriga, tiendas locales, cafés cubiertos o espera para ferry a islas",
+      "keywords": [
+        "Dangriga",
+        "Garinagu",
+        "Stann Creek",
+        "puerto belice",
+        "cultura afrocaribeña"
+      ]
+    },
+    {
+      "id": "tobacco-caye",
+      "nombre": "Tobacco Caye",
+      "tipo": "isla",
+      "region": "Distrito de Stann Creek",
+      "descripcion": "Caita diminuta de pescadores sin comercio turístico masivo. Acceso a arrecife inmediato, ambiente relajado y comida fresca del mar.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Dangriga: ferry privado o pescador 20 min (20-30 EUR). Sin ferry regular, requiere negociación local.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes muy básicos: 20-30 EUR/noche",
+        "medio": "Guesthouses con baño privado: 40-65 EUR/noche",
+        "comfort": "Pequeños resorts: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel desde dock (gratis equipo básico, alquiler 5 EUR)",
+        "Pesca con pescador local (40-60 EUR)",
+        "Paseo por isla (5 min caminata total, gratis)",
+        "Camarones al atardecer (gratis)",
+        "Relax en hamaca (gratis)"
+      ],
+      "donde_comer": "Pescado fresco, camarones, ceviche del día. 8-15 EUR. Hospedajes sirven comidas. Solo 3-4 casas de comida.",
+      "consejo_local": "No hay turismo masivo porque no es fácil llegar. Eso la hace especial. Pescadores comparten historias si les das cerveza. Marea dictamina horarios.",
+      "plan_b_lluvia": "Lluvia tropical corta. Snorkel incluso con lluvia. Hamaca cubierta y historias de pescadores son plan perfecto.",
+      "keywords": [
+        "Tobacco Caye",
+        "isla pequeña belice",
+        "pescador belice",
+        "Stann Creek islas",
+        "autentico belice"
+      ]
+    }
+  ]
+}

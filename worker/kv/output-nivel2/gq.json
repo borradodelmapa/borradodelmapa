@@ -1,0 +1,334 @@
+{
+  "pais": "Guinea Ecuatorial",
+  "codigo": "gq",
+  "alerta_general": "Guinea Ecuatorial presenta desafíos significativos de seguridad, infraestructura y acceso. El turismo independiente es limitado. Se recomienda consultar advertencias de viaje actuales antes de viajar.",
+  "destinos": [
+    {
+      "id": "malabo",
+      "nombre": "Malabo",
+      "tipo": "ciudad",
+      "region": "Isla de Bioko",
+      "descripcion": "Capital y principal punto de entrada del país, ubicada en la isla de Bioko. Centro administrativo y económico con arquitectura colonial portuguesa y ecuatoguineana. Punto de partida obligatorio para explorar el país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Aeropuerto Internacional de Malabo. Vuelos desde Doha, Addis Abeba o ciudades africanas. Duración variable. Coste aprox. 400-800 EUR (conectando desde Europa).",
+      "donde_dormir": {
+        "mochilero": "Pensiones básicas en barrio de Ela Nguema: 25-40 EUR/noche",
+        "medio": "Hotel mediano (Hotel Sofitel Malabo): 80-120 EUR/noche",
+        "comfort": "Hilton Malabo o similares: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por la Catedral de Santa Isabel (gratis)",
+        "Mercado central de Malabo para artesanía local (gratis, pequeñas compras)",
+        "Playa de Malabo, aunque sucia (gratis)",
+        "Museo de arte y cultura ecuatoguineano (10 EUR)"
+      ],
+      "donde_comer": "Restaurantes de hotel o comedores locales. Probar cassava, plátano y pescado a la brasa. Rango 8-25 EUR. Zona portuaria tiene opciones más económicas.",
+      "consejo_local": "El efectivo (EUR o Franco CFA) es esencial; los cajeros son limitados y los bancos cierran pronto. Los taxis no tienen taxímetro: negocia antes.",
+      "plan_b_lluvia": "Museos o cafeterías de hotel. Lluvia tropical es intensa pero breve.",
+      "alerta_seguridad": "Criminalidad moderada en zonas periféricas. Quédate en zonas centrales y evita desplazamientos nocturnos.",
+      "keywords": [
+        "Malabo city",
+        "capital",
+        "Bioko island",
+        "Ela Nguema",
+        "puerto",
+        "catedral Santa Isabel"
+      ]
+    },
+    {
+      "id": "bata",
+      "nombre": "Bata",
+      "tipo": "ciudad",
+      "region": "Región Continental",
+      "descripcion": "Segunda ciudad más importante, ubicada en la región continental. Puerto comercial activo y punto de acceso alternativo. Menos turística que Malabo pero con vida local más auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde Malabo: vuelo interno (30 min, 80-150 EUR) o ferry (6-8 horas, 40-60 EUR, poco confiable). Autobús desde otras ciudades continentales.",
+      "donde_dormir": {
+        "mochilero": "Pensiones locales: 20-35 EUR/noche",
+        "medio": "Hotel Bata o Ibis Styles: 70-100 EUR/noche",
+        "comfort": "Hotel Sofitel Bata (si está abierto): 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por el malecón y puerto (gratis)",
+        "Mercado de Bata para artesanía y productos locales (gratis, compras opcionales)",
+        "Playa Bata aunque sin infraestructura (gratis)",
+        "Exploración de barrios locales y vida cotidiana (gratis)"
+      ],
+      "donde_comer": "Comedores locales en mercado central. Pescado fresco, yuca, plátano. Rango 6-20 EUR. Mercado es la opción más auténtica y económica.",
+      "consejo_local": "Bata es más real y menos turística que Malabo. Los lugareños son muy abiertos. El transporte local es caótico pero accesible.",
+      "plan_b_lluvia": "Museos locales si existen, o tiempo en comedores con jugadores de dominó.",
+      "alerta_seguridad": "Seguridad similar a Malabo. Zonas del mercado densas; cuidado con pertenencias.",
+      "keywords": [
+        "Bata city",
+        "continental",
+        "puerto",
+        "mercado",
+        "región continental"
+      ]
+    },
+    {
+      "id": "isla-corisco",
+      "nombre": "Isla de Corisco",
+      "tipo": "isla",
+      "region": "Región Continental (frente a costa)",
+      "descripcion": "Pequeña isla frente a la costa continental con playas tranquilas y vida rural. Destino para quienes buscan desconectar en un entorno más aislado y auténtico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde Bata: lancha o pequeño ferry (1-2 horas, 15-25 EUR). Servicios irregulares; preguntar en puerto.",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes locales: 15-25 EUR/noche",
+        "medio": "No hay opciones claras; negocia con pobladores",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Playas de arena (gratis)",
+        "Snorkel si tienes equipo (gratis)",
+        "Caminar por la isla (gratis)",
+        "Interactuar con comunidades locales de pescadores (gratis)"
+      ],
+      "donde_comer": "Solo opciones locales: pescado recién capturado, yuca. Rango 5-12 EUR. Trae snacks de la ciudad.",
+      "consejo_local": "Las conexiones son muy irregulares. Ve sin prisa de regresar. Trae efectivo, repelente y agua.",
+      "plan_b_lluvia": "Lluvia tropical aislará la isla; prepárate para quedarte extra.",
+      "alerta_seguridad": "Zona remota pero con baja criminalidad. Riesgo principal es la falta de servicios médicos.",
+      "keywords": [
+        "Corisco",
+        "isla",
+        "playa",
+        "pescado",
+        "remoto"
+      ]
+    },
+    {
+      "id": "monte-alen",
+      "nombre": "Parque Nacional Monte Alén",
+      "tipo": "naturaleza",
+      "region": "Región Continental (Wele-Nzas)",
+      "descripcion": "Única área protegida importante del país con selva tropical primaria, biodiversidad y fauna. Para viajeros interesados en naturaleza virgen, aunque requiere organización y paciencia.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "enero a marzo (menos lluvia)",
+      "como_llegar": "Desde Bata: coche 4x4 con conductor local (3-4 horas, ~150 EUR el vehículo). Requiere permisos previos o tours organizados. Difícil sin guía.",
+      "donde_dormir": {
+        "mochilero": "Campamento básico en parque: 20-30 EUR/noche (si disponible)",
+        "medio": "Alojamiento rústico con guías: 40-60 EUR/noche",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Senderismo en la selva con guía (gratis entrada, paga guía ~30-50 EUR/día)",
+        "Avistamiento de fauna (elefantes, monos, aves) (gratis)",
+        "Fotografía de naturaleza (gratis)",
+        "Interacción con guardas del parque (gratis)"
+      ],
+      "donde_comer": "Comida preparada por guías o lleva desde Bata. Rango 5-10 EUR.",
+      "consejo_local": "Necesitas guía obligatoriamente. Las carreteras son pésimas. Lleva repelente potente y linterna.",
+      "plan_b_lluvia": "La selva es más dura con lluvia. Mejor ir en estación seca.",
+      "alerta_seguridad": "Zona remota pero relativamente segura. Mayor riesgo es falta de acceso médico rápido.",
+      "keywords": [
+        "Monte Alen",
+        "parque nacional",
+        "selva",
+        "naturaleza",
+        "biodiversidad",
+        "Wele-Nzas"
+      ]
+    },
+    {
+      "id": "rio-muni",
+      "nombre": "Región de Río Muni",
+      "tipo": "rural",
+      "region": "Región Continental",
+      "descripcion": "Extensa región selvática poco desarrollada turísticamente. Destino para viajeros aventureros que quieren experimentar vida rural auténtica y comunidades indígenas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "enero a marzo",
+      "como_llegar": "Desde Bata: autobús o coche 4x4 hacia pueblos como Ebebiyin o Mongomo (4-6 horas, 15-30 EUR en autobús). Carreteras muy malas.",
+      "donde_dormir": {
+        "mochilero": "Pensiones en pueblos pequeños: 10-20 EUR/noche",
+        "medio": "Alojamiento básico en Ebebiyin: 25-40 EUR/noche",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Caminatas por bosques con lugareños (gratis)",
+        "Visita a aldeas y contacto con comunidades (gratis)",
+        "Pesca artesanal en ríos (gratis o pequeño pago)",
+        "Exploración de mercados rurales (gratis)"
+      ],
+      "donde_comer": "Comida casera en aldeas. Yuca, carne, pescado de río. Rango 4-10 EUR. Pide recomendaciones locales.",
+      "consejo_local": "Los pueblos son muy auténticos pero infraestructura es mínima. Lleva botiquín, efectivo y paciencia.",
+      "plan_b_lluvia": "Lluvia hace carreteras intransitables. Mejor ir en estación seca.",
+      "alerta_seguridad": "Bajo riesgo de criminalidad pero zona remota sin servicios.",
+      "keywords": [
+        "Rio Muni",
+        "región continental",
+        "Ebebiyin",
+        "Mongomo",
+        "aldeas",
+        "rural",
+        "bosque"
+      ]
+    },
+    {
+      "id": "isla-bioko",
+      "nombre": "Isla de Bioko (fuera de Malabo)",
+      "tipo": "isla",
+      "region": "Isla de Bioko",
+      "descripcion": "La isla contiene pueblos costeros pequeños, Luba y Riaba, con playas más salvajes y comunidades de pescadores. Menos desarrolladas que Malabo pero más auténticas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde Malabo: autobús o moto-taxi hacia Luba (1-2 horas, 10-15 EUR). Carretera costera.",
+      "donde_dormir": {
+        "mochilero": "Pensiones en Luba: 15-25 EUR/noche",
+        "medio": "Alojamiento básico: 30-50 EUR/noche",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Playas tranquilas (gratis)",
+        "Pesca con lugareños (pequeño pago o trueque)",
+        "Senderismo costero (gratis)",
+        "Vida cotidiana en pueblos de pescadores (gratis)"
+      ],
+      "donde_comer": "Restaurantes rústicos en Luba. Pescado a la brasa, plátano. Rango 6-15 EUR.",
+      "consejo_local": "Los pueblos son muy pequeños. No esperes lujos. La gente es amable si respetas su ritmo.",
+      "plan_b_lluvia": "Quedarse en pensión con lugareños.",
+      "alerta_seguridad": "Bajo riesgo; zona tranquila.",
+      "keywords": [
+        "Bioko",
+        "Luba",
+        "Riaba",
+        "pescadores",
+        "costa",
+        "playas"
+      ]
+    },
+    {
+      "id": "mongomo",
+      "nombre": "Mongomo",
+      "tipo": "ciudad",
+      "region": "Región Continental (Centro-Sur)",
+      "descripcion": "Pueblo pequeño en la región continental conocido como punto de paso hacia interior. Acceso a naturaleza y vida rural auténtica sin ser tan remoto como Monte Alén.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a marzo",
+      "como_llegar": "Desde Bata: coche 4x4 o autobús (4-5 horas, 20-30 EUR). Carretera deteriorada.",
+      "donde_dormir": {
+        "mochilero": "Pensiones muy básicas: 12-18 EUR/noche",
+        "medio": "No hay opciones",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Exploración de mercado local (gratis)",
+        "Contacto con comunidades locales (gratis)",
+        "Caminatas hacia pueblos vecinos (gratis)",
+        "Fotografía de vida rural (gratis)"
+      ],
+      "donde_comer": "Comida de mercado o casas locales. Rango 4-8 EUR.",
+      "consejo_local": "Mongomo es parada de paso más que destino. Sirve para transitar hacia Monte Alén u otros lugares.",
+      "plan_b_lluvia": "Pocas opciones; mejor ir en estación seca.",
+      "alerta_seguridad": "Seguro pero muy básico.",
+      "keywords": [
+        "Mongomo",
+        "paso",
+        "rural",
+        "centro-sur"
+      ]
+    },
+    {
+      "id": "ebebiyin",
+      "nombre": "Ebebiyin",
+      "tipo": "ciudad",
+      "region": "Región Continental (Noreste)",
+      "descripcion": "Pueblo fronterizo con Camerún en el noreste ecuatoguineano. Punto de entrada/salida alternativo y acceso a comunidades indígenas de la región de Wele-Nzas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a marzo",
+      "como_llegar": "Desde Bata: autobús o coche (5-6 horas, 25-35 EUR). Desde Camerún (frontera cercana).",
+      "donde_dormir": {
+        "mochilero": "Pensiones locales: 10-20 EUR/noche",
+        "medio": "Alojamiento básico: 20-35 EUR/noche",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Mercado fronterizo con Camerún (gratis)",
+        "Contacto con comunidades indígenas (gratis)",
+        "Caminatas hacia aldeas cercanas (gratis)",
+        "Exploración de bosques tropicales accesibles (gratis)"
+      ],
+      "donde_comer": "Comida local: yuca, pescado, carne de caza. Rango 4-10 EUR.",
+      "consejo_local": "Ebebiyin es punto de paso hacia Camerún o hacia interior. Poco desarrollo turístico pero auténtico.",
+      "plan_b_lluvia": "Clima difícil en temporada de lluvia.",
+      "alerta_seguridad": "Zona fronteriza; pequeño riesgo de situaciones irregulares en frontera.",
+      "keywords": [
+        "Ebebiyin",
+        "frontera",
+        "Camerun",
+        "Wele-Nzas",
+        "indígenas"
+      ]
+    },
+    {
+      "id": "isla-annobón",
+      "nombre": "Isla de Annobón",
+      "tipo": "isla",
+      "region": "Provincia de Annobón",
+      "descripcion": "Isla más meridional de Guinea Ecuatorial, remota y poco visitada. Vida de pescadores, playas vírgenes y biodiversidad marina. Requiere dedicación pero ofrece experiencia muy auténtica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "enero a marzo",
+      "como_llegar": "Desde Malabo: vuelo interno (poco frecuente, 1 hora, 100-150 EUR) o barco de carga (8-12 horas, 50-100 EUR). Muy irregular.",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes locales: 15-25 EUR/noche",
+        "medio": "Alojamiento básico con lugareños: 25-40 EUR/noche",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Playas vírgenes (gratis)",
+        "Snorkel y buceo si traes equipo (gratis)",
+        "Avistamiento de aves marinas (gratis)",
+        "Interacción con comunidades de pescadores (gratis)"
+      ],
+      "donde_comer": "Comida local: pescado, arroz, plátano. Rango 5-12 EUR. Muy limitado.",
+      "consejo_local": "Annobón es el destino más remoto. Conexiones son impredecibles. Necesitas flexibilidad y paciencia. Trae efectivo y medicinas.",
+      "plan_b_lluvia": "Quedarás aislado si hay tormenta.",
+      "alerta_seguridad": "Remoto pero bajo riesgo de criminalidad.",
+      "keywords": [
+        "Annobón",
+        "isla",
+        "sur",
+        "remota",
+        "pescadores",
+        "playas",
+        "marina"
+      ]
+    },
+    {
+      "id": "excursion-camerun-douala",
+      "nombre": "Excursión a Camerún: Douala",
+      "tipo": "excursion_desde",
+      "region": "Camerún (país vecino)",
+      "descripcion": "Excursión desde Ebebiyin (frontera con Camerún) hacia Douala. Alternativa para quienes desean explorar la región más amplia o como escape si Guinea Ecuatorial resulta demasiado limitada.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "enero a marzo",
+      "como_llegar": "Desde Ebebiyin: cruce fronterizo a pie/coche local (1-2 horas, 10-20 EUR). Luego autobús/minibús a Douala (3-4 horas, 15-25 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergues en Douala: 15-30 EUR/noche",
+        "medio": "Hotel mediano: 40-70 EUR/noche",
+        "comfort": "Hotel de cadena: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Porto Douala y vida portuaria (gratis)",
+        "Museos de Camerún (5-10 EUR)",
+        "Mercados locales (gratis)",
+        "Gastronomía camerunesa (10-20 EUR)"
+      ],
+      "donde_comer": "Douala tiene mucha oferta gastronómica. Rango 8-30 EUR. Mercados y restaurantes.",
+      "consejo_local": "Camerún tiene mejor infraestructura que Guinea Ecuatorial. Douala es más desarrollada como destino turístico.",
+      "plan_b_lluvia": "Museos interiores.",
+      "alerta_seguridad": "Camerún tiene su propia situación de seguridad; consulta recomendaciones actuales.",
+      "excursion_desde": true,
+      "keywords": [
+        "Camerun",
+        "Douala",
+        "excursion",
+        "frontera",
+        "vecino"
+      ]
+    }
+  ]
+}

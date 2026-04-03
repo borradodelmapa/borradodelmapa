@@ -1,0 +1,337 @@
+{
+  "pais": "Polonia",
+  "codigo": "pl",
+  "destinos": [
+    {
+      "id": "krakow",
+      "nombre": "Cracovia",
+      "tipo": "histórico",
+      "region": "Pequeña Polonia (Malopolska)",
+      "descripcion": "Centro medieval perfectamente conservado con plaza mayor renacentista, castillo Wawel y museos de la Segunda Guerra Mundial. Es la base ideal para explorar Auschwitz y los Tatra. Combina historia, cultura y vida urbana vibrante.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Varsovia: tren directo 3h (15-25 EUR) o autobús 5h (8-12 EUR)",
+      "donde_dormir": {
+        "mochilero": "Albergues en Kazimierz: 12-18 EUR/noche",
+        "medio": "Apartamentos centro o barrio Podgorze: 35-60 EUR/noche",
+        "comfort": "Hotels cerca Plaza Mayor: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Plaza Mayor y Lonja de los Paños (gratis entrada externa)",
+        "Castillo de Wawel (15 EUR entrada)",
+        "Barrio Kazimierz judío y sinagogas (5-8 EUR)",
+        "Excursión Auschwitz-Birkenau (tour 50-70 EUR, entrada 20 EUR)",
+        "Mina de sal de Wieliczka (25 EUR)"
+      ],
+      "donde_comer": "Zapiekanka (sándwich tostado 3-5 EUR) en Kazimierz, pierogi caseros (4-6 EUR), bigos (5-7 EUR). Zona recomendada: Plac Nowy en Kazimierz o calles laterales de la Plaza Mayor. Restaurantes locales 8-15 EUR por plato.",
+      "consejo_local": "Viaja a Auschwitz con tour operador, no solo. El viaje independiente es complicado y necesitas guía para contexto. Los tours salen 6:30am desde agencias en Kazimierz.",
+      "plan_b_lluvia": "Museos de Flory (arte medieval), Museo de la Farmacia, cripta subterránea de la Catedral, o cafés literarios en Kazimierz.",
+      "keywords": [
+        "Krakow",
+        "Cracovia",
+        "Kazimierz",
+        "Wawel",
+        "Auschwitz nearby",
+        "Plaza Mayor"
+      ]
+    },
+    {
+      "id": "varsovia",
+      "nombre": "Varsovia",
+      "tipo": "ciudad",
+      "region": "Mazovia (Mazowieckie)",
+      "descripcion": "Capital reconstruida tras la Segunda Guerra Mundial con mezcla de barrio antiguo restaurado, torres de vidrio modernas y museos intensos. Centro de transportes de Polonia con buenas conexiones y vida nocturna.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "puerta de entrada principal (aeropuerto Chopin a 10km: bus 7 EUR, 30min; Uber 12-16 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales Praga o Wola: 13-20 EUR/noche",
+        "medio": "Apartamentos Śródmieście o Praga: 40-70 EUR/noche",
+        "comfort": "Hotels Nueva Ciudad: 75-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Barrio Antiguo (Stare Miasto) reconstruido (gratis pasear)",
+        "Museo del Alzamiento de Varsovia (17 EUR)",
+        "Palacio de Cultura y Ciencia (12 EUR terraza)",
+        "Muzeum Polin - historia judía (18 EUR)",
+        "Barrio Praga alternative (gratis, street art y cafés)",
+        "Parque Lazienki (gratis)"
+      ],
+      "donde_comer": "Zurek (sopa de centeno 4-6 EUR), sopas y carnes. Barrio Praga tiene bares de comida barata (5-8 EUR), restaurantes modernos Śródmieście (12-20 EUR). Mercados de comida en Hala Mirowska.",
+      "consejo_local": "Praga es el barrio bohemio real, no el turístico centro. Pasea por ul. Zabkowska para ver Polonia auténtica. El centro antiguo es reconstrucción de posguerra, interesante históricamente pero menos carácter.",
+      "plan_b_lluvia": "Museos (Museo POLIN, Museo del Levantamiento, Galería Nacional), galerías de arte underground, cafés en Praga.",
+      "keywords": [
+        "Warsaw",
+        "Varsovia",
+        "Praga",
+        "Stare Miasto",
+        "Polin Museum",
+        "Palacio Ciencia"
+      ]
+    },
+    {
+      "id": "gdansk",
+      "nombre": "Gdansk",
+      "tipo": "ciudad",
+      "region": "Pomerania (Pomorskie)",
+      "descripcion": "Puerto histórico en el Mar Báltico con fachadas de colores junto al río Motława, importancia en la historia Solidarity y ambiente relajado. Combina playa, historia medieval y vida cosmopolita.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-agosto, mayo, septiembre",
+      "como_llegar": "desde Varsovia: tren directo 5-6h (20-35 EUR) o vuelo (25-60 EUR, 1h)",
+      "donde_dormir": {
+        "mochilero": "Hostales Oliwa o Stare Miasto: 12-18 EUR/noche",
+        "medio": "Apartamentos río Motława: 40-65 EUR/noche",
+        "comfort": "Hotels junto río o Oliwa: 70-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo Motława y fachadas históricas (gratis)",
+        "Iglesia de Mariacka (6 EUR torre)",
+        "Museo Solidarity (8 EUR)",
+        "Basílica de Santa Catalina (gratis)",
+        "Playas Oliwa y Sopot (gratis, 15min tren)",
+        "Muelle y puerto (gratis pasear)"
+      ],
+      "donde_comer": "Zurawina (sopa ácida 4-5 EUR), arenque báltico (6-8 EUR), piekarnia (panadería). Restaurantes caros en Motława 15-25 EUR. Bares de comida rápida en calles secundarias 5-8 EUR.",
+      "consejo_local": "En junio y agosto hay festival de Shakespeare. Las playas cercanas (Sopot, Gdynia) son accesibles en tren suburban (4 EUR) pero están abarrotadas; Oliwa es más local.",
+      "plan_b_lluvia": "Museo Europejskie, Muzeum Bursztynu (ámbar), galerías de arte en Stare Miasto, cafés junto al río.",
+      "keywords": [
+        "Gdansk",
+        "Danzig",
+        "Motława",
+        "Solidarity",
+        "puerto báltico",
+        "playas cercanas"
+      ]
+    },
+    {
+      "id": "karpaty-zakopane",
+      "nombre": "Zakopane (Montes Tatra)",
+      "tipo": "montaña",
+      "region": "Pequeña Polonia",
+      "descripcion": "Resort de montaña en los Tatra con senderismo espectacular, arquitectura de madera de estilo góral y ambiente alpino. Base para rutas de trekking accesibles y vistas del pico Rysy.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre (mejor senderismo), diciembre-febrero (esquí)",
+      "como_llegar": "desde Cracovia: bus 2h (6-10 EUR) o minibús compartido 2.5h (10-15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales y pensiones: 15-22 EUR/noche",
+        "medio": "Apartamentos o pokój u pani (casa rural): 35-55 EUR/noche",
+        "comfort": "Resort hotels: 60-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Rysy (pico, 4h ida/vuelta, gratis)",
+        "Garganta Koscieliska (4h, gratis)",
+        "Garganta Dunajec (bote 20 EUR, 2h, espectacular)",
+        "Lago Morskie Oko (7h caminata, gratis)",
+        "Esquí en Kasprowy Wierch (invierno, 30-40 EUR forfait)"
+      ],
+      "donde_comer": "Oscypek (queso de oveja 3-5 EUR), żurek, comidas de montaña en refugios (8-12 EUR). Kielbasa a la parrilla en puestos (4-6 EUR). Restaurantes de montaña durante caminatas 10-15 EUR.",
+      "consejo_local": "Los turistas de excursión de un día enloquecen Garganta Koscieliska. Madruga o hazla en sentido inverso. Morskie Oko es bonito pero abrumadoramente concurrido.",
+      "plan_b_lluvia": "Museo del Estilo Góral, termas de Chochołów (25 EUR), pueblos de montaña como Koscieliska.",
+      "keywords": [
+        "Zakopane",
+        "Tatra",
+        "Rysy",
+        "senderismo",
+        "montaña",
+        "Dunajec",
+        "esquí"
+      ]
+    },
+    {
+      "id": "wroclaw",
+      "nombre": "Breslavia (Wrocław)",
+      "tipo": "ciudad",
+      "region": "Baja Silesia (Dolnoslaskie)",
+      "descripcion": "Ciudad en islas del río Oder con universidad histórica, gnomos de bronce escondidos en calles y atmósfera bohemia. Menos turística que Cracovia pero con igual encanto medieval y vida cultural intensa.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "desde Varsovia: tren 6-7h (20-35 EUR) o bus 7h (10-15 EUR); desde Cracovia: tren 7h (25-40 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales Stare Miasto: 13-19 EUR/noche",
+        "medio": "Apartamentos centro: 40-65 EUR/noche",
+        "comfort": "Hotels históricos: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Plaza Mayor y Ayuntamiento (gratis exterior, 10 EUR interior)",
+        "Búsqueda de gnomos (gratis, hay mapa)",
+        "Catedral de Ostrów Tumski (gratis)",
+        "Barrio universitario Nowy Targ (gratis pasear)",
+        "Puentes y río Oder (gratis pasear)",
+        "Raclawicki Panorama - pintura cilíndrica (18 EUR)"
+      ],
+      "donde_comer": "Pierogi caseros (4-6 EUR), sopa de remolacha (3-5 EUR). Restaurantes Stare Miasto 10-18 EUR. Bares de estudiantes en Nowy Targ 5-8 EUR. Cervecerías tradicionales 6-10 EUR.",
+      "consejo_local": "Los gnomos (krasnale) son una obsesión local; hay +150 escondidos por la ciudad. Busca un mapa en la oficina de turismo o descarga la app. Más auténtico que Cracovia para jóvenes viajeros.",
+      "plan_b_lluvia": "Museos (Museo Nacional, Museo de Arte Moderno), galerías, cafés de estudiantes, puentes cubiertos.",
+      "keywords": [
+        "Wroclaw",
+        "Breslavia",
+        "Oder",
+        "gnomos",
+        "Stare Miasto",
+        "Ostrów Tumski"
+      ]
+    },
+    {
+      "id": "malbork-gdansk-norte",
+      "nombre": "Malbork (Castillo)",
+      "tipo": "histórico",
+      "region": "Pomerania",
+      "descripcion": "Fortaleza medieval más grande de Europa, sede histórica de los Caballeros Teutónicos. Castillo de ladrillo espectacular con interior restaurado. Visita fácil desde Gdansk.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "desde Gdansk: tren 45min (3-5 EUR); desde Varsovia: tren 4.5h (15-25 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Gdansk (es mejor base)",
+        "medio": "Apartamentos Malbork: 30-50 EUR/noche",
+        "comfort": "Hotels Malbork: 50-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo Malbork - visita completa (18 EUR, 3-4h)",
+        "Museo dentro del castillo (incluido entrada)",
+        "Vistas desde murallas (incluido)",
+        "Pueblos pintorescos cercanos (gratis pasear)"
+      ],
+      "donde_comer": "Comida en cafeterías del castillo (8-12 EUR) o restaurantes pequeños del pueblo (6-10 EUR). Opciones limitadas; come antes o después en Gdansk.",
+      "consejo_local": "Compra entrada combinada con museos de Gdansk si lo deseas. El castillo es espectacular pero la mayoría de viajeros lo visita como excursión de un día desde Gdansk.",
+      "plan_b_lluvia": "El castillo es visitable (interior cubierto), aunque menos impactante sin luz natural.",
+      "keywords": [
+        "Malbork",
+        "castillo",
+        "Caballeros Teutónicos",
+        "fortaleza ladrillo",
+        "Gdansk excursion"
+      ]
+    },
+    {
+      "id": "poznan",
+      "nombre": "Poznań",
+      "tipo": "ciudad",
+      "region": "Gran Polonia (Wielkopolskie)",
+      "descripcion": "Centro de Polonia occidental con plaza renacentista, catedral gótica y atmosfera de ciudad universitaria. Menos masificada que Varsovia o Cracovia, con buena gastronomía local.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, septiembre",
+      "como_llegar": "desde Varsovia: tren 3h (15-25 EUR) o bus 4h (10-14 EUR); desde Gdansk: tren 4h (20-30 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales centro: 12-18 EUR/noche",
+        "medio": "Apartamentos Ostrów Tumski: 35-60 EUR/noche",
+        "comfort": "Hotels plaza: 65-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Plaza Mayor (Stary Rynek) y ayuntamiento (gratis exterior, 8 EUR torre)",
+        "Catedral en Ostrów Tumski (gratis)",
+        "Iglesia de María Magdalena (gratis)",
+        "Paseo río Warta (gratis)",
+        "Pueblos tradicionales cercanos (gratis)"
+      ],
+      "donde_comer": "Rogale poznańskie (cruasán local 3-4 EUR), żurek, carnes. Restaurantes Plaza Mayor 10-18 EUR. Bares estudiantes 5-8 EUR. Panadería tradicional.",
+      "consejo_local": "Poznań es natal del movimiento Solidarity. Visita el Monumento a Víctimas de 1956. Es un buen punto de parada entre Varsovia y la costa, no destino por sí solo.",
+      "plan_b_lluvia": "Museos (Museo Nacional, Museo Antropológico), catedral interior, cafés.",
+      "keywords": [
+        "Poznan",
+        "Poznań",
+        "Plaza Mayor",
+        "catedral",
+        "Gran Polonia",
+        "rogale"
+      ]
+    },
+    {
+      "id": "sopot-playas",
+      "nombre": "Sopot (Playas Báltico)",
+      "tipo": "playa",
+      "region": "Pomerania",
+      "descripcion": "Resort playero con muelle histórico de madera, playas de arena y atmósfera veraniega. Popular entre polacos y turistas alemanes. Base para explorar la costa báltica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-agosto",
+      "como_llegar": "desde Gdansk: tren suburban 25min (3-4 EUR) o des Gdansk; desde Varsovia: tren 5.5h (20-35 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales: 14-20 EUR/noche",
+        "medio": "Apartamentos cerca playa: 45-75 EUR/noche",
+        "comfort": "Resort hotels beachfront: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa principal y muelle (gratis)",
+        "Paseo Montażu Filmów - paseo costero (gratis)",
+        "Parque Monte Krreputation (gratis entrada)",
+        "Bares de playa y restaurantes (caro, 15-25 EUR)",
+        "Gdynia cercana (tren 20min, playas más tranquilas)"
+      ],
+      "donde_comer": "Comida playera (hamburguesas, wraps 8-12 EUR), pescado 12-20 EUR. Caro comparado con inland. Helados en muelle 2-4 EUR.",
+      "consejo_local": "Sopot es turístico y caro en temporada. Las playas más tranquilas están en Gdynia o Oliwa (más baratas, menos abarrotadas).",
+      "plan_b_lluvia": "Museos (Museo Arqueológico), galerías, paseo cubierto del muelle.",
+      "keywords": [
+        "Sopot",
+        "playa",
+        "muelle",
+        "Báltico",
+        "Gdynia cerca",
+        "verano"
+      ]
+    },
+    {
+      "id": "wolin-szczecin",
+      "nombre": "Szczecin (Noroeste costero)",
+      "tipo": "ciudad",
+      "region": "Pomerania Occidental (Zachodniopomorskie)",
+      "descripcion": "Puerto histórico en la desembocadura del Oder con castillo ducal, parques y atmósfera menos turística que la costa central. Puerta a islas bálticas y Alemania.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "desde Varsovia: tren 7h (25-40 EUR) o bus 8h (14-18 EUR); desde Gdansk: tren 7h (25-35 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales: 12-17 EUR/noche",
+        "medio": "Apartamentos centro: 35-55 EUR/noche",
+        "comfort": "Hotels junto castillo: 60-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo Ducal y museo (12 EUR)",
+        "Paseo fluvial Oder (gratis)",
+        "Parque Pucki (gratis)",
+        "Catedral de Santiago (gratis)",
+        "Islas Wolin cercanas - parque nacional (excursión)"
+      ],
+      "donde_comer": "Comida local menos cara que costa central. Restaurantes 8-15 EUR. Bares de estudiantes 5-8 EUR.",
+      "consejo_local": "Szczecin es más auténtico, menos turístico. Punto de parada hacia Alemania o si quieres costa sin multitudes. Parque Nacional Wolin (botes a islas) es actividad principal.",
+      "plan_b_lluvia": "Castillo interior, museos, galería de arte.",
+      "keywords": [
+        "Szczecin",
+        "puerto",
+        "Oder",
+        "Wolin",
+        "Pomerania Occidental"
+      ]
+    },
+    {
+      "id": "kielce-sudeste",
+      "nombre": "Ojców (Sudeste - Cuevas)",
+      "tipo": "naturaleza",
+      "region": "Pequeña Polonia",
+      "descripcion": "Parque nacional con cuevas de piedra caliza, río Prądnik y acantilados. Senderismo fácil entre formaciones geológicas espectaculares. Excursión perfecta desde Cracovia.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "desde Cracovia: bus 1.5h (5-8 EUR) o tren 1h + bus; acceso independiente complicado",
+      "donde_dormir": {
+        "mochilero": "Albergue en Ojców: 15-20 EUR/noche",
+        "medio": "Pokój u pani o apartamentos: 35-50 EUR/noche",
+        "comfort": "Lodges rústicos: 55-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Cueva Mina (2-3h, gratis, 15 EUR tour guiado)",
+        "Cueva Łokietka (tour 12 EUR, 30min)",
+        "Paseo río Prądnik (2-3h, gratis)",
+        "Ruinas castillo (gratis)",
+        "Vistas desde los acantilados (gratis)"
+      ],
+      "donde_comer": "Comidas en refugios dentro del parque (8-12 EUR). Restaurante en Ojców pueblo (10-15 EUR). Lleva picnic para máxima flexibilidad.",
+      "consejo_local": "La mayoría visita como excursión de un día. Si te quedas, tienes paz total. El parque cierra ciertos senderos en invierno; verifica en junio-septiembre.",
+      "plan_b_lluvia": "Las cuevas son visitables incluso con lluvia (interior). Senderos embarrados son complicados.",
+      "keywords": [
+        "Ojców",
+        "parque nacional",
+        "cuevas",
+        "Prądnik",
+        "senderismo",
+        "desde Cracovia"
+      ]
+    }
+  ]
+}

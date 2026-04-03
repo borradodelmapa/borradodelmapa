@@ -24,9 +24,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // ── Configuración ──────────────────────────────────────────────
 const CONFIG = {
   apiUrl: 'https://api.anthropic.com/v1/messages',
-  model: 'claude-sonnet-4-20250514',
-  maxTokens: 4096,
-  delayBetweenCalls: 2000,
+  model: 'claude-haiku-4-5-20251001',
+  maxTokens: 8192,
+  delayBetweenCalls: 1500,
   outputDir: path.join(__dirname, 'output-nivel2'),
   countriesFile: path.join(__dirname, 'countries.json'),
   progressFile: path.join(__dirname, 'progress-nivel2.json'),

@@ -1,0 +1,326 @@
+{
+  "pais": "Guinea-Bisáu",
+  "codigo": "gw",
+  "destinos": [
+    {
+      "id": "bissau",
+      "nombre": "Bissau",
+      "tipo": "ciudad",
+      "region": "Região de Bissau",
+      "descripcion": "Capital y puerta de entrada al país, con mercados bulliciosos, arquitectura colonial portuguesa y un puerto animado. Centro neurálgico para organizar viajes a islas y naturaleza del interior. Punto de partida obligatorio para la mayoría de viajeros.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "vuelos internacionales a Aeropuerto de Osvaldo Vieira (OXB); conexiones desde Dakar (Senegal) por aire o carretera",
+      "donde_dormir": {
+        "mochilero": "Guesthouse básica, 15-25 EUR/noche",
+        "medio": "Hotel familiar, 35-60 EUR/noche",
+        "comfort": "Hotel Azalaï, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasear por Praça de Independência (gratis)",
+        "Visitar Palácio da República (5 EUR)",
+        "Explorar Mercado Central (gratis, negociar precios)",
+        "Comer en restaurantes junto al río Geba (8-15 EUR)"
+      ],
+      "donde_comer": "Pescado fresco (peixe grelhado), arroz jollof, cachupa. Restaurantes en Avenida República o junto al puerto. Rango 6-20 EUR",
+      "consejo_local": "La ciudad es caótica pero segura en zonas turísticas durante el día. Evita paseos nocturnos solitarios y negocia siempre taxi antes de subir.",
+      "plan_b_lluvia": "Museos pequeños (Museu Nacional), interior de tiendas de artesanía, cafés con aire acondicionado",
+      "keywords": [
+        "Bissau",
+        "Bisao",
+        "capital",
+        "Praça Independência",
+        "Geba",
+        "puerto"
+      ]
+    },
+    {
+      "id": "archipelago-bijagos",
+      "nombre": "Archipiélago de Bijagós",
+      "tipo": "isla",
+      "region": "Región de Bolama",
+      "descripcion": "88 islas con playas vírgenes, vida marina excepcional y comunidades autóctonas. Destino ideal para buceo, avistamiento de hipopótamos acuáticos y desconexión total. Requiere organización previa pero recompensa con experiencias únicas.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a junio",
+      "como_llegar": "Desde Bissau: ferry a Bolama (5-6 horas, 15-20 EUR) o lanchas privadas a islas específicas (20-40 EUR por trayecto). También vuelos charters desde Bissau",
+      "donde_dormir": {
+        "mochilero": "Posada básica en isla, 20-30 EUR/noche",
+        "medio": "Lodge ecoturístico, 50-80 EUR/noche",
+        "comfort": "Resort con servicios, 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel y buceo con arrecifes de coral (40-80 EUR con guía)",
+        "Avistamiento de hipopótamos acuáticos (gratis desde playa)",
+        "Visita a aldeas de etnia Bijagó (10-15 EUR con guía)",
+        "Pesca artesanal con pescadores locales (20-30 EUR)"
+      ],
+      "donde_comer": "Pescado recién capturado, pulpo a la parrilla, caldo de marisco. Comedores locales, 8-12 EUR. Lleva snacks de Bissau.",
+      "consejo_local": "Las islas no tienen infraestructura. Reserva alojamiento con anticipación. Lleva efectivo (XOF), repelente de mosquitos y protección solar extrema.",
+      "plan_b_lluvia": "Pesca en interiores, visitas a comunidades, descanso en bungalow con lectura",
+      "keywords": [
+        "Bijagos",
+        "Bijagós",
+        "archipiélago",
+        "islas",
+        "Bubaque",
+        "Uno",
+        "Orango"
+      ]
+    },
+    {
+      "id": "cacheu",
+      "nombre": "Cacheu",
+      "tipo": "histórico",
+      "region": "Región de Cacheu",
+      "descripcion": "Fortaleza colonial portuguesa del siglo XVII junto a manglares y río. Centro histórico de tráfico de esclavos reconvertido en monumento. Ofrece perspectiva colonial y biodiversidad de humedales costeros.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Desde Bissau: minibús (2-3 horas, 8-12 EUR) o coche privado (40-60 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse del pueblo, 12-20 EUR/noche",
+        "medio": "Hotel Cacheu, 30-45 EUR/noche",
+        "comfort": "Posada con río, 60-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Explorar Fortaleza de São José (5 EUR entrada)",
+        "Pasear por barrio histórico (gratis)",
+        "Avistamiento de cocodrilos en manglares (guía 15-25 EUR)",
+        "Visita a Parque Nacional de Cacheu (10 EUR + guía obligatorio)"
+      ],
+      "donde_comer": "Arroz con pescado, caldos de marisco, frutas tropicales. Pequeños restaurantes junto río, 5-10 EUR",
+      "consejo_local": "El turismo es mínimo; negocia con guías locales en la fortaleza. Mejor visitarlo como excursión de día desde Bissau o combinado con viaje a Senegal.",
+      "plan_b_lluvia": "Museo pequeño de fortaleza, interior de tiendas de artesanía",
+      "keywords": [
+        "Cacheu",
+        "fortaleza",
+        "São José",
+        "manglares",
+        "histórico",
+        "colonial"
+      ]
+    },
+    {
+      "id": "gabu",
+      "nombre": "Gabú",
+      "tipo": "rural",
+      "region": "Región de Gabú",
+      "descripcion": "Segunda ciudad interior, centro comercial tradicional con mercados autóctonos y acceso a la sabana y cultivos. Punto de parada para viajeros que exploran interior profundo y contacto con vida rural guineana.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Bissau: minibús (6-8 horas, 12-18 EUR) o coche privado (60-90 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse básica, 10-18 EUR/noche",
+        "medio": "Hotel Gabú, 25-40 EUR/noche",
+        "comfort": "Posada turística, 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar Mercado Central (gratis, fotografía con permiso)",
+        "Recorrido por aldeas de etnia Mandinga (guía 15 EUR)",
+        "Picnic en paisaje de sabana (gratis)",
+        "Observación de vida agrícola tradicional (gratis)"
+      ],
+      "donde_comer": "Jollof rice, caldo de cacahuete, miel local. Comedores sencillos, 4-8 EUR. Mercado para frutas y snacks",
+      "consejo_local": "Gabú es un paso hacia Guinea-Conakry, no un destino final. Infraestructura turística mínima. Viaja con guía o agencia desde Bissau.",
+      "plan_b_lluvia": "Mercado cubierto, interior de tiendas, cafés locales",
+      "keywords": [
+        "Gabu",
+        "Gabú",
+        "interior",
+        "sabana",
+        "mercado",
+        "rural"
+      ]
+    },
+    {
+      "id": "bolama",
+      "nombre": "Bolama",
+      "tipo": "isla",
+      "region": "Región de Bolama",
+      "descripcion": "Antigua capital colonial en isla estratégica, con ruinas de edificios decimonónicos y atmósfera fantasmal. Ofrece historia arquitectónica y biodiversidad de manglares, ideal para viajeros de espíritu aventurero.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a junio",
+      "como_llegar": "Desde Bissau: ferry (5-6 horas, 15-20 EUR) o lancha privada (30-50 EUR)",
+      "donde_dormir": {
+        "mochilero": "Alojamiento local básico, 15-25 EUR/noche",
+        "medio": "Guesthouse en ruina restaurada, 35-50 EUR/noche",
+        "comfort": "Lodge colonial, 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Exploración de ruinas coloniales (gratis)",
+        "Paseo por casco histórico (gratis)",
+        "Observación de manglares en canoa (20-30 EUR con guía)",
+        "Visita a isla cercana de Bubaque (15 EUR ferry)"
+      ],
+      "donde_comer": "Pescado fresco, caldo de marisco, frutas tropicales. Pequeños restaurantes, 6-12 EUR",
+      "consejo_local": "Bolama es un destino para viajeros que buscan soledad y decadencia histórica. Infraestructura muy limitada; lleva dinero en efectivo y agua.",
+      "plan_b_lluvia": "Exploración de ruinas techadas, lectura en interior",
+      "keywords": [
+        "Bolama",
+        "isla",
+        "capital colonial",
+        "ruinas",
+        "histórico",
+        "manglares"
+      ]
+    },
+    {
+      "id": "ponta-anchunda",
+      "nombre": "Ponta Ânchor (Ponta Anchunda)",
+      "tipo": "playa",
+      "region": "Región de Tombali",
+      "descripcion": "Playa costera aislada en sur con arena blanca y acceso a arrecifes de coral. Destino tranquilo para buceo y descanso sin turismo de masas. Punto de parada en ruta hacia Sierra Leona.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a junio",
+      "como_llegar": "Desde Bissau: minibús a Quinhamel o Cacheu, luego conexión (8-10 horas total, 15-25 EUR) o coche privado (80-120 EUR)",
+      "donde_dormir": {
+        "mochilero": "Cabaña de pescador, 12-20 EUR/noche",
+        "medio": "Lodge de playa simple, 30-50 EUR/noche",
+        "comfort": "Resort de playa, 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en arrecife coralino (45-70 EUR con guía)",
+        "Caminar playa virgen (gratis)",
+        "Pesca artesanal (20-30 EUR)",
+        "Observación de tortugas marinas (temporada junio-octubre)"
+      ],
+      "donde_comer": "Pulpo a la parrilla, ensalada de mango, bebidas naturales. Comedores de playa, 7-12 EUR",
+      "consejo_local": "Muy aislado; planifica con anticipación. Mejor visitarlo con operador turístico local o coche privado. Infraestructura mínima.",
+      "plan_b_lluvia": "Pesca desde playa, descanso en cabaña, juegos locales",
+      "keywords": [
+        "Ponta Anchunda",
+        "Ponta Ankor",
+        "playa",
+        "sur",
+        "coralino",
+        "arrecife"
+      ]
+    },
+    {
+      "id": "oio",
+      "nombre": "Oio (Región)",
+      "tipo": "rural",
+      "region": "Región de Oio",
+      "descripcion": "Región central con pueblos agrícolas, arrozales y acceso a la naturaleza de Guinea interior. Ofrece inmersión cultural con etnias Balanta y contacto con vida rural auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Bissau: minibús (2-3 horas a capital regional Farim, 8-12 EUR)",
+      "donde_dormir": {
+        "mochilero": "Alojamiento comunitario, 10-15 EUR/noche",
+        "medio": "Guesthouse Farim, 20-35 EUR/noche",
+        "comfort": "Lodge ecoturístico, 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita a aldeas Balanta (guía 10-15 EUR)",
+        "Paseo en canoa por río Mansoa (25-35 EUR)",
+        "Observación de arrozales (gratis)",
+        "Mercado semanal en Farim (gratis)"
+      ],
+      "donde_comer": "Arroz con pescado de río, caldo de maní, bebidas caseras. Comedores locales, 4-8 EUR",
+      "consejo_local": "Viaja con propósito de conocer comunidades reales. Fotografía solo con permiso. Oio es experiencia cultural, no destino de lujo.",
+      "plan_b_lluvia": "Interiores de tiendas, cafés comunitarios",
+      "keywords": [
+        "Oio",
+        "Farim",
+        "Balanta",
+        "rural",
+        "arrozal",
+        "río Mansoa"
+      ]
+    },
+    {
+      "id": "quinhamel",
+      "nombre": "Quinhamel",
+      "tipo": "playa",
+      "region": "Región de Oio",
+      "descripcion": "Pueblo costero pescador con playas de arena oscura y atmósfera local auténtica. Menos frecuentado que Cacheu, ofrece experiencia de costa guineana sin infraestructura turística pesada.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a junio",
+      "como_llegar": "Desde Bissau: minibús (1.5-2 horas, 5-8 EUR) o coche privado (25-40 EUR)",
+      "donde_dormir": {
+        "mochilero": "Posada pescador, 12-18 EUR/noche",
+        "medio": "Guesthouse simple, 25-35 EUR/noche",
+        "comfort": "Hotel de playa, 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo playa (gratis)",
+        "Observación de flota pesquera al amanecer (gratis)",
+        "Compra de pescado fresco (5-10 EUR para comida)",
+        "Baño en playa segura (gratis)"
+      ],
+      "donde_comer": "Pescado asado, camarones, bebidas de coco. Restaurantes frente al mar, 6-12 EUR",
+      "consejo_local": "Visita como excursión de día desde Bissau. Infraestructura limitada para hospedaje. Mejor en transición hacia otras playas del sur.",
+      "plan_b_lluvia": "Mercado cubierto, tiendas locales",
+      "keywords": [
+        "Quinhamel",
+        "playa",
+        "pescador",
+        "costa",
+        "arena"
+      ]
+    },
+    {
+      "id": "bafata",
+      "nombre": "Bafatá",
+      "tipo": "ciudad",
+      "region": "Región de Bafatá",
+      "descripcion": "Tercera ciudad guineana en río Geba, centro administrativo con mercado tradicional y acceso a paisajes fluviales. Parada importante para ruta hacia Guinea-Conakry o exploración de interior.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Bissau: minibús (4-5 horas, 10-15 EUR) o coche privado (50-80 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse básica, 10-18 EUR/noche",
+        "medio": "Hotel Bafatá, 25-40 EUR/noche",
+        "comfort": "Posada con río, 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar Mercado Central (gratis)",
+        "Paseo río Geba en canoa (15-25 EUR con guía)",
+        "Exploración de casco antiguo (gratis)",
+        "Compra de artesanía local (variable)"
+      ],
+      "donde_comer": "Arroz con pescado de río, sopas locales, cacahuetes. Comedores sencillos, 4-9 EUR",
+      "consejo_local": "Bafatá es transición hacia Guinea-Conakry. Poco atractivo como destino final pero útil para conocer interior. Visita de día o una noche máximo.",
+      "plan_b_lluvia": "Mercado cubierto, cafés interiores",
+      "keywords": [
+        "Bafata",
+        "Bafatá",
+        "Geba",
+        "interior",
+        "ciudad",
+        "mercado"
+      ]
+    },
+    {
+      "id": "parque-nacional-salalao",
+      "nombre": "Parque Nacional de Salalao",
+      "tipo": "naturaleza",
+      "region": "Región de Tombali",
+      "descripcion": "Reserva de bosque tropical en sur con biodiversidad de primates, aves y fauna salvaje. Destino para senderismo de aventura y observación de vida silvestre genuina con presencia muy limitada de turistas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Desde Bissau: ruta compleja (10-12 horas con conexiones, 20-30 EUR en transporte público) o coche privado con guía (120-180 EUR)",
+      "donde_dormir": {
+        "mochilero": "Campamento básico o cabaña de guardería, 15-25 EUR/noche",
+        "medio": "Lodge ecoturístico simple, 40-60 EUR/noche",
+        "comfort": "Eco-resort con servicios, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo guiado en bosque (30-50 EUR con guía obligatorio)",
+        "Observación de primates (colobos, mangabeys)",
+        "Avistamiento de aves (gratis en caminatas)",
+        "Baños en cascadas pequeñas (gratis)"
+      ],
+      "donde_comer": "Comidas preparadas por lodge o campamento, proteína de caza local, verduras. 8-15 EUR incluido en paquete",
+      "consejo_local": "Reserva con anticipación. Guía obligatorio. Lleva botas de trekking, repelente anti-insectos potente y tratamiento de malaria preventivo. Infraestructura mínima pero experiencia valiosa.",
+      "plan_b_lluvia": "Senderismo bajo lluvia (bosque húmedo), observación desde campamento",
+      "keywords": [
+        "Salalao",
+        "parque nacional",
+        "bosque",
+        "naturaleza",
+        "selva",
+        "Tombali"
+      ]
+    }
+  ]
+}

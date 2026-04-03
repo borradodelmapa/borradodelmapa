@@ -1,0 +1,370 @@
+{
+  "pais": "Mónaco",
+  "codigo": "mc",
+  "destinos": [
+    {
+      "id": "monaco-ville",
+      "nombre": "Mónaco-Ville (Casco Antiguo)",
+      "tipo": "histórico",
+      "region": "Centro histórico",
+      "descripcion": "El núcleo original de Mónaco, encaramado en un peñasco rocoso sobre el Mediterráneo. Combina callejuelas medievales, palacios y vistas espectaculares del puerto. Imprescindible para entender la historia y el carácter del principado.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a junio, septiembre a octubre",
+      "como_llegar": "A pie desde cualquier punto de Mónaco (máx. 2 km). Autobús público línea 1, 2 (1,50 EUR). Ascensores subterráneos gratuitos.",
+      "donde_dormir": {
+        "mochilero": "Hostal o estudio en Condamine/La Rousse: 60-90 EUR/noche",
+        "medio": "Hotel 3 estrellas en centro: 150-250 EUR/noche",
+        "comfort": "Hotel 4-5 estrellas con vista puerto: 350-600 EUR/noche"
+      },
+      "que_hacer": [
+        "Palacio del Príncipe - visita interior (10 EUR)",
+        "Catedral del Mónaco - entrada libre",
+        "Museo Oceanográfico (17 EUR)",
+        "Paseo por jardines del Palacio - libre",
+        "Escaleras del Castillo y miradores - gratis"
+      ],
+      "donde_comer": "Escalopines à la monégasque, pâtes fraîches. Rango: 15-35 EUR en terrazas turísticas, 25-50 EUR en restaurantes. Zona Rue Comte Félix Gastaldi para menos turismo.",
+      "consejo_local": "Visita el Palacio entre 10-11am para evitar masas. Los ascensores gratuitos (entrada por Rue Comte Félix Gastaldi) son desconocidos para turistas.",
+      "plan_b_lluvia": "Museo Oceanográfico es imprescindible. Tiendas en Rue Princess Caroline.",
+      "keywords": [
+        "Monako",
+        "casco antiguo",
+        "Old Town",
+        "Palacio Príncipe",
+        "puerto Hercules"
+      ]
+    },
+    {
+      "id": "monte-carlo",
+      "nombre": "Monte Carlo",
+      "tipo": "ciudad",
+      "region": "Barrio norte",
+      "descripcion": "Icono de lujo mundial, hogar del Casino más famoso de Europa. Combina arquitectura Belle Époque con vida refinada, pero accesible a pie para explorar gratuitamente. Imprescindible aunque no juegues.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Metro línea 2 (1,50 EUR) o autobús 1, 2. 10 min desde centro. A pie 20 min.",
+      "donde_dormir": {
+        "mochilero": "No recomendado - barrio muy caro. Mejor en otras zonas",
+        "medio": "Hotel 3 estrellas: 180-280 EUR/noche",
+        "comfort": "Hermitage, Fairmont: 450-800 EUR/noche"
+      },
+      "que_hacer": [
+        "Casino de Montecarlo - entrada 10 EUR (solo mirar desde fuera es gratis)",
+        "Salón de Juegos - 17 EUR (slot machines, ruleta)",
+        "Paseo por Place du Casino y Jardín de la Mairie - libre",
+        "Iglesia de Sta. Dévota - entrada libre",
+        "Paseo por Av. de la Costa - vistas y arquitectura"
+      ],
+      "donde_comer": "Caviar, langosta, haute cuisine. Rango: 50-150 EUR. Café de Paris (terraza asequible, 20-30 EUR). Tiendas de sándwiches para picnic barato (8-12 EUR).",
+      "consejo_local": "El Casino es más viejo y menos opulento de lo que parece en fotos. No entres si solo buscas 'lujo' - el sueño se quiebra. Las mejores vistas son desde el exterior y las terrazas de café.",
+      "plan_b_lluvia": "Interior del Casino. Tiendas en Galerie du Métropole.",
+      "keywords": [
+        "Montecarlo",
+        "Casino",
+        "Place du Casino",
+        "Belle Epoque",
+        "juegos azar"
+      ]
+    },
+    {
+      "id": "port-hercule",
+      "nombre": "Puerto Hércules (Port Hercule)",
+      "tipo": "ciudad",
+      "region": "Centro-norte",
+      "descripcion": "Uno de los puertos más icónicos del Mediterráneo, rodeado de yates de lujo. Paseos gratuitos, restaurantes y vistas al atardecer impactantes. Ideal para fotografía y vibrante vida portuaria.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "A pie desde Mónaco-Ville (10 min). Autobús línea 1, 2 (1,50 EUR).",
+      "donde_dormir": {
+        "mochilero": "Condamine (barrio adyacente): 70-100 EUR/noche",
+        "medio": "Hotel cerca puerto: 160-240 EUR/noche",
+        "comfort": "Fairmont, Novotel: 320-500 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo alrededor del puerto - gratis",
+        "Mirador desde Terrasse de la Rascasse - gratis",
+        "Museo de Modelos de Yates (pequeño, 5 EUR)",
+        "Fotografía de puestas de sol - gratis",
+        "Observar Grand Prix de Mónaco (si es en mayo, desde afuera gratis)"
+      ],
+      "donde_comer": "Pescado fresco, bouillabaisse. Rango: 18-40 EUR en terrazas. Monégasque (plato local). Quai Jean-Charles Rey para vistas portuarias.",
+      "consejo_local": "Si es fin de semana, evita - lleno de familias adineradas. Entre semana por la mañana es más tranquilo. Las mejores fotos son al atardecer desde la Terrasse.",
+      "plan_b_lluvia": "Galerías comerciales cercanas (Galerie du Métropole).",
+      "keywords": [
+        "Puerto",
+        "Hercules",
+        "Port Hercule",
+        "yates",
+        "marina",
+        "muelle"
+      ]
+    },
+    {
+      "id": "jardin-exotique",
+      "nombre": "Jardín Exótico",
+      "tipo": "naturaleza",
+      "region": "Oeste",
+      "descripcion": "Colección de 7.000+ cactus y suculentas en terrazas con vistas al Mediterráneo. Único por su altura y diversidad botánica. Incluye cuevas subterráneas (gruta del observatorio). Escapada verde imprescindible.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a octubre (invierno puede ser gris)",
+      "como_llegar": "Autobús línea 2 desde centro (7 min, 1,50 EUR). O a pie subida de 20 min.",
+      "donde_dormir": {
+        "mochilero": "Moneghetti (zona baja): 65-85 EUR/noche",
+        "medio": "Hotel zona baja: 140-200 EUR/noche",
+        "comfort": "No hay opciones lujosas cercanas - mejor en centro"
+      },
+      "que_hacer": [
+        "Recorrido jardín exótico - 9 EUR (audioguía incluida)",
+        "Gruta del Observatorio - incluida en entrada",
+        "Vistas panorámicas del Mediterráneo - gratis",
+        "Fotografía botánica - gratis",
+        "Museo de Antropología Prehistórica (small) - 5 EUR adicionales"
+      ],
+      "donde_comer": "Cafetería en jardín: 12-18 EUR. Pocas opciones gastronómicas cerca. Mejor comer en centro.",
+      "consejo_local": "La gruta es lo menos conocido - ve al fondo del jardín. Las plantas se ven mejor por la mañana (menos sombras). Octubre es ideal: menos turistas, sigue siendo cálido.",
+      "plan_b_lluvia": "Las cuevas funcionan bien en lluvia. El jardín es cubierto parcialmente.",
+      "keywords": [
+        "Jardin Exotique",
+        "cactus",
+        "succulentas",
+        "gruta",
+        "observatorio",
+        "botanico"
+      ]
+    },
+    {
+      "id": "palacio-principe",
+      "nombre": "Palacio del Príncipe",
+      "tipo": "histórico",
+      "region": "Mónaco-Ville",
+      "descripcion": "Residencia oficial del Príncipe Alberto II. Arquitectura renacentista y mobiliario opulento. Las salas abiertas al público muestran la historia de la dinastía Grimaldi y cómo vive la realeza.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a octubre (cerrado en invierno algunos días)",
+      "como_llegar": "Casco antiguo, centro. Autobús 1, 2 o a pie (1 EUR, 5 min).",
+      "donde_dormir": {
+        "mochilero": "Condamine/La Rousse: 70-100 EUR/noche",
+        "medio": "Hotel centro: 150-250 EUR/noche",
+        "comfort": "Hermitage, Metropole: 400-700 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita interior Palacio - 10 EUR (cambio de guardia al mediodía, gratis)",
+        "Observar Ceremonia de Cambio de Guardia - 11:55am, gratis",
+        "Patio interior y jardines - incluido en entrada",
+        "Fotografía exterior - gratis",
+        "Archivo Privado y salas históricas - parte de tour"
+      ],
+      "donde_comer": "Cafés en Rue Comte Félix Gastaldi: 10-20 EUR. Restaurantes en Plaza: 20-40 EUR.",
+      "consejo_local": "Llega 11:50am para el cambio de guardia (lo mejor es gratis). La entrada interior no merece 10 EUR si solo ves muebles - enfócate en el exterior, patios y vistas.",
+      "plan_b_lluvia": "Interior accesible, pero menos impactante sin vistas.",
+      "keywords": [
+        "Palais Princier",
+        "Grimaldi",
+        "residencia",
+        "guardia",
+        "ceremonia"
+      ]
+    },
+    {
+      "id": "catedral-monaco",
+      "nombre": "Catedral de Mónaco",
+      "tipo": "histórico",
+      "region": "Mónaco-Ville",
+      "descripcion": "Catedral de estilo románico-bizantino (1884). Panteón de los Príncipes Grimaldi, incluida la Princesa Grace. Arquitectura bella y atmósfera serena, entrada gratuita.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Mónaco-Ville, a pie desde centro (5 min). Autobús 1, 2.",
+      "donde_dormir": {
+        "mochilero": "Mónaco-Ville o Condamine: 70-100 EUR/noche",
+        "medio": "Hotel centro: 150-250 EUR/noche",
+        "comfort": "Lujo en centro: 350-600 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita interior catedral - entrada gratuita",
+        "Órgano y arquitectura - libre",
+        "Panteón de Grimaldi (tumba Princesa Grace) - libre",
+        "Fotos exterior - gratis",
+        "Misa si interesa - domingos 10am, gratis"
+      ],
+      "donde_comer": "Cafés adyacentes: 12-25 EUR. No hay restaurantes específicos.",
+      "consejo_local": "La Catedral está abierta solo a horas específicas (10am-12pm, 2pm-5pm). Evita horarios de misa. La tumba de la Princesa Grace está en la cripta - pregunta al entrar.",
+      "plan_b_lluvia": "Interior perfecto para lluvia.",
+      "keywords": [
+        "Catedral",
+        "Cathedral",
+        "Grimaldi",
+        "Princesa Grace",
+        "religion",
+        "arquitectura"
+      ]
+    },
+    {
+      "id": "colina-castillo",
+      "nombre": "Colina del Castillo y Escaleras",
+      "tipo": "histórico",
+      "region": "Mónaco-Ville",
+      "descripcion": "Restos de fortificaciones medievales con vistas 360° del Principado y Côte d'Azur. Paseo histórico corto pero con recompensas visuales impactantes. Acceso gratuito.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Desde Mónaco-Ville, entrada por Rue Comte Félix Gastaldi (5 min a pie).",
+      "donde_dormir": {
+        "mochilero": "Mónaco-Ville: 70-100 EUR/noche",
+        "medio": "Centro: 150-250 EUR/noche",
+        "comfort": "Lujo: 350-600 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido murallas y escaleras - gratis",
+        "Vistas panorámicas 360° - gratis",
+        "Fotografía al atardecer - gratis",
+        "Exploración de bastiones - gratis",
+        "Picnic con vistas - gratis (trae comida)"
+      ],
+      "donde_comer": "No hay opciones en la colina. Come antes en Mónaco-Ville.",
+      "consejo_local": "Las escaleras son empinadas pero la recompensa visual merece la pena. Mejor al atardecer para fotos doradas. Lleva agua.",
+      "plan_b_lluvia": "Resbaladizo - evita en lluvia.",
+      "keywords": [
+        "castillo",
+        "escaleras",
+        "murallas",
+        "vistas",
+        "fortificacion",
+        "medieval"
+      ]
+    },
+    {
+      "id": "grimaldi-forum",
+      "nombre": "Grimaldi Forum (Centro Cultural)",
+      "tipo": "histórico",
+      "region": "Larvotto",
+      "descripcion": "Centro de arte y cultura contemporánea con exposiciones rotativas, arquitectura moderna junto al mar. Ideal si llueve o buscas arte. Acceso a paseos marítimos incluidos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Autobús línea 6 desde centro (10 min, 1,50 EUR). A pie 25 min.",
+      "donde_dormir": {
+        "mochilero": "Larvel/Moneghetti: 75-110 EUR/noche",
+        "medio": "Hotel zona Larvotto: 160-280 EUR/noche",
+        "comfort": "Novotel, Fairmont: 350-550 EUR/noche"
+      },
+      "que_hacer": [
+        "Exposición temporal - 15 EUR (varía según exposición)",
+        "Paseo frente al mar - gratis",
+        "Playa Larvel - acceso gratis",
+        "Fotografía arquitectura - gratis",
+        "Cafetería con vistas - 12-20 EUR"
+      ],
+      "donde_comer": "Cafetería Grimaldi Forum: 14-22 EUR. Restaurantes cercanos en Av. Princesse Grace: 25-50 EUR.",
+      "consejo_local": "Las exposiciones son cortas (2-3 meses) y pueden ser muy especializadas. Consulta qué hay antes de ir. El acceso a la playa es gratuito incluso sin exposición.",
+      "plan_b_lluvia": "Perfecto - está todo bajo techo.",
+      "keywords": [
+        "Forum",
+        "arte",
+        "cultura",
+        "exposicion",
+        "contemporaneo",
+        "Larvotto"
+      ]
+    },
+    {
+      "id": "playa-levant",
+      "nombre": "Playas (Plage Levant, Plage Larvel)",
+      "tipo": "playa",
+      "region": "Larvotto, Condamine",
+      "descripcion": "Pequeñas playas urbanas del Mediterráneo con aguas cálidas (verano). Acceso gratuito, aunque limitadas. Alternativa a las playas de la Côte d'Azur francesa cercanas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Plage Larvel: Autobús 6 (1,50 EUR). Plage Levant: a pie desde centro (15 min).",
+      "donde_dormir": {
+        "mochilero": "Condamine/Moneghetti: 70-110 EUR/noche",
+        "medio": "Hotel cerca playa: 150-280 EUR/noche",
+        "comfort": "Beachfront: 400-650 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño - gratis",
+        "Sombrilla alquiler - 15 EUR/día",
+        "Snorkel - equipo alquiler 20 EUR",
+        "Paseos marítimos - gratis",
+        "Picnic - gratis (trae comida)"
+      ],
+      "donde_comer": "Chiringuitos playa: 18-35 EUR. Mejores precios en Rue Grimaldi o zona baja.",
+      "consejo_local": "Las playas de Mónaco son pequeñas y caras. Si buscas playa de verdad, mejor ir a Antibes, Cannes o Cap d'Ail (vecinas, 20 min en tren). Aquí van familias locales, no turistas en masa.",
+      "plan_b_lluvia": "Impossiblemente frío en invierno.",
+      "keywords": [
+        "playa",
+        "beach",
+        "Levant",
+        "Larvel",
+        "bano",
+        "Mediterraneo"
+      ]
+    },
+    {
+      "id": "excursion-cap-dail",
+      "nombre": "Excursión: Cap d'Ail (Francia)",
+      "tipo": "playa",
+      "region": "Frontera francesa (5 km)",
+      "descripcion": "Pequeño pueblo costero francés con playas vírgenes, paseos entre acantilados y cala protegida. Mucho mejor que playas de Mónaco, 15 min en tren. Escapada de día recomendada.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Tren desde Estación Mónaco-Monte Carlo (línea 6) a Cap d'Ail (15 min, 4 EUR). Cada 20 min. Regreso fácil.",
+      "donde_dormir": {
+        "mochilero": "Si duermes aquí: 65-95 EUR/noche",
+        "medio": "Hotel pequeño: 120-200 EUR/noche",
+        "comfort": "Airbnb con vista: 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Mala (cala privada, entrada 5 EUR, paraíso)",
+        "Paseo de los Acantilados (Sentier Littoral) - gratis",
+        "Snorkel aguas cristalinas - gratis + equipo alquiler 15 EUR",
+        "Picnic con vistas - gratis",
+        "Fotografía: vistas espectaculares - gratis"
+      ],
+      "donde_comer": "Restaurantes junto playa: 22-45 EUR. Boulangerie para sándwiches: 6-10 EUR.",
+      "consejo_local": "No duermes aquí - es excursión de día. La Plage Mala cuesta 5 EUR pero es la más hermosa de la región (agua cristalina, tranquila). El Sentier es perfecto para fotógrafos al atardecer.",
+      "plan_b_lluvia": "Si llueve, mejor no - es playa.",
+      "keywords": [
+        "Cap d'Ail",
+        "excursion",
+        "tren",
+        "Francia",
+        "playa",
+        "acantilados",
+        "calas"
+      ],
+      "excursion_desde": true
+    },
+    {
+      "id": "excursion-antibes",
+      "nombre": "Excursión: Antibes (Francia)",
+      "tipo": "ciudad",
+      "region": "Costa francesa (25 km)",
+      "descripcion": "Pueblo amurallado medieval junto al mar con puerto de veleros, museos (Picasso), playas y vida local auténtica. Más barato que Mónaco, más real. Ideal para pasar un día completo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Tren desde Mónaco (línea 6) a Antibes (30 min, 5,50 EUR). Cada 20 min. Autobús también disponible.",
+      "donde_dormir": {
+        "mochilero": "Si duermes aquí: 50-80 EUR/noche (hostal)",
+        "medio": "Hotel 3 estrellas: 90-150 EUR/noche",
+        "comfort": "Hotel frente mar: 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Casco antiguo y murallas - gratis",
+        "Museo Picasso - 12 EUR",
+        "Playas públicas (Gravettes, Ponteil) - gratis",
+        "Puerto Vauban (ver yates) - gratis",
+        "Iglesia de l'Immaculée Conception - gratis"
+      ],
+      "donde_comer": "Bouillabaisse, pâtes. Rango: 12-28 EUR en terrazas. Mejor relación calidad-precio que Mónaco. Rue James Close para vida local.",
+      "consejo_local": "Antibes es lo que Mónaco intenta ser pero sin pretensiones. Más gente local, menos turistas de lujo. El Museo Picasso vale la pena si te interesa. Playas gratuitas y sin masificación.",
+      "plan_b_lluvia": "Museo Picasso es buena opción. Paseos cubiertos en casco antiguo.",
+      "keywords": [
+        "Antibes",
+        "excursion",
+        "tren",
+        "Francia",
+        "medieval",
+        "murallas",
+        "Picasso"
+      ],
+      "excursion_desde": true
+    }
+  ]
+}

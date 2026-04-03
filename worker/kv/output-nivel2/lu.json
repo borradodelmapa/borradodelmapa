@@ -1,0 +1,333 @@
+{
+  "pais": "Luxemburgo",
+  "codigo": "lu",
+  "destinos": [
+    {
+      "id": "ciudad-luxemburgo",
+      "nombre": "Ciudad de Luxemburgo",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital y corazón del país, fusiona medievalismo con modernidad. Su casco antiguo UNESCO, acantilados escénicos y fortaleza son imprescindibles. Centro de transporte y alojamiento para explorar el resto del país.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Punto de entrada principal. Aeropuerto a 6km, autobús/tren al centro en 20 min (5-15 EUR). Capital, base natural.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Ville Haute o Grund: 25-40 EUR/noche",
+        "medio": "Hoteles 3* centro: 70-120 EUR/noche",
+        "comfort": "Hoteles 4-5* Ville Haute: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Casco Antiguo UNESCO (gratis)",
+        "Fortaleza de Luxemburgo (6 EUR)",
+        "Paseo de los Acantilados - Chemin de la Corniche (gratis)",
+        "Palacio Grand-Ducal (10 EUR con visita guiada)",
+        "Museo de Historia de la Ciudad (7 EUR)",
+        "Barrio de Grund y puerto fluvial (gratis)"
+      ],
+      "donde_comer": "Knackwurst y Jambon de Ardenne tradicionales. Rango 12-25 EUR plato principal. Zona Grund tiene tabernas auténticas y más baratas (8-15 EUR).",
+      "consejo_local": "Descarga la app Citywalk para ruta gratuita autoguiada. Los cafés de Placette du Marché son más caros; come en Rue de la Loge.",
+      "plan_b_lluvia": "Museos (Mudam, Philharmonie), galerías de arte en Ville Haute, shopping en Rue de la Reine.",
+      "keywords": [
+        "Luxembourg City",
+        "Ville Haute",
+        "Grund",
+        "Fortaleza",
+        "Corniche",
+        "Acantilados"
+      ]
+    },
+    {
+      "id": "vianden",
+      "nombre": "Vianden",
+      "tipo": "histórico",
+      "region": "Noreste",
+      "descripcion": "Pueblo medieval espectacular dominado por castillo de cuento de hadas en lo alto. Ubicado en valle de Eure, es el destino más fotogénico de Luxemburgo con arquitectura intacta. Ideal para caminantes.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Ciudad de Luxemburgo: autobús 570 (1h 15min, 6 EUR) o tren+autobús. Alternativa: coche alquilado (45km, 45 min).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses/chambres d'hôte: 35-55 EUR/noche",
+        "medio": "Hoteles 3* junto río: 80-110 EUR/noche",
+        "comfort": "Castillo hotel (Hotel Royale) o resort spa: 140-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Vianden (10 EUR, vistas 360°)",
+        "Senderismo Sentier des 7 Châteaux (gratis, 15km)",
+        "Paseo ribereño Eure (gratis)",
+        "Teleférico al castillo (5 EUR)",
+        "Museo de la Casa de Esch-Sur-Sûre (4 EUR)"
+      ],
+      "donde_comer": "Trout local (Truite de l'Eure), pan de jengibre de Vianden. Rango 14-22 EUR. Restaurants en la plaza principal más turísticos; mejor en callejuelas laterales.",
+      "consejo_local": "Llega al atardecer, duerme allí y recorre el pueblo al amanecer antes de llegar turistas. El castillo es mejor fotografiado desde la orilla opuesta del río.",
+      "plan_b_lluvia": "Interior del castillo (25 EUR visita completa), museo, cafés locales para observar pueblo.",
+      "keywords": [
+        "Vianden Castle",
+        "Château de Vianden",
+        "Eure",
+        "pueblo medieval",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "echternach",
+      "nombre": "Echternach",
+      "tipo": "histórico",
+      "region": "Este",
+      "descripcion": "Antigua ciudad monástica junto Sûre con basílica benedictina de 1000 años. Puerta al Parque Natural Germanico-Luxemburgués. Atmósfera tranquila y auténtica, menos turística que Vianden.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Ciudad de Luxemburgo: tren directo (45 min, 12 EUR) o autobús 110 (1h, 6 EUR). Más directo que Vianden.",
+      "donde_dormir": {
+        "mochilero": "Albergues y guesthouses: 30-45 EUR/noche",
+        "medio": "Hoteles 3* centro: 70-100 EUR/noche",
+        "comfort": "Resorts spa: 130-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Basílica de Echternach (gratis, cripta medieval)",
+        "Museo de la Basílica (4 EUR)",
+        "Paseo por Sûre hacia Rosport (gratis, 8km)",
+        "Senderismo Parque Natural (gratis)",
+        "Fuente de Ernz Noire (gratis, bosque)",
+        "Petit Train turístico (8 EUR, si funciona)"
+      ],
+      "donde_comer": "Anguila ahumada del Sûre, especialidades de Ardenne. Rango 13-20 EUR. Rue de la Basilique tiene opciones baratas (9-14 EUR).",
+      "consejo_local": "Visita la Danza de los Peregrinos (Dancing Procession) en martes de Pascua si puedes; es tradicional desde 1349. Fuera de eso, el pueblo es muy tranquilo.",
+      "plan_b_lluvia": "Basílica, museo, biblioteca histórica, cafés junto ventana del río.",
+      "keywords": [
+        "Echternach Basilica",
+        "Sûre",
+        "monasterio",
+        "Parque Natural",
+        "Ernz Noire"
+      ]
+    },
+    {
+      "id": "mosela-luxemburguesa",
+      "nombre": "Región Mosela (Valle del Vino)",
+      "tipo": "rural",
+      "region": "Sureste",
+      "descripcion": "Viñedos en terrazas junto Mosela, pueblos de vino (Remich, Schengen). Ruta vinícola con bodegas, paseos fluviales y gastronomía. Zona más soleada y relajada del país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "agosto-octubre (vendimia)",
+      "como_llegar": "Desde Ciudad de Luxemburgo: autobús 162 a Remich (1h 15min, 6 EUR) o coche alquilado (70km, 1h). Acceso fácil desde Trier (Alemania).",
+      "donde_dormir": {
+        "mochilero": "Campings con bungalós: 25-40 EUR/noche",
+        "medio": "Hotels vinícolas 3*: 75-110 EUR/noche",
+        "comfort": "Resorts y hoteles bodega: 140-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruta vinícola Mosela cycling (25km, gratis)",
+        "Bodega tours con cata (10-25 EUR)",
+        "Crucero Mosela Remich-Trier (15 EUR)",
+        "Schengen: caminata triple frontera (gratis)",
+        "Paseos ribereños (gratis)",
+        "Pueblos como Greiveldange y Wormeldange (exploración libre)"
+      ],
+      "donde_comer": "Vino blanco Riesling local, queso Édam, pescado río. Rango 14-24 EUR. Tabernas en Remich baratas (10-16 EUR) frente a río.",
+      "consejo_local": "Alquila bicicleta en Remich (8 EUR/día) para recorrer viñedos. Los pusher boats (barcos típicos) son turísticos; mejor hacer senderismo. Cata en bodega cooperativa de Remich (5 EUR).",
+      "plan_b_lluvia": "Bodegas cerradas (tours internos), museos del vino, cafés en Remich, compra de botellas.",
+      "keywords": [
+        "Moselle Valley",
+        "Remich",
+        "Schengen",
+        "viñedos",
+        "ruta del vino",
+        "Wormeldange"
+      ]
+    },
+    {
+      "id": "parque-natural-germanico",
+      "nombre": "Parque Natural Germanico-Luxemburgués",
+      "tipo": "naturaleza",
+      "region": "Este",
+      "descripcion": "Zona de 630 km² de bosques, acantilados y valles fronterizos. Ecosistema protegido con senderismo de clase mundial. Base en Echternach o Diekirch para explorar.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Echternach (tren desde capital 45 min) o Diekirch (autobús 1h). Centro de visitantes en Echternach (entrada libre).",
+      "donde_dormir": {
+        "mochilero": "Campings y refugios: 20-35 EUR/noche",
+        "medio": "Guesthouses en pueblos perimetrales: 60-90 EUR/noche",
+        "comfort": "Hoteles Diekirch o Echternach: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Ernz Noire (10km, 3h, gratis)",
+        "Senderismo Haute Sûre (15km, gratis)",
+        "Pasarela Mullerthal Trail (2-8km tramos, gratis)",
+        "Acantilados Conglomerate (gratis, paisaje)",
+        "Cascadas Schiessentümpel (gratis, senderismo)",
+        "Kayak Sûre superior (25-40 EUR alquiler)"
+      ],
+      "donde_comer": "Comida picnic comprada en Echternach o Diekirch (8-12 EUR). Hosterías locales alrededor 12-18 EUR. Pocos restaurantes en interior.",
+      "consejo_local": "Descarga mapas offline; conexión débil en bosques. El trail Mullerthal es el más espectacular pero popular los fines de semana. Mejor entre semana. Lleva agua, los caminos son largos.",
+      "plan_b_lluvia": "Senderos más cortos en boques densos (menos lluvia visible), visita centros de naturaleza cerrados.",
+      "keywords": [
+        "Germanico-Luxembourg Nature Park",
+        "Mullerthal",
+        "Ernz Noire",
+        "Schiessentümpel",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "diekirch",
+      "nombre": "Diekirch",
+      "tipo": "histórico",
+      "region": "Noreste",
+      "descripcion": "Pequeña ciudad fronteriza con Alemania, importante en WWII. Museos especializados, punto de acceso Parque Natural. Menos turística pero con contenido histórico profundo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Ciudad de Luxemburgo: autobús 1 o 6 (1h, 6 EUR). Desde Echternach: autobús (30 min, 3 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 35-50 EUR/noche",
+        "medio": "Hoteles 3*: 70-100 EUR/noche",
+        "comfort": "Hotels 4*: 130-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo de la Batalla de Bulge WWII (8 EUR, exhaustivo)",
+        "Iglesia de San Lorenzo (gratis)",
+        "Musée de la Bière cerveza local (5 EUR)",
+        "Paseo ribereño Sûre (gratis)",
+        "Acceso senderismo Parque Natural (gratis)"
+      ],
+      "donde_comer": "Especialidad: cerveza Diekirch local, carnes de Ardenne. Rango 12-18 EUR. Brasserie junto río más barata (9-13 EUR).",
+      "consejo_local": "Diekirch es punto de acceso principal al Parque Natural por el norte. Combina visita ciudad con senderismo. Museo WWII es muy bueno pero especializado; valora si te interesa.",
+      "plan_b_lluvia": "Museos cerrados, cafés, paseo corto ribereño bajo techado.",
+      "keywords": [
+        "Diekirch",
+        "WWII",
+        "Batalla Bulge",
+        "cerveza Diekirch",
+        "Sûre"
+      ]
+    },
+    {
+      "id": "larochette",
+      "nombre": "Larochette",
+      "tipo": "histórico",
+      "region": "Centro-Este",
+      "descripcion": "Pueblo dominado por ruinas de castillo gótico sobre acantilado. Zona de Müllerthal con senderos espectaculares entre formaciones rocosas. Menos conocido que Vianden pero igualmente hermoso.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Ciudad de Luxemburgo: autobús 409 (45 min, 5 EUR) o tren a Junglinster + autobús (1h total, 8 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 35-50 EUR/noche",
+        "medio": "Hoteles 3*: 75-105 EUR/noche",
+        "comfort": "Hoteles con vistas castillo: 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas Castillo Larochette (gratis, acceso libre)",
+        "Senderismo Müllerthal (5-8km, gratis)",
+        "Pasarelas y puentes colgantes (gratis)",
+        "Picnic con vistas castillo (gratis)",
+        "Fotografía especialmente atardecer (gratis)"
+      ],
+      "donde_comer": "Cafés en plaza pequeña, rango 10-16 EUR. Opciones limitadas; mejor comer en Junglinster cercano o llevar picnic.",
+      "consejo_local": "Castillo visible desde cualquier ángulo del pueblo pero la mejor vista es al atardecer desde el senderismo sur. No hay visita interior; son ruinas, solo exterior.",
+      "plan_b_lluvia": "Senderismo en bosque (menos lluvia), exploración pueblo.",
+      "keywords": [
+        "Larochette",
+        "Château Larochette",
+        "Müllerthal",
+        "castillo ruinas",
+        "acantilado"
+      ]
+    },
+    {
+      "id": "mondorf-les-bains",
+      "nombre": "Mondorf-les-Bains",
+      "tipo": "rural",
+      "region": "Sur",
+      "descripcion": "Pueblo termal junto Mosela, spa histórico de 1846. Zona relajación con parque arbóreo y balnearios. Menos activo que Mosela vinícola pero ideal descanso.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año (spa)",
+      "como_llegar": "Desde Ciudad de Luxemburgo: autobús 166 (1h 20min, 6 EUR). Desde Remich: autobús regional (20 min).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 40-55 EUR/noche",
+        "medio": "Spa hotels 3*: 100-140 EUR/noche",
+        "comfort": "Mondorf Parc Hotel 4*: 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Mondorf Parc (spa, termalismo 35-80 EUR paquetes)",
+        "Parque arbóreo Parc Thermal (gratis paseo)",
+        "Casino (entrada libre, juego a partir 18€)",
+        "Paseo Mosela cercana (gratis)",
+        "Playas fluviales (gratis verano)"
+      ],
+      "donde_comer": "Gastronomía ligera spa, rango 13-22 EUR. Restaurante Parc Thermal más caro (20-28 EUR). Pizzerías pueblo baratas (8-12 EUR).",
+      "consejo_local": "Mondorf es destino de relax, no acción. Ideal rest day después senderismo. Paquete spa con almuerzo vale la pena (45-60 EUR). Menos turístico que Remich.",
+      "plan_b_lluvia": "Spa interior, casino, museos pequeños.",
+      "keywords": [
+        "Mondorf-les-Bains",
+        "termas",
+        "spa",
+        "Mondorf Parc",
+        "Mosela sur"
+      ]
+    },
+    {
+      "id": "murmuor-y-roeser",
+      "nombre": "Murmuor y Roeser (Región Centro)",
+      "tipo": "rural",
+      "region": "Centro-Oeste",
+      "descripcion": "Pueblos rurales auténticos con arquitectura luxemburguesa tradicional. Punto acceso Parque Natural Suiza Luxemburguesa. Menos turísticos, más locales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Ciudad de Luxemburgo: autobús 17 a Roeser (25 min, 3 EUR) o coche (20km, 20 min).",
+      "donde_dormir": {
+        "mochilero": "Campings, guesthouses: 25-40 EUR/noche",
+        "medio": "Hoteles rurales 3*: 65-90 EUR/noche",
+        "comfort": "Casas alquiladas, hoteles: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Parque Suiza Luxemburguesa (10-15km, gratis)",
+        "Paseo Albrunnen (bosque, gratis)",
+        "Exploración arquitectura pueblos (gratis)",
+        "Mercado local Roeser sábados (gratis)"
+      ],
+      "donde_comer": "Comida casera luxemburguesa, rango 11-17 EUR. Menos opciones que ciudades; compra en supermercado para picnic (6-10 EUR).",
+      "consejo_local": "Estos pueblos no son destinos por sí solos sino base tranquila. Si buscas autenticidad rural sin ajetreo turístico, aquí lo encuentras. Mejor para coche.",
+      "plan_b_lluvia": "Senderismo en bosque, exploración pueblo cubierta.",
+      "keywords": [
+        "Roeser",
+        "Murmuor",
+        "pueblo rural",
+        "Suiza Luxemburguesa",
+        "arquitectura tradicional"
+      ]
+    },
+    {
+      "id": "excursion-trier-alemania",
+      "nombre": "Trier, Alemania (Excursión desde Luxemburgo)",
+      "tipo": "histórico",
+      "region": "Frontera (Alemania)",
+      "descripcion": "Ciudad romana más antigua de Alemania (Augusta Treverorum), patrimonio UNESCO. A 50km de Luxemburgo. Ruinas, catedrales, museos. Vale excursión de día.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Ciudad de Luxemburgo: autobús internacional FlixBus (1h 30min, 10-15 EUR). O desde Remich: tren a Trier (35 min, 8 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales Trier: 20-35 EUR/noche",
+        "medio": "Hoteles 3* Trier: 60-100 EUR/noche",
+        "comfort": "Hoteles 4* Trier: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Puerta Negra (Porta Nigra) 2€ entrada",
+        "Basílica Palacio Electoral (gratis)",
+        "Catedral de Trier UNESCO (2€)",
+        "Museo Rheinisches (8€)",
+        "Paseo ribereño Mosela (gratis)",
+        "Iglesia de Liebfrauen (gratis)"
+      ],
+      "donde_comer": "Gastronomía alemana Mosela, rango 12-20 EUR. Más barato que Luxemburgo. Zonas junto río baratas (8-14 EUR).",
+      "consejo_local": "Trier merece día completo. Salida temprana desde Luxemburgo, regreso al atardecer. Documentación Schengen válida suficiente. Trier es más monumental y menos turístico que Luxemburgo.",
+      "plan_b_lluvia": "Museos interiores (Rheinisches, Prínceps), catedrales, cafés.",
+      "keywords": [
+        "Trier",
+        "Tréveris",
+        "Porta Nigra",
+        "Mosela",
+        "Germania romana",
+        "excursión"
+      ]
+    }
+  ]
+}

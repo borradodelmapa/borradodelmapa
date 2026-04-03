@@ -1,0 +1,369 @@
+{
+  "pais": "Rumanía",
+  "codigo": "ro",
+  "destinos": [
+    {
+      "id": "bucarest",
+      "nombre": "Bucarest",
+      "tipo": "ciudad",
+      "region": "Muntenia (sur)",
+      "descripcion": "Capital de Rumanía con arquitectura comunista monumental, museos de clase mundial y vida nocturna vibrante. Centro cultural y punto de entrada principal al país. Mezcla única de Belle Époque, modernismo soviético y gentrificación contemporánea.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Aeropuerto Internacional Otopeni (Băneasa) a 16 km. Autobús express 780 o taxi: 20-30 EUR, 30-45 min. Trenes desde Budapest, Belgrado o Estambul.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Lipscani: 15-25 EUR/noche",
+        "medio": "Apartamentos Midtown o Dorobanți: 40-70 EUR/noche",
+        "comfort": "Hoteles 4* zona Cotroceni: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Palacio del Parlamento (20 EUR, visita guiada obligatoria)",
+        "Barrio Lipscani (casco antiguo, gratis)",
+        "Museo Nacional de Arte (10 EUR)",
+        "Iglesia Revolucionaria (gratis)",
+        "Tren retro a Snagov (7 EUR)"
+      ],
+      "donde_comer": "Ciorba de burtă, mici (salchichas), ciorbă de burtă. 6-12 EUR plato. Barrio Lipscani para turistas, zona Dorobanți para locales.",
+      "consejo_local": "El Palacio se visita solo con tour; reserva online. Los taxis son baratos pero descarga Uber o Bolt. El metro es rápido y cuesta 1,5 EUR.",
+      "plan_b_lluvia": "Museos (Aldea Rural, Museo de la Transición), cines, cafeterías en Lipscani.",
+      "keywords": [
+        "București",
+        "Bucarest",
+        "capital",
+        "Lipscani",
+        "Palacio Parlamento",
+        "Montevideo del Este"
+      ]
+    },
+    {
+      "id": "brașov",
+      "nombre": "Brașov",
+      "tipo": "montaña",
+      "region": "Transilvania (centro)",
+      "descripcion": "Puerta de entrada a los Cárpatos, ciudad medieval rodeada de montañas con arquitectura germánica intacta. Base ideal para senderismo, esquí en invierno y excursiones a Bran, Piatra Craiului y pueblos rurales.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-agosto, diciembre-febrero",
+      "como_llegar": "Desde Bucarest: tren (2,5 h, 15-25 EUR) o autobús (3-4 h, 12-18 EUR). Desde Cluj: 2 h autobús (10 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales Piața Sfatului: 16-28 EUR/noche",
+        "medio": "Penziones Schei o Kronstadt: 35-60 EUR/noche",
+        "comfort": "Hóteles 4* Piața Sfatului: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Piața Sfatului y ayuntamiento (gratis, vistas desde torre: 3 EUR)",
+        "Senderismo Monte Șprenghi (gratis, 2-3 h)",
+        "Castillo de Bran (25 EUR, 30 min en coche)",
+        "Prapastiile (tirolina en bosque: 20 EUR)",
+        "Teleférico a Poiana Brașov (4 EUR)"
+      ],
+      "donde_comer": "Ciorbă de burtă, mici, papanasi (postres fritos). 7-14 EUR plato. Piața Sfatului o callejones de Schei para atmósfera local.",
+      "consejo_local": "Alquila un coche en Brașov para llegar a Bran, Prejmer y pueblos rurales; las distancias son cortas. Los senderos están bien marcados pero sin mantenimiento en invierno.",
+      "plan_b_lluvia": "Iglesia Negra (5 EUR), Museo Brukenthal, cafés en Piața Sfatului.",
+      "keywords": [
+        "Brasov",
+        "Transylvania",
+        "Carpatos",
+        "Bran",
+        "Schei",
+        "Piața Sfatului"
+      ]
+    },
+    {
+      "id": "cluj-napoca",
+      "nombre": "Cluj-Napoca",
+      "tipo": "ciudad",
+      "region": "Transilvania (noroeste)",
+      "descripcion": "La capital no oficial de Transilvania, ciudad universitaria joven con cafeterías, galerías de arte alternativas y actitud indie. Centro cultural de Rumanía post-comunista con vida de barrio bohemio muy viva.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Bucarest: vuelo (1,5 h, 30-80 EUR) o tren de noche (10-12 h, 25-40 EUR). Desde Brașov: autobús 2 h (12 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales Piața Unirii: 15-26 EUR/noche",
+        "medio": "Apartamentos Marasti o Gheorgheni: 35-55 EUR/noche",
+        "comfort": "Hóteles 4* Piața Unirii: 75-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Piața Unirii y Iglesia St. Michael (gratis)",
+        "Galerías de arte en barrio Gheorgheni (gratis)",
+        "Museo de Arte (5 EUR)",
+        "Botanical Garden (3 EUR)",
+        "Mercadillo de antigüedades sábados (gratis)"
+      ],
+      "donde_comer": "Pizza rumana, ciorbă, papanasi. Barrio Gheorgheni para gastropubs indie. 8-15 EUR plato. Mercadillos callejeros para mici baratos.",
+      "consejo_local": "Cluj tiene más ambiente de viajero que Bucarest pero menos monumentos. Los rumanos de aquí son muy directos; no lo tomes por falta de amabilidad. El metro aún se construye.",
+      "plan_b_lluvia": "Museos, galerías, cafeterías (la cultura de café es fuerte aquí).",
+      "keywords": [
+        "Klausenburg",
+        "Cluj",
+        "Transylvania",
+        "Gheorgheni",
+        "Piața Unirii",
+        "ciudad universitaria"
+      ]
+    },
+    {
+      "id": "sibiu",
+      "nombre": "Sibiu",
+      "tipo": "histórico",
+      "region": "Transilvania (centro-sur)",
+      "descripcion": "Una de las ciudades más bonitas de Europa del Este, con plazas medievales rodeadas de arquitectura sajona intacta y fortifications restauradas. Capital Europea de la Cultura 2007 con museo de altura y ritmo de vida medieval.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Brașov: tren o autobús 2 h (8-12 EUR). Desde Bucarest: tren 5 h (20-35 EUR). Desde Cluj: autobús 2,5 h (12 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales Gran Plaza: 16-27 EUR/noche",
+        "medio": "Penziones centradas Turnului: 40-65 EUR/noche",
+        "comfort": "Hóteles 4* Grand Plaza: 85-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Piața Mare y Piața Mică (gratis)",
+        "Museo ASTRA de arte popular (8 EUR)",
+        "Iglesia Evangélica (5 EUR)",
+        "Puente de mentiras (gratis, icónico)",
+        "Teleférico Paltinis (4 EUR, vistas alpinas)"
+      ],
+      "donde_comer": "Sopa de champiñones, guiso de cerdo, mici. Plazas principales para turistas, calllejones laterales para locales. 7-13 EUR plato.",
+      "consejo_local": "Sibiu es más caro que otras ciudades rumanas pero vale cada euro. La ciudad se recorre a pie en 2 horas. Visita al atardecer cuando se encienden las luces de las plazas.",
+      "plan_b_lluvia": "Museo ASTRA, iglesias, librerías de viejo en callejones.",
+      "keywords": [
+        "Hermannstadt",
+        "Sibiu",
+        "Piața Mare",
+        "Piața Mică",
+        "arquitectura sajona",
+        "puente mentiras"
+      ]
+    },
+    {
+      "id": "salina-turda",
+      "nombre": "Salina Turda",
+      "tipo": "naturaleza",
+      "region": "Transilvania (oeste)",
+      "descripcion": "Mina de sal subterránea convertida en parque temático y estación climática. Descenso a 200 m de profundidad con lago salado, tribuna histórica y paisaje casi lunar. Única mina turística de sal en Europa con esta escala.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "marzo-noviembre",
+      "como_llegar": "Desde Cluj: 30 km, autobús o taxi 45 min (12-25 EUR). Desde Turda: a pie 4 km o bus local. Día de excursión desde Cluj o de paso a Brașov.",
+      "donde_dormir": {
+        "mochilero": "Turda pueblo: 14-20 EUR/noche (poco turismo, mejor dormir en Cluj)",
+        "medio": "Turda: 30-50 EUR/noche",
+        "comfort": "Turda: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour salina (12 EUR, 1,5 h con guía)",
+        "Trineo en lago de sal (8 EUR)",
+        "Paseo de cuerdas aéreo (10 EUR)",
+        "Parque temático de sal (incluido en entrada)",
+        "Baño en lago salado (gratis con entrada)"
+      ],
+      "donde_comer": "Restaurante en la salina (caro, 15-20 EUR). Mejor comer en Cluj antes o después.",
+      "consejo_local": "El aire de la salina tiene propiedades curativas; es popular entre alérgicos. Lleva ropa que no importe ensuciarse. El viaje desde Cluj es fácil y rápido.",
+      "plan_b_lluvia": "La salina funciona lluvia o no; el interior es seco. Es atracción para días malos.",
+      "keywords": [
+        "Turda",
+        "mina sal",
+        "haloterapia",
+        "estación clima",
+        "lago subterráneo",
+        "Cluj excursión"
+      ]
+    },
+    {
+      "id": "delta-danubio",
+      "nombre": "Delta del Danubio",
+      "tipo": "naturaleza",
+      "region": "Dobrucha (este, costa)",
+      "descripcion": "Segundo delta más grande de Europa, Patrimonio de la Humanidad con 300+ especies de pájaros y flora única. Paisaje de pantanos, canales y pueblos de pescadores con ritmo lento. Destino de ornitología y aventura en bote.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "marzo-mayo, agosto-octubre",
+      "como_llegar": "Desde Bucarest: autobús a Tulcea (4,5 h, 20 EUR) o vuela y luego coche. Desde Constanza: coche alquilado 2 h (30 EUR). Tour organizado desde Bucarest (2 días, 80-150 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses Tulcea: 15-25 EUR/noche",
+        "medio": "Casas rurales Crișan o Maliuc: 35-60 EUR/noche",
+        "comfort": "Lodges ecológicos Crișan: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour en bote avistamiento pájaros (25-40 EUR, 4-6 h)",
+        "Visita pueblo flotante Crișan (gratis, botes locales 5-10 EUR)",
+        "Museo Delta Danubio Tulcea (3 EUR)",
+        "Fotografía naturaleza (gratis)",
+        "Pesca artesanal (con local: 20-30 EUR)"
+      ],
+      "donde_comer": "Carpa frita, sopa de pescado, caviar local (caro). 10-18 EUR plato. Tulcea tiene más opciones; pueblos del delta son básicos.",
+      "consejo_local": "Reserva tour de avistamiento con anticipación en verano. Los pueblos (Crișan, Maliuc) no tienen tiendas; trae dinero. Las carreteras al delta son malas; no alquiles coche de baja altura.",
+      "plan_b_lluvia": "Los botes salen igual; lleva capa. El museo en Tulcea es alternativa.",
+      "keywords": [
+        "Delta Danubio",
+        "Danube Delta",
+        "Tulcea",
+        "Crișan",
+        "pájaros",
+        "patrimonio mundial"
+      ]
+    },
+    {
+      "id": "monestirul-voronet",
+      "nombre": "Monasterio Voroneț",
+      "tipo": "histórico",
+      "region": "Bucovina (norte)",
+      "descripcion": "Monasterio ortodoxo del siglo XV con exterior completamente pintado: la Capilla Sixtina de la Europa del Este. Muros azul intenso (azul Voroneț) con iconografía medieval que cubre cada rincón. Patrimonio de la Humanidad.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Suceava: coche alquilado 1 h (50 EUR/día) o tour (30-50 EUR). Suceava accesible desde Bucarest en vuelo (80-100 EUR) o tren noche (12 h, 30 EUR). Mejor base: Suceava o Rădăuți.",
+      "donde_dormir": {
+        "mochilero": "Suceava hostales: 14-22 EUR/noche",
+        "medio": "Guesthouses rurales cerca: 30-50 EUR/noche",
+        "comfort": "Hotel Suceava: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita monasterio con fotógrafo local (5 EUR entrada, guía local 10 EUR)",
+        "Monasterio Sucevita (pintura similar, 5 EUR, 30 min en coche)",
+        "Monasterio Humor (5 EUR, 20 min)",
+        "Pueblo Gura Humorului (paseo gratis)",
+        "Ruta de monasterios (auto-organizado o tour 50 EUR)"
+      ],
+      "donde_comer": "Ciorbă de burtă, mici, leche agria. 6-10 EUR plato. Pueblos alrededor muy rurales; come en Suceava.",
+      "consejo_local": "Visita temprano (7-8 AM) para evitar tours. Los monasterios están prohibidos para mujeres ciertos días (verifica). El azul es más intenso al atardecer con luz rasante.",
+      "plan_b_lluvia": "Las pinturas están en muros exteriores; lluvia las acentúa. No es impedimento.",
+      "keywords": [
+        "Voroneț",
+        "Bucovina",
+        "monasterio pintado",
+        "azul Voroneț",
+        "ortodoxo",
+        "Suceava"
+      ]
+    },
+    {
+      "id": "piatra-craiului",
+      "nombre": "Piatra Craiului",
+      "tipo": "montaña",
+      "region": "Cárpatos (centro)",
+      "descripcion": "Macizo montañoso de 2.500 m en los Cárpatos Meridionales con senderismo de clase mundial: gargantas profundas, picos rocosos y refugios de montaña. Menos concurrido que otras rutas europeas pero igualmente espectacular.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Brașov: coche 1,5 h a Zarnești o Prapastiile. Desde Bucarest: coche 2 h. El sendero sale de Zarnești (pequeño pueblo, 20 km de Brașov).",
+      "donde_dormir": {
+        "mochilero": "Refugios montaña (muy básicos): 10-15 EUR/noche",
+        "medio": "Penzión Zarnești: 30-50 EUR/noche",
+        "comfort": "Hotel Brașov (cercano): 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo garganta Zarnești (gratis, 6-8 h, difícil)",
+        "Ruta Plaiul Foii (4-5 h, moderado)",
+        "Ascenso pico Omu (2.505 m, 2 días con refugio)",
+        "Camping salvaje (gratis, permiso requerido en principio)",
+        "Escalada en roca (con guía: 50-80 EUR/día)"
+      ],
+      "donde_comer": "Cero infraestructura en la montaña. Come en Brașov antes/después. Refugios sirven comida básica (10-15 EUR).",
+      "consejo_local": "Las sendas están marcadas con puntos rojos/azules pintados. Trae mapas (papel o offline). El tiempo cambia rápido; alerta meteorológica diaria. Solo en verano; en invierno es alpinismo serio.",
+      "plan_b_lluvia": "Senderismo de baja dificultad o pospón; las nieblas hacen invisible la ruta.",
+      "keywords": [
+        "Piatra Craiului",
+        "Cárpatos",
+        "Zarnești",
+        "garganta",
+        "montañismo",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "oradea",
+      "nombre": "Oradea",
+      "tipo": "ciudad",
+      "region": "Crișana (oeste, frontera con Hungría)",
+      "descripcion": "Capital provincial con arquitectura Art Nouveau preservada de era austro-húngara. Termas termales, vida de café bohemia y atmósfera de pequeña ciudad elegante. Punto de entrada de Hungría o base para explorar Crișana rural.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Cluj: autobús 3 h (15 EUR). Desde Budapest: autobús 3,5 h (20 EUR, frontera fácil). Desde Bucarest: tren noche + conexión (12-16 h, 40-60 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales centro: 14-24 EUR/noche",
+        "medio": "Apartamentos Piața Independenței: 35-55 EUR/noche",
+        "comfort": "Hotel IOtelia Oradea 4*: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Piața Independenței y Palacio Episcopado (gratis)",
+        "Baños termales Nufărul (8 EUR, 3 h piscinas)",
+        "Paseo ribera Crișul Repede (gratis)",
+        "Museo Tării Crișurilor (3 EUR)",
+        "Excursión a Băile 1 Mai (termas, 30 EUR entrada)"
+      ],
+      "donde_comer": "Ciorbă, guiso de cerdo, salami ahumado. 7-12 EUR plato. Piața Independenției muy turística; calllejones laterales para locales.",
+      "consejo_local": "Oradea es puerta a Hungría; muchos viajeros la usan de punto de paso. El baño termal es experiencia típica de Europa Central. La ciudad se siente menos rumana (herencia austro-húngara).",
+      "plan_b_lluvia": "Baños termales son planes ideales con lluvia.",
+      "keywords": [
+        "Oradea",
+        "Varadinum",
+        "Art Nouveau",
+        "termas",
+        "Crișana",
+        "Hungría frontera"
+      ]
+    },
+    {
+      "id": "constanza",
+      "nombre": "Constanza",
+      "tipo": "playa",
+      "region": "Dobrucha (costa)",
+      "descripcion": "Único puerto marítimo de Rumanía en el Mar Negro, con playa de arena, casino Constanza histórico y ruinas grecorromanas. Vida playera estilo europeo de los 60s con atmósfera relajada. Acceso a playa búlgara en ferry (ruta costera).",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Bucarest: autobús 3,5 h (15-20 EUR) o tren 2,5-4 h (12-25 EUR). Desde Sofia (Bulgaria): ferry 15 h o carretera (70 km, 1,5 h en coche).",
+      "donde_dormir": {
+        "mochilero": "Hostales playa: 16-28 EUR/noche",
+        "medio": "Apartamentos frente mar: 40-70 EUR/noche",
+        "comfort": "Hoteles 4* Marina: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa (gratis, sillas/parasol: 5 EUR)",
+        "Casino Constanza (entrada 5 EUR, espectáculo)",
+        "Museo de Arte (5 EUR)",
+        "Ruinas helenísticas (gratis, aire libre)",
+        "Ferry a Mangalia Bulgaria (120 EUR ida, paisaje costa)"
+      ],
+      "donde_comer": "Mariscos, dorada a la sal, mejillones, caviar (caro). 12-20 EUR plato. Paseo marítimo premium, playa para locales económico.",
+      "consejo_local": "Constanza es balneario veranieguista ruso; en julio-agosto muy abarrotado. Mejora en hombro (junio, septiembre). El casino es por turismo histórico, no por juego.",
+      "plan_b_lluvia": "Museos, casino, paseo marítimo cubierto.",
+      "keywords": [
+        "Constanța",
+        "Mar Negro",
+        "playa",
+        "costa",
+        "casino",
+        "Bulgaria ferry"
+      ]
+    },
+    {
+      "id": "sighisoara",
+      "nombre": "Sighișoara",
+      "tipo": "histórico",
+      "region": "Transilvania (este)",
+      "descripcion": "Pueblo fortificado medieval perfectamente preservado, patria de Vlad el Empalador. Torre del Reloj, iglesias en colinas y casas de madera amontonadas en laberinto. Pueblo vivo (no museo): herreros, tejedores y tabernas de mead en callejones originales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Brașov: tren o autobús 2 h (10-15 EUR). Desde Cluj: tren o autobús 2,5 h (12-18 EUR). Desde Bucarest: tren directo 5-6 h (20-35 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales casco antiguo: 15-26 EUR/noche",
+        "medio": "Penziones casas medievales: 40-65 EUR/noche",
+        "comfort": "Hóteles 4* casco antiguo: 85-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo casco antiguo (gratis)",
+        "Torre del Reloj (5 EUR, vistas)",
+        "Iglesia Monasterio en la montaña (gratis, escaleras 190)",
+        "Visita casa natal Vlad (3 EUR, turístico)",
+        "Festival Medieval (julio, música teatro)"
+      ],
+      "donde_comer": "Mead (bebida de miel, 8-12 EUR), ciorbă, schnitzel. 8-15 EUR plato. Tabernas rincones medievales para atmósfera.",
+      "consejo_local": "Sighișoara es visita de 3-4 horas; la mayoría tour de un día. Si duermes, disfruta sin gente al amanecer/atardecer. La mead es tradición local; pruébala.",
+      "plan_b_lluvia": "Paseos cubiertos por pórticos, museos, tabernas.",
+      "keywords": [
+        "Sighișoara",
+        "Schaesburg",
+        "medieval",
+        "Vlad",
+        "Torre Reloj",
+        "Transilvania"
+      ]
+    }
+  ]
+}

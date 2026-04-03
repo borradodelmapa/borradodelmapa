@@ -1,0 +1,377 @@
+{
+  "pais": "Guatemala",
+  "codigo": "gt",
+  "destinos": [
+    {
+      "id": "lago-atitlan",
+      "nombre": "Lago Atitlán",
+      "tipo": "naturaleza",
+      "region": "Highlands occidentales",
+      "descripcion": "Lago de origen volcánico rodeado de 12 pueblos indígenas con vistas espectaculares a tres volcanes. Centro neurálgico para viajeros independientes con infraestructura consolidada. Punto de encuentro cultural donde conviven tradiciones mayas, aventura y vida social.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Ciudad de Guatemala: autobús (6-7 horas, 5-8 EUR) a Panajachel; conexión desde aeropuerto La Aurora en transporte privado (4 horas, 25-35 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Panajachel o San Marcos: 8-12 EUR/noche",
+        "medio": "Guesthouses en pueblos alrededor del lago: 20-35 EUR/noche",
+        "comfort": "Hotels con vistas al lago (Panajachel, Santa Catarina): 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer pueblos indígenas en lancha (15 EUR día completo)",
+        "Subir volcán San Pedro o Atitlán (25-35 EUR con guía)",
+        "Mercado artesanal en Chichicastenango los jueves y domingos (gratis)",
+        "Kayak en el lago (20 EUR)",
+        "Tejer en talleres textiles locales (gratis-10 EUR)"
+      ],
+      "donde_comer": "Comida típica: chiles rellenos, caldo de pollo. Panajachel tiene restaurantes occidentales (8-15 EUR); pueblos más auténticos como San Juan La Laguna (4-8 EUR). Zona de mercado central más barata.",
+      "consejo_local": "Evita Panajachel para dormir si buscas autenticidad; duerme en San Marcos, San Juan o Santa Catarina. Las lanchas salen mejor temprano; negocia precios si vas en grupo.",
+      "plan_b_lluvia": "Museos locales, cursos de cocina maya, artesanías en interior, visitar túneles de volcanes cercanos",
+      "keywords": [
+        "Lake Atitlan",
+        "Panajachel",
+        "San Marcos",
+        "San Juan La Laguna",
+        "Santa Catarina",
+        "volcanes",
+        "indígena",
+        "lago"
+      ]
+    },
+    {
+      "id": "antigua-guatemala",
+      "nombre": "Antigua Guatemala",
+      "tipo": "histórico",
+      "region": "Central",
+      "descripcion": "Capital colonial del siglo XVI con arquitectura barroca perfectamente preservada, declarada Patrimonio de la Humanidad. Punto de partida ideal para explorar volcanes cercanos y comunidades mayas. Infraestructura turística madura pero sin masificación extrema.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Ciudad de Guatemala: autobús (45 minutos, 1-2 EUR) o transporte privado (1 hora, 15-20 EUR); desde La Aurora 1,5 horas",
+      "donde_dormir": {
+        "mochilero": "Hostales centro histórico: 10-15 EUR/noche",
+        "medio": "Pensiones coloniales restauradas: 25-40 EUR/noche",
+        "comfort": "Hotels boutique en caserones: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer iglesias y conventos (donativo 1-2 EUR)",
+        "Subir volcán Agua o Fuego (30-40 EUR con guía)",
+        "Merced artesanal y Palacio de los Capitanes (gratis)",
+        "Clase de cocina guatemalteca (25-35 EUR)",
+        "Fotografía de atardeceres en Palacio de los Capitanes (gratis)"
+      ],
+      "donde_comer": "Enfrijoladas, pepián, fiambre (plato navideño). Mercado Central (3-5 EUR); restaurantes turistas en Calle del Hermano Pedro (12-20 EUR). Mejor relación calidad-precio en callejones laterales.",
+      "consejo_local": "Compra sello de tránsito en mercado para evitar viajes innecesarios a capital. Los volcanes se ven mejor muy temprano; sal a las 5 AM. Semana Santa es especial pero abarrotado.",
+      "plan_b_lluvia": "Museos de arte colonial, galería de jade, tiendas de artesanía, cafeterías",
+      "keywords": [
+        "Antigua",
+        "colonial",
+        "Palacio Capitanes",
+        "volcán Agua",
+        "iglesias",
+        "barrio San Felipe",
+        "arquitectura"
+      ]
+    },
+    {
+      "id": "tikal",
+      "nombre": "Tikal",
+      "tipo": "histórico",
+      "region": "Petén (norte)",
+      "descripcion": "Complejo arqueológico maya más importante de Mesoamérica con templos de 60+ metros sumergidos en selva tropical. Experiencia única en la región con biodiversidad de jaguares y pumas. Requiere planificación pero ofrece inmersión total en ruinas y naturaleza.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Vuelo desde Ciudad de Guatemala a Flores (1,5 horas, 80-120 EUR ida/vuelta); luego transporte local a Tikal (1 hora, 10-15 EUR). Alternativa: autobús a Flores (16 horas, 25-35 EUR) + transporte",
+      "donde_dormir": {
+        "mochilero": "Hospedajes en Flores: 10-15 EUR/noche; jungle lodges básicos: 20-30 EUR/noche",
+        "medio": "Lodges en parque o Flores: 35-50 EUR/noche",
+        "comfort": "Jungle resorts con guías privados: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido completo ruinas Tikal con guía (35-50 EUR, obligatorio)",
+        "Sendero La Coronilla (gratis con entrada)",
+        "Observación de fauna al amanecer (incluido en guía)",
+        "Cenote Ik'il en excursión desde Flores (20-30 EUR)",
+        "Ruinas menores de Uaxactun (30-40 EUR excursión)"
+      ],
+      "donde_comer": "Comedores en Flores con comida local (4-7 EUR). Lodges incluyen comidas. Lleva snacks a ruinas. Agua embotellada obligatoria (2-3 EUR)",
+      "consejo_local": "Entra al parque a las 6 AM para ver jaguares y evitar calor. Usa repelente fuerte (dengue). Contrata guía bilíngüe confiable; no entres solo. Lluvia impredecible; lleva poncho.",
+      "plan_b_lluvia": "Museo de Flores, ruinas menores bajo techo, visita pueblos coloniales",
+      "keywords": [
+        "Tikal",
+        "Petén",
+        "Flores",
+        "templos mayas",
+        "arqueología",
+        "selva",
+        "Gran Plaza"
+      ]
+    },
+    {
+      "id": "chichicastenango",
+      "nombre": "Chichicastenango",
+      "tipo": "rural",
+      "region": "Highlands occidentales",
+      "descripcion": "Pueblo indígena k'iché con mercado artesanal más auténtico de Guatemala (jueves y domingos). Centro de espiritualidad maya con iglesia sincrética donde se realiza copal y ritos ancestrales. Experiencia cultural inmersiva sin exceso de infraestructura occidental.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Antigua: autobús (2,5 horas, 3-4 EUR); desde Lago Atitlán: minibus vía Panajachel (2 horas, 5 EUR); desde Ciudad de Guatemala (3,5 horas, 6 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hospedajes sencillos centro: 8-12 EUR/noche",
+        "medio": "Pensiones con carácter: 20-30 EUR/noche",
+        "comfort": "Hotel Santo Tomás colonial: 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado artesanal (jueves/domingos, gratis entrado)",
+        "Iglesia Santo Tomás con rituales mayas (donativo 2-3 EUR)",
+        "Cementerio indígena (acceso libre)",
+        "Caminar entre vendedores y textiles (gratis)",
+        "Capilla de San Tomás exterior (libre)"
+      ],
+      "donde_comer": "Caldo de gallina, incapié (sopa maíz). Comedores alrededor mercado (3-5 EUR muy económico). Restaurantes turísticos (10-15 EUR) innecesarios.",
+      "consejo_local": "Fotografía solo con consentimiento explícito (1-2 EUR por retrato). Mercado es puro caos; ve con bolso asegurado. Domingo es más turista que jueves. Despierta a las 5 AM para energía del mercado.",
+      "plan_b_lluvia": "Iglesia bajo techo, galerías de arte, talleres textiles cubiertos",
+      "keywords": [
+        "Chichi",
+        "Chichicastenango",
+        "mercado",
+        "indígena",
+        "Santo Tomás",
+        "textiles",
+        "k'iché"
+      ]
+    },
+    {
+      "id": "copan",
+      "nombre": "Copán Ruinas",
+      "tipo": "histórico",
+      "region": "Occidente (frontera Honduras)",
+      "descripcion": "Sitio arqueológico maya con estelas y altares finamente tallados, menor que Tikal pero más íntimo. Ubicado en Honduras pero accesible desde Guatemala. Pueblito colonial adyacente con infraestructura cómoda y entorno montañoso pintoresco.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Antigua o Ciudad Guatemala: autobús a Chiquimula (5 horas, 8 EUR), luego a Copán (2 horas, 4 EUR). Total 7-8 horas. Alternativa shuttle privado desde Antigua (50-70 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hospedajes pueblo Copán Ruinas: 10-15 EUR/noche",
+        "medio": "Guesthouses centro: 25-40 EUR/noche",
+        "comfort": "Hotel Hacienda San Lucas con vistas: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Sitio arqueológico Copán con guía (15 EUR entrada + 20-30 EUR guía obligatorio)",
+        "Parque Macaw (vereda las aves, 8 EUR)",
+        "Senderos Hacienda San Lucas (12 EUR)",
+        "Taller de máscaras tradicionales (gratis-5 EUR)",
+        "Visita pueblos circundantes como La Entrada (30 minutos, libre)"
+      ],
+      "donde_comer": "Baleadas (tortillas rellenas típicas Honduras), pinchos. Comida local (4-6 EUR). Restaurantes pueblo (8-15 EUR). Menos caro que Tikal.",
+      "consejo_local": "Necesitas pasaporte para cruzar frontera Honduras (legalmente es simple). Guía es obligatorio en ruinas. Pueblito es tranquilo; excelente para descanso entre destinos mayores.",
+      "plan_b_lluvia": "Mercado de artesanías cubierto, museo local, cafeterías con vista",
+      "keywords": [
+        "Copan",
+        "Honduras",
+        "ruinas",
+        "estelas",
+        "arqueología",
+        "frontera",
+        "macaw park"
+      ]
+    },
+    {
+      "id": "lake-izabal",
+      "nombre": "Lago Izabal",
+      "tipo": "naturaleza",
+      "region": "Petén oriental",
+      "descripcion": "Lago tropical más grande de Guatemala rodeado de manglares, cuevas y vida marina. Acceso a Río Dulce y caribeño. Menos turístico que Atitlán con ambiente relajado y oportunidades para kayak, snorkel y vida salvaje.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a marzo",
+      "como_llegar": "Desde Ciudad Guatemala: autobús a Río Dulce (5-6 horas, 8-10 EUR); desde Flores (2,5 horas, 8 EUR). Luego lancha local",
+      "donde_dormir": {
+        "mochilero": "Hospedajes Río Dulce pueblo: 10-14 EUR/noche",
+        "medio": "Lodges orilla lago: 25-40 EUR/noche",
+        "comfort": "Resorts con vistas: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Crucero Río Dulce a Livingston (25-35 EUR)",
+        "Kayak en manglares (20-30 EUR)",
+        "Cueva de la Rana (incluida en tours, 15 EUR)",
+        "Castillo San Felipe (3 EUR entrada)",
+        "Snorkel aguas termales (30 EUR)"
+      ],
+      "donde_comer": "Pescado frito, camarones. Fondas locales (4-6 EUR). Restaurantes con barcazas (10-18 EUR). Más barato que zona occidental.",
+      "consejo_local": "Mosquitos son FUERTES; repelente máximo. Agua es cálida y hay cocodrilos; nada solo en zonas permitidas. Río Dulce es más bonito que pueblo.",
+      "plan_b_lluvia": "Cuevas bajo techo, castillo fortaleza, pueblos interiores secos",
+      "keywords": [
+        "Izabal",
+        "Río Dulce",
+        "manglares",
+        "lago",
+        "caribeño",
+        "Livingston"
+      ]
+    },
+    {
+      "id": "livingston",
+      "nombre": "Livingston (Caribeño)",
+      "tipo": "playa",
+      "region": "Costa caribeña (Izabal)",
+      "descripcion": "Única ciudad caribeña de Guatemala con población garinona (afrocaribeña). Acceso solo por agua, vibrante vida local, playas, mezcla cultural única. Puerta a Belize y alternativa auténtica a playas masificadas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Lancha desde Río Dulce (1 hora, 10-15 EUR) o desde Puerto Barrios (autobús luego lancha, 2 horas total, 12 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hospedajes básicos Main Street: 10-15 EUR/noche",
+        "medio": "Guesthouses con fan: 20-30 EUR/noche",
+        "comfort": "Beachfront lodges: 50-75 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa y baño mar (libre)",
+        "Tour Siete Altares (cascadas, 25-35 EUR con guía)",
+        "Visita comunidades garinona cercanas (20-30 EUR tour)",
+        "Paseo Calle Reina (principal, gratis)",
+        "Comida garinona local (4-8 EUR)"
+      ],
+      "donde_comer": "Hudut (pescado envuelto), sopa de mariscos, pan de coco. Comedores callejeros (3-5 EUR). Restaurantes waterfront (12-20 EUR). Autenticidad garantizada.",
+      "consejo_local": "No hay carro; todo es a pie o lancha. Criminalidad existe; no andes de noche solo. Cultura afrocaribeña es lo especial: integra con locales. Visa Belize fácil desde aquí.",
+      "plan_b_lluvia": "Mercado cubierto, museos local, interior pueblos, comida indoor",
+      "keywords": [
+        "Livingston",
+        "caribeño",
+        "garinona",
+        "Punta Gorda",
+        "playas",
+        "Siete Altares",
+        "afrocaribeño"
+      ]
+    },
+    {
+      "id": "semuc-champey",
+      "nombre": "Semuc Champey",
+      "tipo": "naturaleza",
+      "region": "Alta Verapaz (central-norte)",
+      "descripcion": "Monumento natural con piscinas turquesas en capas naturales de río subterráneo sobre puente de piedra. Entorno selvático con cuevas y senderismo. Destino imprescindible para naturaleza pero requiere acceso rústico sin lujos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a marzo",
+      "como_llegar": "Autobús a Cobán (4-5 horas desde Antigua, 8-10 EUR), luego a Lanquín (2 horas, 3 EUR), finalmente jeep/camioneta 10km a Semuc (20-30 minutos, 5-10 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hospedajes Lanquín: 8-12 EUR/noche; camping Semuc (muy básico): 5 EUR/noche",
+        "medio": "Guesthouses Lanquín: 20-30 EUR/noche",
+        "comfort": "Lodges ecoturismo cercanos: 40-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Piscinas naturales Semuc Champey (entrada incluida en hospedaje o 3-5 EUR)",
+        "Tubing en río Cahabón (30-40 EUR)",
+        "Cueva Kan'Ba (25-35 EUR con guía)",
+        "Senderismo a mirador (incluido o 10 EUR guía)",
+        "Baño natural río (libre)"
+      ],
+      "donde_comer": "Comida típica Verapaz: fiambre, pollo. Comedores Lanquín (3-5 EUR muy básico). Lleva snacks; opciones limitadas. Hospedajes ofrecen comidas.",
+      "consejo_local": "Acceso es complicado intencionadamente para controlar turismo. Mejor quedarse en Lanquín y visitar día. El río es frío; traje baño esencial. Cueva requiere buen estado físico.",
+      "plan_b_lluvia": "Tubing bajo lluvia es permitido, cuevas bajo techo, pueblos cercanos",
+      "keywords": [
+        "Semuc Champey",
+        "Lanquín",
+        "Cobán",
+        "piscinas naturales",
+        "río",
+        "cuevas",
+        "Alta Verapaz"
+      ]
+    },
+    {
+      "id": "xela-quetzaltenango",
+      "nombre": "Xela (Quetzaltenango)",
+      "tipo": "ciudad",
+      "region": "Highlands occidentales",
+      "descripcion": "Segunda ciudad más importante, centro cultural y base para volcanes occidentales. Menos turística que Antigua pero con vida local auténtica, escuelas de español, mercado indígena vibrante y acceso a naturaleza. Favorita de mochileros largoplazo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Antigua: autobús (4,5 horas, 6-8 EUR); desde Lago Atitlán (3,5 horas, 6 EUR); desde Ciudad Guatemala (4 horas, 8 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales zona Parque Central: 9-13 EUR/noche",
+        "medio": "Pensiones coloniales: 20-35 EUR/noche",
+        "comfort": "Hotels recuperados: 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado central indígena (gratis)",
+        "Subir volcán Santa María o Chicabal (25-35 EUR con guía)",
+        "Paseo Parque Centro América (gratis, arquitectura neoclásica)",
+        "Escuelas español: clase grupal (40-60 EUR semana) o privada (80-150 EUR)",
+        "Visita pueblo colonial San Andrés Xecul (excursión 15 EUR)"
+      ],
+      "donde_comer": "Fiambre, huevos rellenos, chapines. Comedor mercado (3-5 EUR). Restaurantes Pasaje Enríquez (8-15 EUR). Mejor relación precio que Antigua.",
+      "consejo_local": "Clima es frío (1.600m); lleva sudadera. Español se hablará más aquí que en puntos turísticos. Callejones nocturnos evitar; barrio Templo es peligroso.",
+      "plan_b_lluvia": "Escuelas español intensivo, mercados interiores, museos locales",
+      "keywords": [
+        "Xela",
+        "Quetzaltenango",
+        "volcán",
+        "español",
+        "mercado",
+        "Parque Central",
+        "occidental"
+      ]
+    },
+    {
+      "id": "volcan-pacaya",
+      "nombre": "Volcán Pacaya",
+      "tipo": "montaña",
+      "region": "Central (cercano a Ciudad de Guatemala)",
+      "descripcion": "Volcán activo más accesible de Guatemala con vista a cráter humeante y lava visible. Subida corta (3-4 horas) perfecta para combinar con Antigua o Ciudad de Guatemala. Experiencia volcánica sin extremo esfuerzo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Antigua: excursión con guía local (4-5 horas total, 30-40 EUR); desde Ciudad Guatemala (1,5 horas auto + subida)",
+      "donde_dormir": {
+        "mochilero": "Hospedaje pueblo San Vicente Pacaya (base): 8-12 EUR/noche",
+        "medio": "Guesthouses: 20-30 EUR/noche",
+        "comfort": "Hotels cercanos Antigua: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Ascenso volcán Pacaya (30-50 EUR con guía obligatorio)",
+        "Vista cráter y fumarolas (incluido)",
+        "Fotografía lava/humo (incluido)",
+        "Baños termales base volcán (8-10 EUR adicional)"
+      ],
+      "donde_comer": "En pueblo base o incluido en tour. Fondas modestas (4-6 EUR). Desayuno obligatorio antes subida.",
+      "consejo_local": "Inicia muy temprano (4-5 AM) para evitar nubes mediodía. Zapatos senderismo OBLIGATORIO; lava es afilada. Bastón recomendado. Lleva agua abundante.",
+      "plan_b_lluvia": "Bajo lluvia puede cerrarse; cancela con guía confiable",
+      "keywords": [
+        "Pacaya",
+        "volcán activo",
+        "lava",
+        "humo",
+        "San Vicente Pacaya",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "rio-dulce-fuerte",
+      "nombre": "Río Dulce y Castillo San Felipe",
+      "tipo": "naturaleza",
+      "region": "Izabal (oriental)",
+      "descripcion": "Río tropical de 40km con acantilados verdes, fauna salvaje y castillo colonial del siglo XVII. Base perfecta para explorar Lago Izabal, Livingston y manglares. Mezcla de historia, naturaleza y aventura acuática sin masificación.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Autobús desde Ciudad Guatemala a pueblo Río Dulce (5-6 horas, 8-10 EUR); desde Flores (2,5 horas, 8 EUR); desde Antigua (10 horas, requiere conexión)",
+      "donde_dormir": {
+        "mochilero": "Hostales pueblo o sobre agua: 10-15 EUR/noche",
+        "medio": "Guesthouses con terraza: 25-40 EUR/noche",
+        "comfort": "Lodges flotantes: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo San Felipe (3 EUR entrada, historia fuerte)",
+        "Crucero Río Dulce a Livingston (25-35 EUR)",
+        "Kayak manglares (20-30 EUR)",
+        "Pesca deportiva (80-150 EUR día)",
+        "Baños termales río (10 EUR)"
+      ],
+      "donde_comer": "Pescado frito, camarones. Fondas (4-7 EUR). Restaurantes barcazas (12-20 EUR). Incluido en lodges normalmente.",
+      "consejo_local": "Repelente FUERTE para mosquitos dengue. Currents río son fuertes; respeta admoniciones guías. Pueblo Río Dulce es punto de paso; la belleza está EN el río.",
+      "plan_b_lluvia": "Castillo cubierto parcialmente, cuevas cercanas, pueblos interiores",
+      "keywords": [
+        "Río Dulce",
+        "Castillo San Felipe",
+        "manglares",
+        "Izabal",
+        "crucero",
+        "Livingston"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,339 @@
+{
+  "pais": "Ghana",
+  "codigo": "gh",
+  "destinos": [
+    {
+      "id": "accra",
+      "nombre": "Accra",
+      "tipo": "ciudad",
+      "region": "Greater Accra",
+      "descripcion": "Capital y principal centro urbano de Ghana con mercados vibrantes, museos coloniales y playas cercanas. Punto de entrada para la mayoría de viajeros y base logística esencial. Mezcla de arquitectura colonial, vida moderna y cultura local intensa.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Aeropuerto Internacional de Kotoka. Vuelos internacionales desde Europa (8-12h con conexiones). Autobús desde otras ciudades: 4-6h. Coste aproximado: vuelo 400-700 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Osu/Labadi: 12-18 EUR/noche",
+        "medio": "Hoteles 3 estrellas en Osu/City Center: 40-70 EUR/noche",
+        "comfort": "Hoteles boutique en Accra: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Makola y Jamestown (gratis)",
+        "Museo Nacional de Ghana (5 EUR)",
+        "Playas de Labadi y Coconut Grove (gratis)",
+        "Castillo de Osu (Fuerte) - tours históricos (8 EUR)",
+        "Galería de arte contemporáneo La Palm Royal Beach (gratis entrada)"
+      ],
+      "donde_comer": "Jollof rice, fufu, brochetas de carne en mercados callejeros (2-4 EUR). Zona de Osu para restaurantes más formales (8-15 EUR). Mercado de Makola para comida local auténtica.",
+      "consejo_local": "Negocia los precios en taxis al llegar. Usa Uber/Bolt si disponible. Los viernes por la noche Osu se llena de gente joven local, buen momento para conocer.",
+      "plan_b_lluvia": "Museos cubiertos, cines, compras en malls (Accra Mall, The Shoprite), cafés y librerías en Osu.",
+      "keywords": [
+        "Accra",
+        "Greater Accra",
+        "Osu",
+        "Labadi",
+        "Jamestown",
+        "Castillo de Osu",
+        "Mercado de Makola"
+      ]
+    },
+    {
+      "id": "cape-coast",
+      "nombre": "Cape Coast",
+      "tipo": "histórico",
+      "region": "Central Region",
+      "descripcion": "Pueblo costero con castillos coloniales preservados que fueron puertos de esclavos. Imprescindible para entender la historia de Ghana y la trata atlántica. Tours guiados emotivos y playas tranquilas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Accra: autobús directo (2-3h), 8-12 EUR. También minibús desde Accra central. Taxi compartido más rápido pero costoso (15-20 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales cercanos al castillo: 10-15 EUR/noche",
+        "medio": "Hoteles pequeños en el centro: 25-45 EUR/noche",
+        "comfort": "Resorts en la playa: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Cape Coast - tour con guía (12 EUR, 1.5h)",
+        "Fuerte de St. Jago (incluido en tour del castillo)",
+        "Playas locales en Perentie (gratis)",
+        "Visita a pueblo pesquero de Moree (gratis)",
+        "Mercado de pesca tradicional (gratis, madrugada)"
+      ],
+      "donde_comer": "Pescado a la brasa en la playa (4-6 EUR), fufu local, sopa de cacahuete. Restaurantes de pescado frescos frente al mar (6-10 EUR). Mercado central para comida local muy barata.",
+      "consejo_local": "Los tours del castillo son emotivos pero complicados. Contrata guía local certificado para contexto histórico profundo. El atardecer desde la playa es momento imprescindible.",
+      "plan_b_lluvia": "Tours cubiertos de los castillos, museos locales pequeños, bibliotecas, cafés con vistas al mar.",
+      "keywords": [
+        "Cape Coast",
+        "Castillo de Cape Coast",
+        "Fuerte de St. Jago",
+        "Costa Central",
+        "historia esclavitud",
+        "playas"
+      ]
+    },
+    {
+      "id": "kumasi",
+      "nombre": "Kumasi",
+      "tipo": "ciudad",
+      "region": "Ashanti Region",
+      "descripcion": "Segunda ciudad más grande, centro cultural ashanti con mercados masivos y patrimonio real. Hub importante para explorar la región de Ashanti y acceder a reservas naturales. Menos turística que Accra pero auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Accra: autobús directo (4-5h), 12-18 EUR. STC Coaches línea principal. Taxi compartido: 15-25 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Adum: 10-14 EUR/noche",
+        "medio": "Hoteles 2-3 estrellas centro: 30-50 EUR/noche",
+        "comfort": "Hoteles modernos fuera centro: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado Central de Kumasi (gratis, imprescindible)",
+        "Palacio Real Manhyia - museo (6 EUR)",
+        "Jardín Botánico de Kumasi (4 EUR)",
+        "Santuario de Vida Silvestre de Bosomtwe (entrada 5 EUR, 30km)",
+        "Paseo por zona de Asokwa para artesanía local (gratis)"
+      ],
+      "donde_comer": "Waakye (masa de arroz con salsa de judías), fufu, sopa de cabra. Mercado Central para comida a 1-2 EUR. Callejones de restaurantes en zona Adum (3-6 EUR por plato).",
+      "consejo_local": "El mercado central es abrumador pero imprescindible; ve temprano por la mañana. Evita llevar mochila grande dentro. Los taxistas saben todos los lugares turísticos; pide presupuesto antes.",
+      "plan_b_lluvia": "Museo del Palacio Real, mercados cubiertos, tiendas de artesanía, cafés.",
+      "keywords": [
+        "Kumasi",
+        "Ashanti",
+        "Mercado Central",
+        "Palacio Manhyia",
+        "Adum",
+        "Bosomtwe"
+      ]
+    },
+    {
+      "id": "mole-national-park",
+      "nombre": "Mole National Park",
+      "tipo": "naturaleza",
+      "region": "Northern Region",
+      "descripcion": "Mayor parque nacional de Ghana con safaris a pie y en 4x4 para ver elefantes, antílopes y búfalos. Única experiencia de vida salvaje accesible en Ghana. Lodge básico pero funcional.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero (animales más concentrados)",
+      "como_llegar": "Desde Kumasi o Accra: autobús a Damongo (8-10h desde Accra), 18-25 EUR. Luego taxi local a lodge (15km, 5 EUR). Alternativa: volar a Tamale y autobús desde allí (2h, 12 EUR).",
+      "donde_dormir": {
+        "mochilero": "Mole Motel (lodge del parque): 15-20 EUR/noche (muy básico)",
+        "medio": "Habitaciones mejoradas en lodge: 30-45 EUR/noche",
+        "comfort": "No hay opciones premium en parque; mejores en Tamale a 60km"
+      },
+      "que_hacer": [
+        "Safari a pie guiado (15-20 EUR por persona, 2-3h)",
+        "Safari en jeep (25-35 EUR, 3h)",
+        "Paseo nocturno (10 EUR, fauna nocturna)",
+        "Río Mole para ver cocodrilos y hipopótamos (gratis desde lodge)",
+        "Senderos naturales auto-guiados (gratis)"
+      ],
+      "donde_comer": "Restaurante del lodge: comida básica (8-12 EUR). Únicamente opción dentro del parque. Cocina local simple pero adecuada.",
+      "consejo_local": "Lleva binoculares y cámara con zoom. Los guías son expertos y genuinamente conocen animales. Mejor época: enero-febrero cuando hay menos agua y animales se concentran. Llega antes del atardecer.",
+      "plan_b_lluvia": "Lluvia reduce actividad animal. Aún posibles safaris pero menos avistamientos. Alternativa: explorar aldeas cercanas (Damongo).",
+      "keywords": [
+        "Mole National Park",
+        "Safari Ghana",
+        "Elefantes",
+        "Northern Region",
+        "Parque Nacional",
+        "vida salvaje"
+      ]
+    },
+    {
+      "id": "kokrobite",
+      "nombre": "Kokrobite",
+      "tipo": "playa",
+      "region": "Greater Accra",
+      "descripcion": "Pueblo costero a 30km de Accra con playas tranquilas, vida bohemia, escuelas de surf y ambiente relajado. Popular entre viajeros independientes y nómadas digitales. Base alternativa a Accra más tranquila.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Accra: autobús local o minibús (45min-1h), 2-3 EUR. Taxi compartido: 5-8 EUR. Coche de alquiler más práctico (30-40 EUR/día).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses y hostales: 12-18 EUR/noche",
+        "medio": "Pequeños hoteles beachfront: 35-60 EUR/noche",
+        "comfort": "Resorts con piscina: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de arena blanca (gratis)",
+        "Lecciones de surf (25-40 EUR por clase)",
+        "Visita a pueblo cultural Adum (gratis, danzas tradicionales)",
+        "Snorkel y buceo en arrecifes (30-50 EUR)",
+        "Paseos al atardecer por la playa (gratis)"
+      ],
+      "donde_comer": "Restaurantes beachfront: pescado a la brasa, ceviche (8-15 EUR). Comedores locales: 2-4 EUR. Bares con música en vivo por las tardes.",
+      "consejo_local": "Kokrobite es paraíso para surfers pero el agua es fuerte. Nada solo en playas vigiladas. Muchos nómadas digitales; buenos cafés con wifi. Evita Accra por unos días aquí si buscas tranquilidad.",
+      "plan_b_lluvia": "Cafés y bares con techo, tiendas de artesanía, videojuegos, viajes a Accra cercana.",
+      "keywords": [
+        "Kokrobite",
+        "playa Ghana",
+        "surf",
+        "Accra",
+        "bohemio",
+        "nómadas digitales",
+        "Adum"
+      ]
+    },
+    {
+      "id": "axim",
+      "nombre": "Axim",
+      "tipo": "playa",
+      "region": "Western Region",
+      "descripcion": "Pequeño pueblo costero en el extremo occidental con playas vírgenes, fuerte colonial y ambiente muy tranquilo. Perfecto para desconexión total y exploración menos turística. Viajar a Axim es viajar lentamente.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Accra: autobús a Takoradi primero (4-5h, 15-20 EUR), luego autobús local a Axim (2h, 8 EUR). Total: 8-9h y 25-30 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses muy simples: 8-12 EUR/noche",
+        "medio": "Pequeños hoteles: 20-35 EUR/noche",
+        "comfort": "No hay opciones premium; Takoradi más cerca"
+      },
+      "que_hacer": [
+        "Playas vírgenes de Axim (gratis)",
+        "Fuerte de Axim - tours (4 EUR)",
+        "Pueblos pesqueros locales (gratis)",
+        "Senderismo en áreas costeras (gratis)",
+        "Visitas a mercado local (gratis)"
+      ],
+      "donde_comer": "Pescado fresco a la parrilla en la playa (3-5 EUR). Comedores locales muy básicos (2-3 EUR). Opciones limitadas pero auténticas.",
+      "consejo_local": "Axim es realmente aislado y lento. Esto es su gracia. Sin museos ni atracciones grandes; se trata de estar en la playa, hablar con locales y respirar. Lleva efectivo; pocos ATMs funcionales.",
+      "plan_b_lluvia": "Visitar fuerte cubierto, cafés locales, pasar tiempo en pueblos pesqueros.",
+      "keywords": [
+        "Axim",
+        "playas vírgenes",
+        "Western Region",
+        "Fuerte de Axim",
+        "tranquilo",
+        "aislado"
+      ]
+    },
+    {
+      "id": "takoradi",
+      "nombre": "Takoradi",
+      "tipo": "ciudad",
+      "region": "Western Region",
+      "descripcion": "Puerto industrial y segunda ciudad en importancia con pintura callejera colorida, vida local auténtica y acceso a playas cercanas. Menos turística que Accra pero con energía propia. Gateway a la costa occidental.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Accra: autobús directo (4-5h), 15-20 EUR. Desde Kumasi: autobús (5-6h), 15-20 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales pequeños: 10-15 EUR/noche",
+        "medio": "Hoteles 2-3 estrellas: 30-50 EUR/noche",
+        "comfort": "Hoteles más nuevos: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por murales y street art (gratis)",
+        "Mercado Central (gratis)",
+        "Playa de Takoradi (gratis)",
+        "Fuerte de San Antonio (entrada 4 EUR)",
+        "Puerto y paseo costero (gratis)"
+      ],
+      "donde_comer": "Waakye, fufu, sopa de mariscos locales (2-4 EUR). Restaurantes frente al mar para pescado (6-10 EUR). Mercado para comida auténtica muy barata.",
+      "consejo_local": "La pintura de Takoradi es proyecto local auténtico, no para turistas. Habla con artistas. La ciudad tiene ritmo propio; ve sin expectativas previas.",
+      "plan_b_lluvia": "Museos pequeños, mercados cubiertos, paseos por puerto.",
+      "keywords": [
+        "Takoradi",
+        "Western Region",
+        "puerto",
+        "murales",
+        "street art",
+        "playas"
+      ]
+    },
+    {
+      "id": "lake-bosomtwe",
+      "nombre": "Lake Bosomtwe",
+      "tipo": "naturaleza",
+      "region": "Ashanti Region",
+      "descripcion": "Lago cratérico de agua dulce rodeado de bosque, sagrado en cultura ashanti. Alternativa a playas saladas para relajación, boas acuáticas y pueblos de pescadores. Excursión fácil desde Kumasi.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Kumasi: taxi compartido o tour (30km, 1h), 8-12 EUR. Desde Accra: transporte a Kumasi primero (4-5h), luego a lago.",
+      "donde_dormir": {
+        "mochilero": "Lodges junto al lago muy básicos: 12-18 EUR/noche",
+        "medio": "Pequeños hoteles en pueblos alrededor: 25-40 EUR/noche",
+        "comfort": "Resorts en el lago: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en bote por el lago (10-15 EUR)",
+        "Baño en playas del lago (gratis)",
+        "Visita a pueblos de pescadores (gratis)",
+        "Senderismo en bosque alrededor (gratis, con guía local)",
+        "Observación de aves (gratis)"
+      ],
+      "donde_comer": "Pescado del lago a la parrilla (4-6 EUR). Fufu y sopa local. Opciones limitadas pero frescas.",
+      "consejo_local": "Respeta sitios sagrados; pregunta antes de fotos en pueblos. El agua es limpia para bañarse. Lleva repelente de mosquitos. Es lugar espiritual, no solo turístico.",
+      "plan_b_lluvia": "Botes aún funcionan, paseos por pueblos cubiertos.",
+      "keywords": [
+        "Lake Bosomtwe",
+        "Bosomtwe",
+        "lago",
+        "Ashanti",
+        "agua dulce",
+        "cratérico"
+      ]
+    },
+    {
+      "id": "wli-falls",
+      "nombre": "Wli Falls",
+      "tipo": "naturaleza",
+      "region": "Volta Region",
+      "descripcion": "Cascadas más altas de Ghana en bosque tropical lush de la región de Volta. Caminata versátil por bosque primario con saltos de agua cristalinos. Destino accesible pero con auténtica naturaleza salvaje.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero (menos lluvia)",
+      "como_llegar": "Desde Accra: autobús a Hohoe (5h, 18-25 EUR), luego taxi a Wli (1h, 8-10 EUR). Total: 6-7h y 30-40 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Wli: 10-15 EUR/noche",
+        "medio": "Pequeños hoteles: 25-40 EUR/noche",
+        "comfort": "Resorts fuera del pueblo: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Caminata a Wli Falls Superiores (2-3h, guía obligatorio 10 EUR)",
+        "Caminata a Wli Falls Inferiores (1-2h, gratis con guía local)",
+        "Bano en pozas de agua cristalina (gratis)",
+        "Senderismo en bosque secundario (gratis con guía)",
+        "Visita a pueblo local y huertos de piña (gratis)"
+      ],
+      "donde_comer": "Fufu, sopa de cacahuete, bananos fritos (2-4 EUR). Opciones limitadas pero muy locales.",
+      "consejo_local": "La caminata es mojada y resbaladiza; llevar zapatos acuáticos. El guía es obligatorio para las cascadas superiores (regulación local). Las pozas son piscinas naturales perfectas pero agua fría.",
+      "plan_b_lluvia": "Lluvia puede hacer senderos peligrosos. Lluvia moderada aún posible pero lenta.",
+      "keywords": [
+        "Wli Falls",
+        "cascadas",
+        "Volta Region",
+        "Hohoe",
+        "bosque tropical",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "nzulezo",
+      "nombre": "Nzulezo",
+      "tipo": "isla",
+      "region": "Western Region",
+      "descripcion": "Pueblo de agua flotante construido sobre pilares en laguna, habitado por pueblo Ewe. Experiencia única de vida lacustre tradicional. Tours en canoa por comunidad que vive sobre el agua.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Takoradi: minibús a Beyin (2h, 8 EUR), luego canoa desde puerto a Nzulezo (30min, 15-25 EUR tour completo con guía).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Beyin: 10-14 EUR/noche",
+        "medio": "Pequeños hoteles en Beyin: 25-40 EUR/noche",
+        "comfort": "No hay opciones confortables; Takoradi más cerca"
+      },
+      "que_hacer": [
+        "Tour guiado por pueblo flotante en canoa (20-30 EUR, 1.5-2h)",
+        "Interacción con residentes locales (incluido en tour)",
+        "Baño en laguna (gratis, desde canoa)",
+        "Visita a escuela flotante (incluido en tour)",
+        "Observación de vida tradicional Ewe (gratis)"
+      ],
+      "donde_comer": "En Beyin antes de partir: pescado local, fufu (3-5 EUR). Pocas opciones en Nzulezo; llevar agua.",
+      "consejo_local": "Nzulezo es atracción turística importante pero vive de turismo. Sé respetuoso con privacidad. El tour debe ser con operador local certificado, no turistas independientes. Precio incluye ayuda a comunidad.",
+      "plan_b_lluvia": "Tours siguen funcionando pero canoas más lentas. No es problema mayor.",
+      "keywords": [
+        "Nzulezo",
+        "pueblo agua",
+        "Beyin",
+        "Western Region",
+        "Ewe",
+        "laguna",
+        "canoa"
+      ]
+    }
+  ]
+}

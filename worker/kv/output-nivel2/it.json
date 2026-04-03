@@ -1,0 +1,401 @@
+{
+  "pais": "Italia",
+  "codigo": "it",
+  "destinos": [
+    {
+      "id": "roma",
+      "nombre": "Roma",
+      "tipo": "histórico",
+      "region": "Lazio",
+      "descripcion": "Capital italiana con 2.700 años de historia concentrados en sus calles. Coliseo, Vaticano, Foro Romano y Panteón son imprescindibles. Centro histórico perfectamente caminable, aunque masificado.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde aeropuerto Fiumicino: tren regional 30 min (14 EUR) o autobús 1h (5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Testaccio o San Lorenzo: 20-35 EUR/noche",
+        "medio": "Apartamentos en Trastevere o Centro: 60-90 EUR/noche",
+        "comfort": "Hotel 3-4 estrellas Colonna o Esquilino: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Coliseo + Foro Romano (15 EUR combinado)",
+        "Basílica de San Pedro (gratis entrada, cúpula 18 EUR)",
+        "Museos Vaticanos (17 EUR)",
+        "Pantalla y Plaza Navona (gratis)",
+        "Fuente de Trevi al atardecer (gratis, solo evita vendedores)",
+        "Caminar Trastevere y Testaccio (gratis)"
+      ],
+      "donde_comer": "Cacio e pepe, carbonara, amatriciana en trattorias locales de Testaccio o Trastevere (8-15 EUR plato). Evita zona Coliseo y centro turístico.",
+      "consejo_local": "Compra un abono Roma Pass 72h (38.50 EUR) que incluye transporte ilimitado y 2 museos. Los mejores momentos en el Coliseo son antes de las 7:30 AM o después de las 17:30.",
+      "plan_b_lluvia": "Museos Vaticanos (largo, perfecto para lluvias), Panteón, iglesias (muchas con frescos), cines con películas en versión original.",
+      "keywords": [
+        "Roma",
+        "Rome",
+        "Colosseum",
+        "Vatican",
+        "Trastevere",
+        "Testaccio",
+        "Forum",
+        "Pantheon"
+      ]
+    },
+    {
+      "id": "venecia",
+      "nombre": "Venecia",
+      "tipo": "ciudad",
+      "region": "Veneto",
+      "descripcion": "Única ciudad construida sobre agua en el mundo, sin coches. Canales, puentes y arquitectura medieval crean una atmósfera única. Imprescindible dormir una noche para evitar masas diurnas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre-marzo (menos turistas, riesgo de acqua alta)",
+      "como_llegar": "desde Milán: tren 2.5h (20-50 EUR). desde Trieste: 2h (15-40 EUR). Desde aeropuerto: water bus 1h (15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales Cannaregio o Dorsoduro: 25-40 EUR/noche",
+        "medio": "Apartamentos pequeños San Polo o Santa Croce: 70-110 EUR/noche",
+        "comfort": "Hotel 3-4 estrellas Canal Grande: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Basílica San Marcos (5 EUR)",
+        "Palacio Ducal (20 EUR combinado con Marcos)",
+        "Puente de Rialto (gratis, solo cruzar)",
+        "Paseo gondola (80-100 EUR, evitable)",
+        "Iglesia Santa Maria Gloriosa dei Frari (3 EUR)",
+        "Explorara callejuelas sin mapas (gratis)"
+      ],
+      "donde_comer": "Spaghetti alle vongole, risotto nero (tinta de calamar), sardelle en saor (cebollitas). Mercado Rialto para comida local (8-12 EUR). Evita restaurantes turísticos del canal.",
+      "consejo_local": "La mayoría de turistas son diurnos: explora entre 19:00-22:00 cuando la ciudad es tuya. Compra agua en supermercados, no en bares (50 céntimos vs 3 EUR). Las gondolas son turismo puro; los vaporettos son el transporte real.",
+      "plan_b_lluvia": "Basílica San Marcos, Palacio Ducal, Galerías de la Academia (14 EUR), iglesias y museos. Si hay acqua alta, usa botas impermeables.",
+      "keywords": [
+        "Venice",
+        "Venezia",
+        "Canal Grande",
+        "Rialto",
+        "San Marcos",
+        "Gondola",
+        "Dorsoduro",
+        "Cannaregio"
+      ]
+    },
+    {
+      "id": "florencia",
+      "nombre": "Florencia",
+      "tipo": "histórico",
+      "region": "Toscana",
+      "descripcion": "Cuna del Renacimiento italiano con museos de clase mundial y arquitectura perfecta. La Galería de los Uffizi alberga obras de Da Vinci y Botticelli. Centro compacto y caminable.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Roma: tren 2-3h (25-60 EUR). desde Milán: 2h (20-50 EUR). desde Venecia: 4h (30-70 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales Santa María Novella o Santo Spirito: 22-38 EUR/noche",
+        "medio": "Apartamentos Oltrarno o cerca Ponte Vecchio: 65-95 EUR/noche",
+        "comfort": "Hotel 3-4 estrellas centro histórico: 110-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Galería Uffizi (12 EUR, colas enormes sin reserva previa)",
+        "Catedral + Cúpula Brunelleschi (30 EUR combo)",
+        "Galería Academia (David de Miguel Ángel, 12 EUR)",
+        "Ponte Vecchio y paseo Oltrarno (gratis)",
+        "Palacio Pitti + jardines Boboli (16 EUR)",
+        "Iglesia Santa María Novella (5 EUR)"
+      ],
+      "donde_comer": "Bistecca alla fiorentina (carne roja), ribollita (sopa toscana), crostini toscani. Restaurantes baratos cerca de San Lorenzo (10-18 EUR). Mercados San Lorenzo y Sant'Ambrogio para picnic.",
+      "consejo_local": "Salta colas en Uffizi reservando con antelación (coste incluido en entrada, 3 EUR). La mejor vista de la ciudad es desde Piazzale Michelangelo al atardecer (sube andando o toma bus 12/13). Los hostales pequeños ofrecen cenas grupales baratas (8-12 EUR).",
+      "plan_b_lluvia": "Uffizi, Academia, Pitti, iglesias, Biblioteca Medicea (gratis), pequeños museos de especialidades.",
+      "keywords": [
+        "Florence",
+        "Firenze",
+        "Uffizi",
+        "David",
+        "Duomo",
+        "Ponte Vecchio",
+        "Oltrarno",
+        "Boboli"
+      ]
+    },
+    {
+      "id": "cinque-terre",
+      "nombre": "Cinque Terre",
+      "tipo": "costa",
+      "region": "Liguria",
+      "descripcion": "Cinco pueblos costeros coloridos pegados al acantilado con senderos de senderismo espectaculares. Patrimonio UNESCO con arquitectura medieval y viñedos en terrazas. Acceso limitado mantiene el carácter rústico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "desde La Spezia: tren 5 min (4 EUR cada pueblo). desde Génova: tren 2h (10-15 EUR). desde Florencia: tren + conexiones 3h (30-50 EUR)",
+      "donde_dormir": {
+        "mochilero": "Apartamentos privados o habitaciones Manarola/Vernazza: 35-50 EUR/noche",
+        "medio": "Pequeños hoteles familiares: 70-100 EUR/noche",
+        "comfort": "Hoteles con vistas mar Vernazza/Monterosso: 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo entre pueblos (gratis, Cinque Terre Card 16 EUR si necesitas tren entre pueblos)",
+        "Playa Monterosso (gratis entrada, tumbonas 15 EUR)",
+        "Snorkel/baño en calas (gratis)",
+        "Barca a Portofino (excursión 25-40 EUR)",
+        "Vino local en trattorias (cata gratis con comida)"
+      ],
+      "donde_comer": "Pesto genovés (con piñones), pasta con mariscos frescos, focaccia. Come donde come la gente local: cerca del puerto (12-18 EUR). Las \"5 Terre Card\" incluyen transporte y acceso senderos (16 EUR/día).",
+      "consejo_local": "El sendero Manarola-Corniglia está cerrado frecuentemente por desprendimientos; usa el tren (4 EUR) entre pueblos. Mejor dormir en Manarola o Vernazza que en Monterosso (más turístico). Lleva agua y come fuera de horas pico (12-13h, 19-20h).",
+      "plan_b_lluvia": "Museos pequeños de pueblos, iglesias, tiendas de recuerdos, cafés. Senderos pueden ser peligrosos mojados.",
+      "keywords": [
+        "Cinque Terre",
+        "Five Lands",
+        "Manarola",
+        "Vernazza",
+        "Monterosso",
+        "Riomaggiore",
+        "Corniglia",
+        "Liguria"
+      ]
+    },
+    {
+      "id": "milán",
+      "nombre": "Milán",
+      "tipo": "ciudad",
+      "region": "Lombardía",
+      "descripcion": "Capital del diseño y la moda italiana con Duomo gótico espectacular. Museo refectorio de Leonardo, galerías comerciales y vida cosmopolita. Menos turístico que Roma o Florencia.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "hub de transportes: desde Roma (tren 3h, 30-60 EUR), Florencia (tren 2h, 20-50 EUR), Venecia (tren 2.5h, 20-50 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales Navigli o Porta Venezia: 24-40 EUR/noche",
+        "medio": "Apartamentos Brera o Navigli: 70-100 EUR/noche",
+        "comfort": "Hotel 4 estrellas centro: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Duomo (entrada gratis, cúpula 15 EUR)",
+        "Galería Víctor Manuel (gratis, solo transitar)",
+        "Refectorio (Santa María delle Grazie, 10 EUR, requiere reserva)",
+        "Pinacoteca Brera (12 EUR)",
+        "Paseo Navigli y canales (gratis)",
+        "Castillo Sforzesco (gratis entrada, algunos museos internos 5-12 EUR)"
+      ],
+      "donde_comer": "Risotto alla milanese, cotoletta, panettone (diciembre). Barrio Navigli para trattorias auténticas (10-16 EUR). Aperitivo Happy Hour (17-20h) con pinchos por 8-10 EUR.",
+      "consejo_local": "Milán no es turismo pintoresco sino vida real italiana: tiendas, diseño, gente trabajadora. Los pinchos de aperitivo son legendarios en Navigli. Acércate al barrio Zona Tortona para arte callejero y bares independientes.",
+      "plan_b_lluvia": "Museos Pinacoteca Brera, Castello Sforzesco (museos internos), Duomo, galerías comerciales, cines.",
+      "keywords": [
+        "Milan",
+        "Milano",
+        "Duomo",
+        "Navigli",
+        "Brera",
+        "Castello Sforzesco",
+        "Galleria",
+        "Moda"
+      ]
+    },
+    {
+      "id": "amalfi-positano",
+      "nombre": "Costa de Amalfi",
+      "tipo": "playa",
+      "region": "Campania",
+      "descripcion": "Costa acantilada espectacular con pueblos pintorescos colgados en la montaña. Positano es la joya, con playas de guijarros y restaurantes junto al mar. Paisajes de película pero caro y masificado en verano.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Nápoles: tren/autobús a Salerno (1h, 5-10 EUR), luego autobús SITA Positano (1h, 2.40 EUR)",
+      "donde_dormir": {
+        "mochilero": "Habitaciones privadas en Positano o Praiano: 40-60 EUR/noche",
+        "medio": "Pequeños hoteles Amalfi/Positano: 80-120 EUR/noche",
+        "comfort": "Hoteles con vista mar Positano: 160-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Positano (gratis entrada, sombrillas 15 EUR)",
+        "Paseo costero entre pueblos (gratis)",
+        "Bote a Emerald Grotto (20 EUR)",
+        "Senderismo Path of the Gods (gratis)",
+        "Playas Praiano y Furore (gratis)",
+        "Pueblos Amalfi y Ravello (gratis callejear, iglesias 2-3 EUR)"
+      ],
+      "donde_comer": "Pasta a la limón, mariscos frescos, mozzarella di bufala. Come en playas o callejuelas (12-20 EUR). Ravello es más caro (18-30 EUR). Autoservicio Positano: 8-12 EUR.",
+      "consejo_local": "Positano es Instagram puro y carísimo; igual de bonita es Praiano a mitad de precio. El Path of the Gods es gratis pero duro (2.5h de caminata); hazlo temprano. El autobús SITA es lento pero barato; evita coche de alquiler (peajes + aparcamiento caros).",
+      "plan_b_lluvia": "Iglesias, tiendas de artesanía, pueblos interiores como Ravello (con galerías), cafés.",
+      "keywords": [
+        "Amalfi Coast",
+        "Positano",
+        "Praiano",
+        "Ravello",
+        "Amalfi",
+        "Furore",
+        "Salerno",
+        "Path of Gods"
+      ]
+    },
+    {
+      "id": "napoles",
+      "nombre": "Nápoles",
+      "tipo": "ciudad",
+      "region": "Campania",
+      "descripcion": "Caótica, ruidosa, auténtica metrópolis del sur con pizza original, calles bulliciosas y energía contagiosa. Museo arqueológico de Pompeya/Herculano sin igual. Menos pulida que Roma pero más real.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "hub sur: desde Roma (tren 2-2.5h, 20-40 EUR), desde Milán (tren 8-10h o vuelo 1.5h + traslado)",
+      "donde_dormir": {
+        "mochilero": "Hostales Vomero o Centro histórico: 20-35 EUR/noche",
+        "medio": "Apartamentos Vomero o Chiaia: 50-80 EUR/noche",
+        "comfort": "Hotel 3 estrellas Chiaia/Posillipo: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Arqueológico Nacional (12 EUR, colección mosaicos Pompeya)",
+        "Pompeya (tren 30min + entrada 16 EUR, plan 3-4h mínimo)",
+        "Herculano (más pequeño, menos colas, 13 EUR)",
+        "Catacumbas San Jenaro (10 EUR)",
+        "Paseo Chiaia y Puerto (gratis)",
+        "Pizza fritta en mercado (2-4 EUR)"
+      ],
+      "donde_comer": "Pizza original napolitana (3-5 EUR), pasta e fagioli, sfogliatella (postre, 2 EUR). Evita turismo: come en trattorias locales barrio Vomero o Centro (8-15 EUR). Bakeries napolitanas legendarias.",
+      "consejo_local": "Pompeya requiere reserva online para evitar horas de espera (2 EUR extra). Herculano es menos conocida pero igual de impresionante y menos masificada. El centro histórico es seguro de día pero evita de noche. Pizza fritta es Nápoles en bocado.",
+      "plan_b_lluvia": "Museo Arqueológico, catacumbas, iglesias, pizzerías.",
+      "keywords": [
+        "Naples",
+        "Napoli",
+        "Pompeii",
+        "Herculaneum",
+        "Pizza",
+        "Vesuvius",
+        "Vomero",
+        "San Gennaro"
+      ]
+    },
+    {
+      "id": "bologna",
+      "nombre": "Bolonia",
+      "tipo": "ciudad",
+      "region": "Emilia-Romaña",
+      "descripcion": "Cidade medieval de torres rojas con gastronomía excepcional (tagliatelle al ragù, bolognesa real). Centro histórico peatonal y tranquilo. Hub perfecto entre norte y sur de Italia.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Florencia: tren 1.5h (15-35 EUR). desde Venecia: 2.5h (20-40 EUR). desde Milán: 2h (20-45 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales barrio universitario: 22-36 EUR/noche",
+        "medio": "Apartamentos centro histórico: 60-85 EUR/noche",
+        "comfort": "Hotel 3-4 estrellas piazza: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Piazza Maggiore y Basílica San Petronio (gratis)",
+        "Torres Asinelli y Garisenda (subir 3 EUR)",
+        "Iglesia Santo Stefano (gratis)",
+        "Pinacoteca Nacional (8 EUR)",
+        "Mercado de Vicioli y gastronomía local (gratis deambular)",
+        "Pórticos cubiertos (gratis recorrer)"
+      ],
+      "donde_comer": "Tagliatelle al ragù bolognese (real), tortellini, lasaña, mortadella. Trattorias auténticas en barrio universitario (10-16 EUR). Piacenza cercano para culatello (embutido premium).",
+      "consejo_local": "Bolonia es menos turística que sus vecinas pero igualmente hermosa. Los estudiantes universitarios mantienen vida real. Come tagliatelle al ragù solo en restaurantes italianos reales (no turísticos). Los pórticos son únicos en Italia: 38 km de techo medieval.",
+      "plan_b_lluvia": "Museos (Pinacoteca, Museo Medieval), iglesias, paseos bajo pórticos, gastronomía.",
+      "keywords": [
+        "Bologna",
+        "Bolonia",
+        "Torres",
+        "Ragù",
+        "Asinelli",
+        "Santo Stefano",
+        "Università",
+        "Emilia-Romagna"
+      ]
+    },
+    {
+      "id": "sicilia-palermo",
+      "nombre": "Sicilia - Palermo",
+      "tipo": "ciudad",
+      "region": "Sicilia",
+      "descripcion": "Capital siciliana caótica con arquitectura normanda, gastronomía única (arancini, pasta a la norma) y vida de calle electrizante. Puerta a la isla con playas, templos griegos y pueblos costeros pintorescos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "vuelo desde Roma/Milán (2h, 30-80 EUR con budget airlines). Ferry desde Nápoles (11h, 50-100 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales Kalsa o Vucciria: 22-38 EUR/noche",
+        "medio": "Apartamentos Mondello o centro: 55-85 EUR/noche",
+        "comfort": "Hotel 3-4 estrellas Quattro Canti: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Catedral de Monreale (día trip, tren + entrada 10 EUR)",
+        "Mercado Vucciria y Capo (gratis, comida barata)",
+        "Capilla Palatina (8 EUR)",
+        "Playa Mondello (gratis, 30min tren)",
+        "Iglesia de la Martorana (gratis)",
+        "Paseo Quattro Canti y Via Maqueda (gratis)"
+      ],
+      "donde_comer": "Arancini, pasta a la norma, panelle (buñuelos), panini, granita con brioche. Mercados para picnic (3-6 EUR). Trattorias locales Vucciria (8-14 EUR). Pizza siciliana al taglio.",
+      "consejo_local": "Palermo es caótico pero seguro si evitas bolsos colgados y mantiene alerta. Los mercados son lo más auténtico: come donde comen los locales. Monreale merece excursión: catedral con mosaicos bizantinos inigualables. Incluye Mondello para playa.",
+      "plan_b_lluvia": "Catedral, iglesias (mosaicos), museos, mercados cubiertos, palacio real.",
+      "keywords": [
+        "Palermo",
+        "Palermo",
+        "Sicilia",
+        "Sicily",
+        "Monreale",
+        "Vucciria",
+        "Mondello",
+        "Arancini"
+      ]
+    },
+    {
+      "id": "lago-como",
+      "nombre": "Lago de Como",
+      "tipo": "naturaleza",
+      "region": "Lombardía",
+      "descripcion": "Lagos alpinos de ensueño con pueblos pintorescos, villas históricas y montañas. Varenna y Bellagio son joyas; Menaggio es base económica. Atmósfera romántica pero tranquila en temporada baja.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "desde Milán: tren/autobús a Como (1h, 5-10 EUR), luego ferry entre pueblos (2-5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Apartamentos/habitaciones Menaggio o Varenna: 30-50 EUR/noche",
+        "medio": "Pequeños hoteles lakefront: 70-110 EUR/noche",
+        "comfort": "Hoteles lujo Bellagio/Varenna: 140-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Ferry entre pueblos (pase 1-5 EUR según ruta)",
+        "Caminata Menaggio-Varenna (2h, gratis)",
+        "Villa d'Este Cernobbio (12 EUR)",
+        "Villa Balbianello Lenno (15 EUR)",
+        "Paseos Varenna y Bellagio (gratis)",
+        "Senderismo colinas (gratis)"
+      ],
+      "donde_comer": "Risotto a la milanesa, lubina fresca, trucha. Trattorias lago Varenna/Bellagio (12-20 EUR). Menaggio más barato (8-14 EUR). Picnic en ferries con vistas.",
+      "consejo_local": "Bellagio es hermoso pero turístico y caro; duerme en Menaggio (barato, tranquilo) y toma ferry a Bellagio/Varenna para paseos diurnos. El ferry es el transporte real y ofrece vistas mejores que la carretera. Sube a los pueblos en las colinas para evitar masas lakeshore.",
+      "plan_b_lluvia": "Villas (museos), iglesias, pueblos interiores, cafés.",
+      "keywords": [
+        "Lake Como",
+        "Lago di Como",
+        "Varenna",
+        "Bellagio",
+        "Menaggio",
+        "Como",
+        "Cernobbio",
+        "Lenno"
+      ]
+    },
+    {
+      "id": "dolomitas",
+      "nombre": "Dolomitas",
+      "tipo": "montaña",
+      "region": "Trentino-Alto Adigio",
+      "descripcion": "Macizo montañoso UNESCO con senderismo espectacular, pueblos tiroleses y arquitectura alpina. Val di Fassa es base clásica; Cortina más sofisticada. Ideal para trekking de larga distancia (Via Ferrata).",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre (invierno para esquí)",
+      "como_llegar": "desde Bolonia: tren a Trento (1.5h, 12-25 EUR), luego autobús Fassa (1.5h, 8 EUR)",
+      "donde_dormir": {
+        "mochilero": "Rifugios alpinos (refugios) Fassa: 35-50 EUR/noche",
+        "medio": "Pequeños hoteles tiroleses: 70-100 EUR/noche",
+        "comfort": "Hoteles deportivos Cortina: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Tre Cime di Lavaredo (trekking clásico, gratis, 4-5h)",
+        "Ruta Grandes Dolomitas (4-5 días, gratis, refugios 35-50 EUR/noche)",
+        "Teleféricos (6-12 EUR por subida)",
+        "Via Ferrata (guía 35-50 EUR, material incluido)",
+        "Lago Sorapis (caminata 2.5h, gratis)",
+        "Pueblos Ortisei y Val Badia (gratis callejear)"
+      ],
+      "donde_comer": "Strudel, canederli (ñoquis tiroleses), speck, casunziei (ravioli rellenos). Rifugios alpinos 12-20 EUR. Pueblos pequeños más barato (10-16 EUR). Picnic con productos locales.",
+      "consejo_local": "Las Dolomitas requieren buen nivel físico: el senderismo no es turismo pasivo. Compra mapa detallado o descarga app AllTrails. Los refugios alpinos son experiencia única pero reserva con anticipación (julio-agosto). La Via Ferrata necesita algo de pericia pero es increíble.",
+      "plan_b_lluvia": "Días nublados no arruinan senderismo (menos vistas pero más atmósfera). Refugios interiores, pueblos. Evita Via Ferrata con lluvia.",
+      "keywords": [
+        "Dolomites",
+        "Dolomiti",
+        "Tre Cime",
+        "Fassa",
+        "Cortina",
+        "Via Ferrata",
+        "Trento",
+        "Altoadige"
+      ]
+    }
+  ]
+}

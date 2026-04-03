@@ -1,0 +1,332 @@
+{
+  "pais": "Estonia",
+  "codigo": "ee",
+  "destinos": [
+    {
+      "id": "tallinn",
+      "nombre": "Tallin",
+      "tipo": "ciudad | histórico",
+      "region": "Harjumaa (norte)",
+      "descripcion": "Capital medieval con casco antiguo amurallado declarado Patrimonio UNESCO, torres de defensa intactas y callejuelas adoquinadas. Centro tecnológico europeo con contraste entre historia y modernidad. Punto de partida obligatorio para cualquier viaje por Estonia.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Aeropuerto Internacional de Lennart Meri Tallinn (4 km), bus 2 o taxi 5-10 EUR. Desde Helsinki: ferry 2h (12-20 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Vanalinn o Kalamaja: 15-25 EUR/noche",
+        "medio": "Apartamento Airbnb zona antigua o Lasnamäe: 40-70 EUR/noche",
+        "comfort": "Hotel 4* en Vanalinn o Kumu: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por Vanalinn (casco antiguo) - gratis",
+        "Torres de defensa Kiek in de Kök y Neitsitorn (4 EUR)",
+        "Museo de Ocupación Eesti Okupatsioonimuuseum (6 EUR)",
+        "Panorámica desde Toompea (gratis)",
+        "Mercado Balti Jaam o Kalamaja street art (gratis)"
+      ],
+      "donde_comer": "Comida tradicional estonia: leib (pan negro), pirukad (empanadillas). Zona Vanalinn: Olde Hansa (15-25 EUR), Pegasus (10-15 EUR). Supermercados Coop/Selver para compra rápida.",
+      "consejo_local": "El casco antiguo es caro pero fascinante; come en bares locales fuera de Vanalinn. Compra el Tallinn Card para museos y transporte (24h: 15 EUR).",
+      "plan_b_lluvia": "Museo de Arte KUMU (7 EUR), Centro Tecnológico Energia Disco, cafés de Kalamaja.",
+      "keywords": [
+        "Talinn",
+        "Vanalinn",
+        "casco antiguo",
+        "ciudad vieja",
+        "Toompea",
+        "Kiek in de Kök"
+      ]
+    },
+    {
+      "id": "otepaa",
+      "nombre": "Otepää",
+      "tipo": "naturaleza | montaña",
+      "region": "Valga (sureste)",
+      "descripcion": "Centro de esquí en los Alpes de Estonia, con lagos glaciares y colinas suaves en invierno; en verano es base para senderismo y ciclismo. Destino perfecto para aventura outdoor sin masificación turística.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre-febrero (esquí), junio-agosto (senderismo)",
+      "como_llegar": "Desde Tallin: autobús 4h (10-15 EUR, empresas Lux Express o Tpilet). Coche alquilado recomendado.",
+      "donde_dormir": {
+        "mochilero": "Albergue Pühajärve Spa & Holiday Resort o guesthouses: 18-28 EUR/noche",
+        "medio": "Guesthouse rural tipo Otepää Puhkekeskus: 45-75 EUR/noche",
+        "comfort": "Pühajärve Spa Hotel: 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Esquí en Otepää Ski Resort (lift pass 25 EUR/día)",
+        "Senderismo Kääriku-Otepää (8 km, gratis)",
+        "Ciclismo mountain bike por senderos lacustres (gratis)",
+        "Baño en lago Pühajärv en verano (gratis)",
+        "Visita a reserva Helme bog para trekking (gratis)"
+      ],
+      "donde_comer": "Restaurantes en el pueblo: Pühajärve (platos estonia 12-18 EUR). Compra en Coopi Otepää para picnic.",
+      "consejo_local": "En invierno las pistas son modestas pero ideales para aprender; en verano el paisaje es verde y tranquilo. Alquila bici en el centro de esquí (8 EUR/día).",
+      "plan_b_lluvia": "Spa Pühajärve (15 EUR entrada), Otepää Kihelkonna Church (gratis).",
+      "keywords": [
+        "Otepää",
+        "esquí estonia",
+        "lagos",
+        "Pühajärv",
+        "montañas",
+        "aventura outdoor"
+      ]
+    },
+    {
+      "id": "parnu",
+      "nombre": "Pärnu",
+      "tipo": "playa | ciudad",
+      "region": "Pärnumaa (suroeste)",
+      "descripcion": "Balneario costero con playa de arena fina, arquitectura de madera pintoresca y atmósfera relajada. Principal estación de playa de Estonia con buenos restaurantes y vida nocturna moderada.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-agosto",
+      "como_llegar": "Desde Tallin: autobús 2.5h (10-15 EUR). Coche alquilado también es buena opción.",
+      "donde_dormir": {
+        "mochilero": "Albergue Pärnu Beach Hostel o guesthouses: 16-26 EUR/noche",
+        "medio": "Apartamento cerca playa o guesthouse de madera: 40-65 EUR/noche",
+        "comfort": "Hotel frente al mar tipo Estonia Pärnu o Ammende Villa: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño playa Pärnu Beach (gratis)",
+        "Paseo por arquitectura de madera en barrio antiguo (gratis)",
+        "Paseo por paseo marítimo (gratis)",
+        "Museo de Arte Pärnu (4 EUR)",
+        "Excursión a reserva Soomaa National Park (15 km, gratis)"
+      ],
+      "donde_comer": "Seafood fresco en zona de playa. Raeapteek (4-8 EUR para platos simples), Colde (15-20 EUR). Kiosko en playa para helados.",
+      "consejo_local": "Agosto es pico turístico; junio-julio mejor relación. La arquitectura de madera del siglo XIX es lo más especial; no busques playas mediterráneas, el Báltico es frío.",
+      "plan_b_lluvia": "Museo de Arte, Pärnu Pottery Studio, cafés de la zona histórica.",
+      "keywords": [
+        "Pärnu",
+        "playa estonia",
+        "balneario",
+        "arquitectura madera",
+        "Báltico",
+        "estación de playa"
+      ]
+    },
+    {
+      "id": "tartu",
+      "nombre": "Tartu",
+      "tipo": "ciudad | histórico",
+      "region": "Tartumaa (este)",
+      "descripcion": "Segunda ciudad de Estonia con universidad medieval, atmósfera juvenil y vibrante, rodeada de lagos y bosques. Centro académico con restaurantes buenos y vida cultural auténtica, menos turística que Tallin.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Tallin: autobús 2.5h (10-15 EUR). Tren también disponible (1h 45m).",
+      "donde_dormir": {
+        "mochilero": "Albergue Tartu Backpackers o student hostels: 14-22 EUR/noche",
+        "medio": "Guesthouse en centro: 35-60 EUR/noche",
+        "comfort": "Hotel Dorpat o Barcley: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Catedral de Tartu y Universidad (gratis visita exterior)",
+        "Museo de Historia Natural (3 EUR)",
+        "Paseo por Toomemägi (colina central) (gratis)",
+        "Museo de Arte KUMU Tartu (4 EUR)",
+        "Crucero lago Peipus (12 EUR, 2h)"
+      ],
+      "donde_comer": "Comida estonia auténtica y moderna. Restaurante Püssirohukelder (subterráneo medieval, 12-18 EUR), Draakon (pizza, 8-12 EUR). Zona Raekoja plats (plaza principal) con bares.",
+      "consejo_local": "Tartu es mucho más auténtica y asequible que Tallin. La vida universitaria la hace menos monumental pero más real. Los estudiantes estonian hablan excelente inglés.",
+      "plan_b_lluvia": "Museos de Universidad, Café literatura, galerías de arte local.",
+      "keywords": [
+        "Tartu",
+        "universidad estonia",
+        "ciudad medieval",
+        "Toomemägi",
+        "Peipus",
+        "centro académico"
+      ]
+    },
+    {
+      "id": "saaremaa",
+      "nombre": "Saaremaa (isla)",
+      "tipo": "isla | naturaleza",
+      "region": "Saare (oeste)",
+      "descripcion": "Isla más grande de Estonia con playas vírgenes, bosques densos y cráter meteorítico Kaali. Accesible en ferry, ofrece ciclismo excelente y desconexión total.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-agosto",
+      "como_llegar": "Desde Kuressaare (puerto principal): ferry desde Virtsu (Läänemaa) 30 min (6 EUR coche, 1 EUR peatón). Desde Tallin: coche alquilado + ferry (2.5h total).",
+      "donde_dormir": {
+        "mochilero": "Guesthouse rural o albergue en Kuressaare: 17-27 EUR/noche",
+        "medio": "Cottage de madera en isla: 50-80 EUR/noche",
+        "comfort": "Hoteles en Kuressaare tipo Kuressaare Spa Hotel: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Cráter Kaali y museo (4 EUR, 7 km desde Kuressaare)",
+        "Ciclismo por carreteras rurales (alquiler 8 EUR/día, gratis rutas)",
+        "Playa Angla (gratis)",
+        "Molinos de viento Angla (gratis vista exterior)",
+        "Castillo Kuressaare (5 EUR)"
+      ],
+      "donde_comer": "Comida casera estonia en Restaurante Georgica (10-15 EUR) o pide en guesthouses. Supermercados Coop en Kuressaare.",
+      "consejo_local": "Alquila bici: Saaremaa se descubre pedaleando. El cráter Kaali es impresionante pero busca el punto de observación correcto. Verano es fundamental.",
+      "plan_b_lluvia": "Castillo Kuressaare (museo interior), pueblos costeros cubiertos.",
+      "keywords": [
+        "Saaremaa",
+        "isla estonia",
+        "Kuressaare",
+        "Kaali",
+        "ciclismo",
+        "naturaleza virgen"
+      ]
+    },
+    {
+      "id": "muhu",
+      "nombre": "Muhu (isla)",
+      "tipo": "isla | naturaleza",
+      "region": "Läänemaa (oeste)",
+      "descripcion": "Isla pequeña y tranquila con puente a Saaremaa, pueblos auténticos sin turismo masivo, ideal para ciclismo lento y observación de aves.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio-agosto",
+      "como_llegar": "Desde Virtsu (Lääne): ferry 5 min (1 EUR peatón). Puente a Saaremaa, conectando ambas islas.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse rural Koguva: 18-28 EUR/noche",
+        "medio": "Cottage tradicional: 45-75 EUR/noche",
+        "comfort": "Spa resort Muhu Noa Spa: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Pueblo Koguva de madera (gratis, paseo 1h)",
+        "Ciclismo ruta Muhu (alquiler 7 EUR/día)",
+        "Iglesia Muhu (gratis)",
+        "Mirador Rahula (gratis)",
+        "Observación de aves zona pantanos (gratis)"
+      ],
+      "donde_comer": "Guesthouses ofrecen comidas caseras. Restaurante Muhu Noa Spa (caro, 18-25 EUR). Compra en pequeño Coop Koguva.",
+      "consejo_local": "Muhu es extremadamente tranquila; perfecta para un día desde Saaremaa. Los lugareños son amables pero poco hablan inglés. Infraestructura mínima.",
+      "plan_b_lluvia": "Pueblos cubiertos, iglesia, interior Muhu Noa Spa.",
+      "keywords": [
+        "Muhu",
+        "isla pequeña",
+        "Koguva",
+        "puente Saaremaa",
+        "ciclismo",
+        "tranquilidad"
+      ]
+    },
+    {
+      "id": "lahemaa",
+      "nombre": "Lahemaa National Park",
+      "tipo": "naturaleza | rural",
+      "region": "Läänemaa (norte)",
+      "descripcion": "Parque nacional con bosques de ensueño, pueblos costeros auténticos (Käsmu, Altja), senderos bien marcados. Escapada de naturaleza a 1h de Tallin sin abandoning la accesibilidad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-agosto (senderismo), invierno (bosque nieve)",
+      "como_llegar": "Desde Tallin: autobús (línea 154 a Käsmu) 1h (4-6 EUR) o coche alquilado. Centro de visitantes en Palmse.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Käsmu o Altja: 16-26 EUR/noche",
+        "medio": "Cottage rural o guesthouse con cocina: 40-70 EUR/noche",
+        "comfort": "Manor hotel Palmse Estate: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Pühtu-Käsmu (10 km, gratis)",
+        "Ruta costera Käsmu-Altja (5 km, gratis)",
+        "Centro de visitantes Lahemaa (3 EUR)",
+        "Pueblo Käsmu paseo (gratis)",
+        "Cascada Jägala (gratis)"
+      ],
+      "donde_comer": "Comidas caseras en guesthouses (8-12 EUR). Cafés pequeños en pueblos. Supermercado en Lüganuse.",
+      "consejo_local": "Käsmu es el pueblo más auténtico; Altja es más pequeño aún. Los senderos están bien mantenidos. Alquila bici en guesthouses (7 EUR/día).",
+      "plan_b_lluvia": "Centro de visitantes, pueblos cubiertos, camino bosque entre árboles.",
+      "keywords": [
+        "Lahemaa",
+        "parque nacional",
+        "Käsmu",
+        "Altja",
+        "bosque estonia",
+        "naturaleza norte"
+      ]
+    },
+    {
+      "id": "kuressaare",
+      "nombre": "Kuressaare",
+      "tipo": "ciudad | histórico",
+      "region": "Saare (isla Saaremaa)",
+      "descripcion": "Única ciudad de Saaremaa con castillo medieval y puerto pintoresco, aunque repetitivo con artículos anteriores. Incluido como punto de entrada a la isla.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "junio-agosto",
+      "como_llegar": "Vía ferry desde Virtsu (30 min, 6 EUR coche) o vuelo desde Tallin.",
+      "donde_dormir": {
+        "mochilero": "Albergue en ciudad: 16-24 EUR/noche",
+        "medio": "Guesthouse: 40-70 EUR/noche",
+        "comfort": "Kuressaare Spa Hotel: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo Kuressaare (5 EUR, 1h visita)",
+        "Puerto y paseo marítimo (gratis)",
+        "Museo de Arte Saaremaa (4 EUR)"
+      ],
+      "donde_comer": "Restaurante Georgica (10-15 EUR), cafés puerto.",
+      "consejo_local": "Es punto de paso más que destino. Dedica 2-3h y luego hacia Kaali o Angla.",
+      "plan_b_lluvia": "Castillo museo.",
+      "keywords": [
+        "Kuressaare",
+        "Saaremaa ciudad",
+        "castillo medieval",
+        "puerto",
+        "isla"
+      ]
+    },
+    {
+      "id": "soomaa",
+      "nombre": "Soomaa National Park",
+      "tipo": "naturaleza",
+      "region": "Pärnumaa (centro-sur)",
+      "descripcion": "Parque con pantanos únicos, ríos para canotaje y bosques húmedos. Destino para aventureros que buscan naturaleza genuina lejos de rutas turísticas, con inundaciones periódicas (5 veces al año) que hacen paisaje surreal.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre (canotaje); abril-mayo (inundaciones espectaculares)",
+      "como_llegar": "Desde Tallin: coche alquilado (2.5h) hacia Põitsa o Tooma. Sin transporte público directo.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse rural Soomaa près parque: 20-30 EUR/noche",
+        "medio": "Cottage Maleva Tourism: 50-80 EUR/noche",
+        "comfort": "Lodge Põitsa Puhkekodu: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Canotaje río Emajõgi o Halliste (30-50 EUR excursión guiada)",
+        "Senderismo pantano (senderos señalizados, gratis)",
+        "Observación de aves y flora (gratis)",
+        "Pasarelas de madera sobre pantano (gratis)"
+      ],
+      "donde_comer": "Guesthouses ofrecen comidas. Restaurante rural en Põitsa (10-15 EUR). Compra en Põitsa.",
+      "consejo_local": "Necesitas coche alquilado. El canotaje es la actividad principal. En inundaciones (primavera) el paisaje es increíble pero inaccesible.",
+      "plan_b_lluvia": "Canotaje (se hace lluvia o no), interior guesthouses.",
+      "keywords": [
+        "Soomaa",
+        "pantanos",
+        "canotaje",
+        "naturaleza húmeda",
+        "Põitsa",
+        "aventura"
+      ]
+    },
+    {
+      "id": "hiiumaa",
+      "nombre": "Hiiumaa (isla)",
+      "tipo": "isla | naturaleza",
+      "region": "Läänemaa (norte)",
+      "descripcion": "Isla más pequeña y aislada que Saaremaa con faro Kõpu y naturaleza virgen. Destino para viajeros verdaderamente independientes en busca de soledad y auténtica experiencia rural estonia.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio-agosto",
+      "como_llegar": "Ferry desde Haapsalu (Lääne) 1h 15m (1.50 EUR peatón, 15 EUR coche). Desde Tallin: autobús a Haapsalu (1.5h) + ferry.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse rural en Kärdla: 18-28 EUR/noche",
+        "medio": "Cottage con cocina: 45-75 EUR/noche",
+        "comfort": "Lodge eco-turismo: 85-135 EUR/noche"
+      },
+      "que_hacer": [
+        "Faro Kõpu (5 EUR acceso interior, vistas)",
+        "Ciclismo ruta circular (alquiler 8 EUR/día, gratis rutas)",
+        "Playas Käina Bay (gratis)",
+        "Pueblo Kärdla histórico (gratis paseo)",
+        "Senderismo bosque central (gratis)"
+      ],
+      "donde_comer": "Guesthouses ofrecen comidas caseras. Café local Kärdla. Compra en Coop Kärdla pequeño.",
+      "consejo_local": "Hiiumaa es intensamente tranquila. Infraestructura mínima. Alquila bici: la isla se descubre pedaleando. Lugareños hablan poco inglés pero son acogedores.",
+      "plan_b_lluvia": "Faro interior, pueblos, carreteras forestales cubiertas.",
+      "keywords": [
+        "Hiiumaa",
+        "isla remota",
+        "faro Kõpu",
+        "Kärdla",
+        "soledad estonia",
+        "naturaleza virgen"
+      ]
+    }
+  ]
+}

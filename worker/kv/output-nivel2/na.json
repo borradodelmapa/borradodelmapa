@@ -1,0 +1,329 @@
+{
+  "pais": "Namibia",
+  "codigo": "na",
+  "destinos": [
+    {
+      "id": "desierto-namib",
+      "nombre": "Desierto de Namib y Sossusvlei",
+      "tipo": "desierto",
+      "region": "Hardap, sur de Namibia",
+      "descripcion": "El desierto más antiguo del mundo con dunas de hasta 300 metros de altura. Sossusvlei es una cuenca de arcilla blanca rodeada de dunas rojas donde se forman lagos temporales tras las lluvias. Imprescindible para fotografía y treking en dunas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Windhoek: vuelo interno (1h, 80-150 EUR) o coche alquilado (5h, gasolina ~30 EUR). Entrada Namib-Naukluft: 80 NAD (~4 EUR)",
+      "donde_dormir": {
+        "mochilero": "Camping Sesriem o cabañas básicas: 15-30 EUR/noche",
+        "medio": "Lodges tipo Sossus Dune Lodge: 80-120 EUR/noche",
+        "comfort": "Lodges premium tipo Wilderness: 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Amanecer en Sossusvlei (entrada 6:30, 80 NAD)",
+        "Treking Big Daddy y Dead Vlei (gratis con entrada)",
+        "Excursión Deadvlei y Hiddenvlei (150-200 EUR con guía)",
+        "Atardecer en Elim Dune (gratis)"
+      ],
+      "donde_comer": "Restaurante Sesriem: carnes namibias 12-20 EUR. Comidas secas en lodges. Compra provisiones en Sesriem.",
+      "consejo_local": "Llega a Sossusvlei antes de las 7:00 para fotos sin multitudes. Las dunas cambian de color según la hora del día.",
+      "plan_b_lluvia": "Visita cañón de Sesriem o explora las zonas bajas del desierto en 4x4",
+      "keywords": [
+        "Sossusvlei",
+        "Deadvlei",
+        "Namib",
+        "dunas rojas",
+        "Sesriem",
+        "Big Daddy"
+      ]
+    },
+    {
+      "id": "etosha-parque-nacional",
+      "nombre": "Parque Nacional de Etosha",
+      "tipo": "naturaleza",
+      "region": "Kunene y Oshana, norte de Namibia",
+      "descripcion": "Uno de los mejores parques de fauna africana con depósitos salinos naturales donde se concentran animales. Ofrece avistamiento de leones, elefantes, cebras y ñus sin necesidad de guía oficial.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a octubre (animales concentrados en depósitos)",
+      "como_llegar": "Desde Windhoek: coche alquilado (5h hacia Namutoni, 400km) o excursión guiada 2-3 días (250-400 EUR). Entrada parque: 80 NAD/día",
+      "donde_dormir": {
+        "mochilero": "Campings internos Namutoni/Okaukuejo: 65 NAD (~3 EUR) + alojamiento 60-120 NAD",
+        "medio": "Alojos en puertas: Namutoni Rest Camp (80-150 EUR/noche)",
+        "comfort": "Lodges privados Onguma o Etosha Aoba: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari autónomo en vehículo (gasolina + entrada)",
+        "Game drives nocturnos desde campings (gratis)",
+        "Avistamiento en depósitos salinos de Okaukuejo y Namutoni (gratis)",
+        "Recorrido de 120km por Oshakati Loop"
+      ],
+      "donde_comer": "Restaurantes en Rest Camps: carnes asadas 10-18 EUR. Compra en Outjo o trae provisiones.",
+      "consejo_local": "Los depósitos salinos al atardecer garantizan avistamientos. No necesitas guía: maneja despacio por los caminos principales.",
+      "plan_b_lluvia": "Los animales se dispersan pero los depósitos siguen atractivos; visita museos en Tsumeb o Outjo",
+      "keywords": [
+        "Etosha",
+        "safari",
+        "leones",
+        "elefantes",
+        "Okaukuejo",
+        "Namutoni",
+        "depósito salino"
+      ]
+    },
+    {
+      "id": "windhoek-capital",
+      "nombre": "Windhoek",
+      "tipo": "ciudad",
+      "region": "Khomas, centro de Namibia",
+      "descripcion": "Capital y puerta de entrada a Namibia con arquitectura colonial alemana mezcla de moderno. Punto logístico para alquilar coches, obtener información y vivir la vida urbana namibia.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Aeropuerto internacional (30km): minibús/taxi 150 NAD (~8 EUR, 45 min)",
+      "donde_dormir": {
+        "mochilero": "Backpackers tipo Chameleon Backpackers: 25-40 EUR/noche",
+        "medio": "Guesthouses Klein Windhoek: 60-100 EUR/noche",
+        "comfort": "Hoteles Windhoek Country Club o Hilton: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Christuskirche (iglesia luterana, entrada gratis)",
+        "Parlamento de Namibia (visitas guiadas gratis, previa solicitud)",
+        "Museo Nacional de Namibia (60 NAD, ~3 EUR)",
+        "Barrio de Klein Windhoek (tiendas, galerías, vida local)"
+      ],
+      "donde_comer": "Joe's Beerhouse (carnes, 15-25 EUR), Craft Brewery (local, 8-12 EUR). Supermercados Pick n Pay para provisiones.",
+      "consejo_local": "Alquila coche aquí: Avis, Hertz, Europcar ofrecen precios desde 40 EUR/día. Ten cuidado en barrios pobres por la noche.",
+      "plan_b_lluvia": "Museos, cafés, compras en Windhoek Shopping Mall",
+      "keywords": [
+        "Windhoek",
+        "capital namibia",
+        "Christuskirche",
+        "Klein Windhoek",
+        "Katutura",
+        "independencia"
+      ]
+    },
+    {
+      "id": "canyon-fish-river",
+      "nombre": "Cañón del río Fish",
+      "tipo": "montaña",
+      "region": "Karas, sur de Namibia",
+      "descripcion": "Segunda garganta más grande del mundo (162km) con paredes de 550 metros. Ofrece treking multidia o caminatas cortas con vistas espectaculares del río y formaciones geológicas únicas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Windhoek: coche alquilado hacia Ai-Ais (6h, 450km) o excursión 2-3 días (300-400 EUR). Entrada: 60 NAD/día",
+      "donde_dormir": {
+        "mochilero": "Camping Ai-Ais: 50 NAD + alojamiento simple 80 NAD",
+        "medio": "Ai-Ais Resort: 120-150 EUR/noche",
+        "comfort": "Ai-Ais Hot Springs Resort: 180-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Caminata Main Viewpoint (90 min, gratis)",
+        "Hell's Corner trek (2h, gratis)",
+        "Treking multidia (5-6 días, permiso + 60 NAD/día)",
+        "Piscinas termales Ai-Ais (entrada 30 NAD)"
+      ],
+      "donde_comer": "Restaurante Ai-Ais Resort: 12-20 EUR. Trae provisiones de Keetmanshoop.",
+      "consejo_local": "El treking completo de 5 días requiere permiso y reserva previa. Las aguas termales compensan cualquier lluvia.",
+      "plan_b_lluvia": "Camina viewpoints superiores o relájate en las aguas termales",
+      "keywords": [
+        "Fish River Canyon",
+        "Ai-Ais",
+        "garganta",
+        "treking",
+        "Karas",
+        "aguas termales"
+      ]
+    },
+    {
+      "id": "swakopmund-costa",
+      "nombre": "Swakopmund",
+      "tipo": "playa",
+      "region": "Erongo, costa oeste",
+      "descripcion": "Puerto colonial alemán en el Océano Atlántico con arquitectura vintage, neblina marina y acceso a Skeleton Coast. Punto base para actividades náuticas, tours de fauna marina y exploración de desierto costero.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre a noviembre",
+      "como_llegar": "Desde Windhoek: coche alquilado (3.5h, 370km, 40 EUR gasolina) o autobús (4h, 50 EUR, Intercape)",
+      "donde_dormir": {
+        "mochilero": "Backpackers Swakopmund: 25-35 EUR/noche",
+        "medio": "Guesthouses tipo Cornerstone: 70-110 EUR/noche",
+        "comfort": "Hoteles The Strand o Swakopmund Hotel: 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour de focas y delfines (120-150 EUR, 3h)",
+        "Paseo por el muelle y malecón (gratis)",
+        "Museos: Maritime Museum (30 NAD) y Shell Museum (20 NAD)",
+        "Quad biking en dunas (80-120 EUR, 2h)",
+        "Visita Walvis Bay Lagoon (birds, 150 EUR)"
+      ],
+      "donde_comer": "The Pelican (seafood, 15-25 EUR), Kücki's Pub (burgers, 10-15 EUR). Mercado central para pan fresco.",
+      "consejo_local": "Octubre puede ser muy ventoso. El turismo de focas beneficia la conservación pero respeta distancias.",
+      "plan_b_lluvia": "Museos, spas, cafés con vista al mar",
+      "keywords": [
+        "Swakopmund",
+        "costa namibia",
+        "Skeleton Coast",
+        "Walvis Bay",
+        "delfines",
+        "focas",
+        "Atlantico"
+      ]
+    },
+    {
+      "id": "skeleton-coast",
+      "nombre": "Skeleton Coast",
+      "tipo": "naturaleza",
+      "region": "Kunene, costa norte",
+      "descripcion": "Una de las costas más desoladas de África donde carcasas de barcos oxidados yacen en dunas de arena. Acceso solo con guía oficial; parque remoto con fauna marina y paisaje post-apocalíptico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Swakopmund: excursión aérea (vuelo 1h + guía, 400-600 EUR) o terrestre con operador (2-3 días, 600+ EUR). Se requiere permiso",
+      "donde_dormir": {
+        "mochilero": "Camping Mopane: 40-60 EUR/noche (en tours)",
+        "medio": "Lodges campamento Skeleton Coast Camp: 150-200 EUR/noche",
+        "comfort": "Skeleton Coast Lodge: 250-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseos guidados por restos de naufragios (incluido en tour)",
+        "Avistamiento de focas y hienas (gratis en tour)",
+        "Fotografía de paisaje desértico (gratis)",
+        "Vuelos panorámicos (400+ EUR)"
+      ],
+      "donde_comer": "Alojamiento incluye comidas. Trae snacks adicionales.",
+      "consejo_local": "Solo viaja con operadores registrados. La costa es peligrosa sin guía y acceso requiere permiso especial.",
+      "plan_b_lluvia": "Rara lluvia aquí; tours continúan con protección",
+      "keywords": [
+        "Skeleton Coast",
+        "naufragios",
+        "Kunene",
+        "Spitzkoppe",
+        "Cape Cross",
+        "desolado"
+      ]
+    },
+    {
+      "id": "spitzkoppe-montaña",
+      "nombre": "Spitzkoppe",
+      "tipo": "montaña",
+      "region": "Erongo, desierto central",
+      "descripcion": "Formación rocosa con 1728 metros de altura, a menudo llamada 'Matterhorn de Namibia'. Ofrece treking, escalada y vistas 360º del desierto desde cumbres accesibles.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Swakopmund (1.5h) o Windhoek (3h): coche alquilado. Entrada: 50 NAD (~2.50 EUR)",
+      "donde_dormir": {
+        "mochilero": "Camping Spitzkoppe: 50 NAD/noche",
+        "medio": "Spitzkoppe Restcamp: 80-120 EUR/noche",
+        "comfort": "Lodges cercanos en Erongo: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Treking Spitzkoppe Dome (2.5h, gratis)",
+        "Escalada Big Mama (guía opcional, 100 EUR)",
+        "Piscina natural Aba Huab (gratis)",
+        "Cuevas con arte rupestre damara (gratis con guía local)"
+      ],
+      "donde_comer": "Restaurante campamento: 12-18 EUR. Trae provisiones de Usakos.",
+      "consejo_local": "El treking temprano es mejor; lleva agua abundante (2-3 litros). Sin agua corriente en campings.",
+      "plan_b_lluvia": "Las rocas drenan rápido. Camina después de lluvia para paisaje más verde.",
+      "keywords": [
+        "Spitzkoppe",
+        "Matterhorn namibia",
+        "treking roca",
+        "Erongo",
+        "damara"
+      ]
+    },
+    {
+      "id": "damaraland-region",
+      "nombre": "Damaraland y Spitzkoppe",
+      "tipo": "rural",
+      "region": "Erongo y Kunene, noroeste",
+      "descripcion": "Región montañosa y semiárida con paisajes rojos, aldeas damara tradicionales y conexión cultural. Acceso a Twyfelfontein, Organum y rutas alternativas al circuito principal.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Windhoek: coche (5h, 450km) hacia Omaruru/Damaraland. Tours operados desde Swakopmund/Windhoek (3 días, 400-600 EUR)",
+      "donde_dormir": {
+        "mochilero": "Campings rurales: 30-50 EUR/noche",
+        "medio": "Guesthouses tipo Damara Mopane: 80-120 EUR/noche",
+        "comfort": "Lodges Mowani Mountain Camp: 200-280 EUR/noche"
+      },
+      "que_fazer": [
+        "Twyfelfontein (arte rupestre, 60 NAD entrada, guía 80 NAD)",
+        "Organum (formación rocosa única, gratis)",
+        "Vingerklip (roca en forma de dedo, entrada 20 NAD)",
+        "Encuentros con comunidades damara (tours 150-200 EUR)"
+      ],
+      "donde_comer": "Restaurantes campamentos: 10-18 EUR. Compras en Khorixas o Omaruru.",
+      "consejo_local": "Contrata guía damara local en aldeas; los beneficios van a las comunidades y obtendrás perspectiva auténtica.",
+      "plan_b_lluvia": "Los cañones y sitios cubiertos siguen siendo accesibles",
+      "keywords": [
+        "Damaraland",
+        "Twyfelfontein",
+        "Organum",
+        "Vingerklip",
+        "damara",
+        "arte rupestre",
+        "Kunene"
+      ]
+    },
+    {
+      "id": "caprivi-strip-reservas",
+      "nombre": "Franja de Caprivi y Reservas de Caza",
+      "tipo": "naturaleza",
+      "region": "Zambezi, noreste de Namibia",
+      "descripcion": "Región ribereña única en el río Zambezi con ecosistema diferente al resto del país: vegetación verde, agua permanente y fauna acuática. Acceso a Parque Bwabwata y Mahango con menos turismo que Etosha.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Windhoek: vuelo a Katima Mulilo (1.5h, 150 EUR) o coche (10h hacia Rundu, complejo). Coche alquilado desde Katima",
+      "donde_dormir": {
+        "mochilero": "Campings Bwabwata: 40-60 EUR/noche",
+        "medio": "Lodges Kingfisher: 90-150 EUR/noche",
+        "comfort": "Zambezi Lodge: 200-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari Bwabwata National Park (self-drive, entrada 80 NAD/día)",
+        "Crucero río Zambezi (150-200 EUR, 2-3h)",
+        "Pesca en Caprivi Strip (200+ EUR con guía)",
+        "Visita aldeas tradicionales (100-150 EUR con operador)"
+      ],
+      "donde_comer": "Lodges y restaurantes Katima Mulilo: 12-20 EUR. Mercado local para provisiones.",
+      "consejo_local": "Es la zona más verde y menos turística de Namibia. Los ríos atraen hipopótamos y cocodrilos.",
+      "plan_b_lluvia": "Safari continúa; animales más activos con humedad. Cruceros dependientes del nivel de agua.",
+      "keywords": [
+        "Caprivi Strip",
+        "Zambezi",
+        "Bwabwata",
+        "Katima Mulilo",
+        "Mahango",
+        "hipopotamos"
+      ]
+    },
+    {
+      "id": "keetmanshoop-sudoeste",
+      "nombre": "Keetmanshoop y Bosque de Árboles de Carcaj",
+      "tipo": "naturaleza",
+      "region": "Karas, sur",
+      "descripcion": "Pequeña ciudad colonial punto de entrada al Fish River Canyon. Bosque de árboles de carcaj (Quiver Tree Forest) es un sitio único con formaciones vegetales ancestrales y vistas desérticas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Windhoek: coche (7h, 500km) hacia sur. Desde Sossusvlei (3h). Autobús (7-8h, 60 EUR)",
+      "donde_dormir": {
+        "mochilero": "Camping Keetmanshoop: 40-60 EUR/noche",
+        "medio": "Guesthouses: 60-100 EUR/noche",
+        "comfort": "Protea Hotel o Quiver Tree: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Quiver Tree Forest & Kokerboom (entrada 50 NAD, atardecer es mejor)",
+        "Giant's Playground (rocas balanceadas, entrada 40 NAD)",
+        "Paseo por centro histórico Keetmanshoop (gratis)",
+        "Visita museo local (20 NAD)"
+      ],
+      "donde_comer": "Protea Hotel: carnes 12-20 EUR. Compras en centro comercial.",
+      "consejo_local": "El atardecer en Quiver Tree Forest es magnífico; llega 1h antes del anochecer. Los árboles de carcaj son únicos a Namibia.",
+      "plan_b_lluvia": "Paisaje todavía accesible; raro que llueva en esta zona",
+      "keywords": [
+        "Keetmanshoop",
+        "Quiver Tree Forest",
+        "Kokerboom",
+        "Giant's Playground",
+        "Karas",
+        "sur namibia"
+      ]
+    }
+  ]
+}

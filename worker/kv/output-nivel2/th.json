@@ -1,0 +1,352 @@
+{
+  "pais": "Tailandia",
+  "codigo": "th",
+  "destinos": [
+    {
+      "id": "bangkok",
+      "nombre": "Bangkok",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital bulliciosa con templos dorados, mercados flotantes y vida nocturna intensa. Punto de entrada obligatorio para la mayoría de viajeros independientes. Mezcla caótica de tradición y modernidad en cada esquina.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Aeropuerto Suvarnabhumi (llegada principal): 30 km, tren express o autobús 1-2 horas, 3-8 EUR",
+      "donde_dormir": {
+        "mochilero": "Dormitorio en Khao San Road o Silom: 8-15 EUR/noche",
+        "medio": "Hotel 3 estrellas en Sukhumvit o Riverside: 25-50 EUR/noche",
+        "comfort": "Hotel 4-5 estrellas con piscina: 80-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Templo del Buda de Esmeralda (Wat Phra Kaew) - gratis entrada 200 THB",
+        "Mercado flotante de Damnoen Saduak - 40 EUR tour + barca",
+        "Palacio Real - 400 THB entrada",
+        "Wat Pho (templo del Buda reclinado) - 100 THB",
+        "Masaje tailandés tradicional en Wat Pho - 200-300 THB/hora"
+      ],
+      "donde_comer": "Pad thai y sopa Tom Yum en puestos callejeros (1-3 EUR), mercados nocturnos como Yaowarat, restaurantes de comida rápida en Silom o Sukhumvit",
+      "consejo_local": "Llega a los templos antes de las 8 AM para evitar multitudes y el calor. El BTS (tren elevado) es más rápido que el tráfico: compra tarjeta Rabbit Card",
+      "plan_b_lluvia": "Museos (Museo Nacional), centros comerciales gigantes (Siam Paragon), cines, spa",
+      "keywords": [
+        "Bangkok",
+        "BKK",
+        "Krung Thep",
+        "Khao San",
+        "Silom",
+        "Sukhumvit",
+        "Chinatown",
+        "Thonburi",
+        "Grand Palace",
+        "Wat Arun"
+      ]
+    },
+    {
+      "id": "chiang-mai",
+      "nombre": "Chiang Mai",
+      "tipo": "ciudad",
+      "region": "Norte",
+      "descripcion": "Segunda ciudad más importante, centro cultural del norte con cientos de templos antiguos y ambiente más relajado que Bangkok. Punto de partida para trekking, santuarios de elefantes y pueblos montañosos.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bangkok: vuelo 1 hora (25-60 EUR) o autobús nocturno 11-12 horas (15-25 EUR)",
+      "donde_dormir": {
+        "mochilero": "Albergue en Casco Antiguo: 10-18 EUR/noche",
+        "medio": "Hotel 3 estrellas en Nimmanhaemin: 20-40 EUR/noche",
+        "comfort": "Resort con piscina en Doi Saket: 60-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Wat Phra Singh y Wat Chedi Luang en el casco antiguo - gratis/100 THB",
+        "Trekking a pueblos Hmong o Karen - 30-50 EUR día completo",
+        "Santuario de elefantes (Elephant Nature Park) - 70 EUR",
+        "Cooking class tailandés - 20-25 EUR",
+        "Mercado nocturno de Warorot - gratis entrada"
+      ],
+      "donde_comer": "Khao soi (fideos en curry de Chiang Mai), sai oua (salchicha local), puestos en Night Bazaar, restaurantes de comida lenta en Nimman (2-6 EUR)",
+      "consejo_local": "Renta una moto por 5-8 EUR/día para moverte a tu ritmo, pero maneja con cuidado. El trekking con elefantes es controvertido: elige operadores responsables",
+      "plan_b_lluvia": "Templos bajo techo, museos de textiles, clases de cocina cubierta, spas",
+      "keywords": [
+        "Chiang Mai",
+        "CMai",
+        "CNX",
+        "Casco Antiguo",
+        "Old City",
+        "Nimman",
+        "Nimmanhaemin",
+        "Doi Saket",
+        "Sunday Market"
+      ]
+    },
+    {
+      "id": "krabi",
+      "nombre": "Krabi",
+      "tipo": "isla",
+      "region": "Sur",
+      "descripcion": "Puerta de entrada a las islas andamán con playas de arena blanca y acantilados de caliza dramaticos. Base ideal para islas Ko Phi Phi y Ko Lanta, con escenas de escalada en roca y snorkel.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Desde Bangkok: vuelo 2.5 horas (40-80 EUR) o autobús + barco 18 horas (30-40 EUR)",
+      "donde_dormir": {
+        "mochilero": "Bungaló en Ao Nang: 12-20 EUR/noche",
+        "medio": "Hotel 3 estrellas en Krabi Town o playa: 30-60 EUR/noche",
+        "comfort": "Resort con playa privada: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Escalada en roca (Rock Climbing Railay) - 30-50 EUR",
+        "Excursión a Ko Phi Phi Leh (Playa Maya) - 25-35 EUR tour día",
+        "Railay Beach (solo accesible por barco) - 5 EUR barco + entrada gratis",
+        "Snorkel en Ko Ha (4 islas) - 35 EUR",
+        "Playa Emerald Pool y Hot Spring - 25 EUR tour"
+      ],
+      "donde_comer": "Mariscos frescos en Ao Nang (6-15 EUR), pad thai en puestos callejeros (1.50 EUR), restaurantes tailandeses en Krabi Town",
+      "consejo_local": "Ao Nang es mejor que Railay para dormir (más barato, más opciones), aunque Railay merece una excursión de día. Las corrientes pueden ser fuertes: nada en zonas vigiladas",
+      "plan_b_lluvia": "Spas, cines en Krabi Town, tiendas, museos locales",
+      "keywords": [
+        "Krabi",
+        "Ao Nang",
+        "Railay",
+        "Ko Phi Phi",
+        "Emerald Pool",
+        "Hot Spring",
+        "Andaman",
+        "Playa Maya"
+      ]
+    },
+    {
+      "id": "phuket",
+      "nombre": "Phuket",
+      "tipo": "isla",
+      "region": "Sur",
+      "descripcion": "Isla más grande y desarrollada del sur con infraestructura turística completa. Playas variadas desde Patong (fiesta) hasta Karon y Kamala (más tranquilas), buena base para Similán Islands.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Desde Bangkok: vuelo 2 horas (30-70 EUR) o autobús 13 horas (20-30 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Karon: 12-18 EUR/noche",
+        "medio": "Hotel 3 estrellas en Kamala: 25-50 EUR/noche",
+        "comfort": "Resort beachfront en Karon: 80-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Big Buddha (Phra Muang Saketyataram) - 100 THB entrada",
+        "Snorkel islas Similán (Ao Phuket) - 45-60 EUR liveaboard",
+        "Patong Beach paseo y vida nocturna - gratis",
+        "Faro de Promthep - 50 THB entrada",
+        "Fantasea show tailandés - 70-90 EUR"
+      ],
+      "donde_comer": "Mariscos en restaurantes frente al mar (10-25 EUR), street food en mercados (2-4 EUR), Karon tiene opciones más auténticas que Patong",
+      "consejo_local": "Evita Patong si buscas tranquilidad: demasiado turístico y caro. Karon y Kamala son mejores para viajeros independientes. El tráfico es caótico: usa Grab (app de taxi)",
+      "plan_b_lluvia": "Acuarios, museos tailandeses, shoppings, spas",
+      "keywords": [
+        "Phuket",
+        "HKT",
+        "Patong Beach",
+        "Karon",
+        "Kamala",
+        "Similán Islands",
+        "Big Buddha",
+        "Promthep Cape"
+      ]
+    },
+    {
+      "id": "sukhothai",
+      "nombre": "Sukhothai",
+      "tipo": "histórico",
+      "region": "Centro-Norte",
+      "descripcion": "Antigua capital tailandesa del siglo 13 con ruinas de templos impresionantes en Parque Histórico bien preservado. Destino menos concurrido pero culturalmente significativo, perfecto para ciclismo entre ruinas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Chiang Mai: autobús 5-6 horas (10-15 EUR) o desde Bangkok: autobús 6-7 horas (12-18 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en pueblo: 10-15 EUR/noche",
+        "medio": "Hotel 3 estrellas: 20-35 EUR/noche",
+        "comfort": "Resort con jardin: 50-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Parque Histórico de Sukhothai (100 THB bicicleta incluida) - 200 THB entrada",
+        "Ciclismo entre templos antiguos - gratis (con entrada parque)",
+        "Wat Mahathat - 200 THB entrada parque",
+        "Piscina pública Si Satchanalai (cascada Sai Yok) - gratis",
+        "Museos locales - 100 THB"
+      ],
+      "donde_comer": "Fideos locales, pollo a la brasa, restaurantes humildes en el pueblo principal (2-4 EUR), sin gastronomía cara",
+      "consejo_local": "Renta bicicleta en el parque: es la mejor forma de explorar. Llega temprano (7 AM) para evitar calor y evitar multitudes de tours. El pueblo es pequeño pero hay suficiente para dormir",
+      "plan_b_lluvia": "Museos cubiertos, templos con techo, exploración de pueblo",
+      "keywords": [
+        "Sukhothai",
+        "Historical Park",
+        "Parque Historico",
+        "Wat Mahathat",
+        "Ancient Capital",
+        "Cycling"
+      ]
+    },
+    {
+      "id": "ayutthaya",
+      "nombre": "Ayutthaya",
+      "tipo": "histórico",
+      "region": "Centro",
+      "descripcion": "Antigua capital (1351-1767) con templos en ruinas a orillas del río. Fácilmente accesible como día desde Bangkok, aunque merece dormir una noche para explorar sin prisas y ver puesta de sol en templos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bangkok: tren local 1.5-2 horas (1-2 EUR) o minibus 1 hora (3-5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Albergue o guesthouse: 12-18 EUR/noche",
+        "medio": "Hotel 3 estrellas: 20-40 EUR/noche",
+        "comfort": "Resort riverside: 60-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Wat Phra Si Sanphet - 50 THB",
+        "Templo Mahatat con Buda entre raíces de árbol - 50 THB",
+        "Recorrido en bicicleta o auto-rickshaw - 20-30 EUR tour",
+        "Paseo en bote por el río Chao Phraya - gratis desde orillas",
+        "Palacio Real de Bang Pa In - 100 THB"
+      ],
+      "donde_comer": "Arroz con mango pegajoso (tradicional), sopa Tom Yum, restaurantes en zona turística (3-8 EUR), mercados locales",
+      "consejo_local": "Alquila bicicleta (2 EUR/día) para moverte entre templos a tu ritmo. La mayoría de tours son innecesarios. Evita mediodía: el calor es brutal",
+      "plan_b_lluvia": "Museos, templos con techo, paseos cubiertos",
+      "keywords": [
+        "Ayutthaya",
+        "Ancient Siam",
+        "Wat Phra Si Sanphet",
+        "Bang Pa In",
+        "Mahatat",
+        "River Kwai"
+      ]
+    },
+    {
+      "id": "koh-samui",
+      "nombre": "Koh Samui",
+      "tipo": "isla",
+      "region": "Golfo de Tailandia",
+      "descripcion": "Isla grande y desarrollada con playas de arena blanca y vida nocturna activa. Más caro que el sur de Andamán pero buena infraestructura y acceso a islas menores (Koh Tao, Koh Phangan).",
+      "dias_recomendados": 2,
+      "mejor_epoca": "agosto a octubre, diciembre a abril",
+      "como_llegar": "Desde Bangkok: vuelo 1 hora (30-80 EUR) o ferry desde Surat Thani 5-6 horas (10-15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Bungaló en Maenam o Bophut: 15-22 EUR/noche",
+        "medio": "Hotel 3 estrellas: 30-60 EUR/noche",
+        "comfort": "Resort beachfront: 90-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Gran Buda dorado (Wat Phra Yai) - 20 THB entrada",
+        "Playas: Chaweng (fiesta), Lamai (tranquila), Maenam (mochileros) - gratis",
+        "Excursión a Koh Tao (snorkel buzo) - 50-80 EUR",
+        "Excursión a Koh Phangan (Full Moon Party) - 15 EUR ferry + 15 EUR entrada",
+        "Spa y masaje tailandés - 150-300 THB/hora"
+      ],
+      "donde_comer": "Mariscos en beachfront (8-20 EUR), street food en Fisherman's Village (2-4 EUR), restaurantes internacionales en Chaweng",
+      "consejo_local": "Maenam es el mejor compromiso: playas decentes sin la locura turística de Chaweng. La vida nocturna es cara aquí: si buscas botellones, ve a Koh Phangan. Renta moto (5-8 EUR/día)",
+      "plan_b_lluvia": "Spas, templos, compras, cines",
+      "keywords": [
+        "Koh Samui",
+        "Samui",
+        "Chaweng",
+        "Lamai",
+        "Maenam",
+        "Big Buddha",
+        "Koh Tao",
+        "Koh Phangan",
+        "Full Moon Party"
+      ]
+    },
+    {
+      "id": "pai",
+      "nombre": "Pai",
+      "tipo": "rural",
+      "region": "Norte",
+      "descripcion": "Pueblo montañoso bohemio en el norte con atmósfera hippie, waterfalls cercanas y ambiente relajado. Atrae a mochileros jóvenes y viajeros buscando escapar del turismo masivo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Chiang Mai: songthaew (minibus compartido) 3-4 horas (6-8 EUR) por carretera con curvas",
+      "donde_dormir": {
+        "mochilero": "Bungaló o dormitorio: 10-15 EUR/noche",
+        "medio": "Guesthouse 3 estrellas: 18-35 EUR/noche",
+        "comfort": "Resort con piscina: 50-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Pai Waterfall (cascada) - 20 THB entrada",
+        "Cycling o motos alquiladas a waterfalls cercanas - gratis",
+        "Templo en cueva (Wat Pam Kok) - gratis",
+        "Bamboo bridge al atardecer - gratis",
+        "Pubs y vida nocturna en Walking Street - gratis entrada"
+      ],
+      "donde_comer": "Comida vegana y saludable (herencia hippie), cafés con WiFi, street food tailandés básico (2-5 EUR), pocas opciones gourmet",
+      "consejo_local": "El viaje desde Chiang Mai es largo con curvas cerradas: algunos viajeros se marean. Los mini-buses nocturnos son más baratos (4 EUR) pero incómodos. El ambiente es joven y relajado: acepta el ritmo lento",
+      "plan_b_lluvia": "Cafés cubiertos, spas, museos locales, películas en cafés",
+      "keywords": [
+        "Pai",
+        "Waterfall",
+        "Mae Hong Son Loop",
+        "Bohemian",
+        "Hippie Town",
+        "Bamboo Bridge"
+      ]
+    },
+    {
+      "id": "koh-lanta",
+      "nombre": "Koh Lanta",
+      "tipo": "isla",
+      "region": "Sur (Krabi)",
+      "descripcion": "Isla más relajada y menos desarrollada que Krabi continental, con playas tranquilas y ambiente slow travel. Ideal para buzo, snorkel y desconexión, accesible por ferry desde Krabi.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a mayo",
+      "como_llegar": "Desde Krabi: minibus + ferry 2-3 horas (10-15 EUR) o desde Phuket: ferry 3 horas (15-20 EUR)",
+      "donde_dormir": {
+        "mochilero": "Bungaló en Klong Dao: 12-18 EUR/noche",
+        "medio": "Guesthouse 3 estrellas: 25-45 EUR/noche",
+        "comfort": "Resort con piscina: 70-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas vírgenes: Klong Dao, Khlong Khong - gratis",
+        "Excursión a 4 islas (snorkel) - 25-35 EUR",
+        "Buceo en islas cercanas - 50-70 EUR",
+        "Faro al atardecer (Ko Lanta Yai) - gratis",
+        "Kayak entre manglares - 30-40 EUR"
+      ],
+      "donde_comer": "Mariscos frescos en beachfront (8-15 EUR), restaurantes tailandeses simples (3-6 EUR), pocos lujos gastronómicos",
+      "consejo_local": "No hay ATM: trae efectivo. El ferry nocturno es barato pero tardío: mejor hacer ferry de día. El ambiente es lento y relajado: perfecto para descansar",
+      "plan_b_lluvia": "Templos, museos, spas, paseos cubiertos en pueblo principal",
+      "keywords": [
+        "Koh Lanta",
+        "Ko Lanta",
+        "Klong Dao",
+        "Khlong Khong",
+        "Lanta Old Town",
+        "Dive Site",
+        "Mangrove Kayak"
+      ]
+    },
+    {
+      "id": "isaan-loei",
+      "nombre": "Loei (puerta a Isaan)",
+      "tipo": "naturaleza",
+      "region": "Noreste (Isaan)",
+      "descripcion": "Puerta al región Isaan desconocida y auténtica del noreste tailandés. Montañas, parques nacionales, pueblos locales sin turismo de masas. Destino para viajeros aventureros que buscan fuera de rutas principales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Bangkok: autobús nocturno 10 horas (15-25 EUR) o vuelo a Udon Thani + autobús",
+      "donde_dormir": {
+        "mochilero": "Guesthouse: 10-15 EUR/noche",
+        "medio": "Hotel 3 estrellas: 20-35 EUR/noche",
+        "comfort": "Resort con jardín: 40-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Phu Kradueng National Park (senderismo 7 km) - 200 THB entrada + 100 THB auto",
+        "Erawan Waterfall (cascada) - 100 THB",
+        "Phu Soi Dao (mirador montaña) - 200 THB",
+        "Mercado local - gratis",
+        "Templos simples del pueblo - gratis"
+      ],
+      "donde_comer": "Sai oua (salchicha Isaan), somtam (ensalada de papaya picante), arroz pegajoso, comida callejera básica (1-3 EUR), sin opciones turísticas",
+      "consejo_local": "Esto NO es Chiang Mai: es Tailandia real sin turismo. Los locales hablan menos inglés. Los transportes son básicos pero funcionan. El paisaje es más salvaje",
+      "plan_b_lluvia": "Museos locales pequeños, templos, cafés",
+      "keywords": [
+        "Loei",
+        "Isaan",
+        "Phu Kradueng",
+        "Noreste Tailandia",
+        "Erawan Waterfall",
+        "Phu Soi Dao",
+        "Autentico"
+      ]
+    }
+  ]
+}

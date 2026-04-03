@@ -1,0 +1,357 @@
+{
+  "pais": "China",
+  "codigo": "cn",
+  "destinos": [
+    {
+      "id": "beijing",
+      "nombre": "Beijing",
+      "tipo": "histórico",
+      "region": "Norte - Municipio de Beijing",
+      "descripcion": "Capital política y cultural de China con la Gran Muralla, la Ciudad Prohibida y el Palacio de Verano. Punto de entrada obligatorio para entender la historia imperial y moderna china. Centro de transportes con conexiones a todo el país.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "septiembre-octubre, abril-mayo",
+      "como_llegar": "Capital principal, aeropuerto internacional Beijing Capital. Vuelos desde Europa 10-14h, 500-1200 EUR",
+      "donde_dormir": {
+        "mochilero": "Hostales en Dongcheng o Xicheng: 12-18 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas en Chaoyang: 40-70 EUR/noche",
+        "comfort": "Hoteles 5 estrellas cerca de Forbidden City: 150-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Gran Muralla en Badaling o Jinshanling (30 EUR, 2-3h en transporte)",
+        "Ciudad Prohibida (14 EUR)",
+        "Palacio de Verano (10 EUR)",
+        "Templo del Cielo (5 EUR)",
+        "Mercado de Panjiayuan - antigüedades (gratis entrada)",
+        "Hutongs en bicicleta (15-25 EUR tour)"
+      ],
+      "donde_comer": "Pato de Pekín en Quanjude (12-20 EUR), fideos en callejuelas de hutongs (2-4 EUR). Zona: Wangfujing para turistas, Houhai para locales.",
+      "consejo_local": "Descarga la app WeChat o Alipay antes de llegar; muchos lugares no aceptan efectivo. El metro es rápido y cuesta 2-3 CNY (0.25-0.40 EUR) por viaje.",
+      "plan_b_lluvia": "Museos (Museo Nacional, Museo de la Aviación), compras en centros comerciales, baños termales",
+      "keywords": [
+        "Beijing",
+        "Pekin",
+        "Forbidden City",
+        "Ciudad Prohibida",
+        "Gran Muralla",
+        "Badaling",
+        "Hutongs",
+        "Tiananmen"
+      ]
+    },
+    {
+      "id": "xi-an",
+      "nombre": "Xi'an",
+      "tipo": "histórico",
+      "region": "Centro - Shaanxi",
+      "descripcion": "Hogar del Ejército de Terracota, una de las mayores hazañas arqueológicas del mundo. Ciudad amurallada antigua con muralla intacta y punto clave en la Ruta de la Seda. Imprescindible para entender la historia dinástica china.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Beijing: vuelo directo 2h (80-150 EUR) o tren de noche 12h (50-80 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en zona Sur: 10-16 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas cerca muralla: 30-50 EUR/noche",
+        "comfort": "Hoteles boutique en zona antigua: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Ejército de Terracota (40 EUR, incluye museo y foso 1-3)",
+        "Muralla antigua - paseo en bicicleta (gratis si accedes)",
+        "Gran Pagoda del Ganso Salvaje (5 EUR)",
+        "Mezquita de Xi'an (3 EUR)",
+        "Barrio musulmán - mercado de comida (gratis entrada, comida 3-8 EUR)"
+      ],
+      "donde_comer": "Fideos de trigo en el Barrio Musulmán (2-3 EUR), ravioles chinos (jiaozi) (4-6 EUR). Zona recomendada: Callejuelas del Barrio Musulmán (Muslim Quarter).",
+      "consejo_local": "El Ejército de Terracota es mejor visitarlo a primera hora (antes de 9:30) para evitar multitudes chinas. El microbús desde la estación central cuesta 1 EUR.",
+      "plan_b_lluvia": "Museos de historia de Shaanxi, taller de cerámica terracota, tours cubiertos por la muralla",
+      "keywords": [
+        "Xian",
+        "Xi'an",
+        "Terracota",
+        "Terracotta Army",
+        "Ruta Seda",
+        "Silk Road",
+        "muralla antigua",
+        "Muslim Quarter"
+      ]
+    },
+    {
+      "id": "chongqing",
+      "nombre": "Chongqing",
+      "tipo": "ciudad",
+      "region": "Centro - Chongqing",
+      "descripcion": "Mega-ciudad en el río Yangtze, punto de partida para cruceros hacia el Desfiladero de las Tres Gargantas. Mezcla de modernidad y arquitectura antigua, con comida local picante muy auténtica. Menos visitada que otros destinos, ideal para viajeros independientes.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre-noviembre, marzo-abril",
+      "como_llegar": "Desde Xi'an: vuelo 1.5h (60-120 EUR) o tren 12h (40-70 EUR). Desde Beijing: vuelo 3h (100-200 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Jiefangbei: 10-15 EUR/noche",
+        "medio": "Hoteles 3 estrellas junto al río: 30-45 EUR/noche",
+        "comfort": "Hoteles 5 estrellas con vistas Yangtze: 120-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Desfiladero de las Tres Gargantas - crucero 2-3 días (150-300 EUR todo incluido)",
+        "Plaza de Jiefangbei y barrio antiguo (gratis)",
+        "Templo de Luohan (5 EUR)",
+        "Viejo puerto de Xiaoyuanba (gratis)",
+        "Museo del Impresionismo de Yangtze (entrada incluida en tour)"
+      ],
+      "donde_comer": "Hotpot picante chongqing (malatang) (5-12 EUR), fideos con salsa de chiles (3-5 EUR). Zona: barrio antiguo y mercados nocturnos en Jiefangbei.",
+      "consejo_local": "Los cruceros por las Tres Gargantas son más baratos si los compras in situ que de antemano. La comida local es muy picante; pide 'bu la' (no picante) si no lo toleras.",
+      "plan_b_lluvia": "Museo del Tres Gargantas, compras en Jiefangbei, baños termales",
+      "keywords": [
+        "Chongqing",
+        "Chongching",
+        "Tres Gargantas",
+        "Three Gorges",
+        "Yangtze",
+        "río",
+        "crucero",
+        "Jiefangbei"
+      ]
+    },
+    {
+      "id": "guilin-yangshuo",
+      "nombre": "Guilin y Yangshuo",
+      "tipo": "naturaleza",
+      "region": "Suroeste - Guangxi",
+      "descripcion": "Paisajes de montañas de piedra caliza única al mundo, inmortalizados en la pintura china clásica. Guilin es punto de entrada; Yangshuo es el destino clave con bambú, río Li y pueblos rurales. Imprescindible para viajeros en busca de naturaleza auténtica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre-noviembre, abril-mayo",
+      "como_llegar": "Desde Chongqing: vuelo 1.5h (70-130 EUR) o tren 20h (50-80 EUR). Desde Beijing: vuelo 3.5h (120-250 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Yangshuo (mejor que Guilin): 10-18 EUR/noche",
+        "medio": "Hoteles 3 estrellas en Yangshuo: 35-60 EUR/noche",
+        "comfort": "Resorts con vistas karst: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Crucero río Li Guilin-Yangshuo (25-40 EUR, 5h)",
+        "Senderismo Moonhill Trail (gratis)",
+        "Paseo en bambú de noche con faroles (30-50 EUR)",
+        "Escalada de montaña o Bouldering en Yangshuo (30-40 EUR)",
+        "Pueblos de agua Xingping (gratis acceso, barco 5 EUR)"
+      ],
+      "donde_comer": "Fideos de arroz (rice noodles) (2-4 EUR), test de licor de arroz local (3-5 EUR), pescado del río (10-15 EUR). Zona: Main Street en Yangshuo.",
+      "consejo_local": "Yangshuo es mucho mejor base que Guilin, aunque sea más pequeño. Renta una bicicleta eléctrica (3-5 EUR/día) para explorar pueblos circundantes.",
+      "plan_b_lluvia": "Tours cubiertos por cuevas, museos locales, clases de cocina",
+      "keywords": [
+        "Guilin",
+        "Yangshuo",
+        "karst",
+        "río Li",
+        "Li River",
+        "bamboo",
+        "montañas",
+        "Moonhill"
+      ]
+    },
+    {
+      "id": "shanghai",
+      "nombre": "Shanghai",
+      "tipo": "ciudad",
+      "region": "Este - Shanghai",
+      "descripcion": "Metrópolis moderna con rascacielos futuristas (Pudong) y barrios antiguos con arquitectura colonial. Centro económico de China con gastronomía innovadora. Punto de entrada o salida común para vuelos internacionales.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre-noviembre, marzo-abril",
+      "como_llegar": "Aeropuerto internacional principal. Vuelos desde Europa 11-15h, 400-1000 EUR. Desde Beijing: vuelo 2h (80-150 EUR) o tren 5h (50-90 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en French Concession o Jing'an: 12-20 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas: 45-80 EUR/noche",
+        "comfort": "Hoteles 5 estrellas con vistas: 180-350 EUR/noche"
+      },
+      "que_hacer": [
+        "The Bund - paseo ribereño (gratis)",
+        "Torre Oriental Pearl (12 EUR)",
+        "Jardín Yu (7 EUR)",
+        "Concesión Francesa - exploración a pie (gratis)",
+        "Museo de arte de Shanghai (10 EUR)",
+        "Mercado Yuyuan (gratis entrada, tiendas con precios altos)"
+      ],
+      "donde_comer": "Xiaolongbao (bollos rellenos) (3-6 EUR), comida Huaiyang gourmet (30-80 EUR), street food en Yu Garden (5-10 EUR). Zona: Yuyuan, Huaihai Rd en French Concession.",
+      "consejo_local": "Shanghai es cara comparada con otras ciudades chinas. El metro es excelente (2 CNY/viaje), pero descarga app de metro. Visita Yuyuan temprano antes de 9am.",
+      "plan_b_lluvia": "Museos (Arte, Té, Historia), compras en centros comerciales, tiendas de antaño en French Concession",
+      "keywords": [
+        "Shanghai",
+        "Pudong",
+        "Bund",
+        "The Bund",
+        "French Concession",
+        "Yuyuan",
+        "Jing'an",
+        "Huangpu"
+      ]
+    },
+    {
+      "id": "chengdu",
+      "nombre": "Chengdu",
+      "tipo": "ciudad",
+      "region": "Centro-Oeste - Sichuan",
+      "descripcion": "Ciudad relajada famosa por sus pandas gigantes y comida picante. Centro cultural con vida nocturna vibrante y mercados tradicionales. Punto de partida para Jiuzhaigou y montañas sagradas del Tíbet.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre-noviembre, marzo-abril",
+      "como_llegar": "Desde Chongqing: vuelo 1h (60-100 EUR) o tren 5h (30-50 EUR). Desde Xi'an: vuelo 2h (70-140 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en zona Kuanzhai o Taikooli: 11-17 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas: 35-65 EUR/noche",
+        "comfort": "Hoteles 5 estrellas modernos: 130-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Base de Investigación del Panda Gigante (15 EUR, 2-3h)",
+        "Templo Wenshu (3 EUR)",
+        "Parque People's (gratis entrada, 1 EUR entrada algunos templos)",
+        "Casa de Museo de Du Fu (7 EUR)",
+        "Feria nocturna de Kuanzhai (gratis paseo, comida 2-6 EUR)"
+      ],
+      "donde_comer": "Mapo tofu con pimentón (malatang) (3-5 EUR), hot pot picante (12-20 EUR per cápita), dim sum (3-8 EUR). Zona: Kuanzhai Old Street y mercados nocturnos.",
+      "consejo_local": "Los pandas son más activos al amanecer (llega antes de 8am). La ciudad es muy relajada; la gente pasa horas en cafés: adopta el ritmo local.",
+      "plan_b_lluvia": "Museos de Sichuan, templos cubiertos, baños termales, clases de cocina",
+      "keywords": [
+        "Chengdu",
+        "panda",
+        "giant panda",
+        "Sichuan",
+        "hotpot",
+        "Kuanzhai",
+        "Wenshu",
+        "malatang"
+      ]
+    },
+    {
+      "id": "jiuzhaigou",
+      "nombre": "Jiuzhaigou",
+      "tipo": "naturaleza",
+      "region": "Centro-Oeste - Sichuan",
+      "descripcion": "Parque nacional con lagos alpinos turquesas, cascadas y bosques multicolores a 2500m de altitud. Sitio UNESCO con ecosistema único. Viaje de 1-2 días desde Chengdu, imprescindible para naturaleza espectacular.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre-octubre (colores otoñales), junio-julio",
+      "como_llegar": "Desde Chengdu: autobús 9h (25-35 EUR) o vuelo 1h + autobús 1.5h (150-220 EUR total). Tours diarios desde Chengdu (80-120 EUR incluido todo)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Jiuzhaigou Town: 12-18 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 50-90 EUR/noche",
+        "comfort": "Resorts en parque: 150-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Parque Nacional Jiuzhaigou - entrada 2 días (65 EUR, acceso autobús dentro parque incluido)",
+        "Senderismo por lagos coloridos (gratis con entrada)",
+        "Cascada de Pearl (gratis con entrada)",
+        "Mirador de Wucai Pond (gratis con entrada)"
+      ],
+      "donde_comer": "Comida típica tibetana (15-25 EUR), fideos locales (4-6 EUR). Opciones limitadas dentro parque; llevar snacks. Zona: restaurantes en Jiuzhaigou Town.",
+      "consejo_local": "Entra al parque lo antes posible; está abarrotado después de 10am. El senderismo es a altitud; descansa bien la noche anterior y usa altitud lentamente.",
+      "plan_b_lluvia": "Tours alternativos a Yellow Dragon (Huanglong) si Jiuzhaigou cierra por clima",
+      "keywords": [
+        "Jiuzhaigou",
+        "Jiu Zhai Gou",
+        "parque nacional",
+        "lagos alpinos",
+        "senderismo",
+        "Sichuan",
+        "cascadas",
+        "turquesa"
+      ]
+    },
+    {
+      "id": "lhasa",
+      "nombre": "Lhasa",
+      "tipo": "histórico",
+      "region": "Tíbet Autónomo - Tíbet",
+      "descripcion": "Capital espiritual del Tíbet con el Palacio Potala y el Templo de Jokhang. Centro de cultura tibetana auténtica con mercados y barrios antiguos. Requiere permisos especiales pero accesible con tours organizados.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "Desde Chengdu: vuelo 2h (80-150 EUR) + tour obligatorio (80-200 EUR/día). Tours organizados incluyen todos los permisos.",
+      "donde_dormir": {
+        "mochilero": "Hostales en barrio antiguo: 15-22 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas: 60-100 EUR/noche",
+        "comfort": "Hoteles 5 estrellas con vistas Potala: 180-320 EUR/noche"
+      },
+      "que_hacer": [
+        "Palacio Potala (13 EUR, reserva con agencia)",
+        "Templo Jokhang (4 EUR)",
+        "Templo Sera - debate de monjes (5 EUR)",
+        "Barrio antiguo de Barkhor (gratis paseo)",
+        "Lago Namtso - excursión 2 días (150-250 EUR con agencia)"
+      ],
+      "donde_comer": "Momos tibetanos (rellenos) (3-5 EUR), tsampa (harina de cebada tostada) (2-4 EUR), té con mantequilla (1-2 EUR). Zona: cafés del barrio antiguo con comida tibetana-occidental.",
+      "consejo_local": "Acclimatarse a 3656m es clave; descansa el primer día, bebe mucha agua. Se requiere tour oficial pero son flexibles; negocia ritmo con guía. Respeta espacios sagrados.",
+      "plan_b_lluvia": "Templos cubiertos, museos de arte tibetano, visitas a monasterios",
+      "keywords": [
+        "Lhasa",
+        "Tibet",
+        "Tíbet",
+        "Palacio Potala",
+        "Jokhang",
+        "Barkhor",
+        "Sera",
+        "Namtso"
+      ]
+    },
+    {
+      "id": "hangzhou",
+      "nombre": "Hangzhou",
+      "tipo": "naturaleza",
+      "region": "Este - Zhejiang",
+      "descripcion": "Lago Oeste (West Lake) con paisajes clásicos chinos, templos antiguos y plantaciones de té. Ciudad que inspiró artistas durante siglos. Menos caótica que Shanghai, perfecta para descansar y explorar a pie.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre-noviembre, marzo-mayo",
+      "como_llegar": "Desde Shanghai: tren bala 1h (15-25 EUR) o autobús 2h (8-15 EUR). Desde Chengdu: vuelo 2h (100-200 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales cerca West Lake: 12-18 EUR/noche",
+        "medio": "Hoteles 3-4 estrellas: 40-70 EUR/noche",
+        "comfort": "Resorts lakeside: 150-280 EUR/noche"
+      },
+      "que_hacer": [
+        "West Lake - paseo/bicicleta (gratis)",
+        "Templo de Lingyin (7 EUR)",
+        "Gruta Feilai Feng (7 EUR con entrada templo)",
+        "Plantación de Té Longjing (gratis acceso, degustación 3-10 EUR)",
+        "Puente Seis Armonías (5 EUR)"
+      ],
+      "donde_comer": "Té Longjing (dragón verde) (3-8 EUR taza), pescado del lago (15-25 EUR), pasteles locales (2-4 EUR). Zona: alrededores West Lake y old town.",
+      "consejo_local": "Renta bicicleta (2-3 EUR/día) para rodear el lago sin apuros. Visita plantación Longjing al amanecer cuando se ve el clima perfectamente.",
+      "plan_b_lluvia": "Museos de la dinastía Song, tiendas de té, templos cubiertos",
+      "keywords": [
+        "Hangzhou",
+        "West Lake",
+        "Lago Oeste",
+        "Lingyin",
+        "Longjing",
+        "té verde",
+        "Zhejiang",
+        "classical gardens"
+      ]
+    },
+    {
+      "id": "zhangjiajie",
+      "nombre": "Zhangjiajie",
+      "tipo": "montaña",
+      "region": "Centro-Sur - Hunan",
+      "descripcion": "Parque nacional con acantilados de arenisca que inspiraron Avatar. Teleféricos sobre precipicios y senderos entre montañas. Destino menos conocido pero espectacular, ideal para aventureros.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre-noviembre, abril-mayo",
+      "como_llegar": "Desde Chengdu: vuelo 2h + autobús 1h (150-250 EUR). Desde Chongqing: tren 8h (30-50 EUR) + autobús 1.5h",
+      "donde_dormir": {
+        "mochilero": "Hostales en Zhangjiajie Town: 10-16 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 35-60 EUR/noche",
+        "comfort": "Resorts en montaña: 120-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Parque Nacional Zhangjiajie - entrada 2 días (40-50 EUR, incluye teleféricos básicos)",
+        "Elevador Bailong (額外 15 EUR)",
+        "Pasarela de cristal Yubi Bridge (10 EUR)",
+        "Senderismo Avatar Trail (gratis con entrada parque)",
+        "Aldea minoría Tujia - tours culturales (30-50 EUR)"
+      ],
+      "donde_comer": "Comida de montaña simple (8-15 EUR), fideos locales (3-5 EUR). Opciones limitadas en parque; llevar snacks. Zona: Zhangjiajie Town.",
+      "consejo_local": "Lleva buen calzado de senderismo; los caminos son de piedra y empinados. El elevador Bailong es impresionante pero caro; prueba una alternativa gratis si presupuesto es limitado.",
+      "plan_b_lluvia": "Visitas a aldea Tujia, museos locales, cuevas",
+      "keywords": [
+        "Zhangjiajie",
+        "Avatar",
+        "acantilados",
+        "montañas",
+        "Bailong",
+        "crystal bridge",
+        "Hunan",
+        "senderismo"
+      ]
+    }
+  ]
+}

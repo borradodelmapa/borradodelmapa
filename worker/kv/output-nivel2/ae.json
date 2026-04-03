@@ -1,0 +1,341 @@
+{
+  "pais": "Emiratos Árabes Unidos",
+  "codigo": "ae",
+  "destinos": [
+    {
+      "id": "dubai",
+      "nombre": "Dubái",
+      "tipo": "ciudad",
+      "region": "Emirato de Dubái",
+      "descripcion": "Metrópolis ultramoderna con rascacielos, compras de lujo y playas. Centro financiero y punto de entrada principal para la mayoría de viajeros independientes. Ofrece contraste entre la ciudad futurista y souks tradicionales.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Aeropuerto Internacional de Dubái (DXB). Vuelos desde Europa: 5-8 horas. Coste aprox. 300-600 EUR ida y vuelta. Entrada por defecto para mayoría de viajeros internacionales.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Bur Dubai o Deira: 25-40 EUR/noche",
+        "medio": "Hoteles 3 estrellas en Downtown o JBR Beach: 60-120 EUR/noche",
+        "comfort": "Hoteles 4-5 estrellas en Marina o Downtown: 150-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Burj Khalifa (entrada: 18-30 EUR)",
+        "Souk del Oro y especias en Deira (gratis, compra opcional)",
+        "Playas públicas de Jumeirah (gratis)",
+        "Dubai Mall y centro comercial (gratis entrada, compras pagadas)",
+        "Paseo por Dubai Marina (gratis)"
+      ],
+      "donde_comer": "Comida Emirati tradicional (al machboos, luqaimat): 5-10 EUR. Zona de Al Fahidi Histórico. Food courts en malls: 8-15 EUR. Restaurantes internacionales en JBR Beach: 12-25 EUR.",
+      "consejo_local": "Las playas públicas de Jumeirah son gratuitas y menos concurridas que Kite Beach. Evita el centro comercial en viernes por la tarde (muy lleno). El transporte público es barato y eficiente (metro y autobús).",
+      "plan_b_lluvia": "Visitar museos interiores (Museo de Dubái: 5 EUR), centros comerciales climatizados, o Gold Souk cubierto.",
+      "keywords": [
+        "Dubai",
+        "Dubay",
+        "Burj Khalifa",
+        "Marina",
+        "Downtown",
+        "Deira",
+        "Jumeirah",
+        "emirato Dubai"
+      ]
+    },
+    {
+      "id": "abu-dhabi",
+      "nombre": "Abu Dabi",
+      "tipo": "ciudad",
+      "region": "Emirato de Abu Dabi",
+      "descripcion": "Capital del país con arquitectura más solemne, museos de clase mundial y una atmósfera menos comercial que Dubái. Centro político y cultural con acceso a patrimonio islámico genuino y playas más tranquilas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Dubái: autobús (120 min, 3-5 EUR), coche de alquiler (1,5h, 50-80 EUR), o servicio compartido (40 EUR). Autobús desde aeropuerto DXB directo: 1.5h, 15 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales en zona de Electra Street: 20-35 EUR/noche",
+        "medio": "Hoteles 3 estrellas en Al Marjan Island o cerca de la Corniche: 50-100 EUR/noche",
+        "comfort": "Hoteles 4-5 estrellas en Emirates Palace o Corniche: 120-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Mezquita Sheikh Zayed (entrada: 10 EUR, abierta a no musulmanes con código de vestimenta)",
+        "Louvre Abu Dabi (24 EUR)",
+        "Paseo por la Corniche (gratis)",
+        "Playas públicas de Al Bateen o Saadiyat (gratis)",
+        "Mercado de perlas (gratis)"
+      ],
+      "donde_comer": "Cocina Emirati en restaurantes locales: 8-12 EUR. Recomendado barrio Al Marjan para comida auténtica. Cafés con shisha: 5-8 EUR. Mercado de pescado para cenar barato (12-15 EUR).",
+      "consejo_local": "La Mezquita Sheikh Zayed es más hermosa al atardecer cuando se ilumina. El viernes es día santo (menos tiendas abiertas por la mañana). Menos turismo masivo que Dubái, más experiencia local.",
+      "plan_b_lluvia": "Louvre Abu Dabi, museos interiores, centros comerciales, o Heritage Village cubierto.",
+      "keywords": [
+        "Abu Dhabi",
+        "Abudhabi",
+        "Mezquita Sheikh Zayed",
+        "Louvre",
+        "Corniche",
+        "Emirato Abu Dabi",
+        "capital"
+      ]
+    },
+    {
+      "id": "ras-al-jaimah",
+      "nombre": "Ras al-Jaimah",
+      "tipo": "naturaleza",
+      "region": "Emirato de Ras al-Jaimah (norte)",
+      "descripcion": "Destino menos masificado en las montañas del norte con playas vírgenes, senderismo y patrimonio más auténtico. Ideal para viajeros que buscan naturaleza y escapar del turismo de masas de Dubái y Abu Dabi.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Dubái: coche alquilado (2h, 50-80 EUR) o autobús compartido (2-3h, 15-20 EUR). Transporte público limitado, recomendado coche.",
+      "donde_dormir": {
+        "mochilero": "Hostales o guesthouses simples: 20-30 EUR/noche",
+        "medio": "Hoteles 3 estrellas en Marjan Island o cercanos: 40-80 EUR/noche",
+        "comfort": "Hoteles 4 estrellas beach resorts: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo en Jebel Jais (pico más alto, gratis de acceso, vistas espectaculares)",
+        "Playas de Khatt y Al Marjan (gratis, menos concurridas)",
+        "Wadis (valles de montaña) para trekking natural (gratis)",
+        "Museo Nacional de Ras al-Jaimah (5 EUR)",
+        "ZipLine Jebel Jais (130-160 EUR, opcional)"
+      ],
+      "donde_comer": "Comida Emirati tradicional en pequeños restaurantes locales: 6-10 EUR. Pescado fresco en zonas costeras: 10-15 EUR. Menor variedad gastronómica que grandes ciudades.",
+      "consejo_local": "El senderismo en Jebel Jais es mejor al atardecer. Lleva bastante agua (sin sombrilla, mucho sol). La mayoría de turistas nunca llegan aquí, ambiente muy local y relajado.",
+      "plan_b_lluvia": "Museo Nacional, Interior de hoteles, o excursión a Dibba (pueblo costero vecino).",
+      "keywords": [
+        "Ras Al Khaimah",
+        "RAK",
+        "Jebel Jais",
+        "Khatt",
+        "montañas norte",
+        "playas vírgenes"
+      ]
+    },
+    {
+      "id": "fujairah",
+      "nombre": "Fujairah",
+      "tipo": "playa",
+      "region": "Emirato de Fujairah",
+      "descripcion": "Único emirato con costa en el Golfo de Omán (no en el Golfo Pérsico). Playas más salvajes, buceo excelente y atmósfera rural auténtica. Escapada perfecta de la densidad urbana de Dubái.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril, mayo a septiembre para buceo (agua más cálida)",
+      "como_llegar": "Desde Dubái: coche alquilado (2,5h, 50-80 EUR) o viaje compartido (3h, 20-30 EUR). Autobús limitado, coche recomendado.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses y pequeños hoteles: 20-35 EUR/noche",
+        "medio": "Hoteles 3 estrellas frente a playa: 45-90 EUR/noche",
+        "comfort": "Resorts beach 4 estrellas: 100-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas públicas (gratis, bañarse solo)",
+        "Buceo en arrecifes de coral (experiencia de buceo: 60-100 EUR, iniciación: 80-120 EUR)",
+        "Snorkel desde playa (gratis o renta de equipo: 15 EUR)",
+        "Fuerte Al Hayl (entrada: 3 EUR)",
+        "Senderismo en montañas costeras (gratis)"
+      ],
+      "donde_comer": "Cocina Emirati y pescado fresco en restaurantes rústicos: 7-12 EUR. Kebabs y comida local en souks: 5-8 EUR. Restaurantes turísticos en resorts: 15-25 EUR.",
+      "consejo_local": "El agua aquí es más fresca y clara que en el Golfo. Es el mejor sitio de EAU para buceo real. Mucho menos turismo; la gente local es más acogedora. Evita julio-agosto (calor extremo).",
+      "plan_b_lluvia": "Fuerte Al Hayl, museos locales pequeños, o conducir hacia Omán cercano para explorar.",
+      "keywords": [
+        "Fujairah",
+        "Golfo de Oman",
+        "buceo",
+        "arrecifes",
+        "costa Este",
+        "playas naturales"
+      ]
+    },
+    {
+      "id": "desierto-wahiba",
+      "nombre": "Desierto Wahiba (Sharjah)",
+      "tipo": "desierto",
+      "region": "Emirato de Sharjah / frontera con Omán",
+      "descripcion": "Desierto auténtico con dunas inmensas, experiencia Beduina genuina y cielo nocturno espectacular. Escapada completa de la modernidad para vivir el lado salvaje de Emiratos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Sharjah o Dubái: tour organizado (4-6h con transporte incluido, 60-100 EUR), o coche alquilado (1,5h desde Sharjah). Safari desierto o 4x4 necesario.",
+      "donde_dormir": {
+        "mochilero": "Campamento Beduino básico: 40-60 EUR (incluye cena y desayuno)",
+        "medio": "Campamento con tiendas cómodas: 70-100 EUR",
+        "comfort": "Resort desierto de lujo: 150-250 EUR"
+      },
+      "que_hacer": [
+        "Safari en 4x4 con atardecer (incluido en tour, 60-100 EUR)",
+        "Sandboarding o deslizarse en dunas (gratis si tienes acceso)",
+        "Cena Beduina con fuego (incluida en tour)",
+        "Paseo en camello (30-50 EUR adicional)",
+        "Observación de estrellas nocturna (gratis)"
+      ],
+      "donde_comer": "Cena Beduina tradicional: cordero asado, pan plano, café árabe (incluido en tour). Tours todo incluido recomendados. Restaurantes en Sharjah ciudad: 8-15 EUR.",
+      "consejo_local": "Reserva tour con operador local, no es seguro conducir solo en el desierto. El atardecer es mágico pero rápido (durará 20 minutos). Lleva protector solar y sombrilla.",
+      "plan_b_lluvia": "Rara lluvia en desierto, pero si ocurre, los tours se reasignan o reembolsan.",
+      "keywords": [
+        "Wahiba Sands",
+        "desierto",
+        "Beduino",
+        "Sharjah",
+        "dunas",
+        "safari desierto"
+      ]
+    },
+    {
+      "id": "sharjah",
+      "nombre": "Sharjah",
+      "tipo": "ciudad",
+      "region": "Emirato de Sharjah",
+      "descripcion": "Tercera ciudad con herencia cultural más intensa que Dubái, museos excelentes y souks auténticos. Menos turismo, precios más bajos y atmósfera más local. Puerta de entrada al desierto Wahiba.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Dubái: metro/autobús (30-45 min, 2 EUR), coche (30 min, gasolina). Muy accesible como excursión de día.",
+      "donde_dormir": {
+        "mochilero": "Hostales pequeños en Al Qasba: 18-28 EUR/noche",
+        "medio": "Hoteles 3 estrellas céntricos: 40-70 EUR/noche",
+        "comfort": "Hoteles 4 estrellas: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por Al Qasba (zona de arte y cultura, gratis)",
+        "Souks tradicionales (gratis, compra opcional)",
+        "Museo de Sharjah (entrada: 3 EUR)",
+        "Playa pública de Al Mamzar (gratis, 20 min a Dubái)",
+        "Mezquita Al Noor (entrada libre, código de vestimenta)"
+      ],
+      "donde_comer": "Comida local Emirati en souks: 5-8 EUR. Restaurantes de curry indio barato: 6-10 EUR. Shawarma y kebab: 4-6 EUR. Mucho más barato que Dubái.",
+      "consejo_local": "Sharjah es más conservador que Dubái (se vende menos alcohol). Los souks auténticos son mejores que los de Dubái porque son para locales. El Museo de Sharjah vale la pena.",
+      "plan_b_lluvia": "Museos interiores, souks cubiertos, o viaje a Dubái cercano (30 min metro).",
+      "keywords": [
+        "Sharjah",
+        "Al Qasba",
+        "cultura",
+        "souks auténticos",
+        "museo",
+        "playa Al Mamzar"
+      ]
+    },
+    {
+      "id": "ajman",
+      "nombre": "Ajmán",
+      "tipo": "ciudad",
+      "region": "Emirato de Ajmán",
+      "descripcion": "Emirato pequeño y poco visitado con playa tranquila, marina histórica y ambiente totalmente local. Parada auténtica entre Sharjah y Ras al-Jaimah sin masificación turística.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Sharjah: autobús (20 min, 2 EUR), coche (20 min, gasolina). Desde Dubái: autobús (45 min, 5 EUR). Muy accesible para excursión de día.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses pequeños: 18-30 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 35-65 EUR/noche",
+        "comfort": "Resorts beach: 80-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas públicas tranquilas (gratis)",
+        "Paseo por Ajman Marina (gratis)",
+        "Museo de Ajmán en el Fuerte (entrada: 2 EUR)",
+        "Souk de Ajmán (gratis, más pequeño y local)",
+        "Playa de Crescent (gratis, menos turismo)"
+      ],
+      "donde_comer": "Comida local barata en souks: 5-7 EUR. Restaurantes de pescado: 8-12 EUR. Shawarma y comida rápida Emirati: 4-5 EUR. Muy accesible económicamente.",
+      "consejo_local": "Ajmán es donde van los locales de EAU, no turistas. La playa es más tranquila y segura. Perfecto para pasar 2-3 horas si vienes de Sharjah. El fuerte es pequeño pero vale la pena.",
+      "plan_b_lluvia": "Museo del Fuerte, souks cubiertos, o regreso a Sharjah/Dubái.",
+      "keywords": [
+        "Ajman",
+        "marina histórica",
+        "playas locales",
+        "fuerte Ajman",
+        "poco turismo"
+      ]
+    },
+    {
+      "id": "jebel-ali-y-mangroves",
+      "nombre": "Jebel Ali y Manglares",
+      "tipo": "naturaleza",
+      "region": "sur de Dubái",
+      "descripcion": "Reserva natural con manglares únicos, avifauna abundante y ecosistema desértico protegido. Contraste total con los rascacielos, accesible desde Dubái en 30 minutos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Dubái: coche alquilado o taxi (30 min sur de Palm Jumeirah, 30-50 EUR en taxi). Excursión fácil de medio día desde cualquier parte de Dubái.",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento en la reserva; hospedarse en Dubái",
+        "medio": "Idem",
+        "comfort": "Idem"
+      },
+      "que_hacer": [
+        "Paseo en kayak por manglares (60-90 EUR, 2-3h)",
+        "Observación de aves (gratis, llevar binoculares)",
+        "Senderismo interpretativo (gratis)",
+        "Fotografía de fauna y flora (gratis)",
+        "Tour guiado en 4x4 por la reserva (50-80 EUR)"
+      ],
+      "donde_comer": "No hay restaurantes en la reserva. Comer antes/después en Dubái. Picnic posible pero no recomendado (muy calor).",
+      "consejo_local": "Lleva binoculares para aves. El kayak es la mejor forma de experimentar los manglares. Temprano por la mañana (7-9 AM) hay más fauna. Protección solar extrema.",
+      "plan_b_lluvia": "Regreso a Dubái para actividades interiores.",
+      "keywords": [
+        "Jebel Ali",
+        "manglares",
+        "kayak",
+        "fauna",
+        "aves",
+        "reserva natural",
+        "ecosistema"
+      ]
+    },
+    {
+      "id": "hatta",
+      "nombre": "Hatta",
+      "tipo": "montaña",
+      "region": "enclave sur de Dubái",
+      "descripcion": "Pueblo montañoso de montaña en un enclave de Dubái, con represa pintoresca, senderismo y escapada alpina dentro del desierto. Único lugar de EAU con verdaderas montañas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Dubái: coche alquilado (1,5h este de Dubái, 50-80 EUR), o tour organizado (60-100 EUR todo incluido). Carretera de montaña con vistas.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses rurales básicos: 30-45 EUR/noche",
+        "medio": "Eco-lodges pequeños: 50-90 EUR/noche",
+        "comfort": "Resort de montaña (Hatta Fort Hotel): 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Represa Hatta (paseo alrededor, gratis)",
+        "Senderismo en montañas circundantes (gratis)",
+        "Canyoneering/descenso por cañones (70-100 EUR, tour)",
+        "Kayak en la represa (30-40 EUR)",
+        "Fuerte Hatta restaurado (entrada incluida en algunos tours)"
+      ],
+      "donde_comer": "Restaurantes pequeños en el pueblo: 8-12 EUR. Comida Emirati simple. Pocos opciones, traer snacks es prudente.",
+      "consejo_local": "El canyoneering es espectacular pero requiere tour; no lo hagas solo. Al atardecer la represa es hermosa (foto perfecta). Agua fría incluso en verano.",
+      "plan_b_lluvia": "Rara lluvia pero si ocurre, senderismo se vuelve peligroso. Regresa a Dubái.",
+      "keywords": [
+        "Hatta",
+        "montaña",
+        "represa",
+        "senderismo",
+        "canyoneering",
+        "Dubái este",
+        "enclave"
+      ]
+    },
+    {
+      "id": "isla-sir-bani-yas",
+      "nombre": "Isla Sir Bani Yas",
+      "tipo": "isla",
+      "region": "Golfo Pérsico (Abu Dabi)",
+      "descripcion": "Isla privada con reserva natural de vida silvestre, playas vírgenes y acceso controlado. Safari en isla con fauna local (gacelas, avestruces) y snorkel en arrecifes vírgenes. Experiencia premium pero posible para presupuesto medio.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Tour organizado desde Abu Dabi (45 min en ferry desde puerto): 70-150 EUR todo incluido (transporte, almuerzo, actividades). Reservar con operadores locales.",
+      "donde_dormir": {
+        "mochilero": "No alojamiento económico; tour de día desde Abu Dabi",
+        "medio": "Resort eco en la isla (si se duerme): 120-180 EUR",
+        "comfort": "Resort premium Desert Islands Resort: 200-350 EUR"
+      },
+      "que_hacer": [
+        "Safari en jeep isla (incluido en tour)",
+        "Snorkel en arrecife virgen (incluido)",
+        "Playas aisladas (incluido)",
+        "Observación de fauna (gacelas, avestruces, tortugas)",
+        "Almuerzo tipo picnic en la isla (incluido)"
+      ],
+      "donde_comer": "Almuerzo BBQ grill incluido en el tour (carne, pescado, vegetales). Bebidas a veces incluidas; agua gratis.",
+      "consejo_local": "Es experiencia controlada y cara pero merece la pena: fauna genuina, arrecifes intactos, playas sin gente. Tours privados más caros pero mejor calidad que grupales.",
+      "plan_b_lluvia": "Tours se reasignan si lluvia fuerte. Clima raro en EAU.",
+      "keywords": [
+        "Sir Bani Yas",
+        "isla",
+        "safari",
+        "vida silvestre",
+        "Abu Dabi",
+        "snorkel",
+        "arrecife"
+      ]
+    }
+  ]
+}

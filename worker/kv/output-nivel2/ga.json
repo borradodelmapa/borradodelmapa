@@ -1,0 +1,333 @@
+{
+  "pais": "Gabón",
+  "codigo": "ga",
+  "destinos": [
+    {
+      "id": "libreville",
+      "nombre": "Libreville",
+      "tipo": "ciudad",
+      "region": "Estuario",
+      "descripcion": "Capital y principal puerta de entrada a Gabón, ubicada en la costa atlántica con arquitectura colonial francesa y mercados vibrantes. Centro logístico obligatorio para la mayoría de viajeros independientes. Ofrece museos, playas urbanas y gastronomía franco-africana de calidad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Aeropuerto Internacional de Libreville (León Mba). Desde Europa: vuelos conectados, 10-15h. Desde otras ciudades africanas: Air Gabon, TAAG, Brussels Airlines.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse Ping Ping o similares en centro: 25-35 EUR/noche",
+        "medio": "Hôtel Tropicana o Lékédi Club: 50-80 EUR/noche",
+        "comfort": "Hôtel Mbongué o Méridien Libreville: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Musée des Arts et Traditions Gabonaises (3 EUR)",
+        "Paseo por playa de Owendo (gratis)",
+        "Mercado de Montagne Sainte-Marie para compras locales (gratis)",
+        "Visita a Iglesia de San Miguel (gratis)",
+        "Recorrido por barrios de Akébé y Lalala (gratis)"
+      ],
+      "donde_comer": "Comidas locales: cassava, pez espada, yuca. Restaurantes franco-gaboneses en Bd de l'Indépendance. Precio medio: 8-15 EUR. Mercado de alimentos en Rond-Point de l'Arbre.",
+      "consejo_local": "Llega con dinero en efectivo EUR o CFA: los cajeros en el aeropuerto cierran sin previo aviso y el cambio es complicado fuera de bancos grandes.",
+      "plan_b_lluvia": "Museo Nacional, centros comerciales modernos (Libreville Mall), cafés cubiertos en Plateau.",
+      "keywords": [
+        "Libreville",
+        "capital Gabon",
+        "Leon Mba airport",
+        "Akébé",
+        "Montagne Sainte-Marie",
+        "Owendo beach"
+      ]
+    },
+    {
+      "id": "loango",
+      "nombre": "Parque Nacional Loango",
+      "tipo": "naturaleza",
+      "region": "Ogooué-Maritime",
+      "descripcion": "Uno de los últimos paraísos salvajes de África con playas vírgenes, selva primaria y fauna única (elefantes, hipopótamos, búfalos). Acceso únicamente a través de lodges autorizados, pero ofrecen experiencias de inmersión natural sin iguales en la región.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Libreville: vuelo chárter (40 min, 250-400 EUR p/p, se negocia) o 4x4 + barco (8h, muy difícil sin guía local). Contrata con operador desde Libreville.",
+      "donde_dormir": {
+        "mochilero": "No hay opciones de mochilero; acceso solo con lodge",
+        "medio": "Loango Lodge o Gamba Lodge: 200-300 EUR/noche con pensión completa",
+        "comfort": "Loango Bay Lodge: 350-500 EUR/noche todo incluido"
+      },
+      "que_hacer": [
+        "Safaris a pie en selva primaria (incluido en lodge)",
+        "Avistamiento de elefantes en playas (incluido)",
+        "Paseos en bote por lagunas y ríos (incluido)",
+        "Observación de tortugas marinas (incluido, estacional)",
+        "Trekking hacia cascadas interiores (incluido)"
+      ],
+      "donde_comer": "Cocina del lodge incluso en paquete. Pescado fresco, frutas locales. Comidas servidas en el lodge, sin opciones externas reales.",
+      "consejo_local": "Reserva con 3-4 meses de anticipación; los lodges tienen plazas limitadas y las estaciones secas se agotan. Trae repelente industrial contra mosquitos.",
+      "plan_b_lluvia": "Los safaris se hacen igual, la lluvia no detiene actividades. Más observación de aves acuáticas.",
+      "keywords": [
+        "Loango",
+        "parque nacional",
+        "safari Gabon",
+        "playas selva",
+        "hipopotamos",
+        "elefantes africanos"
+      ]
+    },
+    {
+      "id": "pongara",
+      "nombre": "Parque Nacional Pongara",
+      "tipo": "naturaleza",
+      "region": "Estuario",
+      "descripcion": "Humedales costeros con manglares, playas de nidificación de tortugas y aves migratorias. Menos visitado que Loango pero accesible desde Libreville en una excursión de día o estancia corta. Ideal para observación de aves y naturaleza accesible.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Libreville: vehículo 4x4 + barco (2h total, 60 EUR con operador local + entrada). Tours se organizan en Libreville, cuesta ~80-120 EUR p/p con transporte y guía.",
+      "donde_dormir": {
+        "mochilero": "Campamento básico del parque o guesthouse en Cocobeach: 20-30 EUR/noche",
+        "medio": "Pongara Lodge: 70-100 EUR/noche",
+        "comfort": "No hay opciones de lujo; básico es lo ofrecido"
+      },
+      "que_hacer": [
+        "Observación de aves (gratis en parque)",
+        "Paseos en bote por manglares (incluido tour)",
+        "Playas de nidificación de tortugas (estacional, junio-octubre)",
+        "Trekking en senderos costeros (gratis)",
+        "Avistamiento de delfines (ocasional)"
+      ],
+      "donde_comer": "Pescado fresco, comidas básicas en Cocobeach. Rango: 5-10 EUR. Lleva snacks desde Libreville.",
+      "consejo_local": "Es mucho más tranquilo que Loango y menos caro. Las mejores épocas para tortugas son julio-septiembre; llega al atardecer.",
+      "plan_b_lluvia": "Las barcas se cierran en lluvias fuertes, pero la observación de aves desde senderos sigue siendo posible.",
+      "keywords": [
+        "Pongara",
+        "tortugas marinas",
+        "manglares",
+        "aves",
+        "parque nacional Gabon",
+        "Cocobeach"
+      ]
+    },
+    {
+      "id": "ivindo",
+      "nombre": "Parque Nacional Ivindo",
+      "tipo": "naturaleza",
+      "region": "Estuary & Ogooué-Ivindo",
+      "descripcion": "Selva tropical intacta con cascadas espectaculares (Chutes de Kongou) y fauna diversa incluyendo gorilas. Menos masificado que Loango, con buena infraestructura de lodges. Centro perfecto para trekking en selva primaria y observación de primates.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Libreville: vuelo doméstico a Makokou (1h, 80-120 EUR), luego 4x4 + bote (2h más, 40 EUR). O vuelo chárter directo (negociable).",
+      "donde_dormir": {
+        "mochilero": "Campamento básico o guesthouse en Makokou: 25-35 EUR/noche",
+        "medio": "Ivindo Lodge o Lekedi Park Lodge: 80-120 EUR/noche con pensión",
+        "comfort": "Kongou Falls Lodge: 180-250 EUR/noche todo incluido"
+      },
+      "que_hacer": [
+        "Trekking hacia Cascadas Kongou (incluido en tours, 15 EUR extras)",
+        "Observación de gorilas (con guía especializado, 50-80 EUR)",
+        "Paseos nocturnos en selva (incluido en lodge)",
+        "Paseos en bote por ríos (incluido)",
+        "Avistamiento de chimpancés y monos (incluido)"
+      ],
+      "donde_comer": "Comidas en lodge: pescado, verduras, cassava. Rango en pueblo: 6-12 EUR. En lodge incluido o 15-20 EUR extra.",
+      "consejo_local": "Los gorilas son tímidos; lleva paciencia y binoculares buenos. Los lodges tienen guías experimentados en rastreo. La mejor época es junio-julio.",
+      "plan_b_lluvia": "Las cascadas son más espectaculares con lluvia. Trekking es posible con bota waterproof.",
+      "keywords": [
+        "Ivindo",
+        "cascadas",
+        "gorilas",
+        "selva tropical",
+        "Kongou",
+        "Makokou",
+        "primates"
+      ]
+    },
+    {
+      "id": "akanda",
+      "nombre": "Parque Nacional Akanda",
+      "tipo": "naturaleza",
+      "region": "Estuario",
+      "descripcion": "Manglares y bahías costeras con avifauna excepcional y tortugas marinas. Está a solo 30 minutos de Libreville, lo que lo hace perfecto para excursión de día o extensión de estancia en la capital. Menos turístico que Pongara pero igualmente rico en biodiversidad.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Libreville: bote desde puerto (30 min, 30-50 EUR con operador) o 4x4 a pueblo costero + bote. Tours desde Libreville: ~70 EUR p/p.",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento en el parque; desde Libreville como base",
+        "medio": "Idem",
+        "comfort": "Idem"
+      },
+      "que_hacer": [
+        "Observación de aves en manglares (gratis en parque)",
+        "Paseos en bote (incluido en tours)",
+        "Nado en bahías (con precaución, aguas abiertas)",
+        "Playas para tortugas (estacional)",
+        "Fotografía de naturaleza"
+      ],
+      "donde_comer": "Come en Libreville antes; sin opciones de restaurantes reales en parque. Lleva picnic.",
+      "consejo_local": "Es la excursión más fácil desde Libreville. Madruga (5:30am) para aves matutinas. Los operadores locales en muelle de Libreville son más baratos que agencias.",
+      "plan_b_lluvia": "Posible en lluvia ligera; lluvia fuerte cancela botes.",
+      "keywords": [
+        "Akanda",
+        "manglares",
+        "bahia",
+        "aves",
+        "tortugas",
+        "Libreville cercano"
+      ]
+    },
+    {
+      "id": "mayumba",
+      "nombre": "Mayumba",
+      "tipo": "playa",
+      "region": "Nyanga",
+      "descripcion": "Pueblo costero tranquilo con playas vírgenes, arrecifes de coral y avistamiento de ballenas (estacional). Punto fronterizo con Congo, lejos del turismo masificado. Ideal para descanso y snorkel en aguas tropicales.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Libreville: vuelo doméstico a Gamba (1h, 80 EUR) + 4x4 (1.5h, 50 EUR). O 4x4 directo desde Libreville (8h, difícil sin renta privada, ~150 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouse Mayumba o casas de alquiler: 20-30 EUR/noche",
+        "medio": "Hôtel Mayumba o Diphondo Lodge: 50-80 EUR/noche",
+        "comfort": "Mayumba Bay Resort: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecifes (15-25 EUR con operador local)",
+        "Playas vírgenes (gratis)",
+        "Observación de ballenas jorobadas (julio-octubre, 40 EUR tour)",
+        "Pesca artesanal con lugareños (negociable, 20-30 EUR)",
+        "Visita a reserva de tortugas Banco de Arguin (15 EUR)"
+      ],
+      "donde_comer": "Pescado fresco a la parrilla, camarones, cassava. Comidas locales: 6-10 EUR en comedores. Pocos restaurantes; cocina compartida en guesthouses.",
+      "consejo_local": "Pueblo muy pequeño; negocia directamente con pescadores locales para tours. El dinero en efectivo es obligatorio; no hay cajeros. Malaria: toma profilaxis.",
+      "plan_b_lluvia": "Snorkel se cancela en aguas turbias; playas siguen accesibles para paseos.",
+      "keywords": [
+        "Mayumba",
+        "playas Gabon",
+        "arrecifes coral",
+        "ballenas",
+        "Nyanga",
+        "snorkel"
+      ]
+    },
+    {
+      "id": "franceville",
+      "nombre": "Franceville",
+      "tipo": "ciudad",
+      "region": "Haut-Ogooué",
+      "descripcion": "Segunda ciudad más importante, ubicada en interior montañoso. Centro de minería de uranio pero con encanto local auténtico, mercados coloridos y acceso a reservas forestales. Punto de conexión hacia parques nacionales del interior.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Libreville: vuelo doméstico (1h, 80-120 EUR) o 4x4 (8h en ruta mala, muy cansador). Vuelo recomendado.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse Okondja o Résidence: 20-30 EUR/noche",
+        "medio": "Hôtel Masuku o Gîte du Tourisme: 45-70 EUR/noche",
+        "comfort": "Hôtel de Masuku: 90-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado central de productos locales (gratis)",
+        "Museo de Franceville (entrada: 5 EUR)",
+        "Visita a catedral local (gratis)",
+        "Caminata a Chutes de Poubara (cascadas, 10 EUR con operador)",
+        "Exploración de barrio de Okondja (gratis)"
+      ],
+      "donde_comer": "Comida local: yuca, plátano frito, carnes ahumadas. Mercado central: 5-8 EUR. Restaurantes básicos: 8-15 EUR. Zona de comida callejera en centro.",
+      "consejo_local": "Es donde los locales gaboneses viajan, no turistas. Atmósfera auténtica. El mercado es mejor a primera hora de mañana. Lleva repelente.",
+      "plan_b_lluvia": "Museo, mercados cubiertos, cafés locales. Las cascadas son espectaculares después de lluvia.",
+      "keywords": [
+        "Franceville",
+        "Haut-Ogooue",
+        "interior Gabon",
+        "cascadas Poubara",
+        "ciudad local"
+      ]
+    },
+    {
+      "id": "lambarene",
+      "nombre": "Lambaréné",
+      "tipo": "histórico",
+      "region": "Moyen-Ogooué",
+      "descripcion": "Pueblo histórico en río Ogooué, famoso por la clínica del Dr. Albert Schweitzer (Patrimonio UNESCO). Punto de conexión fluvial con pueblos remotos. Atmósfera colonial y cultural única, menos visitado que otros destinos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Libreville: vuelo doméstico a Port-Gentil (1h, 70 EUR), luego lancha o bote (2.5h, 35 EUR). O ruta terrestre con conexiones complejas.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse local o Auberge des Îles: 25-35 EUR/noche",
+        "medio": "Hôtel de Lambaréné: 50-75 EUR/noche",
+        "comfort": "Pocos opciones; lo mejor es medio"
+      },
+      "que_hacer": [
+        "Visita a Hospital Schweitzer (museo, 10 EUR entrada)",
+        "Paseos en piragua por río (15-25 EUR)",
+        "Exploración de islas fluviales (incluido en tours)",
+        "Mercado de Lambaréné (gratis)",
+        "Visita a iglesia histórica (gratis)"
+      ],
+      "donde_comer": "Comidas en río: pescado fresco a la parrilla. Rango: 7-12 EUR. Pocas opciones; come donde el hospedaje o negocia con locales.",
+      "consejo_local": "El hospital Schweitzer es pequeño pero significativo históricamente. El río es el corazón de la vida local; los botes son el transporte real. Madruga para evitar calor.",
+      "plan_b_lluvia": "Paseos en bote siguen siendo posibles; museo cubierto.",
+      "keywords": [
+        "Lambarene",
+        "Albert Schweitzer",
+        "rio Ogooue",
+        "historico",
+        "patrimonio"
+      ]
+    },
+    {
+      "id": "port-gentil",
+      "nombre": "Port-Gentil",
+      "tipo": "ciudad",
+      "region": "Ogooué-Maritime",
+      "descripcion": "Puerto petrolero importante pero con playas interesantes y punto de conexión hacia Loango, Lambaréné e islas. Base logística menos turística que Libreville pero con servicios decentes. Punto de partida hacia selva y mar.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Libreville: vuelo doméstico (1h, 70-100 EUR) o ferry (no regular; no recomendado). Vuelo es opción práctica.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse locale: 20-30 EUR/noche",
+        "medio": "Hôtel de la Baie o Hôtel Port-Gentil: 50-80 EUR/noche",
+        "comfort": "Hôtel Petro Gabon: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de Mandji (gratis)",
+        "Mercado de pescado (gratis, madrugada)",
+        "Paseos en bote hacia islas cercanas (30-50 EUR)",
+        "Pesca deportiva (negociable, 60-100 EUR)",
+        "Exploración de puerto y vida local (gratis)"
+      ],
+      "donde_comer": "Comida de puerto: pescado fresco, camarones. Rango: 8-15 EUR. Zonas de comedores simples en puerto.",
+      "consejo_local": "Es puerto activo; la atmósfera es de trabajo, no turismo. Si solo pasas una noche, come en puerto por calidad y precio. Las playas urbanas son mediocres; mejor como base para excursiones.",
+      "plan_b_lluvia": "Puerto funciona igual; mercado cubierto.",
+      "keywords": [
+        "Port-Gentil",
+        "puerto",
+        "petroleo",
+        "playas Mandji",
+        "Ogooue-Maritime"
+      ]
+    },
+    {
+      "id": "gamba",
+      "nombre": "Gamba",
+      "tipo": "naturaleza",
+      "region": "Ogooué-Maritime",
+      "descripcion": "Pueblo remoto en la costa sur, punto de entrada a Loango y reservas forestales intactas. Acceso muy restringido por actividad petrolera, pero ofrecido como base para trekking en selva virgen. Requiere permiso y operador especializado.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Libreville: vuelo doméstico a Gamba (1.5h, 100-150 EUR, vuelos limitados). Requiere arranjo previo con operador.",
+      "donde_dormir": {
+        "mochilero": "Solo con operadores/lodges; no hay hospedaje independiente",
+        "medio": "Gamba Lodge: 100-150 EUR/noche con pensión",
+        "comfort": "Gamba Resort (raro): 150-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking en selva primaria (incluido en lodge)",
+        "Safaris a pie (incluido)",
+        "Observación de fauna (elefantes, antílopes, aves)",
+        "Playas vírgenes cercanas (acceso restringido)",
+        "Paseos nocturnos en selva (incluido)"
+      ],
+      "donde_comer": "Solo en lodges; comida incluida o pagada a lodge. Pescado y verduras locales. No hay restaurantes independientes.",
+      "consejo_local": "Gamba es técnicamente cerrado a turismo independiente por actividad petrolera. Solo accesible con operadores establecidos (Loango Bay Lodge, Gamba Lodge). Reserva con 2-3 meses anticipación.",
+      "plan_b_lluvia": "Trekking es posible; lluvia intensifica experiencia selvática.",
+      "keywords": [
+        "Gamba",
+        "Loango acceso",
+        "selva primaria",
+        "safari remoto",
+        "Ogooue-Maritime"
+      ]
+    }
+  ]
+}

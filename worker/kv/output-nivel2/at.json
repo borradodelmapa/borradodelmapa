@@ -1,0 +1,224 @@
+{
+  "pais": "Austria",
+  "codigo": "at",
+  "destinos": [
+    {
+      "id": "viena",
+      "nombre": "Viena",
+      "tipo": "ciudad",
+      "region": "Este",
+      "descripcion": "Capital imperial con palacios barrocos, museos de clase mundial y una escena cultural vibrante. Centro histórico declarado Patrimonio de la UNESCO con arquitectura que mezcla épocas. Punto de partida ideal para explorar Austria y Europa Central.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "vuelo internacional a Viena (desde España 2-3 horas, 40-120 EUR), o tren desde otras ciudades austriacas",
+      "donde_dormir": {
+        "mochilero": "albergue 18-25 EUR/noche",
+        "medio": "hotel 3* 60-90 EUR/noche",
+        "comfort": "hotel 4* 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "visitar Palacio de Schönbrunn",
+        "recorrer Catedral de San Esteban",
+        "pasear por Ringstrasse",
+        "museos de arte y naturaleza",
+        "conciertos clásicos en salas históricas"
+      ],
+      "donde_comer": "Wiener Schnitzel (12-18 EUR), Apfelstrudel, Sachertorte, cerveza local (4-6 EUR)",
+      "consejo_local": "compra la Vienna Card para transporte ilimitado y descuentos en museos",
+      "plan_b_lluvia": "museos Hofburg, Belvedere, cafés históricos",
+      "keywords": [
+        "viena",
+        "imperio austro-hungaro",
+        "cultura clasica",
+        "palacios"
+      ]
+    },
+    {
+      "id": "salzburgo",
+      "nombre": "Salzburgo",
+      "tipo": "ciudad",
+      "region": "Noroeste",
+      "descripcion": "Cuna de Mozart situada junto a los Alpes, con un casco antiguo medieval espectacular. Famosa por la película 'Sonrisas y Lágrimas' y su herencia musical baroque. Base perfecta para explorar la región de Salzburgo y los lagos alpinos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "tren desde Viena (2,5 horas, 20-40 EUR) o desde Múnich (2 horas, 25-45 EUR)",
+      "donde_dormir": {
+        "mochilero": "albergue 17-24 EUR/noche",
+        "medio": "hotel 3* 55-80 EUR/noche",
+        "comfort": "hotel 4* 100-150 EUR/noche"
+      },
+      "que_fazer": [
+        "visitar Fortaleza de Hohensalzburg",
+        "recorrer casco antiguo medieval",
+        "casa natal de Mozart",
+        "tours relacionados con Sonrisas y Lágrimas",
+        "conciertos clásicos nocturnos"
+      ],
+      "donde_comer": "Salzburger Nockerl (11-15 EUR), Bosna (sándwich 5-7 EUR), café Mozart (café 3-4 EUR)",
+      "consejo_local": "sube a Hohensalzburg al atardecer para vistas panorámicas sin aglomeraciones",
+      "plan_b_lluvia": "Museo de Mozart, Residencia, cafés tradicionales",
+      "keywords": [
+        "salzburgo",
+        "mozart",
+        "alpes",
+        "sonrisas y lagrimas"
+      ]
+    },
+    {
+      "id": "innsbruck",
+      "nombre": "Innsbruck",
+      "tipo": "ciudad",
+      "region": "Tirol",
+      "descripcion": "Capital del Tirol en los Alpes, ideal para montañeros y amantes de deportes de invierno y verano. Arquitectura medieval bien preservada con vistas alpinas impresionantes. Excelente acceso a senderos de trekking y deportes de nieve según la estación.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre (senderismo), diciembre-marzo (esquí)",
+      "como_llegar": "tren desde Viena (10 horas, 40-70 EUR) o desde Múnich (2 horas, 30-50 EUR)",
+      "donde_dormir": {
+        "mochilero": "albergue 16-23 EUR/noche",
+        "medio": "hotel 3* 50-75 EUR/noche",
+        "comfort": "hotel 4* 95-140 EUR/noche"
+      },
+      "que_hacer": [
+        "teleférico a Hafelekar para vistas alpinas",
+        "senderismo en Zillertal",
+        "visitar Techo de Oro medieval",
+        "esquí o snow en invierno",
+        "aventura en glaciares"
+      ],
+      "donde_comer": "Tiroler Gröstl (13-17 EUR), Knödel (8-12 EUR), strudel de manzana (5 EUR)",
+      "consejo_local": "compra el Tirol Pass para acceso a teleféricos y atracciones",
+      "plan_b_lluvia": "museos tiroleses, galerías de arte, termas Aqua Dome",
+      "keywords": [
+        "innsbruck",
+        "tirol",
+        "alpes",
+        "esqui",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "hallstatt",
+      "nombre": "Hallstatt",
+      "tipo": "pueblo",
+      "region": "Salzkammergut",
+      "descripcion": "Pueblo lacustre de cuento de hadas considerado uno de los más bellos de Europa, con casas de colores reflejadas en el lago Hallstatt. Combina belleza natural con patrimonio minero histórico. Atrae multitudes pero merece la visita, especialmente al amanecer o atardecer.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre-octubre, mayo-junio (menos aglomeración)",
+      "como_llegar": "tren a Hallstatt + ferry (desde Viena 3,5 horas, 25-45 EUR total), o tour organizado desde Salzburgo (1,5 horas)",
+      "donde_dormir": {
+        "mochilero": "guesthouse 25-35 EUR/noche",
+        "medio": "hotel 3* 70-100 EUR/noche",
+        "comfort": "hotel 4* 130-180 EUR/noche"
+      },
+      "que_hacer": [
+        "paseos junto al lago",
+        "mina de sal prehistórica Hallein",
+        "subida al castillo Hohenwerfen",
+        "fotografía al amanecer",
+        "kayaking en el lago"
+      ],
+      "donde_comer": "trucha del lago (16-22 EUR), Kasnocken (11-14 EUR), café con vista al lago (4-5 EUR)",
+      "consejo_local": "llega antes de las 8am o después de las 17h para evitar cruceros turísticos",
+      "plan_b_lluvia": "mina de sal subterránea, museos, cafés lakeside",
+      "keywords": [
+        "hallstatt",
+        "lago",
+        "pueblo medieval",
+        "salzkammergut"
+      ]
+    },
+    {
+      "id": "graz",
+      "nombre": "Graz",
+      "tipo": "ciudad",
+      "region": "Estiria",
+      "descripcion": "Segunda ciudad de Austria con centro medieval conservado y arquitectura renacentista. Menos turística que Viena pero igualmente encantadora, con vida cultural vibrante y buena escena gastronómica. Capital cultural europea 2003 con edificios modernos icónicos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "tren desde Viena (2,5 horas, 20-40 EUR) o desde Ljubljana (2 horas, 25-40 EUR)",
+      "donde_dormir": {
+        "mochilero": "albergue 16-22 EUR/noche",
+        "medio": "hotel 3* 50-75 EUR/noche",
+        "comfort": "hotel 4* 90-130 EUR/noche"
+      },
+      "que_hacer": [
+        "subir a Schlossberg para vistas 360°",
+        "recorrer Altstadt medieval",
+        "visitar Kunsthaus (museo de arte moderno)",
+        "mercado Griesplatz",
+        "paseos por el río Mur"
+      ],
+      "donde_comer": "Steirischer Apfelstrudel (6-8 EUR), Kürbissuppe (sopa de calabaza, 8-10 EUR), Murtal wines (5-8 EUR)",
+      "consejo_local": "visita el mercado matutino para comida local auténtica a buen precio",
+      "plan_b_lluvia": "Kunsthaus, museos de folclore, tiendas de antigüedades",
+      "keywords": [
+        "graz",
+        "estiria",
+        "medieval",
+        "capital cultural"
+      ]
+    },
+    {
+      "id": "st-anton",
+      "nombre": "St. Anton am Arlberg",
+      "tipo": "pueblo",
+      "region": "Tirol Occidental",
+      "descripcion": "Legendario pueblo de esquí en los Alpes con vibrante vida nocturna y acceso a pistas de clase mundial. Centro de deportes de nieve pero también ofrece trekking espectacular en verano. Destino para aventureros activos en cualquier estación.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre-marzo (esquí), junio-septiembre (senderismo)",
+      "como_llegar": "tren desde Innsbruck (1,5 horas, 15-25 EUR) o desde Viena (9 horas, 35-60 EUR)",
+      "donde_dormir": {
+        "mochilero": "albergue 20-28 EUR/noche",
+        "medio": "hotel 3* 60-90 EUR/noche",
+        "comfort": "hotel 4* 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "esquí o snowboard en Arlberg",
+        "senderismo alpino de verano",
+        "parapente desde Galzigbahn",
+        "vida nocturna en Après-Ski",
+        "escalada en roca"
+      ],
+      "donde_comer": "Wiener Schnitzel (14-18 EUR), especialidades del Arlberg (12-16 EUR), cerveza local (5-7 EUR)",
+      "consejo_local": "lleva equipo adecuado; el clima cambia rapidamente en altitud",
+      "plan_b_lluvia": "aprés-ski cubierto, piscinas termales cercanas, museos",
+      "keywords": [
+        "st anton",
+        "esqui",
+        "arlberg",
+        "deportes invierno"
+      ]
+    },
+    {
+      "id": "melk",
+      "nombre": "Melk",
+      "tipo": "pueblo",
+      "region": "Baja Austria",
+      "descripcion": "Pueblo romántico del Danubio dominado por una abadía barroca espectacular perched sobre acantilados. Punto de partida ideal para navegar o caminar por el valle del Danubio (Patrimonio UNESCO). Acceso fácil desde Viena para excursión de un día o base para explorar la región.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "tren desde Viena Westbahnhof (1,5 horas, 15-25 EUR)",
+      "donde_dormir": {
+        "mochilero": "guesthouse 18-26 EUR/noche",
+        "medio": "hotel 3* 55-80 EUR/noche",
+        "comfort": "hotel 4* 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "visitar Abadía de Melk",
+        "paseo por el casco antiguo",
+        "crucero fluvial por el Danubio",
+        "cicloturismo del Danubio",
+        "mirador de la abadía al atardecer"
+      ],
+      "donde_comer": "trucha del Danubio (15-19 EUR), Apfelstrudel de la abadía (6 EUR), vinos Wachau (5-8 EUR)",
+      "consejo_local": "reserva la abadía con anticipación para evitar grandes grupos de tours",
+      "plan_b_lluvia": "interior de la abadía, museos, cafés con vista al Danubio",
+      "keywords": [
+        "melk",
+        "danubio",
+        "abadia",
+        "valle del danubio"
+      ]
+    }
+  ]
+}

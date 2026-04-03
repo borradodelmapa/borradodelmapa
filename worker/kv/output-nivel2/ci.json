@@ -1,0 +1,321 @@
+{
+  "pais": "Costa de Marfil",
+  "codigo": "ci",
+  "destinos": [
+    {
+      "id": "abidjan",
+      "nombre": "Abidján",
+      "tipo": "ciudad",
+      "region": "Sureste, Laguna Ebrié",
+      "descripcion": "Capital económica y principal hub de transporte de Costa de Marfil. Centro urbano caótico con mercados vibrantes, museos y vida nocturna. Punto de entrada obligatorio para la mayoría de viajeros.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Llegada a Abidján (aeropuerto internacional). Es el punto de entrada del país.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Plateau o Cocody: 15-25 EUR/noche",
+        "medio": "Hoteles 2-3 estrellas en Cocody o Le Plateau: 40-80 EUR/noche",
+        "comfort": "Hoteles 4-5 estrellas (Sofitel, Hilton): 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Treichville (gratis, haggling obligatorio)",
+        "Museo Nacional de Costa de Marfil (3 EUR)",
+        "Catedral de San Pablo (gratis)",
+        "Paseo por la Laguna Ebrié (tours: 15-20 EUR)",
+        "Barrio de Cocody para vida nocturna (gastos variables)"
+      ],
+      "donde_comer": "Attiéké con pescado frito en puestos callejeros (2-3 EUR). Restaurantes en Cocody para más opciones. Sopa de maní, fufu, aloco (plátano frito) en mercados.",
+      "consejo_local": "Negocia precios en mercados, pero no en transporte. Evita Abidján de noche en zonas desconocidas. El tráfico es caótico; usa taxis con taxímetro o Uber.",
+      "plan_b_lluvia": "Museos, compras en Plateau, cines en centros comerciales, cafés en Cocody",
+      "keywords": [
+        "Abidjan",
+        "Treichville",
+        "Cocody",
+        "Plateau",
+        "Laguna Ebrie",
+        "capital Costa Marfil"
+      ]
+    },
+    {
+      "id": "grand-bassam",
+      "nombre": "Grand-Bassam",
+      "tipo": "playa",
+      "region": "Sureste, Litoral",
+      "descripcion": "Pueblo costero con playas de arena oscura y atmósfera relajada. Antigua capital colonial con arquitectura francesa decrépita que le da carácter. Perfecta escapada de playa a 45 min de Abidján.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Abidján en autobús (1 hora, 2-3 EUR) o taxi compartido (30-40 min, 5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 12-18 EUR/noche",
+        "medio": "Hoteles pequeños frente a playa: 30-50 EUR/noche",
+        "comfort": "Resorts boutique: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Grand-Bassam (gratis, natación)",
+        "Recorrer edificios coloniales abandonados (gratis, fotografía)",
+        "Pesca artesanal al atardecer (gratis, observar)",
+        "Festival anual Cosmopolite (enero/febrero, entrada pagada si aplica)"
+      ],
+      "donde_comer": "Restaurantes de pescado fresco en la playa (8-15 EUR). Poisson braisé (pescado a la brasa), langosta. Pequeños puestos de comida callejera (2-4 EUR).",
+      "consejo_local": "Grand-Bassam es tranquilo pero a veces lento. Lleva efectivo; no todos aceptan tarjeta. El agua puede ser peligrosa para nadar dependiendo de la zona; pregunta localmente.",
+      "plan_b_lluvia": "Explorar edificios coloniales interiores, cafés cubiertos, museos locales si existen",
+      "keywords": [
+        "Grand Bassam",
+        "Bassam",
+        "playas Costa Marfil",
+        "pueblo costero",
+        "arquitectura colonial"
+      ]
+    },
+    {
+      "id": "yamoussoukro",
+      "nombre": "Yamoussoukro",
+      "tipo": "histórico",
+      "region": "Centro",
+      "descripcion": "Capital política de Costa de Marfil, una ciudad construida en medio de la selva con monumentos grandiosos y una atmósfera surrealista. Lugar único para entender el poder ivoiriano y su arquitectura ambiciosa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Abidján en autobús (4 horas, 8-12 EUR) o taxi compartido (más rápido, 15-20 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses simples: 12-20 EUR/noche",
+        "medio": "Hoteles 2-3 estrellas: 35-60 EUR/noche",
+        "comfort": "Hotel Président: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Basílica de Nuestra Señora de la Paz (gratis entrada, arquitectura monumental)",
+        "Palacio Presidencial (vistas exteriores, gratis)",
+        "Lago Yamoussoukro (paseo tranquilo, gratis)",
+        "Estatua de Félix Houphouët-Boigny (icono, gratis)"
+      ],
+      "donde_comer": "Restaurantes sencillos alrededor de la Basílica (5-10 EUR). Riz sauce arachide, fufu. Gastronomía limitada pero accesible.",
+      "consejo_local": "Yamoussoukro es una ciudad muerta; la mayoría de vida se concentra en 2-3 zonas. Alquila un taxi para el día (30-40 EUR) porque los sitios están dispersos. Visita la Basílica temprano para evitar calor.",
+      "plan_b_lluvia": "Basílica (cubierta), compras en mercados locales, descanso en hotel",
+      "keywords": [
+        "Yamoussoukro",
+        "capital politica",
+        "Basilica Nuestra Senora Paz",
+        "Houphouet-Boigny",
+        "arquitectura"
+      ]
+    },
+    {
+      "id": "man",
+      "nombre": "Man",
+      "tipo": "montaña",
+      "region": "Oeste",
+      "descripcion": "Pueblo montañoso en la región de Dix-Huit Montagnes con paisajes de selva verde exuberante y aire fresco. Centro de senderismo y punto de acceso a la región más salvaje de Costa de Marfil.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Abidján en autobús (8-10 horas, 15-20 EUR) o vuelo si existe. Viaje larguísimo; considera dividir en Daloa.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 10-15 EUR/noche",
+        "medio": "Pequeños hoteles: 25-40 EUR/noche",
+        "comfort": "Resorts de montaña (si existen): 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a Cascadas de Cascade (half-day trek, 10 EUR guía)",
+        "Subida a Mont Tonkoui (vistas panorámicas, 5-8 EUR guía)",
+        "Visitas a pueblos tradicionales Dan (gratis + propina guía)",
+        "Mercado tradicional de Man (gratis, compras locales)"
+      ],
+      "donde_comer": "Comida local básica en pequeños restaurantes (4-7 EUR). Sopa, arroz, verduras. Inflación de precios si esperas gastronomía; es comida simple.",
+      "consejo_local": "Man es aislado y relativamente inseguro fuera del pueblo. Contrata guías locales para senderismo. No hay mucho lujo; la atracción es la naturaleza y el trekking. Viaja en grupo si es posible.",
+      "plan_b_lluvia": "Museos de pueblos (si existen), cafés locales, descanso, viaja a Daloa",
+      "keywords": [
+        "Man",
+        "Dix-Huit Montagnes",
+        "montanas",
+        "senderismo",
+        "cascadas",
+        "Mont Tonkoui"
+      ]
+    },
+    {
+      "id": "assinie-mafia",
+      "nombre": "Assiné-Mafia",
+      "tipo": "playa",
+      "region": "Sureste, Litoral",
+      "descripcion": "Pueblo de pescadores tranquilo en la costa con playas vírgenes y ambiente auténtico. Alternativa más relajada y menos turística que Grand-Bassam, perfecta para quienes buscan soledad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Abidján en taxi compartido hacia Grand-Bassam, luego conexión local (total 2 horas, 8-10 EUR). O taxi privado (1.5 horas, 25-35 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses familiares: 10-15 EUR/noche",
+        "medio": "Pequeños hoteles de playa: 25-45 EUR/noche",
+        "comfort": "Resorts boutique: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de arena blanca (gratis, baño)",
+        "Observar pesca artesanal (gratis, fotografía/participación)",
+        "Paseos en piragua (kayak tradicional): 10-15 EUR",
+        "Compra de pescado fresco a pescadores (cena memorable, 5-10 EUR)"
+      ],
+      "donde_comer": "Restaurantes de pescado fresco en playa (10-15 EUR). Langostinos, pez gato, atún a la parrilla. Comida de pescadores, sin pretensiones.",
+      "consejo_local": "Assiné es muy tranquilo; casi no hay turismo. Los locales son amables pero la infraestructura es básica. Lleva efectivo. El agua puede ser fuerte; nada en grupos o pregunta primero.",
+      "plan_b_lluvia": "Paseos cubiertos, descanso en hamaca, juegos locales",
+      "keywords": [
+        "Assinie",
+        "Mafia",
+        "playas tranquilas",
+        "pueblos pescadores",
+        "playa virgen"
+      ]
+    },
+    {
+      "id": "bouake",
+      "nombre": "Boakié",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Segunda ciudad de Costa de Marfil, centro comercial y cultural con mercados animados y vida local auténtica. Hub para explorar la región central sin turismo de masas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Abidján en autobús (4 horas, 8-10 EUR) o taxi compartido (6-8 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 12-18 EUR/noche",
+        "medio": "Hoteles pequeños: 30-50 EUR/noche",
+        "comfort": "Hotel 3-4 estrellas: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Boakié (gratis, compras y observación)",
+        "Museo de Boakié (2-3 EUR, arte local si está abierto)",
+        "Barrio de Koumassi (ambiente local, gratis)",
+        "Catedral de Boakié (gratis, arquitectura)"
+      ],
+      "donde_comer": "Restaurantes locales abundantes (5-8 EUR). Attiéké, yam frito, caldo de pescado. Precios muy accesibles.",
+      "consejo_local": "Boakié es menos turística que Abidján y más barata. Es más auténtica pero menos cómoda. Buena base para explorar pueblos cercanos. Tráfico menos caótico que la capital.",
+      "plan_b_lluvia": "Mercados cubiertos, tiendas, descanso en hotel",
+      "keywords": [
+        "Bouake",
+        "Boake",
+        "segunda ciudad",
+        "mercados",
+        "centro comercial"
+      ]
+    },
+    {
+      "id": "daloa",
+      "nombre": "Daloa",
+      "tipo": "ciudad",
+      "region": "Centro-Oeste",
+      "descripcion": "Centro regional importante en ruta hacia Man o la costa oeste. Punto de parada obligado si viajas al occidente del país. Menos turística, más local.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Abidján en autobús (6-7 horas, 10-15 EUR). Parada entre Abidján y Man.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 10-15 EUR/noche",
+        "medio": "Hoteles: 25-40 EUR/noche",
+        "comfort": "Hotel 3-4 estrellas: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado central (gratis, vida local)",
+        "Paseos por la ciudad (gratis)",
+        "Compra de café local (souvenirs, 5-10 EUR)"
+      ],
+      "donde_comer": "Restaurantes locales (4-8 EUR). Fufu, sopa, arroz. Gastronomía simple pero abundante.",
+      "consejo_local": "Daloa es principalmente parada de paso. No hay atracciones turísticas grandes; el valor está en la vida local y descanso. Buen lugar para probar transporte intercity ivoiriano.",
+      "plan_b_lluvia": "Mercado cubierto, descanso en hotel, comida local",
+      "keywords": [
+        "Daloa",
+        "centro-oeste",
+        "parada transito",
+        "mercados",
+        "cafe"
+      ]
+    },
+    {
+      "id": "san-pedro",
+      "nombre": "San-Pedro",
+      "tipo": "ciudad",
+      "region": "Suroeste, Litoral",
+      "descripcion": "Puerto costero en el suroeste con playas amplias y acceso a la región de cacao. Punto de salida para explorar la costa occidental menos turística de Costa de Marfil.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Abidján en autobús (8-9 horas, 15-20 EUR). Viaje largo; considera vuelo si disponible.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 12-18 EUR/noche",
+        "medio": "Hoteles pequeños: 30-50 EUR/noche",
+        "comfort": "Hotel 3-4 estrellas: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de San-Pedro (gratis, baño)",
+        "Puerto pesquero (gratis, observación)",
+        "Mercado de pescado (gratis, autenticidad)",
+        "Excursión a plantaciones de cacao cercanas (10-20 EUR con guía)"
+      ],
+      "donde_comer": "Restaurantes de mariscos frescos (10-15 EUR). Pez espada, camarones, pulpo. Gastronomía costera.",
+      "consejo_local": "San-Pedro es más aventurero y menos turístico. Puerto activo con energía local. Playas buenas pero infraestructura básica. Buen punto para entender industria de cacao ivoiriana.",
+      "plan_b_lluvia": "Puerto cubierto, mercado, descanso",
+      "keywords": [
+        "San Pedro",
+        "puerto costero",
+        "suroeste",
+        "playas",
+        "cacao"
+      ]
+    },
+    {
+      "id": "monts-korhogo",
+      "nombre": "Korhogo",
+      "tipo": "rural",
+      "region": "Norte",
+      "descripcion": "Centro cultural del norte, famoso por tradiciones textiles y arte local. Puerta a la región norteña con vida rural auténtica y artesanía tradicional.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Abidján en autobús (10-12 horas, 15-20 EUR). Viaje larguísimo; vuelo recomendado si disponible.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 10-15 EUR/noche",
+        "medio": "Hoteles simples: 25-40 EUR/noche",
+        "comfort": "Hotel 3 estrellas: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Taller de batik y textiles locales (visita: 5-10 EUR, compras variables)",
+        "Mercado de Korhogo (gratis, artesanía local)",
+        "Museos de arte tradicional (3-5 EUR si están abiertos)",
+        "Visitas a pueblos Senufo cercanos (guía local: 15-20 EUR)"
+      ],
+      "donde_comer": "Restaurantes locales (4-8 EUR). Fufu, sopa, carne a la brasa. Gastronomía norteña.",
+      "consejo_local": "Korhogo requiere viaje largo desde Abidján. Vale la pena para artesanía textil y cultura Senufo. Contrata guías locales para pueblos. Seguridad: zona relativamente tranquila pero aislada.",
+      "plan_b_lluvia": "Talleres cubiertos, museos, mercado cubierto",
+      "keywords": [
+        "Korhogo",
+        "norte",
+        "arte textil",
+        "batik",
+        "cultura Senufo",
+        "artesania"
+      ]
+    },
+    {
+      "id": "taï",
+      "nombre": "Parque Nacional de Taï",
+      "tipo": "naturaleza",
+      "region": "Suroeste, Selva",
+      "descripcion": "Reserva de biosfera UNESCO con selva tropical primaria intacta. Uno de los últimos bosques prístinos de África occidental con fauna única. Destino para naturalistas aventureros dispuestos a trabajo físico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde San-Pedro o Tabou (pueblo más cercano) en taxi/pickup (2-3 horas difíciles, 10-15 EUR). Acceso limitado; requiere coordinación previa.",
+      "donde_dormir": {
+        "mochilero": "Campamento en la selva o guesthouses en Tabou: 15-25 EUR/noche",
+        "medio": "Lodge rústico si existe: 40-70 EUR/noche",
+        "comfort": "Opciones limitadas; requiere camping"
+      },
+      "que_hacer": [
+        "Trekking guiado por la selva (8 horas: 30-50 EUR guía)",
+        "Observación de fauna (chimpancés, elefantes, antílopes)",
+        "Avistamiento de aves (80+ especies, binoculares recomendados)",
+        "Baños en ríos naturales (gratis)"
+      ],
+      "donde_comer": "Cocina local simple en Tabou (3-7 EUR). En el parque, cocina en campamento. Lleva provisiones.",
+      "consejo_local": "Taï requiere logística seria. Reserva con ONG locales (WCS, etc) antes de llegar. Guías obligatorios. Insectos, calor, lluvia: prepárate bien. No es turismo cómodo; es aventura real.",
+      "plan_b_lluvia": "Los treks en lluvia son difíciles; pospón o acampa. Explora pueblos Tabou.",
+      "keywords": [
+        "Tai",
+        "parque nacional",
+        "selva tropical",
+        "UNESCO",
+        "trekking",
+        "fauna",
+        "chimpances"
+      ]
+    }
+  ]
+}

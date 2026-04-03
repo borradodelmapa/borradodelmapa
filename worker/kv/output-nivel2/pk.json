@@ -1,0 +1,370 @@
+{
+  "pais": "Pakistán",
+  "codigo": "pk",
+  "destinos": [
+    {
+      "id": "hunza-valley",
+      "nombre": "Hunza Valley",
+      "tipo": "montaña",
+      "region": "Gilgit-Baltistan, norte",
+      "descripcion": "Valle de montañas espectaculares en el Karakoram con pueblos tradicionales, fortalezas antiguas y vistas del Rakaposhi. Destino imprescindible para trekking y fotografía de paisajes alpinos. La región es conocida por sus habitantes longevos y la ausencia de turismo masivo.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Islamabad: vuelo a Gilgit (1h, 80-120 EUR) o jeep/autobús (12-14h, 25-40 EUR), luego jeep compartido a Hunza (3h, 5-10 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guest houses familiares en Karimabad o Altit: 10-20 EUR/noche",
+        "medio": "Mountain lodges con vistas: 25-45 EUR/noche",
+        "comfort": "Resorts de lujo con spa: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a Passu Cones y glaciares (gratis/guía 30-50 EUR/día)",
+        "Fortaleza de Altit (entrada 3 EUR)",
+        "Jeep safari por Karakoram Highway (media jornada, 40-60 EUR con guía)",
+        "Baño en aguas termales de Hunza (gratis)"
+      ],
+      "donde_comer": "Cocina pakistaní casera: chapatis, daal, pollo a la mantequilla. Almuerzo 3-5 EUR en comedores locales. Come en las casas de huéspedes o en Karimabad bazaar.",
+      "consejo_local": "Negocia precios de jeeps compartidos en la mañana, no al llegar. Las mejores vistas son al atardecer desde el mirador de Baltit.",
+      "plan_b_lluvia": "Visita el museo de Hunza en Karimabad, explora mercados locales de productos secos, o viaja a pueblos vecinos más bajos en altitud.",
+      "keywords": [
+        "Karimabad",
+        "Altit",
+        "Passu",
+        "Karakoram",
+        "Rakaposhi",
+        "trekking Hunza",
+        "valle glacial"
+      ]
+    },
+    {
+      "id": "lahore",
+      "nombre": "Lahore",
+      "tipo": "histórico",
+      "region": "Punjab, este",
+      "descripcion": "Capital cultural de Pakistán con arquitectura mogol excepcional, mercados caóticos y vida nocturna vibrante. La ciudad antigua contiene palacios, mezquitas y fuerte de valor histórico mundial. Punto de entrada ideal para viajeros independientes con excelente infraestructura.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Vuelo internacional a Lahore (hub principal) o tren desde Islamabad (5h, 8-15 EUR) o autobús (5-6h, 10-20 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Gulberg o ciudad antigua: 12-20 EUR/noche",
+        "medio": "Hoteles de 3-4 estrellas en Gulberg: 40-70 EUR/noche",
+        "comfort": "Hoteles de lujo en Gulberg o Cantonment: 120-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Fuerte Lahore (entrada 3 EUR)",
+        "Mezquita Badshahi (gratis)",
+        "Paseo nocturno por bazares de la ciudad vieja: Urdu Bazaar, Anarkali (gratis)",
+        "Museo de Punjab (entrada 2 EUR)",
+        "Tumbas de emperadores mogoles (gratis)"
+      ],
+      "donde_comer": "Nihari (carne estofada), seekh kebab, kulfi. Comidas 2-4 EUR en comedores de Anarkali. Restaurantes en Gulberg: 6-12 EUR. Prueba chai en cualquier esquina: 0.30 EUR.",
+      "consejo_local": "El Fuerte es mágico al atardecer cuando se ilumina. Camina por la ciudad vieja de noche, es seguro y mucho más fresco. Usa taxis Uber (más seguro que taxis normales) después de las 8 PM.",
+      "plan_b_lluvia": "Visita museos de aire acondicionado, compra en Mall of the Punjab, o disfruta del food court de Gulberg.",
+      "keywords": [
+        "Anarkali",
+        "Gulberg",
+        "Fuerte Rojo",
+        "Badshahi",
+        "mogol",
+        "Punjab",
+        "ciudad vieja"
+      ]
+    },
+    {
+      "id": "islamabad-rawalpindi",
+      "nombre": "Islamabad y Rawalpindi",
+      "tipo": "ciudad",
+      "region": "Punjab septentrional, capital",
+      "descripcion": "Capital moderna y punto de entrada más lógico con infraestructura excelente y cercana a montañas del norte. Islamabad es ordenada y segura; Rawalpindi es caótica pero auténtica. Base ideal para explorar el norte.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Aeropuerto internacional de Islamabad (hub principal), o tren/autobús desde Lahore (5-6h, 8-20 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Islamabad F-7 o Rawalpindi: 10-18 EUR/noche",
+        "medio": "Hoteles en Islamabad Sector G-5: 35-60 EUR/noche",
+        "comfort": "Hoteles de 4-5 estrellas en Islamabad: 100-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo en Margalla Hills (gratis, trail de 1-3h)",
+        "Faisal Mosque (entrada gratis, donativo sugerido)",
+        "Mercado Rawalpindi (gratis, caótico y auténtico)",
+        "Pakistan Monument (entrada 1.50 EUR)",
+        "Lok Virsa Museum (entrada 2 EUR)"
+      ],
+      "donde_comer": "Biryani, tandoori chicken, samosas. Comidas en Rawalpindi: 2-4 EUR. Restaurantes en Islamabad: 6-15 EUR. Comer en el mercado de Rawalpindi es experiencia imprescindible.",
+      "consejo_local": "No uses taxis amarillos en Rawalpindi; Uber es más seguro. Margalla Hills al atardecer es perfecto para fotos. Llega a Faisal Mosque antes de las 5 PM para evitar aglomeraciones de oración.",
+      "plan_b_lluvia": "Museos, shopping en mercados cubiertos, cafeterías en Islamabad.",
+      "keywords": [
+        "Margalla Hills",
+        "Faisal Mosque",
+        "Rawalpindi",
+        "Sector G-5",
+        "F-7",
+        "Pakistan Monument",
+        "capital"
+      ]
+    },
+    {
+      "id": "naran-kaghan",
+      "nombre": "Naran-Kaghan",
+      "tipo": "montaña",
+      "region": "Khyber Pakhtunkhwa, norte",
+      "descripcion": "Estación de montaña pintoresca a 2,000 metros con bosques de pinos, cascadas y aire alpino. Popular entre viajeros locales, menos saturado que Hunza. Acceso fácil desde Islamabad para trekking corto y descanso en naturaleza.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Islamabad: autobús o jeep compartido (3.5-4h, 12-20 EUR) hasta Naran",
+      "donde_dormir": {
+        "mochilero": "Guest houses básicas: 8-15 EUR/noche",
+        "medio": "Resorts de montaña: 25-50 EUR/noche",
+        "comfort": "Lodges con vistas panorámicas: 70-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a Saif-ul-Malook (lago alpino, 3-4h, 30 EUR con guía)",
+        "Cascadas de Kaghan (senderismo gratis)",
+        "Paseos a caballo por prados (20-30 EUR/hora)",
+        "Picnic junto al río Kunhar (gratis)"
+      ],
+      "donde_comer": "Comida casera en guest houses: 3-5 EUR. Daal, chapati, pollo. Hay pocos restaurantes; come donde duermes.",
+      "consejo_local": "El trekking a Saif-ul-Malook es popular; sal temprano para evitar multitudes. Las noches son muy frías incluso en verano; trae abrigo.",
+      "plan_b_lluvia": "Quédate en el pueblo explorando tiendas locales, o baja a pueblos a menor altitud.",
+      "keywords": [
+        "Saif-ul-Malook",
+        "Kaghan",
+        "Kunhar",
+        "trekking",
+        "lago alpino",
+        "pinos",
+        "cascadas"
+      ]
+    },
+    {
+      "id": "peshawar",
+      "nombre": "Peshawar",
+      "tipo": "histórico",
+      "region": "Khyber Pakhtunkhwa, noroeste",
+      "descripcion": "Ciudad histórica en la ruta de la Seda con bazares densos y auténticos. Centro comercial y cultural del noroeste con arquitectura colonial británica mezclada con mercados tradicionales. Experiencia intensa y poco turística.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Autobús desde Islamabad (8-10h, 15-25 EUR) o vuelo (1h, 60-100 EUR)",
+      "alerta_seguridad": "Peshawar está en una región con alertas de seguridad intermitentes. Verifica situación actual antes de viajar. Evita grandes concentraciones.",
+      "donde_dormir": {
+        "mochilero": "Guest houses cerca de la estación de autobús: 10-18 EUR/noche",
+        "medio": "Hoteles de 3 estrellas: 25-45 EUR/noche",
+        "comfort": "Hoteles internacionales con seguridad: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Bazaar de Qissakhani (mercado de especias y telas, gratis)",
+        "Mosque Mahabat Khan (entrada gratis)",
+        "Peshawar Museum (entrada 2 EUR)",
+        "Casco antiguo a pie (gratis)",
+        "Fort Bala Hisar (entrada 1.50 EUR)"
+      ],
+      "donde_comer": "Chapli kebab (especialidad local), nihari, korma. Comidas 2-4 EUR en bazares. No hay restaurantes occidentales; come comida local en pequeñas tiendas.",
+      "consejo_local": "Visita bazares a primera hora antes de que se llenen. Usa transporte seguro (Uber/taxi pre-acordado). No hagas fotos sin permiso en bazares.",
+      "plan_b_lluvia": "Museos, tiendas cubiertas de bazares, café tradicional.",
+      "keywords": [
+        "Qissakhani",
+        "ruta de la Seda",
+        "bazares",
+        "Mahabat Khan",
+        "Khyber Pakhtunkhwa",
+        "comercio"
+      ]
+    },
+    {
+      "id": "skardu",
+      "nombre": "Skardu",
+      "tipo": "montaña",
+      "region": "Gilgit-Baltistan, norte",
+      "descripcion": "Hub de montañismo con acceso a K2, glaciares Siachen y Baltoro. Base para treks y expediciones de alta altitud. Pueblo pequeño pero bien conectado con infraestructura para viajeros independientes.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Vuelo desde Islamabad (1h, 80-120 EUR) o conducción brutal (18-20h, 40 EUR autobús) desde Islamabad vía Karakoram Highway",
+      "donde_dormir": {
+        "mochilero": "Guest houses en el bazar: 12-20 EUR/noche",
+        "medio": "Hoteles con montañas visibles: 30-60 EUR/noche",
+        "comfort": "Resorts de montaña con servicios: 90-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a Fairy Meadows/Nanga Parbat base camp (3 días, 150-200 EUR con guía)",
+        "Glaciar Baltoro (expedición 7-10 días, 400-600 EUR)",
+        "Deosai Plains (día completo en jeep, 50-80 EUR)",
+        "Lago Satpara (día corto, 20-30 EUR con guía)"
+      ],
+      "donde_comer": "Comida casera en guest houses: 3-5 EUR. Carne guisada, daal, pan. Algunos restaurantes básicos en bazar: 4-7 EUR.",
+      "consejo_local": "Los vuelos a Skardu se cancelan frecuentemente por niebla; ten días flexibles. Aclimatación es importante (3,000 m). Contrata guías acreditados para treks.",
+      "plan_b_lluvia": "Cancela vuelos son frecuentes. Espera en Islamabad o reduce a actividades locales de baja altitud.",
+      "keywords": [
+        "K2",
+        "Baltoro",
+        "Siachen",
+        "Deosai",
+        "Fairy Meadows",
+        "glaciares",
+        "montañismo"
+      ]
+    },
+    {
+      "id": "chitral",
+      "nombre": "Chitral",
+      "tipo": "naturaleza",
+      "region": "Khyber Pakhtunkhwa, noroeste",
+      "descripcion": "Valle remoto en el Hindu Kush con paisajes alpinos intactos, pueblos kalasha indígenas y trekking espectacular. Destino para viajeros con tiempo y ánimo aventurero, poco turismo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Autobús desde Peshawar (10-12h, 20-30 EUR) o jeep compartido (carretera difícil)",
+      "alerta_seguridad": "La ruta hacia Chitral atraviesa zona montañosa remota con carreteras peligrosas. Verifica seguridad actual.",
+      "donde_dormir": {
+        "mochilero": "Guest houses sencillas: 8-15 EUR/noche",
+        "medio": "Lodges locales: 20-40 EUR/noche",
+        "comfort": "Resort de montaña: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a pueblos Kalasha (1-3 días, 40-80 EUR con guía)",
+        "Senderismo por el valle (gratis)",
+        "Batin Gol Pass (trekking de 2 días, requiere aclimatación)",
+        "Mercado local de Chitral (gratis)"
+      ],
+      "donde_comer": "Comida casera similar a Hunza: daal, pollo, chapati. 2-4 EUR en comedores. Come en guest houses.",
+      "consejo_local": "Los pueblos Kalasha son únicos; respeta su cultura, no tomes fotos sin permiso. La carretera es brutal; viaja de día. El viaje es la experiencia.",
+      "plan_b_lluvia": "Las carreteras pueden cerrarse en lluvia. Quédate en Chitral pueblo o baja a altitud menor.",
+      "keywords": [
+        "Kalasha",
+        "Hindu Kush",
+        "remoto",
+        "trekking Chitral",
+        "Batin Gol",
+        "indígena"
+      ]
+    },
+    {
+      "id": "karachi",
+      "nombre": "Karachi",
+      "tipo": "playa",
+      "region": "Sindh, sur",
+      "descripcion": "Mayor ciudad de Pakistán con playas, vida nocturna y restaurantes modernos. Puerto histórico con arquitectura colonial. Menos caótico que Lahore pero más dinámico; punto de entrada alternativo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Vuelo internacional o autobús desde Lahore (14-16h, 20-30 EUR) o vuelo doméstico (2h, 40-80 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en Zamzama o Clifton: 12-20 EUR/noche",
+        "medio": "Hoteles en Defence/Clifton: 40-80 EUR/noche",
+        "comfort": "Hoteles de lujo en Clifton con vistas al mar: 120-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de Clifton y Hawke's Bay (gratis)",
+        "Puerto histórico y Frere Hall (entrada gratis)",
+        "Museos: National Museum (entrada 1.50 EUR)",
+        "Mercado de Bombay (gratis, caótico)",
+        "Atardecer en Bab-e-Islam o paseo costero (gratis)"
+      ],
+      "donde_comer": "Biryani de Karachi (especialidad), seafood, haleem. Comidas 3-6 EUR en comedores. Restaurantes en Clifton/Zamzama: 10-20 EUR. Chai de playa: 0.30 EUR.",
+      "consejo_local": "Las playas de Clifton al atardecer son vida social local. Come seafood fresco en puestos costeros. Evita conducir de noche; usa Uber.",
+      "plan_b_lluvia": "Shopping en centros comerciales, museos, restaurantes.",
+      "keywords": [
+        "Clifton",
+        "Hawke's Bay",
+        "Zamzama",
+        "puerto",
+        "mar",
+        "biryani",
+        "costa"
+      ]
+    },
+    {
+      "id": "mohenjo-daro",
+      "nombre": "Mohenjo-daro",
+      "tipo": "histórico",
+      "region": "Sindh, centro-sur",
+      "descripcion": "Ruinas de civilización del Valle del Indo (3,300 a.C.), patrimonio mundial. Uno de los yacimientos arqueológicos más antiguos del mundo con ciudad planificada intacta. Experiencia histórica única en Pakistán.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Karachi: autobús o tren a Larkana (4-5h, 10-20 EUR), luego jeep a Mohenjo-daro (1h, 5-10 EUR). O desde Lahore en tren (14-16h)",
+      "donde_dormir": {
+        "mochilero": "Guest houses en Larkana: 8-15 EUR/noche",
+        "medio": "Hotel pequeño en Larkana: 20-35 EUR/noche",
+        "comfort": "No hay opciones; alojamiento básico solamente"
+      },
+      "que_hacer": [
+        "Ruinas de Mohenjo-daro (entrada 3 EUR, visita 2-3h con guía)",
+        "Museo en el sitio (entrada incluida)",
+        "Ver casas antiguas y calles (gratis dentro del sitio)"
+      ],
+      "donde_comer": "Comida básica en Larkana: daal, arroz, chapati. 2-3 EUR. Come antes de ir al sitio (no hay comida allí).",
+      "consejo_local": "Contrata guía en la entrada (5-10 EUR) para entender la ciudad antigua. El sitio es extenso; trae agua. Viaja desde Karachi o Lahore en un viaje largo.",
+      "plan_b_lluvia": "El sitio es al aire libre; la lluvia lo hace imposible. Visita en estación seca.",
+      "keywords": [
+        "Valle del Indo",
+        "civilización",
+        "patrimonio mundial",
+        "arqueología",
+        "Larkana",
+        "3300 AC"
+      ]
+    },
+    {
+      "id": "saif-ul-mulook-naran",
+      "nombre": "Saif-ul-Malook (desde Naran)",
+      "tipo": "montaña",
+      "region": "Khyber Pakhtunkhwa, norte",
+      "descripcion": "Lago alpino cristalino a 3,500 metros rodeado de montañas nevadas. Accesible en día completo desde Naran. Experiencia de alta montaña sin necesidad de trekking de varios días.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Naran: jeep compartido hasta trailhead (1.5h, 10 EUR), luego trekking o pony (3-4h subida, 30-40 EUR alquiler pony)",
+      "donde_dormir": {
+        "mochilero": "Duerme en Naran, día de excursión a lago",
+        "medio": "Duerme en Naran, día de excursión a lago",
+        "comfort": "Duerme en Naran, día de excursión a lago"
+      },
+      "que_hacer": [
+        "Trekking al lago (4h subida, gratis caminar)",
+        "Alquiler de pony si no quieres caminar (30-40 EUR)",
+        "Fotos del lago (gratis)",
+        "Picnic en orilla del lago (gratis)"
+      ],
+      "donde_comer": "Lleva tu propio picnic desde Naran. Sandwiches y agua. Come en las orillas del lago.",
+      "consejo_local": "Sal muy temprano (5-6 AM) para tener tiempo. El camino es empinado pero bien marcado. El mal de altura es posible; sube lentamente.",
+      "plan_b_lluvia": "Cancela si hay nube baja o lluvia. No hay visibilidad ni seguridad.",
+      "keywords": [
+        "lago alpino",
+        "3500m",
+        "pony",
+        "trekking Naran",
+        "nevado",
+        "día completo"
+      ]
+    },
+    {
+      "id": "swat-valley",
+      "nombre": "Swat Valley",
+      "tipo": "naturaleza",
+      "region": "Khyber Pakhtunkhwa, norte",
+      "descripcion": "Valle montañoso con ríos turquesas, trekking accesible y ruinas budistas antiguas. Centro turístico tradicional pakistaní con buena infraestructura. Popular entre mochileros por combinación de naturaleza y facilidad de acceso.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Islamabad o Peshawar: autobús a Mingora (6-8h desde Islamabad, 20-30 EUR), luego jeep a pueblos del valle",
+      "alerta_seguridad": "Swat fue afectado por conflicto pasado. Actualmente seguro para turismo, pero verifica situación reciente.",
+      "donde_dormir": {
+        "mochilero": "Guest houses en Mingora o Saidu Swat: 8-15 EUR/noche",
+        "medio": "Resorts de montaña: 25-50 EUR/noche",
+        "comfort": "Lodges con vistas al valle: 70-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a Malam Jabba (estación de esquí en verano, 40 EUR con guía)",
+        "Ruinas budistas de Butkara (entrada 1.50 EUR)",
+        "Paseos junto al río Swat (gratis)",
+        "Minhan resort y cascadas (gratis entrada, resort pagado)"
+      ],
+      "donde_comer": "Comida casera en guest houses: 3-5 EUR. Daal, pollo, chapati. Restaurantes pequeños en Mingora: 4-7 EUR.",
+      "consejo_local": "Alquila jeep compartido para moverte por el valle. Los trekking son moderados, accesibles sin experiencia. Las ruinas budistas son menos conocidas que debían.",
+      "plan_b_lluvia": "Visita ruinas cubiertas, pueblos cercanos a menor altitud, o quédate en alojamiento con vistas al valle.",
+      "keywords": [
+        "Mingora",
+        "río Swat",
+        "Malam Jabba",
+        "Butkara",
+        "trekking",
+        "budista"
+      ]
+    }
+  ]
+}

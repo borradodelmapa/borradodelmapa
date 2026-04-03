@@ -1,0 +1,316 @@
+{
+  "pais": "Albania",
+  "codigo": "al",
+  "destinos": [
+    {
+      "id": "tirana",
+      "nombre": "Tirana",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital de Albania con arquitectura colorida, museos y vida nocturna vibrante. Centro neurálgico para conocer la historia moderna del país y punto de partida natural. Mezcla de herencia otomana, comunista y contemporánea en constante transformación.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Aeropuerto Internacional de Tirana-Rinas (20 km): autobús 40 min (3 EUR), taxi/Uber 25 EUR, coche de alquiler disponible",
+      "donde_dormir": {
+        "mochilero": "Hostales en Durrës Road o Vatan Street: 15-20 EUR/noche",
+        "medio": "Hoteles 3 estrellas en centro: 40-60 EUR/noche",
+        "comfort": "Hoteles 4-5 estrellas: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Plaza Skanderbeg y Mezquita de Ethem Bey (gratis)",
+        "Museo Nacional de Historia (5 EUR)",
+        "Recorrido de graffiti en barrio de Komuna Parisit (10 EUR tour guiado)",
+        "Montaña Dajti en teleférico (2.5 EUR ida y vuelta, vistas panorámicas)"
+      ],
+      "donde_comer": "Byrek tradicional (1-2 EUR), shtatzem (ensalada de berenjenas), raki casero. Zona Blloku es cara; comer en callejuelas laterales es más económico (8-15 EUR menú)",
+      "consejo_local": "Los taxis sin taxímetro te engañarán; usa Uber o negocia antes. Los precios para turistas en zona Blloku son doble que en zonas locales.",
+      "plan_b_lluvia": "Museo de Espionaje (5 EUR), galerías de arte en Blloku, café en Casa Muzika",
+      "keywords": [
+        "Tirane",
+        "Skanderbeg",
+        "Blloku",
+        "Plaza central",
+        "capitale"
+      ]
+    },
+    {
+      "id": "saranda",
+      "nombre": "Sarandë",
+      "tipo": "playa",
+      "region": "Sur (Riviera)",
+      "descripcion": "Pueblo costero en la Riviera Albanesa con playas preciosas y acceso a ruinas griegas de Butrinto. Menos abarrotado que Durrës, ideal para combinar playa, senderismo y arqueología. Vistas al mar Jónico espectaculares.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Tirana en autobús (8-10 horas, 12-15 EUR) o vuelo a Corfu (Grecia) y ferry (30 min, 10 EUR). Coche alquilado es más flexible (400 km aprox).",
+      "donde_dormir": {
+        "mochilero": "Hostales frente al mar o en barrio viejo: 18-25 EUR/noche",
+        "medio": "Hoteles 3 estrellas con vistas: 35-50 EUR/noche",
+        "comfort": "Resorts de lujo con playa privada: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Saranda y paseo marítimo (gratis)",
+        "Ruinas de Butrinto, Patrimonio UNESCO (5 EUR entrada)",
+        "Isla de Ksamil: playas de arena blanca (ferry 5 EUR o nado)",
+        "Senderismo a Llogara Pass y mirador (gratis)"
+      ],
+      "donde_comer": "Pescado fresco a la parrilla (12-18 EUR), gambas sarandeñas, camarones. Restaurantes en paseo marítimo más caros (20-30 EUR); callejuelas laterales más baratas (10-15 EUR)",
+      "consejo_local": "Butrinto está a 18 km (autobús local o taxi compartido 2 EUR). Ir temprano para evitar turistas. Las playas cerca de Ksamil tienen agua cristalina pero es difícil aparcar.",
+      "plan_b_lluvia": "Museo Arqueológico de Butrinto (incluido en entrada), paseo cubierto en puerto, café tradicional local",
+      "keywords": [
+        "Sarande",
+        "Riviera",
+        "Butrinto",
+        "Ksamil",
+        "playa sur"
+      ]
+    },
+    {
+      "id": "kotor",
+      "nombre": "Kotor (excursión desde Albania)",
+      "tipo": "histórico",
+      "region": "Montenegro (frontera)",
+      "descripcion": "Ciudadela medieval amurallada declarada Patrimonio UNESCO en la Bahía de Kotor. Aunque está en Montenegro, es la excursión más popular desde Albania (2 horas desde Sarandë). Arquitectura veneciana y vistas espectaculares.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "Desde Sarandë en coche alquilado o tour compartido (2 horas, 15-20 EUR); o autobús Tirana-Kotor (7 horas, 15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en barrio viejo: 20-28 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 50-70 EUR/noche",
+        "comfort": "Resort en bahía: 90-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Murallas y ciudadela (gratis subida, 3 EUR museo)",
+        "Iglesia de San Lucas y Catedral (2 EUR cada una)",
+        "Paseo por bahía en bote (15-25 EUR hora)",
+        "Senderismo a Fortaleza de San Juan (gratis, 1.5 horas)"
+      ],
+      "donde_comer": "Cefalópodos frescos, langostinos, pasta a la veneciana. Frente al agua caro (25-35 EUR); callejones interiores razonables (12-18 EUR)",
+      "consejo_local": "Los aparcamientos en ciudad vieja están regulados; deja el coche en zona exterior. Sube a las murallas al atardecer para fotos mejores.",
+      "plan_b_lluvia": "Museos marítimos en ciudadela, iglesias, galerías de arte",
+      "keywords": [
+        "Kotor",
+        "Montenegro",
+        "bahía",
+        "medieval",
+        "excursion"
+      ]
+    },
+    {
+      "id": "gjirokastra",
+      "nombre": "Gjirokastër",
+      "tipo": "histórico",
+      "region": "Sur",
+      "descripcion": "Pueblo de montaña con arquitectura otomana excepcional y fortaleza defensiva. Patrimonio UNESCO menos concurrido que otras ciudades. Perfecta para fotografía, gastronomía local y sumergirse en Albania auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Tirana en autobús (5-6 horas, 10 EUR). Desde Sarandë (1.5 horas, 5 EUR). Coche: 150 km de Tirana",
+      "donde_dormir": {
+        "mochilero": "Hostales y posadas en barrio viejo: 16-22 EUR/noche",
+        "medio": "Hoteles tradicionales: 35-50 EUR/noche",
+        "comfort": "Hoteles boutique en casas históricas: 60-85 EUR/noche"
+      },
+      "que_hacer": [
+        "Fortaleza de Gjirokastër con museo militar (3 EUR, vistas 360°)",
+        "Paseo por bazaar y casas de piedra tradicionales (gratis)",
+        "Casa museo de Enver Hoxha (2 EUR)",
+        "Festival folclórico si coincide (junio, gratis entrada inicial)"
+      ],
+      "donde_comer": "Flan (queso feta en hoja de parra), especialidad de carnes grill, melaza local. Mercado principal para comprar provisiones (muy barato). Restaurantes en bazaar 8-14 EUR",
+      "consejo_local": "El pueblo es pequeño y se recorre a pie en 3 horas. Las tiendas de souvenirs venden alfombras falsas; compra en bazaar oficial. Acuérdate llevar dinero efectivo, pocos sitios aceptan tarjeta.",
+      "plan_b_lluvia": "Casa museo de Ismail Kadare (2 EUR), museos pequeños en fortaleza, café tradicional bajo techo",
+      "keywords": [
+        "Gjirokaster",
+        "Gjirokastra",
+        "fortaleza",
+        "otomana",
+        "patrimonio"
+      ]
+    },
+    {
+      "id": "durrës",
+      "nombre": "Durrës",
+      "tipo": "playa",
+      "region": "Centro-Oeste",
+      "descripcion": "Playa principal cerca de Tirana con puerto antiguo y anfiteatro romano. Combinación de playas modernas, ruinas históricas y vida local sin excesivo turismo. Punto de acceso rápido desde la capital (30 min).",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Autobús desde Tirana (30 min, 0.4 EUR), tren (35 min, 0.4 EUR), taxi (30 EUR). Coche: 30 km",
+      "donde_dormir": {
+        "mochilero": "Hostales en paseo marítimo o centro: 15-20 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 35-50 EUR/noche",
+        "comfort": "Resorts costeros: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Durrës (gratis)",
+        "Anfiteatro Romano (2 EUR entrada, siglo II d.C.)",
+        "Museo Arqueológico (3 EUR)",
+        "Paseo por puerto y pescado fresco (gratis caminar)"
+      ],
+      "donde_comer": "Gambas a la sal, pescado a la parrilla, saláta dushi (ensalada local). Chiringuitos en playa 10-15 EUR; mercado de pescado 8-12 EUR menú",
+      "consejo_local": "El anfiteatro está medio enterrado bajo construcciones nuevas; visita con guía local (5 EUR) para entender la historia. La playa al atardecer es cuando se llena de locales.",
+      "plan_b_lluvia": "Museo Arqueológico (cubierto), paseo portuario bajo arcadas, cafeterías",
+      "keywords": [
+        "Durres",
+        "Durrres",
+        "playa",
+        "romano",
+        "puerto"
+      ]
+    },
+    {
+      "id": "berat",
+      "nombre": "Berat",
+      "tipo": "histórico",
+      "region": "Centro",
+      "descripcion": "Ciudad blanca de 2,400 años con arquitectura preservada del período otomano, declarada Patrimonio UNESCO. Panorámica desde la colina es espectacular. Menos masificada que Dubrovnik, ideal para fotografía y cultura.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Tirana en autobús (2 horas, 3 EUR), coche (110 km). Desde Gjirokastër (1.5 horas, 5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales en barrio viejo: 16-25 EUR/noche",
+        "medio": "Hoteles tradicionales con patio: 40-60 EUR/noche",
+        "comfort": "Hoteles boutique con vistas: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Fortaleza de Berat y vistas panorámicas (2.5 EUR)",
+        "Iglesia Onufriu con iconos antiguos (2 EUR)",
+        "Paseo por barrio viejo (Mangalem) a pie (gratis)",
+        "Museo etnológico de Berat (2 EUR)"
+      ],
+      "donde_comer": "Byrek casero, molleja a la brasa, flan tradicional. Restaurantes en barrio viejo 10-18 EUR; terraza con vistas más cara (20-25 EUR)",
+      "consejo_local": "La mejor vista es desde la fortaleza al atardecer cuando la luz es dorada. El barrio viejo es un laberinto; lleva mapa o GPS. Los gatos son abundantes; llévalos trocitos de carne.",
+      "plan_b_lluvia": "Iglesias y museos en barrio viejo (cubiertos), café tradicional, talleres de artesanos locales",
+      "keywords": [
+        "Berat",
+        "fortaleza",
+        "ciudad blanca",
+        "otomana",
+        "Mangalem"
+      ]
+    },
+    {
+      "id": "ohrid",
+      "nombre": "Ohrid (excursión desde Albania)",
+      "tipo": "histórico",
+      "region": "Macedonia del Norte (frontera)",
+      "descripcion": "Antigua ciudad portuaria en lago Ohrid, Patrimonio UNESCO. Accesible desde Albania en 2 horas. Iglesias bizantinas, paseo lacustre y gastronomía macedónica. Uno de los lagos más antiguos de Europa.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Tirana en autobús directo (5-6 horas, 10 EUR) o coche alquilado (280 km). Desde Berat (3 horas, 8 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostales frente al lago: 18-24 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 40-65 EUR/noche",
+        "comfort": "Resorts de lujo en lago: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo lacustre y playas (gratis)",
+        "Iglesia de San Jovan Kaneo (2 EUR)",
+        "Fortaleza de Samuel (2 EUR vistas del lago)",
+        "Bote en lago a Isla de Sveti Naum (10 EUR)"
+      ],
+      "donde_comer": "Trucha fresca del lago, pez perch, sopa de pescado macedónica. Frente al agua 15-22 EUR; callejuelas 10-14 EUR",
+      "consejo_local": "El paso fronterizo es fácil con pasaporte comunitario. Ohrid es más limpio y turístico que ciudades albanesas; si buscas autenticidad, vuelve a Berat.",
+      "plan_b_lluvia": "Museos en iglesias, galerías de arte, café junto al lago",
+      "keywords": [
+        "Ohrid",
+        "Ohrida",
+        "Macedonia",
+        "lago",
+        "excursion"
+      ]
+    },
+    {
+      "id": "valbona",
+      "nombre": "Valbona Valley",
+      "tipo": "montaña",
+      "region": "Norte",
+      "descripcion": "Valle alpino rodeado de picos de 2,000+ metros ideal para senderismo. Menos conocido que otros destinos, auténtico y virgen. Acceso por carreteras de montaña escénicas; requiere aclimatación.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Tirana en coche alquilado (4-5 horas, 260 km hacia Bajram Curri). Autobús a Bajram Curri, luego transporte local (muy pocas opciones públicas)",
+      "donde_dormir": {
+        "mochilero": "Posadas de montaña simples: 18-25 EUR/noche",
+        "medio": "Casas guesthouse: 30-50 EUR/noche",
+        "comfort": "No hay hoteles de lujo; mejor opción es bungalow rústico: 60-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo valle Valbona-Theth (6-8 horas, ruta emblemática)",
+        "Cascada de Grunhas (1 hora senderismo, gratis)",
+        "Paseo por aldeas tradicionales (gratis)",
+        "Fotografía de picos Prokletije (gratis)"
+      ],
+      "donde_comer": "Carne a la brasa, pan casero, queso fresco, miel local. En guesthouses 8-12 EUR comida completa; sin restaurantes formales",
+      "consejo_local": "Necesitas tus propias provisiones si vas trekking. Las casas guesthouse ofrecen cena si avisan antes. Las carreteras son malas pero seguras; conduce lento. Hay guardias fronterizos pero son amables.",
+      "plan_b_lluvia": "Quedarse en posada, observar montañas desde terraza cubierta, juegos locales",
+      "keywords": [
+        "Valbona",
+        "trekking",
+        "Theth",
+        "Prokletije",
+        "montaña norte"
+      ]
+    },
+    {
+      "id": "vlora",
+      "nombre": "Vlora",
+      "tipo": "playa",
+      "region": "Sur",
+      "descripcion": "Puerto histórico y playa popular en la costa sur. Menor multitud que Sarandë, con playa ancha de arena y acceso a parques nacionales costeros. Centro de vida nocturna si buscas bares.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Tirana en autobús (3 horas, 5 EUR), coche (140 km). Desde Sarandë (2 horas, 8 EUR hacia norte)",
+      "donde_dormir": {
+        "mochilero": "Hostales en paseo marítimo: 16-22 EUR/noche",
+        "medio": "Hoteles 3 estrellas: 35-55 EUR/noche",
+        "comfort": "Resorts de playa: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Vlora (gratis)",
+        "Paseo marítimo y monumento de independencia (gratis)",
+        "Excursión a Parque Nacional Llogara (entrada 2 EUR, senderismo)",
+        "Playa de Dukati cercana (5 km, más salvaje)"
+      ],
+      "donde_comer": "Gambas sarandanas, pulpo a la parrilla, ensalada griega. Restaurantes en paseo 12-20 EUR; mercado y chiringuitos 8-12 EUR",
+      "consejo_local": "La ciudad puede ser ruidosa por vida nocturna; elige hotel en zona tranquila si buscas descanso. Dukati es mejor playa pero sin servicios; lleva agua.",
+      "plan_b_lluvia": "Museos pequeños en puerto, paseo cubierto, bares interiores",
+      "keywords": [
+        "Vlora",
+        "Vlore",
+        "playa sur",
+        "puerto",
+        "Llogara"
+      ]
+    },
+    {
+      "id": "theth",
+      "nombre": "Theth Valley",
+      "tipo": "montaña",
+      "region": "Norte",
+      "descripcion": "Valle remoto en Alpes Albaneses con arquitectura tradicional perfectamente preservada. Acceso complicado (no hay carretera asfaltada) pero recompensa con autenticidad pura y trekking de clase mundial. Ideal para aventureros con tiempo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "julio-septiembre",
+      "como_llegar": "Desde Tirana coche a Bajram Curri (5 horas, 280 km), luego coche de montaña o a pie (2-3 horas de walk final). Carretera de tierra muy difícil en lluvia. Vía trekking desde Valbona (8 horas, sendero señalizado)",
+      "donde_dormir": {
+        "mochilero": "Posadas de montaña muy simples: 15-25 EUR/noche",
+        "medio": "Casas guesthouse locales: 25-40 EUR/noche",
+        "comfort": "Posadas mejoradas pero rústicas: 50-75 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a cascadas y picos (varias rutas de 3-6 horas, gratis)",
+        "Visita a iglesia de Theth (gratis)",
+        "Torre defensiva Kulla e Ngujimit (gratis entrada, 2 EUR foto)",
+        "Trekking a Blue Eye Spring cercano (4 horas, gratis)"
+      ],
+      "donde_comer": "Comida casera en guesthouses (8-10 EUR), sin restaurantes; lleva algo de comida de respaldo",
+      "consejo_local": "No hay gasolina, ATM ni tienda. Compra todo en Bajram Curri. La ruta Valbona-Theth trekking es más fácil que llegar en coche. Algunos guesthouses no tienen electricidad 24h.",
+      "plan_b_lluvia": "Quedar en posada, caminar corto bajo lluvia (se ve bonito), escritura/lectura",
+      "keywords": [
+        "Theth",
+        "Trekking",
+        "Alpes",
+        "valle norte",
+        "aventura"
+      ]
+    }
+  ]
+}

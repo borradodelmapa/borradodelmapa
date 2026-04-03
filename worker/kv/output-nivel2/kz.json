@@ -1,0 +1,369 @@
+{
+  "pais": "Kazajistán",
+  "codigo": "kz",
+  "destinos": [
+    {
+      "id": "almaty",
+      "nombre": "Almaty",
+      "tipo": "ciudad",
+      "region": "Sureste (Almaty Region)",
+      "descripcion": "Antigua capital y mayor ciudad de Kazajistán, ubicada al pie de las montañas Tian Shan. Centro cultural y gastronómico con mercados tradicionales, museos y vida nocturna. Punto de partida ideal para excursiones a naturaleza y montañas cercanas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-septiembre, diciembre-enero",
+      "como_llegar": "Vuelo desde Europa (Estambul, Moscú) 4-6h, 50-120 EUR. Autobús desde frontera Kyrgyzstan 6-8h, 15-25 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel en Almaty Central: 8-15 EUR/noche",
+        "medio": "Hotel 3* en Turgen o Gogol Street: 25-50 EUR/noche",
+        "comfort": "Hotel 4-5* en centro: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Osh (Oshskiy Bazaar) - compra y observación (gratis)",
+        "Parque Nacional Turgen Gorge - senderismo y vistas (gratis)",
+        "Teleférico a Chimbulak - vistas de la ciudad (10 EUR)",
+        "Museo Nacional de Kazajistán (8 EUR)",
+        "Catedral Ortodoxa de la Ascensión (gratis)"
+      ],
+      "donde_comer": "Plov, beshbarmak (carne con fideos), kumis. Rango 5-15 EUR. Barrio Turgen Street para comer local; Abay Avenue para cafés modernos.",
+      "consejo_local": "El mercado de Osh abre temprano (6am). Ve antes de las 9am para ver la actividad real y evitar aglomeración. Negocia precios en souvenirs.",
+      "plan_b_lluvia": "Museo Nacional, Medeu (pista de hielo histórica), cafés de té en bazares cubiertos, compras en Khan Shatyr (centro comercial futurista).",
+      "keywords": [
+        "Almaty",
+        "Alma-Ata",
+        "ciudad más grande Kazakhstan",
+        "Turgen",
+        "Medeu",
+        "Chimbulak"
+      ]
+    },
+    {
+      "id": "astana-nur-sultan",
+      "nombre": "Astana (Nur-Sultán)",
+      "tipo": "ciudad",
+      "region": "Centro (Akmola Region)",
+      "descripcion": "Capital futurista construida desde cero en 1997, con arquitectura vanguardista y amplias avenidas. Experiencia única de ciudad planificada moderna con museos de clase mundial. Punto de conexión obligatorio para vuelos internacionales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Vuelo desde Almaty 2h, 30-60 EUR. Tren desde Almaty 16-18h, 20-40 EUR. Autobús 18-20h, 15-25 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel en Saryarka: 10-18 EUR/noche",
+        "medio": "Hotel 3* en centro: 35-60 EUR/noche",
+        "comfort": "Hotel 4-5* cerca Khan Shatyr: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Mausoleo Khoja Ahmed Yasavi (UNESCO) - arquitectura islámica (5 EUR)",
+        "Palacio de Paz y Reconciliación - pirámide de vidrio (gratis exterior, 5 EUR interior)",
+        "Parque Riverside - paseo y vistas (gratis)",
+        "Museo Nacional de Historia (10 EUR)",
+        "Monumento Bayterek - vista panorámica (8 EUR)"
+      ],
+      "donde_comer": "Plov, laghman (fideos), kumis, kazy (embutido kazajo). Rango 6-16 EUR. Khan Shatyr para comida moderna; Turksib District para local.",
+      "consejo_local": "La ciudad es enorme: usa taxi (Yandex app, 1-3 EUR) o autobús para moverte. El frío puede ser extremo en invierno (-20°C). El Mausoleo de Khoja Ahmed Yasavi está en Turkestán, a 200km: tren o tour desde Astana.",
+      "plan_b_lluvia": "Museos (Nacional, Historia del Espacio), Khan Shatyr (centro comercial con parque acuático), cines, bibliotecas.",
+      "keywords": [
+        "Astana",
+        "Nur-Sultan",
+        "Nursultan",
+        "Akmola",
+        "capital",
+        "Bayterek",
+        "Khan Shatyr"
+      ]
+    },
+    {
+      "id": "big-almaty-lake",
+      "nombre": "Big Almaty Lake",
+      "tipo": "naturaleza",
+      "region": "Sureste (Almaty Region)",
+      "descripcion": "Lago alpino de aguas turquesas a 2511m de altitud, a 30km de Almaty. Excursión clásica de medio día con vistas espectaculares de montaña y fauna local. Experiencia de naturaleza pura sin infraestructura turística pesada.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "julio-septiembre",
+      "como_llegar": "Desde Almaty: tour organizado (30-50 EUR todo incluido) o taxi + caminata (10 EUR en taxi + gasolina). 2h total.",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento. Dormir en Almaty, viaje de día.",
+        "medio": "No hay alojamiento. Dormir en Almaty.",
+        "comfort": "No hay alojamiento. Dormir en Almaty."
+      },
+      "que_hacer": [
+        "Senderismo alrededor del lago (gratis)",
+        "Fotografía de vistas panorámicas (gratis)",
+        "Observación de fauna (aves, ardillas de tierra) (gratis)",
+        "Picnic (traer comida desde Almaty)"
+      ],
+      "donde_comer": "No hay restaurantes. Lleva picnic desde Almaty: pan, queso, frutas, agua (8-12 EUR para comprar).",
+      "consejo_local": "Empieza muy temprano (6-7am) para evitar tour groups. El último tramo es caminata de 30-40 min bastante empinada. Lleva capas: puede hacer frío arriba incluso en julio. El agua es demasiado fría para bañarse.",
+      "plan_b_lluvia": "Imposible con lluvia fuerte: los caminos se vuelven peligrosos. Reprogramar para otro día o visitar Turgen Gorge (más bajo).",
+      "keywords": [
+        "Big Almaty Lake",
+        "Turquoise Lake",
+        "alpine lake",
+        "2511m",
+        "Almaty lakes"
+      ]
+    },
+    {
+      "id": "turkestan-samarkand",
+      "nombre": "Turkestán (Turkistan)",
+      "tipo": "histórico",
+      "region": "Suroeste (Turkistan Region)",
+      "descripcion": "Antigua ciudad de la Ruta de la Seda con patrimonio islámico extraordinario, especialmente el Mausoleo Khoja Ahmed Yasavi (UNESCO). Centro espiritual del Islam de Asia Central con bazares tradicionales y arquitectura osmanlí.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Tren desde Astana 18-20h, 20-40 EUR. Autobús desde Astana 20h, 15-25 EUR. Vuelo Almaty-Aktau, luego bus (más complicado).",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Old Town: 10-16 EUR/noche",
+        "medio": "Hotel 3* cerca Mausoleo: 25-45 EUR/noche",
+        "comfort": "Hotel 4* en nuevo Turkestán: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Mausoleo Khoja Ahmed Yasavi (UNESCO) - arquitectura islámica (5 EUR)",
+        "Bazar de Turkestán - compras y observación (gratis)",
+        "Tumaris Gate - puerta histórica (gratis)",
+        "Pecado Alem Tomb (tumba islándica menor) (gratis)",
+        "Paseo nocturno por Old Town iluminado (gratis)"
+      ],
+      "donde_comer": "Kebab, plov, laghman, sopa de carne. Rango 4-12 EUR. Bazares para comer local; restaurantes cerca Mausoleo para turistas.",
+      "consejo_local": "La ciudad se divide en Old Town (histórico) y New Town. Todo lo importante está en Old Town a pie. El Mausoleo cierra al mediodía (pausa 12-14h), ir por la mañana.",
+      "plan_b_lluvia": "Bazar cubierto, museos pequeños (arqueología, etnografía), té en casas de té tradicionales.",
+      "keywords": [
+        "Turkestan",
+        "Turkistan",
+        "Khoja Ahmed Yasavi",
+        "Ruta Seda",
+        "UNESCO",
+        "Samarkand kazajo"
+      ]
+    },
+    {
+      "id": "kolsai-lakes",
+      "nombre": "Kolsai Lakes",
+      "tipo": "naturaleza",
+      "region": "Sureste (Almaty Region)",
+      "descripcion": "Sistema de tres lagos alpinos escalonados en montañas Tian Shan, a 150km de Almaty. Senderismo de varios días o trekkings de corta duración con alojamiento en jurtadas. Combinación perfecta de naturaleza virgen y experiencia nómada kazaja.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Almaty: tour organizado (100-150 EUR, 2-3 días todo incluido) o alquiler auto + senderismo. 4-5h en coche + caminar.",
+      "donde_dormir": {
+        "mochilero": "Jurtada con familia local: 15-25 EUR/noche (incluye comidas)",
+        "medio": "Jurtada mejorada o pequeño guesthouse: 30-50 EUR/noche",
+        "comfort": "Lodge de turismo premium: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking entre los tres lagos (gratis, requiere guide 30-50 EUR/día)",
+        "Senderismo al Segundo Lago (6h, gratis)",
+        "Equitación hacia el Tercer Lago (50 EUR)",
+        "Pesca en lago (gratis con permiso local)",
+        "Experiencia nómada: vida con familia kazaja (gratis si se aloja en jurtada)"
+      ],
+      "donde_comer": "Comida casera kazaja en jurtadas: carne, té, pan. Incluido en paquete de alojamiento. Restaurante en base del Primer Lago (8-15 EUR).",
+      "consejo_local": "Mejor ir con tour organizado: Las rutas no están bien señalizadas y el clima cambia rápido. Las jurtadas auténticas ofrecen experiencias increíbles pero requieren estar preparado para comodidad básica.",
+      "plan_b_lluvia": "Niebla es común: no arruina la experiencia, solo reduce vistas. Lluvia fuerte hace peligroso el trekking; espera a mejorar o ve al Primer Lago (más bajo).",
+      "keywords": [
+        "Kolsai Lakes",
+        "Kolsai",
+        "three lakes",
+        "alpine lakes",
+        "trekking Kazakhstan",
+        "jurtada"
+      ]
+    },
+    {
+      "id": "altyn-emel-national-park",
+      "nombre": "Altyn-Emel National Park",
+      "tipo": "desierto",
+      "region": "Sureste (Almaty Region)",
+      "descripcion": "Parque nacional con paisajes desérticos, cañones y formaciones rocosas en el desierto de Betpak-Dala. Atracciones incluyen Aktau Canyon (montañas multicolor), Duna Cantante y vida salvaje de Asia Central. Experiencia de desierto accesible desde Almaty.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Almaty: tour organizado (100-140 EUR, 2 días) o auto alquilado + camping. 300km, 5-6h de conducción.",
+      "donde_dormir": {
+        "mochilero": "Camping en parque: 10-15 EUR/noche (traer tienda o alquilar en tour)",
+        "medio": "Guesthouse en Saryshagan: 20-35 EUR/noche",
+        "comfort": "Lodge de turismo en parque: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Aktau Canyon - senderismo entre cañones multicolores (gratis, entrada parque 5 EUR)",
+        "Duna Cantante - acústica natural del desierto (gratis)",
+        "Observación de vida salvaje: gacelas, jinetes (gratis)",
+        "Conducción 4x4 en desierto (60-100 EUR con guía)",
+        "Sunset viewing desde colinas (gratis)"
+      ],
+      "donde_comer": "Comida de campamento en tour o guesthouse: carne a la brasa, pan kazajo. Rango 10-18 EUR. Llevar agua y snacks adicionales.",
+      "consejo_local": "La Duna Cantante solo canta con condiciones específicas de arena y humedad: no esperes sonidos espectaculares. Aktau Canyon es la atracción principal y justifica el viaje solo.",
+      "plan_b_lluvia": "Lluvia es rara en desierto. Polvo y viento son comunes: lleva gafas y protección solar. El parque es visitable en casi cualquier clima.",
+      "keywords": [
+        "Altyn-Emel",
+        "Aktau Canyon",
+        "Singing Dune",
+        "Betpak-Dala",
+        "desert Kazakhstan",
+        "desierto"
+      ]
+    },
+    {
+      "id": "charyn-canyon",
+      "nombre": "Charyn Canyon",
+      "tipo": "naturaleza",
+      "region": "Sureste (Almaty Region)",
+      "descripcion": "Cañón espectacular de paredes rojas y areniscas a 200km de Almaty, similar al Grand Canyon en miniatura. Senderismo a lo largo del río Charyn con paisajes dramáticos. Accesible como excursión de 1-2 días desde Almaty.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Almaty: tour organizado (60-90 EUR) o auto alquilado (10 EUR gasolina). 200km, 3-4h de conducción.",
+      "donde_dormir": {
+        "mochilero": "Camping/jurtada en Charyn: 12-18 EUR/noche",
+        "medio": "Guesthouse cerca cañón: 25-40 EUR/noche",
+        "comfort": "No hay comfort nearby. Dormir en Almaty, viaje de día recomendado."
+      },
+      "que_hacer": [
+        "Senderismo Castle Trail - 14km por fondo cañón (gratis)",
+        "Paseo Gorge Edge (miradores de cima) (gratis)",
+        "Baño en río Charyn (agua fría) (gratis)",
+        "Fotografía de puestas de sol (gratis)",
+        "Picnic en cañón (traer comida) (gratis)"
+      ],
+      "donde_comer": "Lleva picnic desde Almaty. Guesthouses cercanos ofrecen comida local (8-15 EUR). No hay restaurantes en el cañón.",
+      "consejo_local": "Castle Trail es sendero popular pero poco marcado: mejor ir con guía local o tour organizado. Las paredes son frágiles; no te alejes del camino oficial.",
+      "plan_b_lluvia": "Las lluvias pueden causar crecidas del río: peligroso en Castle Trail. Mejor evitar o esperar a clima claro.",
+      "keywords": [
+        "Charyn Canyon",
+        "Charyn Gorge",
+        "red rocks",
+        "river hiking",
+        "Grand Canyon Kazakhstan"
+      ]
+    },
+    {
+      "id": "issyk-lake",
+      "nombre": "Issyk Lake",
+      "tipo": "montaña",
+      "region": "Sureste (Almaty Region)",
+      "descripcion": "Lago glacial a 2195m en las montañas Turgen, a 60km de Almaty. Excursión clásica de trekking a un día con vistas de glaciares y montaña pura. Menos turístico que Big Almaty Lake, más salvaje y accesible.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "julio-septiembre",
+      "como_llegar": "Desde Almaty: tour organizado (50-70 EUR) o taxi + trekking (15 EUR taxi). 4h total incluido caminata.",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento. Dormir en Almaty, viaje de día.",
+        "medio": "No hay alojamiento. Dormir en Almaty.",
+        "comfort": "No hay alojamiento. Dormir en Almaty."
+      },
+      "que_hacer": [
+        "Trekking al lago desde Turgen Gorge (6-8h round trip, gratis)",
+        "Fotografía de glaciares y montaña (gratis)",
+        "Observación de fauna alpina (gratis)",
+        "Picnic junto al lago (traer comida) (gratis)"
+      ],
+      "donde_comer": "Lleva picnic desde Almaty. No hay facilidades. Agua del lago es bebible.",
+      "consejo_local": "Es una excursión seria para senderistas con experiencia: 2000m+ de elevación, terreno rocoso, clima impredecible. Parte muy temprano (5-6am).",
+      "plan_b_lluvia": "Niebla es muy frecuente en julio-agosto: no arruina excursión pero reduces vistas. Lluvia fuerte hace el sendero peligroso.",
+      "keywords": [
+        "Issyk Lake",
+        "Issyk",
+        "glacial lake",
+        "Turgen Gorge",
+        "alpine hiking",
+        "2195m"
+      ]
+    },
+    {
+      "id": "saryesik-atyrau-desert",
+      "nombre": "Ustyurt Plateau & Mangystau Desert",
+      "tipo": "desierto",
+      "region": "Oeste (Mangystau Region)",
+      "descripcion": "Región árida extrema con paisajes lunares: Door to Hell (cráter de gas ardiente), Jadyding Canyon, y formaciones rocosas surreales. Destino para viajeros aventureros que buscan lo inusual y remoto en Asia Central.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre-marzo",
+      "como_llegar": "Vuela a Aktau (desde Almaty 3h, 60-120 EUR o desde Astana). Luego tour desde Aktau (200-300 EUR, 2-3 días) o alquiler auto.",
+      "donde_dormir": {
+        "mochilero": "Camping en desierto: 15-20 EUR/noche (incluido en tour)",
+        "medio": "Guesthouse en Aktau o tour lodge: 30-50 EUR/noche",
+        "comfort": "Hotel en Aktau: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Door to Hell (Darvaza Crater) - cráter de fuego ardiente (gratis, entrada desierto 10 EUR)",
+        "Jadyding Canyon - hiking entre rocas (gratis)",
+        "Bozzhira Canyon - formaciones rocosas (gratis)",
+        "Observación de vida salvaje del desierto (gratis)",
+        "Puesta de sol en desierto (gratis)"
+      ],
+      "donde_comer": "Comida de campamento: carne, té, pan. Incluido en tour 15-20 EUR. Restaurantes en Aktau (10-20 EUR).",
+      "consejo_local": "Mangystau es uno de los lugares más remotos de Asia Central: ve con tour organizado. La gasolina y agua son críticas. Viaja en invierno para evitar calor extremo (40°C+).",
+      "plan_b_lluvia": "Lluvia es casi inexistente. Viento de arena es el enemigo: protege todo. Tormentas de polvo pueden ocurrir; asegúrate de estar en asentamiento.",
+      "keywords": [
+        "Mangystau",
+        "Door to Hell",
+        "Darvaza",
+        "Ustyurt",
+        "Aktau",
+        "lunar landscape",
+        "Jadyding",
+        "desierto remoto"
+      ]
+    },
+    {
+      "id": "karaganda-gulag-museum",
+      "nombre": "Karagandá (Karagandy) & Prison Camp Museum",
+      "tipo": "histórico",
+      "region": "Centro (Karaganda Region)",
+      "descripcion": "Ciudad industrial con pasado sombría como centro del Gulag soviético. Museo en antiguo campo de prisioneros ofrece perspectiva histórica oscura pero crucial. Destino para entender la historia de la URSS, no para turismo convencional.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Tren desde Astana 4h, 15-30 EUR. Autobús desde Astana 5h, 10-20 EUR. Vuelo desde Almaty 2h, 40-80 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel en centro: 10-15 EUR/noche",
+        "medio": "Hotel 3* en Bukhar Zhyrau: 25-45 EUR/noche",
+        "comfort": "Hotel 4* en centro: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Prison Camp Museum (Karlag Museum) - historia del Gulag (8 EUR, requiere 3-4h)",
+        "Memorial a víctimas del Gulag (gratis)",
+        "Museos de Historia Local (5-10 EUR)",
+        "Catedral ortodoxa Exaltación (gratis)",
+        "Paseo por parque memorial (gratis)"
+      ],
+      "donde_comer": "Comida kazaja típica: plov, beshbarmak, kebab. Rango 5-12 EUR. Restaurantes en calle Bukhar Zhyrau.",
+      "consejo_local": "Karagandá es ciudad deprimida pero históricamente importante. El museo del Gulag es intenso y recomendable para entender URSS. La mayoría son ruinas; interés arqueológico más que recreativo.",
+      "plan_b_lluvia": "Museos interiores, catedral, librerías. El museo del Gulag es la atracción principal y está cubierto.",
+      "keywords": [
+        "Karaganda",
+        "Karagandy",
+        "Karlag Museum",
+        "Gulag",
+        "Soviet history",
+        "prison camp",
+        "historical tourism"
+      ]
+    },
+    {
+      "id": "semei-nuclear-history",
+      "nombre": "Semey (Semipalatinsk) & Nuclear Heritage",
+      "tipo": "histórico",
+      "region": "Este (East Kazakhstan Region)",
+      "descripcion": "Ciudad con historia compleja como sitio de pruebas nucleares soviéticas. Museo Nuclear importante y cementerio de víctimas. Destino educativo para interesados en Guerra Fría y consecuencias ambientales, no para turismo casual.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Vuelo desde Almaty 3h, 50-100 EUR o desde Astana 2h, 40-70 EUR. Tren desde Astana 24h, 25-45 EUR (muy lento).",
+      "donde_dormir": {
+        "mochilero": "Hostel/guesthouse: 12-18 EUR/noche",
+        "medio": "Hotel 3*: 30-50 EUR/noche",
+        "comfort": "Hotel 4*: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo del Testeo Nuclear (Nuclear Testing Museum) (10 EUR, 2-3h)",
+        "Monumento a las víctimas (Polygon Memorial) (gratis)",
+        "Paseo histórico por ciudad (gratis)",
+        "Museo Local de Historia (5 EUR)",
+        "Río Irtysh - paseo (gratis)"
+      ],
+      "donde_comer": "Comida kazaja: lagman, plov, carne. Rango 5-12 EUR. Cafés en avenida Lenin (Abay).",
+      "consejo_local": "Semey es ciudad difícil de visitar por motivos turísticos, pero crucial para entender la historia soviética. La mayoría de turistas son académicos o historiadores. El museo es excelente pero sombrío.",
+      "plan_b_lluvia": "Museos interiores, cafés, librerías históricas. Parques cubiertos.",
+      "keywords": [
+        "Semey",
+        "Semipalatinsk",
+        "nuclear testing",
+        "Soviet nuclear",
+        "polygon",
+        "Cold War history"
+      ]
+    }
+  ]
+}

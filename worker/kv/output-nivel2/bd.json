@@ -1,0 +1,335 @@
+{
+  "pais": "Bangladés",
+  "codigo": "bd",
+  "destinos": [
+    {
+      "id": "dhaka",
+      "nombre": "Daca (Dhaka)",
+      "tipo": "ciudad",
+      "region": "Daca Central",
+      "descripcion": "Capital caótica y vibrante de Bangladés, centro cultural, histórico y gastronómico del país. Punto de entrada obligatorio para la mayoría de viajeros independientes. Base logística ideal para explorar el resto del país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Aeropuerto internacional Hazrat Shahjalal (DAC). Autobús desde aeropuerto al centro: 2-3 horas, 3-5 EUR. Taxi/Uber: 8-12 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guest house en Gulshan o Banani: 10-15 EUR/noche",
+        "medio": "Hotel de 3 estrellas en Gulshan: 30-50 EUR/noche",
+        "comfort": "Hotel de 4-5 estrellas en Gulshan: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Lalbagh Fort - fortaleza mogol del siglo XVII (2 EUR, gratis viernes)",
+        "Ahsan Manzil - palacio histórico restaurado (entrada 2 EUR)",
+        "Star Mosque - mezquita con cerámica azul única (gratis)",
+        "Sadarghat - puerto caótico al atardecer (gratis)",
+        "Mercado de Old Dhaka - compras y fotografía (gratis)"
+      ],
+      "donde_comer": "Probar biryani, shahi tukda y mezze. Zona de Kawran Bazar para comida callejera (0,5-2 EUR). Restaurantes de Gulshan para comida occidental (5-15 EUR).",
+      "consejo_local": "Ve a Sadarghat al atardecer, no al mediodía. El tráfico de Daca es infernal; usa Uber o rickshaw compartido. Evita llevar valuables visibles.",
+      "plan_b_lluvia": "Museos cubiertos: Museos de Daca (antropología, arte), centros comerciales, cafés en Gulshan.",
+      "keywords": [
+        "Dhaka",
+        "capital Bangladesh",
+        "Daca",
+        "Old Dhaka",
+        "Gulshan",
+        "Kawran Bazar",
+        "Lalbagh"
+      ]
+    },
+    {
+      "id": "cox-bazar",
+      "nombre": "Cox's Bazar",
+      "tipo": "playa",
+      "region": "Chittagong Hill Tracts",
+      "descripcion": "Playa más larga del mundo (120 km) con arena dorada y atmósfera relajada. Punto de partida para explorar los Chittagong Hill Tracts. Destino de playa independiente más popular de Bangladés.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Daca: autobús nocturno (14-16 horas, 10-15 EUR) o vuelo local (1 hora, 50-80 EUR). Carretera costera espectacular.",
+      "donde_dormir": {
+        "mochilero": "Guest house en zona de playa: 8-12 EUR/noche",
+        "medio": "Resort de 3 estrellas: 25-40 EUR/noche",
+        "comfort": "Resort de 4-5 estrellas frente al mar: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa principal - nadar, paseos al atardecer (gratis)",
+        "Himchori Waterfall - cascada en la jungla, 45 minutos a pie (gratis)",
+        "Inani Beach - playa más virgen, 20 km norte (gratis, 1-2 EUR bus local)",
+        "Teknaf - pueblo fronterizo con Birmania, mercado étnico (gratis)",
+        "Buceo en snorkel en Saint Martin Island (excursión de día, 20-30 EUR)"
+      ],
+      "donde_comer": "Mariscos frescos en restaurantes de playa (3-8 EUR). Biryanis y momos de comida callejera (0,5-1 EUR). Zona de Laboni Point para cenar al atardecer.",
+      "consejo_local": "La playa no es para nadar cómodamente en monzón (junio-septiembre). Las olas en octubre-noviembre aún son fuertes pero es el mejor momento. Alquila una moto para moverte por la zona.",
+      "plan_b_lluvia": "Visita pueblos cercanos Teknaf y Ukhia, compra en mercados locales, prueba comida callejera bajo techo.",
+      "keywords": [
+        "Cox Bazar",
+        "playa Bangladesh",
+        "Laboni Point",
+        "Himchori",
+        "Teknaf",
+        "playa más larga"
+      ]
+    },
+    {
+      "id": "sylhet",
+      "nombre": "Sylhet",
+      "tipo": "naturaleza",
+      "region": "Sylhet (Noreste)",
+      "descripcion": "Región de plantaciones de té exuberantes y valles verdes en el noreste. Centro base para explorar jardines de té, ríos y pueblos rurales. Clima más fresco que el resto del país y arquitectura colonial británica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Daca: autobús (8-10 horas, 8-12 EUR), vuelo local (1,5 horas, 50-70 EUR) o tren (10-12 horas, 8-15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guest house en Sylhet ciudad: 8-12 EUR/noche",
+        "medio": "Hotel de 3 estrellas: 20-35 EUR/noche",
+        "comfort": "Resort de té en Moulvibazar: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Jardines de té de Moulvibazar - tours por plantaciones (2-5 EUR con guía local)",
+        "Lawachara National Park - trekking en bosque tropical (entrada 1 EUR, guía 5-8 EUR)",
+        "Ratargul Swamp Forest - bosque flotante en canoa (excursión 10-15 EUR)",
+        "Shrine of Hazrat Shah Jalal - templo histórico en Sylhet (gratis)",
+        "Jaflong - río fronterizo con India, visitas de piedra (gratis)"
+      ],
+      "donde_comer": "Probá dal bhaat, pita bread local y te con leche de té estates. Comida callejera en Sylhet: 1-2 EUR. Restaurantes de la ciudad: 5-10 EUR.",
+      "consejo_local": "Contrata un guía local en tu guest house para visitar jardines de té; los propietarios suelen dejar entrar si vas con alguien local. Las mejores vistas al amanecer.",
+      "plan_b_lluvia": "Visita museos en Sylhet, explora pueblos locales en rickshaw, prueba chai en casas de familia (pide en tu alojamiento).",
+      "keywords": [
+        "Sylhet",
+        "plantaciones de té",
+        "Moulvibazar",
+        "Lawachara",
+        "Jaflong",
+        "Ratargul",
+        "té Bangladesh"
+      ]
+    },
+    {
+      "id": "sundarbans",
+      "nombre": "Los Sundarbans",
+      "tipo": "naturaleza",
+      "region": "Khulna (Suroeste)",
+      "descripcion": "Mayor manglar del mundo y hogar del tigre de Bengala. Patrimonio de la UNESCO con ecosistema único. Experiencia de safari fluvial y vida silvestre imposible de encontrar en otro lugar.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril (evitar monzón)",
+      "como_llegar": "Desde Daca a Khulna: autobús (7-8 horas, 8-10 EUR) o tren. Desde Khulna a Sundarbans: tours organizados salida de Khulna (3-4 horas en bote, incluido en paquete tour 40-80 EUR/día).",
+      "donde_dormir": {
+        "mochilero": "Bungalow básico en lodge flotante: 15-25 EUR/noche (tours incluyen hospedaje)",
+        "medio": "Lodge de 3 estrellas con WiFi: 30-50 EUR/noche",
+        "comfort": "Resort flotante con camarotes privados: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en bote - búsqueda de tigres de Bengala (incluido en tours, 40-80 EUR/día)",
+        "Trekking por manglares (incluido en tours)",
+        "Avistamiento de aves acuáticas (gratis durante tours)",
+        "Visita a pueblos de pescadores (incluido)",
+        "Fotografía de atardeceres en el manglar (gratis)"
+      ],
+      "donde_comer": "Comida incluida en paquetes de tours (curry de pescado, arroz). Fuera de tours en Khulna: dal bhaat, samosas, té (1-3 EUR).",
+      "consejo_local": "Los tigres son esquivos; ver uno es suerte. Contrata un tour de agencia reputada (Sundarban Travel, Sundarban Ecotourism) que respete el ambiente. Madrugadas para mejores avistamientos.",
+      "plan_b_lluvia": "Los Sundarbans son relativamente secos en la época de viaje recomendada. Si hay mal tiempo, los botes siguen navegando pero con menos visibilidad.",
+      "keywords": [
+        "Sundarbans",
+        "manglares Bangladesh",
+        "tigre de Bengala",
+        "Khulna",
+        "safari Bangladés",
+        "UNESCO"
+      ]
+    },
+    {
+      "id": "saint-martin",
+      "nombre": "Isla Saint Martin",
+      "tipo": "isla",
+      "region": "Cox's Bazar",
+      "descripcion": "Única isla coralina de Bangladés con arrecifes de coral, aguas cristalinas y arena blanca. Destino de playa virgen e ideal para snorkel. Pequeña isla compartida con India.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Cox's Bazar: bote desde Teknaf (45 minutos a 1 hora, 5-8 EUR ida y vuelta). Tours organizados desde Cox's Bazar (20-30 EUR todo incluido).",
+      "donde_dormir": {
+        "mochilero": "Cabaña básica en la isla: 10-15 EUR/noche (limitadas opciones)",
+        "medio": "Cabaña con baño privado: 20-30 EUR/noche",
+        "comfort": "Resort de la isla: 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecifes de coral (5-10 EUR con guía)",
+        "Playa principal - nadar y relajarse (gratis)",
+        "Caminar alrededor de la isla (gratis)",
+        "Puesta de sol desde la playa (gratis)",
+        "Recolección de conchas y coral (gratis, solo observar)"
+      ],
+      "donde_comer": "Comida cara en la isla (sobrecargada). Provéete en Teknaf antes de partir. Pescado grillado en restaurantes de la isla: 8-15 EUR.",
+      "consejo_local": "Lleva dinero en efectivo; no hay cajeros. Come antes de llegar. La isla se llena los fines de semana; ve entre semana.",
+      "plan_b_lluvia": "En marea baja, camina hacia las rocas de coral. Los tours funcionan incluso con lluvia ligera.",
+      "keywords": [
+        "Saint Martin",
+        "isla coralina",
+        "Teknaf",
+        "snorkel Bangladesh",
+        "isla coral"
+      ]
+    },
+    {
+      "id": "bagerhat",
+      "nombre": "Bagerhat",
+      "tipo": "histórico",
+      "region": "Khulna (Suroeste)",
+      "descripcion": "Sitio arqueológico con 60+ mezquitas antiguas y templos de la era medieval. Patrimonio de la UNESCO poco visitado. Arquitectura islámica única de Bangladés.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Khulna: autobús o rickshaw compartido (1,5-2 horas, 2-4 EUR). Desde Daca a Khulna: 7-8 horas (8-10 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guest house básico en Bagerhat: 6-10 EUR/noche",
+        "medio": "Hotel pequeño: 12-18 EUR/noche",
+        "comfort": "Opción limitada; mejor hospedarse en Khulna y hacer excursión de día"
+      },
+      "que_hacer": [
+        "Sixty Dome Mosque (Shait Gambuj Masjid) - mezquita de 60 cúpulas (entrada 2 EUR)",
+        "Nine Dome Mosque - arquitectura antigua (gratis)",
+        "Recorrido a pie por sitios arqueológicos (gratis)",
+        "Mezquita de Khan Jahan Ali - templo importante (gratis)",
+        "Museos locales pequeños (1-2 EUR)"
+      ],
+      "donde_comer": "Comida local sencilla en Bagerhat: dal, curry (1-2 EUR). Restaurantes de Khulna: 3-8 EUR.",
+      "consejo_local": "Contrata un guía en Bagerhat (5-8 EUR) para entender la historia. Lleva sombrilla; poco abrigo del sol. Muy pocos turistas; auténtico viaje independiente.",
+      "plan_b_lluvia": "Las mezquitas tienen techos; exploralas dentro.",
+      "keywords": [
+        "Bagerhat",
+        "Sixty Dome Mosque",
+        "Shait Gambuj",
+        "Khan Jahan Ali",
+        "arqueología Bangladesh",
+        "UNESCO"
+      ]
+    },
+    {
+      "id": "rangamati",
+      "nombre": "Rangamati",
+      "tipo": "montaña",
+      "region": "Chittagong Hill Tracts",
+      "descripcion": "Centro de los Chittagong Hill Tracts con lagos de montaña, pueblos indígenas y paisajes ondulados. Destino de trekking, canoa y encuentros culturales auténticos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Daca a Chittagong: autobús (8-10 horas, 8-12 EUR). Desde Chittagong a Rangamati: autobús (2-3 horas, 3-5 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guest house en Rangamati: 8-12 EUR/noche",
+        "medio": "Hotel de 3 estrellas: 20-35 EUR/noche",
+        "comfort": "Resort de montaña con vista a lago: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Kaptai Lake - recorridos en bote por lago de montaña (5-15 EUR con guía)",
+        "Trekking a Khagrachari - senderos en bosque tropical (8-12 EUR guía)",
+        "Visita a pueblos Chakma y Marma - encuentro cultural (gratis)",
+        "Hanging Bridge - puente colgante (gratis)",
+        "Kamatarang - vista panorámica (gratis)"
+      ],
+      "donde_comer": "Comida tribal en lodges, curry de bambú y carnes locales. Restaurantes en Rangamati: 3-8 EUR. Comida callejera: 1-2 EUR.",
+      "consejo_local": "Contrata guía local para trekking y seguridad. La zona tiene sensibilidades políticas; respeta la cultura local. No fotografíes sin permiso.",
+      "plan_b_lluvia": "Explora pueblos cercanos en rickshaw, pasa tiempo en guest houses con locales, prueba comida local.",
+      "keywords": [
+        "Rangamati",
+        "Chittagong Hill Tracts",
+        "Kaptai Lake",
+        "pueblos indígenas",
+        "trekking Bangladesh",
+        "Chakma"
+      ]
+    },
+    {
+      "id": "khulna",
+      "nombre": "Khulna",
+      "tipo": "ciudad",
+      "region": "Khulna (Suroeste)",
+      "descripcion": "Puerta de entrada a Sundarbans y segunda ciudad importante del suroeste. Centro de mercado tradicional, templos hindúes antiguos y puerto fluvial auténtico.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Daca: autobús (7-8 horas, 8-10 EUR), tren (9-10 horas, 8-12 EUR). Vuelos locales ocasionalmente (50-70 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guest house en centro: 8-12 EUR/noche",
+        "medio": "Hotel de 3 estrellas: 20-30 EUR/noche",
+        "comfort": "Hotel de 4 estrellas: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Templo de Shahi Eid Gah - mercado historio alrededor (gratis)",
+        "Divisoria River Palace - palacio antiguo (gratis)",
+        "Mercado de Khulna - comercio local (gratis)",
+        "Puerto fluvial (Ghats) - atardecer sobre agua (gratis)",
+        "Templo Jain antiguo - arquitectura religiosa (gratis)"
+      ],
+      "donde_comer": "Curries de pescado fresco, bhakri (pan) local. Mercado de comida callejera: 1-2 EUR. Restaurantes de ciudad: 4-10 EUR.",
+      "consejo_local": "Khulna es base para Sundarbans; pasa una noche aquí para tours al día siguiente. El mercado al atardecer es más activo.",
+      "plan_b_lluvia": "Mercados cubiertos, templos cubiertos, cafés.",
+      "keywords": [
+        "Khulna",
+        "suroeste Bangladesh",
+        "Sundarbans base",
+        "mercado Khulna",
+        "puerto fluvial"
+      ]
+    },
+    {
+      "id": "chittagong",
+      "nombre": "Chittagong",
+      "tipo": "ciudad",
+      "region": "Chittagong",
+      "descripcion": "Segundo puerto más importante de Bangladés con arquitectura colonial, templos antiguos y acceso a Hill Tracts. Centro cultural diferente a Daca con menos caos turístico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Daca: autobús (8-10 horas, 8-12 EUR), tren (12-14 horas, 8-15 EUR), vuelo (1 hora, 50-80 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guest house en zona de mercado: 8-12 EUR/noche",
+        "medio": "Hotel de 3 estrellas: 20-35 EUR/noche",
+        "comfort": "Hotel de 4-5 estrellas: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Colina de Buddha - estatua colosal y vista panorámica (entrada 2 EUR)",
+        "Mercado antiguo de Chawkbazar - artesanía local (gratis)",
+        "Templo Patenga - templo hindú frente al mar (gratis)",
+        "Puente Banani - estructura histórica (gratis)",
+        "Museos locales - arte e historia (1-2 EUR)"
+      ],
+      "donde_comer": "Mariscos frescos en restaurantes de Patenga (5-12 EUR). Comida callejera del mercado: 1-2 EUR. Chai y snacks: 0,5-1 EUR.",
+      "consejo_local": "Chittagong es menos turística que Daca. Base aquí para explorar Hill Tracts. Usa Uber o rickshaw; el tráfico es intenso.",
+      "plan_b_lluvia": "Mercados cubiertos, templos, cafés, museos.",
+      "keywords": [
+        "Chittagong",
+        "Chattogram",
+        "puerto Bangladesh",
+        "Buddha Hill",
+        "Patenga",
+        "Chawkbazar"
+      ]
+    },
+    {
+      "id": "srimangal",
+      "nombre": "Srimangal",
+      "tipo": "naturaleza",
+      "region": "Sylhet (Noreste)",
+      "descripcion": "Centro de plantaciones de té del país con paisaje de colinas verdes y cultivos. Pueblo pintoresco con lodge en jardines de té. Mejor base para explorar la región de té.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Sylhet: autobús (2-3 horas, 2-3 EUR). Desde Daca a Sylhet, luego a Srimangal (ver Sylhet para ruta a Sylhet).",
+      "donde_dormir": {
+        "mochilero": "Guest house sencillo: 8-12 EUR/noche",
+        "medio": "Tea Garden Lodge: 25-40 EUR/noche (hospedaje en plantación)",
+        "comfort": "Resort de té con servicio completo: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking en jardines de té (2-5 EUR con guía local)",
+        "Visita a viviendas de trabajadores del té (5-8 EUR tour)",
+        "Srimangal town market - comida local y artesanía (gratis)",
+        "Rajkandi Waterfall - cascada cercana (gratis)",
+        "Amanecer en plantaciones (gratis)"
+      ],
+      "donde_comer": "Comida sencilla en mercado: 1-2 EUR. Restaurantes de pueblo: 3-6 EUR. Té con snacks en lodge: 1-2 EUR.",
+      "consejo_local": "Hospédate en un Tea Garden Lodge para experiencia auténtica. Despierta antes del amanecer para ver trabajadores en plantaciones. Presupuesto bajo pero experiencia auténtica.",
+      "plan_b_lluvia": "Lluvia hace el paisaje más verde. Explora mercado local, prueba chai casero.",
+      "keywords": [
+        "Srimangal",
+        "plantaciones de té",
+        "Sylhet",
+        "tea gardens",
+        "jardines de té Bangladesh"
+      ]
+    }
+  ]
+}

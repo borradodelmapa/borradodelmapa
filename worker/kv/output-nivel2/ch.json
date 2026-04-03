@@ -1,0 +1,345 @@
+{
+  "pais": "Suiza",
+  "codigo": "ch",
+  "destinos": [
+    {
+      "id": "interlaken",
+      "nombre": "Interlaken",
+      "tipo": "montaña",
+      "region": "Oberland bernés",
+      "descripcion": "Pueblo base para acceder a los Alpes suizos, situado entre dos lagos glaciares. Centro de deportes de aventura y punto de partida para excursiones a Jungfraujoch y las montañas circundantes. Combina acceso fácil con paisajes espectaculares.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre, diciembre a marzo para esquí",
+      "como_llegar": "desde Zurich en tren: 2 horas, 30-50 EUR. Autobús más lento pero barato: 3-4 horas, 15-25 EUR",
+      "donde_dormir": {
+        "mochilero": "albergue/hostel: 25-40 EUR/noche",
+        "medio": "hotel 3 estrellas: 80-130 EUR/noche",
+        "comfort": "hotel 4+ estrellas o resort: 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Tren a Jungfraujoch (Techo de Europa): 160 EUR ida/vuelta, vistas impresionantes",
+        "Senderismo en Harder Kulm: gratuito, 1,5 horas",
+        "Paragliding: 150-200 EUR",
+        "Paseo en barco por los lagos: 15-25 EUR",
+        "Via Ferrata o escalada: 80-120 EUR con guía"
+      ],
+      "donde_comer": "Fondue y raclette suizas (15-25 EUR). Zona de Höheweg tiene restaurantes medianos. Comprar en supermercados Migros/Coop para ahorrar (8-12 EUR comida preparada)",
+      "consejo_local": "Compra el Swiss Travel Pass si planeas múltiples trenes; descuentos de 25-50% en muchas rutas. El tren Jungfraujoch es caro pero incluye museos en la cima.",
+      "plan_b_lluvia": "Museos en Interlaken (Historia natural), películas en cines locales, o viaje a Lucerna (1 hora en tren)",
+      "keywords": [
+        "Interlaken",
+        "Jungfraujoch",
+        "Alpino",
+        "Aventura",
+        "Oberland",
+        "Eiger",
+        "Matterhorn cercano"
+      ]
+    },
+    {
+      "id": "lucerna",
+      "nombre": "Lucerna",
+      "tipo": "histórico",
+      "region": "Suiza Central",
+      "descripcion": "Ciudad medieval junto al lago de los Cuatro Cantones con arquitectura bien conservada y ambiente atmosférico. Punto de partida para expediciones a montañas cercanas y acceso fácil a otras regiones. Mezcla perfecta de cultura, naturaleza y comodidad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Zurich en tren: 1 hora, 25-35 EUR. Desde Interlaken: 2 horas, 30-45 EUR",
+      "donde_dormir": {
+        "mochilero": "albergue: 30-45 EUR/noche",
+        "medio": "hotel 3 estrellas: 90-140 EUR/noche",
+        "comfort": "hotel 4+ estrellas con vistas al lago: 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Puente de la Capilla (Kapellbrücke): gratuito, icónico del siglo XIV",
+        "Paseo por casco antiguo: gratuito",
+        "Museo de Transporte Suizo: 30 EUR",
+        "Crucero por lago de los Cuatro Cantones: 35-50 EUR",
+        "Subida al Rigi desde Vitznau: 50 EUR, vistas panorámicas"
+      ],
+      "donde_comer": "Specialidad local: 'Luzerner Käsesuppesuppe' (sopa de queso). Restaurantes medianos en Altstadt: 18-30 EUR. Falafel y kebab barato en Bahnhofstrasse: 10-15 EUR",
+      "consejo_local": "Baja al puerto por la mañana temprano antes de que lleguen los grupos turísticos. Las mejores fotos del puente son desde el lago, no desde la calle.",
+      "plan_b_lluvia": "Museo de Arte (KKL Luzern, 15-20 EUR), compras en Bahnhofstrasse, cafés junto al lago",
+      "keywords": [
+        "Lucerna",
+        "Luzern",
+        "Kapellbrücke",
+        "Lago Cuatro Cantones",
+        "Medieval",
+        "Suiza Central"
+      ]
+    },
+    {
+      "id": "zermatt",
+      "nombre": "Zermatt",
+      "tipo": "montaña",
+      "region": "Valais",
+      "descripcion": "Pueblo alpino sin coches al pie del Matterhorn, el pico más icónico de Suiza. Acceso a senderismo de todas las dificultades y vistas imposibles del famoso monte. Pequeño pero con infraestructura suficiente para mochileros.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "desde Zurich en tren hasta Visp (3 horas, 50 EUR) + tren de montaña a Zermatt (40 minutos, 35 EUR). Alternativa: autobús desde Berna",
+      "donde_dormir": {
+        "mochilero": "albergue/hospedaje simple: 35-50 EUR/noche",
+        "medio": "hotel 3 estrellas: 100-160 EUR/noche",
+        "comfort": "hotel 4 estrellas con vistas al Matterhorn: 250-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Schwarzsee: 2 horas gratuitas, vistas del Matterhorn reflejado",
+        "Subida a Gornergrat en tren de cremallera: 80 EUR ida/vuelta, panorámicas de 29 cuatromiles",
+        "Ruta Haute Route (multidía): gratuita pero extenuante",
+        "Matterhorn Museum: 12 EUR",
+        "Esquí en temporada (diciembre-marzo): desde 60 EUR/día forfait"
+      ],
+      "donde_comer": "Spagueti a la carbonara típica ('Spaghetti Zermatt'): 18-25 EUR. Carne a la parrilla: 25-35 EUR. Panaderias Bäckerei con pan barato: 3-5 EUR",
+      "consejo_local": "No intentes hacer el Matterhorn sin experiencia; mueren ~12 personas al año. Haz senderismo en lugar de ello. El pueblo sin coches es especial: los suministros llegan en pequeños trenes eléctricos.",
+      "plan_b_lluvia": "Museo del Matterhorn, relajarse en hotel, o viaje a Saas Fee (otro pueblo alpino, 1 hora en autobús)",
+      "keywords": [
+        "Zermatt",
+        "Matterhorn",
+        "Valais",
+        "Gornergrat",
+        "Schwarzsee",
+        "Esquí",
+        "Alpinismo"
+      ]
+    },
+    {
+      "id": "berna",
+      "nombre": "Berna",
+      "tipo": "histórico",
+      "region": "Suiza Central",
+      "descripcion": "Capital federal suiza con casco antiguo patrimonio UNESCO, torres medievales y río Aare. Pequeña enough para recorrer a pie pero con museos de clase mundial y buena base para explorar toda Suiza. Menos turística que Lucerna o Zurich.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Zurich en tren: 1,5 horas, 30-45 EUR. Desde Interlaken: 1 hora, 20-30 EUR",
+      "donde_dormir": {
+        "mochilero": "albergue/hostel: 28-42 EUR/noche",
+        "medio": "hotel 3 estrellas: 85-130 EUR/noche",
+        "comfort": "hotel 4 estrellas centro: 180-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Casco antiguo (Altstadt): gratuito, paseo imprescindible",
+        "Torre del Reloj (Zytglogge): acceso a mecanismo 15 EUR",
+        "Museo de Bellas Artes: 12 EUR",
+        "Catedral de Berna: 5 EUR entrada campanario",
+        "Baño en río Aare (Aareabad): gratuito, experiencia local única",
+        "Parlamento suizo: tours gratuitos con reserva"
+      ],
+      "donde_comer": "Plato nacional 'Bernese Platte' (carnes curadas): 20-28 EUR. Restaurantes pequeños en Gerechtigkeitsgasse: 15-22 EUR. Mercado de Bundesplatz los miércoles para frutas/verduras baratas",
+      "consejo_local": "Los locales se bañan en el Aare en verano llevando mochilas flotantes. Pruébalo: es surrealista flotar en pleno centro de la capital. Bajos precios en alojamiento comparado con otras capitales suizas.",
+      "plan_b_lluvia": "Museo Histórico Suizo (10-15 EUR), Museo Einstein (7 EUR, casa donde vivió), cafés en Marktgasse",
+      "keywords": [
+        "Berna",
+        "Bern",
+        "Capital",
+        "Altstadt",
+        "Zytglogge",
+        "Aare",
+        "UNESCO"
+      ]
+    },
+    {
+      "id": "zurich",
+      "nombre": "Zurich",
+      "tipo": "ciudad",
+      "region": "Suiza Nordeste",
+      "descripcion": "Puerta de entrada principal a Suiza por aeropuerto, ciudad moderna junto al lago. Centro financiero con museos excepcionales, vida nocturna y punto de conexión para trenes a todo el país. Más cara pero muy eficiente.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "llegada por aeropuerto internacional. Tren al centro en 10 minutos desde terminal: 7 EUR",
+      "donde_dormir": {
+        "mochilero": "albergue zona Industriequartier: 32-48 EUR/noche",
+        "medio": "hotel 3 estrellas: 100-150 EUR/noche",
+        "comfort": "hotel 4+ estrellas lago: 250-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por orilla del lago (Uetliberg): gratuito",
+        "Museo de Bellas Artes: 18 EUR",
+        "Museo Rietberg (arte asiático): 15 EUR",
+        "Iglesia de Fraumünster (vitrales Chagall): 5 EUR",
+        "Baños públicos en el lago: gratuito"
+      ],
+      "donde_comer": "Fondue o raclette: 25-35 EUR. Bratwurst callejero: 7-10 EUR. Birch Müesli (desayuno típico): 8-12 EUR. Zona Kreis 5 con restaurantes más baratos: 15-20 EUR",
+      "consejo_local": "Zurich es el punto de inicio perfecto pero no necesitas pasar aquí más de un día. Los precios son los más altos de Suiza. Compra el Swiss Travel Pass aquí antes de partir.",
+      "plan_b_lluvia": "Museos (impresionantes colecciones), compras en Bahnhofstrasse, cines, o simplemente sale en el próximo tren",
+      "keywords": [
+        "Zurich",
+        "Zürich",
+        "Aeropuerto",
+        "Lago",
+        "Bellas Artes",
+        "Capital económica"
+      ]
+    },
+    {
+      "id": "appenzell",
+      "nombre": "Appenzell",
+      "tipo": "rural",
+      "region": "Suiza Nordeste",
+      "descripcion": "Pueblo alpino pequeño con tradiciones vivas, casas de madera pintadas y cultura local intacta. Menos turístico que otros destinos, permite experimentar la Suiza rural auténtica. Base para senderismo en el Säntis.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Zurich en tren: 1,5 horas, 28-40 EUR. Desde St. Gallen: 30 minutos, 8 EUR",
+      "donde_dormir": {
+        "mochilero": "albergue/hospedaje familiar: 32-45 EUR/noche",
+        "medio": "hotel 3 estrellas: 85-120 EUR/noche",
+        "comfort": "hotel o posada rural 4 estrellas: 150-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por pueblo: gratuito, ver casas tradicionales",
+        "Senderismo a Säntis: 4-5 horas ida/vuelta, gratuito",
+        "Museo de Appenzell: 8 EUR",
+        "Museo de la Ganadería: 6 EUR",
+        "Feria de Appenzell (abril, ganadería): gratuita"
+      ],
+      "donde_comer": "Appenzeller Käse (queso local): 12-18 EUR por plato. Bratwurst: 8 EUR. Pastelería local 'Biber' (pan de jengibre): 3-5 EUR. Restaurantes locales: 18-26 EUR",
+      "consejo_local": "Llega en domingo temprano para ver la procesión religiosa en traje local (Landsgemeinde en junio es espectacular si puedes ir). El pueblo es auténtico porque el turismo no lo ha colonizado.",
+      "plan_b_lluvia": "Museo de Appenzell, tiendas de artesanía, cafés con vistas al valle",
+      "keywords": [
+        "Appenzell",
+        "Rural",
+        "Tradición",
+        "Säntis",
+        "Casas de madera",
+        "Suiza Nordeste"
+      ]
+    },
+    {
+      "id": "jungfrau-region",
+      "nombre": "Jungfrau Region",
+      "tipo": "montaña",
+      "region": "Oberland bernés",
+      "descripcion": "Área de montaña de clase mundial con Eiger, Mönch y Jungfrau (cuatro mil metros). Accesible sin escalada técnica gracias a ferrocarriles de montaña. Senderismo de todos los niveles y vistas glaciares únicamente en Suiza.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "base en Grindelwald o Wengen (desde Interlaken 1 hora en tren, 25-35 EUR). Desde Zurich 2,5-3 horas total",
+      "donde_dormir": {
+        "mochilero": "albergue Grindelwald: 30-45 EUR/noche",
+        "medio": "hotel 3 estrellas: 95-140 EUR/noche",
+        "comfort": "hotel 4 estrellas con vistas: 200-320 EUR/noche"
+      },
+      "que_hacer": [
+        "Tren Jungfraujoch (Techo de Europa): 160 EUR ida/vuelta, glaciares y panorámicas",
+        "Senderismo First-Bachalpsee: 3 horas, gratuito, vista icónica del Eiger",
+        "Senderismo Männlichen-Kleine Scheidegg: 2,5 horas, gratuito",
+        "Tren Wengen (sin coches): 35 EUR, pueblo alpino único",
+        "Esquí en temporada: desde 70 EUR/día"
+      ],
+      "donde_comer": "Fondue en refugios de montaña: 20-28 EUR. Albergues con comida casera: 15-22 EUR. Supermercados en Grindelwald para provisiones de sendero: 8-12 EUR",
+      "consejo_local": "Compra el Swiss Travel Pass de 7 días si haces múltiples trenes. Jungfraujoch es turístico pero necesario. Haz senderismo en lugar de pagar todo. Wengen sin coches es único en Suiza.",
+      "plan_b_lluvia": "Senderismo de menor altura a valles bajos, museos en Interlaken, o relajo en alojamiento",
+      "keywords": [
+        "Jungfrau",
+        "Eiger",
+        "Grindelwald",
+        "Wengen",
+        "Jungfraujoch",
+        "Hiking",
+        "Glaciar"
+      ]
+    },
+    {
+      "id": "montreux-riviera",
+      "nombre": "Montreux & Riviera",
+      "tipo": "playa",
+      "region": "Valais",
+      "descripcion": "Lago Leman (Ginebra) con clima suave y viñedos Lavaux en terraza (UNESCO). Acceso a castillo de Chillon y pueblos vinaticos. Menos concurrida que los Alpes, perfecta para relajarse entre senderismo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "desde Zurich en tren: 2,5 horas, 40-60 EUR. Desde Interlaken: 2 horas, 35-50 EUR",
+      "donde_dormir": {
+        "mochilero": "albergue Montreux: 32-45 EUR/noche",
+        "medio": "hotel 3 estrellas lago: 95-140 EUR/noche",
+        "comfort": "hotel 4+ estrellas con vistas lago: 220-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Chillon: 15 EUR (icónico del lago)",
+        "Senderos Lavaux terrazas vinaticas: gratuito, 2-3 horas",
+        "Paseo por paseo marítimo Montreux: gratuito",
+        "Tren de montaña Rochers de Naye: 50 EUR ida/vuelta",
+        "Cata de vinos: 15-25 EUR"
+      ],
+      "donde_comer": "Fondue Savoyard (queso local): 20-28 EUR. Pescado del lago (féra): 22-32 EUR. Restaurantes en plaza Montreux: 18-28 EUR. Mercado de frutas: 4-8 EUR",
+      "consejo_local": "Los viñedos Lavaux se recorren mejor en tren de cremallera (15 EUR) o caminando en descenso. Festival Jazz de Montreux es julio (entradas caras pero atmosférico). El lago es mucho más caliente que en Alpino.",
+      "plan_b_lluvia": "Castillo de Chillon (cubierto), tren de cremallera, catas de vino, museos Montreux",
+      "keywords": [
+        "Montreux",
+        "Lavaux",
+        "Chillon",
+        "Lago Leman",
+        "Riviera",
+        "Viños",
+        "Valais"
+      ]
+    },
+    {
+      "id": "ginebra",
+      "nombre": "Ginebra",
+      "tipo": "ciudad",
+      "region": "Ginebra",
+      "descripcion": "Puerta de entrada occidental con lago espectacular y Jet d'Eau icónico. Centro internacional con museos de clase mundial. Menos turística que Zurich para mochileros, más cara que pueblos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "aeropuerto internacional (llegada): tren 15 minutos al centro, 18 EUR. Desde Zurich 2,5 horas tren: 50-70 EUR",
+      "donde_dormir": {
+        "mochilero": "albergue Paquis: 30-45 EUR/noche",
+        "medio": "hotel 3 estrellas: 95-140 EUR/noche",
+        "comfort": "hotel 4+ estrellas lago: 250-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Jet d'Eau (fuente): gratuito verlo, 15 EUR subir",
+        "Casco antiguo (Vieille Ville): gratuito",
+        "Museo Ariana (cerámica/vidrio): 12 EUR",
+        "Catedral San Pedro: 5 EUR campanario",
+        "Paseo Rive Droite lago: gratuito",
+        "CERN (física nuclear): tours gratuitas con reserva"
+      ],
+      "donde_comer": "Fondue: 25-32 EUR. Raclette: 22-30 EUR. Restaurantes pequeños Carouge: 15-24 EUR. Callejero kebab/falafel: 9-12 EUR",
+      "consejo_local": "Ginebra es cara pero menos que Zurich. Compra pan en panaderias locales antes que en cafés turísticos (diferencia 2x en precio). El barrio Carouge tiene vida local auténtica.",
+      "plan_b_lluvia": "Museos (Red Cross, arte moderno), compras, o salida a Montreux/Lavaux en tren",
+      "keywords": [
+        "Ginebra",
+        "Geneva",
+        "Jet d'Eau",
+        "Lago Leman",
+        "Internacional",
+        "ONU",
+        "Vieille Ville"
+      ]
+    },
+    {
+      "id": "basel",
+      "nombre": "Basel",
+      "tipo": "histórico",
+      "region": "Suiza Noroeste",
+      "descripcion": "Ciudad medieval junto al Rin con arquitectura impresionante y museos de arte vanguardista. Menos concurrida que Zurich, acceso a Francia y Alemania. Pequeña y caminable con atmósfera local genuina.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "desde Zurich en tren: 1,5 horas, 35-50 EUR. Desde Berna: 1 hora, 30-45 EUR",
+      "donde_dormir": {
+        "mochilero": "albergue St. Alban: 28-40 EUR/noche",
+        "medio": "hotel 3 estrellas: 85-130 EUR/noche",
+        "comfort": "hotel 4 estrellas centro: 180-270 EUR/noche"
+      },
+      "que_hacer": [
+        "Casco antiguo Altstadt: gratuito",
+        "Catedral de Basel: 3 EUR",
+        "Museo Tinguely (arte moderno): 16 EUR",
+        "Kunstmuseum (bellas artes): 16 EUR",
+        "Paseo por Rin (Rheinufer): gratuito",
+        "Excursión a Alsacia (Francia, 30 min tren): explorar Colmar"
+      ],
+      "donde_comer": "Mehlsuppe (sopa tradicional): 10-14 EUR. Carnes a la parrilla: 18-26 EUR. Restaurantes en Marktplatz: 16-24 EUR. Carnicería Deli: 6-10 EUR",
+      "consejo_local": "Basel es la puerta al Rin y a Francia. Muchos viajeros lo saltan pero tiene museos de arte mejor que Zurich. Los locales son amables y la ciudad es muy bicicleta-friendly.",
+      "plan_b_lluvia": "Museos (excepcionales), compras en Marktstrasse, librerías antiguas, cafés",
+      "keywords": [
+        "Basel",
+        "Basilea",
+        "Rin",
+        "Altstadt",
+        "Arte moderno",
+        "Francia cercana"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,337 @@
+{
+  "pais": "Panamá",
+  "codigo": "pa",
+  "destinos": [
+    {
+      "id": "ciudad-de-panama",
+      "nombre": "Ciudad de Panamá",
+      "tipo": "ciudad",
+      "region": "Panamá Metropolitana",
+      "descripcion": "Capital moderna con rascacielos, casco antiguo colonial y acceso al Canal de Panamá. Centro neurálgico para viajeros independientes con buena infraestructura, vida nocturna y gastronomía variada. Punto de partida ideal para explorar el país.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "vuelo internacional a Tocumen (20 km). Taxi/Uber al centro: 25-35 EUR, 30-45 min. Autobús: 2 EUR, 60 min.",
+      "donde_dormir": {
+        "mochilero": "Hostel en Casco Viejo o El Cangrejo: 12-18 EUR/noche",
+        "medio": "Hotel 3* en Casco Viejo o Punta Pacifica: 50-80 EUR/noche",
+        "comfort": "Hotel 4-5* con vista al skyline: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido por Casco Viejo: iglesias coloniales, plazas, murallas (gratis/guía 15 EUR)",
+        "Esclusas del Canal de Panamá - Centro de Visitantes (10 EUR)",
+        "Puente Causeway para vistas del skyline al atardecer (gratis)",
+        "Barrio de San Blas - isla Nalunega en lancha rápida (35-50 EUR día completo)"
+      ],
+      "donde_comer": "Ceviche y mariscos en Casco Viejo (8-15 EUR), tamales en Calidonia (2-3 EUR), restaurantes modernos en Punta Pacifica (15-30 EUR). Mejor zona: Casco Viejo para atmósfera.",
+      "consejo_local": "El Casco Viejo es hermoso pero lleno de turistas; explora Calidonia y El Cangrejo para vida local real y mejor comida barata. Usa Metro (0,25 EUR) para moverte, es rápido y seguro.",
+      "plan_b_lluvia": "Museo del Canal Interoceánico (4 EUR), Museo de Antropología (3 EUR), centro comercial en Albrook o Multiplaza si lluvia fuerte.",
+      "keywords": [
+        "panama city",
+        "Casco Viejo",
+        "Canal",
+        "skyline",
+        "Punta Pacifica",
+        "El Cangrejo",
+        "Calidonia"
+      ]
+    },
+    {
+      "id": "san-blas",
+      "nombre": "Archipiélago de San Blas (Guna Yala)",
+      "tipo": "isla",
+      "region": "San Blas (costa caribeña norte)",
+      "descripcion": "Archipiélago autónomo con más de 360 islas de arena blanca y agua turquesa, gobernado por los Guna. Playas vírgenes, vida indígena auténtica y buceo de bajo costo. Imprescindible para viajeros independientes sin turismo masivo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a marzo, julio a agosto",
+      "como_llegar": "Desde Ciudad de Panamá: vuelo doméstico a Colon (45 min, 120 EUR ida/vuelta) + lancha rápida 1 hora (25 EUR). O tour desde ciudad (50-70 EUR todo incluido, 6 horas).",
+      "donde_dormir": {
+        "mochilero": "Cabaña en isla pequeña: 15-25 EUR/noche",
+        "medio": "Lodge eco en isla: 35-60 EUR/noche",
+        "comfort": "Resort en isla privada: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en aguas cristalinas (gratis desde isla, 15 EUR tour con guía)",
+        "Visita a comunidades Guna y museo cultural (5-10 EUR)",
+        "Buceo certificado (40-50 EUR por inmersión)",
+        "Islote Perro (Dog Island) para puesta de sol (15-20 EUR tour)"
+      ],
+      "donde_comer": "Pescado fresco a la plancha, arroz de coco, ceviche (5-10 EUR). Alojamientos incluyen comidas básicas. Pocas opciones: come en tu hospedaje o solicita comidas especiales.",
+      "consejo_local": "Negocia precios en lancha directamente en Colon, no con agencias. Las islas Wichub Wala y Diablo son mejores que las del tour estándar. Lleva efectivo (dólares estadounidenses), no hay cajeros.",
+      "plan_b_lluvia": "Los lluvia es breve. Snorkel en días nublados sigue siendo bueno. Lee, descansa o aprende palabras en guna con lugareños.",
+      "keywords": [
+        "Guna Yala",
+        "San Blas islands",
+        "Colon",
+        "archipiélago",
+        "buceo caribeño",
+        "playas vírgenes",
+        "indígenas"
+      ]
+    },
+    {
+      "id": "bocas-del-toro",
+      "nombre": "Bocas del Toro",
+      "tipo": "isla",
+      "region": "Bocas del Toro (costa caribeña noroeste)",
+      "descripcion": "Archipiélago turístico en el Caribe con playas, vida nocturna, bosques tropicales y buceo. Atmósfera relajada con backpackers y viajeros independientes, mezcla de naturaleza y entretenimiento.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Ciudad de Panamá: vuelo a Bocas (1 hora, 100-130 EUR) o autobús a Almirante (12 horas, 30 EUR) + ferry 30 min (5 EUR). Recomendado: vuelo.",
+      "donde_dormir": {
+        "mochilero": "Hostel en Bocas Town: 12-18 EUR/noche",
+        "medio": "Hotel 2-3* con vista al mar: 40-70 EUR/noche",
+        "comfort": "Resort en isla privada o beachfront: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel/buceo en Coral Cay o Bastimentos (25-40 EUR tour)",
+        "Playa Estrella (Starfish Beach) en Isla Colón (8-12 EUR tour)",
+        "Senderismo en Parque Nacional Bastimentos (entrada 5 EUR)",
+        "Vida nocturna en Calle 1 (bares, música en directo) (bebidas 3-6 EUR)"
+      ],
+      "donde_comer": "Ceviches, rondón (guiso de pescado), patacones (plátanos fritos). Rango: 5-12 EUR menú local, 15-25 EUR restaurantes turísticos. Calle 1 y waterfront para ambiente.",
+      "consejo_local": "Bocas Town es pequeño: camina todo. Evita caminar solo de noche en zonas oscuras. El buceo es barato pero la visibilidad varía mucho; pregunta antes de pagar. Las playas pueden tener basura en marea alta.",
+      "plan_b_lluvia": "Lluvia tropical es breve. Visita Smithsonian Tropical Research Institute (16 EUR, reservar), cafés, museos locales o relájate en alojamiento.",
+      "keywords": [
+        "Bocas Town",
+        "Bastimentos",
+        "Colón",
+        "Caribe panameño",
+        "buceo",
+        "archipiélago",
+        "backpacker"
+      ]
+    },
+    {
+      "id": "boquete",
+      "nombre": "Boquete",
+      "tipo": "montaña",
+      "region": "Chiriquí (oeste, tierras altas)",
+      "descripcion": "Pueblo de montaña a 1.200 m en la provincia de Chiriquí, conocido por clima fresco, cultivo de café, senderismo y naturaleza. Escapada perfecta del calor de la costa, con comunidad de expatriados y viajeros.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a febrero, junio a julio",
+      "como_llegar": "Desde Ciudad de Panamá: autobús a David (8 horas, 25 EUR) + minibús a Boquete 45 min (3 EUR). O vuelo a David (1 hora, 100 EUR) + minibús.",
+      "donde_dormir": {
+        "mochilero": "Hostel/guesthouse: 12-20 EUR/noche",
+        "medio": "Hotel o café con habitaciones: 30-50 EUR/noche",
+        "comfort": "Resort con vistas a montaña: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a Volcan Baru (entrada 5 EUR, salida 4 AM para vistas)",
+        "Tour de fincas de café con degustación (15-20 EUR)",
+        "Piedra Pintada: cascada y piscinas naturales (gratis, requiere guía local 20 EUR)",
+        "Canopy/tirolesa en bosque nuboso (25-35 EUR)"
+      ],
+      "donde_comer": "Café de Boquete (local, 2-3 EUR), pollo a la leña, verduras frescas. Rango general: 4-8 EUR comida barata, 10-18 EUR restaurantes. Zona central alrededor de la plaza.",
+      "consejo_local": "Ve muy temprano al Volcán Baru (4 AM) para evitar nubes; es frío en la cumbre. El café local es excelente pero compra directo en fincas para mejor precio. Lluvia en tarde casi cada día, normal.",
+      "plan_b_lluvia": "Lluvia = frío. Visita cafeterías locales, compra café para llevar, descansa. Las tardes lluviosas son ideales para leer o conocer gente en hospedajes.",
+      "keywords": [
+        "Boquete",
+        "Chiriqui",
+        "Volcan Baru",
+        "café",
+        "montaña",
+        "David",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "isla-coiba",
+      "nombre": "Isla Coiba",
+      "tipo": "isla",
+      "region": "Veraguas (costa del Pacífico oeste)",
+      "descripcion": "Parque Nacional marino con isla principal y archipiélago protegido. Buceo de clase mundial, playas vírgenes, fauna marina abundante y bosque tropical intacto. Destino para viajeros aventureros dispuestos a gastar más.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a abril",
+      "como_llegar": "Desde Ciudad de Panamá a Santa Catalina (6-7 horas, autobús 20 EUR) + lancha rápida a Coiba 1,5 horas (70 EUR ida/vuelta). Tours todo incluido: 150-200 EUR día completo desde Santa Catalina.",
+      "donde_dormir": {
+        "mochilero": "Campamento básico en isla (incluido en tour): 30-50 EUR/noche",
+        "medio": "Lodge eco en Santa Catalina: 40-70 EUR/noche",
+        "comfort": "Resort eco-turismo: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo: arrecifes de coral, tiburones, rayas gigantes (70 EUR dos inmersiones)",
+        "Snorkel en Isla Granito de Oro (incluido en tour)",
+        "Senderismo y avistamiento de fauna: iguanas, jaguares, águilas (guía incluido)",
+        "Playa Córmoran para relajarse (incluido en tours)"
+      ],
+      "donde_comer": "Comidas simples en campamentos: pescado, arroz, verduras (incluido en tours). Santa Catalina: mariscos 8-12 EUR. Opciones limitadas; come en hospedaje.",
+      "consejo_local": "Reserva buceo con agencia acreditada en Santa Catalina o Ciudad de Panamá. El mar puede estar bravo: pregunta condiciones. Lleva protector solar fuerte (farmacias caras allá). No es turismo de masas; ve si buscas aventura real.",
+      "plan_b_lluvia": "Enero-abril lluvia es rara. Si ocurre, buceo sigue siendo posible. Senderismo se cancela por seguridad.",
+      "keywords": [
+        "Coiba",
+        "Santa Catalina",
+        "buceo",
+        "Veraguas",
+        "arrecife",
+        "parque nacional marino",
+        "aventura"
+      ]
+    },
+    {
+      "id": "gatun",
+      "nombre": "Lago Gatún",
+      "tipo": "naturaleza",
+      "region": "Zona del Canal",
+      "descripcion": "Lago artificial colosal creado para el Canal de Panamá, rodeado de selva tropical y vida silvestre. Excelente para paseos en bote, avistamiento de fauna y entender la geografía del Canal.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Ciudad de Panamá: autobús/taxi a Gatun (norte) 1 hora (10-15 EUR). Tours desde ciudad: 40-60 EUR incluido transporte.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Colón o Gamboa (cercano): 12-18 EUR/noche",
+        "medio": "Hotel eco-lodge en Gamboa: 50-80 EUR/noche",
+        "comfort": "Resort en isla privada del lago: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Crucero por el lago: avistamiento de monos, caimanes, aves (20-30 EUR tour 3-4 horas)",
+        "Visita a Isla Barro Colorado (investigación científica): 35 EUR + lancha 15 EUR",
+        "Pesca deportiva (si interesa): 80-100 EUR meia día",
+        "Observatorio de aves en Gamboa (guía 20 EUR)"
+      ],
+      "donde_comer": "Restaurantes en Gamboa o Colón: pescado, típico panameño (8-15 EUR). Opciones limitadas, come en tu hospedaje o en Gamboa.",
+      "consejo_local": "Ve temprano para avistamiento de fauna. Lleva binoculares y cámara con zoom. Colón es peligroso para andar solo; usa tours organizados. El lago es enorme: el recorrido no es rápido.",
+      "plan_b_lluvia": "Tours siguen adelante. Lluvia no detiene animales. Lleva impermeable.",
+      "keywords": [
+        "Gatun",
+        "Gamboa",
+        "Colón",
+        "lago",
+        "Canal",
+        "fauna tropical",
+        "monos",
+        "crucero"
+      ]
+    },
+    {
+      "id": "rio-chagres",
+      "nombre": "Río Chagres y Parque Nacional",
+      "tipo": "naturaleza",
+      "region": "Colón (este de la Zona del Canal)",
+      "descripcion": "Río selvático con parque nacional protegido, ideal para senderismo en selva virgen, avistamiento de fauna y experiencia de naturaleza pura. Menos turístico que otras atracciones, más auténtico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Desde Ciudad de Panamá: autobús a Colón (1 hora, 3 EUR) + lancha río arriba desde puerto. Tours desde ciudad: 60-90 EUR todo incluido.",
+      "donde_dormir": {
+        "mochilero": "Cabaña en río: 20-30 EUR/noche",
+        "medio": "Lodge eco en río: 40-70 EUR/noche",
+        "comfort": "Resort en río: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo en selva tropical (guía obligatorio: 25 EUR, 4-5 horas)",
+        "Paseo en canoa/bote por el río (15-25 EUR)",
+        "Visita a comunidades indígenas Emberá (incluido en tours, 10 EUR propina)",
+        "Avistamiento de fauna: caimanes, jaguares, monos, aves (gratis observando durante recorridos)"
+      ],
+      "donde_comer": "Comida típica en lodges: yuca, plátanos, pescado (8-15 EUR). Pocas opciones; come en hospedaje. Llevar snacks de ciudad es buena idea.",
+      "consejo_local": "Necesitas guía local para selva; no vayas solo. Los Emberá son amables pero respetuosos: paga por fotos (1-2 EUR). Mosquitos: usa repelente fuerte. Lleva ropa que se puede mojar.",
+      "plan_b_lluvia": "Lluvia es frecuente. Senderos se ponen fangosos pero practicables. Lleva botas impermeables. Río crece y paseos pueden cancelarse.",
+      "keywords": [
+        "Chagres",
+        "Colón",
+        "selva",
+        "Emberá",
+        "río",
+        "parque nacional",
+        "aventura selvática"
+      ]
+    },
+    {
+      "id": "isla-taboga",
+      "nombre": "Isla Taboga",
+      "tipo": "isla",
+      "region": "Bahía de Panamá (Panamá Metropolitana)",
+      "descripcion": "Isla pequeña y cercana a Ciudad de Panamá, conocida como 'la isla de las flores'. Playas tranquilas, pueblo pintoresco, y escapada de un día ideal sin comprometer tiempo. Destino relaxed para viajeros que no quieren irse lejos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a mayo",
+      "como_llegar": "Desde Ciudad de Panamá (Puerto de Amador): ferry rápido 45 min (12 EUR ida/vuelta). Sale 8 AM y 4 PM típicamente.",
+      "donde_dormir": {
+        "mochilero": "Hostal/pensión: 18-25 EUR/noche",
+        "medio": "Hotel pequeño con vista al mar: 45-70 EUR/noche",
+        "comfort": "Resort con playa: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Taboga (gratis, cuidado con erosión costera)",
+        "Snorkel en Isla Chapera cercana (15-20 EUR tour)",
+        "Senderismo a Iglesia de San Pedro (gratis, vistas del pueblo)",
+        "Paseo por pueblo, tiendas artesanales, cafés (gratis)"
+      ],
+      "donde_comer": "Ceviches y mariscos frescos: 6-12 EUR. Restaurantes frente al mar: 12-20 EUR. Pequeño pueblo: opciones limitadas, cierra temprano.",
+      "consejo_local": "Ideal para una tarde/noche, no gastar días. Playa principal está erosionada; nada en zonas designadas. Ferry sale puntualmente; llega 15 min antes. Caro para lo que ofrece, pero cerca.",
+      "plan_b_lluvia": "Lluvia tropical breve. Come en restaurante, relájate. No es destino de senderismo intenso.",
+      "keywords": [
+        "Taboga",
+        "isla flores",
+        "bahia",
+        "ferry",
+        "día",
+        "cercano",
+        "playas panameñas"
+      ]
+    },
+    {
+      "id": "panama-viejo",
+      "nombre": "Panamá Viejo (Ruinas)",
+      "tipo": "histórico",
+      "region": "Panamá Metropolitana",
+      "descripcion": "Ruinas de la primera Ciudad de Panamá (1519), destruida por piratas en 1671. Sitio arqueológico con museo, catedral en ruinas y vistas al mar moderno. Comprender historia colonial panameña en un único lugar.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "diciembre a abril (menos calor)",
+      "como_llegar": "Desde Ciudad de Panamá centro: Uber/taxi 20 min (10-15 EUR). Autobús línea 1 desde Punta Pacifica (1 EUR, 30-40 min). A pie es muy lejos.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Casco Viejo o cercano: 12-18 EUR/noche",
+        "medio": "Hotel en Punta Pacifica o Amador: 50-80 EUR/noche",
+        "comfort": "Hotel con vistas al sitio: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido por ruinas con audioguía (10 EUR)",
+        "Museo de Sitio: artefactos, historia (incluido en entrada)",
+        "Fotografía de catedral en ruinas con skyline moderno de fondo (gratis)",
+        "Atardecer en paseo junto al mar (gratis)"
+      ],
+      "donde_comer": "Cafetería pequeña en sitio: bebidas y snacks básicos (3-6 EUR). Come antes en ciudad o después en zonas cercanas. Opciones limitadas en ruinas.",
+      "consejo_local": "Ve con guía (generalmente incluido) o audioguía es imprescindible para entender. Muy caluroso a medio día; ve temprano o atardecer. Los contrastes históricos son fascinantes pero el sitio es pequeño: 2-3 horas máximo.",
+      "plan_b_lluvia": "Lluvia = cancela. Hay poca sombra. Mejor ir otro día o tempranísimo.",
+      "keywords": [
+        "Panama Viejo",
+        "ruinas",
+        "histórico",
+        "arqueología",
+        "colonial",
+        "piratas",
+        "sitio arqueológico"
+      ]
+    },
+    {
+      "id": "pedasi",
+      "nombre": "Pedasí",
+      "tipo": "playa",
+      "region": "Los Santos (península de Azuero, suroeste)",
+      "descripcion": "Pueblo costero tradicional en Península de Azuero, menos turístico que otros destinos. Playas limpias, pueblo auténtico panameño, y punto base para ver ballenas (julio-octubre) y delfines. Viajeros que buscan Panamá real.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a abril, julio a octubre (ballenas)",
+      "como_llegar": "Desde Ciudad de Panamá: autobús a Las Tablas (5-6 horas, 15 EUR) + minibús a Pedasí 45 min (4 EUR). O tour/van privada: 60-80 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel/guesthouse: 12-20 EUR/noche",
+        "medio": "Hotel pequeño: 35-55 EUR/noche",
+        "comfort": "Resort costa: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Pedasí: bañarse, relajarse (gratis)",
+        "Tour de avistamiento de ballenas (julio-octubre): 40-60 EUR",
+        "Isla Iguana: snorkel, playa virgen (20-30 EUR tour)",
+        "Mercado y pueblo: caminar, comer, conocer locales (gratis)"
+      ],
+      "donde_comer": "Ceviches, rondón, arroz de marisco (5-10 EUR). Comida auténtica sin markup turístico. Mercado local mejor que restaurantes.",
+      "consejo_local": "Pueblo pequeño, sin bullicio turístico. Playas pueden tener algas en temporadas. Ballenas verdaderamente espectaculares en julio-octubre. Llevar efectivo; no todos aceptan tarjeta.",
+      "plan_b_lluvia": "Lluvia es común mayo-junio. Tours se pueden cancelar. Relájate en pueblo, come bien, conoce gente.",
+      "keywords": [
+        "Pedasi",
+        "Los Santos",
+        "Azuero",
+        "ballenas",
+        "playas",
+        "auténtico",
+        "pueblo costero"
+      ]
+    }
+  ]
+}

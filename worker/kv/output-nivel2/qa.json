@@ -1,0 +1,326 @@
+{
+  "pais": "Catar",
+  "codigo": "qa",
+  "destinos": [
+    {
+      "id": "doha",
+      "nombre": "Doha",
+      "tipo": "ciudad",
+      "region": "Costa este",
+      "descripcion": "Capital y centro neurálgico de Catar, con rascacielos futuristas, museos de clase mundial y una cornisa espectacular. Es el punto de entrada obligatorio y concentra la mayoría de atracciones culturales y gastronómicas del país.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Aeropuerto Internacional Hamad (HIA), 4 km al norte. Autobús público (línea 777) 45 min por 2 EUR, taxi 20-30 EUR, Uber 15-20 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Bab Al Bahar o Souq Waqif: 40-60 EUR/noche",
+        "medio": "Hoteles 3* en West Bay o The Pearl: 80-150 EUR/noche",
+        "comfort": "Hoteles 5* (Mandarin Oriental, Lusail): 250-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo de Arte Islámico: 15 EUR (una de las mejores colecciones del mundo árabe)",
+        "Cornisa de Doha (Corniche): gratis (paseo de 7 km con vistas al skyline)",
+        "Souq Waqif: gratis entrada, comprar/comer (mercado tradicional restaurado)",
+        "Museum of Modern Art Qatar: 10 EUR",
+        "Pearl District: gratis (paseo por isla artificial con marina y galerías)"
+      ],
+      "donde_comer": "Souq Waqif para comida local barata (shawarma 5-8 EUR), Al Bandar para pescado fresco (15-25 EUR), The Pearl para fusión moderna (25-40 EUR). Probar: machbous, warak einab, tabbouleh.",
+      "consejo_local": "Visita el Souq Waqif al atardecer cuando el calor baja y hay más ambiente. Los viernes es muy abarrotado.",
+      "plan_b_lluvia": "Museos (arte islámico, arte moderno, Katara cultural village cubierto), centros comerciales climatizados (Doha Festival City, Villaggio Mall).",
+      "keywords": [
+        "Doha",
+        "Qatar capital",
+        "Corniche",
+        "Souq Waqif",
+        "West Bay",
+        "The Pearl",
+        "Katara"
+      ]
+    },
+    {
+      "id": "al-wakrah",
+      "nombre": "Al Wakrah",
+      "tipo": "ciudad",
+      "region": "Costa sur",
+      "descripcion": "Puerto pesquero tradicional a 20 km de Doha con un souq recuperado, playas y arquitectura heredada. Punto de partida ideal para explorar la costa sur menos turística y más auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Doha en autobús público (línea 50) 40 min por 2 EUR, o Uber 15-18 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales pequeños en zona vieja: 35-50 EUR/noche",
+        "medio": "Hoteles 3* (Marsa Malaz Barzan): 70-120 EUR/noche",
+        "comfort": "Resorts con playa (Banana Island): 180-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Souq Al Wakrah: gratis (arquitectura tradicional y tiendas de ropa, no turístico)",
+        "Playa Al Wakrah: gratis (arena fina, para baño, menos concurrida que Doha)",
+        "Barco de pesca tradicional dhow: 25-35 EUR (paseos al atardecer)",
+        "Museo de Al Wakrah: 10 EUR (historia del buceo de perlas)"
+      ],
+      "donde_comer": "Restaurantes de pescado en el puerto (15-25 EUR), café árabe tradicional en el souq (2-3 EUR café). Probar: samak grelhani (pez a la parrilla), hummus, falafel.",
+      "consejo_local": "El souq es genuino, sin turistas masivos. Mejor visitarlo por la mañana temprano cuando los pescadores descargan.",
+      "plan_b_lluvia": "Museo de Al Wakrah, souq interior, cafeterías tradicionales.",
+      "keywords": [
+        "Al Wakrah",
+        "Wakrah",
+        "Puerto pesquero",
+        "Souq tradicional",
+        "Costa sur Catar",
+        "Dhow"
+      ]
+    },
+    {
+      "id": "al-khor",
+      "nombre": "Al Khor",
+      "tipo": "ciudad",
+      "region": "Costa norte",
+      "descripcion": "Pueblo costero en el norte con vistas a la bahía de Catar, playas tranquilas y acceso a humedales. Ideal para escapar de la aglomeración de Doha y disfrutar de la vida costera más lenta.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Doha en coche alquilado (50 EUR/día) 45 min, o autobús público línea 14 (3 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales: 40-55 EUR/noche",
+        "medio": "Hoteles 3* locales: 65-100 EUR/noche",
+        "comfort": "Resorts con vistas: 150-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Al Khor: gratis (playa de arena blanca, tranquila, permitido baño)",
+        "Al Khor Corniche: gratis (paseo al atardecer con vistas a la bahía)",
+        "Humedales de Al Khor: gratis entrada, tour guiado 20-30 EUR (aves migratorias, hábitat único)",
+        "Espigón de pesca: gratis (zona de local, pescar desde el muelle)"
+      ],
+      "donde_comer": "Restaurantes locales baratos junto a la playa (10-18 EUR), cafés árabes tradicionales (2-5 EUR). Pescado fresco en puestos locales.",
+      "consejo_local": "Los viernes por la tarde hay mucha gente local en el corniche. Mejor ir entre semana o a primera hora de la mañana.",
+      "plan_b_lluvia": "Recorrer el pueblo caminando, cafés cubiertos, paseos por el puerto interior.",
+      "keywords": [
+        "Al Khor",
+        "Khor",
+        "Costa norte",
+        "Humedales",
+        "Playa tranquila",
+        "Bahía Catar"
+      ]
+    },
+    {
+      "id": "muscat-excursion",
+      "nombre": "Mascate (excursión desde Doha)",
+      "tipo": "ciudad",
+      "region": "Omán (excursión)",
+      "descripcion": "Capital de Omán a 300 km, con arquitectura sultanía, souqs antiguos y playas volcánicas. Accesible en día desde Doha para viajeros que quieren expandir horizontes sin abandonar la región.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Vuelo doméstico (Air Arabia, 45 min, 40-80 EUR ida y vuelta), o coche alquilado (300 km, 4-5 horas, autopista recta, gasolina 30 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Ruwi: 30-45 EUR/noche",
+        "medio": "Hoteles 3* centro: 60-100 EUR/noche",
+        "comfort": "Resorts de playa (Shangrila, Al Bustan Palace): 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Palacio Al Alam: 3 EUR (arquitectura sultanía, fotos desde fuera gratis)",
+        "Souq de Mascate: gratis (uno de los más bonitos de Oriente Medio)",
+        "Fuerte Al Jalali: 5 EUR (vistas al puerto)",
+        "Playa Al Qurum: gratis (arena volcánica negra, única en la región)"
+      ],
+      "donde_comer": "Souq para shuwa y comida local (8-15 EUR), Corniche para restaurantes con vistas (20-30 EUR). Probar: shuwa omani, majboos, falafel.",
+      "consejo_local": "La entrada de Omán es visa on arrival (15 EUR). El trayecto en coche es hipnótico por el desierto. Vale más la pena que pasar otro día en Doha.",
+      "plan_b_lluvia": "Museos interiores (Museo Nacional de Omán), malls climatizados, souqs cubiertos.",
+      "keywords": [
+        "Muscat",
+        "Mascate",
+        "Omán",
+        "Excursion Catar",
+        "Souq",
+        "Palacio Al Alam",
+        "Golfo Persa"
+      ]
+    },
+    {
+      "id": "isla-pearls",
+      "nombre": "The Pearl (Isla artificial)",
+      "tipo": "isla",
+      "region": "Oeste de Doha",
+      "descripcion": "Isla artificial de lujo con marina, galerías, restaurantes y playas privadas. Aunque desarrollada para clase alta, es visitable gratis y ofrece una visión futurista del desarrollo qatarí sin pagar entrada.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Doha centro en metro (línea roja) + autobús (línea 18) 30 min por 2 EUR, o Uber 12-15 EUR.",
+      "donde_dormir": {
+        "mochilero": "No hay hostales; dormir en Doha y visitar de día",
+        "medio": "No recomendado",
+        "comfort": "Apartamentos de lujo alquilados (200-350 EUR/noche en Airbnb)"
+      },
+      "que_hacer": [
+        "Paseo por la marina: gratis (barcos de lujo, tiendas, fotografía)",
+        "Playas The Pearl: gratis entrada pero acceso limitado (playas privadas para residentes)",
+        "Galerías de arte al aire libre: gratis",
+        "Tiendas y cafés: gratis mirar, gastar en consumo"
+      ],
+      "donde_comer": "Cafés y restaurantes de lujo (25-50 EUR+). Pizza casual (15 EUR), cafés árabes (3-5 EUR). Es caro, mejor comer en Doha antes.",
+      "consejo_local": "Visítalo al atardecer cuando el sol baja y las fotos salen mejores. No esperes playa de acceso libre; es más bien un paseo.",
+      "plan_b_lluvia": "Galerías interiores, tiendas, cafés.",
+      "keywords": [
+        "The Pearl",
+        "Pearl District",
+        "Isla artificial",
+        "Marina",
+        "Lujo",
+        "Desarrollo Qatar"
+      ]
+    },
+    {
+      "id": "desierto-sands",
+      "nombre": "Desierto y dunas (excursión safari)",
+      "tipo": "desierto",
+      "region": "Sur de Doha",
+      "descripcion": "Dunas de arena roja del desierto interior con campamentos beduinos, actividades off-road y atardeceres espectaculares. Experiencia clásica del Golfo, imprescindible para entender el territorio más allá de las ciudades.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Tour organizado desde Doha (35-60 EUR, incluye transporte y guía), salida 14:00-16:00, regreso 19:00-21:00. Reservar en hotel o agencias.",
+      "donde_dormir": {
+        "mochilero": "Campamentos del desierto (tiendas beduinas): 50-80 EUR/noche",
+        "medio": "Campamentos con más comodidad: 100-150 EUR/noche",
+        "comfort": "Luxury desert camps (Inland Sea): 200-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Safari en 4x4 por las dunas: incluido en tour (saltos, pendientes, emocionante)",
+        "Atardecer en el desierto: incluido (fotografía inmejorable)",
+        "Cena beduina al fuego: 20-30 EUR adicionales (espectáculo, BBQ local)",
+        "Observación de estrellas: gratis (el desierto tiene cielo nocturno claro)"
+      ],
+      "donde_comer": "Tours incluyen cena (cordero al fuego, hummus, fecha, café árabe). Comer antes de partir si lo prefieres.",
+      "consejo_local": "Lleva protección solar, agua abundante y ropa cómoda. El viaje en 4x4 es agresivo; si tienes espalda sensible, avisa. Los atardeceres duran 20 minutos, no llegas tarde.",
+      "plan_b_lluvia": "Los tours se cancelan si llueve (raro en invierno). Reprogramar o visitar Katara cultural village.",
+      "keywords": [
+        "Desierto Catar",
+        "Dunas rojas",
+        "Safari",
+        "Beduino",
+        "Off-road",
+        "Inland Sea",
+        "Mesaieed"
+      ]
+    },
+    {
+      "id": "lusail",
+      "nombre": "Lusail",
+      "tipo": "ciudad",
+      "region": "Norte de Doha",
+      "descripcion": "Ciudad nueva de lujo a 15 km de Doha, construida para el Mundial 2022, con marina, paseos, parques y una arquitectura moderna. Centro alternativo para compras y paseos sin el caos del centro.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Doha en metro (línea roja directo) 20 min por 2 EUR, o Uber 15 EUR.",
+      "donde_dormir": {
+        "mochilero": "No hay hostales; dormir en Doha",
+        "medio": "Hoteles nuevos 4*: 100-160 EUR/noche",
+        "comfort": "Hoteles 5* de lujo: 250-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Lusail Boulevard: gratis (paseo moderno, tiendas, cafés, arquitectura futurista)",
+        "Lusail Marina: gratis (vista a yates y barcos de lujo)",
+        "Lusail Stadium: tours externos gratis (o 10 EUR tour interno si disponible, estadio del mundial)",
+        "Parques: gratis (áreas verdes nuevas, jardines)"
+      ],
+      "donde_comer": "Restaurantes nuevos en el Boulevard (20-40 EUR), cafés locales (5-10 EUR). Variedad internacional.",
+      "consejo_local": "Lusail es muy nueva (2022) y a veces parece un pueblo fantasma fuera de horas punta. Mejor visitarlo viernes-sábado. Muy limpia y segura.",
+      "plan_b_lluvia": "Compras en boulevard cubierto, cafés, restaurantes interiores.",
+      "keywords": [
+        "Lusail",
+        "Nueva ciudad",
+        "Qatar 2022",
+        "Lusail Marina",
+        "Boulevard",
+        "Estadio"
+      ]
+    },
+    {
+      "id": "umm-bab",
+      "nombre": "Umm Bab",
+      "tipo": "rural",
+      "region": "Oeste (desierto interior)",
+      "descripcion": "Zona agrícola tradicional en el desierto interior, con granjas, huertos y forma de vida local fuera del turismo. Ofrece perspectiva auténtica del Catar rural, aunque infraestructura turística limitada.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Coche alquilado desde Doha (80 km oeste, 1.5-2 horas, carretera excelente, gasolina 15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales: no hay; dormir en Doha",
+        "medio": "Hoteles muy básicos o guesthouses locales: 50-70 EUR/noche",
+        "comfort": "No hay opciones de lujo; mejor Doha o Lusail"
+      },
+      "que_hacer": [
+        "Granjas locales: gratis acceso (preguntar permiso, ver cultivos de dátil)",
+        "Vida rural: gratis (pasear, fotografiar, charlas con locales)",
+        "Mercado agrícola: gratis (frutas, verduras baratas, no turístico)"
+      ],
+      "donde_comer": "Restaurantes familiares locales (8-15 EUR), muy barato. Probar platos caseros árabes.",
+      "consejo_local": "Es un destino sin infraestructura turística; habla árabe o lleva traductor. Los locales son amables pero no esperan turistas. No hay mucho que 'ver' pero la experiencia es auténtica.",
+      "plan_b_lluvia": "No hay alternativas cubiertas. Mejor día soleado.",
+      "keywords": [
+        "Umm Bab",
+        "Rural Catar",
+        "Granjas",
+        "Agricultura",
+        "Desierto interior",
+        "Autentico"
+      ]
+    },
+    {
+      "id": "zekreet",
+      "nombre": "Zekreet",
+      "tipo": "naturaleza",
+      "region": "Noroeste",
+      "descripcion": "Península baja con playas vírgenes, restos de antiguas islas y paisaje desolado. Destino remoto y poco visitado ideal para hiking, fotografía y soledad, con vista a Arabia Saudí en el horizonte.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Coche alquilado desde Doha (120 km noroeste, 2-2.5 horas, pista final sin asfalto, gasolina 25 EUR). No hay transporte público.",
+      "donde_dormir": {
+        "mochilero": "Campamento básico o dormir en el coche: 20-40 EUR",
+        "medio": "No hay opciones; mejor dormir en Doha",
+        "comfort": "No hay"
+      },
+      "que_hacer": [
+        "Playas vírgenes: gratis (arenas blancas, agua clara, muy tranquilo)",
+        "Hiking por la península: gratis (senderos no marcados, llevar agua)",
+        "Ruinas de antiguas asentamientos: gratis (restos arqueológicos dispersos)",
+        "Fotografía de atardecer: gratis (luz dramática sobre el Golfo)"
+      ],
+      "donde_comer": "No hay restaurantes; llevar comida y agua desde Doha. Picnic en la playa.",
+      "consejo_local": "Lleva mucha agua (2-3 litros por persona), protección solar extrema y teléfono cargado. Las pistas finales son de arena; neumáticos todoterreno recomendados. Es un lugar muy remoto y poco frecuentado.",
+      "plan_b_lluvia": "No es viable con mal tiempo. La pista se vuelve intransitable con lluvia.",
+      "keywords": [
+        "Zekreet",
+        "Peninsula",
+        "Playas virgenes",
+        "Remoto",
+        "Hiking",
+        "Noroeste Catar"
+      ]
+    },
+    {
+      "id": "khauf-nakhsh-excursion",
+      "nombre": "Arabia Saudí fronteriza (excursión)",
+      "tipo": "desierto",
+      "region": "Frontera sur",
+      "descripcion": "Área fronteriza con Arabia Saudí accesible solo con permiso especial, pero cercana a zonas de Zekreet. Los viajeros aventureros pueden explorar el extremo suroeste del país hacia el desierto saudí.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Coche desde Doha (150+ km), permiso fronterizo requerido (consultar con gobierno catarí, complejo). No es una excursión común.",
+      "donde_dormir": {
+        "mochilero": "Camping improvisado: muy básico",
+        "medio": "No hay infraestructura",
+        "comfort": "No hay"
+      },
+      "que_hacer": [
+        "Observar la frontera: gratis (vista a Arabia Saudí)",
+        "Desierto puro: gratis"
+      ],
+      "donde_comer": "Llevar provisiones desde Doha.",
+      "consejo_local": "Esto es extremadamente remoto y requiere permiso gubernamental. No es una opción realista para la mayoría. Mejor enfocarse en Zekreet o desierto interior.",
+      "plan_b_lluvia": "No viable.",
+      "keywords": [
+        "Arabia Saudí",
+        "Frontera",
+        "Desierto remoto",
+        "Permiso especial",
+        "Aventura extrema"
+      ]
+    }
+  ]
+}

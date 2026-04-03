@@ -1,0 +1,333 @@
+{
+  "pais": "Cuba",
+  "codigo": "cu",
+  "destinos": [
+    {
+      "id": "la-habana",
+      "nombre": "La Habana",
+      "tipo": "ciudad | histórico",
+      "region": "La Habana (noroeste)",
+      "descripcion": "Capital y puerta de entrada a Cuba con arquitectura colonial intacta, malecón emblemático y vida callejera vibrante. Centro histórico declarado Patrimonio de la Humanidad donde conviven edificios del siglo XVI con arte contemporáneo. Imprescindible para entender Cuba moderna y antigua.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Aeropuerto Internacional José Martí (30 km): autobús/shuttle 5-10 EUR (45 min), taxi/Uber 20-30 EUR",
+      "donde_dormir": {
+        "mochilero": "Casa particular (airbnb local) o albergue en Centro Habana: 20-35 EUR/noche",
+        "medio": "Casa particular Vedado o Habana Vieja: 40-60 EUR/noche",
+        "comfort": "Hotel 4-5 estrellas Vedado/Miramar: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer Habana Vieja a pie: Catedral, Plaza de Armas, Castillo de la Real Fuerza (gratis pasear, museos 3-5 EUR)",
+        "Paseo del Malecón al atardecer (gratis)",
+        "Fustanela (mojito/ron) en La Bodeguita del Medio o bares locales (2-5 EUR)",
+        "Barrio de Regla en ferry (0,5 EUR, gratis visita)",
+        "Museo de la Revolución (5 EUR)",
+        "Necrópolis de Cristóbal Colón (3 EUR)"
+      ],
+      "donde_comer": "Ropa vieja (3-6 EUR), congri, picadillo cubano. Comer en paladares (restaurantes caseros privados) de Centro Habana o Vedado: 5-12 EUR plato. Zona Habana Vieja más turística y cara.",
+      "consejo_local": "Lleva efectivo en CUP (pesos cubanos), no USD. Los cambistas en la calle ofrecen mejor tasa que bancos pero verificar billetes. Las casas particulares son más baratas y auténticas que hoteles.",
+      "plan_b_lluvia": "Museos cerrados (Revolución, Hemingway en Finca Vigía), cines locales con películas cubanas, bares y cafeterías coloniales",
+      "keywords": [
+        "Habana Vieja",
+        "Centro Habana",
+        "Vedado",
+        "Miramar",
+        "malecón",
+        "Habana colonial"
+      ]
+    },
+    {
+      "id": "trinidad",
+      "nombre": "Trinidad",
+      "tipo": "ciudad | histórico",
+      "region": "Sancti Spíritus (centro-sur)",
+      "descripcion": "Pueblo colonial intacto del siglo XVI en el corazón de Cuba, prácticamente congelado en el tiempo. Calles de adoquín, mansiones coloniales en ruinas habitadas y plazas tranquilas sin turismo de masas. Punto de partida para Topes de Collantes y playas de Playa Ancho.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde La Habana: autobús Viazul 8 horas (30 EUR) o minibús compartido 7 horas (25 EUR). Desde Varadero: 6 horas (25 EUR)",
+      "donde_dormir": {
+        "mochilero": "Casa particular Centro Histórico: 20-30 EUR/noche",
+        "medio": "Casa colonial reformada o pequeño hotel: 35-50 EUR/noche",
+        "comfort": "Hotel memorias Trinidad/Iberostar: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Explorar Plaza Mayor a pie (gratis)",
+        "Iglesia Parroquial Mayor y Convento San Francisco (3 EUR museo)",
+        "Subir a la Torre de la Manaca Iznaga en Valle de los Ingenios (2 EUR, vista panorámica)",
+        "Topes de Collantes: cascadas y senderismo (excursión desde Trinidad, 15 EUR con guía)",
+        "Playa Ancho: playa de arena negra (15 km, taxi compartido 5 EUR)"
+      ],
+      "donde_comer": "Comida criolla en paladares de la plaza (ropa vieja, picadillo): 4-8 EUR. Rumores: restaurante con vista de la plaza (7-12 EUR). Las tiendas de helado son afamadas (1-2 EUR).",
+      "consejo_local": "Llega a primera hora (7-8 AM) para ver el pueblo sin turistas de autobús. Los guías locales en la plaza no son oficiales pero honestos; acuerda precio antes.",
+      "plan_b_lluvia": "Museos de la ciudad (Museo de Arquitectura, Museo de la Lucha Contra Bandidos: 2-3 EUR), cafeterías locales, bares en columpiadas",
+      "keywords": [
+        "Trinidad colonial",
+        "Topes de Collantes",
+        "Valle de los Ingenios",
+        "Plaza Mayor",
+        "Trinidad histórica"
+      ]
+    },
+    {
+      "id": "varadero",
+      "nombre": "Varadero",
+      "tipo": "playa",
+      "region": "Matanzas (norte)",
+      "descripcion": "Resort de playa todo-en-uno con 20 km de arena blanca y agua turquesa. Aunque es el destino más turístico de Cuba, ofrece la mejor relación de infraestructura para viajeros independientes que quieren playa, buceo y vida nocturna.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde La Habana: autobús Viazul 3 horas (9 EUR), minibús 2,5 horas (8 EUR). Desde aeropuerto: shuttle directo (15-20 EUR)",
+      "donde_dormir": {
+        "mochilero": "Casa particular o albergue centro: 20-35 EUR/noche",
+        "medio": "Hotel 3 estrellas (Meliá Varadero, Iberostar): 50-80 EUR/noche",
+        "comfort": "Resort 4-5 estrellas all-inclusive (Sandals, Memories): 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas centro y Playa de las Américas (gratis)",
+        "Buceo/snorkel en parque marino (30-50 EUR)",
+        "Parque Natural Varahicaos (3 EUR, cenotes subterráneos)",
+        "Paseo en barco pirata al atardecer (25-35 EUR)",
+        "Cavernas de Bellamar (5 EUR)",
+        "Casa de 3 Galas: experiencia de vida local (gratis entrada)"
+      ],
+      "donde_comer": "Paladares en centro: 5-10 EUR. Restaurantes playeros: 8-15 EUR. Pizzerías y cafeterías cubanas: 2-4 EUR. Avenida 1era zona más cara, callejuelas laterales más locales.",
+      "consejo_local": "La mayoría de turistas son resorteros. Pasea por el centro (Avenida 1era) después de las 18:00 para ver vida local, no turismo de masas. El buceo es mucho más barato que en Caribe francés.",
+      "plan_b_lluvia": "Acuario (8 EUR), bares y discotecas (entrada 5-10 EUR), spa/masaje, museos locales",
+      "keywords": [
+        "Varadero playas",
+        "Cayo Largo",
+        "buceo Varadero",
+        "resort all-inclusive",
+        "Avenida 1era"
+      ]
+    },
+    {
+      "id": "santa-clara",
+      "nombre": "Santa Clara",
+      "tipo": "ciudad | histórico",
+      "region": "Villa Clara (centro)",
+      "descripcion": "Ciudad universitaria en la ruta central con fuerte legado revolucionario (muerte del Che Guevara). Menos turística que Trinidad pero con buena infraestructura, vida estudiantil y punto de conexión natural en viajes de norte a sur.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde La Habana: Viazul 3,5 horas (12 EUR). Desde Trinidad: minibús 2 horas (8 EUR). Desde Varadero: Viazul 2 horas (12 EUR)",
+      "donde_dormir": {
+        "mochilero": "Casa particular centro: 18-30 EUR/noche",
+        "medio": "Hotel 2-3 estrellas: 35-50 EUR/noche",
+        "comfort": "Hotel Meliá o similar: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Monumento y Mausoleo del Che Guevara (1 EUR museo, 5 EUR subir torre)",
+        "Plaza Vidal: centro histórico con vida local (gratis pasear)",
+        "Tren Blindado (sitio histórico de revolución): 2 EUR",
+        "Parque Leoncio Vidal (gratis)",
+        "Iglesia del Carmen (gratis)"
+      ],
+      "donde_comer": "Comida criolla en paladares zona Plaza Vidal: 4-8 EUR. Restaurante Meliá para comer turístico: 10-15 EUR. Cafeterías y heladerías locales: 1-2 EUR.",
+      "consejo_local": "Santa Clara es un día máximo. La mayoría viajeros para aquí entre La Habana y Trinidad/Varadero. Come en paladares del norte de la plaza, más locales.",
+      "plan_b_lluvia": "Museos (museo de Decoración, de Historia): 2-3 EUR, cafeterías, cines locales",
+      "keywords": [
+        "Santa Clara Che Guevara",
+        "Tren Blindado",
+        "Plaza Vidal",
+        "Monumento del Che",
+        "ruta central Cuba"
+      ]
+    },
+    {
+      "id": "santiago-de-cuba",
+      "nombre": "Santiago de Cuba",
+      "tipo": "ciudad",
+      "region": "Santiago de Cuba (sureste)",
+      "descripcion": "Segunda ciudad más importante de Cuba con fuerte identidad afrocaribeña, música son y carnaval vibrante. Menos viajeros que La Habana, más auténtica, con arquitectura colonial, castillo histórico y ambiente más relajado.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "julio (Carnaval), noviembre a mayo",
+      "como_llegar": "Desde La Habana: vuelo 1 hora (80-120 EUR) o Viazul 15-16 horas (50 EUR). Desde Varadero: vuelo (100-150 EUR) o Viazul 18 horas (55 EUR)",
+      "donde_dormir": {
+        "mochilero": "Casa particular centro o Reparto: 20-35 EUR/noche",
+        "medio": "Hotel 3 estrellas: 40-60 EUR/noche",
+        "comfort": "Hotel 4 estrellas: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo del Morro (5 EUR, vistas bahía)",
+        "Casco Histórico: Catedral, Plaza de Armas (gratis pasear)",
+        "Casa de Diego Velázquez (2 EUR)",
+        "Cementerio Santa Ifigenia (2 EUR, tumbas emblemáticas)",
+        "Salsa en vivo en Casa de las Tradiciones o bares locales (gratis entrada, 2-3 EUR bebida)",
+        "Excursión a Baracoa: pueblo pintoresco en montaña (30 km, minibús 5 EUR, 1 hora)"
+      ],
+      "donde_comer": "Cocina criolla con influencia caribeña: langosta, viandas. Paladares en centro: 5-10 EUR. La terraza de Restaurante el Morro: 10-15 EUR con vista. Helados de Coppelia (1 EUR).",
+      "consejo_local": "El carnaval de julio es increíble pero cuadruplica precios. Ve en noviembre-mayo para menor multitud. La salsa aquí es más auténtica que en La Habana, no es turística.",
+      "plan_b_lluvia": "Museos (Revolución, de Ambiente, Bacardí): 2-3 EUR, cafeterías con vista de bahía",
+      "keywords": [
+        "Santiago de Cuba",
+        "Carnaval Santiago",
+        "Castillo del Morro",
+        "música son",
+        "Baracoa"
+      ]
+    },
+    {
+      "id": "baracoa",
+      "nombre": "Baracoa",
+      "tipo": "ciudad | playa | naturaleza",
+      "region": "Guantánamo (sureste extremo)",
+      "descripcion": "Pueblo costero rodeado de montañas selvático y aislado, primer asentamiento europeo de Cuba. Playa de arena negra, cacao local, frutas tropicales y ambiente tranquilo. Requiere esfuerzo para llegar pero recompensa con autenticidad total.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde Santiago: minibús 2,5 horas (6 EUR) por carretera montaña. Desde La Habana: vuelo + minibús (120 EUR total)",
+      "donde_dormir": {
+        "mochilero": "Casa particular o albergue: 18-28 EUR/noche",
+        "medio": "Hotel pequeño: 35-50 EUR/noche",
+        "comfort": "Hotel boutique: 60-85 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Baracoa (gratis)",
+        "Trekking a El Yunque (pico montaña): 15 EUR con guía",
+        "Paseo en bote río Miel (8-12 EUR)",
+        "Playa Maguana: 10 km playa tranquila (minibús 2 EUR)",
+        "Probar chocolate y cacao local en tienditas (2-4 EUR)",
+        "Castillo de Seboruco (1 EUR, vista panorámica)"
+      ],
+      "donde_comer": "Frutos de mar (langostinos, camarones) en paladares playeros: 7-12 EUR. Tostones, platanos, fruta tropical. Jugos de frutas locales: 1 EUR. La terraza de Mar Verde: buena relación.",
+      "consejo_local": "El camino es montaña con curvas. Toma minibús compartido, no taxi solo (más caro). Baracoa es caro comparado con interior Cuba porque todo se trae en camión. Las playas a 5-10 km del pueblo son vacías.",
+      "plan_b_lluvia": "Visita pueblito, cafeterías, tiendas artesanía local, museos pequeños",
+      "keywords": [
+        "Baracoa",
+        "El Yunque Baracoa",
+        "Playa Maguana",
+        "primer asentamiento Cuba",
+        "Guantánamo"
+      ]
+    },
+    {
+      "id": "cayo-coco",
+      "nombre": "Cayo Coco",
+      "tipo": "playa | isla",
+      "region": "Ciego de Ávila (norte centro)",
+      "descripcion": "Isla cayería con playas vírgenes de arena blanca y arrecife de coral cercano. Menos construida que Varadero, más exclusiva pero con menos vida local. Ideal para buceo, snorkel y relax absoluto sin agenda.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde La Habana: Viazul a Ciego de Ávila 5 horas (22 EUR), luego minibús compartido 1 hora (5 EUR). Desde Varadero: autobús 3,5 horas (15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Casa particular o pequeño albergue (limitados): 25-40 EUR/noche",
+        "medio": "Hotel pequeño 2-3 estrellas: 50-75 EUR/noche",
+        "comfort": "Resort 4-5 estrellas all-inclusive: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas Playa Las Coloradas, Playa Las Piernas (gratis)",
+        "Buceo en arrecife: 30-45 EUR",
+        "Snorkel desde playa (equipo 8 EUR alquiler)",
+        "Cayo Guillermo (cayería cerca): 20 EUR excursión",
+        "Catamaran al atardecer (30-40 EUR)"
+      ],
+      "donde_comer": "Paladares y restaurantes en cayo: 8-15 EUR. Opciones limitadas fuera resorts. Las tiendas de provisiones son caras. Comer en el resort si estás dentro, si no, come en Ciego de Ávila y sube al cayo.",
+      "consejo_local": "Cayo Coco es casi solo resorts all-inclusive. Si no estás en uno, trae snacks. Las playas son públicas pero infraestructura es mínima. Mejor día completo que noche.",
+      "plan_b_lluvia": "Museos de pueblo (Ciego de Ávila base), actividades cubiertas en resorts",
+      "keywords": [
+        "Cayo Coco",
+        "cayería norte",
+        "buceo Cayo Coco",
+        "playas vírgenes",
+        "Cayo Guillermo"
+      ]
+    },
+    {
+      "id": "matanzas",
+      "nombre": "Matanzas",
+      "tipo": "ciudad",
+      "region": "Matanzas (norte)",
+      "descripcion": "Ciudad portuaria histórica llamada 'Atenas de Cuba' por arquitectura neoclásica y patrimonio cultural. Centro teatral y literario con vida local auténtica. Generalmente ignorada por turistas pero con valor histórico y parque natural cercano.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde La Habana: Viazul 1,5 horas (6 EUR) o minibús (4 EUR). Desde Varadero: minibús 30 min (2 EUR)",
+      "donde_dormir": {
+        "mochilero": "Casa particular centro: 18-28 EUR/noche",
+        "medio": "Hotel pequeño: 30-45 EUR/noche",
+        "comfort": "Hotel 3 estrellas: 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo Malecón (gratis)",
+        "Catedral de San Carlos Borromeo (gratis)",
+        "Teatro Sauto (2 EUR tour, arquitectura bellísima)",
+        "Museo Farmacéutico (2 EUR, único en Latinoamérica)",
+        "Cuevas de Bellamar (excursión Varadero, pero base desde aquí: 5 EUR)"
+      ],
+      "donde_comer": "Comida local en paladares: 4-7 EUR. Restaurante Meliá o La Vigia: 8-12 EUR. Helados Coppelia: 1 EUR. No hay turismo gastronómico pero comida honesta.",
+      "consejo_local": "Matanzas es parada entre La Habana y Varadero. Pocas personas bajan aquí; eso la hace más auténtica. Come en lugares donde comen cubanos, no turistas.",
+      "plan_b_lluvia": "Museos (Farmacéutico, Teatro interior), cafeterías, galerías arte local",
+      "keywords": [
+        "Matanzas",
+        "Atenas Cuba",
+        "Teatro Sauto",
+        "Museo Farmacéutico",
+        "Malecón Matanzas"
+      ]
+    },
+    {
+      "id": "cienfuegos",
+      "nombre": "Cienfuegos",
+      "tipo": "ciudad | playa",
+      "region": "Cienfuegos (sur)",
+      "descripcion": "Puerto francés colonial fundado en 1819 con arquitectura neoclásica ordenada y bahía hermosa. Menos conocida que Trinidad o La Habana, punto de salida a Cayo Loco y El Nicho. Ambiente relajado, buenos paladares y vida local.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde La Habana: Viazul 4,5 horas (18 EUR). Desde Trinidad: minibús 2 horas (6 EUR). Desde Varadero: Viazul 4 horas (20 EUR)",
+      "donde_dormir": {
+        "mochilero": "Casa particular Prado o centro: 20-32 EUR/noche",
+        "medio": "Hotel 2-3 estrellas: 40-60 EUR/noche",
+        "comfort": "Hotel 4 estrellas Meliá: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo del Prado (malecón, gratis)",
+        "Catedral Metropolitana y Plaza Mayor (gratis)",
+        "Castillo de Jagua (5 EUR, 10 min en ferry)",
+        "Excursión a Cayo Loco: isla con playas vírgenes (40 EUR tour)",
+        "Salsa y música en vivo en bares locales (gratis entrada, 2-3 EUR bebida)",
+        "El Nicho: cascadas montaña (40 EUR tour desde aquí)"
+      ],
+      "donde_comer": "Mariscos en paladares playeros: 8-12 EUR. La Veranda: restaurante con vista bahía (12-18 EUR). Pescado frito tiendas locales: 4-6 EUR. Helados y refrescos: 1-2 EUR.",
+      "consejo_local": "Cienfuegos tiene la mejor relación precio-experiencia de Cuba sin ser turista. Los locales son amables. Prueba el ron y daiquiri en bares pequeños, no turísticos.",
+      "plan_b_lluvia": "Museos (Historia, Revolución): 2-3 EUR, bares, cafeterías, galerías",
+      "keywords": [
+        "Cienfuegos",
+        "Prado Cienfuegos",
+        "Castillo Jagua",
+        "Cayo Loco",
+        "puerto francés Cuba"
+      ]
+    },
+    {
+      "id": "vinales",
+      "nombre": "Viñales",
+      "tipo": "naturaleza | rural | montaña",
+      "region": "Pinar del Río (suroeste)",
+      "descripcion": "Valle pintoresco rodeado de mogotes (formaciones rocosas de caliza), plantaciones de tabaco y fincas locales. Punto de partida para trekking, ciclismo rural y aprender sobre producción de puros cubanos. Auténtico, tranquilo y diferente del resto de Cuba.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Desde La Habana: Viazul 3 horas (12 EUR) o minibús (10 EUR). Única conexión buena es desde capital.",
+      "donde_dormir": {
+        "mochilero": "Casa particular en valle: 20-30 EUR/noche",
+        "medio": "Hotel pequeño o finca turística: 35-50 EUR/noche",
+        "comfort": "Hotel boutique: 60-85 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking mogotes: Mural de la Prehistoria (1 EUR), Gran Caverna (5 EUR con guía)",
+        "Visita plantación tabaco y casa de campesino (8-12 EUR con guía local)",
+        "Paseo a caballo por valle (15-20 EUR hora)",
+        "Ciclismo rural (alquiler bici 5 EUR/día)",
+        "Cueva de San Tomás (senderismo + cueva: 8 EUR)",
+        "Relaxar en porch de casa particular viendo mogotes (gratis)"
+      ],
+      "donde_comer": "Comida de granja en casas particulares o paladares: 5-10 EUR. Ropa vieja, picadillo, viandas locales. La Jarana: restaurante típico (8-15 EUR). Jugos frutas y café local: 1-2 EUR.",
+      "consejo_local": "Contrata guías locales en la calle (honestos) no en tours organizados. Monta a caballo solo si estás acostumbrado. Las mejores vistas de mogotes al atardecer desde carretera principal o porches.",
+      "plan_b_lluvia": "Casas particulares con actividades interiores, cuevas (secas), artesanía local, cafeterías",
+      "keywords": [
+        "Viñales",
+        "mogotes",
+        "plantación tabaco",
+        "Valle Viñales",
+        "Pinar del Río"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,332 @@
+{
+  "pais": "Guyana",
+  "codigo": "gy",
+  "destinos": [
+    {
+      "id": "georgetown",
+      "nombre": "Georgetown",
+      "tipo": "ciudad",
+      "region": "Demerara-Mahaica",
+      "descripcion": "Capital colonial de Guyana con arquitectura de madera victoriana, mercados animados y cultura caribeña vibrante. Centro de entrada para la mayoría de viajeros y punto logístico para explorar el país. Punto de partida para excursiones fluviales y acceso a la naturaleza interior.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero-marzo, septiembre-noviembre",
+      "como_llegar": "Vuelo internacional a Cheddi Jagan International Airport (30 km). Taxi/autobús a Georgetown: 45 minutos, 15-20 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel o guesthouse en Bel Air/Kitty: 20-30 EUR/noche",
+        "medio": "Hotel 2-3 estrellas en Bel Air/Queenstown: 40-70 EUR/noche",
+        "comfort": "Resort en Umana Yana o Marriott: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por Stabroek Market (gratis)",
+        "Visita a Demerara Rum Distillery (10 EUR)",
+        "City Hall & St George's Cathedral (gratis)",
+        "National Museum (5 EUR)",
+        "Paseo por el Seawall (gratis)"
+      ],
+      "donde_comer": "Comida criolla guyanese (pepperpot, cook-up rice). Mercados callejeros 2-5 EUR. Restaurants en Main Street y North Road 8-15 EUR. Probar roti y curry en barrios locales.",
+      "consejo_local": "Evita caminar de noche en zonas alejadas del centro. El Seawall es seguro durante el día y ideal para ver el atardecer. Los minibuses locales son caóticos pero muy baratos.",
+      "plan_b_lluvia": "National Museum, mercados cubiertos, cafés locales, visita a Umana Yana (centro cultural con vistas).",
+      "keywords": [
+        "Georgetown",
+        "Stabroek",
+        "Bel Air",
+        "Kitty",
+        "Queenstown",
+        "capital Guyana",
+        "St George's Cathedral"
+      ]
+    },
+    {
+      "id": "kaieteur-falls",
+      "nombre": "Cataratas Kaieteur",
+      "tipo": "naturaleza",
+      "region": "Potaro-Siparuni",
+      "descripcion": "Una de las cataratas más altas del mundo (226 metros) en plena jungla guyanese virgen. Accesible por pequeños aviones desde Georgetown, ofrece una experiencia de naturaleza pura con vistas espectaculares y muy pocos turistas. Ideal para aventureros que buscan lo auténtico lejos de rutas masificadas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero-marzo, septiembre-noviembre (menos lluvia)",
+      "como_llegar": "Vuelo charter desde Georgetown (Ogle Airport): 1 hora, 200-300 EUR ida/vuelta. Algunos tours incluyen guía y transporte.",
+      "donde_dormir": {
+        "mochilero": "Camping o lodge rústico (si se contrata tour): incluido en 150-250 EUR",
+        "medio": "Lodge Kaieteur (básico): 80-120 EUR/noche",
+        "comfort": "No hay opciones comfort en la zona; se visita en día desde Georgetown"
+      },
+      "que_hacer": [
+        "Senderismo a miradores de las cataratas (gratis con entrada)",
+        "Fotografía de flora y fauna (gratis)",
+        "Excursión a Tukeit Falls si hay tiempo (10 EUR adicionales)",
+        "Observación de aves endémicas (gratis)"
+      ],
+      "donde_comer": "Comida básica incluida en tours. Llevar snacks. Lodges locales ofrecen comida casera guyanese (10-15 EUR).",
+      "consejo_local": "Contrata con agencias oficiales; los vuelos pueden cancelarse por clima. Madruga para máxima luz natural. Lleva repelente potente y ropa impermeable. El paisaje es increíble pero está muy remoto.",
+      "plan_b_lluvia": "Los vuelos se cancelan en mal tiempo. Reserva flexible o planifica excursiones alternativas desde Georgetown.",
+      "keywords": [
+        "Kaieteur Falls",
+        "cataratas",
+        "waterfall",
+        "Potaro",
+        "jungle",
+        "naturaleza Guyana"
+      ]
+    },
+    {
+      "id": "orinduik-falls",
+      "nombre": "Cataratas Orinduik",
+      "tipo": "naturaleza",
+      "region": "Potaro-Siparuni",
+      "descripcion": "Cascadas de múltiples niveles en el río Ireng con piscinas naturales perfectas para nadar. Menos espectacular que Kaieteur pero más accesible y con mejor oportunidad de interacción con comunidades indígenas. Ideal para una experiencia más aventurera que turística.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero-marzo, septiembre-noviembre",
+      "como_llegar": "Vuelo o tour organizado desde Georgetown: 2-3 horas con paradas, 250-400 EUR incluido transporte y guía.",
+      "donde_dormir": {
+        "mochilero": "Eco-lodge o camping comunitario: 30-50 EUR/noche",
+        "medio": "Eco-lodge rústico (Orinduik Lodge): 60-100 EUR/noche",
+        "comfort": "No disponible; se visita en tour de un día desde Georgetown"
+      },
+      "que_hacer": [
+        "Baño en piscinas naturales (gratis)",
+        "Trekking a cascadas superiores (gratis)",
+        "Encuentro con comunidades Macushi/Patamona (gratis, con guía)",
+        "Pesca (5-10 EUR con permiso local)"
+      ],
+      "donde_comer": "Comida casera guyanese en lodges locales (8-12 EUR). Incluido en la mayoría de tours. Frutas frescas en mercados locales.",
+      "consejo_local": "Negocia directamente con guías locales Macushi para tours más auténticos y baratos. El río es seguro pero frío. Lleva crema solar fuerte; el reflejo en el agua quema.",
+      "plan_b_lluvia": "Las aguas pueden crecer mucho. Mejor ir en estación seca. Tours suelen ser flexibles con fechas.",
+      "keywords": [
+        "Orinduik Falls",
+        "Ireng",
+        "cascadas",
+        "comunidades indígenas",
+        "Macushi",
+        "piscinas naturales"
+      ]
+    },
+    {
+      "id": "lethem",
+      "nombre": "Lethem",
+      "tipo": "rural",
+      "region": "Upper Takutu-Upper Essequibo",
+      "descripcion": "Pueblo fronterizo remoto en la sabana de la región sur con acceso a la naturaleza genuina de Guyana y conexión a Brasil. Centro de avistamiento de fauna y punto de partida para explorar el Rupununi. Experiencia auténtica lejos del turismo convencional.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "enero-marzo, septiembre-noviembre",
+      "como_llegar": "Vuelo desde Georgetown (Ogle Airport): 2.5 horas, 120-180 EUR ida/vuelta. También minibus: 12+ horas, 40-60 EUR (muy incómodo).",
+      "donde_dormir": {
+        "mochilero": "Guesthouse local o hospedaje comunitario: 15-25 EUR/noche",
+        "medio": "Rock View Lodge o Lethem Hotel: 50-80 EUR/noche",
+        "comfort": "Rock View Lodge (opción premium): 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Excursión a ranchos locales y encuentro con vaqueros guyanese (15-30 EUR)",
+        "Safari en sabana para avistamiento de jaguares y pumas (50-80 EUR con guía)",
+        "Visita a comunidades indígenas Wapixana (gratis/donación)",
+        "Pesca en río Takutu (20-40 EUR)"
+      ],
+      "donde_comer": "Comida local simple: arroz, pollo, casabe. Restaurantes básicos 5-8 EUR. Rock View Lodge ofrece comida de calidad (12-18 EUR). Mercado local con frutas tropicales.",
+      "consejo_local": "Alquila un 4x4 o contrata un tour para explorar. La región es segura pero remota; asegúrate de tener gasolina. Lleva efectivo; no hay cajeros. Los ateardeceres en la sabana son excepcionales.",
+      "plan_b_lluvia": "Los caminos se vuelven intransitables. Viaja en estación seca. Los vuelos rara vez se cancelan pero minibuses sí.",
+      "keywords": [
+        "Lethem",
+        "Rupununi",
+        "sabana",
+        "Takutu",
+        "frontera Brasil",
+        "vaqueros",
+        "jaguares"
+      ]
+    },
+    {
+      "id": "shell-beach",
+      "nombre": "Shell Beach",
+      "tipo": "playa",
+      "region": "Barima-Waini",
+      "descripcion": "Playa remota en el norte donde anidan tortugas marinas gigantes durante temporada. Accesible solo por barco desde Nueva Ámsterdam, ofrece una experiencia selvática marina muy poco turística. Destino para aventureros interesados en conservación y vida salvaje.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-agosto (temporada de anidación de tortugas)",
+      "como_llegar": "Minibus desde Georgetown a Nueva Ámsterdam (4 horas, 10-15 EUR), luego barco privado (4-5 horas, 150-250 EUR por grupo). Tours organizados: 400-600 EUR todo incluido.",
+      "donde_dormir": {
+        "mochilero": "Campamento básico o lodge rústico: 40-60 EUR/noche",
+        "medio": "Lodge comunitario Shell Beach: 70-100 EUR/noche",
+        "comfort": "Not available; viaja en tour todo incluido"
+      },
+      "que_hacer": [
+        "Observación de tortugas gigantes anidando (gratis con guía)",
+        "Caminata nocturna en playa (gratis)",
+        "Snorkel/natación en aguas limpias (gratis)",
+        "Kayak en manglares (15-30 EUR)"
+      ],
+      "donde_comer": "Comida casera en el lodge: pescado fresco, plátanos, arroz. Incluido en la mayoría de paquetes (12-20 EUR por comida si no está incluido).",
+      "consejo_local": "Viaja en temporada de tortugas (abril-agosto) para maximizar avistamientos. Lleva repelente de insectos potente; los mosquitos pueden ser brutales. El viaje en barco es largo pero la experiencia compensa.",
+      "plan_b_lluvia": "Lluvia frecuente en esta región. Lleva ropa impermeable y espera cambios en el itinerario.",
+      "keywords": [
+        "Shell Beach",
+        "tortugas marinas",
+        "Nueva Ámsterdam",
+        "playa Guyana",
+        "Barima-Waini",
+        "manglares"
+      ]
+    },
+    {
+      "id": "iwokrama-rainforest",
+      "nombre": "Iwokrama Rainforest",
+      "tipo": "naturaleza",
+      "region": "Potaro-Siparuni",
+      "descripcion": "Reserva de 371.000 hectáreas en el corazón de la selva virgen guyanese, dedicada a conservación y ecoturismo sostenible. Centro de investigación con programas de ecoturismo donde se ve fauna variada (jaguares, pumas, tapires). Experiencia inmersiva en la selva auténtica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "enero-marzo, septiembre-noviembre",
+      "como_llegar": "Tour desde Georgetown (agencias locales): transporte incluido, 4-5 horas, 300-500 EUR por persona (3 días) incluido alojamiento y comidas.",
+      "donde_dormir": {
+        "mochilero": "Dormitorio en Iwokrama Center: 40-60 EUR/noche",
+        "medio": "Cabaña privada en el center: 80-120 EUR/noche",
+        "comfort": "Cabaña de lujo Iwokrama: 150-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo guiado en la selva (incluido)",
+        "Canopy walk a 40 metros de altura (20 EUR)",
+        "Observación de fauna nocturna (gratis con guía)",
+        "Pesca en río Essequibo (30-50 EUR con guía)"
+      ],
+      "donde_comer": "Comida de buena calidad en el center: pescado del río, vegetales frescos, comida guyanese. Incluido en la mayoría de paquetes.",
+      "consejo_local": "Reserva con anticipación. Los guías son excelentes y conocen mucho sobre ecología. La selva es densa; respeta la vida salvaje. Madruga para ver fauna en movimiento.",
+      "plan_b_lluvia": "Selva tropical; espera lluvia. Las actividades continúan. Lleva ropa impermeable y botas de trekking.",
+      "keywords": [
+        "Iwokrama",
+        "selva",
+        "rainforest",
+        "Essequibo",
+        "conservación",
+        "ecoturismo",
+        "canopy"
+      ]
+    },
+    {
+      "id": "new-amsterdam",
+      "nombre": "Nueva Ámsterdam",
+      "tipo": "ciudad",
+      "region": "East Berbice-Corentyne",
+      "descripcion": "Segundo puerto de Guyana con herencia holandesa visible en la arquitectura. Punto de conexión a Shell Beach y al interior. Menos turístico que Georgetown pero más auténtico, con mercados locales animados y vida cotidiana guyanese genuine.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero-marzo, septiembre-noviembre",
+      "como_llegar": "Minibus desde Georgetown: 4 horas, 10-15 EUR. O vuela directamente: 45 minutos, 80-120 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse local: 20-30 EUR/noche",
+        "medio": "Hotel pequeño en centro: 40-60 EUR/noche",
+        "comfort": "No hay opciones premium; la mayoría son paso hacia otros destinos"
+      },
+      "que_hacer": [
+        "Paseo por el puerto y mercado de pescado (gratis)",
+        "Visita a iglesia reformada holandesa (gratis)",
+        "Excursión a Berbice River (15-25 EUR)",
+        "Mercado local de frutas y artesanía (gratis)"
+      ],
+      "donde_comer": "Comida criolla local en mercados callejeros: 2-4 EUR. Restaurantes simples 5-8 EUR. Pescado fresco en quioscos junto al puerto.",
+      "consejo_local": "Es una ciudad funcional más que turística; no esperes atracciones complejas. Úsala como base para Shell Beach o el interior. El puerto es interesante al atardecer.",
+      "plan_b_lluvia": "Mercados cubiertos, iglesia, museos locales.",
+      "keywords": [
+        "New Amsterdam",
+        "Nueva Ámsterdam",
+        "East Berbice-Corentyne",
+        "puerto",
+        "Berbice",
+        "arquitectura holandesa"
+      ]
+    },
+    {
+      "id": "rock-island-lodge",
+      "nombre": "Rock Island Lodge (río Essequibo)",
+      "tipo": "naturaleza",
+      "region": "Demerara-Mahaica",
+      "descripcion": "Lodge en una isla en el río Essequibo a 45 minutos de Georgetown, especializado en observación de aves y vida selvática. Acceso fácil a la naturaleza sin alejarse mucho de la capital. Ideal para trekking de corta duración y avistamiento de flora y fauna amazónica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero-marzo, septiembre-noviembre",
+      "como_llegar": "Tour desde Georgetown (agencias locales): 45 minutos en bote, 150-250 EUR por persona (2 días) con alojamiento y guía.",
+      "donde_dormir": {
+        "mochilero": "Cabaña básica en lodge: 40-60 EUR/noche",
+        "medio": "Cabaña con baño privado: 80-120 EUR/noche",
+        "comfort": "Cabaña premium: 140-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo guiado en la isla (incluido)",
+        "Observación de aves (300+ especies, incluido)",
+        "Paseo en bote por el río (incluido)",
+        "Pesca deportiva (30-50 EUR adicionales)"
+      ],
+      "donde_comer": "Comida de buena calidad en el lodge: pescado del río, carnes, vegetales frescos. Incluido en la mayoría de paquetes.",
+      "consejo_local": "Perfecto para una primera inmersión en naturaleza guyanese sin comprometerse a viajes largos. Los guías son muy buenos en identificar aves. Madruga para ver fauna activa.",
+      "plan_b_lluvia": "Lluvia frecuente pero actividades continúan. Lleva ropa impermeable.",
+      "keywords": [
+        "Rock Island Lodge",
+        "Essequibo",
+        "aves",
+        "birdwatching",
+        "ecoturismo",
+        "río"
+      ]
+    },
+    {
+      "id": "paramakatoi",
+      "nombre": "Paramakatoi",
+      "tipo": "rural",
+      "region": "Potaro-Siparuni",
+      "descripcion": "Comunidad indígena Pemon en las montañas Pakaraima con acceso a Mount Roraima. Pueblo auténtico donde la vida sigue ritmos ancestrales. Base para excursiones a géiseres calientes y el legendario Roraima, ofreciendo experiencia cultural única.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "enero-marzo, septiembre-noviembre (evita julio-agosto: inaccesible)",
+      "como_llegar": "Vuelo desde Georgetown a Paramakatoi: 1.5 horas, 130-180 EUR. Tours organizados incluyen transporte.",
+      "donde_dormir": {
+        "mochilero": "Hospedaje comunitario o guesthouse: 20-35 EUR/noche",
+        "medio": "Eco-lodge local (si disponible): 50-80 EUR/noche",
+        "comfort": "No hay opciones; mayoría son tours todo incluido desde Georgetown"
+      },
+      "que_hacer": [
+        "Caminata a Mount Roraima base (2-3 días, 100-150 EUR con guía)",
+        "Visita a géiseres calientes (Hot Springs): 20-30 EUR",
+        "Taller de artesanía indígena (gratis/donación)",
+        "Comida tradicional Pemon (5-10 EUR)"
+      ],
+      "donde_comer": "Comida casera Pemon: cazuela de caza, yuca, frutas locales. Hospedajes ofrecen comida básica (8-12 EUR). Come con familias locales si es posible.",
+      "consejo_local": "Mount Roraima es un trek de 4-5 días completo; la mayoría de viajeros solo llegan a la base en 1-2 días. Contrata guías locales Pemon; conocen el terreno mejor que cualquier agencia. Lleva efectivo; no hay bancos.",
+      "plan_b_lluvia": "Zona con lluvia frecuente; viaja en estación seca si es posible. Los caminos se vuelven muy difíciles.",
+      "keywords": [
+        "Paramakatoi",
+        "Mount Roraima",
+        "Pakaraima",
+        "Pemon",
+        "indígena",
+        "géiseres",
+        "Hot Springs"
+      ]
+    },
+    {
+      "id": "bartica",
+      "nombre": "Bartica",
+      "tipo": "ciudad",
+      "region": "Cuyuni-Mazaruni",
+      "descripcion": "Puerto minero en la confluencia de tres ríos (Essequibo, Cuyuni, Mazaruni). Puerta de entrada al interior minero y aventurero. Poco turístico pero auténtico, con acceso a prospección de diamantes y exploración fluvial profunda en Guyana.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero-marzo, septiembre-noviembre",
+      "como_llegar": "Minibus desde Georgetown: 5-6 horas, 15-20 EUR. O bote privado por el río: 4 horas, 60-100 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse local: 20-30 EUR/noche",
+        "medio": "Hotel pequeño: 40-60 EUR/noche",
+        "comfort": "Bartica Lodge: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Excursión a campamentos mineros (30-50 EUR con guía local)",
+        "Paseo en bote por confluencia de ríos (gratis/15 EUR)",
+        "Mercado local y puerto (gratis)",
+        "Pesca en río Essequibo (20-40 EUR)"
+      ],
+      "donde_comer": "Comida local simple: pescado, arroz, casabe. Quioscos y restaurantes básicos 4-8 EUR. Frutas frescas en mercado.",
+      "consejo_local": "Es una ciudad de paso muy local. No es turística pero ofrece una perspectiva real de Guyana minera. La confluencia de ríos es hermosa al atardecer. Negocia directamente con guías locales si quieres ir a prospecciones.",
+      "plan_b_lluvia": "Ríos pueden crecer; algunos paseos se cancelan. Mercados y pueblo accessible.",
+      "keywords": [
+        "Bartica",
+        "minería",
+        "Essequibo",
+        "Cuyuni",
+        "Mazaruni",
+        "confluencia",
+        "puerto"
+      ]
+    }
+  ]
+}

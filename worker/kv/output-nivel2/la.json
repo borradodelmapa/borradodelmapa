@@ -1,0 +1,331 @@
+{
+  "pais": "Laos",
+  "codigo": "la",
+  "destinos": [
+    {
+      "id": "luang-prabang",
+      "nombre": "Luang Prabang",
+      "tipo": "histórico",
+      "region": "Norte",
+      "descripcion": "Antigua capital real con templos budistas dorados, callejuelas coloniales francesas y el Mekong como escenario. Centro espiritual de Laos donde los monjes recorren las calles al amanecer pidiendo limosna. Patrimonio UNESCO con arquitectura perfectamente conservada.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "desde Vientián: vuelo 1h (25-40 EUR) o autobús nocturno 10h (15-20 EUR)",
+      "donde_dormir": {
+        "mochilero": "guesthouses en old town: 8-15 EUR/noche",
+        "medio": "boutique hotels coloniales: 30-60 EUR/noche",
+        "comfort": "resorts de lujo junto al Mekong: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Ceremonia alms-giving con monjes al amanecer (gratis)",
+        "Templo Wat Xieng Thong: el más hermoso del país (3 EUR)",
+        "Paseo por night market en Sisavangvong Road (gratis)",
+        "Excursión a Kuang Si Waterfall: cascadas azul turquesa (5 EUR)",
+        "Crucero al atardecer por el Mekong (12 EUR)"
+      ],
+      "donde_comer": "Probar khao soi (fideos con curry), sticky rice y bebidas de café de Laos. Precios: 2-5 EUR en comedores locales, 8-15 EUR en restaurantes con vistas. Zona riverside más turística pero con buena relación calidad-precio.",
+      "consejo_local": "Ir a la ceremonia de alms-giving entre 5:30-6:30 AM desde la calle principal antes del anochecer; es gratuito pero respeta las normas (no tocar a los monjes, rodilla en tierra).",
+      "plan_b_lluvia": "Museos (Royal Palace, Luang Prabang Museum), talleres de seda o papel tradicional, templos interiores.",
+      "keywords": [
+        "Luang Prabang",
+        "LP",
+        "old town",
+        "Mekong",
+        "templos budistas",
+        "Wat Xieng Thong"
+      ]
+    },
+    {
+      "id": "vientian",
+      "nombre": "Vientián",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital relajada junto al Mekong con un toque colonial francés y templos budistas dispersos. Punto de entrada principal a Laos y base para acceder a otros destinos. Menos turística que Luang Prabang pero con buena infraestructura y comida callejera excelente.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Aeropuerto internacional Wattay (vuelos desde Bangkok, Hanoi, Singapur). Desde el aeropuerto al centro: tuk-tuk 5-7 EUR, autobús 1 EUR.",
+      "donde_dormir": {
+        "mochilero": "guesthouses en Vang Vieng Road o That Luang area: 7-12 EUR/noche",
+        "medio": "mid-range hotels en Samsenthai: 25-50 EUR/noche",
+        "comfort": "hotels de cadena con piscina: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Pha That Luang: Gran Estupa dorada (2 EUR entrada)",
+        "Wat Sisaket: templo más antiguo (2 EUR)",
+        "Paseo riverside al atardecer en Quai Fa Ngum (gratis)",
+        "Patuxai: monumento de la independencia (2 EUR)",
+        "Talad Sao morning market: compras y comida (gratis navegar)"
+      ],
+      "donde_comer": "Khao jee (baguette laosiano con paté), som tam (papaya verde picante), grillados de carne en pinchos. Precios: 1-3 EUR en comedores callejeros, 6-12 EUR en restaurantes. Mejor en Talad Sao o Chao Anou Road.",
+      "consejo_local": "El Mekong está bajo la mayoría del año; visitar durante monzón (julio-septiembre) si quieres verlo caudaloso. Vientián es más para dormir y organizar viajes que para pasar días enteros.",
+      "plan_b_lluvia": "Museos (Laos National Museum), tiendas de artesanía, cafés de comida lao, templos cubiertos.",
+      "keywords": [
+        "Vientian",
+        "Vientiane",
+        "capital",
+        "Mekong",
+        "Pha That Luang",
+        "Patuxai"
+      ]
+    },
+    {
+      "id": "vang-vieng",
+      "nombre": "Vang Vieng",
+      "tipo": "naturaleza",
+      "region": "Centro",
+      "descripcion": "Pueblo junto al río Nam Song rodeado de formaciones kársticas espectaculares. Popular entre mochileros por tubing recreativo, cuevas, escalada en roca y bungee jumping. Mezcla de naturaleza salvaje con una escena viajera muy establecida.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "desde Vientián: autobús/minibus 3.5h (5-8 EUR) o desde Luang Prabang: autobús 6h (10-15 EUR)",
+      "donde_dormir": {
+        "mochilero": "backpacker hostels junto al río: 6-10 EUR/noche",
+        "medio": "bungalows y guesthouses con vistas: 20-40 EUR/noche",
+        "comfort": "resorts con piscina: 50-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Tubing por Nam Song (cuevas, swing, piscinas naturales): 8-10 EUR",
+        "Trekking a cuevas (Tham Jang, Tham En): 15-20 EUR con guía",
+        "Escalada en roca: 20-30 EUR",
+        "Bungee jumping: 25 EUR",
+        "Kayaking en Nam Song: 15 EUR"
+      ],
+      "donde_comer": "Comida lao estándar + opciones occidentales por la cantidad de turistas. Papaya salad, grillados, noodles. Precios: 2-4 EUR en comedores locales, 6-10 EUR en restaurantes turísticos. Main Street tiene la mayoría de opciones.",
+      "consejo_local": "El tubing puede ser peligroso en aguas altas (julio-octubre); en estación seca es más seguro. Evitar alcohol durante tubing; ha habido accidentes graves.",
+      "plan_b_lluvia": "Visitar cuevas (actividad cubierta), trekking light, jugar en hostels donde hay mucha vida social.",
+      "keywords": [
+        "Vang Vieng",
+        "tubing",
+        "Nam Song",
+        "cuevas",
+        "backpackers",
+        "formaciones kársticas"
+      ]
+    },
+    {
+      "id": "si-phan-don",
+      "nombre": "Si Phan Don (4000 Islas)",
+      "tipo": "isla",
+      "region": "Sur",
+      "descripcion": "Archipiélago de islas en el Mekong con un ritmo de vida lentísimo, playas de arena en temporada seca y caídas de agua. Punto más meridional de Laos con un ambiente completamente diferente al norte: más relajado, menos turístico, ideal para desconectar.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a mayo (agua baja, playas visibles)",
+      "como_llegar": "desde Pakse: minibus/taxi 1h (3-5 EUR) hasta Nakasang, luego ferry/bote a las islas (1-3 EUR según destino)",
+      "donde_dormir": {
+        "mochilero": "bungalows de bambú en Don Det, Don Khone: 8-15 EUR/noche",
+        "medio": "bungalows con mejor acabado: 25-50 EUR/noche",
+        "comfort": "resorts aislados con energía solar: 60-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en bicicleta por Don Khone (gratis alquiler 1-2 EUR/día)",
+        "Cascada Li Phi (gratis desde Don Khone)",
+        "Paseo en bote para ver delfines del Irrawaddy (20-30 EUR)",
+        "Pesca nocturna con linterna: 10-15 EUR",
+        "Simplemente tumbarme a observar el Mekong (gratis)"
+      ],
+      "donde_comer": "Pescado grillado, catfish, curry lao. Precios muy bajos: 1.5-3 EUR en comedores locales, 5-8 EUR en restaurantes con turistas. Menos variedad que el norte pero comida fresca.",
+      "consejo_local": "Los delfines del Irrawaddy están en riesgo de extinción; contrata con operadores locales que respeten cuotas. Mejor verlos al atardecer cuando están más activos.",
+      "plan_b_lluvia": "En estación de lluvias (junio-octubre) hay mucha agua pero menos turistas y precios más bajos. Las islas siguen funcionar pero con menos actividades de bote.",
+      "keywords": [
+        "Si Phan Don",
+        "4000 islas",
+        "Don Det",
+        "Don Khone",
+        "Mekong",
+        "delfines del Irrawaddy"
+      ]
+    },
+    {
+      "id": "pakse",
+      "nombre": "Pakse",
+      "tipo": "ciudad",
+      "region": "Sur",
+      "descripcion": "Ciudad portuaria en el sur que sirve como base para acceder a Si Phan Don, Wat Phou y la región de Bolaven. Menos turística que el norte pero con buena infraestructura. Punto de transición entre Tailandia y Camboya.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "desde Vientián: vuelo 1.5h (40-60 EUR) o autobús nocturno 10h (20-25 EUR). Desde Tailandia (Ubon): autobús 1h (3 EUR).",
+      "donde_dormir": {
+        "mochilero": "guesthouses en centro: 7-12 EUR/noche",
+        "medio": "hotels locales: 25-45 EUR/noche",
+        "comfort": "Champasak Palace o similar: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Talad Jao: mercado tradicional gigante (gratis)",
+        "Paseo riverside (gratis)",
+        "Templo Wat Luang (2 EUR)",
+        "Museos de la ciudad (2-3 EUR)",
+        "Base para excursiones a Wat Phou y Si Phan Don"
+      ],
+      "donde_comer": "Comida del sur más especiada. Curries, pescado fresco, papayas. Precios: 1.5-3 EUR en comedores de Talad Jao, 5-10 EUR en restaurantes. La comida callejera es muy buena.",
+      "consejo_local": "Pakse es un punto de paso, no un destino. Si quieres pasar la noche, busca hotel cerca de Talad Jao para tener comida cerca por la noche.",
+      "plan_b_lluvia": "Mercados cubiertos, tiendas, cafés. Pakse puede visitarse completamente en interior.",
+      "keywords": [
+        "Pakse",
+        "sur de Laos",
+        "Talad Jao",
+        "Mekong",
+        "puerta a Si Phan Don"
+      ]
+    },
+    {
+      "id": "wat-phou",
+      "nombre": "Wat Phou",
+      "tipo": "histórico",
+      "region": "Sur",
+      "descripcion": "Templo preangkoriano en ruinas sobre una montaña, Patrimonio UNESCO con 1500 años de antigüedad. Sitio arqueológico poco restaurado que da una sensación de exploración real. Mucho menos concurrido que Angkor en Camboya pero igual de impresionante.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "desde Pakse: minibus/taxi compartido 45 min (4-6 EUR) o excursión organizada (20-30 EUR con guía)",
+      "donde_dormir": {
+        "mochilero": "en Champasak pueblo: 8-15 EUR/noche",
+        "medio": "bungalows junto al río: 25-50 EUR/noche",
+        "comfort": " Anaconda Hotel en Champasak: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Subida a Wat Phou al amanecer (5-6 EUR entrada)",
+        "Exploración de ruinas de los palacios inferiores (incluido)",
+        "Templos satélite alrededor: Wat Tomo (gratis)",
+        "Paseo por Champasak pueblo: casas coloniales francesas (gratis)"
+      ],
+      "donde_comer": "Comida lao simple. Pocos restaurantes; comer en Champasak o traer snacks. Precios: 2-4 EUR en comedores locales.",
+      "consejo_local": "Ir al amanecer: menos calor y luz mágica. Lleva agua abundante y calzado cómodo; las piedras son resbaladizas. Contrata un guía en el parking (5-10 EUR) para entender la historia.",
+      "plan_b_lluvia": "El sitio sigue siendo visitable pero las piedras quedan muy mojadas y resbaladizas. Ir con extremo cuidado o posponerlo.",
+      "keywords": [
+        "Wat Phou",
+        "Champasak",
+        "templo preangkoriano",
+        "ruinas",
+        "Patrimonio UNESCO"
+      ]
+    },
+    {
+      "id": "bolaven-plateau",
+      "nombre": "Bolaven Plateau",
+      "tipo": "naturaleza",
+      "region": "Sur",
+      "descripcion": "Meseta selvática en el sur donde se cultiva café de calidad, con cascadas espectaculares, pueblos de minorías étnicas y paisajes de plantaciones. Zona menos turística que el norte pero con gran diversidad natural y cultural. Ideal para trekking y conocer Laos rural.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "desde Pakse: excursión con minibús (30-50 EUR con guía y transporte) o alquilar moto/coche (30-50 EUR/día)",
+      "donde_dormir": {
+        "mochilero": "guesthouses en pueblos como Tad Lo: 10-15 EUR/noche",
+        "medio": "bungalows en plantaciones de café: 30-60 EUR/noche",
+        "comfort": "eco-lodges de lujo: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a cascadas (Tad Fane, Tad Lo): 15-25 EUR con guía",
+        "Visita a plantaciones de café y cata: 5-10 EUR",
+        "Encuentro con pueblos de minorías étnicas (Alak, Katu): incluido en trekking",
+        "Paseo en elefante: 40-60 EUR (controversial, verificar estándares)",
+        "Ciclismo por plantaciones: 10-20 EUR"
+      ],
+      "donde_comer": "Comida rural laosiana. Muy pocas opciones fuera de guesthouses; pedir comida donde duermes. Precios: 2-4 EUR. Café local excelente y muy barato (0.5-1 EUR).",
+      "consejo_local": "Alquilar una moto es la mejor opción si tienes experiencia; los guías te marcan rutas seguras. Acercarse a pueblos con respeto y, si es posible, con guía local que hable el idioma.",
+      "plan_b_lluvia": "Julio-octubre es estación de lluvias pero la meseta sigue siendo hermosa (selva más verde). Algunas pistas se vuelven intransitables.",
+      "keywords": [
+        "Bolaven Plateau",
+        "cascadas",
+        "café de Laos",
+        "minorías étnicas",
+        "Tad Lo",
+        "Tad Fane"
+      ]
+    },
+    {
+      "id": "nong-khiaw",
+      "nombre": "Nong Khiaw",
+      "tipo": "naturaleza",
+      "region": "Norte",
+      "descripcion": "Pueblo pequeño junto al río Nam Ou entre montañas de piedra caliza. Alternativa tranquila a Vang Vieng con trekking, cuevas y una escena mucho menos turística. Punto de partida ideal para explorar el norte sin multitudes.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "desde Luang Prabang: minibus 3h (5-8 EUR) o desde Vang Vieng: minibus/taxi 4h (8-10 EUR)",
+      "donde_dormir": {
+        "mochilero": "bungalows de bambú: 8-12 EUR/noche",
+        "medio": "guesthouses con buenos acabados: 25-45 EUR/noche",
+        "comfort": "resorts junto al río: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a Pha Sua Waterfall (3 EUR con guía)",
+        "Paseo a Muang Ngoi (pueblo al otro lado del río, 15 min en bote): gratis",
+        "Exploración de cuevas (Tham Pha Thok): 3-5 EUR",
+        "Kayaking en Nam Ou: 15 EUR",
+        "Paseo por los acantilados al atardecer (gratis)"
+      ],
+      "donde_comer": "Comida lao simple pero auténtica. Pescado del río, sticky rice, sopas. Precios: 1.5-3 EUR en comedores, 5-8 EUR en guesthouses.",
+      "consejo_local": "Muy pocos turistas llegan aquí; es increíblemente tranquilo. Los locales son amables pero pocos hablan inglés. Contrata siempre un guía local para trekking.",
+      "plan_b_lluvia": "Cuevas y trekking sin vistas panorámicas. El pueblo sigue siendo bonito incluso en lluvia para simplemente sentarse y escribir.",
+      "keywords": [
+        "Nong Khiaw",
+        "Nam Ou",
+        "pueblos tranquilos",
+        "montañas",
+        "Muang Ngoi"
+      ]
+    },
+    {
+      "id": "udomxai",
+      "nombre": "Udomxai",
+      "tipo": "naturaleza",
+      "region": "Noroeste",
+      "descripcion": "Ciudad remota en el noroeste, punto de transición entre Tailandia y China. Centro para explorar el norte profundo con trekking a pueblos de minorías étnicas, menos turístico aún que Nong Khiaw. Base para conexiones a China o Tailandia.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "desde Luang Prabang: minibus 4-5h (10-12 EUR) o desde Nong Khiaw: minibus 4h (8 EUR)",
+      "donde_dormir": {
+        "mochilero": "guesthouses básicas: 7-10 EUR/noche",
+        "medio": "hotels locales: 20-35 EUR/noche",
+        "comfort": "pocos opciones de comfort; mejor en ciudades cercanas"
+      },
+      "que_hacer": [
+        "Trekking a pueblos de Akha y Lisu (30-50 EUR con guía, 1-2 días)",
+        "Paseo por mercado local (gratis)",
+        "Templo Wat Phothisala (gratis)",
+        "Base para salida a Tailandia (Chiang Rai) o China (Mengla)"
+      ],
+      "donde_comer": "Comida muy local: sopa de cerdo, hierbas silvestres, arroz. Precios: 1-2 EUR. Pocas opciones; comer donde duermes o en mercado.",
+      "consejo_local": "Udomxai es principalmente un punto de paso, no un destino. Si trekking a pueblos de minorías, contratar agencia local (pocos hablan inglés). Verificar documentación si cruzarás a China/Tailandia.",
+      "plan_b_lluvia": "Limitaciones severas. Mejor visitar con buen clima.",
+      "keywords": [
+        "Udomxai",
+        "norte profundo",
+        "minorías étnicas",
+        "Akha",
+        "Lisu",
+        "conexión China"
+      ]
+    },
+    {
+      "id": "4000-islands-excursion",
+      "nombre": "Excursión a Camboya desde Pakse",
+      "tipo": "excursion",
+      "region": "Sur (salida desde Pakse)",
+      "excursion_desde": true,
+      "descripcion": "Cruce fácil hacia Camboya (Stung Treng) para visitar Angkor Wat y otras maravillas del Sudeste Asiático. Frontera terrestre accesible desde el sur de Laos. Solo 1-2 horas en bote/coche desde Si Phan Don.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "desde Pakse/Si Phan Don: minibus + bote a Stung Treng, Camboya (3-4h, 15-25 EUR). Luego vuelos domésticos o buses a Siem Reap (1-2 días más).",
+      "donde_dormir": {
+        "mochilero": "guesthouses en Stung Treng: 8-12 EUR/noche",
+        "medio": "hotels en Siem Reap: 30-60 EUR/noche",
+        "comfort": "resorts de Siem Reap: 80-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Angkor Wat: complejo de templos más grande del mundo (37 EUR 3 días)",
+        "Templos de Bayon, Ta Prohm (incluido Angkor pass)",
+        "Lago Tonlé Sap y pueblos flotantes (30-50 EUR)",
+        "Mercados de Siem Reap"
+      ],
+      "donde_comer": "Comida khmer (similar a lao pero más especiada). Precios varían mucho: 2-3 EUR callejero, 15-40 EUR restaurantes turísticos.",
+      "consejo_local": "Obtener visa de Camboya antes (online E-visa: 25 EUR) o en frontera. Stung Treng es un pueblo tranquilo; dormir una noche allí si vienes desde Si Phan Don.",
+      "plan_b_lluvia": "Angkor sigue siendo visitable en monzón pero con barro. Monzón es junio-octubre.",
+      "keywords": [
+        "Camboya",
+        "Angkor Wat",
+        "excursión desde Laos",
+        "Stung Treng",
+        "frontera",
+        "Siem Reap"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,334 @@
+{
+  "pais": "Eslovenia",
+  "codigo": "si",
+  "destinos": [
+    {
+      "id": "lago-bled",
+      "nombre": "Lago Bled",
+      "tipo": "naturaleza",
+      "region": "Noroeste (cerca de Kranjska Gora)",
+      "descripcion": "Lago alpino de 2 km² rodeado de montañas, con una iglesia en islote y castillo en acantilado. Es el destino más fotografiado de Eslovenia y punto de partida para excursiones montañosas. Ideal para senderismo, remo y descanso de naturaleza accesible.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "desde Ljubljana: autobús (1,5h, 5-8 EUR) o coche alquilado (1h)",
+      "donde_dormir": {
+        "mochilero": "albergue + privado 25-40 EUR/noche",
+        "medio": "hotel 3* + pensión 60-90 EUR/noche",
+        "comfort": "hotel 4-5* 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Remo alrededor del lago (gratis desde orilla, 15 EUR con bote)",
+        "Subida al Castillo de Bled (gratuito acceso, vistas)",
+        "Senderismo ruta Ojstrica (3h, gratuito)",
+        "Baño en el lago (gratis, junio-septiembre)",
+        "Degustación de Bled cream cake (3-4 EUR)"
+      ],
+      "donde_comer": "Crema de Bled (postre típico), trucha local. Rango 8-15 EUR plato principal. Zona de paseo junto al lago con cafeterías.",
+      "consejo_local": "Llega antes de las 9:00 para evitar autobuses de turismo. La mejor luz para fotos es al atardecer desde la orilla norte.",
+      "plan_b_lluvia": "Visita el Castillo de Bled (interior cubierto) o recorre el pueblo a pie.",
+      "keywords": [
+        "Bled",
+        "Lake Bled",
+        "castillo Bled",
+        "isla iglesia",
+        "Ojstrica"
+      ]
+    },
+    {
+      "id": "cuevas-postojna",
+      "nombre": "Cuevas de Postojna",
+      "tipo": "naturaleza",
+      "region": "Sudoeste (región de Notranjska)",
+      "descripcion": "Sistema de cuevas kársticas de 24 km con estalagmitas gigantescas y tren subterráneo. Es la atracción geológica más importante de los Balcanes y visita obligatoria para cualquier viajero. La experiencia combina paisaje subterráneo espectacular con tecnología turística eficiente.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año (temperatura constante 8°C)",
+      "como_llegar": "desde Ljubljana: autobús (1,5h, 5-8 EUR) o coche alquilado (1h)",
+      "donde_dormir": {
+        "mochilero": "albergue en Postojna 20-35 EUR/noche",
+        "medio": "hotel 3* 50-75 EUR/noche",
+        "comfort": "hotel 4* 90-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour guiado cuevas con tren (entrada 30 EUR, 1,5h incluida)",
+        "Visita Castillo de Predjama (8 EUR, 30 min a pie o coche)",
+        "Observatorio de murciélagos (gratis con tour)",
+        "Recorrido a pie por pueblos cercanos (gratis)"
+      ],
+      "donde_comer": "Cocina local de Notranjska: papa (sopa espesa), canelones rellenos. Rango 7-12 EUR. Restaurantes junto entrada cuevas.",
+      "consejo_local": "Compra entrada combinada Postojna + Castillo Predjama (40 EUR) con descuento. Abriga bien: dentro hace 8°C incluso en verano.",
+      "plan_b_lluvia": "Las cuevas son perfectas para lluvia (interior protegido). Aprovecha para el Castillo Predjama que también está cubierto parcialmente.",
+      "keywords": [
+        "Postojna caves",
+        "Postojnska jama",
+        "Predjama castle",
+        "karst",
+        "stalactites"
+      ]
+    },
+    {
+      "id": "capital-ljubljana",
+      "nombre": "Ljubljana",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital de 280.000 hab con centro medieval bien preservado, puente del Dragón icónico y escena cultural vibrante. Ciudad verde y accesible a pie, con buen equilibrio entre patrimonio, gastronomía y vida nocturna. Excelente para 2-3 días de exploración urbana.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "aeropuerto a 25 km: autobús (45 min, 4 EUR), taxi (30 EUR), shuttle privado",
+      "donde_dormir": {
+        "mochilero": "albergue centro 22-38 EUR/noche",
+        "medio": "hotel 3* 65-95 EUR/noche",
+        "comfort": "hotel 4-5* 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por casco antiguo y Puente del Dragón (gratis)",
+        "Catedral de Ljubljana (libre entrada)",
+        "Castillo de Ljubljana + vistas (15 EUR, funicular 3 EUR)",
+        "Museo Nacional (12 EUR)",
+        "Paseo en bote por río Ljubljanica (20 EUR, 1h)",
+        "Mercado Central (Centralna tržnica) - observar y comer (gratis pasear)"
+      ],
+      "donde_comer": "Menestra (sopa vegetal típica), carne de ciervo, ajdovi štruklji (crepes trigo negro). Rango 8-18 EUR. Zona mejor: Stari trg (casco viejo), Metelkova.",
+      "consejo_local": "La ciudad es muy asequible. Come en mercado central a mediodía por mitad de precio. El jueves por la noche hay conciertos gratis en plazas.",
+      "plan_b_lluvia": "Galerías de arte (Museo Moderno, gratis primer domingo mes), cines, museos pequeños, café en Prešeren Square.",
+      "keywords": [
+        "Ljubljana",
+        "Liubliana",
+        "puente dragón",
+        "Dragon bridge",
+        "casco antiguo",
+        "Old Town",
+        "Stari trg"
+      ]
+    },
+    {
+      "id": "esloveno-pais-vino",
+      "nombre": "Región Vitivinícola (Vipava + Primorska)",
+      "tipo": "rural",
+      "region": "Sudoeste (Primorska)",
+      "descripcion": "Zona productora de vinos blancos de calidad con paisaje ondulante, pueblos pequeños y bodegas familiares. Perfecta para enoturismo lento, catas directas en viñedo y gastronomía local. Menos masificada que Bled, más auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre-octubre (vendimia), mayo-junio",
+      "como_llegar": "desde Ljubljana: coche alquilado (1,5h) o autobús a Ajdovščina (1,5h, 6 EUR) + coche taxi/local",
+      "donde_dormir": {
+        "mochilero": "casa rural/agroturismo 25-40 EUR/noche",
+        "medio": "alojamiento rural 50-75 EUR/noche",
+        "comfort": "hotel boutique 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita bodegas familiares con cata (5-15 EUR degustación)",
+        "Senderismo entre viñedos (gratis)",
+        "Tour pueblos Vipava, Hrastovlje (gratis, conducción)",
+        "Iglesia de Hrastovlje (entrada libre)",
+        "Picnic con vinos locales en viñedo (vino 5-8 EUR botella)"
+      ],
+      "donde_comer": "Prosciutto de Karst, quesos locales, pasta fresca, vinos blancos Refošk. Rango 10-20 EUR. Restaurantes en pueblos pequeños.",
+      "consejo_local": "Las bodegas esperan llamadas previas pero aceptan walk-ins. Los dueños hablan poco inglés: llevar frases clave en esloveno.",
+      "plan_b_lluvia": "Visita museos pequeños de pueblos o catas cubiertas en bodegas. Los caminos entre viñedos quedan muy fangosos.",
+      "keywords": [
+        "Vipava valley",
+        "Vipavska dolina",
+        "Primorska",
+        "vinos eslovenos",
+        "Refošk",
+        "Rebula",
+        "Karst wine"
+      ]
+    },
+    {
+      "id": "esloveno-costa",
+      "nombre": "Costa de Eslovenia (Piran + Portorož)",
+      "tipo": "playa",
+      "region": "Suroeste (Istria eslovena)",
+      "descripcion": "Único acceso al Mediterráneo: pequeño pero encantador con pueblos costeros históricos, playas rocky y arquitectura veneciana. Piran es una joya medieval sobre acantilado. Combina playa, cultura y gastronomía de mariscos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "desde Ljubljana: autobús (2,5h, 8-12 EUR) o coche alquilado (2,5h)",
+      "donde_dormir": {
+        "mochilero": "albergue/privado Piran 28-45 EUR/noche",
+        "medio": "hotel 3* 70-100 EUR/noche",
+        "comfort": "hotel 4* + resort 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo medieval Piran casco viejo (gratis)",
+        "Subida Torre Tartini (8 EUR, vistas)",
+        "Baño en playas Rocky (gratis, sombrillas 5-10 EUR)",
+        "Excursión bote isla Fiesa (15 EUR)",
+        "Paseo nocturno al atardecer (gratis)",
+        "Museo acuario Piran (8 EUR)"
+      ],
+      "donde_comer": "Mariscos frescos (gambas, mejillones), pasta con marisco, ceviche local. Rango 12-25 EUR. Restaurantes en puerto Piran.",
+      "consejo_local": "Piran es muy pequeño (15 min a pie de punta a punta). Los precios suben 30% en agosto. Ve en junio o septiembre.",
+      "plan_b_lluvia": "Museos pequeños, iglesias, galerías de arte. El paseo costero techado en partes.",
+      "keywords": [
+        "Piran",
+        "Pirano",
+        "Portorož",
+        "Slovenia coast",
+        "Adriatic",
+        "Istrian coast",
+        "playas"
+      ]
+    },
+    {
+      "id": "bosque-esmeralda",
+      "nombre": "Bosque Virgen de Krapje (Parque Nacional Plitvice - Croacia Cercana)",
+      "tipo": "naturaleza",
+      "region": "Sudeste (frontera con Croacia)",
+      "descripcion": "Pequeño bosque primario esloveno, menos conocido que cuevas o Bled, pero impresionante para senderismo profundo. Parte del patrimonio natural de los Balcanes. Alternativa auténtica a los circuitos turísticos clásicos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "desde Ljubljana: coche alquilado (2h) a Novo Mesto, luego 45 min a Krapje. Acceso remoto.",
+      "donde_dormir": {
+        "mochilero": "albergue pequeño Novo Mesto 20-30 EUR/noche",
+        "medio": "hotel rural 45-70 EUR/noche",
+        "comfort": "no hay opciones de lujo, máx. hotel 3* 80 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo bosque virgen (gratis, 2-4h según ruta)",
+        "Observación fauna (jabalíes, venados, aves)",
+        "Fotografía naturaleza (gratis)",
+        "Picnic en claro (gratis)"
+      ],
+      "donde_comer": "Restaurante rústico pequeño (si existe): comida casera 8-12 EUR. Mejor llevar comida desde Ljubljana.",
+      "consejo_local": "No es accesible con transporte público. Requiere coche propio. Lleva mapa detallado: señalización mínima.",
+      "plan_b_lluvia": "Lluvia hace senderos peligrosos. Mejor día despejado obligatorio.",
+      "keywords": [
+        "Krapje",
+        "bosque virgen",
+        "virgin forest",
+        "senderismo profundo",
+        "Novo Mesto"
+      ]
+    },
+    {
+      "id": "viaducto-solkan",
+      "nombre": "Viaducto de Solkan",
+      "tipo": "histórico",
+      "region": "Noroeste (Gorizia, frontera Italia)",
+      "descripcion": "Puente histórico de hormigón armado más grande del mundo cuando se construyó (1905). Monumento de ingeniería sobre río Soča, conecta Eslovenia e Italia. Lugar tranquilo para fotógrafos y amantes de arquitectura industrial.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "desde Ljubljana: coche alquilado (1,5h) a Solkan. Autobús a Nova Gorica (1,5h, 6 EUR) + taxi local (15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Nova Gorica albergue 20-30 EUR/noche",
+        "medio": "hotel 3* 50-70 EUR/noche",
+        "comfort": "hotel 4* 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Fotografía viaducto desde abajo (gratis)",
+        "Paseo a pie sobre el puente (gratis)",
+        "Paseo río Soča (gratis)",
+        "Visita bodega cercana (si tiempo permite)"
+      ],
+      "donde_comer": "Pequeña cafetería cerca viaducto (3-6 EUR). Mejor comer en Nova Gorica.",
+      "consejo_local": "Es parada rápida, máximo 1-2 horas. Combina con visita a Nueva Gorica (tienda franca) o Aquileia (Italia, 20 min).",
+      "plan_b_lluvia": "Las fotos mejoran con lluvia para contraluces.",
+      "keywords": [
+        "Solkan",
+        "Solkansky most",
+        "viaducto",
+        "viaduct",
+        "puente hormigón",
+        "Soča river"
+      ]
+    },
+    {
+      "id": "soča-turquesa",
+      "nombre": "Río Soča (Valle Soča)",
+      "tipo": "naturaleza",
+      "region": "Noroeste (Primorska alpina)",
+      "descripcion": "Río alpino de color turquesa espectacular, considerado uno de los más bonitos de Europa. Senderismo de ribera, camping, kayak y fly-fishing. Destino para viajeros activos buscando aventura agua dulce combinada con paisaje montañoso.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "desde Ljubljana: coche alquilado a Kobarid (2h) o Bovec (2h). Autobús (3h, 8-10 EUR) + taxi",
+      "donde_dormir": {
+        "mochilero": "albergue Bovec/Kobarid 25-40 EUR/noche",
+        "medio": "alojamiento rural 50-80 EUR/noche",
+        "comfort": "hotel aventura 4* 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo ribera Soča (gratis, varias rutas 1-4h)",
+        "Kayak en Soča (40-60 EUR/persona tour guiado 2h)",
+        "Canyoning (50-80 EUR)",
+        "Fly-fishing (alquiler caña + guía 100-150 EUR día)",
+        "Baño río (gratis, agua fría)",
+        "Fotografía cascadas (gratis)"
+      ],
+      "donde_comer": "Cocina montaña: trucha ahumada, carnes a la parrilla, sopa cebada. Rango 10-18 EUR. Restaurantes en pueblos Bovec/Kobarid.",
+      "consejo_local": "Agua del río congelante incluso en julio. Lleva neopreno si planeo baño. Los mejores senderos parten de Bovec.",
+      "plan_b_lluvia": "Lluvia intensa hace río peligroso. Mejor esperar o hacer actividades cubiertas (museos pequeños).",
+      "keywords": [
+        "Soča river",
+        "Isonzo",
+        "Bovec",
+        "Kobarid",
+        "turquoise river",
+        "canyoning",
+        "Soča valley"
+      ]
+    },
+    {
+      "id": "vintgar-garganta",
+      "nombre": "Garganta de Vintgar",
+      "tipo": "naturaleza",
+      "region": "Noroeste (Bled)",
+      "descripcion": "Cañón excavado en roca roja por río Radovna, con pasarelas de madera sobre agua. Senderismo de 1,5h accesible y espectacular con vista cerrada entre acantilados. Menos masificado que Bled, más aventurero.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "desde Bled: autobús local o coche (15 min) a entrada Vintgar. A pie desde Bled (1,5h)",
+      "donde_dormir": {
+        "mochilero": "albergue Bled (base) 25-40 EUR/noche",
+        "medio": "hotel Bled 60-90 EUR/noche",
+        "comfort": "hotel Bled 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo garganta Radovna (entrada 5,50 EUR, 1,5h, imprescindible)",
+        "Fotografía río rojo y pasarelas (incluida entrada)",
+        "Picnic en entrada (gratis)"
+      ],
+      "donde_comer": "Como base desde Bled (come en Bled, no en Vintgar)",
+      "consejo_local": "Entrada por donativo en temp baja. Zapatillas con agarre obligatorio (resbaladizo cuando moja). Vai pronto para evitar colas.",
+      "plan_b_lluvia": "Mojarse es parte del plan. Pero si riesgo deslizamientos, cierra.",
+      "keywords": [
+        "Vintgar gorge",
+        "Vintgarjska soteska",
+        "Radovna river",
+        "roja",
+        "red rock"
+      ]
+    },
+    {
+      "id": "eslovenia-otro-lado",
+      "nombre": "Rogelj + Celje (Región Central)",
+      "tipo": "histórico",
+      "region": "Centro-Este",
+      "descripcion": "Pequeña ciudad medieval Celje con castillo ruinoso, menos conocida que Ljubljana pero auténtica. Punto de parada entre Ljubljana y este, con patrimonio medieval bien preservado. Acceso a termas cercanas (Laško) para turismo de bienestar lento.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "desde Ljubljana: autobús (1h, 4-6 EUR) o coche alquilado (1h)",
+      "donde_dormir": {
+        "mochilero": "albergue Celje 18-28 EUR/noche",
+        "medio": "hotel 3* 45-65 EUR/noche",
+        "comfort": "hotel 4* 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo Celje + ruinas (entrada 5 EUR, vistas ciudad)",
+        "Paseo casco antiguo (gratis)",
+        "Museo local (6 EUR)",
+        "Relax termas Laško cercanas (30 EUR día, 15 min)",
+        "Café sentarse en plaza (gratis observar)"
+      ],
+      "donde_comer": "Cocina región estilo austríaco-esloveno, sopa cebada, cerdo. Rango 7-13 EUR. Plaza central con cafeterías.",
+      "consejo_local": "Parada ideal 1-2 horas entre Ljubljana y fronteras este. Menos turismo que capital. Gente local amable.",
+      "plan_b_lluvia": "Museos, castillo interior (parcial), cafés cubiertos.",
+      "keywords": [
+        "Celje",
+        "Ceille",
+        "castillo Celje",
+        "región central",
+        "termas Lasko",
+        "Old Town"
+      ]
+    }
+  ]
+}

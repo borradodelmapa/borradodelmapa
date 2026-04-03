@@ -1,0 +1,332 @@
+{
+  "pais": "Uzbekistán",
+  "codigo": "uz",
+  "destinos": [
+    {
+      "id": "samarkanda",
+      "nombre": "Samarcanda",
+      "tipo": "histórico",
+      "region": "Región de Samarcanda",
+      "descripcion": "Centro histórico de la Ruta de la Seda con arquitectura timúrida de los siglos XIV-XV. La Plaza Registan es el conjunto de madrasas más espectacular de Asia Central. Imprescindible para entender la historia medieval de Oriente Medio.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Tashkent en tren rápido Afrosiyob (3h, 15-25 EUR) o avión (1h, 40-60 EUR)",
+      "donde_dormir": {
+        "mochilero": "hostales en zona antigua + bed & breakfast: 8-15 EUR/noche",
+        "medio": "hoteles 3* en Registan o Siab Bazaar: 30-50 EUR/noche",
+        "comfort": "hoteles boutique históricos: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Plaza Registan al amanecer (gratis, imprescindible)",
+        "Mausoleo de Gur-e-Amir (3 EUR)",
+        "Necrópolis de Shah-i-Zinda (3 EUR)",
+        "Bazaar de Siab (gratis)",
+        "Mezquita de Bibi-Khanum (2 EUR)"
+      ],
+      "donde_comer": "Plov en restaurantes locales cerca del bazaar (2-4 EUR), shashlyk en Siab Bazaar, té en casas de té tradicionales (chaikhanas)",
+      "consejo_local": "Visita Registan al amanecer antes de que lleguen los turistas. El edificio más antiguo es la madrasa de la izquierda (Sherdor), no el central.",
+      "plan_b_lluvia": "Museos interiores: Museo de Afrosiyab, Museo Ulugbek, tiendas de cerámica en la medina cubierta",
+      "keywords": [
+        "Samarkand",
+        "Registan",
+        "Ruta Seda",
+        "timúrida",
+        "Shah-i-Zinda",
+        "Gur-e-Amir"
+      ]
+    },
+    {
+      "id": "bujara",
+      "nombre": "Bujará",
+      "tipo": "histórico",
+      "region": "Región de Bujará",
+      "descripcion": "Segunda ciudad más importante de la Ruta de la Seda con medina mejor conservada que Samarcanda. Centro comercial histórico con bazaares laberínticos, mezquitas y madrasas del siglo XVI. Menos turística pero igual de auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Samarcanda en tren o autobús (1,5h, 3-5 EUR) o desde Tashkent (4h, 8-12 EUR)",
+      "donde_dormir": {
+        "mochilero": "hostales en medina: 7-12 EUR/noche",
+        "medio": "hoteles 3* tradicionales: 25-40 EUR/noche",
+        "comfort": "casas tradicionales restauradas: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Medina antigua y bazaares (gratis)",
+        "Mezquita de Kalyan (1 EUR entrada)",
+        "Madrasa de Mir-i-Arab (2 EUR)",
+        "Ciudadela de Ark (2 EUR)",
+        "Bazar de Taqi Telpak (gratis, mercado tradicional)"
+      ],
+      "donde_comer": "Plov bujarita en chaikhanas locales (2-3 EUR), kebab en callejones del bazar, samsa de carne fresca",
+      "consejo_local": "La medina es pequeña: piérdete deliberadamente por los callejones para encontrar tiendas de artesanos reales, no turísticas. El mejor té está en casas sin señalización.",
+      "plan_b_lluvia": "Ciudadela de Ark interior, museos de tapices y cerámica, tiendas cubiertas del bazar",
+      "keywords": [
+        "Bukhara",
+        "Bukhoro",
+        "medina",
+        "Kalyan",
+        "Mir-i-Arab",
+        "bazaar"
+      ]
+    },
+    {
+      "id": "jiva",
+      "nombre": "Jiva",
+      "tipo": "histórico",
+      "region": "Región de Jorazm",
+      "descripcion": "Ciudad amurallada mejor conservada de Uzbekistán, prácticamente un museo al aire libre. Calles estrechas, minaretes y puertas históricas intactas desde el siglo XVII. Atmósfera intensa y menos comercializada que otros destinos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo-mayo, septiembre-octubre",
+      "como_llegar": "desde Urgench en coche compartido (30 min, 1-2 EUR) o desde Tashkent vuelo + transfer (2h vuelo + 1h coche, 60-80 EUR total)",
+      "donde_dormir": {
+        "mochilero": "hostales pequeños en murallas: 6-10 EUR/noche",
+        "medio": "hoteles guest houses: 20-35 EUR/noche",
+        "comfort": "hoteles históricos dentro de murallas: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por murallas completas (gratis)",
+        "Minaret Kalta Minor (incompleto, gratis desde fuera)",
+        "Madrasa de Muhammad Amin (1 EUR)",
+        "Mezquita de Juma (1 EUR)",
+        "Museos en casas históricas (1-2 EUR cada uno)"
+      ],
+      "donde_comer": "Lagman bujarita en restaurantes pequeños (1,5-2 EUR), samsa de cordero, té en terrazas de casas tradicionales",
+      "consejo_local": "Alojarse dentro de las murallas es esencial: el 90% de la experiencia es estar rodeado de historia. Los musicales nocturnos en hoteles son principalmente para turistas.",
+      "plan_b_lluvia": "Museos interiores en madrasas, tiendas de arte y souvenirs bajo techos, casas de té cubiertas",
+      "keywords": [
+        "Khiva",
+        "Chiwa",
+        "murallas",
+        "Kalta Minor",
+        "Jorazm",
+        "Ichon Qala"
+      ]
+    },
+    {
+      "id": "tashkent",
+      "nombre": "Tashkent",
+      "tipo": "ciudad",
+      "region": "Región de Tashkent",
+      "descripcion": "Capital moderna con mezcla de arquitectura soviética y uzbeka, metro decorado con mosaicos, bazaares históricos y museos. Puerta de entrada a Uzbekistán y centro de transporte. No es la más bonita pero imprescindible como punto de partida.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "aeropuerto internacional Yunusabad (15 km, taxi/autobús 3-8 EUR, 30 min)",
+      "donde_dormir": {
+        "mochilero": "hostales en Chilanzar: 8-12 EUR/noche",
+        "medio": "hoteles 3* zona Amir Timur: 25-40 EUR/noche",
+        "comfort": "hoteles 4-5* Uzbekistan Plaza: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Metro de Tashkent (0,15 EUR por viaje, mosaicos únicos)",
+        "Bazar Chorsu (gratis)",
+        "Medina histórica de Old City (gratis paseo)",
+        "Museo de Amir Timur (3 EUR)",
+        "Parque Amir Timur (gratis)"
+      ],
+      "donde_comer": "Plov en Chorsu Bazaar (1,5-2 EUR), manti en restaurantes locales, osh (arroz especiado) en Risotto Almaty",
+      "consejo_local": "El metro es una experiencia en sí: cada estación es diferente. Compra un pase de transporte (tarjeta Temir) para moverte eficientemente. Los taxis con Uber/Yandex son más seguros que los taxis callejeros.",
+      "plan_b_lluvia": "Metro completo, museos interiores, tiendas en centros comerciales modernos",
+      "keywords": [
+        "Tashkent",
+        "Toshkent",
+        "capital",
+        "Chorsu",
+        "Old City",
+        "metro"
+      ]
+    },
+    {
+      "id": "shakhrisabz",
+      "nombre": "Shahrisabz",
+      "tipo": "histórico",
+      "region": "Región de Kashkadarya",
+      "descripcion": "Pequeña ciudad natal de Tamerlán con palacios en ruinas y arquitectura timúrida menos conocida. Ambiente más auténtico y menos comercial que Samarcanda. Ideal para viajeros que buscan algo diferente.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Samarcanda en coche compartido (2h, 2-3 EUR) o desde Tashkent (4h, 5-8 EUR)",
+      "donde_dormir": {
+        "mochilero": "guesthouses locales: 6-10 EUR/noche",
+        "medio": "hoteles pequeños: 20-30 EUR/noche",
+        "comfort": "sin opciones, mejor hacer excursión desde Samarcanda"
+      },
+      "que_hacer": [
+        "Palacio de Ak-Saray en ruinas (2 EUR)",
+        "Mezquita de Dorut Tilavat (1 EUR)",
+        "Bazar histórico (gratis)",
+        "Mausoleo de Jahangir (1 EUR)",
+        "Caminata a mercado de vegetales local (gratis)"
+      ],
+      "donde_comer": "Plov local en restaurantes sin turistas (1-2 EUR), pan tandoor fresco, té en chaikhanas",
+      "consejo_local": "Visita como excursión de un día desde Samarcanda. El Ak-Saray es impresionante en ruinas: imagina cómo fue cuando Tamerlán lo usó.",
+      "plan_b_lluvia": "Museo pequeño, tiendas de souvenirs, casas de té interiores",
+      "keywords": [
+        "Shahrisabz",
+        "Shakhrisabz",
+        "Tamerlán",
+        "Ak-Saray",
+        "Kashkadarya",
+        "Dorut Tilavat"
+      ]
+    },
+    {
+      "id": "fergana",
+      "nombre": "Valle de Fergana",
+      "tipo": "rural",
+      "region": "Región de Fergana",
+      "descripcion": "Valle histórico de la Ruta de la Seda con ciudades pequeñas (Fergana, Margilan, Kokand) y producción de seda. Menos visitado que otros destinos, ideal para ver Uzbekistán auténtico y artesanía de cerámica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Tashkent en autobús (3,5h, 3-5 EUR) o avión (1h, 40-60 EUR) a Fergana",
+      "donde_dormir": {
+        "mochilero": "guesthouses en Margilan: 7-11 EUR/noche",
+        "medio": "hoteles pequeños en Kokand: 20-35 EUR/noche",
+        "comfort": "hoteles guest house: 40-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Fábrica de seda de Margilan (2 EUR tour)",
+        "Palacio Juma Khanaka en Kokand (2 EUR)",
+        "Bazar de cerámica de Fergana (gratis, compra opcional)",
+        "Escuelas Korán históricas (1 EUR)",
+        "Mercado tradicional sin turistas (gratis)"
+      ],
+      "donde_comer": "Lagman local (1,5 EUR), samsa de queso, palav de Fergana, frutas frescas de temporada",
+      "consejo_local": "Margilan es el corazón: ve a una fábrica de seda pequeña y familiar, no la grande. Los dueños explican el proceso ancestral. El valle es peligroso hacia Kirguistán: respeta las fronteras.",
+      "plan_b_lluvia": "Fábricas de seda interiores, museos de Kokand, bazaares cubiertos",
+      "keywords": [
+        "Fergana",
+        "Margilan",
+        "Kokand",
+        "seda",
+        "cerámica",
+        "lagman"
+      ]
+    },
+    {
+      "id": "urgench",
+      "nombre": "Urgench",
+      "tipo": "ciudad",
+      "region": "Región de Jorazm",
+      "descripcion": "Puerta de entrada a Jiva y ciudad histórica del Jorazm antiguo. Centro de transporte y comercial moderno con acceso a excursiones al desierto de Ustyurt. Punto de partida obligado para la región de Jorazm.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "marzo-mayo, septiembre-octubre",
+      "como_llegar": "vuelo desde Tashkent (2h, 50-70 EUR) o autobús nocturno (11h, 6-10 EUR)",
+      "donde_dormir": {
+        "mochilero": "hostales cerca estación: 8-12 EUR/noche",
+        "medio": "hoteles 3*: 25-40 EUR/noche",
+        "comfort": "hoteles con piscina: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Bazar de Urgench (gratis)",
+        "Parque central (gratis)",
+        "Museos arqueológicos (2 EUR)",
+        "Organizar tours al desierto o Jiva desde aquí"
+      ],
+      "donde_comer": "Plov regional en bazaar (2 EUR), shashlyk, té en chaikhanas, restaurantes modernos en centro",
+      "consejo_local": "Es principalmente un hub de transporte: pasa máximo una noche. Usa operadores locales para excursiones al desierto de Ustyurt, no agencias en Tashkent.",
+      "plan_b_lluvia": "Museos interiores, tiendas cubiertas, hoteles con piscina",
+      "keywords": [
+        "Urgench",
+        "Turtkul",
+        "Jorazm",
+        "hub transporte",
+        "Aral",
+        "Jiva entrance"
+      ]
+    },
+    {
+      "id": "desierto-aral",
+      "nombre": "Desierto de Aral",
+      "tipo": "desierto",
+      "region": "Región de Karakalpakstán",
+      "descripcion": "Tragedia ambiental convertida en atracción única: restos del Mar de Aral, barcos oxidados en el desierto y pueblos abandonados. Experiencia desoladora y educativa sobre el cambio climático. Para viajeros con mentalidad de aventura.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Urgench con tour organizado o coche alquilado (3-4h, 30-50 EUR por persona con grupo)",
+      "donde_dormir": {
+        "mochilero": "campamentos en desierto: 10-20 EUR/noche (incluido en tours)",
+        "medio": "guesthouses en Moynaq o Nukus: 20-30 EUR/noche",
+        "comfort": "tours con alojamiento incluido desde Urgench: 80-150 EUR/día"
+      },
+      "que_hacer": [
+        "Cementerio de barcos de Moynaq (incluido en tour)",
+        "Orilla actual del Aral (caminata, gratis dentro de tour)",
+        "Pueblos fantasma abandonados (exploración)",
+        "Atardecer en desierto (gratis, espectacular)"
+      ],
+      "donde_comer": "Tours incluyen comidas, o compra en Moynaq/Nukus (comida básica, 2-3 EUR)",
+      "consejo_local": "Contrata tours desde Urgench, no desde Tashkent. La experiencia es sobria y educativa, no una diversión: los locales sufrieron la catástrofe. Lleva mucha agua y protección solar.",
+      "plan_b_lluvia": "No es un destino para clima lluvioso: evita julio-agosto. En caso de mal tiempo, museos de Nukus sobre historia del Aral.",
+      "keywords": [
+        "Aral Sea",
+        "Moynaq",
+        "barcos",
+        "desierto",
+        "Karakalpakstan",
+        "catastrofe ambiental"
+      ]
+    },
+    {
+      "id": "nukus",
+      "nombre": "Nukus",
+      "tipo": "ciudad",
+      "region": "Karakalpakstán",
+      "descripcion": "Capital de Karakalpakstán, ciudad soviética con museo de arte de Savitsky con colecciones de artistas rusos proscritos de la época soviética. Centro cultural inesperado en el desierto. Menos turística pero culturalmente importante.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Urgench en autobús o vuelo (1h vuelo, 50-70 EUR), o incluido en tours al Aral (3-4h coche, 10-15 EUR)",
+      "donde_dormir": {
+        "mochilero": "guesthouses: 8-12 EUR/noche",
+        "medio": "hoteles 3*: 25-35 EUR/noche",
+        "comfort": "sin opciones de lujo"
+      },
+      "que_hacer": [
+        "Museo Savitsky de arte soviético (5 EUR, imprescindible)",
+        "Bazar de Nukus (gratis)",
+        "Parque central (gratis)",
+        "Museos de arqueología (2 EUR)"
+      ],
+      "donde_comer": "Plov en bazaar (2 EUR), manti, té local, restaurantes básicos pero correctos",
+      "consejo_local": "El museo Savitsky es una joya: tiene cuadros rusos prohibidos por Stalin, pirámides de botellas, y arte experimental genuino. Vale mucho más de los 5 EUR. No hay muchos visitantes.",
+      "plan_b_lluvia": "Museo Savitsky es imprescindible llueva o no, pasa horas allí",
+      "keywords": [
+        "Nukus",
+        "Karakalpakstan",
+        "Savitsky Museum",
+        "arte soviético",
+        "Aral capital"
+      ]
+    },
+    {
+      "id": "tian-shan",
+      "nombre": "Montañas Tian Shan",
+      "tipo": "montaña",
+      "region": "Región de Tashkent",
+      "descripcion": "Cadena montañosa de 3000m+ con senderismo, lagos alpinos y paisajes salvajes. Escape de ciudades para viajeros que buscan naturaleza. Menos desarrollado que otras zonas de senderismo de Asia Central pero muy auténtico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "desde Tashkent en coche alquilado (2-3h a pié de montaña, 30-50 EUR) o tours organizados (60-100 EUR/día)",
+      "donde_dormir": {
+        "mochilero": "campamentos o guesthouses de montaña: 10-20 EUR/noche",
+        "medio": "yurtas tradicionales: 25-40 EUR/noche",
+        "comfort": "lodges de montaña: 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a Lago Charvak (2-3 días, gratis)",
+        "Trekking a Big Almaty Lake (día completo, gratis)",
+        "Cabalgata en praderas (20-30 EUR)",
+        "Acampada en picos (incluido en tours)",
+        "Fotografía de vida silvestre"
+      ],
+      "donde_comer": "Tours incluyen comidas o compra de provisions en Tashkent antes de ir (comida básica 2-3 EUR)",
+      "consejo_local": "Alquila un coche 4x4: los tours desde Tashkent están diseñados para turistas pasivos. Viajando independiente verás menos gente. Lleva equipo propio o renta en Tashkent.",
+      "plan_b_lluvia": "Montañas en lluvia son peligrosas: cancela y reschedule. Si llueve, vuelve a Tashkent.",
+      "keywords": [
+        "Tian Shan",
+        "Charvak",
+        "Big Almaty Lake",
+        "senderismo",
+        "montaña",
+        "trekking"
+      ]
+    }
+  ]
+}

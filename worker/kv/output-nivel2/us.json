@@ -1,0 +1,364 @@
+{
+  "pais": "Estados Unidos",
+  "codigo": "us",
+  "destinos": [
+    {
+      "id": "nueva-york",
+      "nombre": "Nueva York",
+      "tipo": "ciudad",
+      "region": "Noreste (Nueva York)",
+      "descripcion": "La ciudad más icónica de EE.UU. con museos de clase mundial, arquitectura diversa y energía única. Combina cultura, gastronomía y vida urbana intensa. Cada barrio tiene identidad propia: desde Brooklyn artsy hasta Manhattan corporativo.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "septiembre-octubre, abril-mayo",
+      "como_llegar": "Vuelo a JFK/Newark desde Europa: 8-10h, 200-500 EUR. Tren desde Boston: 3.5h, 30 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel en Lower East Side o Astoria (Queens): 35-50 EUR/noche",
+        "medio": "Hotel boutique en Williamsburg o East Village: 120-180 EUR/noche",
+        "comfort": "Hotel cadena Midtown o Upper West Side: 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Metropolitan Museum (donativo 25 EUR, realmente gratis si lo declinas)",
+        "Caminar el High Line (gratis)",
+        "Traversía a Staten Island Ferry (gratis, vistas de Estatua de la Libertad)",
+        "Subir al Empire State Building (25 EUR)",
+        "Explorar mercadillos de Chinatown (gratis)"
+      ],
+      "donde_comer": "Pizza slice en cualquier esquina (2-4 EUR). Ramen en East Village (12-18 EUR). Tacos en Queens (3-6 EUR). Bagels en la zona del Lower East Side (3-5 EUR).",
+      "consejo_local": "Compra el MetroCard recargable (33 EUR/7 días ilimitado): más rentable que taxis. Los museos piden donativo pero no es obligatorio. Come en las zonas menos turísticas: astoria, Sunset Park.",
+      "plan_b_lluvia": "MoMA, American Museum of Natural History, visitas a barrios cubiertos (Chinatown, Little Italy)",
+      "keywords": [
+        "NYC",
+        "Manhattan",
+        "Brooklyn",
+        "Queens",
+        "Bronx",
+        "Times Square",
+        "Central Park",
+        "SoHo",
+        "Williamsburg"
+      ]
+    },
+    {
+      "id": "nueva-orleans",
+      "nombre": "Nueva Orleans",
+      "tipo": "ciudad",
+      "region": "Sur (Luisiana)",
+      "descripcion": "Mezcla única de culturas francesa, africana y criolla con música en vivo, gastronomía creola y arquitectura colonial. Vibrante vida nocturna en el French Quarter y ambiente festivo permanente. Accesible y más barata que destinos costeros.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre-enero, febrero-marzo",
+      "como_llegar": "Vuelo a Louis Armstrong desde Atlanta/Miami: 2-3h, 80-150 EUR. Desde Nueva York: vuelo directo 3h, 120-200 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel en French Quarter o Marigny: 25-40 EUR/noche",
+        "medio": "Guesthouse en Bywater o Tremé: 80-120 EUR/noche",
+        "comfort": "Hotel histórico en French Quarter: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por French Quarter (gratis)",
+        "Música en vivo en Frenchmen Street (gratis entrada, copas 4-6 EUR)",
+        "Cemetery tours (15-20 EUR)",
+        "Swamp tour desde Nueva Orleans (40-60 EUR)",
+        "Beale Street en Memphis (excursión cercana, 4h autobús): gratis caminar, conciertos 10-30 EUR"
+      ],
+      "donde_comer": "Beignets en Café Du Monde (6 EUR). Gumbo (12-18 EUR). Po'boys de camarón (8-12 EUR). Jambalaya casera en restaurantes locales fuera del French Quarter (15-20 EUR).",
+      "consejo_local": "El French Quarter es turístico pero necesario; duerme mejor en Marigny. Los conciertos nocturnos en Frenchmen Street son gratis entrada, pagas solo lo que bebas. Prueba los 'second line' callejeros (desfiles improvisados) los domingos en el Tremé.",
+      "plan_b_lluvia": "Audubon Aquarium (20 EUR), Preservation Hall (entrada a partir de 15 EUR, ambiente íntimo de jazz),  tiendas vintage en Decatur",
+      "keywords": [
+        "NOLA",
+        "French Quarter",
+        "Frenchmen Street",
+        "Marigny",
+        "Bywater",
+        "creole",
+        "jazz",
+        "voodoo"
+      ]
+    },
+    {
+      "id": "san-francisco",
+      "nombre": "San Francisco",
+      "tipo": "ciudad",
+      "region": "Oeste (California)",
+      "descripcion": "Ciudad costera con clima templado, puentes iconicos y colinas empinadas. Contracultural e innovadora, con barrios bohemios, tech-forward y mercados gourmet. Punto de partida ideal para explorar Costa de California y Yosemite.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "septiembre-octubre",
+      "como_llegar": "Vuelo a SFO desde Europa: 10-12h, 400-700 EUR. Autobús desde Los Ángeles: 6h, 15-40 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel en SOMA o Mission: 40-60 EUR/noche",
+        "medio": "Hotel en Hayes Valley o Castro: 100-150 EUR/noche",
+        "comfort": "Hotel en Marina o Nob Hill: 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Golden Gate Bridge (cruzar a pie, gratis)",
+        "Cable cars (históricos, 8 EUR billete sencillo)",
+        "Alcatraz island (35 EUR, reserva con antelación)",
+        "Twin Peaks vista panorámica (gratis)",
+        "Mission District murales y bares (gratis paseo)"
+      ],
+      "donde_comer": "Fish & chips en Fisherman's Wharf (18-25 EUR, turístico). Mission burritos auténticos (10-14 EUR). Dim sum en Chinatown (10-15 EUR por persona). Café en North Beach (5-7 EUR).",
+      "consejo_local": "El clima es impredecible: lleva capas. El 'micro climate' es real, cada barrio diferente. Compra Visitor Passport (45 EUR, 3 atracciones incluidas). Evita Fisherman's Wharf de turistas; come en Mission District.",
+      "plan_b_lluvia": "Exploratorium de ciencias (20 EUR), Asian Art Museum (15 EUR), librerías vintage en North Beach, cafeterías en Mission",
+      "keywords": [
+        "SF",
+        "Bay Area",
+        "Golden Gate",
+        "Alcatraz",
+        "Mission District",
+        "Castro",
+        "Chinatown",
+        "Haight-Ashbury",
+        "Silicon Valley"
+      ]
+    },
+    {
+      "id": "parque-nacional-yellowstone",
+      "nombre": "Parque Nacional Yellowstone",
+      "tipo": "naturaleza",
+      "region": "Noroeste (Wyoming, Montana, Idaho)",
+      "descripcion": "Primer parque nacional de EE.UU. con géisers, fuentes termales y fauna salvaje. Paisajes geológicos únicos con el géiser Old Faithful y cañones espectaculares. Imprescindible para naturaleza virgen sin multitudes de ciudad.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Vuelo a Bozeman o Jackson Hole, luego coche de alquiler (1-2h): 120-200 EUR coche/día. Entrada parque: 35 EUR/vehículo (7 días).",
+      "donde_dormir": {
+        "mochilero": "Camping dentro parque: 15-20 EUR/noche, o pueblito Gardiner exterior: 30-50 EUR/noche",
+        "medio": "Lodge dentro parque (Old Faithful Inn): 100-150 EUR/noche",
+        "comfort": "Resort privado Jackson Hole o West Yellowstone: 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Geyser Old Faithful (gratis desde carretera)",
+        "Lamar Valley wildlife watching (gratis, mejores osos y bisontes al amanecer)",
+        "Grand Prismatic Spring (gratis acceso)",
+        "Hiking senderos en Grand Canyon del Yellowstone (gratis)",
+        "Fishing en río Yellowstone con permiso (20 EUR/día)"
+      ],
+      "donde_comer": "Restaurante Old Faithful Inn (20-35 EUR platos). General stores dentro parque: sándwiches 10-15 EUR. Mejor comer en Gardiner o Mammoth Hot Springs afuera (15-25 EUR opciones caseras).",
+      "consejo_local": "Vea Old Faithful solo si llega sin expectativas; es famoso pero hay cientos de géiseres mejores. Madrugue para wildlife viewing en Lamar Valley (osos, lobos, bisontes). Reserve alojamiento dentro del parque con 6+ meses anticipación.",
+      "plan_b_lluvia": "Museo de Yellowstone, thermal features cubierto en Mammoth, carretera scenic con paradas bajo la lluvia",
+      "keywords": [
+        "Yellowstone",
+        "Old Faithful",
+        "Grand Prismatic",
+        "Lamar Valley",
+        "géiser",
+        "bisontes",
+        "osos",
+        "Grand Canyon Yellowstone"
+      ]
+    },
+    {
+      "id": "las-vegas",
+      "nombre": "Las Vegas",
+      "tipo": "ciudad",
+      "region": "Suroeste (Nevada)",
+      "descripcion": "Ciudad del juego, espectáculos y excesos sin regulaciones sociales normales. Atracciones extravagantes, shows de clase mundial y gastronomía sorprendente. Acceso barato con vuelos desde todo el mundo; excelente base para Grand Canyon y desierto.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre-febrero",
+      "como_llegar": "Vuelo a Harry Reid International (LAS) desde Europa: 10-12h, 300-600 EUR. Autobús desde Los Ángeles: 5h, 25-50 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel Downtown (Fremont) o casino economy rooms: 20-40 EUR/noche",
+        "medio": "Casino hotel Strip (Flamingo, Linq): 50-100 EUR/noche",
+        "comfort": "Resort lujo Strip (Bellagio, Wynn): 150-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Caminar The Strip (gratis)",
+        "Bellagio Fountains (gratis, cada 15-30 min)",
+        "Fremont Street show luz (gratis paseo)",
+        "Red Rock Canyon (15 EUR entrada, paisaje desierto)",
+        "Excursión Grand Canyon (desde 100 EUR todo incluido)"
+      ],
+      "donde_comer": "Buffets casinos (15-25 EUR, valor mediocre). Taquerias en Downtown/off-Strip (6-10 EUR). Restaurantes gourmet celebrity (40-150 EUR). Happy hour en Fremont (copas 2-3 EUR, 17-19h).",
+      "consejo_local": "Los casinos pierden dinero con comida: aprovecha. Fremont Street Downtown es más auténtico y barato que The Strip. Los shows sin entrada (Bellagio, Mirage volcán) son gratis. Alquilar coche barato y escapar a naturaleza (Valley of Fire, Red Rock) vale la pena.",
+      "plan_b_lluvia": "Museos (Neon Museum 15 EUR, Mob Museum 18 EUR), casinos con entretenimiento cubierto (Cirque du Soleil 50-150 EUR), piscinas interiores resort",
+      "keywords": [
+        "Vegas",
+        "The Strip",
+        "Fremont Street",
+        "casinos",
+        "Grand Canyon",
+        "Red Rock",
+        "Bellagio",
+        "Caesars Palace",
+        "Luxor"
+      ]
+    },
+    {
+      "id": "denver",
+      "nombre": "Denver",
+      "tipo": "ciudad",
+      "region": "Centro-Oeste (Colorado)",
+      "descripcion": "Puerta de entrada a las Montañas Rocosas con escena cervecera artesanal, museos excelentes y vida urbana relajada. Ambiente joven, precio accesible y proximidad inmediata a naturaleza de montaña. Base perfecta para senderismo alpino.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre, diciembre-enero (esquí)",
+      "como_llegar": "Vuelo a Denver International desde Europa: 10-12h, 350-600 EUR. Autobús desde Las Vegas: 8h, 30-60 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel LoDo (Lower Downtown): 30-45 EUR/noche",
+        "medio": "Hotel Capitol Hill o RiNo: 80-120 EUR/noche",
+        "comfort": "Hotel centro o cerca 16th Street: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Denver Art Museum (18 EUR)",
+        "State Capitol tours (gratis)",
+        "Cherry Creek hiking trail (gratis)",
+        "Red Rocks Park conciertos (20-80 EUR entradas, o gratis visita)",
+        "Brewery crawl en LoDo (catas 5-15 EUR)"
+      ],
+      "donde_comer": "Mexican food auténtico (10-15 EUR). Brewpubs (12-20 EUR platos + cerveza 4-6 EUR). Food trucks South Platte (6-12 EUR). Restaurantes vegetarianos/veganos abundantes (15-25 EUR).",
+      "consejo_local": "Denver está a 1609m: la altitud afecta (bebe agua extra). Las cervecerías artesanales dan catas gratis con compra. Cherry Creek es río urbano perfecto para correr/pasear. Salidas de día fáciles: Mt. Evans (1.5h), Garden of the Gods (1h hacia Colorado Springs).",
+      "plan_b_lluvia": "Denver Museum of Nature & Science (18 EUR), Colorado History Museum (12 EUR), cervecerías con interior cómodo, librerías independientes",
+      "keywords": [
+        "Denver",
+        "Colorado",
+        "Mile High",
+        "LoDo",
+        "RiNo",
+        "Cherry Creek",
+        "Red Rocks",
+        "Rocosas",
+        "brewing"
+      ]
+    },
+    {
+      "id": "madera-california",
+      "nombre": "Parque Nacional Yosemite",
+      "tipo": "naturaleza",
+      "region": "Oeste (California, Sierra Nevada)",
+      "descripcion": "Parque de montaña con acantilados de granito espectaculares, cascadas y bosques antiguos. Fotografía legendaria y senderismo de todos los niveles. Menos accesible que Yellowstone pero más salvaje y con mayor diversidad de ecosistema montañoso.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde San Francisco: coche alquiler 4h, 80-150 EUR/día. Entrada parque: 35 EUR/vehículo (7 días). Desde Fresno aeropuerto: 2.5h.",
+      "donde_dormir": {
+        "mochilero": "Camping Yosemite (15-20 EUR, reserva crucial). Pueblito exterior Madera/Groveland: 40-70 EUR/noche",
+        "medio": "Curry Village cabañas dentro (80-100 EUR)",
+        "comfort": "Ahwahnee Hotel dentro (250-400 EUR) o resort exterior Madera: 150-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Glacier Point vista panorámica (gratis, carretera cerrada nov-mayo)",
+        "Mirror Lake trail (gratis, 8km, fácil)",
+        "Vernal Fall hike (gratis, desafiante, 9km)",
+        "El Capitan viewing area (gratis)",
+        "Tunnel View al atardecer (gratis)"
+      ],
+      "donde_comer": "Provisiones en pueblito exterior Madera (mercados 8-15 EUR). Restaurants dentro Yosemite Valley (25-40 EUR). Mejor llevar picnic: supermercado Fresno antes de subir.",
+      "consejo_local": "El Valle de Yosemite es 7km², fácil recorrer. Las cataratas tienen caudal máximo mayo-junio. Evita julio-agosto (masas turísticas). Camping llena 5+ meses antes. Tioga Pass (ruta oriental) abre mayo-noviembre, acceso desde Las Vegas.",
+      "plan_b_lluvia": "Visitor Center museo (entrada parque incluida), pueblos cercanos Madera, carreteras scenic con paradas",
+      "keywords": [
+        "Yosemite",
+        "Half Dome",
+        "El Capitan",
+        "Glacier Point",
+        "Vernal Fall",
+        "Nevada Fall",
+        "Sierra Nevada",
+        "granite",
+        "Madera"
+      ]
+    },
+    {
+      "id": "miami",
+      "nombre": "Miami",
+      "tipo": "playa",
+      "region": "Sur (Florida)",
+      "descripcion": "Playas tropicales, Art Deco histórico y vida nocturna intensa. Diversidad cultural (cubana, haitiana, latinoamericana) reflejada en gastronomía y arte. Acceso a arrecifes de coral y Cayos de Florida. Más barato que Cancún con más carácter.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre-abril",
+      "como_llegar": "Vuelo a Miami International desde Europa: 8-10h, 300-500 EUR. Desde Nueva York: vuelo corto 3h, 80-200 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostel South Beach o Wynwood: 30-50 EUR/noche",
+        "medio": "Hotel Art Deco South Beach: 90-130 EUR/noche",
+        "comfort": "Beachfront resort South Beach o Brickell: 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "South Beach paseo (gratis)",
+        "Art Deco Historic District tours (15-25 EUR, o autoguiado gratis)",
+        "Wynwood Walls murales callejeros (gratis)",
+        "Vizcaya Museum (18 EUR)",
+        "Snorkel Key Biscayne (40-60 EUR excursión, o playa gratis)"
+      ],
+      "donde_comer": "Cubano sandwich (6-10 EUR). Ceviches (12-18 EUR). Arepas venezolanas (8-12 EUR). Seafood en Brickell (20-35 EUR). Mojitos South Beach turístico (12-18 EUR), Wynwood más barato (6-10 EUR).",
+      "consejo_local": "South Beach es turístico pero imprescindible una noche. Wynwood es artsy, barato y auténtico. Comer bien en Allapattah, Little Havana (barrios locales). Viaja con coche alquilado: Miami es sprawling. Junio-octubre: huracanes y mucho calor.",
+      "plan_b_lluvia": "Vizcaya Museum, Wynwood indoor galleries, tiendas Art Deco District, aquarium Seaquarium (40 EUR)",
+      "keywords": [
+        "Miami",
+        "South Beach",
+        "Art Deco",
+        "Wynwood",
+        "Little Havana",
+        "Brickell",
+        "Key Biscayne",
+        "Miami Beach",
+        "Cuban"
+      ]
+    },
+    {
+      "id": "santa-fe",
+      "nombre": "Santa Fe",
+      "tipo": "histórico",
+      "region": "Suroeste (Nuevo México)",
+      "descripcion": "Capital cultural del Suroeste con arquitectura adobe terracota, galerías de arte y escena gastronómica vanguardista. Mezcla de herencia indígena, española y artística. Elevación 2134m con luz legendaria. Destino introspectivo y artístico poco masificado.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Vuelo a Santa Fe Regional desde Denver: 1h, 100-180 EUR. Desde Albuquerque: coche 1.5h, 40-70 EUR alquiler.",
+      "donde_dormir": {
+        "mochilero": "Hostel o guesthouse Downtown: 40-60 EUR/noche",
+        "medio": "Hotel adobe estilo: 100-150 EUR/noche",
+        "comfort": "Resorts boutique periféricos: 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Plaza Mayor paseo y galerías (gratis)",
+        "Museo de arte de Santa Fe (18 EUR)",
+        "Canyon Road galerías (gratis entrada, centenares de galerías)",
+        "Georgia O'Keeffe Museum (18 EUR)",
+        "Bandelier National Monument sitio arqueológico (16 EUR, 1h sur)"
+      ],
+      "donde_comer": "Sopapillas rellenos (8-12 EUR). Enchiladas rojo/verde (14-20 EUR). Postre: biscochito galleta regional (3-5 EUR). Restaurantes gourmet mezclan New Mexican con vanguardia (30-50 EUR).",
+      "consejo_local": "Plaza Mayor es corazón; pásate atardecer. La altitud (2134m) afecta menos que Denver. Canyon Road es larga; cubre galerías seleccionadas. Agosto: festival Indian Market (gratuito, abarrotado). La ciudad es caro pero vale por unicidad.",
+      "plan_b_lluvia": "Museos Georgia O'Keeffe e historia, galerías cubiertas Canyon Road, librerías antiguas Downtown, tiendas cerámica",
+      "keywords": [
+        "Santa Fe",
+        "New Mexico",
+        "Southwest",
+        "Canyon Road",
+        "plaza",
+        "adobe",
+        "Indian Market",
+        "O'Keeffe",
+        "Bandelier"
+      ]
+    },
+    {
+      "id": "nueva-orleans-excepto-ruta",
+      "nombre": "Ruta 66 (Segmento Central)",
+      "tipo": "rural",
+      "region": "Centro (Oklahoma, Texas, Nuevo México, Arizona)",
+      "descripcion": "Carretera histórica de Chicago a Los Ángeles con pueblitos desaparecidos, moteles vintage y paisajes desérticos. Recorre el alma americana media del siglo XX. Mejor conducir el segmento central (Oklahoma a Arizona) que es más icónico y accesible.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "marzo-mayo, septiembre-octubre",
+      "como_llegar": "Coche alquilado. Punto partida: Oklahoma City (vuelo desde cualquier hub). Segmento: Shamrock TX a Williams AZ (600km, 7-8h conducción).",
+      "donde_dormir": {
+        "mochilero": "Moteles vintage Seligman, Winslow, Holbrook: 40-70 EUR/noche",
+        "medio": "Moteles mejor conservados o B&B pueblos: 70-110 EUR/noche",
+        "comfort": "Resorts Sedona o Flagstaff cercanos: 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Cadillac Ranch car art (Amarillo TX, gratis, tira de pintura auto)",
+        "Blue Dome Seligman antigüedades (gratis paseo)",
+        "Winslow Standin' on the Corner Park (gratis, referencia canción)",
+        "Meteor Crater Arizona (18 EUR)",
+        "Petrified Forest National Park (30 EUR entrada)"
+      ],
+      "donde_comer": "Diners clásicos años 50 (12-18 EUR). Red's Steakhouse Seligman (15-25 EUR). Mejor llevar picnic: supermercados pueblos pequeños son caros.",
+      "consejo_local": "Conduce sin prisa; los pueblos son micro (100-500 habitantes). Photostops kitsch: Cadillac Ranch, Blue Whale Catoosa OK. Combustible: carga antes de segmentos largos desérticos. Moteles vintage baratos y con carácter; evita cadenas. La ruta es plana y fácil.",
+      "plan_b_lluvia": "Conducción entre pueblos es arriesgada (visibility baja); pausar en pueblos, museos locales o Petrified Forest cubierto",
+      "keywords": [
+        "Route 66",
+        "Ruta 66",
+        "mother road",
+        "Seligman",
+        "Winslow",
+        "Cadillac Ranch",
+        "Meteor Crater",
+        "vintage motels",
+        "americana"
+      ]
+    }
+  ]
+}

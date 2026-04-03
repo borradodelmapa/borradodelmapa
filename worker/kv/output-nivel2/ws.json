@@ -1,0 +1,327 @@
+{
+  "pais": "Samoa",
+  "codigo": "ws",
+  "destinos": [
+    {
+      "id": "apia",
+      "nombre": "Apia",
+      "tipo": "ciudad",
+      "region": "Upolu",
+      "descripcion": "Capital de Samoa ubicada en la costa norte de Upolu, centro logístico y cultural del país. Punto de entrada obligatorio con puerto y aeropuerto internacional. Mezcla de mercados locales, edificios coloniales y vida samoana cotidiana.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Aeropuerto Internacional Faleolo a 40 km (taxi compartido/shuttle 25-35 EUR, 45 min)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses familiares 20-35 EUR/noche",
+        "medio": "Hoteles de cadena local 50-80 EUR/noche",
+        "comfort": "Resorts con vistas al puerto 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Salelologa (gratis)",
+        "Iglesia de Samoa Independiente (gratis)",
+        "Paseo por el malecón Beach Road (gratis)",
+        "Museo Nacional de Samoa (5 EUR)",
+        "Robert Louis Stevenson Museum (8 EUR)"
+      ],
+      "donde_comer": "Oka (platos locales, 8-12 EUR), zona de Vailima para restaurantes, palusami (plato típico, 6-10 EUR)",
+      "consejo_local": "El lunes es feriado (Anzac Day) y muchos negocios cierran. Cambiar dinero en el banco antes del fin de semana, los cambistas tienen peor tasa.",
+      "plan_b_lluvia": "Museo Nacional, shopping en centros comerciales, comer en un fale (cabaña abierta) viendo la lluvia",
+      "keywords": [
+        "Apia",
+        "capital Samoa",
+        "Upolu",
+        "Beach Road",
+        "mercado samoano"
+      ]
+    },
+    {
+      "id": "lalomanu",
+      "nombre": "Lalomanu",
+      "tipo": "playa",
+      "region": "Upolu (costa este)",
+      "descripcion": "Playa virgen de arena blanca en la costa este de Upolu, considerada una de las más hermosas de Samoa sin desarrollo turístico masivo. Aguas calmadas, arrecife de coral cercano y comunidad samoana auténtica. Ideal para snorkel y relax.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Apia en autobús local (ruta sur hasta Lalomanu, 1,5 EUR, 1.5 horas) o taxi privado (40-50 EUR)",
+      "donde_dormir": {
+        "mochilero": "Fales tradicionales en guesthouses 25-40 EUR/noche",
+        "medio": "Beach fales con baño privado 50-70 EUR/noche",
+        "comfort": "Resort beachfront (Lalomanu Beach Resort) 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en el arrecife (gratis)",
+        "Nadar en aguas cristalinas (gratis)",
+        "Caminar por la playa (gratis)",
+        "Visitar piscina natural Afu Aau (gratis)",
+        "Atardecer en la playa (gratis)"
+      ],
+      "donde_comer": "Comedores locales en la aldea (oka, palolo, 8-15 EUR), frutas tropicales frescas, no hay restaurantes formales",
+      "consejo_local": "Trae dinero en efectivo, no hay cajeros. Las aguas son seguras pero respeta los arrecifes. Los locales aprecian saludar en samoan: 'Talofa!'",
+      "plan_b_lluvia": "Paseos por la aldea, aprender a cocinar platos samoanos con locales, leer bajo el fale",
+      "keywords": [
+        "Lalomanu",
+        "playa Samoa",
+        "arrecife coral",
+        "fales",
+        "Upolu este"
+      ]
+    },
+    {
+      "id": "savaii",
+      "nombre": "Savai'i",
+      "tipo": "isla",
+      "region": "Savai'i",
+      "descripcion": "Isla más grande de Samoa pero menos desarrollada que Upolu, con volcanes extintos, playas negras de lava, selva tropical y pueblos tradicionales. Destino para viajeros que buscan autenticidad y naturaleza sin infraestructura turística pesada.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Ferry desde Apia (Samoa Shipping Company, 60 EUR ida/vuelta, 3.5 horas) o vuelo interno (120 EUR, 1 hora)",
+      "donde_dormir": {
+        "mochilero": "Fales y guesthouses 20-35 EUR/noche",
+        "medio": "Resorts pequeños en Salelologa 50-80 EUR/noche",
+        "comfort": "Beach resorts en Manase Beach 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Caminar por la costa con lava negra (gratis)",
+        "Visitar Afu Aau (piscina natural mineral, gratis)",
+        "Snorkel en arrecifes (gratis)",
+        "Senderismo en volcanes extintos (gratis)",
+        "Visitar pueblos tradicionles de Olosega (gratis)"
+      ],
+      "donde_comer": "Comedores en Salelologa y pueblos costeros (8-12 EUR), mariscos frescos, pocos restaurantes occidentales",
+      "consejo_local": "El ferry puede retrasarse con mal tiempo. Renta un coche (15-20 EUR/día) o usa taxis locales compartidos. Lleva repelente de mosquitos.",
+      "plan_b_lluvia": "Explorar pueblos interiores, visitar iglesias locales, comprar artesanía samoana",
+      "keywords": [
+        "Savai'i",
+        "isla volcánica",
+        "lava negra",
+        "Salelologa",
+        "Manase",
+        "ferry"
+      ]
+    },
+    {
+      "id": "le-aualalo",
+      "nombre": "Le Aualalo Waterfall",
+      "tipo": "naturaleza",
+      "region": "Upolu (interior)",
+      "descripcion": "Cascada escondida en la selva tropical de Upolu, accesible mediante caminata corta por sendero natural. Una de las pocas cataratas de Samoa con agua dulce y piscina para bañarse, en entorno completamente verde.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Apia hacia el interior (taxi 30 EUR ida/vuelta + entrada a propiedad privada 5 EUR por persona)",
+      "donde_dormir": {
+        "mochilero": "Dormir en Apia y hacer excursión de día",
+        "medio": "Dormir en Apia",
+        "comfort": "Dormir en Apia"
+      },
+      "que_hacer": [
+        "Caminata por la selva (gratis después de entrada)",
+        "Baño en piscina de agua dulce (gratis)",
+        "Fotografía de naturaleza (gratis)",
+        "Observación de fauna tropical (gratis)"
+      ],
+      "donde_comer": "Lleva comida desde Apia, no hay restaurantes cerca",
+      "consejo_local": "Ve temprano para evitar que llueva durante la caminata. Lleva zapatos con buen agarre, el sendero puede ser resbaladizo.",
+      "plan_b_lluvia": "No accesible con lluvia fuerte; reprogramar para otro día",
+      "keywords": [
+        "Le Aualalo",
+        "cascada Samoa",
+        "selva tropical",
+        "Upolu interior",
+        "piscina natural"
+      ]
+    },
+    {
+      "id": "manase-beach",
+      "nombre": "Manase Beach",
+      "tipo": "playa",
+      "region": "Savai'i (costa norte)",
+      "descripcion": "Playa de arena blanca en la costa norte de Savai'i, más tranquila que Lalomanu y con ambiente más de mochilero. Punto de partida para snorkel y avistamiento de tortugas marinas. Comunidad local pequeña y relajada.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Salelologa (ferry de Apia) en coche de alquiler (20 km, 30 min, 15-20 EUR/día) o taxi compartido (15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Fales con baño compartido 20-35 EUR/noche",
+        "medio": "Beach fales privados 50-70 EUR/noche",
+        "comfort": "Manase Waterfront Resort 100-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife (gratis)",
+        "Paseo al atardecer (gratis)",
+        "Observar tortugas marinas (gratis, mayo-octubre)",
+        "Pesca local (10-20 EUR con pescadores)",
+        "Buceo (80-120 EUR con operadores)"
+      ],
+      "donde_comer": "Restaurantes junto a la playa (10-18 EUR), oka y mariscos, Manase Waterfront Bistro para comida occidental",
+      "consejo_local": "Alquila una bicicleta (5 EUR/día) para explorar pueblos cercanos. Las tortugas son activas al amanecer.",
+      "plan_b_lluvia": "Paseos por pueblos, artesanía local, descansar en el fale",
+      "keywords": [
+        "Manase",
+        "Manase Beach",
+        "Savai'i norte",
+        "snorkel",
+        "tortugas marinas"
+      ]
+    },
+    {
+      "id": "upolu-interior",
+      "nombre": "Upolu Interior (Senderismo)",
+      "tipo": "montaña",
+      "region": "Upolu (centro)",
+      "descripcion": "Rutas de senderismo por el interior montañoso de Upolu, atravesando selva tropical con vistas a ambas costas. Senderos de dificultad variable, desde caminatas cortas a ascensos desafiantes. Experiencia de naturaleza virgen sin turismo masivo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Apia hacia diferentes trailheads (taxi/autobús 10-20 EUR, 45 min a 1.5 horas)",
+      "donde_dormir": {
+        "mochilero": "Dormir en Apia o Le Tiara",
+        "medio": "Dormir en Apia o Le Tiara",
+        "comfort": "Dormir en resorts cercanos a Apia"
+      },
+      "que_hacer": [
+        "Senderismo al Monte Vaea (3 horas, gratis)",
+        "Camino a las cataratas interiores (2 horas, gratis)",
+        "Observación de aves tropicales (gratis)",
+        "Fotografía de paisajes (gratis)"
+      ],
+      "donde_comer": "Llevar provisiones desde Apia, no hay opciones en montaña",
+      "consejo_local": "Contrata un guía local (20-30 EUR) que conozca las rutas y pueda explicar la flora. Los senderos no están bien marcados.",
+      "plan_b_lluvia": "Selva mojada es hermosa pero peligrosa en el terreno, reprogramar",
+      "keywords": [
+        "Upolu senderismo",
+        "Monte Vaea",
+        "selva Samoa",
+        "trekking",
+        "interior Upolu"
+      ]
+    },
+    {
+      "id": "ofu-beach",
+      "nombre": "Ofu Beach (Excursión a Samoa Americana)",
+      "tipo": "playa",
+      "region": "Manu'a (Samoa Americana)",
+      "descripcion": "Playa de arena blanca perfecta en las islas Manu'a de Samoa Americana. Considerada una de las mejores playas del Pacífico con arrecife de coral intacto. Requiere visado pero es accesible desde Samoa occidental.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Vuelo desde Apia a Pago Pago (Samoa Americana, 180 EUR ida/vuelta, 1 hora) + ferry o vuelo interno a Ofu (30-60 EUR, 30 min-1.5 horas)",
+      "excursion_desde": true,
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Ofu village 30-45 EUR/noche",
+        "medio": "Vaoto Lodge 80-100 EUR/noche",
+        "comfort": "No hay opciones de lujo en Ofu"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife Ofu (gratis)",
+        "Playa de arena blanca (gratis)",
+        "Senderismo costero (gratis)",
+        "Buceo avanzado (100-150 EUR)",
+        "Observación de tortugas (gratis)"
+      ],
+      "donde_comer": "Comedores locales (10-15 EUR), mariscos frescos, No hay restaurantes formales",
+      "consejo_local": "Necesitas visado de Samoa Americana (gratis para españoles, 30 días). El dólar estadounidense es moneda oficial. Menos turismo que Samoa occidental.",
+      "plan_b_lluvia": "Paseos por la aldea, artesanía local, explorar iglesias",
+      "keywords": [
+        "Ofu",
+        "Ofu Beach",
+        "Samoa Americana",
+        "Manu'a",
+        "arrecife coral",
+        "excursion"
+      ]
+    },
+    {
+      "id": "piula-cave-pool",
+      "nombre": "Piula Cave Pool",
+      "tipo": "naturaleza",
+      "region": "Upolu (Savai'i costero)",
+      "descripcion": "Piscina subterránea dentro de una cueva de coral, conectada con agua del mar. Experiencia única de baño en una caverna tropical de agua cristalina. Sitio histórico y natural a la vez.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Apia hacia la costa sur (coche de alquiler 35 EUR/día, 1.5 horas) o excursión organizada (40-60 EUR desde hotel)",
+      "donde_dormir": {
+        "mochilero": "Dormir en Apia y hacer excursión de día",
+        "medio": "Dormir en Apia",
+        "comfort": "Dormir en Apia"
+      },
+      "que_hacer": [
+        "Baño en la cueva (entrada 10 EUR)",
+        "Exploración de la cueva (gratis con entrada)",
+        "Fotografía (gratis)",
+        "Visita a iglesia Piula adyacente (gratis)"
+      ],
+      "donde_comer": "Small shop de refrescos en la entrada, llevar comida desde Apia",
+      "consejo_local": "El agua es salada pero refrescante. Lleva linterna o usa la que alquilan. La cueva es accesible fácilmente, ideal para familias.",
+      "plan_b_lluvia": "Accesible con lluvia, la cueva es protección",
+      "keywords": [
+        "Piula Cave",
+        "cueva Samoa",
+        "piscina subterránea",
+        "agua salada",
+        "Upolu sur"
+      ]
+    },
+    {
+      "id": "samoan-cultural-village",
+      "nombre": "Samoan Cultural Village",
+      "tipo": "histórico",
+      "region": "Upolu (Le Tiara)",
+      "descripcion": "Museo vivo donde experimentas la vida tradicional samoana: demostraciones de fuego, danzas, construcción de fales y gastronomía autóctona. Aunque turístico, ofrece contexto cultural genuino para entender Samoa.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Desde Apia (taxi/autobús hacia Le Tiara, 10 EUR, 20 min) o excursión de hotel (incluida a veces)",
+      "donde_dormir": {
+        "mochilero": "Dormir en Apia, visita de día",
+        "medio": "Dormir en Apia",
+        "comfort": "Dormir en Le Tiara Resort cercano"
+      },
+      "que_hacer": [
+        "Danza tradicional (incluida con entrada)",
+        "Demostración de fuego (incluida)",
+        "Comida tradicional umu (15 EUR adicionales)",
+        "Construcción de fale (incluida)",
+        "Mercado artesanía (precios variables)"
+      ],
+      "donde_comer": "Restaurante en el lugar (umu feast 20-25 EUR), bebidas tropicales",
+      "consejo_local": "Visita por la mañana (9-12h) para evitar grupos de cruceros. La entrada es cara pero educativa. Ñe salam en samoan es 'bienvenido'.",
+      "plan_b_lluvia": "Accesible, muchas actividades bajo techo",
+      "keywords": [
+        "cultural village",
+        "tradición samoana",
+        "Le Tiara",
+        "danza",
+        "umu",
+        "fuego"
+      ]
+    },
+    {
+      "id": "tafua-peninsula",
+      "nombre": "Tafua Peninsula (Excursión)",
+      "tipo": "naturaleza",
+      "region": "Savai'i (oeste)",
+      "descripcion": "Península volcánica en el extremo oeste de Savai'i con cráteres visibles, playas de lava negra y vistas espectaculares del Océano Pacífico. Senderismo a través de terreno volcánico único con comunidades samoas aisladas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Salelologa (coche alquilado, 50 km, 1.5 horas, 15-20 EUR/día) o taxi compartido (25-30 EUR)",
+      "donde_dormir": {
+        "mochilero": "Dormir en Salelologa o Manase",
+        "medio": "Dormir en Salelologa o Manase",
+        "comfort": "Dormir en Manase Resort"
+      },
+      "que_hacer": [
+        "Camino volcánico (gratis)",
+        "Vista del cráter (gratis)",
+        "Fotografía de lava negra (gratis)",
+        "Observación de costa (gratis)",
+        "Exploración de pequeños pueblos (gratis)"
+      ],
+      "donde_comer": "Llevar comida desde Salelologa, no hay opciones en la península",
+      "consejo_local": "Terreno volcánico requiere cuidado con los pies. Lleva agua abundante. Las vistas del atardecer sobre el Pacífico son espectaculares.",
+      "plan_b_lluvia": "Senderos resbaladizos con lluvia; mejor reprogramar",
+      "keywords": [
+        "Tafua",
+        "volcán Samoa",
+        "lava negra",
+        "Savai'i oeste",
+        "península"
+      ]
+    }
+  ]
+}

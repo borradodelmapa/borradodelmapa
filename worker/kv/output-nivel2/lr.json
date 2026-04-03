@@ -1,0 +1,324 @@
+{
+  "pais": "Liberia",
+  "codigo": "lr",
+  "alerta_seguridad": "Liberia requiere precaución: evitar Monrovia por la noche, viajar en grupos, verificar situación de seguridad actual antes de partir. Algunas zonas rurales tienen acceso limitado.",
+  "destinos": [
+    {
+      "id": "monrovia",
+      "nombre": "Monrovia",
+      "tipo": "ciudad",
+      "region": "Condado de Montserrado",
+      "descripcion": "Capital y mayor ciudad de Liberia, punto de entrada obligatorio. Centro histórico con arquitectura colonial, mercados caóticos y costa atlántica. Base para organizar el resto del viaje.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Roberts International Airport (ROB) desde Europa vía conexión (típicamente 18-24h). Transferencia al centro: taxi compartido 15-25 EUR, 45 min.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Sinkor/Congo Town: 20-35 EUR/noche",
+        "medio": "Hoteles 3* en Monrovia: 50-90 EUR/noche",
+        "comfort": "Hoteles internacionales (Monrovia Hotel): 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional de Liberia (3 EUR, historia del país)",
+        "Paseo por Waterfront Boulevard (gratis, atardecer)",
+        "Mercado artesanal de Broad Street (regateo, artesanía local)",
+        "Playa de Monrovia en Breeze Beach (gratis, vigilada al mediodía)"
+      ],
+      "donde_comer": "Rice and cassava soup, fufu de plátano. Comedores locales 2-5 EUR. Sinkor tiene opciones mejores; evitar comida de calle de noche.",
+      "consejo_local": "No vayas a pie de noche nunca. Los taxis son seguros pero negocia precio antes. Las playas son seguras solo de día con gente alrededor.",
+      "plan_b_lluvia": "Museo Nacional, galerías de arte, cafés con aire acondicionado en Sinkor.",
+      "keywords": [
+        "Monrovia capital",
+        "Roberts Airport",
+        "Sinkor",
+        "Waterfront",
+        "Congo Town",
+        "mercado artesanal"
+      ]
+    },
+    {
+      "id": "harper",
+      "nombre": "Harper",
+      "tipo": "playa",
+      "region": "Condado de Maryland",
+      "descripcion": "Pueblo costero relajado en el sureste, con playas de arena negra y atmósfera tranquila. Punto de entrada alternativo si vienes de Costa de Marfil. Ideal para desconectar del caos urbano.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Monrovia: vuelo interno (30 min, 60-90 EUR) o autobús 10h (15-20 EUR). Más directo desde frontera de Costa de Marfil.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 15-25 EUR/noche",
+        "medio": "Hoteles pequeños con baño privado: 35-55 EUR/noche",
+        "comfort": "Beachfront lodges: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de arena negra volcánica (gratis, nadar con precaución)",
+        "Pesca artesanal con pescadores locales (5-10 EUR por salida)",
+        "Exploración de mercado local (gratis, comida fresca)",
+        "Senderismo en selva cercana hacia Cape Palmas (10 EUR guía local)"
+      ],
+      "donde_comer": "Pargo fresco, camarones, sopa de pescado. Comedores de playa 3-6 EUR. Pide lo que acaban de traer los pescadores.",
+      "consejo_local": "Harper es muy tranquilo: sin turismo masivo, precios bajos, gente amable. Ideal para relax pero con servicios básicos limitados.",
+      "plan_b_lluvia": "Visitar casas de lugareños que cocinan (experiencia cultural), explorar pueblo interior.",
+      "keywords": [
+        "Harper playa",
+        "Maryland County",
+        "arena negra",
+        "Cape Palmas",
+        "pesca artesanal",
+        "frontera Costa de Marfil"
+      ]
+    },
+    {
+      "id": "buchanan",
+      "nombre": "Buchanan",
+      "tipo": "ciudad",
+      "region": "Condado de Grand Bassa",
+      "descripcion": "Puerto histórico con arquitectura colonial y playas amplias. Menos turístico que Monrovia pero con infraestructura decente. Centro logístico para explorar la costa central.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Monrovia: minibús 3-4h (12-18 EUR). Carretera costera con vistas al océano.",
+      "donde_dormir": {
+        "mochilero": "Alojamientos locales: 15-30 EUR/noche",
+        "medio": "Hoteles con comodidades básicas: 40-65 EUR/noche",
+        "comfort": "Beachfront hotels: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de Buchanan (gratis, más tranquilas que Monrovia)",
+        "Recorrido por puerto histórico (gratis, fotografía)",
+        "Mercado central (gratis, comida local)",
+        "Excursión a Todee Island si hay barca disponible (15-25 EUR)"
+      ],
+      "donde_comer": "Cassava bread, sopa de pescado, platos de arroz. Comedores locales 2-4 EUR. La costa tiene mejores opciones de marisco.",
+      "consejo_local": "Buchanan es puerta a zonas rurales más auténticas. Usa como base para excursiones al interior sin quedarte en Monrovia.",
+      "plan_b_lluvia": "Explorar tiendas locales, hablar con pescadores en el puerto, visitar iglesias históricas.",
+      "keywords": [
+        "Buchanan puerto",
+        "Grand Bassa County",
+        "playas centrales",
+        "Todee Island",
+        "arquitectura colonial"
+      ]
+    },
+    {
+      "id": "ganta",
+      "nombre": "Ganta",
+      "tipo": "rural",
+      "region": "Condado de Nimba",
+      "descripcion": "Ciudad del interior cerca de la frontera con Guinea. Acceso a selva primaria, cultura Mano, y rutas de senderismo. Punto de partida para la Liberia menos turística.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Monrovia: minibús 6-7h (15-22 EUR). Carretera de tierra en parte final. Alternativa: vuelo interno si disponible.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes básicos: 12-20 EUR/noche",
+        "medio": "Hoteles pequeños con baño privado: 25-40 EUR/noche",
+        "comfort": "Opciones limitadas; alojamiento 40-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo en selva de Nimba (5-10 EUR guía obligatorio)",
+        "Visitas a pueblos Mano y Gio (cultural, gratis, con guía local)",
+        "Cascadas cercanas como Yekepa (excursión 1 día, 15-20 EUR)",
+        "Mercado local y encuentros con comunidades indígenas (gratis)"
+      ],
+      "donde_comer": "Fufu, sopa de hojas, carne de caza ocasional. Comedores muy básicos 2-3 EUR. Trae snacks desde Monrovia si tienes preferencias.",
+      "consejo_local": "Ganta es auténtica y segura si respetas a la gente. Los guías locales son esenciales para la selva. Habla con ellos sobre fauna (posibles avistamientos de elefantes).",
+      "plan_b_lluvia": "Quedarse en pueblo, visitar casas locales, aprender sobre cultivos de cacao y caucho.",
+      "keywords": [
+        "Ganta interior",
+        "Nimba County",
+        "selva primaria",
+        "cultura Mano",
+        "senderismo",
+        "frontera Guinea"
+      ]
+    },
+    {
+      "id": "robertsport",
+      "nombre": "Robertsport",
+      "tipo": "playa",
+      "region": "Condado de Grand Cape Mount",
+      "descripcion": "Pueblo costero con famosas olas para surf, playas salvajes y ambiente bohemio. Destino creciente para viajeros aventureros buscando naturaleza bruta.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a octubre (olas), noviembre a marzo (seco)",
+      "como_llegar": "Desde Monrovia: minibús 2.5-3h (10-15 EUR) hacia oeste. Caminos mejoran cada año.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes locales y surfistas: 15-25 EUR/noche",
+        "medio": "Pequeños hoteles: 35-50 EUR/noche",
+        "comfort": "Beach resorts nuevos: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Surf en Palm Beach y otras playas (alquiler tabla 10-15 EUR/día)",
+        "Senderismo por acantilados (gratis, vistas espectaculares)",
+        "Exploración de playas desiertas (gratis, fotografía)",
+        "Pesca con lugareños (negociable, 10-20 EUR)"
+      ],
+      "donde_comer": "Pargo fresco, camarones, arroz con frijoles. Comedores de playa 2-5 EUR. Algunos hoteles ofrecen menú occidental.",
+      "consejo_local": "Robertsport atrae cada vez más surfistas. Las aguas son frías (corrientes atlánticas), pero seguras. Trae equipo propio si eres muy exigente.",
+      "plan_b_lluvia": "Las lluvias son mejores para surf. Alquilar casa local, cocinar con amigos, explorar pueblos cercanos.",
+      "keywords": [
+        "Robertsport surf",
+        "Grand Cape Mount",
+        "Palm Beach",
+        "olas",
+        "playas salvajes",
+        "oeste Liberia"
+      ]
+    },
+    {
+      "id": "kakata",
+      "nombre": "Kakata",
+      "tipo": "montaña",
+      "region": "Condado de Margibi",
+      "descripcion": "Pueblo montañoso con acceso a caminatas y vistas. Centro para explorar la región central con menos ajetreo que Monrovia. Base para conocer agricultura local.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Monrovia: minibús 1.5h (5-8 EUR) hacia interior sur. Acceso fácil y seguro.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes locales: 12-20 EUR/noche",
+        "medio": "Pequeño hotel: 25-40 EUR/noche",
+        "comfort": "Opciones limitadas"
+      },
+      "que_hacer": [
+        "Caminatas por colinas y plantaciones (gratis con guía local)",
+        "Visita a huertos de cacao y caucho (turismo agrícola, 5 EUR)",
+        "Mercado local (gratis, productos frescos)",
+        "Encuentro con comunidades locales (cultural, gratis)"
+      ],
+      "donde_comer": "Platos de arroz y verduras, sopa local. Comedores 2-3 EUR. Muy auténtico, pocas opciones occidentales.",
+      "consejo_local": "Kakata es la puerta de la agricultura liberia. Los agricultores comparten conocimiento si preguntas. Ideal para un día de escapada desde Monrovia.",
+      "plan_b_lluvia": "Visitar casas locales, aprender sobre procesamiento de cacao, cocinar con familias.",
+      "keywords": [
+        "Kakata montaña",
+        "Margibi County",
+        "agricultura",
+        "cacao",
+        "interior cercano"
+      ]
+    },
+    {
+      "id": "zwedru",
+      "nombre": "Zwedru",
+      "tipo": "rural",
+      "region": "Condado de Grand Gedeh",
+      "descripcion": "Ciudad fronteriza en el sureste, acceso a selva virgen y cultura Krahn. Punto de salida hacia selvas intactas de Liberia oriental. Infraestructura mínima pero auténtica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Monrovia: vuelo interno (1h, 70-90 EUR) más seguro que carretera. Alternativa: minibús 10-12h (20-25 EUR), ruta difícil.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes básicos: 10-18 EUR/noche",
+        "medio": "Hotel pequeño: 20-35 EUR/noche",
+        "comfort": "Opciones muy limitadas"
+      },
+      "que_hacer": [
+        "Senderismo en selva de Grand Gedeh (guía obligatorio, 10-15 EUR/día)",
+        "Avistamiento de fauna: elefantes, ciervos de agua (con suerte)",
+        "Visitas a pueblos Krahn (cultural, con guía local)",
+        "Exploración de mercados fronterizos (gratis, experiencia local)"
+      ],
+      "donde_comer": "Comida muy local, limitada variedad. Comedores básicos 2-3 EUR. Trae provisiones si tienes restricciones.",
+      "consejo_local": "Zwedru es la frontera real de la Liberia turística. Segura pero aislada. Los guías locales son esenciales para selva. Posible ver fauna mayor con paciencia.",
+      "plan_b_lluvia": "Quedarse en pueblo, conocer gente, aprender sobre historia de región.",
+      "keywords": [
+        "Zwedru sureste",
+        "Grand Gedeh County",
+        "selva virgen",
+        "frontera",
+        "cultura Krahn",
+        "fauna silvestre"
+      ]
+    },
+    {
+      "id": "pleebo",
+      "nombre": "Pleebo",
+      "tipo": "playa",
+      "region": "Condado de Maryland",
+      "descripcion": "Pueblo costero tranquilo con playas vírgenes y acceso a islas cercanas. Alternativa relajada a Harper. Ideal para snorkel y avistamiento de vida marina.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Desde Harper: minibús 1.5-2h (5-8 EUR) costero. O desde Monrovia: vuelo interno (45 min, 70-85 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hospedajes locales: 12-22 EUR/noche",
+        "medio": "Hoteles pequeños: 30-45 EUR/noche",
+        "comfort": "Beachfront opciones: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas solitarias de Pleebo (gratis, natación segura)",
+        "Snorkel en arrecifes cercanos (10-15 EUR con bote local)",
+        "Visita a islas cercanas: Cestos Island (excursión media jornada 20 EUR)",
+        "Pesca artesanal temprana (gratis, observar o participar)"
+      ],
+      "donde_comer": "Marisco fresco, camarones, pargo. Comedores de playa 3-5 EUR. Muy barato y de calidad.",
+      "consejo_local": "Pleebo tiene el mejor snorkel de la región. Las aguas son claras y hay arrecife. Menos turistas que Harper pero igual de tranquilo.",
+      "plan_b_lluvia": "Quedarse en alojamiento, visitar pueblo interior, cocinar con pescadores.",
+      "keywords": [
+        "Pleebo playa",
+        "Maryland County",
+        "snorkel",
+        "arrecife",
+        "islas",
+        "pesca artesanal"
+      ]
+    },
+    {
+      "id": "saniquellie",
+      "nombre": "Sanniquellie",
+      "tipo": "rural",
+      "region": "Condado de Nimba",
+      "descripcion": "Pueblo fronterizo nororiental con acceso a parque natural y cultura de transición Mano-Gio. Puerta a La Dent (montaña sagrada). Bastante aislado pero con significado cultural.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Ganta: minibús 1.5h (5-10 EUR) hacia norte. Total desde Monrovia: 8-9h de transporte.",
+      "donde_dormir": {
+        "mochilero": "Hospedajes muy básicos: 10-15 EUR/noche",
+        "medio": "Hotel pequeño: 20-30 EUR/noche",
+        "comfort": "Opciones muy limitadas"
+      },
+      "que_hacer": [
+        "Senderismo a La Dent mountain (3h subida, guía local obligatorio 10-15 EUR)",
+        "Vistas panorámicas desde cumbre (gratis una vez arriba)",
+        "Visitas a pueblos Mano (cultural, con guía)",
+        "Observación de pájaros en bosque montano"
+      ],
+      "donde_comer": "Comida muy local, limitada. Comedores 2-3 EUR. Cocina con lugareños si es posible.",
+      "consejo_local": "La Dent es sagrada para comunidades locales: respeta rituals y permisos. Las vistas valen la pena pero necesitas forma física.",
+      "plan_b_lluvia": "Quedarse en pueblo, conocer iglesias locales, mercados.",
+      "keywords": [
+        "Sanniquellie frontera",
+        "Nimba County",
+        "La Dent mountain",
+        "montaña sagrada",
+        "norte Liberia"
+      ]
+    },
+    {
+      "id": "todee",
+      "nombre": "Todee Island",
+      "tipo": "isla",
+      "region": "Condado de Grand Bassa",
+      "descripcion": "Isla aislada accesible desde Buchanan, sin habitantes fijos, playas desiertas y selva costera. Destino aventurero para mochileros que buscan soledad absoluta.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a marzo (mar tranquilo para barca)",
+      "como_llegar": "Desde Buchanan: barca contratada 45 min (15-25 EUR ida vuelta, depende grupo). Negociar en puerto con pescadores.",
+      "donde_dormir": {
+        "mochilero": "Acampar en isla (permiso del guía/pescador): 5-10 EUR, o día de ida vuelta",
+        "medio": "No hay alojamiento; regresa a Buchanan",
+        "comfort": "No hay alojamiento; regresa a Buchanan"
+      },
+      "que_hacer": [
+        "Playas vírgenes de arena blanca (gratis)",
+        "Senderismo por selva de isla (gratis, sin senderos marcados)",
+        "Snorkel en aguas cercanas (gratis)",
+        "Picnic y acampada bajo estrellas (llevar comida)"
+      ],
+      "donde_comer": "Lleva toda comida desde Buchanan o el bote. Agua: trae botellas.",
+      "consejo_local": "Todee es un verdadero escape. Compra comida en Buchanan antes. Los pescadores pueden dejar tienda y recoger al día siguiente.",
+      "plan_b_lluvia": "No recomendable con mal tiempo; olas peligrosas. Mejor posponer o quedarse en Buchanan.",
+      "keywords": [
+        "Todee Island",
+        "Grand Bassa County",
+        "isla desierta",
+        "acampada",
+        "snorkel",
+        "aventura"
+      ]
+    }
+  ]
+}

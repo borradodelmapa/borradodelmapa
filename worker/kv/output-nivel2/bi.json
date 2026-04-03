@@ -1,0 +1,317 @@
+{
+  "pais": "Burundi",
+  "codigo": "bi",
+  "destinos": [
+    {
+      "id": "gitega",
+      "nombre": "Gitega",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital administrativa de Burundi desde 2018, ubicada en las mesetas centrales. Ofrece museos etnográficos, mercados auténticos y una vida urbana más tranquila que Bujumbura. Es el punto de partida ideal para explorar la región central.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "desde Bujumbura en autobús (4-5 horas, 8-12 EUR) o minibús compartido (5-6 horas, 5-8 EUR)",
+      "donde_dormir": {
+        "mochilero": "hospedajes básicos o casas de huéspedes: 15-25 EUR/noche",
+        "medio": "hoteles 2-3 estrellas: 35-50 EUR/noche",
+        "comfort": "hoteles modernos: 60-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar el Museo Nacional de Gitega (entrada 5 EUR, colecciones de arte tradicional y tambores)",
+        "Explorar el mercado central de Gitega (gratis, artesanía local)",
+        "Pasear por los jardines de Inzira (gratis)"
+      ],
+      "donde_comer": "Comidas locales en pequeños puestos (matoke, beans, ugali): 2-4 EUR. Restaurantes en el centro: 5-10 EUR",
+      "consejo_local": "Gitega es más segura y menos turística que Bujumbura. Los conductores de moto-taxi son honestos pero negocia primero.",
+      "plan_b_lluvia": "Pasar más tiempo en museos o visitar tiendas de artesanía cubierta",
+      "keywords": [
+        "Gitega",
+        "capital administrativa",
+        "mesetas centrales",
+        "museo nacional",
+        "mercado central"
+      ]
+    },
+    {
+      "id": "bujumbura",
+      "nombre": "Bujumbura",
+      "tipo": "ciudad",
+      "region": "Oeste (Lago Tanganica)",
+      "descripcion": "Principal ciudad y puerto de Burundi a orillas del lago Tanganica. Mezcla de vida urbana, playas lacustres y acceso a mercados. Centro de transporte y servicios del país, aunque con seguridad variable.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "aeropuerto internacional Melchior Ndadaye (punto de entrada principal), a 12 km del centro. Taxi: 15-20 EUR, autobús: 2 EUR",
+      "donde_dormir": {
+        "mochilero": "hostales y hospedajes: 20-30 EUR/noche",
+        "medio": "hoteles 2-3 estrellas: 40-60 EUR/noche",
+        "comfort": "hoteles con vistas al lago: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Relajarse en playas del lago Tanganica (gratis)",
+        "Visitar el Museo Vivo de Bujumbura (entrada 10 EUR, arte contemporáneo)",
+        "Cenar en restaurantes con vista al lago (gratis entrar, comida 8-15 EUR)"
+      ],
+      "donde_comer": "Pescado fresco del lago, matoke y cerveza local Amstel. Restaurantes económicos: 5-8 EUR, restaurantes turísticos: 12-20 EUR. Zona de mercado y restaurantes populares: Buyenzi",
+      "consejo_local": "Evita ciertas áreas por la noche y no viajes solo. El mercado de Buyenzi es caótico pero auténtico; ten cuidado con bolsos y mochilas.",
+      "plan_b_lluvia": "Museos, shopping en centros comerciales o cafeterías del centro",
+      "alerta_seguridad": "Burundi ha tenido episodios de inestabilidad política. Consulta avisos de viaje antes de ir. Evita manifestaciones y mantente en áreas turísticas.",
+      "keywords": [
+        "Bujumbura",
+        "lago Tanganica",
+        "capital",
+        "puerto",
+        "mercado Buyenzi",
+        "aeropuerto Melchior Ndadaye"
+      ]
+    },
+    {
+      "id": "lago-tanganica",
+      "nombre": "Lago Tanganica",
+      "tipo": "playa",
+      "region": "Oeste",
+      "descripcion": "Segundo lago más profundo del mundo, compartido por cuatro países. En Burundi ofrece playas tranquilas, pesca artesanal y vistas espectaculares. Ideal para relajarse y bucear en aguas claras.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "desde Bujumbura, a orillas del lago. Acceso directo desde la ciudad o viajes organizados (5-15 EUR por persona)",
+      "donde_dormir": {
+        "mochilero": "casas de huéspedes en pueblos costeros: 15-25 EUR/noche",
+        "medio": "lodges pequeños: 35-50 EUR/noche",
+        "comfort": "resorts con vista al lago: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Nadar y relajarse en playas (gratis)",
+        "Buceo o snorkel en aguas claras (25-40 EUR con operadores locales)",
+        "Visitar poblados de pescadores artesanales (gratis, fotografía 2-5 EUR por donativo)"
+      ],
+      "donde_comer": "Tilapia y perca del Nilo recién capturadas: 4-8 EUR. Mercadillos en pueblos costeros con comida local: 2-5 EUR",
+      "consejo_local": "El agua es segura para nadar en la mayoría de zonas, pero consulta localmente sobre Bilharzia. Los pescadores al atardecer ofrecen escenas fotogénicas únicas.",
+      "plan_b_lluvia": "Visitas a pueblos costeros cubiertos, explorar comercios locales",
+      "keywords": [
+        "lago Tanganica",
+        "playas",
+        "buceo",
+        "pesca artesanal",
+        "Bujumbura",
+        "aguas claras"
+      ]
+    },
+    {
+      "id": "parque-nacional-kibira",
+      "nombre": "Parque Nacional Kibira",
+      "tipo": "naturaleza",
+      "region": "Noroeste",
+      "descripcion": "Bosque tropical montañoso que se extiende desde Burundi a Ruanda, hogar de chimpancés, monos y una biodiversidad excepcional. Senderos entre la niebla y paisajes salvajes poco visitados.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "desde Gitega o Bujumbura hasta Musasa (pueblo de entrada), 3-4 horas en minibús (12-15 EUR). Luego a pie o con guía local",
+      "donde_dormir": {
+        "mochilero": "hospedajes muy básicos en Musasa: 10-18 EUR/noche",
+        "medio": "eco-lodges cercanos: 35-50 EUR/noche",
+        "comfort": "lodges con servicios: 60-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking de chimpancés (40-60 EUR con guía oficial, 3-4 horas)",
+        "Senderos de bosque tropical (gratis con guía local 15-25 EUR)",
+        "Avistamiento de aves (gratis o con guía especializado 30 EUR)"
+      ],
+      "donde_comer": "Comidas básicas en Musasa: ugali, beans (2-4 EUR). Lleva snacks desde la ciudad",
+      "consejo_local": "Contrata un guía local obligatoriamente. El parque es poco turístico, así que prepárate para caminar en barro y condiciones primitivas.",
+      "plan_b_lluvia": "Senderos cubiertos del bosque, fotografía de fauna en días nublados",
+      "keywords": [
+        "Kibira",
+        "bosque tropical",
+        "chimpancés",
+        "trekking",
+        "Musasa",
+        "biodiversidad"
+      ]
+    },
+    {
+      "id": "bururi",
+      "nombre": "Bururi",
+      "tipo": "montaña",
+      "region": "Sur",
+      "descripcion": "Pueblo montañoso en las alturas del sur de Burundi, hogar de plantaciones de té y café. Ofrece paisajes agrícolas espectaculares, aire fresco y acceso a caminatas entre montañas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "desde Gitega o Bujumbura, minibús hasta Bururi (5-6 horas, 10-15 EUR)",
+      "donde_dormir": {
+        "mochilero": "hospedajes muy básicos: 12-20 EUR/noche",
+        "medio": "pequeños hoteles: 25-40 EUR/noche",
+        "comfort": "eco-lodges con vista: 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseos entre plantaciones de té y café (gratis, con propietarios locales)",
+        "Senderismo hacia cascadas (gratis, 2-3 horas)",
+        "Visita a fábricas de procesamiento de té (5-10 EUR con tour)"
+      ],
+      "donde_comer": "Comida local en pequeños comedores: 3-5 EUR. Productos locales de excelente calidad",
+      "consejo_local": "Bururi es auténtico y poco turístico. Los locales son receptivos pero no hablan inglés; intenta algo de francés.",
+      "plan_b_lluvia": "Visitas cubiertas a procesadoras de té, explorar pueblos adyacentes",
+      "keywords": [
+        "Bururi",
+        "montañas",
+        "té",
+        "café",
+        "sur de Burundi",
+        "paisajes agrícolas"
+      ]
+    },
+    {
+      "id": "gisozi-memorial",
+      "nombre": "Gisozi / Monumento a las Víctimas del Genocidio",
+      "tipo": "histórico",
+      "region": "Centro-Sur",
+      "descripcion": "Memorial que honra a las víctimas del genocidio de 1993 en Burundi. Sitio sombrío pero educativo que pone en contexto la historia reciente del país.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "desde Gitega, minibús hacia Gisozi (2-3 horas, 5-8 EUR)",
+      "donde_dormir": {
+        "mochilero": "hospedajes pequeños en pueblos cercanos: 12-20 EUR/noche",
+        "medio": "hoteles básicos: 25-35 EUR/noche",
+        "comfort": "lodges cercanos: 45-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar el memorial y museo (entrada 5-10 EUR, visita guiada 15-25 EUR)",
+        "Reflexión personal (gratis)",
+        "Charlas con guías locales sobre historia (incluido en visita guiada)"
+      ],
+      "donde_comer": "Pequeños restaurantes en pueblos cercanos: 3-6 EUR",
+      "consejo_local": "Es un sitio de luto. Sé respetuoso, silencioso y reflexivo. Los guías ofrecen perspectivas valiosas sobre reconciliación.",
+      "plan_b_lluvia": "Museo interior, documentación disponible",
+      "keywords": [
+        "Gisozi",
+        "genocidio",
+        "memorial",
+        "historia",
+        "1993",
+        "reconciliación"
+      ]
+    },
+    {
+      "id": "nyanza-lac",
+      "nombre": "Nyanza-Lac",
+      "tipo": "playa",
+      "region": "Oeste",
+      "descripcion": "Pequeño pueblo costero en el lago Tanganica con playas tranquilas y vibrante vida local. Punto de partida para explorar la costa y comunidades de pescadores.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "desde Bujumbura, 10 km al sur, minibús o moto-taxi (20-30 minutos, 2-3 EUR)",
+      "donde_dormir": {
+        "mochilero": "casas de huéspedes: 15-22 EUR/noche",
+        "medio": "pequeños hoteles: 30-45 EUR/noche",
+        "comfort": "lodges costeros: 50-75 EUR/noche"
+      },
+      "que_hacer": [
+        "Nadar en playas (gratis)",
+        "Ver puestas de sol desde el lago (gratis)",
+        "Comprar pescado recién capturado en el mercado matutino (3-8 EUR por kilo)"
+      ],
+      "donde_comer": "Tilapia asada con limón y sal: 4-6 EUR. Comedores locales de pescados: 3-5 EUR",
+      "consejo_local": "Nyanza-Lac es más relajado que Bujumbura. Ideal para una parada nocturna. El mejor pescado se vende por la mañana.",
+      "plan_b_lluvia": "Cafeterías cubiertas, mercado local",
+      "keywords": [
+        "Nyanza-Lac",
+        "lago Tanganica",
+        "playas",
+        "pueblos costeros",
+        "pescado fresco"
+      ]
+    },
+    {
+      "id": "rusizi-nacional-park",
+      "nombre": "Parque Nacional Rusizi",
+      "tipo": "naturaleza",
+      "region": "Oeste",
+      "descripcion": "Humedales protegidos en la desembocadura del río Rusizi en el lago Tanganica. Santuario de aves migratorias, hipopótamos y fauna acuática. Poco visitado pero con biodiversidad excepcional.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "desde Bujumbura, 25-30 km al sur, minibús a pueblo de entrada + bote (2-3 horas total, 8-12 EUR)",
+      "donde_dormir": {
+        "mochilero": "hospedajes en pueblos cercanos: 12-20 EUR/noche",
+        "medio": "lodges pequeños: 35-50 EUR/noche",
+        "comfort": "eco-lodges: 55-75 EUR/noche"
+      },
+      "que_hacer": [
+        "Tours en bote por humedales (30-50 EUR con guía local)",
+        "Avistamiento de aves y hipopótamos (incluido en tours)",
+        "Caminata por senderos de humedal (15-25 EUR con guía)"
+      ],
+      "donde_comer": "Pescado de humedal, comidas locales en pueblos: 3-6 EUR",
+      "consejo_local": "El parque requiere guía obligatoriamente. Es uno de los mejores lugares para aves en Burundi; lleva binoculares.",
+      "plan_b_lluvia": "Tours cubiertos, esperar entre aguaceros",
+      "keywords": [
+        "Rusizi",
+        "parque nacional",
+        "humedales",
+        "aves",
+        "hipopótamos",
+        "Tanganica"
+      ]
+    },
+    {
+      "id": "muramvya",
+      "nombre": "Muramvya",
+      "tipo": "rural",
+      "region": "Centro",
+      "descripcion": "Pequeño pueblo en las mesetas centrales, antigua capital real de Burundi. Ofrece experiencia rural auténtica, plantaciones de plátano y conexión con la vida local tradicional.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "desde Gitega, 30 km al oeste, minibús (1-1.5 horas, 3-5 EUR)",
+      "donde_dormir": {
+        "mochilero": "hospedajes muy básicos: 10-18 EUR/noche",
+        "medio": "pequeños hoteles: 20-30 EUR/noche",
+        "comfort": "eco-lodges: 40-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar fincas de plátanos y café con agricultores (gratis o 5 EUR donativo)",
+        "Explorar mercados locales (gratis)",
+        "Conocer la historia local y palacio real (5-10 EUR entrada)"
+      ],
+      "donde_comer": "Matoke, beans y comida local casera: 2-4 EUR",
+      "consejo_local": "Muramvya es desconocida para turistas internacionales. Es el lugar perfecto para integración genuina y fotografía sin intrusión.",
+      "plan_b_lluvia": "Visitas cubiertas, mercados, conversación con locales",
+      "keywords": [
+        "Muramvya",
+        "capital real",
+        "mesetas",
+        "plátanos",
+        "rural",
+        "vida local"
+      ]
+    },
+    {
+      "id": "cuvette-centrale",
+      "nombre": "Cuvette Centrale / Ruanda Vecino",
+      "tipo": "excursion_desde",
+      "region": "Frontera Norte",
+      "descripcion": "Excursión a Ruanda desde el norte de Burundi. Acceso a parques nacionales de primates, volcanes y bosques montañosos no disponibles en Burundi. Viaje corto pero de alto impacto natural.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "desde Gitega o Bujumbura hasta frontera norte (Kayanza/Rusizi), minibús a Ruanda (6-8 horas, 20-30 EUR)",
+      "donde_dormir": {
+        "mochilero": "hostales en Kigali o pueblos fronterizos: 20-30 EUR/noche",
+        "medio": "hoteles 2-3 estrellas: 40-60 EUR/noche",
+        "comfort": "lodges en volcanes: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking de gorilas de montaña (500+ EUR, pero excepcional - reserva con agencias)",
+        "Visita al Lago Kivu (gratis, actividades 10-20 EUR)",
+        "Volcanes de Virunga (tours 30-50 EUR)"
+      ],
+      "donde_comer": "Comida ruandesa e internacional: 8-15 EUR en ciudades",
+      "consejo_local": "Ruanda está mejor desarrollado turísticamente que Burundi. Los gorilas valen el viaje pero reserva con antelación.",
+      "plan_b_lluvia": "Museos de Kigali, mercados, visitas cubiertas",
+      "excursion_desde": true,
+      "keywords": [
+        "Ruanda",
+        "gorilas",
+        "volcanes",
+        "Kigali",
+        "Kivu",
+        "frontera norte",
+        "Kayanza"
+      ]
+    }
+  ]
+}

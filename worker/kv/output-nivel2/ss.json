@@ -1,0 +1,314 @@
+{
+  "pais": "Sudán del Sur",
+  "codigo": "ss",
+  "alerta_general": "Sudán del Sur presenta riesgos significativos de seguridad. Consulta con tu gobierno antes de viajar. La infraestructura turística es muy limitada.",
+  "destinos": [
+    {
+      "id": "juba",
+      "nombre": "Juba",
+      "tipo": "ciudad",
+      "region": "Estado Central Ecuatorial",
+      "descripcion": "Capital y mayor ciudad de Sudán del Sur, punto de entrada principal. Ofrece museos, mercados locales y vida urbana auténtica en un contexto de desarrollo acelerado. Centro administrativo y comercial donde se concentran la mayoría de servicios para viajeros.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Vuelo internacional a Aeropuerto de Juba desde Nairobi (2h, 150-300 EUR) o desde Khartoum (2.5h, 120-250 EUR). También autobús desde frontera de Uganda/Kenya (10-14h, 40-80 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guest houses en barrio Munuki, 15-25 EUR/noche",
+        "medio": "Hoteles mid-range en centro (Rajaf Road area), 40-70 EUR/noche",
+        "comfort": "Akasha House o similares, 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional de Juba (entrada 3 EUR, colecciones etnográficas limitadas pero interesantes)",
+        "Mercado Konyo Konyo (gratis, artesanías y vida local)",
+        "Paseo por río Nilo al atardecer (gratis, zona de Khartoum Street)"
+      ],
+      "donde_comer": "Comida sudanesa y del Sur en restaurantes locales (4-8 EUR). Probar kisra (pan fermentado), ugali y pescado del Nilo. Zona Rajaf Road para opciones más variadas.",
+      "consejo_local": "Lleva efectivo en USD o GBP. Los cajeros son limitados y las tarjetas funcionan raramente. Negocia precios en taxis antes de subir.",
+      "plan_b_lluvia": "Visita interior del Museo Nacional o pasa tiempo en cafeterías locales. Las lluvias en estación reducen movilidad significativamente.",
+      "alerta_seguridad": "Conflictos intermitentes, ataques en carreteras y crimen urbano. Solo viable con investigación reciente y contactos locales. Evita movilidad nocturna.",
+      "keywords": [
+        "Yuba",
+        "capital Sudán del Sur",
+        "Rajaf Road",
+        "Konyo Konyo",
+        "Nilo"
+      ]
+    },
+    {
+      "id": "murchison-falls",
+      "nombre": "Murchison Falls (excursión desde Uganda)",
+      "tipo": "naturaleza",
+      "region": "Frontera Uganda-Sudán del Sur",
+      "descripcion": "Accesible desde Parque Nacional Murchison Falls en Uganda (lado más seguro). Cascadas espectaculares del Nilo Blanco con fauna abundante. Punto de entrada natural a la región del Nilo superior.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a febrero",
+      "como_llegar": "Desde Juba: vuelo a Kampala, Uganda (1.5h, 80-150 EUR), luego vuelo a Parque Murchison o conducción (6h, 30-50 EUR). También cruce frontera terrestre desde Juba.",
+      "donde_dormir": {
+        "mochilero": "Bandas en parque o lodges básicos en Masindi, 20-30 EUR/noche",
+        "medio": "Nile Safari Lodge o similar, 50-80 EUR/noche",
+        "comfort": "Paraa Safari Lodge, 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Game drive en parque (30-50 EUR, búfalo, elefante, jirafa)",
+        "Crucero río Nilo hasta base de cataratas (25-40 EUR, avistamiento cocodrilo)",
+        "Senderismo hasta mirador de cascadas (gratis, 1.5h)"
+      ],
+      "donde_comer": "Comida en lodges del parque (15-25 EUR). Pescado del Nilo y platos locales. Llevar snacks desde Masindi.",
+      "consejo_local": "Reserve tours con operadores en Masindi. Los guías del parque conocen bien rutas seguras. Binoculares esenciales.",
+      "plan_b_lluvia": "Los cruceros funcionan con lluvia. Los game drives se dificultan pero la fauna es más activa.",
+      "excursion_desde": true,
+      "keywords": [
+        "Murchison",
+        "cataratas Nilo",
+        "safari Uganda",
+        "Nilo Blanco"
+      ]
+    },
+    {
+      "id": "bentiu",
+      "nombre": "Bentiu",
+      "tipo": "ciudad",
+      "region": "Estado Unidad",
+      "descripcion": "Puerto fluvial importante en el Nilo Blanco, punto central para explorar la región de los pantanos (Sudd). Acceso a vida tradicional y paisajes de agua únicos. Menos turístico que Juba pero más auténtico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde Juba: vuelo charter (1.5h, 200-400 EUR) o conducción (8-10h en 4x4, 80-150 EUR). Pocos servicios regulares.",
+      "donde_dormir": {
+        "mochilero": "Guest houses locales, 10-20 EUR/noche",
+        "medio": "Hoteles básicos en centro, 25-40 EUR/noche",
+        "comfort": "No hay opciones reales, máximo mid-range"
+      },
+      "que_hacer": [
+        "Paseo en bote por Nilo Blanco (10-20 EUR, avistamiento hipopótamo)",
+        "Mercado de Bentiu (gratis, artesanías Shilluk y Dinka)",
+        "Visita aldeas tradicionales cercanas (con guía, 15-25 EUR)"
+      ],
+      "donde_comer": "Comida local simple: pescado fresco, gachas de sorgo. 2-5 EUR. Comerías en mercado. Agua embotellada esencial.",
+      "consejo_local": "Bentiu es punto de entrada al Sudd. Los desplazamientos internos requieren permisos. Contrata guía local en Juba antes de llegar.",
+      "plan_b_lluvia": "En temporada de lluvia (junio-octubre) la ciudad se aísla. Solo viable en estación seca.",
+      "alerta_seguridad": "Historial de conflicto reciente. Seguridad variable. Requiere confirmación de situación antes de viajar.",
+      "keywords": [
+        "Bentiu",
+        "Nilo Blanco",
+        "Sudd",
+        "pantanos",
+        "Shilluk"
+      ]
+    },
+    {
+      "id": "kassala",
+      "nombre": "Kassala (excursión desde Sudán)",
+      "tipo": "histórico",
+      "region": "Frontera con Sudán (acceso desde región del Este)",
+      "descripcion": "Ciudad histórica en Sudán cercana a frontera de Sudán del Sur. Centro cultural con fuerte herencia otomana y mercados tradicionales. Punto de convergencia de rutas comerciales históricas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Desde Juba: vuelo a Port Sudan, Sudán (2h, 150-300 EUR), luego autobús/minibús a Kassala (6-8h, 25-40 EUR). Ruta terrestre difícil.",
+      "donde_dormir": {
+        "mochilero": "Guest houses en centro, 12-18 EUR/noche",
+        "medio": "Hoteles locales simples, 25-40 EUR/noche",
+        "comfort": "Limitado a opciones mid-range sudanesas"
+      },
+      "que_hacer": [
+        "Explorar Medina Vieja con mercados (gratis, arquitectura otomana)",
+        "Subida a Jebel Kassala (montaña icónica, gratis, 2h)",
+        "Mercado de camellos (gratis, ver transacciones tradicionales)"
+      ],
+      "donde_comer": "Fuul, koshari, te sudanés. 2-4 EUR. Restaurantes en bazar. Agua segura esencial.",
+      "consejo_local": "Kassala es puerta a Sudán. Los visados sudaneses son complejos. Mejor hacerlo antes. Las montañas ofrecen vistas espectaculares al atardecer.",
+      "plan_b_lluvia": "En lluvia, la subida a montaña es resbaladiza. El mercado sigue funcionando cubierto.",
+      "excursion_desde": true,
+      "alerta_seguridad": "Frontera inestable. Confirmar seguridad reciente antes de viajar.",
+      "keywords": [
+        "Kassala",
+        "Sudán",
+        "Jebel Kassala",
+        "otomano",
+        "frontera"
+      ]
+    },
+    {
+      "id": "wau",
+      "nombre": "Wau",
+      "tipo": "ciudad",
+      "region": "Bahr el Ghazal Occidental",
+      "descripcion": "Segunda ciudad histórica, importante centro comercial precolonial. Punto de acceso a la región de sabana del oeste y culturas Fertit. Menos desarrollada que Juba pero culturalmente significativa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Juba: vuelo charter (1.5h, 200-350 EUR) o conducción 4x4 (10-12h, muy difícil). Pocos vuelos regulares.",
+      "donde_dormir": {
+        "mochilero": "Guest houses muy básicas, 8-15 EUR/noche",
+        "medio": "Hoteles locales, 20-30 EUR/noche",
+        "comfort": "Opciones limitadas, máximo 40-50 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado central de Wau (gratis, artesanías y vida local)",
+        "Visita comunidades Fertit cercanas con guía (15-30 EUR)",
+        "Paseo por Catedral y barrios históricos (gratis)"
+      ],
+      "donde_comer": "Comida local simple: cassava, verduras, carne ocasional. 2-4 EUR. Mercado para comidas callejeras.",
+      "consejo_local": "Wau requiere planificación. Los servicios son muy limitados. Lleva medicinas y snacks desde Juba. Los locales son acogedores con visitantes.",
+      "plan_b_lluvia": "En estación de lluvia (mayo-octubre), acceso casi imposible. Solo viable en estación seca.",
+      "alerta_seguridad": "Aunque menos volátil que otras áreas, requiere confirmación de seguridad reciente.",
+      "keywords": [
+        "Wau",
+        "Bahr el Ghazal",
+        "Fertit",
+        "oeste Sudán del Sur"
+      ]
+    },
+    {
+      "id": "rumbek",
+      "nombre": "Rumbek",
+      "tipo": "rural",
+      "region": "Bahr el Ghazal Central",
+      "descripcion": "Puerta a la cultura Dinka ganadera y paisajes de sabana. Centro de intercambio de ganado tradicional y punto base para explorar vida pastoral nómada. Experiencia cultural inmersiva.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde Juba: vuelo charter (2h, 250-400 EUR) o conducción muy difícil. Mejor desde Wau (5h en 4x4, 60-100 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guest houses muy básicas, 8-15 EUR/noche",
+        "medio": "Hoteles simples, 18-28 EUR/noche",
+        "comfort": "Opciones limitadas"
+      },
+      "que_hacer": [
+        "Mercado de ganado (gratis, transacciones tradicionales Dinka)",
+        "Visita campamentos pastorales nómadas (con guía local, 10-20 EUR)",
+        "Fotografía etnográfica y aprendizaje cultural (gratis)"
+      ],
+      "donde_comer": "Leche, carne, gachas de sorgo. 2-5 EUR. Mercado local.",
+      "consejo_local": "Obtén guía en Rumbek. Los Dinka son hospitalarios pero respeta costumbres. El mercado es más activo por la mañana.",
+      "plan_b_lluvia": "Inaccessible en estación de lluvia. Solo noviembre-febrero.",
+      "alerta_seguridad": "Aunque menos urbano, requiere verificación de seguridad local reciente.",
+      "keywords": [
+        "Rumbek",
+        "Dinka",
+        "ganadería",
+        "pastores",
+        "sabana"
+      ]
+    },
+    {
+      "id": "bor",
+      "nombre": "Bor",
+      "tipo": "ciudad",
+      "region": "Jonglei",
+      "descripcion": "Centro comercial en la región de Jonglei, punto de acceso a los ríos y llanuras de inundación. Importante para entender dinámicas entre etnias Nuer y Dinka. Menos visitado que capitales.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde Juba: vuelo charter (1h, 150-300 EUR) o conducción 4x4 (6-8h, muy difícil). Acceso limitado.",
+      "donde_dormir": {
+        "mochilero": "Guest houses básicas, 10-18 EUR/noche",
+        "medio": "Hoteles simples locales, 22-35 EUR/noche",
+        "comfort": "Opciones muy limitadas"
+      },
+      "que_hacer": [
+        "Mercado de Bor (gratis, comercio tradicional Nuer)",
+        "Cruceros río Nilo y afluentes (15-25 EUR, paisaje de papiros)",
+        "Aldeas cercanas con guía (10-20 EUR)"
+      ],
+      "donde_comer": "Pescado del río Nilo, mijo, verduras locales. 2-5 EUR. Comerías en mercado.",
+      "consejo_local": "Bor es punto de tensión histórica. Contrata guía confiable. Los ríos son navegables en estación seca.",
+      "plan_b_lluvia": "Muy afectado por lluvia. Limitado a estación seca (noviembre-marzo).",
+      "alerta_seguridad": "Área de conflicto anterior. Requiere confirmación de situación actual.",
+      "keywords": [
+        "Bor",
+        "Jonglei",
+        "Nuer",
+        "Nilo",
+        "río"
+      ]
+    },
+    {
+      "id": "malakal",
+      "nombre": "Malakal",
+      "tipo": "ciudad",
+      "region": "Alto Nilo",
+      "descripcion": "Puerto fluvial importante en el Nilo Blanco, centro de intercambio comercial. Acceso a vida ribereña y etnias Shilluk. Base para explorar región de Alto Nilo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Juba: vuelo charter (1.5h, 180-320 EUR) o conducción muy difícil. Mejor desde Bentiu (3-4h, 40-70 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guest houses locales, 10-18 EUR/noche",
+        "medio": "Hoteles simples, 24-36 EUR/noche",
+        "comfort": "Limitado"
+      },
+      "que_hacer": [
+        "Paseo en bote por Nilo Blanco (12-20 EUR, flora y fauna)",
+        "Mercado de Malakal (gratis, artesanías Shilluk)",
+        "Visita aldeas Shilluk cercanas (con guía, 15-25 EUR)"
+      ],
+      "donde_comer": "Pescado fresco, gachas, verduras. 2-5 EUR. Mercado. Agua embotellada esencial.",
+      "consejo_local": "Malakal es puerto activo. Los Shilluk tienen cultura única. Los desplazamientos por río son más seguros que por tierra.",
+      "plan_b_lluvia": "En lluvia, acceso terrestre limitado pero río más navegable.",
+      "alerta_seguridad": "Historial de violencia comunitaria. Requiere confirmación reciente de seguridad.",
+      "keywords": [
+        "Malakal",
+        "Alto Nilo",
+        "Shilluk",
+        "puerto fluvial"
+      ]
+    },
+    {
+      "id": "dungu-uganda",
+      "nombre": "Dungu y Ri-Rafiki (Safari en Uganda)",
+      "tipo": "naturaleza",
+      "region": "Frontera Uganda-Sudán del Sur (acceso desde Uganda)",
+      "descripcion": "Parques nacionales y reservas en Uganda cercanas a frontera de Sudán del Sur (Kidepo Valley, Ri-Rafiki). Fauna abundante y paisajes de sabana sin infraestructura turística masiva. Alternativa más segura a exploración directa de Sudán del Sur.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a febrero",
+      "como_llegar": "Desde Juba o Kampala: vuelo a Kidepo (2h desde Kampala, 150-250 EUR) o conducción (10h desde Kampala, 60-100 EUR).",
+      "donde_dormir": {
+        "mochilero": "Bandas en parque, 20-30 EUR/noche",
+        "medio": "Kidepo Valley Lodge, 50-80 EUR/noche",
+        "comfort": "Apoka Safari Lodge, 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Game drives parque Kidepo (30-50 EUR, león, búfalo, jirafa, avestruz)",
+        "Senderismo (15-30 EUR, paisaje de savana y vistas)",
+        "Avistamiento aves (gratis con game drive)"
+      ],
+      "donde_comer": "Comida en lodges (15-25 EUR). Pescado y platos ugandeses. Snacks desde Kampala.",
+      "consejo_local": "Kidepo es menos masificado que Serengeti. Los guías conocen bien el terreno. Lleva binoculares y protector solar.",
+      "plan_b_lluvia": "Los game drives funcionan. Fauna más activa con lluvia.",
+      "excursion_desde": true,
+      "keywords": [
+        "Kidepo",
+        "Uganda",
+        "safari",
+        "Ri-Rafiki",
+        "frontera"
+      ]
+    },
+    {
+      "id": "renk",
+      "nombre": "Renk",
+      "tipo": "ciudad",
+      "region": "Alto Nilo (extremo norte)",
+      "descripcion": "Puerta norteña a Sudán del Sur, punto fronterizo con Sudán. Centro fluvial en el Nilo Blanco menos desarrollado. Acceso a etnias Shilluk y Nuer del norte.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Juba: vuelo charter (2h, 220-380 EUR) o conducción muy difícil (14+ h). Mejor desde Malakal (4h, 50-80 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guest houses muy básicas, 8-15 EUR/noche",
+        "medio": "Hoteles simples, 18-28 EUR/noche",
+        "comfort": "Opciones muy limitadas"
+      },
+      "que_hacer": [
+        "Mercado de Renk (gratis, comercio fronterizo)",
+        "Paseo río Nilo (10-15 EUR, avistamiento cocodrilo)",
+        "Exploración zona fronteriza (con permiso local, gratis)"
+      ],
+      "donde_comer": "Comida simple local. 2-4 EUR. Mercado.",
+      "consejo_local": "Renk es muy remoto. Servicios muy limitados. Es principalmente punto de tránsito, no destino final.",
+      "plan_b_lluvia": "En lluvia, prácticamente inaccesible por tierra.",
+      "alerta_seguridad": "Zona fronteriza con dinámicas complejas. Requiere confirmación de seguridad reciente.",
+      "keywords": [
+        "Renk",
+        "frontera Sudán",
+        "Alto Nilo",
+        "norte"
+      ]
+    }
+  ]
+}

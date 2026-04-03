@@ -1,0 +1,346 @@
+{
+  "pais": "Grecia",
+  "codigo": "gr",
+  "destinos": [
+    {
+      "id": "atenas",
+      "nombre": "Atenas",
+      "tipo": "ciudad | histórico",
+      "region": "Ática",
+      "descripcion": "Capital griega con la Acrópolis, el Partenón y museos de clase mundial. Centro cultural y punto de entrada principal para la mayoría de viajeros. Mezcla perfecta de antigüedad clásica, vida urbana moderna y gastronomía.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Aeropuerto Internacional Eleftherios Venizelos: autobús (4 EUR, 1h), tren (10 EUR, 30 min), taxi (40 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hostal en Plaka o Psirri: 18-28 EUR/noche",
+        "medio": "Apartamento o hotel 3* en Syntagma o Kolonaki: 50-80 EUR/noche",
+        "comfort": "Hotel 4-5* en Centro: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Acrópolis y Partenón (18 EUR)",
+        "Museo Arqueológico Nacional (gratis con Acropolis Pass 34 EUR)",
+        "Ágora Antigua (8 EUR)",
+        "Paseo por barrio de Plaka (gratis)",
+        "Cementerio de Keramikos (8 EUR)"
+      ],
+      "donde_comer": "Souvlaki, moussaka, saganaki frito en Plaka o Psirri: 8-15 EUR/plato. Mercado de Varvakios para street food a 3-5 EUR",
+      "consejo_local": "Compra el Acropolis Pass (34 EUR) en vez de entradas individuales: incluye 7 sitios arqueológicos durante 5 días. Sube a la Acrópolis al atardecer para fotos sin masas.",
+      "plan_b_lluvia": "Museo Arqueológico Nacional, Museo Acrópolis, Museo Benaki o bibliotecas subterráneas",
+      "keywords": [
+        "Athens",
+        "Acropolis",
+        "Partenon",
+        "Plaka",
+        "Syntagma",
+        "Psirri",
+        "Monastiraki"
+      ]
+    },
+    {
+      "id": "santorini",
+      "nombre": "Santorini",
+      "tipo": "isla | playa",
+      "region": "Cicladas",
+      "descripcion": "Isla volcánica icónica con pueblos blancos en acantilados, vistas al Egeo y puestas de sol legendarias. Perfecta para combinar playa, senderismo y vida nocturna. Centro de viajeros independientes en el Egeo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Ferry desde Atenas (Puerto Piraeus): 10-14 EUR, 9h; vuelo: 50-80 EUR, 1h (Ryanair/Sky Express); ferry desde otras islas: 15-25 EUR",
+      "donde_dormir": {
+        "mochilero": "Hostal en Kamari o Perissa: 20-35 EUR/noche",
+        "medio": "Apartamento con vista en Oia o Fira: 70-110 EUR/noche",
+        "comfort": "Suite con jacuzzi en Oia: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Fira-Oia (gratis, 2h)",
+        "Playa Roja de Akrotiri (gratis)",
+        "Baño termal en islote de Nea Kameni (25 EUR tour)",
+        "Museo Arqueológico de Akrotiri (6 EUR)",
+        "Puesta de sol desde Oia o Santo Winery (gratis o 12 EUR en bodega)"
+      ],
+      "donde_comer": "Fava (puré de garbanzos), tomates rellenos, pescado fresco en Kamari o Perissa: 12-20 EUR. Evita turistas en Oia (precios 3x)",
+      "consejo_local": "Llega a Oia 1-2h antes del atardecer para conseguir sitio. Mejor alojarse en Kamari o Perissa (más barato y auténtico) que en Oia. El ferry es más barato pero el vuelo sale desde Atenas más temprano.",
+      "plan_b_lluvia": "Museos (Akrotiri, Arqueológico), bodegas, pueblos interiores como Pyrgos",
+      "keywords": [
+        "Santorin",
+        "Santorini island",
+        "Oia",
+        "Fira",
+        "Kamari",
+        "Perissa",
+        "caldera",
+        "volcánico"
+      ]
+    },
+    {
+      "id": "milos",
+      "nombre": "Milos",
+      "tipo": "isla | playa",
+      "region": "Cicladas",
+      "descripcion": "Isla de Cicladas menos masificada que Santorini con playas multicolores, cuevas y acantilados espectaculares. Ideal para viajeros que buscan autenticidad sin renunciar a comodidades.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Ferry desde Atenas (Puerto Piraeus): 8-12 EUR, 2h 45min directo; o ferry desde Santorini: 12 EUR, 30 min",
+      "donde_dormir": {
+        "mochilero": "Hostal en Adamas o Plaka: 18-28 EUR/noche",
+        "medio": "Apartamento en Kleftiko o pequeño pueblo: 45-75 EUR/noche",
+        "comfort": "Boutique hotel con vistas: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Kleftiko (gratis, 15 EUR tour barco)",
+        "Cueva de Papafragas (gratis, entrada con donativo)",
+        "Playa Sarakiniko (gratis)",
+        "Mina de obsidiana en Fylakopi (3 EUR)",
+        "Senderismo entre playas (gratis)"
+      ],
+      "donde_comer": "Pulpo a la brasa, ensalada de Milos en tabernas de Adamas: 10-15 EUR. Productos locales en mercado",
+      "consejo_local": "Alquila coche o quad (25-35 EUR/día) para acceder a playas remotas. Muchas solo se alcanzan por barco o caminando. El tour de Kleftiko merece la pena si no alquilas vehículo.",
+      "plan_b_lluvia": "Museo de Milos (3 EUR), cuevas interiores, pueblos tradicionales",
+      "keywords": [
+        "Milos island",
+        "Kleftiko",
+        "Sarakiniko",
+        "Adamas",
+        "Plaka Milos",
+        "cicadas menos turística"
+      ]
+    },
+    {
+      "id": "creta",
+      "nombre": "Creta",
+      "tipo": "isla | playa | naturaleza",
+      "region": "Creta",
+      "descripcion": "Isla más grande de Grecia con playas paradisíacas, gargantas de montaña, palacios minoicos y cultura auténtica. Ofrece diversidad: costa norte turística, playas vírgenes al sur, montañas.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Vuelo desde Atenas: 30-60 EUR, 1h (Ryanair, Olympic); ferry: 15-25 EUR, 7-9h desde Puerto Piraeus",
+      "donde_dormir": {
+        "mochilero": "Hostal en Chania o Rethymno: 17-26 EUR/noche",
+        "medio": "Habitación en pueblos costeros: 45-75 EUR/noche",
+        "comfort": "Boutique hotel en casco antiguo: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Palacio de Knossos (18 EUR)",
+        "Garganta de Samaria trekking (gratis, pero tour 35 EUR con transporte)",
+        "Playa Balos y laguna (gratis acceso, 20 EUR tour)",
+        "Cueva de Diktaion (8 EUR)",
+        "Paseo puerto en Chania (gratis)"
+      ],
+      "donde_comer": "Xlania (estofado cretense), queso feta, tomates. Tavernas en puerto: 10-18 EUR. Raki casero (gratis con café)",
+      "consejo_local": "Creta es grande: divide en 2-3 zonas (Chania-Rethymno norte, Heraklion centro, Lassithi este). El trekking de Samaria requiere levantarse temprano (7 AM) pero es imprescindible.",
+      "plan_b_lluvia": "Palacios minoicos interiores, museos arqueológicos, pueblos montañosos",
+      "keywords": [
+        "Crete",
+        "Knossos",
+        "Chania",
+        "Samaria",
+        "Balos",
+        "Rethymno",
+        "Heraklion",
+        "minoico"
+      ]
+    },
+    {
+      "id": "rodas",
+      "nombre": "Rodas",
+      "tipo": "isla | playa | histórico",
+      "region": "Dodecaneso",
+      "descripcion": "Isla oriental con playas amplias, casco antiguo medieval bien conservado y mezcla de culturas griega, turca e italiana. Menos masificada que Santorini pero con más infraestructura.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Ferry desde Atenas (puerto Piraeus): 25-35 EUR, 12-16h; vuelo: 40-70 EUR, 1h 15min; ferry desde otras islas del Dodecaneso: 15-25 EUR",
+      "donde_dormir": {
+        "mochilero": "Hostal en casco antiguo: 20-30 EUR/noche",
+        "medio": "Hotel 2-3* en Ixia Beach: 50-80 EUR/noche",
+        "comfort": "Resort con piscina: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Casco antiguo medieval (gratis paseo, 8 EUR Palacio de Maestres)",
+        "Playa Ixia (gratis, windsurf 40 EUR/h)",
+        "Playa Tsambika (gratis)",
+        "Lindos y Acrópolis (12 EUR)",
+        "Bodegas locales (gratis degustación)"
+      ],
+      "donde_comer": "Souvlaki, pastitsada (guiso rodense), pescado en puerto: 12-18 EUR. Calles estrechas del casco antiguo con tabernas",
+      "consejo_local": "El windsurf en Ixia es excelente: vientos consistentes. Lindos es bonita pero abarrotada: ir temprano (8 AM) o atardecer. Alquilar moto o coche es útil para explorar playas del sur.",
+      "plan_b_lluvia": "Casco antiguo, museos, pueblos montañosos interiores",
+      "keywords": [
+        "Rhodes",
+        "Rodos",
+        "Lindos",
+        "casco antiguo",
+        "medieval",
+        "Ixia",
+        "Tsambika",
+        "Dodecaneso"
+      ]
+    },
+    {
+      "id": "naxos",
+      "nombre": "Naxos",
+      "tipo": "isla | playa | rural",
+      "region": "Cicladas",
+      "descripcion": "Isla de Cicladas con playas amplias, pueblos blancos auténticos en montaña y producción local de queso y vino. Combina turismo con vida real griega sin ser masificada.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Ferry desde Atenas: 10-14 EUR, 6h; ferry desde otras Cicladas: 8-12 EUR, 1-2h",
+      "donde_dormir": {
+        "mochilero": "Hostal en Chora (capital): 18-26 EUR/noche",
+        "medio": "Apartamento en pueblo de montaña: 45-70 EUR/noche",
+        "comfort": "Boutique hotel con vistas: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de arena: Agia Anna, Agios Prokopios (gratis)",
+        "Pueblos blancos: Halki, Filoti, Apiranthos (gratis, jeep tour 40 EUR)",
+        "Cantera de mármol (gratis vista, tours 25 EUR)",
+        "Quesería local (gratis o tour degustación 20 EUR)",
+        "Senderismo entre pueblos (gratis)"
+      ],
+      "donde_comer": "Queso local, vino Naxiano, garbanzos guisados en tabernas de pueblos: 10-15 EUR. Mercado en Chora",
+      "consejo_local": "Naxos es más barata que Santorini o Mykonos. Los pueblos de montaña (Halki, Apiranthos) tienen más autenticidad que la costa. Alquila quad o moto para llegar (20-30 EUR/día).",
+      "plan_b_lluvia": "Pueblos interiores, tiendas de productos locales, taquerías cubiertas",
+      "keywords": [
+        "Naxos island",
+        "Chora Naxos",
+        "Halki",
+        "Apiranthos",
+        "Agios Prokopios",
+        "queso local",
+        "cicadas autentica"
+      ]
+    },
+    {
+      "id": "meteora",
+      "nombre": "Meteora",
+      "tipo": "naturaleza | histórico | montaña",
+      "region": "Tesalia",
+      "descripcion": "Formaciones rocosas gigantes con monasterios medievales en sus cimas. Paisaje surrealista único en Europa. Ideal para senderismo y fotografía.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Atenas: tren (15-25 EUR, 4-5h) a Kalambaka o autobús (15 EUR, 4h); desde Salónica: tren (12 EUR, 3-4h)",
+      "donde_dormir": {
+        "mochilero": "Hostal en Kalambaka: 17-25 EUR/noche",
+        "medio": "Hotel 2-3* con vistas a las rocas: 50-80 EUR/noche",
+        "comfort": "Hotel 4* en Kalambaka: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Gran Meteoro (gratis, 2h)",
+        "Monasterios (6 EUR entrada cada uno, abiertos algunos días)",
+        "Visita a monasterios con guía (35 EUR group tour)",
+        "Fotografía desde puntos de vista (gratis)",
+        "Escalada deportiva (40 EUR con guía)"
+      ],
+      "donde_comer": "Crepes de queso, pasteles regionales en Kalambaka: 8-12 EUR. Tabernas en pueblo principal",
+      "consejo_local": "Los monasterios cierran algunos días (verificar horarios). El senderismo es mejor que los tours organizados. Sunrise hikes desde Kalambaka son espectaculares (guía 30 EUR). Viaja a primera hora desde Atenas.",
+      "plan_b_lluvia": "Visitas a monasterios interiores, museos de Kalambaka",
+      "keywords": [
+        "Meteora",
+        "Kalambaka",
+        "monasterios",
+        "rocas gigantes",
+        "senderismo",
+        "tesalia"
+      ]
+    },
+    {
+      "id": "mykonos",
+      "nombre": "Mykonos",
+      "tipo": "isla | playa",
+      "region": "Cicladas",
+      "descripcion": "Isla de Cicladas más conocida por vida nocturna y playas. Mezcla de turismo de lujo con pueblos costeros auténticos. Cara pero imprescindible para la experiencia griega de verano.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Ferry desde Atenas: 10-14 EUR, 5h directo; vuelo: 50-80 EUR, 1h; ferry desde Delos: 5 EUR, 30 min",
+      "donde_dormir": {
+        "mochilero": "Hostal lejos del centro: 25-40 EUR/noche",
+        "medio": "Hotel pequeño en Chora: 80-120 EUR/noche",
+        "comfort": "Resort de lujo: 200-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas: Paradise, Super Paradise (gratis, beach clubs 15-25 EUR)",
+        "Casco antiguo de Chora (gratis paseo)",
+        "Molinos de viento (gratis fotos)",
+        "Iglesia Panagia Paraportiani (gratis)",
+        "Vida nocturna (copas 12-20 EUR)"
+      ],
+      "donde_comer": "Souvlaki, ensaladas en Chora: 12-20 EUR (precios inflados). Evita restaurantes frente al puerto",
+      "consejo_local": "Mykonos es cara y turística, pero Delos (isla cercana, 5 EUR ferry) ofrece ruinas minoicas auténticas sin masas. Ve a Delos en vez de gastar en Mykonos. Playas gay-friendly de Mykonos son legendarias pero caras.",
+      "plan_b_lluvia": "Casco antiguo, vida nocturna cubierta",
+      "keywords": [
+        "Mykonos",
+        "Chora Mykonos",
+        "Paradise Beach",
+        "vida nocturna",
+        "cicadas",
+        "Delos excursion"
+      ]
+    },
+    {
+      "id": "delfos",
+      "nombre": "Delfos",
+      "tipo": "histórico | montaña | naturaleza",
+      "region": "Fócida",
+      "descripcion": "Antiguo sitio arqueológico en las laderas del Monte Parnaso con vista al valle de Crisa. Centro religioso del mundo antiguo, con museo excepcional. Menos masificado que Atenas.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Atenas: autobús (12 EUR, 3h), coche alquilado (40 EUR gasolina); tren a Livadia + conexión (15 EUR total, 4h)",
+      "donde_dormir": {
+        "mochilero": "Hostal en Delfos pueblo: 18-26 EUR/noche",
+        "medio": "Hotel 2-3* cerca de ruinas: 55-85 EUR/noche",
+        "comfort": "Hotel boutique con vistas: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Sitio arqueológico de Delfos (18 EUR, incluye museo)",
+        "Museo Arqueológico de Delfos (5 EUR adicional o incluido)",
+        "Senderismo al Santuario de Atenea (gratis, 30 min)",
+        "Pueblo de Delfos (gratis paseo)",
+        "Playa en Galaxidi (gratis, 45 min en coche)"
+      ],
+      "donde_comer": "Feta, olivas, verduras locales en tabernas: 10-14 EUR. Productos de montaña frescos",
+      "consejo_local": "Llega temprano (8 AM) para evitar masas. El museo es excelente: dedica 2h. La vista del valle desde arriba es tan importante como las ruinas. El pueblo de Delfos en sí es bonito y funcional.",
+      "plan_b_lluvia": "Museo cubierto, pueblos interiores",
+      "keywords": [
+        "Delphi",
+        "Delfos",
+        "archaeological site",
+        "Apollo",
+        "oracle",
+        "Parnassus",
+        "museo"
+      ]
+    },
+    {
+      "id": "paros",
+      "nombre": "Paros",
+      "tipo": "isla | playa",
+      "region": "Cicladas",
+      "descripcion": "Isla de Cicladas con puerto importante, playas amplias y pueblos blancos tranquilos. Punto de conexión entre islas con buen equilibrio entre turismo y autenticidad.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Ferry desde Atenas: 10-14 EUR, 5h; ferry desde otras Cicladas: 8-12 EUR, 1-2h",
+      "donde_dormir": {
+        "mochilero": "Hostal en Parikia (puerto): 18-28 EUR/noche",
+        "medio": "Apartamento en pueblo: 50-75 EUR/noche",
+        "comfort": "Hotel con piscina: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de arena: Kalimeri, Drios, Santa Maria (gratis)",
+        "Iglesia Ekatontapiliani en Parikia (gratis)",
+        "Pueblo de Naoussa (gratis paseo)",
+        "Cantera de mármol (gratis vista, tours 25 EUR)",
+        "Senderismo entre pueblos (gratis)"
+      ],
+      "donde_comer": "Ensalada griega, calamar a la brasa, vino local: 10-16 EUR. Tabernas en puerto o pueblos",
+      "consejo_local": "Paros es punto de tránsito: muchos ferries pasan aquí. Naoussa es pueblito más bonito que Parikia (puerto principal). Las playas del sur son menos conocidas y más tranquilas.",
+      "plan_b_lluvia": "Pueblos interiores, iglesias cubiertas",
+      "keywords": [
+        "Paros",
+        "Parikia",
+        "Naoussa",
+        "Drios",
+        "cicadas",
+        "marmol",
+        "puerto ferry"
+      ]
+    }
+  ]
+}

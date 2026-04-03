@@ -1,0 +1,344 @@
+{
+  "pais": "Turquía",
+  "codigo": "tr",
+  "destinos": [
+    {
+      "id": "estambul",
+      "nombre": "Estambul",
+      "tipo": "ciudad",
+      "region": "Mármara",
+      "descripcion": "La única ciudad transcontinental que conecta Europa y Asia, con una densidad histórica abrumadora: mezquitas otomanas, basares antiguos, y una vida nocturna frenética. El Bósforo divide la ciudad en dos continentes y ofrece perspectivas únicas. Punto de entrada obligado para la mayoría de viajeros.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Vuelos internacionales al aeropuerto de Atatürk o Sabiha Gökçen. Desde Europa: 2-4 horas de vuelo, 40-150 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Sultanahmet o Beyoglu: 15-25 EUR/noche",
+        "medio": "Hoteles 3* en Taksim o Galata: 40-70 EUR/noche",
+        "comfort": "Hoteles 4-5* con vistas al Bósforo: 100-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Mezquita Azul y Basílica de Santa Sofía (entrada: 10 EUR cada una, gratis antes de las 9 AM en algunos días)",
+        "Paseo en ferry por el Bósforo (4 EUR, 1 hora)",
+        "Bazar de las Especias y Gran Bazar (gratis, regatea obligatoria)",
+        "Galata Tower (subida: 8 EUR, vistas 360°)",
+        "Palacio de Topkapi (entrada: 15 EUR)",
+        "Barrio de Balat: calles bohemias y cafeterías vintage (gratis)"
+      ],
+      "donde_comer": "Kebab de cordero y pida (pizza turca) por 3-5 EUR. Meze (entrantes) en tabernas tradicionales. Zona de Sultanahmet cara para turistas; busca en Beyoglu o Balat. Té turco (1 EUR) en cualquier rincón.",
+      "consejo_local": "Compra un Istanbulkart (tarjeta de transporte reutilizable): sale a cuenta tras 3-4 viajes. Los viernes los museos cierran temprano. La Mezquita Azul tiene horarios de oración; entra fuera de esos períodos.",
+      "plan_b_lluvia": "Palacio de Topkapi (interior), museos arqueológicos, Pera Museum, hammams turcos (baños: 15-25 EUR)",
+      "keywords": [
+        "Istanbul",
+        "Bósforo",
+        "Sultanahmet",
+        "Beyoglu",
+        "Galata",
+        "Taksim",
+        "Santa Sofía",
+        "Mezquita Azul"
+      ]
+    },
+    {
+      "id": "capadocia",
+      "nombre": "Capadocia",
+      "tipo": "naturaleza",
+      "region": "Anatolia Central",
+      "descripcion": "Un paisaje lunar de torres de piedra volcánica, cuevas excavadas y pueblos encalados en acantilados. Los viajeros independientes aquí viven experiencias únicas: vuelos en globo aerostático al amanecer y exploración de ciudades subterráneas milenarias. Es casi obligatorio en cualquier ruta turca.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Estambul en avión a Kayseri (1 hora, 30-60 EUR) o autobús a Nevsehir (12 horas, 25-35 EUR). Luego autobús/minibús a Goreme (30 min, 5 EUR).",
+      "donde_dormir": {
+        "mochilero": "Cave hotels en Goreme: 20-35 EUR/noche (experiencia única)",
+        "medio": "Hoteles turísticos en Goreme o Uchisar: 50-80 EUR/noche",
+        "comfort": "Resorts boutique con piscina: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Vuelo en globo aerostático al amanecer (80-120 EUR, reserva con agencias locales, no online)",
+        "Senderismo por el Valle de las Hadas y el Cañón Rojo (gratis, 4-5 horas)",
+        "Ciudad subterránea de Derinkuyu (entrada: 5 EUR)",
+        "Iglesias rupestres en el Museo al Aire Libre (entrada: 10 EUR)",
+        "Vistas desde Uchisar Castle (entrada: 5 EUR)",
+        "Paseo en caballo al atardecer (30-40 EUR, negocia directamente)"
+      ],
+      "donde_comer": "Testi kebab (carne en maceta de barro): 8-12 EUR. Sopas regionales y börek (hojaldre turco). Cenar en la terraza de una cueva con vistas: típico y asequible (12-18 EUR).",
+      "consejo_local": "Reserva el globo con una agencia LOCAL en Goreme, no desde el hotel: ahorras 20-30 EUR. El senderismo es mejor sin guía si tienes mapa. Evita julio-agosto (calor extremo y masificación).",
+      "plan_b_lluvia": "Ciudades subterráneas, museos de arte sacro, talleres de cerámica en Avanos, bazares cubiertos",
+      "keywords": [
+        "Cappadocia",
+        "Goreme",
+        "globo",
+        "hadas",
+        "cuevas",
+        "Derinkuyu",
+        "Kaymakli",
+        "Uchisar"
+      ]
+    },
+    {
+      "id": "pamukkale",
+      "nombre": "Pamukkale",
+      "tipo": "naturaleza",
+      "region": "Egeo",
+      "descripcion": "Terrazas blancas de travertino con piscinas termales naturales descenden una montaña como cascadas petrificadas. La combinación de baños termales, ruinas grecorromanas de Hierápolis y paisaje surrealista lo hace imprescindible. Baño en las aguas cálidas es la experiencia principal.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Estambul: autobús (12-14 horas, 25-35 EUR) a Denizli, luego minibús a Pamukkale (20 min, 3 EUR). Alternativa: vuelo a Izmir + autobús (2 horas, 10 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Pamukkale pueblo: 18-28 EUR/noche",
+        "medio": "Hoteles 3* con acceso a terrazas: 45-70 EUR/noche",
+        "comfort": "Resorts con spa termal: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en las terrazas de travertino blanco (entrada: 15 EUR, incluye Hierápolis)",
+        "Piscina de Cleopatra con ruinas sumergidas (entrada: 12 EUR, 30 min)",
+        "Ruinas de Hierápolis: teatro, necrópolis, templos (gratis con entrada a terrazas)",
+        "Senderismo por el cañón Çal (gratis, 2 horas, espectacular)"
+      ],
+      "donde_comer": "Trucha de río fresca: 10-15 EUR. Comida tradicional en cafeterías del pueblo: 6-10 EUR. Come antes de entrar a las terrazas (cierra al atardecer).",
+      "consejo_local": "Entra temprano (08:00) para evitar masas de tours organizados. Lleva descalzo: los baños termales son fríos pero relajantes. El travertino es frágil; no saltes sobre él.",
+      "plan_b_lluvia": "Piscina de Cleopatra (interior parcialmente), ruinas de Hierápolis bajo techo, pueblos cercanos como Sarayköy",
+      "keywords": [
+        "Pamukkale",
+        "travertino",
+        "terrazas blancas",
+        "Hierapolis",
+        "piscina Cleopatra",
+        "termal"
+      ]
+    },
+    {
+      "id": "efeso",
+      "nombre": "Éfeso",
+      "tipo": "histórico",
+      "region": "Egeo",
+      "descripcion": "Una de las ruinas grecorromanas mejor conservadas del mundo, con la Biblioteca de Celso como joya arquitectónica. La ciudad antigua cuenta una historia completa de 2000 años. Imprescindible para entender la historia del Mediterráneo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo-mayo, septiembre-octubre",
+      "como_llegar": "Desde Estambul: vuelo a Izmir (1 hora, 25-50 EUR) o autobús (9 horas, 20-30 EUR). De Izmir a Selcuk en tren (1 hora, 5 EUR) o minibús (1,5 horas, 4 EUR). Luego minibús a Éfeso (20 min, 2 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en Selcuk: 16-26 EUR/noche",
+        "medio": "Hoteles 3* en Selcuk o Kusadasi: 40-65 EUR/noche",
+        "comfort": "Resorts en Kusadasi (playa): 90-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas de Éfeso completas (entrada: 15 EUR, necesita 3-4 horas)",
+        "Biblioteca de Celso (incluida en entrada a ruinas)",
+        "Casa de la Virgen María (entrada: 8 EUR, a 7 km, minibús 3 EUR)",
+        "Museo de Éfeso (entrada: 8 EUR, excelentes artefactos)",
+        "Templo de Artemisa (ruinas a 10 km, minibús, entrada: 5 EUR)"
+      ],
+      "donde_comer": "Brochetas de cordero y pollo (4-7 EUR). Mercados locales en Selcuk más baratos que Kusadasi. Pide vino local Capadocia o Uvalı (5-8 EUR la botella).",
+      "consejo_local": "Alójate en Selcuk, no en Kusadasi (más caro y turístico). Entra a ruinas al abrir (08:00) para evitar calor. La mayoría de viajeros dedican solo 2 horas; necesitas mínimo 3.",
+      "plan_b_lluvia": "Museo de Éfeso (interior), Casa de la Virgen María (cubierta), bazares de Selcuk",
+      "keywords": [
+        "Ephesus",
+        "Efeso",
+        "Biblioteca Celso",
+        "Selcuk",
+        "ruinas grecorromanas",
+        "Kusadasi"
+      ]
+    },
+    {
+      "id": "capadocia-subterranea",
+      "nombre": "Konya",
+      "tipo": "histórico",
+      "region": "Anatolia Central",
+      "descripcion": "Centro espiritual del sufismo turco y hogar de la danza de los derviches giratorios. La ciudad conserva una atmósfera mística con museos en madrasas otomanas y la tumba del poeta Rumi. Menos turística que Capadocia, pero profundamente auténtica.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre-mayo",
+      "como_llegar": "Desde Estambul: autobús (9-11 horas, 20-30 EUR) o desde Capadocia (3 horas, 15 EUR). Tren nocturno disponible.",
+      "donde_dormir": {
+        "mochilero": "Hostales cerca de la estación: 15-22 EUR/noche",
+        "medio": "Hoteles 3* en centro: 40-60 EUR/noche",
+        "comfort": "Hoteles boutique: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Mevlana Müzesi, tumba de Rumi (entrada: 10 EUR)",
+        "Ceremonia de danza de derviches giratorios (entrada: 15-25 EUR, viernes 19:00, reserva)",
+        "Museo de Azulejos Karatay (entrada: 5 EUR)",
+        "Mezquita de Selimiye (gratis, fuera horarios oración)",
+        "Bazar antiguo (gratis, menos turístico que Estambul)"
+      ],
+      "donde_comer": "Etli ekmek (pizza de carne): 4-6 EUR. Sopas de legumbres. Confiterías con baklava casero (3-4 EUR). Comida más barata que zonas turísticas.",
+      "consejo_local": "La ceremonia de derviches es turística pero legítima; algunos viajeros la consideran obligatoria. Konya es conservadora (menos alcohol, más modestia). Visita en ruta a Capadocia, no como destino aislado.",
+      "plan_b_lluvia": "Todos los sitios clave son interiores: museos, bazares cubiertos, mausoleo",
+      "keywords": [
+        "Konya",
+        "Mevlana",
+        "Rumi",
+        "derviches",
+        "danza giratoria",
+        "sufismo"
+      ]
+    },
+    {
+      "id": "dalyan",
+      "nombre": "Dalyan",
+      "tipo": "playa",
+      "region": "Costa Mediterránea",
+      "descripcion": "Pueblo costero no masificado con playas vírgenes, aguas termales y un río navegable. La playa de Iztuzu es una de las pocas zonas de anidación de tortugas marinas caretta del Mediterráneo. Combina naturaleza, relax y aventura sin aglomeraciones turísticas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "Desde Estambul: autobús a Dalyan (10-12 horas, 25-35 EUR). O vía Izmir + autobús (8 horas total). Desde Marmaris en taxi acuático o autobús (1 hora, 8 EUR).",
+      "donde_dormir": {
+        "mochilero": "Pansiones en el pueblo: 20-32 EUR/noche",
+        "medio": "Hoteles 3* con vistas al río: 50-80 EUR/noche",
+        "comfort": "Resorts boutique: 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo en bote por el río Dalyan con vistas a tumbas rupestres (8-12 EUR, 2 horas)",
+        "Playa de Iztuzu y observación de tortugas (entrada gratuita, desembarco 5 EUR)",
+        "Aguas termales de Suluniye (entrada: 5 EUR)",
+        "Castillo de Dalyan ruinas (senderismo gratis desde el pueblo)",
+        "Baños de lodo (entrada: 8 EUR, experiencia relajante)"
+      ],
+      "donde_comer": "Pescado fresco del día (15-20 EUR). Pide en terrazas junto al río, negocia precios. Meze y vino blanco local (4-6 EUR botella).",
+      "consejo_local": "Evita julio-agosto (calor insoportable y masas). El río es mejor navegarlo temprano. Las tortugas salen en junio-julio; después ves huellas. Los tours en bote siempre incluyen parada en aguas termales y baños de lodo.",
+      "plan_b_lluvia": "Visita museos de Ortaca cercano, pueblos rurales, aguas termales cubiertas",
+      "keywords": [
+        "Dalyan",
+        "Iztuzu",
+        "tortugas caretta",
+        "río",
+        "termal",
+        "playa",
+        "Marmaris"
+      ]
+    },
+    {
+      "id": "fethiye",
+      "nombre": "Fethiye",
+      "tipo": "playa",
+      "region": "Costa Mediterránea",
+      "descripcion": "Puerto deportivo con playas pintorescas, senderismo en montañas costeras y punto de partida para cruceros por la Costa Turquesa. La bahía de Ölüdeniz (Laguna Azul) es una de las playas más bellas del país. Combina vida costera relajada con aventura.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Estambul: vuelo a Dalaman (1,5 horas, 30-70 EUR) o autobús (11-13 horas, 25-35 EUR). De Dalaman a Fethiye en minibús (45 min, 5 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en centro: 18-28 EUR/noche",
+        "medio": "Hoteles 3* frente al puerto: 50-80 EUR/noche",
+        "comfort": "Resorts en Ölüdeniz: 110-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Paragliding desde Babadag (100-120 EUR, salida en tándem, 45 min aire)",
+        "Playa de Ölüdeniz (entrada: gratis, parking 5 EUR)",
+        "Senderismo Lycian Way: etapas de 1-2 días (gratis, mapa 5 EUR)",
+        "Crucero 12 Islas en barco (25-35 EUR, todo incluido)",
+        "Tumbas rupestres de Telmessos (gratis, vistas al atardecer)"
+      ],
+      "donde_comer": "Meze buffet: 12-15 EUR todo incluido. Pescado a granel: 15-20 EUR por kilo. Té turco en puerto: 1 EUR. Terrazas del puerto más caras que callejuelas interiores.",
+      "consejo_local": "Reserva paragliding directamente con agencias en la playa, no con hoteles (más barato). La Laguna Azul es hermosa pero llena de tours; sube caminando y baja en paragliding para verla vacía. El Lycian Way es mejor sin guía.",
+      "plan_b_lluvia": "Museos locales, pueblo medieval de Kayakoy, talleres de cerámica, bares y restaurantes cubiertos",
+      "keywords": [
+        "Fethiye",
+        "Ölüdeniz",
+        "Laguna Azul",
+        "paragliding",
+        "Lycian Way",
+        "Costa Turquesa"
+      ]
+    },
+    {
+      "id": "antioquía",
+      "nombre": "Antioquía (Antakya)",
+      "tipo": "histórico",
+      "region": "Sureste (Hatay)",
+      "descripcion": "Una de las primeras ciudades cristianas del mundo, con mosaicos grecorromanos excepcionales y herencia multicultural (siria, griega, turca). Menos visitada que otros destinos, ofrece autenticidad: bazares reales, comida excelente y un museo arqueológico de primer nivel.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo-abril, octubre-noviembre",
+      "como_llegar": "Desde Estambul: vuelo a Hatay (2 horas, 35-80 EUR) o autobús (20+ horas, 30-45 EUR, muy largo). Desde Capadocia o Konya: autobús (8-10 horas, 20-30 EUR).",
+      "donde_dormir": {
+        "mochilero": "Pansiones en medina: 16-25 EUR/noche",
+        "medio": "Hoteles 3* en centro: 40-65 EUR/noche",
+        "comfort": "Hoteles 4* moderno: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo de Arqueología (entrada: 10 EUR, mosaicos impresionantes)",
+        "Basílica de San Pedro (gruta cristiana primitiva): 5 EUR",
+        "Bazar antiguo de Antioquía (gratis, regatea intenso)",
+        "Iglesia de Sts. Simeon y Paul (gratis, 2 km del centro)",
+        "Paseo por río Orontes (gratis)"
+      ],
+      "donde_comer": "Hummus local (3 EUR), kebab sirio (5 EUR), hummus con piñones tostados. Comida más barata que el resto de Turquía. Vino local no-turco sino levantino. Cafés bohemios baratos.",
+      "consejo_local": "Antioquía es frontera con Siria; seguridad está garantizada en ciudad pero evita zonas fronterizas. El bazar necesita negociación fuerte (típico sirioturco). Comida de influencia levantina, diferente al resto de país.",
+      "plan_b_lluvia": "Museo arqueológico (interior completo), bazares cubiertos, iglesias de clima controlado",
+      "keywords": [
+        "Antakya",
+        "Antioquía",
+        "mosaicos",
+        "basílica Pedro",
+        "Siria",
+        "levante",
+        "historia cristiana"
+      ]
+    },
+    {
+      "id": "amaseia",
+      "nombre": "Amaseia",
+      "tipo": "histórico",
+      "region": "Mar Negro (Anatolia del Norte)",
+      "descripcion": "Ciudad fortaleza pontiaca construida en acantilados sobre el río Yesilirmak, con tumbas reales excavadas en la roca. Conserva arquitectura otomana auténtica, bazares sin turistas masivos y una atmósfera imperial antigua. Destino para viajeros que buscan historia menos hollada.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Estambul: autobús a Amaseia (6 horas, 15-20 EUR) o tren (8+ horas, 10-15 EUR). Desde Ankara: autobús (3,5 horas, 12 EUR).",
+      "donde_dormir": {
+        "mochilero": "Pansiones en medina: 14-22 EUR/noche",
+        "medio": "Hoteles 3* en centro: 35-55 EUR/noche",
+        "comfort": "Hoteles con vistas río: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Tumbas Reales Pontiácas (entrada: 5 EUR, espectaculares al atardecer)",
+        "Ciudadela de Amaseia (senderismo gratis 1 hora)",
+        "Bazar antiguo (gratis, auténtico, sin presión turística)",
+        "Museos en caravanserai (entrada: 5 EUR total)",
+        "Paseo por río Yesilirmak (gratis)"
+      ],
+      "donde_comer": "Anchoas (hamsi) de Mar Negro (4-6 EUR), sopa de remolacha. Comida muy barata (5-8 EUR comida completa). Bazares con vendedores de helado tradicional (2 EUR).",
+      "consejo_local": "Amaseia es un salto temporal: la mayoría de turistas no llegan aquí. Las tumbas son majestuosas al atardecer; ve entre las 17:00-18:00. Población local amable, pocos hablan inglés.",
+      "plan_b_lluvia": "Bazares cubiertos, museos, paseos por la medina",
+      "keywords": [
+        "Amaseia",
+        "Amasya",
+        "tumbas reales",
+        "Yesilirmak",
+        "Ponto",
+        "fortaleza"
+      ]
+    },
+    {
+      "id": "antalya",
+      "nombre": "Antalya",
+      "tipo": "playa",
+      "region": "Costa Mediterránea",
+      "descripcion": "Puerto mediterráneo grande pero manejable, con casco antiguo (Kaleici) bien conservado, playas cercanas y acceso a ruinas grecorromanas. Es la puerta de entrada principal a la Costa Turquesa y ofrece relax urbano combinado con naturaleza.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Estambul: vuelo a Antalya (2 horas, 25-60 EUR). Autobús (12-14 horas, 25-35 EUR). Hub de conexiones aéreas internacionales.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Kaleici: 17-26 EUR/noche",
+        "medio": "Hoteles 3* en puerto: 45-75 EUR/noche",
+        "comfort": "Resorts con spa: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Kaleici (casco antiguo): calles medievales, bazares (gratis, senderismo)",
+        "Playas de Konyaalti y Lara (entrada: gratis)",
+        "Cascadas de Duden (entrada: 5 EUR, 10 km del centro, autobús 2 EUR)",
+        "Museo arqueológico de Antalya (entrada: 10 EUR)",
+        "Ruinas de Aspendos y Side a 1 hora (entrada: 5-8 EUR cada una, tours 20-30 EUR)"
+      ],
+      "donde_comer": "Kebab en Kaleici: 5-8 EUR. Pescado fresco en puerto: 12-18 EUR. Comida callejera (meze): 3-5 EUR. Terrazas de Kaleici caras; busca en callejuelas.",
+      "consejo_local": "Antalya es punto de partida pero no merece más de 2 días. Kaleici es hermoso pero turístico. Las playas cercanas son mejores en Side o Fethiye. Usa como hub de conexión.",
+      "plan_b_lluvia": "Museo arqueológico (interior), Kaleici cubierto parcialmente, cascadas bajo techo",
+      "keywords": [
+        "Antalya",
+        "Kaleici",
+        "Costa Turquesa",
+        "Mediterráneo",
+        "Side",
+        "Aspendos",
+        "Duden"
+      ]
+    }
+  ]
+}

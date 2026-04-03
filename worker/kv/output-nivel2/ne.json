@@ -1,0 +1,332 @@
+{
+  "pais": "Níger",
+  "codigo": "ne",
+  "destinos": [
+    {
+      "id": "niamey",
+      "nombre": "Niamey",
+      "tipo": "ciudad",
+      "region": "Centro-oeste, a orillas del río Níger",
+      "descripcion": "Capital y principal puerta de entrada al país, con museos coloniales, mercados auténticos y vida ribereña. Centro administrativo donde conseguir visados y permisos para el interior. Base logística para explorar el resto de Níger.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Aeropuerto Internacional Diori Hamani: vuelos desde París, Casablanca, Dakar. Bus desde Mali/Burkina Faso: 12-15h, 30-50 EUR",
+      "donde_dormir": {
+        "mochilero": "Albergues en Plateau: 12-18 EUR/noche",
+        "medio": "Hotel 2-3* zona centro (Niamey 2000, Plateau): 35-60 EUR/noche",
+        "comfort": "Sofitel Niger, Gaweye Hotel: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional (MNHN): arte prehispánico e historia (gratis-3 EUR)",
+        "Paseo por el río Níger al atardecer (gratis)",
+        "Mercado de Niamey: textiles, artesanía, especias (gratis)",
+        "Palacio del Presidente (exterior, gratis)"
+      ],
+      "donde_comer": "Brochette de cabra, riz gras, mille-feuille. Restaurantes en Plateau: 5-12 EUR. Street food en mercados: 2-4 EUR",
+      "consejo_local": "Visita el río al amanecer antes de que salga el calor; la ciudad se vuelve imposible después de las 11 de la mañana",
+      "plan_b_lluvia": "Museos, compras en el mercado cubierto, cafés con aire acondicionado",
+      "keywords": [
+        "Niamey Niger",
+        "capital",
+        "Plateau",
+        "río Niger",
+        "Musée National"
+      ]
+    },
+    {
+      "id": "agadez",
+      "nombre": "Agadez",
+      "tipo": "histórico",
+      "region": "Noreste, Sahara",
+      "descripcion": "Antigua ciudad caravanera y centro espiritual tuareg con arquitectura en adobe de 500 años. Minarete de la Gran Mezquita es símbolo del país. Punto de partida para expediciones al Sahara y Tassili n'Ajjer.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Niamey: vuelo interno (1h, 80-120 EUR) o bus 20h (40-60 EUR). Carretera peligrosa; consultar situación",
+      "donde_dormir": {
+        "mochilero": "Guesthouses tradicionales (Kasbah, Sahara): 15-25 EUR/noche",
+        "medio": "Hotel Aïr (2*), casas riads renovadas: 40-70 EUR/noche",
+        "comfort": "No hay opciones de lujo; máximo mid-range"
+      },
+      "que_hacer": [
+        "Minarete de la Mezquita (subir 80 escalones): vista 360° (2 EUR)",
+        "Barrio antiguo de adobe: paseo y fotos (gratis)",
+        "Mercado de camellos: negociación y animales (gratis)",
+        "Visita a taller de orfebrería tuareg (negociable, 5-15 EUR)"
+      ],
+      "donde_comer": "Tajín de verduras, pastas locales, dátiles. Restaurantes pequeños: 4-8 EUR. Agua: 0.5 EUR",
+      "consejo_local": "Compra una indigo tuareg en el mercado, no en tiendas para turistas. Los vendedores del mercado de camellos te invitarán a té; no rechaces (es cortesía)",
+      "plan_b_lluvia": "Riesgo mínimo de lluvia. Si hay tormenta, quedate en el hotel o explora museos de arte local",
+      "alerta_seguridad": "Región con presencia de grupos armados. Consulta avisos de tu gobierno. Se recomienda viajar en grupos organizados",
+      "keywords": [
+        "Agadez",
+        "minarete",
+        "tuareg",
+        "caravana",
+        "Sahara",
+        "Aïr"
+      ]
+    },
+    {
+      "id": "tamanrasset",
+      "nombre": "Tassili n'Ajjer (desde Agadez o Tamanrasset-Argelia)",
+      "tipo": "naturaleza",
+      "region": "Noreste, frontera con Argelia",
+      "descripcion": "Meseta del Sahara con cañones espectaculares, arte rupestre de 10.000 años y formaciones rocosas surrealistas. Patrimonio UNESCO. Accesible desde Agadez (3-4 días) o Tamanrasset en Argelia, con guías locales tuareg.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "diciembre a febrero",
+      "como_llegar": "Desde Agadez: expedición 4WD con agencia local (250-400 EUR/persona grupo). Desde Tamanrasset (Argelia): 2h en 4WD (80 EUR) + permiso",
+      "donde_dormir": {
+        "mochilero": "Campamento en el desierto: 20-35 EUR/noche (tienda compartida)",
+        "medio": "Campamento con cabaña: 40-60 EUR/noche",
+        "comfort": "No disponible en zona"
+      },
+      "que_hacer": [
+        "Senderismo a Jabbaren (arte rupestre): 6h (incluido en expedición)",
+        "Cañón de Tamanrasset: 3h de trekking (gratis con guía)",
+        "Puesta de sol en meseta (gratis)",
+        "Acampar bajo las estrellas (gratis)"
+      ],
+      "donde_comer": "Comida incluida en expedición: tajín, couscús, dátiles. Agua: fundamental",
+      "consejo_local": "Lleva agua en exceso (2-3L/día). Los guías tuareg conocen rutas secretas si les cae bien; sé respetuoso",
+      "plan_b_lluvia": "Riesgo casi nulo. Si hay tormenta de arena, quedate en campamento",
+      "alerta_seguridad": "Zona remota y fronteriza. Solo viaja con agencias autorizadas y guías locales. Consulta embajada",
+      "keywords": [
+        "Tassili",
+        "arte rupestre",
+        "cañón",
+        "desierto",
+        "Jabbaren",
+        "UNESCO",
+        "expedición"
+      ]
+    },
+    {
+      "id": "maradi",
+      "nombre": "Maradi",
+      "tipo": "ciudad",
+      "region": "Centro-sur, cerca de Nigéria",
+      "descripcion": "Segunda ciudad de Níger y puerta comercial hacia Nigéria. Mercados animados, arquitectura colonial francesa, vida local auténtica lejos del circuito turístico. Base para explorar el sur rural.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Niamey: bus 8-10h (20-30 EUR) o vuelo interno (1h, 70 EUR). Carretera en buen estado",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 12-18 EUR/noche",
+        "medio": "Hotel Majestic, Hotel Maradi (2*): 30-50 EUR/noche",
+        "comfort": "Opciones limitadas; máximo 60 EUR/noche"
+      },
+      "que_hacer": [
+        "Gran Mercado: textiles, especias, artesanía (gratis)",
+        "Barrio antiguo francés: paseo arquitectónico (gratis)",
+        "Mezquita local (si es bienvenido): 2 EUR",
+        "Mercado de ganado: observación matutina (gratis)"
+      ],
+      "donde_comer": "Mille-feuille, koki (pasta de almendra), carne a la brasa. Comedores: 3-6 EUR. Restaurantes modestos: 8-12 EUR",
+      "consejo_local": "Maradi es más asequible que Niamey. Los precios se negocian; no pagues el primer precio en mercados",
+      "plan_b_lluvia": "Explora museos locales o busca refugio en mercados cubiertos",
+      "keywords": [
+        "Maradi",
+        "comercial",
+        "mercado",
+        "Nigéria frontera",
+        "sur"
+      ]
+    },
+    {
+      "id": "zinder",
+      "nombre": "Zinder",
+      "tipo": "histórico",
+      "region": "Este, centro histórico",
+      "descripcion": "Antigua capital del sultanato Damagaram con medina medieval, palacio del Sultán y historia hausa profunda. Menos turístico que Agadez pero igualmente auténtico. Centro cultural con artesanía textil de alta calidad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo",
+      "como_llegar": "Desde Niamey: bus 12h (30-40 EUR). Desde Maradi: 4h (15 EUR). Carretera transitable",
+      "donde_dormir": {
+        "mochilero": "Guesthouses medina: 12-20 EUR/noche",
+        "medio": "Hotel Cure Salée, Hotel Zinder: 35-55 EUR/noche",
+        "comfort": "Opciones muy limitadas"
+      },
+      "que_hacer": [
+        "Medina antigua: laberinto de calles (gratis)",
+        "Palacio del Sultán (exterior y patio): 3 EUR",
+        "Mezquita de Zinder: arquitectura (gratis, respeta horarios)",
+        "Mercado textil: indigo y telas tuareg (gratis)"
+      ],
+      "donde_comer": "Migas de mijo, carne estofada, dátiles rellenos. Comedores: 3-5 EUR",
+      "consejo_local": "La medina es un auténtico laberinto; contrata un guía local por 10-15 EUR para no perderte",
+      "plan_b_lluvia": "Explora patios interiores de casas tradicionales con permiso",
+      "keywords": [
+        "Zinder",
+        "medina",
+        "Sultanato",
+        "Damagaram",
+        "hausa",
+        "este"
+      ]
+    },
+    {
+      "id": "dosso",
+      "nombre": "Dosso",
+      "tipo": "rural",
+      "region": "Oeste, zona verde",
+      "descripcion": "Pequeña ciudad en la región más verde de Níger, entre ríos y sabana. Centro de vida rural auténtica, punto de partida para excursiones a aldeas tradicionales y cascadas (estacionales). Menos visitada que otras ciudades.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Niamey: bus 3-4h (10-15 EUR) o bicicleta alquilada (ruta escénica)",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes locales: 10-15 EUR/noche",
+        "medio": "Hotel simple (Dosso Hotel): 20-35 EUR/noche",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Excursión a aldeas Djerma: vida cotidiana (gratis + propina a guía 5 EUR)",
+        "Cascadas de Guesskérou (estación seca limitada): senderismo 4h (gratis)",
+        "Paseo a caballo: 15-30 EUR/día",
+        "Mercado local: productos frescos y artesanía (gratis)"
+      ],
+      "donde_comer": "Mijo, verduras de temporada, carne. Comedores familiares: 2-4 EUR",
+      "consejo_local": "Dosso es el verdadero Níger rural; no hay turismo masivo. Los locales agradecen el respeto y curiosidad genuina",
+      "plan_b_lluvia": "Visita casas familiares, aprende a cocinar mijo, charlas nocturnas",
+      "keywords": [
+        "Dosso",
+        "rural",
+        "verde",
+        "sabana",
+        "Djerma",
+        "oeste",
+        "cascadas"
+      ]
+    },
+    {
+      "id": "arlit",
+      "nombre": "Arlit",
+      "tipo": "ciudad",
+      "region": "Noreste, uranio",
+      "descripcion": "Centro minero en el desierto, puerta al Aïr. Menos turístico que Agadez pero más accesible. Punto de partida para trekking en montañas Aïr y vida nómada tuareg. Atmósfera industrial contrastante con belleza desértica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Agadez: 4h en 4WD (30 EUR) o bus (25 EUR). Desde Niamey: vuelo (1.5h, 100 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses simples: 12-18 EUR/noche",
+        "medio": "Hotel Aïr (2*): 35-50 EUR/noche",
+        "comfort": "No hay opciones de comfort"
+      },
+      "que_hacer": [
+        "Excursión a montañas Aïr: 2-3 días con guía (100-200 EUR)",
+        "Visita a aldeas tuareg: vida nómada (gratis + propina)",
+        "Puesta de sol en desierto (gratis)",
+        "Mercado local de camellos (gratis)"
+      ],
+      "donde_comer": "Tajín, pasta, camellos asados en mercado. Comedores: 3-6 EUR",
+      "consejo_local": "Arlit es más barata que Agadez y menos saturada. Los guías de trekking aquí son igual de buenos pero más asequibles",
+      "plan_b_lluvia": "Riesgo casi nulo. Si hay tormenta, quedate en town",
+      "alerta_seguridad": "Zona de minería de uranio, actividad militar presente. Menos turística pero segura si respetas restricciones",
+      "keywords": [
+        "Arlit",
+        "uranio",
+        "Aïr",
+        "montaña",
+        "tuareg",
+        "desierto",
+        "noreste"
+      ]
+    },
+    {
+      "id": "gaya",
+      "nombre": "Gaya",
+      "tipo": "ciudad",
+      "region": "Oeste, río Níger",
+      "descripcion": "Pequeña ciudad ribereña en el río Níger, punto fronterizo con Benín. Vida lenta, pescadores locales, paisajes fluviales. Menos conocida pero perfecta para viajeros que buscan lo auténtico lejos de circuitos principales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Dosso: 2h en bus (8 EUR). Desde Niamey: 5h bus (15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Casas de huéspedes locales: 10-15 EUR/noche",
+        "medio": "Hotel simple: 20-30 EUR/noche",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Paseo en piroga por río Níger: 1-2h (15-25 EUR)",
+        "Mercado de pescado matutino: vida local (gratis)",
+        "Excursión a Benín (30 min): visita fronteriza (gratis, con pasaporte)"
+      ],
+      "donde_comer": "Pescado fresco, alubias, mijo. Comedores ribereños: 2-4 EUR",
+      "consejo_local": "Gaya es parada corta pero valiosa si vienes desde Benín. El río es hermoso al atardecer",
+      "plan_b_lluvia": "Actividades en interiores o despede lluvia bajo techo",
+      "keywords": [
+        "Gaya",
+        "río",
+        "Benín frontera",
+        "pescadores",
+        "oeste",
+        "ribereño"
+      ]
+    },
+    {
+      "id": "say",
+      "nombre": "Say",
+      "tipo": "rural",
+      "region": "Suroeste, sabana",
+      "descripcion": "Pequeña aldea tradicional en sabana seca, centro de vida campesina hausa. Aldeas circundantes especializadas en artesanía cerámica y textil. Destino para quienes buscan inmersión rural pura sin infraestructura turística.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "noviembre a febrero",
+      "como_llegar": "Desde Niamey: 2h en bicicleta alquilada (ruta rural) o bus minibús (5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Homestay con familia: 8-12 EUR/noche (incluye cena)",
+        "medio": "No disponible",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Talleres de cerámica artesanal: participación (gratis + donativo 5-10 EUR)",
+        "Vida cotidiana con familia: cocina, agua, labores (gratis)",
+        "Mercado semanal: telas y productos locales (gratis)"
+      ],
+      "donde_comer": "Comida con familia anfitriona (incluida en hospedaje)",
+      "consejo_local": "Say es para viajeros sin prisa. Requiere flexibilidad, paciencia y disposición a no hablar mucho inglés",
+      "plan_b_lluvia": "Actividades bajo techo con familia",
+      "keywords": [
+        "Say",
+        "hausa",
+        "aldea",
+        "cerámica",
+        "sabana",
+        "rural",
+        "inmersión"
+      ]
+    },
+    {
+      "id": "cure-salee",
+      "nombre": "Cure Salée (festival estacional)",
+      "tipo": "eventos",
+      "region": "Centro-norte, desierto de Ténéré",
+      "descripcion": "Festival anual de ganaderos nómadas y sedentarios en pozo de agua dulce en el desierto. Caravanas de camellos, festejos, danzas tradicionales. Evento único en Níger, ocurre en agosto-septiembre (temporada seca en el desierto).",
+      "dias_recomendados": 3,
+      "mejor_epoca": "agosto a septiembre (NOTA: temporada de lluvias en el sur, pero seca en desierto)",
+      "como_llegar": "Desde Niamey: expedición organizada 5-7 días (400-600 EUR/persona) con 4WD. Desde Agadez: 2 días en 4WD (200 EUR)",
+      "donde_dormir": {
+        "mochilero": "Campamento en desierto: 25-40 EUR/noche",
+        "medio": "Campamento con tiendas mayores: 40-60 EUR/noche",
+        "comfort": "No disponible"
+      },
+      "que_hacer": [
+        "Desfiles de camellos adornados: concursos (gratis)",
+        "Danzas tradicionales nómadas: noche (gratis)",
+        "Caravanas de comerciantes: observación (gratis)",
+        "Compra de artesanía tuareg directamente a artesanos (precio negociable)"
+      ],
+      "donde_comer": "Tajín, carne de camello, dátiles. Incluido en expedición",
+      "consejo_local": "Cure Salée es impredecible; depende de lluvia y ciclos nómadas. Confirma fechas exactas antes de viajar. Ve con agencia, no solo",
+      "plan_b_lluvia": "Riesgo bajo en período oficial, pero posible. Si llueve, el festival se pospone",
+      "alerta_seguridad": "Zona remota y fronteriza. Solo con agencias autorizadas. Consulta situación política antes",
+      "keywords": [
+        "Cure Salée",
+        "festival",
+        "camellos",
+        "nómadas",
+        "Ténéré",
+        "evento",
+        "agosto",
+        "desierto"
+      ]
+    }
+  ]
+}

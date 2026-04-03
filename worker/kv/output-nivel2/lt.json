@@ -1,0 +1,330 @@
+{
+  "pais": "Lituania",
+  "codigo": "lt",
+  "destinos": [
+    {
+      "id": "vilna",
+      "nombre": "Vilna",
+      "tipo": "ciudad",
+      "region": "Lituania Oriental",
+      "descripcion": "Capital de Lituania con casco antiguo declarado Patrimonio de la UNESCO, famoso por sus iglesias barrocas, callejones empedrados y atmósfera bohemia. Centro cultural y punto de entrada más importante del país con excelente infraestructura turística. Punto de partida ideal para explorar el resto de Lituania.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Vuelos internacionales al aeropuerto de Vilna (VNO) desde ciudades europeas. Autobús desde otras ciudades: 2-4 horas. Tren desde Varsovia/Riga.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Užupis - 12-18 EUR/noche",
+        "medio": "Hoteles 3* centro antiguo - 40-70 EUR/noche",
+        "comfort": "Hoteles 4*+ Old Town - 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por casco antiguo y Catedral (gratis)",
+        "Subir a Torre de Gediminas para vistas (3 EUR)",
+        "Visitar barrio de Užupis y Street Art (gratis)",
+        "Iglesia de San Pedro y San Pablo (3 EUR)",
+        "Museo Nacional de Lituania (5 EUR)"
+      ],
+      "donde_comer": "Cepelinai (pasta rellena) y zupa (sopa tradicional), 5-10 EUR plato. Zona Pilies gatve para restaurantes turísticos, Užupis para locales auténticos.",
+      "consejo_local": "El barrio de Užupis tiene su propia 'república' con himno y constitución pintada en muros. Visítalo al anochecer cuando está menos concurrido.",
+      "plan_b_lluvia": "Museos (KGB, Víctimas del Genocidio), cafés tradicionales en Pilies gatve, compras en Vilniaus Šilas mall.",
+      "keywords": [
+        "Vilnius",
+        "Vilna",
+        "Old Town",
+        "Užupis",
+        "Catedral",
+        "Tower of Gediminas"
+      ]
+    },
+    {
+      "id": "trakai",
+      "nombre": "Trakai",
+      "tipo": "histórico",
+      "region": "Lituania Central",
+      "descripcion": "Pueblo medieval famoso por su castillo construido sobre una isla en el lago Galvė, uno de los símbolos nacionales de Lituania. Entorno de bosques y lagos perfectos para actividades al aire libre. Distancia corta desde Vilna (28 km) hace que sea excursión popular pero valiosa.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Tren desde Vilna (45 min, 1-2 EUR) o autobús (30 min, 1,5 EUR). Muy accesible.",
+      "donde_dormir": {
+        "mochilero": "Hostales/guesthouses junto al lago - 15-22 EUR/noche",
+        "medio": "Hoteles lakeside 3* - 45-65 EUR/noche",
+        "comfort": "Resort con spa - 85-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Trakai (entrada 7 EUR, audioguía incluida)",
+        "Paseo en bote por lago Galvė (10 EUR)",
+        "Senderismo por bosques alrededor (gratis)",
+        "Visita a pueblos karaítas (comunidad étnica) - museos (3 EUR)",
+        "Playa/baño en lago (gratis)"
+      ],
+      "donde_comer": "Kibinai (empanada tradicional karaíta rellena de carne), 2-3 EUR. Restaurantes al lado del castillo, 8-15 EUR plato.",
+      "consejo_local": "Llega temprano (antes de las 10:00) para evitar los tours organizados. El castillo es más bonito fotografiado desde la orilla opuesta del lago.",
+      "plan_b_lluvia": "Interior del castillo con exposiciones, museos locales, cafés con vistas al lago.",
+      "keywords": [
+        "Trakai Castle",
+        "Lake Galve",
+        "Medieval",
+        "Karaites",
+        "Islet"
+      ]
+    },
+    {
+      "id": "kaunas",
+      "nombre": "Kaunas",
+      "tipo": "ciudad",
+      "region": "Lituania Central",
+      "descripcion": "Segunda ciudad más grande con centro histórico bien preservado, castillo medieval y vida cultural vibrante. Menos turística que Vilna pero igualmente interesante, con arquitectura Art Decó única y buena escena de bares y cafés. Punto estratégico para explorar la región central.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Tren desde Vilna (1 hora, 2-4 EUR) o autobús (1,5 horas, 3-5 EUR). Frecuentes conexiones.",
+      "donde_dormir": {
+        "mochilero": "Hostales centro - 13-19 EUR/noche",
+        "medio": "Hoteles 3* - 35-55 EUR/noche",
+        "comfort": "Hoteles 4* - 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Kaunas (entrada 4 EUR, vistas desde puentes)",
+        "Paseo por Laisvės alėja (avenida peatonal principal - gratis)",
+        "Museo de Arte de Kaunas (5 EUR)",
+        "Iglesia de Witchcraft/Rezekne (gratis)",
+        "Bar crawl en zona Savanorių - ambiente local"
+      ],
+      "donde_comer": "Žemyna (cocina lituania moderna), Metropolis café, 7-12 EUR plato. Zona Laisvės alėja saturada de turistas, barrios laterales más auténticos.",
+      "consejo_local": "El museo de Arte Diablos (Devil's Museum) es extraño pero fascinante - único en el mundo con colección de máscaras de diablos. El castillo es más interesante visto desde el puente sobre el Nemunas.",
+      "plan_b_lluvia": "Museos (arte, diablos, guerra), compras en centro comercial Mega, cafés tradicionales.",
+      "keywords": [
+        "Kaunas",
+        "Laisvės alėja",
+        "Art Deco",
+        "Castle",
+        "Nemunas"
+      ]
+    },
+    {
+      "id": "neringa",
+      "nombre": "Neringa",
+      "tipo": "playa",
+      "region": "Costa Báltica",
+      "descripcion": "Pintoresca franja de tierra entre el mar Báltico y la laguna Curona, con pueblos de pescadores tradicionales (Nida, Juodkrantė) y dunas de arena únicas. Ambiente relajado con playas, ciclorutas y arquitectura histórica. Destino costero más importante de Lituania.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Ferry desde Klaipėda (30 min, 5 EUR persona, 12 EUR coche) o autobús (1,5 horas hasta Klaipėda + ferry). Alternativa: carretera por Rusia (Kaliningrado) pero requiere visado.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Nida/Juodkrantė - 18-25 EUR/noche",
+        "medio": "Hoteles 3* con vistas - 50-75 EUR/noche",
+        "comfort": "Resort premium - 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa del Báltico - baño/paseo (gratis)",
+        "Cicloruta Neringa - 40 km (gratis, alquiler bici 5-10 EUR/día)",
+        "Subida a dunas de Parnidis (entrada 2 EUR, vistas)",
+        "Visita a Nida y Juodkrantė (gratis)",
+        "Museo de Historia de la Pesca (4 EUR)"
+      ],
+      "donde_comer": "Arenque y pescado fresco, Plėvai (restaurante famoso), 12-18 EUR plato. Kibininė para kibinai baratos.",
+      "consejo_local": "Alquila bici y haz la cicloruta en dirección norte hacia Juodkrantė al atardecer. Las mejores puestas de sol son desde la laguna, no desde el Báltico.",
+      "plan_b_lluvia": "Museos (Historia, Ámbar), cafés con chimenea, paseos por pueblos bajo lluvia.",
+      "keywords": [
+        "Neringa",
+        "Nida",
+        "Juodkrantė",
+        "Baltic Sea",
+        "Curonian Spit",
+        "Dunas"
+      ]
+    },
+    {
+      "id": "klaipeda",
+      "nombre": "Klaipėda",
+      "tipo": "ciudad",
+      "region": "Costa Báltica",
+      "descripcion": "Puerto histórico con encantador centro antiguo reconstruido, museos marítimos y acceso directo al mar Báltico. Base logística para Neringa pero también destino valioso por sí mismo, con ambiente portuario auténtico y buena infraestructura.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Autobús desde Vilna (5 horas, 8-12 EUR), desde Kaunas (3 horas, 6-10 EUR). Tren limitado. Vía Kaunas es más rápido.",
+      "donde_dormir": {
+        "mochilero": "Hostales centro - 14-20 EUR/noche",
+        "medio": "Hoteles 3* - 40-60 EUR/noche",
+        "comfort": "Hoteles con vista puerto - 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por casco antiguo (gratis)",
+        "Teatro de Dramas (7 EUR entrada, o solo exterior)",
+        "Museo Marítimo/Acuario (6 EUR)",
+        "Puerto y paseo marítimo (gratis)",
+        "Playa de Klaipėda (gratis)"
+      ],
+      "donde_comer": "Pescado fresco, Aukstaitija (cocina lituania), 8-14 EUR plato. Restaurantes junto al puerto, algunos turísticos.",
+      "consejo_local": "El puerto está vivo con barcos de pesca reales - ve temprano por la mañana para ver la acción. La estatua de Annie (Ananda) es punto de encuentro local.",
+      "plan_b_lluvia": "Museos (marítimo, ámbar), interior del Teatro de Dramas si hay representaciones, cafés.",
+      "keywords": [
+        "Klaipėda",
+        "Klaipeda",
+        "Baltic Sea",
+        "Port",
+        "Old Town",
+        "Harbor"
+      ]
+    },
+    {
+      "id": "kernave",
+      "nombre": "Kernave",
+      "tipo": "histórico",
+      "region": "Lituania Oriental",
+      "descripcion": "Capital arqueológica de Lituania: cinco colinas (castillos antiguos) en valle del Neris, con museo y reconstrucciones históricas. Sitio Patrimonio UNESCO menos concurrido que otros, perfecto para entender la historia medieval lituana. Excursión desde Vilna para viajeros interesados en arqueología.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Tren desde Vilna (25 min, 0,5 EUR) o autobús (40 min, 1,5 EUR). Muy accesible.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses aldeanos - 15-20 EUR/noche",
+        "medio": "Hotel pequeño en zona - 30-50 EUR/noche",
+        "comfort": "Resort spa cercano - 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Kernave (entrada 3 EUR, exposiciones sobre castillos)",
+        "Subida a las 5 colinas para vistas (gratis)",
+        "Senderismo por valle Neris (gratis)",
+        "Reconstrucciones históricas en verano (ver fechas, 2-5 EUR)",
+        "Picnic en el campo"
+      ],
+      "donde_comer": "Opciones limitadas en pueblo. Lleva picnic o come en Vilna. Cafés básicos locales si los encuentras.",
+      "consejo_local": "Las colinas son más bonitas al atardecer cuando la luz dorada ilumina el valle. Combina con Trakai en un día si tienes poco tiempo.",
+      "plan_b_lluvia": "Interior del museo (pequeño pero bien hecho), paseo por pueblo, regreso a Vilna.",
+      "keywords": [
+        "Kernave",
+        "Archaeology",
+        "UNESCO",
+        "Castles",
+        "Neris Valley"
+      ]
+    },
+    {
+      "id": "druskininkai",
+      "nombre": "Druskininkai",
+      "tipo": "naturaleza",
+      "region": "Lituania Sur",
+      "descripcion": "Estación termal y balneario en río Nemunas rodeado de bosques de pinos. Centro de spa y bienestar con parques, ciclorutas y aguas minerales. Destino para relajarse, alejarse del turismo convencional y disfrutar de naturaleza báltica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Autobús desde Vilna (2,5 horas, 4-6 EUR). Desde Kaunas (1,5 horas, 3-5 EUR). Menos conectado que otros destinos.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses - 18-25 EUR/noche",
+        "medio": "Hotels spa 3* - 50-80 EUR/noche",
+        "comfort": "Resort spa 4* - 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Parques y paseos por bosques (gratis)",
+        "Cicloruta Ramuva (alquiler 8-12 EUR/día)",
+        "Spa/baños termales (15-25 EUR/entrada día)",
+        "Paseo en bote por Nemunas (10-15 EUR)",
+        "Museos pequeños de arte/escultura (2-3 EUR)"
+      ],
+      "donde_comer": "Cocina lituana, especialidades de spa (saludables), 8-13 EUR plato. Establecimientos en centro termal.",
+      "consejo_local": "Es un destino de spa sin ser pretencioso - muchos lituanos locales vienen a pasar fines de semana. La mejor opción es combinar hotel 3* con entrada a spa incluida.",
+      "plan_b_lluvia": "Spas interiores, museos locales, piscinas cubiertas.",
+      "keywords": [
+        "Druskininkai",
+        "Spa",
+        "Nemunas",
+        "Thermal",
+        "Wellness",
+        "Pines"
+      ]
+    },
+    {
+      "id": "anyksciai",
+      "nombre": "Anykščiai",
+      "tipo": "rural",
+      "region": "Lituania Oriental",
+      "descripcion": "Pueblo pintoresco en región de bosques y colinas conocido por tradiciones artesanales, cervecería tradicional y ambiente rural auténtico. Destino para viajeros que buscan Lituania fuera de circuito turístico, con ciclorutas y paisajes verdes.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Autobús desde Vilna (2 horas, 3-5 EUR) o desde Kaunas (1,5 horas, 3-4 EUR). Menos frecuentes que hacia grandes ciudades.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses rurales - 15-22 EUR/noche",
+        "medio": "Pequeños hoteles - 35-50 EUR/noche",
+        "comfort": "Manor houses/rural retreat - 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita a Puntukas (roca sagrada de 160 toneladas - gratis)",
+        "Brewery Anykščiai - degustación (6-8 EUR)",
+        "Ciclorutas por bosques (alquiler 7-10 EUR/día)",
+        "Museos de arte y artesanía local (2-3 EUR)",
+        "Paseos naturales por región de colinas"
+      ],
+      "donde_comer": "Cocina casera lituana, setas y alimentos locales, 6-10 EUR plato. Posadas rurales.",
+      "consejo_local": "La roca Puntukas es lugar sagrado pagano - los lituanos van allí a dejar ofrendas y hacer deseos. Mejor visitarla al atardecer.",
+      "plan_b_lluvia": "Brewery cubierto, museos locales, regreso a Vilna.",
+      "keywords": [
+        "Anykščiai",
+        "Anyksciai",
+        "Puntukas",
+        "Rock",
+        "Rural",
+        "Brewery"
+      ]
+    },
+    {
+      "id": "paneriai",
+      "nombre": "Paneriai (Excursión desde Vilna)",
+      "tipo": "histórico",
+      "region": "Vilna - Sur",
+      "descripcion": "Memorial y museos del Holocausto en bosque donde nazis ejecutaron 70,000 personas durante WWII. Sitio solemne y educativo, importante para entender historia de Lituania. Muchos viajeros independientes lo visitan como excursión necesaria desde Vilna.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Autobús 13 desde centro Vilna (20 min, 0,6 EUR) hasta parada Paneriai. Muy accesible.",
+      "donde_dormir": {
+        "mochilero": "N/A (excursión desde Vilna)",
+        "medio": "N/A",
+        "comfort": "N/A"
+      },
+      "que_hacer": [
+        "Museo de Paneriai (entrada gratis, donación sugerida 2-5 EUR)",
+        "Paseo por memorial en bosque (gratis)",
+        "Lectura de placas y testimonios",
+        "Reflexión en zona de ejecuciones"
+      ],
+      "donde_comer": "Sin opciones en Paneriai. Lleva picnic o come antes/después en Vilna.",
+      "consejo_local": "Es lugar solemne. Muchas víctimas fueron enterradas fosas comunes. Los monumentos son simples pero poderosos. Ve en día soleado si puedes - el bosque oscuro añade peso emocional.",
+      "plan_b_lluvia": "Museo interior es protegido, pero el paseo por memorial puede ser incómodo.",
+      "keywords": [
+        "Paneriai",
+        "Holocaust Memorial",
+        "WWII",
+        "Museum",
+        "Vilna"
+      ]
+    },
+    {
+      "id": "kulioniskis",
+      "nombre": "Kūlioniskai (Excursión desde Kaunas)",
+      "tipo": "naturaleza",
+      "region": "Lituania Central",
+      "descripcion": "Reserva natural con desfiladero del río Nemunas y bosques intactos, accesible para senderismo. Menos turístico que Kernave pero igualmente bonito para exploración independiente. Ideal para viajeros que buscan naturaleza auténtica.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Autobús desde Kaunas (1,5 horas, 3 EUR) hacia Kūlioniskai. Después caminata desde pueblo.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en pueblo - 16-22 EUR/noche",
+        "medio": "Hotel pequeño - 35-50 EUR/noche",
+        "comfort": "Manor house rural - 65-95 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo por sendero del desfiladero (gratis, 5-10 km)",
+        "Vistas al río Nemunas (gratis)",
+        "Observación de aves y naturaleza (gratis)",
+        "Picnic junto al río",
+        "Fotografía de paisajes"
+      ],
+      "donde_comer": "Opciones limitadas. Come en Kaunas antes o trae picnic. Posadas rurales si las encuentras.",
+      "consejo_local": "El desfiladero del Nemunas es menos conocido que sus versiones en otros países, pero igualmente bonito. Los lugareños lo frequentan en verano.",
+      "plan_b_lluvia": "Senderismo es posible con lluvia pero incómodo. Mejor combinar con Kaunas si el tiempo es malo.",
+      "keywords": [
+        "Kūlioniskai",
+        "Nemunas Gorge",
+        "Hiking",
+        "Nature Reserve",
+        "River"
+      ]
+    }
+  ]
+}

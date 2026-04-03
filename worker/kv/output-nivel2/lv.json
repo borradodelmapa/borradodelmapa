@@ -1,0 +1,337 @@
+{
+  "pais": "Letonia",
+  "codigo": "lv",
+  "destinos": [
+    {
+      "id": "riga",
+      "nombre": "Riga",
+      "tipo": "ciudad",
+      "region": "Riga (capital)",
+      "descripcion": "Capital letona con uno de los mayores centros históricos de Art Nouveau en Europa. Combina arquitectura medieval en la Ciudad Vieja con modernismo de principios del siglo XX. Centro económico y cultural del país con excelente gastronomía y vida nocturna.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "punto de entrada principal: vuelos internacionales al aeropuerto de Riga (RIX), 4 km del centro. Autobús al centro: 2 EUR, 20 minutos. Taxi/Uber: 15-20 EUR.",
+      "donde_dormir": {
+        "mochilero": "albergues en Ciudad Vieja: 12-18 EUR/noche",
+        "medio": "hoteles 3 estrellas en Centrs o Vecriga: 40-70 EUR/noche",
+        "comfort": "hoteles 4-5 estrellas: 100-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Pasear por Vecriga (Ciudad Vieja, gratis)",
+        "Subir a la Torre de Televisión (5 EUR, vistas 360º)",
+        "Museos de Art Nouveau en Elizabetes iela (4-6 EUR/entrada)",
+        "Mercado de Centraltirgus (gratis, comprar comida local)",
+        "Iglesia de la Cúpula (2 EUR, arquitectura única)"
+      ],
+      "donde_comer": "Prueba rupjmaize (pan negro letón), jāņu siers (queso de eneldo), kaposeņi (rosquillas). Zona Vecriga: restaurantes 12-25 EUR por plato. Street food en el mercado: 3-6 EUR.",
+      "consejo_local": "El Mercado Central está dividido por zonas especializadas en edificios de hangares antiguos. Llega temprano para ver la actividad real. Evita las 20:00-22:00 cuando se vuelve turístico.",
+      "plan_b_lluvia": "Museos de historia letona (Museo Nacional de Letonia, 8 EUR), Museos de Ocupación (gratis), cafeterías y librerías en Vecriga.",
+      "keywords": [
+        "Riga",
+        "RIX",
+        "Vecriga",
+        "Ciudad Vieja",
+        "Art Nouveau",
+        "Elizabetes iela",
+        "Centraltirgus",
+        "Daugava"
+      ]
+    },
+    {
+      "id": "sigulda",
+      "nombre": "Sigulda",
+      "tipo": "histórico",
+      "region": "Vidzeme (región central)",
+      "descripcion": "Pequeña ciudad en el valle del Gauja conocida por sus ruinas de castillos medievales y el famoso Castillo de Sigulda. Centro de aventura en naturaleza con senderismo y paisajes bálticos clásicos. Punto de partida para explorar la región de Vidzeme.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Riga: tren directo 1h (2-3 EUR) o autobús 1h 15min (3-4 EUR). Trenes desde estación central de Riga cada 1-2 horas.",
+      "donde_dormir": {
+        "mochilero": "albergues y guesthouses: 15-22 EUR/noche",
+        "medio": "hoteles pequeños: 35-55 EUR/noche",
+        "comfort": "hoteles boutique: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Sigulda (6 EUR, vistas del valle)",
+        "Ruinas del Castillo Viejo de Sigulda (2 EUR)",
+        "Castillo de Krimulda (3 EUR, al otro lado del río)",
+        "Sendero del Gauja entre castillos (gratis, 2-3 horas)",
+        "Teleférico sobre el río Gauja (5 EUR, única atracción del tipo en Báltica)"
+      ],
+      "donde_comer": "Cocina tradicional letona en restaurantes locales: 8-15 EUR. Prueba pīrādziņi (empanadas de carne). Cafés en el centro: 4-8 EUR.",
+      "consejo_local": "Compra el ticket combinado para los 3 castillos (12 EUR total, más barato que individual). El teleférico es una experiencia kitsch pero muy letona. Reserva con antelación en verano.",
+      "plan_b_lluvia": "Museo de Arte de Sigulda (4 EUR), explorar cafeterías locales, senderismo bajo lluvia (el paisaje es hermoso incluso mojado).",
+      "keywords": [
+        "Sigulda",
+        "Castillo de Sigulda",
+        "Gauja",
+        "Castillo Viejo",
+        "Krimulda",
+        "Vidzeme",
+        "teleférico"
+      ]
+    },
+    {
+      "id": "cesis",
+      "nombre": "Cesis",
+      "tipo": "histórico",
+      "region": "Vidzeme (región central-norte)",
+      "descripcion": "Pueblo medieval en el corazón de Vidzeme con un castillo reconstruido y ambiente de cuento de hadas. Menos turístico que Sigulda pero igual de atractivo, con una zona rural intacta y excelentes rutas de senderismo. Ideal para viajeros que buscan autenticidad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Riga: autobús directo 2h 30min (4-5 EUR). Desde Sigulda: autobús/tren 1h 30min (2-3 EUR). Autobuses salen cada 2-3 horas.",
+      "donde_dormir": {
+        "mochilero": "guesthouses y albergues: 14-20 EUR/noche",
+        "medio": "hoteles pequeños: 30-50 EUR/noche",
+        "comfort": "hotel Cesis: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Cesis (6 EUR, reconstrucción completa)",
+        "Parque del Castillo con senderos (gratis)",
+        "Iglesia evangélica luterana (1 EUR, arquitectura interior)",
+        "Senderismo en Vidzeme Highlands (gratis)",
+        "Museo de Arte de Cesis (4 EUR)"
+      ],
+      "donde_comer": "Restaurante Piebalgas Muiza (comida tradicional, 12-18 EUR). Cafés en Pils iela: 5-10 EUR. Pan y quesos locales en tiendas pequeñas.",
+      "consejo_local": "Cesis es el punto de partida para rutas de senderismo de varios días en Vidzeme. Muchos viajeros la saltan indo directo a Sigulda, pero es un error. Alquilar una bicicleta (10-15 EUR/día) es la mejor forma de explorar.",
+      "plan_b_lluvia": "Castillo (cubierto parcialmente), cafés y tiendas de antigüedades, museos locales.",
+      "keywords": [
+        "Cesis",
+        "Castillo de Cesis",
+        "Vidzeme Highlands",
+        "Pils iela",
+        "medieval",
+        "senderismo"
+      ]
+    },
+    {
+      "id": "juramalas-playas",
+      "nombre": "Jurmala (playas bálticas)",
+      "tipo": "playa",
+      "region": "Jurmala (costa oeste, cerca de Riga)",
+      "descripcion": "Balneario histórico en la costa del Mar Báltico con playas de arena blanca y arquitectura de dacha de la época soviética. Alternativa cercana a Riga para descanso de playa, aunque el agua es fría incluso en verano. Popular entre letones y viajeros locales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "desde Riga: tren directo 30min (1,50 EUR), sale cada 30 min desde estación central. O autobús 40 min (2 EUR). Taxi/Uber: 15 EUR.",
+      "donde_dormir": {
+        "mochilero": "albergues pequeños: 16-24 EUR/noche",
+        "medio": "hoteles 2-3 estrellas: 45-75 EUR/noche",
+        "comfort": "hoteles frente al mar: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas públicas (gratis, agua 16-20ºC en verano)",
+        "Paseo por la costa y paseo marítimo (gratis)",
+        "Museos pequeños (2-4 EUR)",
+        "Parque Dzintari con conciertos (acceso gratis, conciertos variables)",
+        "Buceo y actividades acuáticas (15-50 EUR según actividad)"
+      ],
+      "donde_comer": "Restaurantes de pescado fresco: 15-25 EUR. Cerveza local en chiringuitos de playa: 3-4 EUR. Comida rápida: 5-8 EUR.",
+      "consejo_local": "Las playas no son bonitas en el sentido tropical: arena gris y agua fría. El atractivo real es la atmósfera relajada y la arquitectura retro. Ven en fin de semana para ambiente local auténtico.",
+      "plan_b_lluvia": "Museos, spas y centros de bienestar (Spa treatments: 30-70 EUR), tiendas y cafeterías.",
+      "keywords": [
+        "Jurmala",
+        "playas Báltica",
+        "Mar Báltico",
+        "Dzintari",
+        "balneario",
+        "costa letona"
+      ]
+    },
+    {
+      "id": "kuldiga",
+      "nombre": "Kuldiga",
+      "tipo": "naturaleza",
+      "region": "Kurzeme (costa oeste)",
+      "descripcion": "Pueblo pintoresco en occidente conocido por Ventas Rapid, la cascada más ancha de Europa (249 m). Rodeado de naturaleza salvaje, bosques y río Venta. Destino perfecto para senderismo y fotografía de naturaleza, lejos de masas turísticas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Riga: autobús directo 3h 30min (5-6 EUR). Desde Liepaja: autobús 1h 15min (2-3 EUR). Menos servicio que otras rutas, revisar horarios.",
+      "donde_dormir": {
+        "mochilero": "albergues y guesthouses: 15-22 EUR/noche",
+        "medio": "hoteles pequeños: 35-60 EUR/noche",
+        "comfort": "hoteles con vistas al río: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Ventas Rapid (gratis, mejor desde ambos lados del río)",
+        "Sendero del Río Venta (gratis, 3-4 horas)",
+        "Paseo por el pueblo y puentes antiguos (gratis)",
+        "Senderismo en bosques de Kurzeme (gratis)",
+        "Museo local (2 EUR)"
+      ],
+      "donde_comer": "Comida letona auténtica en restaurantes locales: 10-16 EUR. Pescado del río Venta: 12-18 EUR. Cafés: 4-6 EUR.",
+      "consejo_local": "Ventas Rapid es más impresionante en primavera (mayo-junio) cuando hay caudal máximo de agua de deshielo. En verano baja mucho. Llega temprano para fotos sin gente.",
+      "plan_b_lluvia": "Museo de Kuldiga, cafeterías, senderismo (el bosque es denso, protege de lluvia ligera).",
+      "keywords": [
+        "Kuldiga",
+        "Ventas Rapid",
+        "cascada",
+        "Venta",
+        "Kurzeme",
+        "senderismo",
+        "naturaleza"
+      ]
+    },
+    {
+      "id": "liepaja",
+      "nombre": "Liepaja",
+      "tipo": "ciudad",
+      "region": "Kurzeme (costa oeste)",
+      "descripcion": "Puerto histórico en el Báltico occidental con arquitectura austro-húngara decadente y atmósfera nostálgica de ciudad costera en declive. Menos tourística que Riga, auténtica y con playa, atrae a viajeros que buscan lo real.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "desde Riga: autobús directo 3h 45min (5-7 EUR). Desde Kuldiga: autobús 1h 15min (2-3 EUR). Vuelos domésticos más caros que autobús.",
+      "donde_dormir": {
+        "mochilero": "albergues: 15-22 EUR/noche",
+        "medio": "hoteles 2-3 estrellas: 40-65 EUR/noche",
+        "comfort": "hoteles frente al mar: 80-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por puerto histórico (gratis)",
+        "Playas públicas (gratis)",
+        "Museo de la Ocupación (4 EUR)",
+        "Fortaleza de Karosta (4 EUR, tours de bunker de la URSS)",
+        "Paseo nocturno por ruinas de la época soviética (gratis)"
+      ],
+      "donde_comer": "Pescado fresco local: 14-22 EUR. Cerveza local Aldaris: 2-3 EUR. Restaurantes en Pils iela: 12-20 EUR.",
+      "consejo_local": "Liepaja tiene una vibra de ciudad fantasma hermosa. Muchas ruinas de la época soviética. El bunker de Karosta es surrealista pero requiere tour guiado (reserva en alojamiento). El puerto es bonito al atardecer.",
+      "plan_b_lluvia": "Museos, Fortaleza de Karosta (cubierta), cafés, compras en el centro.",
+      "keywords": [
+        "Liepaja",
+        "puerto Báltico",
+        "Karosta",
+        "fortaleza soviética",
+        "costa",
+        "arquitectura austro-húngara"
+      ]
+    },
+    {
+      "id": "sigulda-gauja",
+      "nombre": "Valle del Gauja (Parque Nacional)",
+      "tipo": "naturaleza",
+      "region": "Vidzeme (región central)",
+      "descripcion": "Parque nacional con el río Gauja como centro, ofreciendo rafting, senderismo y aventura outdoor. Incluye cuevas, cascadas y bosques primarios. Base ideal en Sigulda o Cesis para actividades de aventura multi-día.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Sigulda (centro del parque): punto de partida para todas las actividades. Véase Sigulda para indicaciones de llegada.",
+      "donde_dormir": {
+        "mochilero": "camping y cabañas: 12-18 EUR/noche",
+        "medio": "guesthouses rurales: 35-55 EUR/noche",
+        "comfort": "hoteles en Sigulda/Cesis: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Rafting en el Gauja (25-40 EUR, 2-3 horas)",
+        "Senderos de senderismo marcados (gratis)",
+        "Cueva de Gūtmaņa (1 EUR, formación rocosa histórica)",
+        "Camping salvaje con permisos (5-10 EUR)",
+        "Canoa en el río (alquiler 20-30 EUR)"
+      ],
+      "donde_comer": "Establecimientos en Sigulda/Cesis. En la naturaleza: llevar provisiones. Restaurantes rurales: 10-16 EUR.",
+      "consejo_local": "El rafting en Gauja es fácil pero emocionante. Las mejores compañías salen desde Sigulda. Reserva con antelación en julio-agosto. El sendero Ķemeri es excelente para ver toda la belleza del valle en un día.",
+      "plan_b_lluvia": "Senderismo (muy bonito con lluvia), cuevas (protegidas), actividades en pueblos cercanos.",
+      "keywords": [
+        "Gauja",
+        "parque nacional",
+        "rafting",
+        "senderismo",
+        "río Gauja",
+        "Gūtmaņa",
+        "aventura"
+      ]
+    },
+    {
+      "id": "rundale-bauska",
+      "nombre": "Palacio de Rundale (Bauska)",
+      "tipo": "histórico",
+      "region": "Zemgale (sureste)",
+      "descripcion": "Palacio barroco del siglo XVIII con jardines neoclásicos, residencia real letona más importante. Aunque requiere viaje desde Riga, es una joya arquitectónica única y menos abarrotada que atracciones de Vidzeme.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "desde Riga: autobús a Bauska 1h 30min (3-4 EUR), luego taxi/autobús local al palacio 10 min (3-5 EUR). O tour organizado desde Riga (30-50 EUR incluye transporte).",
+      "donde_dormir": {
+        "mochilero": "guesthouses en Bauska: 16-22 EUR/noche",
+        "medio": "hoteles en Bauska: 40-60 EUR/noche",
+        "comfort": "hoteles boutique: 70-120 EUR/noche (pocos en la zona)"
+      },
+      "que_hacer": [
+        "Visita guiada al Palacio de Rundale (14 EUR, tour 1-1,5 horas)",
+        "Jardines neoclásicos (incluidos en entrada)",
+        "Castillo de Bauska (2 EUR, pequeño, ruinas)",
+        "Paseo por el pueblo de Bauska (gratis)",
+        "Museo de vidrio en Bauska (3 EUR, colección rara)"
+      ],
+      "donde_comer": "Restaurante en el palacio: 15-20 EUR. Cafés en Bauska: 5-10 EUR. Picnic en jardines (lleva tu comida).",
+      "consejo_local": "El palacio requiere tour guiado obligatorio (en inglés disponible). Las fotos de los interiores son limitadas. Los jardines son lo mejor en primavera. Combina con Castillo de Bauska en el mismo día.",
+      "plan_b_lluvia": "Tours interiores del palacio (cubiertos), museos locales, cafés.",
+      "keywords": [
+        "Rundale",
+        "palacio barroco",
+        "Bauska",
+        "jardines neoclásicos",
+        "real letona"
+      ]
+    },
+    {
+      "id": "ventspils",
+      "nombre": "Ventspils",
+      "tipo": "playa",
+      "region": "Kurzeme (costa oeste)",
+      "descripcion": "Puerto y balneario con playas y el famoso Castillo de Ventspils. Menos turístico que Jurmala, más animado que Liepaja. Ofrece mezcla de playa, historia y vida local auténtica. Punto de partida para la costa oeste.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "desde Riga: autobús directo 2h 45min (4-5 EUR). Desde Kuldiga: autobús 1h 30min (2-3 EUR). Desde Liepaja: autobús 1h 30min (2-3 EUR).",
+      "donde_dormir": {
+        "mochilero": "albergues: 14-20 EUR/noche",
+        "medio": "hoteles 2-3 estrellas: 40-65 EUR/noche",
+        "comfort": "hoteles frente al mar: 85-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Ventspils (5 EUR, museo interior)",
+        "Playas públicas (gratis)",
+        "Paseo por puerto y malecón (gratis)",
+        "Parque con esculptura (gratis)",
+        "Museo de Arte moderno (3 EUR)"
+      ],
+      "donde_comer": "Pescado fresco: 14-22 EUR. Helados locales en verano: 2-3 EUR. Restaurantes en el puerto: 12-20 EUR.",
+      "consejo_local": "Ventspils tiene un aire más próspero que Liepaja (puerto de petróleo activo). El castillo merece la visita. La playa es menos bonita que en otros lados, pero el ambiente es relajado.",
+      "plan_b_lluvia": "Castillo (cubierto parcialmente), museos, shopping, cafés.",
+      "keywords": [
+        "Ventspils",
+        "castillo de Ventspils",
+        "puerto",
+        "playas",
+        "costa oeste",
+        "Kurzeme"
+      ]
+    },
+    {
+      "id": "salaspils-bunker",
+      "nombre": "Búnker de Salaspils (excursión de día)",
+      "tipo": "histórico",
+      "region": "cerca de Riga (25 km al este)",
+      "descripcion": "Búnker subterráneo secreto de la época soviética, uno de los más intactos de la región. Permite entender la paranoia militar soviética. Excursión fácil desde Riga, experiencia única imposible de replicar en otros países bálticos.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "todo el año (interior)",
+      "como_llegar": "desde Riga: tren local 30 min (1 EUR) a Salaspils, luego taxi/a pie 2 km (5 EUR taxi o 30 min andando). Tours organizados desde Riga: 40-60 EUR (incluye transporte y guía).",
+      "donde_dormir": {
+        "mochilero": "excursión de día desde Riga",
+        "medio": "excursión de día desde Riga",
+        "comfort": "excursión de día desde Riga"
+      },
+      "que_hacer": [
+        "Tour guiado del búnker (10 EUR, 1,5 horas, obligatorio ir con guía)",
+        "Fotografía exterior del búnker (gratis)",
+        "Paseo por el pueblo de Salaspils (gratis)"
+      ],
+      "donde_comer": "Sin opciones en Salaspils. Comer en Riga antes/después.",
+      "consejo_local": "El búnker solo se visita con tour guiado obligatorio en horarios fijos (revisar disponibilidad en temporada baja). El interior es fascinante pero claustrofóbico. Las guías conocen historias apócrifas de la Guerra Fría.",
+      "plan_b_lluvia": "Actividad cubierta (interior), perfecta para días grises.",
+      "keywords": [
+        "Salaspils",
+        "búnker soviético",
+        "Guerra Fría",
+        "secreto militar",
+        "excursión de día"
+      ]
+    }
+  ]
+}

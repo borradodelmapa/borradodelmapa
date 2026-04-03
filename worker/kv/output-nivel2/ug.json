@@ -1,0 +1,314 @@
+{
+  "pais": "Uganda",
+  "codigo": "ug",
+  "destinos": [
+    {
+      "id": "kibale-national-park",
+      "nombre": "Kibale National Park",
+      "tipo": "naturaleza",
+      "region": "Occidente, cerca de Fort Portal",
+      "descripcion": "Selva tropical primaria con la mayor concentración de primates de Uganda: chimpancés, monos colobos y otras 12 especies. Imprescindible para el trekking de chimpancés y observación de vida silvestre sin masificación turística. El bosque es denso y la experiencia es más íntima que en otros parques.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a agosto, diciembre a febrero",
+      "como_llegar": "Desde Kampala en autobús a Fort Portal (6 horas, 15-20 EUR), luego 30 km al parque en vehículo 4x4 (1 hora, 40-60 EUR con guía)",
+      "donde_dormir": {
+        "mochilero": "Kibale Forest Camp o casas locales en Fort Portal, 15-25 EUR/noche",
+        "medio": "Primate Lodge o Crater Safari Lodge, 60-100 EUR/noche",
+        "comfort": "Ndali Lodge o Kibale Forest Lodge, 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Chimpanzee trekking (70 EUR, 3 horas)",
+        "Bigodi Wetland Sanctuary walk (12 EUR, 2-3 horas, gratis con guía local)",
+        "Crater lake hike cerca de Fort Portal (15 EUR)",
+        "Night forest walk (20 EUR)"
+      ],
+      "donde_comer": "Fort Portal: matoke (plátano hervido), ugali, nyama choma en Dutchess Bakery o Kabarole Club. Presupuesto 3-8 EUR. En el parque comer en el lodge.",
+      "consejo_local": "Llega al parque a las 6 AM para el trekking. Los guías locales fuera del lodge son más baratos (30 EUR) y igual de buenos. Trae repelente de insectos fuerte.",
+      "plan_b_lluvia": "Visitar la estación de investigación de chimpancés, walk en Bigodi Wetland (más fácil con lluvia), explorar Fort Portal town",
+      "keywords": [
+        "chimpanzee trekking Uganda",
+        "Kibale Forest",
+        "Fort Portal",
+        "primate sanctuary",
+        "bosque tropical"
+      ]
+    },
+    {
+      "id": "bwindi-impenetrable-national-park",
+      "nombre": "Bwindi Impenetrable National Park",
+      "tipo": "naturaleza",
+      "region": "Suroeste, frontera con Congo",
+      "descripcion": "Uno de los últimos refugios de gorilas de montaña del mundo: 480 individuos viven aquí. El trekking de gorilas es la experiencia más intensa de Uganda, aunque cara. El bosque es impenetrable literalmente: la biodiversidad es excepcional.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a agosto, diciembre a enero",
+      "como_llegar": "Desde Kampala en avión a Kihihi (1,5 horas, 150-200 EUR) o en autobús a Kabale (10 horas, 25 EUR), luego minibús a Bwindi (2 horas, 8 EUR)",
+      "donde_dormir": {
+        "mochilero": "Bwindi Community Rest Camp o casas en pueblos cercanos, 20-35 EUR/noche",
+        "medio": "Mahogany Springs o Bwindi Lodge, 80-120 EUR/noche",
+        "comfort": "Bwindi Wilderness Lodge o Clouds Mountain Gorilla Lodge, 200-350 EUR/noche"
+      },
+      "que_hacer": [
+        "Mountain gorilla trekking (700 EUR, permiso de 1 día, 4-8 horas)",
+        "Forest walk con guías locales (15 EUR)",
+        "Batwa pygmy cultural tours (20 EUR, 2 horas)",
+        "Rushaga sector exploration (gratis)"
+      ],
+      "donde_comer": "En lodges o pueblos como Kisoro: posho, matoke, beans. Presupuesto 2-5 EUR en comedores locales. Lodges: 15-25 EUR.",
+      "consejo_local": "El permiso de gorila sube y baja. En temporada baja (mayo, noviembre) negocia directamente en el parque o con tour operators locales. Trae botas de trekking impermeables. Si no tienes presupuesto para gorilas, los forest walks son excelentes y baratos.",
+      "plan_b_lluvia": "Batwa cultural tours (funcionan con lluvia), explorar pueblos cercanos, visitar el Kabale Crater Lake, quedarse en lodge",
+      "keywords": [
+        "mountain gorilla trekking",
+        "Bwindi",
+        "gorilas Uganda",
+        "Kisoro",
+        "southwestern Uganda"
+      ]
+    },
+    {
+      "id": "queen-elizabeth-national-park",
+      "nombre": "Queen Elizabeth National Park",
+      "tipo": "naturaleza",
+      "region": "Suroeste-centro, Kasese",
+      "descripcion": "Parque vasto con fauna diversa: búfalos, leones, elefantes, hipopótamos y aves (672 especies). El Kazinga Channel ofrece cruceros baratos con excelente avistamiento. Es más accesible económicamente que Bwindi y permite combinar safari con senderismo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a agosto, diciembre a febrero",
+      "como_llegar": "Desde Kampala en autobús a Kasese (7-8 horas, 18-25 EUR), luego minibús al parque (1-2 horas, 8 EUR)",
+      "donde_dormir": {
+        "mochilero": "Kasese town: backpackers o casas de huéspedes, 15-25 EUR/noche",
+        "medio": "Mweya Safari Lodge o Crater Lake Lodge (cercano), 70-110 EUR/noche",
+        "comfort": "Mweya Safari Lodge suites o Katara Lodge, 180-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Kazinga Channel boat cruise (20-30 EUR, 2 horas, fauna increíble)",
+        "Game drive sector norte (40-50 EUR con guía, 4 horas)",
+        "Rwenzori foothills hike (25 EUR, 4-5 horas)",
+        "Salt Lake (Katwe) tour (15 EUR, historia de minería)"
+      ],
+      "donde_comer": "Kasese: chapati, samosas, Nile perch grillado. Presupuesto 2-6 EUR. En Mweya Lodge: 15-30 EUR. Mercado de Kasese barato y auténtico.",
+      "consejo_local": "El crucero por Kazinga es obligatorio: la concentración de animales en orilla es impresionante. Contrata guías locales en Mweya, son más baratos que tours operados. Visita Salt Lake si te interesa la historia local.",
+      "plan_b_lluvia": "Kazinga cruise (especialmente recomendado con nublado), explorar Salt Lake Katwe, quedarse en lodge",
+      "keywords": [
+        "Queen Elizabeth",
+        "Kazinga Channel",
+        "Kasese",
+        "safari Uganda",
+        "hipopotamos"
+      ]
+    },
+    {
+      "id": "lake-bunyonyi",
+      "nombre": "Lake Bunyonyi",
+      "tipo": "isla",
+      "region": "Suroeste, Kabale",
+      "descripcion": "Lago con 29 islas, paisaje montañoso y clima fresco. Perfecto para relajarse tras trekking intenso. Está saturado de turismo de mochilero pero ofrece actividades genuinas: buceo, kayak, senderismo. El agua es clara y sin cocodrilos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto, diciembre a febrero",
+      "como_llegar": "Desde Kabale en minibús a pueblos de orilla como Kabale town o Rutindo (30 min, 2-3 EUR), luego a isla en bote (5-15 EUR según destino)",
+      "donde_dormir": {
+        "mochilero": "Kabale town o casas en isla de Punishment: 12-20 EUR/noche",
+        "medio": "Bunyonyi Overland Resort o Amajambere Irungu, 50-80 EUR/noche",
+        "comfort": "Bunyonyi Safari Resort o Bwama Island Lodge, 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Kayaking entre islas (20-30 EUR, 2-3 horas)",
+        "Buceo certificado (60-80 EUR, 1 inmersión)",
+        "Hiking en montañas alrededor (gratis con guía local, 10-15 EUR)",
+        "Visita isla Bwama con comunidad local (15 EUR, 3 horas)"
+      ],
+      "donde_comer": "Kabale town: restaurantes baratos de comida local (2-4 EUR). Islas: fish grillado, posho. En lodges: 10-20 EUR. Kabale market para fruta fresca barata.",
+      "consejo_local": "Evita la isla de Punishment si buscas paz: es puro turismo de mochilero/fiesta. Punishment Island y Amajambere son dos spots diferentes. Las islas menores (Bwama, Bunyonyi central) son más auténticas. Negocia precio de bote con locales, no con resorts.",
+      "plan_b_lluvia": "Actividades en isla (descanso), buceo, visitas culturales a Bwama, explorar Kabale town",
+      "keywords": [
+        "Lake Bunyonyi",
+        "Kabale",
+        "islas Uganda",
+        "kayaking",
+        "diving"
+      ]
+    },
+    {
+      "id": "kampala",
+      "nombre": "Kampala",
+      "tipo": "ciudad",
+      "region": "Centro, capital",
+      "descripcion": "Capital bulliciosa con mercados caóticos, museos interesantes y vida nocturna. No es destino principal pero indispensable como punto de entrada y descanso. Ofrece auténtica experiencia urbana africana sin exotismo forzado.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto, diciembre a febrero",
+      "como_llegar": "Aeropuerto de Entebbe a 40 km (taxi 20-30 EUR, 1 hora; autobús 3-5 EUR, 2 horas)",
+      "donde_dormir": {
+        "mochilero": "Kamokya, Wandegeya: The Backpackers Place, Cosy Nest, 12-20 EUR/noche",
+        "medio": "Kolping Guest House o Mestizo Restaurant & Bar, 45-70 EUR/noche",
+        "comfort": "Serena Hotel o Hilton, 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Uganda Museum (5 EUR, historia y etnografía)",
+        "Kasubi Tombs (3 EUR, patrimonio cultural)",
+        "Kabaka's Palace visita (5 EUR)",
+        "Owino Market (gratis, experiencia auténtica)",
+        "Ekspresso bar hopping en Kampala, Acacia/Naalya (4-8 EUR)"
+      ],
+      "donde_comer": "Owino Market: comida local barata (1-2 EUR). Acacia: brunch, 5-10 EUR. Mestizo: latinoamericana, 8-15 EUR. Cafe Pap: ugandés, 3-6 EUR. Nile Perch everywhere.",
+      "consejo_local": "No vayas a Kampala esperando atracción turística. Es caótica, desordenada y eso es el punto. Owino Market es seguro si vas de día con bolsa pequeña. Los conductores de mototaxi (boda boda) son peligrosos: usa taxi regular o Uber. La ciudad es franca y amable si muestras respeto.",
+      "plan_b_lluvia": "Museos (Uganda Museum), malls, cafeterías, explorar bairros como Kampala y Nakasero",
+      "keywords": [
+        "Kampala",
+        "capital Uganda",
+        "Owino Market",
+        "Kasubi",
+        "Uganda Museum"
+      ]
+    },
+    {
+      "id": "murchison-falls-national-park",
+      "nombre": "Murchison Falls National Park",
+      "tipo": "naturaleza",
+      "region": "Norte, Masindi",
+      "descripcion": "Parque grande con fauna abundante (leones, elefantes, hipopótamos) y el río Nilo. Las cataratas Murchison son espectaculares. Menos turístico que Queen Elizabeth, con safaris más auténticos y cruceros por el Nilo baratos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a agosto, diciembre a febrero",
+      "como_llegar": "Desde Kampala en autobús a Masindi (5 horas, 12-15 EUR), luego minibús/pickup a Paraa (2-3 horas, 8 EUR)",
+      "donde_dormir": {
+        "mochilero": "Pakuba Safari Lodge budget o casas en Paraa, 18-30 EUR/noche",
+        "medio": "Red Chilli Rest Camp o Sambiya River Lodge, 60-100 EUR/noche",
+        "comfort": "Nile Safari Lodge o Murchison River Lodge, 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Nile river cruise a cataratas (25 EUR, 2 horas, fauna increíble)",
+        "Safari game drive sector norte (35-50 EUR, 4 horas)",
+        "Top of the Falls hike (5 EUR, 1,5 horas, vistas épicas)",
+        "Fishing en el Nilo (30 EUR, 3 horas)"
+      ],
+      "donde_comer": "Paraa: comida simple en lodges. Masindi: chapati, posho, Nile fish. Presupuesto 2-5 EUR en comedores. Lodges: 12-25 EUR.",
+      "consejo_local": "El Nile cruise es imprescindible: los hipopótamos y cocodrilos están muy cerca. Contrata guías de lodge, son experimentados. El Top of the Falls se ve mejor al atardecer. Puedes llegar sin tour operator desde Masindi, es más barato.",
+      "plan_b_lluvia": "Nile cruise (especialmente con lluvia), explorar Masindi, descanso en lodge",
+      "keywords": [
+        "Murchison Falls",
+        "safari norte Uganda",
+        "Nilo",
+        "hipopotamos",
+        "Masindi"
+      ]
+    },
+    {
+      "id": "rwenzori-mountains",
+      "nombre": "Rwenzori Mountains",
+      "tipo": "montaña",
+      "region": "Suroeste, frontera con Congo",
+      "descripcion": "Cadena montañosa glacial con picos sobre 5000m: Margherita Peak (5109m). Trekking exigente de 6-7 días con paisajes alpinos únicos en Uganda. Solo para senderistas experimentados pero la recompensa es montar en las nubes.",
+      "dias_recomendados": 7,
+      "mejor_epoca": "junio a agosto, diciembre a enero",
+      "como_llegar": "Desde Kampala a Kasese (7-8 horas, 20 EUR), luego a Kilembe en minibús (45 min, 3 EUR), entrada al parque en Kilembe gate",
+      "donde_dormir": {
+        "mochilero": "Kasese town budget hostels, 15-20 EUR/noche",
+        "medio": "Equator Snow Lodge o similares en Kasese, 60-90 EUR/noche",
+        "comfort": "Kasese Lodge o similar, 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Margherita Peak trekking 6-7 días (300-400 EUR con guía/porter, incluye parque)",
+        "Lower circuit trekking 4 días (150-200 EUR, menos técnico)",
+        "Acclimatization hikes desde Kilembe (30-50 EUR, 1-2 horas)"
+      ],
+      "donde_comer": "Kasese: comida local barata. En trek: comida proveída por operador. Presupuesto alimentación trek: incluido en costo.",
+      "consejo_local": "Necesitas aclimatación: haz acclimatization hikes antes. El mal de altura es real arriba de 4000m. Los porters son esenciales (costo 5-10 EUR/día). Contrata con Rwenzori Mountaineering Services, son oficiales. Agosto es mejor que junio (menos lluvia).",
+      "plan_b_lluvia": "Acclimatization hikes en zonas bajas, explorar Kasese y alrededores, descanso",
+      "keywords": [
+        "Rwenzori Mountains",
+        "Margherita Peak",
+        "montaña Uganda",
+        "trekking",
+        "Kilembe"
+      ]
+    },
+    {
+      "id": "fort-portal",
+      "nombre": "Fort Portal",
+      "tipo": "ciudad",
+      "region": "Occidente",
+      "descripcion": "Pequeña ciudad de montaña, base para Kibale y trekking. Menos caótica que Kampala pero con vida local auténtica. Punto de paso obligatorio para acceder a la región oeste sin artificialidad turística.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto, diciembre a febrero",
+      "como_llegar": "Desde Kampala en autobús (6-7 horas, 15-20 EUR)",
+      "donde_dormir": {
+        "mochilero": "Kibale Forest Camp o hostels en Fort Portal town, 15-25 EUR/noche",
+        "medio": "Dutchess Bakery Guesthouse o similar, 40-70 EUR/noche",
+        "comfort": "Ndali Lodge o Crater Safari Lodge, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Crater lakes hiking alrededor (15-25 EUR con guía, 4-5 horas)",
+        "Kabarole Museum (2 EUR, etnografía local)",
+        "Town walk y exploración Kabarole Club (gratis)",
+        "Kibale National Park day trips (70 EUR chimpanzees)"
+      ],
+      "donde_comer": "Dutchess Bakery: desayunos buenos y baratos (2-4 EUR). Kabarole Club: ambiente social, ugandés (3-6 EUR). Mercado: chapati, samosas (1 EUR). Nile Perch en restaurantes.",
+      "consejo_local": "Fort Portal es ciudad de paso pero merece 1-2 días. El Kabarole Club es donde van locales: ambiente authentico, no turístico. Los crater lakes alrededor son poco visitados y hermosos. Contrata guías en Dutchess Bakery, más baratos que tour operators.",
+      "plan_b_lluvia": "Museo, Kabarole Club, exploración de pueblos cercanos, descanso",
+      "keywords": [
+        "Fort Portal",
+        "Kabarole",
+        "crater lakes",
+        "western Uganda"
+      ]
+    },
+    {
+      "id": "jinja-nile-source",
+      "nombre": "Jinja & Nile Source",
+      "tipo": "naturaleza",
+      "region": "Este, Jinja",
+      "descripcion": "Jinja es la ciudad del Nilo, donde el río nace del lago Victoria. Centro de aventura acuática (rafting, kayaking). La fuente del Nilo es mitológica. Combina aventura, relajación en lago y vida de mochilero internacional.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto, diciembre a febrero",
+      "como_llegar": "Desde Kampala en autobús (1,5-2 horas, 4-6 EUR) o en tren (2,5 horas, 1-3 EUR)",
+      "donde_dormir": {
+        "mochilero": "Nile River Backpackers, Jinja Backpackers, 10-18 EUR/noche",
+        "medio": "Njeru Cottage o similares, 40-70 EUR/noche",
+        "comfort": "Nile Porch Luxury Retreat o Jinja Paradise Hotel, 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Rafting en Nilo (40-60 EUR, 2-3 horas, grado III-IV)",
+        "Kayaking en Nilo o Lake Victoria (25-40 EUR, 2 horas)",
+        "Bujagali Falls visita (gratis)",
+        "Nile Source monument (3 EUR, foto simbólica)"
+      ],
+      "donde_comer": "Sofitel: brunch buenos (8-12 EUR). Source Café: comida casual (4-8 EUR). Mercado Jinja: comida local (1-3 EUR). Fish and chips en restaurantes riverside.",
+      "consejo_local": "Jinja es backpacker hub: socialmente fácil pero pierde autenticidad. El rafting es la actividad rey, guías experimentados. Lake Victoria es enorme pero orilla poco desarrollada. La Nile Source es monumento modesto, no es natural visible. Raft si buscas adrenalina, sino es prescindible.",
+      "plan_b_lluvia": "Rafting (especialmente con lluvia, más caudal), kayaking, exploración de Jinja town, descanso",
+      "keywords": [
+        "Jinja",
+        "Nile source",
+        "rafting",
+        "Lake Victoria",
+        "eastern Uganda"
+      ]
+    },
+    {
+      "id": "semuliki-national-park",
+      "nombre": "Semuliki National Park",
+      "tipo": "naturaleza",
+      "region": "Occidente, frontera Congo-DRC",
+      "descripcion": "Parque tropical poco visitado con fauna diversa y geothermal springs únicos. Acceso a ecosistemas congoleses desde Uganda. Excelente para observación de aves (700+ especies) y senderismo. Quietud absoluta comparado con otros parques.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto, diciembre a enero",
+      "como_llegar": "Desde Fort Portal a Bundibugyo (3-4 horas, 8-12 EUR), luego a Ntandi gate (1 hora, 4 EUR)",
+      "donde_dormir": {
+        "mochilero": "Bundibugyo town: basic guesthouses, 12-18 EUR/noche",
+        "medio": "Semuliki Safari Lodge (si abierto), 60-90 EUR/noche",
+        "comfort": "Bundibugyo Lodge o base en Fort Portal + day trip, 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Geothermal springs hike (20 EUR con guía, 2-3 horas)",
+        "Forest walk y birdwatching (15 EUR, 3-4 horas)",
+        "Ntandi trail exploration (gratis con guía local, 10 EUR)"
+      ],
+      "donde_comer": "Bundibugyo: comida básica local. Presupuesto 2-4 EUR. En lodge si disponible: 10-15 EUR. Mercado de Bundibugyo barato.",
+      "consejo_local": "Semuliki es remoto: infraestructura mínima pero eso es el atractivo. El lodge a menudo cierra. Mejor estrategia: base en Fort Portal, day trip o 1 noche en Bundibugyo. Las hot springs son geotérmicas únicas, valen la pena. Guías locales en Bundibugyo.",
+      "plan_b_lluvia": "Geothermal springs (funcionan siempre), forest walk (con impermeable), exploración local",
+      "keywords": [
+        "Semuliki",
+        "geothermal springs",
+        "birdwatching",
+        "west Uganda",
+        "remote"
+      ]
+    }
+  ]
+}

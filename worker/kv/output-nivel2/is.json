@@ -1,0 +1,328 @@
+{
+  "pais": "Islandia",
+  "codigo": "is",
+  "destinos": [
+    {
+      "id": "reikiavik",
+      "nombre": "Reikiavik",
+      "tipo": "ciudad",
+      "region": "Región Metropolitana",
+      "descripcion": "Capital y único centro urbano de Islandia con museos de calidad, vida nocturna vibrante y arquitectura colorida. Punto de partida obligatorio para acceder al resto del país y base logística ideal. Centro compacto, amigable con mochileros y excelente para conocer la cultura islandesa moderna.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Aeropuerto Internacional de Keflavík (45 km): autobús Flybus 4.490 EUR, coche de alquiler 35-50 EUR/día, taxi 50-60 EUR",
+      "donde_dormir": {
+        "mochilero": "Albergues en el centro (HI Reikiavik, Kex Hostel): 25-35 EUR/noche",
+        "medio": "Guesthouses tipo Airbnb en Óldtown: 60-90 EUR/noche",
+        "comfort": "Hoteles de cadena (Borg, ION Adventure Hotel): 150-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Explorar Laugavegur y el casco antiguo (gratis)",
+        "Baño en Sky Lagoon o Sundhöllin (25 EUR)",
+        "Museo Nacional Islandés (15 EUR)",
+        "Mirador de Perlan (gratis/con café)",
+        "Paseo por Tjörnin pond (gratis)"
+      ],
+      "donde_comer": "Hot dogs de Bæjarins Beztu (4-5 EUR), fish and chips en el puerto, cevichería Japón. Rango: 8-20 EUR platos principales. Mejor zona: casco antiguo y puerto",
+      "consejo_local": "Compra comida en los supermercados Bonus o Krónan (40% más barato que restaurantes) y haz pícnics. La ciudad es cara pero el transporte público es eficiente.",
+      "plan_b_lluvia": "Museos de arte (Perlan, Museo Nacional), piscinas geotérmicas, cafeterías cozy en Óldtown",
+      "keywords": [
+        "Reykjavik",
+        "capital islandesa",
+        "Oldtown",
+        "Laugavegur",
+        "Sky Lagoon",
+        "Hallgrímskirkja"
+      ]
+    },
+    {
+      "id": "golden-circle",
+      "nombre": "Golden Circle",
+      "tipo": "naturaleza",
+      "region": "Región Sur (desde Reikiavik)",
+      "descripcion": "Ruta de un día que conecta tres maravillas: Þingvellir (grietas tectónicas UNESCO), Geysir (géiseres activos) y Gullfoss (cascada de 32m). Loop de 300 km perfectamente señalizado y accesible sin guía turístico. Obligatorio para todo viajero en Islandia.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Reikiavik en coche de alquiler (90 km ida): 1,5 horas, gasolina 15 EUR. Autobús grupal desde Reikiavik: 60-80 EUR (descartable si viajas solo/a)",
+      "donde_dormir": {
+        "mochilero": "En Reikiavik base, o camping cerca de Borgarnes: 15-20 EUR/noche",
+        "medio": "Guesthouses en Selfoss o Hveragerði: 50-70 EUR/noche",
+        "comfort": "Spa Hotel en Hveragerði o cabaña en Borgarnes: 120-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Caminata en Þingvellir: grietas, sísmico de placa (gratis)",
+        "Geysir: ver la erupción de Strokkur cada 5-10 min (gratis)",
+        "Cascada Gullfoss: dos viewpoints (gratis)",
+        "Baño en Geysir Hot Spring (20 EUR opcional)"
+      ],
+      "donde_comer": "Cafetería Geysir Center (sándwiches 12-15 EUR), restaurante Gullfoss (carnes 20-25 EUR). Trae comida desde Reikiavik, hay pocos restaurantes",
+      "consejo_local": "Llega a Strokkur antes de las 11:00 para evitar autobuses. No necesitas guía; las señales son claras. El circuito es un 'tick the box' turístico pero imprescindible.",
+      "plan_b_lluvia": "Aún se ve bien en lluvia ligera. Lleva impermeable. Si hay nieve, las carreteras pueden cerrarse (info en Road.is)",
+      "keywords": [
+        "Golden Circle",
+        "Þingvellir",
+        "Geysir",
+        "Gullfoss",
+        "Strokkur",
+        "Hveragerdi"
+      ]
+    },
+    {
+      "id": "laguna-glaciar-jokulsarlon",
+      "nombre": "Laguna Glaciar Jökulsárlón",
+      "tipo": "naturaleza",
+      "region": "Región Sur Este (Vatnajökull)",
+      "descripcion": "Laguna de agua glaciar con icebergs flotantes frente a la lengua del glaciar Vatnajökull. Destino remoto pero accesible, impactante por su escala y contraste de colores. Tour en bote opcional pero recomendado para ver de cerca los témpanos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Reikiavik en coche de alquiler: ruta 1 este 400 km, 5-6 horas. Gasolina 50 EUR. Autobús grupal desde Reikiavik: 100-120 EUR (agotador, no recomendado)",
+      "donde_dormir": {
+        "mochilero": "Camping cerca de Jökulsárlón: 12-18 EUR/noche. Hostel Hótel en Höfn (30 km): 28-40 EUR/noche",
+        "medio": "Guesthouse rural en Höfn o cerca de la laguna: 60-85 EUR/noche",
+        "comfort": "Cabaña de lujo Jökulsárlón o hotel en Höfn: 130-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Laguna desde la orilla: fotografía de icebergs (gratis)",
+        "Tour en bote Jökulsárlón: 35 EUR, 1 hora",
+        "Playa de Diamond Beach: hielo en arena negra (gratis)",
+        "Mirador de Breiðamerkursandur (gratis)"
+      ],
+      "donde_comer": "Cafetería Jökulsárlón (sándwiches 15 EUR), supermercado en Höfn. Cocina en el camping o alojamiento",
+      "consejo_local": "Alquila coche desde Reikiavik: es el único modo viable. La laguna es hermosa al atardecer (luz hasta las 23:00 en verano). Diamond Beach es una joya gratis a 5 km de la laguna.",
+      "plan_b_lluvia": "Sigue siendo espectacular con niebla. Trae impermeable. Si hay tormenta, espera en el hostel o cafetería.",
+      "keywords": [
+        "Jokulsarlon",
+        "laguna glaciar",
+        "Diamond Beach",
+        "Vatnajokull",
+        "icebergs",
+        "Hofn"
+      ]
+    },
+    {
+      "id": "south-coast",
+      "nombre": "Costa Sur (South Coast)",
+      "tipo": "naturaleza",
+      "region": "Región Sur",
+      "descripcion": "Ruta de 200 km entre Reikiavik y Jökulsárlón con cascadas (Seljalandsfoss, Skógafoss), glaciar negro Sólheimasandur y pueblos costeros. Combinable en 2-3 días de roadtrip independiente. Uno de los recorridos más hermosos y variados de Islandia.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Reikiavik en coche de alquiler: ruta 1 este 180 km, 2-3 horas hasta Vík. Gasolina 30-40 EUR",
+      "donde_dormir": {
+        "mochilero": "Camping en Seljalandsfoss o Skógafoss: 15-20 EUR/noche. Albergue en Vík: 30-40 EUR/noche",
+        "medio": "Guesthouse familiar en Hvolsvöllur o Vík: 55-80 EUR/noche",
+        "comfort": "Hotel ION Adventure o cabaña luxury en Vík: 140-190 EUR/noche"
+      },
+      "que_hacer": [
+        "Seljalandsfoss: cascada con cueva (gratis, 2 EUR parking)",
+        "Skógafoss: cascada masiva (gratis)",
+        "Playa negra Reynisfjara: cuevas y olas (gratis)",
+        "Glaciar Sólheimasandur (acceso a pie 3 horas o tour 4x4: 80 EUR)"
+      ],
+      "donde_comer": "Restaurante Fosshotel en Hvolsvöllur (carnes 18-22 EUR), tienda de sándwiches en Vík (8-10 EUR). Compra provisiones en Reikiavik",
+      "consejo_local": "Conduce sin prisa, detente en miradores pequeños (no solo los principales). Reynisfjara es peligrosa con olas grandes: no te acerques a la orilla. Alquila el coche con tanque lleno.",
+      "plan_b_lluvia": "Las cascadas son mejores con lluvia. En nieve, la ruta 1 permanece abierta pero las secundarias cierran. Comprueba road.is",
+      "keywords": [
+        "South Coast",
+        "Seljalandsfoss",
+        "Skogafoss",
+        "Reynisfjara",
+        "Vik",
+        "playa negra"
+      ]
+    },
+    {
+      "id": "westfjords",
+      "nombre": "Westfjords",
+      "tipo": "rural",
+      "region": "Región Oeste",
+      "descripcion": "Región remota con acantilados de Dyrhólaey, cascadas y fauna (frailecillos en verano). Menos turística que la Costa Sur pero igualmente impactante. Requiere más días y coche, pero recompensa con soledad y paisaje virgen.",
+      "dias_recomendados": 3,
+      "mejor_época": "junio a agosto (acceso limitado en invierno)",
+      "como_llegar": "Desde Reikiavik en coche de alquiler: ruta 1 norte + ruta 60-61, 200 km, 3-4 horas. Gasolina 40 EUR",
+      "donde_dormir": {
+        "mochilero": "Camping en Ísafjörður o Látrabjarg: 15-20 EUR/noche",
+        "medio": "Guesthouse en Ísafjörður o Patreksfjörður: 60-85 EUR/noche",
+        "comfort": "Hotel Ísafjörður o cabaña rústica: 130-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Acantilado Látrabjarg: aves y frailecillos (gratis)",
+        "Cascada Dynjandi (gratis)",
+        "Pueblo costero Ísafjörður (exploración gratis)",
+        "Avistamiento de ballenas desde Ísafjörður (80 EUR)"
+      ],
+      "donde_comer": "Restaurante Tjöruhúsið en Ísafjörður (pescado fresco 20-25 EUR), cafés locales. Cocina en el camping",
+      "consejo_local": "Los Westfjords son el 'auténtico' Islandia. Menos filtros Instagram, más ganadería y naturaleza cruda. Las carreteras son sinuosas pero seguras. Lleva provisiones desde Reikiavik.",
+      "plan_b_lluvia": "El clima es más impredecible aquí. La lluvia es frecuente. Los acantilados son espectaculares incluso con niebla.",
+      "keywords": [
+        "Westfjords",
+        "Latrabjarg",
+        "Dynjandi",
+        "Isafjordur",
+        "frailecillos",
+        "acantilados"
+      ]
+    },
+    {
+      "id": "peninsula-snaefellsnes",
+      "nombre": "Península de Snæfellsnes",
+      "tipo": "naturaleza",
+      "region": "Región Oeste",
+      "descripcion": "Península de 90 km con volcán Snæfellsjökull (inmortalizado en Viaje al Centro de la Tierra), playas de lava, cascadas y montañas. Miniatura de Islandia condensada en un día de roadtrip. Menos concurrida que la Costa Sur pese a su belleza.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Reikiavik en coche de alquiler: ruta 1 norte + ruta 54, 180 km, 2-3 horas. Gasolina 30 EUR",
+      "donde_dormir": {
+        "mochilero": "Camping en Grundarfjörður o Snæfellsbær: 12-18 EUR/noche",
+        "medio": "Guesthouse en Grundarfjörður: 55-75 EUR/noche",
+        "comfort": "Cabaña de diseño en la península: 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Montaña Kirkjufell: fotografía icónica (gratis)",
+        "Cascada Kirkjufellsfoss (gratis)",
+        "Playa de lava Djúpalónssandur (gratis)",
+        "Caminata volcán Snæfellsjökull (40 EUR con guía)"
+      ],
+      "donde_comer": "Restaurante en Grundarfjörður (pescado 18-22 EUR), café en Stykkishólmur. Compra provisiones en Reikiavik",
+      "consejo_local": "Kirkjufell es Instagram-famosa, llega temprano (7:00) para evitar multitudes. La caminata al volcán es impresionante pero exigente. El clima es volátil.",
+      "plan_b_lluvia": "Funciona con lluvia. Los acantilados son atmosféricos con niebla. Comprueba road.is para acceso a carreteras secundarias.",
+      "keywords": [
+        "Snaefellsnes",
+        "Kirkjufell",
+        "Snæfellsjökull",
+        "Djupalonsssandur",
+        "Grundarfjordur"
+      ]
+    },
+    {
+      "id": "lago-myvatn",
+      "nombre": "Lago Mývatn",
+      "tipo": "naturaleza",
+      "region": "Región Norte",
+      "descripcion": "Lago geotérmico con hervaderos de barro hirviendo, campos de lava lunar y aves acuáticas. Combinable con baño en Sky Lagoon de agua caliente. Destino norte accesible para quienes alquilen coche sin extremo esfuerzo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Desde Reikiavik en coche de alquiler: ruta 1 norte vía Akureyri, 450 km, 5-6 horas. Gasolina 60 EUR. Opción vuelo + coche: vuelo Reikiavik-Akureyri 80-100 EUR, luego coche alquiler (45 km más)",
+      "donde_dormir": {
+        "mochilero": "Camping Mývatn: 12-18 EUR/noche. Hostel en Akureyri: 28-40 EUR/noche",
+        "medio": "Guesthouse rural cerca del lago: 50-75 EUR/noche",
+        "comfort": "Hotel Ion Adventure en Mývatn o cabaña: 140-190 EUR/noche"
+      },
+      "que_hacer": [
+        "Hervadero Námafjall: barro hirviendo (gratis)",
+        "Campo de lava Dimmuborgir: senderismo (gratis)",
+        "Baño Sky Lagoon geotérmico (30 EUR)",
+        "Avistamiento de aves acuáticas (gratis desde la orilla)"
+      ],
+      "donde_comer": "Restaurante Gamli Barinn en Akureyri (carnes 20-24 EUR), café en Mývatn (sándwiches 10-12 EUR)",
+      "consejo_local": "Combina con Akureyri (segunda ciudad islandesa, cultura local auténtica). El olor a azufre en Námafjall es normal, no tóxico. Las playas del lago son tranquilas, ideales para relajarse.",
+      "plan_b_lluvia": "El vapor de los hervaderos se intensifica con humedad. Los campos de lava son intrigantes en niebla.",
+      "keywords": [
+        "Myvatn",
+        "Namafjall",
+        "Dimmuborgir",
+        "geotermia",
+        "Akureyri",
+        "Sky Lagoon"
+      ]
+    },
+    {
+      "id": "snaefells-peninsula-remote",
+      "nombre": "Garganta Fjaðrárgljúfur",
+      "tipo": "montaña",
+      "region": "Región Sur Interior",
+      "descripcion": "Cañón espectacular de 100m de profundidad con río esmeralda y acantilados. Menos turístico que Gullfoss pero igualmente impactante. Accesible desde la ruta 1 sur con pequeño desvío. Perfecto para caminatas y fotografía.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Reikiavik en coche de alquiler: ruta 1 este vía Selfoss + ruta 206, 200 km, 3 horas. Gasolina 25 EUR",
+      "donde_dormir": {
+        "mochilero": "Camping cerca de Vatnajökull o en Hvolsvöllur: 15-20 EUR/noche",
+        "medio": "Guesthouse en Hvolsvöllur o Kirkjubæjarklaustur: 55-75 EUR/noche",
+        "comfort": "Hotel en la Costa Sur: 130-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Mirador principal del cañón (gratis)",
+        "Caminata por el borde de Fjaðrárgljúfur (1-2 horas, gratis)",
+        "Fotografía al atardecer (gratis)"
+      ],
+      "donde_comer": "Café pequeño cerca del aparcamiento (sándwiches 10 EUR) o come en Hvolsvöllur",
+      "consejo_local": "Combina con Golden Circle o Costa Sur en un roadtrip más largo. El cañón es espectacular pero breve (30-40 min de parada suficientes). No es un destino de 'acampada', visita de paso.",
+      "plan_b_lluvia": "Visible en lluvia, pero el contraste de colores se pierde. La caminata es resbaladiza.",
+      "keywords": [
+        "Fjadrargljufur",
+        "cañón",
+        "canyon",
+        "río esmeralda",
+        "acantilados",
+        "Costa Sur"
+      ]
+    },
+    {
+      "id": "vatnajokull-glacier-hike",
+      "nombre": "Excursión al Glaciar Vatnajökull",
+      "tipo": "montaña",
+      "region": "Región Sur Este",
+      "descripcion": "Caminata guiada sobre el glaciar más grande de Europa (mayor que todos los Alpes combinados). Experiencia inmersiva con crampones, piolet y arnés. Tours de 3-4 horas desde Skaftafell. Físicamente exigente pero transformadora.",
+      "dias_recomendados": 1,
+      "mejor_época": "junio a septiembre",
+      "como_llegar": "Desde Jökulsárlón o Höfn en coche: parque Skaftafell 25 km, 30 min. O desde Reikiavik: 5-6 horas directo. Coche alquiler 35-50 EUR/día",
+      "donde_dormir": {
+        "mochilero": "Camping Skaftafell: 12-18 EUR/noche. Hostel en Höfn (30 km): 30-40 EUR/noche",
+        "medio": "Guesthouse en Skaftafell o Höfn: 60-85 EUR/noche",
+        "comfort": "Cabaña rústica o hotel en Höfn: 130-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour glaciar Vatnajökull con guía oficial: 60-100 EUR (3-4 horas)",
+        "Senderismo Skaftafell: cascada Svartifoss (2 horas, gratis)",
+        "Mirador glaciar desde el centro de visitantes (gratis)"
+      ],
+      "donde_comer": "Cafetería Skaftafell (sándwiches 12-15 EUR) o cocina en camping",
+      "consejo_local": "No intentes caminar el glaciar sin guía: es peligroso (grietas, crevasses invisibles). Los tours son seguros y educativos. Lleva buen calzado de senderismo (crítico). El glaciar retrocede visiblemente cada año por el cambio climático.",
+      "plan_b_lluvia": "Los tours se cancelan con mala visibilidad o tormenta eléctrica. Reserva con antelación y tener fecha flexible.",
+      "keywords": [
+        "Vatnajokull",
+        "glacier",
+        "Skaftafell",
+        "caminata glaciar",
+        "crampones",
+        "excursion"
+      ]
+    },
+    {
+      "id": "ring-road-completa",
+      "nombre": "Ring Road (Ruta 1) Completa",
+      "tipo": "roadtrip",
+      "region": "Todo Islandia",
+      "descripcion": "Carretera de circunvalación de 1.332 km que rodea toda Islandia. Conecta todos los principales destinos (cascadas, glaciares, playas, fiordos). Viable en 7-10 días en coche de alquiler. La manera más flexible y auténtica de explorar Islandia para viajeros independientes.",
+      "dias_recomendados": 10,
+      "mejor_época": "junio a septiembre",
+      "como_llegar": "Comienza en Reikiavik, coche de alquiler desde aeropuerto Keflavík: 35-50 EUR/día (10 días: 350-500 EUR). Gasolina total: ~150-180 EUR (depende del motor)",
+      "donde_dormir": {
+        "mochilero": "Camping cada noche: 12-20 EUR/noche. Total 10 noches: 120-200 EUR",
+        "medio": "Mezcla camping + guesthouse: 40-60 EUR/noche promedio. Total: 400-600 EUR",
+        "comfort": "Hotel + cabaña: 120-160 EUR/noche. Total: 1.200-1.600 EUR"
+      },
+      "que_hacer": [
+        "Golden Circle (día 1): Þingvellir, Geysir, Gullfoss (gratis)",
+        "Costa Sur (días 2-3): cascadas, Reynisfjara, Jökulsárlón (gratis)",
+        "Vatnajökull (día 4): glaciar Skaftafell (60-100 EUR tour)",
+        "Región Este: Egilsstair, Seydisfjordur (exploración gratis)",
+        "Región Norte (días 5-6): Mývatn, Akureyri, Goðafoss (gratis)",
+        "Westfjords (días 7-8): Látrabjarg, Dynjandi (gratis)",
+        "Snæfellsnes (día 9): Kirkjufell, volcán (gratis/40 EUR tour)",
+        "Regreso Reikiavik (día 10)"
+      ],
+      "donde_comer": "Cocina en camping (sándwiches, pasta): 10-15 EUR/día. Restaurantes ocasionales: 20-30 EUR. Total comida 10 días: 100-300 EUR",
+      "consejo_local": "Empieza por la Costa Sur (sentido antihorario) para acostumbrarte a la carretera. Los campings están bien señalizados. Llena el tanque en pueblos grandes. Una semana es muy rápida, 10-14 días es realista para no correr. Duerme 1-2 noches en el mismo lugar cuando puedas (recarga).",
+      "plan_b_lluvia": "La Ring Road permanece abierta en lluvia. Carreteras secundarias pueden cerrar. Descarga app road.is para alertas de tráfico en tiempo real. Flexibilidad es clave.",
+      "keywords": [
+        "Ring Road",
+        "Ruta 1",
+        "circunvalación",
+        "roadtrip",
+        "todos los destinos",
+        "10 dias"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,349 @@
+{
+  "pais": "Bélgica",
+  "codigo": "be",
+  "destinos": [
+    {
+      "id": "brujas",
+      "nombre": "Brujas",
+      "tipo": "histórico",
+      "region": "Flandes Occidental",
+      "descripcion": "Centro medieval perfectamente conservado con canales, plazas adoquinadas y arquitectura de cuento. Es la ciudad más fotogénica de Bélgica y punto de partida ideal para explorar Flandes. Accesible a pie, sin multitudes masivas fuera de temporada alta.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Bruselas en tren: 15 min, 15 EUR. Desde aeropuerto en autobús + tren: 45 min, 25 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostal en centro histórico o Sint-Jans: 25-35 EUR/noche",
+        "medio": "Hotel 3* en Centrum o Sint-Walburga: 60-90 EUR/noche",
+        "comfort": "Hotel 4* centro medieval (ej: De Tuilerieën): 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por canales en bote (15 EUR)",
+        "Torre Belfort: subir 366 escalones, vistas panorámicas (12 EUR)",
+        "Basílica de la Santa Sangre y museo (15 EUR)",
+        "Cervecería local: prueba Trappist (3-5 EUR pinta)",
+        "Paseo nocturno gratuito por calles iluminadas"
+      ],
+      "donde_comer": "Moules-frites (mejillones con patatas fritas): 12-18 EUR en cualquier café de Markt. Waterzooi (estofado flamenco): 14-20 EUR. Cerveza local en pubs tradicionales.",
+      "consejo_local": "Alquila bicicleta (10 EUR/día) para escapar al campo de Flandes; los turistas se quedan en el centro. Come en tabernas sin turistas en Sint-Jakobsstraat.",
+      "plan_b_lluvia": "Museos Gruthuse y Memling House (arte medieval), catacumbas bajo iglesias, Chocolatería Neuzekes para workshop de chocolate (20 EUR).",
+      "keywords": [
+        "Bruges",
+        "Brugge",
+        "medieval",
+        "canals",
+        "Markt",
+        "Belfort",
+        "Sint-Baafskathedraal"
+      ]
+    },
+    {
+      "id": "amberes",
+      "nombre": "Amberes",
+      "tipo": "ciudad",
+      "region": "Flandes",
+      "descripcion": "Puerto medieval con dinamismo cosmopolita: diamantes, arte flamenco, moda underground y un waterfront renovado. Menos abarrotada que Brujas pero igual de bella, con carácter más auténtico y joven.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Bruselas en tren: 35 min, 13 EUR. Desde Brujas en tren: 45 min, 16 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostal en Gramercy o Sint-Andries: 22-32 EUR/noche",
+        "medio": "Hotel 3* cerca Centraal Station o Meir: 55-85 EUR/noche",
+        "comfort": "Hotel 4* waterfront (ej: Zuiderterras): 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Catedral de Nuestra Señora: tríptico de Rubens (8 EUR)",
+        "Museo Plantin-Moretus: imprenta histórica (10 EUR)",
+        "Paseo por MAS (Museo de Arte Moderno): 12 EUR o gratis primer miércoles",
+        "Barrio Sint-Andries: boutiques independientes y cafés (gratis)",
+        "Puerto de Amberes: paseo gratuito, vistas de grúas y barcos"
+      ],
+      "donde_comer": "Waterzooi: 15-22 EUR. Croquetas de camarón: 3-4 EUR en bares de Melkmarkt. Cerveza Trappist. Falafel en barrio Schipperkaai (7 EUR).",
+      "consejo_local": "El barrio de diamantes (Diamantkwartier) es turístico; mejor ir a Sint-Andries para tiendas de diseñadores jóvenes. Come en tabernas sin nombre en calles pequeñas.",
+      "plan_b_lluvia": "Museo Rubenshuis (casa-estudio del pintor, 14 EUR), Museo de Diamantes (12 EUR), librerías independientes, cine art house.",
+      "keywords": [
+        "Antwerp",
+        "Antwerpen",
+        "Rubens",
+        "port",
+        "diamonds",
+        "fashion",
+        "Sint-Andries",
+        "Schipperkaai"
+      ]
+    },
+    {
+      "id": "bruselas",
+      "nombre": "Bruselas",
+      "tipo": "ciudad",
+      "region": "Región de Bruselas-Capital",
+      "descripcion": "Capital cosmopolita con Art Nouveau, comics belgas y cerveza excepcional. Centro medieval restaurado contrasta con barrios residenciales bohemios. Es el corazón de Europa pero frecuentemente pasada por alto por viajeros independientes.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "marzo-mayo, septiembre-noviembre",
+      "como_llegar": "Centro de transporte europeo: Eurostar desde Londres (2h15, 50-100 EUR), vuelos internacionales, trenes desde cualquier país limítrofe.",
+      "donde_dormir": {
+        "mochilero": "Hostal en Sablon o Saint-Gilles: 20-30 EUR/noche",
+        "medio": "Hotel 3* barrio Marolles o Ixelles: 50-80 EUR/noche",
+        "comfort": "Hotel 4* center o Louise: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Gran Plaza (Grote Markt): plaza medieval gratuita, mercado navideño en invierno",
+        "Atomium: monumento futurista de 1958, vistas 360°, mirador (15 EUR)",
+        "Museo del Cómic Belga (13 EUR) o Museos Royaux (gratis primer miércoles)",
+        "Art Nouveau en Ixelles: tours o paseo autodidacta (gratis)",
+        "Street art en Saint-Gilles y Marolles (gratis)"
+      ],
+      "donde_comer": "Moules-frites en Rue de Bouchers: 12-16 EUR (turístico). Mejor: estofado en Saint-Gilles: 14-18 EUR. Waffles belgas: 4-6 EUR. Cerveza Lambic y Trappist en pubs tradicionales.",
+      "consejo_local": "Evita Rue de Bouchers; come en bares sin turistas en Marolles o Sablon. El metro es confuso; usa tranvías y autobús. Cervecería Delirium Tremens tiene 2000+ cervezas pero es turística.",
+      "plan_b_lluvia": "Museos: Art Ancien, Art Moderno, Instrumentos Musicales (gratis primer miércoles). Biblioteca Real. Cines art house. Cervecerías.",
+      "keywords": [
+        "Brussels",
+        "Bruxelles",
+        "Grote Markt",
+        "Atomium",
+        "Marolles",
+        "Ixelles",
+        "Art Nouveau",
+        "comics"
+      ]
+    },
+    {
+      "id": "gante",
+      "nombre": "Gante",
+      "tipo": "histórico",
+      "region": "Flandes Oriental",
+      "descripcion": "Rival más auténtica de Brujas: medieval pero sin masificación turística. Canales, arquitectura gótica y una atmósfera universitaria vivaz con bares, cafés y vida nocturna. Ideal para mochileros que quieren Brujas sin las multitudes.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Bruselas en tren: 30 min, 14 EUR. Desde Brujas en tren: 15 min, 10 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostal Citadelpark o Sint-Jacobs: 20-28 EUR/noche",
+        "medio": "Hotel 3* Citadelpark o Sint-Martens: 50-75 EUR/noche",
+        "comfort": "Hotel 4* waterfront (ej: Ghent River Hotel): 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Iglesia de San Bavón: tríptico de van Eyck (3 EUR)",
+        "Paseo por canales en bote (15 EUR) o a pie gratuito",
+        "Subir Torre Belfort para vistas (6 EUR)",
+        "Barrio Graffiti Street: street art legal (gratis)",
+        "Museos: Bellas Artes, Museo de Historia (primeros miércoles gratis)"
+      ],
+      "donde_comer": "Waterzooi: 14-20 EUR. Stoemp (puré con verduras): 12-16 EUR. Cerveza Trappist. Falafel barato en zona universitaria Citadelpark (6-8 EUR).",
+      "consejo_local": "Alquila bicicleta (8 EUR/día) como los locales. Los estudiantes dominan la ciudad; la vida nocturna es intensa. Come en tabernas pequeñas sin turistas en Graffiti Street.",
+      "plan_b_lluvia": "Museos de Bellas Artes, Historia Medieval, Arqueología (varios con entrada conjunta: 15 EUR). Biblioteca Joven Sint-Pieters. Cafés independientes.",
+      "keywords": [
+        "Gent",
+        "Ghent",
+        "van Eyck",
+        "canals",
+        "student city",
+        "Graffiti Street",
+        "Belfort",
+        "Sint-Baafskathedraal"
+      ]
+    },
+    {
+      "id": "oostende",
+      "nombre": "Oostende",
+      "tipo": "playa",
+      "region": "Costa de Flandes",
+      "descripcion": "Único balneario belga con playa arenosa y arquitectura belle époque. Paseo marítimo histórico, arte contemporáneo y cercanía a Brujas hacen que sea escape costero perfecto sin necesidad de salir del país.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "Desde Bruselas en tren: 1h20, 18 EUR. Desde Brujas en tren: 15 min, 10 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostal cerca playa: 22-32 EUR/noche",
+        "medio": "Hotel 3* paseo marítimo: 55-85 EUR/noche",
+        "comfort": "Hotel 4* frente mar (ej: Thermae Palace): 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa: baño y paseo (gratis)",
+        "Paseo marítimo histórico: arquitectura belle époque (gratis)",
+        "Museo MARo: arte moderno (12 EUR)",
+        "Acuario de Bélgica (16 EUR)",
+        "Pier: salón de juegos tradicionales (entrada gratis, juegos pagos)"
+      ],
+      "donde_comer": "Camarones pelados frescos: 8-12 EUR en puestos de la playa. Waterzooi de pescado: 15-20 EUR. Waffles de playa: 4-5 EUR. Cerveza en chiringuitos.",
+      "consejo_local": "El agua es fría todo el año; muchos locales solo pasean. Evita julio-agosto por aglomeraciones. Las mejores comidas de mariscos están en muelles pesqueros fuera del centro.",
+      "plan_b_lluvia": "Museo MARo, Acuario, paseo bajo paraguas por paseo marítimo, cafés art deco, cine vintage.",
+      "keywords": [
+        "Ostend",
+        "coast",
+        "beach",
+        "pier",
+        "belle epoque",
+        "seaside",
+        "promenade"
+      ]
+    },
+    {
+      "id": "namur",
+      "nombre": "Namur",
+      "tipo": "histórico",
+      "region": "Valonia",
+      "descripcion": "Ciudadela medievalfortaleza en la confluencia del Mosa y Sambre. Acceso a las Ardenas (naturaleza) desde una ciudad con carácter. Menos turística que Brujas, más accesible que pueblos rurales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Bruselas en tren: 1h10, 16 EUR. Desde Lieja en tren: 30 min, 12 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostal en centro histórico: 20-28 EUR/noche",
+        "medio": "Hotel 3* Namur centro: 50-70 EUR/noche",
+        "comfort": "Hotel 4* frente río: 85-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Fortaleza de Namur: vistas de la ciudad (8 EUR, funicular 4 EUR)",
+        "Catedral de San Aubain: arquitectura barroca (gratis)",
+        "Paseo por río Mosa en bote (15 EUR)",
+        "Museo de Arte Antiguo (12 EUR)",
+        "Casco antiguo a pie: gratis"
+      ],
+      "donde_comer": "Jamón de Ardenas: 12-16 EUR. Queso belga local: 10-14 EUR. Waterzooi: 14-18 EUR. Cafés en plaza Saint-Aubain con precio razonable.",
+      "consejo_local": "Es puerta de entrada a las Ardenas; combina con excursiones en naturaleza. Los locales son más amables que en Bruselas. Come en tabernas valones pequeñas.",
+      "plan_b_lluvia": "Museos (Arte, Arqueología, Historia), catedral, paseos cubiertos por las arcadas, cafés históricos.",
+      "keywords": [
+        "Namur",
+        "citadel",
+        "Wallonia",
+        "Meuse",
+        "fortress",
+        "gateway to Ardennes"
+      ]
+    },
+    {
+      "id": "ardenas",
+      "nombre": "Ardenas (región)",
+      "tipo": "naturaleza",
+      "region": "Valonia",
+      "descripcion": "Bosques, ríos y pueblos medievales enclavados: Dinant, Rochefort, La Roche-en-Ardenne. Senderismo, canotaje y gastronomía de caza. Es el pulmón verde de Bélgica y escapada perfecta de ciudades para independientes aventureros.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Namur en coche alquilado (40 EUR/día) o autobús regional (8-15 EUR). Tren a pueblos principales: Dinant (1h desde Bruselas, 20 EUR).",
+      "donde_dormir": {
+        "mochilero": "Casas rurales en pueblos (25-35 EUR/noche) o camping (15-22 EUR/noche)",
+        "medio": "Hotel rural 2-3* en Dinant o Rochefort: 50-70 EUR/noche",
+        "comfort": "Hotel 4* con spa o histórico (ej: Château-hôtel): 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo GR sentier des Ardennes: gratis",
+        "Canotaje en río Meuse Dinant-Anseremme (25-40 EUR)",
+        "Pueblos antiguos: Dinant, Rochefort, La Roche-en-Ardenne (paseos gratis)",
+        "Cuevas de Rochefort (12 EUR)",
+        "Castillos arruinados: entrada 5-8 EUR"
+      ],
+      "donde_comer": "Jamón de Ardenas ahumado: 14-20 EUR plato principal. Conejo guisado: 16-22 EUR. Queso Ardenas. Restaurantes rústicos en pueblos: 15-25 EUR menú.",
+      "consejo_local": "Necesitas coche o ser nómada en bicicleta; el transporte público es limitado. Los pueblos son pequeños; reserva alojamiento. La mejor gastronomía está en tabernas locales, no en restaurantes turísticos.",
+      "plan_b_lluvia": "Visitar pueblos cubiertos (galerías), museos locales, cuevas (constantemente 13°C), leer en posadas, gastronomía casera.",
+      "keywords": [
+        "Ardennes",
+        "hiking",
+        "Dinant",
+        "Rochefort",
+        "La Roche",
+        "forests",
+        "Meuse river",
+        "canoeing"
+      ]
+    },
+    {
+      "id": "lovaina",
+      "nombre": "Lovaina",
+      "tipo": "ciudad",
+      "region": "Flandes",
+      "descripcion": "Universidad más antigua de Flandes (1425) con campus gótico. Ciudad compacta, bicicletas por todos lados, bares de estudiantes y auténtica vida local sin turismo masivo. Perfecto escape de capitales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "septiembre-junio (vida universitaria), junio-agosto (más tranquila)",
+      "como_llegar": "Desde Bruselas en tren: 20 min, 10 EUR. Desde Amberes en tren: 40 min, 15 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostal Leuven o habitación compartida universitaria: 18-26 EUR/noche",
+        "medio": "Hotel 3* centro: 45-65 EUR/noche",
+        "comfort": "Hotel 4* histórico: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Biblioteca Universitaria histórica (estilo gótico, interior gratis vista exterior)",
+        "Iglesia de San Pedro: arquitectura gótica (gratis)",
+        "Paseo en bicicleta por campus (alquiler 10 EUR/día)",
+        "Markt: plaza central con terrazas (gratis)",
+        "Museos: Arte Divinidad (5 EUR), Arqueología (entrada reducida)"
+      ],
+      "donde_comer": "Cerveza Trappist en bares de estudiantes: 3-4 EUR. Comida menú estudiante: 8-10 EUR en cantinas. Broodje (sándwich): 4-5 EUR. Carne a la brasa: 12-16 EUR.",
+      "consejo_local": "Los estudiantes dominan; la ciudad es barata y auténtica en octubre-mayo. Alquila bici como los locales. Come en bares de estudiantes fuera de Markt (mucho más barato).",
+      "plan_b_lluvia": "Biblioteca histórica (interior), iglesias, museos, cine universitario, cafés de barrio.",
+      "keywords": [
+        "Leuven",
+        "Louvain",
+        "university",
+        "student city",
+        "Markt",
+        "gothic",
+        "cyclist paradise"
+      ]
+    },
+    {
+      "id": "lieja",
+      "nombre": "Lieja",
+      "tipo": "ciudad",
+      "region": "Valonia",
+      "descripcion": "Segunda ciudad de Bélgica, menos conocida pero auténtica: arte punk, cuadros de Delacroix, principado católico histórico. Vida nocturna intensa, mercado de pulgas legendario y gastronomía valona real sin pretensiones.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "marzo-mayo, septiembre-noviembre",
+      "como_llegar": "Desde Bruselas en tren: 1h, 16 EUR. Desde Amberes en tren: 1h40, 24 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostal Lieja Outremeuse: 18-26 EUR/noche",
+        "medio": "Hotel 3* centro: 45-65 EUR/noche",
+        "comfort": "Hotel 4* histórico: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo de Arte Moderno (MAMAC): arte belga contemporáneo (8 EUR)",
+        "Catedral de San Pablo: arquitectura neogótica (gratis)",
+        "Barrio Outremeuse: tabernas y cultura local (gratis paseo)",
+        "Mercado de los Dominicos: antigüedades todos los domingos (gratis entrada)",
+        "Paseo por orilla del Mosa (gratis)"
+      ],
+      "donde_comer": "Liégeois: estofado de res con pasas: 14-18 EUR. Jamón de Ardenas: 12-16 EUR. Queso local. Gaufre de Lieja (waffle denso): 4-5 EUR. Cafés auténticos: 8-12 EUR plato.",
+      "consejo_local": "El barrio Outremeuse es donde viven los 'Liégeois' auténticos; come en tabernas sin turistas. El mercado de pulgas es el mejor de Bélgica (domingos 6am). Evita centro turístico cerca catedral.",
+      "plan_b_lluvia": "Museos (Arte, Historia, Arqueología), catedral, barrio Outremeuse en bares, gastronomía.",
+      "keywords": [
+        "Liège",
+        "Lijeijk",
+        "Outremeuse",
+        "flea market",
+        "Wallonia",
+        "Delacroix",
+        "nightlife"
+      ]
+    },
+    {
+      "id": "ypres",
+      "nombre": "Ypres",
+      "tipo": "histórico",
+      "region": "Flandes Occidental",
+      "descripcion": "Centro medieval completamente reconstruido tras Primera Guerra Mundial. Museos de guerra, puertas antiguas intactas y ceremonia diaria de desfiles militares en homenaje a caídos. Sombría pero profundamente impactante para quienes buscan historia real.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "Desde Brujas en autobús: 1h, 10 EUR. Desde Bruselas en tren + autobús: 2h, 25 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostal Ypres: 20-28 EUR/noche",
+        "medio": "Hotel 3* Grote Markt: 50-70 EUR/noche",
+        "comfort": "Hotel 4* histórico: 80-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Cementerios militares (Tyne Cot, Menin Gate): entrada gratis, impactante",
+        "Museos Primera Guerra Mundial: In Flanders Fields (15 EUR), Passchendaele (14 EUR)",
+        "Menin Gate: ceremonia diaria 20:00 (gratis, solemne)",
+        "Torre Belfort: vistas (10 EUR)",
+        "Paseo por fosos y murallas (gratis)"
+      ],
+      "donde_comer": "Waterzooi: 14-18 EUR. Moules-frites: 12-16 EUR. Cerveza local. Cafés sencillos sin pretensiones: 10-15 EUR menú.",
+      "consejo_local": "La ceremonia del Menin Gate (20:00 diarios) es emocionante y solemne; llega temprano. Los cementerios militares son destinos de peregrinos, no turistas. Respeta el ambiente grave.",
+      "plan_b_lluvia": "Museos de guerra (especialmente In Flanders Fields: muy completo), catedral, cementerios.",
+      "keywords": [
+        "Ypres",
+        "Ieper",
+        "WWI",
+        "Menin Gate",
+        "war cemeteries",
+        "Flanders Fields",
+        "Passchendaele"
+      ]
+    }
+  ]
+}

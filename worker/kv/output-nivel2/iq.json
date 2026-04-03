@@ -1,0 +1,228 @@
+{
+  "pais": "Irak",
+  "codigo": "iq",
+  "destinos": [
+    {
+      "id": "bagdad",
+      "nombre": "Bagdad",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital de Irak con una rica historia milenaria. Centro político, cultural y económico del país. Ofrece museos de clase mundial, bazares tradicionales y restos arqueológicos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "vuelo internacional al Aeropuerto Internacional de Bagdad, desde 80-150 EUR",
+      "donde_dormir": {
+        "mochilero": "guesthouses 25-40 EUR/noche",
+        "medio": "hoteles 60-100 EUR/noche",
+        "comfort": "hoteles de lujo 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional de Irak",
+        "Bazar de Al-Mutanabbi",
+        "Puente de la República",
+        "Paseo por el río Tigris",
+        "Palacio Abbasí"
+      ],
+      "donde_comer": "Caldo de judías, kebab al horno, masgouf (pescado a la parrilla) 3-8 EUR por plato",
+      "consejo_local": "Contrata guía oficial para mayor seguridad y acceso a sitios restringidos",
+      "plan_b_lluvia": "Visita museos y bazares cubiertos",
+      "keywords": [
+        "capital",
+        "historia",
+        "museos",
+        "Tigris",
+        "arqueología"
+      ]
+    },
+    {
+      "id": "najaf",
+      "nombre": "Najaf",
+      "tipo": "ciudad",
+      "region": "Sur",
+      "descripcion": "Una de las ciudades más santas del islam chiita. Centro de peregrinación religiosa con la Mezquita del Imán Ali. Atmósfera espiritual única y ciudad antigua bien preservada.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "autobús desde Bagdad 4-5 horas, 15-25 EUR o vuelo doméstico",
+      "donde_dormir": {
+        "mochilero": "hostales 20-35 EUR/noche",
+        "medio": "hoteles 50-80 EUR/noche",
+        "comfort": "hoteles religiosos 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Mezquita del Imán Ali",
+        "Cementerio de Wadi as-Salam",
+        "Bazar tradicional de Najaf",
+        "Paseos nocturnos por la ciudad vieja"
+      ],
+      "donde_comer": "Comida iraní, caldo de lentejas, pan tandoori fresco 2-6 EUR por comida",
+      "consejo_local": "Respeta códigos de vestimenta modestos, especialmente cerca de mezquitas",
+      "plan_b_lluvia": "Visita galerías de arte locales y tiendas de cerámica",
+      "keywords": [
+        "religión",
+        "chiita",
+        "peregrinación",
+        "mezquita",
+        "ciudad sagrada"
+      ]
+    },
+    {
+      "id": "karbala",
+      "nombre": "Karbala",
+      "tipo": "ciudad",
+      "region": "Sur",
+      "descripcion": "Segunda ciudad sagrada del islam chiita, famosa por el Santuario del Imán Hussein. Importante destino de peregrinación durante Ashura. Rica historia religiosa y cultural.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre a mayo",
+      "como_llegar": "autobús desde Bagdad 90 minutos, 10-15 EUR o desde Najaf 1 hora",
+      "donde_dormir": {
+        "mochilero": "albergues 20-30 EUR/noche",
+        "medio": "hoteles 50-75 EUR/noche",
+        "comfort": "hoteles premium 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Santuario del Imán Hussein",
+        "Santuario de Abbas ibn Ali",
+        "Museo de Karbala",
+        "Bazar de Karbala",
+        "Participar en peregrinaciones"
+      ],
+      "donde_comer": "Estofado de garbanzos, kabab, té iraní 2-5 EUR por plato",
+      "consejo_local": "Planifica visitando durante ceremonias religiosas para una experiencia auténtica",
+      "plan_b_lluvia": "Explora tiendas de recuerdos y sitios cubiertos del bazar",
+      "keywords": [
+        "religión",
+        "santuario",
+        "peregrinación",
+        "cultura islámica",
+        "Ashura"
+      ]
+    },
+    {
+      "id": "erbil",
+      "nombre": "Erbil",
+      "tipo": "ciudad",
+      "region": "Norte",
+      "descripcion": "Capital de la región del Kurdistán iraquí con arquitectura moderna y antigua. Mezcla de comercio contemporáneo con la histórica Ciudadela de Erbil. Más segura y progresista.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "vuelo doméstico desde Bagdad 1 hora, 60-100 EUR o autobús 8-10 horas",
+      "donde_dormir": {
+        "mochilero": "guesthouses 25-40 EUR/noche",
+        "medio": "hoteles 70-110 EUR/noche",
+        "comfort": "hoteles internacionales 180-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Ciudadela de Erbil",
+        "Bazares modernos y tradicionales",
+        "Parque Mineh",
+        "Museo de la Ciudadela",
+        "Vida nocturna en el centro"
+      ],
+      "donde_comer": "Kebab kurdo, falafel, hummus, té con cardamomo 3-7 EUR por comida",
+      "consejo_local": "Excelente base para explorar la región kurda. Mejor infraestructura turística que otras ciudades.",
+      "plan_b_lluvia": "Centros comerciales cubiertos, museos, cafeterías",
+      "keywords": [
+        "Kurdistán",
+        "Ciudadela",
+        "modernidad",
+        "seguridad relativa",
+        "comercio"
+      ]
+    },
+    {
+      "id": "sulaymaniyah",
+      "nombre": "Sulaymaniyah",
+      "tipo": "ciudad",
+      "region": "Norte",
+      "descripcion": "Ciudad montañosa en el corazón del Kurdistán, conocida por su escena cultural y artística. Centro intelectual con universidades y galerías. Paisajes naturales impresionantes cercanos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "autobús desde Erbil 3-4 horas, 15-20 EUR o vuelo doméstico",
+      "donde_dormir": {
+        "mochilero": "hostales 20-35 EUR/noche",
+        "medio": "hoteles 60-90 EUR/noche",
+        "comfort": "hoteles boutique 120-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo de la Fotografía",
+        "Galerías de arte contemporáneo",
+        "Paseos por montes Qandil",
+        "Lago Darbandikhan",
+        "Cafés literarios"
+      ],
+      "donde_comer": "Comida kurda, sopa de yogur, pan kurdo, carne asada 3-6 EUR por plato",
+      "consejo_local": "Centro cultural vibrant con jóvenes emprendedores y artistas. Menos turístico que Erbil.",
+      "plan_b_lluvia": "Visita museos, cafés intelectuales y librerías",
+      "keywords": [
+        "Kurdistán",
+        "arte",
+        "cultura",
+        "montañas",
+        "naturaleza"
+      ]
+    },
+    {
+      "id": "babilonia",
+      "nombre": "Babilonia",
+      "tipo": "sitio arqueologico",
+      "region": "Centro",
+      "descripcion": "Antiguo sitio arqueológico de la legendaria ciudad de Babilonia. Puertas de Ishtar, murallas y palacios de Nabucodonosor II. Uno de los sitios más importantes de la arqueología mundial.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "autobús desde Bagdad o Karbala 85 km, 10-15 EUR, requiere permisos especiales",
+      "donde_dormir": {
+        "mochilero": "Hillah cercano 20-30 EUR/noche",
+        "medio": "hoteles en Hillah 50-75 EUR/noche",
+        "comfort": "hoteles en Hillah 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas de Puerta de Ishtar",
+        "Paseos por murallas antiguas",
+        "Museo de Babilonia",
+        "Fotografía de restos arqueológicos"
+      ],
+      "donde_comer": "Restaurantes en Hillah con comida local 4-8 EUR por comida",
+      "consejo_local": "Obtén permisos arqueológicos en Bagdad antes de viajar. Contrata arqueólogo local.",
+      "plan_b_lluvia": "Visita museo local cubierto y ciudades cercanas",
+      "keywords": [
+        "arqueología",
+        "antigua Babilonia",
+        "Nabucodonosor",
+        "Puerta Ishtar",
+        "historia"
+      ]
+    },
+    {
+      "id": "dohuk",
+      "nombre": "Dohuk",
+      "tipo": "ciudad",
+      "region": "Norte",
+      "descripcion": "Ciudad en las montañas del Kurdistán septentrional con vistas espectaculares. Punto de partida para excursiones a montañas y pueblos remotos. Cultura kurda auténtica y hospedable.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "autobús desde Erbil 2 horas, 12-18 EUR o vuelo doméstico",
+      "donde_dormir": {
+        "mochilero": "guesthouses 18-30 EUR/noche",
+        "medio": "hoteles 50-80 EUR/noche",
+        "comfort": "resorts de montaña 100-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo en montañas Zagros",
+        "Pueblo de Akre medieval",
+        "Cascadas de Bekhal",
+        "Lagos de montaña",
+        "Visita pueblos kurdos"
+      ],
+      "donde_comer": "Carne asada, yogur casero, pan recién hecho, frutas frescas 3-6 EUR por plato",
+      "consejo_local": "Mejor destino para naturaleza. Los locales son muy amables con viajeros independientes.",
+      "plan_b_lluvia": "Explora pueblos interiores, museos locales, cocina tradicional",
+      "keywords": [
+        "montañas",
+        "Kurdistán",
+        "naturaleza",
+        "senderismo",
+        "cultura kurda"
+      ]
+    }
+  ]
+}

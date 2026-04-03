@@ -1,0 +1,370 @@
+{
+  "pais": "Chipre",
+  "codigo": "cy",
+  "destinos": [
+    {
+      "id": "nicosia",
+      "nombre": "Nicosia (Lefkosia)",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital dividida de Chipre, con un casco antiguo amurallado que mezcla arquitectura veneciana, otomana y colonial británica. Es el único centro urbano importante donde experimentar la vida chipriota auténtica lejos del turismo masivo. Punto de encuentro de culturas y punto de acceso a la zona norte.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a noviembre, marzo a abril",
+      "como_llegar": "Desde el aeropuerto de Larnaca: autobús directo (línea 20) 30 min, 8 EUR; taxi compartido 20-25 EUR; coche de alquiler 45 min",
+      "donde_dormir": {
+        "mochilero": "Hostales en Laiki Gitonia: 18-25 EUR/noche",
+        "medio": "Hotels 3* en centro: 40-70 EUR/noche",
+        "comfort": "Hotels 4-5* Hilton o similar: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer a pie el casco antiguo amurallado (gratis)",
+        "Visitar la Mezquita de Selimiye, exmonasterio gótico (3 EUR)",
+        "Cruzar la Línea Verde hacia la zona norte - buscar punto de control (gratis pero requiere documentación)",
+        "Museo del Chipre (5 EUR)",
+        "Paseo por Laiki Gitonia, barrio tradicional restaurado (gratis)"
+      ],
+      "donde_comer": "Meze chipriota (platos pequeños) en tavernas de Laiki Gitonia: 12-18 EUR. Probar halloumi frito, souvlaki y vino tinto local. Zona recomendada: callejuelas junto a la Mezquita de Selimiye.",
+      "consejo_local": "Ve a primera hora a la ciudad vieja antes de que lleguen los tours. El mercado tradicional (Panayia) abre temprano y es donde comen los locales, no los turistas.",
+      "plan_b_lluvia": "Museos (Arqueológico, de Bizancio) o cafés en Laiki Gitonia. La ciudad es compacta y muy caminable incluso con llovizna.",
+      "keywords": [
+        "Lefkosia",
+        "Nicosia",
+        "casco antiguo",
+        "Línea Verde",
+        "Laiki Gitonia",
+        "Selimiye",
+        "capital"
+      ]
+    },
+    {
+      "id": "paphos",
+      "nombre": "Paphos",
+      "tipo": "ciudad | playa",
+      "region": "Oeste",
+      "descripcion": "Puerto medieval con yacimientos arqueológicos de mosaicos greco-romanos únicos y playas tranquilas. Combina historia Patrimonio UNESCO con una vibe más relajada que Limassol. Base excelente para explorar el oeste del país.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril a junio, septiembre a octubre",
+      "como_llegar": "Desde Larnaca: autobús (línea 610) 2.5h, 8 EUR; coche alquiler 2h; vuela a aeropuerto local desde Larnaca 30 min vuelo",
+      "donde_dormir": {
+        "mochilero": "Hostales Kamen o backpackers: 22-30 EUR/noche",
+        "medio": "Hotels 3* centro: 50-80 EUR/noche",
+        "comfort": "Hotels 4-5* con vistas al puerto: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Mosaicos de la Casa de Dionisio - Patrimonio UNESCO (4.50 EUR)",
+        "Castillo de Paphos medieval (3 EUR)",
+        "Playas de arena: Coral Bay (5 EUR estacionamiento) o Lara Beach para tortugas (gratis)",
+        "Tumba de los Reyes - necrópolis heleno-romana (4 EUR)",
+        "Paseo por el puerto pesquero, comer pescado fresco (gratis)",
+        "Snorkel en Blue Lagoon - excursión barco (25 EUR)"
+      ],
+      "donde_comer": "Tavernas frente al puerto: pescado a la sal, camarones, pulpo a la brasa. 15-25 EUR por persona. No pidas en hoteles turísticos; baja a los restaurantes locales de pescadores en el puerto viejo.",
+      "consejo_local": "El mejor momento para ver los mosaicos es temprano (8am). Luego sube a Geroskipou, pueblito a 3km, donde hay tiendas de cerámica tradicional y es mucho más barato que en Paphos ciudad.",
+      "plan_b_lluvia": "Museos de Paphos (Arqueológico, Etnográfico) o explora pueblos cercanos como Geroskipou. El castillo también es interesante incluso con lluvia.",
+      "keywords": [
+        "Paphos",
+        "Pafos",
+        "mosaicos",
+        "Dionisio",
+        "castillo medieval",
+        "puerto",
+        "UNESCO",
+        "oeste"
+      ]
+    },
+    {
+      "id": "troodos",
+      "nombre": "Macizo de Troodos",
+      "tipo": "montaña | naturaleza",
+      "region": "Centro",
+      "descripcion": "Cordillera que cruza el centro de Chipre con pueblos pintorescos de montaña, monasterios bizantinos y bosques de pinos. Escape perfecto del calor costero y punto de acceso a la cultura chipriota rural tradicional. Incluye iglesias con frescos Patrimonio UNESCO.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a junio, septiembre a octubre (julio-agosto muy caluroso)",
+      "como_llegar": "Desde Nicosia: coche alquiler 1.5h a Platres; autobús Larnaca-Limassol que para en Troodos (1.5h, 5 EUR) - menos práctico sin coche",
+      "donde_dormir": {
+        "mochilero": "Casas rurales/guesthouses en Platres o Kakopetria: 25-35 EUR/noche",
+        "medio": "Pequeños hotels en pueblos: 50-80 EUR/noche",
+        "comfort": "Resort de Troodos o villas: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Caledonian Path (6km, 2h, gratis)",
+        "Monasterio Kykkos - uno de los más antiguos de Chipre (3 EUR)",
+        "Iglesias pintadas de Troodos (Panayia Moutoula, Stavros tis Agiasmatis): 1-2 EUR cada una",
+        "Pueblo tradicional Kakopetria con río (gratis)",
+        "Viñedos locales - cata en pequeñas bodegas (5-10 EUR)",
+        "Pueblo de Platres con cascada Millomeris (gratis)"
+      ],
+      "donde_comer": "Cocina montañesa: conejo guisado, setas silvestres, halloumi frito, pan casero. Tavernas en Platres y Kakopetria: 10-15 EUR. Prueba el vino Commandaria de la región.",
+      "consejo_local": "Necesitas coche. Los pueblos están conectados por carreteras serpenteantes pero sin transporte público útil. Compra frutas y productos locales directamente de las casas en los pueblos - mucho más barato y fresco.",
+      "plan_b_lluvia": "Las iglesias son cubiertas. Visita los museos pequeños de pueblos (arte bizantino) o pasea por bosques - lluvia no es problema en montaña.",
+      "keywords": [
+        "Troodos",
+        "Platres",
+        "Kakopetria",
+        "Kykkos",
+        "montaña",
+        "iglesias pintadas",
+        "senderismo",
+        "frescos bizantinos"
+      ]
+    },
+    {
+      "id": "ayia-napa",
+      "nombre": "Ayia Napa",
+      "tipo": "playa",
+      "region": "Este",
+      "descripcion": "Resort de playa con aguas cristalinas y acantilados de roca caliza. Aunque turístico, es base para snorkel de clase mundial, playas vírgenes cercanas y es imprescindible para viajeros que quieren combinar naturaleza marina con algo de vida nocturna. Centro de buceo certificado.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a junio, septiembre a octubre",
+      "como_llegar": "Desde Larnaca: autobús directo 45 min, 3.50 EUR; taxi 25-30 EUR; coche alquiler 45 min",
+      "donde_dormir": {
+        "mochilero": "Hostales Backpackers o bunks: 20-28 EUR/noche",
+        "medio": "Hotels 3* centro de playa: 50-90 EUR/noche",
+        "comfort": "Resort beachfront 4-5*: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa principal Ayia Napa Beach - arena fina (gratis)",
+        "Snorkel en Nissi Beach o Cherry Bay (alquiler equipo 20 EUR/día)",
+        "Excursión barco a cuevas y Isla de Conejo (25-35 EUR)",
+        "Monasterio de Ayia Napa, oasis verde en el centro (gratis)",
+        "Playa virgen Konnos Beach - caminata 30 min desde centro (gratis)",
+        "Buceo certificado PADI (60-100 EUR primera inmersión)"
+      ],
+      "donde_comer": "Mariscos frescos: gambas, percebes, pulpo. Zona de tavernas junto a playa: 18-28 EUR. También fish and chips británico y comida internacional. Ten cuidado con restaurantes muy turísticos frente a playa - los mejores están una calle atrás.",
+      "consejo_local": "El snorkel mejor es a primera hora (aguas más claras) antes de que lleguen los barcos. Konnos Beach es prístina pero requiere caminar - la mayoría de turistas no la conoce.",
+      "plan_b_lluvia": "Buceo (igual se hace con lluvia), museos, cines, o viaja a Larnaca cercana (45 min) para cambiar de escena.",
+      "keywords": [
+        "Ayia Napa",
+        "Agia Napa",
+        "playa",
+        "snorkel",
+        "buceo",
+        "este",
+        "Nissi Beach",
+        "monasterio",
+        "Conejo"
+      ]
+    },
+    {
+      "id": "larnaca",
+      "nombre": "Larnaca",
+      "tipo": "ciudad | playa",
+      "region": "Este",
+      "descripcion": "Puerto histórico con playas decentes, iglesia paleocristiana de Lazareth y el lago salado de Larnaca con flamencos. Punto de entrada principal pero subestimado como destino. Menos bullicioso que Ayia Napa pero con más carácter histórico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a junio, septiembre a octubre",
+      "como_llegar": "Aeropuerto principal de Chipre: autobús 30 min, 6 EUR; taxi 15-20 EUR",
+      "donde_dormir": {
+        "mochilero": "Hostales centro histórico: 20-28 EUR/noche",
+        "medio": "Hotels 3* junto a playa: 45-75 EUR/noche",
+        "comfort": "Hotels 4-5* beachfront: 100-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Iglesia de San Lázaro - iglesia paleocristiana del s.IX (libre, donativo)",
+        "Paseo marítimo Finikoudes - playa urbana (gratis)",
+        "Lago Salado de Larnaca y observatorio de flamencos (gratis, mejor enero-marzo)",
+        "Fuerte de Larnaca medieval (2.50 EUR)",
+        "Museo Arqueológico (5 EUR)",
+        "Playas cercanas: Mackenzie Beach (cómoda, junto aeropuerto) o Pervolia Beach (más tranquila)"
+      ],
+      "donde_comer": "Pescado fresco en el paseo marítimo: pulpo, dorada, camarones. 15-22 EUR. También probar kebab chipriota y meze. Restaurantes con mejor precio una calle atrás del paseo.",
+      "consejo_local": "Muchos viajeros pasan por Larnaca solo para el aeropuerto - es error. Pasa una noche, explora la ciudad vieja y toma el bus directo a tu siguiente destino. El lago es mejor en invierno/primavera para flamencos.",
+      "plan_b_lluvia": "Museos, iglesia, o café en el paseo marítimo cubierto. Larnaca es muy caminable.",
+      "keywords": [
+        "Larnaca",
+        "Larnaka",
+        "San Lázaro",
+        "lago salado",
+        "puerto",
+        "este",
+        "Finikoudes",
+        "flamencos",
+        "aeropuerto"
+      ]
+    },
+    {
+      "id": "limassol",
+      "nombre": "Limassol",
+      "tipo": "ciudad | playa",
+      "region": "Sur",
+      "descripcion": "Puerto comercial más grande con castillo medieval, paseo marítimo moderno y gastronomía avanzada. Menos turístico que el norte pero con excelentes museos, vida local auténtica y acceso a bodegas de vino de Chipre. Base estratégica para el sur.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a mayo, septiembre a octubre",
+      "como_llegar": "Desde Larnaca: autobús directo 1h, 5 EUR; coche alquiler 1h; bus desde Paphos 1.5h",
+      "donde_dormir": {
+        "mochilero": "Hostales en centro: 22-32 EUR/noche",
+        "medio": "Hotels 3* paseo marítimo: 55-90 EUR/noche",
+        "comfort": "Hotels 4-5* con playa: 130-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Limassol - fortaleza medieval (3 EUR)",
+        "Museo Arqueológico (5 EUR)",
+        "Paseo marítimo Molos - parque litoral moderno (gratis)",
+        "Bodegas de vino Commandaria - tour desde Limassol (20-40 EUR con degustación)",
+        "Playa de Curium Beach (gratis)",
+        "Catacumbas cristianas de Amathus (2 EUR)"
+      ],
+      "donde_comer": "Gastronomía de nivel. Restaurantes en paseo Molos: 20-30 EUR. Probar halloumi, souvlaki, meze. Zona Anexartisias para tabernas locales más baratas: 12-18 EUR. Vino local de Commandaria imprescindible.",
+      "consejo_local": "Limassol tiene mucha menos turistas que el norte. El paseo Molos es excelente para correr/pasear al atardecer. Las bodegas de vino cercanas hacen tours - reserva con antelación.",
+      "plan_b_lluvia": "Museos, castillo, o bodegas cubiertas. Limassol es muy resguardado.",
+      "keywords": [
+        "Limassol",
+        "Limassol",
+        "castillo",
+        "puerto",
+        "paseo marítimo",
+        "Molos",
+        "vino Commandaria",
+        "sur",
+        "arqueología"
+      ]
+    },
+    {
+      "id": "kyrenia",
+      "nombre": "Kyrenia (Girne)",
+      "tipo": "ciudad | playa",
+      "region": "Norte",
+      "descripcion": "Puerto pintoresco con castillo medieval en acantilado y paseo marítimo encantador. Aunque técnicamente en la zona norte controlada por Turquía, es el destino más accesible y hermoso del norte. Requiere cruzar la Línea Verde desde Nicosia. Playas y gastronomía excelentes.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a junio, septiembre a octubre",
+      "como_llegar": "Desde Nicosia: coche alquiler 1h o autobús a frontera (1h, 3 EUR) + taxi local (10 EUR); documentación: pasaporte válido",
+      "donde_dormir": {
+        "mochilero": "Guesthouses turcos: 25-35 EUR/noche",
+        "medio": "Pequeños hotels puerto: 50-80 EUR/noche",
+        "comfort": "Hotels 4-5*: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Kyrenia en acantilado (5 EUR aprox.)",
+        "Paseo marítimo - sentarse en cafés (gratis)",
+        "Snorkel en playas cercanas (20 EUR alquiler equipo)",
+        "Museo del Barco Naufragado (4 EUR)",
+        "Monasterio de Bellapais en montaña (2 EUR)",
+        "Playas Alagadi con tortugas (gratis, vigiladas)"
+      ],
+      "donde_comer": "Comida turca mezclada con chipriota: kebab, pescado a la sal, meze. Paseo marítimo: 15-25 EUR. Moneda: Lira Turca (TRY), pero aceptan euros. Precios más bajos que sur.",
+      "consejo_local": "Necesitas pasaporte válido para cruzar la Línea Verde - no vale DNI. Vuelve el mismo día o quédate en norte pero avisa al hotel sur. Los precios son más bajos aquí que en el sur. El castillo al atardecer es espectacular.",
+      "plan_b_lluvia": "Museo del barco, monasterio de Bellapais (interior), cafés.",
+      "keywords": [
+        "Kyrenia",
+        "Girne",
+        "norte",
+        "castillo",
+        "puerto",
+        "Bellapais",
+        "Línea Verde",
+        "tortugas",
+        "turco"
+      ]
+    },
+    {
+      "id": "kourion",
+      "nombre": "Kourion",
+      "tipo": "histórico",
+      "region": "Sur",
+      "descripcion": "Yacimiento arqueológico greco-romano en acantilado sobre el mar, uno de los más espectaculares de Chipre. Ruinas de teatro, mosaicos y templos en un escenario natural perfectamente conservado. Imprescindible para amantes de arqueología.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "septiembre a abril (menos calor)",
+      "como_llegar": "Desde Limassol: coche alquiler 30 min (25km); autobús a Episkopi + taxi (1h total, 8 EUR bus)",
+      "donde_dormir": {
+        "mochilero": "Dormir en Limassol, excursión diaria",
+        "medio": "Dormir en Limassol, excursión diaria",
+        "comfort": "Dormir en Limassol, excursión diaria"
+      },
+      "que_hacer": [
+        "Recorrido yacimiento arqueológico (4.50 EUR)",
+        "Teatro greco-romano - vista al mar (incluido entrada)",
+        "Casa de Eustolios - mosaicos bien preservados (incluido)",
+        "Templo de Apolo en ruinas (incluido)",
+        "Foto atardecer sobre acantilados (gratis)",
+        "Playa Curium Beach al pie (gratis, acceso desde yacimiento)"
+      ],
+      "donde_comer": "No hay restaurantes en el yacimiento. Lleva agua y picnic. Tavernas en pueblos cercanos Episkopi o Limassol: 12-18 EUR.",
+      "consejo_local": "Entra temprano (8am) para evitar turistas y calor. El teatrillo es pequeño pero el escenario es de película. Lleva agua - hay sombra limitada. El atardecer es mágico pero cierra a las 17-18h.",
+      "plan_b_lluvia": "Igual se visita. Los acantilados son espectaculares incluso nublados.",
+      "keywords": [
+        "Kourion",
+        "Kourio",
+        "arqueología",
+        "teatro",
+        "mosaicos",
+        "acantilados",
+        "greco-romano",
+        "sur"
+      ]
+    },
+    {
+      "id": "akamas",
+      "nombre": "Península de Akamas",
+      "tipo": "naturaleza",
+      "region": "Noroeste",
+      "descripcion": "Península virgen y protegida con senderos en naturaleza, playas salvajes y aguas cristalinas. Uno de los últimos espacios sin desarrollar de Chipre. Ideal para trekking, camping salvaje responsable y biodiversidad. Área de desove de tortugas marinas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a junio, septiembre a octubre",
+      "como_llegar": "Desde Paphos: coche alquiler 1h a pueblo de Latchi; sin transporte público viable",
+      "donde_dormir": {
+        "mochilero": "Camping Latchi o guesthouses pueblos cercanos: 20-30 EUR/noche",
+        "medio": "Guesthouses en Latchi: 45-70 EUR/noche",
+        "comfort": "Resort pequeño Latchi: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Akamas Ridge Trail - 8km circular (gratis)",
+        "Playa virgen Lara - zona desove tortugas (gratis, acceso 4x4 o a pie)",
+        "Piscina Natural de agua dulce Fontana Amoroza (gratis)",
+        "Snorkel en Latchi o Blue Lagoon cercana (20-30 EUR excursión)",
+        "Avistamiento aves y fauna (gratis con senderismo)",
+        "Playa Toxeftra (gratis, arenisca roja rara)"
+      ],
+      "donde_comer": "Tavernas en pueblo Latchi: pescado fresco, pulpo a la brasa. 15-22 EUR. Poca variedad - come bien en Paphos antes o lleva provisiones.",
+      "consejo_local": "Necesitas coche 4x4 o a pie para Lara Beach (protegida). Los senderos son muy bien marcados. No hay agua potable en senderos - lleva litros. Acampar salvaje es técnicamente ilegal pero tolerado si dejas sin rastro.",
+      "plan_b_lluvia": "Los senderos drenan bien. Pero niebla en montaña anula vistas. Mejor no ir con mal tiempo.",
+      "keywords": [
+        "Akamas",
+        "península",
+        "naturaleza",
+        "Latchi",
+        "Lara Beach",
+        "senderismo",
+        "tortugas",
+        "virgen",
+        "noroeste"
+      ]
+    },
+    {
+      "id": "polis-chrysochous",
+      "nombre": "Polis Chrysochous",
+      "tipo": "rural | playa",
+      "region": "Noroeste",
+      "descripcion": "Pueblo costero pequeño y tranquilo al borde de la península de Akamas. Comunidad local preservada sin overtourism, playas bonitas y acceso a naturaleza. Perfecto para viajeros que buscan desconexión total y autenticidad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a junio, septiembre a octubre",
+      "como_llegar": "Desde Paphos: coche alquiler 1h; autobús (línea 612) 1.5h aprox., 5 EUR",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 22-32 EUR/noche",
+        "medio": "Pequeños hotels: 50-75 EUR/noche",
+        "comfort": "Resort frente al mar: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Polis Beach - arena fina (gratis)",
+        "Paseo por pueblo - vida local (gratis)",
+        "Snorkel en playas cercanas (alquiler equipo 15 EUR/día)",
+        "Senderismo a Akamas desde aquí (gratis)",
+        "Pesca local o excursión barco (25-40 EUR)",
+        "Café con locales en plaza central (gratis, gasto en bebida 2-3 EUR)"
+      ],
+      "donde_comer": "Tavernas tradicionales: souvlaki, halloumi, meze. 10-16 EUR. Muy auténtico, pocos turistas. Cena temprano - muchos restaurantes cierran a las 21h.",
+      "consejo_local": "Este es un pueblo donde los griegos chipriotas vienen a pasar fin de semana, no turistas masivos. Hablan poco inglés - tener paciencia. El pescado es fresco y barato. Evita agosto - invadido de locales.",
+      "plan_b_lluvia": "Poco que hacer cubierto. Mejor día nublado para senderismo.",
+      "keywords": [
+        "Polis",
+        "Polis Chrysochous",
+        "pueblo",
+        "costa",
+        "Akamas",
+        "tranquilo",
+        "rural",
+        "autenticidad",
+        "noroeste"
+      ]
+    }
+  ]
+}

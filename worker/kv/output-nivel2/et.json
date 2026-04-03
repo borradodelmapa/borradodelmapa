@@ -1,0 +1,320 @@
+{
+  "pais": "Etiopía",
+  "codigo": "et",
+  "destinos": [
+    {
+      "id": "addis-ababa",
+      "nombre": "Addis Ababa",
+      "tipo": "ciudad",
+      "region": "Addis Ababa",
+      "descripcion": "Capital y hub de transporte principal de Etiopía. Centro cultural con museos de relevancia mundial, mercados caóticos y vida urbana intensa. Punto de entrada obligatorio para la mayoría de viajeros.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Vuelo internacional a Bole Airport (aeropuerto principal). Desde Europa: 8-12h con escala, 400-800 EUR. Taxi/minibús al centro: 5 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales en Piazza: 12-18 EUR/noche",
+        "medio": "Hoteles Piazza/Bole: 40-70 EUR/noche",
+        "comfort": "Hoteles 4-5 estrellas Bole: 120-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional (Lucy, fósiles humanos ancestrales) - 5 EUR",
+        "Mercado de Merkato (compras textiles, especias) - gratis",
+        "Iglesia de San Jorge (Addis Ababa) - 2 EUR",
+        "Entrepôt Café y vida cultural local - 8-15 EUR por comida"
+      ],
+      "donde_comer": "Inyera con legumbres vegetales y carnes. Barrio Piazza para backpackers (2-5 EUR), Bole para más opciones (8-20 EUR). Probar tej (bebida de miel).",
+      "consejo_local": "El mercado de Merkato es abrumador: ve con local si puedes, ten cuidado con bolsos y evita fotos directas. Los viernes hay mercado de ganadería fuera del centro.",
+      "plan_b_lluvia": "Museos nacionales, galerías de arte contemporáneo en Piazza, cafés literarios, compras en centros comerciales Bole.",
+      "keywords": [
+        "Addis, capital etiopía",
+        "Piazza",
+        "Bole",
+        "Merkato",
+        "Lucy"
+      ]
+    },
+    {
+      "id": "lalibela",
+      "nombre": "Lalibela",
+      "tipo": "histórico",
+      "region": "Amhara",
+      "descripcion": "Complejo de 11 iglesias monolíticas talladas en roca viva en el s. XII, Patrimonio UNESCO. Sitio religioso activo con procesiones etíopes y arquitectura única en el mundo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Desde Addis Ababa: vuelo 1h (60-120 EUR) o minibús 13h (15-25 EUR). Luego taxi/caminata local 2 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales Rocky Pensión: 15-22 EUR/noche",
+        "medio": "Hotel Roha o similar: 35-55 EUR/noche",
+        "comfort": "Limalimo Lodge: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour iglesias norte y sur (Bet Medhane Alem, Bet Golgotha) - 50 EUR guía+entrada",
+        "Caminata atardecer colinas circundantes - gratis",
+        "Ceremonia religiosa matutina (participar como observador) - gratis",
+        "Festival Timkat si viajas enero - gratis"
+      ],
+      "donde_comer": "Inyera, injera doro (pollo). Cafés turísticos 3-8 EUR. Come en hospedaje o pequeños restaurantes locales. Probar tej local.",
+      "consejo_local": "Contrata guía oficial (obligatorio, 25-40 EUR/día): te explica tallas y leyendas. Las iglesias cierran 17h. Visita Timkat (6-19 enero) si puedes: procesión masiva única.",
+      "plan_b_lluvia": "Túneles subterráneos entre iglesias siguen siendo transitables, museos pequeños del pueblo, visitar monasterios cercanos (Asheton Mariam).",
+      "keywords": [
+        "Lalibela churches",
+        "monolithic churches",
+        "iglesias monolíticas",
+        "Timkat"
+      ]
+    },
+    {
+      "id": "axum",
+      "nombre": "Axum",
+      "tipo": "histórico",
+      "region": "Tigray",
+      "descripcion": "Antigua capital del Imperio Axumita (s. I-VII), cuna del cristianismo etíope. Obeliscos monumentales, iglesia de Santa María de Sión y monasterios en entorno árido.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Desde Addis: vuelo 2.5h (80-150 EUR) o autobús 24h (20-40 EUR) vía Mekelle. Taxi local 3 EUR.",
+      "donde_dormir": {
+        "mochilero": "Pensiones básicas: 12-18 EUR/noche",
+        "medio": "Axum Hotel o Sabean: 35-50 EUR/noche",
+        "comfort": "Axumite Hotel: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Obeliscos de Axum (ruinas imperio antiguo) - 5 EUR",
+        "Iglesia Santa María Sión - 3 EUR",
+        "Monasterio Debre Damo (requiere escalada cuerda) - 5 EUR + guía 10 EUR",
+        "Tumbas reales subterráneas - 5 EUR"
+      ],
+      "donde_comer": "Inyera, tibs (carnes salteadas). Restaurantes 4-10 EUR. Zona central junto a obeliscos.",
+      "consejo_local": "Axum es menos turístico que Lalibela: los locales son muy receptivos. El monasterio Debre Damo requiere buena forma física; la cuerda es pura tradición pero segura. Almuerza antes de visitar porque poco cierra después de 14h.",
+      "plan_b_lluvia": "Iglesias subterráneas, museos arqueológicos pequeños, paseos por mercadillos del pueblo.",
+      "keywords": [
+        "Axum",
+        "Aksum",
+        "imperio axumita",
+        "obeliscos",
+        "Santa Maria Zion",
+        "Debre Damo"
+      ]
+    },
+    {
+      "id": "danakil-depression",
+      "nombre": "Danakil Depression",
+      "tipo": "desierto",
+      "region": "Afar",
+      "descripcion": "Uno de los lugares más inhóspitos de la Tierra: volcanes activos, fuentes termales de colores ácidos y depresión a -116m bajo nivel del mar. Experiencia extrema para viajeros resistentes.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a febrero (extremadamente caluroso, 40-50°C)",
+      "como_llegar": "Desde Mekelle: tour operador obligatorio 3-4 días (400-800 EUR todo incluido). Viaje 12h en 4x4 a Erta Ale.",
+      "donde_dormir": {
+        "mochilero": "Campamento básico desierto: incluido en tour",
+        "medio": "Idem tours",
+        "comfort": "Idem tours (mejor operador = tiendas mejores)"
+      },
+      "que_hacer": [
+        "Volcán Erta Ale (lago de lava activo), ascenso nocturno - incluido tour",
+        "Dallol (géisers ácidos, colores surrealistas) - incluido",
+        "Salar de Karum - incluido",
+        "Baño en aguas termales - incluido"
+      ],
+      "donde_comer": "Comida incluida en tour: arroz, pasta, legumbres básicas. Lleva snacks personales. Agua: litros incluidos en tour.",
+      "consejo_local": "Es caro pero no hay alternativa sin tour: seguridad obligatoria (zona Afar). Aclimatarse en Mekelle antes. Lleva protección solar SPF 50+, gafas, gorro. El viaje es duro: poco sueño, calor extremo, comida básica. No es para todos.",
+      "plan_b_lluvia": "No llueve aquí. El riesgo es el calor extremo: mejor si viajes octubre-noviembre.",
+      "alerta_seguridad": "Zona controlada por grupo étnico Afar: requiere guías de seguridad y tour operador registrado. Evita viajar solo.",
+      "keywords": [
+        "Danakil",
+        "Erta Ale",
+        "Dallol",
+        "volcán lava",
+        "depresión"
+      ]
+    },
+    {
+      "id": "simien-mountains",
+      "nombre": "Simien Mountains",
+      "tipo": "montaña",
+      "region": "Amhara",
+      "descripcion": "Cadena de 4000m+ con paisaje espectacular tipo meseta africana. Trekking entre acantilados, avistamiento de primates endémicos (gelada, colobos) y vistas de Ras Dashen.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Desde Addis: vuelo a Gondar 2h (60 EUR) + minibús 2h a Debark (8 EUR). Entrada parque 30 EUR.",
+      "donde_dormir": {
+        "mochilero": "Cabaña básica Debark: 15-25 EUR/noche",
+        "medio": "Hotel Debark: 35-50 EUR/noche",
+        "comfort": "Simien Lodge: 80-150 EUR/noche (alojamiento lujo en montaña)"
+      },
+      "que_hacer": [
+        "Trekking Ras Dashen (3 días, vistas 360°) - guía 20 EUR/día",
+        "Caminata día Chennek (primates gelada) - gratis + entrada",
+        "Observación aves endémicas - gratis",
+        "Ascenso pico Bwahit - 1 día, guía 20 EUR"
+      ],
+      "donde_comer": "Comida en alojamiento o llevar provisiones. Restaurantes Debark: 3-6 EUR. Inyera, pastas, legumbres.",
+      "consejo_local": "Contrata guía oficial Debark (obligatorio): conocen rutas seguras y avistamientos. Aclimatación importante si vienes de Addis directo. Empieza caminatas temprano. Los primates gelada son dóciles pero no toques.",
+      "plan_b_lluvia": "Niebla frecuente pero no lluvia fuerte octubre-febrero. Caminatas más cortas o visita Gondar (iglesias, castillos) cercano.",
+      "keywords": [
+        "Simien",
+        "montañas",
+        "trekking",
+        "gelada",
+        "Debark",
+        "Ras Dashen"
+      ]
+    },
+    {
+      "id": "gondar",
+      "nombre": "Gondar",
+      "tipo": "histórico",
+      "region": "Amhara",
+      "descripcion": "Capital medieval con castillos de piedra (s. XVII), baños termales reales y iglesias. Centro base para Simien Mountains con arquitectura fascinante y accesibilidad turística.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Desde Addis: vuelo 2h (60-120 EUR) o autobús 12h (20-35 EUR). Desde Lalibela: minibús 8h (15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales Piazza: 15-22 EUR/noche",
+        "medio": "Hotel Walia Ibis o similar: 40-65 EUR/noche",
+        "comfort": "Goha Hotel: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo Real Fasilides (complejo fortificado) - 5 EUR",
+        "Baño termales Fasilides - 2 EUR",
+        "Iglesia Debre Birhan Selassie (techo murales) - 3 EUR",
+        "Mercado Gondar - gratis",
+        "Día excursión Monastério Tana (isla lago Tana) - 30-40 EUR tour"
+      ],
+      "donde_comer": "Inyera doro, tibs. Cafés turísticos 4-10 EUR. Zona Piazza y casco antiguo. Probar catfish del lago Tana.",
+      "consejo_local": "Gondar es menos caótico que Addis pero más auténtico. Los castillos están a corta distancia caminando. Visita iglesias temprano antes turistas de grupo. La gente es muy amable.",
+      "plan_b_lluvia": "Iglesias interiores, baños termales cubiertos, mercados, tiendas.",
+      "keywords": [
+        "Gondar",
+        "castillos reales",
+        "Fasilides",
+        "Piazza",
+        "lago Tana"
+      ]
+    },
+    {
+      "id": "omo-valley",
+      "nombre": "Omo Valley",
+      "tipo": "rural",
+      "region": "SNNPR",
+      "descripcion": "Valle aislado con etnias indígenas (Mursi, Karo, Surma) con prácticas ancestrales intactas. Trekking y encuentro cultural intenso en entorno selvático y árido.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Desde Addis: vuelo a Arba Minch 2h (80-150 EUR) + minibús 2-3h (8-15 EUR). Luego tour 4x4 valle (obligatorio).",
+      "donde_dormir": {
+        "mochilero": "Campamento básico Valle Omo: 20-30 EUR/noche",
+        "medio": "Eco-lodge Arba Minch: 40-60 EUR/noche",
+        "comfort": "Arba Minch Resort: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita pueblo Mursi (tatuajes faciales distintivos) - 15 EUR guía",
+        "Encuentro tribu Karo (pinturas corporales) - 15 EUR",
+        "Caminata paisaje selvático - incluido tour",
+        "Ceremonia tradicional si coincide - varía"
+      ],
+      "donde_comer": "Comida incluida tour o en Arba Minch: injera, carnes, pescado. Arba Minch 5-12 EUR. Agua embotellada obligatoria.",
+      "consejo_local": "Contrata tour respetoso (evita fotos sin permiso, respeta privacidad). Los Mursi son directos con tarifas de fotografía: negocia antes. Es viaje de verdad salvaje: no hay lujos, carreteras básicas, calor.",
+      "plan_b_lluvia": "Lluvia rara pero posible septiembre-octubre. Sigue funcionando, fango complica trekking. Arba Minch tiene playas (cocodrilos a distancia).",
+      "keywords": [
+        "Omo Valley",
+        "Mursi",
+        "Karo",
+        "Surma",
+        "etnias",
+        "Arba Minch"
+      ]
+    },
+    {
+      "id": "mekelle",
+      "nombre": "Mekelle",
+      "tipo": "ciudad",
+      "region": "Tigray",
+      "descripcion": "Capital regional de Tigray, base para viajes a Axum y Danakil. Ciudad media con carácter etíope auténtico, menos turística que Gondar pero con buena infraestructura.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Desde Addis: vuelo 2.5h (90-150 EUR) o autobús 14h (25-35 EUR). Desde Gondar: minibús 8h (15 EUR).",
+      "donde_dormir": {
+        "mochilero": "Pensiones centro: 15-20 EUR/noche",
+        "medio": "Axum Hotel o Semera: 40-60 EUR/noche",
+        "comfort": "Abreha Atsbeha: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Catedral de Mekelle - 2 EUR",
+        "Mercado local (textiles, especias) - gratis",
+        "Museo Tigray (arte local) - 3 EUR",
+        "Iglesia Mai Bahti cercana - 2 EUR"
+      ],
+      "donde_comer": "Shiro (pasta de garbanzos), tibs. Centro ciudad 4-8 EUR. Mercado callejero 2-3 EUR.",
+      "consejo_local": "Mekelle es hub logístico, no destino principal. Pero ciudad amable, mercado interesante. La mayoría de viajeros para aquí solo noche/día. Buena base si exploras Tigray.",
+      "plan_b_lluvia": "Iglesias interiores, mercados, museos pequeños, cafés.",
+      "alerta_seguridad": "Región Tigray: situación política sensible. Verificar seguridad actualizada antes de viajar. Desde 2023 más estable pero consulta.",
+      "keywords": [
+        "Mekelle",
+        "Tigray",
+        "catedral",
+        "hub"
+      ]
+    },
+    {
+      "id": "bahir-dar",
+      "nombre": "Bahir Dar",
+      "tipo": "ciudad",
+      "region": "Amhara",
+      "descripcion": "Orillas lago Tana con monasterios en islas, centro acogedor. Base para islas monásticas y cercana a Cataratas del Nilo Azul.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Desde Addis: vuelo 1h (50-100 EUR) o autobús 9h (15-25 EUR). Desde Gondar: minibús 3h (8 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales Pensyon: 15-20 EUR/noche",
+        "medio": "Hotel Bahir Dar Pensyon: 40-60 EUR/noche",
+        "comfort": "Kuriftu Resort: 90-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour islas lago Tana (monasterios antiguos) - 25-40 EUR barco",
+        "Monasterio Tana Mariam - incluido tour",
+        "Cascadas Nilo Azul (Tisisat) excursión día - 20 EUR guía",
+        "Paseo orillas lago - gratis"
+      ],
+      "donde_comer": "Pescado fresco tilapia, injera. Restaurantes orillas 5-12 EUR. Pescado asado en mercado 3 EUR.",
+      "consejo_local": "Los monasterios islas están activos: entra respetuoso, sin fotos en ceremonias. Las cascadas Tisisat mejores después lluvia (septiembre) pero visita en dry season es más cómoda.",
+      "plan_b_lluvia": "Monasterios interiores, museos pequeños, cafés lago.",
+      "keywords": [
+        "Bahir Dar",
+        "lago Tana",
+        "monasterios",
+        "Tisisat",
+        "Nilo Azul"
+      ]
+    },
+    {
+      "id": "bale-mountains",
+      "nombre": "Bale Mountains",
+      "tipo": "naturaleza",
+      "region": "Oromia",
+      "descripcion": "Parque nacional con trekking remoto, meseta alpina única, vida silvestre endémica (lobo etíope, colobos). Menos visitado que Simien, más salvaje y auténtico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "octubre a febrero",
+      "como_llegar": "Desde Addis: minibús a Robe 8h (15 EUR) + tour operador desde allí. Vuelo si existe.",
+      "donde_dormir": {
+        "mochilero": "Cabaña Dinsho: 15-22 EUR/noche",
+        "medio": "Robe Hotel: 35-55 EUR/noche",
+        "comfort": "Bale Mountains Lodge (si abierto): 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking meseta Saneti (lobo etíope) - guía 20 EUR/día",
+        "Ascenso Tullu Dimtu (4377m) - 2 días, guía 20 EUR",
+        "Avistamiento fauna endémica - gratis",
+        "Manantiales Harenna - caminata"
+      ],
+      "donde_comer": "Comida cabaña o llevar provisiones. Robe: injera, legumbres 3-6 EUR.",
+      "consejo_local": "Bale es para viajeros de verdad: pocos turistas, infraestructura básica, paisaje espectacular. Guía obligatorio. El lobo etíope es raro pero existe. Aclimatación importante (4000m+).",
+      "plan_b_lluvia": "Niebla frecuente pero no impide trekking. Nieve posible enero-febrero altura.",
+      "keywords": [
+        "Bale Mountains",
+        "trekking",
+        "lobo etíope",
+        "Saneti",
+        "parque nacional"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,342 @@
+{
+  "pais": "Bulgaria",
+  "codigo": "bg",
+  "destinos": [
+    {
+      "id": "sofia",
+      "nombre": "Sofía",
+      "tipo": "ciudad",
+      "region": "Sofía (occidente)",
+      "descripcion": "Capital de Bulgaria con una mezcla fascinante de arquitectura otomana, soviética y moderna. Centro cultural y punto de partida para explorar el país. Buena base con transporte público eficiente y vida nocturna accesible.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Aeropuerto de Sofía (BOJ) a 10 km del centro. Autobús 84 o 384 (~1 EUR, 45 min), taxi ~15 EUR",
+      "donde_dormir": {
+        "mochilero": "Albergue en Vasil Levski o Centro: 12-18 EUR/noche",
+        "medio": "Hostel privado o pequeño hotel 3* en Centro: 30-50 EUR/noche",
+        "comfort": "Hotel 4* en Plaza Aleksandar Nevski: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Catedral de Aleksandar Nevski (gratis, entrada exterior)",
+        "Iglesia de Boyana, Patrimonio UNESCO (5 EUR, tomar minibús desde centro)",
+        "Museo Nacional de Historia (8 EUR)",
+        "Pasear por barrio de Vitosha y mercado de la mujer (gratis)",
+        "Visita a cervecería local Kamenitsa (3-5 EUR cerveza)"
+      ],
+      "donde_comer": "Banitsa (hojaldre relleno de queso) en cafés locales (1-2 EUR), shopska salad (ensalada búlgara, 3-4 EUR). Zona de Vitosha para restaurantes. Budget: 5-12 EUR comida completa",
+      "consejo_local": "El transporte público es muy barato (0.80 EUR billete) y funciona bien. Compra un abono de 10 viajes. Los búlgaros niegan con la cabeza cuando dicen 'sí', ¡no te confundas!",
+      "plan_b_lluvia": "Museo Arqueológico Nacional, galerías de arte en el centro, cafe culture en Aleksandar Batenberg",
+      "keywords": [
+        "Sofia",
+        "capital",
+        "Nevski",
+        "Vasil Levski",
+        "Boyana",
+        "Vitosha"
+      ]
+    },
+    {
+      "id": "plovdiv",
+      "nombre": "Plovdiv",
+      "tipo": "histórico",
+      "region": "Tracia (centro-sur)",
+      "descripcion": "Segunda ciudad más importante con un casco antiguo bien preservado en colina, arquitectura renacentista otomana y ruinas romanas. Menos turística que Sofía pero igual de interesante, con excelente vida cultural y restaurantes.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Sofía: autobús directo (2-3 EUR, 2h 15 min) o tren (2 EUR, 2h 45 min). Minibús privado (5-8 EUR)",
+      "donde_dormir": {
+        "mochilero": "Albergue en casco antiguo: 13-17 EUR/noche",
+        "medio": "Hotel boutique 3* en Stara Gradina: 35-55 EUR/noche",
+        "comfort": "Hotel 4* con vistas: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Casco antiguo de Stara Gradina (libre, paseo atmosférico con casas del s.XIX)",
+        "Teatro Romano (3 EUR, asómate al atardecer)",
+        "Iglesia de Djumaia (2 EUR)",
+        "Museo Arqueológico Regional (4 EUR)",
+        "Cafe en terraza de Kapana (zona de tiendas vintage, gratis pasear)"
+      ],
+      "donde_comer": "Kapana (barrio bohemio con restaurantes baratos): taverna tradicional 6-10 EUR. Probar bob (sopa de judías), meze. Zona Stara Gradina: 8-15 EUR comida con vista",
+      "consejo_local": "El teatro romano todavía funciona en verano para conciertos. Revisa la programación. Sube al casco antiguo al atardecer, es espectacular y casi sin gente.",
+      "plan_b_lluvia": "Museo Arqueológico, iglesias techadas, cafés literarios en Kapana",
+      "keywords": [
+        "Plovdiv",
+        "Stara Gradina",
+        "Teatro Romano",
+        "Kapana",
+        "segunda ciudad",
+        "Trimontium"
+      ]
+    },
+    {
+      "id": "bansko",
+      "nombre": "Bansko",
+      "tipo": "montaña",
+      "region": "Pirineos (suroeste)",
+      "descripcion": "Pueblo de montaña en los Pirineos con acceso a esquí en invierno y senderismo en verano. Casco antiguo tradicional y buena base para trekking. Destino de aventura con precios bajos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre (senderismo), diciembre-marzo (esquí)",
+      "como_llegar": "Desde Sofía: minibús (8-12 EUR, 3h) o coche de alquiler. Autobús público menos frecuente",
+      "donde_dormir": {
+        "mochilero": "Hostel en centro: 13-16 EUR/noche",
+        "medio": "Hotel 3* con acceso a piscina: 35-55 EUR/noche",
+        "comfort": "Alojamiento en ski resort: 70-120 EUR/noche (invierno más caro)"
+      },
+      "que_hacer": [
+        "Senderismo a Vihren (pico más alto de Bulgaria, 2,914m, difícil, todo el día)",
+        "Ruta más fácil a lago Popovo (4-5h, medio)",
+        "Ski en Pirin (invierno)",
+        "Pasear casco antiguo con casas de piedra (libre)",
+        "Visita a monasterio de Rila como excursión (30 EUR tour)"
+      ],
+      "donde_comer": "Comida de montaña: shopska salad, cordero guisado, pan casero. Tabernas locales 5-10 EUR. Pirin Lodge restaurant 12-20 EUR",
+      "consejo_local": "Lleva agua y protección solar. El senderismo es muy accesible pero las altitudes engañan. Los caminos están bien marcados pero sin señalización constante.",
+      "plan_b_lluvia": "Museo del Tabaco (historia local), cafés en el pueblo, monasterio Rila como excursión cubierta",
+      "keywords": [
+        "Bansko",
+        "Pirineos",
+        "Vihren",
+        "senderismo",
+        "esqui",
+        "montaña",
+        "trekking"
+      ]
+    },
+    {
+      "id": "monasterio-rila",
+      "nombre": "Monasterio de Rila",
+      "tipo": "histórico",
+      "region": "Rila (suroeste)",
+      "descripcion": "Monasterio ortodoxo Patrimonio UNESCO en valle montañoso. Uno de los sitios religiosos más importantes de Bulgaria con arquitectura medieval y frescos notables. Fácil excursión desde Sofía o Bansko.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "Desde Sofía: minibús desde estación Tsaritsyn (6-8 EUR, 2h) o tour organizado (15-20 EUR). Desde Bansko: excursión de 1 día (30 EUR con guía o alquiler coche)",
+      "donde_dormir": {
+        "mochilero": "No hay albergues. Hospedería del monasterio: 25-35 EUR/noche (básica)",
+        "medio": "Hotel en pueblo de Rila: 35-50 EUR/noche",
+        "comfort": "Spa resort cercano: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Entrada al monasterio (4 EUR, incluye iglesia y frescos)",
+        "Paseo por claustros (libre)",
+        "Senderismo por bosque de Rila (gratis, varios niveles)",
+        "Cascada de Skakalo (3 km, 1h, fácil)",
+        "Almuerzo en monasterio o pueblo (8-12 EUR)"
+      ],
+      "donde_comer": "Comida tradicional búlgara en monasterio o tabernas del pueblo. 6-10 EUR. La hospedería ofrece desayuno y cena",
+      "consejo_local": "Llega temprano (antes de las 10) para evitar grupos de tour. Viste discreto (hombros y rodillas cubiertas). El monasterio cierra a las 18h normalmente.",
+      "plan_b_lluvia": "La iglesia principal está cubierta. Lluvia ligera es aceptable. Día muy nublado hace claustrofóbico",
+      "keywords": [
+        "Rila",
+        "monasterio",
+        "UNESCO",
+        "religioso",
+        "Patrimonio",
+        "ortodoxo",
+        "Sofía excursión"
+      ]
+    },
+    {
+      "id": "nessebar",
+      "nombre": "Nessebar",
+      "tipo": "playa",
+      "region": "Costa negra (este)",
+      "descripcion": "Pueblo costero Patrimonio UNESCO en península con ruinas greco-romanas, playas de arena y arquitectura antigua preservada. Centro turístico pero con carácter auténtico lejos de resorts. Buena combinación de playa e historia.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio, septiembre (verano sin aglomeraciones)",
+      "como_llegar": "Desde Sofía: autobús directo a Burgas (8-12 EUR, 6-7h) o vuelo (barato con budget airlines), luego minibús a Nessebar (2 EUR, 30 min). Desde Plovdiv: autobus (8 EUR, 4h)",
+      "donde_dormir": {
+        "mochilero": "Hostel en casco antiguo: 12-18 EUR/noche",
+        "medio": "Hotel 3* frente a playa: 35-65 EUR/noche (verano +20%)",
+        "comfort": "Resort 4* con piscina: 70-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Casco antiguo amurallado (libre, paseo de 1-2h)",
+        "Ruinas de murallas y iglesias antiguas (gratis ver desde fuera)",
+        "Playas de arena (libre)",
+        "Kayak o parasailing (20-40 EUR)",
+        "Visita a Old Town Museum (3 EUR)"
+      ],
+      "donde_comer": "Pescado fresco en restaurante frente al mar: 10-18 EUR. Camarones, mejillones. Tabernas en casco antiguo: 8-12 EUR. Helados artesanales (2-3 EUR)",
+      "consejo_local": "La verdadera joya es caminar el casco antiguo al atardecer sin turistas. Las playas al norte (Sunny Beach) son más grandes pero masificadas. Nessebar es más auténtico al sur.",
+      "plan_b_lluvia": "Días nublados frecuentes. Casco antiguo es cubierto en parte. Visita museos o cafés. Lluvia fuerte es rara",
+      "keywords": [
+        "Nessebar",
+        "Costa Negra",
+        "playa",
+        "UNESCO",
+        "antiguo",
+        "Burgas",
+        "Sunny Beach"
+      ]
+    },
+    {
+      "id": "varna",
+      "nombre": "Varna",
+      "tipo": "ciudad",
+      "region": "Costa negra (norte)",
+      "descripcion": "Ciudad costera más grande con puerto histórico, playas, vida nocturna activa y acceso fácil a otras playas. Menos turística que resorts cercanos pero con más vida urbana que Nessebar. Buena parada en ruta costera.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-julio, septiembre",
+      "como_llegar": "Desde Sofía: autobús directo (10-15 EUR, 7h), avión (vuelos baratos), o tren (8 EUR, 8-9h). Desde Nessebar: minibús (2-3 EUR, 1h)",
+      "donde_dormir": {
+        "mochilero": "Hostel en centro: 12-16 EUR/noche",
+        "medio": "Hotel 3* céntrico: 35-60 EUR/noche",
+        "comfort": "Hotel 4* frente a playa: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo marítimo (Sea Garden, libre, 3 km de paseo)",
+        "Museos arqueológicos (Tesoro de Varna, 5 EUR)",
+        "Playas de arena urbanas (libre)",
+        "Catedral de Asunción (gratis)",
+        "Vida nocturna en barrio de Tsar Simeon (gratis pasear, pubs 2-4 EUR bebida)"
+      ],
+      "donde_comer": "Restaurantes de pescado en paseo marítimo: 12-20 EUR. Meze en tabernas locales: 6-10 EUR. Streetfood: burek (pan relleno) 1-2 EUR",
+      "consejo_local": "Varna es más búlgara que los resorts. El Sea Garden es perfecto para sunset. La playa Euxinograd (al norte, minibús) es menos llena",
+      "plan_b_lluvia": "Museos interiores, paseo marítimo cubierto parcialmente, cafés",
+      "keywords": [
+        "Varna",
+        "Costa Negra",
+        "puerto",
+        "Sea Garden",
+        "ciudad costera",
+        "Euxinograd"
+      ]
+    },
+    {
+      "id": "samokov",
+      "nombre": "Samokov",
+      "tipo": "rural",
+      "region": "Rila (suroeste)",
+      "descripcion": "Pueblo tradicional en montañas, centro histórico de artesanía de metal. Auténtico y no masificado, punto de partida para trekking en Rila. Ideal para viajeros que buscan Bulgaria rural.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Sofía: minibús desde Tsaritsyn (5-7 EUR, 1h 15 min). Tren local también posible (3 EUR, 1h 45 min)",
+      "donde_dormir": {
+        "mochilero": "Casa rural o pequeño hostel: 12-16 EUR/noche",
+        "medio": "Hotel familiar 2-3*: 30-45 EUR/noche",
+        "comfort": "Resort de montaña: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita a iglesia de Bogorodica (gratis, siglo XIX)",
+        "Taller de metalurgia (observar artesanos, 5 EUR si entras a tienda)",
+        "Senderismo a cascada Borovets (2-3h, fácil)",
+        "Museo local de artesanía (3 EUR)",
+        "Picnic en bosque cercano (mercado del pueblo)"
+      ],
+      "donde_comer": "Comida casera en guesthouses: 8-12 EUR. Taberna local con banitsa y sopa: 3-5 EUR. Compra alimentos en mercado local",
+      "consejo_local": "El pueblo vive del metal. Las artesanías son genuinas, no souvenirs de importación. Habla con artesanos, son personas reales, no vendedores turísticos",
+      "plan_b_lluvia": "Iglesia, talleres cubiertos, cafés locales, museo",
+      "keywords": [
+        "Samokov",
+        "Rila",
+        "artesania",
+        "metal",
+        "pueblo rural",
+        "tradicional",
+        "montaña"
+      ]
+    },
+    {
+      "id": "kazanlak",
+      "nombre": "Kazanlak",
+      "tipo": "rural",
+      "region": "Valle de las rosas (centro)",
+      "descripcion": "Centro del famoso Valle de las Rosas búlgaro, con destilería de rosas históricas. Pueblo auténtico fuera de rutas turísticas principales, ideal para conocer comercio local de flores y visitar pueblos cercanos montañosos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio (floración), septiembre-octubre",
+      "como_llegar": "Desde Sofía: minibús (8 EUR, 3h) o autobús (6-8 EUR, 3-4h). Desde Plovdiv: autobús (4 EUR, 1h 30 min)",
+      "donde_dormir": {
+        "mochilero": "Hostel o guesthouse: 12-16 EUR/noche",
+        "medio": "Hotel rural 3*: 30-50 EUR/noche",
+        "comfort": "Casa de campo con jardín: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo de la Rosa (5 EUR, historia de destilería)",
+        "Visita a destilería local (tour 10-15 EUR, incluye degustación)",
+        "Senderismo por valle (gratis, varios niveles)",
+        "Pueblo de Kalofer cercano (autobus 1 EUR, arquitectura tradicional)",
+        "Festival de rosas (junio, si viajan entonces)"
+      ],
+      "donde_comer": "Comida casera en guesthouses: 8-10 EUR. Especialidades locales: salsa de tomate casera, yogur. Barato y auténtico",
+      "consejo_local": "Mayo-junio es pura rosa: perfume en el aire, flores en campos. Es mágico pero hay turistas. Octubre es mejor para experimentar vida real del pueblo sin aglomeraciones",
+      "plan_b_lluvia": "Museo interior, destilería cubierta, cafés, pueblos cercanos",
+      "keywords": [
+        "Kazanlak",
+        "Valle de las Rosas",
+        "Rosa bulgara",
+        "Kalofer",
+        "destileria",
+        "artesania"
+      ]
+    },
+    {
+      "id": "gran-tarnovo",
+      "nombre": "Gran Tarnovo",
+      "tipo": "histórico",
+      "region": "Gabrovo (norte)",
+      "descripcion": "Capital medieval búlgara con fortaleza de Tsarevets espectacular en acantilado, arquitectura otomana preservada y vistas sobre río. Destino histórico importante pero menos masificado que Sofía o Plovdiv. Excelente para historia y arquitectura.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Sofía: autobús (8-10 EUR, 4-5h) o minibús. Desde Plovdiv: autobús (6-8 EUR, 3-4h). Desde Varna: autobús (8-10 EUR, 4h)",
+      "donde_dormir": {
+        "mochilero": "Hostel en casco antiguo Varusha: 12-17 EUR/noche",
+        "medio": "Hotel 3* con vistas: 35-55 EUR/noche",
+        "comfort": "Hotel 4* en colina: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Fortaleza Tsarevets (5 EUR, ascenso 30 min, vistas espectaculares)",
+        "Casco antiguo Varusha (libre, paseo 2h, casas coloridas)",
+        "Iglesia de los 40 Mártires (3 EUR, interiores notables)",
+        "Show de luz y sonido en fortaleza (15 EUR, noches)",
+        "Senderismo por río Yantra (gratis)"
+      ],
+      "donde_comer": "Restaurantes en Varusha con vistas: 8-15 EUR. Comida tradicional. Cafés en plaza 2-4 EUR",
+      "consejo_local": "Sube a Tsarevets al atardecer sin falla. El show nocturno es kitsch pero las vistas sin iluminación son mejores. El casco antiguo es donde viven búlgaros reales, no turistas",
+      "plan_b_lluvia": "Iglesias cubiertas, museos interiores, casco antiguo (parcialmente cubierto en tiendas)",
+      "keywords": [
+        "Gran Tarnovo",
+        "Turnovo",
+        "Tsarevets",
+        "capital medieval",
+        "Varusha",
+        "fortaleza",
+        "Yantra"
+      ]
+    },
+    {
+      "id": "kotel",
+      "nombre": "Kotel",
+      "tipo": "rural",
+      "region": "Stara Planina (norte)",
+      "descripcion": "Pueblo de montaña autêntico en cordillera, famoso por tejido tradicional y arquitectura preservada. Menos turístico, ideal para senderismo de montaña y experiencia rural búlgara genuina. Punto de partida para trekking en Stara Planina.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Sofia: minibús a Gabrovo (8 EUR, 3h), luego minibús local a Kotel (3 EUR, 1h). Desde Gran Tarnovo: minibús (4 EUR, 1h 30 min)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse rural: 12-15 EUR/noche",
+        "medio": "Casa rural acogedora: 30-45 EUR/noche",
+        "comfort": "Resort de montaña: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita a talleres de tejedoras locales (gratis ver, comprar obras 20-100 EUR)",
+        "Senderismo a cascada Polskiya Skok (4-5h, medio)",
+        "Iglesia de la Asunción (gratis)",
+        "Museo etnográfico (3 EUR)",
+        "Paseo por pueblo y bosque (gratis)"
+      ],
+      "donde_comer": "Comida casera en guesthouses: 8-12 EUR. Yogur casero (1-2 EUR), pan fresco. Supermercado local para picnic",
+      "consejo_local": "Las tejedoras son personas mayores que mantienen tradición viva. Comprar sus obras es apoyo directo. El tejido búlgaro es patrimonio, no souvenirs",
+      "plan_b_lluvia": "Iglesia, talleres cubiertos, museo, guesthouses tienen salas de estar",
+      "keywords": [
+        "Kotel",
+        "tejido",
+        "artesania",
+        "montaña",
+        "Stara Planina",
+        "pueblo rural",
+        "tradicional"
+      ]
+    }
+  ]
+}

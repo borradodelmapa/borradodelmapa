@@ -1,0 +1,339 @@
+{
+  "pais": "Ruanda",
+  "codigo": "rw",
+  "destinos": [
+    {
+      "id": "volcanoes-national-park",
+      "nombre": "Parque Nacional de los Volcanes",
+      "tipo": "naturaleza",
+      "region": "Noroeste (Ruhengeri)",
+      "descripcion": "Hogar de los gorilas de montaña, una de las experiencias más importantes de África. El trekking permite observar familias de gorilas en su hábitat natural en las laderas del volcán Karisimbi. Imprescindible para cualquier viajero que visite Ruanda.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre, diciembre a febrero",
+      "como_llegar": "Desde Kigali: minibús o coche privado (2-3 horas, 35-50 EUR). Bus directo desde terminal Nyabugogo.",
+      "donde_dormir": {
+        "mochilero": "Hostels en Ruhengeri: 15-25 EUR/noche",
+        "medio": "Midrange lodge (One&Only, Mountain Gorilla View Lodge): 80-150 EUR/noche",
+        "comfort": "Singita Kanda, Wilderness Safaris: 400-600 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking de gorilas (300 USD/permiso, 4-6 horas)",
+        "Golden monkey trekking (100 USD, 2-3 horas)",
+        "Senderismo volcán Bisoke (gratis, 5-6 horas)",
+        "Visita a fuentes de agua caliente Karisoke (10 EUR)"
+      ],
+      "donde_comer": "Comida local en Ruhengeri: ugali, matoke, stew. Mercado central ofrece platos por 3-5 EUR. Restaurantes en lodges: 15-30 EUR.",
+      "consejo_local": "Reserva los permisos de gorilas con meses de anticipación (junio-agosto están agotados). Lleva repelente y ropa impermeable; hay mucho barro en los senderos.",
+      "plan_b_lluvia": "Visita el Centro de Investigación Karisoke o explora pueblos cercanos como Musanze; el trekking puede reprogramarse si la niebla es densa.",
+      "keywords": [
+        "volcanoes",
+        "gorilas montaña",
+        "Ruhengeri",
+        "Virunga",
+        "trekking gorilas",
+        "volcán Karisimbi",
+        "golden monkeys"
+      ]
+    },
+    {
+      "id": "kigali-ciudad",
+      "nombre": "Kigali",
+      "tipo": "ciudad",
+      "region": "Centro",
+      "descripcion": "Capital de Ruanda, punto de entrada obligado con una escena artística creciente y museos de importancia histórica. Punto de partida para cualquier itinerario, ofrece buen transporte, restaurantes decentes y una atmósfera más cosmopolita que el resto del país.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Aeropuerto Internacional Kigali (KGL): taxis regulados, Uber o shuttle de hotel (30-40 minutos, 15-25 EUR).",
+      "donde_dormir": {
+        "mochilero": "Heaven Hostels, Waves Hostel: 18-30 EUR/noche",
+        "medio": "Ubumwe Grande Hotel, Chez Lando: 60-100 EUR/noche",
+        "comfort": "Serena Kigali, Radisson Blu: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Kigali Genocide Memorial (5 EUR, 2 horas, obligatorio)",
+        "Mercado de Kimironko (gratis, compras de artesanía local)",
+        "Visita a galerías de arte en el barrio Nyarugenge (gratis)",
+        "Lake Kivu viewpoint en Nyarutarama (gratis)",
+        "Rwanda Art Museum (8 EUR)"
+      ],
+      "donde_comer": "Distrito de Kimihurura: restaurantes modernos con platos por 8-20 EUR. Street food en Kimironko: 2-4 EUR. Cadena Good Earth o Heaven ofrece internacional a 15-25 EUR.",
+      "consejo_local": "Los taxistas no siempre usan taxímetro; negocia la tarifa antes o usa Uber. El 7 de abril se conmemora el genocidio; evita ruido innecesario ese día.",
+      "plan_b_lluvia": "Museos, galerías de arte, compras en centro comercial The Source, cafés locales.",
+      "keywords": [
+        "Kigali",
+        "capital",
+        "Nyarutarama",
+        "Kimironko",
+        "Nyarugenge",
+        "mercado",
+        "genocide memorial",
+        "aeropuerto"
+      ]
+    },
+    {
+      "id": "lake-kivu",
+      "nombre": "Lago Kivu",
+      "tipo": "playa",
+      "region": "Oeste (Karongi, Gisenyi)",
+      "descripcion": "Segundo lago más grande de África con playas de arena volcánica y vistas a la República Democrática del Congo. Punto de relax entre trekking, excelente para nadar, kayaking y disfrutar la vida local en pueblos pesqueros.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre, diciembre a febrero",
+      "como_llegar": "Desde Kigali: minibús a Gisenyi (5-6 horas, 10-15 EUR) o Karongi (4 horas, 8-12 EUR). Ruta panorámica muy recomendada.",
+      "donde_dormir": {
+        "mochilero": "Karongi Beach Hostel, Sam's Place Gisenyi: 15-25 EUR/noche",
+        "medio": "Lake Kivu Serena, Musanze Hotel: 70-120 EUR/noche",
+        "comfort": "Retreat Gisenyi, One&Only Nyungwe House: 150-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Nadar en el lago y disfrutar playa (gratis)",
+        "Kayaking en el lago (20-40 EUR por 2-3 horas)",
+        "Isla de Idjwi tour desde Gisenyi (30-50 EUR, día completo)",
+        "Visita a plantaciones de té en Karongi (15 EUR)",
+        "Pesca al atardecer con pescadores locales (10-20 EUR)"
+      ],
+      "donde_comer": "Pescado fresco del lago (tilapia, sambaza): 5-8 EUR en restaurantes locales. Gisenyi tiene opciones más caras (10-20 EUR). Prueba ugali y matoke.",
+      "consejo_local": "El lago Kivu tiene gas metano en profundidades; los lugareños no nadan lejos de la orilla. Las olas pueden ser fuertes en la tarde, mejor nadar temprano.",
+      "plan_b_lluvia": "Visitas a pueblos locales, mercados, museos del té, cafés con vista al lago.",
+      "keywords": [
+        "Lake Kivu",
+        "Gisenyi",
+        "Karongi",
+        "playa",
+        "Idjwi",
+        "volcánico",
+        "pescado fresco"
+      ]
+    },
+    {
+      "id": "nyungwe-forest",
+      "nombre": "Bosque Nacional de Nyungwe",
+      "tipo": "naturaleza",
+      "region": "Suroeste",
+      "descripcion": "Uno de los bosques tropicales más antiguos de África, hogar de 13 especies de primates incluyendo chimpancés. Redes de senderismo bien mantenidas sin aglomeración turística, ideal para avistamiento de fauna y experiencia de selva auténtica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre, diciembre a febrero",
+      "como_llegar": "Desde Kigali: minibús a Cyangugu o entrada por Gisakura (3-4 horas, 12-18 EUR). Acceso desde carretera principal Butare-Gisenyi.",
+      "donde_dormir": {
+        "mochilero": "Nyungwe Top View Hill Hotel: 20-35 EUR/noche",
+        "medio": "Nyungwe Forest Lodge, One&Only Nyungwe House: 80-150 EUR/noche",
+        "comfort": "One&Only Nyungwe House, Wilderness Safaris: 300-500 EUR/noche"
+      },
+      "que_hacer": [
+        "Chimpanzee trekking (90 USD/permiso, 4-5 horas)",
+        "Canopy walk en puentes colgantes (15 EUR, 1-2 horas)",
+        "Senderismo Igishigishi (gratis, 3-4 horas)",
+        "Visita cascadas Karamba (5 EUR, 2 horas)",
+        "Avistamiento de colobos rojos (gratis en senderos)"
+      ],
+      "donde_comer": "Alojamientos ofrecen comida local simple. Restaurantes cercanos en Cyangugu: 4-8 EUR. Lleva snacks si haces trekking.",
+      "consejo_local": "Los chimpancés son impredecibles; mantén distancia de 7 metros. Contrata un guía local certificado (obligatorio para chimps, 30-50 EUR extra).",
+      "plan_b_lluvia": "Canopy walk es aceptable con lluvia ligera. Visita el centro de visitantes, explora senderos cortos de baja altitud.",
+      "keywords": [
+        "Nyungwe",
+        "bosque tropical",
+        "chimpancés",
+        "canopy walk",
+        "Cyangugu",
+        "Gisakura",
+        "selva"
+      ]
+    },
+    {
+      "id": "butare-ciudad",
+      "nombre": "Butare (Huye)",
+      "tipo": "histórico",
+      "region": "Sur",
+      "descripcion": "Segunda ciudad de Ruanda con importante patrimonio cultural y arquitectura colonial. Centro del arte y educación ruandés, ideal para entender la historia precolonial y la vida cotidiana lejos del circuito turístico principal.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Desde Kigali: minibús directo (2-2.5 horas, 8-12 EUR) desde terminal Nyabugogo.",
+      "donde_dormir": {
+        "mochilero": "Huye Hostel, Credo Guesthouse: 15-25 EUR/noche",
+        "medio": "Huye Guest House, City Guest House: 50-80 EUR/noche",
+        "comfort": "No hay opciones de lujo real; mejores opciones están en Kigali"
+      },
+      "que_hacer": [
+        "National Museum of Rwanda (5 EUR, 2 horas)",
+        "Royal Palace Museum (4 EUR, 1.5 horas)",
+        "Explora mercado tradicional (gratis)",
+        "Paseo por barrio colonial (gratis)",
+        "Catedral de Sainte-Famille (gratis)"
+      ],
+      "donde_comer": "Comida local en restaurantes humildes: 3-6 EUR. Carne a la brasa en mercado. Algunas cafeterías ofrecen pizza y pasta a 8-12 EUR.",
+      "consejo_local": "Butare tiene menos turismo y es más tranquilo que Kigali; los lugareños son muy amables. Los museos cierran temprano (17:00), visita por la mañana.",
+      "plan_b_lluvia": "Museos, mercados cubiertos, cafés locales.",
+      "keywords": [
+        "Butare",
+        "Huye",
+        "museo nacional",
+        "royal palace",
+        "histórico",
+        "colonial",
+        "arte"
+      ]
+    },
+    {
+      "id": "lake-ruhondo",
+      "nombre": "Lago Ruhondo",
+      "tipo": "naturaleza",
+      "region": "Norte",
+      "descripcion": "Lago glacial en altura rodeado de colinas verde intenso, menos visitado que Kivu pero igualmente hermoso. Punto de parada ideal entre volcanes y Kigali con comunidades de pescadores y atmósfera rural auténtica.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre, diciembre a febrero",
+      "como_llegar": "Desde Volcanoes NP: coche (1.5 horas, 30-50 EUR) o minibús local (2-3 horas, 8-12 EUR). Ruta hacia Kigali.",
+      "donde_dormir": {
+        "mochilero": "Ruhondo Eco Camp: 20-35 EUR/noche",
+        "medio": "Ruhondo Eco Camp plus, small lodges: 50-100 EUR/noche",
+        "comfort": "Pocos alojamientos; mejor dormir en volcanes o Kigali"
+      },
+      "que_hacer": [
+        "Nadar y relajarse en el lago (gratis)",
+        "Paseo en bote con pescadores (15-25 EUR, 1-2 horas)",
+        "Senderismo alrededor del lago (gratis)",
+        "Visita a comunidades locales (5-10 EUR por guía)"
+      ],
+      "donde_comer": "Pescado fresco en restaurantes simples: 4-7 EUR. Eco Camp ofrece comida por 10-15 EUR.",
+      "consejo_local": "Es un lugar muy tranquilo; no esperes servicios turísticos. Los amaneceres son espectaculares, madruga para fotografiar.",
+      "plan_b_lluvia": "Café con vista al lago, paseos cortos entre lluvia.",
+      "keywords": [
+        "Lake Ruhondo",
+        "glacial",
+        "norte Ruanda",
+        "pescadores",
+        "tranquilo",
+        "verde"
+      ]
+    },
+    {
+      "id": "kibuye-lakeside",
+      "nombre": "Kibuye (Karongi) - Pueblo Lakeside",
+      "tipo": "playa",
+      "region": "Oeste",
+      "descripcion": "Pueblo costero en Lake Kivu más tranquilo que Gisenyi, con playas vírgenes y cayos para explorar. Ideal para desconexión total y actividades acuáticas a ritmo local.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a septiembre, diciembre a febrero",
+      "como_llegar": "Desde Kigali: minibús a Karongi (4 horas, 8-12 EUR). Desde Gisenyi: bote privado (2 horas, 50-80 EUR) o carretera (1.5 horas).",
+      "donde_dormir": {
+        "mochilero": "Karongi Beach Hostel, Sam's Kibuye: 15-25 EUR/noche",
+        "medio": "Kibuye Serena, Bethanie: 60-110 EUR/noche",
+        "comfort": "Serena luxury options: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas y baño en el lago (gratis)",
+        "Excursión a cayos (20-40 EUR, tour)",
+        "Paddle board o kayaking (25-50 EUR)",
+        "Atardecer en bote con cerveza local (15 EUR)",
+        "Visita plantación de té cercana (15 EUR)"
+      ],
+      "donde_comer": "Restaurantes frente al agua sirven pescado fresco: 6-12 EUR. Carne a la brasa en playa: 5-8 EUR.",
+      "consejo_local": "El agua es segura para nadar. Los botes pueden ser negociables si hablas con pescadores directamente, sin intermediarios.",
+      "plan_b_lluvia": "Cafés con techumbre, paseos por pueblo, compras de artesanía.",
+      "keywords": [
+        "Kibuye",
+        "Karongi",
+        "Lake Kivu",
+        "playas",
+        "cayos",
+        "pueblito",
+        "pescado"
+      ]
+    },
+    {
+      "id": "lake-muhazi",
+      "nombre": "Lago Muhazi",
+      "tipo": "naturaleza",
+      "region": "Este",
+      "descripcion": "Lago menos turístico en el este de Ruanda, rodeado de naturaleza salvaje y pequeños pueblos. Excelente para observar vida silvestre local y disfrutar tranquilidad lejos del circuito principal.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Kigali: minibús hacia Kayonza/Ngoma (2-2.5 horas, 8-12 EUR). Acceso por Kayonza.",
+      "donde_dormir": {
+        "mochilero": "Muhazi Hotel: 18-28 EUR/noche",
+        "medio": "Muhazi Serena, small lodges: 60-100 EUR/noche",
+        "comfort": "Opciones limitadas"
+      },
+      "que_hacer": [
+        "Baño en el lago (gratis)",
+        "Bote de pesca con locales (10-20 EUR)",
+        "Observación de aves (gratis, lleva binoculares)",
+        "Picnic en orilla (gratis + comida)"
+      ],
+      "donde_comer": "Pescado fresco, simple: 4-6 EUR. Alojamientos básicos ofrecen comida por 8-12 EUR.",
+      "consejo_local": "Muy pocos turistas llegan aquí. Los locales son curiosos y amables. Lleva efectivo; no hay cajeros automáticos cercanos.",
+      "plan_b_lluvia": "Visita pueblos cercanos, mercados, descanso en alojamiento.",
+      "keywords": [
+        "Lake Muhazi",
+        "este Ruanda",
+        "Kayonza",
+        "tranquilo",
+        "aves",
+        "salvaje"
+      ]
+    },
+    {
+      "id": "gishwati-forest",
+      "nombre": "Bosque de Gishwati",
+      "tipo": "naturaleza",
+      "region": "Noroeste",
+      "descripcion": "Bosque protegido entre volcanes y Kivu con población de primates y vegetación exuberante. Punto de parada secundaria con menos infraestructura pero auténtica experiencia forestal sin masificación.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Volcanes NP: coche privado (1-1.5 horas, 35-50 EUR). Acceso desde Ruhengeri.",
+      "donde_dormir": {
+        "mochilero": "Gishwati Eco Lodge: 20-30 EUR/noche",
+        "medio": "Small lodges in area: 50-80 EUR/noche",
+        "comfort": "Mejor dormir en volcanes o Kivu"
+      },
+      "que_hacer": [
+        "Senderismo con guía local (10-20 EUR, 3-4 horas)",
+        "Avistamiento de primates (gratis en senderos, guía recomendado)",
+        "Observación de aves (gratis)"
+      ],
+      "donde_comer": "Alojamientos ofrecen comida simple local: 8-12 EUR. Restaurantes humildes cercanos: 3-5 EUR.",
+      "consejo_local": "Menos turístico que volcanes; infraestructura mínima pero auténtica. Contrata guía local certificado en Ruhengeri antes de subir.",
+      "plan_b_lluvia": "Bosque es accesible; lluvia no impide trekking, solo se pone más muddy.",
+      "keywords": [
+        "Gishwati",
+        "bosque",
+        "primates",
+        "norte",
+        "senderismo",
+        "poco turismo"
+      ]
+    },
+    {
+      "id": "akagera-national-park",
+      "nombre": "Parque Nacional Akagera",
+      "tipo": "naturaleza",
+      "region": "Este",
+      "descripcion": "Único parque de safari de Ruanda con fauna grande (búfalos, elefantes, leopardos), recientemente restaurado y mejorado. Experiencia de savana africana más convencional, aunque menos desarrollado que parques en Tanzania o Kenya.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a octubre",
+      "como_llegar": "Desde Kigali: coche privado (2-2.5 horas, 50-80 EUR) a entrada este. Minibús a Kayonza luego transporte local.",
+      "donde_dormir": {
+        "mochilero": "Akagera Game Lodge budget: 30-50 EUR/noche",
+        "medio": "Akagera Game Lodge, Magashi Camp: 80-150 EUR/noche",
+        "comfort": "Magashi Camp (Wilderness Safaris): 250-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Game drive con guía (70-100 USD por 3-4 horas)",
+        "Observación de aves (gratis en lodge o durante game drive)",
+        "Paseo a pie (30-50 USD, 2 horas, con guía armado)",
+        "Picnic en savana (incluido en tour)"
+      ],
+      "donde_comer": "Lodges ofrecen all-inclusive o media pensión (comida por 20-35 EUR si no está incluida). Pocas opciones fuera de alojamientos.",
+      "consejo_local": "Es el único safari tradicional de Ruanda pero con menos megafauna que Tanzania/Kenya. Mejor en temporada seca. Los guías locales conocen bien el parque.",
+      "plan_b_lluvia": "Game drives funcionan con lluvia; avistamientos pueden ser mejores (fauna activa). Prepárate para fango.",
+      "keywords": [
+        "Akagera",
+        "safari",
+        "este Ruanda",
+        "fauna",
+        "elefantes",
+        "leopardos",
+        "savana",
+        "game drive"
+      ]
+    }
+  ]
+}

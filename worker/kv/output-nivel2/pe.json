@@ -1,0 +1,331 @@
+{
+  "pais": "Perú",
+  "codigo": "pe",
+  "destinos": [
+    {
+      "id": "machu-picchu",
+      "nombre": "Machu Picchu",
+      "tipo": "histórico",
+      "region": "Cusco, Valle Sagrado",
+      "descripcion": "Ciudadela inca del siglo XV ubicada en las alturas de los Andes. Es la atracción arqueológica más importante de Sudamérica y el sitio más visitado de Perú. Imprescindible para entender la civilización inca.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "desde Lima: vuelo Lima-Cusco (1h, 40-80 EUR) + tren Cusco-Aguas Calientes (4h, 20-60 EUR) + autobús subida (12 EUR). También senderismo Inca Trail (4 días, 600 EUR con agencia).",
+      "donde_dormir": {
+        "mochilero": "Albergues en Aguas Calientes: 12-18 EUR/noche",
+        "medio": "Hotels 2-3 estrellas: 30-50 EUR/noche",
+        "comfort": "Hotels con vistas: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Entrada a Machu Picchu (55 EUR)",
+        "Subida a Huayna Picchu (8 EUR adicionales)",
+        "Inca Trail trek (600 EUR con guía autorizado)",
+        "Baños termales Aguas Calientes (12 EUR)"
+      ],
+      "donde_comer": "Aguas Calientes: ceviche, trucha a la parrilla, papas a la huancaína. Rango 8-20 EUR. Calle Pachacútec tiene opciones económicas.",
+      "consejo_local": "Llega a Aguas Calientes la noche anterior. Sube a Machu Picchu temprano (6:30 AM) para evitar muchedumbres. Entrada de 15:00 es más barata.",
+      "plan_b_lluvia": "Visita museo de sitio, baños termales o explora pueblos cercanos como Ollantaytambo.",
+      "keywords": [
+        "Machu Picchu",
+        "Macchu Picchu",
+        "ciudadela inca",
+        "Aguas Calientes",
+        "Huayna Picchu",
+        "Inca Trail"
+      ]
+    },
+    {
+      "id": "cusco",
+      "nombre": "Cusco",
+      "tipo": "histórico",
+      "region": "Cusco",
+      "descripcion": "Antigua capital del imperio inca a 3.400m de altitud. Centro histórico con plazas coloniales, iglesias barrocas y muros incas. Punto de partida para el Valle Sagrado y Machu Picchu.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "desde Lima: vuelo directo (1h, 40-80 EUR) o autobús nocturno (20-24h, 30-50 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales en San Blas: 12-18 EUR/noche",
+        "medio": "Hotels centro histórico: 35-60 EUR/noche",
+        "comfort": "Hotels boutique Plaza de Armas: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Plaza de Armas y Catedral (15 EUR entrada combinada)",
+        "Sacsayhuamán - fortaleza inca (15 EUR)",
+        "Qorikancha - templo del sol inca (10 EUR)",
+        "Barrio de San Blas con vistas (gratis)",
+        "Mercado de San Pedro (gratis)"
+      ],
+      "donde_comer": "Ceviche, ají de gallina, lomo saltado. Rango 6-15 EUR. Zona San Blas y alrededor de Plaza de Armas con buen ambiente.",
+      "consejo_local": "Tómate 2 días para aclimatarte a la altura antes de actividades intensas. El coca te ayuda con el soroche (mal de altura). San Blas al atardecer es perfecto para fotos.",
+      "plan_b_lluvia": "Museos: Museo de Arte Precolombino, Museo de la Coca, galerías en San Blas.",
+      "keywords": [
+        "Cusco",
+        "Cuzco",
+        "San Blas",
+        "Plaza de Armas",
+        "Valle Sagrado",
+        "capital inca"
+      ]
+    },
+    {
+      "id": "lima",
+      "nombre": "Lima",
+      "tipo": "ciudad",
+      "region": "Lima",
+      "descripcion": "Capital del Perú con gastronomía mundialmente reconocida. Centros históricos coloniales, museos de arte prehispánico y una escena cultural dinámica. Puerta de entrada a casi todos los viajeros.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre-marzo",
+      "como_llegar": "Aeropuerto Jorge Chávez. Entrada principal al país.",
+      "donde_dormir": {
+        "mochilero": "Hostales Miraflores/Barranco: 12-20 EUR/noche",
+        "medio": "Hotels Miraflores/San Isidro: 40-70 EUR/noche",
+        "comfort": "Hotels centro histórico/Barranco: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Larco - arte prehispánico (10 EUR)",
+        "Museo Nacional de Antropología (12 EUR)",
+        "Centro Histórico y Catedral (gratis paseo, 8 EUR catedral)",
+        "Miraflores - acantilados y parques (gratis)",
+        "Barranco - barrio bohemio con galerías (gratis)"
+      ],
+      "donde_comer": "Capital gastronómica de Sudamérica: ceviche (10-18 EUR), tiradito, causa limeña. Rango 8-50 EUR según lugar. Miraflores y Barranco con mejores opciones.",
+      "consejo_local": "Barranco es perfecto para cenar y beber al atardecer. Evita centro histórico de noche. Toma colectivos (microbús) para moverte entre distritos, es barato (0,80 EUR).",
+      "plan_b_lluvia": "Museos, cafeterías en Barranco, compras en centros comerciales.",
+      "keywords": [
+        "Lima",
+        "Miraflores",
+        "Barranco",
+        "Centro Histórico",
+        "gastronomía peruana",
+        "capital Perú"
+      ]
+    },
+    {
+      "id": "valle-sagrado",
+      "nombre": "Valle Sagrado",
+      "tipo": "histórico",
+      "region": "Cusco",
+      "descripcion": "Región con pueblos coloniales y ruinas incas entre Cusco y Machu Picchu. Incluye Ollantaytambo, Pisac y Urubamba con mercados tradicionales y arqueología en contexto rural.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "desde Cusco: autobús local (1,5-2h, 3-5 EUR) o tour privado (40-60 EUR). Acceso a través de pueblos interconectados.",
+      "donde_dormir": {
+        "mochilero": "Ollantaytambo/Pisac: 12-16 EUR/noche",
+        "medio": "Urubamba: 30-45 EUR/noche",
+        "comfort": "Lodges con vistas: 70-110 EUR/noche"
+      },
+      "que_hacer": [
+        "Ruinas de Ollantaytambo (30 EUR)",
+        "Andenes agrícolas de Pisac (25 EUR)",
+        "Mercado de Pisac (gratis entrada, compras 5-20 EUR)",
+        "Salineras de Maras (12 EUR)",
+        "Trekking a pueblos remotos (guía 40-60 EUR)"
+      ],
+      "donde_comer": "Trucha a la parrilla, pachamanca (plato bajo tierra), quinua. Rango 5-15 EUR. Urubamba tiene mejor variedad gastronómica.",
+      "consejo_local": "Pisac: ve al mercado dominguero temprano (8 AM) para ver artesanía sin turistas. Ollantaytambo es pueblo más auténtico, ideal para dormir entre Cusco y Machu Picchu.",
+      "plan_b_lluvia": "Visita pueblos artesanales cubiertos, museos locales, mercados techados.",
+      "keywords": [
+        "Valle Sagrado",
+        "Ollantaytambo",
+        "Pisac",
+        "Urubamba",
+        "andenes incas",
+        "Maras"
+      ]
+    },
+    {
+      "id": "amazon-puerto-maldonado",
+      "nombre": "Amazonía - Puerto Maldonado",
+      "tipo": "naturaleza",
+      "region": "Madre de Dios",
+      "descripcion": "Acceso a la selva amazónica peruana con lodges ecológicos. Avistamiento de fauna (jaguares, osos hormigueros, caimanes) y navegación por ríos. Menos turístico que iquitos, más accesible.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-octubre (menos lluvia)",
+      "como_llegar": "desde Lima: vuelo a Puerto Maldonado (2h, 80-150 EUR). Desde Cusco: vuelo (1h, 60-100 EUR). Luego traslado a lodge en bote (30 minutos, incluido).",
+      "donde_dormir": {
+        "mochilero": "Lodges básicos: 40-60 EUR/noche (all-inclusive)",
+        "medio": "Lodges estándar: 70-120 EUR/noche (incluye comidas y excursiones)",
+        "comfort": "Lodges de lujo: 150-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Excursión nocturna avistamiento fauna (incluida en lodge)",
+        "Navegación río Madre de Dios (incluida)",
+        "Trekking selva (guía 20-30 EUR adicionales)",
+        "Collpa - observación de guacamayos (15 EUR)"
+      ],
+      "donde_comer": "Comidas incluidas en lodges. Pescado fresco, plátanos, yuca. Pueblos cercanos: rango 5-12 EUR.",
+      "consejo_local": "Elige lodge con buenas reseñas de naturistas. El avistamiento de fauna requiere paciencia y silencio. Mosquiteros imprescindibles. Mejor en temporada seca.",
+      "plan_b_lluvia": "Más fauna activa con lluvia. Prepárate con buen equipo impermeable.",
+      "keywords": [
+        "Amazonía",
+        "Puerto Maldonado",
+        "selva peruana",
+        "Madre de Dios",
+        "lodges amazónicos",
+        "fauna amazónica"
+      ]
+    },
+    {
+      "id": "arequipa",
+      "nombre": "Arequipa",
+      "tipo": "ciudad",
+      "region": "Arequipa",
+      "descripcion": "Segunda ciudad del Perú a 2.335m con arquitectura colonial de sillar blanco. Centro histórico UNESCO. Punto de partida para Colca y trekking andino. Clima seco y agradable.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "desde Lima: vuelo (2h, 40-80 EUR) o autobús (18h, 25-40 EUR). Desde Cusco: autobús (11h, 20-35 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales centro: 10-16 EUR/noche",
+        "medio": "Hotels plaza principal: 35-55 EUR/noche",
+        "comfort": "Hotels con vistas volcanes: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Plaza de Armas y Catedral (gratis exterior, 5 EUR interior)",
+        "Monasterio de Santa Catalina (10 EUR)",
+        "Museo Santuarios Andinos - momia inca (12 EUR)",
+        "Paseo por barrio de Yanahuara (gratis, vistas volcanes)",
+        "Volcán Misti - ascenso (60 EUR con guía 2 días)"
+      ],
+      "donde_comer": "Rocoto relleno (plato local), chupe de camarones, arequipanos. Rango 6-15 EUR. Zona Plaza de Armas.",
+      "consejo_local": "Santa Catalina al atardecer es espectacular. Las vistas al Misti desde Yanahuara son mejores que desde plaza. Arequipa es más tranquila y real que Cusco.",
+      "plan_b_lluvia": "Museos cerrados, paseos cubiertos en portales coloniales.",
+      "keywords": [
+        "Arequipa",
+        "sillar blanco",
+        "Volcán Misti",
+        "Colca",
+        "Santa Catalina",
+        "segunda ciudad"
+      ]
+    },
+    {
+      "id": "cañon-colca",
+      "nombre": "Cañón del Colca",
+      "tipo": "montaña",
+      "region": "Arequipa",
+      "descripcion": "Uno de los cañones más profundos del mundo (3.400m). Avistamiento de cóndores andinos. Trekking de múltiples días o tours de 2 días desde Arequipa. Paisajes espectaculares.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "desde Arequipa: tour organizado (2 días, 60-100 EUR) o transporte público (autobús Arequipa-Chivay 3,5h, 5 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales Chivay/Yanque: 12-18 EUR/noche",
+        "medio": "Hotels Chivay: 35-55 EUR/noche",
+        "comfort": "Lodges spa con aguas termales: 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Mirador Cruz del Cóndor - avistamiento cóndores (entrada incluida en tour)",
+        "Trekking 2 días por el fondo (60-100 EUR con agencia)",
+        "Aguas termales Chivay (5 EUR)",
+        "Pueblos tradicionales Yanque, Cabanaconde (gratis paseo)"
+      ],
+      "donde_comer": "Trucha local, papa a la huancaína, sopa. Rango 5-12 EUR. Chivay tiene mejor oferta.",
+      "consejo_local": "Cruz del Cóndor: ve antes de las 9 AM (vientos levantaban el polvo después). Los cóndores vuelan al atardecer. Tour de 2 días desde Arequipa es mejor que ir por tu cuenta.",
+      "plan_b_lluvia": "Más difícil avistar cóndores. Caminos pueden ser resbaladizos.",
+      "keywords": [
+        "Colca",
+        "Cañon Colca",
+        "cóndor andino",
+        "Chivay",
+        "trekking Colca",
+        "Cruz del Cóndor"
+      ]
+    },
+    {
+      "id": "lago-titicaca",
+      "nombre": "Lago Titicaca",
+      "tipo": "isla",
+      "region": "Puno",
+      "descripcion": "Lago binacional más alto del mundo (3.810m). Islas flotantes Uros, Isla de Taquile. Cultura aymara y quechua. Menos turístico que Machu Picchu, más auténtico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "desde Arequipa: autobús (5h, 12-20 EUR) o desde Cusco (11h, 20-35 EUR). Llegada a Puno, puerto principal.",
+      "donde_dormir": {
+        "mochilero": "Hostales Puno centro: 10-15 EUR/noche",
+        "medio": "Hotels Puno: 30-50 EUR/noche",
+        "comfort": "Hotels con vista lago: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Islas Uros - casas flotantes (35 EUR tour)",
+        "Isla de Taquile - trekking y textiles (40 EUR tour)",
+        "Pueblo de Puno - museos (gratis paseo, 5-8 EUR museos)",
+        "Atardecer lago (gratis desde costa)"
+      ],
+      "donde_comer": "Trucha del Titicaca, sopa de quinua, raya a la parmesan. Rango 6-14 EUR. Puno tiene mejor oferta que islas.",
+      "consejo_local": "Uros es turístico pero auténtico. Taquile es menos visitada y más genuina (subida de escaleras fuerte a 3.850m). Ve temprano para evitar grupos. Puno es caótica pero real.",
+      "plan_b_lluvia": "Tours siguen en lluvia. Lleva ropa impermeable.",
+      "keywords": [
+        "Titicaca",
+        "Puno",
+        "Uros",
+        "Taquile",
+        "islas flotantes",
+        "lago más alto"
+      ]
+    },
+    {
+      "id": "nazca",
+      "nombre": "Nazca",
+      "tipo": "desierto",
+      "region": "Ica",
+      "descripcion": "Misteriosas líneas geométricas preincaicas trazadas en el desierto hace 1.500 años. Sobrevuelos de avioneta obligatorios. Museos y acueductos prehispánicos. Experiencia única.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-agosto",
+      "como_llegar": "desde Lima: autobús (6h, 15-25 EUR) o vuelo a Nazca (1h, 80-150 EUR). Tours organizados desde Lima (2 días, 100-150 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostales Nazca: 10-15 EUR/noche",
+        "medio": "Hotels Nazca: 30-50 EUR/noche",
+        "comfort": "Hotels con piscina: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Vuelo sobrevuelo líneas Nazca (80-120 EUR, 30 min)",
+        "Mirador Pozo (gratis acceso básico)",
+        "Museo Antonini - contexto arqueológico (8 EUR)",
+        "Acueductos Cantalloc (12 EUR)",
+        "Desierto observación astronómica nocturna (30 EUR)"
+      ],
+      "donde_comer": "Pollo a la nazca, ceviche de caballa. Rango 5-12 EUR. Pocas opciones, Nazca es pueblo pequeño.",
+      "consejo_local": "Sobrevuelo es imprescindible (las líneas no se ven desde tierra bien). Elige mañana temprano (menos turbulencia). Mareos posibles. Toma dramamine si propensión a mareos. Fly Nazca es agencia confiable.",
+      "plan_b_lluvia": "Lluvia es rara. Cielos nubosos impiden vuelos.",
+      "keywords": [
+        "Nazca",
+        "líneas de Nazca",
+        "geoglifos",
+        "sobrevuelo",
+        "Ica",
+        "arqueología Nazca"
+      ]
+    },
+    {
+      "id": "iquitos-amazon",
+      "nombre": "Iquitos",
+      "tipo": "naturaleza",
+      "region": "Loreto",
+      "descripcion": "Entrada principal a la amazonía peruana por río. Biodiversidad extrema, comunidades indígenas, cruceros fluviales. Más infraestructura que Puerto Maldonado pero más turístico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "septiembre-marzo",
+      "como_llegar": "desde Lima: vuelo (2h, 100-180 EUR). Única entrada por aire. Desde Iquitos: botes a lodges (2-4h, incluido en reserva).",
+      "donde_dormir": {
+        "mochilero": "Hostales centro: 12-20 EUR/noche",
+        "medio": "Lodges estándar: 80-150 EUR/noche (all-inclusive)",
+        "comfort": "Cruceros de lujo: 200-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Crucero río Amazonas (80-200 EUR por día según confort)",
+        "Trekking selva y avistamiento fauna (incluido en lodge)",
+        "Comunidades indígenas Huitoto/Shipibo (tour 40-60 EUR)",
+        "Rescue center animales (15 EUR)"
+      ],
+      "donde_comer": "Pescado blanco, pirañas, juane (plato local). Rango 6-15 EUR. Centro Iquitos.",
+      "consejo_local": "Iquitos es caótica pero punto de partida obligatorio. Booking lodge con anticipación es crítico. Agua potable solamente comprada. Repelente de mosquitos fuerte (hay dengue).",
+      "plan_b_lluvia": "Temporada de lluvia (diciembre-marzo) = mejor avistamiento de fauna (ríos crecidos).",
+      "keywords": [
+        "Iquitos",
+        "Amazonía",
+        "Loreto",
+        "cruceros amazónicos",
+        "comunidades indígenas",
+        "río Amazonas"
+      ]
+    }
+  ]
+}

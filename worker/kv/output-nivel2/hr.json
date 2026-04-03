@@ -1,0 +1,335 @@
+{
+  "pais": "Croacia",
+  "codigo": "hr",
+  "destinos": [
+    {
+      "id": "dubrovnik",
+      "nombre": "Dubrovnik",
+      "tipo": "ciudad",
+      "region": "Dalmacia del Sur",
+      "descripcion": "Ciudad amurallada del siglo XIII con arquitectura renacentista, playas cercanas y vistas al Adriático. Escenario de Juego de Tronos y capital del turismo croata. Imprescindible para ver la Costa Dálmata histórica.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Desde Zagreb en avión (2h, 30-80 EUR) o autobús (10h, 20-35 EUR). Desde Split en autobús (4h, 15-25 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal Old Town o Backpackers Club: 25-35 EUR/noche",
+        "medio": "Hotel Apartman Perla o similar: 60-90 EUR/noche",
+        "comfort": "Hotel Excelsior o Hilton Imperial: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por las murallas (25 EUR)",
+        "Playa de Banje (gratis)",
+        "Isla de Lokrum en ferry (15 EUR)",
+        "Casco antiguo y Stradun (gratis)",
+        "Mirador de Srd en teleférico (15 EUR)"
+      ],
+      "donde_comer": "Mariscos frescos y dalmatian pasta. Zona Stradun: 12-20 EUR. Callejones laterales: 8-15 EUR.",
+      "consejo_local": "Sube a las murallas al atardecer para fotos sin multitudes. Los precios bajan significativamente en mayo y octubre.",
+      "plan_b_lluvia": "Museos: Palacio Sponza, Museo Marítimo (8-10 EUR). Galerías en el casco antiguo.",
+      "keywords": [
+        "Ragusa",
+        "Adriático",
+        "murallas",
+        "Stradun",
+        "Juego de Tronos",
+        "Banje",
+        "Lokrum"
+      ]
+    },
+    {
+      "id": "split",
+      "nombre": "Split",
+      "tipo": "ciudad",
+      "region": "Dalmacia Central",
+      "descripcion": "Segunda ciudad de Croacia, construida dentro del Palacio de Diocleciano romano del siglo III. Hub de transporte con vida nocturna vibrante y fácil acceso a islas Adriáticas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, septiembre",
+      "como_llegar": "Desde Zagreb en autobús (8h, 15-25 EUR) o avión (1.5h, 25-70 EUR). Centro de conexiones para islas.",
+      "donde_dormir": {
+        "mochilero": "Hostal Split Backpackers o Guesthouse Marko: 22-32 EUR/noche",
+        "medio": "Hotel Peristil o Apartments Kozarica: 55-80 EUR/noche",
+        "comfort": "Hotel Radisson Blu o Le Méridien: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Palacio de Diocleciano exploración (gratis)",
+        "Playa de Bačvice (gratis)",
+        "Mirador de Marjan (gratis)",
+        "Museo Arqueológico (8 EUR)",
+        "Ferries a islas Hvar, Brač, Vis"
+      ],
+      "donde_comer": "Calamares a la parrilla, pastas. Zona Riva (frente al mar): 10-18 EUR. Callejones interiores: 6-12 EUR.",
+      "consejo_local": "El Palacio de Diocleciano es un laberinto; piérdete por las callejuelas interiores en lugar de hacer un tour. La playa de Bačvice es donde van los locales.",
+      "plan_b_lluvia": "Explorar criptas del Palacio (3 EUR). Museo de Vidrio de Bol en ferry a Brač (día completo).",
+      "keywords": [
+        "Spalato",
+        "Palacio Diocleciano",
+        "Riva",
+        "Bačvice",
+        "Marjan",
+        "puerto"
+      ]
+    },
+    {
+      "id": "hvar",
+      "nombre": "Hvar",
+      "tipo": "isla",
+      "region": "Islas Adriáticas",
+      "descripcion": "Isla con lavanda, vinos tintos y vida nocturna cosmopolita. Combina playas tranquilas, pueblos históricos y discotecas de verano sin ser tan masificada como Mykonos.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre (lavanda), mayo y octubre (tranquilo)",
+      "como_llegar": "Ferry desde Split (2h, 12-18 EUR) o desde Drvenik (1h, 8-12 EUR). Catamán rápido disponible.",
+      "donde_dormir": {
+        "mochilero": "Hostal Green Lizard o rooms en pueblos (25-40 EUR/noche)",
+        "medio": "Hotel Adriana o Slanic: 70-100 EUR/noche",
+        "comfort": "Amfora o Aman Sveti Stefan (si presupuesto es alto): 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Playas de Lavanda (gratis)",
+        "Fortaleza Napoleónica (6 EUR)",
+        "Exploración de pueblos: Jelsa, Vrboska (gratis)",
+        "Snorkel en calas (tours 40-60 EUR)",
+        "Plantaciones de lavanda (tours 30 EUR)"
+      ],
+      "donde_comer": "Langosta, mejillones, vinos locales. Puerto de Hvar: 14-22 EUR. Pueblos interiores: 8-14 EUR.",
+      "consejo_local": "La lavanda florece en julio-agosto pero es caótico. Ve en junio o septiembre. Las playas mejores están en pueblos menores como Jelsa.",
+      "plan_b_lluvia": "Museos de Hvar (Museo Franciscano, 5 EUR). Bodegas de vino para catas (15-25 EUR).",
+      "keywords": [
+        "Lavanda",
+        "vino croata",
+        "Jelsa",
+        "Vrboska",
+        "playas",
+        "fortaleza"
+      ]
+    },
+    {
+      "id": "vis",
+      "nombre": "Vis",
+      "tipo": "isla",
+      "region": "Islas Adriáticas",
+      "descripcion": "Isla más aislada y auténtica del Adriático, liberada del turismo masivo. Cuevas azules, vinos únicos y pueblos de pescadores sin transformar.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "Ferry desde Split (2.5h, 15-22 EUR) o catamarán rápido (1h, 25-35 EUR). Menos frecuentes que a otras islas.",
+      "donde_dormir": {
+        "mochilero": "Rooms privadas en Vis pueblo o Komiza: 30-45 EUR/noche",
+        "medio": "Hotel Tamaris o Apartments Renata: 65-95 EUR/noche",
+        "comfort": "Ivo Spa Resort: 140-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Cueva Azul (Blue Cave) en tour (40-50 EUR)",
+        "Playas de Srebrna, Stiniva (gratis)",
+        "Pueblos costeros a pie (gratis)",
+        "Degustación de vino Vugava (20-30 EUR)",
+        "Snorkel desde el puerto (45-60 EUR)"
+      ],
+      "donde_comer": "Pescado fresco, calamares, vinos locales. Puerto: 12-20 EUR. Komiza (pueblo pesquero): 8-15 EUR.",
+      "consejo_local": "No alquiles coche; todo es caminable. La Cueva Azul es hermosa pero abarrotada de tours; intenta ir temprano. Los locales comen en Komiza, no en Vis pueblo.",
+      "plan_b_lluvia": "Museo de la Pesca en Komiza (5 EUR). Explorar galerías de arte locales.",
+      "keywords": [
+        "Blue Cave",
+        "Cueva Azul",
+        "Komiza",
+        "vino Vugava",
+        "Srebrna",
+        "Stiniva"
+      ]
+    },
+    {
+      "id": "plitvice",
+      "nombre": "Parque Nacional Lagos de Plitvice",
+      "tipo": "naturaleza",
+      "region": "Lika-Banija (interior)",
+      "descripcion": "Cascadas, lagos turquesas conectados y bosques primarios en 16 lagos escalonados. UNESCO desde 1979, es el parque natural más visitado de Croacia y uno de los más bellos de Europa.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre (menos concurrido que verano)",
+      "como_llegar": "Desde Zagreb en autobús (2h, 12-20 EUR) o coche alquilado. Desde Split en coche (4h, gasolina ~25 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal o guest houses cerca: 25-35 EUR/noche",
+        "medio": "Hotel Jezero (dentro del parque) o Plitvica Jezera: 60-85 EUR/noche",
+        "comfort": "Hotel Jezero 4*: 100-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Entrada al parque + circuito de lagos (30-40 EUR entrada)",
+        "Paseo Lower Lakes (4h, incluido)",
+        "Paseo Upper Lakes (3-4h, incluido)",
+        "Barco eléctrico por lago Kozjak (incluido en entrada)",
+        "Senderos de bosque primario (gratis dentro del parque)"
+      ],
+      "donde_comer": "Restaurante Plitvice Jezera (mediocre pero única opción dentro): 10-16 EUR. Mejor comer en pueblos cercanos.",
+      "consejo_local": "Entra antes de las 9am para evitar multitudes de tours de grupo. Dos días te permiten hacer los dos circuitos principales sin prisa. El parque es mejor sin lluvia.",
+      "plan_b_lluvia": "Las cascadas son espectaculares con lluvia pero los senderos son resbaladizos. Si llueve fuerte, mejor ir a otro día.",
+      "keywords": [
+        "Lagos Plitvice",
+        "Plitvička jezera",
+        "cascadas",
+        "UNESCO",
+        "Lagos de Croacia"
+      ]
+    },
+    {
+      "id": "rovinj",
+      "nombre": "Rovinj",
+      "tipo": "ciudad",
+      "region": "Istria",
+      "descripcion": "Pueblecito costero con casas apiladas, playas rocosas y arquitectura veneciana. La versión más bonita y manejable de la Costa Adriática sin caos turístico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo, junio, septiembre, octubre",
+      "como_llegar": "Desde Zagreb en autobús (6h, 15-25 EUR) o coche alquilado. Desde Trieste (Italia) en coche (1.5h).",
+      "donde_dormir": {
+        "mochilero": "Hostal Rovinj o rooms privadas: 28-40 EUR/noche",
+        "medio": "Hotel Rovinj or Apt. con vistas: 65-95 EUR/noche",
+        "comfort": "Hotel Monte Mulini o Residence Kristal: 130-190 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por casco antiguo (gratis)",
+        "Iglesia de Santa Eufemia subida (gratis, vistas)",
+        "Playas de Lone y Polari (gratis)",
+        "Isla de Katarina en bote (tours 25-40 EUR)",
+        "Kayak en la costa (tours 50-70 EUR)"
+      ],
+      "donde_comer": "Pulpo a la parrilla, pasta con trufa. Puerto: 14-22 EUR. Callejones: 9-15 EUR.",
+      "consejo_local": "Aparca fuera del pueblo y camina; el centro es peatonal. Las mejores fotos de la iglesia desde el agua, considera alquilar un kayak.",
+      "plan_b_lluvia": "Museos pequeños. Explorar Grožnjan (pueblo de artistas, 20 km, coche o bus).",
+      "keywords": [
+        "Rovinj istrian",
+        "Rovigno",
+        "Istria",
+        "Eufemia",
+        "playas"
+      ]
+    },
+    {
+      "id": "plitvice-zadar",
+      "nombre": "Zadar",
+      "tipo": "ciudad",
+      "region": "Dalmacia del Norte",
+      "descripcion": "Puerto histórico con iglesias románicas, paseo marítimo legendario (Órgano del Mar), y menos turismo que Dubrovnik. Punto de partida para Islas Zadar.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, septiembre",
+      "como_llegar": "Desde Split en autobús (3h, 10-18 EUR) o coche. Desde Zagreb en autobús (6h, 15-28 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal Zadar Old Town o rooms: 24-35 EUR/noche",
+        "medio": "Hotel Cosmacendi o Apartments: 55-80 EUR/noche",
+        "comfort": "Hotel Falkensteiner Premium: 120-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Órgano del Mar (Sea Organ) al atardecer (gratis)",
+        "Saludo al Sol instalación de luz (gratis)",
+        "Iglesia de San Donato (8 EUR entrada)",
+        "Forum antiguo (gratis)",
+        "Ferries a Islas Zadar (Pasman, Ugljan): 8-15 EUR"
+      ],
+      "donde_comer": "Mariscos, pastel de cordero. Paseo marítimo: 12-18 EUR. Interior: 7-14 EUR.",
+      "consejo_local": "El Órgano del Mar suena mejor al atardecer con viento. Visita Pasman o Ugljan en ferry para playas tranquilas sin turismo de masas.",
+      "plan_b_lluvia": "Museo Arqueológico (8 EUR). Iglesias y galerías de arte.",
+      "keywords": [
+        "Zadar",
+        "Órgano del Mar",
+        "Sea Organ",
+        "Forum",
+        "San Donato",
+        "Pasman"
+      ]
+    },
+    {
+      "id": "korcula",
+      "nombre": "Korčula",
+      "tipo": "isla",
+      "region": "Dalmacia del Sur",
+      "descripcion": "Isla de vinos tintos únicos, pueblo medieval amurallado y menos visitada que Hvar. Presuntamente patria de Marco Polo y destino relajado con playas y gastronomía.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "Ferry desde Orebić (30min, 4-6 EUR) o desde Hvar (1.5h, 12-18 EUR). Coche ferry desde Estación Split.",
+      "donde_dormir": {
+        "mochilero": "Rooms privadas en pueblo: 25-38 EUR/noche",
+        "medio": "Hotel Marko Polo o apartments: 60-85 EUR/noche",
+        "comfort": "Lesic Dimitri Palace (lujo local): 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por murallas del pueblo (gratis)",
+        "Catedral de San Marcos (5 EUR)",
+        "Degustación de vino Plavac Mali (20-30 EUR)",
+        "Playas de Pupnatska Luka (gratis)",
+        "Snorkel desde playas (gratis o tours 40-60 EUR)"
+      ],
+      "donde_comer": "Pastas con langosta, vinos locales. Centro: 12-20 EUR. Pueblos menores: 8-14 EUR.",
+      "consejo_local": "Los vinos tintos Plavac Mali son únicos en el mundo; compra botellas para llevar. Las playas mejores están en pueblos secundarios como Pupnat.",
+      "plan_b_lluvia": "Catas de vino en bodegas. Museo de Korčula (Marco Polo, 5 EUR).",
+      "keywords": [
+        "Korcula",
+        "Korčula",
+        "vino Plavac Mali",
+        "Marco Polo",
+        "murallas",
+        "Pupnat"
+      ]
+    },
+    {
+      "id": "bol-brac",
+      "nombre": "Bol (Isla de Brač)",
+      "tipo": "isla",
+      "region": "Islas Adriáticas",
+      "descripcion": "Famosa por la playa de Zlatni Rat (Cuerno de Oro), arena blanca en forma de punta dinámica. Destino de windsurfing y acceso a playas tranquilas del interior.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Ferry desde Split (1h, 10-15 EUR) o Makarska en coche (30 min coche + ferry). Opción de ferry de coche desde Split.",
+      "donde_dormir": {
+        "mochilero": "Hostales o rooms en Bol: 26-40 EUR/noche",
+        "medio": "Hotel Zlatni Rat o Bodul: 70-100 EUR/noche",
+        "comfort": "Bol Meditarania 4*: 130-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Zlatni Rat (gratis, la más famosa)",
+        "Windsurfing (lecciones 60-80 EUR)",
+        "Playas de Radoboj, Lovrecina (gratis)",
+        "Exploración pueblos interiores (gratis)",
+        "Acantilados de Vidova Gora en moto/coche (vistas, gratis)"
+      ],
+      "donde_comer": "Pescado, calamares, ensalada dálmata. Centro Bol: 11-18 EUR. Pueblos: 7-13 EUR.",
+      "consejo_local": "Zlatni Rat es bella pero abarrotada de turistas. Ve temprano o a última hora. Las playas de Radoboj (lado opuesto) son mucho más tranquilas. Alquila moto o coche para explorar la isla.",
+      "plan_b_lluvia": "Pueblos interiores como Postira o Pučišća. Cantera de piedra blanca de Brač (histórica).",
+      "keywords": [
+        "Brac",
+        "Bol",
+        "Zlatni Rat",
+        "Cuerno de Oro",
+        "Vidova Gora",
+        "windsurfing"
+      ]
+    },
+    {
+      "id": "pula",
+      "nombre": "Pula",
+      "tipo": "ciudad",
+      "region": "Istria",
+      "descripcion": "Capital de Istria con anfiteatro romano intacto, playas cercanas y arquitectura austro-húngara. Gateway a Istria y alternativa menos masificada a la Costa Adriática.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "Desde Zagreb en autobús (6h, 12-22 EUR) o coche alquilado. Aeropuerto con vuelos internacionales.",
+      "donde_dormir": {
+        "mochilero": "Hostal Pula or rooms: 22-32 EUR/noche",
+        "medio": "Hotel Scalabis o Apartments: 55-80 EUR/noche",
+        "comfort": "Hotel Histria o Park Plaza: 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Anfiteatro romano (entrada 12 EUR, o museo 10 EUR)",
+        "Paseo por puerto (gratis)",
+        "Playas Banjole, Stoja (gratis)",
+        "Museo arqueológico (10 EUR)",
+        "Excursión a Rovinj o Motovun (coche/bus)"
+      ],
+      "donde_comer": "Pasta trufa (especialidad de Istria), mariscos. Centro: 10-16 EUR. Terrazas: 8-14 EUR.",
+      "consejo_local": "El anfiteatro es mejor visitado al atardecer cuando la luz es dorada. Haz una excursión a Motovun (pueblecito en colina medieval) en coche alquilado. La región de Istria vale más que Pula misma.",
+      "plan_b_lluvia": "Museo de arte Hedonisia. Explorar barrio histórico bajo techo.",
+      "keywords": [
+        "Pula",
+        "Anfiteatro",
+        "Istria",
+        "Arena romana",
+        "Banjole",
+        "Motovun"
+      ]
+    }
+  ]
+}

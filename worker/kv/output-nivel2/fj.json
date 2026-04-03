@@ -1,0 +1,322 @@
+{
+  "pais": "Fiyi",
+  "codigo": "fj",
+  "destinos": [
+    {
+      "id": "nadi",
+      "nombre": "Nadi",
+      "tipo": "ciudad",
+      "region": "Viti Levu occidental",
+      "descripcion": "Puerta de entrada a Fiyi y centro turístico principal. Aunque no destaca por belleza urbana, es el hub logístico donde la mayoría de viajeros comienza su recorrido. Desde aquí accedes a playas cercanas, islas y el resto del archipiélago.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Aeropuerto internacional Nadi (llegada principal). Autobús local desde el aeropuerto: 2 EUR, 1 hora. Taxis: 15-20 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostal compartido en Main Street o zona cercana: 15-25 EUR/noche",
+        "medio": "Hotel pequeño en Nadi Town o cercano a playas: 40-70 EUR/noche",
+        "comfort": "Resort en Denarau Island (20 min): 80-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado de Nadi (gratis, compras locales)",
+        "Playa de Denarau Island (gratis, arena y mar)",
+        "Excursión a Isla de Corales - Coral Coast (30-40 EUR, snorkel)",
+        "Visita a templo hindú Sri Siva Subramaniya (gratis)"
+      ],
+      "donde_comer": "Curry fiyiano, roti, pescado fresco. Rango: 5-15 EUR. Main Street, mercado central, restaurantes en Denarau.",
+      "consejo_local": "Llega al mercado antes de las 9 AM para ver la actividad local real. Evita pasear solo de noche por Main Street.",
+      "plan_b_lluvia": "Shopping en centro comercial, visita museos locales, comidas en restaurantes cubiertos.",
+      "keywords": [
+        "Nadi Town",
+        "Denarau Island",
+        "aeropuerto Nadi",
+        "Fiji"
+      ]
+    },
+    {
+      "id": "islas-mamanuca",
+      "nombre": "Islas Mamanuca",
+      "tipo": "isla",
+      "region": "Occidente, frente a Nadi",
+      "descripcion": "Archipiélago de islas de arena blanca y agua turquesa accesibles desde Nadi en ferry. Ideales para buceo, snorkel y playas vírgenes sin masificación extrema. Combina resorts con opciones de mochilero.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Ferry desde Puerto Denarau (Nadi): 30-50 EUR ida y vuelta, 45 min a 1.5 horas según isla. Operadores: South Sea Cruises, Coral Coast Airways.",
+      "donde_dormir": {
+        "mochilero": "Backpacker resort o bungalow compartido: 20-35 EUR/noche",
+        "medio": "Bungalow privado pequeño: 50-90 EUR/noche",
+        "comfort": "Resort con piscina: 100-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecifes (gratis desde playa, equipo: 10-15 EUR)",
+        "Buceo PADI (60-100 EUR por inmersión)",
+        "Paseo en kayak (15-25 EUR)",
+        "Caminata por la isla (gratis)",
+        "Atardecer desde playa (gratis)"
+      ],
+      "donde_comer": "Pescado a la parrilla, curries, fruta tropical. Rango: 8-20 EUR. Restaurantes de resorts, comedores comunitarios.",
+      "consejo_local": "Las islas son pequeñas; trae protector solar alto y repelente. El agua puede ser cálida pero turbulenta en temporada de ciclones.",
+      "plan_b_lluvia": "Interior de bungalows con hamacas, juegos de mesa, lecturas. Buceo (a veces posible incluso con lluvia).",
+      "keywords": [
+        "Mamanuca",
+        "Beachcomber Island",
+        "South Sea Island",
+        "Monu Island",
+        "playas Fiji"
+      ]
+    },
+    {
+      "id": "islas-yasawa",
+      "nombre": "Islas Yasawa",
+      "tipo": "isla",
+      "region": "Occidente, norte de Mamanuca",
+      "descripcion": "Cadena de islas volcánicas más al norte con playas salvajes, cuevas y menos turismo masivo que Mamanuca. Perfecta para viajeros que buscan experiencias más auténticas y remotas. Acceso más lento pero experiencia más íntima.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Ferry desde Puerto Denarau: Yasawa Flyer (35-60 EUR, 2-3 horas según destino). O vuelo desde Nadi (50-80 EUR, 45 min).",
+      "donde_dormir": {
+        "mochilero": "Backpacker bungalow: 18-30 EUR/noche",
+        "medio": "Resort pequeño: 50-85 EUR/noche",
+        "comfort": "Resort boutique: 90-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en Blue Lagoon (gratis desde playa)",
+        "Sawa-i-Lau Caves - cueva sagrada con laguna (15-25 EUR con guía)",
+        "Paseo a pueblos locales (gratis)",
+        "Buceo en los arrecifes (55-90 EUR)",
+        "Atardecer en acantilados (gratis)"
+      ],
+      "donde_comer": "Pescado fiyiano, dalo (taro), fideuá. Rango: 6-16 EUR. Comedores de hostales, restaurantes comunitarios.",
+      "consejo_local": "El Yasawa Flyer para cuando hay mar agitado es incómodo; ve en ferries menos frecuentes o vuelos si eres propenso al mareo.",
+      "plan_b_lluvia": "Viaja entre islas (ferry), explora cuevas, aprende tejidos de palmera con locales.",
+      "keywords": [
+        "Yasawa Islands",
+        "Blue Lagoon",
+        "Kuata",
+        "Narikoso",
+        "Sawa-i-Lau"
+      ]
+    },
+    {
+      "id": "suva",
+      "nombre": "Suva",
+      "tipo": "ciudad",
+      "region": "Viti Levu oriental",
+      "descripcion": "Capital de Fiyi, única ciudad grande del país. Centro político y cultural donde vive la mayoría de población. Menos turística que Nadi pero auténtica, con mercados bulliciosos, museos y vida local real. Base para explorar el este de Viti Levu.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Nadi: autobús (20-30 EUR, 4-5 horas) o vuelo (60-80 EUR, 1 hora).",
+      "donde_dormir": {
+        "mochilero": "Hostal en área central: 15-25 EUR/noche",
+        "medio": "Hotel pequeño: 35-60 EUR/noche",
+        "comfort": "Hotel con servicios: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado Municipal de Suva (gratis, observar, comprar frutas)",
+        "Museo Fiji (3-5 EUR, artefactos y cultura local)",
+        "Jardín Botánico de Colo-i-Suva (2-3 EUR, naturaleza local)",
+        "Paseo por Cakobau Park (gratis)",
+        "Catedral y templos religiosos (gratis)"
+      ],
+      "donde_comer": "Curry fiyiano, chow mein, ensaladas de frutas. Rango: 4-12 EUR. Mercado central, restaurantes en Victoria Parade.",
+      "consejo_local": "Suva llueve mucho; lleva impermeable. La ciudad es segura durante el día, evita barrios periféricos de noche.",
+      "plan_b_lluvia": "Museos, cines, compras en centros comerciales, cafés cubiertos.",
+      "keywords": [
+        "Suva",
+        "capital Fiji",
+        "Victoria Parade",
+        "Cakobau Park"
+      ]
+    },
+    {
+      "id": "coral-coast",
+      "nombre": "Coral Coast",
+      "tipo": "playa",
+      "region": "Viti Levu sur",
+      "descripcion": "Litoral sur de Viti Levu conocido por arrecifes de coral cercanos a la costa y playas amplias. Menos concurrido que Denarau, con mezcla de resorts y hostales. Punto base para snorkel y buceo desde tierra.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Nadi: autobús (10-15 EUR, 2 horas) o shuttle privado (25-35 EUR, 1.5 horas).",
+      "donde_dormir": {
+        "mochilero": "Backpacker resort: 18-28 EUR/noche",
+        "medio": "Bungalow pequeño: 45-75 EUR/noche",
+        "comfort": "Resort playa: 85-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel directo desde playa (gratis, equipo: 10 EUR)",
+        "Excursión a pueblos kava locales (20-30 EUR con guía)",
+        "Buceo en arrecife (50-80 EUR)",
+        "Caminata costera (gratis)",
+        "Ceremonia de kava en lodge (15-25 EUR)"
+      ],
+      "donde_comer": "Pescado fiyiano, ural (camarón), ensalada de papaya. Rango: 7-15 EUR. Restaurantes de resort, comedores locales.",
+      "consejo_local": "El arrecife está muy cerca de la costa pero es fácil pasearse; pregunta por corrientes antes de entrar al agua.",
+      "plan_b_lluvia": "Ceremonias de kava cubierta, caminatas en interior, películas en lodge.",
+      "keywords": [
+        "Coral Coast",
+        "Viti Levu sur",
+        "Sigatoka",
+        "snorkel arrecife"
+      ]
+    },
+    {
+      "id": "taveuni",
+      "nombre": "Taveuni",
+      "tipo": "isla",
+      "region": "Noreste de Viti Levu",
+      "descripcion": "Isla volcánica selvática y menos turística. Famosa por Bouma Falls, senderos en la jungla y buceo en arrecife. Ideal para viajeros que quieren naturaleza pura sin masas de gente. Requiere más tiempo de viaje pero recompensa con autenticidad.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Vuelo desde Suva o Nadi (50-80 EUR, 45 min) o ferry (tiempo variable, menos frecuente). Autobús local en isla: 2-5 EUR.",
+      "donde_dormir": {
+        "mochilero": "Bungalow compartido: 16-25 EUR/noche",
+        "medio": "Bungalow privado: 40-70 EUR/noche",
+        "comfort": "Resort pequeño: 75-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Bouma Falls (entrada parque: 5 EUR, 3 cascadas)",
+        "Sendero Lavena (gratis, vista panorámica)",
+        "Buceo en arrecife de Somosomo Strait (60-95 EUR)",
+        "Baño en piscinas naturales de Tavoro (gratis)",
+        "Visita a pueblos kava (guía: 25-35 EUR)"
+      ],
+      "donde_comer": "Pescado ahumado, fruta tropical, comida casera de locales. Rango: 5-12 EUR. Pequeños restaurantes y comedores.",
+      "consejo_local": "Los senderos pueden ser resbaladizos tras lluvia; lleva botas con buen agarre. La isla es muy verde y húmeda.",
+      "plan_b_lluvia": "Visitas cubierta a pueblos, aprende habilidades locales, buceo (a veces posible).",
+      "keywords": [
+        "Taveuni",
+        "Bouma Falls",
+        "Somosomo",
+        "island Fiji",
+        "naturaleza"
+      ]
+    },
+    {
+      "id": "savusavu",
+      "nombre": "Savusavu",
+      "tipo": "ciudad",
+      "region": "Isla Vanua Levu norte",
+      "descripcion": "Pueblo costero tranquilo en Vanua Levu con reputación como destino de buceo y vida lenta. Hub menor pero con encanto, mercados locales auténticos y acceso a buceo de clase mundial. Popular entre buceadores experimentados.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Vuelo desde Nadi o Suva (60-85 EUR, 1 hora) o ferry (4-6 horas, menos frecuente, 25-40 EUR).",
+      "donde_dormir": {
+        "mochilero": "Hostal o guesthouse: 14-24 EUR/noche",
+        "medio": "Hotel pequeño: 35-60 EUR/noche",
+        "comfort": "Resort: 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado local (gratis, compra frutas y pescado)",
+        "Buceo en Waitui Pass y arrecifes (65-100 EUR)",
+        "Paseo por pueblo (gratis)",
+        "Baño en aguas termales (gratis o 5 EUR con guía)",
+        "Excursión a plantaciones de copra (10-15 EUR)"
+      ],
+      "donde_comer": "Pescado fiyiano, roti, aguacate. Rango: 5-12 EUR. Mercado, pequeños restaurantes.",
+      "consejo_local": "Savusavu es más barato que Nadi y Suva. Llega temprano al mercado para mejor selección de pescado.",
+      "plan_b_lluvia": "Buceo interior, lectura en guesthouse, visita a pueblos pequeños cubiertos.",
+      "keywords": [
+        "Savusavu",
+        "Vanua Levu",
+        "buceo",
+        "Waitui",
+        "vida lenta"
+      ]
+    },
+    {
+      "id": "levuka",
+      "nombre": "Levuka",
+      "tipo": "histórico",
+      "region": "Isla Ovalau, este de Viti Levu",
+      "descripcion": "Pueblo costero histórico, antigua capital de Fiyi. Arquitectura colonial británica, callejones antiguos y atmósfera congelada en el tiempo. Poco turístico pero fascinante para quienes buscan historia auténtica. Acceso complicado pero recompensador.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Ferry desde Suva a Ovalau (8-12 EUR, 2 horas) luego minibús a Levuka (2 EUR). Acceso lento pero directo.",
+      "donde_dormir": {
+        "mochilero": "Backpacker lodge: 12-20 EUR/noche",
+        "medio": "Guesthouse histórico: 30-50 EUR/noche",
+        "comfort": "Resort pequeño: 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por casco histórico (gratis, arquitectura colonial)",
+        "Museo de Levuka (2-3 EUR, historia local)",
+        "Ascenso a Colo-i-Suva para vistas (gratis, 45 min)",
+        "Compra en tiendas antiguas de recuerdos (precios bajos)",
+        "Fotografía de arquitectura colonial (gratis)"
+      ],
+      "donde_comer": "Comida casera fiyiana, curry simple, pescado fresco. Rango: 4-10 EUR. Pequeños comedores.",
+      "consejo_local": "Levuka es muy tranquilo; camina sin prisa y conversa con residentes. No hay gran oferta turística pero eso es su encanto.",
+      "plan_b_lluvia": "Museos, compras, cafeterías, historias de residentes locales.",
+      "keywords": [
+        "Levuka",
+        "Ovalau",
+        "capital histórica",
+        "arquitectura colonial",
+        "patrimonio"
+      ]
+    },
+    {
+      "id": "viwa-island",
+      "nombre": "Viwa Island",
+      "tipo": "isla",
+      "region": "Delta cerca de Rewa, sureste",
+      "descripcion": "Isla pequeña en delta fluvial con aldea tradicional casi sin influencia turística. Experiencia de vida fiyiana auténtica lejos de playas comerciales. Solo para viajeros que buscan inmersión cultural profunda y aceptan comodidades mínimas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Suva: minibús a Puerto Rewa (30-45 min, 3 EUR) luego bote a Viwa (15-20 EUR, 30 min). Requiere coordinación.",
+      "donde_dormir": {
+        "mochilero": "Casa de familia o bungalow básico: 12-18 EUR/noche",
+        "medio": "Bungalow mejorado: 25-40 EUR/noche",
+        "comfort": "Opción muy limitada; alojamiento comunitario mejorado: 40-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Aprender tejidos de palmera (gratis con familia)",
+        "Pesca tradicional (gratis, participación)",
+        "Snorkel local (gratis, equipo propio o 10 EUR)",
+        "Ceremonias de kava comunitaria (10-20 EUR)",
+        "Observación de aves del delta (guía: 20-30 EUR)"
+      ],
+      "donde_comer": "Pescado, taro, roti casero cocinado por familia. Rango: 3-8 EUR (comidas compartidas). Todo es comida de huerto/pesca.",
+      "consejo_local": "No hay tiendas; trae dinero en efectivo, comida si prefieres snacks. Comunícate con guesthouse antes para preparación.",
+      "plan_b_lluvia": "Interior con familia, aprender artesanía, historias locales, descanso.",
+      "keywords": [
+        "Viwa",
+        "Rewa delta",
+        "aldea tradicional",
+        "inmersión cultural",
+        "auténtico"
+      ]
+    },
+    {
+      "id": "kadavu",
+      "nombre": "Kadavu",
+      "tipo": "isla",
+      "region": "Sur, lejos de Viti Levu",
+      "descripcion": "Isla remota y salvaje con arrecifes de coral vírgenes y playas intactas. Menos conocida que Yasawa o Mamanuca, perfecta para buceadores avanzados y quienes quieren Fiyi sin turismo. Acceso más difícil pero experiencia más exclusiva.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Vuelo desde Nadi (80-100 EUR, 1 hora) o ferries irregulares (35-50 EUR, variable). Acceso limitado.",
+      "donde_dormir": {
+        "mochilero": "Backpacker resort: 15-25 EUR/noche",
+        "medio": "Bungalow: 40-70 EUR/noche",
+        "comfort": "Resort: 80-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en Great Astrolabe Reef (70-110 EUR)",
+        "Snorkel desde playa (gratis, equipo: 10 EUR)",
+        "Caminata costera (gratis)",
+        "Exploración de pueblos remotos (gratis)",
+        "Pesca y vida marina (libre participación)"
+      ],
+      "donde_comer": "Pescado fresco, calamar, marisco local. Rango: 5-14 EUR. Comedores de resort, comidas compartidas.",
+      "consejo_local": "Kadavu es verdaderamente remoto; compra provisiones en Nadi si planeas cocinar. Los ferries son irregulares; vuelo es más confiable.",
+      "plan_b_lluvia": "Buceo (a veces más visible), interior de bungalows, descanso, buceo en aguas profundas.",
+      "keywords": [
+        "Kadavu",
+        "Great Astrolabe Reef",
+        "isla remota",
+        "buceo avanzado",
+        "Fiyi sur"
+      ]
+    }
+  ]
+}

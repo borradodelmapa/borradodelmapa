@@ -1,0 +1,347 @@
+{
+  "pais": "Finlandia",
+  "codigo": "fi",
+  "destinos": [
+    {
+      "id": "helsinki",
+      "nombre": "Helsinki",
+      "tipo": "ciudad",
+      "region": "Región de Uusimaa, sur",
+      "descripcion": "Capital finlandesa con arquitectura nórdica moderna y clásica, mercados vibrantes y acceso directo al Báltico. Punto de partida ideal para explorar el país con buena conexión de transportes. Centro cultural y gastronómico del país.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-agosto, diciembre",
+      "como_llegar": "vuelo internacional, 2,5 horas desde Madrid; tranvía desde aeropuerto al centro (5,50 EUR, 30 min)",
+      "donde_dormir": {
+        "mochilero": "albergue (Hostel Skala, Eurohostel) 25-35 EUR/noche",
+        "medio": "hotel 3 estrellas (Hotel Kamp, Sokos) 70-100 EUR/noche",
+        "comfort": "hotel 4-5 estrellas (Kämp, Kollektiivi) 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Catedral Blanca y Templo de Roca Uspenski (gratis entrada, solo exterior recomendado)",
+        "Mercado de Kauppatori, probar salmón ahumado y reno (5-15 EUR por plato)",
+        "Museo del Diseño Finlandés (12 EUR)",
+        "Isla de Suomenlinna, ferri desde mercado (5 EUR ida/vuelta, gratis acceso isla)",
+        "Sauna tradicional en Löyly o Rajaportin (15-25 EUR/30 min)"
+      ],
+      "donde_comer": "Kauppatori para comida callejera, Kallio para restaurantes de moda. Prueba reno, salmón ahumado y pan de centeno. Rango: 8-20 EUR comida rápida, 25-50 EUR restaurante medio.",
+      "consejo_local": "Compra la Helsinki Card (24/48/72h) si planeas museos; el tranvía es libre en la ciudad. Come en Kauppatori al mediodía, más barato que noche.",
+      "plan_b_lluvia": "Museo Nacional Finlandés, Kiasma (arte contemporáneo), saunas y cafés.",
+      "keywords": [
+        "Helsinki",
+        "Helsingfors",
+        "capital finlandesa",
+        "Kallio",
+        "Kauppatori",
+        "Uspenski",
+        "Suomenlinna"
+      ]
+    },
+    {
+      "id": "rovaniemi",
+      "nombre": "Rovaniemi",
+      "tipo": "naturaleza",
+      "region": "Laponia, norte",
+      "descripcion": "Puerta a la Laponia finlandesa, famosa por auroras boreales en invierno y sol de medianoche en verano. Centro para actividades árticas: trineos de renos, motos de nieve y tradición sámi. Experiencia única del norte europeo.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre-marzo (auroras), junio-julio (sol de medianoche)",
+      "como_llegar": "vuelo desde Helsinki (Finnair, Air Carelia) 2,5 horas, 60-150 EUR; autobús 24h, 80-100 EUR",
+      "donde_dormir": {
+        "mochilero": "albergue (Guesthouse Borealis) 30-40 EUR/noche",
+        "medio": "hotel 3 estrellas (Arctic Hotel Santa) 80-120 EUR/noche",
+        "comfort": "lodge de lujo (Wilderness Hotel Kakslauttanen, iglu de cristal) 200-400 EUR/noche"
+      },
+      "que_hacer": [
+        "Aldea del Papá Noel (entrada 7 EUR, fotos con Papá Noel gratis)",
+        "Paseo en trineo de renos (60-80 EUR, 1,5 horas)",
+        "Safari en moto de nieve (80-120 EUR, 2 horas)",
+        "Pesca de salmón en río Kemijoki (gratis con caña propia o 15-25 EUR alquiler)",
+        "Caminata para auroras boreales (guía, 40-60 EUR si hay cielos despejados)"
+      ],
+      "donde_comer": "Ruta 75 para comida sámi tradicional (reno guisado, 18-25 EUR). Restaurante Nili. Cafés locales con café y pasteles tradicionales 8-12 EUR.",
+      "consejo_local": "Las auroras no están garantizadas; ve en invierno temprano (octubre-noviembre) o tardío (febrero-marzo) para mejor visibilidad sin frío extremo. El Papá Noel es turístico pero la zona de Laponia es auténtica.",
+      "plan_b_lluvia": "Museo de Arktikum (historia ártica), iglú de hielo, spa con piscinas térmicas.",
+      "keywords": [
+        "Rovaniemi",
+        "Laponia",
+        "auroras boreales",
+        "northern lights",
+        "Papá Noel",
+        "Santa Claus",
+        "Arktis"
+      ]
+    },
+    {
+      "id": "turku",
+      "nombre": "Turku",
+      "tipo": "ciudad",
+      "region": "Región Occidental, suroeste",
+      "descripcion": "Segunda ciudad finlandesa con patrimonio medieval, castillo bien conservado y mercados auténticos. Centro histórico y cultural menos turístico que Helsinki, ideal para viajeros independientes que buscan autenticidad nórdica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre, especialmente junio",
+      "como_llegar": "tren desde Helsinki (Pearn) 2 horas, 15-35 EUR; autobús 2,5 horas, 12-20 EUR",
+      "donde_dormir": {
+        "mochilero": "albergue (Turku Hostel) 28-38 EUR/noche",
+        "medio": "hotel 3 estrellas (Hotel Aki) 65-90 EUR/noche",
+        "comfort": "hotel 4 estrellas (Radisson Blu) 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo de Turku, tours guiados (15 EUR entrada, recomendado tour 8 EUR extra)",
+        "Catedral de Turku, entrada libre (5 EUR donativo sugerido)",
+        "Mercado de Kauppatori, probar comida local (4-12 EUR)",
+        "Museo Sibelius (7 EUR)",
+        "Paseo ribereño por río Aurajoki, acceso libre"
+      ],
+      "donde_comer": "Kauppatori para comida callejera. Restaurante Paella, Cafetería Cacao. Rango: 7-15 EUR comida rápida, 20-40 EUR restaurante.",
+      "consejo_local": "Turku es más tranquila que Helsinki y menos cara. El castillo es impresionante dentro; dedica tiempo. Las frutas frescas en el mercado son excelentes.",
+      "plan_b_lluvia": "Museo de Arte Aboa Vetus, Museo Farmacéutico, cafés junto al río.",
+      "keywords": [
+        "Turku",
+        "Abo",
+        "castillo",
+        "segunda ciudad",
+        "medieval",
+        "Aurajoki",
+        "catedral"
+      ]
+    },
+    {
+      "id": "inari-laponia",
+      "nombre": "Inari (Laponia Sámi)",
+      "tipo": "rural",
+      "region": "Laponia, norte",
+      "descripcion": "Corazón de la cultura sámi finlandesa en el lago Inari. Mucho menos turístico que Rovaniemi, con tradiciones indígenas auténticas, avistamiento de auroras y naturaleza virgen. Experiencia inmersiva en Laponia real.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre-noviembre (auroras claras), junio-julio (sol medianoche)",
+      "como_llegar": "autobús desde Rovaniemi (Onnibus) 3,5 horas, 25-40 EUR; sin acceso ferroviario directo",
+      "donde_dormir": {
+        "mochilero": "cabaña básica de turismo (Inari Wilderness) 30-50 EUR/noche",
+        "medio": "lodge familiar (Hotel Inari) 70-100 EUR/noche",
+        "comfort": "cabaña de lujo con sauna (Arctic Landscape) 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Sámi Siida (12 EUR, fundamental para entender la cultura)",
+        "Pesca de trucha en lago Inari con guía local (60 EUR, 3 horas)",
+        "Caminata nocturna para auroras (30 EUR, sin garantía)",
+        "Sauna tradicional sámi (15 EUR)",
+        "Iglesia Sámi de Inari, entrada libre"
+      ],
+      "donde_comer": "Cabaña local sirve comida sámi casera (sopa de reno, 12-18 EUR). Pocas opciones comerciales; muchos lodges incluyen cena. Lleva snacks.",
+      "consejo_local": "Inari es pequeño; casi sin turismo masivo. La gente local es reservada pero acogedora. Las auroras aquí son tan reales como en Rovaniemi pero con menos multitudes.",
+      "plan_b_lluvia": "Museo Siida, refugios en cabañas, lagos cubiertos por niebla (paradójicamente hermosos).",
+      "keywords": [
+        "Inari",
+        "Sámi",
+        "lago Inari",
+        "cultura sámi",
+        "aurora borealis",
+        "norte remoto",
+        "Laponia auténtica"
+      ]
+    },
+    {
+      "id": "koli-nacional",
+      "nombre": "Parque Nacional de Koli",
+      "tipo": "naturaleza",
+      "region": "Karelia del Norte, este",
+      "descripcion": "Montaña emblemática finlandesa con vistas panorámicas de lagos y bosques. Senderismo accesible con paisajes que cambian de color según la estación. Menos conocido que otros destinos pero esencial para entender Finlandia natural.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre (senderismo), octubre (colores otoñales)",
+      "como_llegar": "tren desde Helsinki a Lieksa (5,5 horas, 40-70 EUR), luego autobús (1,5 horas, 12 EUR) o coche alquilado",
+      "donde_dormir": {
+        "mochilero": "cabaña hostal (Koli Camping) 25-35 EUR/noche",
+        "medio": "cabaña con baño (Koli Resort) 60-90 EUR/noche",
+        "comfort": "lodge de madera (Koli Wilderness) 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Ascenso Koli (pico 347m, gratis, 1,5 horas ida/vuelta, vistas de 3 lagos)",
+        "Senderismo anillo Koli (3-5 horas, gratis, senderos bien señalizados)",
+        "Paseo en bote por lago Tuonela (35 EUR, 1,5 horas)",
+        "Pesca tradicional (caña alquiler 5 EUR/día)",
+        "Sauna junto al lago (15 EUR en cabañas)"
+      ],
+      "donde_comer": "Cabaña de Koli sirve comida casera. Restaurante Koli-tupa (sopas, salmón, 15-22 EUR). Pocas opciones; lleva picnic.",
+      "consejo_local": "Los colores otoñales (octubre) son espectaculares. Sube al pico al atardecer para ver reflejos en los lagos. Clima cambia rápido; lleva capas.",
+      "plan_b_lluvia": "Museo de Koli, cabañas con sauna, pueblos cercanos (Lieksa).",
+      "keywords": [
+        "Koli",
+        "parque nacional",
+        "senderismo finlandés",
+        "lakes",
+        "mountain",
+        "bosques finlandeses",
+        "Karelia"
+      ]
+    },
+    {
+      "id": "tampere",
+      "nombre": "Tampere",
+      "tipo": "ciudad",
+      "region": "Finlandia Central, sur-central",
+      "descripcion": "Ciudad industrial transformada en hub cultural entre dos lagos. Museos de calidad, gastrería local y mercados auténticos sin exceso de turismo. Punto de parada lógica en ruta norte-sur con carácter industrial nórdico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-septiembre",
+      "como_llegar": "tren desde Helsinki (Pendolino) 2 horas, 15-40 EUR; autobús 2,5 horas, 10-18 EUR",
+      "donde_dormir": {
+        "mochilero": "albergue (Tampere Backpackers) 26-36 EUR/noche",
+        "medio": "hotel 3 estrellas (Cumulus) 70-100 EUR/noche",
+        "comfort": "hotel 4 estrellas (Sokos Ilta) 130-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Moomin, dedicado a Tove Jansson (15 EUR, imprescindible si te gustan los cuentos)",
+        "Museo del Trabajo (Työmies) (8 EUR, exposición industrial)",
+        "Acuario Särkänniemi (25 EUR, con otras atracciones opción combo 40 EUR)",
+        "Paseo por lagos Pyhäjärvi y Näsijärvi (gratis, bonito al atardecer)",
+        "Mercado Kauppahalli para reno y salmón ahumado (5-15 EUR)"
+      ],
+      "donde_comer": "Kauppahalli y Tampere Market Square. Prueba 'raparperi' (tarta de ruibarbo local). Rango: 8-18 EUR comida, 22-45 EUR restaurante.",
+      "consejo_local": "Tampere es menos turística que Helsinki; la cerveza local (Brewing) es buena. La ciudad tiene vida nocturna real, no solo destino de paso.",
+      "plan_b_lluvia": "Museos Moomin y Trabajo, acuario, cafés junto a los lagos.",
+      "keywords": [
+        "Tampere",
+        "Tammerfors",
+        "Moomin",
+        "industrial",
+        "dos lagos",
+        "museos",
+        "centro finlandés"
+      ]
+    },
+    {
+      "id": "archipelago-aland",
+      "nombre": "Archipiélago de Åland",
+      "tipo": "isla",
+      "region": "Åland, entre Finlandia y Suecia",
+      "descripcion": "Región autónoma sueca-parlante con 30,000 islas y uno de los archipiélagos más bellos del Báltico. Ciclismo entre islas, pueblos de pescadores auténticos y naturaleza intacta. Escapada de viajero lento.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-agosto",
+      "como_llegar": "ferri desde Turku (Eckerö Line o Viking Line) 2-6 horas según ruta, 30-80 EUR; o vuelo desde Helsinki (Flybe) 20 min, 40-80 EUR",
+      "donde_dormir": {
+        "mochilero": "guesthouse rural (Geta Byaholm) 30-40 EUR/noche",
+        "medio": "hotel familiar (Hotel Arkipelag) 65-90 EUR/noche",
+        "comfort": "spa resort (Eckerö Spa) 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Ciclismo entre islas (alquiler bici 10 EUR/día, rutas libres)",
+        "Castillo de Kastelholm (11 EUR, fortaleza medieval)",
+        "Pueblo de Saltvik, tradicional pescador (gratis, caminar)",
+        "Paseo en bote privado o contratado (40-60 EUR, 2 horas)",
+        "Playas de Mariehamn y Lemland (gratis)"
+      ],
+      "donde_comer": "Restaurantes de Mariehamn sirven pescado fresco. Prueba arenque marinado y salmón. Rango: 10-20 EUR comida, 25-50 EUR restaurante.",
+      "consejo_local": "Alquila bici, la mejor forma de explorar. Los ferris entre islas menores son gratis o muy baratos. El idioma es sueco; en islas pequeñas hablan poco inglés.",
+      "plan_b_lluvia": "Museo de Åland, pueblos costeros cubiertos, ferris entre islas son experiencia en sí.",
+      "keywords": [
+        "Åland",
+        "Aland",
+        "archipiélago",
+        "islas Báltico",
+        "Mariehamn",
+        "Kastelholm",
+        "ciclismo"
+      ]
+    },
+    {
+      "id": "oulu",
+      "nombre": "Oulu",
+      "tipo": "ciudad",
+      "region": "Ostrobotnia del Norte, norte",
+      "descripcion": "Ciudad universitaria vibrante en costa del Báltico con puerto activo, gastrería local y acceso a playas del norte. Menos visitada que grandes capitales pero con escena cultural auténtica y punto de parada hacia Laponia.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-agosto",
+      "como_llegar": "tren desde Helsinki (Intercity) 8 horas, 35-80 EUR; vuelo (Finnair) 1,5 horas, 50-120 EUR",
+      "donde_dormir": {
+        "mochilero": "albergue (Oulu Hostel) 28-38 EUR/noche",
+        "medio": "hotel 3 estrellas (Sokos Oulu) 70-100 EUR/noche",
+        "comfort": "hotel 4 estrellas (Radisson Blu) 120-170 EUR/noche"
+      },
+      "que_hacer": [
+        "Isla de Hietasaari, playas libres (gratis, acceso en bote o puente)",
+        "Museo de Arte Oulu (7 EUR)",
+        "Paseo ribereño río Oulu (gratis)",
+        "Mercado de Kauppahalli, reno y pescado fresco (5-15 EUR)",
+        "Pueblo histórico de Turkansaari (5 EUR, vida rural tradicional)"
+      ],
+      "donde_comer": "Kauppahalli para comida local. Prueba sopa de salmón y reno. Rango: 8-16 EUR comida, 20-40 EUR restaurante.",
+      "consejo_local": "Oulu tiene vida nocturna real; es ciudad universitaria. Festival de aire libre en verano. Acceso a sol de medianoche (junio) sin viajar tan al norte como Rovaniemi.",
+      "plan_b_lluvia": "Museos, mercados cubiertos, cafés junto al río.",
+      "keywords": [
+        "Oulu",
+        "Uleaborg",
+        "norte finlandés",
+        "Báltico",
+        "playas",
+        "universidad",
+        "norte auténtico"
+      ]
+    },
+    {
+      "id": "savonlinna",
+      "nombre": "Savonlinna",
+      "tipo": "histórico",
+      "region": "Karelia del Sur, este",
+      "descripcion": "Pequeña ciudad portuaria dominada por castillo Olavinlinna sobre lago Saimaa. Escenario idílico con botes de madera, ópera al aire libre en verano y arquitectura del siglo XIX. Gema subestimada para viajeros que buscan Finlandia pintoresca.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-agosto (ópera), especialmente julio",
+      "como_llegar": "tren desde Helsinki (vía Tampere) 5 horas, 30-60 EUR; autobús 4,5 horas, 20-35 EUR",
+      "donde_dormir": {
+        "mochilero": "cabaña hostal (Savonlinna Camping) 25-35 EUR/noche",
+        "medio": "hotel 3 estrellas (Spa Hotel Savonlinna) 70-100 EUR/noche",
+        "comfort": "hotel histórico (Original Sokos Hotel) 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo Olavinlinna, visita guiada (15 EUR entrada, tour 5 EUR extra)",
+        "Festival de Ópera de Savonlinna, entradas desde 40 EUR (julio, reserva con anticipación)",
+        "Paseo en bote tradicional por lago Saimaa (30-50 EUR, 1,5 horas)",
+        "Pueblo histórico de Olavinlinnan museo (7 EUR)",
+        "Playas Pihlajaniemi (gratis)"
+      ],
+      "donde_comer": "Restaurante junto al castillo con vistas. Prueba pescado de lago Saimaa. Rango: 10-18 EUR comida, 25-50 EUR restaurante.",
+      "consejo_local": "La ópera en julio es espectáculo; reserva meses antes si quieres entrada. Sin ópera, igual vale la pena por el castillo y atmósfera. Los botes de madera son icónicos; haz paseo en uno.",
+      "plan_b_lluvia": "Castillo (interior), museos, cafés ribereños cubiertos.",
+      "keywords": [
+        "Savonlinna",
+        "Olavinlinna",
+        "castillo",
+        "ópera",
+        "lago Saimaa",
+        "Karelia",
+        "histórico"
+      ]
+    },
+    {
+      "id": "nuuk-excursion",
+      "nombre": "Excursión a Groenlandia: Nuuk",
+      "tipo": "ciudad",
+      "region": "Groenlandia (isla, territorio de Dinamarca)",
+      "descripcion": "Capital de Groenlandia, accesible desde Finlandia vía Copenhague. Centro multicolor con glaciares cercanos y cultura ártica auténtica. Excursión especial para viajeros que quieren ir más allá de Laponia hacia el Ártico real.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio-agosto",
+      "como_llegar": "vuelo desde Helsinki a Copenhague (2,5h, 40-100 EUR), luego vuelo Copenhague-Nuuk (Air Greenland, 3,5h, 150-250 EUR). Total viaje: 6-7 horas con escala.",
+      "donde_dormir": {
+        "mochilero": "hostel (Arctic Hotel) 40-55 EUR/noche",
+        "medio": "hotel 3 estrellas (Hotel Nuuk) 90-130 EUR/noche",
+        "comfort": "hotel 4 estrellas (Hilton) 180-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Catedral de Nuuk (gratis, arquitectura contemporánea)",
+        "Museo Nacional de Groenlandia (12 EUR, ropa y arte inuit)",
+        "Paseo en bote a glaciares Qooroq (80-120 EUR, 3-4 horas)",
+        "Mercado tradicional (gratis, compra salmón ahumado local)",
+        "Caminata a montaña Hikertrail (gratis, vistas de fiordo)"
+      ],
+      "donde_comer": "Restaurante Sarfartoq sirve comida groenlandesa (halibut, camarones árticos, 20-40 EUR). Rango general alto: 15-35 EUR comida rápida, 40-80 EUR restaurante.",
+      "consejo_local": "Los vuelos a Groenlandia son caros pero experiencia única. Lleva efectivo (tarjetas aceptadas pero tiendas pequeñas no). El hielo y clima cambian rápido; prepárate.",
+      "plan_b_lluvia": "Museos, mercados cubiertos, cafés con vista a fiordo.",
+      "excursion_desde": true,
+      "keywords": [
+        "Nuuk",
+        "Groenlandia",
+        "Godthaab",
+        "glaciares",
+        "Ártico",
+        "excursión",
+        "inuit"
+      ]
+    }
+  ]
+}

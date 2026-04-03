@@ -1,0 +1,337 @@
+{
+  "pais": "Papúa Nueva Guinea",
+  "codigo": "pg",
+  "destinos": [
+    {
+      "id": "port-moresby",
+      "nombre": "Port Moresby",
+      "tipo": "ciudad",
+      "region": "Capital Nacional",
+      "descripcion": "Capital y principal puerta de entrada, con museos de arte y cultura melanesia, mercados locales vibrantes y acceso a playas cercanas. Centro administrativo donde resolver trámites y cambiar dinero. Base obligatoria para conectar con otros destinos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Aeropuerto Internacional Nadi Jackson (POM) - vuelos internacionales desde Brisbane, Manila o Sydney. Duración: 3-5 horas desde Australia. Coste aproximado: 200-400 EUR",
+      "donde_dormir": {
+        "mochilero": "Hostales en Waigani o Boroko: 25-40 EUR/noche",
+        "medio": "Hoteles midrange en Port Moresby Downtown: 60-100 EUR/noche",
+        "comfort": "Hotels de cadena (Crowne Plaza, Grand Papua): 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo Nacional de Papua Nueva Guinea (entrada gratuita/5 EUR)",
+        "Mercado Badili - compra local y artesanías (gratuito)",
+        "Playa de Ela Beach para sunset (gratuito)",
+        "Parliament House tour (5 EUR, previa solicitud)",
+        "Arts and cultural markets en Gordons Market (gratuito)"
+      ],
+      "donde_comer": "Comida local (kaukau, sago, pescado): 5-10 EUR. Zonas: Waigani, Boroko. Cadenas internacionales: 15-25 EUR",
+      "consejo_local": "No camines solo por la noche en zonas como Downtown o Badili. Los taxis son seguros; pide al hotel que te los reserve. El mercado es mejor por la mañana.",
+      "plan_b_lluvia": "Museo Nacional, shoppings cubiertos (Boroko), cafés locales",
+      "alerta_seguridad": "Port Moresby tiene altos índices de delincuencia. Evita zonas como Moresby South, no lleves objetos de valor visibles, mantén dinero en cantidades pequeñas. Viaja con precaución y usa transporte reservado.",
+      "keywords": [
+        "POM",
+        "capital Papua Nueva Guinea",
+        "Waigani",
+        "Boroko",
+        "Ela Beach",
+        "Badili Market"
+      ]
+    },
+    {
+      "id": "rabaul",
+      "nombre": "Rabaul",
+      "tipo": "histórico",
+      "region": "Provincia de Nueva Bretaña Oriental",
+      "descripcion": "Puerto histórico con restos de la Segunda Guerra Mundial, volcanes activos (Tavurvur) y vista sobre una bahía espectacular. Pequeño pueblo costero con fuerte legado colonial alemán y japonés. Ideal para buceo y exploración de cuevas volcánicas.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Vuelo desde Port Moresby con Air Niugini: 1 hora, 80-120 EUR. Alternativamente ferry desde Kimbe (8 horas, 30 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 20-35 EUR/noche",
+        "medio": "Rabaul Hotel o similar: 50-80 EUR/noche",
+        "comfort": "Rabaul Resorts & Spa: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Subida volcán Tavurvur al atardecer (gratuito, 2 horas caminata)",
+        "Buceo en pecios de WWII (50-80 EUR con operador)",
+        "Cueva Kokopo con murciélagos (10 EUR + guía local)",
+        "Paseo por museos de guerra subterráneos (5 EUR)",
+        "Tours por bunkers y fortines abandonados (gratuito con guía local)"
+      ],
+      "donde_comer": "Pescado fresco y comida local: 6-12 EUR. Restaurantes en Rabaul Town. Prueba el tuna y langosta.",
+      "consejo_local": "Los locales son muy amables. Contrata guías a través de tu hospedaje - conocen historias no documentadas de la guerra. El volcán es mejor al atardecer pero cálzate bien; el terreno es rocoso.",
+      "plan_b_lluvia": "Museos de guerra cubiertos, visita bunkers subterráneos, prueba snorkel en zonas protegidas",
+      "keywords": [
+        "Rabaul",
+        "Nueva Bretaña",
+        "Tavurvur",
+        "WWII",
+        "volcanes PNG",
+        "pecios buceo"
+      ]
+    },
+    {
+      "id": "wewak",
+      "nombre": "Wewak",
+      "tipo": "ciudad",
+      "region": "Provincia del Este Sepik",
+      "descripcion": "Pueblo costero relajado en la costa norte con acceso a islas vírgenes y pueblos ribereños del río Sepik. Puerto pintoresco con playas tranquilas y punto de partida para cruceros fluviales únicos. Menos turístico que Rabaul pero auténtico.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Vuelo desde Port Moresby con Air Niugini: 2 horas, 100-150 EUR",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 18-30 EUR/noche",
+        "medio": "Wewak Hotel o similar: 40-70 EUR/noche",
+        "comfort": "Resort beachfront: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por el muelle y puerto al atardecer (gratuito)",
+        "Excursión a islas cercanas: Muschu o Kairiru (35-60 EUR con tour)",
+        "Snorkel en arrecifes (10-20 EUR con operador)",
+        "Visita pueblo de Sepik Island (25 EUR con guía)",
+        "Pesca local (30-50 EUR media día)"
+      ],
+      "donde_comer": "Restaurantes junto al puerto: 7-15 EUR. Especialidad: marisco fresco y platos locales con sago",
+      "consejo_local": "Wewak es el punto de partida para tours de Sepik River - negocia directamente con operadores locales para ahorrar. El puerto es bonito al amanecer antes del calor.",
+      "plan_b_lluvia": "Cafés locales, pequeño museo colonial, compras en mercado cubierto",
+      "keywords": [
+        "Wewak",
+        "East Sepik",
+        "Sepik River",
+        "Muschu Island",
+        "Kairiru",
+        "puerto PNG"
+      ]
+    },
+    {
+      "id": "sepik-river-cruise",
+      "nombre": "Crucero Río Sepik",
+      "tipo": "naturaleza",
+      "region": "Provincia del Este Sepik",
+      "descripcion": "Experiencia única navegando el río Sepik por pueblos aislados, selva virgen y encuentros con culturas indígenas. Uno de los últimos lugares donde la vida tradicional persiste. Imprescindible para viajeros aventureros que buscan lo auténtico.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Wewak en barca/crucero: 1-5 días navegando río arriba. Coste aproximado: 150-400 EUR incluido alojamiento básico en pueblos o barcazas",
+      "donde_dormir": {
+        "mochilero": "En guesthouses de pueblos ribereños o barcazas improvisadas: 15-25 EUR/noche",
+        "medio": "Pequeños resorts ribereños o tours con hospedaje incluido: 80-120 EUR/día",
+        "comfort": "Tours premium con guías experimentados y alojamiento mejor: 200-350 EUR/día"
+      },
+      "que_hacer": [
+        "Visitas a pueblos indígenas Iatmul y Chambri (incluido en tour)",
+        "Compra de arte y artesanías locales auténticas (5-50 EUR)",
+        "Observación de vida silvestre: cocodrilos, aves tropicales (gratuito durante navegación)",
+        "Ceremonia cultural local (15-30 EUR si la organizan)",
+        "Pesca nocturna con linternas (20-40 EUR)"
+      ],
+      "donde_comer": "Comida local cocinada en pueblos: incluida en tour. Prueba sagú, taro, pescado ahumado. Presupuesto incluido en paquete tour",
+      "consejo_local": "Contrata tours a través de operadores consolidados desde Wewak - viajes independientes por Sepik pueden ser complicados sin contactos. Lleva repelente fuerte para mosquitos. Los pueblos aceptan dólares PNG o AUD.",
+      "plan_b_lluvia": "Las lluvias no impiden navegación pero hacen incómodo. Algunos tours incluyen visitas a museos y talleres de artesanía en pueblos",
+      "keywords": [
+        "Sepik River",
+        "Iatmul",
+        "Chambri",
+        "crucero rio",
+        "pueblos indigenas",
+        "arte tribal PNG"
+      ]
+    },
+    {
+      "id": "madang",
+      "nombre": "Madang",
+      "tipo": "playa",
+      "region": "Provincia de Madang",
+      "descripcion": "Destino costero con playas de arena blanca, arrecifes de coral intactos y el mejor buceo de PNG. Pueblo pintoresco con fuerte influencia australiana y alemana. Excelente para snorkel, buceo y relax en un entorno tropical.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Vuelo desde Port Moresby con Air Niugini: 1,5 horas, 90-130 EUR. También ferry desde Lae (8 horas, 25 EUR)",
+      "donde_dormir": {
+        "mochilero": "Backpacker lodges y guesthouses: 20-35 EUR/noche",
+        "medio": "Hoteles como Madang Resort o Coastwatchers: 60-100 EUR/noche",
+        "comfort": "Madang Resort Spa, resorts beachfront: 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en arrecife Jais Aben (60-100 EUR con operador)",
+        "Snorkel en Pig Island (15 EUR tour)",
+        "Playa de Madang Town para baño (gratuito)",
+        "Visita a Musée Océanique (10 EUR)",
+        "Tours a islas cercanas: Kar Kar, Umboi (40-80 EUR)"
+      ],
+      "donde_comer": "Comida marina fresca: 8-15 EUR. Zona: malecón de Madang. Restaurantes con vista al mar: 15-25 EUR",
+      "consejo_local": "Madang es seguro comparado con Port Moresby. Las mejores inmersiones son por la mañana antes del viento. Contrata buceo con operadores certificados - el arrecife es excepcional pero exige respeto.",
+      "plan_b_lluvia": "Museo marítimo, cafés locales, snorkel en zonas protegidas de la lluvia",
+      "keywords": [
+        "Madang",
+        "buceo PNG",
+        "arrecife coral",
+        "Jais Aben",
+        "Pig Island",
+        "playa blanca"
+      ]
+    },
+    {
+      "id": "kavieng",
+      "nombre": "Kavieng",
+      "tipo": "isla",
+      "region": "Provincia de Nueva Irlanda",
+      "descripcion": "Capital de Nueva Irlanda con playas prístinas, buceo de clase mundial y acceso a arrecifes vírgenes. Pueblo tranquilo en una isla remota con infraestructura básica pero entorno natural espectacular. Perfecto para buceo y desconexión total.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Vuelo desde Port Moresby a Kavieng con Air Niugini: 2 horas, 110-160 EUR. Ferry desde Rabaul (12 horas, 40 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 20-30 EUR/noche",
+        "medio": "Kavieng Hotel o similar: 50-80 EUR/noche",
+        "comfort": "Resort beachfront: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo en arrecife New Hanover (50-90 EUR con operador)",
+        "Snorkel cerca del puerto (10-15 EUR)",
+        "Tours a Nusa Island con playas vírgenes (30-50 EUR)",
+        "Pesca nocturna local (25-40 EUR)",
+        "Visita a pueblos de Nueva Irlanda en lancha (20-35 EUR)"
+      ],
+      "donde_comer": "Marisco y pescado fresco: 8-14 EUR. Restaurantes pequeños en puerto. Presupuesto bajo, comida auténtica",
+      "consejo_local": "Kavieng es muy tranquilo - casi no hay turismo. Comunícate con operadores locales a través del hotel. El buceo es excelente pero menos concurrido que Madang. Efectivo en PGK obligatorio.",
+      "plan_b_lluvia": "Pueblos cubiertos, artesanías locales, cafés junto al puerto",
+      "keywords": [
+        "Kavieng",
+        "Nueva Irlanda",
+        "buceo remoto",
+        "New Hanover",
+        "Nusa Island",
+        "arrecife PNG"
+      ]
+    },
+    {
+      "id": "mount-hagen",
+      "nombre": "Mount Hagen",
+      "tipo": "montaña",
+      "region": "Provincia de Jiwaka/Occidental",
+      "descripcion": "Ciudad en las tierras altas con mercados vibrantes, culturas indígenas vivas y el famoso Mount Hagen Show (festival anual). Puerta a las provincias montañosas donde persisten tradiciones ancestrales. Atmósfera única con influencia colonial británica.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "agosto (Mount Hagen Show), mayo a octubre",
+      "como_llegar": "Vuelo desde Port Moresby con Air Niugini: 1,5 horas, 85-120 EUR. Ruta por carretera muy peligrosa - no recomendada",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 22-35 EUR/noche",
+        "medio": "Hotels como Highlander o Hagen Gardens: 50-85 EUR/noche",
+        "comfort": "Paradise Hotel Mount Hagen: 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Mount Hagen Show anual en agosto - ceremonias tribales (15 EUR entrada)",
+        "Mercado local - artesanías y culturas (gratuito explorar)",
+        "Visita a aldeas cercanas con guía (20-40 EUR)",
+        "Paseo por centro de la ciudad y colonial buildings (gratuito)",
+        "Tours a plantaciones de café (25-40 EUR)"
+      ],
+      "donde_comer": "Comida local de tierras altas: 6-12 EUR. Mercado tiene puestos de comida. Restaurantes: 12-20 EUR",
+      "consejo_local": "Mount Hagen Show es imprescindible si viajas en agosto - las ceremonias son auténticas. Evita el centro por la noche. Los mercados son intensos: ve temprano y ten cuidado con pertenencias.",
+      "plan_b_lluvia": "Las tierras altas reciben lluvia frecuente. Visitas cubiertaas a museos, cafés locales, mercados bajo techo",
+      "keywords": [
+        "Mount Hagen",
+        "Highlands PNG",
+        "tribal show",
+        "mercado local",
+        "Jiwaka",
+        "culturas indigenas"
+      ]
+    },
+    {
+      "id": "goroka",
+      "nombre": "Goroka",
+      "tipo": "ciudad",
+      "region": "Provincia del Este (Eastern Highlands)",
+      "descripcion": "Segunda ciudad de las tierras altas con Goroka Show (festival septiembre), culturas indígenas preservadas y mercados auténticos. Centro regional para explorar pueblos de montaña y tradiciones culturales. Más segura que Hagen, más tranquila.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "septiembre (Goroka Show), mayo a octubre",
+      "como_llegar": "Vuelo desde Port Moresby con Air Niugini: 1 hora, 75-110 EUR. Conexión con Lae también disponible",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 20-32 EUR/noche",
+        "medio": "Goroka Hotel, Bird of Paradise: 48-80 EUR/noche",
+        "comfort": "Goroka Resort & Spa: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Goroka Show en septiembre - ceremonia tribal (12 EUR entrada)",
+        "Mercado local auténtico (gratuito explorar)",
+        "Visita aldea de Asaro Mud Men (20-35 EUR con guía)",
+        "Paseos por jardines de café y plantaciones (15-30 EUR)",
+        "Museo local de cultura (5 EUR)"
+      ],
+      "donde_comer": "Comida de montaña local: 6-12 EUR. Sweet potato (kaukau), verduras frescas. Mercado: 3-6 EUR por comida",
+      "consejo_local": "Goroka es más segura que Mount Hagen. El Goroka Show es menos masivo pero igual de auténtico. Usa guías locales para aldeas - algunos lugares requieren permisos informales.",
+      "plan_b_lluvia": "Museo local, cafés, mercado cubierto, tours a plantaciones con cobertura",
+      "keywords": [
+        "Goroka",
+        "Eastern Highlands",
+        "Goroka Show",
+        "Asaro Mud Men",
+        "tribal PNG",
+        "culturas montaña"
+      ]
+    },
+    {
+      "id": "kokopo",
+      "nombre": "Kokopo",
+      "tipo": "ciudad",
+      "region": "Provincia de Nueva Bretaña Oriental",
+      "descripcion": "Pueblo costero relajado y antigua capital de Nueva Bretaña, con playas tranquilas, arrecifes cercanos y acceso a volcanes. Alternativa más segura y tranquila a Rabaul, con infraestructura mejor. Ideal para descanso y snorkel.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Vuelo desde Port Moresby con Air Niugini: 1,5 horas, 80-120 EUR. También ferry desde Rabaul (45 min, 10 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 18-30 EUR/noche",
+        "medio": "Kokopo Beach Bungalow Resort: 50-80 EUR/noche",
+        "comfort": "Kokopo Beach Resort & Spa: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife cercano (10-20 EUR)",
+        "Playa de Kokopo para baño y relax (gratuito)",
+        "Tours a Duke of York Islands (40-70 EUR)",
+        "Visita a Kuradui War Museum (5 EUR)",
+        "Paseo por puerto al atardecer (gratuito)"
+      ],
+      "donde_comer": "Pescado fresco y langosta: 8-15 EUR. Restaurantes con vista mar: 15-22 EUR. Zona: waterfront",
+      "consejo_local": "Kokopo es más tranquilo y seguro que Rabaul. Perfecto para relajarse entre viajes. Contrata snorkel con resorts - los arrecifes cercanos son buenos pero pequeños.",
+      "plan_b_lluvia": "Museum, cafés locales, compras en mercado cubierto",
+      "keywords": [
+        "Kokopo",
+        "Nueva Bretaña",
+        "playa tranquila",
+        "Duke of York",
+        "snorkel PNG",
+        "arrecife cercano"
+      ]
+    },
+    {
+      "id": "lae",
+      "nombre": "Lae",
+      "tipo": "ciudad",
+      "region": "Provincia de Morobe",
+      "descripcion": "Tercer puerto más importante y puerta a las tierras altas y río Markham. Centro comercial con mercados intensos y acceso a excursiones de naturaleza. Menos turístico pero funcional como base para explorar la región oriental.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Vuelo desde Port Moresby con Air Niugini: 1,5 horas, 80-120 EUR. Ferry a Madang (8 horas, 25 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouses centrales: 20-30 EUR/noche",
+        "medio": "Hotels como Peninsula o Lae City: 45-75 EUR/noche",
+        "comfort": "Lae Waterfront Hotel: 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado central de Lae (gratuito explorar)",
+        "Waterfront walk al atardecer (gratuito)",
+        "Tours a río Markham (30-50 EUR)",
+        "Visita Botanical Gardens (5 EUR)",
+        "Excursiones a pueblos ribereños (25-45 EUR)"
+      ],
+      "donde_comer": "Comida local variada: 6-12 EUR. Mercado: 3-7 EUR por comida. Restaurantes: 12-18 EUR",
+      "consejo_local": "Lae no es destino en sí - úsalo como conexión. El mercado es intenso e inseguro con dinero visible. Evita caminar solo por la noche. Buena base si conectas a Madang o tierras altas.",
+      "plan_b_lluvia": "Centro cubierto, cafés, compras en mall, mercado protegido",
+      "keywords": [
+        "Lae",
+        "Morobe",
+        "puerto PNG",
+        "Markham River",
+        "tierras altas acceso",
+        "mercado local"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,314 @@
+{
+  "pais": "Madagascar",
+  "codigo": "mg",
+  "destinos": [
+    {
+      "id": "antananarivo",
+      "nombre": "Antananarivo",
+      "tipo": "ciudad",
+      "region": "Región Analamanga (centro)",
+      "descripcion": "Capital de Madagascar construida en las tierras altas con arquitectura colonial francesa. Punto de entrada obligatorio para la mayoría de viajeros y base para explorar el centro del país. Centro cultural con museos, mercados tradicionales y gastronomía local.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre",
+      "como_llegar": "Vuelo internacional a Ivato (aeropuerto internacional). Desde Europa: 20-24h con escalas, 600-1200 EUR",
+      "donde_dormir": {
+        "mochilero": "Hostales en Analakely, 12-18 EUR/noche",
+        "medio": "Hoteles 2-3 estrellas en Haute-Ville, 30-50 EUR/noche",
+        "comfort": "Hoteles boutique centro, 70-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Musée de la Reine (palacio real, 3 EUR)",
+        "Mercado Analakely (gratis, compras de artesanía)",
+        "Catedral de Andohalo (gratis)",
+        "Paseo por Haute-Ville y barrio colonial (gratis)"
+      ],
+      "donde_comer": "Arroz frito (riz frit) en mercados callejeros (2-3 EUR), restaurantes de brochetas en Analakely (4-6 EUR), comida malgache en Habitavy",
+      "consejo_local": "Cambiar dinero en Analakely, no en el aeropuerto. Las tarjetas de crédito funcionan mal fuera de la capital, lleva efectivo",
+      "plan_b_lluvia": "Museos, mercados cubiertos, explorar tiendas de artesanía y ropa vintage en Haute-Ville",
+      "keywords": [
+        "Tana",
+        "Antananarivo capital",
+        "Analakely",
+        "Haute-Ville",
+        "Ivato aeropuerto"
+      ]
+    },
+    {
+      "id": "ile-sainte-marie",
+      "nombre": "Île Sainte-Marie",
+      "tipo": "isla",
+      "region": "Costa este (Analanjirofo)",
+      "descripcion": "Isla de 50 km frente a la costa este, famosa por el avistamiento de ballenas jorobadas (julio-septiembre) y playas de arena blanca. Excelente para viajeros que buscan relax, snorkel y una isla auténtica sin masificación turística.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "julio a septiembre (ballenas), junio a octubre (clima general)",
+      "como_llegar": "Desde Antananarivo: vuelo a Soanierana Ivanga (1.5h, 80-120 EUR) o vía Toliara con transbordador (16h, 15 EUR). Ferry desde Sambava (2h, 5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Cabañas básicas Ambodifotatra, 10-15 EUR/noche",
+        "medio": "Guesthouses con baño, 20-35 EUR/noche",
+        "comfort": "Beach resorts, 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Avistamiento de ballenas jorobadas desde lanchas (50-70 EUR, julio-sept)",
+        "Snorkel arrecifes coralinos (gratis desde playa, 30 EUR tours)",
+        "Pirate cemetery y Reliquias pirata (gratis)",
+        "Paseo en bicicleta isla completa (gratis, alquiler 2-3 EUR)"
+      ],
+      "donde_comer": "Pescado a la parrilla (gratis 3-4 EUR), langostas frescas (5-8 EUR), arroz con verduras en comedores locales, restaurantes en Ambodifotatra (6-10 EUR)",
+      "consejo_local": "Enero-marzo lluvia tropical, isla se aísla. Compra tickets de ferry con anticipación en temporada de ballenas. La isla es pequeña, cámara lenta local",
+      "plan_b_lluvia": "Explorar pueblo pirata, visitar cementerio histórico cubierto, juegos de mesa en cabañas, snorkel en laguna protegida",
+      "keywords": [
+        "Sainte-Marie",
+        "Nosy Boraha",
+        "ballenas jorobadas",
+        "Ambodifotatra",
+        "island hopping Madagascar"
+      ]
+    },
+    {
+      "id": "parc-national-andasibe",
+      "nombre": "Parc National Andasibe-Mantadia",
+      "tipo": "naturaleza",
+      "region": "Este (Atsinanana), entre Antananarivo y costa",
+      "descripcion": "Selva tropical protegida con el lémur indri más grande de Madagascar y cientos de especies endémicas. Imprescindible para ver vida silvestre malgache en su hábitat natural con caminos bien mantenidos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a marzo (más vida salvaje, menos turismo octubre-nov)",
+      "como_llegar": "Desde Antananarivo: minibús a Moramanga (2h, 4 EUR), luego taxi-brousse a Andasibe pueblo (45 min, 2 EUR). Total: 6 EUR",
+      "donde_dormir": {
+        "mochilero": "Lodges básicos Andasibe pueblo, 12-18 EUR/noche",
+        "medio": "Guesthouses con guía incluido, 25-40 EUR/noche",
+        "comfort": "Lodges ecoturismo, 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Mantadia (gratis entrada parque 25 EUR, 3-4h)",
+        "Visita nocturna vida silvestre (15 EUR, 2h)",
+        "Avistamiento lémur indri (incluido en entrada)",
+        "Bamboo forest walk (gratis desde lodge)"
+      ],
+      "donde_comer": "Comedores familiares en pueblo (2-3 EUR), arroz con camarones (3 EUR), mercadillo de frutas (1-2 EUR), algunos lodges ofrecen cena (8-12 EUR)",
+      "consejo_local": "Contrata guía local obligatorio en parque (5-8 EUR). Lleva binoculares. Amanecer es mejor hora para lémures, ve a las 6am",
+      "plan_b_lluvia": "Tours nocturnos (mejor en lluvia para ver vida nocturna), museos pequeños pueblo, quedarse en lodge con vistas selva",
+      "keywords": [
+        "Andasibe",
+        "lémur indri",
+        "Mantadia",
+        "selva tropical Madagascar",
+        "wildlife parque"
+      ]
+    },
+    {
+      "id": "canal-de-los-pangalanes",
+      "nombre": "Canal de los Pangalanes",
+      "tipo": "naturaleza",
+      "region": "Costa este (Atsinanana)",
+      "descripcion": "Sistema de canales naturales y lagunas conectadas que recorren 645 km la costa este. Viaje lento en canoa o pequeños botes a través de pueblos remotos, vegetación tropical y vida cotidiana malgache sin turismo occidental.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre (agua alta, menos calor)",
+      "como_llegar": "Desde Antananarivo a Toliara (vuelo 90 EUR o minibús 48h, 20 EUR). Mejor desde Antalaha norte: minibús desde costa (variable según punto)",
+      "donde_dormir": {
+        "mochilero": "Casas familiares en pueblos (8-12 EUR/noche)",
+        "medio": "Pequeños hostales flotantes, 15-25 EUR/noche",
+        "comfort": "Eco-lodges canal (40-60 EUR/noche)"
+      },
+      "que_hacer": [
+        "Recorrido canoa manual 1-3 días (30-60 EUR con guía y comidas)",
+        "Pesca con pescadores locales (gratis, colabora)",
+        "Visita pueblos remotos Antalaha, Sambava (gratis)",
+        "Avistamiento aves acuáticas (gratis, incluido viaje)"
+      ],
+      "donde_comer": "Pescado fresco cocinado en canoa (2-3 EUR), arroz con verduras, frutas tropicales en pueblos (1-2 EUR), tour incluye comidas básicas",
+      "consejo_local": "Viaja con agencia local o guía: perderás sin ellos. Ropa que seque rápido. Lleva filtro de agua o tabletas purificación",
+      "plan_b_lluvia": "Mejor viajar en lluvia (agua más alta), comunidades más activas. Evita si hay inundaciones fuertes",
+      "keywords": [
+        "Pangalanes",
+        "canal este Madagascar",
+        "Antalaha",
+        "Sambava",
+        "canoa remota"
+      ]
+    },
+    {
+      "id": "avenue-baobabs",
+      "nombre": "Avenida de los Baobabs",
+      "tipo": "naturaleza",
+      "region": "Oeste (Boeny), cerca Menabe",
+      "descripcion": "Camino de tierra flanqueado por 25 baobabs gigantes de 800 años, uno de los paisajes más icónicos de Madagascar. Mejor al atardecer cuando la luz dorada ilumina los árboles ancestrales.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "julio a octubre (clima seco)",
+      "como_llegar": "Desde Antananarivo a Menabe (vuelo 100 EUR o minibús 12h, 25 EUR). Desde Menabe/Morondava: taxi-brousse o tour (2h, 10-15 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hospedajes Morondava, 10-15 EUR/noche",
+        "medio": "Guesthouses, 20-35 EUR/noche",
+        "comfort": "Eco-lodges con piscina, 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrido avenida baobabs atardecer (5-10 EUR con guía, 1.5h)",
+        "Fotografía sunrise (6-10 EUR tour)",
+        "Paseo a caballo entre baobabs (15 EUR)",
+        "Exploración mercado Morondava (gratis)"
+      ],
+      "donde_comer": "Langostas grilladas Morondava (6-10 EUR), arroz frito con carne (2-3 EUR), zumo coco fresco (1 EUR), restaurantes turísticos (8-12 EUR)",
+      "consejo_local": "Contrata transporte con conductor local que sepa dónde entrar (baobabs en propiedad privada, pequeño acceso 2-3 EUR). Atardecer es imprescindible",
+      "plan_b_lluvia": "Menor calor pero caminos fangosos. Mejor en estación seca. Si lluvia, la avenida se ve igualmente bonita pero acceso más complicado",
+      "keywords": [
+        "Baobabs",
+        "Morondava",
+        "Avenue des Baobabs",
+        "avenida baobabs Madagascar"
+      ]
+    },
+    {
+      "id": "isalo-national-park",
+      "nombre": "Isalo National Park",
+      "tipo": "montaña",
+      "region": "Sur (Atsimo-Andrefana), cerca Ranohira",
+      "descripcion": "Parque de cañones rojos, arenas color óxido y formaciones rocosas espectaculares con lémures de cola anillada. Senderismo variado desde fácil a desafiante con piscinas naturales y vistas panorámicas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril a octubre (clima seco, no lluvia)",
+      "como_llegar": "Desde Antananarivo a Ranohira: vuelo a Fianarantsoa (100 EUR, 1h) + minibús (4h, 8 EUR). O minibús directo 14h, 25 EUR desde Tana",
+      "donde_dormir": {
+        "mochilero": "Hospedajes Ranohira, 10-15 EUR/noche",
+        "medio": "Lodges básicos, 20-35 EUR/noche",
+        "comfort": "Eco-lodges con vistas cañones, 45-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Piscina Natural (entrada 25 EUR, 3h medio)",
+        "Cañón Rojo trek (25 EUR, 4h)",
+        "Avistamiento lémures cola anillada (incluido en senderismo)",
+        "Puesta sol desde Ihazofotse (gratis)"
+      ],
+      "donde_comer": "Comedores locales Ranohira (2-3 EUR), arroz con verduras, frutas tropicales (1-2 EUR), lodges cena 8-10 EUR",
+      "consejo_local": "Mejor madrugar para senderismos (guía obligatorio 5-8 EUR). Las piscinas naturales son gelidas, lleva toalla. Llevar agua (2L mínimo)",
+      "plan_b_lluvia": "Parque cierra o inaccesible en lluvia/inundaciones. Viaja en estación seca. Si está lloviendo, quedate en Ranohira explorando pueblo",
+      "keywords": [
+        "Isalo",
+        "Ranohira",
+        "cañones rojos",
+        "red canyon Madagascar",
+        "national park isalo"
+      ]
+    },
+    {
+      "id": "reserve-anja",
+      "nombre": "Réserve Privée d'Anja",
+      "tipo": "naturaleza",
+      "region": "Sur (Atsimo-Andrefana), entre Isalo y Fianarantsoa",
+      "descripcion": "Pequeña reserva privada con lémures de cola anillada semi-habituados que bajan a comer de la mano. Perfecta como parada intermedia y para fotografía de vida salvaje de cerca.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "todo el año, mejor abril-octubre",
+      "como_llegar": "En ruta entre Ranohira e Ambalavao (minibús para en entrada, 2h desde Ranohira, 5 EUR)",
+      "donde_dormir": {
+        "mochilero": "Camping reserva, 5-8 EUR/noche",
+        "medio": "Pequeños hospedajes cercanos, 10-15 EUR/noche",
+        "comfort": "Eco-lodge reserva, 30-50 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita guiada lémures (entrada 12 EUR, 1.5-2h)",
+        "Fotografía lémures comiendo (incluido)",
+        "Paseo formaciones rocosas (gratis con guía)",
+        "Tarde relajada leyendo entre rocas (gratis)"
+      ],
+      "donde_comer": "Comedor simple en reserva (3-5 EUR), mejor llevar snacks, frutas",
+      "consejo_local": "Lémures están acostumbrados pero salvajes: no toques aunque se acerquen. Mejor fotografía temprano. Parada de 2h es suficiente",
+      "plan_b_lluvia": "Paseos más cortos pero igual de bonito, menos turistas, lémures más activos buscando comida",
+      "keywords": [
+        "Anja",
+        "lemur reserve",
+        "privada anja",
+        "wildlife cercano Madagascar"
+      ]
+    },
+    {
+      "id": "fort-dauphin",
+      "nombre": "Fort Dauphin (Tôlanaro)",
+      "tipo": "playa",
+      "region": "Sureste (Atsimo-Atsinanana)",
+      "descripcion": "Pueblo costero en bahía natural con playas de arena blanca, historia colonial francesa y punto de partida para islas vírgenes. Menos concurrido que Sainte-Marie, ideal para relax y snorkel.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre (clima cálido, mar tranquilo)",
+      "como_llegar": "Desde Antananarivo: vuelo Air Austral a Tôlanaro (2h, 120 EUR) o minibús 20h (35 EUR). Opción: ruta costa sur más lenta",
+      "donde_dormir": {
+        "mochilero": "Hostales puerto, 10-18 EUR/noche",
+        "medio": "Hoteles 2 estrellas, 25-40 EUR/noche",
+        "comfort": "Beach resorts, 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Snorkel arrecife Tsimanampetsotse (tour 30 EUR, 4h)",
+        "Playa Libanona (gratis, 15 min desde puerto)",
+        "Visita isla privada Île de Nosy (tour 40 EUR, día completo)",
+        "Paseo puerto pesquero y mercado (gratis)"
+      ],
+      "donde_comer": "Langostas frescas grilladas (7-10 EUR), pulpo (4-6 EUR), arroz con pescado en comedores mercado (2-3 EUR), restaurantes turísticos (10-15 EUR)",
+      "consejo_local": "Diciembre-marzo ciclones, viaja en estación seca. Puerto es agradable al amanecer. Lleva protector solar fuerte (UV muy intenso)",
+      "plan_b_lluvia": "Explorar mercado cubierto, pueblo colonial, museos pequeños, juegos locales en bares",
+      "keywords": [
+        "Tôlanaro",
+        "Fort Dauphin",
+        "playas sureste",
+        "langosta Madagascar",
+        "puerto pesquero"
+      ]
+    },
+    {
+      "id": "bemaraha-national-park",
+      "nombre": "Parc National Bemaraha",
+      "tipo": "naturaleza",
+      "region": "Noroeste (Diana)",
+      "descripcion": "Patrimonio de la UNESCO con el Tsingy (formaciones rocosas de piedra caliza afiladas como cuchillas). Paisaje lunar único, trekking desafiante y lémures endémicos. Para viajeros aventureros.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre (agua subterránea accesible, clima seco)",
+      "como_llegar": "Desde Antananarivo a Antsalova (vuelo 150 EUR, 2h) + minibús a Menabe (3h, 10 EUR). O minibús 16h desde Antananarivo (30 EUR)",
+      "donde_dormir": {
+        "mochilero": "Hospedajes básicos Menabe, 8-12 EUR/noche",
+        "medio": "Lodges parque, 20-30 EUR/noche",
+        "comfort": "Eco-lodges premium, 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Tsingy Grand Rouge trek (entrada 37 EUR, 3-4h medio-difícil)",
+        "Tsingy Gray (37 EUR, 4-5h difícil)",
+        "Avistamiento lémures sifaka diadema (incluido trekkings)",
+        "Cueva Andramozavoavy (entrada incluida en treks)"
+      ],
+      "donde_comer": "Comidas en lodge (5-8 EUR), llevar snacks. Mercado en Menabe (1-2 EUR)",
+      "consejo_local": "Calzado con buen agarre obligatorio (piedras muy afiladas). Ropa de manga larga. Guía obligatorio. Tsingy Grand Rouge es más accesible, Gray es para expertos",
+      "plan_b_lluvia": "Cierre parcial en lluvia, agua alta. Mejor evitar. Si visitas, algunos circuitos abiertos pero caminos fangosos",
+      "keywords": [
+        "Bemaraha",
+        "Tsingy",
+        "UNESCO Madagascar",
+        "formations rocosas",
+        "adventure park"
+      ]
+    },
+    {
+      "id": "miandrivazo",
+      "nombre": "Miandrivazo & Río Tsiribihina",
+      "tipo": "rural",
+      "region": "Oeste (Betsiboka)",
+      "descripcion": "Pueblo ribereño desde el que se recorren los rápidos del río Tsiribihina en piragua durante 2-3 días. Aventura de bajo presupuesto con aldeas malgaches, vida salvaje y desconexión total.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre (nivel río óptimo, clima seco)",
+      "como_llegar": "Desde Antananarivo a Miandrivazo: minibús 10h (20 EUR) o parada ruta costa oeste. Desde Menabe/Morondava posible conexión",
+      "donde_dormir": {
+        "mochilero": "Hospedajes pueblo, 8-12 EUR/noche",
+        "medio": "Eco-lodges río (incluyen viaje), 25-40 EUR/noche",
+        "comfort": "Tours operadores privados, 50-80 EUR/noche"
+      },
+      "que_hacer": [
+        "Piragua río Tsiribihina 2-3 días (50-100 EUR con comidas y guide)",
+        "Visita aldeas remotas (gratis, incluido en tour)",
+        "Avistamiento cocodrilos y aves (incluido viaje)",
+        "Baño en piscina natural (gratis)"
+      ],
+      "donde_comer": "Comidas preparadas en viaje (incluidas en tour), arroz y pescado fresco, fruta local",
+      "consejo_local": "Enero-marzo no navegar (lluvia, río peligroso). Negocia grupo para reducir precio individual. Lleva almohada inflable, mosquitera",
+      "plan_b_lluvia": "Abril-mayo río aún bueno pero descendiendo. Junio-septiembre ideal. Evita estación lluviosa diciembre-marzo",
+      "keywords": [
+        "Tsiribihina",
+        "Miandrivazo",
+        "río aventura",
+        "piragua Madagascar",
+        "rio remoto"
+      ]
+    }
+  ]
+}

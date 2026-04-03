@@ -1,0 +1,351 @@
+{
+  "pais": "Suecia",
+  "codigo": "se",
+  "destinos": [
+    {
+      "id": "estocolmo",
+      "nombre": "Estocolmo",
+      "tipo": "ciudad",
+      "region": "Uppland, este",
+      "descripcion": "Capital sueca construida sobre 14 islas con una Ciudad Vieja (Gamla Stan) medieval perfectamente conservada. Centro de transporte, cultura y gastronomía nórdica. Punto de partida ideal para explorar el archipiélago sueco.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Vuelo internacional a Arlanda Airport (40 km): tren 20 min (20 EUR), autobús 45 min (6 EUR). O ferry desde Helsinki/Talín.",
+      "donde_dormir": {
+        "mochilero": "Albergue en Södermalm o Norrmalm: 25-35 EUR/noche",
+        "medio": "Hostal con habitación privada o hotel 3* en Kungsholmen: 70-100 EUR/noche",
+        "comfort": "Hotel 4-5* en Norrmalm o Östermalm: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Gamla Stan: paseo medieval gratis",
+        "Museo Vasa (navío 1628 hundido): 13 EUR",
+        "Ayuntamiento de Estocolmo y torre: 5 EUR",
+        "Parque Drottningholm (palacio real): 11 EUR",
+        "Archipiélago en ferry: 8-15 EUR",
+        "Museo Nordico (historia sueca): 10 EUR"
+      ],
+      "donde_comer": "Caldo de cangrejo (kräftskiva) en verano, cangreburgo, salmón ahumado. Restaurantes económicos en Södermalm (8-12 EUR), mercado Saluhall (6-10 EUR). Evita Gamla Stan (caro y turístico).",
+      "consejo_local": "Compra la Stockholm Card (1 día: 49 EUR) si vas a museos. El metro tiene paradas con arte (Rådhuset, Fridhemsplan). Come en food courts de Hay Market o supermercados (ICA) para ahorrar.",
+      "plan_b_lluvia": "Museo Vasa, Museo ABBA, Fotografiska (arte), cafés en Södermalm.",
+      "keywords": [
+        "Stockholm",
+        "Gamla Stan",
+        "Södermalm",
+        "Norrmalm",
+        "Archipiélago",
+        "Vasa",
+        "Ayuntamiento"
+      ]
+    },
+    {
+      "id": "gotemburgo",
+      "nombre": "Gotemburgo",
+      "tipo": "ciudad",
+      "region": "Västra Götaland, oeste",
+      "descripcion": "Segunda ciudad sueca con carácter portuario y cosmopolita, menos abarrotada que Estocolmo. Excelente base para explorar la costa oeste y cerca de Dinamarca. Gastronomía muy buena y ambiente local auténtico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Desde Estocolmo: tren 4h (35-60 EUR). Avión desde Europa: Gothenburg City Airport (vuelos desde muchas capitales europeas).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Haga o Centro: 24-32 EUR/noche",
+        "medio": "Hotel 3* en Avenyn o Liseberg: 65-90 EUR/noche",
+        "comfort": "Hotel 4* Clarion o similar: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Parque de atracciones Liseberg: 30-40 EUR entrada",
+        "Museo de Arte de Gotemburgo (Konstmuseum): 8 EUR",
+        "Paseo por barrio bohemio Haga: gratis",
+        "Archipiélago de Gotemburgo en ferry: 12-18 EUR",
+        "Museo Maritiman (barcos históricos): 12 EUR"
+      ],
+      "donde_comer": "Camarones de la costa oeste, bouillabaisse sueca, albóndigas. Restaurantes en Haga son caros pero auténticos. Come en food courts o en el mercado Feskekörka (mercado de pescado): 8-15 EUR.",
+      "consejo_local": "Haga es el barrio hippie-alternativo con mejor vibe que el centro. Liseberg es caro pero el parque en sí es hermoso. Los tranvías amarillos son icónicos y funcionan bien.",
+      "plan_b_lluvia": "Museo de Arte, Maritiman, cafés en Haga, Liseberg (aunque menos disfrutable).",
+      "keywords": [
+        "Gothenburg",
+        "Goteborg",
+        "Haga",
+        "Avenyn",
+        "Liseberg",
+        "Feskekörka",
+        "Archipiélago"
+      ]
+    },
+    {
+      "id": "malmo",
+      "nombre": "Malmö",
+      "tipo": "ciudad",
+      "region": "Scania, sur",
+      "descripcion": "Ciudad portuaria moderna y multicultural, famosa por su arquitectura contemporánea (Torso Turning) y vida nocturna. A solo 30 minutos de Copenhague, perfecta para combinar ambos países. Más asequible y desenfadada que Estocolmo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Estocolmo: tren 5h (40-70 EUR). Desde Copenhague: tren 35 min (5 EUR). Vuelos europeos a Malmö Airport.",
+      "donde_dormir": {
+        "mochilero": "Albergue en centro: 22-30 EUR/noche",
+        "medio": "Hotel 3* Västra Hamnen: 60-80 EUR/noche",
+        "comfort": "Hotel 4* cerca del canal: 110-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por Västra Hamnen (puerto nuevo): gratis",
+        "Torre Torso Turning (vistas): 6 EUR entrada",
+        "Castillo de Malmö: 4 EUR",
+        "Museo de Arte: 8 EUR",
+        "Playa de Ribersborg: gratis"
+      ],
+      "donde_comer": "Comida escandinava moderna. Zona Möllevångstorget (mercado multicultural) con restaurantes baratos (7-12 EUR). Restaurantes de pescado en el puerto: 15-25 EUR.",
+      "consejo_local": "Malmö es mucho más progre y alternativa que otras ciudades suecas. Möllevångstorget es donde está la vida real (mercado, restaurantes étnicos, tiendas vintage). Es perfecta para una excursión de un día desde Copenhague.",
+      "plan_b_lluvia": "Museos, Torso Turning (también visible de cerca), cafés en Möllevångstorget.",
+      "keywords": [
+        "Malmo",
+        "Västra Hamnen",
+        "Torso",
+        "Möllevångstorget",
+        "Ribersborg",
+        "Scania"
+      ]
+    },
+    {
+      "id": "uppsala",
+      "nombre": "Uppsala",
+      "tipo": "ciudad",
+      "region": "Uppland, centro",
+      "descripcion": "Universidad más antigua de Escandinavia (1477) con ambiente estudiantil vibrante y patrimonio histórico vikingo. Paseo tranquilo en el río Fyris, tumuli antiguos y vida nocturna asequible. Escapada perfecta desde Estocolmo.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a septiembre",
+      "como_llegar": "Desde Estocolmo: tren regional 45 min (8-12 EUR). Auto o bicicleta.",
+      "donde_dormir": {
+        "mochilero": "Albergue cerca de universidad: 20-28 EUR/noche",
+        "medio": "Hotel 3* centro: 55-75 EUR/noche",
+        "comfort": "Hotel 4* junto al río: 90-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Catedral de Uppsala (gótica, mayor de Escandinavia): gratis",
+        "Tumuli (tumbas vikingas Gamla Uppsala): gratis",
+        "Museo Gustavianum: 8 EUR",
+        "Paseo en bicicleta por río Fyris: gratis",
+        "Cervecería Norrlands (local): degustación 5 EUR"
+      ],
+      "donde_comer": "Comida universitaria barata en comedores (10-12 EUR). Restaurantes en calle Storgatan. Carne de reno, arenque marinado. Pizzerías económicas (8 EUR).",
+      "consejo_local": "La vida noctuna es muy buena y barata comparada con Estocolmo. Alquila bicicleta (5 EUR/día) para moverte. Los estudiantes dominan la ciudad, especialmente viernes y sábados.",
+      "plan_b_lluvia": "Museos, catedral, cafés en Storgatan.",
+      "keywords": [
+        "Uppsala",
+        "Gamla Uppsala",
+        "Catedral",
+        "Universidad",
+        "Fyris",
+        "Vikingas",
+        "Gustavianum"
+      ]
+    },
+    {
+      "id": "parque-nacional-abisko",
+      "nombre": "Parque Nacional Abisko",
+      "tipo": "naturaleza",
+      "region": "Norrbotten, norte (Laponia)",
+      "descripcion": "Montañas árticas, senderismo de alta calidad y auroras boreales en invierno. Uno de los mejores lugares de Suecia para trekking y observación de fenómenos naturales. Acceso desde Kiruna o Abisko Östra.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a agosto (senderismo), septiembre a marzo (auroras)",
+      "como_llegar": "Desde Estocolmo: vuelo a Kiruna (3h, 60-120 EUR), luego tren o autobús a Abisko (2h, 20 EUR). O tren directo desde Estocolmo (18h, 80-150 EUR).",
+      "donde_dormir": {
+        "mochilero": "Abisko Östra Hostel o camping alpino: 25-35 EUR/noche",
+        "medio": "Abisko Tourist Station (refugio confortable): 80-100 EUR/noche",
+        "comfort": "Hotel en Kiruna (más caro): 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo Kungsleden (paso Abisko): 100 km en varios días o tramos cortos (gratis)",
+        "Paseo a Abisko Canyon: gratis, 5 km",
+        "Lago Torneträsk: pesca (permiso), baño glacial (gratis)",
+        "Caza de auroras boreales (con guía): 80-120 EUR",
+        "Safari de renos (invierno): 120 EUR"
+      ],
+      "donde_comer": "Comida en Abisko Tourist Station o auto-catering (caro todo). Groceries en Kiruna. Comida típica ártica: carne de reno, pescado de agua fría.",
+      "consejo_local": "Reserva alojamiento con anticipación. Trae repelente de mosquitos en verano (plaga). Las auroras no son garantía en invierno, pero Abisko tiene menos nubes que otros lugares de Laponia. Kungsleden es famosa pero abarrotada en agosto.",
+      "plan_b_lluvia": "Senderismo corto cubierto, refugios con vistas, café en Tourist Station.",
+      "keywords": [
+        "Abisko",
+        "Laponia",
+        "Kungsleden",
+        "Auroras",
+        "Montañas",
+        "Trekking",
+        "Kiruna",
+        "Ártico"
+      ]
+    },
+    {
+      "id": "isla-gotland",
+      "nombre": "Isla de Gotland",
+      "tipo": "isla",
+      "region": "Gotland, centro-este",
+      "descripcion": "Isla medieval con ciudades de cuento (Visby), playas de arena, gastronomía local de cordero y quesos. Atmósfera más relajada que Estocolmo con patrimonio vikingo y clima templado. Un imprescindible del Báltico.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Desde Estocolmo: ferry desde Nynäshamn (3-4h, 30-50 EUR) o vuelo a Visby (1h, 50-100 EUR).",
+      "donde_dormir": {
+        "mochilero": "Albergue en Visby: 24-32 EUR/noche",
+        "medio": "Casa rural en pueblos: 60-80 EUR/noche",
+        "comfort": "Hotel 4* en Visby: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Visby Ciudad Vieja (muralla medieval): gratis",
+        "Ruinas de iglesias románicas (40+): gratis",
+        "Playas de Fårösund o Sudersand: gratis",
+        "Faro de Fårö (norte): gratis",
+        "Mercado agrícola en Visby: gratis"
+      ],
+      "donde_comer": "Cordero de Gotland (specialidad), quesos locales, pescado. Restaurantes en Visby centro (caro: 15-25 EUR). Mercados y supermercados más económicos (8-12 EUR).",
+      "consejo_local": "Alquila coche o bicicleta (40 EUR/día coche, 8 EUR bicicleta) para explorar la isla. Visby es bonita pero turística; mejor dormir en pueblos. El cordero de Gotland es caro pero vale la pena probar.",
+      "plan_b_lluvia": "Museos en Visby, ruinas cubiertas, paseos cortos.",
+      "keywords": [
+        "Gotland",
+        "Visby",
+        "Isla",
+        "Gotlands",
+        "Fårö",
+        "Románicas",
+        "Cordero",
+        "Báltico"
+      ]
+    },
+    {
+      "id": "estocolmo-archiepielago",
+      "nombre": "Archipiélago de Estocolmo",
+      "tipo": "naturaleza",
+      "region": "Uppland, este (desde Estocolmo)",
+      "descripcion": "30,000 islas y islotes en el Báltico, accesibles en ferry desde Estocolmo. Senderismo, baño, cabaña roja típica, y ausencia de masificación. Una de las experiencias nórdicas más auténticas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Ferry desde Estocolmo puerto: Waxholmsbolaget opera servicios (10-20 EUR por tramo). Isla de Vaxholm: 30 min. Isla de Grinda: 1h.",
+      "donde_dormir": {
+        "mochilero": "Camping en islas (Grinda, Finnhamn): 20-25 EUR/noche",
+        "medio": "Cabaña roja alquilada: 70-100 EUR/noche",
+        "comfort": "Resort en Vaxholm: 110-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Ferry scenic por archipiélago: 15-20 EUR",
+        "Senderismo en Grinda o Finnhamn: gratis",
+        "Baño en rocas: gratis",
+        "Sauna tradicional: 8-12 EUR",
+        "Cena con vistas (reserva): 25-40 EUR"
+      ],
+      "donde_comer": "Comida picnic (cómprala en Estocolmo). Restaurantes en islas (caro, 18-30 EUR). Cabaña roja típica sirve comida sencilla.",
+      "consejo_local": "Trae comida y agua desde Estocolmo. Las cabañas rojas (stugor) alquilables son la mejor experiencia. Viaja fuera de agosto si quieres evitar multitudes.",
+      "plan_b_lluvia": "Ferry largo desde interior de cabina, sauna, juegos de mesa.",
+      "keywords": [
+        "Archipiélago",
+        "Vaxholm",
+        "Grinda",
+        "Finnhamn",
+        "Ferry",
+        "Cabaña roja",
+        "Báltico",
+        "Islas"
+      ]
+    },
+    {
+      "id": "jokkmokk",
+      "nombre": "Jokkmokk",
+      "tipo": "rural",
+      "region": "Norrbotten, norte (Laponia)",
+      "descripcion": "Pueblo sami (indígena) en Laponia con mercado tradicional (febrero), cultura ártica y proximidad a naturaleza virgen. Más accesible que Abisko y con atmósfera auténtica de pueblo. Centro cultural importante.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "febrero (mercado sami), junio a agosto",
+      "como_llegar": "Desde Kiruna: autobús 3h (25-35 EUR). Desde Estocolmo: vuelo a Kiruna + conexión (5-6h total, 80-150 EUR).",
+      "donde_dormir": {
+        "mochilero": "Camping Jokkmokk: 20-26 EUR/noche",
+        "medio": "Hotel Aktuell o Ailo: 70-90 EUR/noche",
+        "comfort": "Lodge de lujo cercano: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Mercado Sami tradicional (febrero): entrada gratis, compras 10-50 EUR",
+        "Museo Ájtte (cultura sami): 10 EUR",
+        "Senderismo cerca (sin dificultad): gratis",
+        "Safari de renos con pastores sami (invierno): 100-150 EUR",
+        "Paseo en trineo de perros (invierno): 120 EUR"
+      ],
+      "donde_comer": "Comida sami: reno, pescado ártico. Restaurante local simple (10-15 EUR). Tienda de comestibles cara.",
+      "consejo_local": "El mercado sami en febrero es experiencia única pero muy concurrida. En verano es más tranquilo y auténtico. Los sami son amables pero reservados; respeta su cultura.",
+      "plan_b_lluvia": "Museo Ájtte, cafés, compras en mercadillo.",
+      "keywords": [
+        "Jokkmokk",
+        "Laponia",
+        "Sami",
+        "Mercado",
+        "Cultura indígena",
+        "Reno",
+        "Ártico"
+      ]
+    },
+    {
+      "id": "lago-siljan",
+      "nombre": "Región del Lago Siljan",
+      "tipo": "naturaleza",
+      "region": "Dalarna, centro",
+      "descripcion": "Región pintoresca de lagos, pueblos de madera roja y tradiciones folclóricas suecas. Combine senderismo, cabaña roja alquilada y gastronomía local. Menos masificado que Laponia, más accesible y auténtico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a septiembre",
+      "como_llegar": "Desde Estocolmo: tren a Falun o Borlänge (3h, 30-60 EUR), luego autobús o coche a pueblos alrededor de Siljan.",
+      "donde_dormir": {
+        "mochilero": "Camping alrededor del lago: 18-24 EUR/noche",
+        "medio": "Cabaña roja alquilada: 60-85 EUR/noche",
+        "comfort": "Resort o hotel rural: 100-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo alrededor de Siljan: gratis",
+        "Pueblo de Rättvik (balneario histórico): paseo gratis",
+        "Pueblo de Tällberg (arquitectura tradicional): gratis",
+        "Bicicleta alrededor del lago (60 km): gratis (alquiler 8 EUR/día)",
+        "Sauna en cabaña roja: 8-12 EUR"
+      ],
+      "donde_comer": "Comida sueca tradicional: arenque marinado, pan de centeno, quesos. Restaurante en pueblos (12-20 EUR). Pícnic desde tiendas (8-12 EUR).",
+      "consejo_local": "Alquila cabaña roja (stugor) si puedes; es la experiencia más auténtica. Los pueblos tienen encanto pero son pequeños. Lleva bicicleta alquilada para explorar.",
+      "plan_b_lluvia": "Paseos cortos, cabañas cozy, sauna.",
+      "keywords": [
+        "Siljan",
+        "Rättvik",
+        "Tällberg",
+        "Dalarna",
+        "Lago",
+        "Cabaña roja",
+        "Folclore",
+        "Suecia central"
+      ]
+    },
+    {
+      "id": "costa-oeste-bohuslän",
+      "nombre": "Costa Oeste (Bohuslän)",
+      "tipo": "playa",
+      "region": "Västra Götaland, oeste",
+      "descripcion": "Costa rocosa con pueblos pesqueros auténticos, comida de mariscos excelente y paisaje de fiordo. Menos arenosa que otras playas europeas pero mucho más característica y asequible que Noruega.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio a agosto",
+      "como_llegar": "Desde Gotemburgo: tren a Strömstad (2h, 20-35 EUR) o conducir costa arriba. Pueblos como Tjörn, Orust más accesibles en coche.",
+      "donde_dormir": {
+        "mochilero": "Camping en pueblos costeros: 20-28 EUR/noche",
+        "medio": "Cabaña o pequeño hotel: 70-95 EUR/noche",
+        "comfort": "Resort costero: 110-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por puerto de Strömstad: gratis",
+        "Baño en rocas (badplatser públicos): gratis",
+        "Senderismo costero GTA (sendero): gratis",
+        "Tour de granjas de ostras: 15-25 EUR",
+        "Kayak o vela: 30-50 EUR"
+      ],
+      "donde_comer": "Gambas frescas, ostras, cangrejo, arenque. Restaurantes portuarios (18-28 EUR). Kioscos de comida rápida costera (8-12 EUR). Compra directamente de pescadores.",
+      "consejo_local": "Los pueblos más auténticos no están en guías: pregunta en Gotemburgo dónde comer gambas frescas. El agua está fría pero nadable en julio-agosto. Las ostras suecas compiten con las francesas.",
+      "plan_b_lluvia": "Cafés portuarios, compra de comida local, museos pequeños.",
+      "keywords": [
+        "Bohuslän",
+        "Strömstad",
+        "Costa oeste",
+        "Fiordos",
+        "Mariscos",
+        "Rocas",
+        "Pueblos pesqueros",
+        "Västra Götaland"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,343 @@
+{
+  "pais": "Vaticano",
+  "codigo": "va",
+  "destinos": [
+    {
+      "id": "ciudad-del-vaticano",
+      "nombre": "Ciudad del Vaticano (Centro Histórico)",
+      "tipo": "histórico",
+      "region": "Centro del Vaticano",
+      "descripcion": "El corazón espiritual del catolicismo mundial, con la Basílica de San Pedro, museos vaticanos y la Capilla Sixtina. Es el estado más pequeño del mundo pero concentra patrimonio artístico de importancia global. Imprescindible para entender el arte renacentista y la historia religiosa europea.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Entrada desde Roma (Italia). Metro línea A hasta Ottaviano (15 min desde centro). Libre acceso a la Ciudad del Vaticano una vez dentro del perímetro.",
+      "donde_dormir": {
+        "mochilero": "Albergue en Roma, zona Prati o Testaccio: 20-35 EUR/noche",
+        "medio": "Hotel 3* en Roma cerca de Vaticano: 60-100 EUR/noche",
+        "comfort": "Hotel 4-5* Roma, vista a cúpula: 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Basílica de San Pedro - entrada gratis, subida a cúpula 18 EUR",
+        "Museos Vaticanos y Capilla Sixtina - 17 EUR (o incluido en entrada combinada 33 EUR)",
+        "Castillo de Sant'Angelo y Puente Sant'Angelo - 15 EUR, vistas del Tíber",
+        "Cementerio Monumental Vaticano - 13 EUR con reserva previa",
+        "Plaza San Pedro al atardecer - gratis"
+      ],
+      "donde_comer": "Pizza al taglio y pasta en barrio Prati (8-12 EUR). Restaurantes italianos auténticos en Borgo Pio (15-25 EUR plato). Evitar establecimientos pegados a museos.",
+      "consejo_local": "Entra a Museos Vaticanos a última hora (14:00-16:00) para evitar colas. Domingo entrada gratis a museos (último domingo de mes) pero extremadamente lleno. Lleva zapatos cómodos: el suelo es de mármol pulido y resbaladizo.",
+      "plan_b_lluvia": "Todos los espacios principales son interiores. Los museos son ideales para días lluviosos. La Basílica tiene techo.",
+      "keywords": [
+        "Vaticano",
+        "Vatican",
+        "San Pedro",
+        "Saint Peter",
+        "Capilla Sixtina",
+        "Sistine Chapel",
+        "Museos Vaticanos",
+        "Vatican Museums",
+        "Prati",
+        "Borgo"
+      ]
+    },
+    {
+      "id": "museos-vaticanos",
+      "nombre": "Museos Vaticanos",
+      "tipo": "histórico",
+      "region": "Ala norte de la Ciudad del Vaticano",
+      "descripcion": "Conjunto de 54 museos con una de las colecciones de arte más valiosas del mundo. Comprende pinacoteca, escultura clásica, arte moderno y una ruta que culmina en la Capilla Sixtina. Recorrido cronológico que abarca desde el antiguo Egipto hasta el siglo XX.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre-marzo (menos turismo)",
+      "como_llegar": "Metro A, parada Ottaviano (5 min a pie). Entrada por Viale Vaticano, calle 4.",
+      "donde_dormir": {
+        "mochilero": "Hostales Roma Prati: 18-30 EUR/noche",
+        "medio": "Hotel 3* Roma zona museos: 50-80 EUR/noche",
+        "comfort": "Hotel boutique Prati: 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Galería de los Mapas - entrada incluida",
+        "Apartamentos de Rafael - 17 EUR entrada museos",
+        "Pinacoteca Vaticana (obras maestras 400-1700) - incluido",
+        "Escultura clásica greco-romana - incluido",
+        "Capilla Sixtina (techo de Miguel Ángel) - incluido en entrada museos"
+      ],
+      "donde_comer": "Cafetería dentro museos (cara: 12-18 EUR). Mejor comer antes o después en Prati.",
+      "consejo_local": "La entrada incluida en ticket NO permite fotos en Capilla Sixtina (vigilancia estricta). El recorrido es largo (4-6 horas): no intentes todo en un día si no te interesa arte medieval temprano. Hay ascensor para la cúpula de San Pedro (7 EUR más cómodo que escaleras).",
+      "plan_b_lluvia": "Perfecto para lluvia. Clima interior controlado.",
+      "keywords": [
+        "Musei Vaticani",
+        "Vatican Museums",
+        "Capilla Sixtina",
+        "Sistine Chapel",
+        "Miguel Angel",
+        "Michelangelo",
+        "Rafael",
+        "Raphael",
+        "pinacoteca"
+      ]
+    },
+    {
+      "id": "basilica-san-pedro",
+      "nombre": "Basílica de San Pedro",
+      "tipo": "histórico",
+      "region": "Plaza San Pedro, centro Vaticano",
+      "descripcion": "Mayor iglesia católica del mundo y obra maestra del Renacimiento (construcción 1506-1626). Diseñada por Bramante, Rafael y Bernini, contiene la tumba de San Pedro y alberga arte monumental. La cúpula de Miguel Ángel domina el perfil de Roma.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Metro A Ottaviano (7 min a pie) o Cipro (10 min a pie). Acceso libre a la basílica.",
+      "donde_dormir": {
+        "mochilero": "Hostales cercanos Prati: 22-35 EUR/noche",
+        "medio": "Hotel 2-3* Vaticano: 45-75 EUR/noche",
+        "comfort": "Hotel 4* con vistas cúpula: 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Entrada a la Basílica - gratis",
+        "Subida a la cúpula a pie (551 escalones) - 8 EUR o ascensor+escaleras - 13 EUR",
+        "Catacumbas bajo la basílica (Necropolis Vaticana) - 13 EUR con reserva guiada",
+        "Plaza San Pedro at sunset - gratis, ver bendición papal (miércoles 10:30)",
+        "Baldaquino de Bernini y confesión de San Pedro - incluido entrada"
+      ],
+      "donde_comer": "No hay comida dentro. Pizza y café en Piazza San Pietro (10-15 EUR). Restaurantes Borgo Pio (12-20 EUR).",
+      "consejo_local": "Las colas comienzan desde las 7:00 AM. Entra antes de las 8:30 o después de las 16:00. Si subes a la cúpula, hazlo primero (cansador al final del día). El código de vestimenta es estricto: cubrir hombros, rodillas y no usar pantalones cortos.",
+      "plan_b_lluvia": "Interior completamente cubierto. Perfecto para lluvia, aunque wet floors peligrosos.",
+      "keywords": [
+        "St. Peter's Basilica",
+        "Basilica di San Pietro",
+        "cúpula",
+        "dome",
+        "Bernini",
+        "Miguel Angel",
+        "plaza San Pedro"
+      ]
+    },
+    {
+      "id": "necropolis-vaticana",
+      "nombre": "Necrópolis Vaticana",
+      "tipo": "histórico",
+      "region": "Bajo la Basílica de San Pedro",
+      "descripcion": "Cementerio subterráneo del siglo I d.C. con tumbas paleocristianas y la presunta tumba de San Pedro. Acceso restringido a grupos con guía. Ofrece una perspectiva arqueológica única sobre los primeros cristianos en Roma.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Entrada por Basílica de San Pedro. Requiere reserva previa en vaticantourism.com",
+      "donde_dormir": {
+        "mochilero": "Hostales Roma Prati: 20-35 EUR/noche",
+        "medio": "Hotel 3* centro: 55-90 EUR/noche",
+        "comfort": "Hotel 4* Vaticano: 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita guiada Necrópolis (inglés/italiano) - 13 EUR, 1.5 horas",
+        "Observar mosaicos paleocristianos - incluido",
+        "Fotografiar tumbas de Papas posteriores - parcialmente permitido",
+        "Subir después a cúpula San Pedro - combinable"
+      ],
+      "donde_comer": "No hay opciones bajo tierra. Comer antes o después en Prati.",
+      "consejo_local": "Las visitas son en grupos pequeños (máx 12-15 personas) y guiadas. No es libre. Reserva con 2 semanas de anticipación en temporada alta. El guía habla rápido: solicita guía en español o pide itinerario impreso.",
+      "plan_b_lluvia": "Completamente subterráneo, no afecta lluvia.",
+      "keywords": [
+        "Necropolis",
+        "Necrópolis",
+        "catacumbas",
+        "catacombs",
+        "San Pedro",
+        "tumba",
+        "arqueologia",
+        "papal tombs"
+      ]
+    },
+    {
+      "id": "capilla-sixtina",
+      "nombre": "Capilla Sixtina",
+      "tipo": "histórico",
+      "region": "Ala este museos Vaticanos",
+      "descripcion": "Capilla privada papal construida 1477-1480, decorada por Miguel Ángel (techo 1508-1512 y Juicio Final 1536-1541). Una de las obras maestras del arte occidental. El techo representa escenas del Génesis con la icónica 'Creación de Adán'.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año, evitar mediodía",
+      "como_llegar": "Dentro de Museos Vaticanos. Metro A Ottaviano. Entrada museos 17 EUR (incluye Capilla).",
+      "donde_dormir": {
+        "mochilero": "Prati hostales: 18-30 EUR/noche",
+        "medio": "Hotel 3* Vaticano: 50-85 EUR/noche",
+        "comfort": "Hotel 4-5* Roma: 150-280 EUR/noche"
+      },
+      "que_hacer": [
+        "Contemplar techo Miguel Ángel - incluido entrada",
+        "Observar Juicio Final (pared) - 17 EUR",
+        "Frescos lunetos (Botticelli, Perugino) - incluido",
+        "Suelo intarsia de mármol - gratis"
+      ],
+      "donde_comer": "Cafetería museos (cara). Pizza en Prati después.",
+      "consejo_local": "NO se permite fotografía (vigilancia con multas 500 EUR). La capilla requiere silencio absoluto. Lleva binoculares para ver detalles del techo. El aire es húmedo y caliente por las masas de gente: ve con ropa ligera.",
+      "plan_b_lluvia": "Interior. Ideal lluvia.",
+      "keywords": [
+        "Sistine Chapel",
+        "Miguel Angel",
+        "techo",
+        "ceiling",
+        "Juicio Final",
+        "Last Judgment",
+        "Creacion Adan",
+        "frescos"
+      ]
+    },
+    {
+      "id": "plaza-san-pedro",
+      "nombre": "Plaza San Pedro",
+      "tipo": "histórico",
+      "region": "Frente a Basílica San Pedro",
+      "descripcion": "Monumental plaza elíptica diseñada por Bernini (1629-1667) con columnata de 284 columnas y obelisco egipcio central. Espacio de reunión papal y símbolo de la catolicidad mundial. Escenario de canonizaciones, jubileos y eventos religiosos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año, atardecer mejor",
+      "como_llegar": "Metro A Ottaviano. Libre acceso.",
+      "donde_dormir": {
+        "mochilero": "Hostales Prati: 20-35 EUR/noche",
+        "medio": "Hotel 3* Vaticano: 55-90 EUR/noche",
+        "comfort": "Hotel 4* con balcón plaza: 180-300 EUR/noche"
+      },
+      "que_hacer": [
+        "Observar obelisco y fuentes - gratis",
+        "Bendición papal (miércoles 10:30, domingo 12:00) - gratis",
+        "Subir escalinatas para vista completa - gratis",
+        "Fotografía al atardecer - gratis",
+        "Sentarse en columnata al atardecer - gratis"
+      ],
+      "donde_comer": "Terrazas alrededor Plaza (15-25 EUR, caro). Mejor ir a Prati o Borgo.",
+      "consejo_local": "Llega temprano para bendición papal si quieres un lugar cercano (sin control de seguridad en zonas lejanas). El acústica es impresionante: Bernini diseñó columnata para que voz papal se escuche en toda la plaza. Al atardecer, la luz sobre la cúpula es perfecta para fotos.",
+      "plan_b_lluvia": "A cielo abierto. lluvia cancela eventos. Mejor evitar.",
+      "keywords": [
+        "St. Peter's Square",
+        "Plaza San Pietro",
+        "Piazza San Pietro",
+        "obelisco",
+        "obelisk",
+        "columnata",
+        "Bernini",
+        "bendicion papal"
+      ]
+    },
+    {
+      "id": "apartamentos-rafael",
+      "nombre": "Apartamentos de Rafael",
+      "tipo": "histórico",
+      "region": "Museos Vaticanos, ala oeste",
+      "descripcion": "Suite de 4 habitaciones decoradas por Rafael y su taller (1508-1520) con frescos sobre temas clásicos y religiosos. Residencia papal original antes de la construcción del palacio actual. Ejemplo de Renacimiento en su apogeo.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Dentro Museos Vaticanos. Entrada museos 17 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales Prati: 18-30 EUR/noche",
+        "medio": "Hotel 3* Vaticano: 50-80 EUR/noche",
+        "comfort": "Hotel 4* Roma: 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Sala de la Signatura (Escuela de Atenas, Disputa) - incluido",
+        "Sala de Constantino (frescos históricos) - incluido",
+        "Sala del Incendio del Borgo - incluido",
+        "Detalle de decoraciones grotescas - incluido"
+      ],
+      "donde_comer": "Cafetería museos o después en Prati.",
+      "consejo_local": "Muchos visitantes se saltan estos apartamentos por ir directo a Capilla Sixtina. Error: La Escuela de Atenas es tan importante como el techo de Miguel Ángel. El flujo es menos caótico aquí. Lleva binoculares para frescos del techo.",
+      "plan_b_lluvia": "Interior. Ideal.",
+      "keywords": [
+        "Raphael Rooms",
+        "Stanze di Raffaello",
+        "Escuela de Atenas",
+        "School of Athens",
+        "Rafael",
+        "Raphael",
+        "frescos renacimiento"
+      ]
+    },
+    {
+      "id": "torre-campanario-vaticano",
+      "nombre": "Torre del Campanario Vaticano",
+      "tipo": "histórico",
+      "region": "Esquina noroeste Basílica San Pedro",
+      "descripcion": "Torre de ladrillo del siglo XVI construida por Donato Bramante. Alberga las campanas vaticanas más históricas, incluida la Campana Grande del siglo XVI. Acceso limitado pero ofrece vistas únicas de la Ciudad del Vaticano.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Entrada desde Basílica. Acceso restringido a visitas guiadas (previa reserva).",
+      "donde_dormir": {
+        "mochilero": "Hostales Prati: 20-35 EUR/noche",
+        "medio": "Hotel 3* Vaticano: 55-90 EUR/noche",
+        "comfort": "Hotel 4* Roma: 140-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita guiada a campanario - 10 EUR (raro disponible)",
+        "Observar campanas históricas - incluido",
+        "Vista interior de la cúpula - desde campanario"
+      ],
+      "donde_comer": "No hay. Comer antes o después en Prati.",
+      "consejo_local": "Las visitas al campanario son EXTREMADAMENTE raras y suelen estar cerradas. Generalmente solo abierto para grupos grandes reservados meses antes. Intenta averiguar en info Vaticano si es posible en tu fecha. No confundir con ascenso a cúpula (que sí es abierto al público).",
+      "plan_b_lluvia": "Interior.",
+      "keywords": [
+        "campanario",
+        "bell tower",
+        "campane",
+        "bells",
+        "Bramante",
+        "torre vaticana"
+      ]
+    },
+    {
+      "id": "biblioteca-vaticana",
+      "nombre": "Biblioteca Apostólica Vaticana",
+      "tipo": "histórico",
+      "region": "Palacio Apostólico, noreste",
+      "descripcion": "Una de las bibliotecas más antiguas y valiosas del mundo (fundada 1446) con manuscritos medievales, incunables y documentos papales únicos. Colecciones restringidas pero con exposiciones periódicas accesibles. Custodian textos que son patrimonio de la humanidad.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Entrada por Museos Vaticanos. Exposiciones temporales abiertas al público.",
+      "donde_dormir": {
+        "mochilero": "Hostales Prati: 18-30 EUR/noche",
+        "medio": "Hotel 3* Vaticano: 50-85 EUR/noche",
+        "comfort": "Hotel 4* Roma: 150-230 EUR/noche"
+      },
+      "que_hacer": [
+        "Exposiciones temporales biblioteca - incluido entrada museos",
+        "Ver manuscritos medievales (rotación) - incluido",
+        "Lectura de carteles informativos sobre colecciones - gratis"
+      ],
+      "donde_comer": "Cafetería museos o Prati después.",
+      "consejo_local": "La biblioteca como tal NO es accesible al público general (es de investigación). Solo se pueden ver exposiciones temporales de manuscritos en las salas de museos. Para acceso real, debes ser investigador acreditado. Las exposiciones cambian 2-3 veces al año.",
+      "plan_b_lluvia": "Interior. Ideal.",
+      "keywords": [
+        "Biblioteca Apostolica",
+        "Apostolic Library",
+        "manuscritos",
+        "manuscripts",
+        "incunables",
+        "documentos papales"
+      ]
+    },
+    {
+      "id": "galeria-mapas-vaticana",
+      "nombre": "Galería de los Mapas",
+      "tipo": "histórico",
+      "region": "Museos Vaticanos, ala norte",
+      "descripcion": "Corredor de 120 metros con 40 mapas monumentales de Italia y territorios papales (1580-1585), pintados por Ignazio Danti. Representa el conocimiento geográfico del Renacimiento tardío. Arquitectura y mapas antiguos de extraordinario valor.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "todo el año",
+      "como_llegar": "Dentro Museos Vaticanos. Entrada 17 EUR.",
+      "donde_dormir": {
+        "mochilero": "Hostales Prati: 18-30 EUR/noche",
+        "medio": "Hotel 3* Vaticano: 50-80 EUR/noche",
+        "comfort": "Hotel 4* Roma: 140-220 EUR/noche"
+      },
+      "que_hacer": [
+        "Recorrer galería completa - incluido",
+        "Estudiar mapas de regiones italianas antiguas - gratis",
+        "Fotografía de bóveda decorada - permitido",
+        "Comparar con mapas modernos (mentalmente) - gratis"
+      ],
+      "donde_comer": "Cafetería museos o después en Prati.",
+      "consejo_local": "Esta galería es una joya ignorada por la mayoría. El flujo de turistas es menor que en otras secciones. La bóveda pintada es tan impresionante como los mapas. Ideal si te interesa historia cartográfica o geografía renacentista.",
+      "plan_b_lluvia": "Interior. Perfecto.",
+      "keywords": [
+        "Gallery of Maps",
+        "Galeria delle Carte Geografiche",
+        "mapas antiguos",
+        "cartografia",
+        "Danti",
+        "geografía renacentista"
+      ]
+    }
+  ]
+}

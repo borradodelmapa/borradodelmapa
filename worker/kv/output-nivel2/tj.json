@@ -1,0 +1,337 @@
+{
+  "pais": "Tayikistán",
+  "codigo": "tj",
+  "destinos": [
+    {
+      "id": "dushanbe",
+      "nombre": "Dushanbe",
+      "tipo": "ciudad",
+      "region": "Valle de Hisar, centro",
+      "descripcion": "Capital y mayor ciudad de Tayikistán, con bazares tradicionales, museos soviéticos y arquitectura de época. Punto de entrada obligatorio para la mayoría de viajeros. Centro cultural y administrativo donde acclimatarse antes de rutas de montaña.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Vuelo internacional a aeropuerto Khujand o Dushanbe desde Asia Central; desde Dushanbe centro en taxi/autobús local",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en barrio Somoni: 10-15 EUR/noche",
+        "medio": "Hoteles 3* en centro: 25-40 EUR/noche",
+        "comfort": "Hoteles 4*+ (Hyatt, Serena): 60-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Bazar Bazaar (mercado tradicional) - gratis",
+        "Museo Nacional de Tayikistán (historia soviética y preislámica) - 2 EUR",
+        "Parque Rudaki y Plaza de la Nación - gratis",
+        "Palacio de Naciones (arquitectura monumental) - exterior gratis",
+        "Sinagoga y Mezquita Haji Yakoob - gratis"
+      ],
+      "donde_comer": "Quorutob (plato de pan frito con yogur), plov, shashlik. Bazares en Somoni 5-8 EUR. Restaurantes locales 8-15 EUR. Zona mercado histórico para comida callejera.",
+      "consejo_local": "Los mercados cierran temprano (17h). Los viernes son lentos; ve miércoles. El agua del grifo no es potable pero los hospedajes tienen garrafas. Lleva efectivo (somoni tayiko), pocas tarjetas aceptadas.",
+      "plan_b_lluvia": "Museo Nacional, bazares techados, paseos por parques cubiertos de árboles",
+      "keywords": [
+        "Dushanbe",
+        "capital",
+        "Somoni",
+        "bazaar",
+        "Rudaki",
+        "Naciones"
+      ]
+    },
+    {
+      "id": "panj-river",
+      "nombre": "Río Panj y Corredor del Wakhan",
+      "tipo": "naturaleza",
+      "region": "Pamir oriental, frontera con Afganistán",
+      "descripcion": "Cañón espectacular que forma la frontera con Afganistán, con senderismo de altura y vistas de pueblos afganos. Ruta clásica para trekking independiente con alojamiento en jramoques (casas de huéspedes). Experiencia cruda de montaña remota.",
+      "dias_recomendados": 7,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Dushanbe a Khorog en bus (36h, 15-20 EUR). Luego trekking desde Khorog hacia Ishkashim o Vrang. Requiere permiso de zona fronteriza (4-7 días para obtener).",
+      "donde_dormir": {
+        "mochilero": "Jramoques (casas familiares): 5-10 EUR/noche",
+        "medio": "Guesthouses en Khorog: 15-25 EUR/noche",
+        "comfort": "No hay; acampar o jramoques mejorados 20-30 EUR"
+      },
+      "que_hacer": [
+        "Trekking Khorog-Ishkashim (4 días) - gratis",
+        "Baños termales Bibi Fatima cerca Vrang - gratis",
+        "Vistas del Panj desde senderos elevados - gratis",
+        "Visita pueblos afghanos desde orilla (fotografía) - gratis",
+        "Paseo a Vrang (pueblo comercial histórico) - gratis"
+      ],
+      "donde_comer": "Pan casero, dahl, té negro. Comidas en jramoques 3-5 EUR. Tiendas en Khorog para provisiones. Lleva snacks desde Dushanbe.",
+      "consejo_local": "El permiso de zona fronteriza es obligatorio; tramítalo en Dushanbe (OVIR). La ruta es mejor junio-agosto. Lleva agua, protección solar extrema. Los pueblos afganos son seguros desde la orilla tailandesa. Aclimatación importante: dormir bajo en Khorog primero.",
+      "plan_b_lluvia": "Khorog tiene museos locales (gratis) y bazares. Mala época para trekking; quedarse en pueblos.",
+      "keywords": [
+        "Panj",
+        "Wakhan",
+        "Khorog",
+        "Ishkashim",
+        "Vrang",
+        "frontera Afganistan",
+        "Pamir"
+      ]
+    },
+    {
+      "id": "pik-lenin-base",
+      "nombre": "Pico Lenin (Base de Campo)",
+      "tipo": "montaña",
+      "region": "Pamir septentrional, Osh",
+      "descripcion": "Segunda montaña más alta del mundo (7.134m), accesible para escaladores con experiencia media. Campo base a 4.100m es objetivo realista para trekking sin técnica. Paisaje lunar de glaciares y picos nevados.",
+      "dias_recomendados": 10,
+      "mejor_epoca": "julio-agosto",
+      "como_llegar": "Desde Dushanbe a Osh (vuelo 1h, 30-50 EUR). Osh a Sary Tash en 4x4 (5h, 50-80 EUR compartido). Campamento base está a 3 días de marcha desde Sary Tash.",
+      "donde_dormir": {
+        "mochilero": "Campamentos en ruta y base: 0 EUR (acampar propio) o jramoques 5-8 EUR",
+        "medio": "Lodge en Sary Tash: 20-30 EUR, campamento equipado en base 30-50 EUR",
+        "comfort": "Expediciones comerciales con tiendas: 80-150 EUR/noche (todo incluido)"
+      },
+      "que_hacer": [
+        "Trekking a campo base Lenin (4.100m) - gratis",
+        "Vistas de Picos Okün y Pamir desde base - gratis",
+        "Ascenso técnico a Pico Lenin (con guía) - 800-1200 EUR",
+        "Aclimatación en campamentos intermedios - gratis",
+        "Fotografía de glaciares y picos al atardecer - gratis"
+      ],
+      "donde_comer": "Dahl, pasta, arroz en campamentos. Provisiones en Sary Tash (básicas). Expediciones comerciales incluyen comidas. Lleva energía desde Dushanbe.",
+      "consejo_local": "Contratar guía de montaña en Osh (10-20 EUR/día) es crucial. El mal de altura es real; aclimatación lenta. Base de campo es caótica en julio-agosto con muchas expediciones. Mejor junio (menos gente) si aclimatación rápida. Llevar equipo de camping robusto.",
+      "plan_b_lluvia": "Mal tiempo cierra rutas. Quedarse en Sary Tash o Osh.",
+      "keywords": [
+        "Lenin",
+        "Pico Lenin",
+        "7134",
+        "Pamir",
+        "base camp",
+        "Sary Tash",
+        "Osh"
+      ]
+    },
+    {
+      "id": "khujand",
+      "nombre": "Khujand",
+      "tipo": "ciudad",
+      "region": "Valle de Fergana, norte",
+      "descripcion": "Ciudad histórica en valle fértil, segunda más importante de Tayikistán. Bazares vivos, fortaleza antigua y proximidad a Uzbekistán. Punto de entrada alternativo y base para explorar Valle de Fergana.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "Vuelo desde Dushanbe (1h, 40-60 EUR) o bus (8h, 10-15 EUR). Taxis desde aeropuerto 3-5 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en centro: 12-18 EUR/noche",
+        "medio": "Hoteles 3* (Khovar, Shodmon): 25-35 EUR/noche",
+        "comfort": "Hotel Khujand Palace: 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Fortaleza de Khujand (murallas antiguas) - 1 EUR",
+        "Bazar Panjshanbe (mercado principal) - gratis",
+        "Museo de la Historia Local - 1.50 EUR",
+        "Paseo por Río Syr Darya - gratis",
+        "Mezquita Behbudiy (arquitectura moderna) - gratis"
+      ],
+      "donde_comer": "Plov khujandi (con comino), manti, samsa. Bazares 3-6 EUR. Restaurantes 8-15 EUR. Zona mercado para auténtico.",
+      "consejo_local": "Khujand es más acogedor y menos abrumador que Dushanbe para llegar. Cruces a Uzbekistán (Fergana) son posibles pero requieren visa. El bazar es intenso; ve temprano (7-9h).",
+      "plan_b_lluvia": "Museo local, bazares techados, paseos cubiertos",
+      "keywords": [
+        "Khujand",
+        "Khodjand",
+        "Fergana",
+        "fortaleza",
+        "bazar",
+        "norte"
+      ]
+    },
+    {
+      "id": "iskanderkul",
+      "nombre": "Lago Iskanderkul",
+      "tipo": "naturaleza",
+      "region": "Pamir occidental, Zeravshan",
+      "descripcion": "Lago alpino de montaña a 2.195m rodeado de picos nevados. Trekking accesible desde Penj (pueblo base) sin necesidad de técnica alpina. Agua turquesa y campamentos básicos en orilla. Experiencia de Pamir sin extremo técnico.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Dushanbe a Penj (3-4h en jeep compartido, 15-20 EUR). Penj tiene algunos hospedajes. Trekking desde Penj a lago (1-2 días según ruta).",
+      "donde_dormir": {
+        "mochilero": "Campamentos en orilla lago (tiendas básicas) o acampar: 5-8 EUR, libre",
+        "medio": "Guesthouses en Penj: 12-20 EUR/noche",
+        "comfort": "Lodge rústico en Penj: 25-35 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking a Iskanderkul desde Penj (1-2 días) - gratis",
+        "Baño en lago alpino - gratis",
+        "Vistas de Picos Korjenevskaia - gratis",
+        "Campamento al atardecer - gratis",
+        "Paseo corto a Cascada Murghab - gratis"
+      ],
+      "donde_comer": "Comidas en guesthouses Penj (dahl, pan, té): 3-5 EUR. Lleva provisiones de Dushanbe. Agua del lago es potable.",
+      "consejo_local": "Penj es punto de partida; aclímate allí un día. El lago se congela octubre-mayo. Lleva tienda o acuerda jramoques. El trekking es muy factible sin guía pero lleva mapa. Protección solar alta (3.000m+).",
+      "plan_b_lluvia": "Nubes frecuentes pero no impiden trekking. Mala visibilidad; quedarse en Penj.",
+      "keywords": [
+        "Iskanderkul",
+        "lago",
+        "Penj",
+        "alpino",
+        "Zeravshan",
+        "Pamir occidental"
+      ]
+    },
+    {
+      "id": "murghab",
+      "nombre": "Murghab",
+      "tipo": "rural",
+      "region": "Pamir oriental, Wakhan",
+      "descripcion": "Pueblo remoto de Pamir oriental a 3.640m, punto de paso en trekking del Taklamakán antiguo. Muy básico pero auténtico; acceso a nómadas kirguises y paisaje de altiplano desértico. Solo para aventureros robustos.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "julio-agosto",
+      "como_llegar": "Desde Khorog en 4x4 (12-14h, 40-60 EUR compartido en grupo). Ruta con altitud extrema y camino sin asfaltar.",
+      "donde_dormir": {
+        "mochilero": "Jramoques en pueblo: 5-8 EUR/noche",
+        "medio": "Guesthouse Murghab (básico): 10-15 EUR/noche",
+        "comfort": "No hay; acampar o jramoques"
+      },
+      "que_hacer": [
+        "Encuentros con nómadas kirguises - gratis",
+        "Trekking a campamentos kirguises (reqeuire guía) - 20-30 EUR/día",
+        "Vistas de Pamir desde pueblo - gratis",
+        "Compra de artesanía kirguís - variable",
+        "Observación de marmotas y fauna alpina - gratis"
+      ],
+      "donde_comer": "Té de mantequilla, dahl, pan. Pocas opciones; come en jraoques (2-4 EUR). Lleva energía desde Khorog.",
+      "consejo_local": "Murghab es extremadamente remoto y básico. Mal de altura severo. Solo ve si tienes aclimatación previa. Contrata guía en Khorog antes (crucial para seguridad y encuentros con kirguises). Junio-septiembre únicamente; resto año cerrado por nieve.",
+      "plan_b_lluvia": "Tormenta de nieve es posible julio-agosto. Estar preparado. Quedarse en jraoques.",
+      "keywords": [
+        "Murghab",
+        "Wakhan",
+        "kirguises",
+        "Pamir oriental",
+        "3640m",
+        "remoto"
+      ]
+    },
+    {
+      "id": "panj-trekking",
+      "nombre": "Trekking Panj River Trek (Ishkashim-Kalaikhumb)",
+      "tipo": "naturaleza",
+      "region": "Pamir oriental, Wakhan",
+      "descripcion": "Ruta de trekking de 6-7 días por cañón Panj con vistas constantes a Afganistán al otro lado. Pueblos en orilla, pueblos históricos de comercio y aclimatación progresiva en montaña. Experiencia de frontera única sin acceso a Afganistán.",
+      "dias_recomendados": 7,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Dushanbe a Khorog (36h en bus, 15-20 EUR). Trekking comienza en Khorog o Ishkashim (se llega en bus desde Khorog 2h, 5 EUR).",
+      "donde_dormir": {
+        "mochilero": "Jramoques en pueblos ruta: 5-10 EUR/noche",
+        "medio": "Guesthouses mejorados en pueblos: 12-20 EUR/noche",
+        "comfort": "Expediciones comerciales con tiendas: 50-80 EUR/noche (incluye comida)"
+      },
+      "que_hacer": [
+        "Trekking 6-7 días Ishkashim-Kalaikhumb - gratis",
+        "Baños termales Bibi Fatima - gratis",
+        "Visita pueblo Vrang (historia comercial) - gratis",
+        "Encuentros con residentes locales - gratis",
+        "Fotografía de Panj al atardecer - gratis"
+      ],
+      "donde_comer": "Pan casero, dahl, té en jramoques (3-5 EUR comidas). Tiendas en pueblos para provisiones. Lleva snacks energéticos.",
+      "consejo_local": "Permiso de zona fronteriza requerido (4-7 días en OVIR Dushanbe, gratis). Ritmo lento; aclimatación natural. Los pueblos son seguros; gente amable. Lleva agua en abundancia. Guía local opcional pero útil (10-15 EUR/día).",
+      "plan_b_lluvia": "Lluvia es rara pero posible julio-agosto. Senderos se vuelven difíciles. Quedarse en pueblos.",
+      "keywords": [
+        "Panj",
+        "trekking",
+        "Ishkashim",
+        "Kalaikhumb",
+        "Wakhan",
+        "frontera"
+      ]
+    },
+    {
+      "id": "penj-zeravshan",
+      "nombre": "Trekking Zeravshan Ridge",
+      "tipo": "montaña",
+      "region": "Pamir occidental, Zeravshan",
+      "descripcion": "Trekking de cresta alpina de 5-7 días a 4.000-4.500m con vistas de glaciares. Accesible sin técnica alpina pero requiere buen estado físico. Pocos trekistas; soledad absoluta en montaña.",
+      "dias_recomendados": 7,
+      "mejor_epoca": "julio-agosto",
+      "como_llegar": "Desde Dushanbe a Penj (3-4h jeep, 15-20 EUR). Inicio trekking desde Penj o pueblos aledaños.",
+      "donde_dormir": {
+        "mochilero": "Acampar (tienda propia): gratis",
+        "medio": "Campamentos intermedios con jramoques: 8-12 EUR/noche",
+        "comfort": "Expediciones con campamento equipado: 40-60 EUR/noche"
+      },
+      "que_hacer": [
+        "Trekking Zeravshan 5-7 días - gratis",
+        "Vistas de Picos Lenin, Korjenevskaia - gratis",
+        "Fotografía de glaciares y cresta - gratis",
+        "Aclimatación a altitud - gratis",
+        "Encuentros con pastores nómadas - gratis"
+      ],
+      "donde_comer": "Lleva todo desde Dushanbe (pasta, dahl, café, té). Jramoques en ruta ofrecen pan/dahl básico (2-3 EUR). Agua de glaciares potable.",
+      "consejo_local": "Ruta poco frecuentada; guía altamente recomendado (15-20 EUR/día). Mapa trekking necesario. Aclimatación previa en Penj (1-2 días). Mal de altura es real a 4.500m; ritmo muy lento.",
+      "plan_b_lluvia": "Clima variable julio-agosto. Tormentas posibles. Estar preparado con tienda robusta.",
+      "keywords": [
+        "Zeravshan",
+        "trekking",
+        "cresta",
+        "4500m",
+        "glaciares",
+        "Pamir occidental"
+      ]
+    },
+    {
+      "id": "garm-chashma",
+      "nombre": "Garm Chashma (Baños Termales)",
+      "tipo": "naturaleza",
+      "region": "Pamir occidental, valle Zeravshan",
+      "descripcion": "Baños termales naturales en valle alpino remoto, rodeados de picos. Lugar aislado para relajación después de trekking. Combinación de aguas termales calientes y paisaje de montaña. Experiencia mística de Pamir.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "julio-septiembre",
+      "como_llegar": "Desde Penj a Garm Chashma (trekking 2-3 días o jeep en época seca). Requiere logística con guía local.",
+      "donde_dormir": {
+        "mochilero": "Acampar o jramoques básicas: 5-10 EUR/noche",
+        "medio": "Guesthouse rústica en baños: 15-20 EUR/noche",
+        "comfort": "Expediciones comerciales: 50-70 EUR/noche"
+      },
+      "que_hacer": [
+        "Baños termales naturales - gratis",
+        "Trekking en valle alpino - gratis",
+        "Fotografía de picos al atardecer - gratis",
+        "Relajación y recuperación - gratis",
+        "Observación de fauna alpina - gratis"
+      ],
+      "donde_comer": "Cocina en jramoques (dahl, pan, té): 2-4 EUR. Lleva complementos desde Penj.",
+      "consejo_local": "Acceso difícil; requiere jeep en buen estado o 2-3 días trekking. Guía local esencial. Agua termal es cálida (35-40°C) pero no ultra caliente. Época mejor julio-agosto; junio aún con nieve.",
+      "plan_b_lluvia": "Camino jeep se vuelve intransitable. Ir junio o agosto es más seguro.",
+      "keywords": [
+        "Garm Chashma",
+        "baños termales",
+        "Zeravshan",
+        "Pamir",
+        "relajación"
+      ]
+    },
+    {
+      "id": "khorog",
+      "nombre": "Khorog",
+      "tipo": "ciudad",
+      "region": "Pamir oriental, Wakhan",
+      "descripcion": "Ciudad fronteriza en cañón Panj, puerta de entrada a Pamir oriental. Mercados vivos, vista de Afganistán al otro lado del río, punto logístico para trekking. Ambiente fronterizo único.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "Desde Dushanbe en bus (36h, 15-20 EUR) o jeep compartido (24h, 25-35 EUR).",
+      "donde_dormir": {
+        "mochilero": "Guesthouses: 10-15 EUR/noche",
+        "medio": "Hoteles 2-3* (Panj, Khorog): 20-30 EUR/noche",
+        "comfort": "Guesthouse mejorado: 35-50 EUR/noche"
+      },
+      "que_hacer": [
+        "Bazar local - gratis",
+        "Paseo junto Río Panj (vistas Afganistán) - gratis",
+        "Mercado de frutas y verduras - gratis",
+        "Museo local pequeño - 1 EUR",
+        "Provisiones para trekking - variable"
+      ],
+      "donde_comer": "Plov, quorutob, samsa. Bazares 4-7 EUR. Restaurantes 8-12 EUR. Comida callejera muy barata.",
+      "consejo_local": "Khorog es caótica pero auténtica. Punto crítico para obtener provisiones antes de trekking. Dinero en effectivo aquí (somoni). ATM funciona intermitentemente. Atmosfera fronteriza intensa; observa normas locales.",
+      "plan_b_lluvia": "Bazares techados, museos pequeños",
+      "keywords": [
+        "Khorog",
+        "Wakhan",
+        "frontera",
+        "Panj",
+        "base trekking",
+        "Afganistan"
+      ]
+    }
+  ]
+}

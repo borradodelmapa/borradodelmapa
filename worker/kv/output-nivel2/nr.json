@@ -1,0 +1,317 @@
+{
+  "pais": "Nauru",
+  "codigo": "nr",
+  "destinos": [
+    {
+      "id": "yaren",
+      "nombre": "Yaren",
+      "tipo": "ciudad",
+      "region": "Distrito de Yaren",
+      "descripcion": "Capital de facto de Nauru, ubicada en la costa sur. Centro administrativo y comercial del país donde se concentran servicios, bancos y tiendas. Punto de partida lógico para explorar la isla dado que aquí está el aeropuerto internacional.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Aeropuerto Internacional de Nauru está en Yaren. Llegada directa desde Kiribati, Fiji o Australia con Nauru Airlines.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses locales: 40-60 EUR/noche",
+        "medio": "Nauru Hotel o similar: 80-120 EUR/noche",
+        "comfort": "Menen Hotel: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Visitar el Parlamento de Nauru (gratis, exterior)",
+        "Recorrer el mercado local de Yaren (gratis)",
+        "Paseo por la costa de Anibare (gratis)",
+        "Comprar provisiones en tiendas locales (variable)"
+      ],
+      "donde_comer": "Comida local: pescado fresco, noodles asiáticos. Rango 8-15 EUR. Zona de mercado y restaurantes cerca del puerto.",
+      "consejo_local": "El efectivo es esencial; hay muy pocos cajeros y no todos los negocios aceptan tarjeta. Lleva dinero de Fiji o cambia en el aeropuerto.",
+      "plan_b_lluvia": "Visitar tiendas locales, museos pequeños o descansar en el hotel; la lluvia es corta pero intensa.",
+      "keywords": [
+        "Yaren District",
+        "capital",
+        "aeropuerto Nauru",
+        "centro administrativo"
+      ]
+    },
+    {
+      "id": "anibare-bay",
+      "nombre": "Anibare Bay",
+      "tipo": "playa",
+      "region": "Distrito de Anibare",
+      "descripcion": "Bahía en la costa este de Nauru con la playa más amplia y accesible del país. Aguas tranquilas ideales para nadar y snorkel básico. Escenario relajado lejos del centro urbano.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Yaren en taxi o rental: 15-20 minutos, 10-15 EUR en taxi, 25-35 EUR en auto de alquiler/día.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses cercanas: 45-65 EUR/noche",
+        "medio": "Lodge pequeño: 70-100 EUR/noche",
+        "comfort": "Anibare Bay Resort (si está abierto): 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Nadar y relajarse en la playa (gratis)",
+        "Snorkel con equipo propio o rentado (20-30 EUR con guía)",
+        "Paseo al atardecer (gratis)",
+        "Pesca local con pescadores (15-25 EUR)"
+      ],
+      "donde_comer": "Pequeños comedores de pescado fresco, 7-12 EUR. Opciones limitadas; mejor llevar provisiones de Yaren.",
+      "consejo_local": "Las olas pueden ser fuertes según la estación; el lado sur de la bahía es más tranquilo. Lleva protección solar potente.",
+      "plan_b_lluvia": "El interior de la isla tiene miradores y senderos; explorar pueblos cercanos como Buada.",
+      "keywords": [
+        "Anibare",
+        "east coast",
+        "beach",
+        "swimming",
+        "lagoon"
+      ]
+    },
+    {
+      "id": "buada-lagoon",
+      "nombre": "Buada Lagoon",
+      "tipo": "naturaleza",
+      "region": "Distrito de Buada",
+      "descripcion": "Única laguna de agua dulce en Nauru, rodeada de vegetación tropical y asentamientos locales. Espacio ecológico importante y punto de observación de vida local cotidiana.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Yaren en taxi: 10-15 minutos, 10-12 EUR. O caminando desde Anibare.",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento específico; dormir en Yaren o Anibare",
+        "medio": "No hay alojamiento específico; dormir en Yaren o Anibare",
+        "comfort": "No hay alojamiento específico; dormir en Yaren o Anibare"
+      },
+      "que_hacer": [
+        "Observar la laguna y flora tropical (gratis)",
+        "Caminar alrededor de la laguna (gratis, 1-2 horas)",
+        "Fotografía de fauna local y plantas (gratis)",
+        "Charla con residentes locales (gratis)"
+      ],
+      "donde_comer": "Sin opciones de restaurantes; llevar snacks de Yaren.",
+      "consejo_local": "La laguna es sagrada para algunos residentes; respeta las áreas privadas. Mosquitos al atardecer; lleva repelente.",
+      "plan_b_lluvia": "Visita rápida entre lluvias, la laguna solo crece.",
+      "keywords": [
+        "Buada",
+        "lagoon",
+        "freshwater",
+        "tropical",
+        "ecology"
+      ]
+    },
+    {
+      "id": "meneng-district",
+      "nombre": "Meneng",
+      "tipo": "histórico",
+      "region": "Distrito de Meneng",
+      "descripcion": "Zona con restos de infraestructura de la Segunda Guerra Mundial, incluyendo bases aéreas abandonadas y búnkeres. Testimonio histórico de la ocupación japonesa e importancia estratégica de la isla.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Yaren en taxi: 10-15 minutos, 10-12 EUR. O en auto de alquiler.",
+      "donde_dormir": {
+        "mochilero": "Dormir en Yaren, excursión de día",
+        "medio": "Dormir en Yaren, excursión de día",
+        "comfort": "Dormir en Yaren, excursión de día"
+      },
+      "que_hacer": [
+        "Explorar restos de bases aéreas japonesas (gratis)",
+        "Fotografía de búnkeres abandonados (gratis)",
+        "Visita guiada con historiador local (25-40 EUR)",
+        "Museo de historia de Nauru en Yaren (5-10 EUR entrada)"
+      ],
+      "donde_comer": "Sin opciones locales; comer en Yaren antes o después.",
+      "consejo_local": "Algunos búnkeres son inestables; no entres sin guía. Los restos están parcialmente cubiertos por vegetación; lleva machete mental.",
+      "plan_b_lluvia": "Los bunkers ofrecen refugio. Ir a mediodía cuando lluvia es menos probable.",
+      "keywords": [
+        "Meneng",
+        "WWII",
+        "Japanese",
+        "bunkers",
+        "airbase",
+        "historia"
+      ]
+    },
+    {
+      "id": "aiwo-district",
+      "nombre": "Aiwo",
+      "tipo": "ciudad",
+      "region": "Distrito de Aiwo",
+      "descripcion": "Distrito costero del norte con pequeños pueblos y vida rural. Menos turístico que Yaren, ofrece vista auténtica de la vida cotidiana nauruense y acceso a la costa norte.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Yaren en taxi o auto alquilado: 20-25 minutos, 12-15 EUR en taxi.",
+      "donde_dormir": {
+        "mochilero": "Muy pocas opciones; guesthouses básicas 40-55 EUR/noche",
+        "medio": "Guesthouses: 60-85 EUR/noche",
+        "comfort": "Mejor dormir en Yaren"
+      },
+      "que_hacer": [
+        "Paseo por pueblos costeros (gratis)",
+        "Baño en playas del norte (gratis)",
+        "Observación de vida local (gratis)",
+        "Compra en pequeños mercados locales (variable)"
+      ],
+      "donde_comer": "Cocina casera nauruense en pequeños comedores, 6-10 EUR. Opciones muy limitadas.",
+      "consejo_local": "Aiwo es quieto; ve a última hora de tarde para ver la vida local. No hay transporte público; necesitas taxi o auto.",
+      "plan_b_lluvia": "Pueblos tienen estructuras cubiertas; socializar con locales en pequeños comercios.",
+      "keywords": [
+        "Aiwo",
+        "north coast",
+        "villages",
+        "rural",
+        "local life"
+      ]
+    },
+    {
+      "id": "baiti-district",
+      "nombre": "Baiti",
+      "tipo": "rural",
+      "region": "Distrito de Baiti",
+      "descripcion": "Área rural interior con asentamientos dispersos y vegetación densa. Acceso a la vida agrícola y tradicional de Nauru, alejado del turismo.",
+      "dias_recomendados": 0.5,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Yaren en taxi: 15-20 minutos, 10-12 EUR.",
+      "donde_dormir": {
+        "mochilero": "No recomendado; excursión de día desde Yaren",
+        "medio": "No recomendado; excursión de día desde Yaren",
+        "comfort": "No recomendado; excursión de día desde Yaren"
+      },
+      "que_hacer": [
+        "Caminata por senderos rurales (gratis)",
+        "Observación de flora tropical (gratis)",
+        "Charla con agricultores locales (gratis)",
+        "Fotografía de paisaje (gratis)"
+      ],
+      "donde_comer": "Sin servicios de comida; llevar snacks de Yaren.",
+      "consejo_local": "Respetuoso con la propiedad privada; algunos terrenos son privados. Lleva agua y protección solar.",
+      "plan_b_lluvia": "Baiti es boscoso; la lluvia es parte de la experiencia. Caminar entre lluvias.",
+      "keywords": [
+        "Baiti",
+        "rural",
+        "interior",
+        "agricultural",
+        "forest"
+      ]
+    },
+    {
+      "id": "denigomodu-district",
+      "nombre": "Denigomodu",
+      "tipo": "ciudad",
+      "region": "Distrito de Denigomodu",
+      "descripcion": "Pueblo costero del sur con acceso a playas rocosas y calas. Área menos visitada con carácter local fuerte y oportunidades para snorkel en arrecifes cercanos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Yaren en taxi: 20-25 minutos, 12-15 EUR.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses básicas: 40-55 EUR/noche",
+        "medio": "Pequeñas posadas: 65-90 EUR/noche",
+        "comfort": "Mejor opción en Yaren"
+      },
+      "que_hacer": [
+        "Exploración de playas rocosas (gratis)",
+        "Snorkel en arrecifes cercanos (20-30 EUR con guía)",
+        "Observación de aves marinas (gratis)",
+        "Paseo costal al atardecer (gratis)"
+      ],
+      "donde_comer": "Pescado fresco en pequeños comedores, 7-12 EUR. Mercado local pequeño.",
+      "consejo_local": "Las corrientes pueden ser fuertes; no nades sin conocer las áreas seguras. Pregunta a locales.",
+      "plan_b_lluvia": "Las playas rocosas ofrecen cierto refugio. Día de exploración interior.",
+      "keywords": [
+        "Denigomodu",
+        "south coast",
+        "rocky beaches",
+        "fishing",
+        "coves"
+      ]
+    },
+    {
+      "id": "ewa-district",
+      "nombre": "Ewa",
+      "tipo": "playa",
+      "region": "Distrito de Ewa",
+      "descripcion": "Zona costera oeste con playas tranquilas y arrecifes de coral. Menos acceso turístico y más ambiente auténtico que Anibare, ideal para snorkel.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Desde Yaren en taxi o auto: 25-30 minutos, 15-18 EUR en taxi.",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento; excursión de día desde Yaren",
+        "medio": "No hay alojamiento; excursión de día desde Yaren",
+        "comfort": "No hay alojamiento; excursión de día desde Yaren"
+      },
+      "que_hacer": [
+        "Snorkel en arrecifes de coral (equipo propio o 25-35 EUR con guía)",
+        "Baño en playas tranquilas (gratis)",
+        "Observación de peces tropicales (gratis)",
+        "Picnic en la playa (variable)"
+      ],
+      "donde_comer": "Sin servicios formales; llevar comida de Yaren.",
+      "consejo_local": "Los arrecifes de Ewa son los mejores para snorkel; el coral es frágil, respétalo. Lleva escarpines.",
+      "plan_b_lluvia": "Lluvia no afecta mucho el snorkel; aguas cálidas. Regresa si las olas suben.",
+      "keywords": [
+        "Ewa",
+        "west coast",
+        "coral reefs",
+        "snorkeling",
+        "tropical fish"
+      ]
+    },
+    {
+      "id": "nauru-island-circuit",
+      "nombre": "Circuito de la Isla Completa",
+      "tipo": "excursion_desde",
+      "region": "Toda la isla",
+      "descripcion": "Recorrido de 19 km alrededor de la isla costera en taxi o auto alquilado. Permite ver todos los distritos y acceso a diferentes playas en un día. La isla es pequeña, este circuito es viable.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Auto de alquiler desde Yaren: 25-35 EUR/día. Taxi privado para el circuito: 40-60 EUR.",
+      "donde_dormir": {
+        "mochilero": "Dormir en Yaren",
+        "medio": "Dormir en Yaren",
+        "comfort": "Dormir en Yaren"
+      },
+      "que_hacer": [
+        "Paradas fotográficas en múltiples playas (gratis)",
+        "Baños en 2-3 playas diferentes (gratis)",
+        "Observación de paisajes variados (gratis)",
+        "Compra en tiendas locales de diferentes distritos (variable)"
+      ],
+      "donde_comer": "Parar en Yaren para comidas principales o llevar snacks.",
+      "consejo_local": "Haz el circuito horario para ver el litoral al mejor ángulo de luz. Salida temprano (8 AM) para máximo tiempo en cada parada.",
+      "plan_b_lluvia": "Circuito igual de viable; lluvia es corta. Llevar impermeable ligero.",
+      "keywords": [
+        "island tour",
+        "coastal circuit",
+        "all districts",
+        "road trip",
+        "Nauru complete"
+      ]
+    },
+    {
+      "id": "kiribati-tarawa",
+      "nombre": "Tarawa, Kiribati (Excursión)",
+      "tipo": "excursion_desde",
+      "region": "Kiribati (país vecino)",
+      "descripcion": "Atolón principal de Kiribati a 1 hora en avión desde Nauru. Centro cultural con mayor infraestructura turística, museos, vida local más dinámica y acceso a snorkel de clase mundial.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo a octubre",
+      "como_llegar": "Vuelo Air Kiribati desde Nauru a Tarawa: 1 hora, 200-350 EUR ida y vuelta. Solo algunos vuelos semanales.",
+      "donde_dormir": {
+        "mochilero": "Guesthouses en Betio: 35-50 EUR/noche",
+        "medio": "Hoteles pequeños: 60-100 EUR/noche",
+        "comfort": "Otintaai Hotel: 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Museo de Historia de Tarawa (5-10 EUR)",
+        "Snorkel en lagunas de coral (30-50 EUR con operador)",
+        "Visita a pueblos locales (gratis)",
+        "Observación de aves marinas en islas cercanas (25-40 EUR tour)"
+      ],
+      "donde_comer": "Comida kiribatiana: pescado de coco, pan de panadería local. Rango 6-15 EUR. Zona de mercado en Betio.",
+      "consejo_local": "Confirma vuelos con anticipación; pueden cancelarse. Cambio de divisa (dólar australiano o USD). Tarawa es más caro que Nauru.",
+      "plan_b_lluvia": "Museos y compras en mercado cubierto; lluvia es corta.",
+      "keywords": [
+        "Kiribati",
+        "Tarawa",
+        "atoll",
+        "snorkeling",
+        "Pacific",
+        "excursion from Nauru"
+      ]
+    }
+  ]
+}

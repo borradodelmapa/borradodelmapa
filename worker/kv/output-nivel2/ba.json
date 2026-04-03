@@ -1,0 +1,339 @@
+{
+  "pais": "Bosnia y Herzegovina",
+  "codigo": "ba",
+  "destinos": [
+    {
+      "id": "mostar",
+      "nombre": "Mostar",
+      "tipo": "histórico",
+      "region": "Herzegovina",
+      "descripcion": "Ciudad dividida por el río Neretva con el icónico puente Stari Most, símbolo de reconciliación tras la guerra. Centro histórico otomano bien conservado con bazares, mezquitas y galerías de arte. Punto de entrada perfecta a Herzegovina.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Sarajevo: autobús directo 2.5 horas, 8-12 EUR",
+      "donde_dormir": {
+        "mochilero": "Hostal/habitación compartida en casco viejo, 20-30 EUR/noche",
+        "medio": "Hotel 3 estrellas centro, 50-80 EUR/noche",
+        "comfort": "Hotel boutique con vistas al puente, 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Cruzar Stari Most (gratis)",
+        "Saltar desde el puente con local Mostar Diving Club (25 EUR)",
+        "Explorar bazares otomanos Bazaar (gratis)",
+        "Visitar Kravice Waterfalls excursión (30 EUR con tours)",
+        "Museo de la Guerra (3 EUR)"
+      ],
+      "donde_comer": "Cevapcici (pinchitos de carne), burek (pastel de queso), rango 5-12 EUR. Zona Bazaar tiene más atmósfera que riverside.",
+      "consejo_local": "Ve al puente al atardecer cuando baja el turismo de autobuses. Los locales usan la calle Onescukova para vivir, no Stari Most.",
+      "plan_b_lluvia": "Museo de la Hermandad de Dervíches (pequeño pero atmosférico), paseos por bazares cubiertos",
+      "keywords": [
+        "Mostar",
+        "Stari Most",
+        "Herzegovina",
+        "puente",
+        "río Neretva",
+        "casco viejo otomano"
+      ]
+    },
+    {
+      "id": "sarajevo",
+      "nombre": "Sarajevo",
+      "tipo": "ciudad",
+      "region": "Bosnia Central",
+      "descripcion": "Capital multiétnica con historia otomana, austrohúngara y marcas vivas de la guerra reciente. Baščaršija (bazaar antiguo) convive con edificios de la época de Tito y museos de conflicto. Gastronomía excelente y escena cultural vibrante.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "Llegada principal: aeropuerto internacional, 30 min en bus 4 EUR o taxi 25 EUR",
+      "donde_dormir": {
+        "mochilero": "Hostal Baščaršija, 25-35 EUR/noche",
+        "medio": "Hotel 3 estrellas Centar, 60-90 EUR/noche",
+        "comfort": "Hotel Sarajevo Palace o similar, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Baščaršija y sus hammams turcos (4 EUR sauna)",
+        "Museo Nacional (3 EUR, viernes entrada libre)",
+        "War Tunnel Museum (10 EUR)",
+        "Tranvía histórico amarillo Sebilj (gratis, es transporte)",
+        "Subir a Trebevic en funicular (5 EUR ida y vuelta)",
+        "Cementerio de Kovaci (gratis, impactante)"
+      ],
+      "donde_comer": "Cevapi con lepinja (pan), burek, bsara (sopa de judías), 4-8 EUR. Evita Baščaršija para comer (caro), ve a barrio Bjelave o Dobrinja.",
+      "consejo_local": "Los locales odian que se hable del sitio como 'zona de guerra': es una ciudad viva. Pregunta por cafeterías underground en Centar, tienen mejor atmósfera que turistas.",
+      "plan_b_lluvia": "Museo de la Historia Olímpica (2 EUR), Museo Nacional, cafés cubiertos en Baščaršija, galerías de arte independientes",
+      "keywords": [
+        "Sarajevo",
+        "Baščaršija",
+        "capital Bosnia",
+        "guerra",
+        "sitio",
+        "otomano",
+        "multicultural"
+      ]
+    },
+    {
+      "id": "konjic",
+      "nombre": "Konjic",
+      "tipo": "naturaleza",
+      "region": "Bosnia Central",
+      "descripcion": "Pueblo junto al río Neretva rodeado de cañones y montañas. Punto base para rafting, senderismo y acceso a la secretaísima SFRJ nuklearna bunkera (búnker nuclear de la era Tito). Mucho menos turístico que Mostar.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "desde Sarajevo: autobús 2 horas, 6 EUR; desde Mostar: 1.5 horas, 4 EUR",
+      "donde_dormir": {
+        "mochilero": "Hostal o habitación privada rural, 20-28 EUR/noche",
+        "medio": "Hotel Konjic 3 estrellas, 50-70 EUR/noche",
+        "comfort": "Glamping/cabaña vista río, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Rafting Neretva (25-35 EUR con equipo)",
+        "Bunker Nuklearan (visita guiada obligatoria 20 EUR, reservar online)",
+        "Senderismo Čemerlić cañón (gratis)",
+        "Kayaking río (alquiler 15 EUR)",
+        "Visita Bjelašnica montaña (gratis acceso senderos)"
+      ],
+      "donde_comer": "Trout (pstrva) de río, cordero asado, 6-10 EUR. Restaurantes ribereños: Neretva River Club es turístico pero bueno.",
+      "consejo_local": "El búnker nuclear NO está en guías turísticas oficiales: es un sitio secreto de la era soviética. Reserva con operador local Sunce ili Kisa para acceso real, no trucos de turismo.",
+      "plan_b_lluvia": "Visita interior del búnker (cubierto), museos de Konjic pequeños, cafés ribereños cubiertos",
+      "keywords": [
+        "Konjic",
+        "Neretva",
+        "rafting",
+        "búnker nuclear",
+        "SFRJ",
+        "cañón",
+        "naturaleza Bosnia"
+      ]
+    },
+    {
+      "id": "medugorje",
+      "nombre": "Medugorje",
+      "tipo": "religioso",
+      "region": "Herzegovina",
+      "descripcion": "Pueblo de peregrinación católica donde supuestamente aparece la Virgen María desde 1981. Centro espiritual y punto de montaña con iglesia, museo y vistas. Independientemente de creencias, es culturalmente importante y menos masificado que otros destinos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-octubre",
+      "como_llegar": "desde Mostar: autobús 45 min, 3 EUR; desde aeropuerto Split (Croacia): 1.5 horas, 15 EUR",
+      "donde_dormir": {
+        "mochilero": "Habitación en casa privada, 20-30 EUR/noche",
+        "medio": "Hospedería 3 estrellas, 50-70 EUR/noche",
+        "comfort": "Hotel boutique, 90-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Iglesia de Santiago (misa, gratis)",
+        "Subida monte Podbrdo (45 min, gratis, vistas espectaculares)",
+        "Rosario rock (sendero marcado, gratis)",
+        "Museo Medugorje (3 EUR)"
+      ],
+      "donde_comer": "Comida local simple, tostadas con queso, 5-9 EUR. Restaurantes turísticos caros: come en tiendas locales.",
+      "consejo_local": "Mejor ir pronto por la mañana. La mayoría de peregrinos llega mediodía; al atardecer es casi solo tuyo. La 'aparición' sigue siendo no confirmada por la Iglesia oficialmente.",
+      "plan_b_lluvia": "Iglesia interior (está cubierta), museo, cafés",
+      "keywords": [
+        "Medugorje",
+        "peregrinación",
+        "Virgen María",
+        "Herzegovina",
+        "iglesia",
+        "monte Podbrdo",
+        "religioso"
+      ]
+    },
+    {
+      "id": "blagaj",
+      "nombre": "Blagaj",
+      "tipo": "naturaleza",
+      "region": "Herzegovina",
+      "descripcion": "Pueblo medieval al pie de acantilados con fuente Buna (río subterráneo que emerge). Dervish tekke (monasterio) está construido en la roca junto al agua. Uno de los lugares más fotogénicos de Bosnia, pero poco turístico si evitas picos horarios.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "abril-mayo, septiembre-octubre",
+      "como_llegar": "desde Mostar: autobús local o taxi 30 min, 4 EUR (autobús), 15 EUR (taxi)",
+      "donde_dormir": {
+        "mochilero": "Alojamiento en Mostar + día de excursión (mejor opción)",
+        "medio": "Casa rural Blagaj, 50-70 EUR/noche",
+        "comfort": "Resort pequeño, 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Visita Dervish Tekke (5 EUR)",
+        "Fuente Buna y piscina natural (gratis)",
+        "Senderismo acantilados Blagaj (gratis, paisaje increíble)",
+        "Kayaking río Buna (30 EUR tours)"
+      ],
+      "donde_comer": "Restaurantes junto al agua venden trucha local (pstrva), 8-15 EUR. Caros pero vistas merecen.",
+      "consejo_local": "Llega antes de las 10:00 AM o después de las 16:00 para evitar tours. La gente del tekke es amable si muestras respeto; quítate zapatos al entrar.",
+      "plan_b_lluvia": "Visita interior tekke (cubierto), cafés, regresa a Mostar",
+      "keywords": [
+        "Blagaj",
+        "Dervish Tekke",
+        "fuente Buna",
+        "acantilado",
+        "río subterráneo",
+        "Herzegovina",
+        "paisaje"
+      ]
+    },
+    {
+      "id": "trebinje",
+      "nombre": "Trebinje",
+      "tipo": "ciudad",
+      "region": "Herzegovina",
+      "descripcion": "Pueblo viejo héroe de la guerra, ahora pacífico con arquitectura mediterránea, paseos ribereños y bodegas de vino. Menos turístico que Mostar pero igual de atmosférico. Punto de acceso a Montenegro cercano.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "desde Mostar: autobús 1.5 horas, 6 EUR",
+      "donde_dormir": {
+        "mochilero": "Hostal/habitación compartida casco viejo, 22-32 EUR/noche",
+        "medio": "Hotel 3 estrellas, 55-75 EUR/noche",
+        "comfort": "Hotel Trebevic con vistas, 100-140 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo río Trebisnjica (gratis)",
+        "Iglesia Ortodoxa/catedral (gratis, espectacular interior)",
+        "Bodegas de vino Vinarija (15-20 EUR catas)",
+        "Monasterio Tvrdos (gratis, 5 km afuera)"
+      ],
+      "donde_comer": "Vino local (Blatina), cordero, cevapcici, 5-10 EUR. Zona ribereña tiene restaurantes buenos sin precios turísticos.",
+      "consejo_local": "Trebinje fue fuerte durante la guerra; la gente es robusta pero amable. Intenta el vino local, es excelente y nadie lo conoce fuera.",
+      "plan_b_lluvia": "Iglesia ortodoxa (cubierta, impresionante), cafés ribereños, museos pequeños",
+      "keywords": [
+        "Trebinje",
+        "Herzegovina",
+        "río Trebisnjica",
+        "vino",
+        "ortodoxo",
+        "arquitectura",
+        "guerra"
+      ]
+    },
+    {
+      "id": "jajce",
+      "nombre": "Jajce",
+      "tipo": "histórico",
+      "region": "Bosnia Central",
+      "descripcion": "Pueblo medieval encaramado en acantilado con castillo ruinas, cataratas y mausoleo medieval. Historia otomana y austrohúngara. Menos visitado que Mostar pero igual de rico históricamente.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-junio, septiembre-octubre",
+      "como_llegar": "desde Sarajevo: autobús 3 horas, 8 EUR; desde Mostar: 2.5 horas, 10 EUR",
+      "donde_dormir": {
+        "mochilero": "Hostal Jajce, 20-28 EUR/noche",
+        "medio": "Hotel 3 estrellas casco viejo, 50-70 EUR/noche",
+        "comfort": "Habitación con vista castillo, 90-130 EUR/noche"
+      },
+      "que_hacer": [
+        "Castillo en ruinas (subida 10 min, gratis)",
+        "Cataratas Pliva (gratis)",
+        "Museo etnográfico (2 EUR)",
+        "Mausoleo medieval (2 EUR)",
+        "Kayaking lagos Pliva (25 EUR alquiler)"
+      ],
+      "donde_comer": "Trucha de los lagos, burek, 5-9 EUR. Mercado local barato, restaurantes riverside caros.",
+      "consejo_local": "Jajce fue capital medieval de Bosnia. Evita grupo de tours; ve solo o con local. Cataratas mejores al caer sol.",
+      "plan_b_lluvia": "Museo etnográfico, iglesias cubiertas, cafés, espera a sol para castillo",
+      "keywords": [
+        "Jajce",
+        "castillo medieval",
+        "cataratas Pliva",
+        "Bosnia central",
+        "mausoleo",
+        "lago"
+      ]
+    },
+    {
+      "id": "neum",
+      "nombre": "Neum",
+      "tipo": "playa",
+      "region": "Herzegovina Costa",
+      "descripcion": "Único acceso de Bosnia al Adriático, pueblo playero pequeño con playa de guijarros y paseo marítimo. Mucho menos turístico que Croacia. Punto de paso entre Bosnia y Croacia.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "junio-septiembre",
+      "como_llegar": "desde Mostar: autobús 1 hora, 5 EUR; desde Split (Croacia): 1 hora, 10 EUR",
+      "donde_dormir": {
+        "mochilero": "Habitación privada playa, 25-35 EUR/noche",
+        "medio": "Hotel 3 estrellas paseo marítimo, 60-80 EUR/noche",
+        "comfort": "Resort con playa privada, 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa Neuma (acceso 2-3 EUR o libre zonas públicas)",
+        "Paseo marítimo (gratis)",
+        "Snorkel en acantilados (equipo alquiler 10 EUR)",
+        "Kayaking costa (25 EUR)"
+      ],
+      "donde_comer": "Mariscos, camarones, pez espada, 8-15 EUR. Más barato que Croacia. Restaurantes paseo marítimo turísticos pero aceptables.",
+      "consejo_local": "Neuma es paso obligado Sarajevo-Dubrovnik pero casi nadie se queda. Ideal para descanso de playa rápido, no esperes mucho.",
+      "plan_b_lluvia": "Paseo marítimo cubierto, cafés, compras, o regresa a Mostar",
+      "keywords": [
+        "Neum",
+        "playa Bosnia",
+        "Adriático",
+        "guijarros",
+        "paseo marítimo",
+        "Herzegovina costa"
+      ]
+    },
+    {
+      "id": "srebrenica",
+      "nombre": "Srebrenica",
+      "tipo": "histórico",
+      "region": "Bosnia Este",
+      "descripcion": "Pueblo marcado por genocidio de 1995. Memorial y cementerio de 6,000+ víctimas es sitio de peregrinación y educación. Difícil pero importante para entender historia reciente. Turismo muy limitado, requiere sensibilidad.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "desde Sarajevo: autobús + cambio, 4 horas, 12-15 EUR (ruta poco frecuente, consulta)",
+      "donde_dormir": {
+        "mochilero": "Alojamiento limitado, habitación privada, 25-35 EUR/noche",
+        "medio": "Hotel Srebrenica si abre, 50-70 EUR/noche",
+        "comfort": "Mejor hospedarse en Bratunac cercano (15 EUR más)"
+      },
+      "que_hacer": [
+        "Memorial Srebrenica (entrada 5 EUR, impactante)",
+        "Cementerio Potočari (gratis, solemne)",
+        "Museo Srebrenica (3 EUR, testimonios)"
+      ],
+      "donde_comer": "Comida simple local, 5-8 EUR. Pocos restaurantes; mejor comer en Bratunac.",
+      "consejo_local": "Este es un sitio de duelo, no de turismo. Respeta silencio, no tomes fotos sin permiso. Los locales aprecian visitantes serios que quieren aprender.",
+      "plan_b_lluvia": "Museo (cubierto), reflexión, regresa a Sarajevo",
+      "alerta_contenido": "Genocidio documentado 1995. Contenido emocionalmente pesado. Visita solo si buscas educación histórica seria.",
+      "keywords": [
+        "Srebrenica",
+        "genocidio",
+        "memorial",
+        "Bosnia este",
+        "1995",
+        "guerra civil",
+        "historia reciente"
+      ]
+    },
+    {
+      "id": "visegrad",
+      "nombre": "Visegräd",
+      "tipo": "histórico",
+      "region": "Bosnia Este",
+      "descripcion": "Pueblo en río Drina famoso por puente otomano Mehmed-Pašin Most (Patrimonio UNESCO). Arquitectura otomana bien conservada. Menos turístico que otros destinos, auténtico y relativamente económico.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "mayo-octubre",
+      "como_llegar": "desde Sarajevo: autobús 4 horas, 10 EUR (conexiones limitadas); desde Bratunac: 2 horas, 6 EUR",
+      "donde_dormir": {
+        "mochilero": "Habitación privada casco viejo, 20-28 EUR/noche",
+        "medio": "Hotel Visegrad 3 estrellas, 50-70 EUR/noche",
+        "comfort": "Hotel con vista puente, 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Puente Mehmed-Pašin Most (gratis, Patrimonio UNESCO)",
+        "Casco viejo otomano (gratis, paseos)",
+        "Fortaleza Mehmed-Pašin (pequeña, gratis acceso)",
+        "Kayaking río Drina (20 EUR tours)",
+        "Senderismo alrededores (gratis)"
+      ],
+      "donde_comer": "Cevapcici, pstrva (trucha), 5-9 EUR. Restaurantes ribereños baratos sin turistas masivos.",
+      "consejo_local": "Visegräd es más auténtico que Mostar: pocos turistas, gente local real. Puente es espectacular al atardecer sin gente.",
+      "plan_b_lluvia": "Paseos por casco viejo cubierto (arcadas), cafés, pasa rápido",
+      "keywords": [
+        "Visegräd",
+        "Mehmed-Pašin Most",
+        "puente otomano",
+        "Drina",
+        "UNESCO",
+        "Bosnia este",
+        "arquitectura otomana"
+      ]
+    }
+  ]
+}

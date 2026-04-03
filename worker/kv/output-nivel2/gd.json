@@ -1,0 +1,342 @@
+{
+  "pais": "Granada",
+  "codigo": "gd",
+  "destinos": [
+    {
+      "id": "saint-georges",
+      "nombre": "Saint George's",
+      "tipo": "ciudad",
+      "region": "San Jorge (capital)",
+      "descripcion": "Capital y puerta de entrada a Granada, ubicada en una bahía semicircular con arquitectura colonial británica. Centro administrativo y comercial donde se concentran servicios, restaurantes y vida local auténtica. Punto de partida para explorar el resto de la isla.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a mayo, octubre a noviembre",
+      "como_llegar": "Aeropuerto Internacional Maurice Bishop a 8 km, autobús o taxi 20-30 minutos, 15-25 EUR",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en downtown o Belmont, 35-55 EUR/noche",
+        "medio": "Hotel boutique en Carenage, 60-100 EUR/noche",
+        "comfort": "Resort en Grand Anse o Morne Rouge, 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por Carenage waterfront (gratis)",
+        "Fort George y vistas del puerto (gratis, vistas incluidas)",
+        "Spice Market o mercado local (gratis, compras opcionales)",
+        "Iglesia anglicana de San Jorge (gratis)",
+        "Museo del Chocolate (5 EUR)",
+        "Paseo nocturno por el malecón (gratis)"
+      ],
+      "donde_comer": "Pescado fresco en Carenage (8-15 EUR), lamproie local, nutmeg mace, curries. Zona de comedores junto al agua.",
+      "consejo_local": "Llega al mercado spice temprano (antes de las 9 AM) para ver la actividad real y precios más bajos. Los vendedores son amables si negocias con respeto.",
+      "plan_b_lluvia": "Museo Nacional de Granada (5 EUR), tiendas en downtown, explorar galerías de arte local",
+      "keywords": [
+        "St George's",
+        "capital Granada",
+        "Carenage",
+        "Puerto",
+        "Downtown",
+        "Belmont"
+      ]
+    },
+    {
+      "id": "grand-anse",
+      "nombre": "Grand Anse Beach",
+      "tipo": "playa",
+      "region": "Noroeste (San Andrés)",
+      "descripcion": "La playa más larga y accesible de Granada con arena dorada y aguas tranquilas. Infraestructura completa de bares y watersports sin perder el carácter relajado. Ideal para nadar, snorkel básico y vida de playa caribeña.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a mayo, octubre a noviembre",
+      "como_llegar": "Desde Saint George's, autobús local 20-30 minutos, 2-3 EUR o taxi compartido 10-15 EUR",
+      "donde_dormir": {
+        "mochilero": "Budget beachfront o colina, 40-60 EUR/noche",
+        "medio": "Hotel en primera línea, 80-130 EUR/noche",
+        "comfort": "Resort todo incluido, 150-250 EUR/noche"
+      },
+      "que_hacer": [
+        "Nadar y tomar sol (gratis)",
+        "Snorkel frente a la playa (gratis o alquiler equipo 10 EUR)",
+        "Paseo al atardecer (gratis)",
+        "Tomar tragos en beach bars (4-8 EUR por bebida)",
+        "Watersports: jet ski, banana boat (20-40 EUR)",
+        "Paseo a Morne Rouge por sendero costal (gratis)"
+      ],
+      "donde_comer": "Shacks de comida en la playa: arroz con pescado, roti, ensalada (6-10 EUR). Restaurantes en la calle principal para comida más formal (12-20 EUR).",
+      "consejo_local": "El lado sur de Grand Anse (cerca de la calle principal) tiene más servicios y es más seguro; el lado norte es más tranquilo pero menos concurrido.",
+      "plan_b_lluvia": "Tiendas de souvenirs, cafés con vista a la playa, museos en Saint George's a 30 min",
+      "keywords": [
+        "Playa Principal",
+        "Grand Anse Beach",
+        "San Andrés",
+        "Morne Rouge",
+        "Snorkel",
+        "Aguas Tranquilas"
+      ]
+    },
+    {
+      "id": "carriacou-island",
+      "nombre": "Carriacou",
+      "tipo": "isla",
+      "region": "Islas Granadinas (norte)",
+      "descripcion": "Isla hermana de Granada con atmósfera tranquila y auténtica, playas vírgenes y comunidad local acogedora. Destino perfecto para desconectarse del turismo masivo y experimentar vida caribeña genuina. Ideal para snorkel, buceo y descanso.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "enero a mayo, octubre a noviembre",
+      "como_llegar": "Ferry desde Saint George's, 1-1.5 horas, 10-15 EUR (Osprey Lines o Jbåd Express) o avión 30 min (60-100 EUR)",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en Hillsborough, 30-50 EUR/noche",
+        "medio": "Hotel pequeño frente al mar, 70-100 EUR/noche",
+        "comfort": "Resort boutique, 120-180 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa de Hillsborough (gratis)",
+        "Anse la Roche: snorkel virgen (gratis)",
+        "Excursión a Petit Martinique en bote local (15-25 EUR)",
+        "Senderismo a High North (gratis, 2 horas)",
+        "Buceo en Paradise Reef (40-70 EUR)",
+        "Taverna local con música en vivo al atardecer (gratis entrada, consumo mínimo 5 EUR)"
+      ],
+      "donde_comer": "Seafood local en Hillsborough: langosta, mahi-mahi, roti (8-15 EUR). Comedores tradicionales sin lujos pero auténticos.",
+      "consejo_local": "El ferry es la experiencia: viaja en la cubierta superior, habla con locales. Los horarios pueden variar; comprueba el día anterior.",
+      "plan_b_lluvia": "Museos pequeños en Hillsborough, cafés locales con juegos de mesa, explorar pueblos interiores a pie",
+      "keywords": [
+        "Carriacou Island",
+        "Hillsborough",
+        "Islas Granadinas",
+        "Petit Martinique",
+        "Buceo"
+      ]
+    },
+    {
+      "id": "annandale-falls",
+      "nombre": "Annandale Falls & Interior",
+      "tipo": "naturaleza",
+      "region": "Centro de Granada",
+      "descripcion": "Cascada tropical en el corazón selvático de Granada, accesible en 15 minutos desde Saint George's. Baño refrescante en piscina natural rodeada de vegetación exuberante. Primer contacto perfecto con la naturaleza de la isla sin grandes esfuerzos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a mayo, octubre a noviembre",
+      "como_llegar": "Taxi desde Saint George's, 20 minutos, 15-20 EUR ida y vuelta. O autobús local + caminata 30 min total.",
+      "donde_dormir": {
+        "mochilero": "No hay alojamiento en la zona; dormir en Saint George's",
+        "medio": "Idem",
+        "comfort": "Idem"
+      },
+      "que_hacer": [
+        "Cascada y baño en piscina natural (2 EUR entrada)",
+        "Senderismo por senderos de selva (gratis con entrada)",
+        "Fotografía de flora tropical (gratis)",
+        "Picnic junto a la cascada (llevar comida)",
+        "Observación de aves (gratis)"
+      ],
+      "donde_comer": "Llevar comida preparada o comer en Saint George's antes/después. Hay pequeño café/bar en la entrada (refrescos 2-3 EUR).",
+      "consejo_local": "Ir en la mañana cuando hay más luz en la cascada. El agua está helada: ve preparado. Lleva dinero en efectivo para la entrada.",
+      "plan_b_lluvia": "La lluvia hace la cascada más espectacular pero el sendero es resbaladizo. Usar botas de senderismo o crocs con buen agarre.",
+      "keywords": [
+        "Annandale Falls",
+        "Cascada",
+        "Selva",
+        "Baño Natural",
+        "Sendero",
+        "Interior"
+      ]
+    },
+    {
+      "id": "morne-rouge",
+      "nombre": "Morne Rouge & Morne Fendue",
+      "tipo": "montaña",
+      "region": "Noroeste (San Andrés)",
+      "descripcion": "Pueblos de montaña con vistas espectaculares de la costa y acceso a senderos de selva auténtica. Comunidades locales vibrantes sin infraestructura turística pesada. Ideal para senderismo, gastronomía local y encuentros genuinos.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a mayo, octubre a noviembre",
+      "como_llegar": "Autobús desde Saint George's o Grand Anse, 30-40 minutos, 2-3 EUR. A pie desde Grand Anse, 1.5 horas por sendero costero.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse simple en pueblo, 40-60 EUR/noche",
+        "medio": "Casa rural o posada pequeña, 70-100 EUR/noche",
+        "comfort": "Resort en la montaña, 120-160 EUR/noche"
+      },
+      "que_hacer": [
+        "Senderismo a Morne Fendue (2 horas, gratis)",
+        "Vistas panorámicas desde la cima (gratis)",
+        "Visita a plantaciones de especias (gratis, pedir permiso)",
+        "Desayuno o almuerzo casero con locales (8-12 EUR)",
+        "Exploración de pueblo a pie (gratis)",
+        "Compra de cultivos locales en huertos (2-5 EUR)"
+      ],
+      "donde_comer": "Comedores locales sin rótulos: arroz con frijoles, carne estofada, plantain (6-10 EUR). Probar freshly squeezed juice.",
+      "consejo_local": "Pregunta en la calle o en cafeterías si alguien ofrece 'homecooked meals'. Locales invitan a desayunar en sus casas por pocos euros.",
+      "plan_b_lluvia": "Explorar pueblos en auto con paradas en comedores. Nubes bajas crean atmósfera mística en las montañas.",
+      "keywords": [
+        "Morne Rouge",
+        "Morne Fendue",
+        "Montaña",
+        "Sendero",
+        "Vistas",
+        "Especias"
+      ]
+    },
+    {
+      "id": "saintes-islands",
+      "nombre": "Las Islas de los Santos (Saintes)",
+      "tipo": "isla",
+      "region": "Sureste - Excursión desde Granada",
+      "descripcion": "Pequeño archipiélago de 4 islas con playas paradisíacas y buceo de clase mundial. Excursión de un día desde Granada con aguas cristalinas, restos de naufragios y fauna marina. Menos abarrotada que Carriacou y muy accesible.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a mayo, octubre a noviembre",
+      "como_llegar": "Ferry desde Saint George's 45-60 min o excursión en bote privado. Operadores locales en Grand Anse y Saint George's, 40-80 EUR por persona (incluye transporte, snorkel, almuerzo).",
+      "donde_dormir": {
+        "mochilero": "Excursión de un día; dormir en Saint George's o Grand Anse",
+        "medio": "Idem",
+        "comfort": "Idem"
+      },
+      "que_hacer": [
+        "Snorkel en arrecife de coral (incluido en excursión)",
+        "Buceo en naufragio HMS Brittania (40-70 EUR adicional)",
+        "Playas vírgenes en islas deshabitadas (incluido)",
+        "Almuerzo de mariscos en bote o playa (incluido)",
+        "Avistamiento de tortugas (incluido, posibilidad alta)"
+      ],
+      "donde_comer": "Almuerzo incluido en la mayoría de excursiones: arroz, pescado grillado, ensalada. Bebidas en botes. Sin opciones de comidas adicionales en islas.",
+      "consejo_local": "Reserva con operadores locales en Grand Anse antes del día anterior. Los grupos grandes de turismo masivo van de Barbados; los desde Granada son más íntimos.",
+      "plan_b_lluvia": "Posibilidad de adelantar/atrasar día. El mar agitado hace desaconsejable la travesía.",
+      "keywords": [
+        "Saintes",
+        "Buceo",
+        "Snorkel",
+        "Isla",
+        "Naufragio",
+        "Excursión de día"
+      ],
+      "excursion_desde": true
+    },
+    {
+      "id": "fort-frederick",
+      "nombre": "Fort Frederick & Fuertes Históricos",
+      "tipo": "histórico",
+      "region": "Alrededores de Saint George's",
+      "descripcion": "Fuerte colonial del siglo XVIII con vistas 360° del puerto y costa. Arqueología bien preservada de las luchas británico-francesas. Combina historia con paisaje espectacular sin ser masificado.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a mayo, octubre a noviembre",
+      "como_llegar": "Desde Saint George's, taxi o autobús local, 15 minutos, 10-15 EUR o excursión a pie posible, 1 hora cuesta arriba",
+      "donde_dormir": {
+        "mochilero": "Saint George's, 35-55 EUR/noche",
+        "medio": "Saint George's, 60-100 EUR/noche",
+        "comfort": "Saint George's o Grand Anse, 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Exploración del fuerte (gratis)",
+        "Vistas fotográficas del puerto y costa (gratis)",
+        "Visita a Fort George (similar, 20 min a pie desde Fort Frederick, gratis)",
+        "Lectura de paneles informativos históricos (gratis)",
+        "Picnic en las murallas (llevar comida)",
+        "Atardecer desde las alturas (gratis)"
+      ],
+      "donde_comer": "No hay servicios en los fuertes. Comer en Saint George's antes o después (8-20 EUR según lugar).",
+      "consejo_local": "Combina visita a Fort Frederick y Fort George en medio día. Hay camino a pie entre ambos que regala vistas del interior.",
+      "plan_b_lluvia": "Las vistas nubladas tienen su encanto; las murallas no se ven afectadas. Menos gente que con buen tiempo.",
+      "keywords": [
+        "Fort Frederick",
+        "Fort George",
+        "Historia",
+        "Colonial",
+        "Fuerte",
+        "Vistas Panorámicas"
+      ]
+    },
+    {
+      "id": "mountain-plantations",
+      "nombre": "Plantaciones de Especias & Chocolate",
+      "tipo": "rural",
+      "region": "Interior montañoso",
+      "descripcion": "Granjas de cultivo de nutmega, canela y cacao donde se pueden tocar, probar y comprar productos. Tours guiados con agricultores locales explicando el proceso de cultivo. Experiencia agro-turística auténtica sin artificialidad.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a mayo, octubre a noviembre",
+      "como_llegar": "Desde Saint George's, taxi o auto rentado, 30-45 minutos según plantación, 15-25 EUR taxi ida/vuelta o 35-50 EUR alquiler de auto por día",
+      "donde_dormir": {
+        "mochilero": "Saint George's o Morne Rouge, 35-60 EUR/noche",
+        "medio": "Saint George's o casas rurales, 70-110 EUR/noche",
+        "comfort": "Resort en Morne Rouge o Grand Anse, 120-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Tour guiado de plantación nutmega (10-15 EUR por persona)",
+        "Degustación de productos (incluida en tour)",
+        "Compra directa de especias a productor (2-8 EUR por bolsa)",
+        "Tour de plantación de cacao (10-15 EUR)",
+        "Demostración de procesamiento (incluida)",
+        "Fotos en huertos (gratis)"
+      ],
+      "donde_comer": "Comidas simples en pequeños comedores dentro o cerca de plantaciones (6-12 EUR). Frutas tropicales directas del árbol.",
+      "consejo_local": "Lleva bolsas para compras de especias. Los precios en plantación son un 50% menos que en tiendas. Los dueños aman hablar de su trabajo; haz preguntas.",
+      "plan_b_lluvia": "Los tours continúan. La lluvia intensifica los aromas de las especias. Caminos pueden ser resbaladizos.",
+      "keywords": [
+        "Plantaciones",
+        "Nutmega",
+        "Cacao",
+        "Especias",
+        "Agro-turismo",
+        "Grenada Island Spice"
+      ]
+    },
+    {
+      "id": "point-salines-beach",
+      "nombre": "Point Salines Beach & Costa Sur",
+      "tipo": "playa",
+      "region": "Sur (San Andrés)",
+      "descripcion": "Playa menos conocida con aguas tranquilas y ambiente local auténtico. Alternativa a Grand Anse con menos turismo masivo pero igual de hermosa. Pescadores locales al amanecer y vida de pueblo caribeño.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a mayo, octubre a noviembre",
+      "como_llegar": "Autobús desde Saint George's, 20-30 minutos, 2-3 EUR o taxi, 15-20 EUR. A pie desde Grand Anse, 30-40 minutos por costa.",
+      "donde_dormir": {
+        "mochilero": "Guesthouse simple, 40-60 EUR/noche",
+        "medio": "Hotel pequeño, 70-110 EUR/noche",
+        "comfort": "Resort, 130-200 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño y descanso en playa (gratis)",
+        "Paseo al atardecer (gratis)",
+        "Compra de pescado fresco a pescadores (4-10 EUR)",
+        "Snorkel frente a la playa (gratis o equipo 10 EUR)",
+        "Bebidas en beach shacks (3-5 EUR)",
+        "Camina hacia Morne Rouge por sendero costero (2 horas, gratis)"
+      ],
+      "donde_comer": "Comedores junto a la playa: pescado recién capturado, roti, arroz (7-12 EUR). Shacks informales sin pretensiones.",
+      "consejo_local": "Llega al amanecer para ver el trabajo de los pescadores. Point Salines es la playa de Grenada para dormir tranquilo.",
+      "plan_b_lluvia": "Paseos cortos, explorar pueblo interior, cafés con vistas nubladas",
+      "keywords": [
+        "Point Salines",
+        "Playa Sur",
+        "Pescadores",
+        "Local",
+        "Tranquila"
+      ]
+    },
+    {
+      "id": "tides-bay-pink-sand",
+      "nombre": "Pink Sand Beach & Tides Bay",
+      "tipo": "playa",
+      "region": "Noroeste cercano (San Andrés)",
+      "descripcion": "Pequeña cala con arena rosada genuina y aguas cristalinas. Menos accesible que Grand Anse lo que mantiene la tranquilidad. Lugar perfecto para snorkel y tarde tranquila lejos de multitudes.",
+      "dias_recomendados": 1,
+      "mejor_epoca": "enero a mayo, octubre a noviembre",
+      "como_llegar": "Taxi desde Saint George's o Grand Anse, 20-25 minutos, 15-20 EUR o camina desde Grand Anse, 45-50 minutos por sendero costero",
+      "donde_dormir": {
+        "mochilero": "Guesthouse en zona o Grand Anse cercana, 40-65 EUR/noche",
+        "medio": "Hotel pequeño, 75-120 EUR/noche",
+        "comfort": "Resort, 140-210 EUR/noche"
+      },
+      "que_hacer": [
+        "Baño en agua cristalina (gratis)",
+        "Snorkel inmediato a la playa (gratis, alquiler equipo 10-15 EUR)",
+        "Exploración de cala (gratis)",
+        "Picnic en la playa (llevar comida)",
+        "Fotografia de arena rosa (gratis)",
+        "Atardecer desde la playa (gratis)"
+      ],
+      "donde_comer": "No hay servicios en la playa. Pequeño bar/shack con refrescos y snacks simples (3-6 EUR). Mejor comer en Grand Anse antes/después.",
+      "consejo_local": "La arena rosada es microscópica concha marina. La playa es popular pero no abarrotada. Lleva agua dulce para enjuagarse.",
+      "plan_b_lluvia": "Playas pequeñas sufren más con clima; mejor ir a Grand Anse en días nublados o lluviosos",
+      "keywords": [
+        "Pink Sand Beach",
+        "Tides Bay",
+        "Arena Rosa",
+        "Snorkel",
+        "Cala"
+      ]
+    }
+  ]
+}

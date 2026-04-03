@@ -1,0 +1,350 @@
+{
+  "pais": "Venezuela",
+  "codigo": "ve",
+  "alerta_general": "Venezuela enfrenta una crisis política y económica severa. La situación de seguridad es compleja en muchas áreas. Se recomienda verificar restricciones de viaje con las autoridades antes de planificar.",
+  "destinos": [
+    {
+      "id": "margarita",
+      "nombre": "Isla de Margarita",
+      "tipo": "isla",
+      "region": "Nueva Esparta",
+      "descripcion": "Isla caribeña con playas de arena blanca, aguas turquesas y pueblos costeros. Punto de entrada frecuente para viajeros que evitan la capital. Combina relax, deportes acuáticos y vida de playa sin pretensiones.",
+      "dias_recomendados": 5,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "vuelo desde Caracas (1h, ~80-150 EUR), ferry desde Puerto La Cruz (3-4h, ~20-40 EUR) o vuelos internacionales directos desde Colombia/Curazao",
+      "donde_dormir": {
+        "mochilero": "posada familiar en Pampatar o Juan Griego: 15-25 EUR/noche",
+        "medio": "hotel 3* en Porlamar: 40-60 EUR/noche",
+        "comfort": "resort en Playa El Agua: 80-120 EUR/noche"
+      },
+      "que_hacer": [
+        "Playa El Agua: nadar, tomar sol (gratis)",
+        "Windsurf en Margarita (30-50 EUR/clase)",
+        "Pueblo costero de Juan Griego al atardecer (gratis)",
+        "Snorkel en islotes cercanos (25-40 EUR con guía)",
+        "Mercado de Porlamar para artesanía local (gratis explorar)"
+      ],
+      "donde_comer": "Langosta, pargo y arepa en restaurantes de Porlamar o Juan Griego. Rango: 5-15 EUR plato principal. Mejor zona: frente al mar en Pampatar",
+      "consejo_local": "Juan Griego es más auténtico y barato que Porlamar. Lleva efectivo en bolívares si es posible, aunque USD se acepta en turismo",
+      "plan_b_lluvia": "Visitar pueblos coloniales en el interior (Asunción), museos locales o mercados cubiertos",
+      "alerta_seguridad": "Margarita es relativamente más segura que el continente, pero evita desplazamientos nocturnos y mantén precaución en áreas alejadas",
+      "keywords": [
+        "isla margarita",
+        "porlamar",
+        "juan griego",
+        "playa el agua",
+        "nueva esparta",
+        "caribeño venezolano"
+      ]
+    },
+    {
+      "id": "canaima",
+      "nombre": "Parque Nacional Canaima",
+      "tipo": "naturaleza",
+      "region": "Bolívar, Guayana",
+      "descripcion": "Patrimonio UNESCO con biodiversidad extrema: jungla virgen, ríos con rápidos y el Salto Ángel, la cascada más alta del mundo. Acceso únicamente a pie o río; experiencia auténtica de guías indígenas Pemon.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "noviembre a marzo (menos lluvia)",
+      "como_llegar": "Vuelo Caracas a Puerto Ordaz o Ciudad Bolívar (1-1.5h, ~50-100 EUR), luego jeep/bus a Canaima (6-8h, ~25-40 EUR). O tour operador que incluye acceso",
+      "donde_dormir": {
+        "mochilero": "campamento indígena Pemon: 20-35 EUR/noche con comidas",
+        "medio": "lodge ecoturístico (Campamento Ucaima): 50-80 EUR/noche",
+        "comfort": "no hay opción comfort; la experiencia es rústica por diseño"
+      },
+      "que_hacer": [
+        "Salto Ángel (trekking 5-6h, incluido en tour: 80-150 EUR)",
+        "Paseo en canoa por río Carrao (4h, 40-60 EUR)",
+        "Caminar con guías Pemon en la selva (30-50 EUR)",
+        "Piscina natural La Hacha (gratis con acceso al parque)",
+        "Observación de aves y fauna (gratis durante senderismo)"
+      ],
+      "donde_comer": "Comida tradicional Pemon (casabe, granos, pescado). Incluida en lodges. Rango: 10-20 EUR comida casera. Los tours organizados suelen llevar comida",
+      "consejo_local": "Mejor contratar tours en Ciudad Bolívar con operadores locales que en Caracas. Los guías Pemon son expertos en la selva; respeta su ritmo. Lleva repelente potente",
+      "plan_b_lluvia": "La lluvia es parte del viaje; los ríos suben y las vistas cambian. Si hay crecida extrema, permanece en campamento disfrutando de la naturaleza",
+      "alerta_seguridad": "El acceso terrestre a Canaima atraviesa zonas de control minero ilegal. Se recomienda usar tours organizados de operadores establecidos. Viajar solo no es recomendable",
+      "keywords": [
+        "salto angel",
+        "canaima",
+        "pemon",
+        "guayana",
+        "bolivar",
+        "rio carrao",
+        "selva amazonica"
+      ]
+    },
+    {
+      "id": "merida",
+      "nombre": "Mérida y Los Andes",
+      "tipo": "montaña",
+      "region": "Mérida, Los Andes",
+      "descripcion": "Cordillera andina con la ciudad más alta de Venezuela. Teleférico histórico sube a 4.765m; senderos de montaña, pueblos coloniales y vista de páramo alpino. Clima frío, aire limpio, ambiente universitario y bohemio.",
+      "dias_recomendados": 4,
+      "mejor_epoca": "diciembre a marzo",
+      "como_llegar": "Vuelo Caracas a Mérida (1h, ~70-120 EUR) o autobús (12h, ~15-25 EUR). Desde Margarita es más complicado",
+      "donde_dormir": {
+        "mochilero": "posada en la Avenida de los Próceres: 15-25 EUR/noche",
+        "medio": "hotel 3* centro histórico: 35-55 EUR/noche",
+        "comfort": "hotel con vista a la sierra: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Teleférico de Mérida (4.765m, ida/vuelta 20-30 EUR)",
+        "Trekking a laguna de Mucubají (5h, guía 30-50 EUR)",
+        "Paseo a caballo en páramo (3h, 25-40 EUR)",
+        "Explorar pueblo de Jají (gratis, a 40km)",
+        "Mérida Extrema: tirolesa, rappel, trekking nocturno (50-80 EUR)"
+      ],
+      "donde_comer": "Trucha de los ríos andinos, arepas, carne asada. Rango: 5-12 EUR plato. Avenida de los Próceres concentra restaurantes y cafeterías. Especialidad: fresas con queso",
+      "consejo_local": "El teleférico funciona irregularmente; pregunta en posada el día anterior. La noche es muy fría en la cima (lleva abrigo). Los guías locales son confiables",
+      "plan_b_lluvia": "Mérida se nubla frecuentemente por las tardes. Sube al teleférico temprano. Alterna con exploración de pueblos coloniales cercanos",
+      "alerta_seguridad": "Mérida es relativamente segura en el centro turístico, pero evita zonas periféricas y desplazamientos solos nocturnos",
+      "keywords": [
+        "merida",
+        "teleférico",
+        "los andes",
+        "páramo",
+        "venezuela",
+        "mucubaji",
+        "jají"
+      ]
+    },
+    {
+      "id": "coche",
+      "nombre": "Isla de Coche",
+      "tipo": "isla",
+      "region": "Nueva Esparta",
+      "descripcion": "Isla pequeña hermana de Margarita, menos turística, con playas vírgenes, posibilidad de buceo y vida más lenta. Ideal para quien busca escapar del turismo masivo pero con comodidades básicas.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Ferry desde Margarita (Porlamar, 30min, ~8-12 EUR) o vuelos privados. Mejor acceso desde Margarita como excursión",
+      "donde_dormir": {
+        "mochilero": "posada familiar: 15-20 EUR/noche",
+        "medio": "pequeño hotel frente al mar: 30-45 EUR/noche",
+        "comfort": "no hay opción 4*, infraestructura limitada intencionadamente"
+      },
+      "que_hacer": [
+        "Playa Las Aguas: nadar, buceo (gratis entrada, 30-50 EUR inmersión)",
+        "Snorkel en arrecife (20-40 EUR con guía)",
+        "Paseo en bote a playas remotas (25-35 EUR)",
+        "Visita a salina histórica (gratis)",
+        "Exploración a pie de la isla (gratis)"
+      ],
+      "donde_comer": "Pescado fresco, ceviches, arepa. Rango: 5-10 EUR. Pocas opciones; comer donde hay gente local",
+      "consejo_local": "No hay cajero automático; lleva efectivo desde Margarita. La isla es muy pequeña; 2 días es suficiente. Buceo es más seguro que en Margarita",
+      "plan_b_lluvia": "Es isla caribeña; lluvia breve. Siesta en posada y disfruta de la soledad",
+      "alerta_seguridad": "Coche es segura. Isla pequeña y controlada por habitantes locales",
+      "keywords": [
+        "coche",
+        "isla",
+        "nueva esparta",
+        "playas",
+        "buceo",
+        "caribeño"
+      ]
+    },
+    {
+      "id": "puerto-la-cruz",
+      "nombre": "Puerto La Cruz y Cumaná",
+      "tipo": "playa",
+      "region": "Anzoátegui y Sucre",
+      "descripcion": "Puertos costeros del Caribe oriental con playas accesibles, vida marina y cercanía a archipiélagos. Cumaná es la ciudad más antigua de Sudamérica. Punto de salida para Margarita y Canaima.",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Vuelo Caracas (1h, ~60-100 EUR) o autobús (5-6h, ~15-25 EUR desde Caracas)",
+      "donde_dormir": {
+        "mochilero": "posada centro: 12-18 EUR/noche",
+        "medio": "hotel 3* frente al paseo: 30-50 EUR/noche",
+        "comfort": "resort Margarita (isla vecina): 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo marítimo (Paseo Colón): caminar, comer, observar (gratis)",
+        "Playa de Puerto La Cruz: baño, descanso (gratis)",
+        "Tour a archipiélagos (Mochimeros, Los Testigos) (40-70 EUR)",
+        "Cumaná (30min): castillo San Antonio de Boca de Río, iglesia histórica (gratis)",
+        "Ferry a Margarita (3-4h, ~20-40 EUR)"
+      ],
+      "donde_comer": "Ceviches, camarones, arepa. Paseo Colón tiene opciones turísticas (8-15 EUR). Busca donde comen locales para mejor precio (5-8 EUR)",
+      "consejo_local": "Puerto La Cruz es más moderno; Cumaná es más histórica pero menos infraestructura turística. Usa Puerto La Cruz como base si buscas comodidad",
+      "plan_b_lluvia": "Lluvia breve en el Caribe. Refugiarse en restaurantes con vista; vida en puerto continúa",
+      "alerta_seguridad": "Puerto La Cruz tiene áreas problemáticas. Mantén viajes en zona turística (paseo marítimo) y evita alejarte al anochecer",
+      "keywords": [
+        "puerto la cruz",
+        "cumania",
+        "paseo colon",
+        "caribeño",
+        "anzoategui",
+        "sucre"
+      ]
+    },
+    {
+      "id": "sorte",
+      "nombre": "Los Roques y archipiélagos",
+      "tipo": "isla",
+      "region": "Distrito Federal, frente a Caracas",
+      "descripcion": "Archipiélago nacional con buceo de clase mundial, playa de arena blanca virgen y biodiversidad marina. Acceso controlado y limitado; experiencia auténtica pero cara. Ideal para buceadores.",
+      "dias_recomendados": 3,
+      "mejor_epoca": "diciembre a abril",
+      "como_llegar": "Vuelo desde Caracas (45min, ~100-180 EUR ida/vuelta) con operadores especializados como Aerotur",
+      "donde_dormir": {
+        "mochilero": "posada simple en Gran Roque: 40-60 EUR/noche",
+        "medio": "posada comfort Gran Roque: 60-100 EUR/noche",
+        "comfort": "lodge con todas comodidades: 100-150 EUR/noche"
+      },
+      "que_hacer": [
+        "Buceo (2-3 inmersiones: 80-120 EUR)",
+        "Snorkel desde playa (gratis entrada, guía opcional 25-40 EUR)",
+        "Paseo en bote a playas desiertas (30-50 EUR)",
+        "Avistamiento de tortugas (incluido en tours)",
+        "Pesca (con operador local: 50-80 EUR)"
+      ],
+      "donde_comer": "Pescado fresco diario, langosta. Posadas incluyen comidas simples. Rango: 10-20 EUR comida. Sin mucha variedad",
+      "consejo_local": "Lleva dinero en efectivo; no hay cajeros. El parque tiene cuota de entrada (~15 EUR). Reserva con operador desde Caracas. Paciencia con vuelos: cancelaciones frecuentes por clima",
+      "plan_b_lluvia": "Lluvia = cambio de inmersiones a snorkel o espera. Clima es impredecible",
+      "alerta_seguridad": "Los Roques es seguro; está bajo protección de parque nacional con presencia de guardaparques",
+      "keywords": [
+        "los roques",
+        "archipiélago",
+        "buceo",
+        "gran roque",
+        "caribeño",
+        "parque nacional"
+      ]
+    },
+    {
+      "id": "orinoco",
+      "nombre": "Viaje por el Orinoco (Orinoquía)",
+      "tipo": "naturaleza",
+      "region": "Apure y Amazonas",
+      "descripcion": "Navegación por el río más caudaloso de Sudamérica: llanos inundados, fauna salvaje (caimanes, delfines rosados), comunidades indígenas y paisaje primitivo. Experiencia pura de naturaleza y cultura",
+      "dias_recomendados": 4,
+      "mejor_epoca": "julio a octubre (aguas altas para navegación mejor)",
+      "como_llegar": "Vuelo a Puerto Ayacucho (Amazonas) desde Caracas (~2h, ~80-140 EUR), luego contratar tour operador local (4-5 días incluido: 600-1000 EUR)",
+      "donde_dormir": {
+        "mochilero": "campamento simple indígena/operador: 30-50 EUR/noche",
+        "medio": "lodge ecoturístico básico: 50-80 EUR/noche",
+        "comfort": "no hay; experiencia es rústica"
+      },
+      "que_hacer": [
+        "Navegación en canoa motorizada (incluida en tour)",
+        "Avistamiento de delfines rosados (gratis en tour)",
+        "Encuentro con comunidades indígenas Warao, Yanomami (con respeto)",
+        "Pesca de pirañas (gratis en tour)",
+        "Caminata en selva húmeda (guía incluido)"
+      ],
+      "donde_comer": "Comida indígena: pescado, yuca, frutos silvestres. Tours incluyen alimentación. Rango: 10-15 EUR/día, muy básico",
+      "consejo_local": "Contrata solo con operadores establecidos en Puerto Ayacucho. Viajes solo no recomendados. Acepta que es incómodo (mosquitos, calor, suciedad) y disfruta la aventura",
+      "plan_b_lluvia": "Lluvia es norma. Río crece; viajes se adaptan. Trae impermeable",
+      "alerta_seguridad": "Amazonas tiene presencia de grupos irregulares. Viaja con operador de confianza. No salgas solo del grupo",
+      "keywords": [
+        "orinoco",
+        "amazonas",
+        "puerto ayacucho",
+        "llanos",
+        "delfin rosa",
+        "indigena",
+        "warao"
+      ]
+    },
+    {
+      "id": "maturin",
+      "nombre": "Maturín y caverna de Caripe",
+      "tipo": "naturaleza",
+      "region": "Monagas",
+      "descripcion": "Caverna de estalactitas (Cueva del Guácharo) en profunda selva subtropical. Pueblo pequeño de Caripe es acceso a una de las cuevas más grandes de Sudamérica. Experiencia arqueológica y de naturaleza",
+      "dias_recomendados": 2,
+      "mejor_epoca": "octubre a abril",
+      "como_llegar": "Vuelo Caracas a Maturín (1h, ~60-100 EUR) o autobús (9h, ~20-35 EUR). Luego coche a Caripe (90km, 2-3h, ~15-25 EUR compartido)",
+      "donde_dormir": {
+        "mochilero": "posada en Caripe: 15-22 EUR/noche",
+        "medio": "pequeño hotel en Caripe: 30-45 EUR/noche",
+        "comfort": "no hay; infraestructura mínima"
+      },
+      "que_hacer": [
+        "Caverna del Guácharo (entrada + guía obligatorio: 15-25 EUR)",
+        "Camino de los Guácharos (sendero, 3-4h: 20-30 EUR con guía)",
+        "Piscina natural del río (gratis)",
+        "Exploración del pueblo de Caripe (gratis)",
+        "Observación de fauna nocturna (guía: 20-30 EUR)"
+      ],
+      "donde_comer": "Comida casera, pollo, arepa. Rango: 4-8 EUR. Pocas opciones; come en la posada o fondas locales",
+      "consejo_local": "Caripe es pueblito tranquilo. No hay turismo masivo. La caverna es húmeda y fresca; lleva abrigo. Contrata guía local en Caripe (no desde Caracas)",
+      "plan_b_lluvia": "Lluvia hace caverna más espectacular (agua suena fuerte). Senderos pueden ser lódosos",
+      "alerta_seguridad": "Monagas tiene criminalidad moderada. Mantente en ruta turística (Caripe) y evita salidas nocturnas",
+      "keywords": [
+        "caripe",
+        "guacharo",
+        "caverna",
+        "monagas",
+        "maturin",
+        "cueva"
+      ]
+    },
+    {
+      "id": "coro",
+      "nombre": "Coro y Medanos",
+      "tipo": "histórico",
+      "region": "Falcón",
+      "descripcion": "Ciudad colonial UNESCO, primera capital de Venezuela, con arquitectura española intacta. Cercano: Médanos de Coro (desierto de arena en el Caribe). Combinación única de historia y paisaje desértico",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a abril",
+      "como_llegar": "Vuelo Caracas a Coro (1h, ~80-130 EUR) o autobús (4-5h, ~15-25 EUR)",
+      "donde_dormir": {
+        "mochilero": "posada en centro histórico: 15-22 EUR/noche",
+        "medio": "hotel 3* colonial: 35-50 EUR/noche",
+        "comfort": "resort en Médanos: 60-90 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo por centro histórico: iglesias, plazas, mansiones coloniales (gratis)",
+        "Museo de Cerámica (5 EUR entrada)",
+        "Médanos de Coro: paseo en 4x4 (25-40 EUR)",
+        "Sandboarding en médanos (15-30 EUR)",
+        "Playa Adicora (30km, gratis)"
+      ],
+      "donde_comer": "Arepa rellena, carne, mariscos. Rango: 5-10 EUR. Centro histórico tiene restaurantes turísticos; busca fondas locales",
+      "consejo_local": "Coro es muy tranquilo y fácil de visitar a pie. Médanos son únicos en Caribe: arena de verdad. Visita temprano para evitar calor",
+      "plan_b_lluvia": "Lluvia rara en Coro. Si cae, disfruta arquitectura en museos",
+      "alerta_seguridad": "Coro es segura. Mantén normal precaución; evita salidas nocturnas solitarias",
+      "keywords": [
+        "coro",
+        "medanos",
+        "falcón",
+        "colonial",
+        "desierto caribeño",
+        "adicora"
+      ]
+    },
+    {
+      "id": "maracacaibo",
+      "nombre": "Maracaibo y Lago de Maracaibo",
+      "tipo": "ciudad",
+      "region": "Zulia",
+      "descripcion": "Segunda ciudad de Venezuela, puerto en lago más grande de Sudamérica. Vida urbana caribeña, mercado local animado, patrimonio arquitectónico. Menos turística que otras opciones pero auténtica",
+      "dias_recomendados": 2,
+      "mejor_epoca": "noviembre a marzo",
+      "como_llegar": "Vuelo Caracas (1h, ~70-110 EUR) o autobús (12h, ~20-35 EUR)",
+      "donde_dormir": {
+        "mochilero": "posada centro: 15-20 EUR/noche",
+        "medio": "hotel 3* zona turística: 40-60 EUR/noche",
+        "comfort": "hotel 4*: 70-100 EUR/noche"
+      },
+      "que_hacer": [
+        "Paseo de la Cintura: malecón del lago (gratis)",
+        "Mercado Las Pulgas: artesanía y cultura local (gratis explorar)",
+        "Basílica de Santa María: iglesia icónica (gratis)",
+        "Tour a comunidades lacustres en canoa (30-50 EUR)",
+        "Iglesia de San Francisco: arquitectura colonial (gratis)"
+      ],
+      "donde_comer": "Arepa, tequeños, carne; gastronomía zuliiana típica. Rango: 5-12 EUR. Mercado tiene comida callejera (2-4 EUR). Zona turística más caro",
+      "consejo_local": "Maracaibo es caliente y húmedo; no es destino de playa (lago, no mar). Visitado por pocos turistas extranjeros. Gente amable. Paseo de noche es seguro",
+      "plan_b_lluvia": "Lluvia es breve. Refugiarse en mercados cubiertos",
+      "alerta_seguridad": "Maracaibo tiene criminalidad moderada. Zona turística (Paseo de la Cintura) es segura. Evita barrios alejados y salidas nocturnas",
+      "keywords": [
+        "maracaibo",
+        "zulia",
+        "lago",
+        "cintura",
+        "caribeño",
+        "venezuela"
+      ]
+    }
+  ]
+}
