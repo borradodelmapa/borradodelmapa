@@ -405,7 +405,7 @@ const mapaItinerario = {
 
     // Ocultar contenido principal; en desktop dejar input bar visible para chatear
     if (appContent) appContent.style.display = 'none';
-    if (inputBar && window.innerWidth < 769) inputBar.style.display = 'none';
+    if (inputBar) inputBar.style.display = 'none';
     const bottomBar = document.getElementById('app-bottom-bar');
     if (bottomBar) bottomBar.style.display = 'none';
     view.style.display = 'block';
