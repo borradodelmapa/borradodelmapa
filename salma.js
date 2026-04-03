@@ -1861,7 +1861,8 @@ const salma = {
           if (data === '[DONE]') continue;
           try {
             const parsed = JSON.parse(data);
-            const delta = parsed.choices?.[0]?.delta?.content || '';
+            if (parsed.done) break;
+            const delta = parsed.t || '';
             if (delta) { fullText += delta; if (onChunk) onChunk(fullText); }
           } catch {}
         }
