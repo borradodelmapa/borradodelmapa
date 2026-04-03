@@ -77,8 +77,9 @@ const mapaRuta = {
     if (!valid.length) { el.style.display = 'none'; return; }
 
     const KEY = 'AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA';
-    const w = el.offsetWidth || 640;
-    const h = el.offsetHeight || 360;
+    // offsetWidth/offsetHeight puede ser 0 si el contenedor aún no se ha pintado
+    const w = el.offsetWidth > 10 ? el.offsetWidth : 640;
+    const h = el.offsetHeight > 10 ? el.offsetHeight : 380;
     const size = `${Math.min(w, 640)}x${Math.min(h, 400)}`;
 
     // Marcadores numerados con color por día

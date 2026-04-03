@@ -66,10 +66,10 @@
 <script>
 window._loadGoogleMaps = function() {
   return new Promise((resolve, reject) => {
-    if (window.google && window.google.maps) { resolve(); return; }
+    if (window.google && window.google.maps && window.google.maps.Map) { resolve(); return; }
+    window._gmapsReady = resolve;
     const s = document.createElement('script');
-    s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA&libraries=geometry,marker&loading=async';
-    s.onload = resolve;
+    s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA&libraries=geometry,marker&callback=_gmapsReady';
     s.onerror = reject;
     document.head.appendChild(s);
   });

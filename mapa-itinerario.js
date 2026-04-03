@@ -406,6 +406,8 @@ const mapaItinerario = {
     // Ocultar contenido principal; en desktop dejar input bar visible para chatear
     if (appContent) appContent.style.display = 'none';
     if (inputBar && window.innerWidth < 769) inputBar.style.display = 'none';
+    const bottomBar = document.getElementById('app-bottom-bar');
+    if (bottomBar) bottomBar.style.display = 'none';
     view.style.display = 'block';
 
     // Inicializar mapa y cards
@@ -423,6 +425,8 @@ const mapaItinerario = {
         view.style.display = 'none';
         if (appContent) appContent.style.display = '';
         if (inputBar) inputBar.style.display = '';
+        const bb = document.getElementById('app-bottom-bar');
+        if (bb) bb.style.display = '';
         mapaRuta.destroy();
         mapaItinerario.destroy();
         window.showState = _origShowState; // restaurar
@@ -443,7 +447,9 @@ const mapaItinerario = {
 
     if (view) view.style.display = 'none';
     if (appContent) appContent.style.display = '';
-    if (inputBar) inputBar.style.display = ''; // siempre restaurar
+    if (inputBar) inputBar.style.display = '';
+    const bottomBar = document.getElementById('app-bottom-bar');
+    if (bottomBar) bottomBar.style.display = '';
 
     // Restaurar showState si fue interceptado
     if (window.showState !== window._showStateOriginal && typeof window._showStateOriginal === 'function') {
