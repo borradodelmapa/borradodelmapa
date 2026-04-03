@@ -474,21 +474,31 @@ const mapaRuta = {
     document.getElementById('ccs-input').addEventListener('keydown', e => { if (e.key === 'Enter') doSend(); });
   },
 
+  _streamingDiv: null,
+
   _addChatMessage(role, text) {
     const msgs = document.getElementById('ccs-messages');
     if (!msgs) return;
+    // Para Salma en streaming: actualizar el mismo div en vez de crear uno nuevo
+    if (role === 'salma' && this._streamingDiv && msgs.contains(this._streamingDiv)) {
+      this._streamingDiv.textContent = text;
+      msgs.scrollTop = msgs.scrollHeight;
+      return;
+    }
     const div = document.createElement('div');
     div.className = `ccs-msg ccs-msg-${role}`;
     div.textContent = text;
     msgs.appendChild(div);
     msgs.scrollTop = msgs.scrollHeight;
-    // Expandir el sheet cuando llega una respuesta
     if (role === 'salma') {
+      this._streamingDiv = div;
       const sheet = document.getElementById('copilot-chat-sheet');
       if (sheet && !this._chatExpanded) {
         this._chatExpanded = true;
         sheet.classList.add('ccs-expanded');
       }
+    } else {
+      this._streamingDiv = null;
     }
   },
 

@@ -1838,6 +1838,7 @@ const salma = {
       country: this._copilotCountry || '',
     };
 
+    let streamCompleted = false;
     try {
       const res = await fetch(window.SALMA_API, {
         method: 'POST',
@@ -1849,8 +1850,9 @@ const salma = {
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let fullText = '';
+      let streamDone = false;
 
-      while (true) {
+      while (!streamDone) {
         const { done, value } = await reader.read();
         if (done) break;
         const chunk = decoder.decode(value, { stream: true });
@@ -1858,23 +1860,24 @@ const salma = {
         for (const line of lines) {
           if (!line.startsWith('data: ')) continue;
           const data = line.slice(6).trim();
-          if (data === '[DONE]') continue;
+          if (data === '[DONE]') { streamDone = true; break; }
           try {
             const parsed = JSON.parse(data);
-            if (parsed.done) break;
+            if (parsed.done) { streamDone = true; break; }
             const delta = parsed.t || '';
             if (delta) { fullText += delta; if (onChunk) onChunk(fullText); }
           } catch {}
         }
       }
 
+      streamCompleted = true;
       // Actualizar historial
       this._history.push({ role: 'user', content: msg });
       this._history.push({ role: 'assistant', content: fullText });
       if (this._history.length > 20) this._history = this._history.slice(-20);
 
     } catch (e) {
-      if (onChunk) onChunk('Error conectando con Salma. Inténtalo de nuevo.');
+      if (!streamCompleted && onChunk) onChunk('Error conectando con Salma. Inténtalo de nuevo.');
     }
   }
 };
