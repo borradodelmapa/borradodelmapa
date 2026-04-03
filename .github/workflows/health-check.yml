@@ -1,0 +1,27 @@
+name: Salma Health Check
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Cada 6 horas
+  workflow_dispatch:
+
+jobs:
+  ping:
+    name: Worker online check
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Ping worker
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST https://salma-api.paco-defoto.workers.dev/ \
+            -H "Content-Type: application/json" \
+            -d '{"message":"ping","history":[],"uid":"health-check"}' \
+            --max-time 15)
+          echo "HTTP status: $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "❌ Worker no responde (HTTP $STATUS)"
+            exit 1
+          fi
+          echo "✅ Worker online"
