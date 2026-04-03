@@ -92,15 +92,16 @@ const mapaRuta = {
     const pathCoords = valid.map(s => `${s.lat},${s.lng}`).join('|');
     const path = `path=color:0xD4A843CC|weight:3|${pathCoords}`;
 
-    // Dark style Salma
+    // Dark style Salma (colores suficientemente contrastados para ser visibles)
     const styles = [
-      'style=feature:all|element:geometry|color:0x1a1a1a',
-      'style=feature:road|element:geometry|color:0x38414e',
-      'style=feature:road|element:geometry.stroke|color:0x212a37',
-      'style=feature:water|element:geometry|color:0x17263c',
+      'style=feature:all|element:geometry|color:0x242424',
+      'style=feature:road|element:geometry|color:0x4a5568',
+      'style=feature:road.highway|element:geometry|color:0x6b7280',
+      'style=feature:water|element:geometry|color:0x1e3a5f',
+      'style=feature:landscape|element:geometry|color:0x2d3748',
       'style=feature:poi|element:all|visibility:off',
       'style=feature:transit|element:all|visibility:off',
-      'style=feature:all|element:labels.text.fill|color:0x9e9e9e',
+      'style=feature:all|element:labels.text.fill|color:0xb0b0b0',
       'style=feature:all|element:labels.text.stroke|color:0x1a1a1a',
     ].join('&');
 
