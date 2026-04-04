@@ -2031,13 +2031,16 @@ body {
   font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;
   flex-shrink:0;
 }
-.ccs-cam-btn {
-  width:36px; height:36px; border-radius:10px; flex-shrink:0;
+.ccs-cam-btn,
+.ccs-mic-btn {
+  width:40px; height:40px; border-radius:50%; flex-shrink:0;
   display:flex; align-items:center; justify-content:center; cursor:pointer;
-  background:rgba(244,239,230,.07); color:rgba(244,239,230,.5);
-  border:1px solid rgba(244,239,230,.1); transition:color .2s,border-color .2s;
+  background:rgba(244,239,230,.07); color:rgba(244,239,230,.55);
+  border:1px solid rgba(244,239,230,.1); transition:color .2s,background .2s;
 }
-.ccs-cam-btn:hover { color:rgba(244,239,230,.9); border-color:rgba(244,239,230,.25); }
+.ccs-cam-btn:hover, .ccs-mic-btn:hover { color:rgba(244,239,230,.9); background:rgba(244,239,230,.12); }
+.ccs-mic-active { background:var(--dorado) !important; color:#0c0a06 !important; }
+.ccs-mic-active svg { stroke:#0c0a06; }
 
 /* ═══ COPILOTO FULLSCREEN ═══ */
 .itin-view.copilot-fullscreen .itin-map-col { flex:0 0 100%; width:100%; height:100%; }
