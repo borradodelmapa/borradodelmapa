@@ -459,7 +459,15 @@ const mapaItinerario = {
         // Restaurar nav según estado del chat
         const bb = document.getElementById('app-bottom-bar');
         if (bb) bb.style.display = mapaRuta._chatExpanded ? '' : 'none';
-        setTimeout(() => mapaRuta.invalidateSize(), 150);
+        setTimeout(() => {
+          mapaRuta.invalidateSize();
+          // Re-renderizar controles y FAB por si Google Maps los borró al ocultar el div
+          const cid = mapaRuta._currentContainerId;
+          if (cid) {
+            mapaRuta._renderMapControls(cid);
+            mapaRuta._renderCopilotFab(cid);
+          }
+        }, 200);
       });
       document.body.appendChild(btn);
     }
