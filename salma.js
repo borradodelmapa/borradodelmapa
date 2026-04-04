@@ -587,7 +587,10 @@ const salma = {
     $send.disabled = true;
     const camBtn = document.getElementById('cam-btn');
     if (camBtn) camBtn.disabled = true;
-    const loadingEl = this._addLoading();
+    const loadingPhrase = this._isRouteMsg(msg)
+      ? null  // aleatoria del pool de rutas
+      : this._loadingPhrasesSimple[Math.floor(Math.random() * this._loadingPhrasesSimple.length)];
+    const loadingEl = this._addLoading(loadingPhrase);
 
     try {
       const body = {
@@ -1701,6 +1704,12 @@ const salma = {
     'Preguntando a los locales...', 'Comprobando horarios...',
     'Buscando restaurantes de verdad...', 'Verificando coordenadas...',
   ],
+  _loadingPhrasesSimple: [
+    'Un momento...', 'Pensando...', 'Dame un segundo...', 'Ahí voy...',
+  ],
+  _isRouteMsg(msg) {
+    return /ruta|itinerario|días|dias|semana|viaje a |voy a |me voy a |quiero ir|visitar|recorrer|\d+\s*d[íi]/i.test(msg);
+  },
   _loadingInterval: null,
 
   // ═══ BOTÓN VOLVER A LA RUTA (cuando se chatea desde el itinerario) ═══
