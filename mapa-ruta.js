@@ -656,13 +656,16 @@ const mapaRuta = {
       this._chatExpanded = !this._chatExpanded;
       sheet.classList.toggle('ccs-expanded', this._chatExpanded);
       const nav = document.getElementById('app-bottom-bar');
+      const fab = document.getElementById('copilot-fab');
       if (this._chatExpanded) {
         document.getElementById('ccs-input').focus();
         if (nav) nav.style.display = '';
         sheet.classList.add('ccs-above-nav');
+        fab?.classList.add('fab-raised');
       } else {
         if (nav) nav.style.display = 'none';
         sheet.classList.remove('ccs-above-nav');
+        fab?.classList.remove('fab-raised');
       }
     });
 
@@ -735,6 +738,7 @@ const mapaRuta = {
         this._chatExpanded = true;
         sheet.classList.add('ccs-expanded');
         sheet.classList.add('ccs-above-nav');
+        document.getElementById('copilot-fab')?.classList.add('fab-raised');
         // Mostrar nav al expandirse
         const navEl = document.getElementById('app-bottom-bar');
         if (navEl) navEl.style.display = '';

@@ -1956,8 +1956,9 @@ body {
   position:absolute; bottom:68px; right:16px; z-index:520;
   display:flex; align-items:center; gap:7px;
   border:none; cursor:pointer; border-radius:24px;
-  padding:10px 16px; transition:all .25s; box-shadow:0 4px 16px rgba(0,0,0,.4);
+  padding:10px 16px; transition:all .3s cubic-bezier(.4,0,.2,1); box-shadow:0 4px 16px rgba(0,0,0,.4);
 }
+.copilot-fab.fab-raised { bottom:336px; }
 .copilot-fab-off {
   background:rgba(12,10,6,.85); backdrop-filter:blur(10px);
   color:rgba(244,239,230,.55); border:1px solid rgba(244,239,230,.12);
