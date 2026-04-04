@@ -25,6 +25,7 @@ const salma = {
   _narratorActive: false,
   _narratorNotified: new Set(),
   _narratorLastCheck: 0,
+  _narratorLastCheckPerContext: new Map(),
   _narratorInterval: null,
   _rateLimitNotified: false,
   _voices: [],
@@ -1230,6 +1231,7 @@ const salma = {
   stopNarrator() {
     this._narratorActive = false;
     this._rateLimitNotified = false;  // Reset flag para próxima sesión
+    this._narratorLastCheckPerContext.clear();  // Reset throttle per context
     if (this._narratorInterval) {
       clearInterval(this._narratorInterval);
       this._narratorInterval = null;
@@ -1244,9 +1246,12 @@ const salma = {
     // Funciona en vista de ruta O en chat principal
     const itinView = document.getElementById('itin-view');
     const inRouteView = itinView && itinView.style.display !== 'none';
+    // Throttle per context (route vs chat) para evitar delay innecesario al cambiar de vista
+    const contextKey = inRouteView ? 'route' : 'chat';
+    const lastCheck = this._narratorLastCheckPerContext.get(contextKey) || 0;
     const now = Date.now();
-    if (now - this._narratorLastCheck < 25000) return;
-    this._narratorLastCheck = now;
+    if (now - lastCheck < 25000) return;
+    this._narratorLastCheckPerContext.set(contextKey, now);
 
     const { lat, lng } = this._userLocation;
     console.log('[Salma] Narrator check:', lat, lng);
