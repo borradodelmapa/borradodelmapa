@@ -1273,6 +1273,16 @@ body {
 }
 .auth-back:hover { opacity:1; }
 
+/* Botón cerrar modal */
+.auth-close {
+  position:absolute; top:calc(env(safe-area-inset-top, 16px) + 4px); right:16px;
+  background:none; border:none; color:var(--crema); font-size:32px;
+  cursor:pointer; opacity:.5; padding:4px; line-height:1; width:40px; height:40px;
+  display:flex; align-items:center; justify-content:center;
+  transition:opacity .2s;
+}
+.auth-close:hover { opacity:1; }
+
 /* Acciones welcome */
 .auth-actions { display:flex; flex-direction:column; gap:14px; padding-bottom:8px; }
 

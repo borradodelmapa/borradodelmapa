@@ -2402,6 +2402,14 @@ document.getElementById('auth-go-register')?.addEventListener('click', () => _au
 document.getElementById('auth-back-login')?.addEventListener('click', () => _authShowView('welcome'));
 document.getElementById('auth-back-register')?.addEventListener('click', () => _authShowView('welcome'));
 document.getElementById('auth-skip')?.addEventListener('click', closeModal);
+// Botones de cerrar modal
+document.getElementById('auth-close-welcome')?.addEventListener('click', closeModal);
+document.getElementById('auth-close-login')?.addEventListener('click', closeModal);
+document.getElementById('auth-close-register')?.addEventListener('click', closeModal);
+// Escrim clickeable para cerrar modal
+document.getElementById('auth-screen')?.addEventListener('click', (e) => {
+  if (e.target.id === 'auth-screen') closeModal();
+});
 document.getElementById('switch-to-register')?.addEventListener('click', () => _authShowView('register'));
 document.getElementById('switch-to-login')?.addEventListener('click', () => _authShowView('login'));
 
