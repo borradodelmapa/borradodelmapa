@@ -180,9 +180,9 @@ async function renderWelcome() {
   window.scrollTo(0, 0);
   // Chips fallback — se muestran inmediatamente, Firestore actualiza después
   const defaultChips = `
-    <div class="chip" data-msg="3 días en Lisboa sola">Mi primer viaje sola</div>
-    <div class="chip" data-msg="Vietnam 15 días mochilero">Vietnam 15 días</div>
-    <div class="chip" data-msg="Me han robado el pasaporte en el extranjero">Pasaporte robado</div>`;
+    <div class="chip" data-msg="Mi primer viaje sola, dame tips">Mi primer viaje sola</div>
+    <div class="chip" data-msg="Vietnam 15 días, mochilero">Vietnam 15 días</div>
+    <div class="chip" data-msg="Me han robado el pasaporte, ayuda">Pasaporte robado</div>`;
 
   $content.innerHTML = `
     <div class="welcome-hero fade-in">
@@ -271,26 +271,9 @@ async function renderWelcome() {
     if (wCameraInput) wCameraInput.addEventListener('change', handleWelcomeFile);
   }
 
-  // Placeholder rotativo
+  // Placeholder estático (sin rotación)
   if (wInput) {
-    const ejemplos = [
-      'Vietnam 10 días en moto',
-      'Bangkok sin hotel, es tarde',
-      '3 días en Lisboa sola',
-      'Vacunas para Nepal',
-      'Me han robado en Roma',
-      'Japón 2 semanas, primer viaje',
-      'Médico en Tailandia urgente',
-      'Marruecos 5 días desde Tánger',
-      'Avería en carretera en Turquía',
-      'Ferry de Atenas a Santorini'
-    ];
-    let idx = 0;
-    window._placeholderInterval = setInterval(() => {
-      if (wInput.value) return;
-      idx = (idx + 1) % ejemplos.length;
-      wInput.placeholder = ejemplos[idx];
-    }, 3000);
+    wInput.placeholder = '¿A dónde vamos?';
   }
 
   // Event listeners para chips fallback (inmediatos)

@@ -646,6 +646,8 @@ const salma = {
       if (data.reply) {
         this.history.push({ role: 'assistant', content: data.reply });
       }
+      // Persistir historial
+      this._saveHistory();
 
       // Si hay ruta, renderizar guide-card
       if (data.route && data.route.stops) {
@@ -1434,6 +1436,28 @@ const salma = {
     area.insertAdjacentHTML('afterbegin', html);
   },
 
+  // ═══ PERSISTENCIA ═══
+
+  _saveHistory() {
+    // Guardar historial en localStorage (máximo 20 mensajes)
+    if (this.history && this.history.length > 0) {
+      try {
+        localStorage.setItem('_salmaHistory', JSON.stringify(this.history.slice(-20)));
+      } catch (e) {
+        console.warn('No se pudo guardar historial:', e);
+      }
+    }
+  },
+
+  reset() {
+    // Limpiar historial y localStorage
+    this.history = [];
+    localStorage.removeItem('_salmaHistory');
+    this._narratorActive = false;
+    this._rateLimitNotified = false;
+    this._narratorLastCheckPerContext.clear();
+  },
+
   // ═══ CHAT DOM ═══
 
   _initChat(skipWelcome) {
@@ -1443,6 +1467,27 @@ const salma = {
     }
     if (!document.getElementById('chat-area')) {
       $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
+    }
+    // Cargar historial desde localStorage (si existe)
+    const saved = localStorage.getItem('_salmaHistory');
+    if (saved && !this.currentRoute) {
+      try {
+        this.history = JSON.parse(saved);
+        // Renderizar historial guardado
+        const area = this._getChatArea();
+        if (area && this.history.length > 0) {
+          for (const msg of this.history) {
+            if (msg.role === 'user') {
+              this._addUserBubble(msg.content, msg.photoUrl);
+            } else if (msg.role === 'assistant') {
+              this._addSalmaBubble(msg.content);
+            }
+          }
+        }
+      } catch (e) {
+        console.error('Error cargando historial:', e);
+        localStorage.removeItem('_salmaHistory');
+      }
     }
     // Mostrar tarjeta copiloto si hay datos del país
     if (this._copilotData) this.showCopilotCard();
