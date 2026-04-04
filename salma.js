@@ -1134,6 +1134,9 @@ const salma = {
 
   async checkNearbyPOIs() {
     if (!this._narratorActive || !this._userLocation) return;
+    // Solo narrar si la vista de ruta está activa (no contaminar el chat principal)
+    const itinView = document.getElementById('itin-view');
+    if (!itinView || itinView.style.display === 'none') return;
     const now = Date.now();
     if (now - this._narratorLastCheck < 25000) return;
     this._narratorLastCheck = now;
@@ -1178,9 +1181,9 @@ const salma = {
             });
           }
 
-          // Si el chat está abierto, insertar burbuja
-          const area = this._getChatArea();
-          if (area) {
+          // Insertar en el chat del copiloto (ccs-messages), nunca en el chat principal
+          const ccsArea = document.getElementById('ccs-messages');
+          if (ccsArea) {
             const bubble = document.createElement('div');
             bubble.className = 'msg msg-salma narrator-msg';
             bubble.innerHTML = `
@@ -1189,8 +1192,8 @@ const salma = {
                 <div class="narrator-poi-name">📍 ${poi.name}</div>
                 ${narData.narrative}
               </div>`;
-            area.appendChild(bubble);
-            this._scrollToBottom(false);
+            ccsArea.appendChild(bubble);
+            ccsArea.scrollTop = ccsArea.scrollHeight;
             // Narrador habla automático solo si voz está activada
             if (localStorage.getItem('salma_voice') === 'true') {
               const narText = narData.narrative;
