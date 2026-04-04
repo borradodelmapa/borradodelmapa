@@ -4294,6 +4294,33 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     const history = body.history || [];
     const currentRoute = body.current_route || null;
     const userName = body.user_name || null;
+
+    // ─── RESPUESTAS PRE-COCINADAS — saludos simples sin contenido (~50ms, 0 tokens) ───
+    // Solo intercepta cuando el mensaje es un saludo puro, sin destino ni pregunta añadida
+    if (!currentRoute && history.length === 0) {
+      const msgNorm = message.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      const isPureGreeting = /^(hola[.!¡?]*|hey[.!]?|buenas[.!]?|buenos dias[.!]?|buenas (tardes|noches)[.!]?|ey[.!]?|hi[.!]?|hello[.!]?|qu[e']? (tal|pasa|hay)|como estas?[?]?|todo bien[?]?|saludos[.!]?)$/.test(msgNorm);
+      if (isPureGreeting) {
+        const nombre = body.user_name ? `, ${body.user_name.split(' ')[0]}` : '';
+        const respuestas = [
+          `¡Hola${nombre}! ¿A dónde tiramos hoy?`,
+          `¡Buenas${nombre}! Cuéntame, ¿qué destino te tiene loco?`,
+          `¡Ey${nombre}! El mundo está ahí fuera. ¿Cuál te apetece?`,
+          `¡Hola${nombre}! ¿Ruta nueva, vuelo, hotel… o estás en un lío viajero?`,
+          `¡Buenas${nombre}! Dime destino y días y te armo algo que merezca la pena.`,
+          `¡Ey${nombre}! ¿Tienes ya destino o seguimos soñando con el mapa?`,
+          `¡Hola${nombre}! ¿A dónde me llevas esta vez?`,
+          `¡Buenas${nombre}! Aquí estoy. ¿Qué se te ha metido entre ceja y ceja?`,
+          `¡Ey${nombre}! ¿Escapada de fin de semana o te vas al otro lado del mundo?`,
+          `¡Hola${nombre}! Dime un sitio y te digo todo lo que necesitas saber.`,
+        ];
+        const reply = respuestas[Math.floor(Math.random() * respuestas.length)];
+        return new Response(
+          JSON.stringify({ reply, route: null }),
+          { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
+        );
+      }
+    }
     const userNationality = body.nationality || null;
     const userLocation = body.user_location || null;
     const travelDates = body.travel_dates || null;
