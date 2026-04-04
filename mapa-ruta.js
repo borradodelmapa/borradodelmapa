@@ -797,14 +797,9 @@ const mapaRuta = {
     if (!marker) return;
 
     const gmapsUrl = `https://www.google.com/maps?q=${stop.lat},${stop.lng}`;
-    const KEY = 'AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
-    const photoHtml = stop.photo_ref
-      ? `<img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${stop.photo_ref}&key=${KEY}"
-             style="width:100%;height:160px;object-fit:cover;display:block;border-radius:8px 8px 0 0;"
-             onerror="this.style.display='none'">`
-      : '';
+    const dayColor = this._dayColors ? this._dayColors[((stop.day || 1) - 1) % this._dayColors.length] : '#D4A843';
 
-    const content = `
+    const _buildContent = (photoHtml) => `
       <div style="font-family:'Inter',sans-serif;width:260px;background:#0c0a06;border-radius:10px;overflow:hidden;color:#f4efe6;">
         ${photoHtml}
         <div style="padding:12px 14px 14px;">
@@ -821,11 +816,29 @@ const mapaRuta = {
         </div>
       </div>`;
 
-    // Cerrar el anterior
-    if (this._infoWindow) this._infoWindow.close();
+    // Placeholder de color mientras carga la foto
+    const placeholderHtml = `<div style="width:100%;height:160px;background:linear-gradient(135deg,${dayColor}44,${dayColor}11);border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center;">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="4" fill="${dayColor}" fill-opacity=".2"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="${dayColor}" fill-opacity=".7"/><circle cx="12" cy="9" r="2.5" fill="#fff" fill-opacity=".9"/></svg>
+    </div>`;
 
-    this._infoWindow = new google.maps.InfoWindow({ content, disableAutoPan: false });
+    // Cerrar el anterior y abrir con placeholder
+    if (this._infoWindow) this._infoWindow.close();
+    this._infoWindow = new google.maps.InfoWindow({ content: _buildContent(placeholderHtml), disableAutoPan: false });
     this._infoWindow.open(this._map, marker);
+
+    // Cargar foto real vía worker (evita placeholders de Google)
+    if (stop.photo_ref && window.SALMA_API) {
+      fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`)
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (!data?.url || !this._infoWindow) return;
+          const photoHtml = `<img src="${data.url}"
+            style="width:100%;height:160px;object-fit:cover;display:block;border-radius:8px 8px 0 0;"
+            onerror="this.parentNode.style.display='none'">`;
+          this._infoWindow.setContent(_buildContent(photoHtml));
+        })
+        .catch(() => {}); // mantener placeholder si falla
+    }
   },
 
   // ═══ RESALTAR MARCADOR ═══

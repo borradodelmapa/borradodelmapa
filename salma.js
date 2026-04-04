@@ -700,8 +700,9 @@ const salma = {
       this._scrollToBottom();
 
       // Si el usuario escribió desde el itinerario y la respuesta NO abre ruta nueva,
-      // añadir botón para volver a la ruta
-      if (_itinWasOpen && _itinSavedRoute && !(data.route && data.route.stops)) {
+      // añadir botón para volver a la ruta — solo si el copiloto NO está activo
+      // (si lo está, el botón VOLVER flotante ya cubre esta función)
+      if (_itinWasOpen && _itinSavedRoute && !(data.route && data.route.stops) && !window.mapaRuta?._copilotActive) {
         this._addReturnToRouteButton(_itinSavedRoute, _itinSavedDocId, _itinSavedOptions);
       }
 

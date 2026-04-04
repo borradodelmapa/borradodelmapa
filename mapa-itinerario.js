@@ -424,26 +424,26 @@ const mapaItinerario = {
     // Interceptar showState para cerrar la vista si el usuario navega con el bottom bar
     const _origShowState = window.showState;
     window.showState = function(state) {
-      if (view.style.display !== 'none') {
-        if (mapaRuta._copilotActive) {
-          // Copiloto ON: ocultar sin destruir + botón volver
+      if (mapaRuta._copilotActive) {
+        // Copiloto ON: ocultar vista si estaba visible + siempre mostrar botón volver
+        if (view.style.display !== 'none') {
           view.style.display = 'none';
           if (appContent) appContent.style.display = '';
           if (inputBar) inputBar.style.display = '';
           const bb = document.getElementById('app-bottom-bar');
           if (bb) bb.style.display = '';
-          _showReturnBtn(view, appContent, inputBar);
-        } else {
-          // Copiloto OFF: cerrar todo
-          view.style.display = 'none';
-          if (appContent) appContent.style.display = '';
-          if (inputBar) inputBar.style.display = '';
-          const bb = document.getElementById('app-bottom-bar');
-          if (bb) bb.style.display = '';
-          mapaRuta.destroy();
-          mapaItinerario.destroy();
-          window.showState = _origShowState;
         }
+        _showReturnBtn(view, appContent, inputBar);
+      } else if (view.style.display !== 'none') {
+        // Copiloto OFF: cerrar todo
+        view.style.display = 'none';
+        if (appContent) appContent.style.display = '';
+        if (inputBar) inputBar.style.display = '';
+        const bb = document.getElementById('app-bottom-bar');
+        if (bb) bb.style.display = '';
+        mapaRuta.destroy();
+        mapaItinerario.destroy();
+        window.showState = _origShowState;
       }
       _origShowState(state);
     };
