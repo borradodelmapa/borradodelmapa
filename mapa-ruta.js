@@ -119,7 +119,29 @@ const mapaRuta = {
     btnShare.title = 'Compartir';
     btnShare.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`;
     btnShare.addEventListener('click', () => {
-      document.dispatchEvent(new CustomEvent('guide:share'));
+      const valid = this._currentStops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
+      let url;
+      if (valid.length < 2) {
+        url = valid.length === 1
+          ? `https://www.google.com/maps?q=${valid[0].lat},${valid[0].lng}`
+          : 'https://www.google.com/maps';
+      } else {
+        const max = 25;
+        const sampled = valid.length <= max ? valid : (() => {
+          const step = valid.length / max, r = [];
+          for (let i = 0; i < max; i++) r.push(valid[Math.floor(i * step)]);
+          return r;
+        })();
+        url = 'https://www.google.com/maps/dir/' + sampled.map(p => p.lat + ',' + p.lng).join('/');
+      }
+      if (navigator.share) {
+        navigator.share({ title: 'Ruta en Google Maps', url });
+      } else {
+        navigator.clipboard?.writeText(url).then(() => {
+          btnShare.title = '¡Copiado!';
+          setTimeout(() => { btnShare.title = 'Compartir ruta'; }, 2000);
+        });
+      }
     });
 
     // Botón Utilidades (menú desplegable)
