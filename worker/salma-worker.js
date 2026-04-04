@@ -389,7 +389,7 @@ BÚSQUEDAS EN TIEMPO REAL: tu conocimiento llega a agosto 2025. Si el dato puede
 
 TIEMPO Y CLIMA: siempre en tiempo real. Si el contexto incluye [DATOS DEL TIEMPO REAL], úsalos. Si no, usa buscar_web inmediatamente. Sin excepciones.
 
-JERARQUÍA DE HERRAMIENTAS: las tools específicas tienen prioridad sobre buscar_web. Para hoteles: buscar_hotel. Para vuelos: buscar_vuelos. Para restaurantes: buscar_restaurante. buscar_web solo cuando no hay tool específica.
+JERARQUÍA DE HERRAMIENTAS: las tools específicas tienen prioridad sobre buscar_web. Para hoteles: buscar_hotel. Para vuelos: buscar_vuelos. Para restaurantes: buscar_restaurante. Para gimnasios, farmacias, tiendas, spas, museos, clínicas, o cualquier lugar que NO sea comida/hotel/vuelo/coche: usa buscar_web con query "nombre del lugar + ciudad". NUNCA uses buscar_restaurante para lugares que no son restaurantes.
 
 PROHIBIDO INVENTAR:
 1. Las ÚNICAS URLs permitidas: (a) las que devuelve una herramienta, (b) google.com/maps/dir/ construida con coordenadas reales.
@@ -745,6 +745,50 @@ function isFlightRequest(message) {
 // Detectar si el usuario pide hotel/alojamiento
 function isHotelRequest(message) {
   return /hotel|hoteles|alojamiento|hostal|apartamento|airbnb|dormir|hospedaje|accommodation|where to stay|dónde dormir|donde dormir|busca.*hotel|reserva.*hotel/i.test(message);
+}
+
+// Extrae rango de fechas del texto del mensaje (para pre-fetch Duffel sin esperar al frontend)
+// Maneja: "del 10 al 15 de abril", "10 de abril", "semana del 10", "april 10-15", etc.
+function extractDatesFromMessage(message) {
+  const MONTHS = { enero:1,january:1,febrero:2,february:2,marzo:3,march:3,abril:4,april:4,mayo:5,may:5,junio:6,june:6,julio:7,july:7,agosto:8,august:8,septiembre:9,september:9,octubre:10,october:10,noviembre:11,november:11,diciembre:12,december:12 };
+  const now = new Date();
+  const currentYear = now.getFullYear();
+
+  const toISO = (day, month) => {
+    const y = (month < now.getMonth() + 1) ? currentYear + 1 : currentYear;
+    return `${y}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+  };
+
+  // "del 10 al 15 de abril" / "del 10 al 15 abril"
+  const rangeMonthMatch = message.match(/\bdel?\s+(\d{1,2})\s+al?\s+(\d{1,2})\s+(?:de\s+)?([a-záéíóú]+)/i);
+  if (rangeMonthMatch) {
+    const month = MONTHS[rangeMonthMatch[3].toLowerCase()];
+    if (month) return { from: toISO(+rangeMonthMatch[1], month), to: toISO(+rangeMonthMatch[2], month) };
+  }
+
+  // "10 al 15 de abril" (sin "del")
+  const rangeMatch2 = message.match(/\b(\d{1,2})\s+al?\s+(\d{1,2})\s+(?:de\s+)?([a-záéíóú]+)/i);
+  if (rangeMatch2) {
+    const month = MONTHS[rangeMatch2[3].toLowerCase()];
+    if (month) return { from: toISO(+rangeMatch2[1], month), to: toISO(+rangeMatch2[2], month) };
+  }
+
+  // "semana del 10 al 15" — sin mes explícito, buscar mes en el mensaje
+  const semanaMatch = message.match(/semana\s+del?\s+(\d{1,2})\s+al?\s+(\d{1,2})/i);
+  if (semanaMatch) {
+    const monthMatch = message.match(/\b(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre|january|february|march|april|may|june|july|august|september|october|november|december)\b/i);
+    const month = monthMatch ? MONTHS[monthMatch[1].toLowerCase()] : now.getMonth() + 1;
+    return { from: toISO(+semanaMatch[1], month), to: toISO(+semanaMatch[2], month) };
+  }
+
+  // "el 10 de abril" — solo ida
+  const singleMatch = message.match(/\bel\s+(\d{1,2})\s+(?:de\s+)?([a-záéíóú]+)/i);
+  if (singleMatch) {
+    const month = MONTHS[singleMatch[2].toLowerCase()];
+    if (month) return { from: toISO(+singleMatch[1], month), to: null };
+  }
+
+  return null;
 }
 
 // Detectar si el usuario pide alquiler de coche o restaurante
@@ -1672,8 +1716,9 @@ function injectTransportBlock(reply, kvTransportData, message) {
   // Solo para transporte local concreto — NO para intención de viaje a un país/ciudad lejana
   const goKeywords = /llévame|taxi|aeropuerto|airport|estación|estacion|station|terminal/i;
   if (!goKeywords.test(message)) return reply;
-  // Si ya tiene enlace de una app de transporte, no duplicar
+  // Si ya tiene enlace o mención del bloque de app de transporte, no duplicar
   if (/grab\.com|m\.uber\.com|bolt\.eu|indrive\.com/i.test(reply)) return reply;
+  if (/Abre \*\*Grab\*\*|Abre \*\*Uber\*\*|Abre \*\*Bolt\*\*|🟩 Abre|🚕 Transporte local/i.test(reply)) return reply;
 
   let appBlock = '';
   if (kvTransportData && kvTransportData.ridehailing) {
@@ -2116,9 +2161,17 @@ async function buscarVuelosDuffel(params, duffelToken) {
       bookingUrl += `${skyDate(params.fecha_vuelta)}/`;
     }
 
-    // Ordenar por precio y tomar los 5 más baratos
+    // Ordenar por precio, deduplicar por aerolínea+precio+horario salida, tomar top 5
+    const seen = new Set();
     const sortedOffers = offers
       .sort((a, b) => parseFloat(a.total_amount) - parseFloat(b.total_amount))
+      .filter(offer => {
+        const seg = offer.slices[0]?.segments[0];
+        const key = `${offer.total_amount}-${seg?.marketing_carrier?.iata_code || ''}-${(seg?.departing_at || '').slice(0, 16)}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
       .slice(0, 5);
 
     // Formatear resultados para que Claude los presente bien
@@ -4352,9 +4405,13 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           const _origIATA = getCityIATA(_transportODPrefetch.origin);
           const _destIATA = getCityIATA(_transportODPrefetch.dest);
           if (_origIATA && _destIATA && env.DUFFEL_ACCESS_TOKEN) {
+            // Usar fechas del frontend si las hay, o extraerlas del mensaje, o mañana como fallback
+            const _extractedDates = travelDates || extractDatesFromMessage(message);
             const _tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+            const _duffelDate = _extractedDates?.from || _tomorrow;
+            const _duffelReturn = _extractedDates?.to || null;
             _duffelTransportPromise = buscarVuelosDuffel(
-              { origen: _origIATA, destino: _destIATA, fecha_ida: _tomorrow, adultos: 1 },
+              { origen: _origIATA, destino: _destIATA, fecha_ida: _duffelDate, fecha_vuelta: _duffelReturn, adultos: 1 },
               env.DUFFEL_ACCESS_TOKEN
             ).catch(() => null);
           }
