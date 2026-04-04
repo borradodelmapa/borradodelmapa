@@ -542,9 +542,10 @@ const salma = {
 
     // Si el mensaje requiere ubicación y no la tenemos, mostrar prompt
     if (!this._userLocation && msg) {
-      const needsLocation = /desde donde estoy|cerca de m[ií]|por aqu[ií]|aqu[ií] cerca|donde estoy|mi ubicaci[oó]n|nearest|near me/i.test(msg);
+      const needsLocation = /desde donde estoy|desde aqu[ií]|desde ah[ií]|cerca de m[ií]|por aqu[ií]|aqu[ií] cerca|donde estoy|mi ubicaci[oó]n|nearest|near me|vuelo.*desde aqu[ií]|vuelo.*desde ah[ií]/i.test(msg);
       if (needsLocation) {
         this._addUserBubble(msg);
+        this._pendingGeoMessage = msg;  // guardar para reenviar tras GPS
         this._showGeoPrompt();
         return;
       }
@@ -1623,9 +1624,8 @@ const salma = {
         <span class="msg-salma-name">Salma</span>
       </div>
       <div class="msg-body-salma">
-        Necesito tu ubicación para buscarte lo más cercano.<br><br>
-        Toca el <strong>🔒 candado</strong> en la barra del navegador → <strong>Permisos</strong> → <strong>Ubicación</strong> → <strong>Permitir</strong>. Luego vuelve a enviar tu mensaje.<br><br>
-        <button class="btn-geo-retry" onclick="salma.retryGeolocation(this)">📍 Intentar activar ubicación</button>
+        No tienes el GPS activo. Actívalo y te digo.<br><br>
+        <button class="btn-geo-retry" onclick="salma.retryGeolocation(this)">📍 Activar ubicación</button>
       </div>`;
     area.appendChild(div);
     this._scrollToBottom(true);
@@ -1644,10 +1644,19 @@ const salma = {
         const prompt = document.querySelector('.msg-geo-prompt');
         if (prompt) prompt.remove();
         if (!this._copilotCountry) this.initCopilot();
+        // Reenviar el mensaje original automáticamente
+        if (this._pendingGeoMessage) {
+          const pendingMsg = this._pendingGeoMessage;
+          this._pendingGeoMessage = null;
+          setTimeout(() => this.send(pendingMsg), 400);
+        }
       },
       (err) => {
-        if (btn) btn.textContent = '📍 Intentar activar ubicación';
+        if (btn) btn.textContent = '📍 Activar ubicación';
         this._geoBlocked = (err.code === 1);
+        if (err.code === 1 && btn) {
+          btn.insertAdjacentHTML('afterend', '<br><small style="opacity:0.6">Permiso denegado. Ve a Ajustes del navegador → Ubicación → Permitir.</small>');
+        }
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );

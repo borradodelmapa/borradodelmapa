@@ -441,7 +441,7 @@ async function getSystemPrompt(env) {
       // Guardar en KV con TTL 60s
       if (env?.SALMA_KB) {
         try {
-          await env.SALMA_KB.put('_cache:prompt', promptText, { expirationTtl: 60 });
+          await env.SALMA_KB.put('_cache:prompt', promptText, { expirationTtl: 300 });
         } catch (_) {}
       }
       return promptText;
@@ -777,6 +777,52 @@ function getCityIATA(city) {
   if (!city) return null;
   const norm = city.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   return CITY_TO_IATA[norm] || null;
+}
+
+// Lookup IATA por coordenadas GPS — para cuando userLocationName viene vacío
+// Solo cubre destinos turísticos donde Claude tendería a asumir el hub nacional
+const AIRPORT_BY_COORDS = [
+  { iata: 'USM', name: 'Koh Samui',    lat: 9.548,  lng: 100.062, r: 0.25 },
+  { iata: 'HKT', name: 'Phuket',       lat: 8.113,  lng: 98.316,  r: 0.5  },
+  { iata: 'KBV', name: 'Krabi',        lat: 8.099,  lng: 98.986,  r: 0.3  },
+  { iata: 'CNX', name: 'Chiang Mai',   lat: 18.767, lng: 98.962,  r: 0.3  },
+  { iata: 'KOP', name: 'Koh Phangan',  lat: 9.743,  lng: 100.014, r: 0.2  },
+  { iata: 'DPS', name: 'Bali',         lat: -8.748, lng: 115.167, r: 0.5  },
+  { iata: 'LOP', name: 'Lombok',       lat: -8.757, lng: 116.277, r: 0.4  },
+  { iata: 'BMU', name: 'Bima/Flores',  lat: -8.539, lng: 118.687, r: 0.5  },
+  { iata: 'MNL', name: 'Manila',       lat: 14.509, lng: 121.020, r: 0.4  },
+  { iata: 'CEB', name: 'Cebu',         lat: 10.307, lng: 123.979, r: 0.3  },
+  { iata: 'PPS', name: 'El Nido/Palawan', lat: 9.745, lng: 118.759, r: 0.5 },
+  { iata: 'DAD', name: 'Da Nang',      lat: 16.044, lng: 108.202, r: 0.4  },
+  { iata: 'HPH', name: 'Haiphong',     lat: 20.819, lng: 106.724, r: 0.4  },
+  { iata: 'PQC', name: 'Phu Quoc',     lat: 10.227, lng: 103.967, r: 0.3  },
+  { iata: 'REP', name: 'Siem Reap',    lat: 13.411, lng: 103.813, r: 0.3  },
+  { iata: 'AGP', name: 'Málaga',       lat: 36.675, lng: -4.499,  r: 0.3  },
+  { iata: 'IBZ', name: 'Ibiza',        lat: 38.873, lng: 1.373,   r: 0.2  },
+  { iata: 'PMI', name: 'Palma Mallorca', lat: 39.551, lng: 2.739,  r: 0.3  },
+  { iata: 'TFS', name: 'Tenerife Sur', lat: 28.045, lng: -16.572, r: 0.3  },
+  { iata: 'LPA', name: 'Gran Canaria', lat: 27.932, lng: -15.387, r: 0.3  },
+  { iata: 'FUE', name: 'Fuerteventura',lat: 28.452, lng: -13.864, r: 0.3  },
+  { iata: 'ACE', name: 'Lanzarote',    lat: 28.945, lng: -13.605, r: 0.2  },
+  { iata: 'HER', name: 'Heraklion/Creta', lat: 35.340, lng: 25.180, r: 0.4 },
+  { iata: 'RHO', name: 'Rodas',        lat: 36.405, lng: 28.086,  r: 0.2  },
+  { iata: 'JTR', name: 'Santorini',    lat: 36.399, lng: 25.479,  r: 0.15 },
+  { iata: 'JMK', name: 'Mykonos',      lat: 37.435, lng: 25.348,  r: 0.15 },
+  { iata: 'CFU', name: 'Corfú',        lat: 39.602, lng: 19.912,  r: 0.2  },
+  { iata: 'SPU', name: 'Split',        lat: 43.539, lng: 16.298,  r: 0.3  },
+  { iata: 'DBV', name: 'Dubrovnik',    lat: 42.561, lng: 18.268,  r: 0.2  },
+  { iata: 'RAK', name: 'Marrakech',    lat: 31.606, lng: -8.036,  r: 0.4  },
+  { iata: 'AGA', name: 'Agadir',       lat: 30.325, lng: -9.413,  r: 0.4  },
+  { iata: 'FNC', name: 'Madeira',      lat: 32.698, lng: -16.778, r: 0.3  },
+  { iata: 'PDL', name: 'Azores/Ponta Delgada', lat: 37.741, lng: -25.698, r: 0.3 },
+];
+function getIATAFromCoords(lat, lng) {
+  for (const ap of AIRPORT_BY_COORDS) {
+    if (Math.abs(lat - ap.lat) < ap.r && Math.abs(lng - ap.lng) < ap.r) {
+      return { iata: ap.iata, name: ap.name };
+    }
+  }
+  return null;
 }
 
 function extractHelpLocation(message, history, currentRoute) {
@@ -1186,7 +1232,11 @@ function buildMessages(history, message, currentRoute, userName, userNationality
   if (userNationality) ctx.push(`[NACIONALIDAD: ${userNationality} — adapta visados]`);
   if (userLocation) {
     const locName = userLocationName ? ` (${userLocationName})` : '';
-    ctx.push(`[UBICACIÓN DEL VIAJERO${locName}: lat=${userLocation.lat}, lng=${userLocation.lng} — El viajero está AQUÍ. Para Google Maps usa SIEMPRE estas coordenadas como origen: ${userLocation.lat},${userLocation.lng}]`);
+    // IATA por nombre de ciudad, o por coordenadas como fallback
+    const locIATA = getCityIATA(userLocationName) || (userLocation.lat && userLocation.lng ? getIATAFromCoords(userLocation.lat, userLocation.lng)?.iata : null);
+    const iataName = getCityIATA(userLocationName) ? userLocationName : (getIATAFromCoords(userLocation.lat, userLocation.lng)?.name || userLocationName);
+    const iataHint = locIATA ? ` — Aeropuerto más cercano: ${locIATA} (${iataName}). Para vuelos "desde donde estoy" usa origen: ${locIATA}, NO el hub nacional.` : '';
+    ctx.push(`[UBICACIÓN DEL VIAJERO${locName}: lat=${userLocation.lat}, lng=${userLocation.lng} — El viajero está AQUÍ. Para Google Maps usa SIEMPRE estas coordenadas como origen: ${userLocation.lat},${userLocation.lng}${iataHint}]`);
   }
   if (travelDates && travelDates.from) {
     ctx.push(`[FECHAS DE VIAJE: del ${travelDates.from} al ${travelDates.to} — menciona estacionalidad, clima esperado y festivos que coincidan]`);
@@ -4433,6 +4483,17 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           }
         }
 
+        // Fix lowercase: si el mensaje tiene palabras en minúscula que son países/ciudades
+        if (!countryCode) {
+          const STOPWORDS = new Set(['que','con','como','para','una','los','las','del','por','sin','mas','muy','hay','tiene','quiero','puedo','donde','cuanto','cuesta','vale','esta','esto','esa','ese','cual','cuando','desde','hasta','sobre','entre','tras','cada','todo','toda','nada','algo','algun','alguna','bien','mal','bueno','mala','mejor','peor','gran','poco','mucho','menos','hola','oye','dame','dime','dinos','cuales','son','fue','era','han','has','haz','pon','mira','vez','dia','mes','ano','hora','tiempo','lugar','sitio','zona','area','parte','tipo','tipo','cosa','info','info','datos','dato','precio','coste','coste','tema','tema','tips','tip','idioma','moneda','visa','visado','seguro','seguridad','vuelo','hotel','ruta','viaje','viajes','pais','ciudad','playa','mar','rio','lago']);
+          const allWords = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').match(/\b[a-z]{3,}\b/g) || [];
+          for (const word of allWords) {
+            if (STOPWORDS.has(word)) continue;
+            const code = await env.SALMA_KB.get('kw:' + word);
+            if (code) { countryCode = code; location = location || word; break; }
+          }
+        }
+
         // Fallback 2: geocodificar el nombre de la ciudad/lugar para detectar país
         if (!countryCode && location) {
           try {
@@ -4491,33 +4552,30 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
 
         if (countryCode) {
           const kwNorm = (location || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
-          if (countryCode) {
-            const ccLower = countryCode.toLowerCase();
-            // Ficha del país (nivel 1)
-            const baseJson = await env.SALMA_KB.get('dest:' + ccLower + ':base');
-            if (baseJson) kvCountryData = JSON.parse(baseJson);
+          const ccLower = countryCode.toLowerCase();
 
-            // Buscar destino específico (nivel 2)
-            const spotRef = await env.SALMA_KB.get('spot:' + kwNorm);
-            if (spotRef) {
-              const spotJson = await env.SALMA_KB.get('dest:' + spotRef.replace(':', ':spot:'));
-              if (spotJson) kvDestinationData = JSON.parse(spotJson);
-            }
+          // Leer KV en paralelo (en vez de secuencial — ahorra ~200ms)
+          const daysMatch = message.match(/(\d+)\s*d\S*as?/i) || message.match(/(\d+)\s*days?/i);
+          const days = daysMatch ? daysMatch[1] : null;
+          const routeKey = (isRouteRequest(message, history) && days)
+            ? 'route:' + countryCode + ':' + kwNorm.replace(/\s+/g, '-') + ':' + days
+            : null;
 
-            // Datos de transporte del país (apps de transporte)
-            const transportJson = await env.SALMA_KB.get('transport:' + countryCode.toLowerCase());
-            if (transportJson) kvTransportData = JSON.parse(transportJson);
+          const [baseJson, spotRef, transportJson, cachedRouteJson] = await Promise.all([
+            env.SALMA_KB.get('dest:' + ccLower + ':base'),
+            env.SALMA_KB.get('spot:' + kwNorm),
+            env.SALMA_KB.get('transport:' + ccLower),
+            routeKey ? env.SALMA_KB.get(routeKey) : Promise.resolve(null),
+          ]);
 
-            // Buscar ruta cacheada (nivel 3) — solo para peticiones de ruta
-            if (isRouteRequest(message, history)) {
-              const daysMatch = message.match(/(\d+)\s*d\S*as?/i) || message.match(/(\d+)\s*days?/i);
-              const days = daysMatch ? daysMatch[1] : null;
-              if (days) {
-                const routeKey = 'route:' + countryCode + ':' + kwNorm.replace(/\s+/g, '-') + ':' + days;
-                const cachedJson = await env.SALMA_KB.get(routeKey);
-                if (cachedJson) kvCachedRoute = JSON.parse(cachedJson);
-              }
-            }
+          if (baseJson) kvCountryData = JSON.parse(baseJson);
+          if (cachedRouteJson) kvCachedRoute = JSON.parse(cachedRouteJson);
+          if (transportJson) kvTransportData = JSON.parse(transportJson);
+
+          // Destino específico: si spotRef existe, leer el detalle (segunda ronda, unavoidable)
+          if (spotRef) {
+            const spotJson = await env.SALMA_KB.get('dest:' + spotRef.replace(':', ':spot:'));
+            if (spotJson) kvDestinationData = JSON.parse(spotJson);
           }
         }
       } catch (e) { /* KV fallo silencioso — Salma funciona sin KV */ }
