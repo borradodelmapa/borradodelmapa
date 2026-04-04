@@ -150,8 +150,18 @@ function updateBottomBar() {
 
   document.getElementById('tab-home').addEventListener('click', () => showState('welcome'));
   document.getElementById('tab-chat').addEventListener('click', () => {
-    if (currentState !== 'chat') {
-      if (typeof salma !== 'undefined') salma._initChat();
+    // Detectar si estamos en vista de ruta
+    const itinView = document.getElementById('itin-view');
+    const inRouteView = itinView && itinView.style.display !== 'none';
+
+    if (inRouteView) {
+      // OPCIÓN B: Abrir chat como modal (sin perder ruta)
+      openChatModal();
+    } else {
+      // Comportamiento normal: cambiar a vista chat principal
+      if (currentState !== 'chat') {
+        if (typeof salma !== 'undefined') salma._initChat();
+      }
     }
   });
   document.getElementById('tab-rutas').addEventListener('click', () => {
@@ -171,6 +181,95 @@ function handleAvatarClick() {
     showState('profile');
   } else {
     openModal('login');
+  }
+}
+
+// ═══ CHAT MODAL (Opción B: chat sin perder ruta) ═══
+
+function openChatModal() {
+  const modal = document.getElementById('chat-modal');
+  if (!modal) return;
+
+  modal.style.display = 'flex';
+  const textarea = document.getElementById('chat-modal-input');
+  if (textarea) {
+    setTimeout(() => textarea.focus(), 100);
+  }
+
+  // Limpiar mensajes previos
+  const messagesContainer = document.getElementById('chat-modal-messages');
+  if (messagesContainer) {
+    messagesContainer.innerHTML = '';
+  }
+}
+
+function closeChatModal() {
+  const modal = document.getElementById('chat-modal');
+  if (!modal) return;
+  modal.style.display = 'none';
+}
+
+// Listeners para cierre del modal
+document.addEventListener('chat-modal:close', closeChatModal);
+
+// Cerrar modal con Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('chat-modal');
+    if (modal && modal.style.display !== 'none') {
+      closeChatModal();
+    }
+  }
+});
+
+// Handlers para el modal de chat
+document.getElementById('chat-modal-send')?.addEventListener('click', sendChatModalMessage);
+document.getElementById('chat-modal-input')?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChatModalMessage();
+  }
+});
+
+async function sendChatModalMessage() {
+  const textarea = document.getElementById('chat-modal-input');
+  const messagesContainer = document.getElementById('chat-modal-messages');
+
+  if (!textarea || !messagesContainer) return;
+
+  const text = textarea.value.trim();
+  if (!text) return;
+
+  // Mostrar mensaje del usuario en el modal
+  const userMsg = document.createElement('div');
+  userMsg.className = 'chat-modal-msg user-msg';
+  userMsg.textContent = text;
+  messagesContainer.appendChild(userMsg);
+
+  textarea.value = '';
+  textarea.style.height = 'auto';
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+  // Enviar a Salma usando la instancia global
+  if (typeof salma !== 'undefined') {
+    try {
+      const response = await salma.send(text, null);
+
+      // Mostrar respuesta de Salma en el modal
+      if (response.reply) {
+        const salmaMsg = document.createElement('div');
+        salmaMsg.className = 'chat-modal-msg salma-msg';
+        salmaMsg.textContent = response.reply;
+        messagesContainer.appendChild(salmaMsg);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+    } catch (err) {
+      console.error('Error enviando mensaje desde modal:', err);
+      const errorMsg = document.createElement('div');
+      errorMsg.className = 'chat-modal-msg error-msg';
+      errorMsg.textContent = 'Error al enviar el mensaje';
+      messagesContainer.appendChild(errorMsg);
+    }
   }
 }
 

@@ -108,6 +108,22 @@ window._loadGoogleMaps = function() {
   </div>
 </div>
 
+<!-- ═══ CHAT MODAL (se abre desde ruta sin perder contexto) ═══ -->
+<div class="chat-modal" id="chat-modal" style="display:none">
+  <div class="chat-modal-overlay" onclick="document.dispatchEvent(new CustomEvent('chat-modal:close'))"></div>
+  <div class="chat-modal-panel">
+    <div class="chat-modal-header">
+      <h3>Salma</h3>
+      <button class="chat-modal-close" onclick="document.dispatchEvent(new CustomEvent('chat-modal:close'))" aria-label="Cerrar chat">×</button>
+    </div>
+    <div class="chat-modal-messages" id="chat-modal-messages"></div>
+    <div class="chat-modal-input">
+      <textarea class="chat-modal-textarea" id="chat-modal-input" placeholder="Escribe a Salma..." autocomplete="off" rows="1"></textarea>
+      <button class="chat-modal-send" id="chat-modal-send" aria-label="Enviar">→</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ INPUT BAR (siempre visible) ═══ -->
 <div class="app-input-bar" id="app-input-bar">
   <!-- Preview foto (oculto por defecto) -->
