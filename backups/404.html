@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title id="page-title">Guía de viaje · Borrado del Mapa</title>
+<meta name="description" id="page-desc" content="Guía de viaje creada con Salma, tu compañera de viaje.">
+<meta name="theme-color" content="#050505">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Borrado del Mapa">
+<meta property="og:title" id="og-title" content="Guía de viaje · Borrado del Mapa">
+<meta property="og:description" id="og-desc" content="Guía de viaje creada con Salma, tu compañera de viaje.">
+<meta property="og:image" id="og-image" content="https://borradodelmapa.com/og-image.jpg">
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<link rel="stylesheet" href="/styles.css">
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-B2YWQKPTZZ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-B2YWQKPTZZ');</script>
+<style>
+  .public-page { min-height:100vh; background:var(--negro); }
+  .public-header { padding:16px 20px; display:flex; justify-content:center; align-items:center; border-bottom:1px solid var(--linea); }
+  .public-header a { text-decoration:none; }
+  .public-logo { font-family:var(--font-display); font-size:18px; color:var(--blanco); letter-spacing:.08em; }
+  .public-logo span { color:var(--dorado); }
+  .public-content { max-width:700px; margin:0 auto; padding:20px 16px 40px; }
+  .public-cta {
+    margin:20px 0; padding:16px; text-align:center;
+    border-top:1px solid var(--linea);
+  }
+  .public-cta h3 { font-family:var(--font-mono); font-size:10px; color:rgba(244,239,230,.5); letter-spacing:.12em; margin-bottom:10px; text-transform:uppercase; }
+  .public-cta p { display:none; }
+  .public-cta a {
+    display:inline-block; padding:10px 22px; background:transparent; color:var(--dorado);
+    font-family:var(--font-mono); font-size:10px; letter-spacing:.12em;
+    border-radius:8px; text-decoration:none; border:1px solid var(--linea);
+  }
+  .public-cta a:hover { opacity:.9; }
+  .public-loading { text-align:center; padding:80px 20px; color:rgba(244,239,230,.5); }
+  .public-error { text-align:center; padding:80px 20px; }
+  .public-error h2 { font-family:var(--font-tight); font-size:28px; color:var(--blanco); margin-bottom:12px; }
+  .public-error p { color:rgba(244,239,230,.6); margin-bottom:20px; }
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script>
+const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
+if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
+</script>
+</head>
+<body>
+<div class="public-page">
+  <div class="public-header">
+    <a href="/"><div class="public-logo">BORRADO<span>DEL</span>MAPA</div></a>
+  </div>
+  <div class="public-content" id="public-content">
+    <div class="public-loading" id="public-loading">Cargando guía...</div>
+  </div>
+</div>
+
+<script>
+window.SALMA_API = "https://salma-api.paco-defoto.workers.dev";
+
+function escapeHTML(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+<script src="/guide-renderer.js"></script>
+<script src="/bitacora-renderer.js"></script>
+<style>
+  /* Blog mode overrides for public diario */
+  /* Blog mode — hide edit controls */
+  .public-content .diario-area { max-width:700px; }
+  .public-content .diario-back { display:none; }
+  .public-content .diario-privacy-change { display:none; }
+  .public-content .diario-privacy { display:none; }
+  .public-content .diario-upload-btn { display:none; }
+  .public-content .diario-note-toggle { display:none; }
+  .public-content .diario-photo-delete { display:none !important; }
+  .public-content .diario-stop-note { max-height:none; }
+  .public-content .diario-stop-note:empty { display:none; }
+  .public-content .diario-note-input { background:rgba(212,160,23,.08); border:none; border-left:3px solid var(--dorado); padding:12px 16px; color:rgba(244,239,230,.7); font-style:italic; resize:none; pointer-events:none; min-height:auto; border-radius:0 8px 8px 0; }
+  .public-content .diario-note-input:empty, .public-content .diario-note-input[value=""] { display:none; }
+  .public-content .diario-stop-actions { display:none; }
+  .public-content .diario-note-status { display:none; }
+  .public-content .diario-note-day { pointer-events:none; background:rgba(212,160,23,.08); border:none; border-left:3px solid var(--dorado); padding:12px 16px; color:rgba(244,239,230,.6); font-style:italic; border-radius:0 8px 8px 0; }
+  .public-content .diario-note-day:empty { display:none; }
+  .public-content .diario-share-btn { display:none; }
+
+  /* Blog mode — enhanced hero */
+  .public-diario-hero { text-align:center; padding:40px 20px 20px; }
+  .public-diario-country { font-family:var(--font-mono); font-size:11px; letter-spacing:.2em; color:var(--dorado); margin-bottom:8px; }
+  .public-diario-title { font-size:26px; font-weight:700; color:var(--blanco); margin-bottom:8px; }
+  .public-diario-author { font-size:13px; color:rgba(244,239,230,.5); margin-bottom:4px; }
+  .public-diario-salma { display:inline-flex; align-items:center; gap:6px; font-size:11px; color:rgba(244,239,230,.4); margin-top:12px; }
+  .public-diario-salma img { width:20px; height:20px; border-radius:50%; }
+  .public-diario-stats { display:flex; justify-content:center; gap:24px; margin-top:20px; padding-bottom:20px; border-bottom:1px solid var(--linea); }
+  .public-diario-stat-num { display:block; font-size:22px; font-weight:700; color:var(--dorado); }
+  .public-diario-stat-label { font-size:10px; color:rgba(244,239,230,.4); letter-spacing:.1em; }
+
+  /* Blog mode — photo badges */
+  .public-content .diario-photo-user { position:relative; }
+  .public-content .diario-photo-user::after {
+    content:'Mi foto'; position:absolute; bottom:8px; left:8px;
+    background:rgba(0,0,0,.7); color:var(--dorado); font-size:10px;
+    padding:3px 8px; border-radius:10px; font-family:var(--font-mono);
+  }
+
+  /* Blog mode — CTA enhanced */
+  .public-cta-enhanced {
+    text-align:center; padding:60px 20px; margin:40px 0;
+    background:linear-gradient(180deg, transparent, rgba(212,160,23,.08) 50%, transparent);
+    border-radius:20px;
+  }
+  .public-cta-enhanced h3 { font-size:20px; color:var(--blanco); margin-bottom:8px; font-family:var(--font-tight); }
+  .public-cta-enhanced p { font-size:14px; color:rgba(244,239,230,.5); margin-bottom:24px; }
+  .public-cta-enhanced a {
+    display:inline-block; background:var(--dorado); color:#0d0d0d;
+    font-weight:700; font-size:13px; padding:14px 32px; border-radius:25px;
+    text-decoration:none; transition:transform .15s; border:none;
+  }
+  .public-cta-enhanced a:hover { transform:scale(1.03); }
+</style>
+<script>
+(async function() {
+  const slug = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
+  if (!slug || slug === '404.html') {
+    showError();
+    return;
+  }
+
+  try {
+    const db = firebase.firestore();
+    const doc = await db.collection('public_guides').doc(slug).get();
+
+    if (!doc.exists) {
+      showError();
+      return;
+    }
+
+    const data = doc.data();
+    const routeData = JSON.parse(data.itinerarioIA);
+
+    // Actualizar meta tags
+    const title = (data.nombre || 'Guía de viaje') + ' · Borradodelmapa';
+    document.getElementById('page-title').textContent = title;
+    document.getElementById('og-title').content = title;
+    const desc = data.summary || routeData.summary || 'Guía de viaje creada con Salma';
+    document.getElementById('page-desc').content = desc;
+    document.getElementById('og-desc').content = desc;
+    if (data.cover_image) document.getElementById('og-image').content = data.cover_image;
+
+    // Renderizar
+    const content = document.getElementById('public-content');
+    document.getElementById('public-loading').remove();
+
+    const hasNotes = data.notes && Object.keys(data.notes).length > 0;
+    const hasPhotos = data.photos && data.photos.length > 0;
+    const isDiario = hasNotes || hasPhotos;
+
+    if (isDiario && typeof bitacoraRenderer !== 'undefined') {
+      // Vista blog — diario con notas y fotos
+      const authorName = data.owner_name || 'Viajero';
+      const date = data.createdAt ? new Date(data.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+      const stops = routeData.stops || [];
+      const totalDays = [...new Set(stops.map(s => s.day))].length;
+      const totalKm = Math.round(stops.reduce((sum, s) => sum + (s.km_from_previous || 0), 0));
+      const totalPhotos = (data.photos || []).length;
+      const country = routeData.country || routeData.region || '';
+
+      // Hero
+      const heroDiv = document.createElement('div');
+      heroDiv.className = 'public-diario-hero';
+      heroDiv.innerHTML = `
+        ${country ? `<div class="public-diario-country">${escapeHTML(country.toUpperCase())}</div>` : ''}
+        <div class="public-diario-title">${escapeHTML(data.nombre || routeData.title || 'Mi viaje')}</div>
+        <div class="public-diario-author">por ${escapeHTML(authorName)}${date ? ` · ${date}` : ''}</div>
+        <div class="public-diario-salma"><img src="/salma_ai_avatar.png" alt="Salma"> Ruta creada con Salma</div>
+        <div class="public-diario-stats">
+          <div><span class="public-diario-stat-num">${totalDays}</span><span class="public-diario-stat-label">DÍAS</span></div>
+          ${totalKm > 0 ? `<div><span class="public-diario-stat-num">${totalKm}</span><span class="public-diario-stat-label">KM</span></div>` : ''}
+          <div><span class="public-diario-stat-num">${stops.length}</span><span class="public-diario-stat-label">PARADAS</span></div>
+          ${totalPhotos > 0 ? `<div><span class="public-diario-stat-num">${totalPhotos}</span><span class="public-diario-stat-label">FOTOS</span></div>` : ''}
+        </div>
+      `;
+      content.appendChild(heroDiv);
+
+      // Contenedor para el diario
+      const diarioArea = document.createElement('div');
+      diarioArea.id = 'app-content';
+      content.appendChild(diarioArea);
+
+      // Simular currentUser como null para modo lectura
+      window.currentUser = null;
+      bitacoraRenderer.renderDiario(routeData, slug, data.notes || {}, data.photos || [], data);
+
+      // Quitar interactividad (notas readonly, sin upload)
+      document.querySelectorAll('.diario-note-input').forEach(el => {
+        el.readOnly = true;
+        if (!el.value.trim()) el.closest('.diario-stop-note,.diario-day-note')?.remove();
+      });
+    } else {
+      // Vista guía normal
+      const area = document.createElement('div');
+      area.id = 'chat-area';
+      content.appendChild(area);
+      guideRenderer.render(routeData, { saved: true });
+    }
+
+    // CTA
+    const cta = document.createElement('div');
+    cta.className = isDiario ? 'public-cta-enhanced' : 'public-cta';
+    cta.innerHTML = isDiario ? `
+      <h3>¿Quieres tu propia Bitácora?</h3>
+      <p>Salma te diseña la ruta, te guía en el viaje y documenta tu aventura.</p>
+      <a href="/">Empieza tu viaje</a>
+    ` : `
+      <h3>Viaja con alguien que sabe lo que hace</h3>
+      <p>Salma te resuelve antes, durante y después. Como viajar con alguien que ya ha estado ahí.</p>
+      <a href="/">EMPIEZA TU VIAJE</a>
+    `;
+    content.appendChild(cta);
+
+  } catch (e) {
+    console.error('Error cargando guía pública:', e);
+    showError();
+  }
+
+  function showError() {
+    const content = document.getElementById('public-content');
+    content.innerHTML = `
+      <div class="public-error">
+        <h2>Esta página no existe</h2>
+        <p>Puede que se haya eliminado o que el enlace esté mal.</p>
+        <a href="/" style="display:inline-block;padding:12px 24px;background:var(--dorado);color:var(--negro);font-family:var(--font-tight);font-weight:700;font-size:14px;border-radius:10px;text-decoration:none;margin-top:8px;">Ir a Borrado del Mapa</a>
+      </div>`;
+    // Mismo bottom bar que la app
+    if (!document.getElementById('public-bottom-bar')) {
+      const bar = document.createElement('nav');
+      bar.id = 'public-bottom-bar';
+      bar.className = 'app-bottom-bar';
+      bar.innerHTML = `
+        <a href="/" class="bottom-tab" style="text-decoration:none">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home</span>
+        </a>
+        <a href="/?go=chat" class="bottom-tab" style="text-decoration:none">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Salma</span>
+        </a>
+        <a href="/?go=rutas" class="bottom-tab" style="text-decoration:none">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
+          <span>Mis Viajes</span>
+        </a>
+        <a href="/?go=profile" class="bottom-tab" style="text-decoration:none">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Perfil</span>
+        </a>`;
+      document.body.appendChild(bar);
+    }
+  }
+})();
+</script>
+</body>
+</html>
