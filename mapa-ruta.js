@@ -787,10 +787,15 @@ const mapaRuta = {
     el.querySelector('.stop-info-panel')?.remove();
 
     const gmapsUrl = `https://www.google.com/maps?q=${stop.lat},${stop.lng}`;
+    const photoHtml = stop.photo_ref
+      ? `<img class="sip-photo" src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=${stop.photo_ref}&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U" alt="" onerror="this.parentElement.querySelector('.sip-photo-wrap').style.display='none'">`
+      : '';
+
     const panel = document.createElement('div');
     panel.className = 'stop-info-panel';
     panel.innerHTML = `
-      <button class="sip-close" id="sip-close">&times;</button>
+      <button class="sip-close" id="sip-close">✕</button>
+      ${photoHtml ? `<div class="sip-photo-wrap">${photoHtml}</div>` : ''}
       <div class="sip-body">
         <div class="sip-day">Día ${stop.day || ''}</div>
         <div class="sip-title">${stop.headline || stop.name || ''}</div>
