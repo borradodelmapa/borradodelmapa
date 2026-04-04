@@ -1993,11 +1993,18 @@ auth.onAuthStateChanged(async (user) => {
 
 async function guardarGuia(routeData) {
   if (!currentUser) {
-    // Registro lazy — guardar ruta y pedir login
+    // Registro lazy — guardar ruta en caché y pedir login
     window._salmaLastRoute = routeData;
     localStorage.setItem('_salmaRouteBackup', JSON.stringify(routeData));
-    showToast('Regístrate para guardar tu ruta');
+
+    // Abrir modal de registro
     openModal('register');
+
+    // Toast secundario (después de que el modal esté visible)
+    setTimeout(() => {
+      showToast('Tu guía está guardada temporalmente. Crea una cuenta para mantenerla sincronizada.');
+    }, 300);
+
     return null;
   }
   return await guardarGuiaDirecto(routeData);
