@@ -2179,16 +2179,39 @@ body {
   display:none !important;
 }
 
-/* Ocultar todo en la esquina superior izquierda del mapa */
-[style*="top:"] [style*="left:"],
-[style*="top: "] [style*="left: "],
-.itin-view > div:nth-child(1),
-[class*="salma"][class*="tag"],
-[class*="ask"],
-[class*="pideme"],
+/* Ocultar barra de acciones flotante en vista itinerario */
+.itin-action-bar {
+  display:none !important;
+}
+
+/* Ocultar todo elemento sospechoso en ruta */
+.itin-view [class*="salma"],
+.itin-view [class*="ask"],
+.itin-view [class*="pideme"],
+.itin-view [class*="pide"],
+.itin-view [id*="salma"],
+.itin-view [id*="ask"],
+.itin-view [id*="pideme"],
+[class*="salma-tag"],
+[class*="ask-salma"],
+[class*="askSalma"],
 [id*="salma-tag"],
-[id*="ask"],
-[id*="pideme"] {
+[id*="ask-salma"],
+button[class*="ask"],
+button[class*="salma"],
+.itin-header + *:not(.itin-cards-scroll),
+.itin-view > div:not(#itin-view) > div:first-child {
+  display:none !important;
+}
+
+/* Asegurar que la barra de navegación inferior es lo único visible */
+#app-bottom-bar {
+  display:block !important;
+}
+.app-header {
+  display:none !important;
+}
+.map-controls {
   display:none !important;
 }
 .map-ctrl-btn {
