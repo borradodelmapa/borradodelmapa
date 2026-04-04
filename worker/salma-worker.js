@@ -3717,6 +3717,23 @@ export default {
         return new Response(JSON.stringify({ error: 'Missing lat/lng' }), { status: 400, headers: corsH });
       }
       try {
+        // Rate limit: máx 20 llamadas/día a Google Places (límite gratuito)
+        const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
+        const rateLimitKey = `pois_rate:${clientIP}`;
+        const count = parseInt(await env.SALMA_KB?.get(rateLimitKey) || '0');
+        if (count >= 20) {
+          return new Response(JSON.stringify({ pois: [], cached: false, rate_limited: true }), { headers: corsH });
+        }
+
+        // Caché por ubicación (hash de lat/lng redondeado a 0.01°)
+        const latRounded = Math.round(parseFloat(lat) * 100) / 100;
+        const lngRounded = Math.round(parseFloat(lng) * 100) / 100;
+        const cacheKey = `pois_cache:${latRounded}:${lngRounded}`;
+        const cached = await env.SALMA_KB?.get(cacheKey);
+        if (cached) {
+          return new Response(JSON.stringify({ pois: JSON.parse(cached), cached: true }), { headers: corsH });
+        }
+
         const placesKey = env.GOOGLE_PLACES_KEY;
         if (!placesKey) {
           return new Response(JSON.stringify({ error: 'No Places key' }), { status: 500, headers: corsH });
@@ -3726,7 +3743,7 @@ export default {
         const pRes = await fetch(placesUrl);
         const pData = await pRes.json();
         if (!pData.results || !pData.results.length) {
-          return new Response(JSON.stringify({ pois: [] }), { headers: corsH });
+          return new Response(JSON.stringify({ pois: [], cached: false }), { headers: corsH });
         }
         // Calcular distancia y devolver top 5
         const userLat = parseFloat(lat);
@@ -3749,13 +3766,20 @@ export default {
             rating: p.rating || null
           };
         }).sort((a, b) => a.distance_m - b.distance_m);
-        return new Response(JSON.stringify({ pois }), { headers: corsH });
+
+        // Cachear resultado durante 1 hora
+        if (env.SALMA_KB) {
+          await env.SALMA_KB.put(cacheKey, JSON.stringify(pois), { expirationTtl: 3600 });
+          // Incrementar counter de rate limit (TTL 24h)
+          await env.SALMA_KB.put(rateLimitKey, String(count + 1), { expirationTtl: 86400 });
+        }
+        return new Response(JSON.stringify({ pois, cached: false }), { headers: corsH });
       } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+        return new Response(JSON.stringify({ error: e.message, pois: [] }), { status: 500, headers: corsH });
       }
     }
 
-    // ─── ENDPOINT /narrate (Narrador — Haiku genera narrativa de un POI) ───
+    // ─── ENDPOINT /narrate (Narrador — OpenAI genera narrativa de un POI) ───
     if (request.method === 'POST' && url.pathname === '/narrate') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
       let body;
@@ -3767,6 +3791,21 @@ export default {
         return new Response(JSON.stringify({ error: 'Missing poi_name' }), { status: 400, headers: corsH });
       }
       try {
+        // Rate limit: máx 100 narrativas/día
+        const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
+        const rateLimitKey = `narrate_rate:${clientIP}`;
+        const count = parseInt(await env.SALMA_KB?.get(rateLimitKey) || '0');
+        if (count >= 100) {
+          return new Response(JSON.stringify({ narrative: 'Por ahora no puedo generar más narrativas. Intenta en un rato.', poi_name, cached: false }), { headers: corsH });
+        }
+
+        // Caché por POI + país (24h)
+        const cacheKey = `narrate_cache:${poi_name.toLowerCase()}:${country_code || 'unknown'}`;
+        const cached = await env.SALMA_KB?.get(cacheKey);
+        if (cached) {
+          return new Response(JSON.stringify({ narrative: cached, poi_name, cached: true }), { headers: corsH });
+        }
+
         // Obtener contexto del país del KV si existe
         let countryContext = '';
         if (country_code && env.SALMA_KB) {
@@ -3787,9 +3826,16 @@ export default {
           }]
         });
         const narrative = result.text || '';
-        return new Response(JSON.stringify({ narrative, poi_name }), { headers: corsH });
+
+        // Cachear resultado durante 24h
+        if (env.SALMA_KB) {
+          await env.SALMA_KB.put(cacheKey, narrative, { expirationTtl: 86400 });
+          // Incrementar counter de rate limit (TTL 24h)
+          await env.SALMA_KB.put(rateLimitKey, String(count + 1), { expirationTtl: 86400 });
+        }
+        return new Response(JSON.stringify({ narrative, poi_name, cached: false }), { headers: corsH });
       } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+        return new Response(JSON.stringify({ error: e.message, narrative: '' }), { status: 500, headers: corsH });
       }
     }
 

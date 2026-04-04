@@ -525,8 +525,8 @@ const salma = {
     if (this._streaming) return;
     if (!this._checkRate()) return;
 
-    // Si no tenemos ubicación todavía, reintentar (ahora hay interacción del usuario)
-    if (!this._userLocation && !this._geoWatchId && !this._geoBlocked) this.initGeolocation();
+    // Si no tenemos ubicación todavía, mostrar disclosure (ahora hay interacción del usuario)
+    if (!this._userLocation && !this._geoWatchId && !this._geoBlocked) this._showGeoDisclosure();
 
     // Transicionar a chat si estamos en welcome
     if (currentState === 'welcome' || currentState === 'viajes') {
@@ -1154,9 +1154,9 @@ const salma = {
 
   async checkNearbyPOIs() {
     if (!this._narratorActive || !this._userLocation) return;
-    // Solo narrar si la vista de ruta está activa (no contaminar el chat principal)
+    // Funciona en vista de ruta O en chat principal
     const itinView = document.getElementById('itin-view');
-    if (!itinView || itinView.style.display === 'none') return;
+    const inRouteView = itinView && itinView.style.display !== 'none';
     const now = Date.now();
     if (now - this._narratorLastCheck < 25000) return;
     this._narratorLastCheck = now;
@@ -1201,19 +1201,19 @@ const salma = {
             });
           }
 
-          // Insertar en el chat del copiloto (ccs-messages), nunca en el chat principal
-          const ccsArea = document.getElementById('ccs-messages');
-          if (ccsArea) {
+          // Insertar en el chat del copiloto (ccs-messages si ruta abierta) o en chat principal
+          let targetArea = inRouteView ? document.getElementById('ccs-messages') : this._getChatArea();
+          if (targetArea) {
             const bubble = document.createElement('div');
             bubble.className = 'msg msg-salma narrator-msg';
             bubble.innerHTML = `
-              <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma · narrador</span></div>
+              <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma · 📍 cerca</span></div>
               <div class="msg-body-salma">
                 <div class="narrator-poi-name">📍 ${poi.name}</div>
                 ${narData.narrative}
               </div>`;
-            ccsArea.appendChild(bubble);
-            ccsArea.scrollTop = ccsArea.scrollHeight;
+            targetArea.appendChild(bubble);
+            targetArea.scrollTop = targetArea.scrollHeight;
             // Narrador habla automático solo si voz está activada
             if (localStorage.getItem('salma_voice') === 'true') {
               const narText = narData.narrative;
@@ -1721,6 +1721,44 @@ const salma = {
         }
       }, 3000);
     }
+  },
+
+  _showGeoDisclosure() {
+    const area = this._getChatArea();
+    if (!area) return;
+    // Evitar duplicados
+    if (area.querySelector('.msg-geo-disclosure')) return;
+    const div = document.createElement('div');
+    div.className = 'msg msg-salma msg-geo-disclosure';
+    div.innerHTML = `
+      <div class="msg-salma-header">
+        <div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div>
+        <span class="msg-salma-name">Salma</span>
+      </div>
+      <div class="msg-body-salma">
+        <strong>📍 ¿Usar tu ubicación?</strong>
+        <p style="margin:8px 0 0 0;font-size:14px;opacity:0.85;">Tu ubicación me ayuda a darte recomendaciones locales: restaurantes cerca, POIs de interés cuando viajas, info práctica del país. Nunca se comparte ni se guarda.</p>
+        <div style="display:flex;gap:8px;margin-top:12px;">
+          <button class="btn-geo-accept" style="flex:1;padding:10px;border:none;border-radius:6px;background:var(--dorado,#d4a843);color:#1a1a1a;font-weight:600;cursor:pointer;">Permitir</button>
+          <button class="btn-geo-reject" style="flex:1;padding:10px;border:1px solid rgba(255,255,255,0.2);border-radius:6px;background:transparent;color:inherit;font-weight:600;cursor:pointer;">Ahora no</button>
+        </div>
+      </div>`;
+    area.appendChild(div);
+    this._scrollToBottom(true);
+
+    const acceptBtn = div.querySelector('.btn-geo-accept');
+    const rejectBtn = div.querySelector('.btn-geo-reject');
+
+    acceptBtn.addEventListener('click', () => {
+      div.remove();
+      this._geoBlocked = false;
+      this.initGeolocation();
+    });
+
+    rejectBtn.addEventListener('click', () => {
+      div.remove();
+      this._geoBlocked = true;
+    });
   },
 
   _loadingPhrases: [
