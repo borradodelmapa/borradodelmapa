@@ -4100,6 +4100,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     // ─── HELP SEARCH / WEATHER (pre-Claude) ───
     let helpResults = null;
     let weatherData = null;
+    let transportSearchData = null;
     const helpCategory = isHelpRequest(message);
     if (helpCategory) {
       let helpLocation = extractHelpLocation(message, history, currentRoute);
@@ -4115,8 +4116,20 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           if (helpCategory === 'weather') {
             weatherData = await fetchWeather(helpLocation, env.OPENWEATHER_KEY);
           } else if (helpCategory === 'transport') {
-            // Para transporte no hacemos búsqueda Places — Google devuelve resultados irrelevantes.
-            // La IA responde con datos KV de transporte + conocimiento propio.
+            // Para transporte hacemos búsqueda web directa y la inyectamos en el contexto
+            if (env.BRAVE_SEARCH_KEY) {
+              try {
+                // Limpiar la query: quitar verbos de petición (dame, busca, cómo...) y añadir "2025"
+                const transportQuery = message
+                  .replace(/^(dame|busca|dime|cómo|como|quiero|necesito|hay)\s+(un|una|el|la|los|las)?\s*/i, '')
+                  .replace(/\?$/, '')
+                  .trim() + ' 2025 precio opciones';
+                const tRes = await buscarWeb({ query: transportQuery }, env.BRAVE_SEARCH_KEY);
+                if (tRes && !tRes.error && tRes.resultados?.length > 0) {
+                  transportSearchData = tRes;
+                }
+              } catch (_) {}
+            }
           } else {
             helpResults = await searchPlacesForHelp(message, helpLocation, env.GOOGLE_PLACES_KEY, searchCoords);
           }
@@ -4130,6 +4143,24 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     let weatherFallbackMsg = null;
     if (helpCategory === 'weather' && !weatherData) {
       weatherFallbackMsg = '[TIEMPO: Los datos en tiempo real no están disponibles. USA buscar_web AHORA para obtener el tiempo actual. El tiempo cambia cada hora — jamás respondas con tu conocimiento base.]';
+    }
+
+    // Si era consulta de transporte → inyectar resultados de búsqueda web en el contexto
+    let transportFallbackMsg = null;
+    if (helpCategory === 'transport') {
+      if (transportSearchData && transportSearchData.resultados?.length > 0) {
+        // Tenemos resultados reales — inyectarlos como contexto
+        const snippets = transportSearchData.resultados.slice(0, 5).map((r, i) => {
+          let s = `[${i+1}] ${r.titulo}\n${r.snippet}`;
+          if (r.url) s += `\nFuente: ${r.url}`;
+          if (r.contenido) s += `\nContenido: ${r.contenido.slice(0, 500)}`;
+          return s;
+        }).join('\n\n');
+        transportFallbackMsg = `[BÚSQUEDA WEB — resultados reales para la consulta del usuario:\n${snippets}\n\nUsa ESTOS DATOS para responder. Da opciones concretas (compañías, precios, horarios). Incluye enlace de reserva si lo hay. No inventes datos — usa solo lo que aparece aquí. Responde en el idioma del usuario.]`;
+      } else {
+        // Sin resultados — indicar al modelo que use su conocimiento con precaución
+        transportFallbackMsg = '[TRANSPORTE: No se encontraron datos en tiempo real. Responde con tu conocimiento, indica que los horarios pueden haber cambiado, y recomienda verificar en la web oficial.]';
+      }
     }
 
     // ─── EVENT SEARCH (pre-Claude, solo cuando hay fechas) ───
@@ -4303,6 +4334,10 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       systemPrompt += '\n\n' + weatherFallbackMsg;
     }
 
+    if (transportFallbackMsg) {
+      systemPrompt += '\n\n' + transportFallbackMsg;
+    }
+
     const isRoute = isRouteRequest(message, history);
     const isFlightReq = isFlightRequest(message);
     const isHotelReq = isHotelRequest(message);
@@ -4311,7 +4346,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     // Si helpCategory=food y ya tenemos resultados de Google Places, no usar tool
     const serviceReqEffective = isServiceReq && !(helpCategory === 'food' && helpResults);
     // GPT-4o-mini para todo (reemplaza Sonnet/Haiku)
-    const needsTools = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg;
+    const needsTools = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg || !!transportFallbackMsg;
     const reqModel = 'gpt-4o-mini';
     const reqMaxTokens = needsTools ? 6000 : 3000;
 
