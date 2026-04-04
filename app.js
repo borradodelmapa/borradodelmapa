@@ -1993,18 +1993,23 @@ auth.onAuthStateChanged(async (user) => {
 
 async function guardarGuia(routeData) {
   if (!currentUser) {
-    // Registro lazy — guardar ruta en caché y pedir login
+    // Usuario NO logueado — pedir registro/login ANTES de guardar
     window._salmaLastRoute = routeData;
-    localStorage.setItem('_salmaRouteBackup', JSON.stringify(routeData));
+    // NO guardamos en localStorage — solo en memoria hasta que se registre/logee
 
-    // Abrir modal de registro
+    // Actualizar contexto del modal: cambiar subtitle a "Para guardar esta guía, necesitas una cuenta"
+    const registerSub = document.querySelector('#modal-register-view .modal-sub');
+    const loginSub = document.querySelector('#modal-login-view .modal-sub');
+    if (registerSub) registerSub.textContent = 'Para guardar esta guía, crea tu cuenta';
+    if (loginSub) loginSub.textContent = 'Para guardar esta guía, entra a tu cuenta';
+
+    // Abrir modal de registro por defecto
+    const loginView = document.getElementById('modal-login-view');
+    const registerView = document.getElementById('modal-register-view');
+    if (loginView) loginView.classList.add('hidden');
+    if (registerView) registerView.classList.remove('hidden');
+
     openModal('register');
-
-    // Toast secundario (después de que el modal esté visible)
-    setTimeout(() => {
-      showToast('Tu guía está guardada temporalmente. Crea una cuenta para mantenerla sincronizada.');
-    }, 300);
-
     return null;
   }
   return await guardarGuiaDirecto(routeData);
