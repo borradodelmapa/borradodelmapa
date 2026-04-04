@@ -225,7 +225,87 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Handlers para el modal de chat
+// Handlers para el modal de chat - CÁMARA Y MICRÓFONO
+setTimeout(() => {
+  const modalCamBtn = document.getElementById('chat-modal-cam-btn');
+  const modalPhotoInput = document.getElementById('chat-modal-photo-input');
+  const modalCameraInput = document.getElementById('chat-modal-camera-input');
+  const modalCamMenu = document.getElementById('chat-modal-cam-menu');
+  const modalPhotoCancel = document.getElementById('chat-modal-photo-cancel');
+  const modalMicBtn = document.getElementById('chat-modal-mic-btn');
+
+  if (modalCamBtn && modalPhotoInput) {
+    // Toggle menú cámara
+    modalCamBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (modalCamMenu) {
+        modalCamMenu.style.display = modalCamMenu.style.display === 'none' ? '' : 'none';
+      }
+    });
+
+    // Opción: Hacer foto
+    document.getElementById('chat-modal-cam-menu-foto')?.addEventListener('click', () => {
+      if (modalCamMenu) modalCamMenu.style.display = 'none';
+      if (modalCameraInput) modalCameraInput.click();
+    });
+
+    // Opción: Galería
+    document.getElementById('chat-modal-cam-menu-galeria')?.addEventListener('click', () => {
+      if (modalCamMenu) modalCamMenu.style.display = 'none';
+      modalPhotoInput.click();
+    });
+
+    // Procesar foto seleccionada
+    const handleModalPhoto = (e) => {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = '';
+      if (file && typeof salma !== 'undefined' && salma._handlePhotoSelected) {
+        salma._handlePhotoSelected(file);
+        // Mostrar preview en el modal
+        const preview = document.getElementById('chat-modal-photo-preview');
+        const thumb = document.getElementById('chat-modal-photo-thumb');
+        if (preview && thumb) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            thumb.src = event.target.result;
+            preview.style.display = '';
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    };
+
+    modalPhotoInput.addEventListener('change', handleModalPhoto);
+    if (modalCameraInput) modalCameraInput.addEventListener('change', handleModalPhoto);
+
+    // Cancelar foto
+    if (modalPhotoCancel) {
+      modalPhotoCancel.addEventListener('click', () => {
+        const preview = document.getElementById('chat-modal-photo-preview');
+        if (preview) preview.style.display = 'none';
+        if (typeof salma !== 'undefined' && salma._clearPendingPhoto) {
+          salma._clearPendingPhoto();
+        }
+      });
+    }
+
+    // Cerrar menú al clickear fuera
+    document.addEventListener('click', () => {
+      if (modalCamMenu) modalCamMenu.style.display = 'none';
+    });
+  }
+
+  // Micrófono para modal
+  if (modalMicBtn && typeof salma !== 'undefined') {
+    modalMicBtn.addEventListener('click', () => {
+      if (typeof salma.toggleMic === 'function') {
+        salma.toggleMic();
+      }
+    });
+  }
+}, 100);
+
+// Handlers para el modal de chat - ENVÍO
 document.getElementById('chat-modal-send')?.addEventListener('click', sendChatModalMessage);
 document.getElementById('chat-modal-input')?.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) {

@@ -117,8 +117,42 @@ window._loadGoogleMaps = function() {
       <button class="chat-modal-close" onclick="document.dispatchEvent(new CustomEvent('chat-modal:close'))" aria-label="Cerrar chat">×</button>
     </div>
     <div class="chat-modal-messages" id="chat-modal-messages"></div>
-    <div class="chat-modal-input">
-      <textarea class="chat-modal-textarea" id="chat-modal-input" placeholder="Escribe a Salma..." autocomplete="off" rows="1"></textarea>
+
+    <!-- INPUT BAR COMPLETO (como app-input-bar pero para modal) -->
+    <div class="chat-modal-input-bar">
+      <!-- Preview foto (oculto por defecto) -->
+      <div class="chat-modal-photo-preview" id="chat-modal-photo-preview" style="display:none">
+        <img id="chat-modal-photo-thumb" alt="Preview">
+        <button class="chat-modal-photo-cancel" id="chat-modal-photo-cancel" aria-label="Cancelar foto">&times;</button>
+      </div>
+
+      <div class="chat-modal-input-row">
+        <textarea class="chat-modal-textarea" id="chat-modal-input" placeholder="Escribe a Salma..." autocomplete="off" rows="1"></textarea>
+        <input type="file" id="chat-modal-photo-input" accept="image/*" style="display:none">
+        <input type="file" id="chat-modal-camera-input" accept="image/*" capture="environment" style="display:none">
+
+        <div class="chat-modal-cam-menu" id="chat-modal-cam-menu" style="display:none">
+          <button class="chat-modal-cam-menu-opt" id="chat-modal-cam-menu-foto">📸 Hacer foto</button>
+          <button class="chat-modal-cam-menu-opt" id="chat-modal-cam-menu-galeria">🖼️ Galería</button>
+        </div>
+
+        <button class="chat-modal-cam" id="chat-modal-cam-btn" aria-label="Enviar foto">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </button>
+
+        <button class="chat-modal-mic" id="chat-modal-mic-btn" aria-label="Hablar">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="1" width="6" height="12" rx="3"/>
+            <path d="M19 10v1a7 7 0 0 1-14 0v-1"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+      </div>
+
       <button class="chat-modal-send" id="chat-modal-send" aria-label="Enviar">→</button>
     </div>
   </div>

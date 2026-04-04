@@ -3882,13 +3882,53 @@ body {
   background: rgba(212, 168, 67, 0.5);
 }
 
-.chat-modal-input {
+/* INPUT BAR COMPLETO PARA MODAL */
+.chat-modal-input-bar {
   display: flex;
+  flex-direction: column;
   gap: 8px;
   padding: 16px 20px 20px;
   border-top: 1px solid rgba(212, 168, 67, 0.1);
   background: rgba(0, 0, 0, 0.3);
   border-radius: 0 0 16px 16px;
+}
+
+/* Preview foto */
+.chat-modal-photo-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(212, 168, 67, 0.1);
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(212, 168, 67, 0.2);
+}
+
+.chat-modal-photo-preview img {
+  max-width: 50px;
+  max-height: 50px;
+  border-radius: 4px;
+}
+
+.chat-modal-photo-cancel {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: rgba(244, 239, 230, 0.6);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0 4px;
+}
+
+.chat-modal-photo-cancel:hover {
+  color: var(--dorado, #d4a843);
+}
+
+/* Input row (textarea + buttons) */
+.chat-modal-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
 }
 
 .chat-modal-textarea {
@@ -3915,6 +3955,94 @@ body {
   color: rgba(244, 239, 230, 0.4);
 }
 
+/* Menú cámara */
+.chat-modal-cam-menu {
+  position: absolute;
+  bottom: 50px;
+  right: 20px;
+  background: var(--negro, #1a1a1a);
+  border: 1px solid rgba(212, 168, 67, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 10;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.chat-modal-cam-menu-opt {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  color: rgba(244, 239, 230, 0.8);
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: background .2s ease, color .2s ease;
+}
+
+.chat-modal-cam-menu-opt:hover {
+  background: rgba(212, 168, 67, 0.15);
+  color: var(--dorado, #d4a843);
+}
+
+/* Botón cámara */
+.chat-modal-cam {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: none;
+  border: 1px solid rgba(212, 168, 67, 0.3);
+  border-radius: 6px;
+  color: rgba(244, 239, 230, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s ease;
+  flex-shrink: 0;
+}
+
+.chat-modal-cam:hover {
+  border-color: var(--dorado, #d4a843);
+  color: var(--dorado, #d4a843);
+}
+
+.chat-modal-cam:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Botón micrófono */
+.chat-modal-mic {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: none;
+  border: 1px solid rgba(212, 168, 67, 0.3);
+  border-radius: 6px;
+  color: rgba(244, 239, 230, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s ease;
+  flex-shrink: 0;
+}
+
+.chat-modal-mic:hover {
+  border-color: var(--dorado, #d4a843);
+  color: var(--dorado, #d4a843);
+}
+
+.chat-modal-mic.listening {
+  border-color: var(--dorado, #d4a843);
+  background: rgba(212, 168, 67, 0.15);
+  color: var(--dorado, #d4a843);
+  animation: pulse 1s infinite;
+}
+
+/* Botón enviar */
 .chat-modal-send {
   background: var(--dorado, #d4a843);
   border: none;
