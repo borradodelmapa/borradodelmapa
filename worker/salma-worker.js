@@ -421,16 +421,33 @@ const SALMA_SYSTEM_BASE = [
 // ═══════════════════════════════════════════════════════════════
 const FIRESTORE_PROJECT = 'borradodelmapa-85257';
 
+// Caché a nivel de módulo — persiste mientras el worker esté caliente (minutos/horas)
+// Evita hasta la llamada KV en requests frecuentes → 0ms en vez de 20-60ms
+let _modulePromptCache = null;
+let _modulePromptTs = 0;
+const MODULE_PROMPT_TTL = 300_000; // 5 min
+
 async function getSystemPrompt(env) {
-  // Intentar leer de KV primero (TTL 60s configurado al escribir)
+  const now = Date.now();
+
+  // 1. Caché en memoria del módulo (más rápido que KV)
+  if (_modulePromptCache && (now - _modulePromptTs) < MODULE_PROMPT_TTL) {
+    return _modulePromptCache;
+  }
+
+  // 2. Intentar leer de KV (TTL 5min)
   if (env?.SALMA_KB) {
     try {
       const cached = await env.SALMA_KB.get('_cache:prompt');
-      if (cached) return cached;
+      if (cached) {
+        _modulePromptCache = cached;
+        _modulePromptTs = now;
+        return cached;
+      }
     } catch (_) {}
   }
 
-  // Leer de Firestore
+  // 3. Leer de Firestore
   try {
     const url = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents/config/salma-prompt`;
     const res = await fetch(url);
@@ -438,7 +455,8 @@ async function getSystemPrompt(env) {
     const doc = await res.json();
     const promptText = doc.fields?.prompt_text?.stringValue;
     if (promptText && promptText.length > 100) {
-      // Guardar en KV con TTL 60s
+      _modulePromptCache = promptText;
+      _modulePromptTs = now;
       if (env?.SALMA_KB) {
         try {
           await env.SALMA_KB.put('_cache:prompt', promptText, { expirationTtl: 300 });
@@ -1160,6 +1178,52 @@ function tryKVDirectAnswer(message, country, destination) {
   // ── Emergencias ──
   if (/emergencia|emergency|telefono.*urgencia|numero.*emergencia|policia|ambulancia|hospital/i.test(m)) {
     return `**Emergencias en ${pais}:** ${c.emergencias}\nPrefijo telefónico: ${c.prefijo_tel}`;
+  }
+
+  // ── Capital ──
+  if (/capital|ciudad.*principal|capital.*pais/i.test(m)) {
+    return `La capital de **${pais}** es **${c.capital}**.`;
+  }
+
+  // ── Prefijo / llamar desde fuera ──
+  if (/prefijo|codigo.*pais|codigo.*telefono|llamar.*desde|marcar.*desde|phone.*code|dial/i.test(m)) {
+    return `**Prefijo telefónico de ${pais}:** ${c.prefijo_tel}\n\nEmergencias locales: ${c.emergencias}`;
+  }
+
+  // ── Apps de transporte / taxi ──
+  if (/app.*taxi|app.*transporte|uber|grab|bolt|taxi.*app|como.*moverme|transporte.*local|app.*moverse/i.test(m)) {
+    const apps = c.apps_transporte || c.transporte_apps;
+    if (apps) return `**Apps de transporte en ${pais}:**\n\n${apps}`;
+  }
+
+  // ── Conducción / izquierda o derecha ──
+  if (/conduct|conduc|izquierda|derecha|left.*side|right.*side|driving.*side|alquil.*coche|coche.*alquil|manejar/i.test(m)) {
+    const lado = c.conduce_izquierda ? 'por la **izquierda** 🚗' : 'por la **derecha** 🚗';
+    let reply = `En **${pais}** se conduce ${lado}.`;
+    if (c.carnet_internacional) reply += `\n\nCarnet internacional: ${c.carnet_internacional}`;
+    return reply;
+  }
+
+  // ── Agua potable ──
+  if (/agua.*potable|agua.*grifo|beber.*agua|agua.*segura|tap.*water|drinking.*water/i.test(m)) {
+    return `**Agua en ${pais}:** ${c.agua_potable}`;
+  }
+
+  // ── Propinas ──
+  if (/propina|tip|tipping|propinas/i.test(m)) {
+    return `**Propinas en ${pais}:** ${c.propinas}`;
+  }
+
+  // ── SIM / conectividad ──
+  if (/sim|tarjeta.*sim|internet.*movil|datos.*movil|esim|roaming|wifi|conectividad/i.test(m)) {
+    const sim = c.sim_local || c.conectividad;
+    if (sim) return `**Conectividad en ${pais}:**\n\n${sim}`;
+  }
+
+  // ── Salud / sanidad ──
+  if (/sanidad|sanid|seguro.*medico|medico|salud|health|farmacia|medicine/i.test(m)) {
+    const salud = c.salud || c.seguro_medico;
+    if (salud) return `**Salud en ${pais}:**\n\n${salud}\n\nVacunas: ${c.vacunas}`;
   }
 
   // ── Info general del país (pregunta amplia) ──
@@ -4325,20 +4389,15 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
 
               const searches = [];
 
-              // Búsqueda 1: opciones de transporte tierra/mar
+              // 1 búsqueda Brave optimizada (antes eran 2 en paralelo — misma info, menos overhead)
               if (env.BRAVE_SEARCH_KEY) {
-                const q1 = `${routeStr} ferry bus transport options price schedule 2025 booking`;
+                const q1 = `how to get from ${routeStr} transport options ferry bus price companies 2025`;
                 searches.push(buscarWeb({ query: q1 }, env.BRAVE_SEARCH_KEY).catch(() => null));
-
-                // Búsqueda 2: opciones adicionales (12Go Asia, booking, compañías)
-                const q2 = `how to get from ${routeStr} cheapest options 2025`;
-                searches.push(buscarWeb({ query: q2 }, env.BRAVE_SEARCH_KEY).catch(() => null));
               } else {
-                searches.push(Promise.resolve(null));
                 searches.push(Promise.resolve(null));
               }
 
-              // Búsqueda 3: Duffel vuelos (si tenemos IATA origen y destino)
+              // Duffel vuelos (si tenemos IATA origen y destino)
               const origIATA = getCityIATA(originCity);
               const destIATA = getCityIATA(destCity);
               if (origIATA && destIATA && env.DUFFEL_ACCESS_TOKEN) {
@@ -4351,16 +4410,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
                 searches.push(Promise.resolve(null));
               }
 
-              const [res1, res2, flightRes] = await Promise.all(searches);
+              const [res1, flightRes] = await Promise.all(searches);
 
-              // Combinar resultados de las dos búsquedas web
-              const combinedResults = [];
-              if (res1?.resultados) combinedResults.push(...res1.resultados);
-              if (res2?.resultados) {
-                for (const r of res2.resultados) {
-                  if (!combinedResults.find(x => x.url === r.url)) combinedResults.push(r);
-                }
-              }
+              const combinedResults = res1?.resultados || [];
               if (combinedResults.length > 0) transportSearchData = { resultados: combinedResults, flightData: flightRes };
               else if (flightRes && !flightRes.error) transportSearchData = { resultados: [], flightData: flightRes };
             }
