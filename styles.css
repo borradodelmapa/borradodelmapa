@@ -2029,11 +2029,12 @@ body {
 .ccs-input:focus { border-color:rgba(212,168,67,.4); }
 .ccs-input::placeholder { color:rgba(244,239,230,.3); }
 .ccs-send {
-  width:36px; height:36px; border-radius:10px; border:none;
-  background:var(--dorado); color:#0c0a06; font-size:18px;
-  font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  width:36px; height:36px; border-radius:50%; border:none;
+  background:var(--dorado); color:#0c0a06;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
   flex-shrink:0;
 }
+.ccs-send svg { stroke:#0c0a06; }
 .ccs-cam-btn,
 .ccs-mic-btn {
   width:40px; height:40px; border-radius:50%; flex-shrink:0;
@@ -3017,7 +3018,7 @@ body {
 }
 .itin-btn:hover { background: rgba(240,180,41,.1); }
 .itin-btn-save { background: rgba(212,160,23,.18); border-color: var(--dorado); }
-.itin-btn-maps { font-size: 16px; padding: 4px 8px; }
+.itin-btn-maps { font-size: 12px; padding: 5px 10px; background:rgba(66,133,244,.12); border-color:rgba(66,133,244,.35); color:rgba(244,239,230,.9); }
 .itin-btn-share { font-size: 15px; padding: 4px 8px; }
 
 /* ── Sección extras (antes de salir, info práctica, tips) ── */

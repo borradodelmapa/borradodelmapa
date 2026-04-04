@@ -48,7 +48,7 @@ const mapaItinerario = {
       const actionBar = document.createElement('div');
       actionBar.className = 'itin-action-bar';
       actionBar.innerHTML = `
-        <a class="itin-btn itin-btn-maps" href="${mapsUrl}" target="_blank" rel="noopener" title="Ver ruta en Google Maps">🗺️ Ruta</a>
+        <a class="itin-btn itin-btn-maps" href="${mapsUrl}" target="_blank" rel="noopener" title="Abrir en Google Maps"><svg width="15" height="15" viewBox="0 0 24 24" style="flex-shrink:0;margin-right:5px"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="2.5"/></svg>Google Maps</a>
         ${options.saved ? '' : '<button class="itin-btn itin-btn-save" id="itin-save-btn">GUARDAR</button>'}
         <button class="itin-btn itin-btn-share" id="itin-share-btn" title="Compartir">⤴</button>
       `;

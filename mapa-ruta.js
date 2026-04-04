@@ -558,6 +558,9 @@ const mapaRuta = {
         <div class="ccs-messages" id="ccs-messages"></div>
         <div class="ccs-input-row">
           <input type="text" class="ccs-input" id="ccs-input" placeholder="Escribe a Salma..." autocomplete="off">
+          <button class="ccs-send" id="ccs-send" aria-label="Enviar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
           <label class="ccs-cam-btn" for="ccs-cam-input" aria-label="Foto" title="Adjuntar foto">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </label>
@@ -594,6 +597,7 @@ const mapaRuta = {
       }
     };
     document.getElementById('ccs-input').addEventListener('keydown', e => { if (e.key === 'Enter') doSend(); });
+    document.getElementById('ccs-send').addEventListener('click', doSend);
 
     // Micrófono
     const micBtn = document.getElementById('ccs-mic');
@@ -640,6 +644,8 @@ const mapaRuta = {
       if (sheet && !this._chatExpanded) {
         this._chatExpanded = true;
         sheet.classList.add('ccs-expanded');
+        // Mostrar nav al expandirse
+        document.getElementById('app-bottom-bar')?.classList.remove('copilot-hidden');
       }
     } else {
       this._streamingDiv = null;
