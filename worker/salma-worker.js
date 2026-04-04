@@ -4333,6 +4333,35 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     const userNotes = body.user_notes || null;
     const frontendCountryCode = body.country || null; // País enviado por el frontend (detectado por GPS)
 
+    // ─── PRE-FETCH TRANSPORTE — arranca Brave+Duffel INMEDIATAMENTE, en paralelo con geocoding+KV ───
+    // Si el mensaje parece transporte con OD, no esperar al bloque helpCategory (~400ms después)
+    let _braveTransportPromise = null;
+    let _duffelTransportPromise = null;
+    let _transportODPrefetch = null;
+    {
+      const _isTransportMsg = /taxi|transfer|ferry|aeropuerto|airport|\btren\b|flixbus|renfe|\bave\s|como.?llegar|como.*ir.*de|de.*a.*en|bus.?(de|desde)|estacion/i.test(message);
+      if (_isTransportMsg && env.BRAVE_SEARCH_KEY) {
+        _transportODPrefetch = extractTransportOD(message);
+        if (_transportODPrefetch) {
+          const _routeStr = `${_transportODPrefetch.origin} to ${_transportODPrefetch.dest}`;
+          _braveTransportPromise = buscarWeb(
+            { query: `how to get from ${_routeStr} transport options ferry bus price companies 2025` },
+            env.BRAVE_SEARCH_KEY
+          ).catch(() => null);
+          // Duffel también arranca ya
+          const _origIATA = getCityIATA(_transportODPrefetch.origin);
+          const _destIATA = getCityIATA(_transportODPrefetch.dest);
+          if (_origIATA && _destIATA && env.DUFFEL_ACCESS_TOKEN) {
+            const _tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+            _duffelTransportPromise = buscarVuelosDuffel(
+              { origen: _origIATA, destino: _destIATA, fecha_ida: _tomorrow, adultos: 1 },
+              env.DUFFEL_ACCESS_TOKEN
+            ).catch(() => null);
+          }
+        }
+      }
+    }
+
     // Reverse geocoding: convertir coordenadas → nombre de ciudad + país (Nominatim/OSM, gratis)
     let userLocationName = null;
     let userCountryCode = null; // ISO 2 letras del país donde está el usuario (por GPS)
@@ -4414,30 +4443,21 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
               const destCity = od.dest;
               const routeStr = `${originCity} to ${destCity}`;
 
-              const searches = [];
+              // Usar el promise pre-iniciado (arrancó ~400ms antes, en paralelo con geocoding+KV)
+              // Si por alguna razón no se pre-inició, lanzar ahora como fallback
+              const bravePromise = _braveTransportPromise ||
+                (env.BRAVE_SEARCH_KEY
+                  ? buscarWeb({ query: `how to get from ${routeStr} transport options ferry bus price companies 2025` }, env.BRAVE_SEARCH_KEY).catch(() => null)
+                  : Promise.resolve(null));
 
-              // 1 búsqueda Brave optimizada (antes eran 2 en paralelo — misma info, menos overhead)
-              if (env.BRAVE_SEARCH_KEY) {
-                const q1 = `how to get from ${routeStr} transport options ferry bus price companies 2025`;
-                searches.push(buscarWeb({ query: q1 }, env.BRAVE_SEARCH_KEY).catch(() => null));
-              } else {
-                searches.push(Promise.resolve(null));
-              }
-
-              // Duffel vuelos (si tenemos IATA origen y destino)
               const origIATA = getCityIATA(originCity);
               const destIATA = getCityIATA(destCity);
-              if (origIATA && destIATA && env.DUFFEL_ACCESS_TOKEN) {
-                const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
-                searches.push(
-                  buscarVuelosDuffel({ origen: origIATA, destino: destIATA, fecha_ida: tomorrow, adultos: 1 }, env.DUFFEL_ACCESS_TOKEN)
-                    .catch(() => null)
-                );
-              } else {
-                searches.push(Promise.resolve(null));
-              }
+              const duffelPromise = _duffelTransportPromise ||
+                (origIATA && destIATA && env.DUFFEL_ACCESS_TOKEN
+                  ? buscarVuelosDuffel({ origen: origIATA, destino: destIATA, fecha_ida: new Date(Date.now() + 86400000).toISOString().split('T')[0], adultos: 1 }, env.DUFFEL_ACCESS_TOKEN).catch(() => null)
+                  : Promise.resolve(null));
 
-              const [res1, flightRes] = await Promise.all(searches);
+              const [res1, flightRes] = await Promise.all([bravePromise, duffelPromise]);
 
               const combinedResults = res1?.resultados || [];
               if (combinedResults.length > 0) transportSearchData = { resultados: combinedResults, flightData: flightRes };
