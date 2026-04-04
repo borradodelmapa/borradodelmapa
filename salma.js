@@ -949,8 +949,24 @@ const salma = {
                 this._addLoading();
               }
 
+              // SEARCHING — tools ejecutando en paralelo, mostrar dots animados
+              if (evt.searching) {
+                if (textEl && !document.getElementById('salma-searching-dots')) {
+                  const dots = document.createElement('div');
+                  dots.id = 'salma-searching-dots';
+                  dots.className = 'loading-dots searching-dots';
+                  dots.innerHTML = '<span></span><span></span><span></span>';
+                  textEl.appendChild(dots);
+                  this._scrollToBottom();
+                }
+                continue;
+              }
+
               // TEXT CHUNK
               if (evt.t) {
+                // Quitar dots de búsqueda cuando llega contenido real
+                const searchingDots = document.getElementById('salma-searching-dots');
+                if (searchingDots) searchingDots.remove();
                 fullText += evt.t;
                 if (textEl) {
                   let display = fullText;

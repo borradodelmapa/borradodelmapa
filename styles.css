@@ -740,6 +740,7 @@ body {
 
 /* Loading dots */
 .loading-dots { display:flex; gap:4px; align-items:center; padding:4px 0; }
+.searching-dots { margin-top:8px; }
 .loading-dots span {
   width:6px; height:6px; border-radius:50%; background:var(--dorado);
   animation:dotBounce .6s ease infinite;
