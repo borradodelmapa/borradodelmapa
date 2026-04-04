@@ -35,11 +35,30 @@ const mapaRuta = {
 
     this._renderCopilotFab(containerId);
     if (this._copilotActive) {
+      this._renderMapControls(containerId);
       this._renderTurnPanel(containerId);
       this._renderChatSheet();
+      this._enterFullscreen();
     } else {
       this._removeChatSheet();
+      this._removeMapControls(containerId);
     }
+  },
+
+  // ═══ FULLSCREEN (Copiloto ON) ═══
+  _enterFullscreen() {
+    document.getElementById('itin-view')?.classList.add('copilot-fullscreen');
+    document.querySelector('.app-header')?.classList.add('copilot-hidden');
+    document.getElementById('itin-mobile-back-btn')?.classList.add('copilot-hidden');
+    // Nav oculta por defecto — aparece solo al abrir el chat
+    document.getElementById('app-bottom-bar')?.classList.add('copilot-hidden');
+  },
+
+  _exitFullscreen() {
+    document.getElementById('itin-view')?.classList.remove('copilot-fullscreen');
+    document.querySelector('.app-header')?.classList.remove('copilot-hidden');
+    document.getElementById('itin-mobile-back-btn')?.classList.remove('copilot-hidden');
+    document.getElementById('app-bottom-bar')?.classList.remove('copilot-hidden');
   },
 
   // ═══ FAB COPILOTO ═══
@@ -66,6 +85,90 @@ const mapaRuta = {
       if (typeof window.toggleCopilot === 'function') window.toggleCopilot();
     });
     el.appendChild(fab);
+  },
+
+  // ═══ MAP CONTROLS (Copiloto ON) ═══
+  _renderMapControls(containerId) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    this._removeMapControls(containerId);
+
+    const controls = document.createElement('div');
+    controls.className = 'map-controls';
+    controls.id = 'map-controls';
+
+    // Botón Google Maps (re-centrar)
+    const btnMaps = document.createElement('button');
+    btnMaps.className = 'map-ctrl-btn map-ctrl-gmaps';
+    btnMaps.setAttribute('aria-label', 'Recentrar mapa');
+    btnMaps.title = 'Recentrar';
+    btnMaps.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`;
+    btnMaps.addEventListener('click', () => {
+      if (!this._map || this._mapType !== 'google' || !window.google) return;
+      const valid = this._currentStops.filter(s => s.lat && s.lng);
+      if (!valid.length) return;
+      const bounds = new google.maps.LatLngBounds();
+      valid.forEach(s => bounds.extend({ lat: s.lat, lng: s.lng }));
+      this._map.fitBounds(bounds, { top: 40, right: 40, bottom: 60, left: 40 });
+    });
+
+    // Botón Compartir
+    const btnShare = document.createElement('button');
+    btnShare.className = 'map-ctrl-btn map-ctrl-share';
+    btnShare.setAttribute('aria-label', 'Compartir');
+    btnShare.title = 'Compartir';
+    btnShare.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`;
+    btnShare.addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('guide:share'));
+    });
+
+    // Botón Utilidades (menú desplegable)
+    const btnUtil = document.createElement('button');
+    btnUtil.className = 'map-ctrl-btn map-ctrl-util';
+    btnUtil.setAttribute('aria-label', 'Utilidades');
+    btnUtil.title = 'Utilidades';
+    btnUtil.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>`;
+
+    const utilMenu = document.createElement('div');
+    utilMenu.className = 'map-util-menu';
+    utilMenu.id = 'map-util-menu';
+    utilMenu.innerHTML = `
+      <button class="map-util-item" id="util-satellite">Satélite</button>
+      <button class="map-util-item" id="util-terrain">Terreno</button>
+      <button class="map-util-item" id="util-roadmap">Mapa</button>
+      <div class="map-util-sep"></div>
+      <a class="map-util-item" href="https://open.spotify.com" target="_blank" rel="noopener">Spotify</a>
+    `;
+    btnUtil.addEventListener('click', (e) => {
+      e.stopPropagation();
+      utilMenu.classList.toggle('map-util-open');
+    });
+    document.addEventListener('click', () => utilMenu.classList.remove('map-util-open'), { once: false });
+
+    utilMenu.querySelector('#util-satellite')?.addEventListener('click', () => {
+      if (this._map && this._mapType === 'google') this._map.setMapTypeId('satellite');
+      utilMenu.classList.remove('map-util-open');
+    });
+    utilMenu.querySelector('#util-terrain')?.addEventListener('click', () => {
+      if (this._map && this._mapType === 'google') this._map.setMapTypeId('terrain');
+      utilMenu.classList.remove('map-util-open');
+    });
+    utilMenu.querySelector('#util-roadmap')?.addEventListener('click', () => {
+      if (this._map && this._mapType === 'google') this._map.setMapTypeId('roadmap');
+      utilMenu.classList.remove('map-util-open');
+    });
+
+    controls.appendChild(btnMaps);
+    controls.appendChild(btnShare);
+    controls.appendChild(btnUtil);
+    controls.appendChild(utilMenu);
+    el.appendChild(controls);
+  },
+
+  _removeMapControls(containerId) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.querySelector('#map-controls')?.remove();
   },
 
   // ═══ STATIC MAPS (Copiloto OFF) ═══
@@ -446,17 +549,27 @@ const mapaRuta = {
       <div class="ccs-body" id="ccs-body">
         <div class="ccs-messages" id="ccs-messages"></div>
         <div class="ccs-input-row">
+          <label class="ccs-cam-btn" for="ccs-cam-input" aria-label="Foto" title="Adjuntar foto">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </label>
+          <input type="file" id="ccs-cam-input" accept="image/*" capture="environment" style="display:none">
           <input type="text" class="ccs-input" id="ccs-input" placeholder="Añade una parada, cambia el plan…" autocomplete="off">
           <button class="ccs-send" id="ccs-send" aria-label="Enviar">›</button>
         </div>
       </div>`;
     document.getElementById('itin-view').appendChild(sheet);
 
-    // Toggle expandir/colapsar
+    // Toggle expandir/colapsar — nav aparece con el chat
     document.getElementById('ccs-handle').addEventListener('click', () => {
       this._chatExpanded = !this._chatExpanded;
       sheet.classList.toggle('ccs-expanded', this._chatExpanded);
-      if (this._chatExpanded) document.getElementById('ccs-input').focus();
+      const nav = document.getElementById('app-bottom-bar');
+      if (this._chatExpanded) {
+        document.getElementById('ccs-input').focus();
+        nav?.classList.remove('copilot-hidden');
+      } else {
+        nav?.classList.add('copilot-hidden');
+      }
     });
 
     // Enviar mensaje a Salma
@@ -482,7 +595,7 @@ const mapaRuta = {
     // Para Salma en streaming: actualizar el mismo div en vez de crear uno nuevo
     if (role === 'salma' && this._streamingDiv && msgs.contains(this._streamingDiv)) {
       this._streamingDiv.textContent = text;
-      msgs.scrollTop = msgs.scrollHeight;
+      // No auto-scroll en streaming — el usuario controla el scroll
       return;
     }
     const div = document.createElement('div');
@@ -516,6 +629,7 @@ const mapaRuta = {
       this.init(this._currentContainerId, this._currentStops);
     } else {
       this._updateFab();
+      this._enterFullscreen();
     }
   },
 
@@ -524,6 +638,7 @@ const mapaRuta = {
     this._copilotActive = false;
     this._stopGpsTracking();
     this._removeChatSheet();
+    this._exitFullscreen();
     if (this._currentContainerId && this._currentStops.length) {
       this.init(this._currentContainerId, this._currentStops);
     } else {
