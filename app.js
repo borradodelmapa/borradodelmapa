@@ -45,6 +45,10 @@ function showState(state) {
   const inputBar = document.querySelector('.app-input-bar');
 
   if (state === 'welcome') {
+    // Limpiar barra de acciones del mapa si existe
+    const actionBar = document.body.querySelector('.itin-action-bar');
+    if (actionBar) actionBar.remove();
+
     renderWelcome();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '0';
