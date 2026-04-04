@@ -1449,6 +1449,11 @@ const salma = {
   },
 
   _getChatArea() {
+    // Detectar automáticamente si estamos en ruta o en chat principal
+    const inRouteView = !!window._itinViewOpen;
+    if (inRouteView) {
+      return document.getElementById('ccs-messages') || document.getElementById('chat-area');
+    }
     return document.getElementById('chat-area');
   },
 
