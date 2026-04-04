@@ -33,15 +33,15 @@ const mapaRuta = {
       this._renderStaticMap(containerId, stops);
     }
 
-    this._renderCopilotFab(containerId);
-    if (this._copilotActive) {
-      this._renderMapControls(containerId);
+    if (!this._copilotActive) {
+      this._renderCopilotFab(containerId);
+      this._removeChatSheet();
+      this._removeMapControls(containerId);
+    } else {
+      // FAB y controles se añaden DESPUÉS de que el mapa cargue (en _buildGoogleMap/_buildLeafletMap)
       this._renderTurnPanel(containerId);
       this._renderChatSheet();
       this._enterFullscreen();
-    } else {
-      this._removeChatSheet();
-      this._removeMapControls(containerId);
     }
   },
 
@@ -344,6 +344,10 @@ const mapaRuta = {
     if (valid.length >= 2) {
       this._loadDirectionsRenderer(valid);
     }
+
+    // Añadir FAB y controles DESPUÉS del mapa (evita que innerHTML='' los borre)
+    this._renderCopilotFab(this._currentContainerId);
+    this._renderMapControls(this._currentContainerId);
   },
 
   // DirectionsRenderer — dibuja la ruta real con flechas de giro
@@ -411,6 +415,10 @@ const mapaRuta = {
 
     this._polyline = L.polyline(valid.map(s => [s.lat, s.lng]), { color: '#D4A843', weight: 3, opacity: 0.7, dashArray: '8 6' }).addTo(this._map);
     this._map.fitBounds(bounds, { padding: [40, 40] });
+
+    // FAB y controles tras cargar el mapa
+    this._renderCopilotFab(this._currentContainerId);
+    if (this._copilotActive) this._renderMapControls(this._currentContainerId);
   },
 
   // ═══ DECODE GOOGLE POLYLINE ═══

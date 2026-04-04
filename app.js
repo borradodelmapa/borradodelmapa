@@ -1923,6 +1923,7 @@ auth.onAuthStateChanged(async (user) => {
       coins_saldo: userData.coins_saldo || 0,
       rutas_gratis_usadas: userData.rutas_gratis_usadas || 0,
       avatarURL: userData.avatarURL || '',
+      copilot_data: userData.copilot_data || {},
     };
 
     currentUserSOSConfig = userData.sos_config || {
@@ -2688,8 +2689,6 @@ window.openCoinsModal = openCoinsModal;
 // ═══ COPILOTO — toggle con lógica de Coins ═══
 
 async function toggleCopilot() {
-  if (!currentUser) { window._afterLogin = 'profile'; openModal('login'); return; }
-
   const copilotActive = typeof mapaRuta !== 'undefined' && mapaRuta._copilotActive;
 
   if (copilotActive) {
@@ -2697,6 +2696,12 @@ async function toggleCopilot() {
     if (typeof mapaRuta !== 'undefined') mapaRuta.deactivateCopilot();
     if (typeof salma !== 'undefined') salma.stopNarrator();
     showToast('Copiloto desactivado');
+    return;
+  }
+
+  // Sin login — activar gratis (sin coins)
+  if (!currentUser) {
+    _doCopilotActivate();
     return;
   }
 
@@ -2718,7 +2723,7 @@ async function toggleCopilot() {
     return;
   }
 
-  // Descontar 1 coin y guardar
+  // Descontar 1 coin y guardar (solo la primera vez del día)
   try {
     const newCoins = coins - 1;
     await db.collection('users').doc(currentUser.uid).update({
