@@ -1982,7 +1982,7 @@ body {
 
 /* Barra volver/apagar navegación (copiloto activo fuera del mapa) */
 .copilot-return-bar {
-  position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
+  position:fixed; bottom:76px; right:12px;
   z-index:9999; display:flex; align-items:center; gap:8px;
   animation:copilot-pulse 2s ease-in-out infinite;
 }
