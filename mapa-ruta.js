@@ -180,10 +180,37 @@ const mapaRuta = {
       utilMenu.classList.remove('map-util-open');
     });
 
+    // Separador visual
+    const sep = document.createElement('div');
+    sep.className = 'map-ctrl-sep';
+
+    // Zoom +
+    const btnZoomIn = document.createElement('button');
+    btnZoomIn.className = 'map-ctrl-btn map-ctrl-zoom';
+    btnZoomIn.setAttribute('aria-label', 'Acercar');
+    btnZoomIn.title = 'Acercar';
+    btnZoomIn.textContent = '+';
+    btnZoomIn.addEventListener('click', () => {
+      if (this._map && this._mapType === 'google') this._map.setZoom((this._map.getZoom() || 10) + 1);
+    });
+
+    // Zoom −
+    const btnZoomOut = document.createElement('button');
+    btnZoomOut.className = 'map-ctrl-btn map-ctrl-zoom';
+    btnZoomOut.setAttribute('aria-label', 'Alejar');
+    btnZoomOut.title = 'Alejar';
+    btnZoomOut.textContent = '−';
+    btnZoomOut.addEventListener('click', () => {
+      if (this._map && this._mapType === 'google') this._map.setZoom(Math.max(1, (this._map.getZoom() || 10) - 1));
+    });
+
     controls.appendChild(btnMaps);
     controls.appendChild(btnShare);
     controls.appendChild(btnUtil);
     controls.appendChild(utilMenu);
+    controls.appendChild(sep);
+    controls.appendChild(btnZoomIn);
+    controls.appendChild(btnZoomOut);
     el.appendChild(controls);
   },
 
@@ -313,8 +340,7 @@ const mapaRuta = {
       zoom: 7,
       styles: darkStyle,
       disableDefaultUI: true,
-      zoomControl: true,
-      zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_BOTTOM },
+      zoomControl: false,
       gestureHandling: 'greedy',
       mapTypeId: 'roadmap',
     });

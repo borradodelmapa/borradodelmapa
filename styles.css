@@ -2116,6 +2116,8 @@ body {
 }
 .map-ctrl-btn:hover { background:rgba(30,25,15,.95); border-color:rgba(244,239,230,.25); }
 .map-ctrl-btn svg { display:block; }
+.map-ctrl-zoom { font-size:20px; font-weight:600; line-height:1; }
+.map-ctrl-sep { height:1px; background:rgba(244,239,230,.12); margin:2px 4px; }
 
 /* Menú utilidades */
 .map-util-menu {
