@@ -514,7 +514,7 @@ const salma = {
   },
 
   // ═══ PUNTO DE ENTRADA ÚNICO ═══
-  async send(msg) {
+  async send(msg, options = {}) {
     // Capturar foto pendiente antes de validar msg
     const photo = this._pendingPhoto;
     if (photo) {
@@ -558,7 +558,7 @@ const salma = {
     // NO push a history aquí — se hace en _doSend tras recibir respuesta
 
     // Todo va directo al worker — Salma decide si preguntar
-    this._doSend(msg || '', { photo });
+    this._doSend(msg || '', { photo, ...options });
   },
 
   // ═══ ENVÍO AL WORKER ═══
@@ -570,11 +570,14 @@ const salma = {
     this._currentAbort = new AbortController();
 
     // Si el itinerario está abierto, cerrarlo para mostrar la respuesta en el chat
+    // EXCEPTO si estamos en modal (skipCloseItinerary = true)
     const _itinWasOpen = !!(window._itinViewOpen);
     const _itinSavedRoute = window._itinViewRoute || null;
     const _itinSavedDocId = window._itinViewDocId || null;
     const _itinSavedOptions = window._itinViewOptions || null;
-    if (_itinWasOpen) {
+    const _skipCloseItinerary = (extra && extra.skipCloseItinerary) === true;
+
+    if (_itinWasOpen && !_skipCloseItinerary) {
       const _view = document.getElementById('itin-view');
       const _appContent = document.getElementById('app-content');
       const _inputBar = document.getElementById('app-input-bar');

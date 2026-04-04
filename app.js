@@ -148,7 +148,25 @@ function updateBottomBar() {
       <span>SOS</span>
     </button>`;
 
-  document.getElementById('tab-home').addEventListener('click', () => showState('welcome'));
+  document.getElementById('tab-home').addEventListener('click', () => {
+    // Si estamos en vista de ruta, cerrarla primero
+    const itinView = document.getElementById('itin-view');
+    const inRouteView = itinView && (itinView.style.display === 'block' || itinView.style.display !== 'none');
+    if (inRouteView || window._itinViewOpen) {
+      // Cerrar ruta: aplicar la misma lógica que en salma._doSend
+      const _view = document.getElementById('itin-view');
+      const _appContent = document.getElementById('app-content');
+      const _inputBar = document.getElementById('app-input-bar');
+      window._itinViewOpen = false;
+      if (_view) _view.style.display = 'none';
+      if (_appContent) _appContent.style.display = '';
+      if (_inputBar) _inputBar.style.display = '';
+      if (typeof mapaRuta !== 'undefined') mapaRuta.destroy();
+      if (typeof mapaItinerario !== 'undefined') mapaItinerario.destroy();
+    }
+    // Luego ir a welcome
+    showState('welcome');
+  });
   document.getElementById('tab-chat').addEventListener('click', () => {
     // Detectar si estamos en vista de ruta (versión nueva con mapa interactivo)
     // Usar multiple methods para detectar: window._itinViewOpen OR elemento visible
@@ -316,9 +334,8 @@ document.getElementById('chat-modal-input')?.addEventListener('keydown', (e) => 
 
 async function sendChatModalMessage() {
   const textarea = document.getElementById('chat-modal-input');
-  const messagesContainer = document.getElementById('chat-modal-messages');
 
-  if (!textarea || !messagesContainer) return;
+  if (!textarea) return;
 
   const text = textarea.value.trim();
   if (!text) return;
@@ -327,32 +344,19 @@ async function sendChatModalMessage() {
   const userMsg = document.createElement('div');
   userMsg.className = 'chat-modal-msg user-msg';
   userMsg.textContent = text;
-  messagesContainer.appendChild(userMsg);
+  const messagesContainer = document.getElementById('chat-modal-messages');
+  if (messagesContainer) {
+    messagesContainer.appendChild(userMsg);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
 
   textarea.value = '';
   textarea.style.height = 'auto';
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
   // Enviar a Salma usando la instancia global
+  // Pasar skipCloseItinerary: true para mantener la ruta abierta en el modal
   if (typeof salma !== 'undefined') {
-    try {
-      const response = await salma.send(text, null);
-
-      // Mostrar respuesta de Salma en el modal
-      if (response.reply) {
-        const salmaMsg = document.createElement('div');
-        salmaMsg.className = 'chat-modal-msg salma-msg';
-        salmaMsg.textContent = response.reply;
-        messagesContainer.appendChild(salmaMsg);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-      }
-    } catch (err) {
-      console.error('Error enviando mensaje desde modal:', err);
-      const errorMsg = document.createElement('div');
-      errorMsg.className = 'chat-modal-msg error-msg';
-      errorMsg.textContent = 'Error al enviar el mensaje';
-      messagesContainer.appendChild(errorMsg);
-    }
+    salma.send(text, { skipCloseItinerary: true });
   }
 }
 
