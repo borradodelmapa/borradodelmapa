@@ -399,6 +399,9 @@ const mapaItinerario = {
     const inputBar = document.getElementById('app-input-bar');
     if (!view) return;
 
+    // Eliminar botón volver si existía
+    document.getElementById('copilot-return-btn')?.remove();
+
     // Limpiar guide-cards del chat y loading/retry si los hay
     document.querySelectorAll('.guide-card').forEach(el => el.remove());
     if (typeof salma !== 'undefined' && typeof salma._removeLoading === 'function') salma._removeLoading();
@@ -466,6 +469,10 @@ const mapaItinerario = {
           if (cid) {
             mapaRuta._renderMapControls(cid);
             mapaRuta._renderCopilotFab(cid);
+            // Restaurar fab-raised si el chat estaba expandido
+            if (mapaRuta._chatExpanded) {
+              document.getElementById('copilot-fab')?.classList.add('fab-raised');
+            }
           }
         }, 200);
       });
