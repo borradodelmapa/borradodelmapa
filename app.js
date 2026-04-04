@@ -150,9 +150,12 @@ function updateBottomBar() {
 
   document.getElementById('tab-home').addEventListener('click', () => showState('welcome'));
   document.getElementById('tab-chat').addEventListener('click', () => {
-    // Detectar si estamos en vista de ruta
+    // Detectar si estamos en vista de ruta (versión nueva con mapa interactivo)
+    // Usar multiple methods para detectar: window._itinViewOpen OR elemento visible
     const itinView = document.getElementById('itin-view');
-    const inRouteView = itinView && itinView.style.display !== 'none';
+    const inRouteViewDOM = itinView && (itinView.style.display === 'block' || itinView.style.display !== 'none');
+    const inRouteViewGlobal = window._itinViewOpen === true;
+    const inRouteView = inRouteViewDOM || inRouteViewGlobal;
 
     if (inRouteView) {
       // OPCIÓN B: Abrir chat como modal (sin perder ruta)
