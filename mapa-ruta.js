@@ -51,15 +51,17 @@ const mapaRuta = {
     document.getElementById('itin-view')?.classList.add('copilot-fullscreen');
     document.querySelector('.app-header')?.classList.add('copilot-hidden');
     document.getElementById('itin-mobile-back-btn')?.classList.add('copilot-hidden');
-    // Nav oculta por defecto — aparece solo al abrir el chat
-    document.getElementById('app-bottom-bar')?.classList.add('copilot-hidden');
+    // Nav oculta — aparece al abrir el chat de Salma
+    const _navEl = document.getElementById('app-bottom-bar');
+    if (_navEl) _navEl.style.display = 'none';
   },
 
   _exitFullscreen() {
     document.getElementById('itin-view')?.classList.remove('copilot-fullscreen');
     document.querySelector('.app-header')?.classList.remove('copilot-hidden');
     document.getElementById('itin-mobile-back-btn')?.classList.remove('copilot-hidden');
-    document.getElementById('app-bottom-bar')?.classList.remove('copilot-hidden');
+    const _navExit = document.getElementById('app-bottom-bar');
+    if (_navExit) _navExit.style.display = '';
   },
 
   // ═══ FAB COPILOTO ═══
@@ -652,9 +654,9 @@ const mapaRuta = {
       const nav = document.getElementById('app-bottom-bar');
       if (this._chatExpanded) {
         document.getElementById('ccs-input').focus();
-        nav?.classList.remove('copilot-hidden');
+        if (nav) nav.style.display = '';
       } else {
-        nav?.classList.add('copilot-hidden');
+        if (nav) nav.style.display = 'none';
       }
     });
 
@@ -727,7 +729,8 @@ const mapaRuta = {
         this._chatExpanded = true;
         sheet.classList.add('ccs-expanded');
         // Mostrar nav al expandirse
-        document.getElementById('app-bottom-bar')?.classList.remove('copilot-hidden');
+        const navEl = document.getElementById('app-bottom-bar');
+        if (navEl) navEl.style.display = '';
       }
     } else {
       this._streamingDiv = null;
@@ -784,15 +787,10 @@ const mapaRuta = {
     el.querySelector('.stop-info-panel')?.remove();
 
     const gmapsUrl = `https://www.google.com/maps?q=${stop.lat},${stop.lng}`;
-    const photoHtml = stop.photo_ref
-      ? `<img class="sip-photo" src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photoreference=${stop.photo_ref}&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U" alt="" onerror="this.style.display='none'">`
-      : '';
-
     const panel = document.createElement('div');
     panel.className = 'stop-info-panel';
     panel.innerHTML = `
       <button class="sip-close" id="sip-close">&times;</button>
-      ${photoHtml}
       <div class="sip-body">
         <div class="sip-day">Día ${stop.day || ''}</div>
         <div class="sip-title">${stop.headline || stop.name || ''}</div>
