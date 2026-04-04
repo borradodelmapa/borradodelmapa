@@ -292,7 +292,7 @@ const mapaRuta = {
       styles: darkStyle,
       disableDefaultUI: true,
       zoomControl: true,
-      zoomControlOptions: { position: google.maps.ControlPosition.TOP_LEFT },
+      zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_TOP },
       gestureHandling: 'greedy',
       mapTypeId: 'roadmap',
     });

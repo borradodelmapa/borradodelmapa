@@ -232,7 +232,7 @@ const guideRenderer = {
       // Enlace Google Maps del día
       const dayLink = linksMap[num];
       const mapsLinkHtml = dayLink
-        ? `<a class="guide-day-gmaps-link" href="${dayLink.url}" target="_blank" rel="noopener">🗺️ ${escapeHTML(dayLink.label || 'Ver ruta en Google Maps')}</a>`
+        ? `<a class="guide-day-gmaps-link" href="${dayLink.url}" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" style="flex-shrink:0"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="2.5"/></svg> Abrir en Google Maps</a>`
         : '';
 
       html += `

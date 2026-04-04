@@ -936,11 +936,14 @@ body {
 
 /* Maps link por día */
 .guide-day-gmaps-link {
-  display:block; font-family:var(--font-mono); font-size:12px;
-  color:var(--dorado); text-decoration:none; padding:8px 12px;
-  margin-bottom:8px; letter-spacing:.05em;
+  display:inline-flex; align-items:center; gap:7px;
+  font-family:var(--font-mono); font-size:12px; font-weight:600;
+  color:rgba(244,239,230,.85); text-decoration:none;
+  padding:7px 12px; margin-bottom:8px; letter-spacing:.04em;
+  background:rgba(66,133,244,.12); border:1px solid rgba(66,133,244,.3);
+  border-radius:8px; transition:background .2s,border-color .2s;
 }
-.guide-day-gmaps-link:hover { color:var(--dorado2); }
+.guide-day-gmaps-link:hover { background:rgba(66,133,244,.2); border-color:rgba(66,133,244,.5); color:#fff; }
 
 /* Secciones pre-departure y practical-info */
 .guide-section {
@@ -1950,7 +1953,7 @@ body {
 
 /* ═══ COPILOTO FAB ═══ */
 .copilot-fab {
-  position:absolute; bottom:16px; right:16px; z-index:500;
+  position:absolute; bottom:68px; right:16px; z-index:520;
   display:flex; align-items:center; gap:7px;
   border:none; cursor:pointer; border-radius:24px;
   padding:10px 16px; transition:all .25s; box-shadow:0 4px 16px rgba(0,0,0,.4);
