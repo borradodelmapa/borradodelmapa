@@ -557,14 +557,14 @@ const mapaRuta = {
       <div class="ccs-body" id="ccs-body">
         <div class="ccs-messages" id="ccs-messages"></div>
         <div class="ccs-input-row">
-          <input type="text" class="ccs-input" id="ccs-input" placeholder="Escribe a Salma..." autocomplete="off">
+          <input type="text" class="ccs-input" id="ccs-input" placeholder="Escribe a Salma..." autocomplete="off" autocorrect="off" autocapitalize="off" data-lpignore="true" data-form-type="other">
           <button class="ccs-send" id="ccs-send" aria-label="Enviar">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
           <label class="ccs-cam-btn" for="ccs-cam-input" aria-label="Foto" title="Adjuntar foto">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </label>
-          <input type="file" id="ccs-cam-input" accept="image/*" capture="environment" style="display:none">
+          <input type="file" id="ccs-cam-input" accept="image/*" style="display:none">
           <button class="ccs-mic-btn" id="ccs-mic" aria-label="Micrófono" title="Hablar con Salma">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M19 10a7 7 0 0 1-14 0"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
           </button>
