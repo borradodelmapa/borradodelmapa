@@ -1980,18 +1980,30 @@ body {
 }
 .copilot-fab-on { animation:copilot-pulse 2.5s ease-in-out infinite; }
 
-/* Botón volver a navegación (copiloto activo fuera del mapa) */
-.copilot-return-btn {
+/* Barra volver/apagar navegación (copiloto activo fuera del mapa) */
+.copilot-return-bar {
   position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
-  z-index:9999;
-  display:flex; align-items:center; gap:8px;
+  z-index:9999; display:flex; align-items:center; gap:8px;
+  animation:copilot-pulse 2s ease-in-out infinite;
+}
+.copilot-return-btn {
+  display:flex; align-items:center; gap:7px;
   background:#D4A843; color:#0c0a06;
   font-family:var(--font-mono); font-size:12px; font-weight:700;
   letter-spacing:.05em; text-transform:uppercase;
-  padding:12px 22px; border-radius:28px; border:none; cursor:pointer;
-  box-shadow:0 4px 20px rgba(212,168,67,.45);
-  animation:copilot-pulse 2s ease-in-out infinite;
+  padding:12px 20px; border-radius:28px; border:none; cursor:pointer;
+  box-shadow:0 4px 20px rgba(212,168,67,.4);
   white-space:nowrap;
+}
+.copilot-stop-btn {
+  display:flex; align-items:center; gap:6px;
+  background:rgba(12,10,6,.9); color:rgba(244,239,230,.7);
+  font-family:var(--font-mono); font-size:12px; font-weight:700;
+  letter-spacing:.05em; text-transform:uppercase;
+  padding:12px 16px; border-radius:28px; cursor:pointer;
+  border:1px solid rgba(244,239,230,.15);
+  box-shadow:0 4px 16px rgba(0,0,0,.4);
+  white-space:nowrap; backdrop-filter:blur(10px);
 }
 
 /* ═══ COPILOTO CHAT BOTTOM SHEET ═══ */

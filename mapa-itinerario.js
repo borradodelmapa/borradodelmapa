@@ -399,8 +399,8 @@ const mapaItinerario = {
     const inputBar = document.getElementById('app-input-bar');
     if (!view) return;
 
-    // Eliminar botón volver si existía
-    document.getElementById('copilot-return-btn')?.remove();
+    // Eliminar barra volver/apagar si existía
+    document.getElementById('copilot-return-bar')?.remove();
 
     // Limpiar guide-cards del chat y loading/retry si los hay
     document.querySelectorAll('.guide-card').forEach(el => el.remove());
@@ -449,34 +449,53 @@ const mapaItinerario = {
     };
 
     function _showReturnBtn(view, appContent, inputBar) {
-      if (document.getElementById('copilot-return-btn')) return;
-      const btn = document.createElement('button');
-      btn.id = 'copilot-return-btn';
-      btn.className = 'copilot-return-btn';
-      btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg> Volver a la navegación`;
-      btn.addEventListener('click', () => {
-        btn.remove();
+      if (document.getElementById('copilot-return-bar')) return;
+
+      const bar = document.createElement('div');
+      bar.id = 'copilot-return-bar';
+      bar.className = 'copilot-return-bar';
+
+      // Botón volver
+      const btnReturn = document.createElement('button');
+      btnReturn.className = 'copilot-return-btn';
+      btnReturn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg> Volver`;
+      btnReturn.addEventListener('click', () => {
+        bar.remove();
         if (appContent) appContent.style.display = 'none';
         if (inputBar) inputBar.style.display = 'none';
         view.style.display = 'block';
-        // Restaurar nav según estado del chat
         const bb = document.getElementById('app-bottom-bar');
         if (bb) bb.style.display = mapaRuta._chatExpanded ? '' : 'none';
         setTimeout(() => {
           mapaRuta.invalidateSize();
-          // Re-renderizar controles y FAB por si Google Maps los borró al ocultar el div
           const cid = mapaRuta._currentContainerId;
           if (cid) {
             mapaRuta._renderMapControls(cid);
             mapaRuta._renderCopilotFab(cid);
-            // Restaurar fab-raised si el chat estaba expandido
             if (mapaRuta._chatExpanded) {
               document.getElementById('copilot-fab')?.classList.add('fab-raised');
             }
           }
         }, 200);
       });
-      document.body.appendChild(btn);
+
+      // Botón apagar
+      const btnStop = document.createElement('button');
+      btnStop.className = 'copilot-stop-btn';
+      btnStop.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Apagar`;
+      btnStop.addEventListener('click', () => {
+        bar.remove();
+        view.style.display = 'none';
+        const bb = document.getElementById('app-bottom-bar');
+        if (bb) bb.style.display = '';
+        mapaRuta.deactivateCopilot();
+        mapaItinerario.destroy();
+        window.showState = _origShowState;
+      });
+
+      bar.appendChild(btnReturn);
+      bar.appendChild(btnStop);
+      document.body.appendChild(bar);
     }
   }
 
