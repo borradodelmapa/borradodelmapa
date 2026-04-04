@@ -1,0 +1,30 @@
+# Wrangler cache y estado local
+worker/.wrangler/
+.wrangler/
+
+# Claude worktrees internos
+.claude/worktrees/
+
+# API keys y credenciales
+api/
+*.env
+.env*
+
+# Archivos comprimidos grandes
+*.rar
+*.zip
+salma.rar
+
+# KV output generado (cientos de JSONs, se regeneran con los scripts)
+worker/kv/output/
+worker/kv/output-nivel2/
+worker/kv/output-nivel25/
+worker/kv/_*.json
+worker/kv/*.json
+
+# Node modules
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db

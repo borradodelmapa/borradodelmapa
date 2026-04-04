@@ -20,6 +20,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const NAMESPACE_ID = 'b2056c0613d94feb955b92279ba02fb6';
 const BATCH_SIZE = 500; // wrangler bulk acepta hasta 10000
 
+// Normaliza una clave KV a ASCII puro (Cloudflare rechaza non-ASCII en claves)
+function safeKey(str) {
+  return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\x00-\x7F]/g, '');
+}
+
 const args = process.argv.slice(2);
 const dryRun = args.includes('--dry-run');
 const onlyNivel1 = args.includes('--nivel1');
@@ -46,10 +51,17 @@ async function main() {
       // Ficha completa
       kvPairs.push({ key: `dest:${code}:base`, value: JSON.stringify(data) });
 
-      // Keywords
+      // Siempre añadir el nombre del país como keyword (kw:espana → es, kw:japon → jp...)
+      const paisNorm = safeKey(data.pais || '');
+      if (paisNorm) kvPairs.push({ key: `kw:${paisNorm}`, value: code });
+      // También el código ISO como keyword (kw:es → es, kw:th → th...)
+      kvPairs.push({ key: `kw:${code}`, value: code });
+
+      // Keywords adicionales de ciudades/atracciones
       if (data.keywords && Array.isArray(data.keywords)) {
         for (const kw of data.keywords) {
-          const kwNorm = kw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+          const kwNorm = safeKey(kw);
+          if (!kwNorm) continue; // era cirílico/árabe/coreano puro — skip
           kvPairs.push({ key: `kw:${kwNorm}`, value: code });
         }
       }
@@ -74,13 +86,15 @@ async function main() {
           // Cada destino individual + keywords
           for (const dest of data.destinos) {
             if (dest.id) {
-              kvPairs.push({ key: `dest:${code}:spot:${dest.id}`, value: JSON.stringify(dest) });
-              kvPairs.push({ key: `spot:${dest.id}`, value: `${code}:${dest.id}` });
+              const spotId = safeKey(dest.id) || dest.id.replace(/[^\x00-\x7F]/g, '');
+              kvPairs.push({ key: `dest:${code}:spot:${spotId}`, value: JSON.stringify(dest) });
+              kvPairs.push({ key: `spot:${spotId}`, value: `${code}:${spotId}` });
 
               // Keywords del destino
               if (dest.keywords && Array.isArray(dest.keywords)) {
                 for (const kw of dest.keywords) {
-                  const kwNorm = kw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                  const kwNorm = safeKey(kw);
+                  if (!kwNorm) continue; // era cirílico/árabe/coreano puro — skip
                   kvPairs.push({ key: `kw:${kwNorm}`, value: code });
                 }
               }
@@ -113,6 +127,17 @@ async function main() {
       console.log('⚠️ No se encontró output-nivel25/');
     }
   }
+
+  // Deduplicar: si hay claves repetidas (ej. kw:iguazu → ar y br), quedarse con la última
+  const kvMap = new Map();
+  for (const p of kvPairs) kvMap.set(p.key, p.value);
+  const kvDeduped = Array.from(kvMap.entries()).map(([key, value]) => ({ key, value }));
+  const dupes = kvPairs.length - kvDeduped.length;
+  if (dupes > 0) console.log(`   ⚠️  ${dupes} claves duplicadas eliminadas`);
+
+  // Reemplazar array original
+  kvPairs.length = 0;
+  kvPairs.push(...kvDeduped);
 
   console.log(`\n📊 Total pares KV: ${kvPairs.length}`);
 

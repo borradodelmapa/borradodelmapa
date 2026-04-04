@@ -1,0 +1,12 @@
+Ya lo veo. El flujo actual:
+
+1. El usuario escribe en un textarea → se activa `_debounceSaveNote` con 2 segundos de delay
+2. Muestra "..." mientras espera
+3. Guarda automáticamente → muestra "✓" por 2 segundos y desaparece
+4. No hay botón de guardar — es auto-save silencioso
+
+El problema: el usuario no sabe si se guardó o no. El "✓" es pequeño y desaparece rápido. Y si escribe varias veces, el debounce puede confundir.
+
+La solución: cambiar el auto-save por un **botón "Guardar" visible** que aparece cuando cambias el texto. Al pulsar, guarda y cambia a "✓ Guardado" en verde. Simple y claro.
+
+fecha 28032026
