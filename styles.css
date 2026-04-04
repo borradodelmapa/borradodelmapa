@@ -3798,15 +3798,4 @@ body {
 
 /* Media query para pantallas grandes */
 @media (min-width: 600px) {
-  .chat-modal-panel {
-    max-width: 450px;
-    max-height: 70vh;
-    margin: auto;
-    margin-bottom: 60px;
-    border-radius: 16px;
-  }
-
-  .chat-modal-input {
-    border-radius: 0 0 16px 16px;
-  }
 }
