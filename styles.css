@@ -93,14 +93,7 @@ body {
 
 /* ── App header (fijo arriba) ── */
 .app-header {
-  position:fixed; top:0; left:0; right:0; z-index:1000;
-  padding:14px 20px;
-  background:rgba(8,7,4,.92);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--linea);
-  display:flex; align-items:center; justify-content:center;
-  height:56px;
+  display:none !important;
 }
 .app-logo {
   font-family:var(--font-display);
