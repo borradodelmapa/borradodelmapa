@@ -125,11 +125,30 @@ function updateBottomBar() {
   const sosContacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim());
   const sosReady = currentUser && sosContacts.length > 0;
 
-  bar.innerHTML = `
+  // Si usuario logueado: mostrar dos toggles en lugar de Home
+  // Si no logueado: mostrar botón Home normal
+  const homeSection = currentUser ? `
+    <div class="bottom-toggles-pair">
+      <label class="bottom-toggle" title="Activar/Desactivar Copiloto (GPS + Narrador)">
+        <span class="bottom-toggle-icon">🧭</span>
+        <input type="checkbox" id="bottom-narrator-toggle" ${typeof salma !== 'undefined' && salma._narratorActive ? 'checked' : ''}>
+        <span class="toggle-slider-small"></span>
+      </label>
+      <label class="bottom-toggle" title="Activar/Desactivar voz de Salma">
+        <span class="bottom-toggle-icon">${localStorage.getItem('salma_voice') === 'true' ? '🔊' : '🔇'}</span>
+        <input type="checkbox" id="bottom-voice-toggle" ${localStorage.getItem('salma_voice') === 'true' ? 'checked' : ''}>
+        <span class="toggle-slider-small"></span>
+      </label>
+    </div>
+  ` : `
     <button class="bottom-tab ${isHome ? 'bottom-tab-active' : ''}" id="tab-home">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span>Home</span>
     </button>
+  `;
+
+  bar.innerHTML = `
+    ${homeSection}
     <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span>Salma</span>
@@ -148,25 +167,62 @@ function updateBottomBar() {
       <span>SOS</span>
     </button>`;
 
-  document.getElementById('tab-home').addEventListener('click', () => {
-    // Si estamos en vista de ruta, cerrarla primero
-    const itinView = document.getElementById('itin-view');
-    const inRouteView = itinView && (itinView.style.display === 'block' || itinView.style.display !== 'none');
-    if (inRouteView || window._itinViewOpen) {
-      // Cerrar ruta: aplicar la misma lógica que en salma._doSend
-      const _view = document.getElementById('itin-view');
-      const _appContent = document.getElementById('app-content');
-      const _inputBar = document.getElementById('app-input-bar');
-      window._itinViewOpen = false;
-      if (_view) _view.style.display = 'none';
-      if (_appContent) _appContent.style.display = '';
-      if (_inputBar) _inputBar.style.display = '';
-      if (typeof mapaRuta !== 'undefined') mapaRuta.destroy();
-      if (typeof mapaItinerario !== 'undefined') mapaItinerario.destroy();
-    }
-    // Luego ir a welcome
-    showState('welcome');
-  });
+  // Event listener para tab-home (solo si no está logueado)
+  const homeBtn = document.getElementById('tab-home');
+  if (homeBtn) {
+    homeBtn.addEventListener('click', () => {
+      // Si estamos en vista de ruta, cerrarla primero
+      const itinView = document.getElementById('itin-view');
+      const inRouteView = itinView && (itinView.style.display === 'block' || itinView.style.display !== 'none');
+      if (inRouteView || window._itinViewOpen) {
+        // Cerrar ruta: aplicar la misma lógica que en salma._doSend
+        const _view = document.getElementById('itin-view');
+        const _appContent = document.getElementById('app-content');
+        const _inputBar = document.getElementById('app-input-bar');
+        window._itinViewOpen = false;
+        if (_view) _view.style.display = 'none';
+        if (_appContent) _appContent.style.display = '';
+        if (_inputBar) _inputBar.style.display = '';
+        if (typeof mapaRuta !== 'undefined') mapaRuta.destroy();
+        if (typeof mapaItinerario !== 'undefined') mapaItinerario.destroy();
+      }
+      // Luego ir a welcome
+      showState('welcome');
+    });
+  }
+
+  // Event listeners para los dos toggles (solo si está logueado)
+  const narratorToggle = document.getElementById('bottom-narrator-toggle');
+  if (narratorToggle) {
+    narratorToggle.addEventListener('change', async (e) => {
+      if (typeof salma === 'undefined') return;
+      if (e.target.checked) {
+        const ok = await salma.startNarrator();
+        if (ok === false) {
+          e.target.checked = false;
+          if (typeof showToast === 'function') showToast('Copiloto no disponible (requiere GPS)');
+        }
+      } else {
+        salma.stopNarrator();
+      }
+    });
+  }
+
+  const voiceToggle = document.getElementById('bottom-voice-toggle');
+  if (voiceToggle) {
+    voiceToggle.addEventListener('change', (e) => {
+      localStorage.setItem('salma_voice', e.target.checked ? 'true' : 'false');
+      // Actualizar icono
+      const icon = voiceToggle.parentElement.querySelector('.bottom-toggle-icon');
+      if (icon) {
+        icon.textContent = e.target.checked ? '🔊' : '🔇';
+      }
+      // Cancelar síntesis si se desactiva
+      if (!e.target.checked && typeof salma !== 'undefined') {
+        salma.salmaSpeakStop();
+      }
+    });
+  }
   document.getElementById('tab-chat').addEventListener('click', () => {
     // Detectar si estamos en vista de ruta (versión nueva con mapa interactivo)
     // Usar multiple methods para detectar: window._itinViewOpen OR elemento visible

@@ -1962,6 +1962,41 @@ body {
 .profile-section-sos.sos-unconfigured .profile-section-label { color:rgba(244,239,230,.75); }
 .profile-section-sos.sos-unconfigured:hover { background:rgba(255,255,255,.04); }
 
+/* ═══ TOGGLES EN BOTTOM BAR (Copiloto + Voz) ═══ */
+.bottom-toggles-pair {
+  display:flex; gap:8px; align-items:center; flex:1;
+  justify-content:flex-start; padding:4px 10px;
+}
+.bottom-toggle {
+  position:relative; display:inline-flex; align-items:center; gap:4px;
+  background:none; border:none; cursor:pointer;
+  color:rgba(244,239,230,.4); font-size:11px;
+  padding:2px 0; transition:color .2s;
+}
+.bottom-toggle-icon {
+  font-size:14px; display:inline-block;
+}
+.bottom-toggle input { opacity:0; width:0; height:0; }
+.toggle-slider-small {
+  position:relative; display:inline-block;
+  width:32px; height:18px;
+  background:rgba(244,239,230,.15); border-radius:9px;
+  transition:background .3s;
+  flex-shrink:0;
+}
+.toggle-slider-small::before {
+  content:''; position:absolute; left:2px; top:2px;
+  width:14px; height:14px; border-radius:50%;
+  background:var(--blanco); transition:transform .3s;
+}
+.bottom-toggle input:checked + .toggle-slider-small {
+  background:var(--dorado);
+}
+.bottom-toggle input:checked + .toggle-slider-small::before {
+  transform:translateX(14px);
+}
+.bottom-toggle:hover { color:rgba(244,239,230,.6); }
+
 /* ═══ COPILOTO FAB ═══ */
 .copilot-fab {
   position:absolute; bottom:68px; right:16px; z-index:520;
