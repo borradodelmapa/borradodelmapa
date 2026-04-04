@@ -2178,6 +2178,19 @@ body {
 .map-controls {
   display:none !important;
 }
+
+/* Ocultar todo en la esquina superior izquierda del mapa */
+[style*="top:"] [style*="left:"],
+[style*="top: "] [style*="left: "],
+.itin-view > div:nth-child(1),
+[class*="salma"][class*="tag"],
+[class*="ask"],
+[class*="pideme"],
+[id*="salma-tag"],
+[id*="ask"],
+[id*="pideme"] {
+  display:none !important;
+}
 .map-ctrl-btn {
   width:40px; height:40px; border-radius:10px; border:none; cursor:pointer;
   background:rgba(12,10,6,.88); backdrop-filter:blur(10px);
