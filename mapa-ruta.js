@@ -121,28 +121,32 @@ const mapaRuta = {
     btnShare.setAttribute('aria-label', 'Compartir');
     btnShare.title = 'Compartir';
     btnShare.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`;
-    btnShare.addEventListener('click', () => {
-      const valid = this._currentStops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
-      let url;
-      if (valid.length < 2) {
-        url = valid.length === 1
-          ? `https://www.google.com/maps?q=${valid[0].lat},${valid[0].lng}`
-          : 'https://www.google.com/maps';
-      } else {
-        const max = 25;
-        const sampled = valid.length <= max ? valid : (() => {
-          const step = valid.length / max, r = [];
-          for (let i = 0; i < max; i++) r.push(valid[Math.floor(i * step)]);
-          return r;
-        })();
-        url = 'https://www.google.com/maps/dir/' + sampled.map(p => p.lat + ',' + p.lng).join('/');
-      }
+    btnShare.addEventListener('click', async () => {
+      let shareUrl = null;
+      // Intentar obtener URL pública de la ruta (mismo flujo que guide-renderer)
+      try {
+        if (typeof salma !== 'undefined' && salma.currentRouteId &&
+            typeof db !== 'undefined' && typeof currentUser !== 'undefined' && currentUser) {
+          const userDoc = await db.collection('users').doc(currentUser.uid)
+            .collection('maps').doc(salma.currentRouteId).get();
+          let slug = userDoc.data()?.slug;
+          if (!slug && typeof generateSlug === 'function' && typeof publishGuide === 'function') {
+            const r = userDoc.data();
+            slug = generateSlug(r?.title || r?.name || 'mi-ruta');
+            publishGuide(salma.currentRouteId, userDoc.data(), slug, r).catch(() => {});
+          }
+          if (slug) shareUrl = 'https://borradodelmapa.com/' + slug;
+        }
+      } catch(e) {}
+
+      if (!shareUrl) shareUrl = window.location.href;
+
       if (navigator.share) {
-        navigator.share({ title: 'Ruta en Google Maps', url });
+        navigator.share({ title: 'Mi ruta de viaje', text: 'Viaja con alguien que sabe lo que hace', url: shareUrl }).catch(() => {});
       } else {
-        navigator.clipboard?.writeText(url).then(() => {
+        navigator.clipboard?.writeText(shareUrl).then(() => {
           btnShare.title = '¡Copiado!';
-          setTimeout(() => { btnShare.title = 'Compartir ruta'; }, 2000);
+          setTimeout(() => { btnShare.title = 'Compartir'; }, 2000);
         });
       }
     });
