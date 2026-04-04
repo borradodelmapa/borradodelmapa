@@ -292,7 +292,7 @@ const mapaRuta = {
       styles: darkStyle,
       disableDefaultUI: true,
       zoomControl: true,
-      zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_TOP },
+      zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_BOTTOM },
       gestureHandling: 'greedy',
       mapTypeId: 'roadmap',
     });
@@ -319,6 +319,7 @@ const mapaRuta = {
       });
       marker.addListener('click', () => {
         this.highlightMarker(i);
+        this._showStopPanel(i);
         document.dispatchEvent(new CustomEvent('itin:marker-click', { detail: { index: i } }));
       });
       marker._latLng = { lat: stop.lat, lng: stop.lng };
@@ -561,10 +562,15 @@ const mapaRuta = {
           <button class="ccs-send" id="ccs-send" aria-label="Enviar">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
-          <label class="ccs-cam-btn" for="ccs-cam-input" aria-label="Foto" title="Adjuntar foto">
+          <button class="ccs-cam-btn" id="ccs-cam-btn" aria-label="Foto" title="Foto o galería">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          </label>
-          <input type="file" id="ccs-cam-input" accept="image/*" style="display:none">
+          </button>
+          <div class="ccs-cam-menu" id="ccs-cam-menu">
+            <label class="ccs-cam-opt" for="ccs-cam-direct">Cámara</label>
+            <input type="file" id="ccs-cam-direct" accept="image/*" capture="environment" style="display:none">
+            <label class="ccs-cam-opt" for="ccs-cam-gallery">Galería</label>
+            <input type="file" id="ccs-cam-gallery" accept="image/*" style="display:none">
+          </div>
           <button class="ccs-mic-btn" id="ccs-mic" aria-label="Micrófono" title="Hablar con Salma">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M19 10a7 7 0 0 1-14 0"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
           </button>
@@ -598,6 +604,15 @@ const mapaRuta = {
     };
     document.getElementById('ccs-input').addEventListener('keydown', e => { if (e.key === 'Enter') doSend(); });
     document.getElementById('ccs-send').addEventListener('click', doSend);
+
+    // Botón cámara — mini menú cámara / galería
+    const camBtn = document.getElementById('ccs-cam-btn');
+    const camMenu = document.getElementById('ccs-cam-menu');
+    camBtn?.addEventListener('click', e => {
+      e.stopPropagation();
+      camMenu?.classList.toggle('ccs-cam-open');
+    });
+    document.addEventListener('click', () => camMenu?.classList.remove('ccs-cam-open'));
 
     // Micrófono
     const micBtn = document.getElementById('ccs-mic');
@@ -689,6 +704,40 @@ const mapaRuta = {
     fab.className = `copilot-fab ${this._copilotActive ? 'copilot-fab-on' : 'copilot-fab-off'}`;
     fab.title = this._copilotActive ? 'Copiloto activo' : 'Activar Copiloto';
     fab.querySelector('.copilot-fab-label').textContent = this._copilotActive ? 'ON' : 'COPILOTO';
+  },
+
+  // ═══ PANEL INFO PARADA ═══
+  _showStopPanel(index) {
+    const stop = this._currentStops[index];
+    if (!stop) return;
+    const el = document.getElementById(this._currentContainerId);
+    if (!el) return;
+
+    // Eliminar panel anterior
+    el.querySelector('.stop-info-panel')?.remove();
+
+    const gmapsUrl = `https://www.google.com/maps?q=${stop.lat},${stop.lng}`;
+    const photoHtml = stop.photo_ref
+      ? `<img class="sip-photo" src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${stop.photo_ref}&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U" alt="">`
+      : '';
+
+    const panel = document.createElement('div');
+    panel.className = 'stop-info-panel';
+    panel.innerHTML = `
+      <button class="sip-close" id="sip-close">&times;</button>
+      ${photoHtml}
+      <div class="sip-body">
+        <div class="sip-day">Día ${stop.day || ''}</div>
+        <div class="sip-title">${stop.headline || stop.name || ''}</div>
+        ${stop.narrative ? `<p class="sip-text">${stop.narrative}</p>` : ''}
+        <a class="sip-maps-btn" href="${gmapsUrl}" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="2.5"/></svg>
+          Ver en Google Maps
+        </a>
+      </div>`;
+
+    el.appendChild(panel);
+    panel.querySelector('#sip-close').addEventListener('click', () => panel.remove());
   },
 
   // ═══ RESALTAR MARCADOR ═══

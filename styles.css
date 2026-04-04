@@ -2046,6 +2046,51 @@ body {
 .ccs-mic-active { background:var(--dorado) !important; color:#0c0a06 !important; }
 .ccs-mic-active svg { stroke:#0c0a06; }
 
+/* Menú cámara */
+.ccs-cam-menu {
+  position:absolute; bottom:56px; right:100px; z-index:520;
+  background:rgba(12,10,6,.95); backdrop-filter:blur(12px);
+  border:1px solid rgba(244,239,230,.12); border-radius:10px;
+  overflow:hidden; display:none; flex-direction:column; min-width:110px;
+  box-shadow:0 4px 16px rgba(0,0,0,.5);
+}
+.ccs-cam-menu.ccs-cam-open { display:flex; }
+.ccs-cam-opt {
+  padding:11px 14px; cursor:pointer; font-size:13px;
+  color:rgba(244,239,230,.85); display:block;
+  transition:background .15s;
+}
+.ccs-cam-opt:hover { background:rgba(244,239,230,.07); }
+
+/* Panel info parada */
+.stop-info-panel {
+  position:absolute; bottom:70px; left:12px; right:12px; z-index:530;
+  background:rgba(10,9,6,.94); backdrop-filter:blur(16px);
+  border:1px solid rgba(212,168,67,.25); border-radius:14px;
+  overflow:hidden; max-height:55vh; display:flex; flex-direction:column;
+  box-shadow:0 8px 32px rgba(0,0,0,.6);
+}
+.sip-close {
+  position:absolute; top:10px; right:12px; z-index:1;
+  background:rgba(0,0,0,.4); border:none; color:rgba(244,239,230,.7);
+  width:28px; height:28px; border-radius:50%; font-size:16px;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+}
+.sip-photo { width:100%; height:140px; object-fit:cover; flex-shrink:0; }
+.sip-body { padding:14px 16px 16px; overflow-y:auto; }
+.sip-day { font-family:var(--font-mono); font-size:10px; color:var(--dorado); letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px; }
+.sip-title { font-size:16px; font-weight:700; color:rgba(244,239,230,.95); margin-bottom:8px; line-height:1.3; }
+.sip-text { font-size:13px; color:rgba(244,239,230,.65); line-height:1.55; margin-bottom:12px; }
+.sip-maps-btn {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:12px; font-family:var(--font-mono); font-weight:600;
+  color:rgba(244,239,230,.85); text-decoration:none;
+  padding:6px 11px; border-radius:8px;
+  background:rgba(66,133,244,.12); border:1px solid rgba(66,133,244,.3);
+  transition:background .2s;
+}
+.sip-maps-btn:hover { background:rgba(66,133,244,.22); }
+
 /* ═══ COPILOTO FULLSCREEN ═══ */
 .itin-view.copilot-fullscreen .itin-map-col { flex:0 0 100%; width:100%; height:100%; }
 .itin-view.copilot-fullscreen .itin-cards-col { display:none; }
