@@ -151,7 +151,9 @@ CORRECCIONES FRECUENTES — aplica siempre:
 "Ferry a Roma" → El ferry llega a Civitavecchia (80km al norte). De ahí tren directo a Roma en 1h30.
 "Ferry a París" → París no tiene puerto. Los ferries del Canal llegan a Calais o Dunkerque; de ahí 1h30 en tren a París. El Eurostar (tren bajo el canal) va directo Londres-París en 2h20.
 "Tren de Madrid a Barcelona en ferry" → No hay agua entre ellas. AVE (2h30), bus (6-7h) o vuelo (1h15).
-"Cruzar Marruecos-España en coche" → Ferries Tánger Med → Tarifa (35min) o Algeciras (35min). También Ceuta (frontera terrestre). En julio-agosto, colas de hasta 12h — recomendable cruzar de madrugada o usar Melilla.
+"Ferry de Tarifa/Algeciras a Marrakech" → Marrakech está 340km tierra adentro. El ferry llega a Tánger o Tánger Med. Ruta completa: ferry Tarifa→Tánger (35min, FRS/DFDS, ~35-45€) + bus CTM o Supratours Tánger→Marrakech (3,5-4h, ~10-15€). No hay tren directo Tánger-Marrakech sin transbordo.
+"Ferry de Tarifa/Algeciras a Fez/Casablanca/Rabat" → Mismo principio. Ferry hasta Tánger/Tánger Med, luego tren ONCF o bus. Tánger→Fez: 3h30 en tren. Tánger→Casablanca: 4h45. Tánger→Rabat: 3h30.
+"Cruzar Marruecos-España en coche" → Ferries Tánger Med→Tarifa (35min) o Algeciras (35min). También Ceuta (frontera terrestre) o Melilla. En julio-agosto, colas de hasta 12h — cruzar de madrugada o usar Melilla.
 "Ir de Tailandia a Malasia en tren" → Ruta Hat Yai → Padang Besar (frontera) → Butterworth/Penang → KL. Verificar estado del servicio (interrupciones frecuentes en 2025-2026).
 
 ISLAS — con y sin aeropuerto:
@@ -4369,11 +4371,14 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         ctx += `[Repetir bloque por cada opción. Mínimo 2 opciones.]\n\n`;
         ctx += `Emojis: 🚢 ferry · 🚌 bus · 🚄 tren · ✈️ vuelo · 🚕 taxi privado\n\n`;
         ctx += `REGLAS GEOGRÁFICAS CRÍTICAS:\n`;
-        ctx += `- Si el destino final no tiene puerto (Bangkok, Madrid, París, Roma…), el ferry NUNCA llega allí. Muestra el tramo real del ferry (hasta el puerto intermedio) y el tramo terrestre por separado.\n`;
+        ctx += `- Si el destino final no tiene puerto (Bangkok, Marrakech, Madrid, París, Roma…), el ferry NUNCA llega allí. Muestra SIEMPRE: (1) el tramo ferry hasta el puerto real, y (2) el tramo terrestre desde ese puerto hasta el destino final.\n`;
         ctx += `  Ejemplo CORRECTO para Koh Samui → Bangkok:\n`;
-        ctx += `    🚢 Tramo 1 — Ferry: Koh Samui → Surat Thani/Don Sak (1,5-2h)\n`;
-        ctx += `    🚌 Tramo 2 — Bus nocturno: Surat Thani → Bangkok (7-9h)\n`;
-        ctx += `- Si los datos de búsqueda dicen "ferry to Bangkok" es porque la ruta TOTAL acaba en Bangkok, pero el ferry solo llega al puerto. Desglósalo siempre.\n`;
+        ctx += `    🚢 Ferry: Koh Samui → Surat Thani (1,5-2h, Lomprayah/Raja Ferry, 300-500 THB)\n`;
+        ctx += `    🚌 Bus nocturno: Surat Thani → Bangkok (7-9h, 400-700 THB)\n`;
+        ctx += `  Ejemplo CORRECTO para Tarifa → Marrakech:\n`;
+        ctx += `    🚢 Ferry: Tarifa → Tánger (35min, FRS/DFDS, 35-45€)\n`;
+        ctx += `    🚌 Bus: Tánger → Marrakech (3,5-4h, CTM/Supratours, 10-15€)\n`;
+        ctx += `- Si los datos de búsqueda dicen "ferry to [ciudad interior]" es porque la ruta TOTAL acaba ahí, pero el ferry solo llega al puerto. Desglosa siempre los dos tramos.\n`;
         ctx += `- Emoji correcto por medio: 🚢 ferry/barco · 🚌 bus/minivan · 🚄 tren · ✈️ avión · 🛥️ speedboat · 🚕 taxi/privado. NO uses 🚄 para vuelos.\n\n`;
         ctx += `REGLAS DE DATOS:\n`;
         ctx += `- Sustituye [los corchetes] por datos reales de los resultados de búsqueda\n`;
