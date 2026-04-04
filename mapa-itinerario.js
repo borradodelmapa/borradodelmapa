@@ -422,17 +422,47 @@ const mapaItinerario = {
     const _origShowState = window.showState;
     window.showState = function(state) {
       if (view.style.display !== 'none') {
-        view.style.display = 'none';
-        if (appContent) appContent.style.display = '';
-        if (inputBar) inputBar.style.display = '';
-        const bb = document.getElementById('app-bottom-bar');
-        if (bb) bb.style.display = '';
-        mapaRuta.destroy();
-        mapaItinerario.destroy();
-        window.showState = _origShowState; // restaurar
+        if (mapaRuta._copilotActive) {
+          // Copiloto ON: ocultar sin destruir + botón volver
+          view.style.display = 'none';
+          if (appContent) appContent.style.display = '';
+          if (inputBar) inputBar.style.display = '';
+          const bb = document.getElementById('app-bottom-bar');
+          if (bb) bb.style.display = '';
+          _showReturnBtn(view, appContent, inputBar);
+        } else {
+          // Copiloto OFF: cerrar todo
+          view.style.display = 'none';
+          if (appContent) appContent.style.display = '';
+          if (inputBar) inputBar.style.display = '';
+          const bb = document.getElementById('app-bottom-bar');
+          if (bb) bb.style.display = '';
+          mapaRuta.destroy();
+          mapaItinerario.destroy();
+          window.showState = _origShowState;
+        }
       }
       _origShowState(state);
     };
+
+    function _showReturnBtn(view, appContent, inputBar) {
+      if (document.getElementById('copilot-return-btn')) return;
+      const btn = document.createElement('button');
+      btn.id = 'copilot-return-btn';
+      btn.className = 'copilot-return-btn';
+      btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg> Volver a la navegación`;
+      btn.addEventListener('click', () => {
+        btn.remove();
+        if (appContent) appContent.style.display = 'none';
+        if (inputBar) inputBar.style.display = 'none';
+        view.style.display = 'block';
+        // Restaurar nav según estado del chat
+        const bb = document.getElementById('app-bottom-bar');
+        if (bb) bb.style.display = mapaRuta._chatExpanded ? '' : 'none';
+        setTimeout(() => mapaRuta.invalidateSize(), 150);
+      });
+      document.body.appendChild(btn);
+    }
   }
 
   function closeItinerarioView() {

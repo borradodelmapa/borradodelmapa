@@ -1980,6 +1980,20 @@ body {
 }
 .copilot-fab-on { animation:copilot-pulse 2.5s ease-in-out infinite; }
 
+/* Botón volver a navegación (copiloto activo fuera del mapa) */
+.copilot-return-btn {
+  position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
+  z-index:9999;
+  display:flex; align-items:center; gap:8px;
+  background:#D4A843; color:#0c0a06;
+  font-family:var(--font-mono); font-size:12px; font-weight:700;
+  letter-spacing:.05em; text-transform:uppercase;
+  padding:12px 22px; border-radius:28px; border:none; cursor:pointer;
+  box-shadow:0 4px 20px rgba(212,168,67,.45);
+  animation:copilot-pulse 2s ease-in-out infinite;
+  white-space:nowrap;
+}
+
 /* ═══ COPILOTO CHAT BOTTOM SHEET ═══ */
 .copilot-chat-sheet {
   position:absolute; bottom:0; left:0; right:0; z-index:510;
