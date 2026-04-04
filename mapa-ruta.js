@@ -15,6 +15,7 @@ const mapaRuta = {
   _currentContainerId: null,
   _copilotActive: false,
   _userMarker: null, // Punto azul de ubicación del usuario
+  _infoWindow: null, // InfoWindow activo
 
   // Colores por día
   _dayColors: ['#D4A843', '#E87040', '#5CB85C', '#5BC0DE', '#D9534F', '#AA66CC', '#FF8C00'],
@@ -787,38 +788,44 @@ const mapaRuta = {
     fab.querySelector('.copilot-fab-label').textContent = this._copilotActive ? 'ON' : 'COPILOTO';
   },
 
-  // ═══ PANEL INFO PARADA ═══
+  // ═══ INFO PARADA — InfoWindow nativo Google Maps ═══
   _showStopPanel(index) {
     const stop = this._currentStops[index];
-    if (!stop) return;
-    const el = document.getElementById(this._currentContainerId);
-    if (!el) return;
+    if (!stop || !this._map || this._mapType !== 'google' || !window.google) return;
 
-    // Eliminar panel anterior
-    el.querySelector('.stop-info-panel')?.remove();
+    const marker = this._markers[index];
+    if (!marker) return;
 
     const gmapsUrl = `https://www.google.com/maps?q=${stop.lat},${stop.lng}`;
+    const KEY = 'AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
     const photoHtml = stop.photo_ref
-      ? `<img class="sip-photo" src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=${stop.photo_ref}&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U" alt="" onerror="this.parentElement.querySelector('.sip-photo-wrap').style.display='none'">`
+      ? `<img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${stop.photo_ref}&key=${KEY}"
+             style="width:100%;height:160px;object-fit:cover;display:block;border-radius:8px 8px 0 0;"
+             onerror="this.style.display='none'">`
       : '';
 
-    const panel = document.createElement('div');
-    panel.className = 'stop-info-panel';
-    panel.innerHTML = `
-      <button class="sip-close" id="sip-close">✕</button>
-      ${photoHtml ? `<div class="sip-photo-wrap">${photoHtml}</div>` : ''}
-      <div class="sip-body">
-        <div class="sip-day">Día ${stop.day || ''}</div>
-        <div class="sip-title">${stop.headline || stop.name || ''}</div>
-        ${stop.narrative ? `<p class="sip-text">${stop.narrative}</p>` : ''}
-        <a class="sip-maps-btn" href="${gmapsUrl}" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="2.5"/></svg>
-          Ver en Google Maps
-        </a>
+    const content = `
+      <div style="font-family:'Inter',sans-serif;width:260px;background:#0c0a06;border-radius:10px;overflow:hidden;color:#f4efe6;">
+        ${photoHtml}
+        <div style="padding:12px 14px 14px;">
+          <div style="font-size:10px;color:#D4A843;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;">Día ${stop.day || ''}</div>
+          <div style="font-size:15px;font-weight:700;margin-bottom:6px;line-height:1.3;">${stop.headline || stop.name || ''}</div>
+          ${stop.narrative ? `<p style="font-size:12px;color:rgba(244,239,230,.65);line-height:1.5;margin:0 0 10px;">${stop.narrative}</p>` : ''}
+          <a href="${gmapsUrl}" target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;
+                    color:#f4efe6;text-decoration:none;padding:5px 10px;border-radius:6px;
+                    background:rgba(66,133,244,.15);border:1px solid rgba(66,133,244,.3);">
+            <svg width="12" height="12" viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="2.5"/></svg>
+            Ver en Google Maps
+          </a>
+        </div>
       </div>`;
 
-    el.appendChild(panel);
-    panel.querySelector('#sip-close').addEventListener('click', () => panel.remove());
+    // Cerrar el anterior
+    if (this._infoWindow) this._infoWindow.close();
+
+    this._infoWindow = new google.maps.InfoWindow({ content, disableAutoPan: false });
+    this._infoWindow.open(this._map, marker);
   },
 
   // ═══ RESALTAR MARCADOR ═══
@@ -877,6 +884,10 @@ const mapaRuta = {
     if (this._userMarker) {
       try { this._userMarker.setMap(null); } catch(e) {}
       this._userMarker = null;
+    }
+    if (this._infoWindow) {
+      try { this._infoWindow.close(); } catch(e) {}
+      this._infoWindow = null;
     }
     // Limpiar contenedor si tiene imagen estática
     if (this._currentContainerId) {
