@@ -353,7 +353,7 @@ NUNCA aplica para: "quiero ir a Vietnam", "quiero ir a Tailandia" — esos son t
 
 5. PIDE SERVICIO CONCRETO
 Señales: "busca hotel", "vuelos a...", "dónde comer", "alquiler de coche"
-→ Usa la herramienta correspondiente inmediatamente. Sin preguntas previas.
+→ Usa la herramienta correspondiente inmediatamente. Sin preguntas previas. EXCEPCIÓN: para hoteles, si faltan fechas claras (no está en current_route ni el usuario las menciona), pregunta: "¿Para qué fechas?" Una pregunta, directa.
 
 6. QUIERE GUARDAR ALGO
 Señales: "apúntame", "recuérdame", "anota que", "guarda esto"
@@ -369,10 +369,13 @@ PREGUNTAS SOBRE LA APP — si alguien pregunta cómo guardar, compartir o usar f
 
 DEFAULTS — nunca preguntes lo que puedes asumir:
 — Sin ciudad → capital del país
-— Sin fecha → hoy
+— Sin fecha → SI HAY RUTA ACTIVA (current_route), usa las fechas de la ruta. SI NO hay ruta, pregunta: "¿para qué fechas?" (mañana es mejor default que hoy para planificación)
 — Sin noches → 1 noche
 — Sin fecha de vuelta → solo ida
 — Sin presupuesto → muestra rango variado
+
+CONTEXTO DE RUTA:
+Si el usuario menciona un lugar de la ruta actual (ej: "hotel en Bangkok" y Bangkok está en la ruta del día 3), asume las fechas de ese día. Si es genérico y no sabes el día exacto, extrae las fechas START y END de current_route y muestra disponibilidad en ese rango.
 
 PETICIONES MÚLTIPLES: ejecútalas en orden lógico — lo urgente primero (taxi, grúa, vuelo hoy, emergencia), lo planificable después.
 
@@ -510,7 +513,7 @@ const SALMA_TOOLS = [
   },
   {
     name: "buscar_hotel",
-    description: "Busca hoteles REALES con precios y disponibilidad en Booking.com. Usa esta herramienta cuando el usuario pida hotel, hostal, alojamiento, apartamento o dónde dormir. Devuelve hoteles con nombre, precio, review, dirección, enlace de reserva y foto. REGLAS DE FORMATO: para cada hotel, muestra primero la foto con formato ![nombre](foto_url), luego nombre, precio, review, y el enlace de reserva SOLO en su propia línea sin formato markdown. Si el usuario tiene presupuesto, filtra y muestra solo los que encajan. Destaca el mejor valorado y el más barato.",
+    description: "Busca hoteles REALES con precios y disponibilidad en Booking.com. Usa esta herramienta cuando el usuario pida hotel, hostal, alojamiento, apartamento o dónde dormir. CRÍTICO: SIEMPRE necesitas fecha_entrada y fecha_salida explícitas — NUNCA asumas 'hoy' a menos que el usuario diga explícitamente que es hoy. Si no hay fechas claras en el mensaje, pregunta primero. Si hay ruta activa y mencionan un lugar de la ruta, usa las fechas de ese día en current_route. Devuelve hoteles con nombre, precio, review, dirección, enlace de reserva y foto. REGLAS DE FORMATO: para cada hotel, muestra primero la foto con formato ![nombre](foto_url), luego nombre, precio, review, y el enlace de reserva SOLO en su propia línea sin formato markdown. Si el usuario tiene presupuesto, filtra y muestra solo los que encajan. Destaca el mejor valorado y el más barato.",
     input_schema: {
       type: "object",
       properties: {
