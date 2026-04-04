@@ -1984,10 +1984,11 @@ body {
   position:absolute; bottom:0; left:0; right:0; z-index:510;
   background:rgba(12,10,6,.95); backdrop-filter:blur(16px);
   border-top:1px solid rgba(212,168,67,.2); border-radius:16px 16px 0 0;
-  transition:height .3s cubic-bezier(.4,0,.2,1);
+  transition:height .3s cubic-bezier(.4,0,.2,1), bottom .3s cubic-bezier(.4,0,.2,1);
   height:52px; overflow:hidden;
 }
 .copilot-chat-sheet.ccs-expanded { height:260px; }
+.copilot-chat-sheet.ccs-above-nav { bottom:60px; }
 .ccs-handle {
   display:flex; align-items:center; gap:10px;
   padding:12px 16px 8px; cursor:pointer; user-select:none;

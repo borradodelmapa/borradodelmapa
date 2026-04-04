@@ -659,8 +659,10 @@ const mapaRuta = {
       if (this._chatExpanded) {
         document.getElementById('ccs-input').focus();
         if (nav) nav.style.display = '';
+        sheet.classList.add('ccs-above-nav');
       } else {
         if (nav) nav.style.display = 'none';
+        sheet.classList.remove('ccs-above-nav');
       }
     });
 
@@ -732,6 +734,7 @@ const mapaRuta = {
       if (sheet && !this._chatExpanded) {
         this._chatExpanded = true;
         sheet.classList.add('ccs-expanded');
+        sheet.classList.add('ccs-above-nav');
         // Mostrar nav al expandirse
         const navEl = document.getElementById('app-bottom-bar');
         if (navEl) navEl.style.display = '';
