@@ -604,7 +604,7 @@ function isHelpRequest(message) {
     money: /cajero|atm|cambio.?de.?(divisa|moneda)|currency.?exchange|western.?union|money.?transfer/,
     food: /restaurante.*cerca|restaurant.*near|donde.*comer.*aqui|donde.*comer.*cerca|donde.*cenar.*aqui|donde.*cenar.*cerca|comer.*por.*aqui|cenar.*por.*aqui/,
     logistics: /cerrajero|locksmith|lavanderia|laundry|optica|optician|zapatero|cobbler|tienda.?de?.?electronica|electronics|cargador|charger|adaptador|adapter/,
-    transport: /taxi|transfer|estacion.?de?.?tren|train.?station|estacion.?de?.?bus|bus.?station|ferry|ferry\s|puerto|port|aeropuerto|airport|\btren\b|\bbus\b|autobus|flixbus|renfe|ave\s|high.?speed|como.?(llegar|voy|ir|llego)|how.?(to.?get|to.?go|to.?reach)/,
+    transport: /taxi|transfer|estacion.?de?.?tren|train.?station|estacion.?de?.?bus|bus.?station|ferry|puerto\s+de|aeropuerto|airport|\btren\b|autobus.?(de|desde|a)|flixbus|renfe|\bave\s|high.?speed.?train|como.?llegar/,
     communication: /tarjeta.?sim|sim.?card|wifi|locutorio|internet.?cafe/,
     weather: /tiempo|clima|temperatura|lluvia|llover|pronostico|forecast|weather|rain|cold|frio|calor|heat|humedad|humidity|tormenta|storm|nieve|snow|monzon|monsoon|cuando.?mejor.?ir|mejor.?epoca|best.?time/,
   };
@@ -4161,53 +4161,56 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           if (helpCategory === 'weather') {
             weatherData = await fetchWeather(helpLocation, env.OPENWEATHER_KEY);
           } else if (helpCategory === 'transport') {
-            // Para transporte: búsqueda web en paralelo (ferry/bus + vuelos) + Duffel opcional
+            // Formato rico con Brave SOLO cuando hay origen+destino explícito ("de X a Y")
+            // Preguntas genéricas ("hay taxi aquí", "bus turístico") → Claude responde con su conocimiento
             const od = extractTransportOD(message);
-            const originCity = od?.origin || helpLocation;
-            const destCity = od?.dest || '';
-            const routeStr = destCity ? `${originCity} to ${destCity}` : originCity;
+            if (od && od.origin && od.dest) {
+              const originCity = od.origin;
+              const destCity = od.dest;
+              const routeStr = `${originCity} to ${destCity}`;
 
-            const searches = [];
+              const searches = [];
 
-            // Búsqueda 1: opciones de transporte tierra/mar
-            if (env.BRAVE_SEARCH_KEY) {
-              const q1 = `${routeStr} ferry bus transport options price schedule 2025 booking`;
-              searches.push(buscarWeb({ query: q1 }, env.BRAVE_SEARCH_KEY).catch(() => null));
+              // Búsqueda 1: opciones de transporte tierra/mar
+              if (env.BRAVE_SEARCH_KEY) {
+                const q1 = `${routeStr} ferry bus transport options price schedule 2025 booking`;
+                searches.push(buscarWeb({ query: q1 }, env.BRAVE_SEARCH_KEY).catch(() => null));
 
-              // Búsqueda 2: opciones adicionales (12Go Asia, booking, compañías)
-              const q2 = `how to get from ${routeStr} cheapest options 2025`;
-              searches.push(buscarWeb({ query: q2 }, env.BRAVE_SEARCH_KEY).catch(() => null));
-            } else {
-              searches.push(Promise.resolve(null));
-              searches.push(Promise.resolve(null));
-            }
-
-            // Búsqueda 3: Duffel vuelos (si tenemos IATA origen y destino)
-            const origIATA = getCityIATA(originCity);
-            const destIATA = getCityIATA(destCity);
-            if (origIATA && destIATA && env.DUFFEL_ACCESS_TOKEN) {
-              const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
-              const today = tomorrow; // Usar mañana para más disponibilidad
-              searches.push(
-                buscarVuelosDuffel({ origen: origIATA, destino: destIATA, fecha_ida: today, adultos: 1 }, env.DUFFEL_ACCESS_TOKEN)
-                  .catch(() => null)
-              );
-            } else {
-              searches.push(Promise.resolve(null));
-            }
-
-            const [res1, res2, flightRes] = await Promise.all(searches);
-
-            // Combinar resultados de las dos búsquedas web
-            const combinedResults = [];
-            if (res1?.resultados) combinedResults.push(...res1.resultados);
-            if (res2?.resultados) {
-              for (const r of res2.resultados) {
-                if (!combinedResults.find(x => x.url === r.url)) combinedResults.push(r);
+                // Búsqueda 2: opciones adicionales (12Go Asia, booking, compañías)
+                const q2 = `how to get from ${routeStr} cheapest options 2025`;
+                searches.push(buscarWeb({ query: q2 }, env.BRAVE_SEARCH_KEY).catch(() => null));
+              } else {
+                searches.push(Promise.resolve(null));
+                searches.push(Promise.resolve(null));
               }
+
+              // Búsqueda 3: Duffel vuelos (si tenemos IATA origen y destino)
+              const origIATA = getCityIATA(originCity);
+              const destIATA = getCityIATA(destCity);
+              if (origIATA && destIATA && env.DUFFEL_ACCESS_TOKEN) {
+                const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+                searches.push(
+                  buscarVuelosDuffel({ origen: origIATA, destino: destIATA, fecha_ida: tomorrow, adultos: 1 }, env.DUFFEL_ACCESS_TOKEN)
+                    .catch(() => null)
+                );
+              } else {
+                searches.push(Promise.resolve(null));
+              }
+
+              const [res1, res2, flightRes] = await Promise.all(searches);
+
+              // Combinar resultados de las dos búsquedas web
+              const combinedResults = [];
+              if (res1?.resultados) combinedResults.push(...res1.resultados);
+              if (res2?.resultados) {
+                for (const r of res2.resultados) {
+                  if (!combinedResults.find(x => x.url === r.url)) combinedResults.push(r);
+                }
+              }
+              if (combinedResults.length > 0) transportSearchData = { resultados: combinedResults, flightData: flightRes };
+              else if (flightRes && !flightRes.error) transportSearchData = { resultados: [], flightData: flightRes };
             }
-            if (combinedResults.length > 0) transportSearchData = { resultados: combinedResults, flightData: flightRes };
-            else if (flightRes && !flightRes.error) transportSearchData = { resultados: [], flightData: flightRes };
+            // Si no hay od explícito → transportSearchData queda null → Claude responde sin formato
           } else {
             helpResults = await searchPlacesForHelp(message, helpLocation, env.GOOGLE_PLACES_KEY, searchCoords);
           }
@@ -4270,9 +4273,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         ctx += `- Termina sin hacer preguntas\n`;
         ctx += `- NO uses los corchetes en la respuesta final — reemplázalos con datos reales`;
       } else {
-        ctx += `No se encontraron datos en tiempo real. Responde con tu conocimiento, avisa de que los horarios pueden haber cambiado, y recomienda verificar en la web oficial.]`;
+        // Búsqueda sin resultados → no inyectar nada, Claude responde libre con su conocimiento
+        ctx = null;
       }
-      ctx += ']';
       transportFallbackMsg = ctx;
     }
 
