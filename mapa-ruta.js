@@ -14,6 +14,7 @@ const mapaRuta = {
   _currentStops: [],
   _currentContainerId: null,
   _copilotActive: false,
+  _userMarker: null, // Punto azul de ubicación del usuario
 
   // Colores por día
   _dayColors: ['#D4A843', '#E87040', '#5CB85C', '#5BC0DE', '#D9534F', '#AA66CC', '#FF8C00'],
@@ -553,9 +554,27 @@ const mapaRuta = {
   _onGpsUpdate(pos) {
     const { latitude, longitude } = pos.coords;
 
-    // Centrar mapa en posición actual si Google Maps
+    // Mostrar punto azul de usuario SIN mover el mapa
     if (this._map && this._mapType === 'google' && window.google) {
-      this._map.panTo({ lat: latitude, lng: longitude });
+      const userPos = { lat: latitude, lng: longitude };
+      if (this._userMarker) {
+        this._userMarker.setPosition(userPos);
+      } else {
+        this._userMarker = new google.maps.Marker({
+          map: this._map,
+          position: userPos,
+          title: 'Tu ubicación',
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: '#4285F4',
+            fillOpacity: 1,
+            strokeColor: '#fff',
+            strokeWeight: 3,
+            scale: 9,
+          },
+          zIndex: 999,
+        });
+      }
     }
 
     // Avanzar step si el usuario está cerca del end_location del step actual
@@ -766,7 +785,7 @@ const mapaRuta = {
 
     const gmapsUrl = `https://www.google.com/maps?q=${stop.lat},${stop.lng}`;
     const photoHtml = stop.photo_ref
-      ? `<img class="sip-photo" src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${stop.photo_ref}&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U" alt="">`
+      ? `<img class="sip-photo" src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photoreference=${stop.photo_ref}&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U" alt="" onerror="this.style.display='none'">`
       : '';
 
     const panel = document.createElement('div');
@@ -841,6 +860,10 @@ const mapaRuta = {
     this._steps = [];
     this._activeIdx = -1;
     this._mapType = null;
+    if (this._userMarker) {
+      try { this._userMarker.setMap(null); } catch(e) {}
+      this._userMarker = null;
+    }
     // Limpiar contenedor si tiene imagen estática
     if (this._currentContainerId) {
       const el = document.getElementById(this._currentContainerId);
