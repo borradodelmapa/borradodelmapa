@@ -2297,6 +2297,13 @@ async function buscarHotelesBooking(input, rapidApiKey) {
       const moneda = h.currency_code || 'EUR';
       const precioNoche = noches > 0 ? Math.round(precioTotal / noches * 100) / 100 : precioTotal;
 
+      // Construir enlace con fechas: agregar parámetros de checkin/checkout a la URL base
+      let enlaceConFechas = h.url || '';
+      if (enlaceConFechas) {
+        const separator = enlaceConFechas.includes('?') ? '&' : '?';
+        enlaceConFechas += `${separator}ss_pos=1&checkin_month=${input.fecha_entrada.split('-')[1]}&checkin_monthday=${input.fecha_entrada.split('-')[2]}&checkin_year=${input.fecha_entrada.split('-')[0]}&checkout_month=${input.fecha_salida.split('-')[1]}&checkout_monthday=${input.fecha_salida.split('-')[2]}&checkout_year=${input.fecha_salida.split('-')[0]}`;
+      }
+
       return {
         nombre: h.hotel_name,
         precio_total: precioTotal,
@@ -2308,7 +2315,7 @@ async function buscarHotelesBooking(input, rapidApiKey) {
         estrellas: h.class || 0,
         direccion: h.address || '',
         distrito: h.district || h.city || '',
-        enlace_reserva: h.url || '',
+        enlace_reserva: enlaceConFechas,
         foto: h.max_photo_url || h.main_photo_url || ''
       };
     });
@@ -2324,8 +2331,8 @@ async function buscarHotelesBooking(input, rapidApiKey) {
       if (filtrados.length > 0) hoteles = filtrados;
     }
 
-    // Top 5 más baratos
-    hoteles = hoteles.slice(0, 5);
+    // Top 2 más baratos (reducido para UX limpia)
+    hoteles = hoteles.slice(0, 2);
 
     const result = {
       encontrados: hoteles.length,
