@@ -422,17 +422,7 @@ const mapaItinerario = {
     // Interceptar showState para cerrar la vista si el usuario navega con el bottom bar
     const _origShowState = window.showState;
     window.showState = function(state) {
-      if (mapaRuta._copilotActive) {
-        // Copiloto ON: ocultar vista si estaba visible + siempre mostrar botón volver
-        if (view.style.display !== 'none') {
-          view.style.display = 'none';
-          if (appContent) appContent.style.display = '';
-          if (inputBar) inputBar.style.display = '';
-          const bb = document.getElementById('app-bottom-bar');
-          if (bb) bb.style.display = '';
-        }
-        _showReturnBtn(view, appContent, inputBar);
-      } else if (view.style.display !== 'none') {
+      if (view.style.display !== 'none') {
         // Copiloto OFF: cerrar todo
         view.style.display = 'none';
         if (appContent) appContent.style.display = '';
@@ -446,55 +436,6 @@ const mapaItinerario = {
       _origShowState(state);
     };
 
-    function _showReturnBtn(view, appContent, inputBar) {
-      if (document.getElementById('copilot-return-bar')) return;
-
-      const bar = document.createElement('div');
-      bar.id = 'copilot-return-bar';
-      bar.className = 'copilot-return-bar';
-
-      // Botón volver
-      const btnReturn = document.createElement('button');
-      btnReturn.className = 'copilot-return-btn';
-      btnReturn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg> Volver`;
-      btnReturn.addEventListener('click', () => {
-        bar.remove();
-        if (appContent) appContent.style.display = 'none';
-        if (inputBar) inputBar.style.display = 'none';
-        view.style.display = 'block';
-        const bb = document.getElementById('app-bottom-bar');
-        if (bb) bb.style.display = '';
-        setTimeout(() => {
-          mapaRuta.invalidateSize();
-          const cid = mapaRuta._currentContainerId;
-          if (cid) {
-            mapaRuta._renderMapControls(cid);
-            mapaRuta._renderCopilotFab(cid);
-            if (mapaRuta._chatExpanded) {
-              document.getElementById('copilot-fab')?.classList.add('fab-raised');
-            }
-          }
-        }, 200);
-      });
-
-      // Botón apagar
-      const btnStop = document.createElement('button');
-      btnStop.className = 'copilot-stop-btn';
-      btnStop.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Apagar`;
-      btnStop.addEventListener('click', () => {
-        bar.remove();
-        view.style.display = 'none';
-        const bb = document.getElementById('app-bottom-bar');
-        if (bb) bb.style.display = '';
-        mapaRuta.deactivateCopilot();
-        mapaItinerario.destroy();
-        window.showState = _origShowState;
-      });
-
-      bar.appendChild(btnReturn);
-      bar.appendChild(btnStop);
-      document.body.appendChild(bar);
-    }
   }
 
   function closeItinerarioView() {
