@@ -108,6 +108,15 @@ window._loadGoogleMaps = function() {
   </div>
 </div>
 
+<!-- ═══ MAPA EN VIVO (logueado) ═══ -->
+<div id="live-map-view" style="display:none">
+  <div id="live-map-container"></div>
+  <button id="live-map-back" onclick="closeLiveMap()">← App</button>
+  <button id="live-map-center" onclick="liveMapCenter()" title="Mi ubicación">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+  </button>
+</div>
+
 <!-- ═══ INPUT BAR (siempre visible) ═══ -->
 <div class="app-input-bar" id="app-input-bar">
   <!-- Preview foto (oculto por defecto) -->

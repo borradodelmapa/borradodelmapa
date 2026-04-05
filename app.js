@@ -126,10 +126,15 @@ function updateBottomBar() {
   const sosReady = currentUser && sosContacts.length > 0;
 
   bar.innerHTML = `
+    ${currentUser ? `
+    <button class="bottom-tab" id="tab-livemap">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+      <span>Mapa</span>
+    </button>` : `
     <button class="bottom-tab ${isHome ? 'bottom-tab-active' : ''}" id="tab-home">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span>Home</span>
-    </button>
+    </button>`}
     <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span>Salma</span>
@@ -148,7 +153,11 @@ function updateBottomBar() {
       <span>SOS</span>
     </button>`;
 
-  document.getElementById('tab-home').addEventListener('click', () => showState('welcome'));
+  if (currentUser) {
+    document.getElementById('tab-livemap').addEventListener('click', openLiveMap);
+  } else {
+    document.getElementById('tab-home').addEventListener('click', () => showState('welcome'));
+  }
   document.getElementById('tab-chat').addEventListener('click', () => {
     // Si hay guía abierta, cerrarla primero
     if (window._itinViewOpen && typeof closeItinerarioView === 'function') {
@@ -2683,6 +2692,111 @@ function _doCopilotActivate() {}
 function _restoreCopilotState() {}
 
 window.toggleCopilot = toggleCopilot;
+
+// ═══ MAPA EN VIVO ═══
+
+let _liveMap = null;
+let _liveMapWatchId = null;
+let _liveUserMarker = null;
+
+function openLiveMap() {
+  const view = document.getElementById('live-map-view');
+  const bar = document.getElementById('app-bottom-bar');
+  if (!view) return;
+
+  view.style.display = 'block';
+  if (bar) bar.style.display = 'none';
+  document.querySelector('.app-header')?.style.setProperty('display', 'none', 'important');
+
+  (window._loadGoogleMaps ? window._loadGoogleMaps() : Promise.reject())
+    .then(() => {
+      const el = document.getElementById('live-map-container');
+      if (!el || _liveMap) return;
+
+      const darkStyle = [
+        { elementType: 'geometry', stylers: [{ color: '#1a1a1a' }] },
+        { elementType: 'labels.text.fill', stylers: [{ color: '#9e9e9e' }] },
+        { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#38414e' }] },
+        { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#746855' }] },
+        { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#17263c' }] },
+        { featureType: 'poi', elementType: 'all', stylers: [{ visibility: 'off' }] },
+        { featureType: 'transit', elementType: 'all', stylers: [{ visibility: 'off' }] },
+      ];
+
+      _liveMap = new google.maps.Map(el, {
+        zoom: 15,
+        center: { lat: 40.416, lng: -3.703 },
+        styles: darkStyle,
+        disableDefaultUI: true,
+        gestureHandling: 'greedy',
+      });
+
+      // Geolocalización en tiempo real
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+          const latlng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          _liveMap.setCenter(latlng);
+          _placeUserMarker(latlng);
+        });
+        _liveMapWatchId = navigator.geolocation.watchPosition(pos => {
+          const latlng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          _placeUserMarker(latlng);
+        }, null, { enableHighAccuracy: true, maximumAge: 5000 });
+      }
+    })
+    .catch(() => showToast('No se pudo cargar Google Maps'));
+}
+
+function _placeUserMarker(latlng) {
+  if (!_liveMap) return;
+  if (_liveUserMarker) {
+    _liveUserMarker.setPosition(latlng);
+  } else {
+    _liveUserMarker = new google.maps.Marker({
+      map: _liveMap,
+      position: latlng,
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        fillColor: '#4285F4',
+        fillOpacity: 1,
+        strokeColor: '#fff',
+        strokeWeight: 3,
+        scale: 10,
+      },
+      title: 'Tu ubicación',
+      zIndex: 999,
+    });
+  }
+}
+
+function liveMapCenter() {
+  if (!_liveMap || !navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(pos => {
+    const latlng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+    _liveMap.panTo(latlng);
+    _liveMap.setZoom(16);
+  });
+}
+
+function closeLiveMap() {
+  const view = document.getElementById('live-map-view');
+  const bar = document.getElementById('app-bottom-bar');
+  if (view) view.style.display = 'none';
+  if (bar) bar.style.display = '';
+  document.querySelector('.app-header')?.style.removeProperty('display');
+  if (_liveMapWatchId !== null) {
+    navigator.geolocation.clearWatch(_liveMapWatchId);
+    _liveMapWatchId = null;
+  }
+  if (_liveMap) {
+    _liveUserMarker = null;
+    _liveMap = null;
+    document.getElementById('live-map-container').innerHTML = '';
+  }
+}
+
+window.closeLiveMap = closeLiveMap;
+window.liveMapCenter = liveMapCenter;
 
 // ═══ UTILIDADES ═══
 
