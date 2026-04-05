@@ -3146,6 +3146,35 @@ export default {
 
     const url = new URL(request.url);
 
+    // ─── ENDPOINT /share-map — Guarda pins para compartir ───
+    if (request.method === 'POST' && url.pathname === '/share-map') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      try {
+        const body = await request.json();
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        let id = '';
+        for (let i = 0; i < 6; i++) id += chars[Math.floor(Math.random() * chars.length)];
+        await env.SALMA_KB.put(`shared_map:${id}`, JSON.stringify(body), { expirationTtl: 86400 * 60 }); // 60 días
+        return new Response(JSON.stringify({ id }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /map/:id — Recupera pins compartidos ───
+    if (request.method === 'GET' && url.pathname.startsWith('/map/')) {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const id = url.pathname.replace('/map/', '').trim().toUpperCase();
+      if (!id) return new Response(JSON.stringify({ error: 'no_id' }), { status: 400, headers: corsH });
+      try {
+        const data = await env.SALMA_KB.get(`shared_map:${id}`);
+        if (!data) return new Response(JSON.stringify({ error: 'not_found' }), { status: 404, headers: corsH });
+        return new Response(data, { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── ENDPOINT /pin — Extractor de lugar para mapa personal ───
     if (request.method === 'POST' && url.pathname === '/pin') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };

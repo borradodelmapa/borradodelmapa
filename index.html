@@ -136,14 +136,34 @@ window._loadGoogleMaps = function() {
   <button id="live-map-center" onclick="liveMapCenter()" title="Mi ubicación">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
   </button>
-  <!-- Botón Street View -->
-  <button id="live-map-sv-btn" onclick="toggleStreetView()" title="Street View">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-7 8c0-1.1.9-2 2-2h.5c.4 0 .8.1 1.1.3L10 12.6c.6.4 1.3.7 2 .7s1.4-.3 2-.7l1.4-1.3c.3-.2.7-.3 1.1-.3H17a2 2 0 0 1 2 2v5H5v-5z"/></svg>
+  <!-- Botón Compartir mapa -->
+  <button id="live-map-share-btn" onclick="openShareSheet()" title="Compartir mapa">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
   </button>
-  <!-- Barra flotante en modo Street View -->
-  <div id="live-map-sv-bar" style="display:none">
-    <button class="lmsv-btn" onclick="pinFromStreetView()">📍 Pin aquí</button>
-    <button class="lmsv-btn lmsv-exit" onclick="exitStreetView()">✕ Salir</button>
+  <!-- Share sheet -->
+  <div id="live-map-share-sheet" style="display:none">
+    <div class="lmsh-handle"></div>
+    <div class="lmsh-header">
+      <span class="lmsh-title">Compartir mapa</span>
+      <button class="lmsh-close" onclick="closeShareSheet()">✕</button>
+    </div>
+    <div class="lmsh-options">
+      <button class="lmsh-option" onclick="shareAsImage()">
+        <div class="lmsh-opt-icon">🖼️</div>
+        <div class="lmsh-opt-text">
+          <div class="lmsh-opt-title">Imagen para redes</div>
+          <div class="lmsh-opt-desc">Mapa con tus pins para compartir</div>
+        </div>
+      </button>
+      <button class="lmsh-option" onclick="shareAsSalmaLink()">
+        <div class="lmsh-opt-icon">🔗</div>
+        <div class="lmsh-opt-text">
+          <div class="lmsh-opt-title">Link de Salma</div>
+          <div class="lmsh-opt-desc">Quien lo abra verá tus pins cargados</div>
+        </div>
+      </button>
+    </div>
+    <div id="lmsh-status"></div>
   </div>
   <!-- Botón Salma en el mapa -->
   <button id="live-map-salma-btn" onclick="openSalmaMapSheet()" title="Guardar en el mapa">🤖</button>

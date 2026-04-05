@@ -2915,6 +2915,21 @@ function openLiveMap() {
         _savedPinsData.forEach(pinData => _placeMapPin(pinData));
         _savedPinsData = []; // _placeMapPin los vuelve a añadir
       }
+
+      // Cargar mapa compartido si llegó via ?map=ID
+      if (_pendingSharedMapId) {
+        const id = _pendingSharedMapId;
+        _pendingSharedMapId = null;
+        const SALMA_API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+        fetch(`${SALMA_API}/map/${id}`)
+          .then(r => r.json())
+          .then(data => {
+            if (data.error) { showToast('Link caducado o no encontrado'); return; }
+            (data.pins || []).forEach(p => _placeMapPin(p));
+            showToast(`✅ ${data.pins?.length || 0} pins cargados`);
+          })
+          .catch(() => showToast('Error al cargar el mapa compartido'));
+      }
     })
     .catch(() => showToast('No se pudo cargar Google Maps'));
 }
@@ -3164,41 +3179,87 @@ let _tapPin = null;
 let _tapLatLng = null;
 let _pinIdCounter = 0;
 
-// ── Street View ──
-let _svPanorama = null;
+// ── Compartir mapa ──
+let _pendingSharedMapId = null;
+// Comprobar al cargar si hay ?map=ID en la URL
+(function () {
+  const id = new URLSearchParams(window.location.search).get('map');
+  if (id) _pendingSharedMapId = id.trim().toUpperCase();
+})();
 
-function toggleStreetView() {
-  if (!_liveMap) return;
-  if (!_svPanorama) {
-    _svPanorama = _liveMap.getStreetView();
-    _svPanorama.addListener('visible_changed', () => {
-      const visible = _svPanorama.getVisible();
-      const bar = document.getElementById('live-map-sv-bar');
-      const btn = document.getElementById('live-map-sv-btn');
-      if (bar) bar.style.display = visible ? 'flex' : 'none';
-      if (btn) btn.classList.toggle('active', visible);
+function openShareSheet() {
+  if (!_savedPinsData.length) { showToast('No hay pins guardados'); return; }
+  document.getElementById('lmsh-status').textContent = '';
+  document.getElementById('live-map-share-sheet').style.display = 'block';
+}
+function closeShareSheet() {
+  document.getElementById('live-map-share-sheet').style.display = 'none';
+}
+
+async function shareAsImage() {
+  const status = document.getElementById('lmsh-status');
+  if (!_savedPinsData.length) { showToast('No hay pins guardados'); return; }
+  status.textContent = '⏳ Generando imagen…';
+  const center = _liveMap.getCenter();
+  const zoom = Math.min(_liveMap.getZoom(), 14);
+  const markerColors = { hotel: 'blue', restaurant: 'orange', monument: 'yellow', beach: 'green', park: 'green', other: 'red' };
+  const markersParam = _savedPinsData.map(p => {
+    const col = markerColors[p.place_type] || 'red';
+    return `markers=color:${col}%7C${p.lat},${p.lng}`;
+  }).join('&');
+  const imgUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${center.lat()},${center.lng()}&zoom=${zoom}&size=600x600&maptype=roadmap&${markersParam}&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U`;
+  try {
+    const res = await fetch(imgUrl);
+    const blob = await res.blob();
+    const file = new File([blob], 'mapa-salma.jpg', { type: 'image/jpeg' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: 'Mi mapa de viaje — Salma' });
+      status.textContent = '';
+      closeShareSheet();
+    } else {
+      // Fallback: descargar
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'mapa-salma.jpg';
+      a.click();
+      status.textContent = '✅ Imagen descargada';
+    }
+  } catch (e) {
+    // Si fetch falla por CORS, abrir en nueva pestaña
+    window.open(imgUrl, '_blank');
+    status.textContent = '';
+    closeShareSheet();
+  }
+}
+
+async function shareAsSalmaLink() {
+  const status = document.getElementById('lmsh-status');
+  if (!_savedPinsData.length) { showToast('No hay pins guardados'); return; }
+  status.textContent = '⏳ Creando link…';
+  try {
+    const SALMA_API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+    const pins = _savedPinsData.map(({ name, address, description, place_type, lat, lng, checkin, checkout, confirmation }) =>
+      ({ name, address, description, place_type, lat, lng, checkin, checkout, confirmation })
+    );
+    const res = await fetch(`${SALMA_API}/share-map`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pins }),
     });
+    const data = await res.json();
+    if (!data.id) throw new Error('no id');
+    const shareUrl = `${window.location.origin}${window.location.pathname}?map=${data.id}`;
+    if (navigator.share) {
+      await navigator.share({ title: 'Mi mapa en Salma', text: `Mira mis pins de viaje en Salma`, url: shareUrl });
+      status.textContent = '';
+      closeShareSheet();
+    } else {
+      await navigator.clipboard.writeText(shareUrl);
+      status.textContent = `✅ Link copiado: ?map=${data.id}`;
+    }
+  } catch (e) {
+    status.textContent = '❌ Error al crear el link';
   }
-  if (_svPanorama.getVisible()) {
-    _svPanorama.setVisible(false);
-  } else {
-    _svPanorama.setPosition(_liveMap.getCenter());
-    _svPanorama.setPov({ heading: 0, pitch: 0 });
-    _svPanorama.setVisible(true);
-  }
-}
-
-function exitStreetView() {
-  if (_svPanorama) _svPanorama.setVisible(false);
-}
-
-function pinFromStreetView() {
-  if (!_svPanorama) return;
-  const pos = _svPanorama.getPosition();
-  if (!pos) return;
-  const lat = pos.lat(), lng = pos.lng();
-  _placeMapPin({ name: `📸 ${lat.toFixed(4)}, ${lng.toFixed(4)}`, address: '', description: '', place_type: 'other', lat, lng });
-  exitStreetView();
 }
 
 function deletePinById(pinId) {
@@ -3473,10 +3534,11 @@ window.openSalmaMapSheet = openSalmaMapSheet;
 window.closeSalmaMapSheet = closeSalmaMapSheet;
 window.sendSalmaMapPhoto = sendSalmaMapPhoto;
 window.closeTapSheet = closeTapSheet;
-window.toggleStreetView = toggleStreetView;
-window.exitStreetView = exitStreetView;
-window.pinFromStreetView = pinFromStreetView;
 window.deletePinById = deletePinById;
+window.openShareSheet = openShareSheet;
+window.closeShareSheet = closeShareSheet;
+window.shareAsImage = shareAsImage;
+window.shareAsSalmaLink = shareAsSalmaLink;
 
 // ═══ UTILIDADES ═══
 

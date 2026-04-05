@@ -3087,8 +3087,8 @@ body {
 }
 .lmt-option:active { background: rgba(212,168,67,0.15); }
 .lmt-option.active { color: var(--dorado); font-weight: 600; }
-/* ── Street View button ── */
-#live-map-sv-btn {
+/* ── Share button ── */
+#live-map-share-btn {
   position: fixed;
   bottom: calc(env(safe-area-inset-bottom, 0px) + 228px);
   right: 16px;
@@ -3103,25 +3103,45 @@ body {
   display: flex; align-items: center; justify-content: center;
   backdrop-filter: blur(8px);
 }
-#live-map-sv-btn.active { color: var(--dorado); }
-/* ── Barra Street View ── */
-#live-map-sv-bar {
+/* ── Share sheet ── */
+#live-map-share-sheet {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
-  left: 50%; transform: translateX(-50%);
-  z-index: 985;
-  display: flex; gap: 10px;
+  bottom: 0; left: 0; right: 0;
+  z-index: 980;
+  background: var(--negro, #0a0a0f);
+  border-radius: 18px 18px 0 0;
+  border-top: 1px solid rgba(212,168,67,0.25);
+  padding: 0 16px calc(env(safe-area-inset-bottom, 0px) + 20px);
 }
-.lmsv-btn {
-  padding: 12px 20px;
-  border: none; border-radius: 12px;
-  font-size: 14px; font-weight: 600;
-  cursor: pointer;
-  background: var(--dorado, #D4A843); color: #111;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+.lmsh-handle {
+  width: 36px; height: 4px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px; margin: 10px auto 0;
 }
-.lmsv-exit {
-  background: rgba(20,18,14,0.95); color: #fff;
+.lmsh-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0 12px;
+}
+.lmsh-title { font-size: 15px; font-weight: 700; color: #fff; }
+.lmsh-close {
+  background: none; border: none; color: rgba(255,255,255,0.5);
+  font-size: 18px; cursor: pointer; padding: 4px;
+}
+.lmsh-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.lmsh-option {
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px; padding: 14px;
+  cursor: pointer; text-align: left; width: 100%;
+}
+.lmsh-option:active { background: rgba(212,168,67,0.1); }
+.lmsh-opt-icon { font-size: 28px; flex-shrink: 0; }
+.lmsh-opt-title { font-size: 14px; font-weight: 600; color: var(--crema, #f4efe6); margin-bottom: 2px; }
+.lmsh-opt-desc { font-size: 12px; color: rgba(244,239,230,0.45); }
+#lmsh-status {
+  font-size: 13px; color: rgba(244,239,230,0.6);
+  text-align: center; min-height: 20px; padding: 4px 0;
 }
 /* ── Salma button en el mapa ── */
 #live-map-salma-btn {
