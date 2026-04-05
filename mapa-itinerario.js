@@ -409,8 +409,9 @@ const mapaItinerario = {
     // Ocultar contenido principal; en desktop dejar input bar visible para chatear
     if (appContent) appContent.style.display = 'none';
     if (inputBar) inputBar.style.display = 'none';
+    const bottomBar = document.getElementById('app-bottom-bar');
+    if (bottomBar) bottomBar.style.display = 'none';
     view.style.display = 'block';
-    document.body.classList.add('itin-open');
 
     // Inicializar mapa y cards
     const stops = routeData.stops;
@@ -436,7 +437,6 @@ const mapaItinerario = {
       } else if (view.style.display !== 'none') {
         // Copiloto OFF: cerrar todo
         view.style.display = 'none';
-        document.body.classList.remove('itin-open');
         if (appContent) appContent.style.display = '';
         if (inputBar) inputBar.style.display = '';
         const bb = document.getElementById('app-bottom-bar');
@@ -465,7 +465,7 @@ const mapaItinerario = {
         if (inputBar) inputBar.style.display = 'none';
         view.style.display = 'block';
         const bb = document.getElementById('app-bottom-bar');
-        if (bb) bb.style.display = '';
+        if (bb) bb.style.display = mapaRuta._chatExpanded ? '' : 'none';
         setTimeout(() => {
           mapaRuta.invalidateSize();
           const cid = mapaRuta._currentContainerId;
@@ -510,7 +510,6 @@ const mapaItinerario = {
     mapaItinerario.destroy();
 
     if (view) view.style.display = 'none';
-    document.body.classList.remove('itin-open');
     if (appContent) appContent.style.display = '';
     if (inputBar) inputBar.style.display = '';
     const bottomBar = document.getElementById('app-bottom-bar');

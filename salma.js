@@ -25,9 +25,7 @@ const salma = {
   _narratorActive: false,
   _narratorNotified: new Set(),
   _narratorLastCheck: 0,
-  _narratorLastCheckPerContext: new Map(),
   _narratorInterval: null,
-  _rateLimitNotified: false,
   _voices: [],
 
   // ═══ VOZ DE SALMA — Web Speech API ═══
@@ -514,7 +512,7 @@ const salma = {
   },
 
   // ═══ PUNTO DE ENTRADA ÚNICO ═══
-  async send(msg, options = {}) { // Ya es async desde antes
+  async send(msg) {
     // Capturar foto pendiente antes de validar msg
     const photo = this._pendingPhoto;
     if (photo) {
@@ -527,8 +525,8 @@ const salma = {
     if (this._streaming) return;
     if (!this._checkRate()) return;
 
-    // Si no tenemos ubicación todavía, mostrar disclosure (ahora hay interacción del usuario)
-    if (!this._userLocation && !this._geoWatchId && !this._geoBlocked) this._showGeoDisclosure();
+    // Si no tenemos ubicación todavía, reintentar (ahora hay interacción del usuario)
+    if (!this._userLocation && !this._geoWatchId && !this._geoBlocked) this.initGeolocation();
 
     // Transicionar a chat si estamos en welcome
     if (currentState === 'welcome' || currentState === 'viajes') {
@@ -539,18 +537,6 @@ const salma = {
     if (msg && /activa.*gps|desactiva.*gps|activa.*ubicaci|desactiva.*ubicaci|pon.*gps|quita.*gps|apaga.*gps|enciende.*gps|activar.*gps|desactivar.*gps|activar.*ubicaci|desactivar.*ubicaci/i.test(msg)) {
       this._addUserBubble(msg);
       this.showGPSToggle();
-      return;
-    }
-
-    // ═══ DETECTAR BÚSQUEDA DE POIs EN EL CHAT ═══
-    const poiMatch = this._detectPoiRequest(msg);
-    if (poiMatch && typeof mapaRuta !== 'undefined' && mapaRuta._copilotActive) {
-      this._addUserBubble(msg);
-      const poi = mapaRuta._poiTypes.find(p => p.id === poiMatch.id);
-      if (poi) {
-        await mapaRuta._togglePoiType(poiMatch.id);
-        this._addSalmaBubble(`Mostrando ${poi.label.replace(/^[^\s]+\s/, '').toLowerCase()} cercanos a ti. Toca en el mapa para ver detalles.`);
-      }
       return;
     }
 
@@ -570,7 +556,7 @@ const salma = {
     // NO push a history aquí — se hace en _doSend tras recibir respuesta
 
     // Todo va directo al worker — Salma decide si preguntar
-    this._doSend(msg || '', { photo, ...options });
+    this._doSend(msg || '', { photo });
   },
 
   // ═══ ENVÍO AL WORKER ═══
@@ -582,14 +568,11 @@ const salma = {
     this._currentAbort = new AbortController();
 
     // Si el itinerario está abierto, cerrarlo para mostrar la respuesta en el chat
-    // EXCEPTO si estamos en modal (skipCloseItinerary = true)
     const _itinWasOpen = !!(window._itinViewOpen);
     const _itinSavedRoute = window._itinViewRoute || null;
     const _itinSavedDocId = window._itinViewDocId || null;
     const _itinSavedOptions = window._itinViewOptions || null;
-    const _skipCloseItinerary = (extra && extra.skipCloseItinerary) === true;
-
-    if (_itinWasOpen && !_skipCloseItinerary) {
+    if (_itinWasOpen) {
       const _view = document.getElementById('itin-view');
       const _appContent = document.getElementById('app-content');
       const _inputBar = document.getElementById('app-input-bar');
@@ -661,8 +644,6 @@ const salma = {
       if (data.reply) {
         this.history.push({ role: 'assistant', content: data.reply });
       }
-      // Persistir historial
-      this._saveHistory();
 
       // Si hay ruta, renderizar guide-card
       if (data.route && data.route.stops) {
@@ -1133,10 +1114,16 @@ const salma = {
 
   async startNarrator() {
     if (this._narratorActive) return;
-    // Mostrar modal unificado de permisos GPS + Notificaciones
-    const permissionsOk = await this._requestAllPermissions();
-    if (!permissionsOk) {
-      console.log('[Salma] Narrador: permisos denegados');
+    // Pedir permiso notificaciones
+    if ('Notification' in window && Notification.permission === 'default') {
+      const perm = await Notification.requestPermission();
+      if (perm !== 'granted') {
+        console.log('[Salma] Narrador: notificaciones denegadas');
+        return false;
+      }
+    }
+    if ('Notification' in window && Notification.permission === 'denied') {
+      console.log('[Salma] Narrador: notificaciones bloqueadas');
       return false;
     }
     this._narratorActive = true;
@@ -1154,101 +1141,8 @@ const salma = {
     return true;
   },
 
-  async _requestAllPermissions() {
-    // Modal unificado pidiendo GPS + Notificaciones
-    const area = this._getChatArea();
-    if (!area) return false;
-
-    return new Promise((resolve) => {
-      // Evitar duplicados
-      if (area.querySelector('.msg-perms-request')) {
-        resolve(false);
-        return;
-      }
-
-      const div = document.createElement('div');
-      div.className = 'msg msg-salma msg-perms-request';
-      div.innerHTML = `
-        <div class="msg-salma-header">
-          <div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div>
-          <span class="msg-salma-name">Salma</span>
-        </div>
-        <div class="msg-body-salma">
-          <strong>📍 El Copiloto necesita 2 cosas</strong>
-          <p>Para funcionar, necesito tu ubicación (GPS) y permiso para enviarte notificaciones de POIs cercanos. Los datos no se guardan ni se comparten.</p>
-          <ul style="margin:8px 0;padding-left:18px;font-size:13px;opacity:0.85;line-height:1.6;">
-            <li>✓ Ubicación: restaurantes, museos y lugares especiales cerca</li>
-            <li>✓ Notificaciones: aviso cuando te acercas a algo importante</li>
-          </ul>
-          <div style="display:flex;gap:8px;margin-top:12px;">
-            <button class="btn-perms-accept">Activar todo</button>
-            <button class="btn-perms-reject">Cancelar</button>
-          </div>
-        </div>`;
-      area.appendChild(div);
-      this._scrollToBottom(true);
-
-      const acceptBtn = div.querySelector('.btn-perms-accept');
-      const rejectBtn = div.querySelector('.btn-perms-reject');
-
-      acceptBtn.addEventListener('click', async () => {
-        acceptBtn.disabled = true;
-        acceptBtn.textContent = 'Un momento...';
-
-        let notificationsGranted = false;
-        let gpsGranted = false;
-
-        // Pedir notificaciones primero
-        if ('Notification' in window && Notification.permission === 'default') {
-          try {
-            const notifPerm = await Notification.requestPermission();
-            notificationsGranted = notifPerm === 'granted';
-          } catch (e) {
-            console.log('[Salma] Error pidiendo notificaciones:', e);
-          }
-        } else {
-          notificationsGranted = Notification.permission === 'granted';
-        }
-
-        // Luego pedir GPS
-        gpsGranted = await new Promise((resolveGps) => {
-          if (!navigator.geolocation) {
-            resolveGps(false);
-            return;
-          }
-          navigator.geolocation.getCurrentPosition(
-            () => { resolveGps(true); },
-            () => { resolveGps(false); },
-            { enableHighAccuracy: true, timeout: 10000 }
-          );
-        });
-
-        div.remove();
-        if (notificationsGranted && gpsGranted) {
-          // Ambos concedidos
-          resolve(true);
-        } else {
-          // Mostrar feedback de qué falta
-          const missing = [];
-          if (!notificationsGranted) missing.push('notificaciones');
-          if (!gpsGranted) missing.push('ubicación');
-          const feedbackMsg = `Para que el Copiloto funcione, necesito permisos de ${missing.join(' y ')}. Ve a Ajustes del navegador → Sitios → Borrado del Mapa.`;
-          this._addSalmaBubble(feedbackMsg);
-          resolve(false);
-        }
-      });
-
-      rejectBtn.addEventListener('click', () => {
-        div.remove();
-        resolve(false);
-      });
-    });
-  },
-
   stopNarrator() {
     this._narratorActive = false;
-    this._rateLimitNotified = false;  // Reset flag para próxima sesión
-    this._narratorLastCheckPerContext.clear();  // Reset throttle per context
     if (this._narratorInterval) {
       clearInterval(this._narratorInterval);
       this._narratorInterval = null;
@@ -1260,15 +1154,12 @@ const salma = {
 
   async checkNearbyPOIs() {
     if (!this._narratorActive || !this._userLocation) return;
-    // Funciona en vista de ruta O en chat principal
+    // Solo narrar si la vista de ruta está activa (no contaminar el chat principal)
     const itinView = document.getElementById('itin-view');
-    const inRouteView = itinView && itinView.style.display !== 'none';
-    // Throttle per context (route vs chat) para evitar delay innecesario al cambiar de vista
-    const contextKey = inRouteView ? 'route' : 'chat';
-    const lastCheck = this._narratorLastCheckPerContext.get(contextKey) || 0;
+    if (!itinView || itinView.style.display === 'none') return;
     const now = Date.now();
-    if (now - lastCheck < 25000) return;
-    this._narratorLastCheckPerContext.set(contextKey, now);
+    if (now - this._narratorLastCheck < 25000) return;
+    this._narratorLastCheck = now;
 
     const { lat, lng } = this._userLocation;
     console.log('[Salma] Narrator check:', lat, lng);
@@ -1277,14 +1168,6 @@ const salma = {
       const res = await fetch(window.SALMA_API + '/nearby-pois?lat=' + lat + '&lng=' + lng + '&radius=500');
       if (!res.ok) return;
       const data = await res.json();
-
-      // Si rate limit alcanzado, mostrar mensaje una sola vez
-      if (data.rate_limited && !this._rateLimitNotified) {
-        this._rateLimitNotified = true;
-        this._addSalmaBubble('He alcanzado el límite diario de búsquedas de lugares. Vuelve mañana para más recomendaciones.');
-        return;
-      }
-
       if (!data.pois || !data.pois.length) return;
 
       for (const poi of data.pois) {
@@ -1318,24 +1201,19 @@ const salma = {
             });
           }
 
-          // Insertar en el chat del copiloto (ccs-messages si ruta abierta) o en chat principal
-          let targetArea = inRouteView ? document.getElementById('ccs-messages') : this._getChatArea();
-          if (targetArea) {
-            // Limitar burbujas: máximo 10 simultáneas, quitar las más antiguas
-            const existingBubbles = targetArea.querySelectorAll('.narrator-msg');
-            if (existingBubbles.length >= 10) {
-              existingBubbles[0].remove();
-            }
+          // Insertar en el chat del copiloto (ccs-messages), nunca en el chat principal
+          const ccsArea = document.getElementById('ccs-messages');
+          if (ccsArea) {
             const bubble = document.createElement('div');
             bubble.className = 'msg msg-salma narrator-msg';
             bubble.innerHTML = `
-              <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma · 📍 cerca</span></div>
+              <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma · narrador</span></div>
               <div class="msg-body-salma">
                 <div class="narrator-poi-name">📍 ${poi.name}</div>
                 ${narData.narrative}
               </div>`;
-            targetArea.appendChild(bubble);
-            targetArea.scrollTop = targetArea.scrollHeight;
+            ccsArea.appendChild(bubble);
+            ccsArea.scrollTop = ccsArea.scrollHeight;
             // Narrador habla automático solo si voz está activada
             if (localStorage.getItem('salma_voice') === 'true') {
               const narText = narData.narrative;
@@ -1451,28 +1329,6 @@ const salma = {
     area.insertAdjacentHTML('afterbegin', html);
   },
 
-  // ═══ PERSISTENCIA ═══
-
-  _saveHistory() {
-    // Guardar historial en localStorage (máximo 20 mensajes)
-    if (this.history && this.history.length > 0) {
-      try {
-        localStorage.setItem('_salmaHistory', JSON.stringify(this.history.slice(-20)));
-      } catch (e) {
-        console.warn('No se pudo guardar historial:', e);
-      }
-    }
-  },
-
-  reset() {
-    // Limpiar historial y localStorage
-    this.history = [];
-    localStorage.removeItem('_salmaHistory');
-    this._narratorActive = false;
-    this._rateLimitNotified = false;
-    this._narratorLastCheckPerContext.clear();
-  },
-
   // ═══ CHAT DOM ═══
 
   _initChat(skipWelcome) {
@@ -1483,81 +1339,12 @@ const salma = {
     if (!document.getElementById('chat-area')) {
       $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
     }
-    // Cargar historial desde localStorage (si existe)
-    const saved = localStorage.getItem('_salmaHistory');
-    if (saved && !this.currentRoute) {
-      try {
-        this.history = JSON.parse(saved);
-        // Renderizar historial guardado
-        const area = this._getChatArea();
-        if (area && this.history.length > 0) {
-          for (const msg of this.history) {
-            if (msg.role === 'user') {
-              this._addUserBubble(msg.content, msg.photoUrl);
-            } else if (msg.role === 'assistant') {
-              this._addSalmaBubble(msg.content);
-            }
-          }
-        }
-      } catch (e) {
-        console.error('Error cargando historial:', e);
-        localStorage.removeItem('_salmaHistory');
-      }
-    }
     // Mostrar tarjeta copiloto si hay datos del país
     if (this._copilotData) this.showCopilotCard();
   },
 
   _getChatArea() {
-    // Detectar automáticamente si estamos en ruta o en chat principal
-    const inRouteView = !!window._itinViewOpen;
-    if (inRouteView) {
-      return document.getElementById('ccs-messages') || document.getElementById('chat-area');
-    }
     return document.getElementById('chat-area');
-  },
-
-  _detectPoiRequest(msg) {
-    if (!msg) return null;
-    const msgLower = msg.toLowerCase();
-
-    // Palabras clave para detectar cada tipo de POI
-    const poiKeywords = {
-      restaurant: ['restaurante', 'dónde comer', 'comida', 'cenar', 'almorzar', 'comer', 'cocina'],
-      cafe: ['café', 'cafetería', 'desayuno', 'café con', 'tomar un café'],
-      bar: ['bar', 'pub', 'taberna', 'cerveza', 'copa', 'bebida'],
-      hotel: ['hotel', 'alojamiento', 'dónde dormir', 'hospedarse', 'posada', 'hostal'],
-      gas: ['gasolinera', 'gasolina', 'benzina', 'combustible', 'carburante', 'surtidor'],
-      pharmacy: ['farmacia', 'medicinas', 'farmacéutico', 'pastillas', 'medicamento'],
-      supermarket: ['supermercado', 'mercado', 'compra', 'tienda', 'superm'],
-      hospital: ['hospital', 'urgencias', 'médico', 'doctor', 'emergencia', 'sanatorio'],
-      bank: ['banco', 'atm', 'cajero', 'dinero', 'cambio'],
-      transit: ['estación', 'tren', 'autobús', 'bus', 'transporte', 'parada'],
-      museum: ['museo', 'arte', 'exhibición', 'exposición', 'galería de arte'],
-      attraction: ['atracción', 'visita', 'lugar turístico', 'qué ver', 'sitio', 'monumento'],
-      gallery: ['galería', 'arte', 'cuadros', 'pintura'],
-      library: ['biblioteca', 'libro', 'librería'],
-      cinema: ['cine', 'película', 'películas', 'cartelera'],
-      aquarium: ['acuario', 'peces', 'marino'],
-      zoo: ['zoo', 'zoológico', 'animales', 'safari'],
-      worship: ['iglesia', 'templo', 'mezquita', 'sinagoga', 'monasterio', 'capilla', 'convento'],
-      cemetery: ['cementerio', 'tumba'],
-      park: ['parque', 'parques', 'plaza', 'verde'],
-      nature: ['naturaleza', 'montaña', 'lago', 'cascada', 'playa', 'río', 'paisaje'],
-      camping: ['camping', 'campamento', 'acampar', 'tienda'],
-      hiking: ['senderismo', 'sendero', 'ruta', 'trekking', 'caminar', 'montañ']
-    };
-
-    // Detectar qué tipo de POI busca
-    for (const [poiId, keywords] of Object.entries(poiKeywords)) {
-      for (const keyword of keywords) {
-        if (msgLower.includes(keyword)) {
-          return { id: poiId, keyword };
-        }
-      }
-    }
-
-    return null;
   },
 
   _addUserBubble(text, photoUrl) {
@@ -1936,44 +1723,6 @@ const salma = {
     }
   },
 
-  _showGeoDisclosure() {
-    const area = this._getChatArea();
-    if (!area) return;
-    // Evitar duplicados
-    if (area.querySelector('.msg-geo-disclosure')) return;
-    const div = document.createElement('div');
-    div.className = 'msg msg-salma msg-geo-disclosure';
-    div.innerHTML = `
-      <div class="msg-salma-header">
-        <div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div>
-        <span class="msg-salma-name">Salma</span>
-      </div>
-      <div class="msg-body-salma">
-        <strong>📍 ¿Usar tu ubicación?</strong>
-        <p>Tu ubicación me ayuda a darte recomendaciones locales: restaurantes cerca, POIs de interés cuando viajas, info práctica del país. Nunca se comparte ni se guarda.</p>
-        <div style="display:flex;gap:8px;margin-top:12px;">
-          <button class="btn-geo-accept">Permitir</button>
-          <button class="btn-geo-reject">Ahora no</button>
-        </div>
-      </div>`;
-    area.appendChild(div);
-    this._scrollToBottom(true);
-
-    const acceptBtn = div.querySelector('.btn-geo-accept');
-    const rejectBtn = div.querySelector('.btn-geo-reject');
-
-    acceptBtn.addEventListener('click', () => {
-      div.remove();
-      this._geoBlocked = false;
-      this.initGeolocation();
-    });
-
-    rejectBtn.addEventListener('click', () => {
-      div.remove();
-      this._geoBlocked = true;
-    });
-  },
-
   _loadingPhrases: [
     'Mirando el mapa...', 'Calculando la ruta...', 'Buscando los mejores sitios...',
     'Consultando precios...', 'Organizando el itinerario...',
@@ -2115,6 +1864,60 @@ const salma = {
     return true;
   },
 
+  // ═══ SEND DESDE COPILOTO (chat bottom sheet en itin-view) ═══
+  async sendFromCopilot(msg, onChunk) {
+    if (!msg || this._streaming) return;
+    if (!this._checkRate()) return;
+
+    const body = {
+      message: msg,
+      history: this._history || [],
+      user_location: this._userLocation || null,
+      country: this._copilotCountry || '',
+    };
+
+    let streamCompleted = false;
+    try {
+      const res = await fetch(window.SALMA_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) return;
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let fullText = '';
+      let streamDone = false;
+
+      while (!streamDone) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6).trim();
+          if (data === '[DONE]') { streamDone = true; break; }
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.done) { streamDone = true; break; }
+            const delta = parsed.t || '';
+            if (delta) { fullText += delta; if (onChunk) onChunk(fullText); }
+          } catch {}
+        }
+      }
+
+      streamCompleted = true;
+      // Actualizar historial
+      this._history.push({ role: 'user', content: msg });
+      this._history.push({ role: 'assistant', content: fullText });
+      if (this._history.length > 20) this._history = this._history.slice(-20);
+
+    } catch (e) {
+      if (!streamCompleted && onChunk) onChunk('Error conectando con Salma. Inténtalo de nuevo.');
+    }
+  }
 };
 
 // Exponer globalmente

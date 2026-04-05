@@ -42,11 +42,6 @@ function showState(state) {
   currentState = state;
   updateHeader();
 
-  // Limpiar barra de acción del itinerario si salimos del chat/ruta
-  if (state !== 'chat') {
-    document.body.querySelector('.itin-action-bar')?.remove();
-  }
-
   const inputBar = document.querySelector('.app-input-bar');
 
   if (state === 'welcome') {
@@ -130,30 +125,11 @@ function updateBottomBar() {
   const sosContacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim());
   const sosReady = currentUser && sosContacts.length > 0;
 
-  // Si usuario logueado: mostrar dos toggles en lugar de Home
-  // Si no logueado: mostrar botón Home normal
-  const homeSection = currentUser ? `
-    <div class="bottom-toggles-pair">
-      <label class="bottom-toggle" title="Activar/Desactivar Copiloto (GPS + Narrador)">
-        <span class="bottom-toggle-icon">🧭</span>
-        <input type="checkbox" id="bottom-narrator-toggle" ${typeof salma !== 'undefined' && salma._narratorActive ? 'checked' : ''}>
-        <span class="toggle-slider-small"></span>
-      </label>
-      <label class="bottom-toggle" title="Activar/Desactivar voz de Salma">
-        <span class="bottom-toggle-icon">${localStorage.getItem('salma_voice') === 'true' ? '🔊' : '🔇'}</span>
-        <input type="checkbox" id="bottom-voice-toggle" ${localStorage.getItem('salma_voice') === 'true' ? 'checked' : ''}>
-        <span class="toggle-slider-small"></span>
-      </label>
-    </div>
-  ` : `
+  bar.innerHTML = `
     <button class="bottom-tab ${isHome ? 'bottom-tab-active' : ''}" id="tab-home">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span>Home</span>
     </button>
-  `;
-
-  bar.innerHTML = `
-    ${homeSection}
     <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span>Salma</span>
@@ -172,74 +148,7 @@ function updateBottomBar() {
       <span>SOS</span>
     </button>`;
 
-  // Event listener para tab-home (solo si no está logueado)
-  const homeBtn = document.getElementById('tab-home');
-  if (homeBtn) {
-    homeBtn.addEventListener('click', () => {
-      // Si estamos en vista de ruta, cerrarla primero
-      const itinView = document.getElementById('itin-view');
-      const inRouteView = itinView && (itinView.style.display === 'block' || itinView.style.display !== 'none');
-      if (inRouteView || window._itinViewOpen) {
-        // Cerrar ruta: aplicar la misma lógica que en salma._doSend
-        const _view = document.getElementById('itin-view');
-        const _appContent = document.getElementById('app-content');
-        const _inputBar = document.getElementById('app-input-bar');
-        window._itinViewOpen = false;
-        if (_view) _view.style.display = 'none';
-        if (_appContent) _appContent.style.display = '';
-        if (_inputBar) _inputBar.style.display = '';
-        if (typeof mapaRuta !== 'undefined') mapaRuta.destroy();
-        if (typeof mapaItinerario !== 'undefined') mapaItinerario.destroy();
-      }
-      // Luego ir a welcome
-      showState('welcome');
-    });
-  }
-
-  // Event listeners para los dos toggles (solo si está logueado)
-  const narratorToggle = document.getElementById('bottom-narrator-toggle');
-  if (narratorToggle) {
-    narratorToggle.addEventListener('change', async (e) => {
-      if (typeof salma === 'undefined') return;
-      if (e.target.checked) {
-        if (window._itinViewOpen && typeof mapaRuta !== 'undefined') {
-          // Guía abierta: mapa completo + GPS + POIs
-          await mapaRuta.activateCopilot();
-          if (!mapaRuta._copilotActive) e.target.checked = false;
-        } else {
-          // Sin guía: GPS + notificaciones de Salma
-          const ok = await salma.startNarrator();
-          if (ok === false) {
-            e.target.checked = false;
-            if (typeof showToast === 'function') showToast('Copiloto no disponible (requiere GPS)');
-          }
-        }
-      } else {
-        if (window._itinViewOpen && typeof mapaRuta !== 'undefined' && mapaRuta._copilotActive) {
-          // Volver a vista de guía normal
-          mapaRuta.deactivateCopilot();
-        } else {
-          salma.stopNarrator();
-        }
-      }
-    });
-  }
-
-  const voiceToggle = document.getElementById('bottom-voice-toggle');
-  if (voiceToggle) {
-    voiceToggle.addEventListener('change', (e) => {
-      localStorage.setItem('salma_voice', e.target.checked ? 'true' : 'false');
-      // Actualizar icono
-      const icon = voiceToggle.parentElement.querySelector('.bottom-toggle-icon');
-      if (icon) {
-        icon.textContent = e.target.checked ? '🔊' : '🔇';
-      }
-      // Cancelar síntesis si se desactiva
-      if (!e.target.checked && typeof salma !== 'undefined') {
-        salma.salmaSpeakStop();
-      }
-    });
-  }
+  document.getElementById('tab-home').addEventListener('click', () => showState('welcome'));
   document.getElementById('tab-chat').addEventListener('click', () => {
     if (currentState !== 'chat') {
       if (typeof salma !== 'undefined') salma._initChat();
@@ -271,9 +180,9 @@ async function renderWelcome() {
   window.scrollTo(0, 0);
   // Chips fallback — se muestran inmediatamente, Firestore actualiza después
   const defaultChips = `
-    <div class="chip" data-msg="Mi primer viaje sola, dame tips">Mi primer viaje sola</div>
-    <div class="chip" data-msg="Vietnam 15 días, mochilero">Vietnam 15 días</div>
-    <div class="chip" data-msg="Me han robado el pasaporte, ayuda">Pasaporte robado</div>`;
+    <div class="chip" data-msg="3 días en Lisboa sola">Mi primer viaje sola</div>
+    <div class="chip" data-msg="Vietnam 15 días mochilero">Vietnam 15 días</div>
+    <div class="chip" data-msg="Me han robado el pasaporte en el extranjero">Pasaporte robado</div>`;
 
   $content.innerHTML = `
     <div class="welcome-hero fade-in">
@@ -362,9 +271,26 @@ async function renderWelcome() {
     if (wCameraInput) wCameraInput.addEventListener('change', handleWelcomeFile);
   }
 
-  // Placeholder estático (sin rotación)
+  // Placeholder rotativo
   if (wInput) {
-    wInput.placeholder = '¿A dónde vamos?';
+    const ejemplos = [
+      'Vietnam 10 días en moto',
+      'Bangkok sin hotel, es tarde',
+      '3 días en Lisboa sola',
+      'Vacunas para Nepal',
+      'Me han robado en Roma',
+      'Japón 2 semanas, primer viaje',
+      'Médico en Tailandia urgente',
+      'Marruecos 5 días desde Tánger',
+      'Avería en carretera en Turquía',
+      'Ferry de Atenas a Santorini'
+    ];
+    let idx = 0;
+    window._placeholderInterval = setInterval(() => {
+      if (wInput.value) return;
+      idx = (idx + 1) % ejemplos.length;
+      wInput.placeholder = ejemplos[idx];
+    }, 3000);
   }
 
   // Event listeners para chips fallback (inmediatos)
@@ -562,6 +488,15 @@ async function renderProfile() {
           <span class="profile-section-arrow">›</span>
         </div>
 
+        <div class="profile-section" id="prof-narrator">
+          <span class="profile-section-icon">🧭</span>
+          <span class="profile-section-label">Copiloto</span>
+          <button class="profile-info-btn" id="prof-narrator-info" onclick="event.stopPropagation()">i</button>
+          <label class="profile-toggle" onclick="event.stopPropagation()">
+            <input type="checkbox" id="narrator-toggle" ${typeof salma !== 'undefined' && salma._narratorActive ? 'checked' : ''}>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
 
         <div class="profile-section profile-section-sos ${(currentUserSOSConfig?.contacts || []).filter(c=>c.phone?.trim()).length > 0 ? 'sos-configured' : 'sos-unconfigured'}" id="prof-sos">
           <span class="profile-section-icon profile-section-icon-sos">🆘</span>
@@ -2058,22 +1993,10 @@ auth.onAuthStateChanged(async (user) => {
 
 async function guardarGuia(routeData) {
   if (!currentUser) {
-    // Usuario NO logueado — pedir registro/login ANTES de guardar
+    // Registro lazy — guardar ruta y pedir login
     window._salmaLastRoute = routeData;
-    // NO guardamos en localStorage — solo en memoria hasta que se registre/logee
-
-    // Actualizar contexto del modal: cambiar subtitle a "Para guardar esta guía, necesitas una cuenta"
-    const registerSub = document.querySelector('#modal-register-view .modal-sub');
-    const loginSub = document.querySelector('#modal-login-view .modal-sub');
-    if (registerSub) registerSub.textContent = 'Para guardar esta guía, crea tu cuenta';
-    if (loginSub) loginSub.textContent = 'Para guardar esta guía, entra a tu cuenta';
-
-    // Abrir modal de registro por defecto
-    const loginView = document.getElementById('modal-login-view');
-    const registerView = document.getElementById('modal-register-view');
-    if (loginView) loginView.classList.add('hidden');
-    if (registerView) registerView.classList.remove('hidden');
-
+    localStorage.setItem('_salmaRouteBackup', JSON.stringify(routeData));
+    showToast('Regístrate para guardar tu ruta');
     openModal('register');
     return null;
   }
@@ -2484,14 +2407,6 @@ document.getElementById('auth-go-register')?.addEventListener('click', () => _au
 document.getElementById('auth-back-login')?.addEventListener('click', () => _authShowView('welcome'));
 document.getElementById('auth-back-register')?.addEventListener('click', () => _authShowView('welcome'));
 document.getElementById('auth-skip')?.addEventListener('click', closeModal);
-// Botones de cerrar modal
-document.getElementById('auth-close-welcome')?.addEventListener('click', closeModal);
-document.getElementById('auth-close-login')?.addEventListener('click', closeModal);
-document.getElementById('auth-close-register')?.addEventListener('click', closeModal);
-// Escrim clickeable para cerrar modal
-document.getElementById('auth-screen')?.addEventListener('click', (e) => {
-  if (e.target.id === 'auth-screen') closeModal();
-});
 document.getElementById('switch-to-register')?.addEventListener('click', () => _authShowView('register'));
 document.getElementById('switch-to-login')?.addEventListener('click', () => _authShowView('login'));
 
@@ -2786,7 +2701,7 @@ async function toggleCopilot() {
 
   // Sin login — activar gratis (sin coins)
   if (!currentUser) {
-    await _doCopilotActivate();
+    _doCopilotActivate();
     return;
   }
 
@@ -2796,7 +2711,7 @@ async function toggleCopilot() {
 
   if (copilotData.activated_date === hoy) {
     // Ya pagó hoy — activar sin cobrar
-    await _doCopilotActivate();
+    _doCopilotActivate();
     return;
   }
 
@@ -2819,15 +2734,15 @@ async function toggleCopilot() {
     currentUser.copilot_data = { activated_date: hoy };
     updateBottomBar();
     showToast('Copiloto activado · −1 Salma Coin · saldo: ' + newCoins);
-    await _doCopilotActivate();
+    _doCopilotActivate();
   } catch (e) {
     console.warn('Error activando Copiloto:', e);
     showToast('Error al activar Copiloto. Inténtalo de nuevo.');
   }
 }
 
-async function _doCopilotActivate() {
-  if (typeof mapaRuta !== 'undefined') await mapaRuta.activateCopilot();
+function _doCopilotActivate() {
+  if (typeof mapaRuta !== 'undefined') mapaRuta.activateCopilot();
   if (typeof salma !== 'undefined') salma.startNarrator();
 }
 
