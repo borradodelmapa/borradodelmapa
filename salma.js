@@ -1063,6 +1063,9 @@ const salma = {
     this.currentRoute = routeData;
     this.currentRouteId = docId;
 
+    // Resetear copiloto para mostrar vista de guía, no mapa fullscreen
+    if (typeof mapaRuta !== 'undefined') mapaRuta._copilotActive = false;
+
     // Abrir directamente la guía seleccionada
     if (typeof window.openItinerarioView === 'function') {
       window.openItinerarioView(routeData, this.currentRouteId, { saved: true, fromChat: false });
