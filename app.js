@@ -2697,26 +2697,27 @@ window.toggleCopilot = toggleCopilot;
 
 window._mapConfig = { food: false, medical: false, lodging: false, shopping: false, parks: false, culture: false, transit: false };
 
-const _catFeature = {
-  food:     'poi.food_and_drink',
-  medical:  'poi.medical',
-  lodging:  'poi.lodging',
-  shopping: 'poi.business',
-  parks:    'poi.park',
-  culture:  'poi.attraction',
-  transit:  'transit',
+// PlacesService types por categoría (reales, no estilos)
+const _catConfig = {
+  food:     { types: ['restaurant', 'cafe', 'bar', 'bakery'],                         color: '#E87040', label: '🍽' },
+  medical:  { types: ['pharmacy', 'hospital', 'doctor'],                              color: '#D9534F', label: '+' },
+  lodging:  { types: ['lodging'],                                                     color: '#5BC0DE', label: 'H' },
+  shopping: { types: ['supermarket', 'grocery_or_supermarket', 'convenience_store'],  color: '#AA66CC', label: 'S' },
+  parks:    { types: ['park'],                                                        color: '#5CB85C', label: 'P' },
+  culture:  { types: ['museum', 'tourist_attraction', 'art_gallery'],                 color: '#D4A843', label: 'A' },
+  transit:  { types: ['transit_station', 'bus_station', 'subway_station'],            color: '#666',    label: 'T' },
 };
 
+let _poiInfoWindow = null;
+let _placesService = null;
+let _catMarkers = {};
+
 function _buildMapStyle() {
-  const style = [
+  window._mapStyle = [
     { featureType: 'poi',     elementType: 'all', stylers: [{ visibility: 'off' }] },
     { featureType: 'transit', elementType: 'all', stylers: [{ visibility: 'off' }] },
   ];
-  Object.entries(window._mapConfig).forEach(([cat, on]) => {
-    if (on) style.push({ featureType: _catFeature[cat], elementType: 'all', stylers: [{ visibility: 'on' }] });
-  });
-  window._mapStyle = style;
-  return style;
+  return window._mapStyle;
 }
 
 function _applyMapStyle() {
@@ -2727,9 +2728,80 @@ function _applyMapStyle() {
   }
 }
 
+function _showPoiInfo(place, latLng, placeId) {
+  if (!_poiInfoWindow || !_liveMap) return;
+  const photoHtml = place.photos && place.photos.length
+    ? `<img src="${place.photos[0].getUrl({ maxWidth: 280, maxHeight: 140 })}" style="width:100%;height:130px;object-fit:cover;border-radius:10px 10px 0 0;display:block">`
+    : `<div style="width:100%;height:70px;background:#f0f0f0;border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:center;font-size:32px">📍</div>`;
+  const stars = place.rating ? `<span style="color:#F5A623;font-size:11px">★ ${place.rating.toFixed(1)}</span>` : '';
+  const mapsUrl = place.url || (placeId ? `https://www.google.com/maps/place/?q=place_id:${placeId}` : '#');
+  const content = `
+    <div style="font-family:'Inter',sans-serif;width:260px;border-radius:10px;overflow:hidden;background:#fff">
+      ${photoHtml}
+      <div style="padding:10px 12px 12px">
+        <div style="font-size:15px;font-weight:700;color:#111;line-height:1.3;margin-bottom:4px">${place.name || ''}</div>
+        ${stars}
+        ${place.formatted_address ? `<div style="font-size:11px;color:#777;margin-top:4px;margin-bottom:10px">${place.formatted_address}</div>` : '<div style="margin-bottom:8px"></div>'}
+        <a href="${mapsUrl}" target="_blank" rel="noopener"
+          style="display:flex;align-items:center;justify-content:center;gap:6px;background:#4285F4;color:#fff;border-radius:8px;padding:8px;font-size:12px;font-weight:600;text-decoration:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5" fill="rgba(255,255,255,.9)"/></svg>
+          Ver en Google Maps
+        </a>
+      </div>
+    </div>`;
+  _poiInfoWindow.setContent(content);
+  _poiInfoWindow.setPosition(latLng || place.geometry?.location);
+  _poiInfoWindow.setOptions({ pixelOffset: new google.maps.Size(0, -10) });
+  _poiInfoWindow.open(_liveMap);
+}
+
+function _loadCatMarkers(cat) {
+  if (!_liveMap || !_placesService) return;
+  const cfg = _catConfig[cat];
+  if (!cfg) return;
+  if (!_catMarkers[cat]) _catMarkers[cat] = [];
+  const center = _liveMap.getCenter();
+  cfg.types.forEach(type => {
+    _placesService.nearbySearch({ location: center, radius: 1500, type }, (results, status) => {
+      if (!results || !results.length) return;
+      results.forEach(place => {
+        if (!place.geometry) return;
+        const marker = new google.maps.Marker({
+          map: _liveMap,
+          position: place.geometry.location,
+          icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: cfg.color, fillOpacity: 0.92, strokeColor: '#fff', strokeWeight: 2, scale: 12 },
+          label: { text: cfg.label, color: '#fff', fontSize: '10px', fontWeight: '700' },
+          title: place.name,
+          zIndex: 10,
+        });
+        marker.addListener('click', () => {
+          _placesService.getDetails(
+            { placeId: place.place_id, fields: ['name', 'photos', 'formatted_address', 'rating', 'url', 'geometry'] },
+            (detail, s) => {
+              if (s !== google.maps.places.PlacesServiceStatus.OK || !detail) return;
+              _showPoiInfo(detail, detail.geometry.location, place.place_id);
+            }
+          );
+        });
+        _catMarkers[cat].push(marker);
+      });
+    });
+  });
+}
+
+function _removeCatMarkers(cat) {
+  (_catMarkers[cat] || []).forEach(m => m.setMap(null));
+  _catMarkers[cat] = [];
+}
+
 function toggleMapCat(checkbox) {
-  window._mapConfig[checkbox.dataset.cat] = checkbox.checked;
-  _applyMapStyle();
+  const cat = checkbox.dataset.cat;
+  window._mapConfig[cat] = checkbox.checked;
+  if (checkbox.checked) {
+    _loadCatMarkers(cat);
+  } else {
+    _removeCatMarkers(cat);
+  }
 }
 
 function toggleMapLayersPanel() {
@@ -2773,42 +2845,9 @@ function openLiveMap() {
         gestureHandling: 'greedy',
       });
 
-      // Click en POI nativo → InfoWindow personalizado con foto
-      const _poiInfoWindow = new google.maps.InfoWindow();
-      const _placesService = new google.maps.places.PlacesService(_liveMap);
-      _liveMap.addListener('click', (e) => {
-        if (!e.placeId) return;
-        e.stop();
-        _placesService.getDetails(
-          { placeId: e.placeId, fields: ['name', 'photos', 'formatted_address', 'rating', 'url', 'geometry'] },
-          (place, status) => {
-            if (status !== google.maps.places.PlacesServiceStatus.OK || !place) return;
-            const photoHtml = place.photos && place.photos.length
-              ? `<img src="${place.photos[0].getUrl({ maxWidth: 280, maxHeight: 140 })}" style="width:100%;height:130px;object-fit:cover;border-radius:10px 10px 0 0;display:block">`
-              : `<div style="width:100%;height:70px;background:#f0f0f0;border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:center;font-size:32px">🏨</div>`;
-            const stars = place.rating ? `<span style="color:#F5A623;font-size:11px">★ ${place.rating.toFixed(1)}</span>` : '';
-            const mapsUrl = place.url || `https://www.google.com/maps/place/?q=place_id:${e.placeId}`;
-            const content = `
-              <div style="font-family:'Inter',sans-serif;width:260px;border-radius:10px;overflow:hidden;background:#fff">
-                ${photoHtml}
-                <div style="padding:10px 12px 12px">
-                  <div style="font-size:15px;font-weight:700;color:#111;line-height:1.3;margin-bottom:4px">${place.name || ''}</div>
-                  ${stars}
-                  ${place.formatted_address ? `<div style="font-size:11px;color:#777;margin-top:4px;margin-bottom:10px">${place.formatted_address}</div>` : '<div style="margin-bottom:8px"></div>'}
-                  <a href="${mapsUrl}" target="_blank" rel="noopener"
-                    style="display:flex;align-items:center;justify-content:center;gap:6px;background:#4285F4;color:#fff;border-radius:8px;padding:8px;font-size:12px;font-weight:600;text-decoration:none">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5" fill="rgba(255,255,255,.9)"/></svg>
-                    Ver en Google Maps
-                  </a>
-                </div>
-              </div>`;
-            _poiInfoWindow.setContent(content);
-            _poiInfoWindow.setPosition(e.latLng);
-            _poiInfoWindow.setOptions({ pixelOffset: new google.maps.Size(0, -10) });
-            _poiInfoWindow.open(_liveMap);
-          }
-        );
-      });
+      // InfoWindow y PlacesService compartidos para toda la sesión del mapa
+      _poiInfoWindow = new google.maps.InfoWindow();
+      _placesService = new google.maps.places.PlacesService(_liveMap);
 
       // Geolocalización en tiempo real
       if (navigator.geolocation) {
@@ -2870,9 +2909,15 @@ function closeLiveMap() {
   }
   if (_liveMap) {
     clearRouteFromLiveMap();
+    Object.keys(_catMarkers).forEach(cat => _removeCatMarkers(cat));
+    _poiInfoWindow = null;
+    _placesService = null;
     _liveUserMarker = null;
     _liveMap = null;
     document.getElementById('live-map-container').innerHTML = '';
+    // Desmarcar checkboxes del panel
+    document.querySelectorAll('#live-map-layers-panel input[type=checkbox]').forEach(cb => { cb.checked = false; });
+    window._mapConfig = { food: false, medical: false, lodging: false, shopping: false, parks: false, culture: false, transit: false };
   }
 }
 
