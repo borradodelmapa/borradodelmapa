@@ -92,28 +92,7 @@ const mapaRuta = {
 
   // ═══ FAB COPILOTO ═══
   _renderCopilotFab(containerId) {
-    const el = document.getElementById(containerId);
-    if (!el) return;
-    // Eliminar FAB anterior si existía
-    const old = el.querySelector('.copilot-fab');
-    if (old) old.remove();
-
-    const fab = document.createElement('button');
-    fab.id = 'copilot-fab';
-    fab.className = `copilot-fab ${this._copilotActive ? 'copilot-fab-on' : 'copilot-fab-off'}`;
-    fab.setAttribute('aria-label', 'Copiloto');
-    fab.title = this._copilotActive ? 'Copiloto activo' : 'Activar Copiloto';
-    fab.innerHTML = `
-      <svg class="copilot-fab-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
-      </svg>
-      <span class="copilot-fab-label">${this._copilotActive ? 'ON' : 'COPILOTO'}</span>
-    `;
-    fab.addEventListener('click', async () => {
-      if (typeof window.toggleCopilot === 'function') await window.toggleCopilot();
-    });
-    el.appendChild(fab);
+    // FAB eliminado
   },
 
   // ═══ MAP CONTROLS (Copiloto ON) ═══
