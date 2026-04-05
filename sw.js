@@ -1,64 +1,19 @@
-const CACHE_NAME = 'bdm-v42';
+// Service Worker — SIN CACHÉ. Todo desde red siempre.
 
-// Assets que se cachean para offline (imágenes, no JS/CSS)
-const CACHE_ASSETS = [
-  '/salma_ai_avatar.png',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/mapa.png'
-];
+self.addEventListener('install', () => self.skipWaiting());
 
-// JS/CSS/HTML — siempre frescos desde red, sin caché HTTP
-const ALWAYS_FRESH = ['.js', '.css', '.html', '/'];
-
-// Instalar — solo cachear imágenes (no JS/CSS que cambian frecuentemente)
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(CACHE_ASSETS))
-      .then(() => self.skipWaiting())
-  );
-});
-
-// Activar — limpiar caches viejas
 self.addEventListener('activate', (e) => {
+  // Borrar todas las cachés existentes
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
-// Fetch — JS/CSS/HTML siempre desde red (no-cache), imágenes desde caché
+// Fetch — siempre red, sin caché
 self.addEventListener('fetch', (e) => {
-  const url = new URL(e.request.url);
-
-  if (url.origin !== location.origin) return;
   if (e.request.method !== 'GET') return;
-
-  const path = url.pathname;
-  const isFresh = ALWAYS_FRESH.some(ext => path.endsWith(ext) || path === '/');
-
-  if (isFresh) {
-    // Siempre red, forzando bypass de caché HTTP
-    e.respondWith(
-      fetch(e.request, { cache: 'no-cache' })
-        .catch(() => caches.match(e.request))
-    );
-  } else {
-    // Imágenes y otros: network first con caché de fallback
-    e.respondWith(
-      fetch(e.request)
-        .then(res => {
-          if (res.ok) {
-            const clone = res.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
-          }
-          return res;
-        })
-        .catch(() => caches.match(e.request))
-    );
-  }
+  e.respondWith(fetch(e.request, { cache: 'no-store' }));
 });
 
 // Push notification (narrador en ruta)

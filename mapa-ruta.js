@@ -29,21 +29,10 @@ const mapaRuta = {
     this._currentStops = stops;
     this.destroy();
 
-    if (this._copilotActive) {
-      this._initGoogleMaps(containerId, stops);
-    } else {
-      this._renderStaticMap(containerId, stops);
-    }
-
-    if (!this._copilotActive) {
-      this._renderCopilotFab(containerId);
-      this._removeChatSheet();
-      this._removeMapControls(containerId);
-    } else {
-      // FAB y controles se añaden DESPUÉS de que el mapa cargue (en _buildGoogleMap/_buildLeafletMap)
-      this._renderTurnPanel(containerId);
-      this._enterFullscreen();
-    }
+    // Siempre mapa estático al abrir guía
+    this._renderStaticMap(containerId, stops);
+    this._removeChatSheet();
+    this._removeMapControls(containerId);
   },
 
   // ═══ FULLSCREEN (Copiloto ON) ═══
@@ -243,9 +232,9 @@ const mapaRuta = {
 
     el.innerHTML = `<img src="${url}" class="static-map-img" alt="Mapa de ruta" style="cursor:pointer">`;
 
-    // Al pulsar el mapa estático, activar mapa de navegación completo
+    // Al pulsar el mapa estático, abrir mapa de navegación completo
     el.querySelector('.static-map-img').addEventListener('click', () => {
-      mapaRuta.activateCopilot();
+      mapaRuta._openFullNav();
     });
 
     // Cargar polyline real y actualizar imagen
@@ -271,7 +260,7 @@ const mapaRuta = {
       .then(data => {
         if (!data.polyline) return;
         const el = document.getElementById(containerId);
-        if (!el || this._copilotActive) return; // Puede que Copiloto se activó mientras cargaba
+        if (!el) return;
 
         const path = `path=enc:${encodeURIComponent(data.polyline)}`;
         const imgUrl = `https://maps.googleapis.com/maps/api/staticmap?size=${size}&scale=2&${markers}&${path}&${styles}&key=${KEY}`;
@@ -452,8 +441,7 @@ const mapaRuta = {
     this._map.fitBounds(bounds, { padding: [40, 40] });
 
     // FAB y controles tras cargar el mapa
-    this._renderCopilotFab(this._currentContainerId);
-    if (this._copilotActive) this._renderMapControls(this._currentContainerId);
+    this._renderMapControls(this._currentContainerId);
   },
 
   // ═══ DECODE GOOGLE POLYLINE ═══
@@ -733,28 +721,26 @@ const mapaRuta = {
     this._chatExpanded = false;
   },
 
-  // ═══ ACTIVAR / DESACTIVAR COPILOTO ═══
-  activateCopilot() {
-    if (this._copilotActive) return;
-    this._copilotActive = true;
+  // ═══ ABRIR MAPA NAVEGACIÓN COMPLETO ═══
+  _openFullNav() {
     if (this._currentContainerId && this._currentStops.length) {
-      this.init(this._currentContainerId, this._currentStops);
-    } else {
-      this._updateFab();
       this._enterFullscreen();
+      this._initGoogleMaps(this._currentContainerId, this._currentStops);
     }
   },
 
+  activateCopilot() {
+    this._openFullNav();
+  },
+
   deactivateCopilot() {
-    if (!this._copilotActive) return;
-    this._copilotActive = false;
     this._stopGpsTracking();
     this._removeChatSheet();
     this._exitFullscreen();
     if (this._currentContainerId && this._currentStops.length) {
-      this.init(this._currentContainerId, this._currentStops);
-    } else {
-      this._updateFab();
+      this._renderStaticMap(this._currentContainerId, this._currentStops);
+      this._removeChatSheet();
+      this._removeMapControls(this._currentContainerId);
     }
   },
 

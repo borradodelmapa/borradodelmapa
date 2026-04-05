@@ -2750,15 +2750,8 @@ function _doCopilotActivate() {
   if (typeof salma !== 'undefined') salma.startNarrator();
 }
 
-// Al cargar la app, restaurar estado Copiloto si ya se activó hoy
-function _restoreCopilotState() {
-  if (!currentUser) return;
-  const hoy = new Date().toISOString().slice(0, 10);
-  const copilotData = currentUser.copilot_data || {};
-  if (copilotData.activated_date === hoy) {
-    if (typeof mapaRuta !== 'undefined') mapaRuta._copilotActive = true;
-  }
-}
+// Copiloto eliminado — función vacía para compatibilidad
+function _restoreCopilotState() {}
 
 window.toggleCopilot = toggleCopilot;
 
