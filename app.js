@@ -3182,7 +3182,7 @@ async function _processSalmaMapRequest(imageBase64) {
       const userPos = _liveUserMarker ? _liveUserMarker.getPosition() : null;
       if (userPos) {
         const label = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-        _placeMapPin({ name: `📷 ${label}`, address: '', description: '', place_type: 'other', lat: userPos.lat(), lng: userPos.lng() });
+        _placeMapPin({ name: `📷 ${label}`, address: '', description: '', place_type: 'other', photo: imageBase64, lat: userPos.lat(), lng: userPos.lng() });
         status.textContent = '📍 Guardado en tu posición actual';
         setTimeout(() => closeSalmaMapSheet(), 1800);
       } else {
@@ -3192,14 +3192,14 @@ async function _processSalmaMapRequest(imageBase64) {
       return;
     }
 
-    await _handleMapPin(data, status);
+    await _handleMapPin(data, status, imageBase64);
   } catch (e) {
     status.textContent = '❌ Error al procesar la imagen';
     setTimeout(() => closeSalmaMapSheet(), 2500);
   }
 }
 
-async function _handleMapPin(action, status) {
+async function _handleMapPin(action, status, photoBase64 = null) {
   if (!_placesService) { status.textContent = '❌ Mapa no disponible.'; return; }
   status.textContent = '📍 Buscando en el mapa...';
 
@@ -3218,7 +3218,7 @@ async function _handleMapPin(action, status) {
       const name = place.name || action.name;
       const address = place.formatted_address || action.address || '';
 
-      _placeMapPin({ name, address, description: action.description, place_type: action.place_type, checkin: action.checkin, checkout: action.checkout, confirmation: action.confirmation, lat, lng });
+      _placeMapPin({ name, address, description: action.description, place_type: action.place_type, checkin: action.checkin, checkout: action.checkout, confirmation: action.confirmation, photo: photoBase64, lat, lng });
 
       if (currentUser && typeof db !== 'undefined') {
         try {
@@ -3237,7 +3237,7 @@ async function _handleMapPin(action, status) {
   );
 }
 
-function _placeMapPin({ name, address, description, place_type, checkin, checkout, confirmation, lat, lng }) {
+function _placeMapPin({ name, address, description, place_type, checkin, checkout, confirmation, photo, lat, lng }) {
   if (!_liveMap) return;
   const pinColors = { hotel: '#5BC0DE', monument: '#D4A843', restaurant: '#E87040', beach: '#5CB85C', park: '#5CB85C', other: '#AA66CC' };
   const pinEmojis = { hotel: '🏨', monument: '🏛️', restaurant: '🍽️', beach: '🏖️', park: '🌿', other: '⭐' };
@@ -3253,13 +3253,17 @@ function _placeMapPin({ name, address, description, place_type, checkin, checkou
   marker.addListener('click', () => {
     if (!_poiInfoWindow) return;
     const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-    _poiInfoWindow.setContent(`<div style="font-family:'Inter',sans-serif;width:230px;padding:12px 14px">
-      <div style="font-size:13px;font-weight:700;color:#111;margin-bottom:4px">${name}</div>
-      ${address ? `<div style="font-size:11px;color:#777;margin-bottom:8px">${address}</div>` : ''}
-      ${description ? `<div style="font-size:12px;color:#444;margin-bottom:8px">${description}</div>` : ''}
-      ${(checkin || checkout) ? `<div style="font-size:11px;color:#5BC0DE;margin-bottom:8px">🗓 ${checkin || ''}${checkin && checkout ? ' → ' : ''}${checkout || ''}</div>` : ''}
-      ${confirmation ? `<div style="font-size:10px;color:#999;margin-bottom:8px">Ref: ${confirmation}</div>` : ''}
-      <a href="${mapsUrl}" target="_blank" style="display:block;text-align:center;background:#4285F4;color:#fff;border-radius:8px;padding:7px;font-size:12px;font-weight:600;text-decoration:none">Cómo llegar</a>
+    const mediaType = photo ? (photo.charAt(0) === 'i' ? 'image/png' : 'image/jpeg') : null;
+    _poiInfoWindow.setContent(`<div style="font-family:'Inter',sans-serif;width:230px;overflow:hidden;border-radius:10px">
+      ${photo ? `<img src="data:${mediaType};base64,${photo}" style="width:100%;height:140px;object-fit:cover;display:block">` : ''}
+      <div style="padding:12px 14px">
+        <div style="font-size:13px;font-weight:700;color:#111;margin-bottom:4px">${name}</div>
+        ${address ? `<div style="font-size:11px;color:#777;margin-bottom:8px">${address}</div>` : ''}
+        ${description ? `<div style="font-size:12px;color:#444;margin-bottom:8px">${description}</div>` : ''}
+        ${(checkin || checkout) ? `<div style="font-size:11px;color:#5BC0DE;margin-bottom:8px">🗓 ${checkin || ''}${checkin && checkout ? ' → ' : ''}${checkout || ''}</div>` : ''}
+        ${confirmation ? `<div style="font-size:10px;color:#999;margin-bottom:8px">Ref: ${confirmation}</div>` : ''}
+        <a href="${mapsUrl}" target="_blank" style="display:block;text-align:center;background:#4285F4;color:#fff;border-radius:8px;padding:7px;font-size:12px;font-weight:600;text-decoration:none">Cómo llegar</a>
+      </div>
     </div>`);
     _poiInfoWindow.open(_liveMap, marker);
   });
