@@ -1063,14 +1063,9 @@ const salma = {
     this.currentRoute = routeData;
     this.currentRouteId = docId;
 
-    this._initChat();
-    const title = routeData.title || routeData.name || 'Tu ruta';
-    this._addSalmaBubble('Aquí tienes tu guía de ' + title + '. Si quieres cambiar algo, dímelo.');
-    showState('chat');
-
-    // Abrir vista de guía (nueva)
+    // Abrir directamente la guía seleccionada
     if (typeof window.openItinerarioView === 'function') {
-      window.openItinerarioView(routeData, this.currentRouteId, { saved: true, fromChat: true });
+      window.openItinerarioView(routeData, this.currentRouteId, { saved: true, fromChat: false });
     }
 
     // Si no está enriquecida, enriquecer ahora en background
