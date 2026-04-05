@@ -3146,14 +3146,12 @@ export default {
 
     const url = new URL(request.url);
 
-    // ─── ENDPOINT /pin — Extractor de lugar para mapa personal (Claude) ───
+    // ─── ENDPOINT /pin — Extractor de lugar para mapa personal ───
     if (request.method === 'POST' && url.pathname === '/pin') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       try {
         const body = await request.json();
         const { text, image_base64 } = body;
-        const apiKey = env.ANTHROPIC_API_KEY;
-        if (!apiKey) return new Response(JSON.stringify({ name: null, error: 'no_key' }), { status: 500, headers: corsH });
 
         const systemPrompt = `Eres un extractor de datos. Analiza el texto o imagen y devuelve SOLO un JSON válido, sin explicaciones, sin markdown.
 Extrae el lugar principal (hotel, monumento, restaurante, playa, catedral, mercado...).
@@ -3162,34 +3160,48 @@ Formato exacto (todos los campos, JSON null —no el string "null"— si no hay 
 IMPORTANTE: Si no puedes identificar el nombre exacto del lugar, usa null (no escribas "null" como texto). Solo pon un nombre si estás seguro.
 SOLO JSON. Nada más.`;
 
-        const mediaType = image_base64
-          ? (image_base64.charAt(0) === 'i' ? 'image/png' : 'image/jpeg')
-          : null;
+        let raw = '';
 
-        const userContent = image_base64
-          ? [
-              { type: 'image', source: { type: 'base64', media_type: mediaType, data: image_base64 } },
-              { type: 'text', text: text || 'Extrae el lugar de esta imagen.' }
-            ]
-          : [{ type: 'text', text: text || '' }];
+        if (image_base64) {
+          // Imagen → GPT-4o-mini vision (Claude 4 no soporta vision en esta cuenta)
+          if (!env.OPENAI_API_KEY) return new Response(JSON.stringify({ name: null, error: 'no_openai_key' }), { status: 500, headers: corsH });
+          const mediaType = image_base64.charAt(0) === 'i' ? 'image/png' : 'image/jpeg';
+          const oRes = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${env.OPENAI_API_KEY}` },
+            body: JSON.stringify({
+              model: 'gpt-4o-mini',
+              max_tokens: 300,
+              temperature: 0,
+              messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: [
+                  { type: 'image_url', image_url: { url: `data:${mediaType};base64,${image_base64}`, detail: 'high' } },
+                  { type: 'text', text: 'Extrae el lugar de esta imagen.' }
+                ]}
+              ]
+            })
+          });
+          const oData = await oRes.json();
+          raw = oData.choices?.[0]?.message?.content?.trim() || '';
+        } else {
+          // Texto → Claude Sonnet
+          if (!env.ANTHROPIC_API_KEY) return new Response(JSON.stringify({ name: null, error: 'no_anthropic_key' }), { status: 500, headers: corsH });
+          const cRes = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+            body: JSON.stringify({
+              model: 'claude-sonnet-4-6',
+              max_tokens: 300,
+              system: systemPrompt,
+              messages: [{ role: 'user', content: text || '' }]
+            })
+          });
+          const cData = await cRes.json();
+          if (cData.type === 'error') throw new Error(cData.error?.message || 'claude_error');
+          raw = cData.content?.[0]?.text?.trim() || '';
+        }
 
-        const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': apiKey,
-            'anthropic-version': '2023-06-01',
-          },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-6',
-            max_tokens: 300,
-            system: systemPrompt,
-            messages: [{ role: 'user', content: userContent }]
-          })
-        });
-        const cData = await claudeRes.json();
-        if (cData.type === 'error') throw new Error(cData.error?.message || 'claude_error');
-        const raw = cData.content?.[0]?.text?.trim() || '';
         const cleaned = raw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
         try {
           const result = JSON.parse(cleaned);
