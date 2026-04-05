@@ -2981,6 +2981,20 @@ body {
 }
 #live-map-center {
   position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+  right: 16px;
+  z-index: 970;
+  background: rgba(12,10,6,0.92);
+  color: var(--dorado);
+  border: 1px solid rgba(212,168,67,0.35);
+  border-radius: 50%;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+#live-map-layers-btn {
+  position: fixed;
   bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
   right: 16px;
   z-index: 970;
@@ -2993,6 +3007,59 @@ body {
   cursor: pointer;
   backdrop-filter: blur(8px);
 }
+#live-map-layers-panel {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+  right: 68px;
+  z-index: 970;
+  background: rgba(12,10,6,0.96);
+  border: 1px solid rgba(212,168,67,0.25);
+  border-radius: 14px;
+  padding: 12px 16px;
+  min-width: 200px;
+  backdrop-filter: blur(12px);
+}
+.lml-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--dorado);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.lml-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--crema);
+  gap: 16px;
+}
+.lml-row:last-child { border-bottom: none; }
+.lml-row input[type="checkbox"] {
+  width: 36px; height: 20px;
+  appearance: none;
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background .2s;
+}
+.lml-row input[type="checkbox"]:checked { background: var(--dorado); }
+.lml-row input[type="checkbox"]::after {
+  content: '';
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 16px; height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform .2s;
+}
+.lml-row input[type="checkbox"]:checked::after { transform: translateX(16px); }
 
 .itin-view {
   position: fixed;

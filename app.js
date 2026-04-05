@@ -2695,11 +2695,53 @@ window.toggleCopilot = toggleCopilot;
 
 // ═══ CONFIGURACIÓN COMPARTIDA DE MAPAS ═══
 
-window._mapStyle = [
-  { featureType: 'poi',     elementType: 'all', stylers: [{ visibility: 'off' }] },
-  { featureType: 'transit', elementType: 'all', stylers: [{ visibility: 'off' }] },
-  { featureType: 'business', elementType: 'all', stylers: [{ visibility: 'off' }] },
-];
+window._mapConfig = { food: false, medical: false, lodging: false, shopping: false, parks: false, culture: false, transit: false };
+
+const _catFeature = {
+  food:     'poi.food_and_drink',
+  medical:  'poi.medical',
+  lodging:  'poi.lodging',
+  shopping: 'poi.business',
+  parks:    'poi.park',
+  culture:  'poi.attraction',
+  transit:  'transit',
+};
+
+function _buildMapStyle() {
+  const style = [
+    { featureType: 'poi',     elementType: 'all', stylers: [{ visibility: 'off' }] },
+    { featureType: 'transit', elementType: 'all', stylers: [{ visibility: 'off' }] },
+  ];
+  Object.entries(window._mapConfig).forEach(([cat, on]) => {
+    if (on) style.push({ featureType: _catFeature[cat], elementType: 'all', stylers: [{ visibility: 'on' }] });
+  });
+  window._mapStyle = style;
+  return style;
+}
+
+function _applyMapStyle() {
+  const style = _buildMapStyle();
+  if (_liveMap) _liveMap.setOptions({ styles: style });
+  if (typeof mapaRuta !== 'undefined' && mapaRuta._map && mapaRuta._mapType === 'google') {
+    mapaRuta._map.setOptions({ styles: style });
+  }
+}
+
+function toggleMapCat(checkbox) {
+  window._mapConfig[checkbox.dataset.cat] = checkbox.checked;
+  _applyMapStyle();
+}
+
+function toggleMapLayersPanel() {
+  const panel = document.getElementById('live-map-layers-panel');
+  if (panel) panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+window.toggleMapCat = toggleMapCat;
+window.toggleMapLayersPanel = toggleMapLayersPanel;
+
+// Inicializar estilo base
+_buildMapStyle();
 
 // ═══ MAPA EN VIVO ═══
 
