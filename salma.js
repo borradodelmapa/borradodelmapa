@@ -1068,12 +1068,8 @@ const salma = {
     this._addSalmaBubble('Aquí tienes tu guía de ' + title + '. Si quieres cambiar algo, dímelo.');
     showState('chat');
 
-    // Abrir vista itinerario enriquecida
-    if (typeof window.openItinerarioView === 'function') {
-      window.openItinerarioView(routeData, this.currentRouteId, { saved: true, fromChat: true });
-    } else {
-      guideRenderer.render(routeData, { saved: true, showGmapsOffer: true });
-    }
+    // Mostrar guía completa en el chat
+    guideRenderer.render(routeData, { saved: true, showGmapsOffer: true });
 
     // Si no está enriquecida, enriquecer ahora en background
     const isEnriched = docData && docData.enriched === true;
