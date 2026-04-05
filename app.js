@@ -2859,14 +2859,19 @@ async function openRouteSelector() {
     list.innerHTML = '';
     snap.forEach(doc => {
       const d = doc.data();
-      const stops = (d.stops || []).length;
-      const days = d.stops ? Math.max(...d.stops.map(s => s.day || 1)) : 1;
+      // Las paradas están serializadas en itinerarioIA
+      let routeData = null;
+      try { routeData = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null; } catch(_) {}
+      const stops = routeData?.stops || [];
+      const validStops = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01);
+      const days = d.num_dias || d.dias || '?';
       const item = document.createElement('div');
       item.className = 'lmrs-item';
-      item.innerHTML = `<span class="lmrs-item-title">${d.title || 'Ruta sin nombre'}</span>
-        <span class="lmrs-item-meta">${days} día${days > 1 ? 's' : ''} · ${stops} paradas</span>`;
+      item.innerHTML = `<span class="lmrs-item-title">${d.nombre || 'Mi ruta'}</span>
+        <span class="lmrs-item-meta">${days} día${days > 1 ? 's' : ''} · ${validStops.length} paradas con coords</span>`;
       item.addEventListener('click', () => {
-        selectRouteOnMap(d);
+        if (routeData) selectRouteOnMap(routeData);
+        else showToast('Esta ruta no tiene datos de mapa');
         closeRouteSelector();
       });
       list.appendChild(item);
