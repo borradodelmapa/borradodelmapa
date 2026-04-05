@@ -2916,20 +2916,6 @@ function openLiveMap() {
         _savedPinsData = []; // _placeMapPin los vuelve a añadir
       }
 
-      // Cargar mapa compartido si llegó via ?map=ID
-      if (_pendingSharedMapId) {
-        const id = _pendingSharedMapId;
-        _pendingSharedMapId = null;
-        const SALMA_API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
-        fetch(`${SALMA_API}/map/${id}`)
-          .then(r => r.json())
-          .then(data => {
-            if (data.error) { showToast('Link caducado o no encontrado'); return; }
-            (data.pins || []).forEach(p => _placeMapPin(p));
-            showToast(`✅ ${data.pins?.length || 0} pins cargados`);
-          })
-          .catch(() => showToast('Error al cargar el mapa compartido'));
-      }
     })
     .catch(() => showToast('No se pudo cargar Google Maps'));
 }
@@ -3180,12 +3166,6 @@ let _tapLatLng = null;
 let _pinIdCounter = 0;
 
 // ── Compartir mapa ──
-let _pendingSharedMapId = null;
-// Comprobar al cargar si hay ?map=ID en la URL
-(function () {
-  const id = new URLSearchParams(window.location.search).get('map');
-  if (id) _pendingSharedMapId = id.trim().toUpperCase();
-})();
 
 function openShareSheet() {
   if (!_savedPinsData.length) { showToast('No hay pins guardados'); return; }
@@ -3232,35 +3212,6 @@ async function shareAsImage() {
   }
 }
 
-async function shareAsSalmaLink() {
-  const status = document.getElementById('lmsh-status');
-  if (!_savedPinsData.length) { showToast('No hay pins guardados'); return; }
-  status.textContent = '⏳ Creando link…';
-  try {
-    const SALMA_API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
-    const pins = _savedPinsData.map(({ name, address, description, place_type, lat, lng, checkin, checkout, confirmation }) =>
-      ({ name, address, description, place_type, lat, lng, checkin, checkout, confirmation })
-    );
-    const res = await fetch(`${SALMA_API}/share-map`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pins }),
-    });
-    const data = await res.json();
-    if (!data.id) throw new Error('no id');
-    const shareUrl = `${window.location.origin}${window.location.pathname}?map=${data.id}`;
-    if (navigator.share) {
-      await navigator.share({ title: 'Mi mapa en Salma', text: `Mira mis pins de viaje en Salma`, url: shareUrl });
-      status.textContent = '';
-      closeShareSheet();
-    } else {
-      await navigator.clipboard.writeText(shareUrl);
-      status.textContent = `✅ Link copiado: ?map=${data.id}`;
-    }
-  } catch (e) {
-    status.textContent = '❌ Error al crear el link';
-  }
-}
 
 function deletePinById(pinId) {
   const mi = _mapPins.findIndex(m => m._pinId === pinId);
@@ -3538,7 +3489,6 @@ window.deletePinById = deletePinById;
 window.openShareSheet = openShareSheet;
 window.closeShareSheet = closeShareSheet;
 window.shareAsImage = shareAsImage;
-window.shareAsSalmaLink = shareAsSalmaLink;
 
 // ═══ UTILIDADES ═══
 
