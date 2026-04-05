@@ -3163,7 +3163,8 @@ async function _processSalmaMapRequest(text, imageBase64) {
     if (imageBase64) body.image_base64 = imageBase64;
     if (currentUser) body.uid = currentUser.uid;
 
-    const res = await fetch('https://salma-worker.borradodelmapa.workers.dev/', {
+    const SALMA_API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+    const res = await fetch(SALMA_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
