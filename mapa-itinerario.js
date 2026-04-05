@@ -412,6 +412,7 @@ const mapaItinerario = {
     const bottomBar = document.getElementById('app-bottom-bar');
     if (bottomBar) bottomBar.style.display = 'none';
     view.style.display = 'block';
+    document.body.classList.add('itin-open');
 
     // Inicializar mapa y cards
     const stops = routeData.stops;
@@ -437,6 +438,7 @@ const mapaItinerario = {
       } else if (view.style.display !== 'none') {
         // Copiloto OFF: cerrar todo
         view.style.display = 'none';
+        document.body.classList.remove('itin-open');
         if (appContent) appContent.style.display = '';
         if (inputBar) inputBar.style.display = '';
         const bb = document.getElementById('app-bottom-bar');
@@ -510,6 +512,7 @@ const mapaItinerario = {
     mapaItinerario.destroy();
 
     if (view) view.style.display = 'none';
+    document.body.classList.remove('itin-open');
     if (appContent) appContent.style.display = '';
     if (inputBar) inputBar.style.display = '';
     const bottomBar = document.getElementById('app-bottom-bar');

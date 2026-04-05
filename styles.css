@@ -3112,6 +3112,7 @@ body {
 
 /* ── Barra de acciones flotante (se añade al body, z-index raíz) ── */
 .itin-action-bar {
+  display: none !important;
   position: fixed;
   top: 12px;
   right: 12px;
@@ -3124,6 +3125,9 @@ body {
   border-radius: 12px;
   border: 1px solid rgba(212,160,23,.3);
   backdrop-filter: blur(12px);
+}
+body.itin-open .itin-action-bar {
+  display: flex !important;
 }
 .itin-btn {
   background: none;
