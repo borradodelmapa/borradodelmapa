@@ -3162,6 +3162,52 @@ let _mapPins = [];
 let _savedPinsData = []; // persiste entre sesiones del mapa
 let _tapPin = null;
 let _tapLatLng = null;
+let _pinIdCounter = 0;
+
+// ── Street View ──
+let _svPanorama = null;
+
+function toggleStreetView() {
+  if (!_liveMap) return;
+  if (!_svPanorama) {
+    _svPanorama = _liveMap.getStreetView();
+    _svPanorama.addListener('visible_changed', () => {
+      const visible = _svPanorama.getVisible();
+      const bar = document.getElementById('live-map-sv-bar');
+      const btn = document.getElementById('live-map-sv-btn');
+      if (bar) bar.style.display = visible ? 'flex' : 'none';
+      if (btn) btn.classList.toggle('active', visible);
+    });
+  }
+  if (_svPanorama.getVisible()) {
+    _svPanorama.setVisible(false);
+  } else {
+    _svPanorama.setPosition(_liveMap.getCenter());
+    _svPanorama.setPov({ heading: 0, pitch: 0 });
+    _svPanorama.setVisible(true);
+  }
+}
+
+function exitStreetView() {
+  if (_svPanorama) _svPanorama.setVisible(false);
+}
+
+function pinFromStreetView() {
+  if (!_svPanorama) return;
+  const pos = _svPanorama.getPosition();
+  if (!pos) return;
+  const lat = pos.lat(), lng = pos.lng();
+  _placeMapPin({ name: `📸 ${lat.toFixed(4)}, ${lng.toFixed(4)}`, address: '', description: '', place_type: 'other', lat, lng });
+  exitStreetView();
+}
+
+function deletePinById(pinId) {
+  const mi = _mapPins.findIndex(m => m._pinId === pinId);
+  if (mi !== -1) { _mapPins[mi].setMap(null); _mapPins.splice(mi, 1); }
+  const di = _savedPinsData.findIndex(d => d._pinId === pinId);
+  if (di !== -1) _savedPinsData.splice(di, 1);
+  if (_poiInfoWindow) _poiInfoWindow.close();
+}
 
 const _tapPlaceIcons = {
   restaurant:'🍽️', cafe:'☕', bar:'🍺', night_club:'🍸',
@@ -3388,6 +3434,7 @@ function _placeMapPin({ name, address, description, place_type, checkin, checkou
   const pinColors = { hotel: '#5BC0DE', monument: '#D4A843', restaurant: '#E87040', beach: '#5CB85C', park: '#5CB85C', other: '#AA66CC' };
   const pinEmojis = { hotel: '🏨', monument: '🏛️', restaurant: '🍽️', beach: '🏖️', park: '🌿', other: '⭐' };
   const color = pinColors[place_type] || '#AA66CC';
+  const pinId = ++_pinIdCounter;
 
   const marker = new google.maps.Marker({
     map: _liveMap,
@@ -3396,9 +3443,10 @@ function _placeMapPin({ name, address, description, place_type, checkin, checkou
     label: { text: pinEmojis[place_type] || '⭐', fontSize: '14px' },
     title: name, zIndex: 50,
   });
+  marker._pinId = pinId;
   marker.addListener('click', () => {
     if (!_poiInfoWindow) return;
-    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+    const navUrl = `https://maps.google.com/maps?daddr=${lat},${lng}`;
     const mediaType = photo ? (photo.charAt(0) === 'i' ? 'image/png' : 'image/jpeg') : null;
     _poiInfoWindow.setContent(`<div style="font-family:'Inter',sans-serif;width:230px;overflow:hidden;border-radius:10px">
       ${photo ? `<img src="data:${mediaType};base64,${photo}" style="width:100%;height:140px;object-fit:cover;display:block">` : ''}
@@ -3408,13 +3456,16 @@ function _placeMapPin({ name, address, description, place_type, checkin, checkou
         ${description ? `<div style="font-size:12px;color:#444;margin-bottom:8px">${description}</div>` : ''}
         ${(checkin || checkout) ? `<div style="font-size:11px;color:#5BC0DE;margin-bottom:8px">🗓 ${checkin || ''}${checkin && checkout ? ' → ' : ''}${checkout || ''}</div>` : ''}
         ${confirmation ? `<div style="font-size:10px;color:#999;margin-bottom:8px">Ref: ${confirmation}</div>` : ''}
-        <a href="${mapsUrl}" target="_blank" style="display:block;text-align:center;background:#4285F4;color:#fff;border-radius:8px;padding:7px;font-size:12px;font-weight:600;text-decoration:none">Cómo llegar</a>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <a href="${navUrl}" target="_blank" style="flex:1;text-align:center;background:#4285F4;color:#fff;border-radius:8px;padding:7px;font-size:12px;font-weight:600;text-decoration:none">Cómo llegar</a>
+          <button onclick="deletePinById(${pinId})" style="background:#ff3b30;color:#fff;border:none;border-radius:8px;padding:7px 10px;font-size:12px;cursor:pointer">🗑️</button>
+        </div>
       </div>
     </div>`);
     _poiInfoWindow.open(_liveMap, marker);
   });
   _mapPins.push(marker);
-  _savedPinsData.push({ name, address, description, place_type, checkin, checkout, confirmation, photo, lat, lng });
+  _savedPinsData.push({ name, address, description, place_type, checkin, checkout, confirmation, photo, lat, lng, _pinId: pinId });
   _liveMap.panTo({ lat, lng });
 }
 
@@ -3422,6 +3473,10 @@ window.openSalmaMapSheet = openSalmaMapSheet;
 window.closeSalmaMapSheet = closeSalmaMapSheet;
 window.sendSalmaMapPhoto = sendSalmaMapPhoto;
 window.closeTapSheet = closeTapSheet;
+window.toggleStreetView = toggleStreetView;
+window.exitStreetView = exitStreetView;
+window.pinFromStreetView = pinFromStreetView;
+window.deletePinById = deletePinById;
 
 // ═══ UTILIDADES ═══
 

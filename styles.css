@@ -3087,6 +3087,42 @@ body {
 }
 .lmt-option:active { background: rgba(212,168,67,0.15); }
 .lmt-option.active { color: var(--dorado); font-weight: 600; }
+/* ── Street View button ── */
+#live-map-sv-btn {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 228px);
+  right: 16px;
+  z-index: 970;
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: rgba(12,10,6,0.92);
+  border: none;
+  color: var(--crema, #F4EFE6);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(8px);
+}
+#live-map-sv-btn.active { color: var(--dorado); }
+/* ── Barra Street View ── */
+#live-map-sv-bar {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+  left: 50%; transform: translateX(-50%);
+  z-index: 985;
+  display: flex; gap: 10px;
+}
+.lmsv-btn {
+  padding: 12px 20px;
+  border: none; border-radius: 12px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer;
+  background: var(--dorado, #D4A843); color: #111;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+}
+.lmsv-exit {
+  background: rgba(20,18,14,0.95); color: #fff;
+}
 /* ── Salma button en el mapa ── */
 #live-map-salma-btn {
   position: fixed;
