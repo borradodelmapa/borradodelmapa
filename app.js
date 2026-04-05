@@ -2887,8 +2887,8 @@ function openLiveMap() {
       _poiInfoWindow = new google.maps.InfoWindow();
       _placesService = new google.maps.places.PlacesService(_liveMap);
 
-      // Cerrar paneles al tocar el mapa
-      _liveMap.addListener('click', _closeMapPanels);
+      // Tap en mapa: cerrar paneles + pin manual
+      _liveMap.addListener('click', _onMapTap);
       _liveMap.addListener('drag', _closeMapPanels);
 
       // Geolocalización en tiempo real
@@ -2958,6 +2958,7 @@ function closeLiveMap() {
   if (bar) bar.style.display = '';
   document.querySelector('.app-header')?.style.removeProperty('display');
   _closeMapPanels();
+  closeTapSheet();
   if (_liveMapWatchId !== null) {
     navigator.geolocation.clearWatch(_liveMapWatchId);
     _liveMapWatchId = null;
@@ -3159,6 +3160,122 @@ window.clearRouteFromLiveMap = clearRouteFromLiveMap;
 
 let _mapPins = [];
 let _savedPinsData = []; // persiste entre sesiones del mapa
+let _tapPin = null;
+let _tapLatLng = null;
+
+const _tapPlaceIcons = {
+  restaurant:'🍽️', cafe:'☕', bar:'🍺', night_club:'🍸',
+  lodging:'🏨', hotel:'🏨',
+  supermarket:'🛒', grocery_or_supermarket:'🛒', convenience_store:'🏪',
+  pharmacy:'💊', hospital:'🏥', doctor:'🩺',
+  museum:'🏛️', art_gallery:'🖼️', tourist_attraction:'📸',
+  park:'🌳', church:'⛪', mosque:'🕌', synagogue:'🕍',
+  atm:'💳', bank:'🏦', gas_station:'⛽',
+  shopping_mall:'🛍️', clothing_store:'👕',
+  transit_station:'🚇', subway_station:'🚇', bus_station:'🚌',
+  airport:'✈️',
+};
+
+function _onMapTap(e) {
+  _closeMapPanels();
+  if (_poiInfoWindow) _poiInfoWindow.close();
+  _tapLatLng = e.latLng;
+
+  if (_tapPin) {
+    _tapPin.setPosition(_tapLatLng);
+  } else {
+    _tapPin = new google.maps.Marker({
+      map: _liveMap,
+      position: _tapLatLng,
+      icon: {
+        path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
+        fillColor: '#D4A843', fillOpacity: 1,
+        strokeColor: '#fff', strokeWeight: 1.5,
+        scale: 1.5,
+        anchor: new google.maps.Point(12, 22),
+      },
+      zIndex: 200,
+    });
+  }
+  _showTapSheet(_tapLatLng);
+}
+
+function closeTapSheet() {
+  const sheet = document.getElementById('live-map-tap-sheet');
+  if (sheet) sheet.style.display = 'none';
+  if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
+  _tapLatLng = null;
+}
+
+function _showTapSheet(latLng) {
+  if (!_placesService) return;
+  const sheet = document.getElementById('live-map-tap-sheet');
+  const addrEl = document.getElementById('lmts-address');
+  const nearbyEl = document.getElementById('lmts-nearby-list');
+  sheet.style.display = 'flex';
+  addrEl.textContent = 'Buscando dirección…';
+  nearbyEl.innerHTML = '<div style="color:rgba(244,239,230,.4);font-size:12px;padding:10px 0">Buscando lugares cerca…</div>';
+
+  const lat = latLng.lat(), lng = latLng.lng();
+
+  document.getElementById('lmts-dir-btn').onclick = () =>
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+
+  function setSaveAction(name) {
+    document.getElementById('lmts-save-btn').onclick = () => {
+      _placeMapPin({ name, address: '', description: '', place_type: 'other', lat, lng });
+      if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
+      sheet.style.display = 'none';
+      _tapLatLng = null;
+    };
+  }
+  setSaveAction(`📍 ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+
+  // Geocodificación inversa
+  const geocoder = new google.maps.Geocoder();
+  geocoder.geocode({ location: latLng }, (results, status) => {
+    if (status === 'OK' && results[0]) {
+      addrEl.textContent = results[0].formatted_address;
+      setSaveAction(results[0].formatted_address);
+    } else {
+      addrEl.textContent = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+    }
+  });
+
+  // Lugares cercanos
+  _placesService.nearbySearch({ location: latLng, radius: 400 }, (results, status) => {
+    nearbyEl.innerHTML = '';
+    if (!results || !results.length) {
+      nearbyEl.innerHTML = '<div style="color:rgba(244,239,230,.4);font-size:12px;padding:10px 0">Sin lugares encontrados</div>';
+      return;
+    }
+    results.slice(0, 15).forEach(place => {
+      const icon = _tapPlaceIcons[place.types?.[0]] || '📍';
+      const rating = place.rating ? `★ ${place.rating.toFixed(1)}` : '';
+      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name)}&query_place_id=${place.place_id}`;
+      const row = document.createElement('div');
+      row.className = 'lmts-place-row';
+      row.innerHTML = `
+        <div class="lmts-place-icon">${icon}</div>
+        <div class="lmts-place-info">
+          <div class="lmts-place-name">${place.name}</div>
+          ${rating ? `<div class="lmts-place-meta">${rating}</div>` : ''}
+        </div>
+        <a href="${mapsUrl}" target="_blank" rel="noopener" class="lmts-place-dir">🗺️ Ir</a>`;
+      row.addEventListener('click', ev => {
+        if (ev.target.closest('a')) return;
+        _placesService.getDetails(
+          { placeId: place.place_id, fields: ['name','photos','formatted_address','rating','url','geometry'] },
+          (detail, s) => {
+            if (s !== google.maps.places.PlacesServiceStatus.OK || !detail) return;
+            _showPoiInfo(detail, detail.geometry.location, place.place_id);
+          }
+        );
+      });
+      nearbyEl.appendChild(row);
+    });
+  });
+}
 
 function openSalmaMapSheet() {
   document.getElementById('live-map-salma-sheet').style.display = 'block';
@@ -3293,6 +3410,7 @@ function _placeMapPin({ name, address, description, place_type, checkin, checkou
 window.openSalmaMapSheet = openSalmaMapSheet;
 window.closeSalmaMapSheet = closeSalmaMapSheet;
 window.sendSalmaMapPhoto = sendSalmaMapPhoto;
+window.closeTapSheet = closeTapSheet;
 
 // ═══ UTILIDADES ═══
 

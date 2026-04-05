@@ -159,6 +159,21 @@ window._loadGoogleMaps = function() {
     <div id="salma-map-status" style="display:none"></div>
   </div>
 
+  <!-- Sheet: tap manual en mapa -->
+  <div id="live-map-tap-sheet" style="display:none">
+    <div class="lmts-handle"></div>
+    <div class="lmts-header">
+      <div id="lmts-address" class="lmts-address">Buscando dirección…</div>
+      <button class="lmts-close" onclick="closeTapSheet()">✕</button>
+    </div>
+    <div class="lmts-btns">
+      <button class="lmts-btn-save" id="lmts-save-btn">⭐ Guardar pin</button>
+      <button class="lmts-btn-dir" id="lmts-dir-btn">🗺️ Cómo llegar</button>
+    </div>
+    <div class="lmts-section-title">Cerca de aquí</div>
+    <div id="lmts-nearby-list" class="lmts-nearby-list"></div>
+  </div>
+
   <button id="live-map-layers-btn" onclick="toggleMapLayersPanel()" title="Capas">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
   </button>

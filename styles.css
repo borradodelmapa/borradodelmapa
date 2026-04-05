@@ -3195,6 +3195,72 @@ body {
 .lmrs-item:active { background: rgba(212,168,67,0.08); }
 .lmrs-item-title { font-size: 14px; font-weight: 600; color: var(--crema); }
 .lmrs-item-meta { font-size: 12px; color: rgba(244,239,230,0.5); }
+/* ── Tap sheet (pin manual) ── */
+#live-map-tap-sheet {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 980;
+  background: var(--negro, #0a0a0f);
+  border-radius: 18px 18px 0 0;
+  border-top: 1px solid rgba(212,168,67,0.25);
+  padding: 0 16px calc(env(safe-area-inset-bottom, 0px) + 16px);
+  max-height: 65vh;
+  display: flex; flex-direction: column;
+}
+.lmts-handle {
+  width: 36px; height: 4px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px;
+  margin: 10px auto 6px;
+  flex-shrink: 0;
+}
+.lmts-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 8px 0 10px; gap: 8px; flex-shrink: 0;
+}
+.lmts-address {
+  font-size: 13px; color: rgba(244,239,230,0.7);
+  line-height: 1.4; flex: 1;
+}
+.lmts-close {
+  background: none; border: none; color: rgba(255,255,255,0.5);
+  font-size: 18px; cursor: pointer; padding: 4px; flex-shrink: 0;
+}
+.lmts-btns {
+  display: flex; gap: 8px; margin-bottom: 14px; flex-shrink: 0;
+}
+.lmts-btn-save, .lmts-btn-dir {
+  flex: 1; padding: 10px 8px; border: none; border-radius: 12px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.lmts-btn-save { background: var(--dorado, #D4A843); color: #111; }
+.lmts-btn-dir  { background: rgba(255,255,255,0.1); color: #fff; }
+.lmts-section-title {
+  font-size: 11px; font-weight: 700; color: rgba(244,239,230,0.35);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  margin-bottom: 8px; flex-shrink: 0;
+}
+.lmts-nearby-list { overflow-y: auto; flex: 1; }
+.lmts-place-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+}
+.lmts-place-row:active { background: rgba(212,168,67,0.06); }
+.lmts-place-icon { font-size: 20px; flex-shrink: 0; }
+.lmts-place-info { flex: 1; min-width: 0; }
+.lmts-place-name {
+  font-size: 13px; font-weight: 600; color: var(--crema, #f4efe6);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.lmts-place-meta { font-size: 11px; color: rgba(244,239,230,0.4); margin-top: 2px; }
+.lmts-place-dir {
+  background: none; border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(244,239,230,0.7); border-radius: 8px;
+  padding: 6px 9px; font-size: 11px; cursor: pointer;
+  white-space: nowrap; flex-shrink: 0; text-decoration: none;
+}
+
 #live-map-layers-btn {
   position: fixed;
   bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
