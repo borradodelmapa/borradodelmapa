@@ -1662,6 +1662,7 @@ const salma = {
       const price = h.price_level ? '€'.repeat(h.price_level) : '';
       const card = document.createElement('div');
       card.className = 'salma-result-card';
+      const mapsBtn = this.currentRoute && h.maps_link ? `<a class="salma-result-card-cta" href="${h.maps_link}" target="_blank" rel="noopener">Ver en Maps</a>` : '';
       card.innerHTML = `
         ${h.photo_ref ? `<img src="${SALMA_API}/photo?ref=${encodeURIComponent(h.photo_ref)}&maxwidth=400" alt="${h.name}" loading="lazy" onerror="this.style.display='none'">` : ''}
         <div class="salma-result-card-body">
@@ -1669,7 +1670,7 @@ const salma = {
           <div class="salma-result-card-sub">${h.address}</div>
           ${stars ? `<div class="salma-result-card-rating">${stars}</div>` : ''}
           ${price ? `<div class="salma-result-card-price">${price}</div>` : ''}
-          ${h.maps_link ? `<a class="salma-result-card-cta" href="${h.maps_link}" target="_blank" rel="noopener">Ver en Maps</a>` : ''}
+          ${mapsBtn}
         </div>`;
       grid.appendChild(card);
     }
@@ -1691,13 +1692,14 @@ const salma = {
       const openBadge = p.open_now === true ? '<span class="salma-open-badge">Abierto</span>' : p.open_now === false ? '<span class="salma-closed-badge">Cerrado</span>' : '';
       const card = document.createElement('div');
       card.className = 'salma-result-card';
+      const mapsBtn = this.currentRoute && p.maps_link ? `<a class="salma-result-card-cta" href="${p.maps_link}" target="_blank" rel="noopener">Ver en Maps</a>` : '';
       card.innerHTML = `
         ${p.photo_ref ? `<img src="${SALMA_API}/photo?ref=${encodeURIComponent(p.photo_ref)}&maxwidth=400" alt="${p.name}" loading="lazy" onerror="this.style.display='none'">` : ''}
         <div class="salma-result-card-body">
           <div class="salma-result-card-name">${p.name} ${openBadge}</div>
           <div class="salma-result-card-sub">${p.address}</div>
           ${stars ? `<div class="salma-result-card-rating">${stars}</div>` : ''}
-          ${p.maps_link ? `<a class="salma-result-card-cta" href="${p.maps_link}" target="_blank" rel="noopener">Ver en Maps</a>` : ''}
+          ${mapsBtn}
         </div>`;
       grid.appendChild(card);
     }
