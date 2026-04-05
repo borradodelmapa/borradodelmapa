@@ -2115,60 +2115,6 @@ const salma = {
     return true;
   },
 
-  // ═══ SEND DESDE COPILOTO (chat bottom sheet en itin-view) ═══
-  async sendFromCopilot(msg, onChunk) {
-    if (!msg || this._streaming) return;
-    if (!this._checkRate()) return;
-
-    const body = {
-      message: msg,
-      history: this._history || [],
-      user_location: this._userLocation || null,
-      country: this._copilotCountry || '',
-    };
-
-    let streamCompleted = false;
-    try {
-      const res = await fetch(window.SALMA_API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      if (!res.ok) return;
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let fullText = '';
-      let streamDone = false;
-
-      while (!streamDone) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split('\n');
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
-          const data = line.slice(6).trim();
-          if (data === '[DONE]') { streamDone = true; break; }
-          try {
-            const parsed = JSON.parse(data);
-            if (parsed.done) { streamDone = true; break; }
-            const delta = parsed.t || '';
-            if (delta) { fullText += delta; if (onChunk) onChunk(fullText); }
-          } catch {}
-        }
-      }
-
-      streamCompleted = true;
-      // Actualizar historial
-      this._history.push({ role: 'user', content: msg });
-      this._history.push({ role: 'assistant', content: fullText });
-      if (this._history.length > 20) this._history = this._history.slice(-20);
-
-    } catch (e) {
-      if (!streamCompleted && onChunk) onChunk('Error conectando con Salma. Inténtalo de nuevo.');
-    }
-  }
 };
 
 // Exponer globalmente
