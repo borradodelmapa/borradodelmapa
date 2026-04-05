@@ -268,25 +268,10 @@ const mapaRuta = {
   _buildGoogleMap(el, valid) {
     if (!window.google || !window.google.maps) return;
 
-    // Dark style con colores Salma
-    const darkStyle = [
-      { elementType: 'geometry', stylers: [{ color: '#1a1a1a' }] },
-      { elementType: 'labels.text.fill', stylers: [{ color: '#9e9e9e' }] },
-      { elementType: 'labels.text.stroke', stylers: [{ color: '#1a1a1a' }] },
-      { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#38414e' }] },
-      { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#212a37' }] },
-      { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#746855' }] },
-      { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#17263c' }] },
-      { featureType: 'poi', elementType: 'all', stylers: [{ visibility: 'off' }] },
-      { featureType: 'transit', elementType: 'all', stylers: [{ visibility: 'off' }] },
-      { featureType: 'administrative', elementType: 'geometry', stylers: [{ color: '#2d2d2d' }] },
-    ];
-
     const center = { lat: valid[0].lat, lng: valid[0].lng };
     this._map = new google.maps.Map(el, {
       center,
       zoom: 7,
-      styles: darkStyle,
       disableDefaultUI: true,
       zoomControl: false,
       gestureHandling: 'greedy',
