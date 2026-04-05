@@ -51,9 +51,6 @@ const mapaRuta = {
     document.getElementById('itin-view')?.classList.add('copilot-fullscreen');
     document.querySelector('.app-header')?.classList.add('copilot-hidden');
     document.getElementById('itin-mobile-back-btn')?.classList.add('copilot-hidden');
-    // Nav oculta — aparece al abrir el chat de Salma
-    const _navEl = document.getElementById('app-bottom-bar');
-    if (_navEl) _navEl.style.display = 'none';
   },
 
   _exitFullscreen() {
@@ -64,27 +61,8 @@ const mapaRuta = {
     if (_navExit) _navExit.style.display = '';
   },
 
-  // ═══ FAB VER RUTA COMPLETA ═══
   _renderCopilotFab(containerId) {
-    const el = document.getElementById(containerId);
-    if (!el) return;
-    const old = el.querySelector('.copilot-fab');
-    if (old) old.remove();
-
-    const fab = document.createElement('button');
-    fab.id = 'copilot-fab';
-    fab.className = 'copilot-fab copilot-fab-off';
-    fab.setAttribute('aria-label', 'Ver ruta completa');
-    fab.innerHTML = `
-      <svg class="copilot-fab-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
-      <span class="copilot-fab-label">VER RUTA COMPLETA</span>
-    `;
-    fab.addEventListener('click', () => {
-      if (window._itinViewRoute && typeof window.openItinerarioView === 'function') {
-        window.openItinerarioView(window._itinViewRoute, window._itinViewDocId, window._itinViewOptions || { saved: true });
-      }
-    });
-    el.appendChild(fab);
+    // Botón eliminado
   },
 
   // ═══ MAP CONTROLS (Copiloto ON) ═══
