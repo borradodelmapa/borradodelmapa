@@ -42,6 +42,11 @@ function showState(state) {
   currentState = state;
   updateHeader();
 
+  // Limpiar barra de acción del itinerario si salimos del chat/ruta
+  if (state !== 'chat') {
+    document.body.querySelector('.itin-action-bar')?.remove();
+  }
+
   const inputBar = document.querySelector('.app-input-bar');
 
   if (state === 'welcome') {
