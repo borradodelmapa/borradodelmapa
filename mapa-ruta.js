@@ -272,14 +272,12 @@ const mapaRuta = {
     this._map = new google.maps.Map(el, {
       center,
       zoom: 7,
+      styles: window._mapStyle || [],
       disableDefaultUI: true,
       zoomControl: false,
       gestureHandling: 'greedy',
       mapTypeId: 'roadmap',
     });
-
-    // Traffic layer
-    new google.maps.TrafficLayer().setMap(this._map);
 
     // Legacy markers numerados por día (no requieren Map ID)
     this._markers = valid.map((stop, i) => {

@@ -2693,6 +2693,14 @@ function _restoreCopilotState() {}
 
 window.toggleCopilot = toggleCopilot;
 
+// ═══ CONFIGURACIÓN COMPARTIDA DE MAPAS ═══
+
+window._mapStyle = [
+  { featureType: 'poi',     elementType: 'all', stylers: [{ visibility: 'off' }] },
+  { featureType: 'transit', elementType: 'all', stylers: [{ visibility: 'off' }] },
+  { featureType: 'business', elementType: 'all', stylers: [{ visibility: 'off' }] },
+];
+
 // ═══ MAPA EN VIVO ═══
 
 let _liveMap = null;
@@ -2716,6 +2724,7 @@ function openLiveMap() {
       _liveMap = new google.maps.Map(el, {
         zoom: 15,
         center: { lat: 40.416, lng: -3.703 },
+        styles: window._mapStyle,
         disableDefaultUI: true,
         gestureHandling: 'greedy',
       });
