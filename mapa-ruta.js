@@ -756,8 +756,18 @@ const mapaRuta = {
   },
 
   // ═══ ACTIVAR / DESACTIVAR COPILOTO ═══
-  activateCopilot() {
+  async activateCopilot() {
     if (this._copilotActive) return;
+
+    // Solicitar permiso de GPS al navegador
+    const gpsGranted = await this._requestGpsPermission();
+    if (!gpsGranted) {
+      if (typeof showToast === 'function') {
+        showToast('Necesitamos permiso de GPS para activar el Copiloto');
+      }
+      return;
+    }
+
     this._copilotActive = true;
     if (this._currentContainerId && this._currentStops.length) {
       this.init(this._currentContainerId, this._currentStops);
@@ -765,6 +775,39 @@ const mapaRuta = {
       this._updateFab();
       this._enterFullscreen();
     }
+  },
+
+  async _requestGpsPermission() {
+    if (!navigator.geolocation) return false;
+
+    // Si está disponible la Permissions API, usarla
+    if (navigator.permissions && navigator.permissions.query) {
+      try {
+        const permission = await navigator.permissions.query({ name: 'geolocation' });
+        if (permission.state === 'denied') return false;
+        if (permission.state === 'granted') return true;
+        // Si es 'prompt', intentar watchPosition (dispara diálogo nativo)
+      } catch (e) {
+        // Algunos navegadores no soportan query('geolocation'), continuamos
+      }
+    }
+
+    // Intentar watchPosition para obtener ubicación (dispara diálogo nativo del navegador)
+    return new Promise((resolve) => {
+      let timeoutId = setTimeout(() => resolve(false), 5000);
+
+      navigator.geolocation.watchPosition(
+        (pos) => {
+          clearTimeout(timeoutId);
+          resolve(true);
+        },
+        (error) => {
+          clearTimeout(timeoutId);
+          resolve(false);
+        },
+        { timeout: 4000 }
+      );
+    });
   },
 
   deactivateCopilot() {

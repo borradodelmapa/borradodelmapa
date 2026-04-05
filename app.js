@@ -2946,7 +2946,7 @@ async function toggleCopilot() {
 
   // Sin login — activar gratis (sin coins)
   if (!currentUser) {
-    _doCopilotActivate();
+    await _doCopilotActivate();
     return;
   }
 
@@ -2956,7 +2956,7 @@ async function toggleCopilot() {
 
   if (copilotData.activated_date === hoy) {
     // Ya pagó hoy — activar sin cobrar
-    _doCopilotActivate();
+    await _doCopilotActivate();
     return;
   }
 
@@ -2979,15 +2979,15 @@ async function toggleCopilot() {
     currentUser.copilot_data = { activated_date: hoy };
     updateBottomBar();
     showToast('Copiloto activado · −1 Salma Coin · saldo: ' + newCoins);
-    _doCopilotActivate();
+    await _doCopilotActivate();
   } catch (e) {
     console.warn('Error activando Copiloto:', e);
     showToast('Error al activar Copiloto. Inténtalo de nuevo.');
   }
 }
 
-function _doCopilotActivate() {
-  if (typeof mapaRuta !== 'undefined') mapaRuta.activateCopilot();
+async function _doCopilotActivate() {
+  if (typeof mapaRuta !== 'undefined') await mapaRuta.activateCopilot();
   if (typeof salma !== 'undefined') salma.startNarrator();
 }
 
