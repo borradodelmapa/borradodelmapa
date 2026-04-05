@@ -3162,9 +3162,13 @@ Formato exacto (todos los campos, JSON null —no el string "null"— si no hay 
 IMPORTANTE: Si no puedes identificar el nombre exacto del lugar, usa null (no escribas "null" como texto). Solo pon un nombre si estás seguro.
 SOLO JSON. Nada más.`;
 
+        const mediaType = image_base64
+          ? (image_base64.charAt(0) === 'i' ? 'image/png' : 'image/jpeg')
+          : null;
+
         const userContent = image_base64
           ? [
-              { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: image_base64 } },
+              { type: 'image', source: { type: 'base64', media_type: mediaType, data: image_base64 } },
               { type: 'text', text: text || 'Extrae el lugar de esta imagen.' }
             ]
           : [{ type: 'text', text: text || '' }];

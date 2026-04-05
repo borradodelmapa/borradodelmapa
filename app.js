@@ -3102,21 +3102,10 @@ let _mapPins = [];
 function openSalmaMapSheet() {
   document.getElementById('live-map-salma-sheet').style.display = 'block';
   document.getElementById('salma-map-status').style.display = 'none';
-  document.getElementById('salma-map-input-row').style.display = 'none';
-  document.getElementById('salma-map-input').value = '';
 }
 
 function closeSalmaMapSheet() {
   document.getElementById('live-map-salma-sheet').style.display = 'none';
-}
-
-async function sendSalmaMapText() {
-  const input = document.getElementById('salma-map-input');
-  const text = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  document.getElementById('salma-map-input-row').style.display = 'none';
-  await _processSalmaMapRequest(text, null);
 }
 
 function sendSalmaMapPhoto(fileInput) {
@@ -3125,40 +3114,45 @@ function sendSalmaMapPhoto(fileInput) {
   const reader = new FileReader();
   reader.onload = async (e) => {
     const base64 = e.target.result.split(',')[1];
-    await _processSalmaMapRequest(null, base64);
+    await _processSalmaMapRequest(base64);
   };
   reader.readAsDataURL(file);
   fileInput.value = '';
 }
 
-async function _processSalmaMapRequest(text, imageBase64) {
+async function _processSalmaMapRequest(imageBase64) {
   const status = document.getElementById('salma-map-status');
   status.textContent = '🔍 Identificando...';
   status.style.display = 'block';
 
   try {
     const SALMA_API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
-    const body = {};
-    if (text) body.text = text;
-    if (imageBase64) body.image_base64 = imageBase64;
-
     const res = await fetch(SALMA_API + '/pin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ image_base64: imageBase64 }),
     });
     const data = await res.json();
 
     if (!data.name || data.name === 'null' || !data.name.trim()) {
-      status.textContent = '❓ No he identificado el lugar. ¿Cómo se llama?';
-      document.getElementById('salma-map-input-row').style.display = 'flex';
-      document.getElementById('salma-map-input').focus();
+      // No identificado — pinear en GPS actual si disponible
+      const userPos = _liveUserMarker ? _liveUserMarker.getPosition() : null;
+      if (userPos) {
+        const label = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        _placeMapPin({ name: `📷 ${label}`, address: '', description: '', place_type: 'other', lat: userPos.lat(), lng: userPos.lng() });
+        status.textContent = '📍 Guardado en tu posición actual';
+        setTimeout(() => closeSalmaMapSheet(), 1800);
+      } else {
+        status.textContent = '❌ No he podido identificar el lugar';
+        setTimeout(() => closeSalmaMapSheet(), 2500);
+      }
       return;
     }
 
     await _handleMapPin(data, status);
   } catch (e) {
-    status.textContent = '❌ No he podido procesar eso. Prueba otra vez.';
+    status.textContent = '❌ Error al procesar la imagen';
+    setTimeout(() => closeSalmaMapSheet(), 2500);
   }
 }
 
@@ -3232,7 +3226,6 @@ function _placeMapPin({ name, address, description, place_type, checkin, checkou
 
 window.openSalmaMapSheet = openSalmaMapSheet;
 window.closeSalmaMapSheet = closeSalmaMapSheet;
-window.sendSalmaMapText = sendSalmaMapText;
 window.sendSalmaMapPhoto = sendSalmaMapPhoto;
 
 // ═══ UTILIDADES ═══
