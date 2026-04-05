@@ -1121,27 +1121,46 @@ const salma = {
 
   async startNarrator() {
     if (this._narratorActive) return;
-    // Solo pedir notificaciones — GPS ya está activo desde initGeolocation()
-    const notificationsOk = await this._requestNotificationPermission();
-    if (!notificationsOk) {
-      console.log('[Salma] Narrador: notificaciones denegadas');
-      return false;
+
+    // ═══ PASO 1: Verificar si tenemos GPS ═══
+    const hasGPS = this._userLocation && this._geoWatchId;
+
+    if (!hasGPS) {
+      // ═══ PASO 2A: Si NO hay GPS, pedir AMBOS permisos (GPS + Notificaciones) ═══
+      const bothOk = await this._requestGPSAndNotifications();
+      if (!bothOk) {
+        console.log('[Salma] Narrador: permisos GPS/Notif denegados');
+        return false;
+      }
+    } else {
+      // ═══ PASO 2B: Si ya hay GPS, solo pedir Notificaciones ═══
+      const notificationsOk = await this._requestNotificationPermission();
+      if (!notificationsOk) {
+        console.log('[Salma] Narrador: notificaciones denegadas');
+        return false;
+      }
     }
-    // Si no hay GPS aún, esperar a que se active
-    if (!this._userLocation) {
-      this._addSalmaBubble('Esperando ubicación GPS... (puede tardar unos segundos)');
-    }
+
+    // ═══ PASO 3: Iniciar Narrator ═══
     this._narratorActive = true;
     this._narratorNotified = new Set();
     this._narratorLastCheck = 0;
+
     // Reactivar GPS continuo si se había parado
     if (!this._geoWatchId) this.initGeolocation();
+
+    // Si aún no hay ubicación, mostrar mensaje de espera
+    if (!this._userLocation) {
+      this._addSalmaBubble('Esperando ubicación GPS... (puede tardar unos segundos)');
+    }
+
     // Check periódico cada 30s
     this._narratorInterval = setInterval(() => this.checkNearbyPOIs(), 30000);
-    // Primer check inmediato
+    // Primer check inmediato (esperará a tener ubicación)
     this.checkNearbyPOIs();
+
     localStorage.setItem('narrator_active', 'true');
-    console.log('[Salma] Narrador activado (reutilizando GPS existente)');
+    console.log('[Salma] Narrador activado' + (hasGPS ? ' (reutilizando GPS)' : ' (GPS + Notificaciones activados)'));
     if (typeof updateBottomBar === 'function') updateBottomBar();
     return true;
   },
@@ -1209,6 +1228,113 @@ const salma = {
       rejectBtn.addEventListener('click', () => {
         div.remove();
         resolve(true); // Permitir sin notificaciones
+      });
+    });
+  },
+
+  async _requestGPSAndNotifications() {
+    // Pedir GPS + Notificaciones cuando GPS NO está activo
+    // GPS es OBLIGATORIO para el Narrador, Notificaciones es opcional
+    const area = this._getChatArea();
+    if (!area) return false; // Sin chat area, no podemos pedir permisos
+
+    return new Promise((resolve) => {
+      // Evitar duplicados de modal
+      if (area.querySelector('.msg-perms-request')) {
+        resolve(false);
+        return;
+      }
+
+      const div = document.createElement('div');
+      div.className = 'msg msg-salma msg-perms-request';
+      div.innerHTML = `
+        <div class="msg-salma-header">
+          <div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div>
+          <span class="msg-salma-name">Salma</span>
+        </div>
+        <div class="msg-body-salma">
+          <strong>📍 Activo tu Copiloto de viaje</strong>
+          <p>Para guiarte en tiempo real, necesito tu ubicación exacta (GPS). También puedo enviarte notificaciones cuando te acercas a restaurantes, museos y lugares que te van a encantar.</p>
+          <ul style="margin:8px 0;padding-left:18px;font-size:13px;opacity:0.85;line-height:1.6;">
+            <li>✓ Ubicación GPS: te localizo en tiempo real</li>
+            <li>✓ Notificaciones: aviso cuando hay algo interesante cerca</li>
+          </ul>
+          <div style="display:flex;gap:8px;margin-top:12px;">
+            <button class="btn-perms-accept">Activar Copiloto</button>
+            <button class="btn-perms-reject">Ahora no</button>
+          </div>
+        </div>`;
+      area.appendChild(div);
+      this._scrollToBottom(true);
+
+      const acceptBtn = div.querySelector('.btn-perms-accept');
+      const rejectBtn = div.querySelector('.btn-perms-reject');
+
+      acceptBtn.addEventListener('click', async () => {
+        acceptBtn.disabled = true;
+        acceptBtn.textContent = 'Un momento...';
+
+        let gpsGranted = false;
+        let notificationsGranted = false;
+
+        // PASO 1: Pedir GPS (OBLIGATORIO)
+        gpsGranted = await new Promise((resolveGps) => {
+          if (!navigator.geolocation) {
+            resolveGps(false);
+            return;
+          }
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              // GPS otorgado, guardar ubicación
+              this._userLocation = {
+                lat: Math.round(pos.coords.latitude * 10000) / 10000,
+                lng: Math.round(pos.coords.longitude * 10000) / 10000,
+                accuracy: Math.round(pos.coords.accuracy)
+              };
+              console.log('[Salma] GPS otorgado:', this._userLocation);
+              resolveGps(true);
+            },
+            () => {
+              console.log('[Salma] GPS denegado o no disponible');
+              resolveGps(false);
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+          );
+        });
+
+        // PASO 2: Pedir Notificaciones (OPCIONAL)
+        if ('Notification' in window && Notification.permission === 'default') {
+          try {
+            const notifPerm = await Notification.requestPermission();
+            notificationsGranted = notifPerm === 'granted';
+          } catch (e) {
+            console.log('[Salma] Error pidiendo notificaciones:', e);
+            notificationsGranted = false;
+          }
+        } else if ('Notification' in window) {
+          notificationsGranted = Notification.permission === 'granted';
+        }
+
+        div.remove();
+
+        // PASO 3: Validar resultado
+        if (!gpsGranted) {
+          // GPS es obligatorio
+          const feedbackMsg = 'Para que el Copiloto funcione, necesito permiso de ubicación. Ve a Ajustes del navegador → Sitios → Borrado del Mapa.';
+          this._addSalmaBubble(feedbackMsg);
+          resolve(false);
+        } else {
+          // GPS OK - notificaciones son bonus
+          if (!notificationsGranted) {
+            this._addSalmaBubble('GPS activo. Las notificaciones están desactivadas, pero puedo guiarte de todas formas.');
+          }
+          resolve(true);
+        }
+      });
+
+      rejectBtn.addEventListener('click', () => {
+        div.remove();
+        resolve(false);
       });
     });
   },
