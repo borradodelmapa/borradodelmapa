@@ -3211,25 +3211,34 @@ function _showTapSheet(latLng) {
   if (!_placesService) return;
   const sheet = document.getElementById('live-map-tap-sheet');
   const addrEl = document.getElementById('lmts-address');
+  const coordsEl = document.getElementById('lmts-coords');
+  const photoEl = document.getElementById('lmts-photo');
   const nearbyEl = document.getElementById('lmts-nearby-list');
   sheet.style.display = 'flex';
   addrEl.textContent = 'Buscando dirección…';
   nearbyEl.innerHTML = '<div style="color:rgba(244,239,230,.4);font-size:12px;padding:10px 0">Buscando lugares cerca…</div>';
 
   const lat = latLng.lat(), lng = latLng.lng();
+  const latStr = lat.toFixed(5), lngStr = lng.toFixed(5);
+  coordsEl.textContent = `${latStr}, ${lngStr}`;
 
-  document.getElementById('lmts-dir-btn').onclick = () =>
-    window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+  // Street View estático del punto tocado
+  photoEl.src = `https://maps.googleapis.com/maps/api/streetview?size=400x160&location=${lat},${lng}&fov=90&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U&return_error_codes=true`;
+  photoEl.style.display = 'block';
+
+  // URL que abre Google Maps app nativa en móvil
+  const navUrl = `https://maps.google.com/maps?daddr=${lat},${lng}`;
+  document.getElementById('lmts-dir-btn').onclick = () => window.open(navUrl, '_blank');
 
   function setSaveAction(name) {
     document.getElementById('lmts-save-btn').onclick = () => {
-      _placeMapPin({ name, address: '', description: '', place_type: 'other', lat, lng });
+      _placeMapPin({ name, address: `${latStr}, ${lngStr}`, description: '', place_type: 'other', lat, lng });
       if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
       sheet.style.display = 'none';
       _tapLatLng = null;
     };
   }
-  setSaveAction(`📍 ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+  setSaveAction(`📍 ${latStr}, ${lngStr}`);
 
   // Geocodificación inversa
   const geocoder = new google.maps.Geocoder();
@@ -3238,7 +3247,8 @@ function _showTapSheet(latLng) {
       addrEl.textContent = results[0].formatted_address;
       setSaveAction(results[0].formatted_address);
     } else {
-      addrEl.textContent = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+      addrEl.textContent = `${latStr}, ${lngStr}`;
+      coordsEl.textContent = '';
     }
   });
 
@@ -3252,7 +3262,8 @@ function _showTapSheet(latLng) {
     results.slice(0, 15).forEach(place => {
       const icon = _tapPlaceIcons[place.types?.[0]] || '📍';
       const rating = place.rating ? `★ ${place.rating.toFixed(1)}` : '';
-      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name)}&query_place_id=${place.place_id}`;
+      const plLat = place.geometry.location.lat(), plLng = place.geometry.location.lng();
+      const placeNavUrl = `https://maps.google.com/maps?daddr=${plLat},${plLng}`;
       const row = document.createElement('div');
       row.className = 'lmts-place-row';
       row.innerHTML = `
@@ -3261,7 +3272,7 @@ function _showTapSheet(latLng) {
           <div class="lmts-place-name">${place.name}</div>
           ${rating ? `<div class="lmts-place-meta">${rating}</div>` : ''}
         </div>
-        <a href="${mapsUrl}" target="_blank" rel="noopener" class="lmts-place-dir">🗺️ Ir</a>`;
+        <a href="${placeNavUrl}" target="_blank" rel="noopener" class="lmts-place-dir">🗺️ Ir</a>`;
       row.addEventListener('click', ev => {
         if (ev.target.closest('a')) return;
         _placesService.getDetails(

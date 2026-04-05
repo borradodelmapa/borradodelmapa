@@ -162,8 +162,12 @@ window._loadGoogleMaps = function() {
   <!-- Sheet: tap manual en mapa -->
   <div id="live-map-tap-sheet" style="display:none">
     <div class="lmts-handle"></div>
+    <img id="lmts-photo" class="lmts-photo" src="" alt="" style="display:none" onerror="this.style.display='none'">
     <div class="lmts-header">
-      <div id="lmts-address" class="lmts-address">Buscando dirección…</div>
+      <div>
+        <div id="lmts-address" class="lmts-address">Buscando dirección…</div>
+        <div id="lmts-coords" class="lmts-coords"></div>
+      </div>
       <button class="lmts-close" onclick="closeTapSheet()">✕</button>
     </div>
     <div class="lmts-btns">
