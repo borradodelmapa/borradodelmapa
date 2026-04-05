@@ -2748,6 +2748,8 @@ _buildMapStyle();
 let _liveMap = null;
 let _liveMapWatchId = null;
 let _liveUserMarker = null;
+let _liveRouteMarkers = [];
+let _liveRoutePolyline = null;
 
 function openLiveMap() {
   const view = document.getElementById('live-map-view');
@@ -2829,14 +2831,103 @@ function closeLiveMap() {
     _liveMapWatchId = null;
   }
   if (_liveMap) {
+    clearRouteFromLiveMap();
     _liveUserMarker = null;
     _liveMap = null;
     document.getElementById('live-map-container').innerHTML = '';
   }
 }
 
+async function openRouteSelector() {
+  if (!currentUser || !window.db) return;
+  const sheet = document.getElementById('live-map-routes-sheet');
+  const list = document.getElementById('live-map-routes-list');
+  if (!sheet || !list) return;
+
+  list.innerHTML = '<div style="padding:20px;text-align:center;color:rgba(244,239,230,.4)">Cargando...</div>';
+  sheet.style.display = 'block';
+
+  try {
+    const snap = await db.collection('users').doc(currentUser.uid).collection('maps')
+      .orderBy('createdAt', 'desc').limit(30).get();
+
+    if (snap.empty) {
+      list.innerHTML = '<div style="padding:20px;text-align:center;color:rgba(244,239,230,.4)">No tienes rutas guardadas</div>';
+      return;
+    }
+
+    list.innerHTML = '';
+    snap.forEach(doc => {
+      const d = doc.data();
+      const stops = (d.stops || []).length;
+      const days = d.stops ? Math.max(...d.stops.map(s => s.day || 1)) : 1;
+      const item = document.createElement('div');
+      item.className = 'lmrs-item';
+      item.innerHTML = `<span class="lmrs-item-title">${d.title || 'Ruta sin nombre'}</span>
+        <span class="lmrs-item-meta">${days} día${days > 1 ? 's' : ''} · ${stops} paradas</span>`;
+      item.addEventListener('click', () => {
+        selectRouteOnMap(d);
+        closeRouteSelector();
+      });
+      list.appendChild(item);
+    });
+  } catch(e) {
+    list.innerHTML = '<div style="padding:20px;text-align:center;color:rgba(244,239,230,.4)">Error cargando rutas</div>';
+  }
+}
+
+function closeRouteSelector() {
+  document.getElementById('live-map-routes-sheet').style.display = 'none';
+}
+
+function selectRouteOnMap(routeData) {
+  if (!_liveMap || !window.google) return;
+  clearRouteFromLiveMap();
+
+  const dayColors = ['#D4A843','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
+  const valid = (routeData.stops || []).filter(s => s.lat && s.lng);
+  if (!valid.length) { showToast('Esta ruta no tiene coordenadas'); return; }
+
+  const bounds = new google.maps.LatLngBounds();
+
+  _liveRouteMarkers = valid.map((stop, i) => {
+    const color = dayColors[((stop.day || 1) - 1) % dayColors.length];
+    const marker = new google.maps.Marker({
+      map: _liveMap,
+      position: { lat: stop.lat, lng: stop.lng },
+      label: { text: String(i + 1), color: '#fff', fontSize: '11px', fontWeight: '700' },
+      icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: color, fillOpacity: 1, strokeColor: '#fff', strokeWeight: 2, scale: 13 },
+      title: stop.headline || stop.name || `Parada ${i + 1}`,
+    });
+    bounds.extend({ lat: stop.lat, lng: stop.lng });
+    return marker;
+  });
+
+  _liveRoutePolyline = new google.maps.Polyline({
+    path: valid.map(s => ({ lat: s.lat, lng: s.lng })),
+    map: _liveMap,
+    strokeColor: '#D4A843',
+    strokeWeight: 3,
+    strokeOpacity: 0.7,
+  });
+
+  _liveMap.fitBounds(bounds, { top: 80, right: 40, bottom: 80, left: 40 });
+  document.getElementById('live-map-clear-route').style.display = 'block';
+}
+
+function clearRouteFromLiveMap() {
+  _liveRouteMarkers.forEach(m => m.setMap(null));
+  _liveRouteMarkers = [];
+  if (_liveRoutePolyline) { _liveRoutePolyline.setMap(null); _liveRoutePolyline = null; }
+  const btn = document.getElementById('live-map-clear-route');
+  if (btn) btn.style.display = 'none';
+}
+
 window.closeLiveMap = closeLiveMap;
 window.liveMapCenter = liveMapCenter;
+window.openRouteSelector = openRouteSelector;
+window.closeRouteSelector = closeRouteSelector;
+window.clearRouteFromLiveMap = clearRouteFromLiveMap;
 
 // ═══ UTILIDADES ═══
 

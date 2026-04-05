@@ -112,6 +112,16 @@ window._loadGoogleMaps = function() {
 <div id="live-map-view" style="display:none">
   <div id="live-map-container"></div>
   <button id="live-map-back" onclick="closeLiveMap()">← App</button>
+  <button id="live-map-routes-btn" onclick="openRouteSelector()" title="Mis Rutas">📍 Mis Rutas</button>
+  <button id="live-map-clear-route" onclick="clearRouteFromLiveMap()" style="display:none" title="Quitar ruta">✕ Ruta</button>
+  <!-- Sheet selector de rutas -->
+  <div id="live-map-routes-sheet" style="display:none">
+    <div class="lmrs-header">
+      <span>Selecciona una ruta</span>
+      <button onclick="closeRouteSelector()">✕</button>
+    </div>
+    <div id="live-map-routes-list"></div>
+  </div>
   <button id="live-map-center" onclick="liveMapCenter()" title="Mi ubicación">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
   </button>
