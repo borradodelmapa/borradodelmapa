@@ -2713,20 +2713,9 @@ function openLiveMap() {
       const el = document.getElementById('live-map-container');
       if (!el || _liveMap) return;
 
-      const darkStyle = [
-        { elementType: 'geometry', stylers: [{ color: '#1a1a1a' }] },
-        { elementType: 'labels.text.fill', stylers: [{ color: '#9e9e9e' }] },
-        { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#38414e' }] },
-        { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#746855' }] },
-        { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#17263c' }] },
-        { featureType: 'poi', elementType: 'all', stylers: [{ visibility: 'off' }] },
-        { featureType: 'transit', elementType: 'all', stylers: [{ visibility: 'off' }] },
-      ];
-
       _liveMap = new google.maps.Map(el, {
         zoom: 15,
         center: { lat: 40.416, lng: -3.703 },
-        styles: darkStyle,
         disableDefaultUI: true,
         gestureHandling: 'greedy',
       });
