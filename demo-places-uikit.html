@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo — Google Places UI Kit</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; height: 100dvh; display: flex; flex-direction: column; background: #f0f0f0; }
+
+    h1 { font-size: 14px; font-weight: 600; padding: 10px 14px; background: #1a73e8; color: #fff; }
+
+    .layout { display: flex; flex: 1; overflow: hidden; }
+
+    /* Panel izquierdo */
+    .sidebar {
+      width: 340px; min-width: 280px;
+      display: flex; flex-direction: column;
+      background: #fff; border-right: 1px solid #e0e0e0;
+      overflow: hidden;
+    }
+
+    .search-bar {
+      display: flex; gap: 8px; padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    .search-bar input {
+      flex: 1; padding: 8px 12px; border: 1px solid #ccc;
+      border-radius: 8px; font-size: 13px; outline: none;
+    }
+    .search-bar input:focus { border-color: #1a73e8; }
+    .search-bar button {
+      padding: 8px 14px; background: #1a73e8; color: #fff;
+      border: none; border-radius: 8px; font-size: 13px;
+      cursor: pointer; white-space: nowrap;
+    }
+
+    .category-chips {
+      display: flex; gap: 6px; padding: 8px 10px;
+      flex-wrap: wrap; border-bottom: 1px solid #eee;
+    }
+    .chip {
+      padding: 5px 10px; border-radius: 20px; font-size: 12px;
+      border: 1px solid #ccc; background: #fff; cursor: pointer;
+    }
+    .chip:hover { background: #e8f0fe; border-color: #1a73e8; color: #1a73e8; }
+
+    .results-area { flex: 1; overflow-y: auto; }
+
+    gmp-place-search { display: block; }
+
+    /* Mapa */
+    gmp-map { flex: 1; }
+
+    /* Info de este demo */
+    .demo-note {
+      font-size: 11px; color: #888; padding: 6px 10px;
+      background: #fffde7; border-top: 1px solid #fff9c4;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🔍 Demo — Google Places UI Kit (Place Search Component)</h1>
+
+<div class="layout">
+
+  <!-- Panel de búsqueda -->
+  <div class="sidebar">
+
+    <div class="search-bar">
+      <input id="queryInput" type="text" placeholder="Busca: hoteles, supermercados…" value="hoteles">
+      <button id="searchBtn">Buscar</button>
+    </div>
+
+    <div class="category-chips">
+      <button class="chip" onclick="search('hoteles')">🏨 Hoteles</button>
+      <button class="chip" onclick="search('supermercados')">🛒 Super</button>
+      <button class="chip" onclick="search('restaurantes')">🍽️ Restaurantes</button>
+      <button class="chip" onclick="search('farmacias')">💊 Farmacias</button>
+      <button class="chip" onclick="search('cajero automático')">💳 Cajeros</button>
+      <button class="chip" onclick="search('hospital')">🏥 Hospitales</button>
+    </div>
+
+    <div class="results-area">
+      <gmp-place-search selectable id="placeSearch">
+        <gmp-place-all-content></gmp-place-all-content>
+        <gmp-place-text-search-request max-result-count="20"></gmp-place-text-search-request>
+      </gmp-place-search>
+    </div>
+
+    <div class="demo-note">Los resultados se centran en la zona visible del mapa · max 20 por página</div>
+
+  </div>
+
+  <!-- Mapa -->
+  <gmp-map id="theMap" center="40.4168,-3.7038" zoom="14" map-id="DEMO_MAP_ID"></gmp-map>
+
+</div>
+
+<script>
+  // Carga usando bootstrap loader de Google (v weekly = Places UI Kit disponible)
+  (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&u().then(()=>d[l](f,...n))})({
+    key: "AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U",
+    v: "weekly",
+  });
+
+  // Buscar por texto
+  function search(query) {
+    document.getElementById('queryInput').value = query;
+    const req = document.querySelector('gmp-place-text-search-request');
+    if (req) req.textQuery = query;
+  }
+
+  document.getElementById('searchBtn').addEventListener('click', () => {
+    search(document.getElementById('queryInput').value.trim());
+  });
+  document.getElementById('queryInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') search(e.target.value.trim());
+  });
+
+  // Auto-buscar al cargar (esperar que el componente esté listo)
+  customElements.whenDefined('gmp-place-search').then(() => {
+    setTimeout(() => search('hoteles'), 800);
+  });
+
+  // Geolocalización: centrar mapa en posición real del usuario
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      const mapEl = document.getElementById('theMap');
+      if (mapEl) {
+        mapEl.center = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        mapEl.zoom = 15;
+        // Re-buscar centrado en nueva posición
+        setTimeout(() => search(document.getElementById('queryInput').value || 'hoteles'), 500);
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
