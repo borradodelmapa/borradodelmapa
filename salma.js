@@ -17,6 +17,7 @@ const salma = {
   currentRoute: null,
   currentRouteId: null,
   _streaming: false,
+  _userScrolled: false,
   _rateTimes: [],
   _userLocation: null,
   _geoBlocked: false,
@@ -585,6 +586,7 @@ const salma = {
     }
 
     this._streaming = true;
+    this._userScrolled = false; // nuevo mensaje → retomar auto-scroll
     $send.disabled = true;
     const camBtn = document.getElementById('cam-btn');
     if (camBtn) camBtn.disabled = true;
@@ -1839,13 +1841,24 @@ const salma = {
   },
 
   _scrollToBottom(force) {
-    // Solo hacer scroll si el usuario ya está cerca del fondo (< 300px)
-    // o si se fuerza (ej: mensaje del usuario, no contenido streaming)
-    const distFromBottom = document.body.scrollHeight - window.innerHeight - window.scrollY;
-    if (!force && distFromBottom > 300) return;
-    setTimeout(() => {
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }, 50);
+    // force=true: siempre scroll (mensaje usuario, loading inicial)
+    // force=false/undefined: solo si el usuario no ha scrolleado manualmente hacia arriba
+    if (!force && this._userScrolled) return;
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  },
+
+  _initScrollTracking() {
+    let lastScrollY = window.scrollY;
+    window.addEventListener('scroll', () => {
+      const distFromBottom = document.body.scrollHeight - window.innerHeight - window.scrollY;
+      const scrolledUp = window.scrollY < lastScrollY;
+      lastScrollY = window.scrollY;
+      if (scrolledUp && distFromBottom > 80) {
+        this._userScrolled = true;
+      } else if (distFromBottom < 80) {
+        this._userScrolled = false;
+      }
+    }, { passive: true });
   },
 
   // ═══ RATE LIMIT ═══
@@ -1921,3 +1934,4 @@ window.salma = salma;
 
 // Auto-inicializar cámara (DOM ya está listo porque los scripts van al final del body)
 salma._initCameraBtn();
+salma._initScrollTracking();
