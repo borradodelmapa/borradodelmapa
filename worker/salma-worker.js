@@ -3157,8 +3157,9 @@ export default {
 
         const systemPrompt = `Eres un extractor de datos. Analiza el texto o imagen y devuelve SOLO un JSON válido, sin explicaciones, sin markdown.
 Extrae el lugar principal (hotel, monumento, restaurante, playa, catedral, mercado...).
-Formato exacto (todos los campos, null si no hay dato):
+Formato exacto (todos los campos, JSON null —no el string "null"— si no hay dato):
 {"name":"nombre exacto del lugar","address":"ciudad, país","description":"una frase descriptiva breve","place_type":"hotel|monument|restaurant|beach|park|other","checkin":null,"checkout":null,"confirmation":null}
+IMPORTANTE: Si no puedes identificar el nombre exacto del lugar, usa null (no escribas "null" como texto). Solo pon un nombre si estás seguro.
 SOLO JSON. Nada más.`;
 
         const userContent = image_base64

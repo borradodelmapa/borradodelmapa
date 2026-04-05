@@ -3149,7 +3149,7 @@ async function _processSalmaMapRequest(text, imageBase64) {
     });
     const data = await res.json();
 
-    if (!data.name) {
+    if (!data.name || data.name === 'null' || !data.name.trim()) {
       status.textContent = '❓ No he identificado el lugar. ¿Cómo se llama?';
       document.getElementById('salma-map-input-row').style.display = 'flex';
       document.getElementById('salma-map-input').focus();
@@ -3167,8 +3167,9 @@ async function _handleMapPin(action, status) {
   status.textContent = '📍 Buscando en el mapa...';
 
   const query = [action.name, action.address].filter(Boolean).join(', ');
+  const userPos = _liveUserMarker ? _liveUserMarker.getPosition() : null;
   _placesService.findPlaceFromQuery(
-    { query, fields: ['geometry', 'name', 'formatted_address', 'place_id'] },
+    { query, fields: ['geometry', 'name', 'formatted_address', 'place_id'], ...(userPos ? { locationBias: userPos } : {}) },
     async (results, placeStatus) => {
       if (placeStatus !== google.maps.places.PlacesServiceStatus.OK || !results.length) {
         status.textContent = '❌ No he encontrado ese lugar. Sé más específico.';
