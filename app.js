@@ -2760,32 +2760,43 @@ function _loadCatMarkers(cat) {
   const cfg = _catConfig[cat];
   if (!cfg) return;
   if (!_catMarkers[cat]) _catMarkers[cat] = [];
-  const center = _liveMap.getCenter();
-  cfg.types.forEach(type => {
-    _placesService.nearbySearch({ location: center, radius: 1500, type }, (results, status) => {
-      if (!results || !results.length) return;
-      results.forEach(place => {
-        if (!place.geometry) return;
-        const marker = new google.maps.Marker({
-          map: _liveMap,
-          position: place.geometry.location,
-          icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: cfg.color, fillOpacity: 0.92, strokeColor: '#fff', strokeWeight: 2, scale: 12 },
-          label: { text: cfg.label, color: '#fff', fontSize: '10px', fontWeight: '700' },
-          title: place.name,
-          zIndex: 10,
-        });
-        marker.addListener('click', () => {
-          _placesService.getDetails(
-            { placeId: place.place_id, fields: ['name', 'photos', 'formatted_address', 'rating', 'url', 'geometry'] },
-            (detail, s) => {
-              if (s !== google.maps.places.PlacesServiceStatus.OK || !detail) return;
-              _showPoiInfo(detail, detail.geometry.location, place.place_id);
-            }
-          );
-        });
-        _catMarkers[cat].push(marker);
+  const seenIds = new Set(_catMarkers[cat].map(m => m._placeId).filter(Boolean));
+  const bounds = _liveMap.getBounds();
+
+  function addResults(results, pagination) {
+    if (!results || !results.length) return;
+    results.forEach(place => {
+      if (!place.geometry || !place.place_id) return;
+      if (seenIds.has(place.place_id)) return;
+      seenIds.add(place.place_id);
+      const marker = new google.maps.Marker({
+        map: _liveMap,
+        position: place.geometry.location,
+        icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: cfg.color, fillOpacity: 0.92, strokeColor: '#fff', strokeWeight: 2, scale: 12 },
+        label: { text: cfg.label, color: '#fff', fontSize: '10px', fontWeight: '700' },
+        title: place.name,
+        zIndex: 10,
       });
+      marker._placeId = place.place_id;
+      marker.addListener('click', () => {
+        _placesService.getDetails(
+          { placeId: place.place_id, fields: ['name', 'photos', 'formatted_address', 'rating', 'url', 'geometry'] },
+          (detail, s) => {
+            if (s !== google.maps.places.PlacesServiceStatus.OK || !detail) return;
+            _showPoiInfo(detail, detail.geometry.location, place.place_id);
+          }
+        );
+      });
+      _catMarkers[cat].push(marker);
     });
+    if (pagination && pagination.hasNextPage) pagination.nextPage();
+  }
+
+  cfg.types.forEach(type => {
+    const req = bounds
+      ? { bounds, type }
+      : { location: _liveMap.getCenter(), radius: 5000, type };
+    _placesService.nearbySearch(req, addResults);
   });
 }
 
