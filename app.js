@@ -2892,6 +2892,12 @@ function openLiveMap() {
           _placeUserMarker(latlng);
         }, null, { enableHighAccuracy: true, maximumAge: 5000 });
       }
+
+      // Restaurar ruta activa si había una (sin resetear _activeRouteData)
+      if (_activeRouteData) {
+        const saved = _activeRouteData;
+        selectRouteOnMap(saved);
+      }
     })
     .catch(() => showToast('No se pudo cargar Google Maps'));
 }
@@ -3003,10 +3009,12 @@ function closeRouteSelector() {
 
 let _liveRouteStops = [];
 let _liveInfoWindow = null;
+let _activeRouteData = null;
 
 function selectRouteOnMap(routeData) {
   if (!_liveMap || !window.google) return;
   clearRouteFromLiveMap();
+  _activeRouteData = routeData;
 
   const dayColors = ['#D4A843','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
   const valid = (routeData.stops || []).filter(s => s.lat && s.lng);
@@ -3110,6 +3118,7 @@ function _updateNearestChip() {
 }
 
 function clearRouteFromLiveMap() {
+  _activeRouteData = null;
   _liveRouteMarkers.forEach(m => m.setMap(null));
   _liveRouteMarkers = [];
   if (_liveRoutePolyline) { _liveRoutePolyline.setMap(null); _liveRoutePolyline = null; }
