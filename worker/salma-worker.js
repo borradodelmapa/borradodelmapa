@@ -3181,13 +3181,14 @@ SOLO JSON. Nada más.`;
             'anthropic-version': '2023-06-01',
           },
           body: JSON.stringify({
-            model: 'claude-haiku-4-5-20251001',
+            model: 'claude-sonnet-4-6',
             max_tokens: 300,
             system: systemPrompt,
             messages: [{ role: 'user', content: userContent }]
           })
         });
         const cData = await claudeRes.json();
+        if (cData.type === 'error') throw new Error(cData.error?.message || 'claude_error');
         const raw = cData.content?.[0]?.text?.trim() || '';
         const cleaned = raw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
         try {
