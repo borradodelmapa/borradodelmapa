@@ -501,15 +501,6 @@ async function renderProfile() {
           <span class="profile-section-arrow">›</span>
         </div>
 
-        <div class="profile-section" id="prof-narrator">
-          <span class="profile-section-icon">🧭</span>
-          <span class="profile-section-label">Copiloto</span>
-          <button class="profile-info-btn" id="prof-narrator-info" onclick="event.stopPropagation()">i</button>
-          <label class="profile-toggle" onclick="event.stopPropagation()">
-            <input type="checkbox" id="narrator-toggle" ${typeof salma !== 'undefined' && salma._narratorActive ? 'checked' : ''}>
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
 
         <div class="profile-section profile-section-sos ${(currentUserSOSConfig?.contacts || []).filter(c=>c.phone?.trim()).length > 0 ? 'sos-configured' : 'sos-unconfigured'}" id="prof-sos">
           <span class="profile-section-icon profile-section-icon-sos">🆘</span>
