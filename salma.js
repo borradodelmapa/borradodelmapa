@@ -514,7 +514,7 @@ const salma = {
   },
 
   // ═══ PUNTO DE ENTRADA ÚNICO ═══
-  async send(msg, options = {}) {
+  async send(msg, options = {}) { // Ya es async desde antes
     // Capturar foto pendiente antes de validar msg
     const photo = this._pendingPhoto;
     if (photo) {
@@ -539,6 +539,18 @@ const salma = {
     if (msg && /activa.*gps|desactiva.*gps|activa.*ubicaci|desactiva.*ubicaci|pon.*gps|quita.*gps|apaga.*gps|enciende.*gps|activar.*gps|desactivar.*gps|activar.*ubicaci|desactivar.*ubicaci/i.test(msg)) {
       this._addUserBubble(msg);
       this.showGPSToggle();
+      return;
+    }
+
+    // ═══ DETECTAR BÚSQUEDA DE POIs EN EL CHAT ═══
+    const poiMatch = this._detectPoiRequest(msg);
+    if (poiMatch && typeof mapaRuta !== 'undefined' && mapaRuta._copilotActive) {
+      this._addUserBubble(msg);
+      const poi = mapaRuta._poiTypes.find(p => p.id === poiMatch.id);
+      if (poi) {
+        await mapaRuta._togglePoiType(poiMatch.id);
+        this._addSalmaBubble(`Mostrando ${poi.label.replace(/^[^\s]+\s/, '').toLowerCase()} cercanos a ti. Toca en el mapa para ver detalles.`);
+      }
       return;
     }
 
@@ -1505,6 +1517,49 @@ const salma = {
     return document.getElementById('chat-area');
   },
 
+  _detectPoiRequest(msg) {
+    if (!msg) return null;
+    const msgLower = msg.toLowerCase();
+
+    // Palabras clave para detectar cada tipo de POI
+    const poiKeywords = {
+      restaurant: ['restaurante', 'dónde comer', 'comida', 'cenar', 'almorzar', 'comer', 'cocina'],
+      cafe: ['café', 'cafetería', 'desayuno', 'café con', 'tomar un café'],
+      bar: ['bar', 'pub', 'taberna', 'cerveza', 'copa', 'bebida'],
+      hotel: ['hotel', 'alojamiento', 'dónde dormir', 'hospedarse', 'posada', 'hostal'],
+      gas: ['gasolinera', 'gasolina', 'benzina', 'combustible', 'carburante', 'surtidor'],
+      pharmacy: ['farmacia', 'medicinas', 'farmacéutico', 'pastillas', 'medicamento'],
+      supermarket: ['supermercado', 'mercado', 'compra', 'tienda', 'superm'],
+      hospital: ['hospital', 'urgencias', 'médico', 'doctor', 'emergencia', 'sanatorio'],
+      bank: ['banco', 'atm', 'cajero', 'dinero', 'cambio'],
+      transit: ['estación', 'tren', 'autobús', 'bus', 'transporte', 'parada'],
+      museum: ['museo', 'arte', 'exhibición', 'exposición', 'galería de arte'],
+      attraction: ['atracción', 'visita', 'lugar turístico', 'qué ver', 'sitio', 'monumento'],
+      gallery: ['galería', 'arte', 'cuadros', 'pintura'],
+      library: ['biblioteca', 'libro', 'librería'],
+      cinema: ['cine', 'película', 'películas', 'cartelera'],
+      aquarium: ['acuario', 'peces', 'marino'],
+      zoo: ['zoo', 'zoológico', 'animales', 'safari'],
+      worship: ['iglesia', 'templo', 'mezquita', 'sinagoga', 'monasterio', 'capilla', 'convento'],
+      cemetery: ['cementerio', 'tumba'],
+      park: ['parque', 'parques', 'plaza', 'verde'],
+      nature: ['naturaleza', 'montaña', 'lago', 'cascada', 'playa', 'río', 'paisaje'],
+      camping: ['camping', 'campamento', 'acampar', 'tienda'],
+      hiking: ['senderismo', 'sendero', 'ruta', 'trekking', 'caminar', 'montañ']
+    };
+
+    // Detectar qué tipo de POI busca
+    for (const [poiId, keywords] of Object.entries(poiKeywords)) {
+      for (const keyword of keywords) {
+        if (msgLower.includes(keyword)) {
+          return { id: poiId, keyword };
+        }
+      }
+    }
+
+    return null;
+  },
+
   _addUserBubble(text, photoUrl) {
     const area = this._getChatArea();
     if (!area) return;
@@ -2060,60 +2115,6 @@ const salma = {
     return true;
   },
 
-  // ═══ SEND DESDE COPILOTO (chat bottom sheet en itin-view) ═══
-  async sendFromCopilot(msg, onChunk) {
-    if (!msg || this._streaming) return;
-    if (!this._checkRate()) return;
-
-    const body = {
-      message: msg,
-      history: this._history || [],
-      user_location: this._userLocation || null,
-      country: this._copilotCountry || '',
-    };
-
-    let streamCompleted = false;
-    try {
-      const res = await fetch(window.SALMA_API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      if (!res.ok) return;
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let fullText = '';
-      let streamDone = false;
-
-      while (!streamDone) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split('\n');
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
-          const data = line.slice(6).trim();
-          if (data === '[DONE]') { streamDone = true; break; }
-          try {
-            const parsed = JSON.parse(data);
-            if (parsed.done) { streamDone = true; break; }
-            const delta = parsed.t || '';
-            if (delta) { fullText += delta; if (onChunk) onChunk(fullText); }
-          } catch {}
-        }
-      }
-
-      streamCompleted = true;
-      // Actualizar historial
-      this._history.push({ role: 'user', content: msg });
-      this._history.push({ role: 'assistant', content: fullText });
-      if (this._history.length > 20) this._history = this._history.slice(-20);
-
-    } catch (e) {
-      if (!streamCompleted && onChunk) onChunk('Error conectando con Salma. Inténtalo de nuevo.');
-    }
-  }
 };
 
 // Exponer globalmente

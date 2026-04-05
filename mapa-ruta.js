@@ -20,6 +20,35 @@ const mapaRuta = {
   // Colores por día
   _dayColors: ['#D4A843', '#E87040', '#5CB85C', '#5BC0DE', '#D9534F', '#AA66CC', '#FF8C00'],
 
+  // ═══ TIPOS DE POIs ═══
+  _poiTypes: [
+    { id: 'restaurant', label: '🍽️ Restaurante', type: 'restaurant' },
+    { id: 'cafe', label: '☕ Café', type: 'cafe' },
+    { id: 'bar', label: '🍺 Bar', type: 'bar' },
+    { id: 'hotel', label: '🏨 Hotel', type: 'lodging' },
+    { id: 'gas', label: '⛽ Gasolinera', type: 'gas_station' },
+    { id: 'pharmacy', label: '💊 Farmacia', type: 'pharmacy' },
+    { id: 'supermarket', label: '🛒 Supermercado', type: 'grocery_or_supermarket' },
+    { id: 'hospital', label: '🏥 Hospital', type: 'hospital' },
+    { id: 'bank', label: '🏦 Banco/ATM', type: 'atm' },
+    { id: 'transit', label: '🚉 Estación', type: 'train_station' },
+    { id: 'museum', label: '🏛️ Museo', type: 'museum' },
+    { id: 'attraction', label: '🎭 Atracción', type: 'tourist_attraction' },
+    { id: 'gallery', label: '🖼️ Galería', type: 'art_gallery' },
+    { id: 'library', label: '📚 Biblioteca', type: 'library' },
+    { id: 'cinema', label: '🎬 Cine', type: 'movie_theater' },
+    { id: 'aquarium', label: '🐠 Acuario', type: 'aquarium' },
+    { id: 'zoo', label: '🦁 Zoo', type: 'zoo' },
+    { id: 'worship', label: '⛪ Templo', type: 'place_of_worship' },
+    { id: 'cemetery', label: '⚰️ Cementerio', type: 'cemetery' },
+    { id: 'park', label: '🌳 Parque', type: 'park' },
+    { id: 'nature', label: '⛰️ Naturaleza', type: 'natural_feature' },
+    { id: 'camping', label: '⛺ Camping', type: 'campground' },
+    { id: 'hiking', label: '🥾 Senderismo', type: 'hiking_area' }
+  ],
+  _poiMarkers: {}, // Almacena marcadores de POIs activos
+  _activePoiType: null, // Tipo de POI actualmente visible
+
   // ═══ INIT ═══
   init(containerId, stops) {
     const el = document.getElementById(containerId);
@@ -42,7 +71,6 @@ const mapaRuta = {
     } else {
       // FAB y controles se añaden DESPUÉS de que el mapa cargue (en _buildGoogleMap/_buildLeafletMap)
       this._renderTurnPanel(containerId);
-      this._renderChatSheet();
       this._enterFullscreen();
     }
   },
@@ -85,8 +113,8 @@ const mapaRuta = {
       </svg>
       <span class="copilot-fab-label">${this._copilotActive ? 'ON' : 'COPILOTO'}</span>
     `;
-    fab.addEventListener('click', () => {
-      if (typeof window.toggleCopilot === 'function') window.toggleCopilot();
+    fab.addEventListener('click', async () => {
+      if (typeof window.toggleCopilot === 'function') await window.toggleCopilot();
     });
     el.appendChild(fab);
   },
@@ -520,6 +548,125 @@ const mapaRuta = {
     // Activar GPS para avance automático
     this._currentStep = 0;
     this._startGpsTracking();
+
+    // Renderizar filtros de POIs
+    this._renderPoiFilters(containerId);
+  },
+
+  _renderPoiFilters(containerId) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    const old = el.querySelector('.poi-filters');
+    if (old) old.remove();
+
+    const filterBar = document.createElement('div');
+    filterBar.className = 'poi-filters';
+    filterBar.id = 'poi-filters';
+    filterBar.innerHTML = `<div class="poi-filters-scroll">` +
+      this._poiTypes.map(poi => `
+        <button class="poi-chip" data-poi="${poi.id}" title="${poi.label}">
+          ${poi.label}
+        </button>
+      `).join('') +
+      `</div>`;
+
+    el.appendChild(filterBar);
+
+    // Event listeners para los chips
+    filterBar.querySelectorAll('.poi-chip').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const poiId = e.target.closest('.poi-chip').dataset.poi;
+        await this._togglePoiType(poiId);
+      });
+    });
+  },
+
+  async _togglePoiType(poiId) {
+    const poi = this._poiTypes.find(p => p.id === poiId);
+    if (!poi) return;
+
+    // Si ya está activo, desactivar
+    if (this._activePoiType === poiId) {
+      this._clearPoiMarkers();
+      this._activePoiType = null;
+      document.querySelectorAll('.poi-chip').forEach(b => b.classList.remove('poi-chip-active'));
+      return;
+    }
+
+    // Desactivar anterior
+    if (this._activePoiType) {
+      this._clearPoiMarkers();
+      document.querySelectorAll('.poi-chip').forEach(b => b.classList.remove('poi-chip-active'));
+    }
+
+    // Activar nuevo
+    this._activePoiType = poiId;
+    document.querySelector(`[data-poi="${poiId}"]`).classList.add('poi-chip-active');
+    await this._searchAndShowPois(poi);
+  },
+
+  async _searchAndShowPois(poi) {
+    if (!this._map || this._mapType !== 'google' || !window.google) return;
+    if (!this._userMarker) return; // Sin ubicación
+
+    const userLat = this._userMarker.getPosition().lat();
+    const userLng = this._userMarker.getPosition().lng();
+
+    const service = new window.google.maps.places.PlacesService(this._map);
+    const request = {
+      location: { lat: userLat, lng: userLng },
+      radius: 5000, // 5km
+      type: poi.type
+    };
+
+    service.nearbySearch(request, (results, status) => {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK && results) {
+        this._displayPoiMarkers(results, poi);
+      }
+    });
+  },
+
+  _displayPoiMarkers(results, poi) {
+    this._clearPoiMarkers();
+
+    results.slice(0, 10).forEach((place, idx) => {
+      const marker = new window.google.maps.Marker({
+        map: this._map,
+        position: place.geometry.location,
+        title: place.name,
+        icon: {
+          path: window.google.maps.SymbolPath.CIRCLE,
+          fillColor: '#FF6B35',
+          fillOpacity: 0.8,
+          strokeColor: '#fff',
+          strokeWeight: 2,
+          scale: 8,
+        },
+        zIndex: 100 + idx,
+      });
+
+      const infoContent = `
+        <div style="font-family:'Inter',sans-serif;width:200px;color:#f4efe6;">
+          <div style="font-weight:700;font-size:14px;margin-bottom:4px;">${place.name}</div>
+          ${place.rating ? `<div style="font-size:12px;color:#D4A843;">⭐ ${place.rating} (${place.user_ratings_total || 0} reseñas)</div>` : ''}
+          ${place.vicinity ? `<div style="font-size:12px;color:rgba(244,239,230,.7);margin-top:6px;">${place.vicinity}</div>` : ''}
+        </div>
+      `;
+
+      marker.addListener('click', () => {
+        if (this._infoWindow) this._infoWindow.close();
+        this._infoWindow = new window.google.maps.InfoWindow({ content: infoContent });
+        this._infoWindow.open(this._map, marker);
+      });
+
+      this._poiMarkers[place.place_id] = marker;
+    });
+  },
+
+  _clearPoiMarkers() {
+    Object.values(this._poiMarkers).forEach(marker => marker.setMap(null));
+    this._poiMarkers = {};
+    if (this._infoWindow) this._infoWindow.close();
   },
 
   _updateTurnPanel() {
@@ -612,152 +759,19 @@ const mapaRuta = {
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   },
 
-  // ═══ CHAT BOTTOM SHEET (Copiloto ON) ═══
-  _chatExpanded: false,
+  // ═══ ACTIVAR / DESACTIVAR COPILOTO ═══
+  async activateCopilot() {
+    if (this._copilotActive) return;
 
-  _renderChatSheet() {
-    if (document.getElementById('copilot-chat-sheet')) return;
-
-    const sheet = document.createElement('div');
-    sheet.id = 'copilot-chat-sheet';
-    sheet.className = 'copilot-chat-sheet';
-    sheet.innerHTML = `
-      <div class="ccs-handle" id="ccs-handle">
-        <div class="ccs-handle-bar"></div>
-        <span class="ccs-handle-label">
-          <img src="/salma_ai_avatar.png" class="ccs-avatar" alt="Salma">
-          Salma · Pídeme algo
-        </span>
-      </div>
-      <div class="ccs-body" id="ccs-body">
-        <div class="ccs-messages" id="ccs-messages"></div>
-        <div class="ccs-input-row">
-          <input type="text" class="ccs-input" id="ccs-input" placeholder="Escribe a Salma..." autocomplete="off" autocorrect="off" autocapitalize="off" data-lpignore="true" data-form-type="other">
-          <button class="ccs-send" id="ccs-send" aria-label="Enviar">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-          <button class="ccs-cam-btn" id="ccs-cam-btn" aria-label="Foto" title="Foto o galería">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          </button>
-          <div class="ccs-cam-menu" id="ccs-cam-menu">
-            <label class="ccs-cam-opt" for="ccs-cam-direct">Cámara</label>
-            <input type="file" id="ccs-cam-direct" accept="image/*" capture="environment" style="display:none">
-            <label class="ccs-cam-opt" for="ccs-cam-gallery">Galería</label>
-            <input type="file" id="ccs-cam-gallery" accept="image/*" style="display:none">
-          </div>
-          <button class="ccs-mic-btn" id="ccs-mic" aria-label="Micrófono" title="Hablar con Salma">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M19 10a7 7 0 0 1-14 0"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-          </button>
-        </div>
-      </div>`;
-    document.getElementById('itin-view').appendChild(sheet);
-
-    // Toggle expandir/colapsar — nav aparece con el chat
-    document.getElementById('ccs-handle').addEventListener('click', () => {
-      this._chatExpanded = !this._chatExpanded;
-      sheet.classList.toggle('ccs-expanded', this._chatExpanded);
-      const nav = document.getElementById('app-bottom-bar');
-      const fab = document.getElementById('copilot-fab');
-      if (this._chatExpanded) {
-        document.getElementById('ccs-input').focus();
-        if (nav) nav.style.display = '';
-        sheet.classList.add('ccs-above-nav');
-        fab?.classList.add('fab-raised');
-      } else {
-        if (nav) nav.style.display = 'none';
-        sheet.classList.remove('ccs-above-nav');
-        fab?.classList.remove('fab-raised');
+    // Solicitar permiso de GPS al navegador
+    const gpsGranted = await this._requestGpsPermission();
+    if (!gpsGranted) {
+      if (typeof showToast === 'function') {
+        showToast('Necesitamos permiso de GPS para activar el Copiloto');
       }
-    });
-
-    // Enviar mensaje a Salma
-    const doSend = () => {
-      const input = document.getElementById('ccs-input');
-      const text = input.value.trim();
-      if (!text) return;
-      input.value = '';
-      this._addChatMessage('user', text);
-      if (typeof salma !== 'undefined') {
-        salma.sendFromCopilot(text, msg => this._addChatMessage('salma', msg));
-      }
-    };
-    document.getElementById('ccs-input').addEventListener('keydown', e => { if (e.key === 'Enter') doSend(); });
-    document.getElementById('ccs-send').addEventListener('click', doSend);
-
-    // Botón cámara — mini menú cámara / galería
-    const camBtn = document.getElementById('ccs-cam-btn');
-    const camMenu = document.getElementById('ccs-cam-menu');
-    camBtn?.addEventListener('click', e => {
-      e.stopPropagation();
-      camMenu?.classList.toggle('ccs-cam-open');
-    });
-    document.addEventListener('click', () => camMenu?.classList.remove('ccs-cam-open'));
-
-    // Micrófono
-    const micBtn = document.getElementById('ccs-mic');
-    if (micBtn && (window.SpeechRecognition || window.webkitSpeechRecognition)) {
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      micBtn.addEventListener('click', () => {
-        const rec = new SR();
-        rec.lang = navigator.language || 'es-ES';
-        rec.interimResults = false;
-        rec.onstart = () => micBtn.classList.add('ccs-mic-active');
-        rec.onend = () => micBtn.classList.remove('ccs-mic-active');
-        rec.onresult = e => {
-          const text = e.results[0][0].transcript;
-          const input = document.getElementById('ccs-input');
-          if (input) { input.value = text; doSend(); }
-        };
-        rec.start();
-      });
-    } else if (micBtn) {
-      micBtn.style.opacity = '0.3';
-      micBtn.title = 'Micrófono no disponible en este navegador';
-    }
-  },
-
-  _streamingDiv: null,
-
-  _addChatMessage(role, text) {
-    const msgs = document.getElementById('ccs-messages');
-    if (!msgs) return;
-    // Para Salma en streaming: actualizar el mismo div en vez de crear uno nuevo
-    if (role === 'salma' && this._streamingDiv && msgs.contains(this._streamingDiv)) {
-      this._streamingDiv.textContent = text;
-      // No auto-scroll en streaming — el usuario controla el scroll
       return;
     }
-    const div = document.createElement('div');
-    div.className = `ccs-msg ccs-msg-${role}`;
-    div.textContent = text;
-    msgs.appendChild(div);
-    msgs.scrollTop = msgs.scrollHeight;
-    if (role === 'salma') {
-      this._streamingDiv = div;
-      const sheet = document.getElementById('copilot-chat-sheet');
-      if (sheet && !this._chatExpanded) {
-        this._chatExpanded = true;
-        sheet.classList.add('ccs-expanded');
-        sheet.classList.add('ccs-above-nav');
-        document.getElementById('copilot-fab')?.classList.add('fab-raised');
-        // Mostrar nav al expandirse
-        const navEl = document.getElementById('app-bottom-bar');
-        if (navEl) navEl.style.display = '';
-      }
-    } else {
-      this._streamingDiv = null;
-    }
-  },
 
-  _removeChatSheet() {
-    const sheet = document.getElementById('copilot-chat-sheet');
-    if (sheet) sheet.remove();
-    this._chatExpanded = false;
-  },
-
-  // ═══ ACTIVAR / DESACTIVAR COPILOTO ═══
-  activateCopilot() {
-    if (this._copilotActive) return;
     this._copilotActive = true;
     if (this._currentContainerId && this._currentStops.length) {
       this.init(this._currentContainerId, this._currentStops);
@@ -767,11 +781,44 @@ const mapaRuta = {
     }
   },
 
+  async _requestGpsPermission() {
+    if (!navigator.geolocation) return false;
+
+    // Si está disponible la Permissions API, usarla
+    if (navigator.permissions && navigator.permissions.query) {
+      try {
+        const permission = await navigator.permissions.query({ name: 'geolocation' });
+        if (permission.state === 'denied') return false;
+        if (permission.state === 'granted') return true;
+        // Si es 'prompt', intentar watchPosition (dispara diálogo nativo)
+      } catch (e) {
+        // Algunos navegadores no soportan query('geolocation'), continuamos
+      }
+    }
+
+    // Intentar watchPosition para obtener ubicación (dispara diálogo nativo del navegador)
+    return new Promise((resolve) => {
+      let timeoutId = setTimeout(() => resolve(false), 5000);
+
+      navigator.geolocation.watchPosition(
+        (pos) => {
+          clearTimeout(timeoutId);
+          resolve(true);
+        },
+        (error) => {
+          clearTimeout(timeoutId);
+          resolve(false);
+        },
+        { timeout: 4000 }
+      );
+    });
+  },
+
   deactivateCopilot() {
     if (!this._copilotActive) return;
     this._copilotActive = false;
     this._stopGpsTracking();
-    this._removeChatSheet();
+    this._clearPoiMarkers();
     this._exitFullscreen();
     if (this._currentContainerId && this._currentStops.length) {
       this.init(this._currentContainerId, this._currentStops);
