@@ -2910,6 +2910,7 @@ function closeLiveMap() {
   if (_liveMap) {
     clearRouteFromLiveMap();
     Object.keys(_catMarkers).forEach(cat => _removeCatMarkers(cat));
+    _mapPins.forEach(m => m.setMap(null)); _mapPins = [];
     _poiInfoWindow = null;
     _placesService = null;
     _liveUserMarker = null;
@@ -3093,6 +3094,168 @@ window.liveMapCenter = liveMapCenter;
 window.openRouteSelector = openRouteSelector;
 window.closeRouteSelector = closeRouteSelector;
 window.clearRouteFromLiveMap = clearRouteFromLiveMap;
+
+// ═══ SALMA MAPA — Guardar lugares ═══
+
+let _salmaVoiceRec = null;
+let _mapPins = [];
+
+function openSalmaMapSheet() {
+  document.getElementById('live-map-salma-sheet').style.display = 'block';
+  document.getElementById('salma-map-status').style.display = 'none';
+  document.getElementById('salma-map-input').value = '';
+}
+
+function closeSalmaMapSheet() {
+  document.getElementById('live-map-salma-sheet').style.display = 'none';
+  if (_salmaVoiceRec) { _salmaVoiceRec.stop(); _salmaVoiceRec = null; }
+}
+
+async function sendSalmaMapText() {
+  const input = document.getElementById('salma-map-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  await _processSalmaMapRequest(text, null);
+}
+
+function sendSalmaMapPhoto(fileInput) {
+  const file = fileInput.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const base64 = e.target.result.split(',')[1];
+    await _processSalmaMapRequest('¿Qué lugar es este? Guárdalo en el mapa.', base64);
+  };
+  reader.readAsDataURL(file);
+  fileInput.value = '';
+}
+
+function toggleSalmaVoice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showToast('Voz no disponible en este navegador'); return; }
+  const btn = document.getElementById('salma-map-voice-btn');
+  if (_salmaVoiceRec) {
+    _salmaVoiceRec.stop(); _salmaVoiceRec = null;
+    btn.textContent = '🎤'; return;
+  }
+  const rec = new SR();
+  rec.lang = 'es-ES'; rec.continuous = false; rec.interimResults = false;
+  rec.onresult = async (e) => {
+    const text = e.results[0][0].transcript;
+    document.getElementById('salma-map-input').value = text;
+    _salmaVoiceRec = null; btn.textContent = '🎤';
+    await _processSalmaMapRequest(text, null);
+  };
+  rec.onerror = rec.onend = () => { _salmaVoiceRec = null; btn.textContent = '🎤'; };
+  _salmaVoiceRec = rec;
+  rec.start();
+  btn.textContent = '🔴';
+}
+
+async function _processSalmaMapRequest(text, imageBase64) {
+  const status = document.getElementById('salma-map-status');
+  status.textContent = '🤖 Analizando...';
+  status.style.display = 'block';
+
+  try {
+    const body = { message: text, map_mode: true };
+    if (imageBase64) body.image_base64 = imageBase64;
+    if (currentUser) body.uid = currentUser.uid;
+
+    const res = await fetch('https://salma-worker.borradodelmapa.workers.dev/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    const reply = data.reply || '';
+
+    const actionMatch = reply.match(/SALMA_ACTION:\s*(\{[^\n]+\})/);
+    if (actionMatch) {
+      try {
+        const action = JSON.parse(actionMatch[1]);
+        if (action.type === 'MAP_PIN') {
+          await _handleMapPin(action, status);
+          return;
+        }
+      } catch (_) {}
+    }
+    status.textContent = reply.replace(/SALMA_ACTION:[^\n]*/g, '').trim().slice(0, 200);
+  } catch (e) {
+    status.textContent = 'No he podido procesar eso. Prueba otra vez.';
+  }
+}
+
+async function _handleMapPin(action, status) {
+  if (!_placesService) { status.textContent = '❌ Mapa no disponible.'; return; }
+  status.textContent = '📍 Buscando en el mapa...';
+
+  const query = [action.name, action.address].filter(Boolean).join(', ');
+  _placesService.findPlaceFromQuery(
+    { query, fields: ['geometry', 'name', 'formatted_address', 'place_id'] },
+    async (results, placeStatus) => {
+      if (placeStatus !== google.maps.places.PlacesServiceStatus.OK || !results.length) {
+        status.textContent = '❌ No he encontrado ese lugar. Sé más específico.';
+        return;
+      }
+      const place = results[0];
+      const lat = place.geometry.location.lat();
+      const lng = place.geometry.location.lng();
+      const name = place.name || action.name;
+      const address = place.formatted_address || action.address || '';
+
+      _placeMapPin({ name, address, description: action.description, place_type: action.place_type, lat, lng });
+
+      if (currentUser && typeof db !== 'undefined') {
+        try {
+          await db.collection('users').doc(currentUser.uid).collection('map_pins').add({
+            name, address, description: action.description || '',
+            place_type: action.place_type || 'other',
+            lat, lng, created_at: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        } catch (_) {}
+      }
+
+      status.textContent = `✅ "${name}" guardado`;
+      setTimeout(() => closeSalmaMapSheet(), 1800);
+    }
+  );
+}
+
+function _placeMapPin({ name, address, description, place_type, lat, lng }) {
+  if (!_liveMap) return;
+  const pinColors = { hotel: '#5BC0DE', monument: '#D4A843', restaurant: '#E87040', beach: '#5CB85C', park: '#5CB85C', other: '#AA66CC' };
+  const pinEmojis = { hotel: '🏨', monument: '🏛️', restaurant: '🍽️', beach: '🏖️', park: '🌿', other: '⭐' };
+  const color = pinColors[place_type] || '#AA66CC';
+
+  const marker = new google.maps.Marker({
+    map: _liveMap,
+    position: { lat, lng },
+    icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: color, fillOpacity: 1, strokeColor: '#fff', strokeWeight: 2, scale: 14 },
+    label: { text: pinEmojis[place_type] || '⭐', fontSize: '14px' },
+    title: name, zIndex: 50,
+  });
+  marker.addListener('click', () => {
+    if (!_poiInfoWindow) return;
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+    _poiInfoWindow.setContent(`<div style="font-family:'Inter',sans-serif;width:230px;padding:12px 14px">
+      <div style="font-size:13px;font-weight:700;color:#111;margin-bottom:4px">${name}</div>
+      ${address ? `<div style="font-size:11px;color:#777;margin-bottom:8px">${address}</div>` : ''}
+      ${description ? `<div style="font-size:12px;color:#444;margin-bottom:8px">${description}</div>` : ''}
+      <a href="${mapsUrl}" target="_blank" style="display:block;text-align:center;background:#4285F4;color:#fff;border-radius:8px;padding:7px;font-size:12px;font-weight:600;text-decoration:none">Cómo llegar</a>
+    </div>`);
+    _poiInfoWindow.open(_liveMap, marker);
+  });
+  _mapPins.push(marker);
+  _liveMap.panTo({ lat, lng });
+}
+
+window.openSalmaMapSheet = openSalmaMapSheet;
+window.closeSalmaMapSheet = closeSalmaMapSheet;
+window.sendSalmaMapText = sendSalmaMapText;
+window.sendSalmaMapPhoto = sendSalmaMapPhoto;
+window.toggleSalmaVoice = toggleSalmaVoice;
 
 // ═══ UTILIDADES ═══
 

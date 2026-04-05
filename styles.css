@@ -3045,6 +3045,71 @@ body {
   backdrop-filter: blur(6px);
   cursor: pointer;
 }
+/* ── Salma button en el mapa ── */
+#live-map-salma-btn {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 80px);
+  right: 16px;
+  z-index: 970;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: var(--dorado, #D4A843);
+  border: none;
+  font-size: 24px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+/* ── Salma sheet en el mapa ── */
+#live-map-salma-sheet {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 980;
+  background: var(--negro, #0a0a0f);
+  border-radius: 18px 18px 0 0;
+  border-top: 1px solid rgba(212,168,67,0.25);
+  padding: 0 16px calc(env(safe-area-inset-bottom, 0px) + 16px);
+}
+.lms-handle {
+  width: 36px; height: 4px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px;
+  margin: 10px auto 0;
+}
+.lms-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 0 10px;
+}
+.lms-title { font-size: 15px; font-weight: 700; color: #fff; }
+.lms-close {
+  background: none; border: none; color: rgba(255,255,255,0.5);
+  font-size: 18px; cursor: pointer; padding: 4px;
+}
+.lms-input-row {
+  display: flex; gap: 8px; margin-bottom: 12px;
+}
+.lms-input-row input {
+  flex: 1; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px; padding: 10px 14px; color: #fff; font-size: 14px; outline: none;
+}
+.lms-input-row input::placeholder { color: rgba(255,255,255,0.35); }
+.lms-send {
+  background: var(--dorado, #D4A843); border: none; border-radius: 12px;
+  color: #000; font-size: 18px; font-weight: 700; width: 44px; cursor: pointer;
+}
+.lms-actions {
+  display: flex; gap: 10px; margin-bottom: 12px;
+}
+.lms-action-btn {
+  flex: 1; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px; padding: 12px 0; text-align: center; font-size: 22px;
+  cursor: pointer; color: #fff;
+}
+#salma-map-status {
+  font-size: 13px; color: rgba(255,255,255,0.7);
+  text-align: center; padding: 8px 0 4px;
+  min-height: 24px;
+}
 #live-map-routes-sheet {
   position: fixed;
   bottom: 0; left: 0; right: 0;
