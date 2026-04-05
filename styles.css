@@ -1897,7 +1897,7 @@ body {
 
 /* ═══ BOTTOM BAR ═══ */
 .app-bottom-bar {
-  position:fixed; bottom:0; left:0; right:0; z-index:900;
+  position:fixed; bottom:0; left:0; right:0; z-index:950;
   display:flex; justify-content:space-around; align-items:flex-start;
   background:rgba(12,10,6,.95); backdrop-filter:blur(12px);
   border-top:1px solid rgba(244,239,230,.08);
