@@ -2981,7 +2981,7 @@ body {
 }
 #live-map-center {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 124px);
   right: 16px;
   z-index: 970;
   background: rgba(12,10,6,0.92);
@@ -3045,10 +3045,52 @@ body {
   backdrop-filter: blur(6px);
   cursor: pointer;
 }
+/* ── Botón tipo mapa ── */
+#live-map-maptype-btn {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+  right: 16px;
+  z-index: 970;
+  background: rgba(12,10,6,0.92);
+  color: var(--dorado);
+  border: 1px solid rgba(212,168,67,0.35);
+  border-radius: 50%;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+#live-map-maptype-panel {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+  right: 68px;
+  z-index: 970;
+  background: rgba(12,10,6,0.96);
+  border: 1px solid rgba(212,168,67,0.25);
+  border-radius: 14px;
+  padding: 8px;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.lmt-option {
+  background: none;
+  border: none;
+  color: var(--crema, #F4EFE6);
+  padding: 9px 14px;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.lmt-option:active { background: rgba(212,168,67,0.15); }
+.lmt-option.active { color: var(--dorado); font-weight: 600; }
 /* ── Salma button en el mapa ── */
 #live-map-salma-btn {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 80px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 176px);
   right: 16px;
   z-index: 970;
   width: 52px; height: 52px;
