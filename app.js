@@ -2804,6 +2804,11 @@ function toggleMapCat(checkbox) {
   }
 }
 
+function _closeMapPanels() {
+  document.getElementById('live-map-layers-panel').style.display = 'none';
+  document.getElementById('live-map-maptype-panel').style.display = 'none';
+}
+
 function toggleMapLayersPanel() {
   const panel = document.getElementById('live-map-layers-panel');
   if (panel) {
@@ -2819,6 +2824,7 @@ function toggleMapTypePanel() {
     panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
   }
 }
+
 
 function setLiveMapType(type) {
   if (_liveMap) _liveMap.setMapTypeId(type);
@@ -2869,6 +2875,10 @@ function openLiveMap() {
       // InfoWindow y PlacesService compartidos para toda la sesión del mapa
       _poiInfoWindow = new google.maps.InfoWindow();
       _placesService = new google.maps.places.PlacesService(_liveMap);
+
+      // Cerrar paneles al tocar el mapa
+      _liveMap.addListener('click', _closeMapPanels);
+      _liveMap.addListener('drag', _closeMapPanels);
 
       // Geolocalización en tiempo real
       if (navigator.geolocation) {
@@ -2924,8 +2934,7 @@ function closeLiveMap() {
   if (view) view.style.display = 'none';
   if (bar) bar.style.display = '';
   document.querySelector('.app-header')?.style.removeProperty('display');
-  document.getElementById('live-map-maptype-panel').style.display = 'none';
-  document.getElementById('live-map-layers-panel').style.display = 'none';
+  _closeMapPanels();
   if (_liveMapWatchId !== null) {
     navigator.geolocation.clearWatch(_liveMapWatchId);
     _liveMapWatchId = null;
