@@ -20,6 +20,35 @@ const mapaRuta = {
   // Colores por día
   _dayColors: ['#D4A843', '#E87040', '#5CB85C', '#5BC0DE', '#D9534F', '#AA66CC', '#FF8C00'],
 
+  // ═══ TIPOS DE POIs ═══
+  _poiTypes: [
+    { id: 'restaurant', label: '🍽️ Restaurante', type: 'restaurant' },
+    { id: 'cafe', label: '☕ Café', type: 'cafe' },
+    { id: 'bar', label: '🍺 Bar', type: 'bar' },
+    { id: 'hotel', label: '🏨 Hotel', type: 'lodging' },
+    { id: 'gas', label: '⛽ Gasolinera', type: 'gas_station' },
+    { id: 'pharmacy', label: '💊 Farmacia', type: 'pharmacy' },
+    { id: 'supermarket', label: '🛒 Supermercado', type: 'grocery_or_supermarket' },
+    { id: 'hospital', label: '🏥 Hospital', type: 'hospital' },
+    { id: 'bank', label: '🏦 Banco/ATM', type: 'atm' },
+    { id: 'transit', label: '🚉 Estación', type: 'train_station' },
+    { id: 'museum', label: '🏛️ Museo', type: 'museum' },
+    { id: 'attraction', label: '🎭 Atracción', type: 'tourist_attraction' },
+    { id: 'gallery', label: '🖼️ Galería', type: 'art_gallery' },
+    { id: 'library', label: '📚 Biblioteca', type: 'library' },
+    { id: 'cinema', label: '🎬 Cine', type: 'movie_theater' },
+    { id: 'aquarium', label: '🐠 Acuario', type: 'aquarium' },
+    { id: 'zoo', label: '🦁 Zoo', type: 'zoo' },
+    { id: 'worship', label: '⛪ Templo', type: 'place_of_worship' },
+    { id: 'cemetery', label: '⚰️ Cementerio', type: 'cemetery' },
+    { id: 'park', label: '🌳 Parque', type: 'park' },
+    { id: 'nature', label: '⛰️ Naturaleza', type: 'natural_feature' },
+    { id: 'camping', label: '⛺ Camping', type: 'campground' },
+    { id: 'hiking', label: '🥾 Senderismo', type: 'hiking_area' }
+  ],
+  _poiMarkers: {}, // Almacena marcadores de POIs activos
+  _activePoiType: null, // Tipo de POI actualmente visible
+
   // ═══ INIT ═══
   init(containerId, stops) {
     const el = document.getElementById(containerId);
@@ -520,6 +549,125 @@ const mapaRuta = {
     // Activar GPS para avance automático
     this._currentStep = 0;
     this._startGpsTracking();
+
+    // Renderizar filtros de POIs
+    this._renderPoiFilters(containerId);
+  },
+
+  _renderPoiFilters(containerId) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    const old = el.querySelector('.poi-filters');
+    if (old) old.remove();
+
+    const filterBar = document.createElement('div');
+    filterBar.className = 'poi-filters';
+    filterBar.id = 'poi-filters';
+    filterBar.innerHTML = `<div class="poi-filters-scroll">` +
+      this._poiTypes.map(poi => `
+        <button class="poi-chip" data-poi="${poi.id}" title="${poi.label}">
+          ${poi.label}
+        </button>
+      `).join('') +
+      `</div>`;
+
+    el.appendChild(filterBar);
+
+    // Event listeners para los chips
+    filterBar.querySelectorAll('.poi-chip').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const poiId = e.target.closest('.poi-chip').dataset.poi;
+        await this._togglePoiType(poiId);
+      });
+    });
+  },
+
+  async _togglePoiType(poiId) {
+    const poi = this._poiTypes.find(p => p.id === poiId);
+    if (!poi) return;
+
+    // Si ya está activo, desactivar
+    if (this._activePoiType === poiId) {
+      this._clearPoiMarkers();
+      this._activePoiType = null;
+      document.querySelectorAll('.poi-chip').forEach(b => b.classList.remove('poi-chip-active'));
+      return;
+    }
+
+    // Desactivar anterior
+    if (this._activePoiType) {
+      this._clearPoiMarkers();
+      document.querySelectorAll('.poi-chip').forEach(b => b.classList.remove('poi-chip-active'));
+    }
+
+    // Activar nuevo
+    this._activePoiType = poiId;
+    document.querySelector(`[data-poi="${poiId}"]`).classList.add('poi-chip-active');
+    await this._searchAndShowPois(poi);
+  },
+
+  async _searchAndShowPois(poi) {
+    if (!this._map || this._mapType !== 'google' || !window.google) return;
+    if (!this._userMarker) return; // Sin ubicación
+
+    const userLat = this._userMarker.getPosition().lat();
+    const userLng = this._userMarker.getPosition().lng();
+
+    const service = new window.google.maps.places.PlacesService(this._map);
+    const request = {
+      location: { lat: userLat, lng: userLng },
+      radius: 5000, // 5km
+      type: poi.type
+    };
+
+    service.nearbySearch(request, (results, status) => {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK && results) {
+        this._displayPoiMarkers(results, poi);
+      }
+    });
+  },
+
+  _displayPoiMarkers(results, poi) {
+    this._clearPoiMarkers();
+
+    results.slice(0, 10).forEach((place, idx) => {
+      const marker = new window.google.maps.Marker({
+        map: this._map,
+        position: place.geometry.location,
+        title: place.name,
+        icon: {
+          path: window.google.maps.SymbolPath.CIRCLE,
+          fillColor: '#FF6B35',
+          fillOpacity: 0.8,
+          strokeColor: '#fff',
+          strokeWeight: 2,
+          scale: 8,
+        },
+        zIndex: 100 + idx,
+      });
+
+      const infoContent = `
+        <div style="font-family:'Inter',sans-serif;width:200px;color:#f4efe6;">
+          <div style="font-weight:700;font-size:14px;margin-bottom:4px;">${place.name}</div>
+          ${place.rating ? `<div style="font-size:12px;color:#D4A843;">⭐ ${place.rating} (${place.user_ratings_total || 0} reseñas)</div>` : ''}
+          ${place.vicinity ? `<div style="font-size:12px;color:rgba(244,239,230,.7);margin-top:6px;">${place.vicinity}</div>` : ''}
+        </div>
+      `;
+
+      marker.addListener('click', () => {
+        if (this._infoWindow) this._infoWindow.close();
+        this._infoWindow = new window.google.maps.InfoWindow({ content: infoContent });
+        this._infoWindow.open(this._map, marker);
+      });
+
+      this._poiMarkers[place.place_id] = marker;
+    });
+  },
+
+  _clearPoiMarkers() {
+    Object.values(this._poiMarkers).forEach(marker => marker.setMap(null));
+    this._poiMarkers = {};
+    if (this._infoWindow) this._infoWindow.close();
   },
 
   _updateTurnPanel() {
@@ -814,6 +962,7 @@ const mapaRuta = {
     if (!this._copilotActive) return;
     this._copilotActive = false;
     this._stopGpsTracking();
+    this._clearPoiMarkers();
     this._removeChatSheet();
     this._exitFullscreen();
     if (this._currentContainerId && this._currentStops.length) {
