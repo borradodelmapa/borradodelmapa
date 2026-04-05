@@ -2809,6 +2809,7 @@ function _placeUserMarker(latlng) {
       zIndex: 999,
     });
   }
+  _updateNearestChip();
 }
 
 function liveMapCenter() {
@@ -2885,6 +2886,9 @@ function closeRouteSelector() {
   document.getElementById('live-map-routes-sheet').style.display = 'none';
 }
 
+let _liveRouteStops = [];
+let _liveInfoWindow = null;
+
 function selectRouteOnMap(routeData) {
   if (!_liveMap || !window.google) return;
   clearRouteFromLiveMap();
@@ -2893,6 +2897,8 @@ function selectRouteOnMap(routeData) {
   const valid = (routeData.stops || []).filter(s => s.lat && s.lng);
   if (!valid.length) { showToast('Esta ruta no tiene coordenadas'); return; }
 
+  _liveRouteStops = valid;
+  _liveInfoWindow = new google.maps.InfoWindow();
   const bounds = new google.maps.LatLngBounds();
 
   _liveRouteMarkers = valid.map((stop, i) => {
@@ -2904,6 +2910,7 @@ function selectRouteOnMap(routeData) {
       icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: color, fillOpacity: 1, strokeColor: '#fff', strokeWeight: 2, scale: 13 },
       title: stop.headline || stop.name || `Parada ${i + 1}`,
     });
+    marker.addListener('click', () => _showStopInfo(stop, i, marker, color));
     bounds.extend({ lat: stop.lat, lng: stop.lng });
     return marker;
   });
@@ -2918,14 +2925,75 @@ function selectRouteOnMap(routeData) {
 
   _liveMap.fitBounds(bounds, { top: 80, right: 40, bottom: 80, left: 40 });
   document.getElementById('live-map-clear-route').style.display = 'block';
+  _updateNearestChip();
+}
+
+function _showStopInfo(stop, i, marker, color) {
+  const gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}&travelmode=driving`;
+  const photoHtml = stop.photo
+    ? `<img src="${stop.photo}" style="width:100%;height:130px;object-fit:cover;border-radius:10px 10px 0 0;display:block">`
+    : `<div style="width:100%;height:80px;background:linear-gradient(135deg,${color}44,${color}22);border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:center;font-size:28px">${_stopEmoji(stop)}</div>`;
+
+  const content = `
+    <div style="font-family:'Inter',sans-serif;width:240px;border-radius:10px;overflow:hidden;background:#fff">
+      ${photoHtml}
+      <div style="padding:10px 12px 12px">
+        <div style="font-size:10px;color:${color};font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Día ${stop.day || i+1}</div>
+        <div style="font-size:14px;font-weight:700;color:#111;line-height:1.3;margin-bottom:6px">${stop.headline || stop.name || `Parada ${i+1}`}</div>
+        ${stop.narrative ? `<div style="font-size:12px;color:#555;line-height:1.5;margin-bottom:10px;max-height:60px;overflow:hidden">${stop.narrative}</div>` : ''}
+        <a href="${gmapsUrl}" target="_blank" rel="noopener"
+          style="display:flex;align-items:center;justify-content:center;gap:6px;background:#4285F4;color:#fff;border-radius:8px;padding:8px;font-size:12px;font-weight:600;text-decoration:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5" fill="rgba(255,255,255,.9)"/></svg>
+          Cómo llegar
+        </a>
+      </div>
+    </div>`;
+  _liveInfoWindow.setContent(content);
+  _liveInfoWindow.open(_liveMap, marker);
+}
+
+function _stopEmoji(stop) {
+  const n = (stop.name || stop.headline || '').toLowerCase();
+  if (n.includes('playa') || n.includes('beach')) return '🏖️';
+  if (n.includes('templo') || n.includes('temple') || n.includes('iglesia')) return '🛕';
+  if (n.includes('muse')) return '🏛️';
+  if (n.includes('parque') || n.includes('park')) return '🌿';
+  if (n.includes('monta') || n.includes('mount')) return '⛰️';
+  return '📍';
+}
+
+function _haversineKm(lat1, lng1, lat2, lng2) {
+  const R = 6371, dLat = (lat2-lat1)*Math.PI/180, dLng = (lng2-lng1)*Math.PI/180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function _updateNearestChip() {
+  const chip = document.getElementById('live-map-nearest-chip');
+  if (!chip || !_liveRouteStops.length || !_liveUserMarker) return;
+  const pos = _liveUserMarker.getPosition();
+  if (!pos) return;
+  let nearest = null, minDist = Infinity;
+  _liveRouteStops.forEach((stop, i) => {
+    const d = _haversineKm(pos.lat(), pos.lng(), stop.lat, stop.lng);
+    if (d < minDist) { minDist = d; nearest = { stop, i }; }
+  });
+  if (!nearest) return;
+  const dist = minDist < 1 ? Math.round(minDist * 1000) + ' m' : minDist.toFixed(1) + ' km';
+  chip.textContent = `📍 Más cerca: ${nearest.stop.headline || nearest.stop.name || `Parada ${nearest.i+1}`} · ${dist}`;
+  chip.style.display = 'block';
 }
 
 function clearRouteFromLiveMap() {
   _liveRouteMarkers.forEach(m => m.setMap(null));
   _liveRouteMarkers = [];
   if (_liveRoutePolyline) { _liveRoutePolyline.setMap(null); _liveRoutePolyline = null; }
+  if (_liveInfoWindow) { _liveInfoWindow.close(); }
+  _liveRouteStops = [];
   const btn = document.getElementById('live-map-clear-route');
   if (btn) btn.style.display = 'none';
+  const chip = document.getElementById('live-map-nearest-chip');
+  if (chip) chip.style.display = 'none';
 }
 
 window.closeLiveMap = closeLiveMap;
