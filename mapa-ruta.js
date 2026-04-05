@@ -342,8 +342,7 @@ const mapaRuta = {
       this._loadDirectionsRenderer(valid);
     }
 
-    // Añadir FAB y controles DESPUÉS del mapa (evita que innerHTML='' los borre)
-    this._renderCopilotFab(this._currentContainerId);
+    // Controles DESPUÉS del mapa (evita que innerHTML='' los borre)
     this._renderMapControls(this._currentContainerId);
   },
 
