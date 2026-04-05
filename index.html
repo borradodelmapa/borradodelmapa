@@ -69,7 +69,7 @@ window._loadGoogleMaps = function() {
     if (window.google && window.google.maps && window.google.maps.Map) { resolve(); return; }
     window._gmapsReady = resolve;
     const s = document.createElement('script');
-    s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U&libraries=geometry,marker&callback=_gmapsReady';
+    s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U&libraries=geometry,marker,places&callback=_gmapsReady';
     s.onerror = reject;
     document.head.appendChild(s);
   });

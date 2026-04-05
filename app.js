@@ -2773,6 +2773,43 @@ function openLiveMap() {
         gestureHandling: 'greedy',
       });
 
+      // Click en POI nativo → InfoWindow personalizado con foto
+      const _poiInfoWindow = new google.maps.InfoWindow();
+      const _placesService = new google.maps.places.PlacesService(_liveMap);
+      _liveMap.addListener('click', (e) => {
+        if (!e.placeId) return;
+        e.stop();
+        _placesService.getDetails(
+          { placeId: e.placeId, fields: ['name', 'photos', 'formatted_address', 'rating', 'url', 'geometry'] },
+          (place, status) => {
+            if (status !== google.maps.places.PlacesServiceStatus.OK || !place) return;
+            const photoHtml = place.photos && place.photos.length
+              ? `<img src="${place.photos[0].getUrl({ maxWidth: 280, maxHeight: 140 })}" style="width:100%;height:130px;object-fit:cover;border-radius:10px 10px 0 0;display:block">`
+              : `<div style="width:100%;height:70px;background:#f0f0f0;border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:center;font-size:32px">🏨</div>`;
+            const stars = place.rating ? `<span style="color:#F5A623;font-size:11px">★ ${place.rating.toFixed(1)}</span>` : '';
+            const mapsUrl = place.url || `https://www.google.com/maps/place/?q=place_id:${e.placeId}`;
+            const content = `
+              <div style="font-family:'Inter',sans-serif;width:260px;border-radius:10px;overflow:hidden;background:#fff">
+                ${photoHtml}
+                <div style="padding:10px 12px 12px">
+                  <div style="font-size:15px;font-weight:700;color:#111;line-height:1.3;margin-bottom:4px">${place.name || ''}</div>
+                  ${stars}
+                  ${place.formatted_address ? `<div style="font-size:11px;color:#777;margin-top:4px;margin-bottom:10px">${place.formatted_address}</div>` : '<div style="margin-bottom:8px"></div>'}
+                  <a href="${mapsUrl}" target="_blank" rel="noopener"
+                    style="display:flex;align-items:center;justify-content:center;gap:6px;background:#4285F4;color:#fff;border-radius:8px;padding:8px;font-size:12px;font-weight:600;text-decoration:none">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5" fill="rgba(255,255,255,.9)"/></svg>
+                    Ver en Google Maps
+                  </a>
+                </div>
+              </div>`;
+            _poiInfoWindow.setContent(content);
+            _poiInfoWindow.setPosition(e.latLng);
+            _poiInfoWindow.setOptions({ pixelOffset: new google.maps.Size(0, -10) });
+            _poiInfoWindow.open(_liveMap);
+          }
+        );
+      });
+
       // Geolocalización en tiempo real
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
