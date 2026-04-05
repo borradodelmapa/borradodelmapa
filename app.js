@@ -2909,6 +2909,12 @@ function openLiveMap() {
         const saved = _activeRouteData;
         selectRouteOnMap(saved);
       }
+
+      // Restaurar pins de fotos guardados
+      if (_savedPinsData.length) {
+        _savedPinsData.forEach(pinData => _placeMapPin(pinData));
+        _savedPinsData = []; // _placeMapPin los vuelve a añadir
+      }
     })
     .catch(() => showToast('No se pudo cargar Google Maps'));
 }
@@ -2961,7 +2967,7 @@ function closeLiveMap() {
     clearRouteFromLiveMap();
     _activeRouteData = savedRoute; // preservar para cuando vuelva al mapa
     Object.keys(_catMarkers).forEach(cat => _removeCatMarkers(cat));
-    _mapPins.forEach(m => m.setMap(null)); _mapPins = [];
+    _mapPins.forEach(m => m.setMap(null)); _mapPins = []; // _savedPinsData se preserva
     _poiInfoWindow = null;
     _placesService = null;
     _liveUserMarker = null;
@@ -3152,6 +3158,7 @@ window.clearRouteFromLiveMap = clearRouteFromLiveMap;
 // ═══ SALMA MAPA — Guardar lugares ═══
 
 let _mapPins = [];
+let _savedPinsData = []; // persiste entre sesiones del mapa
 
 function openSalmaMapSheet() {
   document.getElementById('live-map-salma-sheet').style.display = 'block';
@@ -3279,6 +3286,7 @@ function _placeMapPin({ name, address, description, place_type, checkin, checkou
     _poiInfoWindow.open(_liveMap, marker);
   });
   _mapPins.push(marker);
+  _savedPinsData.push({ name, address, description, place_type, checkin, checkout, confirmation, photo, lat, lng });
   _liveMap.panTo({ lat, lng });
 }
 
