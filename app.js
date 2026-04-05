@@ -3097,18 +3097,17 @@ window.clearRouteFromLiveMap = clearRouteFromLiveMap;
 
 // ═══ SALMA MAPA — Guardar lugares ═══
 
-let _salmaVoiceRec = null;
 let _mapPins = [];
 
 function openSalmaMapSheet() {
   document.getElementById('live-map-salma-sheet').style.display = 'block';
   document.getElementById('salma-map-status').style.display = 'none';
+  document.getElementById('salma-map-input-row').style.display = 'none';
   document.getElementById('salma-map-input').value = '';
 }
 
 function closeSalmaMapSheet() {
   document.getElementById('live-map-salma-sheet').style.display = 'none';
-  if (_salmaVoiceRec) { _salmaVoiceRec.stop(); _salmaVoiceRec = null; }
 }
 
 async function sendSalmaMapText() {
@@ -3116,6 +3115,7 @@ async function sendSalmaMapText() {
   const text = input.value.trim();
   if (!text) return;
   input.value = '';
+  document.getElementById('salma-map-input-row').style.display = 'none';
   await _processSalmaMapRequest(text, null);
 }
 
@@ -3125,91 +3125,40 @@ function sendSalmaMapPhoto(fileInput) {
   const reader = new FileReader();
   reader.onload = async (e) => {
     const base64 = e.target.result.split(',')[1];
-    await _processSalmaMapRequest('¿Qué lugar es este? Guárdalo en el mapa.', base64);
+    await _processSalmaMapRequest(null, base64);
   };
   reader.readAsDataURL(file);
   fileInput.value = '';
 }
 
-function toggleSalmaVoice() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { showToast('Voz no disponible en este navegador'); return; }
-  const btn = document.getElementById('salma-map-voice-btn');
-  if (_salmaVoiceRec) {
-    _salmaVoiceRec.stop(); _salmaVoiceRec = null;
-    btn.textContent = '🎤'; return;
-  }
-  const rec = new SR();
-  rec.lang = 'es-ES'; rec.continuous = false; rec.interimResults = false;
-  rec.onresult = async (e) => {
-    const text = e.results[0][0].transcript;
-    document.getElementById('salma-map-input').value = text;
-    _salmaVoiceRec = null; btn.textContent = '🎤';
-    await _processSalmaMapRequest(text, null);
-  };
-  rec.onerror = rec.onend = () => { _salmaVoiceRec = null; btn.textContent = '🎤'; };
-  _salmaVoiceRec = rec;
-  rec.start();
-  btn.textContent = '🔴';
-}
-
 async function _processSalmaMapRequest(text, imageBase64) {
   const status = document.getElementById('salma-map-status');
-  status.textContent = '🤖 Analizando...';
+  status.textContent = '🔍 Identificando...';
   status.style.display = 'block';
 
   try {
-    const body = { message: text, map_mode: true };
-    if (imageBase64) body.image_base64 = imageBase64;
-    if (currentUser) body.uid = currentUser.uid;
-
     const SALMA_API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
-    const res = await fetch(SALMA_API, {
+    const body = {};
+    if (text) body.text = text;
+    if (imageBase64) body.image_base64 = imageBase64;
+
+    const res = await fetch(SALMA_API + '/pin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
+    const data = await res.json();
 
-    let reply = '', actionResults = [];
-    const ct = res.headers.get('content-type') || '';
-    if (ct.includes('application/json')) {
-      const data = await res.json();
-      reply = data.reply || '';
-      actionResults = data.action_results || [];
-    } else {
-      // SSE stream — leer hasta evento done
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buf = '', streamDone = false;
-      while (!streamDone) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        buf += decoder.decode(value, { stream: true });
-        const lines = buf.split('\n');
-        buf = lines.pop() || '';
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
-          try {
-            const evt = JSON.parse(line.slice(6).trim());
-            if (evt.done) {
-              reply = evt.reply || '';
-              actionResults = evt.action_results || [];
-              streamDone = true;
-            }
-          } catch (_) {}
-        }
-      }
-    }
-
-    // MAP_PIN viene en action_results (el worker extrae SALMA_ACTION del texto)
-    const mapPin = actionResults.find(a => a && a.type === 'map_pin');
-    if (mapPin) {
-      await _handleMapPin(mapPin, status);
+    if (!data.name) {
+      status.textContent = '❓ No he identificado el lugar. ¿Cómo se llama?';
+      document.getElementById('salma-map-input-row').style.display = 'flex';
+      document.getElementById('salma-map-input').focus();
       return;
     }
-    status.textContent = reply.trim().slice(0, 200) || 'No he encontrado ese lugar. Sé más específico.';
+
+    await _handleMapPin(data, status);
   } catch (e) {
-    status.textContent = 'No he podido procesar eso. Prueba otra vez.';
+    status.textContent = '❌ No he podido procesar eso. Prueba otra vez.';
   }
 }
 
@@ -3231,13 +3180,14 @@ async function _handleMapPin(action, status) {
       const name = place.name || action.name;
       const address = place.formatted_address || action.address || '';
 
-      _placeMapPin({ name, address, description: action.description, place_type: action.place_type, lat, lng });
+      _placeMapPin({ name, address, description: action.description, place_type: action.place_type, checkin: action.checkin, checkout: action.checkout, confirmation: action.confirmation, lat, lng });
 
       if (currentUser && typeof db !== 'undefined') {
         try {
           await db.collection('users').doc(currentUser.uid).collection('map_pins').add({
             name, address, description: action.description || '',
             place_type: action.place_type || 'other',
+            checkin: action.checkin || null, checkout: action.checkout || null,
             lat, lng, created_at: firebase.firestore.FieldValue.serverTimestamp(),
           });
         } catch (_) {}
@@ -3249,7 +3199,7 @@ async function _handleMapPin(action, status) {
   );
 }
 
-function _placeMapPin({ name, address, description, place_type, lat, lng }) {
+function _placeMapPin({ name, address, description, place_type, checkin, checkout, confirmation, lat, lng }) {
   if (!_liveMap) return;
   const pinColors = { hotel: '#5BC0DE', monument: '#D4A843', restaurant: '#E87040', beach: '#5CB85C', park: '#5CB85C', other: '#AA66CC' };
   const pinEmojis = { hotel: '🏨', monument: '🏛️', restaurant: '🍽️', beach: '🏖️', park: '🌿', other: '⭐' };
@@ -3269,6 +3219,8 @@ function _placeMapPin({ name, address, description, place_type, lat, lng }) {
       <div style="font-size:13px;font-weight:700;color:#111;margin-bottom:4px">${name}</div>
       ${address ? `<div style="font-size:11px;color:#777;margin-bottom:8px">${address}</div>` : ''}
       ${description ? `<div style="font-size:12px;color:#444;margin-bottom:8px">${description}</div>` : ''}
+      ${(checkin || checkout) ? `<div style="font-size:11px;color:#5BC0DE;margin-bottom:8px">🗓 ${checkin || ''}${checkin && checkout ? ' → ' : ''}${checkout || ''}</div>` : ''}
+      ${confirmation ? `<div style="font-size:10px;color:#999;margin-bottom:8px">Ref: ${confirmation}</div>` : ''}
       <a href="${mapsUrl}" target="_blank" style="display:block;text-align:center;background:#4285F4;color:#fff;border-radius:8px;padding:7px;font-size:12px;font-weight:600;text-decoration:none">Cómo llegar</a>
     </div>`);
     _poiInfoWindow.open(_liveMap, marker);
@@ -3281,7 +3233,6 @@ window.openSalmaMapSheet = openSalmaMapSheet;
 window.closeSalmaMapSheet = closeSalmaMapSheet;
 window.sendSalmaMapText = sendSalmaMapText;
 window.sendSalmaMapPhoto = sendSalmaMapPhoto;
-window.toggleSalmaVoice = toggleSalmaVoice;
 
 // ═══ UTILIDADES ═══
 

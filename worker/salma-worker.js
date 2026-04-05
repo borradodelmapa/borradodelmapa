@@ -384,6 +384,7 @@ SALMA_ACTION — acciones especiales que el sistema detecta y ejecuta automátic
 — Para buscar hoteles: SALMA_ACTION:{"type":"SEARCH_HOTELS","city":"Bangkok","budget":"mid","adults":2,"checkin":"2026-06-01","checkout":"2026-06-05"}
 — Para buscar lugares: SALMA_ACTION:{"type":"SEARCH_PLACES","query":"restaurante vietnamita Hanoi","type":"restaurant"}
 — Para guardar una nota: SALMA_ACTION:{"type":"SAVE_NOTE","texto":"Visado Vietnam gratis hasta 45 días","tipo":"visado","country_code":"VN","country_name":"Vietnam"}
+— Para guardar un lugar en el mapa personal del usuario: SALMA_ACTION:{"type":"MAP_PIN","name":"Nombre exacto del lugar como aparece en Google Maps","address":"Ciudad y país","description":"Una frase útil sobre el lugar","place_type":"hotel|monument|restaurant|beach|park|other"}
 Usa SALMA_ACTION además de tu respuesta normal, no en lugar de ella.
 
 DATO PRIMERO SIEMPRE: la información útil va al principio. La personalidad y el contexto, detrás.
@@ -1320,7 +1321,7 @@ function tryKVDirectAnswer(message, country, destination) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode) {
   let systemPrompt = dynamicPrompt || SALMA_SYSTEM_BASE;
 
   // Contexto mínimo del usuario + fecha actual
@@ -1466,6 +1467,11 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
     }
   } else {
     userContent += '\n\n[Si generas ruta, responde con 1-2 frases solo. Si es conversacional, extiéndete con densidad de datos. Si el usuario pide datos concretos, dato primero y breve.]';
+  }
+
+  // Modo mapa — inyectar en el system prompt para máxima prioridad
+  if (mapMode) {
+    systemPrompt += '\n\n⚠️ MODO MAPA ACTIVO: El usuario está usando el botón de guardar lugar en su mapa. Su mensaje describe un lugar (monumento, hotel, restaurante, playa, catedral, mercado...) o adjunta una foto de ese lugar. Tu única tarea: identificar el lugar, escribir 1 frase útil sobre él, y emitir OBLIGATORIAMENTE en la última línea: SALMA_ACTION:{"type":"MAP_PIN","name":"Nombre exacto como en Google Maps","address":"Ciudad, País","description":"Una frase útil","place_type":"hotel|monument|restaurant|beach|park|other"}. Si no puedes identificar el lugar con certeza, pregunta: "¿De qué lugar se trata? Dame el nombre o la ciudad."';
   }
 
   // Si Salma preguntó antes y el usuario responde, forzar generación
@@ -2786,6 +2792,9 @@ async function executeSalmaAction(action, env, userLocation) {
     case 'SAVE_NOTE':
       // La nota se guarda en el frontend; aquí la devolvemos tal cual
       return { type: 'note', texto: action.texto, tipo: action.tipo || 'general', country_code: action.country_code || null, country_name: action.country_name || null };
+    case 'MAP_PIN':
+      // El pin se coloca en el frontend; pasamos los datos tal cual
+      return { type: 'map_pin', name: action.name, address: action.address || '', description: action.description || '', place_type: action.place_type || 'other' };
     default:
       return null;
   }
@@ -3136,6 +3145,55 @@ export default {
     }
 
     const url = new URL(request.url);
+
+    // ─── ENDPOINT /pin — Extractor de lugar para mapa personal ───
+    if (request.method === 'POST' && url.pathname === '/pin') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      try {
+        const body = await request.json();
+        const { text, image_base64 } = body;
+        const apiKey = env.OPENAI_API_KEY;
+        if (!apiKey) return new Response(JSON.stringify({ name: null, error: 'no_key' }), { status: 500, headers: corsH });
+
+        const systemPrompt = `Eres un extractor de datos. Analiza el texto o imagen y devuelve SOLO un JSON válido, sin explicaciones, sin markdown.
+Extrae el lugar principal (hotel, monumento, restaurante, playa, catedral, mercado...).
+Formato exacto (todos los campos, null si no hay dato):
+{"name":"nombre exacto del lugar","address":"ciudad, país","description":"una frase descriptiva breve","place_type":"hotel|monument|restaurant|beach|park|other","checkin":null,"checkout":null,"confirmation":null}
+SOLO JSON. Nada más.`;
+
+        const userContent = image_base64
+          ? [
+              { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${image_base64}`, detail: 'high' } },
+              { type: 'text', text: text || 'Extrae el lugar de esta imagen.' }
+            ]
+          : (text || '');
+
+        const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            max_tokens: 300,
+            temperature: 0,
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userContent }
+            ]
+          })
+        });
+        const oData = await openaiRes.json();
+        const raw = oData.choices?.[0]?.message?.content?.trim() || '';
+        const cleaned = raw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+        try {
+          const result = JSON.parse(cleaned);
+          return new Response(JSON.stringify(result), { headers: corsH });
+        } catch (_) {
+          return new Response(JSON.stringify({ name: null, error: 'parse_error' }), { headers: corsH });
+        }
+      } catch (e) {
+        return new Response(JSON.stringify({ name: null, error: e.message }), { status: 500, headers: corsH });
+      }
+    }
 
     // ─── ENDPOINT /upload-photo (R2) ───
     if (request.method === 'POST' && url.pathname === '/upload-photo') {
@@ -4438,6 +4496,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     const coinsSaldo = typeof body.coins_saldo === 'number' ? body.coins_saldo : 0;
     const rutasGratisUsadas = typeof body.rutas_gratis_usadas === 'number' ? body.rutas_gratis_usadas : 0;
     const imageBase64 = body.image_base64 || null;
+    const mapMode = body.map_mode || false;
     const uid = body.uid || null;
     const userNotes = body.user_notes || null;
     const frontendCountryCode = body.country || null; // País enviado por el frontend (detectado por GPS)
@@ -4818,7 +4877,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     const dynamicPrompt = await getSystemPrompt(env);
 
     // Construir mensajes (con datos KV si los hay)
-    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt);
+    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode);
 
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {

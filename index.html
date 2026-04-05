@@ -136,8 +136,8 @@ window._loadGoogleMaps = function() {
       <span class="lms-title">🤖 Guardar en el mapa</span>
       <button class="lms-close" onclick="closeSalmaMapSheet()">✕</button>
     </div>
-    <div class="lms-input-row">
-      <input type="text" id="salma-map-input" placeholder="Describe el lugar..." onkeydown="if(event.key==='Enter')sendSalmaMapText()">
+    <div class="lms-input-row" id="salma-map-input-row" style="display:none">
+      <input type="text" id="salma-map-input" placeholder="¿Cómo se llama el lugar?" onkeydown="if(event.key==='Enter')sendSalmaMapText()">
       <button class="lms-send" onclick="sendSalmaMapText()">→</button>
     </div>
     <div class="lms-actions">
@@ -149,7 +149,6 @@ window._loadGoogleMaps = function() {
         📁
         <input type="file" accept="image/*" style="display:none" onchange="sendSalmaMapPhoto(this)">
       </label>
-      <button class="lms-action-btn" id="salma-map-voice-btn" onclick="toggleSalmaVoice()">🎤</button>
     </div>
     <div id="salma-map-status" style="display:none"></div>
   </div>
