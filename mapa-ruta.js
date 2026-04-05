@@ -13,7 +13,6 @@ const mapaRuta = {
   _activeIdx: -1,
   _currentStops: [],
   _currentContainerId: null,
-  _copilotActive: false,
   _userMarker: null, // Punto azul de ubicación del usuario
   _infoWindow: null, // InfoWindow activo
 
@@ -35,24 +34,6 @@ const mapaRuta = {
     this._removeMapControls(containerId);
   },
 
-  // ═══ FULLSCREEN (Copiloto ON) ═══
-  _enterFullscreen() {
-    document.getElementById('itin-view')?.classList.add('copilot-fullscreen');
-    document.querySelector('.app-header')?.classList.add('copilot-hidden');
-    document.getElementById('itin-mobile-back-btn')?.classList.add('copilot-hidden');
-  },
-
-  _exitFullscreen() {
-    document.getElementById('itin-view')?.classList.remove('copilot-fullscreen');
-    document.querySelector('.app-header')?.classList.remove('copilot-hidden');
-    document.getElementById('itin-mobile-back-btn')?.classList.remove('copilot-hidden');
-    const _navExit = document.getElementById('app-bottom-bar');
-    if (_navExit) _navExit.style.display = '';
-  },
-
-  _renderCopilotFab(containerId) {
-    // Botón eliminado
-  },
 
   // ═══ MAP CONTROLS (Copiloto ON) ═══
   _renderMapControls(containerId) {
@@ -573,179 +554,12 @@ const mapaRuta = {
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   },
 
-  // ═══ CHAT BOTTOM SHEET (Copiloto ON) ═══
-  _chatExpanded: false,
-
-  _renderChatSheet() {
-    if (document.getElementById('copilot-chat-sheet')) return;
-
-    const sheet = document.createElement('div');
-    sheet.id = 'copilot-chat-sheet';
-    sheet.className = 'copilot-chat-sheet';
-    sheet.innerHTML = `
-      <div class="ccs-handle" id="ccs-handle">
-        <div class="ccs-handle-bar"></div>
-        <span class="ccs-handle-label">
-          <img src="/salma_ai_avatar.png" class="ccs-avatar" alt="Salma">
-          Salma · Pídeme algo
-        </span>
-      </div>
-      <div class="ccs-body" id="ccs-body">
-        <div class="ccs-messages" id="ccs-messages"></div>
-        <div class="ccs-input-row">
-          <input type="text" class="ccs-input" id="ccs-input" placeholder="Escribe a Salma..." autocomplete="off" autocorrect="off" autocapitalize="off" data-lpignore="true" data-form-type="other">
-          <button class="ccs-send" id="ccs-send" aria-label="Enviar">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-          <button class="ccs-cam-btn" id="ccs-cam-btn" aria-label="Foto" title="Foto o galería">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          </button>
-          <div class="ccs-cam-menu" id="ccs-cam-menu">
-            <label class="ccs-cam-opt" for="ccs-cam-direct">Cámara</label>
-            <input type="file" id="ccs-cam-direct" accept="image/*" capture="environment" style="display:none">
-            <label class="ccs-cam-opt" for="ccs-cam-gallery">Galería</label>
-            <input type="file" id="ccs-cam-gallery" accept="image/*" style="display:none">
-          </div>
-          <button class="ccs-mic-btn" id="ccs-mic" aria-label="Micrófono" title="Hablar con Salma">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M19 10a7 7 0 0 1-14 0"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-          </button>
-        </div>
-      </div>`;
-    document.getElementById('itin-view').appendChild(sheet);
-
-    // Toggle expandir/colapsar — nav aparece con el chat
-    document.getElementById('ccs-handle').addEventListener('click', () => {
-      this._chatExpanded = !this._chatExpanded;
-      sheet.classList.toggle('ccs-expanded', this._chatExpanded);
-      const nav = document.getElementById('app-bottom-bar');
-      const fab = document.getElementById('copilot-fab');
-      if (this._chatExpanded) {
-        document.getElementById('ccs-input').focus();
-        if (nav) nav.style.display = '';
-        sheet.classList.add('ccs-above-nav');
-        fab?.classList.add('fab-raised');
-      } else {
-        if (nav) nav.style.display = 'none';
-        sheet.classList.remove('ccs-above-nav');
-        fab?.classList.remove('fab-raised');
-      }
-    });
-
-    // Enviar mensaje a Salma
-    const doSend = () => {
-      const input = document.getElementById('ccs-input');
-      const text = input.value.trim();
-      if (!text) return;
-      input.value = '';
-      this._addChatMessage('user', text);
-      if (typeof salma !== 'undefined') {
-        salma.sendFromCopilot(text, msg => this._addChatMessage('salma', msg));
-      }
-    };
-    document.getElementById('ccs-input').addEventListener('keydown', e => { if (e.key === 'Enter') doSend(); });
-    document.getElementById('ccs-send').addEventListener('click', doSend);
-
-    // Botón cámara — mini menú cámara / galería
-    const camBtn = document.getElementById('ccs-cam-btn');
-    const camMenu = document.getElementById('ccs-cam-menu');
-    camBtn?.addEventListener('click', e => {
-      e.stopPropagation();
-      camMenu?.classList.toggle('ccs-cam-open');
-    });
-    document.addEventListener('click', () => camMenu?.classList.remove('ccs-cam-open'));
-
-    // Micrófono
-    const micBtn = document.getElementById('ccs-mic');
-    if (micBtn && (window.SpeechRecognition || window.webkitSpeechRecognition)) {
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      micBtn.addEventListener('click', () => {
-        const rec = new SR();
-        rec.lang = navigator.language || 'es-ES';
-        rec.interimResults = false;
-        rec.onstart = () => micBtn.classList.add('ccs-mic-active');
-        rec.onend = () => micBtn.classList.remove('ccs-mic-active');
-        rec.onresult = e => {
-          const text = e.results[0][0].transcript;
-          const input = document.getElementById('ccs-input');
-          if (input) { input.value = text; doSend(); }
-        };
-        rec.start();
-      });
-    } else if (micBtn) {
-      micBtn.style.opacity = '0.3';
-      micBtn.title = 'Micrófono no disponible en este navegador';
-    }
-  },
-
-  _streamingDiv: null,
-
-  _addChatMessage(role, text) {
-    const msgs = document.getElementById('ccs-messages');
-    if (!msgs) return;
-    // Para Salma en streaming: actualizar el mismo div en vez de crear uno nuevo
-    if (role === 'salma' && this._streamingDiv && msgs.contains(this._streamingDiv)) {
-      this._streamingDiv.textContent = text;
-      // No auto-scroll en streaming — el usuario controla el scroll
-      return;
-    }
-    const div = document.createElement('div');
-    div.className = `ccs-msg ccs-msg-${role}`;
-    div.textContent = text;
-    msgs.appendChild(div);
-    msgs.scrollTop = msgs.scrollHeight;
-    if (role === 'salma') {
-      this._streamingDiv = div;
-      const sheet = document.getElementById('copilot-chat-sheet');
-      if (sheet && !this._chatExpanded) {
-        this._chatExpanded = true;
-        sheet.classList.add('ccs-expanded');
-        sheet.classList.add('ccs-above-nav');
-        document.getElementById('copilot-fab')?.classList.add('fab-raised');
-        // Mostrar nav al expandirse
-        const navEl = document.getElementById('app-bottom-bar');
-        if (navEl) navEl.style.display = '';
-      }
-    } else {
-      this._streamingDiv = null;
-    }
-  },
-
   _removeChatSheet() {
-    const sheet = document.getElementById('copilot-chat-sheet');
-    if (sheet) sheet.remove();
-    this._chatExpanded = false;
+    document.getElementById('copilot-chat-sheet')?.remove();
   },
 
-  // ═══ ABRIR MAPA NAVEGACIÓN COMPLETO ═══
-  _openFullNav() {
-    if (this._currentContainerId && this._currentStops.length) {
-      this._enterFullscreen();
-      this._initGoogleMaps(this._currentContainerId, this._currentStops);
-    }
-  },
-
-  activateCopilot() {
-    this._openFullNav();
-  },
-
-  deactivateCopilot() {
-    this._stopGpsTracking();
-    this._removeChatSheet();
-    this._exitFullscreen();
-    if (this._currentContainerId && this._currentStops.length) {
-      this._renderStaticMap(this._currentContainerId, this._currentStops);
-      this._removeChatSheet();
-      this._removeMapControls(this._currentContainerId);
-    }
-  },
-
-  _updateFab() {
-    const fab = document.getElementById('copilot-fab');
-    if (!fab) return;
-    fab.className = `copilot-fab ${this._copilotActive ? 'copilot-fab-on' : 'copilot-fab-off'}`;
-    fab.title = this._copilotActive ? 'Copiloto activo' : 'Activar Copiloto';
-    fab.querySelector('.copilot-fab-label').textContent = this._copilotActive ? 'ON' : 'COPILOTO';
-  },
+  activateCopilot() {},
+  deactivateCopilot() {},
 
   // ═══ INFO PARADA — InfoWindow nativo Google Maps ═══
   _showStopPanel(index) {

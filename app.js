@@ -582,27 +582,11 @@ async function renderProfile() {
   document.getElementById('prof-docs').addEventListener('click', () => {
     if (typeof docsViajero !== 'undefined') docsViajero.render();
   });
-  document.getElementById('narrator-toggle').addEventListener('change', async (e) => {
-    if (typeof salma === 'undefined') return;
-    if (e.target.checked) {
-      const ok = await salma.startNarrator();
-      if (ok === false) {
-        e.target.checked = false;
-        alert('Para usar el Copiloto, permite las notificaciones en tu navegador.');
-      }
-    } else {
-      salma.stopNarrator();
-    }
-    updateBottomBar();
-  });
-  document.getElementById('prof-bitacora-info').addEventListener('click', () => {
+  document.getElementById('prof-bitacora-info')?.addEventListener('click', () => {
     showInfoPopup('Aquí encontrarás listados todos tus viajes. Encontrarás las notas asignadas a cada viaje. Además podrás escribir un blog de viaje, añadirle fotos... y compartirlo si quieres con la comunidad.');
   });
-  document.getElementById('prof-galeria-info').addEventListener('click', () => {
+  document.getElementById('prof-galeria-info')?.addEventListener('click', () => {
     showInfoPopup('Aquí puedes organizar las fotos de todos tus viajes. Crear galerías nuevas. Y hacer videos para compartir con tus amigos en redes sociales o como quieras.');
-  });
-  document.getElementById('prof-narrator-info').addEventListener('click', () => {
-    showInfoPopup('Copiloto activa el GPS, el narrador de puntos de interés y la navegación con Google Maps. Salma te avisa cuando te acercas a un lugar especial y te guía en ruta. Disponible con Salma Coins.');
   });
   document.getElementById('prof-help').addEventListener('click', () => renderSalmaCan());
   document.getElementById('prof-sos').addEventListener('click', () => {
