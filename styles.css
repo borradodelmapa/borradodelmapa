@@ -2988,8 +2988,8 @@ body {
     flex-direction: column;
   }
   .itin-map-col {
-    flex: 0 0 40vh;
-    height: 40vh;
+    flex: 0 0 50vh;
+    height: 50vh;
   }
   .itin-cards-col {
     flex: 1;

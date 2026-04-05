@@ -28,10 +28,12 @@ const mapaRuta = {
     this._currentStops = stops;
     this.destroy();
 
-    // Siempre mapa estático al abrir guía
-    this._renderStaticMap(containerId, stops);
-    this._removeChatSheet();
-    this._removeMapControls(containerId);
+    const valid = stops.filter(s => s.lat && s.lng);
+    if (valid.length && window.L) {
+      this._buildLeafletMap(el, valid);
+    } else {
+      this._renderStaticMap(containerId, stops);
+    }
   },
 
 

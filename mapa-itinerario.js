@@ -408,9 +408,10 @@ const mapaItinerario = {
     document.querySelectorAll('.guide-card').forEach(el => el.remove());
     if (typeof salma !== 'undefined' && typeof salma._removeLoading === 'function') salma._removeLoading();
 
-    // Ocultar contenido principal; en desktop dejar input bar visible para chatear
+    // Ocultar contenido principal y header
     if (appContent) appContent.style.display = 'none';
     if (inputBar) inputBar.style.display = 'none';
+    document.querySelector('.app-header')?.style.setProperty('display', 'none', 'important');
     view.style.display = 'block';
 
     // Inicializar mapa y cards
@@ -425,10 +426,10 @@ const mapaItinerario = {
     const _origShowState = window.showState;
     window.showState = function(state) {
       if (view.style.display !== 'none') {
-        // Copiloto OFF: cerrar todo
         view.style.display = 'none';
         if (appContent) appContent.style.display = '';
         if (inputBar) inputBar.style.display = '';
+        document.querySelector('.app-header')?.style.removeProperty('display');
         const bb = document.getElementById('app-bottom-bar');
         if (bb) bb.style.display = '';
         mapaRuta.destroy();
