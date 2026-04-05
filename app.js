@@ -3170,11 +3170,12 @@ async function _processSalmaMapRequest(text, imageBase64) {
       body: JSON.stringify(body),
     });
 
-    let reply = '';
+    let reply = '', actionResults = [];
     const ct = res.headers.get('content-type') || '';
     if (ct.includes('application/json')) {
       const data = await res.json();
       reply = data.reply || '';
+      actionResults = data.action_results || [];
     } else {
       // SSE stream — leer hasta evento done
       const reader = res.body.getReader();
@@ -3190,23 +3191,23 @@ async function _processSalmaMapRequest(text, imageBase64) {
           if (!line.startsWith('data: ')) continue;
           try {
             const evt = JSON.parse(line.slice(6).trim());
-            if (evt.done) { reply = evt.reply || ''; streamDone = true; }
+            if (evt.done) {
+              reply = evt.reply || '';
+              actionResults = evt.action_results || [];
+              streamDone = true;
+            }
           } catch (_) {}
         }
       }
     }
 
-    const actionMatch = reply.match(/SALMA_ACTION:\s*(\{[^\n]+\})/);
-    if (actionMatch) {
-      try {
-        const action = JSON.parse(actionMatch[1]);
-        if (action.type === 'MAP_PIN') {
-          await _handleMapPin(action, status);
-          return;
-        }
-      } catch (_) {}
+    // MAP_PIN viene en action_results (el worker extrae SALMA_ACTION del texto)
+    const mapPin = actionResults.find(a => a && a.type === 'map_pin');
+    if (mapPin) {
+      await _handleMapPin(mapPin, status);
+      return;
     }
-    status.textContent = reply.replace(/SALMA_ACTION:[^\n]*/g, '').trim().slice(0, 200);
+    status.textContent = reply.trim().slice(0, 200) || 'No he encontrado ese lugar. Sé más específico.';
   } catch (e) {
     status.textContent = 'No he podido procesar eso. Prueba otra vez.';
   }
