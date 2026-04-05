@@ -2946,7 +2946,9 @@ function closeLiveMap() {
     _liveMapWatchId = null;
   }
   if (_liveMap) {
+    const savedRoute = _activeRouteData;
     clearRouteFromLiveMap();
+    _activeRouteData = savedRoute; // preservar para cuando vuelva al mapa
     Object.keys(_catMarkers).forEach(cat => _removeCatMarkers(cat));
     _mapPins.forEach(m => m.setMap(null)); _mapPins = [];
     _poiInfoWindow = null;
