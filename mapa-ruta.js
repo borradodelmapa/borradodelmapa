@@ -241,8 +241,12 @@ const mapaRuta = {
 
     const url = `https://maps.googleapis.com/maps/api/staticmap?size=${size}&scale=2&${markers}&${path}&${styles}&key=${KEY}`;
 
-    el.innerHTML = `<img src="${url}" class="static-map-img" alt="Mapa de ruta">
-      <div class="static-map-badge">Activa el Copiloto para navegar 🧭</div>`;
+    el.innerHTML = `<img src="${url}" class="static-map-img" alt="Mapa de ruta" style="cursor:pointer">`;
+
+    // Al pulsar el mapa estático, activar mapa de navegación completo
+    el.querySelector('.static-map-img').addEventListener('click', () => {
+      mapaRuta.activateCopilot();
+    });
 
     // Cargar polyline real y actualizar imagen
     if (valid.length >= 2) {
