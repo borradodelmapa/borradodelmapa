@@ -3151,6 +3151,8 @@ body {
   border: 1px solid rgba(212,160,23,.3);
   backdrop-filter: blur(12px);
 }
+body.itin-open .app-header { display: none; }
+
 body.itin-open .itin-action-bar {
   display: flex !important;
 }
