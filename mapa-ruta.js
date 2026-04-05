@@ -114,8 +114,8 @@ const mapaRuta = {
       </svg>
       <span class="copilot-fab-label">${this._copilotActive ? 'ON' : 'COPILOTO'}</span>
     `;
-    fab.addEventListener('click', () => {
-      if (typeof window.toggleCopilot === 'function') window.toggleCopilot();
+    fab.addEventListener('click', async () => {
+      if (typeof window.toggleCopilot === 'function') await window.toggleCopilot();
     });
     el.appendChild(fab);
   },

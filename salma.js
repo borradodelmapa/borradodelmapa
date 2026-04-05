@@ -514,7 +514,7 @@ const salma = {
   },
 
   // ═══ PUNTO DE ENTRADA ÚNICO ═══
-  async send(msg, options = {}) {
+  async send(msg, options = {}) { // Ya es async desde antes
     // Capturar foto pendiente antes de validar msg
     const photo = this._pendingPhoto;
     if (photo) {
