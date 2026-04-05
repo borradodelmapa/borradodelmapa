@@ -150,9 +150,22 @@ function updateBottomBar() {
 
   document.getElementById('tab-home').addEventListener('click', () => showState('welcome'));
   document.getElementById('tab-chat').addEventListener('click', () => {
-    if (currentState !== 'chat') {
-      if (typeof salma !== 'undefined') salma._initChat();
+    // Si hay guía abierta, cerrarla primero
+    if (window._itinViewOpen && typeof closeItinerarioView === 'function') {
+      closeItinerarioView();
+    } else if (window._itinViewOpen) {
+      const _view = document.getElementById('itin-view');
+      const _appContent = document.getElementById('app-content');
+      const _inputBar = document.getElementById('app-input-bar');
+      window._itinViewOpen = false;
+      if (_view) _view.style.display = 'none';
+      if (_appContent) _appContent.style.display = '';
+      if (_inputBar) _inputBar.style.display = '';
+      if (typeof mapaRuta !== 'undefined') mapaRuta.destroy();
+      if (typeof mapaItinerario !== 'undefined') mapaItinerario.destroy();
     }
+    if (typeof salma !== 'undefined') salma._initChat();
+    showState('chat');
   });
   document.getElementById('tab-rutas').addEventListener('click', () => {
     if (!currentUser) { window._afterLogin = 'rutas'; openModal('login'); return; }

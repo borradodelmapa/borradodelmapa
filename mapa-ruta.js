@@ -42,7 +42,6 @@ const mapaRuta = {
     } else {
       // FAB y controles se añaden DESPUÉS de que el mapa cargue (en _buildGoogleMap/_buildLeafletMap)
       this._renderTurnPanel(containerId);
-      this._renderChatSheet();
       this._enterFullscreen();
     }
   },
