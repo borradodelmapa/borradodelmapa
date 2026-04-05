@@ -542,6 +542,18 @@ const salma = {
       return;
     }
 
+    // ═══ DETECTAR BÚSQUEDA DE POIs EN EL CHAT ═══
+    const poiMatch = this._detectPoiRequest(msg);
+    if (poiMatch && typeof mapaRuta !== 'undefined' && mapaRuta._copilotActive) {
+      this._addUserBubble(msg);
+      const poi = mapaRuta._poiTypes.find(p => p.id === poiMatch.id);
+      if (poi) {
+        await mapaRuta._togglePoiType(poiMatch.id);
+        this._addSalmaBubble(`Mostrando ${poi.label.replace(/^[^\s]+\s/, '').toLowerCase()} cercanos a ti. Toca en el mapa para ver detalles.`);
+      }
+      return;
+    }
+
     // Si el mensaje requiere ubicación y no la tenemos, mostrar prompt
     if (!this._userLocation && msg) {
       const needsLocation = /desde donde estoy|desde aqu[ií]|desde ah[ií]|cerca de m[ií]|por aqu[ií]|aqu[ií] cerca|donde estoy|mi ubicaci[oó]n|nearest|near me|vuelo.*desde aqu[ií]|vuelo.*desde ah[ií]/i.test(msg);
@@ -1503,6 +1515,49 @@ const salma = {
       return document.getElementById('ccs-messages') || document.getElementById('chat-area');
     }
     return document.getElementById('chat-area');
+  },
+
+  _detectPoiRequest(msg) {
+    if (!msg) return null;
+    const msgLower = msg.toLowerCase();
+
+    // Palabras clave para detectar cada tipo de POI
+    const poiKeywords = {
+      restaurant: ['restaurante', 'dónde comer', 'comida', 'cenar', 'almorzar', 'comer', 'cocina'],
+      cafe: ['café', 'cafetería', 'desayuno', 'café con', 'tomar un café'],
+      bar: ['bar', 'pub', 'taberna', 'cerveza', 'copa', 'bebida'],
+      hotel: ['hotel', 'alojamiento', 'dónde dormir', 'hospedarse', 'posada', 'hostal'],
+      gas: ['gasolinera', 'gasolina', 'benzina', 'combustible', 'carburante', 'surtidor'],
+      pharmacy: ['farmacia', 'medicinas', 'farmacéutico', 'pastillas', 'medicamento'],
+      supermarket: ['supermercado', 'mercado', 'compra', 'tienda', 'superm'],
+      hospital: ['hospital', 'urgencias', 'médico', 'doctor', 'emergencia', 'sanatorio'],
+      bank: ['banco', 'atm', 'cajero', 'dinero', 'cambio'],
+      transit: ['estación', 'tren', 'autobús', 'bus', 'transporte', 'parada'],
+      museum: ['museo', 'arte', 'exhibición', 'exposición', 'galería de arte'],
+      attraction: ['atracción', 'visita', 'lugar turístico', 'qué ver', 'sitio', 'monumento'],
+      gallery: ['galería', 'arte', 'cuadros', 'pintura'],
+      library: ['biblioteca', 'libro', 'librería'],
+      cinema: ['cine', 'película', 'películas', 'cartelera'],
+      aquarium: ['acuario', 'peces', 'marino'],
+      zoo: ['zoo', 'zoológico', 'animales', 'safari'],
+      worship: ['iglesia', 'templo', 'mezquita', 'sinagoga', 'monasterio', 'capilla', 'convento'],
+      cemetery: ['cementerio', 'tumba'],
+      park: ['parque', 'parques', 'plaza', 'verde'],
+      nature: ['naturaleza', 'montaña', 'lago', 'cascada', 'playa', 'río', 'paisaje'],
+      camping: ['camping', 'campamento', 'acampar', 'tienda'],
+      hiking: ['senderismo', 'sendero', 'ruta', 'trekking', 'caminar', 'montañ']
+    };
+
+    // Detectar qué tipo de POI busca
+    for (const [poiId, keywords] of Object.entries(poiKeywords)) {
+      for (const keyword of keywords) {
+        if (msgLower.includes(keyword)) {
+          return { id: poiId, keyword };
+        }
+      }
+    }
+
+    return null;
   },
 
   _addUserBubble(text, photoUrl) {
