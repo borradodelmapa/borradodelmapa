@@ -409,8 +409,6 @@ const mapaItinerario = {
     // Ocultar contenido principal; en desktop dejar input bar visible para chatear
     if (appContent) appContent.style.display = 'none';
     if (inputBar) inputBar.style.display = 'none';
-    const bottomBar = document.getElementById('app-bottom-bar');
-    if (bottomBar) bottomBar.style.display = 'none';
     view.style.display = 'block';
     document.body.classList.add('itin-open');
 
@@ -467,7 +465,7 @@ const mapaItinerario = {
         if (inputBar) inputBar.style.display = 'none';
         view.style.display = 'block';
         const bb = document.getElementById('app-bottom-bar');
-        if (bb) bb.style.display = mapaRuta._chatExpanded ? '' : 'none';
+        if (bb) bb.style.display = '';
         setTimeout(() => {
           mapaRuta.invalidateSize();
           const cid = mapaRuta._currentContainerId;

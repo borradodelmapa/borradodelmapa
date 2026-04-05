@@ -3027,7 +3027,10 @@ body {
 
 .itin-view {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: calc(56px + env(safe-area-inset-bottom, 0px));
   z-index: 900;
   background: var(--negro);
 }
@@ -3059,12 +3062,15 @@ body {
   .itin-map-col {
     flex: 0 0 40vh;
     height: 40vh;
+    order: 1;
   }
   .itin-cards-col {
     flex: 1;
     height: auto;
     border-left: none;
-    border-top: 1px solid rgba(240,180,41,.15);
+    border-bottom: 1px solid rgba(240,180,41,.15);
+    border-top: none;
+    order: 0;
     overflow-x: hidden;
     overflow-y: auto;
     display: flex;
