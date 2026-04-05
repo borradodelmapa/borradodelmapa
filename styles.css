@@ -3042,8 +3042,8 @@ body {
   max-width: 80vw;
   overflow: hidden;
   text-overflow: ellipsis;
-  pointer-events: none;
   backdrop-filter: blur(6px);
+  cursor: pointer;
 }
 #live-map-routes-sheet {
   position: fixed;

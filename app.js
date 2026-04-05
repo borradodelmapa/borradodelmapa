@@ -2980,8 +2980,18 @@ function _updateNearestChip() {
   });
   if (!nearest) return;
   const dist = minDist < 1 ? Math.round(minDist * 1000) + ' m' : minDist.toFixed(1) + ' km';
-  chip.textContent = `📍 Más cerca: ${nearest.stop.headline || nearest.stop.name || `Parada ${nearest.i+1}`} · ${dist}`;
+  const label = nearest.stop.headline || nearest.stop.name || `Parada ${nearest.i + 1}`;
+  chip.textContent = `📍 #${nearest.i + 1} ${label} · ${dist}`;
   chip.style.display = 'block';
+  chip.style.pointerEvents = 'auto';
+  chip.style.cursor = 'pointer';
+  chip.onclick = () => {
+    const dayColors = ['#D4A843','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
+    const color = dayColors[((nearest.stop.day || 1) - 1) % dayColors.length];
+    _liveMap.panTo({ lat: nearest.stop.lat, lng: nearest.stop.lng });
+    _liveMap.setZoom(14);
+    _showStopInfo(nearest.stop, nearest.i, _liveRouteMarkers[nearest.i], color);
+  };
 }
 
 function clearRouteFromLiveMap() {
