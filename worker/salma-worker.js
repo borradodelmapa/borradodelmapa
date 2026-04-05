@@ -3146,13 +3146,13 @@ export default {
 
     const url = new URL(request.url);
 
-    // ─── ENDPOINT /pin — Extractor de lugar para mapa personal ───
+    // ─── ENDPOINT /pin — Extractor de lugar para mapa personal (Claude) ───
     if (request.method === 'POST' && url.pathname === '/pin') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
       try {
         const body = await request.json();
         const { text, image_base64 } = body;
-        const apiKey = env.OPENAI_API_KEY;
+        const apiKey = env.ANTHROPIC_API_KEY;
         if (!apiKey) return new Response(JSON.stringify({ name: null, error: 'no_key' }), { status: 500, headers: corsH });
 
         const systemPrompt = `Eres un extractor de datos. Analiza el texto o imagen y devuelve SOLO un JSON válido, sin explicaciones, sin markdown.
@@ -3164,26 +3164,27 @@ SOLO JSON. Nada más.`;
 
         const userContent = image_base64
           ? [
-              { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${image_base64}`, detail: 'high' } },
+              { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: image_base64 } },
               { type: 'text', text: text || 'Extrae el lugar de esta imagen.' }
             ]
-          : (text || '');
+          : [{ type: 'text', text: text || '' }];
 
-        const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
+        const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+          },
           body: JSON.stringify({
-            model: 'gpt-4o-mini',
+            model: 'claude-haiku-4-5-20251001',
             max_tokens: 300,
-            temperature: 0,
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user', content: userContent }
-            ]
+            system: systemPrompt,
+            messages: [{ role: 'user', content: userContent }]
           })
         });
-        const oData = await openaiRes.json();
-        const raw = oData.choices?.[0]?.message?.content?.trim() || '';
+        const cData = await claudeRes.json();
+        const raw = cData.content?.[0]?.text?.trim() || '';
         const cleaned = raw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
         try {
           const result = JSON.parse(cleaned);
