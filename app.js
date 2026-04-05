@@ -202,13 +202,25 @@ function updateBottomBar() {
     narratorToggle.addEventListener('change', async (e) => {
       if (typeof salma === 'undefined') return;
       if (e.target.checked) {
-        const ok = await salma.startNarrator();
-        if (ok === false) {
-          e.target.checked = false;
-          if (typeof showToast === 'function') showToast('Copiloto no disponible (requiere GPS)');
+        if (window._itinViewOpen && typeof mapaRuta !== 'undefined') {
+          // Guía abierta: mapa completo + GPS + POIs
+          await mapaRuta.activateCopilot();
+          if (!mapaRuta._copilotActive) e.target.checked = false;
+        } else {
+          // Sin guía: GPS + notificaciones de Salma
+          const ok = await salma.startNarrator();
+          if (ok === false) {
+            e.target.checked = false;
+            if (typeof showToast === 'function') showToast('Copiloto no disponible (requiere GPS)');
+          }
         }
       } else {
-        salma.stopNarrator();
+        if (window._itinViewOpen && typeof mapaRuta !== 'undefined' && mapaRuta._copilotActive) {
+          // Volver a vista de guía normal
+          mapaRuta.deactivateCopilot();
+        } else {
+          salma.stopNarrator();
+        }
       }
     });
   }
