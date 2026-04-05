@@ -1121,11 +1121,15 @@ const salma = {
 
   async startNarrator() {
     if (this._narratorActive) return;
-    // Mostrar modal unificado de permisos GPS + Notificaciones
-    const permissionsOk = await this._requestAllPermissions();
-    if (!permissionsOk) {
-      console.log('[Salma] Narrador: permisos denegados');
+    // Solo pedir notificaciones — GPS ya está activo desde initGeolocation()
+    const notificationsOk = await this._requestNotificationPermission();
+    if (!notificationsOk) {
+      console.log('[Salma] Narrador: notificaciones denegadas');
       return false;
+    }
+    // Si no hay GPS aún, esperar a que se active
+    if (!this._userLocation) {
+      this._addSalmaBubble('Esperando ubicación GPS... (puede tardar unos segundos)');
     }
     this._narratorActive = true;
     this._narratorNotified = new Set();
@@ -1137,13 +1141,80 @@ const salma = {
     // Primer check inmediato
     this.checkNearbyPOIs();
     localStorage.setItem('narrator_active', 'true');
-    console.log('[Salma] Narrador activado');
+    console.log('[Salma] Narrador activado (reutilizando GPS existente)');
     if (typeof updateBottomBar === 'function') updateBottomBar();
     return true;
   },
 
+  async _requestNotificationPermission() {
+    // Solo pedir notificaciones — GPS ya está activo
+    const area = this._getChatArea();
+    if (!area) return true; // Si no hay chat, permitir de todas formas
+
+    return new Promise((resolve) => {
+      // Si ya tiene permiso, permitir directo
+      if ('Notification' in window && Notification.permission === 'granted') {
+        resolve(true);
+        return;
+      }
+      // Si ya fue denegado, no insistir
+      if ('Notification' in window && Notification.permission === 'denied') {
+        this._addSalmaBubble('Notificaciones desactivadas. Puedo navegar sin ellas, pero no recibirás alertas de lugares cercanos.');
+        resolve(true); // Permitir igual, solo sin notificaciones
+        return;
+      }
+
+      // Mostrar modal simple solo para notificaciones
+      if (area.querySelector('.msg-perms-request')) {
+        resolve(true);
+        return;
+      }
+
+      const div = document.createElement('div');
+      div.className = 'msg msg-salma msg-perms-request';
+      div.innerHTML = `
+        <div class="msg-salma-header">
+          <div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div>
+          <span class="msg-salma-name">Salma</span>
+        </div>
+        <div class="msg-body-salma">
+          <strong>🔔 Notificaciones del Copiloto</strong>
+          <p>Te aviso cuando te acercas a restaurantes, museos o lugares interesantes.</p>
+          <div style="display:flex;gap:8px;margin-top:12px;">
+            <button class="btn-perms-accept">Activar notificaciones</button>
+            <button class="btn-perms-reject">Sin notificaciones</button>
+          </div>
+        </div>`;
+      area.appendChild(div);
+      this._scrollToBottom(true);
+
+      const acceptBtn = div.querySelector('.btn-perms-accept');
+      const rejectBtn = div.querySelector('.btn-perms-reject');
+
+      acceptBtn.addEventListener('click', async () => {
+        acceptBtn.disabled = true;
+        acceptBtn.textContent = 'Un momento...';
+
+        try {
+          const notifPerm = await Notification.requestPermission();
+          div.remove();
+          resolve(notifPerm === 'granted');
+        } catch (e) {
+          console.log('[Salma] Error pidiendo notificaciones:', e);
+          div.remove();
+          resolve(true); // Permitir de todas formas
+        }
+      });
+
+      rejectBtn.addEventListener('click', () => {
+        div.remove();
+        resolve(true); // Permitir sin notificaciones
+      });
+    });
+  },
+
   async _requestAllPermissions() {
-    // Modal unificado pidiendo GPS + Notificaciones
+    // Modal unificado pidiendo GPS + Notificaciones (OBSOLETO - mantener por compatibilidad)
     const area = this._getChatArea();
     if (!area) return false;
 
