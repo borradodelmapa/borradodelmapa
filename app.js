@@ -2870,6 +2870,18 @@ function openLiveMap() {
   if (bar) bar.style.display = 'none';
   document.querySelector('.app-header')?.style.setProperty('display', 'none', 'important');
 
+  // Cerrar cualquier sheet que haya quedado abierta
+  closeSalmaMapSheet();
+  closeTapSheet();
+  closeShareSheet();
+  _closeMapPanels();
+
+  // Si el mapa ya existe, solo reanudar GPS
+  if (_liveMap) {
+    _resumeMapGPS();
+    return;
+  }
+
   (window._loadGoogleMaps ? window._loadGoogleMaps() : Promise.reject())
     .then(() => {
       const el = document.getElementById('live-map-container');
@@ -2883,41 +2895,27 @@ function openLiveMap() {
         gestureHandling: 'greedy',
       });
 
-      // InfoWindow y PlacesService compartidos para toda la sesión del mapa
       _poiInfoWindow = new google.maps.InfoWindow();
       _placesService = new google.maps.places.PlacesService(_liveMap);
 
-      // Tap en mapa: cerrar paneles + pin manual
       _liveMap.addListener('click', _onMapTap);
       _liveMap.addListener('drag', _closeMapPanels);
 
-      // Geolocalización en tiempo real
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {
-          const latlng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-          _liveMap.setCenter(latlng);
-          _placeUserMarker(latlng);
-        });
-        _liveMapWatchId = navigator.geolocation.watchPosition(pos => {
-          const latlng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-          _placeUserMarker(latlng);
-        }, null, { enableHighAccuracy: true, maximumAge: 5000 });
-      }
-
-      // Restaurar ruta activa si había una (sin resetear _activeRouteData)
-      if (_activeRouteData) {
-        const saved = _activeRouteData;
-        selectRouteOnMap(saved);
-      }
-
-      // Restaurar pins de fotos guardados
-      if (_savedPinsData.length) {
-        _savedPinsData.forEach(pinData => _placeMapPin(pinData));
-        _savedPinsData = []; // _placeMapPin los vuelve a añadir
-      }
-
+      _resumeMapGPS();
     })
     .catch(() => showToast('No se pudo cargar Google Maps'));
+}
+
+function _resumeMapGPS() {
+  if (!navigator.geolocation || _liveMapWatchId !== null) return;
+  navigator.geolocation.getCurrentPosition(pos => {
+    const latlng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+    if (_liveMap && !_liveUserMarker) _liveMap.setCenter(latlng);
+    _placeUserMarker(latlng);
+  });
+  _liveMapWatchId = navigator.geolocation.watchPosition(pos => {
+    _placeUserMarker({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+  }, null, { enableHighAccuracy: true, maximumAge: 5000 });
 }
 
 function _placeUserMarker(latlng) {
@@ -2958,27 +2956,17 @@ function closeLiveMap() {
   if (view) view.style.display = 'none';
   if (bar) bar.style.display = '';
   document.querySelector('.app-header')?.style.removeProperty('display');
+  // Cerrar sheets y paneles
   _closeMapPanels();
+  closeSalmaMapSheet();
   closeTapSheet();
+  closeShareSheet();
+  // Pausar GPS (se reanuda al volver)
   if (_liveMapWatchId !== null) {
     navigator.geolocation.clearWatch(_liveMapWatchId);
     _liveMapWatchId = null;
   }
-  if (_liveMap) {
-    const savedRoute = _activeRouteData;
-    clearRouteFromLiveMap();
-    _activeRouteData = savedRoute; // preservar para cuando vuelva al mapa
-    Object.keys(_catMarkers).forEach(cat => _removeCatMarkers(cat));
-    _mapPins.forEach(m => m.setMap(null)); _mapPins = []; // _savedPinsData se preserva
-    _poiInfoWindow = null;
-    _placesService = null;
-    _liveUserMarker = null;
-    _liveMap = null;
-    document.getElementById('live-map-container').innerHTML = '';
-    // Desmarcar checkboxes del panel
-    document.querySelectorAll('#live-map-layers-panel input[type=checkbox]').forEach(cb => { cb.checked = false; });
-    window._mapConfig = { food: false, medical: false, lodging: false, shopping: false, parks: false, culture: false, transit: false };
-  }
+  // El mapa queda vivo en memoria — pins, ruta y capas se preservan
 }
 
 async function openRouteSelector() {
