@@ -28,12 +28,7 @@ const mapaRuta = {
     this._currentStops = stops;
     this.destroy();
 
-    const valid = stops.filter(s => s.lat && s.lng);
-    if (valid.length && window.L) {
-      this._buildLeafletMap(el, valid);
-    } else {
-      this._renderStaticMap(containerId, stops);
-    }
+    this._initGoogleMaps(containerId, stops);
   },
 
 
