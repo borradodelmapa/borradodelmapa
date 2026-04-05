@@ -401,6 +401,8 @@ const mapaItinerario = {
 
     // Eliminar barra volver/apagar si existía
     document.getElementById('copilot-return-bar')?.remove();
+    // Asegurar que nunca quede el modo fullscreen activo
+    view.classList.remove('copilot-fullscreen');
 
     // Limpiar guide-cards del chat y loading/retry si los hay
     document.querySelectorAll('.guide-card').forEach(el => el.remove());

@@ -2692,63 +2692,8 @@ window.openCoinsModal = openCoinsModal;
 
 // ═══ COPILOTO — toggle con lógica de Coins ═══
 
-async function toggleCopilot() {
-  const copilotActive = typeof mapaRuta !== 'undefined' && mapaRuta._copilotActive;
-
-  if (copilotActive) {
-    // Desactivar
-    if (typeof mapaRuta !== 'undefined') mapaRuta.deactivateCopilot();
-    if (typeof salma !== 'undefined') salma.stopNarrator();
-    showToast('Copiloto desactivado');
-    return;
-  }
-
-  // Sin login — activar gratis (sin coins)
-  if (!currentUser) {
-    _doCopilotActivate();
-    return;
-  }
-
-  // Activar — comprobar si ya pagó hoy
-  const hoy = new Date().toISOString().slice(0, 10);
-  const copilotData = currentUser.copilot_data || {};
-
-  if (copilotData.activated_date === hoy) {
-    // Ya pagó hoy — activar sin cobrar
-    _doCopilotActivate();
-    return;
-  }
-
-  // Comprobar coins
-  const coins = currentUser.coins_saldo || 0;
-  if (coins < 1) {
-    showToast('Necesitas 1 Salma Coin para activar el Copiloto');
-    openCoinsModal();
-    return;
-  }
-
-  // Descontar 1 coin y guardar (solo la primera vez del día)
-  try {
-    const newCoins = coins - 1;
-    await db.collection('users').doc(currentUser.uid).update({
-      coins_saldo: newCoins,
-      copilot_data: { activated_date: hoy }
-    });
-    currentUser.coins_saldo = newCoins;
-    currentUser.copilot_data = { activated_date: hoy };
-    updateBottomBar();
-    showToast('Copiloto activado · −1 Salma Coin · saldo: ' + newCoins);
-    _doCopilotActivate();
-  } catch (e) {
-    console.warn('Error activando Copiloto:', e);
-    showToast('Error al activar Copiloto. Inténtalo de nuevo.');
-  }
-}
-
-function _doCopilotActivate() {
-  if (typeof mapaRuta !== 'undefined') mapaRuta.activateCopilot();
-  if (typeof salma !== 'undefined') salma.startNarrator();
-}
+function toggleCopilot() {}
+function _doCopilotActivate() {}
 
 // Copiloto eliminado — función vacía para compatibilidad
 function _restoreCopilotState() {}
