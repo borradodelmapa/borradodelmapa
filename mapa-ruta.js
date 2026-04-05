@@ -80,9 +80,6 @@ const mapaRuta = {
     document.getElementById('itin-view')?.classList.add('copilot-fullscreen');
     document.querySelector('.app-header')?.classList.add('copilot-hidden');
     document.getElementById('itin-mobile-back-btn')?.classList.add('copilot-hidden');
-    // Nav oculta — aparece al abrir el chat de Salma
-    const _navEl = document.getElementById('app-bottom-bar');
-    if (_navEl) _navEl.style.display = 'none';
   },
 
   _exitFullscreen() {
