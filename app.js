@@ -3169,8 +3169,32 @@ async function _processSalmaMapRequest(text, imageBase64) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
-    const data = await res.json();
-    const reply = data.reply || '';
+
+    let reply = '';
+    const ct = res.headers.get('content-type') || '';
+    if (ct.includes('application/json')) {
+      const data = await res.json();
+      reply = data.reply || '';
+    } else {
+      // SSE stream — leer hasta evento done
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buf = '', streamDone = false;
+      while (!streamDone) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buf += decoder.decode(value, { stream: true });
+        const lines = buf.split('\n');
+        buf = lines.pop() || '';
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          try {
+            const evt = JSON.parse(line.slice(6).trim());
+            if (evt.done) { reply = evt.reply || ''; streamDone = true; }
+          } catch (_) {}
+        }
+      }
+    }
 
     const actionMatch = reply.match(/SALMA_ACTION:\s*(\{[^\n]+\})/);
     if (actionMatch) {
