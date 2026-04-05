@@ -3151,6 +3151,7 @@ let _mapPins = [];
 let _savedPinsData = []; // persiste entre sesiones del mapa
 let _tapPin = null;
 let _tapLatLng = null;
+let _tapPhotoBase64 = null;
 let _pinIdCounter = 0;
 
 // ── Compartir mapa ──
@@ -3251,6 +3252,28 @@ function closeTapSheet() {
   if (sheet) sheet.style.display = 'none';
   if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
   _tapLatLng = null;
+  clearTapPhoto();
+}
+
+function handleTapPhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    _tapPhotoBase64 = e.target.result.split(',')[1];
+    document.getElementById('lmts-photo-thumb').src = e.target.result;
+    document.getElementById('lmts-photo-preview').style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+
+function clearTapPhoto() {
+  _tapPhotoBase64 = null;
+  const preview = document.getElementById('lmts-photo-preview');
+  if (preview) preview.style.display = 'none';
+  const thumb = document.getElementById('lmts-photo-thumb');
+  if (thumb) thumb.src = '';
 }
 
 function _showTapSheet(latLng) {
@@ -3278,10 +3301,11 @@ function _showTapSheet(latLng) {
 
   function setSaveAction(name) {
     document.getElementById('lmts-save-btn').onclick = () => {
-      _placeMapPin({ name, address: `${latStr}, ${lngStr}`, description: '', place_type: 'other', lat, lng });
+      _placeMapPin({ name, address: `${latStr}, ${lngStr}`, description: '', place_type: 'other', photo: _tapPhotoBase64, lat, lng });
       if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
       sheet.style.display = 'none';
       _tapLatLng = null;
+      clearTapPhoto();
     };
   }
   setSaveAction(`📍 ${latStr}, ${lngStr}`);
@@ -3473,6 +3497,8 @@ window.openSalmaMapSheet = openSalmaMapSheet;
 window.closeSalmaMapSheet = closeSalmaMapSheet;
 window.sendSalmaMapPhoto = sendSalmaMapPhoto;
 window.closeTapSheet = closeTapSheet;
+window.handleTapPhoto = handleTapPhoto;
+window.clearTapPhoto = clearTapPhoto;
 window.deletePinById = deletePinById;
 window.openShareSheet = openShareSheet;
 window.closeShareSheet = closeShareSheet;

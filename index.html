@@ -196,6 +196,20 @@ window._loadGoogleMaps = function() {
       <button class="lmts-btn-save" id="lmts-save-btn">⭐ Guardar pin</button>
       <button class="lmts-btn-dir" id="lmts-dir-btn">🗺️ Cómo llegar</button>
     </div>
+    <div class="lmts-photo-row">
+      <label class="lmts-photo-btn" title="Hacer foto">
+        📷
+        <input type="file" accept="image/*" capture="environment" style="display:none" onchange="handleTapPhoto(this)">
+      </label>
+      <label class="lmts-photo-btn" title="Subir imagen">
+        📁
+        <input type="file" accept="image/*" style="display:none" onchange="handleTapPhoto(this)">
+      </label>
+      <div id="lmts-photo-preview" style="display:none">
+        <img id="lmts-photo-thumb" alt="">
+        <button class="lmts-photo-clear" onclick="clearTapPhoto()">✕</button>
+      </div>
+    </div>
     <div class="lmts-section-title">Cerca de aquí</div>
     <div id="lmts-nearby-list" class="lmts-nearby-list"></div>
   </div>
