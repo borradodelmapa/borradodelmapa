@@ -2887,9 +2887,10 @@ function openLiveMap() {
       const el = document.getElementById('live-map-container');
       if (!el || _liveMap) return;
 
+      const _lastPos = JSON.parse(localStorage.getItem('salma_last_pos') || 'null');
       _liveMap = new google.maps.Map(el, {
         zoom: 15,
-        center: { lat: 40.416, lng: -3.703 },
+        center: _lastPos || { lat: 40.416, lng: -3.703 },
         styles: window._mapStyle,
         disableDefaultUI: true,
         gestureHandling: 'greedy',
@@ -2908,11 +2909,12 @@ function openLiveMap() {
 
 function _resumeMapGPS() {
   if (!navigator.geolocation || _liveMapWatchId !== null) return;
+  // maximumAge alto → usa posición cacheada del navegador (respuesta inmediata)
   navigator.geolocation.getCurrentPosition(pos => {
     const latlng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
     if (_liveMap && !_liveUserMarker) _liveMap.setCenter(latlng);
     _placeUserMarker(latlng);
-  });
+  }, null, { maximumAge: 60000, timeout: 10000 });
   _liveMapWatchId = navigator.geolocation.watchPosition(pos => {
     _placeUserMarker({ lat: pos.coords.latitude, lng: pos.coords.longitude });
   }, null, { enableHighAccuracy: true, maximumAge: 5000 });
@@ -2920,6 +2922,7 @@ function _resumeMapGPS() {
 
 function _placeUserMarker(latlng) {
   if (!_liveMap) return;
+  localStorage.setItem('salma_last_pos', JSON.stringify({ lat: latlng.lat, lng: latlng.lng }));
   if (_liveUserMarker) {
     _liveUserMarker.setPosition(latlng);
   } else {
