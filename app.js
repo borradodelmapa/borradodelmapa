@@ -2839,7 +2839,7 @@ function closeLiveMap() {
 }
 
 async function openRouteSelector() {
-  if (!currentUser || !window.db) return;
+  if (!currentUser || typeof db === 'undefined') return;
   const sheet = document.getElementById('live-map-routes-sheet');
   const list = document.getElementById('live-map-routes-list');
   if (!sheet || !list) return;
