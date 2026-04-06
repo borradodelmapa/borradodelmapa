@@ -5487,9 +5487,13 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           // ── PASO 2: Draft inmediato (coords del KV donde haya, Claude donde no) ──
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ draft: true, reply, route })}\n\n`)); } catch (_) {}
 
-          // ── Verify DESACTIVADO — las fotos tienen bug, el verify solo añade 30s sin beneficio ──
-          // TODO: arreglar bug de fotos en verifyAllStops y reactivar
-          // Las coords vienen del KV (verificadas) o de Claude (95% correctas)
+          // ── PASO 3: Verify con Google Places (fotos + coords reales) ──
+          try {
+            if (env.GOOGLE_PLACES_KEY) {
+              const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY);
+              if (verified) route = verified;
+            }
+          } catch (_) {}
         }
 
         // ── Guardar ruta en KV (nivel 3 — caché automático con múltiples keys) ──
