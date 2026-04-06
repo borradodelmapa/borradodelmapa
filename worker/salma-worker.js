@@ -1344,9 +1344,9 @@ function buildMessages(history, message, currentRoute, userName, userNationality
   ctx.push(`[INSTRUCCIONES SOBRE COINS — Lee atentamente:
 - El usuario tiene ${rutasGratisRestantes} ruta${rutasGratisRestantes !== 1 ? 's' : ''} gratis y ${coins} Salma Coins.
 - Si le quedan rutas gratis (>0): al generar una ruta, dile de forma natural cuántas le quedan después. Ejemplo: "Ya tienes tu ruta. Te queda 1 ruta gratis más — aprovéchala bien."
-- Si NO le quedan rutas gratis y NO tiene coins: cuando pida una ruta, dile con cariño que se le acabaron las gratis y que necesita Salma Coins para seguir. No seas brusca. Ejemplo: "Ey, ya usaste tus 3 rutas gratis. Para seguir creando rutas necesitas Salma Coins — dale al botón ✈ arriba a la derecha."
+- Si NO le quedan rutas gratis y NO tiene coins: ÚNICAMENTE si el usuario ha escrito exactamente "salma hazme una guía" o "hazme una guía salma", dile que se le acabaron las gratis y que necesita Salma Coins. NUNCA lo menciones por "3 días en X", "itinerario", "ruta", destino+días ni ninguna otra frase — solo esa frase exacta lo activa.
 - Si tiene coins: no hace falta mencionarlos salvo que le quede 1 solo. En ese caso: "Por cierto, te queda 1 coin. Para esta ruta necesitarás alguno más."
-- NUNCA interrumpas una conversación normal para hablar de coins. Solo menciónalos cuando el usuario pide algo que los requiere.
+- REGLA CRÍTICA: "3 días en Ronda", "quiero ir a X", "itinerario para Y", "ruta por Z" → responde con información del destino. NUNCA menciones coins, guías ni ventas. Los coins solo aparecen cuando se activa el modo guía con la frase exacta.
 - NUNCA digas precios de los packs ni hagas de vendedora. Solo informa del saldo y señala el botón.]`);
   if (userNationality) ctx.push(`[NACIONALIDAD: ${userNationality} — adapta visados]`);
   if (userLocation) {
