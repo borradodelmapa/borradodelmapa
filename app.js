@@ -284,6 +284,42 @@ async function renderWelcome() {
         </div>
       </div>
     </div>
+    <div class="welcome-below">
+      <div class="welcome-stats">
+        <div class="welcome-stat">
+          <span class="welcome-stat-num" id="stat-routes">—</span>
+          <span class="welcome-stat-label">rutas creadas</span>
+        </div>
+        <span class="welcome-stat-dot">·</span>
+        <div class="welcome-stat">
+          <span class="welcome-stat-num">193</span>
+          <span class="welcome-stat-label">países</span>
+        </div>
+      </div>
+      <div class="welcome-features">
+        <div class="welcome-feature">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+          <div>
+            <div class="welcome-feature-title">Planifica</div>
+            <div class="welcome-feature-desc">Ruta con mapa, fotos y paradas día a día</div>
+          </div>
+        </div>
+        <div class="welcome-feature">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <div>
+            <div class="welcome-feature-title">Busca</div>
+            <div class="welcome-feature-desc">Vuelos, hoteles y restaurantes con datos reales</div>
+          </div>
+        </div>
+        <div class="welcome-feature">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          <div>
+            <div class="welcome-feature-title">Acompaña</div>
+            <div class="welcome-feature-desc">Te guía en ruta y resuelve imprevistos</div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div id="welcome-reminders"></div>`;
 
   // Welcome input → enviar
@@ -345,9 +381,28 @@ async function renderWelcome() {
   // Actualizar chips con datos reales de Firestore (async, sin layout shift)
   _loadChipsAsync(chipsEl);
 
+  // Contador de rutas creadas (async)
+  _loadRouteCount();
+
   // Recordatorios próximos
   if (currentUser && typeof notasManager !== 'undefined') {
     notasManager.renderWelcomeReminders('welcome-reminders');
+  }
+}
+
+async function _loadRouteCount() {
+  const el = document.getElementById('stat-routes');
+  if (!el) return;
+  try {
+    const snap = await db.collection('public_guides').get();
+    const count = snap.size;
+    if (count > 0) {
+      el.textContent = count > 999 ? (count / 1000).toFixed(1).replace('.', ',') + 'k' : count.toString();
+    } else {
+      el.textContent = '0';
+    }
+  } catch (_) {
+    el.textContent = '—';
   }
 }
 

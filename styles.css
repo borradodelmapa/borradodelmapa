@@ -703,6 +703,47 @@ body {
 .chip-ghost { display:none; }
 .chip:hover { background:rgba(212,160,23,.2); border-color:var(--dorado); }
 
+/* ── Welcome below-the-fold: stats + features ── */
+.welcome-below {
+  max-width:540px; margin:0 auto;
+  padding:32px 24px 40px; text-align:center;
+}
+.welcome-stats {
+  display:flex; align-items:center; justify-content:center; gap:12px;
+  margin-bottom:28px;
+}
+.welcome-stat { display:flex; flex-direction:column; align-items:center; }
+.welcome-stat-num {
+  font-family:var(--font-tight); font-size:28px; font-weight:800;
+  color:var(--dorado); line-height:1;
+}
+.welcome-stat-label {
+  font-family:var(--font-mono); font-size:10px;
+  color:rgba(244,239,230,.5); letter-spacing:.1em; margin-top:4px;
+}
+.welcome-stat-dot {
+  font-size:20px; color:rgba(244,239,230,.2); margin-top:-10px;
+}
+.welcome-features {
+  display:flex; gap:24px; text-align:left;
+}
+.welcome-feature {
+  display:flex; align-items:flex-start; gap:10px; flex:1;
+}
+.welcome-feature svg { flex-shrink:0; color:var(--dorado); opacity:.6; margin-top:2px; }
+.welcome-feature-title {
+  font-family:var(--font-tight); font-size:13px; font-weight:700;
+  color:var(--crema); margin-bottom:2px;
+}
+.welcome-feature-desc {
+  font-size:11px; color:rgba(244,239,230,.5); line-height:1.4;
+}
+@media (max-width:600px) {
+  .welcome-features { flex-direction:column; gap:16px; align-items:center; }
+  .welcome-feature { max-width:280px; }
+  .welcome-stat-num { font-size:24px; }
+}
+
 /* ═══ STATE 2: CHAT + GUIDE ═══ */
 .chat-area { padding:12px 16px; }
 
