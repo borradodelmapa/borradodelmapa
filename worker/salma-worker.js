@@ -804,19 +804,26 @@ function formatDayHeaders(text, numDays) {
     return result.replace(/\n{4,}/g, '\n\n\n');
   }
 
-  // Paso 2: si Sonnet no usó ordinales, dividir por párrafos
-  // Separar fotos (al inicio) del contenido
-  const photoRegex = /^((?:\s*!\[[^\]]*\]\([^)]+\)\s*\n*)+)/;
-  const photoMatch = text.match(photoRegex);
-  const photos = photoMatch ? photoMatch[1].trim() : '';
-  const content = photoMatch ? text.slice(photoMatch[0].length).trim() : text.trim();
+  // Paso 2: si Sonnet no usó ordinales, dividir por párrafos y distribuir fotos
 
-  // Separar párrafos de contenido vs párrafos finales (transporte, tips)
+  // Extraer TODAS las fotos del texto (pueden estar al inicio o inline)
+  const photoLines = [];
+  const textLines = [];
+  for (const line of text.split('\n')) {
+    if (/^!\[/.test(line.trim())) {
+      photoLines.push(line.trim());
+    } else {
+      textLines.push(line);
+    }
+  }
+  const content = textLines.join('\n').trim();
+
+  // Separar párrafos
   const paragraphs = content.split(/\n\n+/).filter(p => p.trim().length > 20);
-  if (paragraphs.length < numDays + 1) return text; // muy poco texto, no dividir
+  if (paragraphs.length < numDays + 1) return text;
 
-  // Detectar párrafos finales (transporte, llegar, comer, clima) — van fuera de los días
-  const tailKeywords = /^(?:Para llegar|Cómo llegar|Para comer|Si quieres|El clima|En abril|Presupuesto|Transporte)/i;
+  // Detectar párrafos finales (transporte, tips, comer)
+  const tailKeywords = /^(?:Para llegar|Cómo llegar|Para comer|Si quieres|El clima|En abril|Presupuesto|Transporte|Si necesitas|Cómo moverse)/i;
   let tailStart = paragraphs.length;
   for (let i = paragraphs.length - 1; i >= Math.floor(paragraphs.length / 2); i--) {
     if (tailKeywords.test(paragraphs[i].trim())) tailStart = i;
@@ -825,8 +832,7 @@ function formatDayHeaders(text, numDays) {
 
   const bodyParas = paragraphs.slice(0, tailStart);
   const tailParas = paragraphs.slice(tailStart);
-
-  if (bodyParas.length < numDays) return text; // no hay suficientes párrafos
+  if (bodyParas.length < numDays) return text;
 
   // Distribuir párrafos entre los días
   const parasPerDay = Math.ceil(bodyParas.length / numDays);
@@ -836,13 +842,14 @@ function formatDayHeaders(text, numDays) {
     const end = Math.min(start + parasPerDay, bodyParas.length);
     if (start >= bodyParas.length) break;
     const dayParas = bodyParas.slice(start, end).join('\n\n');
-    parts.push('**Día ' + (d + 1) + '**\n\n' + dayParas);
+    // Distribuir fotos: 1 foto por día si hay suficientes
+    const photo = photoLines[d] || '';
+    const photoBlock = photo ? photo + '\n\n' : '';
+    parts.push('**Día ' + (d + 1) + '**\n\n' + photoBlock + dayParas);
   }
 
-  // Reensamblar: fotos + días + cola
-  let final = '';
-  if (photos) final += photos + '\n\n';
-  final += parts.join('\n\n');
+  // Reensamblar: días + cola (fotos ya distribuidas, no al inicio)
+  let final = parts.join('\n\n\n');
   if (tailParas.length > 0) final += '\n\n' + tailParas.join('\n\n');
 
   return final;
@@ -1613,30 +1620,21 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
 — Continuidad: la primera parada del día N+1 empieza donde acabó el día N.]`;
   } else if (isDaysDestination(message)) {
     // Destino + días → respuesta estructurada por días (sin JSON, sin ruta)
-    userContent += `\n\n[MODO PLAN DE VIAJE — PRIORIDAD MÁXIMA, ANULA REGLAS DE FORMATO ANTERIORES:
+    userContent += `\n\n[MODO PLAN DE VIAJE — INSTRUCCIONES ESTRICTAS:
 
-PROHIBIDO: generar SALMA_ROUTE_JSON, preguntar nada, mencionar guías/coins, inventar URLs.
+PROHIBIDO: SALMA_ROUTE_JSON, preguntar, mencionar guías/coins, inventar URLs, párrafos largos.
 
-FORMATO OBLIGATORIO — PARA ESTA RESPUESTA ignora la regla de "no listas" y "no títulos". Usa EXACTAMENTE este formato:
+BREVEDAD OBLIGATORIA: máximo 2-3 frases por parada. Dato histórico/cultural + precio + tiempo. Sin prosa. Sin rodeos. Sin repetir lo que ya dijiste.
 
-EJEMPLO DE RESPUESTA CORRECTA (copia esta estructura):
+FORMATO: cada parada es 1 párrafo corto con nombre en negrita + enlace Maps + 1-2 frases útiles.
 
-**Día 1 — Casco antiguo y el Tajo**
+Ejemplo: **Puente Nuevo** (https://www.google.com/maps/search/Puente+Nuevo+Ronda) — 42 años de obras (1751-1793), cámara interior que fue cárcel. Baja al Camino de los Molinos para la mejor vista. 1h. Gratis.
 
-**Puente Nuevo** (https://www.google.com/maps/search/Puente+Nuevo+Ronda) — Se terminó en 1793 después de 42 años de obras. La cámara interior sobre el arco central sirvió de cárcel. Baja al fondo del Tajo por el Camino de los Molinos para la mejor vista. 1h.
+4-5 paradas por día. Cada día termina con dónde comer (nombre + enlace + plato + precio).
+Al final: transporte, presupuesto diario, alternativas.
+Cierra con: "Si quieres la guía completa con mapa y navegación, dime 'Salma hazme una guía'."
 
-**Baños Árabes** (https://www.google.com/maps/search/Baños+Árabes+Ronda) — Siglo XIII, los mejor conservados de Andalucía. 3,50€. 30min.
-
-**Palacio de Mondragón** (https://www.google.com/maps/search/Palacio+Mondragón+Ronda) — Residencia del sultán Abomelic en el siglo XIV. Patio mudéjar y mirador al Tajo. 3€. 45min.
-
-Dónde comer: **Tragabuches** (https://www.google.com/maps/search/Tragabuches+Ronda) — rabo de toro y sopa de hinojo. Menú 18-25€.
-
-**Día 2 — Miradores y la Ronda profunda**
-(misma estructura)
-
-FIN DEL EJEMPLO. Genera tu respuesta con esta MISMA estructura. Cada lugar con su enlace Maps, dato histórico/cultural, tiempo y precio. 4-5 paradas por día. Al final: cómo llegar, presupuesto, alternativas. Cierra con: "Si quieres la guía completa con mapa y navegación, dime 'Salma hazme una guía'."
-
-Usa buscar_foto para al menos 1 lugar destacado POR DÍA (mínimo 1 foto por día, ideal 2). Llama a buscar_foto varias veces si hace falta — cada día merece su foto.]`;
+FOTOS: usa buscar_foto para 1 lugar por día MÍNIMO. Llama a buscar_foto varias veces — 1 por día.]`;
   } else {
     userContent += `\n\n[MODO CONVERSACIONAL — INSTRUCCIONES ESTRICTAS:
 
