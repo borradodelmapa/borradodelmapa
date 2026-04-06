@@ -855,6 +855,25 @@ function formatDayHeaders(text, numDays) {
   return final;
 }
 
+// Genera un enlace Google Maps directions con todas las paradas mencionadas en el texto
+function appendRouteMapLink(text) {
+  // Extraer nombres de lugares de los enlaces Maps (más fiable que negritas)
+  const boldNames = [];
+  const mapsRegex = /google\.com\/maps\/search\/([^\s)]+)/g;
+  let m;
+  while ((m = mapsRegex.exec(text)) !== null) {
+    const name = decodeURIComponent(m[1]).replace(/\+/g, ' ').trim();
+    if (name.length < 4) continue;
+    // Evitar duplicados
+    if (!boldNames.includes(name)) boldNames.push(name);
+  }
+  if (boldNames.length < 3) return text; // muy pocas paradas
+  // Tomar máximo 20 paradas (límite de Google Maps)
+  const waypoints = boldNames.slice(0, 20).map(n => encodeURIComponent(n.replace(/\s+/g, '+')));
+  const mapsUrl = 'https://www.google.com/maps/dir/' + waypoints.join('/');
+  return text + '\n\n📍 **Ruta completa en Google Maps:**\n' + mapsUrl;
+}
+
 function isHelpRequest(message) {
   if (!message) return null;
   const m = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -1624,17 +1643,18 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
 
 PROHIBIDO: SALMA_ROUTE_JSON, preguntar, mencionar guías/coins, inventar URLs, párrafos largos.
 
-BREVEDAD OBLIGATORIA: máximo 2-3 frases por parada. Dato histórico/cultural + precio + tiempo. Sin prosa. Sin rodeos. Sin repetir lo que ya dijiste.
+BREVEDAD OBLIGATORIA: máximo 2-3 frases por parada. Dato histórico/cultural + precio + tiempo. Sin prosa. Sin rodeos.
 
-FORMATO: cada parada es 1 párrafo corto con nombre en negrita + enlace Maps + 1-2 frases útiles.
+FORMATO DE CADA PARADA: nombre en negrita + descripción breve + enlace Maps AL FINAL del párrafo (no al principio).
+Ejemplo: **Puente Nuevo** — 42 años de obras (1751-1793), cámara interior que fue cárcel. Baja al Camino de los Molinos para la mejor vista. 1h. Gratis. https://www.google.com/maps/search/Puente+Nuevo+Ronda
 
-Ejemplo: **Puente Nuevo** (https://www.google.com/maps/search/Puente+Nuevo+Ronda) — 42 años de obras (1751-1793), cámara interior que fue cárcel. Baja al Camino de los Molinos para la mejor vista. 1h. Gratis.
+4-5 paradas por día. Cada día termina con dónde comer (nombre + plato + precio + enlace Maps al final).
 
-4-5 paradas por día. Cada día termina con dónde comer (nombre + enlace + plato + precio).
-Al final: transporte, presupuesto diario, alternativas.
+AL FINAL DE TODO: incluye un enlace Google Maps de la ruta completa con todas las paradas principales encadenadas. Formato: https://www.google.com/maps/dir/Parada1/Parada2/Parada3/... con los nombres de los lugares. Uno por ruta, al final.
+
 Cierra con: "Si quieres la guía completa con mapa y navegación, dime 'Salma hazme una guía'."
 
-FOTOS: usa buscar_foto para 1 lugar por día MÍNIMO. Llama a buscar_foto varias veces — 1 por día.]`;
+FOTOS OBLIGATORIAS: llama a buscar_foto para CADA PARADA que menciones. Si tienes 4 paradas en un día, llama a buscar_foto 4 veces con los 4 nombres. Cada parada merece su foto. No agrupes — una foto justo antes de cada párrafo de parada.]`;
   } else {
     userContent += `\n\n[MODO CONVERSACIONAL — INSTRUCCIONES ESTRICTAS:
 
@@ -5634,6 +5654,8 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         const _numDays = _daysMatch ? parseInt(_daysMatch[1]) : 0;
         if (_numDays >= 2 && !route) {
           reply = formatDayHeaders(reply, _numDays);
+          // Añadir enlace Google Maps de ruta completa al final
+          reply = appendRouteMapLink(reply);
         }
 
         // ── SALMA_ACTION: extraer acciones del texto, limpiar reply, ejecutar APIs en paralelo ──
