@@ -698,6 +698,11 @@ const salma = {
         } else {
           // Ruta normal con draft: parchear con datos verificados (fotos, coords)
           try {
+            // Vista itinerario (mapa-itinerario.js)
+            if (window._itinViewOpen && typeof mapaItinerario !== 'undefined') {
+              mapaItinerario.updateVerified(data.route.stops);
+            }
+            // Vista guía clásica (guide-renderer.js)
             guideRenderer.updateVerified(data.route);
           } catch (e) {
             console.warn('Error actualizando guía verificada:', e);

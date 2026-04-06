@@ -343,6 +343,22 @@ const mapaItinerario = {
     return result;
   },
 
+  // ═══ ACTUALIZAR FOTOS CON DATOS VERIFICADOS (después del verify del worker) ═══
+  updateVerified(stops) {
+    if (!Array.isArray(stops)) return;
+    stops.forEach((stop, i) => {
+      if (!stop.photo_ref) return;
+      const photoDiv = document.getElementById(`itin-photo-${i}`);
+      if (!photoDiv || photoDiv.querySelector('img')) return; // ya tiene foto real
+      fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`)
+        .then(r => r.json())
+        .then(data => {
+          if (data.url) photoDiv.innerHTML = `<img src="${data.url}" alt="" class="itin-card-img" loading="lazy">`;
+        })
+        .catch(() => {});
+    });
+  },
+
   // ═══ ACTUALIZAR CAMPOS ENRIQUECIDOS (después de enrichGuia) ═══
   updateEnrichedFields(stops) {
     if (!Array.isArray(stops)) return;

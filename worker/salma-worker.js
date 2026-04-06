@@ -3655,7 +3655,7 @@ export default {
           const pLng = candidate?.geometry?.location?.lng;
           if (pLat && pLng) {
             const distKm = Math.sqrt(Math.pow(Math.abs(pLat - parseFloat(lat)), 2) + Math.pow(Math.abs(pLng - parseFloat(lng)), 2)) * 111;
-            if (distKm > 10) return new Response(JSON.stringify({ error: 'too far' }), { status: 404, headers: corsH });
+            if (distKm > 30) return new Response(JSON.stringify({ error: 'too far' }), { status: 404, headers: corsH });
           }
         }
         const imgRes = await fetch(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${photoRef}&key=${placesKey}`);
