@@ -216,18 +216,6 @@ async function renderWelcome() {
         <div class="welcome-input-wrap">
           <div class="input-row">
             <textarea class="welcome-input" id="welcome-input" placeholder="¿A dónde vamos?" rows="1"></textarea>
-            <input type="file" id="welcome-photo-input" accept="image/*" style="display:none">
-            <input type="file" id="welcome-camera-input" accept="image/*" capture="environment" style="display:none">
-            <div class="cam-menu" id="welcome-cam-menu" style="display:none">
-              <button class="cam-menu-opt" id="welcome-cam-menu-foto">📸 Hacer foto</button>
-              <button class="cam-menu-opt" id="welcome-cam-menu-galeria">🖼️ Galería</button>
-            </div>
-            <button class="app-cam welcome-cam" id="welcome-cam-btn" aria-label="Enviar foto">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                <circle cx="12" cy="13" r="4"/>
-              </svg>
-            </button>
             <button class="app-mic welcome-mic" id="welcome-mic-btn" aria-label="Hablar">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="9" y="1" width="6" height="12" rx="3"/>
@@ -257,14 +245,12 @@ async function renderWelcome() {
     const msg = wInput.value.trim();
     if (msg && typeof salma !== 'undefined') salma.send(msg);
   });
-  const wCam = document.getElementById('welcome-cam-btn');
   const wMic = document.getElementById('welcome-mic-btn');
   if (wInput) wInput.addEventListener('input', () => {
     wInput.style.height = 'auto';
     wInput.style.height = Math.min(wInput.scrollHeight, 120) + 'px';
     const hasText = wInput.value.trim().length > 0;
     if (wSend) wSend.style.display = hasText ? '' : 'none';
-    if (wCam) wCam.style.display = hasText ? 'none' : '';
     if (wMic) wMic.style.display = hasText ? 'none' : '';
   });
   if (wInput) wInput.addEventListener('keydown', (e) => {
@@ -274,35 +260,6 @@ async function renderWelcome() {
       if (msg && typeof salma !== 'undefined') salma.send(msg);
     }
   });
-
-  // Welcome camera button — menú foto/galería
-  const wCamBtn = document.getElementById('welcome-cam-btn');
-  const wPhotoInput = document.getElementById('welcome-photo-input');
-  const wCameraInput = document.getElementById('welcome-camera-input');
-  const wCamMenu = document.getElementById('welcome-cam-menu');
-  if (wCamBtn && wPhotoInput && typeof salma !== 'undefined') {
-    wCamBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (wCamMenu) wCamMenu.style.display = wCamMenu.style.display === 'none' ? '' : 'none';
-    });
-    if (wCamMenu) {
-      document.getElementById('welcome-cam-menu-foto')?.addEventListener('click', () => {
-        wCamMenu.style.display = 'none';
-        if (wCameraInput) wCameraInput.click();
-      });
-      document.getElementById('welcome-cam-menu-galeria')?.addEventListener('click', () => {
-        wCamMenu.style.display = 'none';
-        wPhotoInput.click();
-      });
-    }
-    const handleWelcomeFile = (e) => {
-      const file = e.target.files && e.target.files[0];
-      e.target.value = '';
-      if (file) salma._handlePhotoSelected(file);
-    };
-    wPhotoInput.addEventListener('change', handleWelcomeFile);
-    if (wCameraInput) wCameraInput.addEventListener('change', handleWelcomeFile);
-  }
 
   // Placeholder rotativo
   if (wInput) {
