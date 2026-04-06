@@ -312,16 +312,16 @@ async function renderWelcome() {
   // Placeholder rotativo
   if (wInput) {
     const ejemplos = [
-      'Vietnam 10 días en moto',
-      'Bangkok sin hotel, es tarde',
-      '3 días en Lisboa sola',
+      'Vietnam en moto',
+      'Sin hotel en Bangkok',
+      'Lisboa 3 días sola',
       'Vacunas para Nepal',
       'Me han robado en Roma',
       'Japón 2 semanas',
-      'Médico en Tailandia urgente',
+      'Médico urgente',
       'Marruecos 5 días',
       'Avería en Turquía',
-      'Ferry Atenas–Santorini'
+      'Ferry a Santorini'
     ];
     let idx = 0;
     window._placeholderInterval = setInterval(() => {

@@ -180,6 +180,9 @@ const mapaItinerario = {
       <div class="itin-card-body">
         <div class="itin-card-num">${index + 1}</div>
         <div class="itin-card-name">${this._esc(stop.headline || stop.name)}</div>
+        <button class="guide-stop-speak itin-speak" aria-label="Escuchar" data-text="${this._esc((stop.headline || stop.name) + '. ' + (stop.narrative || ''))}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
         <div class="itin-card-details" id="itin-details-${index}">
           ${km > 0 ? `<span class="itin-card-km">${Math.round(km)} km</span>` : ''}
           ${horas ? `<span class="itin-card-hours">${this._formatHours(horas)}</span>` : ''}
@@ -194,10 +197,35 @@ const mapaItinerario = {
       </div>
     `;
 
-    card.addEventListener('click', () => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.itin-speak')) return; // no navegar al pulsar altavoz
       this.highlightCard(index);
       mapaRuta.centerOn(index);
     });
+
+    // Altavoz — leer parada
+    const speakBtn = card.querySelector('.itin-speak');
+    if (speakBtn) {
+      speakBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const text = speakBtn.dataset.text;
+        if (text && typeof salma !== 'undefined') {
+          if (salma._currentAudio || (window.speechSynthesis && speechSynthesis.speaking)) {
+            salma.salmaSpeakStop();
+            speakBtn.classList.remove('speaking');
+          } else {
+            salma.salmaSpeakDirect(text);
+            speakBtn.classList.add('speaking');
+            const checkEnd = setInterval(() => {
+              if (!salma._currentAudio && !(window.speechSynthesis && speechSynthesis.speaking)) {
+                speakBtn.classList.remove('speaking');
+                clearInterval(checkEnd);
+              }
+            }, 500);
+          }
+        }
+      });
+    }
 
     // Cargar foto inicial — pasamos el card directamente porque aún no está en el DOM
     this._loadInitialPhoto(stop, index, card);
