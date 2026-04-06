@@ -204,9 +204,9 @@ body {
 }
 .app-mic {
   width:44px; height:44px; flex-shrink:0;
-  border-radius:50%; border:1px solid var(--linea);
-  background:rgba(255,255,255,.04);
-  color:var(--crema); cursor:pointer;
+  border-radius:50%; border:none;
+  background:transparent;
+  color:rgba(244,239,230,.5); cursor:pointer;
   display:flex; align-items:center; justify-content:center;
   transition:all .2s;
   -webkit-touch-callout:none;
@@ -214,7 +214,7 @@ body {
   user-select:none;
   touch-action:manipulation;
 }
-.app-mic:hover { border-color:var(--linea-fuerte); }
+.app-mic:hover { color:var(--crema); }
 .app-mic.listening {
   background:#e53e3e; color:#fff;
   border-color:#e53e3e;
@@ -247,15 +247,15 @@ body {
 /* Botón cámara */
 .app-cam {
   width:44px; height:44px; flex-shrink:0;
-  border-radius:50%; border:1px solid var(--linea);
-  background:rgba(255,255,255,.04);
-  color:var(--crema); cursor:pointer;
+  border-radius:50%; border:none;
+  background:transparent;
+  color:rgba(244,239,230,.5); cursor:pointer;
   display:flex; align-items:center; justify-content:center;
   transition:all .2s;
   -webkit-touch-callout:none; -webkit-user-select:none; user-select:none;
   touch-action:manipulation; padding:0;
 }
-.app-cam:hover { border-color:var(--linea-fuerte); }
+.app-cam:hover { color:var(--crema); }
 .app-cam:disabled { opacity:.4; cursor:not-allowed; }
 /* Menú cámara/galería */
 .cam-menu {
