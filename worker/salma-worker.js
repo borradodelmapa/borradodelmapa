@@ -4,7 +4,10 @@
  * BINDINGS en Cloudflare Dashboard:
  *   - Secret: OPENAI_API_KEY
  *   - Secret: GOOGLE_PLACES_KEY
+ *   - Secret: ELEVENLABS_API_KEY
  */
+
+const ELEVENLABS_VOICE_ID = 'fzAdMudUtRHNnk5tjJRR';
 
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 1 — Identidad
@@ -4545,6 +4548,59 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         return new Response(JSON.stringify({ ok: true, version: newVersion, chars: prompt_text.length }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── POST /tts — ElevenLabs Text-to-Speech ───
+    if (request.method === 'POST' && url.pathname === '/tts') {
+      const corsH = { 'Access-Control-Allow-Origin': '*' };
+      try {
+        const { text } = await request.json();
+        if (!text) return new Response('No text', { status: 400, headers: corsH });
+
+        // Limpiar markdown y símbolos antes de enviar a ElevenLabs
+        const clean = text
+          .replace(/#{1,6}\s?/g, '')
+          .replace(/\*{1,2}([^*]+)\*{1,2}/g, '$1')
+          .replace(/https?:\/\/\S+/g, '')
+          .replace(/[^\p{L}\p{N}\p{P}\p{Z}]/gu, '')
+          .replace(/^[\s]*[-•]\s*/gm, '')
+          .replace(/\s+/g, ' ')
+          .trim()
+          .slice(0, 1500); // Límite: no leer guías enteras
+
+        if (!clean) return new Response('Empty text', { status: 400, headers: corsH });
+
+        const elRes = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`, {
+          method: 'POST',
+          headers: {
+            'xi-api-key': env.ELEVENLABS_API_KEY,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            text: clean,
+            model_id: 'eleven_multilingual_v2',
+            voice_settings: { stability: 0.5, similarity_boost: 0.75 },
+          }),
+        });
+
+        if (!elRes.ok) {
+          // Cualquier error (créditos agotados, etc.) → el cliente cae a Web Speech
+          return new Response(JSON.stringify({ error: 'elevenlabs_error', status: elRes.status }), {
+            status: elRes.status,
+            headers: { ...corsH, 'Content-Type': 'application/json' },
+          });
+        }
+
+        const audio = await elRes.arrayBuffer();
+        return new Response(audio, {
+          headers: { ...corsH, 'Content-Type': 'audio/mpeg' },
+        });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), {
+          status: 500,
+          headers: { ...corsH, 'Content-Type': 'application/json' },
+        });
       }
     }
 

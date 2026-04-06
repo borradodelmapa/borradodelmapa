@@ -28,19 +28,19 @@ const salma = {
   _narratorLastCheck: 0,
   _narratorInterval: null,
   _voices: [],
+  _currentAudio: null,
 
-  // ═══ VOZ DE SALMA — Web Speech API ═══
+  // ═══ VOZ DE SALMA — ElevenLabs + fallback Web Speech ═══
   initVoices() {
     if (!window.speechSynthesis) return;
     this._voices = speechSynthesis.getVoices();
     speechSynthesis.onvoiceschanged = () => { this._voices = speechSynthesis.getVoices(); };
   },
 
-  salmaSpeak(text) {
+  async salmaSpeak(text) {
     try {
-      if (!window.speechSynthesis) return;
       if (localStorage.getItem('salma_voice') !== 'true') return;
-      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+
       // Limpiar texto: quitar markdown, emojis, URLs, guiones de lista
       const clean = text
         .replace(/#{1,6}\s?/g, '')
@@ -51,6 +51,32 @@ const salma = {
         .replace(/\s+/g, ' ')
         .trim();
       if (!clean) return;
+
+      // Parar cualquier audio previo
+      this.salmaSpeakStop();
+
+      // Intentar ElevenLabs vía worker
+      try {
+        const api = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+        const res = await fetch(api + '/tts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: clean }),
+        });
+        if (!res.ok) throw new Error('ElevenLabs ' + res.status);
+        const blob = await res.blob();
+        const audioUrl = URL.createObjectURL(blob);
+        this._currentAudio = new Audio(audioUrl);
+        this._currentAudio.play();
+        this._currentAudio.onended = () => URL.revokeObjectURL(audioUrl);
+        return; // Éxito — no caemos a Web Speech
+      } catch (e) {
+        console.warn('[Salma] ElevenLabs falló, usando voz del navegador:', e.message);
+      }
+
+      // Fallback: Web Speech API
+      if (!window.speechSynthesis) return;
+      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
       const utt = new SpeechSynthesisUtterance(clean);
       const esVoice = this._voices.find(v => v.lang.startsWith('es'));
       utt.voice = esVoice || this._voices[0] || null;
@@ -62,6 +88,11 @@ const salma = {
   },
 
   salmaSpeakStop() {
+    if (this._currentAudio) {
+      this._currentAudio.pause();
+      this._currentAudio.src = '';
+      this._currentAudio = null;
+    }
     if (window.speechSynthesis) speechSynthesis.cancel();
   },
 
