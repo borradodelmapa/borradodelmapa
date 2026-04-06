@@ -791,8 +791,7 @@ const salma = {
           });
         }
 
-        // SSE stream
-        this._removeLoading();
+        // SSE stream — reusar burbuja loading como stream (una sola burbuja)
         const textEl = this._addStreamBubble();
         const reader = res.body.getReader();
         this._currentReader = reader;
@@ -1587,36 +1586,54 @@ const salma = {
 
   // Botón mute/unmute global en cada burbuja
   _addSpeakButton(el) {
-    if (!window.speechSynthesis) return;
+    if (!window.speechSynthesis && !window.SALMA_API) return;
     const header = el.querySelector('.msg-salma-header');
     if (!header || header.querySelector('.msg-speak-btn')) return;
-    const muted = localStorage.getItem('salma_voice') !== 'true';
     const speakBtn = document.createElement('button');
     speakBtn.className = 'msg-speak-btn';
-    speakBtn.textContent = muted ? '\u{1F507}' : '\u{1F50A}';
-    speakBtn.title = muted ? 'Activar voz' : 'Silenciar voz';
+    speakBtn.textContent = '\u{1F50A}';
+    speakBtn.title = 'Escuchar';
     speakBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const isOn = localStorage.getItem('salma_voice') === 'true';
-      // Toggle global
-      localStorage.setItem('salma_voice', isOn ? 'false' : 'true');
-      if (isOn) this.salmaSpeakStop();
-      // Actualizar TODOS los botones
-      this._syncSpeakButtons();
+      // Si ya está hablando, parar
+      if (salma._currentAudio || (window.speechSynthesis && speechSynthesis.speaking)) {
+        this.salmaSpeakStop();
+        speakBtn.classList.remove('speaking');
+        return;
+      }
+      // Leer el texto de ESTE mensaje
+      const body = el.querySelector('.msg-body-salma');
+      if (!body) return;
+      const text = body.textContent || '';
+      if (!text.trim()) return;
+      this.salmaSpeakDirect(text);
+      speakBtn.classList.add('speaking');
+      const checkEnd = setInterval(() => {
+        if (!this._currentAudio && !(window.speechSynthesis && speechSynthesis.speaking)) {
+          speakBtn.classList.remove('speaking');
+          clearInterval(checkEnd);
+        }
+      }, 500);
     });
     header.appendChild(speakBtn);
   },
 
-  // Sincronizar icono de todos los botones de voz
-  _syncSpeakButtons() {
-    const muted = localStorage.getItem('salma_voice') !== 'true';
-    document.querySelectorAll('.msg-speak-btn').forEach(btn => {
-      btn.textContent = muted ? '\u{1F507}' : '\u{1F50A}';
-      btn.title = muted ? 'Activar voz' : 'Silenciar voz';
-    });
-  },
-
   _addStreamBubble() {
+    // Reusar la burbuja de loading si existe (evita dos burbujas)
+    const existing = document.getElementById('salma-loading');
+    if (existing) {
+      existing.id = 'salma-stream-msg';
+      const body = existing.querySelector('.msg-body-salma');
+      if (body) {
+        body.innerHTML = '';
+        body.id = 'salma-stream-text';
+      }
+      // Limpiar intervalos de loading
+      if (this._loadingInterval) { clearInterval(this._loadingInterval); this._loadingInterval = null; }
+      if (this._retryTimer) { clearTimeout(this._retryTimer); this._retryTimer = null; }
+      return document.getElementById('salma-stream-text');
+    }
+    // Fallback: crear nueva burbuja
     const area = this._getChatArea();
     if (!area) return null;
     const div = document.createElement('div');
@@ -1781,12 +1798,14 @@ const salma = {
 
   _loadingPhrases: [
     'Mirando el mapa...', 'Calculando la ruta...', 'Buscando los mejores sitios...',
-    'Consultando precios...', 'Organizando el itinerario...',
-    'Preguntando a los locales...', 'Comprobando horarios...',
+    'Organizando el itinerario...', 'Preguntando a los locales...',
     'Buscando restaurantes de verdad...', 'Verificando coordenadas...',
+    'Esto va a merecer la pena...', 'Casi lo tengo...',
+    'Un poco más y lo tienes...', 'Preparando algo bueno...',
   ],
   _loadingPhrasesSimple: [
     'Un momento...', 'Pensando...', 'Dame un segundo...', 'Ahí voy...',
+    'Déjame ver...', 'Lo miro...',
   ],
   _isRouteMsg(msg) {
     return /ruta|itinerario|días|dias|semana|viaje a |voy a |me voy a |quiero ir|visitar|recorrer|\d+\s*d[íi]/i.test(msg);

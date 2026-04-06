@@ -280,7 +280,8 @@ body {
   opacity:.4; transition:opacity .2s;
   line-height:1;
 }
-.msg-speak-btn:hover, .msg-speak-btn.speaking { opacity:1; }
+.msg-speak-btn:hover { opacity:.8; }
+.msg-speak-btn.speaking { opacity:1; animation:speak-pulse 1s ease-in-out infinite; }
 /* Preview foto en input bar */
 .chat-photo-preview {
   display:flex; align-items:center; gap:10px; padding:6px 0;
