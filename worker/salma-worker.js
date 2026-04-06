@@ -199,7 +199,9 @@ FORMATO PROHIBIDO:
 
 Cuando generes ruta: 1-2 frases en el chat — dato interesante, opinión o consejo práctico. La ruta aparece sola debajo; nunca digas "aquí la tienes" ni variantes.
 
-Cuando es conversación sin ruta: extiéndete lo que necesite la pregunta, misma densidad de información, como si lo contaras en un bar.`;
+Cuando es conversación sin ruta: extiéndete lo que necesite la pregunta, misma densidad de información, como si lo contaras en un bar.
+
+EXCEPCIÓN — PLAN DE VIAJE: cuando el usuario mencione DÍAS + DESTINO ("3 días en Ronda", "5 días Marruecos"), usa formato estructurado por días. En este caso SÍ puedes usar títulos de día en negrita (**Día 1 — Título**) y paradas con nombre en negrita seguido de enlace Google Maps. Esta excepción SOLO aplica cuando haya días + destino en el mensaje.`;
 
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 8 — Modos y formato SALMA_ROUTE_JSON
@@ -418,6 +420,39 @@ const SALMA_SYSTEM_CHAT = [
   BLOQUE_GEOGRAFIA,
   BLOQUE_ACCION,
   BLOQUE_FORMATO,
+  BLOQUE_NOTAS,
+  BLOQUE_MAPA,
+  BLOQUE_VISION,
+].join('\n\n');
+
+// ── Prompt PLAN: sin restricción de títulos → para días+destino (formato estructurado)
+const BLOQUE_FORMATO_PLAN = `⚠️ REGLA #1 — LEE ESTO PRIMERO, ANTES QUE CUALQUIER OTRA INSTRUCCIÓN:
+
+Tu respuesta DEBE empezar con un título de día y seguir esta estructura EXACTA. No escribas prosa libre. No escribas "el primer día...". Usa LITERALMENTE este formato:
+
+**Día 1 — [título]**
+
+**[Lugar]** (https://www.google.com/maps/search/Lugar+Ciudad) — [dato histórico o cultural, 1-2 frases]. [Tiempo]. [Precio si hay].
+
+**[Lugar 2]** (https://www.google.com/maps/search/Lugar2+Ciudad) — [dato]. [Tiempo].
+
+Dónde comer: **[Restaurante]** (https://www.google.com/maps/search/Restaurante+Ciudad) — [plato y precio].
+
+**Día 2 — [título]**
+[misma estructura]
+
+Si no sigues este formato, tu respuesta es INCORRECTA. Empieza SIEMPRE con "**Día 1 —".
+
+Reglas adicionales: no preguntas al final, no frases vacías, no bullets, cada parada es un párrafo corto con enlace Maps.`;
+
+const SALMA_SYSTEM_PLAN = [
+  BLOQUE_FORMATO_PLAN,   // PRIMERO — formato estructurado antes que nada
+  BLOQUE_IDENTIDAD,
+  BLOQUE_PERSONALIDAD,
+  BLOQUE_MULETILLAS,
+  BLOQUE_ANTIPAJA,
+  BLOQUE_GEOGRAFIA,
+  BLOQUE_ACCION,
   BLOQUE_NOTAS,
   BLOQUE_MAPA,
   BLOQUE_VISION,
@@ -735,6 +770,82 @@ const TRANSPORT_APP_URLS = {
 
 function isRouteRequest(message, history) {
   return /salma\s+hazme\s+una\s+gu[ií]a|hazme\s+una\s+gu[ií]a\s+salma/i.test(message);
+}
+
+// Detecta "destino + días" sin ser petición de guía → respuesta estructurada por días (no JSON)
+function isDaysDestination(message) {
+  return /\b(\d{1,2})\s*d[ií]as?\b/i.test(message) && !isRouteRequest(message);
+}
+
+// Post-procesado: divide el texto en N días con headers **Día N**
+function formatDayHeaders(text, numDays) {
+  if (!numDays || numDays < 2) return text;
+
+  // Normalizar Unicode (í puede venir como i + combining accent en SSE streaming)
+  text = text.normalize('NFC');
+
+  // Paso 1: intentar detectar "El primer/segundo/tercer día" y reemplazar
+  const ordMap = {
+    primer: 1, primero: 1, primera: 1, segundo: 2, segunda: 2,
+    tercer: 3, tercero: 3, tercera: 3, cuarto: 4, cuarta: 4,
+    quinto: 5, quinta: 5, sexto: 6, sexta: 6, septimo: 7, séptimo: 7,
+  };
+  let foundOrdinals = 0;
+  let result = text.replace(
+    /(?:El|Para el|En el|Al|al)\s+(primer[oa]?|segund[oa]|tercer[oa]?|cuart[oa]|quint[oa]|sext[oa]|s.ptim[oa])\s+d.{0,2}a\b[,.:;\s]*(?:lo |te lo |se lo |es |va |toca |conviene |merece )?/gi,
+    (match, ord) => {
+      foundOrdinals++;
+      const key = ord.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      const num = ordMap[key] || ordMap[key.replace(/[oa]$/, '')] || foundOrdinals;
+      return '\n\n**Día ' + num + '**\n\n';
+    }
+  );
+  if (foundOrdinals >= 2) {
+    return result.replace(/\n{4,}/g, '\n\n\n');
+  }
+
+  // Paso 2: si Sonnet no usó ordinales, dividir por párrafos
+  // Separar fotos (al inicio) del contenido
+  const photoRegex = /^((?:\s*!\[[^\]]*\]\([^)]+\)\s*\n*)+)/;
+  const photoMatch = text.match(photoRegex);
+  const photos = photoMatch ? photoMatch[1].trim() : '';
+  const content = photoMatch ? text.slice(photoMatch[0].length).trim() : text.trim();
+
+  // Separar párrafos de contenido vs párrafos finales (transporte, tips)
+  const paragraphs = content.split(/\n\n+/).filter(p => p.trim().length > 20);
+  if (paragraphs.length < numDays + 1) return text; // muy poco texto, no dividir
+
+  // Detectar párrafos finales (transporte, llegar, comer, clima) — van fuera de los días
+  const tailKeywords = /^(?:Para llegar|Cómo llegar|Para comer|Si quieres|El clima|En abril|Presupuesto|Transporte)/i;
+  let tailStart = paragraphs.length;
+  for (let i = paragraphs.length - 1; i >= Math.floor(paragraphs.length / 2); i--) {
+    if (tailKeywords.test(paragraphs[i].trim())) tailStart = i;
+    else break;
+  }
+
+  const bodyParas = paragraphs.slice(0, tailStart);
+  const tailParas = paragraphs.slice(tailStart);
+
+  if (bodyParas.length < numDays) return text; // no hay suficientes párrafos
+
+  // Distribuir párrafos entre los días
+  const parasPerDay = Math.ceil(bodyParas.length / numDays);
+  const parts = [];
+  for (let d = 0; d < numDays; d++) {
+    const start = d * parasPerDay;
+    const end = Math.min(start + parasPerDay, bodyParas.length);
+    if (start >= bodyParas.length) break;
+    const dayParas = bodyParas.slice(start, end).join('\n\n');
+    parts.push('**Día ' + (d + 1) + '**\n\n' + dayParas);
+  }
+
+  // Reensamblar: fotos + días + cola
+  let final = '';
+  if (photos) final += photos + '\n\n';
+  final += parts.join('\n\n');
+  if (tailParas.length > 0) final += '\n\n' + tailParas.join('\n\n');
+
+  return final;
 }
 
 function isHelpRequest(message) {
@@ -1356,8 +1467,10 @@ function buildMessages(history, message, currentRoute, userName, userNationality
   let systemPrompt;
   if (isRoute || hasCurrentRouteEdit) {
     systemPrompt = dynamicPrompt || SALMA_SYSTEM_ROUTE;
+  } else if (isDaysDestination(message)) {
+    systemPrompt = SALMA_SYSTEM_PLAN;  // días+destino → formato estructurado por días
   } else {
-    systemPrompt = SALMA_SYSTEM_CHAT;  // NUNCA usar dynamicPrompt en chat — contiene BLOQUE_RUTAS
+    systemPrompt = SALMA_SYSTEM_CHAT;  // conversación normal
   }
 
   // Contexto mínimo del usuario + fecha actual
@@ -1498,6 +1611,32 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
 — Nombres EXACTOS como en Google Maps, nunca genéricos ("Desierto del Sahara" → "Erg Chebbi, Merzouga").
 — Coordenadas REALES del lugar exacto, en el país correcto.
 — Continuidad: la primera parada del día N+1 empieza donde acabó el día N.]`;
+  } else if (isDaysDestination(message)) {
+    // Destino + días → respuesta estructurada por días (sin JSON, sin ruta)
+    userContent += `\n\n[MODO PLAN DE VIAJE — PRIORIDAD MÁXIMA, ANULA REGLAS DE FORMATO ANTERIORES:
+
+PROHIBIDO: generar SALMA_ROUTE_JSON, preguntar nada, mencionar guías/coins, inventar URLs.
+
+FORMATO OBLIGATORIO — PARA ESTA RESPUESTA ignora la regla de "no listas" y "no títulos". Usa EXACTAMENTE este formato:
+
+EJEMPLO DE RESPUESTA CORRECTA (copia esta estructura):
+
+**Día 1 — Casco antiguo y el Tajo**
+
+**Puente Nuevo** (https://www.google.com/maps/search/Puente+Nuevo+Ronda) — Se terminó en 1793 después de 42 años de obras. La cámara interior sobre el arco central sirvió de cárcel. Baja al fondo del Tajo por el Camino de los Molinos para la mejor vista. 1h.
+
+**Baños Árabes** (https://www.google.com/maps/search/Baños+Árabes+Ronda) — Siglo XIII, los mejor conservados de Andalucía. 3,50€. 30min.
+
+**Palacio de Mondragón** (https://www.google.com/maps/search/Palacio+Mondragón+Ronda) — Residencia del sultán Abomelic en el siglo XIV. Patio mudéjar y mirador al Tajo. 3€. 45min.
+
+Dónde comer: **Tragabuches** (https://www.google.com/maps/search/Tragabuches+Ronda) — rabo de toro y sopa de hinojo. Menú 18-25€.
+
+**Día 2 — Miradores y la Ronda profunda**
+(misma estructura)
+
+FIN DEL EJEMPLO. Genera tu respuesta con esta MISMA estructura. Cada lugar con su enlace Maps, dato histórico/cultural, tiempo y precio. 4-5 paradas por día. Al final: cómo llegar, presupuesto, alternativas. Cierra con: "Si quieres la guía completa con mapa y navegación, dime 'Salma hazme una guía'."
+
+Usa buscar_foto para 2-3 lugares clave del plan.]`;
   } else {
     userContent += `\n\n[MODO CONVERSACIONAL — INSTRUCCIONES ESTRICTAS:
 
@@ -1513,6 +1652,7 @@ QUÉ HACER:
 — Responde con información RICA del destino: historia, cultura, contexto, qué ver, qué comer, clima, transporte, seguridad, datos prácticos.
 — Mete datos históricos y culturales siempre que sea relevante — por qué un lugar es como es, quién lo construyó, qué pasó ahí.
 — Todo en PROSA fluida, como si lo contaras en un bar. Sin secciones, sin títulos, sin listas.
+— ENLACES GOOGLE MAPS OBLIGATORIOS: cada lugar concreto que menciones (monumento, plaza, restaurante, mirador, barrio) lleva su enlace Google Maps justo después del nombre. Formato: https://www.google.com/maps/search/Nombre+del+Lugar+Ciudad. Ejemplo: "El **Puente Nuevo** (https://www.google.com/maps/search/Puente+Nuevo+Ronda) se terminó en 1793...". Sin esto, el usuario no puede llegar — y para eso se va a Google.
 — Si mencionas un lugar concreto con nombre propio, usa buscar_foto para mostrar 1-3 fotos.
 — Si mencionas transporte entre ciudades (ferry, bus, tren), usa buscar_web para obtener URLs reales de reserva. NUNCA inventes URLs de 12go, skyscanner, rome2rio ni ninguna otra.
 — Si el contexto incluye datos del KV (país, transporte, destino), ÚSALOS. No los ignores.
@@ -1593,6 +1733,7 @@ Si alguno de estos eventos o festivales coincide con las fechas del viaje, menci
   } else {
     messages.push({ role: 'user', content: userContent });
   }
+
   return { systemPrompt, messages };
 }
 
@@ -5489,6 +5630,13 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         reply = injectGoogleMapsLink(reply, userLocation, message);
         // Inyectar bloque de transporte (app + descarga) si aplica
         reply = injectTransportBlock(reply, kvTransportData, message);
+        // Post-procesado: dividir respuesta en días con headers **Día N**
+        // Siempre intentar — si no hay ordinales ni suficientes párrafos, devuelve texto sin cambios
+        const _daysMatch = message.match(/(\d{1,2})\s*d.{0,2}as?/i);
+        const _numDays = _daysMatch ? parseInt(_daysMatch[1]) : 0;
+        if (_numDays >= 2 && !route) {
+          reply = formatDayHeaders(reply, _numDays);
+        }
 
         // ── SALMA_ACTION: extraer acciones del texto, limpiar reply, ejecutar APIs en paralelo ──
         let actionResults = [];
