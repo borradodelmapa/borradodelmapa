@@ -236,6 +236,11 @@ async function renderWelcome() {
                 <line x1="8" y1="23" x2="16" y2="23"/>
               </svg>
             </button>
+            <button class="welcome-send" id="welcome-send" aria-label="Enviar" style="display:none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </button>
           </div>
         </div>
         <div class="welcome-chips" id="welcome-chips">
@@ -252,9 +257,15 @@ async function renderWelcome() {
     const msg = wInput.value.trim();
     if (msg && typeof salma !== 'undefined') salma.send(msg);
   });
+  const wCam = document.getElementById('welcome-cam-btn');
+  const wMic = document.getElementById('welcome-mic-btn');
   if (wInput) wInput.addEventListener('input', () => {
     wInput.style.height = 'auto';
     wInput.style.height = Math.min(wInput.scrollHeight, 120) + 'px';
+    const hasText = wInput.value.trim().length > 0;
+    if (wSend) wSend.style.display = hasText ? '' : 'none';
+    if (wCam) wCam.style.display = hasText ? 'none' : '';
+    if (wMic) wMic.style.display = hasText ? 'none' : '';
   });
   if (wInput) wInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -301,11 +312,11 @@ async function renderWelcome() {
       '3 días en Lisboa sola',
       'Vacunas para Nepal',
       'Me han robado en Roma',
-      'Japón 2 semanas, primer viaje',
+      'Japón 2 semanas',
       'Médico en Tailandia urgente',
-      'Marruecos 5 días desde Tánger',
-      'Avería en carretera en Turquía',
-      'Ferry de Atenas a Santorini'
+      'Marruecos 5 días',
+      'Avería en Turquía',
+      'Ferry Atenas–Santorini'
     ];
     let idx = 0;
     window._placeholderInterval = setInterval(() => {
