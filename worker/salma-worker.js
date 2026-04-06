@@ -1462,7 +1462,7 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
   if (isRouteRequest(message, history)) {
     userContent += '\n\n[OBLIGATORIO — GENERA RUTA AHORA: Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 1 frase sobre el destino + salto de línea + SALMA_ROUTE_JSON + JSON completo. NO respondas solo con texto. Usa defaults razonables para lo que falte.]';
   } else {
-    userContent += '\n\n[Si generas ruta, responde con 1-2 frases solo. Si es conversacional, extiéndete con densidad de datos. Si el usuario pide datos concretos, dato primero y breve.]';
+    userContent += '\n\n[MODO CONVERSACIONAL — NO es petición de guía. Responde con información del destino en prosa. PROHIBIDO preguntar para personalizar ninguna ruta. PROHIBIDO mencionar guías, coins o el modo guía. Dato directo y punto.]';
   }
 
   // Si Salma preguntó antes y el usuario responde, forzar generación
