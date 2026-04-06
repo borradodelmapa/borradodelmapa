@@ -203,7 +203,7 @@ Cuando es conversación sin ruta: extiéndete lo que necesite la pregunta, misma
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 8 — Modos y formato SALMA_ROUTE_JSON
 // ═══════════════════════════════════════════════════════════════
-const BLOQUE_RUTAS = `⛔ REGLA ABSOLUTA — GUÍAS: NUNCA generes SALMA_ROUTE_JSON salvo en estos casos exactos: (1) el usuario escribe "salma hazme una guía" o "hazme una guía salma", (2) el mensaje contiene un número de días ("3 días en Ronda", "5 días Vietnam"), (3) el usuario pide "hazme una ruta" o "hazme un itinerario". Cualquier otra frase — "quiero ir a X", "qué ver en X", preguntas sobre un país — responde con información y tools, NUNCA con SALMA_ROUTE_JSON.
+const BLOQUE_RUTAS = `⛔ REGLA ABSOLUTA — GUÍAS: NUNCA generes SALMA_ROUTE_JSON ni entres en modo guía salvo que el usuario haya escrito literalmente "salma hazme una guía" o "hazme una guía salma". NINGUNA otra frase lo activa. Ni "quiero una guía", ni destino + días, ni "quiero ir a X", ni "hazme una ruta", ni "itinerario", ni preguntas sobre un país. Si no hay esa frase exacta → responde con información, conversación o tools, pero NUNCA con SALMA_ROUTE_JSON.
 
 ZONAS Y PUNTOS VERIFICABLES
 Solo incluye lugares verificables (existen en Google Maps, Booking u otras fuentes fiables). No inventes nombres, direcciones ni coordenadas. Prefiere lugares conocidos y comprobables.
@@ -345,9 +345,9 @@ Señales: "¿qué ver en...?", "¿es caro...?", "¿necesito visado?", "¿cuándo
 → Responde con lo que sabes. Sin tools, sin ruta, sin taxi.
 
 2. QUIERE UNA GUÍA (SALMA_ROUTE_JSON)
-Señales claras: número de días ("3 días en Ronda", "5 días Vietnam"), "salma hazme una guía", "hazme una ruta", "hazme un itinerario".
-Si no hay número de días ni petición explícita → responde con información del destino, tips, qué ver, herramientas. Sin SALMA_ROUTE_JSON.
-"Quiero ir a X" o "qué ver en X" sin días → conversación, no guía.
+Solo si el usuario ha escrito literalmente "salma hazme una guía" o "hazme una guía salma".
+NINGUNA otra señal activa el modo guía: ni destino + días, ni "hazme una ruta", ni "quiero ir a X", ni "itinerario".
+Si el usuario escribe cualquiera de esas cosas sin la frase exacta → responde con información del destino, tips, qué ver, herramientas. Sin SALMA_ROUTE_JSON.
 
 4. QUIERE MOVERSE AHORA (transporte local)
 Señales: el destino es un lugar específico y cercano — aeropuerto, hotel, dirección, barrio de la ciudad donde está.
@@ -716,14 +716,7 @@ const TRANSPORT_APP_URLS = {
 // ═══════════════════════════════════════════════════════════════
 
 function isRouteRequest(message, history) {
-  if (!message) return false;
-  // Frase explícita
-  if (/salma\s+hazme\s+una\s+gu[ií]a|hazme\s+una\s+gu[ií]a\s+salma/i.test(message)) return true;
-  // Número de días + destino (no es pregunta)
-  if (/\b\d+\s*(d[ií]as?|days?|noches?|nights?)\b/i.test(message) && !/^\s*[¿?]/.test(message)) return true;
-  // "hazme una ruta / itinerario"
-  if (/hazme\s+(una\s+)?(ruta|itinerario|plan\s+de\s+viaje)/i.test(message)) return true;
-  return false;
+  return /salma\s+hazme\s+una\s+gu[ií]a|hazme\s+una\s+gu[ií]a\s+salma/i.test(message);
 }
 
 function isHelpRequest(message) {
@@ -1467,7 +1460,7 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
   }
 
   if (isRouteRequest(message, history)) {
-    userContent += '\n\n[OBLIGATORIO — GENERA RUTA AHORA: Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 1 frase sobre el destino + salto de línea + SALMA_ROUTE_JSON + JSON completo. NO respondas solo con texto. Usa defaults razonables para lo que falte (mezcla cultura+gastronomía+naturaleza, viajero sin restricciones especiales). NO preguntes nada — genera ya.]';
+    userContent += '\n\n[OBLIGATORIO — GENERA RUTA AHORA: Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 1 frase sobre el destino + salto de línea + SALMA_ROUTE_JSON + JSON completo. NO respondas solo con texto. Usa defaults razonables para lo que falte.]';
   } else {
     userContent += '\n\n[Si generas ruta, responde con 1-2 frases solo. Si es conversacional, extiéndete con densidad de datos. Si el usuario pide datos concretos, dato primero y breve.]';
   }
