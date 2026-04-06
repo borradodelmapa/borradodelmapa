@@ -234,7 +234,7 @@ body {
   0%,100% { box-shadow:0 0 0 0 rgba(229,62,62,.3); }
   50% { box-shadow:0 0 4px 4px rgba(229,62,62,.15); }
 }
-.app-input::placeholder { color:rgba(244,239,230,.25); }
+.app-input::placeholder { color:rgba(244,239,230,.4); }
 .app-input:focus { border-color:var(--linea-fuerte); }
 .app-send-arrow {
   width:40px; height:40px; border-radius:50%; flex-shrink:0;
@@ -277,7 +277,7 @@ body {
 .msg-speak-btn {
   background:none; border:none; cursor:pointer;
   font-size:14px; padding:2px 6px; margin-left:auto;
-  opacity:.4; transition:opacity .2s;
+  opacity:.55; transition:opacity .2s;
   line-height:1;
 }
 .msg-speak-btn:hover { opacity:.8; }
@@ -552,11 +552,11 @@ body {
   border-radius:4px; padding:2px 4px; line-height:1;
 }
 .galeria-empty {
-  text-align:center; color:rgba(244,239,230,.35);
+  text-align:center; color:rgba(244,239,230,.5);
   font-size:14px; padding:60px 20px;
 }
 .galeria-loading {
-  text-align:center; color:rgba(244,239,230,.35);
+  text-align:center; color:rgba(244,239,230,.5);
   font-size:14px; padding:60px 20px;
 }
 /* Acciones foto modal */
@@ -653,7 +653,7 @@ body {
 }
 .welcome-cam { right:44px; }
 .welcome-mic { right:6px; }
-.welcome-input::placeholder { color:rgba(244,239,230,.45); }
+.welcome-input::placeholder { color:rgba(244,239,230,.55); }
 .welcome-input:focus { border-color:var(--dorado); background:rgba(255,255,255,.1); }
 .input-row .welcome-send {
   position:absolute; top:50%; transform:translateY(-50%); right:6px;
@@ -881,7 +881,7 @@ body {
 }
 .guide-day-count {
   font-family:var(--font-mono); font-size:9px;
-  color:rgba(212,160,23,.5);
+  color:rgba(212,160,23,.75);
 }
 .guide-day-arrow {
   font-size:11px; color:var(--dorado); margin-left:4px;
@@ -916,7 +916,7 @@ body {
 }
 .guide-stop-speak {
   width:28px; height:28px; border:none; border-radius:50%;
-  background:transparent; color:rgba(244,239,230,.35);
+  background:transparent; color:rgba(244,239,230,.5);
   cursor:pointer; display:flex; align-items:center; justify-content:center;
   padding:0; flex-shrink:0; transition:all .15s;
 }
@@ -964,8 +964,8 @@ body {
 /* Route badge (km + carretera entre paradas) */
 .guide-stop-route-badge {
   font-family:var(--font-mono); font-size:11px; letter-spacing:.05em;
-  color:rgba(244,239,230,.45); padding:4px 12px; margin:2px 0 0;
-  border-left:2px dashed rgba(244,239,230,.15);
+  color:rgba(244,239,230,.6); padding:4px 12px; margin:2px 0 0;
+  border-left:2px dashed rgba(244,239,230,.25);
 }
 
 /* Km badge en header de día */
@@ -1076,7 +1076,7 @@ body {
 }
 .viajes-sub {
   font-family:'Space Mono',monospace; font-size:10px;
-  color:var(--crema); opacity:.4; letter-spacing:.8px;
+  color:var(--crema); opacity:.6; letter-spacing:.8px;
 }
 .viajes-grid { padding:0 16px 20px; display:grid; gap:14px; }
 .viaje-card {
@@ -1124,7 +1124,7 @@ body {
 }
 .viaje-group-count {
   font-family:var(--font-mono); font-size:10px;
-  color:rgba(244,239,230,.4); font-weight:400;
+  color:rgba(244,239,230,.6); font-weight:400;
 }
 .viaje-group-grid { display:grid; gap:14px; }
 .viaje-card-delete:hover { background:rgba(200,50,50,.7); color:#fff; }
@@ -1154,7 +1154,7 @@ body {
 .viaje-card-new-icon { font-size:28px; opacity:.5; }
 .viaje-card-new-txt {
   font-family:var(--font-mono); font-size:9px;
-  color:var(--crema); opacity:.4; letter-spacing:.14em;
+  color:var(--crema); opacity:.6; letter-spacing:.14em;
 }
 
 /* ═══ MODAL AUTH ═══ */
@@ -1221,7 +1221,7 @@ body {
 .modal-divider {
   display:flex; align-items:center; gap:12px; margin:18px 0;
   font-family:var(--font-mono); font-size:9px;
-  color:rgba(244,239,230,.3); letter-spacing:.1em;
+  color:rgba(244,239,230,.5); letter-spacing:.1em;
 }
 .modal-divider::before, .modal-divider::after {
   content:''; flex:1; height:1px; background:var(--linea);
@@ -1237,7 +1237,7 @@ body {
 .btn-social:hover { border-color:var(--dorado); color:var(--dorado); }
 .modal-switch {
   text-align:center; margin-top:16px;
-  font-size:12px; color:rgba(244,239,230,.4);
+  font-size:12px; color:rgba(244,239,230,.6);
 }
 .modal-switch a {
   color:var(--dorado); text-decoration:none; cursor:pointer;
