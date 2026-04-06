@@ -3882,7 +3882,7 @@ function sanitizeUrls(text) {
     '12go.asia', 'bookaway.com', 'lomprayah.com', 'seatrandiscovery.com', 'seatranferry.com', 'rajaferryport.com', 'rome2rio.com',
     'directferries.com', 'directferries.es', 'ferryscanner.com', 'clickferry.com', 'ferryhopper.com',
     'balearia.com', 'frs.es', 'frs-group.com', 'trasmediterranea.es', 'armasferry.com', 'aferry.com', 'aferry.es',
-    'omio.com', 'busbud.com', 'wanderu.com', 'virail.com', 'virail.es',
+    'omio.com', 'omio.es', 'busbud.com', 'wanderu.com', 'virail.com', 'virail.es',
     'thetrainline.com', 'trainline.com', 'renfe.com', 'raileurope.com', 'sncf-connect.com', 'bahn.com', 'trenitalia.com', 'cp.pt',
     'alsa.es', 'flixbus.com', 'flixbus.es', 'blablacar.es', 'blablacar.com',
     'grab.com', 'gojek.com',
@@ -3958,7 +3958,7 @@ function formatMessage(str) {
     else if (url.indexOf('balearia.com') !== -1) label = '🚢 Reservar en Baleària';
     else if (url.indexOf('frs.es') !== -1 || url.indexOf('frs-group.com') !== -1) label = '🚢 Reservar en FRS';
     else if (url.indexOf('trasmediterranea.es') !== -1) label = '🚢 Reservar en Trasmediterránea';
-    else if (url.indexOf('omio.com') !== -1) label = '🔍 Comparar en Omio';
+    else if (url.indexOf('omio.com') !== -1 || url.indexOf('omio.es') !== -1) label = '🔍 Comparar en Omio';
     else if (url.indexOf('busbud.com') !== -1) label = '🚌 Reservar en Busbud';
     else if (url.indexOf('thetrainline.com') !== -1 || url.indexOf('trainline.com') !== -1) label = '🚆 Reservar en Trainline';
     else if (url.indexOf('renfe.com') !== -1) label = '🚄 Reservar en Renfe';
