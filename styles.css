@@ -158,6 +158,25 @@ body {
 }
 .app-content::-webkit-scrollbar { display:none; }
 
+/* ── Chat vacío: saludo + chips ── */
+.chat-empty { padding:20px 16px; }
+.chat-empty-chips {
+  display:flex; flex-wrap:wrap; gap:8px;
+  padding:16px 0 0 48px; /* alineado con el texto de Salma (avatar 36px + gap 12px) */
+}
+.chat-empty-chip {
+  padding:8px 16px; border-radius:20px;
+  background:rgba(244,239,230,.06); border:1px solid rgba(212,168,67,.3);
+  color:rgba(244,239,230,.85); font-size:13px; font-weight:500;
+  font-family:var(--font-tight); cursor:pointer;
+  transition:all .15s;
+}
+.chat-empty-chip:hover {
+  background:rgba(212,168,67,.15); border-color:var(--dorado);
+  color:var(--crema);
+}
+.chat-empty-chip:active { transform:scale(.96); }
+
 /* ── Input bar (fijo abajo, NUNCA desaparece) ── */
 .app-input-bar {
   position:fixed; bottom:56px; left:0; right:0; z-index:1100;
@@ -217,16 +236,14 @@ body {
 }
 .app-input::placeholder { color:rgba(244,239,230,.25); }
 .app-input:focus { border-color:var(--linea-fuerte); }
-.app-send {
-  width:100%; height:44px; border-radius:10px;
+.app-send-arrow {
+  width:40px; height:40px; border-radius:50%; flex-shrink:0;
   background:var(--dorado); border:none; cursor:pointer;
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--font-mono); font-size:13px; font-weight:700;
-  color:var(--negro); letter-spacing:.08em; transition:background .2s;
-  white-space:nowrap;
+  color:var(--negro); padding:0; transition:background .2s;
 }
-.app-send:hover { background:var(--dorado2); }
-.app-send:disabled { opacity:.4; cursor:not-allowed; }
+.app-send-arrow:hover { background:var(--dorado2); }
+.app-send-arrow:disabled { opacity:.4; cursor:not-allowed; }
 /* Botón cámara */
 .app-cam {
   width:44px; height:44px; flex-shrink:0;

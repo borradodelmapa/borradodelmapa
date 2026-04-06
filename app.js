@@ -86,6 +86,10 @@ function showState(state) {
       layer.className = 'chat-bg-layer';
       document.body.insertBefore(layer, document.body.firstChild);
     }
+    // Estado vacío: saludo + chips si no hay chat previo
+    if (!document.getElementById('chat-area') || !document.getElementById('chat-area').hasChildNodes()) {
+      _renderChatEmpty();
+    }
     // Handoff desde guía pública o destino externo
     const handoff = localStorage.getItem('_salmaHandoff');
     if (handoff) {
@@ -195,6 +199,50 @@ function handleAvatarClick() {
   } else {
     openModal('login');
   }
+}
+
+// ═══ CHAT VACÍO — saludo + chips ═══
+
+function _renderChatEmpty() {
+  if (!document.getElementById('chat-area')) {
+    $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
+  }
+  const area = document.getElementById('chat-area');
+  if (!area || area.hasChildNodes()) return;
+
+  const saludos = [
+    'Dime. Ruta, hotel, restaurante, vuelo — lo que necesites.',
+    'Ey, ¿qué plan tienes? Cuéntame y lo montamos.',
+    '¿A dónde vamos? Te armo la ruta entera.',
+    'Aquí estoy. Dime destino o lo que necesites resolver.'
+  ];
+  const saludo = saludos[Math.floor(Math.random() * saludos.length)];
+
+  const chips = [
+    { label: 'Hazme una ruta', msg: 'Hazme una ruta' },
+    { label: 'Hotel cerca', msg: 'Busca un hotel cerca' },
+    { label: 'Dónde comer', msg: 'Recomiéndame dónde comer cerca' },
+    { label: 'Buscar vuelo', msg: 'Busca vuelos' },
+    { label: 'Info del país', msg: 'Cuéntame info práctica del país donde estoy' },
+    { label: 'Emergencia', msg: 'Necesito ayuda urgente' }
+  ];
+
+  area.innerHTML = `
+    <div class="chat-empty">
+      <div class="msg msg-salma">
+        <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
+        <div class="msg-body-salma">${saludo}</div>
+      </div>
+      <div class="chat-empty-chips">
+        ${chips.map(c => `<button class="chat-empty-chip" data-msg="${c.msg}">${c.label}</button>`).join('')}
+      </div>
+    </div>`;
+
+  area.querySelectorAll('.chat-empty-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      if (typeof salma !== 'undefined') salma.send(chip.dataset.msg);
+    });
+  });
 }
 
 // ═══ WELCOME (estado 1) ═══
@@ -2167,6 +2215,13 @@ window.enrichGuia = enrichGuia;
 $input.addEventListener('input', () => {
   $input.style.height = 'auto';
   $input.style.height = Math.min($input.scrollHeight, 100) + 'px';
+  // Toggle enviar/cámara+micro
+  const hasText = $input.value.trim().length > 0;
+  if ($send) $send.style.display = hasText ? '' : 'none';
+  const chatCam = document.getElementById('cam-btn');
+  const chatMic = document.getElementById('mic-btn');
+  if (chatCam) chatCam.style.display = hasText ? 'none' : '';
+  if (chatMic) chatMic.style.display = hasText ? 'none' : '';
 });
 
 $send.addEventListener('click', sendMessage);
