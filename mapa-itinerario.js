@@ -136,8 +136,16 @@ const mapaItinerario = {
     this._doShare(routeData, id);
   },
 
-  _doShare(routeData, id) {
-    const url = window.location.origin + '/' + id;
+  async _doShare(routeData, id) {
+    // Buscar el slug de la guía pública (no el ID del documento)
+    let slug = id;
+    try {
+      if (typeof db !== 'undefined' && typeof currentUser !== 'undefined' && currentUser) {
+        const doc = await db.collection('users').doc(currentUser.uid).collection('maps').doc(id).get();
+        if (doc.exists && doc.data().slug) slug = doc.data().slug;
+      }
+    } catch (_) {}
+    const url = window.location.origin + '/' + slug;
     if (navigator.share) {
       navigator.share({ title: routeData.title || routeData.name || 'Mi ruta', url }).catch(() => {});
     } else {
