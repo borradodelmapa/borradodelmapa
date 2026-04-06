@@ -1800,11 +1800,15 @@ const salma = {
     'Mirando el mapa...', 'Calculando la ruta...', 'Buscando los mejores sitios...',
     'Organizando el itinerario...', 'Preguntando a los locales...',
     'Buscando restaurantes de verdad...', 'Verificando coordenadas...',
-    'Esto va a merecer la pena...', 'Casi lo tengo...',
-    'Un poco más y lo tienes...', 'Preparando algo bueno...',
+  ],
+  _motivationalPhrases: [
+    'Esto va a merecer la pena', 'Casi lo tengo',
+    'Un poco más y lo tienes', 'Preparando algo bueno',
+    'Va quedando bonito', 'Estoy en ello, tranqui',
+    'Que no cunda el pánico', 'Tú relájate',
   ],
   _loadingPhrasesSimple: [
-    'Un momento...', 'Pensando...', 'Dame un segundo...', 'Ahí voy...',
+    'Un momento...', 'Dame un segundo...', 'Ahí voy...',
     'Déjame ver...', 'Lo miro...',
   ],
   _isRouteMsg(msg) {
@@ -1833,6 +1837,13 @@ const salma = {
   },
 
   _addLoading(customText, noRetry = false) {
+    // Si ya existe, solo actualizar el texto de status
+    const existing = document.getElementById('salma-loading');
+    if (existing && customText) {
+      const statusEl = document.getElementById('loading-status');
+      if (statusEl) statusEl.textContent = customText;
+      return existing;
+    }
     this._removeLoading();
     const area = this._getChatArea();
     if (!area) return;
@@ -1840,24 +1851,34 @@ const salma = {
     div.className = 'msg msg-salma';
     div.id = 'salma-loading';
     const phrase = customText || this._loadingPhrases[Math.floor(Math.random() * this._loadingPhrases.length)];
+    const motiv = this._motivationalPhrases[Math.floor(Math.random() * this._motivationalPhrases.length)];
     div.innerHTML = `
       <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
       <div class="msg-body-salma">
         <div class="loading-dots"><span></span><span></span><span></span></div>
-        <div class="loading-text" id="loading-phrase">${phrase}</div>
+        <div class="loading-text" id="loading-phrase">
+          <span id="loading-status">${phrase}</span>
+          <span class="loading-motiv" id="loading-motiv">${motiv}</span>
+        </div>
       </div>`;
     area.appendChild(div);
-    this._scrollToBottom(true);  // forzar: loading inicial
+    this._scrollToBottom(true);
 
-    // Rotar frases solo si no hay texto custom
-    if (!customText) {
-      let idx = 0;
-      this._loadingInterval = setInterval(() => {
-        idx = (idx + 1) % this._loadingPhrases.length;
-        const el = document.getElementById('loading-phrase');
-        if (el) el.textContent = this._loadingPhrases[idx];
-      }, 3000);
-    }
+    // Rotar frase motivadora cada 4s
+    let motivIdx = 0;
+    this._loadingInterval = setInterval(() => {
+      motivIdx = (motivIdx + 1) % this._motivationalPhrases.length;
+      const el = document.getElementById('loading-motiv');
+      if (el) el.textContent = this._motivationalPhrases[motivIdx];
+      // Si no hay texto custom, también rotar el status
+      if (!customText) {
+        const statusEl = document.getElementById('loading-status');
+        if (statusEl) {
+          const statusIdx = Math.floor(Math.random() * this._loadingPhrases.length);
+          statusEl.textContent = this._loadingPhrases[statusIdx];
+        }
+      }
+    }, 4000);
 
     // Botón reintentar: aparece a los 18s si Salma aún está pensando
     // noRetry=true cuando estamos en generación por bloques (cada bloque resetea el timer → loop infinito)
