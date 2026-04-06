@@ -296,16 +296,25 @@ async function renderWelcome() {
           </div>
           <div class="welcome-features">
             <div class="welcome-feature">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
-              <span>Planifica</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+              <div>
+                <div class="welcome-feature-title">Planifica</div>
+                <div class="welcome-feature-desc">Ruta con mapa, fotos y paradas día a día</div>
+              </div>
             </div>
             <div class="welcome-feature">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <span>Busca</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <div>
+                <div class="welcome-feature-title">Busca</div>
+                <div class="welcome-feature-desc">Vuelos, hoteles y restaurantes con datos reales</div>
+              </div>
             </div>
             <div class="welcome-feature">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-              <span>Acompaña</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+              <div>
+                <div class="welcome-feature-title">Acompaña</div>
+                <div class="welcome-feature-desc">Te guía en ruta y resuelve imprevistos</div>
+              </div>
             </div>
           </div>
         </div>
