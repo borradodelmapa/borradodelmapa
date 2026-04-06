@@ -200,7 +200,9 @@ Cuando es conversación sin ruta: extiéndete lo que necesite la pregunta, misma
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 8 — Modos y formato SALMA_ROUTE_JSON
 // ═══════════════════════════════════════════════════════════════
-const BLOQUE_RUTAS = `ZONAS Y PUNTOS VERIFICABLES
+const BLOQUE_RUTAS = `⛔ REGLA ABSOLUTA — GUÍAS: NUNCA generes SALMA_ROUTE_JSON ni entres en modo guía salvo que el usuario haya escrito literalmente "salma hazme una guía" o "hazme una guía salma". NINGUNA otra frase lo activa. Ni "quiero una guía", ni destino + días, ni "quiero ir a X", ni "hazme una ruta", ni "itinerario", ni preguntas sobre un país. Si no hay esa frase exacta → responde con información, conversación o tools, pero NUNCA con SALMA_ROUTE_JSON.
+
+ZONAS Y PUNTOS VERIFICABLES
 Solo incluye lugares verificables (existen en Google Maps, Booking u otras fuentes fiables). No inventes nombres, direcciones ni coordenadas. Prefiere lugares conocidos y comprobables.
 
 NOMBRES PARA ENLACES A GOOGLE MAPS
@@ -283,16 +285,19 @@ SERVICIOS — HERRAMIENTAS
 
 buscar_hotel → hotel, hostal, apartamento, dónde dormir
 buscar_coche → alquiler de coche, moto, scooter
+buscar_lugar → CUALQUIER lugar físico: restaurante, bar, café, dónde comer/cenar, gimnasio, farmacia, museo, spa, cajero, cambio de divisa, clínica, supermercado, tienda… Para comida pasa tipo_places: "restaurant". Para el resto omite tipo_places.
 buscar_vuelos → vuelo, billete de avión
 buscar_foto → cuando recomiendes un lugar concreto con nombre propio. 1-3 fotos por respuesta. No usar cuando generes ruta (la ruta tiene sus propias fotos).
-buscar_web → dato que puede haber cambiado desde agosto 2025 y para el que no hay tool específica
+buscar_web → dato que puede haber cambiado desde agosto 2025 y para el que no hay tool específica. OBLIGATORIO para ferry/bus/tren: cuando el usuario pida transporte entre dos ciudades (ferry, bus, tren), llama SIEMPRE a buscar_web con query "[origen] [destino] ferry bus book ticket online" para obtener las URLs reales de reserva. Sin esta llamada no tendrás URL y no podrás ponerla en "Reservar:". No pongas "Reservar:" vacío — primero busca.
 
-RESTAURANTES: si el sistema ya te proporciona resultados de restaurantes en el contexto, preséntalos directamente. Si no, usa buscar_restaurante. Nunca respondas con texto inventado cuando pidan dónde comer.
+RESTAURANTES: si el sistema ya te proporciona resultados en el contexto, preséntalos directamente. Si no, usa buscar_lugar con tipo_places: "restaurant". Nunca respondas con texto inventado cuando pidan dónde comer.
 
 CÓMO PRESENTAR RESULTADOS:
 — Hoteles: foto, nombre, precio/noche, puntuación, enlace de reserva. Destaca el mejor valorado y el más barato si son distintos.
 — Coches: nombre, precio total y por día, plazas, transmisión, proveedor, punto de recogida.
 — Restaurantes: nombre, tipo de cocina, zona, enlace TheFork o Google Maps.
+— Vuelos: cuando vengan de un rango de fechas (fecha_rango_hasta), SIEMPRE muestra el trade-off: precio vs duración total vs tiempo de escala. Formato: "✈️ Opción 1 — X€ — sale el DÍA — Xh Xmin (escala Xh en CIUDAD)". Si hay una opción más cara pero con mucha menos escala, menciónala expresamente: "Este cuesta 3€ más pero te ahorras 3h de escala".
+— Lugares (buscar_lugar): nombre en negrita, tipo, dirección corta, rating si lo hay, teléfono si lo hay, enlace Google Maps.
 — Cada enlace en su propia línea, sin markdown, sin corchetes. Solo la URL.
 — CERO URLs inventadas. Solo pon URLs que te haya devuelto una herramienta en esta conversación. Si no tienes URL, pon solo el nombre.
 
@@ -336,14 +341,10 @@ DETECTA QUÉ QUIERE EL USUARIO
 Señales: "¿qué ver en...?", "¿es caro...?", "¿necesito visado?", "¿cuándo ir?", "¿qué tiempo hace?"
 → Responde con lo que sabes. Sin tools, sin ruta, sin taxi.
 
-2. QUIERE VISITAR UN DESTINO o PIDE RUTA
-Señales: "quiero ir a Vietnam", "Vietnam 5 días", "hazme una ruta por...", "itinerario de...", "X días por Y"
-El destino es un país, región o ciudad lejana — no un lugar específico y cercano.
-
-ANTES DE GENERAR CUALQUIER RUTA: necesitas saber qué quiere hacer y con quién va.
-Si no lo ha dicho → pregunta en UNA sola frase: "¿Qué quieres hacer — playas, cultura, naturaleza? ¿Vas solo, en pareja o en grupo?"
-NO generes la ruta hasta tener esa respuesta.
-Si dice "dale", "lo que tú veas", "hazla ya" → genera con defaults (mezcla cultura+emblemáticos, solo, ritmo intermedio).
+2. QUIERE UNA GUÍA (SALMA_ROUTE_JSON)
+Solo si el usuario ha escrito literalmente "salma hazme una guía" o "hazme una guía salma".
+NINGUNA otra señal activa el modo guía: ni destino + días, ni "hazme una ruta", ni "quiero ir a X", ni "itinerario".
+Si el usuario escribe cualquiera de esas cosas sin la frase exacta → responde con información del destino, tips, qué ver, herramientas. Sin SALMA_ROUTE_JSON.
 
 4. QUIERE MOVERSE AHORA (transporte local)
 Señales: el destino es un lugar específico y cercano — aeropuerto, hotel, dirección, barrio de la ciudad donde está.
@@ -353,7 +354,7 @@ NUNCA aplica para: "quiero ir a Vietnam", "quiero ir a Tailandia" — esos son t
 
 5. PIDE SERVICIO CONCRETO
 Señales: "busca hotel", "vuelos a...", "dónde comer", "alquiler de coche"
-→ Usa la herramienta correspondiente inmediatamente. Sin preguntas previas. EXCEPCIÓN: para hoteles, si faltan fechas claras (no está en current_route ni el usuario las menciona), pregunta: "¿Para qué fechas?" Una pregunta, directa.
+→ Usa la herramienta correspondiente inmediatamente. Sin preguntas previas.
 
 6. QUIERE GUARDAR ALGO
 Señales: "apúntame", "recuérdame", "anota que", "guarda esto"
@@ -369,13 +370,10 @@ PREGUNTAS SOBRE LA APP — si alguien pregunta cómo guardar, compartir o usar f
 
 DEFAULTS — nunca preguntes lo que puedes asumir:
 — Sin ciudad → capital del país
-— Sin fecha → SI HAY RUTA ACTIVA (current_route), usa las fechas de la ruta. SI NO hay ruta, pregunta: "¿para qué fechas?" (mañana es mejor default que hoy para planificación)
+— Sin fecha → hoy
 — Sin noches → 1 noche
 — Sin fecha de vuelta → solo ida
 — Sin presupuesto → muestra rango variado
-
-CONTEXTO DE RUTA:
-Si el usuario menciona un lugar de la ruta actual (ej: "hotel en Bangkok" y Bangkok está en la ruta del día 3), asume las fechas de ese día. Si es genérico y no sabes el día exacto, extrae las fechas START y END de current_route y muestra disponibilidad en ese rango.
 
 PETICIONES MÚLTIPLES: ejecútalas en orden lógico — lo urgente primero (taxi, grúa, vuelo hoy, emergencia), lo planificable después.
 
@@ -393,7 +391,9 @@ BÚSQUEDAS EN TIEMPO REAL: tu conocimiento llega a agosto 2025. Si el dato puede
 
 TIEMPO Y CLIMA: siempre en tiempo real. Si el contexto incluye [DATOS DEL TIEMPO REAL], úsalos. Si no, usa buscar_web inmediatamente. Sin excepciones.
 
-JERARQUÍA DE HERRAMIENTAS: las tools específicas tienen prioridad sobre buscar_web. Para hoteles: buscar_hotel. Para vuelos: buscar_vuelos. Para restaurantes: buscar_restaurante. Para gimnasios, farmacias, tiendas, spas, museos, clínicas, o cualquier lugar que NO sea comida/hotel/vuelo/coche: usa buscar_web con query "nombre del lugar + ciudad". NUNCA uses buscar_restaurante para lugares que no son restaurantes.
+JERARQUÍA DE HERRAMIENTAS: las tools específicas tienen prioridad sobre buscar_web. Para hoteles: buscar_hotel. Para vuelos: buscar_vuelos. Para cualquier lugar físico (restaurantes, bares, gimnasios, farmacias, museos, spas, cajeros, tiendas, clínicas…): buscar_lugar. NUNCA uses buscar_web cuando buscar_lugar puede hacer el trabajo.
+
+VELOCIDAD — REGLA CRÍTICA: cuando el usuario pide varias cosas a la vez (vuelo + hotel + gym + taxi…), llama a TODAS las herramientas necesarias en una SOLA respuesta, de golpe. No hagas rondas separadas. No esperes el resultado de una para llamar a la siguiente. Todas las búsquedas son independientes y deben lanzarse simultáneamente.
 
 PROHIBIDO INVENTAR:
 1. Las ÚNICAS URLs permitidas: (a) las que devuelve una herramienta, (b) google.com/maps/dir/ construida con coordenadas reales.
@@ -500,6 +500,10 @@ const SALMA_TOOLS = [
           type: "string",
           description: "Fecha de regreso en formato YYYY-MM-DD. Omitir para vuelos solo ida"
         },
+        fecha_rango_hasta: {
+          type: "string",
+          description: "Fecha fin del rango flexible en formato YYYY-MM-DD. Si el usuario pide 'la semana del 10 al 15' o 'cualquier día entre X e Y', pon fecha_ida=primer día y fecha_rango_hasta=último día. Se buscará en 3 fechas distribuidas para encontrar el más barato."
+        },
         adultos: {
           type: "integer",
           description: "Número de pasajeros adultos. Por defecto 1"
@@ -514,7 +518,7 @@ const SALMA_TOOLS = [
   },
   {
     name: "buscar_hotel",
-    description: "Busca hoteles REALES con precios y disponibilidad en Booking.com. Usa esta herramienta cuando el usuario pida hotel, hostal, alojamiento, apartamento o dónde dormir. CRÍTICO: SIEMPRE necesitas fecha_entrada y fecha_salida explícitas — NUNCA asumas 'hoy' a menos que el usuario diga explícitamente que es hoy. Si no hay fechas claras en el mensaje, pregunta primero. Si hay ruta activa y mencionan un lugar de la ruta, usa las fechas de ese día en current_route. Devuelve hoteles con nombre, precio, review, dirección, enlace de reserva y foto. REGLAS DE FORMATO: para cada hotel, muestra primero la foto con formato ![nombre](foto_url), luego nombre, precio, review, y el enlace de reserva SOLO en su propia línea sin formato markdown. Si el usuario tiene presupuesto, filtra y muestra solo los que encajan. Destaca el mejor valorado y el más barato.",
+    description: "Busca hoteles REALES con precios y disponibilidad en Booking.com. Usa esta herramienta cuando el usuario pida hotel, hostal, alojamiento, apartamento o dónde dormir. Devuelve hoteles con nombre, precio, review, dirección, enlace de reserva y foto. REGLAS DE FORMATO: para cada hotel, muestra primero la foto con formato ![nombre](foto_url), luego nombre, precio, review, y el enlace de reserva SOLO en su propia línea sin formato markdown. Si el usuario tiene presupuesto, filtra y muestra solo los que encajan. Destaca el mejor valorado y el más barato.",
     input_schema: {
       type: "object",
       properties: {
@@ -577,25 +581,29 @@ const SALMA_TOOLS = [
     }
   },
   {
-    name: "buscar_restaurante",
-    description: "Busca restaurantes reales con Google Places. Usa esta herramienta cuando el usuario pida restaurante, dónde comer o dónde cenar. Si devuelve un array 'restaurantes', presenta cada uno con **nombre en negrita**, teléfono, dirección, rating, si está abierto, y el enlace google_maps en su propia línea (sin markdown, solo la URL). Si devuelve enlaces genéricos, ponlos en su propia línea sin markdown.",
+    name: "buscar_lugar",
+    description: "Busca cualquier lugar físico con Google Places: restaurantes, bares, cafés, gimnasios, farmacias, museos, clínicas, spas, supermercados, cajeros, cambio de divisas, tiendas… Úsala para TODO lo que el usuario quiera encontrar cerca: dónde comer, dónde ir al gym, dónde comprar una SIM, etc. Devuelve nombre, dirección, teléfono, rating, horario y enlace Google Maps.",
     input_schema: {
       type: "object",
       properties: {
+        query: {
+          type: "string",
+          description: "Qué buscar. Para comida usa el tipo de cocina o 'restaurante' + estilo. Ej: 'restaurante thai', 'sushi', 'boxing gym', 'farmacia', 'cambio de divisas', 'supermercado', 'museo historia'"
+        },
         ciudad: {
           type: "string",
-          description: "Ciudad donde buscar restaurante (ej: 'Madrid', 'Tokyo', 'Bangkok')"
-        },
-        tipo_cocina: {
-          type: "string",
-          description: "Tipo de cocina si el usuario lo especifica (ej: 'sushi', 'italiana', 'local', 'vegetariana')"
+          description: "Ciudad donde buscar. Ej: 'Hanoi', 'Bangkok', 'Madrid'"
         },
         zona: {
           type: "string",
-          description: "Zona o barrio si el usuario lo especifica (ej: 'centro', 'casco antiguo', 'Shibuya')"
+          description: "Zona o barrio si el usuario lo especifica. Opcional."
+        },
+        tipo_places: {
+          type: "string",
+          description: "Tipo Google Places para afinar resultados. Usa 'restaurant' para cualquier búsqueda de comida/cenar/restaurante. Deja vacío para el resto."
         }
       },
-      required: ["ciudad"]
+      required: ["query", "ciudad"]
     }
   },
   {
@@ -705,18 +713,7 @@ const TRANSPORT_APP_URLS = {
 // ═══════════════════════════════════════════════════════════════
 
 function isRouteRequest(message, history) {
-  // Excluir "ruta" cuando se usa en contexto de Google Maps / direcciones (no es itinerario de viaje)
-  const isDirectionsRequest = /ruta.*(google|maps|gps|como llego|como ir|llegar|ir a)|google.*ruta|maps.*ruta|dame.*(la )?ruta.*(a |al |en )/i.test(message);
-  if (isDirectionsRequest && !/\d+\s*d[ií]as?/i.test(message)) return false;
-  const directMatch = /ruta|itinerario|qué ver|que ver|visitar|días en|dias en|días|dias|fin de semana|semana en|lugares en|qué hacer|que hacer|plan para|viaje a|viaje por|llevo.*días|me quedo|escapada|excursion|excursión/i.test(message);
-  if (directMatch) return true;
-  if (Array.isArray(history) && history.length >= 2) {
-    const prevMessages = history.map(h => h.content || '').join(' ');
-    const historyHasRouteContext = /ruta|itinerario|días|dias|viaje|visitar|qué ver|que ver|playas?|playa/i.test(prevMessages);
-    const userGivesData = /\d+\s*d[ií]as?|\d+\s*noches?|zona|calas?|playa|surf|ciudad|pueblo|costa|norte|sur|este|oeste/i.test(message);
-    if (historyHasRouteContext && userGivesData) return true;
-  }
-  return false;
+  return /salma\s+hazme\s+una\s+gu[ií]a|hazme\s+una\s+gu[ií]a\s+salma/i.test(message);
 }
 
 function isHelpRequest(message) {
@@ -1469,17 +1466,16 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
     userContent += '\n\n[Si generas ruta, responde con 1-2 frases solo. Si es conversacional, extiéndete con densidad de datos. Si el usuario pide datos concretos, dato primero y breve.]';
   }
 
-  // Modo mapa — inyectar en el system prompt para máxima prioridad
-  if (mapMode) {
-    systemPrompt += '\n\n⚠️ MODO MAPA ACTIVO: El usuario está usando el botón de guardar lugar en su mapa. Su mensaje describe un lugar (monumento, hotel, restaurante, playa, catedral, mercado...) o adjunta una foto de ese lugar. Tu única tarea: identificar el lugar, escribir 1 frase útil sobre él, y emitir OBLIGATORIAMENTE en la última línea: SALMA_ACTION:{"type":"MAP_PIN","name":"Nombre exacto como en Google Maps","address":"Ciudad, País","description":"Una frase útil","place_type":"hotel|monument|restaurant|beach|park|other"}. Si no puedes identificar el lugar con certeza, pregunta: "¿De qué lugar se trata? Dame el nombre o la ciudad."';
-  }
-
   // Si Salma preguntó antes y el usuario responde, forzar generación
   if (Array.isArray(history) && history.length >= 2) {
     const lastAssistant = history.filter(h => h.role === 'assistant').pop();
     if (lastAssistant && lastAssistant.content && /\?/.test(lastAssistant.content)) {
       userContent += '\n\n[IMPORTANTE: Ya preguntaste y el usuario responde. Si incluye destino/días/tipo, GENERA LA RUTA YA. No preguntes más.]';
     }
+  }
+
+  if (mapMode) {
+    systemPrompt += '\n\n⚠️ MODO MAPA ACTIVO: El usuario está usando el botón de guardar lugar en su mapa. Su mensaje describe un lugar (monumento, hotel, restaurante, playa, catedral, mercado...) o adjunta una foto de ese lugar. Tu única tarea: identificar el lugar, escribir 1 frase útil sobre él, y emitir OBLIGATORIAMENTE en la última línea: SALMA_ACTION:{"type":"MAP_PIN","name":"Nombre exacto como en Google Maps","address":"Ciudad, País","description":"Una frase útil","place_type":"hotel|monument|restaurant|beach|park|other"}. Si no puedes identificar el lugar con certeza, pregunta: "¿De qué lugar se trata? Dame el nombre o la ciudad."';
   }
 
   // Inyectar resultados de búsqueda de ayuda al viajero
@@ -1618,6 +1614,29 @@ function sanitizeInventedUrls(text) {
     if (url.includes('booking.com')) return url;
     if (url.includes('skyscanner.es') || url.includes('skyscanner.com')) return url;
     if (url.includes('rentalcars.com') || url.includes('discovercars.com')) return url;
+    // Reserva de transporte (ferry, bus, tren)
+    if (url.includes('12go.asia') || url.includes('12go.com')) return url;
+    if (url.includes('bookaway.com')) return url;
+    if (url.includes('lomprayah.com')) return url;
+    if (url.includes('seatrandiscovery.com') || url.includes('seatranferry.com')) return url;
+    if (url.includes('rome2rio.com')) return url;
+    if (url.includes('busbud.com')) return url;
+    if (url.includes('trainline.com') || url.includes('thetrainline.com')) return url;
+    if (url.includes('trenitalia.com')) return url;
+    if (url.includes('renfe.com')) return url;
+    if (url.includes('omio.com')) return url;
+    if (url.includes('wanderu.com')) return url;
+    if (url.includes('flixbus.es') || url.includes('flixbus.com')) return url;
+    if (url.includes('blablacar.es') || url.includes('blablacar.com')) return url;
+    if (url.includes('directferries.es') || url.includes('directferries.com')) return url;
+    if (url.includes('ferryhopper.com')) return url;
+    if (url.includes('ferryscanner.com')) return url;
+    if (url.includes('clickferry.com')) return url;
+    if (url.includes('balearia.com')) return url;
+    if (url.includes('frs.es') || url.includes('frs-group.com')) return url;
+    if (url.includes('trasmediterranea.es') || url.includes('armasferry.com')) return url;
+    if (url.includes('virail.es') || url.includes('virail.com')) return url;
+    if (url.includes('aferry.es') || url.includes('aferry.com')) return url;
     const transportClean = ['https://www.grab.com', 'https://m.uber.com', 'https://bolt.eu',
       'https://www.didiglobal.com', 'https://www.gojek.com', 'https://www.careem.com',
       'https://indrive.com', 'https://cabify.com', 'https://www.free-now.com',
@@ -2086,93 +2105,83 @@ async function verifyAllStops(route, placesKey) {
 // BÚSQUEDA DE VUELOS — Duffel API
 // ═══════════════════════════════════════════════════════════════
 
+// Busca vuelos en una sola fecha — helper interno
+async function _buscarVuelosFecha(params, duffelToken) {
+  const slices = [{
+    origin: params.origen,
+    destination: params.destino,
+    departure_date: params.fecha_ida
+  }];
+  if (params.fecha_vuelta) {
+    slices.push({ origin: params.destino, destination: params.origen, departure_date: params.fecha_vuelta });
+  }
+  const passengers = [];
+  const numAdultos = params.adultos || 1;
+  for (let i = 0; i < numAdultos; i++) passengers.push({ type: 'adult' });
+
+  const response = await fetch(
+    'https://api.duffel.com/air/offer_requests?return_offers=true&supplier_timeout=15000',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Accept-Encoding': 'gzip',
+        'Duffel-Version': 'v2',
+        'Authorization': `Bearer ${duffelToken}`
+      },
+      body: JSON.stringify({ data: { slices, passengers, cabin_class: params.clase || 'economy' } }),
+      signal: AbortSignal.timeout(12000)
+    }
+  );
+  const data = await response.json();
+  if (data.errors) return [];
+  return data.data?.offers || [];
+}
+
 async function buscarVuelosDuffel(params, duffelToken) {
   if (!duffelToken) {
     return { error: 'Token de Duffel no configurado. Añade DUFFEL_ACCESS_TOKEN en Cloudflare.' };
   }
 
   try {
-    // Construir slices (tramos del viaje)
-    const slices = [
-      {
-        origin: params.origen,
-        destination: params.destino,
-        departure_date: params.fecha_ida
-      }
-    ];
+    let allOffers = [];
 
-    // Si hay fecha de vuelta, añadir slice de regreso
-    if (params.fecha_vuelta) {
-      slices.push({
-        origin: params.destino,
-        destination: params.origen,
-        departure_date: params.fecha_vuelta
-      });
+    // ── Búsqueda multi-fecha si hay rango flexible ──
+    if (params.fecha_rango_hasta && params.fecha_rango_hasta > params.fecha_ida) {
+      // Solo inicio y fin del rango (2 llamadas en paralelo, más rápido)
+      const uniqueDates = [...new Set([params.fecha_ida, params.fecha_rango_hasta])];
+
+      const results = await Promise.allSettled(
+        uniqueDates.map(fecha => _buscarVuelosFecha({ ...params, fecha_ida: fecha }, duffelToken).catch(() => []))
+      );
+      for (const r of results) {
+        if (r.status === 'fulfilled') allOffers.push(...r.value);
+      }
+    } else {
+      // Búsqueda normal en una fecha
+      allOffers = await _buscarVuelosFecha(params, duffelToken);
     }
 
-    // Construir array de pasajeros
-    const passengers = [];
-    const numAdultos = params.adultos || 1;
-    for (let i = 0; i < numAdultos; i++) {
-      passengers.push({ type: 'adult' });
-    }
-
-    const requestBody = {
-      data: {
-        slices: slices,
-        passengers: passengers,
-        cabin_class: params.clase || 'economy'
-      }
-    };
-
-    // Llamar a Duffel — return_offers=true incluye ofertas directamente
-    const response = await fetch(
-      'https://api.duffel.com/air/offer_requests?return_offers=true&supplier_timeout=15000',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Accept-Encoding': 'gzip',
-          'Duffel-Version': 'v2',
-          'Authorization': `Bearer ${duffelToken}`
-        },
-        body: JSON.stringify(requestBody),
-        signal: AbortSignal.timeout(12000)
-      }
-    );
-
-    const data = await response.json();
-
-    // Manejar errores de Duffel
-    if (data.errors) {
-      return {
-        encontrados: 0,
-        error: data.errors[0]?.message || 'Error en la búsqueda de vuelos'
-      };
-    }
-
-    const offers = data.data?.offers || [];
-    const offerRequestId = data.data?.id || null;
-
-    if (offers.length === 0) {
+    if (allOffers.length === 0) {
       return {
         encontrados: 0,
         mensaje: 'No se encontraron vuelos con esos criterios. Prueba con fechas más flexibles.'
       };
     }
 
-    // Generar enlace de reserva en Skyscanner (distingue solo ida vs ida+vuelta)
-    // Formato fecha Skyscanner: AAMMDD (260415 = 15 abril 2026)
+    // Generar enlace de reserva en Skyscanner
     const skyDate = (d) => d.replace(/^20(\d{2})-(\d{2})-(\d{2})$/, '$1$2$3');
     let bookingUrl = `https://www.skyscanner.es/transporte/vuelos/${params.origen.toLowerCase()}/${params.destino.toLowerCase()}/${skyDate(params.fecha_ida)}/`;
-    if (params.fecha_vuelta) {
-      bookingUrl += `${skyDate(params.fecha_vuelta)}/`;
+    if (params.fecha_vuelta) bookingUrl += `${skyDate(params.fecha_vuelta)}/`;
+    if (params.fecha_rango_hasta) {
+      // Para rango flexible, apuntar al buscador de mes
+      bookingUrl = `https://www.skyscanner.es/transporte/vuelos/${params.origen.toLowerCase()}/${params.destino.toLowerCase()}/`;
     }
 
     // Ordenar por precio, deduplicar por aerolínea+precio+horario salida, tomar top 5
     const seen = new Set();
-    const sortedOffers = offers
+    const sortedOffers = allOffers
       .sort((a, b) => parseFloat(a.total_amount) - parseFloat(b.total_amount))
       .filter(offer => {
         const seg = offer.slices[0]?.segments[0];
@@ -2200,6 +2209,14 @@ async function buscarVuelosDuffel(params, duffelToken) {
         llegada: ultimoSegmento.arriving_at,
         duracion: idaSlice.duration || 'No disponible',
         escalas: idaSlice.segments.length - 1,
+        tiempo_escala_min: idaSlice.segments.length > 1
+          ? idaSlice.segments.slice(1).reduce((acc, seg, i) => {
+              const prev = idaSlice.segments[i];
+              const llegada = prev?.arriving_at ? new Date(prev.arriving_at) : null;
+              const salida = seg?.departing_at ? new Date(seg.departing_at) : null;
+              return llegada && salida ? acc + Math.round((salida - llegada) / 60000) : acc;
+            }, 0)
+          : 0,
         clase: offer.cabin_class || params.clase || 'economy'
       };
 
@@ -2306,13 +2323,6 @@ async function buscarHotelesBooking(input, rapidApiKey) {
       const moneda = h.currency_code || 'EUR';
       const precioNoche = noches > 0 ? Math.round(precioTotal / noches * 100) / 100 : precioTotal;
 
-      // Construir enlace con fechas: agregar parámetros de checkin/checkout a la URL base
-      let enlaceConFechas = h.url || '';
-      if (enlaceConFechas) {
-        const separator = enlaceConFechas.includes('?') ? '&' : '?';
-        enlaceConFechas += `${separator}ss_pos=1&checkin_month=${input.fecha_entrada.split('-')[1]}&checkin_monthday=${input.fecha_entrada.split('-')[2]}&checkin_year=${input.fecha_entrada.split('-')[0]}&checkout_month=${input.fecha_salida.split('-')[1]}&checkout_monthday=${input.fecha_salida.split('-')[2]}&checkout_year=${input.fecha_salida.split('-')[0]}`;
-      }
-
       return {
         nombre: h.hotel_name,
         precio_total: precioTotal,
@@ -2324,7 +2334,7 @@ async function buscarHotelesBooking(input, rapidApiKey) {
         estrellas: h.class || 0,
         direccion: h.address || '',
         distrito: h.district || h.city || '',
-        enlace_reserva: enlaceConFechas,
+        enlace_reserva: h.url || '',
         foto: h.max_photo_url || h.main_photo_url || ''
       };
     });
@@ -2340,8 +2350,8 @@ async function buscarHotelesBooking(input, rapidApiKey) {
       if (filtrados.length > 0) hoteles = filtrados;
     }
 
-    // Top 2 más baratos (reducido para UX limpia)
-    hoteles = hoteles.slice(0, 2);
+    // Top 5 más baratos
+    hoteles = hoteles.slice(0, 5);
 
     const result = {
       encontrados: hoteles.length,
@@ -2565,6 +2575,89 @@ function generarVideo(input) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// BUSCAR LUGAR — Google Places genérico (gym, farmacia, museo…)
+// ═══════════════════════════════════════════════════════════════
+
+async function buscarLugar(input, placesKey, userCoords) {
+  if (!placesKey) return { error: 'Google Places key no configurada' };
+
+  // Compatibilidad con llamadas legacy de buscar_restaurante (sin campo query)
+  const query = input.query || (input.tipo_cocina ? input.tipo_cocina + ' restaurante' : 'restaurante');
+  const ciudad = input.ciudad || '';
+  const esComida = input.tipo_places === 'restaurant' ||
+    /restaurante|comer|cenar|comida|cafe|bar\b|sushi|thai|italiano|chino|tapas/i.test(query);
+
+  let searchTerms = query + ' ' + ciudad;
+  if (input.zona) searchTerms += ' ' + input.zona;
+
+  try {
+    let url;
+    const typeParam = input.tipo_places ? `&type=${encodeURIComponent(input.tipo_places)}` : (esComida ? '&type=restaurant' : '');
+    const radius = esComida ? 1500 : 3000;
+    if (userCoords && userCoords.lat && userCoords.lng) {
+      url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchTerms)}&language=es&location=${userCoords.lat},${userCoords.lng}&radius=${radius}${typeParam}&key=${placesKey}`;
+    } else {
+      url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchTerms)}&language=es${typeParam}&key=${placesKey}`;
+    }
+    const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+    const data = await res.json();
+
+    if (!data?.results?.length) {
+      // Fallback para comida: devolver enlaces TheFork + Google Maps
+      if (esComida) {
+        return {
+          enlace_thefork: `https://www.thefork.es/buscar?q=${normalizeQuery(searchTerms)}`,
+          enlace_google_maps: `https://www.google.com/maps/search/restaurantes+${normalizeQuery(searchTerms)}`,
+          ciudad,
+          nota: 'TheFork permite reservar mesa directamente. Google Maps muestra reseñas y fotos.'
+        };
+      }
+      return { error: `No encontré "${query}" en ${ciudad}. Prueba con otro término.` };
+    }
+
+    const top = data.results.slice(0, 5);
+    const detailPromises = top.map(p => {
+      if (!p.place_id) return Promise.resolve(null);
+      return fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${p.place_id}&fields=name,formatted_phone_number,international_phone_number,formatted_address,rating,price_level,opening_hours,website&language=es&key=${placesKey}`)
+        .then(r => r.json()).catch(() => null);
+    });
+    const details = await Promise.all(detailPromises);
+
+    const lugares = top.map((p, i) => {
+      const d = details[i]?.result;
+      const nombre = d?.name || p.name;
+      const gmapsLink = p.place_id
+        ? `https://www.google.com/maps/place/?q=place_id:${p.place_id}`
+        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nombre + ' ' + ciudad)}`;
+      const entry = {
+        nombre,
+        telefono: d?.international_phone_number || d?.formatted_phone_number || '',
+        direccion: d?.formatted_address || p.formatted_address || '',
+        rating: (d?.rating || p.rating) ? `${d?.rating || p.rating}★` : '',
+        abierto: d?.opening_hours?.open_now != null ? (d.opening_hours.open_now ? 'Abierto ahora' : 'Cerrado ahora') : '',
+        web: d?.website || '',
+        google_maps: gmapsLink,
+      };
+      if (esComida && (d?.price_level || p.price_level)) {
+        entry.precio = '€'.repeat(d?.price_level || p.price_level);
+      }
+      return entry;
+    }).filter(l => l.nombre);
+
+    return {
+      lugares,
+      ciudad,
+      query,
+      nota: esComida
+        ? 'Resultados reales de Google Places. Llama antes para confirmar disponibilidad.'
+        : 'Resultados reales de Google Places. Llama antes para confirmar horarios.'
+    };
+  } catch (e) {
+    return { error: 'Error buscando lugar: ' + e.message };
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
 // BÚSQUEDA WEB GENERAL (Serper + fetch contenido top URLs)
 // ═══════════════════════════════════════════════════════════════
 
@@ -2626,6 +2719,32 @@ async function buscarWeb(input, braveKey) {
 // DISPATCHER DE HERRAMIENTAS — Ejecuta la tool que Claude pida
 // ═══════════════════════════════════════════════════════════════
 
+function getToolProgressMsg(toolName, input) {
+  switch (toolName) {
+    case 'buscar_vuelos':
+      return `✈️ Buscando vuelos ${input.origen || ''} → ${input.destino || ''}...\n`;
+    case 'buscar_hotel':
+      return `🏨 Mirando hoteles en ${input.ciudad || ''}...\n`;
+    case 'buscar_lugar': {
+      const q = input.query || '';
+      const c = input.ciudad || '';
+      if (/restaurante|comer|cenar|sushi|thai|tapas/i.test(q)) return `🍽️ Buscando dónde comer en ${c}...\n`;
+      if (/gym|boxeo|fitness|sport/i.test(q)) return `🥊 Buscando gimnasio en ${c}...\n`;
+      if (/taxi|transfer|traslado/i.test(q)) return `🚕 Buscando taxi en ${c}...\n`;
+      if (/sim|tarjeta.*datos|telefon/i.test(q)) return `📱 Buscando dónde comprar SIM en ${c}...\n`;
+      if (/cambio|divisa|moneda|exchange/i.test(q)) return `💱 Buscando cambio de divisas en ${c}...\n`;
+      if (/farmacia/i.test(q)) return `💊 Buscando farmacia en ${c}...\n`;
+      return `📍 Buscando ${q} en ${c}...\n`;
+    }
+    case 'buscar_coche':
+      return `🚗 Buscando coches en ${input.ciudad_recogida || ''}...\n`;
+    case 'buscar_web':
+      return `🔍 Consultando información actualizada...\n`;
+    default:
+      return null;
+  }
+}
+
 async function executeToolCall(toolName, toolInput, env, userCoords) {
   switch (toolName) {
     case 'buscar_vuelos':
@@ -2634,8 +2753,9 @@ async function executeToolCall(toolName, toolInput, env, userCoords) {
       return await buscarHotelesBooking(toolInput, env.RAPIDAPI_KEY);
     case 'buscar_coche':
       return await buscarCochesBooking(toolInput, env.RAPIDAPI_KEY);
-    case 'buscar_restaurante':
-      return await buscarRestaurante(toolInput, env.GOOGLE_PLACES_KEY, userCoords);
+    case 'buscar_restaurante': // alias legacy — redirige a buscar_lugar
+    case 'buscar_lugar':
+      return await buscarLugar(toolInput, env.GOOGLE_PLACES_KEY, userCoords);
     case 'buscar_foto':
       return await buscarFotoLugar(toolInput, env.GOOGLE_PLACES_KEY);
     case 'buscar_web':
@@ -2895,6 +3015,7 @@ function toolsToOpenAI(tools) {
 }
 
 const OPENAI_TOOLS = toolsToOpenAI(SALMA_TOOLS);
+const ANTHROPIC_TOOLS = SALMA_TOOLS; // ya en formato Anthropic (input_schema)
 
 // Llamada no-streaming a OpenAI (reemplaza todas las llamadas a Anthropic sin stream)
 async function callOpenAI(apiKey, { model, max_tokens, temperature, system, messages }) {
@@ -3053,6 +3174,70 @@ async function readOpenAIStream(openaiRes, writer, encoder, decoder, forwardText
 }
 
 // ═══════════════════════════════════════════════════════════════
+// ANTHROPIC STREAMING — Claude Sonnet (texto sin foto)
+// ═══════════════════════════════════════════════════════════════
+async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
+  const reader = res.body.getReader();
+  let buffer = '';
+  let fullText = '';
+  let contentBlocks = [];
+  let stopReason = null;
+  let routeSignalSent = false;
+  const blocksInProgress = {};
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() || '';
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const jsonStr = line.slice(6).trim();
+      try {
+        const evt = JSON.parse(jsonStr);
+        if (evt.type === 'content_block_start') {
+          blocksInProgress[evt.index] = { ...evt.content_block, partial_json: '' };
+        } else if (evt.type === 'content_block_delta') {
+          const b = blocksInProgress[evt.index];
+          if (!b) continue;
+          if (evt.delta.type === 'text_delta') {
+            const chunk = evt.delta.text;
+            b.text = (b.text || '') + chunk;
+            fullText += chunk;
+            if (forwardText && writer) {
+              if (!fullText.includes('SALMA_ROUTE')) {
+                try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`)); } catch (_) {}
+              } else if (!routeSignalSent) {
+                routeSignalSent = true;
+                try { await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`)); } catch (_) {}
+              }
+            }
+          } else if (evt.delta.type === 'input_json_delta') {
+            b.partial_json += evt.delta.partial_json;
+          }
+        } else if (evt.type === 'message_delta') {
+          if (evt.delta?.stop_reason) stopReason = evt.delta.stop_reason;
+        }
+      } catch (e) {}
+    }
+  }
+
+  for (const idx of Object.keys(blocksInProgress).sort((a, b) => +a - +b)) {
+    const b = blocksInProgress[idx];
+    if (b.type === 'text' && b.text) {
+      contentBlocks.push({ type: 'text', text: b.text });
+    } else if (b.type === 'tool_use') {
+      let input = {};
+      try { input = JSON.parse(b.partial_json || '{}'); } catch (e) {}
+      contentBlocks.push({ type: 'tool_use', id: b.id, name: b.name, input });
+    }
+  }
+
+  return { fullText, contentBlocks, stopReason, routeSignalSent };
+}
+
+// ═══════════════════════════════════════════════════════════════
 // HANDLER PRINCIPAL
 // ═══════════════════════════════════════════════════════════════
 
@@ -3145,74 +3330,6 @@ export default {
     }
 
     const url = new URL(request.url);
-
-    // ─── ENDPOINT /pin — Extractor de lugar para mapa personal ───
-    if (request.method === 'POST' && url.pathname === '/pin') {
-      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
-      try {
-        const body = await request.json();
-        const { text, image_base64 } = body;
-
-        const systemPrompt = `Eres un extractor de datos. Analiza el texto o imagen y devuelve SOLO un JSON válido, sin explicaciones, sin markdown.
-Extrae el lugar principal (hotel, monumento, restaurante, playa, catedral, mercado...).
-Formato exacto (todos los campos, JSON null —no el string "null"— si no hay dato):
-{"name":"nombre exacto del lugar","address":"ciudad, país","description":"una frase descriptiva breve","place_type":"hotel|monument|restaurant|beach|park|other","checkin":null,"checkout":null,"confirmation":null}
-IMPORTANTE: Si no puedes identificar el nombre exacto del lugar, usa null (no escribas "null" como texto). Solo pon un nombre si estás seguro.
-SOLO JSON. Nada más.`;
-
-        let raw = '';
-
-        if (image_base64) {
-          // Imagen → GPT-4o-mini vision (Claude 4 no soporta vision en esta cuenta)
-          if (!env.OPENAI_API_KEY) return new Response(JSON.stringify({ name: null, error: 'no_openai_key' }), { status: 500, headers: corsH });
-          const mediaType = image_base64.charAt(0) === 'i' ? 'image/png' : 'image/jpeg';
-          const oRes = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${env.OPENAI_API_KEY}` },
-            body: JSON.stringify({
-              model: 'gpt-4o-mini',
-              max_tokens: 300,
-              temperature: 0,
-              messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: [
-                  { type: 'image_url', image_url: { url: `data:${mediaType};base64,${image_base64}`, detail: 'high' } },
-                  { type: 'text', text: 'Extrae el lugar de esta imagen.' }
-                ]}
-              ]
-            })
-          });
-          const oData = await oRes.json();
-          raw = oData.choices?.[0]?.message?.content?.trim() || '';
-        } else {
-          // Texto → Claude Sonnet
-          if (!env.ANTHROPIC_API_KEY) return new Response(JSON.stringify({ name: null, error: 'no_anthropic_key' }), { status: 500, headers: corsH });
-          const cRes = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-            body: JSON.stringify({
-              model: 'claude-sonnet-4-6',
-              max_tokens: 300,
-              system: systemPrompt,
-              messages: [{ role: 'user', content: text || '' }]
-            })
-          });
-          const cData = await cRes.json();
-          if (cData.type === 'error') throw new Error(cData.error?.message || 'claude_error');
-          raw = cData.content?.[0]?.text?.trim() || '';
-        }
-
-        const cleaned = raw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-        try {
-          const result = JSON.parse(cleaned);
-          return new Response(JSON.stringify(result), { headers: corsH });
-        } catch (_) {
-          return new Response(JSON.stringify({ name: null, error: 'parse_error' }), { headers: corsH });
-        }
-      } catch (e) {
-        return new Response(JSON.stringify({ name: null, error: e.message }), { status: 500, headers: corsH });
-      }
-    }
 
     // ─── ENDPOINT /upload-photo (R2) ───
     if (request.method === 'POST' && url.pathname === '/upload-photo') {
@@ -3797,23 +3914,6 @@ SOLO JSON. Nada más.`;
         return new Response(JSON.stringify({ error: 'Missing lat/lng' }), { status: 400, headers: corsH });
       }
       try {
-        // Rate limit: máx 20 llamadas/día a Google Places (límite gratuito)
-        const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
-        const rateLimitKey = `pois_rate:${clientIP}`;
-        const count = parseInt(await env.SALMA_KB?.get(rateLimitKey) || '0');
-        if (count >= 20) {
-          return new Response(JSON.stringify({ pois: [], cached: false, rate_limited: true }), { headers: corsH });
-        }
-
-        // Caché por ubicación (hash de lat/lng redondeado a 0.01°)
-        const latRounded = Math.round(parseFloat(lat) * 100) / 100;
-        const lngRounded = Math.round(parseFloat(lng) * 100) / 100;
-        const cacheKey = `pois_cache:${latRounded}:${lngRounded}`;
-        const cached = await env.SALMA_KB?.get(cacheKey);
-        if (cached) {
-          return new Response(JSON.stringify({ pois: JSON.parse(cached), cached: true }), { headers: corsH });
-        }
-
         const placesKey = env.GOOGLE_PLACES_KEY;
         if (!placesKey) {
           return new Response(JSON.stringify({ error: 'No Places key' }), { status: 500, headers: corsH });
@@ -3823,7 +3923,7 @@ SOLO JSON. Nada más.`;
         const pRes = await fetch(placesUrl);
         const pData = await pRes.json();
         if (!pData.results || !pData.results.length) {
-          return new Response(JSON.stringify({ pois: [], cached: false }), { headers: corsH });
+          return new Response(JSON.stringify({ pois: [] }), { headers: corsH });
         }
         // Calcular distancia y devolver top 5
         const userLat = parseFloat(lat);
@@ -3846,20 +3946,13 @@ SOLO JSON. Nada más.`;
             rating: p.rating || null
           };
         }).sort((a, b) => a.distance_m - b.distance_m);
-
-        // Cachear resultado durante 1 hora
-        if (env.SALMA_KB) {
-          await env.SALMA_KB.put(cacheKey, JSON.stringify(pois), { expirationTtl: 3600 });
-          // Incrementar counter de rate limit (TTL 24h)
-          await env.SALMA_KB.put(rateLimitKey, String(count + 1), { expirationTtl: 86400 });
-        }
-        return new Response(JSON.stringify({ pois, cached: false }), { headers: corsH });
+        return new Response(JSON.stringify({ pois }), { headers: corsH });
       } catch (e) {
-        return new Response(JSON.stringify({ error: e.message, pois: [] }), { status: 500, headers: corsH });
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
     }
 
-    // ─── ENDPOINT /narrate (Narrador — OpenAI genera narrativa de un POI) ───
+    // ─── ENDPOINT /narrate (Narrador — Haiku genera narrativa de un POI) ───
     if (request.method === 'POST' && url.pathname === '/narrate') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
       let body;
@@ -3871,21 +3964,6 @@ SOLO JSON. Nada más.`;
         return new Response(JSON.stringify({ error: 'Missing poi_name' }), { status: 400, headers: corsH });
       }
       try {
-        // Rate limit: máx 100 narrativas/día
-        const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
-        const rateLimitKey = `narrate_rate:${clientIP}`;
-        const count = parseInt(await env.SALMA_KB?.get(rateLimitKey) || '0');
-        if (count >= 100) {
-          return new Response(JSON.stringify({ narrative: 'Por ahora no puedo generar más narrativas. Intenta en un rato.', poi_name, cached: false }), { headers: corsH });
-        }
-
-        // Caché por POI + país (24h)
-        const cacheKey = `narrate_cache:${poi_name.toLowerCase()}:${country_code || 'unknown'}`;
-        const cached = await env.SALMA_KB?.get(cacheKey);
-        if (cached) {
-          return new Response(JSON.stringify({ narrative: cached, poi_name, cached: true }), { headers: corsH });
-        }
-
         // Obtener contexto del país del KV si existe
         let countryContext = '';
         if (country_code && env.SALMA_KB) {
@@ -3906,16 +3984,9 @@ SOLO JSON. Nada más.`;
           }]
         });
         const narrative = result.text || '';
-
-        // Cachear resultado durante 24h
-        if (env.SALMA_KB) {
-          await env.SALMA_KB.put(cacheKey, narrative, { expirationTtl: 86400 });
-          // Incrementar counter de rate limit (TTL 24h)
-          await env.SALMA_KB.put(rateLimitKey, String(count + 1), { expirationTtl: 86400 });
-        }
-        return new Response(JSON.stringify({ narrative, poi_name, cached: false }), { headers: corsH });
+        return new Response(JSON.stringify({ narrative, poi_name }), { headers: corsH });
       } catch (e) {
-        return new Response(JSON.stringify({ error: e.message, narrative: '' }), { status: 500, headers: corsH });
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
     }
 
@@ -4532,7 +4603,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         if (_transportODPrefetch) {
           const _routeStr = `${_transportODPrefetch.origin} to ${_transportODPrefetch.dest}`;
           _braveTransportPromise = buscarWeb(
-            { query: `how to get from ${_routeStr} transport options ferry bus price companies 2025` },
+            { query: `how to get from ${_routeStr} ferry bus train book ticket buy online booking` },
             env.BRAVE_SEARCH_KEY
           ).catch(() => null);
           // Duffel también arranca ya
@@ -4599,8 +4670,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       );
     }
 
-    const apiKey = env.OPENAI_API_KEY;
-    if (!apiKey) {
+    const apiKey = env.OPENAI_API_KEY; // solo para fotos (imageBase64) y rutas largas
+    // Texto sin foto → Anthropic. Solo bloqueamos si no hay ninguna key disponible
+    if (!apiKey && !env.ANTHROPIC_API_KEY) {
       return new Response(
         JSON.stringify({ reply: 'Salma no está configurada (falta API key).', route: null }),
         { status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
@@ -4638,7 +4710,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
               // Si por alguna razón no se pre-inició, lanzar ahora como fallback
               const bravePromise = _braveTransportPromise ||
                 (env.BRAVE_SEARCH_KEY
-                  ? buscarWeb({ query: `how to get from ${routeStr} transport options ferry bus price companies 2025` }, env.BRAVE_SEARCH_KEY).catch(() => null)
+                  ? buscarWeb({ query: `how to get from ${routeStr} ferry bus train book ticket buy online booking` }, env.BRAVE_SEARCH_KEY).catch(() => null)
                   : Promise.resolve(null));
 
               const origIATA = getCityIATA(originCity);
@@ -4681,10 +4753,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
 
       // Resultados web (ferry/bus)
       if (transportSearchData?.resultados?.length > 0) {
-        const snippets = transportSearchData.resultados.slice(0, 6).map((r, i) => {
+        const snippets = transportSearchData.resultados.slice(0, 4).map((r, i) => {
           let s = `[${i+1}] ${r.titulo}\n${r.snippet}`;
-          if (r.url) s += `\nURL: ${r.url}`;
-          if (r.contenido) s += `\nContenido: ${r.contenido.slice(0, 600)}`;
+          if (r.contenido) s += `\nInfo: ${r.contenido.slice(0, 300)}`;
           return s;
         }).join('\n\n');
         ctx += `BÚSQUEDA WEB (ferry/bus/tren):\n${snippets}\n\n`;
@@ -4700,15 +4771,35 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         ctx += `VUELOS (Duffel):\n${vSnippets}\n\n`;
       }
 
+      // URLs reales de Brave para footer "Compara y reserva:"
+      const braveBookingUrls = transportSearchData?.resultados?.filter(r => r.url) || [];
+
       if (transportSearchData?.resultados?.length > 0 || (fd && !fd.error)) {
         ctx += `FORMATO OBLIGATORIO — responde SOLO con este bloque, sin texto antes ni preguntas después:\n\n`;
         ctx += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
         ctx += `Encontré X opciones verificadas hoy (${dateStr}, ${timeStr}):\n\n`;
         ctx += `[EMOJI] [NOMBRE REAL DE LA COMPAÑÍA O TIPO] ([Recomendado / Más rápido / Más barato])\n`;
-        ctx += `  • [Compañía real]: [Origen] → [Destino]\n`;
-        ctx += `  • Total: [precio real] | [duración] ⏱️\n`;
-        ctx += `  • Reservar: [URL real]\n\n`;
+        ctx += `  • [Compañía real]: [Origen] → [Destino] · [duración] · [precio]\n`;
+        ctx += `  • Total: [precio total] | [tiempo total] ⏱️\n`;
+        ctx += `  • Reservar: [URL_REAL]\n\n`;
         ctx += `[Repetir bloque por cada opción. Mínimo 2 opciones.]\n\n`;
+
+        // URLs disponibles para asignar a cada opción
+        if (braveBookingUrls.length > 0 || (fd && !fd.error && fd.vuelos?.length > 0)) {
+          ctx += `URLS REALES DISPONIBLES — asígnalas a las opciones correspondientes:\n`;
+          braveBookingUrls.slice(0, 4).forEach((r, i) => {
+            ctx += `  [URL${i+1} — para ferry/bus/tren]: ${r.url}\n`;
+          });
+          if (fd?.vuelos?.length > 0) {
+            fd.vuelos.slice(0, 2).forEach((v, i) => {
+              if (v.enlace_reserva) ctx += `  [URL_VUELO${i+1} — para opción de vuelo]: ${v.enlace_reserva}\n`;
+            });
+          }
+          ctx += `\nREGLA CRÍTICA: cada opción DEBE tener su "Reservar:" con URL real. `;
+          ctx += `Si hay menos URLs que opciones, repite la misma URL en varias opciones — es mejor repetir que dejar vacío. `;
+          ctx += `NUNCA pongas "Reservar:" sin URL. NUNCA inventes URLs. Copia exactamente las de arriba.\n\n`;
+        }
+
         ctx += `Emojis: 🚢 ferry · 🚌 bus · 🚄 tren · ✈️ vuelo · 🚕 taxi privado\n\n`;
         ctx += `REGLAS GEOGRÁFICAS CRÍTICAS:\n`;
         ctx += `- Si el destino final no tiene puerto (Bangkok, Marrakech, Madrid, París, Roma…), el ferry NUNCA llega allí. Muestra SIEMPRE: (1) el tramo ferry hasta el puerto real, y (2) el tramo terrestre desde ese puerto hasta el destino final.\n`;
@@ -4718,16 +4809,12 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         ctx += `  Ejemplo CORRECTO para Tarifa → Marrakech:\n`;
         ctx += `    🚢 Ferry: Tarifa → Tánger (35min, FRS/DFDS, 35-45€)\n`;
         ctx += `    🚌 Bus: Tánger → Marrakech (3,5-4h, CTM/Supratours, 10-15€)\n`;
-        ctx += `- Si los datos de búsqueda dicen "ferry to [ciudad interior]" es porque la ruta TOTAL acaba ahí, pero el ferry solo llega al puerto. Desglosa siempre los dos tramos.\n`;
-        ctx += `- Emoji correcto por medio: 🚢 ferry/barco · 🚌 bus/minivan · 🚄 tren · ✈️ avión · 🛥️ speedboat · 🚕 taxi/privado. NO uses 🚄 para vuelos.\n\n`;
+        ctx += `- Emoji correcto por medio: 🚢 ferry/barco · 🚌 bus/minivan · 🚄 tren · ✈️ avión · 🛥️ speedboat · 🚕 taxi/privado.\n\n`;
         ctx += `REGLAS DE DATOS:\n`;
-        ctx += `- Sustituye [los corchetes] por datos reales de los resultados de búsqueda\n`;
         ctx += `- Si no tienes precio exacto, pon rango (ej. "800-1.200 THB")\n`;
-        ctx += `- Si no tienes horario, omite el paréntesis de hora\n`;
         ctx += `- Termina sin hacer preguntas\n`;
         ctx += `- NO uses los corchetes en la respuesta final — reemplázalos con datos reales`;
       } else {
-        // Búsqueda sin resultados → no inyectar nada, Claude responde libre con su conocimiento
         ctx = null;
       }
       transportFallbackMsg = ctx;
@@ -4933,9 +5020,10 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     const reqStartTime = Date.now();
     // Si helpCategory=food y ya tenemos resultados de Google Places, no usar tool
     const serviceReqEffective = isServiceReq && !(helpCategory === 'food' && helpResults);
-    // GPT-4o-mini para todo (reemplaza Sonnet/Haiku)
     const needsTools = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg || !!transportFallbackMsg;
-    const reqModel = 'gpt-4o-mini';
+    // Fotos → OpenAI (mejor visión). Texto → Claude Sonnet (mejor instrucciones)
+    const useAnthropic = !imageBase64;
+    const reqModel = 'gpt-4o-mini'; // solo para fotos (OpenAI)
     const reqMaxTokens = needsTools ? 6000 : 3000;
 
     // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
@@ -5067,71 +5155,93 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         let lastFlightBookingUrl = null; // Guardar enlace de vuelos para inyectar si GPT no lo incluye
 
         for (let iteration = 0; iteration <= MAX_TOOL_ITERATIONS; iteration++) {
-          // ── Llamar a OpenAI (streaming + tools) ──
-          let openaiRes;
-          // Build messages in OpenAI format
-          const openaiMsgs = [{ role: 'system', content: systemPrompt }];
-          for (const m of currentMessages) {
-            if (m.role === 'user' && Array.isArray(m.content)) {
-              // tool_result blocks → OpenAI tool messages
-              for (const block of m.content) {
-                if (block.type === 'tool_result') {
-                  openaiMsgs.push({ role: 'tool', tool_call_id: block.tool_use_id, content: block.content });
-                }
-              }
-            } else if (m.role === 'assistant' && Array.isArray(m.content)) {
-              let textParts = '';
-              const toolCalls = [];
-              for (const block of m.content) {
-                if (block.type === 'text') textParts += block.text;
-                else if (block.type === 'tool_use') {
-                  toolCalls.push({ id: block.id, type: 'function', function: { name: block.name, arguments: JSON.stringify(block.input) } });
-                }
-              }
-              const msg = { role: 'assistant' };
-              if (textParts) msg.content = textParts;
-              if (toolCalls.length) msg.tool_calls = toolCalls;
-              if (!textParts && !toolCalls.length) msg.content = '';
-              openaiMsgs.push(msg);
-            } else if (m.role === 'user' && m.content && Array.isArray(m.content) && m.content[0]?.type === 'image_url') {
-              // Vision message — pass through
-              openaiMsgs.push(m);
-            } else {
-              openaiMsgs.push(m);
+          let apiRes;
+          let result;
+
+          if (useAnthropic) {
+            // ── Claude Sonnet (texto sin foto) ──
+            try {
+              apiRes = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'x-api-key': env.ANTHROPIC_API_KEY,
+                  'anthropic-version': '2023-06-01',
+                },
+                body: JSON.stringify({
+                  model: 'claude-sonnet-4-6',
+                  max_tokens: reqMaxTokens,
+                  system: systemPrompt,
+                  messages: currentMessages,
+                  tools: ANTHROPIC_TOOLS,
+                  stream: true,
+                }),
+              });
+            } catch (e) {
+              await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No puedo conectar ahora mismo. Inténtalo en un momento.', route: null })}\n\n`));
+              break;
             }
-          }
-          try {
-            openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`,
-              },
-              body: JSON.stringify({
-                model: reqModel,
-                max_tokens: reqMaxTokens,
-                temperature: 0.7,
-                messages: openaiMsgs,
-                tools: OPENAI_TOOLS,
-                stream: true,
-              }),
-            });
-          } catch (e) {
-            await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No puedo conectar ahora mismo. Inténtalo en un momento.', route: null })}\n\n`));
-            break;
+            if (!apiRes.ok) {
+              await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
+              break;
+            }
+            result = await readAnthropicStream(apiRes, writer, encoder, decoder, true);
+          } else {
+            // ── OpenAI gpt-4o-mini (fotos con visión) ──
+            const openaiMsgs = [{ role: 'system', content: systemPrompt }];
+            for (const m of currentMessages) {
+              if (m.role === 'user' && Array.isArray(m.content)) {
+                for (const block of m.content) {
+                  if (block.type === 'tool_result') {
+                    openaiMsgs.push({ role: 'tool', tool_call_id: block.tool_use_id, content: block.content });
+                  }
+                }
+              } else if (m.role === 'assistant' && Array.isArray(m.content)) {
+                let textParts = '';
+                const toolCalls = [];
+                for (const block of m.content) {
+                  if (block.type === 'text') textParts += block.text;
+                  else if (block.type === 'tool_use') {
+                    toolCalls.push({ id: block.id, type: 'function', function: { name: block.name, arguments: JSON.stringify(block.input) } });
+                  }
+                }
+                const msg = { role: 'assistant' };
+                if (textParts) msg.content = textParts;
+                if (toolCalls.length) msg.tool_calls = toolCalls;
+                if (!textParts && !toolCalls.length) msg.content = '';
+                openaiMsgs.push(msg);
+              } else {
+                openaiMsgs.push(m);
+              }
+            }
+            try {
+              apiRes = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+                body: JSON.stringify({
+                  model: reqModel,
+                  max_tokens: reqMaxTokens,
+                  temperature: 0.7,
+                  messages: openaiMsgs,
+                  tools: OPENAI_TOOLS,
+                  parallel_tool_calls: true,
+                  stream: true,
+                }),
+              });
+            } catch (e) {
+              await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No puedo conectar ahora mismo. Inténtalo en un momento.', route: null })}\n\n`));
+              break;
+            }
+            if (!apiRes.ok) {
+              await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
+              break;
+            }
+            result = await readOpenAIStream(apiRes, writer, encoder, decoder, true);
           }
 
-          if (!openaiRes.ok) {
-            const errBody = await openaiRes.text().catch(() => '');
-            await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
-            break;
-          }
-
-          // ── Leer stream: reenviar texto al cliente + detectar tool_calls ──
-          const result = await readOpenAIStream(openaiRes, writer, encoder, decoder, true);
           allText += result.fullText;
 
-          // ── Si Claude terminó (no pide herramientas), salir del bucle ──
+          // ── Si terminó (no pide herramientas), salir del bucle ──
           if (result.stopReason !== 'tool_use') {
             break;
           }
@@ -5143,16 +5253,34 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
             content: result.contentBlocks
           });
 
-          // Ejecutar cada herramienta pedida
-          const toolResults = [];
-          for (const block of result.contentBlocks) {
-            if (block.type === 'tool_use') {
+          // Ejecutar herramientas — en paralelo si hay varias
+          const toolUseBlocks = result.contentBlocks.filter(b => b.type === 'tool_use');
+
+          // Stream progress events antes de lanzar (el usuario ve texto inmediatamente)
+          const progressLines = toolUseBlocks.map(b => getToolProgressMsg(b.name, b.input)).filter(Boolean);
+          if (progressLines.length) {
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: progressLines.join('') })}\n\n`)); } catch (_) {}
+          }
+
+          // Señal de "buscando" al frontend + heartbeat cada 2s para mantener la animación
+          let _searchingActive = toolUseBlocks.length > 0;
+          if (_searchingActive) {
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ searching: true })}\n\n`)); } catch (_) {}
+            // Heartbeat periódico mientras los tools corren en paralelo
+            const _heartbeatLoop = (async () => {
+              while (_searchingActive) {
+                await new Promise(r => setTimeout(r, 2000));
+                if (_searchingActive) {
+                  try { await writer.write(encoder.encode(`data: ${JSON.stringify({ searching: true })}\n\n`)); } catch (_) {}
+                }
+              }
+            })();
+          }
+
+          // Ejecutar todas en paralelo con Promise.all
+          const toolResults = await Promise.all(
+            toolUseBlocks.map(async block => {
               const toolResult = await executeToolCall(block.name, block.input, env, userLocation);
-              toolResults.push({
-                type: 'tool_result',
-                tool_use_id: block.id,
-                content: JSON.stringify(toolResult)
-              });
               // Capturar enlace de vuelos para inyectar si GPT no lo incluye
               if (block.name === 'buscar_vuelos' && toolResult.enlace_reserva) {
                 lastFlightBookingUrl = toolResult.enlace_reserva;
@@ -5161,8 +5289,16 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
               if (block.name === 'guardar_nota' && toolResult.saved) {
                 try { await writer.write(encoder.encode(`data: ${JSON.stringify({ save_nota: true, nota_data: toolResult.nota })}\n\n`)); } catch (_) {}
               }
-            }
-          }
+              return {
+                type: 'tool_result',
+                tool_use_id: block.id,
+                content: JSON.stringify(toolResult)
+              };
+            })
+          );
+
+          // Parar heartbeat — tools terminados
+          _searchingActive = false;
 
           // Añadir resultados de herramientas al historial
           currentMessages.push({

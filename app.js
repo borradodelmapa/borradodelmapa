@@ -3879,9 +3879,12 @@ function sanitizeUrls(text) {
     'kiwi.com', 'skyscanner.es', 'skyscanner.com',
     'rentalcars.com', 'discovercars.com',
     'thefork.com', 'thefork.es',
-    '12go.asia', 'bookaway.com', 'lomprayah.com', 'seatrandiscovery.com', 'rajaferryport.com', 'rome2rio.com',
-    'thetrainline.com', 'renfe.com', 'raileurope.com', 'sncf-connect.com', 'bahn.com', 'trenitalia.com', 'cp.pt',
-    'alsa.es', 'flixbus.com', 'blablacar.es', 'blablacar.com',
+    '12go.asia', 'bookaway.com', 'lomprayah.com', 'seatrandiscovery.com', 'seatranferry.com', 'rajaferryport.com', 'rome2rio.com',
+    'directferries.com', 'directferries.es', 'ferryscanner.com', 'clickferry.com', 'ferryhopper.com',
+    'balearia.com', 'frs.es', 'frs-group.com', 'trasmediterranea.es', 'armasferry.com', 'aferry.com', 'aferry.es',
+    'omio.com', 'busbud.com', 'wanderu.com', 'virail.com', 'virail.es',
+    'thetrainline.com', 'trainline.com', 'renfe.com', 'raileurope.com', 'sncf-connect.com', 'bahn.com', 'trenitalia.com', 'cp.pt',
+    'alsa.es', 'flixbus.com', 'flixbus.es', 'blablacar.es', 'blablacar.com',
     'grab.com', 'gojek.com',
     'uber.com', 'm.uber.com', 'bolt.eu', 'indrive.com',
     'cabify.com', 'free-now.com', 'careem.com', 'lyft.com',
@@ -3948,11 +3951,20 @@ function formatMessage(str) {
     else if (url.indexOf('12go.asia') !== -1) label = '🚢 Reservar en 12Go Asia';
     else if (url.indexOf('bookaway.com') !== -1) label = '🚌 Reservar en Bookaway';
     else if (url.indexOf('rome2rio.com') !== -1) label = '🗺️ Ver opciones en Rome2Rio';
-    else if (url.indexOf('thetrainline.com') !== -1) label = '🚆 Reservar en Trainline';
+    else if (url.indexOf('directferries') !== -1) label = '🚢 Reservar en Direct Ferries';
+    else if (url.indexOf('ferryscanner.com') !== -1) label = '🚢 Comparar en Ferryscanner';
+    else if (url.indexOf('clickferry.com') !== -1) label = '🚢 Reservar en Clickferry';
+    else if (url.indexOf('ferryhopper.com') !== -1) label = '🚢 Reservar en Ferryhopper';
+    else if (url.indexOf('balearia.com') !== -1) label = '🚢 Reservar en Baleària';
+    else if (url.indexOf('frs.es') !== -1 || url.indexOf('frs-group.com') !== -1) label = '🚢 Reservar en FRS';
+    else if (url.indexOf('trasmediterranea.es') !== -1) label = '🚢 Reservar en Trasmediterránea';
+    else if (url.indexOf('omio.com') !== -1) label = '🔍 Comparar en Omio';
+    else if (url.indexOf('busbud.com') !== -1) label = '🚌 Reservar en Busbud';
+    else if (url.indexOf('thetrainline.com') !== -1 || url.indexOf('trainline.com') !== -1) label = '🚆 Reservar en Trainline';
     else if (url.indexOf('renfe.com') !== -1) label = '🚄 Reservar en Renfe';
     else if (url.indexOf('raileurope.com') !== -1) label = '🚆 Reservar en Rail Europe';
     else if (url.indexOf('alsa.es') !== -1) label = '🚌 Reservar en Alsa';
-    else if (url.indexOf('flixbus.com') !== -1) label = '🟢 Reservar en FlixBus';
+    else if (url.indexOf('flixbus.com') !== -1 || url.indexOf('flixbus.es') !== -1) label = '🟢 Reservar en FlixBus';
     else if (url.indexOf('blablacar') !== -1) label = '🚗 Ver en BlaBlaCar';
     else if (url.indexOf('kiwitaxi.com') !== -1) label = '🚕 Reservar transfer';
     else if (url.indexOf('uber.com') !== -1) label = '🚕 Abrir Uber';
