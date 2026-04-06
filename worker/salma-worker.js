@@ -800,12 +800,19 @@ function isServiceRequest(message) {
 // Extrae origen y destino de frases de transporte (ferry/tren/bus)
 // "ferry de Koh Samui a Bangkok" → { origin: "Koh Samui", dest: "Bangkok" }
 function extractTransportOD(message) {
+  // Elimina palabras de transporte/genéricas que se cuelan al final del nombre de ciudad
+  const stripTrailingWords = (s) => {
+    const noise = /^(ferry|bus|tren|avion|avion|vuelo|vuelos|coche|taxi|barco|metro|directo|barato|rapido|y|o|en|por|con|para|desde|hacia|hasta|si|hay|tienen|como|ir|llegar)$/i;
+    const words = s.trim().split(/\s+/);
+    while (words.length > 1 && noise.test(words[words.length - 1])) words.pop();
+    return words.join(' ');
+  };
   // Patrón principal: "de/desde X a/hasta Y"
   const m1 = message.match(/\b(?:de|desde)\s+([\wáéíóúñÁÉÍÓÚÑ\s\-]{2,30}?)\s+(?:a|hasta|hacia)\s+([\wáéíóúñÁÉÍÓÚÑ\s\-]{2,30}?)(?:\s*[?,.]|$)/i);
-  if (m1) return { origin: m1[1].trim(), dest: m1[2].trim() };
+  if (m1) return { origin: stripTrailingWords(m1[1]), dest: stripTrailingWords(m1[2]) };
   // Patrón inglés: "from X to Y"
   const m2 = message.match(/\bfrom\s+([\w\s\-]{2,30}?)\s+to\s+([\w\s\-]{2,30}?)(?:\s*[?,.]|$)/i);
-  if (m2) return { origin: m2[1].trim(), dest: m2[2].trim() };
+  if (m2) return { origin: stripTrailingWords(m2[1]), dest: stripTrailingWords(m2[2]) };
   return null;
 }
 
@@ -1613,6 +1620,10 @@ function sanitizeInventedUrls(text) {
     if (url.includes('thefork.com') || url.includes('thefork.es')) return url;
     if (url.includes('booking.com')) return url;
     if (url.includes('skyscanner.es') || url.includes('skyscanner.com')) return url;
+    if (url.includes('kiwi.com')) return url;
+    if (url.includes('kayak.com') || url.includes('kayak.es')) return url;
+    if (url.includes('momondo.com') || url.includes('momondo.es')) return url;
+    if (url.includes('google.com/flights')) return url;
     if (url.includes('rentalcars.com') || url.includes('discovercars.com')) return url;
     // Reserva de transporte (ferry, bus, tren)
     if (url.includes('12go.asia') || url.includes('12go.com')) return url;
@@ -1624,7 +1635,7 @@ function sanitizeInventedUrls(text) {
     if (url.includes('trainline.com') || url.includes('thetrainline.com')) return url;
     if (url.includes('trenitalia.com')) return url;
     if (url.includes('renfe.com')) return url;
-    if (url.includes('omio.com')) return url;
+    if (url.includes('omio.com') || url.includes('omio.es')) return url;
     if (url.includes('wanderu.com')) return url;
     if (url.includes('flixbus.es') || url.includes('flixbus.com')) return url;
     if (url.includes('blablacar.es') || url.includes('blablacar.com')) return url;
@@ -4765,8 +4776,8 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       const fd = transportSearchData?.flightData;
       if (fd && !fd.error && fd.vuelos?.length > 0) {
         const vSnippets = fd.vuelos.slice(0, 3).map(v =>
-          `• ${v.aerolinea}: ${v.origen}→${v.destino} ${v.hora_salida || ''}→${v.hora_llegada || ''} | ${v.precio} ${v.moneda} | ${v.duracion || ''}`
-          + (v.enlace_reserva ? `\n  Reservar: ${v.enlace_reserva}` : '')
+          `• ${v.aerolinea}: ${v.origen}→${v.destino} ${v.salida?.slice(11,16) || ''}→${v.llegada?.slice(11,16) || ''} | ${v.precio} | ${v.duracion || ''}`
+          + (fd.enlace_reserva ? `\n  Reservar: ${fd.enlace_reserva}` : '')
         ).join('\n');
         ctx += `VUELOS (Duffel):\n${vSnippets}\n\n`;
       }
@@ -4790,10 +4801,8 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           braveBookingUrls.slice(0, 4).forEach((r, i) => {
             ctx += `  [URL${i+1} — para ferry/bus/tren]: ${r.url}\n`;
           });
-          if (fd?.vuelos?.length > 0) {
-            fd.vuelos.slice(0, 2).forEach((v, i) => {
-              if (v.enlace_reserva) ctx += `  [URL_VUELO${i+1} — para opción de vuelo]: ${v.enlace_reserva}\n`;
-            });
+          if (fd?.enlace_reserva) {
+            ctx += `  [URL_VUELO — para opción de vuelo, Skyscanner]: ${fd.enlace_reserva}\n`;
           }
           ctx += `\nREGLA CRÍTICA: cada opción DEBE tener su "Reservar:" con URL real. `;
           ctx += `Si hay menos URLs que opciones, repite la misma URL en varias opciones — es mejor repetir que dejar vacío. `;
