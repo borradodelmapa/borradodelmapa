@@ -4753,80 +4753,99 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       weatherFallbackMsg = '[TIEMPO: Los datos en tiempo real no están disponibles. USA buscar_web AHORA para obtener el tiempo actual. El tiempo cambia cada hora — jamás respondas con tu conocimiento base.]';
     }
 
-    // Si era consulta de transporte → inyectar resultados de búsqueda web en el contexto
+    // Si era consulta de transporte → inyectar bloque pre-estructurado con URLs ya asignadas
+    // Claude solo rellena los [campos] — las líneas "Reservar:" están fijas en el worker
     let transportFallbackMsg = null;
     if (helpCategory === 'transport') {
       const now = new Date();
       const dateStr = now.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', timeZone: 'Europe/Madrid' });
       const timeStr = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid' });
 
-      let ctx = `[DATOS TRANSPORTE — ${dateStr}, ${timeStr}\n\n`;
-
-      // Resultados web (ferry/bus)
-      if (transportSearchData?.resultados?.length > 0) {
-        const snippets = transportSearchData.resultados.slice(0, 4).map((r, i) => {
-          let s = `[${i+1}] ${r.titulo}\n${r.snippet}`;
-          if (r.contenido) s += `\nInfo: ${r.contenido.slice(0, 300)}`;
-          return s;
-        }).join('\n\n');
-        ctx += `BÚSQUEDA WEB (ferry/bus/tren):\n${snippets}\n\n`;
-      }
-
-      // Datos de vuelo (Duffel)
       const fd = transportSearchData?.flightData;
-      if (fd && !fd.error && fd.vuelos?.length > 0) {
-        const vSnippets = fd.vuelos.slice(0, 3).map(v =>
-          `• ${v.aerolinea}: ${v.origen}→${v.destino} ${v.salida?.slice(11,16) || ''}→${v.llegada?.slice(11,16) || ''} | ${v.precio} | ${v.duracion || ''}`
-          + (fd.enlace_reserva ? `\n  Reservar: ${fd.enlace_reserva}` : '')
-        ).join('\n');
-        ctx += `VUELOS (Duffel):\n${vSnippets}\n\n`;
-      }
+      const hasData = transportSearchData?.resultados?.length > 0 || (fd && !fd.error);
 
-      // URLs reales de Brave para footer "Compara y reserva:"
-      const braveBookingUrls = transportSearchData?.resultados?.filter(r => r.url) || [];
+      if (hasData) {
+        // URL terrestre: primera URL de Brave que esté en la whitelist, o rome2rio como fallback garantizado
+        const braveUrls = transportSearchData?.resultados?.filter(r => r.url) || [];
+        const _allowedLandDomains = [
+          '12go.asia','12go.com','bookaway.com','lomprayah.com','seatrandiscovery.com','seatranferry.com',
+          'rome2rio.com','busbud.com','trainline.com','thetrainline.com','trenitalia.com','renfe.com',
+          'omio.com','omio.es','wanderu.com','flixbus.es','flixbus.com','blablacar.es','blablacar.com',
+          'directferries.com','directferries.es','ferryhopper.com','ferryscanner.com','clickferry.com',
+          'balearia.com','frs.es','trasmediterranea.es','armasferry.com','aferry.com','aferry.es',
+          'virail.es','virail.com','alsa.es','rajaferryport.com',
+        ];
+        const allowedBraveUrl = braveUrls.find(r => _allowedLandDomains.some(d => r.url?.includes(d)));
+        const od = _transportODPrefetch;
+        const rome2rioUrl = od
+          ? `https://www.rome2rio.com/s/${encodeURIComponent(od.origin)}/${encodeURIComponent(od.dest)}`
+          : 'https://www.rome2rio.com';
+        const landUrl = allowedBraveUrl?.url || rome2rioUrl;
+        // URL vuelo: Skyscanner de Duffel si hay resultados, null si no
+        const flightUrl = (fd && !fd.error) ? fd.enlace_reserva : null;
 
-      if (transportSearchData?.resultados?.length > 0 || (fd && !fd.error)) {
-        ctx += `FORMATO OBLIGATORIO — responde SOLO con este bloque, sin texto antes ni preguntas después:\n\n`;
-        ctx += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-        ctx += `Encontré X opciones verificadas hoy (${dateStr}, ${timeStr}):\n\n`;
-        ctx += `[EMOJI] [NOMBRE REAL DE LA COMPAÑÍA O TIPO] ([Recomendado / Más rápido / Más barato])\n`;
-        ctx += `  • [Compañía real]: [Origen] → [Destino] · [duración] · [precio]\n`;
-        ctx += `  • Total: [precio total] | [tiempo total] ⏱️\n`;
-        ctx += `  • Reservar: [URL_REAL]\n\n`;
-        ctx += `[Repetir bloque por cada opción. Mínimo 2 opciones.]\n\n`;
+        let ctx = `[DATOS TRANSPORTE — ${dateStr}, ${timeStr}\n\n`;
 
-        // URLs disponibles para asignar a cada opción
-        if (braveBookingUrls.length > 0 || (fd && !fd.error && fd.vuelos?.length > 0)) {
-          ctx += `URLS REALES DISPONIBLES — asígnalas a las opciones correspondientes:\n`;
-          braveBookingUrls.slice(0, 4).forEach((r, i) => {
-            ctx += `  [URL${i+1} — para ferry/bus/tren]: ${r.url}\n`;
-          });
-          if (fd?.enlace_reserva) {
-            ctx += `  [URL_VUELO — para opción de vuelo, Skyscanner]: ${fd.enlace_reserva}\n`;
-          }
-          ctx += `\nREGLA CRÍTICA: cada opción DEBE tener su "Reservar:" con URL real. `;
-          ctx += `Si hay menos URLs que opciones, repite la misma URL en varias opciones — es mejor repetir que dejar vacío. `;
-          ctx += `NUNCA pongas "Reservar:" sin URL. NUNCA inventes URLs. Copia exactamente las de arriba.\n\n`;
+        // Referencias para precios y compañías (Brave)
+        if (transportSearchData?.resultados?.length > 0) {
+          const snippets = transportSearchData.resultados.slice(0, 4).map((r, i) => {
+            let s = `[${i+1}] ${r.titulo}\n${r.snippet}`;
+            if (r.contenido) s += `\nInfo: ${r.contenido.slice(0, 300)}`;
+            return s;
+          }).join('\n\n');
+          ctx += `REFERENCIAS — precios, compañías, horarios reales:\n${snippets}\n\n`;
         }
 
-        ctx += `Emojis: 🚢 ferry · 🚌 bus · 🚄 tren · ✈️ vuelo · 🚕 taxi privado\n\n`;
-        ctx += `REGLAS GEOGRÁFICAS CRÍTICAS:\n`;
-        ctx += `- Si el destino final no tiene puerto (Bangkok, Marrakech, Madrid, París, Roma…), el ferry NUNCA llega allí. Muestra SIEMPRE: (1) el tramo ferry hasta el puerto real, y (2) el tramo terrestre desde ese puerto hasta el destino final.\n`;
-        ctx += `  Ejemplo CORRECTO para Koh Samui → Bangkok:\n`;
-        ctx += `    🚢 Ferry: Koh Samui → Surat Thani (1,5-2h, Lomprayah/Raja Ferry, 300-500 THB)\n`;
-        ctx += `    🚌 Bus nocturno: Surat Thani → Bangkok (7-9h, 400-700 THB)\n`;
-        ctx += `  Ejemplo CORRECTO para Tarifa → Marrakech:\n`;
-        ctx += `    🚢 Ferry: Tarifa → Tánger (35min, FRS/DFDS, 35-45€)\n`;
-        ctx += `    🚌 Bus: Tánger → Marrakech (3,5-4h, CTM/Supratours, 10-15€)\n`;
-        ctx += `- Emoji correcto por medio: 🚢 ferry/barco · 🚌 bus/minivan · 🚄 tren · ✈️ avión · 🛥️ speedboat · 🚕 taxi/privado.\n\n`;
-        ctx += `REGLAS DE DATOS:\n`;
-        ctx += `- Si no tienes precio exacto, pon rango (ej. "800-1.200 THB")\n`;
-        ctx += `- Termina sin hacer preguntas\n`;
-        ctx += `- NO uses los corchetes en la respuesta final — reemplázalos con datos reales`;
+        // Vuelos Duffel (precios en tiempo real)
+        if (fd && !fd.error && fd.vuelos?.length > 0) {
+          const vSnippets = fd.vuelos.slice(0, 3).map(v =>
+            `• ${v.aerolinea}: ${v.origen}→${v.destino} ${v.salida?.slice(11,16) || ''}→${v.llegada?.slice(11,16) || ''} | ${v.precio} | ${v.duracion || ''}`
+          ).join('\n');
+          ctx += `VUELOS DUFFEL (precios reales de hoy):\n${vSnippets}\n\n`;
+        }
+
+        // Esqueleto pre-estructurado — URLs ya incrustadas, Claude solo rellena [campos]
+        ctx += `RESPUESTA EXACTA — sustituye los [campos] con datos de las REFERENCIAS. `;
+        ctx += `Las líneas "Reservar:" están FIJAS: cópialas tal cual, sin cambiar ni una letra.\n\n`;
+        ctx += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        ctx += `Encontré [N] opciones verificadas hoy (${dateStr}, ${timeStr}):\n\n`;
+
+        ctx += `[EMOJI] [Nombre opción 1 — ej. "Ferry + Bus nocturno"] ([etiqueta: Más barato / Recomendado])\n`;
+        ctx += `  • [Compañía]: [Origen] → [Destino] · [duración] · [precio]\n`;
+        ctx += `  • Total: [precio total] | [tiempo total] ⏱️\n`;
+        ctx += `  • Reservar: ${landUrl}\n\n`;
+
+        ctx += `[EMOJI] [Nombre opción 2 — si existe otra opción terrestre diferente, ej. "Ferry + Tren nocturno"]\n`;
+        ctx += `  • [Compañía]: [Origen] → [Destino] · [duración] · [precio]\n`;
+        ctx += `  • Total: [precio total] | [tiempo total] ⏱️\n`;
+        ctx += `  • Reservar: ${landUrl}\n\n`;
+
+        if (flightUrl) {
+          const primerVuelo = fd?.vuelos?.[0];
+          ctx += `✈️ Vuelo directo (Más rápido)\n`;
+          if (primerVuelo) {
+            ctx += `  • ${primerVuelo.aerolinea}: ${primerVuelo.origen}→${primerVuelo.destino} | ${primerVuelo.precio} | ${primerVuelo.duracion || ''}\n`;
+          } else {
+            ctx += `  • [Aerolínea]: [Origen] → [Destino] · [duración] · [precio]\n`;
+          }
+          ctx += `  • Total: ${primerVuelo ? primerVuelo.precio : '[precio]'} | [duración] ⏱️\n`;
+          ctx += `  • Reservar: ${flightUrl}\n\n`;
+        }
+
+        ctx += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+        ctx += `REGLAS:\n`;
+        ctx += `- Sustituye todos los [campos] con datos reales de las REFERENCIAS\n`;
+        ctx += `- Si solo hay una opción terrestre real, elimina el bloque de opción 2\n`;
+        ctx += `- GEOGRAFÍA: si el destino no tiene puerto (Bangkok, Madrid, Roma, Marrakech...), el ferry NUNCA llega directo — muestra siempre el tramo ferry + tramo terrestre\n`;
+        ctx += `- Emojis: 🚢 ferry · 🚌 bus · 🚄 tren · ✈️ vuelo · 🛥️ speedboat · 🚕 taxi\n`;
+        ctx += `- Rango de precio si no hay exacto (ej. "800-1.200 THB")\n`;
+        ctx += `- Termina sin preguntas\n`;
+        ctx += `]`;
+
+        transportFallbackMsg = ctx;
       } else {
-        ctx = null;
+        transportFallbackMsg = null;
       }
-      transportFallbackMsg = ctx;
     }
 
     // ─── EVENT SEARCH (pre-Claude, solo cuando hay fechas) ───
@@ -5029,7 +5048,8 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     const reqStartTime = Date.now();
     // Si helpCategory=food y ya tenemos resultados de Google Places, no usar tool
     const serviceReqEffective = isServiceReq && !(helpCategory === 'food' && helpResults);
-    const needsTools = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg || !!transportFallbackMsg;
+    // transportFallbackMsg tiene datos pre-buscados → Claude no necesita tools, responde directo del esqueleto
+    const needsTools = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg;
     // Fotos → OpenAI (mejor visión). Texto → Claude Sonnet (mejor instrucciones)
     const useAnthropic = !imageBase64;
     const reqModel = 'gpt-4o-mini'; // solo para fotos (OpenAI)
