@@ -87,6 +87,14 @@ const salma = {
     } catch (e) { console.warn('[Salma] Error voz:', e); }
   },
 
+  // Hablar texto directamente (sin depender del toggle global)
+  async salmaSpeakDirect(text) {
+    const saved = localStorage.getItem('salma_voice');
+    localStorage.setItem('salma_voice', 'true');
+    await this.salmaSpeak(text);
+    if (saved !== 'true') localStorage.setItem('salma_voice', saved || 'false');
+  },
+
   salmaSpeakStop() {
     if (this._currentAudio) {
       this._currentAudio.pause();

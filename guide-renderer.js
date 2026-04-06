@@ -115,6 +115,30 @@ const guideRenderer = {
         }
         return;
       }
+      // Altavoz en parada — hablar sin toggle acordeón
+      const speakBtn = e.target.closest('.guide-stop-speak');
+      if (speakBtn) {
+        e.stopPropagation();
+        const text = speakBtn.dataset.text;
+        if (text && typeof salma !== 'undefined') {
+          // Toggle: si ya está hablando, parar
+          if (salma._currentAudio || (window.speechSynthesis && speechSynthesis.speaking)) {
+            salma.salmaSpeakStop();
+            speakBtn.classList.remove('speaking');
+          } else {
+            salma.salmaSpeakDirect(text);
+            speakBtn.classList.add('speaking');
+            // Quitar clase cuando termine
+            const checkEnd = setInterval(() => {
+              if (!salma._currentAudio && !(window.speechSynthesis && speechSynthesis.speaking)) {
+                speakBtn.classList.remove('speaking');
+                clearInterval(checkEnd);
+              }
+            }, 500);
+          }
+        }
+        return;
+      }
       const stopHead = e.target.closest('.guide-stop-head');
       if (stopHead) {
         const stop = stopHead.parentElement;
@@ -343,6 +367,9 @@ const guideRenderer = {
           <div class="guide-stop-head">
             <span class="guide-stop-icon">${icon}</span>
             <span class="guide-stop-name">${escapeHTML(s.headline || s.name)}</span>
+            <button class="guide-stop-speak" aria-label="Escuchar" data-text="${escapeHTML((s.headline || s.name) + '. ' + (s.narrative || ''))}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            </button>
             <span class="guide-stop-arrow">▾</span>
           </div>
           <div class="guide-stop-body">
