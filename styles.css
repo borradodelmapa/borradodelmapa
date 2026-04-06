@@ -161,15 +161,19 @@ body {
 /* ── Chat vacío: saludo + chips ── */
 .chat-empty { padding:20px 16px; }
 .chat-empty-chips {
-  display:flex; flex-wrap:wrap; gap:8px;
-  padding:16px 0 0 48px; /* alineado con el texto de Salma (avatar 36px + gap 12px) */
+  display:grid; grid-template-columns:1fr 1fr; gap:8px;
+  padding:16px 0 0;
+  margin-left:48px; margin-right:16px; max-width:340px;
+}
+@media (min-width:600px) {
+  .chat-empty-chips { grid-template-columns:1fr 1fr 1fr; max-width:480px; }
 }
 .chat-empty-chip {
-  padding:8px 16px; border-radius:20px;
+  padding:8px 12px; border-radius:20px;
   background:rgba(244,239,230,.06); border:1px solid rgba(212,168,67,.3);
   color:rgba(244,239,230,.85); font-size:13px; font-weight:500;
   font-family:var(--font-tight); cursor:pointer;
-  transition:all .15s;
+  transition:all .15s; text-align:center;
 }
 .chat-empty-chip:hover {
   background:rgba(212,168,67,.15); border-color:var(--dorado);
