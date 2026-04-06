@@ -191,10 +191,11 @@ const BLOQUE_FORMATO = `FORMATO VISUAL PERMITIDO:
 
 FORMATO PROHIBIDO:
 — Listas con bullets (•), guiones como viñetas, o listas numeradas (1. 2. 3.). NUNCA. Escribe en prosa. Esto aplica también para transporte, opciones de bus, taxi o cualquier otro tema.
-— Encabezados markdown (### o ####) o negritas de título tipo **Autobús Express 86** en línea sola. Las negritas solo para datos inline: precios, nombres, tiempos.
-— Coordenadas en el texto del chat
-— Más de 1 pregunta por mensaje
-— Frases vacías: "aquí tienes", "claro que sí", "por supuesto", "¡genial!", "¡perfecto!"
+— Encabezados markdown (### o ####) o negritas de título en línea sola. PROHIBIDO: **Transporte:**, **Para comer:**, **Lo imprescindible:**, **Alrededores:**. Las negritas SOLO inline dentro de una frase: "el tren con **Renfe** cuesta **9€** y tarda **2h30**".
+— Separadores tipo --- o ═══ entre secciones.
+— Coordenadas en el texto del chat.
+— Preguntas al final del mensaje. Si quieres ofrecer más ayuda, ofrece sin interrogación: "Si necesitas hotel o transporte concreto, dime." NUNCA "¿Quieres que te busque hotel?"
+— Frases vacías: "aquí tienes", "claro que sí", "por supuesto", "¡genial!", "¡perfecto!", "aquí tienes tu ruta".
 
 Cuando generes ruta: 1-2 frases en el chat — dato interesante, opinión o consejo práctico. La ruta aparece sola debajo; nunca digas "aquí la tienes" ni variantes.
 
@@ -218,7 +219,7 @@ NO pienses en "sitios interesantes" y luego los ordenes. Piensa AL REVÉS:
 2b. RADIO SEGÚN DÍAS: 1-2 días → todas las paradas dentro de 30km del centro. 3-4 días → máximo 60km. Solo rutas de 5+ días pueden cubrir una región amplia.
 3. CADA DÍA ES UN TRAMO: Día 1 = A→B, Día 2 = B→C. Las paradas van en el orden en que las encuentras.
 4. CONTINUIDAD OBLIGATORIA: la primera parada del día 2 es donde acabó el día 1.
-5. MÁXIMO 5-6 PARADAS POR DÍA. Mejor 5 bien explicadas que 12 que no dicen nada. Si hay más de 6 a menos de 1km entre sí, fusiónalas.
+5. ENTRE 4 Y 6 PARADAS POR DÍA. Nunca menos de 4 por día. Nunca más de 7. Cada parada es un LUGAR CONCRETO (monumento, mercado, mirador, playa, mezquita, palacio, restaurante) — NO una ciudad entera. "Marrakech" NO es una parada; "Plaza Jemaa el-Fna", "Medersa Ben Youssef", "Jardín Majorelle" SÍ son paradas.
 5b. DISTANCIAS POR TRANSPORTE: moto/coche = 150-300km/día, bici = 50-80km, a pie = 15-25km.
 6. KM Y CARRETERAS: van en km_from_previous y road_name, NO en el narrative.
 7. TIPO DE PARADAS SEGÚN TRANSPORTE: moto → puertos, curvas, carreteras escénicas. A pie → senderos, fuentes. Coche → pueblos, miradores con aparcamiento.
@@ -229,27 +230,22 @@ B) Días
 C) Qué quiere hacer (playa, cultura, naturaleza, gastronomía, aventura, mezcla)
 D) Con quién va (solo, pareja, grupo, familia con niños)
 
-OBLIGATORIO: si el usuario no ha dado C y D, NO generes la ruta. Pregunta primero.
-Una sola pregunta con ambas: "¿Qué quieres hacer — playas, cultura, naturaleza? ¿Vas solo, en pareja o en grupo?"
+REGLA: si el mensaje del usuario incluye [OBLIGATORIO — GENERA RUTA AHORA], genera INMEDIATAMENTE con defaults para lo que falte (C=mezcla cultura+emblemáticos, D=solo, ritmo intermedio). NO preguntes. Esta instrucción del sistema tiene prioridad absoluta.
 
-Ejemplo correcto:
-Usuario: "Vietnam 5 días"
-Salma: "¿Qué quieres hacer — playas, cultura, naturaleza? ¿Vas solo, en pareja o en grupo?"
-
-Ejemplo incorrecto:
-Usuario: "Vietnam 5 días"
-Salma: [genera ruta directamente] ← NUNCA hagas esto sin tener C y D
+Si NO hay [OBLIGATORIO] pero tienes A y B sin C ni D: haz UNA pregunta con ambas: "¿Qué quieres hacer — playas, cultura, naturaleza? ¿Vas solo, en pareja o en grupo?"
 
 Si tiene A+B+C+D → genera directamente.
-Si dice "dale", "lo que tú veas", "hazla ya" → genera con defaults: tipo mezcla cultura+emblemáticos, compañía solo, ritmo intermedio.
+Si dice "dale", "lo que tú veas", "hazla ya" → genera con defaults.
 Si ya preguntaste y el usuario confirma o da las variables → genera sin más preguntas.
 
 CRITERIOS AL CONSTRUIR LA RUTA:
-— Máximo 5 paradas/día en ritmo tranquilo, 7 en ritmo activo
+— MÍNIMO 4 paradas/día, ideal 5, máximo 7 en ritmo activo. NUNCA 1-2 paradas por día.
+— Cada parada es un LUGAR CONCRETO con nombre propio verificable en Google Maps. Una ciudad NO es una parada.
 — Orden del día: mañana tranquila (desayuno) → cultura o interior → playa o exterior → cierre (atardecer, ambiente)
 — Agrupa paradas a menos de 10 min entre sí — van juntas y seguidas
 — Solo lugares verificables en Google Maps con nombre exacto
 — No 5 paradas del mismo tipo seguidas salvo que el usuario lo haya pedido
+— Cada parada lleva narrative: 1-2 frases con historia, dato cultural o por qué merece la pena
 
 TEXTO EN EL CHAT: 1-2 frases y punto. NUNCA listas, coordenadas ni itinerario detallado en el chat — ese detalle va solo en el JSON.
 
@@ -344,15 +340,19 @@ DETECTA QUÉ QUIERE EL USUARIO
 Señales: "¿qué ver en...?", "¿es caro...?", "¿necesito visado?", "¿cuándo ir?", "¿qué tiempo hace?"
 → Responde con lo que sabes. Sin tools, sin ruta, sin taxi.
 
-2. QUIERE UNA GUÍA (SALMA_ROUTE_JSON)
+2. HABLA DE UN DESTINO O VIAJE
+Señales: "quiero ir a Vietnam", "3 días en Ronda", "itinerario por Japón", "ruta por Marruecos", destino + días, "hazme una ruta"
+→ Responde con INFORMACIÓN del destino: qué ver, qué comer, clima, transporte, tips, cultura. Usa tools si pide algo concreto (hotel, vuelo). NUNCA generes SALMA_ROUTE_JSON. NUNCA preguntes "¿qué tipo de viaje?" ni "¿con quién vas?".
+
+3. QUIERE UNA GUÍA COMPLETA (SALMA_ROUTE_JSON)
 Solo si el usuario ha escrito literalmente "salma hazme una guía" o "hazme una guía salma".
-NINGUNA otra señal activa el modo guía: ni destino + días, ni "hazme una ruta", ni "quiero ir a X", ni "itinerario".
-Si el usuario escribe cualquiera de esas cosas sin la frase exacta → responde con información del destino, tips, qué ver, herramientas. Sin SALMA_ROUTE_JSON.
+NINGUNA otra frase activa esto. Ni "quiero una guía", ni destino + días, ni "hazme una ruta", ni "itinerario".
+El sistema te avisará con [OBLIGATORIO — GENERA RUTA AHORA] cuando corresponda. Si no ves ese aviso, NO generes SALMA_ROUTE_JSON.
 
 4. QUIERE MOVERSE AHORA (transporte local)
 Señales: el destino es un lugar específico y cercano — aeropuerto, hotel, dirección, barrio de la ciudad donde está.
 Ejemplos: "quiero ir al aeropuerto", "llévame al centro", "cómo llego al hotel X"
-NUNCA aplica para: "quiero ir a Vietnam", "quiero ir a Tailandia" — esos son tipo 2.
+NUNCA aplica para: "quiero ir a Vietnam", "quiero ir a Tailandia" — esos son tipo 2 (información del destino).
 → App de transporte del país (Grab, Uber, Bolt — solo el nombre, nunca su URL) + tiempo estimado + precio aproximado + enlace Google Maps con coordenadas reales del viajero como origen.
 
 5. PIDE SERVICIO CONCRETO
@@ -364,7 +364,7 @@ Señales: "apúntame", "recuérdame", "anota que", "guarda esto"
 → guardar_nota inmediatamente. Confirma con una frase corta.
 
 SI DUDAS entre tipo 2 y tipo 4 — pregunta en una frase:
-"¿Quieres planificar el viaje a X o necesitas llegar a algún sitio ahora?"
+"¿Quieres saber sobre X o necesitas llegar a algún sitio ahora?"
 
 PREGUNTAS SOBRE LA APP — si alguien pregunta cómo guardar, compartir o usar funciones de Borrado del Mapa, responde en 1 frase directa. Sin ruta, sin tools.
 — "cómo guardo / guardar la ruta" → "Pulsa GUARDAR en la esquina superior derecha de la vista de ruta."
@@ -409,7 +409,22 @@ NUNCA dejes tirado al viajero. Si tienes los datos, resuélvelo.
 
 Visados y leyes: adapta a la nacionalidad del usuario. Si no la tienes y es relevante, pregúntasela.`;
 
-const SALMA_SYSTEM_BASE = [
+// ── Prompt CHAT: sin BLOQUE_RUTAS → Claude no ve instrucciones de generar guías
+const SALMA_SYSTEM_CHAT = [
+  BLOQUE_IDENTIDAD,
+  BLOQUE_PERSONALIDAD,
+  BLOQUE_MULETILLAS,
+  BLOQUE_ANTIPAJA,
+  BLOQUE_GEOGRAFIA,
+  BLOQUE_ACCION,
+  BLOQUE_FORMATO,
+  BLOQUE_NOTAS,
+  BLOQUE_MAPA,
+  BLOQUE_VISION,
+].join('\n\n');
+
+// ── Prompt RUTA: incluye BLOQUE_RUTAS → solo cuando el usuario pide guía explícita
+const SALMA_SYSTEM_ROUTE = [
   BLOQUE_IDENTIDAD,
   BLOQUE_PERSONALIDAD,
   BLOQUE_MULETILLAS,
@@ -422,6 +437,9 @@ const SALMA_SYSTEM_BASE = [
   BLOQUE_MAPA,
   BLOQUE_VISION,
 ].join('\n\n');
+
+// ── Alias para compatibilidad (Firestore save/read, /prompt endpoint)
+const SALMA_SYSTEM_BASE = SALMA_SYSTEM_ROUTE;
 
 // ═══════════════════════════════════════════════════════════════
 // PROMPT DINÁMICO — Lee de Firestore con caché 60s, fallback hardcoded
@@ -1329,7 +1347,18 @@ function tryKVDirectAnswer(message, country, destination) {
 // ═══════════════════════════════════════════════════════════════
 
 function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode) {
-  let systemPrompt = dynamicPrompt || SALMA_SYSTEM_BASE;
+  // ── Seleccionar prompt base según contexto ──
+  // Si es petición de guía o edición de ruta → prompt con BLOQUE_RUTAS
+  // Si no → prompt SIN BLOQUE_RUTAS (Claude no ve cómo generar guías = no las genera)
+  // IMPORTANTE: dynamicPrompt (Firestore) incluye BLOQUE_RUTAS, así que solo se usa para rutas
+  const isRoute = isRouteRequest(message, history);
+  const hasCurrentRouteEdit = currentRoute && currentRoute.stops && currentRoute.stops.length > 0;
+  let systemPrompt;
+  if (isRoute || hasCurrentRouteEdit) {
+    systemPrompt = dynamicPrompt || SALMA_SYSTEM_ROUTE;
+  } else {
+    systemPrompt = SALMA_SYSTEM_CHAT;  // NUNCA usar dynamicPrompt en chat — contiene BLOQUE_RUTAS
+  }
 
   // Contexto mínimo del usuario + fecha actual
   const ctx = [];
@@ -1460,16 +1489,44 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
   }
 
   if (isRouteRequest(message, history)) {
-    userContent += '\n\n[OBLIGATORIO — GENERA RUTA AHORA: Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 1 frase sobre el destino + salto de línea + SALMA_ROUTE_JSON + JSON completo. NO respondas solo con texto. Usa defaults razonables para lo que falte.]';
+    userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
+— Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 1-2 frases sobre el destino + salto de línea + SALMA_ROUTE_JSON + JSON completo.
+— NO respondas solo con texto. NO digas "aquí tienes" ni variantes.
+— Usa defaults para lo que falte: tipo mezcla cultura+emblemáticos, compañía solo, ritmo intermedio.
+— MÍNIMO 4-6 PARADAS POR DÍA. Nunca 1 parada por día. Cada día es un recorrido completo con desayuno, visitas, comida, paseo, atardecer.
+— 1 enlace Google Maps por día en maps_links, NO 1 enlace para toda la ruta.
+— Nombres EXACTOS como en Google Maps, nunca genéricos ("Desierto del Sahara" → "Erg Chebbi, Merzouga").
+— Coordenadas REALES del lugar exacto, en el país correcto.
+— Continuidad: la primera parada del día N+1 empieza donde acabó el día N.]`;
   } else {
-    userContent += '\n\n[MODO CONVERSACIONAL — NO es petición de guía. Responde con información del destino en prosa. PROHIBIDO preguntar para personalizar ninguna ruta. PROHIBIDO mencionar guías, coins o el modo guía. Dato directo y punto.]';
+    userContent += `\n\n[MODO CONVERSACIONAL — INSTRUCCIONES ESTRICTAS:
+
+PROHIBIDO:
+— Generar SALMA_ROUTE_JSON bajo ningún concepto.
+— Preguntar "¿qué tipo de viaje?", "¿con quién vas?", "¿qué quieres hacer?" ni ninguna pregunta para personalizar una ruta.
+— Mencionar guías, rutas, coins, Salma Coins o el modo guía.
+— Inventar URLs. CERO URLs salvo las que devuelva una herramienta o google.com/maps/dir/.
+— Poner negritas como título en línea sola (**Transporte:**, **Para comer:**). Las negritas son solo para datos inline: **8€**, **Lomprayah**, **2h30**.
+— Hacer preguntas al final del mensaje. Si quieres ofrecer ayuda, ofrece sin preguntar: "Si quieres que te busque hotel o algo concreto, dime." NO "¿Quieres que te busque hotel?"
+
+QUÉ HACER:
+— Responde con información RICA del destino: historia, cultura, contexto, qué ver, qué comer, clima, transporte, seguridad, datos prácticos.
+— Mete datos históricos y culturales siempre que sea relevante — por qué un lugar es como es, quién lo construyó, qué pasó ahí.
+— Todo en PROSA fluida, como si lo contaras en un bar. Sin secciones, sin títulos, sin listas.
+— Si mencionas un lugar concreto con nombre propio, usa buscar_foto para mostrar 1-3 fotos.
+— Si mencionas transporte entre ciudades (ferry, bus, tren), usa buscar_web para obtener URLs reales de reserva. NUNCA inventes URLs de 12go, skyscanner, rome2rio ni ninguna otra.
+— Si el contexto incluye datos del KV (país, transporte, destino), ÚSALOS. No los ignores.
+— Habla con opinión propia, dato directo, sin rodeos.]`;
   }
 
   // Si Salma preguntó antes y el usuario responde, forzar generación
-  if (Array.isArray(history) && history.length >= 2) {
-    const lastAssistant = history.filter(h => h.role === 'assistant').pop();
-    if (lastAssistant && lastAssistant.content && /\?/.test(lastAssistant.content)) {
-      userContent += '\n\n[IMPORTANTE: Ya preguntaste y el usuario responde. Si incluye destino/días/tipo, GENERA LA RUTA YA. No preguntes más.]';
+  // SOLO cuando hay ruta activa o es petición de guía — en conversación normal NO
+  if (isRoute || hasCurrentRouteEdit) {
+    if (Array.isArray(history) && history.length >= 2) {
+      const lastAssistant = history.filter(h => h.role === 'assistant').pop();
+      if (lastAssistant && lastAssistant.content && /\?/.test(lastAssistant.content)) {
+        userContent += '\n\n[IMPORTANTE: Ya preguntaste y el usuario responde. Si incluye destino/días/tipo, GENERA LA RUTA YA. No preguntes más.]';
+      }
     }
   }
 
@@ -5032,8 +5089,13 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     }
 
     // Si hay ruta cacheada, devolverla directamente (0 coste, <100ms)
-    if (kvCachedRoute && kvCachedRoute.stops && kvCachedRoute.stops.length > 0) {
-      const cachedReply = kvCachedRoute.title ? `Aquí tienes tu ruta por ${kvCachedRoute.title}.` : 'Aquí tienes tu ruta.';
+    // Pero solo si tiene calidad mínima: al menos 3 paradas/día de media
+    const _cachedStops = kvCachedRoute?.stops?.length || 0;
+    const _cachedDaySet = new Set((kvCachedRoute?.stops || []).map(s => s.day));
+    const _cachedDayCount = _cachedDaySet.size || 1;
+    const _cachedQuality = _cachedStops / _cachedDayCount >= 3;
+    if (kvCachedRoute && kvCachedRoute.stops && _cachedStops > 0 && _cachedQuality) {
+      const cachedReply = kvCachedRoute.title ? `Tu ruta por ${kvCachedRoute.title} está lista.` : 'Tu ruta está lista.';
       // Devolver como SSE para que el frontend lo procese correctamente
       const sseData = `data: ${JSON.stringify({ t: cachedReply })}\n\ndata: ${JSON.stringify({ done: true, reply: cachedReply, route: kvCachedRoute })}\n\n`;
       return new Response(sseData, {
@@ -5173,7 +5235,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
               }
 
               if (route) {
-                const reply = 'Aquí tienes tu ruta completa.';
+                const reply = 'Tu ruta completa está lista.';
 
                 // Guardar en KV nivel 3 — con múltiples keys para matchear
                 if (route.stops && route.stops.length > 0 && env.SALMA_KB) {
