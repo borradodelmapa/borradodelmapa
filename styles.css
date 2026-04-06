@@ -137,10 +137,13 @@ body {
 /* ── App content (scroll entre header e input) ── */
 .app-content {
   padding-top:56px;
-  padding-bottom:220px;
+  padding-bottom:80px;
   min-height:0;
   overflow-y:auto;
   scrollbar-width:none;
+}
+.app-content.app-content--chat {
+  padding-bottom:220px;
 }
 /* Fondo mapa sutil en el chat */
 .chat-bg-layer {
@@ -2856,7 +2859,8 @@ body {
 .diario-share-option:hover { background:rgba(212,160,23,.1); color:var(--dorado); }
 
 /* ═══ RECORDATORIOS WELCOME ═══ */
-.welcome-reminders { padding:0 4px; margin-top:18px; }
+#welcome-reminders { max-width:480px; margin:0 auto; padding:0 16px 24px; }
+.welcome-reminders { padding:0; margin-top:0; }
 .welcome-reminders-title { font-family:var(--font-mono); font-size:10px; font-weight:600; letter-spacing:.15em; color:var(--dorado); margin-bottom:10px; text-transform:uppercase; }
 .reminder-card { display:flex; align-items:flex-start; gap:10px; padding:12px 14px; background:rgba(244,239,230,.04); border:1px solid rgba(244,239,230,.08); border-radius:10px; margin-bottom:8px; transition:opacity .3s, transform .3s; }
 .reminder-card-urgent { border-color:rgba(212,168,67,.35); background:rgba(212,168,67,.06); }

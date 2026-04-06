@@ -51,33 +51,34 @@ function showState(state) {
   } else if (state === 'rutas') {
     loadUserGuides();
     if (inputBar) inputBar.style.display = 'none';
-    $content.style.paddingBottom = '';
+    $content.style.paddingBottom = '80px';
   } else if (state === 'viajes' || state === 'profile') {
     renderProfile();
     if (inputBar) inputBar.style.display = 'none';
-    $content.style.paddingBottom = '';
+    $content.style.paddingBottom = '80px';
   } else if (state === 'bitacora') {
     renderBitacora();
     if (inputBar) inputBar.style.display = 'none';
-    $content.style.paddingBottom = '';
+    $content.style.paddingBottom = '80px';
   } else if (state === 'diario') {
     // renderDiario se llama con parámetros desde renderBitacora
     if (inputBar) inputBar.style.display = 'none';
-    $content.style.paddingBottom = '';
+    $content.style.paddingBottom = '80px';
   } else if (state === 'documentos') {
     if (typeof docsViajero !== 'undefined') docsViajero.render();
     if (inputBar) inputBar.style.display = 'none';
-    $content.style.paddingBottom = '';
+    $content.style.paddingBottom = '80px';
   } else if (state === 'notas') {
     if (typeof notasManager !== 'undefined') notasManager.renderNotasView();
     if (inputBar) inputBar.style.display = 'none';
-    $content.style.paddingBottom = '';
+    $content.style.paddingBottom = '80px';
   } else if (state === 'chat') {
     // Limpiar welcome si estaba visible (ej: llegando desde ?go=chat)
     const welcomeEl = $content.querySelector('.welcome-area');
     if (welcomeEl) $content.innerHTML = '';
     $input.placeholder = 'Escribe a Salma...';
     if (inputBar) inputBar.style.display = '';
+    $content.classList.add('app-content--chat');
     $content.style.paddingBottom = '';
     if (!document.getElementById('chat-bg-layer')) {
       const layer = document.createElement('div');
@@ -96,10 +97,11 @@ function showState(state) {
       }, 150);
     }
   }
-  // Quitar fondo mapa si salimos del chat
+  // Quitar fondo mapa y padding extra si salimos del chat
   if (state !== 'chat') {
     const layer = document.getElementById('chat-bg-layer');
     if (layer) layer.remove();
+    $content.classList.remove('app-content--chat');
   }
 }
 
@@ -146,7 +148,6 @@ function updateBottomBar() {
     <button class="bottom-tab ${isProfile ? 'bottom-tab-active' : ''}" id="tab-profile">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
-      ${currentUser && (currentUser.coins_saldo || 0) > 0 ? `<span class="bottom-tab-coins">${currentUser.coins_saldo}</span>` : ''}
     </button>
     <button class="bottom-tab ${sosReady ? 'bottom-tab-sos' : 'bottom-tab-sos-off'}" id="tab-sos" aria-label="SOS Emergencia">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -240,10 +241,9 @@ async function renderWelcome() {
         <div class="welcome-chips" id="welcome-chips">
           ${defaultChips}
         </div>
-        <div id="welcome-reminders"></div>
-
       </div>
-    </div>`;
+    </div>
+    <div id="welcome-reminders"></div>`;
 
   // Welcome input → enviar
   const wInput = document.getElementById('welcome-input');
@@ -350,14 +350,18 @@ async function _loadChipsAsync(chipsEl) {
 
     if (currentUser) {
       const snap = await db.collection('users').doc(currentUser.uid)
-        .collection('maps').orderBy('createdAt', 'desc').limit(3).get();
+        .collection('maps').orderBy('createdAt', 'desc').limit(6).get();
       if (!snap.empty) {
+        const seen = new Set();
         snap.forEach(doc => {
+          if (seen.size >= 3) return;
           const d = doc.data();
           const label = chipLabel(d.nombre || 'Mi ruta');
+          if (seen.has(label)) return; // evitar chips duplicados
+          seen.add(label);
           chipsHtml += `<div class="chip chip-saved" data-doc-id="${doc.id}">${escapeHTML(label)}</div>`;
         });
-        chipsType = 'saved';
+        if (seen.size > 0) chipsType = 'saved';
       }
     }
     if (!chipsHtml) {
