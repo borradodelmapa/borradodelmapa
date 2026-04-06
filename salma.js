@@ -977,18 +977,32 @@ const salma = {
               if (evt.generating && !textDone) {
                 textDone = true;
                 this._fixStreamBubble();
-                this._addLoading();
+                this._addLoading('Generando tu ruta...', true);  // noRetry=true durante generación
               }
 
               // KEEPALIVE — verificando paradas
-              if (evt.k && !textDone) {
-                textDone = true;
-                this._fixStreamBubble();
-                this._addLoading();
+              if (evt.k) {
+                // Actualizar texto de progreso y resetear retry
+                const loadPhrase = document.getElementById('loading-phrase');
+                if (loadPhrase) loadPhrase.textContent = 'Verificando paradas y cargando fotos...';
+                // Esconder botón reintentar si existe
+                const retryBtn = document.querySelector('.btn-retry-salma');
+                if (retryBtn) retryBtn.remove();
+                if (!textDone) {
+                  textDone = true;
+                  this._fixStreamBubble();
+                  this._addLoading('Verificando paradas y cargando fotos...', true);
+                }
               }
 
-              // SEARCHING — tools ejecutando en paralelo, mostrar dots animados
+              // SEARCHING — tools ejecutando en paralelo
               if (evt.searching) {
+                // Actualizar texto de progreso
+                const loadPhrase = document.getElementById('loading-phrase');
+                if (loadPhrase) loadPhrase.textContent = 'Buscando información...';
+                // Esconder botón reintentar si existe
+                const retryBtn = document.querySelector('.btn-retry-salma');
+                if (retryBtn) retryBtn.remove();
                 if (textEl && !document.getElementById('salma-searching-dots')) {
                   const dots = document.createElement('div');
                   dots.id = 'salma-searching-dots';
