@@ -1636,7 +1636,7 @@ Dónde comer: **Tragabuches** (https://www.google.com/maps/search/Tragabuches+Ro
 
 FIN DEL EJEMPLO. Genera tu respuesta con esta MISMA estructura. Cada lugar con su enlace Maps, dato histórico/cultural, tiempo y precio. 4-5 paradas por día. Al final: cómo llegar, presupuesto, alternativas. Cierra con: "Si quieres la guía completa con mapa y navegación, dime 'Salma hazme una guía'."
 
-Usa buscar_foto para 2-3 lugares clave del plan.]`;
+Usa buscar_foto para al menos 1 lugar destacado POR DÍA (mínimo 1 foto por día, ideal 2). Llama a buscar_foto varias veces si hace falta — cada día merece su foto.]`;
   } else {
     userContent += `\n\n[MODO CONVERSACIONAL — INSTRUCCIONES ESTRICTAS:
 
