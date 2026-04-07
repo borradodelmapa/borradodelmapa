@@ -3042,7 +3042,7 @@ function openLiveMap() {
       _poiInfoWindow = new google.maps.InfoWindow();
       _placesService = new google.maps.places.PlacesService(_liveMap);
 
-      _liveMap.addListener('click', _onMapTap);
+      // _liveMap.addListener('click', _onMapTap); // tap sheet desactivado
       _liveMap.addListener('drag', _closeMapPanels);
 
       // Forzar que Google Maps recalcule tamaño (el contenedor pasa de display:none a visible)
