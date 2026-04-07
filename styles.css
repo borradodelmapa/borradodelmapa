@@ -3097,77 +3097,34 @@ body {
   backdrop-filter: blur(8px);
   display: flex; align-items: center; justify-content: center;
 }
-/* ── Dropdown herramientas mapa (arriba-derecha) ── */
-.lm-tools {
+#live-map-center {
   position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 14px);
-  right: 14px;
-  z-index: 975;
-}
-.lm-tools-toggle {
-  width: 40px; height: 40px;
-  background: rgba(10,10,15,0.82);
-  border: 1.5px solid rgba(212,168,67,0.30);
-  border-radius: 12px;
-  color: var(--dorado, #D4A843);
-  cursor: pointer;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 124px);
+  right: 16px;
+  z-index: 970;
+  background: rgba(12,10,6,0.92);
+  color: var(--dorado);
+  border: 1px solid rgba(212,168,67,0.35);
+  border-radius: 50%;
+  width: 44px; height: 44px;
   display: flex; align-items: center; justify-content: center;
-  backdrop-filter: blur(12px);
-  transition: background .15s, border-color .15s;
-}
-.lm-tools-toggle:active { background: rgba(212,168,67,0.12); }
-.lm-tools-toggle.open { border-color: var(--dorado, #D4A843); background: rgba(212,168,67,0.10); }
-.lm-tools-dropdown {
-  position: absolute;
-  top: 48px;
-  right: 0;
-  min-width: 200px;
-  background: rgba(10,10,15,0.94);
-  border: 1.5px solid rgba(212,168,67,0.25);
-  border-radius: 16px;
-  padding: 6px;
-  backdrop-filter: blur(16px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-  display: none;
-  flex-direction: column;
-}
-.lm-tools-dropdown.open { display: flex; }
-.lm-tools-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 12px;
-  border: none;
-  border-radius: 10px;
-  background: none;
-  color: rgba(244,239,230,0.8);
-  font-size: 13px;
-  font-weight: 600;
-  font-family: inherit;
   cursor: pointer;
-  transition: background .12s;
-  white-space: nowrap;
+  backdrop-filter: blur(8px);
 }
-.lm-tools-item:active { background: rgba(212,168,67,0.10); }
-.lm-tools-item svg:first-child { color: var(--dorado, #D4A843); stroke: var(--dorado, #D4A843); flex-shrink: 0; }
-.lm-tools-item span { flex: 1; }
-.lm-tools-chevron { color: rgba(244,239,230,0.3); flex-shrink: 0; transition: transform .2s; }
-.lm-tools-item.sub-open .lm-tools-chevron { transform: rotate(180deg); color: var(--dorado, #D4A843); }
-.lm-tools-sub {
-  padding: 2px 0 2px 14px;
-  border-left: 2px solid rgba(212,168,67,0.15);
-  margin: 0 8px 4px 20px;
-  flex-direction: column;
-}
-.lm-tools-sub .lmt-option {
-  padding: 8px 12px;
-  font-size: 13px;
-  text-align: left;
-  width: 100%;
-}
-.lm-tools-sub .lml-row {
-  padding: 7px 0;
-  font-size: 13px;
+/* ── Botón tipo mapa ── */
+#live-map-maptype-btn {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+  right: 16px;
+  z-index: 970;
+  background: rgba(12,10,6,0.92);
+  color: var(--dorado);
+  border: 1px solid rgba(212,168,67,0.35);
+  border-radius: 50%;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
 }
 #live-map-routes-btn {
   position: fixed;
@@ -3622,9 +3579,33 @@ body {
   white-space: nowrap; flex-shrink: 0; text-decoration: none;
 }
 
-/* Legacy individual buttons hidden — moved to .lm-tools dropdown */
-#live-map-layers-btn, #live-map-center, #live-map-maptype-btn { display: none !important; }
-#live-map-layers-panel, #live-map-maptype-panel { display: none !important; }
+/* ── Botón capas (POI) ── */
+#live-map-layers-btn {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+  right: 16px;
+  z-index: 970;
+  background: rgba(12,10,6,0.92);
+  color: var(--dorado);
+  border: 1px solid rgba(212,168,67,0.35);
+  border-radius: 50%;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+#live-map-layers-panel {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+  right: 68px;
+  z-index: 972;
+  background: rgba(12,10,6,0.96);
+  border: 1px solid rgba(212,168,67,0.25);
+  border-radius: 14px;
+  padding: 12px 16px;
+  min-width: 200px;
+  backdrop-filter: blur(12px);
+}
 .lml-title {
   font-size: 11px;
   font-weight: 700;

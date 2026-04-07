@@ -2987,59 +2987,6 @@ window.toggleMapLayersPanel = toggleMapLayersPanel;
 window.toggleMapTypePanel = toggleMapTypePanel;
 window.setLiveMapType = setLiveMapType;
 
-// ── Dropdown herramientas mapa (arriba-derecha) ──
-function toggleMapTools() {
-  const dd = document.getElementById('lm-tools-dropdown');
-  const btn = document.getElementById('lm-tools-toggle');
-  if (!dd) return;
-  const open = dd.classList.toggle('open');
-  btn?.classList.toggle('open', open);
-  if (open) {
-    document.addEventListener('click', _closeMapToolsOutside, true);
-  } else {
-    document.removeEventListener('click', _closeMapToolsOutside, true);
-  }
-}
-function closeMapTools() {
-  const dd = document.getElementById('lm-tools-dropdown');
-  const btn = document.getElementById('lm-tools-toggle');
-  if (dd) dd.classList.remove('open');
-  if (btn) btn.classList.remove('open');
-  document.removeEventListener('click', _closeMapToolsOutside, true);
-}
-function _closeMapToolsOutside(e) {
-  const tools = document.getElementById('live-map-tools');
-  if (tools && !tools.contains(e.target)) closeMapTools();
-}
-function toggleMapTypeInline() {
-  const sub = document.getElementById('lm-tools-maptype-sub');
-  const item = document.getElementById('lm-tools-maptype');
-  if (!sub) return;
-  const show = sub.style.display === 'none';
-  sub.style.display = show ? 'flex' : 'none';
-  item?.classList.toggle('sub-open', show);
-  // Cerrar capas si abierto
-  const layersSub = document.getElementById('lm-tools-layers-sub');
-  if (layersSub) layersSub.style.display = 'none';
-  document.getElementById('lm-tools-layers')?.classList.remove('sub-open');
-}
-function toggleLayersInline() {
-  const sub = document.getElementById('lm-tools-layers-sub');
-  const item = document.getElementById('lm-tools-layers');
-  if (!sub) return;
-  const show = sub.style.display === 'none';
-  sub.style.display = show ? 'block' : 'none';
-  item?.classList.toggle('sub-open', show);
-  // Cerrar maptype si abierto
-  const maptypeSub = document.getElementById('lm-tools-maptype-sub');
-  if (maptypeSub) maptypeSub.style.display = 'none';
-  document.getElementById('lm-tools-maptype')?.classList.remove('sub-open');
-}
-window.toggleMapTools = toggleMapTools;
-window.closeMapTools = closeMapTools;
-window.toggleMapTypeInline = toggleMapTypeInline;
-window.toggleLayersInline = toggleLayersInline;
-
 // Inicializar estilo base
 _buildMapStyle();
 
