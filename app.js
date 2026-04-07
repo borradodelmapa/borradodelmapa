@@ -3023,18 +3023,21 @@ async function diarioPickSave() {
   const lat = _diario.lat, lng = _diario.lng;
   if (!lat && !lng) { showToast('Toca el mapa primero'); return; }
 
-  // Pin permanente en el mapa (verde, visual)
+  // Pin permanente en el mapa (dorado, con ID y click handler)
   if (_liveMap) {
+    const pinId = 'spin_' + (++_pinIdCounter) + '_' + Date.now();
     const marker = new google.maps.Marker({
       map: _liveMap,
       position: { lat, lng },
-      icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#5CB85C', fillOpacity: 0.95, strokeColor: '#fff', strokeWeight: 2, scale: 10 },
-      label: { text: '📌', fontSize: '14px' },
+      icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#D4A843', fillOpacity: 0.95, strokeColor: '#fff', strokeWeight: 2, scale: 10 },
       title: _diario.locName,
       zIndex: 150,
     });
+    marker._pinId = pinId;
+    marker._pinData = { lat, lng, locName: _diario.locName, photoUrl: null };
+    marker.addListener('click', () => _showPinInfo(marker));
     _mapPins.push(marker);
-    _savedPinsData.push({ lat, lng, locName: _diario.locName, place_type: 'other' });
+    _savedPinsData.push({ lat, lng, locName: _diario.locName, place_type: 'other', _pinId: pinId });
   }
 
   // Limpiar pin temporal
@@ -3237,8 +3240,15 @@ function _diarioAutoSave() {
   _saveDiarioToGallery();
   _diarioDropPermanentPin();
 }
+let _pinIdCounter = 0;
 function _diarioDropPermanentPin() {
   if (!_liveMap || !_diario.lat) return;
+  const pinId = 'dpin_' + (++_pinIdCounter) + '_' + Date.now();
+  // Guardar foto como object URL si existe
+  let photoUrl = null;
+  if (_diario.lastBlob) {
+    try { photoUrl = URL.createObjectURL(_diario.lastBlob); } catch(e) {}
+  }
   const marker = new google.maps.Marker({
     map: _liveMap,
     position: { lat: _diario.lat, lng: _diario.lng },
@@ -3246,10 +3256,11 @@ function _diarioDropPermanentPin() {
     title: _diario.locName,
     zIndex: 150,
   });
-  marker._pinData = { lat: _diario.lat, lng: _diario.lng, locName: _diario.locName, hasPhoto: !!_diario.lastBlob };
+  marker._pinId = pinId;
+  marker._pinData = { lat: _diario.lat, lng: _diario.lng, locName: _diario.locName, photoUrl: photoUrl };
   marker.addListener('click', () => _showPinInfo(marker));
   _mapPins.push(marker);
-  _savedPinsData.push({ lat: _diario.lat, lng: _diario.lng, locName: _diario.locName, place_type: 'other' });
+  _savedPinsData.push({ lat: _diario.lat, lng: _diario.lng, locName: _diario.locName, place_type: 'other', _pinId: pinId });
 }
 
 async function shareDiarioWA() {
@@ -3285,36 +3296,42 @@ async function shareDiarioNative() {
 
 function closeDiarioResult() { document.getElementById('diario-result').classList.remove('on'); }
 
-// Info al tocar pin guardado
+// Info al tocar pin guardado (con foto si existe)
 function _showPinInfo(marker) {
   if (!_poiInfoWindow || !_liveMap) return;
   const d = marker._pinData || {};
+  const pinId = marker._pinId || '';
   const mapsUrl = 'https://www.google.com/maps?q=' + d.lat + ',' + d.lng;
+  const photoHtml = d.photoUrl
+    ? `<img src="${d.photoUrl}" style="width:100%;height:140px;object-fit:cover;border-radius:10px 10px 0 0;display:block">`
+    : '';
+  const padTop = d.photoUrl ? '10px' : '12px';
   const content = `
-    <div style="font-family:'Inter',sans-serif;width:220px;border-radius:10px;overflow:hidden;background:#fff;padding:12px">
-      <div style="font-size:14px;font-weight:700;color:#111;margin-bottom:4px">📍 ${d.locName || 'Pin guardado'}</div>
-      <div style="font-size:11px;color:#777;margin-bottom:10px">${d.lat?.toFixed(5)}, ${d.lng?.toFixed(5)}</div>
-      <div style="display:flex;gap:6px">
-        <a href="${mapsUrl}" target="_blank" rel="noopener"
-          style="flex:1;text-align:center;background:#D4A843;color:#0a0a0f;border-radius:8px;padding:7px;font-size:11px;font-weight:700;text-decoration:none">
-          Ver en Maps
-        </a>
-        <button onclick="window._deletePinMarker(this)" data-idx="${_mapPins.indexOf(marker)}"
-          style="flex:1;background:#D9534F;color:#fff;border:none;border-radius:8px;padding:7px;font-size:11px;font-weight:700;cursor:pointer">
-          Eliminar
-        </button>
+    <div style="font-family:'Inter',sans-serif;width:240px;border-radius:10px;overflow:hidden;background:#fff">
+      ${photoHtml}
+      <div style="padding:${padTop} 12px 12px">
+        <div style="font-size:14px;font-weight:700;color:#111;margin-bottom:3px">📍 ${d.locName || 'Pin guardado'}</div>
+        <div style="font-size:11px;color:#888;margin-bottom:10px">${d.lat?.toFixed(5)}, ${d.lng?.toFixed(5)}</div>
+        <div style="display:flex;gap:6px">
+          <a href="${mapsUrl}" target="_blank" rel="noopener"
+            style="flex:1;text-align:center;background:#D4A843;color:#0a0a0f;border-radius:8px;padding:8px;font-size:11px;font-weight:700;text-decoration:none">
+            Ver en Maps
+          </a>
+          <button onclick="window._deletePinById('${pinId}')"
+            style="flex:1;background:#D9534F;color:#fff;border:none;border-radius:8px;padding:8px;font-size:11px;font-weight:700;cursor:pointer">
+            Eliminar
+          </button>
+        </div>
       </div>
     </div>`;
   _poiInfoWindow.setContent(content);
   _poiInfoWindow.open(_liveMap, marker);
 }
-window._deletePinMarker = function(btn) {
-  const idx = parseInt(btn.dataset.idx);
-  if (idx >= 0 && _mapPins[idx]) {
-    _mapPins[idx].setMap(null);
-    _mapPins.splice(idx, 1);
-    _savedPinsData.splice(idx, 1);
-  }
+window._deletePinById = function(pinId) {
+  const mi = _mapPins.findIndex(m => m._pinId === pinId);
+  if (mi !== -1) { _mapPins[mi].setMap(null); _mapPins.splice(mi, 1); }
+  const di = _savedPinsData.findIndex(d => d._pinId === pinId);
+  if (di !== -1) _savedPinsData.splice(di, 1);
   if (_poiInfoWindow) _poiInfoWindow.close();
   showToast('Pin eliminado');
 };
@@ -3691,7 +3708,6 @@ let _savedPinsData = []; // persiste entre sesiones del mapa
 let _tapPin = null;
 let _tapLatLng = null;
 let _tapPhotoBase64 = null;
-let _pinIdCounter = 0;
 
 // ── Compartir mapa ──
 
