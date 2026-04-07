@@ -3016,25 +3016,42 @@ function diarioPickGallery() {
 function diarioPickNavigate() {
   const lat = _diario.lat, lng = _diario.lng;
   if (!lat && !lng) return;
-  window.open('https://www.google.com/maps/@' + lat + ',' + lng + ',17z', '_blank');
+  window.open('https://www.google.com/maps?q=' + lat + ',' + lng, '_blank');
 }
 async function diarioPickSave() {
-  if (!currentUser) { showToast('Inicia sesión para guardar'); return; }
-  const uid = currentUser.uid;
+  if (!currentUser) { showToast('Inicia sesión para guardar'); closeDiarioPicker(); openModal('login'); return; }
+  const lat = _diario.lat, lng = _diario.lng;
+  if (!lat && !lng) { showToast('Toca el mapa primero'); return; }
+
+  // Pin permanente en el mapa (verde, visual)
+  if (_liveMap) {
+    const marker = new google.maps.Marker({
+      map: _liveMap,
+      position: { lat, lng },
+      icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#5CB85C', fillOpacity: 0.95, strokeColor: '#fff', strokeWeight: 2, scale: 10 },
+      label: { text: '📌', fontSize: '14px' },
+      title: _diario.locName,
+      zIndex: 150,
+    });
+    _mapPins.push(marker);
+    _savedPinsData.push({ lat, lng, locName: _diario.locName, place_type: 'other' });
+  }
+
+  // Limpiar pin temporal
+  if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
+
+  // Guardar en Firestore
   try {
-    await db.collection('users').doc(uid).collection('pins').add({
-      lat: _diario.lat,
-      lng: _diario.lng,
+    await db.collection('users').doc(currentUser.uid).collection('pins').add({
+      lat, lng,
       locName: _diario.locName,
       routeId: _activeRouteDocId || null,
       createdAt: new Date().toISOString()
     });
-    showToast('📌 Punto guardado');
-    closeDiarioPicker();
-  } catch (e) {
-    console.warn('[Pin save]', e);
-    showToast('Error al guardar');
-  }
+  } catch (e) { console.warn('[Pin save]', e); }
+
+  showToast('📌 Punto guardado');
+  closeDiarioPicker();
 }
 function diarioPickDelete() {
   if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
@@ -3210,7 +3227,7 @@ function _drawDiarioKodak(ctx, photo, W, H, transport, loc, mapImg, msgTxt) {
 }
 
 // Share/download
-function _diarioMapsLink() { return 'https://www.google.com/maps/@'+_diario.lat+','+_diario.lng+',17z'; }
+function _diarioMapsLink() { return 'https://www.google.com/maps?q='+_diario.lat+','+_diario.lng; }
 function _diarioShareText() {
   return 'Estoy bien mama! 📍 '+_diario.locName+'\n'+_diarioMapsLink();
 }

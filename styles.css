@@ -3565,68 +3565,72 @@ body {
 }
 .lml-row input[type="checkbox"]:checked::after { transform: translateX(16px); }
 
-/* ── Picker acciones mapa (moderno) ── */
+/* ── Picker acciones mapa (sin marco, estilo botones mapa) ── */
 #diario-picker {
   position: fixed;
   bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
   left: 50%;
   transform: translateX(-50%);
   z-index: 980;
-  background: rgba(12,10,6,0.96);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 22px;
-  padding: 14px 16px 10px;
-  backdrop-filter: blur(16px);
-  min-width: 300px;
-  max-width: 92vw;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 .dpick-row {
   display: flex;
-  gap: 6px;
+  gap: 10px;
   justify-content: center;
 }
 .dpick-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px;
-  padding: 10px 12px 8px;
-  min-width: 56px;
+  gap: 3px;
+  background: rgba(12,10,6,0.92);
+  border: 1px solid rgba(212,168,67,0.35);
+  border-radius: 50%;
+  width: 52px; height: 52px;
+  justify-content: center;
   cursor: pointer;
-  transition: background .15s, border-color .15s;
+  backdrop-filter: blur(8px);
+  transition: background .15s, transform .12s;
+  padding: 0;
 }
-.dpick-btn:active { background: rgba(255,255,255,0.12); }
+.dpick-btn:active { background: rgba(12,10,6,1); transform: scale(0.92); }
 .dpick-icon { font-size: 20px; line-height: 1; }
-.dpick-label { font-size: 10px; font-weight: 600; color: rgba(244,239,230,0.7); letter-spacing: .02em; }
-.dpick-nav { background: rgba(212,168,67,0.12); border-color: rgba(212,168,67,0.30); }
-.dpick-nav .dpick-label { color: var(--dorado, #D4A843); }
-.dpick-save { background: rgba(92,184,93,0.10); border-color: rgba(92,184,93,0.25); }
+.dpick-label { font-size: 8px; font-weight: 700; color: var(--dorado, #D4A843); letter-spacing: .03em; text-transform: uppercase; }
+.dpick-save { border-color: rgba(92,184,93,0.40); }
 .dpick-save .dpick-label { color: #5CB85C; }
-.dpick-del { background: rgba(217,83,79,0.08); border-color: rgba(217,83,79,0.20); }
+.dpick-del { border-color: rgba(217,83,79,0.35); }
 .dpick-del .dpick-label { color: #D9534F; }
 .dpick-loc {
-  text-align: center;
   font-size: 11px;
-  color: rgba(244,239,230,0.45);
-  margin-top: 8px;
+  color: rgba(244,239,230,0.55);
+  background: rgba(12,10,6,0.75);
+  padding: 4px 14px;
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  max-width: 80vw;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .dpick-close {
   position: absolute;
-  top: 6px;
-  right: 10px;
-  background: none;
-  border: none;
-  color: rgba(244,239,230,0.35);
-  font-size: 16px;
+  top: -8px;
+  right: -8px;
+  background: rgba(12,10,6,0.85);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 50%;
+  width: 28px; height: 28px;
+  color: rgba(244,239,230,0.5);
+  font-size: 14px;
   cursor: pointer;
-  padding: 4px;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(8px);
 }
 
 .itin-view {
