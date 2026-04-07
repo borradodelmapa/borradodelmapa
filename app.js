@@ -107,9 +107,9 @@ function showState(state) {
     if (layer) layer.remove();
     $content.classList.remove('app-content--chat');
   }
-  // FAB Mi Diario: visible en todo menos welcome y chat
-  const fab = document.getElementById('fab-diario');
-  if (fab) fab.style.display = (state === 'welcome' || state === 'chat') ? 'none' : 'flex';
+  // FAB mapa: visible en todo menos welcome
+  const fab = document.getElementById('fab-map');
+  if (fab) fab.style.display = (state === 'welcome' || !currentUser) ? 'none' : '';
 }
 
 function updateHeader() {
@@ -1033,8 +1033,8 @@ async function renderGaleria(albumFilter) {
   let albumes = [];
   try {
     const [fotosSnap, albumesSnap] = await Promise.all([
-      db.collection('users').doc(uid).collection('fotos').orderBy('createdAt', 'desc').get(),
-      db.collection('users').doc(uid).collection('albumes').orderBy('createdAt', 'desc').get()
+      db.collection('users').doc(uid).collection('fotos').orderBy('createdAt', 'desc').limit(60).get(),
+      db.collection('users').doc(uid).collection('albumes').orderBy('createdAt', 'desc').limit(20).get()
     ]);
     fotosSnap.forEach(d => fotos.push({ id: d.id, ...d.data() }));
     albumesSnap.forEach(d => albumes.push({ id: d.id, ...d.data() }));
@@ -1042,7 +1042,7 @@ async function renderGaleria(albumFilter) {
     console.warn('[Galería] Error Firestore (puede faltar reglas):', e.message);
     // Intentar cargar fotos de las rutas existentes como fallback
     try {
-      const mapsSnap = await db.collection('users').doc(uid).collection('maps').get();
+      const mapsSnap = await db.collection('users').doc(uid).collection('maps').orderBy('createdAt', 'desc').limit(20).get();
       mapsSnap.forEach(doc => {
         const data = doc.data();
         if (data.photos && Array.isArray(data.photos)) {
@@ -1198,19 +1198,38 @@ function _showFotoActions(foto, albumes, uid, currentAlbumFilter) {
   modal.id = 'foto-actions-modal';
   modal.className = 'modal-overlay active';
 
-  const albumOptions = albumes.map(a =>
-    `<button class="foto-action-btn" data-move="${a.id}">${escapeHTML(a.nombre)}</button>`
-  ).join('');
+  const hasCoords = foto.lat && foto.lng && Math.abs(foto.lat) > 0.01;
+  const dateStr = foto.createdAt ? new Date(foto.createdAt).toLocaleDateString('es-ES') : '';
 
   modal.innerHTML = `
-    <div class="modal" style="max-width:340px">
-      <button class="modal-close" id="foto-modal-close">&times;</button>
-      <img src="${escapeHTML(foto.url)}" style="width:100%;border-radius:8px;margin-bottom:12px">
-      ${foto.caption ? `<p style="font-size:13px;color:var(--crema);margin-bottom:12px">${escapeHTML(foto.caption)}</p>` : ''}
-      <div style="font-size:11px;color:rgba(244,239,230,.4);margin-bottom:16px">${TAG_ICONS[foto.tag] || '📷'} ${foto.tag || 'otro'} · ${new Date(foto.createdAt).toLocaleDateString('es-ES')}</div>
-      ${albumes.length > 0 ? `<div class="foto-action-section">Mover a álbum:</div>${albumOptions}` : ''}
-      ${foto.albumId ? `<button class="foto-action-btn" data-move="__quitar__">Quitar de álbum</button>` : ''}
-      <button class="foto-action-btn foto-action-delete" id="foto-delete">Eliminar foto</button>
+    <div class="foto-detail">
+      <button class="foto-detail-close" id="foto-modal-close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <img src="${escapeHTML(foto.url)}" class="foto-detail-img">
+      <div class="foto-detail-meta">
+        ${foto.caption ? `<div class="foto-detail-caption">${escapeHTML(foto.caption)}</div>` : ''}
+        <div class="foto-detail-info">${TAG_ICONS[foto.tag] || '📷'} ${foto.tag || 'foto'} ${dateStr ? '· ' + dateStr : ''}</div>
+        ${hasCoords ? `<div class="foto-detail-coords">📍 ${foto.lat.toFixed(3)}, ${foto.lng.toFixed(3)}</div>` : ''}
+      </div>
+      <div class="foto-detail-actions">
+        <button class="foto-act" id="foto-act-share">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Compartir
+        </button>
+        <button class="foto-act" id="foto-act-download">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar
+        </button>
+        ${hasCoords ? `<button class="foto-act" id="foto-act-map">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Ver en mapa
+        </button>` : ''}
+        <button class="foto-act foto-act-danger" id="foto-delete">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          Eliminar
+        </button>
+      </div>
     </div>`;
 
   document.body.appendChild(modal);
@@ -1219,21 +1238,48 @@ function _showFotoActions(foto, albumes, uid, currentAlbumFilter) {
   modal.querySelector('#foto-modal-close').addEventListener('click', () => modal.remove());
   modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
 
-  // Mover a álbum
-  modal.querySelectorAll('[data-move]').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const targetAlbum = btn.dataset.move;
-      try {
-        await db.collection('users').doc(uid).collection('fotos').doc(foto.id).update({
-          albumId: targetAlbum === '__quitar__' ? null : targetAlbum
-        });
-        modal.remove();
-        if (typeof showToast === 'function') showToast(targetAlbum === '__quitar__' ? 'Foto quitada del álbum' : 'Foto movida');
-        renderGaleria(currentAlbumFilter);
-      } catch (e) {
-        if (typeof showToast === 'function') showToast('Error al mover foto');
+  // Compartir
+  modal.querySelector('#foto-act-share')?.addEventListener('click', async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({ url: foto.url, title: foto.caption || 'Foto de viaje' });
+      } else {
+        await navigator.clipboard.writeText(foto.url);
+        if (typeof showToast === 'function') showToast('Enlace copiado');
       }
-    });
+    } catch (_) {}
+  });
+
+  // Descargar
+  modal.querySelector('#foto-act-download')?.addEventListener('click', () => {
+    const a = document.createElement('a');
+    a.href = foto.url;
+    a.download = foto.caption || 'foto-viaje';
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  });
+
+  // Ver en mapa → guardar pin + abrir mapa
+  modal.querySelector('#foto-act-map')?.addEventListener('click', async () => {
+    try {
+      // Guardar pin en mapa
+      await db.collection('users').doc(uid).collection('map_pins').add({
+        lat: foto.lat,
+        lng: foto.lng,
+        type: 'photo',
+        label: foto.caption || 'Foto',
+        photoUrl: foto.url,
+        createdAt: new Date().toISOString()
+      });
+      modal.remove();
+      if (typeof showToast === 'function') showToast('📍 Pin guardado en el mapa');
+      // Abrir mapa si está disponible
+      if (typeof openLiveMap === 'function') openLiveMap();
+    } catch (e) {
+      if (typeof showToast === 'function') showToast('Error al guardar pin');
+    }
   });
 
   // Eliminar
@@ -1241,7 +1287,6 @@ function _showFotoActions(foto, albumes, uid, currentAlbumFilter) {
     if (!confirm('¿Eliminar esta foto?')) return;
     try {
       await db.collection('users').doc(uid).collection('fotos').doc(foto.id).delete();
-      // Eliminar de R2
       if (foto.key) {
         fetch(window.SALMA_API + '/delete-photo', {
           method: 'POST',
@@ -1661,7 +1706,7 @@ async function loadUserGuides() {
 
   try {
     const snap = await db.collection('users').doc(currentUser.uid)
-      .collection('maps').orderBy('createdAt', 'desc').get();
+      .collection('maps').orderBy('createdAt', 'desc').limit(30).get();
 
     const grid = document.getElementById('viajes-grid');
 
@@ -2283,6 +2328,13 @@ $input.addEventListener('input', () => {
 });
 
 $send.addEventListener('click', sendMessage);
+
+// FAB Mapa → abrir mapa en vivo
+const _fabMap = document.getElementById('fab-map');
+if (_fabMap) _fabMap.addEventListener('click', () => {
+  if (typeof openLiveMap === 'function') openLiveMap();
+});
+
 $input.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
@@ -2901,10 +2953,8 @@ function toggleMapCat(checkbox) {
 }
 
 function _closeMapPanels() {
-  const lp = document.getElementById('live-map-layers-panel');
-  const mp = document.getElementById('live-map-maptype-panel');
-  if (lp) lp.style.display = 'none';
-  if (mp) mp.style.display = 'none';
+  document.getElementById('live-map-layers-panel').style.display = 'none';
+  document.getElementById('live-map-maptype-panel').style.display = 'none';
 }
 
 function toggleMapLayersPanel() {
@@ -2932,479 +2982,10 @@ function setLiveMapType(type) {
   });
 }
 
-// ── Mini-menú herramientas (toggle) ──
-function toggleLiveMapTools() {
-  const menu = document.getElementById('live-map-tools-menu');
-  if (!menu) return;
-  const visible = menu.style.display !== 'none';
-  menu.style.display = visible ? 'none' : 'flex';
-  // Cerrar paneles si se cierra el menú
-  if (visible) {
-    document.getElementById('live-map-maptype-panel').style.display = 'none';
-    document.getElementById('live-map-layers-panel').style.display = 'none';
-  }
-}
-function closeLiveMapTools() {
-  const menu = document.getElementById('live-map-tools-menu');
-  if (menu) menu.style.display = 'none';
-}
-// ══════════════════════════════════════════
-// MI DIARIO — tap mapa → cámara → story → compartir
-// ══════════════════════════════════════════
-
-const _diario = {
-  photo: null,
-  locName: '',
-  lat: 0, lng: 0,
-  lastBlob: null,
-  mapImg: null,
-};
-
-// Tap mapa o FAB → muestra picker foto/galería
-function diarioCapture() {
-  // Si viene del FAB, usar ubicación actual del mapa
-  if (_liveMap) {
-    const c = _liveMap.getCenter();
-    _diario.lat = c.lat(); _diario.lng = c.lng();
-  } else if (window._salmaUserLat) {
-    _diario.lat = window._salmaUserLat; _diario.lng = window._salmaUserLng;
-  }
-  _diarioGeocode();
-  _showDiarioPicker();
-}
-
-// Reverse geocode silencioso
-function _diarioGeocode() {
-  if (!window.google || !google.maps || !google.maps.Geocoder) {
-    _diario.locName = window._salmaUserCountry || '';
-    return;
-  }
-  const geocoder = new google.maps.Geocoder();
-  geocoder.geocode({ location: { lat: _diario.lat, lng: _diario.lng } }, (results, status) => {
-    if (status === 'OK' && results[0]) {
-      const parts = results[0].address_components;
-      const city = (parts.find(p => p.types.includes('locality')) || parts.find(p => p.types.includes('administrative_area_level_1')) || {}).long_name || '';
-      const country = (parts.find(p => p.types.includes('country')) || {}).long_name || '';
-      _diario.locName = city && country ? city + ' · ' + country : results[0].formatted_address;
-    } else {
-      _diario.locName = _diario.lat.toFixed(3) + ', ' + _diario.lng.toFixed(3);
-    }
-  });
-}
-
-// ── Picker foto/galería ──
-function _showDiarioPicker() {
-  const picker = document.getElementById('diario-picker');
-  if (picker) picker.style.display = 'block';
-  const loc = document.getElementById('dpick-loc');
-  if (loc) loc.textContent = _diario.locName || '';
-}
-function closeDiarioPicker() {
-  const picker = document.getElementById('diario-picker');
-  if (picker) picker.style.display = 'none';
-}
-function diarioPickCamera() {
-  closeDiarioPicker();
-  const input = document.getElementById('diario-camera-input');
-  if (input) input.click();
-}
-function diarioPickGallery() {
-  closeDiarioPicker();
-  const input = document.getElementById('diario-gallery-input');
-  if (input) input.click();
-}
-function diarioPickNavigate() {
-  const lat = _diario.lat, lng = _diario.lng;
-  if (!lat && !lng) return;
-  window.open('https://www.google.com/maps?q=' + lat + ',' + lng, '_blank');
-}
-async function diarioPickSave() {
-  if (!currentUser) { showToast('Inicia sesión para guardar'); closeDiarioPicker(); openModal('login'); return; }
-  const lat = _diario.lat, lng = _diario.lng;
-  if (!lat && !lng) { showToast('Toca el mapa primero'); return; }
-
-  // Pin permanente en el mapa (dorado, con ID y click handler)
-  if (_liveMap) {
-    const pinId = 'spin_' + (++_pinIdCounter) + '_' + Date.now();
-    const marker = new google.maps.Marker({
-      map: _liveMap,
-      position: { lat, lng },
-      icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#D4A843', fillOpacity: 0.95, strokeColor: '#fff', strokeWeight: 2, scale: 10 },
-      title: _diario.locName,
-      zIndex: 150,
-    });
-    marker._pinId = pinId;
-    marker._pinData = { lat, lng, locName: _diario.locName, photoUrl: null };
-    marker.addListener('click', () => _showPinInfo(marker));
-    _mapPins.push(marker);
-    _savedPinsData.push({ lat, lng, locName: _diario.locName, place_type: 'other', _pinId: pinId });
-  }
-
-  // Limpiar pin temporal
-  if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
-
-  // Guardar en Firestore
-  try {
-    await db.collection('users').doc(currentUser.uid).collection('pins').add({
-      lat, lng,
-      locName: _diario.locName,
-      routeId: _activeRouteDocId || null,
-      createdAt: new Date().toISOString()
-    });
-  } catch (e) { console.warn('[Pin save]', e); }
-
-  showToast('📌 Punto guardado');
-  closeDiarioPicker();
-}
-function diarioPickDelete() {
-  if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
-  _tapLatLng = null;
-  closeDiarioPicker();
-  showToast('Pin eliminado');
-}
-window.diarioPickNavigate = diarioPickNavigate;
-window.diarioPickSave = diarioPickSave;
-window.diarioPickDelete = diarioPickDelete;
-window.diarioPickCamera = diarioPickCamera;
-window.diarioPickGallery = diarioPickGallery;
-window.closeDiarioPicker = closeDiarioPicker;
-
-// Listener: tras elegir/capturar foto → generar story automáticamente
-function _onDiarioPhoto(e) {
-  const f = e.target.files[0]; if (!f) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const img = new Image();
-    img.onload = () => {
-      _diario.photo = img;
-      if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
-      generateDiarioStory();
-    };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(f);
-  e.target.value = '';
-}
-document.addEventListener('DOMContentLoaded', () => {
-  const cam = document.getElementById('diario-camera-input');
-  const gal = document.getElementById('diario-gallery-input');
-  if (cam) cam.addEventListener('change', _onDiarioPhoto);
-  if (gal) gal.addEventListener('change', _onDiarioPhoto);
-});
-
-// Generar story Kodak automáticamente
-async function generateDiarioStory() {
-  if (!_diario.photo) return;
-
-  // Load map background
-  const mapUrl = 'https://maps.googleapis.com/maps/api/staticmap?center='
-    + _diario.lat+','+_diario.lng+'&zoom=14&size=640x640'
-    + '&style=element:geometry%7Ccolor:0x1d2c4d&style=element:labels.text.fill%7Ccolor:0x8ec3b9&style=feature:road%7Celement:geometry%7Ccolor:0x304a7d&style=feature:water%7Celement:geometry%7Ccolor:0x0e1626&style=feature:poi%7Cvisibility:off'
-    + '&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
-  try {
-    const mapImg = await new Promise((resolve, reject) => {
-      const i = new Image(); i.crossOrigin='anonymous';
-      i.onload = () => resolve(i); i.onerror = reject; i.src = mapUrl;
-    });
-    // Scale map to story size
-    const tmp = document.createElement('canvas'); tmp.width=1080; tmp.height=1920;
-    tmp.getContext('2d').drawImage(mapImg,0,0,1080,1920);
-    const scaled = new Image();
-    await new Promise(r => { scaled.onload=r; scaled.src=tmp.toDataURL(); });
-    _diario.mapImg = scaled;
-  } catch(e) { _diario.mapImg = null; }
-
-  // Draw Kodak frame
-  const c = document.getElementById('diario-canvas');
-  const ctx = c.getContext('2d');
-  _drawDiarioKodak(ctx, _diario.photo, 1080, 1920, null, _diario.locName, _diario.mapImg, '');
-
-  // Save blob
-  await new Promise(resolve => { c.toBlob(b => { _diario.lastBlob = b; resolve(); }, 'image/jpeg', 0.95); });
-
-  // Show result
-  document.getElementById('diario-result-loc-txt').textContent = _diario.locName;
-  document.getElementById('diario-result').classList.add('on');
-
-  // Auto-guardar en galería del usuario
-  _diarioSaved = false;
-  _saveDiarioToGallery();
-}
-
-function _drawDiarioKodak(ctx, photo, W, H, transport, loc, mapImg, msgTxt) {
-  const fs = W / 1080;
-
-  // Background: map or dark gradient
-  if (mapImg) {
-    const mr = mapImg.naturalWidth/mapImg.naturalHeight, cr = W/H;
-    let sx=0,sy=0,sw=mapImg.naturalWidth,sh=mapImg.naturalHeight;
-    if(mr>cr){sw=sh*cr;sx=(mapImg.naturalWidth-sw)/2;}else{sh=sw/cr;sy=(mapImg.naturalHeight-sh)/2;}
-    ctx.drawImage(mapImg,sx,sy,sw,sh,0,0,W,H);
-    ctx.fillStyle='rgba(10,10,9,0.48)'; ctx.fillRect(0,0,W,H);
-  } else {
-    const bg=ctx.createLinearGradient(0,0,W,H);
-    bg.addColorStop(0,'#0F1520');bg.addColorStop(1,'#060810');
-    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
-  }
-
-  // Kodak print
-  const printW=Math.round(W*0.80), printX=Math.round((W-printW)/2);
-  const bT=Math.round(26*fs),bS=Math.round(26*fs),bB=Math.round(96*fs);
-  const phW=printW-bS*2, phH=Math.round(phW*1.24);
-  const printH=bT+phH+bB, printY=Math.round((H-printH)*0.36);
-  const phX=printX+bS, phY=printY+bT;
-
-  // Shadow + white print
-  ctx.save();
-  ctx.shadowColor='rgba(0,0,0,0.85)';ctx.shadowBlur=Math.round(70*fs);ctx.shadowOffsetY=Math.round(30*fs);
-  ctx.fillStyle='#F8F6F0';ctx.fillRect(printX,printY,printW,printH);
-  ctx.restore();
-  ctx.fillStyle='#F8F6F0';ctx.fillRect(printX,printY,printW,printH);
-
-  // Photo
-  if(photo){
-    ctx.save();ctx.beginPath();ctx.rect(phX,phY,phW,phH);ctx.clip();
-    const ir=photo.naturalWidth/photo.naturalHeight,cr2=phW/phH;
-    let sx=0,sy=0,sw=photo.naturalWidth,sh=photo.naturalHeight;
-    if(ir>cr2){sw=sh*cr2;sx=(photo.naturalWidth-sw)/2;}else{sh=sw/cr2;sy=(photo.naturalHeight-sh)/2;}
-    ctx.drawImage(photo,sx,sy,sw,sh,phX,phY,phW,phH);
-    ctx.restore();
-    // Vignette
-    const vig=ctx.createRadialGradient(phX+phW/2,phY+phH/2,phW*.3,phX+phW/2,phY+phH/2,phW*.72);
-    vig.addColorStop(0,'rgba(0,0,0,0)');vig.addColorStop(1,'rgba(0,0,0,0.20)');
-    ctx.fillStyle=vig;ctx.fillRect(phX,phY,phW,phH);
-  }
-
-  // Transport badge
-  if(transport){
-    const bSz=Math.round(80*fs),bPad=Math.round(16*fs);
-    ctx.save();ctx.fillStyle='rgba(0,0,0,0.55)';
-    ctx.beginPath();ctx.roundRect(phX+bPad,phY+bPad,bSz,bSz,Math.round(12*fs));ctx.fill();
-    ctx.font=Math.round(50*fs)+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.fillText(transport,phX+bPad+bSz/2,phY+bPad+bSz/2);
-    ctx.restore();
-  }
-
-  // Date badge
-  const dateStr=new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'2-digit'});
-  {
-    const bH=Math.round(46*fs),bW=Math.round(158*fs),bPad=Math.round(16*fs);
-    ctx.save();ctx.fillStyle='rgba(0,0,0,0.55)';
-    ctx.beginPath();ctx.roundRect(phX+phW-bW-bPad,phY+bPad,bW,bH,Math.round(7*fs));ctx.fill();
-    ctx.fillStyle='rgba(255,255,255,0.92)';ctx.font='bold '+Math.round(22*fs)+'px -apple-system,sans-serif';
-    ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.fillText(dateStr,phX+phW-bW/2-bPad,phY+bPad+bH/2);
-    ctx.restore();
-  }
-
-  // Bottom strip: KODAK
-  const sY=phY+phH,sH=bB;
-  ctx.fillStyle='#E01B22';ctx.font='bold '+Math.round(32*fs)+'px Georgia,serif';
-  ctx.textAlign='left';ctx.textBaseline='top';
-  ctx.fillText('KODAK',phX,sY+Math.round(14*fs));
-  ctx.fillStyle='rgba(0,0,0,0.28)';ctx.font=Math.round(16*fs)+'px Georgia,serif';
-  ctx.fillText('GOLD 200',phX,sY+Math.round(50*fs));
-  const shortLoc=loc.length>26?loc.substring(0,24)+'…':loc;
-  ctx.fillStyle='rgba(0,0,0,0.80)';ctx.font='bold '+Math.round(24*fs)+'px -apple-system,sans-serif';
-  ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillText('📍 '+shortLoc,W/2,sY+sH*0.46);
-  ctx.fillStyle='rgba(0,0,0,0.30)';ctx.font='bold '+Math.round(26*fs)+'px Georgia,serif';
-  ctx.textAlign='right';ctx.textBaseline='top';
-  ctx.fillText('36',phX+phW,sY+Math.round(14*fs));
-
-  // Message below print
-  if(msgTxt){
-    const msgY=printY+printH+Math.round(56*fs);
-    ctx.fillStyle='rgba(244,239,230,0.96)';ctx.font='bold '+Math.round(46*fs)+'px -apple-system,sans-serif';
-    ctx.textAlign='center';ctx.textBaseline='top';
-    const words=msgTxt.split(' ');let line='',lines=[];
-    words.forEach(w=>{const t=line?line+' '+w:w;if(ctx.measureText(t).width>W-Math.round(140*fs)&&line){lines.push(line);line=w;}else line=t;});
-    if(line)lines.push(line);
-    lines.forEach((l,i)=>ctx.fillText(l,W/2,msgY+i*Math.round(62*fs)));
-  }
-
-  // Watermark
-  ctx.fillStyle='rgba(244,239,230,0.20)';ctx.font=Math.round(22*fs)+'px -apple-system,sans-serif';
-  ctx.textAlign='right';ctx.textBaseline='bottom';
-  ctx.fillText('borradodelmapa.com',W-Math.round(44*fs),H-Math.round(44*fs));
-}
-
-// Share/download
-function _diarioMapsLink() { return 'https://www.google.com/maps?q='+_diario.lat+','+_diario.lng; }
-function _diarioShareText() {
-  return 'Estoy bien mama! Mira aquí estoy 📍\n'+_diario.locName+'\n'+_diarioMapsLink()+'\n\nborradodelmapa.com';
-}
-
-// Al compartir/descargar → guardar en galería + pin en mapa
-function _diarioAutoSave() {
-  _saveDiarioToGallery();
-  _diarioDropPermanentPin();
-}
-let _pinIdCounter = 0;
-function _diarioDropPermanentPin() {
-  if (!_liveMap || !_diario.lat) return;
-  const pinId = 'dpin_' + (++_pinIdCounter) + '_' + Date.now();
-  // Guardar foto como object URL si existe
-  let photoUrl = null;
-  if (_diario.lastBlob) {
-    try { photoUrl = URL.createObjectURL(_diario.lastBlob); } catch(e) {}
-  }
-  const marker = new google.maps.Marker({
-    map: _liveMap,
-    position: { lat: _diario.lat, lng: _diario.lng },
-    icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#D4A843', fillOpacity: 0.95, strokeColor: '#fff', strokeWeight: 2, scale: 10 },
-    title: _diario.locName,
-    zIndex: 150,
-  });
-  marker._pinId = pinId;
-  marker._pinData = { lat: _diario.lat, lng: _diario.lng, locName: _diario.locName, photoUrl: photoUrl };
-  marker.addListener('click', () => _showPinInfo(marker));
-  _mapPins.push(marker);
-  _savedPinsData.push({ lat: _diario.lat, lng: _diario.lng, locName: _diario.locName, place_type: 'other', _pinId: pinId });
-}
-
-async function shareDiarioWA() {
-  if(!_diario.lastBlob) return;
-  _diarioAutoSave();
-  const file=new File([_diario.lastBlob],'mi-diario.jpg',{type:'image/jpeg'});
-  const txt=_diarioShareText();
-  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-    try{await navigator.share({files:[file],text:txt});return;}catch(e){}
-  }
-  const a=document.createElement('a');a.href=URL.createObjectURL(_diario.lastBlob);
-  a.download='mi-diario.jpg';a.click();
-  if(typeof showToast==='function')showToast('📸 Descargada — adjúntala en WhatsApp');
-  setTimeout(()=>window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank'),700);
-}
-
-function downloadDiario() {
-  if(!_diario.lastBlob) return;
-  _diarioAutoSave();
-  const a=document.createElement('a');a.href=URL.createObjectURL(_diario.lastBlob);
-  a.download='mi-diario-'+Date.now()+'.jpg';a.click();
-  if(typeof showToast==='function')showToast('✓ Guardada');
-}
-
-async function shareDiarioNative() {
-  if(!_diario.lastBlob) return;
-  _diarioAutoSave();
-  const file=new File([_diario.lastBlob],'mi-diario.jpg',{type:'image/jpeg'});
-  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-    try{await navigator.share({files:[file],text:_diarioShareText()});}catch(e){}
-  } else { downloadDiario(); }
-}
-
-function closeDiarioResult() { document.getElementById('diario-result').classList.remove('on'); }
-
-async function diarioResultSave() {
-  _diarioAutoSave();
-  showToast('📌 Guardado en tu mapa');
-}
-window.diarioResultSave = diarioResultSave;
-
-// Info al tocar pin guardado (con foto si existe)
-function _showPinInfo(marker) {
-  if (!_poiInfoWindow || !_liveMap) return;
-  const d = marker._pinData || {};
-  const pinId = marker._pinId || '';
-  const mapsUrl = 'https://www.google.com/maps?q=' + d.lat + ',' + d.lng;
-  const photoHtml = d.photoUrl
-    ? `<img src="${d.photoUrl}" style="width:100%;height:140px;object-fit:cover;border-radius:10px 10px 0 0;display:block">`
-    : '';
-  const padTop = d.photoUrl ? '10px' : '12px';
-  const content = `
-    <div style="font-family:'Inter',sans-serif;width:240px;border-radius:10px;overflow:hidden;background:#fff">
-      ${photoHtml}
-      <div style="padding:${padTop} 12px 12px">
-        <div style="font-size:14px;font-weight:700;color:#111;margin-bottom:3px">📍 ${d.locName || 'Pin guardado'}</div>
-        <div style="font-size:11px;color:#888;margin-bottom:10px">${d.lat?.toFixed(5)}, ${d.lng?.toFixed(5)}</div>
-        <div style="display:flex;gap:6px">
-          <a href="${mapsUrl}" target="_blank" rel="noopener"
-            style="flex:1;text-align:center;background:#D4A843;color:#0a0a0f;border-radius:8px;padding:8px;font-size:11px;font-weight:700;text-decoration:none">
-            Ver en Maps
-          </a>
-          <button onclick="window._deletePinById('${pinId}')"
-            style="flex:1;background:#D9534F;color:#fff;border:none;border-radius:8px;padding:8px;font-size:11px;font-weight:700;cursor:pointer">
-            Eliminar
-          </button>
-        </div>
-      </div>
-    </div>`;
-  _poiInfoWindow.setContent(content);
-  _poiInfoWindow.open(_liveMap, marker);
-}
-window._deletePinById = function(pinId) {
-  const mi = _mapPins.findIndex(m => m._pinId === pinId);
-  if (mi !== -1) { _mapPins[mi].setMap(null); _mapPins.splice(mi, 1); }
-  const di = _savedPinsData.findIndex(d => d._pinId === pinId);
-  if (di !== -1) _savedPinsData.splice(di, 1);
-  if (_poiInfoWindow) _poiInfoWindow.close();
-  showToast('Pin eliminado');
-};
-
-// Auto-guardar story en Firestore (ruta activa o galería general)
-let _diarioSaved = false;
-async function _saveDiarioToGallery() {
-  if (_diarioSaved || !_diario.lastBlob || !currentUser) return;
-  _diarioSaved = true;
-  try {
-    const uid = currentUser.uid;
-    // Comprimir blob para subir
-    const formData = new FormData();
-    formData.append('photo', _diario.lastBlob, 'mi-diario.jpg');
-    formData.append('uid', uid);
-
-    const res = await fetch(window.SALMA_API + '/upload-gallery-photo', {
-      method: 'POST',
-      body: formData
-    });
-    if (!res.ok) throw new Error('Upload failed');
-    const { key, url } = await res.json();
-
-    const now = new Date().toISOString();
-
-    // Guardar foto en galería
-    await db.collection('users').doc(uid).collection('fotos').add({
-      key, url,
-      tag: 'diario',
-      caption: _diario.locName,
-      albumId: null,
-      routeId: _activeRouteDocId || null,
-      lat: _diario.lat,
-      lng: _diario.lng,
-      source: 'diario',
-      createdAt: now
-    });
-
-    // Guardar pin del viajero (para mapa interactivo)
-    await db.collection('users').doc(uid).collection('pins').add({
-      lat: _diario.lat,
-      lng: _diario.lng,
-      locName: _diario.locName,
-      photoUrl: url,
-      routeId: _activeRouteDocId || null,
-      createdAt: now
-    });
-
-    if (typeof showToast === 'function') showToast('📸 Guardada en tu galería');
-  } catch (e) {
-    console.warn('[Diario save]', e);
-    _diarioSaved = false; // Permitir reintentar
-  }
-}
-
 window.toggleMapCat = toggleMapCat;
 window.toggleMapLayersPanel = toggleMapLayersPanel;
 window.toggleMapTypePanel = toggleMapTypePanel;
 window.setLiveMapType = setLiveMapType;
-window.toggleLiveMapTools = toggleLiveMapTools;
-window.closeLiveMapTools = closeLiveMapTools;
-window.diarioCapture = diarioCapture;
-window.generateDiarioStory = generateDiarioStory;
-window.shareDiarioWA = shareDiarioWA;
-window.downloadDiario = downloadDiario;
-window.shareDiarioNative = shareDiarioNative;
-window.closeDiarioResult = closeDiarioResult;
 
 // Inicializar estilo base
 _buildMapStyle();
@@ -3425,6 +3006,7 @@ function openLiveMap() {
   view.style.display = 'block';
   if (bar) bar.style.display = 'none';
   document.querySelector('.app-header')?.style.setProperty('display', 'none', 'important');
+
   // Cerrar cualquier sheet que haya quedado abierta
   closeSalmaMapSheet();
   closeTapSheet();
@@ -3446,7 +3028,6 @@ function openLiveMap() {
       _liveMap = new google.maps.Map(el, {
         zoom: 15,
         center: _lastPos || { lat: 40.416, lng: -3.703 },
-        mapTypeId: 'hybrid',
         styles: window._mapStyle,
         disableDefaultUI: true,
         gestureHandling: 'greedy',
@@ -3560,7 +3141,7 @@ async function openRouteSelector() {
       item.innerHTML = `<span class="lmrs-item-title">${d.nombre || 'Mi ruta'}</span>
         <span class="lmrs-item-meta">${days} día${days > 1 ? 's' : ''} · ${validStops.length} paradas con coords</span>`;
       item.addEventListener('click', () => {
-        if (routeData) selectRouteOnMap(routeData, doc.id);
+        if (routeData) selectRouteOnMap(routeData);
         else showToast('Esta ruta no tiene datos de mapa');
         closeRouteSelector();
       });
@@ -3578,13 +3159,11 @@ function closeRouteSelector() {
 let _liveRouteStops = [];
 let _liveInfoWindow = null;
 let _activeRouteData = null;
-let _activeRouteDocId = null;
 
-function selectRouteOnMap(routeData, docId) {
+function selectRouteOnMap(routeData) {
   if (!_liveMap || !window.google) return;
   clearRouteFromLiveMap();
   _activeRouteData = routeData;
-  _activeRouteDocId = docId || null;
 
   const dayColors = ['#D4A843','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
   const valid = (routeData.stops || []).filter(s => s.lat && s.lng);
@@ -3689,7 +3268,6 @@ function _updateNearestChip() {
 
 function clearRouteFromLiveMap() {
   _activeRouteData = null;
-  _activeRouteDocId = null;
   _liveRouteMarkers.forEach(m => m.setMap(null));
   _liveRouteMarkers = [];
   if (_liveRoutePolyline) { _liveRoutePolyline.setMap(null); _liveRoutePolyline = null; }
@@ -3714,19 +3292,17 @@ let _savedPinsData = []; // persiste entre sesiones del mapa
 let _tapPin = null;
 let _tapLatLng = null;
 let _tapPhotoBase64 = null;
+let _pinIdCounter = 0;
 
 // ── Compartir mapa ──
 
 function openShareSheet() {
   if (!_savedPinsData.length) { showToast('No hay pins guardados'); return; }
-  const status = document.getElementById('lmsh-status');
-  const sheet = document.getElementById('live-map-share-sheet');
-  if (status) status.textContent = '';
-  if (sheet) sheet.style.display = 'block';
+  document.getElementById('lmsh-status').textContent = '';
+  document.getElementById('live-map-share-sheet').style.display = 'block';
 }
 function closeShareSheet() {
-  const el = document.getElementById('live-map-share-sheet');
-  if (el) el.style.display = 'none';
+  document.getElementById('live-map-share-sheet').style.display = 'none';
 }
 
 async function shareAsImage() {
@@ -3792,7 +3368,6 @@ function _onMapTap(e) {
   if (_poiInfoWindow) _poiInfoWindow.close();
   _tapLatLng = e.latLng;
 
-  // Drop gold pin
   if (_tapPin) {
     _tapPin.setPosition(_tapLatLng);
   } else {
@@ -3809,25 +3384,7 @@ function _onMapTap(e) {
       zIndex: 200,
     });
   }
-
-  // Save coordinates for diario — set fallback name immediately
-  _diario.lat = _tapLatLng.lat();
-  _diario.lng = _tapLatLng.lng();
-  _diario.locName = _diario.lat.toFixed(3) + ', ' + _diario.lng.toFixed(3);
-
-  // Reverse geocode in background (non-blocking, best-effort)
-  if (!window._diarioGeocoder) window._diarioGeocoder = new google.maps.Geocoder();
-  window._diarioGeocoder.geocode({ location: _tapLatLng }, (results, status) => {
-    if (status === 'OK' && results[0]) {
-      const parts = results[0].address_components;
-      const city = (parts.find(p => p.types.includes('locality')) || parts.find(p => p.types.includes('administrative_area_level_1')) || {}).long_name || '';
-      const country = (parts.find(p => p.types.includes('country')) || {}).long_name || '';
-      if (city || country) _diario.locName = city && country ? city + ' · ' + country : results[0].formatted_address;
-    }
-  });
-
-  // Show photo/gallery picker
-  _showDiarioPicker();
+  _showTapSheet(_tapLatLng);
 }
 
 function closeTapSheet() {
@@ -3942,15 +3499,12 @@ function _showTapSheet(latLng) {
 }
 
 function openSalmaMapSheet() {
-  const sheet = document.getElementById('live-map-salma-sheet');
-  const status = document.getElementById('salma-map-status');
-  if (sheet) sheet.style.display = 'block';
-  if (status) status.style.display = 'none';
+  document.getElementById('live-map-salma-sheet').style.display = 'block';
+  document.getElementById('salma-map-status').style.display = 'none';
 }
 
 function closeSalmaMapSheet() {
-  const el = document.getElementById('live-map-salma-sheet');
-  if (el) el.style.display = 'none';
+  document.getElementById('live-map-salma-sheet').style.display = 'none';
 }
 
 function sendSalmaMapPhoto(fileInput) {
