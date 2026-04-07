@@ -136,6 +136,26 @@ window._loadGoogleMaps = function() {
   <button id="live-map-center" onclick="liveMapCenter()" title="Mi ubicación">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
   </button>
+  <!-- Capas POI (restaurantes, hoteles, farmacias…) -->
+  <button id="live-map-layers-btn" onclick="toggleMapLayersPanel()" title="Capas">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+  </button>
+  <div id="live-map-layers-panel" style="display:none">
+    <div class="lml-title">Mostrar en el mapa</div>
+    <label class="lml-row"><span>🍽️ Restaurantes</span><input type="checkbox" data-cat="food" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>💊 Farmacias</span><input type="checkbox" data-cat="medical" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>🏨 Hoteles</span><input type="checkbox" data-cat="lodging" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>🛒 Supermercados</span><input type="checkbox" data-cat="shopping" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>🌳 Parques</span><input type="checkbox" data-cat="parks" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>🏛️ Cultura</span><input type="checkbox" data-cat="culture" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>🚇 Transporte</span><input type="checkbox" data-cat="transit" onchange="toggleMapCat(this)"></label>
+  </div>
+  <!-- Picker: foto o galería (tras tap en mapa) -->
+  <div id="diario-picker" style="display:none">
+    <button class="diario-pick-btn" id="diario-pick-camera" onclick="diarioPickCamera()">📷 Foto</button>
+    <button class="diario-pick-btn" id="diario-pick-gallery" onclick="diarioPickGallery()">🖼️ Galería</button>
+    <button class="diario-pick-close" onclick="closeDiarioPicker()">✕</button>
+  </div>
 
   <canvas id="diario-hidden-canvas" width="1080" height="1920" style="display:none"></canvas>
 
@@ -388,8 +408,9 @@ window._loadGoogleMaps = function() {
   </svg>
 </button>
 
-<!-- Input oculto: cámara frontal + opción galería -->
-<input type="file" id="diario-capture-input" accept="image/*" style="display:none">
+<!-- Inputs ocultos: cámara (capture) y galería (sin capture) -->
+<input type="file" id="diario-camera-input" accept="image/*" capture="environment" style="display:none">
+<input type="file" id="diario-gallery-input" accept="image/*" style="display:none">
 
 <!-- ═══ RESULTADO Mi Diario (fullscreen overlay) ═══ -->
 <div id="diario-result" class="diario-result">

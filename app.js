@@ -2960,7 +2960,7 @@ const _diario = {
   mapImg: null,
 };
 
-// Tap mapa o FAB → abre cámara frontal directo
+// Tap mapa o FAB → muestra picker foto/galería
 function diarioCapture() {
   // Si viene del FAB, usar ubicación actual del mapa
   if (_liveMap) {
@@ -2970,9 +2970,7 @@ function diarioCapture() {
     _diario.lat = window._salmaUserLat; _diario.lng = window._salmaUserLng;
   }
   _diarioGeocode();
-  // Abrir cámara frontal directo (en móvil da opción nativa de galería también)
-  const input = document.getElementById('diario-capture-input');
-  if (input) input.click();
+  _showDiarioPicker();
 }
 
 // Reverse geocode silencioso
@@ -2994,27 +2992,50 @@ function _diarioGeocode() {
   });
 }
 
+// ── Picker foto/galería ──
+function _showDiarioPicker() {
+  const picker = document.getElementById('diario-picker');
+  if (picker) picker.style.display = 'flex';
+}
+function closeDiarioPicker() {
+  const picker = document.getElementById('diario-picker');
+  if (picker) picker.style.display = 'none';
+}
+function diarioPickCamera() {
+  closeDiarioPicker();
+  const input = document.getElementById('diario-camera-input');
+  if (input) input.click();
+}
+function diarioPickGallery() {
+  closeDiarioPicker();
+  const input = document.getElementById('diario-gallery-input');
+  if (input) input.click();
+}
+window.diarioPickCamera = diarioPickCamera;
+window.diarioPickGallery = diarioPickGallery;
+window.closeDiarioPicker = closeDiarioPicker;
+
 // Listener: tras elegir/capturar foto → generar story automáticamente
-document.addEventListener('DOMContentLoaded', () => {
-  const input = document.getElementById('diario-capture-input');
-  if (!input) return;
-  input.addEventListener('change', e => {
-    const f = e.target.files[0]; if (!f) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const img = new Image();
-      img.onload = () => {
-        _diario.photo = img;
-        // Limpiar pin del mapa
-        if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
-        // Generar story directo
-        generateDiarioStory();
-      };
-      img.src = ev.target.result;
+function _onDiarioPhoto(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      _diario.photo = img;
+      if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
+      generateDiarioStory();
     };
-    reader.readAsDataURL(f);
-    e.target.value = '';
-  });
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(f);
+  e.target.value = '';
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const cam = document.getElementById('diario-camera-input');
+  const gal = document.getElementById('diario-gallery-input');
+  if (cam) cam.addEventListener('change', _onDiarioPhoto);
+  if (gal) gal.addEventListener('change', _onDiarioPhoto);
 });
 
 // Generar story Kodak automáticamente
@@ -3658,26 +3679,24 @@ function _onMapTap(e) {
     });
   }
 
-  // Save coordinates for diario
+  // Save coordinates for diario — set fallback name immediately
   _diario.lat = _tapLatLng.lat();
   _diario.lng = _tapLatLng.lng();
+  _diario.locName = _diario.lat.toFixed(3) + ', ' + _diario.lng.toFixed(3);
 
-  // Reverse geocode in background
-  const geocoder = new google.maps.Geocoder();
-  geocoder.geocode({ location: _tapLatLng }, (results, status) => {
+  // Reverse geocode in background (non-blocking, best-effort)
+  if (!window._diarioGeocoder) window._diarioGeocoder = new google.maps.Geocoder();
+  window._diarioGeocoder.geocode({ location: _tapLatLng }, (results, status) => {
     if (status === 'OK' && results[0]) {
       const parts = results[0].address_components;
       const city = (parts.find(p => p.types.includes('locality')) || parts.find(p => p.types.includes('administrative_area_level_1')) || {}).long_name || '';
       const country = (parts.find(p => p.types.includes('country')) || {}).long_name || '';
-      _diario.locName = city && country ? city + ' · ' + country : results[0].formatted_address;
-    } else {
-      _diario.locName = _diario.lat.toFixed(3) + ', ' + _diario.lng.toFixed(3);
+      if (city || country) _diario.locName = city && country ? city + ' · ' + country : results[0].formatted_address;
     }
   });
 
-  // Open camera/gallery picker directly
-  const captureInput = document.getElementById('diario-capture-input');
-  if (captureInput) captureInput.click();
+  // Show photo/gallery picker
+  _showDiarioPicker();
 }
 
 function closeTapSheet() {
