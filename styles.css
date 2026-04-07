@@ -3099,8 +3099,8 @@ body {
 }
 #live-map-center {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 124px);
-  right: 16px;
+  top: calc(env(safe-area-inset-top, 0px) + 14px);
+  right: 14px;
   z-index: 970;
   background: rgba(12,10,6,0.92);
   color: var(--dorado);
@@ -3114,8 +3114,8 @@ body {
 /* ── Botón tipo mapa ── */
 #live-map-maptype-btn {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
-  right: 16px;
+  top: calc(env(safe-area-inset-top, 0px) + 62px);
+  right: 14px;
   z-index: 970;
   background: rgba(12,10,6,0.92);
   color: var(--dorado);
@@ -3310,8 +3310,8 @@ body {
 /* ── Panel tipo mapa (junto al botón abajo-derecha) ── */
 #live-map-maptype-panel {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
-  right: 68px;
+  top: calc(env(safe-area-inset-top, 0px) + 62px);
+  right: 62px;
   z-index: 972;
   background: rgba(12,10,6,0.96);
   border: 1px solid rgba(212,168,67,0.25);
@@ -3582,8 +3582,8 @@ body {
 /* ── Botón capas (POI) ── */
 #live-map-layers-btn {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
-  right: 16px;
+  top: calc(env(safe-area-inset-top, 0px) + 110px);
+  right: 14px;
   z-index: 970;
   background: rgba(12,10,6,0.92);
   color: var(--dorado);
@@ -3596,8 +3596,8 @@ body {
 }
 #live-map-layers-panel {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
-  right: 68px;
+  top: calc(env(safe-area-inset-top, 0px) + 110px);
+  right: 62px;
   z-index: 972;
   background: rgba(12,10,6,0.96);
   border: 1px solid rgba(212,168,67,0.25);
