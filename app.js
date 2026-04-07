@@ -3365,28 +3365,28 @@ async function shareAsImage() {
 function _showPinInfo(marker) {
   if (!_poiInfoWindow || !_liveMap) return;
   const d = marker._pinData || {};
+  const pinId = marker._pinId || '';
   const lat = d.lat || marker.getPosition().lat();
   const lng = d.lng || marker.getPosition().lng();
-  const name = d.locName || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+  const mapsUrl = 'https://www.google.com/maps?q=' + lat + ',' + lng;
   const photoHtml = d.photoUrl
-    ? `<img src="${d.photoUrl}" style="width:100%;height:130px;object-fit:cover;border-radius:10px 10px 0 0;display:block">`
-    : `<div style="width:100%;height:50px;background:linear-gradient(135deg,#1a1a1a,#2a2a2a);border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:center;font-size:24px">📌</div>`;
-  const pinId = marker._pinId || '';
-  const navUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+    ? `<img src="${d.photoUrl}" style="width:100%;height:140px;object-fit:cover;border-radius:10px 10px 0 0;display:block">`
+    : '';
+  const padTop = d.photoUrl ? '10px' : '12px';
   const content = `
     <div style="font-family:'Inter',sans-serif;width:240px;border-radius:10px;overflow:hidden;background:#fff">
       ${photoHtml}
-      <div style="padding:10px 12px 12px">
-        <div style="font-size:14px;font-weight:700;color:#111;line-height:1.3;margin-bottom:4px">${name}</div>
+      <div style="padding:${padTop} 12px 12px">
+        <div style="font-size:14px;font-weight:700;color:#111;margin-bottom:3px">📍 ${d.locName || 'Pin guardado'}</div>
         <div style="font-size:11px;color:#888;margin-bottom:10px">${lat.toFixed(5)}, ${lng.toFixed(5)}</div>
         <div style="display:flex;gap:6px">
-          <a href="${navUrl}" target="_blank" rel="noopener"
-            style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;background:#4285F4;color:#fff;border-radius:8px;padding:8px;font-size:12px;font-weight:600;text-decoration:none">
-            🗺️ Ir aquí
+          <a href="${mapsUrl}" target="_blank" rel="noopener"
+            style="flex:1;text-align:center;background:#D4A843;color:#0a0a0f;border-radius:8px;padding:8px;font-size:11px;font-weight:700;text-decoration:none">
+            Ver en Maps
           </a>
-          <button onclick="deletePinById('${pinId}');showToast('Pin eliminado')"
-            style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;background:#e74c3c;color:#fff;border:none;border-radius:8px;padding:8px;font-size:12px;font-weight:600;cursor:pointer">
-            🗑️ Eliminar
+          <button onclick="window._deletePinById('${pinId}')"
+            style="flex:1;background:#D9534F;color:#fff;border:none;border-radius:8px;padding:8px;font-size:11px;font-weight:700;cursor:pointer">
+            Eliminar
           </button>
         </div>
       </div>
@@ -3394,6 +3394,14 @@ function _showPinInfo(marker) {
   _poiInfoWindow.setContent(content);
   _poiInfoWindow.open(_liveMap, marker);
 }
+window._deletePinById = function(pinId) {
+  const mi = _mapPins.findIndex(m => m._pinId === pinId);
+  if (mi !== -1) { _mapPins[mi].setMap(null); _mapPins.splice(mi, 1); }
+  const di = _savedPinsData.findIndex(d => d._pinId === pinId);
+  if (di !== -1) _savedPinsData.splice(di, 1);
+  if (_poiInfoWindow) _poiInfoWindow.close();
+  showToast('Pin eliminado');
+};
 
 function deletePinById(pinId) {
   const mi = _mapPins.findIndex(m => m._pinId === pinId);
@@ -3418,6 +3426,36 @@ const _tapPlaceIcons = {
 
 // ── Diario: estado + picker ──
 const _diario = { photo: null, locName: '', lat: 0, lng: 0, lastBlob: null, mapImg: null };
+
+// Tap mapa o FAB → muestra picker foto/galería
+function diarioCapture() {
+  if (_liveMap) {
+    const c = _liveMap.getCenter();
+    _diario.lat = c.lat(); _diario.lng = c.lng();
+  } else if (window._salmaUserLat) {
+    _diario.lat = window._salmaUserLat; _diario.lng = window._salmaUserLng;
+  }
+  _diarioGeocode();
+  _showDiarioPicker();
+}
+
+function _diarioGeocode() {
+  if (!window.google || !google.maps || !google.maps.Geocoder) {
+    _diario.locName = window._salmaUserCountry || '';
+    return;
+  }
+  const geocoder = new google.maps.Geocoder();
+  geocoder.geocode({ location: { lat: _diario.lat, lng: _diario.lng } }, (results, status) => {
+    if (status === 'OK' && results[0]) {
+      const parts = results[0].address_components;
+      const city = (parts.find(p => p.types.includes('locality')) || parts.find(p => p.types.includes('administrative_area_level_1')) || {}).long_name || '';
+      const country = (parts.find(p => p.types.includes('country')) || {}).long_name || '';
+      _diario.locName = city && country ? city + ' · ' + country : results[0].formatted_address;
+    } else {
+      _diario.locName = _diario.lat.toFixed(3) + ', ' + _diario.lng.toFixed(3);
+    }
+  });
+}
 
 function _showDiarioPicker() {
   const picker = document.getElementById('diario-picker');
@@ -3482,6 +3520,265 @@ window.diarioPickDelete = diarioPickDelete;
 window.diarioPickCamera = diarioPickCamera;
 window.diarioPickGallery = diarioPickGallery;
 window.closeDiarioPicker = closeDiarioPicker;
+
+// ── Listener: tras elegir/capturar foto → generar story ──
+function _onDiarioPhoto(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      _diario.photo = img;
+      if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
+      generateDiarioStory();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(f);
+  e.target.value = '';
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const cam = document.getElementById('diario-camera-input');
+  const gal = document.getElementById('diario-gallery-input');
+  if (cam) cam.addEventListener('change', _onDiarioPhoto);
+  if (gal) gal.addEventListener('change', _onDiarioPhoto);
+});
+
+// ── Generar story Kodak ──
+async function generateDiarioStory() {
+  if (!_diario.photo) return;
+
+  // Mapa estático de fondo
+  const mapUrl = 'https://maps.googleapis.com/maps/api/staticmap?center='
+    + _diario.lat+','+_diario.lng+'&zoom=14&size=640x640'
+    + '&style=element:geometry%7Ccolor:0x1d2c4d&style=element:labels.text.fill%7Ccolor:0x8ec3b9&style=feature:road%7Celement:geometry%7Ccolor:0x304a7d&style=feature:water%7Celement:geometry%7Ccolor:0x0e1626&style=feature:poi%7Cvisibility:off'
+    + '&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
+  try {
+    const mapImg = await new Promise((resolve, reject) => {
+      const i = new Image(); i.crossOrigin='anonymous';
+      i.onload = () => resolve(i); i.onerror = reject; i.src = mapUrl;
+    });
+    const tmp = document.createElement('canvas'); tmp.width=1080; tmp.height=1920;
+    tmp.getContext('2d').drawImage(mapImg,0,0,1080,1920);
+    const scaled = new Image();
+    await new Promise(r => { scaled.onload=r; scaled.src=tmp.toDataURL(); });
+    _diario.mapImg = scaled;
+  } catch(e) { _diario.mapImg = null; }
+
+  const c = document.getElementById('diario-canvas');
+  const ctx = c.getContext('2d');
+  _drawDiarioKodak(ctx, _diario.photo, 1080, 1920, null, _diario.locName, _diario.mapImg, '');
+
+  await new Promise(resolve => { c.toBlob(b => { _diario.lastBlob = b; resolve(); }, 'image/jpeg', 0.95); });
+
+  const locTxt = document.getElementById('diario-result-loc-txt');
+  if (locTxt) locTxt.textContent = _diario.locName;
+  const resultEl = document.getElementById('diario-result');
+  if (resultEl) resultEl.classList.add('on');
+
+  _diarioSaved = false;
+  _saveDiarioToGallery();
+}
+
+function _drawDiarioKodak(ctx, photo, W, H, transport, loc, mapImg, msgTxt) {
+  const fs = W / 1080;
+
+  // Background: map or dark gradient
+  if (mapImg) {
+    const mr = mapImg.naturalWidth/mapImg.naturalHeight, cr = W/H;
+    let sx=0,sy=0,sw=mapImg.naturalWidth,sh=mapImg.naturalHeight;
+    if(mr>cr){sw=sh*cr;sx=(mapImg.naturalWidth-sw)/2;}else{sh=sw/cr;sy=(mapImg.naturalHeight-sh)/2;}
+    ctx.drawImage(mapImg,sx,sy,sw,sh,0,0,W,H);
+    ctx.fillStyle='rgba(10,10,9,0.48)'; ctx.fillRect(0,0,W,H);
+  } else {
+    const bg=ctx.createLinearGradient(0,0,W,H);
+    bg.addColorStop(0,'#0F1520');bg.addColorStop(1,'#060810');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  }
+
+  // Kodak print
+  const printW=Math.round(W*0.80), printX=Math.round((W-printW)/2);
+  const bT=Math.round(26*fs),bS=Math.round(26*fs),bB=Math.round(96*fs);
+  const phW=printW-bS*2, phH=Math.round(phW*1.24);
+  const printH=bT+phH+bB, printY=Math.round((H-printH)*0.36);
+  const phX=printX+bS, phY=printY+bT;
+
+  ctx.save();
+  ctx.shadowColor='rgba(0,0,0,0.85)';ctx.shadowBlur=Math.round(70*fs);ctx.shadowOffsetY=Math.round(30*fs);
+  ctx.fillStyle='#F8F6F0';ctx.fillRect(printX,printY,printW,printH);
+  ctx.restore();
+  ctx.fillStyle='#F8F6F0';ctx.fillRect(printX,printY,printW,printH);
+
+  // Photo
+  if(photo){
+    ctx.save();ctx.beginPath();ctx.rect(phX,phY,phW,phH);ctx.clip();
+    const ir=photo.naturalWidth/photo.naturalHeight,cr2=phW/phH;
+    let sx=0,sy=0,sw=photo.naturalWidth,sh=photo.naturalHeight;
+    if(ir>cr2){sw=sh*cr2;sx=(photo.naturalWidth-sw)/2;}else{sh=sw/cr2;sy=(photo.naturalHeight-sh)/2;}
+    ctx.drawImage(photo,sx,sy,sw,sh,phX,phY,phW,phH);
+    ctx.restore();
+    const vig=ctx.createRadialGradient(phX+phW/2,phY+phH/2,phW*.3,phX+phW/2,phY+phH/2,phW*.72);
+    vig.addColorStop(0,'rgba(0,0,0,0)');vig.addColorStop(1,'rgba(0,0,0,0.20)');
+    ctx.fillStyle=vig;ctx.fillRect(phX,phY,phW,phH);
+  }
+
+  // Date badge
+  const dateStr=new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'2-digit'});
+  {
+    const bH=Math.round(46*fs),bW=Math.round(158*fs),bPad=Math.round(16*fs);
+    ctx.save();ctx.fillStyle='rgba(0,0,0,0.55)';
+    ctx.beginPath();ctx.roundRect(phX+phW-bW-bPad,phY+bPad,bW,bH,Math.round(7*fs));ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.92)';ctx.font='bold '+Math.round(22*fs)+'px -apple-system,sans-serif';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(dateStr,phX+phW-bW/2-bPad,phY+bPad+bH/2);
+    ctx.restore();
+  }
+
+  // Bottom strip: KODAK
+  const sY=phY+phH,sH=bB;
+  ctx.fillStyle='#E01B22';ctx.font='bold '+Math.round(32*fs)+'px Georgia,serif';
+  ctx.textAlign='left';ctx.textBaseline='top';
+  ctx.fillText('KODAK',phX,sY+Math.round(14*fs));
+  ctx.fillStyle='rgba(0,0,0,0.28)';ctx.font=Math.round(16*fs)+'px Georgia,serif';
+  ctx.fillText('GOLD 200',phX,sY+Math.round(50*fs));
+  const shortLoc=loc.length>26?loc.substring(0,24)+'…':loc;
+  ctx.fillStyle='rgba(0,0,0,0.80)';ctx.font='bold '+Math.round(24*fs)+'px -apple-system,sans-serif';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('📍 '+shortLoc,W/2,sY+sH*0.46);
+  ctx.fillStyle='rgba(0,0,0,0.30)';ctx.font='bold '+Math.round(26*fs)+'px Georgia,serif';
+  ctx.textAlign='right';ctx.textBaseline='top';
+  ctx.fillText('36',phX+phW,sY+Math.round(14*fs));
+
+  if(msgTxt){
+    const msgY=printY+printH+Math.round(56*fs);
+    ctx.fillStyle='rgba(244,239,230,0.96)';ctx.font='bold '+Math.round(46*fs)+'px -apple-system,sans-serif';
+    ctx.textAlign='center';ctx.textBaseline='top';
+    const words=msgTxt.split(' ');let line='',lines=[];
+    words.forEach(w=>{const t=line?line+' '+w:w;if(ctx.measureText(t).width>W-Math.round(140*fs)&&line){lines.push(line);line=w;}else line=t;});
+    if(line)lines.push(line);
+    lines.forEach((l,i)=>ctx.fillText(l,W/2,msgY+i*Math.round(62*fs)));
+  }
+
+  // Watermark
+  ctx.fillStyle='rgba(244,239,230,0.20)';ctx.font=Math.round(22*fs)+'px -apple-system,sans-serif';
+  ctx.textAlign='right';ctx.textBaseline='bottom';
+  ctx.fillText('borradodelmapa.com',W-Math.round(44*fs),H-Math.round(44*fs));
+}
+
+// ── Share / Download ──
+function _diarioMapsLink() { return 'https://www.google.com/maps?q='+_diario.lat+','+_diario.lng; }
+function _diarioShareText() {
+  return 'Estoy bien mama! Mira aquí estoy 📍\n'+_diario.locName+'\n'+_diarioMapsLink()+'\n\nborradodelmapa.com';
+}
+
+function _diarioAutoSave() {
+  _saveDiarioToGallery();
+  _diarioDropPermanentPin();
+}
+
+function _diarioDropPermanentPin() {
+  if (!_liveMap || !_diario.lat) return;
+  const pinId = 'dpin_' + (++_pinIdCounter) + '_' + Date.now();
+  let photoUrl = null;
+  if (_diario.lastBlob) {
+    try { photoUrl = URL.createObjectURL(_diario.lastBlob); } catch(e) {}
+  }
+  const marker = new google.maps.Marker({
+    map: _liveMap,
+    position: { lat: _diario.lat, lng: _diario.lng },
+    icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#D4A843', fillOpacity: 0.95, strokeColor: '#fff', strokeWeight: 2, scale: 10 },
+    title: _diario.locName, zIndex: 150,
+  });
+  marker._pinId = pinId;
+  marker._pinData = { lat: _diario.lat, lng: _diario.lng, locName: _diario.locName, photoUrl: photoUrl };
+  marker.addListener('click', () => _showPinInfo(marker));
+  _mapPins.push(marker);
+  _savedPinsData.push({ lat: _diario.lat, lng: _diario.lng, locName: _diario.locName, place_type: 'other', _pinId: pinId });
+}
+
+async function shareDiarioWA() {
+  if(!_diario.lastBlob) return;
+  _diarioAutoSave();
+  const file=new File([_diario.lastBlob],'mi-diario.jpg',{type:'image/jpeg'});
+  const txt=_diarioShareText();
+  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file],text:txt});return;}catch(e){}
+  }
+  const a=document.createElement('a');a.href=URL.createObjectURL(_diario.lastBlob);
+  a.download='mi-diario.jpg';a.click();
+  if(typeof showToast==='function')showToast('📸 Descargada — adjúntala en WhatsApp');
+  setTimeout(()=>window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank'),700);
+}
+
+function downloadDiario() {
+  if(!_diario.lastBlob) return;
+  _diarioAutoSave();
+  const a=document.createElement('a');a.href=URL.createObjectURL(_diario.lastBlob);
+  a.download='mi-diario-'+Date.now()+'.jpg';a.click();
+  if(typeof showToast==='function')showToast('✓ Guardada');
+}
+
+async function shareDiarioNative() {
+  if(!_diario.lastBlob) return;
+  _diarioAutoSave();
+  const file=new File([_diario.lastBlob],'mi-diario.jpg',{type:'image/jpeg'});
+  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file],text:_diarioShareText()});}catch(e){}
+  } else { downloadDiario(); }
+}
+
+function closeDiarioResult() {
+  const el = document.getElementById('diario-result');
+  if (el) el.classList.remove('on');
+}
+
+async function diarioResultSave() {
+  _diarioAutoSave();
+  showToast('📌 Guardado en tu mapa');
+}
+
+let _diarioSaved = false;
+async function _saveDiarioToGallery() {
+  if (_diarioSaved || !_diario.lastBlob || !currentUser) return;
+  _diarioSaved = true;
+  try {
+    const uid = currentUser.uid;
+    const formData = new FormData();
+    formData.append('photo', _diario.lastBlob, 'mi-diario.jpg');
+    formData.append('uid', uid);
+
+    const res = await fetch(window.SALMA_API + '/upload-gallery-photo', {
+      method: 'POST',
+      body: formData
+    });
+    if (!res.ok) throw new Error('Upload failed');
+    const { key, url } = await res.json();
+
+    const now = new Date().toISOString();
+    await db.collection('users').doc(uid).collection('fotos').add({
+      key, url, tag: 'diario', caption: _diario.locName, albumId: null,
+      routeId: _activeRouteDocId || null, lat: _diario.lat, lng: _diario.lng,
+      source: 'diario', createdAt: now
+    });
+    await db.collection('users').doc(uid).collection('pins').add({
+      lat: _diario.lat, lng: _diario.lng, locName: _diario.locName,
+      photoUrl: url, routeId: _activeRouteDocId || null, createdAt: now
+    });
+
+    if (typeof showToast === 'function') showToast('📸 Guardada en tu galería');
+  } catch (e) {
+    console.warn('[Diario save]', e);
+    _diarioSaved = false;
+  }
+}
+
+window.generateDiarioStory = generateDiarioStory;
+window.shareDiarioWA = shareDiarioWA;
+window.downloadDiario = downloadDiario;
+window.shareDiarioNative = shareDiarioNative;
+window.closeDiarioResult = closeDiarioResult;
+window.diarioResultSave = diarioResultSave;
+window.diarioCapture = diarioCapture;
 
 function _onMapTap(e) {
   _closeMapPanels();
