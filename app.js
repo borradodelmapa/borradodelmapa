@@ -3006,6 +3006,11 @@ function openLiveMap() {
   view.style.display = 'block';
   if (bar) bar.style.display = 'none';
   document.querySelector('.app-header')?.style.setProperty('display', 'none', 'important');
+  // Ocultar elementos que se filtran al mapa
+  const inputBar = document.querySelector('.app-input-bar');
+  if (inputBar) inputBar.style.display = 'none';
+  const fab = document.getElementById('fab-map');
+  if (fab) fab.style.display = 'none';
 
   // Cerrar cualquier sheet que haya quedado abierta
   closeSalmaMapSheet();
@@ -3096,6 +3101,11 @@ function closeLiveMap() {
   if (view) view.style.display = 'none';
   if (bar) bar.style.display = '';
   document.querySelector('.app-header')?.style.removeProperty('display');
+  // Restaurar elementos ocultos
+  const inputBar = document.querySelector('.app-input-bar');
+  if (inputBar && currentState === 'chat') inputBar.style.display = '';
+  const fab = document.getElementById('fab-map');
+  if (fab && currentUser && currentState !== 'welcome') fab.style.display = '';
   // Cerrar sheets y paneles
   _closeMapPanels();
   closeSalmaMapSheet();
