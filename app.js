@@ -3034,6 +3034,7 @@ function openLiveMap() {
       _liveMap = new google.maps.Map(el, {
         zoom: 15,
         center: _lastPos || { lat: 40.416, lng: -3.703 },
+        mapTypeId: 'hybrid',
         styles: window._mapStyle,
         disableDefaultUI: true,
         gestureHandling: 'greedy',
