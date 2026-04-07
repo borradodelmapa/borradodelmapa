@@ -3311,6 +3311,7 @@ let _tapPin = null;
 let _tapLatLng = null;
 let _tapPhotoBase64 = null;
 let _pinIdCounter = 0;
+let _activeRouteDocId = null;
 
 // ── Compartir mapa ──
 
@@ -3360,6 +3361,39 @@ async function shareAsImage() {
   }
 }
 
+
+function _showPinInfo(marker) {
+  if (!_poiInfoWindow || !_liveMap) return;
+  const d = marker._pinData || {};
+  const lat = d.lat || marker.getPosition().lat();
+  const lng = d.lng || marker.getPosition().lng();
+  const name = d.locName || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+  const photoHtml = d.photoUrl
+    ? `<img src="${d.photoUrl}" style="width:100%;height:130px;object-fit:cover;border-radius:10px 10px 0 0;display:block">`
+    : `<div style="width:100%;height:50px;background:linear-gradient(135deg,#1a1a1a,#2a2a2a);border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:center;font-size:24px">📌</div>`;
+  const pinId = marker._pinId || '';
+  const navUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+  const content = `
+    <div style="font-family:'Inter',sans-serif;width:240px;border-radius:10px;overflow:hidden;background:#fff">
+      ${photoHtml}
+      <div style="padding:10px 12px 12px">
+        <div style="font-size:14px;font-weight:700;color:#111;line-height:1.3;margin-bottom:4px">${name}</div>
+        <div style="font-size:11px;color:#888;margin-bottom:10px">${lat.toFixed(5)}, ${lng.toFixed(5)}</div>
+        <div style="display:flex;gap:6px">
+          <a href="${navUrl}" target="_blank" rel="noopener"
+            style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;background:#4285F4;color:#fff;border-radius:8px;padding:8px;font-size:12px;font-weight:600;text-decoration:none">
+            🗺️ Ir aquí
+          </a>
+          <button onclick="deletePinById('${pinId}');showToast('Pin eliminado')"
+            style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;background:#e74c3c;color:#fff;border:none;border-radius:8px;padding:8px;font-size:12px;font-weight:600;cursor:pointer">
+            🗑️ Eliminar
+          </button>
+        </div>
+      </div>
+    </div>`;
+  _poiInfoWindow.setContent(content);
+  _poiInfoWindow.open(_liveMap, marker);
+}
 
 function deletePinById(pinId) {
   const mi = _mapPins.findIndex(m => m._pinId === pinId);
@@ -3423,7 +3457,7 @@ async function diarioPickSave() {
     });
     marker._pinId = pinId;
     marker._pinData = { lat, lng, locName: _diario.locName, photoUrl: null };
-    if (typeof _showPinInfo === 'function') marker.addListener('click', () => _showPinInfo(marker));
+    marker.addListener('click', () => _showPinInfo(marker));
     _mapPins.push(marker);
     _savedPinsData.push({ lat, lng, locName: _diario.locName, place_type: 'other', _pinId: pinId });
   }
