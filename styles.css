@@ -3046,18 +3046,20 @@ body {
 }
 #live-map-back {
   position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 12px);
-  left: 12px;
+  top: calc(env(safe-area-inset-top, 0px) + 14px);
+  left: 14px;
   z-index: 970;
-  background: rgba(12,10,6,0.92);
-  color: var(--crema);
-  border: 1px solid rgba(212,168,67,0.35);
-  border-radius: 20px;
-  padding: 8px 18px;
-  font-size: 14px;
-  font-weight: 600;
+  background: rgba(12,10,6,0.55);
+  color: rgba(244,239,230,0.7);
+  border: none;
+  border-radius: 50%;
+  width: 36px; height: 36px;
+  padding: 0;
+  font-size: 18px;
+  font-weight: 400;
   cursor: pointer;
   backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
 }
 /* center button now inside mini-menu */
 #live-map-center { display: none; }
@@ -3152,11 +3154,12 @@ body {
 }
 .lm-tool-btn:active { color: var(--dorado); border-color: rgba(212,168,67,0.35); }
 
-/* ── FAB Mi Diario (global, flotante) ── */
+/* ── FAB Mi Diario (global, centro-derecha) ── */
 #fab-diario {
   position: fixed;
-  bottom: 90px;
+  top: 50%;
   right: 16px;
+  transform: translateY(-50%);
   z-index: 971;
   width: 56px; height: 56px;
   border-radius: 50%;
@@ -3168,11 +3171,8 @@ body {
   display: flex; align-items: center; justify-content: center;
   transition: transform .17s, box-shadow .17s;
 }
-#fab-diario:hover { transform: scale(1.07); box-shadow: 0 6px 32px rgba(212,168,67,0.65); }
-#fab-diario:active { transform: scale(0.94); }
-#fab-diario.fab-diario-map { bottom: auto; top: 50%; transform: translateY(-50%); width: 62px; height: 62px; }
-#fab-diario.fab-diario-map:hover { transform: translateY(-50%) scale(1.07); }
-#fab-diario.fab-diario-map:active { transform: translateY(-50%) scale(0.94); }
+#fab-diario:hover { transform: translateY(-50%) scale(1.07); box-shadow: 0 6px 32px rgba(212,168,67,0.65); }
+#fab-diario:active { transform: translateY(-50%) scale(0.94); }
 
 /* ── Resultado Mi Diario (fullscreen) ── */
 .diario-result {

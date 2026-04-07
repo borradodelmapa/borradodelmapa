@@ -107,9 +107,9 @@ function showState(state) {
     if (layer) layer.remove();
     $content.classList.remove('app-content--chat');
   }
-  // FAB Mi Diario: visible en todo menos welcome
+  // FAB Mi Diario: visible en todo menos welcome y chat
   const fab = document.getElementById('fab-diario');
-  if (fab) fab.style.display = state === 'welcome' ? 'none' : 'flex';
+  if (fab) fab.style.display = (state === 'welcome' || state === 'chat') ? 'none' : 'flex';
 }
 
 function updateHeader() {
@@ -3207,7 +3207,9 @@ async function _saveDiarioToGallery() {
     if (!res.ok) throw new Error('Upload failed');
     const { key, url } = await res.json();
 
-    // Guardar en Firestore
+    const now = new Date().toISOString();
+
+    // Guardar foto en galería
     await db.collection('users').doc(uid).collection('fotos').add({
       key, url,
       tag: 'diario',
@@ -3217,7 +3219,17 @@ async function _saveDiarioToGallery() {
       lat: _diario.lat,
       lng: _diario.lng,
       source: 'diario',
-      createdAt: new Date().toISOString()
+      createdAt: now
+    });
+
+    // Guardar pin del viajero (para mapa interactivo)
+    await db.collection('users').doc(uid).collection('pins').add({
+      lat: _diario.lat,
+      lng: _diario.lng,
+      locName: _diario.locName,
+      photoUrl: url,
+      routeId: _activeRouteDocId || null,
+      createdAt: now
     });
 
     if (typeof showToast === 'function') showToast('📸 Guardada en tu galería');
@@ -3259,10 +3271,6 @@ function openLiveMap() {
   view.style.display = 'block';
   if (bar) bar.style.display = 'none';
   document.querySelector('.app-header')?.style.setProperty('display', 'none', 'important');
-  // FAB centrado vertical en mapa
-  const fab = document.getElementById('fab-diario');
-  if (fab) { fab.style.display = 'flex'; fab.classList.add('fab-diario-map'); }
-
   // Cerrar cualquier sheet que haya quedado abierta
   closeSalmaMapSheet();
   closeTapSheet();
@@ -3352,9 +3360,6 @@ function closeLiveMap() {
   if (view) view.style.display = 'none';
   if (bar) bar.style.display = '';
   document.querySelector('.app-header')?.style.removeProperty('display');
-  // FAB vuelve a posición normal
-  const fab = document.getElementById('fab-diario');
-  if (fab) fab.classList.remove('fab-diario-map');
   // Cerrar sheets y paneles
   _closeMapPanels();
   closeSalmaMapSheet();
