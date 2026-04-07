@@ -3061,8 +3061,35 @@ body {
   backdrop-filter: blur(8px);
   display: flex; align-items: center; justify-content: center;
 }
-/* center button now inside mini-menu */
-#live-map-center { display: none; }
+#live-map-center {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 124px);
+  right: 16px;
+  z-index: 970;
+  background: rgba(12,10,6,0.92);
+  color: var(--dorado);
+  border: 1px solid rgba(212,168,67,0.35);
+  border-radius: 50%;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+/* ── Botón tipo mapa ── */
+#live-map-maptype-btn {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+  right: 16px;
+  z-index: 970;
+  background: rgba(12,10,6,0.92);
+  color: var(--dorado);
+  border: 1px solid rgba(212,168,67,0.35);
+  border-radius: 50%;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
 #live-map-routes-btn {
   position: fixed;
   top: calc(env(safe-area-inset-top, 0px) + 12px);
@@ -3212,11 +3239,11 @@ body {
 .diario-rbtn-share { background: rgba(255,255,255,.08); color: var(--crema, #F4EFE6); border: 1px solid rgba(255,255,255,.1); }
 .diario-rbtn-cls { background: rgba(255,255,255,.08); color: rgba(244,239,230,.5); border: 1px solid rgba(255,255,255,.1); flex: 0.5; }
 
-/* ── Botón tipo mapa (panel, reposicionado para mini-menú) ── */
+/* ── Panel tipo mapa (junto al botón abajo-derecha) ── */
 #live-map-maptype-panel {
   position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 108px);
-  right: 64px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+  right: 68px;
   z-index: 972;
   background: rgba(12,10,6,0.96);
   border: 1px solid rgba(212,168,67,0.25);

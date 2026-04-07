@@ -3569,7 +3569,8 @@ function openShareSheet() {
   document.getElementById('live-map-share-sheet').style.display = 'block';
 }
 function closeShareSheet() {
-  document.getElementById('live-map-share-sheet').style.display = 'none';
+  const el = document.getElementById('live-map-share-sheet');
+  if (el) el.style.display = 'none';
 }
 
 async function shareAsImage() {
@@ -3792,7 +3793,8 @@ function openSalmaMapSheet() {
 }
 
 function closeSalmaMapSheet() {
-  document.getElementById('live-map-salma-sheet').style.display = 'none';
+  const el = document.getElementById('live-map-salma-sheet');
+  if (el) el.style.display = 'none';
 }
 
 function sendSalmaMapPhoto(fileInput) {
