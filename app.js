@@ -2901,8 +2901,10 @@ function toggleMapCat(checkbox) {
 }
 
 function _closeMapPanels() {
-  document.getElementById('live-map-layers-panel').style.display = 'none';
-  document.getElementById('live-map-maptype-panel').style.display = 'none';
+  const lp = document.getElementById('live-map-layers-panel');
+  const mp = document.getElementById('live-map-maptype-panel');
+  if (lp) lp.style.display = 'none';
+  if (mp) mp.style.display = 'none';
 }
 
 function toggleMapLayersPanel() {
@@ -3565,8 +3567,10 @@ let _pinIdCounter = 0;
 
 function openShareSheet() {
   if (!_savedPinsData.length) { showToast('No hay pins guardados'); return; }
-  document.getElementById('lmsh-status').textContent = '';
-  document.getElementById('live-map-share-sheet').style.display = 'block';
+  const status = document.getElementById('lmsh-status');
+  const sheet = document.getElementById('live-map-share-sheet');
+  if (status) status.textContent = '';
+  if (sheet) sheet.style.display = 'block';
 }
 function closeShareSheet() {
   const el = document.getElementById('live-map-share-sheet');
@@ -3788,8 +3792,10 @@ function _showTapSheet(latLng) {
 }
 
 function openSalmaMapSheet() {
-  document.getElementById('live-map-salma-sheet').style.display = 'block';
-  document.getElementById('salma-map-status').style.display = 'none';
+  const sheet = document.getElementById('live-map-salma-sheet');
+  const status = document.getElementById('salma-map-status');
+  if (sheet) sheet.style.display = 'block';
+  if (status) status.style.display = 'none';
 }
 
 function closeSalmaMapSheet() {
