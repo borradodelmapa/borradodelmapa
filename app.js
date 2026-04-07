@@ -3382,6 +3382,73 @@ const _tapPlaceIcons = {
   airport:'✈️',
 };
 
+// ── Diario: estado + picker ──
+const _diario = { photo: null, locName: '', lat: 0, lng: 0, lastBlob: null, mapImg: null };
+
+function _showDiarioPicker() {
+  const picker = document.getElementById('diario-picker');
+  if (picker) picker.style.display = 'block';
+  const loc = document.getElementById('dpick-loc');
+  if (loc) loc.textContent = _diario.locName || '';
+}
+function closeDiarioPicker() {
+  const picker = document.getElementById('diario-picker');
+  if (picker) picker.style.display = 'none';
+}
+function diarioPickCamera() {
+  closeDiarioPicker();
+  const input = document.getElementById('diario-camera-input');
+  if (input) input.click();
+}
+function diarioPickGallery() {
+  closeDiarioPicker();
+  const input = document.getElementById('diario-gallery-input');
+  if (input) input.click();
+}
+function diarioPickNavigate() {
+  const lat = _diario.lat, lng = _diario.lng;
+  if (!lat && !lng) return;
+  window.open('https://www.google.com/maps?q=' + lat + ',' + lng, '_blank');
+}
+async function diarioPickSave() {
+  if (!currentUser) { showToast('Inicia sesión para guardar'); closeDiarioPicker(); openModal('login'); return; }
+  const lat = _diario.lat, lng = _diario.lng;
+  if (!lat && !lng) { showToast('Toca el mapa primero'); return; }
+  if (_liveMap) {
+    const pinId = 'spin_' + (++_pinIdCounter) + '_' + Date.now();
+    const marker = new google.maps.Marker({
+      map: _liveMap, position: { lat, lng },
+      icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#D4A843', fillOpacity: 0.95, strokeColor: '#fff', strokeWeight: 2, scale: 10 },
+      title: _diario.locName, zIndex: 150,
+    });
+    marker._pinId = pinId;
+    marker._pinData = { lat, lng, locName: _diario.locName, photoUrl: null };
+    if (typeof _showPinInfo === 'function') marker.addListener('click', () => _showPinInfo(marker));
+    _mapPins.push(marker);
+    _savedPinsData.push({ lat, lng, locName: _diario.locName, place_type: 'other', _pinId: pinId });
+  }
+  if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
+  try {
+    await db.collection('users').doc(currentUser.uid).collection('pins').add({
+      lat, lng, locName: _diario.locName, routeId: _activeRouteDocId || null, createdAt: new Date().toISOString()
+    });
+  } catch (e) { console.warn('[Pin save]', e); }
+  showToast('📌 Punto guardado');
+  closeDiarioPicker();
+}
+function diarioPickDelete() {
+  if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
+  _tapLatLng = null;
+  closeDiarioPicker();
+  showToast('Pin eliminado');
+}
+window.diarioPickNavigate = diarioPickNavigate;
+window.diarioPickSave = diarioPickSave;
+window.diarioPickDelete = diarioPickDelete;
+window.diarioPickCamera = diarioPickCamera;
+window.diarioPickGallery = diarioPickGallery;
+window.closeDiarioPicker = closeDiarioPicker;
+
 function _onMapTap(e) {
   _closeMapPanels();
   if (_poiInfoWindow) _poiInfoWindow.close();
@@ -3403,7 +3470,24 @@ function _onMapTap(e) {
       zIndex: 200,
     });
   }
-  _showTapSheet(_tapLatLng);
+
+  // Coordenadas para diario
+  _diario.lat = _tapLatLng.lat();
+  _diario.lng = _tapLatLng.lng();
+  _diario.locName = _diario.lat.toFixed(3) + ', ' + _diario.lng.toFixed(3);
+
+  // Reverse geocode en background
+  if (!window._diarioGeocoder) window._diarioGeocoder = new google.maps.Geocoder();
+  window._diarioGeocoder.geocode({ location: _tapLatLng }, (results, status) => {
+    if (status === 'OK' && results[0]) {
+      const parts = results[0].address_components;
+      const city = (parts.find(p => p.types.includes('locality')) || parts.find(p => p.types.includes('administrative_area_level_1')) || {}).long_name || '';
+      const country = (parts.find(p => p.types.includes('country')) || {}).long_name || '';
+      if (city || country) _diario.locName = city && country ? city + ' · ' + country : results[0].formatted_address;
+    }
+  });
+
+  _showDiarioPicker();
 }
 
 function closeTapSheet() {
