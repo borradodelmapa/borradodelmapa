@@ -3296,6 +3296,12 @@ async function shareDiarioNative() {
 
 function closeDiarioResult() { document.getElementById('diario-result').classList.remove('on'); }
 
+async function diarioResultSave() {
+  _diarioAutoSave();
+  showToast('📌 Guardado en tu mapa');
+}
+window.diarioResultSave = diarioResultSave;
+
 // Info al tocar pin guardado (con foto si existe)
 function _showPinInfo(marker) {
   if (!_poiInfoWindow || !_liveMap) return;
