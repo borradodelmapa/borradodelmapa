@@ -3227,17 +3227,19 @@ body {
 }
 .diario-result-loc { text-align: center; font-size: 13px; font-weight: 600; color: rgba(244,239,230,.6); margin-bottom: 14px; }
 .diario-result-loc span { color: var(--dorado, #D4A843); }
-.diario-result-btns { display: flex; gap: 8px; }
+.diario-result-btns { display: flex; gap: 10px; }
 .diario-rbtn {
-  flex: 1; padding: 13px 8px; border-radius: 14px; border: none; cursor: pointer;
+  flex: 1; padding: 14px 10px; border-radius: 16px; border: 1px solid rgba(212,168,67,0.25); cursor: pointer;
   font-size: 13px; font-weight: 700; font-family: inherit;
-  display: flex; align-items: center; justify-content: center; gap: 5px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  background: rgba(12,10,6,0.95); color: var(--dorado, #D4A843);
+  backdrop-filter: blur(8px); transition: transform .12s, background .15s;
 }
-.diario-rbtn:active { transform: scale(.97); }
-.diario-rbtn-wa { background: #25D366; color: #fff; flex: 2; }
-.diario-rbtn-dl { background: rgba(255,255,255,.08); color: var(--crema, #F4EFE6); border: 1px solid rgba(255,255,255,.1); }
-.diario-rbtn-share { background: rgba(255,255,255,.08); color: var(--crema, #F4EFE6); border: 1px solid rgba(255,255,255,.1); }
-.diario-rbtn-cls { background: rgba(255,255,255,.08); color: rgba(244,239,230,.5); border: 1px solid rgba(255,255,255,.1); flex: 0.5; }
+.diario-rbtn:active { transform: scale(.95); background: rgba(212,168,67,0.15); }
+.diario-rbtn-wa { background: rgba(12,10,6,0.95); color: var(--dorado); border-color: var(--dorado, #D4A843); flex: 2; }
+.diario-rbtn-dl { }
+.diario-rbtn-share { }
+.diario-rbtn-cls { flex: 0.5; color: rgba(244,239,230,.4); border-color: rgba(255,255,255,.1); }
 
 /* ── Panel tipo mapa (junto al botón abajo-derecha) ── */
 #live-map-maptype-panel {
