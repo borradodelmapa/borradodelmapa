@@ -3565,42 +3565,68 @@ body {
 }
 .lml-row input[type="checkbox"]:checked::after { transform: translateX(16px); }
 
-/* ── Picker foto/galería (tras tap en mapa) ── */
+/* ── Picker acciones mapa (moderno) ── */
 #diario-picker {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 32px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
   left: 50%;
   transform: translateX(-50%);
   z-index: 980;
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  background: rgba(12,10,6,0.94);
-  border: 1px solid rgba(212,168,67,0.30);
-  border-radius: 20px;
-  padding: 10px 16px;
-  backdrop-filter: blur(12px);
+  background: rgba(12,10,6,0.96);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 22px;
+  padding: 14px 16px 10px;
+  backdrop-filter: blur(16px);
+  min-width: 300px;
+  max-width: 92vw;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
 }
-.diario-pick-btn {
-  background: rgba(212,168,67,0.15);
-  color: var(--crema, #F4EFE6);
-  border: 1px solid rgba(212,168,67,0.30);
+.dpick-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+.dpick-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 14px;
-  padding: 12px 20px;
-  font-size: 15px;
-  font-weight: 600;
+  padding: 10px 12px 8px;
+  min-width: 56px;
   cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.dpick-btn:active { background: rgba(255,255,255,0.12); }
+.dpick-icon { font-size: 20px; line-height: 1; }
+.dpick-label { font-size: 10px; font-weight: 600; color: rgba(244,239,230,0.7); letter-spacing: .02em; }
+.dpick-nav { background: rgba(212,168,67,0.12); border-color: rgba(212,168,67,0.30); }
+.dpick-nav .dpick-label { color: var(--dorado, #D4A843); }
+.dpick-save { background: rgba(92,184,93,0.10); border-color: rgba(92,184,93,0.25); }
+.dpick-save .dpick-label { color: #5CB85C; }
+.dpick-del { background: rgba(217,83,79,0.08); border-color: rgba(217,83,79,0.20); }
+.dpick-del .dpick-label { color: #D9534F; }
+.dpick-loc {
+  text-align: center;
+  font-size: 11px;
+  color: rgba(244,239,230,0.45);
+  margin-top: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
-.diario-pick-btn:active { background: rgba(212,168,67,0.30); }
-.diario-pick-nav { background: rgba(212,168,67,0.25); color: var(--dorado, #D4A843); border-color: rgba(212,168,67,0.50); }
-.diario-pick-close {
+.dpick-close {
+  position: absolute;
+  top: 6px;
+  right: 10px;
   background: none;
   border: none;
-  color: rgba(244,239,230,0.5);
-  font-size: 18px;
+  color: rgba(244,239,230,0.35);
+  font-size: 16px;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 4px;
 }
 
 .itin-view {

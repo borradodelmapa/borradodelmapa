@@ -150,12 +150,27 @@ window._loadGoogleMaps = function() {
     <label class="lml-row"><span>🏛️ Cultura</span><input type="checkbox" data-cat="culture" onchange="toggleMapCat(this)"></label>
     <label class="lml-row"><span>🚇 Transporte</span><input type="checkbox" data-cat="transit" onchange="toggleMapCat(this)"></label>
   </div>
-  <!-- Picker: ir aquí / foto / galería (tras tap en mapa) -->
+  <!-- Picker: acciones tras tap en mapa -->
   <div id="diario-picker" style="display:none">
-    <button class="diario-pick-btn diario-pick-nav" onclick="diarioPickNavigate()">🗺️ Ir aquí</button>
-    <button class="diario-pick-btn" onclick="diarioPickCamera()">📷 Foto</button>
-    <button class="diario-pick-btn" onclick="diarioPickGallery()">🖼️ Galería</button>
-    <button class="diario-pick-close" onclick="closeDiarioPicker()">✕</button>
+    <div class="dpick-row">
+      <button class="dpick-btn dpick-nav" onclick="diarioPickNavigate()">
+        <span class="dpick-icon">🗺️</span><span class="dpick-label">Ir aquí</span>
+      </button>
+      <button class="dpick-btn dpick-save" onclick="diarioPickSave()">
+        <span class="dpick-icon">📌</span><span class="dpick-label">Guardar</span>
+      </button>
+      <button class="dpick-btn" onclick="diarioPickCamera()">
+        <span class="dpick-icon">📷</span><span class="dpick-label">Foto</span>
+      </button>
+      <button class="dpick-btn" onclick="diarioPickGallery()">
+        <span class="dpick-icon">🖼️</span><span class="dpick-label">Galería</span>
+      </button>
+      <button class="dpick-btn dpick-del" onclick="diarioPickDelete()">
+        <span class="dpick-icon">🗑️</span><span class="dpick-label">Borrar</span>
+      </button>
+    </div>
+    <div id="dpick-loc" class="dpick-loc"></div>
+    <button class="dpick-close" onclick="closeDiarioPicker()">✕</button>
   </div>
 
   <canvas id="diario-hidden-canvas" width="1080" height="1920" style="display:none"></canvas>

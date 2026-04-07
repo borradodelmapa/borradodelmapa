@@ -2995,7 +2995,9 @@ function _diarioGeocode() {
 // ── Picker foto/galería ──
 function _showDiarioPicker() {
   const picker = document.getElementById('diario-picker');
-  if (picker) picker.style.display = 'flex';
+  if (picker) picker.style.display = 'block';
+  const loc = document.getElementById('dpick-loc');
+  if (loc) loc.textContent = _diario.locName || '';
 }
 function closeDiarioPicker() {
   const picker = document.getElementById('diario-picker');
@@ -3014,9 +3016,35 @@ function diarioPickGallery() {
 function diarioPickNavigate() {
   const lat = _diario.lat, lng = _diario.lng;
   if (!lat && !lng) return;
-  window.open('https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng, '_blank');
+  window.open('https://www.google.com/maps/@' + lat + ',' + lng + ',17z', '_blank');
+}
+async function diarioPickSave() {
+  if (!currentUser) { showToast('Inicia sesión para guardar'); return; }
+  const uid = currentUser.uid;
+  try {
+    await db.collection('users').doc(uid).collection('pins').add({
+      lat: _diario.lat,
+      lng: _diario.lng,
+      locName: _diario.locName,
+      routeId: _activeRouteDocId || null,
+      createdAt: new Date().toISOString()
+    });
+    showToast('📌 Punto guardado');
+    closeDiarioPicker();
+  } catch (e) {
+    console.warn('[Pin save]', e);
+    showToast('Error al guardar');
+  }
+}
+function diarioPickDelete() {
+  if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
+  _tapLatLng = null;
+  closeDiarioPicker();
+  showToast('Pin eliminado');
 }
 window.diarioPickNavigate = diarioPickNavigate;
+window.diarioPickSave = diarioPickSave;
+window.diarioPickDelete = diarioPickDelete;
 window.diarioPickCamera = diarioPickCamera;
 window.diarioPickGallery = diarioPickGallery;
 window.closeDiarioPicker = closeDiarioPicker;
@@ -3182,9 +3210,9 @@ function _drawDiarioKodak(ctx, photo, W, H, transport, loc, mapImg, msgTxt) {
 }
 
 // Share/download
-function _diarioMapsLink() { return 'https://www.google.com/maps/search/?api=1&query='+_diario.lat+','+_diario.lng; }
+function _diarioMapsLink() { return 'https://www.google.com/maps/@'+_diario.lat+','+_diario.lng+',17z'; }
 function _diarioShareText() {
-  return '📍 '+_diario.locName+'\n'+_diarioMapsLink()+'\n\nborradodelmapa.com';
+  return 'Estoy bien mama! 📍 '+_diario.locName+'\n'+_diarioMapsLink();
 }
 
 async function shareDiarioWA() {
@@ -3321,6 +3349,7 @@ function openLiveMap() {
       _liveMap = new google.maps.Map(el, {
         zoom: 15,
         center: _lastPos || { lat: 40.416, lng: -3.703 },
+        mapTypeId: 'hybrid',
         styles: window._mapStyle,
         disableDefaultUI: true,
         gestureHandling: 'greedy',
