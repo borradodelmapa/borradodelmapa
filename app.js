@@ -3011,6 +3011,12 @@ function diarioPickGallery() {
   const input = document.getElementById('diario-gallery-input');
   if (input) input.click();
 }
+function diarioPickNavigate() {
+  const lat = _diario.lat, lng = _diario.lng;
+  if (!lat && !lng) return;
+  window.open('https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng, '_blank');
+}
+window.diarioPickNavigate = diarioPickNavigate;
 window.diarioPickCamera = diarioPickCamera;
 window.diarioPickGallery = diarioPickGallery;
 window.closeDiarioPicker = closeDiarioPicker;

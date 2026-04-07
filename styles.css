@@ -3593,6 +3593,7 @@ body {
   white-space: nowrap;
 }
 .diario-pick-btn:active { background: rgba(212,168,67,0.30); }
+.diario-pick-nav { background: rgba(212,168,67,0.25); color: var(--dorado, #D4A843); border-color: rgba(212,168,67,0.50); }
 .diario-pick-close {
   background: none;
   border: none;

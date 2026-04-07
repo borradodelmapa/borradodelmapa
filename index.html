@@ -150,10 +150,11 @@ window._loadGoogleMaps = function() {
     <label class="lml-row"><span>🏛️ Cultura</span><input type="checkbox" data-cat="culture" onchange="toggleMapCat(this)"></label>
     <label class="lml-row"><span>🚇 Transporte</span><input type="checkbox" data-cat="transit" onchange="toggleMapCat(this)"></label>
   </div>
-  <!-- Picker: foto o galería (tras tap en mapa) -->
+  <!-- Picker: ir aquí / foto / galería (tras tap en mapa) -->
   <div id="diario-picker" style="display:none">
-    <button class="diario-pick-btn" id="diario-pick-camera" onclick="diarioPickCamera()">📷 Foto</button>
-    <button class="diario-pick-btn" id="diario-pick-gallery" onclick="diarioPickGallery()">🖼️ Galería</button>
+    <button class="diario-pick-btn diario-pick-nav" onclick="diarioPickNavigate()">🗺️ Ir aquí</button>
+    <button class="diario-pick-btn" onclick="diarioPickCamera()">📷 Foto</button>
+    <button class="diario-pick-btn" onclick="diarioPickGallery()">🖼️ Galería</button>
     <button class="diario-pick-close" onclick="closeDiarioPicker()">✕</button>
   </div>
 
