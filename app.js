@@ -107,6 +107,9 @@ function showState(state) {
     if (layer) layer.remove();
     $content.classList.remove('app-content--chat');
   }
+  // FAB mapa: visible en todo menos welcome
+  const fab = document.getElementById('fab-map');
+  if (fab) fab.style.display = (state === 'welcome' || !currentUser) ? 'none' : '';
 }
 
 function updateHeader() {
@@ -1030,8 +1033,8 @@ async function renderGaleria(albumFilter) {
   let albumes = [];
   try {
     const [fotosSnap, albumesSnap] = await Promise.all([
-      db.collection('users').doc(uid).collection('fotos').orderBy('createdAt', 'desc').get(),
-      db.collection('users').doc(uid).collection('albumes').orderBy('createdAt', 'desc').get()
+      db.collection('users').doc(uid).collection('fotos').orderBy('createdAt', 'desc').limit(60).get(),
+      db.collection('users').doc(uid).collection('albumes').orderBy('createdAt', 'desc').limit(20).get()
     ]);
     fotosSnap.forEach(d => fotos.push({ id: d.id, ...d.data() }));
     albumesSnap.forEach(d => albumes.push({ id: d.id, ...d.data() }));
@@ -1039,7 +1042,7 @@ async function renderGaleria(albumFilter) {
     console.warn('[Galería] Error Firestore (puede faltar reglas):', e.message);
     // Intentar cargar fotos de las rutas existentes como fallback
     try {
-      const mapsSnap = await db.collection('users').doc(uid).collection('maps').get();
+      const mapsSnap = await db.collection('users').doc(uid).collection('maps').orderBy('createdAt', 'desc').limit(20).get();
       mapsSnap.forEach(doc => {
         const data = doc.data();
         if (data.photos && Array.isArray(data.photos)) {
@@ -1195,19 +1198,38 @@ function _showFotoActions(foto, albumes, uid, currentAlbumFilter) {
   modal.id = 'foto-actions-modal';
   modal.className = 'modal-overlay active';
 
-  const albumOptions = albumes.map(a =>
-    `<button class="foto-action-btn" data-move="${a.id}">${escapeHTML(a.nombre)}</button>`
-  ).join('');
+  const hasCoords = foto.lat && foto.lng && Math.abs(foto.lat) > 0.01;
+  const dateStr = foto.createdAt ? new Date(foto.createdAt).toLocaleDateString('es-ES') : '';
 
   modal.innerHTML = `
-    <div class="modal" style="max-width:340px">
-      <button class="modal-close" id="foto-modal-close">&times;</button>
-      <img src="${escapeHTML(foto.url)}" style="width:100%;border-radius:8px;margin-bottom:12px">
-      ${foto.caption ? `<p style="font-size:13px;color:var(--crema);margin-bottom:12px">${escapeHTML(foto.caption)}</p>` : ''}
-      <div style="font-size:11px;color:rgba(244,239,230,.4);margin-bottom:16px">${TAG_ICONS[foto.tag] || '📷'} ${foto.tag || 'otro'} · ${new Date(foto.createdAt).toLocaleDateString('es-ES')}</div>
-      ${albumes.length > 0 ? `<div class="foto-action-section">Mover a álbum:</div>${albumOptions}` : ''}
-      ${foto.albumId ? `<button class="foto-action-btn" data-move="__quitar__">Quitar de álbum</button>` : ''}
-      <button class="foto-action-btn foto-action-delete" id="foto-delete">Eliminar foto</button>
+    <div class="foto-detail">
+      <button class="foto-detail-close" id="foto-modal-close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <img src="${escapeHTML(foto.url)}" class="foto-detail-img">
+      <div class="foto-detail-meta">
+        ${foto.caption ? `<div class="foto-detail-caption">${escapeHTML(foto.caption)}</div>` : ''}
+        <div class="foto-detail-info">${TAG_ICONS[foto.tag] || '📷'} ${foto.tag || 'foto'} ${dateStr ? '· ' + dateStr : ''}</div>
+        ${hasCoords ? `<div class="foto-detail-coords">📍 ${foto.lat.toFixed(3)}, ${foto.lng.toFixed(3)}</div>` : ''}
+      </div>
+      <div class="foto-detail-actions">
+        <button class="foto-act" id="foto-act-share">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Compartir
+        </button>
+        <button class="foto-act" id="foto-act-download">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar
+        </button>
+        ${hasCoords ? `<button class="foto-act" id="foto-act-map">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Ver en mapa
+        </button>` : ''}
+        <button class="foto-act foto-act-danger" id="foto-delete">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          Eliminar
+        </button>
+      </div>
     </div>`;
 
   document.body.appendChild(modal);
@@ -1216,21 +1238,48 @@ function _showFotoActions(foto, albumes, uid, currentAlbumFilter) {
   modal.querySelector('#foto-modal-close').addEventListener('click', () => modal.remove());
   modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
 
-  // Mover a álbum
-  modal.querySelectorAll('[data-move]').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const targetAlbum = btn.dataset.move;
-      try {
-        await db.collection('users').doc(uid).collection('fotos').doc(foto.id).update({
-          albumId: targetAlbum === '__quitar__' ? null : targetAlbum
-        });
-        modal.remove();
-        if (typeof showToast === 'function') showToast(targetAlbum === '__quitar__' ? 'Foto quitada del álbum' : 'Foto movida');
-        renderGaleria(currentAlbumFilter);
-      } catch (e) {
-        if (typeof showToast === 'function') showToast('Error al mover foto');
+  // Compartir
+  modal.querySelector('#foto-act-share')?.addEventListener('click', async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({ url: foto.url, title: foto.caption || 'Foto de viaje' });
+      } else {
+        await navigator.clipboard.writeText(foto.url);
+        if (typeof showToast === 'function') showToast('Enlace copiado');
       }
-    });
+    } catch (_) {}
+  });
+
+  // Descargar
+  modal.querySelector('#foto-act-download')?.addEventListener('click', () => {
+    const a = document.createElement('a');
+    a.href = foto.url;
+    a.download = foto.caption || 'foto-viaje';
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  });
+
+  // Ver en mapa → guardar pin + abrir mapa
+  modal.querySelector('#foto-act-map')?.addEventListener('click', async () => {
+    try {
+      // Guardar pin en mapa
+      await db.collection('users').doc(uid).collection('map_pins').add({
+        lat: foto.lat,
+        lng: foto.lng,
+        type: 'photo',
+        label: foto.caption || 'Foto',
+        photoUrl: foto.url,
+        createdAt: new Date().toISOString()
+      });
+      modal.remove();
+      if (typeof showToast === 'function') showToast('📍 Pin guardado en el mapa');
+      // Abrir mapa si está disponible
+      if (typeof openLiveMap === 'function') openLiveMap();
+    } catch (e) {
+      if (typeof showToast === 'function') showToast('Error al guardar pin');
+    }
   });
 
   // Eliminar
@@ -1238,7 +1287,6 @@ function _showFotoActions(foto, albumes, uid, currentAlbumFilter) {
     if (!confirm('¿Eliminar esta foto?')) return;
     try {
       await db.collection('users').doc(uid).collection('fotos').doc(foto.id).delete();
-      // Eliminar de R2
       if (foto.key) {
         fetch(window.SALMA_API + '/delete-photo', {
           method: 'POST',
@@ -1658,7 +1706,7 @@ async function loadUserGuides() {
 
   try {
     const snap = await db.collection('users').doc(currentUser.uid)
-      .collection('maps').orderBy('createdAt', 'desc').get();
+      .collection('maps').orderBy('createdAt', 'desc').limit(30).get();
 
     const grid = document.getElementById('viajes-grid');
 
@@ -2280,6 +2328,13 @@ $input.addEventListener('input', () => {
 });
 
 $send.addEventListener('click', sendMessage);
+
+// FAB Mapa → abrir mapa en vivo
+const _fabMap = document.getElementById('fab-map');
+if (_fabMap) _fabMap.addEventListener('click', () => {
+  if (typeof openLiveMap === 'function') openLiveMap();
+});
+
 $input.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
