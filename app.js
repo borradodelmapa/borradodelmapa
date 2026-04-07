@@ -3319,7 +3319,8 @@ function openShareSheet() {
   document.getElementById('live-map-share-sheet').style.display = 'block';
 }
 function closeShareSheet() {
-  document.getElementById('live-map-share-sheet').style.display = 'none';
+  const el = document.getElementById('live-map-share-sheet');
+  if (el) el.style.display = 'none';
 }
 
 async function shareAsImage() {
@@ -3516,12 +3517,15 @@ function _showTapSheet(latLng) {
 }
 
 function openSalmaMapSheet() {
-  document.getElementById('live-map-salma-sheet').style.display = 'block';
-  document.getElementById('salma-map-status').style.display = 'none';
+  const sheet = document.getElementById('live-map-salma-sheet');
+  const status = document.getElementById('salma-map-status');
+  if (sheet) sheet.style.display = 'block';
+  if (status) status.style.display = 'none';
 }
 
 function closeSalmaMapSheet() {
-  document.getElementById('live-map-salma-sheet').style.display = 'none';
+  const el = document.getElementById('live-map-salma-sheet');
+  if (el) el.style.display = 'none';
 }
 
 function sendSalmaMapPhoto(fileInput) {
