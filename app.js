@@ -3450,9 +3450,8 @@ function _showTapSheet(latLng) {
   const latStr = lat.toFixed(5), lngStr = lng.toFixed(5);
   coordsEl.textContent = `${latStr}, ${lngStr}`;
 
-  // Street View estático del punto tocado
-  photoEl.src = `https://maps.googleapis.com/maps/api/streetview?size=400x160&location=${lat},${lng}&fov=90&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U&return_error_codes=true`;
-  photoEl.style.display = 'block';
+  // Street View desactivado — falla en muchas zonas
+  photoEl.style.display = 'none';
 
   // URL que abre Google Maps app nativa en móvil
   const navUrl = `https://maps.google.com/maps?daddr=${lat},${lng}`;
