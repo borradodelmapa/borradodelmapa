@@ -3018,8 +3018,9 @@ function openLiveMap() {
   closeShareSheet();
   _closeMapPanels();
 
-  // Si el mapa ya existe, solo reanudar GPS
+  // Si el mapa ya existe, solo reanudar GPS y forzar redimensión
   if (_liveMap) {
+    setTimeout(() => google.maps.event.trigger(_liveMap, 'resize'), 100);
     _resumeMapGPS();
     return;
   }
@@ -3044,9 +3045,15 @@ function openLiveMap() {
       _liveMap.addListener('click', _onMapTap);
       _liveMap.addListener('drag', _closeMapPanels);
 
+      // Forzar que Google Maps recalcule tamaño (el contenedor pasa de display:none a visible)
+      setTimeout(() => google.maps.event.trigger(_liveMap, 'resize'), 200);
+
       _resumeMapGPS();
     })
-    .catch(() => showToast('No se pudo cargar Google Maps'));
+    .catch((e) => {
+      console.error('[LiveMap] Error cargando Google Maps:', e);
+      showToast('No se pudo cargar Google Maps');
+    });
 }
 
 function _resumeMapGPS() {
