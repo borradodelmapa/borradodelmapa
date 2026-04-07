@@ -159,22 +159,28 @@ window._loadGoogleMaps = function() {
   </div>
   <!-- Picker: acciones tras tap en mapa -->
   <div id="diario-picker" style="display:none">
+    <button class="dpick-close" onclick="closeDiarioPicker()" aria-label="Cerrar">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
     <div class="dpick-row">
       <button class="dpick-btn" onclick="diarioPickCamera()">
-        <span class="dpick-icon">📷</span><span class="dpick-label">Foto</span>
+        <svg class="dpick-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <span class="dpick-label">Foto</span>
       </button>
       <button class="dpick-btn" onclick="diarioPickGallery()">
-        <span class="dpick-icon">🖼️</span><span class="dpick-label">Galería</span>
+        <svg class="dpick-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <span class="dpick-label">Galeria</span>
       </button>
-      <button class="dpick-btn dpick-nav" onclick="diarioPickNavigate()">
-        <span class="dpick-icon">🗺️</span><span class="dpick-label">Ir aquí</span>
+      <button class="dpick-btn dpick-primary" onclick="diarioPickNavigate()">
+        <svg class="dpick-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+        <span class="dpick-label">Ir aqui</span>
       </button>
       <button class="dpick-btn dpick-save" onclick="diarioPickSave()">
-        <span class="dpick-icon">📌</span><span class="dpick-label">Guardar</span>
+        <svg class="dpick-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+        <span class="dpick-label">Guardar</span>
       </button>
     </div>
     <div id="dpick-loc" class="dpick-loc"></div>
-    <button class="dpick-close" onclick="closeDiarioPicker()">✕</button>
   </div>
 
   <canvas id="diario-hidden-canvas" width="1080" height="1920" style="display:none"></canvas>
@@ -437,14 +443,27 @@ window._loadGoogleMaps = function() {
   <div class="diario-result-canvas-wrap">
     <canvas id="diario-canvas" width="1080" height="1920"></canvas>
   </div>
+  <button class="diario-result-close" onclick="closeDiarioResult()" aria-label="Cerrar">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
   <div class="diario-result-actions">
-    <div class="diario-result-loc">📍 <span id="diario-result-loc-txt"></span></div>
+    <div class="diario-result-loc">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--dorado)" style="vertical-align:-2px;margin-right:3px"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#0a0a0f" cx="12" cy="9" r="2.5"/></svg>
+      <span id="diario-result-loc-txt"></span>
+    </div>
     <div class="diario-result-btns">
-      <button class="diario-rbtn diario-rbtn-wa" onclick="shareDiarioWA()">💬 WhatsApp</button>
-      <button class="diario-rbtn" onclick="downloadDiario()">⬇ Descargar</button>
-      <button class="diario-rbtn" onclick="shareDiarioNative()">↗ Compartir</button>
-      <button class="diario-rbtn dpick-save" onclick="diarioResultSave()">📌 Guardar</button>
-      <button class="diario-rbtn" onclick="closeDiarioResult()">🗺️ Mapa</button>
+      <button class="diario-rbtn diario-rbtn-primary" onclick="shareDiarioNative()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Compartir
+      </button>
+      <button class="diario-rbtn" onclick="downloadDiario()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Descargar
+      </button>
+      <button class="diario-rbtn diario-rbtn-save" onclick="diarioResultSave()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+        Guardar
+      </button>
     </div>
   </div>
 </div>

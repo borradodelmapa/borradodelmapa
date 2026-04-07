@@ -3256,26 +3256,56 @@ body {
   border-radius: 6px;
   box-shadow: 0 16px 60px rgba(0,0,0,.8);
 }
+/* Boton X cerrar resultado */
+.diario-result-close {
+  position: absolute;
+  top: max(env(safe-area-inset-top, 12px), 12px);
+  right: 14px;
+  z-index: 2;
+  width: 44px; height: 44px;
+  background: rgba(10,10,15,0.7);
+  border: 1.5px solid rgba(244,239,230,0.12);
+  border-radius: 50%;
+  color: rgba(244,239,230,0.6);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(8px);
+  transition: border-color .15s, background .15s;
+}
+.diario-result-close:active { border-color: rgba(244,239,230,0.3); background: rgba(10,10,15,0.9); }
 .diario-result-actions {
   width: 100%; background: var(--negro, #0a0a0f);
   border-radius: 24px 24px 0 0;
-  padding: 14px 20px calc(env(safe-area-inset-bottom, 0px) + 24px);
+  padding: 16px 20px calc(env(safe-area-inset-bottom, 0px) + 24px);
 }
 .diario-result-loc { text-align: center; font-size: 13px; font-weight: 600; color: rgba(244,239,230,.6); margin-bottom: 14px; }
 .diario-result-loc span { color: var(--dorado, #D4A843); }
-.diario-result-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.diario-result-btns { display: flex; gap: 10px; }
 .diario-rbtn {
-  flex: 1 1 calc(50% - 4px); min-width: 0;
-  padding: 13px 6px; border-radius: 14px;
-  border: 1px solid rgba(212,168,67,0.30); cursor: pointer;
+  flex: 1; min-width: 0;
+  padding: 14px 8px; border-radius: 14px;
+  border: 1.5px solid rgba(212,168,67,0.25); cursor: pointer;
   font-size: 12px; font-weight: 700; font-family: inherit;
-  display: flex; align-items: center; justify-content: center; gap: 5px;
-  background: rgba(12,10,6,0.95); color: var(--dorado, #D4A843);
-  transition: transform .12s, background .15s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  background: rgba(244,239,230,0.03); color: rgba(244,239,230,0.7);
+  transition: transform .12s, background .15s, border-color .15s;
   white-space: nowrap;
 }
-.diario-rbtn:active { transform: scale(.95); background: rgba(212,168,67,0.12); }
-.diario-rbtn-wa { border-color: var(--dorado, #D4A843); }
+.diario-rbtn:active { transform: scale(.95); background: rgba(212,168,67,0.10); }
+.diario-rbtn svg { flex-shrink: 0; stroke: currentColor; }
+/* Boton primario: Compartir */
+.diario-rbtn-primary {
+  background: rgba(212,168,67,0.15);
+  border-color: var(--dorado, #D4A843);
+  color: var(--dorado, #D4A843);
+}
+.diario-rbtn-primary:active { background: rgba(212,168,67,0.28); }
+/* Boton guardar */
+.diario-rbtn-save {
+  border-color: rgba(92,184,93,0.30);
+  color: rgba(92,184,93,0.8);
+}
+.diario-rbtn-save:active { background: rgba(92,184,93,0.10); }
 
 /* ── Panel tipo mapa (junto al botón abajo-derecha) ── */
 #live-map-maptype-panel {
@@ -3618,52 +3648,67 @@ body {
 }
 .lml-row input[type="checkbox"]:checked::after { transform: translateX(16px); }
 
-/* ── Picker acciones mapa (sin marco, estilo botones mapa) ── */
+/* ── Picker acciones mapa ── */
 #diario-picker {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
   left: 50%;
   transform: translateX(-50%);
   z-index: 980;
-  background: none;
-  border: none;
+  background: rgba(10,10,15,0.88);
+  border: 1.5px solid rgba(212,168,67,0.25);
+  border-radius: 20px;
+  padding: 14px 18px 12px;
+  backdrop-filter: blur(16px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 .dpick-row {
   display: flex;
-  gap: 10px;
+  gap: 14px;
   justify-content: center;
 }
 .dpick-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
-  background: rgba(12,10,6,0.92);
-  border: 1px solid rgba(212,168,67,0.35);
-  border-radius: 50%;
-  width: 52px; height: 52px;
+  gap: 5px;
+  background: rgba(244,239,230,0.04);
+  border: 1.5px solid rgba(212,168,67,0.25);
+  border-radius: 14px;
+  width: 58px; height: 58px;
   justify-content: center;
   cursor: pointer;
-  backdrop-filter: blur(8px);
-  transition: background .15s, transform .12s;
+  transition: background .15s, transform .12s, border-color .15s;
   padding: 0;
 }
-.dpick-btn:active { background: rgba(12,10,6,1); transform: scale(0.92); }
-.dpick-icon { font-size: 20px; line-height: 1; }
-.dpick-label { font-size: 8px; font-weight: 700; color: var(--dorado, #D4A843); letter-spacing: .03em; text-transform: uppercase; }
-.dpick-save { border-color: rgba(92,184,93,0.40); }
-.dpick-save .dpick-label { color: #5CB85C; }
+.dpick-btn:active { background: rgba(212,168,67,0.12); transform: scale(0.93); }
+.dpick-svg { stroke: rgba(244,239,230,0.7); flex-shrink: 0; }
+.dpick-btn:active .dpick-svg { stroke: var(--dorado, #D4A843); }
+.dpick-label {
+  font-size: 9px; font-weight: 700;
+  color: rgba(244,239,230,0.5);
+  letter-spacing: .04em; text-transform: uppercase;
+}
+/* Accion principal: Ir aqui */
+.dpick-primary {
+  background: rgba(212,168,67,0.15);
+  border-color: var(--dorado, #D4A843);
+}
+.dpick-primary .dpick-svg { stroke: var(--dorado, #D4A843); }
+.dpick-primary .dpick-label { color: var(--dorado, #D4A843); }
+.dpick-primary:active { background: rgba(212,168,67,0.28); }
+/* Guardar */
+.dpick-save { border-color: rgba(92,184,93,0.35); }
+.dpick-save .dpick-svg { stroke: #5CB85C; }
+.dpick-save .dpick-label { color: rgba(92,184,93,0.8); }
+.dpick-save:active { background: rgba(92,184,93,0.12); }
 .dpick-loc {
   font-size: 11px;
-  color: rgba(244,239,230,0.55);
-  background: rgba(12,10,6,0.75);
-  padding: 4px 14px;
-  border-radius: 10px;
-  backdrop-filter: blur(8px);
+  color: rgba(244,239,230,0.5);
+  padding: 0 4px;
   max-width: 80vw;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -3671,18 +3716,19 @@ body {
 }
 .dpick-close {
   position: absolute;
-  top: -8px;
-  right: -8px;
-  background: rgba(12,10,6,0.85);
-  border: 1px solid rgba(255,255,255,0.10);
+  top: -12px;
+  right: -12px;
+  background: rgba(10,10,15,0.92);
+  border: 1.5px solid rgba(244,239,230,0.12);
   border-radius: 50%;
-  width: 28px; height: 28px;
+  width: 32px; height: 32px;
   color: rgba(244,239,230,0.5);
-  font-size: 14px;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   backdrop-filter: blur(8px);
+  transition: border-color .15s;
 }
+.dpick-close:active { border-color: rgba(244,239,230,0.3); }
 
 .itin-view {
   position: fixed;
