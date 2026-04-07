@@ -2960,8 +2960,7 @@ function _closeMapPanels() {
 function toggleMapLayersPanel() {
   const panel = document.getElementById('live-map-layers-panel');
   if (panel) {
-    const mp = document.getElementById('live-map-maptype-panel');
-    if (mp) mp.style.display = 'none';
+    document.getElementById('live-map-maptype-panel').style.display = 'none';
     panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
   }
 }
@@ -2969,8 +2968,7 @@ function toggleMapLayersPanel() {
 function toggleMapTypePanel() {
   const panel = document.getElementById('live-map-maptype-panel');
   if (panel) {
-    const lp = document.getElementById('live-map-layers-panel');
-    if (lp) lp.style.display = 'none';
+    document.getElementById('live-map-layers-panel').style.display = 'none';
     panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
   }
 }
@@ -2978,8 +2976,7 @@ function toggleMapTypePanel() {
 
 function setLiveMapType(type) {
   if (_liveMap) _liveMap.setMapTypeId(type);
-  const mp = document.getElementById('live-map-maptype-panel');
-  if (mp) mp.style.display = 'none';
+  document.getElementById('live-map-maptype-panel').style.display = 'none';
   document.querySelectorAll('.lmt-option').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.type === type);
   });
