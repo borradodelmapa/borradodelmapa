@@ -3059,20 +3059,8 @@ body {
   cursor: pointer;
   backdrop-filter: blur(8px);
 }
-#live-map-center {
-  position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 124px);
-  right: 16px;
-  z-index: 970;
-  background: rgba(12,10,6,0.92);
-  color: var(--dorado);
-  border: 1px solid rgba(212,168,67,0.35);
-  border-radius: 50%;
-  width: 44px; height: 44px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-}
+/* center button now inside mini-menu */
+#live-map-center { display: none; }
 #live-map-routes-btn {
   position: fixed;
   top: calc(env(safe-area-inset-top, 0px) + 12px);
@@ -3125,26 +3113,111 @@ body {
   backdrop-filter: blur(6px);
   cursor: pointer;
 }
-/* ── Botón tipo mapa ── */
-#live-map-maptype-btn {
+/* ── Mini-menú herramientas (discreto, arriba-derecha) ── */
+#live-map-tools-toggle {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
   right: 16px;
   z-index: 970;
-  background: rgba(12,10,6,0.92);
-  color: var(--dorado);
-  border: 1px solid rgba(212,168,67,0.35);
+  background: rgba(12,10,6,0.72);
+  color: rgba(244,239,230,0.55);
+  border: 1px solid rgba(255,255,255,0.10);
   border-radius: 50%;
-  width: 44px; height: 44px;
+  width: 40px; height: 40px;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   backdrop-filter: blur(8px);
+  transition: background .2s, color .2s;
 }
+#live-map-tools-toggle:active { background: rgba(12,10,6,0.92); color: var(--dorado); }
+#live-map-tools-menu {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 60px);
+  right: 16px;
+  z-index: 970;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lm-tool-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(12,10,6,0.85);
+  color: rgba(244,239,230,0.60);
+  border: 1px solid rgba(255,255,255,0.10);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: color .15s, border-color .15s;
+}
+.lm-tool-btn:active { color: var(--dorado); border-color: rgba(212,168,67,0.35); }
+
+/* ── FAB Mi Diario (global, flotante) ── */
+#fab-diario {
+  position: fixed;
+  bottom: 90px;
+  right: 16px;
+  z-index: 971;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--dorado, #D4A843);
+  border: none;
+  color: #0C0C0B;
+  box-shadow: 0 4px 24px rgba(212,168,67,0.50);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .17s, box-shadow .17s;
+}
+#fab-diario:hover { transform: scale(1.07); box-shadow: 0 6px 32px rgba(212,168,67,0.65); }
+#fab-diario:active { transform: scale(0.94); }
+#fab-diario.fab-diario-map { bottom: auto; top: 50%; transform: translateY(-50%); width: 62px; height: 62px; }
+#fab-diario.fab-diario-map:hover { transform: translateY(-50%) scale(1.07); }
+#fab-diario.fab-diario-map:active { transform: translateY(-50%) scale(0.94); }
+
+/* ── Resultado Mi Diario (fullscreen) ── */
+.diario-result {
+  position: fixed; inset: 0; z-index: 990;
+  background: rgba(0,0,0,.92);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-end;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s;
+}
+.diario-result.on { opacity: 1; pointer-events: auto; }
+.diario-result-canvas-wrap {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  padding: 20px 20px 0; overflow: hidden;
+}
+.diario-result-canvas-wrap canvas {
+  max-height: 100%; max-width: 100%;
+  border-radius: 6px;
+  box-shadow: 0 16px 60px rgba(0,0,0,.8);
+}
+.diario-result-actions {
+  width: 100%; background: var(--negro, #0a0a0f);
+  border-radius: 24px 24px 0 0;
+  padding: 14px 20px calc(env(safe-area-inset-bottom, 0px) + 24px);
+}
+.diario-result-loc { text-align: center; font-size: 13px; font-weight: 600; color: rgba(244,239,230,.6); margin-bottom: 14px; }
+.diario-result-loc span { color: var(--dorado, #D4A843); }
+.diario-result-btns { display: flex; gap: 8px; }
+.diario-rbtn {
+  flex: 1; padding: 13px 8px; border-radius: 14px; border: none; cursor: pointer;
+  font-size: 13px; font-weight: 700; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+.diario-rbtn:active { transform: scale(.97); }
+.diario-rbtn-wa { background: #25D366; color: #fff; flex: 2; }
+.diario-rbtn-dl { background: rgba(255,255,255,.08); color: var(--crema, #F4EFE6); border: 1px solid rgba(255,255,255,.1); }
+.diario-rbtn-share { background: rgba(255,255,255,.08); color: var(--crema, #F4EFE6); border: 1px solid rgba(255,255,255,.1); }
+.diario-rbtn-cls { background: rgba(255,255,255,.08); color: rgba(244,239,230,.5); border: 1px solid rgba(255,255,255,.1); flex: 0.5; }
+
+/* ── Botón tipo mapa (panel, reposicionado para mini-menú) ── */
 #live-map-maptype-panel {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
-  right: 68px;
-  z-index: 970;
+  top: calc(env(safe-area-inset-top, 0px) + 108px);
+  right: 64px;
+  z-index: 972;
   background: rgba(12,10,6,0.96);
   border: 1px solid rgba(212,168,67,0.25);
   border-radius: 14px;
@@ -3167,22 +3240,7 @@ body {
 }
 .lmt-option:active { background: rgba(212,168,67,0.15); }
 .lmt-option.active { color: var(--dorado); font-weight: 600; }
-/* ── Share button ── */
-#live-map-share-btn {
-  position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 228px);
-  right: 16px;
-  z-index: 970;
-  width: 44px; height: 44px;
-  border-radius: 12px;
-  background: rgba(12,10,6,0.92);
-  border: none;
-  color: var(--crema, #F4EFE6);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  backdrop-filter: blur(8px);
-}
+/* share button removed — functionality moved to Mi Diario */
 /* ── Share sheet ── */
 #live-map-share-sheet {
   position: fixed;
@@ -3223,21 +3281,7 @@ body {
   font-size: 13px; color: rgba(244,239,230,0.6);
   text-align: center; min-height: 20px; padding: 4px 0;
 }
-/* ── Salma button en el mapa ── */
-#live-map-salma-btn {
-  position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 176px);
-  right: 16px;
-  z-index: 970;
-  width: 52px; height: 52px;
-  border-radius: 50%;
-  background: var(--dorado, #D4A843);
-  border: none;
-  font-size: 24px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-}
+/* salma-btn removed — replaced by FAB Mi Diario */
 /* ── Salma sheet en el mapa ── */
 #live-map-salma-sheet {
   position: fixed;
@@ -3425,25 +3469,13 @@ body {
   white-space: nowrap; flex-shrink: 0; text-decoration: none;
 }
 
-#live-map-layers-btn {
-  position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
-  right: 16px;
-  z-index: 970;
-  background: rgba(12,10,6,0.92);
-  color: var(--dorado);
-  border: 1px solid rgba(212,168,67,0.35);
-  border-radius: 50%;
-  width: 44px; height: 44px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-}
+/* layers button now inside mini-menu */
+#live-map-layers-btn { display: none; }
 #live-map-layers-panel {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
-  right: 68px;
-  z-index: 970;
+  top: calc(env(safe-area-inset-top, 0px) + 108px);
+  right: 64px;
+  z-index: 972;
   background: rgba(12,10,6,0.96);
   border: 1px solid rgba(212,168,67,0.25);
   border-radius: 14px;

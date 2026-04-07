@@ -5,7 +5,8 @@
       "name": "Frontend (servidor estático)",
       "runtimeExecutable": "node",
       "runtimeArgs": [".claude/serve.js"],
-      "port": 8080
+      "port": 8080,
+      "autoPort": true
     },
     {
       "name": "Salma Worker (wrangler dev)",

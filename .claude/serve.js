@@ -13,4 +13,4 @@ http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': mime[path.extname(fp)] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
     res.end(data);
   });
-}).listen(8080, () => console.log('Serving on http://localhost:8080'));
+}).listen(process.env.PORT || 8080, () => console.log('Serving on port ' + (process.env.PORT || 8080)));

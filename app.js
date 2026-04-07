@@ -107,6 +107,9 @@ function showState(state) {
     if (layer) layer.remove();
     $content.classList.remove('app-content--chat');
   }
+  // FAB Mi Diario: visible en todo menos welcome
+  const fab = document.getElementById('fab-diario');
+  if (fab) fab.style.display = state === 'welcome' ? 'none' : 'flex';
 }
 
 function updateHeader() {
@@ -2927,10 +2930,315 @@ function setLiveMapType(type) {
   });
 }
 
+// ── Mini-menú herramientas (toggle) ──
+function toggleLiveMapTools() {
+  const menu = document.getElementById('live-map-tools-menu');
+  if (!menu) return;
+  const visible = menu.style.display !== 'none';
+  menu.style.display = visible ? 'none' : 'flex';
+  // Cerrar paneles si se cierra el menú
+  if (visible) {
+    document.getElementById('live-map-maptype-panel').style.display = 'none';
+    document.getElementById('live-map-layers-panel').style.display = 'none';
+  }
+}
+function closeLiveMapTools() {
+  const menu = document.getElementById('live-map-tools-menu');
+  if (menu) menu.style.display = 'none';
+}
+// ══════════════════════════════════════════
+// MI DIARIO — tap mapa → cámara → story → compartir
+// ══════════════════════════════════════════
+
+const _diario = {
+  photo: null,
+  locName: '',
+  lat: 0, lng: 0,
+  lastBlob: null,
+  mapImg: null,
+};
+
+// Tap mapa o FAB → abre cámara frontal directo
+function diarioCapture() {
+  // Si viene del FAB, usar ubicación actual del mapa
+  if (_liveMap) {
+    const c = _liveMap.getCenter();
+    _diario.lat = c.lat(); _diario.lng = c.lng();
+  } else if (window._salmaUserLat) {
+    _diario.lat = window._salmaUserLat; _diario.lng = window._salmaUserLng;
+  }
+  _diarioGeocode();
+  // Abrir cámara frontal directo (en móvil da opción nativa de galería también)
+  const input = document.getElementById('diario-capture-input');
+  if (input) input.click();
+}
+
+// Reverse geocode silencioso
+function _diarioGeocode() {
+  if (!window.google || !google.maps || !google.maps.Geocoder) {
+    _diario.locName = window._salmaUserCountry || '';
+    return;
+  }
+  const geocoder = new google.maps.Geocoder();
+  geocoder.geocode({ location: { lat: _diario.lat, lng: _diario.lng } }, (results, status) => {
+    if (status === 'OK' && results[0]) {
+      const parts = results[0].address_components;
+      const city = (parts.find(p => p.types.includes('locality')) || parts.find(p => p.types.includes('administrative_area_level_1')) || {}).long_name || '';
+      const country = (parts.find(p => p.types.includes('country')) || {}).long_name || '';
+      _diario.locName = city && country ? city + ' · ' + country : results[0].formatted_address;
+    } else {
+      _diario.locName = _diario.lat.toFixed(3) + ', ' + _diario.lng.toFixed(3);
+    }
+  });
+}
+
+// Listener: tras elegir/capturar foto → generar story automáticamente
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('diario-capture-input');
+  if (!input) return;
+  input.addEventListener('change', e => {
+    const f = e.target.files[0]; if (!f) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const img = new Image();
+      img.onload = () => {
+        _diario.photo = img;
+        // Limpiar pin del mapa
+        if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
+        // Generar story directo
+        generateDiarioStory();
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(f);
+    e.target.value = '';
+  });
+});
+
+// Generar story Kodak automáticamente
+async function generateDiarioStory() {
+  if (!_diario.photo) return;
+
+  // Load map background
+  const mapUrl = 'https://maps.googleapis.com/maps/api/staticmap?center='
+    + _diario.lat+','+_diario.lng+'&zoom=14&size=640x640'
+    + '&style=element:geometry%7Ccolor:0x1d2c4d&style=element:labels.text.fill%7Ccolor:0x8ec3b9&style=feature:road%7Celement:geometry%7Ccolor:0x304a7d&style=feature:water%7Celement:geometry%7Ccolor:0x0e1626&style=feature:poi%7Cvisibility:off'
+    + '&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
+  try {
+    const mapImg = await new Promise((resolve, reject) => {
+      const i = new Image(); i.crossOrigin='anonymous';
+      i.onload = () => resolve(i); i.onerror = reject; i.src = mapUrl;
+    });
+    // Scale map to story size
+    const tmp = document.createElement('canvas'); tmp.width=1080; tmp.height=1920;
+    tmp.getContext('2d').drawImage(mapImg,0,0,1080,1920);
+    const scaled = new Image();
+    await new Promise(r => { scaled.onload=r; scaled.src=tmp.toDataURL(); });
+    _diario.mapImg = scaled;
+  } catch(e) { _diario.mapImg = null; }
+
+  // Draw Kodak frame
+  const c = document.getElementById('diario-canvas');
+  const ctx = c.getContext('2d');
+  _drawDiarioKodak(ctx, _diario.photo, 1080, 1920, null, _diario.locName, _diario.mapImg, '');
+
+  // Save blob
+  await new Promise(resolve => { c.toBlob(b => { _diario.lastBlob = b; resolve(); }, 'image/jpeg', 0.95); });
+
+  // Show result
+  document.getElementById('diario-result-loc-txt').textContent = _diario.locName;
+  document.getElementById('diario-result').classList.add('on');
+
+  // Auto-guardar en galería del usuario
+  _diarioSaved = false;
+  _saveDiarioToGallery();
+}
+
+function _drawDiarioKodak(ctx, photo, W, H, transport, loc, mapImg, msgTxt) {
+  const fs = W / 1080;
+
+  // Background: map or dark gradient
+  if (mapImg) {
+    const mr = mapImg.naturalWidth/mapImg.naturalHeight, cr = W/H;
+    let sx=0,sy=0,sw=mapImg.naturalWidth,sh=mapImg.naturalHeight;
+    if(mr>cr){sw=sh*cr;sx=(mapImg.naturalWidth-sw)/2;}else{sh=sw/cr;sy=(mapImg.naturalHeight-sh)/2;}
+    ctx.drawImage(mapImg,sx,sy,sw,sh,0,0,W,H);
+    ctx.fillStyle='rgba(10,10,9,0.48)'; ctx.fillRect(0,0,W,H);
+  } else {
+    const bg=ctx.createLinearGradient(0,0,W,H);
+    bg.addColorStop(0,'#0F1520');bg.addColorStop(1,'#060810');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  }
+
+  // Kodak print
+  const printW=Math.round(W*0.80), printX=Math.round((W-printW)/2);
+  const bT=Math.round(26*fs),bS=Math.round(26*fs),bB=Math.round(96*fs);
+  const phW=printW-bS*2, phH=Math.round(phW*1.24);
+  const printH=bT+phH+bB, printY=Math.round((H-printH)*0.36);
+  const phX=printX+bS, phY=printY+bT;
+
+  // Shadow + white print
+  ctx.save();
+  ctx.shadowColor='rgba(0,0,0,0.85)';ctx.shadowBlur=Math.round(70*fs);ctx.shadowOffsetY=Math.round(30*fs);
+  ctx.fillStyle='#F8F6F0';ctx.fillRect(printX,printY,printW,printH);
+  ctx.restore();
+  ctx.fillStyle='#F8F6F0';ctx.fillRect(printX,printY,printW,printH);
+
+  // Photo
+  if(photo){
+    ctx.save();ctx.beginPath();ctx.rect(phX,phY,phW,phH);ctx.clip();
+    const ir=photo.naturalWidth/photo.naturalHeight,cr2=phW/phH;
+    let sx=0,sy=0,sw=photo.naturalWidth,sh=photo.naturalHeight;
+    if(ir>cr2){sw=sh*cr2;sx=(photo.naturalWidth-sw)/2;}else{sh=sw/cr2;sy=(photo.naturalHeight-sh)/2;}
+    ctx.drawImage(photo,sx,sy,sw,sh,phX,phY,phW,phH);
+    ctx.restore();
+    // Vignette
+    const vig=ctx.createRadialGradient(phX+phW/2,phY+phH/2,phW*.3,phX+phW/2,phY+phH/2,phW*.72);
+    vig.addColorStop(0,'rgba(0,0,0,0)');vig.addColorStop(1,'rgba(0,0,0,0.20)');
+    ctx.fillStyle=vig;ctx.fillRect(phX,phY,phW,phH);
+  }
+
+  // Transport badge
+  if(transport){
+    const bSz=Math.round(80*fs),bPad=Math.round(16*fs);
+    ctx.save();ctx.fillStyle='rgba(0,0,0,0.55)';
+    ctx.beginPath();ctx.roundRect(phX+bPad,phY+bPad,bSz,bSz,Math.round(12*fs));ctx.fill();
+    ctx.font=Math.round(50*fs)+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(transport,phX+bPad+bSz/2,phY+bPad+bSz/2);
+    ctx.restore();
+  }
+
+  // Date badge
+  const dateStr=new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'2-digit'});
+  {
+    const bH=Math.round(46*fs),bW=Math.round(158*fs),bPad=Math.round(16*fs);
+    ctx.save();ctx.fillStyle='rgba(0,0,0,0.55)';
+    ctx.beginPath();ctx.roundRect(phX+phW-bW-bPad,phY+bPad,bW,bH,Math.round(7*fs));ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.92)';ctx.font='bold '+Math.round(22*fs)+'px -apple-system,sans-serif';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(dateStr,phX+phW-bW/2-bPad,phY+bPad+bH/2);
+    ctx.restore();
+  }
+
+  // Bottom strip: KODAK
+  const sY=phY+phH,sH=bB;
+  ctx.fillStyle='#E01B22';ctx.font='bold '+Math.round(32*fs)+'px Georgia,serif';
+  ctx.textAlign='left';ctx.textBaseline='top';
+  ctx.fillText('KODAK',phX,sY+Math.round(14*fs));
+  ctx.fillStyle='rgba(0,0,0,0.28)';ctx.font=Math.round(16*fs)+'px Georgia,serif';
+  ctx.fillText('GOLD 200',phX,sY+Math.round(50*fs));
+  const shortLoc=loc.length>26?loc.substring(0,24)+'…':loc;
+  ctx.fillStyle='rgba(0,0,0,0.80)';ctx.font='bold '+Math.round(24*fs)+'px -apple-system,sans-serif';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('📍 '+shortLoc,W/2,sY+sH*0.46);
+  ctx.fillStyle='rgba(0,0,0,0.30)';ctx.font='bold '+Math.round(26*fs)+'px Georgia,serif';
+  ctx.textAlign='right';ctx.textBaseline='top';
+  ctx.fillText('36',phX+phW,sY+Math.round(14*fs));
+
+  // Message below print
+  if(msgTxt){
+    const msgY=printY+printH+Math.round(56*fs);
+    ctx.fillStyle='rgba(244,239,230,0.96)';ctx.font='bold '+Math.round(46*fs)+'px -apple-system,sans-serif';
+    ctx.textAlign='center';ctx.textBaseline='top';
+    const words=msgTxt.split(' ');let line='',lines=[];
+    words.forEach(w=>{const t=line?line+' '+w:w;if(ctx.measureText(t).width>W-Math.round(140*fs)&&line){lines.push(line);line=w;}else line=t;});
+    if(line)lines.push(line);
+    lines.forEach((l,i)=>ctx.fillText(l,W/2,msgY+i*Math.round(62*fs)));
+  }
+
+  // Watermark
+  ctx.fillStyle='rgba(244,239,230,0.20)';ctx.font=Math.round(22*fs)+'px -apple-system,sans-serif';
+  ctx.textAlign='right';ctx.textBaseline='bottom';
+  ctx.fillText('borradodelmapa.com',W-Math.round(44*fs),H-Math.round(44*fs));
+}
+
+// Share/download
+function _diarioMapsLink() { return 'https://www.google.com/maps/search/?api=1&query='+_diario.lat+','+_diario.lng; }
+function _diarioShareText() {
+  return '📍 '+_diario.locName+'\n'+_diarioMapsLink()+'\n\nborradodelmapa.com';
+}
+
+async function shareDiarioWA() {
+  if(!_diario.lastBlob) return;
+  const file=new File([_diario.lastBlob],'mi-diario.jpg',{type:'image/jpeg'});
+  const txt=_diarioShareText();
+  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file],text:txt});return;}catch(e){}
+  }
+  const a=document.createElement('a');a.href=URL.createObjectURL(_diario.lastBlob);
+  a.download='mi-diario.jpg';a.click();
+  if(typeof showToast==='function')showToast('📸 Descargada — adjúntala en WhatsApp');
+  setTimeout(()=>window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank'),700);
+}
+
+function downloadDiario() {
+  if(!_diario.lastBlob) return;
+  const a=document.createElement('a');a.href=URL.createObjectURL(_diario.lastBlob);
+  a.download='mi-diario-'+Date.now()+'.jpg';a.click();
+  if(typeof showToast==='function')showToast('✓ Guardada');
+}
+
+async function shareDiarioNative() {
+  if(!_diario.lastBlob) return;
+  const file=new File([_diario.lastBlob],'mi-diario.jpg',{type:'image/jpeg'});
+  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file],text:_diarioShareText()});}catch(e){}
+  } else { downloadDiario(); }
+}
+
+function closeDiarioResult() { document.getElementById('diario-result').classList.remove('on'); }
+
+// Auto-guardar story en Firestore (ruta activa o galería general)
+let _diarioSaved = false;
+async function _saveDiarioToGallery() {
+  if (_diarioSaved || !_diario.lastBlob || !currentUser) return;
+  _diarioSaved = true;
+  try {
+    const uid = currentUser.uid;
+    // Comprimir blob para subir
+    const formData = new FormData();
+    formData.append('photo', _diario.lastBlob, 'mi-diario.jpg');
+    formData.append('uid', uid);
+
+    const res = await fetch(window.SALMA_API + '/upload-gallery-photo', {
+      method: 'POST',
+      body: formData
+    });
+    if (!res.ok) throw new Error('Upload failed');
+    const { key, url } = await res.json();
+
+    // Guardar en Firestore
+    await db.collection('users').doc(uid).collection('fotos').add({
+      key, url,
+      tag: 'diario',
+      caption: _diario.locName,
+      albumId: null,
+      routeId: _activeRouteDocId || null,
+      lat: _diario.lat,
+      lng: _diario.lng,
+      source: 'diario',
+      createdAt: new Date().toISOString()
+    });
+
+    if (typeof showToast === 'function') showToast('📸 Guardada en tu galería');
+  } catch (e) {
+    console.warn('[Diario save]', e);
+    _diarioSaved = false; // Permitir reintentar
+  }
+}
+
 window.toggleMapCat = toggleMapCat;
 window.toggleMapLayersPanel = toggleMapLayersPanel;
 window.toggleMapTypePanel = toggleMapTypePanel;
 window.setLiveMapType = setLiveMapType;
+window.toggleLiveMapTools = toggleLiveMapTools;
+window.closeLiveMapTools = closeLiveMapTools;
+window.diarioCapture = diarioCapture;
+window.generateDiarioStory = generateDiarioStory;
+window.shareDiarioWA = shareDiarioWA;
+window.downloadDiario = downloadDiario;
+window.shareDiarioNative = shareDiarioNative;
+window.closeDiarioResult = closeDiarioResult;
 
 // Inicializar estilo base
 _buildMapStyle();
@@ -2951,6 +3259,9 @@ function openLiveMap() {
   view.style.display = 'block';
   if (bar) bar.style.display = 'none';
   document.querySelector('.app-header')?.style.setProperty('display', 'none', 'important');
+  // FAB centrado vertical en mapa
+  const fab = document.getElementById('fab-diario');
+  if (fab) { fab.style.display = 'flex'; fab.classList.add('fab-diario-map'); }
 
   // Cerrar cualquier sheet que haya quedado abierta
   closeSalmaMapSheet();
@@ -3041,6 +3352,9 @@ function closeLiveMap() {
   if (view) view.style.display = 'none';
   if (bar) bar.style.display = '';
   document.querySelector('.app-header')?.style.removeProperty('display');
+  // FAB vuelve a posición normal
+  const fab = document.getElementById('fab-diario');
+  if (fab) fab.classList.remove('fab-diario-map');
   // Cerrar sheets y paneles
   _closeMapPanels();
   closeSalmaMapSheet();
@@ -3086,7 +3400,7 @@ async function openRouteSelector() {
       item.innerHTML = `<span class="lmrs-item-title">${d.nombre || 'Mi ruta'}</span>
         <span class="lmrs-item-meta">${days} día${days > 1 ? 's' : ''} · ${validStops.length} paradas con coords</span>`;
       item.addEventListener('click', () => {
-        if (routeData) selectRouteOnMap(routeData);
+        if (routeData) selectRouteOnMap(routeData, doc.id);
         else showToast('Esta ruta no tiene datos de mapa');
         closeRouteSelector();
       });
@@ -3104,11 +3418,13 @@ function closeRouteSelector() {
 let _liveRouteStops = [];
 let _liveInfoWindow = null;
 let _activeRouteData = null;
+let _activeRouteDocId = null;
 
-function selectRouteOnMap(routeData) {
+function selectRouteOnMap(routeData, docId) {
   if (!_liveMap || !window.google) return;
   clearRouteFromLiveMap();
   _activeRouteData = routeData;
+  _activeRouteDocId = docId || null;
 
   const dayColors = ['#D4A843','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
   const valid = (routeData.stops || []).filter(s => s.lat && s.lng);
@@ -3213,6 +3529,7 @@ function _updateNearestChip() {
 
 function clearRouteFromLiveMap() {
   _activeRouteData = null;
+  _activeRouteDocId = null;
   _liveRouteMarkers.forEach(m => m.setMap(null));
   _liveRouteMarkers = [];
   if (_liveRoutePolyline) { _liveRoutePolyline.setMap(null); _liveRoutePolyline = null; }
@@ -3313,6 +3630,7 @@ function _onMapTap(e) {
   if (_poiInfoWindow) _poiInfoWindow.close();
   _tapLatLng = e.latLng;
 
+  // Drop gold pin
   if (_tapPin) {
     _tapPin.setPosition(_tapLatLng);
   } else {
@@ -3329,7 +3647,27 @@ function _onMapTap(e) {
       zIndex: 200,
     });
   }
-  _showTapSheet(_tapLatLng);
+
+  // Save coordinates for diario
+  _diario.lat = _tapLatLng.lat();
+  _diario.lng = _tapLatLng.lng();
+
+  // Reverse geocode in background
+  const geocoder = new google.maps.Geocoder();
+  geocoder.geocode({ location: _tapLatLng }, (results, status) => {
+    if (status === 'OK' && results[0]) {
+      const parts = results[0].address_components;
+      const city = (parts.find(p => p.types.includes('locality')) || parts.find(p => p.types.includes('administrative_area_level_1')) || {}).long_name || '';
+      const country = (parts.find(p => p.types.includes('country')) || {}).long_name || '';
+      _diario.locName = city && country ? city + ' · ' + country : results[0].formatted_address;
+    } else {
+      _diario.locName = _diario.lat.toFixed(3) + ', ' + _diario.lng.toFixed(3);
+    }
+  });
+
+  // Open camera/gallery picker directly
+  const captureInput = document.getElementById('diario-capture-input');
+  if (captureInput) captureInput.click();
 }
 
 function closeTapSheet() {
