@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Borrado del Mapa · Viaja con Salma</title>
+
+  <meta name="description" content="Salma es tu compañera de viaje inteligente. Te diseña la ruta, te guía con voz, te resuelve imprevistos en tiempo real y documenta tu aventura. No es otra app de viajes. Es la persona que te falta.">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+  <meta name="theme-color" content="#050505">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="Permissions-Policy" content="geolocation=(self), microphone=()">
+  <link rel="canonical" href="https://borradodelmapa.com/">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Borradodelmapa">
+  <link rel="apple-touch-icon" href="/salma_ai_avatar.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Borradodelmapa">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:title" content="Viaja con Salma — Borrado del Mapa">
+  <meta property="og:description" content="La persona que te falta en cada viaje. Planifica, guía, resuelve y acompaña.">
+  <meta property="og:url" content="https://borradodelmapa.com/">
+  <meta property="og:image" content="https://borradodelmapa.com/og-image.jpg">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Borradodelmapa · Tu copiloto de viaje con IA">
+  <meta name="twitter:description" content="Salma planifica tu ruta, te acompaña en el viaje y guarda todo lo que descubres.">
+  <meta name="twitter:image" content="https://borradodelmapa.com/og-image.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="//raw.githubusercontent.com">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Borradodelmapa",
+    "url": "https://borradodelmapa.com/",
+    "logo": "https://borradodelmapa.com/logo.png",
+    "sameAs": ["https://instagram.com/borradodelmapa"]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Borradodelmapa",
+    "applicationCategory": "TravelApplication",
+    "operatingSystem": "Web",
+    "url": "https://borradodelmapa.com/",
+    "description": "Salma es tu copiloto de viaje con IA. Planifica rutas, descubre lugares y viaja con una guía inteligente.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+  }
+  </script>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<!-- Google Maps JS — carga bajo demanda al activar Copiloto -->
+<script>
+window._loadGoogleMaps = function() {
+  return new Promise((resolve, reject) => {
+    if (window.google && window.google.maps && window.google.maps.Map) { resolve(); return; }
+    window._gmapsReady = resolve;
+    const s = document.createElement('script');
+    s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U&libraries=geometry,marker,places&callback=_gmapsReady';
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+};
+</script>
+<link rel="stylesheet" href="styles.css?v=43">
+<link rel="stylesheet" href="docs-viajero.css?v=2">
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-B2YWQKPTZZ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-B2YWQKPTZZ');</script>
+</head>
+<body>
+
+<!-- ═══ SPLASH ═══ -->
+<div id="splash">
+  <img class="splash-avatar" src="/salma_ai_avatar.png" alt="Salma">
+  <div class="splash-logo">borrado<span>del</span>mapa</div>
+  <div class="splash-dots"><span></span><span></span><span></span></div>
+</div>
+
+<!-- ═══ HEADER ═══ -->
+<header class="app-header">
+  <div class="app-logo" id="app-logo">borrado<span>del</span>mapa</div>
+  <div class="app-header-actions" id="header-actions"></div>
+</header>
+
+<!-- ═══ CONTENT ═══ -->
+<main class="app-content" id="app-content"></main>
+
+<!-- ═══ VISTA ITINERARIO (ruta enriquecida) ═══ -->
+<div class="itin-view" id="itin-view" style="display:none">
+  <button class="itin-mobile-back" id="itin-mobile-back-btn" aria-label="Volver" onclick="document.dispatchEvent(new CustomEvent('itin:close'))">←</button>
+  <div class="itin-layout">
+    <div class="itin-map-col" id="itin-map-container"></div>
+    <div class="itin-cards-col" id="itin-cards-container"></div>
+  </div>
+</div>
+
+<!-- ═══ MAPA EN VIVO (logueado) ═══ -->
+<div id="live-map-view" style="display:none">
+  <div id="live-map-container"></div>
+  <button id="live-map-back" onclick="closeLiveMap()">← App</button>
+  <button id="live-map-routes-btn" onclick="openRouteSelector()" title="Mis Rutas">📍 Mis Rutas</button>
+  <button id="live-map-clear-route" onclick="clearRouteFromLiveMap()" style="display:none" title="Quitar ruta">✕ Ruta</button>
+  <div id="live-map-nearest-chip" style="display:none"></div>
+  <!-- Sheet selector de rutas -->
+  <div id="live-map-routes-sheet" style="display:none">
+    <div class="lmrs-header">
+      <span>Selecciona una ruta</span>
+      <button onclick="closeRouteSelector()">✕</button>
+    </div>
+    <div id="live-map-routes-list"></div>
+  </div>
+  <!-- Botón tipo mapa -->
+  <button id="live-map-maptype-btn" onclick="toggleMapTypePanel()" title="Tipo de mapa">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+  </button>
+  <div id="live-map-maptype-panel" style="display:none">
+    <button class="lmt-option" data-type="roadmap" onclick="setLiveMapType('roadmap')">🗺️ Normal</button>
+    <button class="lmt-option" data-type="satellite" onclick="setLiveMapType('satellite')">🛰️ Satélite</button>
+    <button class="lmt-option" data-type="hybrid" onclick="setLiveMapType('hybrid')">🛰️ + calles</button>
+    <button class="lmt-option" data-type="terrain" onclick="setLiveMapType('terrain')">⛰️ Terreno</button>
+  </div>
+  <button id="live-map-center" onclick="liveMapCenter()" title="Mi ubicación">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+  </button>
+  <!-- Botón Compartir mapa -->
+  <button id="live-map-share-btn" onclick="openShareSheet()" title="Compartir mapa">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+  </button>
+  <!-- Share sheet -->
+  <div id="live-map-share-sheet" style="display:none">
+    <div class="lmsh-handle"></div>
+    <div class="lmsh-header">
+      <span class="lmsh-title">Compartir mapa</span>
+      <button class="lmsh-close" onclick="closeShareSheet()">✕</button>
+    </div>
+    <div class="lmsh-options">
+      <button class="lmsh-option" onclick="shareAsImage()">
+        <div class="lmsh-opt-icon">🖼️</div>
+        <div class="lmsh-opt-text">
+          <div class="lmsh-opt-title">Imagen para redes</div>
+          <div class="lmsh-opt-desc">Mapa con tus pins para compartir</div>
+        </div>
+      </button>
+    </div>
+    <div id="lmsh-status"></div>
+  </div>
+  <!-- Botón Salma en el mapa -->
+  <button id="live-map-salma-btn" onclick="openSalmaMapSheet()" title="Guardar en el mapa">🤖</button>
+
+  <!-- Sheet Salma mapa -->
+  <div id="live-map-salma-sheet" style="display:none">
+    <div class="lms-handle"></div>
+    <div class="lms-header">
+      <span class="lms-title">🤖 Guardar en el mapa</span>
+      <button class="lms-close" onclick="closeSalmaMapSheet()">✕</button>
+    </div>
+    <div class="lms-actions">
+      <label class="lms-action-btn">
+        📷
+        <input type="file" accept="image/*" capture="environment" style="display:none" onchange="sendSalmaMapPhoto(this)">
+      </label>
+      <label class="lms-action-btn">
+        📁
+        <input type="file" accept="image/*" style="display:none" onchange="sendSalmaMapPhoto(this)">
+      </label>
+    </div>
+    <div id="salma-map-status" style="display:none"></div>
+  </div>
+
+  <!-- Sheet: tap manual en mapa -->
+  <div id="live-map-tap-sheet" style="display:none">
+    <div class="lmts-handle"></div>
+    <img id="lmts-photo" class="lmts-photo" src="" alt="" style="display:none" onerror="this.style.display='none'">
+    <div class="lmts-header">
+      <div>
+        <div id="lmts-address" class="lmts-address">Buscando dirección…</div>
+        <div id="lmts-coords" class="lmts-coords"></div>
+      </div>
+      <button class="lmts-close" onclick="closeTapSheet()">✕</button>
+    </div>
+    <div class="lmts-btns">
+      <button class="lmts-btn-save" id="lmts-save-btn">⭐ Guardar pin</button>
+      <button class="lmts-btn-dir" id="lmts-dir-btn">🗺️ Cómo llegar</button>
+    </div>
+    <div class="lmts-photo-row">
+      <label class="lmts-photo-btn" title="Hacer foto">
+        📷
+        <input type="file" accept="image/*" capture="environment" style="display:none" onchange="handleTapPhoto(this)">
+      </label>
+      <label class="lmts-photo-btn" title="Subir imagen">
+        📁
+        <input type="file" accept="image/*" style="display:none" onchange="handleTapPhoto(this)">
+      </label>
+      <div id="lmts-photo-preview" style="display:none">
+        <img id="lmts-photo-thumb" alt="">
+        <button class="lmts-photo-clear" onclick="clearTapPhoto()">✕</button>
+      </div>
+    </div>
+    <div class="lmts-section-title">Cerca de aquí</div>
+    <div id="lmts-nearby-list" class="lmts-nearby-list"></div>
+  </div>
+
+  <button id="live-map-layers-btn" onclick="toggleMapLayersPanel()" title="Capas">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+  </button>
+  <div id="live-map-layers-panel" style="display:none">
+    <div class="lml-title">Mostrar en el mapa</div>
+    <label class="lml-row"><span>🍽️ Restaurantes</span><input type="checkbox" data-cat="food" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>💊 Farmacias</span><input type="checkbox" data-cat="medical" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>🏨 Hoteles</span><input type="checkbox" data-cat="lodging" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>🛒 Supermercados</span><input type="checkbox" data-cat="shopping" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>🌳 Parques</span><input type="checkbox" data-cat="parks" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>🏛️ Cultura</span><input type="checkbox" data-cat="culture" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>🚇 Transporte</span><input type="checkbox" data-cat="transit" onchange="toggleMapCat(this)"></label>
+  </div>
+</div>
+
+<!-- ═══ INPUT BAR (siempre visible) ═══ -->
+<div class="app-input-bar" id="app-input-bar">
+  <!-- Preview foto (oculto por defecto) -->
+  <div class="chat-photo-preview" id="chat-photo-preview" style="display:none">
+    <img id="chat-photo-thumb" alt="Preview">
+    <button class="chat-photo-cancel" id="chat-photo-cancel" aria-label="Cancelar foto">&times;</button>
+  </div>
+  <div class="input-row">
+    <textarea class="app-input" id="main-input" placeholder="Ej: Vietnam 10 días en moto" autocomplete="off" rows="1"></textarea>
+    <input type="file" id="chat-photo-input" accept="image/*" style="display:none">
+    <input type="file" id="chat-camera-input" accept="image/*" capture="environment" style="display:none">
+    <div class="cam-menu" id="cam-menu" style="display:none">
+      <button class="cam-menu-opt" id="cam-menu-foto">📸 Hacer foto</button>
+      <button class="cam-menu-opt" id="cam-menu-galeria">🖼️ Galería</button>
+    </div>
+    <button class="app-cam" id="cam-btn" aria-label="Enviar foto">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+    </button>
+    <button class="app-mic" id="mic-btn" aria-label="Hablar">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="1" width="6" height="12" rx="3"/>
+        <path d="M19 10v1a7 7 0 0 1-14 0v-1"/>
+        <line x1="12" y1="19" x2="12" y2="23"/>
+        <line x1="8" y1="23" x2="16" y2="23"/>
+      </svg>
+    </button>
+    <button class="app-send-arrow" id="main-send" aria-label="Enviar" style="display:none">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- ═══ AUTH SCREEN (sustituye modal) ═══ -->
+<div class="auth-screen" id="auth-screen">
+
+  <div class="auth-bg"></div>
+
+  <!-- VISTA: Bienvenida -->
+  <div class="auth-view" id="auth-welcome-view">
+    <div class="auth-logo-wrap">
+      <div class="auth-logo">BORRADO<br><span>DEL</span>MAPA</div>
+      <div class="auth-tagline">SALMA · TU COMPAÑERA DE VIAJE</div>
+    </div>
+    <div class="auth-actions">
+      <button class="auth-btn-primary" id="auth-go-login">ENTRAR</button>
+      <button class="auth-btn-secondary" id="auth-go-register">CREAR CUENTA</button>
+      <div class="auth-divider">o</div>
+      <button class="auth-btn-google" id="btn-google-login">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continuar con Google
+      </button>
+    </div>
+    <button class="auth-skip" id="auth-skip">Explorar sin cuenta →</button>
+  </div>
+
+  <!-- VISTA: Login -->
+  <div class="auth-view hidden" id="auth-login-view">
+    <button class="auth-back" id="auth-back-login">←</button>
+    <div class="auth-header">
+      <div class="auth-logo small">BORRADO<span>DEL</span>MAPA</div>
+      <h2 class="auth-title">Bienvenido de vuelta</h2>
+    </div>
+    <div class="auth-biometric hidden" id="auth-biometric">
+      <button class="auth-fingerprint-btn" id="btn-fingerprint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M17.5 5.5C16 4 14.1 3 12 3c-2.1 0-4 .9-5.5 2.5C4.9 7.1 4 9 4 11.2c0 2.8.8 5.4 2.1 7.8"/><path d="M20 11.2c0-4.4-3.6-8-8-8"/><path d="M12 8c-1.7 0-3 1.3-3 3 0 1.8.5 3.5 1.4 5"/><path d="M15 11c0-1.7-1.3-3-3-3"/><path d="M12 11c0 2 .5 3.9 1.4 5.5"/><path d="M7.5 19.5c1 1 2.3 1.7 3.8 1.9"/></svg>
+      </button>
+      <p class="auth-fingerprint-label">Usar huella dactilar</p>
+      <div class="auth-divider">o entra con email</div>
+    </div>
+    <div class="auth-form">
+      <div class="auth-error" id="login-error"></div>
+      <div class="auth-field">
+        <label class="auth-label">EMAIL</label>
+        <input class="auth-input" type="email" id="login-email" placeholder="tu@email.com" autocomplete="email">
+      </div>
+      <div class="auth-field">
+        <label class="auth-label">CONTRASEÑA</label>
+        <input class="auth-input" type="password" id="login-pass" placeholder="Tu contraseña" autocomplete="current-password">
+      </div>
+      <button class="auth-btn-primary" id="btn-login">ENTRAR</button>
+      <div class="auth-divider">o</div>
+      <button class="auth-btn-google" id="btn-google-login-2">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continuar con Google
+      </button>
+      <div class="auth-switch">¿No tienes cuenta? <a id="switch-to-register">Regístrate</a></div>
+    </div>
+  </div>
+
+  <!-- VISTA: Registro -->
+  <div class="auth-view hidden" id="auth-register-view">
+    <button class="auth-back" id="auth-back-register">←</button>
+    <div class="auth-header">
+      <div class="auth-logo small">BORRADO<span>DEL</span>MAPA</div>
+      <h2 class="auth-title">Crea tu cuenta</h2>
+    </div>
+    <div class="auth-form">
+      <div class="auth-error" id="register-error"></div>
+      <div class="auth-field">
+        <label class="auth-label">NOMBRE</label>
+        <input class="auth-input" type="text" id="register-name" placeholder="Tu nombre" autocomplete="name">
+      </div>
+      <div class="auth-field">
+        <label class="auth-label">EMAIL</label>
+        <input class="auth-input" type="email" id="register-email" placeholder="tu@email.com" autocomplete="email">
+      </div>
+      <div class="auth-field">
+        <label class="auth-label">CONTRASEÑA</label>
+        <input class="auth-input" type="password" id="register-pass" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+      </div>
+      <button class="auth-btn-primary" id="btn-register">CREAR CUENTA</button>
+      <div class="auth-divider">o</div>
+      <button class="auth-btn-google" id="btn-google-register">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continuar con Google
+      </button>
+      <div class="auth-switch">¿Ya tienes cuenta? <a id="switch-to-login">Entra</a></div>
+    </div>
+  </div>
+
+  <!-- relleno modal antiguo (vacío, mantiene IDs) -->
+  <div class="hidden" id="modal-auth"><div class="modal">
+    <div id="modal-login-view">
+      <h2 class="modal-title">Entra</h2>
+      <p class="modal-sub">Guarda tus guías y accede desde cualquier sitio</p>
+      <div class="modal-error" id="login-error"></div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" id="login-email" placeholder="tu@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" id="login-pass" placeholder="Tu contraseña">
+      </div>
+      <button class="btn-form" id="btn-login">ENTRAR</button>
+      <div class="modal-divider">o</div>
+      <button class="btn-social" id="btn-google-login">
+        <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continuar con Google
+      </button>
+      <div class="modal-switch">¿No tienes cuenta? <a id="switch-to-register">Regístrate</a></div>
+    </div>
+
+    <!-- Register -->
+    <div id="modal-register-view" class="hidden">
+      <h2 class="modal-title">Regístrate</h2>
+      <p class="modal-sub">Crea tu cuenta y guarda tus guías de viaje</p>
+      <div class="modal-error" id="register-error"></div>
+      <div class="form-group">
+        <label class="form-label">Nombre</label>
+        <input class="form-input" type="text" id="register-name" placeholder="Tu nombre">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" id="register-email" placeholder="tu@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" id="register-pass" placeholder="Mínimo 6 caracteres">
+      </div>
+      <button class="btn-form" id="btn-register">CREAR CUENTA</button>
+      <div class="modal-divider">o</div>
+      <button class="btn-social" id="btn-google-register">
+        <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continuar con Google
+      </button>
+      <div class="modal-switch">¿Ya tienes cuenta? <a id="switch-to-login-old">Entra</a></div>
+    </div>
+  </div></div></div>
+
+<!-- ═══ MODAL: QUÉ PUEDE HACER SALMA ═══ -->
+<div class="salma-info-overlay" id="salma-info-overlay" style="display:none">
+  <div class="salma-info-modal">
+    <button class="salma-info-close" id="salma-info-close">&times;</button>
+    <div class="salma-info-hero">
+      <div class="salma-info-hero-line">Antes, durante y después</div>
+      <div class="salma-info-hero-line">Siempre contigo</div>
+      <div class="salma-info-hero-big">Salma te resuelve</div>
+    </div>
+    <div class="salma-info-list">
+      <div class="salma-info-item done">No sé por dónde empezar → Te monta la ruta</div>
+      <div class="salma-info-item done">Son las 11pm y no tengo hotel → Te busca uno abierto</div>
+      <div class="salma-info-item done">No entiendo el menú → Te traduce</div>
+      <div class="salma-info-item done">Me han robado la cartera → Embajada + teléfonos</div>
+      <div class="salma-info-item done">¿Necesito visado? → Te lo dice al momento</div>
+      <div class="salma-info-item done">¿Este barrio es seguro? → Te avisa</div>
+      <div class="salma-info-item done">¿Cuánto me va a costar? → Presupuesto real</div>
+      <div class="salma-info-item done">Llueve y se me cae el plan → Plan B listo</div>
+      <div class="salma-info-item done">Quiero compartir mi ruta → Link directo</div>
+      <div class="salma-info-item soon">Avería en carretera → Grúa + mecánico cerca</div>
+      <div class="salma-info-item soon">Audio guía en ruta</div>
+      <div class="salma-info-item soon">Salma te acompaña en tiempo real</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══ COOKIE BANNER ═══ -->
+<div class="cookie-banner" id="cookie-banner" style="display:none">
+  <p>Usamos cookies esenciales para que la app funcione y analíticas para mejorarla. <a href="/legal.html#cookies">Más info</a></p>
+  <div class="cookie-banner-actions">
+    <button class="cookie-btn-accept" id="cookie-accept">Aceptar</button>
+    <button class="cookie-btn-reject" id="cookie-reject">Solo esenciales</button>
+  </div>
+</div>
+
+<!-- ═══ FIREBASE ═══ -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+<script>
+const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
+if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
+window.SALMA_API="https://salma-api.paco-defoto.workers.dev";
+</script>
+
+<!-- ═══ STRIPE ═══ -->
+<script src="https://js.stripe.com/v3/"></script>
+
+<!-- ═══ APP ═══ -->
+<script src="country-utils.js"></script>
+<script src="app.js"></script>
+<script src="nav-history.js"></script>
+<script src="notas.js"></script>
+<script src="salma.js"></script>
+<script src="video-player.js"></script>
+<script src="guide-renderer.js"></script>
+<script src="bitacora-renderer.js"></script>
+<script src="mapa-ruta.js"></script>
+<script src="mapa-itinerario.js"></script>
+<script src="docs-viajero.js?v=1"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+if (typeof salma !== 'undefined') { salma.initGeolocation(); salma.initVoices(); }
+
+// Salma info modal
+document.getElementById('salma-info-close')?.addEventListener('click', () => {
+  document.getElementById('salma-info-overlay').style.display = 'none';
+});
+document.getElementById('salma-info-overlay')?.addEventListener('click', (e) => {
+  if (e.target.id === 'salma-info-overlay') e.target.style.display = 'none';
+});
+
+// Cookie consent
+(function() {
+  const consent = localStorage.getItem('cookie_consent');
+  if (!consent) {
+    document.getElementById('cookie-banner').style.display = 'flex';
+  }
+  document.getElementById('cookie-accept')?.addEventListener('click', function() {
+    localStorage.setItem('cookie_consent', 'all');
+    document.getElementById('cookie-banner').style.display = 'none';
+  });
+  document.getElementById('cookie-reject')?.addEventListener('click', function() {
+    localStorage.setItem('cookie_consent', 'essential');
+    document.getElementById('cookie-banner').style.display = 'none';
+  });
+})();
+</script>
+</body>
+</html>
