@@ -632,6 +632,85 @@ const guideRenderer = {
     // Ajustar vista a todos los puntos — limitado a la ruta
     map.fitBounds(bounds, { padding: [30, 30] });
     this._maps['main'] = map;
+
+    // Brújula (centro-izquierda)
+    this._renderGuideCompass(el);
+  },
+
+  _guideCompassHandler: null,
+  _guideCompassActive: false,
+
+  _renderGuideCompass(mapEl) {
+    if (!mapEl) return;
+    mapEl.querySelector('.map-compass')?.remove();
+    this._stopGuideCompass();
+
+    if (localStorage.getItem('compass_hidden') === '1') return;
+
+    const compass = document.createElement('div');
+    compass.className = 'map-compass';
+    compass.innerHTML = `
+      <button class="map-compass-close" aria-label="Cerrar brújula">&times;</button>
+      <div class="map-compass-ring">
+        <div class="map-compass-n">N</div>
+        <div class="map-compass-e">E</div>
+        <div class="map-compass-s">S</div>
+        <div class="map-compass-w">O</div>
+        <div class="map-compass-needle">
+          <div class="map-compass-needle-n"></div>
+          <div class="map-compass-needle-s"></div>
+        </div>
+      </div>`;
+    mapEl.style.position = 'relative';
+    mapEl.appendChild(compass);
+
+    const ring = compass.querySelector('.map-compass-ring');
+
+    compass.querySelector('.map-compass-close').addEventListener('click', (e) => {
+      e.stopPropagation();
+      compass.remove();
+      this._stopGuideCompass();
+      localStorage.setItem('compass_hidden', '1');
+    });
+
+    // Magnetómetro del móvil
+    const onOrientation = (e) => {
+      let heading = null;
+      if (typeof e.webkitCompassHeading === 'number') {
+        heading = e.webkitCompassHeading;
+      } else if (typeof e.alpha === 'number') {
+        heading = 360 - e.alpha;
+      }
+      if (heading === null) return;
+      this._guideCompassActive = true;
+      ring.style.transform = `rotate(${-heading}deg)`;
+    };
+
+    if (typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
+      const askPermission = () => {
+        DeviceOrientationEvent.requestPermission()
+          .then(state => {
+            if (state === 'granted') {
+              this._guideCompassHandler = onOrientation;
+              window.addEventListener('deviceorientation', onOrientation, true);
+            }
+          }).catch(() => {});
+        compass.removeEventListener('click', askPermission);
+      };
+      compass.addEventListener('click', askPermission);
+    } else if (typeof DeviceOrientationEvent !== 'undefined') {
+      this._guideCompassHandler = onOrientation;
+      window.addEventListener('deviceorientation', onOrientation, true);
+    }
+  },
+
+  _stopGuideCompass() {
+    if (this._guideCompassHandler) {
+      window.removeEventListener('deviceorientation', this._guideCompassHandler, true);
+      this._guideCompassHandler = null;
+    }
+    this._guideCompassActive = false;
   },
 
   _initDayMap(dayNum, stops) {
