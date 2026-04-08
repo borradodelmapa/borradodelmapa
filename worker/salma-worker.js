@@ -955,6 +955,24 @@ function isServiceRequest(message) {
   return /alquil|rent.*car|coche.*alquil|moto|scooter|restaurante|restaurant|dónde comer|donde comer|cenar|cena|comida|dónde cenar|donde cenar/i.test(message);
 }
 
+// Detectar si el usuario necesita buscar_web (datos en tiempo real, enlaces, info actualizada)
+// Esto asegura que Claude reciba las tools cuando necesite buscar en internet
+function needsWebSearchTool(message) {
+  if (!message) return false;
+  const m = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  // Peticiones explícitas de enlaces/webs/URLs
+  if (/\b(web|pagina|pagina web|url|enlace|link|sitio web|website|reservar|booking|reserva online)\b/i.test(m)) return true;
+  // Peticiones de datos en tiempo real (horarios, precios actuales, disponibilidad, eventos)
+  if (/\b(horario|schedule|precio actual|cuanto cuesta ahora|disponibilidad|availability|abierto hoy|abre hoy|cerrado hoy|cierra hoy)\b/i.test(m)) return true;
+  // Eventos y festivales
+  if (/\b(evento|festival|fiesta|feria|concierto|celebracion|event|carnaval|semana santa|ano nuevo|navidad)\b/i.test(m)) return true;
+  // Peticiones explícitas de buscar/consultar info actualizada
+  if (/\b(busca|search|consulta|averigua|investiga|find|look up|comprueba|verifica)\b.*\b(info|informacion|dato|web|pagina|enlace|horario|precio)\b/i.test(m)) return true;
+  // Noticias o alertas de viaje
+  if (/\b(alerta|aviso|warning|noticias|news|cerrado|cortado|huelga|strike)\b/i.test(m)) return true;
+  return false;
+}
+
 // Extrae origen y destino de frases de transporte (ferry/tren/bus)
 // "ferry de Koh Samui a Bangkok" → { origin: "Koh Samui", dest: "Bangkok" }
 function extractTransportOD(message) {
@@ -5321,8 +5339,10 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     const reqStartTime = Date.now();
     // Si helpCategory=food y ya tenemos resultados de Google Places, no usar tool
     const serviceReqEffective = isServiceReq && !(helpCategory === 'food' && helpResults);
+    // Detectar si necesita buscar_web (enlaces, datos en tiempo real, eventos, etc.)
+    const webSearchNeeded = needsWebSearchTool(message);
     // transportFallbackMsg tiene datos pre-buscados → Claude no necesita tools, responde directo del esqueleto
-    const needsTools = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg;
+    const needsTools = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg || webSearchNeeded;
     // Fotos → OpenAI (mejor visión). Texto → Claude Sonnet (mejor instrucciones)
     const useAnthropic = !imageBase64;
     const reqModel = 'gpt-4o-mini'; // solo para fotos (OpenAI)
