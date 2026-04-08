@@ -1742,7 +1742,7 @@ Si alguno de estos eventos o festivales coincide con las fechas del viaje, menci
           type: 'image_url',
           image_url: {
             url: `data:image/jpeg;base64,${imageBase64}`,
-            detail: 'low'
+            detail: 'high'
           }
         },
         { type: 'text', text: userContent || 'El viajero te envía esta foto. Analízala según el contexto del viaje.' }
