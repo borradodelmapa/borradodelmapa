@@ -3431,6 +3431,9 @@ function _showDiarioPicker() {
   if (picker) picker.style.display = 'block';
   const loc = document.getElementById('dpick-loc');
   if (loc) loc.textContent = _diario.locName || '';
+  // Mostrar botón brújula solo si está oculta
+  const compassBtn = document.getElementById('dpick-compass-btn');
+  if (compassBtn) compassBtn.style.display = localStorage.getItem('compass_hidden') === '1' ? 'flex' : 'none';
 }
 function closeDiarioPicker() {
   const picker = document.getElementById('diario-picker');
@@ -3489,6 +3492,12 @@ window.diarioPickDelete = diarioPickDelete;
 window.diarioPickCamera = diarioPickCamera;
 window.diarioPickGallery = diarioPickGallery;
 window.closeDiarioPicker = closeDiarioPicker;
+function diarioPickCompass() {
+  closeDiarioPicker();
+  localStorage.removeItem('compass_hidden');
+  if (typeof mapaRuta !== 'undefined') mapaRuta._renderCompass('live-map-container');
+}
+window.diarioPickCompass = diarioPickCompass;
 
 // ── Listener: tras elegir/capturar foto → generar story ──
 function _onDiarioPhoto(e) {
