@@ -359,7 +359,7 @@ window.notasManager = (() => {
             <button class="nota-card-delete" data-id="${n.id}" aria-label="Eliminar">\u2715</button>
           </div>
         </div>
-        <div class="nota-card-texto ${isLong ? 'nota-truncated' : ''}" data-id="${n.id}">${typeof formatMessage === 'function' ? formatMessage(n.texto) : _escHtml(n.texto)}</div>
+        <div class="nota-card-texto ${isLong ? 'nota-truncated' : ''}" data-id="${n.id}">${_escHtml(n.texto)}</div>
         ${(n.files && n.files.length) ? `<div class="nota-card-files">${n.files.map(f => {
           const isImg = (f.fileType || '').startsWith('image/');
           return isImg
