@@ -3036,8 +3036,6 @@ body {
 .reminder-badge-soon { background:rgba(212,168,67,.1); color:rgba(212,168,67,.8); }
 .reminder-badge-future { background:rgba(244,239,230,.06); color:rgba(244,239,230,.5); }
 .reminder-badge-far { background:rgba(244,239,230,.04); color:rgba(244,239,230,.35); }
-.welcome-reminders-more { display:block; width:100%; padding:8px; margin-top:4px; background:none; border:1px solid rgba(212,168,67,.25); border-radius:8px; color:var(--dorado); font-size:12px; font-family:var(--font-mono); letter-spacing:.05em; cursor:pointer; transition:all .15s; }
-.welcome-reminders-more:hover { background:rgba(212,168,67,.08); border-color:rgba(212,168,67,.4); }
 
 /* ═══ MIS NOTAS ═══ */
 .notas-area { max-width:540px; margin:0 auto; padding:16px; }

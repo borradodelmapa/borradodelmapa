@@ -648,18 +648,22 @@ const salma = {
         body.rutas_gratis_usadas = window.currentUser.rutas_gratis_usadas || 0;
       }
       if (this._userLocation) body.user_location = this._userLocation;
-      // Inyectar notas del usuario (sistema unificado)
+      // Inyectar notas del país si hay contexto
+      if (window.currentUser && typeof detectCountryInMessage === 'function') {
+        const msgCountry = detectCountryInMessage(msg) || (this.currentRoute ? normalizeCountry(this.currentRoute.country) : null);
+        if (msgCountry && msgCountry.code) {
+          try {
+            const paisDoc = await db.collection('users').doc(window.currentUser.uid).collection('paises').doc(msgCountry.code).get();
+            if (paisDoc.exists) {
+              const notas = (paisDoc.data().notas || []).slice(-10);
+              if (notas.length) body.country_notes = notas.map(n => ({ texto: n.texto, tipo: n.tipo }));
+            }
+          } catch (_) {}
+        }
+      }
+      // Inyectar notas del nuevo sistema (recordatorios y generales)
       if (window.currentUser && typeof notasManager !== 'undefined') {
         try {
-          // Notas del país detectado en el mensaje
-          const msgCountry = typeof detectCountryInMessage === 'function'
-            ? (detectCountryInMessage(msg) || (this.currentRoute ? normalizeCountry(this.currentRoute.country) : null))
-            : null;
-          if (msgCountry?.code) {
-            const countryNotas = await notasManager.getByCountry(msgCountry.code);
-            if (countryNotas.length) body.country_notes = countryNotas.slice(-10).map(n => ({ texto: n.texto, tipo: n.tipo }));
-          }
-          // Notas generales del usuario
           const userNotas = await notasManager.getAll({ limit: 10 });
           if (userNotas.length) body.user_notes = userNotas.map(n => ({ texto: n.texto, tipo: n.tipo, fecha: n.fechaRecordatorio }));
         } catch (_) {}
@@ -878,16 +882,19 @@ const salma = {
               // TOOL_NOTE — auto-guardar nota del país
               if (evt.tool_note && evt.summary && evt.country_hint) {
                 try {
-                  if (typeof notasManager !== 'undefined' && window.currentUser) {
-                    const c = typeof normalizeCountry === 'function' ? normalizeCountry(evt.country_hint) : null;
-                    notasManager.create({
-                      texto: evt.summary,
-                      countryCode: c?.code || null,
-                      countryName: c?.name || null,
-                      emoji: c?.emoji || null,
-                      origen: 'auto',
-                      fuente: evt.tool
-                    });
+                  if (typeof normalizeCountry === 'function' && typeof saveCountryNote === 'function' && window.currentUser) {
+                    const c = normalizeCountry(evt.country_hint);
+                    if (c.code) {
+                      const tipoMap = { buscar_hotel:'hotel', buscar_vuelos:'vuelo', buscar_coche:'transporte', buscar_restaurante:'restaurante', buscar_lugar:'lugar', buscar_web:'nota' };
+                      saveCountryNote(c.code, c.name, c.emoji, {
+                        id: 'nota_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+                        texto: evt.summary,
+                        tipo: tipoMap[evt.tool] || 'nota',
+                        origen: 'auto',
+                        fuente: evt.tool,
+                        fecha: new Date().toISOString()
+                      });
+                    }
                   }
                 } catch (_) {}
                 continue;
@@ -1539,48 +1546,41 @@ const salma = {
     wrap.appendChild(grid);
   },
 
-  async _saveNoteFromBubble(text, btnEl) {
+  _saveNoteFromBubble(text, btnEl) {
     if (!window.currentUser) {
+      // Guardar nota pendiente para después del registro
       window._pendingSaveNote = { text, btnEl };
       if (typeof openModal === 'function') openModal('register');
       return;
     }
-    if (typeof notasManager === 'undefined') return;
+    const country = detectCountryInMessage(text) || (this.currentRoute ? normalizeCountry(this.currentRoute.country) : null);
+    const snippet = text;
 
-    // Feedback inmediato
-    if (btnEl) {
-      btnEl.innerHTML = 'Guardando...';
-      btnEl.disabled = true;
-    }
-
-    // País opcional — si se detecta, bien; si no, se guarda sin país
-    const country = (typeof detectCountryInMessage === 'function' ? detectCountryInMessage(text) : null)
-      || (this.currentRoute ? normalizeCountry(this.currentRoute.country) : null);
-
-    try {
-      await notasManager.create({
-        texto: text,
-        countryCode: country?.code || null,
-        countryName: country?.name || null,
-        emoji: country?.emoji || null,
-        origen: 'chat',
-        fuente: 'guardar_burbuja'
+    const doSave = (code, name, emoji) => {
+      saveCountryNote(code, name, emoji, {
+        id: 'nota_' + Date.now(),
+        texto: snippet,
+        tipo: 'nota',
+        origen: 'manual',
+        fecha: new Date().toISOString()
       });
+      // Cambiar botón a "Guardado" en verde
       if (btnEl) {
         btnEl.innerHTML = '&#x2713; Guardado';
         btnEl.style.background = 'rgba(92,184,92,.2)';
         btnEl.style.borderColor = 'rgba(92,184,92,.4)';
         btnEl.style.color = '#5cb85c';
+        btnEl.disabled = true;
       }
-    } catch (err) {
-      console.error('Error guardando nota desde chat:', err);
-      if (btnEl) {
-        btnEl.innerHTML = '&#x2717; Error';
-        btnEl.style.background = 'rgba(217,83,79,.2)';
-        btnEl.style.borderColor = 'rgba(217,83,79,.4)';
-        btnEl.style.color = '#d9534f';
-        btnEl.disabled = false;
-      }
+    };
+
+    if (country && country.code) {
+      doSave(country.code, country.name, country.emoji);
+    } else {
+      const pais = prompt('¿En qué país guardamos esta nota?');
+      if (!pais) return;
+      const c = normalizeCountry(pais);
+      if (c.code) doSave(c.code, c.name, c.emoji);
     }
   },
 

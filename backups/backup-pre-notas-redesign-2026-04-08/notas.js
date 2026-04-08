@@ -11,8 +11,14 @@ window.notasManager = (() => {
   function _escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
   const TIPOS = {
-    general:      { label: 'Nota',         icon: '\u{1F4DD}', tagClass: 'tag-nota' },
-    recordatorio: { label: 'Recordatorio', icon: '\u{1F4CC}', tagClass: 'tag-nota' }
+    general:      { label: 'Nota',        icon: '\u{1F4DD}', tagClass: 'tag-nota' },
+    recordatorio: { label: 'Recordatorio', icon: '\u{1F4CC}', tagClass: 'tag-nota' },
+    hotel:        { label: 'Hotel',        icon: '\u{1F3E8}', tagClass: 'tag-hotel' },
+    vuelo:        { label: 'Vuelo',        icon: '\u2708\uFE0F', tagClass: 'tag-vuelo' },
+    restaurante:  { label: 'Restaurante',  icon: '\u{1F37D}\uFE0F', tagClass: 'tag-restaurante' },
+    lugar:        { label: 'Lugar',        icon: '\u{1F4CD}', tagClass: 'tag-lugar' },
+    visado:       { label: 'Visado',       icon: '\u{1F6C2}', tagClass: 'tag-visado' },
+    transporte:   { label: 'Transporte',   icon: '\u{1F68C}', tagClass: 'tag-transporte' }
   };
 
   // ── Upload files to R2 ──
@@ -229,17 +235,15 @@ window.notasManager = (() => {
 
       const all = allNotas
         .filter(n => !n.completado && n.fechaRecordatorio && n.fechaRecordatorio <= futureStr)
-        .sort((a, b) => (a.fechaRecordatorio || '').localeCompare(b.fechaRecordatorio || ''));
+        .sort((a, b) => (a.fechaRecordatorio || '').localeCompare(b.fechaRecordatorio || ''))
+        .slice(0, 5);
 
       if (all.length === 0) { el.innerHTML = ''; return; }
-
-      const shown = all.slice(0, 3);
-      const hasMore = all.length > 3;
 
       el.innerHTML = `
         <div class="welcome-reminders">
           <div class="welcome-reminders-title">Pr\u00f3ximamente</div>
-          ${shown.map(n => `
+          ${all.map(n => `
             <div class="reminder-card ${n.fechaRecordatorio <= _today() ? 'reminder-card-urgent' : ''}" data-id="${n.id}">
               <button class="reminder-check" data-id="${n.id}" aria-label="Completar">\u2713</button>
               <div class="reminder-body">
@@ -250,7 +254,6 @@ window.notasManager = (() => {
               </div>
             </div>
           `).join('')}
-          ${hasMore ? '<button class="welcome-reminders-more" id="welcome-reminders-more">Ver todas</button>' : ''}
         </div>`;
 
       // Listeners — completar recordatorio
@@ -263,12 +266,6 @@ window.notasManager = (() => {
           if (card) card.style.opacity = '0';
           setTimeout(() => renderWelcomeReminders(containerId), 300);
         });
-      });
-
-      // "Ver todas" → ir a Mis Notas con filtro Pendientes
-      el.querySelector('#welcome-reminders-more')?.addEventListener('click', () => {
-        _currentFilter = 'recordatorios';
-        if (typeof showState === 'function') showState('notas');
       });
     } catch (e) {
       console.warn('Error cargando recordatorios:', e);
@@ -352,6 +349,7 @@ window.notasManager = (() => {
     return `
       <div class="nota-card" data-id="${n.id}">
         <div class="nota-card-header">
+          ${_tipoTag(n.tipo)}
           ${n.emoji ? `<span class="nota-card-country">${n.emoji}</span>` : ''}
           ${_dateBadge(n.fechaRecordatorio)}
           <div class="nota-card-actions">
@@ -382,7 +380,12 @@ window.notasManager = (() => {
       <div class="nota-form">
         <textarea class="nota-form-input" id="nota-form-texto" placeholder="Escribe tu nota..." rows="3">${_escHtml(n.texto)}</textarea>
         <div class="nota-form-row">
-          <input type="date" class="nota-form-date" id="nota-form-fecha" value="${n.fechaRecordatorio || ''}" placeholder="Recordatorio (opcional)">
+          <select class="nota-form-select" id="nota-form-tipo">
+            ${Object.entries(TIPOS).map(([k, v]) =>
+              `<option value="${k}" ${n.tipo === k ? 'selected' : ''}>${v.icon} ${v.label}</option>`
+            ).join('')}
+          </select>
+          <input type="date" class="nota-form-date" id="nota-form-fecha" value="${n.fechaRecordatorio || ''}" placeholder="Fecha">
         </div>
         <div class="nota-form-row">
           <button class="nota-form-file-btn" id="nota-form-file-btn">\u{1F4CE} Adjuntar archivo</button>
@@ -416,8 +419,8 @@ window.notasManager = (() => {
     document.getElementById('nota-form-save').addEventListener('click', async () => {
       const texto = document.getElementById('nota-form-texto').value.trim();
       if (!texto) return;
+      const tipo = document.getElementById('nota-form-tipo').value;
       const fecha = document.getElementById('nota-form-fecha').value || null;
-      const tipo = fecha ? 'recordatorio' : 'general';
       const saveBtn = document.getElementById('nota-form-save');
       saveBtn.disabled = true;
       saveBtn.textContent = 'Guardando...';
