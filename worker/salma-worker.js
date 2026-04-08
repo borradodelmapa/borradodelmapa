@@ -1622,12 +1622,19 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
   }
 
   let userContent = message || '';
+
+  // Si hay foto, no pegar bloques de modo (CONVERSACIONAL/PLAN/RUTA)
+  // BLOQUE_VISION en system prompt + el texto del usuario es suficiente
+  const hasPhoto = !!imageBase64;
+
   if (currentRoute && currentRoute.stops && currentRoute.stops.length > 0) {
     const stopSummary = currentRoute.stops.map((s, i) => `Día ${s.day}: ${s.name}`).join(', ');
     userContent += `\n\n[RUTA ACTUAL del usuario: "${currentRoute.title || ''}" — ${currentRoute.stops.length} paradas: ${stopSummary}. Si el usuario pide CAMBIOS (añadir, quitar, reordenar), devuelve la ruta completa actualizada en SALMA_ROUTE_JSON manteniendo las paradas que no cambian. Si pide una RUTA NUEVA (otro destino), ignora esta ruta y genera desde cero.]`;
   }
 
-  if (isRouteRequest(message, history)) {
+  if (hasPhoto) {
+    // Foto → no pegar bloques de modo, BLOQUE_VISION en system prompt + texto del usuario es suficiente
+  } else if (isRouteRequest(message, history)) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
 — Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 1-2 frases sobre el destino + salto de línea + SALMA_ROUTE_JSON + JSON completo.
 — NO respondas solo con texto. NO digas "aquí tienes" ni variantes.
@@ -1745,7 +1752,7 @@ Si alguno de estos eventos o festivales coincide con las fechas del viaje, menci
             detail: 'high'
           }
         },
-        { type: 'text', text: userContent || 'El viajero te envía esta foto. Analízala según el contexto del viaje.' }
+        { type: 'text', text: userContent || 'El viajero te envía esta foto.' }
       ]
     });
   } else {
