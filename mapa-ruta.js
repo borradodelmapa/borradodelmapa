@@ -169,6 +169,114 @@ const mapaRuta = {
     el.querySelector('#map-controls')?.remove();
   },
 
+  // ═══ COMPASS (brújula sobre el mapa) ═══
+  _compassListener: null,
+  _deviceOrientationHandler: null,
+
+  _renderCompass(containerId) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.querySelector('.map-compass')?.remove();
+    this._stopDeviceOrientation();
+
+    // Si el usuario la cerró, no mostrar
+    if (localStorage.getItem('compass_hidden') === '1') return;
+
+    const compass = document.createElement('div');
+    compass.className = 'map-compass';
+    compass.innerHTML = `
+      <button class="map-compass-close" aria-label="Cerrar brújula">&times;</button>
+      <div class="map-compass-ring">
+        <div class="map-compass-n">N</div>
+        <div class="map-compass-e">E</div>
+        <div class="map-compass-s">S</div>
+        <div class="map-compass-w">O</div>
+        <div class="map-compass-needle">
+          <div class="map-compass-needle-n"></div>
+          <div class="map-compass-needle-s"></div>
+        </div>
+      </div>`;
+    el.appendChild(compass);
+
+    const ring = compass.querySelector('.map-compass-ring');
+
+    // Botón cerrar
+    compass.querySelector('.map-compass-close').addEventListener('click', (e) => {
+      e.stopPropagation();
+      compass.remove();
+      this._stopDeviceOrientation();
+      localStorage.setItem('compass_hidden', '1');
+    });
+
+    // 1) Magnetómetro del móvil — orientación real del teléfono
+    this._startDeviceOrientation(ring);
+
+    // 2) Fallback: heading del mapa (3D/tilt en desktop)
+    if (this._map && this._mapType === 'google' && window.google) {
+      if (this._compassListener) google.maps.event.removeListener(this._compassListener);
+      this._compassListener = this._map.addListener('heading_changed', () => {
+        // Solo usar heading del mapa si NO hay magnetómetro activo
+        if (this._deviceOrientationActive) return;
+        const heading = this._map.getHeading() || 0;
+        if (ring) ring.style.transform = `rotate(${-heading}deg)`;
+      });
+    }
+  },
+
+  _deviceOrientationActive: false,
+
+  _startDeviceOrientation(ring) {
+    if (!ring) return;
+
+    const onOrientation = (e) => {
+      // webkitCompassHeading (iOS) o alpha (Android)
+      let heading = null;
+      if (typeof e.webkitCompassHeading === 'number') {
+        heading = e.webkitCompassHeading; // iOS: 0=Norte, ya es heading magnético
+      } else if (typeof e.alpha === 'number' && e.absolute) {
+        heading = 360 - e.alpha; // Android absolute: convertir a heading
+      } else if (typeof e.alpha === 'number') {
+        heading = 360 - e.alpha; // Android relative: aproximación
+      }
+      if (heading === null) return;
+      this._deviceOrientationActive = true;
+      ring.style.transform = `rotate(${-heading}deg)`;
+    };
+
+    // iOS 13+ requiere permiso explícito
+    if (typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
+      // Pedir permiso al primer toque en la brújula
+      const compass = ring.closest('.map-compass');
+      if (compass) {
+        const askPermission = () => {
+          DeviceOrientationEvent.requestPermission()
+            .then(state => {
+              if (state === 'granted') {
+                this._deviceOrientationHandler = onOrientation;
+                window.addEventListener('deviceorientation', onOrientation, true);
+              }
+            })
+            .catch(() => {});
+          compass.removeEventListener('click', askPermission);
+        };
+        compass.addEventListener('click', askPermission);
+      }
+    } else if (typeof DeviceOrientationEvent !== 'undefined') {
+      // Android y otros: directamente
+      this._deviceOrientationHandler = onOrientation;
+      window.addEventListener('deviceorientation', onOrientation, true);
+    }
+  },
+
+  _stopDeviceOrientation() {
+    if (this._deviceOrientationHandler) {
+      window.removeEventListener('deviceorientation', this._deviceOrientationHandler, true);
+      this._deviceOrientationHandler = null;
+    }
+    this._deviceOrientationActive = false;
+  },
+
   // ═══ STATIC MAPS (Copiloto OFF) ═══
   _renderStaticMap(containerId, stops) {
     const el = document.getElementById(containerId);
@@ -327,6 +435,7 @@ const mapaRuta = {
 
     // Controles DESPUÉS del mapa (evita que innerHTML='' los borre)
     this._renderMapControls(this._currentContainerId);
+    this._renderCompass(this._currentContainerId);
   },
 
   // DirectionsRenderer — dibuja la ruta real con flechas de giro
@@ -654,6 +763,11 @@ const mapaRuta = {
       try { this._infoWindow.close(); } catch(e) {}
       this._infoWindow = null;
     }
+    if (this._compassListener && window.google) {
+      try { google.maps.event.removeListener(this._compassListener); } catch(e) {}
+      this._compassListener = null;
+    }
+    this._stopDeviceOrientation();
     // Limpiar contenedor si tiene imagen estática
     if (this._currentContainerId) {
       const el = document.getElementById(this._currentContainerId);

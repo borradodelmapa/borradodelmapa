@@ -2287,6 +2287,56 @@ body {
 .map-util-item:hover { background:rgba(244,239,230,.06); color:rgba(244,239,230,1); }
 .map-util-sep { height:1px; background:rgba(244,239,230,.08); margin:2px 0; }
 
+/* ═══ COMPASS (brújula) ═══ */
+.map-compass {
+  position:absolute; top:50%; left:16px; transform:translateY(-50%); z-index:500;
+  width:64px; height:64px;
+}
+.map-compass-close {
+  position:absolute; top:-6px; right:-6px; z-index:2;
+  width:20px; height:20px; border-radius:50%; border:none; cursor:pointer;
+  background:rgba(12,10,6,.9); color:rgba(244,239,230,.6);
+  font-size:13px; line-height:1; display:flex; align-items:center; justify-content:center;
+  border:1px solid rgba(244,239,230,.12); transition:border-color .2s,color .2s;
+  box-shadow:0 1px 4px rgba(0,0,0,.4);
+}
+.map-compass-close:hover { color:rgba(244,239,230,.95); border-color:rgba(244,239,230,.3); }
+.map-compass-ring {
+  width:64px; height:64px; position:relative;
+  border-radius:50%;
+  background:rgba(12,10,6,.85); backdrop-filter:blur(10px);
+  border:1px solid rgba(244,239,230,.12);
+  box-shadow:0 2px 10px rgba(0,0,0,.5);
+  transition:transform .3s ease;
+}
+.map-compass-n,.map-compass-s,.map-compass-e,.map-compass-w {
+  position:absolute; font-size:10px; font-weight:700;
+  font-family:var(--font-mono); letter-spacing:.04em;
+  line-height:1; text-align:center;
+}
+.map-compass-n { top:5px; left:50%; transform:translateX(-50%); color:#D4A843; }
+.map-compass-s { bottom:5px; left:50%; transform:translateX(-50%); color:rgba(244,239,230,.3); }
+.map-compass-e { right:6px; top:50%; transform:translateY(-50%); color:rgba(244,239,230,.35); }
+.map-compass-w { left:6px; top:50%; transform:translateY(-50%); color:rgba(244,239,230,.35); }
+/* Aguja */
+.map-compass-needle {
+  position:absolute; top:50%; left:50%;
+  width:4px; height:32px; transform:translate(-50%,-50%);
+}
+.map-compass-needle-n {
+  width:0; height:0;
+  border-left:4px solid transparent; border-right:4px solid transparent;
+  border-bottom:14px solid #D4A843;
+  position:absolute; top:0; left:50%; transform:translateX(-50%);
+  filter:drop-shadow(0 0 3px rgba(212,168,67,.4));
+}
+.map-compass-needle-s {
+  width:0; height:0;
+  border-left:3px solid transparent; border-right:3px solid transparent;
+  border-top:12px solid rgba(244,239,230,.2);
+  position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+}
+
 /* ═══ TURN-BY-TURN PANEL ═══ */
 .turn-panel {
   position:absolute; top:12px; left:64px; right:70px; z-index:500;
