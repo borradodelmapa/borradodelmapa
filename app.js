@@ -3049,12 +3049,95 @@ function openLiveMap() {
       // Forzar que Google Maps recalcule tamaño (el contenedor pasa de display:none a visible)
       setTimeout(() => google.maps.event.trigger(_liveMap, 'resize'), 200);
 
+      // Brújula (centro-izquierda)
+      _renderLiveCompass(el);
+
       _resumeMapGPS();
     })
     .catch((e) => {
       console.error('[LiveMap] Error cargando Google Maps:', e);
       showToast('No se pudo cargar Google Maps');
     });
+}
+
+// ═══ BRÚJULA LIVE MAP ═══
+let _liveCompassHandler = null;
+function _renderLiveCompass(mapEl) {
+  if (!mapEl) return;
+  mapEl.querySelector('.map-compass')?.remove();
+  if (_liveCompassHandler) {
+    window.removeEventListener('deviceorientation', _liveCompassHandler, true);
+    _liveCompassHandler = null;
+  }
+  if (localStorage.getItem('compass_hidden') === '1') return;
+
+  const compass = document.createElement('div');
+  compass.className = 'map-compass';
+  compass.innerHTML = `
+    <button class="map-compass-close" aria-label="Cerrar brújula">&times;</button>
+    <div class="map-compass-ring">
+      <div class="map-compass-n">N</div>
+      <div class="map-compass-e">E</div>
+      <div class="map-compass-s">S</div>
+      <div class="map-compass-w">O</div>
+      <div class="map-compass-needle">
+        <div class="map-compass-needle-n"></div>
+        <div class="map-compass-needle-s"></div>
+      </div>
+    </div>`;
+  mapEl.style.position = 'relative';
+  mapEl.appendChild(compass);
+
+  const ring = compass.querySelector('.map-compass-ring');
+
+  compass.querySelector('.map-compass-close').addEventListener('click', (e) => {
+    e.stopPropagation();
+    compass.remove();
+    if (_liveCompassHandler) {
+      window.removeEventListener('deviceorientation', _liveCompassHandler, true);
+      _liveCompassHandler = null;
+    }
+    localStorage.setItem('compass_hidden', '1');
+  });
+
+  // Heading del mapa (rotación 3D)
+  if (_liveMap) {
+    _liveMap.addListener('heading_changed', () => {
+      if (_liveCompassHandler) return; // magnetómetro tiene prioridad
+      const heading = _liveMap.getHeading() || 0;
+      ring.style.transform = `rotate(${-heading}deg)`;
+    });
+  }
+
+  // Magnetómetro del móvil
+  const onOrientation = (e) => {
+    let heading = null;
+    if (typeof e.webkitCompassHeading === 'number') {
+      heading = e.webkitCompassHeading;
+    } else if (typeof e.alpha === 'number') {
+      heading = 360 - e.alpha;
+    }
+    if (heading === null) return;
+    ring.style.transform = `rotate(${-heading}deg)`;
+  };
+
+  if (typeof DeviceOrientationEvent !== 'undefined' &&
+      typeof DeviceOrientationEvent.requestPermission === 'function') {
+    const askPermission = () => {
+      DeviceOrientationEvent.requestPermission()
+        .then(state => {
+          if (state === 'granted') {
+            _liveCompassHandler = onOrientation;
+            window.addEventListener('deviceorientation', onOrientation, true);
+          }
+        }).catch(() => {});
+      compass.removeEventListener('click', askPermission);
+    };
+    compass.addEventListener('click', askPermission);
+  } else if (typeof DeviceOrientationEvent !== 'undefined') {
+    _liveCompassHandler = onOrientation;
+    window.addEventListener('deviceorientation', onOrientation, true);
+  }
 }
 
 function _resumeMapGPS() {
