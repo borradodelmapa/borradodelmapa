@@ -763,6 +763,7 @@ const salma = {
       $send.disabled = false;
       const camBtnF = document.getElementById('cam-btn');
       if (camBtnF) camBtnF.disabled = false;
+      if (typeof resetInputButtons === 'function') resetInputButtons();
       if (!('ontouchstart' in window)) $input.focus();
     }
   },
@@ -1931,6 +1932,7 @@ const salma = {
     if ($send) $send.disabled = false;
     const camBtn = document.getElementById('cam-btn');
     if (camBtn) camBtn.disabled = false;
+    if (typeof resetInputButtons === 'function') resetInputButtons();
 
     // Reintentar con el último mensaje
     if (this._lastMsg !== undefined) {

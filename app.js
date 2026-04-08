@@ -78,6 +78,8 @@ function showState(state) {
     if (welcomeEl) $content.innerHTML = '';
     $input.placeholder = 'Escribe a Salma...';
     if (inputBar) inputBar.style.display = '';
+    // Resetear botones cam/mic/send al volver al chat
+    if (typeof resetInputButtons === 'function') resetInputButtons();
     $content.classList.add('app-content--chat');
     $content.style.paddingBottom = '';
     if (!document.getElementById('chat-bg-layer')) {
@@ -328,23 +330,37 @@ async function renderWelcome() {
   // Welcome input → enviar
   const wInput = document.getElementById('welcome-input');
   const wSend = document.getElementById('welcome-send');
-  if (wSend) wSend.addEventListener('click', () => {
-    const msg = wInput.value.trim();
-    if (msg && typeof salma !== 'undefined') salma.send(msg);
-  });
   const wMic = document.getElementById('welcome-mic-btn');
-  if (wInput) wInput.addEventListener('input', () => {
-    wInput.style.height = 'auto';
-    wInput.style.height = Math.min(wInput.scrollHeight, 120) + 'px';
+
+  function resetWelcomeButtons() {
+    if (!wInput) return;
     const hasText = wInput.value.trim().length > 0;
     if (wSend) wSend.style.display = hasText ? '' : 'none';
     if (wMic) wMic.style.display = hasText ? 'none' : '';
+  }
+
+  if (wSend) wSend.addEventListener('click', () => {
+    const msg = wInput.value.trim();
+    if (!msg) return;
+    wInput.value = '';
+    wInput.style.height = 'auto';
+    resetWelcomeButtons();
+    if (typeof salma !== 'undefined') salma.send(msg);
+  });
+  if (wInput) wInput.addEventListener('input', () => {
+    wInput.style.height = 'auto';
+    wInput.style.height = Math.min(wInput.scrollHeight, 120) + 'px';
+    resetWelcomeButtons();
   });
   if (wInput) wInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       const msg = wInput.value.trim();
-      if (msg && typeof salma !== 'undefined') salma.send(msg);
+      if (!msg) return;
+      wInput.value = '';
+      wInput.style.height = 'auto';
+      resetWelcomeButtons();
+      if (typeof salma !== 'undefined') salma.send(msg);
     }
   });
 
@@ -2169,16 +2185,21 @@ window.enrichGuia = enrichGuia;
 
 // ═══ INPUT — textarea auto-resize + enviar ═══
 
-$input.addEventListener('input', () => {
-  $input.style.height = 'auto';
-  $input.style.height = Math.min($input.scrollHeight, 100) + 'px';
-  // Toggle enviar/cámara+micro
+// Reset centralizado de botones cam/mic/send según contenido del input
+function resetInputButtons() {
   const hasText = $input.value.trim().length > 0;
   if ($send) $send.style.display = hasText ? '' : 'none';
   const chatCam = document.getElementById('cam-btn');
   const chatMic = document.getElementById('mic-btn');
   if (chatCam) chatCam.style.display = hasText ? 'none' : '';
   if (chatMic) chatMic.style.display = hasText ? 'none' : '';
+}
+window.resetInputButtons = resetInputButtons;
+
+$input.addEventListener('input', () => {
+  $input.style.height = 'auto';
+  $input.style.height = Math.min($input.scrollHeight, 100) + 'px';
+  resetInputButtons();
 });
 
 $send.addEventListener('click', sendMessage);
@@ -2200,6 +2221,7 @@ function sendMessage() {
   if (!msg) return;
   $input.value = '';
   $input.style.height = 'auto';
+  resetInputButtons();
   if (typeof salma !== 'undefined') salma.send(msg);
 }
 
@@ -2245,6 +2267,13 @@ function sendMessage() {
       const isWelcome = inputEl.id === 'welcome-input';
       if (isWelcome) {
         const msg = inputEl.value.trim();
+        inputEl.value = '';
+        inputEl.style.height = 'auto';
+        // Reset welcome buttons
+        const wS = document.getElementById('welcome-send');
+        const wM = document.getElementById('welcome-mic-btn');
+        if (wS) wS.style.display = 'none';
+        if (wM) wM.style.display = '';
         if (msg && typeof salma !== 'undefined') salma.send(msg);
       } else {
         sendMessage();
