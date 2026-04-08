@@ -30,16 +30,39 @@ const salma = {
   _voices: [],
   _currentAudio: null,
 
-  // ═══ VOZ DE SALMA — ElevenLabs + fallback Web Speech ═══
+  // ═══ VOZ DE SALMA — Toggle global + ElevenLabs + fallback Web Speech ═══
+  _voiceOn: false,
+
   initVoices() {
     if (!window.speechSynthesis) return;
     this._voices = speechSynthesis.getVoices();
     speechSynthesis.onvoiceschanged = () => { this._voices = speechSynthesis.getVoices(); };
   },
 
+  initVoiceToggle() {
+    const btn = document.getElementById('voice-toggle');
+    if (!btn) return;
+    // Restaurar estado desde localStorage
+    this._voiceOn = localStorage.getItem('salma_voice') === 'true';
+    this._updateVoiceToggleUI();
+    btn.addEventListener('click', () => {
+      this._voiceOn = !this._voiceOn;
+      localStorage.setItem('salma_voice', this._voiceOn ? 'true' : 'false');
+      this._updateVoiceToggleUI();
+      if (!this._voiceOn) this.salmaSpeakStop();
+    });
+  },
+
+  _updateVoiceToggleUI() {
+    const btn = document.getElementById('voice-toggle');
+    if (!btn) return;
+    btn.classList.toggle('voice-on', this._voiceOn);
+    btn.setAttribute('aria-label', this._voiceOn ? 'Desactivar voz de Salma' : 'Activar voz de Salma');
+  },
+
   async salmaSpeak(text) {
     try {
-      if (localStorage.getItem('salma_voice') !== 'true') return;
+      if (!this._voiceOn) return;
 
       // Limpiar texto: quitar markdown, emojis, URLs, guiones de lista
       const clean = text
@@ -68,8 +91,8 @@ const salma = {
         const audioUrl = URL.createObjectURL(blob);
         this._currentAudio = new Audio(audioUrl);
         this._currentAudio.play();
-        this._currentAudio.onended = () => URL.revokeObjectURL(audioUrl);
-        return; // Éxito — no caemos a Web Speech
+        this._currentAudio.onended = () => { URL.revokeObjectURL(audioUrl); this._currentAudio = null; };
+        return;
       } catch (e) {
         console.warn('[Salma] ElevenLabs falló, usando voz del navegador:', e.message);
       }
@@ -85,14 +108,6 @@ const salma = {
       utt.pitch = 1.05;
       speechSynthesis.speak(utt);
     } catch (e) { console.warn('[Salma] Error voz:', e); }
-  },
-
-  // Hablar texto directamente (sin depender del toggle global)
-  async salmaSpeakDirect(text) {
-    const saved = localStorage.getItem('salma_voice');
-    localStorage.setItem('salma_voice', 'true');
-    await this.salmaSpeak(text);
-    if (saved !== 'true') localStorage.setItem('salma_voice', saved || 'false');
   },
 
   salmaSpeakStop() {
@@ -1272,8 +1287,8 @@ const salma = {
               </div>`;
             ccsArea.appendChild(bubble);
             ccsArea.scrollTop = ccsArea.scrollHeight;
-            // Narrador habla automático solo si voz está activada
-            if (localStorage.getItem('salma_voice') === 'true') {
+            // Narrador habla automático si la voz está activada
+            if (this._voiceOn) {
               const narText = narData.narrative;
               setTimeout(() => this.salmaSpeak(narText), 50);
             }
@@ -1425,7 +1440,6 @@ const salma = {
     div.innerHTML = `
       <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
       <div class="msg-body-salma">${formatMessage(text)}</div>`;
-    this._addSpeakButton(div);
     // Botón guardar nota solo si el mensaje tiene contenido relevante (>80 chars)
     if (text.length > 150) {
       const btnHtml = document.createElement('button');
@@ -1439,8 +1453,8 @@ const salma = {
     }
     area.appendChild(div);
     this._scrollToBottom(true);
-    // Auto-speak solo si el usuario lo ha activado explícitamente
-    if (localStorage.getItem('salma_voice') === 'true') {
+    // Auto-speak si la voz está activada
+    if (this._voiceOn) {
       setTimeout(() => this.salmaSpeak(text), 50);
     }
   },
@@ -1594,39 +1608,6 @@ const salma = {
     }
   },
 
-  // Botón mute/unmute global en cada burbuja
-  _addSpeakButton(el) {
-    if (!window.speechSynthesis && !window.SALMA_API) return;
-    const header = el.querySelector('.msg-salma-header');
-    if (!header || header.querySelector('.msg-speak-btn')) return;
-    const speakBtn = document.createElement('button');
-    speakBtn.className = 'msg-speak-btn';
-    speakBtn.textContent = '\u{1F50A}';
-    speakBtn.title = 'Escuchar';
-    speakBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      // Si ya está hablando, parar
-      if (salma._currentAudio || (window.speechSynthesis && speechSynthesis.speaking)) {
-        this.salmaSpeakStop();
-        speakBtn.classList.remove('speaking');
-        return;
-      }
-      // Leer el texto de ESTE mensaje
-      const body = el.querySelector('.msg-body-salma');
-      if (!body) return;
-      const text = body.textContent || '';
-      if (!text.trim()) return;
-      this.salmaSpeakDirect(text);
-      speakBtn.classList.add('speaking');
-      const checkEnd = setInterval(() => {
-        if (!this._currentAudio && !(window.speechSynthesis && speechSynthesis.speaking)) {
-          speakBtn.classList.remove('speaking');
-          clearInterval(checkEnd);
-        }
-      }, 500);
-    });
-    header.appendChild(speakBtn);
-  },
 
   _addStreamBubble() {
     // Reusar la burbuja de loading si existe (evita dos burbujas)
@@ -1662,7 +1643,6 @@ const salma = {
       el.removeAttribute('id');
       const bodyEl = el.querySelector('.msg-body-salma');
       const textContent = bodyEl ? bodyEl.textContent : '';
-      this._addSpeakButton(el);
       // Añadir botón guardar nota solo si hay contenido relevante
       if (textContent.length > 150 && !el.querySelector('.msg-save-note')) {
         const btn = document.createElement('button');
@@ -1689,9 +1669,8 @@ const salma = {
         const textContent = txt ? txt.textContent : '';
         if (txt) txt.removeAttribute('id');
         el.removeAttribute('id');
-        this._addSpeakButton(el);
-        // Auto-speak solo si el usuario lo ha activado explícitamente
-        if (textContent && localStorage.getItem('salma_voice') === 'true') {
+        // Auto-speak si la voz está activada
+        if (textContent) {
           const t = textContent;
           setTimeout(() => this.salmaSpeak(t), 50);
         }
