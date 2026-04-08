@@ -2185,14 +2185,16 @@ window.enrichGuia = enrichGuia;
 
 // ═══ INPUT — textarea auto-resize + enviar ═══
 
-// Reset centralizado de botones cam/mic/send según contenido del input
+// Reset centralizado de botones cam/mic/send según contenido del input o foto pendiente
 function resetInputButtons() {
   const hasText = $input.value.trim().length > 0;
-  if ($send) $send.style.display = hasText ? '' : 'none';
+  const hasPhoto = typeof salma !== 'undefined' && !!salma._pendingPhoto;
+  const showSend = hasText || hasPhoto;
+  if ($send) $send.style.display = showSend ? '' : 'none';
   const chatCam = document.getElementById('cam-btn');
   const chatMic = document.getElementById('mic-btn');
-  if (chatCam) chatCam.style.display = hasText ? 'none' : '';
-  if (chatMic) chatMic.style.display = hasText ? 'none' : '';
+  if (chatCam) chatCam.style.display = showSend ? 'none' : '';
+  if (chatMic) chatMic.style.display = showSend ? 'none' : '';
 }
 window.resetInputButtons = resetInputButtons;
 
@@ -2218,7 +2220,8 @@ $input.addEventListener('keydown', (e) => {
 });
 function sendMessage() {
   const msg = $input.value.trim();
-  if (!msg) return;
+  const hasPendingPhoto = typeof salma !== 'undefined' && salma._pendingPhoto;
+  if (!msg && !hasPendingPhoto) return;
   $input.value = '';
   $input.style.height = 'auto';
   resetInputButtons();

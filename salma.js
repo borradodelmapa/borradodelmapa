@@ -377,6 +377,13 @@ const salma = {
         thumb.src = localUrl;
         preview.style.display = '';
       }
+      // Mostrar botón enviar (la foto ya se puede enviar sin texto)
+      const $send = document.getElementById('main-send');
+      const camBtn = document.getElementById('cam-btn');
+      const micBtn = document.getElementById('mic-btn');
+      if ($send) $send.style.display = '';
+      if (camBtn) camBtn.style.display = 'none';
+      if (micBtn) micBtn.style.display = 'none';
     } catch (e) {
       console.error('[Salma] Error procesando foto:', e);
       if (typeof showToast === 'function') showToast('Error al procesar la foto');
@@ -390,6 +397,8 @@ const salma = {
     this._pendingPhoto = null;
     const preview = document.getElementById('chat-photo-preview');
     if (preview) preview.style.display = 'none';
+    // Restaurar botones cam/mic/send
+    if (typeof resetInputButtons === 'function') resetInputButtons();
   },
 
   _compressImage(file, maxWidth, quality) {
