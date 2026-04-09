@@ -484,6 +484,8 @@ const mapaItinerario = {
         document.querySelector('.app-header')?.style.removeProperty('display');
         const bb = document.getElementById('app-bottom-bar');
         if (bb) bb.style.display = '';
+        // Quitar barra flotante (Google Maps + Compartir)
+        document.body.querySelectorAll('.itin-action-bar').forEach(el => el.remove());
         mapaRuta.destroy();
         mapaItinerario.destroy();
         window.showState = _origShowState;
