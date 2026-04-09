@@ -136,19 +136,12 @@ function updateBottomBar() {
   const isChat = currentState === 'chat';
   const isRutas = currentState === 'rutas';
   const isProfile = currentState === 'profile' || currentState === 'bitacora' || currentState === 'diario' || currentState === 'documentos' || currentState === 'notas';
-  const sosContacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim());
-  const sosReady = currentUser && sosContacts.length > 0;
 
   bar.innerHTML = `
-    ${currentUser ? `
-    <button class="bottom-tab" id="tab-livemap">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
-      <span>Mapa</span>
-    </button>` : `
     <button class="bottom-tab ${isHome ? 'bottom-tab-active' : ''}" id="tab-home">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span>Home</span>
-    </button>`}
+    </button>
     <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span>Salma</span>
@@ -160,17 +153,9 @@ function updateBottomBar() {
     <button class="bottom-tab ${isProfile ? 'bottom-tab-active' : ''}" id="tab-profile">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
-    </button>
-    <button class="bottom-tab ${sosReady ? 'bottom-tab-sos' : 'bottom-tab-sos-off'}" id="tab-sos" aria-label="SOS Emergencia">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <span>SOS</span>
     </button>`;
 
-  if (currentUser) {
-    document.getElementById('tab-livemap').addEventListener('click', openLiveMap);
-  } else {
-    document.getElementById('tab-home').addEventListener('click', () => showState('welcome'));
-  }
+  document.getElementById('tab-home').addEventListener('click', () => showState('welcome'));
   document.getElementById('tab-chat').addEventListener('click', () => {
     // Si hay guía abierta, cerrarla primero
     if (window._itinViewOpen && typeof closeItinerarioView === 'function') {
@@ -197,11 +182,6 @@ function updateBottomBar() {
     showState('rutas');
   });
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
-  document.getElementById('tab-sos').addEventListener('click', () => {
-    if (!currentUser) { window._afterLogin = 'profile'; openModal('login'); return; }
-    const contacts = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim());
-    if (contacts.length > 0) { showSOSConfirm(); } else { renderSOSConfig(); }
-  });
 }
 
 function handleAvatarClick() {
