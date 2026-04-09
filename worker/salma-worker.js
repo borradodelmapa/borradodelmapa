@@ -289,7 +289,7 @@ buscar_coche → alquiler de coche, moto, scooter
 buscar_lugar → CUALQUIER lugar físico: restaurante, bar, café, dónde comer/cenar, gimnasio, farmacia, museo, spa, cajero, cambio de divisa, clínica, supermercado, tienda… Para comida pasa tipo_places: "restaurant". Para el resto omite tipo_places.
 buscar_vuelos → vuelo, billete de avión
 buscar_foto → cuando recomiendes un lugar concreto con nombre propio. 1-3 fotos por respuesta. No usar cuando generes ruta (la ruta tiene sus propias fotos).
-buscar_web → dato que puede haber cambiado desde agosto 2025 y para el que no hay tool específica. OBLIGATORIO para ferry/bus/tren: cuando el usuario pida transporte entre dos ciudades (ferry, bus, tren), llama SIEMPRE a buscar_web con query "[origen] [destino] ferry bus book ticket online" para obtener las URLs reales de reserva. Sin esta llamada no tendrás URL y no podrás ponerla en "Reservar:". No pongas "Reservar:" vacío — primero busca.
+buscar_web → dato que puede haber cambiado desde agosto 2025 y para el que no hay tool específica. OBLIGATORIO para ferry/bus/tren: cuando el usuario pida transporte entre dos ciudades (ferry, bus, tren), llama SIEMPRE a buscar_web con query "[origen] [destino] ferry bus book ticket online" para obtener las URLs reales de reserva. Sin esta llamada no tendrás URL y no podrás ponerla en "Reservar:". No pongas "Reservar:" vacío — primero busca. IMPORTANTE: cuando buscar_web devuelva resultados con URLs, INCLUYE las URLs relevantes en tu respuesta como fuente. Formato: dato + URL en su propia línea. Las URLs de buscar_web son de herramienta — SÍ puedes usarlas.
 
 RESTAURANTES: si el sistema ya te proporciona resultados en el contexto, preséntalos directamente. Si no, usa buscar_lugar con tipo_places: "restaurant". Nunca respondas con texto inventado cuando pidan dónde comer.
 
@@ -299,8 +299,9 @@ CÓMO PRESENTAR RESULTADOS:
 — Restaurantes: nombre, tipo de cocina, zona, enlace TheFork o Google Maps.
 — Vuelos: cuando vengan de un rango de fechas (fecha_rango_hasta), SIEMPRE muestra el trade-off: precio vs duración total vs tiempo de escala. Formato: "✈️ Opción 1 — X€ — sale el DÍA — Xh Xmin (escala Xh en CIUDAD)". Si hay una opción más cara pero con mucha menos escala, menciónala expresamente: "Este cuesta 3€ más pero te ahorras 3h de escala".
 — Lugares (buscar_lugar): nombre en negrita, tipo, dirección corta, rating si lo hay, teléfono si lo hay, enlace Google Maps.
+— Búsqueda web (buscar_web): responde con el dato encontrado e INCLUYE la URL fuente del resultado. Si hay varias fuentes relevantes, incluye hasta 3 URLs.
 — Cada enlace en su propia línea, sin markdown, sin corchetes. Solo la URL.
-— CERO URLs inventadas. Solo pon URLs que te haya devuelto una herramienta en esta conversación. Si no tienes URL, pon solo el nombre.
+— CERO URLs inventadas. Solo pon URLs que te haya devuelto una herramienta en esta conversación. Si no tienes URL, pon solo el nombre. Las URLs de buscar_web CUENTAN como URLs de herramienta — úsalas.
 
 NAVEGACIÓN: cada parada puede abrirse en Google Maps para navegar.`;
 
@@ -701,7 +702,7 @@ const SALMA_TOOLS = [
   },
   {
     name: "buscar_web",
-    description: "Busca información actual en internet usando Google. Usa esta herramienta OBLIGATORIAMENTE cuando la pregunta incluya fechas concretas, horarios, precios actuales, programas de eventos, procesiones, conciertos, ferias, si algo está abierto o cerrado, o cualquier dato que pueda haber cambiado desde agosto de 2025. Devuelve los resultados más relevantes con su fuente para que puedas responder con datos verificados.",
+    description: "Busca información actual en internet usando Google. Usa esta herramienta OBLIGATORIAMENTE cuando la pregunta incluya fechas concretas, horarios, precios actuales, programas de eventos, procesiones, conciertos, ferias, si algo está abierto o cerrado, o cualquier dato que pueda haber cambiado desde agosto de 2025. Devuelve resultados con título, snippet, URL y contenido de la página. SIEMPRE incluye las URLs de los resultados relevantes en tu respuesta como fuente — son URLs reales de herramienta, no inventadas.",
     input_schema: {
       type: "object",
       properties: {
@@ -2923,7 +2924,7 @@ async function buscarWeb(input, braveKey) {
     if (!organic.length) return { resultados: [], mensaje: 'No se encontraron resultados para esa búsqueda.' };
 
     // 2. Intentar obtener contenido de las top 2 URLs
-    const topUrls = organic.slice(0, 2).map(r => r.link).filter(Boolean);
+    const topUrls = organic.slice(0, 2).map(r => r.url).filter(Boolean);
     const contenidos = await Promise.all(topUrls.map(async url => {
       try {
         const res = await fetch(url, {
@@ -2946,12 +2947,16 @@ async function buscarWeb(input, braveKey) {
       }
     }));
 
-    // 3. Combinar snippets de Serper + contenido real de las webs
-    const resultados = organic.map((r, i) => ({
+    // 3. Combinar snippets + contenido real de las webs (vincular por URL)
+    const contenidoMap = {};
+    for (const c of contenidos) {
+      if (c?.url) contenidoMap[c.url] = c.texto;
+    }
+    const resultados = organic.map(r => ({
       titulo: r.title || '',
       snippet: r.description || '',
       url: r.url || '',
-      contenido: contenidos[i]?.texto || null,
+      contenido: contenidoMap[r.url] || null,
     }));
 
     return { resultados, query: input.query };
