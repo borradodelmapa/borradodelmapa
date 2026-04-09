@@ -109,6 +109,9 @@ function showState(state) {
     if (layer) layer.remove();
     $content.classList.remove('app-content--chat');
   }
+  // Limpiar barra flotante de guía si quedó huérfana
+  const _orphanBar = document.body.querySelector('.itin-action-bar');
+  if (_orphanBar) _orphanBar.remove();
   // FAB mapa: visible en todo menos welcome
   const fab = document.getElementById('fab-map');
   if (fab) fab.style.display = (state === 'welcome' || !currentUser) ? 'none' : '';
@@ -177,6 +180,9 @@ function updateBottomBar() {
       const _appContent = document.getElementById('app-content');
       const _inputBar = document.getElementById('app-input-bar');
       window._itinViewOpen = false;
+      // Quitar barra flotante (Google Maps + Compartir) del body
+      const _actionBar = document.body.querySelector('.itin-action-bar');
+      if (_actionBar) _actionBar.remove();
       if (_view) _view.style.display = 'none';
       if (_appContent) _appContent.style.display = '';
       if (_inputBar) _inputBar.style.display = '';

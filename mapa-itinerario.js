@@ -503,6 +503,10 @@ const mapaItinerario = {
     mapaRuta.destroy();
     mapaItinerario.destroy();
 
+    // Quitar barra flotante (Google Maps + Compartir) del body
+    const actionBar = document.body.querySelector('.itin-action-bar');
+    if (actionBar) actionBar.remove();
+
     if (view) view.style.display = 'none';
     if (appContent) appContent.style.display = '';
     if (inputBar) inputBar.style.display = '';
