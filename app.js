@@ -584,6 +584,12 @@ async function renderProfile() {
       </div>
 
       <div class="profile-sections">
+        <div class="profile-section" id="prof-bitacora">
+          <span class="profile-section-icon">\u{1F30D}</span>
+          <span class="profile-section-label">Cuaderno de Viaje</span>
+          <span class="profile-section-arrow">\u203A</span>
+        </div>
+
         <div class="profile-section" id="prof-docs">
           <span class="profile-section-icon">\u{1F5C4}\uFE0F</span>
           <span class="profile-section-label">Documentos del Viajero</span>
@@ -677,6 +683,7 @@ async function renderProfile() {
     avatarInput.addEventListener('change', (e) => handleAvatarFile(e.target.files[0]));
     avatarCamera.addEventListener('change', (e) => handleAvatarFile(e.target.files[0]));
   }
+  document.getElementById('prof-bitacora').addEventListener('click', () => showState('bitacora'));
   document.getElementById('prof-coins').addEventListener('click', openCoinsModal);
   document.getElementById('prof-notas').addEventListener('click', () => showState('notas'));
   document.getElementById('prof-galeria').addEventListener('click', () => renderGaleria());
