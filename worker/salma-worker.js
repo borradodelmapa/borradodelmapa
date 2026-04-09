@@ -1758,16 +1758,17 @@ ${formatted}
 Si alguno de estos eventos o festivales coincide con las fechas del viaje, menciónalo brevemente en el día que toque como dato útil. NO reestructures la ruta por un evento. Si ninguno encaja con las fechas, ignóralos. NUNCA inventes eventos.]`;
   }
 
-  // Si hay imagen, enviar como content array (vision de OpenAI)
+  // Si hay imagen, enviar como content array (vision Anthropic)
   if (imageBase64) {
     messages.push({
       role: 'user',
       content: [
         {
-          type: 'image_url',
-          image_url: {
-            url: `data:image/jpeg;base64,${imageBase64}`,
-            detail: 'high'
+          type: 'image',
+          source: {
+            type: 'base64',
+            media_type: 'image/jpeg',
+            data: imageBase64
           }
         },
         { type: 'text', text: userContent || 'El viajero te envía esta foto.' }
@@ -4967,9 +4968,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       );
     }
 
-    const apiKey = env.OPENAI_API_KEY; // solo para fotos (imageBase64) y rutas largas
-    // Texto sin foto → Anthropic. Solo bloqueamos si no hay ninguna key disponible
-    if (!apiKey && !env.ANTHROPIC_API_KEY) {
+    const apiKey = env.OPENAI_API_KEY; // fallback legacy (rutas largas)
+    // Todo va por Anthropic. Solo bloqueamos si no hay key
+    if (!env.ANTHROPIC_API_KEY) {
       return new Response(
         JSON.stringify({ reply: 'Salma no está configurada (falta API key).', route: null }),
         { status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
@@ -5343,9 +5344,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     const webSearchNeeded = needsWebSearchTool(message);
     // transportFallbackMsg tiene datos pre-buscados → Claude no necesita tools, responde directo del esqueleto
     const needsTools = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg || webSearchNeeded;
-    // Fotos → OpenAI (mejor visión). Texto → Claude Sonnet (mejor instrucciones)
-    const useAnthropic = !imageBase64;
-    const reqModel = 'gpt-4o-mini'; // solo para fotos (OpenAI)
+    // Todo va a Claude Sonnet (visión nativa incluida)
+    const useAnthropic = true;
+    const reqModel = 'gpt-4o-mini'; // fallback legacy (no se usa si useAnthropic=true)
     const reqMaxTokens = needsTools ? 6000 : 3000;
 
     // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
