@@ -1054,6 +1054,7 @@ const salma = {
                     display = display.replace(/[\n.][ ]?SAL[MA_ROUTE]*$/, '');
                   }
                   textEl.innerHTML = formatMessage(display.trim());
+                  textEl.dataset.raw = fullText;
                   this._scrollToBottom();
                 }
               }
@@ -1677,15 +1678,15 @@ const salma = {
     if (el) {
       el.removeAttribute('id');
       const bodyEl = el.querySelector('.msg-body-salma');
-      const textContent = bodyEl ? bodyEl.textContent : '';
+      const rawText = bodyEl?.dataset.raw || bodyEl?.textContent || '';
       // Añadir botón guardar nota solo si hay contenido relevante
-      if (textContent.length > 150 && !el.querySelector('.msg-save-note')) {
+      if (rawText.length > 150 && !el.querySelector('.msg-save-note')) {
         const btn = document.createElement('button');
         btn.className = 'msg-save-note';
         btn.innerHTML = '&#x1F516; Guardar nota';
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
-          this._saveNoteFromBubble(textContent, btn);
+          this._saveNoteFromBubble(rawText, btn);
         });
         el.appendChild(btn);
       }
@@ -1701,6 +1702,7 @@ const salma = {
       if (txt && !txt.textContent.trim()) {
         el.remove(); // Vacía, quitar
       } else {
+        const rawText = txt?.dataset.raw || txt?.textContent || '';
         const textContent = txt ? txt.textContent : '';
         if (txt) txt.removeAttribute('id');
         el.removeAttribute('id');
@@ -1710,13 +1712,13 @@ const salma = {
           setTimeout(() => this.salmaSpeak(t), 50);
         }
         // Botón guardar nota solo si hay contenido relevante
-        if (textContent.length > 150 && !el.querySelector('.msg-save-note')) {
+        if (rawText.length > 150 && !el.querySelector('.msg-save-note')) {
           const btn = document.createElement('button');
           btn.className = 'msg-save-note';
           btn.innerHTML = '&#x1F516; Guardar nota';
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            this._saveNoteFromBubble(textContent, btn);
+            this._saveNoteFromBubble(rawText, btn);
           });
           el.appendChild(btn);
         }
