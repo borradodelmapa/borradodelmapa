@@ -1582,11 +1582,46 @@ const salma = {
       || (this.currentRoute ? normalizeCountry(this.currentRoute.country) : null);
 
     try {
+      // Extraer imágenes markdown ![alt](url) y limpiar del texto
+      const imgRegex = /!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g;
+      const imageUrls = [];
+      let match;
+      while ((match = imgRegex.exec(text)) !== null) {
+        imageUrls.push({ alt: match[1], url: match[2] });
+      }
+      const cleanText = text.replace(imgRegex, '').replace(/\n{3,}/g, '\n\n').trim();
+
+      // Convertir enlaces markdown [texto](url) → texto (url) para que linkify los pille
+      const linkifiedText = cleanText.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '$1 $2');
+
+      // Subir imágenes a R2 en background
+      const files = [];
+      const api = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+      const uid = window.currentUser.uid;
+      for (const img of imageUrls) {
+        try {
+          const resp = await fetch(img.url);
+          if (!resp.ok) continue;
+          const blob = await resp.blob();
+          const fileName = (img.alt || 'foto').replace(/[^a-zA-Z0-9_-]/g, '_') + '.jpg';
+          const formData = new FormData();
+          formData.append('file', new File([blob], fileName, { type: blob.type || 'image/jpeg' }));
+          formData.append('uid', uid);
+          formData.append('docId', 'nota_' + Date.now());
+          const upRes = await fetch(api + '/upload-doc', { method: 'POST', body: formData });
+          if (upRes.ok) {
+            const { key, url } = await upRes.json();
+            files.push({ fileName, fileType: 'image/jpeg', r2Key: key, downloadURL: url });
+          }
+        } catch (e) { console.warn('Error subiendo imagen a R2:', e); }
+      }
+
       await notasManager.create({
-        texto: text,
+        texto: linkifiedText,
         countryCode: country?.code || null,
         countryName: country?.name || null,
         emoji: country?.emoji || null,
+        files,
         origen: 'chat',
         fuente: 'guardar_burbuja'
       });
