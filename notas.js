@@ -9,6 +9,10 @@ window.notasManager = (() => {
   function _genId() { return 'nota_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6); }
   function _today() { return new Date().toISOString().slice(0, 10); }
   function _escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  function _linkify(text) {
+    const escaped = _escHtml(text);
+    return escaped.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+  }
 
   const TIPOS = {
     general:      { label: 'Nota',         icon: '\u{1F4DD}', tagClass: 'tag-nota' },
@@ -359,7 +363,7 @@ window.notasManager = (() => {
             <button class="nota-card-delete" data-id="${n.id}" aria-label="Eliminar">\u2715</button>
           </div>
         </div>
-        <div class="nota-card-texto ${isLong ? 'nota-truncated' : ''}" data-id="${n.id}">${_escHtml(n.texto)}</div>
+        <div class="nota-card-texto ${isLong ? 'nota-truncated' : ''}" data-id="${n.id}">${_linkify(n.texto)}</div>
         ${(n.files && n.files.length) ? `<div class="nota-card-files">${n.files.map(f => {
           const isImg = (f.fileType || '').startsWith('image/');
           return isImg
@@ -376,7 +380,25 @@ window.notasManager = (() => {
     const isNew = !nota;
     const n = nota || { texto: '', tipo: 'general', fechaRecordatorio: '', countryCode: '' };
 
-    const existingFiles = (n.files || []).map(f => `<div class="nota-file-item"><span class="nota-file-item-name">${_escHtml(f.fileName)}</span></div>`).join('');
+    const keptFiles = [...(n.files || [])];
+
+    function _renderExistingFiles(container) {
+      if (!container) return;
+      container.innerHTML = keptFiles.map((f, i) => {
+        const isImg = (f.fileType || '').startsWith('image/');
+        return `<div class="nota-file-item">
+          ${isImg ? `<img class="nota-file-item-thumb" src="${f.downloadURL}" alt="">` : ''}
+          <span class="nota-file-item-name">${_escHtml(f.fileName)}</span>
+          <button class="nota-file-item-remove" data-idx="${i}">\u2715</button>
+        </div>`;
+      }).join('');
+      container.querySelectorAll('.nota-file-item-remove').forEach(btn => {
+        btn.addEventListener('click', () => {
+          keptFiles.splice(parseInt(btn.dataset.idx), 1);
+          _renderExistingFiles(container);
+        });
+      });
+    }
 
     el.innerHTML = `
       <div class="nota-form">
@@ -388,13 +410,15 @@ window.notasManager = (() => {
           <button class="nota-form-file-btn" id="nota-form-file-btn">\u{1F4CE} Adjuntar archivo</button>
           <input type="file" id="nota-form-file-input" accept="image/*,application/pdf" multiple style="display:none">
         </div>
-        ${existingFiles ? `<div class="nota-form-existing">${existingFiles}</div>` : ''}
+        <div id="nota-form-existing" class="nota-form-file-list"></div>
         <div id="nota-form-file-list" class="nota-form-file-list"></div>
         <div class="nota-form-actions">
           <button class="nota-form-cancel" id="nota-form-cancel">Cancelar</button>
           <button class="nota-form-save" id="nota-form-save">${isNew ? 'Crear' : 'Guardar'}</button>
         </div>
       </div>`;
+
+    _renderExistingFiles(document.getElementById('nota-form-existing'));
 
     // File handling
     const selectedFiles = [];
@@ -423,8 +447,8 @@ window.notasManager = (() => {
       saveBtn.textContent = 'Guardando...';
 
       try {
-        // Subir archivos si hay
-        let files = nota?.files || [];
+        // Combinar archivos existentes (no borrados) + nuevos subidos
+        let files = [...keptFiles];
         if (selectedFiles.length > 0) {
           files = [...files, ...(await _uploadFiles(selectedFiles))];
         }

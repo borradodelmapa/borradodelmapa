@@ -3068,6 +3068,7 @@ body {
 .nota-card-delete { background:none; border:none; cursor:pointer; font-size:14px; padding:2px 8px; color:rgba(239,68,68,.5); transition:color .15s; }
 .nota-card-delete:hover { color:#f87171; }
 .nota-card-texto { font-size:14px; color:rgba(244,239,230,.8); line-height:1.5; word-break:break-word; }
+.nota-card-texto a { color:var(--dorado); text-decoration:underline; text-underline-offset:2px; }
 .nota-card-texto.nota-truncated { overflow:hidden; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; cursor:pointer; }
 .nota-card-texto.nota-expanded { -webkit-line-clamp:unset; cursor:pointer; }
 .nota-card-date { font-size:11px; color:rgba(244,239,230,.3); margin-top:6px; }
@@ -3093,6 +3094,7 @@ body {
 .nota-file-item { display:flex; align-items:center; gap:8px; padding:6px 10px; background:rgba(74,222,128,.06); border:1px solid rgba(74,222,128,.15); border-radius:6px; font-size:12px; color:rgba(244,239,230,.7); }
 .nota-file-item-name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .nota-file-item-remove { background:none; border:none; color:rgba(239,68,68,.5); font-size:11px; cursor:pointer; padding:2px 4px; }
+.nota-file-item-thumb { width:32px; height:32px; object-fit:cover; border-radius:4px; }
 .nota-form-existing { display:flex; flex-direction:column; gap:4px; margin-top:8px; }
 .nota-form-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
 .nota-form-cancel { background:none; border:1px solid rgba(244,239,230,.1); color:rgba(244,239,230,.5); padding:8px 16px; border-radius:8px; font-size:13px; cursor:pointer; }
