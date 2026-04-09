@@ -4961,7 +4961,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       }
     }
 
-    if (!message.trim()) {
+    if (!message.trim() && !imageBase64) {
       return new Response(
         JSON.stringify({ reply: 'Dime a dónde quieres ir o qué te apetece hacer y te ayudo.', route: null }),
         { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
