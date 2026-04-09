@@ -546,78 +546,110 @@ async function renderProfile() {
 
   const coins = currentUser.coins_saldo || 0;
   const rutas = currentUser.rutas_gratis_usadas || 0;
+  const freeLeft = Math.max(0, 3 - rutas);
   const initial = (currentUser.name || currentUser.email || 'V')[0].toUpperCase();
+  const sosConfigured = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim()).length > 0;
+
   const avatarHtml = currentUser.avatarURL
-    ? `<div class="profile-avatar profile-avatar-img" id="prof-avatar-btn"><img src="${currentUser.avatarURL}" alt="Avatar"><div class="profile-avatar-edit">\u{1F4F7}</div></div>`
-    : `<div class="profile-avatar" id="prof-avatar-btn">${escapeHTML(initial)}<div class="profile-avatar-edit">\u{1F4F7}</div></div>`;
+    ? `<div class="prof-avatar prof-avatar-has-img" id="prof-avatar-btn"><img src="${currentUser.avatarURL}" alt="Avatar"><div class="prof-avatar-edit-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div></div>`
+    : `<div class="prof-avatar" id="prof-avatar-btn">${escapeHTML(initial)}<div class="prof-avatar-edit-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div></div>`;
 
   $content.innerHTML = `
-    <div class="profile-area fade-in">
-      <div class="profile-header">
+    <div class="profile-area prof-v2 fade-in">
+      <input type="file" id="prof-avatar-input" accept="image/*" style="display:none">
+      <input type="file" id="prof-avatar-camera" accept="image/*" capture="user" style="display:none">
+
+      <!-- Hero Header -->
+      <div class="prof-hero">
+        <div class="prof-hero-glow"></div>
         ${avatarHtml}
-        <input type="file" id="prof-avatar-input" accept="image/*" style="display:none">
-        <input type="file" id="prof-avatar-camera" accept="image/*" capture="user" style="display:none">
-        <div class="profile-info">
-          <div class="profile-name">${escapeHTML(currentUser.name || 'Viajero')}</div>
-          <div class="profile-stats">${coins} Salma Coins · ${3 - rutas} rutas gratis</div>
+        <div class="prof-hero-name">${escapeHTML(currentUser.name || 'Viajero')}</div>
+        <div class="prof-stats-strip">
+          <div class="prof-stat-card" id="prof-stat-coins">
+            <div class="prof-stat-number">${coins}</div>
+            <div class="prof-stat-label">COINS</div>
+          </div>
+          <div class="prof-stat-divider"></div>
+          <div class="prof-stat-card">
+            <div class="prof-stat-number">${freeLeft}</div>
+            <div class="prof-stat-label">GRATIS</div>
+          </div>
+          <div class="prof-stat-divider"></div>
+          <div class="prof-stat-card">
+            <div class="prof-stat-number" id="prof-stat-guides">&ndash;</div>
+            <div class="prof-stat-label">VIAJES</div>
+          </div>
         </div>
       </div>
 
-      <div class="profile-sections">
-        <div class="profile-section" id="prof-bitacora">
-          <span class="profile-section-icon">\u{1F30D}</span>
-          <span class="profile-section-label">Cuaderno de Viaje</span>
-          <span class="profile-section-arrow">\u203A</span>
+      <!-- Card 1: Tu Viaje -->
+      <div class="prof-group">
+        <div class="prof-group-title">TU VIAJE</div>
+        <div class="prof-card">
+          <div class="prof-row" id="prof-bitacora">
+            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg></span>
+            <span class="prof-row-label">Cuaderno de Viaje</span>
+            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="prof-row-sep"></div>
+          <div class="prof-row" id="prof-docs">
+            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>
+            <span class="prof-row-label">Documentos del Viajero</span>
+            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="prof-row-sep"></div>
+          <div class="prof-row" id="prof-notas">
+            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
+            <span class="prof-row-label">Mis Notas</span>
+            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="prof-row-sep"></div>
+          <div class="prof-row" id="prof-galeria">
+            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>
+            <span class="prof-row-label">Galería</span>
+            <button class="prof-row-info-btn" id="prof-galeria-info" onclick="event.stopPropagation()">i</button>
+            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
         </div>
-
-        <div class="profile-section" id="prof-docs">
-          <span class="profile-section-icon">\u{1F5C4}\uFE0F</span>
-          <span class="profile-section-label">Documentos del Viajero</span>
-          <span class="profile-section-arrow">\u203A</span>
-        </div>
-
-        <div class="profile-section" id="prof-notas">
-          <span class="profile-section-icon">\u{1F4DD}</span>
-          <span class="profile-section-label">Mis Notas</span>
-          <span class="profile-section-arrow">\u203A</span>
-        </div>
-
-        <div class="profile-section" id="prof-galeria">
-          <span class="profile-section-icon">🖼️</span>
-          <span class="profile-section-label">Galería</span>
-          <button class="profile-info-btn" id="prof-galeria-info" onclick="event.stopPropagation()">i</button>
-          <span class="profile-section-arrow">›</span>
-        </div>
-
-
-        <div class="profile-section profile-section-sos ${(currentUserSOSConfig?.contacts || []).filter(c=>c.phone?.trim()).length > 0 ? 'sos-configured' : 'sos-unconfigured'}" id="prof-sos">
-          <span class="profile-section-icon profile-section-icon-sos">🆘</span>
-          <span class="profile-section-label">SOS Emergencia</span>
-          <span class="sos-status-badge">
-            ${(currentUserSOSConfig?.contacts || []).filter(c=>c.phone?.trim()).length > 0
-              ? '<span class="sos-badge-on">configurado</span>'
-              : '<span class="sos-badge-off">sin configurar</span>'}
-          </span>
-          <button class="profile-info-btn sos-edit-btn" id="prof-sos-edit" onclick="event.stopPropagation()" title="Editar contactos">✏️</button>
-          <span class="profile-section-arrow">›</span>
-        </div>
-
-        <div class="profile-section" id="prof-coins">
-          <span class="profile-section-icon">S</span>
-          <span class="profile-section-label">Salma Coins</span>
-          <span class="profile-section-coins-badge">${coins}</span>
-          <span class="profile-section-arrow">›</span>
-        </div>
-
-        <div class="profile-section" id="prof-help">
-          <svg class="profile-section-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <span class="profile-section-label">¿Qué puedo hacer?</span>
-          <span class="profile-section-arrow">›</span>
-        </div>
-
       </div>
 
-      <div class="profile-legal">
+      <!-- Card 2: Seguridad -->
+      <div class="prof-group">
+        <div class="prof-group-title">SEGURIDAD</div>
+        <div class="prof-card ${sosConfigured ? 'prof-card-sos-on' : 'prof-card-sos-off'}">
+          <div class="prof-row prof-row-sos" id="prof-sos">
+            <span class="prof-row-icon prof-row-icon-sos"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+            <span class="prof-row-label">SOS Emergencia</span>
+            <span class="prof-sos-badge">${sosConfigured
+              ? '<span class="prof-sos-on">configurado</span>'
+              : '<span class="prof-sos-off">sin configurar</span>'}</span>
+            <button class="prof-row-info-btn prof-sos-edit-btn" id="prof-sos-edit" onclick="event.stopPropagation()" title="Editar contactos">✏️</button>
+            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Cuenta -->
+      <div class="prof-group">
+        <div class="prof-group-title">CUENTA</div>
+        <div class="prof-card">
+          <div class="prof-row" id="prof-coins">
+            <span class="prof-row-icon prof-row-icon-coins"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M14.5 9a3.5 3.5 0 0 0-5 0"/><path d="M9.5 15a3.5 3.5 0 0 0 5 0"/><line x1="12" y1="3" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="21"/></svg></span>
+            <span class="prof-row-label">Salma Coins</span>
+            <span class="prof-coins-badge">${coins}</span>
+            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="prof-row-sep"></div>
+          <div class="prof-row" id="prof-help">
+            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+            <span class="prof-row-label">¿Qué puedo hacer?</span>
+            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="prof-legal">
         <a href="/legal.html#aviso-legal" target="_blank">Aviso legal</a>
         <span>·</span>
         <a href="/legal.html#privacidad" target="_blank">Privacidad</a>
@@ -626,7 +658,7 @@ async function renderProfile() {
         <span>·</span>
         <a href="/legal.html#terminos" target="_blank">Términos</a>
       </div>
-      <button class="profile-logout-link" id="prof-logout">Cerrar sesión</button>
+      <button class="prof-logout" id="prof-logout">Cerrar sesión</button>
     </div>`;
 
   // Event listeners
@@ -686,6 +718,17 @@ async function renderProfile() {
   document.getElementById('prof-logout').addEventListener('click', () => {
     if (confirm('¿Cerrar sesión?')) logout();
   });
+  // Stats: click en coins abre modal
+  document.getElementById('prof-stat-coins')?.addEventListener('click', openCoinsModal);
+  // Stats: cargar conteo de guías async
+  db.collection('users').doc(currentUser.uid)
+    .collection('maps').get().then(snap => {
+      const el = document.getElementById('prof-stat-guides');
+      if (el) el.textContent = snap.size;
+    }).catch(() => {
+      const el = document.getElementById('prof-stat-guides');
+      if (el) el.textContent = '0';
+    });
   // Cargar guías del usuario
   _loadProfileGuides();
 }
