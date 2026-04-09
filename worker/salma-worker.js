@@ -299,9 +299,9 @@ CÓMO PRESENTAR RESULTADOS:
 — Restaurantes: nombre, tipo de cocina, zona, enlace TheFork o Google Maps.
 — Vuelos: cuando vengan de un rango de fechas (fecha_rango_hasta), SIEMPRE muestra el trade-off: precio vs duración total vs tiempo de escala. Formato: "✈️ Opción 1 — X€ — sale el DÍA — Xh Xmin (escala Xh en CIUDAD)". Si hay una opción más cara pero con mucha menos escala, menciónala expresamente: "Este cuesta 3€ más pero te ahorras 3h de escala".
 — Lugares (buscar_lugar): nombre en negrita, tipo, dirección corta, rating si lo hay, teléfono si lo hay, enlace Google Maps.
-— Búsqueda web (buscar_web): responde con el dato encontrado e INCLUYE la URL fuente del resultado. Si hay varias fuentes relevantes, incluye hasta 3 URLs.
+— Búsqueda web (buscar_web): responde con el dato + INCLUYE la URL fuente en su propia línea. Hasta 3 URLs si hay varias fuentes.
 — Cada enlace en su propia línea, sin markdown, sin corchetes. Solo la URL.
-— CERO URLs inventadas. Solo pon URLs que te haya devuelto una herramienta en esta conversación. Si no tienes URL, pon solo el nombre. Las URLs de buscar_web CUENTAN como URLs de herramienta — úsalas.
+— URLs permitidas: las que devuelve cualquier herramienta (buscar_web, buscar_hotel, buscar_lugar, buscar_vuelos...) + google.com/maps/. Si no tienes URL de herramienta, pon solo el nombre — no inventes.
 
 NAVEGACIÓN: cada parada puede abrirse en Google Maps para navegar.`;
 
@@ -402,13 +402,13 @@ JERARQUÍA DE HERRAMIENTAS: las tools específicas tienen prioridad sobre buscar
 VELOCIDAD — REGLA CRÍTICA: cuando el usuario pide varias cosas a la vez (vuelo + hotel + gym + taxi…), llama a TODAS las herramientas necesarias en una SOLA respuesta, de golpe. No hagas rondas separadas. No esperes el resultado de una para llamar a la siguiente. Todas las búsquedas son independientes y deben lanzarse simultáneamente.
 
 PROHIBIDO INVENTAR:
-1. Las ÚNICAS URLs permitidas: (a) las que devuelve una herramienta, (b) google.com/maps/dir/ construida con coordenadas reales.
-2. NUNCA URLs de apps (Grab, Uber, Booking, etc.) — solo el nombre de la app.
-3. NUNCA inventes teléfonos, direcciones, horarios ni precios exactos que no vengan de herramienta o contexto KV.
+1. No inventes URLs, teléfonos, direcciones, horarios ni precios. Solo datos de herramientas o KV.
+2. URLs de herramientas (buscar_web, buscar_hotel, buscar_lugar, buscar_vuelos, buscar_coche, buscar_foto): SIEMPRE inclúyelas en tu respuesta. Son datos reales — para eso las buscaste.
+3. Apps de transporte (Grab, Uber, Bolt...): solo el nombre, nunca su URL.
 4. Si no tienes el dato, usa buscar_web. Si no lo encuentra, di "no he encontrado ese dato".
 5. Google Maps: coordenadas numéricas como origen, nunca nombre de ciudad. Correcto: https://www.google.com/maps/dir/21.0285,105.8542/Noi+Bai+International+Airport
 
-NUNCA dejes tirado al viajero. Si tienes los datos, resuélvelo.
+No dejes tirado al viajero. Si tienes los datos, resuélvelo.
 
 Visados y leyes: adapta a la nacionalidad del usuario. Si no la tienes y es relevante, pregúntasela.`;
 
@@ -854,6 +854,60 @@ function formatDayHeaders(text, numDays) {
   if (tailParas.length > 0) final += '\n\n' + tailParas.join('\n\n');
 
   return final;
+}
+
+// ═══ VALIDATE MAPS URLS — Post-streaming: valida enlaces Maps con Google Places ═══
+// Extrae google.com/maps/search/... del reply, valida con Find Place,
+// reemplaza con place_id si existe o elimina si es inventado.
+async function validateMapsUrls(reply, placesKey) {
+  if (!placesKey || !reply) return reply;
+
+  // Extraer URLs google.com/maps/search/...
+  const mapsRegex = /https:\/\/www\.google\.com\/maps\/search\/([^\s)]+)/g;
+  const matches = [];
+  let m;
+  while ((m = mapsRegex.exec(reply)) !== null) {
+    matches.push({ full: m[0], query: decodeURIComponent(m[1]).replace(/\+/g, ' ') });
+  }
+  if (!matches.length) return reply;
+
+  // Validar todas en paralelo con Find Place (ligero: solo place_id + name)
+  const results = await Promise.all(matches.map(async ({ full, query }) => {
+    try {
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(query)}&inputtype=textquery&fields=place_id,name&key=${placesKey}`,
+        { signal: AbortSignal.timeout(3000) }
+      );
+      const data = await res.json();
+      const place = data?.candidates?.[0];
+      if (place?.place_id) {
+        // Lugar real → reemplazar con enlace place_id (directo, sin ambigüedad)
+        return {
+          original: full,
+          replacement: `https://www.google.com/maps/place/?q=place_id:${place.place_id}`
+        };
+      }
+      // No encontrado → eliminar enlace
+      return { original: full, replacement: '' };
+    } catch {
+      return { original: full, replacement: full }; // timeout → dejar como está
+    }
+  }));
+
+  // Aplicar reemplazos
+  let cleaned = reply;
+  for (const { original, replacement } of results) {
+    if (replacement) {
+      cleaned = cleaned.replace(original, replacement);
+    } else {
+      // Eliminar URL + paréntesis o espacio sobrante
+      cleaned = cleaned.replace(` (${original})`, '');
+      cleaned = cleaned.replace(`(${original})`, '');
+      cleaned = cleaned.replace(` ${original}`, '');
+      cleaned = cleaned.replace(original, '');
+    }
+  }
+  return cleaned;
 }
 
 // Genera un enlace Google Maps directions con todas las paradas mencionadas en el texto
@@ -1688,7 +1742,7 @@ PROHIBIDO:
 — Generar SALMA_ROUTE_JSON bajo ningún concepto.
 — Preguntar "¿qué tipo de viaje?", "¿con quién vas?", "¿qué quieres hacer?" ni ninguna pregunta para personalizar una ruta.
 — Mencionar guías, rutas, coins, Salma Coins o el modo guía.
-— Inventar URLs. CERO URLs salvo las que devuelva una herramienta o google.com/maps/dir/.
+— Inventar URLs. Solo URLs de herramientas o google.com/maps/.
 — Poner negritas como título en línea sola (**Transporte:**, **Para comer:**). Las negritas son solo para datos inline: **8€**, **Lomprayah**, **2h30**.
 — Hacer preguntas al final del mensaje. Si quieres ofrecer ayuda, ofrece sin preguntar: "Si quieres que te busque hotel o algo concreto, dime." NO "¿Quieres que te busque hotel?"
 
@@ -5689,6 +5743,11 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           reply = formatDayHeaders(reply, _numDays);
           // Añadir enlace Google Maps de ruta completa al final
           reply = appendRouteMapLink(reply);
+        }
+
+        // ── Validar enlaces Maps en conversacional (no rutas — las rutas ya tienen verify) ──
+        if (!route && env.GOOGLE_PLACES_KEY) {
+          try { reply = await validateMapsUrls(reply, env.GOOGLE_PLACES_KEY); } catch (_) {}
         }
 
         // ── SALMA_ACTION: extraer acciones del texto, limpiar reply, ejecutar APIs en paralelo ──
