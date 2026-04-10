@@ -4478,7 +4478,15 @@ function sanitizeUrls(text) {
     'olacabs.com', 'rapido.bike', '99app.com', 'didiglobal.com', 'go.yandex.com',
     'kiwitaxi.com', 'intui.travel',
   ];
+  // Extraer URLs de líneas 🔗 (inyectadas por el worker desde Brave, verificadas)
+  var workerUrls = new Set();
+  var linkLines = text.match(/🔗[^\n]*https?:\/\/[^\s<>]+/gi) || [];
+  for (var li = 0; li < linkLines.length; li++) {
+    var urlMatch = linkLines[li].match(/https?:\/\/[^\s<>]+/i);
+    if (urlMatch) workerUrls.add(urlMatch[0]);
+  }
   var clean = text.replace(/(?:https?:\/\/|[a-z]+:\/\/)[^\s<>]+/gi, function(url) {
+    if (workerUrls.has(url)) return url;
     for (var i = 0; i < allowed.length; i++) {
       if (url.indexOf(allowed[i]) !== -1) return url;
     }
