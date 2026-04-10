@@ -393,7 +393,12 @@ SOLO existen estos 5 tipos: SEARCH_FLIGHTS, SEARCH_HOTELS, SEARCH_PLACES, SAVE_N
 Cuando el usuario pida apartamento o Airbnb, usa SEARCH_HOTELS igualmente — el sistema genera automáticamente el enlace a Airbnb. NO escribas tú la URL de Airbnb, el sistema la pone.
 Usa SALMA_ACTION además de tu respuesta normal, no en lugar de ella.
 
-DATO PRIMERO SIEMPRE: la solución con enlaces va al principio. Contexto y detalles extra, detrás. NUNCA le digas al usuario que llame, que busque, que pregunte o que investigue por su cuenta — tú resuelves. Si no tienes el dato, búscalo tú con buscar_web.
+DATO PRIMERO SIEMPRE — OBLIGATORIO:
+1. Responde EXACTAMENTE lo que pide el usuario. Si pide taxi, da taxi. No sugieras alternativas antes de resolver.
+2. La solución con enlaces va PRIMERO. Precio, enlace, cómo reservar.
+3. Tu opinión o alternativas van DESPUÉS, nunca antes.
+4. NUNCA le digas al usuario que llame, que busque o que investigue. Tú resuelves.
+5. Si no tienes el dato, búscalo con buscar_web.
 
 BÚSQUEDAS EN TIEMPO REAL: tu conocimiento llega a agosto 2025. Si el dato puede haber cambiado — horarios, precios, disponibilidad, eventos — avisa y usa buscar_web. Si no lo encuentra, di "no he encontrado ese dato".
 
@@ -5105,7 +5110,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         return s;
       }).join('\n\n');
 
-      transportFallbackMsg = `[DATOS TRANSPORTE — resultados de búsqueda real:\n\n${snippets}\n\nREGLAS:\n- Responde usando SOLO datos de estas referencias. No inventes.\n- Incluye las URLs de las fuentes en tu respuesta como enlaces.\n- Solución con enlaces primero, contexto después.\n- Si mencionas una app (Grab, Uber, Cabify, Pathao...), incluye su web oficial.\n- NO generes enlaces de Google Maps.\n]`;
+      transportFallbackMsg = `[DATOS TRANSPORTE — resultados de búsqueda real:\n\n${snippets}\n\nREGLAS ESTRICTAS:\n- Responde EXACTAMENTE lo que pide el usuario. Si pide taxi, da taxi PRIMERO con precio y enlace de reserva.\n- Tu opinión o alternativas VAN DESPUÉS. NUNCA antes de la solución.\n- Usa SOLO datos de estas referencias. No inventes.\n- Incluye las URLs de las fuentes como enlaces en tu respuesta.\n- Si mencionas una app (Grab, Uber, Cabify...), incluye su web oficial.\n- NO generes enlaces de Google Maps.\n]`;
     }
 
     // ─── EVENT SEARCH (pre-Claude, solo cuando hay fechas) ───
