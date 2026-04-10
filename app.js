@@ -4581,7 +4581,10 @@ function showOnboarding() {
 }
 
 // ═══ INIT ═══
+// No llamar showState('welcome') aquí — onAuthStateChanged decide:
+// - Con sesión → directo al chat
+// - Sin sesión → gate obligatorio
+// El splash se mantiene visible hasta que Firebase resuelva el auth
 if (!localStorage.getItem('bdm_onboarding_done')) {
   showOnboarding();
 }
-showState('welcome');
