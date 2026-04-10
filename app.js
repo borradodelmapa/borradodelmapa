@@ -2404,13 +2404,13 @@ function sendMessage() {
 document.getElementById('btn-google-login')?.addEventListener('click', doGoogleLogin);
 document.getElementById('btn-fingerprint')?.addEventListener('click', doFingerprintLogin);
 
-// Logo → welcome
+// Logo → chat (logueado) o gate (no logueado)
 document.getElementById('app-logo')?.addEventListener('click', () => {
   if (currentUser) {
-    showState('profile');
+    if (typeof salma !== 'undefined') salma._initChat();
+    showState('chat');
   } else {
-    if (typeof salma !== 'undefined') salma.reset();
-    showState('welcome');
+    openModal();
   }
 });
 
