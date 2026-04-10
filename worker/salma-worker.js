@@ -5684,7 +5684,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
         }
 
-        // ── Inyectar URLs de transporte que Claude no incluyó ──
+        // ── Inyectar URLs de transporte que Claude no incluyó (como stream chunk para que se vea) ──
         if (!route && transportSearchData?.resultados?.length > 0) {
           const braveUrls = transportSearchData.resultados
             .filter(r => r.url && !reply.includes(r.url))
@@ -5693,11 +5693,11 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           if (braveUrls.length > 0) {
             let linksBlock = '\n';
             for (const r of braveUrls) {
-              // Extraer dominio limpio para el label
-              const domain = r.url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
               linksBlock += `\n🔗 ${r.titulo.slice(0, 60)} — ${r.url}`;
             }
             reply += linksBlock;
+            // Enviar como chunk de streaming para que el frontend lo muestre
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: linksBlock })}\n\n`)); } catch (_) {}
           }
         }
 
