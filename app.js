@@ -1779,6 +1779,8 @@ async function doFingerprintLogin() {
       // Patrón lock screen: si Firebase tiene sesión viva, solo desbloquear
       if (auth.currentUser) {
         closeModal();
+        // Ir directo al chat sin pasar por onAuthStateChanged
+        window._fingerprintUnlock = true;
         if (typeof salma !== 'undefined') salma._initChat();
         showState('chat');
         return;
@@ -1930,6 +1932,11 @@ auth.onAuthStateChanged(async (user) => {
 
     // Tras login, ir al destino indicado o directo al chat
     hideSplash();
+    // Si la huella ya desbloqueó, no redirigir de nuevo
+    if (window._fingerprintUnlock) {
+      window._fingerprintUnlock = false;
+      return;
+    }
     const goParam = new URLSearchParams(window.location.search).get('go');
     if (goParam) {
       history.replaceState(null, '', '/');
