@@ -5080,50 +5080,6 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
             }
           }
         } catch (e) { /* Fallo silencioso */ }
-
-        // ── TRANSPORTE SIN CLAUDE — respuesta directa con Brave + KV ──
-        if (transportSearchData?.resultados?.length > 0) {
-          let directReply = '';
-
-          // Brave results
-          const results = transportSearchData.resultados
-            .filter(r => r.url && !/blog|guia|guide|tripadvisor|wikipedia|wikivoyage/i.test(r.url))
-            .slice(0, 5);
-          for (const r of results) {
-            directReply += `🔗 **${r.titulo.slice(0, 70)}**\n${r.snippet}\n${r.url}\n\n`;
-          }
-
-          // Cargar apps del país desde KV (mini-lookup solo de transport)
-          const transportCC = userCountryCode || frontendCountryCode || null;
-          if (transportCC && env.SALMA_KB) {
-            try {
-              const transportJson = await env.SALMA_KB.get('transport:' + transportCC.toLowerCase());
-              if (transportJson) {
-                const transportData = JSON.parse(transportJson);
-                if (transportData.ridehailing) {
-                  const allApps = [transportData.ridehailing.best, ...(transportData.ridehailing.others || [])].filter(Boolean);
-                  if (allApps.length > 0) {
-                    directReply += '**Apps de transporte en la zona:**\n';
-                    for (const appName of allApps) {
-                      const appData = TRANSPORT_APP_URLS[appName.toLowerCase()];
-                      if (appData) {
-                        directReply += `${appData.icon} ${appData.name} — ${appData.web}\n`;
-                      }
-                    }
-                  }
-                }
-              }
-            } catch (_) {}
-          }
-
-          if (directReply) {
-            return new Response(
-              JSON.stringify({ reply: directReply.trim(), route: null }),
-              { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
-            );
-          }
-        }
-
       } else if (helpLocation) {
         try {
           if (helpCategory === 'weather') {
@@ -5743,9 +5699,19 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
             }
           }
 
-          // 2. Apps ride-hailing del país (del KV) que Claude no mencionó
-          if (kvTransportData?.ridehailing) {
-            const allApps = [kvTransportData.ridehailing.best, ...(kvTransportData.ridehailing.others || [])].filter(Boolean);
+          // 2. Apps ride-hailing del país — cargar del KV usando GPS del usuario
+          let _transportApps = kvTransportData;
+          if (!_transportApps && env.SALMA_KB) {
+            const _cc = userCountryCode || frontendCountryCode || null;
+            if (_cc) {
+              try {
+                const _tj = await env.SALMA_KB.get('transport:' + _cc.toLowerCase());
+                if (_tj) _transportApps = JSON.parse(_tj);
+              } catch (_) {}
+            }
+          }
+          if (_transportApps?.ridehailing) {
+            const allApps = [_transportApps.ridehailing.best, ...(_transportApps.ridehailing.others || [])].filter(Boolean);
             for (const appName of allApps) {
               const appData = TRANSPORT_APP_URLS[appName.toLowerCase()];
               if (appData && !reply.toLowerCase().includes(appData.web.replace('https://', '').replace('http://', ''))) {
