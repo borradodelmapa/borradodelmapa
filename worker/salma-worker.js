@@ -3243,11 +3243,26 @@ async function searchHotelsPlaces(params, placesKey, userLocation) {
     || params.subtype === 'apartment'
     || /apartamento|airbnb|apartment/i.test(params.query || params._userMessage || '');
 
-  // Construir query adaptada al presupuesto y tipo
-  let query = isApartment ? 'apartamento alquiler vacacional' : 'hotel';
-  if (budget === 'low') query = isApartment ? 'apartamento barato alquiler' : 'hostel alojamiento barato';
-  else if (budget === 'high') query = isApartment ? 'apartamento de lujo vacacional' : 'hotel de lujo boutique';
-  else if (budget === 'mid') query = isApartment ? 'apartamento vacacional' : 'hotel 3 estrellas';
+  // Apartamento → solo enlace Airbnb, sin Google Places (no tiene apartamentos)
+  if (isApartment) {
+    let airbnbLink = null;
+    if (city) {
+      const citySlug = city.trim().replace(/\s+/g, '-');
+      airbnbLink = `https://www.airbnb.com/s/${encodeURIComponent(citySlug)}/homes`;
+      const qs = [];
+      if (checkin) qs.push(`checkin=${checkin}`);
+      if (checkout) qs.push(`checkout=${checkout}`);
+      if (adults) qs.push(`adults=${adults}`);
+      if (qs.length) airbnbLink += '?' + qs.join('&');
+    }
+    return { type: 'hotels', city, checkin, checkout, adults, budget, hotels: [], airbnb_link: airbnbLink };
+  }
+
+  // Hotel normal → buscar en Google Places
+  let query = 'hotel';
+  if (budget === 'low') query = 'hostel alojamiento barato';
+  else if (budget === 'high') query = 'hotel de lujo boutique';
+  else if (budget === 'mid') query = 'hotel 3 estrellas';
   if (city) query += ' ' + city;
 
   const searchLat = lat || userLocation?.lat;
@@ -3258,22 +3273,7 @@ async function searchHotelsPlaces(params, placesKey, userLocation) {
 
   const res = await fetch(url);
   const data = await res.json();
-
-  // Generar enlace directo a Airbnb para apartamentos
-  let airbnbLink = null;
-  if (isApartment && city) {
-    const citySlug = city.trim().replace(/\s+/g, '-');
-    airbnbLink = `https://www.airbnb.com/s/${encodeURIComponent(citySlug)}/homes`;
-    const qs = [];
-    if (checkin) qs.push(`checkin=${checkin}`);
-    if (checkout) qs.push(`checkout=${checkout}`);
-    if (adults) qs.push(`adults=${adults}`);
-    if (qs.length) airbnbLink += '?' + qs.join('&');
-  }
-
-  if (!data?.results?.length) {
-    return { type: 'hotels', city, checkin, checkout, adults, budget, hotels: [], airbnb_link: airbnbLink, error: airbnbLink ? null : 'Sin resultados' };
-  }
+  if (!data?.results?.length) return { type: 'hotels', error: 'Sin resultados', city };
 
   const hotels = data.results.slice(0, 5).map(p => ({
     name: p.name,
@@ -3289,7 +3289,7 @@ async function searchHotelsPlaces(params, placesKey, userLocation) {
     open_now: p.opening_hours?.open_now ?? null,
   }));
 
-  return { type: 'hotels', city, checkin, checkout, adults, budget, hotels, airbnb_link: airbnbLink };
+  return { type: 'hotels', city, checkin, checkout, adults, budget, hotels };
 }
 
 // ═══ GOOGLE PLACES — Búsqueda genérica de lugares ═══
