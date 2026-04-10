@@ -5468,6 +5468,7 @@ INSTRUCCIONES:
         // Mensajes que crecen con cada iteración del bucle (tool_use → tool_result)
         let currentMessages = [...messages];
         let lastFlightBookingUrl = null; // Guardar enlace de vuelos para inyectar si GPT no lo incluye
+        let _toolUrls = []; // URLs de buscar_lugar y buscar_web para inyectar si Claude no las pone
 
         for (let iteration = 0; iteration <= MAX_TOOL_ITERATIONS; iteration++) {
           let apiRes;
@@ -5600,6 +5601,18 @@ INSTRUCCIONES:
               if (block.name === 'buscar_vuelos' && toolResult.enlace_reserva) {
                 lastFlightBookingUrl = toolResult.enlace_reserva;
               }
+              // Capturar URLs de resultados de herramientas para inyectar si Claude no las pone
+              if (block.name === 'buscar_lugar' && toolResult.lugares) {
+                for (const l of toolResult.lugares) {
+                  if (l.website) _toolUrls.push({ titulo: l.nombre || l.name, url: l.website });
+                  if (l.maps_link) _toolUrls.push({ titulo: (l.nombre || l.name) + ' en Maps', url: l.maps_link });
+                }
+              }
+              if (block.name === 'buscar_web' && toolResult.resultados) {
+                for (const r of toolResult.resultados) {
+                  if (r.url) _toolUrls.push({ titulo: r.titulo, url: r.url });
+                }
+              }
               // Enviar evento al cliente para guardar nota en Firestore
               if (block.name === 'guardar_nota' && toolResult.saved) {
                 try { await writer.write(encoder.encode(`data: ${JSON.stringify({ save_nota: true, nota_data: toolResult.nota })}\n\n`)); } catch (_) {}
@@ -5726,6 +5739,22 @@ INSTRUCCIONES:
           if (linksBlock) {
             reply += '\n' + linksBlock;
             try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: '\n' + linksBlock })}\n\n`)); } catch (_) {}
+          }
+        }
+
+        // ── Inyectar URLs de tools (buscar_lugar, buscar_web) que Claude no incluyó ──
+        if (!route && _toolUrls.length > 0) {
+          const missingUrls = _toolUrls
+            .filter(u => u.url && !reply.includes(u.url))
+            .filter(u => !/blog|guia|guide|tripadvisor|wikipedia|wikivoyage/i.test(u.url))
+            .slice(0, 3);
+          if (missingUrls.length > 0) {
+            let toolLinksBlock = '\n';
+            for (const u of missingUrls) {
+              toolLinksBlock += `\n🔗 ${(u.titulo || '').slice(0, 60)} — ${u.url}`;
+            }
+            reply += toolLinksBlock;
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: toolLinksBlock })}\n\n`)); } catch (_) {}
           }
         }
 
