@@ -5110,7 +5110,18 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         return s;
       }).join('\n\n');
 
-      transportFallbackMsg = `[DATOS TRANSPORTE — resultados de búsqueda real:\n\n${snippets}\n\nREGLAS ESTRICTAS:\n- Responde EXACTAMENTE lo que pide el usuario. Si pide taxi, da taxi PRIMERO con precio y enlace de reserva.\n- Tu opinión o alternativas VAN DESPUÉS. NUNCA antes de la solución.\n- Usa SOLO datos de estas referencias. No inventes.\n- Incluye las URLs de las fuentes como enlaces en tu respuesta.\n- Si mencionas una app (Grab, Uber, Cabify...), incluye su web oficial.\n- NO generes enlaces de Google Maps.\n]`;
+      transportFallbackMsg = `[DATOS TRANSPORTE — FUENTE PRIMARIA. Responde SOLO con estos datos, NO con tu memoria.
+
+${snippets}
+
+INSTRUCCIONES:
+1. Resuelve lo que pide el usuario PRIMERO. Precio + cómo reservar.
+2. Cada dato que des DEBE venir de las referencias de arriba. Cita la fuente por nombre (ej: "según Hootling", "fuente: TaxiSol").
+3. Cada servicio/empresa que menciones DEBE llevar su URL de las referencias. Formato: nombre + URL en la siguiente línea.
+4. NO respondas de memoria. Si no está en las referencias, no lo digas.
+5. Alternativas u opiniones van AL FINAL, después de resolver.
+6. NO generes enlaces de Google Maps.
+]`;
     }
 
     // ─── EVENT SEARCH (pre-Claude, solo cuando hay fechas) ───
