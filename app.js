@@ -179,7 +179,7 @@ function updateBottomBar() {
     showState('chat');
   });
   document.getElementById('tab-rutas').addEventListener('click', () => {
-    if (!currentUser) { window._afterLogin = 'rutas'; openModal('login'); return; }
+    if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
     showState('rutas');
   });
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
@@ -189,7 +189,7 @@ function handleAvatarClick() {
   if (currentUser) {
     showState('profile');
   } else {
-    openModal('login');
+    openModal();
   }
 }
 
@@ -1707,30 +1707,18 @@ function destPhoto(destino) {
 
 // ═══ AUTH — Pantallas completas ═══
 
-function openModal(view) {
+function openModal() {
   const screen = document.getElementById('auth-screen');
   if (!screen) return;
   screen.classList.add('active');
-  _authShowView(view === 'register' ? 'register' : 'welcome');
+  _checkBiometricAvailable();
 }
 
 function closeModal() {
   const screen = document.getElementById('auth-screen');
   if (screen) screen.classList.remove('active');
-  ['login-email','login-pass','register-name','register-email','register-pass'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.value = '';
-  });
-  ['login-error','register-error'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.textContent = ''; el.classList.remove('show'); }
-  });
-}
-
-function _authShowView(view) {
-  ['welcome','login','register'].forEach(v => {
-    const el = document.getElementById('auth-' + v + '-view');
-    if (el) el.classList.toggle('hidden', v !== view);
-  });
+  const err = document.getElementById('login-error');
+  if (err) { err.textContent = ''; err.classList.remove('show'); }
 }
 
 window.openModal = openModal;
@@ -1739,45 +1727,6 @@ window.closeModal = closeModal;
 function showAuthError(id, msg) {
   const el = document.getElementById(id);
   if (el) { el.textContent = msg; el.classList.add('show'); }
-}
-
-async function doLogin() {
-  const email = document.getElementById('login-email')?.value.trim();
-  const pass = document.getElementById('login-pass')?.value;
-  if (!email || !pass) return showAuthError('login-error', 'Rellena email y contraseña');
-  try {
-    await auth.signInWithEmailAndPassword(email, pass);
-    closeModal();
-    // Ofrecer registrar huella si no la tiene y el dispositivo la soporta
-    if (!localStorage.getItem('bdm_webauthn_cred') && window.PublicKeyCredential) {
-      registerFingerprint(email);
-    }
-  } catch (e) {
-    showAuthError('login-error', authErrorMsg(e));
-  }
-}
-
-async function doRegister() {
-  const name = document.getElementById('register-name')?.value.trim();
-  const email = document.getElementById('register-email')?.value.trim();
-  const pass = document.getElementById('register-pass')?.value;
-  if (!email || !pass) return showAuthError('register-error', 'Rellena email y contraseña');
-  if (pass.length < 6) return showAuthError('register-error', 'Mínimo 6 caracteres');
-  try {
-    const cred = await auth.createUserWithEmailAndPassword(email, pass);
-    await db.collection('users').doc(cred.user.uid).set({
-      name: name || email.split('@')[0],
-      email: email,
-      isPremium: false,
-      mapsCount: 0,
-      coins_saldo: 0,
-      rutas_gratis_usadas: 0,
-      createdAt: new Date().toISOString()
-    });
-    closeModal();
-  } catch (e) {
-    showAuthError('register-error', authErrorMsg(e));
-  }
 }
 
 async function doGoogleLogin() {
@@ -1797,6 +1746,10 @@ async function doGoogleLogin() {
       });
     }
     closeModal();
+    // Ofrecer registrar huella si no la tiene y el dispositivo la soporta
+    if (!localStorage.getItem('bdm_webauthn_cred') && window.PublicKeyCredential) {
+      registerFingerprint(user.email);
+    }
   } catch (e) {
     console.error('Google login error:', e);
     showAuthError('login-error', authErrorMsg(e));
@@ -1812,7 +1765,7 @@ async function doFingerprintLogin() {
     btn.classList.remove('success','error');
     const storedCred = localStorage.getItem('bdm_webauthn_cred');
     if (!storedCred) { btn.classList.add('error'); return; }
-    const { credentialId, email } = JSON.parse(storedCred);
+    const { credentialId } = JSON.parse(storedCred);
     const assertion = await navigator.credentials.get({
       publicKey: {
         challenge: new Uint8Array(32),
@@ -1823,12 +1776,16 @@ async function doFingerprintLogin() {
     });
     if (assertion) {
       btn.classList.add('success');
-      // Con WebAuthn verificado, iniciamos sesión con el email guardado
-      // (en producción esto iría al servidor; aquí usamos custom token o email link)
-      // Por ahora mostramos el formulario con el email prellenado
-      document.getElementById('login-email').value = email || '';
-      document.getElementById('login-pass').focus();
-      showToast('Identidad verificada — introduce tu contraseña');
+      // Huella verificada — hacer login con Google silencioso
+      try {
+        await auth.signInWithPopup(googleProvider);
+        closeModal();
+      } catch (gErr) {
+        // Si el popup falla (bloqueado, cancelado), mostrar error
+        btn.classList.remove('success');
+        btn.classList.add('error');
+        showAuthError('login-error', 'No se pudo iniciar sesión. Usa el botón de Google.');
+      }
     }
   } catch (e) {
     btn.classList.add('error');
@@ -1884,7 +1841,7 @@ function logout() {
   auth.signOut();
   currentUser = null;
   if (typeof salma !== 'undefined') salma.reset();
-  showState('welcome');
+  // onAuthStateChanged se encarga de mostrar el gate
 }
 
 function authErrorMsg(e) {
@@ -1959,7 +1916,7 @@ auth.onAuthStateChanged(async (user) => {
       }
     }
 
-    // Tras login, ir al destino indicado o quedarse en welcome
+    // Tras login, ir al destino indicado o directo al chat
     hideSplash();
     const goParam = new URLSearchParams(window.location.search).get('go');
     if (goParam) {
@@ -1970,21 +1927,16 @@ auth.onAuthStateChanged(async (user) => {
       window._afterLogin = null;
       showState(dest);
     } else {
-      showState('welcome');
+      // Usuario registrado → directo al chat
+      if (typeof salma !== 'undefined') salma._initChat();
+      showState('chat');
     }
   } else {
+    // No hay sesión → mostrar gate obligatorio
     currentUser = null;
     updateHeader();
     hideSplash();
-    const goParam = new URLSearchParams(window.location.search).get('go');
-    if (goParam) {
-      history.replaceState(null, '', '/');
-      showState('welcome');
-      if (goParam === 'rutas' || goParam === 'profile') {
-        window._afterLogin = goParam;
-        setTimeout(() => openModal('login'), 350);
-      }
-    }
+    openModal();
   }
 });
 
@@ -1995,8 +1947,8 @@ async function guardarGuia(routeData) {
     // Registro lazy — guardar ruta y pedir login
     window._salmaLastRoute = routeData;
     localStorage.setItem('_salmaRouteBackup', JSON.stringify(routeData));
-    showToast('Regístrate para guardar tu ruta');
-    openModal('register');
+    showToast('Inicia sesión para guardar tu ruta');
+    openModal();
     return null;
   }
   return await guardarGuiaDirecto(routeData);
@@ -2428,30 +2380,10 @@ function sendMessage() {
   });
 })();
 
-// ═══ AUTH SCREEN — Event listeners ═══
+// ═══ AUTH GATE — Event listeners ═══
 
-// Navegación entre vistas
-document.getElementById('auth-go-login')?.addEventListener('click', () => { _authShowView('login'); _checkBiometricAvailable(); });
-document.getElementById('auth-go-register')?.addEventListener('click', () => _authShowView('register'));
-document.getElementById('auth-back-login')?.addEventListener('click', () => _authShowView('welcome'));
-document.getElementById('auth-back-register')?.addEventListener('click', () => _authShowView('welcome'));
-document.getElementById('auth-skip')?.addEventListener('click', closeModal);
-document.getElementById('switch-to-register')?.addEventListener('click', () => _authShowView('register'));
-document.getElementById('switch-to-login')?.addEventListener('click', () => _authShowView('login'));
-
-// Login / Registro
-document.getElementById('btn-login')?.addEventListener('click', doLogin);
-document.getElementById('btn-register')?.addEventListener('click', doRegister);
 document.getElementById('btn-google-login')?.addEventListener('click', doGoogleLogin);
-document.getElementById('btn-google-login-2')?.addEventListener('click', doGoogleLogin);
-document.getElementById('btn-google-register')?.addEventListener('click', doGoogleLogin);
-
-// Huella dactilar (WebAuthn)
 document.getElementById('btn-fingerprint')?.addEventListener('click', doFingerprintLogin);
-
-// Enter en inputs
-document.getElementById('login-pass')?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-document.getElementById('register-pass')?.addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
 
 // Logo → welcome
 document.getElementById('app-logo')?.addEventListener('click', () => {
@@ -3464,7 +3396,7 @@ function diarioPickNavigate() {
   window.open('https://www.google.com/maps?q=' + lat + ',' + lng, '_blank');
 }
 async function diarioPickSave() {
-  if (!currentUser) { showToast('Inicia sesión para guardar'); closeDiarioPicker(); openModal('login'); return; }
+  if (!currentUser) { showToast('Inicia sesión para guardar'); closeDiarioPicker(); openModal(); return; }
   const lat = _diario.lat, lng = _diario.lng;
   if (!lat && !lng) { showToast('Toca el mapa primero'); return; }
   if (_liveMap) {
@@ -4622,7 +4554,7 @@ function showOnboarding() {
   function closeOnboarding(goToRegister) {
     localStorage.setItem('bdm_onboarding_done', '1');
     overlay.remove();
-    if (goToRegister && !currentUser) openModal('register');
+    if (goToRegister && !currentUser) openModal();
   }
 
   document.body.appendChild(overlay);

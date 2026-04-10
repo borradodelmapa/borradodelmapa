@@ -1333,12 +1333,16 @@ body {
 .auth-bg {
   position:absolute; inset:0;
   background:url('/mapa.webp') center/cover no-repeat;
-  opacity:.12; pointer-events:none;
+  opacity:0; pointer-events:none;
+  transition:opacity 1.5s ease-out;
 }
-/* Gradiente oscuro encima del fondo */
+.auth-screen.active .auth-bg {
+  opacity:.3;
+  animation:heartbeat 2.5s ease-in-out 1.5s infinite;
+}
 .auth-bg::after {
   content:''; position:absolute; inset:0;
-  background:linear-gradient(to bottom, rgba(5,5,5,.6) 0%, rgba(5,5,5,.2) 40%, rgba(5,5,5,.7) 100%);
+  background:radial-gradient(ellipse at center, transparent 0%, rgba(5,5,5,.85) 75%);
 }
 
 .auth-view {
@@ -1373,64 +1377,37 @@ body {
   color:var(--dorado); margin-top:12px; text-align:center; opacity:.9;
 }
 
-/* Header vista login/register */
-.auth-header { padding-top:52px; margin-bottom:28px; }
-.auth-title {
-  font-family:var(--font-tight); font-size:32px; font-weight:700;
-  color:var(--blanco); margin-top:4px; line-height:1.1;
-}
-
-/* Botón atrás */
-.auth-back {
-  position:absolute; top:calc(env(safe-area-inset-top, 16px) + 8px); left:16px;
-  background:none; border:none; color:var(--crema); font-size:24px;
-  cursor:pointer; opacity:.5; padding:8px; line-height:1;
-  transition:opacity .2s;
-}
-.auth-back:hover { opacity:1; }
 
 /* Acciones welcome */
 .auth-actions { display:flex; flex-direction:column; gap:14px; padding-bottom:8px; }
 
-/* Botones */
-.auth-btn-primary {
+
+/* Botón Google dorado — CTA principal del gate */
+.auth-btn-google-primary {
   width:100%; padding:17px;
   background:var(--dorado); color:var(--negro); border:none;
   border-radius:50px; font-family:var(--font-mono);
-  font-size:12px; font-weight:700; letter-spacing:.16em;
+  font-size:12px; font-weight:700; letter-spacing:.12em;
   cursor:pointer; transition:background .2s, transform .1s;
+  display:flex; align-items:center; justify-content:center; gap:10px;
 }
-.auth-btn-primary:hover { background:var(--dorado2); }
-.auth-btn-primary:active { transform:scale(.98); }
-.auth-btn-primary:disabled { opacity:.5; cursor:not-allowed; }
+.auth-btn-google-primary:hover { background:var(--dorado2); }
+.auth-btn-google-primary:active { transform:scale(.98); }
+.auth-btn-google-primary svg { flex-shrink:0; }
 
-.auth-btn-secondary {
-  width:100%; padding:16px;
+/* Botón huella inline — secundario */
+.auth-btn-fingerprint {
+  width:100%; padding:15px;
   background:transparent; color:var(--dorado);
-  border:1.5px solid rgba(212,160,23,.6); border-radius:50px;
-  font-family:var(--font-mono); font-size:12px; font-weight:700; letter-spacing:.16em;
-  cursor:pointer; transition:all .2s;
-}
-.auth-btn-secondary:hover { border-color:var(--dorado); background:rgba(212,160,23,.06); }
-
-.auth-btn-google {
-  width:100%; padding:14px;
-  background:rgba(255,255,255,.12); color:var(--crema);
-  border:1px solid rgba(244,239,230,.25); border-radius:50px;
-  font-family:var(--font-mono); font-size:11px; letter-spacing:.08em;
+  border:1.5px solid rgba(212,160,23,.5); border-radius:50px;
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.1em;
   cursor:pointer; transition:all .2s;
   display:flex; align-items:center; justify-content:center; gap:10px;
 }
-.auth-btn-google:hover { border-color:rgba(244,239,230,.35); }
-
-/* Skip */
-.auth-skip {
-  background:none; border:none; color:rgba(244,239,230,.3);
-  font-family:var(--font-mono); font-size:11px; letter-spacing:.08em;
-  cursor:pointer; padding:14px 0 4px; text-align:center;
-  transition:color .2s;
-}
-.auth-skip:hover { color:rgba(244,239,230,.55); }
+.auth-btn-fingerprint:hover { border-color:var(--dorado); background:rgba(212,160,23,.08); }
+.auth-btn-fingerprint.success { border-color:#22c55e; color:#22c55e; background:rgba(34,197,94,.08); }
+.auth-btn-fingerprint.error { border-color:var(--rojo); color:var(--rojo); background:rgba(239,68,68,.08); }
+.auth-btn-fingerprint svg { flex-shrink:0; }
 
 /* Divider */
 .auth-divider {
@@ -1442,58 +1419,19 @@ body {
   content:''; flex:1; height:1px; background:rgba(244,239,230,.12);
 }
 
-/* Form */
-.auth-form { display:flex; flex-direction:column; }
-.auth-field { margin-bottom:18px; }
-.auth-label {
-  font-family:var(--font-mono); font-size:9px; letter-spacing:.16em;
-  color:var(--dorado); display:block; margin-bottom:7px; opacity:.9;
-}
-.auth-input {
-  width:100%; padding:15px 18px;
-  background:rgba(255,255,255,.06); border:1px solid rgba(244,239,230,.12);
-  border-radius:14px; color:var(--crema);
-  font-family:var(--font-body); font-size:16px;
-  outline:none; transition:border-color .2s, background .2s; box-sizing:border-box;
-}
-.auth-input:focus { border-color:rgba(212,160,23,.6); background:rgba(255,255,255,.08); }
-
 /* Error */
 .auth-error {
   font-size:12px; color:var(--rojo); margin-bottom:14px;
   padding:10px 14px; background:rgba(239,68,68,.08);
-  border-radius:8px; display:none;
+  border-radius:8px; display:none; text-align:center;
 }
 .auth-error.show { display:block; }
 
-/* Switch link */
-.auth-switch {
-  text-align:center; margin-top:18px;
-  font-size:13px; color:rgba(244,239,230,.4);
-}
-.auth-switch a { color:var(--dorado); text-decoration:none; cursor:pointer; }
-.auth-switch a:hover { text-decoration:underline; }
-
-/* Biometría / huella */
+/* Biometric toggle */
 .auth-biometric {
   display:flex; flex-direction:column; align-items:center;
-  padding:24px 0 8px;
 }
-.auth-fingerprint-btn {
-  width:80px; height:80px; border-radius:50%;
-  background:rgba(212,160,23,.1); border:2px solid rgba(212,160,23,.4);
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer; transition:all .2s; color:var(--dorado);
-  margin-bottom:10px;
-}
-.auth-fingerprint-btn svg { width:40px; height:40px; }
-.auth-fingerprint-btn:hover { background:rgba(212,160,23,.2); border-color:var(--dorado); }
-.auth-fingerprint-btn.success { border-color:#22c55e; color:#22c55e; background:rgba(34,197,94,.1); }
-.auth-fingerprint-btn.error { border-color:var(--rojo); color:var(--rojo); background:rgba(239,68,68,.1); }
-.auth-fingerprint-label {
-  font-family:var(--font-mono); font-size:11px; color:rgba(244,239,230,.5);
-  letter-spacing:.08em; margin-bottom:0;
-}
+.auth-biometric.hidden { display:none; }
 
 /* ═══ TOAST ═══ */
 .toast {
