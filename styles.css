@@ -163,7 +163,7 @@ body {
 .chat-empty-chips {
   display:grid; grid-template-columns:1fr 1fr; gap:8px;
   padding:16px 0 0;
-  margin-left:48px; margin-right:16px; max-width:340px;
+  max-width:340px; margin:0 auto;
 }
 @media (min-width:600px) {
   .chat-empty-chips { grid-template-columns:1fr 1fr 1fr; max-width:480px; }
