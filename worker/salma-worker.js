@@ -5093,7 +5093,29 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
             directReply += `🔗 **${r.titulo.slice(0, 70)}**\n${r.snippet}\n${r.url}\n\n`;
           }
 
-          // KV todavía no se ha cargado a esta altura — lo dejamos sin apps por ahora
+          // Cargar apps del país desde KV (mini-lookup solo de transport)
+          const transportCC = userCountryCode || frontendCountryCode || null;
+          if (transportCC && env.SALMA_KB) {
+            try {
+              const transportJson = await env.SALMA_KB.get('transport:' + transportCC.toLowerCase());
+              if (transportJson) {
+                const transportData = JSON.parse(transportJson);
+                if (transportData.ridehailing) {
+                  const allApps = [transportData.ridehailing.best, ...(transportData.ridehailing.others || [])].filter(Boolean);
+                  if (allApps.length > 0) {
+                    directReply += '**Apps de transporte en la zona:**\n';
+                    for (const appName of allApps) {
+                      const appData = TRANSPORT_APP_URLS[appName.toLowerCase()];
+                      if (appData) {
+                        directReply += `${appData.icon} ${appData.name} — ${appData.web}\n`;
+                      }
+                    }
+                  }
+                }
+              }
+            } catch (_) {}
+          }
+
           if (directReply) {
             return new Response(
               JSON.stringify({ reply: directReply.trim(), route: null }),
