@@ -385,7 +385,7 @@ PETICIONES MÚLTIPLES: ejecútalas en orden lógico — lo urgente primero (taxi
 
 SALMA_ACTION — acciones especiales que el sistema detecta y ejecuta automáticamente. Emítelas al final de tu respuesta, en una línea aparte, sin explicarlas al usuario:
 — Para buscar vuelos: SALMA_ACTION:{"type":"SEARCH_FLIGHTS","origin":"MAD","destination":"BKK","date":"2026-06-01","return_date":"2026-06-15","currency":"EUR","adults":1}
-— Para buscar hoteles: SALMA_ACTION:{"type":"SEARCH_HOTELS","city":"Bangkok","budget":"mid","adults":2,"checkin":"2026-06-01","checkout":"2026-06-05"}
+— Para buscar hoteles: SALMA_ACTION:{"type":"SEARCH_HOTELS","city":"Bangkok","budget":"mid","adults":2,"checkin":"2026-06-01","checkout":"2026-06-05"} — Si piden apartamento/airbnb, añade "subtype":"apartment"
 — Para buscar lugares: SALMA_ACTION:{"type":"SEARCH_PLACES","query":"restaurante vietnamita Hanoi","type":"restaurant"}
 — Para guardar una nota: SALMA_ACTION:{"type":"SAVE_NOTE","texto":"Visado Vietnam gratis hasta 45 días","tipo":"visado","country_code":"VN","country_name":"Vietnam"}
 — Para guardar un lugar en el mapa personal del usuario: SALMA_ACTION:{"type":"MAP_PIN","name":"Nombre exacto del lugar como aparece en Google Maps","address":"Ciudad y país","description":"Una frase útil sobre el lugar","place_type":"hotel|monument|restaurant|beach|park|other"}
@@ -3150,9 +3150,9 @@ function extractSalmaActions(text) {
 }
 
 // Ejecuta todas las acciones en paralelo y filtra nulls
-async function executeSalmaActionsParallel(actions, env, userLocation) {
+async function executeSalmaActionsParallel(actions, env, userLocation, userMessage) {
   const results = await Promise.all(
-    actions.map(action => executeSalmaAction(action, env, userLocation).catch(e => ({ type: action.type, error: e.message })))
+    actions.map(action => executeSalmaAction(action, env, userLocation, userMessage).catch(e => ({ type: action.type, error: e.message })))
   );
   return results.filter(r => r !== null);
 }
@@ -3169,7 +3169,7 @@ function parseDurationHours(d) {
 }
 
 // Dispatcher individual — un switch por tipo de acción
-async function executeSalmaAction(action, env, userLocation) {
+async function executeSalmaAction(action, env, userLocation, userMessage) {
   switch (action.type) {
     case 'SEARCH_FLIGHTS': {
       // Usamos Duffel (mismo proveedor que buscar_vuelos tool)
@@ -3215,7 +3215,7 @@ async function executeSalmaAction(action, env, userLocation) {
     case 'SEARCH_AIRBNB':
     case 'SEARCH_ACCOMMODATION':
     case 'SEARCH_HOSTEL':
-      return await searchHotelsPlaces(action, env.GOOGLE_PLACES_KEY, userLocation);
+      return await searchHotelsPlaces({ ...action, _userMessage: userMessage }, env.GOOGLE_PLACES_KEY, userLocation);
     case 'SEARCH_PLACES':
       return await searchPlacesGoogle(action, env.GOOGLE_PLACES_KEY, userLocation);
     case 'SAVE_NOTE':
@@ -3237,10 +3237,11 @@ async function executeSalmaAction(action, env, userLocation) {
 async function searchHotelsPlaces(params, placesKey, userLocation) {
   if (!placesKey) return { type: 'hotels', error: 'No GOOGLE_PLACES_KEY configurada' };
   const { city, lat, lng, budget, adults = 2, checkin, checkout } = params;
-  // Detectar si es búsqueda de apartamento/airbnb por el tipo de acción original
+  // Detectar si es búsqueda de apartamento/airbnb
   const originalType = params.type || '';
   const isApartment = originalType === 'SEARCH_AIRBNB' || originalType === 'SEARCH_ACCOMMODATION'
-    || /apartamento|airbnb|apartment/i.test(params.query || '');
+    || params.subtype === 'apartment'
+    || /apartamento|airbnb|apartment/i.test(params.query || params._userMessage || '');
 
   // Construir query adaptada al presupuesto y tipo
   let query = isApartment ? 'apartamento alquiler vacacional' : 'hotel';
@@ -5780,7 +5781,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           const { cleanText: saClean, actions: saActions } = extractSalmaActions(reply);
           if (saActions.length > 0) {
             reply = saClean;
-            actionResults = await executeSalmaActionsParallel(saActions, env, userLocation);
+            actionResults = await executeSalmaActionsParallel(saActions, env, userLocation, message);
           }
         } catch (_) {}
 
