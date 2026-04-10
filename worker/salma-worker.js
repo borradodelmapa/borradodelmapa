@@ -390,6 +390,7 @@ SALMA_ACTION — acciones especiales que el sistema detecta y ejecuta automátic
 — Para guardar una nota: SALMA_ACTION:{"type":"SAVE_NOTE","texto":"Visado Vietnam gratis hasta 45 días","tipo":"visado","country_code":"VN","country_name":"Vietnam"}
 — Para guardar un lugar en el mapa personal del usuario: SALMA_ACTION:{"type":"MAP_PIN","name":"Nombre exacto del lugar como aparece en Google Maps","address":"Ciudad y país","description":"Una frase útil sobre el lugar","place_type":"hotel|monument|restaurant|beach|park|other"}
 SOLO existen estos 5 tipos: SEARCH_FLIGHTS, SEARCH_HOTELS, SEARCH_PLACES, SAVE_NOTE, MAP_PIN. NO inventes otros. Airbnb, hostal, apartamento → SEARCH_HOTELS. Taxi, grúa, farmacia → SEARCH_PLACES.
+Cuando el usuario pida apartamento o Airbnb, usa SEARCH_HOTELS igualmente — el sistema genera automáticamente el enlace a Airbnb. NO escribas tú la URL de Airbnb, el sistema la pone.
 Usa SALMA_ACTION además de tu respuesta normal, no en lugar de ella.
 
 DATO PRIMERO SIEMPRE: la información útil va al principio. La personalidad y el contexto, detrás.
@@ -3236,12 +3237,16 @@ async function executeSalmaAction(action, env, userLocation) {
 async function searchHotelsPlaces(params, placesKey, userLocation) {
   if (!placesKey) return { type: 'hotels', error: 'No GOOGLE_PLACES_KEY configurada' };
   const { city, lat, lng, budget, adults = 2, checkin, checkout } = params;
+  // Detectar si es búsqueda de apartamento/airbnb por el tipo de acción original
+  const originalType = params.type || '';
+  const isApartment = originalType === 'SEARCH_AIRBNB' || originalType === 'SEARCH_ACCOMMODATION'
+    || /apartamento|airbnb|apartment/i.test(params.query || '');
 
-  // Construir query adaptada al presupuesto
-  let query = 'hotel';
-  if (budget === 'low') query = 'hostel alojamiento barato';
-  else if (budget === 'high') query = 'hotel de lujo boutique';
-  else if (budget === 'mid') query = 'hotel 3 estrellas';
+  // Construir query adaptada al presupuesto y tipo
+  let query = isApartment ? 'apartamento alquiler vacacional' : 'hotel';
+  if (budget === 'low') query = isApartment ? 'apartamento barato alquiler' : 'hostel alojamiento barato';
+  else if (budget === 'high') query = isApartment ? 'apartamento de lujo vacacional' : 'hotel de lujo boutique';
+  else if (budget === 'mid') query = isApartment ? 'apartamento vacacional' : 'hotel 3 estrellas';
   if (city) query += ' ' + city;
 
   const searchLat = lat || userLocation?.lat;
@@ -3252,7 +3257,22 @@ async function searchHotelsPlaces(params, placesKey, userLocation) {
 
   const res = await fetch(url);
   const data = await res.json();
-  if (!data?.results?.length) return { type: 'hotels', error: 'Sin resultados', city };
+
+  // Generar enlace directo a Airbnb para apartamentos
+  let airbnbLink = null;
+  if (isApartment && city) {
+    const citySlug = city.trim().replace(/\s+/g, '-');
+    airbnbLink = `https://www.airbnb.com/s/${encodeURIComponent(citySlug)}/homes`;
+    const qs = [];
+    if (checkin) qs.push(`checkin=${checkin}`);
+    if (checkout) qs.push(`checkout=${checkout}`);
+    if (adults) qs.push(`adults=${adults}`);
+    if (qs.length) airbnbLink += '?' + qs.join('&');
+  }
+
+  if (!data?.results?.length) {
+    return { type: 'hotels', city, checkin, checkout, adults, budget, hotels: [], airbnb_link: airbnbLink, error: airbnbLink ? null : 'Sin resultados' };
+  }
 
   const hotels = data.results.slice(0, 5).map(p => ({
     name: p.name,
@@ -3268,7 +3288,7 @@ async function searchHotelsPlaces(params, placesKey, userLocation) {
     open_now: p.opening_hours?.open_now ?? null,
   }));
 
-  return { type: 'hotels', city, checkin, checkout, adults, budget, hotels };
+  return { type: 'hotels', city, checkin, checkout, adults, budget, hotels, airbnb_link: airbnbLink };
 }
 
 // ═══ GOOGLE PLACES — Búsqueda genérica de lugares ═══

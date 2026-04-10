@@ -1512,32 +1512,50 @@ const salma = {
   },
 
   _renderHotelResults(result, wrap) {
-    const items = result.hotels;
-    if (!items || items.length === 0) return;
+    const items = result.hotels || [];
+    const hasResults = items.length > 0;
+    const hasAirbnb = !!result.airbnb_link;
+    if (!hasResults && !hasAirbnb) return;
     const SALMA_API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
     const header = document.createElement('div');
     header.className = 'salma-results-header';
-    header.textContent = `🏨 Hoteles en ${result.city || 'la zona'}${result.checkin ? ' · ' + result.checkin : ''}`;
+    header.textContent = hasAirbnb
+      ? `🏠 Alojamiento en ${result.city || 'la zona'}${result.checkin ? ' · ' + result.checkin : ''}`
+      : `🏨 Hoteles en ${result.city || 'la zona'}${result.checkin ? ' · ' + result.checkin : ''}`;
     wrap.appendChild(header);
-    const grid = document.createElement('div');
-    grid.className = 'salma-result-grid';
-    for (const h of items) {
-      const stars = h.rating ? '⭐ ' + h.rating.toFixed(1) + (h.reviews ? ` (${h.reviews.toLocaleString()})` : '') : '';
-      const price = h.price_level ? '€'.repeat(h.price_level) : '';
-      const card = document.createElement('div');
-      card.className = 'salma-result-card';
-      card.innerHTML = `
-        ${h.photo_ref ? `<img src="${SALMA_API}/photo?ref=${encodeURIComponent(h.photo_ref)}&maxwidth=400" alt="${h.name}" loading="lazy" onerror="this.style.display='none'">` : ''}
+    // Enlace directo a Airbnb si aplica
+    if (hasAirbnb) {
+      const airbnbCard = document.createElement('div');
+      airbnbCard.className = 'salma-result-card salma-airbnb-card';
+      airbnbCard.innerHTML = `
         <div class="salma-result-card-body">
-          <div class="salma-result-card-name">${h.name}</div>
-          <div class="salma-result-card-sub">${h.address}</div>
-          ${stars ? `<div class="salma-result-card-rating">${stars}</div>` : ''}
-          ${price ? `<div class="salma-result-card-price">${price}</div>` : ''}
-          ${h.maps_link ? `<a class="salma-result-card-cta" href="${h.maps_link}" target="_blank" rel="noopener">Ver en Maps</a>` : ''}
+          <div class="salma-result-card-name">🏠 Apartamentos en Airbnb</div>
+          <div class="salma-result-card-sub">${result.city || 'Ver opciones'}${result.checkin ? ' · ' + result.checkin + (result.checkout ? ' → ' + result.checkout : '') : ''}</div>
+          <a class="salma-result-card-cta" href="${result.airbnb_link}" target="_blank" rel="noopener">Ver en Airbnb</a>
         </div>`;
-      grid.appendChild(card);
+      wrap.appendChild(airbnbCard);
     }
-    wrap.appendChild(grid);
+    if (hasResults) {
+      const grid = document.createElement('div');
+      grid.className = 'salma-result-grid';
+      for (const h of items) {
+        const stars = h.rating ? '⭐ ' + h.rating.toFixed(1) + (h.reviews ? ` (${h.reviews.toLocaleString()})` : '') : '';
+        const price = h.price_level ? '€'.repeat(h.price_level) : '';
+        const card = document.createElement('div');
+        card.className = 'salma-result-card';
+        card.innerHTML = `
+          ${h.photo_ref ? `<img src="${SALMA_API}/photo?ref=${encodeURIComponent(h.photo_ref)}&maxwidth=400" alt="${h.name}" loading="lazy" onerror="this.style.display='none'">` : ''}
+          <div class="salma-result-card-body">
+            <div class="salma-result-card-name">${h.name}</div>
+            <div class="salma-result-card-sub">${h.address}</div>
+            ${stars ? `<div class="salma-result-card-rating">${stars}</div>` : ''}
+            ${price ? `<div class="salma-result-card-price">${price}</div>` : ''}
+            ${h.maps_link ? `<a class="salma-result-card-cta" href="${h.maps_link}" target="_blank" rel="noopener">Ver en Maps</a>` : ''}
+          </div>`;
+        grid.appendChild(card);
+      }
+      wrap.appendChild(grid);
+    }
   },
 
   _renderPlaceResults(result, wrap) {
