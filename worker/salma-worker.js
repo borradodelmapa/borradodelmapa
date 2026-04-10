@@ -5279,8 +5279,8 @@ INSTRUCCIONES:
       });
     }
 
-    // ─── RESPUESTA DIRECTA DEL KV (sin llamar a Claude = 0 coste) ───
-    if (kvCountryData && !imageBase64 && !isRouteRequest(message, history) && !isFlightRequest(message) && !isHotelRequest(message) && !isServiceRequest(message) && !helpCategory) {
+    // ─── RESPUESTA DIRECTA DEL KV (sin llamar a Claude = 0 coste) — SOLO para preguntas de info del país ───
+    if (kvCountryData && !skipKV && !imageBase64 && !isFlightRequest(message) && !isHotelRequest(message) && !isServiceRequest(message) && !helpCategory) {
       const kvDirectReply = tryKVDirectAnswer(message, kvCountryData, kvDestinationData);
       if (kvDirectReply) {
         return new Response(
