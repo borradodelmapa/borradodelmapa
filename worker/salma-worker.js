@@ -5302,8 +5302,11 @@ INSTRUCCIONES:
     // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
     const dynamicPrompt = await getSystemPrompt(env);
 
-    // Construir mensajes (con datos KV si los hay)
-    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode);
+    // Para búsquedas de sitios concretos (gym, restaurante, farmacia...) NO inyectar KV
+    // para que Claude use buscar_lugar en vez de responder con datos del KV
+    const placeCategories = new Set(['health', 'food', 'logistics', 'vehicle', 'security', 'money']);
+    const skipKV = placeCategories.has(helpCategory);
+    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode);
 
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {
