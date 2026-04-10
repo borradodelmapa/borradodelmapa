@@ -5157,61 +5157,79 @@ INSTRUCCIONES:
           }
         }
 
-        // Fix lowercase: si el mensaje tiene palabras en minúscula que son países/ciudades
+        // Fallback 2: Nominatim — geocodificar cualquier palabra del mensaje que no sea stopword
+        // Va ANTES del escaneo word-by-word de KV porque Nominatim detecta ciudades que KV no tiene
         if (!countryCode) {
-          const STOPWORDS = new Set(['que','con','como','para','una','los','las','del','por','sin','mas','muy','hay','tiene','quiero','puedo','donde','cuanto','cuesta','vale','esta','esto','esa','ese','cual','cuando','desde','hasta','sobre','entre','tras','cada','todo','toda','nada','algo','algun','alguna','bien','mal','bueno','mala','mejor','peor','gran','poco','mucho','menos','hola','oye','dame','dime','dinos','cuales','son','fue','era','han','has','haz','pon','mira','vez','dia','mes','ano','hora','tiempo','lugar','sitio','zona','area','parte','tipo','tipo','cosa','info','info','datos','dato','precio','coste','coste','tema','tema','tips','tip','idioma','moneda','visa','visado','seguro','seguridad','vuelo','hotel','ruta','viaje','viajes','pais','ciudad','playa','mar','rio','lago','taxi','aeropuerto','centro','necesito','busco','queria','estacion','terminal','apartamento','restaurante','coche','grua','embajada','farmacia','hospital','policia','emergencia']);
-          const allWords = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').match(/\b[a-z]{3,}\b/g) || [];
-          for (const word of allWords) {
-            if (STOPWORDS.has(word)) continue;
-            const code = await env.SALMA_KB.get('kw:' + word);
-            if (code) { countryCode = code; location = location || word; break; }
-          }
-        }
+          const STOPWORDS = new Set(['que','con','como','para','una','los','las','del','por','sin','mas','muy','hay','tiene','quiero','puedo','donde','cuanto','cuesta','vale','esta','esto','esa','ese','cual','cuando','desde','hasta','sobre','entre','tras','cada','todo','toda','nada','algo','algun','alguna','bien','mal','bueno','mala','mejor','peor','gran','poco','mucho','menos','hola','oye','dame','dime','dinos','cuales','son','fue','era','han','has','haz','pon','mira','vez','dia','mes','ano','hora','tiempo','lugar','sitio','zona','area','parte','tipo','cosa','info','datos','dato','precio','coste','tema','tips','tip','idioma','moneda','visa','visado','seguro','seguridad','vuelo','hotel','ruta','viaje','viajes','pais','ciudad','playa','mar','rio','lago','taxi','aeropuerto','centro','necesito','busco','queria','estacion','terminal','apartamento','restaurante','coche','grua','embajada','farmacia','hospital','policia','emergencia','gym','gimnasio','boxeo','fitness','cerca','mejor','buscame','encuentra','dame']);
+          const candidateWords = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').match(/\b[a-z]{3,}\b/g) || [];
+          const candidates = candidateWords.filter(w => !STOPWORDS.has(w));
 
-        // Fallback 2: geocodificar el nombre de la ciudad/lugar para detectar país
-        if (!countryCode && location) {
-          try {
-            const geoUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=1&accept-language=es`;
-            const geoRes = await fetch(geoUrl, { headers: { 'User-Agent': 'SalmaBot/1.0' } });
-            const geoArr = await geoRes.json();
-            if (geoArr.length > 0 && geoArr[0].display_name) {
-              // Extraer país del display_name (último componente) o usar boundingbox
-              const parts = geoArr[0].display_name.split(',');
-              const countryName = parts[parts.length - 1].trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-              // Mapeo rápido de nombres de país a código ISO
-              const countryMap = {
-                'espana': 'ES', 'spain': 'ES', 'francia': 'FR', 'france': 'FR', 'portugal': 'PT',
-                'italia': 'IT', 'italy': 'IT', 'alemania': 'DE', 'germany': 'DE', 'reino unido': 'GB',
-                'united kingdom': 'GB', 'estados unidos': 'US', 'united states': 'US', 'mexico': 'MX',
-                'argentina': 'AR', 'colombia': 'CO', 'peru': 'PE', 'chile': 'CL', 'brasil': 'BR',
-                'brazil': 'BR', 'tailandia': 'TH', 'thailand': 'TH', 'japon': 'JP', 'japan': 'JP',
-                'marruecos': 'MA', 'morocco': 'MA', 'turquia': 'TR', 'turkey': 'TR', 'turkiye': 'TR',
-                'grecia': 'GR', 'greece': 'GR', 'iran': 'IR', 'india': 'IN', 'china': 'CN',
-                'australia': 'AU', 'canada': 'CA', 'cuba': 'CU', 'republica dominicana': 'DO',
-                'costa rica': 'CR', 'panama': 'PA', 'ecuador': 'EC', 'bolivia': 'BO', 'uruguay': 'UY',
-                'paraguay': 'PY', 'venezuela': 'VE', 'guatemala': 'GT', 'honduras': 'HN',
-                'el salvador': 'SV', 'nicaragua': 'NI', 'filipinas': 'PH', 'philippines': 'PH',
-                'indonesia': 'ID', 'malasia': 'MY', 'malaysia': 'MY', 'vietnam': 'VN', 'viet nam': 'VN',
-                'camboya': 'KH', 'cambodia': 'KH', 'laos': 'LA', 'myanmar': 'MM', 'singapur': 'SG',
-                'singapore': 'SG', 'corea del sur': 'KR', 'south korea': 'KR', 'egipto': 'EG',
-                'egypt': 'EG', 'sudafrica': 'ZA', 'south africa': 'ZA', 'kenia': 'KE', 'kenya': 'KE',
-                'tanzania': 'TZ', 'etiopia': 'ET', 'ethiopia': 'ET', 'nigeria': 'NG',
-                'belgica': 'BE', 'belgium': 'BE', 'paises bajos': 'NL', 'netherlands': 'NL',
-                'suiza': 'CH', 'switzerland': 'CH', 'austria': 'AT', 'irlanda': 'IE', 'ireland': 'IE',
-                'dinamarca': 'DK', 'denmark': 'DK', 'noruega': 'NO', 'norway': 'NO',
-                'suecia': 'SE', 'sweden': 'SE', 'finlandia': 'FI', 'finland': 'FI',
-                'polonia': 'PL', 'poland': 'PL', 'rumania': 'RO', 'romania': 'RO',
-                'hungria': 'HU', 'hungary': 'HU', 'republica checa': 'CZ', 'czechia': 'CZ',
-                'croacia': 'HR', 'croatia': 'HR', 'serbia': 'RS', 'bulgaria': 'BG',
-                'rusia': 'RU', 'russia': 'RU', 'ucrania': 'UA', 'ukraine': 'UA',
-                'israel': 'IL', 'jordania': 'JO', 'jordan': 'JO', 'libano': 'LB', 'lebanon': 'LB',
-                'arabia saudita': 'SA', 'saudi arabia': 'SA', 'emiratos arabes unidos': 'AE',
-                'united arab emirates': 'AE', 'qatar': 'QA', 'oman': 'OM', 'kuwait': 'KW',
-                'nueva zelanda': 'NZ', 'new zealand': 'NZ', 'islandia': 'IS', 'iceland': 'IS',
-              };
-              countryCode = countryMap[countryName] || null;
-            }
-          } catch (e) { /* geocoding fallo — silencioso */ }
+          // Probar cada candidato en Nominatim (máx 2 intentos para no gastar tiempo)
+          const countryMap = {
+            'espana': 'ES', 'spain': 'ES', 'francia': 'FR', 'france': 'FR', 'portugal': 'PT',
+            'italia': 'IT', 'italy': 'IT', 'alemania': 'DE', 'germany': 'DE', 'reino unido': 'GB',
+            'united kingdom': 'GB', 'estados unidos': 'US', 'united states': 'US', 'mexico': 'MX',
+            'argentina': 'AR', 'colombia': 'CO', 'peru': 'PE', 'chile': 'CL', 'brasil': 'BR',
+            'brazil': 'BR', 'tailandia': 'TH', 'thailand': 'TH', 'japon': 'JP', 'japan': 'JP',
+            'marruecos': 'MA', 'morocco': 'MA', 'turquia': 'TR', 'turkey': 'TR', 'turkiye': 'TR',
+            'grecia': 'GR', 'greece': 'GR', 'iran': 'IR', 'india': 'IN', 'china': 'CN',
+            'australia': 'AU', 'canada': 'CA', 'cuba': 'CU', 'republica dominicana': 'DO',
+            'costa rica': 'CR', 'panama': 'PA', 'ecuador': 'EC', 'bolivia': 'BO', 'uruguay': 'UY',
+            'paraguay': 'PY', 'venezuela': 'VE', 'guatemala': 'GT', 'honduras': 'HN',
+            'el salvador': 'SV', 'nicaragua': 'NI', 'filipinas': 'PH', 'philippines': 'PH',
+            'indonesia': 'ID', 'malasia': 'MY', 'malaysia': 'MY', 'vietnam': 'VN', 'viet nam': 'VN',
+            'camboya': 'KH', 'cambodia': 'KH', 'laos': 'LA', 'myanmar': 'MM', 'singapur': 'SG',
+            'singapore': 'SG', 'corea del sur': 'KR', 'south korea': 'KR', 'egipto': 'EG',
+            'egypt': 'EG', 'sudafrica': 'ZA', 'south africa': 'ZA', 'kenia': 'KE', 'kenya': 'KE',
+            'tanzania': 'TZ', 'etiopia': 'ET', 'ethiopia': 'ET', 'nigeria': 'NG',
+            'belgica': 'BE', 'belgium': 'BE', 'paises bajos': 'NL', 'netherlands': 'NL',
+            'suiza': 'CH', 'switzerland': 'CH', 'austria': 'AT', 'irlanda': 'IE', 'ireland': 'IE',
+            'dinamarca': 'DK', 'denmark': 'DK', 'noruega': 'NO', 'norway': 'NO',
+            'suecia': 'SE', 'sweden': 'SE', 'finlandia': 'FI', 'finland': 'FI',
+            'polonia': 'PL', 'poland': 'PL', 'rumania': 'RO', 'romania': 'RO',
+            'hungria': 'HU', 'hungary': 'HU', 'republica checa': 'CZ', 'czechia': 'CZ',
+            'croacia': 'HR', 'croatia': 'HR', 'serbia': 'RS', 'bulgaria': 'BG',
+            'rusia': 'RU', 'russia': 'RU', 'ucrania': 'UA', 'ukraine': 'UA',
+            'israel': 'IL', 'jordania': 'JO', 'jordan': 'JO', 'libano': 'LB', 'lebanon': 'LB',
+            'arabia saudita': 'SA', 'saudi arabia': 'SA', 'emiratos arabes unidos': 'AE',
+            'united arab emirates': 'AE', 'qatar': 'QA', 'oman': 'OM', 'kuwait': 'KW',
+            'nueva zelanda': 'NZ', 'new zealand': 'NZ', 'islandia': 'IS', 'iceland': 'IS',
+            'nepal': 'NP', 'nepal': 'NP', 'sri lanka': 'LK', 'bangladesh': 'BD',
+            'birmania': 'MM', 'tunez': 'TN', 'tunisia': 'TN', 'senegal': 'SN', 'ruanda': 'RW', 'rwanda': 'RW',
+          };
+
+          for (const word of candidates.slice(0, 2)) {
+            // Primero comprobar si es un país conocido en el mapa
+            if (countryMap[word]) { countryCode = countryMap[word]; location = location || word; break; }
+            // Si no, geocodificar con Nominatim
+            try {
+              // Caché en KV para no repetir la misma ciudad
+              const geoCacheKey = 'geocity:' + word;
+              let cachedCC = env.SALMA_KB ? await env.SALMA_KB.get(geoCacheKey) : null;
+              if (cachedCC) {
+                countryCode = cachedCC;
+                location = location || word;
+                break;
+              }
+              const geoUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(word)}&format=json&limit=1&accept-language=en`;
+              const geoRes = await fetch(geoUrl, { headers: { 'User-Agent': 'SalmaBot/1.0' }, signal: AbortSignal.timeout(3000) });
+              const geoArr = await geoRes.json();
+              if (geoArr.length > 0 && geoArr[0].display_name) {
+                const parts = geoArr[0].display_name.split(',');
+                const countryName = parts[parts.length - 1].trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                const cc = countryMap[countryName] || null;
+                if (cc) {
+                  countryCode = cc;
+                  location = location || word;
+                  // Cachear en KV para la próxima vez (30 días)
+                  if (env.SALMA_KB) {
+                    try { await env.SALMA_KB.put(geoCacheKey, cc, { expirationTtl: 2592000 }); } catch (_) {}
+                  }
+                  break;
+                }
+              }
+            } catch (_) {}
+          }
         }
 
         // Guardar si el país se detectó del mensaje (vs GPS) para saber si es consulta local o remota
