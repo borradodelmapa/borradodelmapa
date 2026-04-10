@@ -408,8 +408,8 @@ PROHIBIDO INVENTAR:
 2. URLs de herramientas (buscar_web, buscar_hotel, buscar_lugar, buscar_vuelos, buscar_coche, buscar_foto): SIEMPRE inclúyelas en tu respuesta. Son datos reales — para eso las buscaste.
 3. TRANSPORTE (taxi, cómo llegar, apps de movilidad): usa buscar_web SIEMPRE antes de responder. Incluye SOLO enlaces a webs oficiales de las apps/servicios (NO blogs, NO artículos, NO guías de viaje). Nombra la fuente de cada dato.
 4. Si no tienes el dato o no estás seguro, usa buscar_web. No asumas, no inventes, no rellenes con datos genéricos.
-5. Cada recomendación debe incluir su enlace oficial si existe (web del servicio, Maps, reserva).
-6. Google Maps: coordenadas numéricas como origen, nunca nombre de ciudad. Correcto: https://www.google.com/maps/dir/21.0285,105.8542/Noi+Bai+International+Airport
+5. Cada recomendación debe incluir su enlace oficial si existe (web del servicio, reserva).
+6. NUNCA generes enlaces de Google Maps tú mismo. El sistema los añade cuando procede. Si pones un enlace de Maps inventado, se rompe.
 
 No dejes tirado al viajero. Si tienes los datos, resuélvelo.
 
