@@ -3042,17 +3042,8 @@ function getToolProgressMsg(toolName, input) {
       return `✈️ Buscando vuelos ${input.origen || ''} → ${input.destino || ''}...\n`;
     case 'buscar_hotel':
       return `🏨 Mirando hoteles en ${input.ciudad || ''}...\n`;
-    case 'buscar_lugar': {
-      const q = input.query || '';
-      const c = input.ciudad || '';
-      if (/restaurante|comer|cenar|sushi|thai|tapas/i.test(q)) return `🍽️ Buscando dónde comer en ${c}...\n`;
-      if (/gym|boxeo|fitness|sport/i.test(q)) return `🥊 Buscando gimnasio en ${c}...\n`;
-      if (/taxi|transfer|traslado/i.test(q)) return `🚕 Buscando taxi en ${c}...\n`;
-      if (/sim|tarjeta.*datos|telefon/i.test(q)) return `📱 Buscando dónde comprar SIM en ${c}...\n`;
-      if (/cambio|divisa|moneda|exchange/i.test(q)) return `💱 Buscando cambio de divisas en ${c}...\n`;
-      if (/farmacia/i.test(q)) return `💊 Buscando farmacia en ${c}...\n`;
-      return `📍 Buscando ${q} en ${c}...\n`;
-    }
+    case 'buscar_lugar':
+      return `🔍 Buscando...\n`;
     case 'buscar_coche':
       return `🚗 Buscando coches en ${input.ciudad_recogida || ''}...\n`;
     case 'buscar_web':
