@@ -5684,6 +5684,23 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
         }
 
+        // ── Inyectar URLs de transporte que Claude no incluyó ──
+        if (!route && transportSearchData?.resultados?.length > 0) {
+          const braveUrls = transportSearchData.resultados
+            .filter(r => r.url && !reply.includes(r.url))
+            .filter(r => !/blog|guia|guide|tripadvisor|wikipedia|wikivoyage/i.test(r.url))
+            .slice(0, 3);
+          if (braveUrls.length > 0) {
+            let linksBlock = '\n';
+            for (const r of braveUrls) {
+              // Extraer dominio limpio para el label
+              const domain = r.url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
+              linksBlock += `\n🔗 ${r.titulo.slice(0, 60)} — ${r.url}`;
+            }
+            reply += linksBlock;
+          }
+        }
+
         // ── SALMA_ACTION: extraer acciones del texto, limpiar reply, ejecutar APIs en paralelo ──
         let actionResults = [];
         try {
