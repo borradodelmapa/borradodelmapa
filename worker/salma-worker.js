@@ -389,6 +389,7 @@ SALMA_ACTION — acciones especiales que el sistema detecta y ejecuta automátic
 — Para buscar lugares: SALMA_ACTION:{"type":"SEARCH_PLACES","query":"restaurante vietnamita Hanoi","type":"restaurant"}
 — Para guardar una nota: SALMA_ACTION:{"type":"SAVE_NOTE","texto":"Visado Vietnam gratis hasta 45 días","tipo":"visado","country_code":"VN","country_name":"Vietnam"}
 — Para guardar un lugar en el mapa personal del usuario: SALMA_ACTION:{"type":"MAP_PIN","name":"Nombre exacto del lugar como aparece en Google Maps","address":"Ciudad y país","description":"Una frase útil sobre el lugar","place_type":"hotel|monument|restaurant|beach|park|other"}
+SOLO existen estos 5 tipos: SEARCH_FLIGHTS, SEARCH_HOTELS, SEARCH_PLACES, SAVE_NOTE, MAP_PIN. NO inventes otros. Airbnb, hostal, apartamento → SEARCH_HOTELS. Taxi, grúa, farmacia → SEARCH_PLACES.
 Usa SALMA_ACTION además de tu respuesta normal, no en lugar de ella.
 
 DATO PRIMERO SIEMPRE: la información útil va al principio. La personalidad y el contexto, detrás.
@@ -3210,6 +3211,9 @@ async function executeSalmaAction(action, env, userLocation) {
       };
     }
     case 'SEARCH_HOTELS':
+    case 'SEARCH_AIRBNB':
+    case 'SEARCH_ACCOMMODATION':
+    case 'SEARCH_HOSTEL':
       return await searchHotelsPlaces(action, env.GOOGLE_PLACES_KEY, userLocation);
     case 'SEARCH_PLACES':
       return await searchPlacesGoogle(action, env.GOOGLE_PLACES_KEY, userLocation);

@@ -1053,8 +1053,12 @@ const salma = {
                   } else {
                     display = display.replace(/[\n.][ ]?SAL[MA_ROUTE]*$/, '');
                   }
+                  // Ocultar SALMA_ACTION:{...} del streaming (se procesan en el done event)
+                  display = display.replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '').replace(/\n{3,}/g, '\n\n');
+                  // Ocultar fragmentos parciales de SALMA_ACTION que aún no cerraron
+                  display = display.replace(/SALMA_ACTION:\s*\{[^\n]*$/g, '');
                   textEl.innerHTML = formatMessage(display.trim());
-                  textEl.dataset.raw = fullText;
+                  textEl.dataset.raw = fullText.replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '').trim();
                   this._scrollToBottom();
                 }
               }
