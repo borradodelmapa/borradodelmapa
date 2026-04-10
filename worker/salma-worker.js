@@ -1950,8 +1950,10 @@ function sanitizeInventedUrls(text) {
 
 // Inyecta enlace Google Maps si el usuario tiene GPS, la respuesta habla de ir a un sitio,
 // y no hay ya un enlace de Google Maps en la respuesta.
-function injectGoogleMapsLink(reply, userLocation, message) {
+function injectGoogleMapsLink(reply, userLocation, message, isLocalQuery) {
   if (!reply || !userLocation || !userLocation.lat || !userLocation.lng) return reply;
+  // Solo inyectar si la consulta es local (el país del GPS coincide con el destino)
+  if (isLocalQuery === false) return reply;
   // Si ya tiene un enlace de Google Maps, no duplicar
   if (reply.includes('google.com/maps')) return reply;
   // Solo para transporte local concreto — no para intención de viaje a un país/ciudad lejana
@@ -2041,8 +2043,10 @@ function injectGoogleMapsLink(reply, userLocation, message) {
 
 // Inyecta bloque de transporte (app + descarga) cuando el usuario quiere ir a un sitio
 // Usa datos reales del KV de transporte + URLs reales de TRANSPORT_APP_URLS
-function injectTransportBlock(reply, kvTransportData, message) {
+function injectTransportBlock(reply, kvTransportData, message, isLocalQuery) {
   if (!reply || !message) return reply;
+  // Solo inyectar si la consulta es local (el país del GPS coincide con el destino)
+  if (isLocalQuery === false) return reply;
   // Solo para transporte local concreto — NO para intención de viaje a un país/ciudad lejana
   const goKeywords = /llévame|taxi|aeropuerto|airport|estación|estacion|station|terminal/i;
   if (!goKeywords.test(message)) return reply;
@@ -5237,12 +5241,14 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     let kvDestinationData = null;
     let kvCachedRoute = null;
     let kvTransportData = null;
+    let countryFromMessage = false;
+    let countryCode = null;
     const _kvDebug = {};
     if (env.SALMA_KB) {
       try {
         // Extraer ubicación: primero el extractor normal, luego buscar palabras del mensaje en KV
         let location = extractHelpLocation(message, history, currentRoute);
-        let countryCode = null;
+        countryCode = null;
 
         if (location) {
           const kwNorm = location.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
@@ -5261,7 +5267,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
 
         // Fix lowercase: si el mensaje tiene palabras en minúscula que son países/ciudades
         if (!countryCode) {
-          const STOPWORDS = new Set(['que','con','como','para','una','los','las','del','por','sin','mas','muy','hay','tiene','quiero','puedo','donde','cuanto','cuesta','vale','esta','esto','esa','ese','cual','cuando','desde','hasta','sobre','entre','tras','cada','todo','toda','nada','algo','algun','alguna','bien','mal','bueno','mala','mejor','peor','gran','poco','mucho','menos','hola','oye','dame','dime','dinos','cuales','son','fue','era','han','has','haz','pon','mira','vez','dia','mes','ano','hora','tiempo','lugar','sitio','zona','area','parte','tipo','tipo','cosa','info','info','datos','dato','precio','coste','coste','tema','tema','tips','tip','idioma','moneda','visa','visado','seguro','seguridad','vuelo','hotel','ruta','viaje','viajes','pais','ciudad','playa','mar','rio','lago']);
+          const STOPWORDS = new Set(['que','con','como','para','una','los','las','del','por','sin','mas','muy','hay','tiene','quiero','puedo','donde','cuanto','cuesta','vale','esta','esto','esa','ese','cual','cuando','desde','hasta','sobre','entre','tras','cada','todo','toda','nada','algo','algun','alguna','bien','mal','bueno','mala','mejor','peor','gran','poco','mucho','menos','hola','oye','dame','dime','dinos','cuales','son','fue','era','han','has','haz','pon','mira','vez','dia','mes','ano','hora','tiempo','lugar','sitio','zona','area','parte','tipo','tipo','cosa','info','info','datos','dato','precio','coste','coste','tema','tema','tips','tip','idioma','moneda','visa','visado','seguro','seguridad','vuelo','hotel','ruta','viaje','viajes','pais','ciudad','playa','mar','rio','lago','taxi','aeropuerto','centro','necesito','busco','queria','estacion','terminal','apartamento','restaurante','coche','grua','embajada','farmacia','hospital','policia','emergencia']);
           const allWords = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').match(/\b[a-z]{3,}\b/g) || [];
           for (const word of allWords) {
             if (STOPWORDS.has(word)) continue;
@@ -5316,6 +5322,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           } catch (e) { /* geocoding fallo — silencioso */ }
         }
 
+        // Guardar si el país se detectó del mensaje (vs GPS) para saber si es consulta local o remota
+        countryFromMessage = !!countryCode;
+
         // Fallback 3: si hay GPS y no se encontró país por el mensaje, usar el país del GPS
         if (!countryCode && userCountryCode) {
           countryCode = userCountryCode;
@@ -5356,6 +5365,12 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         }
       } catch (e) { /* KV fallo silencioso — Salma funciona sin KV */ }
     }
+
+    // Determinar si es consulta local (GPS coincide con destino) o remota
+    const gpsCountry = (userCountryCode || frontendCountryCode || '').toUpperCase();
+    const detectedCountry = (countryCode || '').toUpperCase();
+    // Es local si: no detectamos país del mensaje (usó GPS), o si el país detectado coincide con GPS
+    const isLocalQuery = !countryFromMessage || (detectedCountry === gpsCountry);
 
     // Si hay ruta cacheada, devolverla directamente (0 coste, <100ms)
     // Pero solo si tiene calidad mínima: al menos 3 paradas/día de media
@@ -5739,8 +5754,8 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         // ── Inyectar Google Maps y transporte como stream chunks (antes de procesar reply) ──
         {
           const tempReply = replyWithoutRouteBlock(allText);
-          const withMaps = injectGoogleMapsLink(tempReply, userLocation, message);
-          const withTransport = injectTransportBlock(withMaps, kvTransportData, message);
+          const withMaps = injectGoogleMapsLink(tempReply, userLocation, message, isLocalQuery);
+          const withTransport = injectTransportBlock(withMaps, kvTransportData, message, isLocalQuery);
           // Si se añadió algo, enviar la parte nueva como chunk de texto
           if (withTransport.length > tempReply.length) {
             const injected = withTransport.slice(tempReply.length);
@@ -5757,9 +5772,9 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         let route = extractRouteFromReply(allText);
         let reply = replyWithoutRouteBlock(allText);
         // Inyectar Google Maps automáticamente si aplica
-        reply = injectGoogleMapsLink(reply, userLocation, message);
+        reply = injectGoogleMapsLink(reply, userLocation, message, isLocalQuery);
         // Inyectar bloque de transporte (app + descarga) si aplica
-        reply = injectTransportBlock(reply, kvTransportData, message);
+        reply = injectTransportBlock(reply, kvTransportData, message, isLocalQuery);
         // Post-procesado: dividir respuesta en días con headers **Día N**
         // Siempre intentar — si no hay ordinales ni suficientes párrafos, devuelve texto sin cambios
         const _daysMatch = message.match(/(\d{1,2})\s*d.{0,2}as?/i);
