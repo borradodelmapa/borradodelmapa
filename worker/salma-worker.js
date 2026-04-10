@@ -5787,9 +5787,13 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           reply = appendRouteMapLink(reply);
         }
 
-        // ── Validar enlaces Maps en conversacional (no rutas — las rutas ya tienen verify) ──
-        if (!route && env.GOOGLE_PLACES_KEY) {
-          try { reply = await validateMapsUrls(reply, env.GOOGLE_PLACES_KEY); } catch (_) {}
+        // ── Limpiar enlaces Maps inventados por Claude en chat (rutas tienen verify, no pasan por aquí) ──
+        if (!route) {
+          // Quitar URLs de Google Maps que Claude inventa (no verificadas)
+          reply = reply.replace(/\[?📍[^\]]*\]?\s*\(?https?:\/\/[^\s)]*google\.com\/maps[^\s)]*\)?/gi, '');
+          reply = reply.replace(/📍\s*(?:Abrir en Google Maps|Ver en Google Maps|Google Maps)[^\n]*/gi, '');
+          reply = reply.replace(/https?:\/\/(?:www\.)?google\.com\/maps\/dir\/[^\s)>\]]+/gi, '');
+          reply = reply.replace(/\n{3,}/g, '\n\n').trim();
         }
 
         // ── SALMA_ACTION: extraer acciones del texto, limpiar reply, ejecutar APIs en paralelo ──
