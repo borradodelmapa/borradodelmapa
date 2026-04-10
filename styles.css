@@ -1337,12 +1337,21 @@ body {
   transition:opacity 1.5s ease-out;
 }
 .auth-screen.active .auth-bg {
-  opacity:.3;
-  animation:heartbeat 2.5s ease-in-out 1.5s infinite;
+  opacity:.5;
+  animation:heartbeat 2s ease-in-out 2s 5;
 }
 .auth-bg::after {
   content:''; position:absolute; inset:0;
-  background:radial-gradient(ellipse at center, transparent 0%, rgba(5,5,5,.85) 75%);
+  background:radial-gradient(ellipse at center, transparent 0%, var(--negro) 75%);
+}
+.auth-cloud {
+  position:absolute; top:15%; left:-50%; width:50%; height:40%;
+  background:radial-gradient(ellipse at center, rgba(255,255,255,.25) 0%, rgba(255,255,255,.10) 40%, transparent 70%);
+  filter:blur(60px);
+  opacity:0; pointer-events:none; z-index:1;
+}
+.auth-screen.active .auth-cloud {
+  animation:cloud-drift 11s ease-in-out forwards;
 }
 
 .auth-view {
