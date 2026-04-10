@@ -31,7 +31,7 @@ let currentUserSOSConfig = null;
 
 // ═══ DOM refs ═══
 const $content = document.getElementById('app-content');
-const $headerActions = document.getElementById('header-actions');
+// Header eliminado
 const $input = document.getElementById('main-input');
 const $send = document.getElementById('main-send');
 const $toast = document.getElementById('toast');
@@ -118,8 +118,7 @@ function showState(state) {
 }
 
 function updateHeader() {
-  // Header limpio — solo logo. Navegación en bottom bar.
-  $headerActions.innerHTML = '';
+  // Header eliminado — solo actualiza bottom bar
   updateBottomBar();
 }
 
@@ -142,18 +141,18 @@ function updateBottomBar() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span>Home</span>
     </button>` : ''}
-    <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span>Salma</span>
+    <button class="bottom-tab ${typeof salma !== 'undefined' && salma._narratorActive ? 'bottom-tab-narrator-on' : ''}" id="tab-narrador">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="10" r="5"/><circle cx="17" cy="10" r="5"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
+      <span>Narrador</span>
+      ${typeof salma !== 'undefined' && salma._narratorActive ? '<span class="narrator-pulse"></span>' : ''}
     </button>
     <button class="bottom-tab ${isRutas ? 'bottom-tab-active' : ''}" id="tab-rutas">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
     </button>
-    <button class="bottom-tab ${typeof salma !== 'undefined' && salma._narratorActive ? 'bottom-tab-narrator-on' : ''}" id="tab-narrador">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="10" r="5"/><circle cx="17" cy="10" r="5"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
-      <span>Narrador</span>
-      ${typeof salma !== 'undefined' && salma._narratorActive ? '<span class="narrator-pulse"></span>' : ''}
+    <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Salma</span>
     </button>
     <button class="bottom-tab ${isProfile ? 'bottom-tab-active' : ''}" id="tab-profile">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -626,6 +625,12 @@ async function renderProfile() {
       <div class="prof-group">
         <div class="prof-group-title">CUENTA</div>
         <div class="prof-card">
+          <div class="prof-row" id="prof-logout">
+            <span class="prof-row-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
+            <span class="prof-row-label">Cerrar sesión</span>
+            <svg class="prof-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="prof-row-sep"></div>
           <div class="prof-row" id="prof-coins">
             <span class="prof-row-icon prof-row-icon-coins"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M14.5 9a3.5 3.5 0 0 0-5 0"/><path d="M9.5 15a3.5 3.5 0 0 0 5 0"/><line x1="12" y1="3" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="21"/></svg></span>
             <span class="prof-row-label">Salma Coins</span>
@@ -651,7 +656,6 @@ async function renderProfile() {
         <span>·</span>
         <a href="/legal.html#terminos" target="_blank">Términos</a>
       </div>
-      <button class="prof-logout" id="prof-logout">Cerrar sesión</button>
     </div>`;
 
   // Event listeners
@@ -1691,11 +1695,11 @@ async function loadUserGuides() {
           </div>
           <div class="viajes-empty-title">Aún no tienes ninguna ruta</div>
           <div class="viajes-empty-sub">Dile a Salma a dónde quieres ir y en un minuto tienes tu primera guía con mapa, fotos y toda la info.</div>
-          <button class="viajes-empty-btn" id="btn-empty-new">Crear mi primera ruta</button>
+          <button class="viajes-empty-btn" id="btn-empty-new">Habla con Salma</button>
         </div>`;
       document.getElementById('btn-empty-new').addEventListener('click', () => {
-        if (typeof salma !== 'undefined') salma.reset();
-        showState('welcome');
+        if (typeof salma !== 'undefined') { salma.reset(); salma._initChat(); }
+        showState('chat');
       });
     } else {
       // Lista plana normal
@@ -2424,15 +2428,7 @@ function sendMessage() {
 document.getElementById('btn-google-login')?.addEventListener('click', doGoogleLogin);
 document.getElementById('btn-fingerprint')?.addEventListener('click', doFingerprintLogin);
 
-// Logo → chat (logueado) o gate (no logueado)
-document.getElementById('app-logo')?.addEventListener('click', () => {
-  if (currentUser) {
-    if (typeof salma !== 'undefined') salma._initChat();
-    showState('chat');
-  } else {
-    openModal();
-  }
-});
+// Logo eliminado — navegación solo por bottom bar
 
 // ═══ MODAL COINS ═══
 
@@ -2871,7 +2867,7 @@ function openLiveMap() {
 
   view.style.display = 'block';
   if (bar) bar.style.display = 'none';
-  document.querySelector('.app-header')?.style.setProperty('display', 'none', 'important');
+  // Header eliminado — no hay nada que ocultar
   // Ocultar elementos que se filtran al mapa
   const inputBar = document.querySelector('.app-input-bar');
   if (inputBar) inputBar.style.display = 'none';
@@ -3057,7 +3053,7 @@ function closeLiveMap() {
   const bar = document.getElementById('app-bottom-bar');
   if (view) view.style.display = 'none';
   if (bar) bar.style.display = '';
-  document.querySelector('.app-header')?.style.removeProperty('display');
+  // Header eliminado — no hay nada que restaurar
   // Restaurar elementos ocultos
   const inputBar = document.querySelector('.app-input-bar');
   if (inputBar && currentState === 'chat') inputBar.style.display = '';

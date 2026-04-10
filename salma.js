@@ -1445,6 +1445,10 @@ const salma = {
     }
     // Mostrar tarjeta copiloto si hay datos del país
     if (this._copilotData) this.showCopilotCard();
+    // Banner de recordatorios (una vez al día)
+    if (window.currentUser && typeof notasManager !== 'undefined') {
+      notasManager.renderChatReminders(document.getElementById('chat-area'));
+    }
   },
 
   _getChatArea() {

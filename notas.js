@@ -515,6 +515,50 @@ window.notasManager = (() => {
     });
   }
 
+  // ── RENDER: Banner recordatorios en el chat (una vez al día) ──
+
+  async function renderChatReminders(chatArea) {
+    if (!chatArea || !_uid()) return;
+    const dismissKey = 'bdm_reminders_dismissed_' + _today();
+    if (localStorage.getItem(dismissKey)) return;
+
+    try {
+      const allNotas = await getAll();
+      const today = _today();
+      const pending = allNotas
+        .filter(n => !n.completado && n.fechaRecordatorio && n.fechaRecordatorio <= today)
+        .sort((a, b) => (a.fechaRecordatorio || '').localeCompare(b.fechaRecordatorio || ''));
+
+      if (pending.length === 0) return;
+
+      const shown = pending.slice(0, 3);
+      const banner = document.createElement('div');
+      banner.className = 'chat-reminders-banner';
+      banner.innerHTML = `
+        <div class="chat-reminders-header">
+          <span class="chat-reminders-title">Recordatorios</span>
+          <button class="chat-reminders-close" aria-label="Cerrar">&times;</button>
+        </div>
+        ${shown.map(n => `
+          <div class="chat-reminder-item">
+            <span class="chat-reminder-text">${_escHtml(n.texto)}</span>
+            ${_dateBadge(n.fechaRecordatorio)}
+          </div>
+        `).join('')}
+        ${pending.length > 3 ? `<div class="chat-reminders-more">${pending.length - 3} más</div>` : ''}`;
+
+      chatArea.prepend(banner);
+
+      banner.querySelector('.chat-reminders-close').addEventListener('click', () => {
+        localStorage.setItem(dismissKey, '1');
+        banner.style.opacity = '0';
+        setTimeout(() => banner.remove(), 200);
+      });
+    } catch (e) {
+      console.warn('Error cargando recordatorios chat:', e);
+    }
+  }
+
   // ── API pública ──
   return {
     create,
@@ -525,6 +569,7 @@ window.notasManager = (() => {
     getByCountry,
     toggleComplete,
     renderWelcomeReminders,
+    renderChatReminders,
     renderNotasView,
     TIPOS
   };
