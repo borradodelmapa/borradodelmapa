@@ -5082,48 +5082,23 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         } catch (e) { /* Fallo silencioso */ }
 
         // ── TRANSPORTE SIN CLAUDE — respuesta directa con Brave + KV ──
-        {
+        if (transportSearchData?.resultados?.length > 0) {
           let directReply = '';
 
           // Brave results
-          if (transportSearchData?.resultados?.length > 0) {
-            const results = transportSearchData.resultados
-              .filter(r => r.url && !/blog|guia|guide|tripadvisor|wikipedia|wikivoyage/i.test(r.url))
-              .slice(0, 5);
-            for (const r of results) {
-              directReply += `🔗 **${r.titulo.slice(0, 70)}**\n${r.snippet}\n${r.url}\n\n`;
-            }
+          const results = transportSearchData.resultados
+            .filter(r => r.url && !/blog|guia|guide|tripadvisor|wikipedia|wikivoyage/i.test(r.url))
+            .slice(0, 5);
+          for (const r of results) {
+            directReply += `🔗 **${r.titulo.slice(0, 70)}**\n${r.snippet}\n${r.url}\n\n`;
           }
 
-          // Apps ride-hailing del país (KV)
-          if (kvTransportData?.ridehailing) {
-            const allApps = [kvTransportData.ridehailing.best, ...(kvTransportData.ridehailing.others || [])].filter(Boolean);
-            if (allApps.length > 0) {
-              directReply += '**Apps de transporte en la zona:**\n';
-              for (const appName of allApps) {
-                const appData = TRANSPORT_APP_URLS[appName.toLowerCase()];
-                if (appData) {
-                  directReply += `${appData.icon} ${appData.name} — ${appData.web}\n`;
-                }
-              }
-            }
-          }
-
+          // KV todavía no se ha cargado a esta altura — lo dejamos sin apps por ahora
           if (directReply) {
-            // Enviar como stream y cerrar — sin pasar por Claude
-            const encoder = new TextEncoder();
-            const { readable, writable } = new TransformStream();
-            const writer = writable.getWriter();
-            ctx.waitUntil((async () => {
-              try {
-                await writer.write(encoder.encode(`data: ${JSON.stringify({ t: directReply })}\n\n`));
-                await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: directReply, route: null })}\n\n`));
-                await writer.close();
-              } catch (_) {}
-            })());
-            return new Response(readable, {
-              headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Access-Control-Allow-Origin': '*' }
-            });
+            return new Response(
+              JSON.stringify({ reply: directReply.trim(), route: null }),
+              { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
+            );
           }
         }
 
