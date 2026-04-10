@@ -4305,16 +4305,28 @@ export default {
           }
         }
 
-        const apiKey = env.OPENAI_API_KEY;
-        const result = await callOpenAI(apiKey, {
-          model: 'gpt-4o-mini',
-          max_tokens: 200,
-          messages: [{
-            role: 'user',
-            content: `Eres Salma, compañera de viaje. El viajero está junto a ${poi_name}${countryContext}. Cuéntale en 2-3 frases: qué es, por qué importa y un dato curioso. Tono cercano y directo, sin paja. Máximo 80 palabras. Solo el texto, sin encabezados ni viñetas.`
-          }]
+        const narrateRes = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 200,
+            messages: [{
+              role: 'user',
+              content: `Eres Salma, compañera de viaje. El viajero está junto a ${poi_name}${countryContext}. Cuéntale en 2-3 frases: qué es, por qué importa y un dato curioso. Tono cercano y directo, sin paja. Máximo 80 palabras. Solo el texto, sin encabezados ni viñetas.`
+            }]
+          }),
         });
-        const narrative = result.text || '';
+        if (!narrateRes.ok) {
+          const errText = await narrateRes.text().catch(() => '');
+          throw new Error('Anthropic ' + narrateRes.status + ': ' + errText);
+        }
+        const narrateData = await narrateRes.json();
+        const narrative = narrateData.content?.[0]?.text || '';
         return new Response(JSON.stringify({ narrative, poi_name }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });

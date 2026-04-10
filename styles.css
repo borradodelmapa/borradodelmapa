@@ -2366,6 +2366,55 @@ body {
 }
 /* narrator usa el layout base de .profile-section */
 
+/* Botón Explorar activo en bottom bar */
+.bottom-tab-narrator-on { color:var(--dorado) !important; }
+.bottom-tab-narrator-on .narrator-pulse {
+  position:absolute; top:4px; right:50%; margin-right:-18px;
+}
+
+/* Toast flotante del narrador */
+.narrator-toast {
+  position:fixed; bottom:130px; left:5%; right:5%; z-index:950;
+  background:rgba(18,16,12,.95); backdrop-filter:blur(12px);
+  border:1px solid rgba(212,160,23,.25); border-radius:14px;
+  padding:14px 16px; max-width:420px; margin:0 auto;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+}
+.narrator-toast-in {
+  animation:narrator-toast-slide-in .35s ease-out forwards;
+}
+.narrator-toast-out {
+  animation:narrator-toast-slide-out .35s ease-in forwards;
+}
+@keyframes narrator-toast-slide-in {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes narrator-toast-slide-out {
+  from { opacity:1; transform:translateY(0); }
+  to   { opacity:0; transform:translateY(20px); }
+}
+.narrator-toast-close {
+  position:absolute; top:8px; right:12px;
+  color:rgba(244,239,230,.4); cursor:pointer; font-size:14px;
+  line-height:1; padding:4px;
+}
+.narrator-toast-close:hover { color:var(--blanco); }
+.narrator-toast-poi {
+  font-family:var(--font-tight); font-weight:700;
+  color:var(--dorado); font-size:14px; margin-bottom:6px;
+}
+.narrator-toast-text {
+  color:rgba(244,239,230,.85); font-size:13px; line-height:1.5;
+  margin-bottom:8px;
+}
+.narrator-toast-link {
+  display:inline-flex; align-items:center; gap:4px;
+  color:var(--dorado); font-size:12px; font-weight:600;
+  text-decoration:none; opacity:.8;
+}
+.narrator-toast-link:hover { opacity:1; }
+
 /* ═══ PERFIL DE USUARIO ═══ */
 .profile-area {
   max-width:480px; margin:0 auto; padding:24px 16px 40px;

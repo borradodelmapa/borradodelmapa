@@ -150,6 +150,11 @@ function updateBottomBar() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
     </button>
+    <button class="bottom-tab ${typeof salma !== 'undefined' && salma._narratorActive ? 'bottom-tab-narrator-on' : ''}" id="tab-narrador">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="10" r="5"/><circle cx="17" cy="10" r="5"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
+      <span>Narrador</span>
+      ${typeof salma !== 'undefined' && salma._narratorActive ? '<span class="narrator-pulse"></span>' : ''}
+    </button>
     <button class="bottom-tab ${isProfile ? 'bottom-tab-active' : ''}" id="tab-profile">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
@@ -181,6 +186,21 @@ function updateBottomBar() {
   document.getElementById('tab-rutas').addEventListener('click', () => {
     if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
     showState('rutas');
+  });
+  document.getElementById('tab-narrador').addEventListener('click', async () => {
+    if (typeof salma === 'undefined') return;
+    if (salma._narratorActive) {
+      salma.stopNarrator();
+      salma.showNarratorToast('Narrador desactivado. Ya no recibirás alertas de lugares cercanos.', 4000);
+    } else {
+      const ok = await salma.startNarrator();
+      if (ok === false) {
+        salma.showNarratorToast('Para usar el narrador, permite las notificaciones y la ubicación en tu navegador.', 5000);
+      } else if (ok === true) {
+        salma.showNarratorToast('Narrador activado. Te avisaré cuando estés cerca de algo con interés cultural o histórico.', 5000);
+      }
+    }
+    updateBottomBar();
   });
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
 }

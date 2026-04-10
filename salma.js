@@ -1230,11 +1230,33 @@ const salma = {
     if (typeof updateBottomBar === 'function') updateBottomBar();
   },
 
+  showNarratorToast(text, duration, poi) {
+    const existing = document.getElementById('narrator-toast');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.id = 'narrator-toast';
+    toast.className = 'narrator-toast narrator-toast-in';
+    const mapsLink = poi && poi.place_id
+      ? `https://www.google.com/maps/place/?q=place_id:${poi.place_id}`
+      : poi ? `https://www.google.com/maps/search/?api=1&query=${poi.lat},${poi.lng}` : '';
+    toast.innerHTML = `
+      <div class="narrator-toast-close" onclick="this.parentElement.remove()">✕</div>
+      ${poi ? `<div class="narrator-toast-poi">\uD83D\uDCCD ${poi.name}</div>` : ''}
+      <div class="narrator-toast-text">${text}</div>
+      ${mapsLink ? `<a class="narrator-toast-link" href="${mapsLink}" target="_blank" rel="noopener">Ver en Google Maps</a>` : ''}`;
+    document.body.appendChild(toast);
+    const autoDismiss = duration || 10000;
+    setTimeout(() => {
+      if (toast.parentElement) {
+        toast.classList.remove('narrator-toast-in');
+        toast.classList.add('narrator-toast-out');
+        setTimeout(() => toast.remove(), 400);
+      }
+    }, autoDismiss);
+  },
+
   async checkNearbyPOIs() {
     if (!this._narratorActive || !this._userLocation) return;
-    // Solo narrar si la vista de ruta está activa (no contaminar el chat principal)
-    const itinView = document.getElementById('itin-view');
-    if (!itinView || itinView.style.display === 'none') return;
     const now = Date.now();
     if (now - this._narratorLastCheck < 25000) return;
     this._narratorLastCheck = now;
@@ -1253,7 +1275,6 @@ const salma = {
         if (this._narratorNotified.has(key)) continue;
         this._narratorNotified.add(key);
 
-        // Pedir narrativa a Haiku
         try {
           const narRes = await fetch(window.SALMA_API + '/narrate', {
             method: 'POST',
@@ -1269,7 +1290,7 @@ const salma = {
           const narData = await narRes.json();
           if (!narData.narrative) continue;
 
-          // Notificación push
+          // Notificación push (app en background)
           if ('Notification' in window && Notification.permission === 'granted') {
             new Notification('Salma', {
               body: narData.narrative,
@@ -1279,27 +1300,32 @@ const salma = {
             });
           }
 
-          // Insertar en el chat del copiloto (ccs-messages), nunca en el chat principal
+          // Destino de la burbuja: copiloto si visible, sino toast flotante
           const ccsArea = document.getElementById('ccs-messages');
-          if (ccsArea) {
+          const itinView = document.getElementById('itin-view');
+          const itinVisible = itinView && itinView.style.display !== 'none';
+
+          if (ccsArea && itinVisible) {
             const bubble = document.createElement('div');
             bubble.className = 'msg msg-salma narrator-msg';
             bubble.innerHTML = `
-              <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma · narrador</span></div>
+              <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma \u00b7 narrador</span></div>
               <div class="msg-body-salma">
-                <div class="narrator-poi-name">📍 ${poi.name}</div>
+                <div class="narrator-poi-name">\uD83D\uDCCD ${poi.name}</div>
                 ${narData.narrative}
               </div>`;
             ccsArea.appendChild(bubble);
             ccsArea.scrollTop = ccsArea.scrollHeight;
-            // Narrador habla automático si la voz está activada
-            if (this._voiceOn) {
-              const narText = narData.narrative;
-              setTimeout(() => this.salmaSpeak(narText), 50);
-            }
+          } else {
+            this.showNarratorToast(narData.narrative, 10000, poi);
           }
 
-          console.log('[Salma] Narrador:', poi.name, '→', narData.narrative.substring(0, 60) + '...');
+          if (this._voiceOn) {
+            const narText = narData.narrative;
+            setTimeout(() => this.salmaSpeak(narText), 50);
+          }
+
+          console.log('[Salma] Narrador:', poi.name, '\u2192', narData.narrative.substring(0, 60) + '...');
         } catch (e) {
           console.log('[Salma] Narrador: error narrativa', e.message);
         }
