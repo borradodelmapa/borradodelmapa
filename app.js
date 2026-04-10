@@ -1776,15 +1776,21 @@ async function doFingerprintLogin() {
     });
     if (assertion) {
       btn.classList.add('success');
-      // Huella verificada — hacer login con Google silencioso
+      // Patrón lock screen: si Firebase tiene sesión viva, solo desbloquear
+      if (auth.currentUser) {
+        closeModal();
+        if (typeof salma !== 'undefined') salma._initChat();
+        showState('chat');
+        return;
+      }
+      // Sin sesión Firebase → necesitamos Google popup como fallback
       try {
         await auth.signInWithPopup(googleProvider);
         closeModal();
       } catch (gErr) {
-        // Si el popup falla (bloqueado, cancelado), mostrar error
         btn.classList.remove('success');
         btn.classList.add('error');
-        showAuthError('login-error', 'No se pudo iniciar sesión. Usa el botón de Google.');
+        showAuthError('login-error', 'Sesión expirada. Usa el botón de Google.');
       }
     }
   } catch (e) {
@@ -1837,6 +1843,12 @@ function _checkBiometricAvailable() {
   if (biometric) biometric.classList.toggle('hidden', !stored);
 }
 
+// Lock screen — bloquea UI sin cerrar sesión Firebase (huella desbloquea)
+function lockScreen() {
+  openModal();
+}
+
+// Logout real — cierra sesión Firebase (requiere Google para volver)
 function logout() {
   auth.signOut();
   currentUser = null;
