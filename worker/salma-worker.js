@@ -356,7 +356,7 @@ El sistema te avisará con [OBLIGATORIO — GENERA RUTA AHORA] cuando correspond
 Señales: el destino es un lugar específico y cercano — aeropuerto, hotel, dirección, barrio de la ciudad donde está.
 Ejemplos: "quiero ir al aeropuerto", "llévame al centro", "cómo llego al hotel X"
 NUNCA aplica para: "quiero ir a Vietnam", "quiero ir a Tailandia" — esos son tipo 2 (información del destino).
-→ App de transporte del país (Grab, Uber, Bolt) con enlace de descarga si lo conoces + tiempo estimado + precio aproximado + enlace Google Maps con coordenadas reales del viajero como origen.
+→ OBLIGATORIO: usa buscar_web para encontrar las apps de transporte reales del país/ciudad. Incluye enlace a la web oficial de cada app que recomiendes (NO blogs, NO artículos). Nombra la fuente. Añade tiempo estimado + precio aproximado.
 
 5. PIDE SERVICIO CONCRETO
 Señales: "busca hotel", "vuelos a...", "dónde comer", "alquiler de coche"
@@ -406,10 +406,10 @@ VELOCIDAD — REGLA CRÍTICA: cuando el usuario pide varias cosas a la vez (vuel
 PROHIBIDO INVENTAR:
 1. No inventes URLs, teléfonos, direcciones, horarios ni precios. Solo datos de herramientas o KV.
 2. URLs de herramientas (buscar_web, buscar_hotel, buscar_lugar, buscar_vuelos, buscar_coche, buscar_foto): SIEMPRE inclúyelas en tu respuesta. Son datos reales — para eso las buscaste.
-3. Apps de transporte (Grab, Uber, Bolt...): incluye enlace de descarga o web oficial si lo conoces.
-4. Si no tienes el dato o no estás seguro, usa buscar_web SIEMPRE. No asumas, no inventes, no rellenes con datos genéricos. Busca y da información real con enlaces reales.
-5. Cada recomendación que hagas debe incluir su enlace si existe (web, Maps, app store, reserva).
-5. Google Maps: coordenadas numéricas como origen, nunca nombre de ciudad. Correcto: https://www.google.com/maps/dir/21.0285,105.8542/Noi+Bai+International+Airport
+3. TRANSPORTE (taxi, cómo llegar, apps de movilidad): usa buscar_web SIEMPRE antes de responder. Incluye SOLO enlaces a webs oficiales de las apps/servicios (NO blogs, NO artículos, NO guías de viaje). Nombra la fuente de cada dato.
+4. Si no tienes el dato o no estás seguro, usa buscar_web. No asumas, no inventes, no rellenes con datos genéricos.
+5. Cada recomendación debe incluir su enlace oficial si existe (web del servicio, Maps, reserva).
+6. Google Maps: coordenadas numéricas como origen, nunca nombre de ciudad. Correcto: https://www.google.com/maps/dir/21.0285,105.8542/Noi+Bai+International+Airport
 
 No dejes tirado al viajero. Si tienes los datos, resuélvelo.
 
@@ -1952,9 +1952,8 @@ function sanitizeInventedUrls(text) {
 // Inyecta enlace Google Maps si el usuario tiene GPS, la respuesta habla de ir a un sitio,
 // y no hay ya un enlace de Google Maps en la respuesta.
 function injectGoogleMapsLink(reply, userLocation, message, isLocalQuery) {
-  if (!reply || !userLocation || !userLocation.lat || !userLocation.lng) return reply;
-  // Solo inyectar si la consulta es local (el país del GPS coincide con el destino)
-  if (isLocalQuery === false) return reply;
+  // Desactivada — Claude genera sus propios enlaces Maps con buscar_web/buscar_lugar
+  return reply;
   // Si ya tiene un enlace de Google Maps, no duplicar
   if (reply.includes('google.com/maps')) return reply;
   // Solo para transporte local concreto — no para intención de viaje a un país/ciudad lejana
@@ -2045,9 +2044,8 @@ function injectGoogleMapsLink(reply, userLocation, message, isLocalQuery) {
 // Inyecta bloque de transporte (app + descarga) cuando el usuario quiere ir a un sitio
 // Usa datos reales del KV de transporte + URLs reales de TRANSPORT_APP_URLS
 function injectTransportBlock(reply, kvTransportData, message, isLocalQuery) {
-  if (!reply || !message) return reply;
-  // Solo inyectar si la consulta es local (el país del GPS coincide con el destino)
-  if (isLocalQuery === false) return reply;
+  // Desactivada — Claude busca transporte real con buscar_web
+  return reply;
   // Solo para transporte local concreto — NO para intención de viaje a un país/ciudad lejana
   const goKeywords = /llévame|taxi|aeropuerto|airport|estación|estacion|station|terminal/i;
   if (!goKeywords.test(message)) return reply;
