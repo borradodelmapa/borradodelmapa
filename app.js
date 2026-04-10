@@ -138,10 +138,10 @@ function updateBottomBar() {
   const isProfile = currentState === 'profile' || currentState === 'bitacora' || currentState === 'diario' || currentState === 'documentos' || currentState === 'notas';
 
   bar.innerHTML = `
-    <button class="bottom-tab ${isHome ? 'bottom-tab-active' : ''}" id="tab-home">
+    ${!currentUser ? `<button class="bottom-tab ${isHome ? 'bottom-tab-active' : ''}" id="tab-home">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span>Home</span>
-    </button>
+    </button>` : ''}
     <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span>Salma</span>
@@ -155,7 +155,8 @@ function updateBottomBar() {
       <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
     </button>`;
 
-  document.getElementById('tab-home').addEventListener('click', () => showState('welcome'));
+  const tabHome = document.getElementById('tab-home');
+  if (tabHome) tabHome.addEventListener('click', () => showState('welcome'));
   document.getElementById('tab-chat').addEventListener('click', () => {
     // Si hay guía abierta, cerrarla primero
     if (window._itinViewOpen && typeof closeItinerarioView === 'function') {
@@ -274,17 +275,6 @@ async function renderWelcome() {
           ${defaultChips}
         </div>
         <div class="welcome-proof">
-          <div class="welcome-stats">
-            <div class="welcome-stat">
-              <span class="welcome-stat-num" id="stat-routes">—</span>
-              <span class="welcome-stat-label">rutas creadas</span>
-            </div>
-            <span class="welcome-stat-dot">·</span>
-            <div class="welcome-stat">
-              <span class="welcome-stat-num">193</span>
-              <span class="welcome-stat-label">países</span>
-            </div>
-          </div>
           <div class="welcome-features">
             <div class="welcome-feature">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
@@ -386,8 +376,6 @@ async function renderWelcome() {
   // Actualizar chips con datos reales de Firestore (async, sin layout shift)
   _loadChipsAsync(chipsEl);
 
-  // Contador de rutas creadas (async)
-  _loadRouteCount();
 
   // Recordatorios próximos
   if (currentUser && typeof notasManager !== 'undefined') {
@@ -395,21 +383,6 @@ async function renderWelcome() {
   }
 }
 
-async function _loadRouteCount() {
-  const el = document.getElementById('stat-routes');
-  if (!el) return;
-  try {
-    const snap = await db.collection('public_guides').get();
-    const count = snap.size;
-    if (count > 0) {
-      el.textContent = count > 999 ? (count / 1000).toFixed(1).replace('.', ',') + 'k' : count.toString();
-    } else {
-      el.textContent = '0';
-    }
-  } catch (_) {
-    el.textContent = '—';
-  }
-}
 
 function chipLabel(name, max = 18) {
   if (name.length <= max) return name;
