@@ -5279,7 +5279,11 @@ INSTRUCCIONES:
       });
     }
 
-    // ─── RESPUESTA DIRECTA DEL KV (sin llamar a Claude = 0 coste) — SOLO para preguntas de info del país ───
+    // KV solo para rutas y guías — en todo lo demás Claude usa sus tools
+    const isRoute = isRouteRequest(message, history) || isDaysDestination(message);
+    const skipKV = !isRoute;
+
+    // ─── RESPUESTA DIRECTA DEL KV (sin llamar a Claude = 0 coste) — SOLO para rutas/guías ───
     if (kvCountryData && !skipKV && !imageBase64 && !isFlightRequest(message) && !isHotelRequest(message) && !isServiceRequest(message) && !helpCategory) {
       const kvDirectReply = tryKVDirectAnswer(message, kvCountryData, kvDestinationData);
       if (kvDirectReply) {
@@ -5292,10 +5296,6 @@ INSTRUCCIONES:
 
     // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
     const dynamicPrompt = await getSystemPrompt(env);
-
-    // KV solo para rutas y guías — en todo lo demás Claude usa sus tools
-    const isRoute = isRouteRequest(message, history) || isDaysDestination(message);
-    const skipKV = !isRoute;
     let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode);
 
     // Inyectar notas del usuario en el contexto
