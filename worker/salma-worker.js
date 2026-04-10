@@ -1041,9 +1041,12 @@ function extractTransportOD(message) {
     while (words.length > 1 && noise.test(words[words.length - 1])) words.pop();
     return words.join(' ');
   };
-  // Patrón principal: "de/desde X a/hasta Y"
-  const m1 = message.match(/\b(?:de|desde)\s+([\wáéíóúñÁÉÍÓÚÑ\s\-]{2,30}?)\s+(?:a|hasta|hacia)\s+([\wáéíóúñÁÉÍÓÚÑ\s\-]{2,30}?)(?:\s*[?,.]|$)/i);
+  // Patrón principal: "de/desde X a/al/hasta Y"
+  const m1 = message.match(/\b(?:de|desde)\s+([\wáéíóúñÁÉÍÓÚÑ\s\-]{2,30}?)\s+(?:al?|hasta|hacia)\s+([\wáéíóúñÁÉÍÓÚÑ\s\-]{2,30}?)(?:\s*[?,.]|$)/i);
   if (m1) return { origin: stripTrailingWords(m1[1]), dest: stripTrailingWords(m1[2]) };
+  // Patrón "taxi/ir LUGAR al/a LUGAR"
+  const m3 = message.match(/(?:taxi|ir|llegar)\s+(?:del?\s+)?([\wáéíóúñÁÉÍÓÚÑ\s\-]{2,30}?)\s+(?:al?|hasta|hacia)\s+([\wáéíóúñÁÉÍÓÚÑ\s\-]{2,30}?)(?:\s*[?,.]|$)/i);
+  if (m3) return { origin: stripTrailingWords(m3[1]), dest: stripTrailingWords(m3[2]) };
   // Patrón inglés: "from X to Y"
   const m2 = message.match(/\bfrom\s+([\w\s\-]{2,30}?)\s+to\s+([\w\s\-]{2,30}?)(?:\s*[?,.]|$)/i);
   if (m2) return { origin: stripTrailingWords(m2[1]), dest: stripTrailingWords(m2[2]) };
