@@ -2911,6 +2911,9 @@ function openLiveMap() {
       // Brújula (centro-izquierda)
       _renderLiveCompass(el);
 
+      // Cargar pins guardados del usuario
+      _loadSavedPins();
+
       _resumeMapGPS();
     })
     .catch((e) => {
@@ -3258,6 +3261,35 @@ let _tapPhotoBase64 = null;
 let _pinIdCounter = 0;
 let _activeRouteDocId = null;
 
+// ── Cargar pins guardados de Firestore ──
+let _pinsLoaded = false;
+async function _loadSavedPins() {
+  if (_pinsLoaded || !currentUser || typeof db === 'undefined' || !_liveMap || !window.google) return;
+  _pinsLoaded = true;
+  try {
+    const snap = await db.collection('users').doc(currentUser.uid).collection('pins').get();
+    if (snap.empty) return;
+    snap.forEach(doc => {
+      const d = doc.data();
+      if (!d.lat || !d.lng) return;
+      const pinId = 'db_' + doc.id;
+      // Evitar duplicados si ya existe en memoria
+      if (_savedPinsData.some(p => p._pinId === pinId)) return;
+      const marker = new google.maps.Marker({
+        map: _liveMap, position: { lat: d.lat, lng: d.lng },
+        icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#D4A843', fillOpacity: 0.95, strokeColor: '#fff', strokeWeight: 2, scale: 10 },
+        title: d.locName || 'Pin guardado', zIndex: 150,
+      });
+      marker._pinId = pinId;
+      marker._pinData = { lat: d.lat, lng: d.lng, locName: d.locName || '', photoUrl: d.photoUrl || null };
+      marker._firestoreId = doc.id;
+      marker.addListener('click', () => _showPinInfo(marker));
+      _mapPins.push(marker);
+      _savedPinsData.push({ lat: d.lat, lng: d.lng, locName: d.locName || '', place_type: d.place_type || 'other', _pinId: pinId });
+    });
+  } catch (e) { console.warn('[LoadPins]', e); }
+}
+
 // ── Compartir mapa ──
 
 function openShareSheet() {
@@ -3340,11 +3372,16 @@ function _showPinInfo(marker) {
   _poiInfoWindow.open(_liveMap, marker);
 }
 window._deletePinById = function(pinId) {
+  const marker = _mapPins.find(m => m._pinId === pinId);
   const mi = _mapPins.findIndex(m => m._pinId === pinId);
   if (mi !== -1) { _mapPins[mi].setMap(null); _mapPins.splice(mi, 1); }
   const di = _savedPinsData.findIndex(d => d._pinId === pinId);
   if (di !== -1) _savedPinsData.splice(di, 1);
   if (_poiInfoWindow) _poiInfoWindow.close();
+  // Borrar de Firestore
+  if (marker?._firestoreId && currentUser && typeof db !== 'undefined') {
+    db.collection('users').doc(currentUser.uid).collection('pins').doc(marker._firestoreId).delete().catch(() => {});
+  }
   showToast('Pin eliminado');
 };
 
@@ -3508,9 +3545,12 @@ async function diarioPickSave() {
   }
   if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
   try {
-    await db.collection('users').doc(currentUser.uid).collection('pins').add({
+    const docRef = await db.collection('users').doc(currentUser.uid).collection('pins').add({
       lat, lng, locName: _diario.locName, routeId: _activeRouteDocId || null, createdAt: new Date().toISOString()
     });
+    // Guardar ID de Firestore para poder borrar después
+    const m = _mapPins.find(p => p._pinId === pinId);
+    if (m) m._firestoreId = docRef.id;
   } catch (e) { console.warn('[Pin save]', e); }
   showToast('📌 Punto guardado');
   closeDiarioPicker();
