@@ -3277,7 +3277,7 @@ async function _loadSavedPins() {
       if (_savedPinsData.some(p => p._pinId === pinId)) return;
       const marker = new google.maps.Marker({
         map: _liveMap, position: { lat: d.lat, lng: d.lng },
-        icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#D4A843', fillOpacity: 0.95, strokeColor: '#fff', strokeWeight: 2, scale: 10 },
+        icon: { path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', fillColor: '#D4A843', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 1.5, scale: 1.8, anchor: new google.maps.Point(12, 22) },
         title: d.locName || 'Pin guardado', zIndex: 150,
       });
       marker._pinId = pinId;
@@ -3286,6 +3286,8 @@ async function _loadSavedPins() {
       marker.addListener('click', () => _showPinInfo(marker));
       _mapPins.push(marker);
       _savedPinsData.push({ lat: d.lat, lng: d.lng, locName: d.locName || '', place_type: d.place_type || 'other', _pinId: pinId });
+      // Abrir InfoWindow automáticamente
+      _showPinInfo(marker);
     });
   } catch (e) { console.warn('[LoadPins]', e); }
 }
@@ -3340,39 +3342,59 @@ async function shareAsImage() {
 
 
 function _showPinInfo(marker) {
-  if (!_poiInfoWindow || !_liveMap) return;
+  if (!_liveMap) return;
   const d = marker._pinData || {};
   const pinId = marker._pinId || '';
   const lat = d.lat || marker.getPosition().lat();
   const lng = d.lng || marker.getPosition().lng();
-  const mapsUrl = 'https://www.google.com/maps?q=' + lat + ',' + lng;
+  const mapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+  const navUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
   const photoHtml = d.photoUrl
     ? `<img src="${d.photoUrl}" style="width:100%;height:140px;object-fit:cover;border-radius:10px 10px 0 0;display:block">`
     : '';
   const padTop = d.photoUrl ? '10px' : '12px';
   const content = `
-    <div style="font-family:'Inter',sans-serif;width:240px;border-radius:10px;overflow:hidden;background:#fff">
+    <div style="font-family:'Inter',sans-serif;width:260px;border-radius:10px;overflow:hidden;background:#fff">
       ${photoHtml}
       <div style="padding:${padTop} 12px 12px">
         <div style="font-size:14px;font-weight:700;color:#111;margin-bottom:3px">📍 ${d.locName || 'Pin guardado'}</div>
         <div style="font-size:11px;color:#888;margin-bottom:10px">${lat.toFixed(5)}, ${lng.toFixed(5)}</div>
-        <div style="display:flex;gap:6px">
-          <a href="${mapsUrl}" target="_blank" rel="noopener"
-            style="flex:1;text-align:center;background:#D4A843;color:#0a0a0f;border-radius:8px;padding:8px;font-size:11px;font-weight:700;text-decoration:none">
-            Ver en Maps
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <a href="${navUrl}" target="_blank" rel="noopener"
+            style="flex:1;text-align:center;background:#D4A843;color:#0a0a0f;border-radius:8px;padding:8px 6px;font-size:11px;font-weight:700;text-decoration:none;min-width:60px">
+            Ir aquí
           </a>
+          <button onclick="window._sharePinById('${lat}','${lng}','${encodeURIComponent(d.locName || 'Pin guardado')}')"
+            style="flex:1;background:#5BC0DE;color:#fff;border:none;border-radius:8px;padding:8px 6px;font-size:11px;font-weight:700;cursor:pointer;min-width:60px">
+            Compartir
+          </button>
           <button onclick="window._deletePinById('${pinId}')"
-            style="flex:1;background:#D9534F;color:#fff;border:none;border-radius:8px;padding:8px;font-size:11px;font-weight:700;cursor:pointer">
+            style="flex:1;background:#D9534F;color:#fff;border:none;border-radius:8px;padding:8px 6px;font-size:11px;font-weight:700;cursor:pointer;min-width:60px">
             Eliminar
           </button>
         </div>
       </div>
     </div>`;
-  _poiInfoWindow.setContent(content);
-  _poiInfoWindow.open(_liveMap, marker);
+  // Cada pin tiene su propio InfoWindow para poder estar todos abiertos
+  if (!marker._infoWindow) {
+    marker._infoWindow = new google.maps.InfoWindow();
+  }
+  marker._infoWindow.setContent(content);
+  marker._infoWindow.open(_liveMap, marker);
 }
+window._sharePinById = function(lat, lng, name) {
+  const url = `https://www.google.com/maps?q=${lat},${lng}`;
+  const title = decodeURIComponent(name);
+  if (navigator.share) {
+    navigator.share({ title: title, text: `📍 ${title}`, url: url }).catch(() => {});
+  } else {
+    navigator.clipboard?.writeText(url).then(() => showToast('Enlace copiado'));
+  }
+};
 window._deletePinById = function(pinId) {
   const marker = _mapPins.find(m => m._pinId === pinId);
+  // Cerrar su InfoWindow individual
+  if (marker?._infoWindow) marker._infoWindow.close();
   const mi = _mapPins.findIndex(m => m._pinId === pinId);
   if (mi !== -1) { _mapPins[mi].setMap(null); _mapPins.splice(mi, 1); }
   const di = _savedPinsData.findIndex(d => d._pinId === pinId);
@@ -3534,7 +3556,7 @@ async function diarioPickSave() {
     const pinId = 'spin_' + (++_pinIdCounter) + '_' + Date.now();
     const marker = new google.maps.Marker({
       map: _liveMap, position: { lat, lng },
-      icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#D4A843', fillOpacity: 0.95, strokeColor: '#fff', strokeWeight: 2, scale: 10 },
+      icon: { path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', fillColor: '#D4A843', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 1.5, scale: 1.8, anchor: new google.maps.Point(12, 22) },
       title: _diario.locName, zIndex: 150,
     });
     marker._pinId = pinId;
@@ -3750,7 +3772,7 @@ function _diarioDropPermanentPin() {
   const marker = new google.maps.Marker({
     map: _liveMap,
     position: { lat: _diario.lat, lng: _diario.lng },
-    icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#D4A843', fillOpacity: 0.95, strokeColor: '#fff', strokeWeight: 2, scale: 10 },
+    icon: { path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', fillColor: '#D4A843', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 1.5, scale: 1.8, anchor: new google.maps.Point(12, 22) },
     title: _diario.locName, zIndex: 150,
   });
   marker._pinId = pinId;
