@@ -3535,11 +3535,11 @@ function diarioPickCompass() {
 window.diarioPickCompass = diarioPickCompass;
 function diarioPickSOS() {
   closeDiarioPicker();
-  closeLiveMap();
   const sosConfigured = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim()).length > 0;
   if (sosConfigured) {
     showSOSConfirm();
   } else {
+    closeLiveMap();
     renderSOSConfig();
   }
 }
@@ -4186,6 +4186,10 @@ function showSOSConfirm() {
 }
 
 async function triggerSOS() {
+  // Cerrar live-map si está abierto (SOS desde el mapa)
+  const lmv = document.getElementById('live-map-view');
+  if (lmv && lmv.style.display !== 'none') closeLiveMap();
+
   document.querySelector('.app-input-bar').style.display = 'none';
   currentState = 'sos';
 
