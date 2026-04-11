@@ -4186,11 +4186,6 @@ function showSOSConfirm() {
 }
 
 async function triggerSOS() {
-  // Cerrar live-map si está abierto (SOS desde el mapa)
-  const lmv = document.getElementById('live-map-view');
-  if (lmv && lmv.style.display !== 'none') closeLiveMap();
-
-  document.querySelector('.app-input-bar').style.display = 'none';
   currentState = 'sos';
 
   // Usar coords que ya tenemos (instantáneo), mejorar en background
@@ -4232,7 +4227,6 @@ async function triggerSOS() {
 }
 
 function _renderSOSScreen(mode, contacts, message, sentCount) {
-  const $c = document.getElementById('app-content');
   const encodedMsg = encodeURIComponent(message);
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const phonesSep = isIOS ? ';' : ',';
@@ -4240,7 +4234,7 @@ function _renderSOSScreen(mode, contacts, message, sentCount) {
   const phones = contacts.map(c => c.phone).join(phonesSep);
 
   const waButtons = contacts.map(c => `
-    <a class="sos-wa-btn" href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${encodedMsg}">
+    <a class="sos-wa-btn" href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${encodedMsg}" target="_blank" rel="noopener">
       <span class="sos-wa-icon">🟢</span>
       <span>WhatsApp → ${escapeHTML(c.name || c.phone)}</span>
     </a>`).join('');
@@ -4280,20 +4274,34 @@ function _renderSOSScreen(mode, contacts, message, sentCount) {
       ${smsBtn}`;
   }
 
-  $c.innerHTML = `<div class="sos-area fade-in">
-    <div class="sos-header">
-      <button class="sos-back" id="sos-back">← Volver</button>
-      <span class="sos-header-title">🆘 Emergencia</span>
+  // Overlay encima del mapa (no sobreescribe app-content)
+  let overlay = document.getElementById('sos-screen-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'sos-screen-overlay';
+    overlay.className = 'sos-overlay';
+    document.body.appendChild(overlay);
+  }
+  overlay.innerHTML = `<div class="sos-modal" style="max-width:400px;width:92%;max-height:80vh;overflow-y:auto;">
+    <div class="sos-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <span class="sos-header-title" style="font-size:18px;font-weight:700;">🆘 Emergencia</span>
+      <button class="sos-back" id="sos-back" style="background:none;border:1px solid rgba(244,239,230,.2);border-radius:8px;color:rgba(244,239,230,.7);padding:6px 12px;cursor:pointer;font-size:13px;">✕ Cerrar</button>
     </div>
     ${body}
-    <button class="sos-config-link" id="sos-edit-contacts">Editar contactos de emergencia</button>
+    <button class="sos-config-link" id="sos-edit-contacts" style="margin-top:16px;">Editar contactos</button>
   </div>`;
+  overlay.style.display = 'flex';
 
   document.getElementById('sos-back').addEventListener('click', () => {
-    document.querySelector('.app-input-bar').style.display = '';
-    showState('profile');
+    overlay.style.display = 'none';
+    currentState = 'chat';
   });
-  document.getElementById('sos-edit-contacts').addEventListener('click', () => renderSOSConfig());
+  document.getElementById('sos-edit-contacts').addEventListener('click', () => {
+    overlay.style.display = 'none';
+    currentState = 'chat';
+    closeLiveMap();
+    renderSOSConfig();
+  });
 }
 
 // Cola offline: reintenta automáticamente al recuperar conexión
