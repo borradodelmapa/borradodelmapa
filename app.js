@@ -3533,6 +3533,16 @@ function diarioPickCompass() {
   if (typeof mapaRuta !== 'undefined') mapaRuta._renderCompass('live-map-container');
 }
 window.diarioPickCompass = diarioPickCompass;
+function diarioPickSOS() {
+  closeDiarioPicker();
+  const sosConfigured = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim()).length > 0;
+  if (sosConfigured) {
+    showSOSConfirm();
+  } else {
+    renderSOSConfig();
+  }
+}
+window.diarioPickSOS = diarioPickSOS;
 
 // ── Listener: tras elegir/capturar foto → generar story ──
 function _onDiarioPhoto(e) {
