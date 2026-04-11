@@ -3365,7 +3365,7 @@ function _showPinInfo(marker) {
             Ir aquí
           </a>
           <button onclick="window._sharePinById('${lat}','${lng}','${encodeURIComponent(d.locName || 'Pin guardado')}')"
-            style="flex:1;background:#5BC0DE;color:#fff;border:none;border-radius:8px;padding:8px 6px;font-size:11px;font-weight:700;cursor:pointer;min-width:60px">
+            style="flex:1;background:#5CB85C;color:#fff;border:none;border-radius:8px;padding:8px 6px;font-size:11px;font-weight:700;cursor:pointer;min-width:60px">
             Compartir
           </button>
           <button onclick="window._deletePinById('${pinId}')"
@@ -3383,12 +3383,12 @@ function _showPinInfo(marker) {
   marker._infoWindow.open(_liveMap, marker);
 }
 window._sharePinById = function(lat, lng, name) {
-  const url = `https://www.google.com/maps?q=${lat},${lng}`;
-  const title = decodeURIComponent(name);
+  const mapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+  const msg = `Estoy bien mama!!! 📍 ${mapsUrl} 🌍 https://borradodelmapa.com`;
   if (navigator.share) {
-    navigator.share({ title: title, text: `📍 ${title}`, url: url }).catch(() => {});
+    navigator.share({ title: 'Estoy bien!', text: msg }).catch(() => {});
   } else {
-    navigator.clipboard?.writeText(url).then(() => showToast('Enlace copiado'));
+    navigator.clipboard?.writeText(msg).then(() => showToast('Mensaje copiado'));
   }
 };
 window._deletePinById = function(pinId) {
@@ -3606,6 +3606,11 @@ function diarioPickSOS() {
   }
 }
 window.diarioPickSOS = diarioPickSOS;
+function toggleImFineMenu() {
+  const menu = document.getElementById('dpick-imfine-menu');
+  if (menu) menu.style.display = menu.style.display === 'none' ? 'flex' : 'none';
+}
+window.toggleImFineMenu = toggleImFineMenu;
 
 // ── Listener: tras elegir/capturar foto → generar story ──
 function _onDiarioPhoto(e) {

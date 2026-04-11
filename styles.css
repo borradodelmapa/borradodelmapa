@@ -3762,6 +3762,25 @@ body {
 .dpick-save .dpick-svg { stroke: #5CB85C; }
 .dpick-save .dpick-label { color: rgba(92,184,93,0.8); }
 .dpick-save:active { background: rgba(92,184,93,0.12); }
+/* I'M FINE */
+.dpick-imfine { border-color: rgba(92,184,93,.45); background:rgba(92,184,93,.1); }
+.dpick-imfine .dpick-svg { stroke: #5CB85C; }
+.dpick-imfine .dpick-label { color: rgba(92,184,93,.85); }
+.dpick-imfine:active { background: rgba(92,184,93,.2); }
+.dpick-imfine-menu {
+  position:absolute; bottom:calc(100% + 6px); left:14px;
+  background:rgba(10,10,15,.95); border:1.5px solid rgba(92,184,93,.3);
+  border-radius:12px; padding:6px; z-index:5;
+  display:flex; flex-direction:column; gap:4px;
+  backdrop-filter:blur(12px);
+}
+.dpick-imfine-opt {
+  background:none; border:none; color:rgba(244,239,230,.8);
+  font-size:13px; font-family:inherit; padding:10px 16px;
+  border-radius:8px; cursor:pointer; text-align:left;
+  transition:background .15s;
+}
+.dpick-imfine-opt:hover,.dpick-imfine-opt:active { background:rgba(92,184,93,.12); }
 /* SOS */
 .dpick-sos { border-color: rgba(220,53,69,.5); background:rgba(220,53,69,.12); }
 .dpick-sos:active { background: rgba(220,53,69,.25); transform:scale(0.93); }
