@@ -27,6 +27,8 @@ const salma = {
   _narratorNotified: new Set(),
   _narratorLastCheck: 0,
   _narratorInterval: null,
+  _narratorQueue: [],
+  _narratorProcessing: false,
   _voices: [],
   _currentAudio: null,
 
@@ -1213,15 +1215,20 @@ const salma = {
       return false;
     }
     this._narratorActive = true;
-    this._narratorNotified = new Set();
+    // Restaurar dedup desde sessionStorage (sobrevive recargas)
+    try {
+      const saved = sessionStorage.getItem('narrator_notified_pois');
+      this._narratorNotified = new Set(saved ? JSON.parse(saved) : []);
+    } catch (_) { this._narratorNotified = new Set(); }
     this._narratorLastCheck = 0;
+    this._narratorQueue = [];
+    this._narratorProcessing = false;
     // Reactivar GPS continuo si se había parado
     if (!this._geoWatchId) this.initGeolocation();
-    // Check periódico cada 30s
-    this._narratorInterval = setInterval(() => this.checkNearbyPOIs(), 30000);
+    // Check periódico cada 60s
+    this._narratorInterval = setInterval(() => this.checkNearbyPOIs(), 60000);
     // Primer check inmediato
     this.checkNearbyPOIs();
-    localStorage.setItem('narrator_active', 'true');
     console.log('[Salma] Narrador activado');
     if (typeof updateBottomBar === 'function') updateBottomBar();
     return true;
@@ -1233,7 +1240,8 @@ const salma = {
       clearInterval(this._narratorInterval);
       this._narratorInterval = null;
     }
-    localStorage.setItem('narrator_active', 'false');
+    this._narratorQueue = [];
+    this._narratorProcessing = false;
     console.log('[Salma] Narrador desactivado');
     if (typeof updateBottomBar === 'function') updateBottomBar();
   },
@@ -1266,7 +1274,7 @@ const salma = {
   async checkNearbyPOIs() {
     if (!this._narratorActive || !this._userLocation) return;
     const now = Date.now();
-    if (now - this._narratorLastCheck < 25000) return;
+    if (now - this._narratorLastCheck < 55000) return;
     this._narratorLastCheck = now;
 
     const { lat, lng } = this._userLocation;
@@ -1278,68 +1286,98 @@ const salma = {
       const data = await res.json();
       if (!data.pois || !data.pois.length) return;
 
-      for (const poi of data.pois) {
-        const key = poi.place_id || poi.name;
-        if (this._narratorNotified.has(key)) continue;
-        this._narratorNotified.add(key);
+      // Filtrar solo POIs no notificados, ordenados por cercanía
+      const newPois = data.pois
+        .filter(p => !this._narratorNotified.has(p.place_id || p.name))
+        .sort((a, b) => (a.distance_m || 0) - (b.distance_m || 0));
 
-        try {
-          const narRes = await fetch(window.SALMA_API + '/narrate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              poi_name: poi.name,
-              lat: poi.lat,
-              lng: poi.lng,
-              country_code: this._copilotCountry || ''
-            })
-          });
-          if (!narRes.ok) continue;
-          const narData = await narRes.json();
-          if (!narData.narrative) continue;
+      if (!newPois.length) return;
 
-          // Notificación push (app en background)
-          if ('Notification' in window && Notification.permission === 'granted') {
-            new Notification('Salma', {
-              body: narData.narrative,
-              icon: '/salma_ai_avatar.png',
-              tag: 'narrator-' + key,
-              data: { poi_name: poi.name, narrative: narData.narrative }
-            });
-          }
+      // Encolar solo el más cercano (max 1 por ciclo)
+      const poi = newPois[0];
+      const key = poi.place_id || poi.name;
+      this._narratorNotified.add(key);
+      // Persistir dedup en sessionStorage
+      try { sessionStorage.setItem('narrator_notified_pois', JSON.stringify([...this._narratorNotified])); } catch (_) {}
 
-          // Destino de la burbuja: copiloto si visible, sino toast flotante
-          const ccsArea = document.getElementById('ccs-messages');
-          const itinView = document.getElementById('itin-view');
-          const itinVisible = itinView && itinView.style.display !== 'none';
-
-          if (ccsArea && itinVisible) {
-            const bubble = document.createElement('div');
-            bubble.className = 'msg msg-salma narrator-msg';
-            bubble.innerHTML = `
-              <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma \u00b7 narrador</span></div>
-              <div class="msg-body-salma">
-                <div class="narrator-poi-name">\uD83D\uDCCD ${poi.name}</div>
-                ${narData.narrative}
-              </div>`;
-            ccsArea.appendChild(bubble);
-            ccsArea.scrollTop = ccsArea.scrollHeight;
-          } else {
-            this.showNarratorToast(narData.narrative, 10000, poi);
-          }
-
-          if (this._voiceOn) {
-            const narText = narData.narrative;
-            setTimeout(() => this.salmaSpeak(narText), 50);
-          }
-
-          console.log('[Salma] Narrador:', poi.name, '\u2192', narData.narrative.substring(0, 60) + '...');
-        } catch (e) {
-          console.log('[Salma] Narrador: error narrativa', e.message);
-        }
-      }
+      this._narratorQueue.push(poi);
+      console.log('[Salma] Narrator queue: ' + this._narratorQueue.length + ' pending');
+      this._processNarratorQueue();
     } catch (e) {
       console.log('[Salma] Narrador: error check POIs', e.message);
+    }
+  },
+
+  async _processNarratorQueue() {
+    if (this._narratorProcessing || !this._narratorQueue.length || !this._narratorActive) return;
+    this._narratorProcessing = true;
+
+    const poi = this._narratorQueue.shift();
+    const key = poi.place_id || poi.name;
+
+    try {
+      const narRes = await fetch(window.SALMA_API + '/narrate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          poi_name: poi.name,
+          lat: poi.lat,
+          lng: poi.lng,
+          country_code: this._copilotCountry || ''
+        })
+      });
+      if (!narRes.ok) { this._narratorProcessing = false; return; }
+      const narData = await narRes.json();
+      if (!narData.narrative) { this._narratorProcessing = false; return; }
+
+      const isForeground = document.visibilityState === 'visible';
+
+      if (isForeground) {
+        // App visible: solo burbuja/toast, NO push nativa
+        const ccsArea = document.getElementById('ccs-messages');
+        const itinView = document.getElementById('itin-view');
+        const itinVisible = itinView && itinView.style.display !== 'none';
+
+        if (ccsArea && itinVisible) {
+          const bubble = document.createElement('div');
+          bubble.className = 'msg msg-salma narrator-msg';
+          bubble.innerHTML = `
+            <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma \u00b7 narrador</span></div>
+            <div class="msg-body-salma">
+              <div class="narrator-poi-name">\uD83D\uDCCD ${poi.name}</div>
+              ${narData.narrative}
+            </div>`;
+          ccsArea.appendChild(bubble);
+          ccsArea.scrollTop = ccsArea.scrollHeight;
+        } else {
+          this.showNarratorToast(narData.narrative, 10000, poi);
+        }
+      } else {
+        // App en background: solo push nativa
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification('Salma', {
+            body: narData.narrative,
+            icon: '/salma_ai_avatar.png',
+            tag: 'narrator-' + key,
+            data: { poi_name: poi.name, narrative: narData.narrative }
+          });
+        }
+      }
+
+      if (this._voiceOn && isForeground) {
+        const narText = narData.narrative;
+        setTimeout(() => this.salmaSpeak(narText), 50);
+      }
+
+      console.log('[Salma] Narrador:', poi.name, '\u2192', narData.narrative.substring(0, 60) + '...');
+    } catch (e) {
+      console.log('[Salma] Narrador: error narrativa', e.message);
+    }
+
+    this._narratorProcessing = false;
+    // Si quedan más en cola, procesar siguiente con spacing de 20s
+    if (this._narratorQueue.length && this._narratorActive) {
+      setTimeout(() => this._processNarratorQueue(), 20000);
     }
   },
 
