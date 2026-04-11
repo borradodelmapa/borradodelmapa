@@ -3384,7 +3384,7 @@ window._sharePinById = async function(lat, lng, name, photoUrlEnc) {
   const locName = decodeURIComponent(name);
   const photoUrl = decodeURIComponent(photoUrlEnc || '');
   const mapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
-  const msg = `Estoy bien mama!!! 📍\n${locName}\n${mapsUrl}\n\n🌍 https://borradodelmapa.com`;
+  const msg = `Estoy muy bien!!! Mira donde estoy!!! 📍\n${locName}\n${mapsUrl}\n\n🌍 https://borradodelmapa.com`;
 
   // Si hay foto, compartir foto + texto juntos
   if (photoUrl) {
@@ -3773,7 +3773,7 @@ function _drawDiarioKodak(ctx, photo, W, H, transport, loc, mapImg, msgTxt) {
 // ── Share / Download ──
 function _diarioMapsLink() { return 'https://www.google.com/maps?q='+_diario.lat+','+_diario.lng; }
 function _diarioShareText() {
-  return 'Estoy bien mama!!! 📍\n'+_diario.locName+'\n'+_diarioMapsLink()+'\n\n🌍 https://borradodelmapa.com';
+  return 'Estoy muy bien!!! Mira donde estoy!!! 📍\n'+_diario.locName+'\n'+_diarioMapsLink()+'\n\n🌍 https://borradodelmapa.com';
 }
 
 function _diarioAutoSave() {
