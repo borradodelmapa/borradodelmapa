@@ -13,10 +13,11 @@ id = "b2056c0613d94feb955b92279ba02fb6"
 binding = "SALMA_PHOTOS"
 bucket_name = "salma-photos"
 
+# Cron: domingo 3:00 UTC = backup completo KV → R2 (mantiene últimos 8)
 # Cron: lunes 4:00 UTC = regenera fichas nivel 1 caducadas
 # Cron: miércoles 4:00 UTC = genera rutas nivel 3 para países sin rutas
 [triggers]
-crons = ["0 4 * * 1", "0 4 * * 3"]
+crons = ["0 3 * * sun", "0 4 * * 1", "0 4 * * 3"]
 
 [vars]
 # Optional: use Workers AI instead — set USE_CLOUDFLARE_AI = "1" and add binding:

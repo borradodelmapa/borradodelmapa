@@ -6275,6 +6275,11 @@ SEGURIDAD:
     if (!env.SALMA_KB || !env.OPENAI_API_KEY) return;
 
     const dayOfWeek = new Date(event.scheduledTime).getUTCDay(); // 0=dom, 1=lun, 3=mié
+    if (dayOfWeek === 0) {
+      // DOMINGO → Backup completo KV + Firestore metadata a R2
+      await this._cronBackup(env);
+      return;
+    }
     if (dayOfWeek === 3) {
       // MIÉRCOLES → Generar rutas nivel 3
       await this._cronNivel3(env);
@@ -6477,6 +6482,97 @@ SEGURIDAD:
 
     } catch (e) {
       console.log(`[KV Cron L3] Error general: ${e.message}`);
+    }
+  },
+
+  // ═══ CRON DOMINGO: Backup completo KV → R2 ═══
+  async _cronBackup(env) {
+    if (!env.SALMA_KB || !env.SALMA_PHOTOS) {
+      console.log('[Backup] Error: falta SALMA_KB o SALMA_PHOTOS (R2)');
+      return;
+    }
+
+    const date = new Date().toISOString().slice(0, 10);
+    console.log(`[Backup] Iniciando backup KV → R2 (${date})`);
+
+    try {
+      const backup = {};
+      let totalKeys = 0;
+      let cursor = null;
+
+      // Listar todas las claves (paginado, 1000 por página)
+      do {
+        const listOpts = { limit: 1000 };
+        if (cursor) listOpts.cursor = cursor;
+        const list = await env.SALMA_KB.list(listOpts);
+
+        for (const key of list.keys) {
+          // Skip claves dinámicas/efímeras que no necesitan backup
+          if (key.name.startsWith('geo:') || key.name.startsWith('geocity:') ||
+              key.name.startsWith('sos_rate:') || key.name.startsWith('_cache:')) {
+            continue;
+          }
+          try {
+            const value = await env.SALMA_KB.get(key.name);
+            if (value) {
+              try { backup[key.name] = JSON.parse(value); }
+              catch { backup[key.name] = value; }
+              totalKeys++;
+            }
+          } catch (e) {
+            console.log(`[Backup] Error leyendo ${key.name}: ${e.message}`);
+          }
+        }
+
+        cursor = list.list_complete ? null : list.cursor;
+      } while (cursor);
+
+      if (totalKeys === 0) {
+        console.log('[Backup] ⚠️ 0 claves encontradas — abortando');
+        return;
+      }
+
+      // Crear metadata del backup
+      const meta = {
+        date,
+        timestamp: Date.now(),
+        total_keys: totalKeys,
+        prefixes: {},
+      };
+      for (const key of Object.keys(backup)) {
+        const prefix = key.split(':')[0];
+        meta.prefixes[prefix] = (meta.prefixes[prefix] || 0) + 1;
+      }
+
+      const backupData = { _meta: meta, data: backup };
+      const jsonStr = JSON.stringify(backupData);
+      const sizeKB = (jsonStr.length / 1024).toFixed(1);
+
+      // Subir a R2
+      await env.SALMA_PHOTOS.put(
+        `backups/kv/kv-backup-${date}.json`,
+        jsonStr,
+        { httpMetadata: { contentType: 'application/json' } }
+      );
+
+      console.log(`[Backup] ✅ Backup completado: ${totalKeys} claves, ${sizeKB} KB → R2:backups/kv/kv-backup-${date}.json`);
+
+      // Limpiar backups antiguos (mantener últimos 8 = ~2 meses)
+      try {
+        const list = await env.SALMA_PHOTOS.list({ prefix: 'backups/kv/kv-backup-' });
+        const files = list.objects.sort((a, b) => b.key.localeCompare(a.key));
+        if (files.length > 8) {
+          for (const old of files.slice(8)) {
+            await env.SALMA_PHOTOS.delete(old.key);
+            console.log(`[Backup] 🗑️ Backup antiguo eliminado: ${old.key}`);
+          }
+        }
+      } catch (e) {
+        console.log(`[Backup] ⚠️ Error limpiando backups antiguos: ${e.message}`);
+      }
+
+    } catch (e) {
+      console.log(`[Backup] ❌ Error general: ${e.message}`);
     }
   },
 };

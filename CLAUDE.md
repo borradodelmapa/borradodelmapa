@@ -853,8 +853,16 @@ node upload-kv.js
 # Restaurar nivel 2
 node upload-kv-nivel2.js
 
-# Restaurar todo (bulk)
+# Restaurar transport enriquecido (ES, TH, NP, VN)
+node upload-transport-routes.js
+
+# Restaurar todo (bulk, nivel 1+2)
 node upload-all-kv.cjs
+
+# Restaurar desde backup R2 (si los JSONs locales no están disponibles)
+# 1. Descargar backup más reciente de R2:
+wrangler r2 object get salma-photos/backups/kv/kv-backup-YYYY-MM-DD.json --file=restore.json
+# 2. Los datos están en restore.json → extraer y subir con wrangler kv bulk put
 ```
 
 ### Si se rompe Firebase
@@ -874,6 +882,75 @@ firebase deploy --only firestore:rules
 4. Pedir "3 días en Cádiz" — debe generar ruta con mapa y fotos
 5. Guardar ruta → debe aparecer en Mis Viajes
 6. Worker health: `curl -H "Authorization: Bearer {ADMIN_TOKEN}" https://salma-api.paco-defoto.workers.dev/health`
+7. Transport KV: preguntar "tren Madrid Barcelona" → debe responder con formato comparativa y trainline.com
+
+---
+
+## Estrategia de backup (12 abril 2026)
+
+### Qué se respalda y cómo
+
+| Componente | Respaldo | Frecuencia | Ubicación |
+|---|---|---|---|
+| **Código** | Git + GitHub | Cada commit | GitHub `borradodelmapa/borradodelmapa` |
+| **KV completo** | Worker cron → R2 | **Automático cada domingo 3:00 UTC** | R2: `backups/kv/kv-backup-YYYY-MM-DD.json` |
+| **KV completo** | Script local | Manual bajo demanda | `worker/kv/backups/kv-backup-YYYY-MM-DD.json` |
+| **Transport JSONs** | Git + archivos locales | Cada cambio | `worker/kv/transport-routes/*.json` |
+| **R2 (fotos/docs)** | Cloudflare R2 (11 nueves durabilidad) | Continuo | Bucket `salma-photos` |
+| **Firestore** | — | **PENDIENTE** | — |
+| **API keys** | Archivos locales | Manual | `api/` carpeta (gitignored) |
+| **Snapshots estables** | Git tags + Desktop | Por versión | Tags: `v1-stable-20260410`, `v2.1-transport-stable` |
+
+### Backup automático KV (cron domingo)
+
+El worker ejecuta `_cronBackup()` cada domingo a las 3:00 UTC:
+1. Lista TODAS las claves del KV (excluyendo efímeras: `geo:`, `geocity:`, `sos_rate:`, `_cache:`)
+2. Descarga cada valor
+3. Crea JSON con metadata (`_meta.date`, `_meta.total_keys`, `_meta.prefixes`)
+4. Sube a R2: `backups/kv/kv-backup-YYYY-MM-DD.json`
+5. Limpia backups >8 semanas (mantiene últimos 8)
+
+**Coste: $0** (KV reads + R2 writes incluidos en el plan)
+
+### Backup manual KV (script local)
+
+```bash
+cd worker/kv
+
+# Backup completo
+node backup-kv.js
+
+# Backup solo transport
+node backup-kv.js --prefix transport
+
+# Backup + subir a R2
+node backup-kv.js --upload-r2
+```
+
+### Restaurar KV desde backup R2
+
+```bash
+# 1. Ver backups disponibles
+wrangler r2 object list salma-photos --prefix="backups/kv/"
+
+# 2. Descargar
+wrangler r2 object get salma-photos/backups/kv/kv-backup-2026-04-12.json --file=restore.json
+
+# 3. Restaurar (requiere script de conversión bulk)
+node restore-kv.js restore.json
+```
+
+### Tags git estables
+
+| Tag | Fecha | Descripción |
+|-----|-------|-------------|
+| `v1-stable-20260410` | 10 abril 2026 | V1 completa pre-mapa |
+| `v2.1-transport-stable` | 12 abril 2026 | V2.1 con transport KV + formato comparativa |
+
+### Pendiente backup
+
+- **Firestore** — Los datos de usuarios (guías, notas, perfil) NO se respaldan. Firebase ofrece export automático en plan Blaze. Implementar cuando se active Blaze.
+- **R2 fotos** — Las fotos de usuarios están en R2 con 11 nueves de durabilidad. No necesitan backup adicional salvo caso extremo.
 
 ---
 
@@ -893,9 +970,18 @@ wrangler deploy
 # Añadir/actualizar secret en Cloudflare
 wrangler secret put NOMBRE_SECRET
 
-# Restaurar a V1 estable
-git checkout v1-stable-20260410
+# Restaurar a V2.1 estable
+git checkout v2.1-transport-stable
 
-# Backup completo en Desktop
-# C:\Users\User\Desktop\salma-v1-stable-20260410\
+# Backup KV manual
+cd worker/kv && node backup-kv.js
+
+# Ver stats transport KV
+cd worker/kv && node upload-transport-routes.js --stats
+
+# Subir transport KV (4 países)
+cd worker/kv && node upload-transport-routes.js
+
+# Backup en Desktop
+# C:\Users\User\Desktop\salma-v2.1-transport-20260412\
 ```
