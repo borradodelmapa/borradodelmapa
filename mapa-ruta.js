@@ -208,6 +208,13 @@ const mapaRuta = {
       localStorage.setItem('compass_hidden', '1');
     });
 
+    // Tap en brújula → resetear mapa a norte arriba
+    ring.addEventListener('click', () => {
+      if (this._map && this._mapType === 'google' && window.google) {
+        this._map.setHeading(0);
+      }
+    });
+
     // 1) Magnetómetro del móvil — orientación real del teléfono
     this._startDeviceOrientation(ring);
 
@@ -380,6 +387,8 @@ const mapaRuta = {
     this._map = new google.maps.Map(el, {
       center,
       zoom: 7,
+      heading: 0,                    // Norte arriba siempre al cargar
+      tiltInteractionEnabled: false, // Bloquear tilt 3D accidental
       styles: window._mapStyle || [],
       disableDefaultUI: true,
       zoomControl: false,
