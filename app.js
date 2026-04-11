@@ -3364,7 +3364,7 @@ function _showPinInfo(marker) {
             style="flex:1;text-align:center;background:#D4A843;color:#0a0a0f;border-radius:8px;padding:8px 6px;font-size:11px;font-weight:700;text-decoration:none;min-width:60px">
             Ir aquí
           </a>
-          <button onclick="window._sharePinById('${lat}','${lng}','${encodeURIComponent(d.locName || 'Pin guardado')}')"
+          <button onclick="window._sharePinById('${lat}','${lng}','${encodeURIComponent(d.locName || 'Pin guardado')}','${encodeURIComponent(d.photoUrl || '')}')"
             style="flex:1;background:#5CB85C;color:#fff;border:none;border-radius:8px;padding:8px 6px;font-size:11px;font-weight:700;cursor:pointer;min-width:60px">
             Compartir
           </button>
@@ -3382,9 +3382,28 @@ function _showPinInfo(marker) {
   marker._infoWindow.setContent(content);
   marker._infoWindow.open(_liveMap, marker);
 }
-window._sharePinById = function(lat, lng, name) {
+window._sharePinById = async function(lat, lng, name, photoUrlEnc) {
+  const locName = decodeURIComponent(name);
+  const photoUrl = decodeURIComponent(photoUrlEnc || '');
   const mapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
-  const msg = `Estoy bien mama!!! 📍 ${mapsUrl} 🌍 https://borradodelmapa.com`;
+  const msg = `Estoy bien mama!!! 📍\n${locName}\n${mapsUrl}\n\n🌍 https://borradodelmapa.com`;
+
+  // Si hay foto, compartirla como archivo
+  if (photoUrl) {
+    try {
+      const res = await fetch(photoUrl);
+      const blob = await res.blob();
+      const file = new File([blob], 'mi-ubicacion.jpg', { type: 'image/jpeg' });
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file] });
+      }
+    } catch(e) {}
+    // Abrir WhatsApp con texto (foto va aparte)
+    setTimeout(() => window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank'), 1000);
+    return;
+  }
+
+  // Sin foto: compartir solo texto
   if (navigator.share) {
     navigator.share({ title: 'Estoy bien!', text: msg }).catch(() => {});
   } else {
@@ -3759,7 +3778,7 @@ function _drawDiarioKodak(ctx, photo, W, H, transport, loc, mapImg, msgTxt) {
 // ── Share / Download ──
 function _diarioMapsLink() { return 'https://www.google.com/maps?q='+_diario.lat+','+_diario.lng; }
 function _diarioShareText() {
-  return 'Estoy bien mama! Mira aquí estoy 📍\n'+_diario.locName+'\n'+_diarioMapsLink()+'\n\nborradodelmapa.com';
+  return 'Estoy bien mama!!! 📍\n'+_diario.locName+'\n'+_diarioMapsLink()+'\n\n🌍 https://borradodelmapa.com';
 }
 
 function _diarioAutoSave() {
@@ -3793,12 +3812,14 @@ async function shareDiarioWA() {
   const file=new File([_diario.lastBlob],'mi-diario.jpg',{type:'image/jpeg'});
   const txt=_diarioShareText();
   if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-    try{await navigator.share({files:[file],text:txt});return;}catch(e){}
+    try{await navigator.share({files:[file]});} catch(e){}
+  } else {
+    const a=document.createElement('a');a.href=URL.createObjectURL(_diario.lastBlob);
+    a.download='mi-diario.jpg';a.click();
   }
-  const a=document.createElement('a');a.href=URL.createObjectURL(_diario.lastBlob);
-  a.download='mi-diario.jpg';a.click();
-  if(typeof showToast==='function')showToast('📸 Descargada — adjúntala en WhatsApp');
-  setTimeout(()=>window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank'),700);
+  // Abrir WhatsApp con el texto (foto va aparte)
+  if(typeof showToast==='function')showToast('📸 Ahora envía el mensaje con tu ubicación');
+  setTimeout(()=>window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank'),1000);
 }
 
 function downloadDiario() {
@@ -3813,9 +3834,13 @@ async function shareDiarioNative() {
   if(!_diario.lastBlob) return;
   _diarioAutoSave();
   const file=new File([_diario.lastBlob],'mi-diario.jpg',{type:'image/jpeg'});
+  const txt=_diarioShareText();
   if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-    try{await navigator.share({files:[file],text:_diarioShareText()});}catch(e){}
+    try{await navigator.share({files:[file]});} catch(e){}
   } else { downloadDiario(); }
+  // Abrir WhatsApp con el texto (foto va aparte ya que WA ignora text con files)
+  if(typeof showToast==='function')showToast('📸 Ahora envía el mensaje con tu ubicación');
+  setTimeout(()=>window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank'),1000);
 }
 
 function closeDiarioResult() {
