@@ -3661,19 +3661,22 @@ async function generateDiarioStory() {
       const i = new Image(); i.crossOrigin='anonymous';
       i.onload = () => resolve(i); i.onerror = reject; i.src = mapUrl;
     });
-    // Crop centrado: de la imagen cuadrada, tomar el ancho completo y recortar alto proporcionalmente
+    // Cover: escalar mapa para cubrir TODO el canvas 1080x1920 (recortar laterales si hace falta)
     const tmp = document.createElement('canvas'); tmp.width=1080; tmp.height=1920;
     const tCtx = tmp.getContext('2d');
     const iw = mapImg.naturalWidth, ih = mapImg.naturalHeight;
-    const targetRatio = 1080/1920; // 0.5625
-    const srcW = iw, srcH = Math.round(iw / targetRatio); // más alto que la imagen → usar ancho completo, escalar
-    // La imagen es cuadrada: para llenar 9:16, escalamos el ancho al 100% y dejamos que se repita/estire solo en alto
-    const drawH = Math.round(1080 * (ih / iw)); // alto proporcional
-    const yOffset = Math.round((1920 - drawH) / 2); // centrar verticalmente
-    tCtx.drawImage(mapImg, 0, 0, iw, ih, 0, yOffset, 1080, drawH);
-    // Rellenar arriba y abajo con el color de borde del mapa
-    tCtx.fillStyle = '#e8e4da'; // color terrain de Google
-    if (yOffset > 0) { tCtx.fillRect(0, 0, 1080, yOffset); tCtx.fillRect(0, yOffset + drawH, 1080, 1920 - yOffset - drawH); }
+    const canvasRatio = 1080/1920, imgRatio = iw/ih;
+    let sx=0, sy=0, sw=iw, sh=ih;
+    if (imgRatio > canvasRatio) {
+      // Imagen más ancha que canvas → recortar laterales
+      sw = Math.round(ih * canvasRatio);
+      sx = Math.round((iw - sw) / 2);
+    } else {
+      // Imagen más alta que canvas → recortar arriba/abajo
+      sh = Math.round(iw / canvasRatio);
+      sy = Math.round((ih - sh) / 2);
+    }
+    tCtx.drawImage(mapImg, sx, sy, sw, sh, 0, 0, 1080, 1920);
     const scaled = new Image();
     await new Promise(r => { scaled.onload=r; scaled.src=tmp.toDataURL(); });
     _diario.mapImg = scaled;
