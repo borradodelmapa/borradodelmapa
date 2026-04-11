@@ -3286,8 +3286,6 @@ async function _loadSavedPins() {
       marker.addListener('click', () => _showPinInfo(marker));
       _mapPins.push(marker);
       _savedPinsData.push({ lat: d.lat, lng: d.lng, locName: d.locName || '', place_type: d.place_type || 'other', _pinId: pinId });
-      // Abrir InfoWindow automáticamente
-      _showPinInfo(marker);
     });
   } catch (e) { console.warn('[LoadPins]', e); }
 }
