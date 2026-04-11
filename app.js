@@ -3388,22 +3388,19 @@ window._sharePinById = async function(lat, lng, name, photoUrlEnc) {
   const mapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
   const msg = `Estoy bien mama!!! 📍\n${locName}\n${mapsUrl}\n\n🌍 https://borradodelmapa.com`;
 
-  // Si hay foto, compartirla como archivo
+  // Si hay foto, compartir foto + texto juntos
   if (photoUrl) {
     try {
       const res = await fetch(photoUrl);
       const blob = await res.blob();
       const file = new File([blob], 'mi-ubicacion.jpg', { type: 'image/jpeg' });
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file] });
+        try { await navigator.share({ files: [file], text: msg }); return; } catch(e) {}
       }
     } catch(e) {}
-    // Abrir WhatsApp con texto (foto va aparte)
-    setTimeout(() => window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank'), 1000);
-    return;
   }
 
-  // Sin foto: compartir solo texto
+  // Sin foto o share falló: compartir texto
   if (navigator.share) {
     navigator.share({ title: 'Estoy bien!', text: msg }).catch(() => {});
   } else {
@@ -3812,14 +3809,12 @@ async function shareDiarioWA() {
   const file=new File([_diario.lastBlob],'mi-diario.jpg',{type:'image/jpeg'});
   const txt=_diarioShareText();
   if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-    try{await navigator.share({files:[file]});} catch(e){}
-  } else {
-    const a=document.createElement('a');a.href=URL.createObjectURL(_diario.lastBlob);
-    a.download='mi-diario.jpg';a.click();
+    try{await navigator.share({files:[file],text:txt});return;}catch(e){}
   }
-  // Abrir WhatsApp con el texto (foto va aparte)
-  if(typeof showToast==='function')showToast('📸 Ahora envía el mensaje con tu ubicación');
-  setTimeout(()=>window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank'),1000);
+  const a=document.createElement('a');a.href=URL.createObjectURL(_diario.lastBlob);
+  a.download='mi-diario.jpg';a.click();
+  if(typeof showToast==='function')showToast('📸 Descargada — adjúntala en WhatsApp');
+  setTimeout(()=>window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank'),700);
 }
 
 function downloadDiario() {
@@ -3834,13 +3829,9 @@ async function shareDiarioNative() {
   if(!_diario.lastBlob) return;
   _diarioAutoSave();
   const file=new File([_diario.lastBlob],'mi-diario.jpg',{type:'image/jpeg'});
-  const txt=_diarioShareText();
   if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-    try{await navigator.share({files:[file]});} catch(e){}
+    try{await navigator.share({files:[file],text:_diarioShareText()});}catch(e){}
   } else { downloadDiario(); }
-  // Abrir WhatsApp con el texto (foto va aparte ya que WA ignora text con files)
-  if(typeof showToast==='function')showToast('📸 Ahora envía el mensaje con tu ubicación');
-  setTimeout(()=>window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank'),1000);
 }
 
 function closeDiarioResult() {
