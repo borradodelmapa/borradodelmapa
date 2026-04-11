@@ -2999,78 +2999,6 @@ function _renderLiveCompass(mapEl) {
   }
 }
 
-// ═══ BUSCADOR LIVE MAP ═══
-let _liveSearchMarker = null;
-let _liveAutocomplete = null;
-
-function _renderLiveSearchBar(mapEl) {
-  if (!mapEl) return;
-  mapEl.querySelector('#live-map-search-bar')?.remove();
-
-  const bar = document.createElement('div');
-  bar.className = 'map-search-bar map-search-hidden';
-  bar.id = 'live-map-search-bar';
-  bar.style.position = 'fixed';
-  bar.style.zIndex = '970';
-  bar.innerHTML = `
-    <div class="map-search-row input-row">
-      <svg class="map-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" class="map-search-input" id="live-map-search-input" placeholder="Buscar lugar..." autocomplete="off">
-      <button class="app-mic map-search-mic" aria-label="Buscar con voz">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="1" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0014 0"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-      </button>
-    </div>
-    <div class="map-search-hint">Pregunta a Salma: restaurantes, hoteles, farmacias...</div>`;
-  mapEl.appendChild(bar);
-
-  const input = document.getElementById('live-map-search-input');
-  if (!input || !window.google || !google.maps.places) return;
-
-  _liveAutocomplete = new google.maps.places.Autocomplete(input, {
-    fields: ['geometry', 'name', 'formatted_address', 'place_id'],
-    types: ['establishment', 'geocode'],
-  });
-  _liveAutocomplete.addListener('place_changed', () => {
-    const place = _liveAutocomplete.getPlace();
-    if (!place.geometry || !place.geometry.location) return;
-    const pos = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
-    _liveMap.panTo(pos);
-    _liveMap.setZoom(15);
-    if (_liveSearchMarker) _liveSearchMarker.setMap(null);
-    _liveSearchMarker = new google.maps.Marker({
-      map: _liveMap, position: pos, title: place.name || place.formatted_address,
-      icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#f0b429', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 2, scale: 12 },
-      animation: google.maps.Animation.DROP, zIndex: 1000,
-    });
-  });
-
-  // Enter → servicios a Salma
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const q = input.value.trim();
-      if (!q) return;
-      const servicePattern = /restaurante|hotel|hostal|grúa|grua|embajada|farmacia|hospital|gasolina|cajero|supermercado|policia|policía|taxi|bus|tren|aeropuerto|parking/i;
-      if (servicePattern.test(q)) {
-        if (typeof salma !== 'undefined') salma.send(q);
-        closeLiveMap();
-      }
-      input.value = '';
-    }
-  });
-
-  // Mic dispatch (reutiliza el sistema de app.js)
-  document.addEventListener('map:search-submit', (e) => {
-    const q = e.detail?.query;
-    if (!q) return;
-    const servicePattern = /restaurante|hotel|hostal|grúa|grua|embajada|farmacia|hospital|gasolina|cajero|supermercado|policia|policía|taxi|bus|tren|aeropuerto|parking/i;
-    if (servicePattern.test(q)) {
-      if (typeof salma !== 'undefined') salma.send(q);
-      closeLiveMap();
-    }
-  });
-}
-
 function _resumeMapGPS() {
   if (!navigator.geolocation || _liveMapWatchId !== null) return;
   // maximumAge alto → usa posición cacheada del navegador (respuesta inmediata)
@@ -3134,7 +3062,6 @@ function closeLiveMap() {
   closeTapSheet();
   closeShareSheet();
   // Limpiar markers de búsqueda
-  if (_liveSearchMarker) { try { _liveSearchMarker.setMap(null); } catch(e) {} _liveSearchMarker = null; }
   if (_dpickSearchMarker) { try { _dpickSearchMarker.setMap(null); } catch(e) {} _dpickSearchMarker = null; }
   closeDiarioPicker();
   // Pausar GPS (se reanuda al volver)
@@ -3493,6 +3420,8 @@ function closeDiarioPicker() {
   const picker = document.getElementById('diario-picker');
   if (picker) picker.style.display = 'none';
   if (_dpickSearchMarker) { try { _dpickSearchMarker.setMap(null); } catch(e) {} _dpickSearchMarker = null; }
+  // Cerrar paneles desplegables de tipo mapa y capas
+  _closeMapPanels();
 }
 
 function _initDpickSearch() {
@@ -3501,35 +3430,23 @@ function _initDpickSearch() {
 
   _dpickAutocomplete = new google.maps.places.Autocomplete(input, {
     fields: ['geometry', 'name', 'formatted_address', 'place_id'],
-    types: ['establishment', 'geocode'],
   });
+  // Vincular al mapa para predicciones en la zona visible
+  if (_liveMap) _dpickAutocomplete.bindTo('bounds', _liveMap);
+
   _dpickAutocomplete.addListener('place_changed', () => {
     const place = _dpickAutocomplete.getPlace();
     if (!place.geometry || !place.geometry.location) return;
     const pos = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
-    if (_liveMap) { _liveMap.panTo(pos); _liveMap.setZoom(15); }
+    if (_liveMap) { _liveMap.panTo(pos); _liveMap.setZoom(16); }
     if (_dpickSearchMarker) _dpickSearchMarker.setMap(null);
     _dpickSearchMarker = new google.maps.Marker({
       map: _liveMap, position: pos, title: place.name || place.formatted_address,
       icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#f0b429', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 2, scale: 12 },
       animation: google.maps.Animation.DROP, zIndex: 1000,
     });
-  });
-
-  // Enter → servicios a Salma
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const q = input.value.trim();
-      if (!q) return;
-      const servicePattern = /restaurante|hotel|hostal|grúa|grua|embajada|farmacia|hospital|gasolina|cajero|supermercado|policia|policía|taxi|bus|tren|aeropuerto|parking/i;
-      if (servicePattern.test(q)) {
-        closeDiarioPicker();
-        if (typeof salma !== 'undefined') salma.send(q);
-        closeLiveMap();
-      }
-      input.value = '';
-    }
+    input.value = '';
+    closeDiarioPicker();
   });
 }
 function diarioPickCamera() {

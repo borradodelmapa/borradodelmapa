@@ -3786,26 +3786,34 @@ body {
   transition: border-color .15s;
 }
 .dpick-close:active { border-color: rgba(244,239,230,0.3); }
-/* Fila controles dentro del diario-picker */
-.dpick-ctrl-row { gap:10px; }
-.dpick-ctrl-row .dpick-btn { width:52px; height:52px; border-radius:12px; }
+/* Separador visual dentro del picker */
+.dpick-sep {
+  width:85%; height:1px;
+  background:rgba(244,239,230,.08);
+  margin:2px auto;
+}
+/* Fila controles mapa — mismo tamaño que acciones */
+.dpick-ctrl-row { gap:14px; }
 /* Buscador dentro del diario-picker */
 .dpick-search-row {
   display:flex; align-items:center; gap:8px; width:100%;
-  background:rgba(244,239,230,.06); border:1px solid rgba(244,239,230,.1);
-  border-radius:10px; padding:6px 10px;
+  background:rgba(244,239,230,.04);
+  border:1.5px solid rgba(212,168,67,.2);
+  border-radius:14px; padding:8px 12px;
 }
 .dpick-search-input {
   flex:1; background:none; border:none; outline:none;
   color:rgba(244,239,230,.9); font-family:var(--font-body);
   font-size:13px; line-height:1.4; height:28px;
 }
-.dpick-search-input::placeholder { color:rgba(244,239,230,.35); }
+.dpick-search-input::placeholder { color:rgba(244,239,230,.3); }
 .dpick-search-mic {
-  width:28px; height:28px; border-radius:50%; border:none;
-  background:none; color:rgba(244,239,230,.5); cursor:pointer;
+  width:30px; height:30px; border-radius:50%; border:none;
+  background:rgba(244,239,230,.04); color:rgba(244,239,230,.5); cursor:pointer;
   display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  transition:color .15s, background .15s;
 }
+.dpick-search-mic:active { color:var(--dorado); background:rgba(212,168,67,.1); }
 
 .itin-view {
   position: fixed;
