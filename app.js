@@ -3535,6 +3535,7 @@ function diarioPickCompass() {
 window.diarioPickCompass = diarioPickCompass;
 function diarioPickSOS() {
   closeDiarioPicker();
+  closeLiveMap();
   const sosConfigured = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim()).length > 0;
   if (sosConfigured) {
     showSOSConfirm();

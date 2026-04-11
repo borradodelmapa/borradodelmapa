@@ -3763,10 +3763,12 @@ body {
 .dpick-save .dpick-label { color: rgba(92,184,93,0.8); }
 .dpick-save:active { background: rgba(92,184,93,0.12); }
 /* SOS */
-.dpick-sos { border-color: rgba(220,53,69,.45); }
-.dpick-sos .dpick-svg { stroke: #DC3545; }
-.dpick-sos .dpick-label { color: rgba(220,53,69,.85); }
-.dpick-sos:active { background: rgba(220,53,69,.15); }
+.dpick-sos { border-color: rgba(220,53,69,.5); background:rgba(220,53,69,.12); }
+.dpick-sos:active { background: rgba(220,53,69,.25); transform:scale(0.93); }
+.dpick-sos-text {
+  font-size:16px; font-weight:900; color:#DC3545;
+  letter-spacing:.08em; line-height:1;
+}
 .dpick-loc {
   font-size: 11px;
   color: rgba(244,239,230,0.5);
