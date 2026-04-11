@@ -2276,7 +2276,7 @@ function sendMessage() {
     resetMicState();
     if (hadResult && inputEl && inputEl.value.trim()) {
       const isWelcome = inputEl.id === 'welcome-input';
-      const isMapSearch = inputEl.id === 'map-search-input' || inputEl.id === 'live-map-search-input';
+      const isMapSearch = inputEl.id === 'map-search-input' || inputEl.id === 'live-map-search-input' || inputEl.id === 'dpick-search-input';
       if (isMapSearch) {
         document.dispatchEvent(new CustomEvent('map:search-submit', { detail: { query: inputEl.value.trim() } }));
         inputEl.value = '';
@@ -2911,9 +2911,6 @@ function openLiveMap() {
       // Brújula (centro-izquierda)
       _renderLiveCompass(el);
 
-      // Buscador con Autocomplete + Salma + Voz
-      _renderLiveSearchBar(el);
-
       _resumeMapGPS();
     })
     .catch((e) => {
@@ -3136,12 +3133,10 @@ function closeLiveMap() {
   closeSalmaMapSheet();
   closeTapSheet();
   closeShareSheet();
-  // Limpiar marker de búsqueda
+  // Limpiar markers de búsqueda
   if (_liveSearchMarker) { try { _liveSearchMarker.setMap(null); } catch(e) {} _liveSearchMarker = null; }
-  // Restaurar controles a estado oculto para próxima apertura
-  document.querySelectorAll('.live-map-ctrl').forEach(el => el.classList.add('live-map-ctrl-hidden'));
-  const lmSearch = document.getElementById('live-map-search-bar');
-  if (lmSearch) lmSearch.classList.add('map-search-hidden');
+  if (_dpickSearchMarker) { try { _dpickSearchMarker.setMap(null); } catch(e) {} _dpickSearchMarker = null; }
+  closeDiarioPicker();
   // Pausar GPS (se reanuda al volver)
   if (_liveMapWatchId !== null) {
     navigator.geolocation.clearWatch(_liveMapWatchId);
@@ -3480,6 +3475,9 @@ function _diarioGeocode() {
   });
 }
 
+let _dpickAutocomplete = null;
+let _dpickSearchMarker = null;
+
 function _showDiarioPicker() {
   const picker = document.getElementById('diario-picker');
   if (picker) picker.style.display = 'block';
@@ -3488,10 +3486,51 @@ function _showDiarioPicker() {
   // Mostrar botón brújula solo si está oculta
   const compassBtn = document.getElementById('dpick-compass-btn');
   if (compassBtn) compassBtn.style.display = localStorage.getItem('compass_hidden') === '1' ? 'flex' : 'none';
+  // Inicializar Autocomplete del buscador (una sola vez)
+  _initDpickSearch();
 }
 function closeDiarioPicker() {
   const picker = document.getElementById('diario-picker');
   if (picker) picker.style.display = 'none';
+  if (_dpickSearchMarker) { try { _dpickSearchMarker.setMap(null); } catch(e) {} _dpickSearchMarker = null; }
+}
+
+function _initDpickSearch() {
+  const input = document.getElementById('dpick-search-input');
+  if (!input || _dpickAutocomplete || !window.google || !google.maps.places) return;
+
+  _dpickAutocomplete = new google.maps.places.Autocomplete(input, {
+    fields: ['geometry', 'name', 'formatted_address', 'place_id'],
+    types: ['establishment', 'geocode'],
+  });
+  _dpickAutocomplete.addListener('place_changed', () => {
+    const place = _dpickAutocomplete.getPlace();
+    if (!place.geometry || !place.geometry.location) return;
+    const pos = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
+    if (_liveMap) { _liveMap.panTo(pos); _liveMap.setZoom(15); }
+    if (_dpickSearchMarker) _dpickSearchMarker.setMap(null);
+    _dpickSearchMarker = new google.maps.Marker({
+      map: _liveMap, position: pos, title: place.name || place.formatted_address,
+      icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#f0b429', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 2, scale: 12 },
+      animation: google.maps.Animation.DROP, zIndex: 1000,
+    });
+  });
+
+  // Enter → servicios a Salma
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const q = input.value.trim();
+      if (!q) return;
+      const servicePattern = /restaurante|hotel|hostal|grúa|grua|embajada|farmacia|hospital|gasolina|cajero|supermercado|policia|policía|taxi|bus|tren|aeropuerto|parking/i;
+      if (servicePattern.test(q)) {
+        closeDiarioPicker();
+        if (typeof salma !== 'undefined') salma.send(q);
+        closeLiveMap();
+      }
+      input.value = '';
+    }
+  });
 }
 function diarioPickCamera() {
   closeDiarioPicker();
@@ -3813,11 +3852,6 @@ window.diarioResultSave = diarioResultSave;
 window.diarioCapture = diarioCapture;
 
 function _onMapTap(e) {
-  // Revelar controles ocultos del live-map
-  document.querySelectorAll('.live-map-ctrl-hidden').forEach(el => el.classList.remove('live-map-ctrl-hidden'));
-  const lmSearch = document.getElementById('live-map-search-bar');
-  if (lmSearch) lmSearch.classList.remove('map-search-hidden');
-
   _closeMapPanels();
   if (_poiInfoWindow) _poiInfoWindow.close();
   _tapLatLng = e.latLng;

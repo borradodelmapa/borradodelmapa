@@ -3175,14 +3175,6 @@ body {
   z-index: 960;
   background: #1a1a1a;
 }
-/* Controles live-map: ocultos hasta tap */
-.live-map-ctrl { transition:opacity .35s ease; }
-.live-map-ctrl.live-map-ctrl-hidden { opacity:0; pointer-events:none; }
-/* Buscador live-map */
-#live-map-search-bar {
-  top:calc(env(safe-area-inset-top, 0px) + 52px);
-  left:14px; right:14px;
-}
 #live-map-container {
   width: 100%;
   height: 100%;
@@ -3204,35 +3196,7 @@ body {
   backdrop-filter: blur(8px);
   display: flex; align-items: center; justify-content: center;
 }
-#live-map-center {
-  position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 14px);
-  right: 14px;
-  z-index: 970;
-  background: rgba(12,10,6,0.92);
-  color: var(--dorado);
-  border: 1px solid rgba(212,168,67,0.35);
-  border-radius: 50%;
-  width: 44px; height: 44px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-}
-/* ── Botón tipo mapa ── */
-#live-map-maptype-btn {
-  position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 62px);
-  right: 14px;
-  z-index: 970;
-  background: rgba(12,10,6,0.92);
-  color: var(--dorado);
-  border: 1px solid rgba(212,168,67,0.35);
-  border-radius: 50%;
-  width: 44px; height: 44px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-}
+/* Botones centrar y tipo mapa movidos al diario-picker */
 #live-map-routes-btn {
   position: fixed;
   top: calc(env(safe-area-inset-top, 0px) + 12px);
@@ -3417,9 +3381,9 @@ body {
 /* ── Panel tipo mapa (junto al botón abajo-derecha) ── */
 #live-map-maptype-panel {
   position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 62px);
-  right: 62px;
-  z-index: 972;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 260px);
+  left: 50%; transform: translateX(-50%);
+  z-index: 990;
   background: rgba(12,10,6,0.96);
   border: 1px solid rgba(212,168,67,0.25);
   border-radius: 14px;
@@ -3686,26 +3650,12 @@ body {
   white-space: nowrap; flex-shrink: 0; text-decoration: none;
 }
 
-/* ── Botón capas (POI) ── */
-#live-map-layers-btn {
-  position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 110px);
-  right: 14px;
-  z-index: 970;
-  background: rgba(12,10,6,0.92);
-  color: var(--dorado);
-  border: 1px solid rgba(212,168,67,0.35);
-  border-radius: 50%;
-  width: 44px; height: 44px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-}
+/* Botón capas movido al diario-picker */
 #live-map-layers-panel {
   position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 110px);
-  right: 62px;
-  z-index: 972;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 260px);
+  left: 50%; transform: translateX(-50%);
+  z-index: 990;
   background: rgba(12,10,6,0.96);
   border: 1px solid rgba(212,168,67,0.25);
   border-radius: 14px;
@@ -3836,6 +3786,26 @@ body {
   transition: border-color .15s;
 }
 .dpick-close:active { border-color: rgba(244,239,230,0.3); }
+/* Fila controles dentro del diario-picker */
+.dpick-ctrl-row { gap:10px; }
+.dpick-ctrl-row .dpick-btn { width:52px; height:52px; border-radius:12px; }
+/* Buscador dentro del diario-picker */
+.dpick-search-row {
+  display:flex; align-items:center; gap:8px; width:100%;
+  background:rgba(244,239,230,.06); border:1px solid rgba(244,239,230,.1);
+  border-radius:10px; padding:6px 10px;
+}
+.dpick-search-input {
+  flex:1; background:none; border:none; outline:none;
+  color:rgba(244,239,230,.9); font-family:var(--font-body);
+  font-size:13px; line-height:1.4; height:28px;
+}
+.dpick-search-input::placeholder { color:rgba(244,239,230,.35); }
+.dpick-search-mic {
+  width:28px; height:28px; border-radius:50%; border:none;
+  background:none; color:rgba(244,239,230,.5); cursor:pointer;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
 
 .itin-view {
   position: fixed;
