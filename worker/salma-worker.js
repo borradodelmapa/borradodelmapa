@@ -3876,12 +3876,12 @@ export default {
       const zoom = url.searchParams.get('zoom') || '14';
       const size = url.searchParams.get('size') || '640x640';
       const maptype = url.searchParams.get('maptype') || 'satellite';
-      const placesKey = env.GOOGLE_PLACES_KEY;
-      if (!lat || !lng || !placesKey) {
+      const apiKey = url.searchParams.get('key') || env.GOOGLE_PLACES_KEY;
+      if (!lat || !lng || !apiKey) {
         return new Response('Missing params', { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } });
       }
       try {
-        const gmUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${size}&maptype=${maptype}&key=${placesKey}`;
+        const gmUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${size}&maptype=${maptype}&key=${apiKey}`;
         const imgRes = await fetch(gmUrl);
         if (!imgRes.ok) return new Response('Map error', { status: 502, headers: { 'Access-Control-Allow-Origin': '*' } });
         const imgBlob = await imgRes.arrayBuffer();

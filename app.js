@@ -3654,7 +3654,7 @@ async function generateDiarioStory() {
   if (!_diario.photo) return;
 
   // Mapa estático de fondo (via worker proxy para evitar CORS)
-  const mapUrl = window.SALMA_API + '/staticmap?lat=' + _diario.lat + '&lng=' + _diario.lng + '&zoom=14&size=640x640&maptype=satellite';
+  const mapUrl = window.SALMA_API + '/staticmap?lat=' + _diario.lat + '&lng=' + _diario.lng + '&zoom=14&size=640x640&maptype=terrain&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
   try {
     const mapImg = await new Promise((resolve, reject) => {
       const i = new Image(); i.crossOrigin='anonymous';
