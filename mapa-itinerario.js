@@ -524,18 +524,7 @@ const mapaItinerario = {
     if (!_openedFromChat && typeof showState === 'function') showState('bitacora');
   }
 
-  // Puente con bitacoraRenderer (Mis Viajes)
-  if (typeof bitacoraRenderer !== 'undefined') {
-    const _originalRenderDiario = bitacoraRenderer.renderDiario.bind(bitacoraRenderer);
-    bitacoraRenderer.renderDiario = function(routeData, docId, notes, photos, docData) {
-      if (!routeData || !routeData.stops || !routeData.stops.length) {
-        return _originalRenderDiario(routeData, docId, notes, photos, docData);
-      }
-      openItinerarioView(routeData, docId, { saved: true });
-    };
-  }
-
-  // Exponer globalmente para que salma.js pueda llamarlo
+  // Exponer globalmente para que app.js y salma.js puedan llamarlo (P2-11: ya no hay monkey-patch)
   window.openItinerarioView = openItinerarioView;
 
   // Escuchar cierre desde el botón back

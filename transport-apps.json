@@ -3,7 +3,7 @@
     "version": "1.0",
     "updated": "2026-03-30",
     "update_cycle": "semestral",
-    "note": "ride-hailing + trenes + metro/bus + ferry + especial. Deep links con coords solo Uber y Lyft."
+    "note": "ride-hailing + trenes + metro/bus + ferry + especial. Deep links con coords: Uber, Lyft, Ola, Yango. El resto sin documentación pública."
   },
   "apps": {
     "uber": {
@@ -52,7 +52,8 @@
     },
     "ola": {
       "name": "Ola", "icon": "🟡",
-      "deep_link": null, "web_fallback": "https://www.olacabs.com",
+      "deep_link": "https://olawebcdn.com/assets/ola-universal-link.html?lat={pickup_lat}&lng={pickup_lng}&drop_lat={dropoff_lat}&drop_lng={dropoff_lng}",
+      "web_fallback": "https://book.olacabs.com",
       "store_ios": "https://apps.apple.com/app/ola-cabs/id539179365",
       "store_android": "https://play.google.com/store/apps/details?id=com.olacabs.customer"
     },
@@ -77,12 +78,14 @@
     },
     "yandex": {
       "name": "Yandex Go", "icon": "🔴",
-      "deep_link": null, "web_fallback": "https://go.yandex.com",
+      "deep_link": "https://yango.go.link/route?start-lat={pickup_lat}&start-lon={pickup_lng}&end-lat={dropoff_lat}&end-lon={dropoff_lng}",
+      "web_fallback": "https://go.yandex.com",
       "store_android": "https://play.google.com/store/apps/details?id=ru.yandex.taxi"
     },
     "yango": {
       "name": "Yango", "icon": "🔴",
-      "deep_link": null, "web_fallback": "https://yango.com",
+      "deep_link": "https://yango.go.link/route?start-lat={pickup_lat}&start-lon={pickup_lng}&end-lat={dropoff_lat}&end-lon={dropoff_lng}",
+      "web_fallback": "https://yango.com",
       "store_android": "https://play.google.com/store/apps/details?id=com.yandex.yango",
       "note": "Marca internacional de Yandex, fuerte en África"
     },

@@ -490,6 +490,77 @@ const SALMA_SYSTEM_BASE = SALMA_SYSTEM_ROUTE;
 // ═══════════════════════════════════════════════════════════════
 const FIRESTORE_PROJECT = 'borradodelmapa-85257';
 
+// ═══════════════════════════════════════════════════════════════
+// AUTH — Verificar Firebase ID token + leer datos del usuario
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * Verifica el Firebase ID token leyendo el doc del usuario en Firestore.
+ * Si el token es válido y tiene permisos, devuelve los datos del usuario.
+ * Si falla, devuelve null.
+ */
+async function verifyAuthAndGetUser(authHeader) {
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
+  const idToken = authHeader.slice(7);
+  if (!idToken || idToken.length < 50) return null;
+
+  // Decodificar payload del JWT para obtener uid (base64url → JSON)
+  try {
+    const parts = idToken.split('.');
+    if (parts.length !== 3) return null;
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+    const uid = payload.sub || payload.user_id;
+    if (!uid) return null;
+
+    // Verificar que el token no ha expirado (con margen de 30s)
+    if (payload.exp && payload.exp * 1000 < Date.now() - 30000) return null;
+
+    // Leer datos del usuario desde Firestore usando el ID token como auth
+    // Esto valida el token contra Firebase (si es inválido, Firestore devuelve 401/403)
+    const userDocUrl = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents/users/${uid}`;
+    const firestoreRes = await fetch(userDocUrl, {
+      headers: { 'Authorization': 'Bearer ' + idToken },
+      signal: AbortSignal.timeout(5000),
+    });
+
+    if (!firestoreRes.ok) return null;
+
+    const doc = await firestoreRes.json();
+    const fields = doc.fields || {};
+
+    return {
+      uid,
+      coins_saldo: parseInt(fields.coins_saldo?.integerValue || '0', 10),
+      rutas_gratis_usadas: parseInt(fields.rutas_gratis_usadas?.integerValue || '0', 10),
+      name: fields.name?.stringValue || null,
+      isPremium: fields.isPremium?.booleanValue || false,
+    };
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * Rate limiting por UID usando KV.
+ * Devuelve true si se permite la petición, false si se ha excedido el límite.
+ */
+const RATE_LIMIT_MAX = 60; // mensajes por hora
+const RATE_LIMIT_TTL = 3600; // 1 hora en segundos
+
+async function checkRateLimit(uid, kvNamespace) {
+  if (!kvNamespace || !uid) return true; // sin KV, permitir
+  const hourBucket = Math.floor(Date.now() / (RATE_LIMIT_TTL * 1000));
+  const key = `rate:${uid}:${hourBucket}`;
+  try {
+    const current = parseInt(await kvNamespace.get(key) || '0', 10);
+    if (current >= RATE_LIMIT_MAX) return false;
+    await kvNamespace.put(key, String(current + 1), { expirationTtl: RATE_LIMIT_TTL });
+    return true;
+  } catch (e) {
+    return true; // si KV falla, permitir (fail-open)
+  }
+}
+
 // Caché a nivel de módulo — persiste mientras el worker esté caliente (minutos/horas)
 // Evita hasta la llamada KV en requests frecuentes → 0ms en vez de 20-60ms
 let _modulePromptCache = null;
@@ -1959,141 +2030,9 @@ function sanitizeInventedUrls(text) {
 
 // Inyecta enlace Google Maps si el usuario tiene GPS, la respuesta habla de ir a un sitio,
 // y no hay ya un enlace de Google Maps en la respuesta.
-function injectGoogleMapsLink(reply, userLocation, message, isLocalQuery) {
-  // Desactivada — Claude genera sus propios enlaces Maps con buscar_web/buscar_lugar
-  return reply;
-  // Si ya tiene un enlace de Google Maps, no duplicar
-  if (reply.includes('google.com/maps')) return reply;
-  // Solo para transporte local concreto — no para intención de viaje a un país/ciudad lejana
-  const goKeywords = /aeropuerto|airport|estación|estacion|station|terminal|cómo llegar|como llegar|llegar a[l ]|ir desde|dame enlace|google maps|navegar|cómo voy|como voy|taxi/i;
-  if (!goKeywords.test(message)) return reply;
-  // Extraer destino del mensaje y de la respuesta de GPT
-  let dest = null;
-
-  // 0. Del mensaje: "ir a Málaga desde X", "ir desde X a Y", "ir a Y en taxi"
-  //    Extraer destino: la palabra/s después de "a/hasta/hacia" cortando en "desde/en/por/con"
-  const destPatterns = [
-    /\ba\s+([\wáéíóúñ]+(?:\s+[\wáéíóúñ]+)?)\s+desde/i,                           // "a Málaga desde..."
-    /(?:ir|llegar|viajar)\s+(?:al?\s|hasta\s|hacia\s)([\wáéíóúñ\s]+?)(?:\s+(?:desde|en\s|por\s|con\s|para\s|,)|$)/i, // "ir a/al Málaga en taxi"
-    /desde\s+[\wáéíóúñ\s]+?\s+(?:al?\s|hasta\s|hacia\s)([\wáéíóúñ\s]+?)(?:\s+(?:para\s|el\s+\d|en\s|por\s|con\s|,)|$)/i, // "desde X a/al Y"
-    /taxi\s+(?:desde\s+[\wáéíóúñ\s]+?\s+)?(?:al?\s|hasta\s|hacia\s)([\wáéíóúñ\s]+?)(?:\s+(?:para\s|el\s+\d|de la|del|desde|en\s|por\s|con\s|,)|$)/i, // "taxi ... al centro de la ciudad"
-  ];
-  for (const pat of destPatterns) {
-    const m = message.match(pat);
-    if (m) {
-      const candidate = m[1].trim();
-      if (candidate.length >= 3 && !/^(un|una|el|la|los|las|mi|tu|su|este|donde|aqui|ahi|alli|taxi|coche|bus|tren|pie)$/i.test(candidate)) {
-        dest = candidate;
-        break;
-      }
-    }
-  }
-
-  // 1. Buscar aeropuerto/estación con nombre completo en la respuesta
-  if (!dest) {
-    const airportPatterns = [
-      /\*\*([^*]*(?:Airport|Aeropuerto|Aeroporto)[^*]*)\*\*/i,
-      /\*\*([^*]*(?:Station|Estación|Terminal|Gare)[^*]*)\*\*/i,
-    ];
-    for (const pat of airportPatterns) {
-      const m = reply.match(pat);
-      if (m) {
-        dest = m[1].replace(/\s*[-—].*/, '').replace(/\s*\+\d.*/, '').trim();
-        break;
-      }
-    }
-  }
-
-  // 2. Del mensaje: "ir al aeropuerto de Málaga", "a la torre eiffel"
-  if (!dest) {
-    const msgDest = message.match(/(?:a[l ]?\s*(?:la\s+)?)(aeropuerto\s+de\s+[\w\sáéíóúñ]{2,20}|estación\s+de\s+[\w\sáéíóúñ]{2,20}|torre eiffel|taj mahal|coliseo|big ben|sagrada familia|alhambra|machu picchu)/i);
-    if (msgDest) dest = msgDest[1].trim();
-  }
-
-  // 3. Fallback: primer lugar en negrita en la respuesta (ignorar precios, números, phones)
-  if (!dest) {
-    const boldMatches = reply.matchAll(/\*\*([^*]{3,50})\*\*/g);
-    for (const bm of boldMatches) {
-      const candidate = bm[1].replace(/\s*[-—].*/, '').replace(/\s*\+\d.*/, '').trim();
-      // Ignorar si es un precio, número, teléfono o texto genérico
-      if (/^\d|^[€$£¥]|€|USD|\d+\s*(min|km|h\b|hora|metro|€|\$)/.test(candidate)) continue;
-      if (candidate.length < 3) continue;
-      dest = candidate;
-      break;
-    }
-  }
-
-  if (!dest) return reply;
-
-  // Extraer origen del mensaje: "desde X" → usar X como origen en vez de GPS
-  let origin = `${userLocation.lat},${userLocation.lng}`;
-  let originCity = '';
-  const fromMatch = message.match(/desde\s+([\wáéíóúñÁÉÍÓÚÑ\s]{3,40}?)(?:\s+(?:al?\s|hasta\s|hacia\s|para\s|en\s+taxi|en\s+coche|por|con|,)|$)/i);
-  if (fromMatch) {
-    const fromPlace = fromMatch[1].trim();
-    if (fromPlace.length >= 3 && !/^(un|una|el|la|los|las|mi|tu|su|aqui|ahi|alli|taxi|coche|bus|tren)$/i.test(fromPlace)) {
-      origin = fromPlace.replace(/\s+/g, '+');
-      // Extraer ciudad del origen para enriquecer destinos genéricos
-      const cityMatch = fromPlace.match(/(?:de|in)\s+([\wáéíóúñ]+)/i);
-      if (cityMatch) originCity = cityMatch[1];
-    }
-  }
-
-  // Si el destino es genérico ("centro", "centro de la ciudad"), añadir la ciudad
-  if (/^centro\b/i.test(dest) && originCity) {
-    dest = dest + ', ' + originCity;
-  }
-  dest = dest.replace(/\s+/g, '+');
-
-  const mapsUrl = `https://www.google.com/maps/dir/${origin}/${dest}`;
-  return reply + `\n\n📍 ${mapsUrl}`;
-}
-
-// Inyecta bloque de transporte (app + descarga) cuando el usuario quiere ir a un sitio
-// Usa datos reales del KV de transporte + URLs reales de TRANSPORT_APP_URLS
-function injectTransportBlock(reply, kvTransportData, message, isLocalQuery) {
-  // Desactivada — Claude busca transporte real con buscar_web
-  return reply;
-  // Solo para transporte local concreto — NO para intención de viaje a un país/ciudad lejana
-  const goKeywords = /llévame|taxi|aeropuerto|airport|estación|estacion|station|terminal/i;
-  if (!goKeywords.test(message)) return reply;
-  // Si ya tiene enlace o mención del bloque de app de transporte, no duplicar
-  if (/grab\.com|m\.uber\.com|bolt\.eu|indrive\.com/i.test(reply)) return reply;
-  if (/Abre \*\*Grab\*\*|Abre \*\*Uber\*\*|Abre \*\*Bolt\*\*|🟩 Abre|🚕 Transporte local/i.test(reply)) return reply;
-
-  let appBlock = '';
-  if (kvTransportData && kvTransportData.ridehailing) {
-    const best = kvTransportData.ridehailing.best;
-    const appData = best ? TRANSPORT_APP_URLS[best.toLowerCase()] : null;
-    if (appData) {
-      // Caso normal: app conocida con URL de descarga
-      appBlock += `\n\n${appData.icon} Abre **${appData.name}** y pide un coche hasta tu destino.`;
-      // Alternativas
-      const others = (kvTransportData.ridehailing.others || []).filter(o => o !== best);
-      if (others.length > 0) {
-        const otherNames = others.map(o => {
-          const od = TRANSPORT_APP_URLS[o.toLowerCase()];
-          return od ? od.name : o;
-        }).join(', ');
-        appBlock += `\nTambién funciona: ${otherNames}`;
-      }
-      if (kvTransportData.ridehailing.tips) {
-        appBlock += `\n${kvTransportData.ridehailing.tips}`;
-      }
-    } else if (kvTransportData.ridehailing.tips) {
-      // Caso especial: no hay app en stores internacionales pero hay tips (ej: Irán → Snapp)
-      appBlock += `\n\n🚕 **Transporte local**: ${kvTransportData.ridehailing.tips}`;
-    }
-  }
-
-  if (!appBlock) return reply;
-  // Insertar antes del enlace de Google Maps si existe, o al final
-  const mapsIdx = reply.indexOf('📍');
-  if (mapsIdx !== -1) {
-    return reply.slice(0, mapsIdx).trimEnd() + appBlock + '\n\n' + reply.slice(mapsIdx);
-  }
-  return reply + appBlock;
-}
+// Desactivadas — Claude genera sus propios enlaces Maps y transporte con buscar_web (P2-12)
+function injectGoogleMapsLink(reply) { return reply; }
+function injectTransportBlock(reply) { return reply; }
 
 // ═══════════════════════════════════════════════════════════════
 // BLOQUES PARALELOS — Rutas largas (>7 días)
@@ -4938,15 +4877,38 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
     }
 
+    const corsChat = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+
+    // ─── AUTH — Verificar Firebase ID token ───
+    const authHeader = request.headers.get('Authorization') || '';
+    const authUser = await verifyAuthAndGetUser(authHeader);
+    if (!authUser) {
+      return new Response(JSON.stringify({
+        reply: 'Inicia sesión para hablar conmigo. ¡Es gratis!',
+        route: null,
+        error: 'auth_required'
+      }), { status: 401, headers: corsChat });
+    }
+
+    // ─── RATE LIMITING — 60 msgs/hora por usuario ───
+    const withinLimit = await checkRateLimit(authUser.uid, env.SALMA_KB);
+    if (!withinLimit) {
+      return new Response(JSON.stringify({
+        reply: 'Has enviado demasiados mensajes esta hora. Espera un poco y vuelve a intentarlo.',
+        route: null,
+        error: 'rate_limited'
+      }), { status: 429, headers: corsChat });
+    }
+
     let body;
     try { body = await request.json(); } catch (e) {
-      return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+      return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: corsChat });
     }
 
     const message = body.message || body.msg || '';
     const history = body.history || [];
     const currentRoute = body.current_route || null;
-    const userName = body.user_name || null;
+    const userName = authUser.name || body.user_name || null;
 
     // ─── RESPUESTAS PRE-COCINADAS — saludos simples sin contenido (~50ms, 0 tokens) ───
     // Solo intercepta cuando el mensaje es un saludo puro, sin destino ni pregunta añadida
@@ -4954,7 +4916,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       const msgNorm = message.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       const isPureGreeting = /^(hola[.!¡?]*|hey[.!]?|buenas[.!]?|buenos dias[.!]?|buenas (tardes|noches)[.!]?|ey[.!]?|hi[.!]?|hello[.!]?|qu[e']? (tal|pasa|hay)|como estas?[?]?|todo bien[?]?|saludos[.!]?)$/.test(msgNorm);
       if (isPureGreeting) {
-        const nombre = body.user_name ? `, ${body.user_name.split(' ')[0]}` : '';
+        const nombre = userName ? `, ${userName.split(' ')[0]}` : '';
         const respuestas = [
           `¡Hola${nombre}! ¿A dónde tiramos hoy?`,
           `¡Buenas${nombre}! Cuéntame, ¿qué destino te tiene loco?`,
@@ -4979,11 +4941,12 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     const travelDates = body.travel_dates || null;
     const transport = body.transport || null;
     const withKids = body.with_kids || false;
-    const coinsSaldo = typeof body.coins_saldo === 'number' ? body.coins_saldo : 0;
-    const rutasGratisUsadas = typeof body.rutas_gratis_usadas === 'number' ? body.rutas_gratis_usadas : 0;
+    // Coins y rutas gratis se leen server-side desde Firestore (P0-2 — no confiar en el frontend)
+    const coinsSaldo = authUser.coins_saldo;
+    const rutasGratisUsadas = authUser.rutas_gratis_usadas;
     const imageBase64 = body.image_base64 || null;
     const mapMode = body.map_mode || false;
-    const uid = body.uid || null;
+    const uid = authUser.uid; // UID verificado server-side (no confiar en body.uid)
     const userNotes = body.user_notes || null;
     const frontendCountryCode = body.country || null; // País enviado por el frontend (detectado por GPS)
 

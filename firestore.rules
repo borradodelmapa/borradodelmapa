@@ -12,10 +12,18 @@ service cloud.firestore {
       }
     }
 
-    // Guías públicas — lectura abierta, escritura autenticada
+    // Guías públicas — lectura abierta, escritura solo del dueño (P0-5)
     match /public_guides/{slug} {
       allow read: if true;
-      allow write: if request.auth != null;
+      // Crear: cualquier usuario autenticado (debe incluir su uid)
+      allow create: if request.auth != null
+                    && request.resource.data.uid == request.auth.uid;
+      // Actualizar/borrar: solo el dueño
+      // Legacy: guías sin campo uid permiten update/delete por cualquier auth
+      // (migrar docs legacy para añadir uid y eliminar este fallback)
+      allow update, delete: if request.auth != null
+                            && (resource.data.uid == request.auth.uid
+                                || !('uid' in resource.data));
     }
 
     // Config (DEPRECATED en favor de Cloudflare KV)

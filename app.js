@@ -948,7 +948,10 @@ async function renderBitacora() {
           try { route = JSON.parse(d.itinerarioIA || '{}'); } catch (_) {}
           currentState = 'diario';
           updateBottomBar();
-          if (typeof bitacoraRenderer !== 'undefined') {
+          // Abrir en vista itinerario si está disponible, sino fallback a bitacora (P2-11)
+          if (typeof window.openItinerarioView === 'function' && route && route.stops && route.stops.length) {
+            window.openItinerarioView(route, doc.id, { saved: true });
+          } else if (typeof bitacoraRenderer !== 'undefined') {
             bitacoraRenderer.renderDiario(route, doc.id, d.notes || {}, d.photos || [], d);
           }
         }
@@ -2112,6 +2115,7 @@ async function publishGuide(docId, rutaData, slug, routeData) {
   try {
     await db.collection('public_guides').doc(slug).set({
       slug: slug,
+      uid: currentUser.uid, // Ownership: solo el dueño puede editar/borrar (P0-5)
       ownerDocId: docId,
       nombre: rutaData.nombre,
       destino: rutaData.destino,
@@ -2641,34 +2645,21 @@ function initStripeCard(overlay) {
       }
 
       if (paymentIntent.status === 'succeeded') {
-        // 3. Actualizar saldo en Firestore + local
-        const newSaldo = (currentUser.coins_saldo || 0) + coinsToAdd;
-        try {
-          await db.collection('users').doc(currentUser.uid).update({
-            coins_saldo: newSaldo,
-            isPremium: true,
-          });
-        } catch (e) {
-          console.error('Error actualizando coins en Firestore:', e);
-        }
-        currentUser.coins_saldo = newSaldo;
-        currentUser.isPremium = true;
-        updateHeader();
+        // TODO: P0-1 — Los coins se sumarán via Stripe webhook (server-side).
+        // La actualización client-side se ha eliminado por seguridad.
+        // Cuando el webhook esté implementado, el server actualizará Firestore
+        // y el frontend detectará el cambio automáticamente.
 
-        // Mostrar éxito con los coins correctos
+        // Mostrar confirmación de pago (sin sumar coins localmente)
         const coinsSpan = document.getElementById('stripe-success-coins');
         if (coinsSpan) coinsSpan.textContent = coinsToAdd;
         loadingEl.style.display = 'none';
         successEl.style.display = 'flex';
 
-        // Actualizar el saldo en el modal
-        const valEl = overlay.querySelector('.coins-modal-saldo-val');
-        if (valEl) valEl.textContent = newSaldo + ' coins';
-
         // Cerrar modal tras 2s
         setTimeout(() => {
           overlay.remove();
-          showToast('¡' + coinsToAdd + ' Salma Coins añadidos!');
+          showToast('Pago confirmado — coins pendientes de activar');
         }, 2000);
       }
     } catch (e) {

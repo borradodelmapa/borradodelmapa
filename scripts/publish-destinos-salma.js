@@ -19,10 +19,18 @@ const ROOT = path.join(__dirname, '..');
 const KV_DIR = path.join(ROOT, 'worker', 'kv', 'output-nivel2');
 const COUNTRIES_FILE = path.join(ROOT, 'worker', 'kv', 'countries.json');
 
-const FIREBASE_API_KEY = 'AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA';
+// Credenciales via env vars (nunca hardcodear en el código — P0-3)
+// Uso: SALMA_EMAIL=x SALMA_PASS=y node scripts/publish-destinos-salma.js
+const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY || 'AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA';
 const PROJECT_ID = 'borradodelmapa-85257';
-const SALMA_EMAIL = 'salmaborradodelmapa@gmail.com';
-const SALMA_PASS = 'Zonakanjea159876';
+const SALMA_EMAIL = process.env.SALMA_EMAIL;
+const SALMA_PASS = process.env.SALMA_PASS;
+
+if (!SALMA_EMAIL || !SALMA_PASS) {
+  console.error('ERROR: Define SALMA_EMAIL y SALMA_PASS como variables de entorno.');
+  console.error('  SALMA_EMAIL=email SALMA_PASS=pass node scripts/publish-destinos-salma.js');
+  process.exit(1);
+}
 
 // ── Helpers ──────────────────────────────────────────────
 

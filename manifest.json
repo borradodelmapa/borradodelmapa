@@ -22,6 +22,21 @@
       "purpose": "any maskable"
     }
   ],
+  "shortcuts": [
+    {
+      "name": "Hablar con Salma",
+      "short_name": "Chat",
+      "description": "Abre el chat con Salma",
+      "url": "/?action=chat",
+      "icons": [{ "src": "/salma_ai_avatar.webp", "sizes": "96x96" }]
+    },
+    {
+      "name": "Mis Viajes",
+      "short_name": "Viajes",
+      "description": "Ver tus guías guardadas",
+      "url": "/?action=viajes"
+    }
+  ],
   "categories": ["travel", "navigation"],
   "lang": "es",
   "dir": "ltr"

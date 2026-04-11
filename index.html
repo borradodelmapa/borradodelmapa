@@ -77,9 +77,20 @@ window._loadGoogleMaps = function() {
 </script>
 <link rel="stylesheet" href="styles.css?v=44">
 <link rel="stylesheet" href="docs-viajero.css?v=2">
-<!-- Google Analytics 4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-B2YWQKPTZZ"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-B2YWQKPTZZ');</script>
+<!-- Google Analytics 4 — se carga solo tras consentimiento de cookies (P1-6) -->
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+function loadGA4(){
+  if(document.getElementById('ga4-script'))return;
+  var s=document.createElement('script');
+  s.id='ga4-script';s.async=true;
+  s.src='https://www.googletagmanager.com/gtag/js?id=G-B2YWQKPTZZ';
+  document.head.appendChild(s);
+  gtag('js',new Date());gtag('config','G-B2YWQKPTZZ');
+}
+if(localStorage.getItem('cookie_consent')==='all') loadGA4();
+</script>
 </head>
 <body>
 
@@ -425,6 +436,7 @@ document.getElementById('salma-info-overlay')?.addEventListener('click', (e) => 
   document.getElementById('cookie-accept')?.addEventListener('click', function() {
     localStorage.setItem('cookie_consent', 'all');
     document.getElementById('cookie-banner').style.display = 'none';
+    if (typeof loadGA4 === 'function') loadGA4(); // Cargar GA4 tras consentimiento
   });
   document.getElementById('cookie-reject')?.addEventListener('click', function() {
     localStorage.setItem('cookie_consent', 'essential');

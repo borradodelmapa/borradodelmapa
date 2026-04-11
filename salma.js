@@ -667,10 +667,8 @@ const salma = {
       if (this.currentRoute) body.current_route = this.currentRoute;
       if (window.currentUser?.country) body.nationality = window.currentUser.country;
       if (window.currentUser?.name) body.user_name = window.currentUser.name;
-      if (window.currentUser) {
-        body.coins_saldo = window.currentUser.coins_saldo || 0;
-        body.rutas_gratis_usadas = window.currentUser.rutas_gratis_usadas || 0;
-      }
+      // coins_saldo y rutas_gratis_usadas se leen server-side desde Firestore
+      // (ya no se envían desde el frontend por seguridad — P0-2)
       if (this._userLocation) body.user_location = this._userLocation;
       // Inyectar notas del usuario (sistema unificado)
       if (window.currentUser && typeof notasManager !== 'undefined') {
@@ -793,12 +791,22 @@ const salma = {
   },
 
   // ═══ SSE STREAMING ═══
-  _stream(bodyObj, loadingEl) {
+  async _stream(bodyObj, loadingEl) {
+    // Obtener Firebase ID token para auth server-side
+    let idToken = null;
+    try {
+      const user = firebase.auth().currentUser;
+      if (user) idToken = await user.getIdToken();
+    } catch (e) { console.warn('[Salma] No se pudo obtener idToken:', e); }
+
     return new Promise((resolve, reject) => {
       const signal = this._currentAbort ? this._currentAbort.signal : undefined;
+      const headers = { 'Content-Type': 'application/json' };
+      if (idToken) headers['Authorization'] = 'Bearer ' + idToken;
+
       fetch(window.SALMA_API, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify(bodyObj),
         signal,
       }).then(res => {

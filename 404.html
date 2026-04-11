@@ -17,9 +17,20 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <link rel="stylesheet" href="/styles.css">
 <link rel="stylesheet" href="/destinos.css">
-<!-- Google Analytics 4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-B2YWQKPTZZ"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-B2YWQKPTZZ');</script>
+<!-- Google Analytics 4 — solo tras consentimiento de cookies (P1-6) -->
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+function loadGA4(){
+  if(document.getElementById('ga4-script'))return;
+  var s=document.createElement('script');
+  s.id='ga4-script';s.async=true;
+  s.src='https://www.googletagmanager.com/gtag/js?id=G-B2YWQKPTZZ';
+  document.head.appendChild(s);
+  gtag('js',new Date());gtag('config','G-B2YWQKPTZZ');
+}
+if(localStorage.getItem('cookie_consent')==='all') loadGA4();
+</script>
 <style>
   .public-page { min-height:100vh; background:var(--negro); }
   .public-header { padding:16px 20px; display:flex; justify-content:center; align-items:center; border-bottom:1px solid var(--linea); }
