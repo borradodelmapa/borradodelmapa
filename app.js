@@ -3654,14 +3654,26 @@ async function generateDiarioStory() {
   if (!_diario.photo) return;
 
   // Mapa estático de fondo (via worker proxy para evitar CORS)
-  const mapUrl = window.SALMA_API + '/staticmap?lat=' + _diario.lat + '&lng=' + _diario.lng + '&zoom=14&size=640x640&maptype=terrain&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
+  // Pedimos 640x640 y hacemos crop centrado a proporción 9:16 en el canvas
+  const mapUrl = window.SALMA_API + '/staticmap?lat=' + _diario.lat + '&lng=' + _diario.lng + '&zoom=13&size=640x640&maptype=terrain&scale=2&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
   try {
     const mapImg = await new Promise((resolve, reject) => {
       const i = new Image(); i.crossOrigin='anonymous';
       i.onload = () => resolve(i); i.onerror = reject; i.src = mapUrl;
     });
+    // Crop centrado: de la imagen cuadrada, tomar el ancho completo y recortar alto proporcionalmente
     const tmp = document.createElement('canvas'); tmp.width=1080; tmp.height=1920;
-    tmp.getContext('2d').drawImage(mapImg,0,0,1080,1920);
+    const tCtx = tmp.getContext('2d');
+    const iw = mapImg.naturalWidth, ih = mapImg.naturalHeight;
+    const targetRatio = 1080/1920; // 0.5625
+    const srcW = iw, srcH = Math.round(iw / targetRatio); // más alto que la imagen → usar ancho completo, escalar
+    // La imagen es cuadrada: para llenar 9:16, escalamos el ancho al 100% y dejamos que se repita/estire solo en alto
+    const drawH = Math.round(1080 * (ih / iw)); // alto proporcional
+    const yOffset = Math.round((1920 - drawH) / 2); // centrar verticalmente
+    tCtx.drawImage(mapImg, 0, 0, iw, ih, 0, yOffset, 1080, drawH);
+    // Rellenar arriba y abajo con el color de borde del mapa
+    tCtx.fillStyle = '#e8e4da'; // color terrain de Google
+    if (yOffset > 0) { tCtx.fillRect(0, 0, 1080, yOffset); tCtx.fillRect(0, yOffset + drawH, 1080, 1920 - yOffset - drawH); }
     const scaled = new Image();
     await new Promise(r => { scaled.onload=r; scaled.src=tmp.toDataURL(); });
     _diario.mapImg = scaled;
