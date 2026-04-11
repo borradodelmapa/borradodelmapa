@@ -2928,7 +2928,8 @@ function _renderLiveCompass(mapEl) {
     window.removeEventListener('deviceorientation', _liveCompassHandler, true);
     _liveCompassHandler = null;
   }
-  if (localStorage.getItem('compass_hidden') === '1') return;
+  // Brújula siempre visible al abrir mapa (se resetea cada apertura)
+  localStorage.removeItem('compass_hidden');
 
   const compass = document.createElement('div');
   compass.className = 'map-compass';
@@ -3431,22 +3432,54 @@ function _initDpickSearch() {
   _dpickAutocomplete = new google.maps.places.Autocomplete(input, {
     fields: ['geometry', 'name', 'formatted_address', 'place_id'],
   });
-  // Vincular al mapa para predicciones en la zona visible
   if (_liveMap) _dpickAutocomplete.bindTo('bounds', _liveMap);
 
   _dpickAutocomplete.addListener('place_changed', () => {
     const place = _dpickAutocomplete.getPlace();
-    if (!place.geometry || !place.geometry.location) return;
-    const pos = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
-    if (_liveMap) { _liveMap.panTo(pos); _liveMap.setZoom(16); }
-    if (_dpickSearchMarker) _dpickSearchMarker.setMap(null);
-    _dpickSearchMarker = new google.maps.Marker({
-      map: _liveMap, position: pos, title: place.name || place.formatted_address,
-      icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#f0b429', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 2, scale: 12 },
-      animation: google.maps.Animation.DROP, zIndex: 1000,
-    });
-    input.value = '';
-    closeDiarioPicker();
+    if (place.geometry && place.geometry.location) {
+      _goToPlace(place.geometry.location.lat(), place.geometry.location.lng(), place.name || place.formatted_address);
+    } else if (place.name) {
+      // El usuario escribió y pulsó Enter sin seleccionar — geocoding manual
+      _geocodeAndGo(place.name);
+    }
+  });
+
+  // Enter sin seleccionar sugerencia — geocoding directo
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const q = input.value.trim();
+      if (q) setTimeout(() => {
+        // Si place_changed no se disparó (sin selección), hacer geocoding
+        if (input.value.trim() === q) _geocodeAndGo(q);
+      }, 300);
+    }
+  });
+}
+
+function _goToPlace(lat, lng, title) {
+  if (!_liveMap) return;
+  const pos = { lat, lng };
+  _liveMap.panTo(pos);
+  _liveMap.setZoom(16);
+  if (_dpickSearchMarker) _dpickSearchMarker.setMap(null);
+  _dpickSearchMarker = new google.maps.Marker({
+    map: _liveMap, position: pos, title: title || '',
+    icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#f0b429', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 2, scale: 12 },
+    animation: google.maps.Animation.DROP, zIndex: 1000,
+  });
+  const input = document.getElementById('dpick-search-input');
+  if (input) input.value = '';
+  closeDiarioPicker();
+}
+
+function _geocodeAndGo(query) {
+  if (!window.google || !google.maps.Geocoder) return;
+  new google.maps.Geocoder().geocode({ address: query }, (results, status) => {
+    if (status === 'OK' && results[0]) {
+      const loc = results[0].geometry.location;
+      _goToPlace(loc.lat(), loc.lng(), results[0].formatted_address);
+    }
   });
 }
 function diarioPickCamera() {
