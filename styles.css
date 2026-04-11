@@ -2264,8 +2264,7 @@ body {
 .map-search-input {
   flex:1; background:none; border:none; outline:none;
   color:rgba(244,239,230,.9); font-family:var(--font-body);
-  font-size:14px; resize:none; line-height:1.4;
-  min-height:20px; max-height:20px; overflow:hidden;
+  font-size:14px; line-height:1.4; height:32px;
 }
 .map-search-input::placeholder { color:rgba(244,239,230,.4); }
 .map-search-icon { width:16px; height:16px; flex-shrink:0; color:rgba(244,239,230,.5); }
@@ -3181,8 +3180,8 @@ body {
 .live-map-ctrl.live-map-ctrl-hidden { opacity:0; pointer-events:none; }
 /* Buscador live-map */
 #live-map-search-bar {
-  top:calc(env(safe-area-inset-top, 0px) + 56px);
-  left:50px; right:50px;
+  top:calc(env(safe-area-inset-top, 0px) + 52px);
+  left:14px; right:14px;
 }
 #live-map-container {
   width: 100%;

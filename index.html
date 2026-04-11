@@ -126,7 +126,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 <div id="live-map-view" style="display:none">
   <div id="live-map-container"></div>
   <button id="live-map-back" onclick="closeLiveMap()">✕</button>
-  <button id="live-map-routes-btn" class="live-map-ctrl live-map-ctrl-hidden" onclick="openRouteSelector()" title="Mis Rutas">📍 Mis Rutas</button>
+  <button id="live-map-routes-btn" onclick="openRouteSelector()" title="Mis Rutas">📍 Mis Rutas</button>
   <button id="live-map-clear-route" onclick="clearRouteFromLiveMap()" style="display:none" title="Quitar ruta">✕ Ruta</button>
   <div id="live-map-nearest-chip" style="display:none"></div>
   <div id="live-map-routes-sheet" style="display:none">
