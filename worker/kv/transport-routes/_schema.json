@@ -1,0 +1,148 @@
+{
+  "_comment": "Schema de referencia para transport-routes KV. Cada país sigue esta estructura.",
+  "_version": "2.0",
+  "_updated": "2026-04-11",
+  "_key_pattern": "transport:{cc_lowercase}",
+
+  "country": "ISO 2-letter code (uppercase)",
+  "country_name": "Nombre del país en español",
+  "updated": "YYYY-MM-DD",
+  "currency": {
+    "code": "THB",
+    "symbol": "฿",
+    "rate_eur": 0.026,
+    "_comment": "1 unidad local = X EUR (aprox)"
+  },
+
+  "ridehailing": {
+    "best": "app_key del catálogo apps (transport-apps.json)",
+    "others": ["app_key", "..."],
+    "tips": "Consejo general del país",
+    "payment": "Tarjeta/efectivo/ambos",
+    "tipping": "¿Se da propina? ¿Cuánto?"
+  },
+
+  "train": {
+    "operator": "Operador nacional principal",
+    "apps": ["app_key del catálogo"],
+    "booking_local": "URL oficial del operador",
+    "booking_foreign": "URL mejor para extranjeros (ej: baolau.com, 12go.asia)",
+    "tips": "Consejo general sobre trenes",
+    "passes": "Pases turísticos si existen (ej: JR Pass, Swiss Pass, Interrail)"
+  },
+
+  "metro_bus": {
+    "apps": ["app_key del catálogo"],
+    "cities": {
+      "Ciudad": {
+        "systems": ["Metro (N líneas)", "Tranvía", "BRT"],
+        "card": { "name": "Nombre tarjeta", "price": "precio", "where": "Dónde comprar" },
+        "hours": "Horario general",
+        "local_app": "App local específica"
+      }
+    },
+    "tips": "Consejo general"
+  },
+
+  "ferry": {
+    "apps": ["app_key del catálogo"],
+    "operators": ["Nombre operador principal"],
+    "booking_url": "URL principal de reserva",
+    "seasonal": "Info de temporadas si aplica",
+    "tips": "Consejo general"
+  },
+
+  "intercity_bus": {
+    "operators": ["Operador principal"],
+    "booking_url": "URL reserva",
+    "tips": "Consejo general"
+  },
+
+  "special": {
+    "modes": ["tuk-tuk", "songthaew", "..."],
+    "tips": "Consejo sobre transporte especial",
+    "scams": "Estafas comunes de transporte"
+  },
+
+  "driving": {
+    "side": "right|left",
+    "license": "¿Necesita licencia internacional?",
+    "scooter": "Info alquiler moto/scooter si popular",
+    "road_quality": "Estado general de carreteras"
+  },
+
+  "maps_app": "App de mapas que mejor funciona",
+
+  "airports": {
+    "IATA": {
+      "name": "Nombre completo del aeropuerto",
+      "city": "Ciudad que sirve",
+      "distance_km": 30,
+      "transfers": [
+        {
+          "mode": "metro|bus|taxi|grab|train|shuttle",
+          "name": "Nombre del servicio (ej: Airport Rail Link)",
+          "duration": "30 min",
+          "price_local": "45 THB",
+          "price_eur": "~1.20€",
+          "frequency": "Cada 15 min",
+          "hours": "05:30-24:00",
+          "tip": "Consejo específico"
+        }
+      ]
+    }
+  },
+
+  "stations": {
+    "Ciudad": {
+      "train": "Nombre estación tren principal",
+      "bus": "Nombre terminal bus principal",
+      "bus_alt": "Terminal bus secundario si existe"
+    }
+  },
+
+  "routes": [
+    {
+      "from": "Ciudad origen",
+      "to": "Ciudad destino",
+      "distance_km": 700,
+      "popular": true,
+      "options": [
+        {
+          "type": "train|flight|bus|ferry|ferry+bus|minivan|motorbike",
+          "emoji": "🚂|✈️|🚌|🚢|🚢|🚐|🏍️",
+          "label": "Nombre corto para mostrar (ej: 'Tren nocturno (Experiencia)')",
+          "recommended": true,
+          "operator": "Nombre del operador",
+          "operators_alt": ["Otros operadores"],
+          "duration": "12-14h",
+          "price_local": "800-1,200 THB",
+          "price_eur": "~22-33€",
+          "frequency": "6 trenes/día",
+          "booking_url": "URL directa de reserva",
+          "booking_alt": "URL alternativa",
+          "departure_station": "Estación/terminal de salida",
+          "arrival_station": "Estación/terminal de llegada",
+          "class_tip": "Mejor clase/opción (ej: 'Sleeper 2ª clase mejor relación')",
+          "advance_booking": "Reservar con 3-5 días de antelación",
+          "tip": "Consejo específico de esta opción"
+        }
+      ]
+    }
+  ],
+
+  "booking_platforms": [
+    {
+      "name": "12go.asia",
+      "url": "https://12go.asia",
+      "type": "agregador",
+      "best_for": "Todo tipo de transporte. Inglés. Ideal para extranjeros.",
+      "commission": "$3-5 por billete"
+    }
+  ],
+
+  "tips_general": [
+    "Consejo general 1 sobre transporte en el país",
+    "Consejo general 2..."
+  ]
+}

@@ -1,0 +1,756 @@
+{
+  "country": "NP",
+  "country_name": "Nepal",
+  "updated": "2026-04-11",
+  "currency": {
+    "code": "NPR",
+    "symbol": "₨",
+    "rate_eur": 0.007,
+    "_comment": "1 NPR ≈ 0.007 EUR (1 EUR ≈ 143 NPR)"
+  },
+
+  "ridehailing": {
+    "best": "indrive",
+    "others": [],
+    "tips": "Pathao es la app principal en Katmandú (moto+coche). InDrive alternativa con precio negociable. Yango lanzado en 2025. Fuera de Katmandú y Pokhara no hay apps — solo negociar taxi o jeep directamente.",
+    "payment": "Efectivo principalmente. Tarjeta aceptada en algunas apps.",
+    "tipping": "No esperado. Redondear la cifra es suficiente."
+  },
+
+  "train": {
+    "operator": null,
+    "apps": [],
+    "booking_local": null,
+    "booking_foreign": null,
+    "tips": "No hay red ferroviaria significativa en Nepal. Todo el transporte terrestre es por carretera.",
+    "passes": null
+  },
+
+  "metro_bus": {
+    "apps": [],
+    "cities": {
+      "Katmandú": {
+        "systems": ["Microbus", "Tempo (taxis eléctricos colectivos)"],
+        "card": null,
+        "hours": "06:00-20:00 aprox",
+        "local_app": "Pathao (moto-taxi y coche)"
+      },
+      "Pokhara": {
+        "systems": ["Taxi", "Moto-taxi"],
+        "card": null,
+        "hours": null,
+        "local_app": null
+      }
+    },
+    "tips": "No hay metro ni sistema formal de transporte público en Nepal. Katmandú tiene microbus y tempo (taxis eléctricos colectivos compartidos) pero es caótico y sin información para turistas. No existe tarjeta de transporte."
+  },
+
+  "ferry": {
+    "apps": [],
+    "operators": null,
+    "booking_url": null,
+    "seasonal": null,
+    "tips": "Nepal no tiene costa. No hay servicios de ferry."
+  },
+
+  "intercity_bus": {
+    "operators": ["Sofa Bus Nepal", "Swift Holidays", "VIP Sofa Bus Nepal"],
+    "booking_url": "https://bussewa.com.np",
+    "tips": "Tourist bus SIEMPRE para extranjeros — más seguro y cómodo que local bus. Carreteras peligrosas, evitar viajes nocturnos. Greenline Tours lleva SUSPENDIDO desde marzo 2020, NO ha reabierto."
+  },
+
+  "special": {
+    "modes": ["rickshaw", "mountain flight", "helicóptero", "porteadores/sherpas", "jeep compartido"],
+    "tips": "Rickshaw en Katmandú para trayectos cortos: 100-200 NPR. Mountain flight para ver el Everest: ~200 USD (25-30 min). Porteadores y sherpas para trekking: contratar siempre con agencia certificada (NTB). Jeep compartido para zonas de montaña sin bus turístico.",
+    "scams": "Taxis sin taxímetro: SIEMPRE negociar el precio antes de subir. Falsas agencias de trekking en Thamel — verificar licencia NTB. Porteadores no certificados que abandonan en ruta."
+  },
+
+  "driving": {
+    "side": "left",
+    "license": "No se puede conducir solo en Nepal — siempre con conductor contratado. No se alquilan coches sin conductor.",
+    "scooter": "Alquiler de scooter/moto posible en Katmandú y Pokhara pero tráfico extremadamente caótico y peligroso. No recomendado para turistas.",
+    "road_quality": "Carreteras peligrosas, especialmente en zonas de montaña y durante el monzón (jun-sep). Prithvi Highway (KTM-Pokhara) en obras 2025-2026 con retrasos significativos."
+  },
+
+  "maps_app": "Google Maps funciona pero datos limitados en zonas rurales. Maps.me mejor offline para trekking.",
+
+  "airports": {
+    "KTM": {
+      "name": "Tribhuvan International Airport",
+      "city": "Katmandú",
+      "distance_km": 5.5,
+      "transfers": [
+        {
+          "mode": "taxi",
+          "name": "Pre-paid taxi counter (dentro del aeropuerto)",
+          "duration": "15-30 min",
+          "price_local": "700 NPR (hasta 4 pax)",
+          "price_eur": "~5€",
+          "frequency": "Siempre disponible",
+          "hours": "24h",
+          "tip": "Counter oficial dentro de la terminal. Precio fijo hasta Thamel. Opción más segura al llegar."
+        },
+        {
+          "mode": "taxi",
+          "name": "Taxi negociado (parking exterior)",
+          "duration": "15-30 min",
+          "price_local": "500-600 NPR",
+          "price_eur": "~3.50-4€",
+          "frequency": "Siempre disponible",
+          "hours": "24h",
+          "tip": "Más barato que prepaid pero hay que negociar. Salir del edificio y buscar taxis en el parking."
+        },
+        {
+          "mode": "grab",
+          "name": "Pathao / InDrive",
+          "duration": "15-30 min",
+          "price_local": "450-550 NPR coche / 150-200 NPR moto",
+          "price_eur": "~3-4€ coche / ~1-1.40€ moto",
+          "frequency": "Bajo demanda",
+          "hours": "24h",
+          "tip": "Requiere SIM nepalí para registrarse. Comprar SIM en el aeropuerto (~500 NPR) antes de pedir. Opción más barata si ya tienes SIM."
+        },
+        {
+          "mode": "bus",
+          "name": "Sajha Yatayat Ruta 5",
+          "duration": "45-60 min",
+          "price_local": "20 NPR",
+          "price_eur": "~0.15€",
+          "frequency": "Cada 20-30 min",
+          "hours": "06:00-19:00",
+          "tip": "Impracticable con equipaje. Solo viable para mochila pequeña y viajeros experimentados."
+        }
+      ]
+    },
+    "PKR": {
+      "name": "Pokhara International Airport",
+      "city": "Pokhara",
+      "distance_km": 4,
+      "transfers": [
+        {
+          "mode": "taxi",
+          "name": "Taxi prepaid",
+          "duration": "15-25 min",
+          "price_local": "800-1,200 NPR",
+          "price_eur": "~6-8€",
+          "frequency": "Siempre disponible",
+          "hours": "Según vuelos",
+          "tip": "Nuevo aeropuerto (inaugurado 2023) más lejos de Lakeside que el antiguo. Negociar o usar counter prepaid."
+        }
+      ]
+    }
+  },
+
+  "stations": {
+    "Katmandú": {
+      "train": null,
+      "bus": "Gongabu Bus Park (buses locales e interurbanos)",
+      "bus_alt": "Sorhakhutte Tourist Bus Stop (buses turísticos, también llamado Kantipath)"
+    },
+    "Pokhara": {
+      "train": null,
+      "bus": "Prithvi Bus Park"
+    }
+  },
+
+  "routes": [
+    {
+      "from": "Katmandú",
+      "to": "Pokhara",
+      "distance_km": 200,
+      "popular": true,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "VIP Sofa Bus (Recomendado)",
+          "recommended": true,
+          "operator": "Swift Holidays",
+          "operators_alt": ["VIP Sofa Bus Nepal"],
+          "duration": "6-8h (hasta 10-12h con obras 2026)",
+          "price_local": "1,600-1,700 NPR / USD 16-25",
+          "price_eur": "~12-19€",
+          "frequency": "Diario 7:00 AM",
+          "booking_url": "https://swiftholidays.com.np",
+          "booking_alt": "https://bussewa.com.np",
+          "departure_station": "Sorhakhutte Tourist Bus Stop",
+          "arrival_station": "Prithvi Bus Park (Pokhara)",
+          "class_tip": "Asientos 2x1 con AC, entretenimiento. Algunos incluyen desayuno y almuerzo.",
+          "advance_booking": "Reservar 1-2 días antes en temporada alta",
+          "tip": "La mejor opción calidad-precio. Greenline Tours lleva SUSPENDIDO desde 2020. Prithvi Highway en obras 2025-2026, posibles retrasos significativos."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Tourist Deluxe Bus",
+          "recommended": false,
+          "operator": "Sofa Bus Nepal",
+          "duration": "6-8h",
+          "price_local": "1,200 NPR / USD 12",
+          "price_eur": "~9€",
+          "frequency": "Diario 7:00 AM",
+          "booking_url": "https://sofabusnepal.com",
+          "booking_alt": "https://bussewa.com.np",
+          "departure_station": "Sorhakhutte Tourist Bus Stop",
+          "arrival_station": "Prithvi Bus Park (Pokhara)",
+          "class_tip": "Asientos 2x2 con AC. Parada para almuerzo incluida.",
+          "advance_booking": "Reservar 1 día antes",
+          "tip": "Opción económica. Menos cómodo que VIP pero mucho mejor que local bus."
+        },
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo (Rápido, vistas montaña)",
+          "recommended": false,
+          "operator": "Buddha Air",
+          "operators_alt": ["Yeti Airlines", "Shree Airlines"],
+          "duration": "25-30 min",
+          "price_local": "USD 115-145 (precio extranjeros)",
+          "price_eur": "~87-110€",
+          "frequency": "Varios diarios",
+          "booking_url": "https://buddhaair.com",
+          "booking_alt": "https://yetiairlines.com",
+          "departure_station": "Tribhuvan International (KTM)",
+          "arrival_station": "Pokhara International (PKR)",
+          "class_tip": "Pedir ventanilla derecha (KTM→PKR) para vistas del Himalaya.",
+          "advance_booking": "Reservar 2-4 semanas. Precio triple para extranjeros vs locales.",
+          "tip": "Vistas espectaculares del Himalaya. Retrasos posibles por clima. Todas las aerolíneas nepalíes están prohibidas en espacio aéreo UE (designación SSC de ICAO)."
+        },
+        {
+          "type": "minivan",
+          "emoji": "🚗",
+          "label": "Coche privado con conductor",
+          "recommended": false,
+          "operator": "Nepal Vehicle Rental",
+          "duration": "5-7h",
+          "price_local": "14,000-18,000 NPR / USD 100-150 por vehículo (4 pax)",
+          "price_eur": "~75-115€",
+          "frequency": "Bajo demanda",
+          "booking_url": "https://nepalvehiclerental.com",
+          "class_tip": "Precio por vehículo, dividir entre 4 pasajeros sale rentable.",
+          "advance_booking": "Reservar 1-2 días antes",
+          "tip": "No se puede conducir solo en Nepal. Siempre con conductor contratado. Permite paradas en el camino (Bandipur, Manakamana)."
+        }
+      ]
+    },
+    {
+      "from": "Katmandú",
+      "to": "Chitwan (Sauraha)",
+      "distance_km": 150,
+      "popular": true,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Tourist Bus (Recomendado)",
+          "recommended": true,
+          "operator": "Sofa Bus Nepal",
+          "operators_alt": ["Graceful Adventure"],
+          "duration": "5-6h",
+          "price_local": "800-1,500 NPR / USD 9-13",
+          "price_eur": "~7-10€",
+          "frequency": "Diario 7:00 AM",
+          "booking_url": "https://bussewa.com.np",
+          "departure_station": "Sorhakhutte Tourist Bus Stop",
+          "advance_booking": "Reservar 1 día antes",
+          "tip": "Muchos safari lodges en Sauraha organizan su propio transfer desde Katmandú — preguntar al reservar alojamiento."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "VIP Sofa Bus",
+          "recommended": false,
+          "operator": "Swift Holidays",
+          "duration": "5-6h",
+          "price_local": "1,300-2,500 NPR / USD 13-20",
+          "price_eur": "~10-15€",
+          "frequency": "Diario 7:00 AM",
+          "booking_url": "https://bussewa.com.np",
+          "departure_station": "Sorhakhutte Tourist Bus Stop",
+          "tip": "Más cómodo. Comprobar si el lodge incluye transfer antes de reservar bus aparte."
+        }
+      ]
+    },
+    {
+      "from": "Katmandú",
+      "to": "Lumbini (via Bhairahawa)",
+      "distance_km": 290,
+      "popular": false,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Tourist Bus a Bhairahawa",
+          "recommended": true,
+          "operator": "Baba Adventure",
+          "operators_alt": ["Yatra Nepal"],
+          "duration": "8-10h hasta Bhairahawa",
+          "price_local": "1,500-2,500 NPR / USD 12-20",
+          "price_eur": "~9-15€",
+          "frequency": "Diario 6:30-7:00 AM",
+          "booking_url": "https://babaadventure.com",
+          "booking_alt": "https://bussewa.com.np",
+          "departure_station": "Gongabu Bus Park",
+          "advance_booking": "Reservar 1 día antes",
+          "tip": "Desde Bhairahawa: taxi a Lumbini 28 km = 800-1,200 NPR (~6-8€) / 30 min. Bus llega a Bhairahawa, NO directamente a Lumbini."
+        },
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo a Bhairahawa + taxi",
+          "recommended": false,
+          "operator": "Buddha Air",
+          "operators_alt": ["Yeti Airlines"],
+          "duration": "30 min vuelo + 30 min taxi",
+          "price_local": "USD 113 (extranjeros) + taxi 1,000-1,500 NPR",
+          "price_eur": "~85€ + ~7-10€ taxi",
+          "frequency": "2-3 vuelos/día",
+          "booking_url": "https://buddhaair.com",
+          "departure_station": "Tribhuvan International (KTM)",
+          "arrival_station": "Gautam Buddha Airport (BWA)",
+          "tip": "Aeropuerto de Bhairahawa a Lumbini en taxi. Más rápido pero significativamente más caro."
+        }
+      ]
+    },
+    {
+      "from": "Katmandú",
+      "to": "Lukla (Everest trek)",
+      "distance_km": 140,
+      "popular": true,
+      "options": [
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo a Lukla (CRÍTICO)",
+          "recommended": true,
+          "operator": "Tara Air",
+          "operators_alt": ["Summit Air"],
+          "duration": "25-30 min desde KTM / 20 min desde Ramechhap",
+          "price_local": "USD 215-225 solo ida",
+          "price_eur": "~165-170€",
+          "frequency": "Varios diarios (si el tiempo lo permite)",
+          "booking_url": "https://taraair.com",
+          "departure_station": "Tribhuvan International (KTM) o Ramechhap (temporada alta)",
+          "arrival_station": "Tenzing-Hillary Airport (LUA)",
+          "class_tip": "Equipaje: 10 kg facturado + 5 kg mano. Estricto.",
+          "advance_booking": "Reservar 4-6 semanas. En temporada alta se agota.",
+          "tip": "DURANTE TEMPORADA ALTA (15 Mar-15 May, 25 Sep-30 Nov) TODOS los vuelos salen de Ramechhap, NO de Katmandú. Ramechhap está a 4-5h en coche desde KTM (bus 800-1,500 NPR). Retrasos MUY comunes por clima. Dejar 2-3 días de margen. Lukla = uno de los aeropuertos más peligrosos del mundo (pista de 527m en acantilado a 2,860m)."
+        },
+        {
+          "type": "flight",
+          "emoji": "🚁",
+          "label": "Helicóptero (charter/compartido)",
+          "recommended": false,
+          "operator": "Varias compañías",
+          "duration": "45 min desde KTM",
+          "price_local": "USD 3,000-4,500 charter (4-5 pax) / USD 400-500 compartido por persona",
+          "price_eur": "~305-380€ compartido / ~2,300-3,430€ charter",
+          "frequency": "Bajo demanda",
+          "tip": "Opción de emergencia o premium. Más fiable que avión en mal tiempo. Se puede compartir charter entre 4-5 personas."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚗",
+          "label": "Jeep KTM→Salleri + trek 3 días a Lukla",
+          "recommended": false,
+          "operator": "Jeeps compartidos locales",
+          "duration": "10-12h jeep + 3 días trek",
+          "price_local": "3,500-4,000 NPR/persona jeep compartido",
+          "price_eur": "~24-28€ (solo jeep)",
+          "departure_station": "Gongabu Bus Park / Koteshwor",
+          "tip": "Ahorra el vuelo pero añade 3 días de trek hasta Lukla. Solo para viajeros con tiempo y experiencia. Alternativa cuando los vuelos se cancelan varios días seguidos."
+        }
+      ]
+    },
+    {
+      "from": "Pokhara",
+      "to": "Chitwan (Sauraha)",
+      "distance_km": 150,
+      "popular": true,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Tourist Bus (Recomendado)",
+          "recommended": true,
+          "operator": "Graceful Adventure",
+          "operators_alt": ["Trek Nepal Himalayas"],
+          "duration": "5-7h",
+          "price_local": "800-1,000 NPR / USD 10-15",
+          "price_eur": "~8-11€",
+          "frequency": "Diario 7:00 AM",
+          "booking_url": "https://bussewa.com.np",
+          "departure_station": "Prithvi Bus Park (Pokhara)",
+          "tip": "Ruta directa sin pasar por Katmandú. Buena combinación KTM→Pokhara→Chitwan o viceversa."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "VIP Sofa Bus",
+          "recommended": false,
+          "operator": "VIP Sofa Bus Nepal",
+          "duration": "5-6h",
+          "price_local": "USD 15-20",
+          "price_eur": "~11-15€",
+          "frequency": "Diario 7:00 AM",
+          "booking_url": "https://bussewa.com.np",
+          "tip": "Más cómodo con asientos 2x1."
+        }
+      ]
+    },
+    {
+      "from": "Pokhara",
+      "to": "Jomsom / Muktinath",
+      "distance_km": 100,
+      "popular": false,
+      "options": [
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo Pokhara→Jomsom",
+          "recommended": true,
+          "operator": "Tara Air",
+          "operators_alt": ["Summit Air"],
+          "duration": "20-25 min",
+          "price_local": "USD 250 (extranjeros)",
+          "price_eur": "~190€",
+          "frequency": "3-5 vuelos/día, solo 6:00-10:00 AM",
+          "booking_url": "https://taraair.com",
+          "departure_station": "Pokhara International (PKR)",
+          "arrival_station": "Jomsom Airport",
+          "advance_booking": "Reservar 2-3 semanas",
+          "tip": "Solo vuelos matutinos — los vientos extremos del valle del Kaligandaki hacen imposible volar por la tarde. Cancelaciones MUY frecuentes. Obligatorio tener días de margen."
+        },
+        {
+          "type": "minivan",
+          "emoji": "🚗",
+          "label": "Jeep Pokhara→Jomsom",
+          "recommended": false,
+          "operator": "Agencias locales Pokhara Lakeside",
+          "duration": "8-10h",
+          "price_local": "2,000-3,000 NPR compartido / 25,000-35,000 NPR privado",
+          "price_eur": "~14-21€ compartido / ~175-245€ privado",
+          "departure_station": "Pokhara Lakeside (agencias)",
+          "tip": "Carretera muy dura vía Beni y el valle del Kaligandaki. Alternativa cuando los vuelos se cancelan."
+        },
+        {
+          "type": "minivan",
+          "emoji": "🚗",
+          "label": "Jeep Jomsom→Muktinath",
+          "recommended": false,
+          "operator": "Jeeps locales en Jomsom Airport",
+          "duration": "1.5h (22 km)",
+          "price_local": "9,500 NPR por jeep (6 pax)",
+          "price_eur": "~66€ por jeep",
+          "tip": "Jeeps esperan en el aeropuerto de Jomsom. Compartir entre pasajeros para dividir coste."
+        }
+      ]
+    },
+    {
+      "from": "Katmandú",
+      "to": "Nagarkot",
+      "distance_km": 32,
+      "popular": true,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚕",
+          "label": "Taxi directo (Recomendado)",
+          "recommended": true,
+          "operator": "Pathao / InDrive / taxi negociado",
+          "duration": "1-1.5h",
+          "price_local": "3,000-5,000 NPR ida",
+          "price_eur": "~21-35€",
+          "frequency": "Bajo demanda",
+          "tip": "Ida y vuelta con espera: 5,000-7,000 NPR. Ideal para excursión de amanecer (salir 4-5 AM). Negociar precio antes de subir."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Tourist Bus directo",
+          "recommended": false,
+          "operator": "Agencias turísticas Thamel",
+          "duration": "1.5-2h",
+          "price_local": "500-700 NPR",
+          "price_eur": "~3.50-5€",
+          "frequency": "Según agencia",
+          "tip": "Contratar en agencias de Thamel. Menos flexible que taxi."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Local Bus (vía Bhaktapur)",
+          "recommended": false,
+          "operator": "Buses locales",
+          "duration": "2-3h (con transbordo en Bhaktapur)",
+          "price_local": "110-150 NPR total",
+          "price_eur": "~0.75-1€",
+          "tip": "Requiere cambio de bus en Bhaktapur. Solo para viajeros con experiencia y sin prisa."
+        }
+      ]
+    },
+    {
+      "from": "Katmandú",
+      "to": "Bhaktapur",
+      "distance_km": 13,
+      "popular": true,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚕",
+          "label": "Taxi",
+          "recommended": false,
+          "operator": "Pathao / InDrive / taxi negociado",
+          "duration": "30-45 min",
+          "price_local": "800-1,500 NPR",
+          "price_eur": "~6-10€",
+          "frequency": "Bajo demanda",
+          "tip": "Más cómodo pero caro para la distancia."
+        },
+        {
+          "type": "motorbike",
+          "emoji": "🏍️",
+          "label": "Moto Pathao (Más barato y rápido)",
+          "recommended": true,
+          "operator": "Pathao",
+          "duration": "20-30 min",
+          "price_local": "150-200 NPR",
+          "price_eur": "~1-1.40€",
+          "booking_url": "https://pathao.com",
+          "tip": "Requiere SIM nepalí para usar la app. Opción más barata y rápida."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Local Bus",
+          "recommended": false,
+          "operator": "Buses locales",
+          "duration": "30-60 min",
+          "price_local": "50 NPR",
+          "price_eur": "~0.35€",
+          "frequency": "Cada 10-15 min",
+          "departure_station": "Bagbazaar (Katmandú)",
+          "tip": "Bhaktapur tiene entrada de 1,800 NPR para extranjeros."
+        }
+      ]
+    },
+    {
+      "from": "Katmandú",
+      "to": "Besisahar (inicio Annapurna Circuit)",
+      "distance_km": 185,
+      "popular": false,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Tourist Bus (Recomendado)",
+          "recommended": true,
+          "operator": "Buses turísticos varios",
+          "duration": "6-8h",
+          "price_local": "700-900 NPR / USD 9",
+          "price_eur": "~7€",
+          "frequency": "Diario, primero 6:30 AM",
+          "booking_url": "https://bussewa.com.np",
+          "departure_station": "Gongabu Bus Park",
+          "arrival_station": "Besisahar bus stand",
+          "advance_booking": "Reservar con antelación en temporada alta de trekking (oct-nov, mar-abr)",
+          "tip": "Desde Besisahar se puede continuar en jeep compartido hasta Chame o Manang (1,500-3,000 NPR/persona). Permisos de trekking (ACAP 3,000 NPR) en oficina NTB Thamel o Pokhara."
+        },
+        {
+          "type": "minivan",
+          "emoji": "🚗",
+          "label": "Jeep privado",
+          "recommended": false,
+          "operator": "Agencias locales",
+          "duration": "5-6h",
+          "price_local": "15,000-20,000 NPR por vehículo",
+          "price_eur": "~105-140€",
+          "tip": "Precio por vehículo. Cómodo para grupos de 4."
+        }
+      ]
+    },
+    {
+      "from": "Katmandú",
+      "to": "Bandipur",
+      "distance_km": 143,
+      "popular": false,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Tourist Bus a Dumre + taxi",
+          "recommended": true,
+          "operator": "Buses turísticos KTM→Pokhara (bajar en Dumre)",
+          "duration": "5+h hasta Dumre + 30 min taxi",
+          "price_local": "1,100-1,600 NPR bus + 500-800 NPR taxi",
+          "price_eur": "~8-11€ bus + ~3.50-6€ taxi",
+          "booking_url": "https://bussewa.com.np",
+          "departure_station": "Sorhakhutte Tourist Bus Stop",
+          "tip": "La mayoría de buses a Pokhara pasan por Dumre. Avisar al conductor para bajar allí. Taxi Dumre→Bandipur sube por carretera de montaña."
+        },
+        {
+          "type": "minivan",
+          "emoji": "🚗",
+          "label": "Coche privado directo",
+          "recommended": false,
+          "operator": "Agencias locales",
+          "duration": "4-5h directo",
+          "price_local": "5,000-7,000 NPR",
+          "price_eur": "~35-49€",
+          "tip": "Parada perfecta entre Katmandú y Pokhara. Pueblo medieval en cresta de montaña con vistas al Himalaya."
+        }
+      ]
+    },
+    {
+      "from": "Katmandú",
+      "to": "Sunauli (frontera India)",
+      "distance_km": 290,
+      "popular": false,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Tourist Bus a Sunauli/Bhairahawa",
+          "recommended": true,
+          "operator": "Baba Adventure",
+          "operators_alt": ["Yatra Nepal"],
+          "duration": "8-12h",
+          "price_local": "1,500-2,000 NPR / USD 18",
+          "price_eur": "~11-14€",
+          "frequency": "Mañana 6:00 AM + noche 7:30 PM",
+          "booking_url": "https://yatranepal.com",
+          "booking_alt": "https://bussewa.com.np",
+          "departure_station": "Gongabu Bus Park",
+          "tip": "Frontera abierta 6:00-22:00. Necesitas visado indio (obtener antes). Desde Sunauli (lado indio): buses a Varanasi 8h, Gorakhpur 3h."
+        }
+      ]
+    },
+    {
+      "from": "Katmandú",
+      "to": "Kakarbhitta (frontera India este)",
+      "distance_km": 460,
+      "popular": false,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Bus directo",
+          "recommended": true,
+          "operator": "Buses interurbanos",
+          "duration": "12-14h",
+          "price_local": "1,500-2,500 NPR / USD 18",
+          "price_eur": "~11-19€",
+          "frequency": "Salidas 6:00 AM + 4:00 PM",
+          "booking_url": "https://bussewa.com.np",
+          "departure_station": "Gongabu Bus Park",
+          "tip": "Cruzar a Panitanki (India). Desde allí: buses a Siliguri 1.5h, Darjeeling 3h. Frontera relativamente tranquila."
+        },
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo KTM→Bhadrapur + taxi frontera",
+          "recommended": false,
+          "operator": "Buddha Air",
+          "operators_alt": ["Yeti Airlines"],
+          "duration": "50 min vuelo + 30 min taxi",
+          "price_local": "USD 120-150 (extranjeros)",
+          "price_eur": "~95-120€ + taxi",
+          "frequency": "1-2 vuelos/día",
+          "booking_url": "https://buddhaair.com",
+          "departure_station": "Tribhuvan International (KTM)",
+          "arrival_station": "Chandragadhi Airport (BDP)",
+          "tip": "Vuelo a Bhadrapur y taxi 30 min a Kakarbhitta/frontera. Mucho más rápido que 14h de bus."
+        }
+      ]
+    }
+  ],
+
+  "booking_platforms": [
+    {
+      "name": "BusSewa",
+      "url": "https://bussewa.com.np",
+      "type": "plataforma local",
+      "best_for": "Buses interurbanos Nepal. 600+ rutas. En nepalí e inglés.",
+      "commission": "Incluida en precio"
+    },
+    {
+      "name": "Tourist BusSewa",
+      "url": "https://bussewa.com.np",
+      "type": "plataforma local",
+      "best_for": "Buses turísticos específicamente. Más fácil para extranjeros.",
+      "commission": "Incluida en precio"
+    },
+    {
+      "name": "Buddha Air",
+      "url": "https://buddhaair.com",
+      "type": "aerolínea",
+      "best_for": "Aerolínea doméstica principal. Rutas KTM-PKR, KTM-Bhairahawa, KTM-Bhadrapur.",
+      "commission": "Directo"
+    },
+    {
+      "name": "Yeti Airlines",
+      "url": "https://yetiairlines.com",
+      "type": "aerolínea",
+      "best_for": "Aerolínea doméstica. Rutas similares a Buddha Air.",
+      "commission": "Directo"
+    },
+    {
+      "name": "Tara Air",
+      "url": "https://taraair.com",
+      "type": "aerolínea",
+      "best_for": "Vuelos de montaña: Lukla (Everest), Jomsom (Annapurna). Especialista STOL.",
+      "commission": "Directo"
+    },
+    {
+      "name": "Sofa Bus Nepal",
+      "url": "https://sofabusnepal.com",
+      "type": "operador bus",
+      "best_for": "Operador de bus turístico. Ruta KTM-Pokhara y KTM-Chitwan.",
+      "commission": "Directo"
+    },
+    {
+      "name": "Swift Holidays",
+      "url": "https://swiftholidays.com.np",
+      "type": "operador bus",
+      "best_for": "VIP bus operator. Asientos 2x1 premium.",
+      "commission": "Directo"
+    },
+    {
+      "name": "Bookaway",
+      "url": "https://bookaway.com",
+      "type": "agregador",
+      "best_for": "Agregador multi-operador. Buses y vuelos Nepal. En inglés, fácil para extranjeros.",
+      "commission": "$2-5 por billete"
+    },
+    {
+      "name": "Pathao",
+      "url": "https://pathao.com",
+      "type": "ride-hailing",
+      "best_for": "Ride-hailing en Katmandú. Moto-taxi y coche. Requiere SIM nepalí.",
+      "commission": "Incluida en tarifa"
+    },
+    {
+      "name": "Nepal Flight Ticket",
+      "url": "https://nepalflightticket.com",
+      "type": "agregador vuelos",
+      "best_for": "Agregador de vuelos domésticos Nepal. Compara Buddha Air, Yeti, Tara Air.",
+      "commission": "Incluida en precio"
+    }
+  ],
+
+  "tips_general": [
+    "Tourist bus SIEMPRE sobre local bus para extranjeros — más seguro, más cómodo, y la diferencia de precio es mínima.",
+    "Carretera Katmandú-Pokhara (Prithvi Highway) en obras 2025-2026, retrasos significativos (6-8h se convierten en 10-12h).",
+    "Vuelos internos tienen precio TRIPLE para extranjeros respecto a locales nepalíes.",
+    "Siempre llevar 2-3 días extra de margen para vuelos de montaña (Lukla, Jomsom). Las cancelaciones por clima son la norma, no la excepción.",
+    "Seguro de viaje que cubra evacuación en helicóptero es OBLIGATORIO para trekking. Sin excepciones.",
+    "Pathao e InDrive requieren SIM nepalí — comprar en el aeropuerto de Katmandú (~500 NPR con datos).",
+    "No se puede conducir solo en Nepal — siempre con conductor contratado. No hay self-drive.",
+    "Carreteras de montaña peligrosas especialmente en monzón (jun-sep) y de noche. NUNCA viajar de noche por carretera de montaña.",
+    "Greenline Tours (que fue el mejor bus turístico) lleva SUSPENDIDO desde marzo 2020 — NO ha reabierto.",
+    "Negociar SIEMPRE el precio del taxi antes de subir si no usas app. No hay taxímetro.",
+    "Permisos trekking: Annapurna ACAP 3,000 NPR, Everest Sagarmatha NP USD 30 + Khumbu 2,000 NPR + TIMS 2,000 NPR. Tramitar en oficina NTB Thamel o Pokhara.",
+    "Todas las aerolíneas nepalíes están prohibidas en espacio aéreo UE (designación SSC de ICAO desde 2013). Vuelos matutinos son más seguros y tienen más probabilidad de operar.",
+    "NUNCA presionar para volar en mal tiempo. Los pilotos nepalíes cancelan por seguridad — respetarlo."
+  ]
+}

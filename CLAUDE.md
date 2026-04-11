@@ -1,5 +1,5 @@
 # CLAUDE.md — Borrado del Mapa
-## V2 Mapa — 11 abril 2026 | Backup: `backups/borradodelmapa-v2-mapa-2026-04-11/`
+## V2.1 Transport — 12 abril 2026 | Backup: `backups/borradodelmapa-v2-mapa-2026-04-11/`
 
 ---
 
@@ -362,7 +362,7 @@ Cloudflare KV namespace `SALMA_KB` (id: `b2056c0613d94feb955b92279ba02fb6`)
 | `dest:{cc}:base` | 1 | Datos base país (moneda, idioma, visados, seguridad) | 193 países |
 | `dest:{cc}:destinos` | 2 | Top destinos, qué hacer, qué comer, transporte, cultura | 193 países |
 | `dest:{cc}:practical` | 2.5 | Frases, emergencias, apps, salud, conectividad, kit, presupuesto | 193 países |
-| `transport:{cc}` | — | Apps transporte (ride-hailing, tren, metro/bus, ferry, especial) | 193 países |
+| `transport:{cc}` | T | **Transport enriquecido** (rutas, aeropuertos, operadores, precios, booking URLs) | 4 países (ES, TH, NP, VN) — resto básico (126 países) |
 | `spot:{slug}` | — | POI individual (lat/lng, photo_ref, verified_address) | Variable |
 | `kw:{keyword}` | — | Índice ciudad→código ISO país | Miles |
 | `route:{cc}:{dest}:{days}` | 3 | Rutas pre-generadas con paradas y coords (30 días TTL) | Algunos destinos |
@@ -370,6 +370,89 @@ Cloudflare KV namespace `SALMA_KB` (id: `b2056c0613d94feb955b92279ba02fb6`)
 | `geocity:{word}` | — | Caché Nominatim ciudad→país (30 días TTL) | Dinámico |
 | `_cache:prompt` | — | Caché prompt Firestore (5 min TTL) | 1 clave |
 | `sos_rate:{ip}` | — | Rate limiting SOS (10 min TTL) | Dinámico |
+
+### Transport KV enriquecido (nivel T) — 12 abril 2026
+
+**4 países completos** con datos verificados (operadores, precios, URLs, aeropuertos):
+
+| País | Rutas | Aeropuertos | Plataformas booking | Tamaño | Archivo local |
+|------|-------|-------------|---------------------|--------|---------------|
+| 🇪🇸 España | 20 | 7 (MAD, BCN, AGP, SVQ, VLC, GRX, BIO) | 16 | 40.8 KB | `worker/kv/transport-routes/es.json` |
+| 🇹🇭 Tailandia | 18 | 6 (BKK, DMK, CNX, HKT, KBV, USM) | 14 | 36.6 KB | `worker/kv/transport-routes/th.json` |
+| 🇳🇵 Nepal | 12 | 2 (KTM, PKR) | 10 | 29.8 KB | `worker/kv/transport-routes/np.json` |
+| 🇻🇳 Vietnam | 18 | 6 (HAN, SGN, DAD, HUI, CXR, DLI) | 12 | 37.4 KB | `worker/kv/transport-routes/vn.json` |
+
+**Schema:** `worker/kv/transport-routes/_schema.json` — definición universal reutilizable para cualquier país.
+
+**Estructura por país (`transport:{cc}`):**
+```
+{
+  country, country_name, updated, currency,
+  ridehailing: { best, others, tips, payment, tipping },
+  train: { operator, booking_local, booking_foreign, tips, passes },
+  metro_bus: { apps, cities: { Ciudad: { systems, card, hours, local_app } } },
+  ferry: { operators, booking_url, seasonal, tips },
+  intercity_bus: { operators, booking_url, tips },
+  special: { modes, tips, scams },
+  driving: { side, license, scooter, road_quality },
+  airports: { IATA: { name, city, distance_km, transfers: [...] } },
+  stations: { Ciudad: { train, bus, bus_alt } },
+  routes: [ { from, to, distance_km, popular, options: [...] } ],
+  booking_platforms: [ { name, url, type, best_for } ],
+  tips_general: [...]
+}
+```
+
+**Cómo funciona en el worker:**
+1. Usuario pregunta por transporte → worker detecta país y lee `transport:{cc}` del KV
+2. Worker busca coincidencia de ruta (from/to en el mensaje) o aeropuerto
+3. Si match → inyecta SOLO esa ruta (~400 tokens) + formato comparativa + weather/events/news
+4. Si NO match → fallback a tips generales + Brave Search
+5. Resultado: respuesta 2-3s más rápida que sin KV, con datos verificados
+
+**Añadir un nuevo país:**
+```bash
+# 1. Crear JSON siguiendo _schema.json
+cp worker/kv/transport-routes/_schema.json worker/kv/transport-routes/jp.json
+# Rellenar con datos verificados
+
+# 2. Subir al KV
+wrangler kv key put "transport:jp" --path "worker/kv/transport-routes/jp.json" \
+  --namespace-id "b2056c0613d94feb955b92279ba02fb6" --remote
+
+# 3. No requiere redeploy del worker — los datos se usan automáticamente
+```
+
+**Coste por país nuevo:** ~$0.10-0.15 si se genera con Claude Sonnet + verificación web.
+
+### Reglas de fiabilidad (inyectadas en cada respuesta)
+
+El worker inyecta automáticamente un bloque `[REGLAS DE FIABILIDAD]` en el system prompt:
+- Fecha actual → prohíbe mencionar eventos pasados (Semana Santa, Carnaval, etc.)
+- Prioridad: KV > herramientas > memoria de Claude
+- Anti-invención: operadores, horarios, precios, URLs, apps
+- Aviso de caducidad si KV tiene >6 meses
+- Visados: siempre "verifica en web oficial"
+- Seguridad: recomienda exteriores.gob.es
+- renfe.com bloqueado (no funciona en móvil) → usa trainline.com
+
+### Transport enrichment (weather + events + news)
+
+Cuando hay match de ruta/aeropuerto en KV, el worker busca EN PARALELO (~400ms total):
+- 🌤️ **Tiempo** — OpenWeatherMap (GRATIS, forecast 3 días)
+- 🎉 **Eventos** — Serper.dev (~$0.001, solo si hay fecha en el mensaje)
+- 📰 **Noticias** — Brave Web Search (GRATIS, 2 titulares recientes)
+
+Los resultados se inyectan en el contexto de Claude y se muestran al final de la respuesta de transporte.
+
+### Formato comparativa transporte (BLOQUE_FORMATO_TRANSPORTE)
+
+Se activa SOLO cuando hay match de ruta KV. Anula el formato prosa y permite:
+- Emojis como headers (🚂, ✈️, 🚢, 🚌, 🚕)
+- Bullets para datos (operador, duración, precio, enlace)
+- ⭐ opción recomendada
+- ✅ bloque presupuesto si el viajero tiene ruta guardada
+- 📍 ficha destino con datos factuales (fundación, UNESCO, famosa por)
 
 ### Scripts de generación (`worker/kv/`)
 
@@ -379,10 +462,12 @@ Cloudflare KV namespace `SALMA_KB` (id: `b2056c0613d94feb955b92279ba02fb6`)
 | `generate-nivel2.js` | Claude Sonnet | Nivel 2 — `dest:{cc}:destinos` | ~$2.50 / 193 países |
 | `generate-nivel25.js` | Claude Haiku | Nivel 2.5 — `dest:{cc}:practical` | ~$1.20 / 193 países |
 | `generate-nivel3.js` | GPT-4o-mini (cron) | Nivel 3 — `route:{cc}:{dest}:{days}` | ~$0.06 / ruta |
+| `upload-transport-routes.js` | — | Transport enriquecido desde JSONs locales | $0 (solo upload) |
 
-**Otros scripts KV:** `upload-kv.js`, `upload-kv-nivel2.js`, `upload-all-kv.cjs`, `upload-spots-bulk.cjs`, `upload-transport.js`, `upload-wrangler.js`, `enrich-spots.cjs`, `stats.js`, `stats-nivel2.js`
+**Otros scripts KV:** `upload-kv.js`, `upload-kv-nivel2.js`, `upload-all-kv.cjs`, `upload-spots-bulk.cjs`, `upload-transport.js` (básico), `upload-transport-routes.js` (enriquecido), `upload-wrangler.js`, `enrich-spots.cjs`, `stats.js`, `stats-nivel2.js`
 
 **JSONs de respaldo en `worker/kv/`:** `countries.json` (195 países base), `_index.json`, `_nivel2_1.json`
+**JSONs transport en `worker/kv/transport-routes/`:** `_schema.json`, `es.json`, `th.json`, `np.json`, `vn.json`
 
 El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápido, más barato.
 
@@ -624,6 +709,22 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 - [x] Service Worker (sin caché offline, push ready)
 - [x] Instalable desde móvil
 
+### V2.1 Transport (12 abril 2026)
+- [x] KV transport enriquecido: 68 rutas, 21 aeropuertos, 52 plataformas booking (ES, TH, NP, VN)
+- [x] Schema universal reutilizable para cualquier país (`_schema.json`)
+- [x] Inyección inteligente: worker detecta ruta/aeropuerto en mensaje → inyecta solo datos relevantes
+- [x] Formato comparativa transporte (BLOQUE_FORMATO_TRANSPORTE): emojis, bullets, opciones comparadas
+- [x] Ficha destino factual: fundación, UNESCO, famosa por, dato útil (sin prosa)
+- [x] Weather en paralelo: OpenWeatherMap forecast 3 días (gratis)
+- [x] Eventos en paralelo: Serper.dev con filtro de fecha (solo futuros)
+- [x] Noticias locales en paralelo: Brave Web Search 2 titulares
+- [x] Reglas de fiabilidad globales: KV > herramientas > memoria, anti-invención, fecha actual
+- [x] Brave Search skip cuando KV tiene match (sin blogs basura)
+- [x] `injectTransportBlock()` reactivada: añade plataformas booking post-respuesta
+- [x] URLs verificadas: 61 URLs, 2 rotas arregladas (Green Bus Thailand, Tourist BusSewa)
+- [x] renfe.com → trainline.com (renfe bloquea webviews/móvil)
+- [x] Upload script: `upload-transport-routes.js` con stats y dry-run
+
 ### V2 Mapa (11 abril 2026)
 - [x] Norte explícito (heading:0) + anti-tilt en ambos mapas
 - [x] Tap en brújula resetea norte (setHeading(0))
@@ -671,7 +772,9 @@ El worker inyecta datos KV en el contexto de Claude → menos tokens, más rápi
 - **Monkey-patch frágil** — `mapa-itinerario.js` parchea `bitacoraRenderer.renderDiario` en runtime.
 - **Deep links transport incompletos** — Solo Uber y Lyft tienen deep links. Bolt, Grab, DiDi etc. tienen `null`.
 - **Manifest PWA básico** — sin `shortcuts`, sin `screenshots`, icono 192px sin versión maskable dedicada.
-- **2 funciones dead code** — `injectGoogleMapsLink()` e `injectTransportBlock()` en el Worker hacen `return` inmediato.
+- **1 función dead code** — `injectGoogleMapsLink()` en el Worker hace `return` inmediato. (`injectTransportBlock()` reactivada en V2.1).
+- **Transport KV incompleto** — Solo 4 países con datos enriquecidos (ES, TH, NP, VN). Resto (122 países) tiene datos básicos (apps + tips). Añadir más países según demanda.
+- **KV sin backup automático** — Los JSONs locales son el respaldo. No hay backup automático del KV en la nube.
 
 ---
 

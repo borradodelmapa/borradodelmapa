@@ -1,0 +1,1377 @@
+{
+  "country": "ES",
+  "country_name": "Espana",
+  "updated": "2026-04-11",
+  "currency": {
+    "code": "EUR",
+    "symbol": "€",
+    "rate_eur": 1
+  },
+  "ridehailing": {
+    "best": "uber",
+    "others": [
+      "bolt",
+      "cabify",
+      "freenow"
+    ],
+    "tips": "Uber no funciona en todas las ciudades. Cabify mejor en muchas ciudades espanolas. FREENOW (ex-mytaxi) es mas caro pero conecta con taxis oficiales. En zonas rurales y pueblos no hay apps de ride-hailing, solo taxi convencional.",
+    "payment": "Tarjeta en todas las apps",
+    "tipping": "No se espera propina. Redondear el importe es suficiente."
+  },
+  "train": {
+    "operator": "Renfe (nacional) + Iryo + OUIGO (competidores AVE)",
+    "apps": [
+      "renfe",
+      "trainline",
+      "omio"
+    ],
+    "booking_local": "https://www.trainline.com",
+    "booking_foreign": "https://www.trainline.com",
+    "tips": "3 operadores de alta velocidad (AVE) compiten en precio: Renfe, Iryo y OUIGO. OUIGO desde 9 euros. AVLO es el low-cost de Renfe. Iryo tiene precios dinamicos competitivos. Compara siempre en Trainline.",
+    "passes": "Interrail / Eurail para viajeros europeos e internacionales",
+    "booking_note": "Trainline vende billetes de Renfe, Iryo y OUIGO. Renfe.com puede no cargar en apps moviles."
+  },
+  "metro_bus": {
+    "apps": [
+      "omio"
+    ],
+    "cities": {
+      "Madrid": {
+        "systems": [
+          "Metro (13 lineas)",
+          "Cercanias Renfe"
+        ],
+        "card": {
+          "name": "Tarjeta Multi",
+          "price": "2.50€ (tarjeta) + recargas",
+          "where": "Maquinas en estaciones de metro y cercanias"
+        },
+        "hours": "06:00-01:30",
+        "local_app": "Metro de Madrid"
+      },
+      "Barcelona": {
+        "systems": [
+          "Metro (12 lineas)",
+          "FGC",
+          "Rodalies"
+        ],
+        "card": {
+          "name": "T-Casual",
+          "price": "11.35€ (10 viajes)",
+          "where": "Maquinas en estaciones de metro y FGC"
+        },
+        "hours": "05:00-00:00 (L-J), 05:00-02:00 (V), 24h (S)",
+        "local_app": "TMB"
+      },
+      "Valencia": {
+        "systems": [
+          "Metrovalencia (9 lineas)"
+        ],
+        "card": {
+          "name": "Mobilis",
+          "price": "Variable segun zonas",
+          "where": "Maquinas en estaciones"
+        },
+        "hours": "05:30-23:30",
+        "local_app": "EMT Valencia"
+      },
+      "Sevilla": {
+        "systems": [
+          "Metro (1 linea)",
+          "Tranvia"
+        ],
+        "card": {
+          "name": "Tarjeta multiviaje",
+          "price": "Variable",
+          "where": "Maquinas en estaciones y estancos"
+        },
+        "hours": "06:30-23:00",
+        "local_app": "TUSSAM"
+      },
+      "Bilbao": {
+        "systems": [
+          "Metro (3 lineas)"
+        ],
+        "card": {
+          "name": "Barik",
+          "price": "3€ (tarjeta) + recargas",
+          "where": "Maquinas en estaciones"
+        },
+        "hours": "06:00-23:00",
+        "local_app": "Bilbobus"
+      },
+      "Malaga": {
+        "systems": [
+          "Metro (2 lineas)"
+        ],
+        "card": {
+          "name": "Tarjeta metro",
+          "price": "Variable",
+          "where": "Maquinas en estaciones"
+        },
+        "hours": "06:30-23:00",
+        "local_app": "EMT Malaga"
+      }
+    },
+    "tips": "Las tarjetas de transporte locales ahorran mucho frente a billetes sueltos. En Madrid y Barcelona se pueden usar sin contacto con el movil."
+  },
+  "ferry": {
+    "apps": [],
+    "operators": [
+      "Trasmediterranea",
+      "Balearia",
+      "FRS",
+      "Naviera Armas"
+    ],
+    "booking_url": "https://www.directferries.com",
+    "seasonal": "Temporada alta junio-septiembre. Reservar con antelacion para Baleares en verano.",
+    "tips": "Para Baleares, los vuelos low-cost son casi siempre mas rapidos y baratos que los ferries para pasajeros sin coche. El ferry merece la pena si llevas vehiculo."
+  },
+  "intercity_bus": {
+    "operators": [
+      "ALSA",
+      "Socibus",
+      "FlixBus"
+    ],
+    "booking_url": "https://www.alsa.com",
+    "tips": "ALSA domina las rutas nacionales con 40-60+ buses diarios en rutas populares. FlixBus es mas barato en rutas populares. Socibus cubre Madrid-Andalucia."
+  },
+  "special": {
+    "modes": [
+      "patinete electrico",
+      "BiciMad",
+      "Bicing"
+    ],
+    "tips": "Lime y Tier disponibles en todas las grandes ciudades. BlaBlaCar muy popular para compartir coche en rutas sin tren directo. El AVE de alta velocidad es una experiencia en si.",
+    "scams": "No hay estafas tipicas de transporte. Cuidado con taximetros trucados en aeropuertos (raro pero posible)."
+  },
+  "driving": {
+    "side": "right",
+    "license": "Carnet EU valido. Carnet internacional recomendado para no-EU.",
+    "scooter": "Alquiler de moto disponible en zonas turisticas y Baleares/Canarias.",
+    "road_quality": "Excelentes autopistas y autovias. Red de carreteras muy bien mantenida."
+  },
+  "maps_app": "Google Maps perfecto para toda Espana. Citymapper excelente en Madrid y Barcelona.",
+  "airports": {
+    "MAD": {
+      "name": "Adolfo Suarez Madrid-Barajas",
+      "city": "Madrid",
+      "distance_km": 12,
+      "transfers": [
+        {
+          "mode": "metro",
+          "name": "Metro L8 Nuevos Ministerios",
+          "duration": "15-20 min",
+          "price_local": "1.50-3€",
+          "price_eur": "1.50-3€",
+          "frequency": "Cada 5 min",
+          "hours": "06:05-01:30",
+          "tip": "Suplemento aeropuerto 3€ en las terminales T1-T3"
+        },
+        {
+          "mode": "bus",
+          "name": "Expres Aeropuerto (linea amarilla)",
+          "duration": "30-40 min a Atocha/Cibeles",
+          "price_local": "5€",
+          "price_eur": "5€",
+          "frequency": "Cada 15 min (24h)",
+          "hours": "24 horas",
+          "tip": "Funciona toda la noche. Para en Cibeles y Atocha."
+        },
+        {
+          "mode": "train",
+          "name": "Cercanias C1",
+          "duration": "25 min",
+          "price_local": "2.60€",
+          "price_eur": "2.60€",
+          "frequency": "Cada 30 min",
+          "hours": "06:00-23:30",
+          "tip": "Solo para en T4. Para T1-T3 combinar con bus lanzadera."
+        },
+        {
+          "mode": "taxi",
+          "name": "Taxi oficial (tarifa fija)",
+          "duration": "20-30 min",
+          "price_local": "30€",
+          "price_eur": "30€",
+          "frequency": "Siempre disponible",
+          "hours": "24 horas",
+          "tip": "Tarifa fija 30€ al centro de Madrid. No negociar, es precio fijo."
+        },
+        {
+          "mode": "grab",
+          "name": "Uber / Cabify",
+          "duration": "20-30 min",
+          "price_local": "20-30€",
+          "price_eur": "20-30€",
+          "frequency": "Bajo demanda",
+          "hours": "24 horas",
+          "tip": "Generalmente mas barato que taxi oficial. Recoger en zona VTC."
+        }
+      ]
+    },
+    "BCN": {
+      "name": "El Prat Josep Tarradellas",
+      "city": "Barcelona",
+      "distance_km": 13,
+      "transfers": [
+        {
+          "mode": "bus",
+          "name": "Aerobus (A1 a T1, A2 a T2)",
+          "duration": "15-20 min a Placa Catalunya",
+          "price_local": "7.75€",
+          "price_eur": "7.75€",
+          "frequency": "Cada 5 min",
+          "hours": "05:00-01:00",
+          "tip": "La opcion mas rapida y comoda al centro. Paradas en Placa Espanya, Urgell y Placa Catalunya."
+        },
+        {
+          "mode": "metro",
+          "name": "Metro L9 Sud",
+          "duration": "30-40 min",
+          "price_local": "5.15€",
+          "price_eur": "5.15€",
+          "frequency": "Cada 7 min",
+          "hours": "05:00-00:00",
+          "tip": "No llega directo al centro. Transbordo necesario en Zona Universitaria o Collblanc."
+        },
+        {
+          "mode": "train",
+          "name": "Cercanias R2 Nord",
+          "duration": "25 min a Passeig de Gracia",
+          "price_local": "4.60€",
+          "price_eur": "4.60€",
+          "frequency": "Cada 30 min",
+          "hours": "05:40-23:40",
+          "tip": "Solo para en T2. Desde T1 hay bus lanzadera gratuito."
+        },
+        {
+          "mode": "taxi",
+          "name": "Taxi oficial (tarifa fija zona centro)",
+          "duration": "25-35 min",
+          "price_local": "~39€",
+          "price_eur": "~39€",
+          "frequency": "Siempre disponible",
+          "hours": "24 horas",
+          "tip": "Tarifa fija aprox 39€ a zona centro. Suplemento nocturno posible."
+        }
+      ]
+    },
+    "AGP": {
+      "name": "Malaga-Costa del Sol",
+      "city": "Malaga",
+      "distance_km": 8,
+      "transfers": [
+        {
+          "mode": "train",
+          "name": "Cercanias C1",
+          "duration": "12 min al centro",
+          "price_local": "1.80€",
+          "price_eur": "1.80€",
+          "frequency": "Cada 20 min",
+          "hours": "05:30-23:00",
+          "tip": "La mejor opcion. Conecta directo con Maria Zambrano (AVE)."
+        },
+        {
+          "mode": "bus",
+          "name": "Bus A Express",
+          "duration": "15-20 min",
+          "price_local": "3€",
+          "price_eur": "3€",
+          "frequency": "Cada 30 min",
+          "hours": "07:00-00:00",
+          "tip": "Alternativa al tren. Para en el centro."
+        },
+        {
+          "mode": "taxi",
+          "name": "Taxi",
+          "duration": "10-15 min",
+          "price_local": "15-20€",
+          "price_eur": "15-20€",
+          "frequency": "Siempre disponible",
+          "hours": "24 horas",
+          "tip": "Corto y barato. Buena opcion si llevas equipaje."
+        }
+      ]
+    },
+    "SVQ": {
+      "name": "Sevilla-San Pablo",
+      "city": "Sevilla",
+      "distance_km": 10,
+      "transfers": [
+        {
+          "mode": "bus",
+          "name": "Bus EA (Especial Aeropuerto)",
+          "duration": "35 min a Plaza de Armas",
+          "price_local": "4€",
+          "price_eur": "4€",
+          "frequency": "Cada 15-30 min",
+          "hours": "05:00-01:00",
+          "tip": "Unica opcion de transporte publico al aeropuerto."
+        },
+        {
+          "mode": "taxi",
+          "name": "Taxi",
+          "duration": "20 min",
+          "price_local": "~25€",
+          "price_eur": "~25€",
+          "frequency": "Siempre disponible",
+          "hours": "24 horas",
+          "tip": "Tarifa con taximetro. Suplemento nocturno y festivos."
+        }
+      ]
+    },
+    "VLC": {
+      "name": "Valencia-Manises",
+      "city": "Valencia",
+      "distance_km": 8,
+      "transfers": [
+        {
+          "mode": "metro",
+          "name": "Metro L3 / L5",
+          "duration": "25 min al centro",
+          "price_local": "5.80€",
+          "price_eur": "5.80€",
+          "frequency": "Cada 10-15 min",
+          "hours": "05:30-23:30",
+          "tip": "Billete especial aeropuerto mas caro que billete normal."
+        },
+        {
+          "mode": "bus",
+          "name": "Bus linea 150",
+          "duration": "30 min",
+          "price_local": "1.50€",
+          "price_eur": "1.50€",
+          "frequency": "Cada 20 min",
+          "hours": "06:00-22:00",
+          "tip": "Mucho mas barato que el metro pero mas lento."
+        },
+        {
+          "mode": "taxi",
+          "name": "Taxi",
+          "duration": "15-20 min",
+          "price_local": "~20€",
+          "price_eur": "~20€",
+          "frequency": "Siempre disponible",
+          "hours": "24 horas",
+          "tip": "Rapido y razonable."
+        }
+      ]
+    },
+    "GRX": {
+      "name": "Federico Garcia Lorca Granada-Jaen",
+      "city": "Granada",
+      "distance_km": 17,
+      "transfers": [
+        {
+          "mode": "bus",
+          "name": "Bus aeropuerto",
+          "duration": "40 min",
+          "price_local": "2.90€",
+          "price_eur": "2.90€",
+          "frequency": "Coincide con vuelos",
+          "hours": "Segun horario de vuelos",
+          "tip": "Sale sincronizado con las llegadas de vuelos."
+        },
+        {
+          "mode": "taxi",
+          "name": "Taxi",
+          "duration": "25 min",
+          "price_local": "~30€",
+          "price_eur": "~30€",
+          "frequency": "Siempre disponible",
+          "hours": "24 horas",
+          "tip": "Aeropuerto lejos del centro. Taxi algo caro pero comodo."
+        }
+      ]
+    },
+    "BIO": {
+      "name": "Bilbao-Loiu",
+      "city": "Bilbao",
+      "distance_km": 12,
+      "transfers": [
+        {
+          "mode": "bus",
+          "name": "Bizkaibus A3247",
+          "duration": "30 min a Termibus",
+          "price_local": "3€",
+          "price_eur": "3€",
+          "frequency": "Cada 15-30 min",
+          "hours": "06:00-00:00",
+          "tip": "Para en la estacion de autobuses Termibus."
+        },
+        {
+          "mode": "taxi",
+          "name": "Taxi",
+          "duration": "20 min",
+          "price_local": "25-30€",
+          "price_eur": "25-30€",
+          "frequency": "Siempre disponible",
+          "hours": "24 horas",
+          "tip": "Tarifa con taximetro."
+        }
+      ]
+    }
+  },
+  "stations": {
+    "Madrid": {
+      "train": "Puerta de Atocha (AVE sur/este) + Chamartin (AVE norte)",
+      "bus": "Estacion Sur de Autobuses (Mendez Alvaro)"
+    },
+    "Barcelona": {
+      "train": "Estacio de Sants",
+      "bus": "Estacio del Nord"
+    },
+    "Sevilla": {
+      "train": "Santa Justa",
+      "bus": "Plaza de Armas"
+    },
+    "Valencia": {
+      "train": "Joaquin Sorolla (AVE) + Estacio del Nord",
+      "bus": "Estacion de Autobuses"
+    },
+    "Malaga": {
+      "train": "Maria Zambrano",
+      "bus": "Estacion de Autobuses"
+    },
+    "Granada": {
+      "train": "Granada",
+      "bus": "Estacion de Autobuses"
+    },
+    "Bilbao": {
+      "train": "Abando Indalecio Prieto",
+      "bus": "Termibus"
+    }
+  },
+  "routes": [
+    {
+      "from": "Madrid",
+      "to": "Barcelona",
+      "distance_km": 620,
+      "popular": true,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "AVE alta velocidad",
+          "recommended": true,
+          "operator": "Renfe AVE / AVLO",
+          "operators_alt": [
+            "Iryo",
+            "OUIGO"
+          ],
+          "duration": "2h30-3h15",
+          "price_local": "7-130€",
+          "price_eur": "7-130€",
+          "frequency": "30+ trenes/dia",
+          "booking_url": "https://www.trainline.com",
+          "departure_station": "Puerta de Atocha",
+          "arrival_station": "Sants",
+          "class_tip": "OUIGO y AVLO low-cost mejor relacion calidad-precio",
+          "advance_booking": "Reservar con 1-2 semanas para mejores precios",
+          "tip": "OUIGO desde 9€ y AVLO desde 7€. 4 operadores compiten en esta ruta: los precios bajan mucho comprando con antelacion."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Autobus",
+          "recommended": false,
+          "operator": "ALSA",
+          "operators_alt": [
+            "FlixBus"
+          ],
+          "duration": "7-8h",
+          "price_local": "20-50€",
+          "price_eur": "20-50€",
+          "frequency": "15+ buses/dia",
+          "booking_url": "https://www.alsa.com",
+          "booking_alt": "https://www.flixbus.com",
+          "tip": "Solo recomendable si presupuesto muy ajustado. El tren es mucho mas rapido."
+        },
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo",
+          "recommended": false,
+          "operator": "Vueling",
+          "operators_alt": [
+            "Iberia",
+            "Ryanair"
+          ],
+          "duration": "1h15",
+          "price_local": "30-150€",
+          "price_eur": "30-150€",
+          "frequency": "20+ vuelos/dia",
+          "tip": "Con tiempo de aeropuerto el vuelo tarda similar al tren. AVE suele ser mejor opcion."
+        }
+      ]
+    },
+    {
+      "from": "Madrid",
+      "to": "Sevilla",
+      "distance_km": 530,
+      "popular": true,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "AVE alta velocidad",
+          "recommended": true,
+          "operator": "Renfe AVE",
+          "operators_alt": [
+            "Iryo",
+            "OUIGO"
+          ],
+          "duration": "2h20-2h45",
+          "price_local": "9-120€",
+          "price_eur": "9-120€",
+          "frequency": "20+ trenes/dia",
+          "booking_url": "https://www.trainline.com",
+          "departure_station": "Puerta de Atocha",
+          "arrival_station": "Santa Justa",
+          "advance_booking": "1-2 semanas para mejores precios",
+          "tip": "Una de las primeras rutas AVE de Espana. OUIGO desde 9€."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Autobus",
+          "recommended": false,
+          "operator": "Socibus",
+          "operators_alt": [
+            "ALSA"
+          ],
+          "duration": "6h",
+          "price_local": "20-35€",
+          "price_eur": "20-35€",
+          "booking_url": "https://www.socibus.es",
+          "tip": "Solo si buscas precio minimo."
+        }
+      ]
+    },
+    {
+      "from": "Madrid",
+      "to": "Valencia",
+      "distance_km": 350,
+      "popular": true,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "AVE alta velocidad",
+          "recommended": true,
+          "operator": "Renfe AVE / AVLO",
+          "operators_alt": [
+            "Iryo",
+            "OUIGO"
+          ],
+          "duration": "1h40-2h",
+          "price_local": "7-60€",
+          "price_eur": "7-60€",
+          "frequency": "25+ trenes/dia",
+          "booking_url": "https://www.trainline.com",
+          "departure_station": "Puerta de Atocha",
+          "arrival_station": "Joaquin Sorolla",
+          "tip": "OUIGO desde 9€, AVLO desde 7€. Trayecto rapido y comodo."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Autobus",
+          "recommended": false,
+          "operator": "ALSA",
+          "operators_alt": [
+            "FlixBus"
+          ],
+          "duration": "4-5h",
+          "price_local": "15-30€",
+          "price_eur": "15-30€",
+          "booking_url": "https://www.alsa.com",
+          "tip": "Mas lento pero mas barato."
+        }
+      ]
+    },
+    {
+      "from": "Madrid",
+      "to": "Malaga",
+      "distance_km": 530,
+      "popular": true,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "AVE alta velocidad",
+          "recommended": true,
+          "operator": "Renfe AVE",
+          "operators_alt": [
+            "Iryo",
+            "OUIGO"
+          ],
+          "duration": "2h20-3h",
+          "price_local": "9-90€",
+          "price_eur": "9-90€",
+          "frequency": "15+ trenes/dia",
+          "booking_url": "https://www.trainline.com",
+          "departure_station": "Puerta de Atocha",
+          "arrival_station": "Maria Zambrano",
+          "tip": "OUIGO desde 9€. Estacion Maria Zambrano conectada por cercanias al aeropuerto."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Autobus",
+          "recommended": false,
+          "operator": "ALSA",
+          "duration": "6h",
+          "price_local": "20-40€",
+          "price_eur": "20-40€",
+          "booking_url": "https://www.alsa.com",
+          "tip": "Mucho mas lento que el AVE."
+        },
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo",
+          "recommended": false,
+          "operator": "Vueling",
+          "operators_alt": [
+            "Ryanair"
+          ],
+          "duration": "1h",
+          "price_local": "30-100€",
+          "price_eur": "30-100€",
+          "tip": "Aeropuerto de Malaga bien conectado por cercanias. Con tiempo de aeropuerto, tren suele ser mejor."
+        }
+      ]
+    },
+    {
+      "from": "Madrid",
+      "to": "Granada",
+      "distance_km": 420,
+      "popular": false,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "AVE alta velocidad",
+          "recommended": true,
+          "operator": "Renfe AVE",
+          "operators_alt": [
+            "Iryo",
+            "OUIGO"
+          ],
+          "duration": "3h-3h15",
+          "price_local": "15-80€",
+          "price_eur": "15-80€",
+          "booking_url": "https://www.trainline.com",
+          "departure_station": "Puerta de Atocha",
+          "arrival_station": "Granada",
+          "tip": "AVE a Granada inaugurado en 2019. Desde 15€."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Autobus",
+          "recommended": false,
+          "operator": "ALSA",
+          "duration": "4h30-5h",
+          "price_local": "15-30€",
+          "price_eur": "15-30€",
+          "booking_url": "https://www.alsa.com",
+          "tip": "Autobuses mas frecuentes que trenes en esta ruta."
+        }
+      ]
+    },
+    {
+      "from": "Madrid",
+      "to": "Toledo",
+      "distance_km": 70,
+      "popular": true,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "AVANT (alta velocidad cercanias)",
+          "recommended": true,
+          "operator": "Renfe AVANT",
+          "duration": "33 min",
+          "price_local": "13-15€",
+          "price_eur": "13-15€",
+          "frequency": "Cada 30 min",
+          "booking_url": "https://www.trainline.com",
+          "departure_station": "Puerta de Atocha",
+          "arrival_station": "Toledo",
+          "tip": "Excursion de un dia perfecta desde Madrid. Solo 33 minutos."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Autobus",
+          "recommended": false,
+          "operator": "ALSA",
+          "duration": "1h-1h15",
+          "price_local": "5-10€",
+          "price_eur": "5-10€",
+          "frequency": "Cada 30 min",
+          "booking_url": "https://www.alsa.com",
+          "departure_station": "Estacion Sur",
+          "tip": "Mas barato que el tren pero mas lento."
+        }
+      ]
+    },
+    {
+      "from": "Madrid",
+      "to": "Cordoba",
+      "distance_km": 345,
+      "popular": false,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "AVE alta velocidad",
+          "recommended": true,
+          "operator": "Renfe AVE",
+          "operators_alt": [
+            "Iryo",
+            "OUIGO"
+          ],
+          "duration": "1h45-2h",
+          "price_local": "9-70€",
+          "price_eur": "9-70€",
+          "frequency": "20+ trenes/dia",
+          "booking_url": "https://www.trainline.com",
+          "departure_station": "Puerta de Atocha",
+          "arrival_station": "Cordoba Central",
+          "tip": "OUIGO desde 9€. Cordoba es parada intermedia de muchos AVE Madrid-Sevilla/Malaga."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Autobus",
+          "recommended": false,
+          "operator": "ALSA",
+          "operators_alt": [
+            "Socibus"
+          ],
+          "duration": "4h30",
+          "price_local": "15-25€",
+          "price_eur": "15-25€",
+          "booking_url": "https://www.alsa.com",
+          "tip": "Mucho mas lento que el AVE."
+        }
+      ]
+    },
+    {
+      "from": "Barcelona",
+      "to": "Valencia",
+      "distance_km": 350,
+      "popular": false,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Euromed / AVE",
+          "recommended": true,
+          "operator": "Renfe Euromed / AVE",
+          "duration": "2h45-3h15",
+          "price_local": "15-50€",
+          "price_eur": "15-50€",
+          "frequency": "10+ trenes/dia",
+          "booking_url": "https://www.trainline.com",
+          "departure_station": "Sants",
+          "arrival_station": "Joaquin Sorolla",
+          "tip": "Euromed recorre la costa y tiene buenas vistas al Mediterraneo."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Autobus",
+          "recommended": false,
+          "operator": "ALSA",
+          "operators_alt": [
+            "FlixBus"
+          ],
+          "duration": "4-5h",
+          "price_local": "10-25€",
+          "price_eur": "10-25€",
+          "booking_url": "https://www.alsa.com",
+          "tip": "Mas barato pero significativamente mas lento."
+        }
+      ]
+    },
+    {
+      "from": "Barcelona",
+      "to": "Mallorca",
+      "distance_km": 0,
+      "popular": true,
+      "options": [
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo",
+          "recommended": true,
+          "operator": "Vueling",
+          "operators_alt": [
+            "Ryanair",
+            "Air Europa"
+          ],
+          "duration": "50 min",
+          "price_local": "20-80€",
+          "price_eur": "20-80€",
+          "frequency": "15+ vuelos/dia",
+          "tip": "Casi siempre mas rapido y barato que el ferry. La mejor opcion sin coche."
+        },
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Ferry",
+          "recommended": false,
+          "operator": "Balearia",
+          "operators_alt": [
+            "Trasmediterranea"
+          ],
+          "duration": "fast 3-3.5h / regular 7-8h",
+          "price_local": "fast 45-90€ / regular 35-60€",
+          "price_eur": "fast 45-90€ / regular 35-60€",
+          "booking_url": "https://www.balearia.com",
+          "booking_alt": "https://www.trasmediterranea.es",
+          "departure_station": "Port de Barcelona",
+          "tip": "Util si llevas coche. Sin coche, el avion es mejor opcion."
+        }
+      ]
+    },
+    {
+      "from": "Sevilla",
+      "to": "Granada",
+      "distance_km": 250,
+      "popular": false,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Tren",
+          "recommended": false,
+          "operator": "Renfe",
+          "duration": "2h30-3h",
+          "price_local": "20-35€",
+          "price_eur": "20-35€",
+          "frequency": "4 trenes/dia",
+          "booking_url": "https://www.trainline.com",
+          "departure_station": "Santa Justa",
+          "arrival_station": "Granada",
+          "tip": "Pocos trenes diarios. Comprobar horarios."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Autobus",
+          "recommended": true,
+          "operator": "ALSA",
+          "duration": "3h",
+          "price_local": "12-25€",
+          "price_eur": "12-25€",
+          "frequency": "10+ buses/dia",
+          "booking_url": "https://www.alsa.com",
+          "tip": "Buses mucho mas frecuentes que trenes en esta ruta."
+        }
+      ]
+    },
+    {
+      "from": "Sevilla",
+      "to": "Cordoba",
+      "distance_km": 140,
+      "popular": false,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "AVE / AVANT",
+          "recommended": true,
+          "operator": "Renfe AVE / AVANT",
+          "operators_alt": [
+            "OUIGO"
+          ],
+          "duration": "45 min",
+          "price_local": "9-30€",
+          "price_eur": "9-30€",
+          "frequency": "20+ trenes/dia",
+          "booking_url": "https://www.trainline.com",
+          "departure_station": "Santa Justa",
+          "arrival_station": "Cordoba Central",
+          "tip": "Trayecto cortisimo en AVE. OUIGO desde 9€. Perfecto para excursion de un dia."
+        }
+      ]
+    },
+    {
+      "from": "Malaga",
+      "to": "Granada",
+      "distance_km": 130,
+      "popular": false,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Autobus",
+          "recommended": true,
+          "operator": "ALSA",
+          "duration": "1h30-2h",
+          "price_local": "10-15€",
+          "price_eur": "10-15€",
+          "frequency": "40+ buses/dia",
+          "booking_url": "https://www.alsa.com",
+          "tip": "Bus domina esta ruta con altisima frecuencia. Hasta 40+ buses diarios."
+        },
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Tren",
+          "recommended": false,
+          "operator": "Renfe",
+          "duration": "2h-2h30",
+          "price_local": "15-25€",
+          "price_eur": "15-25€",
+          "frequency": "4-6 trenes/dia",
+          "booking_url": "https://www.trainline.com",
+          "departure_station": "Maria Zambrano",
+          "arrival_station": "Granada",
+          "tip": "Menos frecuente y mas caro que el bus."
+        }
+      ]
+    },
+    {
+      "from": "Madrid",
+      "to": "Bilbao",
+      "distance_km": 395,
+      "popular": false,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Alvia",
+          "recommended": false,
+          "operator": "Renfe Alvia",
+          "duration": "4h30-5h",
+          "price_local": "25-60€",
+          "price_eur": "25-60€",
+          "frequency": "5 trenes/dia",
+          "booking_url": "https://www.trainline.com",
+          "departure_station": "Chamartin",
+          "arrival_station": "Abando Indalecio Prieto",
+          "tip": "No hay AVE a Bilbao todavia. El Alvia tarda 4-5 horas."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Autobus",
+          "recommended": false,
+          "operator": "ALSA",
+          "operators_alt": [
+            "FlixBus"
+          ],
+          "duration": "4h30-5h",
+          "price_local": "20-40€",
+          "price_eur": "20-40€",
+          "frequency": "10+ buses/dia",
+          "booking_url": "https://www.alsa.com",
+          "tip": "Similar duracion al tren, a veces mas barato."
+        },
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo",
+          "recommended": true,
+          "operator": "Iberia",
+          "operators_alt": [
+            "Vueling"
+          ],
+          "duration": "1h",
+          "price_local": "40-120€",
+          "price_eur": "40-120€",
+          "tip": "Al no haber AVE, el vuelo es la opcion mas rapida."
+        }
+      ]
+    },
+    {
+      "from": "Madrid",
+      "to": "San Sebastian",
+      "distance_km": 450,
+      "popular": false,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Alvia",
+          "recommended": false,
+          "operator": "Renfe Alvia",
+          "duration": "5h-5h30",
+          "price_local": "30-65€",
+          "price_eur": "30-65€",
+          "frequency": "3-4 trenes/dia",
+          "booking_url": "https://www.trainline.com",
+          "departure_station": "Chamartin",
+          "tip": "Sin AVE. Trayecto largo pero paisaje bonito por Castilla y Pais Vasco."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Autobus",
+          "recommended": false,
+          "operator": "ALSA",
+          "duration": "5h30-6h",
+          "price_local": "25-45€",
+          "price_eur": "25-45€",
+          "booking_url": "https://www.alsa.com",
+          "tip": "Similar o mas lento que el tren."
+        },
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo",
+          "recommended": true,
+          "operator": "Vueling",
+          "operators_alt": [
+            "Iberia"
+          ],
+          "duration": "1h",
+          "price_local": "50-130€",
+          "price_eur": "50-130€",
+          "tip": "La opcion mas rapida. Aeropuerto de San Sebastian esta en Hondarribia."
+        }
+      ]
+    },
+    {
+      "from": "Barcelona",
+      "to": "Girona",
+      "distance_km": 100,
+      "popular": false,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "AVE / Rodalies",
+          "recommended": true,
+          "operator": "Renfe AVE (38 min) / Rodalies R11 (1h30)",
+          "duration": "38 min (AVE) / 1h30 (Rodalies)",
+          "price_local": "AVE 10-20€ / Rodalies 4-6€",
+          "price_eur": "AVE 10-20€ / Rodalies 4-6€",
+          "frequency": "20+ trenes/dia (sumando ambos)",
+          "booking_url": "https://www.trainline.com",
+          "departure_station": "Sants",
+          "tip": "Rodalies R11 es barato (4-6€) pero tarda 1h30. AVE rapido pero mas caro."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Autobus",
+          "recommended": false,
+          "operator": "ALSA",
+          "duration": "1h15",
+          "price_local": "8-15€",
+          "price_eur": "8-15€",
+          "booking_url": "https://www.alsa.com",
+          "tip": "Alternativa al tren con precio intermedio."
+        }
+      ]
+    },
+    {
+      "from": "Malaga",
+      "to": "Sevilla",
+      "distance_km": 210,
+      "popular": false,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "AVE / OUIGO",
+          "recommended": true,
+          "operator": "Renfe",
+          "operators_alt": [
+            "OUIGO"
+          ],
+          "duration": "2h",
+          "price_local": "15-40€",
+          "price_eur": "15-40€",
+          "frequency": "8 trenes/dia",
+          "booking_url": "https://www.trainline.com",
+          "departure_station": "Maria Zambrano",
+          "arrival_station": "Santa Justa",
+          "tip": "Conexion comoda entre las dos grandes de Andalucia."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Autobus",
+          "recommended": false,
+          "operator": "ALSA",
+          "duration": "2h30-3h",
+          "price_local": "15-25€",
+          "price_eur": "15-25€",
+          "booking_url": "https://www.alsa.com",
+          "tip": "Algo mas lento y precio similar al tren."
+        }
+      ]
+    },
+    {
+      "from": "Cordoba",
+      "to": "Granada",
+      "distance_km": 160,
+      "popular": false,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Tren",
+          "recommended": false,
+          "operator": "Renfe",
+          "duration": "2h-2h30",
+          "price_local": "20-35€",
+          "price_eur": "20-35€",
+          "frequency": "4 trenes/dia",
+          "booking_url": "https://www.trainline.com",
+          "tip": "Pocos trenes diarios."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Autobus",
+          "recommended": true,
+          "operator": "ALSA",
+          "duration": "2h30-3h",
+          "price_local": "12-20€",
+          "price_eur": "12-20€",
+          "frequency": "8 buses/dia",
+          "booking_url": "https://www.alsa.com",
+          "tip": "Mas frecuente que el tren y mas barato."
+        }
+      ]
+    },
+    {
+      "from": "Algeciras",
+      "to": "Tanger",
+      "distance_km": 0,
+      "popular": true,
+      "options": [
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Ferry Algeciras-Tanger Med",
+          "recommended": true,
+          "operator": "Balearia",
+          "operators_alt": [
+            "FRS",
+            "Naviera Armas"
+          ],
+          "duration": "1-2h",
+          "price_local": "35-55€",
+          "price_eur": "35-55€",
+          "frequency": "23 salidas/dia entre 3 operadores",
+          "booking_url": "https://www.directferries.com",
+          "booking_alt": "https://www.frs.es",
+          "departure_station": "Puerto de Algeciras",
+          "tip": "El cruce mas popular Espana-Marruecos. Altisima frecuencia."
+        },
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Ferry Tarifa-Tanger (alternativa)",
+          "recommended": false,
+          "operator": "FRS",
+          "duration": "35 min",
+          "price_local": "40-60€",
+          "price_eur": "40-60€",
+          "booking_url": "https://www.frs.es",
+          "departure_station": "Puerto de Tarifa",
+          "tip": "Mas rapido (35 min) pero menos frecuente que desde Algeciras."
+        }
+      ]
+    },
+    {
+      "from": "Valencia",
+      "to": "Ibiza",
+      "distance_km": 0,
+      "popular": false,
+      "options": [
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo",
+          "recommended": true,
+          "operator": "Vueling",
+          "operators_alt": [
+            "Ryanair"
+          ],
+          "duration": "45 min",
+          "price_local": "25-90€",
+          "price_eur": "25-90€",
+          "tip": "Vuelo mucho mas practico que el ferry."
+        },
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Ferry",
+          "recommended": false,
+          "operator": "Balearia",
+          "operators_alt": [
+            "Trasmediterranea"
+          ],
+          "duration": "4h30",
+          "price_local": "45-80€",
+          "price_eur": "45-80€",
+          "frequency": "1-2 ferries/dia",
+          "booking_url": "https://www.balearia.com",
+          "tip": "Solo recomendable si llevas coche."
+        }
+      ]
+    },
+    {
+      "from": "Barcelona",
+      "to": "Ibiza",
+      "distance_km": 0,
+      "popular": false,
+      "options": [
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo",
+          "recommended": true,
+          "operator": "Vueling",
+          "operators_alt": [
+            "Ryanair"
+          ],
+          "duration": "50 min",
+          "price_local": "25-80€",
+          "price_eur": "25-80€",
+          "frequency": "5+ vuelos/dia",
+          "tip": "La mejor opcion. Rapido y barato con low-cost."
+        },
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Ferry",
+          "recommended": false,
+          "operator": "Balearia",
+          "operators_alt": [
+            "Trasmediterranea"
+          ],
+          "duration": "8-9h",
+          "price_local": "40-70€",
+          "price_eur": "40-70€",
+          "frequency": "1 ferry/dia",
+          "booking_url": "https://www.balearia.com",
+          "departure_station": "Port de Barcelona",
+          "tip": "Solo si llevas coche o quieres la experiencia del viaje en barco."
+        }
+      ]
+    }
+  ],
+  "booking_platforms": [
+    {
+      "name": "Trainline (vende Renfe/Iryo/OUIGO)",
+      "url": "https://www.trainline.com",
+      "type": "operador",
+      "best_for": "Compra todos los trenes de Espana en una sola web. Funciona en movil y apps."
+    },
+    {
+      "name": "Iryo",
+      "url": "https://www.iryo.eu",
+      "type": "operador",
+      "best_for": "AVE competidor con precios dinamicos"
+    },
+    {
+      "name": "OUIGO",
+      "url": "https://www.ouigo.com",
+      "type": "operador",
+      "best_for": "AVE low-cost, desde 9 euros"
+    },
+    {
+      "name": "Trainline",
+      "url": "https://www.trainline.com",
+      "type": "agregador",
+      "best_for": "Comparar precios de todos los operadores de tren en Europa"
+    },
+    {
+      "name": "Omio",
+      "url": "https://www.omio.com",
+      "type": "agregador",
+      "best_for": "Tren + bus + vuelo, comparador multimodal"
+    },
+    {
+      "name": "ALSA",
+      "url": "https://www.alsa.com",
+      "type": "operador",
+      "best_for": "Autobuses nacionales, lider absoluto en rutas por carretera"
+    },
+    {
+      "name": "FlixBus",
+      "url": "https://www.flixbus.com",
+      "type": "operador",
+      "best_for": "Autobuses low-cost Europa"
+    },
+    {
+      "name": "Socibus",
+      "url": "https://www.socibus.es",
+      "type": "operador",
+      "best_for": "Buses Madrid-Andalucia"
+    },
+    {
+      "name": "BlaBlaCar",
+      "url": "https://www.blablacar.es",
+      "type": "plataforma",
+      "best_for": "Coche compartido, muy popular en Espana"
+    },
+    {
+      "name": "Balearia",
+      "url": "https://www.balearia.com",
+      "type": "operador",
+      "best_for": "Ferries a Baleares y Marruecos"
+    },
+    {
+      "name": "Trasmediterranea",
+      "url": "https://www.trasmediterranea.es",
+      "type": "operador",
+      "best_for": "Ferries a Baleares y Canarias"
+    },
+    {
+      "name": "FRS",
+      "url": "https://www.frs.es",
+      "type": "operador",
+      "best_for": "Ferries Tarifa/Algeciras-Tanger"
+    },
+    {
+      "name": "Direct Ferries",
+      "url": "https://www.directferries.com",
+      "type": "agregador",
+      "best_for": "Comparador de ferries, todas las rutas"
+    },
+    {
+      "name": "Vueling",
+      "url": "https://www.vueling.com",
+      "type": "operador",
+      "best_for": "Aerolinea low-cost con base en Barcelona"
+    },
+    {
+      "name": "Ryanair",
+      "url": "https://www.ryanair.com",
+      "type": "operador",
+      "best_for": "Low-cost generica, vuelos baratos nacionales e internacionales"
+    },
+    {
+      "name": "Iberia",
+      "url": "https://www.iberia.com",
+      "type": "operador",
+      "best_for": "Aerolinea bandera de Espana, puente aereo Madrid-Barcelona"
+    }
+  ],
+  "tips_general": [
+    "3 operadores AVE compiten en precio: Renfe, Iryo, OUIGO. Compara siempre en Trainline.",
+    "OUIGO desde 9€ es la opcion mas barata en tren de alta velocidad.",
+    "ALSA tiene 40-60+ buses diarios en rutas populares.",
+    "BlaBlaCar muy popular para rutas sin tren directo.",
+    "Para Baleares: vuelos low-cost casi siempre mas baratos que ferry sin coche.",
+    "Las tarjetas de transporte locales ahorran mucho frente a billetes sueltos.",
+    "Cercanias Renfe conecta los aeropuertos de Madrid, Barcelona y Malaga al centro.",
+    "Taxis tienen tarifas fijas al aeropuerto en Madrid (30€) y Barcelona (~39€).",
+    "No hay AVE a Bilbao ni San Sebastian todavia. Alvia tarda 4-5 horas.",
+    "En pueblos y zonas rurales: solo taxi convencional, sin apps de ride-hailing."
+  ]
+}

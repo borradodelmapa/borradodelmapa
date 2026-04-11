@@ -1,0 +1,1078 @@
+{
+  "country": "VN",
+  "country_name": "Vietnam",
+  "updated": "2026-04-11",
+  "currency": {
+    "code": "VND",
+    "symbol": "₫",
+    "rate_eur": 0.00004,
+    "_comment": "1 VND = 0.00004 EUR (1 EUR ≈ 25,000 VND)"
+  },
+
+  "ridehailing": {
+    "best": "grab",
+    "others": ["gojek", "indrive", "maxim"],
+    "tips": "Grab es el rey en todo Vietnam. Gojek (Be) más barato en HCMC. Xanh SM (motos eléctricas verdes VinFast) emergiendo en grandes ciudades.",
+    "payment": "Grab: tarjeta y efectivo. Taxi callejero: solo efectivo.",
+    "tipping": "No se espera propina."
+  },
+
+  "train": {
+    "operator": "Vietnam Railways (VNR/DSVN)",
+    "apps": ["rome2rio_app"],
+    "booking_local": "https://vietnam-railway.com",
+    "booking_foreign": "https://baolau.com",
+    "tips": "Reunification Express (34h completo Hanoi-HCMC), los tramos parciales son espectaculares. 4-berth soft sleeper es la mejor experiencia. Baolau.com es la mejor plataforma para extranjeros (inglés, pago con tarjeta).",
+    "passes": null
+  },
+
+  "metro_bus": {
+    "apps": ["grab_transit"],
+    "cities": {
+      "Hanoi": {
+        "systems": ["Metro (1 línea, inaugurado 2021)", "Bus urbano frecuente"],
+        "card": null,
+        "hours": "Bus ~05:00-22:00",
+        "local_app": "Grab"
+      },
+      "HCMC": {
+        "systems": ["Metro en construcción (línea 1 prevista 2024-2025)", "Bus urbano"],
+        "card": null,
+        "hours": "Bus ~05:00-21:00",
+        "local_app": "Grab"
+      },
+      "Da Nang": {
+        "systems": ["Sin metro", "Bus público línea 1 (Da Nang-Hoi An)"],
+        "card": null,
+        "hours": "Bus ~05:30-19:50",
+        "local_app": "Grab"
+      }
+    },
+    "tips": "No hay tarjeta unificada de transporte. Grab es la app imprescindible en todas las ciudades."
+  },
+
+  "ferry": {
+    "apps": ["directferries"],
+    "operators": ["Superdong", "Phu Quoc Express", "Thanh Thoi"],
+    "booking_url": "https://superdong.com.vn",
+    "booking_alt": "https://phuquocexpress.com",
+    "seasonal": null,
+    "tips": "Ferries a Phu Quoc desde Rach Gia y Ha Tien. Superdong y Phu Quoc Express son los operadores principales."
+  },
+
+  "intercity_bus": {
+    "operators": ["Futa Bus (Phuong Trang)", "The Sinh Tourist", "Hoang Long", "Hanh Cafe"],
+    "booking_url": "https://futabus.vn",
+    "booking_alt": "https://vexere.com",
+    "tips": "Sleeper bus (giường nằm) es la forma más popular de viajar entre ciudades. Open bus ticket (Sinh Tourist): hop-on hop-off todo Vietnam ~35-70€. Futa Bus es el gold standard — fiable y frecuente."
+  },
+
+  "special": {
+    "modes": ["xe om (moto-taxi)", "xích lô (ciclo-rickshaw)", "junco (Ha Long)"],
+    "tips": "Grab moto = forma más rápida en tráfico urbano. Xích lô turístico en Hanoi Old Quarter (negociar precio antes). Juncos tradicionales en Ha Long Bay.",
+    "scams": "Taxi: Vinasun y Mai Linh son fiables, evitar taxis sin marca o con taxímetro trucado. Negociar precio antes de subir a xích lô o xe om callejero."
+  },
+
+  "driving": {
+    "side": "right",
+    "license": "IDP técnicamente requerida pero no siempre pedida en zonas turísticas",
+    "scooter": "Muy popular: 150-250K VND/día (6-10€). Sin IDP = sin cobertura de seguro. Accidentes de moto muy frecuentes.",
+    "road_quality": "Autopistas buenas. Carreteras rurales variables. Tráfico caótico en ciudades."
+  },
+
+  "maps_app": "Google Maps funciona bien en ciudades. Grab Maps integrado en la app.",
+
+  "airports": {
+    "HAN": {
+      "name": "Noi Bai International Airport",
+      "city": "Hanoi",
+      "distance_km": 27,
+      "transfers": [
+        {
+          "mode": "bus",
+          "name": "Bus 86 Express",
+          "duration": "50-60 min",
+          "price_local": "30,000 VND",
+          "price_eur": "~1.10€",
+          "frequency": "Cada 25-30 min",
+          "hours": "06:25-23:05",
+          "tip": "Hasta Hanoi Old Quarter. Opción más barata."
+        },
+        {
+          "mode": "grab",
+          "name": "Grab / Taxi",
+          "duration": "45-60 min",
+          "price_local": "250,000-400,000 VND",
+          "price_eur": "~10-16€",
+          "frequency": "Bajo demanda",
+          "hours": "24h",
+          "tip": "Grab más transparente que taxi. Punto de recogida designado en llegadas."
+        }
+      ]
+    },
+    "SGN": {
+      "name": "Tan Son Nhat International Airport",
+      "city": "HCMC",
+      "distance_km": 6,
+      "transfers": [
+        {
+          "mode": "grab",
+          "name": "Grab / Taxi",
+          "duration": "15-20 min",
+          "price_local": "130,000-200,000 VND",
+          "price_eur": "~5-8€",
+          "frequency": "Bajo demanda",
+          "hours": "24h",
+          "tip": "Aeropuerto a solo 6 km del centro. Grab recomendado sobre taxi."
+        },
+        {
+          "mode": "bus",
+          "name": "Bus 109 / 152",
+          "duration": "30-45 min",
+          "price_local": "15,000-20,000 VND",
+          "price_eur": "~0.60-0.80€",
+          "frequency": "Cada 15-20 min",
+          "hours": "05:30-01:30",
+          "tip": "109 hasta Parque 23/9 (District 1). 152 hasta Ben Thanh."
+        }
+      ]
+    },
+    "DAD": {
+      "name": "Da Nang International Airport",
+      "city": "Da Nang",
+      "distance_km": 3,
+      "transfers": [
+        {
+          "mode": "grab",
+          "name": "Grab / Taxi",
+          "duration": "10-15 min",
+          "price_local": "40,000-100,000 VND",
+          "price_eur": "~1.60-4€",
+          "frequency": "Bajo demanda",
+          "hours": "24h",
+          "tip": "Aeropuerto a solo 3 km del centro. El trayecto más corto y barato de Vietnam."
+        }
+      ]
+    },
+    "HUI": {
+      "name": "Phu Bai International Airport",
+      "city": "Hue",
+      "distance_km": 15,
+      "transfers": [
+        {
+          "mode": "grab",
+          "name": "Grab / Taxi",
+          "duration": "20-25 min",
+          "price_local": "250,000-300,000 VND",
+          "price_eur": "~10-12€",
+          "frequency": "Bajo demanda",
+          "hours": "24h",
+          "tip": "Opción más cómoda y directa."
+        },
+        {
+          "mode": "bus",
+          "name": "Bus #2",
+          "duration": "45 min",
+          "price_local": "7,000 VND",
+          "price_eur": "~0.28€",
+          "frequency": "Cada 30-45 min",
+          "hours": "05:30-18:00",
+          "tip": "Opción ultra barata pero lenta. Hasta centro de Hue."
+        },
+        {
+          "mode": "shuttle",
+          "name": "Shuttle compartido",
+          "duration": "25-30 min",
+          "price_local": "100,000 VND",
+          "price_eur": "~3.80€",
+          "frequency": "Según vuelos",
+          "hours": "Según vuelos",
+          "tip": "Buen equilibrio precio-comodidad."
+        }
+      ]
+    },
+    "CXR": {
+      "name": "Cam Ranh International Airport",
+      "city": "Nha Trang",
+      "distance_km": 35,
+      "transfers": [
+        {
+          "mode": "grab",
+          "name": "Grab / Taxi",
+          "duration": "35-45 min",
+          "price_local": "200,000-400,000 VND",
+          "price_eur": "~8-16€",
+          "frequency": "Bajo demanda",
+          "hours": "24h",
+          "tip": "Aeropuerto lejos de Nha Trang (35 km). Negociar precio si taxi."
+        },
+        {
+          "mode": "bus",
+          "name": "Bus #18",
+          "duration": "60 min",
+          "price_local": "50,000-74,000 VND",
+          "price_eur": "~2-3€",
+          "frequency": "Cada 20-30 min",
+          "hours": "06:00-20:00",
+          "tip": "Opción económica. Hasta centro de Nha Trang."
+        }
+      ]
+    },
+    "DLI": {
+      "name": "Lien Khuong Airport",
+      "city": "Da Lat",
+      "distance_km": 30,
+      "transfers": [
+        {
+          "mode": "taxi",
+          "name": "Taxi",
+          "duration": "40 min",
+          "price_local": "250,000-300,000 VND",
+          "price_eur": "~10-12€",
+          "frequency": "Bajo demanda",
+          "hours": "24h",
+          "tip": "Opción más común. Sin shuttle de aeropuerto desde 2025."
+        },
+        {
+          "mode": "grab",
+          "name": "Grab",
+          "duration": "40 min",
+          "price_local": "250,000 VND + 40,000 peaje",
+          "price_eur": "~11.50€",
+          "frequency": "Bajo demanda",
+          "hours": "24h",
+          "tip": "Precio similar al taxi. No hay shuttle de aeropuerto desde 2025."
+        }
+      ]
+    }
+  },
+
+  "stations": {
+    "Hanoi": {
+      "train": "Ga Ha Noi (120 Le Duan)",
+      "bus": "My Dinh (norte/noroeste: Sapa, Ha Giang, Ha Long)",
+      "bus_alt": "Giap Bat (sur: Ninh Binh, Hue, HCMC)"
+    },
+    "HCMC": {
+      "train": "Ga Sai Gon (1 Nguyen Thong, District 3)",
+      "bus": "Mien Dong (este/norte: Da Lat, Nha Trang)",
+      "bus_alt": "Mien Tay (oeste/sur: Mekong, Can Tho)"
+    },
+    "Da Nang": {
+      "train": "Ga Da Nang (200 Hai Phong)",
+      "bus": "Da Nang Central Bus Station"
+    },
+    "Hue": {
+      "train": "Ga Hue (2 Bui Thi Xuan)",
+      "bus": "Hue Bus Station (Ben Xe Phia Nam)"
+    }
+  },
+
+  "routes": [
+    {
+      "from": "Hanoi",
+      "to": "HCMC",
+      "distance_km": 1726,
+      "popular": true,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Tren Reunificación (Experiencia)",
+          "recommended": false,
+          "operator": "Vietnam Railways (VNR)",
+          "duration": "32-36h",
+          "price_local": "750K-3M VND (hard seat 750K / soft seat 900K / hard berth 6-bed 1.2M / soft berth 4-bed 1.5M / VIP 2-bed 3M)",
+          "price_eur": "~30-120€",
+          "frequency": "4 trenes/día (SE1-SE8)",
+          "booking_url": "https://baolau.com",
+          "booking_alt": "https://vietnam-railway.com",
+          "class_tip": "4-berth soft sleeper mejor experiencia. Overnight ahorra hotel.",
+          "tip": "Paradas en Ninh Binh, Hue, Da Nang, Nha Trang. Trayecto icónico completo."
+        },
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo (Recomendado)",
+          "recommended": true,
+          "operator": "Vietnam Airlines",
+          "operators_alt": ["VietJet", "Bamboo Airways"],
+          "duration": "2h",
+          "price_local": "800K-3.5M VND",
+          "price_eur": "~32-140€",
+          "frequency": "30+ vuelos/día",
+          "booking_url": "https://vietnamairlines.com",
+          "advance_booking": "2-4 semanas para mejores precios",
+          "tip": "VietJet la más barata pero sin equipaje incluido. Mid-week más barato."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Sleeper Bus",
+          "recommended": false,
+          "operator": "Hoang Long",
+          "operators_alt": ["Sinh Tourist", "Hanh Cafe"],
+          "duration": "33-40h",
+          "price_local": "500K-900K VND",
+          "price_eur": "~20-36€",
+          "booking_url": "https://vexere.com",
+          "booking_alt": "https://thesinhtourist.vn",
+          "tip": "Open bus ticket ~35-70€ todo Vietnam, válido 1 mes, hop-on hop-off."
+        }
+      ]
+    },
+    {
+      "from": "Hanoi",
+      "to": "Sapa",
+      "distance_km": 320,
+      "popular": true,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Sleeper Bus directo (Recomendado)",
+          "recommended": true,
+          "operator": "Sao Viet",
+          "operators_alt": ["HK Open Tour", "Inter Bus Lines"],
+          "duration": "5.5-6h (vía CT05)",
+          "price_local": "280K VND estándar / 420-500K VIP single cabin",
+          "price_eur": "~11-20€",
+          "frequency": "15-20 salidas/día (mayoría nocturnas)",
+          "booking_url": "https://vexere.com",
+          "booking_alt": "https://12go.asia",
+          "tip": "Recogida gratis en Old Quarter. VIP cabin recomendada. Bus nocturno = amanecer en Sapa."
+        },
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Tren nocturno a Lao Cai + shuttle",
+          "recommended": false,
+          "operator": "Vietnam Railways (VNR)",
+          "operators_alt": ["Chapa Express", "Livitrans", "Sapaly", "Victoria Express"],
+          "duration": "8h tren + 1h shuttle",
+          "price_local": "VNR 4-berth 425K VND / privado lujo 1.5M + shuttle Lao Cai-Sapa 30-120K",
+          "price_eur": "~17-60€ (tren) + ~1-5€ (shuttle)",
+          "frequency": "2 trenes/noche (21:35 SP1, 22:00 SP3)",
+          "booking_url": "https://baolau.com",
+          "departure_station": "Ga Ha Noi",
+          "arrival_station": "Ga Lao Cai (35 km de Sapa)",
+          "tip": "Tren llega a Lao Cai. Bus #01 Lao Cai→Sapa cada 20-30 min, 30K VND."
+        }
+      ]
+    },
+    {
+      "from": "Hanoi",
+      "to": "Ha Long Bay",
+      "distance_km": 160,
+      "popular": true,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Shuttle turístico (Recomendado)",
+          "recommended": true,
+          "operator": "Kumho",
+          "operators_alt": ["Hung Duc", "Phuc Xuyen"],
+          "duration": "2-2.5h (vía autopista)",
+          "price_local": "180,000-300,000 VND",
+          "price_eur": "~7-12€",
+          "frequency": "Hung Duc 12 viajes/día, Phuc Xuyen 30/día",
+          "booking_url": "https://vexere.com",
+          "departure_station": "My Dinh",
+          "tip": "Autopista nueva reduce el trayecto a 2h."
+        },
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Crucero con transfer incluido",
+          "recommended": false,
+          "operator": "Bhaya Cruises",
+          "operators_alt": ["Indochina Junk", "Heritage Line"],
+          "duration": "2.5-3.5h (incluyendo recogida hotel)",
+          "price_local": "Incluido en crucero o ~750K VND standalone",
+          "price_eur": "~30€ standalone",
+          "booking_url": "https://12go.asia",
+          "tip": "La mayoría de cruceros 2-3 días incluyen transfer desde hotel en Hanoi."
+        }
+      ]
+    },
+    {
+      "from": "Hanoi",
+      "to": "Ninh Binh",
+      "distance_km": 95,
+      "popular": true,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Tren (Recomendado)",
+          "recommended": true,
+          "operator": "Vietnam Railways (VNR)",
+          "operators_alt": ["Lotus Train"],
+          "duration": "2h10",
+          "price_local": "103,000-259,000 VND (soft seat 103-150K / sleeper 259K)",
+          "price_eur": "~4-10€",
+          "frequency": "Cada hora aprox",
+          "booking_url": "https://baolau.com",
+          "departure_station": "Ga Ha Noi",
+          "arrival_station": "Ga Ninh Binh",
+          "tip": "El más barato y rápido. Perfecto para excursión de un día."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Bus / Limousine",
+          "recommended": false,
+          "operator": "X.E Vietnam",
+          "operators_alt": ["BinhMinh Limousine"],
+          "duration": "1.5-2h",
+          "price_local": "150,000-270,000 VND",
+          "price_eur": "~6-11€",
+          "frequency": "XE 16 viajes/día",
+          "booking_url": "https://vexere.com",
+          "tip": "Limousine recoge en Old Quarter de Hanoi."
+        }
+      ]
+    },
+    {
+      "from": "Hanoi",
+      "to": "Hue",
+      "distance_km": 688,
+      "popular": false,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Tren nocturno (Recomendado)",
+          "recommended": true,
+          "operator": "Vietnam Railways (VNR)",
+          "duration": "13-14h",
+          "price_local": "780K-1.875M VND (soft sleeper 780-975K / privado turístico ~1.875M)",
+          "price_eur": "~31-75€",
+          "frequency": "4+ trenes/día (serie SE)",
+          "booking_url": "https://baolau.com",
+          "departure_station": "Ga Ha Noi",
+          "arrival_station": "Ga Hue",
+          "tip": "Salida por la tarde, llegada por la mañana. Mejor segmento nocturno del Reunification Express."
+        },
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo",
+          "recommended": false,
+          "operator": "Vietnam Airlines",
+          "operators_alt": ["VietJet"],
+          "duration": "1h15",
+          "price_local": "1.05M-2.5M VND",
+          "price_eur": "~42-100€",
+          "frequency": "~7 directos/día",
+          "booking_url": "https://vietnamairlines.com",
+          "tip": "Phu Bai Airport a 15 km de Hue. Añadir 250-300K VND para taxi/Grab."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Sleeper Bus",
+          "recommended": false,
+          "operator": "Hoang Long",
+          "operators_alt": ["Sinh Tourist", "Camel Travel"],
+          "duration": "12-14h",
+          "price_local": "350,000-600,000 VND",
+          "price_eur": "~14-24€",
+          "booking_url": "https://vexere.com",
+          "tip": "Más barato que el tren pero menos cómodo."
+        }
+      ]
+    },
+    {
+      "from": "Hue",
+      "to": "Hoi An",
+      "distance_km": 130,
+      "popular": true,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Bus turístico / Limousine (Recomendado)",
+          "recommended": true,
+          "operator": "Hai Van Limousine",
+          "operators_alt": ["Hanh Cafe", "Vietnam Travel Bus", "Sinh Tourist"],
+          "duration": "3.5-4.5h",
+          "price_local": "90K-300K VND (Hanh Cafe desde 90K / Hai Van 220K / Luxury Van 250-300K)",
+          "price_eur": "~3.60-12€",
+          "frequency": "Hai Van 2-3 buses/hora, 04:30-22:00",
+          "booking_url": "https://12go.asia",
+          "booking_alt": "https://bookaway.com",
+          "tip": "Media ~250K VND. La mayoría paran en el Paso Hai Van o Marble Mountains."
+        },
+        {
+          "type": "minivan",
+          "emoji": "🚗",
+          "label": "Coche privado vía Hai Van Pass (Experiencia)",
+          "recommended": false,
+          "operator": "Culture Pham Travel",
+          "operators_alt": ["Hoi An Transport Service"],
+          "duration": "2-3h",
+          "price_local": "1.45M-1.5M VND por coche (no por persona)",
+          "price_eur": "~58-60€ por coche",
+          "booking_url": "https://culturephamtravel.com",
+          "booking_alt": "https://hoiantransportservice.com",
+          "tip": "Incluye paradas en Lang Co Bay, mirador Hai Van Pass, Marble Mountains. Dividir coste 2-4 personas."
+        },
+        {
+          "type": "motorbike",
+          "emoji": "🏍️",
+          "label": "Moto Hai Van (Icónica)",
+          "recommended": false,
+          "duration": "3-4h con paradas",
+          "price_local": "150,000-250,000 VND/día alquiler",
+          "price_eur": "~6-10€",
+          "tip": "Ruta icónica. Alquilar en Hue, dejar en Hoi An (recargo one-way). Necesitas IDP. Revisar frenos."
+        }
+      ]
+    },
+    {
+      "from": "Hue",
+      "to": "Da Nang",
+      "distance_km": 100,
+      "popular": false,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Tren (Recomendado)",
+          "recommended": true,
+          "operator": "Vietnam Railways (VNR)",
+          "duration": "2.5-3h",
+          "price_local": "100,000-300,000 VND (estándar 100-150K / Heritage Train 300K)",
+          "price_eur": "~4-12€",
+          "frequency": "9 trenes/día + Heritage Train",
+          "booking_url": "https://baolau.com",
+          "departure_station": "Ga Hue",
+          "arrival_station": "Ga Da Nang",
+          "tip": "Heritage Train cruza POR ENCIMA del Paso Hai Van (los demás usan túnel). Panorámico."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Bus",
+          "recommended": false,
+          "operator": "iHome",
+          "operators_alt": ["Sinh Tourist", "Hung Thinh Phat"],
+          "duration": "2-2.5h",
+          "price_local": "119K-235K VND (Sinh Tourist 119K / iHome 235K)",
+          "price_eur": "~5-9.40€",
+          "booking_url": "https://12go.asia",
+          "tip": "Alternativa si no hay trenes disponibles."
+        }
+      ]
+    },
+    {
+      "from": "Da Nang",
+      "to": "Hoi An",
+      "distance_km": 30,
+      "popular": true,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Bus #1 (Más barato)",
+          "recommended": true,
+          "operator": "Da Nang Public Transport",
+          "duration": "40-75 min",
+          "price_local": "18,000-30,000 VND",
+          "price_eur": "~0.72-1.20€",
+          "frequency": "Cada 20 min",
+          "hours": "05:30-19:50",
+          "tip": "Opción ultra económica. Paradas a lo largo de la ruta costera."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚕",
+          "label": "Grab",
+          "recommended": false,
+          "operator": "Grab",
+          "duration": "45-60 min",
+          "price_local": "250,000-350,000 VND",
+          "price_eur": "~10-14€",
+          "tip": "10-20% más barato que taxis con taxímetro."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚕",
+          "label": "Taxi",
+          "recommended": false,
+          "operator": "Mai Linh / Vinasun",
+          "duration": "45-60 min",
+          "price_local": "350,000-600,000 VND",
+          "price_eur": "~14-24€",
+          "tip": "Usar solo taxis con taxímetro. Mai Linh y Vinasun son fiables."
+        }
+      ]
+    },
+    {
+      "from": "HCMC",
+      "to": "Da Lat",
+      "distance_km": 300,
+      "popular": false,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Sleeper Bus (Recomendado)",
+          "recommended": true,
+          "operator": "Futa Bus (Phuong Trang)",
+          "operators_alt": ["Thanh Buoi", "Tien Oanh"],
+          "duration": "7-8h",
+          "price_local": "200,000-500,000 VND (estándar 200-300K / luxury 500K)",
+          "price_eur": "~8-20€",
+          "frequency": "339 buses/día de 9 compañías(!)",
+          "booking_url": "https://futabus.vn",
+          "booking_alt": "https://vexere.com",
+          "departure_station": "Mien Dong",
+          "tip": "Futa Bus el más popular. Bus nocturno ahorra hotel."
+        },
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo",
+          "recommended": false,
+          "operator": "Vietnam Airlines",
+          "operators_alt": ["VietJet", "Bamboo Airways"],
+          "duration": "1h",
+          "price_local": "700K-3.5M VND (típico 875K-2.125M)",
+          "price_eur": "~35-85€",
+          "frequency": "11 vuelos/día",
+          "booking_url": "https://vietnamairlines.com",
+          "tip": "Lien Khuong Airport a 30 km del centro. Taxi ~300K VND. No hay shuttle de aeropuerto desde 2025."
+        }
+      ]
+    },
+    {
+      "from": "HCMC",
+      "to": "Mui Ne / Phan Thiet",
+      "distance_km": 167,
+      "popular": false,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Bus / Limousine (Recomendado)",
+          "recommended": true,
+          "operator": "Hanh Cafe",
+          "operators_alt": ["ADT Limousine", "Futa Bus"],
+          "duration": "3.5-4.5h",
+          "price_local": "190K-400K VND (Hanh Cafe 190-200K / ADT 340-400K)",
+          "price_eur": "~8-16€",
+          "frequency": "~123 viajes/día combinados",
+          "booking_url": "https://bookaway.com",
+          "booking_alt": "https://12go.asia",
+          "departure_station": "Mien Dong",
+          "tip": "La mayoría de buses paran directamente en los hoteles de la franja de Mui Ne."
+        },
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Tren",
+          "recommended": false,
+          "operator": "Vietnam Railways (VNR)",
+          "duration": "3.5h",
+          "price_local": "150,000-550,000 VND",
+          "price_eur": "~6-22€",
+          "frequency": "1 tren/día (sale ~06:40, SPT1)",
+          "booking_url": "https://baolau.com",
+          "departure_station": "Ga Sai Gon",
+          "tip": "Estación Phan Thiet a 20 km de Mui Ne, necesitas taxi/Grab."
+        }
+      ]
+    },
+    {
+      "from": "HCMC",
+      "to": "Can Tho / Delta del Mekong",
+      "distance_km": 170,
+      "popular": false,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Bus (Recomendado)",
+          "recommended": true,
+          "operator": "Futa Bus (Phuong Trang)",
+          "operators_alt": ["Thanh Buoi", "Mai Linh", "Vu Linh"],
+          "duration": "3-4h",
+          "price_local": "150K-230K VND (Ba Chau desde 150K / Futa ~165K / Vu Linh limousine desde 230K)",
+          "price_eur": "~6-9.20€",
+          "frequency": "Salidas frecuentes todo el día",
+          "booking_url": "https://futabus.vn",
+          "booking_alt": "https://vexere.com",
+          "departure_station": "Mien Tay",
+          "tip": "Futa Bus gold standard para esta ruta."
+        }
+      ]
+    },
+    {
+      "from": "HCMC",
+      "to": "Phu Quoc",
+      "distance_km": 400,
+      "popular": true,
+      "options": [
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo (Recomendado)",
+          "recommended": true,
+          "operator": "Vietnam Airlines",
+          "operators_alt": ["VietJet", "Bamboo Airways", "JetStar"],
+          "duration": "1h",
+          "price_local": "875K-2.5M+ VND",
+          "price_eur": "~35-100+€",
+          "frequency": "20-25 vuelos/día",
+          "booking_url": "https://vietnamairlines.com",
+          "tip": "La opción más rápida y popular. Aeropuerto PQC a 10 km de Duong Dong."
+        },
+        {
+          "type": "ferry+bus",
+          "emoji": "🚢",
+          "label": "Bus + Ferry vía Rach Gia",
+          "recommended": false,
+          "operator": "Futa Bus + Superdong",
+          "duration": "6-7h bus + 2.5h ferry = 10-12h total",
+          "price_local": "bus 150-250K + ferry 330K = ~480-580K VND",
+          "price_eur": "~19-23€",
+          "booking_url": "https://futabus.vn",
+          "booking_alt": "https://superdong.com.vn",
+          "departure_station": "Mien Tay",
+          "tip": "Superdong ferries desde Rach Gia a las 07:00, 08:10, 10:40, 13:10."
+        },
+        {
+          "type": "ferry+bus",
+          "emoji": "🚢",
+          "label": "Bus + Ferry vía Ha Tien (Más corto)",
+          "recommended": false,
+          "operator": "Phu Quoc Express / Superdong",
+          "duration": "5-6h bus + 1.5h ferry",
+          "price_local": "bus ~200K + ferry 230K = ~430K VND",
+          "price_eur": "~17€",
+          "booking_url": "https://phuquocexpress.com",
+          "booking_alt": "https://superdong.com.vn",
+          "departure_station": "Mien Tay",
+          "tip": "Ha Tien = ferry más corto. Salidas 07:45, 09:40, 13:15."
+        }
+      ]
+    },
+    {
+      "from": "Ha Giang",
+      "to": "Ha Giang Loop",
+      "distance_km": 350,
+      "popular": true,
+      "options": [
+        {
+          "type": "motorbike",
+          "emoji": "🏍️",
+          "label": "Moto Ha Giang Loop (Épica)",
+          "recommended": false,
+          "operator": "QT Motorbikes",
+          "operators_alt": ["Style Motorbikes"],
+          "duration": "3-4 días",
+          "price_local": "Honda Wave 180-250K VND/día / Honda XR150 450-600K/día",
+          "price_eur": "~7-24€/día",
+          "booking_url": "https://qtmotorbikesandtours.com.vn",
+          "booking_alt": "https://stylemotorbikes.com",
+          "tip": "Depósito 2-5M VND o pasaporte. IDP técnicamente requerida. Gasolineras escasas en zonas remotas."
+        },
+        {
+          "type": "motorbike",
+          "emoji": "🏍️",
+          "label": "Easy Rider guiado (Recomendado)",
+          "recommended": true,
+          "operator": "Ha Giang Easy Riders",
+          "operators_alt": ["Loop Trails", "Infinity Ha Giang Loop"],
+          "duration": "3 días / 2 noches",
+          "price_local": "budget grupo 3.5M VND / estándar 3.8-4.5M / privado hasta 7.5M (todo incluido: piloto, moto, gasolina, alojamiento, comidas)",
+          "price_eur": "~140-300€ todo incluido",
+          "booking_url": "https://hagiangeasyriders.com",
+          "booking_alt": "https://looptrails.com",
+          "advance_booking": "Reservar 2-3 días antes en temporada alta (oct-dic)",
+          "tip": "Máx 8 viajeros/grupo. Recomendado si no tienes experiencia en moto."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Llegar a Ha Giang desde Hanoi",
+          "recommended": false,
+          "duration": "6-7h",
+          "price_local": "300,000-400,000 VND",
+          "price_eur": "~12-16€",
+          "booking_url": "https://vexere.com",
+          "departure_station": "My Dinh (Hanoi)",
+          "tip": "Sleeper bus nocturno desde Hanoi. Primera parada antes del loop."
+        }
+      ]
+    },
+    {
+      "from": "Nha Trang",
+      "to": "Da Lat",
+      "distance_km": 135,
+      "popular": false,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Bus (Recomendado)",
+          "recommended": true,
+          "operator": "Cuc Tung",
+          "operators_alt": ["iHome", "Futa Bus", "Gorotrip Limousine"],
+          "duration": "3-4h",
+          "price_local": "170,000-230,000 VND",
+          "price_eur": "~7-9€",
+          "frequency": "Cuc Tung 12 viajes/día",
+          "booking_url": "https://vexere.com",
+          "booking_alt": "https://12go.asia",
+          "tip": "Carretera de montaña con muchas curvas. Pastillas para el mareo recomendadas. Mejor por la mañana."
+        }
+      ]
+    },
+    {
+      "from": "Hanoi",
+      "to": "Cat Ba Island",
+      "distance_km": 150,
+      "popular": false,
+      "options": [
+        {
+          "type": "ferry+bus",
+          "emoji": "🚢",
+          "label": "Bus + Ferry (Recomendado)",
+          "recommended": true,
+          "operator": "Hoang Long",
+          "operators_alt": ["Daiichi Travel", "Good Morning Cat Ba"],
+          "duration": "3-3.5h total",
+          "price_local": "275K VND estándar / 375-425K VIP limousine+speedboat",
+          "price_eur": "~11-17€",
+          "frequency": "Hoang Long: 05:20, 07:20, 11:20",
+          "booking_url": "https://goodmorningcatba.com",
+          "booking_alt": "https://12go.asia",
+          "tip": "Billete combinado bus+barco. Llega a Cat Ba Town."
+        },
+        {
+          "type": "ferry+bus",
+          "emoji": "🚡",
+          "label": "Bus + Teleférico",
+          "recommended": false,
+          "duration": "2.5h carretera + 15 min teleférico",
+          "price_local": "400,000-500,000 VND",
+          "price_eur": "~15-19€",
+          "tip": "Opción más nueva y panorámica."
+        }
+      ]
+    },
+    {
+      "from": "Hanoi",
+      "to": "HCMC (Open Bus)",
+      "distance_km": 1726,
+      "popular": true,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Open Bus Ticket (Todo Vietnam)",
+          "recommended": true,
+          "operator": "Sinh Tourist",
+          "operators_alt": ["Hanh Cafe", "Camel Travel"],
+          "duration": "Usar dentro de 1 mes",
+          "price_local": "875K-1.75M VND",
+          "price_eur": "~35-70€ ruta completa",
+          "booking_url": "https://thesinhtourist.vn",
+          "booking_alt": "https://vexere.com",
+          "tip": "Paradas estándar: Hanoi-Ninh Binh-Hue-Hoi An-Nha Trang-Da Lat-HCMC. Reservar asiento 1-2 días antes de cada tramo. Sinh Tourist el original y más fiable."
+        }
+      ]
+    },
+    {
+      "from": "Hanoi",
+      "to": "Da Nang",
+      "distance_km": 760,
+      "popular": false,
+      "options": [
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo (Recomendado)",
+          "recommended": true,
+          "operator": "Vietnam Airlines",
+          "operators_alt": ["VietJet", "Bamboo Airways"],
+          "duration": "1h20",
+          "price_local": "800K-2.5M VND",
+          "price_eur": "~32-100€",
+          "frequency": "15+ vuelos/día",
+          "booking_url": "https://vietnamairlines.com",
+          "tip": "Aeropuerto Da Nang a solo 3 km del centro."
+        },
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Tren nocturno",
+          "recommended": false,
+          "operator": "Vietnam Railways (VNR)",
+          "duration": "15-17h",
+          "price_local": "500K-1.4M VND",
+          "price_eur": "~20-56€",
+          "frequency": "4+ trenes/día",
+          "booking_url": "https://baolau.com",
+          "departure_station": "Ga Ha Noi",
+          "arrival_station": "Ga Da Nang",
+          "tip": "Sleeper nocturno ahorra hotel. Vistas costeras al amanecer."
+        }
+      ]
+    },
+    {
+      "from": "HCMC",
+      "to": "Nha Trang",
+      "distance_km": 430,
+      "popular": false,
+      "options": [
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo",
+          "recommended": false,
+          "operator": "Vietnam Airlines",
+          "operators_alt": ["VietJet", "Bamboo Airways"],
+          "duration": "1h",
+          "price_local": "700K-2M VND",
+          "price_eur": "~28-80€",
+          "frequency": "8-10 vuelos/día",
+          "booking_url": "https://vietnamairlines.com",
+          "tip": "Cam Ranh Airport a 35 km de Nha Trang. Añadir 200-400K VND para transfer."
+        },
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Tren (Recomendado)",
+          "recommended": true,
+          "operator": "Vietnam Railways (VNR)",
+          "duration": "7-9h",
+          "price_local": "400K-1M VND",
+          "price_eur": "~16-40€",
+          "frequency": "4+ trenes/día (serie SNT)",
+          "booking_url": "https://baolau.com",
+          "departure_station": "Ga Sai Gon",
+          "tip": "Tren diurno con vistas costeras espectaculares. Tren nocturno ahorra hotel."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Sleeper Bus",
+          "recommended": false,
+          "operator": "Futa Bus (Phuong Trang)",
+          "operators_alt": ["Sinh Tourist", "Hanh Cafe"],
+          "duration": "8-10h",
+          "price_local": "200,000-400,000 VND",
+          "price_eur": "~8-16€",
+          "booking_url": "https://futabus.vn",
+          "booking_alt": "https://vexere.com",
+          "tip": "Opción más económica. Bus nocturno ahorra hotel."
+        }
+      ]
+    }
+  ],
+
+  "booking_platforms": [
+    {
+      "name": "Baolau",
+      "url": "https://baolau.com",
+      "type": "agregador",
+      "best_for": "Trenes, ferries, buses. La mejor para extranjeros. Inglés y pago con tarjeta.",
+      "commission": "$1-3 por billete"
+    },
+    {
+      "name": "12Go Asia",
+      "url": "https://12go.asia",
+      "type": "agregador",
+      "best_for": "Todo tipo de transporte. Inglés. Ideal para extranjeros.",
+      "commission": "$3-5 por billete"
+    },
+    {
+      "name": "Vexere",
+      "url": "https://vexere.com",
+      "type": "agregador local",
+      "best_for": "Buses. Mayor selección. Plataforma local, comisión baja.",
+      "commission": "Baja"
+    },
+    {
+      "name": "Bookaway",
+      "url": "https://bookaway.com",
+      "type": "agregador",
+      "best_for": "Buses, minivans. Inglés.",
+      "commission": "$2-4 por billete"
+    },
+    {
+      "name": "Futa Bus",
+      "url": "https://futabus.vn",
+      "type": "operador directo",
+      "best_for": "Buses Futa/Phuong Trang. Compra directa, sin comisión.",
+      "commission": "Sin comisión"
+    },
+    {
+      "name": "The Sinh Tourist",
+      "url": "https://thesinhtourist.vn",
+      "type": "operador directo",
+      "best_for": "Buses turísticos, open bus tickets. Compra directa.",
+      "commission": "Sin comisión"
+    },
+    {
+      "name": "Vietnam Railway",
+      "url": "https://vietnam-railway.com",
+      "type": "operador oficial",
+      "best_for": "Billetes de tren oficiales VNR.",
+      "commission": "Sin comisión"
+    },
+    {
+      "name": "Vietnam Airlines",
+      "url": "https://vietnamairlines.com",
+      "type": "aerolínea",
+      "best_for": "Vuelos nacionales e internacionales. Aerolínea de bandera.",
+      "commission": "Sin comisión"
+    },
+    {
+      "name": "VietJet Air",
+      "url": "https://vietjetair.com",
+      "type": "aerolínea low-cost",
+      "best_for": "Vuelos nacionales baratos. Equipaje no incluido.",
+      "commission": "Sin comisión"
+    },
+    {
+      "name": "Bamboo Airways",
+      "url": "https://bambooairways.com",
+      "type": "aerolínea",
+      "best_for": "Vuelos nacionales.",
+      "commission": "Sin comisión"
+    },
+    {
+      "name": "Superdong",
+      "url": "https://superdong.com.vn",
+      "type": "operador ferry",
+      "best_for": "Ferries a Phu Quoc desde Rach Gia.",
+      "commission": "Sin comisión"
+    },
+    {
+      "name": "Phu Quoc Express",
+      "url": "https://phuquocexpress.com",
+      "type": "operador ferry",
+      "best_for": "Ferries a Phu Quoc desde Ha Tien.",
+      "commission": "Sin comisión"
+    }
+  ],
+
+  "tips_general": [
+    "Baolau.com es la mejor plataforma para extranjeros comprando trenes",
+    "Sleeper bus (giường nằm) es la forma más popular de viajar entre ciudades",
+    "Open bus ticket (Sinh Tourist) = hop-on hop-off todo Vietnam por ~35-70€",
+    "VietJet es la más barata pero no incluye equipaje — añadir en la reserva",
+    "Futa Bus (Phuong Trang) es el gold standard de buses — fiable y frecuente",
+    "Grab funciona en todas las ciudades grandes — la app imprescindible",
+    "Ha Giang Loop: mejor con Easy Rider si no tienes experiencia en moto",
+    "Tren Hue-Da Nang Heritage: el único que cruza el paso Hai Van (los demás usan túnel)",
+    "Para Phu Quoc: vuelo mucho más práctico que ferry (1h vs 10-12h)",
+    "Temporada alta (dic-feb, jul-ago): precios vuelos suben 20-50%. Reservar con antelación."
+  ]
+}

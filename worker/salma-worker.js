@@ -1392,10 +1392,12 @@ async function searchEvents(destination, dateFrom, dateTo, serperKey) {
   if (!destination || !dateFrom || !serperKey) return null;
   try {
     const fromDate = new Date(dateFrom);
+    const day = fromDate.getDate();
     const monthNames = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
     const month = monthNames[fromDate.getMonth()];
     const year = fromDate.getFullYear();
-    const query = `eventos ${destination} ${month} ${year} festivales cultura fiestas`;
+    // Buscar con fecha específica para evitar eventos pasados del mismo mes
+    const query = `que hacer ${destination} ${day} ${month} ${year} eventos festivales fiestas`;
 
     const res = await fetch('https://google.serper.dev/search', {
       method: 'POST',
@@ -1416,12 +1418,65 @@ async function searchEvents(destination, dateFrom, dateTo, serperKey) {
     const results = (data.organic || []).slice(0, 5).map(r => ({
       title: r.title || '',
       snippet: r.snippet || '',
+      date: r.date || '',
     }));
 
     return results.length > 0 ? results : null;
   } catch (e) {
     return null;
   }
+}
+
+// Buscar noticias locales recientes de un país/ciudad usando Brave Web Search (gratis)
+async function searchLocalNews(destination, countryName, braveKey) {
+  if (!destination || !braveKey) return null;
+  try {
+    const query = `noticias ${destination} ${countryName || ''} viajeros turismo`;
+    const res = await fetch(`https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}&count=5&freshness=pw&search_lang=es&result_filter=news`, {
+      headers: { 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'X-Subscription-Token': braveKey },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    // Extraer de web results (news filter los prioriza)
+    const webResults = data.web?.results || data.results || [];
+    const results = webResults.slice(0, 3).map(r => ({
+      title: (r.title || '').slice(0, 100),
+      source: (r.url || '').replace(/^https?:\/\/(www\.)?/, '').split('/')[0],
+      age: r.age || r.page_age || '',
+    }));
+    return results.length > 0 ? results : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+// Extraer fecha del mensaje del usuario (para weather/events en consultas de transporte)
+function extractDateFromMessage(message) {
+  if (!message) return null;
+  const m = message.toLowerCase();
+  const meses = { enero:1, febrero:2, marzo:3, abril:4, mayo:5, junio:6, julio:7, agosto:8, septiembre:9, octubre:10, noviembre:11, diciembre:12,
+    january:1, february:2, march:3, april:4, may:5, june:6, july:7, august:8, september:9, october:10, november:11, december:12 };
+  // "15 de junio", "el 20 abril", "20 de mayo de 2026"
+  let match = m.match(/(\d{1,2})\s+(?:de\s+)?(\w+)(?:\s+(?:de\s+)?(\d{4}))?/);
+  if (match) {
+    const day = parseInt(match[1]);
+    const monthNum = meses[match[2]];
+    if (monthNum && day >= 1 && day <= 31) {
+      const year = match[3] ? parseInt(match[3]) : new Date().getFullYear();
+      return `${year}-${String(monthNum).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    }
+  }
+  // "15/06", "15/06/2026"
+  match = m.match(/(\d{1,2})\/(\d{1,2})(?:\/(\d{4}))?/);
+  if (match) {
+    const day = parseInt(match[1]), month = parseInt(match[2]);
+    if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+      const year = match[3] ? parseInt(match[3]) : new Date().getFullYear();
+      return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    }
+  }
+  return null;
 }
 
 function getCountryCode(countryName) {
@@ -1723,27 +1778,155 @@ Propinas: ${c.propinas}]`);
   if (kvTransportData) {
     const t = kvTransportData;
     const lines = [];
-    if (t.ridehailing) {
-      const r = t.ridehailing;
-      lines.push(`Ride-hailing: ${r.best || ''} (también: ${(r.others || []).join(', ')}). ${r.tips || ''}`);
+
+    // ── Buscar ruta específica si el mensaje menciona origen→destino ──
+    let matchedRoute = null;
+    if (t.routes && Array.isArray(t.routes)) {
+      const msgLow = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      for (const route of t.routes) {
+        const fromNorm = (route.from || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const toNorm = (route.to || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        if (fromNorm && toNorm && msgLow.includes(fromNorm) && msgLow.includes(toNorm)) {
+          matchedRoute = route;
+          break;
+        }
+        // Intentar match inverso (Bangkok→Koh Samui cuando pregunta Koh Samui→Bangkok)
+        if (fromNorm && toNorm && msgLow.includes(toNorm) && msgLow.includes(fromNorm)) {
+          matchedRoute = route;
+          break;
+        }
+      }
     }
-    if (t.train) {
-      const tr = t.train;
-      lines.push(`Tren: apps ${(tr.apps || []).join(', ')}. ${tr.tips || ''}`);
+
+    // ── Buscar aeropuerto si el mensaje lo menciona ──
+    let matchedAirport = null;
+    if (t.airports && /aeropuerto|airport|llegar.*desde.*aero|transfer|como.?llego/i.test(message)) {
+      for (const [iata, info] of Object.entries(t.airports)) {
+        const cityNorm = (info.city || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const msgLow = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        if (msgLow.includes(iata.toLowerCase()) || msgLow.includes(cityNorm)) {
+          matchedAirport = { iata, ...info };
+          break;
+        }
+      }
     }
-    if (t.metro_bus) {
-      const m = t.metro_bus;
-      lines.push(`Metro/bus: apps ${(m.apps || []).join(', ')}. ${m.tips || ''}`);
+
+    if (matchedRoute) {
+      // ── Inyectar SOLO la ruta específica (~400 tokens) ──
+      const routeLines = [`Ruta: ${matchedRoute.from} → ${matchedRoute.to} (${matchedRoute.distance_km || '?'} km)`];
+      for (const opt of (matchedRoute.options || [])) {
+        let line = `${opt.emoji || ''} ${opt.label || opt.type}`;
+        if (opt.operator) line += ` — ${opt.operator}`;
+        if (opt.operators_alt?.length) line += ` (también: ${opt.operators_alt.join(', ')})`;
+        if (opt.duration) line += ` | ${opt.duration}`;
+        if (opt.price_local) line += ` | ${opt.price_local}`;
+        if (opt.price_eur) line += ` (${opt.price_eur})`;
+        if (opt.frequency) line += ` | ${opt.frequency}`;
+        if (opt.booking_url) line += `\nReservar: ${opt.booking_url}`;
+        if (opt.booking_alt) line += ` o ${opt.booking_alt}`;
+        if (opt.class_tip) line += `\nMejor opción: ${opt.class_tip}`;
+        if (opt.tip) line += `\nTip: ${opt.tip}`;
+        if (opt.recommended) line = '⭐ RECOMENDADO: ' + line;
+        routeLines.push(line);
+      }
+      ctx.push(`[RUTA VERIFICADA — datos reales, usa estos para responder:
+${routeLines.join('\n\n')}
+
+NUNCA inventes URLs — usa exactamente las que aparecen arriba.]`);
+
+      // ── BLOQUE_FORMATO_TRANSPORTE — anula prosa para esta respuesta ──
+      ctx.push(`[FORMATO COMPARATIVA TRANSPORTE — ANULA el formato prosa para esta respuesta.
+
+Usa EXACTAMENTE este formato para cada opción de transporte:
+
+{emoji} NOMBRE OPCIÓN (etiqueta)
+  • Operador: origen → destino (horario si disponible)
+  • Duración: Xh Xmin ⏱️
+  • Precio: XXX moneda_local (~€XX)
+  • Reservar: URL_real
+
+Reglas:
+— ⭐ marca la opción recomendada al principio.
+— Máximo 4 opciones. Ordena: recomendada primero, luego por precio.
+— Cada opción separada por línea en blanco.
+— Añade 1 línea de tip práctico por opción (en cursiva o entre paréntesis).
+— Después de las opciones, si el viajero tiene ruta guardada, añade:
+
+✅ En tu ruta:
+  • Presupuesto transporte: €X | Coste esta opción: €X ✓
+  • Hora llegada: HH:MM | Check-in hotel: HH:MM ✓
+
+— Si NO tiene ruta guardada, omite el bloque ✅.
+— Al final puedes sugerir 1-2 hoteles en destino si es relevante, con precio y enlace.
+— NUNCA uses este formato fuera de comparativas de transporte inter-ciudad.
+— REGLA TEMPORAL: hoy es ${new Date().toISOString().split('T')[0]}. NUNCA menciones eventos, fiestas o festividades que YA hayan pasado (Semana Santa, Carnaval, Año Nuevo, Reyes, etc.). Ni en el tiempo, ni en tips, ni en ninguna parte de tu respuesta. Solo menciona eventos FUTUROS respecto a la fecha del viajero.
+
+FICHA DESTINO — al final de las opciones de transporte, ANTES del bloque ✅, incluye una ficha breve del destino:
+
+📍 NOMBRE DESTINO
+  • Fundada: fecha/origen histórico (1 línea)
+  • Patrimonio: UNESCO o monumentos clave (si tiene)
+  • Famosa por: 3-4 cosas concretas separadas por coma
+  • Dato útil: 1 hecho práctico o curioso que ayude al viajero
+
+REGLAS de la ficha:
+— Solo DATOS FACTUALES: fechas, nombres, cifras. CERO prosa, CERO adjetivos ("maravillosa", "increíble", "espectacular" PROHIBIDOS).
+— Máximo 4 líneas. Si no sabes un dato con certeza, no lo pongas.
+— La ficha es un EXTRA breve, no el centro de la respuesta.]`);
+    } else {
+      // ── Fallback: tips generales (como antes) ──
+      if (t.ridehailing) {
+        const r = t.ridehailing;
+        let rLine = `Ride-hailing: ${r.best || ''} (también: ${(r.others || []).join(', ')}).`;
+        if (r.tips) rLine += ` ${r.tips}`;
+        if (r.payment) rLine += ` Pago: ${r.payment}.`;
+        lines.push(rLine);
+      }
+      if (t.train && (t.train.operator || t.train.tips)) {
+        const tr = t.train;
+        let trLine = 'Tren:';
+        if (tr.operator) trLine += ` ${tr.operator}.`;
+        if (tr.booking_foreign) trLine += ` Reservar: ${tr.booking_foreign}`;
+        if (tr.tips) trLine += ` ${tr.tips}`;
+        lines.push(trLine);
+      }
+      if (t.metro_bus) {
+        const m = t.metro_bus;
+        lines.push(`Metro/bus: apps ${(m.apps || []).join(', ')}. ${m.tips || ''}`);
+      }
+      if (t.ferry && (t.ferry.operators?.length || t.ferry.tips)) {
+        const f = t.ferry;
+        let fLine = 'Ferry:';
+        if (f.operators?.length) fLine += ` ${f.operators.join(', ')}.`;
+        if (f.booking_url) fLine += ` Reservar: ${f.booking_url}`;
+        if (f.tips) fLine += ` ${f.tips}`;
+        lines.push(fLine);
+      }
+      if (t.intercity_bus && t.intercity_bus.operators?.length) {
+        const b = t.intercity_bus;
+        lines.push(`Bus interurbano: ${b.operators.join(', ')}. ${b.booking_url ? 'Reservar: ' + b.booking_url : ''} ${b.tips || ''}`);
+      }
+      if (t.special) {
+        const s = t.special;
+        lines.push(`Transporte especial: ${(s.modes || s.types || []).join(', ')}. ${s.tips || ''}`);
+      }
     }
-    if (t.ferry) {
-      const f = t.ferry;
-      lines.push(`Ferry: apps ${(f.apps || []).join(', ')}. ${f.tips || ''}`);
+
+    // ── Aeropuerto transfer ──
+    if (matchedAirport) {
+      const a = matchedAirport;
+      let airportBlock = `\nAeropuerto ${a.iata} (${a.name}): ${a.distance_km || '?'} km del centro.`;
+      for (const tr of (a.transfers || [])) {
+        airportBlock += `\n  ${tr.mode}: ${tr.name || ''} ${tr.duration || ''} ${tr.price_local || ''} (${tr.price_eur || ''}). ${tr.tip || ''}`;
+      }
+      if (matchedRoute) {
+        ctx.push(`[TRANSFER AEROPUERTO:${airportBlock}]`);
+      } else {
+        lines.push(airportBlock);
+      }
     }
-    if (t.special) {
-      const s = t.special;
-      lines.push(`Transporte especial: ${(s.types || []).join(', ')}. ${s.tips || ''}`);
-    }
-    if (lines.length > 0) {
+
+    if (!matchedRoute && lines.length > 0) {
       ctx.push(`[TRANSPORTE EN EL DESTINO — usa estos datos cuando el viajero pregunte por moverse:
 ${lines.join('\n')}
 INSTRUCCIÓN: usa estos datos cuando pregunten por transporte. Recomienda apps por NOMBRE ("descárgate Grab"). Si el viajero quiere RESERVAR un taxi o transfer, usa buscar_web para encontrar una web real de reserva en ese país — no inventes URLs. Da precios y consejos prácticos si los tienes.]`);
@@ -2030,9 +2213,31 @@ function sanitizeInventedUrls(text) {
 
 // Inyecta enlace Google Maps si el usuario tiene GPS, la respuesta habla de ir a un sitio,
 // y no hay ya un enlace de Google Maps en la respuesta.
-// Desactivadas — Claude genera sus propios enlaces Maps y transporte con buscar_web (P2-12)
+// Desactivada — Claude genera sus propios enlaces Maps con buscar_web (P2-12)
 function injectGoogleMapsLink(reply) { return reply; }
-function injectTransportBlock(reply) { return reply; }
+
+// Inyecta bloque de plataformas de reserva si el KV enriquecido tiene booking_platforms
+// y la respuesta de Claude habla de transporte pero no incluye URLs de reserva
+function injectTransportBlock(reply, kvTransportData, message, isLocalQuery) {
+  if (!kvTransportData || !kvTransportData.booking_platforms) return reply;
+  // Solo inyectar si el mensaje es sobre transporte
+  if (!/ferry|tren|train|bus|vuelo|flight|cómo.*llegar|como.*llegar|ir.*desde|ir.*a.*desde|transporte/i.test(message || '')) return reply;
+  // No inyectar si ya hay URLs de booking en la respuesta
+  const replyLow = reply.toLowerCase();
+  const platforms = kvTransportData.booking_platforms;
+  const missingPlatforms = platforms.filter(p =>
+    p.url && !replyLow.includes(p.url.replace('https://', '').replace('http://', '').split('/')[0])
+  );
+  // Añadir máx 3 plataformas relevantes que no estén ya en la respuesta
+  if (missingPlatforms.length === 0) return reply;
+  const top = missingPlatforms.slice(0, 3);
+  let block = '\n\n📱 **Reserva aquí:**';
+  for (const p of top) {
+    block += `\n${p.name} — ${p.url}`;
+    if (p.best_for) block += ` (${p.best_for.slice(0, 60)})`;
+  }
+  return reply + block;
+}
 
 // ═══════════════════════════════════════════════════════════════
 // BLOQUES PARALELOS — Rutas largas (>7 días)
@@ -5061,19 +5266,44 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       // Solo usar GPS coords si la ubicación NO viene del mensaje (evita buscar taxis en Samui cuando piden Málaga)
       const searchCoords = helpLocationFromMessage ? null : userLocation;
       // Transporte: búsqueda directa con el mensaje, no necesita helpLocation
+      // SKIP Brave Search si el KV enriquecido tiene rutas/aeropuertos que cubren la pregunta
       if (helpCategory === 'transport') {
-        try {
-          if (env.BRAVE_SEARCH_KEY) {
-            // Usar el prefetch si ya arrancó, si no buscar ahora
-            const braveRes = _braveTransportPromise ? await _braveTransportPromise : await buscarWeb(
-              { query: `${message.replace(/^(necesito|quiero|busco|dame|dime)\s+/i, '').trim()} precio app transporte` },
-              env.BRAVE_SEARCH_KEY
-            ).catch(() => null);
-            if (braveRes?.resultados?.length > 0) {
-              transportSearchData = { resultados: braveRes.resultados, flightData: null };
+        let kvHasTransportMatch = false;
+        if (kvTransportData?.routes?.length > 0 || kvTransportData?.airports) {
+          const msgLow = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+          // Comprobar si alguna ruta coincide
+          if (kvTransportData.routes) {
+            for (const route of kvTransportData.routes) {
+              const fromN = (route.from || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+              const toN = (route.to || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+              if (fromN && toN && msgLow.includes(fromN) && msgLow.includes(toN)) { kvHasTransportMatch = true; break; }
             }
           }
-        } catch (e) { /* Fallo silencioso */ }
+          // Comprobar si algún aeropuerto coincide
+          if (!kvHasTransportMatch && kvTransportData.airports && /aeropuerto|airport|transfer|como.?llego/i.test(message)) {
+            for (const [iata, info] of Object.entries(kvTransportData.airports)) {
+              const cityN = (info.city || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+              if (msgLow.includes(iata.toLowerCase()) || msgLow.includes(cityN)) { kvHasTransportMatch = true; break; }
+            }
+          }
+        }
+        if (kvHasTransportMatch) {
+          // KV enriquecido tiene la respuesta → no necesitamos Brave Search
+          transportSearchData = null;
+        } else {
+          // Fallback: buscar en Brave (rutas no cubiertas por KV)
+          try {
+            if (env.BRAVE_SEARCH_KEY) {
+              const braveRes = _braveTransportPromise ? await _braveTransportPromise : await buscarWeb(
+                { query: `${message.replace(/^(necesito|quiero|busco|dame|dime)\s+/i, '').trim()} precio app transporte` },
+                env.BRAVE_SEARCH_KEY
+              ).catch(() => null);
+              if (braveRes?.resultados?.length > 0) {
+                transportSearchData = { resultados: braveRes.resultados, flightData: null };
+              }
+            }
+          } catch (e) { /* Fallo silencioso */ }
+        }
       } else if (helpLocation) {
         try {
           if (helpCategory === 'weather') {
@@ -5317,7 +5547,121 @@ INSTRUCCIONES:
 
     // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
     const dynamicPrompt = await getSystemPrompt(env);
+
+    // ─── TRANSPORT ENRICHMENT: weather + events + news en paralelo (solo si KV tiene ruta/aeropuerto) ───
+    let transportWeather = null;
+    let transportEvents = null;
+    let transportNews = null;
+    try {
+      if (kvTransportData?.routes?.length > 0 || kvTransportData?.airports) {
+        const msgLow = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        let transportDest = null;
+        if (kvTransportData.routes) {
+          for (const route of kvTransportData.routes) {
+            const toN = (route.to || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            const fromN = (route.from || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            if (toN && msgLow.includes(toN)) { transportDest = route.to; break; }
+            if (fromN && msgLow.includes(fromN)) { transportDest = route.from; break; }
+          }
+        }
+        if (!transportDest && kvTransportData.airports) {
+          for (const [iata, info] of Object.entries(kvTransportData.airports)) {
+            const cityN = (info.city || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            if (msgLow.includes(cityN) || msgLow.includes(iata.toLowerCase())) { transportDest = info.city; break; }
+          }
+        }
+
+        if (transportDest) {
+          const dateFromMsg = extractDateFromMessage(message);
+          const dateStr = dateFromMsg || (travelDates?.from) || null;
+          const countryName = kvTransportData.country_name || '';
+
+          const [_tw, _te, _tn] = await Promise.all([
+            fetchWeather(transportDest, env.OPENWEATHER_KEY).catch(() => null),
+            dateStr && env.SERPER_API_KEY
+              ? searchEvents(transportDest, dateStr, dateStr, env.SERPER_API_KEY).catch(() => null)
+              : Promise.resolve(null),
+            env.BRAVE_SEARCH_KEY
+              ? searchLocalNews(transportDest, countryName, env.BRAVE_SEARCH_KEY).catch(() => null)
+              : Promise.resolve(null),
+          ]);
+          transportWeather = _tw;
+          transportEvents = _te;
+          transportNews = _tn;
+        }
+      }
+    } catch (e) { /* Fallo silencioso — transporte funciona sin weather/events/news */ }
+
     let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode);
+
+    // ─── Inyectar weather + events + news de transporte en el contexto ───
+    if (transportWeather || transportEvents || transportNews) {
+      let extraCtx = '';
+      if (transportWeather) {
+        const w = transportWeather;
+        extraCtx += `\n\n[🌤️ TIEMPO EN ${(w.location || '').toUpperCase()}:`;
+        if (w.current) extraCtx += ` Ahora: ${w.current.temp_c}°C, ${w.current.description}, humedad ${w.current.humidity}%.`;
+        if (w.forecast?.length > 0) {
+          extraCtx += '\nPróximos días:';
+          for (const f of w.forecast.slice(0, 3)) {
+            extraCtx += ` ${f.date}: ${f.max_c}°/${f.min_c}° ${f.description} (lluvia ${f.rain_chance}%).`;
+          }
+        }
+        extraCtx += '\nIncluye esta info brevemente al final de tu respuesta con emoji 🌤️.]';
+      }
+      if (transportEvents && transportEvents.length > 0) {
+        extraCtx += `\n\n[🎉 EVENTOS LOCALES:`;
+        for (const e of transportEvents.slice(0, 3)) {
+          extraCtx += `\n— ${e.title}${e.snippet ? ': ' + e.snippet.slice(0, 80) : ''}`;
+        }
+        extraCtx += `\nFECHA DE HOY: ${new Date().toISOString().split('T')[0]}. REGLA ABSOLUTA: menciona SOLO eventos cuya fecha sea IGUAL o POSTERIOR a la fecha del viajero. PROHIBIDO mencionar eventos que ya pasaron — aunque aparezcan en los datos de arriba. Semana Santa 2026 fue el 5 de abril (YA PASÓ). Carnaval 2026 fue en febrero (YA PASÓ). Si un evento no tiene fecha exacta clara, NO lo menciones. Usa emoji 🎉. NUNCA uses tu memoria para añadir eventos que no estén en los datos de arriba.]`;
+      }
+      if (transportNews && transportNews.length > 0) {
+        extraCtx += `\n\n[📰 NOTICIAS LOCALES RECIENTES:`;
+        for (const n of transportNews.slice(0, 2)) {
+          extraCtx += `\n— ${n.title}${n.source ? ' (' + n.source + ')' : ''}`;
+        }
+        extraCtx += '\nMenciona 1-2 titulares relevantes para viajeros con emoji 📰. NO incluyas URLs de noticias.]';
+      }
+      if (extraCtx) systemPrompt += extraCtx;
+    }
+
+    // ─── REGLAS GLOBALES DE FIABILIDAD — aplican a TODAS las respuestas ───
+    const _today = new Date().toISOString().split('T')[0];
+    const _kvAge = kvTransportData?.updated ? Math.floor((Date.now() - new Date(kvTransportData.updated).getTime()) / (1000 * 60 * 60 * 24)) : null;
+    let _reliabilityRules = `[REGLAS DE FIABILIDAD — ${_today}
+
+FECHA: Hoy es ${_today}.
+— NUNCA menciones fiestas o eventos que ya hayan pasado (Semana Santa 2026 = 6 abril, Carnaval = febrero, Año Nuevo Chino = febrero). Si no sabes la fecha exacta de un evento, NO lo menciones.
+
+PRIORIDAD DE DATOS — de más fiable a menos fiable:
+1. Datos KV inyectados en este contexto (transporte, rutas, precios, operadores) → MÁXIMA prioridad
+2. Resultados de herramientas (buscar_web, buscar_vuelos, buscar_hotel) → datos en tiempo real
+3. Tu conocimiento base → ÚLTIMO recurso, SOLO si no hay dato KV ni herramienta
+
+ANTI-INVENCIÓN:
+— NUNCA inventes nombres de operadores de transporte. Si no aparece en los datos KV o en buscar_web, NO lo menciones.
+— NUNCA inventes horarios específicos (ej: "sale a las 6:30"). Solo da horarios si vienen de los datos KV o de una herramienta.
+— NUNCA inventes precios exactos de tu memoria. Los precios KV son orientativos. Si el viajero necesita precio exacto, recomienda consultar la web de reserva.
+— NUNCA inventes URLs. Solo usa URLs que aparezcan en los datos KV o en resultados de herramientas.
+— NUNCA inventes nombres de apps de transporte que no estén en los datos KV.
+— NUNCA pongas enlaces a renfe.com — no funciona en móviles ni apps. Para trenes en España usa SIEMPRE trainline.com (vende los mismos billetes de Renfe, Iryo y OUIGO).
+
+TIPO DE CAMBIO:
+— Los tipos de cambio en los datos KV son aproximados y pueden haber cambiado. Cuando des precios en moneda local + EUR, añade "aprox" o "~" antes del precio en EUR.
+
+VISADOS Y REQUISITOS:
+— Los requisitos de visado cambian. Si tienes dato del KV, dilo pero añade "verifica en la web oficial antes de viajar". NUNCA afirmes un requisito de visado como 100% seguro.
+
+SEGURIDAD:
+— Si el viajero pregunta por un país con conflicto activo o alerta de seguridad, recomienda SIEMPRE consultar la web del Ministerio de Exteriores (exteriores.gob.es) para alertas actualizadas.`;
+
+    if (_kvAge !== null && _kvAge > 180) {
+      _reliabilityRules += `\n\nAVISO: los datos de transporte KV tienen ${_kvAge} días de antigüedad. Avisa al viajero: "Estos datos son de hace ${Math.floor(_kvAge / 30)} meses — los precios y horarios pueden haber cambiado. Consulta la web del operador para info actualizada."`;
+    }
+
+    _reliabilityRules += ']';
+    systemPrompt += '\n\n' + _reliabilityRules;
 
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {
@@ -5726,10 +6070,11 @@ INSTRUCCIONES:
           let linksBlock = '';
 
           // 1. URLs de Brave que Claude no incluyó (sin duplicados, sin blogs)
+          // SKIP si el KV enriquecido ya cubrió la respuesta (transportSearchData será null)
           if (transportSearchData?.resultados?.length > 0) {
             const braveUrls = transportSearchData.resultados
               .filter(r => r.url && !reply.includes(r.url))
-              .filter(r => !/blog|guia|guide|tripadvisor|wikipedia|wikivoyage/i.test(r.url))
+              .filter(r => !/blog|guia|guide|tripadvisor|wikipedia|wikivoyage|lonely|nomad|backpack|travel.*guide|forum/i.test(r.url))
               .slice(0, 3);
             for (const r of braveUrls) {
               linksBlock += `\n🔗 ${r.titulo.slice(0, 60)} — ${r.url}`;
@@ -5750,10 +6095,22 @@ INSTRUCCIONES:
           if (_transportApps?.ridehailing) {
             const allApps = [_transportApps.ridehailing.best, ...(_transportApps.ridehailing.others || [])].filter(Boolean);
             for (const appName of allApps) {
-              const appData = TRANSPORT_APP_URLS[appName.toLowerCase()];
-              if (appData && !reply.toLowerCase().includes(appData.web.replace('https://', '').replace('http://', ''))) {
-                linksBlock += `\n${appData.icon} ${appData.name} — ${appData.web}`;
+              // Primero intentar URL desde KV enriquecido (booking_platforms)
+              let appUrl = null, appIcon = null, appDisplayName = appName;
+              if (_transportApps.booking_platforms) {
+                const bp = _transportApps.booking_platforms.find(p => p.name.toLowerCase() === appName.toLowerCase());
+                if (bp) { appUrl = bp.url; appDisplayName = bp.name; }
               }
+              // Fallback a TRANSPORT_APP_URLS hardcodeado
+              if (!appUrl) {
+                const appData = TRANSPORT_APP_URLS[appName.toLowerCase()];
+                if (appData) { appUrl = appData.web; appIcon = appData.icon; appDisplayName = appData.name; }
+              }
+              if (!appUrl) continue;
+              // No duplicar si ya está en la respuesta
+              if (reply.toLowerCase().includes(appUrl.replace('https://', '').replace('http://', ''))) continue;
+              const icon = appIcon || TRANSPORT_APP_URLS[appName.toLowerCase()]?.icon || '📱';
+              linksBlock += `\n${icon} ${appDisplayName} — ${appUrl}`;
             }
           }
 

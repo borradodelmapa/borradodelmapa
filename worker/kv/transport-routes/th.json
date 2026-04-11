@@ -1,0 +1,1089 @@
+{
+  "country": "TH",
+  "country_name": "Tailandia",
+  "updated": "2026-04-11",
+  "currency": {
+    "code": "THB",
+    "symbol": "฿",
+    "rate_eur": 0.026,
+    "_comment": "1 THB = 0.026 EUR (1 EUR ≈ 38 THB)"
+  },
+
+  "ridehailing": {
+    "best": "grab",
+    "others": ["bolt", "indrive"],
+    "tips": "Grab domina en todo el país, sobre todo en zonas aeroportuarias. Bolt más barato en ciudad. Tuk-tuks solo aceptan efectivo.",
+    "payment": "Grab: tarjeta y efectivo. Bolt: tarjeta y efectivo. Tuk-tuk: solo efectivo.",
+    "tipping": "No se espera propina en apps. En taxi, redondear el importe."
+  },
+
+  "train": {
+    "operator": "State Railway of Thailand (SRT)",
+    "apps": ["rome2rio_app"],
+    "booking_local": "https://dticket.railway.co.th",
+    "booking_foreign": "https://12go.asia",
+    "tips": "Trenes nocturnos Bangkok-Chiang Mai son la experiencia estrella. Reservar literas 2ª clase con días de antelación. 3ª clase sin reserva (bancos de madera, ventanas abiertas).",
+    "passes": null
+  },
+
+  "metro_bus": {
+    "apps": ["moovit", "grab_transit"],
+    "cities": {
+      "Bangkok": {
+        "systems": ["BTS Skytrain (4 líneas)", "MRT Metro (3 líneas)", "ARL Airport Rail Link"],
+        "card": { "name": "Rabbit Card (BTS) + MRT Card (separadas)", "price": "100 THB depósito cada una (~2.60€)", "where": "Taquillas de cualquier estación BTS o MRT" },
+        "hours": "06:00-24:00",
+        "local_app": "ViaBus",
+        "extra": "Chao Phraya Express Boat: barco por el río, 15-30 THB. Transporte útil y turístico."
+      },
+      "Chiang Mai": {
+        "systems": ["Sin metro. Songthaew (camionetas rojas compartidas, 30-50 THB en ciudad)"],
+        "card": null,
+        "hours": "Songthaews operan ~06:00-22:00",
+        "local_app": "Grab"
+      }
+    },
+    "tips": "En Bangkok las tarjetas BTS (Rabbit) y MRT son distintas e incompatibles. Compra ambas si usas los dos sistemas. Fuera de Bangkok no hay metro."
+  },
+
+  "ferry": {
+    "apps": ["directferries"],
+    "operators": ["Lomprayah", "Seatran Discovery", "Raja Ferry", "Andaman Wave Master", "Tigerline"],
+    "booking_url": "https://12go.asia",
+    "booking_alt": "https://lomprayah.com",
+    "seasonal": "Costa Andamán (Phuket, Phi Phi, Lanta): mar picado jun-oct, ferries cancelados. Golfo de Tailandia (Samui, Phangan, Tao): mar picado oct-dic.",
+    "tips": "Lomprayah es el estándar en las islas del Golfo. 12go.asia agrupa todos los operadores. Siempre reservar ida y vuelta."
+  },
+
+  "intercity_bus": {
+    "operators": ["Nakhonchai Air", "Transport Co"],
+    "booking_url": "https://nakhonchaiair.com",
+    "booking_alt": "https://12go.asia",
+    "tips": "Nakhonchai Air clase Gold/Platinum es el mejor autobús de Tailandia. VIP 24 asientos mucho más cómodo que los normales."
+  },
+
+  "special": {
+    "modes": ["tuk-tuk", "songthaew", "long-tail boat"],
+    "tips": "Songthaews (camionetas compartidas): transporte local económico, precio fijo en ciudad. Long-tail boats: transporte fluvial y costero, negociar precio antes de subir.",
+    "scams": "Bangkok: tuk-tuk que ofrece tour barato = ruta por tiendas de comisión. Negociar precio antes o usar Grab."
+  },
+
+  "driving": {
+    "side": "left",
+    "license": "Licencia internacional obligatoria",
+    "scooter": "Muy popular en islas: 200-300 THB/día. Sin licencia internacional = sin seguro. Accidentes de moto son la primera causa de lesiones en viajeros.",
+    "road_quality": "Autopistas buenas. Carreteras rurales variables. Conducción caótica en ciudades."
+  },
+
+  "maps_app": "Google Maps funciona bien en todo el país. Grab Maps integrado en la app.",
+
+  "airports": {
+    "BKK": {
+      "name": "Suvarnabhumi International Airport",
+      "city": "Bangkok",
+      "distance_km": 30,
+      "transfers": [
+        {
+          "mode": "train",
+          "name": "Airport Rail Link (ARL)",
+          "duration": "26 min",
+          "price_local": "45 THB",
+          "price_eur": "~1.20€",
+          "frequency": "Cada 15 min",
+          "hours": "05:30-24:00",
+          "tip": "Hasta Phaya Thai (conexión BTS). Opción más rápida y barata."
+        },
+        {
+          "mode": "taxi",
+          "name": "Taxi oficial (taxímetro)",
+          "duration": "30-60 min",
+          "price_local": "300-500 THB + 50 recargo aeropuerto + 75 peajes",
+          "price_eur": "~11-16€",
+          "frequency": "24h",
+          "hours": "24h",
+          "tip": "Insistir en taxímetro. Cola oficial en planta 1."
+        },
+        {
+          "mode": "grab",
+          "name": "Grab",
+          "duration": "30-60 min",
+          "price_local": "350-650 THB",
+          "price_eur": "~9-17€",
+          "frequency": "Bajo demanda",
+          "hours": "24h",
+          "tip": "Punto de recogida designado en planta 2. Precio fijo, sin sorpresas."
+        },
+        {
+          "mode": "bus",
+          "name": "S1 Bus (a Khao San Road)",
+          "duration": "60 min",
+          "price_local": "60 THB",
+          "price_eur": "~1.60€",
+          "frequency": "Cada 20-30 min",
+          "hours": "06:00-20:00",
+          "tip": "Directo a Khao San Road. Lo más barato si vas al centro histórico."
+        }
+      ]
+    },
+    "DMK": {
+      "name": "Don Mueang International Airport",
+      "city": "Bangkok",
+      "distance_km": 24,
+      "transfers": [
+        {
+          "mode": "train",
+          "name": "Red Line (SRT)",
+          "duration": "17 min",
+          "price_local": "33 THB",
+          "price_eur": "~0.90€",
+          "frequency": "Cada 10-15 min",
+          "hours": "05:30-24:00",
+          "tip": "Hasta Bang Sue/Krung Thep Aphiwat Central. Conexión con MRT."
+        },
+        {
+          "mode": "taxi",
+          "name": "Taxi oficial (taxímetro)",
+          "duration": "30-60 min",
+          "price_local": "200-400 THB + 50 recargo aeropuerto",
+          "price_eur": "~7-12€",
+          "frequency": "24h",
+          "hours": "24h",
+          "tip": "Más barato que desde Suvarnabhumi. Cola en planta 1."
+        },
+        {
+          "mode": "bus",
+          "name": "A1 Bus (a Mo Chit BTS)",
+          "duration": "20-30 min",
+          "price_local": "30 THB",
+          "price_eur": "~0.80€",
+          "frequency": "Cada 15-20 min",
+          "hours": "07:00-24:00",
+          "tip": "Conexión con BTS Sukhumvit Line y MRT en Mo Chit."
+        },
+        {
+          "mode": "bus",
+          "name": "Limo Bus (a Khao San Road)",
+          "duration": "60 min",
+          "price_local": "150 THB",
+          "price_eur": "~3.90€",
+          "frequency": "Cada 30-60 min",
+          "hours": "06:00-22:00",
+          "tip": "Directo a Khao San Road. Más cómodo que el bus público."
+        }
+      ]
+    },
+    "CNX": {
+      "name": "Chiang Mai International Airport",
+      "city": "Chiang Mai",
+      "distance_km": 3,
+      "transfers": [
+        {
+          "mode": "taxi",
+          "name": "Airport taxi (precio fijo)",
+          "duration": "10-15 min",
+          "price_local": "150 THB",
+          "price_eur": "~3.90€",
+          "frequency": "Bajo demanda",
+          "hours": "24h",
+          "tip": "Precio fijo al centro. Comprar ticket en el counter del aeropuerto."
+        },
+        {
+          "mode": "shuttle",
+          "name": "Songthaew compartido",
+          "duration": "15-20 min",
+          "price_local": "50-100 THB",
+          "price_eur": "~1.30-2.60€",
+          "frequency": "Bajo demanda",
+          "hours": "06:00-22:00",
+          "tip": "Camioneta roja compartida. Más barato pero espera a llenarse."
+        },
+        {
+          "mode": "grab",
+          "name": "Grab",
+          "duration": "10-15 min",
+          "price_local": "100-200 THB",
+          "price_eur": "~2.60-5.30€",
+          "frequency": "Bajo demanda",
+          "hours": "24h",
+          "tip": "El aeropuerto está a solo 3 km del centro. Opción cómoda."
+        }
+      ]
+    },
+    "HKT": {
+      "name": "Phuket International Airport",
+      "city": "Phuket",
+      "distance_km": 32,
+      "transfers": [
+        {
+          "mode": "bus",
+          "name": "Smart Bus",
+          "duration": "60-90 min",
+          "price_local": "50-200 THB",
+          "price_eur": "~1.30-5.30€",
+          "frequency": "Cada 30-60 min",
+          "hours": "06:00-21:00",
+          "tip": "Recorre las playas principales. Opción más económica."
+        },
+        {
+          "mode": "shuttle",
+          "name": "Minibus compartido",
+          "duration": "45-60 min",
+          "price_local": "180-300 THB/persona",
+          "price_eur": "~4.70-7.90€",
+          "frequency": "Bajo demanda",
+          "hours": "06:00-24:00",
+          "tip": "Espera a llenarse. Precio por persona."
+        },
+        {
+          "mode": "taxi",
+          "name": "Taxi oficial",
+          "duration": "45 min",
+          "price_local": "600-800 THB + 100 recargo",
+          "price_eur": "~18-24€",
+          "frequency": "24h",
+          "hours": "24h",
+          "tip": "Precio fijo según destino. Counter en llegadas."
+        },
+        {
+          "mode": "grab",
+          "name": "Grab",
+          "duration": "45-60 min",
+          "price_local": "700-1,000 THB",
+          "price_eur": "~18-26€",
+          "frequency": "Bajo demanda",
+          "hours": "24h",
+          "tip": "A Patong el trayecto más largo y caro. Más transparente que taxi."
+        }
+      ]
+    },
+    "KBV": {
+      "name": "Krabi International Airport",
+      "city": "Krabi",
+      "distance_km": 25,
+      "transfers": [
+        {
+          "mode": "shuttle",
+          "name": "Shuttle compartido (a Ao Nang)",
+          "duration": "60 min",
+          "price_local": "150 THB/persona",
+          "price_eur": "~3.90€",
+          "frequency": "Según vuelos",
+          "hours": "Según vuelos",
+          "tip": "Opción estándar. Comprar billete en el counter de llegadas."
+        },
+        {
+          "mode": "taxi",
+          "name": "Taxi privado",
+          "duration": "30-45 min",
+          "price_local": "600-800 THB",
+          "price_eur": "~16-21€",
+          "frequency": "Bajo demanda",
+          "hours": "24h",
+          "tip": "Precio fijo. Counter en llegadas."
+        }
+      ]
+    },
+    "USM": {
+      "name": "Koh Samui Airport (Bangkok Airways)",
+      "city": "Koh Samui",
+      "distance_km": 4,
+      "transfers": [
+        {
+          "mode": "shuttle",
+          "name": "Minibus compartido",
+          "duration": "15-30 min",
+          "price_local": "130-200 THB",
+          "price_eur": "~3.40-5.30€",
+          "frequency": "Según vuelos",
+          "hours": "Según vuelos",
+          "tip": "A Chaweng Beach. Comprar en el counter."
+        },
+        {
+          "mode": "taxi",
+          "name": "Taxi prepagado",
+          "duration": "10-15 min",
+          "price_local": "500 THB",
+          "price_eur": "~13€",
+          "frequency": "Bajo demanda",
+          "hours": "Según vuelos",
+          "tip": "Precio fijo prepagado. El aeropuerto es propiedad de Bangkok Airways."
+        }
+      ]
+    }
+  },
+
+  "stations": {
+    "Bangkok": {
+      "train": "Krung Thep Aphiwat Central Terminal",
+      "bus": "Mo Chit 2 (norte/noreste)",
+      "bus_alt": "Sai Tai Mai (sur/oeste)",
+      "bus_east": "Ekkamai (este/Pattaya)"
+    },
+    "Chiang Mai": {
+      "bus": "Arcade Bus Terminal 3"
+    }
+  },
+
+  "routes": [
+    {
+      "from": "Bangkok",
+      "to": "Chiang Mai",
+      "distance_km": 700,
+      "popular": true,
+      "options": [
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo (Rápido)",
+          "recommended": false,
+          "operator": "AirAsia",
+          "operators_alt": ["Nok Air", "Lion Air", "VietJet", "Bangkok Airways"],
+          "duration": "1h15",
+          "price_local": "1,400-6,000 THB",
+          "price_eur": "~37-158€",
+          "frequency": "30+ vuelos/día",
+          "booking_url": "https://www.airasia.com",
+          "advance_booking": "3-4 semanas para mejores precios",
+          "tip": "Low-cost salen desde Don Mueang (DMK). Bangkok Airways desde Suvarnabhumi (BKK)."
+        },
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Tren nocturno (Experiencia)",
+          "recommended": true,
+          "operator": "SRT (State Railway of Thailand)",
+          "duration": "10-13h (nocturno)",
+          "price_local": "881-1,081 THB (2ª clase AC sleeper) / 1,753-1,903 THB (1ª clase sleeper)",
+          "price_eur": "~23-28€ (2ª) / ~46-50€ (1ª)",
+          "frequency": "6 trenes/día",
+          "booking_url": "https://dticket.railway.co.th",
+          "booking_alt": "https://12go.asia",
+          "departure_station": "Krung Thep Aphiwat Central Terminal",
+          "class_tip": "Lower berth 2ª clase: más ancha, con ventana. Mejor relación calidad-precio.",
+          "advance_booking": "Reservar con días de antelación, fines de semana se agota rápido",
+          "tip": "Trenes 9 y 13 son los más nuevos. Experiencia imprescindible."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Bus VIP nocturno",
+          "recommended": false,
+          "operator": "Nakhonchai Air",
+          "operators_alt": ["Bangkok Busline"],
+          "duration": "9.5-12.5h",
+          "price_local": "500-900 THB",
+          "price_eur": "~13-24€",
+          "frequency": "20+ salidas/día",
+          "booking_url": "https://nakhonchaiair.com",
+          "departure_station": "Mo Chit 2",
+          "tip": "Clase Gold/Platinum: el mejor autobús de Tailandia. Asientos reclinables, manta, snack."
+        }
+      ]
+    },
+    {
+      "from": "Bangkok",
+      "to": "Phuket",
+      "distance_km": 850,
+      "popular": true,
+      "options": [
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo (Recomendado)",
+          "recommended": true,
+          "operator": "AirAsia",
+          "operators_alt": ["Lion Air", "VietJet"],
+          "duration": "1h20-1h30",
+          "price_local": "1,100-5,500 THB",
+          "price_eur": "~29-145€",
+          "frequency": "15-20 vuelos/día",
+          "tip": "Vuelos más baratos desde Don Mueang (DMK)."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Bus VIP nocturno",
+          "recommended": false,
+          "operator": "Lignite Tour",
+          "operators_alt": ["Phuket Travel"],
+          "duration": "12-14h (nocturno)",
+          "price_local": "800-1,430 THB",
+          "price_eur": "~21-38€",
+          "frequency": "15+ salidas/día",
+          "booking_url": "https://12go.asia",
+          "departure_station": "Sai Tai Mai",
+          "tip": "VIP 24 asientos es el más cómodo. No hay tren directo a Phuket."
+        }
+      ]
+    },
+    {
+      "from": "Bangkok",
+      "to": "Krabi",
+      "distance_km": 800,
+      "popular": false,
+      "options": [
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo (Recomendado)",
+          "recommended": true,
+          "operator": "AirAsia",
+          "operators_alt": ["Lion Air", "VietJet"],
+          "duration": "1h20",
+          "price_local": "1,200-5,000 THB",
+          "price_eur": "~32-132€",
+          "frequency": "8-12 vuelos/día"
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Bus VIP nocturno",
+          "recommended": false,
+          "operator": "Lignite Tour",
+          "operators_alt": ["Jarinthon"],
+          "duration": "12-14h",
+          "price_local": "740-1,200 THB",
+          "price_eur": "~19-32€",
+          "frequency": "18 salidas/día",
+          "departure_station": "Sai Tai Mai"
+        }
+      ]
+    },
+    {
+      "from": "Bangkok",
+      "to": "Koh Samui",
+      "distance_km": 750,
+      "popular": true,
+      "options": [
+        {
+          "type": "flight",
+          "emoji": "✈️",
+          "label": "Vuelo directo (Caro)",
+          "recommended": false,
+          "operator": "Bangkok Airways (MONOPOLIO)",
+          "duration": "1h10",
+          "price_local": "2,985-6,000 THB",
+          "price_eur": "~79-158€",
+          "frequency": "20+ vuelos/día",
+          "booking_url": "https://www.bangkokair.com",
+          "advance_booking": "Reservar con 6 semanas de antelación para mejores precios",
+          "tip": "La ruta doméstica más cara. El aeropuerto de Samui es propiedad de Bangkok Airways. Monopolio total."
+        },
+        {
+          "type": "flight",
+          "emoji": "✈️🚢",
+          "label": "Vuelo Surat Thani + ferry (Ahorro)",
+          "recommended": true,
+          "operator": "AirAsia / Nok Air + ferry combo",
+          "duration": "3.5-5h total",
+          "price_local": "950-1,500 THB",
+          "price_eur": "~25-39€",
+          "booking_url": "https://12go.asia",
+          "tip": "50-70% más barato que Bangkok Airways. Vuelo a Surat Thani (URT) + bus + ferry incluido en combo ticket."
+        },
+        {
+          "type": "ferry+bus",
+          "emoji": "🚢",
+          "label": "Bus + ferry nocturno (Mochilero)",
+          "recommended": false,
+          "operator": "Lomprayah",
+          "operators_alt": ["Seatran Discovery"],
+          "duration": "11-14h",
+          "price_local": "1,100-1,500 THB (Lomprayah) / 700-950 THB (económico)",
+          "price_eur": "~29-39€ (Lomprayah) / ~18-25€ (económico)",
+          "booking_url": "https://lomprayah.com",
+          "booking_alt": "https://12go.asia",
+          "departure_station": "Sai Tai Mai o Khao San Road",
+          "tip": "Bus nocturno desde Sai Tai Mai o Khao San Road. Ahorras noche de hotel."
+        }
+      ]
+    },
+    {
+      "from": "Bangkok",
+      "to": "Koh Phangan",
+      "distance_km": 800,
+      "popular": false,
+      "options": [
+        {
+          "type": "ferry+bus",
+          "emoji": "🚢",
+          "label": "Bus + catamarán Lomprayah (Recomendado)",
+          "recommended": true,
+          "operator": "Lomprayah",
+          "duration": "12-14h",
+          "price_local": "1,250 THB (Express) / 1,550 THB (VIP)",
+          "price_eur": "~33€ (Express) / ~41€ (VIP)",
+          "booking_url": "https://lomprayah.com",
+          "departure_station": "Khao San Road"
+        },
+        {
+          "type": "ferry+bus",
+          "emoji": "🚢",
+          "label": "Bus + ferry Seatran",
+          "recommended": false,
+          "operator": "Seatran Discovery",
+          "duration": "14h",
+          "price_local": "1,000-1,200 THB",
+          "price_eur": "~26-32€",
+          "booking_url": "https://seatrandiscovery.com"
+        },
+        {
+          "type": "flight",
+          "emoji": "✈️🚢",
+          "label": "Vuelo + ferry",
+          "recommended": false,
+          "operator": "AirAsia / Nok Air + ferry",
+          "duration": "4-6h total",
+          "price_local": "1,500-3,000 THB",
+          "price_eur": "~39-79€",
+          "tip": "Full Moon Party: todo se agota semanas antes. Reservar con mucha antelación."
+        }
+      ]
+    },
+    {
+      "from": "Bangkok",
+      "to": "Koh Tao",
+      "distance_km": 850,
+      "popular": false,
+      "options": [
+        {
+          "type": "ferry+bus",
+          "emoji": "🚢",
+          "label": "Bus + catamarán Lomprayah vía Chumphon (Recomendado)",
+          "recommended": true,
+          "operator": "Lomprayah",
+          "duration": "10-12h",
+          "price_local": "1,250-1,550 THB",
+          "price_eur": "~33-41€",
+          "booking_url": "https://lomprayah.com",
+          "departure_station": "Khao San Road",
+          "tip": "Chumphon es el puerto más cercano a Koh Tao."
+        },
+        {
+          "type": "train",
+          "emoji": "🚂🚢",
+          "label": "Tren + ferry vía Chumphon",
+          "recommended": false,
+          "operator": "SRT + Lomprayah",
+          "duration": "7-9h tren + 1.5h ferry",
+          "price_local": "300-1,500 THB (tren) + 450-600 THB (ferry)",
+          "price_eur": "~20-55€ total",
+          "tip": "Tren Bangkok-Chumphon + ferry Lomprayah. Más aventurero."
+        }
+      ]
+    },
+    {
+      "from": "Bangkok",
+      "to": "Ayutthaya",
+      "distance_km": 80,
+      "popular": true,
+      "options": [
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Tren (Recomendado)",
+          "recommended": true,
+          "operator": "SRT",
+          "duration": "1-1.5h",
+          "price_local": "15-20 THB (3ª clase) / 65-300 THB (2ª clase)",
+          "price_eur": "~0.50€ (3ª) / ~2-8€ (2ª)",
+          "frequency": "16+ trenes/día",
+          "booking_url": "https://dticket.railway.co.th",
+          "departure_station": "Krung Thep Aphiwat Central Terminal",
+          "tip": "3ª clase es una experiencia: bancos de madera, ventanas abiertas, sin reserva. Baratísimo."
+        },
+        {
+          "type": "minivan",
+          "emoji": "🚐",
+          "label": "Minivan",
+          "recommended": false,
+          "operator": "Win 91 / Mama Travel",
+          "duration": "1.5-2h",
+          "price_local": "60-100 THB",
+          "price_eur": "~2-3€",
+          "frequency": "Cada 20-30 min",
+          "departure_station": "Mo Chit Van Terminal"
+        }
+      ]
+    },
+    {
+      "from": "Bangkok",
+      "to": "Kanchanaburi",
+      "distance_km": 130,
+      "popular": false,
+      "options": [
+        {
+          "type": "minivan",
+          "emoji": "🚐",
+          "label": "Minivan (Recomendado)",
+          "recommended": true,
+          "operator": "Mama Travel / Hanuman Tour",
+          "duration": "1h45-2h30",
+          "price_local": "170-350 THB",
+          "price_eur": "~4-9€",
+          "frequency": "Cada 30 min",
+          "departure_station": "Sai Tai Mai"
+        },
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Tren Death Railway (Experiencia)",
+          "recommended": false,
+          "operator": "SRT",
+          "duration": "2h45-3h20",
+          "price_local": "100 THB (3ª clase)",
+          "price_eur": "~3€",
+          "frequency": "2 trenes/día",
+          "departure_station": "Thon Buri",
+          "tip": "Ruta escénica que cruza el Puente sobre el Río Kwai. El tren ES la atracción. Sin reserva online."
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Bus",
+          "recommended": false,
+          "operator": "Kanchanaburi Express",
+          "duration": "2.5-3h",
+          "price_local": "140-350 THB",
+          "price_eur": "~4-9€",
+          "frequency": "Cada 30 min",
+          "departure_station": "Sai Tai Mai"
+        }
+      ]
+    },
+    {
+      "from": "Bangkok",
+      "to": "Pattaya",
+      "distance_km": 150,
+      "popular": false,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Bus (Recomendado)",
+          "recommended": true,
+          "operator": "Roong Reuang Coach",
+          "duration": "2-2.5h",
+          "price_local": "141-175 THB",
+          "price_eur": "~4-5€",
+          "frequency": "Cada 30 min",
+          "booking_url": "https://rrcticket.com",
+          "departure_station": "Ekkamai",
+          "tip": "Alternativa: Bell Travel 190-460 THB, servicio hotel-to-hotel (belltravelservice.com)."
+        },
+        {
+          "type": "minivan",
+          "emoji": "🚐",
+          "label": "Minivan",
+          "recommended": false,
+          "operator": "Varias compañías",
+          "duration": "1.5-2h",
+          "price_local": "120-300 THB",
+          "price_eur": "~3-8€",
+          "departure_station": "Ekkamai o Mo Chit"
+        }
+      ]
+    },
+    {
+      "from": "Bangkok",
+      "to": "Hua Hin",
+      "distance_km": 200,
+      "popular": false,
+      "options": [
+        {
+          "type": "minivan",
+          "emoji": "🚐",
+          "label": "Minivan (Recomendado)",
+          "recommended": true,
+          "operator": "Varias compañías",
+          "duration": "2.5-3h",
+          "price_local": "200-250 THB",
+          "price_eur": "~5-7€",
+          "frequency": "Cada 30 min",
+          "departure_station": "Sai Tai Mai"
+        },
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Bus Bell Travel",
+          "recommended": false,
+          "operator": "Bell Travel",
+          "duration": "3.5-4h",
+          "price_local": "180-320 THB",
+          "price_eur": "~5-8€",
+          "booking_url": "https://belltravelservice.com",
+          "tip": "Servicio directo aeropuerto-Hua Hin por 320 THB."
+        },
+        {
+          "type": "train",
+          "emoji": "🚂",
+          "label": "Tren",
+          "recommended": false,
+          "operator": "SRT",
+          "duration": "3.5-4h",
+          "price_local": "94-1,200 THB",
+          "price_eur": "~2-32€",
+          "frequency": "Cada hora aprox",
+          "tip": "La estación de Hua Hin es una de las más bonitas de Tailandia."
+        }
+      ]
+    },
+    {
+      "from": "Chiang Mai",
+      "to": "Pai",
+      "distance_km": 135,
+      "popular": false,
+      "options": [
+        {
+          "type": "minivan",
+          "emoji": "🚐",
+          "label": "Minivan (Recomendado)",
+          "recommended": true,
+          "operator": "Prempracha Transport",
+          "duration": "3-4h",
+          "price_local": "150-250 THB",
+          "price_eur": "~4-7€",
+          "frequency": "Cada hora, 06:30-17:30",
+          "booking_url": "https://premprachatransports.com",
+          "booking_alt": "https://ayaservice.com",
+          "departure_station": "Arcade Bus Terminal 2",
+          "tip": "762 curvas. Tomar pastillas para el mareo. En serio."
+        },
+        {
+          "type": "motorbike",
+          "emoji": "🏍️",
+          "label": "Moto (Aventura)",
+          "recommended": false,
+          "duration": "3-4h",
+          "price_local": "200-300 THB/día alquiler",
+          "price_eur": "~5-8€/día",
+          "tip": "Solo para conductores expertos. Carretera bien asfaltada pero muy sinuosa. Llevar chaqueta para la altitud."
+        }
+      ]
+    },
+    {
+      "from": "Chiang Mai",
+      "to": "Chiang Rai",
+      "distance_km": 200,
+      "popular": false,
+      "options": [
+        {
+          "type": "bus",
+          "emoji": "🚌",
+          "label": "Green Bus (Recomendado)",
+          "recommended": true,
+          "operator": "Green Bus",
+          "duration": "3h20 (VIP) / 3h45 (Express)",
+          "price_local": "271-290 THB (Express) / 380-400 THB (VIP)",
+          "price_eur": "~7-8€ (Express) / ~10-11€ (VIP)",
+          "frequency": "72 salidas/día",
+          "booking_url": "https://12go.asia/en/travel/chiang-mai/chiang-rai",
+          "departure_station": "Arcade Bus Terminal 3",
+          "tip": "VIP: asientos más anchos + snack + baño. El mejor servicio del norte."
+        }
+      ]
+    },
+    {
+      "from": "Phuket",
+      "to": "Phi Phi",
+      "distance_km": 48,
+      "popular": true,
+      "options": [
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Ferry / Speedboat (Recomendado)",
+          "recommended": true,
+          "operator": "Andaman Wave Master",
+          "operators_alt": ["Bundhaya Speed Boat"],
+          "duration": "1.5-2h (ferry) / 45min-1h (speedboat)",
+          "price_local": "450-800 THB (ferry) / 700-1,050 THB (speedboat)",
+          "price_eur": "~12-21€ (ferry) / ~18-28€ (speedboat)",
+          "frequency": "7/día (AWM) + 4/día (Bundhaya)",
+          "booking_url": "https://andamanwavemaster.com",
+          "booking_alt": "https://phuketferry.com",
+          "departure_station": "Rassada Pier",
+          "tip": "Tasa extra Parque Nacional: 400 THB. Mar picado jun-oct. Reservar ida y vuelta."
+        }
+      ]
+    },
+    {
+      "from": "Phuket",
+      "to": "Krabi",
+      "distance_km": 160,
+      "popular": false,
+      "options": [
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Ferry / Speedboat",
+          "recommended": false,
+          "operator": "Andaman Wave Master",
+          "operators_alt": ["Tigerline"],
+          "duration": "1-1.5h (speedboat) / 2-3h (ferry)",
+          "price_local": "650-1,500 THB",
+          "price_eur": "~17-39€",
+          "booking_url": "https://phuketferry.com",
+          "booking_alt": "https://tigerlineferry.com",
+          "tip": "Muchos ferries hacen parada en Phi Phi en ruta = island hopping."
+        },
+        {
+          "type": "minivan",
+          "emoji": "🚐",
+          "label": "Minivan (Más barato y todo el año)",
+          "recommended": true,
+          "duration": "3-4h",
+          "price_local": "300-550 THB",
+          "price_eur": "~8-14€",
+          "booking_url": "https://12go.asia",
+          "tip": "Más barato y funciona todo el año (ferries se cancelan en monzón)."
+        }
+      ]
+    },
+    {
+      "from": "Krabi",
+      "to": "Koh Lanta",
+      "distance_km": 70,
+      "popular": false,
+      "options": [
+        {
+          "type": "minivan",
+          "emoji": "🚐",
+          "label": "Minivan + car ferry (Recomendado)",
+          "recommended": true,
+          "duration": "2-3h",
+          "price_local": "350-450 THB",
+          "price_eur": "~9-12€",
+          "frequency": "Cada hora, 08:00-16:00",
+          "booking_url": "https://12go.asia",
+          "tip": "Incluye cruce en car ferry. Funciona todo el año."
+        },
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Ferry directo (solo nov-abr)",
+          "recommended": false,
+          "operator": "Tigerline",
+          "duration": "1-1h45",
+          "price_local": "500-1,000 THB",
+          "price_eur": "~13-26€",
+          "frequency": "2-6/día (temporada)",
+          "booking_url": "https://tigerlineferry.com",
+          "tip": "Solo temporada seca noviembre-abril."
+        }
+      ]
+    },
+    {
+      "from": "Surat Thani",
+      "to": "Koh Samui",
+      "distance_km": 60,
+      "popular": false,
+      "options": [
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Lomprayah catamarán (Recomendado)",
+          "recommended": true,
+          "operator": "Lomprayah",
+          "duration": "45 min (el más rápido)",
+          "price_local": "450 THB",
+          "price_eur": "~12€",
+          "frequency": "2-3/día",
+          "booking_url": "https://lomprayah.com"
+        },
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Seatran Discovery",
+          "recommended": false,
+          "operator": "Seatran Discovery",
+          "duration": "1.5h",
+          "price_local": "260-330 THB",
+          "price_eur": "~7-9€",
+          "frequency": "3-5/día",
+          "booking_url": "https://seatrandiscovery.com"
+        },
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Raja Ferry (car ferry)",
+          "recommended": false,
+          "operator": "Raja Ferry",
+          "duration": "1.5h",
+          "price_local": "130-170 THB (pasajero) / desde 420 THB (coche+conductor)",
+          "price_eur": "~3-4€ (pasajero) / ~11€ (coche)",
+          "frequency": "15/día, 05:00-19:00",
+          "booking_url": "https://12go.asia",
+          "tip": "El más barato. Car ferry para llevar vehículo a la isla."
+        }
+      ],
+      "tip": "El muelle de Donsak está a 60 km de Surat Thani ciudad. Los combos bus+ferry (350-700 THB / ~9-18€) incluyen el traslado desde ciudad o aeropuerto."
+    },
+    {
+      "from": "Surat Thani",
+      "to": "Koh Phangan",
+      "distance_km": 100,
+      "popular": false,
+      "options": [
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Lomprayah combo bus + catamarán (Recomendado)",
+          "recommended": true,
+          "operator": "Lomprayah",
+          "duration": "3-4h",
+          "price_local": "550-750 THB",
+          "price_eur": "~14-20€",
+          "frequency": "2-3/día",
+          "booking_url": "https://lomprayah.com"
+        },
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Seatran Discovery",
+          "recommended": false,
+          "operator": "Seatran Discovery",
+          "duration": "2.5h desde Donsak",
+          "price_local": "240-300 THB",
+          "price_eur": "~6-8€",
+          "frequency": "3/día",
+          "booking_url": "https://seatrandiscovery.com"
+        },
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Raja night ferry (Económico)",
+          "recommended": false,
+          "operator": "Raja Ferry",
+          "duration": "6-7h (nocturno)",
+          "price_local": "350-500 THB",
+          "price_eur": "~9-13€",
+          "booking_url": "https://12go.asia",
+          "departure_station": "Surat Thani town pier",
+          "tip": "Sale a las 23:00. Básico pero barato. Duermes en el barco."
+        }
+      ]
+    },
+    {
+      "from": "Surat Thani",
+      "to": "Koh Tao",
+      "distance_km": 150,
+      "popular": false,
+      "options": [
+        {
+          "type": "ferry",
+          "emoji": "🚢",
+          "label": "Lomprayah combo bus + catamarán (Recomendado)",
+          "recommended": true,
+          "operator": "Lomprayah",
+          "duration": "5-6h",
+          "price_local": "750-950 THB",
+          "price_eur": "~20-25€",
+          "booking_url": "https://lomprayah.com",
+          "tip": "Vía Chumphon a veces es más rápido: Lomprayah Chumphon-Koh Tao 1.5h por 450 THB (~12€)."
+        }
+      ]
+    }
+  ],
+
+  "booking_platforms": [
+    {
+      "name": "12go.asia",
+      "url": "https://12go.asia",
+      "type": "agregador",
+      "best_for": "Todo tipo de transporte. En inglés. Ideal para extranjeros.",
+      "commission": "$3-5 por billete"
+    },
+    {
+      "name": "Lomprayah",
+      "url": "https://lomprayah.com",
+      "type": "ferry",
+      "best_for": "Ferries y combos bus+ferry a islas del Golfo (Samui, Phangan, Tao)."
+    },
+    {
+      "name": "Seatran Discovery",
+      "url": "https://seatrandiscovery.com",
+      "type": "ferry",
+      "best_for": "Ferries Golfo de Tailandia. Alternativa a Lomprayah."
+    },
+    {
+      "name": "Andaman Wave Master",
+      "url": "https://andamanwavemaster.com",
+      "type": "ferry",
+      "best_for": "Ferries Phuket-Phi Phi y costa Andamán."
+    },
+    {
+      "name": "Tigerline Ferry",
+      "url": "https://tigerlineferry.com",
+      "type": "ferry",
+      "best_for": "Ferries costa Andamán (Phuket-Krabi-Lanta-Phi Phi)."
+    },
+    {
+      "name": "Green Bus",
+      "url": "https://12go.asia/en/travel/chiang-mai/chiang-rai",
+      "type": "bus",
+      "best_for": "Autobuses norte de Tailandia (Chiang Mai-Chiang Rai)."
+    },
+    {
+      "name": "Nakhonchai Air",
+      "url": "https://nakhonchaiair.com",
+      "type": "bus",
+      "best_for": "Autobuses VIP desde Bangkok. Los mejores de Tailandia."
+    },
+    {
+      "name": "Roong Reuang Coach",
+      "url": "https://rrcticket.com",
+      "type": "bus",
+      "best_for": "Bus Bangkok-Pattaya. Frecuente y barato."
+    },
+    {
+      "name": "Bell Travel",
+      "url": "https://belltravelservice.com",
+      "type": "bus",
+      "best_for": "Servicio hotel-to-hotel Bangkok-Pattaya y Bangkok-Hua Hin."
+    },
+    {
+      "name": "Prempracha Transport",
+      "url": "https://premprachatransports.com",
+      "type": "bus",
+      "best_for": "Minivans Chiang Mai-Pai."
+    },
+    {
+      "name": "Aya Service",
+      "url": "https://ayaservice.com",
+      "type": "bus",
+      "best_for": "Minivans Chiang Mai-Pai + alquiler de motos."
+    },
+    {
+      "name": "SRT (State Railway of Thailand)",
+      "url": "https://dticket.railway.co.th",
+      "type": "tren",
+      "best_for": "Billetes oficiales de tren tailandés. Solo en tailandés, pero funciona."
+    },
+    {
+      "name": "Bangkok Airways",
+      "url": "https://www.bangkokair.com",
+      "type": "vuelo",
+      "best_for": "Única aerolínea con vuelos directos a Koh Samui."
+    },
+    {
+      "name": "Phuket Ferry",
+      "url": "https://phuketferry.com",
+      "type": "ferry",
+      "best_for": "Horarios y reservas de ferries desde Phuket."
+    }
+  ],
+
+  "tips_general": [
+    "12go.asia es la mejor plataforma única para extranjeros: trenes, buses, ferries, todo en inglés.",
+    "Los combos bus+ferry de Lomprayah son lo más popular entre mochileros para las islas del Golfo.",
+    "El monopolio de Bangkok Airways en Koh Samui hace los vuelos caros — vuela a Surat Thani + ferry para ahorrar 50-70%.",
+    "Reserva trenes con antelación: las literas de 2ª clase se agotan días antes, especialmente fines de semana.",
+    "Songkran (13-15 abril) y Año Nuevo: todo se agota semanas antes, precios ×3.",
+    "Monzón (jun-oct costa Andamán): ferries a Phi Phi y Lanta pueden cancelarse sin previo aviso.",
+    "Buses y trenes nocturnos ahorran una noche de hotel — viaje inteligente para presupuestos ajustados.",
+    "Las minivans son más rápidas que los buses pero menos cómodas. Los conductores pueden ser agresivos.",
+    "Grab funciona en Bangkok, Chiang Mai, Phuket, Pattaya, Hua Hin — no es fiable en las islas.",
+    "Lleva siempre THB en efectivo para songthaews, tuk-tuks y muelles de ferry pequeños."
+  ]
+}
