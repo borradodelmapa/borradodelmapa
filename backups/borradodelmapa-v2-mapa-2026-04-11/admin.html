@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salma Admin — Panel de Control</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --surface2: #1e1e1e;
+    --gold: #d4a843;
+    --gold-dim: #a8842f;
+    --text: #e0e0e0;
+    --text-dim: #888;
+    --green: #4caf50;
+    --red: #e53935;
+    --orange: #ff9800;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  h1 { color: var(--gold); font-size: 1.5rem; margin-bottom: 8px; }
+  .subtitle { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 24px; }
+  .section { background: var(--surface); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .section h2 { font-size: 1.1rem; color: var(--gold); margin-bottom: 12px; }
+  button {
+    background: var(--gold);
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: opacity 0.2s;
+  }
+  button:hover { opacity: 0.85; }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+  button.secondary { background: var(--surface2); color: var(--text); border: 1px solid #333; }
+  button.danger { background: var(--red); color: #fff; }
+  button.apply { background: var(--green); color: #fff; font-size: 0.8rem; padding: 6px 14px; }
+  .info-row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .info-row span { font-size: 0.85rem; color: var(--text-dim); }
+  .info-row strong { color: var(--text); }
+
+  /* Login */
+  #login-section { text-align: center; padding: 60px 20px; }
+  #login-section input {
+    background: var(--surface2);
+    border: 1px solid #333;
+    color: var(--text);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 260px;
+    margin-right: 8px;
+  }
+
+  /* Semáforo */
+  .summary-bar { display: flex; gap: 12px; margin: 16px 0; flex-wrap: wrap; }
+  .summary-pill {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 20px;
+    font-weight: 600; font-size: 0.9rem;
+  }
+  .summary-pill.pass { background: rgba(76,175,80,0.15); color: var(--green); }
+  .summary-pill.fail { background: rgba(229,57,53,0.15); color: var(--red); }
+  .summary-pill.parcial { background: rgba(255,152,0,0.15); color: var(--orange); }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot.pass { background: var(--green); }
+  .dot.fail { background: var(--red); }
+  .dot.parcial { background: var(--orange); }
+
+  /* Results */
+  .rule-card {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 10px;
+    border-left: 4px solid #333;
+  }
+  .rule-card.pass { border-left-color: var(--green); }
+  .rule-card.fail { border-left-color: var(--red); }
+  .rule-card.parcial { border-left-color: var(--orange); }
+  .rule-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .rule-name { font-weight: 600; font-size: 0.95rem; }
+  .rule-badge { font-size: 0.75rem; padding: 3px 10px; border-radius: 12px; font-weight: 600; text-transform: uppercase; }
+  .rule-badge.pass { background: rgba(76,175,80,0.2); color: var(--green); }
+  .rule-badge.fail { background: rgba(229,57,53,0.2); color: var(--red); }
+  .rule-badge.parcial { background: rgba(255,152,0,0.2); color: var(--orange); }
+  .test-item { font-size: 0.85rem; margin: 6px 0; padding: 8px; background: rgba(0,0,0,0.3); border-radius: 6px; }
+  .test-item .msg { color: var(--gold-dim); font-style: italic; }
+  .test-item .reason { color: var(--text-dim); margin-top: 4px; }
+  .test-item .fix { color: var(--orange); margin-top: 4px; font-size: 0.8rem; }
+  .test-item .response { color: var(--text-dim); margin-top: 4px; font-size: 0.8rem; max-height: 80px; overflow-y: auto; }
+
+  /* Progress */
+  .progress-bar { width: 100%; height: 6px; background: var(--surface2); border-radius: 3px; margin: 12px 0; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--gold); border-radius: 3px; transition: width 0.3s; }
+  .progress-text { font-size: 0.8rem; color: var(--text-dim); }
+
+  /* Prompt editor */
+  #prompt-editor {
+    width: 100%;
+    min-height: 300px;
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    resize: vertical;
+    display: none;
+  }
+
+  .hidden { display: none !important; }
+  .actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="login-section">
+  <h1>Salma Admin</h1>
+  <p class="subtitle">Panel de control — Solo admin</p>
+  <div style="margin-top: 24px;">
+    <input type="password" id="admin-pass" placeholder="Contraseña admin" onkeydown="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()">Entrar</button>
+  </div>
+</div>
+
+<!-- Panel -->
+<div id="panel" class="hidden">
+  <h1>Salma Admin</h1>
+  <p class="subtitle">Control de calidad del prompt y comportamiento de Salma</p>
+
+  <!-- Prompt Info -->
+  <div class="section" id="prompt-section">
+    <h2>Prompt activo</h2>
+    <div class="info-row">
+      <span>Fuente: <strong id="prompt-source">—</strong></span>
+      <span>Version: <strong id="prompt-version">—</strong></span>
+      <span>Actualizado: <strong id="prompt-updated">—</strong></span>
+      <span>Caracteres: <strong id="prompt-chars">—</strong></span>
+    </div>
+    <div class="actions">
+      <button class="secondary" onclick="loadPrompt()">Recargar</button>
+      <button class="secondary" onclick="toggleEditor()">Ver/Editar prompt</button>
+      <button class="secondary" onclick="initPrompt()">Migrar hardcoded a Firestore</button>
+    </div>
+    <textarea id="prompt-editor"></textarea>
+    <div id="editor-actions" class="actions hidden">
+      <button onclick="savePrompt()">Guardar cambios</button>
+      <button class="secondary" onclick="toggleEditor()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Tests -->
+  <div class="section">
+    <h2>Tests automaticos</h2>
+    <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:12px;">
+      Haiku genera mensajes trampa, los envia a Salma y evalua si cumple cada regla del prompt.
+    </p>
+    <button id="run-tests-btn" onclick="runTests()">Lanzar bateria de tests</button>
+    <div id="test-progress" class="hidden">
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <p class="progress-text" id="progress-text">Iniciando...</p>
+    </div>
+  </div>
+
+  <!-- Resultados -->
+  <div class="section hidden" id="results-section">
+    <h2>Resultados</h2>
+    <div class="summary-bar" id="summary-bar"></div>
+    <div id="results-container"></div>
+  </div>
+
+  <!-- Historial -->
+  <div class="section">
+    <h2>Historial de cambios</h2>
+    <p style="font-size:0.85rem;color:var(--text-dim);">
+      Cada fix aplicado queda en Firestore: <code>config/salma-prompt/history/</code>
+    </p>
+  </div>
+</div>
+
+<script>
+const API = 'https://salma-api.paco-defoto.workers.dev';
+let TOKEN = '';
+let currentPromptText = '';
+
+function doLogin() {
+  TOKEN = document.getElementById('admin-pass').value.trim();
+  if (!TOKEN) return;
+  document.getElementById('login-section').classList.add('hidden');
+  document.getElementById('panel').classList.remove('hidden');
+  loadPrompt();
+}
+
+async function apiFetch(path, opts = {}) {
+  const res = await fetch(API + path, {
+    ...opts,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + TOKEN,
+      ...(opts.headers || {}),
+    },
+  });
+  return res.json();
+}
+
+// ─── Prompt ───
+async function loadPrompt() {
+  try {
+    const data = await apiFetch('/admin/get-prompt');
+    document.getElementById('prompt-source').textContent = data.source || '—';
+    document.getElementById('prompt-version').textContent = data.version || '0';
+    document.getElementById('prompt-updated').textContent = data.updated_at ? new Date(data.updated_at).toLocaleString('es') : '—';
+    document.getElementById('prompt-chars').textContent = (data.prompt_text || '').length;
+    currentPromptText = data.prompt_text || '';
+    document.getElementById('prompt-editor').value = currentPromptText;
+  } catch (e) {
+    alert('Error cargando prompt: ' + e.message);
+  }
+}
+
+async function initPrompt() {
+  if (!confirm('Esto sobrescribe el prompt en Firestore con el hardcoded del worker. Continuar?')) return;
+  const data = await apiFetch('/admin/init-prompt', { method: 'POST' });
+  if (data.ok) {
+    alert('Prompt migrado. Version: ' + data.version + ', ' + data.chars + ' chars');
+    loadPrompt();
+  } else {
+    alert('Error: ' + (data.error || 'desconocido'));
+  }
+}
+
+function toggleEditor() {
+  const ed = document.getElementById('prompt-editor');
+  const actions = document.getElementById('editor-actions');
+  const visible = ed.style.display !== 'none';
+  ed.style.display = visible ? 'none' : 'block';
+  actions.classList.toggle('hidden', visible);
+  if (!visible) ed.value = currentPromptText;
+}
+
+async function savePrompt() {
+  const text = document.getElementById('prompt-editor').value;
+  if (text.length < 100) return alert('Prompt demasiado corto');
+  const reason = prompt('Razon del cambio (opcional):') || 'Edicion manual';
+  const data = await apiFetch('/admin/save-prompt', {
+    method: 'POST',
+    body: JSON.stringify({ prompt_text: text, reason }),
+  });
+  if (data.ok) {
+    alert('Guardado. Version: ' + data.version);
+    toggleEditor();
+    loadPrompt();
+  } else {
+    alert('Error: ' + (data.error || 'desconocido'));
+  }
+}
+
+// ─── Tests (2 fases para no reventar el límite de subrequests) ───
+async function runTests() {
+  const btn = document.getElementById('run-tests-btn');
+  const progress = document.getElementById('test-progress');
+  const resultsSection = document.getElementById('results-section');
+
+  btn.disabled = true;
+  btn.textContent = 'Ejecutando...';
+  progress.classList.remove('hidden');
+  resultsSection.classList.add('hidden');
+
+  document.getElementById('progress-fill').style.width = '5%';
+  document.getElementById('progress-text').textContent = 'Fase 1: Haiku extrayendo reglas del prompt...';
+
+  try {
+    const t0 = Date.now();
+
+    // Fase 1: Extraer reglas
+    const extractData = await apiFetch('/admin/test-extract', { method: 'POST' });
+    if (extractData.error) { alert('Error extrayendo reglas: ' + extractData.error); return; }
+
+    const rules = extractData.rules;
+    document.getElementById('progress-fill').style.width = '15%';
+    document.getElementById('progress-text').textContent = `${rules.length} reglas encontradas. Fase 2: Testeando...`;
+
+    // Fase 2: Testear cada regla por separado
+    const results = [];
+    for (let i = 0; i < rules.length; i++) {
+      const pct = 15 + Math.round((i / rules.length) * 80);
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('progress-text').textContent = `Testeando regla ${i + 1}/${rules.length}: ${rules[i].name}`;
+
+      try {
+        const ruleData = await apiFetch('/admin/test-rule', {
+          method: 'POST',
+          body: JSON.stringify({ rule: rules[i] }),
+        });
+        if (ruleData.ok) {
+          results.push(ruleData.result);
+        } else {
+          results.push({ id: rules[i].id, name: rules[i].name, description: rules[i].description, overall: 'error', tests: [{ message: '—', response: '', pass: false, reason: ruleData.error || 'Error', fix_suggestion: null }] });
+        }
+      } catch (e) {
+        results.push({ id: rules[i].id, name: rules[i].name, description: rules[i].description, overall: 'error', tests: [{ message: '—', response: '', pass: false, reason: e.message, fix_suggestion: null }] });
+      }
+    }
+
+    document.getElementById('progress-fill').style.width = '100%';
+    const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+    document.getElementById('progress-text').textContent = `Completado en ${elapsed}s`;
+
+    const passCount = results.filter(r => r.overall === 'pass').length;
+    const failCount = results.filter(r => r.overall === 'fail').length;
+    const parcialCount = results.filter(r => r.overall === 'parcial').length;
+
+    renderResults({
+      timestamp: new Date().toISOString(),
+      summary: { total: results.length, pass: passCount, fail: failCount, parcial: parcialCount },
+      results,
+    });
+
+  } catch (e) {
+    alert('Error: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Lanzar bateria de tests';
+  }
+}
+
+function renderResults(data) {
+  const section = document.getElementById('results-section');
+  const bar = document.getElementById('summary-bar');
+  const container = document.getElementById('results-container');
+  section.classList.remove('hidden');
+
+  // Summary
+  const s = data.summary;
+  bar.innerHTML = `
+    <div class="summary-pill pass"><div class="dot pass"></div> ${s.pass} pass</div>
+    <div class="summary-pill fail"><div class="dot fail"></div> ${s.fail} fail</div>
+    <div class="summary-pill parcial"><div class="dot parcial"></div> ${s.parcial} parcial</div>
+    <span style="color:var(--text-dim);font-size:0.8rem;">${data.results.length} reglas testeadas — ${data.timestamp}</span>
+  `;
+
+  // Results cards — failures first
+  const sorted = [...data.results].sort((a, b) => {
+    const order = { fail: 0, parcial: 1, pass: 2 };
+    return (order[a.overall] || 2) - (order[b.overall] || 2);
+  });
+
+  container.innerHTML = sorted.map(rule => {
+    const testsHtml = rule.tests.map(t => {
+      const fixBtn = t.fix_suggestion && !t.pass
+        ? `<div style="margin-top:6px"><button class="apply" onclick='applyFix(${JSON.stringify(rule.name).replace(/'/g, "&#39;")}, ${JSON.stringify(t.fix_suggestion).replace(/'/g, "&#39;")})'>Aplicar fix</button></div>`
+        : '';
+      return `
+        <div class="test-item">
+          <div class="msg">"${escHtml(t.message)}"</div>
+          <div class="response">${escHtml(t.response || '')}</div>
+          <div class="reason">${t.pass ? '✓' : '✗'} ${escHtml(t.reason || '')}</div>
+          ${t.fix_suggestion && !t.pass ? `<div class="fix">Fix: ${escHtml(t.fix_suggestion)}</div>` : ''}
+          ${fixBtn}
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="rule-card ${rule.overall}">
+        <div class="rule-header">
+          <span class="rule-name">${escHtml(rule.name)}</span>
+          <span class="rule-badge ${rule.overall}">${rule.overall}</span>
+        </div>
+        <div style="font-size:0.8rem;color:var(--text-dim);margin-bottom:8px;">${escHtml(rule.description)}</div>
+        ${testsHtml}
+      </div>`;
+  }).join('');
+}
+
+async function applyFix(ruleName, fixSuggestion) {
+  if (!confirm(`Aplicar fix para "${ruleName}"?\n\n${fixSuggestion}`)) return;
+
+  const data = await apiFetch('/admin/apply-fix', {
+    method: 'POST',
+    body: JSON.stringify({
+      rule_name: ruleName,
+      fix_suggestion: fixSuggestion,
+      current_prompt: currentPromptText,
+    }),
+  });
+
+  if (data.ok) {
+    alert(`Fix aplicado. Nueva version: ${data.version} (${data.chars} chars)`);
+    loadPrompt();
+  } else {
+    alert('Error aplicando fix: ' + (data.error || 'desconocido'));
+  }
+}
+
+function escHtml(s) {
+  return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+</script>
+</body>
+</html>

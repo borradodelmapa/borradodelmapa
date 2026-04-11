@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legal — Borrado del Mapa</title>
+  <meta name="description" content="Aviso legal, política de privacidad, cookies y términos de uso de Borrado del Mapa.">
+  <link rel="icon" href="/favicon.ico">
+  <style>
+    :root {
+      --fondo: #0e0e0e;
+      --texto: #f4efe6;
+      --dorado: #D4A843;
+      --dorado2: #e6c06e;
+      --font-main: 'Georgia', serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: var(--fondo);
+      color: var(--texto);
+      font-family: var(--font-main);
+      line-height: 1.7;
+      padding: 0;
+    }
+    .legal-header {
+      text-align: center;
+      padding: 32px 20px 24px;
+      border-bottom: 1px solid rgba(212,168,67,.15);
+    }
+    .legal-header a {
+      text-decoration: none;
+      color: var(--texto);
+      font-family: var(--font-mono);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: .12em;
+    }
+    .legal-header a span { color: var(--dorado); }
+    .legal-nav {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 20px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(244,239,230,.06);
+    }
+    .legal-nav a {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .1em;
+      color: var(--dorado);
+      text-decoration: none;
+      padding: 6px 14px;
+      border: 1px solid rgba(212,168,67,.2);
+      border-radius: 20px;
+      transition: all .2s;
+    }
+    .legal-nav a:hover {
+      background: rgba(212,168,67,.1);
+      border-color: var(--dorado);
+    }
+    .legal-content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+    h1 {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--dorado);
+      margin-bottom: 8px;
+      letter-spacing: .05em;
+    }
+    .legal-updated {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: rgba(244,239,230,.4);
+      letter-spacing: .1em;
+      margin-bottom: 32px;
+    }
+    h2 {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--dorado);
+      letter-spacing: .08em;
+      margin-top: 36px;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(212,168,67,.12);
+    }
+    h2:first-of-type { margin-top: 0; }
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: rgba(244,239,230,.9);
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+    p {
+      font-size: 14px;
+      color: rgba(244,239,230,.7);
+      margin-bottom: 12px;
+    }
+    ul {
+      font-size: 14px;
+      color: rgba(244,239,230,.7);
+      margin-bottom: 12px;
+      padding-left: 20px;
+    }
+    li { margin-bottom: 4px; }
+    a { color: var(--dorado); }
+    .legal-placeholder {
+      background: rgba(212,168,67,.08);
+      border: 1px dashed rgba(212,168,67,.25);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--dorado);
+      margin-bottom: 12px;
+    }
+    .legal-section {
+      padding-top: 24px;
+    }
+    .legal-footer {
+      text-align: center;
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: rgba(244,239,230,.3);
+      border-top: 1px solid rgba(244,239,230,.06);
+    }
+    .legal-footer a { color: var(--dorado); text-decoration: none; }
+    @media (max-width: 600px) {
+      h1 { font-size: 22px; }
+      .legal-content { padding: 24px 16px 100px; }
+    }
+    .app-bottom-bar {
+      position:fixed; bottom:0; left:0; right:0; z-index:900;
+      display:flex; justify-content:space-around; align-items:flex-start;
+      background:rgba(12,10,6,.95); backdrop-filter:blur(12px);
+      border-top:1px solid rgba(244,239,230,.08);
+      padding:6px 0 env(safe-area-inset-bottom, 6px);
+      min-height:56px;
+    }
+    .bottom-tab {
+      display:flex; flex-direction:column; align-items:center; gap:2px;
+      background:none; border:none; cursor:pointer;
+      color:rgba(244,239,230,.4); font-size:10px;
+      font-family:'SF Mono','Fira Code',monospace;
+      letter-spacing:.05em; padding:4px 16px; transition:color .2s;
+      text-decoration:none;
+    }
+    .bottom-tab svg { stroke:currentColor; }
+    .bottom-tab:hover { color:rgba(244,239,230,.7); }
+  </style>
+</head>
+<body>
+
+<div class="legal-header">
+  <a href="/">borrado<span>del</span>mapa</a>
+</div>
+
+<nav class="legal-nav">
+  <a href="#aviso-legal">Aviso legal</a>
+  <a href="#privacidad">Privacidad</a>
+  <a href="#cookies">Cookies</a>
+  <a href="#terminos">Términos de uso</a>
+</nav>
+
+<div class="legal-content">
+
+  <!-- ═══ AVISO LEGAL ═══ -->
+  <section id="aviso-legal" class="legal-section">
+    <h1>Aviso Legal</h1>
+    <div class="legal-updated">ÚLTIMA ACTUALIZACIÓN: 24 MARZO 2026</div>
+
+    <h2>Titular del sitio web</h2>
+    <div class="legal-placeholder">
+      [PENDIENTE: Nombre del titular / razón social]<br>
+      [PENDIENTE: CIF/NIF]<br>
+      [PENDIENTE: Dirección]<br>
+      Email de contacto: [PENDIENTE]
+    </div>
+
+    <h2>Objeto del sitio</h2>
+    <p>Borrado del Mapa (borradodelmapa.com) es una plataforma de planificación de viajes con inteligencia artificial. Ofrece generación de rutas e itinerarios personalizados, información práctica de destinos y herramientas de organización de viajes.</p>
+
+    <h2>Propiedad intelectual</h2>
+    <p>El diseño, código fuente, logotipos, textos y contenido generado por la plataforma son propiedad de Borrado del Mapa o de sus respectivos titulares. Las rutas generadas por los usuarios mediante la herramienta de IA son de uso personal del usuario que las genera.</p>
+
+    <h2>Limitación de responsabilidad</h2>
+    <p>La información proporcionada por Salma (asistente de IA) tiene carácter orientativo. Borrado del Mapa no garantiza la exactitud de precios, horarios, disponibilidad, requisitos de visado ni cualquier otro dato facilitado. El usuario es responsable de verificar la información antes de su viaje.</p>
+    <p>Borrado del Mapa no se hace responsable de decisiones tomadas basándose en la información proporcionada por la plataforma.</p>
+
+    <h2>Legislación aplicable</h2>
+    <p>Este sitio web se rige por la legislación española. Para cualquier controversia, las partes se someten a los juzgados y tribunales del domicilio del titular.</p>
+  </section>
+
+  <!-- ═══ PRIVACIDAD ═══ -->
+  <section id="privacidad" class="legal-section">
+    <h1>Política de Privacidad</h1>
+    <div class="legal-updated">ÚLTIMA ACTUALIZACIÓN: 24 MARZO 2026</div>
+
+    <h2>Responsable del tratamiento</h2>
+    <div class="legal-placeholder">
+      [PENDIENTE: Nombre del responsable]<br>
+      [PENDIENTE: CIF/NIF]<br>
+      [PENDIENTE: Email de contacto para protección de datos]
+    </div>
+
+    <h2>Datos que recogemos</h2>
+
+    <h3>Datos de registro</h3>
+    <p>Cuando creas una cuenta recogemos:</p>
+    <ul>
+      <li>Email (para identificación y acceso)</li>
+      <li>Nombre (si lo proporcionas, para personalizar la experiencia)</li>
+      <li>Datos de autenticación de Google (si usas Google Sign-In)</li>
+    </ul>
+
+    <h3>Datos de uso</h3>
+    <p>Cuando usas la plataforma se generan:</p>
+    <ul>
+      <li>Rutas e itinerarios que creas (guardados en tu cuenta)</li>
+      <li>Conversaciones con Salma (no se almacenan después de cada guía)</li>
+      <li>Ubicación aproximada (solo si das permiso, para personalizar recomendaciones)</li>
+    </ul>
+
+    <h3>Datos que NO recogemos</h3>
+    <ul>
+      <li>No almacenamos datos bancarios ni de pago (los gestiona el procesador de pagos)</li>
+      <li>No vendemos ni compartimos datos personales con terceros</li>
+      <li>No hacemos perfilado con fines publicitarios</li>
+    </ul>
+
+    <h2>Finalidad del tratamiento</h2>
+    <ul>
+      <li>Prestación del servicio (generar y guardar rutas de viaje)</li>
+      <li>Personalización de la experiencia (nombre, nacionalidad para adaptar info de visados)</li>
+      <li>Comunicaciones sobre el servicio (cambios, actualizaciones)</li>
+    </ul>
+
+    <h2>Base legal</h2>
+    <ul>
+      <li>Ejecución del contrato: el servicio que te proporcionamos</li>
+      <li>Consentimiento: para cookies no esenciales y ubicación</li>
+      <li>Interés legítimo: mejora del servicio y seguridad</li>
+    </ul>
+
+    <h2>Servicios de terceros</h2>
+    <p>Utilizamos los siguientes servicios que pueden procesar datos:</p>
+    <ul>
+      <li><strong>Firebase (Google)</strong> — autenticación y almacenamiento de datos. <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">Política de Firebase</a></li>
+      <li><strong>Google Maps / Places</strong> — verificación de lugares y fotos. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Política de Google</a></li>
+      <li><strong>Anthropic (Claude)</strong> — generación de rutas con IA. <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener">Política de Anthropic</a></li>
+      <li><strong>Cloudflare</strong> — alojamiento del backend. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Política de Cloudflare</a></li>
+    </ul>
+
+    <h2>Conservación de datos</h2>
+    <p>Tus datos se conservan mientras mantengas tu cuenta activa. Puedes solicitar la eliminación de tu cuenta y todos los datos asociados en cualquier momento contactando con nosotros.</p>
+
+    <h2>Tus derechos</h2>
+    <p>Puedes ejercer tus derechos de acceso, rectificación, supresión, portabilidad, limitación y oposición al tratamiento enviando un email a:</p>
+    <div class="legal-placeholder">[PENDIENTE: Email de contacto]</div>
+    <p>También tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es" target="_blank" rel="noopener">aepd.es</a>).</p>
+  </section>
+
+  <!-- ═══ COOKIES ═══ -->
+  <section id="cookies" class="legal-section">
+    <h1>Política de Cookies</h1>
+    <div class="legal-updated">ÚLTIMA ACTUALIZACIÓN: 24 MARZO 2026</div>
+
+    <h2>¿Qué son las cookies?</h2>
+    <p>Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo cuando visitas un sitio web. Permiten que el sitio funcione correctamente y recuerde tus preferencias.</p>
+
+    <h2>Cookies que utilizamos</h2>
+
+    <h3>Cookies esenciales (siempre activas)</h3>
+    <p>Necesarias para que el sitio funcione. No se pueden desactivar.</p>
+    <ul>
+      <li><strong>Sesión de Firebase</strong> — mantiene tu sesión iniciada. Duración: mientras mantengas la sesión.</li>
+      <li><strong>cookie_consent</strong> — recuerda tu elección sobre cookies. Duración: 12 meses.</li>
+    </ul>
+
+    <h3>Cookies de análisis (opcionales)</h3>
+    <p>Nos ayudan a entender cómo se usa la plataforma para mejorarla.</p>
+    <ul>
+      <li><strong>Google Analytics (GA4)</strong> — estadísticas de uso anónimas. Duración: hasta 14 meses. <a href="https://policies.google.com/technologies/cookies" target="_blank" rel="noopener">Más info</a></li>
+    </ul>
+
+    <h2>Cómo gestionar las cookies</h2>
+    <p>Puedes cambiar tu configuración de cookies en cualquier momento usando el banner de cookies o desde la configuración de tu navegador. Ten en cuenta que desactivar cookies esenciales puede afectar al funcionamiento del sitio.</p>
+  </section>
+
+  <!-- ═══ TÉRMINOS DE USO ═══ -->
+  <section id="terminos" class="legal-section">
+    <h1>Términos de Uso</h1>
+    <div class="legal-updated">ÚLTIMA ACTUALIZACIÓN: 24 MARZO 2026</div>
+
+    <h2>Aceptación</h2>
+    <p>Al usar Borrado del Mapa aceptas estos términos. Si no estás de acuerdo, no uses la plataforma.</p>
+
+    <h2>Descripción del servicio</h2>
+    <p>Borrado del Mapa es una herramienta de planificación de viajes que usa inteligencia artificial para generar rutas e itinerarios. El servicio incluye:</p>
+    <ul>
+      <li>Generación de rutas personalizadas</li>
+      <li>Información práctica de destinos</li>
+      <li>Búsqueda de vuelos, hoteles y restaurantes (enlaces a proveedores externos)</li>
+      <li>Guardado y compartición de guías</li>
+    </ul>
+
+    <h2>Modelo de uso</h2>
+    <ul>
+      <li><strong>Plan gratuito:</strong> 3 generaciones de rutas</li>
+      <li><strong>Planes de pago:</strong> desde 3.99€ con más generaciones disponibles</li>
+    </ul>
+    <p>Los planes de pago no son suscripciones recurrentes. Se adquieren packs de generaciones que no caducan.</p>
+
+    <h2>Limitaciones del servicio</h2>
+    <ul>
+      <li>Las rutas son generadas por IA y tienen carácter orientativo</li>
+      <li>Precios, horarios y disponibilidad pueden variar respecto a lo indicado</li>
+      <li>La información de visados y requisitos legales es orientativa — consulta siempre fuentes oficiales</li>
+      <li>Los enlaces a servicios externos (vuelos, hoteles, restaurantes) redirigen a plataformas de terceros con sus propias condiciones</li>
+    </ul>
+
+    <h2>Uso aceptable</h2>
+    <p>Te comprometes a:</p>
+    <ul>
+      <li>Usar la plataforma para planificación de viajes personal</li>
+      <li>No intentar explotar, sobrecargar o manipular el servicio</li>
+      <li>No revender o redistribuir comercialmente el contenido generado</li>
+      <li>No usar el servicio para actividades ilegales</li>
+    </ul>
+
+    <h2>Guías públicas</h2>
+    <p>Las rutas guardadas se publican como guías accesibles por URL. Al guardar una ruta, aceptas que sea visible públicamente. No se muestra información personal del creador en las guías públicas.</p>
+
+    <h2>Cancelación y reembolsos</h2>
+    <p>Puedes dejar de usar el servicio en cualquier momento. Los packs de generaciones adquiridos no son reembolsables una vez usados. Para packs no usados, contacta con nosotros.</p>
+
+    <h2>Modificaciones</h2>
+    <p>Nos reservamos el derecho a modificar estos términos. Los cambios se publicarán en esta página con la fecha de actualización.</p>
+
+    <h2>Contacto</h2>
+    <div class="legal-placeholder">[PENDIENTE: Email de contacto]</div>
+  </section>
+
+</div>
+
+<div class="legal-footer">
+  <a href="/">borradodelmapa.com</a> — Tu compañera de viaje
+</div>
+
+<nav class="app-bottom-bar">
+  <a href="/" class="bottom-tab" style="text-decoration:none">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Home</span>
+  </a>
+  <a href="/?go=chat" class="bottom-tab" style="text-decoration:none">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span>Salma</span>
+  </a>
+  <a href="/?go=rutas" class="bottom-tab" style="text-decoration:none">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
+    <span>Mis Viajes</span>
+  </a>
+  <a href="/?go=profile" class="bottom-tab" style="text-decoration:none">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span>Perfil</span>
+  </a>
+</nav>
+
+</body>
+</html>
