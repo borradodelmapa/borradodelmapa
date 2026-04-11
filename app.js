@@ -3655,8 +3655,7 @@ async function generateDiarioStory() {
 
   // Mapa estático de fondo
   const mapUrl = 'https://maps.googleapis.com/maps/api/staticmap?center='
-    + _diario.lat+','+_diario.lng+'&zoom=14&size=640x640'
-    + '&style=element:geometry%7Ccolor:0x1d2c4d&style=element:labels.text.fill%7Ccolor:0x8ec3b9&style=feature:road%7Celement:geometry%7Ccolor:0x304a7d&style=feature:water%7Celement:geometry%7Ccolor:0x0e1626&style=feature:poi%7Cvisibility:off'
+    + _diario.lat+','+_diario.lng+'&zoom=14&size=640x640&maptype=satellite'
     + '&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
   try {
     const mapImg = await new Promise((resolve, reject) => {
@@ -3739,20 +3738,15 @@ function _drawDiarioKodak(ctx, photo, W, H, transport, loc, mapImg, msgTxt) {
     ctx.restore();
   }
 
-  // Bottom strip: KODAK
+  // Bottom strip: BORRADO DEL MAPA
   const sY=phY+phH,sH=bB;
-  ctx.fillStyle='#E01B22';ctx.font='bold '+Math.round(32*fs)+'px Georgia,serif';
+  ctx.fillStyle='#D4A843';ctx.font='bold '+Math.round(28*fs)+'px -apple-system,sans-serif';
   ctx.textAlign='left';ctx.textBaseline='top';
-  ctx.fillText('KODAK',phX,sY+Math.round(14*fs));
-  ctx.fillStyle='rgba(0,0,0,0.28)';ctx.font=Math.round(16*fs)+'px Georgia,serif';
-  ctx.fillText('GOLD 200',phX,sY+Math.round(50*fs));
+  ctx.fillText('BORRADO DEL MAPA',phX,sY+Math.round(14*fs));
   const shortLoc=loc.length>26?loc.substring(0,24)+'…':loc;
   ctx.fillStyle='rgba(0,0,0,0.80)';ctx.font='bold '+Math.round(24*fs)+'px -apple-system,sans-serif';
   ctx.textAlign='center';ctx.textBaseline='middle';
   ctx.fillText('📍 '+shortLoc,W/2,sY+sH*0.46);
-  ctx.fillStyle='rgba(0,0,0,0.30)';ctx.font='bold '+Math.round(26*fs)+'px Georgia,serif';
-  ctx.textAlign='right';ctx.textBaseline='top';
-  ctx.fillText('36',phX+phW,sY+Math.round(14*fs));
 
   if(msgTxt){
     const msgY=printY+printH+Math.round(56*fs);
