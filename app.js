@@ -2276,7 +2276,11 @@ function sendMessage() {
     resetMicState();
     if (hadResult && inputEl && inputEl.value.trim()) {
       const isWelcome = inputEl.id === 'welcome-input';
-      if (isWelcome) {
+      const isMapSearch = inputEl.id === 'map-search-input';
+      if (isMapSearch) {
+        document.dispatchEvent(new CustomEvent('map:search-submit', { detail: { query: inputEl.value.trim() } }));
+        inputEl.value = '';
+      } else if (isWelcome) {
         const msg = inputEl.value.trim();
         inputEl.value = '';
         inputEl.style.height = 'auto';

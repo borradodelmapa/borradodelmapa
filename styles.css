@@ -2162,6 +2162,10 @@ body {
 .map-controls {
   position:absolute; top:16px; left:16px; z-index:500;
   display:flex; flex-direction:column; gap:8px;
+  transition:opacity .35s ease;
+}
+.map-controls.map-controls-hidden {
+  opacity:0; pointer-events:none;
 }
 .map-ctrl-btn {
   width:40px; height:40px; border-radius:10px; border:none; cursor:pointer;
@@ -2243,6 +2247,53 @@ body {
   border-top:12px solid rgba(244,239,230,.2);
   position:absolute; bottom:0; left:50%; transform:translateX(-50%);
 }
+
+/* ═══ SEARCH BAR (buscador sobre el mapa) ═══ */
+.map-search-bar {
+  position:absolute; top:16px; left:64px; right:70px; z-index:500;
+  transition:opacity .35s ease;
+}
+.map-search-bar.map-search-hidden { opacity:0; pointer-events:none; }
+.map-search-row {
+  display:flex; align-items:center; gap:8px;
+  background:rgba(12,10,6,.88); backdrop-filter:blur(10px);
+  border:1px solid rgba(244,239,230,.1); border-radius:10px;
+  padding:6px 10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.4);
+}
+.map-search-input {
+  flex:1; background:none; border:none; outline:none;
+  color:rgba(244,239,230,.9); font-family:var(--font-body);
+  font-size:14px; resize:none; line-height:1.4;
+  min-height:20px; max-height:20px; overflow:hidden;
+}
+.map-search-input::placeholder { color:rgba(244,239,230,.4); }
+.map-search-icon { width:16px; height:16px; flex-shrink:0; color:rgba(244,239,230,.5); }
+.map-search-mic {
+  width:32px; height:32px; border-radius:50%; border:none;
+  background:none; color:rgba(244,239,230,.6); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:color .2s; flex-shrink:0;
+}
+.map-search-mic:hover { color:rgba(244,239,230,.9); }
+.map-search-hint {
+  margin-top:4px; font-size:11px; color:rgba(244,239,230,.35);
+  font-family:var(--font-body); padding-left:4px;
+}
+@media(max-width:600px) {
+  .map-search-bar { left:16px; right:16px; top:auto; bottom:80px; }
+}
+/* Google Places Autocomplete dark theme */
+.pac-container {
+  z-index:1001!important; background:rgba(12,10,6,.95)!important;
+  border:1px solid rgba(244,239,230,.12)!important; border-radius:10px!important;
+  box-shadow:0 4px 16px rgba(0,0,0,.5)!important; margin-top:4px!important;
+}
+.pac-item { color:rgba(244,239,230,.8)!important; border-top:1px solid rgba(244,239,230,.08)!important; padding:10px 14px!important; cursor:pointer!important; }
+.pac-item:hover,.pac-item-selected { background:rgba(244,239,230,.06)!important; }
+.pac-item-query { color:rgba(244,239,230,.9)!important; }
+.pac-matched { color:#D4A843!important; font-weight:600!important; }
+.pac-icon { display:none!important; }
 
 /* ═══ TURN-BY-TURN PANEL ═══ */
 .turn-panel {

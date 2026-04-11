@@ -15,6 +15,8 @@ const mapaRuta = {
   _currentContainerId: null,
   _userMarker: null, // Punto azul de ubicación del usuario
   _infoWindow: null, // InfoWindow activo
+  _searchMarker: null, // Marker de búsqueda temporal
+  _autocomplete: null, // Google Places Autocomplete
 
   // Colores por día
   _dayColors: ['#D4A843', '#E87040', '#5CB85C', '#5BC0DE', '#D9534F', '#AA66CC', '#FF8C00'],
@@ -39,7 +41,7 @@ const mapaRuta = {
     this._removeMapControls(containerId);
 
     const controls = document.createElement('div');
-    controls.className = 'map-controls';
+    controls.className = 'map-controls map-controls-hidden';
     controls.id = 'map-controls';
 
     // Botón Google Maps (re-centrar)
@@ -284,6 +286,84 @@ const mapaRuta = {
     this._deviceOrientationActive = false;
   },
 
+  // ═══ SEARCH BAR (buscador sobre el mapa) ═══
+  _renderSearchBar(containerId) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.querySelector('#map-search-bar')?.remove();
+
+    const bar = document.createElement('div');
+    bar.className = 'map-search-bar map-search-hidden';
+    bar.id = 'map-search-bar';
+    bar.innerHTML = `
+      <div class="map-search-row input-row">
+        <svg class="map-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <textarea class="map-search-input" id="map-search-input" placeholder="Buscar lugar..." rows="1" autocomplete="off"></textarea>
+        <button class="app-mic map-search-mic" aria-label="Buscar con voz">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="1" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0014 0"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+      </div>
+      <div class="map-search-hint">Pregunta a Salma: restaurantes, hoteles, farmacias...</div>`;
+    el.appendChild(bar);
+
+    const input = document.getElementById('map-search-input');
+    if (!input || !window.google || !google.maps.places) return;
+
+    // Google Places Autocomplete
+    this._autocomplete = new google.maps.places.Autocomplete(input, {
+      fields: ['geometry', 'name', 'formatted_address', 'place_id'],
+      types: ['establishment', 'geocode'],
+    });
+    this._autocomplete.addListener('place_changed', () => {
+      const place = this._autocomplete.getPlace();
+      if (!place.geometry || !place.geometry.location) return;
+      const pos = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
+      this._map.panTo(pos);
+      this._map.setZoom(15);
+      this._addSearchMarker(pos, place.name || place.formatted_address);
+    });
+
+    // Enter → detectar servicios y enviar a Salma
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        this._handleSearchSubmit(input.value.trim());
+        input.value = '';
+      }
+    });
+
+    // Evento del mic (app.js dispatch)
+    this._searchSubmitHandler = (e) => this._handleSearchSubmit(e.detail.query);
+    document.addEventListener('map:search-submit', this._searchSubmitHandler);
+  },
+
+  _addSearchMarker(pos, title) {
+    if (this._searchMarker) this._searchMarker.setMap(null);
+    this._searchMarker = new google.maps.Marker({
+      map: this._map,
+      position: pos,
+      title: title,
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        fillColor: '#f0b429',
+        fillOpacity: 1,
+        strokeColor: '#fff',
+        strokeWeight: 2,
+        scale: 12,
+      },
+      animation: google.maps.Animation.DROP,
+      zIndex: 1000,
+    });
+  },
+
+  _handleSearchSubmit(query) {
+    if (!query) return;
+    const servicePattern = /restaurante|hotel|hostal|grúa|grua|embajada|farmacia|hospital|gasolina|cajero|supermercado|policia|policía|taxi|bus|tren|aeropuerto|parking/i;
+    if (servicePattern.test(query)) {
+      if (typeof salma !== 'undefined') salma.send(query);
+    }
+  },
+
   // ═══ STATIC MAPS (Copiloto OFF) ═══
   _renderStaticMap(containerId, stops) {
     const el = document.getElementById(containerId);
@@ -370,9 +450,12 @@ const mapaRuta = {
     el.innerHTML = ''; // Limpiar imagen estática
     this._mapType = 'google';
 
+    // Lanzar fetch de directions EN PARALELO con la carga del API
+    const dirPromise = valid.length >= 2 ? this._fetchDirections(valid) : null;
+
     // Cargar Maps JS si no está cargado aún, luego inicializar
     (window._loadGoogleMaps ? window._loadGoogleMaps() : Promise.reject('no loader'))
-      .then(() => this._buildGoogleMap(el, valid))
+      .then(() => this._buildGoogleMap(el, valid, dirPromise))
       .catch(() => {
         // Fallback a Leaflet si Maps JS no carga
         this._mapType = 'leaflet';
@@ -380,7 +463,7 @@ const mapaRuta = {
       });
   },
 
-  _buildGoogleMap(el, valid) {
+  _buildGoogleMap(el, valid, dirPromise) {
     if (!window.google || !window.google.maps) return;
 
     const center = { lat: valid[0].lat, lng: valid[0].lng };
@@ -437,54 +520,61 @@ const mapaRuta = {
     valid.forEach(s => bounds.extend({ lat: s.lat, lng: s.lng }));
     this._map.fitBounds(bounds, { top: 40, right: 40, bottom: 60, left: 40 });
 
-    // Cargar ruta real con DirectionsRenderer
-    if (valid.length >= 2) {
-      this._loadDirectionsRenderer(valid);
+    // Aplicar ruta real (pre-fetched en paralelo o fetch ahora)
+    if (dirPromise) {
+      dirPromise.then(data => this._applyDirections(data)).catch(() => {});
+    } else if (valid.length >= 2) {
+      this._fetchDirections(valid).then(data => this._applyDirections(data)).catch(() => {});
     }
 
     // Controles DESPUÉS del mapa (evita que innerHTML='' los borre)
     this._renderMapControls(this._currentContainerId);
     this._renderCompass(this._currentContainerId);
+    this._renderSearchBar(this._currentContainerId);
+
+    // Tap en mapa → revelar controles y buscador
+    this._map.addListener('click', () => {
+      const ctrl = document.getElementById('map-controls');
+      if (ctrl) ctrl.classList.remove('map-controls-hidden');
+      const sb = document.getElementById('map-search-bar');
+      if (sb) sb.classList.remove('map-search-hidden');
+    });
   },
 
-  // DirectionsRenderer — dibuja la ruta real con flechas de giro
-  _loadDirectionsRenderer(valid) {
+  // Fetch de directions (separado para poder lanzar en paralelo)
+  _fetchDirections(valid) {
     const origin = `${valid[0].lat},${valid[0].lng}`;
     const dest = `${valid[valid.length - 1].lat},${valid[valid.length - 1].lng}`;
     let waypoints = '';
     if (valid.length > 2) {
       waypoints = valid.slice(1, -1).map(s => `${s.lat},${s.lng}`).join('|');
     }
-
     let url = `${window.SALMA_API}/directions?origin=${origin}&destination=${dest}&steps=1`;
     if (waypoints) url += `&waypoints=${encodeURIComponent(waypoints)}`;
+    return fetch(url).then(r => r.json());
+  },
 
-    fetch(url)
-      .then(r => r.json())
-      .then(data => {
-        if (!data.polyline || !this._map || this._mapType !== 'google') return;
+  // Aplicar polyline real + steps turn-by-turn
+  _applyDirections(data) {
+    if (!data.polyline || !this._map || this._mapType !== 'google') return;
 
-        // Eliminar polyline provisional
-        if (this._polyline) this._polyline.setMap(null);
+    if (this._polyline) this._polyline.setMap(null);
 
-        const decoded = this._decodePolyline(data.polyline);
-        this._polyline = new google.maps.Polyline({
-          path: decoded.map(([lat, lng]) => ({ lat, lng })),
-          map: this._map,
-          strokeColor: '#D4A843',
-          strokeWeight: 3,
-          strokeOpacity: 0.85,
-          icons: [{ icon: { path: google.maps.SymbolPath.FORWARD_OPEN_ARROW, scale: 3, strokeColor: '#D4A843' }, repeat: '80px' }],
-        });
+    const decoded = this._decodePolyline(data.polyline);
+    this._polyline = new google.maps.Polyline({
+      path: decoded.map(([lat, lng]) => ({ lat, lng })),
+      map: this._map,
+      strokeColor: '#D4A843',
+      strokeWeight: 3,
+      strokeOpacity: 0.85,
+      icons: [{ icon: { path: google.maps.SymbolPath.FORWARD_OPEN_ARROW, scale: 3, strokeColor: '#D4A843' }, repeat: '80px' }],
+    });
 
-        // Guardar steps y actualizar panel turn-by-turn
-        if (data.steps && data.steps.length) {
-          this._steps = data.steps;
-          this._currentStep = 0;
-          this._updateTurnPanel();
-        }
-      })
-      .catch(() => {});
+    if (data.steps && data.steps.length) {
+      this._steps = data.steps;
+      this._currentStep = 0;
+      this._updateTurnPanel();
+    }
   },
 
   // Fallback Leaflet si Google Maps falla
@@ -777,6 +867,15 @@ const mapaRuta = {
       this._compassListener = null;
     }
     this._stopDeviceOrientation();
+    if (this._searchMarker) {
+      try { this._searchMarker.setMap(null); } catch(e) {}
+      this._searchMarker = null;
+    }
+    this._autocomplete = null;
+    if (this._searchSubmitHandler) {
+      document.removeEventListener('map:search-submit', this._searchSubmitHandler);
+      this._searchSubmitHandler = null;
+    }
     // Limpiar contenedor si tiene imagen estática
     if (this._currentContainerId) {
       const el = document.getElementById(this._currentContainerId);
