@@ -3653,10 +3653,8 @@ document.addEventListener('DOMContentLoaded', () => {
 async function generateDiarioStory() {
   if (!_diario.photo) return;
 
-  // Mapa estático de fondo
-  const mapUrl = 'https://maps.googleapis.com/maps/api/staticmap?center='
-    + _diario.lat+','+_diario.lng+'&zoom=14&size=640x640&maptype=satellite'
-    + '&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
+  // Mapa estático de fondo (via worker proxy para evitar CORS)
+  const mapUrl = window.SALMA_API + '/staticmap?lat=' + _diario.lat + '&lng=' + _diario.lng + '&zoom=14&size=640x640&maptype=satellite';
   try {
     const mapImg = await new Promise((resolve, reject) => {
       const i = new Image(); i.crossOrigin='anonymous';
@@ -3738,11 +3736,17 @@ function _drawDiarioKodak(ctx, photo, W, H, transport, loc, mapImg, msgTxt) {
     ctx.restore();
   }
 
-  // Bottom strip: BORRADO DEL MAPA
+  // Bottom strip: BORRADO DEL MAPA (logo con colores)
   const sY=phY+phH,sH=bB;
-  ctx.fillStyle='#D4A843';ctx.font='bold '+Math.round(28*fs)+'px -apple-system,sans-serif';
-  ctx.textAlign='left';ctx.textBaseline='top';
-  ctx.fillText('BORRADO DEL MAPA',phX,sY+Math.round(14*fs));
+  const logoFont='bold '+Math.round(28*fs)+'px -apple-system,sans-serif';
+  ctx.font=logoFont;ctx.textAlign='left';ctx.textBaseline='top';
+  const logoY=sY+Math.round(14*fs);
+  let logoX=phX;
+  ctx.fillStyle='#111';ctx.fillText('BORRADO',logoX,logoY);
+  logoX+=ctx.measureText('BORRADO').width;
+  ctx.fillStyle='#D4A843';ctx.fillText('DEL',logoX,logoY);
+  logoX+=ctx.measureText('DEL').width;
+  ctx.fillStyle='#111';ctx.fillText('MAPA',logoX,logoY);
   const shortLoc=loc.length>26?loc.substring(0,24)+'…':loc;
   ctx.fillStyle='rgba(0,0,0,0.80)';ctx.font='bold '+Math.round(24*fs)+'px -apple-system,sans-serif';
   ctx.textAlign='center';ctx.textBaseline='middle';

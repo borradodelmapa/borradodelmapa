@@ -3869,6 +3869,34 @@ export default {
       }
     }
 
+    // ─── ENDPOINT /staticmap (proxy para evitar CORS en canvas) ───
+    if (request.method === 'GET' && url.pathname === '/staticmap') {
+      const lat = url.searchParams.get('lat');
+      const lng = url.searchParams.get('lng');
+      const zoom = url.searchParams.get('zoom') || '14';
+      const size = url.searchParams.get('size') || '640x640';
+      const maptype = url.searchParams.get('maptype') || 'satellite';
+      const placesKey = env.GOOGLE_PLACES_KEY;
+      if (!lat || !lng || !placesKey) {
+        return new Response('Missing params', { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } });
+      }
+      try {
+        const gmUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${size}&maptype=${maptype}&key=${placesKey}`;
+        const imgRes = await fetch(gmUrl);
+        if (!imgRes.ok) return new Response('Map error', { status: 502, headers: { 'Access-Control-Allow-Origin': '*' } });
+        const imgBlob = await imgRes.arrayBuffer();
+        return new Response(imgBlob, {
+          headers: {
+            'Content-Type': imgRes.headers.get('Content-Type') || 'image/png',
+            'Access-Control-Allow-Origin': '*',
+            'Cache-Control': 'public, max-age=86400',
+          }
+        });
+      } catch(e) {
+        return new Response('Proxy error', { status: 500, headers: { 'Access-Control-Allow-Origin': '*' } });
+      }
+    }
+
     // ─── ENDPOINT /photo ───
     if (request.method === 'GET' && url.pathname === '/photo') {
       const name = url.searchParams.get('name') || '';
