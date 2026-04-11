@@ -1972,8 +1972,8 @@ auth.onAuthStateChanged(async (user) => {
       const dest = window._afterLogin;
       window._afterLogin = null;
       showState(dest);
-    } else {
-      // Usuario registrado → directo al chat
+    } else if (currentState !== 'sos') {
+      // Usuario registrado → directo al chat (no interrumpir SOS)
       if (typeof salma !== 'undefined') salma._initChat();
       showState('chat');
     }
