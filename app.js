@@ -3063,7 +3063,6 @@ function closeLiveMap() {
   closeTapSheet();
   closeShareSheet();
   // Limpiar markers de búsqueda
-  if (_dpickSearchMarker) { try { _dpickSearchMarker.setMap(null); } catch(e) {} _dpickSearchMarker = null; }
   closeDiarioPicker();
   // Pausar GPS (se reanuda al volver)
   if (_liveMapWatchId !== null) {
@@ -3404,7 +3403,6 @@ function _diarioGeocode() {
 }
 
 let _dpickAutocomplete = null;
-let _dpickSearchMarker = null;
 
 function _showDiarioPicker() {
   const picker = document.getElementById('diario-picker');
@@ -3420,7 +3418,6 @@ function _showDiarioPicker() {
 function closeDiarioPicker() {
   const picker = document.getElementById('diario-picker');
   if (picker) picker.style.display = 'none';
-  if (_dpickSearchMarker) { try { _dpickSearchMarker.setMap(null); } catch(e) {} _dpickSearchMarker = null; }
   // Cerrar paneles desplegables de tipo mapa y capas
   _closeMapPanels();
 }
@@ -3458,19 +3455,14 @@ function _initDpickSearch() {
 }
 
 function _goToPlace(lat, lng, title) {
-  if (!_liveMap) return;
-  const pos = { lat, lng };
-  _liveMap.panTo(pos);
+  if (!_liveMap || !window.google) return;
+  _liveMap.panTo({ lat, lng });
   _liveMap.setZoom(16);
-  if (_dpickSearchMarker) _dpickSearchMarker.setMap(null);
-  _dpickSearchMarker = new google.maps.Marker({
-    map: _liveMap, position: pos, title: title || '',
-    icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#f0b429', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 2, scale: 12 },
-    animation: google.maps.Animation.DROP, zIndex: 1000,
-  });
   const input = document.getElementById('dpick-search-input');
   if (input) input.value = '';
-  closeDiarioPicker();
+  // Simular tap en esas coordenadas → mismo pin + picker con FOTO/IR AQUI/GUARDAR
+  const latLng = new google.maps.LatLng(lat, lng);
+  _onMapTap({ latLng });
 }
 
 function _geocodeAndGo(query) {
