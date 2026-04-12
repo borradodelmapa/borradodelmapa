@@ -4958,6 +4958,50 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     const FW_CORS = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
     const FW_FREE_LIMIT = 3;
 
+    // ─── GET /flight-places — autocompletado de ciudades/aeropuertos (Duffel) ───
+    if (request.method === 'GET' && url.pathname === '/flight-places') {
+      try {
+        const q = url.searchParams.get('q');
+        if (!q || q.length < 2) {
+          return new Response(JSON.stringify({ places: [] }), { headers: FW_CORS });
+        }
+
+        const duffelToken = env.DUFFEL_ACCESS_TOKEN;
+        if (!duffelToken) {
+          return new Response(JSON.stringify({ error: 'Duffel not configured' }), { status: 500, headers: FW_CORS });
+        }
+
+        const res = await fetch(
+          `https://api.duffel.com/places/suggestions?query=${encodeURIComponent(q)}&type[]=airport&type[]=city`,
+          {
+            headers: {
+              'Accept': 'application/json',
+              'Duffel-Version': 'v2',
+              'Authorization': `Bearer ${duffelToken}`
+            },
+            signal: AbortSignal.timeout(5000)
+          }
+        );
+
+        if (!res.ok) {
+          return new Response(JSON.stringify({ places: [] }), { headers: FW_CORS });
+        }
+
+        const data = await res.json();
+        const places = (data.data || []).slice(0, 8).map(p => ({
+          name: p.name,
+          iata: p.iata_code || p.iata_city_code || '',
+          city: p.city_name || p.city?.name || p.name,
+          country: p.iata_country_code || '',
+          type: p.type // 'airport' or 'city'
+        })).filter(p => p.iata);
+
+        return new Response(JSON.stringify({ places }), { headers: FW_CORS });
+      } catch (e) {
+        return new Response(JSON.stringify({ places: [], error: e.message }), { headers: FW_CORS });
+      }
+    }
+
     // ─── GET /flight-watches — listar vigilancias del usuario ───
     if (request.method === 'GET' && url.pathname === '/flight-watches') {
       try {

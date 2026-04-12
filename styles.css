@@ -3200,6 +3200,15 @@ body {
 .watch-form-save:hover { background:rgba(212,168,67,.25); }
 .watch-form-save:disabled { opacity:.4; cursor:not-allowed; }
 
+/* Place autocomplete dropdown */
+.fw-place-wrap { position:relative; }
+.fw-place-dropdown { position:absolute; top:100%; left:0; right:0; z-index:50; background:rgba(20,18,9,.97); border:1px solid rgba(244,239,230,.12); border-top:none; border-radius:0 0 8px 8px; max-height:240px; overflow-y:auto; }
+.fw-place-option { display:flex; align-items:center; gap:8px; padding:10px 12px; cursor:pointer; transition:background .1s; flex-wrap:wrap; }
+.fw-place-option:hover { background:rgba(212,168,67,.1); }
+.fw-place-city { font-size:14px; color:rgba(244,239,230,.85); font-weight:500; }
+.fw-place-iata { font-family:var(--font-mono); font-size:12px; color:var(--dorado); background:rgba(212,168,67,.1); padding:1px 6px; border-radius:4px; letter-spacing:.05em; }
+.fw-place-airport { font-size:11px; color:rgba(244,239,230,.3); width:100%; }
+
 /* Botón activar ubicación */
 .btn-geo-retry {
   display: inline-block;

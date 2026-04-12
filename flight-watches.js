@@ -240,20 +240,85 @@ window.flightWatches = (() => {
     } catch (e) { return iso.slice(0, 10); }
   }
 
+  // ── Autocompletado de ciudades/aeropuertos ──
+
+  let _searchTimer = null;
+  const _selectedPlaces = { origin: null, destination: null };
+
+  async function _searchPlaces(query) {
+    if (!query || query.length < 2) return [];
+    try {
+      const res = await fetch(window.SALMA_API + '/flight-places?q=' + encodeURIComponent(query));
+      if (!res.ok) return [];
+      const data = await res.json();
+      return data.places || [];
+    } catch (e) { return []; }
+  }
+
+  function _initPlaceInput(inputId, dropdownId, field) {
+    const input = document.getElementById(inputId);
+    const dropdown = document.getElementById(dropdownId);
+    if (!input || !dropdown) return;
+
+    input.addEventListener('input', () => {
+      _selectedPlaces[field] = null;
+      clearTimeout(_searchTimer);
+      const q = input.value.trim();
+      if (q.length < 2) { dropdown.innerHTML = ''; dropdown.style.display = 'none'; return; }
+      _searchTimer = setTimeout(async () => {
+        const places = await _searchPlaces(q);
+        if (places.length === 0) { dropdown.innerHTML = ''; dropdown.style.display = 'none'; return; }
+        dropdown.innerHTML = places.map(p =>
+          `<div class="fw-place-option" data-iata="${_esc(p.iata)}" data-name="${_esc(p.city || p.name)}" data-country="${_esc(p.country)}">
+            <span class="fw-place-city">${_esc(p.city || p.name)}</span>
+            <span class="fw-place-iata">${_esc(p.iata)}</span>
+            ${p.name !== p.city ? `<span class="fw-place-airport">${_esc(p.name)}</span>` : ''}
+          </div>`
+        ).join('');
+        dropdown.style.display = '';
+        dropdown.querySelectorAll('.fw-place-option').forEach(opt => {
+          opt.addEventListener('click', () => {
+            const iata = opt.dataset.iata;
+            const name = opt.dataset.name;
+            _selectedPlaces[field] = { iata, name, country: opt.dataset.country };
+            input.value = `${name} (${iata})`;
+            dropdown.innerHTML = '';
+            dropdown.style.display = 'none';
+          });
+        });
+      }, 300);
+    });
+
+    // Cerrar dropdown al hacer click fuera
+    document.addEventListener('click', (e) => {
+      if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+  }
+
   // ── Render: Formulario ──
 
   function _showForm() {
     const area = document.getElementById('vuelos-form-area');
     if (!area) return;
 
+    _selectedPlaces.origin = null;
+    _selectedPlaces.destination = null;
+
     area.innerHTML = `
       <div class="watch-form">
-        <div class="watch-form-label">Origen (codigo IATA)</div>
-        <input class="watch-form-input" id="fw-origin" type="text" placeholder="MAD, BCN, LIS..." maxlength="3" />
+        <div class="watch-form-label">Desde donde sales?</div>
+        <div class="fw-place-wrap">
+          <input class="watch-form-input" id="fw-origin" type="text" placeholder="Madrid, Barcelona, Lisboa..." autocomplete="off" />
+          <div class="fw-place-dropdown" id="fw-origin-dropdown" style="display:none"></div>
+        </div>
 
-        <div class="watch-form-label" style="margin-top:12px">Destino</div>
-        <input class="watch-form-input" id="fw-destination" type="text" placeholder="TYO, BKK, JFK..." maxlength="3" />
-        <input class="watch-form-input" id="fw-dest-name" type="text" placeholder="Nombre completo (ej: Tokio, Japon)" style="margin-top:6px" />
+        <div class="watch-form-label" style="margin-top:12px">A donde quieres ir?</div>
+        <div class="fw-place-wrap">
+          <input class="watch-form-input" id="fw-destination" type="text" placeholder="Tokio, Bangkok, Nueva York..." autocomplete="off" />
+          <div class="fw-place-dropdown" id="fw-dest-dropdown" style="display:none"></div>
+        </div>
 
         <div class="watch-form-row">
           <div style="flex:1">
@@ -300,6 +365,10 @@ window.flightWatches = (() => {
         </div>
       </div>`;
 
+    // Autocompletado para origen y destino
+    _initPlaceInput('fw-origin', 'fw-origin-dropdown', 'origin');
+    _initPlaceInput('fw-destination', 'fw-dest-dropdown', 'destination');
+
     // Trip type toggle
     const tripType = document.getElementById('fw-trip-type');
     const returnGroup = document.getElementById('fw-return-group');
@@ -314,9 +383,12 @@ window.flightWatches = (() => {
 
     // Save
     document.getElementById('fw-save').addEventListener('click', async () => {
-      const origin = (document.getElementById('fw-origin').value || '').toUpperCase().trim();
-      const destination = (document.getElementById('fw-destination').value || '').toUpperCase().trim();
-      const destination_name = document.getElementById('fw-dest-name').value.trim();
+      if (!_selectedPlaces.origin) { showToast('Selecciona una ciudad de origen de la lista'); return; }
+      if (!_selectedPlaces.destination) { showToast('Selecciona una ciudad de destino de la lista'); return; }
+
+      const origin = _selectedPlaces.origin.iata;
+      const destination = _selectedPlaces.destination.iata;
+      const destination_name = _selectedPlaces.destination.name;
       const trip_type = document.getElementById('fw-trip-type').value;
       const cabin = document.getElementById('fw-cabin').value;
       const date_from = document.getElementById('fw-date-from').value;
@@ -324,8 +396,6 @@ window.flightWatches = (() => {
       const budget = document.getElementById('fw-budget').value;
       const passengers = parseInt(document.getElementById('fw-passengers').value || '1', 10);
 
-      if (!origin || origin.length < 2) { showToast('Indica el aeropuerto de origen'); return; }
-      if (!destination || destination.length < 2) { showToast('Indica el aeropuerto de destino'); return; }
       if (!date_from) { showToast('Indica la fecha de ida'); return; }
       if (trip_type === 'roundtrip' && !date_to) { showToast('Indica la fecha de vuelta'); return; }
 
@@ -334,7 +404,7 @@ window.flightWatches = (() => {
       saveBtn.disabled = true;
 
       const result = await createWatch({
-        origin, destination, destination_name: destination_name || destination,
+        origin, destination, destination_name,
         trip_type, cabin, date_from,
         date_to: trip_type === 'roundtrip' ? date_to : null,
         budget: budget ? parseInt(budget, 10) : null,
