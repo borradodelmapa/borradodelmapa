@@ -4026,9 +4026,9 @@ function _onDiarioVideo(e) {
     showToast('El vídeo es demasiado grande (máx 50MB)'); return;
   }
 
-  // Comprobar duración
+  // Crear video y arrancarlo AQUÍ (dentro del user gesture, para que play() funcione)
   const video = document.createElement('video');
-  video.preload = 'metadata';
+  video.playsInline = true;
   const objectUrl = URL.createObjectURL(f);
   video.src = objectUrl;
   video.onloadedmetadata = () => {
@@ -4037,12 +4037,17 @@ function _onDiarioVideo(e) {
     if (duration > 15) {
       showToast('Se usarán los últimos 15 segundos');
     }
+    // Seek + play dentro del user gesture (si no, móviles lo bloquean)
+    video.currentTime = trimStart;
+    video.play().catch(() => { video.muted = true; video.play().catch(() => {}); });
+
     // Guardar datos del vídeo
     _diario.isVideo = true;
     _diario.videoFile = f;
     _diario.videoUrl = objectUrl;
     _diario.videoDuration = duration;
     _diario.videoTrimStart = trimStart;
+    _diario.videoElement = video; // Reutilizar en generateDiarioVideoStory
     _diario.lastBlob = f; // raw file temporal (se reemplaza con el Kodak grabado)
     if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
     generateDiarioVideoStory();
@@ -4115,15 +4120,12 @@ async function generateDiarioVideoStory() {
     _diario.mapImg = scaled;
   } catch(e) { _diario.mapImg = null; }
 
-  // 2. Crear video oculto para leer frames (SIN muted para capturar audio)
-  const video = document.createElement('video');
-  video.playsInline = true;
-  video.src = _diario.videoUrl;
-  await new Promise(r => { video.onloadeddata = r; });
-  if (_diario.videoTrimStart > 0) {
-    video.currentTime = _diario.videoTrimStart;
-    await new Promise(r => { video.onseeked = r; });
-  }
+  // 2. Reutilizar el video que ya se arrancó en _onDiarioVideo (dentro del user gesture)
+  const video = _diario.videoElement;
+  if (!video || !video.videoWidth) return;
+  // Seek de vuelta al inicio del trim (pudo avanzar mientras cargaba el mapa)
+  video.currentTime = _diario.videoTrimStart || 0;
+  await new Promise(r => { video.onseeked = r; });
 
   // 3. Mismo canvas que foto (#diario-canvas en el DOM)
   const c = document.getElementById('diario-canvas');
@@ -4150,6 +4152,7 @@ async function generateDiarioVideoStory() {
     // Capturar audio del vídeo y añadirlo al stream del canvas
     try {
       audioCtx = new AudioContext();
+      if (audioCtx.state === 'suspended') await audioCtx.resume();
       const src = audioCtx.createMediaElementSource(video);
       const dest = audioCtx.createMediaStreamDestination();
       src.connect(dest);   // audio → grabación
@@ -4167,11 +4170,7 @@ async function generateDiarioVideoStory() {
     recorder.start();
   }
 
-  // 7. Play + render loop (mismo _drawDiarioKodak que foto)
-  try { await video.play(); } catch(e) {
-    // Si falla sin muted (restricción autoplay) → muted y reintentar (sin audio)
-    video.muted = true; await video.play();
-  }
+  // 7. Render loop (video ya está playing desde _onDiarioVideo)
   const dur = Math.min(15, _diario.videoDuration || 15);
   const loc = _diario.locName || '';
   const t0 = performance.now();
@@ -4193,9 +4192,13 @@ async function generateDiarioVideoStory() {
   if (recorder) {
     await new Promise(r => { recorder.onstop = r; });
     const blob = new Blob(chunks, { type: mime.split(';')[0] });
-    _diario.lastBlob = blob;
-    _diario.videoExt = mime.includes('mp4') ? 'mp4' : 'webm';
-    if (typeof showToast === 'function') showToast('✓ Kodak listo');
+    if (blob.size > 1024) { // Solo si la grabación tiene datos reales
+      _diario.lastBlob = blob;
+      _diario.videoExt = mime.includes('mp4') ? 'mp4' : 'webm';
+      if (typeof showToast === 'function') showToast('✓ Kodak listo');
+    } else {
+      console.warn('[Kodak video] Grabación vacía, usando vídeo original');
+    }
   }
   if (audioCtx) audioCtx.close().catch(() => {});
   _diarioVideoState = null;
