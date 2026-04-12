@@ -188,24 +188,24 @@ window.flightWatches = (() => {
     const dateRange = dateTo ? `${_fmtDate(dateFrom)} \u2014 ${_fmtDate(dateTo)}` : _fmtDate(dateFrom);
     const tripLabel = w.trip_type === 'roundtrip' ? 'Ida y vuelta' : 'Solo ida';
 
-    let priceHtml = '<span class="watch-price-pending">Pendiente de revision</span>';
+    let priceHtml = '<span class="watch-price-pending">Buscando precio... (se actualiza cada dia)</span>';
     if (w.last_price) {
       priceHtml = `<span class="watch-price">${w.last_price} EUR</span>`;
     }
 
     let lowestHtml = '';
     if (w.lowest_price && w.last_price && w.lowest_price < w.last_price) {
-      lowestHtml = `<span class="watch-lowest">Mejor: ${w.lowest_price} EUR</span>`;
+      lowestHtml = `<span class="watch-lowest">Mejor precio encontrado: ${w.lowest_price} EUR</span>`;
     }
 
     let budgetHtml = '';
     if (w.budget) {
-      budgetHtml = `<span class="watch-budget">Ppto: ${w.budget} EUR</span>`;
+      budgetHtml = `<span class="watch-budget">Te aviso si baja de ${w.budget} EUR</span>`;
     }
 
     let checkedHtml = '';
     if (w.last_checked) {
-      checkedHtml = `<div class="watch-card-checked">Revisado: ${_fmtDate(w.last_checked)}</div>`;
+      checkedHtml = `<div class="watch-card-checked">Ultima revision: ${_fmtDate(w.last_checked)}</div>`;
     }
 
     return `
