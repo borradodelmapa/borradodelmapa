@@ -4042,24 +4042,35 @@ function _showDiarioVideoResult() {
   const el = document.getElementById('diario-result');
   if (!el) return;
 
-  // Reemplazar el canvas wrap con preview de vídeo
+  const mapUrl = window.SALMA_API + '/staticmap?lat=' + _diario.lat + '&lng=' + _diario.lng + '&zoom=13&size=640x640&maptype=terrain&scale=2';
+  const dateStr = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' });
+  const locName = _diario.locName || '';
+  const coords = _diario.lat && _diario.lng ? _diario.lat.toFixed(3) + ', ' + _diario.lng.toFixed(3) : '';
+
   const wrap = el.querySelector('.diario-result-canvas-wrap');
   if (wrap) {
-    wrap.innerHTML = '';
-    const videoEl = document.createElement('video');
-    videoEl.src = _diario.videoUrl + '#t=' + _diario.videoTrimStart;
-    videoEl.controls = true;
-    videoEl.autoplay = true;
-    videoEl.loop = true;
-    videoEl.muted = true;
-    videoEl.playsInline = true;
-    videoEl.style.cssText = 'width:100%;max-height:70vh;border-radius:14px;object-fit:contain;background:#000';
-    wrap.appendChild(videoEl);
+    wrap.innerHTML = `
+      <div class="diario-video-kodak" style="background-image:url('${mapUrl}')">
+        <div class="diario-video-kodak-overlay"></div>
+        <div class="diario-video-kodak-print">
+          <div class="diario-video-kodak-frame">
+            <video src="${_diario.videoUrl}#t=${_diario.videoTrimStart}" controls autoplay loop muted playsinline class="diario-video-kodak-video"></video>
+          </div>
+          <div class="diario-video-kodak-bottom">
+            <div class="diario-video-kodak-brand">KODAK</div>
+            <div class="diario-video-kodak-loc">📍 ${escapeHTML(coords)}</div>
+            <div class="diario-video-kodak-date">${dateStr}</div>
+          </div>
+        </div>
+        <div class="diario-video-kodak-footer">
+          <div class="diario-video-kodak-logo">BORRADO<span style="color:var(--dorado)">DEL</span>MAPA</div>
+          <div class="diario-video-kodak-coords">📍 ${escapeHTML(coords)}</div>
+        </div>
+      </div>`;
   }
 
-  // Actualizar texto de ubicación
   const locTxt = document.getElementById('diario-result-loc-txt');
-  if (locTxt) locTxt.textContent = _diario.locName || '';
+  if (locTxt) locTxt.textContent = locName;
 
   el.classList.add('on');
   _diarioSaved = false;
