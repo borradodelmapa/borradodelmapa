@@ -1,13 +1,16 @@
 // Service Worker — Cache del shell + network-first para API (P1-7)
 
-const CACHE_NAME = 'salma-v1';
+const CACHE_NAME = 'salma-v2';
 const SHELL_ASSETS = [
   '/',
   '/index.html',
   '/styles.css',
   '/app.js',
   '/salma.js',
+  '/video-player.js',
+  '/video-assembly.js',
   '/guide-renderer.js',
+  '/bitacora-renderer.js',
   '/mapa-ruta.js',
   '/mapa-itinerario.js',
   '/notas.js',
