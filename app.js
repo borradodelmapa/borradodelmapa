@@ -855,7 +855,7 @@ function _createGuideCard(doc, d, isOffline) {
     const routeData = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null;
     const result = await videoAssembly.assemble({ source: 'route', id: doc.id, routeData });
     if (!result) { showToast('Necesitas al menos 3 fotos en esta ruta'); return; }
-    _showVideoPlayerModal(result.photoUrls, result.params);
+    _showVideoEditModal(result);
   });
   return card;
 }
@@ -1074,6 +1074,7 @@ async function renderGaleria(albumFilter) {
         <div class="galeria-item" data-foto-id="${f.id}">
           <img src="${escapeHTML(f.url)}" class="galeria-thumb" alt="${escapeHTML(f.caption || '')}" loading="lazy">
           <span class="galeria-tag-badge">${TAG_ICONS[f.tag] || '📷'}</span>
+          <button class="galeria-item-delete" data-foto-id="${f.id}" data-foto-key="${escapeHTML(f.key || '')}" title="Eliminar">✕</button>
         </div>`).join('')}</div>`;
 
   $c.innerHTML = `
@@ -1143,7 +1144,7 @@ async function renderGaleria(albumFilter) {
     });
   });
 
-  // Event: crear video desde galería (1 tap → Smart Assembly)
+  // Event: crear video desde galería → edición
   document.getElementById('galeria-video-btn')?.addEventListener('click', async () => {
     if (typeof videoAssembly === 'undefined' || typeof videoPlayer === 'undefined') {
       if (typeof showToast === 'function') showToast('Cargando motor de video…');
@@ -1152,17 +1153,17 @@ async function renderGaleria(albumFilter) {
     showToast('Preparando video…');
     const result = await videoAssembly.assemble({ source: 'gallery' });
     if (!result) { showToast('Necesitas al menos 3 fotos'); return; }
-    _showVideoPlayerModal(result.photoUrls, result.params);
+    _showVideoEditModal(result);
   });
 
-  // Event: crear video del álbum activo (1 tap)
+  // Event: crear video del álbum activo → edición
   document.getElementById('galeria-album-video-btn')?.addEventListener('click', async () => {
     if (typeof videoAssembly === 'undefined') return;
     showToast('Preparando video…');
     const result = await videoAssembly.assemble({ source: 'album', id: activeAlbum });
     if (!result) { showToast('Necesitas al menos 3 fotos en este álbum'); return; }
     result.params.titulo = activeAlbumName || result.params.titulo;
-    _showVideoPlayerModal(result.photoUrls, result.params);
+    _showVideoEditModal(result);
   });
 
   // Event: subir fotos directamente a la galería (el label dispara el input directamente)
@@ -1173,6 +1174,27 @@ async function renderGaleria(albumFilter) {
     // Limpiar input para poder subir el mismo archivo otra vez
     e.target.value = '';
     renderGaleria(activeAlbum);
+  });
+
+  // Event: eliminar foto con la X directa
+  document.querySelectorAll('.galeria-item-delete').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const fotoId = btn.dataset.fotoId;
+      const fotoKey = btn.dataset.fotoKey;
+      if (!confirm('¿Eliminar esta foto?')) return;
+      try {
+        await db.collection('users').doc(uid).collection('fotos').doc(fotoId).delete();
+        if (fotoKey) {
+          fetch(window.SALMA_API + '/delete-photo', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key: fotoKey, uid })
+          }).catch(() => {});
+        }
+        btn.closest('.galeria-item')?.remove();
+        showToast('Foto eliminada');
+      } catch (_) { showToast('Error al eliminar'); }
+    });
   });
 
   // Event: click foto → acciones (mover, eliminar) + long-press → multi-select
@@ -1210,7 +1232,7 @@ async function renderGaleria(albumFilter) {
       const result = await videoAssembly.assemble({ source: 'custom', photos: selectedPhotos });
       if (!result) { showToast('Error al preparar video'); return; }
       _exitSelectMode();
-      _showVideoPlayerModal(result.photoUrls, result.params);
+      _showVideoEditModal(result);
     });
   }
 
@@ -1599,6 +1621,116 @@ function _showCreateVideoModal(fotos, albumes, uid, activeAlbum) {
     await _showVideoPlayerModal(sel.map(f => f.url), params);
   });
 }
+
+// ─── Modal EDICIÓN de video (elegir fotos, estilo, título) ───
+function _showVideoEditModal(result) {
+  const existing = document.getElementById('video-edit-modal');
+  if (existing) existing.remove();
+
+  let { photoUrls, params } = result;
+  let selectedUrls = [...photoUrls];
+  let activeStyle = params.style || 'documental';
+
+  const modal = document.createElement('div');
+  modal.id = 'video-edit-modal';
+  modal.className = 'video-modal-overlay';
+
+  const hasStops = params.stops && params.stops.length >= 2;
+
+  modal.innerHTML = `
+    <div class="video-edit-inner">
+      <div class="video-edit-header">
+        <button class="video-modal-close" id="ve-close">✕</button>
+        <span class="video-edit-title">Crear video</span>
+      </div>
+
+      <div class="video-edit-section">Estilo</div>
+      <div class="video-edit-styles">
+        ${hasStops ? '<button class="ve-style-btn ' + (activeStyle === 'viaje' ? 'active' : '') + '" data-style="viaje">Viaje</button>' : ''}
+        <button class="ve-style-btn ${activeStyle === 'documental' ? 'active' : ''}" data-style="documental">Documental</button>
+        <button class="ve-style-btn ${activeStyle === 'historia' ? 'active' : ''}" data-style="historia">Historia</button>
+      </div>
+
+      <div class="video-edit-section">Título</div>
+      <input class="video-edit-input" id="ve-titulo" type="text" value="${escapeHTML(params.titulo || '')}" maxlength="60">
+
+      <div class="video-edit-section">Frase memorable <span style="opacity:.45">(opcional)</span></div>
+      <input class="video-edit-input" id="ve-highlight" type="text" placeholder="Ej: El mejor atardecer de mi vida" maxlength="100">
+
+      <div class="video-edit-section">Fotos (${selectedUrls.length})</div>
+      <div class="video-edit-photos" id="ve-photos">
+        ${selectedUrls.map((url, i) => `
+          <div class="ve-photo" data-idx="${i}">
+            <img src="${escapeHTML(url)}" alt="">
+            <button class="ve-photo-remove" data-idx="${i}">✕</button>
+          </div>`).join('')}
+      </div>
+
+      <button class="video-edit-gen-btn" id="ve-generar" ${selectedUrls.length < 3 ? 'disabled' : ''}>▶ Generar video (${selectedUrls.length} fotos)</button>
+    </div>`;
+
+  document.body.appendChild(modal);
+
+  // Estilo
+  modal.querySelectorAll('.ve-style-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      modal.querySelectorAll('.ve-style-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeStyle = btn.dataset.style;
+    });
+  });
+
+  // Eliminar foto
+  function _refreshPhotos() {
+    const container = document.getElementById('ve-photos');
+    if (container) {
+      container.innerHTML = selectedUrls.map((url, i) => `
+        <div class="ve-photo" data-idx="${i}">
+          <img src="${escapeHTML(url)}" alt="">
+          <button class="ve-photo-remove" data-idx="${i}">✕</button>
+        </div>`).join('');
+      // Re-bind remove buttons
+      container.querySelectorAll('.ve-photo-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectedUrls.splice(parseInt(btn.dataset.idx), 1);
+          _refreshPhotos();
+        });
+      });
+    }
+    const genBtn = document.getElementById('ve-generar');
+    if (genBtn) {
+      genBtn.disabled = selectedUrls.length < 3;
+      genBtn.textContent = selectedUrls.length < 3
+        ? '⚠ Mínimo 3 fotos'
+        : `▶ Generar video (${selectedUrls.length} fotos)`;
+    }
+  }
+
+  // Bind initial remove buttons
+  modal.querySelectorAll('.ve-photo-remove').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectedUrls.splice(parseInt(btn.dataset.idx), 1);
+      _refreshPhotos();
+    });
+  });
+
+  // Cerrar
+  document.getElementById('ve-close')?.addEventListener('click', () => modal.remove());
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+
+  // Generar
+  document.getElementById('ve-generar')?.addEventListener('click', async () => {
+    if (selectedUrls.length < 3) return;
+    const titulo = (document.getElementById('ve-titulo')?.value || '').trim() || params.titulo;
+    const highlight = (document.getElementById('ve-highlight')?.value || '').trim();
+    const finalParams = { ...params, titulo, highlight, style: activeStyle };
+    modal.remove();
+    await _showVideoPlayerModal(selectedUrls, finalParams);
+  });
+}
+window._showVideoEditModal = _showVideoEditModal;
 
 // ─── Modal PLAYER de video (pantalla completa) ───
 async function _showVideoPlayerModal(photoUrls, params) {
@@ -4890,7 +5022,7 @@ window.videoFromPins = async function() {
   showToast('Preparando video…');
   const result = await videoAssembly.assemble({ source: 'pins' });
   if (!result) { showToast('Necesitas al menos 3 pins con foto'); return; }
-  _showVideoPlayerModal(result.photoUrls, result.params);
+  _showVideoEditModal(result);
 };
 window.currentUser = null;
 Object.defineProperty(window, 'currentUser', {
