@@ -785,12 +785,15 @@ const mapaRuta = {
     const dayColor = this._dayColors ? this._dayColors[((stop.day || 1) - 1) % this._dayColors.length] : '#D4A843';
 
     const _buildContent = (photoHtml) => `
-      <div style="font-family:'Inter',sans-serif;width:260px;background:#0c0a06;border-radius:10px;overflow:hidden;color:#f4efe6;">
+      <div style="font-family:'Inter',sans-serif;width:280px;max-height:380px;background:#0c0a06;border-radius:10px;overflow:hidden;color:#f4efe6;display:flex;flex-direction:column;">
         ${photoHtml}
-        <div style="padding:12px 14px 14px;">
+        <div style="padding:12px 14px 14px;overflow-y:auto;flex:1;">
           <div style="font-size:10px;color:#D4A843;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;">Día ${stop.day || ''}</div>
           <div style="font-size:15px;font-weight:700;margin-bottom:6px;line-height:1.3;">${stop.headline || stop.name || ''}</div>
           ${stop.narrative ? `<p style="font-size:12px;color:rgba(244,239,230,.65);line-height:1.5;margin:0 0 10px;">${stop.narrative}</p>` : ''}
+          ${stop.context ? `<p style="font-size:11px;color:rgba(244,239,230,.5);line-height:1.4;margin:0 0 8px;">📖 ${stop.context}</p>` : ''}
+          ${stop.food_nearby ? `<p style="font-size:11px;color:rgba(244,239,230,.5);line-height:1.4;margin:0 0 8px;">🍜 ${stop.food_nearby}</p>` : ''}
+          ${stop.local_secret ? `<p style="font-size:11px;color:rgba(244,239,230,.5);line-height:1.4;margin:0 0 8px;">🔑 ${stop.local_secret}</p>` : ''}
           <a href="${gmapsUrl}" target="_blank" rel="noopener"
              style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;
                     color:#f4efe6;text-decoration:none;padding:5px 10px;border-radius:6px;
@@ -801,8 +804,12 @@ const mapaRuta = {
         </div>
       </div>`;
 
+    const _photoImgHtml = (url) => `<img src="${url}"
+      style="width:100%;height:160px;object-fit:cover;display:block;border-radius:8px 8px 0 0;flex-shrink:0;"
+      onerror="this.style.display='none'">`;
+
     // Placeholder de color mientras carga la foto
-    const placeholderHtml = `<div style="width:100%;height:160px;background:linear-gradient(135deg,${dayColor}44,${dayColor}11);border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center;">
+    const placeholderHtml = `<div style="width:100%;height:160px;flex-shrink:0;background:linear-gradient(135deg,${dayColor}44,${dayColor}11);border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center;">
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="4" fill="${dayColor}" fill-opacity=".2"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="${dayColor}" fill-opacity=".7"/><circle cx="12" cy="9" r="2.5" fill="#fff" fill-opacity=".9"/></svg>
     </div>`;
 
@@ -811,18 +818,23 @@ const mapaRuta = {
     this._infoWindow = new google.maps.InfoWindow({ content: _buildContent(placeholderHtml), disableAutoPan: false });
     this._infoWindow.open(this._map, marker);
 
-    // Cargar foto real vía worker (evita placeholders de Google)
-    if (stop.photo_ref && window.SALMA_API) {
-      fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`)
-        .then(r => r.ok ? r.json() : null)
-        .then(data => {
-          if (!data?.url || !this._infoWindow) return;
-          const photoHtml = `<img src="${data.url}"
-            style="width:100%;height:160px;object-fit:cover;display:block;border-radius:8px 8px 0 0;"
-            onerror="this.parentNode.style.display='none'">`;
-          this._infoWindow.setContent(_buildContent(photoHtml));
-        })
-        .catch(() => {}); // mantener placeholder si falla
+    // Cargar foto real vía worker: primero por photo_ref, fallback por nombre+coords
+    if (window.SALMA_API) {
+      let photoUrl = stop.photo_ref
+        ? `${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`
+        : (stop.name || stop.headline)
+          ? `${window.SALMA_API}/photo?name=${encodeURIComponent(stop.name || stop.headline)}&lat=${stop.lat}&lng=${stop.lng}&json=1`
+          : null;
+
+      if (photoUrl) {
+        fetch(photoUrl)
+          .then(r => r.ok ? r.json() : null)
+          .then(data => {
+            if (!data?.url || !this._infoWindow) return;
+            this._infoWindow.setContent(_buildContent(_photoImgHtml(data.url)));
+          })
+          .catch(() => {});
+      }
     }
   },
 
