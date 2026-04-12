@@ -4043,69 +4043,14 @@ function _onDiarioVideo(e) {
     _diario.videoUrl = objectUrl;
     _diario.videoDuration = duration;
     _diario.videoTrimStart = trimStart;
-    _diario.lastBlob = f; // para share/download
+    _diario.lastBlob = f; // raw file temporal (se reemplaza con el Kodak grabado)
     if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
-    _showDiarioVideoResult();
+    generateDiarioVideoStory();
   };
   video.onerror = () => {
     URL.revokeObjectURL(objectUrl);
     showToast('Error al cargar el vídeo');
   };
-}
-
-function _showDiarioVideoResult() {
-  const el = document.getElementById('diario-result');
-  if (!el) return;
-
-  const dateStr = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' });
-  const locName = _diario.locName || '';
-  const coords = _diario.lat && _diario.lng ? _diario.lat.toFixed(3) + ', ' + _diario.lng.toFixed(3) : '';
-  const mapBg = (_diario.lat && _diario.lng)
-    ? `background-image:url('${window.SALMA_API}/staticmap?lat=${_diario.lat}&lng=${_diario.lng}&zoom=13&size=640x640&maptype=terrain&scale=2')`
-    : 'background:#1a1a1a';
-
-  const wrap = el.querySelector('.diario-result-canvas-wrap');
-  if (wrap) {
-    // Stretch para que width:100% del kodak funcione (el parent tiene align-items:center)
-    wrap.style.alignSelf = 'stretch';
-    // Limpiar todo y meter el Kodak
-    wrap.innerHTML = '';
-    const kodak = document.createElement('div');
-    kodak.className = 'diario-video-kodak';
-    kodak.style.cssText = mapBg + ';background-size:cover;background-position:center';
-    kodak.innerHTML = `
-      <div style="position:absolute;inset:0;background:rgba(10,10,9,0.48)"></div>
-      <div class="diario-video-kodak-print">
-        <div class="diario-video-kodak-frame">
-          <video id="kodak-video-el" controls autoplay loop muted playsinline class="diario-video-kodak-video"></video>
-        </div>
-        <div class="diario-video-kodak-bottom">
-          <div class="diario-video-kodak-brand">KODAK</div>
-          <div class="diario-video-kodak-loc">${coords ? '📍 ' + escapeHTML(coords) : ''}</div>
-          <div class="diario-video-kodak-date">${dateStr}</div>
-        </div>
-      </div>
-      <div class="diario-video-kodak-footer">
-        <div class="diario-video-kodak-logo">BORRADO<span style="color:#D4A843">DEL</span>MAPA</div>
-        ${coords ? '<div class="diario-video-kodak-coords">📍 ' + escapeHTML(coords) + '</div>' : ''}
-      </div>`;
-    wrap.appendChild(kodak);
-
-    // Asignar src al video después de insertarlo en el DOM
-    const videoEl = document.getElementById('kodak-video-el');
-    if (videoEl) {
-      videoEl.src = _diario.videoUrl;
-      if (_diario.videoTrimStart > 0) videoEl.currentTime = _diario.videoTrimStart;
-    }
-  }
-
-  const locTxt = document.getElementById('diario-result-loc-txt');
-  if (locTxt) locTxt.textContent = locName;
-
-  el.classList.add('on');
-  _diarioSaved = false;
-  _saveDiarioVideoToGallery();
-  _renderDiarioVideoKodak(); // Background: graba vídeo con diseño Kodak para compartir
 }
 
 async function _saveDiarioVideoToGallery() {
@@ -4145,75 +4090,100 @@ async function _saveDiarioVideoToGallery() {
   }
 }
 
-// ── Renderizar vídeo Kodak (canvas + MediaRecorder) ──
-async function _renderDiarioVideoKodak() {
-  if (typeof MediaRecorder === 'undefined') return;
-  const video = document.getElementById('kodak-video-el');
-  if (!video) return;
-  if (!video.videoWidth) await new Promise(r => { video.onloadeddata = r; });
-  if (!video.videoWidth) return;
+// ── Estado de grabación vídeo Kodak ──
+let _diarioVideoState = null; // { video, recorder, raf }
 
-  // Cargar mapa estático (mismo que foto Kodak)
-  let mapImg = null;
-  if (_diario.lat && _diario.lng) {
-    const mapUrl = window.SALMA_API + '/staticmap?lat=' + _diario.lat + '&lng=' + _diario.lng +
-      '&zoom=13&size=640x640&maptype=terrain&scale=2&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
-    try {
-      const raw = await new Promise((ok, ko) => {
-        const i = new Image(); i.crossOrigin='anonymous'; i.onload=()=>ok(i); i.onerror=ko; i.src=mapUrl;
-      });
-      const tmp = document.createElement('canvas'); tmp.width=1080; tmp.height=1920;
-      const tCtx = tmp.getContext('2d');
-      const iw=raw.naturalWidth, ih=raw.naturalHeight, cr=1080/1920, ir=iw/ih;
-      let sx=0,sy=0,sw=iw,sh=ih;
-      if(ir>cr){sw=Math.round(ih*cr);sx=Math.round((iw-sw)/2);}
-      else{sh=Math.round(iw/cr);sy=Math.round((ih-sh)/2);}
-      tCtx.drawImage(raw,sx,sy,sw,sh,0,0,1080,1920);
-      const scaled=new Image();
-      await new Promise(r=>{scaled.onload=r;scaled.src=tmp.toDataURL();});
-      mapImg=scaled;
-    } catch(e) { mapImg=null; }
+// ── Generar story Kodak VÍDEO (mismo flujo que foto) ──
+async function generateDiarioVideoStory() {
+  // 1. Cargar mapa estático — EXACTO igual que generateDiarioStory
+  const mapUrl = window.SALMA_API + '/staticmap?lat=' + _diario.lat + '&lng=' + _diario.lng + '&zoom=13&size=640x640&maptype=terrain&scale=2&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
+  try {
+    const mapImg = await new Promise((resolve, reject) => {
+      const i = new Image(); i.crossOrigin='anonymous';
+      i.onload = () => resolve(i); i.onerror = reject; i.src = mapUrl;
+    });
+    const tmp = document.createElement('canvas'); tmp.width=1080; tmp.height=1920;
+    const tCtx = tmp.getContext('2d');
+    const iw = mapImg.naturalWidth, ih = mapImg.naturalHeight;
+    const canvasRatio = 1080/1920, imgRatio = iw/ih;
+    let sx=0, sy=0, sw=iw, sh=ih;
+    if (imgRatio > canvasRatio) { sw = Math.round(ih * canvasRatio); sx = Math.round((iw - sw) / 2); }
+    else { sh = Math.round(iw / canvasRatio); sy = Math.round((ih - sh) / 2); }
+    tCtx.drawImage(mapImg, sx, sy, sw, sh, 0, 0, 1080, 1920);
+    const scaled = new Image();
+    await new Promise(r => { scaled.onload=r; scaled.src=tmp.toDataURL(); });
+    _diario.mapImg = scaled;
+  } catch(e) { _diario.mapImg = null; }
+
+  // 2. Crear video oculto para leer frames
+  const video = document.createElement('video');
+  video.muted = true; video.playsInline = true;
+  video.src = _diario.videoUrl;
+  await new Promise(r => { video.onloadeddata = r; });
+  if (_diario.videoTrimStart > 0) {
+    video.currentTime = _diario.videoTrimStart;
+    await new Promise(r => { video.onseeked = r; });
   }
 
-  // Canvas offscreen 1080×1920
-  const W=1080, H=1920;
-  const canvas = document.createElement('canvas'); canvas.width=W; canvas.height=H;
-  const ctx = canvas.getContext('2d');
+  // 3. Mismo canvas que foto (#diario-canvas en el DOM)
+  const c = document.getElementById('diario-canvas');
+  const ctx = c.getContext('2d');
 
-  // Elegir formato (MP4 si soportado, si no webm)
-  const stream = canvas.captureStream(30);
-  let mime = 'video/mp4';
-  if(!MediaRecorder.isTypeSupported(mime)){
-    mime='video/webm;codecs=vp9';
-    if(!MediaRecorder.isTypeSupported(mime)) mime='video/webm';
+  // Dibujar primer frame inmediatamente
+  _drawDiarioKodak(ctx, video, 1080, 1920, null, _diario.locName, _diario.mapImg, '');
+
+  // 4. Mostrar modal — EXACTO igual que foto
+  const locTxt = document.getElementById('diario-result-loc-txt');
+  if (locTxt) locTxt.textContent = _diario.locName;
+  const resultEl = document.getElementById('diario-result');
+  if (resultEl) resultEl.classList.add('on');
+
+  // 5. Subir vídeo crudo a galería (en paralelo)
+  _diarioSaved = false;
+  _saveDiarioVideoToGallery();
+
+  // 6. Grabar el canvas con MediaRecorder
+  let recorder = null, chunks = [], mime = '';
+  if (typeof MediaRecorder !== 'undefined') {
+    const stream = c.captureStream(30);
+    mime = 'video/mp4';
+    if (!MediaRecorder.isTypeSupported(mime)) {
+      mime = 'video/webm;codecs=vp9';
+      if (!MediaRecorder.isTypeSupported(mime)) mime = 'video/webm';
+    }
+    recorder = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 4000000 });
+    recorder.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
+    recorder.start();
   }
-  const recorder = new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:4000000});
-  const chunks = [];
-  recorder.ondataavailable = e => { if(e.data.size) chunks.push(e.data); };
-  const done = new Promise(resolve => {
-    recorder.onstop = () => resolve(new Blob(chunks,{type:mime.split(';')[0]}));
-  });
 
-  // Seek al inicio del trim y grabar
+  // 7. Play + render loop (mismo _drawDiarioKodak que foto)
+  await video.play();
   const dur = Math.min(15, _diario.videoDuration || 15);
   const loc = _diario.locName || '';
-  video.currentTime = _diario.videoTrimStart || 0;
-  await new Promise(r => { video.onseeked = r; });
-  recorder.start();
   const t0 = performance.now();
+  _diarioVideoState = { video, recorder };
 
   function drawFrame() {
-    if(recorder.state !== 'recording') return;
-    _drawDiarioKodak(ctx, video, W, H, null, loc, mapImg, '');
-    if((performance.now()-t0)/1000 < dur) requestAnimationFrame(drawFrame);
-    else recorder.stop();
+    if (!_diarioVideoState) return;
+    _drawDiarioKodak(ctx, video, 1080, 1920, null, loc, _diario.mapImg, '');
+    if ((performance.now() - t0) / 1000 < dur) {
+      _diarioVideoState.raf = requestAnimationFrame(drawFrame);
+    } else {
+      video.pause();
+      if (recorder && recorder.state === 'recording') recorder.stop();
+    }
   }
   requestAnimationFrame(drawFrame);
 
-  const blob = await done;
-  _diario.lastBlob = blob;
-  _diario.videoExt = mime.includes('mp4') ? 'mp4' : 'webm';
-  if(typeof showToast==='function') showToast('✓ Kodak listo');
+  // 8. Cuando termina la grabación → blob maquetado reemplaza al crudo
+  if (recorder) {
+    await new Promise(r => { recorder.onstop = r; });
+    const blob = new Blob(chunks, { type: mime.split(';')[0] });
+    _diario.lastBlob = blob;
+    _diario.videoExt = mime.includes('mp4') ? 'mp4' : 'webm';
+    if (typeof showToast === 'function') showToast('✓ Kodak listo');
+  }
+  _diarioVideoState = null;
 }
 
 // ── Generar story Kodak ──
@@ -4424,18 +4394,16 @@ async function shareDiarioNative() {
 }
 
 function closeDiarioResult() {
-  const el = document.getElementById('diario-result');
-  if (el) {
-    el.classList.remove('on');
-    // Restaurar canvas si fue reemplazado por vídeo
-    const wrap = el.querySelector('.diario-result-canvas-wrap');
-    if (wrap) {
-      wrap.style.alignSelf = '';
-      if (!wrap.querySelector('canvas')) {
-        wrap.innerHTML = '<canvas id="diario-canvas" width="1080" height="1920"></canvas>';
-      }
-    }
+  // Parar grabación de vídeo si hay una en curso
+  if (_diarioVideoState) {
+    if (_diarioVideoState.raf) cancelAnimationFrame(_diarioVideoState.raf);
+    _diarioVideoState.video.pause();
+    if (_diarioVideoState.recorder && _diarioVideoState.recorder.state === 'recording')
+      _diarioVideoState.recorder.stop();
+    _diarioVideoState = null;
   }
+  const el = document.getElementById('diario-result');
+  if (el) el.classList.remove('on');
 }
 
 async function diarioResultSave() {
