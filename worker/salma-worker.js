@@ -3705,13 +3705,16 @@ export default {
         if (!photo) {
           return new Response(JSON.stringify({ error: 'Missing photo' }), { status: 400, headers: corsH });
         }
-        if (photo.size > 6 * 1024 * 1024) {
-          return new Response(JSON.stringify({ error: 'Photo too large (max 6MB)' }), { status: 400, headers: corsH });
+        const isVideo = photo.type && photo.type.startsWith('video/');
+        const maxSize = isVideo ? 15 * 1024 * 1024 : 6 * 1024 * 1024;
+        if (photo.size > maxSize) {
+          return new Response(JSON.stringify({ error: isVideo ? 'Video too large (max 15MB)' : 'Photo too large (max 6MB)' }), { status: 400, headers: corsH });
         }
         const timestamp = Date.now();
-        const key = `photos/${uid}/gallery/${timestamp}.jpg`;
+        const ext = isVideo ? '.mp4' : '.jpg';
+        const key = `photos/${uid}/gallery/${timestamp}${ext}`;
         await env.SALMA_PHOTOS.put(key, photo.stream(), {
-          httpMetadata: { contentType: 'image/jpeg' },
+          httpMetadata: { contentType: photo.type || 'image/jpeg' },
           customMetadata: { uid, source: 'gallery' }
         });
         const photoUrl = `https://salma-api.paco-defoto.workers.dev/photo/${encodeURIComponent(key)}`;

@@ -3943,6 +3943,12 @@ window.diarioPickSave = diarioPickSave;
 window.diarioPickDelete = diarioPickDelete;
 window.diarioPickCamera = diarioPickCamera;
 window.diarioPickGallery = diarioPickGallery;
+function diarioPickVideo() {
+  closeDiarioPicker();
+  const input = document.getElementById('diario-video-input');
+  if (input) input.click();
+}
+window.diarioPickVideo = diarioPickVideo;
 window.closeDiarioPicker = closeDiarioPicker;
 function diarioPickCompass() {
   closeDiarioPicker();
@@ -3975,6 +3981,7 @@ function _onDiarioPhoto(e) {
     const img = new Image();
     img.onload = () => {
       _diario.photo = img;
+      _diario.isVideo = false;
       if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
       generateDiarioStory();
     };
@@ -3986,9 +3993,110 @@ function _onDiarioPhoto(e) {
 document.addEventListener('DOMContentLoaded', () => {
   const cam = document.getElementById('diario-camera-input');
   const gal = document.getElementById('diario-gallery-input');
+  const vid = document.getElementById('diario-video-input');
   if (cam) cam.addEventListener('change', _onDiarioPhoto);
   if (gal) gal.addEventListener('change', _onDiarioPhoto);
+  if (vid) vid.addEventListener('change', _onDiarioVideo);
 });
+
+// ── Listener: tras grabar vídeo → validar + subir + mostrar resultado ──
+function _onDiarioVideo(e) {
+  const f = e.target.files[0]; if (!f) return;
+  e.target.value = '';
+
+  if (!f.type.startsWith('video/')) {
+    showToast('Selecciona un vídeo'); return;
+  }
+  if (f.size > 15 * 1024 * 1024) {
+    showToast('El vídeo es demasiado grande (máx 15MB)'); return;
+  }
+
+  // Comprobar duración
+  const video = document.createElement('video');
+  video.preload = 'metadata';
+  const objectUrl = URL.createObjectURL(f);
+  video.src = objectUrl;
+  video.onloadedmetadata = () => {
+    const duration = video.duration;
+    const trimStart = duration > 15 ? duration - 15 : 0;
+    if (duration > 15) {
+      showToast('Se usarán los últimos 15 segundos');
+    }
+    // Guardar datos del vídeo
+    _diario.isVideo = true;
+    _diario.videoFile = f;
+    _diario.videoUrl = objectUrl;
+    _diario.videoDuration = duration;
+    _diario.videoTrimStart = trimStart;
+    _diario.lastBlob = f; // para share/download
+    if (_tapPin) { _tapPin.setMap(null); _tapPin = null; }
+    _showDiarioVideoResult();
+  };
+  video.onerror = () => {
+    URL.revokeObjectURL(objectUrl);
+    showToast('Error al cargar el vídeo');
+  };
+}
+
+function _showDiarioVideoResult() {
+  const el = document.getElementById('diario-result');
+  if (!el) return;
+
+  // Reemplazar contenido con preview de vídeo
+  const preview = el.querySelector('.diario-result-img') || el.querySelector('canvas');
+  if (preview) {
+    const videoEl = document.createElement('video');
+    videoEl.src = _diario.videoUrl + '#t=' + _diario.videoTrimStart;
+    videoEl.controls = true;
+    videoEl.autoplay = true;
+    videoEl.loop = true;
+    videoEl.muted = true;
+    videoEl.playsInline = true;
+    videoEl.style.cssText = 'width:100%;max-height:70vh;border-radius:14px;object-fit:contain;background:#000';
+    preview.replaceWith(videoEl);
+  }
+
+  el.classList.add('on');
+  _diarioSaved = false;
+  _saveDiarioVideoToGallery();
+}
+
+async function _saveDiarioVideoToGallery() {
+  if (_diarioSaved || !_diario.videoFile || !currentUser) return;
+  _diarioSaved = true;
+  try {
+    const uid = currentUser.uid;
+    const formData = new FormData();
+    formData.append('photo', _diario.videoFile, 'mi-diario.mp4');
+    formData.append('uid', uid);
+
+    const res = await fetch(window.SALMA_API + '/upload-gallery-photo', {
+      method: 'POST',
+      body: formData
+    });
+    if (!res.ok) throw new Error('Upload failed');
+    const { key, url } = await res.json();
+
+    const now = new Date().toISOString();
+    await db.collection('users').doc(uid).collection('fotos').add({
+      key, url, tag: 'video', caption: _diario.locName, albumId: null,
+      routeId: _activeRouteDocId || null, lat: _diario.lat, lng: _diario.lng,
+      source: 'diario', type: 'video', duration: _diario.videoDuration,
+      trimStart: _diario.videoTrimStart, createdAt: now
+    });
+    await db.collection('users').doc(uid).collection('pins').add({
+      lat: _diario.lat, lng: _diario.lng, locName: _diario.locName,
+      photoUrl: url, type: 'video', routeId: _activeRouteDocId || null, createdAt: now
+    });
+
+    // Guardar URL de R2 para share
+    _diario.videoR2Url = url;
+    if (typeof showToast === 'function') showToast('🎬 Vídeo guardado en tu galería');
+  } catch (e) {
+    console.warn('[Diario video save]', e);
+    _diarioSaved = false;
+  }
+}
 
 // ── Generar story Kodak ──
 async function generateDiarioStory() {
@@ -4158,29 +4266,37 @@ function _diarioDropPermanentPin() {
 async function shareDiarioWA() {
   if(!_diario.lastBlob) return;
   _diarioAutoSave();
-  const file=new File([_diario.lastBlob],'mi-diario.jpg',{type:'image/jpeg'});
+  const isVid = _diario.isVideo;
+  const fname = isVid ? 'mi-diario.mp4' : 'mi-diario.jpg';
+  const ftype = isVid ? 'video/mp4' : 'image/jpeg';
+  const file=new File([_diario.lastBlob], fname, {type: ftype});
   const txt=_diarioShareText();
   if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
     try{await navigator.share({files:[file],text:txt});return;}catch(e){}
   }
   const a=document.createElement('a');a.href=URL.createObjectURL(_diario.lastBlob);
-  a.download='mi-diario.jpg';a.click();
-  if(typeof showToast==='function')showToast('📸 Descargada — adjúntala en WhatsApp');
+  a.download=fname;a.click();
+  if(typeof showToast==='function')showToast(isVid ? '🎬 Descargado — adjúntalo en WhatsApp' : '📸 Descargada — adjúntala en WhatsApp');
   setTimeout(()=>window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank'),700);
 }
 
 function downloadDiario() {
   if(!_diario.lastBlob) return;
   _diarioAutoSave();
+  const isVid = _diario.isVideo;
+  const ext = isVid ? '.mp4' : '.jpg';
   const a=document.createElement('a');a.href=URL.createObjectURL(_diario.lastBlob);
-  a.download='mi-diario-'+Date.now()+'.jpg';a.click();
-  if(typeof showToast==='function')showToast('✓ Guardada');
+  a.download='mi-diario-'+Date.now()+ext;a.click();
+  if(typeof showToast==='function')showToast('✓ ' + (isVid ? 'Vídeo descargado' : 'Guardada'));
 }
 
 async function shareDiarioNative() {
   if(!_diario.lastBlob) return;
   _diarioAutoSave();
-  const file=new File([_diario.lastBlob],'mi-diario.jpg',{type:'image/jpeg'});
+  const isVid = _diario.isVideo;
+  const fname = isVid ? 'mi-diario.mp4' : 'mi-diario.jpg';
+  const ftype = isVid ? 'video/mp4' : 'image/jpeg';
+  const file=new File([_diario.lastBlob], fname, {type: ftype});
   if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
     try{await navigator.share({files:[file],text:_diarioShareText()});}catch(e){}
   } else { downloadDiario(); }

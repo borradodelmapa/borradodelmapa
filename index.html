@@ -168,6 +168,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
       </button>
       <div class="dpick-imfine-menu" id="dpick-imfine-menu" style="display:none">
         <button class="dpick-imfine-opt" onclick="diarioPickCamera();document.getElementById('dpick-imfine-menu').style.display='none'">📷 Cámara</button>
+        <button class="dpick-imfine-opt" onclick="diarioPickVideo();document.getElementById('dpick-imfine-menu').style.display='none'">🎬 Video</button>
         <button class="dpick-imfine-opt" onclick="diarioPickGallery();document.getElementById('dpick-imfine-menu').style.display='none'">🖼️ Galería</button>
       </div>
       <button class="dpick-btn" onclick="diarioPickNavigate()">
@@ -375,6 +376,7 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 
 <!-- Inputs ocultos: cámara (capture) y galería (sin capture) -->
 <input type="file" id="diario-camera-input" accept="image/*" capture="environment" style="display:none">
+<input type="file" id="diario-video-input" accept="video/*" capture="environment" style="display:none">
 <input type="file" id="diario-gallery-input" accept="image/*" style="display:none">
 
 <!-- ═══ RESULTADO Mi Diario (fullscreen overlay) ═══ -->
