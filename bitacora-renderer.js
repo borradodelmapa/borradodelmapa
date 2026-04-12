@@ -96,7 +96,6 @@ const bitacoraRenderer = {
       btn.addEventListener('click', async () => {
         const dayNum = parseInt(btn.dataset.day);
         if (typeof videoAssembly === 'undefined' || typeof window._showVideoEditModal !== 'function') return;
-        if (typeof showToast === 'function') showToast('Preparando video…');
         const result = await videoAssembly.assemble({ source: 'day', id: docId, dayNum, routeData });
         if (!result) { if (typeof showToast === 'function') showToast('Necesitas al menos 3 fotos de este día'); return; }
         window._showVideoEditModal(result);

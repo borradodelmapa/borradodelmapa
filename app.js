@@ -851,7 +851,7 @@ function _createGuideCard(doc, d, isOffline) {
   card.querySelector('.viaje-card-video')?.addEventListener('click', async (e) => {
     e.stopPropagation();
     if (typeof videoAssembly === 'undefined') return;
-    showToast('Preparando video…');
+
     const routeData = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null;
     const result = await videoAssembly.assemble({ source: 'route', id: doc.id, routeData });
     if (!result) { showToast('Necesitas al menos 3 fotos en esta ruta'); return; }
@@ -1150,7 +1150,7 @@ async function renderGaleria(albumFilter) {
       if (typeof showToast === 'function') showToast('Cargando motor de video…');
       return;
     }
-    showToast('Preparando video…');
+
     const result = await videoAssembly.assemble({ source: 'gallery' });
     if (!result) { showToast('Necesitas al menos 3 fotos'); return; }
     _showVideoEditModal(result);
@@ -1159,7 +1159,7 @@ async function renderGaleria(albumFilter) {
   // Event: crear video del álbum activo → edición
   document.getElementById('galeria-album-video-btn')?.addEventListener('click', async () => {
     if (typeof videoAssembly === 'undefined') return;
-    showToast('Preparando video…');
+
     const result = await videoAssembly.assemble({ source: 'album', id: activeAlbum });
     if (!result) { showToast('Necesitas al menos 3 fotos en este álbum'); return; }
     result.params.titulo = activeAlbumName || result.params.titulo;
@@ -1228,7 +1228,7 @@ async function renderGaleria(albumFilter) {
         .filter(Boolean);
       if (selectedPhotos.length < 3) { showToast('Selecciona al menos 3 fotos'); return; }
       if (typeof videoAssembly === 'undefined') return;
-      showToast('Preparando video…');
+  
       const result = await videoAssembly.assemble({ source: 'custom', photos: selectedPhotos });
       if (!result) { showToast('Error al preparar video'); return; }
       _exitSelectMode();
