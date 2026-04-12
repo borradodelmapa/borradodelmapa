@@ -1,6 +1,6 @@
 // Service Worker — Cache del shell + network-first para API (P1-7)
 
-const CACHE_NAME = 'salma-v8';
+const CACHE_NAME = 'salma-v9';
 const SHELL_ASSETS = [
   '/',
   '/index.html',
@@ -47,7 +47,21 @@ self.addEventListener('fetch', (e) => {
   // Firebase/Google — no cachear
   if (url.hostname.includes('googleapis.com') || url.hostname.includes('firebaseapp.com') || url.hostname.includes('gstatic.com')) return;
 
-  // Shell assets — stale-while-revalidate (cache rápido + actualizar en background)
+  // HTML (navegación) — network-first (siempre carga la versión nueva)
+  if (e.request.mode === 'navigate' || url.pathname === '/' || url.pathname.endsWith('.html')) {
+    e.respondWith(
+      fetch(e.request).then(response => {
+        if (response && response.status === 200) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
+        }
+        return response;
+      }).catch(() => caches.match(e.request).then(c => c || caches.match('/index.html')))
+    );
+    return;
+  }
+
+  // JS/CSS/imágenes — stale-while-revalidate (cache rápido + actualizar en background)
   e.respondWith(
     caches.match(e.request).then(cached => {
       const fetchPromise = fetch(e.request).then(response => {
@@ -57,12 +71,7 @@ self.addEventListener('fetch', (e) => {
         }
         return response;
       }).catch(() => {
-        // Sin red: devolver cache o fallback
         if (cached) return cached;
-        // Para navegación, devolver index.html cacheado (SPA)
-        if (e.request.mode === 'navigate') {
-          return caches.match('/index.html');
-        }
         return new Response('Offline', { status: 503, statusText: 'Offline' });
       });
 

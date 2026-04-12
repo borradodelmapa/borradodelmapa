@@ -609,6 +609,17 @@ body {
   font-family:var(--font-mono); font-size:clamp(7px,2vw,10px);
   color:rgba(248,246,240,0.5);
 }
+/* Badge play vídeo en galería */
+.galeria-video-badge {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:32px; height:32px; border-radius:50%;
+  background:rgba(0,0,0,0.6); color:#fff; font-size:14px;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+}
+.galeria-thumb[src$=".mp4"], video.galeria-thumb {
+  object-fit:cover;
+}
 /* X borrar foto en galería */
 .galeria-item { position:relative; }
 .galeria-item-delete {

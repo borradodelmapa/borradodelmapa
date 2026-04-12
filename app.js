@@ -1070,12 +1070,17 @@ async function renderGaleria(albumFilter) {
 
   const gridHtml = filtered.length === 0
     ? '<div class="galeria-empty">No hay fotos todavía.<br>Pulsa <strong>📤 Añadir</strong> para subir desde tu galería, o envía fotos a Salma desde el chat.</div>'
-    : `<div class="galeria-grid">${filtered.map(f => `
-        <div class="galeria-item" data-foto-id="${f.id}">
-          <img src="${escapeHTML(f.url)}" class="galeria-thumb" alt="${escapeHTML(f.caption || '')}" loading="lazy">
+    : `<div class="galeria-grid">${filtered.map(f => {
+        const isVid = f.type === 'video' || f.tag === 'video';
+        const media = isVid
+          ? `<video src="${escapeHTML(f.url)}" class="galeria-thumb" muted playsinline preload="metadata"></video><span class="galeria-video-badge">▶</span>`
+          : `<img src="${escapeHTML(f.url)}" class="galeria-thumb" alt="${escapeHTML(f.caption || '')}" loading="lazy">`;
+        return `<div class="galeria-item" data-foto-id="${f.id}">
+          ${media}
           <span class="galeria-tag-badge">${TAG_ICONS[f.tag] || '📷'}</span>
           <button class="galeria-item-delete" data-foto-id="${f.id}" data-foto-key="${escapeHTML(f.key || '')}" title="Eliminar">✕</button>
-        </div>`).join('')}</div>`;
+        </div>`;
+      }).join('')}</div>`;
 
   $c.innerHTML = `
     <div class="galeria-area fade-in">
