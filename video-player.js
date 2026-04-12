@@ -76,6 +76,25 @@ const videoPlayer = {
       this._mapEnd    = 0;
       this._photosEnd = this._photos.length * framesPerPhoto;
       this._totalFrames = this._photosEnd;
+    } else if (this._style === 'viaje' && rawStops.length >= 2) {
+      // Viaje: satélite real + split screen por parada
+      const viajeOk = await this._loadViajeImages(rawStops);
+      if (!viajeOk) {
+        // Fallback a documental si no se pueden cargar los mapas
+        this._style = 'documental';
+        const mapFrames = 120;
+        const photoFrames = Math.max(this._photos.length * 90, 270);
+        this._titleEnd = 90;
+        this._mapEnd = this._titleEnd + mapFrames;
+        this._photosEnd = this._mapEnd + photoFrames;
+        this._totalFrames = this._photosEnd + 120;
+      } else {
+        const stopsCount = Math.min(rawStops.length, this._photos.length);
+        this._titleEnd = 90;
+        this._mapEnd = this._titleEnd + 90;  // overview
+        this._photosEnd = this._mapEnd + (stopsCount * this._FRAMES_PER_STOP);
+        this._totalFrames = this._photosEnd + 90;  // cierre
+      }
     } else {
       // Documental: título + mapa + fotos + cierre
       const mapFrames   = 120;
@@ -257,6 +276,12 @@ const videoPlayer = {
     // Historia de Instagram — renderer propio
     if (this._style === 'historia') {
       this._renderFrameHistoria(frame, w, h);
+      return;
+    }
+
+    // Viaje documental — satélite real
+    if (this._style === 'viaje') {
+      this._renderFrameViaje(frame, w, h);
       return;
     }
 
@@ -995,6 +1020,475 @@ const videoPlayer = {
     } else {
       this.download();
     }
+  },
+
+  // ═══════════════════════════════════════════
+  //  ESTILO "VIAJE" — Documental con satélite
+  // ═══════════════════════════════════════════
+
+  _mapImages: [],      // [overview, stop0, stop1, ...]
+  _mapBounds: null,    // { centerLat, centerLng, zoom, imgW, imgH }
+  _rawStops: [],       // stops originales con lat/lng (sin normalizar)
+  _FRAMES_PER_STOP: 80, // zoom-in(20) + split(45) + zoom-out(15)
+
+  // Cargar imágenes satélite (overview + per-stop)
+  async _loadViajeImages(stops) {
+    const apiBase = (typeof window !== 'undefined' && window.SALMA_API) || '';
+    if (!apiBase || stops.length < 2) return false;
+
+    this._rawStops = stops;
+
+    // Calcular bounds y zoom
+    const lats = stops.map(s => s.lat);
+    const lngs = stops.map(s => s.lng);
+    const centerLat = (Math.min(...lats) + Math.max(...lats)) / 2;
+    const centerLng = (Math.min(...lngs) + Math.max(...lngs)) / 2;
+    const zoom = this._calcFitZoom(stops, 640);
+
+    this._mapBounds = { centerLat, centerLng, zoom, imgW: 1280, imgH: 1280 };
+
+    // URLs a cargar
+    const urls = [];
+    // Overview
+    urls.push(`${apiBase}/staticmap?lat=${centerLat}&lng=${centerLng}&zoom=${zoom}&size=640x640&maptype=satellite&scale=2`);
+    // Per-stop (zoom más alto, 640x360 → 1280x720)
+    const stopZoom = Math.min(zoom + 4, 15);
+    for (const s of stops) {
+      urls.push(`${apiBase}/staticmap?lat=${s.lat}&lng=${s.lng}&zoom=${stopZoom}&size=640x360&maptype=satellite&scale=2`);
+    }
+
+    // Cargar en paralelo con timeout
+    const timeout = (ms) => new Promise((_, rej) => setTimeout(() => rej('timeout'), ms));
+    try {
+      const results = await Promise.race([
+        Promise.all(urls.map(url => this._loadImage(url))),
+        timeout(12000)
+      ]);
+      this._mapImages = results;
+      // Verificar que al menos el overview cargó
+      return !!this._mapImages[0];
+    } catch (e) {
+      console.warn('[VideoPlayer] Viaje images timeout/error');
+      return false;
+    }
+  },
+
+  // Calcular zoom level que encuadre todos los stops en un tile de sizePx
+  _calcFitZoom(stops, sizePx) {
+    const lats = stops.map(s => s.lat);
+    const lngs = stops.map(s => s.lng);
+    const latRange = Math.max(...lats) - Math.min(...lats);
+    const lngRange = Math.max(...lngs) - Math.min(...lngs);
+    // Grados que caben en un tile a cada zoom level (aprox en el ecuador)
+    // A zoom Z, 640px cubre ~360/2^Z grados de longitud
+    for (let z = 14; z >= 2; z--) {
+      const degsPerTile = 360 / Math.pow(2, z) * (sizePx / 256);
+      if (degsPerTile > latRange * 1.4 && degsPerTile > lngRange * 1.4) return z;
+    }
+    return 2;
+  },
+
+  // Convertir lat/lng a coordenadas pixel en la imagen overview
+  _latLngToPixel(lat, lng) {
+    if (!this._mapBounds) return { x: 0, y: 0 };
+    const b = this._mapBounds;
+    const scale = Math.pow(2, b.zoom);
+    const worldSize = 256 * scale;
+
+    const toMercX = (ln) => (ln + 180) / 360 * worldSize;
+    const toMercY = (lt) => {
+      const rad = lt * Math.PI / 180;
+      return (1 - Math.log(Math.tan(rad) + 1 / Math.cos(rad)) / Math.PI) / 2 * worldSize;
+    };
+
+    const cx = toMercX(b.centerLng);
+    const cy = toMercY(b.centerLat);
+    const px = toMercX(lng);
+    const py = toMercY(lat);
+
+    return {
+      x: (px - cx) + b.imgW / 2,
+      y: (py - cy) + b.imgH / 2
+    };
+  },
+
+  // ═══ DISPATCHER VIAJE ═══
+  _renderFrameViaje(frame, w, h) {
+    const ctx = this._ctx;
+
+    if (frame < this._titleEnd) {
+      this._drawTitleScene(frame, w, h);
+    } else if (frame < this._mapEnd) {
+      const localFrame = frame - this._titleEnd;
+      const total = this._mapEnd - this._titleEnd;
+      this._drawViajeOverview(localFrame, total, w, h);
+    } else if (frame < this._photosEnd) {
+      const stopFrame = frame - this._mapEnd;
+      const fps = this._FRAMES_PER_STOP;
+      const stopIdx = Math.min(Math.floor(stopFrame / fps), this._rawStops.length - 1);
+      const localFrame = stopFrame - (stopIdx * fps);
+
+      // Determinar fase: zoomin (0-19), split (20-64), zoomout (65-79)
+      if (localFrame < 20) {
+        this._drawViajeStop(stopIdx, 'zoomin', localFrame, 20, w, h);
+      } else if (localFrame < 65) {
+        this._drawViajeStop(stopIdx, 'split', localFrame - 20, 45, w, h);
+      } else {
+        this._drawViajeStop(stopIdx, 'zoomout', localFrame - 65, 15, w, h);
+      }
+    } else {
+      const localFrame = frame - this._photosEnd;
+      const total = this._totalFrames - this._photosEnd;
+      this._drawCloseScene(localFrame, total, w, h);
+    }
+  },
+
+  // ═══ OVERVIEW SATÉLITE ═══
+  _drawViajeOverview(localFrame, totalFrames, w, h) {
+    const ctx = this._ctx;
+    const overview = this._mapImages[0];
+    if (!overview) return;
+
+    const sceneOp = this._lerpEased(localFrame, 0, 20, 0, 1);
+    ctx.globalAlpha = sceneOp;
+
+    // Dibujar overview cubriendo canvas (cover mode)
+    this._drawImageCover(ctx, overview, 0, 0, w, h);
+
+    // Overlay oscuro para legibilidad
+    ctx.fillStyle = 'rgba(0,0,0,0.35)';
+    ctx.fillRect(0, 0, w, h);
+
+    // Dibujar ruta animada
+    const routeProgress = this._easeInOut(
+      Math.max(0, Math.min(1, (localFrame - 15) / (totalFrames - 25)))
+    );
+    this._drawRouteOnOverview(ctx, routeProgress, w, h);
+
+    // Dibujar marcadores de paradas
+    this._drawStopsOnOverview(ctx, routeProgress, w, h);
+
+    // Texto header
+    ctx.globalAlpha = sceneOp;
+    ctx.font = 'bold 11px monospace';
+    ctx.textAlign = 'center';
+    this._drawText(ctx, 'TU RUTA', w / 2, h * 0.08, this.GOLD);
+    ctx.font = '11px monospace';
+    this._drawText(ctx, `${this._rawStops.length} paradas`, w / 2, h * 0.08 + 18, this.CREAM2);
+
+    // Branding
+    ctx.globalAlpha = sceneOp * 0.3;
+    ctx.font = '10px monospace';
+    this._drawText(ctx, 'SALMA · borradodelmapa.com', w / 2, h * 0.95, this.GOLD);
+
+    ctx.globalAlpha = 1;
+  },
+
+  // Dibujar ruta como línea dorada sobre overview
+  _drawRouteOnOverview(ctx, progress, canvasW, canvasH) {
+    if (this._rawStops.length < 2 || !this._mapImages[0]) return;
+
+    const overview = this._mapImages[0];
+    // Calcular escala y offset para mapear pixeles de overview a canvas
+    const scaleX = canvasW / overview.width;
+    const scaleY = canvasH / overview.height;
+    const imgScale = Math.max(scaleX, scaleY);
+    const offX = (canvasW - overview.width * imgScale) / 2;
+    const offY = (canvasH - overview.height * imgScale) / 2;
+
+    // Convertir stops a coordenadas de canvas
+    const pts = this._rawStops.map(s => {
+      const p = this._latLngToPixel(s.lat, s.lng);
+      return { x: p.x * imgScale + offX, y: p.y * imgScale + offY };
+    });
+
+    // Calcular longitud total
+    let totalLen = 0;
+    const segLens = [];
+    for (let i = 1; i < pts.length; i++) {
+      const dx = pts[i].x - pts[i - 1].x;
+      const dy = pts[i].y - pts[i - 1].y;
+      const len = Math.sqrt(dx * dx + dy * dy);
+      segLens.push(len);
+      totalLen += len;
+    }
+
+    const drawLen = totalLen * progress;
+
+    // Glow layer
+    ctx.save();
+    ctx.strokeStyle = this.GOLD2;
+    ctx.lineWidth = 5;
+    ctx.globalAlpha = 0.3;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    let accum = 0;
+    for (let i = 1; i < pts.length; i++) {
+      accum += segLens[i - 1];
+      if (accum <= drawLen) {
+        ctx.lineTo(pts[i].x, pts[i].y);
+      } else {
+        const overshoot = accum - drawLen;
+        const t = 1 - overshoot / segLens[i - 1];
+        const mx = pts[i - 1].x + (pts[i].x - pts[i - 1].x) * t;
+        const my = pts[i - 1].y + (pts[i].y - pts[i - 1].y) * t;
+        ctx.lineTo(mx, my);
+        break;
+      }
+    }
+    ctx.stroke();
+
+    // Main line
+    ctx.strokeStyle = this.GOLD;
+    ctx.lineWidth = 2.5;
+    ctx.globalAlpha = 0.9;
+    ctx.setLineDash([8, 4]);
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    accum = 0;
+    for (let i = 1; i < pts.length; i++) {
+      accum += segLens[i - 1];
+      if (accum <= drawLen) {
+        ctx.lineTo(pts[i].x, pts[i].y);
+      } else {
+        const overshoot = accum - drawLen;
+        const t = 1 - overshoot / segLens[i - 1];
+        const mx = pts[i - 1].x + (pts[i].x - pts[i - 1].x) * t;
+        const my = pts[i - 1].y + (pts[i].y - pts[i - 1].y) * t;
+        ctx.lineTo(mx, my);
+        break;
+      }
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  },
+
+  // Marcadores sobre overview
+  _drawStopsOnOverview(ctx, progress, canvasW, canvasH) {
+    const overview = this._mapImages[0];
+    if (!overview) return;
+    const scaleX = canvasW / overview.width;
+    const scaleY = canvasH / overview.height;
+    const imgScale = Math.max(scaleX, scaleY);
+    const offX = (canvasW - overview.width * imgScale) / 2;
+    const offY = (canvasH - overview.height * imgScale) / 2;
+
+    for (let i = 0; i < this._rawStops.length; i++) {
+      const appear = (i + 1) / this._rawStops.length;
+      if (progress < appear * 0.8) continue;
+
+      const s = this._rawStops[i];
+      const p = this._latLngToPixel(s.lat, s.lng);
+      const x = p.x * imgScale + offX;
+      const y = p.y * imgScale + offY;
+
+      ctx.save();
+      // Glow
+      ctx.globalAlpha = 0.5;
+      ctx.fillStyle = this.GOLD;
+      ctx.beginPath();
+      ctx.arc(x, y, 8, 0, Math.PI * 2);
+      ctx.fill();
+      // Dot
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+      // Label
+      ctx.globalAlpha = 0.8;
+      ctx.font = 'bold 9px sans-serif';
+      ctx.textAlign = 'center';
+      const labelY = (i % 2 === 0) ? y - 14 : y + 18;
+      this._drawText(ctx, (s.name || '').substring(0, 14), x, labelY, this.CREAM);
+      ctx.restore();
+    }
+  },
+
+  // ═══ STOP CON SPLIT SCREEN ═══
+  _drawViajeStop(stopIdx, phase, localFrame, phaseFrames, w, h) {
+    const ctx = this._ctx;
+    const overview = this._mapImages[0];
+    if (!overview) return;
+
+    const stop = this._rawStops[stopIdx];
+    const photo = this._photos[Math.min(stopIdx, this._photos.length - 1)];
+    const stopImg = this._mapImages[stopIdx + 1]; // +1 porque [0] es overview
+
+    if (phase === 'zoomin') {
+      // Zoom progresivo del overview hacia la parada
+      const t = this._easeInOut(localFrame / phaseFrames);
+      const targetScale = 3.0;
+      const scale = 1 + (targetScale - 1) * t;
+
+      // Calcular posición del stop en el overview
+      const p = this._latLngToPixel(stop.lat, stop.lng);
+      const imgScaleX = w / overview.width;
+      const imgScaleY = h / overview.height;
+      const imgScale = Math.max(imgScaleX, imgScaleY);
+      const px = p.x * imgScale + (w - overview.width * imgScale) / 2;
+      const py = p.y * imgScale + (h - overview.height * imgScale) / 2;
+
+      ctx.save();
+      ctx.translate(w / 2, h / 2);
+      ctx.scale(scale, scale);
+      ctx.translate(-w / 2, -h / 2);
+      // Desplazar para centrar en la parada
+      const dx = (w / 2 - px) * t;
+      const dy = (h / 2 - py) * t;
+      ctx.translate(dx, dy);
+
+      this._drawImageCover(ctx, overview, 0, 0, w, h);
+      ctx.fillStyle = 'rgba(0,0,0,0.25)';
+      ctx.fillRect(-w, -h, w * 3, h * 3);
+
+      // Ruta parcial (hasta este stop)
+      const routeProgress = (stopIdx + 1) / this._rawStops.length;
+      this._drawRouteOnOverview(ctx, routeProgress, w, h);
+
+      ctx.restore();
+
+      // Crossfade a split screen en los últimos frames
+      if (t > 0.7) {
+        const splitAlpha = (t - 0.7) / 0.3;
+        ctx.globalAlpha = splitAlpha;
+        this._drawSplitScreen(ctx, stopImg, photo, stop, stopIdx, w, h, 0);
+        ctx.globalAlpha = 1;
+      }
+
+    } else if (phase === 'split') {
+      // Split screen: satélite arriba + foto abajo
+      const progress = localFrame / phaseFrames;
+      this._drawSplitScreen(ctx, stopImg, photo, stop, stopIdx, w, h, progress);
+
+    } else if (phase === 'zoomout') {
+      // Inverse: split → overview
+      const t = this._easeInOut(localFrame / phaseFrames);
+      // Start from split, crossfade to overview
+      if (t < 0.4) {
+        const progress = 1; // split at end
+        this._drawSplitScreen(ctx, stopImg, photo, stop, stopIdx, w, h, progress);
+        ctx.globalAlpha = t / 0.4 * 0.6;
+        this._drawImageCover(ctx, overview, 0, 0, w, h);
+        ctx.fillStyle = 'rgba(0,0,0,0.35)';
+        ctx.fillRect(0, 0, w, h);
+        ctx.globalAlpha = 1;
+      } else {
+        this._drawImageCover(ctx, overview, 0, 0, w, h);
+        ctx.fillStyle = 'rgba(0,0,0,0.35)';
+        ctx.fillRect(0, 0, w, h);
+        const routeProgress = (stopIdx + 1) / this._rawStops.length;
+        this._drawRouteOnOverview(ctx, Math.min(routeProgress + 0.05, 1), w, h);
+        this._drawStopsOnOverview(ctx, routeProgress, w, h);
+      }
+    }
+  },
+
+  // Dibujar split screen: satélite top + info bar + foto bottom
+  _drawSplitScreen(ctx, mapImg, photo, stop, stopIdx, w, h, progress) {
+    const topH = Math.floor(h * 0.42);
+    const barH = Math.floor(h * 0.10);
+    const bottomH = h - topH - barH;
+
+    // Top: imagen satélite de la parada
+    if (mapImg) {
+      this._drawImageCover(ctx, mapImg, 0, 0, w, topH);
+      // Overlay sutil
+      ctx.fillStyle = 'rgba(0,0,0,0.15)';
+      ctx.fillRect(0, 0, w, topH);
+      // Pin marker
+      ctx.save();
+      ctx.fillStyle = this.GOLD;
+      ctx.beginPath();
+      ctx.arc(w / 2, topH / 2, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(w / 2, topH / 2, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    } else {
+      ctx.fillStyle = this.MAP_BG;
+      ctx.fillRect(0, 0, w, topH);
+    }
+
+    // Barra central (fondo oscuro con info)
+    ctx.fillStyle = 'rgba(6,5,3,0.92)';
+    ctx.fillRect(0, topH, w, barH);
+    // Líneas doradas
+    ctx.fillStyle = this.GOLD;
+    ctx.fillRect(0, topH, w, 1.5);
+    ctx.fillRect(0, topH + barH - 1.5, w, 1.5);
+
+    ctx.textAlign = 'center';
+    // Nombre de parada
+    ctx.font = 'bold 16px sans-serif';
+    const name = (stop.name || '').substring(0, 30);
+    this._drawText(ctx, name, w / 2, topH + barH * 0.45, this.CREAM);
+    // Día
+    if (stop.day) {
+      ctx.font = 'bold 10px monospace';
+      this._drawText(ctx, `DÍA ${stop.day}`, w / 2, topH + barH * 0.78, this.GOLD);
+    }
+
+    // Bottom: foto del usuario con Ken Burns
+    if (photo) {
+      const kbProgress = this._easeInOut(progress);
+      const zoom = 1.0 + 0.08 * kbProgress;
+      const dirX = (stopIdx % 2 === 0 ? 1 : -1);
+      const panX = dirX * 10 * kbProgress;
+
+      ctx.save();
+      // Clip a la zona inferior
+      ctx.beginPath();
+      ctx.rect(0, topH + barH, w, bottomH);
+      ctx.clip();
+
+      const cy = topH + barH + bottomH / 2;
+      ctx.translate(w / 2 + panX, cy);
+      ctx.scale(zoom, zoom);
+
+      const imgRatio = photo.width / photo.height;
+      const areaRatio = w / bottomH;
+      let dw, dh;
+      if (imgRatio > areaRatio) {
+        dh = bottomH; dw = bottomH * imgRatio;
+      } else {
+        dw = w; dh = w / imgRatio;
+      }
+      ctx.drawImage(photo, -dw / 2, -dh / 2, dw, dh);
+      ctx.restore();
+    } else {
+      ctx.fillStyle = '#0a0a0a';
+      ctx.fillRect(0, topH + barH, w, bottomH);
+      ctx.font = '12px monospace';
+      this._drawText(ctx, 'Sin foto', w / 2, topH + barH + bottomH / 2, this.CREAM2);
+    }
+
+    // Contador
+    ctx.font = '10px monospace';
+    ctx.textAlign = 'right';
+    ctx.globalAlpha = 0.5;
+    this._drawText(ctx, `${stopIdx + 1} / ${this._rawStops.length}`, w - 12, h - 10, this.CREAM2);
+    ctx.globalAlpha = 1;
+    ctx.textAlign = 'center';
+  },
+
+  // Helper: dibujar imagen en modo cover
+  _drawImageCover(ctx, img, x, y, w, h) {
+    if (!img) return;
+    const imgRatio = img.width / img.height;
+    const areaRatio = w / h;
+    let dw, dh;
+    if (imgRatio > areaRatio) {
+      dh = h; dw = h * imgRatio;
+    } else {
+      dw = w; dh = w / imgRatio;
+    }
+    ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
   }
 };
 

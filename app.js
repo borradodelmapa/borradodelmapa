@@ -808,10 +808,12 @@ function _createGuideCard(doc, d, isOffline) {
     <button class="viaje-card-delete" data-doc-id="${doc.id}" title="Eliminar guía">✕</button>
     <button class="viaje-card-dl${isCached ? ' viaje-card-dl-saved' : ''}" data-doc-id="${doc.id}" title="${isCached ? 'Disponible sin conexión' : 'Guardar para leer sin conexión'}">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
-    </button>`;
+    </button>
+    ${(d.photos && d.photos.length >= 3) ? '<button class="viaje-card-video" data-doc-id="' + doc.id + '" title="Crear video">🎬</button>' : ''}`;
   card.addEventListener('click', (e) => {
     if (e.target.closest('.viaje-card-delete')) return;
     if (e.target.closest('.viaje-card-dl')) return;
+    if (e.target.closest('.viaje-card-video')) return;
     if (d.source === 'kv-nivel2' && d.slug) {
       window.location.href = '/destinos/' + d.slug + '.html';
       return;
@@ -844,6 +846,16 @@ function _createGuideCard(doc, d, isOffline) {
     } catch (_) {
       showToast('No hay espacio suficiente en el dispositivo');
     }
+  });
+  // Video de ruta (1 tap)
+  card.querySelector('.viaje-card-video')?.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    if (typeof videoAssembly === 'undefined') return;
+    showToast('Preparando video…');
+    const routeData = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null;
+    const result = await videoAssembly.assemble({ source: 'route', id: doc.id, routeData });
+    if (!result) { showToast('Necesitas al menos 3 fotos en esta ruta'); return; }
+    _showVideoPlayerModal(result.photoUrls, result.params);
   });
   return card;
 }
@@ -1070,6 +1082,9 @@ async function renderGaleria(albumFilter) {
         <span class="galeria-title">Galería</span>
         <div class="galeria-header-btns">
           <label for="galeria-file-input" class="galeria-upload-btn" title="Añadir fotos">+ Añadir</label>
+          ${activeAlbum && activeAlbum !== '__sin_album__' && filtered.length >= 3
+            ? '<button class="galeria-video-btn galeria-album-video-btn" id="galeria-album-video-btn" title="Video del álbum">🎬 ' + escapeHTML(activeAlbumName) + '</button>'
+            : ''}
           <button class="galeria-video-btn" id="galeria-video-btn" title="Crear video">🎬</button>
         </div>
       </div>
@@ -1128,13 +1143,26 @@ async function renderGaleria(albumFilter) {
     });
   });
 
-  // Event: crear video desde galería
-  document.getElementById('galeria-video-btn')?.addEventListener('click', () => {
-    if (typeof videoPlayer === 'undefined') {
+  // Event: crear video desde galería (1 tap → Smart Assembly)
+  document.getElementById('galeria-video-btn')?.addEventListener('click', async () => {
+    if (typeof videoAssembly === 'undefined' || typeof videoPlayer === 'undefined') {
       if (typeof showToast === 'function') showToast('Cargando motor de video…');
       return;
     }
-    _showCreateVideoModal(fotos, albumes, uid, activeAlbum);
+    showToast('Preparando video…');
+    const result = await videoAssembly.assemble({ source: 'gallery' });
+    if (!result) { showToast('Necesitas al menos 3 fotos'); return; }
+    _showVideoPlayerModal(result.photoUrls, result.params);
+  });
+
+  // Event: crear video del álbum activo (1 tap)
+  document.getElementById('galeria-album-video-btn')?.addEventListener('click', async () => {
+    if (typeof videoAssembly === 'undefined') return;
+    showToast('Preparando video…');
+    const result = await videoAssembly.assemble({ source: 'album', id: activeAlbum });
+    if (!result) { showToast('Necesitas al menos 3 fotos en este álbum'); return; }
+    result.params.titulo = activeAlbumName || result.params.titulo;
+    _showVideoPlayerModal(result.photoUrls, result.params);
   });
 
   // Event: subir fotos directamente a la galería (el label dispara el input directamente)
@@ -1147,9 +1175,70 @@ async function renderGaleria(albumFilter) {
     renderGaleria(activeAlbum);
   });
 
-  // Event: click foto → acciones (mover, eliminar)
+  // Event: click foto → acciones (mover, eliminar) + long-press → multi-select
+  let _selectMode = false;
+  let _longPressTimer = null;
+
+  function _exitSelectMode() {
+    _selectMode = false;
+    document.querySelectorAll('.galeria-item.selected').forEach(el => el.classList.remove('selected'));
+    document.querySelector('.galeria-grid')?.classList.remove('galeria-selecting');
+    document.getElementById('galeria-select-bar')?.remove();
+  }
+
+  function _updateSelectBar() {
+    const count = document.querySelectorAll('.galeria-item.selected').length;
+    let bar = document.getElementById('galeria-select-bar');
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.id = 'galeria-select-bar';
+      bar.className = 'galeria-select-bar';
+      document.body.appendChild(bar);
+    }
+    bar.innerHTML = `
+      <span class="galeria-select-count">${count} foto${count !== 1 ? 's' : ''}</span>
+      <button class="galeria-select-video-btn" id="galeria-select-video" ${count < 3 ? 'disabled' : ''}>🎬 Video</button>
+      <button class="galeria-select-cancel-btn" id="galeria-select-cancel">✕</button>`;
+    document.getElementById('galeria-select-cancel')?.addEventListener('click', _exitSelectMode);
+    document.getElementById('galeria-select-video')?.addEventListener('click', async () => {
+      const selectedPhotos = [...document.querySelectorAll('.galeria-item.selected')]
+        .map(el => fotos.find(f => f.id === el.dataset.fotoId))
+        .filter(Boolean);
+      if (selectedPhotos.length < 3) { showToast('Selecciona al menos 3 fotos'); return; }
+      if (typeof videoAssembly === 'undefined') return;
+      showToast('Preparando video…');
+      const result = await videoAssembly.assemble({ source: 'custom', photos: selectedPhotos });
+      if (!result) { showToast('Error al preparar video'); return; }
+      _exitSelectMode();
+      _showVideoPlayerModal(result.photoUrls, result.params);
+    });
+  }
+
   document.querySelectorAll('.galeria-item').forEach(item => {
+    // Long-press para activar modo selección
+    item.addEventListener('touchstart', (e) => {
+      _longPressTimer = setTimeout(() => {
+        _longPressTimer = null;
+        if (!_selectMode) {
+          _selectMode = true;
+          document.querySelector('.galeria-grid')?.classList.add('galeria-selecting');
+        }
+        item.classList.toggle('selected');
+        _updateSelectBar();
+      }, 500);
+    }, { passive: true });
+    item.addEventListener('touchmove', () => { if (_longPressTimer) { clearTimeout(_longPressTimer); _longPressTimer = null; } }, { passive: true });
+    item.addEventListener('touchend', () => { if (_longPressTimer) { clearTimeout(_longPressTimer); _longPressTimer = null; } });
+
+    // Click normal
     item.addEventListener('click', () => {
+      if (_selectMode) {
+        item.classList.toggle('selected');
+        _updateSelectBar();
+        // Si no queda ninguna seleccionada, salir del modo
+        if (!document.querySelectorAll('.galeria-item.selected').length) _exitSelectMode();
+        return;
+      }
       const fotoId = item.dataset.fotoId;
       const foto = fotos.find(f => f.id === fotoId);
       if (!foto) return;
@@ -1542,13 +1631,36 @@ async function _showVideoPlayerModal(photoUrls, params) {
         <button class="video-btn" id="vpm-download" title="Descargar WebM">⬇</button>
         <button class="video-btn" id="vpm-share" title="Compartir">↗</button>
       </div>
+      <details class="vpm-customize" id="vpm-customize">
+        <summary class="vpm-customize-toggle">Personalizar</summary>
+        <div class="vpm-customize-body">
+          <div class="vpm-customize-row">
+            <label class="vpm-customize-label">Estilo</label>
+            <div class="vpm-style-group">
+              <button class="vpm-style-btn ${params.style === 'viaje' ? 'active' : ''}" data-style="viaje">Viaje</button>
+              <button class="vpm-style-btn ${params.style === 'documental' ? 'active' : ''}" data-style="documental">Documental</button>
+              <button class="vpm-style-btn ${params.style === 'historia' ? 'active' : ''}" data-style="historia">Historia</button>
+            </div>
+          </div>
+          <div class="vpm-customize-row">
+            <label class="vpm-customize-label">Título</label>
+            <input class="vpm-input" id="vpm-titulo-input" type="text" value="${escapeHTML(params.titulo || '')}" maxlength="60">
+          </div>
+          <div class="vpm-customize-row">
+            <label class="vpm-customize-label">Frase</label>
+            <input class="vpm-input" id="vpm-highlight-input" type="text" value="${escapeHTML(params.highlight || '')}" maxlength="100" placeholder="Frase memorable (opcional)">
+          </div>
+          <button class="vpm-apply-btn" id="vpm-apply">Aplicar cambios</button>
+        </div>
+      </details>
     </div>`;
 
   document.body.appendChild(modal);
 
   // Inicializar player
   const canvasWrap = document.getElementById('vpm-canvas-wrap');
-  const ok = await videoPlayer.init(canvasWrap, photoUrls, params);
+  let currentParams = { ...params };
+  const ok = await videoPlayer.init(canvasWrap, photoUrls, currentParams);
   const loadingEl = document.getElementById('vpm-loading');
 
   if (!ok) {
@@ -1592,12 +1704,51 @@ async function _showVideoPlayerModal(photoUrls, params) {
     videoPlayer._updateProgress();
   });
 
+  // Panel Personalizar — estilo
+  modal.querySelectorAll('.vpm-style-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      modal.querySelectorAll('.vpm-style-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Panel Personalizar — aplicar cambios
+  document.getElementById('vpm-apply')?.addEventListener('click', async () => {
+    const activeStyle = modal.querySelector('.vpm-style-btn.active');
+    currentParams = {
+      ...currentParams,
+      style: activeStyle ? activeStyle.dataset.style : currentParams.style,
+      titulo: (document.getElementById('vpm-titulo-input')?.value || '').trim() || currentParams.titulo,
+      highlight: (document.getElementById('vpm-highlight-input')?.value || '').trim()
+    };
+    // Actualizar título en el header
+    const tituloEl = modal.querySelector('.video-modal-titulo');
+    if (tituloEl) tituloEl.textContent = currentParams.titulo;
+
+    videoPlayer.pause();
+    if (playBtn) playBtn.textContent = '▶ Play';
+    showToast('Regenerando video…');
+    // Limpiar canvas anterior
+    const oldCanvas = canvasWrap.querySelector('.video-canvas');
+    if (oldCanvas) oldCanvas.remove();
+    const ok2 = await videoPlayer.init(canvasWrap, photoUrls, currentParams);
+    if (ok2) {
+      canvasWrap.appendChild(videoPlayer._canvas);
+      videoPlayer._progressFill = document.getElementById('vpm-progress-fill');
+      videoPlayer._onEnd = () => { if (playBtn) playBtn.textContent = '▶ Play'; };
+      // Cerrar el panel
+      const details = document.getElementById('vpm-customize');
+      if (details) details.removeAttribute('open');
+    }
+  });
+
   // Cerrar
   document.getElementById('vpm-close')?.addEventListener('click', () => {
     videoPlayer.pause();
     modal.remove();
   });
 }
+window._showVideoPlayerModal = _showVideoPlayerModal;
 
 // ═══ MIS VIAJES (legacy — redirige a perfil) ═══
 
@@ -3311,6 +3462,10 @@ async function _loadSavedPins() {
       _savedPinsData.push({ lat: d.lat, lng: d.lng, locName: d.locName || '', place_type: d.place_type || 'other', _pinId: pinId });
     });
   } catch (e) { console.warn('[LoadPins]', e); }
+  // Mostrar botón video si hay 3+ pins con foto
+  const photoPins = _mapPins.filter(m => m._pinData && m._pinData.photoUrl);
+  const videoBtn = document.getElementById('dpick-video-btn');
+  if (videoBtn) videoBtn.style.display = photoPins.length >= 3 ? '' : 'none';
 }
 
 // ── Compartir mapa ──
@@ -4729,6 +4884,14 @@ window.showToast = showToast;
 window.escapeHTML = escapeHTML;
 window.formatMessage = formatMessage;
 window.guardarGuia = guardarGuia;
+// Video desde pins del mapa (1 tap)
+window.videoFromPins = async function() {
+  if (typeof videoAssembly === 'undefined' || typeof videoPlayer === 'undefined') return;
+  showToast('Preparando video…');
+  const result = await videoAssembly.assemble({ source: 'pins' });
+  if (!result) { showToast('Necesitas al menos 3 pins con foto'); return; }
+  _showVideoPlayerModal(result.photoUrls, result.params);
+};
 window.currentUser = null;
 Object.defineProperty(window, 'currentUser', {
   get: () => currentUser,

@@ -91,6 +91,18 @@ const bitacoraRenderer = {
     // Init photo delete listeners
     this._initPhotoDeleteListeners(docId, routeData, docData);
 
+    // Video por día (1 tap)
+    document.querySelectorAll('.diario-day-video-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const dayNum = parseInt(btn.dataset.day);
+        if (typeof videoAssembly === 'undefined' || typeof window._showVideoPlayerModal !== 'function') return;
+        if (typeof showToast === 'function') showToast('Preparando video…');
+        const result = await videoAssembly.assemble({ source: 'day', id: docId, dayNum, routeData });
+        if (!result) { if (typeof showToast === 'function') showToast('Necesitas al menos 3 fotos de este día'); return; }
+        window._showVideoPlayerModal(result.photoUrls, result.params);
+      });
+    });
+
     // Load Google Places photos
     this._loadAllPhotos();
   },
@@ -109,11 +121,13 @@ const bitacoraRenderer = {
     const dayNums = Object.keys(days).map(Number).sort((a, b) => a - b);
     return dayNums.map(dayNum => {
       const day = days[dayNum];
+      const dayPhotoCount = this._currentPhotos.filter(p => p.day === dayNum).length;
       return `
         <div class="diario-day" data-day="${dayNum}">
           <div class="diario-day-header">
             <div class="diario-day-num">DÍA ${dayNum}</div>
             <div class="diario-day-title">${escapeHTML(day.title || '')}</div>
+            ${dayPhotoCount >= 3 ? '<button class="diario-day-video-btn" data-day="' + dayNum + '" title="Video del día">🎬</button>' : ''}
           </div>
           <div class="diario-day-map" id="diario-map-day-${dayNum}"></div>
           <div class="diario-day-note">

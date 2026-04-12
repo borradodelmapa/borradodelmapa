@@ -199,6 +199,9 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
         <svg class="dpick-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" opacity="0.3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>
         <span class="dpick-label">Brujula</span>
       </button>
+      <button class="dpick-btn dpick-video" id="dpick-video-btn" onclick="videoFromPins()" title="Video de mis pins" style="display:none">
+        <span class="dpick-label">🎬</span>
+      </button>
       <button class="dpick-btn dpick-sos" onclick="diarioPickSOS()">
         <span class="dpick-sos-text">SOS</span>
       </button>
@@ -434,6 +437,7 @@ window.SALMA_API="https://salma-api.paco-defoto.workers.dev";
 <script src="flight-watches.js?v=1"></script>
 <script src="salma.js?v=44"></script>
 <script src="video-player.js"></script>
+<script src="video-assembly.js"></script>
 <script src="guide-renderer.js?v=44"></script>
 <script src="bitacora-renderer.js"></script>
 <script src="mapa-ruta.js"></script>

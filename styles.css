@@ -457,6 +457,105 @@ body {
   color:rgba(245,240,232,.4); font-size:13px; font-family:var(--font-mono);
   padding:40px;
 }
+/* Panel Personalizar */
+.vpm-customize {
+  border-top:1px solid var(--linea); margin-top:8px;
+}
+.vpm-customize-toggle {
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.08em;
+  color:rgba(244,239,230,.5); padding:10px 0; cursor:pointer;
+  list-style:none; text-align:center;
+}
+.vpm-customize-toggle::-webkit-details-marker { display:none; }
+.vpm-customize[open] .vpm-customize-toggle { color:var(--dorado); }
+.vpm-customize-body {
+  display:flex; flex-direction:column; gap:10px; padding:0 0 12px;
+}
+.vpm-customize-row {
+  display:flex; align-items:center; gap:10px;
+}
+.vpm-customize-label {
+  font-family:var(--font-mono); font-size:10px; letter-spacing:.06em;
+  color:rgba(244,239,230,.5); min-width:48px; text-transform:uppercase;
+}
+.vpm-style-group { display:flex; gap:6px; }
+.vpm-style-btn {
+  padding:5px 12px; border-radius:var(--radius-pill);
+  font-family:var(--font-mono); font-size:11px;
+  background:rgba(255,255,255,.04); border:1px solid var(--linea);
+  color:rgba(244,239,230,.6); cursor:pointer; transition:all .15s;
+}
+.vpm-style-btn.active {
+  background:rgba(212,160,23,.15); border-color:var(--dorado); color:var(--dorado);
+}
+.vpm-input {
+  flex:1; padding:6px 10px; border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.04); border:1px solid var(--linea);
+  color:var(--crema); font-family:var(--font-body); font-size:13px;
+  outline:none; transition:border-color .15s;
+}
+.vpm-input:focus { border-color:var(--dorado); }
+.vpm-apply-btn {
+  align-self:center; padding:8px 24px; border-radius:var(--radius-pill);
+  background:var(--dorado); border:none; color:var(--negro);
+  font-family:var(--font-mono); font-size:11px; font-weight:700;
+  letter-spacing:.06em; cursor:pointer; transition:opacity .15s;
+}
+.vpm-apply-btn:hover { opacity:.85; }
+/* Galería multi-select */
+.galeria-selecting .galeria-item {
+  position:relative;
+}
+.galeria-selecting .galeria-item::after {
+  content:''; position:absolute; top:6px; right:6px;
+  width:20px; height:20px; border-radius:50%;
+  border:2px solid rgba(255,255,255,.5); background:rgba(0,0,0,.3);
+  transition:all .15s;
+}
+.galeria-selecting .galeria-item.selected::after {
+  background:var(--dorado); border-color:var(--dorado);
+  box-shadow:0 0 8px rgba(212,160,23,.4);
+}
+.galeria-selecting .galeria-item.selected {
+  outline:2px solid var(--dorado); outline-offset:-2px;
+  border-radius:var(--radius-sm);
+}
+.galeria-select-bar {
+  position:fixed; bottom:70px; left:50%; transform:translateX(-50%);
+  z-index:1200; display:flex; align-items:center; gap:12px;
+  padding:10px 20px; border-radius:var(--radius-pill);
+  background:rgba(6,5,3,.92); border:1px solid var(--dorado);
+  backdrop-filter:blur(12px);
+}
+.galeria-select-count {
+  font-family:var(--font-mono); font-size:12px;
+  color:var(--crema); letter-spacing:.04em;
+}
+.galeria-select-video-btn {
+  padding:6px 16px; border-radius:var(--radius-pill);
+  background:var(--dorado); border:none; color:var(--negro);
+  font-family:var(--font-mono); font-size:11px; font-weight:700;
+  cursor:pointer; transition:opacity .15s;
+}
+.galeria-select-video-btn:disabled { opacity:.35; cursor:default; }
+.galeria-select-cancel-btn {
+  width:28px; height:28px; border-radius:50%; display:flex;
+  align-items:center; justify-content:center;
+  background:rgba(255,255,255,.06); border:1px solid var(--linea);
+  color:rgba(244,239,230,.6); font-size:14px; cursor:pointer;
+}
+/* Botón video del álbum */
+.galeria-album-video-btn {
+  font-size:11px;
+}
+/* Botón video en día del diario */
+.diario-day-video-btn {
+  background:none; border:1px solid rgba(212,160,23,.3);
+  color:var(--dorado); border-radius:var(--radius-pill);
+  padding:3px 10px; font-size:12px; cursor:pointer;
+  margin-left:auto; transition:all .15s;
+}
+.diario-day-video-btn:hover { border-color:var(--dorado); background:rgba(212,160,23,.1); }
 .galeria-empty { text-align:center; color:rgba(245,240,232,.4); font-size:13px; padding:40px 16px; line-height:1.6; }
 .galeria-empty strong { color:var(--dorado); }
 .galeria-back {
@@ -1182,6 +1281,18 @@ body {
   color:var(--dorado);
 }
 .viaje-card-dl.viaje-card-dl-saved:hover { background:rgba(212,160,23,.25); }
+/* Botón video en card de ruta */
+.viaje-card-video {
+  position:absolute; top:8px; right:80px; z-index:2;
+  width:28px; height:28px; border-radius:50%;
+  background:rgba(0,0,0,.6); border:1px solid rgba(212,160,23,.4);
+  color:var(--dorado); font-size:12px; line-height:1;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  opacity:0; transition:opacity .2s;
+  backdrop-filter:blur(4px);
+}
+.viaje-card:hover .viaje-card-video { opacity:1; }
+@media (max-width:600px) { .viaje-card-video { opacity:.7; } }
 @media (max-width:600px) { .viaje-card-delete { opacity:.7; } .viaje-card-dl { opacity:.6; } .viaje-card-dl.viaje-card-dl-saved { opacity:1; } }
 .viaje-card-new {
   border-style:dashed; display:flex; flex-direction:column;
@@ -2979,7 +3090,7 @@ body {
 
 /* Timeline */
 .diario-day { margin-bottom:32px; }
-.diario-day-header { margin-bottom:12px; padding-bottom:8px; border-bottom:2px solid rgba(212,160,23,.2); }
+.diario-day-header { margin-bottom:12px; padding-bottom:8px; border-bottom:2px solid rgba(212,160,23,.2); display:flex; align-items:center; gap:8px; }
 .diario-day-num { font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.15em; color:var(--dorado); }
 .diario-day-title { font-size:16px; font-weight:600; color:rgba(244,239,230,.85); margin-top:2px; }
 .diario-day-map { border-radius:10px; overflow:hidden; margin-bottom:12px; position:relative; z-index:1; }

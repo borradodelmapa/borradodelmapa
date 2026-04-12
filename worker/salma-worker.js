@@ -3929,12 +3929,15 @@ export default {
       const zoom = url.searchParams.get('zoom') || '14';
       const size = url.searchParams.get('size') || '640x640';
       const maptype = url.searchParams.get('maptype') || 'satellite';
+      const scale = url.searchParams.get('scale') || '1';
+      const pathEnc = url.searchParams.get('path') || '';
       const apiKey = url.searchParams.get('key') || env.GOOGLE_PLACES_KEY;
       if (!lat || !lng || !apiKey) {
         return new Response('Missing params', { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } });
       }
       try {
-        const gmUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${size}&maptype=${maptype}&key=${apiKey}`;
+        let gmUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${size}&maptype=${maptype}&scale=${scale}&key=${apiKey}`;
+        if (pathEnc) gmUrl += `&path=color:0xD4A017FF|weight:3|enc:${encodeURIComponent(pathEnc)}`;
         const imgRes = await fetch(gmUrl);
         if (!imgRes.ok) return new Response('Map error', { status: 502, headers: { 'Access-Control-Allow-Origin': '*' } });
         const imgBlob = await imgRes.arrayBuffer();
