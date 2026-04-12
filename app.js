@@ -4115,9 +4115,9 @@ async function generateDiarioVideoStory() {
     _diario.mapImg = scaled;
   } catch(e) { _diario.mapImg = null; }
 
-  // 2. Crear video oculto para leer frames
+  // 2. Crear video oculto para leer frames (SIN muted para capturar audio)
   const video = document.createElement('video');
-  video.muted = true; video.playsInline = true;
+  video.playsInline = true;
   video.src = _diario.videoUrl;
   await new Promise(r => { video.onloadeddata = r; });
   if (_diario.videoTrimStart > 0) {
@@ -4142,10 +4142,21 @@ async function generateDiarioVideoStory() {
   _diarioSaved = false;
   _saveDiarioVideoToGallery();
 
-  // 6. Grabar el canvas con MediaRecorder
-  let recorder = null, chunks = [], mime = '';
+  // 6. Grabar el canvas con MediaRecorder + audio del vídeo
+  let recorder = null, chunks = [], mime = '', audioCtx = null;
   if (typeof MediaRecorder !== 'undefined') {
     const stream = c.captureStream(30);
+
+    // Capturar audio del vídeo y añadirlo al stream del canvas
+    try {
+      audioCtx = new AudioContext();
+      const src = audioCtx.createMediaElementSource(video);
+      const dest = audioCtx.createMediaStreamDestination();
+      src.connect(dest);   // audio → grabación
+      // NO conectar a audioCtx.destination → silencio en altavoces
+      dest.stream.getAudioTracks().forEach(t => stream.addTrack(t));
+    } catch(e) { audioCtx = null; /* sin audio, no pasa nada */ }
+
     mime = 'video/mp4';
     if (!MediaRecorder.isTypeSupported(mime)) {
       mime = 'video/webm;codecs=vp9';
@@ -4157,11 +4168,14 @@ async function generateDiarioVideoStory() {
   }
 
   // 7. Play + render loop (mismo _drawDiarioKodak que foto)
-  await video.play();
+  try { await video.play(); } catch(e) {
+    // Si falla sin muted (restricción autoplay) → muted y reintentar (sin audio)
+    video.muted = true; await video.play();
+  }
   const dur = Math.min(15, _diario.videoDuration || 15);
   const loc = _diario.locName || '';
   const t0 = performance.now();
-  _diarioVideoState = { video, recorder };
+  _diarioVideoState = { video, recorder, audioCtx };
 
   function drawFrame() {
     if (!_diarioVideoState) return;
@@ -4183,6 +4197,7 @@ async function generateDiarioVideoStory() {
     _diario.videoExt = mime.includes('mp4') ? 'mp4' : 'webm';
     if (typeof showToast === 'function') showToast('✓ Kodak listo');
   }
+  if (audioCtx) audioCtx.close().catch(() => {});
   _diarioVideoState = null;
 }
 
@@ -4400,6 +4415,7 @@ function closeDiarioResult() {
     _diarioVideoState.video.pause();
     if (_diarioVideoState.recorder && _diarioVideoState.recorder.state === 'recording')
       _diarioVideoState.recorder.stop();
+    if (_diarioVideoState.audioCtx) _diarioVideoState.audioCtx.close().catch(() => {});
     _diarioVideoState = null;
   }
   const el = document.getElementById('diario-result');
