@@ -1087,6 +1087,7 @@ async function renderGaleria(albumFilter) {
             ? '<button class="galeria-video-btn galeria-album-video-btn" id="galeria-album-video-btn" title="Video del álbum">🎬 ' + escapeHTML(activeAlbumName) + '</button>'
             : ''}
           <button class="galeria-video-btn" id="galeria-video-btn" title="Crear video">🎬</button>
+          <button class="galeria-video-btn" id="galeria-select-btn" title="Seleccionar fotos">☑</button>
         </div>
       </div>
       <input type="file" id="galeria-file-input" accept="image/*" multiple style="display:none">
@@ -1197,9 +1198,16 @@ async function renderGaleria(albumFilter) {
     });
   });
 
-  // Event: click foto → acciones (mover, eliminar) + long-press → multi-select
+  // Event: click foto → acciones (mover, eliminar) + long-press/botón → multi-select
   let _selectMode = false;
   let _longPressTimer = null;
+
+  function _enterSelectMode() {
+    if (_selectMode) return;
+    _selectMode = true;
+    document.querySelector('.galeria-grid')?.classList.add('galeria-selecting');
+    _updateSelectBar();
+  }
 
   function _exitSelectMode() {
     _selectMode = false;
@@ -1257,15 +1265,17 @@ async function renderGaleria(albumFilter) {
     });
   }
 
+  // Botón "Seleccionar" en el header
+  document.getElementById('galeria-select-btn')?.addEventListener('click', () => {
+    if (_selectMode) { _exitSelectMode(); } else { _enterSelectMode(); }
+  });
+
   document.querySelectorAll('.galeria-item').forEach(item => {
     // Long-press para activar modo selección
     item.addEventListener('touchstart', (e) => {
       _longPressTimer = setTimeout(() => {
         _longPressTimer = null;
-        if (!_selectMode) {
-          _selectMode = true;
-          document.querySelector('.galeria-grid')?.classList.add('galeria-selecting');
-        }
+        _enterSelectMode();
         item.classList.toggle('selected');
         _updateSelectBar();
       }, 500);
