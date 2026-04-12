@@ -1097,6 +1097,7 @@ async function renderGaleria(albumFilter) {
             ? `<button class="galeria-upload-btn" id="galeria-add-to-album-btn" title="Añadir fotos existentes al álbum">+ Fotos</button>
                <label for="galeria-file-input" class="galeria-video-btn" title="Subir nuevas fotos">📤</label>
                ${filtered.length >= 3 ? '<button class="galeria-video-btn" id="galeria-album-video-btn" title="Video del álbum">🎬</button>' : ''}
+               ${filtered.length > 0 ? '<button class="galeria-video-btn" id="galeria-select-btn" title="Seleccionar fotos">☑</button>' : ''}
                <button class="galeria-video-btn galeria-delete-album-btn" id="galeria-delete-album-btn" title="Eliminar álbum">🗑</button>`
             : `<label for="galeria-file-input" class="galeria-upload-btn" title="Añadir fotos">+ Añadir</label>
                ${fotos.length >= 3 ? '<button class="galeria-video-btn" id="galeria-video-btn" title="Crear video">🎬</button>' : ''}
