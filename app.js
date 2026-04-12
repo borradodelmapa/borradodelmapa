@@ -1219,16 +1219,37 @@ async function renderGaleria(albumFilter) {
     }
     bar.innerHTML = `
       <span class="galeria-select-count">${count} foto${count !== 1 ? 's' : ''}</span>
+      <button class="galeria-select-delete-btn" id="galeria-select-delete">🗑 Eliminar</button>
       <button class="galeria-select-video-btn" id="galeria-select-video" ${count < 3 ? 'disabled' : ''}>🎬 Video</button>
       <button class="galeria-select-cancel-btn" id="galeria-select-cancel">✕</button>`;
     document.getElementById('galeria-select-cancel')?.addEventListener('click', _exitSelectMode);
+    document.getElementById('galeria-select-delete')?.addEventListener('click', async () => {
+      const selectedEls = [...document.querySelectorAll('.galeria-item.selected')];
+      const selectedPhotos = selectedEls.map(el => fotos.find(f => f.id === el.dataset.fotoId)).filter(Boolean);
+      if (!selectedPhotos.length) return;
+      if (!confirm(`¿Eliminar ${selectedPhotos.length} foto${selectedPhotos.length !== 1 ? 's' : ''}?`)) return;
+      for (const foto of selectedPhotos) {
+        try {
+          await db.collection('users').doc(uid).collection('fotos').doc(foto.id).delete();
+          if (foto.key) {
+            fetch(window.SALMA_API + '/delete-photo', {
+              method: 'POST', headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ key: foto.key, uid })
+            }).catch(() => {});
+          }
+        } catch (_) {}
+      }
+      showToast(`${selectedPhotos.length} foto${selectedPhotos.length !== 1 ? 's' : ''} eliminada${selectedPhotos.length !== 1 ? 's' : ''}`);
+      _exitSelectMode();
+      renderGaleria(activeAlbum);
+    });
     document.getElementById('galeria-select-video')?.addEventListener('click', async () => {
       const selectedPhotos = [...document.querySelectorAll('.galeria-item.selected')]
         .map(el => fotos.find(f => f.id === el.dataset.fotoId))
         .filter(Boolean);
       if (selectedPhotos.length < 3) { showToast('Selecciona al menos 3 fotos'); return; }
       if (typeof videoAssembly === 'undefined') return;
-  
+
       const result = await videoAssembly.assemble({ source: 'custom', photos: selectedPhotos });
       if (!result) { showToast('Error al preparar video'); return; }
       _exitSelectMode();

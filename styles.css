@@ -538,6 +538,13 @@ body {
   cursor:pointer; transition:opacity .15s;
 }
 .galeria-select-video-btn:disabled { opacity:.35; cursor:default; }
+.galeria-select-delete-btn {
+  padding:6px 14px; border-radius:var(--radius-pill);
+  background:rgba(200,50,50,.2); border:1px solid rgba(200,50,50,.5);
+  color:#ef4444; font-family:var(--font-mono); font-size:11px; font-weight:700;
+  cursor:pointer; transition:all .15s;
+}
+.galeria-select-delete-btn:hover { background:rgba(200,50,50,.35); }
 .galeria-select-cancel-btn {
   width:28px; height:28px; border-radius:50%; display:flex;
   align-items:center; justify-content:center;
