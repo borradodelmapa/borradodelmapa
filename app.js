@@ -855,7 +855,7 @@ function _createGuideCard(doc, d, isOffline) {
     const routeData = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null;
     const result = await videoAssembly.assemble({ source: 'route', id: doc.id, routeData });
     if (!result) { showToast('Necesitas al menos 3 fotos en esta ruta'); return; }
-    _showVideoEditModal(result);
+    _showVideoModal(result.photoUrls, result.params);
   });
   return card;
 }
@@ -1159,7 +1159,7 @@ async function renderGaleria(albumFilter) {
 
     const result = await videoAssembly.assemble({ source: 'gallery' });
     if (!result) { showToast('Necesitas al menos 3 fotos'); return; }
-    _showVideoEditModal(result);
+    _showVideoModal(result.photoUrls, result.params);
   });
 
   // Event: crear video del álbum activo → edición
@@ -1169,7 +1169,7 @@ async function renderGaleria(albumFilter) {
     const result = await videoAssembly.assemble({ source: 'album', id: activeAlbum });
     if (!result) { showToast('Necesitas al menos 3 fotos en este álbum'); return; }
     result.params.titulo = activeAlbumName || result.params.titulo;
-    _showVideoEditModal(result);
+    _showVideoModal(result.photoUrls, result.params);
   });
 
   // Event: subir fotos directamente a la galería (el label dispara el input directamente)
@@ -1266,7 +1266,7 @@ async function renderGaleria(albumFilter) {
       const result = await videoAssembly.assemble({ source: 'custom', photos: selectedPhotos });
       if (!result) { showToast('Error al preparar video'); return; }
       _exitSelectMode();
-      _showVideoEditModal(result);
+      _showVideoModal(result.photoUrls, result.params);
     });
   }
 
@@ -1509,372 +1509,142 @@ function _compressImageLocal(file, maxW, quality) {
   });
 }
 
-// ─── Modal de CREACIÓN DE VIDEO desde galería ───
-function _showCreateVideoModal(fotos, albumes, uid, activeAlbum) {
-  const existing = document.getElementById('create-video-modal');
-  if (existing) existing.remove();
-
-  // Helpers de filtro
-  const visual = (arr) => arr.filter(f => f.tag !== 'documento' && f.tag !== 'cartel' && f.url);
-  const hoy    = new Date().toISOString().slice(0, 10);
-
-  const sets = {
-    jornada: visual(fotos.filter(f => f.createdAt && f.createdAt.slice(0, 10) === hoy)),
-    resumen: visual(fotos),
-    album:   visual(activeAlbum && activeAlbum !== '__sin_album__'
-               ? fotos.filter(f => f.albumId === activeAlbum)
-               : fotos)
-  };
-
-  const albumName = activeAlbum && activeAlbum !== '__sin_album__'
-    ? (albumes.find(a => a.id === activeAlbum)?.nombre || 'Álbum')
-    : 'Todas';
-
-  // Título por defecto
-  let defaultTitle = 'Mi viaje';
-  if (typeof salma !== 'undefined' && salma.currentRoute?.title) {
-    defaultTitle = salma.currentRoute.title;
-  } else {
-    defaultTitle = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
-  }
-
-  // Paradas de ruta (para la escena de mapa si hay ruta activa)
-  let routeStops = null;
-  if (typeof salma !== 'undefined' && salma.currentRoute?.stops?.length >= 2) {
-    routeStops = salma.currentRoute.stops
-      .filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01)
-      .map(s => ({ name: s.name || '', lat: s.lat, lng: s.lng, day: s.day }));
-  }
-
-  const tipos = [
-    { key: 'jornada', label: 'Jornada de hoy',    emoji: '📅', count: sets.jornada.length },
-    { key: 'resumen', label: 'Todo el viaje',     emoji: '🌍', count: sets.resumen.length },
-    { key: 'album',   label: albumName,            emoji: '📁', count: sets.album.length }
-  ];
-
-  const modal = document.createElement('div');
-  modal.id = 'create-video-modal';
-  modal.className = 'modal-overlay active';
-
-  modal.innerHTML = `
-    <div class="modal video-create-modal">
-      <button class="modal-close" id="cv-close">&times;</button>
-      <div class="video-create-title">🎬 Crear video</div>
-
-      <div class="video-create-section">Formato</div>
-      <div class="video-formato-group">
-        <button class="video-formato-btn active" data-formato="documental">
-          <span class="video-formato-icon">📽️</span>
-          <span class="video-formato-name">Documental</span>
-          <span class="video-formato-desc">Mapa animado · Ken Burns · 20s</span>
-        </button>
-        <button class="video-formato-btn" data-formato="historia">
-          <span class="video-formato-icon">📱</span>
-          <span class="video-formato-name">Historia</span>
-          <span class="video-formato-desc">Instagram Stories · 2s/foto</span>
-        </button>
-      </div>
-
-      <div class="video-create-section">Tipo de video</div>
-      <div class="video-tipo-group">
-        ${tipos.map(t => `
-          <button class="video-tipo-btn ${t.key === 'jornada' ? 'active' : ''}" data-tipo="${t.key}">
-            <span class="video-tipo-emoji">${t.emoji}</span>
-            <span class="video-tipo-label">${escapeHTML(t.label)}</span>
-            <span class="video-tipo-count">${t.count} fotos</span>
-          </button>`).join('')}
-      </div>
-
-      <div class="video-create-section">Título</div>
-      <input class="video-create-input" id="cv-titulo" type="text"
-        placeholder="Ej: Koh Samui · Día 3" value="${escapeHTML(defaultTitle)}" maxlength="60">
-
-      <div class="video-create-section">Frase memorable <span style="opacity:.45">(opcional)</span></div>
-      <input class="video-create-input" id="cv-highlight" type="text"
-        placeholder="Ej: El mejor atardecer de mi vida" maxlength="100">
-
-      <div class="video-create-section">Fotos seleccionadas</div>
-      <div class="video-foto-preview" id="cv-foto-preview"></div>
-
-      <button class="video-create-gen-btn" id="cv-generar" disabled>▶ Generar video</button>
-    </div>`;
-
-  document.body.appendChild(modal);
-
-  // Estado activo
-  let tipoActivo    = 'jornada';
-  let formatoActivo = 'documental';
-
-  // Listeners formato
-  modal.querySelectorAll('.video-formato-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      modal.querySelectorAll('.video-formato-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      formatoActivo = btn.dataset.formato;
-    });
-  });
-
-  const updatePreview = () => {
-    const sel = sets[tipoActivo] || [];
-    const genBtn = document.getElementById('cv-generar');
-    const preview = document.getElementById('cv-foto-preview');
-
-    if (genBtn) {
-      genBtn.disabled = sel.length === 0;
-      genBtn.textContent = sel.length === 0
-        ? '⚠ Sin fotos para este tipo'
-        : `▶ Generar video (${Math.min(sel.length, 12)} fotos)`;
-    }
-
-    if (preview) {
-      const visible = sel.slice(0, 8);
-      const extra   = sel.length - visible.length;
-      preview.innerHTML = visible.length === 0
-        ? '<span class="video-foto-empty">No hay fotos para este tipo</span>'
-        : visible.map(f =>
-            `<img src="${escapeHTML(f.url)}" class="video-foto-thumb" alt="">`
-          ).join('') + (extra > 0 ? `<span class="video-foto-more">+${extra}</span>` : '');
-    }
-  };
-
-  updatePreview();
-
-  // Listeners tipo
-  modal.querySelectorAll('.video-tipo-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      modal.querySelectorAll('.video-tipo-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      tipoActivo = btn.dataset.tipo;
-      updatePreview();
-    });
-  });
-
-  // Cerrar
-  modal.querySelector('#cv-close').addEventListener('click', () => modal.remove());
-  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
-
-  // Generar
-  modal.querySelector('#cv-generar').addEventListener('click', async () => {
-    const sel    = (sets[tipoActivo] || []).slice(0, 12);
-    if (!sel.length) return;
-
-    const titulo    = (document.getElementById('cv-titulo')?.value || defaultTitle).trim();
-    const highlight = (document.getElementById('cv-highlight')?.value || '').trim();
-    const params    = { titulo, highlight, tipo: tipoActivo, style: formatoActivo };
-    if (routeStops && formatoActivo === 'documental') params.stops = routeStops;
-
-    modal.remove();
-    await _showVideoPlayerModal(sel.map(f => f.url), params);
-  });
-}
-
-// ─── Modal EDICIÓN de video (elegir fotos, estilo, título) ───
-function _showVideoEditModal(result) {
-  const existing = document.getElementById('video-edit-modal');
-  if (existing) existing.remove();
-
-  let { photoUrls, params } = result;
-  let selectedUrls = [...photoUrls];
-  let activeStyle = params.style || 'documental';
-
-  const modal = document.createElement('div');
-  modal.id = 'video-edit-modal';
-  modal.className = 'video-modal-overlay';
-
-  const hasStops = params.stops && params.stops.length >= 2;
-
-  modal.innerHTML = `
-    <div class="video-edit-inner">
-      <div class="video-edit-header">
-        <button class="video-modal-close" id="ve-close">✕</button>
-        <span class="video-edit-title">Crear video</span>
-      </div>
-
-      <div class="video-edit-section">Estilo</div>
-      <div class="video-edit-styles">
-        ${hasStops ? '<button class="ve-style-btn ' + (activeStyle === 'viaje' ? 'active' : '') + '" data-style="viaje">Viaje</button>' : ''}
-        <button class="ve-style-btn ${activeStyle === 'documental' ? 'active' : ''}" data-style="documental">Documental</button>
-        <button class="ve-style-btn ${activeStyle === 'historia' ? 'active' : ''}" data-style="historia">Historia</button>
-      </div>
-
-      <div class="video-edit-section">Título</div>
-      <input class="video-edit-input" id="ve-titulo" type="text" value="${escapeHTML(params.titulo || '')}" maxlength="60">
-
-      <div class="video-edit-section">Frase memorable <span style="opacity:.45">(opcional)</span></div>
-      <input class="video-edit-input" id="ve-highlight" type="text" placeholder="Ej: El mejor atardecer de mi vida" maxlength="100">
-
-      <div class="video-edit-section">Fotos (${selectedUrls.length})</div>
-      <div class="video-edit-photos" id="ve-photos">
-        ${selectedUrls.map((url, i) => `
-          <div class="ve-photo" data-idx="${i}">
-            <img src="${escapeHTML(url)}" alt="">
-            <button class="ve-photo-remove" data-idx="${i}">✕</button>
-          </div>`).join('')}
-      </div>
-
-      <button class="video-edit-gen-btn" id="ve-generar" ${selectedUrls.length < 3 ? 'disabled' : ''}>▶ Generar video (${selectedUrls.length} fotos)</button>
-    </div>`;
-
-  document.body.appendChild(modal);
-
-  // Estilo
-  modal.querySelectorAll('.ve-style-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      modal.querySelectorAll('.ve-style-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      activeStyle = btn.dataset.style;
-    });
-  });
-
-  // Eliminar foto
-  function _refreshPhotos() {
-    const container = document.getElementById('ve-photos');
-    if (container) {
-      container.innerHTML = selectedUrls.map((url, i) => `
-        <div class="ve-photo" data-idx="${i}">
-          <img src="${escapeHTML(url)}" alt="">
-          <button class="ve-photo-remove" data-idx="${i}">✕</button>
-        </div>`).join('');
-      // Re-bind remove buttons
-      container.querySelectorAll('.ve-photo-remove').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          selectedUrls.splice(parseInt(btn.dataset.idx), 1);
-          _refreshPhotos();
-        });
-      });
-    }
-    const genBtn = document.getElementById('ve-generar');
-    if (genBtn) {
-      genBtn.disabled = selectedUrls.length < 3;
-      genBtn.textContent = selectedUrls.length < 3
-        ? '⚠ Mínimo 3 fotos'
-        : `▶ Generar video (${selectedUrls.length} fotos)`;
-    }
-  }
-
-  // Bind initial remove buttons
-  modal.querySelectorAll('.ve-photo-remove').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      selectedUrls.splice(parseInt(btn.dataset.idx), 1);
-      _refreshPhotos();
-    });
-  });
-
-  // Cerrar
-  document.getElementById('ve-close')?.addEventListener('click', () => modal.remove());
-  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
-
-  // Generar
-  document.getElementById('ve-generar')?.addEventListener('click', async () => {
-    if (selectedUrls.length < 3) return;
-    const titulo = (document.getElementById('ve-titulo')?.value || '').trim() || params.titulo;
-    const highlight = (document.getElementById('ve-highlight')?.value || '').trim();
-    const finalParams = { ...params, titulo, highlight, style: activeStyle };
-    modal.remove();
-    await _showVideoPlayerModal(selectedUrls, finalParams);
-  });
-}
-window._showVideoEditModal = _showVideoEditModal;
-
-// ─── Modal PLAYER de video (pantalla completa) ───
-async function _showVideoPlayerModal(photoUrls, params) {
+// ─── Modal UNIFICADO de video — Click & Play ───
+async function _showVideoModal(photoUrls, params) {
   if (typeof videoPlayer === 'undefined') {
     if (typeof showToast === 'function') showToast('Motor de video no cargado');
     return;
   }
 
+  // Limpiar modal anterior
   const existing = document.getElementById('video-player-modal');
   if (existing) { videoPlayer.pause(); existing.remove(); }
+
+  let _exporting = false;
 
   const modal = document.createElement('div');
   modal.id = 'video-player-modal';
   modal.className = 'video-modal-overlay';
 
+  const hasStops = params.stops && params.stops.length >= 2;
+
   modal.innerHTML = `
     <div class="video-modal-inner">
       <div class="video-modal-header">
-        <button class="video-modal-close" id="vpm-close">✕ Cerrar</button>
+        <button class="video-modal-close" id="vm-close">✕</button>
         <span class="video-modal-titulo">${escapeHTML(params.titulo || '')}</span>
       </div>
-      <div class="video-modal-canvas-wrap" id="vpm-canvas-wrap">
-        <div class="video-modal-loading" id="vpm-loading">Preparando video…</div>
-      </div>
-      <div class="video-controls" id="vpm-controls" style="display:none">
-        <button class="video-btn" id="vpm-play">▶ Play</button>
-        <div class="video-progress" id="vpm-progress">
-          <div class="video-progress-fill" id="vpm-progress-fill"></div>
+      <div class="video-modal-canvas-wrap" id="vm-canvas-wrap">
+        <div class="video-modal-loading" id="vm-loading">Preparando video…</div>
+        <div class="video-tap-icon" id="vm-tap-icon">▶</div>
+        <div class="video-export-overlay" id="vm-export" style="display:none">
+          <div class="video-export-text" id="vm-export-text">Exportando… 0%</div>
+          <div class="video-export-bar"><div class="video-export-bar-fill" id="vm-export-fill"></div></div>
         </div>
-        <button class="video-btn" id="vpm-download" title="Descargar WebM">⬇</button>
-        <button class="video-btn" id="vpm-share" title="Compartir">↗</button>
       </div>
-      <details class="vpm-customize" id="vpm-customize">
+      <div class="video-progress" id="vm-progress" style="margin-top:6px">
+        <div class="video-progress-fill" id="vm-progress-fill"></div>
+      </div>
+      <div class="video-modal-actions">
+        <button class="vm-share-btn" id="vm-share" disabled>Compartir</button>
+        <button class="vm-save-btn" id="vm-save" disabled>Guardar</button>
+      </div>
+      <details class="vpm-customize" id="vm-customize">
         <summary class="vpm-customize-toggle">Personalizar</summary>
         <div class="vpm-customize-body">
           <div class="vpm-customize-row">
             <label class="vpm-customize-label">Estilo</label>
             <div class="vpm-style-group">
-              <button class="vpm-style-btn ${params.style === 'viaje' ? 'active' : ''}" data-style="viaje">Viaje</button>
+              ${hasStops ? '<button class="vpm-style-btn ' + (params.style === 'viaje' ? 'active' : '') + '" data-style="viaje">Viaje</button>' : ''}
               <button class="vpm-style-btn ${params.style === 'documental' ? 'active' : ''}" data-style="documental">Documental</button>
               <button class="vpm-style-btn ${params.style === 'historia' ? 'active' : ''}" data-style="historia">Historia</button>
             </div>
           </div>
           <div class="vpm-customize-row">
             <label class="vpm-customize-label">Título</label>
-            <input class="vpm-input" id="vpm-titulo-input" type="text" value="${escapeHTML(params.titulo || '')}" maxlength="60">
+            <input class="vpm-input" id="vm-titulo-input" type="text" value="${escapeHTML(params.titulo || '')}" maxlength="60">
           </div>
-          <div class="vpm-customize-row">
-            <label class="vpm-customize-label">Frase</label>
-            <input class="vpm-input" id="vpm-highlight-input" type="text" value="${escapeHTML(params.highlight || '')}" maxlength="100" placeholder="Frase memorable (opcional)">
-          </div>
-          <button class="vpm-apply-btn" id="vpm-apply">Aplicar cambios</button>
+          <button class="vpm-apply-btn" id="vm-apply">Aplicar cambios</button>
         </div>
       </details>
     </div>`;
 
   document.body.appendChild(modal);
 
-  // Inicializar player
-  const canvasWrap = document.getElementById('vpm-canvas-wrap');
+  // Refs
+  const canvasWrap  = document.getElementById('vm-canvas-wrap');
+  const exportOvr   = document.getElementById('vm-export');
+  const exportText  = document.getElementById('vm-export-text');
+  const exportFill  = document.getElementById('vm-export-fill');
+  const tapIcon     = document.getElementById('vm-tap-icon');
+  const shareBtn    = document.getElementById('vm-share');
+  const saveBtn     = document.getElementById('vm-save');
   let currentParams = { ...params };
+
+  // Helpers
+  function _flashTap(icon) {
+    tapIcon.textContent = icon;
+    tapIcon.classList.add('flash');
+    setTimeout(() => tapIcon.classList.remove('flash'), 400);
+  }
+
+  function _showExport() {
+    _exporting = true;
+    shareBtn.disabled = true;
+    saveBtn.disabled = true;
+    exportOvr.style.display = '';
+    exportText.textContent = 'Exportando… 0%';
+    exportFill.style.width = '0%';
+  }
+
+  function _hideExport() {
+    _exporting = false;
+    shareBtn.disabled = false;
+    saveBtn.disabled = false;
+    exportOvr.style.display = 'none';
+  }
+
+  function _onProgress(pct) {
+    exportText.textContent = 'Exportando… ' + pct + '%';
+    exportFill.style.width = pct + '%';
+  }
+
+  // Inicializar player
   const ok = await videoPlayer.init(canvasWrap, photoUrls, currentParams);
-  const loadingEl = document.getElementById('vpm-loading');
+  const loadingEl = document.getElementById('vm-loading');
 
   if (!ok) {
-    if (loadingEl) loadingEl.textContent = '⚠ No se pudieron cargar las fotos. Inténtalo de nuevo.';
+    if (loadingEl) loadingEl.textContent = '⚠ No se pudieron cargar las fotos';
     return;
   }
 
   if (loadingEl) loadingEl.remove();
   canvasWrap.appendChild(videoPlayer._canvas);
+  shareBtn.disabled = false;
+  saveBtn.disabled = false;
 
-  videoPlayer._progressFill = document.getElementById('vpm-progress-fill');
-  videoPlayer._onEnd = () => {
-    const btn = document.getElementById('vpm-play');
-    if (btn) btn.textContent = '▶ Play';
-  };
+  videoPlayer._progressFill = document.getElementById('vm-progress-fill');
+  videoPlayer._onEnd = () => _flashTap('▶');
 
-  const controls = document.getElementById('vpm-controls');
-  if (controls) controls.style.display = '';
+  // AUTO-PLAY
+  videoPlayer.play();
 
-  // Botón play
-  const playBtn = document.getElementById('vpm-play');
-  playBtn?.addEventListener('click', () => {
+  // Tap en canvas = play/pause
+  canvasWrap.addEventListener('click', (e) => {
+    if (_exporting) return;
+    if (e.target.closest('.video-export-overlay')) return;
     if (videoPlayer._playing) {
       videoPlayer.pause();
-      playBtn.textContent = '▶ Play';
+      _flashTap('▶');
     } else {
       videoPlayer.play();
-      playBtn.textContent = '⏸ Pausa';
+      _flashTap('⏸');
     }
   });
 
-  document.getElementById('vpm-download')?.addEventListener('click', () => videoPlayer.download());
-  document.getElementById('vpm-share')?.addEventListener('click', () => videoPlayer.share());
-
-  // Progreso clicable
-  document.getElementById('vpm-progress')?.addEventListener('click', e => {
+  // Barra de progreso clicable
+  document.getElementById('vm-progress')?.addEventListener('click', e => {
+    if (_exporting) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
     videoPlayer._frame = Math.floor(pct * videoPlayer._totalFrames);
@@ -1882,7 +1652,29 @@ async function _showVideoPlayerModal(photoUrls, params) {
     videoPlayer._updateProgress();
   });
 
-  // Panel Personalizar — estilo
+  // COMPARTIR
+  shareBtn.addEventListener('click', async () => {
+    if (_exporting) return;
+    videoPlayer.pause();
+    _showExport();
+    try {
+      await videoPlayer.shareAsFile(_onProgress);
+    } catch (e) { /* ignore */ }
+    _hideExport();
+  });
+
+  // GUARDAR
+  saveBtn.addEventListener('click', async () => {
+    if (_exporting) return;
+    videoPlayer.pause();
+    _showExport();
+    try {
+      await videoPlayer.downloadWithProgress(_onProgress);
+    } catch (e) { /* ignore */ }
+    _hideExport();
+  });
+
+  // Personalizar — estilo
   modal.querySelectorAll('.vpm-style-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       modal.querySelectorAll('.vpm-style-btn').forEach(b => b.classList.remove('active'));
@@ -1890,43 +1682,39 @@ async function _showVideoPlayerModal(photoUrls, params) {
     });
   });
 
-  // Panel Personalizar — aplicar cambios
-  document.getElementById('vpm-apply')?.addEventListener('click', async () => {
+  // Personalizar — aplicar
+  document.getElementById('vm-apply')?.addEventListener('click', async () => {
     const activeStyle = modal.querySelector('.vpm-style-btn.active');
     currentParams = {
       ...currentParams,
       style: activeStyle ? activeStyle.dataset.style : currentParams.style,
-      titulo: (document.getElementById('vpm-titulo-input')?.value || '').trim() || currentParams.titulo,
-      highlight: (document.getElementById('vpm-highlight-input')?.value || '').trim()
+      titulo: (document.getElementById('vm-titulo-input')?.value || '').trim() || currentParams.titulo
     };
-    // Actualizar título en el header
     const tituloEl = modal.querySelector('.video-modal-titulo');
     if (tituloEl) tituloEl.textContent = currentParams.titulo;
 
     videoPlayer.pause();
-    if (playBtn) playBtn.textContent = '▶ Play';
-    showToast('Regenerando video…');
-    // Limpiar canvas anterior
+    showToast('Regenerando…');
     const oldCanvas = canvasWrap.querySelector('.video-canvas');
     if (oldCanvas) oldCanvas.remove();
     const ok2 = await videoPlayer.init(canvasWrap, photoUrls, currentParams);
     if (ok2) {
       canvasWrap.appendChild(videoPlayer._canvas);
-      videoPlayer._progressFill = document.getElementById('vpm-progress-fill');
-      videoPlayer._onEnd = () => { if (playBtn) playBtn.textContent = '▶ Play'; };
-      // Cerrar el panel
-      const details = document.getElementById('vpm-customize');
+      videoPlayer._progressFill = document.getElementById('vm-progress-fill');
+      videoPlayer._onEnd = () => _flashTap('▶');
+      videoPlayer.play();
+      const details = document.getElementById('vm-customize');
       if (details) details.removeAttribute('open');
     }
   });
 
   // Cerrar
-  document.getElementById('vpm-close')?.addEventListener('click', () => {
+  document.getElementById('vm-close')?.addEventListener('click', () => {
     videoPlayer.pause();
     modal.remove();
   });
 }
-window._showVideoPlayerModal = _showVideoPlayerModal;
+window._showVideoModal = _showVideoModal;
 
 // ═══ MIS VIAJES (legacy — redirige a perfil) ═══
 
@@ -5268,7 +5056,7 @@ window.videoFromPins = async function() {
   showToast('Preparando video…');
   const result = await videoAssembly.assemble({ source: 'pins' });
   if (!result) { showToast('Necesitas al menos 3 pins con foto'); return; }
-  _showVideoEditModal(result);
+  _showVideoModal(result.photoUrls, result.params);
 };
 window.currentUser = null;
 Object.defineProperty(window, 'currentUser', {

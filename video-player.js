@@ -947,56 +947,63 @@ const videoPlayer = {
     ctx.shadowBlur = 0;
   },
 
-  // ═══ DESCARGAR COMO WEBM ═══
-  async download() {
+  // ═══ EXPORT CON PROGRESO Y MP4 ═══
+  _negotiateMime() {
+    const candidates = [
+      'video/mp4;codecs=avc1',
+      'video/mp4',
+      'video/webm;codecs=vp9',
+      'video/webm'
+    ];
+    for (const m of candidates) {
+      if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported(m)) return m;
+    }
+    return 'video/webm';
+  },
+
+  _fileExt(mime) { return mime.startsWith('video/mp4') ? 'mp4' : 'webm'; },
+
+  _sanitizedName() {
+    return (this._params.titulo || 'mi-viaje')
+      .replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s-]/g, '')
+      .replace(/\s+/g, '_');
+  },
+
+  async exportWithProgress(onProgress) {
+    if (typeof MediaRecorder === 'undefined') {
+      if (typeof showToast === 'function') showToast('Tu navegador no soporta la descarga de video');
+      return null;
+    }
+
     const exportCanvas = document.createElement('canvas');
     exportCanvas.width  = 1080;
     exportCanvas.height = 1920;
     const exportCtx = exportCanvas.getContext('2d');
 
-    if (typeof MediaRecorder === 'undefined') {
-      if (typeof showToast === 'function') showToast('Tu navegador no soporta la descarga de video');
-      return;
-    }
-
-    const stream    = exportCanvas.captureStream(this._fps);
-    let mimeType    = 'video/webm;codecs=vp9';
-    if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = 'video/webm';
-
+    const mimeType = this._negotiateMime();
+    const ext      = this._fileExt(mimeType);
+    const stream   = exportCanvas.captureStream(this._fps);
     const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 6000000 });
     const chunks   = [];
     recorder.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
 
     const done = new Promise(resolve => {
       recorder.onstop = () => {
-        const blob = new Blob(chunks, { type: 'video/webm' });
-        const url  = URL.createObjectURL(blob);
-        const a    = document.createElement('a');
-        a.href     = url;
-        const name = (this._params.titulo || 'mi-viaje')
-          .replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s-]/g, '')
-          .replace(/\s+/g, '_');
-        a.download = name + '.webm';
-        a.click();
-        URL.revokeObjectURL(url);
-        resolve();
+        const blob = new Blob(chunks, { type: mimeType });
+        resolve({ blob, ext, mimeType });
       };
     });
 
-    if (typeof showToast === 'function') showToast('Generando video… puede tardar unos segundos');
     recorder.start();
 
-    // Renderizar a resolución 2x usando canvas de exportación
     const origCanvas = this._canvas;
     const origCtx    = this._ctx;
-
-    this._canvas        = exportCanvas;
-    this._ctx           = exportCtx;
-    this._canvas.width  = 1080;
-    this._canvas.height = 1920;
+    this._canvas = exportCanvas;
+    this._ctx    = exportCtx;
 
     for (let f = 0; f < this._totalFrames; f++) {
       this._renderFrame(f);
+      if (onProgress) onProgress(Math.round((f + 1) / this._totalFrames * 100));
       await new Promise(r => setTimeout(r, 1000 / this._fps));
     }
 
@@ -1004,22 +1011,53 @@ const videoPlayer = {
     this._ctx    = origCtx;
 
     recorder.stop();
-    await done;
+    return done;
+  },
+
+  async shareAsFile(onProgress) {
+    const result = await this.exportWithProgress(onProgress);
+    if (!result) return;
+
+    const name = this._sanitizedName() + '.' + result.ext;
+    const file = new File([result.blob], name, { type: result.mimeType });
+
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: this._params.titulo || 'Mi viaje' });
+        return;
+      } catch (e) {
+        if (e.name === 'AbortError') return; // usuario canceló
+      }
+    }
+    // Fallback: descargar
+    this._saveBlob(result.blob, name);
+  },
+
+  async downloadWithProgress(onProgress) {
+    const result = await this.exportWithProgress(onProgress);
+    if (!result) return;
+    const name = this._sanitizedName() + '.' + result.ext;
+    this._saveBlob(result.blob, name);
     if (typeof showToast === 'function') showToast('Video descargado ✓');
   },
 
-  // ═══ COMPARTIR ═══
+  _saveBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a   = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  },
+
+  // ═══ DESCARGAR (wrapper legacy) ═══
+  async download() {
+    await this.downloadWithProgress(null);
+  },
+
+  // ═══ COMPARTIR (wrapper legacy) ═══
   async share() {
-    if (navigator.share && navigator.canShare) {
-      try {
-        if (typeof showToast === 'function') showToast('Preparando para compartir…');
-        await this.download();
-      } catch (e) {
-        this.download();
-      }
-    } else {
-      this.download();
-    }
+    await this.shareAsFile(null);
   },
 
   // ═══════════════════════════════════════════

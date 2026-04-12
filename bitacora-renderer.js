@@ -95,10 +95,10 @@ const bitacoraRenderer = {
     document.querySelectorAll('.diario-day-video-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const dayNum = parseInt(btn.dataset.day);
-        if (typeof videoAssembly === 'undefined' || typeof window._showVideoEditModal !== 'function') return;
+        if (typeof videoAssembly === 'undefined' || typeof window._showVideoModal !== 'function') return;
         const result = await videoAssembly.assemble({ source: 'day', id: docId, dayNum, routeData });
         if (!result) { if (typeof showToast === 'function') showToast('Necesitas al menos 3 fotos de este día'); return; }
-        window._showVideoEditModal(result);
+        window._showVideoModal(result.photoUrls, result.params);
       });
     });
 
