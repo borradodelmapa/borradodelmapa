@@ -3199,6 +3199,10 @@ body {
 .watch-form-save { background:rgba(212,168,67,.15); border:1px solid rgba(212,168,67,.4); color:var(--dorado); padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; transition:background .15s; font-family:inherit; }
 .watch-form-save:hover { background:rgba(212,168,67,.25); }
 .watch-form-save:disabled { opacity:.4; cursor:not-allowed; }
+.watch-form-flex-toggle { margin:12px 0 4px; }
+.fw-toggle { display:flex; align-items:center; gap:8px; cursor:pointer; }
+.fw-toggle input[type="checkbox"] { width:16px; height:16px; accent-color:var(--dorado); cursor:pointer; }
+.fw-toggle-label { font-size:13px; color:rgba(244,239,230,.5); }
 
 /* Place autocomplete dropdown */
 .fw-place-wrap { position:relative; }

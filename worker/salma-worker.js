@@ -5030,7 +5030,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         const idToken = authHeader.slice(7);
 
         const body = await request.json();
-        const { origin, destination, destination_name, date_from, date_to, trip_type, cabin, budget, passengers } = body;
+        const { origin, destination, destination_name, date_from, date_to, trip_type, cabin, budget, passengers, flexible } = body;
 
         if (!origin || !destination || !date_from || !trip_type) {
           return new Response(JSON.stringify({ error: 'Campos obligatorios: origin, destination, date_from, trip_type' }), { status: 400, headers: FW_CORS });
@@ -5078,6 +5078,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           passengers: passengers || 1,
           budget: budget ? parseInt(budget, 10) : null,
           currency: 'EUR',
+          flexible: !!flexible,
           active: true,
           last_price: null,
           lowest_price: null,
@@ -6565,22 +6566,66 @@ INSTRUCCIONES:
         for (const watch of watches) {
           if (checked >= MAX_CHECKS) break;
           if (!watch.active) continue;
-          // Saltar si fecha de ida ya paso
-          if (watch.date_from < todayStr) continue;
+          // Saltar si fecha de ida ya paso (flexible: comparar mes)
+          const isFlexible = watch.flexible || (watch.date_from && watch.date_from.length === 7);
+          if (isFlexible) {
+            // "2026-05" → saltar si ya pasamos ese mes
+            if (watch.date_from + '-31' < todayStr) continue;
+          } else {
+            if (watch.date_from < todayStr) continue;
+          }
 
           try {
-            console.log(`[FW Cron] Buscando ${watch.origin}→${watch.destination} (${watch.date_from})`);
+            let allOffers = [];
 
-            const offers = await _buscarVuelosFecha({
-              origen: watch.origin,
-              destino: watch.destination,
-              fecha_ida: watch.date_from,
-              fecha_vuelta: watch.date_to || null,
-              adultos: watch.passengers || 1,
-              clase: watch.cabin || 'economy'
-            }, duffelToken);
+            if (isFlexible) {
+              // Mes flexible: buscar dia 1, 15 y ultimo del mes
+              const [y, m] = watch.date_from.split('-').map(Number);
+              const lastDay = new Date(y, m, 0).getDate();
+              const sampleDates = [`${watch.date_from}-01`, `${watch.date_from}-15`, `${watch.date_from}-${lastDay}`]
+                .filter(d => d >= todayStr);
+
+              // Fechas vuelta flexible
+              let returnDates = [null];
+              if (watch.date_to && watch.date_to.length === 7) {
+                const [ry, rm] = watch.date_to.split('-').map(Number);
+                const rLast = new Date(ry, rm, 0).getDate();
+                returnDates = [`${watch.date_to}-01`, `${watch.date_to}-15`, `${watch.date_to}-${rLast}`];
+              } else if (watch.date_to) {
+                returnDates = [watch.date_to];
+              }
+
+              console.log(`[FW Cron] Buscando flexible ${watch.origin}→${watch.destination} (${sampleDates.length} fechas)`);
+
+              // Buscar primera fecha de muestra (para no gastar demasiadas llamadas)
+              const sampleDate = sampleDates[0];
+              const sampleReturn = returnDates[0];
+              if (sampleDate) {
+                const offers = await _buscarVuelosFecha({
+                  origen: watch.origin,
+                  destino: watch.destination,
+                  fecha_ida: sampleDate,
+                  fecha_vuelta: sampleReturn,
+                  adultos: watch.passengers || 1,
+                  clase: watch.cabin || 'economy'
+                }, duffelToken);
+                allOffers.push(...(offers || []));
+              }
+            } else {
+              console.log(`[FW Cron] Buscando ${watch.origin}→${watch.destination} (${watch.date_from})`);
+              const offers = await _buscarVuelosFecha({
+                origen: watch.origin,
+                destino: watch.destination,
+                fecha_ida: watch.date_from,
+                fecha_vuelta: watch.date_to || null,
+                adultos: watch.passengers || 1,
+                clase: watch.cabin || 'economy'
+              }, duffelToken);
+              allOffers.push(...(offers || []));
+            }
 
             checked++;
+            const offers = allOffers;
 
             if (!offers || offers.length === 0) {
               console.log(`[FW Cron] Sin resultados para ${watch.origin}→${watch.destination}`);

@@ -185,8 +185,11 @@ window.flightWatches = (() => {
     const isActive = w.active !== false;
     const dateFrom = w.date_from || '';
     const dateTo = w.date_to || '';
-    const dateRange = dateTo ? `${_fmtDate(dateFrom)} \u2014 ${_fmtDate(dateTo)}` : _fmtDate(dateFrom);
+    const isFlexible = w.flexible || (dateFrom.length === 7); // "2026-05" = flexible
+    const fmtFn = isFlexible ? _fmtMonth : _fmtDate;
+    const dateRange = dateTo ? `${fmtFn(dateFrom)} \u2014 ${fmtFn(dateTo)}` : fmtFn(dateFrom);
     const tripLabel = w.trip_type === 'roundtrip' ? 'Ida y vuelta' : 'Solo ida';
+    const flexLabel = isFlexible ? ' (fechas flexibles)' : '';
 
     let priceHtml = '<span class="watch-price-pending">Buscando precio... (se actualiza cada dia)</span>';
     if (w.last_price) {
@@ -216,7 +219,7 @@ window.flightWatches = (() => {
           <span class="watch-dest">${_esc(w.destination)}</span>
         </div>
         <div class="watch-card-meta">${_esc(w.destination_name || w.destination)}</div>
-        <div class="watch-card-dates">${dateRange} \u00B7 ${tripLabel}</div>
+        <div class="watch-card-dates">${dateRange}${flexLabel} \u00B7 ${tripLabel}</div>
         <div class="watch-card-price-row">
           ${priceHtml}
           ${lowestHtml}
@@ -238,6 +241,15 @@ window.flightWatches = (() => {
       const d = new Date(iso);
       return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
     } catch (e) { return iso.slice(0, 10); }
+  }
+
+  function _fmtMonth(ym) {
+    if (!ym) return '';
+    try {
+      const [y, m] = ym.split('-');
+      const d = new Date(parseInt(y), parseInt(m) - 1, 1);
+      return d.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+    } catch (e) { return ym; }
   }
 
   // ── Autocompletado de ciudades/aeropuertos ──
@@ -337,7 +349,14 @@ window.flightWatches = (() => {
           </div>
         </div>
 
-        <div class="watch-form-row">
+        <div class="watch-form-flex-toggle">
+          <label class="fw-toggle">
+            <input type="checkbox" id="fw-flexible" />
+            <span class="fw-toggle-label">Me da igual el dia (mes completo)</span>
+          </label>
+        </div>
+
+        <div class="watch-form-row" id="fw-dates-exact">
           <div style="flex:1">
             <div class="watch-form-label">Ida</div>
             <input class="watch-form-date" id="fw-date-from" type="date" />
@@ -345,6 +364,16 @@ window.flightWatches = (() => {
           <div style="flex:1" id="fw-return-group">
             <div class="watch-form-label">Vuelta</div>
             <input class="watch-form-date" id="fw-date-to" type="date" />
+          </div>
+        </div>
+        <div class="watch-form-row" id="fw-dates-flexible" style="display:none">
+          <div style="flex:1">
+            <div class="watch-form-label">Mes de ida</div>
+            <input class="watch-form-date" id="fw-month-from" type="month" />
+          </div>
+          <div style="flex:1" id="fw-return-month-group">
+            <div class="watch-form-label">Mes de vuelta</div>
+            <input class="watch-form-date" id="fw-month-to" type="month" />
           </div>
         </div>
 
@@ -369,11 +398,23 @@ window.flightWatches = (() => {
     _initPlaceInput('fw-origin', 'fw-origin-dropdown', 'origin');
     _initPlaceInput('fw-destination', 'fw-dest-dropdown', 'destination');
 
-    // Trip type toggle
+    // Flexible dates toggle
+    const flexCheck = document.getElementById('fw-flexible');
+    const datesExact = document.getElementById('fw-dates-exact');
+    const datesFlex = document.getElementById('fw-dates-flexible');
+    flexCheck.addEventListener('change', () => {
+      datesExact.style.display = flexCheck.checked ? 'none' : '';
+      datesFlex.style.display = flexCheck.checked ? '' : 'none';
+    });
+
+    // Trip type toggle (oculta vuelta en oneway)
     const tripType = document.getElementById('fw-trip-type');
     const returnGroup = document.getElementById('fw-return-group');
+    const returnMonthGroup = document.getElementById('fw-return-month-group');
     tripType.addEventListener('change', () => {
-      returnGroup.style.display = tripType.value === 'roundtrip' ? '' : 'none';
+      const show = tripType.value === 'roundtrip';
+      returnGroup.style.display = show ? '' : 'none';
+      returnMonthGroup.style.display = show ? '' : 'none';
     });
 
     // Cancel
@@ -391,13 +432,22 @@ window.flightWatches = (() => {
       const destination_name = _selectedPlaces.destination.name;
       const trip_type = document.getElementById('fw-trip-type').value;
       const cabin = document.getElementById('fw-cabin').value;
-      const date_from = document.getElementById('fw-date-from').value;
-      const date_to = document.getElementById('fw-date-to').value;
+      const flexible = flexCheck.checked;
       const budget = document.getElementById('fw-budget').value;
       const passengers = parseInt(document.getElementById('fw-passengers').value || '1', 10);
 
-      if (!date_from) { showToast('Indica la fecha de ida'); return; }
-      if (trip_type === 'roundtrip' && !date_to) { showToast('Indica la fecha de vuelta'); return; }
+      let date_from, date_to;
+      if (flexible) {
+        date_from = document.getElementById('fw-month-from').value; // "2026-05"
+        date_to = trip_type === 'roundtrip' ? document.getElementById('fw-month-to').value : null;
+        if (!date_from) { showToast('Selecciona el mes de ida'); return; }
+        if (trip_type === 'roundtrip' && !date_to) { showToast('Selecciona el mes de vuelta'); return; }
+      } else {
+        date_from = document.getElementById('fw-date-from').value;
+        date_to = trip_type === 'roundtrip' ? document.getElementById('fw-date-to').value : null;
+        if (!date_from) { showToast('Indica la fecha de ida'); return; }
+        if (trip_type === 'roundtrip' && !date_to) { showToast('Indica la fecha de vuelta'); return; }
+      }
 
       const saveBtn = document.getElementById('fw-save');
       saveBtn.textContent = 'Creando...';
@@ -405,8 +455,8 @@ window.flightWatches = (() => {
 
       const result = await createWatch({
         origin, destination, destination_name,
-        trip_type, cabin, date_from,
-        date_to: trip_type === 'roundtrip' ? date_to : null,
+        trip_type, cabin, date_from, date_to,
+        flexible,
         budget: budget ? parseInt(budget, 10) : null,
         passengers
       });
