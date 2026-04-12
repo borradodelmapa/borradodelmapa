@@ -4066,6 +4066,8 @@ function _showDiarioVideoResult() {
 
   const wrap = el.querySelector('.diario-result-canvas-wrap');
   if (wrap) {
+    // Stretch para que width:100% del kodak funcione (el parent tiene align-items:center)
+    wrap.style.alignSelf = 'stretch';
     // Limpiar todo y meter el Kodak
     wrap.innerHTML = '';
     const kodak = document.createElement('div');
@@ -4352,8 +4354,11 @@ function closeDiarioResult() {
     el.classList.remove('on');
     // Restaurar canvas si fue reemplazado por vídeo
     const wrap = el.querySelector('.diario-result-canvas-wrap');
-    if (wrap && !wrap.querySelector('canvas')) {
-      wrap.innerHTML = '<canvas id="diario-canvas" width="1080" height="1920"></canvas>';
+    if (wrap) {
+      wrap.style.alignSelf = '';
+      if (!wrap.querySelector('canvas')) {
+        wrap.innerHTML = '<canvas id="diario-canvas" width="1080" height="1920"></canvas>';
+      }
     }
   }
 }
