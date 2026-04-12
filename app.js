@@ -4042,9 +4042,10 @@ function _showDiarioVideoResult() {
   const el = document.getElementById('diario-result');
   if (!el) return;
 
-  // Reemplazar contenido con preview de vídeo
-  const preview = el.querySelector('.diario-result-img') || el.querySelector('canvas');
-  if (preview) {
+  // Reemplazar el canvas wrap con preview de vídeo
+  const wrap = el.querySelector('.diario-result-canvas-wrap');
+  if (wrap) {
+    wrap.innerHTML = '';
     const videoEl = document.createElement('video');
     videoEl.src = _diario.videoUrl + '#t=' + _diario.videoTrimStart;
     videoEl.controls = true;
@@ -4053,8 +4054,12 @@ function _showDiarioVideoResult() {
     videoEl.muted = true;
     videoEl.playsInline = true;
     videoEl.style.cssText = 'width:100%;max-height:70vh;border-radius:14px;object-fit:contain;background:#000';
-    preview.replaceWith(videoEl);
+    wrap.appendChild(videoEl);
   }
+
+  // Actualizar texto de ubicación
+  const locTxt = document.getElementById('diario-result-loc-txt');
+  if (locTxt) locTxt.textContent = _diario.locName || '';
 
   el.classList.add('on');
   _diarioSaved = false;
@@ -4304,7 +4309,14 @@ async function shareDiarioNative() {
 
 function closeDiarioResult() {
   const el = document.getElementById('diario-result');
-  if (el) el.classList.remove('on');
+  if (el) {
+    el.classList.remove('on');
+    // Restaurar canvas si fue reemplazado por vídeo
+    const wrap = el.querySelector('.diario-result-canvas-wrap');
+    if (wrap && !wrap.querySelector('canvas')) {
+      wrap.innerHTML = '<canvas id="diario-canvas" width="1080" height="1920"></canvas>';
+    }
+  }
 }
 
 async function diarioResultSave() {
