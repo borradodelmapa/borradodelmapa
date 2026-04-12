@@ -1321,7 +1321,9 @@ function _showFotoActions(foto, albumes, uid, currentAlbumFilter) {
       <button class="foto-detail-close" id="foto-modal-close">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
-      <img src="${escapeHTML(foto.url)}" class="foto-detail-img">
+      ${(foto.type === 'video' || foto.tag === 'video')
+        ? `<video src="${escapeHTML(foto.url)}" class="foto-detail-img" controls autoplay loop muted playsinline></video>`
+        : `<img src="${escapeHTML(foto.url)}" class="foto-detail-img">`}
       <div class="foto-detail-meta">
         ${foto.caption ? `<div class="foto-detail-caption">${escapeHTML(foto.caption)}</div>` : ''}
         <div class="foto-detail-info">${TAG_ICONS[foto.tag] || '📷'} ${foto.tag || 'foto'} ${dateStr ? '· ' + dateStr : ''}</div>
@@ -1353,11 +1355,19 @@ function _showFotoActions(foto, albumes, uid, currentAlbumFilter) {
   modal.querySelector('#foto-modal-close').addEventListener('click', () => modal.remove());
   modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
 
-  // Compartir
+  // Compartir (descarga blob y comparte como archivo)
   modal.querySelector('#foto-act-share')?.addEventListener('click', async () => {
     try {
-      if (navigator.share) {
-        await navigator.share({ url: foto.url, title: foto.caption || 'Foto de viaje' });
+      const isVid = foto.type === 'video' || foto.tag === 'video';
+      const resp = await fetch(foto.url);
+      const blob = await resp.blob();
+      const ext = isVid ? '.mp4' : '.jpg';
+      const mime = isVid ? 'video/mp4' : 'image/jpeg';
+      const file = new File([blob], (foto.caption || 'borradodelmapa') + ext, { type: mime });
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], text: foto.caption || '' });
+      } else if (navigator.share) {
+        await navigator.share({ url: foto.url, title: foto.caption || '' });
       } else {
         await navigator.clipboard.writeText(foto.url);
         if (typeof showToast === 'function') showToast('Enlace copiado');
