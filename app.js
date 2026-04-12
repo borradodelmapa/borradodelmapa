@@ -146,14 +146,14 @@ function updateBottomBar() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span>Home</span>
     </button>` : ''}
-    <button class="bottom-tab ${typeof salma !== 'undefined' && salma._narratorActive ? 'bottom-tab-narrator-on' : ''}" id="tab-narrador">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="10" r="5"/><circle cx="17" cy="10" r="5"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
-      <span>Narrador</span>
-      ${typeof salma !== 'undefined' && salma._narratorActive ? '<span class="narrator-pulse"></span>' : ''}
-    </button>
     <button class="bottom-tab ${isRutas ? 'bottom-tab-active' : ''}" id="tab-rutas">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
+    </button>
+    <button class="bottom-tab ${typeof salma !== 'undefined' && salma._narratorActive ? 'bottom-tab-narrator-on' : ''}" id="tab-narrador">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="10" r="5"/><circle cx="17" cy="10" r="5"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
+      <span>Explorar</span>
+      ${typeof salma !== 'undefined' && salma._narratorActive ? '<span class="narrator-pulse"></span>' : ''}
     </button>
     ${currentUser ? `<button class="bottom-tab ${isVuelos ? 'bottom-tab-active' : ''}" id="tab-vuelos">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
