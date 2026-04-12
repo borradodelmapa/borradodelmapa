@@ -4057,31 +4057,44 @@ function _showDiarioVideoResult() {
   const el = document.getElementById('diario-result');
   if (!el) return;
 
-  const mapUrl = window.SALMA_API + '/staticmap?lat=' + _diario.lat + '&lng=' + _diario.lng + '&zoom=13&size=640x640&maptype=terrain&scale=2';
   const dateStr = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' });
   const locName = _diario.locName || '';
   const coords = _diario.lat && _diario.lng ? _diario.lat.toFixed(3) + ', ' + _diario.lng.toFixed(3) : '';
+  const mapBg = (_diario.lat && _diario.lng)
+    ? `background-image:url('${window.SALMA_API}/staticmap?lat=${_diario.lat}&lng=${_diario.lng}&zoom=13&size=640x640&maptype=terrain&scale=2')`
+    : 'background:#1a1a1a';
 
   const wrap = el.querySelector('.diario-result-canvas-wrap');
   if (wrap) {
-    wrap.innerHTML = `
-      <div class="diario-video-kodak" style="background-image:url('${mapUrl}')">
-        <div class="diario-video-kodak-overlay"></div>
-        <div class="diario-video-kodak-print">
-          <div class="diario-video-kodak-frame">
-            <video src="${_diario.videoUrl}#t=${_diario.videoTrimStart}" controls autoplay loop muted playsinline class="diario-video-kodak-video"></video>
-          </div>
-          <div class="diario-video-kodak-bottom">
-            <div class="diario-video-kodak-brand">KODAK</div>
-            <div class="diario-video-kodak-loc">📍 ${escapeHTML(coords)}</div>
-            <div class="diario-video-kodak-date">${dateStr}</div>
-          </div>
+    // Limpiar todo y meter el Kodak
+    wrap.innerHTML = '';
+    const kodak = document.createElement('div');
+    kodak.className = 'diario-video-kodak';
+    kodak.style.cssText = mapBg + ';background-size:cover;background-position:center';
+    kodak.innerHTML = `
+      <div style="position:absolute;inset:0;background:rgba(10,10,9,0.48)"></div>
+      <div class="diario-video-kodak-print">
+        <div class="diario-video-kodak-frame">
+          <video id="kodak-video-el" controls autoplay loop muted playsinline class="diario-video-kodak-video"></video>
         </div>
-        <div class="diario-video-kodak-footer">
-          <div class="diario-video-kodak-logo">BORRADO<span style="color:var(--dorado)">DEL</span>MAPA</div>
-          <div class="diario-video-kodak-coords">📍 ${escapeHTML(coords)}</div>
+        <div class="diario-video-kodak-bottom">
+          <div class="diario-video-kodak-brand">KODAK</div>
+          <div class="diario-video-kodak-loc">${coords ? '📍 ' + escapeHTML(coords) : ''}</div>
+          <div class="diario-video-kodak-date">${dateStr}</div>
         </div>
+      </div>
+      <div class="diario-video-kodak-footer">
+        <div class="diario-video-kodak-logo">BORRADO<span style="color:#D4A843">DEL</span>MAPA</div>
+        ${coords ? '<div class="diario-video-kodak-coords">📍 ' + escapeHTML(coords) + '</div>' : ''}
       </div>`;
+    wrap.appendChild(kodak);
+
+    // Asignar src al video después de insertarlo en el DOM
+    const videoEl = document.getElementById('kodak-video-el');
+    if (videoEl) {
+      videoEl.src = _diario.videoUrl;
+      if (_diario.videoTrimStart > 0) videoEl.currentTime = _diario.videoTrimStart;
+    }
   }
 
   const locTxt = document.getElementById('diario-result-loc-txt');
