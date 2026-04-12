@@ -677,6 +677,16 @@ body {
   background:rgba(212,160,23,.15); border-color:var(--dorado);
   color:var(--dorado); font-weight:600;
 }
+.galeria-album-chip.active { position:relative; padding-right:28px; }
+.galeria-album-delete-x {
+  position:absolute; top:-6px; right:-6px;
+  width:18px; height:18px; border-radius:50%;
+  background:rgba(200,50,50,.85); border:none;
+  color:#fff; font-size:10px; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:background .12s;
+}
+.galeria-album-delete-x:hover { background:rgba(220,50,50,1); }
 .galeria-album-new { border-style:dashed; }
 
 /* Formulario inline de nuevo álbum */

@@ -1062,7 +1062,8 @@ async function renderGaleria(albumFilter) {
       <div class="galeria-album-chip ${!activeAlbum ? 'active' : ''}" data-album="">Todas (${fotos.length})</div>
       ${albumes.map(a => {
         const count = fotos.filter(f => f.albumId === a.id).length;
-        return `<div class="galeria-album-chip ${activeAlbum === a.id ? 'active' : ''}" data-album="${a.id}">${escapeHTML(a.nombre)} (${count})</div>`;
+        const isActive = activeAlbum === a.id;
+        return `<div class="galeria-album-chip ${isActive ? 'active' : ''}" data-album="${a.id}">${escapeHTML(a.nombre)} (${count})${isActive ? '<button class="galeria-album-delete-x" data-album-id="' + a.id + '" title="Eliminar álbum">✕</button>' : ''}</div>`;
       }).join('')}
       ${sinAlbum > 0 ? `<div class="galeria-album-chip ${activeAlbum === '__sin_album__' ? 'active' : ''}" data-album="__sin_album__">Sin álbum (${sinAlbum})</div>` : ''}
       <div class="galeria-album-chip galeria-album-new" id="galeria-new-album">+ Álbum</div>
@@ -1097,8 +1098,7 @@ async function renderGaleria(albumFilter) {
             ? `<button class="galeria-upload-btn" id="galeria-add-to-album-btn" title="Añadir fotos existentes al álbum">+ Fotos</button>
                <label for="galeria-file-input" class="galeria-video-btn" title="Subir nuevas fotos">📤</label>
                ${filtered.length >= 3 ? '<button class="galeria-video-btn" id="galeria-album-video-btn" title="Video del álbum">🎬</button>' : ''}
-               ${filtered.length > 0 ? '<button class="galeria-video-btn" id="galeria-select-btn" title="Seleccionar fotos">☑</button>' : ''}
-               <button class="galeria-video-btn galeria-delete-album-btn" id="galeria-delete-album-btn" title="Eliminar álbum">🗑</button>`
+               ${filtered.length > 0 ? '<button class="galeria-video-btn" id="galeria-select-btn" title="Seleccionar fotos">☑</button>' : ''}`
             : `<label for="galeria-file-input" class="galeria-upload-btn" title="Añadir fotos">+ Añadir</label>
                ${fotos.length >= 3 ? '<button class="galeria-video-btn" id="galeria-video-btn" title="Crear video">🎬</button>' : ''}
                <button class="galeria-video-btn" id="galeria-select-btn" title="Seleccionar fotos">☑</button>`}
@@ -1257,23 +1257,25 @@ async function renderGaleria(albumFilter) {
     if (activeAlbum && activeAlbum !== '__sin_album__') _enterAddToAlbumMode(activeAlbum);
   });
 
-  // Event: eliminar álbum (las fotos se desasignan, no se borran)
-  document.getElementById('galeria-delete-album-btn')?.addEventListener('click', async () => {
-    if (!activeAlbum || activeAlbum === '__sin_album__') return;
-    if (!confirm(`¿Eliminar el álbum "${activeAlbumName}"?\nLas fotos no se borran, solo se desasignan del álbum.`)) return;
-    try {
-      // Desasignar fotos del álbum
-      const fotosInAlbum = fotos.filter(f => f.albumId === activeAlbum);
-      for (const f of fotosInAlbum) {
-        await db.collection('users').doc(uid).collection('fotos').doc(f.id).update({ albumId: null });
+  // Event: eliminar álbum (X en el chip del álbum activo)
+  document.querySelectorAll('.galeria-album-delete-x').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation(); // no navegar al álbum
+      const albumId = btn.dataset.albumId;
+      const albumName = albumes.find(a => a.id === albumId)?.nombre || 'Álbum';
+      if (!confirm(`¿Eliminar "${albumName}"?\nLas fotos no se borran.`)) return;
+      try {
+        const fotosInAlbum = fotos.filter(f => f.albumId === albumId);
+        for (const f of fotosInAlbum) {
+          try { await db.collection('users').doc(uid).collection('fotos').doc(f.id).update({ albumId: null }); } catch (_) {}
+        }
+        await db.collection('users').doc(uid).collection('albumes').doc(albumId).delete();
+        showToast(`"${albumName}" eliminado`);
+        renderGaleria();
+      } catch (e) {
+        showToast('Error al eliminar álbum');
       }
-      // Borrar documento del álbum
-      await db.collection('users').doc(uid).collection('albumes').doc(activeAlbum).delete();
-      showToast(`Álbum "${activeAlbumName}" eliminado`);
-      renderGaleria(); // volver a "Todas"
-    } catch (e) {
-      showToast('Error al eliminar álbum');
-    }
+    });
   });
 
   // Event: crear video desde galería → edición
