@@ -779,7 +779,7 @@ const salma = {
       this._removeLoading();
       this._removeStreamBubble();
       const errMsg = (e && e.message) ? e.message : String(e);
-      this._addSalmaBubble('Uf, algo ha fallado (' + errMsg + '). Vuelve a intentarlo.');
+      this._addSalmaBubble('Uf, sin conexión o me he aturrullado. Vuelve a intentarlo.');
     } finally {
       this._streaming = false;
       $send.disabled = false;
