@@ -1828,6 +1828,14 @@ async function _showVideoModal(photoUrls, params) {
     videoPlayer._updateProgress();
   });
 
+  // Reset para poder ver el vídeo de nuevo tras export
+  function _resetAfterExport() {
+    _hideExport();
+    videoPlayer._frame = 0;
+    videoPlayer._renderFrame(0);
+    videoPlayer._updateProgress();
+  }
+
   // COMPARTIR
   shareBtn.addEventListener('click', async () => {
     if (_exporting) return;
@@ -1836,7 +1844,7 @@ async function _showVideoModal(photoUrls, params) {
     try {
       await videoPlayer.shareAsFile(_onProgress);
     } catch (e) { /* ignore */ }
-    _hideExport();
+    _resetAfterExport();
   });
 
   // GUARDAR
@@ -1847,7 +1855,7 @@ async function _showVideoModal(photoUrls, params) {
     try {
       await videoPlayer.downloadWithProgress(_onProgress);
     } catch (e) { /* ignore */ }
-    _hideExport();
+    _resetAfterExport();
   });
 
   // Personalizar — estilo

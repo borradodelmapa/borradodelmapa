@@ -1019,17 +1019,31 @@ const videoPlayer = {
     if (!result) return;
 
     const name = this._sanitizedName() + '.' + result.ext;
-    const file = new File([result.blob], name, { type: result.mimeType });
 
-    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+    // Intentar compartir como archivo nativo
+    if (navigator.share) {
       try {
-        await navigator.share({ files: [file], title: this._params.titulo || 'Mi viaje' });
+        const file = new File([result.blob], name, { type: result.mimeType });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: this._params.titulo || 'Mi viaje' });
+          return;
+        }
+      } catch (e) {
+        if (e.name === 'AbortError') return;
+      }
+
+      // Fallback: compartir URL del blob (sin archivo, pero abre el share sheet)
+      try {
+        const url = URL.createObjectURL(result.blob);
+        await navigator.share({ title: this._params.titulo || 'Mi viaje', text: 'Mi viaje · borradodelmapa.com', url });
+        URL.revokeObjectURL(url);
         return;
       } catch (e) {
-        if (e.name === 'AbortError') return; // usuario canceló
+        if (e.name === 'AbortError') return;
       }
     }
-    // Fallback: descargar
+
+    // Último fallback: descargar
     this._saveBlob(result.blob, name);
   },
 
