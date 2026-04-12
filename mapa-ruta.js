@@ -818,22 +818,27 @@ const mapaRuta = {
     this._infoWindow = new google.maps.InfoWindow({ content: _buildContent(placeholderHtml), disableAutoPan: false });
     this._infoWindow.open(this._map, marker);
 
-    // Cargar foto real vía worker: primero por photo_ref, fallback por nombre+coords
+    // Cargar foto real vía worker: photo_ref primero, si falla fallback por nombre+coords
     if (window.SALMA_API) {
-      let photoUrl = stop.photo_ref
-        ? `${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`
-        : (stop.name || stop.headline)
-          ? `${window.SALMA_API}/photo?name=${encodeURIComponent(stop.name || stop.headline)}&lat=${stop.lat}&lng=${stop.lng}&json=1`
-          : null;
-
-      if (photoUrl) {
-        fetch(photoUrl)
+      const _setPhoto = (url) => {
+        if (!this._infoWindow) return;
+        this._infoWindow.setContent(_buildContent(_photoImgHtml(url)));
+      };
+      const _tryByName = () => {
+        if (!(stop.name || stop.headline)) return;
+        fetch(`${window.SALMA_API}/photo?name=${encodeURIComponent(stop.name || stop.headline)}&lat=${stop.lat}&lng=${stop.lng}&json=1`)
           .then(r => r.ok ? r.json() : null)
-          .then(data => {
-            if (!data?.url || !this._infoWindow) return;
-            this._infoWindow.setContent(_buildContent(_photoImgHtml(data.url)));
-          })
+          .then(data => { if (data?.url) _setPhoto(data.url); })
           .catch(() => {});
+      };
+
+      if (stop.photo_ref) {
+        fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`)
+          .then(r => r.ok ? r.json() : null)
+          .then(data => { if (data?.url) _setPhoto(data.url); else _tryByName(); })
+          .catch(() => _tryByName());
+      } else {
+        _tryByName();
       }
     }
   },

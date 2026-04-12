@@ -3516,23 +3516,27 @@ function _showStopInfo(stop, i, marker, color) {
   _liveInfoWindow.setContent(_buildStopContent(placeholderHtml));
   _liveInfoWindow.open(_liveMap, marker);
 
-  // Cargar foto real: photo_ref primero, fallback por nombre+coords
+  // Cargar foto real: photo_ref primero, si falla fallback por nombre+coords
   if (window.SALMA_API) {
-    let photoFetchUrl = stop.photo_ref
-      ? `${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`
-      : (stop.name || stop.headline)
-        ? `${window.SALMA_API}/photo?name=${encodeURIComponent(stop.name || stop.headline)}&lat=${stop.lat}&lng=${stop.lng}&json=1`
-        : null;
-
-    if (photoFetchUrl) {
-      fetch(photoFetchUrl)
+    const _setPhoto = (url) => {
+      const imgHtml = `<img src="${url}" style="width:100%;height:130px;object-fit:cover;display:block;border-radius:10px 10px 0 0;flex-shrink:0;" onerror="this.style.display='none'">`;
+      _liveInfoWindow.setContent(_buildStopContent(imgHtml));
+    };
+    const _tryByName = () => {
+      if (!(stop.name || stop.headline)) return;
+      fetch(`${window.SALMA_API}/photo?name=${encodeURIComponent(stop.name || stop.headline)}&lat=${stop.lat}&lng=${stop.lng}&json=1`)
         .then(r => r.ok ? r.json() : null)
-        .then(data => {
-          if (!data?.url) return;
-          const imgHtml = `<img src="${data.url}" style="width:100%;height:130px;object-fit:cover;display:block;border-radius:10px 10px 0 0;flex-shrink:0;" onerror="this.style.display='none'">`;
-          _liveInfoWindow.setContent(_buildStopContent(imgHtml));
-        })
+        .then(data => { if (data?.url) _setPhoto(data.url); })
         .catch(() => {});
+    };
+
+    if (stop.photo_ref) {
+      fetch(`${window.SALMA_API}/photo?ref=${encodeURIComponent(stop.photo_ref)}&json=1`)
+        .then(r => r.ok ? r.json() : null)
+        .then(data => { if (data?.url) _setPhoto(data.url); else _tryByName(); })
+        .catch(() => _tryByName());
+    } else {
+      _tryByName();
     }
   }
 }
