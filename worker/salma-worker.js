@@ -542,7 +542,7 @@ async function verifyAuthAndGetUser(authHeader) {
 
 // ─── Helpers Firestore REST ───
 
-const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/borradodelmapa/databases/(default)/documents`;
+const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents`;
 
 function _parseFirestoreValue(val) {
   if (!val) return null;
