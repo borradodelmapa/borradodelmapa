@@ -503,8 +503,9 @@ body {
 }
 .vpm-apply-btn:hover { opacity:.85; }
 /* Galería multi-select */
+.galeria-selecting .galeria-item-delete { display:none !important; }
 .galeria-selecting .galeria-item {
-  position:relative;
+  position:relative; cursor:pointer;
 }
 .galeria-selecting .galeria-item::after {
   content:''; position:absolute; top:6px; right:6px;
