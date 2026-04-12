@@ -72,6 +72,10 @@ function showState(state) {
     if (typeof notasManager !== 'undefined') notasManager.renderNotasView();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
+  } else if (state === 'vuelos') {
+    if (typeof flightWatches !== 'undefined') flightWatches.renderVuelosView();
+    if (inputBar) inputBar.style.display = 'none';
+    $content.style.paddingBottom = '80px';
   } else if (state === 'chat') {
     // Limpiar welcome si estaba visible (ej: llegando desde ?go=chat)
     const welcomeEl = $content.querySelector('.welcome-area');
@@ -134,6 +138,7 @@ function updateBottomBar() {
   const isHome = currentState === 'welcome';
   const isChat = currentState === 'chat';
   const isRutas = currentState === 'rutas';
+  const isVuelos = currentState === 'vuelos';
   const isProfile = currentState === 'profile' || currentState === 'bitacora' || currentState === 'diario' || currentState === 'documentos' || currentState === 'notas';
 
   bar.innerHTML = `
@@ -150,6 +155,10 @@ function updateBottomBar() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
     </button>
+    ${currentUser ? `<button class="bottom-tab ${isVuelos ? 'bottom-tab-active' : ''}" id="tab-vuelos">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+      <span>Vuelos</span>
+    </button>` : ''}
     <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span>Salma</span>
@@ -185,6 +194,11 @@ function updateBottomBar() {
   document.getElementById('tab-rutas').addEventListener('click', () => {
     if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
     showState('rutas');
+  });
+  const tabVuelos = document.getElementById('tab-vuelos');
+  if (tabVuelos) tabVuelos.addEventListener('click', () => {
+    if (!currentUser) { window._afterLogin = 'vuelos'; openModal(); return; }
+    showState('vuelos');
   });
   document.getElementById('tab-narrador').addEventListener('click', async () => {
     if (typeof salma === 'undefined') return;
@@ -1976,6 +1990,11 @@ auth.onAuthStateChanged(async (user) => {
       // Usuario registrado → directo al chat (no interrumpir SOS)
       if (typeof salma !== 'undefined') salma._initChat();
       showState('chat');
+    }
+
+    // Flight alerts — avisar en chat si hay bajadas de precio (async, no bloquea)
+    if (typeof flightWatches !== 'undefined') {
+      setTimeout(() => flightWatches.injectAlerts(), 2000);
     }
   } else {
     // No hay sesión → mostrar gate obligatorio

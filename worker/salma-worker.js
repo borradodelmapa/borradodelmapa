@@ -540,6 +540,59 @@ async function verifyAuthAndGetUser(authHeader) {
   }
 }
 
+// ─── Helpers Firestore REST ───
+
+const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/borradodelmapa/databases/(default)/documents`;
+
+function _parseFirestoreValue(val) {
+  if (!val) return null;
+  if ('stringValue' in val) return val.stringValue;
+  if ('integerValue' in val) return parseInt(val.integerValue, 10);
+  if ('doubleValue' in val) return val.doubleValue;
+  if ('booleanValue' in val) return val.booleanValue;
+  if ('nullValue' in val) return null;
+  if ('timestampValue' in val) return val.timestampValue;
+  if ('arrayValue' in val) return (val.arrayValue.values || []).map(_parseFirestoreValue);
+  if ('mapValue' in val) {
+    const obj = {};
+    for (const [k, v] of Object.entries(val.mapValue.fields || {})) obj[k] = _parseFirestoreValue(v);
+    return obj;
+  }
+  return null;
+}
+
+function parseFirestoreDoc(doc) {
+  if (!doc || !doc.fields) return null;
+  const obj = {};
+  for (const [k, v] of Object.entries(doc.fields)) obj[k] = _parseFirestoreValue(v);
+  // Extraer docId del name
+  if (doc.name) obj._docId = doc.name.split('/').pop();
+  return obj;
+}
+
+function _toFirestoreValue(val) {
+  if (val === null || val === undefined) return { nullValue: null };
+  if (typeof val === 'string') return { stringValue: val };
+  if (typeof val === 'number') return Number.isInteger(val) ? { integerValue: String(val) } : { doubleValue: val };
+  if (typeof val === 'boolean') return { booleanValue: val };
+  if (Array.isArray(val)) return { arrayValue: { values: val.map(_toFirestoreValue) } };
+  if (typeof val === 'object') {
+    const fields = {};
+    for (const [k, v] of Object.entries(val)) fields[k] = _toFirestoreValue(v);
+    return { mapValue: { fields } };
+  }
+  return { stringValue: String(val) };
+}
+
+function toFirestoreFields(obj) {
+  const fields = {};
+  for (const [k, v] of Object.entries(obj)) {
+    if (k.startsWith('_')) continue; // skip internal fields
+    fields[k] = _toFirestoreValue(v);
+  }
+  return { fields };
+}
+
 /**
  * Rate limiting por UID usando KV.
  * Devuelve true si se permite la petición, false si se ha excedido el límite.
@@ -3593,7 +3646,7 @@ export default {
       return new Response(null, {
         headers: {
           'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
           'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         },
       });
@@ -4900,6 +4953,299 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       }
     }
 
+    // ═══ FLIGHT WATCHES — Vigilancia de vuelos ═══
+
+    const FW_CORS = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+    const FW_FREE_LIMIT = 3;
+
+    // ─── GET /flight-watches — listar vigilancias del usuario ───
+    if (request.method === 'GET' && url.pathname === '/flight-watches') {
+      try {
+        const authHeader = request.headers.get('Authorization') || '';
+        const authUser = await verifyAuthAndGetUser(authHeader);
+        if (!authUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: FW_CORS });
+        const idToken = authHeader.slice(7);
+
+        const listUrl = `${FIRESTORE_BASE}/users/${authUser.uid}/flight_watches`;
+        const res = await fetch(listUrl, { headers: { 'Authorization': 'Bearer ' + idToken }, signal: AbortSignal.timeout(5000) });
+        if (!res.ok) return new Response(JSON.stringify({ watches: [] }), { headers: FW_CORS });
+        const data = await res.json();
+        const watches = (data.documents || []).map(parseFirestoreDoc).filter(Boolean);
+        return new Response(JSON.stringify({ watches, count: watches.length }), { headers: FW_CORS });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
+      }
+    }
+
+    // ─── POST /flight-watches — crear vigilancia (con limite coins) ───
+    if (request.method === 'POST' && url.pathname === '/flight-watches') {
+      try {
+        const authHeader = request.headers.get('Authorization') || '';
+        const authUser = await verifyAuthAndGetUser(authHeader);
+        if (!authUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: FW_CORS });
+        const idToken = authHeader.slice(7);
+
+        const body = await request.json();
+        const { origin, destination, destination_name, date_from, date_to, trip_type, cabin, budget, passengers } = body;
+
+        if (!origin || !destination || !date_from || !trip_type) {
+          return new Response(JSON.stringify({ error: 'Campos obligatorios: origin, destination, date_from, trip_type' }), { status: 400, headers: FW_CORS });
+        }
+
+        // Contar watches existentes
+        const listUrl = `${FIRESTORE_BASE}/users/${authUser.uid}/flight_watches?pageSize=50`;
+        const listRes = await fetch(listUrl, { headers: { 'Authorization': 'Bearer ' + idToken }, signal: AbortSignal.timeout(5000) });
+        const listData = listRes.ok ? await listRes.json() : {};
+        const currentCount = (listData.documents || []).length;
+
+        let coinsRemaining = authUser.coins_saldo;
+
+        // Limite: 3 gratis, despues 1 coin
+        if (currentCount >= FW_FREE_LIMIT) {
+          if (authUser.coins_saldo < 1) {
+            return new Response(JSON.stringify({
+              error: 'no_coins',
+              message: 'Necesitas Salma Coins para añadir más vigilancias. Las 3 primeras son gratis.'
+            }), { status: 402, headers: FW_CORS });
+          }
+          // Descontar 1 coin
+          coinsRemaining = authUser.coins_saldo - 1;
+          const userPatchUrl = `${FIRESTORE_BASE}/users/${authUser.uid}?updateMask.fieldPaths=coins_saldo`;
+          await fetch(userPatchUrl, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+            body: JSON.stringify({ fields: { coins_saldo: { integerValue: String(coinsRemaining) } } }),
+            signal: AbortSignal.timeout(5000)
+          });
+        }
+
+        // Crear doc
+        const watchId = 'fw_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+        const now = new Date().toISOString();
+        const watchDoc = {
+          id: watchId,
+          origin: origin.toUpperCase().trim(),
+          destination: destination.toUpperCase().trim(),
+          destination_name: destination_name || destination,
+          date_from,
+          date_to: trip_type === 'roundtrip' ? (date_to || null) : null,
+          trip_type: trip_type || 'roundtrip',
+          cabin: cabin || 'economy',
+          passengers: passengers || 1,
+          budget: budget ? parseInt(budget, 10) : null,
+          currency: 'EUR',
+          active: true,
+          last_price: null,
+          lowest_price: null,
+          last_checked: null,
+          created_at: now,
+          updated_at: now
+        };
+
+        // Escribir en Firestore
+        const docUrl = `${FIRESTORE_BASE}/users/${authUser.uid}/flight_watches/${watchId}`;
+        const writeRes = await fetch(docUrl, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+          body: JSON.stringify(toFirestoreFields(watchDoc)),
+          signal: AbortSignal.timeout(5000)
+        });
+
+        if (!writeRes.ok) {
+          const errText = await writeRes.text();
+          return new Response(JSON.stringify({ error: 'Firestore write failed', detail: errText }), { status: 500, headers: FW_CORS });
+        }
+
+        // Sync a KV para el cron
+        if (env.SALMA_KB) {
+          try {
+            // Actualizar lista de watches del usuario en KV
+            const kvKey = 'fw:' + authUser.uid;
+            const existing = JSON.parse(await env.SALMA_KB.get(kvKey) || '[]');
+            existing.push(watchDoc);
+            await env.SALMA_KB.put(kvKey, JSON.stringify(existing));
+
+            // Actualizar indice de usuarios con watches
+            const usersKey = 'flight_watch_users';
+            const users = JSON.parse(await env.SALMA_KB.get(usersKey) || '[]');
+            if (!users.includes(authUser.uid)) {
+              users.push(authUser.uid);
+              await env.SALMA_KB.put(usersKey, JSON.stringify(users));
+            }
+          } catch (kvErr) {
+            console.log('[FW] KV sync error (non-blocking):', kvErr.message);
+          }
+        }
+
+        return new Response(JSON.stringify({ ok: true, watch: watchDoc, coins_remaining: coinsRemaining }), { status: 201, headers: FW_CORS });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
+      }
+    }
+
+    // ─── DELETE /flight-watches — eliminar vigilancia ───
+    if (request.method === 'DELETE' && url.pathname === '/flight-watches') {
+      try {
+        const authHeader = request.headers.get('Authorization') || '';
+        const authUser = await verifyAuthAndGetUser(authHeader);
+        if (!authUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: FW_CORS });
+        const idToken = authHeader.slice(7);
+
+        const body = await request.json();
+        const { watchId } = body;
+        if (!watchId) return new Response(JSON.stringify({ error: 'watchId requerido' }), { status: 400, headers: FW_CORS });
+
+        // Borrar de Firestore
+        const delUrl = `${FIRESTORE_BASE}/users/${authUser.uid}/flight_watches/${watchId}`;
+        await fetch(delUrl, {
+          method: 'DELETE',
+          headers: { 'Authorization': 'Bearer ' + idToken },
+          signal: AbortSignal.timeout(5000)
+        });
+
+        // Borrar alerta asociada (si existe)
+        const alertDelUrl = `${FIRESTORE_BASE}/users/${authUser.uid}/flight_alerts/${watchId}`;
+        await fetch(alertDelUrl, {
+          method: 'DELETE',
+          headers: { 'Authorization': 'Bearer ' + idToken },
+          signal: AbortSignal.timeout(3000)
+        }).catch(() => {});
+
+        // Sync KV
+        if (env.SALMA_KB) {
+          try {
+            const kvKey = 'fw:' + authUser.uid;
+            const existing = JSON.parse(await env.SALMA_KB.get(kvKey) || '[]');
+            const filtered = existing.filter(w => w.id !== watchId);
+            if (filtered.length > 0) {
+              await env.SALMA_KB.put(kvKey, JSON.stringify(filtered));
+            } else {
+              await env.SALMA_KB.delete(kvKey);
+              // Quitar del indice de usuarios
+              const usersKey = 'flight_watch_users';
+              const users = JSON.parse(await env.SALMA_KB.get(usersKey) || '[]');
+              const updatedUsers = users.filter(u => u !== authUser.uid);
+              await env.SALMA_KB.put(usersKey, JSON.stringify(updatedUsers));
+            }
+            // Borrar alertas de KV
+            const alertsKey = 'fw_alerts:' + authUser.uid;
+            const alerts = JSON.parse(await env.SALMA_KB.get(alertsKey) || '[]');
+            const filteredAlerts = alerts.filter(a => a.watchId !== watchId);
+            if (filteredAlerts.length > 0) {
+              await env.SALMA_KB.put(alertsKey, JSON.stringify(filteredAlerts), { expirationTtl: 604800 });
+            } else {
+              await env.SALMA_KB.delete(alertsKey);
+            }
+          } catch (kvErr) {
+            console.log('[FW] KV sync error (non-blocking):', kvErr.message);
+          }
+        }
+
+        return new Response(JSON.stringify({ ok: true }), { headers: FW_CORS });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
+      }
+    }
+
+    // ─── PUT /flight-watches/pause — pausar/reanudar vigilancia ───
+    if (request.method === 'PUT' && url.pathname === '/flight-watches/pause') {
+      try {
+        const authHeader = request.headers.get('Authorization') || '';
+        const authUser = await verifyAuthAndGetUser(authHeader);
+        if (!authUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: FW_CORS });
+        const idToken = authHeader.slice(7);
+
+        const body = await request.json();
+        const { watchId, active } = body;
+        if (!watchId || typeof active !== 'boolean') {
+          return new Response(JSON.stringify({ error: 'watchId y active (bool) requeridos' }), { status: 400, headers: FW_CORS });
+        }
+
+        const now = new Date().toISOString();
+        const patchUrl = `${FIRESTORE_BASE}/users/${authUser.uid}/flight_watches/${watchId}?updateMask.fieldPaths=active&updateMask.fieldPaths=updated_at`;
+        await fetch(patchUrl, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+          body: JSON.stringify({ fields: { active: { booleanValue: active }, updated_at: { stringValue: now } } }),
+          signal: AbortSignal.timeout(5000)
+        });
+
+        // Sync KV
+        if (env.SALMA_KB) {
+          try {
+            const kvKey = 'fw:' + authUser.uid;
+            const existing = JSON.parse(await env.SALMA_KB.get(kvKey) || '[]');
+            const watch = existing.find(w => w.id === watchId);
+            if (watch) {
+              watch.active = active;
+              watch.updated_at = now;
+              await env.SALMA_KB.put(kvKey, JSON.stringify(existing));
+            }
+          } catch (kvErr) {
+            console.log('[FW] KV sync error (non-blocking):', kvErr.message);
+          }
+        }
+
+        return new Response(JSON.stringify({ ok: true, active }), { headers: FW_CORS });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
+      }
+    }
+
+    // ─── GET /flight-alerts — alertas no vistas ───
+    if (request.method === 'GET' && url.pathname === '/flight-alerts') {
+      try {
+        const authHeader = request.headers.get('Authorization') || '';
+        const authUser = await verifyAuthAndGetUser(authHeader);
+        if (!authUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: FW_CORS });
+
+        if (!env.SALMA_KB) return new Response(JSON.stringify({ alerts: [] }), { headers: FW_CORS });
+
+        const alertsKey = 'fw_alerts:' + authUser.uid;
+        const all = JSON.parse(await env.SALMA_KB.get(alertsKey) || '[]');
+        const unseen = all.filter(a => !a.seen);
+        return new Response(JSON.stringify({ alerts: unseen, count: unseen.length }), { headers: FW_CORS });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
+      }
+    }
+
+    // ─── PUT /flight-alerts/mark-seen — marcar alertas como vistas ───
+    if (request.method === 'PUT' && url.pathname === '/flight-alerts/mark-seen') {
+      try {
+        const authHeader = request.headers.get('Authorization') || '';
+        const authUser = await verifyAuthAndGetUser(authHeader);
+        if (!authUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: FW_CORS });
+
+        const body = await request.json();
+        const { alertIds } = body;
+        if (!alertIds || !Array.isArray(alertIds)) {
+          return new Response(JSON.stringify({ error: 'alertIds (array) requerido' }), { status: 400, headers: FW_CORS });
+        }
+
+        if (env.SALMA_KB) {
+          const alertsKey = 'fw_alerts:' + authUser.uid;
+          const all = JSON.parse(await env.SALMA_KB.get(alertsKey) || '[]');
+          const now = new Date().toISOString();
+          let changed = false;
+          for (const a of all) {
+            if (alertIds.includes(a.id) && !a.seen) {
+              a.seen = true;
+              a.seen_at = now;
+              changed = true;
+            }
+          }
+          if (changed) {
+            await env.SALMA_KB.put(alertsKey, JSON.stringify(all), { expirationTtl: 604800 });
+          }
+        }
+
+        return new Response(JSON.stringify({ ok: true }), { headers: FW_CORS });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
+      }
+    }
+
     // ─── POST / ───
     if (request.method !== 'POST') {
       return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
@@ -5915,9 +6261,19 @@ INSTRUCCIONES:
   // CRON: Lunes = regenerar fichas nivel 1 | Miércoles = generar rutas nivel 3
   // ═══════════════════════════════════════════════════════════════
   async scheduled(event, env, ctx) {
-    if (!env.SALMA_KB || !env.OPENAI_API_KEY) return;
+    if (!env.SALMA_KB) return;
 
+    const hour = new Date(event.scheduledTime).getUTCHours();
     const dayOfWeek = new Date(event.scheduledTime).getUTCDay(); // 0=dom, 1=lun, 3=mié
+
+    // 6:00 UTC DIARIO → Monitoreo vuelos
+    if (hour === 6) {
+      await this._cronFlightWatches(env);
+      return;
+    }
+
+    if (!env.OPENAI_API_KEY) return;
+
     if (dayOfWeek === 3) {
       // MIÉRCOLES → Generar rutas nivel 3
       await this._cronNivel3(env);
@@ -6120,6 +6476,163 @@ INSTRUCCIONES:
 
     } catch (e) {
       console.log(`[KV Cron L3] Error general: ${e.message}`);
+    }
+  },
+
+  // ═══ CRON DIARIO: Monitoreo precios vuelos (Flight Watches) ═══
+  async _cronFlightWatches(env) {
+    const MAX_CHECKS = 20;
+    const DELAY_MS = 1500;
+    const duffelToken = env.DUFFEL_ACCESS_TOKEN;
+    if (!duffelToken || !env.SALMA_KB) {
+      console.log('[FW Cron] Sin Duffel token o KV — skip');
+      return;
+    }
+
+    console.log('[FW Cron] ========== INICIO MONITOREO VUELOS ==========');
+    const startTime = Date.now();
+    let checked = 0, alertsCreated = 0, errors = 0;
+
+    try {
+      const usersJson = await env.SALMA_KB.get('flight_watch_users');
+      if (!usersJson) { console.log('[FW Cron] Sin usuarios con watches'); return; }
+      const userIds = JSON.parse(usersJson);
+      console.log(`[FW Cron] ${userIds.length} usuarios con watches`);
+
+      const todayStr = new Date().toISOString().slice(0, 10);
+
+      for (const uid of userIds) {
+        if (checked >= MAX_CHECKS) break;
+
+        const kvKey = 'fw:' + uid;
+        const watchesJson = await env.SALMA_KB.get(kvKey);
+        if (!watchesJson) continue;
+        const watches = JSON.parse(watchesJson);
+
+        // Ordenar por last_checked mas antiguo primero (round-robin)
+        watches.sort((a, b) => {
+          const aTime = a.last_checked ? new Date(a.last_checked).getTime() : 0;
+          const bTime = b.last_checked ? new Date(b.last_checked).getTime() : 0;
+          return aTime - bTime;
+        });
+
+        let kvChanged = false;
+
+        for (const watch of watches) {
+          if (checked >= MAX_CHECKS) break;
+          if (!watch.active) continue;
+          // Saltar si fecha de ida ya paso
+          if (watch.date_from < todayStr) continue;
+
+          try {
+            console.log(`[FW Cron] Buscando ${watch.origin}→${watch.destination} (${watch.date_from})`);
+
+            const offers = await _buscarVuelosFecha({
+              origen: watch.origin,
+              destino: watch.destination,
+              fecha_ida: watch.date_from,
+              fecha_vuelta: watch.date_to || null,
+              adultos: watch.passengers || 1,
+              clase: watch.cabin || 'economy'
+            }, duffelToken);
+
+            checked++;
+
+            if (!offers || offers.length === 0) {
+              console.log(`[FW Cron] Sin resultados para ${watch.origin}→${watch.destination}`);
+              watch.last_checked = new Date().toISOString();
+              kvChanged = true;
+              await new Promise(r => setTimeout(r, DELAY_MS));
+              continue;
+            }
+
+            // Buscar el mas barato
+            const sorted = offers.sort((a, b) => {
+              const pa = parseFloat(a.total_amount || a.totalPrice || 9999999);
+              const pb = parseFloat(b.total_amount || b.totalPrice || 9999999);
+              return pa - pb;
+            });
+            const cheapest = sorted[0];
+            const currentPrice = parseFloat(cheapest.total_amount || cheapest.totalPrice || 0);
+            if (!currentPrice || currentPrice <= 0) {
+              watch.last_checked = new Date().toISOString();
+              kvChanged = true;
+              await new Promise(r => setTimeout(r, DELAY_MS));
+              continue;
+            }
+
+            const previousPrice = watch.last_price;
+
+            // Actualizar precios en watch
+            watch.last_price = currentPrice;
+            watch.last_checked = new Date().toISOString();
+            if (!watch.lowest_price || currentPrice < watch.lowest_price) {
+              watch.lowest_price = currentPrice;
+            }
+            kvChanged = true;
+
+            // Evaluar condiciones de alerta
+            let shouldAlert = false;
+            let alertReason = '';
+
+            if (previousPrice && previousPrice > 0 && currentPrice < previousPrice * 0.85) {
+              shouldAlert = true;
+              alertReason = 'price_drop';
+            }
+            if (watch.budget && currentPrice <= watch.budget) {
+              shouldAlert = true;
+              alertReason = alertReason || 'budget_hit';
+            }
+
+            if (shouldAlert) {
+              const alertsKey = 'fw_alerts:' + uid;
+              const existingAlerts = JSON.parse(await env.SALMA_KB.get(alertsKey) || '[]');
+
+              // Evitar alerta duplicada en las ultimas 24h para el mismo watch
+              const recentAlert = existingAlerts.find(a =>
+                a.watchId === watch.id && !a.seen &&
+                (Date.now() - new Date(a.created_at).getTime()) < 24 * 60 * 60 * 1000
+              );
+
+              if (!recentAlert) {
+                existingAlerts.push({
+                  id: 'fwa_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5),
+                  watchId: watch.id,
+                  origin: watch.origin,
+                  destination: watch.destination,
+                  destination_name: watch.destination_name || watch.destination,
+                  previous_price: previousPrice,
+                  current_price: currentPrice,
+                  lowest_price: watch.lowest_price,
+                  budget: watch.budget,
+                  reason: alertReason,
+                  currency: watch.currency || 'EUR',
+                  seen: false,
+                  created_at: new Date().toISOString()
+                });
+                await env.SALMA_KB.put(alertsKey, JSON.stringify(existingAlerts), { expirationTtl: 604800 });
+                alertsCreated++;
+                console.log(`[FW Cron] ALERTA: ${watch.origin}→${watch.destination} ${previousPrice}→${currentPrice} EUR (${alertReason})`);
+              }
+            }
+
+            await new Promise(r => setTimeout(r, DELAY_MS));
+          } catch (e) {
+            console.log(`[FW Cron] Error ${watch.origin}→${watch.destination}: ${e.message}`);
+            errors++;
+          }
+        }
+
+        // Guardar watches actualizados en KV
+        if (kvChanged) {
+          await env.SALMA_KB.put(kvKey, JSON.stringify(watches));
+        }
+      }
+
+      const duration = Date.now() - startTime;
+      console.log(`[FW Cron] ========== FIN: ${checked} checks, ${alertsCreated} alertas, ${errors} errores (${duration}ms) ==========`);
+    } catch (e) {
+      console.log(`[FW Cron] Error critico: ${e.message}`);
     }
   },
 };

@@ -15,8 +15,9 @@ bucket_name = "salma-photos"
 
 # Cron: lunes 4:00 UTC = regenera fichas nivel 1 caducadas
 # Cron: miércoles 4:00 UTC = genera rutas nivel 3 para países sin rutas
+# Cron: diario 6:00 UTC = monitoreo precios vuelos (flight watches)
 [triggers]
-crons = ["0 4 * * 1", "0 4 * * 3"]
+crons = ["0 4 * * 1", "0 4 * * 3", "0 6 * * *"]
 
 [vars]
 # Optional: use Workers AI instead — set USE_CLOUDFLARE_AI = "1" and add binding:
