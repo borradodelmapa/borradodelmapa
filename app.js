@@ -1061,15 +1061,20 @@ async function renderGaleria(albumFilter) {
       <div class="galeria-album-chip ${!activeAlbum ? 'active' : ''}" data-album="">Todas (${fotos.length})</div>
       ${albumes.map(a => {
         const count = fotos.filter(f => f.albumId === a.id).length;
-        if (count === 0) return '';
         return `<div class="galeria-album-chip ${activeAlbum === a.id ? 'active' : ''}" data-album="${a.id}">${escapeHTML(a.nombre)} (${count})</div>`;
       }).join('')}
       ${sinAlbum > 0 ? `<div class="galeria-album-chip ${activeAlbum === '__sin_album__' ? 'active' : ''}" data-album="__sin_album__">Sin álbum (${sinAlbum})</div>` : ''}
       <div class="galeria-album-chip galeria-album-new" id="galeria-new-album">+ Álbum</div>
     </div>`;
 
+  const isAlbumEmpty = filtered.length === 0 && activeAlbum && activeAlbum !== '__sin_album__';
   const gridHtml = filtered.length === 0
-    ? '<div class="galeria-empty">No hay fotos todavía.<br>Pulsa <strong>📤 Añadir</strong> para subir desde tu galería, o envía fotos a Salma desde el chat.</div>'
+    ? (isAlbumEmpty
+      ? `<div class="galeria-empty">Este álbum está vacío.<br><br>
+          <button class="galeria-add-album-btn" id="galeria-add-from-gallery">Añadir fotos de la galería</button>
+          <label for="galeria-file-input" class="galeria-add-album-btn galeria-add-album-upload">Subir nuevas</label>
+        </div>`
+      : '<div class="galeria-empty">No hay fotos todavía.<br>Pulsa <strong>📤 Añadir</strong> para subir desde tu galería, o envía fotos a Salma desde el chat.</div>')
     : `<div class="galeria-grid">${filtered.map(f => {
         const isVid = f.type === 'video' || f.tag === 'video';
         const media = isVid
@@ -1088,6 +1093,9 @@ async function renderGaleria(albumFilter) {
         <span class="galeria-title">Galería</span>
         <div class="galeria-header-btns">
           <label for="galeria-file-input" class="galeria-upload-btn" title="Añadir fotos">+ Añadir</label>
+          ${activeAlbum && activeAlbum !== '__sin_album__'
+            ? '<button class="galeria-upload-btn" id="galeria-add-to-album-btn" title="Añadir fotos al álbum">+ Fotos</button>'
+            : ''}
           ${activeAlbum && activeAlbum !== '__sin_album__' && filtered.length >= 3
             ? '<button class="galeria-video-btn galeria-album-video-btn" id="galeria-album-video-btn" title="Video del álbum">🎬 ' + escapeHTML(activeAlbumName) + '</button>'
             : ''}
@@ -1148,6 +1156,100 @@ async function renderGaleria(albumFilter) {
       if (e.key === 'Enter') guardar();
       if (e.key === 'Escape') renderGaleria(activeAlbum);
     });
+  });
+
+  // ─── Modo "Añadir fotos al álbum" ───
+  let _addToAlbumId = null;
+  let _addToAlbumName = '';
+
+  function _enterAddToAlbumMode(targetAlbumId) {
+    _addToAlbumId = targetAlbumId;
+    _addToAlbumName = albumes.find(a => a.id === targetAlbumId)?.nombre || 'Álbum';
+
+    // Mostrar TODAS las fotos que NO están en este álbum
+    const available = fotos.filter(f => f.albumId !== targetAlbumId);
+    if (!available.length) {
+      showToast('No hay fotos disponibles para añadir');
+      return;
+    }
+
+    // Reconstruir la grid con las fotos disponibles
+    const grid = document.querySelector('.galeria-grid');
+    const emptyEl = document.querySelector('.galeria-empty');
+    const container = grid || emptyEl;
+    if (!container) return;
+
+    const gridEl = document.createElement('div');
+    gridEl.className = 'galeria-grid galeria-selecting';
+    gridEl.innerHTML = available.map(f => {
+      const isVid = f.type === 'video' || f.tag === 'video';
+      const media = isVid
+        ? `<video src="${escapeHTML(f.url)}" class="galeria-thumb" muted playsinline preload="metadata"></video><span class="galeria-video-badge">▶</span>`
+        : `<img src="${escapeHTML(f.url)}" class="galeria-thumb" alt="${escapeHTML(f.caption || '')}" loading="lazy">`;
+      return `<div class="galeria-item" data-foto-id="${f.id}">
+        ${media}
+        <span class="galeria-tag-badge">${TAG_ICONS[f.tag] || '📷'}</span>
+      </div>`;
+    }).join('');
+    container.replaceWith(gridEl);
+
+    // Click en cada item para seleccionar
+    gridEl.querySelectorAll('.galeria-item').forEach(item => {
+      item.addEventListener('click', () => {
+        item.classList.toggle('selected');
+        _updateAddToAlbumBar();
+      });
+    });
+
+    _updateAddToAlbumBar();
+  }
+
+  function _updateAddToAlbumBar() {
+    const count = document.querySelectorAll('.galeria-item.selected').length;
+    let bar = document.getElementById('galeria-select-bar');
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.id = 'galeria-select-bar';
+      bar.className = 'galeria-select-bar';
+      document.body.appendChild(bar);
+    }
+    bar.innerHTML = `
+      <span class="galeria-select-count">${count} foto${count !== 1 ? 's' : ''}</span>
+      <button class="galeria-select-video-btn" id="galeria-confirm-add-album" ${count === 0 ? 'disabled' : ''}>Añadir a ${escapeHTML(_addToAlbumName)}</button>
+      <button class="galeria-select-cancel-btn" id="galeria-cancel-add-album">✕</button>`;
+
+    document.getElementById('galeria-confirm-add-album')?.addEventListener('click', async () => {
+      const selectedIds = [...document.querySelectorAll('.galeria-item.selected')]
+        .map(el => el.dataset.fotoId).filter(Boolean);
+      if (!selectedIds.length) return;
+      try {
+        for (const fid of selectedIds) {
+          await db.collection('users').doc(uid).collection('fotos').doc(fid).update({ albumId: _addToAlbumId });
+        }
+        showToast(`${selectedIds.length} foto${selectedIds.length !== 1 ? 's' : ''} añadida${selectedIds.length !== 1 ? 's' : ''} a "${_addToAlbumName}"`);
+      } catch (e) {
+        showToast('Error al mover fotos');
+      }
+      _addToAlbumId = null;
+      document.getElementById('galeria-select-bar')?.remove();
+      renderGaleria(activeAlbum);
+    });
+
+    document.getElementById('galeria-cancel-add-album')?.addEventListener('click', () => {
+      _addToAlbumId = null;
+      document.getElementById('galeria-select-bar')?.remove();
+      renderGaleria(activeAlbum);
+    });
+  }
+
+  // Event: botón "Añadir fotos" en estado vacío de álbum
+  document.getElementById('galeria-add-from-gallery')?.addEventListener('click', () => {
+    if (activeAlbum && activeAlbum !== '__sin_album__') _enterAddToAlbumMode(activeAlbum);
+  });
+
+  // Event: botón "+ Fotos" en cabecera de álbum
+  document.getElementById('galeria-add-to-album-btn')?.addEventListener('click', () => {
+    if (activeAlbum && activeAlbum !== '__sin_album__') _enterAddToAlbumMode(activeAlbum);
   });
 
   // Event: crear video desde galería → edición
@@ -1230,12 +1332,60 @@ async function renderGaleria(albumFilter) {
       bar.className = 'galeria-select-bar';
       document.body.appendChild(bar);
     }
+    const hasAlbums = albumes.length > 0;
     bar.innerHTML = `
       <span class="galeria-select-count">${count} foto${count !== 1 ? 's' : ''}</span>
-      <button class="galeria-select-delete-btn" id="galeria-select-delete">🗑 Eliminar</button>
-      <button class="galeria-select-video-btn" id="galeria-select-video" ${count < 3 ? 'disabled' : ''}>🎬 Video</button>
+      ${hasAlbums ? '<button class="galeria-select-album-btn" id="galeria-select-album">📁 Álbum</button>' : ''}
+      <button class="galeria-select-delete-btn" id="galeria-select-delete">🗑</button>
+      <button class="galeria-select-video-btn" id="galeria-select-video" ${count < 3 ? 'disabled' : ''}>🎬</button>
       <button class="galeria-select-cancel-btn" id="galeria-select-cancel">✕</button>`;
     document.getElementById('galeria-select-cancel')?.addEventListener('click', _exitSelectMode);
+
+    // Botón "Álbum" → menú flotante de álbumes
+    document.getElementById('galeria-select-album')?.addEventListener('click', () => {
+      const existing = document.getElementById('galeria-album-menu');
+      if (existing) { existing.remove(); return; }
+
+      const selectedIds = [...document.querySelectorAll('.galeria-item.selected')]
+        .map(el => el.dataset.fotoId).filter(Boolean);
+      if (!selectedIds.length) return;
+
+      const menu = document.createElement('div');
+      menu.id = 'galeria-album-menu';
+      menu.className = 'galeria-album-menu';
+      menu.innerHTML = albumes.map(a =>
+        `<button class="galeria-album-menu-item" data-album-id="${a.id}">${escapeHTML(a.nombre)}</button>`
+      ).join('') + `<button class="galeria-album-menu-item galeria-album-menu-none" data-album-id="__none__">Sin álbum</button>`;
+      bar.appendChild(menu);
+
+      menu.querySelectorAll('.galeria-album-menu-item').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const targetId = btn.dataset.albumId;
+          const albumId = targetId === '__none__' ? null : targetId;
+          const albumName = targetId === '__none__' ? 'Sin álbum' : (albumes.find(a => a.id === targetId)?.nombre || 'Álbum');
+          try {
+            for (const fid of selectedIds) {
+              await db.collection('users').doc(uid).collection('fotos').doc(fid).update({ albumId });
+            }
+            showToast(`${selectedIds.length} foto${selectedIds.length !== 1 ? 's' : ''} → ${albumName}`);
+          } catch (e) {
+            showToast('Error al mover fotos');
+          }
+          _exitSelectMode();
+          renderGaleria(activeAlbum);
+        });
+      });
+
+      // Cerrar menú al tocar fuera
+      setTimeout(() => {
+        document.addEventListener('click', function _closeMenu(e) {
+          if (!menu.contains(e.target) && e.target.id !== 'galeria-select-album') {
+            menu.remove();
+            document.removeEventListener('click', _closeMenu);
+          }
+        });
+      }, 10);
+    });
     document.getElementById('galeria-select-delete')?.addEventListener('click', async () => {
       const selectedEls = [...document.querySelectorAll('.galeria-item.selected')];
       const selectedPhotos = selectedEls.map(el => fotos.find(f => f.id === el.dataset.fotoId)).filter(Boolean);

@@ -523,6 +523,46 @@ body {
 .galeria-album-video-btn {
   font-size:11px;
 }
+/* Botón "Añadir fotos" en estado vacío de álbum */
+.galeria-add-album-btn {
+  display:inline-block; padding:10px 20px; border-radius:var(--radius-sm);
+  background:var(--dorado); border:none; color:var(--negro);
+  font-family:var(--font-mono); font-size:12px; font-weight:700;
+  letter-spacing:.05em; cursor:pointer; transition:opacity .15s;
+  margin:4px;
+}
+.galeria-add-album-btn:hover { opacity:.85; }
+.galeria-add-album-upload {
+  background:rgba(255,255,255,.06); border:1px solid var(--linea);
+  color:rgba(245,240,232,.7);
+}
+.galeria-add-album-upload:hover { border-color:var(--dorado); color:var(--dorado); }
+/* Botón "Álbum" en barra de selección */
+.galeria-select-album-btn {
+  padding:6px 14px; border-radius:var(--radius-pill);
+  background:rgba(212,160,23,.15); border:1px solid rgba(212,160,23,.4);
+  color:var(--dorado); font-family:var(--font-mono); font-size:11px; font-weight:700;
+  cursor:pointer; transition:all .15s;
+}
+.galeria-select-album-btn:hover { background:rgba(212,160,23,.25); border-color:var(--dorado); }
+/* Menú flotante de álbumes */
+.galeria-album-menu {
+  position:absolute; bottom:100%; left:50%; transform:translateX(-50%);
+  margin-bottom:8px; min-width:160px;
+  background:var(--gris); border:1px solid var(--dorado);
+  border-radius:var(--radius-sm); padding:4px;
+  display:flex; flex-direction:column; gap:2px;
+  box-shadow:0 -4px 20px rgba(0,0,0,.5);
+  z-index:1300;
+}
+.galeria-album-menu-item {
+  padding:10px 14px; border-radius:8px;
+  background:none; border:none; text-align:left;
+  color:var(--crema); font-family:var(--font-mono); font-size:12px;
+  cursor:pointer; transition:background .12s;
+}
+.galeria-album-menu-item:hover { background:rgba(212,160,23,.15); }
+.galeria-album-menu-none { color:rgba(245,240,232,.45); font-style:italic; }
 /* Kodak frame para vídeo */
 .diario-video-kodak {
   position:relative; width:100%; max-width:360px; aspect-ratio:9/16;
