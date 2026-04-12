@@ -4105,6 +4105,7 @@ function _showDiarioVideoResult() {
   el.classList.add('on');
   _diarioSaved = false;
   _saveDiarioVideoToGallery();
+  _renderDiarioVideoKodak(); // Background: graba vídeo con diseño Kodak para compartir
 }
 
 async function _saveDiarioVideoToGallery() {
@@ -4142,6 +4143,77 @@ async function _saveDiarioVideoToGallery() {
     console.warn('[Diario video save]', e);
     _diarioSaved = false;
   }
+}
+
+// ── Renderizar vídeo Kodak (canvas + MediaRecorder) ──
+async function _renderDiarioVideoKodak() {
+  if (typeof MediaRecorder === 'undefined') return;
+  const video = document.getElementById('kodak-video-el');
+  if (!video) return;
+  if (!video.videoWidth) await new Promise(r => { video.onloadeddata = r; });
+  if (!video.videoWidth) return;
+
+  // Cargar mapa estático (mismo que foto Kodak)
+  let mapImg = null;
+  if (_diario.lat && _diario.lng) {
+    const mapUrl = window.SALMA_API + '/staticmap?lat=' + _diario.lat + '&lng=' + _diario.lng +
+      '&zoom=13&size=640x640&maptype=terrain&scale=2&key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
+    try {
+      const raw = await new Promise((ok, ko) => {
+        const i = new Image(); i.crossOrigin='anonymous'; i.onload=()=>ok(i); i.onerror=ko; i.src=mapUrl;
+      });
+      const tmp = document.createElement('canvas'); tmp.width=1080; tmp.height=1920;
+      const tCtx = tmp.getContext('2d');
+      const iw=raw.naturalWidth, ih=raw.naturalHeight, cr=1080/1920, ir=iw/ih;
+      let sx=0,sy=0,sw=iw,sh=ih;
+      if(ir>cr){sw=Math.round(ih*cr);sx=Math.round((iw-sw)/2);}
+      else{sh=Math.round(iw/cr);sy=Math.round((ih-sh)/2);}
+      tCtx.drawImage(raw,sx,sy,sw,sh,0,0,1080,1920);
+      const scaled=new Image();
+      await new Promise(r=>{scaled.onload=r;scaled.src=tmp.toDataURL();});
+      mapImg=scaled;
+    } catch(e) { mapImg=null; }
+  }
+
+  // Canvas offscreen 1080×1920
+  const W=1080, H=1920;
+  const canvas = document.createElement('canvas'); canvas.width=W; canvas.height=H;
+  const ctx = canvas.getContext('2d');
+
+  // Elegir formato (MP4 si soportado, si no webm)
+  const stream = canvas.captureStream(30);
+  let mime = 'video/mp4';
+  if(!MediaRecorder.isTypeSupported(mime)){
+    mime='video/webm;codecs=vp9';
+    if(!MediaRecorder.isTypeSupported(mime)) mime='video/webm';
+  }
+  const recorder = new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:4000000});
+  const chunks = [];
+  recorder.ondataavailable = e => { if(e.data.size) chunks.push(e.data); };
+  const done = new Promise(resolve => {
+    recorder.onstop = () => resolve(new Blob(chunks,{type:mime.split(';')[0]}));
+  });
+
+  // Seek al inicio del trim y grabar
+  const dur = Math.min(15, _diario.videoDuration || 15);
+  const loc = _diario.locName || '';
+  video.currentTime = _diario.videoTrimStart || 0;
+  await new Promise(r => { video.onseeked = r; });
+  recorder.start();
+  const t0 = performance.now();
+
+  function drawFrame() {
+    if(recorder.state !== 'recording') return;
+    _drawDiarioKodak(ctx, video, W, H, null, loc, mapImg, '');
+    if((performance.now()-t0)/1000 < dur) requestAnimationFrame(drawFrame);
+    else recorder.stop();
+  }
+  requestAnimationFrame(drawFrame);
+
+  const blob = await done;
+  _diario.lastBlob = blob;
+  _diario.videoExt = mime.includes('mp4') ? 'mp4' : 'webm';
+  if(typeof showToast==='function') showToast('✓ Kodak listo');
 }
 
 // ── Generar story Kodak ──
@@ -4224,9 +4296,10 @@ function _drawDiarioKodak(ctx, photo, W, H, transport, loc, mapImg, msgTxt) {
   // Photo
   if(photo){
     ctx.save();ctx.beginPath();ctx.rect(phX,phY,phW,phH);ctx.clip();
-    const ir=photo.naturalWidth/photo.naturalHeight,cr2=phW/phH;
-    let sx=0,sy=0,sw=photo.naturalWidth,sh=photo.naturalHeight;
-    if(ir>cr2){sw=sh*cr2;sx=(photo.naturalWidth-sw)/2;}else{sh=sw/cr2;sy=(photo.naturalHeight-sh)/2;}
+    const pw=photo.naturalWidth||photo.videoWidth,ph_=photo.naturalHeight||photo.videoHeight;
+    const ir=pw/ph_,cr2=phW/phH;
+    let sx=0,sy=0,sw=pw,sh=ph_;
+    if(ir>cr2){sw=sh*cr2;sx=(pw-sw)/2;}else{sh=sw/cr2;sy=(ph_-sh)/2;}
     ctx.drawImage(photo,sx,sy,sw,sh,phX,phY,phW,phH);
     ctx.restore();
     const vig=ctx.createRadialGradient(phX+phW/2,phY+phH/2,phW*.3,phX+phW/2,phY+phH/2,phW*.72);
@@ -4313,8 +4386,9 @@ async function shareDiarioWA() {
   if(!_diario.lastBlob) return;
   _diarioAutoSave();
   const isVid = _diario.isVideo;
-  const fname = isVid ? 'mi-diario.mp4' : 'mi-diario.jpg';
-  const ftype = isVid ? 'video/mp4' : 'image/jpeg';
+  const vExt = _diario.videoExt || 'mp4';
+  const fname = isVid ? 'mi-diario.' + vExt : 'mi-diario.jpg';
+  const ftype = isVid ? 'video/' + vExt : 'image/jpeg';
   const file=new File([_diario.lastBlob], fname, {type: ftype});
   const txt=_diarioShareText();
   if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
@@ -4330,7 +4404,7 @@ function downloadDiario() {
   if(!_diario.lastBlob) return;
   _diarioAutoSave();
   const isVid = _diario.isVideo;
-  const ext = isVid ? '.mp4' : '.jpg';
+  const ext = isVid ? '.' + (_diario.videoExt || 'mp4') : '.jpg';
   const a=document.createElement('a');a.href=URL.createObjectURL(_diario.lastBlob);
   a.download='mi-diario-'+Date.now()+ext;a.click();
   if(typeof showToast==='function')showToast('✓ ' + (isVid ? 'Vídeo descargado' : 'Guardada'));
@@ -4340,8 +4414,9 @@ async function shareDiarioNative() {
   if(!_diario.lastBlob) return;
   _diarioAutoSave();
   const isVid = _diario.isVideo;
-  const fname = isVid ? 'mi-diario.mp4' : 'mi-diario.jpg';
-  const ftype = isVid ? 'video/mp4' : 'image/jpeg';
+  const vExt = _diario.videoExt || 'mp4';
+  const fname = isVid ? 'mi-diario.' + vExt : 'mi-diario.jpg';
+  const ftype = isVid ? 'video/' + vExt : 'image/jpeg';
   const file=new File([_diario.lastBlob], fname, {type: ftype});
   if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
     try{await navigator.share({files:[file],text:_diarioShareText()});}catch(e){}
