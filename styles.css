@@ -4489,6 +4489,36 @@ body {
   color: rgba(255,255,255,.4);
 }
 
+/* ── Botón "Ir al mapa" — centrado abajo del mapa itinerario ── */
+.itin-go-to-map {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: var(--dorado);
+  color: var(--negro);
+  font-family: var(--font-tight);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,.45);
+  transition: transform .15s, box-shadow .15s;
+}
+.itin-go-to-map:active {
+  transform: translateX(-50%) scale(.95);
+  box-shadow: 0 2px 8px rgba(0,0,0,.35);
+}
+.itin-go-to-map svg { stroke: var(--negro); flex-shrink: 0; }
+
 /* ── Leaflet zoom por encima del bottom bar ── */
 .itin-map-col .leaflet-bottom {
   margin-bottom: 62px;

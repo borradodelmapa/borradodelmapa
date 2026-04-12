@@ -466,13 +466,26 @@ const mapaItinerario = {
     document.querySelector('.app-header')?.style.setProperty('display', 'none', 'important');
     view.style.display = 'block';
 
-    // Inicializar mapa y cards
+    // Inicializar mapa (preview: sin controles, solo botón "Ir al mapa") y cards
     const stops = routeData.stops;
-    mapaRuta.init('itin-map-container', stops);
+    mapaRuta.init('itin-map-container', stops, { preview: true });
     mapaItinerario.init('itin-cards-container', stops, routeData, options);
 
     // Asegurar que el mapa se dimensiona bien
     setTimeout(() => mapaRuta.invalidateSize(), 200);
+
+    // Botón "Ir al mapa" → cierra itinerario + abre mapa live con la ruta cargada + pins
+    const _onOpenLiveMap = () => {
+      document.removeEventListener('itin:open-live-map', _onOpenLiveMap);
+      closeItinerarioView();
+      // Abrir mapa live
+      if (typeof openLiveMap === 'function') openLiveMap();
+      // Cargar la ruta en el mapa live (esperar a que el mapa esté listo)
+      setTimeout(() => {
+        if (typeof selectRouteOnMap === 'function') selectRouteOnMap(routeData);
+      }, 400);
+    };
+    document.addEventListener('itin:open-live-map', _onOpenLiveMap);
 
     // Interceptar showState para cerrar la vista si el usuario navega con el bottom bar
     const _origShowState = window.showState;

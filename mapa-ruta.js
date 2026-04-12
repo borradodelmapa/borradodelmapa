@@ -22,12 +22,13 @@ const mapaRuta = {
   _dayColors: ['#D4A843', '#E87040', '#5CB85C', '#5BC0DE', '#D9534F', '#AA66CC', '#FF8C00'],
 
   // ═══ INIT ═══
-  init(containerId, stops) {
+  init(containerId, stops, options) {
     const el = document.getElementById(containerId);
     if (!el || !stops || !stops.length) return;
 
     this._currentContainerId = containerId;
     this._currentStops = stops;
+    this._previewMode = !!(options && options.preview);
     this.destroy();
 
     this._initGoogleMaps(containerId, stops);
@@ -169,6 +170,21 @@ const mapaRuta = {
     const el = document.getElementById(containerId);
     if (!el) return;
     el.querySelector('#map-controls')?.remove();
+  },
+
+  // ═══ BOTÓN "IR AL MAPA" (modo preview del itinerario) ═══
+  _renderGoToMapButton(containerId) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.querySelector('.itin-go-to-map')?.remove();
+
+    const btn = document.createElement('button');
+    btn.className = 'itin-go-to-map';
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg> Ir al mapa`;
+    btn.addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('itin:open-live-map'));
+    });
+    el.appendChild(btn);
   },
 
   // ═══ COMPASS (brújula sobre el mapa) ═══
@@ -528,17 +544,22 @@ const mapaRuta = {
     }
 
     // Controles DESPUÉS del mapa (evita que innerHTML='' los borre)
-    this._renderMapControls(this._currentContainerId);
-    this._renderCompass(this._currentContainerId);
-    this._renderSearchBar(this._currentContainerId);
+    // En modo preview (itinerario) no se renderizan controles — solo el botón "Ir al mapa"
+    if (!this._previewMode) {
+      this._renderMapControls(this._currentContainerId);
+      this._renderCompass(this._currentContainerId);
+      this._renderSearchBar(this._currentContainerId);
 
-    // Tap en mapa → revelar controles y buscador
-    this._map.addListener('click', () => {
-      const ctrl = document.getElementById('map-controls');
-      if (ctrl) ctrl.classList.remove('map-controls-hidden');
-      const sb = document.getElementById('map-search-bar');
-      if (sb) sb.classList.remove('map-search-hidden');
-    });
+      // Tap en mapa → revelar controles y buscador
+      this._map.addListener('click', () => {
+        const ctrl = document.getElementById('map-controls');
+        if (ctrl) ctrl.classList.remove('map-controls-hidden');
+        const sb = document.getElementById('map-search-bar');
+        if (sb) sb.classList.remove('map-search-hidden');
+      });
+    } else {
+      this._renderGoToMapButton(this._currentContainerId);
+    }
   },
 
   // Fetch de directions (separado para poder lanzar en paralelo)
@@ -603,8 +624,12 @@ const mapaRuta = {
     this._polyline = L.polyline(valid.map(s => [s.lat, s.lng]), { color: '#D4A843', weight: 3, opacity: 0.7, dashArray: '8 6' }).addTo(this._map);
     this._map.fitBounds(bounds, { padding: [40, 40] });
 
-    // FAB y controles tras cargar el mapa
-    this._renderMapControls(this._currentContainerId);
+    // En modo preview (itinerario) solo botón "Ir al mapa"
+    if (!this._previewMode) {
+      this._renderMapControls(this._currentContainerId);
+    } else {
+      this._renderGoToMapButton(this._currentContainerId);
+    }
   },
 
   // ═══ DECODE GOOGLE POLYLINE ═══
