@@ -1222,14 +1222,18 @@ async function renderGaleria(albumFilter) {
       const selectedIds = [...document.querySelectorAll('.galeria-item.selected')]
         .map(el => el.dataset.fotoId).filter(Boolean);
       if (!selectedIds.length) return;
-      try {
-        for (const fid of selectedIds) {
+      let ok = 0;
+      for (const fid of selectedIds) {
+        try {
           await db.collection('users').doc(uid).collection('fotos').doc(fid).update({ albumId: _addToAlbumId });
+          ok++;
+        } catch (e) {
+          console.warn('[Galería] No se pudo mover foto', fid, e.message);
         }
-        showToast(`${selectedIds.length} foto${selectedIds.length !== 1 ? 's' : ''} añadida${selectedIds.length !== 1 ? 's' : ''} a "${_addToAlbumName}"`);
-      } catch (e) {
-        showToast('Error al mover fotos');
       }
+      showToast(ok > 0
+        ? `${ok} foto${ok !== 1 ? 's' : ''} añadida${ok !== 1 ? 's' : ''} a "${_addToAlbumName}"`
+        : 'Error al mover fotos');
       _addToAlbumId = null;
       document.getElementById('galeria-select-bar')?.remove();
       renderGaleria(activeAlbum);
@@ -1382,14 +1386,14 @@ async function renderGaleria(albumFilter) {
           const targetId = btn.dataset.albumId;
           const albumId = targetId === '__none__' ? null : targetId;
           const albumName = targetId === '__none__' ? 'Sin álbum' : (albumes.find(a => a.id === targetId)?.nombre || 'Álbum');
-          try {
-            for (const fid of selectedIds) {
+          let ok = 0;
+          for (const fid of selectedIds) {
+            try {
               await db.collection('users').doc(uid).collection('fotos').doc(fid).update({ albumId });
-            }
-            showToast(`${selectedIds.length} foto${selectedIds.length !== 1 ? 's' : ''} → ${albumName}`);
-          } catch (e) {
-            showToast('Error al mover fotos');
+              ok++;
+            } catch (_) {}
           }
+          showToast(ok > 0 ? `${ok} foto${ok !== 1 ? 's' : ''} → ${albumName}` : 'Error al mover fotos');
           _exitSelectMode();
           renderGaleria(activeAlbum);
         });
