@@ -6,6 +6,10 @@
 // Firebase ya inicializado en index.html — solo referencias
 const auth = firebase.auth();
 const db = firebase.firestore();
+db.enablePersistence({ synchronizeTabs: true }).catch(err => {
+  if (err.code === 'failed-precondition') console.warn('[offline] Persistence failed: multiple tabs open');
+  else if (err.code === 'unimplemented') console.warn('[offline] Persistence not supported in this browser');
+});
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 // Forzar comprobación de SW nuevo en cada carga
