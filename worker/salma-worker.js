@@ -3706,9 +3706,9 @@ export default {
           return new Response(JSON.stringify({ error: 'Missing photo' }), { status: 400, headers: corsH });
         }
         const isVideo = photo.type && photo.type.startsWith('video/');
-        const maxSize = isVideo ? 15 * 1024 * 1024 : 6 * 1024 * 1024;
+        const maxSize = isVideo ? 50 * 1024 * 1024 : 6 * 1024 * 1024;
         if (photo.size > maxSize) {
-          return new Response(JSON.stringify({ error: isVideo ? 'Video too large (max 15MB)' : 'Photo too large (max 6MB)' }), { status: 400, headers: corsH });
+          return new Response(JSON.stringify({ error: isVideo ? 'Video too large (max 50MB)' : 'Photo too large (max 6MB)' }), { status: 400, headers: corsH });
         }
         const timestamp = Date.now();
         const ext = isVideo ? '.mp4' : '.jpg';

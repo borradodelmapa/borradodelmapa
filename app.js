@@ -4007,8 +4007,8 @@ function _onDiarioVideo(e) {
   if (!f.type.startsWith('video/')) {
     showToast('Selecciona un vídeo'); return;
   }
-  if (f.size > 15 * 1024 * 1024) {
-    showToast('El vídeo es demasiado grande (máx 15MB)'); return;
+  if (f.size > 50 * 1024 * 1024) {
+    showToast('El vídeo es demasiado grande (máx 50MB)'); return;
   }
 
   // Comprobar duración
