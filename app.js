@@ -227,6 +227,8 @@ function _renderChatEmpty() {
     { label: 'Info del país', msg: 'Cuéntame info práctica del país donde estoy' },
     { label: 'Explorar', msg: null, action: 'explorar' },
     { label: 'Alerta vuelos', msg: null, action: 'vuelos' },
+    { label: 'Mis Notas', msg: null, action: 'notas' },
+    { label: 'Galería', msg: null, action: 'galeria' },
     { label: 'Emergencia', msg: null, action: 'sos', cls: 'chat-empty-chip--sos' }
   ];
 
@@ -267,6 +269,16 @@ function _renderChatEmpty() {
       if (action === 'vuelos') {
         if (!currentUser) { window._afterLogin = 'vuelos'; openModal(); return; }
         showState('vuelos');
+        return;
+      }
+      if (action === 'notas') {
+        if (!currentUser) { window._afterLogin = 'notas'; openModal(); return; }
+        showState('notas');
+        return;
+      }
+      if (action === 'galeria') {
+        if (!currentUser) { window._afterLogin = 'galeria'; openModal(); return; }
+        renderGaleria();
         return;
       }
       if (chip.dataset.msg && typeof salma !== 'undefined') salma.send(chip.dataset.msg);
