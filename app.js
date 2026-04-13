@@ -243,6 +243,7 @@ function _renderChatEmpty() {
     { label: 'Hazme una ruta', msg: 'Hazme una ruta' },
     { label: 'Hotel cerca', msg: 'Busca un hotel cerca' },
     { label: 'Dónde comer', msg: 'Recomiéndame dónde comer cerca' },
+    { label: 'Buscar vuelo', msg: 'Busca vuelos' },
     { label: 'Info del país', msg: 'Cuéntame info práctica del país donde estoy' },
     { label: 'Alerta vuelos', msg: null, action: 'vuelos' },
     { label: 'Emergencia', msg: null, action: 'sos', cls: 'chat-empty-chip--sos' }
