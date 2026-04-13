@@ -33,7 +33,6 @@ const mapaItinerario = {
     const header = document.createElement('div');
     header.className = 'itin-header';
     header.innerHTML = `
-      <button class="itin-back" id="itin-back-btn">&larr;</button>
       <div class="itin-header-info">
         <div class="itin-title">${this._esc(routeData.title || routeData.name || 'Tu ruta')}</div>
         <div class="itin-meta">${this._totalDays(stops)} días · ${stops.length} paradas · ${this._esc(country.toUpperCase())}</div>
