@@ -3397,6 +3397,8 @@ function closeLiveMap() {
     _liveMapWatchId = null;
   }
   // El mapa queda vivo en memoria — pins, ruta y capas se preservan
+  // Volver al chat al cerrar el mapa
+  if (currentState !== 'chat') showState('chat');
 }
 
 async function openRouteSelector() {
