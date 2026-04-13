@@ -160,10 +160,6 @@ function updateBottomBar() {
       <span>Explorar</span>
       ${typeof salma !== 'undefined' && salma._narratorActive ? '<span class="narrator-pulse"></span>' : ''}
     </button>
-    ${currentUser ? `<button class="bottom-tab ${isVuelos ? 'bottom-tab-active' : ''}" id="tab-vuelos">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
-      <span>Vuelos</span>
-    </button>` : ''}
     <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span>Salma</span>
@@ -199,11 +195,6 @@ function updateBottomBar() {
   document.getElementById('tab-rutas').addEventListener('click', () => {
     if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
     showState('rutas');
-  });
-  const tabVuelos = document.getElementById('tab-vuelos');
-  if (tabVuelos) tabVuelos.addEventListener('click', () => {
-    if (!currentUser) { window._afterLogin = 'vuelos'; openModal(); return; }
-    showState('vuelos');
   });
   document.getElementById('tab-narrador').addEventListener('click', async () => {
     if (typeof salma === 'undefined') return;
@@ -252,9 +243,9 @@ function _renderChatEmpty() {
     { label: 'Hazme una ruta', msg: 'Hazme una ruta' },
     { label: 'Hotel cerca', msg: 'Busca un hotel cerca' },
     { label: 'Dónde comer', msg: 'Recomiéndame dónde comer cerca' },
-    { label: 'Buscar vuelo', msg: 'Busca vuelos' },
     { label: 'Info del país', msg: 'Cuéntame info práctica del país donde estoy' },
-    { label: 'Emergencia', msg: 'Necesito ayuda urgente' }
+    { label: 'Alerta vuelos', msg: null, action: 'vuelos' },
+    { label: 'Emergencia', msg: null, action: 'sos', cls: 'chat-empty-chip--sos' }
   ];
 
   area.innerHTML = `
@@ -264,13 +255,24 @@ function _renderChatEmpty() {
         <div class="msg-body-salma">${saludo}</div>
       </div>
       <div class="chat-empty-chips">
-        ${chips.map(c => `<button class="chat-empty-chip" data-msg="${c.msg}">${c.label}</button>`).join('')}
+        ${chips.map(c => `<button class="chat-empty-chip ${c.cls || ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}">${c.label}</button>`).join('')}
       </div>
     </div>`;
 
   area.querySelectorAll('.chat-empty-chip').forEach(chip => {
     chip.addEventListener('click', () => {
-      if (typeof salma !== 'undefined') salma.send(chip.dataset.msg);
+      const action = chip.dataset.action;
+      if (action === 'sos') {
+        const sosConfigured = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim()).length > 0;
+        if (sosConfigured) showSOSConfirm(); else renderSOSConfig();
+        return;
+      }
+      if (action === 'vuelos') {
+        if (!currentUser) { window._afterLogin = 'vuelos'; openModal(); return; }
+        showState('vuelos');
+        return;
+      }
+      if (chip.dataset.msg && typeof salma !== 'undefined') salma.send(chip.dataset.msg);
     });
   });
 }

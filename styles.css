@@ -139,6 +139,12 @@ body {
   color:var(--crema);
 }
 .chat-empty-chip:active { transform:scale(.96); }
+.chat-empty-chip--sos {
+  background:rgba(239,68,68,.15); border-color:rgba(239,68,68,.5); color:#ef4444;
+}
+.chat-empty-chip--sos:hover {
+  background:rgba(239,68,68,.25); border-color:#ef4444; color:#ff6b6b;
+}
 
 /* ── Input bar (fijo abajo, NUNCA desaparece) ── */
 .app-input-bar {
