@@ -4296,6 +4296,18 @@ body {
 }
 .itin-header-info { flex: 1; min-width: 0; }
 
+/* Botón "Ir al mapa" centrado sobre el mapa preview */
+.itin-go-to-map {
+  position:absolute; bottom:16px; left:50%; transform:translateX(-50%);
+  z-index:10; display:flex; align-items:center; gap:6px;
+  background:var(--dorado); color:var(--negro); border:none;
+  padding:10px 20px; border-radius:var(--radius-pill);
+  font-family:var(--font-tight); font-size:13px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.05em;
+  cursor:pointer; box-shadow:0 2px 12px rgba(0,0,0,.4);
+}
+.itin-go-to-map:active { opacity:.8; transform:translateX(-50%) scale(.96); }
+
 /* ── Barra de acciones flotante (se añade al body, z-index raíz) ── */
 .itin-action-bar {
   position: fixed;
