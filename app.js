@@ -155,11 +155,6 @@ function updateBottomBar() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
     </button>
-    <button class="bottom-tab ${typeof salma !== 'undefined' && salma._narratorActive ? 'bottom-tab-narrator-on' : ''}" id="tab-narrador">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="10" r="5"/><circle cx="17" cy="10" r="5"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
-      <span>Explorar</span>
-      ${typeof salma !== 'undefined' && salma._narratorActive ? '<span class="narrator-pulse"></span>' : ''}
-    </button>
     <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span>Salma</span>
@@ -196,21 +191,6 @@ function updateBottomBar() {
     if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
     showState('rutas');
   });
-  document.getElementById('tab-narrador').addEventListener('click', async () => {
-    if (typeof salma === 'undefined') return;
-    if (salma._narratorActive) {
-      salma.stopNarrator();
-      salma.showNarratorToast('Narrador desactivado. Ya no recibirás alertas de lugares cercanos.', 4000);
-    } else {
-      const ok = await salma.startNarrator();
-      if (ok === false) {
-        salma.showNarratorToast('Para usar el narrador, permite las notificaciones y la ubicación en tu navegador.', 5000);
-      } else if (ok === true) {
-        salma.showNarratorToast('Narrador activado. Te avisaré cuando estés cerca de algo con interés cultural o histórico.', 5000);
-      }
-    }
-    updateBottomBar();
-  });
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
 }
 
@@ -245,6 +225,7 @@ function _renderChatEmpty() {
     { label: 'Dónde comer', msg: 'Recomiéndame dónde comer cerca' },
     { label: 'Buscar vuelo', msg: 'Busca vuelos' },
     { label: 'Info del país', msg: 'Cuéntame info práctica del país donde estoy' },
+    { label: 'Explorar', msg: null, action: 'explorar' },
     { label: 'Alerta vuelos', msg: null, action: 'vuelos' },
     { label: 'Emergencia', msg: null, action: 'sos', cls: 'chat-empty-chip--sos' }
   ];
@@ -266,6 +247,21 @@ function _renderChatEmpty() {
       if (action === 'sos') {
         const sosConfigured = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim()).length > 0;
         if (sosConfigured) showSOSConfirm(); else renderSOSConfig();
+        return;
+      }
+      if (action === 'explorar') {
+        if (typeof salma !== 'undefined') {
+          if (salma._narratorActive) {
+            salma.stopNarrator();
+            salma.showNarratorToast('Narrador desactivado.', 3000);
+          } else {
+            salma.startNarrator().then(ok => {
+              if (ok === false) salma.showNarratorToast('Permite notificaciones y ubicación para usar el narrador.', 5000);
+              else if (ok === true) salma.showNarratorToast('Narrador activado. Te avisaré cerca de lugares con historia.', 5000);
+            });
+          }
+          updateBottomBar();
+        }
         return;
       }
       if (action === 'vuelos') {
