@@ -1689,6 +1689,15 @@ const salma = {
       while ((match = imgRegex.exec(text)) !== null) {
         imageUrls.push({ alt: match[1], url: match[2] });
       }
+      // Capturar fotos PLAN inyectadas en el DOM (no están en el texto raw)
+      const bubble = btnEl?.closest('.msg-salma');
+      if (bubble) {
+        bubble.querySelectorAll('.plan-stop-photo').forEach(img => {
+          if (img.src && !imageUrls.some(i => i.url === img.src)) {
+            imageUrls.push({ alt: img.alt || 'foto', url: img.src });
+          }
+        });
+      }
       const cleanText = text.replace(imgRegex, '').replace(/\n{3,}/g, '\n\n').trim();
 
       // Convertir enlaces markdown [texto](url) → texto (url) para que linkify los pille
