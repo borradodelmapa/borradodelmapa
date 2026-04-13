@@ -703,6 +703,7 @@ const salma = {
       if (data.reply) {
         this.history.push({ role: 'assistant', content: data.reply });
       }
+      this._saveSession();
 
       // Si hay ruta, renderizar guide-card
       if (data.route && data.route.stops) {
@@ -750,6 +751,7 @@ const salma = {
           // Ruta nueva — indicar que hay que pulsar GUARDAR
           this._addSalmaBubble('Dale al botón GUARDAR de abajo para no perderla. Cuando quieras otra ruta, dime destino y días.');
           this.history = [];
+          this._saveSession();
         }
       }
 
@@ -1194,6 +1196,38 @@ const salma = {
     this.currentRouteId = null;
     this._streaming = false;
     this._pendingRouteInfo = null;
+    try { sessionStorage.removeItem('salma_chat'); } catch (_) {}
+  },
+
+  // ═══ PERSISTENCIA CHAT — sessionStorage ═══
+  _saveSession() {
+    try {
+      sessionStorage.setItem('salma_chat', JSON.stringify({
+        history: this.history.slice(-20),
+        ts: Date.now()
+      }));
+    } catch (_) {}
+  },
+
+  _restoreSession() {
+    try {
+      const raw = sessionStorage.getItem('salma_chat');
+      if (!raw) return false;
+      const data = JSON.parse(raw);
+      if (Date.now() - data.ts > 30 * 60 * 1000) {
+        sessionStorage.removeItem('salma_chat');
+        return false;
+      }
+      if (!data.history?.length) return false;
+      this.history = data.history;
+      const area = document.getElementById('chat-area');
+      if (!area) return false;
+      for (const msg of data.history) {
+        if (msg.role === 'user') this._addUserBubble(msg.content);
+        else this._addSalmaBubble(msg.content);
+      }
+      return true;
+    } catch (_) { return false; }
   },
 
   // ═══ NARRADOR EN RUTA ═══
@@ -1450,6 +1484,11 @@ const salma = {
     }
     if (!document.getElementById('chat-area')) {
       $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
+    }
+    // Restaurar conversación previa si existe en sessionStorage
+    const area = document.getElementById('chat-area');
+    if (area && !area.hasChildNodes()) {
+      this._restoreSession();
     }
     // Mostrar tarjeta copiloto si hay datos del país
     if (this._copilotData) this.showCopilotCard();
