@@ -1809,7 +1809,7 @@ const salma = {
     let m;
     while ((m = re.exec(html)) !== null) {
       const name = m[1].replace(/<[^>]*>/g, '').trim();
-      if (name.length < 3) continue;
+      if (name.length < 3 || /salma|gu[ií]a|dónde comer|donde comer/i.test(name)) continue;
       // Buscar URL Maps cercana para extraer query con ciudad
       const afterStr = html.slice(m.index, m.index + 500);
       const mapsMatch = afterStr.match(/maps\/search\/([^"&<]+)/);
@@ -1861,12 +1861,11 @@ const salma = {
       if (!ph) continue;
       if (!url) { ph.remove(); continue; }
       const img = document.createElement('img');
-      img.src = url;
       img.alt = name;
       img.className = 'plan-stop-photo';
-      img.loading = 'lazy';
       img.onload = () => ph.replaceWith(img);
       img.onerror = () => ph.remove();
+      img.src = url;
     }
   },
 
