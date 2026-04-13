@@ -594,6 +594,25 @@ function toFirestoreFields(obj) {
 }
 
 /**
+ * Normaliza nombre de lugar → variantes de clave para buscar en KV (spot:xxx).
+ * Devuelve array de variantes en orden de prioridad: [full, withoutCity, firstTwo, first]
+ */
+function normalizeSpotKey(rawName) {
+  const norm = (rawName || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  if (!norm || norm.length < 3) return [];
+  const full = norm.replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').substring(0, 80);
+  const parts = norm.replace(/[,()]/g, '').split(/\s+/).filter(w => w.length > 2);
+  const first = parts[0] || '';
+  const firstTwo = parts.slice(0, 2).join('-');
+  const withoutCity = norm.replace(/,.*$/, '').trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  const variants = [full];
+  if (withoutCity && withoutCity !== full) variants.push(withoutCity);
+  if (firstTwo && !variants.includes(firstTwo)) variants.push(firstTwo);
+  if (first.length > 4 && !variants.includes(first)) variants.push(first);
+  return variants;
+}
+
+/**
  * Rate limiting por UID usando KV.
  * Devuelve true si se permite la petición, false si se ha excedido el límite.
  */
@@ -1869,7 +1888,7 @@ AL FINAL DE TODO: incluye un enlace Google Maps de la ruta completa con todas la
 
 Cierra con: "Si quieres la guía completa con mapa y navegación, dime 'Salma hazme una guía'."
 
-FOTOS OBLIGATORIAS: llama a buscar_foto para CADA PARADA que menciones. Si tienes 4 paradas en un día, llama a buscar_foto 4 veces con los 4 nombres. Cada parada merece su foto. No agrupes — una foto justo antes de cada párrafo de parada.]`;
+NO llames a buscar_foto — las fotos se cargan automáticamente en el frontend.]`;
   } else {
     userContent += `\n\n[MODO CONVERSACIONAL — INSTRUCCIONES ESTRICTAS:
 
@@ -3986,21 +4005,53 @@ export default {
         return new Response(JSON.stringify({ error: 'missing params' }), { status: 400, headers: corsH });
       }
       try {
-        const bias = (lat && lng) ? `&locationbias=circle:10000@${lat},${lng}` : '';
-        const findRes = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(name)}&inputtype=textquery${bias}&fields=photos,geometry&key=${placesKey}`);
-        const findData = await findRes.json();
-        const candidate = findData.candidates?.[0];
-        const photoRef = candidate?.photos?.[0]?.photo_reference;
-        if (!photoRef) return new Response(JSON.stringify({ error: 'not found' }), { status: 404, headers: corsH });
-
-        if (lat && lng) {
-          const pLat = candidate?.geometry?.location?.lat;
-          const pLng = candidate?.geometry?.location?.lng;
-          if (pLat && pLng) {
-            const distKm = Math.sqrt(Math.pow(Math.abs(pLat - parseFloat(lat)), 2) + Math.pow(Math.abs(pLng - parseFloat(lng)), 2)) * 111;
-            if (distKm > 30) return new Response(JSON.stringify({ error: 'too far' }), { status: 404, headers: corsH });
+        // KV-first: buscar photo_ref cacheado antes de llamar a Find Place ($0.017)
+        let photoRef = null;
+        if (env.SALMA_KB) {
+          const variants = normalizeSpotKey(name);
+          for (const v of variants) {
+            try {
+              const spotJson = await env.SALMA_KB.get('spot:' + v);
+              if (spotJson) {
+                const spot = JSON.parse(spotJson);
+                if (spot.photo_ref) { photoRef = spot.photo_ref; }
+                break;
+              }
+            } catch (_) {}
           }
         }
+
+        // Si no hay KV hit, Find Place API (fallback)
+        if (!photoRef) {
+          const bias = (lat && lng) ? `&locationbias=circle:10000@${lat},${lng}` : '';
+          const findRes = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(name)}&inputtype=textquery${bias}&fields=photos,geometry&key=${placesKey}`);
+          const findData = await findRes.json();
+          const candidate = findData.candidates?.[0];
+          photoRef = candidate?.photos?.[0]?.photo_reference;
+          if (!photoRef) return new Response(JSON.stringify({ error: 'not found' }), { status: 404, headers: corsH });
+
+          if (lat && lng) {
+            const pLat = candidate?.geometry?.location?.lat;
+            const pLng = candidate?.geometry?.location?.lng;
+            if (pLat && pLng) {
+              const distKm = Math.sqrt(Math.pow(Math.abs(pLat - parseFloat(lat)), 2) + Math.pow(Math.abs(pLng - parseFloat(lng)), 2)) * 111;
+              if (distKm > 30) return new Response(JSON.stringify({ error: 'too far' }), { status: 404, headers: corsH });
+            }
+          }
+          // Cachear photo_ref en KV para futuras llamadas (30 días)
+          if (env.SALMA_KB && photoRef) {
+            const cacheKey = 'spot:' + normalizeSpotKey(name)[0];
+            const existing = await env.SALMA_KB.get(cacheKey).catch(() => null);
+            const spotData = existing ? JSON.parse(existing) : {};
+            spotData.photo_ref = photoRef;
+            if (candidate?.geometry?.location) {
+              spotData.lat = spotData.lat || candidate.geometry.location.lat;
+              spotData.lng = spotData.lng || candidate.geometry.location.lng;
+            }
+            env.SALMA_KB.put(cacheKey, JSON.stringify(spotData), { expirationTtl: 2592000 }).catch(() => {});
+          }
+        }
+
         const imgRes = await fetch(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${photoRef}&key=${placesKey}`);
         if (!imgRes.ok) return new Response(JSON.stringify({ error: 'photo error' }), { status: 404, headers: corsH });
         if (url.searchParams.get('json') === '1') {
@@ -6190,22 +6241,15 @@ INSTRUCCIONES:
           // ── PASO 1: Enriquecer paradas con KV (coords + fotos verificadas, instantáneo) ──
           if (env.SALMA_KB) {
             for (const stop of route.stops) {
-              const rawName = (stop.name || stop.headline || '').toLowerCase()
-                .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+              const rawName = stop.name || stop.headline || '';
               if (!rawName || rawName.length < 3) continue;
               try {
-                // Generar variantes de búsqueda
-                const full = rawName.replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').substring(0, 80);
-                const parts = rawName.replace(/[,()]/g, '').split(/\s+/).filter(w => w.length > 2);
-                const first = parts[0] || '';
-                const firstTwo = parts.slice(0, 2).join('-');
-                const withoutCity = rawName.replace(/,.*$/, '').trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-
-                // Buscar en orden: nombre completo, sin ciudad, primeras 2 palabras, primera palabra
-                let spotJson = await env.SALMA_KB.get('spot:' + full);
-                if (!spotJson && withoutCity !== full) spotJson = await env.SALMA_KB.get('spot:' + withoutCity);
-                if (!spotJson && firstTwo && firstTwo !== full) spotJson = await env.SALMA_KB.get('spot:' + firstTwo);
-                if (!spotJson && first.length > 4 && first !== firstTwo) spotJson = await env.SALMA_KB.get('spot:' + first);
+                const variants = normalizeSpotKey(rawName);
+                let spotJson = null;
+                for (const v of variants) {
+                  spotJson = await env.SALMA_KB.get('spot:' + v);
+                  if (spotJson) break;
+                }
 
                 if (spotJson) {
                   const spot = JSON.parse(spotJson);
