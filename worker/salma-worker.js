@@ -4973,7 +4973,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           .replace(/^[\s]*[-•]\s*/gm, '')
           .replace(/\s+/g, ' ')
           .trim()
-          .slice(0, 1500); // Límite: no leer guías enteras
+          .slice(0, 4000); // Límite ampliado (ElevenLabs soporta hasta 5000)
 
         if (!clean) return new Response('Empty text', { status: 400, headers: corsH });
 

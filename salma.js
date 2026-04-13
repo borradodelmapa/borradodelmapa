@@ -29,6 +29,12 @@ const salma = {
   _narratorInterval: null,
   _voices: [],
   _currentAudio: null,
+  _ttsQueue: [],
+  _ttsBuffer: '',
+  _ttsPlaying: false,
+  _ttsStreaming: false,
+  _ttsPreloaded: null,
+  _ttsPrefetchAbort: null,
 
   // ═══ VOZ DE SALMA — Toggle global + ElevenLabs + fallback Web Speech ═══
   _voiceOn: false,
@@ -60,63 +66,228 @@ const salma = {
     btn.setAttribute('aria-label', this._voiceOn ? 'Desactivar voz de Salma' : 'Activar voz de Salma');
   },
 
+  // Limpiar texto para TTS
+  _ttsClean(text) {
+    return text
+      .replace(/#{1,6}\s?/g, '')
+      .replace(/\*{1,2}([^*]+)\*{1,2}/g, '$1')
+      .replace(/https?:\/\/\S+/g, '')
+      .replace(/[^\p{L}\p{N}\p{P}\p{Z}]/gu, '')
+      .replace(/^[\s]*[-•]\s*/gm, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  },
+
+  // Partir texto en frases para la cola TTS
+  _ttsSplitSentences(text) {
+    const sentences = [];
+    // Partir por ". " "! " "? " seguido de mayúscula o final, o por doble salto de línea
+    const parts = text.split(/(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡])|(?:\n\n+)/);
+    let current = '';
+    for (const part of parts) {
+      const trimmed = part.trim();
+      if (!trimmed) continue;
+      if (current.length + trimmed.length > 800) {
+        if (current) sentences.push(current.trim());
+        current = trimmed;
+      } else {
+        current += (current ? ' ' : '') + trimmed;
+      }
+    }
+    if (current.trim()) sentences.push(current.trim());
+    return sentences.filter(s => s.length > 0);
+  },
+
+  // Fetch audio de ElevenLabs para un trozo de texto
+  async _ttsFetchAudio(text, signal) {
+    const api = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+    const res = await fetch(api + '/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text }),
+      signal,
+    });
+    if (!res.ok) throw new Error('ElevenLabs ' + res.status);
+    const blob = await res.blob();
+    const audioUrl = URL.createObjectURL(blob);
+    const audio = new Audio(audioUrl);
+    audio._blobUrl = audioUrl;
+    return audio;
+  },
+
+  // Fallback Web Speech para una frase
+  _ttsSpeakWebSpeech(text) {
+    if (!window.speechSynthesis) return;
+    if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(text);
+    const esVoice = this._voices.find(v => v.lang.startsWith('es'));
+    utt.voice = esVoice || this._voices[0] || null;
+    utt.lang = esVoice ? esVoice.lang : 'es-ES';
+    utt.rate = 1.0;
+    utt.pitch = 1.05;
+    utt.onend = () => { this._ttsPlaying = false; this._ttsPlayNext(); };
+    utt.onerror = () => { this._ttsPlaying = false; this._ttsPlayNext(); };
+    this._ttsPlaying = true;
+    speechSynthesis.speak(utt);
+  },
+
+  // Encolar una frase limpia
+  _ttsEnqueue(sentence) {
+    const clean = this._ttsClean(sentence);
+    if (!clean) return;
+    this._ttsQueue.push(clean);
+    if (!this._ttsPlaying) this._ttsPlayNext();
+  },
+
+  // Reproducir siguiente frase de la cola
+  async _ttsPlayNext() {
+    if (!this._voiceOn || this._ttsQueue.length === 0) {
+      this._ttsPlaying = false;
+      return;
+    }
+    this._ttsPlaying = true;
+    const sentence = this._ttsQueue.shift();
+
+    // Usar audio pre-cargado si existe
+    let audio = this._ttsPreloaded;
+    this._ttsPreloaded = null;
+
+    if (!audio) {
+      try {
+        audio = await this._ttsFetchAudio(sentence);
+      } catch (e) {
+        console.warn('[Salma] ElevenLabs falló, fallback Web Speech:', e.message);
+        this._ttsSpeakWebSpeech(sentence);
+        return;
+      }
+    }
+
+    if (!this._voiceOn) { // voz desactivada durante fetch
+      if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl);
+      this._ttsPlaying = false;
+      return;
+    }
+
+    this._currentAudio = audio;
+    audio.onended = () => {
+      if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl);
+      this._currentAudio = null;
+      this._ttsPlaying = false;
+      this._ttsPlayNext();
+    };
+    audio.onerror = () => {
+      if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl);
+      this._currentAudio = null;
+      this._ttsPlaying = false;
+      this._ttsPlayNext();
+    };
+    audio.play().catch(() => { this._ttsPlaying = false; this._ttsPlayNext(); });
+
+    // Pre-fetch siguiente frase mientras esta suena
+    if (this._ttsQueue.length > 0) {
+      try {
+        if (this._ttsPrefetchAbort) this._ttsPrefetchAbort.abort();
+        this._ttsPrefetchAbort = new AbortController();
+        this._ttsPreloaded = await this._ttsFetchAudio(this._ttsQueue[0], this._ttsPrefetchAbort.signal);
+      } catch (_) { this._ttsPreloaded = null; }
+    }
+  },
+
+  // Iniciar modo streaming TTS
+  _ttsStartStreaming() {
+    this._ttsStopAll();
+    this._ttsStreaming = true;
+    this._ttsBuffer = '';
+  },
+
+  // Alimentar chunk de texto durante streaming
+  _ttsFeedChunk(chunk) {
+    if (!this._voiceOn || !this._ttsStreaming) return;
+    this._ttsBuffer += chunk;
+    // Buscar frases completas: termina en . ! ? seguido de espacio y mayúscula, o doble newline
+    const re = /^([\s\S]*?[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡])/;
+    let match;
+    while ((match = re.exec(this._ttsBuffer))) {
+      const sentence = match[1].trim();
+      if (sentence.length > 10) { // evitar fragmentos minúsculos
+        this._ttsEnqueue(sentence);
+      }
+      this._ttsBuffer = this._ttsBuffer.slice(match[0].length);
+    }
+  },
+
+  // Flush buffer al terminar streaming
+  _ttsFlush() {
+    if (this._ttsBuffer.trim().length > 5) {
+      this._ttsEnqueue(this._ttsBuffer.trim());
+    }
+    this._ttsBuffer = '';
+    this._ttsStreaming = false;
+  },
+
+  // Parar todo el sistema TTS
+  _ttsStopAll() {
+    this._ttsQueue = [];
+    this._ttsBuffer = '';
+    this._ttsPlaying = false;
+    this._ttsStreaming = false;
+    if (this._ttsPreloaded) {
+      if (this._ttsPreloaded._blobUrl) URL.revokeObjectURL(this._ttsPreloaded._blobUrl);
+      this._ttsPreloaded = null;
+    }
+    if (this._ttsPrefetchAbort) {
+      this._ttsPrefetchAbort.abort();
+      this._ttsPrefetchAbort = null;
+    }
+    if (this._currentAudio) {
+      this._currentAudio.pause();
+      if (this._currentAudio._blobUrl) URL.revokeObjectURL(this._currentAudio._blobUrl);
+      this._currentAudio.src = '';
+      this._currentAudio = null;
+    }
+    if (window.speechSynthesis) speechSynthesis.cancel();
+  },
+
+  // salmaSpeak — ahora con soporte para textos largos via cola
   async salmaSpeak(text) {
     try {
       if (!this._voiceOn) return;
-
-      // Limpiar texto: quitar markdown, emojis, URLs, guiones de lista
-      const clean = text
-        .replace(/#{1,6}\s?/g, '')
-        .replace(/\*{1,2}([^*]+)\*{1,2}/g, '$1')
-        .replace(/https?:\/\/\S+/g, '')
-        .replace(/[^\p{L}\p{N}\p{P}\p{Z}]/gu, '')
-        .replace(/^[\s]*[-•]\s*/gm, '')
-        .replace(/\s+/g, ' ')
-        .trim();
+      const clean = this._ttsClean(text);
       if (!clean) return;
 
-      // Parar cualquier audio previo
-      this.salmaSpeakStop();
+      this._ttsStopAll();
 
-      // Intentar ElevenLabs vía worker
+      // Textos largos → partir en frases y encolar
+      if (clean.length > 1200) {
+        const sentences = this._ttsSplitSentences(clean);
+        for (const s of sentences) this._ttsEnqueue(s);
+        return;
+      }
+
+      // Texto corto → una sola llamada directa
       try {
-        const api = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
-        const res = await fetch(api + '/tts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: clean }),
-        });
-        if (!res.ok) throw new Error('ElevenLabs ' + res.status);
-        const blob = await res.blob();
-        const audioUrl = URL.createObjectURL(blob);
-        this._currentAudio = new Audio(audioUrl);
-        this._currentAudio.play();
-        this._currentAudio.onended = () => { URL.revokeObjectURL(audioUrl); this._currentAudio = null; };
+        const audio = await this._ttsFetchAudio(clean);
+        if (!this._voiceOn) { if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl); return; }
+        this._currentAudio = audio;
+        this._ttsPlaying = true;
+        audio.onended = () => {
+          if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl);
+          this._currentAudio = null;
+          this._ttsPlaying = false;
+        };
+        audio.play();
         return;
       } catch (e) {
         console.warn('[Salma] ElevenLabs falló, usando voz del navegador:', e.message);
       }
 
-      // Fallback: Web Speech API
-      if (!window.speechSynthesis) return;
-      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
-      const utt = new SpeechSynthesisUtterance(clean);
-      const esVoice = this._voices.find(v => v.lang.startsWith('es'));
-      utt.voice = esVoice || this._voices[0] || null;
-      utt.lang = esVoice ? esVoice.lang : 'es-ES';
-      utt.rate = 1.0;
-      utt.pitch = 1.05;
-      speechSynthesis.speak(utt);
+      // Fallback Web Speech
+      this._ttsSpeakWebSpeech(clean);
     } catch (e) { console.warn('[Salma] Error voz:', e); }
   },
 
   salmaSpeakStop() {
-    if (this._currentAudio) {
-      this._currentAudio.pause();
-      this._currentAudio.src = '';
-      this._currentAudio = null;
-    }
-    if (window.speechSynthesis) speechSynthesis.cancel();
+    this._ttsStopAll();
   },
 
   // Pedir geolocalización al usuario (se llama una vez, se actualiza continuamente)
@@ -824,6 +995,7 @@ const salma = {
 
         // SSE stream — reusar burbuja loading como stream (una sola burbuja)
         const textEl = this._addStreamBubble();
+        if (this._voiceOn) this._ttsStartStreaming();
         const reader = res.body.getReader();
         this._currentReader = reader;
         const decoder = new TextDecoder();
@@ -1071,6 +1243,8 @@ const salma = {
                   textEl.dataset.raw = fullText.replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '').trim();
                   this._scrollToBottom();
                 }
+                // TTS en tiempo real: alimentar cola con cada chunk
+                if (this._ttsStreaming) this._ttsFeedChunk(evt.t);
               }
             } catch (e) { /* ignorar JSON mal formado */ }
           }
@@ -1814,8 +1988,11 @@ const salma = {
         const textContent = txt ? txt.textContent : '';
         if (txt) txt.removeAttribute('id');
         el.removeAttribute('id');
-        // Auto-speak si la voz está activada
-        if (textContent) {
+        // Flush TTS streaming (encola lo que quede en el buffer)
+        if (this._ttsStreaming) {
+          this._ttsFlush();
+        } else if (this._voiceOn && textContent) {
+          // Fallback: si no estaba en modo streaming, hablar todo
           const t = textContent;
           setTimeout(() => this.salmaSpeak(t), 50);
         }
