@@ -1480,14 +1480,12 @@ const salma = {
   _initChat(skipWelcome) {
     if (currentState !== 'chat') {
       $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
+      // Restaurar sesión ANTES de showState (que renderiza welcome si vacío)
+      this._restoreSession();
       showState('chat');
     }
     if (!document.getElementById('chat-area')) {
       $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
-    }
-    // Restaurar conversación previa si existe en sessionStorage
-    const area = document.getElementById('chat-area');
-    if (area && !area.hasChildNodes()) {
       this._restoreSession();
     }
     // Mostrar tarjeta copiloto si hay datos del país
