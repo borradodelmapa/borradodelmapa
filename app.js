@@ -96,9 +96,10 @@ function showState(state) {
       layer.className = 'chat-bg-layer';
       document.body.insertBefore(layer, document.body.firstChild);
     }
-    // Estado vacío: saludo + chips si no hay chat previo
+    // Restaurar sesión previa o mostrar estado vacío
     if (!document.getElementById('chat-area') || !document.getElementById('chat-area').hasChildNodes()) {
-      _renderChatEmpty();
+      const restored = typeof salma !== 'undefined' && salma._restoreSession();
+      if (!restored) _renderChatEmpty();
     }
     // Handoff desde guía pública o destino externo
     const handoff = localStorage.getItem('_salmaHandoff');
