@@ -5904,75 +5904,74 @@ INSTRUCCIONES:
 
       try {
         // ── TRANSPORT: buscar destino + emitir botones ANTES de Claude ──
-        if (helpCategory === 'transport' && userLocation && (userCountryCode || frontendCountryCode)) {
-          const _tcCode = (userCountryCode || frontendCountryCode).toLowerCase();
-          let _tcApps = kvTransportData;
-          if (!_tcApps && env.SALMA_KB) {
-            try { const _tj = await env.SALMA_KB.get('transport:' + _tcCode); if (_tj) _tcApps = JSON.parse(_tj); } catch (_) {}
+        if (helpCategory === 'transport' && userLocation) {
+          // 1. País del GPS (SIEMPRE GPS, nunca del mensaje)
+          const _tcCC = (userCountryCode || frontendCountryCode || '').toLowerCase();
+
+          // 2. Cargar transport data fresca de KV (no reusar kvTransportData que puede ser de otro país)
+          let _tcData = null;
+          if (_tcCC && env.SALMA_KB) {
+            try {
+              const raw = await env.SALMA_KB.get('transport:' + _tcCC);
+              if (raw) _tcData = JSON.parse(raw);
+            } catch (_) {}
           }
 
-          // Extraer destino: "Necesito un taxi a aeropuerto koh samui" → "aeropuerto koh samui"
-          const destMatch = message.replace(/^(necesito|quiero|busco|pedir?|dame|dime)\s*/i, '')
+          // 3. Extraer destino del mensaje
+          const _tcDest = message.replace(/^(necesito|quiero|busco|pedir?|dame|dime)\s*/i, '')
             .replace(/\b(un\s+)?taxi\b/i, '').replace(/\b(al?|para|hacia|hasta|ir\s+a|de)\b/gi, '').replace(/\s+/g, ' ').trim();
 
-          // Buscar coords del destino con Google Places (ESPERAR resultado, max 4s)
-          let destCoords = null;
-          if (env.GOOGLE_PLACES_KEY && destMatch.length > 3 && !/^(necesito|pedir|taxi|transporte|un)$/i.test(destMatch)) {
+          // 4. Buscar coords del destino con Google Places
+          let _tcCoords = null;
+          if (env.GOOGLE_PLACES_KEY && _tcDest.length > 3 && !/^(necesito|pedir|taxi|transporte|un)$/i.test(_tcDest)) {
             try {
-              const pRes = await fetch(
-                `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(destMatch)}&location=${userLocation.lat},${userLocation.lng}&radius=50000&language=es&key=${env.GOOGLE_PLACES_KEY}`,
+              const _pr = await fetch(
+                `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(_tcDest)}&location=${userLocation.lat},${userLocation.lng}&radius=50000&language=es&key=${env.GOOGLE_PLACES_KEY}`,
                 { signal: AbortSignal.timeout(4000) }
               );
-              const pData = await pRes.json();
-              if (pData.results?.[0]?.geometry?.location) {
-                const p = pData.results[0];
-                destCoords = { lat: p.geometry.location.lat, lng: p.geometry.location.lng, name: p.name || destMatch };
-                _lastBuscarLugarCoords = destCoords;
+              const _pd = await _pr.json();
+              if (_pd.results?.[0]?.geometry?.location) {
+                const _p = _pd.results[0];
+                _tcCoords = { lat: _p.geometry.location.lat, lng: _p.geometry.location.lng, name: _p.name || _tcDest };
+                _lastBuscarLugarCoords = _tcCoords;
               }
             } catch (_) {}
           }
 
-          // Emitir botones AHORA (antes de Claude) si tenemos destino + apps
-          if (destCoords && _tcApps?.ridehailing) {
-            const allApps = [_tcApps.ridehailing.best, ...(_tcApps.ridehailing.others || [])].filter(Boolean);
+          // 5. Construir y emitir botones
+          if (_tcCoords) {
             const actions = [];
 
-            // Google Maps con ruta real
+            // Google Maps con ruta
             actions.push({
-              name: 'Google Maps', icon: '🗺️', key: 'google_maps', type: 'deeplink',
-              url: `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${destCoords.lat},${destCoords.lng}&travelmode=driving`,
-              label: 'Cómo llegar → ' + destCoords.name
+              name: 'Google Maps', icon: '🗺️', type: 'deeplink',
+              url: `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${_tcCoords.lat},${_tcCoords.lng}&travelmode=driving`,
+              label: 'Cómo llegar → ' + _tcCoords.name
             });
 
-            // Apps del país (TODAS como links directos, sin intent complexity)
-            for (const appName of allApps.slice(0, 2)) {
-              const ad = TRANSPORT_APP_URLS[appName.toLowerCase()];
-              if (!ad) continue;
-              if (ad.deep_link) {
-                // App con deep link (Uber, Lyft, Ola, etc.)
+            // App best del país + primer alternativa
+            if (_tcData?.ridehailing?.best) {
+              const _appNames = [_tcData.ridehailing.best, ...(_tcData.ridehailing.others || [])].filter(Boolean).slice(0, 2);
+              for (const _an of _appNames) {
+                const _ad = TRANSPORT_APP_URLS[_an.toLowerCase()];
+                if (!_ad) continue;
+                const _url = (_ad.deep_link)
+                  ? _ad.deep_link.replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
+                      .replace(/{dropoff_lat}/g, _tcCoords.lat).replace(/{dropoff_lng}/g, _tcCoords.lng)
+                      .replace(/{dropoff_name}/g, encodeURIComponent(_tcCoords.name || ''))
+                  : _ad.web;
                 actions.push({
-                  name: ad.name, icon: ad.icon, key: appName, type: 'deeplink',
-                  url: ad.deep_link.replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
-                    .replace(/{dropoff_lat}/g, destCoords.lat).replace(/{dropoff_lng}/g, destCoords.lng)
-                    .replace(/{dropoff_name}/g, encodeURIComponent(destCoords.name || '')),
-                  label: 'Pedir ' + ad.name
-                });
-              } else {
-                // App sin deep link (Grab, Bolt, etc.) — link web directo
-                actions.push({
-                  name: ad.name, icon: ad.icon, key: appName, type: 'deeplink',
-                  url: ad.web,
-                  label: 'Abrir ' + ad.name
+                  name: _ad.name, icon: _ad.icon, type: 'deeplink',
+                  url: _url,
+                  label: _ad.deep_link ? 'Pedir ' + _ad.name : 'Abrir ' + _ad.name
                 });
               }
             }
 
-            // Emitir como SSE ANTES de que Claude empiece
+            // Emitir SSE ANTES de Claude
+            const _tip = _tcData?.ridehailing?.tips || null;
             try {
-              await writer.write(encoder.encode(`data: ${JSON.stringify({
-                transport_actions: actions,
-                transport_tip: _tcApps.ridehailing.tips || null
-              })}\n\n`));
+              await writer.write(encoder.encode(`data: ${JSON.stringify({ transport_actions: actions, transport_tip: _tip })}\n\n`));
             } catch (_) {}
           }
         }
