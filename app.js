@@ -86,8 +86,6 @@ function showState(state) {
     if (welcomeEl) $content.innerHTML = '';
     $input.placeholder = 'Escribe a Salma...';
     if (inputBar) inputBar.style.display = '';
-    const ncBtn = document.getElementById('newchat-btn');
-    if (ncBtn) ncBtn.style.display = '';
     // Resetear botones cam/mic/send al volver al chat
     if (typeof resetInputButtons === 'function') resetInputButtons();
     $content.classList.add('app-content--chat');
@@ -113,11 +111,6 @@ function showState(state) {
         $input.focus();
       }, 150);
     }
-  }
-  // Ocultar botón nueva conversación fuera del chat
-  if (state !== 'chat') {
-    const ncBtn = document.getElementById('newchat-btn');
-    if (ncBtn) ncBtn.style.display = 'none';
   }
   // Quitar fondo mapa y padding extra si salimos del chat
   if (state !== 'chat') {
@@ -162,6 +155,10 @@ function updateBottomBar() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
     </button>
+    ${isChat ? `<button class="bottom-tab bottom-tab-newchat" id="tab-newchat">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      <span>Nuevo</span>
+    </button>` : ''}
     <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span>Salma</span>
@@ -193,6 +190,10 @@ function updateBottomBar() {
     }
     if (typeof salma !== 'undefined') salma._initChat();
     showState('chat');
+  });
+  const tabNewchat = document.getElementById('tab-newchat');
+  if (tabNewchat) tabNewchat.addEventListener('click', () => {
+    if (typeof salma !== 'undefined') salma.newChat();
   });
   document.getElementById('tab-rutas').addEventListener('click', () => {
     if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
@@ -2557,11 +2558,6 @@ $input.addEventListener('input', () => {
 });
 
 $send.addEventListener('click', sendMessage);
-
-// Botón nueva conversación
-document.getElementById('newchat-btn')?.addEventListener('click', () => {
-  if (typeof salma !== 'undefined') salma.newChat();
-});
 
 // FAB Mapa → abrir mapa en vivo
 const _fabMap = document.getElementById('fab-map');
