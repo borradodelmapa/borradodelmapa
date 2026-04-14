@@ -1870,38 +1870,6 @@ const salma = {
     if (input) { input.focus(); input.placeholder = 'Escribe el destino...'; }
   },
 
-  // Listener compartido: intenta abrir app nativa, fallback a store
-  _bindAppLaunchButtons(container) {
-    container.querySelectorAll('.salma-app-launch').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const scheme = btn.dataset.scheme;
-        const pkg = btn.dataset.pkg;
-        const iosId = btn.dataset.iosId;
-        const storeIos = btn.dataset.storeIos;
-        const storeAndroid = btn.dataset.storeAndroid;
-        const web = btn.dataset.web;
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-        const isAndroid = /Android/.test(navigator.userAgent);
-
-        if (isAndroid && pkg) {
-          // Android: intent con fallback automático a Play Store
-          window.location = `intent://open#Intent;scheme=${scheme};package=${pkg};S.browser_fallback_url=${encodeURIComponent(storeAndroid || web)};end`;
-        } else if (isIOS && iosId) {
-          // iOS: intenta scheme, si falla en 1.5s → App Store
-          const start = Date.now();
-          window.location = scheme + '://';
-          setTimeout(() => {
-            if (Date.now() - start < 2000) window.location = storeIos || web;
-          }, 1500);
-        } else {
-          // Desktop: web
-          window.open(web, '_blank');
-        }
-      });
-    });
-  },
-
   _renderTransportActions(actions, tip) {
     const area = this._getChatArea();
     if (!area) return;
@@ -1922,32 +1890,19 @@ const salma = {
 
     const grid = document.createElement('div');
     grid.className = 'salma-result-grid';
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const isAndroid = /Android/.test(navigator.userAgent);
 
     for (const a of actions) {
       const card = document.createElement('div');
       card.className = 'salma-result-card';
-
-      if (a.type === 'app' && a.scheme) {
-        // Botón que intenta abrir la app nativa, fallback a store
-        card.innerHTML = `<div class="salma-result-card-body">
-          <div class="salma-result-card-name">${a.icon} ${a.name}</div>
-          <a class="salma-result-card-cta salma-app-launch" href="#" data-scheme="${a.scheme}" data-pkg="${a.pkg || ''}" data-ios-id="${a.ios_id || ''}" data-store-ios="${a.store_ios || ''}" data-store-android="${a.store_android || ''}" data-web="${a.url}">${a.label}</a>
-        </div>`;
-      } else {
-        // Deep link directo o Google Maps — link normal
-        card.innerHTML = `<div class="salma-result-card-body">
-          <div class="salma-result-card-name">${a.icon} ${a.name}</div>
-          <a class="salma-result-card-cta" href="${a.url}" target="_blank" rel="noopener">${a.label}</a>
-        </div>`;
-      }
+      card.innerHTML = `<div class="salma-result-card-body">
+        <div class="salma-result-card-name">${a.icon} ${a.name}</div>
+        <a class="salma-result-card-cta" href="${a.url}" target="_blank" rel="noopener">${a.label}</a>
+      </div>`;
       grid.appendChild(card);
     }
     wrap.appendChild(grid);
     area.appendChild(wrap);
     this._scrollToBottom(true);
-    this._bindAppLaunchButtons(wrap);
   },
 
   async _saveNoteFromBubble(text, btnEl) {
