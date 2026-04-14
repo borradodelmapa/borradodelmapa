@@ -1579,38 +1579,32 @@ function buildFollowUpChips(dest, collectedData, userCountryCode) {
 
 async function generateMiniResumen(dest, collectedData, userLocationName, env, userName) {
   if (!env.ANTHROPIC_API_KEY) return null;
-
-  // Recopilar destinos top del KV nivel 2 para sugerir rutas
-  const destinos = [];
-  if (collectedData.kvDestinos) {
-    const d = collectedData.kvDestinos;
-    // KV destinos puede ser un objeto con top_destinos array o un objeto directo
-    const tops = d.top_destinos || d.destinos || [];
-    if (Array.isArray(tops)) {
-      for (const t of tops.slice(0, 6)) {
-        const nombre = t.nombre || t.name || '';
-        const dias = t.dias_recomendados || t.dias || '';
-        const tipo = t.tipo || t.type || '';
-        if (nombre) destinos.push(`${nombre} (${tipo}, ${dias} días)`);
-      }
-    }
-  }
-
   const parts = [];
-  parts.push(`País: ${dest.destName}.`);
-  if (destinos.length) parts.push(`Destinos top: ${destinos.join(', ')}.`);
-  if (collectedData.kvBase?.mejor_epoca) parts.push(`Mejor época: ${collectedData.kvBase.mejor_epoca}.`);
-
+  parts.push(`Destino: ${dest.destName} (${dest.destCC || '?'}) desde ${userLocationName || 'ubicación desconocida'}. Distancia: ${Math.round(dest.distanceKm || 0)}km. Nivel: ${dest.level}.`);
+  if (collectedData.kvBase) {
+    const c = collectedData.kvBase;
+    parts.push(`Visa: ${c.visado_espanoles || 'no disponible'}. Moneda: ${c.moneda || '?'}. Seguridad: ${c.seguridad || '?'}.`);
+  }
+  if (collectedData.flights?.vuelos?.length) {
+    const f = collectedData.flights.vuelos[0];
+    parts.push(`Vuelo más barato: ${f.precio}, ${f.aerolinea}, ${f.escalas} escalas.`);
+  }
+  if (collectedData.weather?.current) {
+    parts.push(`Tiempo actual: ${collectedData.weather.current.temp_c}°C, ${collectedData.weather.current.description}.`);
+  }
+  if (collectedData.attractions?.length) {
+    parts.push(`Qué ver: ${collectedData.attractions.slice(0, 3).map(a => a.name).join(', ')}.`);
+  }
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 150,
+        max_tokens: 200,
         messages: [{
           role: 'user',
-          content: `Eres Salma, compañera de viaje.${userName ? ' El viajero se llama ' + userName + '. Deduce género del nombre.' : ''}\n\nDatos de ${dest.destName}:\n${parts.join('\n')}\n\nEscribe 2-3 frases sugiriendo qué rutas le puedes montar al viajero por ${dest.destName}, mencionando los destinos top. Ejemplo: "Te puedo montar una ruta por el norte con Hanoi y Sapa, o una costera por Hoi An y las playas. Tú dime cuántos días tienes."\n\nREGLAS:\n- NO repitas visado, moneda, enchufes ni clima (ya lo ve en las tarjetas).\n- NO inventes datos. Solo usa los destinos de arriba.\n- Tutea. 2-3 frases máximo. Sin emojis.`
+          content: `Eres Salma.${userName ? ' El viajero se llama ' + userName + '. Deduce género del nombre.' : ''} Sugiere en 2 frases qué rutas le puedes montar por ${dest.destName}.\n\nDatos reales:\n${parts.join('\n')}\n\nREGLAS:\n- Exactamente 2 frases. Tutea.\n- NO repitas visado, moneda, enchufes, clima ni nada que ya sale en tarjetas.\n- Sugiere rutas o planes ("te puedo montar una ruta por el norte con X y Y, o por la costa con Z").\n- PROHIBIDO inventar precios o aerolíneas.\n- Sin emojis. Sin saludar.`
         }]
       }),
       signal: AbortSignal.timeout(8000)
