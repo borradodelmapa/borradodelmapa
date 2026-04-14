@@ -1576,7 +1576,7 @@ function buildFollowUpChips(dest, collectedData, userCountryCode) {
   return chips.slice(0, 4);
 }
 
-async function generateMiniResumen(dest, collectedData, userLocationName, env) {
+async function generateMiniResumen(dest, collectedData, userLocationName, env, userName) {
   if (!env.ANTHROPIC_API_KEY) return null;
   const parts = [];
   parts.push(`Destino: ${dest.destName} (${dest.destCC || '?'}) desde ${userLocationName || 'ubicación desconocida'}. Distancia: ${Math.round(dest.distanceKm || 0)}km. Nivel: ${dest.level}.`);
@@ -1603,7 +1603,7 @@ async function generateMiniResumen(dest, collectedData, userLocationName, env) {
         max_tokens: 200,
         messages: [{
           role: 'user',
-          content: `Eres Salma, compañera de viaje. Resume en 2-3 frases cómo llegar a ${dest.destName} desde ${userLocationName || 'donde está el viajero'}. Datos:\n${parts.join('\n')}\n\nMáximo 3 frases cortas y útiles. Sin emojis. Tutea al viajero en MASCULINO (tío, no guapa). Si hay vuelo, menciónalo primero con precio.`
+          content: `Eres Salma, compañera de viaje. Resume en 2-3 frases cómo llegar a ${dest.destName} desde ${userLocationName || 'donde está el viajero'}.${userName ? ' El viajero se llama ' + userName + '. Deduce su género por el nombre y trátale en concordancia (tío/tía, listo/lista).' : ''} Datos:\n${parts.join('\n')}\n\nMáximo 3 frases cortas y útiles. Sin emojis. Tutea. Si hay vuelo, menciónalo primero con precio.`
         }]
       }),
       signal: AbortSignal.timeout(8000)
@@ -1631,7 +1631,7 @@ async function searchNearbyPlaces(lat, lng, type, googleKey) {
   } catch (_) { return []; }
 }
 
-async function handleGoTo(dest, userLocation, userCountryCode, userLocationName, env, writer, encoder, travelDates, userNationality) {
+async function handleGoTo(dest, userLocation, userCountryCode, userLocationName, env, writer, encoder, travelDates, userNationality, userName) {
   const collectedData = {};
   const emit = async (section, data) => {
     try { await writer.write(encoder.encode(`data: ${JSON.stringify({ go_to: section, data })}\n\n`)); } catch (_) {}
@@ -1813,7 +1813,7 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
   }
 
   // ─── MINI-RESUMEN (Claude Haiku) ───
-  const resumen = await generateMiniResumen(dest, collectedData, userLocationName, env);
+  const resumen = await generateMiniResumen(dest, collectedData, userLocationName, env, userName);
   if (resumen) await emit('resumen', { text: resumen });
 
   // ─── CHIPS FOLLOW-UP ───
@@ -6071,7 +6071,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
 
           ctx.waitUntil((async () => {
             try {
-              await handleGoTo(goToDest, userLocation, userCountryCode || frontendCountryCode, userLocationName, env, goToWriter, goToEncoder, travelDates, userNationality);
+              await handleGoTo(goToDest, userLocation, userCountryCode || frontendCountryCode, userLocationName, env, goToWriter, goToEncoder, travelDates, userNationality, userName);
             } catch (e) {
               try {
                 await goToWriter.write(goToEncoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No he podido buscar esa información. Inténtalo de nuevo.', route: null })}\n\n`));
