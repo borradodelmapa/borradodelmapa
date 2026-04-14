@@ -227,21 +227,22 @@ function _renderChatEmpty() {
   ];
   const saludo = saludos[Math.floor(Math.random() * saludos.length)];
 
+  const _ci = (d) => `<svg class="chip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
   const chipsLeft = [
-    { label: 'Hazme una ruta', emoji: '🗺️', msg: 'Hazme una ruta' },
-    { label: 'Buscar vuelo', emoji: '✈️', msg: 'Busca vuelos' },
-    { label: 'Alerta vuelos', emoji: '🔔', msg: null, action: 'vuelos' },
-    { label: 'Pide taxi', emoji: '🚕', msg: null, action: 'taxi' },
-    { label: 'Hotel cerca', emoji: '🏨', msg: 'Busca un hotel cerca' },
-    { label: 'Dónde comer', emoji: '🍽️', msg: 'Recomiéndame dónde comer cerca' },
+    { label: 'Hazme una ruta', icon: _ci('<path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>'), msg: 'Hazme una ruta' },
+    { label: 'Buscar vuelo', icon: _ci('<path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5 5.2 3L5.8 13 4 12.5l-1 1 3 2 2 3 1-1-.5-1.8 2.8-2.8 3 5.2.5-.3c.4-.2.6-.6.5-1.1z"/>'), msg: 'Busca vuelos' },
+    { label: 'Alerta vuelos', icon: _ci('<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>'), msg: null, action: 'vuelos' },
+    { label: 'Pide taxi', icon: _ci('<path d="M5 17h14v-5H5z"/><path d="M7 12V9a1 1 0 011-1h8a1 1 0 011 1v3"/><path d="M5 17l-1 2h1M19 17l1 2h-1"/><circle cx="7.5" cy="14.5" r="1"/><circle cx="16.5" cy="14.5" r="1"/><path d="M9 8l1-3h4l1 3"/>'), msg: null, action: 'taxi' },
+    { label: 'Hotel cerca', icon: _ci('<path d="M3 21V7a2 2 0 012-2h6v16"/><path d="M13 21V3h6a2 2 0 012 2v16"/><path d="M7 9h2M7 13h2M15 9h2M15 13h2"/>'), msg: 'Busca un hotel cerca' },
+    { label: 'Dónde comer', icon: _ci('<path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>'), msg: 'Recomiéndame dónde comer cerca' },
   ];
   const chipsRight = [
-    { label: 'Mis Notas', emoji: '📝', msg: null, action: 'notas' },
-    { label: 'Galería', emoji: '📸', msg: null, action: 'galeria' },
-    { label: 'Explorar zona', emoji: '🧭', msg: null, action: 'explorar' },
-    { label: 'Emergencia', emoji: '🆘', msg: null, action: 'sos', cls: 'chat-empty-chip--sos' },
+    { label: 'Mis Notas', icon: _ci('<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>'), msg: null, action: 'notas' },
+    { label: 'Galería', icon: _ci('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>'), msg: null, action: 'galeria' },
+    { label: 'Explorar zona', icon: _ci('<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>'), msg: null, action: 'explorar' },
+    { label: 'Emergencia', icon: '', msg: null, action: 'sos', cls: 'chat-empty-chip--sos', emoji: '🆘' },
   ];
-  const renderChip = c => `<button class="chat-empty-chip ${c.cls || ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}"><span class="chip-emoji">${c.emoji}</span>${c.label}</button>`;
+  const renderChip = c => `<button class="chat-empty-chip ${c.cls || ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}">${c.icon || ''}${c.emoji ? `<span class="chip-emoji">${c.emoji}</span>` : ''}${c.label}</button>`;
 
   area.innerHTML = `
     <div class="chat-empty">
