@@ -1603,7 +1603,7 @@ async function generateMiniResumen(dest, collectedData, userLocationName, env, u
         max_tokens: 200,
         messages: [{
           role: 'user',
-          content: `Eres Salma, compañera de viaje. Resume en 2-3 frases cómo llegar a ${dest.destName} desde ${userLocationName || 'donde está el viajero'}.${userName ? ' El viajero se llama ' + userName + '. Deduce su género por el nombre y trátale en concordancia (tío/tía, listo/lista).' : ''} Datos:\n${parts.join('\n')}\n\nMáximo 3 frases cortas y útiles. Sin emojis. Tutea. Si hay vuelo, menciónalo primero con precio.`
+          content: `Eres Salma, compañera de viaje. Resume en 2-3 frases cómo llegar a ${dest.destName} desde ${userLocationName || 'donde está el viajero'}.${userName ? ' El viajero se llama ' + userName + '. Deduce su género por el nombre y trátale en concordancia (tío/tía, listo/lista).' : ''} Datos:\n${parts.join('\n')}\n\nREGLAS ESTRICTAS:\n- Máximo 3 frases cortas. Sin emojis. Tutea.\n- SOLO menciona datos que aparezcan arriba. NUNCA inventes precios, aerolíneas ni datos.\n- Si no hay datos de vuelos arriba, NO menciones precios de vuelos.\n- Si hay vuelo con precio en los datos, menciónalo primero.`
         }]
       }),
       signal: AbortSignal.timeout(8000)
