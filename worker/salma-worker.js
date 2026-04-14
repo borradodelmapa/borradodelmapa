@@ -1662,11 +1662,30 @@ async function findIATA(location, locationName, duffelToken) {
   return null;
 }
 
-async function handleGoTo(dest, userLocation, userCountryCode, userLocationName, env, writer, encoder, travelDates, userNationality, userName) {
+// Detectar mes en el mensaje para vuelos (ej: "en junio" → 2026-06-01)
+function detectMonthFromMessage(message) {
+  if (!message) return null;
+  const m = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const meses = { enero: 1, febrero: 2, marzo: 3, abril: 4, mayo: 5, junio: 6, julio: 7, agosto: 8, septiembre: 9, octubre: 10, noviembre: 11, diciembre: 12, january: 1, february: 2, march: 3, april: 4, may: 5, june: 6, july: 7, august: 8, september: 9, october: 10, november: 11, december: 12 };
+  for (const [name, num] of Object.entries(meses)) {
+    if (m.includes(name)) {
+      const now = new Date();
+      let year = now.getFullYear();
+      // Si el mes ya pasó, usar el año que viene
+      if (num < now.getMonth() + 1) year++;
+      return `${year}-${String(num).padStart(2, '0')}-01`;
+    }
+  }
+  return null;
+}
+
+async function handleGoTo(dest, userLocation, userCountryCode, userLocationName, env, writer, encoder, travelDates, userNationality, userName, message) {
   const collectedData = {};
   const emit = async (section, data) => {
     try { await writer.write(encoder.encode(`data: ${JSON.stringify({ go_to: section, data })}\n\n`)); } catch (_) {}
   };
+  // Detectar mes del mensaje para vuelos
+  const detectedDate = detectMonthFromMessage(message);
 
   // Header inmediato
   await emit('header', { destName: dest.destName, destCC: dest.destCC, level: dest.level, distanceKm: Math.round(dest.distanceKm || 0) });
@@ -1728,7 +1747,7 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
         const originIATA = await findIATA(userLocation, userLocationName, env.DUFFEL_ACCESS_TOKEN);
         const destIATA = await findIATA({ lat: dest.destLat, lng: dest.destLng }, dest.destName, env.DUFFEL_ACCESS_TOKEN);
         if (originIATA && destIATA) {
-          return buscarVuelosDuffel({ origen: originIATA, destino: destIATA, fecha_ida: travelDates?.from || getFlexDate(7), adultos: 1 }, env.DUFFEL_ACCESS_TOKEN);
+          return buscarVuelosDuffel({ origen: originIATA, destino: destIATA, fecha_ida: travelDates?.from || detectedDate || getFlexDate(7), adultos: 1 }, env.DUFFEL_ACCESS_TOKEN);
         }
         return null;
       })().catch(() => null);
@@ -1779,9 +1798,9 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
         if (!originIATA) return null;
         return buscarVuelosDuffel({
           origen: originIATA, destino: destIATA || dest.destCC,
-          fecha_ida: travelDates?.from || getFlexDate(14),
+          fecha_ida: travelDates?.from || detectedDate || getFlexDate(14),
           fecha_vuelta: null,
-          fecha_rango_hasta: travelDates?.from ? null : getFlexDate(21),
+          fecha_rango_hasta: (travelDates?.from || detectedDate) ? null : getFlexDate(21),
           adultos: 1
         }, env.DUFFEL_ACCESS_TOKEN);
       })().catch(() => null);
@@ -6100,7 +6119,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
 
           ctx.waitUntil((async () => {
             try {
-              await handleGoTo(goToDest, userLocation, userCountryCode || frontendCountryCode, userLocationName, env, goToWriter, goToEncoder, travelDates, userNationality, userName);
+              await handleGoTo(goToDest, userLocation, userCountryCode || frontendCountryCode, userLocationName, env, goToWriter, goToEncoder, travelDates, userNationality, userName, message);
             } catch (e) {
               try {
                 await goToWriter.write(goToEncoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No he podido buscar esa información. Inténtalo de nuevo.', route: null })}\n\n`));
