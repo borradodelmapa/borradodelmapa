@@ -1891,12 +1891,23 @@ const salma = {
     const grid = document.createElement('div');
     grid.className = 'salma-result-grid';
 
+    const _isAndroid = /Android/i.test(navigator.userAgent);
+    const _isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
     for (const a of actions) {
+      // Para apps sin deep link: intent en Android, scheme en iOS, web en desktop
+      let href = a.url;
+      if (a.type === 'app' && a.pkg && _isAndroid) {
+        href = `intent://open#Intent;scheme=${a.scheme};package=${a.pkg};S.browser_fallback_url=${encodeURIComponent(a.store_android || a.url)};end`;
+      } else if (a.type === 'app' && a.scheme && _isIOS) {
+        href = a.scheme + '://';
+      }
+
       const card = document.createElement('div');
       card.className = 'salma-result-card';
       card.innerHTML = `<div class="salma-result-card-body">
         <div class="salma-result-card-name">${a.icon} ${a.name}</div>
-        <a class="salma-result-card-cta" href="${a.url}" target="_blank" rel="noopener">${a.label}</a>
+        <a class="salma-result-card-cta" href="${href}" target="_blank" rel="noopener">${a.label}</a>
       </div>`;
       grid.appendChild(card);
     }

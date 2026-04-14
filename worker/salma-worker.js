@@ -5955,16 +5955,23 @@ INSTRUCCIONES:
               for (const _an of _appNames) {
                 const _ad = TRANSPORT_APP_URLS[_an.toLowerCase()];
                 if (!_ad) continue;
-                const _url = (_ad.deep_link)
-                  ? _ad.deep_link.replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
+                if (_ad.deep_link) {
+                  actions.push({
+                    name: _ad.name, icon: _ad.icon, type: 'deeplink',
+                    url: _ad.deep_link.replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
                       .replace(/{dropoff_lat}/g, _tcCoords.lat).replace(/{dropoff_lng}/g, _tcCoords.lng)
-                      .replace(/{dropoff_name}/g, encodeURIComponent(_tcCoords.name || ''))
-                  : _ad.web;
-                actions.push({
-                  name: _ad.name, icon: _ad.icon, type: 'deeplink',
-                  url: _url,
-                  label: _ad.deep_link ? 'Pedir ' + _ad.name : 'Abrir ' + _ad.name
-                });
+                      .replace(/{dropoff_name}/g, encodeURIComponent(_tcCoords.name || '')),
+                    label: 'Pedir ' + _ad.name
+                  });
+                } else {
+                  // App sin deep link → enviar scheme+pkg para que frontend abra la app nativa
+                  actions.push({
+                    name: _ad.name, icon: _ad.icon, type: 'app',
+                    url: _ad.web, scheme: _ad.scheme || null, pkg: _ad.pkg || null,
+                    store_ios: _ad.store_ios || null, store_android: _ad.store_android || null,
+                    label: 'Abrir ' + _ad.name
+                  });
+                }
               }
             }
 
