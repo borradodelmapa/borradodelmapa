@@ -6240,45 +6240,44 @@ INSTRUCCIONES:
             const allApps = [_transportApps.ridehailing.best, ...(_transportApps.ridehailing.others || [])].filter(Boolean);
             const transportActions = [];
 
+            // Google Maps PRIMERO — siempre funciona, mejor UX
+            if (destCoords) {
+              transportActions.push({
+                name: 'Google Maps', icon: '🗺️', key: 'google_maps',
+                url: `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${destCoords.lat},${destCoords.lng}&travelmode=driving`,
+                type: 'deeplink',
+                label: 'Cómo llegar' + (destCoords.name ? ' → ' + destCoords.name : '')
+              });
+            }
+
             for (const appName of allApps) {
               const appData = TRANSPORT_APP_URLS[appName.toLowerCase()];
               if (!appData) continue;
               const action = { name: appData.name, icon: appData.icon, key: appName };
 
-              if (appData.deep_link && userLocation && destCoords) {
-                // Deep link con pickup GPS + destino buscado
+              if (appData.deep_link && destCoords) {
+                // Deep link completo: pickup GPS + destino
                 action.url = appData.deep_link
                   .replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
                   .replace(/{dropoff_lat}/g, destCoords.lat).replace(/{dropoff_lng}/g, destCoords.lng)
                   .replace(/{dropoff_name}/g, encodeURIComponent(destCoords.name || ''));
                 action.type = 'deeplink';
-                action.label = 'Pedir ' + appData.name + (destCoords.name ? ' → ' + destCoords.name : '');
+                action.label = 'Pedir ' + appData.name;
+              } else if (appData.deep_link) {
+                // Deep link solo pickup (sin destino) — abre la app con tu ubicación
+                action.url = appData.deep_link
+                  .replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
+                  .replace(/{dropoff_lat}/g, '').replace(/{dropoff_lng}/g, '')
+                  .replace(/{dropoff_name}/g, '');
+                action.type = 'deeplink';
+                action.label = 'Pedir ' + appData.name;
               } else {
-                // Store/web fallback
+                // Web de la app (suele abrir la app si instalada vía universal links)
                 action.url = appData.web;
                 action.type = 'web';
                 action.label = 'Abrir ' + appData.name;
-                if (appData.store_ios) action.store_ios = appData.store_ios;
-                if (appData.store_android) action.store_android = appData.store_android;
               }
               transportActions.push(action);
-            }
-
-            // Siempre añadir Google Maps directions
-            if (userLocation && destCoords) {
-              transportActions.push({
-                name: 'Google Maps', icon: '🗺️', key: 'google_maps',
-                url: `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${destCoords.lat},${destCoords.lng}&travelmode=driving`,
-                type: 'deeplink',
-                label: 'Google Maps' + (destCoords.name ? ' → ' + destCoords.name : '')
-              });
-            } else if (destCoords) {
-              transportActions.push({
-                name: 'Google Maps', icon: '🗺️', key: 'google_maps',
-                url: `https://www.google.com/maps/dir/?api=1&destination=${destCoords.lat},${destCoords.lng}&travelmode=driving`,
-                type: 'deeplink',
-                label: 'Google Maps' + (destCoords.name ? ' → ' + destCoords.name : '')
-              });
             }
 
             if (transportActions.length > 0) {

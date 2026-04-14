@@ -1881,10 +1881,7 @@ const salma = {
         .replace(/{dropoff_name}/g, encodeURIComponent(dropoffName || ''));
       return { url, label: dropoffLat ? 'Pedir ' + app.name : 'Pedir ' + app.name, type: 'deeplink' };
     }
-    // 2. Store link según plataforma
-    if (isIOS && app.store_ios) return { url: app.store_ios, label: 'Descargar ' + app.name, type: 'store' };
-    if (isAndroid && app.store_android) return { url: app.store_android, label: 'Descargar ' + app.name, type: 'store' };
-    // 3. Web fallback
+    // 2. Web de la app (suele abrir la app si está instalada vía universal links)
     return { url: app.web, label: 'Abrir ' + app.name, type: 'web' };
   },
 
@@ -1999,10 +1996,8 @@ const salma = {
     const isAndroid = /Android/.test(navigator.userAgent);
 
     for (const a of actions) {
-      let href = a.url;
-      // Para apps sin deep link en móvil, preferir store
-      if (a.type === 'web' && isIOS && a.store_ios) href = a.store_ios;
-      else if (a.type === 'web' && isAndroid && a.store_android) href = a.store_android;
+      // Usar URL directa (web o deep link). La web suele abrir la app si está instalada.
+      const href = a.url;
 
       const card = document.createElement('div');
       card.className = 'salma-result-card';
