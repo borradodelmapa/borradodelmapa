@@ -290,8 +290,6 @@ function _renderChatEmpty() {
         return;
       }
       if (action === 'goto') {
-        const empty = area.querySelector('.chat-empty');
-        if (empty) empty.remove();
         const input = document.getElementById('salma-input');
         if (input) { input.value = 'Quiero ir a '; input.focus(); }
         return;
