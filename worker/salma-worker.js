@@ -1425,7 +1425,7 @@ function extractGoToDestination(message) {
 }
 
 async function resolveGoToDestination(destText, userLocation, userCountryCode, env) {
-  let destLat = null, destLng = null, destCC = null, destName = destText;
+  let destLat = null, destLng = null, destCC = null, destName = destText, destCapital = null;
   let isCountry = false;
 
   // Fase 1: ¿Es un país conocido?
@@ -1440,6 +1440,7 @@ async function resolveGoToDestination(destText, userLocation, userCountryCode, e
         if (baseJson) {
           const base = JSON.parse(baseJson);
           destName = base.pais || destText;
+          destCapital = base.capital || null;
           if (base.capital) {
             // Geocodificar capital
             try {
@@ -1495,7 +1496,7 @@ async function resolveGoToDestination(destText, userLocation, userCountryCode, e
     level = 'regional';
   }
 
-  return { destText, destName, destLat, destLng, destCC, distanceKm, level, isCountry, sameCountry };
+  return { destText, destName, destLat, destLng, destCC, destCapital, distanceKm, level, isCountry, sameCountry };
 }
 
 function buildGoToTransportActions(userLocation, dest, transportData) {
@@ -1603,7 +1604,7 @@ async function generateMiniResumen(dest, collectedData, userLocationName, env, u
         max_tokens: 200,
         messages: [{
           role: 'user',
-          content: `Eres Salma, compañera de viaje. Resume en 2-3 frases cómo llegar a ${dest.destName} desde ${userLocationName || 'donde está el viajero'}.${userName ? ' El viajero se llama ' + userName + '. Deduce su género por el nombre y trátale en concordancia (tío/tía, listo/lista).' : ''} Datos:\n${parts.join('\n')}\n\nREGLAS ESTRICTAS:\n- Máximo 3 frases cortas. Sin emojis. Tutea.\n- SOLO menciona datos que aparezcan arriba. NUNCA inventes precios, aerolíneas ni datos.\n- Si no hay datos de vuelos arriba, NO menciones precios de vuelos.\n- Si hay vuelo con precio en los datos, menciónalo primero.`
+          content: `Resume en 2 frases lo esencial para ir a ${dest.destName} desde ${userLocationName || 'donde está el viajero'}.${userName ? ' El viajero se llama ' + userName + '.' : ''}\n\nDatos reales:\n${parts.join('\n')}\n\nREGLAS:\n- Exactamente 2 frases. Cortas. Tutea.${userName ? ' Deduce género del nombre.' : ''}\n- PROHIBIDO inventar precios, aerolíneas, rutas o datos que NO estén arriba.\n- PROHIBIDO repetir info. Cada frase dice algo distinto.\n- Si hay precio de vuelo arriba, ponlo. Si NO hay, di "busca vuelos con el chip de abajo".`
         }]
       }),
       signal: AbortSignal.timeout(8000)
@@ -1773,11 +1774,13 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
     if (ccLower && env.SALMA_KB) promises.kvTransport = env.SALMA_KB.get('transport:' + ccLower).then(r => r ? JSON.parse(r) : null).catch(() => null);
     // KV destinos (qué hacer)
     if (ccLower && env.SALMA_KB) promises.kvDestinos = env.SALMA_KB.get('dest:' + ccLower + ':destinos').then(r => r ? JSON.parse(r) : null).catch(() => null);
-    // Vuelos — IATA dinámico via Duffel places/suggestions
+    // Vuelos — IATA dinámico: usa capital para países, nombre para ciudades
     if (env.DUFFEL_ACCESS_TOKEN && userLocation) {
       promises.flights = (async () => {
         const originIATA = await findIATA(userLocation, userLocationName, env.DUFFEL_ACCESS_TOKEN);
-        const destIATA = await findIATA(dest.destLat ? { lat: dest.destLat, lng: dest.destLng } : null, dest.destName, env.DUFFEL_ACCESS_TOKEN);
+        // Para países: buscar IATA de la capital (ej: Vietnam → "Hanoi" → HAN)
+        const destSearchName = dest.isCountry && dest.destCapital ? dest.destCapital : dest.destName;
+        const destIATA = await findIATA(dest.destLat ? { lat: dest.destLat, lng: dest.destLng } : null, destSearchName, env.DUFFEL_ACCESS_TOKEN);
         if (!originIATA) return null;
         return buscarVuelosDuffel({
           origen: originIATA, destino: destIATA || dest.destCC,
