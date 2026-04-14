@@ -6220,10 +6220,13 @@ INSTRUCCIONES:
         }
 
         // ── Generar transport_actions estructurado (deep links / store / Google Maps) ──
-        if (!route && helpCategory === 'transport') {
+        // Se activa con helpCategory=transport O si Claude usó buscar_lugar con categoría transporte
+        const _isTransportContext = helpCategory === 'transport' || (helpCategory && _lastBuscarLugarCoords);
+        if (!route && _isTransportContext) {
+          // Buscar apps del país: 1) del KV ya cargado, 2) fallback por countryCode del mensaje, 3) por GPS
           let _transportApps = kvTransportData;
           if (!_transportApps && env.SALMA_KB) {
-            const _cc = userCountryCode || frontendCountryCode || null;
+            const _cc = countryCode || userCountryCode || frontendCountryCode || null;
             if (_cc) {
               try {
                 const _tj = await env.SALMA_KB.get('transport:' + _cc.toLowerCase());
@@ -6242,6 +6245,7 @@ INSTRUCCIONES:
               const action = { name: appData.name, icon: appData.icon, key: appName };
 
               if (appData.deep_link && userLocation && destCoords) {
+                // Deep link con pickup GPS + destino buscado
                 action.url = appData.deep_link
                   .replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
                   .replace(/{dropoff_lat}/g, destCoords.lat).replace(/{dropoff_lng}/g, destCoords.lng)
@@ -6249,6 +6253,7 @@ INSTRUCCIONES:
                 action.type = 'deeplink';
                 action.label = 'Pedir ' + appData.name + (destCoords.name ? ' → ' + destCoords.name : '');
               } else {
+                // Store/web fallback
                 action.url = appData.web;
                 action.type = 'web';
                 action.label = 'Abrir ' + appData.name;
