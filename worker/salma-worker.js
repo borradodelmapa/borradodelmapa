@@ -5903,35 +5903,32 @@ INSTRUCCIONES:
       const longRoute = isLongRoute(message); // Rutas ≥8 días → generación por bloques paralelos
 
       try {
-        // ── TRANSPORT ACTIONS: emitir ANTES de Claude para que los botones salgan primero ──
+        // ── TRANSPORT: buscar destino proactivamente + preparar datos de apps ──
+        let _tcTransportApps = null;
+        let _tcTransportTip = null;
         if (helpCategory === 'transport' && userLocation && (userCountryCode || frontendCountryCode)) {
           const _tcCode = (userCountryCode || frontendCountryCode).toLowerCase();
-          let _tcApps = kvTransportData;
-          if (!_tcApps && env.SALMA_KB) {
-            try { const _tj = await env.SALMA_KB.get('transport:' + _tcCode); if (_tj) _tcApps = JSON.parse(_tj); } catch (_) {}
+          _tcTransportApps = kvTransportData;
+          if (!_tcTransportApps && env.SALMA_KB) {
+            try { const _tj = await env.SALMA_KB.get('transport:' + _tcCode); if (_tj) _tcTransportApps = JSON.parse(_tj); } catch (_) {}
           }
-          if (_tcApps?.ridehailing) {
-            const _tcAllApps = [_tcApps.ridehailing.best, ...(_tcApps.ridehailing.others || [])].filter(Boolean);
-            const _tcActions = [];
-            // Google Maps primero
-            _tcActions.push({ name: 'Google Maps', icon: '🗺️', key: 'google_maps',
-              url: `https://www.google.com/maps/@${userLocation.lat},${userLocation.lng},15z`, type: 'deeplink', label: 'Abrir Google Maps' });
-            // Apps del país (max 2: best + primer other)
-            for (const appName of _tcAllApps.slice(0, 2)) {
-              const appData = TRANSPORT_APP_URLS[appName.toLowerCase()];
-              if (!appData) continue;
-              if (appData.deep_link) {
-                _tcActions.push({ name: appData.name, icon: appData.icon, key: appName, type: 'deeplink', label: 'Pedir ' + appData.name,
-                  url: appData.deep_link.replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
-                    .replace(/{dropoff_lat}/g, '').replace(/{dropoff_lng}/g, '').replace(/{dropoff_name}/g, '') });
-              } else {
-                _tcActions.push({ name: appData.name, icon: appData.icon, key: appName, type: 'app', label: 'Abrir ' + appData.name,
-                  url: appData.web, scheme: appData.scheme || null, pkg: appData.pkg || null, ios_id: appData.ios_id || null,
-                  store_ios: appData.store_ios || null, store_android: appData.store_android || null });
-              }
-            }
-            if (_tcActions.length > 0) {
-              try { await writer.write(encoder.encode(`data: ${JSON.stringify({ transport_actions: _tcActions, transport_tip: _tcApps.ridehailing.tips || null })}\n\n`)); } catch (_) {}
+          if (_tcTransportApps?.ridehailing) _tcTransportTip = _tcTransportApps.ridehailing.tips || null;
+
+          // Buscar coords del destino proactivamente (sin depender de que Claude use buscar_lugar)
+          // Extraer destino del mensaje: "taxi al aeropuerto de koh samui" → "aeropuerto koh samui"
+          if (env.GOOGLE_PLACES_KEY && !_lastBuscarLugarCoords) {
+            const destMatch = message.replace(/^(necesito|quiero|busco|pedir?|dame|dime)\s*/i, '')
+              .replace(/\b(un\s+)?taxi\b/i, '').replace(/\b(al?|para|hacia|hasta|ir\s+a)\b/gi, '').trim();
+            if (destMatch.length > 2 && !/^(necesito|pedir|taxi|transporte)$/i.test(destMatch)) {
+              try {
+                const placesUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(destMatch)}&location=${userLocation.lat},${userLocation.lng}&radius=50000&language=es&key=${env.GOOGLE_PLACES_KEY}`;
+                const pRes = await fetch(placesUrl, { signal: AbortSignal.timeout(4000) });
+                const pData = await pRes.json();
+                if (pData.results?.[0]?.geometry?.location) {
+                  const p = pData.results[0];
+                  _lastBuscarLugarCoords = { lat: p.geometry.location.lat, lng: p.geometry.location.lng, name: p.name || destMatch };
+                }
+              } catch (_) {}
             }
           }
         }
@@ -6261,7 +6258,37 @@ INSTRUCCIONES:
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
         }
 
-        // (transport_actions ya se emitieron al inicio del stream — no duplicar aquí)
+        // ── TRANSPORT ACTIONS: emitir después de Claude, con destino si buscar_lugar lo encontró ──
+        if (_tcTransportApps?.ridehailing && userLocation) {
+          const destCoords = _lastBuscarLugarCoords;
+          // Solo emitir si hay un destino concreto (no en mensajes genéricos tipo "necesito taxi")
+          if (destCoords) {
+            const _tcAllApps = [_tcTransportApps.ridehailing.best, ...(_tcTransportApps.ridehailing.others || [])].filter(Boolean);
+            const _tcActions = [];
+            // Google Maps CON RUTA al destino
+            _tcActions.push({ name: 'Google Maps', icon: '🗺️', key: 'google_maps',
+              url: `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${destCoords.lat},${destCoords.lng}&travelmode=driving`,
+              type: 'deeplink', label: 'Cómo llegar → ' + (destCoords.name || 'destino') });
+            // Apps del país (best + 1 alternativa)
+            for (const appName of _tcAllApps.slice(0, 2)) {
+              const appData = TRANSPORT_APP_URLS[appName.toLowerCase()];
+              if (!appData) continue;
+              if (appData.deep_link) {
+                _tcActions.push({ name: appData.name, icon: appData.icon, key: appName, type: 'deeplink', label: 'Pedir ' + appData.name,
+                  url: appData.deep_link.replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
+                    .replace(/{dropoff_lat}/g, destCoords.lat).replace(/{dropoff_lng}/g, destCoords.lng)
+                    .replace(/{dropoff_name}/g, encodeURIComponent(destCoords.name || '')) });
+              } else {
+                _tcActions.push({ name: appData.name, icon: appData.icon, key: appName, type: 'app', label: 'Abrir ' + appData.name,
+                  url: appData.web, scheme: appData.scheme || null, pkg: appData.pkg || null, ios_id: appData.ios_id || null,
+                  store_ios: appData.store_ios || null, store_android: appData.store_android || null });
+              }
+            }
+            if (_tcActions.length > 0) {
+              try { await writer.write(encoder.encode(`data: ${JSON.stringify({ transport_actions: _tcActions, transport_tip: _tcTransportTip })}\n\n`)); } catch (_) {}
+            }
+          }
+        }
 
         // ── Inyectar URLs de tools (buscar_lugar, buscar_web) que Claude no incluyó ──
         if (!route && _toolUrls.length > 0) {
