@@ -6925,6 +6925,44 @@ INSTRUCCIONES:
           }
         }
 
+        // ── POST-PROCESADO FOTOS: buscar fotos automáticamente para lugares en negritas ──
+        if (!route && env.GOOGLE_PLACES_KEY) {
+          try {
+            // Extraer nombres en **negrita** que no sean genéricos
+            const boldNames = [];
+            const boldRegex = /\*\*([^*]{3,50})\*\*/g;
+            let bm;
+            while ((bm = boldRegex.exec(allText)) !== null) {
+              const name = bm[1].trim();
+              // Filtrar precios, horas, genéricos
+              if (/^\d|^€|^USD|^Día\s|^Tip:|^Nota:|^Precio|^Gratis|^Abierto|^Cerrado/i.test(name)) continue;
+              if (name.split(/\s+/).length < 2) continue; // mín 2 palabras
+              if (!boldNames.includes(name)) boldNames.push(name);
+            }
+            // Buscar fotos para los primeros 4 lugares (máx)
+            if (boldNames.length > 0) {
+              const photoPromises = boldNames.slice(0, 4).map(name =>
+                buscarFotoLugar({ lugar: name }, env.GOOGLE_PLACES_KEY).catch(() => null)
+              );
+              const photoResults = await Promise.all(photoPromises);
+              let photoChunk = '';
+              for (let pi = 0; pi < photoResults.length; pi++) {
+                const pr = photoResults[pi];
+                if (pr?.fotos?.length && pr.fotos[0]?.markdown) {
+                  // Solo inyectar si Claude no puso ya esa foto
+                  if (!allText.includes(pr.fotos[0].url)) {
+                    photoChunk += '\n' + pr.fotos[0].markdown;
+                  }
+                }
+              }
+              if (photoChunk) {
+                allText += photoChunk;
+                try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: photoChunk })}\n\n`)); } catch (_) {}
+              }
+            }
+          } catch (_) {}
+        }
+
         // ── SALMA_ACTION: extraer acciones del texto, limpiar reply, ejecutar APIs en paralelo ──
         let actionResults = [];
         try {
