@@ -3,7 +3,7 @@
     "version": "1.0",
     "updated": "2026-03-30",
     "update_cycle": "semestral",
-    "note": "ride-hailing + trenes + metro/bus + ferry + especial. Deep links con coords: Uber, Lyft, Ola, Yango. El resto sin documentación pública."
+    "note": "ride-hailing + trenes + metro/bus + ferry + especial + navegación. Deep links con coords: Uber, Lyft, Ola, Yandex, Yango, Google Maps, Waze, Citymapper, Moovit. El resto: store/web fallback."
   },
   "apps": {
     "uber": {
@@ -245,16 +245,34 @@
       "store_android": "https://play.google.com/store/apps/details?id=com.directferries",
       "note": "Comparador global de ferries"
     },
+    "google_maps": {
+      "name": "Google Maps", "icon": "🗺️",
+      "deep_link": "https://www.google.com/maps/dir/?api=1&origin={pickup_lat},{pickup_lng}&destination={dropoff_lat},{dropoff_lng}&travelmode=driving",
+      "web_fallback": "https://www.google.com/maps",
+      "store_ios": "https://apps.apple.com/app/google-maps/id585027354",
+      "store_android": "https://play.google.com/store/apps/details?id=com.google.android.apps.maps",
+      "note": "Navegación universal — fallback siempre disponible"
+    },
+    "waze": {
+      "name": "Waze", "icon": "🚗",
+      "deep_link": "https://waze.com/ul?ll={dropoff_lat},{dropoff_lng}&navigate=yes",
+      "web_fallback": "https://www.waze.com",
+      "store_ios": "https://apps.apple.com/app/waze-navigation-live-traffic/id323229106",
+      "store_android": "https://play.google.com/store/apps/details?id=com.waze",
+      "note": "Navegación social con tráfico en tiempo real"
+    },
     "citymapper": {
       "name": "Citymapper", "icon": "🗺️",
-      "deep_link": null, "web_fallback": "https://citymapper.com",
+      "deep_link": "https://citymapper.com/directions?startcoord={pickup_lat},{pickup_lng}&endcoord={dropoff_lat},{dropoff_lng}&endname={dropoff_name}",
+      "web_fallback": "https://citymapper.com",
       "store_ios": "https://apps.apple.com/app/citymapper/id469463298",
       "store_android": "https://play.google.com/store/apps/details?id=com.citymapper.app.release",
       "note": "Metro/bus/tranvía en grandes ciudades globales"
     },
     "moovit": {
       "name": "Moovit", "icon": "🚇",
-      "deep_link": null, "web_fallback": "https://moovit.com",
+      "deep_link": "https://moovitapp.com/directions?orig_lat={pickup_lat}&orig_lon={pickup_lng}&dest_lat={dropoff_lat}&dest_lon={dropoff_lng}&dest_name={dropoff_name}",
+      "web_fallback": "https://moovit.com",
       "store_ios": "https://apps.apple.com/app/moovit/id498477945",
       "store_android": "https://play.google.com/store/apps/details?id=com.tranzmate",
       "note": "Transporte público en 3500+ ciudades globales"

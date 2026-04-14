@@ -899,21 +899,43 @@ const SALMA_TOOLS = [
 ];
 
 // URLs reales de las apps de transporte — para inyectar por código, no por IA
+// deep_link: template con {pickup_lat},{pickup_lng},{dropoff_lat},{dropoff_lng},{dropoff_name}
 const TRANSPORT_APP_URLS = {
-  grab:     { name: 'Grab',     icon: '🟩', web: 'https://www.grab.com' },
-  uber:     { name: 'Uber',     icon: '🚕', web: 'https://m.uber.com' },
-  bolt:     { name: 'Bolt',     icon: '🟢', web: 'https://bolt.eu' },
-  didi:     { name: 'DiDi',     icon: '🟠', web: 'https://www.didiglobal.com' },
-  gojek:    { name: 'Gojek',    icon: '🟢', web: 'https://www.gojek.com' },
-  careem:   { name: 'Careem',   icon: '🟢', web: 'https://www.careem.com' },
-  indrive:  { name: 'inDrive',  icon: '🟣', web: 'https://indrive.com' },
-  cabify:   { name: 'Cabify',   icon: '🟣', web: 'https://cabify.com' },
-  freenow:  { name: 'FREENOW',  icon: '🔴', web: 'https://www.free-now.com' },
-  yandex:   { name: 'Yandex Go',icon: '🔴', web: 'https://go.yandex.com' },
-  lyft:     { name: 'Lyft',     icon: '🩷', web: 'https://www.lyft.com' },
-  ola:      { name: 'Ola',      icon: '🟡', web: 'https://www.olacabs.com' },
-  kakao_t:  { name: 'Kakao T',  icon: '🟡', web: 'https://t.kakao.com' },
-  yango:    { name: 'Yango',    icon: '🔴', web: 'https://yango.com' },
+  uber:     { name: 'Uber',     icon: '🚕', web: 'https://m.uber.com',
+              deep_link: 'https://m.uber.com/ul/?action=setPickup&pickup[latitude]={pickup_lat}&pickup[longitude]={pickup_lng}&dropoff[latitude]={dropoff_lat}&dropoff[longitude]={dropoff_lng}&dropoff[nickname]={dropoff_name}',
+              store_ios: 'https://apps.apple.com/app/uber/id368677368', store_android: 'https://play.google.com/store/apps/details?id=com.ubercab' },
+  lyft:     { name: 'Lyft',     icon: '🩷', web: 'https://www.lyft.com',
+              deep_link: 'https://lyft.com/ride?pickup[latitude]={pickup_lat}&pickup[longitude]={pickup_lng}&destination[latitude]={dropoff_lat}&destination[longitude]={dropoff_lng}',
+              store_ios: 'https://apps.apple.com/app/lyft/id529379082', store_android: 'https://play.google.com/store/apps/details?id=me.lyft.android' },
+  ola:      { name: 'Ola',      icon: '🟡', web: 'https://www.olacabs.com',
+              deep_link: 'https://olawebcdn.com/assets/ola-universal-link.html?lat={pickup_lat}&lng={pickup_lng}&drop_lat={dropoff_lat}&drop_lng={dropoff_lng}',
+              store_ios: 'https://apps.apple.com/app/ola-cabs/id539179365', store_android: 'https://play.google.com/store/apps/details?id=com.olacabs.customer' },
+  yandex:   { name: 'Yandex Go',icon: '🔴', web: 'https://go.yandex.com',
+              deep_link: 'https://yango.go.link/route?start-lat={pickup_lat}&start-lon={pickup_lng}&end-lat={dropoff_lat}&end-lon={dropoff_lng}',
+              store_android: 'https://play.google.com/store/apps/details?id=ru.yandex.taxi' },
+  yango:    { name: 'Yango',    icon: '🔴', web: 'https://yango.com',
+              deep_link: 'https://yango.go.link/route?start-lat={pickup_lat}&start-lon={pickup_lng}&end-lat={dropoff_lat}&end-lon={dropoff_lng}',
+              store_android: 'https://play.google.com/store/apps/details?id=com.yandex.yango' },
+  grab:     { name: 'Grab',     icon: '🟩', web: 'https://www.grab.com',
+              store_ios: 'https://apps.apple.com/app/grab-superapp/id647268330', store_android: 'https://play.google.com/store/apps/details?id=com.grabtaxi.passenger' },
+  bolt:     { name: 'Bolt',     icon: '🟢', web: 'https://bolt.eu',
+              store_ios: 'https://apps.apple.com/app/bolt-request-a-ride/id675033630', store_android: 'https://play.google.com/store/apps/details?id=ee.mtakso.client' },
+  didi:     { name: 'DiDi',     icon: '🟠', web: 'https://www.didiglobal.com',
+              store_ios: 'https://apps.apple.com/app/didi-rider/id554499054', store_android: 'https://play.google.com/store/apps/details?id=com.xiaojukeji.didi.global.customer' },
+  gojek:    { name: 'Gojek',    icon: '🟢', web: 'https://www.gojek.com',
+              store_ios: 'https://apps.apple.com/app/gojek/id944875099', store_android: 'https://play.google.com/store/apps/details?id=com.gojek.app' },
+  careem:   { name: 'Careem',   icon: '🟢', web: 'https://www.careem.com',
+              store_ios: 'https://apps.apple.com/app/careem/id592978487', store_android: 'https://play.google.com/store/apps/details?id=com.careem.acma' },
+  indrive:  { name: 'inDrive',  icon: '🟣', web: 'https://indrive.com',
+              store_ios: 'https://apps.apple.com/app/indrive/id1050763635', store_android: 'https://play.google.com/store/apps/details?id=sinet.startup.inDriver' },
+  cabify:   { name: 'Cabify',   icon: '🟣', web: 'https://cabify.com',
+              store_ios: 'https://apps.apple.com/app/cabify/id476087442', store_android: 'https://play.google.com/store/apps/details?id=com.cabify.rider' },
+  freenow:  { name: 'FREENOW',  icon: '🔴', web: 'https://www.free-now.com',
+              store_ios: 'https://apps.apple.com/app/free-now/id357852748', store_android: 'https://play.google.com/store/apps/details?id=taxi.android.client' },
+  kakao_t:  { name: 'Kakao T',  icon: '🟡', web: 'https://t.kakao.com',
+              store_android: 'https://play.google.com/store/apps/details?id=com.kakao.taxi' },
+  google_maps: { name: 'Google Maps', icon: '🗺️', web: 'https://www.google.com/maps',
+              deep_link: 'https://www.google.com/maps/dir/?api=1&origin={pickup_lat},{pickup_lng}&destination={dropoff_lat},{dropoff_lng}&travelmode=driving' },
 };
 
 // ═══════════════════════════════════════════════════════════════
@@ -2961,6 +2983,8 @@ async function buscarLugar(input, placesKey, userCoords) {
         abierto: d?.opening_hours?.open_now != null ? (d.opening_hours.open_now ? 'Abierto ahora' : 'Cerrado ahora') : '',
         web: d?.website || '',
         google_maps: gmapsLink,
+        lat: p.geometry?.location?.lat || null,
+        lng: p.geometry?.location?.lng || null,
       };
       if (esComida && (d?.price_level || p.price_level)) {
         entry.precio = '€'.repeat(d?.price_level || p.price_level);
@@ -4236,6 +4260,24 @@ export default {
           return new Response(JSON.stringify({ error: 'Not found' }), { status: 404, headers: corsH });
         }
         return new Response(JSON.stringify({ country, practical_info: JSON.parse(piJson) }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /transport (Apps de transporte por país desde KV) ───
+    if (request.method === 'GET' && url.pathname === '/transport') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      const country = url.searchParams.get('country');
+      if (!country || !env.SALMA_KB) {
+        return new Response(JSON.stringify({ error: 'Missing country or KV' }), { status: 400, headers: corsH });
+      }
+      try {
+        const tjson = await env.SALMA_KB.get('transport:' + country.toLowerCase());
+        if (!tjson) {
+          return new Response(JSON.stringify({ error: 'Not found' }), { status: 404, headers: corsH });
+        }
+        return new Response(JSON.stringify({ country, transport: JSON.parse(tjson) }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
@@ -5938,6 +5980,9 @@ INSTRUCCIONES:
         let currentMessages = [...messages];
         let lastFlightBookingUrl = null; // Guardar enlace de vuelos para inyectar si GPT no lo incluye
         let _toolUrls = []; // URLs de buscar_lugar y buscar_web para inyectar si Claude no las pone
+        let _lastBuscarLugarCoords = null; // Coords del último lugar buscado (para deep links transporte)
+        let _pendingTransportActions = null; // Acciones de transporte para enviar en done event
+        let _pendingTransportTip = null;
 
         for (let iteration = 0; iteration <= MAX_TOOL_ITERATIONS; iteration++) {
           let apiRes;
@@ -6076,6 +6121,11 @@ INSTRUCCIONES:
                   if (l.website) _toolUrls.push({ titulo: l.nombre || l.name, url: l.website });
                   if (l.maps_link) _toolUrls.push({ titulo: (l.nombre || l.name) + ' en Maps', url: l.maps_link });
                 }
+                // Capturar coords del primer resultado para deep links de transporte
+                const _firstLugar = toolResult.lugares[0];
+                if (_firstLugar?.lat && _firstLugar?.lng) {
+                  _lastBuscarLugarCoords = { lat: _firstLugar.lat, lng: _firstLugar.lng, name: _firstLugar.nombre || '' };
+                }
               }
               if (block.name === 'buscar_web' && toolResult.resultados) {
                 for (const r of toolResult.resultados) {
@@ -6169,22 +6219,8 @@ INSTRUCCIONES:
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
         }
 
-        // ── Inyectar URLs de transporte + apps ride-hailing ──
+        // ── Generar transport_actions estructurado (deep links / store / Google Maps) ──
         if (!route && helpCategory === 'transport') {
-          let linksBlock = '';
-
-          // 1. URLs de Brave que Claude no incluyó (sin duplicados, sin blogs)
-          if (transportSearchData?.resultados?.length > 0) {
-            const braveUrls = transportSearchData.resultados
-              .filter(r => r.url && !reply.includes(r.url))
-              .filter(r => !/blog|guia|guide|tripadvisor|wikipedia|wikivoyage/i.test(r.url))
-              .slice(0, 3);
-            for (const r of braveUrls) {
-              linksBlock += `\n🔗 ${r.titulo.slice(0, 60)} — ${r.url}`;
-            }
-          }
-
-          // 2. Apps ride-hailing del país — cargar del KV usando GPS del usuario
           let _transportApps = kvTransportData;
           if (!_transportApps && env.SALMA_KB) {
             const _cc = userCountryCode || frontendCountryCode || null;
@@ -6196,18 +6232,53 @@ INSTRUCCIONES:
             }
           }
           if (_transportApps?.ridehailing) {
+            const destCoords = _lastBuscarLugarCoords;
             const allApps = [_transportApps.ridehailing.best, ...(_transportApps.ridehailing.others || [])].filter(Boolean);
+            const transportActions = [];
+
             for (const appName of allApps) {
               const appData = TRANSPORT_APP_URLS[appName.toLowerCase()];
-              if (appData && !reply.toLowerCase().includes(appData.web.replace('https://', '').replace('http://', ''))) {
-                linksBlock += `\n${appData.icon} ${appData.name} — ${appData.web}`;
-              }
-            }
-          }
+              if (!appData) continue;
+              const action = { name: appData.name, icon: appData.icon, key: appName };
 
-          if (linksBlock) {
-            reply += '\n' + linksBlock;
-            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: '\n' + linksBlock })}\n\n`)); } catch (_) {}
+              if (appData.deep_link && userLocation && destCoords) {
+                action.url = appData.deep_link
+                  .replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
+                  .replace(/{dropoff_lat}/g, destCoords.lat).replace(/{dropoff_lng}/g, destCoords.lng)
+                  .replace(/{dropoff_name}/g, encodeURIComponent(destCoords.name || ''));
+                action.type = 'deeplink';
+                action.label = 'Pedir ' + appData.name + (destCoords.name ? ' → ' + destCoords.name : '');
+              } else {
+                action.url = appData.web;
+                action.type = 'web';
+                action.label = 'Abrir ' + appData.name;
+                if (appData.store_ios) action.store_ios = appData.store_ios;
+                if (appData.store_android) action.store_android = appData.store_android;
+              }
+              transportActions.push(action);
+            }
+
+            // Siempre añadir Google Maps directions
+            if (userLocation && destCoords) {
+              transportActions.push({
+                name: 'Google Maps', icon: '🗺️', key: 'google_maps',
+                url: `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${destCoords.lat},${destCoords.lng}&travelmode=driving`,
+                type: 'deeplink',
+                label: 'Google Maps' + (destCoords.name ? ' → ' + destCoords.name : '')
+              });
+            } else if (destCoords) {
+              transportActions.push({
+                name: 'Google Maps', icon: '🗺️', key: 'google_maps',
+                url: `https://www.google.com/maps/dir/?api=1&destination=${destCoords.lat},${destCoords.lng}&travelmode=driving`,
+                type: 'deeplink',
+                label: 'Google Maps' + (destCoords.name ? ' → ' + destCoords.name : '')
+              });
+            }
+
+            if (transportActions.length > 0) {
+              _pendingTransportActions = transportActions;
+              _pendingTransportTip = _transportApps.ridehailing.tips || null;
+            }
           }
         }
 
@@ -6298,6 +6369,10 @@ INSTRUCCIONES:
         // ── Enviar DONE con ruta verificada (fotos + coords corregidas) ──
         const doneEvt = { done: true, reply, route: route || null };
         if (actionResults.length > 0) doneEvt.action_results = actionResults;
+        if (_pendingTransportActions?.length > 0) {
+          doneEvt.transport_actions = _pendingTransportActions;
+          if (_pendingTransportTip) doneEvt.transport_tip = _pendingTransportTip;
+        }
         if (photoUploadPromise) {
           const photoResult = await photoUploadPromise;
           if (photoResult) { doneEvt.photo_url = photoResult.url; doneEvt.photo_key = photoResult.key; }

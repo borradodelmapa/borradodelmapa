@@ -12,6 +12,30 @@ const SALMA_WELCOME_MESSAGES = [
 
 const SALMA_WELCOME_RETURNING = "¿Tienes ya un viaje guardado? Puedo acompañarte en tiempo real cuando salgas — te cuento qué hay cerca, qué no te puedes perder y cómo llegar. Si todavía estás planeando, dime destino y empezamos.";
 
+// Apps de transporte — datos embebidos para el chip "Pide Taxi" (evita fetch extra)
+// deep_link: template con {pickup_lat},{pickup_lng},{dropoff_lat},{dropoff_lng},{dropoff_name}
+const TRANSPORT_APPS = {
+  uber:     { name: 'Uber',      icon: '🚕', deep_link: 'https://m.uber.com/ul/?action=setPickup&pickup[latitude]={pickup_lat}&pickup[longitude]={pickup_lng}&dropoff[latitude]={dropoff_lat}&dropoff[longitude]={dropoff_lng}&dropoff[nickname]={dropoff_name}',
+              web: 'https://m.uber.com', store_ios: 'https://apps.apple.com/app/uber/id368677368', store_android: 'https://play.google.com/store/apps/details?id=com.ubercab' },
+  lyft:     { name: 'Lyft',      icon: '🩷', deep_link: 'https://lyft.com/ride?pickup[latitude]={pickup_lat}&pickup[longitude]={pickup_lng}&destination[latitude]={dropoff_lat}&destination[longitude]={dropoff_lng}',
+              web: 'https://www.lyft.com', store_ios: 'https://apps.apple.com/app/lyft/id529379082', store_android: 'https://play.google.com/store/apps/details?id=me.lyft.android' },
+  ola:      { name: 'Ola',       icon: '🟡', deep_link: 'https://olawebcdn.com/assets/ola-universal-link.html?lat={pickup_lat}&lng={pickup_lng}&drop_lat={dropoff_lat}&drop_lng={dropoff_lng}',
+              web: 'https://www.olacabs.com', store_ios: 'https://apps.apple.com/app/ola-cabs/id539179365', store_android: 'https://play.google.com/store/apps/details?id=com.olacabs.customer' },
+  yandex:   { name: 'Yandex Go', icon: '🔴', deep_link: 'https://yango.go.link/route?start-lat={pickup_lat}&start-lon={pickup_lng}&end-lat={dropoff_lat}&end-lon={dropoff_lng}',
+              web: 'https://go.yandex.com', store_android: 'https://play.google.com/store/apps/details?id=ru.yandex.taxi' },
+  yango:    { name: 'Yango',     icon: '🔴', deep_link: 'https://yango.go.link/route?start-lat={pickup_lat}&start-lon={pickup_lng}&end-lat={dropoff_lat}&end-lon={dropoff_lng}',
+              web: 'https://yango.com', store_android: 'https://play.google.com/store/apps/details?id=com.yandex.yango' },
+  grab:     { name: 'Grab',      icon: '🟩', web: 'https://www.grab.com', store_ios: 'https://apps.apple.com/app/grab-superapp/id647268330', store_android: 'https://play.google.com/store/apps/details?id=com.grabtaxi.passenger' },
+  bolt:     { name: 'Bolt',      icon: '🟢', web: 'https://bolt.eu', store_ios: 'https://apps.apple.com/app/bolt-request-a-ride/id675033630', store_android: 'https://play.google.com/store/apps/details?id=ee.mtakso.client' },
+  didi:     { name: 'DiDi',      icon: '🟠', web: 'https://www.didiglobal.com', store_ios: 'https://apps.apple.com/app/didi-rider/id554499054', store_android: 'https://play.google.com/store/apps/details?id=com.xiaojukeji.didi.global.customer' },
+  gojek:    { name: 'Gojek',     icon: '🟢', web: 'https://www.gojek.com', store_ios: 'https://apps.apple.com/app/gojek/id944875099', store_android: 'https://play.google.com/store/apps/details?id=com.gojek.app' },
+  careem:   { name: 'Careem',    icon: '🟢', web: 'https://www.careem.com', store_ios: 'https://apps.apple.com/app/careem/id592978487', store_android: 'https://play.google.com/store/apps/details?id=com.careem.acma' },
+  indrive:  { name: 'inDrive',   icon: '🟣', web: 'https://indrive.com', store_ios: 'https://apps.apple.com/app/indrive/id1050763635', store_android: 'https://play.google.com/store/apps/details?id=sinet.startup.inDriver' },
+  cabify:   { name: 'Cabify',    icon: '🟣', web: 'https://cabify.com', store_ios: 'https://apps.apple.com/app/cabify/id476087442', store_android: 'https://play.google.com/store/apps/details?id=com.cabify.rider' },
+  freenow:  { name: 'FREENOW',   icon: '🔴', web: 'https://www.free-now.com', store_ios: 'https://apps.apple.com/app/free-now/id357852748', store_android: 'https://play.google.com/store/apps/details?id=taxi.android.client' },
+  kakao_t:  { name: 'Kakao T',   icon: '🟡', web: 'https://t.kakao.com', store_android: 'https://play.google.com/store/apps/details?id=com.kakao.taxi' },
+};
+
 const salma = {
   history: [],
   currentRoute: null,
@@ -1039,6 +1063,10 @@ const salma = {
                 if (evt.action_results && evt.action_results.length > 0) {
                   try { this._renderActionResults(evt.action_results); } catch (_) {}
                 }
+                // Renderizar botones de transporte (deep links / store / Google Maps)
+                if (evt.transport_actions && evt.transport_actions.length > 0) {
+                  try { this._renderTransportActions(evt.transport_actions, evt.transport_tip); } catch (_) {}
+                }
                 // Guardar notas automáticas de SALMA_ACTION:SAVE_NOTE
                 if (evt.action_results) {
                   for (const r of evt.action_results) {
@@ -1835,6 +1863,158 @@ const salma = {
       grid.appendChild(card);
     }
     wrap.appendChild(grid);
+  },
+
+  // ═══ TRANSPORTE — Panel desde chip + renderizado inline en chat ═══
+
+  _getTransportAppLink(appKey, pickupLat, pickupLng, dropoffLat, dropoffLng, dropoffName) {
+    const app = TRANSPORT_APPS[appKey];
+    if (!app) return null;
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+
+    // 1. Deep link con coords (si tiene template y hay GPS)
+    if (app.deep_link && pickupLat != null) {
+      let url = app.deep_link
+        .replace(/{pickup_lat}/g, pickupLat).replace(/{pickup_lng}/g, pickupLng)
+        .replace(/{dropoff_lat}/g, dropoffLat || '').replace(/{dropoff_lng}/g, dropoffLng || '')
+        .replace(/{dropoff_name}/g, encodeURIComponent(dropoffName || ''));
+      return { url, label: dropoffLat ? 'Pedir ' + app.name : 'Pedir ' + app.name, type: 'deeplink' };
+    }
+    // 2. Store link según plataforma
+    if (isIOS && app.store_ios) return { url: app.store_ios, label: 'Descargar ' + app.name, type: 'store' };
+    if (isAndroid && app.store_android) return { url: app.store_android, label: 'Descargar ' + app.name, type: 'store' };
+    // 3. Web fallback
+    return { url: app.web, label: 'Abrir ' + app.name, type: 'web' };
+  },
+
+  async showTransportPanel() {
+    if (!this._copilotCountry) return;
+    const area = this._getChatArea();
+    if (!area) return;
+
+    // Fetch apps del país desde KV
+    const API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+    let transportData = null;
+    try {
+      const res = await fetch(API + '/transport?country=' + this._copilotCountry);
+      if (res.ok) transportData = (await res.json()).transport;
+    } catch (_) {}
+
+    if (!transportData?.ridehailing) {
+      // Sin datos — mostrar solo Google Maps
+      const wrap = document.createElement('div');
+      wrap.className = 'salma-action-results';
+      wrap.innerHTML = `
+        <div class="salma-results-header">🚕 Transporte</div>
+        <div class="salma-transport-tip">No hay apps de taxi registradas para este país. Usa Google Maps.</div>
+        <div class="salma-result-grid">
+          <div class="salma-result-card"><div class="salma-result-card-body">
+            <div class="salma-result-card-name">🗺️ Google Maps</div>
+            <a class="salma-result-card-cta" href="https://www.google.com/maps" target="_blank" rel="noopener">Abrir Google Maps</a>
+          </div></div>
+        </div>`;
+      area.appendChild(wrap);
+      this._scrollToBottom(true);
+      return;
+    }
+
+    const rh = transportData.ridehailing;
+    const appKeys = [rh.best, ...(rh.others || [])].filter(Boolean);
+    const pickupLat = this._userLocation?.lat;
+    const pickupLng = this._userLocation?.lng;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'salma-action-results';
+
+    // Header con nombre del país
+    const countryName = typeof CODE_TO_NAME !== 'undefined' ? CODE_TO_NAME[this._copilotCountry.toUpperCase()] : this._copilotCountry.toUpperCase();
+    const header = document.createElement('div');
+    header.className = 'salma-results-header';
+    header.textContent = `🚕 Transporte en ${countryName || this._copilotCountry.toUpperCase()}`;
+    wrap.appendChild(header);
+
+    // Tip del KV
+    if (rh.tips) {
+      const tip = document.createElement('div');
+      tip.className = 'salma-transport-tip';
+      tip.textContent = rh.tips;
+      wrap.appendChild(tip);
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'salma-result-grid';
+
+    for (const key of appKeys) {
+      const link = this._getTransportAppLink(key, pickupLat, pickupLng);
+      if (!link) continue;
+      const app = TRANSPORT_APPS[key];
+      const card = document.createElement('div');
+      card.className = 'salma-result-card';
+      card.innerHTML = `<div class="salma-result-card-body">
+        <div class="salma-result-card-name">${app?.icon || '🚕'} ${app?.name || key}</div>
+        <a class="salma-result-card-cta" href="${link.url}" target="_blank" rel="noopener">${link.label}</a>
+      </div>`;
+      grid.appendChild(card);
+    }
+
+    // Siempre Google Maps
+    const gmapsUrl = pickupLat
+      ? `https://www.google.com/maps/dir/?api=1&origin=${pickupLat},${pickupLng}&travelmode=driving`
+      : 'https://www.google.com/maps';
+    const gmCard = document.createElement('div');
+    gmCard.className = 'salma-result-card';
+    gmCard.innerHTML = `<div class="salma-result-card-body">
+      <div class="salma-result-card-name">🗺️ Google Maps</div>
+      <a class="salma-result-card-cta" href="${gmapsUrl}" target="_blank" rel="noopener">Abrir Google Maps</a>
+    </div>`;
+    grid.appendChild(gmCard);
+
+    wrap.appendChild(grid);
+    area.appendChild(wrap);
+    this._scrollToBottom(true);
+  },
+
+  _renderTransportActions(actions, tip) {
+    const area = this._getChatArea();
+    if (!area) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'salma-action-results';
+
+    const header = document.createElement('div');
+    header.className = 'salma-results-header';
+    header.textContent = '🚕 Transporte';
+    wrap.appendChild(header);
+
+    if (tip) {
+      const tipEl = document.createElement('div');
+      tipEl.className = 'salma-transport-tip';
+      tipEl.textContent = tip;
+      wrap.appendChild(tipEl);
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'salma-result-grid';
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+
+    for (const a of actions) {
+      let href = a.url;
+      // Para apps sin deep link en móvil, preferir store
+      if (a.type === 'web' && isIOS && a.store_ios) href = a.store_ios;
+      else if (a.type === 'web' && isAndroid && a.store_android) href = a.store_android;
+
+      const card = document.createElement('div');
+      card.className = 'salma-result-card';
+      card.innerHTML = `<div class="salma-result-card-body">
+        <div class="salma-result-card-name">${a.icon} ${a.name}</div>
+        <a class="salma-result-card-cta" href="${href}" target="_blank" rel="noopener">${a.label}</a>
+      </div>`;
+      grid.appendChild(card);
+    }
+    wrap.appendChild(grid);
+    area.appendChild(wrap);
+    this._scrollToBottom(true);
   },
 
   async _saveNoteFromBubble(text, btnEl) {
