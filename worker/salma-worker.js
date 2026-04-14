@@ -1631,6 +1631,41 @@ async function searchNearbyPlaces(lat, lng, type, googleKey) {
   } catch (_) { return []; }
 }
 
+// Buscar IATA dinámicamente: primero tabla local, luego Duffel places/suggestions
+async function findIATA(location, locationName, duffelToken) {
+  // 1. Tabla local rápida
+  if (location) {
+    const fromCoords = getIATAFromCoords(location.lat, location.lng);
+    if (fromCoords) return fromCoords.iata;
+  }
+  if (locationName) {
+    const fromCity = getCityIATA(locationName.split(',')[0].trim());
+    if (fromCity) return fromCity;
+  }
+  // 2. Duffel places/suggestions (funciona con cualquier ciudad del mundo)
+  if (duffelToken && locationName) {
+    try {
+      const q = locationName.split(',')[0].trim();
+      const res = await fetch(
+        `https://api.duffel.com/places/suggestions?query=${encodeURIComponent(q)}&type[]=airport&type[]=city`,
+        {
+          headers: { 'Accept': 'application/json', 'Duffel-Version': 'v2', 'Authorization': `Bearer ${duffelToken}` },
+          signal: AbortSignal.timeout(4000)
+        }
+      );
+      const data = await res.json();
+      if (data.data?.length) {
+        // Preferir ciudad (agrupa aeropuertos), luego aeropuerto
+        const city = data.data.find(p => p.type === 'city');
+        if (city?.iata_code) return city.iata_code;
+        const airport = data.data.find(p => p.type === 'airport' && p.iata_code);
+        if (airport?.iata_code) return airport.iata_code;
+      }
+    } catch (_) {}
+  }
+  return null;
+}
+
 async function handleGoTo(dest, userLocation, userCountryCode, userLocationName, env, writer, encoder, travelDates, userNationality, userName) {
   const collectedData = {};
   const emit = async (section, data) => {
@@ -1691,16 +1726,16 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
       const fromCity = userLocationName?.split(',')[0] || '';
       promises.braveRoutes = buscarWeb({ query: `como ir de ${fromCity} a ${dest.destName} tren bus transporte` }, env.BRAVE_SEARCH_KEY).catch(() => null);
     }
-    // Vuelos domésticos si >300km
+    // Vuelos domésticos si >300km — IATA dinámico via Duffel
     if (dest.distanceKm > 300 && env.DUFFEL_ACCESS_TOKEN) {
-      const originIATA = getIATAFromCoords(userLocation.lat, userLocation.lng)?.iata || getCityIATA(userLocationName?.split(',')[0]);
-      const destIATA = getCityIATA(dest.destName);
-      if (originIATA && destIATA) {
-        promises.flights = buscarVuelosDuffel({
-          origen: originIATA, destino: destIATA,
-          fecha_ida: travelDates?.from || getFlexDate(7), adultos: 1
-        }, env.DUFFEL_ACCESS_TOKEN).catch(() => null);
-      }
+      promises.flights = (async () => {
+        const originIATA = await findIATA(userLocation, userLocationName, env.DUFFEL_ACCESS_TOKEN);
+        const destIATA = await findIATA({ lat: dest.destLat, lng: dest.destLng }, dest.destName, env.DUFFEL_ACCESS_TOKEN);
+        if (originIATA && destIATA) {
+          return buscarVuelosDuffel({ origen: originIATA, destino: destIATA, fecha_ida: travelDates?.from || getFlexDate(7), adultos: 1 }, env.DUFFEL_ACCESS_TOKEN);
+        }
+        return null;
+      })().catch(() => null);
     }
     // Qué ver y dónde comer
     if (dest.destLat && env.GOOGLE_PLACES_KEY) {
@@ -1738,19 +1773,20 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
     if (ccLower && env.SALMA_KB) promises.kvTransport = env.SALMA_KB.get('transport:' + ccLower).then(r => r ? JSON.parse(r) : null).catch(() => null);
     // KV destinos (qué hacer)
     if (ccLower && env.SALMA_KB) promises.kvDestinos = env.SALMA_KB.get('dest:' + ccLower + ':destinos').then(r => r ? JSON.parse(r) : null).catch(() => null);
-    // Vuelos
+    // Vuelos — IATA dinámico via Duffel places/suggestions
     if (env.DUFFEL_ACCESS_TOKEN && userLocation) {
-      const originIATA = getIATAFromCoords(userLocation.lat, userLocation.lng)?.iata || getCityIATA(userLocationName?.split(',')[0]);
-      const destIATA = dest.isCountry ? getCityIATA(dest.destName) : getCityIATA(dest.destText);
-      if (originIATA) {
-        promises.flights = buscarVuelosDuffel({
+      promises.flights = (async () => {
+        const originIATA = await findIATA(userLocation, userLocationName, env.DUFFEL_ACCESS_TOKEN);
+        const destIATA = await findIATA(dest.destLat ? { lat: dest.destLat, lng: dest.destLng } : null, dest.destName, env.DUFFEL_ACCESS_TOKEN);
+        if (!originIATA) return null;
+        return buscarVuelosDuffel({
           origen: originIATA, destino: destIATA || dest.destCC,
           fecha_ida: travelDates?.from || getFlexDate(14),
           fecha_vuelta: travelDates?.to || null,
           fecha_rango_hasta: travelDates ? null : getFlexDate(21),
           adultos: 1
-        }, env.DUFFEL_ACCESS_TOKEN).catch(() => null);
-      }
+        }, env.DUFFEL_ACCESS_TOKEN);
+      })().catch(() => null);
     }
     // Visa online (Brave)
     if (env.BRAVE_SEARCH_KEY) {
