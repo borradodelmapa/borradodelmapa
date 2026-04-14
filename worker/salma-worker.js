@@ -1846,17 +1846,12 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
     }
   }
 
-  // ─── MINI-RESUMEN (Claude Haiku) ───
-  const resumen = await generateMiniResumen(dest, collectedData, userLocationName, env, userName);
-  if (resumen) await emit('resumen', { text: resumen });
-
   // ─── CHIPS FOLLOW-UP ───
   const chips = buildFollowUpChips(dest, collectedData, userCountryCode);
   if (chips.length) await emit('chips', { chips });
 
   // ─── DONE ───
-  const fullReply = resumen || `Aquí tienes todo lo que necesitas para ir a ${dest.destName}.`;
-  await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: fullReply, route: null })}\n\n`));
+  await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: '', route: null })}\n\n`));
   await writer.close();
 }
 
