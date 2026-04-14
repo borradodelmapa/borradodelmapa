@@ -227,19 +227,21 @@ function _renderChatEmpty() {
   ];
   const saludo = saludos[Math.floor(Math.random() * saludos.length)];
 
-  const chips = [
-    { label: 'Hazme una ruta', msg: 'Hazme una ruta' },
-    { label: 'Hotel cerca', msg: 'Busca un hotel cerca' },
-    { label: 'Dónde comer', msg: 'Recomiéndame dónde comer cerca' },
-    { label: 'Buscar vuelo', msg: 'Busca vuelos' },
-    { label: 'Info del país', msg: 'Cuéntame info práctica del país donde estoy' },
-    { label: 'Pide Taxi', msg: null, action: 'taxi', cls: 'chat-empty-chip--taxi' },
-    { label: 'Explorar', msg: null, action: 'explorar' },
-    { label: 'Alerta vuelos', msg: null, action: 'vuelos' },
-    { label: 'Mis Notas', msg: null, action: 'notas' },
-    { label: 'Galería', msg: null, action: 'galeria' },
-    { label: 'Emergencia', msg: null, action: 'sos', cls: 'chat-empty-chip--sos' }
+  const chipsLeft = [
+    { label: 'Hazme una ruta', emoji: '🗺️', msg: 'Hazme una ruta' },
+    { label: 'Buscar vuelo', emoji: '✈️', msg: 'Busca vuelos' },
+    { label: 'Alerta vuelos', emoji: '🔔', msg: null, action: 'vuelos' },
+    { label: 'Pide taxi', emoji: '🚕', msg: null, action: 'taxi' },
+    { label: 'Hotel cerca', emoji: '🏨', msg: 'Busca un hotel cerca' },
+    { label: 'Dónde comer', emoji: '🍽️', msg: 'Recomiéndame dónde comer cerca' },
   ];
+  const chipsRight = [
+    { label: 'Mis Notas', emoji: '📝', msg: null, action: 'notas' },
+    { label: 'Galería', emoji: '📸', msg: null, action: 'galeria' },
+    { label: 'Explorar zona', emoji: '🧭', msg: null, action: 'explorar' },
+    { label: 'Emergencia', emoji: '🆘', msg: null, action: 'sos', cls: 'chat-empty-chip--sos' },
+  ];
+  const renderChip = c => `<button class="chat-empty-chip ${c.cls || ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}"><span class="chip-emoji">${c.emoji}</span>${c.label}</button>`;
 
   area.innerHTML = `
     <div class="chat-empty">
@@ -248,7 +250,8 @@ function _renderChatEmpty() {
         <div class="msg-body-salma">${saludo}</div>
       </div>
       <div class="chat-empty-chips">
-        ${chips.map(c => `<button class="chat-empty-chip ${c.cls || ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}">${c.label}</button>`).join('')}
+        <div class="chat-empty-col">${chipsLeft.map(renderChip).join('')}</div>
+        <div class="chat-empty-col">${chipsRight.map(renderChip).join('')}</div>
       </div>
     </div>`;
 

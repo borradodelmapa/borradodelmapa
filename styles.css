@@ -120,36 +120,37 @@ body {
 /* ── Chat vacío: saludo + chips ── */
 .chat-empty { padding:20px 16px; }
 .chat-empty-chips {
-  display:grid; grid-template-columns:1fr 1fr; gap:8px;
+  display:flex; gap:8px;
   padding:16px 0 0;
   max-width:340px; margin:0 auto;
 }
+.chat-empty-col {
+  display:flex; flex-direction:column; gap:8px; flex:1; min-width:0;
+}
 @media (min-width:600px) {
-  .chat-empty-chips { grid-template-columns:1fr 1fr 1fr; max-width:480px; }
+  .chat-empty-chips { max-width:420px; }
 }
 .chat-empty-chip {
+  display:flex; align-items:center; gap:6px;
   padding:8px 12px; border-radius:20px;
-  background:rgba(244,239,230,.06); border:1px solid rgba(212,168,67,.3);
-  color:rgba(244,239,230,.85); font-size:13px; font-weight:500;
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1);
+  color:rgba(244,239,230,.6); font-size:13px; font-weight:500;
   font-family:var(--font-tight); cursor:pointer;
-  transition:all .15s; text-align:center;
+  transition:all .15s; text-align:left; white-space:nowrap;
 }
+.chip-emoji { font-size:14px; line-height:1; flex-shrink:0; opacity:.5; }
 .chat-empty-chip:hover {
-  background:rgba(212,168,67,.15); border-color:var(--dorado);
-  color:var(--crema);
+  background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.2);
+  color:rgba(244,239,230,.85);
 }
+.chat-empty-chip:hover .chip-emoji { opacity:.8; }
 .chat-empty-chip:active { transform:scale(.96); }
 .chat-empty-chip--sos {
   background:rgba(239,68,68,.15); border-color:rgba(239,68,68,.5); color:#ef4444;
 }
+.chat-empty-chip--sos .chip-emoji { opacity:1; }
 .chat-empty-chip--sos:hover {
   background:rgba(239,68,68,.25); border-color:#ef4444; color:#ff6b6b;
-}
-.chat-empty-chip--taxi {
-  background:rgba(240,180,41,.12); border-color:rgba(240,180,41,.4);
-}
-.chat-empty-chip--taxi:hover {
-  background:rgba(240,180,41,.22); border-color:var(--dorado);
 }
 .salma-transport-tip {
   font-size:12px; color:rgba(255,255,255,.5); font-style:italic; margin:6px 0 10px 2px;
