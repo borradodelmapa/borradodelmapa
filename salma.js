@@ -23,6 +23,7 @@ const salma = {
   _geoBlocked: false,
   _pendingRouteInfo: null,  // Info parcial mientras esperamos fechas
   _pendingPhoto: null,      // {blob, base64, localUrl} mientras compone mensaje con foto
+  _pendingTaxiDest: false,  // Chip "Pide Taxi" activo: el próximo mensaje es un destino de taxi
   _narratorActive: false,
   _narratorNotified: new Set(),
   _narratorLastCheck: 0,
@@ -759,6 +760,15 @@ const salma = {
     if (!msg && !photo) return;
     if (this._streaming) return;
     if (!this._checkRate()) return;
+
+    // Chip "Pide Taxi": el usuario acaba de escribir el destino → prepend "taxi a"
+    if (this._pendingTaxiDest && msg) {
+      this._pendingTaxiDest = false;
+      msg = 'Necesito un taxi a ' + msg;
+      // Restaurar placeholder
+      const input = document.getElementById('salma-input');
+      if (input) input.placeholder = 'Escribe a Salma...';
+    }
 
     // Si no tenemos ubicación todavía, reintentar (ahora hay interacción del usuario)
     if (!this._userLocation && !this._geoWatchId && !this._geoBlocked) this.initGeolocation();
@@ -1844,7 +1854,21 @@ const salma = {
     wrap.appendChild(grid);
   },
 
-  // ═══ TRANSPORTE — Renderizado inline de botones (recibidos por SSE desde el worker) ═══
+  // ═══ TRANSPORTE — Flujo taxi: pregunta destino → botones + info ═══
+
+  askTaxiDestination() {
+    // Mostrar burbuja de Salma preguntando destino (sin IA, hardcoded)
+    const area = this._getChatArea();
+    if (!area) return;
+    // Limpiar chat-empty si existe
+    const empty = area.querySelector('.chat-empty');
+    if (empty) empty.remove();
+    this._addSalmaBubble('¿A dónde quieres ir?');
+    this._pendingTaxiDest = true;
+    // Focus en el input
+    const input = document.getElementById('salma-input');
+    if (input) { input.focus(); input.placeholder = 'Escribe el destino...'; }
+  },
 
   // Listener compartido: intenta abrir app nativa, fallback a store
   _bindAppLaunchButtons(container) {

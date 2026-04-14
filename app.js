@@ -225,7 +225,7 @@ function _renderChatEmpty() {
     { label: 'Dónde comer', msg: 'Recomiéndame dónde comer cerca' },
     { label: 'Buscar vuelo', msg: 'Busca vuelos' },
     { label: 'Info del país', msg: 'Cuéntame info práctica del país donde estoy' },
-    { label: 'Pide Taxi', msg: 'Necesito pedir un taxi', cls: 'chat-empty-chip--taxi' },
+    { label: 'Pide Taxi', msg: null, action: 'taxi', cls: 'chat-empty-chip--taxi' },
     { label: 'Explorar', msg: null, action: 'explorar' },
     { label: 'Alerta vuelos', msg: null, action: 'vuelos' },
     { label: 'Mis Notas', msg: null, action: 'notas' },
@@ -265,6 +265,10 @@ function _renderChatEmpty() {
           }
           updateBottomBar();
         }
+        return;
+      }
+      if (action === 'taxi') {
+        if (typeof salma !== 'undefined') salma.askTaxiDestination();
         return;
       }
       if (action === 'vuelos') {
