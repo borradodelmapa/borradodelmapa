@@ -2033,18 +2033,19 @@ const salma = {
     const sec = document.createElement('div');
     sec.className = 'salma-goto-section';
     let html = '<div class="salma-goto-section-title">Vuelos</div><div class="salma-result-grid">';
+    const bookUrl = data.enlace_reserva || '';
     for (const f of data.vuelos.slice(0, 4)) {
       const dep = f.salida ? new Date(f.salida).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : '';
       const arr = f.llegada ? new Date(f.llegada).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : '';
       const stops = f.escalas === 0 ? 'Directo' : f.escalas === 1 ? '1 escala' : f.escalas + ' escalas';
-      html += `<div class="salma-result-card"><div class="salma-result-card-body">
+      html += `<div class="salma-result-card" style="cursor:pointer" onclick="window.open('${bookUrl}','_blank')"><div class="salma-result-card-body">
         <div class="salma-result-card-name">✈ ${this._esc(f.aerolinea || '')}</div>
         <div class="salma-result-card-sub">${dep} → ${arr} · ${stops}</div>
         <div class="salma-result-card-price">${this._esc(f.precio || '')}</div>
+        <a class="salma-result-card-cta" href="${bookUrl}" target="_blank" rel="noopener">Reservar</a>
       </div></div>`;
     }
     html += '</div>';
-    if (data.enlace_reserva) html += `<a class="salma-goto-directions" href="${data.enlace_reserva}" target="_blank" rel="noopener" style="margin-top:6px">✈️ Ver más en Skyscanner</a>`;
     sec.innerHTML = html;
     c.appendChild(sec);
   },
