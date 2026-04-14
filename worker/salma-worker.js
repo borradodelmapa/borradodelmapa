@@ -2980,18 +2980,19 @@ async function verifyAllStops(route, placesKey) {
       : 0;
     const closeEnough = origDist < 15; // menos de 15km del punto original
 
+    // Foto: aceptar SIEMPRE que Google devuelva una (es del sitio buscado, no inventada)
+    const photoRef = candidate.photos?.[0]?.photo_reference || detail?.photos?.[0]?.photo_reference || '';
+    if (photoRef) stop.photo_ref = photoRef;
+
     if (!nameMatch && !closeEnough) {
-      // Google devolvió algo sin relación → mantener datos de Claude
+      // Google devolvió algo sin relación → mantener coords de Claude pero QUEDARSE LA FOTO
       verifiedStops.push(stop);
       return;
     }
 
-    // Google solo corrige coords y fotos — NO sobrescribe contenido de Haiku
+    // Google solo corrige coords — NO sobrescribe contenido de Haiku
     stop.lat = pLat;
     stop.lng = pLng;
-
-    const photoRef = candidate.photos?.[0]?.photo_reference || detail?.photos?.[0]?.photo_reference || '';
-    if (photoRef) stop.photo_ref = photoRef;
 
     // Solo sobrescribir nombre si Google devolvió algo relevante
     const verifiedName = detail?.name || candidate.name || '';
