@@ -6925,39 +6925,39 @@ INSTRUCCIONES:
           }
         }
 
-        // ── POST-PROCESADO FOTOS: buscar fotos automáticamente para lugares en negritas ──
+        // ── POST-PROCESADO FOTOS: buscar fotos e inyectar junto a cada lugar en negrita ──
         if (!route && env.GOOGLE_PLACES_KEY) {
           try {
-            // Extraer nombres en **negrita** que no sean genéricos
             const boldNames = [];
             const boldRegex = /\*\*([^*]{3,50})\*\*/g;
             let bm;
             while ((bm = boldRegex.exec(allText)) !== null) {
               const name = bm[1].trim();
-              // Filtrar precios, horas, genéricos
               if (/^\d|^€|^USD|^Día\s|^Tip:|^Nota:|^Precio|^Gratis|^Abierto|^Cerrado/i.test(name)) continue;
-              if (name.split(/\s+/).length < 2) continue; // mín 2 palabras
+              if (name.split(/\s+/).length < 2) continue;
               if (!boldNames.includes(name)) boldNames.push(name);
             }
-            // Buscar fotos para los primeros 4 lugares (máx)
             if (boldNames.length > 0) {
               const photoPromises = boldNames.slice(0, 4).map(name =>
                 buscarFotoLugar({ lugar: name }, env.GOOGLE_PLACES_KEY).catch(() => null)
               );
               const photoResults = await Promise.all(photoPromises);
-              let photoChunk = '';
+              // Inyectar cada foto justo después de su nombre en negrita
               for (let pi = 0; pi < photoResults.length; pi++) {
                 const pr = photoResults[pi];
-                if (pr?.fotos?.length && pr.fotos[0]?.markdown) {
-                  // Solo inyectar si Claude no puso ya esa foto
-                  if (!allText.includes(pr.fotos[0].url)) {
-                    photoChunk += '\n' + pr.fotos[0].markdown;
+                if (pr?.fotos?.length && pr.fotos[0]?.markdown && !allText.includes(pr.fotos[0].url)) {
+                  const name = boldNames[pi];
+                  const marker = `**${name}**`;
+                  const idx = allText.indexOf(marker);
+                  if (idx !== -1) {
+                    // Insertar foto después del párrafo que contiene el nombre
+                    const afterMarker = idx + marker.length;
+                    const nextNewline = allText.indexOf('\n', afterMarker);
+                    const insertPos = nextNewline !== -1 ? nextNewline : allText.length;
+                    const photoMd = '\n' + pr.fotos[0].markdown;
+                    allText = allText.slice(0, insertPos) + photoMd + allText.slice(insertPos);
                   }
                 }
-              }
-              if (photoChunk) {
-                allText += photoChunk;
-                try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: photoChunk })}\n\n`)); } catch (_) {}
               }
             }
           } catch (_) {}
