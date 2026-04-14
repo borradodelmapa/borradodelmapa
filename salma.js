@@ -25,15 +25,24 @@ const TRANSPORT_APPS = {
               web: 'https://go.yandex.com', store_android: 'https://play.google.com/store/apps/details?id=ru.yandex.taxi' },
   yango:    { name: 'Yango',     icon: '🔴', deep_link: 'https://yango.go.link/route?start-lat={pickup_lat}&start-lon={pickup_lng}&end-lat={dropoff_lat}&end-lon={dropoff_lng}',
               web: 'https://yango.com', store_android: 'https://play.google.com/store/apps/details?id=com.yandex.yango' },
-  grab:     { name: 'Grab',      icon: '🟩', web: 'https://www.grab.com', store_ios: 'https://apps.apple.com/app/grab-superapp/id647268330', store_android: 'https://play.google.com/store/apps/details?id=com.grabtaxi.passenger' },
-  bolt:     { name: 'Bolt',      icon: '🟢', web: 'https://bolt.eu', store_ios: 'https://apps.apple.com/app/bolt-request-a-ride/id675033630', store_android: 'https://play.google.com/store/apps/details?id=ee.mtakso.client' },
-  didi:     { name: 'DiDi',      icon: '🟠', web: 'https://www.didiglobal.com', store_ios: 'https://apps.apple.com/app/didi-rider/id554499054', store_android: 'https://play.google.com/store/apps/details?id=com.xiaojukeji.didi.global.customer' },
-  gojek:    { name: 'Gojek',     icon: '🟢', web: 'https://www.gojek.com', store_ios: 'https://apps.apple.com/app/gojek/id944875099', store_android: 'https://play.google.com/store/apps/details?id=com.gojek.app' },
-  careem:   { name: 'Careem',    icon: '🟢', web: 'https://www.careem.com', store_ios: 'https://apps.apple.com/app/careem/id592978487', store_android: 'https://play.google.com/store/apps/details?id=com.careem.acma' },
-  indrive:  { name: 'inDrive',   icon: '🟣', web: 'https://indrive.com', store_ios: 'https://apps.apple.com/app/indrive/id1050763635', store_android: 'https://play.google.com/store/apps/details?id=sinet.startup.inDriver' },
-  cabify:   { name: 'Cabify',    icon: '🟣', web: 'https://cabify.com', store_ios: 'https://apps.apple.com/app/cabify/id476087442', store_android: 'https://play.google.com/store/apps/details?id=com.cabify.rider' },
-  freenow:  { name: 'FREENOW',   icon: '🔴', web: 'https://www.free-now.com', store_ios: 'https://apps.apple.com/app/free-now/id357852748', store_android: 'https://play.google.com/store/apps/details?id=taxi.android.client' },
-  kakao_t:  { name: 'Kakao T',   icon: '🟡', web: 'https://t.kakao.com', store_android: 'https://play.google.com/store/apps/details?id=com.kakao.taxi' },
+  grab:     { name: 'Grab',      icon: '🟩', web: 'https://www.grab.com', scheme: 'grab', pkg: 'com.grabtaxi.passenger', ios_id: '647268330',
+              store_ios: 'https://apps.apple.com/app/grab-superapp/id647268330', store_android: 'https://play.google.com/store/apps/details?id=com.grabtaxi.passenger' },
+  bolt:     { name: 'Bolt',      icon: '🟢', web: 'https://bolt.eu', scheme: 'bolt', pkg: 'ee.mtakso.client', ios_id: '675033630',
+              store_ios: 'https://apps.apple.com/app/bolt-request-a-ride/id675033630', store_android: 'https://play.google.com/store/apps/details?id=ee.mtakso.client' },
+  didi:     { name: 'DiDi',      icon: '🟠', web: 'https://www.didiglobal.com', scheme: 'didi', pkg: 'com.xiaojukeji.didi.global.customer', ios_id: '554499054',
+              store_ios: 'https://apps.apple.com/app/didi-rider/id554499054', store_android: 'https://play.google.com/store/apps/details?id=com.xiaojukeji.didi.global.customer' },
+  gojek:    { name: 'Gojek',     icon: '🟢', web: 'https://www.gojek.com', scheme: 'gojek', pkg: 'com.gojek.app', ios_id: '944875099',
+              store_ios: 'https://apps.apple.com/app/gojek/id944875099', store_android: 'https://play.google.com/store/apps/details?id=com.gojek.app' },
+  careem:   { name: 'Careem',    icon: '🟢', web: 'https://www.careem.com', scheme: 'careem', pkg: 'com.careem.acma', ios_id: '592978487',
+              store_ios: 'https://apps.apple.com/app/careem/id592978487', store_android: 'https://play.google.com/store/apps/details?id=com.careem.acma' },
+  indrive:  { name: 'inDrive',   icon: '🟣', web: 'https://indrive.com', scheme: 'indrive', pkg: 'sinet.startup.inDriver', ios_id: '1050763635',
+              store_ios: 'https://apps.apple.com/app/indrive/id1050763635', store_android: 'https://play.google.com/store/apps/details?id=sinet.startup.inDriver' },
+  cabify:   { name: 'Cabify',    icon: '🟣', web: 'https://cabify.com', scheme: 'cabify', pkg: 'com.cabify.rider', ios_id: '476087442',
+              store_ios: 'https://apps.apple.com/app/cabify/id476087442', store_android: 'https://play.google.com/store/apps/details?id=com.cabify.rider' },
+  freenow:  { name: 'FREENOW',   icon: '🔴', web: 'https://www.free-now.com', scheme: 'freenow', pkg: 'taxi.android.client', ios_id: '357852748',
+              store_ios: 'https://apps.apple.com/app/free-now/id357852748', store_android: 'https://play.google.com/store/apps/details?id=taxi.android.client' },
+  kakao_t:  { name: 'Kakao T',   icon: '🟡', web: 'https://t.kakao.com', scheme: 'kakaot', pkg: 'com.kakao.taxi',
+              store_android: 'https://play.google.com/store/apps/details?id=com.kakao.taxi' },
 };
 
 const salma = {
@@ -1870,18 +1879,20 @@ const salma = {
   _getTransportAppLink(appKey, pickupLat, pickupLng, dropoffLat, dropoffLng, dropoffName) {
     const app = TRANSPORT_APPS[appKey];
     if (!app) return null;
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const isAndroid = /Android/.test(navigator.userAgent);
 
-    // 1. Deep link con coords (si tiene template y hay GPS)
+    // 1. Deep link con coords (Uber, Lyft, Ola, Yandex, Yango)
     if (app.deep_link && pickupLat != null) {
       let url = app.deep_link
         .replace(/{pickup_lat}/g, pickupLat).replace(/{pickup_lng}/g, pickupLng)
         .replace(/{dropoff_lat}/g, dropoffLat || '').replace(/{dropoff_lng}/g, dropoffLng || '')
         .replace(/{dropoff_name}/g, encodeURIComponent(dropoffName || ''));
-      return { url, label: dropoffLat ? 'Pedir ' + app.name : 'Pedir ' + app.name, type: 'deeplink' };
+      return { url, label: 'Pedir ' + app.name, type: 'deeplink' };
     }
-    // 2. Web de la app (suele abrir la app si está instalada vía universal links)
+    // 2. Apps sin deep link → abrir app nativa via scheme (Grab, Bolt, etc.)
+    if (app.scheme) {
+      return { label: 'Abrir ' + app.name, type: 'app', scheme: app.scheme, pkg: app.pkg, ios_id: app.ios_id, store_ios: app.store_ios, store_android: app.store_android, web: app.web };
+    }
+    // 3. Fallback web
     return { url: app.web, label: 'Abrir ' + app.name, type: 'web' };
   },
 
@@ -1948,10 +1959,17 @@ const salma = {
       const app = TRANSPORT_APPS[key];
       const card = document.createElement('div');
       card.className = 'salma-result-card';
-      card.innerHTML = `<div class="salma-result-card-body">
-        <div class="salma-result-card-name">${app?.icon || '🚕'} ${app?.name || key}</div>
-        <a class="salma-result-card-cta" href="${link.url}" target="_blank" rel="noopener">${link.label}</a>
-      </div>`;
+      if (link.type === 'app' && link.scheme) {
+        card.innerHTML = `<div class="salma-result-card-body">
+          <div class="salma-result-card-name">${app?.icon || '🚕'} ${app?.name || key}</div>
+          <a class="salma-result-card-cta salma-app-launch" href="#" data-scheme="${link.scheme}" data-pkg="${link.pkg || ''}" data-ios-id="${link.ios_id || ''}" data-store-ios="${link.store_ios || ''}" data-store-android="${link.store_android || ''}" data-web="${link.web || ''}">${link.label}</a>
+        </div>`;
+      } else {
+        card.innerHTML = `<div class="salma-result-card-body">
+          <div class="salma-result-card-name">${app?.icon || '🚕'} ${app?.name || key}</div>
+          <a class="salma-result-card-cta" href="${link.url}" target="_blank" rel="noopener">${link.label}</a>
+        </div>`;
+      }
       grid.appendChild(card);
     }
 
@@ -1970,6 +1988,39 @@ const salma = {
     wrap.appendChild(grid);
     area.appendChild(wrap);
     this._scrollToBottom(true);
+    this._bindAppLaunchButtons(wrap);
+  },
+
+  // Listener compartido: intenta abrir app nativa, fallback a store
+  _bindAppLaunchButtons(container) {
+    container.querySelectorAll('.salma-app-launch').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const scheme = btn.dataset.scheme;
+        const pkg = btn.dataset.pkg;
+        const iosId = btn.dataset.iosId;
+        const storeIos = btn.dataset.storeIos;
+        const storeAndroid = btn.dataset.storeAndroid;
+        const web = btn.dataset.web;
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        const isAndroid = /Android/.test(navigator.userAgent);
+
+        if (isAndroid && pkg) {
+          // Android: intent con fallback automático a Play Store
+          window.location = `intent://open#Intent;scheme=${scheme};package=${pkg};S.browser_fallback_url=${encodeURIComponent(storeAndroid || web)};end`;
+        } else if (isIOS && iosId) {
+          // iOS: intenta scheme, si falla en 1.5s → App Store
+          const start = Date.now();
+          window.location = scheme + '://';
+          setTimeout(() => {
+            if (Date.now() - start < 2000) window.location = storeIos || web;
+          }, 1500);
+        } else {
+          // Desktop: web
+          window.open(web, '_blank');
+        }
+      });
+    });
   },
 
   _renderTransportActions(actions, tip) {
@@ -1996,20 +2047,28 @@ const salma = {
     const isAndroid = /Android/.test(navigator.userAgent);
 
     for (const a of actions) {
-      // En Android: usar intent link si disponible (abre app o Play Store automáticamente)
-      const href = (isAndroid && a.intent_android) ? a.intent_android : a.url;
-
       const card = document.createElement('div');
       card.className = 'salma-result-card';
-      card.innerHTML = `<div class="salma-result-card-body">
-        <div class="salma-result-card-name">${a.icon} ${a.name}</div>
-        <a class="salma-result-card-cta" href="${href}" target="_blank" rel="noopener">${a.label}</a>
-      </div>`;
+
+      if (a.type === 'app' && a.scheme) {
+        // Botón que intenta abrir la app nativa, fallback a store
+        card.innerHTML = `<div class="salma-result-card-body">
+          <div class="salma-result-card-name">${a.icon} ${a.name}</div>
+          <a class="salma-result-card-cta salma-app-launch" href="#" data-scheme="${a.scheme}" data-pkg="${a.pkg || ''}" data-ios-id="${a.ios_id || ''}" data-store-ios="${a.store_ios || ''}" data-store-android="${a.store_android || ''}" data-web="${a.url}">${a.label}</a>
+        </div>`;
+      } else {
+        // Deep link directo o Google Maps — link normal
+        card.innerHTML = `<div class="salma-result-card-body">
+          <div class="salma-result-card-name">${a.icon} ${a.name}</div>
+          <a class="salma-result-card-cta" href="${a.url}" target="_blank" rel="noopener">${a.label}</a>
+        </div>`;
+      }
       grid.appendChild(card);
     }
     wrap.appendChild(grid);
     area.appendChild(wrap);
     this._scrollToBottom(true);
+    this._bindAppLaunchButtons(wrap);
   },
 
   async _saveNoteFromBubble(text, btnEl) {

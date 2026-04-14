@@ -917,22 +917,31 @@ const TRANSPORT_APP_URLS = {
               deep_link: 'https://yango.go.link/route?start-lat={pickup_lat}&start-lon={pickup_lng}&end-lat={dropoff_lat}&end-lon={dropoff_lng}',
               store_android: 'https://play.google.com/store/apps/details?id=com.yandex.yango' },
   grab:     { name: 'Grab',     icon: '🟩', web: 'https://www.grab.com',
+              scheme: 'grab', pkg: 'com.grabtaxi.passenger', ios_id: '647268330',
               store_ios: 'https://apps.apple.com/app/grab-superapp/id647268330', store_android: 'https://play.google.com/store/apps/details?id=com.grabtaxi.passenger' },
   bolt:     { name: 'Bolt',     icon: '🟢', web: 'https://bolt.eu',
+              scheme: 'bolt', pkg: 'ee.mtakso.client', ios_id: '675033630',
               store_ios: 'https://apps.apple.com/app/bolt-request-a-ride/id675033630', store_android: 'https://play.google.com/store/apps/details?id=ee.mtakso.client' },
   didi:     { name: 'DiDi',     icon: '🟠', web: 'https://www.didiglobal.com',
+              scheme: 'didi', pkg: 'com.xiaojukeji.didi.global.customer', ios_id: '554499054',
               store_ios: 'https://apps.apple.com/app/didi-rider/id554499054', store_android: 'https://play.google.com/store/apps/details?id=com.xiaojukeji.didi.global.customer' },
   gojek:    { name: 'Gojek',    icon: '🟢', web: 'https://www.gojek.com',
+              scheme: 'gojek', pkg: 'com.gojek.app', ios_id: '944875099',
               store_ios: 'https://apps.apple.com/app/gojek/id944875099', store_android: 'https://play.google.com/store/apps/details?id=com.gojek.app' },
   careem:   { name: 'Careem',   icon: '🟢', web: 'https://www.careem.com',
+              scheme: 'careem', pkg: 'com.careem.acma', ios_id: '592978487',
               store_ios: 'https://apps.apple.com/app/careem/id592978487', store_android: 'https://play.google.com/store/apps/details?id=com.careem.acma' },
   indrive:  { name: 'inDrive',  icon: '🟣', web: 'https://indrive.com',
+              scheme: 'indrive', pkg: 'sinet.startup.inDriver', ios_id: '1050763635',
               store_ios: 'https://apps.apple.com/app/indrive/id1050763635', store_android: 'https://play.google.com/store/apps/details?id=sinet.startup.inDriver' },
   cabify:   { name: 'Cabify',   icon: '🟣', web: 'https://cabify.com',
+              scheme: 'cabify', pkg: 'com.cabify.rider', ios_id: '476087442',
               store_ios: 'https://apps.apple.com/app/cabify/id476087442', store_android: 'https://play.google.com/store/apps/details?id=com.cabify.rider' },
   freenow:  { name: 'FREENOW',  icon: '🔴', web: 'https://www.free-now.com',
+              scheme: 'freenow', pkg: 'taxi.android.client', ios_id: '357852748',
               store_ios: 'https://apps.apple.com/app/free-now/id357852748', store_android: 'https://play.google.com/store/apps/details?id=taxi.android.client' },
   kakao_t:  { name: 'Kakao T',  icon: '🟡', web: 'https://t.kakao.com',
+              scheme: 'kakaot', pkg: 'com.kakao.taxi',
               store_android: 'https://play.google.com/store/apps/details?id=com.kakao.taxi' },
   google_maps: { name: 'Google Maps', icon: '🗺️', web: 'https://www.google.com/maps',
               deep_link: 'https://www.google.com/maps/dir/?api=1&origin={pickup_lat},{pickup_lng}&destination={dropoff_lat},{dropoff_lng}&travelmode=driving' },
@@ -6273,12 +6282,15 @@ INSTRUCCIONES:
                 action.type = 'deeplink';
                 action.label = 'Pedir ' + appData.name;
               } else {
-                // Intent link Android: abre app si instalada, si no → Play Store
-                // iOS: web que suele disparar universal link
+                // Sin deep link con coords — enviar scheme+pkg para que frontend abra la app
                 action.url = appData.web;
-                action.type = 'web';
+                action.type = 'app';
                 action.label = 'Abrir ' + appData.name;
-                if (appData.store_android) action.intent_android = `intent://open#Intent;package=${appData.store_android.replace('https://play.google.com/store/apps/details?id=', '')};end`;
+                if (appData.scheme) action.scheme = appData.scheme;
+                if (appData.pkg) action.pkg = appData.pkg;
+                if (appData.ios_id) action.ios_id = appData.ios_id;
+                if (appData.store_ios) action.store_ios = appData.store_ios;
+                if (appData.store_android) action.store_android = appData.store_android;
               }
               transportActions.push(action);
             }
