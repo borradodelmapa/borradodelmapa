@@ -1072,10 +1072,7 @@ const salma = {
                 if (evt.action_results && evt.action_results.length > 0) {
                   try { this._renderActionResults(evt.action_results); } catch (_) {}
                 }
-                // Renderizar botones de transporte (deep links / store / Google Maps)
-                if (evt.transport_actions && evt.transport_actions.length > 0) {
-                  try { this._renderTransportActions(evt.transport_actions, evt.transport_tip); } catch (_) {}
-                }
+                // (transport_actions se manejan como evento SSE independiente, antes del texto)
                 // Guardar notas automáticas de SALMA_ACTION:SAVE_NOTE
                 if (evt.action_results) {
                   for (const r of evt.action_results) {
@@ -1237,6 +1234,12 @@ const salma = {
                   this._fixStreamBubble();
                   this._addLoading('Verificando paradas y cargando fotos...', true);
                 }
+              }
+
+              // TRANSPORT ACTIONS — botones de apps (emitidos ANTES del texto de Claude)
+              if (evt.transport_actions && evt.transport_actions.length > 0) {
+                try { this._renderTransportActions(evt.transport_actions, evt.transport_tip); } catch (_) {}
+                continue;
               }
 
               // SEARCHING — tools ejecutando en paralelo

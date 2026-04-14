@@ -5903,6 +5903,39 @@ INSTRUCCIONES:
       const longRoute = isLongRoute(message); // Rutas ≥8 días → generación por bloques paralelos
 
       try {
+        // ── TRANSPORT ACTIONS: emitir ANTES de Claude para que los botones salgan primero ──
+        if (helpCategory === 'transport' && userLocation && (userCountryCode || frontendCountryCode)) {
+          const _tcCode = (userCountryCode || frontendCountryCode).toLowerCase();
+          let _tcApps = kvTransportData;
+          if (!_tcApps && env.SALMA_KB) {
+            try { const _tj = await env.SALMA_KB.get('transport:' + _tcCode); if (_tj) _tcApps = JSON.parse(_tj); } catch (_) {}
+          }
+          if (_tcApps?.ridehailing) {
+            const _tcAllApps = [_tcApps.ridehailing.best, ...(_tcApps.ridehailing.others || [])].filter(Boolean);
+            const _tcActions = [];
+            // Google Maps primero
+            _tcActions.push({ name: 'Google Maps', icon: '🗺️', key: 'google_maps',
+              url: `https://www.google.com/maps/@${userLocation.lat},${userLocation.lng},15z`, type: 'deeplink', label: 'Abrir Google Maps' });
+            // Apps del país (max 2: best + primer other)
+            for (const appName of _tcAllApps.slice(0, 2)) {
+              const appData = TRANSPORT_APP_URLS[appName.toLowerCase()];
+              if (!appData) continue;
+              if (appData.deep_link) {
+                _tcActions.push({ name: appData.name, icon: appData.icon, key: appName, type: 'deeplink', label: 'Pedir ' + appData.name,
+                  url: appData.deep_link.replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
+                    .replace(/{dropoff_lat}/g, '').replace(/{dropoff_lng}/g, '').replace(/{dropoff_name}/g, '') });
+              } else {
+                _tcActions.push({ name: appData.name, icon: appData.icon, key: appName, type: 'app', label: 'Abrir ' + appData.name,
+                  url: appData.web, scheme: appData.scheme || null, pkg: appData.pkg || null, ios_id: appData.ios_id || null,
+                  store_ios: appData.store_ios || null, store_android: appData.store_android || null });
+              }
+            }
+            if (_tcActions.length > 0) {
+              try { await writer.write(encoder.encode(`data: ${JSON.stringify({ transport_actions: _tcActions, transport_tip: _tcApps.ridehailing.tips || null })}\n\n`)); } catch (_) {}
+            }
+          }
+        }
+
         // ── RUTA LARGA (≥8 días): generación por bloques paralelos ──
         if (longRoute) {
           const days = extractDaysFromMessage(message);
@@ -6228,79 +6261,7 @@ INSTRUCCIONES:
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
         }
 
-        // ── Generar transport_actions estructurado (deep links / store / Google Maps) ──
-        // REQUIERE GPS: sin ubicación real, no mostramos botones de transporte (serían datos basura)
-        const _gpsCountryForTransport = userCountryCode || frontendCountryCode || null;
-        if (!route && helpCategory === 'transport' && userLocation && _gpsCountryForTransport) {
-          // Usar SIEMPRE el país del GPS (donde estás), no el del mensaje
-          let _transportApps = null;
-          if (kvTransportData && _gpsCountryForTransport.toLowerCase() === (countryCode || '').toLowerCase()) {
-            // KV ya cargó datos del mismo país → reusar
-            _transportApps = kvTransportData;
-          }
-          if (!_transportApps && env.SALMA_KB) {
-            try {
-              const _tj = await env.SALMA_KB.get('transport:' + _gpsCountryForTransport.toLowerCase());
-              if (_tj) _transportApps = JSON.parse(_tj);
-            } catch (_) {}
-          }
-          if (_transportApps?.ridehailing) {
-            const destCoords = _lastBuscarLugarCoords;
-            const allApps = [_transportApps.ridehailing.best, ...(_transportApps.ridehailing.others || [])].filter(Boolean);
-            const transportActions = [];
-
-            // Google Maps PRIMERO — SIEMPRE, con o sin destino
-            const gmapsUrl = destCoords
-              ? `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${destCoords.lat},${destCoords.lng}&travelmode=driving`
-              : `https://www.google.com/maps/@${userLocation.lat},${userLocation.lng},15z`;
-            transportActions.push({
-              name: 'Google Maps', icon: '🗺️', key: 'google_maps',
-              url: gmapsUrl, type: 'deeplink',
-              label: destCoords?.name ? 'Cómo llegar → ' + destCoords.name : 'Abrir Google Maps'
-            });
-
-            // Apps de ride-hailing del país
-            for (const appName of allApps) {
-              const appData = TRANSPORT_APP_URLS[appName.toLowerCase()];
-              if (!appData) continue;
-              const action = { name: appData.name, icon: appData.icon, key: appName };
-
-              if (appData.deep_link && destCoords) {
-                // Deep link completo: pickup GPS + destino
-                action.url = appData.deep_link
-                  .replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
-                  .replace(/{dropoff_lat}/g, destCoords.lat).replace(/{dropoff_lng}/g, destCoords.lng)
-                  .replace(/{dropoff_name}/g, encodeURIComponent(destCoords.name || ''));
-                action.type = 'deeplink';
-                action.label = 'Pedir ' + appData.name;
-              } else if (appData.deep_link) {
-                // Deep link solo pickup — abre la app con tu ubicación
-                action.url = appData.deep_link
-                  .replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
-                  .replace(/{dropoff_lat}/g, '').replace(/{dropoff_lng}/g, '')
-                  .replace(/{dropoff_name}/g, '');
-                action.type = 'deeplink';
-                action.label = 'Pedir ' + appData.name;
-              } else {
-                // Sin deep link con coords — enviar scheme+pkg para que frontend abra la app
-                action.url = appData.web;
-                action.type = 'app';
-                action.label = 'Abrir ' + appData.name;
-                if (appData.scheme) action.scheme = appData.scheme;
-                if (appData.pkg) action.pkg = appData.pkg;
-                if (appData.ios_id) action.ios_id = appData.ios_id;
-                if (appData.store_ios) action.store_ios = appData.store_ios;
-                if (appData.store_android) action.store_android = appData.store_android;
-              }
-              transportActions.push(action);
-            }
-
-            if (transportActions.length > 0) {
-              _pendingTransportActions = transportActions;
-              _pendingTransportTip = _transportApps.ridehailing.tips || null;
-            }
-          }
-        }
+        // (transport_actions ya se emitieron al inicio del stream — no duplicar aquí)
 
         // ── Inyectar URLs de tools (buscar_lugar, buscar_web) que Claude no incluyó ──
         if (!route && _toolUrls.length > 0) {
@@ -6389,10 +6350,6 @@ INSTRUCCIONES:
         // ── Enviar DONE con ruta verificada (fotos + coords corregidas) ──
         const doneEvt = { done: true, reply, route: route || null };
         if (actionResults.length > 0) doneEvt.action_results = actionResults;
-        if (_pendingTransportActions?.length > 0) {
-          doneEvt.transport_actions = _pendingTransportActions;
-          if (_pendingTransportTip) doneEvt.transport_tip = _pendingTransportTip;
-        }
         if (photoUploadPromise) {
           const photoResult = await photoUploadPromise;
           if (photoResult) { doneEvt.photo_url = photoResult.url; doneEvt.photo_key = photoResult.key; }
