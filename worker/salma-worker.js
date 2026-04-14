@@ -1554,24 +1554,24 @@ function buildDestTransportInfo(transportData) {
   return actions;
 }
 
-function buildFollowUpChips(dest, collectedData) {
+function buildFollowUpChips(dest, collectedData, userCountryCode) {
   const chips = [];
   if (dest.level === 'local') {
     chips.push({ label: '🏨 Hotel cerca', msg: `Busca un hotel cerca de ${dest.destName}` });
     chips.push({ label: '📸 Más sitios', msg: `Qué más puedo ver cerca de ${dest.destName}` });
     chips.push({ label: '📋 Hazme una ruta', msg: `Hazme una ruta por ${dest.destName}` });
   } else if (dest.level === 'regional') {
+    chips.push({ label: '🚗 Ir por tierra', msg: `Cómo puedo ir por tierra a ${dest.destName}. Cuéntame opciones de tren, bus y carretera.` });
     chips.push({ label: '📋 Hazme una ruta', msg: `Hazme una ruta por ${dest.destName}` });
     chips.push({ label: '🏨 Hotel', msg: `Busca hoteles en ${dest.destName}` });
     chips.push({ label: '💰 Presupuesto', msg: `Cuánto cuesta viajar a ${dest.destName}` });
-    if (collectedData.flights) chips.push({ label: '✈️ Más vuelos', msg: `Busca más vuelos a ${dest.destName}` });
   } else {
+    if (isOverlandViable(userCountryCode, dest.destCC)) {
+      chips.push({ label: '🚗 Ir por tierra', msg: `Cómo puedo ir por tierra a ${dest.destName}. Cuéntame la ruta, países, visados y mejor época.` });
+    }
     chips.push({ label: '📋 Hazme una ruta', msg: `Hazme una ruta por ${dest.destName}` });
     chips.push({ label: '🛂 Detalle visado', msg: `Cuéntame más sobre el visado para ${dest.destName}` });
     chips.push({ label: '🏨 Hotel', msg: `Busca hoteles en ${dest.destName}` });
-    if (isOverlandViable(dest.sameCountry ? dest.destCC : null, dest.destCC)) {
-      chips.push({ label: '🚗 Ir por tierra', msg: `Cómo puedo ir por tierra a ${dest.destName}. Cuéntame la ruta, países, visados y mejor época.` });
-    }
   }
   return chips.slice(0, 4);
 }
@@ -1822,7 +1822,7 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
   if (resumen) await emit('resumen', { text: resumen });
 
   // ─── CHIPS FOLLOW-UP ───
-  const chips = buildFollowUpChips(dest, collectedData);
+  const chips = buildFollowUpChips(dest, collectedData, userCountryCode);
   if (chips.length) await emit('chips', { chips });
 
   // ─── DONE ───
