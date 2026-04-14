@@ -6240,16 +6240,17 @@ INSTRUCCIONES:
             const allApps = [_transportApps.ridehailing.best, ...(_transportApps.ridehailing.others || [])].filter(Boolean);
             const transportActions = [];
 
-            // Google Maps PRIMERO — siempre funciona, mejor UX
-            if (destCoords) {
-              transportActions.push({
-                name: 'Google Maps', icon: '🗺️', key: 'google_maps',
-                url: `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${destCoords.lat},${destCoords.lng}&travelmode=driving`,
-                type: 'deeplink',
-                label: 'Cómo llegar' + (destCoords.name ? ' → ' + destCoords.name : '')
-              });
-            }
+            // Google Maps PRIMERO — SIEMPRE, con o sin destino
+            const gmapsUrl = destCoords
+              ? `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${destCoords.lat},${destCoords.lng}&travelmode=driving`
+              : `https://www.google.com/maps/@${userLocation.lat},${userLocation.lng},15z`;
+            transportActions.push({
+              name: 'Google Maps', icon: '🗺️', key: 'google_maps',
+              url: gmapsUrl, type: 'deeplink',
+              label: destCoords?.name ? 'Cómo llegar → ' + destCoords.name : 'Abrir Google Maps'
+            });
 
+            // Apps de ride-hailing del país
             for (const appName of allApps) {
               const appData = TRANSPORT_APP_URLS[appName.toLowerCase()];
               if (!appData) continue;
@@ -6264,7 +6265,7 @@ INSTRUCCIONES:
                 action.type = 'deeplink';
                 action.label = 'Pedir ' + appData.name;
               } else if (appData.deep_link) {
-                // Deep link solo pickup (sin destino) — abre la app con tu ubicación
+                // Deep link solo pickup — abre la app con tu ubicación
                 action.url = appData.deep_link
                   .replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
                   .replace(/{dropoff_lat}/g, '').replace(/{dropoff_lng}/g, '')
@@ -6272,10 +6273,12 @@ INSTRUCCIONES:
                 action.type = 'deeplink';
                 action.label = 'Pedir ' + appData.name;
               } else {
-                // Web de la app (suele abrir la app si instalada vía universal links)
+                // Intent link Android: abre app si instalada, si no → Play Store
+                // iOS: web que suele disparar universal link
                 action.url = appData.web;
                 action.type = 'web';
                 action.label = 'Abrir ' + appData.name;
+                if (appData.store_android) action.intent_android = `intent://open#Intent;package=${appData.store_android.replace('https://play.google.com/store/apps/details?id=', '')};end`;
               }
               transportActions.push(action);
             }

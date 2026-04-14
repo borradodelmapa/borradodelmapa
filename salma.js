@@ -1996,8 +1996,8 @@ const salma = {
     const isAndroid = /Android/.test(navigator.userAgent);
 
     for (const a of actions) {
-      // Usar URL directa (web o deep link). La web suele abrir la app si está instalada.
-      const href = a.url;
+      // En Android: usar intent link si disponible (abre app o Play Store automáticamente)
+      const href = (isAndroid && a.intent_android) ? a.intent_android : a.url;
 
       const card = document.createElement('div');
       card.className = 'salma-result-card';
