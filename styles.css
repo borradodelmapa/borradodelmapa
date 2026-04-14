@@ -158,6 +158,84 @@ body {
   font-size:12px; color:rgba(255,255,255,.5); font-style:italic; margin:6px 0 10px 2px;
 }
 
+/* ── GO_TO — "Quiero ir a..." tarjetas progresivas ── */
+.salma-goto-container { margin:8px 0 16px; display:flex; flex-direction:column; gap:10px; }
+.salma-goto-header {
+  display:flex; align-items:center; gap:10px; padding:12px 16px;
+  background:rgba(240,180,41,.08); border:1px solid rgba(240,180,41,.15); border-radius:14px;
+}
+.salma-goto-header-flag { font-size:28px; line-height:1; }
+.salma-goto-header-name { font-family:var(--font-tight,'Inter Tight',sans-serif); font-size:18px; font-weight:700; color:#fff; }
+.salma-goto-header-meta { font-size:12px; color:rgba(255,255,255,.45); margin-top:2px; }
+.salma-goto-level-badge {
+  font-size:10px; padding:2px 8px; border-radius:20px; font-weight:600;
+  text-transform:uppercase; margin-left:auto; white-space:nowrap;
+}
+.salma-goto-level-badge--local { background:rgba(52,211,153,.15); color:#34d399; }
+.salma-goto-level-badge--regional { background:rgba(96,165,250,.15); color:#60a5fa; }
+.salma-goto-level-badge--international { background:rgba(251,146,60,.15); color:#fb923c; }
+.salma-goto-section { margin:4px 0; }
+.salma-goto-section-title {
+  font-family:var(--font-tight,'Inter Tight',sans-serif); font-size:13px; font-weight:600;
+  color:rgba(255,255,255,.55); margin-bottom:8px;
+}
+.salma-goto-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.salma-goto-info-pill {
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+  border-radius:10px; padding:8px 12px;
+}
+.salma-goto-info-pill-label { font-size:10px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:.5px; }
+.salma-goto-info-pill-value { font-size:13px; color:#fff; margin-top:2px; line-height:1.3; }
+.salma-goto-visa-kv {
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+  border-radius:10px; padding:10px 14px; font-size:13px; color:rgba(255,255,255,.8);
+}
+.salma-goto-visa-online { margin-top:6px; font-size:12px; color:rgba(255,255,255,.5); }
+.salma-goto-visa-online a { color:var(--dorado); text-decoration:none; }
+.salma-goto-visa-warn {
+  background:rgba(251,146,60,.08); border:1px solid rgba(251,146,60,.2);
+  border-radius:10px; padding:8px 12px; font-size:12px; color:rgba(251,146,60,.9); margin-top:6px;
+}
+.salma-goto-weather {
+  display:flex; align-items:center; gap:12px; padding:10px 14px;
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:10px;
+}
+.salma-goto-weather-temp { font-size:28px; font-weight:700; color:var(--dorado); }
+.salma-goto-weather-desc { font-size:13px; color:rgba(255,255,255,.6); }
+.salma-goto-weather-forecast { display:flex; gap:8px; margin-top:6px; }
+.salma-goto-weather-day { font-size:11px; color:rgba(255,255,255,.45); text-align:center; }
+.salma-goto-directions {
+  display:inline-flex; align-items:center; gap:6px; padding:8px 16px;
+  background:rgba(240,180,41,.1); border:1px solid rgba(240,180,41,.25); border-radius:10px;
+  color:var(--dorado); text-decoration:none; font-size:13px; font-weight:600;
+}
+.salma-goto-directions:hover { background:rgba(240,180,41,.18); }
+.salma-goto-routes-list { display:flex; flex-direction:column; gap:6px; }
+.salma-goto-route-item {
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+  border-radius:10px; padding:10px 14px;
+}
+.salma-goto-route-item a { color:var(--dorado); text-decoration:none; font-size:13px; font-weight:500; }
+.salma-goto-route-item p { font-size:12px; color:rgba(255,255,255,.5); margin:4px 0 0; }
+.salma-goto-news-list { display:flex; flex-direction:column; gap:4px; }
+.salma-goto-news-item { font-size:12px; }
+.salma-goto-news-item a { color:rgba(255,255,255,.7); text-decoration:none; }
+.salma-goto-news-item a:hover { color:var(--dorado); }
+.salma-goto-resumen {
+  padding:12px 16px; background:rgba(240,180,41,.06);
+  border-left:3px solid var(--dorado); border-radius:0 12px 12px 0;
+  font-size:14px; line-height:1.5; color:rgba(255,255,255,.85); font-style:italic;
+}
+.salma-goto-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+.salma-goto-chip {
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+  border-radius:20px; padding:6px 14px; font-size:13px; color:rgba(255,255,255,.7);
+  cursor:pointer; transition:background .2s,border-color .2s; -webkit-tap-highlight-color:transparent;
+}
+.salma-goto-chip:hover, .salma-goto-chip:active {
+  background:rgba(240,180,41,.12); border-color:rgba(240,180,41,.3); color:#fff;
+}
+
 /* ── Input bar (fijo abajo, NUNCA desaparece) ── */
 .app-input-bar {
   position:fixed; bottom:56px; left:0; right:0; z-index:1100;

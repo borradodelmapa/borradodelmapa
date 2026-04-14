@@ -1311,6 +1311,528 @@ function getIATAFromCoords(lat, lng) {
   return null;
 }
 
+// ═══════════════════════════════════════════════════════════════════
+// ═══ "QUIERO IR A..." — Funciones de detección, resolución y orquestación
+// ═══════════════════════════════════════════════════════════════════
+
+function haversineKm(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function getFlexDate(daysFromNow) {
+  const d = new Date();
+  d.setDate(d.getDate() + daysFromNow);
+  return d.toISOString().split('T')[0];
+}
+
+// Mapa de países reutilizable (extraído del inline de ~línea 5670)
+const GO_TO_COUNTRY_MAP = {
+  'espana': 'ES', 'spain': 'ES', 'francia': 'FR', 'france': 'FR', 'portugal': 'PT',
+  'italia': 'IT', 'italy': 'IT', 'alemania': 'DE', 'germany': 'DE', 'reino unido': 'GB',
+  'united kingdom': 'GB', 'estados unidos': 'US', 'united states': 'US', 'usa': 'US',
+  'mexico': 'MX', 'argentina': 'AR', 'colombia': 'CO', 'peru': 'PE', 'chile': 'CL',
+  'brasil': 'BR', 'brazil': 'BR', 'tailandia': 'TH', 'thailand': 'TH', 'japon': 'JP',
+  'japan': 'JP', 'marruecos': 'MA', 'morocco': 'MA', 'turquia': 'TR', 'turkey': 'TR',
+  'turkiye': 'TR', 'grecia': 'GR', 'greece': 'GR', 'iran': 'IR', 'india': 'IN', 'china': 'CN',
+  'australia': 'AU', 'canada': 'CA', 'cuba': 'CU', 'republica dominicana': 'DO',
+  'costa rica': 'CR', 'panama': 'PA', 'ecuador': 'EC', 'bolivia': 'BO', 'uruguay': 'UY',
+  'paraguay': 'PY', 'venezuela': 'VE', 'guatemala': 'GT', 'honduras': 'HN',
+  'el salvador': 'SV', 'nicaragua': 'NI', 'filipinas': 'PH', 'philippines': 'PH',
+  'indonesia': 'ID', 'malasia': 'MY', 'malaysia': 'MY', 'vietnam': 'VN', 'camboya': 'KH',
+  'cambodia': 'KH', 'laos': 'LA', 'myanmar': 'MM', 'singapur': 'SG', 'singapore': 'SG',
+  'corea del sur': 'KR', 'south korea': 'KR', 'egipto': 'EG', 'egypt': 'EG',
+  'sudafrica': 'ZA', 'south africa': 'ZA', 'kenia': 'KE', 'kenya': 'KE',
+  'tanzania': 'TZ', 'etiopia': 'ET', 'ethiopia': 'ET', 'nigeria': 'NG',
+  'belgica': 'BE', 'belgium': 'BE', 'paises bajos': 'NL', 'netherlands': 'NL',
+  'suiza': 'CH', 'switzerland': 'CH', 'austria': 'AT', 'irlanda': 'IE', 'ireland': 'IE',
+  'dinamarca': 'DK', 'denmark': 'DK', 'noruega': 'NO', 'norway': 'NO',
+  'suecia': 'SE', 'sweden': 'SE', 'finlandia': 'FI', 'finland': 'FI',
+  'polonia': 'PL', 'poland': 'PL', 'rumania': 'RO', 'romania': 'RO',
+  'hungria': 'HU', 'hungary': 'HU', 'republica checa': 'CZ', 'czechia': 'CZ',
+  'croacia': 'HR', 'croatia': 'HR', 'serbia': 'RS', 'bulgaria': 'BG',
+  'rusia': 'RU', 'russia': 'RU', 'ucrania': 'UA', 'ukraine': 'UA',
+  'israel': 'IL', 'jordania': 'JO', 'jordan': 'JO', 'libano': 'LB', 'lebanon': 'LB',
+  'arabia saudita': 'SA', 'saudi arabia': 'SA', 'emiratos arabes unidos': 'AE',
+  'united arab emirates': 'AE', 'qatar': 'QA', 'oman': 'OM', 'kuwait': 'KW',
+  'nueva zelanda': 'NZ', 'new zealand': 'NZ', 'islandia': 'IS', 'iceland': 'IS',
+  'nepal': 'NP', 'sri lanka': 'LK', 'bangladesh': 'BD', 'pakistan': 'PK',
+  'birmania': 'MM', 'tunez': 'TN', 'tunisia': 'TN', 'senegal': 'SN',
+  'ruanda': 'RW', 'rwanda': 'RW', 'georgia': 'GE', 'armenia': 'AM', 'azerbaiyan': 'AZ',
+  'uzbekistan': 'UZ', 'kazajistan': 'KZ', 'mongolia': 'MN', 'taiwan': 'TW',
+};
+
+function detectCountryFromText(text) {
+  if (!text) return null;
+  const norm = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+  // Intentar coincidencia exacta primero
+  if (GO_TO_COUNTRY_MAP[norm]) return GO_TO_COUNTRY_MAP[norm];
+  // Intentar cada clave como substring
+  for (const [key, cc] of Object.entries(GO_TO_COUNTRY_MAP)) {
+    if (norm === key || norm.startsWith(key + ' ') || norm.endsWith(' ' + key)) return cc;
+  }
+  return null;
+}
+
+const CONTINENT_MAP = {
+  // Eurasia + África (conectados por tierra)
+  eurasia_africa: ['ES','FR','DE','IT','PT','GB','IE','BE','NL','LU','CH','AT','DK','NO','SE','FI','IS','PL','CZ','SK','HU','RO','BG','HR','RS','BA','ME','MK','AL','GR','TR','CY','RU','UA','BY','MD','EE','LV','LT','GE','AM','AZ','KZ','UZ','TM','TJ','KG','MN','CN','JP','KR','KP','TW','IN','PK','BD','NP','LK','MM','TH','VN','LA','KH','MY','SG','ID','PH','BN','IR','IQ','SY','LB','JO','IL','PS','SA','AE','QA','OM','KW','BH','YE','AF','EG','LY','TN','DZ','MA','MR','SN','GM','GN','SL','LR','CI','GH','TG','BJ','NE','NG','CM','TD','CF','CD','CG','GA','GQ','ST','AO','ZM','ZW','MZ','MW','TZ','KE','UG','RW','BI','ET','ER','DJ','SO','SD','SS','BF','ML'],
+  // Américas (conectadas por tierra, con interrupción Darién pero técnicamente posible)
+  americas: ['US','CA','MX','GT','BZ','HN','SV','NI','CR','PA','CO','VE','GY','SR','EC','PE','BR','BO','PY','UY','AR','CL'],
+  // Oceanía (islas, solo avión)
+  oceania: ['AU','NZ','FJ','PG','WS','TO','VU','SB','KI','FM','MH','PW','NR','TV'],
+};
+
+function isOverlandViable(userCC, destCC) {
+  if (!userCC || !destCC) return false;
+  const u = userCC.toUpperCase();
+  const d = destCC.toUpperCase();
+  if (u === d) return true;
+  for (const [, countries] of Object.entries(CONTINENT_MAP)) {
+    if (countries.includes(u) && countries.includes(d)) return true;
+  }
+  return false;
+}
+
+function isGoToRequest(message) {
+  if (!message) return false;
+  const m = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  // Excluir si ya es un request de ruta explícito ("hazme una guía/ruta")
+  if (/hazme\s+una\s+(guia|ruta)|salma\s+hazme/i.test(m)) return false;
+  return /\b(?:quiero\s+ir\s+a|como\s+llego\s+a|como\s+ir\s+a|me\s+voy\s+a|viajo\s+a|viajar\s+a|quiero\s+viajar\s+a|me\s+gustaria\s+ir\s+a|estoy\s+pensando\s+ir\s+a|voy\s+a\s+ir\s+a|i\s+want\s+to\s+go\s+to|how\s+(?:to|do\s+i)\s+get\s+to|llegar\s+a\b.*desde|ir\s+a\b.*desde)\b/.test(m);
+}
+
+function extractGoToDestination(message) {
+  const m = message.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const patterns = [
+    /(?:quiero\s+ir|como\s+llego|como\s+ir|me\s+voy|viajo|viajar|quiero\s+viajar|me\s+gustaria\s+ir|estoy\s+pensando\s+ir|voy\s+a\s+ir|i\s+want\s+to\s+go|how\s+(?:to|do\s+i)\s+get)\s+(?:a|to)\s+(.+?)(?:\s+desde\s|\s+from\s|[.?!]|$)/i,
+    /(?:llegar)\s+a\s+(.+?)(?:\s+desde\s|[.?!]|$)/i,
+    /\bir\s+a\s+(.+?)\s+desde\s/i,
+  ];
+  for (const p of patterns) {
+    const match = m.match(p);
+    if (match && match[1]) {
+      let dest = match[1].trim();
+      // Limpiar trailing words que no son destino
+      dest = dest.replace(/\s+(en\s+(coche|tren|bus|avion|ferry)|con\s+(ninos|familia)|este\s+(fin|verano|mes)).*$/i, '').trim();
+      if (dest.length > 1 && dest.length < 80) return dest;
+    }
+  }
+  return null;
+}
+
+async function resolveGoToDestination(destText, userLocation, userCountryCode, env) {
+  let destLat = null, destLng = null, destCC = null, destName = destText;
+  let isCountry = false;
+
+  // Fase 1: ¿Es un país conocido?
+  const cc = detectCountryFromText(destText);
+  if (cc) {
+    destCC = cc;
+    isCountry = true;
+    // Obtener capital del KV base para coords
+    if (env.SALMA_KB) {
+      try {
+        const baseJson = await env.SALMA_KB.get('dest:' + cc.toLowerCase() + ':base');
+        if (baseJson) {
+          const base = JSON.parse(baseJson);
+          destName = base.pais || destText;
+          if (base.capital) {
+            // Geocodificar capital
+            try {
+              const geoUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(base.capital + ', ' + (base.pais || ''))}&format=json&limit=1`;
+              const geoRes = await fetch(geoUrl, { headers: { 'User-Agent': 'SalmaBot/1.0' }, signal: AbortSignal.timeout(3000) });
+              const geoArr = await geoRes.json();
+              if (geoArr[0]) { destLat = parseFloat(geoArr[0].lat); destLng = parseFloat(geoArr[0].lon); }
+            } catch (_) {}
+          }
+        }
+      } catch (_) {}
+    }
+  }
+
+  // Fase 2: Si no es país, geocodificar con Google Places (biased a GPS)
+  if (!isCountry && env.GOOGLE_PLACES_KEY) {
+    try {
+      const locBias = userLocation ? `&location=${userLocation.lat},${userLocation.lng}&radius=50000` : '';
+      const pr = await fetch(
+        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(destText)}${locBias}&language=es&key=${env.GOOGLE_PLACES_KEY}`,
+        { signal: AbortSignal.timeout(4000) }
+      );
+      const pd = await pr.json();
+      if (pd.results?.[0]?.geometry?.location) {
+        const p = pd.results[0];
+        destLat = p.geometry.location.lat;
+        destLng = p.geometry.location.lng;
+        destName = p.name || destText;
+      }
+    } catch (_) {}
+
+    // Obtener country code del destino por reverse geocode
+    if (destLat && !destCC) {
+      try {
+        const revUrl = `https://nominatim.openstreetmap.org/reverse?lat=${destLat}&lon=${destLng}&format=json&zoom=3&accept-language=en`;
+        const revRes = await fetch(revUrl, { headers: { 'User-Agent': 'SalmaBot/1.0' }, signal: AbortSignal.timeout(3000) });
+        const revData = await revRes.json();
+        destCC = (revData.address?.country_code || '').toUpperCase();
+      } catch (_) {}
+    }
+  }
+
+  // Calcular distancia y nivel
+  let distanceKm = null;
+  let level = 'international';
+  if (userLocation && destLat) {
+    distanceKm = haversineKm(userLocation.lat, userLocation.lng, destLat, destLng);
+  }
+  const sameCountry = destCC && userCountryCode && destCC.toUpperCase() === userCountryCode.toUpperCase();
+  if (sameCountry && distanceKm !== null && distanceKm < 50) {
+    level = 'local';
+  } else if (sameCountry && distanceKm !== null && distanceKm <= 2000) {
+    level = 'regional';
+  }
+
+  return { destText, destName, destLat, destLng, destCC, distanceKm, level, isCountry, sameCountry };
+}
+
+function buildGoToTransportActions(userLocation, dest, transportData) {
+  const actions = [];
+  // Google Maps directions (siempre primero)
+  if (userLocation && dest.destLat) {
+    actions.push({
+      name: 'Google Maps', icon: '🗺️', type: 'deeplink',
+      url: `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${dest.destLat},${dest.destLng}&travelmode=transit`,
+      label: 'Cómo llegar → ' + (dest.destName || 'destino')
+    });
+  }
+  // Apps ride-hailing del país
+  if (transportData?.ridehailing?.best) {
+    const appNames = [transportData.ridehailing.best, ...(transportData.ridehailing.others || [])].filter(Boolean).slice(0, 2);
+    for (const appName of appNames) {
+      const ad = TRANSPORT_APP_URLS[appName.toLowerCase()];
+      if (!ad) continue;
+      if (ad.deep_link && userLocation && dest.destLat) {
+        actions.push({
+          name: ad.name, icon: ad.icon, type: 'deeplink',
+          url: ad.deep_link.replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
+            .replace(/{dropoff_lat}/g, dest.destLat).replace(/{dropoff_lng}/g, dest.destLng)
+            .replace(/{dropoff_name}/g, encodeURIComponent(dest.destName || '')),
+          label: 'Pedir ' + ad.name
+        });
+      } else {
+        actions.push({
+          name: ad.name, icon: ad.icon, type: 'app',
+          url: ad.web, scheme: ad.scheme || null, pkg: ad.pkg || null,
+          store_ios: ad.store_ios || null, store_android: ad.store_android || null,
+          label: 'Abrir ' + ad.name
+        });
+      }
+    }
+  }
+  return actions;
+}
+
+function buildDestTransportInfo(transportData) {
+  // Para destinos internacionales: info de transporte sin deep links (el usuario no está allí aún)
+  const actions = [];
+  if (transportData?.ridehailing?.best) {
+    const appNames = [transportData.ridehailing.best, ...(transportData.ridehailing.others || [])].filter(Boolean).slice(0, 3);
+    for (const appName of appNames) {
+      const ad = TRANSPORT_APP_URLS[appName.toLowerCase()];
+      if (!ad) continue;
+      actions.push({
+        name: ad.name, icon: ad.icon, type: 'app',
+        url: ad.web, scheme: ad.scheme || null, pkg: ad.pkg || null,
+        store_ios: ad.store_ios || null, store_android: ad.store_android || null,
+        label: 'Descargar ' + ad.name
+      });
+    }
+  }
+  return actions;
+}
+
+function buildFollowUpChips(dest, collectedData) {
+  const chips = [];
+  if (dest.level === 'local') {
+    chips.push({ label: '🏨 Hotel cerca', msg: `Busca un hotel cerca de ${dest.destName}` });
+    chips.push({ label: '📸 Más sitios', msg: `Qué más puedo ver cerca de ${dest.destName}` });
+    chips.push({ label: '📋 Hazme una ruta', msg: `Hazme una ruta por ${dest.destName}` });
+  } else if (dest.level === 'regional') {
+    chips.push({ label: '📋 Hazme una ruta', msg: `Hazme una ruta por ${dest.destName}` });
+    chips.push({ label: '🏨 Hotel', msg: `Busca hoteles en ${dest.destName}` });
+    chips.push({ label: '💰 Presupuesto', msg: `Cuánto cuesta viajar a ${dest.destName}` });
+    if (collectedData.flights) chips.push({ label: '✈️ Más vuelos', msg: `Busca más vuelos a ${dest.destName}` });
+  } else {
+    chips.push({ label: '📋 Hazme una ruta', msg: `Hazme una ruta por ${dest.destName}` });
+    chips.push({ label: '🛂 Detalle visado', msg: `Cuéntame más sobre el visado para ${dest.destName}` });
+    chips.push({ label: '🏨 Hotel', msg: `Busca hoteles en ${dest.destName}` });
+    if (isOverlandViable(dest.sameCountry ? dest.destCC : null, dest.destCC)) {
+      chips.push({ label: '🚗 Ir por tierra', msg: `Cómo puedo ir por tierra a ${dest.destName}. Cuéntame la ruta, países, visados y mejor época.` });
+    }
+  }
+  return chips.slice(0, 4);
+}
+
+async function generateMiniResumen(dest, collectedData, userLocationName, env) {
+  if (!env.ANTHROPIC_API_KEY) return null;
+  const parts = [];
+  parts.push(`Destino: ${dest.destName} (${dest.destCC || '?'}) desde ${userLocationName || 'ubicación desconocida'}. Distancia: ${Math.round(dest.distanceKm || 0)}km. Nivel: ${dest.level}.`);
+  if (collectedData.kvBase) {
+    const c = collectedData.kvBase;
+    parts.push(`Visa: ${c.visado_espanoles || 'no disponible'}. Moneda: ${c.moneda || '?'}. Seguridad: ${c.seguridad || '?'}.`);
+  }
+  if (collectedData.flights?.vuelos?.length) {
+    const f = collectedData.flights.vuelos[0];
+    parts.push(`Vuelo más barato: ${f.precio}, ${f.aerolinea}, ${f.escalas} escalas.`);
+  }
+  if (collectedData.weather?.current) {
+    parts.push(`Tiempo actual: ${collectedData.weather.current.temp_c}°C, ${collectedData.weather.current.description}.`);
+  }
+  if (collectedData.attractions?.length) {
+    parts.push(`Qué ver: ${collectedData.attractions.slice(0, 3).map(a => a.name).join(', ')}.`);
+  }
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 200,
+        messages: [{
+          role: 'user',
+          content: `Eres Salma, compañera de viaje andaluza. Resume en 2-3 frases con personalidad cómo llegar a ${dest.destName} desde ${userLocationName || 'donde está el viajero'}. Datos:\n${parts.join('\n')}\n\nMáximo 3 frases cortas, con gracia pero útil. Sin emojis. Tutea.`
+        }]
+      }),
+      signal: AbortSignal.timeout(8000)
+    });
+    const data = await res.json();
+    return data.content?.[0]?.text || null;
+  } catch (_) { return null; }
+}
+
+async function searchNearbyPlaces(lat, lng, type, googleKey) {
+  if (!googleKey || !lat || !lng) return [];
+  try {
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=2000&type=${type}&language=es&key=${googleKey}`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
+    const data = await res.json();
+    return (data.results || []).slice(0, 5).map(p => ({
+      name: p.name,
+      rating: p.rating || null,
+      reviews: p.user_ratings_total || null,
+      photo_ref: p.photos?.[0]?.photo_reference || null,
+      address: p.vicinity || '',
+      open_now: p.opening_hours?.open_now ?? null,
+      maps_link: `https://www.google.com/maps/place/?q=place_id:${p.place_id}`,
+    }));
+  } catch (_) { return []; }
+}
+
+async function handleGoTo(dest, userLocation, userCountryCode, userLocationName, env, writer, encoder, travelDates, userNationality) {
+  const collectedData = {};
+  const emit = async (section, data) => {
+    try { await writer.write(encoder.encode(`data: ${JSON.stringify({ go_to: section, data })}\n\n`)); } catch (_) {}
+  };
+
+  // Header inmediato
+  await emit('header', { destName: dest.destName, destCC: dest.destCC, level: dest.level, distanceKm: Math.round(dest.distanceKm || 0) });
+
+  // ─── LOCAL (<50km) ───
+  if (dest.level === 'local') {
+    // Directions inmediato
+    if (userLocation && dest.destLat) {
+      await emit('directions', {
+        url: `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${dest.destLat},${dest.destLng}&travelmode=transit`,
+        name: dest.destName, distanceKm: Math.round(dest.distanceKm)
+      });
+    }
+
+    // Paralelo: transport + attractions + restaurants
+    const promises = {};
+    const tcCC = (userCountryCode || '').toLowerCase();
+    if (tcCC && env.SALMA_KB) promises.transport = env.SALMA_KB.get('transport:' + tcCC).then(r => r ? JSON.parse(r) : null).catch(() => null);
+    if (dest.destLat && env.GOOGLE_PLACES_KEY) {
+      promises.attractions = searchNearbyPlaces(dest.destLat, dest.destLng, 'tourist_attraction', env.GOOGLE_PLACES_KEY);
+      promises.restaurants = searchNearbyPlaces(dest.destLat, dest.destLng, 'restaurant', env.GOOGLE_PLACES_KEY);
+    }
+
+    const keys = Object.keys(promises);
+    const results = await Promise.allSettled(Object.values(promises));
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]; const val = results[i].status === 'fulfilled' ? results[i].value : null;
+      if (!val) continue;
+      collectedData[key] = val;
+      if (key === 'transport') {
+        const actions = buildGoToTransportActions(userLocation, dest, val);
+        if (actions.length) await emit('transport', { actions, tip: val.ridehailing?.tips || null });
+      }
+      if (key === 'attractions' && val.length) await emit('attractions', { places: val, query: 'Qué ver cerca' });
+      if (key === 'restaurants' && val.length) await emit('restaurants', { places: val, query: 'Dónde comer cerca' });
+    }
+  }
+
+  // ─── REGIONAL (50-2000km) ───
+  else if (dest.level === 'regional') {
+    // Directions inmediato
+    if (userLocation && dest.destLat) {
+      await emit('directions', {
+        url: `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${dest.destLat},${dest.destLng}&travelmode=transit`,
+        name: dest.destName, distanceKm: Math.round(dest.distanceKm)
+      });
+    }
+
+    const promises = {};
+    const tcCC = (userCountryCode || '').toLowerCase();
+    if (tcCC && env.SALMA_KB) promises.transport = env.SALMA_KB.get('transport:' + tcCC).then(r => r ? JSON.parse(r) : null).catch(() => null);
+    if (env.BRAVE_SEARCH_KEY) {
+      const fromCity = userLocationName?.split(',')[0] || '';
+      promises.braveRoutes = buscarWeb({ query: `como ir de ${fromCity} a ${dest.destName} tren bus transporte` }, env.BRAVE_SEARCH_KEY).catch(() => null);
+    }
+    // Vuelos domésticos si >300km
+    if (dest.distanceKm > 300 && env.DUFFEL_ACCESS_TOKEN) {
+      const originIATA = getIATAFromCoords(userLocation.lat, userLocation.lng)?.iata || getCityIATA(userLocationName?.split(',')[0]);
+      const destIATA = getCityIATA(dest.destName);
+      if (originIATA && destIATA) {
+        promises.flights = buscarVuelosDuffel({
+          origen: originIATA, destino: destIATA,
+          fecha_ida: travelDates?.from || getFlexDate(7), adultos: 1
+        }, env.DUFFEL_ACCESS_TOKEN).catch(() => null);
+      }
+    }
+    // Qué ver y dónde comer
+    if (dest.destLat && env.GOOGLE_PLACES_KEY) {
+      promises.attractions = searchNearbyPlaces(dest.destLat, dest.destLng, 'tourist_attraction', env.GOOGLE_PLACES_KEY);
+      promises.restaurants = searchNearbyPlaces(dest.destLat, dest.destLng, 'restaurant', env.GOOGLE_PLACES_KEY);
+    }
+    // KV destinos
+    if (tcCC && env.SALMA_KB) promises.kvDestinos = env.SALMA_KB.get('dest:' + tcCC + ':destinos').then(r => r ? JSON.parse(r) : null).catch(() => null);
+
+    const keys = Object.keys(promises);
+    const results = await Promise.allSettled(Object.values(promises));
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]; const val = results[i].status === 'fulfilled' ? results[i].value : null;
+      if (!val) continue;
+      collectedData[key] = val;
+      if (key === 'transport') {
+        const actions = buildGoToTransportActions(userLocation, dest, val);
+        if (actions.length) await emit('transport', { actions, tip: val.ridehailing?.tips || null });
+      }
+      if (key === 'braveRoutes' && val.resultados?.length) await emit('routes', { results: val.resultados.slice(0, 3) });
+      if (key === 'flights' && val.vuelos?.length) await emit('flights', val);
+      if (key === 'attractions' && val.length) await emit('attractions', { places: val, query: 'Qué ver en ' + dest.destName });
+      if (key === 'restaurants' && val.length) await emit('restaurants', { places: val, query: 'Dónde comer en ' + dest.destName });
+    }
+  }
+
+  // ─── INTERNATIONAL ───
+  else {
+    const promises = {};
+    const ccLower = (dest.destCC || '').toLowerCase();
+
+    // KV base (visa, moneda, idioma, emergencias)
+    if (ccLower && env.SALMA_KB) promises.kvBase = env.SALMA_KB.get('dest:' + ccLower + ':base').then(r => r ? JSON.parse(r) : null).catch(() => null);
+    // KV transport destino
+    if (ccLower && env.SALMA_KB) promises.kvTransport = env.SALMA_KB.get('transport:' + ccLower).then(r => r ? JSON.parse(r) : null).catch(() => null);
+    // KV destinos (qué hacer)
+    if (ccLower && env.SALMA_KB) promises.kvDestinos = env.SALMA_KB.get('dest:' + ccLower + ':destinos').then(r => r ? JSON.parse(r) : null).catch(() => null);
+    // Vuelos
+    if (env.DUFFEL_ACCESS_TOKEN && userLocation) {
+      const originIATA = getIATAFromCoords(userLocation.lat, userLocation.lng)?.iata || getCityIATA(userLocationName?.split(',')[0]);
+      const destIATA = dest.isCountry ? getCityIATA(dest.destName) : getCityIATA(dest.destText);
+      if (originIATA) {
+        promises.flights = buscarVuelosDuffel({
+          origen: originIATA, destino: destIATA || dest.destCC,
+          fecha_ida: travelDates?.from || getFlexDate(14),
+          fecha_vuelta: travelDates?.to || null,
+          fecha_rango_hasta: travelDates ? null : getFlexDate(21),
+          adultos: 1
+        }, env.DUFFEL_ACCESS_TOKEN).catch(() => null);
+      }
+    }
+    // Visa online (Brave)
+    if (env.BRAVE_SEARCH_KEY) {
+      const nat = userNationality || 'espanol';
+      promises.braveVisa = buscarWeb({ query: `visado ${dest.destName} ${nat} 2026 requisitos entrada` }, env.BRAVE_SEARCH_KEY).catch(() => null);
+    }
+    // Weather
+    if (env.OPENWEATHER_KEY) promises.weather = fetchWeather(dest.destName, env.OPENWEATHER_KEY).catch(() => null);
+    // News
+    if (env.BRAVE_SEARCH_KEY) promises.braveNews = buscarWeb({ query: `${dest.destName} noticias viajeros seguridad 2026` }, env.BRAVE_SEARCH_KEY).catch(() => null);
+    // Rutas terrestres (solo si viable)
+    if (isOverlandViable(userCountryCode, dest.destCC) && dest.distanceKm && dest.distanceKm < 5000 && env.BRAVE_SEARCH_KEY) {
+      const fromCity = userLocationName?.split(',')[0] || '';
+      promises.braveRoutes = buscarWeb({ query: `como ir de ${fromCity} a ${dest.destName} por tierra tren bus overland` }, env.BRAVE_SEARCH_KEY).catch(() => null);
+    }
+
+    // Procesar resultados progresivamente
+    const keys = Object.keys(promises);
+    const results = await Promise.allSettled(Object.values(promises));
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]; const val = results[i].status === 'fulfilled' ? results[i].value : null;
+      if (!val) continue;
+      collectedData[key] = val;
+
+      switch (key) {
+        case 'kvBase':
+          await emit('country_info', {
+            pais: val.pais, capital: val.capital, moneda: val.moneda, cambio: val.cambio_aprox_eur,
+            idioma: val.idioma_oficial, idioma_viajero: val.idioma_viajero, enchufes: val.enchufes,
+            emergencias: val.emergencias, prefijo: val.prefijo_tel, visa_kv: val.visado_espanoles,
+            visa_eu: val.visado_eu, seguridad: val.seguridad, agua: val.agua_potable,
+            mejor_epoca: val.mejor_epoca, evitar_epoca: val.evitar_epoca,
+            coste_mochilero: val.coste_diario_mochilero, coste_medio: val.coste_diario_medio
+          });
+          break;
+        case 'kvTransport':
+          const destActions = buildDestTransportInfo(val);
+          if (destActions.length) await emit('transport', { actions: destActions, tip: val.ridehailing?.tips || null });
+          break;
+        case 'flights':
+          if (val.vuelos?.length) await emit('flights', val);
+          break;
+        case 'braveVisa':
+          if (val.resultados?.length) await emit('visa', { results: val.resultados.slice(0, 3) });
+          break;
+        case 'weather':
+          await emit('weather', val);
+          break;
+        case 'braveNews':
+          if (val.resultados?.length) await emit('news', { results: val.resultados.slice(0, 3) });
+          break;
+        case 'braveRoutes':
+          if (val.resultados?.length) await emit('routes', { results: val.resultados.slice(0, 3), viable: true });
+          break;
+        case 'kvDestinos':
+          // Emitido como info extra si hay datos
+          break;
+      }
+    }
+
+    // Terrestre no viable → avisar
+    if (!isOverlandViable(userCountryCode, dest.destCC)) {
+      await emit('routes', { results: [], viable: false, message: `Desde ${userLocationName?.split(',')[0] || 'tu ubicación'} a ${dest.destName} solo se puede llegar en avión.` });
+    }
+  }
+
+  // ─── MINI-RESUMEN (Claude Haiku) ───
+  const resumen = await generateMiniResumen(dest, collectedData, userLocationName, env);
+  if (resumen) await emit('resumen', { text: resumen });
+
+  // ─── CHIPS FOLLOW-UP ───
+  const chips = buildFollowUpChips(dest, collectedData);
+  if (chips.length) await emit('chips', { chips });
+
+  // ─── DONE ───
+  const fullReply = resumen || `Aquí tienes todo lo que necesitas para ir a ${dest.destName}.`;
+  await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: fullReply, route: null })}\n\n`));
+  await writer.close();
+}
+
+// ═══ FIN "QUIERO IR A..." ═══
+
 function extractHelpLocation(message, history, currentRoute) {
   // 1a. Patrón "desde X a/hasta Y" → destino es Y
   const desdeAMatch = message.match(/desde\s+[\wáéíóúñÁÉÍÓÚÑ\s]+?\s+(?:a|hasta|hacia)\s+([A-ZÁÉÍÓÚÑ\u00C0-\u024F][\wáéíóúñ\u00E0-\u024F\s]{1,30})/i);
@@ -5535,6 +6057,39 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
         { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
       );
     }
+
+    // ─── "QUIERO IR A..." — Detección y orquestación paralela (bypass Claude) ───
+    if (isGoToRequest(message) && userLocation) {
+      const goToDestText = extractGoToDestination(message);
+      if (goToDestText) {
+        const goToDest = await resolveGoToDestination(goToDestText, userLocation, userCountryCode || frontendCountryCode, env);
+        if (goToDest.destLat || goToDest.isCountry) {
+          const goToHeaders = {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+            'Access-Control-Allow-Origin': '*',
+          };
+          const goToEncoder = new TextEncoder();
+          const { readable: goToReadable, writable: goToWritable } = new TransformStream();
+          const goToWriter = goToWritable.getWriter();
+
+          ctx.waitUntil((async () => {
+            try {
+              await handleGoTo(goToDest, userLocation, userCountryCode || frontendCountryCode, userLocationName, env, goToWriter, goToEncoder, travelDates, userNationality);
+            } catch (e) {
+              try {
+                await goToWriter.write(goToEncoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No he podido buscar esa información. Inténtalo de nuevo.', route: null })}\n\n`));
+                await goToWriter.close();
+              } catch (_) {}
+            }
+          })());
+
+          return new Response(goToReadable, { headers: goToHeaders });
+        }
+      }
+    }
+    // Si go_to no detectó destino válido → continúa al flujo normal de Claude
 
     const apiKey = env.OPENAI_API_KEY; // fallback legacy (rutas largas)
     // Todo va por Anthropic. Solo bloqueamos si no hay key

@@ -1219,6 +1219,12 @@ const salma = {
                 continue;
               }
 
+              // GO_TO — "Quiero ir a..." secciones progresivas
+              if (evt.go_to) {
+                try { this._renderGoToSection(evt.go_to, evt.data); } catch (_) {}
+                continue;
+              }
+
               // SEARCHING — tools ejecutando en paralelo
               if (evt.searching) {
                 // Actualizar texto de progreso
@@ -1939,6 +1945,239 @@ const salma = {
     area.appendChild(wrap);
     this._scrollToBottom(true);
   },
+
+  // ═══ "QUIERO IR A..." — Renderers de secciones progresivas ═══
+
+  _esc(str) {
+    return typeof escapeHTML === 'function' ? escapeHTML(String(str)) : String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  },
+
+  _getGoToContainer() {
+    const area = this._getChatArea();
+    if (!area) return null;
+    let c = area.querySelector('.salma-goto-container');
+    if (!c) {
+      c = document.createElement('div');
+      c.className = 'salma-goto-container';
+      area.appendChild(c);
+    }
+    return c;
+  },
+
+  _renderGoToSection(section, data) {
+    if (!data) return;
+    switch (section) {
+      case 'header': this._renderGoToHeader(data); break;
+      case 'directions': this._renderGoToDirections(data); break;
+      case 'country_info': this._renderGoToCountryInfo(data); break;
+      case 'transport': this._renderTransportActions(data.actions || [], data.tip); break;
+      case 'flights': this._renderGoToFlights(data); break;
+      case 'visa': this._renderGoToVisa(data); break;
+      case 'weather': this._renderGoToWeather(data); break;
+      case 'attractions': this._renderGoToPlaces(data, 'Qué ver'); break;
+      case 'restaurants': this._renderGoToPlaces(data, 'Dónde comer'); break;
+      case 'routes': this._renderGoToRoutes(data); break;
+      case 'news': this._renderGoToNews(data); break;
+      case 'resumen': this._renderGoToResumen(data); break;
+      case 'chips': this._renderGoToChips(data); break;
+    }
+    this._scrollToBottom(true);
+  },
+
+  _renderGoToHeader(data) {
+    const c = this._getGoToContainer();
+    if (!c) return;
+    const flag = data.destCC ? String.fromCodePoint(...[...data.destCC.toUpperCase()].map(c => 0x1F1E6 + c.charCodeAt(0) - 65)) : '';
+    const levelLabels = { local: 'Cerca', regional: 'Regional', international: 'Internacional' };
+    const el = document.createElement('div');
+    el.className = 'salma-goto-header';
+    el.innerHTML = `
+      <span class="salma-goto-header-flag">${flag}</span>
+      <div>
+        <div class="salma-goto-header-name">${this._esc(data.destName || '')}</div>
+        <div class="salma-goto-header-meta">${data.distanceKm ? data.distanceKm.toLocaleString() + ' km' : ''}</div>
+      </div>
+      <span class="salma-goto-level-badge salma-goto-level-badge--${data.level || 'international'}">${levelLabels[data.level] || ''}</span>
+    `;
+    c.appendChild(el);
+  },
+
+  _renderGoToDirections(data) {
+    const c = this._getGoToContainer();
+    if (!c || !data.url) return;
+    const sec = document.createElement('div');
+    sec.className = 'salma-goto-section';
+    sec.innerHTML = `<a class="salma-goto-directions" href="${data.url}" target="_blank" rel="noopener">🗺️ Cómo llegar a ${this._esc(data.name || 'destino')}${data.distanceKm ? ' (' + data.distanceKm + ' km)' : ''}</a>`;
+    c.appendChild(sec);
+  },
+
+  _renderGoToCountryInfo(data) {
+    const c = this._getGoToContainer();
+    if (!c) return;
+    const sec = document.createElement('div');
+    sec.className = 'salma-goto-section';
+    const pills = [];
+    if (data.visa_kv) pills.push({ label: 'Visado', value: data.visa_kv });
+    if (data.moneda) pills.push({ label: 'Moneda', value: data.moneda + (data.cambio ? ' (' + data.cambio + ')' : '') });
+    if (data.idioma) pills.push({ label: 'Idioma', value: data.idioma });
+    if (data.enchufes) pills.push({ label: 'Enchufes', value: data.enchufes });
+    if (data.emergencias) pills.push({ label: 'Emergencias', value: data.emergencias });
+    if (data.seguridad) pills.push({ label: 'Seguridad', value: data.seguridad });
+    if (data.mejor_epoca) pills.push({ label: 'Mejor época', value: data.mejor_epoca });
+    if (data.coste_mochilero) pills.push({ label: 'Coste/día', value: 'Backpacker: ' + data.coste_mochilero + (data.coste_medio ? ' · Medio: ' + data.coste_medio : '') });
+    sec.innerHTML = `<div class="salma-goto-section-title">Info práctica</div>
+      <div class="salma-goto-info-grid">${pills.map(p => `<div class="salma-goto-info-pill"><div class="salma-goto-info-pill-label">${this._esc(p.label)}</div><div class="salma-goto-info-pill-value">${this._esc(p.value)}</div></div>`).join('')}</div>`;
+    c.appendChild(sec);
+  },
+
+  _renderGoToFlights(data) {
+    const c = this._getGoToContainer();
+    if (!c || !data.vuelos?.length) return;
+    const sec = document.createElement('div');
+    sec.className = 'salma-goto-section';
+    let html = '<div class="salma-goto-section-title">Vuelos</div><div class="salma-result-grid">';
+    for (const f of data.vuelos.slice(0, 4)) {
+      const dep = f.salida ? new Date(f.salida).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : '';
+      const arr = f.llegada ? new Date(f.llegada).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : '';
+      const stops = f.escalas === 0 ? 'Directo' : f.escalas === 1 ? '1 escala' : f.escalas + ' escalas';
+      html += `<div class="salma-result-card"><div class="salma-result-card-body">
+        <div class="salma-result-card-name">✈ ${this._esc(f.aerolinea || '')}</div>
+        <div class="salma-result-card-sub">${dep} → ${arr} · ${stops}</div>
+        <div class="salma-result-card-price">${this._esc(f.precio || '')}</div>
+      </div></div>`;
+    }
+    html += '</div>';
+    if (data.enlace_reserva) html += `<a class="salma-goto-directions" href="${data.enlace_reserva}" target="_blank" rel="noopener" style="margin-top:6px">✈️ Ver más en Skyscanner</a>`;
+    sec.innerHTML = html;
+    c.appendChild(sec);
+  },
+
+  _renderGoToVisa(data) {
+    const c = this._getGoToContainer();
+    if (!c || !data.results?.length) return;
+    const sec = document.createElement('div');
+    sec.className = 'salma-goto-section';
+    let html = '<div class="salma-goto-section-title">Visado — verificación online</div>';
+    html += '<div class="salma-goto-visa-online">';
+    for (const r of data.results.slice(0, 2)) {
+      html += `<div style="margin-bottom:4px"><a href="${r.url}" target="_blank" rel="noopener">${this._esc(r.titulo || r.url)}</a></div>`;
+      if (r.snippet) html += `<div style="font-size:11px;color:rgba(255,255,255,.4);margin-bottom:6px">${this._esc(r.snippet.slice(0, 150))}</div>`;
+    }
+    html += '</div>';
+    sec.innerHTML = html;
+    c.appendChild(sec);
+  },
+
+  _renderGoToWeather(data) {
+    const c = this._getGoToContainer();
+    if (!c || !data.current) return;
+    const sec = document.createElement('div');
+    sec.className = 'salma-goto-section';
+    let forecastHtml = '';
+    if (data.forecast?.length) {
+      forecastHtml = '<div class="salma-goto-weather-forecast">';
+      for (const d of data.forecast.slice(0, 3)) {
+        const date = d.date ? new Date(d.date + 'T12:00:00').toLocaleDateString('es', { weekday: 'short' }) : '';
+        forecastHtml += `<div class="salma-goto-weather-day">${date}<br>${d.max_c}°/${d.min_c}°</div>`;
+      }
+      forecastHtml += '</div>';
+    }
+    sec.innerHTML = `<div class="salma-goto-section-title">Clima${data.location ? ' en ' + this._esc(data.location) : ''}</div>
+      <div class="salma-goto-weather">
+        <div class="salma-goto-weather-temp">${data.current.temp_c}°</div>
+        <div><div class="salma-goto-weather-desc">${this._esc(data.current.description || '')}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.35)">Humedad ${data.current.humidity}% · Viento ${data.current.wind_kmph} km/h</div></div>
+      </div>${forecastHtml}`;
+    c.appendChild(sec);
+  },
+
+  _renderGoToPlaces(data, title) {
+    const c = this._getGoToContainer();
+    if (!c || !data.places?.length) return;
+    const SALMA_API = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+    const sec = document.createElement('div');
+    sec.className = 'salma-goto-section';
+    let html = `<div class="salma-goto-section-title">${this._esc(title)}</div><div class="salma-result-grid">`;
+    for (const p of data.places.slice(0, 4)) {
+      const stars = p.rating ? '⭐ ' + p.rating.toFixed(1) + (p.reviews ? ' (' + p.reviews.toLocaleString() + ')' : '') : '';
+      const openBadge = p.open_now === true ? '<span class="salma-open-badge">Abierto</span>' : p.open_now === false ? '<span class="salma-closed-badge">Cerrado</span>' : '';
+      html += `<div class="salma-result-card">
+        ${p.photo_ref ? `<img src="${SALMA_API}/photo?ref=${encodeURIComponent(p.photo_ref)}&maxwidth=400" alt="${this._esc(p.name)}" loading="lazy" onerror="this.style.display='none'">` : ''}
+        <div class="salma-result-card-body">
+          <div class="salma-result-card-name">${this._esc(p.name)} ${openBadge}</div>
+          <div class="salma-result-card-sub">${this._esc(p.address || '')}</div>
+          ${stars ? `<div class="salma-result-card-rating">${stars}</div>` : ''}
+          ${p.maps_link ? `<a class="salma-result-card-cta" href="${p.maps_link}" target="_blank" rel="noopener">Ver en Maps</a>` : ''}
+        </div></div>`;
+    }
+    html += '</div>';
+    sec.innerHTML = html;
+    c.appendChild(sec);
+  },
+
+  _renderGoToRoutes(data) {
+    const c = this._getGoToContainer();
+    if (!c) return;
+    const sec = document.createElement('div');
+    sec.className = 'salma-goto-section';
+    if (data.viable === false) {
+      sec.innerHTML = `<div class="salma-goto-section-title">Por tierra</div><div class="salma-goto-visa-kv">${this._esc(data.message || 'Solo avión')}</div>`;
+    } else if (data.results?.length) {
+      let html = '<div class="salma-goto-section-title">Cómo llegar por tierra</div><div class="salma-goto-routes-list">';
+      for (const r of data.results) {
+        html += `<div class="salma-goto-route-item"><a href="${r.url}" target="_blank" rel="noopener">${this._esc(r.titulo || r.url)}</a>`;
+        if (r.snippet) html += `<p>${this._esc(r.snippet.slice(0, 120))}</p>`;
+        html += '</div>';
+      }
+      html += '</div>';
+      sec.innerHTML = html;
+    }
+    if (sec.innerHTML) c.appendChild(sec);
+  },
+
+  _renderGoToNews(data) {
+    const c = this._getGoToContainer();
+    if (!c || !data.results?.length) return;
+    const sec = document.createElement('div');
+    sec.className = 'salma-goto-section';
+    let html = '<div class="salma-goto-section-title">Noticias viajeros</div><div class="salma-goto-news-list">';
+    for (const r of data.results.slice(0, 3)) {
+      html += `<div class="salma-goto-news-item"><a href="${r.url}" target="_blank" rel="noopener">${this._esc(r.titulo || r.url)}</a></div>`;
+    }
+    html += '</div>';
+    sec.innerHTML = html;
+    c.appendChild(sec);
+  },
+
+  _renderGoToResumen(data) {
+    const c = this._getGoToContainer();
+    if (!c || !data.text) return;
+    const el = document.createElement('div');
+    el.className = 'salma-goto-resumen';
+    el.textContent = data.text;
+    c.appendChild(el);
+  },
+
+  _renderGoToChips(data) {
+    const c = this._getGoToContainer();
+    if (!c || !data.chips?.length) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'salma-goto-chips';
+    for (const chip of data.chips) {
+      const btn = document.createElement('button');
+      btn.className = 'salma-goto-chip';
+      btn.textContent = chip.label;
+      btn.addEventListener('click', () => {
+        const input = document.getElementById('salma-input');
+        if (input) input.value = chip.msg;
+        if (typeof salma !== 'undefined' && salma.send) salma.send(chip.msg);
+      });
+      wrap.appendChild(btn);
+    }
+    c.appendChild(wrap);
+  },
+
+  // ═══ FIN "QUIERO IR A..." renderers ═══
 
   async _saveNoteFromBubble(text, btnEl) {
     if (!window.currentUser) {
