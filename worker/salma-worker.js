@@ -1603,7 +1603,7 @@ async function generateMiniResumen(dest, collectedData, userLocationName, env) {
         max_tokens: 200,
         messages: [{
           role: 'user',
-          content: `Eres Salma, compañera de viaje andaluza. Resume en 2-3 frases con personalidad cómo llegar a ${dest.destName} desde ${userLocationName || 'donde está el viajero'}. Datos:\n${parts.join('\n')}\n\nMáximo 3 frases cortas, con gracia pero útil. Sin emojis. Tutea.`
+          content: `Eres Salma, compañera de viaje. Resume en 2-3 frases cómo llegar a ${dest.destName} desde ${userLocationName || 'donde está el viajero'}. Datos:\n${parts.join('\n')}\n\nMáximo 3 frases cortas y útiles. Sin emojis. Tutea al viajero en MASCULINO (tío, no guapa). Si hay vuelo, menciónalo primero con precio.`
         }]
       }),
       signal: AbortSignal.timeout(8000)
@@ -1759,8 +1759,6 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
     }
     // Weather
     if (env.OPENWEATHER_KEY) promises.weather = fetchWeather(dest.destName, env.OPENWEATHER_KEY).catch(() => null);
-    // News
-    if (env.BRAVE_SEARCH_KEY) promises.braveNews = buscarWeb({ query: `${dest.destName} noticias viajeros seguridad 2026` }, env.BRAVE_SEARCH_KEY).catch(() => null);
     // Rutas terrestres (solo si viable)
     if (isOverlandViable(userCountryCode, dest.destCC) && dest.distanceKm && dest.distanceKm < 5000 && env.BRAVE_SEARCH_KEY) {
       const fromCity = userLocationName?.split(',')[0] || '';
@@ -1798,9 +1796,6 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
           break;
         case 'weather':
           await emit('weather', val);
-          break;
-        case 'braveNews':
-          if (val.resultados?.length) await emit('news', { results: val.resultados.slice(0, 3) });
           break;
         case 'braveRoutes':
           if (val.resultados?.length) await emit('routes', { results: val.resultados.slice(0, 3), viable: true });
