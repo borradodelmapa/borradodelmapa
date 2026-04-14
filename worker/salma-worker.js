@@ -5914,22 +5914,21 @@ INSTRUCCIONES:
           }
           if (_tcTransportApps?.ridehailing) _tcTransportTip = _tcTransportApps.ridehailing.tips || null;
 
-          // Buscar coords del destino proactivamente (sin depender de que Claude use buscar_lugar)
+          // Buscar coords del destino en PARALELO con Claude (no bloquea el stream)
           // Extraer destino del mensaje: "taxi al aeropuerto de koh samui" → "aeropuerto koh samui"
-          if (env.GOOGLE_PLACES_KEY && !_lastBuscarLugarCoords) {
-            const destMatch = message.replace(/^(necesito|quiero|busco|pedir?|dame|dime)\s*/i, '')
-              .replace(/\b(un\s+)?taxi\b/i, '').replace(/\b(al?|para|hacia|hasta|ir\s+a)\b/gi, '').trim();
-            if (destMatch.length > 2 && !/^(necesito|pedir|taxi|transporte)$/i.test(destMatch)) {
-              try {
-                const placesUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(destMatch)}&location=${userLocation.lat},${userLocation.lng}&radius=50000&language=es&key=${env.GOOGLE_PLACES_KEY}`;
-                const pRes = await fetch(placesUrl, { signal: AbortSignal.timeout(4000) });
-                const pData = await pRes.json();
-                if (pData.results?.[0]?.geometry?.location) {
-                  const p = pData.results[0];
-                  _lastBuscarLugarCoords = { lat: p.geometry.location.lat, lng: p.geometry.location.lng, name: p.name || destMatch };
-                }
-              } catch (_) {}
-            }
+          const destMatch = message.replace(/^(necesito|quiero|busco|pedir?|dame|dime)\s*/i, '')
+            .replace(/\b(un\s+)?taxi\b/i, '').replace(/\b(al?|para|hacia|hasta|ir\s+a)\b/gi, '').trim();
+          if (env.GOOGLE_PLACES_KEY && destMatch.length > 3 && !/^(necesito|pedir|taxi|transporte|un)$/i.test(destMatch)) {
+            // Lanzar búsqueda en paralelo — se resuelve antes de emitir transport_actions al final
+            var _transportDestPromise = fetch(
+              `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(destMatch)}&location=${userLocation.lat},${userLocation.lng}&radius=50000&language=es&key=${env.GOOGLE_PLACES_KEY}`,
+              { signal: AbortSignal.timeout(4000) }
+            ).then(r => r.json()).then(d => {
+              if (d.results?.[0]?.geometry?.location) {
+                const p = d.results[0];
+                _lastBuscarLugarCoords = { lat: p.geometry.location.lat, lng: p.geometry.location.lng, name: p.name || destMatch };
+              }
+            }).catch(() => {});
           }
         }
 
@@ -6258,7 +6257,10 @@ INSTRUCCIONES:
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
         }
 
-        // ── TRANSPORT ACTIONS: emitir después de Claude, con destino si buscar_lugar lo encontró ──
+        // ── TRANSPORT ACTIONS: emitir después de Claude, con destino ──
+        if (typeof _transportDestPromise !== 'undefined') {
+          try { await _transportDestPromise; } catch (_) {} // Esperar búsqueda paralela
+        }
         if (_tcTransportApps?.ridehailing && userLocation) {
           const destCoords = _lastBuscarLugarCoords;
           // Solo emitir si hay un destino concreto (no en mensajes genéricos tipo "necesito taxi")
