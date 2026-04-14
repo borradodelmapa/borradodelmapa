@@ -6220,19 +6220,20 @@ INSTRUCCIONES:
         }
 
         // ── Generar transport_actions estructurado (deep links / store / Google Maps) ──
-        // Se activa con helpCategory=transport O si Claude usó buscar_lugar con categoría transporte
-        const _isTransportContext = helpCategory === 'transport' || (helpCategory && _lastBuscarLugarCoords);
-        if (!route && _isTransportContext) {
-          // Buscar apps del país: 1) del KV ya cargado, 2) fallback por countryCode del mensaje, 3) por GPS
-          let _transportApps = kvTransportData;
+        // REQUIERE GPS: sin ubicación real, no mostramos botones de transporte (serían datos basura)
+        const _gpsCountryForTransport = userCountryCode || frontendCountryCode || null;
+        if (!route && helpCategory === 'transport' && userLocation && _gpsCountryForTransport) {
+          // Usar SIEMPRE el país del GPS (donde estás), no el del mensaje
+          let _transportApps = null;
+          if (kvTransportData && _gpsCountryForTransport.toLowerCase() === (countryCode || '').toLowerCase()) {
+            // KV ya cargó datos del mismo país → reusar
+            _transportApps = kvTransportData;
+          }
           if (!_transportApps && env.SALMA_KB) {
-            const _cc = countryCode || userCountryCode || frontendCountryCode || null;
-            if (_cc) {
-              try {
-                const _tj = await env.SALMA_KB.get('transport:' + _cc.toLowerCase());
-                if (_tj) _transportApps = JSON.parse(_tj);
-              } catch (_) {}
-            }
+            try {
+              const _tj = await env.SALMA_KB.get('transport:' + _gpsCountryForTransport.toLowerCase());
+              if (_tj) _transportApps = JSON.parse(_tj);
+            } catch (_) {}
           }
           if (_transportApps?.ridehailing) {
             const destCoords = _lastBuscarLugarCoords;
