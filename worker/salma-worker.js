@@ -1579,21 +1579,16 @@ function buildFollowUpChips(dest, collectedData, userCountryCode) {
 
 async function generateMiniResumen(dest, collectedData, userLocationName, env, userName) {
   if (!env.ANTHROPIC_API_KEY) return null;
+  // Solo datos útiles para sugerir rutas — NO pasar visa/moneda/clima (Haiku los repite)
   const parts = [];
-  parts.push(`Destino: ${dest.destName} (${dest.destCC || '?'}) desde ${userLocationName || 'ubicación desconocida'}. Distancia: ${Math.round(dest.distanceKm || 0)}km. Nivel: ${dest.level}.`);
-  if (collectedData.kvBase) {
-    const c = collectedData.kvBase;
-    parts.push(`Visa: ${c.visado_espanoles || 'no disponible'}. Moneda: ${c.moneda || '?'}. Seguridad: ${c.seguridad || '?'}.`);
-  }
-  if (collectedData.flights?.vuelos?.length) {
-    const f = collectedData.flights.vuelos[0];
-    parts.push(`Vuelo más barato: ${f.precio}, ${f.aerolinea}, ${f.escalas} escalas.`);
-  }
-  if (collectedData.weather?.current) {
-    parts.push(`Tiempo actual: ${collectedData.weather.current.temp_c}°C, ${collectedData.weather.current.description}.`);
-  }
-  if (collectedData.attractions?.length) {
-    parts.push(`Qué ver: ${collectedData.attractions.slice(0, 3).map(a => a.name).join(', ')}.`);
+  parts.push(`Destino: ${dest.destName}. Desde: ${userLocationName || '?'}.`);
+  if (collectedData.kvBase?.mejor_epoca) parts.push(`Mejor época: ${collectedData.kvBase.mejor_epoca}.`);
+  if (collectedData.kvDestinos) {
+    const d = collectedData.kvDestinos;
+    const tops = d.top_destinos || d.destinos || [];
+    if (Array.isArray(tops) && tops.length) {
+      parts.push(`Destinos top: ${tops.slice(0, 6).map(t => t.nombre || t.name || '').filter(Boolean).join(', ')}.`);
+    }
   }
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
