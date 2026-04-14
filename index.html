@@ -262,6 +262,11 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
     <button class="chat-photo-cancel" id="chat-photo-cancel" aria-label="Cancelar foto">&times;</button>
   </div>
   <div class="input-row">
+    <button class="app-newchat" id="newchat-btn" aria-label="Nueva conversación" style="display:none">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+      </svg>
+    </button>
     <textarea class="app-input" id="main-input" placeholder="Ej: Vietnam 10 días en moto" autocomplete="off" rows="1"></textarea>
     <input type="file" id="chat-photo-input" accept="image/*" style="display:none">
     <input type="file" id="chat-camera-input" accept="image/*" capture="environment" style="display:none">
@@ -430,11 +435,11 @@ window.SALMA_API="https://salma-api.paco-defoto.workers.dev";
 
 <!-- ═══ APP ═══ -->
 <script src="country-utils.js"></script>
-<script src="app.js?v=54"></script>
+<script src="app.js?v=55"></script>
 <script src="nav-history.js"></script>
 <script src="notas.js"></script>
 <script src="flight-watches.js?v=1"></script>
-<script src="salma.js?v=44"></script>
+<script src="salma.js?v=45"></script>
 <script src="video-player.js?v=3"></script>
 <script src="video-assembly.js?v=2"></script>
 <script src="guide-renderer.js?v=44"></script>

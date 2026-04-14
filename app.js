@@ -86,6 +86,8 @@ function showState(state) {
     if (welcomeEl) $content.innerHTML = '';
     $input.placeholder = 'Escribe a Salma...';
     if (inputBar) inputBar.style.display = '';
+    const ncBtn = document.getElementById('newchat-btn');
+    if (ncBtn) ncBtn.style.display = '';
     // Resetear botones cam/mic/send al volver al chat
     if (typeof resetInputButtons === 'function') resetInputButtons();
     $content.classList.add('app-content--chat');
@@ -111,6 +113,11 @@ function showState(state) {
         $input.focus();
       }, 150);
     }
+  }
+  // Ocultar botón nueva conversación fuera del chat
+  if (state !== 'chat') {
+    const ncBtn = document.getElementById('newchat-btn');
+    if (ncBtn) ncBtn.style.display = 'none';
   }
   // Quitar fondo mapa y padding extra si salimos del chat
   if (state !== 'chat') {
@@ -2550,6 +2557,11 @@ $input.addEventListener('input', () => {
 });
 
 $send.addEventListener('click', sendMessage);
+
+// Botón nueva conversación
+document.getElementById('newchat-btn')?.addEventListener('click', () => {
+  if (typeof salma !== 'undefined') salma.newChat();
+});
 
 // FAB Mapa → abrir mapa en vivo
 const _fabMap = document.getElementById('fab-map');

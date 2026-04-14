@@ -1390,6 +1390,18 @@ const salma = {
     try { sessionStorage.removeItem('salma_chat'); } catch (_) {}
   },
 
+  newChat() {
+    this.history = [];
+    this._pendingRouteInfo = null;
+    this._pendingTaxiDest = false;
+    try { sessionStorage.removeItem('salma_chat'); } catch (_) {}
+    const area = document.getElementById('chat-area');
+    if (area) area.innerHTML = '';
+    if (typeof _renderChatEmpty === 'function') _renderChatEmpty();
+    if (this._copilotData) this.showCopilotCard();
+    if (typeof showToast === 'function') showToast('Nueva conversación');
+  },
+
   // ═══ PERSISTENCIA CHAT — sessionStorage ═══
   _saveSession() {
     try {
@@ -1582,6 +1594,17 @@ const salma = {
       const countryCode = (geo.address?.country_code || '').toLowerCase();
       if (!countryCode || countryCode === this._copilotCountry) return;
 
+      // Comprobar caché sessionStorage antes de fetch al worker
+      try {
+        const cached = sessionStorage.getItem('salma_copilot_' + countryCode);
+        if (cached) {
+          this._copilotCountry = countryCode;
+          this._copilotData = JSON.parse(cached);
+          console.log('[Salma] Copiloto (caché):', geo.address?.country, countryCode);
+          return;
+        }
+      } catch (_) {}
+
       // Pedir info práctica del país al worker
       const piRes = await fetch(window.SALMA_API + '/practical-info?country=' + countryCode);
       if (!piRes.ok) return;
@@ -1590,6 +1613,7 @@ const salma = {
 
       this._copilotCountry = countryCode;
       this._copilotData = piData.practical_info;
+      try { sessionStorage.setItem('salma_copilot_' + countryCode, JSON.stringify(piData.practical_info)); } catch (_) {}
       console.log('[Salma] Copiloto activado:', geo.address?.country, countryCode);
     } catch (e) {
       console.log('[Salma] Copiloto: error obteniendo info', e.message);

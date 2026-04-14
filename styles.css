@@ -169,6 +169,13 @@ body {
   display:flex; gap:8px; align-items:flex-end;
   position:relative;
 }
+.app-newchat {
+  background:none; border:none; cursor:pointer;
+  color:rgba(244,239,230,.35); padding:6px 2px 6px 0;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; transition:color .2s;
+}
+.app-newchat:active { color:var(--dorado); }
 .app-input {
   flex:1; padding:12px 16px;
   background:rgba(255,255,255,.04);
