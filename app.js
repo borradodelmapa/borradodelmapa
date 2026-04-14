@@ -225,7 +225,7 @@ function _renderChatEmpty() {
     { label: 'Dónde comer', msg: 'Recomiéndame dónde comer cerca' },
     { label: 'Buscar vuelo', msg: 'Busca vuelos' },
     { label: 'Info del país', msg: 'Cuéntame info práctica del país donde estoy' },
-    { label: 'Pide Taxi', msg: null, action: 'taxi', cls: 'chat-empty-chip--taxi' },
+    { label: 'Pide Taxi', msg: 'Necesito pedir un taxi', cls: 'chat-empty-chip--taxi' },
     { label: 'Explorar', msg: null, action: 'explorar' },
     { label: 'Alerta vuelos', msg: null, action: 'vuelos' },
     { label: 'Mis Notas', msg: null, action: 'notas' },
@@ -240,7 +240,7 @@ function _renderChatEmpty() {
         <div class="msg-body-salma">${saludo}</div>
       </div>
       <div class="chat-empty-chips">
-        ${chips.filter(c => c.action !== 'taxi' || (typeof salma !== 'undefined' && salma._copilotCountry)).map(c => `<button class="chat-empty-chip ${c.cls || ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}">${c.label}</button>`).join('')}
+        ${chips.map(c => `<button class="chat-empty-chip ${c.cls || ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}">${c.label}</button>`).join('')}
       </div>
     </div>`;
 
@@ -270,10 +270,6 @@ function _renderChatEmpty() {
       if (action === 'vuelos') {
         if (!currentUser) { window._afterLogin = 'vuelos'; openModal(); return; }
         showState('vuelos');
-        return;
-      }
-      if (action === 'taxi') {
-        if (typeof salma !== 'undefined') salma.showTransportPanel();
         return;
       }
       if (action === 'notas') {
