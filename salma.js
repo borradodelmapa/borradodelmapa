@@ -1972,12 +1972,9 @@ const salma = {
       case 'country_info': this._renderGoToCountryInfo(data); break;
       case 'transport': this._renderTransportActions(data.actions || [], data.tip); break;
       case 'flights': this._renderGoToFlights(data); break;
-      case 'visa': this._renderGoToVisa(data); break;
       case 'weather': this._renderGoToWeather(data); break;
       case 'attractions': this._renderGoToPlaces(data, 'Qué ver'); break;
       case 'restaurants': this._renderGoToPlaces(data, 'Dónde comer'); break;
-      case 'routes': this._renderGoToRoutes(data); break;
-      case 'news': this._renderGoToNews(data); break;
       case 'resumen': this._renderGoToResumen(data); break;
       case 'chips': this._renderGoToChips(data); break;
     }
