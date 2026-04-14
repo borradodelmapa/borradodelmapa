@@ -1780,8 +1780,8 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
         return buscarVuelosDuffel({
           origen: originIATA, destino: destIATA || dest.destCC,
           fecha_ida: travelDates?.from || getFlexDate(14),
-          fecha_vuelta: travelDates?.to || null,
-          fecha_rango_hasta: travelDates ? null : getFlexDate(21),
+          fecha_vuelta: null,
+          fecha_rango_hasta: travelDates?.from ? null : getFlexDate(21),
           adultos: 1
         }, env.DUFFEL_ACCESS_TOKEN);
       })().catch(() => null);
