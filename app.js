@@ -290,7 +290,7 @@ function _renderChatEmpty() {
         return;
       }
       if (action === 'goto') {
-        const input = document.getElementById('salma-input');
+        const input = document.getElementById('main-input');
         if (input) { input.value = 'Quiero ir a '; input.focus(); }
         return;
       }
