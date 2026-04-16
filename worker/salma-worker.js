@@ -6818,6 +6818,8 @@ INSTRUCCIONES:
               break;
             }
             if (!apiRes.ok) {
+              let _errBody = ''; try { _errBody = await apiRes.text(); } catch (_) {}
+              console.error(`[API ERROR] status=${apiRes.status} body=${_errBody.substring(0, 500)}`);
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
@@ -6869,6 +6871,8 @@ INSTRUCCIONES:
               break;
             }
             if (!apiRes.ok) {
+              let _errBody = ''; try { _errBody = await apiRes.text(); } catch (_) {}
+              console.error(`[API ERROR] status=${apiRes.status} body=${_errBody.substring(0, 500)}`);
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
