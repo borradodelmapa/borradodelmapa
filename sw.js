@@ -1,6 +1,7 @@
 // Service Worker — Cache del shell + network-first para API (P1-7)
 
-const CACHE_NAME = 'salma-v11';
+const CACHE_NAME = 'salma-v12';
+const SHARE_INBOX = 'share-inbox';
 const SHELL_ASSETS = [
   '/',
   '/index.html',
@@ -14,6 +15,7 @@ const SHELL_ASSETS = [
   '/mapa-ruta.js',
   '/mapa-itinerario.js',
   '/notas.js',
+  '/share-inbox.js',
   '/salma_ai_avatar.webp',
   '/icon-192.png',
   '/icon-512.png',
@@ -36,10 +38,52 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-self.addEventListener('fetch', (e) => {
-  if (e.request.method !== 'GET') return;
+// Handler para "Compartir a Borrado del Mapa" (Web Share Target API)
+async function handleShareTarget(request) {
+  try {
+    const formData = await request.formData();
+    const files = formData.getAll('photos').filter(f => f && f.size > 0);
+    const cache = await caches.open(SHARE_INBOX);
+    // Limpiar inbox anterior
+    const oldKeys = await cache.keys();
+    await Promise.all(oldKeys.map(k => cache.delete(k)));
+    // Guardar cada archivo en la cache con URL sintética
+    const ids = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const id = Date.now() + '-' + i;
+      const resp = new Response(file, {
+        headers: {
+          'Content-Type': file.type || 'application/octet-stream',
+          'X-Share-Name': encodeURIComponent(file.name || ('photo-' + id)),
+          'X-Share-LastModified': String(file.lastModified || 0),
+        }
+      });
+      await cache.put(new Request('/__shared/' + id), resp);
+      ids.push(id);
+    }
+    return Response.redirect('/?share=ready&count=' + ids.length, 303);
+  } catch (err) {
+    return Response.redirect('/?share=error', 303);
+  }
+}
 
+self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
+
+  // Share Target: POST de fotos compartidas desde la galería del móvil
+  if (e.request.method === 'POST' && url.pathname === '/' && url.searchParams.get('share') === '1') {
+    e.respondWith(handleShareTarget(e.request));
+    return;
+  }
+
+  // Lectura de fotos desde la inbox de compartir
+  if (e.request.method === 'GET' && url.pathname.startsWith('/__shared/')) {
+    e.respondWith(caches.open(SHARE_INBOX).then(c => c.match(e.request).then(r => r || new Response('Not found', { status: 404 }))));
+    return;
+  }
+
+  if (e.request.method !== 'GET') return;
 
   // API calls (worker) — network-only, no cachear
   if (url.hostname.includes('salma-api') || url.hostname.includes('workers.dev')) return;

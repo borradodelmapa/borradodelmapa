@@ -39,5 +39,13 @@
   ],
   "categories": ["travel", "navigation"],
   "lang": "es",
-  "dir": "ltr"
+  "dir": "ltr",
+  "share_target": {
+    "action": "/?share=1",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "files": [{ "name": "photos", "accept": ["image/jpeg", "image/png", "image/webp", "image/*"] }]
+    }
+  }
 }
