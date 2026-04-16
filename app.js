@@ -3274,6 +3274,12 @@ function openLiveMap() {
       _loadSavedPins();
 
       _resumeMapGPS();
+
+      // Restaurar ruta activa de sesión anterior
+      try {
+        const saved = JSON.parse(localStorage.getItem('bdm_live_active_route') || 'null');
+        if (saved) selectRouteOnMap(saved);
+      } catch(_){}
     })
     .catch((e) => {
       console.error('[LiveMap] Error cargando Google Maps:', e);
@@ -3491,6 +3497,7 @@ function selectRouteOnMap(routeData) {
   if (!_liveMap || !window.google) return;
   clearRouteFromLiveMap();
   _activeRouteData = routeData;
+  try { localStorage.setItem('bdm_live_active_route', JSON.stringify(routeData)); } catch(_){}
 
   const dayColors = ['#D4A843','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
   const valid = (routeData.stops || []).filter(s => s.lat && s.lng);
@@ -3624,6 +3631,7 @@ function _updateNearestChip() {
 
 function clearRouteFromLiveMap() {
   _activeRouteData = null;
+  try { localStorage.removeItem('bdm_live_active_route'); } catch(_){}
   _liveRouteMarkers.forEach(m => m.setMap(null));
   _liveRouteMarkers = [];
   if (_liveRoutePolyline) { _liveRoutePolyline.setMap(null); _liveRoutePolyline = null; }
