@@ -168,11 +168,9 @@ const mapaItinerario = {
     const km = stop.km_from_previous || 0;
 
     const hasCoords = stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && Math.abs(stop.lng) > 0.01;
-    const mapsNavUrl = stop.place_id
-      ? `https://www.google.com/maps/place/?q=place_id:${stop.place_id}`
-      : hasCoords
-        ? `https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}&travelmode=driving`
-        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([stop.name || stop.headline, country].filter(Boolean).join(', '))}`;
+    const mapsNavUrl = hasCoords
+      ? `https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}&travelmode=driving`
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([stop.name || stop.headline, country].filter(Boolean).join(', '))}`;
 
     card.innerHTML = `
       <div class="itin-card-photo" id="itin-photo-${index}">

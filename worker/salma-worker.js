@@ -201,7 +201,7 @@ Cuando generes ruta: 1-2 frases en el chat — dato interesante, opinión o cons
 
 Cuando es conversación sin ruta: extiéndete lo que necesite la pregunta, misma densidad de información, como si lo contaras en un bar.
 
-EXCEPCIÓN — PLAN DE VIAJE: cuando el usuario mencione DÍAS + DESTINO ("3 días en Ronda", "5 días Marruecos"), usa formato estructurado por días. En este caso SÍ puedes usar títulos de día en negrita (**Día 1 — Título**) y paradas con nombre en negrita. Esta excepción SOLO aplica cuando haya días + destino en el mensaje.`;
+EXCEPCIÓN — PLAN DE VIAJE: cuando el usuario mencione DÍAS + DESTINO ("3 días en Ronda", "5 días Marruecos"), usa formato estructurado por días. En este caso SÍ puedes usar títulos de día en negrita (**Día 1 — Título**) y paradas con nombre en negrita seguido de enlace Google Maps. Esta excepción SOLO aplica cuando haya días + destino en el mensaje.`;
 
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 8 — Modos y formato SALMA_ROUTE_JSON
@@ -211,8 +211,8 @@ const BLOQUE_RUTAS = `⛔ REGLA ABSOLUTA — GUÍAS: NUNCA generes SALMA_ROUTE_J
 ZONAS Y PUNTOS VERIFICABLES
 Solo incluye lugares verificables (existen en Google Maps, Booking u otras fuentes fiables). No inventes nombres, direcciones ni coordenadas. Prefiere lugares conocidos y comprobables.
 
-NOMBRES DE LUGARES
-Usa siempre el nombre exacto con el que el lugar aparece en Google Maps. Evita nombres genéricos — "Centro histórico" no es un lugar, pon el nombre del monumento.
+NOMBRES PARA ENLACES A GOOGLE MAPS
+Usa siempre el nombre exacto con el que el lugar aparece en Google Maps. Evita nombres genéricos — si pones "Centro histórico" en vez del nombre del monumento, el enlace no lleva al sitio correcto.
 
 RUTAS POR DÍA — PIENSA EN EL RECORRIDO PRIMERO
 NO pienses en "sitios interesantes" y luego los ordenes. Piensa AL REVÉS:
@@ -266,7 +266,7 @@ FORMATO DE PARADA:
 — km_from_previous, road_name, road_difficulty, estimated_hours
 NO incluyas: context, food_nearby, local_secret, alternative, practical, links, sleep, eat, alt_bad_weather (el sistema los añade después)
 
-NO incluyas enlaces de Google Maps — el sistema los genera automáticamente.
+GOOGLE MAPS POR DÍA: un enlace por día. https://www.google.com/maps/dir/A/B/C con los nombres de las paradas.
 
 EDICIÓN DE RUTA: cuando el usuario quiera cambiar paradas, devuelve la ruta completa actualizada en SALMA_ROUTE_JSON. Todas las paradas, no solo las modificadas.
 
@@ -296,12 +296,14 @@ RESTAURANTES: si el sistema ya te proporciona resultados en el contexto, presén
 CÓMO PRESENTAR RESULTADOS:
 — Hoteles: foto, nombre, precio/noche, puntuación, enlace de reserva. Destaca el mejor valorado y el más barato si son distintos.
 — Coches: nombre, precio total y por día, plazas, transmisión, proveedor, punto de recogida.
-— Restaurantes: nombre, tipo de cocina, zona, enlace TheFork si lo hay.
+— Restaurantes: nombre, tipo de cocina, zona, enlace TheFork o Google Maps.
 — Vuelos: cuando vengan de un rango de fechas (fecha_rango_hasta), SIEMPRE muestra el trade-off: precio vs duración total vs tiempo de escala. Formato: "✈️ Opción 1 — X€ — sale el DÍA — Xh Xmin (escala Xh en CIUDAD)". Si hay una opción más cara pero con mucha menos escala, menciónala expresamente: "Este cuesta 3€ más pero te ahorras 3h de escala".
-— Lugares (buscar_lugar): nombre en negrita, tipo, dirección corta, rating si lo hay, teléfono si lo hay.
+— Lugares (buscar_lugar): nombre en negrita, tipo, dirección corta, rating si lo hay, teléfono si lo hay, enlace Google Maps.
 — Búsqueda web (buscar_web): responde con el dato + INCLUYE la URL fuente en su propia línea. Hasta 3 URLs si hay varias fuentes.
 — Cada enlace en su propia línea, sin markdown, sin corchetes. Solo la URL.
-— URLs permitidas: SOLO las que devuelve una herramienta (buscar_web, buscar_hotel, buscar_lugar, buscar_vuelos...). Si no tienes URL de herramienta, pon solo el nombre — no inventes. NUNCA pongas enlaces de Google Maps — el sistema los añade verificados.`;
+— URLs permitidas: las que devuelve cualquier herramienta (buscar_web, buscar_hotel, buscar_lugar, buscar_vuelos...) + google.com/maps/. Si no tienes URL de herramienta, pon solo el nombre — no inventes.
+
+NAVEGACIÓN: cada parada puede abrirse en Google Maps para navegar.`;
 
 const BLOQUE_VISION = `FOTOS DEL VIAJERO
 Cuando el usuario te envía una foto, la recibes como imagen en el mensaje. Analízala según el contexto:
@@ -439,20 +441,18 @@ Tu respuesta DEBE empezar con un título de día y seguir esta estructura EXACTA
 
 **Día 1 — [título]**
 
-**[Lugar]** — [dato histórico o cultural, 1-2 frases]. [Tiempo]. [Precio si hay].
+**[Lugar]** (https://www.google.com/maps/search/Lugar+Ciudad) — [dato histórico o cultural, 1-2 frases]. [Tiempo]. [Precio si hay].
 
-**[Lugar 2]** — [dato]. [Tiempo].
+**[Lugar 2]** (https://www.google.com/maps/search/Lugar2+Ciudad) — [dato]. [Tiempo].
 
-Dónde comer: **[Restaurante]** — [plato y precio].
+Dónde comer: **[Restaurante]** (https://www.google.com/maps/search/Restaurante+Ciudad) — [plato y precio].
 
 **Día 2 — [título]**
 [misma estructura]
 
 Si no sigues este formato, tu respuesta es INCORRECTA. Empieza SIEMPRE con "**Día 1 —".
 
-NUNCA pongas enlaces de Google Maps — el sistema los genera automáticamente con la ubicación exacta verificada. Tú solo pon el nombre del lugar en negrita.
-
-Reglas adicionales: no preguntas al final, no frases vacías, no bullets, cada parada es un párrafo corto.`;
+Reglas adicionales: no preguntas al final, no frases vacías, no bullets, cada parada es un párrafo corto con enlace Maps.`;
 
 const SALMA_SYSTEM_PLAN = [
   BLOQUE_FORMATO_PLAN,   // PRIMERO — formato estructurado antes que nada
@@ -1048,71 +1048,77 @@ function formatDayHeaders(text, numDays) {
   return final;
 }
 
-// ═══ INJECT VERIFIED MAPS LINKS — Post-streaming: extrae negritas → Google Places → place_id ═══
-// Claude solo escribe nombres en negrita. El worker busca cada uno en Google Places
-// y añade el enlace verificado (place_id) al lado. Sin intervención de Claude en URLs.
-async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode) {
+// ═══ VALIDATE MAPS URLS — Post-streaming: valida enlaces Maps con Google Places ═══
+// Extrae google.com/maps/search/... del reply, valida con Find Place,
+// reemplaza con place_id si existe o elimina si es inventado.
+async function validateMapsUrls(reply, placesKey) {
   if (!placesKey || !reply) return reply;
 
-  // Extraer nombres en negrita: **Nombre del Lugar**
-  // Excluir patrones que NO son lugares: **Día N**, **8€**, **2h30**, **Dónde comer**
-  const boldRegex = /\*\*([^*]+)\*\*/g;
-  const skipPatterns = /^(D[ií]a\s*\d|d[oó]nde\s|para\s|c[oó]mo\s|\d+[€$£¥]|\d+h|\d+min|tip[os]?:|consejo|nota|importante|atenci[oó]n|ojo|cuidado)/i;
+  // Extraer URLs google.com/maps/search/...
+  const mapsRegex = /https:\/\/www\.google\.com\/maps\/search\/([^\s)]+)/g;
   const matches = [];
-  const seen = new Set();
   let m;
-  while ((m = boldRegex.exec(reply)) !== null) {
-    const name = m[1].trim();
-    const nameLower = name.toLowerCase();
-    // Filtrar: mín 3 chars, no es patrón de skip, no duplicado
-    if (name.length < 3 || skipPatterns.test(name) || seen.has(nameLower)) continue;
-    // Filtrar valores numéricos/precios sueltos
-    if (/^\d+[\s.,]?\d*\s*[€$£¥kmh]?$/i.test(name)) continue;
-    seen.add(nameLower);
-    matches.push({ bold: m[0], name });
+  while ((m = mapsRegex.exec(reply)) !== null) {
+    matches.push({ full: m[0], query: decodeURIComponent(m[1]).replace(/\+/g, ' ') });
   }
   if (!matches.length) return reply;
 
-  // Buscar todos en Google Places en paralelo (Find Place, ligero: place_id + name)
-  const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
-  const regionCtx = region || '';
-  const results = await Promise.all(matches.map(async ({ bold, name }) => {
+  // Validar todas en paralelo con Find Place (ligero: solo place_id + name)
+  const results = await Promise.all(matches.map(async ({ full, query }) => {
     try {
-      const query = regionCtx ? `${name}, ${regionCtx}` : name;
       const res = await fetch(
-        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(query)}&inputtype=textquery${countryFilter}&fields=place_id,name,formatted_address&language=es&key=${placesKey}`,
+        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(query)}&inputtype=textquery&fields=place_id,name&key=${placesKey}`,
         { signal: AbortSignal.timeout(3000) }
       );
       const data = await res.json();
       const place = data?.candidates?.[0];
       if (place?.place_id) {
-        return { bold, name, placeId: place.place_id, googleName: place.name };
+        // Lugar real → reemplazar con enlace place_id (directo, sin ambigüedad)
+        return {
+          original: full,
+          replacement: `https://www.google.com/maps/place/?q=place_id:${place.place_id}`
+        };
       }
-      return { bold, name, placeId: null };
+      // No encontrado → eliminar enlace
+      return { original: full, replacement: '' };
     } catch {
-      return { bold, name, placeId: null };
+      return { original: full, replacement: full }; // timeout → dejar como está
     }
   }));
 
-  // Inyectar enlaces place_id al lado de cada negrita verificada
-  let enriched = reply;
-  for (const { bold, name, placeId } of results) {
-    if (!placeId) continue;
-    const link = `https://www.google.com/maps/place/?q=place_id:${placeId}`;
-    // Reemplazar solo la PRIMERA ocurrencia de esta negrita (evitar duplicados)
-    const boldEscaped = bold.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    // Si ya tiene un link al lado (paréntesis con URL), no duplicar
-    const withLinkRegex = new RegExp(boldEscaped + '\\s*\\([^)]*google\\.com[^)]*\\)');
-    if (withLinkRegex.test(enriched)) continue;
-    // Inyectar link después de la negrita
-    enriched = enriched.replace(bold, `${bold} (${link})`);
+  // Aplicar reemplazos
+  let cleaned = reply;
+  for (const { original, replacement } of results) {
+    if (replacement) {
+      cleaned = cleaned.replace(original, replacement);
+    } else {
+      // Eliminar URL + paréntesis o espacio sobrante
+      cleaned = cleaned.replace(` (${original})`, '');
+      cleaned = cleaned.replace(`(${original})`, '');
+      cleaned = cleaned.replace(` ${original}`, '');
+      cleaned = cleaned.replace(original, '');
+    }
   }
+  return cleaned;
+}
 
-  // Limpiar cualquier URL de Maps que Claude haya puesto por su cuenta (por si acaso)
-  enriched = enriched.replace(/\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/search\/[^\s)]*\)?/gi, '');
-  enriched = enriched.replace(/\s*https?:\/\/(?:www\.)?google\.com\/maps\/dir\/[^\s)>\]]+/gi, '');
-
-  return enriched;
+// Genera un enlace Google Maps directions con todas las paradas mencionadas en el texto
+function appendRouteMapLink(text) {
+  // Extraer nombres de lugares de los enlaces Maps (más fiable que negritas)
+  const boldNames = [];
+  const mapsRegex = /google\.com\/maps\/search\/([^\s)]+)/g;
+  let m;
+  while ((m = mapsRegex.exec(text)) !== null) {
+    const name = decodeURIComponent(m[1]).replace(/\+/g, ' ').trim();
+    if (name.length < 4) continue;
+    // Evitar duplicados
+    if (!boldNames.includes(name)) boldNames.push(name);
+  }
+  if (boldNames.length < 3) return text; // muy pocas paradas
+  // Tomar máximo 20 paradas (límite de Google Maps)
+  const waypoints = boldNames.slice(0, 20).map(n => encodeURIComponent(n.replace(/\s+/g, '+')));
+  const mapsUrl = 'https://www.google.com/maps/dir/' + waypoints.join('/');
+  return text + '\n\n📍 **Ruta completa en Google Maps:**\n' + mapsUrl;
 }
 
 function isHelpRequest(message) {
@@ -2475,14 +2481,16 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
     // Destino + días → respuesta estructurada por días (sin JSON, sin ruta)
     userContent += `\n\n[MODO PLAN DE VIAJE — INSTRUCCIONES ESTRICTAS:
 
-PROHIBIDO: SALMA_ROUTE_JSON, preguntar, mencionar guías/coins, inventar URLs, párrafos largos, enlaces de Google Maps (el sistema los pone verificados).
+PROHIBIDO: SALMA_ROUTE_JSON, preguntar, mencionar guías/coins, inventar URLs, párrafos largos.
 
 BREVEDAD OBLIGATORIA: máximo 2-3 frases por parada. Dato histórico/cultural + precio + tiempo. Sin prosa. Sin rodeos.
 
-FORMATO DE CADA PARADA: nombre en negrita + descripción breve. SIN enlaces — el sistema los añade automáticamente.
-Ejemplo: **Puente Nuevo** — 42 años de obras (1751-1793), cámara interior que fue cárcel. Baja al Camino de los Molinos para la mejor vista. 1h. Gratis.
+FORMATO DE CADA PARADA: nombre en negrita + descripción breve + enlace Maps AL FINAL del párrafo (no al principio).
+Ejemplo: **Puente Nuevo** — 42 años de obras (1751-1793), cámara interior que fue cárcel. Baja al Camino de los Molinos para la mejor vista. 1h. Gratis. https://www.google.com/maps/search/Puente+Nuevo+Ronda
 
-4-5 paradas por día. Cada día termina con dónde comer (nombre en negrita + plato + precio).
+4-5 paradas por día. Cada día termina con dónde comer (nombre + plato + precio + enlace Maps al final).
+
+AL FINAL DE TODO: incluye un enlace Google Maps de la ruta completa con todas las paradas principales encadenadas. Formato: https://www.google.com/maps/dir/Parada1/Parada2/Parada3/... con los nombres de los lugares. Uno por ruta, al final.
 
 Cierra con: "Si quieres la guía completa con mapa y navegación, dime 'Salma hazme una guía'."
 
@@ -2494,7 +2502,7 @@ PROHIBIDO:
 — Generar SALMA_ROUTE_JSON bajo ningún concepto.
 — Preguntar "¿qué tipo de viaje?", "¿con quién vas?", "¿qué quieres hacer?" ni ninguna pregunta para personalizar una ruta.
 — Mencionar guías, rutas, coins, Salma Coins o el modo guía.
-— Inventar URLs. Solo URLs que devuelve una herramienta. NUNCA enlaces de Google Maps — el sistema los genera verificados.
+— Inventar URLs. Solo URLs de herramientas o google.com/maps/.
 — Poner negritas como título en línea sola (**Transporte:**, **Para comer:**). Las negritas son solo para datos inline: **8€**, **Lomprayah**, **2h30**.
 — Hacer preguntas al final del mensaje. Si quieres ofrecer ayuda, ofrece sin preguntar: "Si quieres que te busque hotel o algo concreto, dime." NO "¿Quieres que te busque hotel?"
 
@@ -2502,7 +2510,7 @@ QUÉ HACER:
 — Responde con información RICA del destino: historia, cultura, contexto, qué ver, qué comer, clima, transporte, seguridad, datos prácticos.
 — Mete datos históricos y culturales siempre que sea relevante — por qué un lugar es como es, quién lo construyó, qué pasó ahí.
 — Todo en PROSA fluida, como si lo contaras en un bar. Sin secciones, sin títulos, sin listas.
-— Cada lugar concreto que menciones (monumento, plaza, restaurante, mirador) va con nombre en negrita. El sistema añade automáticamente los enlaces verificados de Google Maps — tú NUNCA pongas enlaces de Maps.
+— ENLACES GOOGLE MAPS OBLIGATORIOS: cada lugar concreto que menciones (monumento, plaza, restaurante, mirador, barrio) lleva su enlace Google Maps justo después del nombre. Formato: https://www.google.com/maps/search/Nombre+del+Lugar+Ciudad. Ejemplo: "El **Puente Nuevo** (https://www.google.com/maps/search/Puente+Nuevo+Ronda) se terminó en 1793...". Sin esto, el usuario no puede llegar — y para eso se va a Google.
 — Si mencionas un lugar concreto con nombre propio, usa buscar_foto para mostrar 1-3 fotos.
 — Si mencionas transporte entre ciudades (ferry, bus, tren), usa buscar_web para obtener URLs reales de reserva. NUNCA inventes URLs de 12go, skyscanner, rome2rio ni ninguna otra.
 — Si el contexto incluye datos del KV (país, transporte, destino), ÚSALOS. No los ignores.
@@ -2622,8 +2630,8 @@ function extractRouteFromReply(text) {
         links: Array.isArray(s.links) ? s.links : [],
         type: s.type || 'lugar',
         day: typeof s.day === 'number' ? s.day : (parseInt(s.day) || 1),
-        lat: typeof s.lat === 'number' ? s.lat : (s.lat != null && !isNaN(parseFloat(s.lat)) ? parseFloat(s.lat) : null),
-        lng: typeof s.lng === 'number' ? s.lng : (s.lng != null && !isNaN(parseFloat(s.lng)) ? parseFloat(s.lng) : null),
+        lat: typeof s.lat === 'number' ? s.lat : (parseFloat(s.lat) || 0),
+        lng: typeof s.lng === 'number' ? s.lng : (parseFloat(s.lng) || 0),
         photo_ref: s.photo_ref || '',
         verified_address: s.verified_address || '',
         km_from_previous: typeof s.km_from_previous === 'number' ? s.km_from_previous : (parseFloat(s.km_from_previous) || 0),
@@ -2882,261 +2890,145 @@ function mergeBlocks(blockResults, originalMessage) {
 // VERIFICACIÓN DE PARADAS — Google Places (post-generación)
 // ═══════════════════════════════════════════════════════════════
 
-// Normaliza texto para comparación: sin tildes, lowercase, sin puntuación
-function normalizeForMatch(str) {
-  return (str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
-}
-
-// Name match estricto: >= 2 palabras significativas en común O >60% overlap
-function strictNameMatch(originalName, googleName) {
-  const normOrig = normalizeForMatch(originalName);
-  const normGoogle = normalizeForMatch(googleName);
-  if (!normOrig || !normGoogle) return false;
-
-  const origWords = normOrig.split(/\s+/).filter(w => w.length > 3);
-  const googleWords = normGoogle.split(/\s+/).filter(w => w.length > 3);
-
-  // Contar palabras en común
-  const commonWords = origWords.filter(w => googleWords.some(gw => gw.includes(w) || w.includes(gw)));
-  // Si hay 2+ palabras en común → match
-  if (commonWords.length >= 2) return true;
-  // Si solo hay 1 palabra significativa (ej: "Alhambra") y coincide → match
-  if (origWords.length === 1 && commonWords.length === 1) return true;
-  if (origWords.length === 0 && googleWords.length === 0) {
-    // Nombres cortos: comparar directamente
-    return normOrig === normGoogle || normOrig.includes(normGoogle) || normGoogle.includes(normOrig);
-  }
-
-  // Fallback: >60% overlap de caracteres (para nombres con variaciones)
-  const shorter = normOrig.length < normGoogle.length ? normOrig : normGoogle;
-  const longer = normOrig.length >= normGoogle.length ? normOrig : normGoogle;
-  if (longer.includes(shorter) && shorter.length > 4) return true;
-
-  return false;
-}
-
-// Address match: Google devolvió una dirección que contiene la ciudad/región esperada
-function addressContainsLocation(formattedAddress, city, region, country) {
-  if (!formattedAddress) return false;
-  const normAddr = normalizeForMatch(formattedAddress);
-  const checks = [city, region, country].filter(Boolean).map(normalizeForMatch);
-  return checks.some(c => c && c.length > 2 && normAddr.includes(c));
-}
-
 async function verifyAllStops(route, placesKey) {
   if (!route?.stops || !placesKey) return route;
 
   const region = route.region || route.country || '';
-  const country = route.country || '';
-  const countryCode = country ? getCountryCode(country) : '';
-  const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
-  const FIELDS = 'place_id,photos,geometry,name,formatted_address,opening_hours,editorial_summary,business_status';
-  const DETAIL_FIELDS = 'name,photos,geometry,editorial_summary,opening_hours,business_status,formatted_address';
+  const countryCode = route.country ? getCountryCode(route.country) : '';
 
-  // ── Helper: buscar una parada en Google Places con un radio dado ──
-  async function findPlace(name, biasLat, biasLng, radiusM) {
-    const searchQuery = region ? `${name}, ${region}` : name;
-    const bias = (biasLat && biasLng && Math.abs(biasLat) > 0.01)
-      ? `&locationbias=circle:${radiusM}@${biasLat},${biasLng}` : '';
-    try {
-      const res = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(searchQuery)}&inputtype=textquery${bias}${countryFilter}&fields=${FIELDS}&language=es&key=${placesKey}`);
-      return await res.json();
-    } catch (_) { return null; }
-  }
-
-  // ── Helper: Text Search fallback (sin bias de coords) ──
-  async function textSearch(name) {
-    const searchQuery = region ? `${name} ${region}` : name;
-    try {
-      const res = await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchQuery)}${countryFilter}&language=es&key=${placesKey}`);
-      const data = await res.json();
-      // Convertir formato Text Search → formato Find Place para unificar
-      if (data?.results?.[0]) return { candidates: [data.results[0]] };
-      return null;
-    } catch (_) { return null; }
-  }
-
-  // ── Helper: validar un candidato de Google contra la parada original ──
-  function validateCandidate(candidate, stop) {
-    if (!candidate?.geometry?.location) return { valid: false, reason: 'no_geometry' };
-
-    const pLat = candidate.geometry.location.lat;
-    const pLng = candidate.geometry.location.lng;
-    const originalName = stop.name || stop.headline || '';
-    const googleName = candidate.name || '';
-
-    // 1. Negocio cerrado permanentemente → rechazar
-    if (candidate.business_status === 'CLOSED_PERMANENTLY') return { valid: false, reason: 'closed' };
-
-    // 2. Name match estricto
-    const nameOk = strictNameMatch(originalName, googleName);
-
-    // 3. Address match: la dirección debe contener la ciudad/región
-    const addrOk = addressContainsLocation(candidate.formatted_address, region, route.region, country);
-
-    // 4. Distancia al punto de Claude (máx 3km)
-    let distKm = Infinity;
-    if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01) {
-      distKm = haversineKm(stop.lat, stop.lng, pLat, pLng);
-    }
-
-    // Aceptar si: nombre coincide + (dirección ok O distancia < 3km)
-    if (nameOk && (addrOk || distKm < 3)) return { valid: true, distKm };
-    // Aceptar si: nombre coincide + distancia razonable (<10km, puede ser zona rural)
-    if (nameOk && distKm < 10) return { valid: true, distKm };
-    // Aceptar si: distancia muy corta (<1km) — aunque el nombre varíe (ej: nombre traducido)
-    if (distKm < 1 && addrOk) return { valid: true, distKm };
-
-    // Rechazar con motivo
-    if (!nameOk) return { valid: false, reason: 'name_mismatch', distKm };
-    if (!addrOk && distKm >= 3) return { valid: false, reason: 'address_mismatch', distKm };
-    return { valid: false, reason: 'too_far', distKm };
-  }
-
-  // ══════════════════════════════════════════════════════════════
-  // PASO 1: Búsqueda escalonada — 3 intentos por parada
-  // ══════════════════════════════════════════════════════════════
-
-  // Intento 1: Find Place con bias 5km (paralelo para todas las paradas)
-  const attempt1 = await Promise.all(route.stops.map(stop => {
+  // 1. Buscar cada parada en Google Places (find + details en 1 sola llamada)
+  const findPromises = route.stops.map(stop => {
     const name = stop.name || stop.headline || '';
     if (!name || name.length < 3) return Promise.resolve(null);
-    return findPlace(name, stop.lat, stop.lng, 5000);
-  }));
-
-  // Para paradas sin match válido → Intento 2: Find Place con bias 15km
-  const needsAttempt2 = [];
-  attempt1.forEach((result, i) => {
-    const c = result?.candidates?.[0];
-    if (!c?.geometry?.location || validateCandidate(c, route.stops[i]).valid === false) {
-      needsAttempt2.push(i);
-    }
+    const searchQuery = region ? `${name} ${region}` : name;
+    const bias = (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01)
+      ? `&locationbias=circle:50000@${stop.lat},${stop.lng}` : '';
+    const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
+    return fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(searchQuery)}&inputtype=textquery${bias}${countryFilter}&fields=place_id,photos,geometry,name,formatted_address,opening_hours,editorial_summary&language=es&key=${placesKey}`)
+      .then(r => r.json()).catch(() => null);
+  });
+  const findResults = await Promise.all(findPromises);
+  // DEBUG photos
+  findResults.forEach((r, i) => {
+    const c = r?.candidates?.[0];
+    if (c) console.log(`[FIND] ${route.stops[i]?.name} → ${c.name} | photos: ${c.photos?.length || 0} | photo_ref: ${(c.photos?.[0]?.photo_reference || '').substring(0, 30)}`);
   });
 
-  const attempt2Results = {};
-  if (needsAttempt2.length > 0) {
-    const a2 = await Promise.all(needsAttempt2.map(i => {
-      const stop = route.stops[i];
-      const name = stop.name || stop.headline || '';
-      return findPlace(name, stop.lat, stop.lng, 15000);
-    }));
-    needsAttempt2.forEach((stopIdx, j) => { attempt2Results[stopIdx] = a2[j]; });
+  // 2. Calcular centro y radio dinámico
+  const verifiedCoords = [];
+  findResults.forEach(data => {
+    const c = data?.candidates?.[0];
+    if (c?.geometry?.location) {
+      verifiedCoords.push({ lat: c.geometry.location.lat, lng: c.geometry.location.lng });
+    }
+  });
+  let centerLat = 0, centerLng = 0, routeRadiusKm = 50;
+  if (verifiedCoords.length > 0) {
+    centerLat = verifiedCoords.reduce((s, p) => s + p.lat, 0) / verifiedCoords.length;
+    centerLng = verifiedCoords.reduce((s, p) => s + p.lng, 0) / verifiedCoords.length;
+    const maxDist = verifiedCoords.reduce((max, p) => {
+      const d = Math.sqrt(Math.pow(Math.abs(p.lat - centerLat), 2) + Math.pow(Math.abs(p.lng - centerLng), 2)) * 111;
+      return d > max ? d : max;
+    }, 0);
+    routeRadiusKm = Math.max(50, maxDist * 1.5);
   }
 
-  // Para paradas que siguen sin match → Intento 3: Text Search (sin coords)
-  const needsAttempt3 = [];
-  needsAttempt2.forEach(i => {
-    const c = attempt2Results[i]?.candidates?.[0];
-    if (!c?.geometry?.location || validateCandidate(c, route.stops[i]).valid === false) {
-      needsAttempt3.push(i);
-    }
-  });
-
-  const attempt3Results = {};
-  if (needsAttempt3.length > 0) {
-    const a3 = await Promise.all(needsAttempt3.map(i => {
-      const name = route.stops[i].name || route.stops[i].headline || '';
-      return textSearch(name);
-    }));
-    needsAttempt3.forEach((stopIdx, j) => { attempt3Results[stopIdx] = a3[j]; });
-  }
-
-  // ══════════════════════════════════════════════════════════════
-  // PASO 2: Elegir el mejor candidato por parada
-  // ══════════════════════════════════════════════════════════════
-
-  const bestCandidates = route.stops.map((stop, i) => {
-    // Probar en orden: attempt1 → attempt2 → attempt3
-    for (const result of [attempt1[i], attempt2Results[i], attempt3Results[i]]) {
-      const c = result?.candidates?.[0];
-      if (!c?.geometry?.location) continue;
-      const validation = validateCandidate(c, stop);
-      if (validation.valid) return { candidate: c, validation };
-    }
-    // Ningún intento válido
-    return null;
-  });
-
-  // ══════════════════════════════════════════════════════════════
-  // PASO 3: Place Details en lotes de 5 (solo para candidatos válidos)
-  // ══════════════════════════════════════════════════════════════
-
-  const detailResults = new Array(route.stops.length).fill(null);
+  // 3. Place Details en lotes de 5 (fotos + editorial summary)
+  const detailResults = new Array(findResults.length).fill(null);
   const BATCH_SIZE = 5;
-  const indicesToFetch = bestCandidates.map((bc, i) => bc?.candidate?.place_id ? i : -1).filter(i => i >= 0);
-
-  for (let b = 0; b < indicesToFetch.length; b += BATCH_SIZE) {
-    const batchIndices = indicesToFetch.slice(b, b + BATCH_SIZE);
-    const batchResults = await Promise.all(batchIndices.map(i => {
-      const placeId = bestCandidates[i].candidate.place_id;
-      return fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=${DETAIL_FIELDS}&language=es&key=${placesKey}`)
-        .then(r => r.json()).catch(() => null);
-    }));
-    batchIndices.forEach((stopIdx, j) => { detailResults[stopIdx] = batchResults[j]; });
+  for (let i = 0; i < findResults.length; i += BATCH_SIZE) {
+    const batch = [];
+    for (let j = i; j < Math.min(i + BATCH_SIZE, findResults.length); j++) {
+      const c = findResults[j]?.candidates?.[0];
+      if (!c?.place_id) { batch.push(Promise.resolve(null)); continue; }
+      if (centerLat && centerLng && c.geometry?.location) {
+        const distKm = Math.sqrt(Math.pow(Math.abs(c.geometry.location.lat - centerLat), 2) + Math.pow(Math.abs(c.geometry.location.lng - centerLng), 2)) * 111;
+        if (distKm > routeRadiusKm) { batch.push(Promise.resolve(null)); continue; }
+      }
+      batch.push(
+        fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${c.place_id}&fields=name,photos,geometry,editorial_summary&language=es&key=${placesKey}`)
+          .then(r => r.json()).catch(() => null)
+      );
+    }
+    const batchResults = await Promise.all(batch);
+    batchResults.forEach((r, idx) => { detailResults[i + idx] = r; });
   }
 
-  // ══════════════════════════════════════════════════════════════
-  // PASO 4: Aplicar coords exactas de Google + marcar no verificadas
-  // ══════════════════════════════════════════════════════════════
-
+  // 4. Enriquecer cada parada con datos reales
+  const verifiedStops = [];
   route.stops.forEach((stop, i) => {
-    const bc = bestCandidates[i];
+    const candidate = findResults[i]?.candidates?.[0];
     const detail = detailResults[i]?.result;
 
-    if (!bc) {
-      // No se pudo verificar — MARCAR, no inventar
-      stop._unverified = true;
-      // Determinar el motivo más específico
-      const lastAttempt = attempt3Results[i] || attempt2Results[i] || attempt1[i];
-      const lastCandidate = lastAttempt?.candidates?.[0];
-      if (!lastCandidate?.geometry?.location) {
-        stop._verifyReason = 'no_google_result';
-      } else {
-        const v = validateCandidate(lastCandidate, stop);
-        stop._verifyReason = v.reason || 'no_match';
-      }
-      console.log(`[VERIFY] ✗ ${stop.name} → NO VERIFICADO (${stop._verifyReason})`);
+    if (!candidate?.geometry?.location) {
+      // Google no encontró → mantener datos originales de Claude
+      verifiedStops.push(stop);
       return;
     }
 
-    const candidate = bc.candidate;
     const pLat = candidate.geometry.location.lat;
     const pLng = candidate.geometry.location.lng;
-    const googleName = detail?.name || candidate.name || '';
 
-    // ── Coords EXACTAS de Google Places ──
-    stop.lat = pLat;
-    stop.lng = pLng;
-    stop.place_id = candidate.place_id;
-    stop._unverified = false;
-
-    // ── Foto: aceptar siempre ──
-    const photoRef = detail?.photos?.[0]?.photo_reference || candidate.photos?.[0]?.photo_reference || '';
-    if (photoRef) stop.photo_ref = photoRef;
-
-    // ── Nombre: sobrescribir si match ──
-    const nameOk = strictNameMatch(stop.name || stop.headline || '', googleName);
-    if (googleName && nameOk) { stop.name = googleName; stop.headline = googleName; }
-
-    // ── Dirección verificada ──
-    const addr = detail?.formatted_address || candidate.formatted_address || '';
-    if (addr) stop.verified_address = addr;
-
-    // ── Horarios: solo si aportan ──
-    const hours = detail?.opening_hours?.weekday_text;
-    if (!stop.practical && hours) {
-      const hoursStr = hours.join(' · ');
-      const isGeneric = /abierto 24 horas/i.test(hoursStr) || /open 24 hours/i.test(hoursStr);
-      if (!isGeneric) stop.practical = hoursStr;
+    // Validar distancia al centro
+    if (centerLat && centerLng) {
+      const distKm = Math.sqrt(Math.pow(Math.abs(pLat - centerLat), 2) + Math.pow(Math.abs(pLng - centerLng), 2)) * 111;
+      if (distKm > routeRadiusKm) {
+        verifiedStops.push(stop); // Fuera de rango → mantener original
+        return;
+      }
     }
 
-    // ── Editorial summary → description ──
+    // Validar que Google devolvió algo relevante (no una tienda random)
+    const originalName = (stop.name || stop.headline || '').toLowerCase();
+    const googleName = (detail?.name || candidate.name || '').toLowerCase();
+    const nameWords = originalName.split(/\s+/).filter(w => w.length > 3);
+    const nameMatch = nameWords.some(w => googleName.includes(w)) || googleName.split(/\s+/).filter(w => w.length > 3).some(w => originalName.includes(w));
+
+    // Validar distancia al punto original de Claude
+    const origDist = (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01)
+      ? Math.sqrt(Math.pow(Math.abs(pLat - stop.lat), 2) + Math.pow(Math.abs(pLng - stop.lng), 2)) * 111
+      : 0;
+    const closeEnough = origDist < 15; // menos de 15km del punto original
+
+    // Foto: aceptar SIEMPRE que Google devuelva una (es del sitio buscado, no inventada)
+    const photoRef = candidate.photos?.[0]?.photo_reference || detail?.photos?.[0]?.photo_reference || '';
+    if (photoRef) stop.photo_ref = photoRef;
+
+    if (!nameMatch && !closeEnough) {
+      // Google devolvió algo sin relación → mantener coords de Claude pero QUEDARSE LA FOTO
+      verifiedStops.push(stop);
+      return;
+    }
+
+    // Google solo corrige coords — NO sobrescribe contenido de Haiku
+    stop.lat = pLat;
+    stop.lng = pLng;
+
+    // Solo sobrescribir nombre si Google devolvió algo relevante
+    const verifiedName = detail?.name || candidate.name || '';
+    if (verifiedName && nameMatch) { stop.name = verifiedName; stop.headline = verifiedName; }
+
+    if (candidate.formatted_address) stop.verified_address = candidate.formatted_address;
+
+    // Horarios: solo si aportan (no "Abierto 24 horas" genérico) y no hay practical de Haiku
+    if (!stop.practical && detail?.opening_hours?.weekday_text) {
+      const hours = detail.opening_hours.weekday_text.join(' · ');
+      const isGeneric = /abierto 24 horas/i.test(hours) || /open 24 hours/i.test(hours);
+      if (!isGeneric) {
+        stop.practical = hours;
+      }
+    }
+
+    // Editorial summary de Google → solo como description (datos), nunca como context
     const googleDesc = detail?.editorial_summary?.overview || '';
     if (googleDesc && !stop.description) stop.description = googleDesc;
 
-    console.log(`[VERIFY] ✓ ${stop.name} → ${googleName} (${pLat.toFixed(5)}, ${pLng.toFixed(5)}) place_id:${candidate.place_id?.substring(0, 20)}`);
+    // NO meter reseñas de Google como context — context es para info histórica/cultural de Haiku
+
+    verifiedStops.push(stop);
   });
 
+  route.stops = verifiedStops;
   return route;
 }
 
@@ -6818,8 +6710,6 @@ INSTRUCCIONES:
               break;
             }
             if (!apiRes.ok) {
-              let _errBody = ''; try { _errBody = await apiRes.text(); } catch (_) {}
-              console.error(`[API ERROR] status=${apiRes.status} body=${_errBody.substring(0, 500)}`);
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
@@ -6871,8 +6761,6 @@ INSTRUCCIONES:
               break;
             }
             if (!apiRes.ok) {
-              let _errBody = ''; try { _errBody = await apiRes.text(); } catch (_) {}
-              console.error(`[API ERROR] status=${apiRes.status} body=${_errBody.substring(0, 500)}`);
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
@@ -7016,13 +6904,16 @@ INSTRUCCIONES:
         const _numDays = _daysMatch ? parseInt(_daysMatch[1]) : 0;
         if (_numDays >= 2 && !route) {
           reply = formatDayHeaders(reply, _numDays);
+          // Añadir enlace Google Maps de ruta completa al final
+          reply = appendRouteMapLink(reply);
         }
 
-        // ── Inyectar enlaces Maps verificados (place_id) en nombres en negrita ──
-        if (!route && env.GOOGLE_PLACES_KEY) {
-          const _region = userLocationName || location || '';
-          const _cc = countryCode || userCountryCode || '';
-          try { reply = await injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc); } catch (_) {}
+        // ── Limpiar enlaces Maps inventados por Claude en chat (rutas tienen verify, no pasan por aquí) ──
+        if (!route) {
+          // Quitar URLs de Google Maps que Claude inventa (no verificadas)
+          reply = reply.replace(/\[?📍[^\]]*\]?\s*\(?https?:\/\/[^\s)]*google\.com\/maps[^\s)]*\)?/gi, '');
+          reply = reply.replace(/📍\s*(?:Abrir en Google Maps|Ver en Google Maps|Google Maps)[^\n]*/gi, '');
+          reply = reply.replace(/https?:\/\/(?:www\.)?google\.com\/maps\/dir\/[^\s)>\]]+/gi, '');
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
         }
 

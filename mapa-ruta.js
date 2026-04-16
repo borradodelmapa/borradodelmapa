@@ -781,9 +781,7 @@ const mapaRuta = {
     const marker = this._markers[index];
     if (!marker) return;
 
-    const gmapsUrl = stop.place_id
-      ? `https://www.google.com/maps/place/?q=place_id:${stop.place_id}`
-      : `https://www.google.com/maps?q=${stop.lat},${stop.lng}`;
+    const gmapsUrl = `https://www.google.com/maps?q=${stop.lat},${stop.lng}`;
     const dayColor = this._dayColors ? this._dayColors[((stop.day || 1) - 1) % this._dayColors.length] : '#D4A843';
 
     const _buildContent = (photoHtml) => `

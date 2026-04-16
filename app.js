@@ -3524,9 +3524,7 @@ function selectRouteOnMap(routeData) {
 }
 
 function _showStopInfo(stop, i, marker, color) {
-  const gmapsUrl = stop.place_id
-    ? `https://www.google.com/maps/place/?q=place_id:${stop.place_id}`
-    : `https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}&travelmode=driving`;
+  const gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}&travelmode=driving`;
 
   const _buildStopContent = (photoHtml) => `
     <div style="font-family:'Inter',sans-serif;width:280px;max-height:380px;border-radius:10px;overflow:hidden;background:#fff;display:flex;flex-direction:column;">
