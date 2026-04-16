@@ -1601,7 +1601,7 @@ async function generateMiniResumen(dest, collectedData, userLocationName, env, u
     }
   }
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
       body: JSON.stringify({
@@ -5009,7 +5009,7 @@ export default {
           }
         }
 
-        const narrateRes = await fetch('https://api.anthropic.com/v1/messages', {
+        const narrateRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -6689,7 +6689,7 @@ INSTRUCCIONES:
           if (useAnthropic) {
             // ── Claude Sonnet (texto sin foto) ──
             try {
-              apiRes = await fetch('https://api.anthropic.com/v1/messages', {
+              apiRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

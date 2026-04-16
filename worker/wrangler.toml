@@ -2,6 +2,9 @@ name = "salma-api"
 main = "salma-worker.js"
 compatibility_date = "2024-01-01"
 
+[placement]
+mode = "smart"
+
 # Secret requerido (añadir con wrangler secret put OPENAI_API_KEY):
 # OPENAI_API_KEY = "sk-proj-..."
 
