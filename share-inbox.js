@@ -186,6 +186,20 @@
     if (el) el.remove();
   }
 
+  function _showLoginBanner() {
+    if (document.getElementById('share-login-banner')) return;
+    const b = document.createElement('div');
+    b.id = 'share-login-banner';
+    b.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:100000;background:#f0b429;color:#060503;padding:10px 16px;font-family:Inter,sans-serif;font-size:13px;font-weight:600;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.4)';
+    b.textContent = 'Inicia sesión y tus fotos se añadirán automáticamente';
+    document.body.appendChild(b);
+  }
+
+  function _hideLoginBanner() {
+    const b = document.getElementById('share-login-banner');
+    if (b) b.remove();
+  }
+
   async function uploadPhoto(blob, uid) {
     const fd = new FormData();
     fd.append('photo', blob, 'shared.jpg');
@@ -662,12 +676,19 @@
       return;
     }
 
-    // Solo mostrar aviso de login si realmente estamos esperando >1s
+    // Si no hay user → cerrar overlay, mostrar banner y abrir login
     const loginWarnTimer = setTimeout(() => {
-      showOverlay('Necesitas iniciar sesión para guardar tus fotos.');
-    }, 1200);
+      closeOverlay();
+      _showLoginBanner();
+      if (typeof window.openModal === 'function') {
+        try { window.openModal(); } catch(_) {}
+      }
+    }, 800);
     await waitForUser();
     clearTimeout(loginWarnTimer);
+    _hideLoginBanner();
+    // Re-mostrar overlay para la fase de subida
+    showOverlay('Preparando subida...');
 
     const uid = window.currentUser.uid;
     const fdb = (typeof db !== 'undefined') ? db : firebase.firestore();
