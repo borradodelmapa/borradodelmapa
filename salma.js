@@ -896,7 +896,7 @@ const salma = {
           this._removeLoading();
           try {
             if (typeof window.openItinerarioView === 'function') {
-              window.openItinerarioView(data.route, null, { fromChat: true });
+              window.openItinerarioView(data.route, isEdit ? this.currentRouteId : null, { fromChat: true, saved: isEdit });
             } else {
               guideRenderer.render(data.route, {});
             }
