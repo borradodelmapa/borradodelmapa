@@ -2017,27 +2017,34 @@ async function loadUserGuides() {
       return card;
     }
 
-    // Si más de 5 guías → agrupar por país
+    // Si más de 5 guías → agrupar por país (detección en cascada, cacheada en Firestore)
     if (allGuides.length > 5) {
+      // Resolver el país de cada guía en paralelo (con límite suave para no saturar Nominatim)
+      const resolved = await Promise.all(allGuides.map(g => _detectGuideCountry(g.id, g.data)));
       const byCountry = {};
-      for (const g of allGuides) {
-        const country = g.data.destino || 'Otros';
-        if (!byCountry[country]) byCountry[country] = [];
-        byCountry[country].push(g);
+      for (let i = 0; i < allGuides.length; i++) {
+        const g = allGuides[i];
+        const c = resolved[i] || { code: 'XX', name: 'Otros', emoji: '' };
+        if (!byCountry[c.code]) byCountry[c.code] = { name: c.name, emoji: c.emoji, guides: [] };
+        byCountry[c.code].guides.push(g);
       }
       // Ordenar países: el grupo con la guía más reciente primero
       const sorted = Object.keys(byCountry).sort((a, b) => {
-        const ta = byCountry[a][0].data.createdAt || '';
-        const tb = byCountry[b][0].data.createdAt || '';
+        const ta = byCountry[a].guides[0].data.createdAt || '';
+        const tb = byCountry[b].guides[0].data.createdAt || '';
         return tb.localeCompare(ta);
       });
-      for (const country of sorted) {
+      // "Otros" siempre al final
+      const otros = sorted.indexOf('XX');
+      if (otros > -1) { sorted.splice(otros, 1); sorted.push('XX'); }
+      for (const code of sorted) {
         const group = document.createElement('div');
         group.className = 'viaje-group';
-        group.innerHTML = `<div class="viaje-group-header">${escapeHTML(country.toUpperCase())} <span class="viaje-group-count">${byCountry[country].length}</span></div>`;
+        const emoji = byCountry[code].emoji ? byCountry[code].emoji + ' ' : '';
+        group.innerHTML = `<div class="viaje-group-header">${emoji}${escapeHTML((byCountry[code].name || 'Otros').toUpperCase())} <span class="viaje-group-count">${byCountry[code].guides.length}</span></div>`;
         const groupGrid = document.createElement('div');
         groupGrid.className = 'viaje-group-grid';
-        for (const g of byCountry[country]) {
+        for (const g of byCountry[code].guides) {
           groupGrid.appendChild(createCard(g, g.data));
         }
         group.appendChild(groupGrid);
@@ -2068,6 +2075,76 @@ async function loadUserGuides() {
     console.error('Error cargando guías:', e);
     showToast('Error al cargar guías');
   }
+}
+
+// ═══ Detección de país de una guía (cascada + cache en Firestore) ═══
+async function _detectGuideCountry(docId, d) {
+  // 1. Ya guardado en la guía
+  if (d.country_code) {
+    const emoji = (typeof countryEmoji === 'function') ? countryEmoji(d.country_code) : '';
+    return { code: d.country_code, name: d.country_name || d.country_code, emoji };
+  }
+
+  // 2. Texto: destino + nombre
+  const txt = [d.destino, d.nombre].filter(Boolean).join(' ');
+  if (txt && typeof detectCountryInMessage === 'function') {
+    const r = detectCountryInMessage(txt);
+    if (r && r.code) {
+      _saveGuideCountry(docId, r.code, r.name);
+      return r;
+    }
+  }
+
+  // 3. Parsear itinerarioIA y buscar country en el primer stop
+  let firstStop = null;
+  try {
+    const route = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null;
+    firstStop = route && route.stops && route.stops[0];
+    if (firstStop) {
+      if (firstStop.country_code && typeof countryEmoji === 'function') {
+        const code = String(firstStop.country_code).toUpperCase();
+        const name = firstStop.country || code;
+        _saveGuideCountry(docId, code, name);
+        return { code, name, emoji: countryEmoji(code) };
+      }
+      if (firstStop.country && typeof normalizeCountry === 'function') {
+        const r = normalizeCountry(firstStop.country);
+        if (r && r.code) {
+          _saveGuideCountry(docId, r.code, r.name);
+          return r;
+        }
+      }
+    }
+  } catch (_) {}
+
+  // 4. Reverse geocode con Nominatim
+  if (firstStop && firstStop.lat && firstStop.lng) {
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${firstStop.lat}&lon=${firstStop.lng}&format=json&accept-language=es&zoom=3`, {
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        const j = await res.json();
+        const code = (j.address && j.address.country_code ? j.address.country_code : '').toUpperCase();
+        if (code) {
+          const name = (j.address && j.address.country) || code;
+          _saveGuideCountry(docId, code, name);
+          const emoji = (typeof countryEmoji === 'function') ? countryEmoji(code) : '';
+          return { code, name, emoji };
+        }
+      }
+    } catch (_) {}
+  }
+
+  // 5. Desconocido
+  return { code: 'XX', name: 'Otros', emoji: '' };
+}
+
+function _saveGuideCountry(docId, code, name) {
+  if (!currentUser || typeof db === 'undefined') return;
+  db.collection('users').doc(currentUser.uid).collection('maps').doc(docId)
+    .set({ country_code: code, country_name: name }, { merge: true })
+    .catch(() => {});
 }
 
 function destPhoto(destino) {
