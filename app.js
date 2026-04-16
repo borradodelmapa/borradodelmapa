@@ -2025,8 +2025,12 @@ async function loadUserGuides() {
         if (!byCountry[country]) byCountry[country] = [];
         byCountry[country].push(g);
       }
-      // Ordenar países alfabéticamente
-      const sorted = Object.keys(byCountry).sort((a, b) => a.localeCompare(b, 'es'));
+      // Ordenar países: el grupo con la guía más reciente primero
+      const sorted = Object.keys(byCountry).sort((a, b) => {
+        const ta = byCountry[a][0].data.createdAt || '';
+        const tb = byCountry[b][0].data.createdAt || '';
+        return tb.localeCompare(ta);
+      });
       for (const country of sorted) {
         const group = document.createElement('div');
         group.className = 'viaje-group';
