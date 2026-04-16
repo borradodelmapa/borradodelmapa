@@ -203,6 +203,7 @@
     const exif = extractExif(buf);
     const hasGps = exif && exif.lat != null && exif.lng != null;
     const exifDate = exif && exif.date ? exif.date : null;
+    console.log('[share-inbox] EXIF:', file.name, 'size:', (file.blob.size / 1024).toFixed(0) + 'KB', 'GPS:', hasGps ? `${exif.lat.toFixed(5)},${exif.lng.toFixed(5)}` : 'NO', 'date:', exifDate || '—');
     const createdAt = exifDate || (file.lastModified ? new Date(file.lastModified).toISOString() : new Date().toISOString());
 
     const { key, url } = await uploadPhoto(file.blob, uid);
@@ -236,6 +237,8 @@
 
     return {
       hasGps,
+      lat: hasGps ? exif.lat : null,
+      lng: hasGps ? exif.lng : null,
       key,
       url,
       fotoDocId: fotoRef.id,
@@ -401,6 +404,8 @@
         ids.forEach(idx => { assigned.add(idx); selected.delete(idx); });
         renderTiles();
         updateCount();
+        const routeName = (routes.find(r => r.id === routeId) || {}).name || 'ruta';
+        showShareToast(`✓ ${ids.length} foto${ids.length === 1 ? '' : 's'} añadida${ids.length === 1 ? '' : 's'} a ${routeName}`);
       } catch (err) {
         console.error('[share-inbox] assign error', err);
         alert('Error asignando fotos');
@@ -447,12 +452,20 @@
       }
     });
 
-    overlay.querySelector('#sa-done').addEventListener('click', () => {
+    overlay.querySelector('#sa-done').addEventListener('click', async () => {
       overlay.remove();
-      // Al cerrar, abrir mapa con pins recargados
-      if (typeof window.openLiveMap === 'function') {
-        if (typeof window._pinsLoaded !== 'undefined') window._pinsLoaded = false;
-        window.openLiveMap();
+      if (typeof window.openLiveMap !== 'function') return;
+      window.openLiveMap();
+      // Esperar a que el mapa esté cargado
+      await new Promise(r => setTimeout(r, 500));
+      // Forzar recarga de pins (el mapa existente no recarga en openLiveMap)
+      if (typeof window.reloadSavedPins === 'function') {
+        try { await window.reloadSavedPins(); } catch(_){}
+      }
+      // Centrar en los pins nuevos con GPS
+      const withGps = uploadedPhotos.filter(p => p && p.hasGps);
+      if (withGps.length && typeof window.liveMapFitPins === 'function') {
+        window.liveMapFitPins(withGps.map(p => ({ lat: p.lat, lng: p.lng })));
       }
     });
 
@@ -462,6 +475,14 @@
 
   function escapeHTML(s) {
     return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  function showShareToast(msg) {
+    const t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#141209;border:1px solid rgba(240,180,41,.4);color:#f0b429;padding:12px 22px;border-radius:999px;font-family:Inter,sans-serif;font-size:13px;font-weight:600;z-index:100000;box-shadow:0 4px 18px rgba(0,0,0,.5)';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2600);
   }
 
   async function runInbox() {
@@ -491,9 +512,12 @@
       return;
     }
 
-    showOverlay('Necesitas iniciar sesión para guardar tus fotos.');
-
+    // Solo mostrar aviso de login si realmente estamos esperando >1s
+    const loginWarnTimer = setTimeout(() => {
+      showOverlay('Necesitas iniciar sesión para guardar tus fotos.');
+    }, 1200);
     await waitForUser();
+    clearTimeout(loginWarnTimer);
 
     const uid = window.currentUser.uid;
     const fdb = (typeof db !== 'undefined') ? db : firebase.firestore();

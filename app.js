@@ -3731,6 +3731,32 @@ async function _loadSavedPins() {
   if (videoBtn) videoBtn.style.display = photoPins.length >= 3 ? '' : 'none';
 }
 
+// ── Recargar pins desde Firestore (tras añadir fotos compartidas, etc) ──
+async function reloadSavedPins() {
+  // Quitar markers actuales del mapa
+  _mapPins.forEach(m => m.setMap(null));
+  _mapPins = [];
+  _savedPinsData = [];
+  _pinsLoaded = false;
+  await _loadSavedPins();
+}
+window.reloadSavedPins = reloadSavedPins;
+
+// ── Encuadrar el mapa en un conjunto de coords ──
+function liveMapFitPins(coords) {
+  if (!_liveMap || !window.google || !coords || !coords.length) return;
+  const bounds = new google.maps.LatLngBounds();
+  coords.forEach(c => { if (c && c.lat && c.lng) bounds.extend({ lat: c.lat, lng: c.lng }); });
+  if (bounds.isEmpty()) return;
+  if (coords.length === 1) {
+    _liveMap.panTo(coords[0]);
+    _liveMap.setZoom(15);
+  } else {
+    _liveMap.fitBounds(bounds, { top: 80, right: 40, bottom: 120, left: 40 });
+  }
+}
+window.liveMapFitPins = liveMapFitPins;
+
 // ── Compartir mapa ──
 
 function openShareSheet() {
