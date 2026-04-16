@@ -279,6 +279,22 @@
       .sa-add:disabled{background:rgba(240,180,41,.25);color:rgba(6,5,3,.5);cursor:not-allowed}
       .sa-discard{flex:1;background:transparent;border:1px solid rgba(239,68,68,.5);color:#ef4444;border-radius:999px;padding:12px;font-size:14px;font-weight:600;cursor:pointer}
       .sa-discard:disabled{opacity:.3;cursor:not-allowed}
+      .sa-locate{flex:1;background:transparent;border:1px solid rgba(240,180,41,.55);color:#f0b429;border-radius:999px;padding:12px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+      .sa-tile .sa-nogps{background:rgba(239,68,68,.85)}
+      /* Modal de ubicación */
+      .sl-overlay{position:fixed;inset:0;z-index:99999;background:rgba(5,5,5,.92);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);padding:20px}
+      .sl-box{background:#141209;border:1px solid rgba(240,180,41,.25);border-radius:16px;padding:20px;width:100%;max-width:440px;display:flex;flex-direction:column;gap:14px}
+      .sl-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#f0b429;letter-spacing:.04em}
+      .sl-sub{font-size:12px;color:rgba(245,240,232,.6);line-height:1.5}
+      .sl-input{background:#0a0806;color:#f5f0e8;border:1px solid rgba(240,180,41,.25);border-radius:10px;padding:12px;font-size:14px;font-family:inherit;outline:none}
+      .sl-input:focus{border-color:rgba(240,180,41,.55)}
+      .sl-preview{font-size:13px;color:#f5f0e8;background:#0a0806;border:1px solid rgba(240,180,41,.18);border-radius:10px;padding:10px 12px;min-height:42px;display:flex;align-items:center;gap:8px}
+      .sl-preview.empty{color:rgba(245,240,232,.35);font-style:italic}
+      .sl-actions{display:flex;gap:8px;margin-top:4px}
+      .sl-cancel{flex:1;background:transparent;border:1px solid rgba(245,240,232,.25);color:#f5f0e8;border-radius:999px;padding:10px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
+      .sl-apply{flex:2;background:#f0b429;color:#060503;border:none;border-radius:999px;padding:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+      .sl-apply:disabled{background:rgba(240,180,41,.25);color:rgba(6,5,3,.5);cursor:not-allowed}
+      .pac-container{z-index:100001 !important}
     `;
     document.head.appendChild(s);
   }
@@ -324,6 +340,7 @@
       <div class="sa-footer">
         <div class="sa-count" id="sa-count">0 seleccionadas</div>
         <div class="sa-actions">
+          <button class="sa-locate" id="sa-locate" style="display:none">📍 Ubicar</button>
           <button class="sa-add" id="sa-add" disabled>Añadir a ruta</button>
           <button class="sa-discard" id="sa-discard" disabled>Descartar</button>
         </div>
@@ -334,6 +351,7 @@
     const countEl = overlay.querySelector('#sa-count');
     const addBtn = overlay.querySelector('#sa-add');
     const discardBtn = overlay.querySelector('#sa-discard');
+    const locateBtn = overlay.querySelector('#sa-locate');
     const allBtn = overlay.querySelector('#sa-all');
     const routeSel = overlay.querySelector('#sa-route');
 
@@ -366,13 +384,25 @@
 
     function updateCount() {
       const n = selected.size;
-      countEl.textContent = `${n} seleccionada${n === 1 ? '' : 's'}`;
+      const noGpsSelected = Array.from(selected).filter(i => !uploadedPhotos[i].hasGps).length;
+      countEl.textContent = n === 0
+        ? '0 seleccionadas'
+        : noGpsSelected
+          ? `${n} seleccionada${n === 1 ? '' : 's'} · ${noGpsSelected} sin ubicación`
+          : `${n} seleccionada${n === 1 ? '' : 's'}`;
       const hasRoutes = routes.length > 0;
       addBtn.disabled = n === 0 || !hasRoutes;
       discardBtn.disabled = n === 0;
       if (hasRoutes && routeSel.value) {
         const r = routes.find(x => x.id === routeSel.value);
         addBtn.textContent = n ? `Añadir ${n} a ${r ? r.name : 'ruta'}` : 'Añadir a ruta';
+      }
+      // Botón Ubicar solo si hay seleccionadas sin GPS
+      if (noGpsSelected > 0) {
+        locateBtn.style.display = '';
+        locateBtn.textContent = `📍 Ubicar ${noGpsSelected}`;
+      } else {
+        locateBtn.style.display = 'none';
       }
     }
 
@@ -387,6 +417,54 @@
     });
 
     routeSel.addEventListener('change', updateCount);
+
+    locateBtn.addEventListener('click', () => {
+      const noGpsIds = Array.from(selected).filter(i => !uploadedPhotos[i].hasGps);
+      if (!noGpsIds.length) return;
+      showLocatePicker(noGpsIds.length, async (place) => {
+        // place: { lat, lng, name }
+        locateBtn.disabled = true;
+        try {
+          const batch = fdb.batch();
+          for (const idx of noGpsIds) {
+            const p = uploadedPhotos[idx];
+            // Offset aleatorio 5-20m para evitar solapamiento
+            const { dLat, dLng } = randomOffsetMeters(place.lat, 5, 20);
+            const lat = place.lat + dLat;
+            const lng = place.lng + dLng;
+            // Actualizar foto
+            batch.update(
+              fdb.collection('users').doc(uid).collection('fotos').doc(p.fotoDocId),
+              { lat, lng, caption: place.name }
+            );
+            // Crear pin (no existía)
+            const pinRef = fdb.collection('users').doc(uid).collection('pins').doc();
+            batch.set(pinRef, {
+              lat, lng,
+              locName: place.name,
+              photoUrl: p.url,
+              routeId: null,
+              source: 'share',
+              createdAt: p.createdAt
+            });
+            // Actualizar objeto en memoria
+            p.hasGps = true;
+            p.lat = lat;
+            p.lng = lng;
+            p.pinDocId = pinRef.id;
+            p.locName = place.name;
+          }
+          await batch.commit();
+          renderTiles();
+          updateCount();
+          showShareToast(`📍 ${noGpsIds.length} foto${noGpsIds.length === 1 ? '' : 's'} ubicada${noGpsIds.length === 1 ? '' : 's'} en ${place.name}`);
+        } catch (err) {
+          console.error('[share-inbox] locate error', err);
+          alert('Error ubicando fotos');
+        }
+        locateBtn.disabled = false;
+      });
+    });
 
     addBtn.addEventListener('click', async () => {
       if (!selected.size || !routeSel.value) return;
@@ -475,6 +553,78 @@
 
   function escapeHTML(s) {
     return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  function randomOffsetMeters(lat, minMeters, maxMeters) {
+    // Distancia aleatoria entre min y max metros, dirección aleatoria
+    const distance = minMeters + Math.random() * (maxMeters - minMeters);
+    const angle = Math.random() * 2 * Math.PI;
+    const metersPerDegLat = 111111;
+    const metersPerDegLng = 111111 * Math.cos(lat * Math.PI / 180);
+    const dLat = (distance * Math.cos(angle)) / metersPerDegLat;
+    const dLng = (distance * Math.sin(angle)) / Math.max(metersPerDegLng, 1);
+    return { dLat, dLng };
+  }
+
+  async function ensureMapsLoaded() {
+    if (window.google && window.google.maps && window.google.maps.places) return true;
+    if (typeof window._loadGoogleMaps === 'function') {
+      try { await window._loadGoogleMaps(); return true; } catch(_) { return false; }
+    }
+    return false;
+  }
+
+  async function showLocatePicker(count, onApply) {
+    const ok = await ensureMapsLoaded();
+    if (!ok) { alert('No se pudo cargar Google Maps'); return; }
+
+    const overlay = document.createElement('div');
+    overlay.className = 'sl-overlay';
+    overlay.innerHTML = `
+      <div class="sl-box">
+        <div class="sl-title">Ubicar ${count} foto${count === 1 ? '' : 's'}</div>
+        <div class="sl-sub">Busca un lugar (ciudad, monumento, playa...). Las fotos se colocarán ahí con un pequeño desplazamiento aleatorio para que no queden superpuestas.</div>
+        <input class="sl-input" id="sl-input" placeholder="Ej: Hoi An, Vietnam" autocomplete="off">
+        <div class="sl-preview empty" id="sl-preview">Aún no has elegido un lugar</div>
+        <div class="sl-actions">
+          <button class="sl-cancel" id="sl-cancel">Cancelar</button>
+          <button class="sl-apply" id="sl-apply" disabled>Aplicar</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+
+    const input = overlay.querySelector('#sl-input');
+    const preview = overlay.querySelector('#sl-preview');
+    const cancelBtn = overlay.querySelector('#sl-cancel');
+    const applyBtn = overlay.querySelector('#sl-apply');
+
+    let chosen = null;
+
+    const ac = new google.maps.places.Autocomplete(input, {
+      types: ['geocode', 'establishment'],
+      fields: ['geometry', 'name', 'formatted_address']
+    });
+    ac.addListener('place_changed', () => {
+      const place = ac.getPlace();
+      if (!place.geometry || !place.geometry.location) return;
+      chosen = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+        name: place.name || place.formatted_address || input.value
+      };
+      preview.textContent = '📍 ' + chosen.name;
+      preview.classList.remove('empty');
+      applyBtn.disabled = false;
+    });
+
+    cancelBtn.addEventListener('click', () => overlay.remove());
+    applyBtn.addEventListener('click', async () => {
+      if (!chosen) return;
+      applyBtn.disabled = true; applyBtn.textContent = 'Aplicando...';
+      try { await onApply(chosen); } finally { overlay.remove(); }
+    });
+
+    setTimeout(() => input.focus(), 100);
   }
 
   function showShareToast(msg) {
