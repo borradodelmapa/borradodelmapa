@@ -198,23 +198,22 @@
     return res.json(); // { key, url }
   }
 
-  async function processOne(file, uid, db) {
+  async function processOne(file, uid, fdb) {
     const buf = await file.blob.arrayBuffer();
     const exif = extractExif(buf);
     const hasGps = exif && exif.lat != null && exif.lng != null;
-    const createdAt = exif && exif.date
-      ? exif.date
-      : (file.lastModified ? new Date(file.lastModified).toISOString() : new Date().toISOString());
+    const exifDate = exif && exif.date ? exif.date : null;
+    const createdAt = exifDate || (file.lastModified ? new Date(file.lastModified).toISOString() : new Date().toISOString());
 
     const { key, url } = await uploadPhoto(file.blob, uid);
 
-    // Foto en galería
-    await db.collection('users').doc(uid).collection('fotos').add({
+    // Foto en galería (sin ruta asignada todavía)
+    const fotoRef = await fdb.collection('users').doc(uid).collection('fotos').add({
       key, url,
       tag: 'compartida',
       caption: '',
       albumId: null,
-      routeId: (window._activeRouteDocId || null),
+      routeId: null,
       lat: hasGps ? exif.lat : null,
       lng: hasGps ? exif.lng : null,
       source: 'share',
@@ -222,19 +221,247 @@
     });
 
     // Pin en el mapa solo si hay GPS
+    let pinRef = null;
     if (hasGps) {
-      await db.collection('users').doc(uid).collection('pins').add({
+      pinRef = await fdb.collection('users').doc(uid).collection('pins').add({
         lat: exif.lat,
         lng: exif.lng,
         locName: '',
         photoUrl: url,
-        routeId: (window._activeRouteDocId || null),
+        routeId: null,
         source: 'share',
         createdAt
       });
     }
 
-    return { hasGps, url };
+    return {
+      hasGps,
+      key,
+      url,
+      fotoDocId: fotoRef.id,
+      pinDocId: pinRef ? pinRef.id : null,
+      exifDate,
+      lastModified: file.lastModified || 0,
+      createdAt,
+    };
+  }
+
+  // ─────────── UI de asignación (grid de selección) ───────────
+
+  function injectAssignStyles() {
+    if (document.getElementById('share-assign-styles')) return;
+    const s = document.createElement('style');
+    s.id = 'share-assign-styles';
+    s.textContent = `
+      .sa-overlay{position:fixed;inset:0;z-index:99998;background:#060503;display:flex;flex-direction:column;font-family:'Inter',sans-serif;color:#f5f0e8}
+      .sa-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(240,180,41,.18)}
+      .sa-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#f0b429;letter-spacing:.04em}
+      .sa-done{background:transparent;border:1px solid rgba(240,180,41,.4);color:#f0b429;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600;cursor:pointer}
+      .sa-controls{display:flex;gap:10px;padding:12px 16px;border-bottom:1px solid rgba(240,180,41,.12);align-items:center;flex-wrap:wrap}
+      .sa-select{flex:1;min-width:180px;background:#141209;color:#f5f0e8;border:1px solid rgba(240,180,41,.25);border-radius:10px;padding:10px 12px;font-size:13px;font-family:inherit}
+      .sa-all{background:transparent;border:1px solid rgba(240,180,41,.4);color:#f0b429;border-radius:999px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+      .sa-grid{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;-webkit-overflow-scrolling:touch}
+      .sa-tile{position:relative;aspect-ratio:1;overflow:hidden;cursor:pointer;background:#141209}
+      .sa-tile img{width:100%;height:100%;object-fit:cover;display:block}
+      .sa-tile .sa-mark{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.5);border:1.5px solid #fff;display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent}
+      .sa-tile.sa-selected .sa-mark{background:#f0b429;border-color:#f0b429;color:#060503}
+      .sa-tile.sa-assigned{pointer-events:none}
+      .sa-tile.sa-assigned::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.55)}
+      .sa-tile.sa-assigned .sa-mark{background:#4285F4;border-color:#4285F4;color:#fff;z-index:1}
+      .sa-tile .sa-nogps{position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,.7);color:#f5f0e8;font-size:9px;padding:2px 6px;border-radius:4px;letter-spacing:.04em}
+      .sa-footer{padding:12px 16px;border-top:1px solid rgba(240,180,41,.18);background:#0a0806;display:flex;flex-direction:column;gap:8px}
+      .sa-count{font-size:12px;color:rgba(245,240,232,.6);text-align:center}
+      .sa-actions{display:flex;gap:8px}
+      .sa-add{flex:2;background:#f0b429;color:#060503;border:none;border-radius:999px;padding:12px;font-size:14px;font-weight:700;cursor:pointer}
+      .sa-add:disabled{background:rgba(240,180,41,.25);color:rgba(6,5,3,.5);cursor:not-allowed}
+      .sa-discard{flex:1;background:transparent;border:1px solid rgba(239,68,68,.5);color:#ef4444;border-radius:999px;padding:12px;font-size:14px;font-weight:600;cursor:pointer}
+      .sa-discard:disabled{opacity:.3;cursor:not-allowed}
+    `;
+    document.head.appendChild(s);
+  }
+
+  async function showAssignmentUI(uploadedPhotos, uid, fdb) {
+    injectAssignStyles();
+
+    // Cargar rutas del usuario
+    let routes = [];
+    try {
+      const snap = await fdb.collection('users').doc(uid).collection('maps')
+        .orderBy('createdAt', 'desc').limit(30).get();
+      snap.forEach(doc => {
+        const d = doc.data();
+        routes.push({ id: doc.id, name: d.nombre || 'Mi ruta', days: d.num_dias || d.dias || '?', destino: d.destino || '' });
+      });
+    } catch (_) {}
+
+    // Orden: más recientes primero (EXIF date → lastModified → createdAt)
+    uploadedPhotos.sort((a, b) => {
+      const ta = a.exifDate || (a.lastModified ? new Date(a.lastModified).toISOString() : a.createdAt);
+      const tb = b.exifDate || (b.lastModified ? new Date(b.lastModified).toISOString() : b.createdAt);
+      return tb.localeCompare(ta);
+    });
+
+    const overlay = document.createElement('div');
+    overlay.className = 'sa-overlay';
+
+    const routeOptions = routes.length
+      ? routes.map(r => `<option value="${r.id}">${escapeHTML(r.name)} · ${r.days} día${r.days > 1 ? 's' : ''}${r.destino ? ' · ' + escapeHTML(r.destino) : ''}</option>`).join('')
+      : '<option value="" disabled selected>No tienes rutas guardadas</option>';
+
+    overlay.innerHTML = `
+      <div class="sa-header">
+        <div class="sa-title">Asigna tus fotos</div>
+        <button class="sa-done" id="sa-done">✕ Hecho</button>
+      </div>
+      <div class="sa-controls">
+        <select class="sa-select" id="sa-route">${routeOptions}</select>
+        <button class="sa-all" id="sa-all">Seleccionar todas</button>
+      </div>
+      <div class="sa-grid" id="sa-grid"></div>
+      <div class="sa-footer">
+        <div class="sa-count" id="sa-count">0 seleccionadas</div>
+        <div class="sa-actions">
+          <button class="sa-add" id="sa-add" disabled>Añadir a ruta</button>
+          <button class="sa-discard" id="sa-discard" disabled>Descartar</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+
+    const grid = overlay.querySelector('#sa-grid');
+    const countEl = overlay.querySelector('#sa-count');
+    const addBtn = overlay.querySelector('#sa-add');
+    const discardBtn = overlay.querySelector('#sa-discard');
+    const allBtn = overlay.querySelector('#sa-all');
+    const routeSel = overlay.querySelector('#sa-route');
+
+    // Estado
+    const selected = new Set();
+    const assigned = new Set(); // indices ya asignados (lock)
+
+    function renderTiles() {
+      grid.innerHTML = '';
+      uploadedPhotos.forEach((p, idx) => {
+        const tile = document.createElement('div');
+        tile.className = 'sa-tile';
+        if (selected.has(idx)) tile.classList.add('sa-selected');
+        if (assigned.has(idx)) tile.classList.add('sa-assigned');
+        tile.innerHTML = `
+          <img src="${p.url}" loading="lazy" alt="">
+          <div class="sa-mark">✓</div>
+          ${!p.hasGps ? '<div class="sa-nogps">Sin GPS</div>' : ''}
+        `;
+        tile.addEventListener('click', () => {
+          if (assigned.has(idx)) return;
+          if (selected.has(idx)) selected.delete(idx);
+          else selected.add(idx);
+          tile.classList.toggle('sa-selected');
+          updateCount();
+        });
+        grid.appendChild(tile);
+      });
+    }
+
+    function updateCount() {
+      const n = selected.size;
+      countEl.textContent = `${n} seleccionada${n === 1 ? '' : 's'}`;
+      const hasRoutes = routes.length > 0;
+      addBtn.disabled = n === 0 || !hasRoutes;
+      discardBtn.disabled = n === 0;
+      if (hasRoutes && routeSel.value) {
+        const r = routes.find(x => x.id === routeSel.value);
+        addBtn.textContent = n ? `Añadir ${n} a ${r ? r.name : 'ruta'}` : 'Añadir a ruta';
+      }
+    }
+
+    allBtn.addEventListener('click', () => {
+      // Alterna: si hay pendientes sin seleccionar → selecciona todos los no asignados; si todos seleccionados → deselecciona
+      const pending = uploadedPhotos.map((_, i) => i).filter(i => !assigned.has(i));
+      const allSelected = pending.every(i => selected.has(i));
+      if (allSelected) pending.forEach(i => selected.delete(i));
+      else pending.forEach(i => selected.add(i));
+      renderTiles();
+      updateCount();
+    });
+
+    routeSel.addEventListener('change', updateCount);
+
+    addBtn.addEventListener('click', async () => {
+      if (!selected.size || !routeSel.value) return;
+      addBtn.disabled = true; addBtn.textContent = 'Asignando...';
+      const routeId = routeSel.value;
+      const ids = Array.from(selected);
+      try {
+        const batch = fdb.batch();
+        ids.forEach(idx => {
+          const p = uploadedPhotos[idx];
+          batch.update(fdb.collection('users').doc(uid).collection('fotos').doc(p.fotoDocId), { routeId });
+          if (p.pinDocId) batch.update(fdb.collection('users').doc(uid).collection('pins').doc(p.pinDocId), { routeId });
+        });
+        await batch.commit();
+        ids.forEach(idx => { assigned.add(idx); selected.delete(idx); });
+        renderTiles();
+        updateCount();
+      } catch (err) {
+        console.error('[share-inbox] assign error', err);
+        alert('Error asignando fotos');
+        addBtn.disabled = false;
+      }
+    });
+
+    discardBtn.addEventListener('click', async () => {
+      if (!selected.size) return;
+      if (!confirm(`¿Borrar ${selected.size} foto${selected.size === 1 ? '' : 's'}? Esta acción es irreversible.`)) return;
+      discardBtn.disabled = true; discardBtn.textContent = 'Borrando...';
+      const ids = Array.from(selected);
+      try {
+        for (const idx of ids) {
+          const p = uploadedPhotos[idx];
+          // Borrar de R2
+          try {
+            await fetch(window.SALMA_API + '/delete-photo', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ key: p.key })
+            });
+          } catch (_) {}
+          // Borrar de Firestore
+          try { await fdb.collection('users').doc(uid).collection('fotos').doc(p.fotoDocId).delete(); } catch (_) {}
+          if (p.pinDocId) try { await fdb.collection('users').doc(uid).collection('pins').doc(p.pinDocId).delete(); } catch (_) {}
+          // Marcar como "desaparecida" del array (null placeholder) para que índices sigan estables
+          uploadedPhotos[idx] = null;
+        }
+        // Rebuild array sin nulls, reset selected
+        const remaining = uploadedPhotos.filter(x => x);
+        uploadedPhotos.length = 0;
+        remaining.forEach(p => uploadedPhotos.push(p));
+        selected.clear();
+        assigned.clear(); // los índices cambiaron, pero ya no hay forma simple de preservarlos → se limpian
+        renderTiles();
+        updateCount();
+        discardBtn.textContent = 'Descartar';
+      } catch (err) {
+        console.error('[share-inbox] discard error', err);
+        alert('Error borrando fotos');
+        discardBtn.disabled = false;
+        discardBtn.textContent = 'Descartar';
+      }
+    });
+
+    overlay.querySelector('#sa-done').addEventListener('click', () => {
+      overlay.remove();
+      // Al cerrar, abrir mapa con pins recargados
+      if (typeof window.openLiveMap === 'function') {
+        if (typeof window._pinsLoaded !== 'undefined') window._pinsLoaded = false;
+        window.openLiveMap();
+      }
+    });
+
+    renderTiles();
+    updateCount();
+  }
+
+  function escapeHTML(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
 
   async function runInbox() {
@@ -269,11 +496,9 @@
     await waitForUser();
 
     const uid = window.currentUser.uid;
-    // `db` es const global de app.js — accesible por scope global en scripts no-módulo
     const fdb = (typeof db !== 'undefined') ? db : firebase.firestore();
 
-    let withGps = 0;
-    let withoutGps = 0;
+    const uploaded = [];
     let failed = 0;
 
     for (let i = 0; i < files.length; i++) {
@@ -281,9 +506,7 @@
       updateProgress((i / files.length) * 100);
       try {
         const res = await processOne(files[i], uid, fdb);
-        if (res.hasGps) withGps++;
-        else withoutGps++;
-        // Borrar de la inbox tras procesar con éxito
+        uploaded.push(res);
         if (cache) await cache.delete(files[i].req);
       } catch (err) {
         console.warn('[share-inbox]', err);
@@ -292,25 +515,16 @@
     }
 
     updateProgress(100);
+    closeOverlay();
 
-    const parts = [];
-    if (withGps) parts.push(`${withGps} añadida${withGps > 1 ? 's' : ''} al mapa`);
-    if (withoutGps) parts.push(`${withoutGps} en galería sin ubicación`);
-    if (failed) parts.push(`${failed} fallaron`);
-    showOverlay(parts.join(' · ') || 'Listo');
-
-    const btn = document.getElementById('share-inbox-close');
-    if (btn) {
-      btn.style.display = 'inline-block';
-      btn.onclick = () => {
-        closeOverlay();
-        if (withGps && typeof window.openLiveMap === 'function') {
-          // Resetear flag de pins cargados para que traiga los nuevos
-          if (typeof window._pinsLoaded !== 'undefined') window._pinsLoaded = false;
-          window.openLiveMap();
-        }
-      };
+    if (!uploaded.length) {
+      showOverlay('No se pudo subir ninguna foto.');
+      setTimeout(closeOverlay, 2500);
+      return;
     }
+
+    // Pantalla de asignación
+    await showAssignmentUI(uploaded, uid, fdb);
   }
 
   // Arrancar si venimos de un share
