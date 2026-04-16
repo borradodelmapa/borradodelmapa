@@ -3275,11 +3275,8 @@ function openLiveMap() {
 
       _resumeMapGPS();
 
-      // Restaurar ruta activa de sesión anterior
-      try {
-        const saved = JSON.parse(localStorage.getItem('bdm_live_active_route') || 'null');
-        if (saved) selectRouteOnMap(saved);
-      } catch(_){}
+      // Restaurar ruta activa — primero Firestore (sync entre dispositivos), fallback localStorage
+      _restoreActiveRoute();
     })
     .catch((e) => {
       console.error('[LiveMap] Error cargando Google Maps:', e);
@@ -3474,7 +3471,7 @@ async function openRouteSelector() {
       item.innerHTML = `<span class="lmrs-item-title">${d.nombre || 'Mi ruta'}</span>
         <span class="lmrs-item-meta">${days} día${days > 1 ? 's' : ''} · ${validStops.length} paradas con coords</span>`;
       item.addEventListener('click', () => {
-        if (routeData) selectRouteOnMap(routeData);
+        if (routeData) selectRouteOnMap(routeData, doc.id);
         else showToast('Esta ruta no tiene datos de mapa');
         closeRouteSelector();
       });
@@ -3493,11 +3490,19 @@ let _liveRouteStops = [];
 let _liveInfoWindow = null;
 let _activeRouteData = null;
 
-function selectRouteOnMap(routeData) {
+function selectRouteOnMap(routeData, docId) {
   if (!_liveMap || !window.google) return;
   clearRouteFromLiveMap();
   _activeRouteData = routeData;
+  _activeRouteDocId = docId || null;
   try { localStorage.setItem('bdm_live_active_route', JSON.stringify(routeData)); } catch(_){}
+  try { if (docId) localStorage.setItem('bdm_live_active_route_id', docId); else localStorage.removeItem('bdm_live_active_route_id'); } catch(_){}
+  // Sincronizar con Firestore (entre dispositivos)
+  if (currentUser && typeof db !== 'undefined') {
+    db.collection('users').doc(currentUser.uid)
+      .set({ active_route_id: docId || null }, { merge: true })
+      .catch(() => {});
+  }
 
   const dayColors = ['#D4A843','#E87040','#5CB85C','#5BC0DE','#D9534F','#AA66CC','#FF8C00'];
   const valid = (routeData.stops || []).filter(s => s.lat && s.lng);
@@ -3631,7 +3636,14 @@ function _updateNearestChip() {
 
 function clearRouteFromLiveMap() {
   _activeRouteData = null;
+  _activeRouteDocId = null;
   try { localStorage.removeItem('bdm_live_active_route'); } catch(_){}
+  try { localStorage.removeItem('bdm_live_active_route_id'); } catch(_){}
+  if (currentUser && typeof db !== 'undefined') {
+    db.collection('users').doc(currentUser.uid)
+      .set({ active_route_id: null }, { merge: true })
+      .catch(() => {});
+  }
   _liveRouteMarkers.forEach(m => m.setMap(null));
   _liveRouteMarkers = [];
   if (_liveRoutePolyline) { _liveRoutePolyline.setMap(null); _liveRoutePolyline = null; }
@@ -3641,6 +3653,33 @@ function clearRouteFromLiveMap() {
   if (btn) btn.style.display = 'none';
   const chip = document.getElementById('live-map-nearest-chip');
   if (chip) chip.style.display = 'none';
+}
+
+async function _restoreActiveRoute() {
+  // 1) Intentar Firestore (sincronizado entre dispositivos)
+  if (currentUser && typeof db !== 'undefined') {
+    try {
+      const userDoc = await db.collection('users').doc(currentUser.uid).get();
+      const activeId = userDoc.exists ? userDoc.data().active_route_id : null;
+      if (activeId) {
+        const mapDoc = await db.collection('users').doc(currentUser.uid).collection('maps').doc(activeId).get();
+        if (mapDoc.exists) {
+          const d = mapDoc.data();
+          let routeData = null;
+          try { routeData = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null; } catch(_){}
+          if (routeData) { selectRouteOnMap(routeData, activeId); return; }
+        }
+        // La ruta ya no existe → limpiar referencia
+        await db.collection('users').doc(currentUser.uid).set({ active_route_id: null }, { merge: true }).catch(() => {});
+      }
+    } catch(_){}
+  }
+  // 2) Fallback localStorage (offline o sesión invitada)
+  try {
+    const saved = JSON.parse(localStorage.getItem('bdm_live_active_route') || 'null');
+    const savedId = localStorage.getItem('bdm_live_active_route_id') || null;
+    if (saved) selectRouteOnMap(saved, savedId);
+  } catch(_){}
 }
 
 window.closeLiveMap = closeLiveMap;
