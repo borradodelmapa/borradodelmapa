@@ -546,6 +546,7 @@
 
     overlay.querySelector('#sa-done').addEventListener('click', async () => {
       overlay.remove();
+      try { sessionStorage.removeItem('share_pending'); } catch (_) {}
       if (typeof window.openLiveMap !== 'function') return;
       window.openLiveMap();
       // Esperar a que el mapa esté cargado
@@ -660,7 +661,10 @@
       check();
     });
 
-    // Limpiar el param de la URL para que no se re-ejecute en recargas
+    // Marcar en sessionStorage por si hay redirect (ej: Google login completo en móvil)
+    try { sessionStorage.setItem('share_pending', '1'); } catch (_) {}
+
+    // Limpiar el param de la URL para que no se re-ejecute en recargas normales
     try {
       const cleanUrl = window.location.pathname + window.location.hash;
       window.history.replaceState({}, '', cleanUrl);
@@ -671,6 +675,7 @@
     const { cache, files } = await getInboxFiles();
 
     if (!files.length) {
+      try { sessionStorage.removeItem('share_pending'); } catch (_) {}
       showOverlay('No se encontraron fotos para añadir.');
       setTimeout(closeOverlay, 2000);
       return;
@@ -713,6 +718,7 @@
     closeOverlay();
 
     if (!uploaded.length) {
+      try { sessionStorage.removeItem('share_pending'); } catch (_) {}
       showOverlay('No se pudo subir ninguna foto.');
       setTimeout(closeOverlay, 2500);
       return;
@@ -722,16 +728,34 @@
     await showAssignmentUI(uploaded, uid, fdb);
   }
 
-  // Arrancar si venimos de un share
-  function maybeStart() {
+  async function hasPendingFiles() {
+    try {
+      const cache = await caches.open('share-inbox');
+      const keys = await cache.keys();
+      return keys.length > 0;
+    } catch (_) { return false; }
+  }
+
+  // Arrancar si venimos de un share — o si quedó pendiente tras un redirect (ej: Google login)
+  async function maybeStart() {
     try {
       const params = new URLSearchParams(window.location.search);
       if (params.get('share') === 'ready') {
         runInbox();
-      } else if (params.get('share') === 'error') {
+        return;
+      }
+      if (params.get('share') === 'error') {
         showOverlay('No se pudieron recibir las fotos compartidas.');
         setTimeout(closeOverlay, 3000);
         try { window.history.replaceState({}, '', window.location.pathname); } catch (_) {}
+        return;
+      }
+      // Resumen tras redirect: hay flag en sessionStorage + archivos en caché
+      let pending = false;
+      try { pending = sessionStorage.getItem('share_pending') === '1'; } catch (_) {}
+      if (pending && await hasPendingFiles()) {
+        console.log('[share-inbox] Resumiendo flujo tras redirect');
+        runInbox();
       }
     } catch (_) {}
   }
