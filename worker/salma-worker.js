@@ -2882,15 +2882,6 @@ function mergeBlocks(blockResults, originalMessage) {
 // VERIFICACIÓN DE PARADAS — Google Places (post-generación)
 // ═══════════════════════════════════════════════════════════════
 
-// Distancia real entre dos puntos (Haversine) — precisa a cualquier latitud
-function haversineKm(lat1, lng1, lat2, lng2) {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLng = (lng2 - lng1) * Math.PI / 180;
-  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
 // Normaliza texto para comparación: sin tildes, lowercase, sin puntuación
 function normalizeForMatch(str) {
   return (str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
