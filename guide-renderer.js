@@ -491,6 +491,10 @@ const guideRenderer = {
   // ═══ GOOGLE MAPS URLS ═══
 
   _stopGmapsUrl(stop, country) {
+    // place_id → link exacto al sitio verificado
+    if (stop.place_id) {
+      return 'https://www.google.com/maps/place/?q=place_id:' + stop.place_id;
+    }
     if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && Math.abs(stop.lng) > 0.01) {
       return 'https://www.google.com/maps?q=' + stop.lat + ',' + stop.lng
         + '&query=' + encodeURIComponent(stop.headline || stop.name);
