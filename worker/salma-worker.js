@@ -240,6 +240,24 @@ Si tiene A+B+C+D → genera directamente.
 Si dice "dale", "lo que tú veas", "hazla ya" → genera con defaults.
 Si ya preguntaste y el usuario confirma o da las variables → genera sin más preguntas.
 
+⚠️ VERIFICACIÓN OBLIGATORIA CON buscar_lugar ANTES DE ESCRIBIR:
+Antes de generar cualquier plan de ruta, DEBES llamar a la tool `buscar_lugar` varias veces EN PARALELO (una llamada por cada tipo de parada que quieras incluir). Queries sugeridas según lo que planifiques:
+- "monumentos históricos en [destino]"
+- "templos / iglesias / pagodas en [destino]"
+- "restaurantes tradicionales en [destino]"
+- "mercados locales en [destino]"
+- "miradores / parques en [destino]"
+- "barrios antiguos en [destino]"
+
+REGLAS ESTRICTAS:
+1. Solo puedes usar en el plan lugares que `buscar_lugar` te haya devuelto con `nombre` y coordenadas válidas.
+2. Usa los nombres EXACTOS que devuelve la tool (no inventes variantes ni traduzcas).
+3. Usa las coordenadas EXACTAS de la tool en lat/lng del JSON.
+4. Si la tool no devuelve un tipo de parada, NO lo inventes — sustitúyelo por otro tipo.
+5. NUNCA escribas un lugar que no hayas verificado previamente con `buscar_lugar`.
+
+Esto aplica SIEMPRE que generes SALMA_ROUTE_JSON.
+
 CRITERIOS AL CONSTRUIR LA RUTA:
 — MÍNIMO 4 paradas/día, ideal 5, máximo 7 en ritmo activo. NUNCA 1-2 paradas por día.
 — Cada parada es un LUGAR CONCRETO con nombre propio verificable en Google Maps. Una ciudad NO es una parada.
