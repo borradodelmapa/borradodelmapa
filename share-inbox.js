@@ -734,13 +734,140 @@
     closeOverlay();
 
     if (!uploaded.length) {
+      try { sessionStorage.removeItem('share_pending'); } catch (_) {}
       showOverlay('No se pudo subir ninguna foto.');
       setTimeout(closeOverlay, 2500);
       return;
     }
 
-    // Pantalla de asignación
-    await showAssignmentUI(uploaded, uid, fdb);
+    // Decidir flujo según haya ruta activa
+    const activeRouteId = await _getActiveRouteId(fdb, uid);
+    if (activeRouteId) {
+      await _fastAssignToActiveRoute(uploaded, uid, fdb, activeRouteId);
+    } else {
+      // Sin ruta activa → pantalla de asignación manual
+      await showAssignmentUI(uploaded, uid, fdb);
+    }
+  }
+
+  // ─────────── Flujo rápido: hay ruta activa ───────────
+  async function _getActiveRouteId(fdb, uid) {
+    try {
+      const doc = await fdb.collection('users').doc(uid).get();
+      return doc.exists ? (doc.data().active_route_id || null) : null;
+    } catch (_) { return null; }
+  }
+
+  async function _getUserPosition() {
+    // 1) Última posición guardada si es fresca (<30 min)
+    try {
+      const raw = localStorage.getItem('salma_last_pos');
+      if (raw) {
+        const p = JSON.parse(raw);
+        if (p && p.lat && p.lng) {
+          const age = p.ts ? (Date.now() - p.ts) : Infinity;
+          if (age < 30 * 60 * 1000) return { lat: p.lat, lng: p.lng, source: 'cached' };
+        }
+      }
+    } catch (_) {}
+    // 2) GPS fresco (con timeout 8s)
+    if (navigator.geolocation) {
+      return new Promise((resolve) => {
+        showOverlay('Obteniendo tu ubicación...');
+        navigator.geolocation.getCurrentPosition(
+          (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude, source: 'fresh' }),
+          () => resolve(null),
+          { maximumAge: 60000, timeout: 8000, enableHighAccuracy: false }
+        );
+      });
+    }
+    return null;
+  }
+
+  async function _fastAssignToActiveRoute(uploaded, uid, fdb, routeId) {
+    // Obtener nombre de la ruta para el toast
+    let routeName = 'ruta activa';
+    try {
+      const mapDoc = await fdb.collection('users').doc(uid).collection('maps').doc(routeId).get();
+      if (mapDoc.exists) routeName = mapDoc.data().nombre || routeName;
+    } catch (_) {}
+
+    // Si alguna foto no trae EXIF GPS, necesitamos la posición del móvil
+    const needDevicePos = uploaded.some(p => !p.hasGps);
+    let devicePos = null;
+    if (needDevicePos) devicePos = await _getUserPosition();
+
+    showOverlay(`Añadiendo a ${routeName}...`);
+
+    const batch = fdb.batch();
+    const coordsForMap = [];
+    let withPin = 0;
+    let noLoc = 0;
+
+    for (const p of uploaded) {
+      // Determinar coords: EXIF primero, si no GPS del móvil
+      let lat = null, lng = null;
+      if (p.hasGps) { lat = p.lat; lng = p.lng; }
+      else if (devicePos) { lat = devicePos.lat; lng = devicePos.lng; }
+
+      const fotoRef = fdb.collection('users').doc(uid).collection('fotos').doc(p.fotoDocId);
+      const fotoUpd = { routeId };
+      if (lat !== null && lng !== null) { fotoUpd.lat = lat; fotoUpd.lng = lng; }
+      batch.update(fotoRef, fotoUpd);
+
+      if (lat !== null && lng !== null) {
+        if (p.pinDocId) {
+          batch.update(
+            fdb.collection('users').doc(uid).collection('pins').doc(p.pinDocId),
+            { routeId }
+          );
+        } else {
+          const pinRef = fdb.collection('users').doc(uid).collection('pins').doc();
+          batch.set(pinRef, {
+            lat, lng,
+            locName: '',
+            photoUrl: p.url,
+            routeId,
+            source: 'share',
+            createdAt: p.createdAt
+          });
+          p.pinDocId = pinRef.id;
+        }
+        withPin++;
+        coordsForMap.push({ lat, lng });
+      } else {
+        noLoc++;
+      }
+    }
+
+    try {
+      await batch.commit();
+      try { sessionStorage.removeItem('share_pending'); } catch (_) {}
+      closeOverlay();
+
+      const msgs = [];
+      if (withPin) msgs.push(`${withPin} en el mapa`);
+      if (noLoc) msgs.push(`${noLoc} solo galería`);
+      showShareToast(`✓ Añadido${withPin + noLoc === 1 ? '' : 's'} a ${routeName} · ${msgs.join(' · ')}`);
+
+      if (withPin > 0 && typeof window.openLiveMap === 'function') {
+        setTimeout(async () => {
+          window.openLiveMap();
+          await new Promise(r => setTimeout(r, 500));
+          if (typeof window.reloadSavedPins === 'function') {
+            try { await window.reloadSavedPins(); } catch (_) {}
+          }
+          if (typeof window.liveMapFitPins === 'function') {
+            window.liveMapFitPins(coordsForMap);
+          }
+        }, 1800);
+      }
+    } catch (err) {
+      console.error('[share-inbox] fast path error', err);
+      alert('Error añadiendo fotos a la ruta activa');
+      // Fallback: pasar a pantalla de asignación
+      await showAssignmentUI(uploaded, uid, fdb);
+    }
   }
 
   // Arrancar si venimos de un share

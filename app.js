@@ -3457,7 +3457,7 @@ function _resumeMapGPS() {
 
 function _placeUserMarker(latlng) {
   if (!_liveMap) return;
-  localStorage.setItem('salma_last_pos', JSON.stringify({ lat: latlng.lat, lng: latlng.lng }));
+  localStorage.setItem('salma_last_pos', JSON.stringify({ lat: latlng.lat, lng: latlng.lng, ts: Date.now() }));
   if (_liveUserMarker) {
     _liveUserMarker.setPosition(latlng);
   } else {

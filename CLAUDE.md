@@ -1,5 +1,70 @@
 # CLAUDE.md — Borrado del Mapa
 ## V2 Mapa — 11 abril 2026 | Backup: `backups/borradodelmapa-v2-mapa-2026-04-11/`
+## V3 Share + Fotos — 17 abril 2026 (sesión)
+
+---
+
+## Sesión 17 abril 2026 — Fotos compartidas + UX Mis Viajes
+
+### Cambios (todos ya en `main`):
+
+1. **Mis Viajes: orden de grupos por guía más reciente** ([app.js:2028-2033])
+   Antes se agrupaban por `destino` alfabéticamente. Tu última guía quedaba escondida.
+
+2. **Mis Viajes: agrupación por PAÍS con detección en cascada** ([app.js:_detectGuideCountry])
+   - Cache en Firestore (`country_code` + `country_name` por guía, se guarda al detectar)
+   - Fallbacks: texto destino+nombre → primer stop del itinerarioIA → Nominatim reverse geocode con lat/lng del primer stop
+   - "Otros" siempre al final. Grupos ordenados por guía más reciente primero.
+
+3. **Ruta activa del mapa: persistencia entre sesiones y dispositivos** ([app.js:selectRouteOnMap/_restoreActiveRoute])
+   - Firestore: `users/{uid}.active_route_id` (sincroniza móvil ↔ portátil)
+   - localStorage: `bdm_live_active_route` + `bdm_live_active_route_id` (fallback offline)
+   - Restauración automática al abrir el mapa
+   - Bug colateral arreglado: `_activeRouteDocId` ahora SÍ se asigna → fotos del diario se etiquetan con la ruta correcta
+
+4. **Share Target Android (PWA): recibir fotos desde galería del móvil**
+   - `manifest.json` declara `share_target` → "Borrado del Mapa" sale en el menú Compartir
+   - `sw.js`: intercepta POST `/?share=1`, guarda en Cache Storage `share-inbox`, redirige a `/?share=ready`
+   - `share-inbox.js` (nuevo, ~800 líneas): parser EXIF mínimo (GPS + DateTimeOriginal), upload a R2, crea foto+pin en Firestore
+   - **Solo funciona en Android/Chrome con PWA instalada**. iOS/Safari no soporta Web Share Target.
+
+5. **Flujo de asignación de fotos compartidas**
+   - **Con ruta activa** → flujo directo: todas las fotos se añaden a esa ruta. Si tienen EXIF GPS usa esa coord, si no usa GPS del móvil (última conocida <30min ó fresca). Toast + abre mapa centrado. Sin pantalla de asignación.
+   - **Sin ruta activa** → pantalla de asignación: grid con miniaturas (recientes primero), selector de ruta, "Seleccionar todas", "Añadir a [ruta]", "Descartar"
+   - **Ubicar manualmente**: si foto no tiene GPS, botón "📍 Ubicar N" abre modal con Google Places Autocomplete. Aplica lat/lng + locName con micro-offset aleatorio (5-20m) para no solapar
+   - **Aviso al añadir sin GPS**: popup "esta foto no tiene ubicación — ¿ubicar primero o solo galería?"
+
+6. **Resume tras redirect** (para Google login en móvil que a veces hace full redirect)
+   - sessionStorage `share_pending=1` cuando empieza el flujo
+   - Al reentrar sin `?share=ready` pero con flag + archivos en cache → reanuda solo
+
+7. **Debug panel flotante** (`debug-panel.js`)
+   - Botón 🐛 flotante abajo-derecha en la app
+   - Intercepta console.log/warn/error + window errors + unhandled rejections
+   - Tap abre overlay con todos los logs + botón "Copiar" al portapapeles
+   - Badge rojo pulsante si hay error
+   - **Se queda activo por ahora** (útil para debuggear lo que venga)
+
+### Nuevas funciones expuestas (`window.*`):
+- `window.reloadSavedPins()` — borra markers + recarga pins desde Firestore
+- `window.liveMapFitPins(coords)` — encuadra mapa sobre conjunto de coords
+- `window.__dbg` — control del debug panel (open, logs)
+
+### Campos nuevos en Firestore:
+- `users/{uid}.active_route_id` — ID de la ruta seleccionada en el mapa live
+- `users/{uid}/maps/{id}.country_code` + `country_name` — país detectado (cache)
+- `users/{uid}/pins/{id}.source = 'share'` — pins creados desde fotos compartidas
+- `users/{uid}/fotos/{id}.source = 'share'` — idem fotos
+
+### Archivos nuevos:
+- `share-inbox.js` — handler de fotos compartidas
+- `debug-panel.js` — panel de logs flotante
+
+### Limitaciones conocidas (para retomar):
+- **iOS**: no funciona (Safari no soporta Web Share Target). Opción: app nativa real.
+- **WhatsApp/galería que strippea EXIF**: no hay GPS → se usa GPS del móvil o el user ubica manualmente
+- **Debug panel**: visible siempre. Quitarlo o ponerlo detrás de un flag cuando no haga falta
+- **Nominatim rate limit**: al cargar Mis Viajes con muchas guías sin country_code cached, puede tardar 1-3s la primera vez
 
 ---
 
