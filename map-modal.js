@@ -201,22 +201,22 @@
       return;
     }
 
-    // Destino único
-    if (dest.placeId) {
-      placesService.getDetails({ placeId: dest.placeId, fields: ['geometry','name'] }, (p, s) => {
-        if (s === google.maps.places.PlacesServiceStatus.OK && p && p.geometry) {
-          markDest(p.geometry.location, p.name || dest.name);
-        } else if (dest.name) {
-          placesService.findPlaceFromQuery({ query: dest.name, fields: ['geometry','name'] }, (r, st) => {
-            if (st === google.maps.places.PlacesServiceStatus.OK && r && r[0]) markDest(r[0].geometry.location, r[0].name);
+    // Destino único — saltarnos getDetails con placeId (a menudo inválido)
+    // Usar findPlaceFromQuery directamente → fallback a Geocoder
+    if (dest.name) {
+      console.log('[map-modal] resolviendo destino:', dest.name);
+      placesService.findPlaceFromQuery({ query: dest.name, fields: ['geometry','name','place_id'] }, (r, st) => {
+        console.log('[map-modal] findPlaceFromQuery status:', st, 'resultados:', r ? r.length : 0);
+        if (st === google.maps.places.PlacesServiceStatus.OK && r && r[0] && r[0].geometry) {
+          markDest(r[0].geometry.location, r[0].name);
+        } else {
+          // Fallback Geocoder
+          new google.maps.Geocoder().geocode({ address: dest.name }, (res, gst) => {
+            console.log('[map-modal] Geocoder status:', gst);
+            if (gst === 'OK' && res[0]) markDest(res[0].geometry.location, dest.name);
             else { const sp = document.getElementById('mm-spinner'); if (sp) sp.textContent = 'No se pudo encontrar el lugar'; }
           });
         }
-      });
-    } else if (dest.name) {
-      placesService.findPlaceFromQuery({ query: dest.name, fields: ['geometry','name'] }, (r, st) => {
-        if (st === google.maps.places.PlacesServiceStatus.OK && r && r[0]) markDest(r[0].geometry.location, r[0].name);
-        else { const sp = document.getElementById('mm-spinner'); if (sp) sp.textContent = 'No se pudo encontrar el lugar'; }
       });
     } else {
       const sp = document.getElementById('mm-spinner'); if (sp) sp.remove();
