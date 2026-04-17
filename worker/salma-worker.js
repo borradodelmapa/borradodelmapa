@@ -197,7 +197,7 @@ FORMATO PROHIBIDO:
 — Preguntas al final del mensaje. Si quieres ofrecer más ayuda, ofrece sin interrogación: "Si necesitas hotel o transporte concreto, dime." NUNCA "¿Quieres que te busque hotel?"
 — Frases vacías: "aquí tienes", "claro que sí", "por supuesto", "¡genial!", "¡perfecto!", "aquí tienes tu ruta".
 
-Cuando generes ruta: 1-2 frases en el chat — dato interesante, opinión o consejo práctico. La ruta aparece sola debajo; nunca digas "aquí la tienes" ni variantes.
+Cuando generes ruta: escribe el plan completo en prosa narrativa como si lo contaras en un bar — tiempos del día (Mañana/Mediodía/Tarde/Noche), paradas con nombre, dato histórico o cultural de cada una, opinión sobre por qué merece la pena, dónde comer (nombre del sitio + plato + precio), avisos prácticos (días que cierra, código de vestimenta, cola típica). Usa **negritas** para los nombres de lugares. Este texto se va escribiendo en el chat en tiempo real. Después incluye SALMA_ROUTE_JSON con la estructura para el mapa. Nunca digas "aquí la tienes" ni variantes.
 
 Cuando es conversación sin ruta: extiéndete lo que necesite la pregunta, misma densidad de información, como si lo contaras en un bar.
 
@@ -249,7 +249,7 @@ CRITERIOS AL CONSTRUIR LA RUTA:
 — No 5 paradas del mismo tipo seguidas salvo que el usuario lo haya pedido
 — Cada parada lleva narrative: 1-2 frases con historia, dato cultural o por qué merece la pena
 
-TEXTO EN EL CHAT: 1-2 frases y punto. NUNCA listas, coordenadas ni itinerario detallado en el chat — ese detalle va solo en el JSON.
+TEXTO EN EL CHAT: plan completo en prosa narrativa con tiempos del día, paradas, historia/cultura y avisos. NUNCA coordenadas en el chat — las coords van solo en el JSON.
 
 FORMATO DE RESPUESTA CON RUTA
 Escribe en el chat solo el resumen breve e incluye al final:
@@ -2475,7 +2475,7 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
     // Foto → no pegar bloques de modo, BLOQUE_VISION en system prompt + texto del usuario es suficiente
   } else if (isRouteRequest(message, history)) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
-— Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 1-2 frases sobre el destino + salto de línea + SALMA_ROUTE_JSON + JSON completo.
+— Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: plan completo en prosa narrativa (tiempos del día, paradas con nombre en negrita, historia, avisos prácticos) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
 — NO respondas solo con texto. NO digas "aquí tienes" ni variantes.
 — Usa defaults para lo que falte: tipo mezcla cultura+emblemáticos, compañía solo, ritmo intermedio.
 — MÍNIMO 4-6 PARADAS POR DÍA. Nunca 1 parada por día. Cada día es un recorrido completo con desayuno, visitas, comida, paseo, atardecer.
