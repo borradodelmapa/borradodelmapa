@@ -6939,6 +6939,30 @@ INSTRUCCIONES:
           const _cc = countryCode || userCountryCode || '';
           try { reply = await injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc); } catch (_) {}
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
+
+          // FALLBACK: si no hay ningún link dir/ (Claude no puso negritas) y el mensaje del usuario
+          // parece una pregunta sobre un lugar concreto, inyectar "Cómo llegar" al final usando el mensaje
+          if (!/google\.com\/maps\/dir/i.test(reply) && message && message.length > 3 && message.length < 120) {
+            const _msgClean = message.trim().replace(/[¿?¡!.,;:]+$/g, '');
+            // Heurística: mensaje corto sin preguntas "qué/cómo/cuándo/dónde es" → tratamos como lugar
+            const _isQuestion = /^\s*(qu[eé]|c[oó]mo|cu[aá]ndo|d[oó]nde|por qu[eé]|hola|gracias|salma)/i.test(_msgClean);
+            if (!_isQuestion && _msgClean.split(/\s+/).length >= 2) {
+              try {
+                const _q = _region ? `${_msgClean}, ${_region}` : _msgClean;
+                const _cf = _cc ? `&components=country:${_cc}` : '';
+                const _r = await fetch(
+                  `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(_q)}&inputtype=textquery${_cf}&fields=place_id,name&language=es&key=${env.GOOGLE_PLACES_KEY}`,
+                  { signal: AbortSignal.timeout(3000) }
+                );
+                const _d = await _r.json();
+                const _p = _d?.candidates?.[0];
+                if (_p?.place_id) {
+                  const _link = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(_p.name || _msgClean)}&destination_place_id=${_p.place_id}`;
+                  reply = reply.trimEnd() + `\n\n${_link}`;
+                }
+              } catch (_) {}
+            }
+          }
         }
 
         // (transport_actions ya emitidos ANTES de Claude)
