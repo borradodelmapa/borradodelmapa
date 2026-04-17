@@ -20,6 +20,7 @@
 #mm-searchbox { position: absolute; top: 14px; left: 14px; z-index: 11; background: #fff; border-radius: 22px; padding: 8px 14px; width: min(340px, calc(100% - 80px)); box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
 #mm-searchbox input { width: 100%; border: 0; outline: 0; font-size: 14px; font-family: 'Inter', sans-serif; color: #111; background: transparent; }
 #mm-searchbox input::placeholder { color: #999; }
+#mm-open { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: #f0b429; color: #060503; border: none; padding: 12px 20px; border-radius: 22px; font-size: 13px; font-weight: 700; cursor: pointer; z-index: 12; box-shadow: 0 4px 14px rgba(0,0,0,0.5); font-family: 'Inter', sans-serif; }
 #mm-spinner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #f0b429; font-size: 14px; z-index: 5; font-family: 'Inter', sans-serif; background: rgba(0,0,0,0.7); padding: 10px 16px; border-radius: 8px; }
     `;
     document.head.appendChild(s);
@@ -128,7 +129,20 @@
           polylineOptions: { strokeColor: '#f0b429', strokeWeight: 5, strokeOpacity: 0.85 },
         });
         ds.route({ origin: userLoc, destination: loc, travelMode: google.maps.TravelMode.DRIVING }, (r, st) => {
-          if (st === 'OK') dr.setDirections(r);
+          console.log('[map-modal] DirectionsService status:', st);
+          if (st === 'OK') {
+            dr.setDirections(r);
+          } else {
+            // Fallback: polyline recta dorada
+            new google.maps.Polyline({
+              path: [userLoc, loc], map: _mmMap,
+              strokeColor: '#f0b429', strokeWeight: 4, strokeOpacity: 0.7,
+              geodesic: true,
+            });
+            const b = new google.maps.LatLngBounds();
+            b.extend(userLoc); b.extend(loc);
+            _mmMap.fitBounds(b, 80);
+          }
         });
       }
 
@@ -263,10 +277,12 @@
           <input id="mm-search-input" type="text" placeholder="Buscar hoteles, farmacias, restaurantes...">
         </div>
         <button id="mm-close" aria-label="Cerrar">×</button>
+        <button id="mm-open">📍 Abrir en Google Maps</button>
       `;
       document.body.appendChild(modal);
 
       document.getElementById('mm-close').addEventListener('click', _close);
+      document.getElementById('mm-open').addEventListener('click', () => window.open(url, '_blank'));
 
       const ensureGoogle = () => {
         if (window.google && google.maps && google.maps.places) return Promise.resolve();
