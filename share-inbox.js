@@ -482,9 +482,17 @@
 
     addBtn.addEventListener('click', async () => {
       if (!selected.size || !routeSel.value) return;
+      const ids = Array.from(selected);
+      const noGpsCount = ids.filter(i => !uploadedPhotos[i].hasGps).length;
+      // Aviso si hay seleccionadas sin ubicación — irían a la galería pero sin pin en mapa
+      if (noGpsCount > 0) {
+        const msg = noGpsCount === ids.length
+          ? `Esta${noGpsCount === 1 ? '' : 's'} ${noGpsCount} foto${noGpsCount === 1 ? '' : 's'} no tiene${noGpsCount === 1 ? '' : 'n'} ubicación.\n\n"Aceptar" = Añadir sin pin en el mapa\n"Cancelar" = Ubicar primero`
+          : `De las ${ids.length} seleccionadas, ${noGpsCount} no tiene${noGpsCount === 1 ? '' : 'n'} ubicación e irá${noGpsCount === 1 ? '' : 'n'} solo a la galería (sin pin en el mapa).\n\n"Aceptar" = Añadir igualmente\n"Cancelar" = Ubicarlas primero`;
+        if (!confirm(msg)) return;
+      }
       addBtn.disabled = true; addBtn.textContent = 'Asignando...';
       const routeId = routeSel.value;
-      const ids = Array.from(selected);
       try {
         const batch = fdb.batch();
         ids.forEach(idx => {
@@ -650,14 +658,24 @@
   }
 
   async function runInbox() {
-    // Esperar a que Firebase y currentUser estén listos
-    const waitForUser = () => new Promise((resolve) => {
-      const check = () => {
-        const hasDb = typeof db !== 'undefined' || (window.firebase && window.firebase.firestore);
-        if (hasDb && window.currentUser) resolve();
-        else setTimeout(check, 300);
-      };
-      check();
+    // Espera un firebase.auth().currentUser (instantáneo en cuanto Firebase restaura sesión).
+    // No esperamos a window.currentUser porque ése se llena tras leer Firestore y puede tardar.
+    const waitForAuthUser = () => new Promise((resolve) => {
+      if (!window.firebase || !firebase.auth) {
+        const poll = () => {
+          if (window.firebase && firebase.auth) setup();
+          else setTimeout(poll, 100);
+        };
+        poll();
+      } else setup();
+
+      function setup() {
+        if (firebase.auth().currentUser) { resolve(firebase.auth().currentUser); return; }
+        // Subscribirse hasta que haya user. NO abrimos el login nosotros — Firebase ya lo hace solo.
+        const unsub = firebase.auth().onAuthStateChanged((user) => {
+          if (user) { unsub(); resolve(user); }
+        });
+      }
     });
 
     // Limpiar el param de la URL para que no se re-ejecute en recargas
@@ -676,21 +694,19 @@
       return;
     }
 
-    // Si no hay user → cerrar overlay, mostrar banner y abrir login
-    const loginWarnTimer = setTimeout(() => {
+    // Comprobación inmediata: si no hay sesión cerramos overlay y mostramos banner
+    // (Firebase ya abre el login solo en app.js:onAuthStateChanged → openModal)
+    const hasAuthNow = !!(window.firebase && firebase.auth && firebase.auth().currentUser);
+    if (!hasAuthNow) {
       closeOverlay();
       _showLoginBanner();
-      if (typeof window.openModal === 'function') {
-        try { window.openModal(); } catch(_) {}
-      }
-    }, 800);
-    await waitForUser();
-    clearTimeout(loginWarnTimer);
+    }
+
+    const authUser = await waitForAuthUser();
     _hideLoginBanner();
-    // Re-mostrar overlay para la fase de subida
     showOverlay('Preparando subida...');
 
-    const uid = window.currentUser.uid;
+    const uid = authUser.uid;
     const fdb = (typeof db !== 'undefined') ? db : firebase.firestore();
 
     const uploaded = [];
