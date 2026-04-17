@@ -1097,6 +1097,11 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode) {
 
   // Limpiar PRIMERO cualquier URL de Maps que Claude haya puesto por su cuenta
   let enriched = reply;
+  // Quitar duplicaciones bold+link de Claude: [**Name**](URL) → **Name**
+  enriched = enriched.replace(/\[\*\*([^\]*]+)\*\*\]\([^)]+\)/g, '**$1**');
+  // **Name** [Name](URL) → **Name** (con o sin espacio)
+  enriched = enriched.replace(/\*\*([^*]+)\*\*\s*\[([^\]]+)\]\([^)]+\)/g, '**$1**');
+  // URLs sueltas de Maps inventadas por Claude
   enriched = enriched.replace(/\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/search\/[^\s)]*\)?/gi, '');
   enriched = enriched.replace(/\s*https?:\/\/(?:www\.)?google\.com\/maps\/dir\/[^\s)>\]]+/gi, '');
   enriched = enriched.replace(/\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/place\/[^\s)]*\)?/gi, '');
