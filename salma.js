@@ -56,7 +56,47 @@ const salma = {
       this._voiceOn = !this._voiceOn;
       localStorage.setItem('salma_voice', this._voiceOn ? 'true' : 'false');
       this._updateVoiceToggleUI();
-      if (!this._voiceOn) this.salmaSpeakStop();
+      if (this._voiceOn) {
+        // Warm-up: desbloquear sintetizador dentro del gesto de usuario
+        // Android Chrome requiere speak() dentro de un user gesture la primera vez.
+        this._warmUpSpeech();
+      } else {
+        this.salmaSpeakStop();
+      }
+    });
+  },
+
+  // Dispara una utterance ultra-corta para "calentar" el sintetizador tras un gesto
+  _warmUpSpeech() {
+    if (!window.speechSynthesis) return;
+    try {
+      const warm = new SpeechSynthesisUtterance(' ');
+      warm.volume = 0; // silencioso
+      warm.rate = 10; // rápido
+      speechSynthesis.speak(warm);
+      console.log('[Salma] Sintetizador TTS calentado');
+      // Recargar voces por si el evento onvoiceschanged no dispara
+      setTimeout(() => {
+        const v = speechSynthesis.getVoices();
+        if (v && v.length) { this._voices = v; console.log('[Salma] Voces cargadas:', v.length); }
+      }, 200);
+    } catch (_) {}
+  },
+
+  // Espera a que haya al menos una voz disponible (timeout 1.5s)
+  async _waitForVoices() {
+    if (this._voices && this._voices.length) return true;
+    this._voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+    if (this._voices.length) return true;
+    return new Promise((resolve) => {
+      let tries = 0;
+      const iv = setInterval(() => {
+        this._voices = speechSynthesis.getVoices();
+        if (this._voices.length || ++tries > 15) {
+          clearInterval(iv);
+          resolve(this._voices.length > 0);
+        }
+      }, 100);
     });
   },
 
@@ -117,19 +157,29 @@ const salma = {
   },
 
   // Fallback Web Speech para una frase
-  _ttsSpeakWebSpeech(text) {
-    if (!window.speechSynthesis) return;
+  async _ttsSpeakWebSpeech(text) {
+    if (!window.speechSynthesis) { console.warn('[Salma] speechSynthesis no disponible'); this._ttsPlaying = false; return; }
+    await this._waitForVoices();
+    const voices = this._voices || [];
     if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
     const utt = new SpeechSynthesisUtterance(text);
-    const esVoice = this._voices.find(v => v.lang.startsWith('es'));
-    utt.voice = esVoice || this._voices[0] || null;
+    const esVoice = voices.find(v => v.lang.startsWith('es'));
+    utt.voice = esVoice || voices[0] || null;
     utt.lang = esVoice ? esVoice.lang : 'es-ES';
     utt.rate = 1.0;
     utt.pitch = 1.05;
+    utt.volume = 1.0;
+    utt.onstart = () => { console.log('[Salma] TTS start:', utt.voice ? utt.voice.name : 'default', utt.lang); };
     utt.onend = () => { this._ttsPlaying = false; this._ttsPlayNext(); };
-    utt.onerror = () => { this._ttsPlaying = false; this._ttsPlayNext(); };
+    utt.onerror = (e) => { console.warn('[Salma] TTS error:', e.error || e.type || 'unknown'); this._ttsPlaying = false; this._ttsPlayNext(); };
     this._ttsPlaying = true;
-    speechSynthesis.speak(utt);
+    console.log('[Salma] Speak:', voices.length, 'voces disponibles, usando', utt.voice ? utt.voice.name : 'null');
+    try {
+      speechSynthesis.speak(utt);
+    } catch (e) {
+      console.warn('[Salma] speak() excepción:', e.message);
+      this._ttsPlaying = false;
+    }
   },
 
   // Encolar una frase limpia
