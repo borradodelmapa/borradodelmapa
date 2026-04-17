@@ -229,7 +229,7 @@ function _renderChatEmpty() {
 
   const _ci = (d) => `<svg class="chip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
   const chipsLeft = [
-    { label: 'Quiero ir a...', icon: _ci('<circle cx="12" cy="10" r="3"/><path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 10-16 0c0 3 2.7 7 8 11.7z"/>'), msg: null, action: 'goto' },
+    // "Quiero ir a..." → desactivado 2026-04-17. Ver PENDIENTES.md
     { label: 'Hazme una ruta', icon: _ci('<path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>'), msg: 'Hazme una ruta' },
     { label: 'Buscar vuelo', icon: _ci('<path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5 5.2 3L5.8 13 4 12.5l-1 1 3 2 2 3 1-1-.5-1.8 2.8-2.8 3 5.2.5-.3c.4-.2.6-.6.5-1.1z"/>'), msg: 'Busca vuelos' },
     { label: 'Alerta vuelos', icon: _ci('<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>'), msg: null, action: 'vuelos' },
@@ -240,7 +240,8 @@ function _renderChatEmpty() {
   const chipsRight = [
     { label: 'Mis Notas', icon: _ci('<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>'), msg: null, action: 'notas' },
     { label: 'Galería', icon: _ci('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>'), msg: null, action: 'galeria' },
-    { label: 'Explorar zona', icon: _ci('<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>'), msg: null, action: 'explorar' },
+    // "Explorar zona" (narrador) → desactivado 2026-04-17. Ver PENDIENTES.md
+    { label: 'Cambio moneda', icon: _ci('<circle cx="9" cy="9" r="6"/><path d="M15.5 15.5a6 6 0 10-6-6"/><path d="M7.5 9h3M9 7.5v3"/><path d="M13.5 15h3M15 13.5v3"/>'), msg: null, action: 'moneda' },
     { label: 'Emergencia', icon: '', msg: null, action: 'sos', cls: 'chat-empty-chip--sos', emoji: '🆘' },
   ];
   const renderChip = c => `<button class="chat-empty-chip ${c.cls || ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}">${c.icon || ''}${c.emoji ? `<span class="chip-emoji">${c.emoji}</span>` : ''}${c.label}</button>`;
@@ -302,6 +303,10 @@ function _renderChatEmpty() {
       if (action === 'galeria') {
         if (!currentUser) { window._afterLogin = 'galeria'; openModal(); return; }
         renderGaleria();
+        return;
+      }
+      if (action === 'moneda') {
+        openCurrencyConverter();
         return;
       }
       if (chip.dataset.msg && typeof salma !== 'undefined') salma.send(chip.dataset.msg);
@@ -5604,6 +5609,186 @@ function showOnboarding() {
 
   document.body.appendChild(overlay);
   renderSlide();
+}
+
+// ═══ CONVERSOR DE DIVISAS ═══
+
+const CURRENCY_LIST = [
+  { code: 'EUR', name: 'Euro', flag: '🇪🇺' },
+  { code: 'USD', name: 'Dólar USA', flag: '🇺🇸' },
+  { code: 'GBP', name: 'Libra', flag: '🇬🇧' },
+  { code: 'JPY', name: 'Yen japonés', flag: '🇯🇵' },
+  { code: 'CNY', name: 'Yuan chino', flag: '🇨🇳' },
+  { code: 'KRW', name: 'Won coreano', flag: '🇰🇷' },
+  { code: 'THB', name: 'Baht tailandés', flag: '🇹🇭' },
+  { code: 'VND', name: 'Đồng vietnamita', flag: '🇻🇳' },
+  { code: 'IDR', name: 'Rupia indonesia', flag: '🇮🇩' },
+  { code: 'INR', name: 'Rupia india', flag: '🇮🇳' },
+  { code: 'AED', name: 'Dírham EAU', flag: '🇦🇪' },
+  { code: 'MAD', name: 'Dírham marroquí', flag: '🇲🇦' },
+  { code: 'TRY', name: 'Lira turca', flag: '🇹🇷' },
+  { code: 'EGP', name: 'Libra egipcia', flag: '🇪🇬' },
+  { code: 'MXN', name: 'Peso mexicano', flag: '🇲🇽' },
+  { code: 'BRL', name: 'Real brasileño', flag: '🇧🇷' },
+  { code: 'ARS', name: 'Peso argentino', flag: '🇦🇷' },
+  { code: 'CLP', name: 'Peso chileno', flag: '🇨🇱' },
+  { code: 'COP', name: 'Peso colombiano', flag: '🇨🇴' },
+  { code: 'PEN', name: 'Sol peruano', flag: '🇵🇪' },
+  { code: 'CAD', name: 'Dólar canadiense', flag: '🇨🇦' },
+  { code: 'AUD', name: 'Dólar australiano', flag: '🇦🇺' },
+  { code: 'NZD', name: 'Dólar neozelandés', flag: '🇳🇿' },
+  { code: 'CHF', name: 'Franco suizo', flag: '🇨🇭' },
+  { code: 'NOK', name: 'Corona noruega', flag: '🇳🇴' },
+  { code: 'SEK', name: 'Corona sueca', flag: '🇸🇪' },
+  { code: 'DKK', name: 'Corona danesa', flag: '🇩🇰' },
+  { code: 'PLN', name: 'Złoty polaco', flag: '🇵🇱' },
+  { code: 'CZK', name: 'Corona checa', flag: '🇨🇿' },
+  { code: 'HUF', name: 'Florín húngaro', flag: '🇭🇺' },
+  { code: 'RUB', name: 'Rublo ruso', flag: '🇷🇺' },
+  { code: 'ZAR', name: 'Rand sudafricano', flag: '🇿🇦' },
+  { code: 'SGD', name: 'Dólar de Singapur', flag: '🇸🇬' },
+  { code: 'MYR', name: 'Ringgit malayo', flag: '🇲🇾' },
+  { code: 'PHP', name: 'Peso filipino', flag: '🇵🇭' },
+  { code: 'HKD', name: 'Dólar HK', flag: '🇭🇰' },
+  { code: 'TWD', name: 'Dólar taiwanés', flag: '🇹🇼' },
+  { code: 'ILS', name: 'Shekel israelí', flag: '🇮🇱' },
+  { code: 'SAR', name: 'Riyal saudí', flag: '🇸🇦' },
+  { code: 'QAR', name: 'Riyal catarí', flag: '🇶🇦' },
+  { code: 'KWD', name: 'Dinar kuwaití', flag: '🇰🇼' }
+];
+
+async function _fetchCurrencyRates() {
+  const CACHE_KEY = 'bdm_currency_rates';
+  const CACHE_TTL = 6 * 60 * 60 * 1000; // 6h
+  try {
+    const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+    if (cached && cached.ts && (Date.now() - cached.ts < CACHE_TTL) && cached.rates) {
+      return cached;
+    }
+  } catch (_) {}
+  const res = await fetch('https://open.er-api.com/v6/latest/EUR');
+  if (!res.ok) throw new Error('fetch_failed');
+  const data = await res.json();
+  if (!data || !data.rates) throw new Error('bad_data');
+  const payload = { ts: Date.now(), base: 'EUR', rates: data.rates, updated: data.time_last_update_utc || '' };
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify(payload)); } catch (_) {}
+  return payload;
+}
+
+function _formatCurrencyAmount(n) {
+  if (!isFinite(n)) return '';
+  if (n === 0) return '0';
+  const abs = Math.abs(n);
+  if (abs >= 1000) return n.toLocaleString('es-ES', { maximumFractionDigits: 2 });
+  if (abs >= 1) return n.toLocaleString('es-ES', { maximumFractionDigits: 4 });
+  if (abs >= 0.01) return n.toLocaleString('es-ES', { maximumFractionDigits: 6 });
+  return n.toExponential(2);
+}
+
+function openCurrencyConverter() {
+  // Si ya está abierto, no duplicar
+  if (document.getElementById('currency-modal-backdrop')) return;
+
+  const backdrop = document.createElement('div');
+  backdrop.id = 'currency-modal-backdrop';
+  backdrop.className = 'currency-backdrop';
+  backdrop.innerHTML = `
+    <div class="currency-modal" role="dialog" aria-modal="true" aria-label="Conversor de divisas">
+      <button class="currency-close" aria-label="Cerrar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="currency-title">Cambio de moneda</div>
+      <div class="currency-status" id="currency-status">Cargando…</div>
+      <div class="currency-row">
+        <input type="number" class="currency-amount" id="currency-amount-a" value="1" min="0" step="any" inputmode="decimal">
+        <select class="currency-select" id="currency-sel-a"></select>
+      </div>
+      <button class="currency-swap" id="currency-swap" aria-label="Invertir">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+      </button>
+      <div class="currency-row">
+        <input type="number" class="currency-amount" id="currency-amount-b" value="" min="0" step="any" inputmode="decimal">
+        <select class="currency-select" id="currency-sel-b"></select>
+      </div>
+      <div class="currency-foot" id="currency-foot">Datos informativos. Fuente: open.er-api.com</div>
+    </div>
+  `;
+  document.body.appendChild(backdrop);
+
+  const $ = (id) => document.getElementById(id);
+  const selA = $('currency-sel-a');
+  const selB = $('currency-sel-b');
+  const inpA = $('currency-amount-a');
+  const inpB = $('currency-amount-b');
+  const status = $('currency-status');
+  const foot = $('currency-foot');
+
+  // Poblar selectores
+  const options = CURRENCY_LIST.map(c => `<option value="${c.code}">${c.flag} ${c.code} — ${c.name}</option>`).join('');
+  selA.innerHTML = options;
+  selB.innerHTML = options;
+  selA.value = 'EUR';
+  selB.value = 'USD';
+
+  let rates = null; // rates relativos a EUR
+
+  function convert(fromCode, toCode, amount) {
+    if (!rates) return NaN;
+    const rFrom = fromCode === 'EUR' ? 1 : rates[fromCode];
+    const rTo = toCode === 'EUR' ? 1 : rates[toCode];
+    if (!rFrom || !rTo) return NaN;
+    // amount en EUR = amount / rFrom  → en toCode = * rTo
+    return (amount / rFrom) * rTo;
+  }
+
+  function updateFromA() {
+    const a = parseFloat(inpA.value);
+    if (!isFinite(a)) { inpB.value = ''; return; }
+    const r = convert(selA.value, selB.value, a);
+    inpB.value = isFinite(r) ? _formatCurrencyAmount(r).replace(/\./g, '').replace(',', '.') : '';
+  }
+  function updateFromB() {
+    const b = parseFloat(inpB.value);
+    if (!isFinite(b)) { inpA.value = ''; return; }
+    const r = convert(selB.value, selA.value, b);
+    inpA.value = isFinite(r) ? _formatCurrencyAmount(r).replace(/\./g, '').replace(',', '.') : '';
+  }
+
+  inpA.addEventListener('input', updateFromA);
+  inpB.addEventListener('input', updateFromB);
+  selA.addEventListener('change', updateFromA);
+  selB.addEventListener('change', updateFromA);
+
+  $('currency-swap').addEventListener('click', () => {
+    const a = selA.value, b = selB.value;
+    selA.value = b; selB.value = a;
+    updateFromA();
+  });
+
+  function close() {
+    backdrop.remove();
+    document.removeEventListener('keydown', onKey);
+  }
+  function onKey(e) { if (e.key === 'Escape') close(); }
+  document.addEventListener('keydown', onKey);
+  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(); });
+  backdrop.querySelector('.currency-close').addEventListener('click', close);
+
+  // Cargar rates
+  _fetchCurrencyRates().then(data => {
+    rates = data.rates;
+    status.style.display = 'none';
+    if (data.updated) {
+      try {
+        const d = new Date(data.updated);
+        if (!isNaN(d)) foot.textContent = `Actualizado ${d.toLocaleDateString('es-ES', { day:'2-digit', month:'short' })}. Datos informativos.`;
+      } catch (_) {}
+    }
+    updateFromA();
+  }).catch(() => {
+    status.textContent = 'No se pudo cargar el cambio. Revisa tu conexión.';
+    status.classList.add('currency-status--err');
+  });
 }
 
 // ═══ INIT ═══
