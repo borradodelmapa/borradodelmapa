@@ -1105,6 +1105,21 @@ const salma = {
 
               // DONE — final
               if (evt.done) {
+                // Si evt.reply tiene contenido añadido post-streaming (enlaces verificados,
+                // rutas completas, etc.), actualizar el bubble con el reply final antes de cerrar
+                if (textEl && evt.reply && fullText.trim() && evt.reply.trim() !== fullText.trim()) {
+                  const replyHasExtras = /google\.com\/maps/i.test(evt.reply) && !/google\.com\/maps/i.test(fullText);
+                  const replyLonger = evt.reply.length > fullText.length + 20;
+                  if (replyHasExtras || replyLonger) {
+                    let display = evt.reply;
+                    const markerPos = display.indexOf('SALMA_ROUTE');
+                    if (markerPos !== -1) display = display.substring(0, markerPos);
+                    display = display.replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '').replace(/\n{3,}/g, '\n\n');
+                    textEl.innerHTML = formatMessage(display.trim());
+                    textEl.dataset.raw = evt.reply.replace(/SALMA_ACTION:\s*\{[^\n]{0,500}\}/g, '').trim();
+                    this._scrollToBottom();
+                  }
+                }
                 this._removeStreamBubble();
                 this._removeLoading();
                 // Si no hubo texto streamed pero hay reply, mostrarlo
