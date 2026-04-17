@@ -215,7 +215,7 @@ const mapaItinerario = {
             salma.salmaSpeakStop();
             speakBtn.classList.remove('speaking');
           } else {
-            salma.salmaSpeakDirect(text);
+            salma.salmaSpeak(text);
             speakBtn.classList.add('speaking');
             const checkEnd = setInterval(() => {
               if (!salma._currentAudio && !(window.speechSynthesis && speechSynthesis.speaking)) {
