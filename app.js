@@ -5458,23 +5458,35 @@ window.openMapsModal = function(url) {
     // Convertir URL a formato embed
     let embedUrl = url;
     try {
+      // Obtener ubicación del usuario para saddr (directions desde su GPS)
+      const _userLoc = (typeof salma !== 'undefined' && salma._userLocation)
+        ? salma._userLocation.lat + ',' + salma._userLocation.lng
+        : '';
+
       if (/\/maps\/dir\/\?api=1/i.test(url)) {
         // URL tipo "cómo llegar" a un solo destino con place_id
         const u = new URL(url);
         const dest = u.searchParams.get('destination');
-        // saddr vacío → Google intenta detectar ubicación del usuario; daddr fuerza directions
-        if (dest) embedUrl = 'https://maps.google.com/maps?saddr=&daddr=' + encodeURIComponent(dest) + '&output=embed';
+        if (dest) {
+          // saddr=GPS del usuario → directions reales; si no hay GPS, saddr vacío
+          embedUrl = 'https://maps.google.com/maps?saddr=' + encodeURIComponent(_userLoc) +
+            '&daddr=' + encodeURIComponent(dest) + '&output=embed';
+        }
       } else if (/\/maps\/dir\/[^?]/i.test(url)) {
         // URL multi-parada /dir/X/Y/Z → embed directions con waypoints "to:"
         const parts = url.split('/dir/')[1].split('/').filter(Boolean);
         if (parts.length >= 2) {
           const places = parts.map(p => decodeURIComponent(p.replace(/\+/g, ' ')));
-          const saddr = encodeURIComponent(places[0]);
-          const daddr = places.slice(1).map(encodeURIComponent).join('+to:');
-          embedUrl = 'https://maps.google.com/maps?saddr=' + saddr + '&daddr=' + daddr + '&output=embed';
+          // Si hay GPS, usarlo como origen; si no, primera parada como origen
+          const saddr = _userLoc ? _userLoc : places[0];
+          const daddrPlaces = _userLoc ? places : places.slice(1);
+          const daddr = daddrPlaces.map(encodeURIComponent).join('+to:');
+          embedUrl = 'https://maps.google.com/maps?saddr=' + encodeURIComponent(saddr) +
+            '&daddr=' + daddr + '&output=embed';
         } else if (parts.length === 1) {
           const place = decodeURIComponent(parts[0].replace(/\+/g, ' '));
-          embedUrl = 'https://maps.google.com/maps?q=' + encodeURIComponent(place) + '&output=embed';
+          embedUrl = 'https://maps.google.com/maps?saddr=' + encodeURIComponent(_userLoc) +
+            '&daddr=' + encodeURIComponent(place) + '&output=embed';
         }
       } else if (!/[?&]output=embed/i.test(embedUrl)) {
         embedUrl += (embedUrl.indexOf('?') === -1 ? '?' : '&') + 'output=embed';
