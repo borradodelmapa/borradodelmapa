@@ -6972,7 +6972,16 @@ INSTRUCCIONES:
 
         // ── Inyectar enlaces Maps verificados (place_id) en nombres en negrita ──
         if (!route && env.GOOGLE_PLACES_KEY) {
-          const _region = userLocationName || location || '';
+          // Extraer destino del mensaje del usuario (prioritario sobre GPS)
+          let _msgDest = (message || '').trim();
+          _msgDest = _msgDest.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
+          _msgDest = _msgDest.replace(/^d[ií]as?\s+(en|por|a)?\s*/i, '');
+          _msgDest = _msgDest.replace(/[¿?¡!.,;:]+/g, '').trim();
+          // Solo usar el mensaje como región si parece destino (no saludo/pregunta corta)
+          const _isValidDest = _msgDest.length >= 3 && _msgDest.length <= 60
+            && !/^(hola|hey|buenas|ey|hi|hello|saludos|gracias|ok|vale|si|no)$/i.test(_msgDest)
+            && _msgDest.split(/\s+/).length <= 8;
+          const _region = _isValidDest ? _msgDest : (userLocationName || location || '');
           const _cc = countryCode || userCountryCode || '';
           try { reply = await injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc); } catch (_) {}
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
