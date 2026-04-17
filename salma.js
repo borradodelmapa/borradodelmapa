@@ -60,6 +60,7 @@ const salma = {
         // Warm-up: desbloquear sintetizador dentro del gesto de usuario
         // Android Chrome requiere speak() dentro de un user gesture la primera vez.
         this._warmUpSpeech();
+        this._ttsWarmed = true;
       } else {
         this.salmaSpeakStop();
       }
@@ -835,6 +836,14 @@ const salma = {
     if (!msg && !photo) return;
     if (this._streaming) return;
     if (!this._checkRate()) return;
+
+    // Warm-up del sintetizador dentro del gesto del usuario (una vez por sesión).
+    // Necesario cuando voz quedó activa de sesión anterior: sin un gesto previo,
+    // Chrome/Android bloquea speak() tras fetch con "not-allowed".
+    if (this._voiceOn && !this._ttsWarmed) {
+      this._warmUpSpeech();
+      this._ttsWarmed = true;
+    }
 
     // Chip "Pide Taxi": el usuario acaba de escribir el destino → prepend "taxi a"
     if (this._pendingTaxiDest && msg) {
