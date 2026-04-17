@@ -2915,12 +2915,10 @@ function strictNameMatch(originalName, googleName) {
   return false;
 }
 
-// Address match: Google devolvió una dirección que contiene la ciudad/región esperada
-function addressContainsLocation(formattedAddress, city, region, country) {
+function addressContainsLocation(formattedAddress, ...locations) {
   if (!formattedAddress) return false;
   const normAddr = normalizeForMatch(formattedAddress);
-  const checks = [city, region, country].filter(Boolean).map(normalizeForMatch);
-  return checks.some(c => c && c.length > 2 && normAddr.includes(c));
+  return locations.filter(Boolean).map(normalizeForMatch).some(c => c && c.length > 2 && normAddr.includes(c));
 }
 
 async function verifyAllStops(route, placesKey) {
@@ -2933,208 +2931,128 @@ async function verifyAllStops(route, placesKey) {
   const FIELDS = 'place_id,photos,geometry,name,formatted_address,opening_hours,editorial_summary,business_status';
   const DETAIL_FIELDS = 'name,photos,geometry,editorial_summary,opening_hours,business_status,formatted_address';
 
-  // ── Helper: buscar una parada en Google Places con un radio dado ──
   async function findPlace(name, biasLat, biasLng, radiusM) {
-    const searchQuery = region ? `${name}, ${region}` : name;
-    const bias = (biasLat && biasLng && Math.abs(biasLat) > 0.01)
-      ? `&locationbias=circle:${radiusM}@${biasLat},${biasLng}` : '';
+    const q = region ? `${name}, ${region}` : name;
+    const bias = (biasLat && biasLng && Math.abs(biasLat) > 0.01) ? `&locationbias=circle:${radiusM}@${biasLat},${biasLng}` : '';
     try {
-      const res = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(searchQuery)}&inputtype=textquery${bias}${countryFilter}&fields=${FIELDS}&language=es&key=${placesKey}`);
-      return await res.json();
+      return await (await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(q)}&inputtype=textquery${bias}${countryFilter}&fields=${FIELDS}&language=es&key=${placesKey}`)).json();
     } catch (_) { return null; }
   }
 
-  // ── Helper: Text Search fallback (sin bias de coords) ──
   async function textSearch(name) {
-    const searchQuery = region ? `${name} ${region}` : name;
+    const q = region ? `${name} ${region}` : name;
     try {
-      const res = await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchQuery)}${countryFilter}&language=es&key=${placesKey}`);
-      const data = await res.json();
-      // Convertir formato Text Search → formato Find Place para unificar
+      const data = await (await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(q)}${countryFilter}&language=es&key=${placesKey}`)).json();
       if (data?.results?.[0]) return { candidates: [data.results[0]] };
       return null;
     } catch (_) { return null; }
   }
 
-  // ── Helper: validar un candidato de Google contra la parada original ──
   function validateCandidate(candidate, stop) {
     if (!candidate?.geometry?.location) return { valid: false, reason: 'no_geometry' };
-
-    const pLat = candidate.geometry.location.lat;
-    const pLng = candidate.geometry.location.lng;
-    const originalName = stop.name || stop.headline || '';
-    const googleName = candidate.name || '';
-
-    // 1. Negocio cerrado permanentemente → rechazar
+    const pLat = candidate.geometry.location.lat, pLng = candidate.geometry.location.lng;
     if (candidate.business_status === 'CLOSED_PERMANENTLY') return { valid: false, reason: 'closed' };
-
-    // 2. Name match estricto
-    const nameOk = strictNameMatch(originalName, googleName);
-
-    // 3. Address match: la dirección debe contener la ciudad/región
+    const nameOk = strictNameMatch(stop.name || stop.headline || '', candidate.name || '');
     const addrOk = addressContainsLocation(candidate.formatted_address, region, route.region, country);
-
-    // 4. Distancia al punto de Claude (máx 3km)
     let distKm = Infinity;
-    if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01) {
-      distKm = haversineKm(stop.lat, stop.lng, pLat, pLng);
-    }
-
-    // Aceptar si: nombre coincide + (dirección ok O distancia < 3km)
+    if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01) distKm = haversineKm(stop.lat, stop.lng, pLat, pLng);
     if (nameOk && (addrOk || distKm < 3)) return { valid: true, distKm };
-    // Aceptar si: nombre coincide + distancia razonable (<10km, puede ser zona rural)
     if (nameOk && distKm < 10) return { valid: true, distKm };
-    // Aceptar si: distancia muy corta (<1km) — aunque el nombre varíe (ej: nombre traducido)
     if (distKm < 1 && addrOk) return { valid: true, distKm };
-
-    // Rechazar con motivo
     if (!nameOk) return { valid: false, reason: 'name_mismatch', distKm };
-    if (!addrOk && distKm >= 3) return { valid: false, reason: 'address_mismatch', distKm };
     return { valid: false, reason: 'too_far', distKm };
   }
 
-  // ══════════════════════════════════════════════════════════════
-  // PASO 1: Búsqueda escalonada — 3 intentos por parada
-  // ══════════════════════════════════════════════════════════════
-
-  // Intento 1: Find Place con bias 5km (paralelo para todas las paradas)
   const attempt1 = await Promise.all(route.stops.map(stop => {
     const name = stop.name || stop.headline || '';
     if (!name || name.length < 3) return Promise.resolve(null);
     return findPlace(name, stop.lat, stop.lng, 5000);
   }));
 
-  // Para paradas sin match válido → Intento 2: Find Place con bias 15km
-  const needsAttempt2 = [];
-  attempt1.forEach((result, i) => {
-    const c = result?.candidates?.[0];
-    if (!c?.geometry?.location || validateCandidate(c, route.stops[i]).valid === false) {
-      needsAttempt2.push(i);
-    }
+  const needsA2 = [];
+  attempt1.forEach((r, i) => {
+    const c = r?.candidates?.[0];
+    if (!c?.geometry?.location || !validateCandidate(c, route.stops[i]).valid) needsA2.push(i);
   });
-
-  const attempt2Results = {};
-  if (needsAttempt2.length > 0) {
-    const a2 = await Promise.all(needsAttempt2.map(i => {
-      const stop = route.stops[i];
-      const name = stop.name || stop.headline || '';
-      return findPlace(name, stop.lat, stop.lng, 15000);
-    }));
-    needsAttempt2.forEach((stopIdx, j) => { attempt2Results[stopIdx] = a2[j]; });
+  const a2 = {};
+  if (needsA2.length > 0) {
+    const results = await Promise.all(needsA2.map(i => findPlace(route.stops[i].name || route.stops[i].headline || '', route.stops[i].lat, route.stops[i].lng, 15000)));
+    needsA2.forEach((idx, j) => { a2[idx] = results[j]; });
   }
 
-  // Para paradas que siguen sin match → Intento 3: Text Search (sin coords)
-  const needsAttempt3 = [];
-  needsAttempt2.forEach(i => {
-    const c = attempt2Results[i]?.candidates?.[0];
-    if (!c?.geometry?.location || validateCandidate(c, route.stops[i]).valid === false) {
-      needsAttempt3.push(i);
-    }
+  const needsA3 = [];
+  needsA2.forEach(i => {
+    const c = a2[i]?.candidates?.[0];
+    if (!c?.geometry?.location || !validateCandidate(c, route.stops[i]).valid) needsA3.push(i);
   });
-
-  const attempt3Results = {};
-  if (needsAttempt3.length > 0) {
-    const a3 = await Promise.all(needsAttempt3.map(i => {
-      const name = route.stops[i].name || route.stops[i].headline || '';
-      return textSearch(name);
-    }));
-    needsAttempt3.forEach((stopIdx, j) => { attempt3Results[stopIdx] = a3[j]; });
+  const a3 = {};
+  if (needsA3.length > 0) {
+    const results = await Promise.all(needsA3.map(i => textSearch(route.stops[i].name || route.stops[i].headline || '')));
+    needsA3.forEach((idx, j) => { a3[idx] = results[j]; });
   }
-
-  // ══════════════════════════════════════════════════════════════
-  // PASO 2: Elegir el mejor candidato por parada
-  // ══════════════════════════════════════════════════════════════
 
   const bestCandidates = route.stops.map((stop, i) => {
-    // Probar en orden: attempt1 → attempt2 → attempt3
-    for (const result of [attempt1[i], attempt2Results[i], attempt3Results[i]]) {
+    for (const result of [attempt1[i], a2[i], a3[i]]) {
       const c = result?.candidates?.[0];
       if (!c?.geometry?.location) continue;
-      const validation = validateCandidate(c, stop);
-      if (validation.valid) return { candidate: c, validation };
+      if (validateCandidate(c, stop).valid) return { candidate: c };
     }
-    // Ningún intento válido
     return null;
   });
 
-  // ══════════════════════════════════════════════════════════════
-  // PASO 3: Place Details en lotes de 5 (solo para candidatos válidos)
-  // ══════════════════════════════════════════════════════════════
-
   const detailResults = new Array(route.stops.length).fill(null);
   const BATCH_SIZE = 5;
-  const indicesToFetch = bestCandidates.map((bc, i) => bc?.candidate?.place_id ? i : -1).filter(i => i >= 0);
-
-  for (let b = 0; b < indicesToFetch.length; b += BATCH_SIZE) {
-    const batchIndices = indicesToFetch.slice(b, b + BATCH_SIZE);
-    const batchResults = await Promise.all(batchIndices.map(i => {
-      const placeId = bestCandidates[i].candidate.place_id;
-      return fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=${DETAIL_FIELDS}&language=es&key=${placesKey}`)
-        .then(r => r.json()).catch(() => null);
-    }));
-    batchIndices.forEach((stopIdx, j) => { detailResults[stopIdx] = batchResults[j]; });
+  const toFetch = bestCandidates.map((bc, i) => bc?.candidate?.place_id ? i : -1).filter(i => i >= 0);
+  for (let b = 0; b < toFetch.length; b += BATCH_SIZE) {
+    const batch = toFetch.slice(b, b + BATCH_SIZE);
+    const results = await Promise.all(batch.map(i =>
+      fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${bestCandidates[i].candidate.place_id}&fields=${DETAIL_FIELDS}&language=es&key=${placesKey}`)
+        .then(r => r.json()).catch(() => null)
+    ));
+    batch.forEach((idx, j) => { detailResults[idx] = results[j]; });
   }
-
-  // ══════════════════════════════════════════════════════════════
-  // PASO 4: Aplicar coords exactas de Google + marcar no verificadas
-  // ══════════════════════════════════════════════════════════════
 
   route.stops.forEach((stop, i) => {
     const bc = bestCandidates[i];
     const detail = detailResults[i]?.result;
 
     if (!bc) {
-      // No se pudo verificar — MARCAR, no inventar
       stop._unverified = true;
-      // Determinar el motivo más específico
-      const lastAttempt = attempt3Results[i] || attempt2Results[i] || attempt1[i];
-      const lastCandidate = lastAttempt?.candidates?.[0];
-      if (!lastCandidate?.geometry?.location) {
-        stop._verifyReason = 'no_google_result';
-      } else {
-        const v = validateCandidate(lastCandidate, stop);
-        stop._verifyReason = v.reason || 'no_match';
-      }
+      const last = a3[i] || a2[i] || attempt1[i];
+      const lc = last?.candidates?.[0];
+      stop._verifyReason = !lc?.geometry?.location ? 'no_google_result' : (validateCandidate(lc, stop).reason || 'no_match');
       console.log(`[VERIFY] ✗ ${stop.name} → NO VERIFICADO (${stop._verifyReason})`);
       return;
     }
 
     const candidate = bc.candidate;
-    const pLat = candidate.geometry.location.lat;
-    const pLng = candidate.geometry.location.lng;
+    const pLat = candidate.geometry.location.lat, pLng = candidate.geometry.location.lng;
     const googleName = detail?.name || candidate.name || '';
 
-    // ── Coords EXACTAS de Google Places ──
     stop.lat = pLat;
     stop.lng = pLng;
     stop.place_id = candidate.place_id;
     stop._unverified = false;
 
-    // ── Foto: aceptar siempre ──
     const photoRef = detail?.photos?.[0]?.photo_reference || candidate.photos?.[0]?.photo_reference || '';
     if (photoRef) stop.photo_ref = photoRef;
 
-    // ── Nombre: sobrescribir si match ──
-    const nameOk = strictNameMatch(stop.name || stop.headline || '', googleName);
-    if (googleName && nameOk) { stop.name = googleName; stop.headline = googleName; }
+    if (googleName && strictNameMatch(stop.name || stop.headline || '', googleName)) {
+      stop.name = googleName; stop.headline = googleName;
+    }
 
-    // ── Dirección verificada ──
     const addr = detail?.formatted_address || candidate.formatted_address || '';
     if (addr) stop.verified_address = addr;
 
-    // ── Horarios: solo si aportan ──
-    const hours = detail?.opening_hours?.weekday_text;
-    if (!stop.practical && hours) {
-      const hoursStr = hours.join(' · ');
-      const isGeneric = /abierto 24 horas/i.test(hoursStr) || /open 24 hours/i.test(hoursStr);
-      if (!isGeneric) stop.practical = hoursStr;
+    if (!stop.practical && detail?.opening_hours?.weekday_text) {
+      const h = detail.opening_hours.weekday_text.join(' · ');
+      if (!/abierto 24 horas|open 24 hours/i.test(h)) stop.practical = h;
     }
 
-    // ── Editorial summary → description ──
-    const googleDesc = detail?.editorial_summary?.overview || '';
-    if (googleDesc && !stop.description) stop.description = googleDesc;
+    const desc = detail?.editorial_summary?.overview || '';
+    if (desc && !stop.description) stop.description = desc;
 
-    console.log(`[VERIFY] ✓ ${stop.name} → ${googleName} (${pLat.toFixed(5)}, ${pLng.toFixed(5)}) place_id:${candidate.place_id?.substring(0, 20)}`);
+    console.log(`[VERIFY] ✓ ${stop.name} → ${googleName} (${pLat.toFixed(5)}, ${pLng.toFixed(5)}) place_id:${(candidate.place_id||'').substring(0, 20)}`);
   });
 
   return route;
