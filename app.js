@@ -5430,7 +5430,9 @@ function formatMessage(str) {
     else if (url.indexOf('olacabs.com') !== -1) label = '🟡 Descargar Ola';
     else if (url.indexOf('airbnb.com') !== -1) label = '🏠 Ver en Airbnb';
     else if (url.indexOf('hostelworld.com') !== -1) label = '🛏️ Ver en Hostelworld';
-    return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href);return false;">' + label + '</a>';
+    var isMaps = url.indexOf('google.com/maps') !== -1;
+    var clickHandler = isMaps ? 'openMapsModal(this.href);return false;' : 'window.open(this.href);return false;';
+    return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" onclick="' + clickHandler + '">' + label + '</a>';
   });
   // Teléfonos internacionales: +XX XXX XXX XXX (con espacios, guiones o puntos)
   html = html.replace(/(\+\d{1,3}[ .-]?\d{1,4}[ .-]?\d{2,4}[ .-]?\d{2,4}[ .-]?\d{0,4})/g, (match) => {
@@ -5446,6 +5448,60 @@ function formatMessage(str) {
   html = html.replace(/\n/g, '<br>');
   return html;
 }
+
+// ═══ MAPS MODAL (bottom sheet con iframe Google Maps) ═══
+window.openMapsModal = function(url) {
+  try {
+    const existing = document.getElementById('maps-modal');
+    if (existing) existing.remove();
+
+    // Convertir URL a formato embed
+    let embedUrl = url;
+    try {
+      if (/\/maps\/dir\/\?api=1/i.test(url)) {
+        const u = new URL(url);
+        const destPlace = u.searchParams.get('destination_place_id');
+        const dest = u.searchParams.get('destination');
+        if (destPlace) embedUrl = 'https://maps.google.com/maps?q=place_id:' + destPlace + '&output=embed';
+        else if (dest) embedUrl = 'https://maps.google.com/maps?q=' + encodeURIComponent(dest) + '&output=embed';
+      } else if (!/[?&]output=embed/i.test(embedUrl)) {
+        embedUrl += (embedUrl.indexOf('?') === -1 ? '?' : '&') + 'output=embed';
+      }
+    } catch (_) {}
+
+    const modal = document.createElement('div');
+    modal.id = 'maps-modal';
+    modal.innerHTML = '<div id="maps-modal-backdrop" style="position:absolute;inset:0;background:rgba(0,0,0,0.55);"></div>' +
+      '<div id="maps-modal-sheet" style="position:absolute;bottom:0;left:0;right:0;height:70vh;background:#141209;border-radius:16px 16px 0 0;display:flex;flex-direction:column;animation:mapsSheetUp 0.25s ease-out;overflow:hidden;">' +
+        '<div style="width:40px;height:4px;background:#555;border-radius:2px;margin:8px auto;flex-shrink:0;"></div>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 12px 8px;flex-shrink:0;gap:8px;">' +
+          '<button id="maps-modal-open" style="background:#f0b429;color:#060503;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">📍 Abrir en Google Maps</button>' +
+          '<button id="maps-modal-close" style="background:transparent;color:#fff;border:none;font-size:28px;cursor:pointer;padding:0 12px;line-height:1;">×</button>' +
+        '</div>' +
+        '<iframe src="' + embedUrl + '" style="flex:1;width:100%;border:0;" frameborder="0" allowfullscreen></iframe>' +
+      '</div>';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:10000;';
+    document.body.appendChild(modal);
+
+    // Animación keyframe (inyectar si no existe)
+    if (!document.getElementById('maps-modal-css')) {
+      const s = document.createElement('style');
+      s.id = 'maps-modal-css';
+      s.textContent = '@keyframes mapsSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }';
+      document.head.appendChild(s);
+    }
+
+    const close = () => modal.remove();
+    document.getElementById('maps-modal-close').addEventListener('click', close);
+    document.getElementById('maps-modal-backdrop').addEventListener('click', close);
+    document.getElementById('maps-modal-open').addEventListener('click', () => {
+      window.open(url, '_blank');
+      close();
+    });
+  } catch (e) {
+    window.open(url, '_blank');
+  }
+};
 
 // Exponer globalmente
 window.showToast = showToast;
