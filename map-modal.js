@@ -84,6 +84,28 @@
     return null;
   }
 
+  function _fallbackIframe(url) {
+    const mapEl = document.getElementById('mm-map');
+    if (mapEl) {
+      // Convertir URL a formato embed adecuado
+      let embed = url;
+      try {
+        if (/\/maps\/dir\/\?api=1/i.test(url)) {
+          const u = new URL(url);
+          const dest = u.searchParams.get('destination') || '';
+          const userLoc = _getUserLoc();
+          const saddr = userLoc ? userLoc.lat + ',' + userLoc.lng : '';
+          embed = 'https://maps.google.com/maps?saddr=' + encodeURIComponent(saddr) + '&daddr=' + encodeURIComponent(dest) + '&output=embed';
+        } else if (!/[?&]output=embed/i.test(embed)) {
+          embed += (embed.indexOf('?') === -1 ? '?' : '&') + 'output=embed';
+        }
+      } catch (_) {}
+      mapEl.innerHTML = '<iframe src="' + embed + '" style="width:100%;height:100%;border:0" frameborder="0" allowfullscreen></iframe>';
+    }
+    const sp = document.getElementById('mm-spinner');
+    if (sp) sp.remove();
+  }
+
   function _close() {
     const m = document.getElementById('mm');
     if (m) m.remove();
@@ -341,24 +363,28 @@
         cb.addEventListener('change', () => _toggleLayer(cb.dataset.mmCat, cb.checked));
       });
 
-      // Esperar a que Google Maps esté disponible
-      const tryInit = (tries = 0) => {
-        if (window.google && google.maps && google.maps.places) {
-          _initMap(dest);
-        } else if (tries < 20) {
-          setTimeout(() => tryInit(tries + 1), 200);
-        } else {
-          // Fallback iframe si Google Maps no carga
-          const mapEl = document.getElementById('mm-map');
-          if (mapEl) {
-            const embed = url.indexOf('?') === -1 ? url + '?output=embed' : url + '&output=embed';
-            mapEl.innerHTML = `<iframe src="${embed}" style="width:100%;height:100%;border:0" frameborder="0"></iframe>`;
-          }
-          const sp = document.getElementById('mm-spinner');
-          if (sp) sp.remove();
-        }
+      // Disparar carga de Google Maps JS (lazy-loaded en index.html)
+      const ensureGoogle = () => {
+        if (window.google && google.maps && google.maps.places) return Promise.resolve();
+        if (typeof window._loadGoogleMaps === 'function') return window._loadGoogleMaps();
+        return new Promise((_, reject) => setTimeout(reject, 8000));
       };
-      tryInit();
+
+      ensureGoogle()
+        .then(() => {
+          // Places library puede tardar un poco más que core maps
+          const waitPlaces = (tries = 0) => {
+            if (window.google && google.maps && google.maps.places) {
+              _initMap(dest);
+            } else if (tries < 30) {
+              setTimeout(() => waitPlaces(tries + 1), 100);
+            } else {
+              _fallbackIframe(url);
+            }
+          };
+          waitPlaces();
+        })
+        .catch(() => _fallbackIframe(url));
     } catch (e) {
       console.error('[map-modal] error:', e);
       window.open(url, '_blank');
