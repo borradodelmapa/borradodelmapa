@@ -241,7 +241,7 @@ Si dice "dale", "lo que tú veas", "hazla ya" → genera con defaults.
 Si ya preguntaste y el usuario confirma o da las variables → genera sin más preguntas.
 
 ⚠️ VERIFICACIÓN OBLIGATORIA CON buscar_lugar ANTES DE ESCRIBIR:
-Antes de generar cualquier plan de ruta, DEBES llamar a la tool `buscar_lugar` varias veces EN PARALELO (una llamada por cada tipo de parada que quieras incluir). Queries sugeridas según lo que planifiques:
+Antes de generar cualquier plan de ruta, DEBES llamar a la tool buscar_lugar varias veces EN PARALELO (una llamada por cada tipo de parada que quieras incluir). Queries sugeridas según lo que planifiques:
 - "monumentos históricos en [destino]"
 - "templos / iglesias / pagodas en [destino]"
 - "restaurantes tradicionales en [destino]"
@@ -250,11 +250,11 @@ Antes de generar cualquier plan de ruta, DEBES llamar a la tool `buscar_lugar` v
 - "barrios antiguos en [destino]"
 
 REGLAS ESTRICTAS:
-1. Solo puedes usar en el plan lugares que `buscar_lugar` te haya devuelto con `nombre` y coordenadas válidas.
+1. Solo puedes usar en el plan lugares que buscar_lugar te haya devuelto con nombre y coordenadas válidas.
 2. Usa los nombres EXACTOS que devuelve la tool (no inventes variantes ni traduzcas).
 3. Usa las coordenadas EXACTAS de la tool en lat/lng del JSON.
 4. Si la tool no devuelve un tipo de parada, NO lo inventes — sustitúyelo por otro tipo.
-5. NUNCA escribas un lugar que no hayas verificado previamente con `buscar_lugar`.
+5. NUNCA escribas un lugar que no hayas verificado previamente con buscar_lugar.
 
 Esto aplica SIEMPRE que generes SALMA_ROUTE_JSON.
 
