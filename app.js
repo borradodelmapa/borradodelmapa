@@ -5462,7 +5462,8 @@ window.openMapsModal = function(url) {
         // URL tipo "cómo llegar" a un solo destino con place_id
         const u = new URL(url);
         const dest = u.searchParams.get('destination');
-        if (dest) embedUrl = 'https://maps.google.com/maps?q=' + encodeURIComponent(dest) + '&output=embed';
+        // saddr vacío → Google intenta detectar ubicación del usuario; daddr fuerza directions
+        if (dest) embedUrl = 'https://maps.google.com/maps?saddr=&daddr=' + encodeURIComponent(dest) + '&output=embed';
       } else if (/\/maps\/dir\/[^?]/i.test(url)) {
         // URL multi-parada /dir/X/Y/Z → embed directions con waypoints "to:"
         const parts = url.split('/dir/')[1].split('/').filter(Boolean);

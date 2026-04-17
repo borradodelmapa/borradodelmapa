@@ -1132,7 +1132,9 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode) {
   // Inyectar enlaces "cómo llegar" verificados (place_id) al lado de cada negrita
   for (const { bold, name, placeId } of results) {
     if (!placeId) continue;
-    const link = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(name)}&destination_place_id=${placeId}`;
+    // Incluir región en destination para que el iframe embed tenga contexto
+    const destParam = regionCtx ? `${name}, ${regionCtx}` : name;
+    const link = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destParam)}&destination_place_id=${placeId}`;
     // Reemplazar solo la PRIMERA ocurrencia de esta negrita (evitar duplicados)
     const boldEscaped = bold.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     // Si ya tiene un link al lado (paréntesis con URL), no duplicar
@@ -2514,6 +2516,8 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
     userContent += `\n\n[MODO PLAN DE VIAJE — INSTRUCCIONES ESTRICTAS:
 
 PROHIBIDO: SALMA_ROUTE_JSON, preguntar, mencionar guías/coins, inventar URLs, párrafos largos, enlaces de Google Maps (el sistema los pone verificados).
+
+DÍAS: si el usuario no especificó número de días (solo puso el destino), genera UN SOLO DÍA. Si dijo "N días", usa ese número exacto.
 
 BREVEDAD OBLIGATORIA: máximo 2-3 frases por parada. Dato histórico/cultural + precio + tiempo. Sin prosa. Sin rodeos.
 
