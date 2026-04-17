@@ -952,7 +952,12 @@ const TRANSPORT_APP_URLS = {
 // ═══════════════════════════════════════════════════════════════
 
 function isRouteRequest(message, history) {
-  return /salma\s+hazme\s+una\s+gu[ií]a|hazme\s+una\s+gu[ií]a\s+salma/i.test(message);
+  if (/salma\s+hazme\s+una\s+gu[ií]a|hazme\s+una\s+gu[ií]a\s+salma/i.test(message)) return true;
+  // "N días en X" (dígitos) → ruta completa con mapa
+  if (/\b(\d{1,2})\s*d[ií]as?\b/i.test(message)) return true;
+  // "un/dos/tres... días en X" (palabras) → ruta completa con mapa
+  if (/\b(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince)\s*d[ií]as?\b/i.test(message)) return true;
+  return false;
 }
 
 // Detecta "destino + días" sin ser petición de guía → respuesta estructurada por días (no JSON)
