@@ -694,15 +694,20 @@
       return;
     }
 
-    // Comprobación inmediata: si no hay sesión cerramos overlay y mostramos banner
-    // (Firebase ya abre el login solo en app.js:onAuthStateChanged → openModal)
+    // Si no hay sesión, esperar 500ms silenciosamente por si Firebase la restaura
+    // rápido (caso habitual). Solo mostramos banner si el retardo es real.
+    // Firebase ya abre el login solo en app.js:onAuthStateChanged.
     const hasAuthNow = !!(window.firebase && firebase.auth && firebase.auth().currentUser);
+    let bannerTimer = null;
     if (!hasAuthNow) {
-      closeOverlay();
-      _showLoginBanner();
+      bannerTimer = setTimeout(() => {
+        closeOverlay();
+        _showLoginBanner();
+      }, 500);
     }
 
     const authUser = await waitForAuthUser();
+    if (bannerTimer) clearTimeout(bannerTimer);
     _hideLoginBanner();
     showOverlay('Preparando subida...');
 
