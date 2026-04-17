@@ -5459,11 +5459,22 @@ window.openMapsModal = function(url) {
     let embedUrl = url;
     try {
       if (/\/maps\/dir\/\?api=1/i.test(url)) {
+        // URL tipo "cómo llegar" a un solo destino con place_id
         const u = new URL(url);
-        const destPlace = u.searchParams.get('destination_place_id');
         const dest = u.searchParams.get('destination');
-        if (destPlace) embedUrl = 'https://maps.google.com/maps?q=place_id:' + destPlace + '&output=embed';
-        else if (dest) embedUrl = 'https://maps.google.com/maps?q=' + encodeURIComponent(dest) + '&output=embed';
+        if (dest) embedUrl = 'https://maps.google.com/maps?q=' + encodeURIComponent(dest) + '&output=embed';
+      } else if (/\/maps\/dir\/[^?]/i.test(url)) {
+        // URL multi-parada /dir/X/Y/Z → embed directions con waypoints "to:"
+        const parts = url.split('/dir/')[1].split('/').filter(Boolean);
+        if (parts.length >= 2) {
+          const places = parts.map(p => decodeURIComponent(p.replace(/\+/g, ' ')));
+          const saddr = encodeURIComponent(places[0]);
+          const daddr = places.slice(1).map(encodeURIComponent).join('+to:');
+          embedUrl = 'https://maps.google.com/maps?saddr=' + saddr + '&daddr=' + daddr + '&output=embed';
+        } else if (parts.length === 1) {
+          const place = decodeURIComponent(parts[0].replace(/\+/g, ' '));
+          embedUrl = 'https://maps.google.com/maps?q=' + encodeURIComponent(place) + '&output=embed';
+        }
       } else if (!/[?&]output=embed/i.test(embedUrl)) {
         embedUrl += (embedUrl.indexOf('?') === -1 ? '?' : '&') + 'output=embed';
       }

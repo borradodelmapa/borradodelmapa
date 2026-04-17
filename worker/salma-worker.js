@@ -7032,6 +7032,16 @@ INSTRUCCIONES:
         // ── POST-PROCESADO FOTOS: buscar fotos e inyectar junto a cada lugar en negrita ──
         if (!route && env.GOOGLE_PLACES_KEY) {
           try {
+            // Extraer destino del mensaje del usuario (igual que injectVerifiedMapsLinks)
+            let _photoRegion = (message || '').trim();
+            _photoRegion = _photoRegion.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
+            _photoRegion = _photoRegion.replace(/^d[ií]as?\s+(en|por|a)?\s*/i, '');
+            _photoRegion = _photoRegion.replace(/[¿?¡!.,;:]+/g, '').trim();
+            const _photoValidDest = _photoRegion.length >= 3 && _photoRegion.length <= 60
+              && !/^(hola|hey|buenas|ey|hi|hello|saludos|gracias|ok|vale|si|no)$/i.test(_photoRegion)
+              && _photoRegion.split(/\s+/).length <= 8;
+            const _photoLocHint = _photoValidDest ? _photoRegion : (userLocationName || '');
+
             const boldNames = [];
             const boldRegex = /\*\*([^*]{3,50})\*\*/g;
             let bm;
@@ -7042,9 +7052,10 @@ INSTRUCCIONES:
               if (!boldNames.includes(name)) boldNames.push(name);
             }
             if (boldNames.length > 0) {
-              const photoPromises = boldNames.slice(0, 4).map(name =>
-                buscarFotoLugar({ lugar: name }, env.GOOGLE_PLACES_KEY).catch(() => null)
-              );
+              const photoPromises = boldNames.slice(0, 4).map(name => {
+                const query = _photoLocHint ? `${name}, ${_photoLocHint}` : name;
+                return buscarFotoLugar({ lugar: query }, env.GOOGLE_PLACES_KEY).catch(() => null);
+              });
               const photoResults = await Promise.all(photoPromises);
               // Inyectar cada foto justo después de su nombre en negrita
               for (let pi = 0; pi < photoResults.length; pi++) {
