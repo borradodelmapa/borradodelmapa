@@ -10,6 +10,8 @@
   let _mmMarkers = {};
   let _mmDestLoc = null;
   let _mmDestName = '';
+  let _mmInfoWindow = null;
+  let _mmRouteMarkers = [];
 
   const _mmCats = {
     food:     { types: ['restaurant','cafe','bar','bakery'],                        color: '#E87040', icon: '🍽', label: 'Restaurantes' },
@@ -106,11 +108,22 @@
     if (sp) sp.remove();
   }
 
+  function _onDocClickClosePanel(e) {
+    const p = document.getElementById('mm-layers');
+    if (!p || p.style.display !== 'block') return;
+    const btn = document.getElementById('mm-btn-layers');
+    if (p.contains(e.target) || (btn && btn.contains(e.target))) return;
+    p.style.display = 'none';
+    if (btn) btn.classList.remove('active');
+  }
+
   function _close() {
+    document.removeEventListener('click', _onDocClickClosePanel, true);
     const m = document.getElementById('mm');
     if (m) m.remove();
     _mmMap = null; _mmSV = null; _mmPlaces = null; _mmMarkers = {};
     _mmDestLoc = null; _mmDestName = '';
+    _mmInfoWindow = null; _mmRouteMarkers = [];
   }
 
   function _toggleLayer(cat, enabled) {
@@ -137,12 +150,47 @@
           label: { text: cfg.icon, fontSize: '11px' },
         });
         mk._pid = p.place_id;
+        mk.addListener('click', () => _showPlaceInfo(mk._pid, mk.getPosition()));
         _mmMarkers[cat].push(mk);
       }
     };
 
     cfg.types.forEach(type => {
       _mmPlaces.nearbySearch({ location: _mmMap.getCenter(), radius: 2500, type }, add);
+    });
+  }
+
+  function _showPlaceInfo(placeId, pos) {
+    if (!_mmPlaces || !_mmMap) return;
+    if (!_mmInfoWindow) _mmInfoWindow = new google.maps.InfoWindow();
+    _mmPlaces.getDetails({
+      placeId,
+      fields: ['name','photos','formatted_address','rating','user_ratings_total','opening_hours','website','international_phone_number','url']
+    }, (p, status) => {
+      if (status !== google.maps.places.PlacesServiceStatus.OK || !p) return;
+      const photo = p.photos && p.photos[0] ? p.photos[0].getUrl({ maxWidth: 320, maxHeight: 160 }) : '';
+      const rating = p.rating ? `<span style="color:#f0b429;font-size:12px;font-weight:600">★ ${p.rating.toFixed(1)}</span>` +
+        (p.user_ratings_total ? `<span style="color:#777;font-size:11px;margin-left:4px">(${p.user_ratings_total})</span>` : '') : '';
+      const openNow = (p.opening_hours && typeof p.opening_hours.isOpen === 'function')
+        ? (p.opening_hours.isOpen() ? '<span style="color:#4ade80;font-size:11px;font-weight:600">● Abierto</span>' : '<span style="color:#ef4444;font-size:11px;font-weight:600">● Cerrado</span>')
+        : '';
+      const addr = p.formatted_address ? `<div style="font-size:11px;color:#777;margin:4px 0 8px">${p.formatted_address}</div>` : '';
+      const phone = p.international_phone_number ? `<a href="tel:${p.international_phone_number.replace(/\s/g,'')}" style="display:block;font-size:12px;color:#060503;text-decoration:none;margin-bottom:4px">📞 ${p.international_phone_number}</a>` : '';
+      const mapsUrl = p.url || `https://www.google.com/maps/place/?q=place_id:${placeId}`;
+      const content = `
+        <div style="font-family:'Inter',sans-serif;width:260px;border-radius:8px;overflow:hidden;background:#fff">
+          ${photo ? `<img src="${photo}" style="width:100%;height:130px;object-fit:cover;display:block">` : ''}
+          <div style="padding:10px 12px 12px">
+            <div style="font-size:14px;font-weight:700;color:#111;line-height:1.3;margin-bottom:4px">${p.name || ''}</div>
+            <div style="display:flex;gap:10px;align-items:center">${rating}${openNow}</div>
+            ${addr}
+            ${phone}
+            <a href="${mapsUrl}" target="_blank" rel="noopener" style="display:block;text-align:center;background:#f0b429;color:#060503;border-radius:6px;padding:8px;font-size:12px;font-weight:600;text-decoration:none;margin-top:6px">📍 Abrir en Google Maps</a>
+          </div>
+        </div>`;
+      _mmInfoWindow.setContent(content);
+      _mmInfoWindow.setPosition(pos);
+      _mmInfoWindow.open(_mmMap);
     });
   }
 
@@ -215,7 +263,6 @@
     _mmDestName = dest.name;
     const userLoc = _getUserLoc();
 
-    // Centro inicial: destino (aún sin geocodificar) → usa cualquier ubicación, se centra al resolver
     _mmMap = new google.maps.Map(mapEl, {
       center: userLoc || { lat: 40.4168, lng: -3.7038 },
       zoom: 14,
@@ -230,82 +277,166 @@
       gestureHandling: 'greedy',
     });
     _mmPlaces = new google.maps.places.PlacesService(_mmMap);
+    _mmInfoWindow = new google.maps.InfoWindow();
 
-    // Actualizar brújula cuando cambie heading
     _mmMap.addListener('heading_changed', _updateCompass);
 
-    // Resolver destino
-    const resolveAndRender = (loc) => {
+    // Cerrar panel Capas al tocar el mapa
+    _mmMap.addListener('click', () => {
+      const p = document.getElementById('mm-layers');
+      if (p && p.style.display === 'block') {
+        p.style.display = 'none';
+        document.getElementById('mm-btn-layers')?.classList.remove('active');
+      }
+    });
+
+    // Multi-stop: geocodificar TODOS los puntos y dibujar ruta numerada
+    if (dest.multiStop && dest.multiStop.length >= 2) {
+      _resolveMultiStop(dest.multiStop, userLoc);
+    } else {
+      _resolveSingle(dest, userLoc);
+    }
+  }
+
+  function _resolveSingle(dest, userLoc) {
+    const render = (loc) => {
       _mmDestLoc = loc;
       _mmMap.setCenter(loc);
       _mmMap.setZoom(15);
 
-      // Marker destino
-      new google.maps.Marker({
-        position: loc,
-        map: _mmMap,
-        title: dest.name,
-        icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#f0b429', fillOpacity: 1, strokeColor: '#060503', strokeWeight: 3, scale: 11 },
+      const mk = new google.maps.Marker({
+        position: loc, map: _mmMap, title: dest.name,
+        icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#f0b429', fillOpacity: 1, strokeColor: '#060503', strokeWeight: 3, scale: 12 },
         zIndex: 999,
       });
+      if (dest.placeId) {
+        mk._pid = dest.placeId;
+        mk.addListener('click', () => _showPlaceInfo(dest.placeId, loc));
+      }
 
-      // Ruta desde GPS usuario
       if (userLoc) {
-        if (dest.multiStop && dest.multiStop.length >= 2) {
-          // Multi-stop: dibujar waypoints
-          const waypoints = dest.multiStop.slice(0, -1).map(p => ({ location: p, stopover: true }));
-          const ds = new google.maps.DirectionsService();
-          const dr = new google.maps.DirectionsRenderer({
-            map: _mmMap,
-            suppressMarkers: false,
-            polylineOptions: { strokeColor: '#f0b429', strokeWeight: 5, strokeOpacity: 0.85 },
-          });
-          ds.route({
-            origin: userLoc,
-            destination: loc,
-            waypoints,
-            optimizeWaypoints: false,
-            travelMode: google.maps.TravelMode.DRIVING,
-          }, (result, status) => {
-            if (status === 'OK') dr.setDirections(result);
-          });
-        } else {
-          _drawRoute(userLoc, loc);
-          // Ajustar bounds para ver origen + destino
-          const b = new google.maps.LatLngBounds();
-          b.extend(userLoc);
-          b.extend(loc);
-          _mmMap.fitBounds(b, 80);
-        }
+        _drawRoute(userLoc, loc);
+        const b = new google.maps.LatLngBounds(); b.extend(userLoc); b.extend(loc);
+        _mmMap.fitBounds(b, 80);
       }
 
       const sp = document.getElementById('mm-spinner');
       if (sp) sp.remove();
     };
 
-    // Geocodificar por place_id o por nombre
+    // 1) placeId → Places Details
     if (dest.placeId) {
-      _mmPlaces.getDetails({ placeId: dest.placeId, fields: ['geometry'] }, (place, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK && place && place.geometry) {
-          resolveAndRender(place.geometry.location);
-        } else {
-          _geocodeByName(dest.name, resolveAndRender);
-        }
+      _mmPlaces.getDetails({ placeId: dest.placeId, fields: ['geometry','name'] }, (p, s) => {
+        if (s === google.maps.places.PlacesServiceStatus.OK && p && p.geometry) return render(p.geometry.location);
+        _geocodeByName(dest.name, render);
       });
     } else {
-      _geocodeByName(dest.name, resolveAndRender);
+      _geocodeByName(dest.name, render);
     }
   }
 
+  function _resolveMultiStop(places, userLoc) {
+    // Geocodificar cada punto en paralelo
+    const geocodeOne = (name) => new Promise(resolve => {
+      _mmPlaces.findPlaceFromQuery({ query: name, fields: ['geometry','place_id','name'] }, (r, s) => {
+        if (s === google.maps.places.PlacesServiceStatus.OK && r && r[0]) {
+          resolve({ name, loc: r[0].geometry.location, placeId: r[0].place_id, gName: r[0].name });
+        } else {
+          // Fallback: Geocoder
+          new google.maps.Geocoder().geocode({ address: name }, (res, st) => {
+            if (st === 'OK' && res[0]) resolve({ name, loc: res[0].geometry.location, placeId: null, gName: name });
+            else resolve(null);
+          });
+        }
+      });
+    });
+
+    Promise.all(places.map(geocodeOne)).then(results => {
+      const valid = results.filter(Boolean);
+      if (valid.length === 0) {
+        const sp = document.getElementById('mm-spinner');
+        if (sp) sp.textContent = 'No se pudo encontrar los lugares';
+        return;
+      }
+
+      _mmDestLoc = valid[valid.length - 1].loc;
+      const bounds = new google.maps.LatLngBounds();
+
+      // Markers numerados
+      valid.forEach((pt, i) => {
+        const num = i + 1;
+        const mk = new google.maps.Marker({
+          position: pt.loc, map: _mmMap, title: pt.gName,
+          icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#f0b429', fillOpacity: 1, strokeColor: '#060503', strokeWeight: 3, scale: 13 },
+          label: { text: String(num), color: '#060503', fontSize: '12px', fontWeight: '700' },
+          zIndex: 999,
+        });
+        if (pt.placeId) {
+          mk._pid = pt.placeId;
+          mk.addListener('click', () => _showPlaceInfo(pt.placeId, pt.loc));
+        }
+        _mmRouteMarkers.push(mk);
+        bounds.extend(pt.loc);
+      });
+
+      // Polyline conectando en orden (líneas entre puntos + Directions para realismo)
+      const ds = new google.maps.DirectionsService();
+      const dr = new google.maps.DirectionsRenderer({
+        map: _mmMap,
+        suppressMarkers: true,
+        preserveViewport: true,
+        polylineOptions: { strokeColor: '#f0b429', strokeWeight: 5, strokeOpacity: 0.85 },
+      });
+      const origin = userLoc || valid[0].loc;
+      const destination = valid[valid.length - 1].loc;
+      const waypointsList = userLoc ? valid.slice(0, -1) : valid.slice(1, -1);
+      const waypoints = waypointsList.map(p => ({ location: p.loc, stopover: true }));
+      ds.route({
+        origin, destination, waypoints,
+        optimizeWaypoints: false,
+        travelMode: google.maps.TravelMode.DRIVING,
+      }, (result, status) => {
+        if (status === 'OK') dr.setDirections(result);
+        else {
+          // Si Directions falla, al menos unir con polyline simple
+          new google.maps.Polyline({
+            path: [userLoc, ...valid.map(v => v.loc)].filter(Boolean),
+            map: _mmMap, strokeColor: '#f0b429', strokeWeight: 4, strokeOpacity: 0.7,
+          });
+        }
+      });
+
+      if (userLoc) bounds.extend(userLoc);
+      _mmMap.fitBounds(bounds, 60);
+
+      const sp = document.getElementById('mm-spinner');
+      if (sp) sp.remove();
+    });
+  }
+
   function _geocodeByName(name, cb) {
-    const gc = new google.maps.Geocoder();
-    gc.geocode({ address: name }, (results, status) => {
-      if (status === 'OK' && results[0]) cb(results[0].geometry.location);
+    // Intentar primero FindPlace con user location bias
+    const userLoc = _getUserLoc();
+    const find = () => new Promise(resolve => {
+      if (!_mmPlaces) return resolve(null);
+      _mmPlaces.findPlaceFromQuery({ query: name, fields: ['geometry','name','place_id'] }, (r, s) => {
+        if (s === google.maps.places.PlacesServiceStatus.OK && r && r[0]) resolve(r[0].geometry.location);
+        else resolve(null);
+      });
+    });
+    const geocode = () => new Promise(resolve => {
+      new google.maps.Geocoder().geocode({ address: name }, (res, st) => {
+        if (st === 'OK' && res[0]) resolve(res[0].geometry.location);
+        else resolve(null);
+      });
+    });
+    find().then(loc => loc ? cb(loc) : geocode().then(loc2 => {
+      if (loc2) cb(loc2);
       else {
         const sp = document.getElementById('mm-spinner');
         if (sp) sp.textContent = 'No se pudo encontrar el lugar';
       }
-    });
+    }));
   }
 
   window.openMapsModal = function(url) {
@@ -349,10 +480,16 @@
         window.open(url, '_blank');
       });
       document.getElementById('mm-btn-layers').addEventListener('click', (e) => {
+        e.stopPropagation();
         const p = document.getElementById('mm-layers');
-        p.style.display = p.style.display === 'block' ? 'none' : 'block';
-        e.currentTarget.classList.toggle('active');
+        const open = p.style.display !== 'block';
+        p.style.display = open ? 'block' : 'none';
+        e.currentTarget.classList.toggle('active', open);
       });
+      // Panel capas: no cerrar al togglear items (para activar varios), pero stopPropagation
+      document.getElementById('mm-layers').addEventListener('click', (e) => e.stopPropagation());
+      // Cerrar panel al tocar fuera (en el documento)
+      document.addEventListener('click', _onDocClickClosePanel, true);
       document.getElementById('mm-btn-sv').addEventListener('click', (e) => {
         _toggleStreetView(e.currentTarget);
       });
