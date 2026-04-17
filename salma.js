@@ -149,6 +149,12 @@ const salma = {
     this._ttsPlaying = true;
     const sentence = this._ttsQueue.shift();
 
+    // Si ElevenLabs está caído en esta sesión → directo a voz del navegador (sin delay)
+    if (this._elevenLabsDown) {
+      this._ttsSpeakWebSpeech(sentence);
+      return;
+    }
+
     // Usar audio pre-cargado si existe
     let audio = this._ttsPreloaded;
     this._ttsPreloaded = null;
@@ -157,7 +163,16 @@ const salma = {
       try {
         audio = await this._ttsFetchAudio(sentence);
       } catch (e) {
-        console.warn('[Salma] ElevenLabs falló, fallback Web Speech:', e.message);
+        const msg = String(e && e.message || e);
+        console.warn('[Salma] ElevenLabs falló, fallback Web Speech:', msg);
+        // Auth / cuota → marcar como caído para toda la sesión
+        if (/401|403|429/.test(msg)) {
+          this._elevenLabsDown = true;
+          if (!this._elevenLabsNotified) {
+            this._elevenLabsNotified = true;
+            if (typeof showToast === 'function') showToast('Voz del navegador (ElevenLabs no disponible)');
+          }
+        }
         this._ttsSpeakWebSpeech(sentence);
         return;
       }
@@ -184,8 +199,8 @@ const salma = {
     };
     audio.play().catch(() => { this._ttsPlaying = false; this._ttsPlayNext(); });
 
-    // Pre-fetch siguiente frase mientras esta suena
-    if (this._ttsQueue.length > 0) {
+    // Pre-fetch siguiente frase mientras esta suena (solo si ElevenLabs va)
+    if (this._ttsQueue.length > 0 && !this._elevenLabsDown) {
       try {
         if (this._ttsPrefetchAbort) this._ttsPrefetchAbort.abort();
         this._ttsPrefetchAbort = new AbortController();
@@ -265,21 +280,31 @@ const salma = {
         return;
       }
 
-      // Texto corto → una sola llamada directa
-      try {
-        const audio = await this._ttsFetchAudio(clean);
-        if (!this._voiceOn) { if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl); return; }
-        this._currentAudio = audio;
-        this._ttsPlaying = true;
-        audio.onended = () => {
-          if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl);
-          this._currentAudio = null;
-          this._ttsPlaying = false;
-        };
-        audio.play();
-        return;
-      } catch (e) {
-        console.warn('[Salma] ElevenLabs falló, usando voz del navegador:', e.message);
+      // Texto corto → una sola llamada directa (salvo que ElevenLabs esté caído)
+      if (!this._elevenLabsDown) {
+        try {
+          const audio = await this._ttsFetchAudio(clean);
+          if (!this._voiceOn) { if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl); return; }
+          this._currentAudio = audio;
+          this._ttsPlaying = true;
+          audio.onended = () => {
+            if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl);
+            this._currentAudio = null;
+            this._ttsPlaying = false;
+          };
+          audio.play();
+          return;
+        } catch (e) {
+          const msg = String(e && e.message || e);
+          console.warn('[Salma] ElevenLabs falló, fallback Web Speech:', msg);
+          if (/401|403|429/.test(msg)) {
+            this._elevenLabsDown = true;
+            if (!this._elevenLabsNotified) {
+              this._elevenLabsNotified = true;
+              if (typeof showToast === 'function') showToast('Voz del navegador (ElevenLabs no disponible)');
+            }
+          }
+        }
       }
 
       // Fallback Web Speech
