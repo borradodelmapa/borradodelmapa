@@ -958,8 +958,9 @@ function isRouteRequest(message, history) {
 // Detecta "destino + días" sin ser petición de guía → respuesta estructurada por días (no JSON)
 function isDaysDestination(message) {
   if (isRouteRequest(message)) return false;
-  // Con días explícitos
+  // Con días explícitos (números o palabras: un/dos/tres...)
   if (/\b(\d{1,2})\s*d[ií]as?\b/i.test(message)) return true;
+  if (/\b(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince)\s*d[ií]as?\b/i.test(message)) return true;
   // Solo destino (1-4 palabras, sin pregunta, sin verbo de acción) → tratar como plan 1 día
   const clean = message.trim().replace(/^(me apetece|vamos a)\s+/i, '').trim();
   if (clean.length >= 3 && clean.length <= 40 && clean.split(/\s+/).length <= 4
