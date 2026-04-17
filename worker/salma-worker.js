@@ -1094,11 +1094,16 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode) {
     }
   }));
 
-  // Inyectar enlaces place_id al lado de cada negrita verificada
+  // Limpiar PRIMERO cualquier URL de Maps que Claude haya puesto por su cuenta
   let enriched = reply;
+  enriched = enriched.replace(/\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/search\/[^\s)]*\)?/gi, '');
+  enriched = enriched.replace(/\s*https?:\/\/(?:www\.)?google\.com\/maps\/dir\/[^\s)>\]]+/gi, '');
+  enriched = enriched.replace(/\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/place\/[^\s)]*\)?/gi, '');
+
+  // Inyectar enlaces "cómo llegar" verificados (place_id) al lado de cada negrita
   for (const { bold, name, placeId } of results) {
     if (!placeId) continue;
-    const link = `https://www.google.com/maps/place/?q=place_id:${placeId}`;
+    const link = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(name)}&destination_place_id=${placeId}`;
     // Reemplazar solo la PRIMERA ocurrencia de esta negrita (evitar duplicados)
     const boldEscaped = bold.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     // Si ya tiene un link al lado (paréntesis con URL), no duplicar
@@ -1107,10 +1112,6 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode) {
     // Inyectar link después de la negrita
     enriched = enriched.replace(bold, `${bold} (${link})`);
   }
-
-  // Limpiar cualquier URL de Maps que Claude haya puesto por su cuenta (por si acaso)
-  enriched = enriched.replace(/\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/search\/[^\s)]*\)?/gi, '');
-  enriched = enriched.replace(/\s*https?:\/\/(?:www\.)?google\.com\/maps\/dir\/[^\s)>\]]+/gi, '');
 
   return enriched;
 }
