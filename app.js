@@ -5388,7 +5388,8 @@ function formatMessage(str) {
   // URLs sueltas → enlaces clicables (onclick fuerza apertura externa en PWA)
   html = html.replace(/([a-zA-Z][a-zA-Z0-9+.-]*:\/\/[^\s<]+)/g, function(_, url) {
     var label = url;
-    if (url.indexOf('google.com/maps/dir') !== -1) label = '🗺️ Cómo llegar';
+    if (url.indexOf('google.com/maps/dir/?') !== -1 || url.indexOf('google.com/maps/dir?') !== -1) label = '🗺️ Cómo llegar';
+    else if (url.indexOf('google.com/maps/dir/') !== -1) label = '🗺️ Ruta completa en Google Maps';
     else if (url.indexOf('google.com/maps') !== -1) label = '📍 Abrir en Google Maps';
     else if (url.indexOf('booking.com') !== -1) label = '🏨 Ver en Booking';
     else if (url.indexOf('kiwi.com') !== -1) label = '✈️ Ver vuelo';

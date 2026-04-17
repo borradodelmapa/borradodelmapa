@@ -1142,6 +1142,14 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode) {
     enriched = enriched.replace(bold, `${bold} (${link})`);
   }
 
+  // Al final, añadir enlace a "Ruta completa" si hay 2+ lugares verificados
+  const validPlaces = results.filter(r => r.placeId);
+  if (validPlaces.length >= 2) {
+    const waypoints = validPlaces.map(r => encodeURIComponent(r.googleName || r.name)).join('/');
+    const routeUrl = `https://www.google.com/maps/dir/${waypoints}`;
+    enriched = enriched.trimEnd() + `\n\n${routeUrl}`;
+  }
+
   return enriched;
 }
 
