@@ -36,6 +36,8 @@ const salma = {
   _ttsStreaming: false,
   _ttsPreloaded: null,
   _ttsPrefetchAbort: null,
+  _ttsUnlocked: false,
+  _ttsFailedUntil: 0,
 
   // ═══ VOZ DE SALMA — Toggle global + ElevenLabs + fallback Web Speech ═══
   _voiceOn: false,
@@ -56,7 +58,19 @@ const salma = {
       this._voiceOn = !this._voiceOn;
       localStorage.setItem('salma_voice', this._voiceOn ? 'true' : 'false');
       this._updateVoiceToggleUI();
-      if (!this._voiceOn) this.salmaSpeakStop();
+      if (this._voiceOn) {
+        // Desbloquear Web Speech dentro del gesto del usuario (Chrome autoplay policy)
+        try {
+          if (window.speechSynthesis) {
+            const u = new SpeechSynthesisUtterance(' ');
+            u.volume = 0;
+            speechSynthesis.speak(u);
+            this._ttsUnlocked = true;
+          }
+        } catch (_) {}
+      } else {
+        this.salmaSpeakStop();
+      }
     });
   },
 
@@ -154,10 +168,16 @@ const salma = {
     this._ttsPreloaded = null;
 
     if (!audio) {
+      // Si ElevenLabs falló recientemente, ir directo al navegador sin gastar petición
+      if (Date.now() < this._ttsFailedUntil) {
+        this._ttsSpeakWebSpeech(sentence);
+        return;
+      }
       try {
         audio = await this._ttsFetchAudio(sentence);
       } catch (e) {
         console.warn('[Salma] ElevenLabs falló, fallback Web Speech:', e.message);
+        this._ttsFailedUntil = Date.now() + 10 * 60 * 1000; // 10 min
         this._ttsSpeakWebSpeech(sentence);
         return;
       }
@@ -265,6 +285,12 @@ const salma = {
         return;
       }
 
+      // Si ElevenLabs falló recientemente → directo al navegador
+      if (Date.now() < this._ttsFailedUntil) {
+        this._ttsSpeakWebSpeech(clean);
+        return;
+      }
+
       // Texto corto → una sola llamada directa
       try {
         const audio = await this._ttsFetchAudio(clean);
@@ -280,6 +306,7 @@ const salma = {
         return;
       } catch (e) {
         console.warn('[Salma] ElevenLabs falló, usando voz del navegador:', e.message);
+        this._ttsFailedUntil = Date.now() + 10 * 60 * 1000; // 10 min
       }
 
       // Fallback Web Speech
@@ -760,6 +787,17 @@ const salma = {
     if (!msg && !photo) return;
     if (this._streaming) return;
     if (!this._checkRate()) return;
+
+    // Desbloquear Web Speech dentro del gesto del usuario (Chrome autoplay policy)
+    // Se ejecuta 1 vez por sesión; después TTS del navegador ya puede sonar tras fetches async
+    if (this._voiceOn && !this._ttsUnlocked && window.speechSynthesis) {
+      try {
+        const u = new SpeechSynthesisUtterance(' ');
+        u.volume = 0;
+        speechSynthesis.speak(u);
+        this._ttsUnlocked = true;
+      } catch (_) {}
+    }
 
     // Chip "Pide Taxi": el usuario acaba de escribir el destino → prepend "taxi a"
     if (this._pendingTaxiDest && msg) {
