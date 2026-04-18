@@ -126,7 +126,7 @@
       _currentAudio = null;
     }
     try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (_) {}
-    clearPlayingBtn();
+    // NO limpiamos el botón aquí. Lo hace el caller (toggle stop) o los onended/onerror (final natural).
   }
 
   async function playBlob(blob) {
@@ -326,8 +326,7 @@
 
     box.querySelectorAll('.translator-replay').forEach(btn => {
       btn.addEventListener('click', () => {
-        // Toggle: si está sonando algo, paramos. Si no, reproducimos esta entrada.
-        if (isSpeaking()) { stopAllAudio(); return; }
+        if (isSpeaking()) { stopAllAudio(); clearPlayingBtn(); return; }
         const h = state.history[parseInt(btn.dataset.idx)];
         if (!h) return;
         setPlayingBtn(btn);
