@@ -93,13 +93,26 @@
   }
 
   // ─── TTS cascada: ES→ElevenLabs Salma · resto→Google Cloud TTS · fallback→navegador ───
+  let _currentAudio = null;
+
+  function stopAllAudio() {
+    if (_currentAudio) {
+      try { _currentAudio.pause(); } catch (_) {}
+      try { if (_currentAudio._blobUrl) URL.revokeObjectURL(_currentAudio._blobUrl); } catch (_) {}
+      _currentAudio = null;
+    }
+    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (_) {}
+  }
+
   async function playBlob(blob) {
     if (!blob || !blob.size) return false;
     try {
       const u = URL.createObjectURL(blob);
       const a = new Audio(u);
-      a.onended = () => URL.revokeObjectURL(u);
-      a.onerror = () => URL.revokeObjectURL(u);
+      a._blobUrl = u;
+      _currentAudio = a;
+      a.onended = () => { URL.revokeObjectURL(u); if (_currentAudio === a) _currentAudio = null; };
+      a.onerror = () => { URL.revokeObjectURL(u); if (_currentAudio === a) _currentAudio = null; };
       await a.play();
       return true;
     } catch (_) { return false; }
@@ -133,8 +146,16 @@
     } catch (_) { return false; }
   }
 
+  function isSpeaking() {
+    if (_currentAudio && !_currentAudio.paused && !_currentAudio.ended) return true;
+    if (window.speechSynthesis && (window.speechSynthesis.speaking || window.speechSynthesis.pending)) return true;
+    return false;
+  }
+
   async function speak(text, langCode) {
     if (!text) return;
+    // Si ya hay algo sonando, lo cortamos antes de empezar algo nuevo.
+    stopAllAudio();
     const bcp = getLang(langCode).bcp;
     if (langCode === 'es') {
       if (await tryElevenSalma(text)) return;
@@ -270,6 +291,8 @@
 
     box.querySelectorAll('.translator-replay').forEach(btn => {
       btn.addEventListener('click', () => {
+        // Toggle: si está sonando algo, paramos. Si no, reproducimos esta entrada.
+        if (isSpeaking()) { stopAllAudio(); return; }
         const h = state.history[parseInt(btn.dataset.idx)];
         if (h) speak(h.textTo, h.to);
       });
