@@ -1082,6 +1082,16 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
   // Excluir patrones que NO son lugares: **Día N**, **8€**, **2h30**, **Dónde comer**
   const boldRegex = /\*\*([^*]+)\*\*/g;
   const skipPatterns = /^(D[ií]a\s*\d|d[oó]nde\s|para\s|c[oó]mo\s|\d+[€$£¥]|\d+h|\d+min|tip[os]?:|consejo|nota|importante|atenci[oó]n|ojo|cuidado)/i;
+  // Nombre propio: descarta precios/puntuaciones/frases con minúsculas
+  // - 1 palabra: debe ser capitalizada y ≥4 chars (permite "Alhambra", "Louvre", "Coliseo")
+  // - 2+ palabras: al menos 2 capitalizadas (permite "Heritage Corner Hostel", "Ba Dinh")
+  function looksLikeProperName(name) {
+    const words = name.trim().split(/\s+/);
+    const capWord = /^[A-ZÁÉÍÓÚÑÀÈÌÒÙÂÊÎÔÛÄËÏÖÜÇ]/;
+    const capsWords = words.filter(w => capWord.test(w));
+    if (words.length === 1) return capsWords.length === 1 && words[0].length >= 4;
+    return capsWords.length >= 2;
+  }
   const matches = [];
   const seen = new Set();
   let m;
@@ -1092,6 +1102,8 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
     if (name.length < 3 || skipPatterns.test(name) || seen.has(nameLower)) continue;
     // Filtrar valores numéricos/precios sueltos
     if (/^\d+[\s.,]?\d*\s*[€$£¥kmh]?$/i.test(name)) continue;
+    // Filtrar negritas que no parecen nombre propio (precios, puntuaciones, "la noche", etc.)
+    if (!looksLikeProperName(name)) continue;
     seen.add(nameLower);
     matches.push({ bold: m[0], name });
   }
@@ -1134,6 +1146,9 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
         const hasBad = types.some(t => BAD_TYPES.has(t));
         const hasGood = types.some(t => GOOD_TYPES.has(t));
         if (hasBad && !hasGood) return { bold, name, placeId: null };
+        // Descartar si el nombre que devuelve Google no se parece al bold
+        // (ej: bold "Hoan Kiem" → Google devuelve "Hoan Kiem Lake" o algo no relacionado)
+        if (!strictNameMatch(name, place.name || '')) return { bold, name, placeId: null };
         return { bold, name, placeId: place.place_id, googleName: place.name };
       }
       return { bold, name, placeId: null };
