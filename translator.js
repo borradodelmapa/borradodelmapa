@@ -220,9 +220,10 @@
     if (!SR) return null;
     const r = new SR();
     r.lang = getLang(langCode).bcp;
-    // continuous=false: el engine auto-termina tras silencio, imposible loop.
-    // Para grabar más, el usuario toca el micro de nuevo.
-    r.continuous = false;
+    // continuous=true: aguanta silencios mientras grabamos una conversación.
+    // Si el engine muere por su cuenta, en onend creamos una instancia NUEVA (no restart
+    // sobre la misma) → results vacíos → imposible re-emitir finales antiguos.
+    r.continuous = true;
     r.interimResults = true;
     r.maxAlternatives = 1;
     return r;
@@ -369,29 +370,11 @@
     if (el) el.remove();
   }
 
-  async function startRec(side) {
-    if (state.recognizing) return;
-    const fromCode = side === 'a' ? state.langA : state.langB;
-    const rec = createRecognition(fromCode);
-    if (!rec) {
-      if (typeof showToast === 'function') showToast('Tu navegador no soporta reconocimiento de voz');
-      return;
-    }
-    state.recognition = rec;
-    state.recognizing = true;
-    state.recognizingSide = side;
-    state.recognizingFromCode = fromCode;
-    state.userStopped = false;
-    // NO reseteamos accumulated aquí: permitimos que al tocar otra vez tras corte se siga acumulando
-    // si el usuario no había procesado (botón aún activo). Pero al procesar, sí se limpia.
-    state.interim = '';
-    state.lastFinalIdx = 0;
-
-    updateMicUI(side, true);
-    showLiveTranscript();
-
+  // Monta todos los handlers en una instancia de SpeechRecognition.
+  // Si el engine muere solo (sin userStopped), creamos INSTANCIA NUEVA y reenlazamos.
+  // Así evitamos que results conserve finales antiguos y se re-emitan como nuevos (bug "hola hola hola").
+  function _attachRecHandlers(rec, side, fromCode) {
     rec.onresult = (e) => {
-      // Fix móvil: Chrome Android re-emite finales. Dedupe por índice + por contenido (belt-and-suspenders).
       let newFinal = '';
       let interimChunk = '';
       for (let i = 0; i < e.results.length; i++) {
@@ -399,8 +382,7 @@
         if (r.isFinal) {
           if (i >= state.lastFinalIdx) {
             const t = r[0].transcript.trim();
-            // Dedup por contenido: si el acumulado ya termina con este mismo texto, lo saltamos
-            const acc = (state.accumulated + newFinal).trim();
+            const acc = (state.accumulated + ' ' + newFinal).trim();
             if (t && !acc.toLowerCase().endsWith(t.toLowerCase())) {
               newFinal += t + ' ';
             }
@@ -420,14 +402,46 @@
     rec.onerror = (e) => {
       if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
         if (typeof showToast === 'function') showToast('Permite el acceso al micrófono');
+        state.userStopped = true; // no queremos auto-restart si es problema de permisos
       }
-      // onend se encarga de finalizar (móvil a veces no dispara onend tras error, timeout lo cubre)
     };
 
     rec.onend = () => {
-      // NO auto-restart. Móvil re-emite "hola" en loop si reiniciamos. Finalizamos y ya.
+      // Si el usuario NO ha parado, el engine murió solo (silencio / límite). Creamos instancia nueva.
+      if (state.recognizing && !state.userStopped) {
+        const fresh = createRecognition(fromCode);
+        if (fresh) {
+          state.recognition = fresh;
+          state.lastFinalIdx = 0; // instance nueva = results vacíos, contador desde 0
+          _attachRecHandlers(fresh, side, fromCode);
+          try { fresh.start(); return; } catch (_) {}
+        }
+      }
       finishRec();
     };
+  }
+
+  async function startRec(side) {
+    if (state.recognizing) return;
+    const fromCode = side === 'a' ? state.langA : state.langB;
+    const rec = createRecognition(fromCode);
+    if (!rec) {
+      if (typeof showToast === 'function') showToast('Tu navegador no soporta reconocimiento de voz');
+      return;
+    }
+    state.recognition = rec;
+    state.recognizing = true;
+    state.recognizingSide = side;
+    state.recognizingFromCode = fromCode;
+    state.userStopped = false;
+    state.accumulated = '';
+    state.interim = '';
+    state.lastFinalIdx = 0;
+
+    updateMicUI(side, true);
+    showLiveTranscript();
+
+    _attachRecHandlers(rec, side, fromCode);
 
     try { rec.start(); }
     catch (_) {
