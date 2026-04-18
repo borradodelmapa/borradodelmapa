@@ -3405,11 +3405,6 @@ async function buscarHotelesBooking(input, rapidApiKey) {
       result.nota_presupuesto = `El usuario busca hoteles por debajo de ${presupuestoMax} EUR/noche.`;
     }
 
-    // [HOTEL-DBG] — TEMPORAL: log de URLs de foto que devuelve Booking
-    try {
-      console.log('[HOTEL-DBG] Booking tool result:', JSON.stringify(hoteles.map(h => ({ nombre: h.nombre, foto: h.foto, enlace: h.enlace_reserva })), null, 2));
-    } catch (_) {}
-
     return result;
 
   } catch (error) {
@@ -6888,6 +6883,7 @@ INSTRUCCIONES:
         let currentMessages = [...messages];
         let lastFlightBookingUrl = null; // Guardar enlace de vuelos para inyectar si GPT no lo incluye
         let _toolUrls = []; // URLs de buscar_lugar y buscar_web para inyectar si Claude no las pone
+        let _hotelPhotosByName = new Map(); // nombre.toLowerCase() → { foto, enlace } de buscar_hotel (para reparar markdown roto)
         let _lastBuscarLugarCoords = null; // Coords del último lugar buscado (para deep links transporte)
         let _pendingTransportActions = null; // Acciones de transporte para enviar en done event
         let _pendingTransportTip = null;
@@ -7023,6 +7019,14 @@ INSTRUCCIONES:
               if (block.name === 'buscar_vuelos' && toolResult.enlace_reserva) {
                 lastFlightBookingUrl = toolResult.enlace_reserva;
               }
+              // Capturar fotos y enlaces de hoteles para reparar markdown roto de Claude
+              if (block.name === 'buscar_hotel' && Array.isArray(toolResult.hoteles)) {
+                for (const h of toolResult.hoteles) {
+                  if (h.nombre && h.foto) {
+                    _hotelPhotosByName.set(h.nombre.toLowerCase().trim(), { foto: h.foto, enlace: h.enlace_reserva || '' });
+                  }
+                }
+              }
               // Capturar URLs de resultados de herramientas para inyectar si Claude no las pone
               if (block.name === 'buscar_lugar' && toolResult.lugares) {
                 for (const l of toolResult.lugares) {
@@ -7104,6 +7108,16 @@ INSTRUCCIONES:
         // ── Procesar respuesta final (ruta, verificación, etc.) ──
         let route = extractRouteFromReply(allText);
         let reply = replyWithoutRouteBlock(allText);
+        // ── Reparar markdown de imagen roto de Claude en respuestas de hotel ──
+        // Sonnet a veces emite ![Name]( + saltos de línea + url_enlace en vez de ![Name](url_foto).
+        // Sustituimos por la foto correcta del tool result; si no hay match, quitamos el fragmento huérfano.
+        if (_hotelPhotosByName.size > 0 && !route) {
+          reply = reply.replace(/!\[([^\]]+)\]\(\s*(?:\n|$)/g, (_match, name) => {
+            const entry = _hotelPhotosByName.get(name.toLowerCase().trim());
+            if (entry && entry.foto) return `![${name}](${entry.foto})\n`;
+            return '';
+          });
+        }
         // Inyectar Google Maps automáticamente si aplica
         reply = injectGoogleMapsLink(reply, userLocation, message, isLocalQuery);
         // Inyectar bloque de transporte (app + descarga) si aplica
@@ -7130,14 +7144,7 @@ INSTRUCCIONES:
           const _region = _isValidDest ? _msgDest : (userLocationName || location || '');
           const _cc = countryCode || userCountryCode || '';
           const _skipRouteLink = isHotelRequest(message);
-          // [HOTEL-DBG] — TEMPORAL: capturar reply antes de injectVerifiedMapsLinks
-          if (_skipRouteLink) {
-            try { console.log('[HOTEL-DBG] reply PRE-injectMaps (first 3000):', reply.slice(0, 3000)); } catch (_) {}
-          }
           try { reply = await injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc, _skipRouteLink); } catch (_) {}
-          if (_skipRouteLink) {
-            try { console.log('[HOTEL-DBG] reply POST-injectMaps (first 3000):', reply.slice(0, 3000)); } catch (_) {}
-          }
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
 
           // FALLBACK: si no hay ningún link dir/ (Claude no puso negritas) y el mensaje del usuario
