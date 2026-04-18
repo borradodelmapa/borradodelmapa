@@ -63,7 +63,7 @@
     const s = document.createElement('style');
     s.id = 'dbg-styles';
     s.textContent = `
-      #dbg-btn{position:fixed;bottom:12px;right:12px;z-index:2147483647;width:42px;height:42px;border-radius:50%;background:#060503;color:#f0b429;border:1.5px solid #f0b429;font-size:18px;font-family:'JetBrains Mono',monospace;font-weight:700;box-shadow:0 2px 10px rgba(0,0,0,.5);cursor:pointer;opacity:.55;padding:0;display:flex;align-items:center;justify-content:center}
+      #dbg-btn{position:fixed;bottom:calc(130px + env(safe-area-inset-bottom, 0px));right:12px;z-index:2147483647;width:42px;height:42px;border-radius:50%;background:#060503;color:#f0b429;border:1.5px solid #f0b429;font-size:18px;font-family:'JetBrains Mono',monospace;font-weight:700;box-shadow:0 2px 10px rgba(0,0,0,.5);cursor:pointer;opacity:.55;padding:0;display:flex;align-items:center;justify-content:center}
       #dbg-btn.dbg-has-error{background:#ef4444;color:#fff;border-color:#fff;opacity:1;animation:dbg-pulse 1s infinite}
       @keyframes dbg-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
       #dbg-overlay{position:fixed;inset:0;z-index:2147483646;background:#060503;display:flex;flex-direction:column;font-family:'JetBrains Mono',monospace}
