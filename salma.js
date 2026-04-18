@@ -140,16 +140,18 @@ const salma = {
     return sentences.filter(s => s.length > 0);
   },
 
-  // Fetch audio de ElevenLabs para un trozo de texto
+  // Fetch audio TTS — Google Cloud TTS (voz neural española).
+  // ElevenLabs desactivado temporalmente por inestabilidad de cuota.
+  // Para volver a ElevenLabs: cambiar '/tts-google' por '/tts' y quitar el body extra.
   async _ttsFetchAudio(text, signal) {
     const api = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
-    const res = await fetch(api + '/tts', {
+    const res = await fetch(api + '/tts-google', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({ text, languageCode: 'es-ES', voiceName: 'es-ES-Neural2-C' }),
       signal,
     });
-    if (!res.ok) throw new Error('ElevenLabs ' + res.status);
+    if (!res.ok) throw new Error('GoogleTTS ' + res.status);
     const blob = await res.blob();
     const audioUrl = URL.createObjectURL(blob);
     const audio = new Audio(audioUrl);

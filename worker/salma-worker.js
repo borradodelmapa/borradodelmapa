@@ -5846,7 +5846,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     if (request.method === 'POST' && url.pathname === '/tts-google') {
       const corsH = { 'Access-Control-Allow-Origin': '*' };
       try {
-        const { text, languageCode } = await request.json();
+        const { text, languageCode, voiceName } = await request.json();
         if (!text || !languageCode) {
           return new Response(JSON.stringify({ error: 'missing params' }), {
             status: 400, headers: { ...corsH, 'Content-Type': 'application/json' },
@@ -5859,12 +5859,14 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           });
         }
         const ttsKey = env.GOOGLE_TTS_KEY || env.GOOGLE_PLACES_KEY;
+        const voice = { languageCode };
+        if (voiceName) voice.name = voiceName;
         const gRes = await fetch(`https://texttospeech.googleapis.com/v1/text:synthesize?key=${ttsKey}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             input: { text: clean },
-            voice: { languageCode },
+            voice,
             audioConfig: { audioEncoding: 'MP3', speakingRate: 0.95 },
           }),
         });
