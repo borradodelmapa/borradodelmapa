@@ -5753,6 +5753,54 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       }
     }
 
+    // ─── POST /translate — Traductor simultáneo (Claude Haiku 4.5) ───
+    if (request.method === 'POST' && url.pathname === '/translate') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      try {
+        const { text, fromLang, toLang } = await request.json();
+        if (!text || !toLang) {
+          return new Response(JSON.stringify({ error: 'missing params' }), { status: 400, headers: corsH });
+        }
+        const clean = String(text).trim().slice(0, 8000);
+        if (!clean) {
+          return new Response(JSON.stringify({ translated: '' }), { headers: corsH });
+        }
+        const fromHint = fromLang ? ` de ${fromLang}` : '';
+        const prompt = `Traduce el siguiente texto${fromHint} a ${toLang}. Devuelve SOLO la traducción, sin comillas, sin explicaciones, sin prefijos, sin alternativas. Mantén los saltos de línea y la estructura. Si hay varias personas hablando, conserva esa separación. Si el texto ya está en ${toLang}, devuélvelo tal cual.\n\nTexto:\n${clean}`;
+
+        const anthRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+          method: 'POST',
+          headers: {
+            'x-api-key': env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 4000,
+            messages: [{ role: 'user', content: prompt }],
+          }),
+        });
+
+        if (!anthRes.ok) {
+          const detail = await anthRes.text().catch(() => '');
+          return new Response(JSON.stringify({ error: 'anthropic_error', status: anthRes.status, detail: detail.slice(0, 200) }), {
+            status: 502,
+            headers: corsH,
+          });
+        }
+
+        const data = await anthRes.json();
+        const translated = ((data.content && data.content[0] && data.content[0].text) || '').trim();
+        return new Response(JSON.stringify({ translated }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: String(e && e.message || e) }), {
+          status: 500,
+          headers: corsH,
+        });
+      }
+    }
+
     // ═══ FLIGHT WATCHES — Vigilancia de vuelos ═══
 
     const FW_CORS = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };

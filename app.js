@@ -242,6 +242,7 @@ function _renderChatEmpty() {
     { label: 'Galería', icon: _ci('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>'), msg: null, action: 'galeria' },
     // "Explorar zona" (narrador) → desactivado 2026-04-17. Ver PENDIENTES.md
     { label: 'Cambio moneda', icon: _ci('<circle cx="9" cy="9" r="6"/><path d="M15.5 15.5a6 6 0 10-6-6"/><path d="M7.5 9h3M9 7.5v3"/><path d="M13.5 15h3M15 13.5v3"/>'), msg: null, action: 'moneda' },
+    { label: 'Traductor', icon: _ci('<path d="M4 5h7"/><path d="M9 3v2c0 4.418-2.686 8-6 8"/><path d="M5 9a8 8 0 006 3"/><path d="M12 20l4-9 4 9"/><path d="M19 18h-6"/>'), msg: null, action: 'traductor' },
     { label: 'Emergencia', icon: '', msg: null, action: 'sos', cls: 'chat-empty-chip--sos', emoji: '🆘' },
   ];
   const renderChip = c => `<button class="chat-empty-chip ${c.cls || ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}">${c.icon || ''}${c.emoji ? `<span class="chip-emoji">${c.emoji}</span>` : ''}${c.label}</button>`;
@@ -307,6 +308,11 @@ function _renderChatEmpty() {
       }
       if (action === 'moneda') {
         openCurrencyConverter();
+        return;
+      }
+      if (action === 'traductor') {
+        if (typeof window.openTranslator === 'function') window.openTranslator();
+        else if (typeof showToast === 'function') showToast('Traductor no disponible');
         return;
       }
       if (chip.dataset.msg && typeof salma !== 'undefined') salma.send(chip.dataset.msg);
