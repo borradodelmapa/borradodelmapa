@@ -5410,6 +5410,35 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       }
     }
 
+    // ─── /admin/verify-place — Valida coords contra findPlaceFromQuery ───
+    if (request.method === 'GET' && url.pathname === '/admin/verify-place') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const authHeader = request.headers.get('Authorization') || '';
+      if (authHeader.replace('Bearer ', '') !== env.ADMIN_TOKEN) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
+      }
+      const name = url.searchParams.get('name') || '';
+      const lat = parseFloat(url.searchParams.get('lat') || '0');
+      const lng = parseFloat(url.searchParams.get('lng') || '0');
+      try {
+        const bias = (lat && lng) ? `&locationbias=circle:5000@${lat},${lng}` : '';
+        const r = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(name)}&inputtype=textquery${bias}&fields=place_id,name,formatted_address,geometry&language=es&key=${env.GOOGLE_PLACES_KEY}`);
+        const d = await r.json();
+        const top = d.candidates?.[0];
+        if (!top) return new Response(JSON.stringify({ found: false, status: d.status }), { headers: corsH });
+        const tLat = top.geometry?.location?.lat;
+        const tLng = top.geometry?.location?.lng;
+        const dist = (tLat && tLng && lat && lng) ? haversineKm(lat, lng, tLat, tLng) * 1000 : null;
+        return new Response(JSON.stringify({
+          found: true, google_name: top.name, google_lat: tLat, google_lng: tLng,
+          google_address: top.formatted_address, distance_m: dist ? Math.round(dist) : null,
+          place_id: top.place_id,
+        }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ─── /admin/test-extract — Fase 1: Haiku extrae reglas del prompt ───
     if (request.method === 'POST' && url.pathname === '/admin/test-extract') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
@@ -5471,15 +5500,34 @@ Responde en JSON estricto (sin markdown, sin backticks):
         const ruleResult = { id: rule.id, name: rule.name, description: rule.description, tests: [] };
 
         for (const testMsg of rule.test_messages.slice(0, 2)) {
-          // Salma responde al mensaje trampa
-          const salmaResult = await callOpenAI(apiKey, {
-            model: 'gpt-4o-mini',
-            max_tokens: 1500,
-            temperature: 0.7,
-            system: currentPrompt,
-            messages: [{ role: 'user', content: testMsg }],
-          });
-          const salmaReply = salmaResult.text || '';
+          // Salma responde al mensaje trampa — Claude Sonnet (modelo real de producción)
+          let salmaReply = '';
+          let debugInfo = '';
+          try {
+            const salmaRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': env.ANTHROPIC_API_KEY,
+                'anthropic-version': '2023-06-01',
+              },
+              body: JSON.stringify({
+                model: 'claude-sonnet-4-6',
+                max_tokens: 1500,
+                temperature: 0.7,
+                system: currentPrompt,
+                messages: [{ role: 'user', content: testMsg }],
+              }),
+            });
+            const salmaJson = await salmaRes.json();
+            salmaReply = salmaJson?.content?.[0]?.text || '';
+            if (!salmaReply) {
+              debugInfo = `[DEBUG status=${salmaRes.status}] ` + JSON.stringify(salmaJson).slice(0, 500);
+            }
+          } catch (e) {
+            debugInfo = `[DEBUG exception] ` + e.message;
+          }
+          if (!salmaReply && debugInfo) salmaReply = debugInfo;
 
           // GPT evalúa la respuesta
           const evalPrompt = `Evalúa si esta respuesta de un chatbot cumple una regla específica.
