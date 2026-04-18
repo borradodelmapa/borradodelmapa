@@ -94,6 +94,30 @@
 
   // ─── TTS cascada: ES→ElevenLabs Salma · resto→Google Cloud TTS · fallback→navegador ───
   let _currentAudio = null;
+  let _playingBtn = null;
+
+  const PLAY_ICON_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/><path d="M19.07 4.93a10 10 0 010 14.14"/></svg>';
+  const STOP_ICON_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>';
+
+  function setPlayingBtn(btn) {
+    if (_playingBtn && _playingBtn !== btn) {
+      _playingBtn.innerHTML = PLAY_ICON_SVG;
+      _playingBtn.classList.remove('translator-replay--playing');
+    }
+    _playingBtn = btn || null;
+    if (btn) {
+      btn.innerHTML = STOP_ICON_SVG;
+      btn.classList.add('translator-replay--playing');
+    }
+  }
+
+  function clearPlayingBtn() {
+    if (_playingBtn) {
+      _playingBtn.innerHTML = PLAY_ICON_SVG;
+      _playingBtn.classList.remove('translator-replay--playing');
+      _playingBtn = null;
+    }
+  }
 
   function stopAllAudio() {
     if (_currentAudio) {
@@ -102,6 +126,7 @@
       _currentAudio = null;
     }
     try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (_) {}
+    clearPlayingBtn();
   }
 
   async function playBlob(blob) {
@@ -111,8 +136,13 @@
       const a = new Audio(u);
       a._blobUrl = u;
       _currentAudio = a;
-      a.onended = () => { URL.revokeObjectURL(u); if (_currentAudio === a) _currentAudio = null; };
-      a.onerror = () => { URL.revokeObjectURL(u); if (_currentAudio === a) _currentAudio = null; };
+      const clean = () => {
+        URL.revokeObjectURL(u);
+        if (_currentAudio === a) { _currentAudio = null; clearPlayingBtn(); }
+      };
+      a.onended = clean;
+      a.onerror = clean;
+      a.onpause = () => { if (a.ended) clean(); };
       await a.play();
       return true;
     } catch (_) { return false; }
@@ -178,8 +208,10 @@
       const match = voices.find(v => v.lang === bcp) || voices.find(v => v.lang && v.lang.startsWith(base));
       if (match) u.voice = match;
       u.rate = 0.95;
+      u.onend = () => clearPlayingBtn();
+      u.onerror = () => clearPlayingBtn();
       window.speechSynthesis.speak(u);
-    } catch (_) {}
+    } catch (_) { clearPlayingBtn(); }
   }
 
   // ─── Speech Recognition ───
@@ -188,7 +220,9 @@
     if (!SR) return null;
     const r = new SR();
     r.lang = getLang(langCode).bcp;
-    r.continuous = true;
+    // continuous=false: el engine auto-termina tras silencio, imposible loop.
+    // Para grabar más, el usuario toca el micro de nuevo.
+    r.continuous = false;
     r.interimResults = true;
     r.maxAlternatives = 1;
     return r;
@@ -294,7 +328,9 @@
         // Toggle: si está sonando algo, paramos. Si no, reproducimos esta entrada.
         if (isSpeaking()) { stopAllAudio(); return; }
         const h = state.history[parseInt(btn.dataset.idx)];
-        if (h) speak(h.textTo, h.to);
+        if (!h) return;
+        setPlayingBtn(btn);
+        speak(h.textTo, h.to);
       });
     });
   }
