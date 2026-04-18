@@ -64,11 +64,11 @@
     recognizingSide: null,
     recognizingFromCode: null,
     userStopped: false,
-    accumulated: '',
+    accumulated: '',      // texto total visible (committed + sessionText + interim)
+    committedText: '',     // texto cerrado de instancias anteriores (cuando el engine murió y arrancamos otra)
     interim: '',
-    lastFinalIdx: 0, // fix móvil: trackear qué finales ya acumulé (no fiarme de e.resultIndex)
-    stopTimer: null, // failsafe si onend no dispara tras abort()
-    history: [], // { from, to, textFrom, textTo }
+    stopTimer: null,
+    history: [],
   };
 
   // ─── Helpers ───
@@ -385,44 +385,54 @@
     return out;
   }
 
-  // Monta todos los handlers en una instancia de SpeechRecognition.
-  // Si el engine muere solo (sin userStopped), creamos INSTANCIA NUEVA y reenlazamos.
-  // Así evitamos que results conserve finales antiguos y se re-emitan como nuevos (bug "hola hola hola").
+  // Colapsa los finales del engine evitando el bug de Chrome Android donde
+  // el mismo texto se expande progresivamente en índices distintos:
+  //   ["hola", "hola", "hola Salma", "hola Salma qué tal"]
+  // Si un final EMPIEZA con el anterior, es una expansión → reemplazar, no sumar.
+  function _collapseFinals(results) {
+    const finals = [];
+    for (let i = 0; i < results.length; i++) {
+      if (results[i].isFinal) {
+        const t = (results[i][0].transcript || '').trim();
+        if (t) finals.push(t);
+      }
+    }
+    const out = [];
+    for (const t of finals) {
+      const tLow = t.toLowerCase();
+      const last = out[out.length - 1];
+      const lastLow = last ? last.toLowerCase() : '';
+      if (last && tLow.startsWith(lastLow)) {
+        out[out.length - 1] = t; // t es expansión del último
+      } else if (last && lastLow.startsWith(tLow)) {
+        // t es prefijo del último → ya lo tenemos
+      } else {
+        out.push(t);
+      }
+    }
+    return out.join(' ');
+  }
+
+  // Monta handlers en una instancia. Si el engine muere solo creamos INSTANCIA NUEVA:
+  // committedText = accumulated hasta ahora, y la nueva sesión arranca con e.results vacío.
   function _attachRecHandlers(rec, side, fromCode) {
     rec.onresult = (e) => {
-      _dlog('onresult', {
-        resultIndex: e.resultIndex,
-        total: e.results.length,
-        lastFinalIdx_before: state.lastFinalIdx,
-        results: _summarizeResults(e.results),
-      });
-      let newFinal = '';
+      const sessionText = _collapseFinals(e.results);
       let interimChunk = '';
       for (let i = 0; i < e.results.length; i++) {
-        const r = e.results[i];
-        if (r.isFinal) {
-          if (i >= state.lastFinalIdx) {
-            const t = r[0].transcript.trim();
-            const acc = (state.accumulated + ' ' + newFinal).trim();
-            if (t && !acc.toLowerCase().endsWith(t.toLowerCase())) {
-              newFinal += t + ' ';
-              _dlog('  → ADD final[' + i + ']:', JSON.stringify(t));
-            } else {
-              _dlog('  → SKIP final[' + i + '] (dedup contenido):', JSON.stringify(t));
-            }
-            state.lastFinalIdx = i + 1;
-          } else {
-            _dlog('  → SKIP final[' + i + '] (dedup idx, lastFinalIdx=' + state.lastFinalIdx + ')');
-          }
-        } else {
-          interimChunk += r[0].transcript + ' ';
-        }
+        if (!e.results[i].isFinal) interimChunk += e.results[i][0].transcript + ' ';
       }
-      if (newFinal.trim()) {
-        state.accumulated = (state.accumulated + ' ' + newFinal).trim();
-      }
+      const parts = [state.committedText, sessionText].filter(Boolean);
+      state.accumulated = parts.join(' ').trim();
       state.interim = interimChunk.trim();
-      _dlog('  accumulated:', JSON.stringify(state.accumulated), 'interim:', JSON.stringify(state.interim));
+      _dlog('onresult', {
+        total: e.results.length,
+        resultIndex: e.resultIndex,
+        sessionText,
+        accumulated: state.accumulated,
+        interim: state.interim,
+        results: _summarizeResults(e.results),
+      });
       showLiveTranscript();
     };
 
@@ -437,11 +447,12 @@
     rec.onend = () => {
       _dlog('onend', { userStopped: state.userStopped, recognizing: state.recognizing, accumulated: state.accumulated });
       if (state.recognizing && !state.userStopped) {
-        _dlog('  → creando instancia NUEVA (engine murió solo)');
+        _dlog('  → creando instancia NUEVA (engine murió solo). committedText <- accumulated');
+        // Cerramos lo de esta sesión: pasa a committed. La nueva instancia empezará con results vacío.
+        state.committedText = state.accumulated;
         const fresh = createRecognition(fromCode);
         if (fresh) {
           state.recognition = fresh;
-          state.lastFinalIdx = 0;
           _attachRecHandlers(fresh, side, fromCode);
           try { fresh.start(); _dlog('  → nueva instancia.start() OK'); return; }
           catch (err) { _dlog('  → nueva instancia.start() FALLO:', err.message); }
@@ -471,8 +482,8 @@
     state.recognizingFromCode = fromCode;
     state.userStopped = false;
     state.accumulated = '';
+    state.committedText = '';
     state.interim = '';
-    state.lastFinalIdx = 0;
 
     updateMicUI(side, true);
     showLiveTranscript();
