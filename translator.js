@@ -62,10 +62,12 @@
     recognition: null,
     recognizing: false,
     recognizingSide: null,
+    recognizingFromCode: null,
     userStopped: false,
     accumulated: '',
     interim: '',
     lastFinalIdx: 0, // fix móvil: trackear qué finales ya acumulé (no fiarme de e.resultIndex)
+    stopTimer: null, // failsafe si onend no dispara tras abort()
     history: [], // { from, to, textFrom, textTo }
   };
 
@@ -319,8 +321,10 @@
     state.recognition = rec;
     state.recognizing = true;
     state.recognizingSide = side;
+    state.recognizingFromCode = fromCode;
     state.userStopped = false;
-    state.accumulated = '';
+    // NO reseteamos accumulated aquí: permitimos que al tocar otra vez tras corte se siga acumulando
+    // si el usuario no había procesado (botón aún activo). Pero al procesar, sí se limpia.
     state.interim = '';
     state.lastFinalIdx = 0;
 
@@ -328,15 +332,19 @@
     showLiveTranscript();
 
     rec.onresult = (e) => {
-      // Fix móvil: en Chrome Android e.resultIndex no es fiable → llevamos nuestro propio contador.
-      // Cada final solo se acumula UNA vez aunque el evento se dispare repetidamente con el mismo array.
+      // Fix móvil: Chrome Android re-emite finales. Dedupe por índice + por contenido (belt-and-suspenders).
       let newFinal = '';
       let interimChunk = '';
       for (let i = 0; i < e.results.length; i++) {
         const r = e.results[i];
         if (r.isFinal) {
           if (i >= state.lastFinalIdx) {
-            newFinal += r[0].transcript + ' ';
+            const t = r[0].transcript.trim();
+            // Dedup por contenido: si el acumulado ya termina con este mismo texto, lo saltamos
+            const acc = (state.accumulated + newFinal).trim();
+            if (t && !acc.toLowerCase().endsWith(t.toLowerCase())) {
+              newFinal += t + ' ';
+            }
             state.lastFinalIdx = i + 1;
           }
         } else {
@@ -353,47 +361,52 @@
     rec.onerror = (e) => {
       if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
         if (typeof showToast === 'function') showToast('Permite el acceso al micrófono');
-        finishRec(side, fromCode);
       }
-      // 'no-speech' y 'aborted' se manejan en onend con auto-restart
+      // onend se encarga de finalizar (móvil a veces no dispara onend tras error, timeout lo cubre)
     };
 
     rec.onend = () => {
-      // Si el usuario no ha pulsado parar, reintentar (el navegador cortó por silencio o límite)
-      if (state.recognizing && !state.userStopped) {
-        state.lastFinalIdx = 0; // nueva sesión, e.results se resetea
-        try { rec.start(); return; } catch (_) {}
-      }
-      finishRec(side, fromCode);
+      // NO auto-restart. Móvil re-emite "hola" en loop si reiniciamos. Finalizamos y ya.
+      finishRec();
     };
 
     try { rec.start(); }
     catch (_) {
       state.recognizing = false;
       state.recognizingSide = null;
+      state.recognizingFromCode = null;
       updateMicUI(side, false);
       removeLiveTranscript();
     }
   }
 
-  async function finishRec(side, fromCode) {
+  async function finishRec() {
+    if (state.stopTimer) { clearTimeout(state.stopTimer); state.stopTimer = null; }
+    const side = state.recognizingSide;
+    const fromCode = state.recognizingFromCode;
     state.recognizing = false;
     state.recognizingSide = null;
+    state.recognizingFromCode = null;
     state.recognition = null;
-    updateMicUI(side, false);
+    if (side) updateMicUI(side, false);
     removeLiveTranscript();
     const spoken = (state.accumulated + ' ' + state.interim).trim();
     state.accumulated = '';
     state.interim = '';
-    if (!spoken) return;
+    if (!spoken || !side || !fromCode) return;
     const toCode = side === 'a' ? state.langB : state.langA;
     await processTranslation(spoken, fromCode, toCode);
   }
 
   function stopRec() {
-    if (!state.recognizing || !state.recognition) return;
+    if (!state.recognizing) return;
     state.userStopped = true;
-    try { state.recognition.stop(); } catch (_) {}
+    try { state.recognition && state.recognition.abort(); } catch (_) {}
+    // Failsafe: si onend no dispara en 1.5s (móvil a veces no lo hace), forzamos el cierre
+    if (state.stopTimer) clearTimeout(state.stopTimer);
+    state.stopTimer = setTimeout(() => {
+      if (state.recognizing) finishRec();
+    }, 1500);
   }
 
   function toggleRec(side) {
