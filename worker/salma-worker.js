@@ -1075,7 +1075,7 @@ function formatDayHeaders(text, numDays) {
 // ═══ INJECT VERIFIED MAPS LINKS — Post-streaming: extrae negritas → Google Places → place_id ═══
 // Claude solo escribe nombres en negrita. El worker busca cada uno en Google Places
 // y añade el enlace verificado (place_id) al lado. Sin intervención de Claude en URLs.
-async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode) {
+async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, skipRouteLink = false) {
   if (!placesKey || !reply) return reply;
 
   // Extraer nombres en negrita: **Nombre del Lugar**
@@ -1097,19 +1097,43 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode) {
   }
   if (!matches.length) return reply;
 
-  // Buscar todos en Google Places en paralelo (Find Place, ligero: place_id + name)
+  // Filtro de types: solo inyectar link si el place devuelto es un lugar real (no barrio, calle, dirección)
+  const BAD_TYPES = new Set([
+    'locality','sublocality','sublocality_level_1','sublocality_level_2','sublocality_level_3',
+    'neighborhood','political',
+    'administrative_area_level_1','administrative_area_level_2','administrative_area_level_3','administrative_area_level_4',
+    'country','continent',
+    'street_address','route','premise','subpremise','postal_code','postal_code_prefix','intersection',
+    'plus_code','geocode'
+  ]);
+  const GOOD_TYPES = new Set([
+    'lodging','restaurant','food','cafe','bar','bakery','meal_takeaway','meal_delivery','night_club',
+    'tourist_attraction','museum','art_gallery','aquarium','zoo','park','amusement_park','campground','rv_park',
+    'stadium','place_of_worship','church','mosque','synagogue','hindu_temple','cemetery',
+    'spa','gym','shopping_mall','department_store','store','supermarket','convenience_store','book_store','clothing_store',
+    'pharmacy','hospital','doctor','dentist','veterinary_care',
+    'movie_theater','library','university','school','train_station','subway_station','bus_station','airport','transit_station',
+    'gas_station','car_rental','parking','atm','bank','embassy','police','fire_station','post_office'
+  ]);
+
+  // Buscar todos en Google Places en paralelo (Find Place, ligero: place_id + name + types)
   const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
   const regionCtx = region || '';
   const results = await Promise.all(matches.map(async ({ bold, name }) => {
     try {
       const query = regionCtx ? `${name}, ${regionCtx}` : name;
       const res = await fetch(
-        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(query)}&inputtype=textquery${countryFilter}&fields=place_id,name,formatted_address&language=es&key=${placesKey}`,
+        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(query)}&inputtype=textquery${countryFilter}&fields=place_id,name,formatted_address,types&language=es&key=${placesKey}`,
         { signal: AbortSignal.timeout(3000) }
       );
       const data = await res.json();
       const place = data?.candidates?.[0];
       if (place?.place_id) {
+        const types = Array.isArray(place.types) ? place.types : [];
+        // Descartar si tiene algún BAD type y ningún GOOD type (barrios, direcciones, zonas administrativas)
+        const hasBad = types.some(t => BAD_TYPES.has(t));
+        const hasGood = types.some(t => GOOD_TYPES.has(t));
+        if (hasBad && !hasGood) return { bold, name, placeId: null };
         return { bold, name, placeId: place.place_id, googleName: place.name };
       }
       return { bold, name, placeId: null };
@@ -1125,9 +1149,10 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode) {
   // **Name** [Name](URL) → **Name** (con o sin espacio)
   enriched = enriched.replace(/\*\*([^*]+)\*\*\s*\[([^\]]+)\]\([^)]+\)/g, '**$1**');
   // URLs sueltas de Maps inventadas por Claude
-  enriched = enriched.replace(/\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/search\/[^\s)]*\)?/gi, '');
-  enriched = enriched.replace(/\s*https?:\/\/(?:www\.)?google\.com\/maps\/dir\/[^\s)>\]]+/gi, '');
-  enriched = enriched.replace(/\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/place\/[^\s)]*\)?/gi, '');
+  // Lookbehind `(?<!\]\()` protege URLs dentro de markdown de imagen ![alt](URL) y enlaces [texto](URL)
+  enriched = enriched.replace(/(?<!\]\()\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/search\/[^\s)]*\)?/gi, '');
+  enriched = enriched.replace(/(?<!\]\()\s*https?:\/\/(?:www\.)?google\.com\/maps\/dir\/[^\s)>\]]+/gi, '');
+  enriched = enriched.replace(/(?<!\]\()\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/place\/[^\s)]*\)?/gi, '');
 
   // Inyectar enlaces "cómo llegar" verificados (place_id) al lado de cada negrita
   for (const { bold, name, placeId } of results) {
@@ -1145,8 +1170,9 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode) {
   }
 
   // Al final, añadir enlace a "Ruta completa" si hay 2+ lugares verificados
+  // (pero NO en respuestas de hotel — no tiene sentido unir varios hoteles como ruta)
   const validPlaces = results.filter(r => r.placeId);
-  if (validPlaces.length >= 2) {
+  if (validPlaces.length >= 2 && !skipRouteLink) {
     const waypoints = validPlaces.map(r => encodeURIComponent(r.googleName || r.name)).join('/');
     const routeUrl = `https://www.google.com/maps/dir/${waypoints}`;
     enriched = enriched.trimEnd() + `\n\n${routeUrl}`;
@@ -7083,7 +7109,8 @@ INSTRUCCIONES:
             && _msgDest.split(/\s+/).length <= 8;
           const _region = _isValidDest ? _msgDest : (userLocationName || location || '');
           const _cc = countryCode || userCountryCode || '';
-          try { reply = await injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc); } catch (_) {}
+          const _skipRouteLink = isHotelRequest(message);
+          try { reply = await injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc, _skipRouteLink); } catch (_) {}
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
 
           // FALLBACK: si no hay ningún link dir/ (Claude no puso negritas) y el mensaje del usuario

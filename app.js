@@ -5398,6 +5398,13 @@ function formatMessage(str) {
   let html = escapeHTML(raw);
   // URLs sueltas → enlaces clicables (onclick fuerza apertura externa en PWA)
   html = html.replace(/([a-zA-Z][a-zA-Z0-9+.-]*:\/\/[^\s<]+)/g, function(_, url) {
+    // Si la URL termina en ')' sin '(' balanceado dentro, ese ')' pertenece al texto (ej. "(URL)") — quitarlo
+    var trailing = '';
+    while (url.length > 0 && url.charAt(url.length - 1) === ')') {
+      var opens = (url.match(/\(/g) || []).length;
+      var closes = (url.match(/\)/g) || []).length;
+      if (closes > opens) { trailing = ')' + trailing; url = url.slice(0, -1); } else break;
+    }
     var label = url;
     if (url.indexOf('google.com/maps/dir/?') !== -1 || url.indexOf('google.com/maps/dir?') !== -1) label = '🗺️ Cómo llegar';
     else if (url.indexOf('google.com/maps/dir/') !== -1) label = '🗺️ Ruta completa en Google Maps';
@@ -5443,7 +5450,7 @@ function formatMessage(str) {
     else if (url.indexOf('hostelworld.com') !== -1) label = '🛏️ Ver en Hostelworld';
     var isMaps = url.indexOf('google.com/maps') !== -1;
     var clickHandler = isMaps ? 'openMapsModal(this.href);return false;' : 'window.open(this.href);return false;';
-    return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" onclick="' + clickHandler + '">' + label + '</a>';
+    return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" onclick="' + clickHandler + '">' + label + '</a>' + trailing;
   });
   // Teléfonos internacionales: +XX XXX XXX XXX (con espacios, guiones o puntos)
   html = html.replace(/(\+\d{1,3}[ .-]?\d{1,4}[ .-]?\d{2,4}[ .-]?\d{2,4}[ .-]?\d{0,4})/g, (match) => {
