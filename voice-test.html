@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voces Salma — Prueba</title>
+<style>
+  :root { --dorado:#f0b429; --negro:#060503; --gris:#141209; --crema:#f5f0e8; --linea:rgba(240,180,41,.35); }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:24px; background:var(--negro); color:var(--crema); font-family:system-ui,sans-serif; max-width:720px; margin:0 auto; }
+  h1 { color:var(--dorado); font-size:24px; margin:0 0 8px; }
+  p { color:rgba(245,240,232,.6); font-size:14px; margin:0 0 20px; }
+  textarea { width:100%; background:var(--gris); color:var(--crema); border:1px solid var(--linea); border-radius:10px; padding:12px; font-size:15px; resize:vertical; min-height:80px; font-family:inherit; margin-bottom:20px; }
+  .voice { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px; background:var(--gris); border:1px solid var(--linea); border-radius:10px; margin-bottom:10px; }
+  .voice-info { flex:1; min-width:0; }
+  .voice-name { font-weight:600; font-size:15px; margin-bottom:4px; }
+  .voice-desc { font-size:12px; color:rgba(245,240,232,.55); }
+  button { padding:12px 18px; background:var(--dorado); color:var(--negro); border:none; border-radius:10px; font-weight:700; cursor:pointer; font-size:14px; min-width:80px; }
+  button:active { transform:scale(.96); }
+  button:disabled { opacity:.4; cursor:wait; }
+  .status { font-size:12px; color:rgba(245,240,232,.5); margin-top:8px; min-height:16px; }
+  .gender { display:inline-block; font-size:11px; background:rgba(240,180,41,.15); padding:2px 8px; border-radius:8px; margin-left:6px; color:var(--dorado); }
+</style>
+</head>
+<body>
+<h1>Prueba de voces (Google Cloud TTS)</h1>
+<p>Escribe una frase y pulsa "Play" en cada voz para comparar. Elige la que más te guste.</p>
+
+<textarea id="txt">Hola, soy Salma, tu compañera de viaje. Dime a dónde quieres ir y te monto la ruta.</textarea>
+
+<div id="list"></div>
+<div class="status" id="status"></div>
+
+<script>
+const API = 'https://salma-api.paco-defoto.workers.dev';
+const VOICES = [
+  { name: 'es-ES-Chirp3-HD-Leda',   desc: 'Chirp 3 HD — premium, cálida y expresiva', gender:'F' },
+  { name: 'es-ES-Chirp3-HD-Aoede',  desc: 'Chirp 3 HD — premium, otra variante',      gender:'F' },
+  { name: 'es-ES-Chirp3-HD-Kore',   desc: 'Chirp 3 HD — premium',                      gender:'F' },
+  { name: 'es-ES-Neural2-C',        desc: 'Neural 2 — tono medio, cálida (la actual)', gender:'F' },
+  { name: 'es-ES-Neural2-A',        desc: 'Neural 2 — más joven, energética',          gender:'F' },
+  { name: 'es-ES-Neural2-F',        desc: 'Neural 2 — más madura',                     gender:'F' },
+  { name: 'es-ES-Neural2-D',        desc: 'Neural 2 — masculina',                      gender:'M' },
+  { name: 'es-ES-Wavenet-C',        desc: 'Wavenet — generación anterior',             gender:'F' },
+  { name: 'es-ES-Standard-A',       desc: 'Standard — calidad básica',                 gender:'F' },
+];
+
+const list = document.getElementById('list');
+const status = document.getElementById('status');
+const txt = document.getElementById('txt');
+
+VOICES.forEach(v => {
+  const row = document.createElement('div');
+  row.className = 'voice';
+  row.innerHTML = `
+    <div class="voice-info">
+      <div class="voice-name">${v.name}<span class="gender">${v.gender}</span></div>
+      <div class="voice-desc">${v.desc}</div>
+    </div>
+    <button data-voice="${v.name}">▶ Play</button>
+  `;
+  list.appendChild(row);
+});
+
+let currentAudio = null;
+
+list.addEventListener('click', async (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  const voice = btn.dataset.voice;
+  const text = txt.value.trim();
+  if (!text) { status.textContent = 'Escribe algo arriba'; return; }
+
+  if (currentAudio) { try { currentAudio.pause(); } catch(_){} currentAudio = null; }
+  btn.disabled = true;
+  status.textContent = 'Cargando ' + voice + '...';
+  const t0 = Date.now();
+  try {
+    const r = await fetch(API + '/tts-google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, languageCode: 'es-ES', voiceName: voice })
+    });
+    if (!r.ok) {
+      const body = await r.text();
+      status.textContent = 'Error ' + r.status + ': ' + body.slice(0, 200);
+      return;
+    }
+    const blob = await r.blob();
+    const url = URL.createObjectURL(blob);
+    const a = new Audio(url);
+    currentAudio = a;
+    a.onended = () => { URL.revokeObjectURL(url); currentAudio = null; };
+    await a.play();
+    status.textContent = 'Reproduciendo ' + voice + ' (' + (Date.now()-t0) + 'ms, ' + Math.round(blob.size/1024) + 'KB)';
+  } catch (err) {
+    status.textContent = 'Error: ' + err.message;
+  } finally {
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
