@@ -3405,6 +3405,11 @@ async function buscarHotelesBooking(input, rapidApiKey) {
       result.nota_presupuesto = `El usuario busca hoteles por debajo de ${presupuestoMax} EUR/noche.`;
     }
 
+    // [HOTEL-DBG] — TEMPORAL: log de URLs de foto que devuelve Booking
+    try {
+      console.log('[HOTEL-DBG] Booking tool result:', JSON.stringify(hoteles.map(h => ({ nombre: h.nombre, foto: h.foto, enlace: h.enlace_reserva })), null, 2));
+    } catch (_) {}
+
     return result;
 
   } catch (error) {
@@ -7125,7 +7130,14 @@ INSTRUCCIONES:
           const _region = _isValidDest ? _msgDest : (userLocationName || location || '');
           const _cc = countryCode || userCountryCode || '';
           const _skipRouteLink = isHotelRequest(message);
+          // [HOTEL-DBG] — TEMPORAL: capturar reply antes de injectVerifiedMapsLinks
+          if (_skipRouteLink) {
+            try { console.log('[HOTEL-DBG] reply PRE-injectMaps (first 3000):', reply.slice(0, 3000)); } catch (_) {}
+          }
           try { reply = await injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc, _skipRouteLink); } catch (_) {}
+          if (_skipRouteLink) {
+            try { console.log('[HOTEL-DBG] reply POST-injectMaps (first 3000):', reply.slice(0, 3000)); } catch (_) {}
+          }
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
 
           // FALLBACK: si no hay ningún link dir/ (Claude no puso negritas) y el mensaje del usuario
