@@ -65,6 +65,7 @@
     userStopped: false,
     accumulated: '',
     interim: '',
+    lastFinalIdx: 0, // fix móvil: trackear qué finales ya acumulé (no fiarme de e.resultIndex)
     history: [], // { from, to, textFrom, textTo }
   };
 
@@ -295,20 +296,31 @@
     state.userStopped = false;
     state.accumulated = '';
     state.interim = '';
+    state.lastFinalIdx = 0;
 
     updateMicUI(side, true);
     showLiveTranscript();
 
     rec.onresult = (e) => {
-      let finalChunk = '';
+      // Fix móvil: en Chrome Android e.resultIndex no es fiable → llevamos nuestro propio contador.
+      // Cada final solo se acumula UNA vez aunque el evento se dispare repetidamente con el mismo array.
+      let newFinal = '';
       let interimChunk = '';
-      for (let i = e.resultIndex; i < e.results.length; i++) {
+      for (let i = 0; i < e.results.length; i++) {
         const r = e.results[i];
-        if (r.isFinal) finalChunk += r[0].transcript + ' ';
-        else interimChunk += r[0].transcript;
+        if (r.isFinal) {
+          if (i >= state.lastFinalIdx) {
+            newFinal += r[0].transcript + ' ';
+            state.lastFinalIdx = i + 1;
+          }
+        } else {
+          interimChunk += r[0].transcript + ' ';
+        }
       }
-      if (finalChunk) state.accumulated = (state.accumulated + ' ' + finalChunk).trim();
-      state.interim = interimChunk;
+      if (newFinal.trim()) {
+        state.accumulated = (state.accumulated + ' ' + newFinal).trim();
+      }
+      state.interim = interimChunk.trim();
       showLiveTranscript();
     };
 
@@ -323,6 +335,7 @@
     rec.onend = () => {
       // Si el usuario no ha pulsado parar, reintentar (el navegador cortó por silencio o límite)
       if (state.recognizing && !state.userStopped) {
+        state.lastFinalIdx = 0; // nueva sesión, e.results se resetea
         try { rec.start(); return; } catch (_) {}
       }
       finishRec(side, fromCode);
