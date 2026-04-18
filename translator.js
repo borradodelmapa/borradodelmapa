@@ -370,11 +370,32 @@
     if (el) el.remove();
   }
 
+  // ─── Debug logging ───
+  let _startMs = 0;
+  function _dlog(...args) {
+    const t = _startMs ? ((Date.now() - _startMs) / 1000).toFixed(2) + 's' : '0s';
+    console.log('[TR ' + t + ']', ...args);
+  }
+  function _summarizeResults(results) {
+    const out = [];
+    for (let i = 0; i < results.length; i++) {
+      const r = results[i];
+      out.push({ i, final: r.isFinal, t: r[0].transcript });
+    }
+    return out;
+  }
+
   // Monta todos los handlers en una instancia de SpeechRecognition.
   // Si el engine muere solo (sin userStopped), creamos INSTANCIA NUEVA y reenlazamos.
   // Así evitamos que results conserve finales antiguos y se re-emitan como nuevos (bug "hola hola hola").
   function _attachRecHandlers(rec, side, fromCode) {
     rec.onresult = (e) => {
+      _dlog('onresult', {
+        resultIndex: e.resultIndex,
+        total: e.results.length,
+        lastFinalIdx_before: state.lastFinalIdx,
+        results: _summarizeResults(e.results),
+      });
       let newFinal = '';
       let interimChunk = '';
       for (let i = 0; i < e.results.length; i++) {
@@ -385,8 +406,13 @@
             const acc = (state.accumulated + ' ' + newFinal).trim();
             if (t && !acc.toLowerCase().endsWith(t.toLowerCase())) {
               newFinal += t + ' ';
+              _dlog('  → ADD final[' + i + ']:', JSON.stringify(t));
+            } else {
+              _dlog('  → SKIP final[' + i + '] (dedup contenido):', JSON.stringify(t));
             }
             state.lastFinalIdx = i + 1;
+          } else {
+            _dlog('  → SKIP final[' + i + '] (dedup idx, lastFinalIdx=' + state.lastFinalIdx + ')');
           }
         } else {
           interimChunk += r[0].transcript + ' ';
@@ -396,36 +422,46 @@
         state.accumulated = (state.accumulated + ' ' + newFinal).trim();
       }
       state.interim = interimChunk.trim();
+      _dlog('  accumulated:', JSON.stringify(state.accumulated), 'interim:', JSON.stringify(state.interim));
       showLiveTranscript();
     };
 
     rec.onerror = (e) => {
+      _dlog('onerror', e.error, e.message || '');
       if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
         if (typeof showToast === 'function') showToast('Permite el acceso al micrófono');
-        state.userStopped = true; // no queremos auto-restart si es problema de permisos
+        state.userStopped = true;
       }
     };
 
     rec.onend = () => {
-      // Si el usuario NO ha parado, el engine murió solo (silencio / límite). Creamos instancia nueva.
+      _dlog('onend', { userStopped: state.userStopped, recognizing: state.recognizing, accumulated: state.accumulated });
       if (state.recognizing && !state.userStopped) {
+        _dlog('  → creando instancia NUEVA (engine murió solo)');
         const fresh = createRecognition(fromCode);
         if (fresh) {
           state.recognition = fresh;
-          state.lastFinalIdx = 0; // instance nueva = results vacíos, contador desde 0
+          state.lastFinalIdx = 0;
           _attachRecHandlers(fresh, side, fromCode);
-          try { fresh.start(); return; } catch (_) {}
+          try { fresh.start(); _dlog('  → nueva instancia.start() OK'); return; }
+          catch (err) { _dlog('  → nueva instancia.start() FALLO:', err.message); }
+        } else {
+          _dlog('  → createRecognition devolvió null');
         }
       }
+      _dlog('  → finishRec');
       finishRec();
     };
   }
 
   async function startRec(side) {
-    if (state.recognizing) return;
+    if (state.recognizing) { _dlog('startRec ignorado (ya grabando)'); return; }
     const fromCode = side === 'a' ? state.langA : state.langB;
+    _startMs = Date.now();
+    _dlog('startRec', { side, fromCode, bcp: getLang(fromCode).bcp });
     const rec = createRecognition(fromCode);
     if (!rec) {
+      _dlog('  → SpeechRecognition no soportado');
       if (typeof showToast === 'function') showToast('Tu navegador no soporta reconocimiento de voz');
       return;
     }
@@ -443,8 +479,9 @@
 
     _attachRecHandlers(rec, side, fromCode);
 
-    try { rec.start(); }
-    catch (_) {
+    try { rec.start(); _dlog('  → rec.start() OK'); }
+    catch (err) {
+      _dlog('  → rec.start() FALLO:', err.message);
       state.recognizing = false;
       state.recognizingSide = null;
       state.recognizingFromCode = null;
@@ -464,27 +501,29 @@
     if (side) updateMicUI(side, false);
     removeLiveTranscript();
     const spoken = (state.accumulated + ' ' + state.interim).trim();
+    _dlog('finishRec. Texto final a traducir:', JSON.stringify(spoken));
     state.accumulated = '';
     state.interim = '';
-    if (!spoken || !side || !fromCode) return;
+    if (!spoken || !side || !fromCode) { _dlog('  → sin texto o sin side/fromCode, fin'); return; }
     const toCode = side === 'a' ? state.langB : state.langA;
     await processTranslation(spoken, fromCode, toCode);
   }
 
   function stopRec() {
-    if (!state.recognizing) return;
+    if (!state.recognizing) { _dlog('stopRec ignorado (no grabando)'); return; }
+    _dlog('stopRec (user tocó parar). Acumulado hasta ahora:', JSON.stringify(state.accumulated));
     state.userStopped = true;
-    try { state.recognition && state.recognition.abort(); } catch (_) {}
-    // Failsafe: si onend no dispara en 1.5s (móvil a veces no lo hace), forzamos el cierre
+    try { state.recognition && state.recognition.abort(); _dlog('  → abort() OK'); }
+    catch (err) { _dlog('  → abort() FALLO:', err.message); }
     if (state.stopTimer) clearTimeout(state.stopTimer);
     state.stopTimer = setTimeout(() => {
-      if (state.recognizing) finishRec();
+      if (state.recognizing) { _dlog('stopRec failsafe 1.5s: forzando finishRec'); finishRec(); }
     }, 1500);
   }
 
   function toggleRec(side) {
+    _dlog('toggleRec side=' + side, { recognizing: state.recognizing, recognizingSide: state.recognizingSide });
     if (state.recognizing) {
-      // Mismo lado → parar. Otro lado → ignorar (botón está deshabilitado visualmente)
       if (state.recognizingSide === side) stopRec();
       return;
     }
