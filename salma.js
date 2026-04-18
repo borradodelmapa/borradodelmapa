@@ -148,7 +148,7 @@ const salma = {
     const res = await fetch(api + '/tts-google', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, languageCode: 'es-ES', voiceName: 'es-ES-Neural2-C' }),
+      body: JSON.stringify({ text, languageCode: 'es-ES', voiceName: 'es-ES-Chirp3-HD-Leda' }),
       signal,
     });
     if (!res.ok) throw new Error('GoogleTTS ' + res.status);
