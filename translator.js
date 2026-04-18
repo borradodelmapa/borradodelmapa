@@ -90,32 +90,58 @@
     try { localStorage.setItem(LS_ELEVEN_DOWN, String(Date.now() + 12 * 3600 * 1000)); } catch (_) {}
   }
 
-  // ─── TTS: ES → ElevenLabs / resto → navegador ───
+  // ─── TTS cascada: ES→ElevenLabs Salma · resto→Google Cloud TTS · fallback→navegador ───
+  async function playBlob(blob) {
+    if (!blob || !blob.size) return false;
+    try {
+      const u = URL.createObjectURL(blob);
+      const a = new Audio(u);
+      a.onended = () => URL.revokeObjectURL(u);
+      a.onerror = () => URL.revokeObjectURL(u);
+      await a.play();
+      return true;
+    } catch (_) { return false; }
+  }
+
+  async function tryElevenSalma(text) {
+    if (isElevenDown()) return false;
+    try {
+      const res = await fetch(API + '/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
+      if (!res.ok) {
+        if ([401, 403, 429].includes(res.status)) markElevenDown();
+        return false;
+      }
+      return await playBlob(await res.blob());
+    } catch (_) { return false; }
+  }
+
+  async function tryGoogleTTS(text, languageCode) {
+    try {
+      const res = await fetch(API + '/tts-google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, languageCode }),
+      });
+      if (!res.ok) return false;
+      return await playBlob(await res.blob());
+    } catch (_) { return false; }
+  }
+
   async function speak(text, langCode) {
     if (!text) return;
-    if (langCode === 'es' && !isElevenDown()) {
-      try {
-        const res = await fetch(API + '/tts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text }),
-        });
-        if (!res.ok) {
-          if ([401, 403, 429].includes(res.status)) markElevenDown();
-          throw new Error('tts ' + res.status);
-        }
-        const blob = await res.blob();
-        const u = URL.createObjectURL(blob);
-        const a = new Audio(u);
-        a.onended = () => URL.revokeObjectURL(u);
-        await a.play().catch(() => speakNative(text, 'es-ES'));
-        return;
-      } catch (_) {
-        speakNative(text, 'es-ES');
-        return;
-      }
+    const bcp = getLang(langCode).bcp;
+    if (langCode === 'es') {
+      if (await tryElevenSalma(text)) return;
+      if (await tryGoogleTTS(text, bcp)) return;
+      speakNative(text, bcp);
+      return;
     }
-    speakNative(text, getLang(langCode).bcp);
+    if (await tryGoogleTTS(text, bcp)) return;
+    speakNative(text, bcp);
   }
 
   function speakNative(text, bcp) {

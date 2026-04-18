@@ -5842,6 +5842,57 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       }
     }
 
+    // ─── POST /tts-google — Google Cloud Text-to-Speech (voces nativas por idioma) ───
+    if (request.method === 'POST' && url.pathname === '/tts-google') {
+      const corsH = { 'Access-Control-Allow-Origin': '*' };
+      try {
+        const { text, languageCode } = await request.json();
+        if (!text || !languageCode) {
+          return new Response(JSON.stringify({ error: 'missing params' }), {
+            status: 400, headers: { ...corsH, 'Content-Type': 'application/json' },
+          });
+        }
+        const clean = String(text).trim().slice(0, 4500);
+        if (!clean) {
+          return new Response(JSON.stringify({ error: 'empty' }), {
+            status: 400, headers: { ...corsH, 'Content-Type': 'application/json' },
+          });
+        }
+        const ttsKey = env.GOOGLE_TTS_KEY || env.GOOGLE_PLACES_KEY;
+        const gRes = await fetch(`https://texttospeech.googleapis.com/v1/text:synthesize?key=${ttsKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            input: { text: clean },
+            voice: { languageCode },
+            audioConfig: { audioEncoding: 'MP3', speakingRate: 0.95 },
+          }),
+        });
+        if (!gRes.ok) {
+          const detail = await gRes.text().catch(() => '');
+          return new Response(JSON.stringify({ error: 'google_tts_error', status: gRes.status, detail: detail.slice(0, 2000) }), {
+            status: 502, headers: { ...corsH, 'Content-Type': 'application/json' },
+          });
+        }
+        const data = await gRes.json();
+        const b64 = data.audioContent;
+        if (!b64) {
+          return new Response(JSON.stringify({ error: 'no audio' }), {
+            status: 500, headers: { ...corsH, 'Content-Type': 'application/json' },
+          });
+        }
+        // Decode base64 → binary MP3
+        const bin = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+        return new Response(bin, {
+          headers: { ...corsH, 'Content-Type': 'audio/mpeg' },
+        });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: String(e && e.message || e) }), {
+          status: 500, headers: { ...corsH, 'Content-Type': 'application/json' },
+        });
+      }
+    }
+
     // ═══ FLIGHT WATCHES — Vigilancia de vuelos ═══
 
     const FW_CORS = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
