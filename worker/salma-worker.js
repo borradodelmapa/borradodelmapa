@@ -7405,11 +7405,12 @@ INSTRUCCIONES:
             while ((bm = boldRegex.exec(allText)) !== null) {
               const name = bm[1].trim();
               if (/^\d|^€|^USD|^Día\s|^Tip:|^Nota:|^Precio|^Gratis|^Abierto|^Cerrado/i.test(name)) continue;
-              if (name.split(/\s+/).length < 2) continue;
+              // Rechazar 1 palabra solo si es corta (Día, Tip, Ojo…). Acepta Alhambra, Louvre, Coliseo…
+              if (name.split(/\s+/).length === 1 && name.length < 5) continue;
               if (!boldNames.includes(name)) boldNames.push(name);
             }
             if (boldNames.length > 0) {
-              const photoPromises = boldNames.slice(0, 4).map(name => {
+              const photoPromises = boldNames.slice(0, 8).map(name => {
                 const query = _photoLocHint ? `${name}, ${_photoLocHint}` : name;
                 return buscarFotoLugar({ lugar: query }, env.GOOGLE_PLACES_KEY).catch(() => null);
               });
