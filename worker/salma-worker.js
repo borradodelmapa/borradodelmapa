@@ -7281,10 +7281,12 @@ INSTRUCCIONES:
           _msgDest = _msgDest.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
           _msgDest = _msgDest.replace(/^d[ií]as?\s+(en|por|a)?\s*/i, '');
           _msgDest = _msgDest.replace(/[¿?¡!.,;:]+/g, '').trim();
-          // Solo usar el mensaje como región si parece destino (no saludo/pregunta corta)
+          // Solo usar el mensaje como región si parece destino (no saludo/pregunta corta/petición de link)
+          const _isRequestMessage = /^\s*(dame|dime|pasa|p[aá]same|envi|necesito|quiero|busco|b[uú]scame|cu[aá]l|d[oó]nde|c[oó]mo|mu[eé]stra|ens[eé]ñame|ver|salma[,\s]|enlace|link|url|maps|google\s)/i.test(_msgDest);
           const _isValidDest = _msgDest.length >= 3 && _msgDest.length <= 60
             && !/^(hola|hey|buenas|ey|hi|hello|saludos|gracias|ok|vale|si|no)$/i.test(_msgDest)
-            && _msgDest.split(/\s+/).length <= 8;
+            && _msgDest.split(/\s+/).length <= 8
+            && !_isRequestMessage;
           const _region = _isValidDest ? _msgDest : (userLocationName || location || '');
           const _cc = countryCode || userCountryCode || '';
           const _skipRouteLink = isHotelRequest(message);
@@ -7314,10 +7316,12 @@ INSTRUCCIONES:
 
             if (_usable && (_isExplicitLinkRequest || _candidateName.split(/\s+/).length >= 2)) {
               try {
+                // Fallback: no pasamos _region (puede ser basura del msg). _candidateName
+                // ya está limpio y el country filter + bias coord del GPS son suficientes.
                 const validated = await getValidatedPlace(
                   _candidateName,
                   env.GOOGLE_PLACES_KEY,
-                  _region,
+                  '',
                   _cc,
                   userLocation && userLocation.lat ? { lat: userLocation.lat, lng: userLocation.lng } : null
                 );
