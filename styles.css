@@ -1033,14 +1033,14 @@ body {
   100% { opacity:1; transform:translateY(0); }
 }
 .chip {
-  font-family:var(--font-body); font-size:13px; font-weight:500;
+  font-family:var(--font-body); font-size:13px; font-weight:600;
   padding:8px 16px; border-radius:999px;
-  background:rgba(212,160,23,.08); border:1px solid rgba(212,160,23,.3);
-  color:var(--crema); cursor:pointer; transition:all .2s;
+  background:rgba(212,160,23,.15); border:1px solid rgba(212,160,23,.6);
+  color:var(--blanco); cursor:pointer; transition:all .2s;
   white-space:nowrap; max-width:48%;
 }
 .chip-ghost { display:none; }
-.chip:hover { background:rgba(212,160,23,.2); border-color:var(--dorado); }
+.chip:hover { background:rgba(212,160,23,.28); border-color:var(--dorado); }
 
 /* ── Welcome proof: stats + features (dentro del hero) ── */
 .welcome-proof { padding-top:8px; width:100%; max-width:420px; }
