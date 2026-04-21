@@ -83,7 +83,7 @@ const guideRenderer = {
 
       ${options.partial ? '<div class="guide-actions"><div class="guide-loading-blocks">Cargando más días...</div></div>' : `<div class="guide-actions">
         ${options.saved ? '' : '<button class="btn-primary" id="guide-save-btn">GUARDAR MI GUÍA</button>'}
-        ${options.showGmapsOffer ? `<a class="btn-primary" id="guide-gmaps-btn" href="${this._fullRouteGmapsUrl(stops, country)}" target="_blank" rel="noopener">🗺 ABRIR EN GOOGLE MAPS</a>` : ''}
+        ${(() => { const u = options.showGmapsOffer ? this._fullRouteGmapsUrl(stops, country) : null; return u ? `<a class="btn-primary" id="guide-gmaps-btn" href="${u}" target="_blank" rel="noopener">🗺 ABRIR EN GOOGLE MAPS</a>` : ''; })()}
         <button class="btn-ghost" id="guide-share-btn">COMPARTIR</button>
       </div>`}
     `;
@@ -349,9 +349,9 @@ const guideRenderer = {
             ${photoHtml}
             ${s.narrative ? `<p class="guide-stop-narrative">${linkify(s.narrative)}</p>` : ''}
             ${tagsHtml}
-            <a class="guide-stop-gmaps" href="${gmapsUrl}" target="_blank" rel="noopener">
+            ${gmapsUrl ? `<a class="guide-stop-gmaps" href="${gmapsUrl}" target="_blank" rel="noopener">
               VER EN GOOGLE MAPS →
-            </a>
+            </a>` : ''}
           </div>
         </div>`;
     }
@@ -490,35 +490,28 @@ const guideRenderer = {
 
   // ═══ GOOGLE MAPS URLS ═══
 
+  // Regla única: sin place_id validado por Google Places → no hay enlace.
   _stopGmapsUrl(stop, country) {
-    // place_id → link exacto al sitio verificado
-    if (stop.place_id) {
+    if (stop && stop.place_id) {
       return 'https://www.google.com/maps/place/?q=place_id:' + stop.place_id;
     }
-    if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && Math.abs(stop.lng) > 0.01) {
-      return 'https://www.google.com/maps?q=' + stop.lat + ',' + stop.lng
-        + '&query=' + encodeURIComponent(stop.headline || stop.name);
-    }
-    return 'https://www.google.com/maps/search/?api=1&query='
-      + encodeURIComponent((stop.headline || stop.name) + ' ' + country);
+    return null;
   },
 
   _dayGmapsUrl(stops, country) {
-    const valid = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
-    if (valid.length < 2) return this._stopGmapsUrl(valid[0] || stops[0], country);
-    // Nombre@lat,lng — Google muestra nombre y ubica exacto
-    const segments = valid.map(p => encodeURIComponent(p.headline || p.name) + '/@' + p.lat + ',' + p.lng).join('/');
+    const valid = (stops || []).filter(s => s && s.place_id);
+    if (valid.length === 0) return null;
+    if (valid.length === 1) return this._stopGmapsUrl(valid[0], country);
+    const segments = valid.map(p => 'place_id:' + p.place_id).join('/');
     return 'https://www.google.com/maps/dir/' + segments;
   },
 
   _fullRouteGmapsUrl(stops, country) {
-    const valid = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
-    if (valid.length < 2) {
-      if (valid.length === 1) return this._stopGmapsUrl(valid[0], country);
-      return 'https://www.google.com/maps';
-    }
+    const valid = (stops || []).filter(s => s && s.place_id);
+    if (valid.length === 0) return null;
+    if (valid.length === 1) return this._stopGmapsUrl(valid[0], country);
     const sampled = this._sampleWaypoints(valid, 25);
-    const segments = sampled.map(p => encodeURIComponent(p.headline || p.name) + '/@' + p.lat + ',' + p.lng).join('/');
+    const segments = sampled.map(p => 'place_id:' + p.place_id).join('/');
     return 'https://www.google.com/maps/dir/' + segments;
   },
 
@@ -740,7 +733,7 @@ const guideRenderer = {
     html += `<div class="map-popup-name">${name}</div>`;
     html += `<div class="map-popup-day">Día ${dayNum}</div>`;
     if (narrative) html += `<div class="map-popup-desc">${narrative}</div>`;
-    html += `<a class="map-popup-link" href="${gmapsUrl}" target="_blank" rel="noopener">Ver en Maps →</a>`;
+    if (gmapsUrl) html += `<a class="map-popup-link" href="${gmapsUrl}" target="_blank" rel="noopener">Ver en Maps →</a>`;
     html += `</div>`;
 
     // No usar bindPopup de Leaflet — creamos overlay propio centrado en el mapa
@@ -760,7 +753,7 @@ const guideRenderer = {
         <div class="map-popup-name">${name}</div>
         <div class="map-popup-day">Día ${dayNum}</div>
         ${narrative ? `<div class="map-popup-desc">${narrative}</div>` : ''}
-        <a class="map-popup-link" href="${gmapsUrl}" target="_blank" rel="noopener">Ver en Maps →</a>
+        ${gmapsUrl ? `<a class="map-popup-link" href="${gmapsUrl}" target="_blank" rel="noopener">Ver en Maps →</a>` : ''}
       `;
       mapEl.style.position = 'relative';
       mapEl.appendChild(overlay);

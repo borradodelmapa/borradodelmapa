@@ -274,7 +274,7 @@ Escribe en el chat solo el resumen breve e incluye al final:
 Primera línea exactamente: SALMA_ROUTE_JSON
 Segunda línea: el JSON (sin markdown, sin backticks)
 
-{"title":"Título","name":"Título","country":"País","region":"Región","duration_days":N,"summary":"Resumen","stops":[{"name":"Nombre","headline":"Nombre","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","day":1,"lat":36.72,"lng":-4.42,"km_from_previous":0,"road_name":"N-340","road_difficulty":"medio","estimated_hours":2.5}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/A/B","label":"Día 1: A → B"}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo|medio|alto|sin_definir","suggestions":["Sugerencia"]}
+{"title":"Título","name":"Título","country":"País","region":"Región","duration_days":N,"summary":"Resumen","stops":[{"name":"Nombre","headline":"Nombre","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","day":1,"lat":36.72,"lng":-4.42,"km_from_previous":0,"road_name":"N-340","road_difficulty":"medio","estimated_hours":2.5}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo|medio|alto|sin_definir","suggestions":["Sugerencia"]}
 
 FORMATO DE PARADA:
 — name/headline: nombre exacto como en Google Maps
@@ -1109,52 +1109,13 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
   }
   if (!matches.length) return reply;
 
-  // Filtro de types: solo inyectar link si el place devuelto es un lugar real (no barrio, calle, dirección)
-  const BAD_TYPES = new Set([
-    'locality','sublocality','sublocality_level_1','sublocality_level_2','sublocality_level_3',
-    'neighborhood','political',
-    'administrative_area_level_1','administrative_area_level_2','administrative_area_level_3','administrative_area_level_4',
-    'country','continent',
-    'street_address','route','premise','subpremise','postal_code','postal_code_prefix','intersection',
-    'plus_code','geocode'
-  ]);
-  const GOOD_TYPES = new Set([
-    'lodging','restaurant','food','cafe','bar','bakery','meal_takeaway','meal_delivery','night_club',
-    'tourist_attraction','museum','art_gallery','aquarium','zoo','park','amusement_park','campground','rv_park',
-    'stadium','place_of_worship','church','mosque','synagogue','hindu_temple','cemetery',
-    'spa','gym','shopping_mall','department_store','store','supermarket','convenience_store','book_store','clothing_store',
-    'pharmacy','hospital','doctor','dentist','veterinary_care',
-    'movie_theater','library','university','school','train_station','subway_station','bus_station','airport','transit_station',
-    'gas_station','car_rental','parking','atm','bank','embassy','police','fire_station','post_office'
-  ]);
-
-  // Buscar todos en Google Places en paralelo (Find Place, ligero: place_id + name + types)
-  const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
+  // Validar cada negrita con getValidatedPlace (strictNameMatch + tipos + región/país).
+  // Regla única: si no pasa validación → no se inyecta link.
   const regionCtx = region || '';
   const results = await Promise.all(matches.map(async ({ bold, name }) => {
-    try {
-      const query = regionCtx ? `${name}, ${regionCtx}` : name;
-      const res = await fetch(
-        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(query)}&inputtype=textquery${countryFilter}&fields=place_id,name,formatted_address,types&language=es&key=${placesKey}`,
-        { signal: AbortSignal.timeout(3000) }
-      );
-      const data = await res.json();
-      const place = data?.candidates?.[0];
-      if (place?.place_id) {
-        const types = Array.isArray(place.types) ? place.types : [];
-        // Descartar si tiene algún BAD type y ningún GOOD type (barrios, direcciones, zonas administrativas)
-        const hasBad = types.some(t => BAD_TYPES.has(t));
-        const hasGood = types.some(t => GOOD_TYPES.has(t));
-        if (hasBad && !hasGood) return { bold, name, placeId: null };
-        // Descartar si el nombre que devuelve Google no se parece al bold
-        // (ej: bold "Hoan Kiem" → Google devuelve "Hoan Kiem Lake" o algo no relacionado)
-        if (!strictNameMatch(name, place.name || '')) return { bold, name, placeId: null };
-        return { bold, name, placeId: place.place_id, googleName: place.name };
-      }
-      return { bold, name, placeId: null };
-    } catch {
-      return { bold, name, placeId: null };
-    }
+    const v = await getValidatedPlace(name, placesKey, regionCtx, countryCode, null);
+    if (v) return { bold, name, placeId: v.place_id, googleName: v.name };
+    return { bold, name, placeId: null };
   }));
 
   // Limpiar PRIMERO cualquier URL de Maps que Claude haya puesto por su cuenta
@@ -1169,27 +1130,22 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
   enriched = enriched.replace(/(?<!\]\()\s*https?:\/\/(?:www\.)?google\.com\/maps\/dir\/[^\s)>\]]+/gi, '');
   enriched = enriched.replace(/(?<!\]\()\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/place\/[^\s)]*\)?/gi, '');
 
-  // Inyectar enlaces "cómo llegar" verificados (place_id) al lado de cada negrita
-  for (const { bold, name, placeId } of results) {
+  // Inyectar enlaces verificados (place_id) al lado de cada negrita validada
+  for (const { bold, placeId } of results) {
     if (!placeId) continue;
-    // Incluir región en destination para que el iframe embed tenga contexto
-    const destParam = regionCtx ? `${name}, ${regionCtx}` : name;
-    const link = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destParam)}&destination_place_id=${placeId}`;
-    // Reemplazar solo la PRIMERA ocurrencia de esta negrita (evitar duplicados)
+    const link = `https://www.google.com/maps/place/?q=place_id:${placeId}`;
     const boldEscaped = bold.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    // Si ya tiene un link al lado (paréntesis con URL), no duplicar
     const withLinkRegex = new RegExp(boldEscaped + '\\s*\\([^)]*google\\.com[^)]*\\)');
     if (withLinkRegex.test(enriched)) continue;
-    // Inyectar link después de la negrita
     enriched = enriched.replace(bold, `${bold} (${link})`);
   }
 
-  // Al final, añadir enlace a "Ruta completa" si hay 2+ lugares verificados
-  // (pero NO en respuestas de hotel — no tiene sentido unir varios hoteles como ruta)
+  // "Ruta completa" al final: solo con place_id validados.
+  // Se omite si skipRouteLink=true (ej: respuestas de hotel, no tiene sentido unirlos como ruta).
   const validPlaces = results.filter(r => r.placeId);
   if (validPlaces.length >= 2 && !skipRouteLink) {
-    const waypoints = validPlaces.map(r => encodeURIComponent(r.googleName || r.name)).join('/');
-    const routeUrl = `https://www.google.com/maps/dir/${waypoints}`;
+    const segments = validPlaces.map(r => 'place_id:' + r.placeId).join('/');
+    const routeUrl = `https://www.google.com/maps/dir/${segments}`;
     enriched = enriched.trimEnd() + `\n\n${routeUrl}`;
   }
 
@@ -2548,7 +2504,7 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
 — NO respondas solo con texto. NO digas "aquí tienes" ni variantes.
 — Usa defaults para lo que falte: tipo mezcla cultura+emblemáticos, compañía solo, ritmo intermedio.
 — MÍNIMO 4-6 PARADAS POR DÍA. Nunca 1 parada por día. Cada día es un recorrido completo con desayuno, visitas, comida, paseo, atardecer.
-— 1 enlace Google Maps por día en maps_links, NO 1 enlace para toda la ruta.
+— NO escribas enlaces a Google Maps. Los genera el sistema después tras verificar con Google Places.
 — Nombres EXACTOS como en Google Maps, nunca genéricos ("Desierto del Sahara" → "Erg Chebbi, Merzouga").
 — Coordenadas REALES del lugar exacto, en el país correcto.
 — Continuidad: la primera parada del día N+1 empieza donde acabó el día N.]`;
@@ -2717,7 +2673,9 @@ function extractRouteFromReply(text) {
         eat: s.eat || null,
         alt_bad_weather: s.alt_bad_weather || '',
       }));
-      if (!route.maps_links) route.maps_links = [];
+      // Ignoramos lo que Claude haya puesto en maps_links — se regenera server-side
+      // en verifyAllStops a partir de paradas con place_id validado.
+      route.maps_links = [];
       if (!route.pre_departure) route.pre_departure = null;
       if (!route.practical_info) route.practical_info = null;
       return route;
@@ -2917,7 +2875,6 @@ function mergeBlocks(blockResults, originalMessage) {
 
   const base = blockResults[0].route;
   const allStops = [];
-  const allMapsLinks = [];
   const allTips = [];
   const allTags = new Set();
 
@@ -2936,7 +2893,8 @@ function mergeBlocks(blockResults, originalMessage) {
     }
 
     allStops.push(...stops);
-    if (br.route.maps_links) allMapsLinks.push(...br.route.maps_links);
+    // maps_links no se acumulan: cada bloque ya los tiene generados en verifyAllStops
+    // a partir de paradas validadas. Los regeneramos aquí a nivel ruta completa.
     if (br.route.tips) allTips.push(...br.route.tips);
     if (br.route.tags) br.route.tags.forEach(t => allTags.add(t));
   }
@@ -2951,7 +2909,7 @@ function mergeBlocks(blockResults, originalMessage) {
     duration_days: maxDay,
     summary: base.summary || '',
     stops: allStops,
-    maps_links: allMapsLinks,
+    maps_links: buildMapsLinksFromStops(allStops),
     tips: [...new Set(allTips)],
     tags: [...allTags],
     budget_level: base.budget_level || 'sin_definir',
@@ -3095,16 +3053,20 @@ async function verifyAllStops(route, placesKey) {
     batch.forEach((idx, j) => { detailResults[idx] = results[j]; });
   }
 
+  // Regla única: sin place_id validado por Google Places → la parada NO entra en el JSON final.
+  const validatedStops = [];
+  const discarded = [];
+
   route.stops.forEach((stop, i) => {
     const bc = bestCandidates[i];
     const detail = detailResults[i]?.result;
 
     if (!bc) {
-      stop._unverified = true;
       const last = a3[i] || a2[i] || attempt1[i];
       const lc = last?.candidates?.[0];
-      stop._verifyReason = !lc?.geometry?.location ? 'no_google_result' : (validateCandidate(lc, stop).reason || 'no_match');
-      console.log(`[VERIFY] ✗ ${stop.name} → NO VERIFICADO (${stop._verifyReason})`);
+      const reason = !lc?.geometry?.location ? 'no_google_result' : (validateCandidate(lc, stop).reason || 'no_match');
+      discarded.push({ name: stop.name || stop.headline || '(sin nombre)', day: stop.day || null, reason });
+      console.log(`[VERIFY] ✗ DESCARTADA "${stop.name}" (${reason})`);
       return;
     }
 
@@ -3115,7 +3077,8 @@ async function verifyAllStops(route, placesKey) {
     stop.lat = pLat;
     stop.lng = pLng;
     stop.place_id = candidate.place_id;
-    stop._unverified = false;
+    delete stop._unverified;
+    delete stop._verifyReason;
 
     const photoRef = detail?.photos?.[0]?.photo_reference || candidate.photos?.[0]?.photo_reference || '';
     if (photoRef) stop.photo_ref = photoRef;
@@ -3135,10 +3098,135 @@ async function verifyAllStops(route, placesKey) {
     const desc = detail?.editorial_summary?.overview || '';
     if (desc && !stop.description) stop.description = desc;
 
+    validatedStops.push(stop);
     console.log(`[VERIFY] ✓ ${stop.name} → ${googleName} (${pLat.toFixed(5)}, ${pLng.toFixed(5)}) place_id:${(candidate.place_id||'').substring(0, 20)}`);
   });
 
+  route.stops = validatedStops;
+  route.discarded_stops = discarded;
+  route.maps_links = buildMapsLinksFromStops(validatedStops);
+
+  console.log(`[VERIFY] Resumen: ${validatedStops.length} validadas, ${discarded.length} descartadas`);
+
   return route;
+}
+
+// Tipos de Google Places que NO son POIs concretos (barrios, direcciones, zonas administrativas).
+const BAD_PLACE_TYPES = new Set([
+  'locality','sublocality','sublocality_level_1','sublocality_level_2','sublocality_level_3',
+  'neighborhood','political',
+  'administrative_area_level_1','administrative_area_level_2','administrative_area_level_3','administrative_area_level_4',
+  'country','continent',
+  'street_address','route','premise','subpremise','postal_code','postal_code_prefix','intersection',
+  'plus_code','geocode'
+]);
+// Tipos de Google Places que SÍ son POIs concretos.
+const GOOD_PLACE_TYPES = new Set([
+  'lodging','restaurant','food','cafe','bar','bakery','meal_takeaway','meal_delivery','night_club',
+  'tourist_attraction','museum','art_gallery','aquarium','zoo','park','amusement_park','campground','rv_park',
+  'stadium','place_of_worship','church','mosque','synagogue','hindu_temple','cemetery',
+  'spa','gym','shopping_mall','department_store','store','supermarket','convenience_store','book_store','clothing_store',
+  'pharmacy','hospital','doctor','dentist','veterinary_care',
+  'movie_theater','library','university','school','train_station','subway_station','bus_station','airport','transit_station',
+  'gas_station','car_rental','parking','atm','bank','embassy','police','fire_station','post_office'
+]);
+
+// Busca un lugar en Google Places y SOLO devuelve resultado si pasa validación estricta:
+// - nombre match (strictNameMatch)
+// - tipos: rechaza si es barrio/calle/zona administrativa sin ser también POI
+// - (dirección contiene región/país O distancia <10km a coord bias)
+// Si no pasa → null. Regla única: no se devuelve lugar no verificado.
+async function getValidatedPlace(query, placesKey, region, countryCode, biasCoords) {
+  if (!placesKey || !query || query.length < 3) return null;
+  const FIELDS = 'place_id,name,geometry,formatted_address,photos,business_status,types';
+  const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
+  const q = region ? `${query}, ${region}` : query;
+
+  async function tryFindPlace(radiusM) {
+    const bias = (biasCoords?.lat && biasCoords?.lng && Math.abs(biasCoords.lat) > 0.01)
+      ? `&locationbias=circle:${radiusM}@${biasCoords.lat},${biasCoords.lng}` : '';
+    try {
+      const r = await fetch(
+        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(q)}&inputtype=textquery${bias}${countryFilter}&fields=${FIELDS}&language=es&key=${placesKey}`,
+        { signal: AbortSignal.timeout(3500) }
+      );
+      const d = await r.json();
+      return d?.candidates?.[0] || null;
+    } catch (_) { return null; }
+  }
+
+  async function tryTextSearch() {
+    try {
+      const r = await fetch(
+        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(q)}${countryFilter}&language=es&key=${placesKey}`,
+        { signal: AbortSignal.timeout(3500) }
+      );
+      const d = await r.json();
+      return d?.results?.[0] || null;
+    } catch (_) { return null; }
+  }
+
+  function isValid(cand) {
+    if (!cand?.geometry?.location || !cand.place_id) return false;
+    if (cand.business_status === 'CLOSED_PERMANENTLY') return false;
+    if (!strictNameMatch(query, cand.name || '')) return false;
+    // Filtrar por tipos: si es un barrio/calle/zona administrativa Y no es también un POI → descartar.
+    const types = Array.isArray(cand.types) ? cand.types : [];
+    const hasBad = types.some(t => BAD_PLACE_TYPES.has(t));
+    const hasGood = types.some(t => GOOD_PLACE_TYPES.has(t));
+    if (hasBad && !hasGood) return false;
+    const addrOk = addressContainsLocation(cand.formatted_address, region, countryCode);
+    let distKm = Infinity;
+    if (biasCoords?.lat && biasCoords?.lng && Math.abs(biasCoords.lat) > 0.01) {
+      distKm = haversineKm(biasCoords.lat, biasCoords.lng, cand.geometry.location.lat, cand.geometry.location.lng);
+    }
+    // Al menos una de las dos: dirección coincide con región/país, O bias-coord a <10km
+    return addrOk || distKm < 10;
+  }
+
+  // 3 intentos: bias 5km → bias 15km → text search libre (con country filter)
+  let c = await tryFindPlace(5000);
+  if (!isValid(c)) c = await tryFindPlace(15000);
+  if (!isValid(c)) c = await tryTextSearch();
+  if (!isValid(c)) return null;
+
+  const photoRef = c.photos?.[0]?.photo_reference || '';
+  return {
+    place_id: c.place_id,
+    name: c.name,
+    lat: c.geometry.location.lat,
+    lng: c.geometry.location.lng,
+    url: 'https://www.google.com/maps/place/?q=place_id:' + c.place_id,
+    photo_ref: photoRef,
+    formatted_address: c.formatted_address || ''
+  };
+}
+
+// Genera maps_links por día usando SOLO paradas con place_id validado.
+// Formato: https://www.google.com/maps/dir/place_id:X/place_id:Y (Google lo acepta).
+function buildMapsLinksFromStops(stops) {
+  if (!Array.isArray(stops) || stops.length === 0) return [];
+  const byDay = new Map();
+  for (const s of stops) {
+    if (!s || !s.place_id) continue;
+    const d = s.day || 1;
+    if (!byDay.has(d)) byDay.set(d, []);
+    byDay.get(d).push(s);
+  }
+  const links = [];
+  const days = [...byDay.keys()].sort((a, b) => a - b);
+  for (const day of days) {
+    const arr = byDay.get(day);
+    if (arr.length === 0) continue;
+    const label = `Día ${day}: ${arr[0].name || arr[0].headline || ''}${arr.length > 1 ? ' → ' + (arr[arr.length - 1].name || arr[arr.length - 1].headline || '') : ''}`;
+    if (arr.length === 1) {
+      links.push({ day, url: 'https://www.google.com/maps/place/?q=place_id:' + arr[0].place_id, label });
+    } else {
+      const segments = arr.map(p => 'place_id:' + p.place_id).join('/');
+      links.push({ day, url: 'https://www.google.com/maps/dir/' + segments, label });
+    }
+  }
+  return links;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -7200,25 +7288,41 @@ INSTRUCCIONES:
           try { reply = await injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc, _skipRouteLink); } catch (_) {}
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
 
-          // FALLBACK: si no hay ningún link dir/ (Claude no puso negritas) y el mensaje del usuario
-          // parece una pregunta sobre un lugar concreto, inyectar "Cómo llegar" al final usando el mensaje
-          if (!/google\.com\/maps\/dir/i.test(reply) && message && message.length > 3 && message.length < 120) {
+          // FALLBACK: si no hay ningún link dir/ y el mensaje parece petición de link/sitio,
+          // buscar con getValidatedPlace (validación estricta). Regla única: sin match validado → nada.
+          if (!/google\.com\/maps\/(dir|place)/i.test(reply) && message && message.length > 3 && message.length < 200) {
             const _msgClean = message.trim().replace(/[¿?¡!.,;:]+$/g, '');
-            // Heurística: mensaje corto sin preguntas "qué/cómo/cuándo/dónde es" → tratamos como lugar
-            const _isQuestion = /^\s*(qu[eé]|c[oó]mo|cu[aá]ndo|d[oó]nde|por qu[eé]|hola|gracias|salma)/i.test(_msgClean);
-            if (!_isQuestion && _msgClean.split(/\s+/).length >= 2) {
+
+            // Petición explícita de enlace/link/cómo llegar: si no hay match, mostramos frase fija.
+            const _isExplicitLinkRequest = /\b(enlace|link|url|maps|google\s*maps|c[oó]mo\s+llegar|d[oó]nde\s+(est[aá]|queda)|ubicaci[oó]n\s+de|direcci[oó]n\s+de)\b/i.test(_msgClean);
+
+            // Extraer el nombre del sitio de la petición: quita muletillas/verbos iniciales.
+            let _candidateName = _msgClean
+              .replace(/^\s*(dame|dime|pasame|p[aá]same|envi[aá]me|necesito|quiero|busco|b[uú]scame|cu[aá]l es|d[oó]nde (est[aá]|queda)|c[oó]mo llego a|c[oó]mo llegar a|c[oó]mo ir a|mu[eé]strame|ens[eé]ñame|ver|salma,?\s*)\s+/i, '')
+              .replace(/^\s*(el|la|los|las|un|una|unos|unas)\s+/i, '')
+              .replace(/^\s*(enlace|link|url|maps|google\s*maps|ubicaci[oó]n|direcci[oó]n)\s+(de|del|a|al|para)\s+/i, '')
+              .replace(/^\s*(puto|puta|pinche|coñ?o|carajo|joder)\s+/i, '')
+              .replace(/\b(por favor|porfa|gracias)\b/gi, '')
+              .trim();
+
+            // Usable si tiene al menos 3 chars y no es una pregunta general vacía
+            const _usable = _candidateName.length >= 3 && _candidateName.length <= 100
+              && _candidateName.split(/\s+/).length <= 12;
+
+            if (_usable && (_isExplicitLinkRequest || _candidateName.split(/\s+/).length >= 2)) {
               try {
-                const _q = _region ? `${_msgClean}, ${_region}` : _msgClean;
-                const _cf = _cc ? `&components=country:${_cc}` : '';
-                const _r = await fetch(
-                  `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(_q)}&inputtype=textquery${_cf}&fields=place_id,name&language=es&key=${env.GOOGLE_PLACES_KEY}`,
-                  { signal: AbortSignal.timeout(3000) }
+                const validated = await getValidatedPlace(
+                  _candidateName,
+                  env.GOOGLE_PLACES_KEY,
+                  _region,
+                  _cc,
+                  userLocation && userLocation.lat ? { lat: userLocation.lat, lng: userLocation.lng } : null
                 );
-                const _d = await _r.json();
-                const _p = _d?.candidates?.[0];
-                if (_p?.place_id) {
-                  const _link = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(_p.name || _msgClean)}&destination_place_id=${_p.place_id}`;
-                  reply = reply.trimEnd() + `\n\n${_link}`;
+                if (validated) {
+                  reply = reply.trimEnd() + `\n\n${validated.url}`;
+                } else if (_isExplicitLinkRequest) {
+                  // Regla única: sin match validado no damos enlace. Frase fija.
+                  reply = reply.trimEnd() + `\n\nNo he encontrado ese sitio en Google Maps con seguridad.`;
                 }
               } catch (_) {}
             }

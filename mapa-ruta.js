@@ -783,7 +783,7 @@ const mapaRuta = {
 
     const gmapsUrl = stop.place_id
       ? `https://www.google.com/maps/place/?q=place_id:${stop.place_id}`
-      : `https://www.google.com/maps?q=${stop.lat},${stop.lng}`;
+      : null;
     const dayColor = this._dayColors ? this._dayColors[((stop.day || 1) - 1) % this._dayColors.length] : '#D4A843';
 
     const _buildContent = (photoHtml) => `
@@ -796,13 +796,13 @@ const mapaRuta = {
           ${stop.context ? `<p style="font-size:11px;color:rgba(244,239,230,.5);line-height:1.4;margin:0 0 8px;">📖 ${stop.context}</p>` : ''}
           ${stop.food_nearby ? `<p style="font-size:11px;color:rgba(244,239,230,.5);line-height:1.4;margin:0 0 8px;">🍜 ${stop.food_nearby}</p>` : ''}
           ${stop.local_secret ? `<p style="font-size:11px;color:rgba(244,239,230,.5);line-height:1.4;margin:0 0 8px;">🔑 ${stop.local_secret}</p>` : ''}
-          <a href="${gmapsUrl}" target="_blank" rel="noopener"
+          ${gmapsUrl ? `<a href="${gmapsUrl}" target="_blank" rel="noopener"
              style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;
                     color:#f4efe6;text-decoration:none;padding:5px 10px;border-radius:6px;
                     background:rgba(66,133,244,.15);border:1px solid rgba(66,133,244,.3);">
             <svg width="12" height="12" viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="2.5"/></svg>
             Ver en Google Maps
-          </a>
+          </a>` : ''}
         </div>
       </div>`;
 

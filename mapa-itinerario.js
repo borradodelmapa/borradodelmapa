@@ -47,7 +47,7 @@ const mapaItinerario = {
       const actionBar = document.createElement('div');
       actionBar.className = 'itin-action-bar';
       actionBar.innerHTML = `
-        <a class="itin-btn itin-btn-maps" href="${mapsUrl}" target="_blank" rel="noopener" title="Abrir en Google Maps"><svg width="15" height="15" viewBox="0 0 24 24" style="flex-shrink:0;margin-right:5px"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="2.5"/></svg>Google Maps</a>
+        ${mapsUrl ? `<a class="itin-btn itin-btn-maps" href="${mapsUrl}" target="_blank" rel="noopener" title="Abrir en Google Maps"><svg width="15" height="15" viewBox="0 0 24 24" style="flex-shrink:0;margin-right:5px"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="2.5"/></svg>Google Maps</a>` : ''}
         ${options.saved ? '' : '<button class="itin-btn itin-btn-save" id="itin-save-btn">GUARDAR</button>'}
         <button class="itin-btn itin-btn-share" id="itin-share-btn" title="Compartir"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
       `;
@@ -167,12 +167,10 @@ const mapaItinerario = {
     const horas = stop.estimated_hours || stop.duracion_horas || null;
     const km = stop.km_from_previous || 0;
 
-    const hasCoords = stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && Math.abs(stop.lng) > 0.01;
+    // Regla única: sin place_id validado → no hay enlace a Maps.
     const mapsNavUrl = stop.place_id
       ? `https://www.google.com/maps/place/?q=place_id:${stop.place_id}`
-      : hasCoords
-        ? `https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}&travelmode=driving`
-        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([stop.name || stop.headline, country].filter(Boolean).join(', '))}`;
+      : null;
 
     card.innerHTML = `
       <div class="itin-card-photo" id="itin-photo-${index}">
@@ -194,7 +192,7 @@ const mapaItinerario = {
         ${stop.local_secret ? `<div class="guide-stop-tag tag-secret"><span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>${this._esc(stop.local_secret)}</div>` : ''}
         ${stop.practical ? `<div class="guide-stop-practical">${this._esc(stop.practical)}</div>` : ''}
         <div class="itin-card-places" id="itin-places-${index}"></div>
-        <a class="itin-card-nav" href="${mapsNavUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 Ir aquí</a>
+        ${mapsNavUrl ? `<a class="itin-card-nav" href="${mapsNavUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 Ir aquí</a>` : ''}
       </div>
     `;
 
@@ -361,14 +359,13 @@ const mapaItinerario = {
   },
 
   // ═══ GOOGLE MAPS RUTA COMPLETA ═══
+  // Regla única: sin place_id validado → no hay enlace.
   _fullRouteGmapsUrl(stops, country) {
-    const valid = (stops || []).filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
-    if (valid.length < 2) {
-      if (valid.length === 1) return 'https://www.google.com/maps?q=' + valid[0].lat + ',' + valid[0].lng;
-      return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(country || 'ruta');
-    }
+    const valid = (stops || []).filter(s => s && s.place_id);
+    if (valid.length === 0) return null;
+    if (valid.length === 1) return 'https://www.google.com/maps/place/?q=place_id:' + valid[0].place_id;
     const sampled = this._sampleWaypoints(valid, 25);
-    const segments = sampled.map(p => p.lat + ',' + p.lng).join('/');
+    const segments = sampled.map(p => 'place_id:' + p.place_id).join('/');
     return 'https://www.google.com/maps/dir/' + segments;
   },
 
