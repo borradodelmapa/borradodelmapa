@@ -5347,6 +5347,7 @@ function sanitizeUrls(text) {
   if (!text) return text;
   var allowed = [
     'google.com/maps', 'googleusercontent.com', 'places.googleapis.com',
+    'salma-api.paco-defoto.workers.dev',
     'booking.com', 'airbnb.com', 'hostelworld.com',
     'kiwi.com', 'skyscanner.es', 'skyscanner.com',
     'rentalcars.com', 'discovercars.com',

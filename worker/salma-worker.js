@@ -2707,6 +2707,8 @@ function sanitizeInventedUrls(text) {
   return text.replace(urlRegex, (url) => {
     if (url.includes('google.com/maps')) return url;
     if (url.includes('googleusercontent.com') || url.includes('places.googleapis.com')) return url;
+    // URLs del proxy propio del worker (fotos permanentes)
+    if (url.includes('salma-api.paco-defoto.workers.dev')) return url;
     if (url.includes('thefork.com') || url.includes('thefork.es')) return url;
     if (url.includes('booking.com')) return url;
     if (url.includes('skyscanner.es') || url.includes('skyscanner.com')) return url;
