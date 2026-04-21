@@ -3175,13 +3175,16 @@ async function getValidatedPlace(query, placesKey, region, countryCode, biasCoor
     const hasBad = types.some(t => BAD_PLACE_TYPES.has(t));
     const hasGood = types.some(t => GOOD_PLACE_TYPES.has(t));
     if (hasBad && !hasGood) return false;
-    const addrOk = addressContainsLocation(cand.formatted_address, region, countryCode);
-    let distKm = Infinity;
+    // Con biasCoords (rutas): exigir distancia <10km al punto sugerido.
+    // Sin biasCoords (chat): confiar en strictNameMatch + types + country filter (el region
+    // que llega aquí puede ser basura tipo "dame el enlace de X", así que no bloqueamos por
+    // addressContainsLocation contra region; validamos solo que la dirección esté en el país).
     if (biasCoords?.lat && biasCoords?.lng && Math.abs(biasCoords.lat) > 0.01) {
-      distKm = haversineKm(biasCoords.lat, biasCoords.lng, cand.geometry.location.lat, cand.geometry.location.lng);
+      const distKm = haversineKm(biasCoords.lat, biasCoords.lng, cand.geometry.location.lat, cand.geometry.location.lng);
+      return distKm < 10;
     }
-    // Al menos una de las dos: dirección coincide con región/país, O bias-coord a <10km
-    return addrOk || distKm < 10;
+    if (!countryCode) return true; // Sin país ni bias: confiamos en name+types
+    return addressContainsLocation(cand.formatted_address, countryCode);
   }
 
   // 3 intentos: bias 5km → bias 15km → text search libre (con country filter)
