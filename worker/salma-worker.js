@@ -3921,23 +3921,21 @@ async function buscarFotoLugar(input, placesKey) {
       return { error: 'No se encontró foto para: ' + input.lugar, lugar: input.lugar };
     }
 
-    // 2. Obtener hasta 3 fotos DISTINTAS del lugar
+    // 2. Construir URLs PERMANENTES vía el proxy /photo del worker.
+    // Antes usábamos photoRes.url (URL temporal de googleusercontent que caduca en minutos
+    // → imágenes rotas cuando el navegador las pide tarde). Ahora /photo?ref=X es estable y cacheable.
     const maxPhotos = Math.min(place.photos.length, 3);
     const fotos = [];
+    const cleanName = (place.name || input.lugar).replace(/[\[\]()]/g, '').trim();
 
     for (let i = 0; i < maxPhotos; i++) {
-      try {
-        const photoRef = place.photos[i].photo_reference;
-        const photoRes = await fetch(
-          `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photo_reference=${photoRef}&key=${placesKey}`
-        );
-        if (photoRes.ok) {
-          fotos.push({
-            url: photoRes.url,
-            markdown: `![${place.name || input.lugar}](${photoRes.url})`,
-          });
-        }
-      } catch (_) {}
+      const photoRef = place.photos[i]?.photo_reference;
+      if (!photoRef) continue;
+      const photoUrl = `https://salma-api.paco-defoto.workers.dev/photo?ref=${encodeURIComponent(photoRef)}`;
+      fotos.push({
+        url: photoUrl,
+        markdown: `![${cleanName}](${photoUrl})`,
+      });
     }
 
     if (fotos.length === 0) {
