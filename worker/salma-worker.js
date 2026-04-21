@@ -6404,6 +6404,39 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
     const userNotes = body.user_notes || null;
     const frontendCountryCode = body.country || null; // País enviado por el frontend (detectado por GPS)
 
+    // ─── BYPASS: petición explícita de enlace Google Maps ───
+    // Si el usuario pide un link (enlace/link/maps/cómo llegar/dónde está/ubicación/dirección),
+    // respondemos DIRECTO con getValidatedPlace. Sin Claude, sin tools, sin tokens.
+    // Resultado: link validado con place_id O frase fija. Siempre <1s, siempre seguro.
+    if (!currentRoute && !imageBase64 && message && message.length <= 200 &&
+        /\b(enlace|link|url|maps|google\s*maps|c[oó]mo\s+llegar|d[oó]nde\s+(est[aá]|queda)|ubicaci[oó]n\s+de|direcci[oó]n\s+de)\b/i.test(message) &&
+        env.GOOGLE_PLACES_KEY) {
+      const _cleanMsg = message.trim().replace(/[¿?¡!.,;:]+$/g, '');
+      const candidateName = _cleanMsg
+        .replace(/^\s*(dame|dime|pasame|p[aá]same|envi[aá]me|necesito|quiero|busco|b[uú]scame|cu[aá]l es|d[oó]nde (est[aá]|queda)|c[oó]mo llego a|c[oó]mo llegar a|c[oó]mo ir a|mu[eé]strame|ens[eé]ñame|ver|salma,?\s*)\s+/i, '')
+        .replace(/^\s*(el|la|los|las|un|una|unos|unas)\s+/i, '')
+        .replace(/^\s*(enlace|link|url|maps|google\s*maps|ubicaci[oó]n|direcci[oó]n)\s+(de|del|a|al|para)\s+/i, '')
+        .replace(/^\s*(puto|puta|pinche|coñ?o|carajo|joder)\s+/i, '')
+        .replace(/\b(por favor|porfa|gracias)\b/gi, '')
+        .trim();
+
+      if (candidateName.length >= 3 && candidateName.length <= 100) {
+        try {
+          const bias = userLocation && userLocation.lat ? { lat: userLocation.lat, lng: userLocation.lng } : null;
+          const validated = await getValidatedPlace(candidateName, env.GOOGLE_PLACES_KEY, '', frontendCountryCode || '', bias);
+          const reply = validated
+            ? validated.url
+            : 'No he encontrado ese sitio en Google Maps con seguridad.';
+          return new Response(
+            JSON.stringify({ reply, route: null }),
+            { headers: corsChat }
+          );
+        } catch (_) {
+          // Si getValidatedPlace falla, caemos al flujo normal con Claude
+        }
+      }
+    }
+
     // ─── PRE-FETCH TRANSPORTE — arranca Brave INMEDIATAMENTE, en paralelo con geocoding+KV ───
     let _braveTransportPromise = null;
     {
