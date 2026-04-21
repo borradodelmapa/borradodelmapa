@@ -1092,7 +1092,7 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
     if (words.length === 1) return capsWords.length === 1 && words[0].length >= 4;
     return capsWords.length >= 2;
   }
-  const matches = [];
+  let matches = [];
   const seen = new Set();
   let m;
   while ((m = boldRegex.exec(reply)) !== null) {
@@ -1108,6 +1108,10 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
     matches.push({ bold: m[0], name });
   }
   if (!matches.length) return reply;
+
+  // Limitar a 6 negritas máx — evita exceder subrequest limit de Cloudflare y colgar el flujo.
+  // Cada negrita dispara hasta 3 fetches a Places (21 fetches = riesgo de timeout/ratelimit).
+  if (matches.length > 6) matches = matches.slice(0, 6);
 
   // Validar cada negrita con getValidatedPlace (strictNameMatch + tipos + región/país).
   // Regla única: si no pasa validación → no se inyecta link.
@@ -3175,13 +3179,14 @@ async function getValidatedPlace(query, placesKey, region, countryCode, biasCoor
     const hasBad = types.some(t => BAD_PLACE_TYPES.has(t));
     const hasGood = types.some(t => GOOD_PLACE_TYPES.has(t));
     if (hasBad && !hasGood) return false;
-    const addrOk = addressContainsLocation(cand.formatted_address, region, countryCode);
-    let distKm = Infinity;
+    // Con biasCoords (rutas): exigir distancia <10km al punto sugerido.
     if (biasCoords?.lat && biasCoords?.lng && Math.abs(biasCoords.lat) > 0.01) {
-      distKm = haversineKm(biasCoords.lat, biasCoords.lng, cand.geometry.location.lat, cand.geometry.location.lng);
+      const distKm = haversineKm(biasCoords.lat, biasCoords.lng, cand.geometry.location.lat, cand.geometry.location.lng);
+      return distKm < 10;
     }
-    // Al menos una de las dos: dirección coincide con región/país, O bias-coord a <10km
-    return addrOk || distKm < 10;
+    // Sin biasCoords (chat): confiamos en strictNameMatch + types.
+    // El components=country:XX del fetch ya filtra por país en el fetch.
+    return true;
   }
 
   // 3 intentos: bias 5km → bias 15km → text search libre (con country filter)
@@ -7285,18 +7290,20 @@ INSTRUCCIONES:
           const _region = _isValidDest ? _msgDest : (userLocationName || location || '');
           const _cc = countryCode || userCountryCode || '';
           const _skipRouteLink = isHotelRequest(message);
-          try { reply = await injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc, _skipRouteLink); } catch (_) {}
+          // ─── Inject primero: links en negritas (con límite 6 + timeout 8s) ───
+          try {
+            const _injectPromise = injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc, _skipRouteLink);
+            const _timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('inject_timeout')), 8000));
+            reply = await Promise.race([_injectPromise, _timeoutPromise]);
+          } catch (_) {}
           reply = reply.replace(/\n{3,}/g, '\n\n').trim();
 
-          // FALLBACK: si no hay ningún link dir/ y el mensaje parece petición de link/sitio,
-          // buscar con getValidatedPlace (validación estricta). Regla única: sin match validado → nada.
-          if (!/google\.com\/maps\/(dir|place)/i.test(reply) && message && message.length > 3 && message.length < 200) {
+          // ─── Fallback: si no hay link Maps en el reply, intentar con petición explícita ───
+          const _hasMapsLink = /google\.com\/maps\/(dir|place)/i.test(reply);
+          if (!_hasMapsLink && message && message.length > 3 && message.length < 200) {
             const _msgClean = message.trim().replace(/[¿?¡!.,;:]+$/g, '');
-
-            // Petición explícita de enlace/link/cómo llegar: si no hay match, mostramos frase fija.
             const _isExplicitLinkRequest = /\b(enlace|link|url|maps|google\s*maps|c[oó]mo\s+llegar|d[oó]nde\s+(est[aá]|queda)|ubicaci[oó]n\s+de|direcci[oó]n\s+de)\b/i.test(_msgClean);
 
-            // Extraer el nombre del sitio de la petición: quita muletillas/verbos iniciales.
             let _candidateName = _msgClean
               .replace(/^\s*(dame|dime|pasame|p[aá]same|envi[aá]me|necesito|quiero|busco|b[uú]scame|cu[aá]l es|d[oó]nde (est[aá]|queda)|c[oó]mo llego a|c[oó]mo llegar a|c[oó]mo ir a|mu[eé]strame|ens[eé]ñame|ver|salma,?\s*)\s+/i, '')
               .replace(/^\s*(el|la|los|las|un|una|unos|unas)\s+/i, '')
@@ -7305,23 +7312,19 @@ INSTRUCCIONES:
               .replace(/\b(por favor|porfa|gracias)\b/gi, '')
               .trim();
 
-            // Usable si tiene al menos 3 chars y no es una pregunta general vacía
-            const _usable = _candidateName.length >= 3 && _candidateName.length <= 100
-              && _candidateName.split(/\s+/).length <= 12;
-
+            const _usable = _candidateName.length >= 3 && _candidateName.length <= 100 && _candidateName.split(/\s+/).length <= 12;
             if (_usable && (_isExplicitLinkRequest || _candidateName.split(/\s+/).length >= 2)) {
               try {
                 const validated = await getValidatedPlace(
                   _candidateName,
                   env.GOOGLE_PLACES_KEY,
-                  _region,
+                  '',
                   _cc,
                   userLocation && userLocation.lat ? { lat: userLocation.lat, lng: userLocation.lng } : null
                 );
                 if (validated) {
                   reply = reply.trimEnd() + `\n\n${validated.url}`;
                 } else if (_isExplicitLinkRequest) {
-                  // Regla única: sin match validado no damos enlace. Frase fija.
                   reply = reply.trimEnd() + `\n\nNo he encontrado ese sitio en Google Maps con seguridad.`;
                 }
               } catch (_) {}
