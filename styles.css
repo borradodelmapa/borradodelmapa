@@ -133,17 +133,17 @@ body {
 .chat-empty-chip {
   display:flex; align-items:center; gap:6px;
   padding:8px 12px; border-radius:20px;
-  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1);
-  color:rgba(244,239,230,.6); font-size:13px; font-weight:500;
+  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25);
+  color:var(--blanco); font-size:13px; font-weight:600;
   font-family:var(--font-tight); cursor:pointer;
   transition:all .15s; text-align:left; white-space:nowrap;
 }
-.chip-icon { flex-shrink:0; opacity:.4; stroke:currentColor; }
-.chat-empty-chip:hover .chip-icon { opacity:.7; }
+.chip-icon { flex-shrink:0; opacity:.75; stroke:currentColor; }
+.chat-empty-chip:hover .chip-icon { opacity:1; }
 .chip-emoji { font-size:14px; line-height:1; flex-shrink:0; }
 .chat-empty-chip:hover {
-  background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.2);
-  color:rgba(244,239,230,.85);
+  background:rgba(255,255,255,.18); border-color:rgba(255,255,255,.4);
+  color:var(--blanco);
 }
 .chat-empty-chip:hover .chip-emoji { opacity:.8; }
 .chat-empty-chip:active { transform:scale(.96); }
