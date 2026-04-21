@@ -144,7 +144,7 @@ function updateBottomBar() {
   const isChat = currentState === 'chat';
   const isRutas = currentState === 'rutas';
   const isVuelos = currentState === 'vuelos';
-  const isProfile = currentState === 'profile' || currentState === 'bitacora' || currentState === 'diario' || currentState === 'documentos' || currentState === 'notas';
+  const isProfile = currentState === 'profile' || currentState === 'bitacora' || currentState === 'diario' || currentState === 'documentos' || currentState === 'notas' || currentState === 'galeria';
 
   bar.innerHTML = `
     ${!currentUser ? `<button class="bottom-tab ${isHome ? 'bottom-tab-active' : ''}" id="tab-home">
@@ -1048,9 +1048,16 @@ const TAG_ICONS = { paisaje:'🏔️', monumento:'🏛️', comida:'🍜', perso
 async function renderGaleria(albumFilter) {
   if (!currentUser) return;
   currentState = 'galeria';
-  updateHeader();
 
   const $c = document.getElementById('app-content');
+  // Limpiar herencias del chat (si venimos de ahí): bg-layer oscuro + padding grande
+  $c.classList.remove('app-content--chat');
+  $c.style.paddingBottom = '80px';
+  const _bgLayer = document.getElementById('chat-bg-layer');
+  if (_bgLayer) _bgLayer.remove();
+
+  updateHeader();
+
   $c.innerHTML = '<div class="galeria-area fade-in"><div class="galeria-loading">Cargando galería...</div></div>';
   document.querySelector('.app-input-bar').style.display = 'none';
 
