@@ -3175,16 +3175,13 @@ async function getValidatedPlace(query, placesKey, region, countryCode, biasCoor
     const hasBad = types.some(t => BAD_PLACE_TYPES.has(t));
     const hasGood = types.some(t => GOOD_PLACE_TYPES.has(t));
     if (hasBad && !hasGood) return false;
-    // Con biasCoords (rutas): exigir distancia <10km al punto sugerido.
-    // Sin biasCoords (chat): confiar en strictNameMatch + types + country filter (el region
-    // que llega aquí puede ser basura tipo "dame el enlace de X", así que no bloqueamos por
-    // addressContainsLocation contra region; validamos solo que la dirección esté en el país).
+    const addrOk = addressContainsLocation(cand.formatted_address, region, countryCode);
+    let distKm = Infinity;
     if (biasCoords?.lat && biasCoords?.lng && Math.abs(biasCoords.lat) > 0.01) {
-      const distKm = haversineKm(biasCoords.lat, biasCoords.lng, cand.geometry.location.lat, cand.geometry.location.lng);
-      return distKm < 10;
+      distKm = haversineKm(biasCoords.lat, biasCoords.lng, cand.geometry.location.lat, cand.geometry.location.lng);
     }
-    if (!countryCode) return true; // Sin país ni bias: confiamos en name+types
-    return addressContainsLocation(cand.formatted_address, countryCode);
+    // Al menos una de las dos: dirección coincide con región/país, O bias-coord a <10km
+    return addrOk || distKm < 10;
   }
 
   // 3 intentos: bias 5km → bias 15km → text search libre (con country filter)
@@ -7281,12 +7278,10 @@ INSTRUCCIONES:
           _msgDest = _msgDest.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
           _msgDest = _msgDest.replace(/^d[ií]as?\s+(en|por|a)?\s*/i, '');
           _msgDest = _msgDest.replace(/[¿?¡!.,;:]+/g, '').trim();
-          // Solo usar el mensaje como región si parece destino (no saludo/pregunta corta/petición de link)
-          const _isRequestMessage = /^\s*(dame|dime|pasa|p[aá]same|envi|necesito|quiero|busco|b[uú]scame|cu[aá]l|d[oó]nde|c[oó]mo|mu[eé]stra|ens[eé]ñame|ver|salma[,\s]|enlace|link|url|maps|google\s)/i.test(_msgDest);
+          // Solo usar el mensaje como región si parece destino (no saludo/pregunta corta)
           const _isValidDest = _msgDest.length >= 3 && _msgDest.length <= 60
             && !/^(hola|hey|buenas|ey|hi|hello|saludos|gracias|ok|vale|si|no)$/i.test(_msgDest)
-            && _msgDest.split(/\s+/).length <= 8
-            && !_isRequestMessage;
+            && _msgDest.split(/\s+/).length <= 8;
           const _region = _isValidDest ? _msgDest : (userLocationName || location || '');
           const _cc = countryCode || userCountryCode || '';
           const _skipRouteLink = isHotelRequest(message);
@@ -7316,12 +7311,10 @@ INSTRUCCIONES:
 
             if (_usable && (_isExplicitLinkRequest || _candidateName.split(/\s+/).length >= 2)) {
               try {
-                // Fallback: no pasamos _region (puede ser basura del msg). _candidateName
-                // ya está limpio y el country filter + bias coord del GPS son suficientes.
                 const validated = await getValidatedPlace(
                   _candidateName,
                   env.GOOGLE_PLACES_KEY,
-                  '',
+                  _region,
                   _cc,
                   userLocation && userLocation.lat ? { lat: userLocation.lat, lng: userLocation.lng } : null
                 );
