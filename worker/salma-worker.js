@@ -1118,7 +1118,7 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
   const regionCtx = region || '';
   const results = await Promise.all(matches.map(async ({ bold, name }) => {
     const v = await getValidatedPlace(name, placesKey, regionCtx, countryCode, null);
-    if (v) return { bold, name, placeId: v.place_id, googleName: v.name };
+    if (v) return { bold, name, placeId: v.place_id, googleName: v.name, lat: v.lat, lng: v.lng };
     return { bold, name, placeId: null };
   }));
 
@@ -1134,21 +1134,25 @@ async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, sk
   enriched = enriched.replace(/(?<!\]\()\s*https?:\/\/(?:www\.)?google\.com\/maps\/dir\/[^\s)>\]]+/gi, '');
   enriched = enriched.replace(/(?<!\]\()\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/place\/[^\s)]*\)?/gi, '');
 
-  // Inyectar enlaces verificados (place_id) al lado de cada negrita validada
-  for (const { bold, placeId } of results) {
+  // Inyectar "🗺️ Cómo llegar" al lado de cada negrita validada.
+  // Formato oficial de Google: dir/?api=1 con destination + destination_place_id.
+  // Google usa destination_place_id como fuente de verdad; destination es texto de backup.
+  for (const { bold, name, googleName, placeId } of results) {
     if (!placeId) continue;
-    const link = `https://www.google.com/maps/place/?q=place_id:${placeId}`;
+    const dest = encodeURIComponent(googleName || name);
+    const link = `https://www.google.com/maps/dir/?api=1&destination=${dest}&destination_place_id=${placeId}`;
     const boldEscaped = bold.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const withLinkRegex = new RegExp(boldEscaped + '\\s*\\([^)]*google\\.com[^)]*\\)');
     if (withLinkRegex.test(enriched)) continue;
     enriched = enriched.replace(bold, `${bold} (${link})`);
   }
 
-  // "Ruta completa" al final: solo con place_id validados.
-  // Se omite si skipRouteLink=true (ej: respuestas de hotel, no tiene sentido unirlos como ruta).
-  const validPlaces = results.filter(r => r.placeId);
+  // "Ruta completa" al final: con lat/lng reales (Google los entiende literal).
+  // Formato /maps/dir/place_id:X/place_id:Y NO funciona — Google lo lee como texto literal.
+  // Usamos lat,lng que vienen de getValidatedPlace (son coords reales de Google Places).
+  const validPlaces = results.filter(r => r.placeId && r.lat && r.lng);
   if (validPlaces.length >= 2 && !skipRouteLink) {
-    const segments = validPlaces.map(r => 'place_id:' + r.placeId).join('/');
+    const segments = validPlaces.map(r => `${r.lat},${r.lng}`).join('/');
     const routeUrl = `https://www.google.com/maps/dir/${segments}`;
     enriched = enriched.trimEnd() + `\n\n${routeUrl}`;
   }
@@ -3208,12 +3212,12 @@ async function getValidatedPlace(query, placesKey, region, countryCode, biasCoor
 }
 
 // Genera maps_links por día usando SOLO paradas con place_id validado.
-// Formato: https://www.google.com/maps/dir/place_id:X/place_id:Y (Google lo acepta).
+// Formato con lat/lng (Google los entiende literal en /dir/, los place_id en path NO funcionan).
 function buildMapsLinksFromStops(stops) {
   if (!Array.isArray(stops) || stops.length === 0) return [];
   const byDay = new Map();
   for (const s of stops) {
-    if (!s || !s.place_id) continue;
+    if (!s || !s.place_id || !s.lat || !s.lng) continue;
     const d = s.day || 1;
     if (!byDay.has(d)) byDay.set(d, []);
     byDay.get(d).push(s);
@@ -3225,9 +3229,11 @@ function buildMapsLinksFromStops(stops) {
     if (arr.length === 0) continue;
     const label = `Día ${day}: ${arr[0].name || arr[0].headline || ''}${arr.length > 1 ? ' → ' + (arr[arr.length - 1].name || arr[arr.length - 1].headline || '') : ''}`;
     if (arr.length === 1) {
+      // 1 parada → link al lugar con place_id (formato oficial, funciona)
       links.push({ day, url: 'https://www.google.com/maps/place/?q=place_id:' + arr[0].place_id, label });
     } else {
-      const segments = arr.map(p => 'place_id:' + p.place_id).join('/');
+      // 2+ paradas → ruta con lat/lng (formato que Google entiende en /dir/)
+      const segments = arr.map(p => `${p.lat},${p.lng}`).join('/');
       links.push({ day, url: 'https://www.google.com/maps/dir/' + segments, label });
     }
   }

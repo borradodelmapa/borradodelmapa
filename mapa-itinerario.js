@@ -361,11 +361,12 @@ const mapaItinerario = {
   // ═══ GOOGLE MAPS RUTA COMPLETA ═══
   // Regla única: sin place_id validado → no hay enlace.
   _fullRouteGmapsUrl(stops, country) {
-    const valid = (stops || []).filter(s => s && s.place_id);
+    const valid = (stops || []).filter(s => s && s.place_id && s.lat && s.lng);
     if (valid.length === 0) return null;
     if (valid.length === 1) return 'https://www.google.com/maps/place/?q=place_id:' + valid[0].place_id;
     const sampled = this._sampleWaypoints(valid, 25);
-    const segments = sampled.map(p => 'place_id:' + p.place_id).join('/');
+    // /dir/ usa lat,lng — place_id: no funciona en path de /dir/
+    const segments = sampled.map(p => `${p.lat},${p.lng}`).join('/');
     return 'https://www.google.com/maps/dir/' + segments;
   },
 

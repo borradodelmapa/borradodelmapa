@@ -499,19 +499,20 @@ const guideRenderer = {
   },
 
   _dayGmapsUrl(stops, country) {
-    const valid = (stops || []).filter(s => s && s.place_id);
+    const valid = (stops || []).filter(s => s && s.place_id && s.lat && s.lng);
     if (valid.length === 0) return null;
     if (valid.length === 1) return this._stopGmapsUrl(valid[0], country);
-    const segments = valid.map(p => 'place_id:' + p.place_id).join('/');
+    // /dir/ usa lat,lng (place_id: no funciona en path)
+    const segments = valid.map(p => `${p.lat},${p.lng}`).join('/');
     return 'https://www.google.com/maps/dir/' + segments;
   },
 
   _fullRouteGmapsUrl(stops, country) {
-    const valid = (stops || []).filter(s => s && s.place_id);
+    const valid = (stops || []).filter(s => s && s.place_id && s.lat && s.lng);
     if (valid.length === 0) return null;
     if (valid.length === 1) return this._stopGmapsUrl(valid[0], country);
     const sampled = this._sampleWaypoints(valid, 25);
-    const segments = sampled.map(p => 'place_id:' + p.place_id).join('/');
+    const segments = sampled.map(p => `${p.lat},${p.lng}`).join('/');
     return 'https://www.google.com/maps/dir/' + segments;
   },
 
