@@ -6415,7 +6415,10 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       const candidateName = _cleanMsg
         .replace(/^\s*(dame|dime|pasame|p[aá]same|envi[aá]me|necesito|quiero|busco|b[uú]scame|cu[aá]l es|d[oó]nde (est[aá]|queda)|c[oó]mo llego a|c[oó]mo llegar a|c[oó]mo ir a|mu[eé]strame|ens[eé]ñame|ver|salma,?\s*)\s+/i, '')
         .replace(/^\s*(el|la|los|las|un|una|unos|unas)\s+/i, '')
-        .replace(/^\s*(enlace|link|url|maps|google\s*maps|ubicaci[oó]n|direcci[oó]n)\s+(de|del|a|al|para)\s+/i, '')
+        // Quita "enlace/link/maps/..." incluso si no va seguido de "de/del"
+        .replace(/^\s*(enlace|link|url|google\s*maps|maps|ubicaci[oó]n|direcci[oó]n)\s+(de\s+|del\s+|a\s+|al\s+|para\s+)?/i, '')
+        // Quita "el/la" si quedó después de quitar "enlace"
+        .replace(/^\s*(el|la|los|las)\s+/i, '')
         .replace(/^\s*(puto|puta|pinche|coñ?o|carajo|joder)\s+/i, '')
         .replace(/\b(por favor|porfa|gracias)\b/gi, '')
         .trim();
