@@ -72,6 +72,13 @@ function showState(state) {
     if (typeof docsViajero !== 'undefined') docsViajero.render();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
+  } else if (state === 'galeria') {
+    $content.classList.remove('app-content--chat');
+    $content.style.paddingBottom = '80px';
+    const _bgL = document.getElementById('chat-bg-layer');
+    if (_bgL) _bgL.remove();
+    if (inputBar) inputBar.style.display = 'none';
+    renderGaleria();
   } else if (state === 'notas') {
     if (typeof notasManager !== 'undefined') notasManager.renderNotasView();
     if (inputBar) inputBar.style.display = 'none';
@@ -303,7 +310,7 @@ function _renderChatEmpty() {
       }
       if (action === 'galeria') {
         if (!currentUser) { window._afterLogin = 'galeria'; openModal(); return; }
-        renderGaleria();
+        showState('galeria');
         return;
       }
       if (action === 'moneda') {
