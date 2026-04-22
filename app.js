@@ -104,7 +104,7 @@ function showState(state) {
       document.body.insertBefore(layer, document.body.firstChild);
     }
     // Restaurar sesión previa o mostrar estado vacío
-    if (!document.getElementById('chat-area') || !document.getElementById('chat-area').hasChildNodes()) {
+    if (!document.getElementById('chat-area') || !document.getElementById('chat-area').querySelector('.msg')) {
       const restored = typeof salma !== 'undefined' && salma._restoreSession();
       if (!restored) _renderChatEmpty();
     }
@@ -218,7 +218,7 @@ function _renderChatEmpty() {
     $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
   }
   const area = document.getElementById('chat-area');
-  if (!area || area.hasChildNodes()) return;
+  if (!area || area.querySelector('.msg')) return;
 
   const saludos = [
     'Dime. Ruta, hotel, restaurante, vuelo — lo que necesites.',
