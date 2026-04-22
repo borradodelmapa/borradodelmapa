@@ -1451,6 +1451,8 @@ function isGoToRequest(message) {
   const m = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   // Excluir si ya es un request de ruta explícito ("hazme una guía/ruta")
   if (/hazme\s+una\s+(guia|ruta)|salma\s+hazme/i.test(m)) return false;
+  // Excluir búsquedas locales: "aquí cerca", "cerca de mí", "por aquí"... → no es un viaje, va al flujo normal / tools
+  if (/\b(?:aqui\s+cerca|cerca\s+de\s+aqui|cerca\s+de\s+mi|cerca\s+mio|por\s+aqui|por\s+la\s+zona|alrededor|near\s+me|around\s+here|close\s+by|nearby)\b/.test(m)) return false;
   return /\b(?:quiero\s+ir\s+a|como\s+llego\s+a|como\s+ir\s+a|me\s+voy\s+a|viajo\s+a|viajar\s+a|quiero\s+viajar\s+a|me\s+gustaria\s+ir\s+a|estoy\s+pensando\s+ir\s+a|voy\s+a\s+ir\s+a|i\s+want\s+to\s+go\s+to|how\s+(?:to|do\s+i)\s+get\s+to|llegar\s+a\b.*desde|ir\s+a\b.*desde)\b/.test(m);
 }
 
