@@ -369,6 +369,39 @@ const salma = {
     this._ttsStopAll();
   },
 
+  // Igual que salmaSpeak pero sin comprobar _voiceOn (para botón "Escuchar" manual)
+  async salmaSpeakManual(text) {
+    try {
+      const clean = this._ttsClean(text);
+      if (!clean) return;
+      this._ttsStopAll();
+      if (clean.length > 1200) {
+        const sentences = this._ttsSplitSentences(clean);
+        for (const s of sentences) this._ttsEnqueue(s);
+        return;
+      }
+      if (!this._elevenLabsDown) {
+        try {
+          const audio = await this._ttsFetchAudio(clean);
+          this._currentAudio = audio;
+          this._ttsPlaying = true;
+          audio.onended = () => {
+            if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl);
+            this._currentAudio = null;
+            this._ttsPlaying = false;
+          };
+          audio.play();
+          return;
+        } catch (e) {
+          const msg = String(e && e.message || e);
+          console.warn('[Salma] ElevenLabs falló (manual), fallback Web Speech:', msg);
+          if (/401|403|429/.test(msg)) this._elevenLabsDown = true;
+        }
+      }
+      this._ttsSpeakWebSpeech(clean);
+    } catch (e) { console.warn('[Salma] Error voz manual:', e); }
+  },
+
   // Pedir geolocalización al usuario (se llama una vez, se actualiza continuamente)
   initGeolocation() {
     if (!navigator.geolocation) return;
@@ -1839,17 +1872,8 @@ const salma = {
     div.innerHTML = `
       <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
       <div class="msg-body-salma">${formatMessage(text)}</div>`;
-    // Botón guardar nota solo si el mensaje tiene contenido relevante (>80 chars)
-    if (text.length > 150) {
-      const btnHtml = document.createElement('button');
-      btnHtml.className = 'msg-save-note';
-      btnHtml.innerHTML = '&#x1F516; Guardar nota';
-      btnHtml.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this._saveNoteFromBubble(text, btnHtml);
-      });
-      div.appendChild(btnHtml);
-    }
+    // Acciones en mensajes largos (Copiar / Compartir / Escuchar / Guardar nota)
+    this._addMsgActions(div, text);
     area.appendChild(div);
     this._scrollToBottom(true);
     // Enriquecer con fotos si es respuesta PLAN
@@ -2278,6 +2302,120 @@ const salma = {
 
   // ═══ FIN "QUIERO IR A..." renderers ═══
 
+  // Barra de acciones en burbujas largas de Salma: Copiar, Compartir, Escuchar, Guardar nota
+  _addMsgActions(bubbleEl, rawText) {
+    if (!bubbleEl || !rawText) return;
+    if (bubbleEl.querySelector('.msg-actions')) return;
+    const text = String(rawText).trim();
+    if (text.length <= 150) return;
+
+    const bar = document.createElement('div');
+    bar.className = 'msg-actions';
+
+    const PLAY_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="6,4 20,12 6,20" fill="currentColor" stroke="none"/></svg>';
+    const STOP_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" fill="currentColor" stroke="none"/><rect x="14" y="5" width="4" height="14" fill="currentColor" stroke="none"/></svg>';
+
+    // Copiar
+    const copyBtn = document.createElement('button');
+    copyBtn.type = 'button';
+    copyBtn.className = 'msg-action-btn';
+    copyBtn.title = 'Copiar';
+    copyBtn.setAttribute('aria-label', 'Copiar');
+    copyBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>';
+    copyBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      try {
+        await navigator.clipboard.writeText(text);
+        if (typeof showToast === 'function') showToast('Copiado');
+      } catch {
+        if (typeof showToast === 'function') showToast('No se pudo copiar');
+      }
+    });
+    bar.appendChild(copyBtn);
+
+    // Compartir
+    const shareBtn = document.createElement('button');
+    shareBtn.type = 'button';
+    shareBtn.className = 'msg-action-btn';
+    shareBtn.title = 'Compartir';
+    shareBtn.setAttribute('aria-label', 'Compartir');
+    shareBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
+    shareBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      try {
+        if (navigator.share) {
+          await navigator.share({ text });
+        } else {
+          await navigator.clipboard.writeText(text);
+          if (typeof showToast === 'function') showToast('Copiado para compartir');
+        }
+      } catch (err) {
+        if (err && err.name === 'AbortError') return;
+        try {
+          await navigator.clipboard.writeText(text);
+          if (typeof showToast === 'function') showToast('Copiado');
+        } catch {}
+      }
+    });
+    bar.appendChild(shareBtn);
+
+    // Escuchar (toggle)
+    const listenBtn = document.createElement('button');
+    listenBtn.type = 'button';
+    listenBtn.className = 'msg-action-btn';
+    listenBtn.title = 'Escuchar';
+    listenBtn.setAttribute('aria-label', 'Escuchar');
+    listenBtn.innerHTML = PLAY_SVG;
+    listenBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isPlaying = listenBtn.classList.contains('is-playing');
+      if (isPlaying) {
+        this.salmaSpeakStop();
+        listenBtn.classList.remove('is-playing');
+        listenBtn.innerHTML = PLAY_SVG;
+        if (this._listenActiveBtn === listenBtn) this._listenActiveBtn = null;
+        if (this._listenWatcher) { clearInterval(this._listenWatcher); this._listenWatcher = null; }
+        return;
+      }
+      if (this._listenActiveBtn && this._listenActiveBtn !== listenBtn) {
+        this._listenActiveBtn.classList.remove('is-playing');
+        this._listenActiveBtn.innerHTML = PLAY_SVG;
+      }
+      this.salmaSpeakStop();
+      this._listenActiveBtn = listenBtn;
+      listenBtn.classList.add('is-playing');
+      listenBtn.innerHTML = STOP_SVG;
+      this.salmaSpeakManual(text);
+      if (this._listenWatcher) clearInterval(this._listenWatcher);
+      this._listenWatcher = setInterval(() => {
+        const queueLen = Array.isArray(this._ttsQueue) ? this._ttsQueue.length : 0;
+        if (!this._ttsPlaying && queueLen === 0) {
+          if (this._listenActiveBtn) {
+            this._listenActiveBtn.classList.remove('is-playing');
+            this._listenActiveBtn.innerHTML = PLAY_SVG;
+            this._listenActiveBtn = null;
+          }
+          clearInterval(this._listenWatcher);
+          this._listenWatcher = null;
+        }
+      }, 400);
+    });
+    bar.appendChild(listenBtn);
+
+    // Guardar nota (reutiliza handler existente, sin cambios de comportamiento)
+    const saveBtn = document.createElement('button');
+    saveBtn.type = 'button';
+    saveBtn.className = 'msg-save-note';
+    saveBtn.innerHTML = '&#x1F516; Guardar nota';
+    saveBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this._saveNoteFromBubble(text, saveBtn);
+    });
+    bar.appendChild(saveBtn);
+
+    bubbleEl.appendChild(bar);
+  },
+
   async _saveNoteFromBubble(text, btnEl) {
     if (!window.currentUser) {
       window._pendingSaveNote = { text, btnEl };
@@ -2402,17 +2540,8 @@ const salma = {
       el.removeAttribute('id');
       const bodyEl = el.querySelector('.msg-body-salma');
       const rawText = bodyEl?.dataset.raw || bodyEl?.textContent || '';
-      // Añadir botón guardar nota solo si hay contenido relevante
-      if (rawText.length > 150 && !el.querySelector('.msg-save-note')) {
-        const btn = document.createElement('button');
-        btn.className = 'msg-save-note';
-        btn.innerHTML = '&#x1F516; Guardar nota';
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          this._saveNoteFromBubble(rawText, btn);
-        });
-        el.appendChild(btn);
-      }
+      // Acciones en mensajes largos (Copiar / Compartir / Escuchar / Guardar nota)
+      this._addMsgActions(el, rawText);
     }
     const txt = document.getElementById('salma-stream-text');
     if (txt) txt.removeAttribute('id');
@@ -2437,17 +2566,8 @@ const salma = {
           const t = textContent;
           setTimeout(() => this.salmaSpeak(t), 50);
         }
-        // Botón guardar nota solo si hay contenido relevante
-        if (rawText.length > 150 && !el.querySelector('.msg-save-note')) {
-          const btn = document.createElement('button');
-          btn.className = 'msg-save-note';
-          btn.innerHTML = '&#x1F516; Guardar nota';
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this._saveNoteFromBubble(rawText, btn);
-          });
-          el.appendChild(btn);
-        }
+        // Acciones en mensajes largos (Copiar / Compartir / Escuchar / Guardar nota)
+        this._addMsgActions(el, rawText);
         // Enriquecer con fotos si es respuesta PLAN
         const bodyEl = txt || el.querySelector('.msg-body-salma');
         if (bodyEl && this._isPlanBubble(bodyEl)) {

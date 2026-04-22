@@ -3281,12 +3281,34 @@ body {
 .bitacora-empty-text { font-weight:600; color:rgba(244,239,230,.7); margin-bottom:8px; }
 .bitacora-empty-sub { font-size:13px; color:rgba(244,239,230,.4); margin-bottom:20px; }
 
-/* ═══ BOOKMARK EN BURBUJAS CHAT ═══ */
+/* ═══ ACCIONES EN BURBUJAS CHAT (Copiar / Compartir / Escuchar / Guardar nota) ═══ */
+.msg-actions {
+  display:flex; align-items:center; gap:6px;
+  margin-top:8px; flex-wrap:wrap;
+}
+.msg-action-btn {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:28px; height:28px; padding:0;
+  background:rgba(212,168,67,.1); border:1px solid rgba(212,168,67,.25);
+  border-radius:6px; cursor:pointer;
+  color:var(--dorado); transition:background .15s, color .15s;
+}
+.msg-action-btn:hover { background:rgba(212,168,67,.2); }
+.msg-action-btn:active { background:rgba(212,168,67,.3); }
+.msg-action-btn svg {
+  width:14px; height:14px;
+  stroke:currentColor; fill:none;
+  stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;
+}
+.msg-action-btn.is-playing {
+  background:rgba(212,168,67,.3); color:var(--dorado2);
+  border-color:rgba(212,168,67,.5);
+}
 .msg-save-note {
   display:inline-flex; align-items:center; gap:4px;
   background:rgba(212,168,67,.1); border:1px solid rgba(212,168,67,.25);
   border-radius:6px; cursor:pointer;
-  font-size:11px; padding:4px 8px; margin-top:6px;
+  font-size:11px; padding:4px 8px;
   color:var(--dorado); transition:background .15s;
 }
 .msg-save-note:hover { background:rgba(212,168,67,.2); }
