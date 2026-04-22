@@ -519,8 +519,8 @@ window.notasManager = (() => {
 
   async function renderChatReminders(chatArea) {
     if (!chatArea || !_uid()) return;
-    const dismissKey = 'bdm_reminders_dismissed_' + _today();
-    if (localStorage.getItem(dismissKey)) return;
+    // Evitar duplicar banner si ya existe uno en esta vista
+    if (chatArea.querySelector('.chat-reminders-banner')) return;
 
     try {
       const allNotas = await getAll();
@@ -550,7 +550,6 @@ window.notasManager = (() => {
       chatArea.prepend(banner);
 
       banner.querySelector('.chat-reminders-close').addEventListener('click', () => {
-        localStorage.setItem(dismissKey, '1');
         banner.style.opacity = '0';
         setTimeout(() => banner.remove(), 200);
       });

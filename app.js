@@ -30,7 +30,7 @@ setTimeout(hideSplash, 4000);
 
 // Estado global
 let currentUser = null;
-let currentState = 'welcome'; // 'welcome' | 'chat' | 'viajes' | 'profile'
+let currentState = 'chat'; // 'chat' | 'viajes' | 'profile' (welcome deprecado — ya no se usa)
 let currentUserSOSConfig = null;
 
 // ═══ DOM refs ═══
@@ -154,10 +154,6 @@ function updateBottomBar() {
   const isProfile = currentState === 'profile' || currentState === 'bitacora' || currentState === 'diario' || currentState === 'documentos' || currentState === 'notas' || currentState === 'galeria';
 
   bar.innerHTML = `
-    ${!currentUser ? `<button class="bottom-tab ${isHome ? 'bottom-tab-active' : ''}" id="tab-home">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>Home</span>
-    </button>` : ''}
     <button class="bottom-tab ${isRutas ? 'bottom-tab-active' : ''}" id="tab-rutas">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
@@ -175,8 +171,6 @@ function updateBottomBar() {
       <span>${currentUser ? 'Perfil' : 'Entrar'}</span>
     </button>`;
 
-  const tabHome = document.getElementById('tab-home');
-  if (tabHome) tabHome.addEventListener('click', () => showState('welcome'));
   document.getElementById('tab-chat').addEventListener('click', () => {
     // Si hay guía abierta, cerrarla primero
     if (window._itinViewOpen && typeof closeItinerarioView === 'function') {
@@ -605,7 +599,7 @@ function renderSalmaCan() {
 }
 
 async function renderProfile() {
-  if (!currentUser) { showState('welcome'); return; }
+  if (!currentUser) { showState('chat'); return; }
 
   const coins = currentUser.coins_saldo || 0;
   const rutas = currentUser.rutas_gratis_usadas || 0;
@@ -916,7 +910,7 @@ function _createGuideCard(doc, d, isOffline) {
 // ═══ BITÁCORA — Organizada por países ═══
 
 async function renderBitacora() {
-  if (!currentUser) { showState('welcome'); return; }
+  if (!currentUser) { showState('chat'); return; }
 
   $content.innerHTML = `
     <div class="bitacora-area fade-in">
@@ -1959,7 +1953,7 @@ window._showVideoModal = _showVideoModal;
 // ═══ MIS VIAJES (legacy — redirige a perfil) ═══
 
 async function loadUserGuides() {
-  if (!currentUser) { showState('welcome'); return; }
+  if (!currentUser) { showState('chat'); return; }
 
   // Si es el usuario Salma, redirigir al perfil público
   const SALMA_UID = 'LlXDmuXD1qgM97Xya8FiVHONXDw2';
@@ -1982,7 +1976,8 @@ async function loadUserGuides() {
 
   document.getElementById('btn-new-guide').addEventListener('click', () => {
     if (typeof salma !== 'undefined') salma.reset();
-    showState('welcome');
+    if (typeof salma !== 'undefined') salma._initChat();
+    showState('chat');
   });
 
   try {
