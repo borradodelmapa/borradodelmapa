@@ -195,7 +195,12 @@ const salma = {
 
   // Reproducir siguiente frase de la cola
   async _ttsPlayNext() {
-    if (!this._voiceOn || this._ttsQueue.length === 0) {
+    if (this._ttsQueue.length === 0) {
+      this._ttsPlaying = false;
+      this._manualSpeakActive = false;
+      return;
+    }
+    if (!this._voiceOn && !this._manualSpeakActive) {
       this._ttsPlaying = false;
       return;
     }
@@ -231,7 +236,7 @@ const salma = {
       }
     }
 
-    if (!this._voiceOn) { // voz desactivada durante fetch
+    if (!this._voiceOn && !this._manualSpeakActive) { // voz desactivada durante fetch
       if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl);
       this._ttsPlaying = false;
       return;
@@ -300,6 +305,7 @@ const salma = {
     this._ttsBuffer = '';
     this._ttsPlaying = false;
     this._ttsStreaming = false;
+    this._manualSpeakActive = false;
     if (this._ttsPreloaded) {
       if (this._ttsPreloaded._blobUrl) URL.revokeObjectURL(this._ttsPreloaded._blobUrl);
       this._ttsPreloaded = null;
@@ -375,6 +381,7 @@ const salma = {
       const clean = this._ttsClean(text);
       if (!clean) return;
       this._ttsStopAll();
+      this._manualSpeakActive = true;
       if (clean.length > 1200) {
         const sentences = this._ttsSplitSentences(clean);
         for (const s of sentences) this._ttsEnqueue(s);
@@ -389,6 +396,7 @@ const salma = {
             if (audio._blobUrl) URL.revokeObjectURL(audio._blobUrl);
             this._currentAudio = null;
             this._ttsPlaying = false;
+            this._manualSpeakActive = false;
           };
           audio.play();
           return;
