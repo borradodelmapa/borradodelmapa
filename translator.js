@@ -266,6 +266,22 @@
           <select class="translator-sel" id="tr-sel-b"></select>
         </div>
         <div class="translator-history" id="tr-history"></div>
+        <div class="translator-inputs">
+          <form class="translator-input-row" id="tr-form-a" data-side="a">
+            <span class="translator-input-lang" id="tr-in-a-lang"></span>
+            <input type="text" class="translator-input" id="tr-in-a" autocomplete="off" autocapitalize="sentences" enterkeyhint="send" />
+            <button type="submit" class="translator-send" aria-label="Traducir">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </form>
+          <form class="translator-input-row" id="tr-form-b" data-side="b">
+            <span class="translator-input-lang" id="tr-in-b-lang"></span>
+            <input type="text" class="translator-input" id="tr-in-b" autocomplete="off" autocapitalize="sentences" enterkeyhint="send" />
+            <button type="submit" class="translator-send" aria-label="Traducir">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </form>
+        </div>
         <div class="translator-mics">
           <button class="translator-mic" id="tr-mic-a" data-side="a">
             <div class="translator-mic-lang" id="tr-mic-a-lang"></div>
@@ -294,6 +310,14 @@
     const b = document.getElementById('tr-mic-b-lang');
     if (a) a.textContent = la.flag + ' ' + la.name;
     if (b) b.textContent = lb.flag + ' ' + lb.name;
+    const ia = document.getElementById('tr-in-a-lang');
+    const ib = document.getElementById('tr-in-b-lang');
+    if (ia) ia.textContent = la.flag;
+    if (ib) ib.textContent = lb.flag;
+    const inA = document.getElementById('tr-in-a');
+    const inB = document.getElementById('tr-in-b');
+    if (inA) { inA.placeholder = 'Escribe en ' + la.name + '…'; inA.lang = la.bcp; }
+    if (inB) { inB.placeholder = 'Escribe en ' + lb.name + '…'; inB.lang = lb.bcp; }
   }
 
   function renderHistory() {
@@ -592,6 +616,23 @@
       const btn = document.getElementById('tr-mic-' + side);
       if (!btn) return;
       btn.addEventListener('click', (e) => { e.preventDefault(); toggleRec(side); });
+    });
+
+    ['a', 'b'].forEach(side => {
+      const form = document.getElementById('tr-form-' + side);
+      if (!form) return;
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = document.getElementById('tr-in-' + side);
+        if (!input) return;
+        const text = (input.value || '').trim();
+        if (!text) return;
+        if (state.recognizing) stopRec();
+        const fromCode = side === 'a' ? state.langA : state.langB;
+        const toCode   = side === 'a' ? state.langB : state.langA;
+        input.value = '';
+        processTranslation(text, fromCode, toCode);
+      });
     });
   }
 
