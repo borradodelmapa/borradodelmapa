@@ -1839,19 +1839,46 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
     if (ccLower && env.SALMA_KB) promises.kvTransport = env.SALMA_KB.get('transport:' + ccLower).then(r => r ? JSON.parse(r) : null).catch(() => null);
     // KV destinos (qué hacer)
     if (ccLower && env.SALMA_KB) promises.kvDestinos = env.SALMA_KB.get('dest:' + ccLower + ':destinos').then(r => r ? JSON.parse(r) : null).catch(() => null);
-    // Vuelos — IATA dinámico: usa capital para países, nombre para ciudades
-    if (env.DUFFEL_ACCESS_TOKEN && userLocation) {
+    // Vuelos — si no hay fecha/mes del usuario, preguntar mes con chips. Si hay, buscar el mes completo (solo ida).
+    const hasUserDate = !!(travelDates?.from || detectedDate);
+    if (!hasUserDate) {
+      // Emitir prompt con chips de los próximos 4 meses. El usuario elige y reenvía "en [mes]".
+      const mesesNombres = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+      const now = new Date();
+      const months = [];
+      for (let i = 1; i <= 4; i++) {
+        const m = new Date(now.getFullYear(), now.getMonth() + i, 1);
+        months.push({ label: mesesNombres[m.getMonth()], value: `${m.getFullYear()}-${String(m.getMonth()+1).padStart(2,'0')}` });
+      }
+      promises.flights_prompt = Promise.resolve({ dest_name: dest.destName, months });
+    } else if (env.DUFFEL_ACCESS_TOKEN && userLocation) {
+      // IATA dinámico: usa capital para países, nombre para ciudades
       promises.flights = (async () => {
         const originIATA = await findIATA(userLocation, userLocationName, env.DUFFEL_ACCESS_TOKEN);
-        // Para países: buscar IATA de la capital (ej: Vietnam → "Hanoi" → HAN)
         const destSearchName = dest.isCountry && dest.destCapital ? dest.destCapital : dest.destName;
         const destIATA = await findIATA(dest.destLat ? { lat: dest.destLat, lng: dest.destLng } : null, destSearchName, env.DUFFEL_ACCESS_TOKEN);
         if (!originIATA) return null;
+
+        // Si usuario dio mes (detectedDate = YYYY-MM-01), buscar inicio + fin del mes para encontrar el más barato.
+        // Si usuario dio fecha exacta (travelDates.from), buscar solo esa fecha.
+        let fecha_ida, fecha_rango_hasta = null;
+        if (!travelDates?.from && detectedDate) {
+          const minDate = new Date(Date.now() + 3 * 86400000);
+          const firstOfMonth = new Date(detectedDate);
+          const start = firstOfMonth < minDate ? minDate : firstOfMonth;
+          fecha_ida = start.toISOString().slice(0, 10);
+          const end = new Date(detectedDate);
+          end.setDate(end.getDate() + 26);
+          fecha_rango_hasta = end.toISOString().slice(0, 10);
+        } else {
+          fecha_ida = travelDates.from;
+        }
+
         return buscarVuelosDuffel({
           origen: originIATA, destino: destIATA || dest.destCC,
-          fecha_ida: travelDates?.from || detectedDate || getFlexDate(14),
+          fecha_ida,
           fecha_vuelta: null,
-          fecha_rango_hasta: (travelDates?.from || detectedDate) ? null : getFlexDate(21),
+          fecha_rango_hasta,
           adultos: 1
         }, env.DUFFEL_ACCESS_TOKEN);
       })().catch(() => null);
@@ -1894,6 +1921,9 @@ async function handleGoTo(dest, userLocation, userCountryCode, userLocationName,
           break;
         case 'flights':
           if (val.vuelos?.length) await emit('flights', val);
+          break;
+        case 'flights_prompt':
+          await emit('flights_prompt', val);
           break;
         case 'braveVisa':
           if (val.resultados?.length) await emit('visa', { results: val.resultados.slice(0, 3) });

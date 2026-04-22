@@ -2105,6 +2105,7 @@ const salma = {
       case 'country_info': this._renderGoToCountryInfo(data); break;
       case 'transport': this._renderTransportActions(data.actions || [], data.tip); break;
       case 'flights': this._renderGoToFlights(data); break;
+      case 'flights_prompt': this._renderGoToFlightsPrompt(data); break;
       case 'weather': this._renderGoToWeather(data); break;
       case 'attractions': this._renderGoToPlaces(data, 'Qué ver'); break;
       case 'restaurants': this._renderGoToPlaces(data, 'Dónde comer'); break;
@@ -2180,6 +2181,38 @@ const salma = {
     }
     html += '</div>';
     sec.innerHTML = html;
+    c.appendChild(sec);
+  },
+
+  _renderGoToFlightsPrompt(data) {
+    const c = this._getGoToContainer();
+    if (!c || !data.months?.length) return;
+    const destName = data.dest_name || '';
+    const sec = document.createElement('div');
+    sec.className = 'salma-goto-section';
+    const title = document.createElement('div');
+    title.className = 'salma-goto-section-title';
+    title.textContent = 'Vuelos — ¿cuándo quieres ir?';
+    sec.appendChild(title);
+    const sub = document.createElement('div');
+    sub.style.cssText = 'font-size:12px;color:rgba(255,255,255,.5);margin-bottom:8px';
+    sub.textContent = 'Te busco los más baratos del mes que elijas (solo ida).';
+    sec.appendChild(sub);
+    const wrap = document.createElement('div');
+    wrap.className = 'salma-goto-chips';
+    for (const m of data.months) {
+      const btn = document.createElement('button');
+      btn.className = 'salma-goto-chip';
+      btn.textContent = m.label.charAt(0).toUpperCase() + m.label.slice(1);
+      btn.addEventListener('click', () => {
+        const msg = `quiero ir a ${destName} en ${m.label}`;
+        const input = document.getElementById('salma-input');
+        if (input) input.value = msg;
+        if (typeof salma !== 'undefined' && salma.send) salma.send(msg);
+      });
+      wrap.appendChild(btn);
+    }
+    sec.appendChild(wrap);
     c.appendChild(sec);
   },
 
