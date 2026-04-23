@@ -1839,8 +1839,16 @@ const salma = {
 
     html += '</div></div>';
 
-    // Insertar al principio del chat
-    area.insertAdjacentHTML('afterbegin', html);
+    // Insertar: dentro de .chat-empty antes de los chips (estado vacío),
+    // o al principio del chat-area si ya hay conversación
+    const chatEmpty = area.querySelector('.chat-empty');
+    if (chatEmpty) {
+      const chips = chatEmpty.querySelector('.chat-empty-chips');
+      if (chips) chips.insertAdjacentHTML('beforebegin', html);
+      else chatEmpty.insertAdjacentHTML('beforeend', html);
+    } else {
+      area.insertAdjacentHTML('afterbegin', html);
+    }
   },
 
   // ═══ WEATHER BANNER ═══
