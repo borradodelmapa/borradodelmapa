@@ -1870,14 +1870,24 @@ const salma = {
     } else if (this._userLocation) {
       url = `${window.SALMA_API}/weather?lat=${this._userLocation.lat}&lon=${this._userLocation.lng}`;
     } else {
+      // Sin GPS todavía — mostrar opción de buscar ciudad manualmente
+      const b = document.getElementById('weather-banner');
+      if (b) b.innerHTML = '<div class="wx-row"><span class="wx-loading" style="cursor:pointer" onclick="salma._wxOpenPicker()">📍 Toca para añadir ubicación</span></div>';
       return;
     }
     try {
       const res = await fetch(url);
-      if (!res.ok) return;
+      if (!res.ok) {
+        const b = document.getElementById('weather-banner');
+        if (b) b.innerHTML = '<div class="wx-row"><span class="wx-loading" style="cursor:pointer" onclick="salma._wxOpenPicker()">⚠️ Sin datos — toca para buscar ciudad</span></div>';
+        return;
+      }
       this._wxData = await res.json();
       this._wxRender();
-    } catch(_) {}
+    } catch(_) {
+      const b = document.getElementById('weather-banner');
+      if (b) b.innerHTML = '<div class="wx-row"><span class="wx-loading" style="cursor:pointer" onclick="salma._wxOpenPicker()">⚠️ Sin datos — toca para buscar ciudad</span></div>';
+    }
   },
 
   _wxRender() {
