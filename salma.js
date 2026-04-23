@@ -425,6 +425,8 @@ const salma = {
         console.log('[Salma] Ubicación:', this._userLocation.lat, this._userLocation.lng, '±' + this._userLocation.accuracy + 'm');
         // Activar copiloto cuando tenemos ubicación
         if (!this._copilotCountry) this.initCopilot();
+        // Cargar banner del tiempo si ya está en pantalla pero sin datos
+        if (!this._wxData && !this._wxCustomLoc && document.getElementById('weather-banner')) this._wxLoad();
         // Si ya tenemos buena precisión (<500m), dejar de monitorizar para ahorrar batería
         // PERO si el narrador está activo, mantener GPS continuo
         if (pos.coords.accuracy < 500 && this._geoWatchId && !this._narratorActive) {
@@ -1838,6 +1840,151 @@ const salma = {
     area.insertAdjacentHTML('afterbegin', html);
   },
 
+  // ═══ WEATHER BANNER ═══
+
+  _wxData: null,
+  _wxMinimized: false,
+  _wxCustomLoc: null,
+  _wxInterval: null,
+
+  initWeatherBanner() {
+    this._wxMinimized = localStorage.getItem('bdm_wx_min') === '1';
+    try { this._wxCustomLoc = JSON.parse(localStorage.getItem('bdm_wx_loc') || 'null'); } catch(_) {}
+    const chatArea = document.getElementById('chat-area');
+    if (!chatArea || document.getElementById('weather-banner')) return;
+    const banner = document.createElement('div');
+    banner.id = 'weather-banner';
+    banner.className = 'wx-banner' + (this._wxMinimized ? ' wx-banner--min' : '');
+    banner.innerHTML = '<div class="wx-row"><span class="wx-loading">🌡️ Cargando tiempo...</span></div>';
+    chatArea.parentNode.insertBefore(banner, chatArea);
+    this._wxLoad();
+    if (this._wxInterval) clearInterval(this._wxInterval);
+    this._wxInterval = setInterval(() => this._wxLoad(), 30 * 60 * 1000);
+  },
+
+  async _wxLoad() {
+    const loc = this._wxCustomLoc;
+    let url;
+    if (loc) {
+      url = `${window.SALMA_API}/weather?lat=${loc.lat}&lon=${loc.lon}`;
+    } else if (this._userLocation) {
+      url = `${window.SALMA_API}/weather?lat=${this._userLocation.lat}&lon=${this._userLocation.lng}`;
+    } else {
+      return;
+    }
+    try {
+      const res = await fetch(url);
+      if (!res.ok) return;
+      this._wxData = await res.json();
+      this._wxRender();
+    } catch(_) {}
+  },
+
+  _wxRender() {
+    const banner = document.getElementById('weather-banner');
+    if (!banner || !this._wxData) return;
+    const d = this._wxData;
+    const icon = this._wxEmoji(d.icon);
+    const min = this._wxMinimized;
+    banner.className = 'wx-banner' + (min ? ' wx-banner--min' : '');
+    const gust = d.wind_gust_kmph ? ` · ráf. ${d.wind_gust_kmph}` : '';
+    const aqiLabels = ['','🟢 Buena','🟡 Aceptable','🟠 Moderada','🔴 Mala','🟣 Muy mala'];
+    const aqiHtml = d.aqi ? `<span class="wx-sep">·</span><span title="Calidad del aire">🌬️ ${aqiLabels[d.aqi] || ''}</span>` : '';
+    if (min) {
+      banner.innerHTML = `
+        <div class="wx-row">
+          <button class="wx-loc" onclick="salma._wxOpenPicker()">📍 ${escapeHTML(d.location)}</button>
+          <span class="wx-sep">·</span>
+          <span class="wx-temp">${icon} ${d.temp}°</span>
+          <span class="wx-sep">·</span>
+          <span class="wx-wind">💨 ${d.wind_kmph} <span class="wx-dir">${d.wind_dir}</span></span>
+          <button class="wx-toggle" onclick="salma._wxToggle()">↓</button>
+        </div>`;
+    } else {
+      banner.innerHTML = `
+        <div class="wx-row">
+          <button class="wx-loc" onclick="salma._wxOpenPicker()">📍 ${escapeHTML(d.location)}</button>
+          <span class="wx-temp">${icon} ${d.temp}°</span>
+          <span class="wx-desc">${escapeHTML(d.description)}</span>
+          <button class="wx-toggle" onclick="salma._wxToggle()">↑</button>
+        </div>
+        <div class="wx-row wx-detail">
+          <span>Sensación ${d.feels_like}°</span>
+          <span class="wx-sep">·</span>
+          <span>💨 ${d.wind_kmph} km/h ${d.wind_dir}${gust}</span>
+          <span class="wx-sep">·</span>
+          <span>💧 ${d.humidity}%</span>
+          ${aqiHtml}
+        </div>`;
+    }
+  },
+
+  _wxToggle() {
+    this._wxMinimized = !this._wxMinimized;
+    localStorage.setItem('bdm_wx_min', this._wxMinimized ? '1' : '0');
+    this._wxRender();
+  },
+
+  _wxOpenPicker() {
+    if (document.getElementById('wx-picker')) return;
+    const overlay = document.createElement('div');
+    overlay.id = 'wx-picker';
+    overlay.className = 'wx-picker-overlay';
+    overlay.innerHTML = `
+      <div class="wx-picker">
+        <div class="wx-picker-head">
+          <span>Cambiar ubicación</span>
+          <button onclick="document.getElementById('wx-picker').remove()">✕</button>
+        </div>
+        <button class="wx-picker-gps" onclick="salma._wxSetGPS()">📍 Usar mi ubicación</button>
+        <div class="wx-picker-row">
+          <input id="wx-city-input" class="wx-city-input" type="text" placeholder="Buscar ciudad..." autocomplete="off">
+          <button class="wx-city-btn" onclick="salma._wxSearchCity()">Buscar</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+    const inp = document.getElementById('wx-city-input');
+    setTimeout(() => inp?.focus(), 80);
+    inp?.addEventListener('keydown', e => { if (e.key === 'Enter') salma._wxSearchCity(); });
+  },
+
+  _wxSetGPS() {
+    this._wxCustomLoc = null;
+    localStorage.removeItem('bdm_wx_loc');
+    document.getElementById('wx-picker')?.remove();
+    const b = document.getElementById('weather-banner');
+    if (b) b.innerHTML = '<div class="wx-row"><span class="wx-loading">🌡️ Cargando...</span></div>';
+    this._wxLoad();
+  },
+
+  async _wxSearchCity() {
+    const inp = document.getElementById('wx-city-input');
+    const city = inp?.value?.trim();
+    if (!city) return;
+    const btn = document.querySelector('.wx-city-btn');
+    if (btn) btn.textContent = '...';
+    try {
+      const res = await fetch(`${window.SALMA_API}/weather?city=${encodeURIComponent(city)}`);
+      if (!res.ok) { showToast('Ciudad no encontrada'); return; }
+      const data = await res.json();
+      this._wxCustomLoc = { lat: data._lat, lon: data._lon, name: data.location };
+      localStorage.setItem('bdm_wx_loc', JSON.stringify(this._wxCustomLoc));
+      this._wxData = data;
+      document.getElementById('wx-picker')?.remove();
+      this._wxRender();
+    } catch(_) {
+      showToast('Error buscando ciudad');
+    } finally {
+      if (btn) btn.textContent = 'Buscar';
+    }
+  },
+
+  _wxEmoji(icon) {
+    const m = {'01d':'☀️','01n':'🌙','02d':'⛅','02n':'⛅','03d':'☁️','03n':'☁️','04d':'☁️','04n':'☁️','09d':'🌧️','09n':'🌧️','10d':'🌦️','10n':'🌧️','11d':'⛈️','11n':'⛈️','13d':'❄️','13n':'❄️','50d':'🌫️','50n':'🌫️'};
+    return m[icon] || '🌡️';
+  },
+
   // ═══ CHAT DOM ═══
 
   _initChat(skipWelcome) {
@@ -1848,6 +1995,8 @@ const salma = {
     if (!document.getElementById('chat-area')) {
       $content.innerHTML = '<div class="chat-area" id="chat-area"></div>';
     }
+    // Banner del tiempo
+    if (!document.getElementById('weather-banner')) this.initWeatherBanner();
     // Mostrar tarjeta copiloto si hay datos del país
     if (this._copilotData) this.showCopilotCard();
     // Banner de recordatorios (una vez al día)

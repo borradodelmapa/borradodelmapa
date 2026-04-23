@@ -2101,6 +2101,45 @@ async function fetchWeather(location, openweatherKey) {
   }
 }
 
+// ─── Banner tiempo: clima actual por lat/lon ───
+function windDegToCardinal(deg) {
+  const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'];
+  return dirs[Math.round(deg / 22.5) % 16];
+}
+
+async function fetchWeatherBanner(lat, lon, key) {
+  if (!key) return null;
+  try {
+    const [wxRes, aqRes] = await Promise.all([
+      fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${key}`, { signal: AbortSignal.timeout(6000) }),
+      fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${key}`, { signal: AbortSignal.timeout(6000) }),
+    ]);
+    if (!wxRes.ok) return null;
+    const d = await wxRes.json();
+    let aqi = null;
+    if (aqRes.ok) {
+      const aqData = await aqRes.json();
+      aqi = aqData?.list?.[0]?.main?.aqi ?? null;
+    }
+    return {
+      location: d.name || '',
+      country: d.sys?.country || '',
+      temp: Math.round(d.main.temp),
+      feels_like: Math.round(d.main.feels_like),
+      description: d.weather[0]?.description || '',
+      icon: d.weather[0]?.icon || '01d',
+      humidity: d.main.humidity,
+      wind_kmph: Math.round((d.wind?.speed || 0) * 3.6),
+      wind_deg: d.wind?.deg || 0,
+      wind_dir: windDegToCardinal(d.wind?.deg || 0),
+      wind_gust_kmph: d.wind?.gust ? Math.round(d.wind.gust * 3.6) : null,
+      aqi,
+      _lat: lat,
+      _lon: lon,
+    };
+  } catch (_) { return null; }
+}
+
 // ═══════════════════════════════════════════════════════════════
 // BÚSQUEDA DE EVENTOS LOCALES (Serper.dev)
 // ═══════════════════════════════════════════════════════════════
@@ -4758,6 +4797,28 @@ export default {
         return new Response('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>', {
           headers: { 'Content-Type': 'application/xml' }
         });
+      }
+    }
+
+    // ─── ENDPOINT /weather (banner tiempo) ───
+    if (request.method === 'GET' && url.pathname === '/weather') {
+      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      const lat = parseFloat(url.searchParams.get('lat'));
+      const lon = parseFloat(url.searchParams.get('lon'));
+      const city = url.searchParams.get('city') || '';
+      try {
+        let data = null;
+        if (!isNaN(lat) && !isNaN(lon)) {
+          data = await fetchWeatherBanner(lat, lon, env.OPENWEATHER_KEY);
+        } else if (city) {
+          const geoRes = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(city)}&limit=1&appid=${env.OPENWEATHER_KEY}`, { signal: AbortSignal.timeout(5000) });
+          const geo = await geoRes.json();
+          if (geo?.[0]) data = await fetchWeatherBanner(geo[0].lat, geo[0].lon, env.OPENWEATHER_KEY);
+        }
+        if (!data) return new Response(JSON.stringify({ error: 'no data' }), { status: 404, headers: corsH });
+        return new Response(JSON.stringify(data), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
     }
 
