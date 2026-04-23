@@ -524,9 +524,11 @@ window.notasManager = (() => {
 
     try {
       const allNotas = await getAll();
-      const today = _today();
+      const future = new Date();
+      future.setDate(future.getDate() + 7);
+      const futureStr = future.toISOString().slice(0, 10);
       const pending = allNotas
-        .filter(n => !n.completado && n.fechaRecordatorio && n.fechaRecordatorio <= today)
+        .filter(n => !n.completado && n.fechaRecordatorio && n.fechaRecordatorio <= futureStr)
         .sort((a, b) => (a.fechaRecordatorio || '').localeCompare(b.fechaRecordatorio || ''));
 
       if (pending.length === 0) return;
