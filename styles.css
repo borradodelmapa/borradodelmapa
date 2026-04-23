@@ -207,35 +207,50 @@ body {
 /* ── Weather Banner ── */
 .wx-banner {
   position: sticky; top: 56px; z-index: 90;
-  background: rgba(14,11,5,.92); backdrop-filter: blur(10px);
+  background: rgba(10,8,3,.96); backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--linea);
-  padding: 7px 14px 8px;
+  padding: 10px 16px 8px;
 }
-.wx-banner--min { padding: 5px 14px; }
-.wx-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.wx-detail { margin-top: 2px; font-size: 12px; color: rgba(255,255,255,.55); }
+.wx-banner--min { padding: 6px 16px; }
+.wx-main {
+  display: flex; align-items: center; gap: 10px;
+}
+.wx-center {
+  display: flex; align-items: baseline; gap: 8px; flex: 1; min-width: 0;
+}
+.wx-min-info {
+  display: flex; align-items: center; gap: 6px; flex: 1;
+  font-size: 13px; color: rgba(255,255,255,.75);
+}
+.wx-extras {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  margin-top: 5px; font-size: 12px; color: rgba(255,255,255,.5);
+}
 .wx-loading { font-size: 12px; color: rgba(255,255,255,.4); }
 .wx-loc {
   background: none; border: none; cursor: pointer; padding: 0;
-  font-size: 13px; font-weight: 600; color: var(--dorado); font-family: var(--font-body);
+  font-size: 13px; font-weight: 700; color: var(--dorado); font-family: var(--font-body);
+  white-space: nowrap; flex-shrink: 0;
 }
 .wx-loc:hover { text-decoration: underline; }
-.wx-temp { font-size: 15px; font-weight: 700; color: #fff; }
-.wx-desc { font-size: 12px; color: rgba(255,255,255,.6); text-transform: capitalize; flex: 1; }
-.wx-wind { font-size: 12px; color: rgba(255,255,255,.7); }
+.wx-temp { font-size: 20px; font-weight: 700; color: #fff; white-space: nowrap; }
+.wx-desc { font-size: 12px; color: rgba(255,255,255,.55); text-transform: capitalize; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .wx-dir {
   display: inline-block; background: rgba(240,180,41,.15); color: var(--dorado);
   border-radius: 4px; padding: 0 4px; font-size: 11px; font-weight: 600;
 }
-.wx-sep { color: rgba(255,255,255,.2); font-size: 11px; }
+.wx-dot { color: rgba(255,255,255,.2); }
 .wx-toggle {
-  margin-left: auto; background: none; border: none; cursor: pointer;
-  color: rgba(255,255,255,.35); font-size: 14px; padding: 0 2px; line-height: 1;
+  background: none; border: none; cursor: pointer; flex-shrink: 0;
+  color: rgba(255,255,255,.3); font-size: 16px; padding: 2px 0 2px 6px; line-height: 1;
 }
 .wx-toggle:hover { color: rgba(255,255,255,.7); }
+/* Separación primer mensaje del chat */
+.chat-area > .msg:first-child,
+.chat-area > .copilot-card ~ .msg:first-of-type { margin-top: 14px; }
 /* Location picker */
 .wx-picker-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 2000;
+  position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 2000;
   display: flex; align-items: flex-end; justify-content: center;
 }
 .wx-picker {

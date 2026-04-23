@@ -1765,6 +1765,8 @@ const salma = {
       this._copilotData = piData.practical_info;
       try { sessionStorage.setItem('salma_copilot_' + countryCode, JSON.stringify(piData.practical_info)); } catch (_) {}
       console.log('[Salma] Copiloto activado:', geo.address?.country, countryCode);
+      // Mostrar tarjeta si el chat ya está abierto (initCopilot es async)
+      if (currentState === 'chat') this.showCopilotCard();
     } catch (e) {
       console.log('[Salma] Copiloto: error obteniendo info', e.message);
     }
@@ -1899,34 +1901,36 @@ const salma = {
     banner.className = 'wx-banner' + (min ? ' wx-banner--min' : '');
     const gust = d.wind_gust_kmph ? ` · ráf. ${d.wind_gust_kmph}` : '';
     const aqiLabels = ['','🟢 Buena','🟡 Aceptable','🟠 Moderada','🔴 Mala','🟣 Muy mala'];
-    const aqiHtml = d.aqi ? `<span class="wx-sep">·</span><span title="Calidad del aire">🌬️ ${aqiLabels[d.aqi] || ''}</span>` : '';
+    const aqiHtml = d.aqi ? `<span class="wx-dot">·</span><span>🌬️ ${aqiLabels[d.aqi]}</span>` : '';
     if (min) {
       banner.innerHTML = `
-        <div class="wx-row">
+        <div class="wx-main">
           <button class="wx-loc" onclick="salma._wxOpenPicker()">📍 ${escapeHTML(d.location)}</button>
-          <span class="wx-sep">·</span>
-          <span class="wx-temp">${icon} ${d.temp}°</span>
-          <span class="wx-sep">·</span>
-          <span class="wx-wind">💨 ${d.wind_kmph} <span class="wx-dir">${d.wind_dir}</span></span>
-          <button class="wx-toggle" onclick="salma._wxToggle()">↓</button>
+          <div class="wx-min-info">
+            <span class="wx-temp">${icon} ${d.temp}°</span>
+            <span class="wx-dot">·</span>
+            <span>💨 ${d.wind_kmph} <span class="wx-dir">${d.wind_dir}</span></span>
+          </div>
+          <button class="wx-toggle" onclick="salma._wxToggle()" title="Expandir">↓</button>
         </div>`;
     } else {
       banner.innerHTML = `
-        <div class="wx-row">
+        <div class="wx-main">
           <button class="wx-loc" onclick="salma._wxOpenPicker()">📍 ${escapeHTML(d.location)}</button>
-          <span class="wx-temp">${icon} ${d.temp}°</span>
-          <span class="wx-desc">${escapeHTML(d.description)}</span>
-          <button class="wx-toggle" onclick="salma._wxToggle()">↑</button>
+          <div class="wx-center">
+            <span class="wx-temp">${icon} ${d.temp}°</span>
+            <span class="wx-desc">${escapeHTML(d.description)}</span>
+          </div>
+          <button class="wx-toggle" onclick="salma._wxToggle()" title="Minimizar">↑</button>
         </div>
-        <div class="wx-row wx-detail">
-          <span>Sensación ${d.feels_like}°</span>
-          <span class="wx-sep">·</span>
-          <span>💨 ${d.wind_kmph} km/h ${d.wind_dir}${gust}</span>
-          <span class="wx-sep">·</span>
+        <div class="wx-extras">
+          <span>Sens. ${d.feels_like}°</span>
+          <span class="wx-dot">·</span>
+          <span>💨 ${d.wind_kmph} km/h <span class="wx-dir">${d.wind_dir}</span>${gust}</span>
+          <span class="wx-dot">·</span>
           <span>💧 ${d.humidity}%</span>
           ${aqiHtml}
         </div>`;
-    }
   },
 
   _wxToggle() {

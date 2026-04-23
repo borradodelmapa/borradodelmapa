@@ -2110,9 +2110,18 @@ function windDegToCardinal(deg) {
 async function fetchWeatherBanner(lat, lon, key) {
   if (!key) return null;
   try {
-    const wxRes = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${key}`, { signal: AbortSignal.timeout(6000) });
-    if (!wxRes.ok) return null;
-    const d = await wxRes.json();
+    // Weather + reverse geocode en paralelo (el geocode da "Hanoi" en vez de "Xom Po")
+    const [wxRes, geoRes] = await Promise.allSettled([
+      fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${key}`, { signal: AbortSignal.timeout(6000) }),
+      fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${key}`, { signal: AbortSignal.timeout(5000) }),
+    ]);
+    if (wxRes.status !== 'fulfilled' || !wxRes.value.ok) return null;
+    const d = await wxRes.value.json();
+    let locationName = d.name || '';
+    if (geoRes.status === 'fulfilled' && geoRes.value.ok) {
+      const geo = await geoRes.value.json();
+      if (geo?.[0]?.name) locationName = geo[0].name;
+    }
     let aqi = null;
     try {
       const aqRes = await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${key}`, { signal: AbortSignal.timeout(5000) });
@@ -2122,7 +2131,7 @@ async function fetchWeatherBanner(lat, lon, key) {
       }
     } catch(_) {}
     return {
-      location: d.name || '',
+      location: locationName,
       country: d.sys?.country || '',
       temp: Math.round(d.main.temp),
       feels_like: Math.round(d.main.feels_like),
