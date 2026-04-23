@@ -206,7 +206,7 @@ body {
 .salma-goto-weather-day { font-size:11px; color:rgba(255,255,255,.45); text-align:center; }
 /* ── Weather Banner ── */
 .wx-banner {
-  position: sticky; top: 56px; z-index: 90;
+  position: sticky; top: 0; z-index: 90;
   background: rgba(10,8,3,.96); backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255,255,255,.06);
   padding: 10px 16px 8px;
@@ -223,8 +223,9 @@ body {
   font-size: 13px; color: rgba(255,255,255,.75);
 }
 .wx-extras {
-  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  display: flex; align-items: center; gap: 6px; flex-wrap: nowrap;
   margin-top: 5px; font-size: 12px; color: rgba(255,255,255,.5);
+  overflow: hidden; white-space: nowrap;
 }
 .wx-loading { font-size: 12px; color: rgba(255,255,255,.4); }
 .wx-loc {

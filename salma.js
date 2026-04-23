@@ -1910,8 +1910,8 @@ const salma = {
     const min = this._wxMinimized;
     banner.className = 'wx-banner' + (min ? ' wx-banner--min' : '');
     const gust = d.wind_gust_kmph ? ` · ráf. ${d.wind_gust_kmph}` : '';
-    const aqiLabels = ['','🟢 Buena','🟡 Aceptable','🟠 Moderada','🔴 Mala','🟣 Muy mala'];
-    const aqiHtml = d.aqi ? `<span class="wx-dot">·</span><span>🌬️ ${aqiLabels[d.aqi]}</span>` : '';
+    const aqiLabels = ['','🟢 Buena','🟡 Acept.','🟠 Moder.','🔴 Mala','🟣 Muy mala'];
+    const aqiHtml = d.aqi ? `<span class="wx-dot">·</span><span>${aqiLabels[d.aqi]}</span>` : '';
     if (min) {
       banner.innerHTML = `
         <div class="wx-main">
