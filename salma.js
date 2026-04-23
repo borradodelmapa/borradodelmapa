@@ -1933,6 +1933,7 @@ const salma = {
           <span>💧 ${d.humidity}%</span>
           ${aqiHtml}
         </div>`;
+    }
   },
 
   _wxToggle() {
