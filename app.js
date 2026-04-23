@@ -319,6 +319,12 @@ function _renderChatEmpty() {
       if (chip.dataset.msg && typeof salma !== 'undefined') salma.send(chip.dataset.msg);
     });
   });
+
+  // Reponer banner recordatorios y tarjeta copiloto — innerHTML los borró
+  if (window.currentUser && typeof notasManager !== 'undefined') {
+    notasManager.renderChatReminders(area);
+  }
+  if (typeof salma !== 'undefined' && salma._copilotData) salma.showCopilotCard();
 }
 
 // ═══ WELCOME (estado 1) ═══
