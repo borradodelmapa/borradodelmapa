@@ -2110,17 +2110,17 @@ function windDegToCardinal(deg) {
 async function fetchWeatherBanner(lat, lon, key) {
   if (!key) return null;
   try {
-    const [wxRes, aqRes] = await Promise.all([
-      fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${key}`, { signal: AbortSignal.timeout(6000) }),
-      fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${key}`, { signal: AbortSignal.timeout(6000) }),
-    ]);
+    const wxRes = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${key}`, { signal: AbortSignal.timeout(6000) });
     if (!wxRes.ok) return null;
     const d = await wxRes.json();
     let aqi = null;
-    if (aqRes.ok) {
-      const aqData = await aqRes.json();
-      aqi = aqData?.list?.[0]?.main?.aqi ?? null;
-    }
+    try {
+      const aqRes = await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${key}`, { signal: AbortSignal.timeout(5000) });
+      if (aqRes.ok) {
+        const aqData = await aqRes.json();
+        aqi = aqData?.list?.[0]?.main?.aqi ?? null;
+      }
+    } catch(_) {}
     return {
       location: d.name || '',
       country: d.sys?.country || '',
