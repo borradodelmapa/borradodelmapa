@@ -1751,6 +1751,7 @@ const salma = {
           this._copilotCountry = countryCode;
           this._copilotData = JSON.parse(cached);
           console.log('[Salma] Copiloto (caché):', geo.address?.country, countryCode);
+          if (currentState === 'chat') this.showCopilotCard();
           return;
         }
       } catch (_) {}
@@ -1851,13 +1852,14 @@ const salma = {
 
   initWeatherBanner() {
     this._wxMinimized = localStorage.getItem('bdm_wx_min') === '1';
-    try { this._wxCustomLoc = JSON.parse(localStorage.getItem('bdm_wx_loc') || 'null'); } catch(_) {}
+    this._wxCustomLoc = null;
+    localStorage.removeItem('bdm_wx_loc'); // limpiar ciudad cacheada — siempre GPS por defecto
     const chatArea = document.getElementById('chat-area');
     if (!chatArea || document.getElementById('weather-banner')) return;
     const banner = document.createElement('div');
     banner.id = 'weather-banner';
     banner.className = 'wx-banner' + (this._wxMinimized ? ' wx-banner--min' : '');
-    banner.innerHTML = '<div class="wx-row"><span class="wx-loading">🌡️ Cargando tiempo...</span></div>';
+    banner.innerHTML = '<div class="wx-main"><span class="wx-loading">🌡️ Cargando tiempo...</span></div>';
     chatArea.parentNode.insertBefore(banner, chatArea);
     this._wxLoad();
     if (this._wxInterval) clearInterval(this._wxInterval);
@@ -1874,21 +1876,21 @@ const salma = {
     } else {
       // Sin GPS todavía — mostrar opción de buscar ciudad manualmente
       const b = document.getElementById('weather-banner');
-      if (b) b.innerHTML = '<div class="wx-row"><span class="wx-loading" style="cursor:pointer" onclick="salma._wxOpenPicker()">📍 Toca para añadir ubicación</span></div>';
+      if (b) b.innerHTML = '<div class="wx-main"><span class="wx-loading" style="cursor:pointer" onclick="salma._wxOpenPicker()">📍 Toca para añadir ubicación</span></div>';
       return;
     }
     try {
       const res = await fetch(url);
       if (!res.ok) {
         const b = document.getElementById('weather-banner');
-        if (b) b.innerHTML = '<div class="wx-row"><span class="wx-loading" style="cursor:pointer" onclick="salma._wxOpenPicker()">⚠️ Sin datos — toca para buscar ciudad</span></div>';
+        if (b) b.innerHTML = '<div class="wx-main"><span class="wx-loading" style="cursor:pointer" onclick="salma._wxOpenPicker()">⚠️ Sin datos — toca para buscar ciudad</span></div>';
         return;
       }
       this._wxData = await res.json();
       this._wxRender();
     } catch(_) {
       const b = document.getElementById('weather-banner');
-      if (b) b.innerHTML = '<div class="wx-row"><span class="wx-loading" style="cursor:pointer" onclick="salma._wxOpenPicker()">⚠️ Sin datos — toca para buscar ciudad</span></div>';
+      if (b) b.innerHTML = '<div class="wx-main"><span class="wx-loading" style="cursor:pointer" onclick="salma._wxOpenPicker()">⚠️ Sin datos — toca para buscar ciudad</span></div>';
     }
   },
 
@@ -1968,7 +1970,7 @@ const salma = {
     localStorage.removeItem('bdm_wx_loc');
     document.getElementById('wx-picker')?.remove();
     const b = document.getElementById('weather-banner');
-    if (b) b.innerHTML = '<div class="wx-row"><span class="wx-loading">🌡️ Cargando...</span></div>';
+    if (b) b.innerHTML = '<div class="wx-main"><span class="wx-loading">🌡️ Cargando...</span></div>';
     this._wxLoad();
   },
 
@@ -1983,7 +1985,6 @@ const salma = {
       if (!res.ok) { showToast('Ciudad no encontrada'); return; }
       const data = await res.json();
       this._wxCustomLoc = { lat: data._lat, lon: data._lon, name: data.location };
-      localStorage.setItem('bdm_wx_loc', JSON.stringify(this._wxCustomLoc));
       this._wxData = data;
       document.getElementById('wx-picker')?.remove();
       this._wxRender();
