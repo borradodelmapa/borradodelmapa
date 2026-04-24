@@ -2122,12 +2122,50 @@ async function fetchWeatherBanner(lat, lon, key) {
       const geo = await geoRes.value.json();
       if (geo?.[0]?.name) locationName = geo[0].name;
     }
+    // AQI + forecast en paralelo para no añadir latencia
     let aqi = null;
+    let forecast = [];
     try {
-      const aqRes = await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${key}`, { signal: AbortSignal.timeout(5000) });
-      if (aqRes.ok) {
-        const aqData = await aqRes.json();
+      const [aqRes, fcRes] = await Promise.allSettled([
+        fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${key}`, { signal: AbortSignal.timeout(5000) }),
+        fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&cnt=40&units=metric&lang=es&appid=${key}`, { signal: AbortSignal.timeout(6000) }),
+      ]);
+      if (aqRes.status === 'fulfilled' && aqRes.value.ok) {
+        const aqData = await aqRes.value.json();
         aqi = aqData?.list?.[0]?.main?.aqi ?? null;
+      }
+      if (fcRes.status === 'fulfilled' && fcRes.value.ok) {
+        const fcData = await fcRes.value.json();
+        const tzOff = d.timezone || 0; // offset en segundos
+        // Agrupar entradas por fecha local
+        const dailyMap = {};
+        for (const item of (fcData.list || [])) {
+          const localDate = new Date((item.dt + tzOff) * 1000).toISOString().split('T')[0];
+          if (!dailyMap[localDate]) dailyMap[localDate] = [];
+          dailyMap[localDate].push(item);
+        }
+        // Fecha de hoy en zona horaria local
+        const todayLocal = new Date((Math.floor(Date.now() / 1000) + tzOff) * 1000).toISOString().split('T')[0];
+        const dayNames = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+        forecast = Object.keys(dailyMap)
+          .filter(dd => dd > todayLocal).sort().slice(0, 4)
+          .map(date => {
+            const items = dailyMap[date];
+            // Entrada más cercana a las 12:00 hora local
+            const noonItem = items.reduce((best, item) => {
+              const h = new Date((item.dt + tzOff) * 1000).getUTCHours();
+              const bh = new Date((best.dt + tzOff) * 1000).getUTCHours();
+              return Math.abs(h - 12) < Math.abs(bh - 12) ? item : best;
+            });
+            const temps = items.map(i => i.main.temp);
+            const [y, m, day] = date.split('-').map(Number);
+            return {
+              day: dayNames[new Date(Date.UTC(y, m - 1, day)).getUTCDay()],
+              icon: noonItem.weather[0]?.icon || '01d',
+              max: Math.round(Math.max(...temps)),
+              min: Math.round(Math.min(...temps)),
+            };
+          });
       }
     } catch(_) {}
     return {
@@ -2143,6 +2181,7 @@ async function fetchWeatherBanner(lat, lon, key) {
       wind_dir: windDegToCardinal(d.wind?.deg || 0),
       wind_gust_kmph: d.wind?.gust ? Math.round(d.wind.gust * 3.6) : null,
       aqi,
+      forecast,
       _lat: lat,
       _lon: lon,
     };
