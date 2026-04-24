@@ -519,6 +519,8 @@ window.notasManager = (() => {
 
   async function renderChatReminders(chatArea) {
     if (!chatArea || !_uid()) return;
+    // Evitar duplicar banner si ya existe uno en esta vista
+    if (chatArea.querySelector('.chat-reminders-banner')) return;
 
     try {
       const allNotas = await getAll();
@@ -547,9 +549,6 @@ window.notasManager = (() => {
         `).join('')}
         ${pending.length > 3 ? `<div class="chat-reminders-more">${pending.length - 3} más</div>` : ''}`;
 
-      // Limpiar banners existentes JUSTO antes de insertar (tras el await) para evitar
-      // duplicados por llamadas concurrentes (_initChat + _renderChatEmpty en cadena)
-      document.querySelectorAll('.chat-reminders-banner').forEach(b => b.remove());
       chatArea.prepend(banner);
 
       banner.querySelector('.chat-reminders-close').addEventListener('click', () => {
