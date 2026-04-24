@@ -519,8 +519,8 @@ window.notasManager = (() => {
 
   async function renderChatReminders(chatArea) {
     if (!chatArea || !_uid()) return;
-    // Evitar duplicar banner si ya existe uno en esta vista
-    if (chatArea.querySelector('.chat-reminders-banner')) return;
+    // Limpiar cualquier banner existente (local o en otros nodos) para evitar duplicados
+    document.querySelectorAll('.chat-reminders-banner').forEach(b => b.remove());
 
     try {
       const allNotas = await getAll();
