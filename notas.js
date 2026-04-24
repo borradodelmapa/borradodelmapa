@@ -517,10 +517,15 @@ window.notasManager = (() => {
 
   // ── RENDER: Banner recordatorios en el chat (una vez al día) ──
 
+  let _renderingReminders = false;
+
   async function renderChatReminders(chatArea) {
     if (!chatArea || !_uid()) return;
     // Evitar duplicar banner si ya existe uno en esta vista
     if (chatArea.querySelector('.chat-reminders-banner')) return;
+    // Evitar concurrencia: si ya hay otra ejecución en vuelo, salir
+    if (_renderingReminders) return;
+    _renderingReminders = true;
 
     try {
       const allNotas = await getAll();
@@ -557,6 +562,8 @@ window.notasManager = (() => {
       });
     } catch (e) {
       console.warn('Error cargando recordatorios chat:', e);
+    } finally {
+      _renderingReminders = false;
     }
   }
 
