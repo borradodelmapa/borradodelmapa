@@ -1912,6 +1912,15 @@ const salma = {
     const gust = d.wind_gust_kmph ? ` · ráf. ${d.wind_gust_kmph}` : '';
     const aqiLabels = ['','🟢 Buena','🟡 Acept.','🟠 Moder.','🔴 Mala','🟣 Muy mala'];
     const aqiHtml = d.aqi ? `<span class="wx-dot">·</span><span>${aqiLabels[d.aqi]}</span>` : '';
+    const fcHtml = (d.forecast && d.forecast.length)
+      ? `<div class="wx-forecast">${d.forecast.map(f =>
+          `<div class="wx-fc-day">
+            <span class="wx-fc-name">${f.day}</span>
+            <span class="wx-fc-icon">${this._wxEmoji(f.icon)}</span>
+            <span class="wx-fc-temp">${f.max}°</span>
+            <span class="wx-fc-min">${f.min}°</span>
+          </div>`).join('')}</div>`
+      : '';
     if (min) {
       banner.innerHTML = `
         <div class="wx-main">
@@ -1940,7 +1949,8 @@ const salma = {
           <span class="wx-dot">·</span>
           <span>💧 ${d.humidity}%</span>
           ${aqiHtml}
-        </div>`;
+        </div>
+        ${fcHtml}`;
     }
   },
 
