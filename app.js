@@ -87,6 +87,10 @@ function showState(state) {
     if (typeof flightWatches !== 'undefined') flightWatches.renderVuelosView();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
+  } else if (state === 'historia') {
+    if (typeof historiaModule !== 'undefined') historiaModule.render();
+    if (inputBar) inputBar.style.display = 'none';
+    $content.style.paddingBottom = '80px';
   } else if (state === 'chat') {
     // Limpiar welcome si estaba visible (ej: llegando desde ?go=chat)
     const welcomeEl = $content.querySelector('.welcome-area');
@@ -151,12 +155,17 @@ function updateBottomBar() {
   const isChat = currentState === 'chat';
   const isRutas = currentState === 'rutas';
   const isVuelos = currentState === 'vuelos';
+  const isHistoria = currentState === 'historia';
   const isProfile = currentState === 'profile' || currentState === 'bitacora' || currentState === 'diario' || currentState === 'documentos' || currentState === 'notas' || currentState === 'galeria';
 
   bar.innerHTML = `
     <button class="bottom-tab ${isRutas ? 'bottom-tab-active' : ''}" id="tab-rutas">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
+    </button>
+    <button class="bottom-tab ${isHistoria ? 'bottom-tab-active' : ''}" id="tab-historia">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 0 3-3h7z"/></svg>
+      <span>Historia</span>
     </button>
     ${isChat ? `<button class="bottom-tab bottom-tab-newchat" id="tab-newchat">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -200,6 +209,8 @@ function updateBottomBar() {
     if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
     showState('rutas');
   });
+  const tabHistoria = document.getElementById('tab-historia');
+  if (tabHistoria) tabHistoria.addEventListener('click', () => showState('historia'));
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
 }
 
