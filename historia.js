@@ -226,6 +226,78 @@ const historiaModule = (() => {
     btn.classList.toggle('hist-tts-active', _ttsActive);
   }
 
+  // ─── Buscar lugar en el Worker ────────────────────────────────────────────
+
+  async function _buscarHistoria(place, lat, lng) {
+    const apiUrl = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+    const res = await fetch(`${apiUrl}/historia-lugar`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ place, lat, lng }),
+      signal: AbortSignal.timeout(25000),
+    });
+    if (!res.ok) throw new Error('Error ' + res.status);
+    const data = await res.json();
+    return data.historia;
+  }
+
+  function _mostrarEstadoBusqueda(msg, isError) {
+    const el = document.getElementById('hist-search-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'hist-search-status' + (isError ? ' hist-search-status--error' : '');
+    el.style.display = msg ? '' : 'none';
+  }
+
+  async function _onBuscar(place, lat, lng) {
+    if (!place || place.trim().length < 2) return;
+    _mostrarEstadoBusqueda('Buscando historia de ' + place + '...');
+    const btn = document.getElementById('hist-search-btn');
+    const gpsBtn = document.getElementById('hist-gps-btn');
+    if (btn) btn.disabled = true;
+    if (gpsBtn) gpsBtn.disabled = true;
+
+    try {
+      const historia = await _buscarHistoria(place.trim(), lat, lng);
+      _renderDetalle(historia);
+    } catch (e) {
+      _mostrarEstadoBusqueda('No pude generar la historia de "' + place + '". Prueba con otro nombre.', true);
+      if (btn) btn.disabled = false;
+      if (gpsBtn) gpsBtn.disabled = false;
+    }
+  }
+
+  async function _onGPS() {
+    _mostrarEstadoBusqueda('Detectando tu ubicación...');
+    const gpsBtn = document.getElementById('hist-gps-btn');
+    if (gpsBtn) gpsBtn.disabled = true;
+
+    try {
+      const pos = await new Promise((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 8000 })
+      );
+      const { latitude: lat, longitude: lng } = pos.coords;
+      _mostrarEstadoBusqueda('Buscando historia del lugar...');
+
+      // Reverse geocode con Nominatim
+      const geoRes = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=10&accept-language=es`,
+        { headers: { 'User-Agent': 'BorradoDelMapa/1.0' }, signal: AbortSignal.timeout(5000) }
+      );
+      const geoData = await geoRes.json();
+      const place = geoData.address?.city || geoData.address?.town || geoData.address?.village
+        || geoData.address?.county || geoData.name || '';
+
+      if (!place) throw new Error('No se pudo determinar el lugar');
+      await _onBuscar(place, lat, lng);
+    } catch (e) {
+      const msg = e.code === 1 ? 'Activa la ubicación para usar esta función'
+        : 'No pude detectar tu ubicación. Escribe el nombre del lugar.';
+      _mostrarEstadoBusqueda(msg, true);
+      if (gpsBtn) gpsBtn.disabled = false;
+    }
+  }
+
   // ─── Render lista ─────────────────────────────────────────────────────────
 
   function _renderLista() {
@@ -237,6 +309,18 @@ const historiaModule = (() => {
           <h1 class="hist-title">Historia</h1>
           <p class="hist-subtitle">Viaja en el tiempo por los lugares que visitas</p>
         </div>
+
+        <div class="hist-search-box">
+          <div class="hist-search-row">
+            <input class="hist-search-input" id="hist-search-input" type="text"
+              placeholder="¿Sobre qué lugar? Ej: Cádiz, Machu Picchu..." autocomplete="off" />
+            <button class="hist-search-btn" id="hist-search-btn">Buscar</button>
+          </div>
+          <button class="hist-gps-btn" id="hist-gps-btn">📍 Historia de aquí</button>
+          <p class="hist-search-status" id="hist-search-status" style="display:none"></p>
+        </div>
+
+        <p class="hist-curadas-label">Historias destacadas</p>
         <div class="hist-grid">
           ${HISTORIAS.map(h => `
             <div class="hist-card" data-id="${h.id}">
@@ -263,6 +347,20 @@ const historiaModule = (() => {
         if (historia) _renderDetalle(historia);
       });
     });
+
+    document.getElementById('hist-search-btn').addEventListener('click', () => {
+      const val = document.getElementById('hist-search-input').value;
+      _onBuscar(val);
+    });
+
+    document.getElementById('hist-search-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const val = document.getElementById('hist-search-input').value;
+        _onBuscar(val);
+      }
+    });
+
+    document.getElementById('hist-gps-btn').addEventListener('click', _onGPS);
   }
 
   // ─── Render detalle ───────────────────────────────────────────────────────

@@ -6103,6 +6103,100 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       }
     }
 
+    // ─── POST /historia-lugar — Genera historia de un lugar con Claude Haiku ───
+    if (request.method === 'POST' && url.pathname === '/historia-lugar') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      let body;
+      try { body = await request.json(); } catch (e) {
+        return new Response(JSON.stringify({ error: 'JSON inválido' }), { status: 400, headers: corsH });
+      }
+
+      const { place, lat, lng } = body;
+      if (!place || typeof place !== 'string' || place.trim().length < 2) {
+        return new Response(JSON.stringify({ error: 'Falta el nombre del lugar' }), { status: 400, headers: corsH });
+      }
+
+      const placeName = place.trim();
+      const slug = placeName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      const kvKey = `historia:${slug}`;
+
+      // 1. Cache KV
+      if (env.SALMA_KB) {
+        try {
+          const cached = await env.SALMA_KB.get(kvKey);
+          if (cached) {
+            return new Response(JSON.stringify({ historia: JSON.parse(cached), source: 'cache' }), { headers: corsH });
+          }
+        } catch (_) {}
+      }
+
+      // 2. Generar con Claude Haiku
+      const prompt = `Eres un historiador experto. Genera la historia de "${placeName}" como JSON con esta estructura exacta, sin texto extra:
+
+{
+  "title": "Nombre: subtítulo histórico",
+  "description": "Descripción de 1-2 frases sobre la relevancia histórica del lugar",
+  "emoji": "🏛️",
+  "category": "Europa|Asia|América|África|Oceanía",
+  "paradas": [
+    {
+      "year": 1492,
+      "title": "Título del hito histórico",
+      "subtitle": "Una frase que contextualiza",
+      "content": "Párrafo narrativo de 3-5 frases explicando qué ocurrió, por qué importa y cómo afectó al lugar. Directo, sin paja.",
+      "key_facts": ["Dato clave 1", "Dato clave 2", "Dato clave 3"]
+    }
+  ]
+}
+
+REGLAS:
+- Entre 4 y 6 paradas cronológicas cubriendo los momentos más importantes
+- Los años pueden ser negativos (a.C.) si es relevante
+- El emoji debe representar el lugar o su cultura (bandera, monumento, símbolo)
+- Contenido en español, tono cercano y directo
+- Solo devuelve el JSON, sin markdown ni explicaciones`;
+
+      try {
+        const claudeRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 1800,
+            messages: [{ role: 'user', content: prompt }],
+          }),
+          signal: AbortSignal.timeout(20000),
+        });
+
+        if (!claudeRes.ok) {
+          throw new Error('Claude ' + claudeRes.status);
+        }
+
+        const claudeData = await claudeRes.json();
+        const raw = (claudeData.content?.[0]?.text || '').trim();
+
+        // Extraer JSON aunque venga con markdown
+        const jsonMatch = raw.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error('Claude no devolvió JSON válido');
+
+        const historia = JSON.parse(jsonMatch[0]);
+        historia.id = slug;
+
+        // 3. Guardar en KV 30 días
+        if (env.SALMA_KB) {
+          env.SALMA_KB.put(kvKey, JSON.stringify(historia), { expirationTtl: 2592000 }).catch(() => {});
+        }
+
+        return new Response(JSON.stringify({ historia, source: 'claude' }), { headers: corsH });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
     // ═══ FLIGHT WATCHES — Vigilancia de vuelos ═══
 
     const FW_CORS = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
