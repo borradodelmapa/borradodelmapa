@@ -272,30 +272,44 @@ const historiaModule = (() => {
     const gpsBtn = document.getElementById('hist-gps-btn');
     if (gpsBtn) gpsBtn.disabled = true;
 
-    try {
-      const pos = await new Promise((resolve, reject) =>
-        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 8000 })
-      );
-      const { latitude: lat, longitude: lng } = pos.coords;
-      _mostrarEstadoBusqueda('Buscando historia del lugar...');
-
-      // Reverse geocode con Nominatim
-      const geoRes = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=10&accept-language=es`,
-        { headers: { 'User-Agent': 'BorradoDelMapa/1.0' }, signal: AbortSignal.timeout(5000) }
-      );
-      const geoData = await geoRes.json();
-      const place = geoData.address?.city || geoData.address?.town || geoData.address?.village
-        || geoData.address?.county || geoData.name || '';
-
-      if (!place) throw new Error('No se pudo determinar el lugar');
-      await _onBuscar(place, lat, lng);
-    } catch (e) {
-      const msg = e.code === 1 ? 'Activa la ubicación para usar esta función'
-        : 'No pude detectar tu ubicación. Escribe el nombre del lugar.';
-      _mostrarEstadoBusqueda(msg, true);
+    if (!navigator.geolocation) {
+      _mostrarEstadoBusqueda('Tu navegador no soporta geolocalización. Escribe el nombre del lugar.', true);
       if (gpsBtn) gpsBtn.disabled = false;
+      return;
     }
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const { latitude: lat, longitude: lng } = pos.coords;
+          _mostrarEstadoBusqueda('Buscando historia del lugar...');
+
+          const geoRes = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=10&accept-language=es`,
+            { headers: { 'User-Agent': 'BorradoDelMapa/1.0' }, signal: AbortSignal.timeout(5000) }
+          );
+          const geoData = await geoRes.json();
+          const place = geoData.address?.city || geoData.address?.town || geoData.address?.village
+            || geoData.address?.county || geoData.name || '';
+
+          if (!place) throw new Error('lugar desconocido');
+          await _onBuscar(place, lat, lng);
+        } catch (e) {
+          _mostrarEstadoBusqueda('No pude determinar el lugar. Escribe el nombre manualmente.', true);
+          if (gpsBtn) gpsBtn.disabled = false;
+        }
+      },
+      (err) => {
+        const msgs = {
+          1: 'Activa la ubicación en tu navegador para usar esta función.',
+          2: 'Ubicación no disponible. Escribe el nombre del lugar.',
+          3: 'Tardó demasiado en obtener tu ubicación. Prueba de nuevo.',
+        };
+        _mostrarEstadoBusqueda(msgs[err.code] || 'No pude detectar tu ubicación.', true);
+        if (gpsBtn) gpsBtn.disabled = false;
+      },
+      { timeout: 10000, maximumAge: 60000 }
+    );
   }
 
   // ─── Render lista ─────────────────────────────────────────────────────────
