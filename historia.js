@@ -226,6 +226,18 @@ const historiaModule = (() => {
     btn.classList.toggle('hist-tts-active', _ttsActive);
   }
 
+  // ─── Helpers ──────────────────────────────────────────────────────────────
+
+  function _thumbUrl(historia) {
+    if (!historia) return '';
+    if (historia.thumbnail) return historia.thumbnail;
+    if (historia.photo_ref) {
+      const api = window.SALMA_API || 'https://salma-api.paco-defoto.workers.dev';
+      return `${api}/photo?ref=${encodeURIComponent(historia.photo_ref)}&maxwidth=600`;
+    }
+    return '';
+  }
+
   // ─── Buscar lugar en el Worker ────────────────────────────────────────────
 
   async function _buscarHistoria(place, lat, lng) {
@@ -397,7 +409,7 @@ const historiaModule = (() => {
           <button class="hist-back-btn" id="hist-back">← Todas las historias</button>
         </div>
         <div class="hist-detalle-header">
-          <div class="hist-detalle-thumb" style="background-image:url('${historia.thumbnail}')"></div>
+          <div class="hist-detalle-thumb" style="background-image:url('${_thumbUrl(historia)}')"></div>
           <div class="hist-detalle-info">
             <span class="hist-card-cat">${historia.category}</span>
             <h1 class="hist-detalle-title">${historia.emoji} ${historia.title}</h1>
@@ -474,8 +486,9 @@ const historiaModule = (() => {
       ? `<ul class="hist-facts">${parada.key_facts.map(f => `<li>${f}</li>`).join('')}</ul>`
       : '';
 
-    const imgHTML = parada.image
-      ? `<div class="hist-parada-img" style="background-image:url('${parada.image}')"></div>`
+    const imgSrc = parada.image || _thumbUrl(_currentHistoria);
+    const imgHTML = imgSrc
+      ? `<div class="hist-parada-img" style="background-image:url('${imgSrc}')"></div>`
       : '';
 
     $wrap.innerHTML = `
