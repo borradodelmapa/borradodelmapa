@@ -1062,6 +1062,22 @@ const salma = {
           this._addSalmaBubble('Dale al botón GUARDAR de abajo para no perderla. Cuando quieras otra ruta, dime destino y días.');
           this.history = [];
           this._saveSession();
+          // Chip Historia para el destino recién generado
+          const _histDestino = data.route.title || data.route.name || data.route.stops?.[0]?.name;
+          if (_histDestino && typeof historiaModule !== 'undefined') {
+            const _chatArea = this._getChatArea();
+            if (_chatArea) {
+              const _chipWrap = document.createElement('div');
+              _chipWrap.className = 'historia-chat-chip-wrap';
+              const _chip = document.createElement('button');
+              _chip.className = 'historia-chat-chip';
+              _chip.textContent = '📚 Historia de ' + _histDestino;
+              _chip.addEventListener('click', () => { historiaModule.loadPlace(_histDestino); showState('historia'); });
+              _chipWrap.appendChild(_chip);
+              _chatArea.appendChild(_chipWrap);
+              this._scrollToBottom(true);
+            }
+          }
         }
       }
 

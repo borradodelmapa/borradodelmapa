@@ -3332,6 +3332,40 @@ let _liveUserMarker = null;
 let _liveRouteMarkers = [];
 let _liveRoutePolyline = null;
 
+function liveMapAbrirHistoria() {
+  const btn = document.getElementById('live-map-historia-btn');
+  if (btn) { btn.textContent = '⏳'; btn.disabled = true; }
+  const restore = () => { if (btn) { btn.textContent = '📚'; btn.disabled = false; } };
+
+  const _lastPos = JSON.parse(localStorage.getItem('salma_last_pos') || 'null');
+  const lat = _lastPos?.lat, lng = _lastPos?.lng;
+
+  if (!lat || !lng) {
+    restore();
+    showToast('Sin ubicación GPS — activa el mapa primero');
+    return;
+  }
+
+  fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=es&zoom=10`, {
+    headers: { 'User-Agent': 'borradodelmapa.com' }
+  })
+    .then(r => r.json())
+    .then(d => {
+      const place = d.address?.city || d.address?.town || d.address?.village || d.address?.county || d.address?.state || d.name;
+      restore();
+      if (!place) { showToast('No se pudo detectar el lugar'); return; }
+      closeLiveMap();
+      if (typeof historiaModule !== 'undefined') {
+        historiaModule.loadPlace(place);
+        showState('historia');
+      }
+    })
+    .catch(() => {
+      restore();
+      showToast('Error al detectar ubicación');
+    });
+}
+
 function openLiveMap() {
   const view = document.getElementById('live-map-view');
   const bar = document.getElementById('app-bottom-bar');
