@@ -489,13 +489,13 @@
 /* ─── Botón Historia en mapa live ────────────────────────────────────────── */
 
 #live-map-historia-btn {
-  position: absolute;
+  position: fixed;
   bottom: 100px;
   right: 14px;
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(30,25,15,.82);
+  background: rgba(12,10,6,.82);
   border: 1px solid rgba(240,180,41,.35);
   color: var(--dorado);
   font-size: 1.2rem;
@@ -505,7 +505,7 @@
   justify-content: center;
   backdrop-filter: blur(8px);
   transition: background .15s, border-color .15s;
-  z-index: 20;
+  z-index: 970;
 }
 
 #live-map-historia-btn:hover {
