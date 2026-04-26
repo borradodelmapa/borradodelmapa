@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Mi Diario — Borrado del Mapa</title>
+  <style>
+    :root {
+      --bg:     #0C0C0B;
+      --s1:     #171715;
+      --s2:     #1E1E1C;
+      --s3:     #252522;
+      --gold:   #D4A843;
+      --orange: #E8851A;
+      --text:   #F4EFE6;
+      --t2:     rgba(244,239,230,.60);
+      --t3:     rgba(244,239,230,.28);
+      --bd:     rgba(244,239,230,.07);
+      --green:  #25D366;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    html, body { width:100%; height:100dvh; overflow:hidden; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--text); }
+
+    /* ── MAP BACKGROUND ── */
+    #map-wrap {
+      position:fixed; inset:0; z-index:0; overflow:hidden;
+      background:#0A1018;
+    }
+    #map-img {
+      width:100%; height:100%; object-fit:cover;
+      opacity:.88; transition:opacity .4s;
+      filter:brightness(.9) saturate(1.1);
+    }
+    /* gradient darkening at bottom so sheet reads cleanly */
+    #map-wrap::after {
+      content:''; position:absolute; inset:0;
+      background: linear-gradient(
+        to bottom,
+        rgba(12,12,11,.10) 0%,
+        rgba(12,12,11,.00) 35%,
+        rgba(12,12,11,.55) 72%,
+        rgba(12,12,11,.92) 100%
+      );
+      pointer-events:none;
+    }
+
+    /* ── MAP TAP LAYER ── */
+    #map-tap {
+      position:fixed; inset:0; z-index:10;
+      cursor:crosshair;
+    }
+
+    /* ── GOLD PIN ── */
+    #map-pin {
+      position:fixed; z-index:15;
+      transform:translate(-50%, -100%);
+      pointer-events:none;
+      transition:left .35s cubic-bezier(.3,1.2,.6,1), top .35s cubic-bezier(.3,1.2,.6,1);
+    }
+    .pin-body {
+      width:26px; height:26px;
+      background:var(--gold);
+      border-radius:50% 50% 50% 0;
+      transform:rotate(-45deg);
+      border:3px solid #fff;
+      box-shadow:0 3px 14px rgba(0,0,0,.55);
+      margin:0 auto;
+    }
+    .pin-shadow {
+      width:14px; height:6px;
+      background:rgba(0,0,0,.28);
+      border-radius:50%;
+      margin:3px auto 0;
+      filter:blur(2px);
+    }
+    .pin-pulse {
+      position:absolute;
+      top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      width:52px; height:52px;
+      background:rgba(212,168,67,.22);
+      border-radius:50%;
+      animation:pulse 1.8s ease-out infinite;
+    }
+    @keyframes pulse {
+      0%   { transform:translate(-50%,-50%) scale(.4); opacity:.9; }
+      100% { transform:translate(-50%,-50%) scale(1.8); opacity:0; }
+    }
+
+    /* ── LOCATION BADGE (top) ── */
+    #loc-badge {
+      position:fixed; top:18px; left:50%; transform:translateX(-50%);
+      z-index:20; background:rgba(12,12,11,.72);
+      backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+      border:1px solid rgba(212,168,67,.22);
+      border-radius:28px; padding:8px 16px;
+      font-size:13px; font-weight:600;
+      white-space:nowrap; max-width:calc(100vw - 32px);
+      overflow:hidden; text-overflow:ellipsis;
+      pointer-events:none;
+    }
+    .badge-dot {
+      display:inline-block; width:7px; height:7px;
+      background:var(--gold); border-radius:50%;
+      margin-right:7px; vertical-align:middle;
+      box-shadow:0 0 6px rgba(212,168,67,.55);
+    }
+
+    /* ── TAP HINT ── */
+    #tap-hint {
+      position:fixed; bottom:108px; left:0; right:0; z-index:20;
+      text-align:center; font-size:12px; color:rgba(244,239,230,.40);
+      pointer-events:none;
+      transition:opacity .3s;
+    }
+    #tap-hint.hidden { opacity:0; }
+
+    /* ── FAB ── */
+    .fab {
+      position:fixed; bottom:28px; right:20px; z-index:50;
+      width:62px; height:62px; border-radius:50%;
+      background:var(--gold); border:none; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 4px 24px rgba(212,168,67,.50);
+      transition:transform .17s, box-shadow .17s;
+    }
+    .fab:hover  { transform:scale(1.07); box-shadow:0 6px 32px rgba(212,168,67,.65); }
+    .fab:active { transform:scale(.94); }
+    .fab svg { width:26px; height:26px; stroke:#0C0C0B; fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+
+    /* ── OVERLAY ── */
+    .ov { position:fixed; inset:0; background:rgba(0,0,0,0); z-index:40; pointer-events:none; transition:background .26s; }
+    .ov.on { background:rgba(0,0,0,.5); pointer-events:auto; }
+
+    /* ── SHEET (compact) ── */
+    .sheet {
+      position:fixed; bottom:0; left:0; right:0;
+      background:var(--s1); border-radius:24px 24px 0 0;
+      z-index:60; transform:translateY(100%);
+      transition:transform .36s cubic-bezier(.3,1.18,.64,1);
+      padding-bottom:env(safe-area-inset-bottom, 0px);
+    }
+    .sheet.on { transform:translateY(0); }
+
+    .sh-handle { width:36px; height:4px; background:var(--bd); border-radius:2px; margin:14px auto 0; }
+    .sh-body   { padding:14px 20px 28px; }
+
+    /* Location row in sheet */
+    .sh-loc {
+      display:flex; align-items:center; gap:10px;
+      background:var(--s2); border-radius:12px;
+      padding:11px 14px; margin-bottom:16px;
+    }
+    .sh-loc-dot { width:8px; height:8px; background:var(--gold); border-radius:50%; flex-shrink:0; box-shadow:0 0 6px rgba(212,168,67,.5); }
+    .sh-loc-name { font-size:14px; font-weight:600; flex:1; }
+    .sh-loc-hint { font-size:11px; color:var(--t3); }
+
+    /* Transport row */
+    .lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--t3); margin-bottom:8px; }
+    .t-row { display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; margin-bottom:16px; scrollbar-width:none; }
+    .t-row::-webkit-scrollbar { display:none; }
+    .t-btn {
+      flex-shrink:0; width:50px; height:50px; border-radius:13px;
+      background:var(--s2); border:1.5px solid transparent;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      font-size:22px; transition:border-color .12s, background .12s;
+    }
+    .t-btn.on { border-color:var(--gold); background:rgba(212,168,67,.12); }
+    .t-sep { flex-shrink:0; width:1px; height:34px; background:var(--bd); align-self:center; margin:0 2px; }
+
+    /* Photo button */
+    .ph-btn {
+      width:100%; height:88px;
+      border:1.5px dashed rgba(244,239,230,.15);
+      border-radius:14px; background:var(--s2);
+      display:flex; align-items:center; justify-content:center;
+      gap:12px; cursor:pointer; margin-bottom:14px;
+      transition:border-color .17s, background .17s;
+      position:relative; overflow:hidden;
+    }
+    .ph-btn:hover { border-color:rgba(212,168,67,.4); }
+    .ph-btn.has { border-color:var(--gold); border-style:solid; }
+    .ph-btn img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .ph-btn-ov { position:absolute; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; font-size:13px; font-weight:600; }
+    .ph-btn.has:hover .ph-btn-ov { display:flex; }
+    .ph-btn-inner { display:flex; flex-direction:column; align-items:center; gap:4px; pointer-events:none; }
+    .ph-btn-icon { font-size:28px; opacity:.5; }
+    .ph-btn-txt  { font-size:13px; font-weight:500; color:var(--t2); }
+    .ph-btn-sub  { font-size:11px; color:var(--t3); }
+    input[type=file] { display:none; }
+
+    /* Generate button */
+    .btn-gen {
+      width:100%; padding:15px;
+      background:var(--gold); color:#0C0C0B;
+      border:none; border-radius:14px;
+      font-size:15px; font-weight:700; font-family:inherit;
+      cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+      transition:opacity .14s, transform .1s;
+    }
+    .btn-gen:disabled { opacity:.35; cursor:not-allowed; }
+    .btn-gen:not(:disabled):active { transform:scale(.97); }
+
+    /* ── RESULT OVERLAY (fullscreen) ── */
+    #result {
+      position:fixed; inset:0; z-index:200;
+      background:rgba(0,0,0,.92);
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:flex-end;
+      opacity:0; pointer-events:none;
+      transition:opacity .3s;
+    }
+    #result.on { opacity:1; pointer-events:auto; }
+
+    #result-canvas-wrap {
+      flex:1; display:flex; align-items:center; justify-content:center;
+      padding:20px 20px 0; overflow:hidden;
+    }
+    #result-canvas-wrap canvas {
+      max-height:100%; max-width:100%;
+      border-radius:6px;
+      box-shadow:0 16px 60px rgba(0,0,0,.8);
+      object-fit:contain;
+    }
+
+    #result-actions {
+      width:100%; background:var(--s1);
+      border-radius:24px 24px 0 0;
+      padding:14px 20px 36px;
+    }
+    .res-loc {
+      text-align:center; font-size:13px; font-weight:600;
+      color:var(--t2); margin-bottom:14px;
+    }
+    .res-loc span { color:var(--gold); }
+    .res-btns { display:flex; gap:10px; }
+    .rbtn {
+      flex:1; padding:14px 8px;
+      border-radius:14px; border:none; cursor:pointer;
+      font-size:13px; font-weight:700; font-family:inherit;
+      display:flex; align-items:center; justify-content:center; gap:6px;
+      transition:opacity .14s, transform .1s;
+    }
+    .rbtn:active { transform:scale(.97); }
+    .rbtn-wa   { background:var(--green); color:#fff; flex:2; }
+    .rbtn-dl   { background:var(--s2); color:var(--text); border:1px solid var(--bd); }
+    .rbtn-cls  { background:var(--s2); color:var(--t2); border:1px solid var(--bd); flex:0.7; }
+
+    /* ── PROGRESS ── */
+    #gen-prog {
+      position:fixed; inset:0; z-index:190;
+      background:rgba(12,12,11,.88);
+      display:none; flex-direction:column;
+      align-items:center; justify-content:center; gap:18px;
+    }
+    #gen-prog.on { display:flex; }
+    .prog-ring { font-size:42px; animation:spin 1.2s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .prog-txt { font-size:15px; font-weight:600; color:var(--t2); }
+
+    /* ── TOAST ── */
+    .toast {
+      position:fixed; bottom:120px; left:50%;
+      transform:translateX(-50%) translateY(10px);
+      background:var(--s3); color:var(--text);
+      font-size:13px; font-weight:500;
+      padding:11px 22px; border-radius:28px;
+      border:1px solid var(--bd); box-shadow:0 8px 32px rgba(0,0,0,.5);
+      z-index:300; opacity:0; pointer-events:none;
+      transition:opacity .22s, transform .22s; white-space:nowrap;
+    }
+    .toast.on { opacity:1; transform:translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- ── MAP BACKGROUND ── -->
+<div id="map-wrap">
+  <img id="map-img" alt="mapa">
+</div>
+
+<!-- ── MAP TAP LAYER ── -->
+<div id="map-tap"></div>
+
+<!-- ── PIN ── -->
+<div id="map-pin">
+  <div class="pin-pulse"></div>
+  <div class="pin-body"></div>
+  <div class="pin-shadow"></div>
+</div>
+
+<!-- ── LOCATION BADGE ── -->
+<div id="loc-badge"><span class="badge-dot"></span><span id="badge-txt">Koh Samui · Tailandia</span></div>
+
+<!-- ── TAP HINT ── -->
+<div id="tap-hint">Toca el mapa para mover el pin</div>
+
+<!-- ── FAB ── -->
+<button class="fab" onclick="openSheet()" aria-label="Mi Diario">
+  <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+</button>
+
+<!-- ── OVERLAY ── -->
+<div class="ov" id="ov" onclick="closeSheet()"></div>
+
+<!-- ── SHEET ── -->
+<div class="sheet" id="sheet">
+  <div class="sh-handle"></div>
+  <div class="sh-body">
+
+    <!-- Location -->
+    <div class="sh-loc">
+      <div class="sh-loc-dot"></div>
+      <div class="sh-loc-name" id="sh-loc-name">Koh Samui · Tailandia</div>
+      <div class="sh-loc-hint">del mapa</div>
+    </div>
+
+    <!-- Transport -->
+    <div class="lbl">Transporte</div>
+    <div class="t-row" id="t-row"></div>
+
+    <!-- Photo -->
+    <div class="ph-btn" id="ph-btn" onclick="document.getElementById('ph-input').click()">
+      <div class="ph-btn-ov">Cambiar foto</div>
+      <div class="ph-btn-inner">
+        <div class="ph-btn-icon">📷</div>
+        <div class="ph-btn-txt">Hacer foto o elegir de galería</div>
+        <div class="ph-btn-sub">Se verá detrás del marco</div>
+      </div>
+    </div>
+    <input type="file" id="ph-input" accept="image/*" capture="environment">
+
+    <!-- Generate -->
+    <button class="btn-gen" id="btn-gen" disabled onclick="generateStory()">
+      <span>✨</span><span>Generar story</span>
+    </button>
+
+  </div>
+</div>
+
+<!-- ── RESULT OVERLAY ── -->
+<div id="result">
+  <div id="result-canvas-wrap">
+    <canvas id="rc" width="1080" height="1920"></canvas>
+  </div>
+  <div id="result-actions">
+    <div class="res-loc">📍 <span id="res-loc-txt">Koh Samui · Tailandia</span></div>
+    <div class="res-btns">
+      <button class="rbtn rbtn-wa"  onclick="shareWA()">💬 WhatsApp</button>
+      <button class="rbtn rbtn-dl"  onclick="download()">⬇</button>
+      <button class="rbtn rbtn-cls" onclick="closeResult()">✕</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── GENERATING PROGRESS ── -->
+<div id="gen-prog">
+  <div class="prog-ring">✨</div>
+  <div class="prog-txt">Generando tu story…</div>
+</div>
+
+<!-- ── HIDDEN CANVAS ── -->
+<canvas id="fc" width="1080" height="1920" style="display:none"></canvas>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+const MAPS_KEY = 'AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
+
+const MAP_STYLES = {
+  dark: 'style=element:geometry%7Ccolor:0x1d2c4d&style=element:labels.text.fill%7Ccolor:0x8ec3b9&style=feature:road%7Celement:geometry%7Ccolor:0x304a7d&style=feature:water%7Celement:geometry%7Ccolor:0x0e1626&style=feature:poi%7Cvisibility:off',
+};
+
+const TRANSPORTS = [
+  {e:'🚗',l:'Coche'},    {e:'🏍️',l:'Moto'},      {e:'🚐',l:'Furgoneta'},
+  {e:'🚲',l:'Bici'},     {e:'🛺',l:'Tuk-tuk'},    {e:'🚌',l:'Bus'},
+  null, // separator
+  {e:'✈️',l:'Avión'},    {e:'🚂',l:'Tren'},        {e:'⛵',l:'Barco'},
+  {e:'🐪',l:'Camello'},  {e:'🐘',l:'Elefante'},    {e:'🚁',l:'Helicóptero'},
+  {e:'🛵',l:'Scooter'},
+];
+
+const S = {
+  lat: 9.538, lng: 100.062,
+  locName: 'Koh Samui · Tailandia',
+  transport: '🚗',
+  photo: null,
+  bgMapImg: null,    // fullscreen map (for app background)
+  storyMapImg: null, // same map scaled to 1080×1920 (for canvas)
+  lastBlob: null,
+};
+
+// ─────────────────────────────────────────────
+// MAP BACKGROUND
+// ─────────────────────────────────────────────
+
+async function loadMapBg() {
+  const url = buildMapUrl(S.lat, S.lng, 14, 640, 640);
+  const img = document.getElementById('map-img');
+  img.onload  = async () => {
+    S.bgMapImg = img;
+    S.storyMapImg = await scaleImage(img, 1080, 1920);
+  };
+  img.onerror = () => { S.bgMapImg = null; };
+  img.crossOrigin = 'anonymous';
+  img.src = url;
+}
+
+function buildMapUrl(lat, lng, zoom, w, h) {
+  return `https://maps.googleapis.com/maps/api/staticmap?`
+    + `center=${lat},${lng}&zoom=${zoom}&size=${w}x${h}`
+    + `&markers=color:orange%7Csize:mid%7C${lat},${lng}`
+    + `&${MAP_STYLES.dark}&key=${MAPS_KEY}`;
+}
+
+function updateMapBg(lat, lng, locName) {
+  S.lat = lat; S.lng = lng; S.locName = locName;
+  S.bgMapImg = null; S.storyMapImg = null;
+  document.getElementById('badge-txt').textContent = locName;
+  document.getElementById('sh-loc-name').textContent = locName;
+  document.getElementById('map-img').style.opacity = '0.4';
+
+  const url = buildMapUrl(lat, lng, 14, 640, 640);
+  const tmpImg = new Image();
+  tmpImg.crossOrigin = 'anonymous';
+  tmpImg.onload = async () => {
+    const mapEl = document.getElementById('map-img');
+    mapEl.src = tmpImg.src;
+    mapEl.style.opacity = '0.88';
+    S.bgMapImg = tmpImg;
+    S.storyMapImg = await scaleImage(tmpImg, 1080, 1920);
+  };
+  tmpImg.src = url;
+}
+
+// ─────────────────────────────────────────────
+// MAP TAP — place pin
+// ─────────────────────────────────────────────
+
+// Demo locations to cycle through on tap (in real app: reverse geocode)
+const DEMO_LOCS = [
+  { lat:9.538,   lng:100.062, name:'Koh Samui · Tailandia' },
+  { lat:18.788,  lng:98.985,  name:'Chiang Mai · Tailandia' },
+  { lat:13.756,  lng:100.502, name:'Bangkok · Tailandia' },
+  { lat:7.951,   lng:98.338,  name:'Phuket · Tailandia' },
+  { lat:19.359,  lng:98.442,  name:'Pai · Tailandia' },
+];
+let demoIdx = 0;
+
+document.getElementById('map-tap').addEventListener('click', e => {
+  const pin = document.getElementById('map-pin');
+  // Move pin to tap position
+  pin.style.left = e.clientX + 'px';
+  pin.style.top  = e.clientY + 'px';
+  // Cycle demo location
+  demoIdx = (demoIdx + 1) % DEMO_LOCS.length;
+  const loc = DEMO_LOCS[demoIdx];
+  updateMapBg(loc.lat, loc.lng, loc.name);
+  showToast('📍 ' + loc.name);
+});
+
+// ─────────────────────────────────────────────
+// SHEET
+// ─────────────────────────────────────────────
+
+function openSheet() {
+  document.getElementById('ov').classList.add('on');
+  document.getElementById('sheet').classList.add('on');
+  document.getElementById('tap-hint').classList.add('hidden');
+}
+function closeSheet() {
+  document.getElementById('ov').classList.remove('on');
+  document.getElementById('sheet').classList.remove('on');
+  document.getElementById('tap-hint').classList.remove('hidden');
+}
+
+// ─────────────────────────────────────────────
+// TRANSPORT
+// ─────────────────────────────────────────────
+
+function buildTransport() {
+  const row = document.getElementById('t-row');
+  row.innerHTML = '';
+  TRANSPORTS.forEach(t => {
+    if (t === null) {
+      const sep = document.createElement('div');
+      sep.className = 't-sep'; row.appendChild(sep);
+      return;
+    }
+    const b = document.createElement('div');
+    b.className = 't-btn' + (t.e === S.transport ? ' on' : '');
+    b.textContent = t.e; b.title = t.l;
+    b.addEventListener('click', () => {
+      S.transport = t.e;
+      row.querySelectorAll('.t-btn').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+    });
+    row.appendChild(b);
+  });
+}
+
+// ─────────────────────────────────────────────
+// PHOTO INPUT
+// ─────────────────────────────────────────────
+
+document.getElementById('ph-input').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      S.photo = img;
+      const btn = document.getElementById('ph-btn');
+      btn.classList.add('has');
+      let el = btn.querySelector('img');
+      if (!el) { el = document.createElement('img'); btn.insertBefore(el, btn.firstChild); }
+      el.src = ev.target.result;
+      btn.querySelector('.ph-btn-inner').style.display = 'none';
+      // Activate generate button
+      document.getElementById('btn-gen').disabled = false;
+    };
+    img.src = ev.target.result;
+  };
+  r.readAsDataURL(f);
+  e.target.value = '';
+});
+
+// ─────────────────────────────────────────────
+// GENERATE STORY
+// ─────────────────────────────────────────────
+
+async function generateStory() {
+  if (!S.photo) return;
+  closeSheet();
+  document.getElementById('gen-prog').classList.add('on');
+
+  // Small delay so the progress shows
+  await new Promise(r => setTimeout(r, 80));
+
+  const c = document.getElementById('rc');
+  const ctx = c.getContext('2d');
+  drawKodak(ctx, S.photo, 1080, 1920, S.transport, S.locName, S.storyMapImg);
+
+  // Save blob for sharing
+  await new Promise(resolve => {
+    c.toBlob(b => { S.lastBlob = b; resolve(); }, 'image/jpeg', 0.95);
+  });
+
+  document.getElementById('gen-prog').classList.remove('on');
+  document.getElementById('res-loc-txt').textContent = S.locName;
+  document.getElementById('result').classList.add('on');
+}
+
+// ─────────────────────────────────────────────
+// CANVAS — KODAK FRAME
+// ─────────────────────────────────────────────
+
+function drawKodak(ctx, photo, W, H, transport, loc, mapImg) {
+  const fs = W / 1080;
+
+  // ── Background: map or dark gradient ──
+  if (mapImg) {
+    const mr = mapImg.naturalWidth / mapImg.naturalHeight, cr = W / H;
+    let sx = 0, sy = 0, sw = mapImg.naturalWidth, sh = mapImg.naturalHeight;
+    if (mr > cr) { sw = sh * cr; sx = (mapImg.naturalWidth - sw) / 2; }
+    else         { sh = sw / cr; sy = (mapImg.naturalHeight - sh) / 2; }
+    ctx.drawImage(mapImg, sx, sy, sw, sh, 0, 0, W, H);
+    ctx.fillStyle = 'rgba(10,10,9,0.48)'; ctx.fillRect(0, 0, W, H);
+  } else {
+    const bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, '#0F1520'); bg.addColorStop(1, '#060810');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)'; ctx.lineWidth = 1;
+    for (let x = 0; x < W; x += Math.round(80*fs)) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for (let y = 0; y < H; y += Math.round(80*fs)) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+  }
+
+  // ── Kodak print ──
+  const printW = Math.round(W * 0.80);
+  const printX = Math.round((W - printW) / 2);
+  const bT = Math.round(26*fs), bS = Math.round(26*fs), bB = Math.round(96*fs);
+  const phW = printW - bS * 2;
+  const phH = Math.round(phW * 1.24);
+  const printH = bT + phH + bB;
+  const printY = Math.round((H - printH) * 0.36);
+  const phX = printX + bS, phY = printY + bT;
+
+  // Shadow
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.85)'; ctx.shadowBlur = Math.round(70*fs); ctx.shadowOffsetY = Math.round(30*fs);
+  ctx.fillStyle = '#F8F6F0'; ctx.fillRect(printX, printY, printW, printH);
+  ctx.restore();
+
+  // White print
+  ctx.fillStyle = '#F8F6F0'; ctx.fillRect(printX, printY, printW, printH);
+  ctx.fillStyle = 'rgba(220,195,155,0.05)'; ctx.fillRect(printX, printY, printW, printH);
+
+  // Photo
+  if (photo) {
+    ctx.save(); ctx.beginPath(); ctx.rect(phX, phY, phW, phH); ctx.clip();
+    const ir = photo.naturalWidth/photo.naturalHeight, cr2 = phW/phH;
+    let sx=0,sy=0,sw=photo.naturalWidth,sh=photo.naturalHeight;
+    if (ir>cr2) { sw=sh*cr2; sx=(photo.naturalWidth-sw)/2; }
+    else        { sh=sw/cr2; sy=(photo.naturalHeight-sh)/2; }
+    ctx.drawImage(photo, sx, sy, sw, sh, phX, phY, phW, phH);
+    ctx.restore();
+    // vignette
+    const vig = ctx.createRadialGradient(phX+phW/2, phY+phH/2, phW*.3, phX+phW/2, phY+phH/2, phW*.72);
+    vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.20)');
+    ctx.fillStyle=vig; ctx.fillRect(phX,phY,phW,phH);
+  } else {
+    const ph=ctx.createLinearGradient(phX,phY,phX,phY+phH);
+    ph.addColorStop(0,'#DDD8CC'); ph.addColorStop(1,'#C8C0B0');
+    ctx.fillStyle=ph; ctx.fillRect(phX,phY,phW,phH);
+    ctx.fillStyle='rgba(0,0,0,0.12)'; ctx.font=`${Math.round(90*fs)}px serif`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('📷', W/2, phY+phH/2);
+  }
+
+  // Transport badge (top-left of photo)
+  if (transport) {
+    const bSz=Math.round(80*fs), bPad=Math.round(16*fs);
+    ctx.save();
+    ctx.fillStyle='rgba(0,0,0,0.55)';
+    ctx.beginPath(); ctx.roundRect(phX+bPad, phY+bPad, bSz, bSz, Math.round(12*fs)); ctx.fill();
+    ctx.font=`${Math.round(50*fs)}px serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(transport, phX+bPad+bSz/2, phY+bPad+bSz/2);
+    ctx.restore();
+  }
+
+  // Date badge (top-right of photo)
+  const dateStr = new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'2-digit'});
+  {
+    const bH=Math.round(46*fs), bW=Math.round(158*fs), bPad=Math.round(16*fs);
+    ctx.save();
+    ctx.fillStyle='rgba(0,0,0,0.55)';
+    ctx.beginPath(); ctx.roundRect(phX+phW-bW-bPad, phY+bPad, bW, bH, Math.round(7*fs)); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.92)'; ctx.font=`bold ${Math.round(22*fs)}px -apple-system,sans-serif`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(dateStr, phX+phW-bW/2-bPad, phY+bPad+bH/2);
+    ctx.restore();
+  }
+
+  // Bottom strip: KODAK branding
+  const sY = phY+phH, sH = bB;
+  ctx.fillStyle='rgba(0,0,0,0.04)'; ctx.fillRect(phX, sY, phW, Math.round(2*fs));
+  ctx.fillStyle='#E01B22'; ctx.font=`bold ${Math.round(32*fs)}px Georgia,serif`;
+  ctx.textAlign='left'; ctx.textBaseline='top';
+  ctx.fillText('KODAK', phX, sY+Math.round(14*fs));
+  ctx.fillStyle='rgba(0,0,0,0.28)'; ctx.font=`${Math.round(16*fs)}px Georgia,serif`;
+  ctx.fillText('GOLD 200', phX, sY+Math.round(50*fs));
+
+  const shortLoc = loc.length>26 ? loc.substring(0,24)+'…' : loc;
+  ctx.fillStyle='rgba(0,0,0,0.80)'; ctx.font=`bold ${Math.round(24*fs)}px -apple-system,sans-serif`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('📍 '+shortLoc, W/2, sY+sH*0.46);
+
+  ctx.fillStyle='rgba(0,0,0,0.30)'; ctx.font=`bold ${Math.round(26*fs)}px Georgia,serif`;
+  ctx.textAlign='right'; ctx.textBaseline='top';
+  ctx.fillText('36', phX+phW, sY+Math.round(14*fs));
+  ctx.font=`${Math.round(15*fs)}px Georgia,serif`;
+  ctx.fillText('exp.', phX+phW, sY+Math.round(46*fs));
+
+  // Message below print
+  const msgY = printY+printH+Math.round(56*fs);
+  ctx.fillStyle='rgba(244,239,230,0.96)'; ctx.font=`bold ${Math.round(46*fs)}px -apple-system,sans-serif`;
+  ctx.textAlign='center'; ctx.textBaseline='top';
+  const msgTxt = 'Estoy bien mamá 📍';
+  const words=msgTxt.split(' '); let line='', lines=[];
+  words.forEach(w => {
+    const t=line?line+' '+w:w;
+    if(ctx.measureText(t).width>W-Math.round(140*fs)&&line){lines.push(line);line=w;}else line=t;
+  });
+  if(line)lines.push(line);
+  lines.forEach((l,i)=>ctx.fillText(l, W/2, msgY+i*Math.round(62*fs)));
+
+  // Watermark
+  ctx.fillStyle='rgba(244,239,230,0.20)'; ctx.font=`${Math.round(22*fs)}px -apple-system,sans-serif`;
+  ctx.textAlign='right'; ctx.textBaseline='bottom';
+  ctx.fillText('borradodelmapa.com', W-Math.round(44*fs), H-Math.round(44*fs));
+}
+
+// ─────────────────────────────────────────────
+// SHARE / DOWNLOAD
+// ─────────────────────────────────────────────
+
+function mapsLink() {
+  return `https://www.google.com/maps/search/?api=1&query=${S.lat},${S.lng}`;
+}
+function shareText() {
+  return `Estoy bien mamá 📍\n\n📍 ${S.locName}\n${mapsLink()}\n\nborradodelmapa.com`;
+}
+
+async function shareWA() {
+  if (!S.lastBlob) return;
+  const file = new File([S.lastBlob], 'mi-diario.jpg', { type: 'image/jpeg' });
+  const txt = shareText();
+  if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file], text: txt }); return; } catch(e) {}
+  }
+  // Fallback: download + WhatsApp text
+  const a = document.createElement('a'); a.href = URL.createObjectURL(S.lastBlob);
+  a.download = 'mi-diario.jpg'; a.click();
+  showToast('📸 Descargada — adjúntala en WhatsApp');
+  setTimeout(() => window.open('https://wa.me/?text='+encodeURIComponent(txt), '_blank'), 700);
+}
+
+function download() {
+  if (!S.lastBlob) return;
+  const a = document.createElement('a'); a.href = URL.createObjectURL(S.lastBlob);
+  a.download = 'mi-diario-' + Date.now() + '.jpg'; a.click();
+  showToast('✓ Guardada');
+}
+
+function closeResult() {
+  document.getElementById('result').classList.remove('on');
+}
+
+// ─────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────
+
+function scaleImage(img, W, H) {
+  return new Promise(resolve => {
+    const tmp = document.createElement('canvas'); tmp.width = W; tmp.height = H;
+    tmp.getContext('2d').drawImage(img, 0, 0, W, H);
+    const out = new Image(); out.onload = () => resolve(out); out.src = tmp.toDataURL();
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('on');
+  setTimeout(() => t.classList.remove('on'), 3000);
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+
+buildTransport();
+loadMapBg();
+
+// Center pin on load
+const pin = document.getElementById('map-pin');
+pin.style.left = '50%';
+pin.style.top  = '42%';
+</script>
+</body>
+</html>

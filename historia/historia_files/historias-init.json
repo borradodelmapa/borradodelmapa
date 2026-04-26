@@ -1,0 +1,349 @@
+# HISTORIAS INICIALES (JSON para KV/Firestore)
+
+**Estado:** Plantilla lista para expandir con contenido real
+
+---
+
+```json
+[
+  {
+    "id": "vietnam-1862-1975",
+    "title": "Vietnam: Colonia a Nación",
+    "description": "La historia de la resistencia vietnamita contra la colonización francesa y la guerra de Vietnam. Un viaje de 113 años de transformación.",
+    "thumbnail": "https://images.unsplash.com/photo-1464207687429-7505649dae38?w=400",
+    "duration_minutes": 45,
+    "category": "Asia",
+    "tags": ["colonialismo", "guerra", "independencia", "Vietnam"],
+    "location": {
+      "place_name": "Vietnam",
+      "lat": 14.0583,
+      "lng": 108.2772
+    },
+    "related_histories": ["hanoi-1000-years", "thailand-siam-1600-2000"],
+    "paradas": [
+      {
+        "year": 1862,
+        "title": "Invasión francesa - Conquista de Cochinchina",
+        "subtitle": "El inicio de la colonización francesa en Vietnam",
+        "content": "En 1862, Francia invade y conquista Cochinchina (sur de Vietnam). Los franceses llegan con barcos de guerra y establecen su primer control sobre territorio vietnamita. Esta es la semilla que eventualmente llevaría a la Indochina Francesa. Vietnam estaba dividido en tres reinos: Tonkín (norte), Annam (centro) y Cochinchina (sur). Francia aprovecha las divisiones internas.",
+        "images": [
+          {
+            "url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600",
+            "caption": "Saigón en 1862 - primeras construcciones coloniales"
+          },
+          {
+            "url": "https://images.unsplash.com/photo-1464207687429-7505649dae38?w=600",
+            "caption": "Mapa del tratado de Saigón (1862)"
+          }
+        ],
+        "documents": [
+          {
+            "title": "Tratado de Saigón (1862)",
+            "url": "https://example.com/documents/saigon-1862.pdf",
+            "type": "treaty"
+          }
+        ],
+        "characters": ["Napoleon III", "Tự Đức"],
+        "key_facts": [
+          "Batalla de Đà Nẵng (1858-1859) precede la conquista",
+          "Francia y España juntas contra Vietnam",
+          "Cochinchina cae en 1862"
+        ]
+      },
+      {
+        "year": 1887,
+        "title": "Unión Indochina - Hanoi se convierte en capital colonial",
+        "subtitle": "Vietnam, Camboya y Laos bajo administración francesa unificada",
+        "content": "Francia establece la Unión Indochina en 1887, unificando Vietnam, Camboya y Laos bajo una sola administración. Hanoi se convierte en la capital de la Indochina Francesa. Los franceses comienzan a construir infraestructura: ferrocarriles, carreteras, edificios gubernamentales. La ciudad vieja de Hanoi se mezcla con la nueva arquitectura francesa. Los vietnamitas se convierten en trabajadores de segunda clase en su propia tierra.",
+        "images": [
+          {
+            "url": "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=600",
+            "caption": "Hanoi colonial - arquitectura francesa (1890s)"
+          }
+        ],
+        "characters": ["Jules Ferry", "Tự Đức"],
+        "key_facts": [
+          "Indochina Francesa formada: Vietnam, Camboya, Laos",
+          "Hanoi: mezcla de ciudad vieja y arquitectura francesa",
+          "Sistema administrativo colonial impuesto"
+        ]
+      },
+      {
+        "year": 1911,
+        "title": "Ho Chi Minh llega a Francia - Búsqueda de independencia",
+        "subtitle": "Un joven vietnamita busca justicia en París",
+        "content": "Un joven vietnamita llamado Nguyễn Sinh Cung (Ho Chi Minh) trabaja como cocinero en barcos franceses y eventualmente llega a París en 1911. En París, es testigo de cómo Francia se presenta como defensora de la libertad, mientras oprime a Vietnam. En 1917, durante la Conferencia de Paz de Versalles, presenta una petición pidiendo independencia para Vietnam. Nadie lo escucha. Disilisionado, se acerca a ideas comunistas.",
+        "images": [
+          {
+            "url": "https://images.unsplash.com/photo-1466873565700-f7e73fa20152?w=600",
+            "caption": "París 1911 - Ho Chi Minh (joven)"
+          }
+        ],
+        "documents": [
+          {
+            "title": "Petición de Ho Chi Minh a la Conferencia de Versalles (1919)",
+            "url": "https://example.com/documents/versailles-petition.pdf"
+          }
+        ],
+        "characters": ["Ho Chi Minh", "Woodrow Wilson", "Clemenceau"],
+        "key_facts": [
+          "Ho Chi Minh nace como Nguyễn Sinh Cung (1890)",
+          "Trabaja en barcos, es marinero y cocinero",
+          "París 1911: busca libertad para Vietnam",
+          "Versalles 1919: petición ignorada = giro hacia comunismo"
+        ]
+      },
+      {
+        "year": 1954,
+        "title": "Dien Bien Phu - Victoria vietnamita sobre Francia",
+        "subtitle": "La batalla que acabó con la Indochina Francesa",
+        "content": "En 1954, después de 9 años de guerra de independencia, los vietnamitas bajo Ho Chi Minh derrotan a Francia en la batalla de Dien Bien Phu. Francia pierde 2.293 soldados. Es un golpe devastador para el imperio francés. La Conferencia de Ginebra divide Vietnam temporalmente en norte (Ho Chi Minh) y sur. Se promete elecciones reunificadoras... que nunca ocurren.",
+        "images": [
+          {
+            "url": "https://images.unsplash.com/photo-1514432324607-2e467f4af445?w=600",
+            "caption": "Soldados vietnamitas celebran en Dien Bien Phu (1954)"
+          }
+        ],
+        "documents": [
+          {
+            "title": "Acuerdos de Ginebra (1954)",
+            "url": "https://example.com/documents/geneva-1954.pdf"
+          }
+        ],
+        "characters": ["Ho Chi Minh", "Võ Nguyên Giáp", "Pierre Mendès France"],
+        "key_facts": [
+          "Batalla de Dien Bien Phu: 55 días de asedio",
+          "Francia se rinde: fin de la Indochina Francesa",
+          "Vietnam dividido: norte vs sur (Ginebra)",
+          "Promesa de elecciones que nunca ocurren"
+        ]
+      },
+      {
+        "year": 1964,
+        "title": "Incidente del Golfo de Tonkín - EEUU entra en la guerra",
+        "subtitle": "Un pretexto que escaló la guerra a nivel global",
+        "content": "En agosto de 1964, dos incidentes en el Golfo de Tonkín (el segundo probablemente no ocurrió) son usados por EEUU como pretexto para escalar la guerra. El presidente Johnson ordena los 'Rolling Thunder' - 3 años de bombardeos masivos sobre Vietnam del Norte. Las tropas americanas llegan en masa. La guerra se convierte en un conflicto de superpotencias: EEUU vs Vietnam + Unión Soviética + China.",
+        "images": [
+          {
+            "url": "https://images.unsplash.com/photo-1589519160732-57fc498494f8?w=600",
+            "caption": "Destrucción de Hanoi por bombardeos estadounidenses (1965-1972)"
+          }
+        ],
+        "documents": [
+          {
+            "title": "Resolución del Golfo de Tonkín (1964) - FALSA",
+            "url": "https://example.com/documents/tonkin-1964.pdf"
+          }
+        ],
+        "characters": ["Lyndon B. Johnson", "Ho Chi Minh", "Robert S. McNamara"],
+        "key_facts": [
+          "Incidentes del Golfo de Tonkín: agosto 1964",
+          "Segundo incidente: probablemente falso",
+          "EEUU bombardea Vietnam del Norte durante 3 años (Rolling Thunder)",
+          "Medio millón de soldados americanos en Vietnam en 1968"
+        ]
+      },
+      {
+        "year": 1975,
+        "title": "Caída de Saigón - Reunificación de Vietnam",
+        "subtitle": "El final de la guerra de Vietnam",
+        "content": "El 30 de abril de 1975, tanques del norte vietnamita entran en Saigón. Los últimos helicópteros americanos evacúan diplomáticos desde la embajada. Vietnam se reúne bajo el gobierno de Ho Chi Minh. La guerra termina después de 20 años (si cuentas desde 1954) o 10 años (si cuentas desde la intervención americana). 58.000 americanos mueren. 2-3 millones de vietnamitas mueren. Las cicatrices todavía duelen hoy.",
+        "images": [
+          {
+            "url": "https://images.unsplash.com/photo-1591254670039-e72ea2c01df4?w=600",
+            "caption": "Caída de Saigón - tanques vietnamitas entran en la ciudad (30 de abril de 1975)"
+          },
+          {
+            "url": "https://images.unsplash.com/photo-1522846914519-c0fb7b4d1a91?w=600",
+            "caption": "Evacuación final desde la embajada americana"
+          }
+        ],
+        "documents": [
+          {
+            "title": "Testimonio de sobrevivientes de la guerra",
+            "url": "https://example.com/documents/testimonios.pdf"
+          }
+        ],
+        "characters": ["Ho Chi Minh (fallece en 1969, pero su legado)", "Lê Duẩn", "Saigón civilians"],
+        "key_facts": [
+          "30 de abril de 1975: Saigón cae",
+          "Evacuación caótica: helicópteros desde embajada",
+          "58.000 muertos americanos",
+          "2-3 millones de vietnamitas muertos",
+          "Vietnam reunificado bajo gobierno comunista"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hanoi-1000-years",
+    "title": "Hanoi: 1000 años de historia",
+    "description": "Desde su fundación en el siglo XI hasta convertirse en capital de la Indochina Francesa y luego de un Vietnam independiente.",
+    "thumbnail": "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=400",
+    "duration_minutes": 30,
+    "category": "Asia",
+    "tags": ["Hanoi", "Vietnam", "historia urbana"],
+    "location": {
+      "place_name": "Hanoi, Vietnam",
+      "lat": 21.0285,
+      "lng": 105.8542
+    },
+    "paradas": [
+      {
+        "year": 1010,
+        "title": "Fundación de Hanoi - Thang Long",
+        "subtitle": "El emperador Ly Thai To funda la ciudad",
+        "content": "En 1010, el emperador Ly Thai To traslada la capital del reino de Dai Viet a la orilla del río Rojo y funda 'Thang Long' (que significa 'Dragón Ascendente'). La ciudad se construye con una fortaleza central. El nombre captura la aspiración: como un dragón que sube hacia el cielo.",
+        "images": [],
+        "characters": ["Ly Thai To"],
+        "key_facts": ["Fundada en 1010 como Thang Long", "Capital del reino de Dai Viet"]
+      },
+      {
+        "year": 1887,
+        "title": "Hanoi colonial - Ciudad francesa",
+        "subtitle": "Se convierte en capital de la Indochina Francesa",
+        "content": "Francia comienza a rediseñar Hanoi. Construye la Avenida Paullet (hoy Avenida Ba Trieu), introduce alameda francés, establece la Catedral de Hanoi. La ciudad vieja coexiste con los nuevos barrios franceses. Los vietnamitas son trabajadores de segunda clase.",
+        "images": [],
+        "characters": ["Jules Ferry"],
+        "key_facts": ["Capital de Indochina Francesa"]
+      },
+      {
+        "year": 1954,
+        "title": "Hanoi independiente",
+        "subtitle": "Recupera su libertad",
+        "content": "Después de Dien Bien Phu y los Acuerdos de Ginebra, Hanoi se convierte en capital de Vietnam del Norte. Los franceses se van.",
+        "images": [],
+        "characters": ["Ho Chi Minh"],
+        "key_facts": ["Independencia de Francia"]
+      },
+      {
+        "year": 1975,
+        "title": "Hanoi capital de Vietnam reunificado",
+        "subtitle": "Fin de la división",
+        "content": "Con la caída de Saigón, Hanoi se convierte en capital de todo Vietnam reunificado.",
+        "images": [],
+        "characters": [],
+        "key_facts": ["Reunificación"]
+      }
+    ]
+  },
+  {
+    "id": "thailand-siam-1600-2000",
+    "title": "Siam/Tailandia: Del Aislamiento a la Modernidad",
+    "description": "La única nación del sudeste asiático que nunca fue colonizada. La historia de cómo Tailandia navegó entre imperios.",
+    "thumbnail": "https://images.unsplash.com/photo-1540959375944-7049f642e9f1?w=400",
+    "duration_minutes": 35,
+    "category": "Asia",
+    "tags": ["Tailandia", "Siam", "monarquía", "no-colonizado"],
+    "location": {
+      "place_name": "Tailandia",
+      "lat": 15.8700,
+      "lng": 100.9925
+    },
+    "paradas": [
+      {
+        "year": 1782,
+        "title": "Fundación de Bangkok - Dinastía Chakri",
+        "subtitle": "Rama I funda la dinastía que perdura hoy",
+        "content": "El General Chakri funda Bangkok y establece la dinastía Chakri, que sigue gobernando Tailandia hoy. Bangkok se construye como una fortaleza defensiva contra Birmania. El rio Chao Phraya es la arteria vital de la ciudad.",
+        "images": [],
+        "characters": ["Rama I (Chakri)"],
+        "key_facts": ["Dinastía Chakri: 1782-hoy", "Bangkok fundada"]
+      },
+      {
+        "year": 1868,
+        "title": "Rey Mongkut - Modernización de Siam",
+        "subtitle": "Rama IV se abre al mundo moderno",
+        "content": "El Rey Mongkut (Rama IV) realiza reformas para modernizar Siam y mantener su independencia frente a colonias francesas (Indochina) e inglesas (Birmania). Firma tratados comerciales con potencias occidentales.",
+        "images": [],
+        "characters": ["Rama IV (Mongkut)"],
+        "key_facts": ["Modernización para preservar independencia"]
+      },
+      {
+        "year": 1932,
+        "title": "Revolución de 1932 - Fin de la monarquía absoluta",
+        "subtitle": "Transición a monarquía constitucional",
+        "content": "Una revolución silenciosa (bloodless) en 1932 limita el poder absoluto del rey. Siam se convierte en monarquía constitucional. Es un hito democrático en Asia.",
+        "images": [],
+        "characters": [],
+        "key_facts": ["1932: monarquía constitucional"]
+      },
+      {
+        "year": 1949,
+        "title": "Cambio de nombre: Siam a Tailandia",
+        "subtitle": "Identidad nacional reforzada",
+        "content": "El país oficialmente cambia su nombre de 'Siam' a 'Tailandia' para enfatizar la identidad tailandesa frente a colonización.",
+        "images": [],
+        "characters": [],
+        "key_facts": ["Nombre oficial: Tailandia desde 1949"]
+      }
+    ]
+  },
+  {
+    "id": "french-revolution-1789",
+    "title": "Revolución Francesa: 1789-1799",
+    "description": "De Versalles al Terror. Cómo una nación cambió la historia del mundo en una década.",
+    "thumbnail": "https://images.unsplash.com/photo-1518938267842-7dbd1d24ba3b?w=400",
+    "duration_minutes": 50,
+    "category": "Europa",
+    "tags": ["Francia", "revolución", "1789", "monarquía", "república"],
+    "location": {
+      "place_name": "París, Francia",
+      "lat": 48.8566,
+      "lng": 2.3522
+    },
+    "paradas": [
+      {
+        "year": 1789,
+        "title": "Toma de la Bastilla",
+        "subtitle": "El símbolo del inicio de la revolución",
+        "content": "El 14 de julio de 1789, parisinos furiosos rodean la Bastilla (prisión real) pidiendo armas. Después de horas de enfrentamientos, la Bastilla cae. Hoy es el Día de la Bastilla, el Día de la Independencia francesa. El mundo nunca vuelve a ser igual.",
+        "images": [],
+        "characters": ["Luis XVI", "María Antonieta"],
+        "key_facts": ["14 de julio de 1789", "Fin de la monarquía absoluta"]
+      },
+      {
+        "year": 1793,
+        "title": "Ejecución de Luis XVI - El Rey muere en la guillotina",
+        "subtitle": "Un punto de no retorno",
+        "content": "En enero de 1793, el rey Luis XVI es juzgado, condenado a muerte y ejecutado en la guillotina. María Antonieta será ejecutada meses después. El Ancien Régime está muerto.",
+        "images": [],
+        "characters": ["Luis XVI", "Robespierre"],
+        "key_facts": ["Ejecución en guillotina", "Fin de la monarquía"]
+      },
+      {
+        "year": 1794,
+        "title": "El Terror - Robespierre en el poder",
+        "subtitle": "La revolución devora a sus propios hijos",
+        "content": "Robespierre y el Comité de Seguridad Pública ejecutan a miles: nobles, clérigos, pero también revolucionarios que se consideran 'traidores'. Se estima 40.000 muertes durante el Terror. Finalmente, Robespierre mismo es ejecutado en julio de 1794.",
+        "images": [],
+        "characters": ["Robespierre", "Danton"],
+        "key_facts": ["40.000 ejecuciones estimadas", "Robespierre ejecutado en julio"]
+      },
+      {
+        "year": 1799,
+        "title": "Golpe de Napoleón - Fin de la Revolución",
+        "subtitle": "Un joven general toma el poder",
+        "content": "Napoleón Bonaparte orquesta un golpe de estado (Golpe del 18 Brumario) y se convierte en Primer Cónsul. La Revolución Francesa como movimiento ha terminado. Pero Napoleón llevará sus ideas por toda Europa.",
+        "images": [],
+        "characters": ["Napoleón Bonaparte"],
+        "key_facts": ["Golpe de Napoleón", "Fin de la república revolucionaria"]
+      }
+    ]
+  }
+]
+```
+
+---
+
+## 📝 NOTAS DE IMPLEMENTACIÓN
+
+1. **Imágenes:** Reemplazar URLs de Unsplash con imágenes reales de archivo histórico
+2. **Documentos:** Crear PDFs o links a documentos históricos reales
+3. **Caracteres:** Expandir sistema de personajes para poder "chatear" con ellos
+4. **Contenido:** Los textos son esqueletos - expandir con narrativa más detallada
+5. **Audio:** Grabar narración de Salma para cada parada (TTS después)
+
+---
+
+**Estado:** ✅ Plantilla lista para expandir

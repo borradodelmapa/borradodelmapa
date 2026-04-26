@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Borrado del Mapa · Viaja con Salma</title>
+
+  <meta name="description" content="Salma es tu compañera de viaje inteligente. Te diseña la ruta, te guía con voz, te resuelve imprevistos en tiempo real y documenta tu aventura. No es otra app de viajes. Es la persona que te falta.">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+  <meta name="theme-color" content="#050505">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="Permissions-Policy" content="geolocation=(self), microphone=()">
+  <link rel="canonical" href="https://borradodelmapa.com/">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Borradodelmapa">
+  <link rel="apple-touch-icon" href="/salma_ai_avatar.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Borradodelmapa">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:title" content="Viaja con Salma — Borrado del Mapa">
+  <meta property="og:description" content="La persona que te falta en cada viaje. Planifica, guía, resuelve y acompaña.">
+  <meta property="og:url" content="https://borradodelmapa.com/">
+  <meta property="og:image" content="https://borradodelmapa.com/og-image.jpg">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Borradodelmapa · Tu copiloto de viaje con IA">
+  <meta name="twitter:description" content="Salma planifica tu ruta, te acompaña en el viaje y guarda todo lo que descubres.">
+  <meta name="twitter:image" content="https://borradodelmapa.com/og-image.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="//raw.githubusercontent.com">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Borradodelmapa",
+    "url": "https://borradodelmapa.com/",
+    "logo": "https://borradodelmapa.com/logo.png",
+    "sameAs": ["https://instagram.com/borradodelmapa"]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Borradodelmapa",
+    "applicationCategory": "TravelApplication",
+    "operatingSystem": "Web",
+    "url": "https://borradodelmapa.com/",
+    "description": "Salma es tu copiloto de viaje con IA. Planifica rutas, descubre lugares y viaja con una guía inteligente.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+  }
+  </script>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<!-- Google Maps JS — carga bajo demanda al activar Copiloto -->
+<script>
+window._loadGoogleMaps = function() {
+  return new Promise((resolve, reject) => {
+    if (window.google && window.google.maps && window.google.maps.Map) { resolve(); return; }
+    window._gmapsReady = resolve;
+    const s = document.createElement('script');
+    s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U&libraries=geometry,marker,places&callback=_gmapsReady';
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+};
+</script>
+<link rel="stylesheet" href="styles.css?v=44">
+<link rel="stylesheet" href="docs-viajero.css?v=2">
+<!-- Google Analytics 4 — se carga solo tras consentimiento de cookies (P1-6) -->
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+function loadGA4(){
+  if(document.getElementById('ga4-script'))return;
+  var s=document.createElement('script');
+  s.id='ga4-script';s.async=true;
+  s.src='https://www.googletagmanager.com/gtag/js?id=G-B2YWQKPTZZ';
+  document.head.appendChild(s);
+  gtag('js',new Date());gtag('config','G-B2YWQKPTZZ');
+}
+if(localStorage.getItem('cookie_consent')==='all') loadGA4();
+</script>
+</head>
+<body>
+
+<!-- ═══ SPLASH ═══ -->
+<div id="splash">
+  <img class="splash-avatar" src="/salma_ai_avatar.png" alt="Salma">
+  <div class="splash-logo">borrado<span>del</span>mapa</div>
+  <div class="splash-dots"><span></span><span></span><span></span></div>
+</div>
+
+<!-- ═══ CONTENT ═══ -->
+<main class="app-content" id="app-content"></main>
+
+<!-- ═══ FAB MAPA (flotante, oculto en welcome) ═══ -->
+<button class="fab-map" id="fab-map" style="display:none" aria-label="Abrir mapa">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+  </svg>
+</button>
+
+<!-- ═══ VISTA ITINERARIO (ruta enriquecida) ═══ -->
+<div class="itin-view" id="itin-view" style="display:none">
+  <button class="itin-mobile-back" id="itin-mobile-back-btn" aria-label="Volver" onclick="document.dispatchEvent(new CustomEvent('itin:close'))">←</button>
+  <div class="itin-layout">
+    <div class="itin-map-col" id="itin-map-container"></div>
+    <div class="itin-cards-col" id="itin-cards-container"></div>
+  </div>
+</div>
+
+<!-- ═══ MAPA EN VIVO (logueado) ═══ -->
+<div id="live-map-view" style="display:none">
+  <div id="live-map-container"></div>
+  <button id="live-map-back" onclick="closeLiveMap()">✕</button>
+  <button id="live-map-routes-btn" onclick="openRouteSelector()" title="Mis Rutas">📍 Mis Rutas</button>
+  <button id="live-map-clear-route" onclick="clearRouteFromLiveMap()" style="display:none" title="Quitar ruta">✕ Ruta</button>
+  <div id="live-map-nearest-chip" style="display:none"></div>
+  <div id="live-map-routes-sheet" style="display:none">
+    <div class="lmrs-header">
+      <span>Selecciona una ruta</span>
+      <button onclick="closeRouteSelector()">✕</button>
+    </div>
+    <div id="live-map-routes-list"></div>
+  </div>
+  <!-- Tipo de mapa -->
+  <button id="live-map-maptype-btn" onclick="toggleMapTypePanel()" title="Tipo de mapa">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+  </button>
+  <div id="live-map-maptype-panel" style="display:none">
+    <button class="lmt-option" data-type="roadmap" onclick="setLiveMapType('roadmap')">🗺️ Normal</button>
+    <button class="lmt-option" data-type="satellite" onclick="setLiveMapType('satellite')">🛰️ Satélite</button>
+    <button class="lmt-option" data-type="hybrid" onclick="setLiveMapType('hybrid')">🛰️ + calles</button>
+    <button class="lmt-option" data-type="terrain" onclick="setLiveMapType('terrain')">⛰️ Terreno</button>
+  </div>
+  <!-- Centrar ubicación -->
+  <button id="live-map-center" onclick="liveMapCenter()" title="Mi ubicación">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+  </button>
+  <!-- Capas POI (restaurantes, hoteles, farmacias…) -->
+  <button id="live-map-layers-btn" onclick="toggleMapLayersPanel()" title="Capas">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+  </button>
+  <div id="live-map-layers-panel" style="display:none">
+    <div class="lml-title">Mostrar en el mapa</div>
+    <label class="lml-row"><span>🍽️ Restaurantes</span><input type="checkbox" data-cat="food" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>💊 Farmacias</span><input type="checkbox" data-cat="medical" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>🏨 Hoteles</span><input type="checkbox" data-cat="lodging" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>🛒 Supermercados</span><input type="checkbox" data-cat="shopping" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>🌳 Parques</span><input type="checkbox" data-cat="parks" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>🏛️ Cultura</span><input type="checkbox" data-cat="culture" onchange="toggleMapCat(this)"></label>
+    <label class="lml-row"><span>🚇 Transporte</span><input type="checkbox" data-cat="transit" onchange="toggleMapCat(this)"></label>
+  </div>
+  <!-- Picker: acciones tras tap en mapa -->
+  <div id="diario-picker" style="display:none">
+    <button class="dpick-close" onclick="closeDiarioPicker()" aria-label="Cerrar">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="dpick-row">
+      <button class="dpick-btn dpick-primary" onclick="diarioPickCamera()">
+        <svg class="dpick-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <span class="dpick-label">Foto</span>
+      </button>
+      <button class="dpick-btn" onclick="diarioPickGallery()">
+        <svg class="dpick-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <span class="dpick-label">Galeria</span>
+      </button>
+      <button class="dpick-btn" onclick="diarioPickNavigate()">
+        <svg class="dpick-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+        <span class="dpick-label">Ir aqui</span>
+      </button>
+      <button class="dpick-btn dpick-save" onclick="diarioPickSave()">
+        <svg class="dpick-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+        <span class="dpick-label">Guardar</span>
+      </button>
+      <button class="dpick-btn" id="dpick-compass-btn" onclick="diarioPickCompass()" style="display:none">
+        <svg class="dpick-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" opacity="0.3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>
+        <span class="dpick-label">Brujula</span>
+      </button>
+    </div>
+    <div id="dpick-loc" class="dpick-loc"></div>
+  </div>
+
+  <canvas id="diario-hidden-canvas" width="1080" height="1920" style="display:none"></canvas>
+
+  <!-- Sheet: tap manual en mapa (legacy, hidden) -->
+  <div id="live-map-tap-sheet" style="display:none">
+    <div class="lmts-handle"></div>
+    <img id="lmts-photo" class="lmts-photo" src="" alt="" style="display:none" onerror="this.style.display='none'">
+    <div class="lmts-header">
+      <div>
+        <div id="lmts-address" class="lmts-address">Buscando dirección…</div>
+        <div id="lmts-coords" class="lmts-coords"></div>
+      </div>
+      <button class="lmts-close" onclick="closeTapSheet()">✕</button>
+    </div>
+    <div class="lmts-btns">
+      <button class="lmts-btn-save" id="lmts-save-btn">⭐ Guardar pin</button>
+      <button class="lmts-btn-dir" id="lmts-dir-btn">🗺️ Cómo llegar</button>
+    </div>
+    <div class="lmts-photo-row">
+      <label class="lmts-photo-btn" title="Hacer foto">
+        📷
+        <input type="file" accept="image/*" capture="environment" style="display:none" onchange="handleTapPhoto(this)">
+      </label>
+      <label class="lmts-photo-btn" title="Subir imagen">
+        📁
+        <input type="file" accept="image/*" style="display:none" onchange="handleTapPhoto(this)">
+      </label>
+      <div id="lmts-photo-preview" style="display:none">
+        <img id="lmts-photo-thumb" alt="">
+        <button class="lmts-photo-clear" onclick="clearTapPhoto()">✕</button>
+      </div>
+    </div>
+    <div class="lmts-section-title">Cerca de aquí</div>
+    <div id="lmts-nearby-list" class="lmts-nearby-list"></div>
+  </div>
+</div>
+
+<!-- ═══ INPUT BAR (siempre visible) ═══ -->
+<div class="app-input-bar" id="app-input-bar">
+  <!-- Preview foto (oculto por defecto) -->
+  <div class="chat-photo-preview" id="chat-photo-preview" style="display:none">
+    <img id="chat-photo-thumb" alt="Preview">
+    <button class="chat-photo-cancel" id="chat-photo-cancel" aria-label="Cancelar foto">&times;</button>
+  </div>
+  <div class="input-row">
+    <textarea class="app-input" id="main-input" placeholder="Ej: Vietnam 10 días en moto" autocomplete="off" rows="1"></textarea>
+    <input type="file" id="chat-photo-input" accept="image/*" style="display:none">
+    <input type="file" id="chat-camera-input" accept="image/*" capture="environment" style="display:none">
+    <div class="cam-menu" id="cam-menu" style="display:none">
+      <button class="cam-menu-opt" id="cam-menu-foto">📸 Hacer foto</button>
+      <button class="cam-menu-opt" id="cam-menu-galeria">🖼️ Galería</button>
+    </div>
+    <button class="app-voice-toggle" id="voice-toggle" aria-label="Activar voz de Salma">
+      <svg class="voice-icon-off" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
+      </svg>
+      <svg class="voice-icon-on" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+      </svg>
+    </button>
+    <button class="app-cam" id="cam-btn" aria-label="Enviar foto">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+    </button>
+    <button class="app-mic" id="mic-btn" aria-label="Hablar">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="1" width="6" height="12" rx="3"/>
+        <path d="M19 10v1a7 7 0 0 1-14 0v-1"/>
+        <line x1="12" y1="19" x2="12" y2="23"/>
+        <line x1="8" y1="23" x2="16" y2="23"/>
+      </svg>
+    </button>
+    <button class="app-send-arrow" id="main-send" aria-label="Enviar" style="display:none">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- ═══ AUTH SCREEN (sustituye modal) ═══ -->
+<div class="auth-screen" id="auth-screen">
+
+  <div class="auth-bg"></div>
+  <div class="auth-cloud"></div>
+
+  <!-- VISTA: Gate — solo Google + huella -->
+  <div class="auth-view" id="auth-welcome-view">
+    <div class="auth-logo-wrap">
+      <div class="auth-logo">BORRADO<br><span>DEL</span>MAPA</div>
+      <div class="auth-tagline">SALMA · TU COMPAÑERA DE VIAJE</div>
+    </div>
+    <div class="auth-actions">
+      <div class="auth-error" id="login-error"></div>
+      <button class="auth-btn-google-primary" id="btn-google-login">
+        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Entrar con Google
+      </button>
+      <div class="auth-biometric hidden" id="auth-biometric">
+        <div class="auth-divider">o</div>
+        <button class="auth-btn-fingerprint" id="btn-fingerprint">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M17.5 5.5C16 4 14.1 3 12 3c-2.1 0-4 .9-5.5 2.5C4.9 7.1 4 9 4 11.2c0 2.8.8 5.4 2.1 7.8"/><path d="M20 11.2c0-4.4-3.6-8-8-8"/><path d="M12 8c-1.7 0-3 1.3-3 3 0 1.8.5 3.5 1.4 5"/><path d="M15 11c0-1.7-1.3-3-3-3"/><path d="M12 11c0 2 .5 3.9 1.4 5.5"/><path d="M7.5 19.5c1 1 2.3 1.7 3.8 1.9"/></svg>
+          Usar huella dactilar
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ MODAL: QUÉ PUEDE HACER SALMA ═══ -->
+<div class="salma-info-overlay" id="salma-info-overlay" style="display:none">
+  <div class="salma-info-modal">
+    <button class="salma-info-close" id="salma-info-close">&times;</button>
+    <div class="salma-info-hero">
+      <div class="salma-info-hero-line">Antes, durante y después</div>
+      <div class="salma-info-hero-line">Siempre contigo</div>
+      <div class="salma-info-hero-big">Salma te resuelve</div>
+    </div>
+    <div class="salma-info-list">
+      <div class="salma-info-item done">No sé por dónde empezar → Te monta la ruta</div>
+      <div class="salma-info-item done">Son las 11pm y no tengo hotel → Te busca uno abierto</div>
+      <div class="salma-info-item done">No entiendo el menú → Te traduce</div>
+      <div class="salma-info-item done">Me han robado la cartera → Embajada + teléfonos</div>
+      <div class="salma-info-item done">¿Necesito visado? → Te lo dice al momento</div>
+      <div class="salma-info-item done">¿Este barrio es seguro? → Te avisa</div>
+      <div class="salma-info-item done">¿Cuánto me va a costar? → Presupuesto real</div>
+      <div class="salma-info-item done">Llueve y se me cae el plan → Plan B listo</div>
+      <div class="salma-info-item done">Quiero compartir mi ruta → Link directo</div>
+      <div class="salma-info-item soon">Avería en carretera → Grúa + mecánico cerca</div>
+      <div class="salma-info-item soon">Audio guía en ruta</div>
+      <div class="salma-info-item soon">Salma te acompaña en tiempo real</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══ COOKIE BANNER ═══ -->
+<!-- ═══ FAB Mi Diario (global, oculto en welcome) ═══ -->
+<button id="fab-diario" onclick="openLiveMap()" title="Mi Diario" style="display:none">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+    <polyline points="14 2 14 8 20 8"/>
+    <circle cx="12" cy="15" r="3"/>
+    <path d="M12 12v0"/>
+  </svg>
+</button>
+
+<!-- Inputs ocultos: cámara (capture) y galería (sin capture) -->
+<input type="file" id="diario-camera-input" accept="image/*" capture="environment" style="display:none">
+<input type="file" id="diario-gallery-input" accept="image/*" style="display:none">
+
+<!-- ═══ RESULTADO Mi Diario (fullscreen overlay) ═══ -->
+<div id="diario-result" class="diario-result">
+  <div class="diario-result-canvas-wrap">
+    <canvas id="diario-canvas" width="1080" height="1920"></canvas>
+  </div>
+  <button class="diario-result-close" onclick="closeDiarioResult()" aria-label="Cerrar">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <div class="diario-result-actions">
+    <div class="diario-result-loc">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--dorado)" style="vertical-align:-2px;margin-right:3px"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#0a0a0f" cx="12" cy="9" r="2.5"/></svg>
+      <span id="diario-result-loc-txt"></span>
+    </div>
+    <div class="diario-result-btns">
+      <button class="diario-rbtn diario-rbtn-primary" onclick="shareDiarioNative()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Compartir
+      </button>
+      <button class="diario-rbtn" onclick="downloadDiario()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Descargar
+      </button>
+      <button class="diario-rbtn diario-rbtn-save" onclick="diarioResultSave()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+        Guardar
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="cookie-banner" id="cookie-banner" style="display:none">
+  <p>Usamos cookies esenciales para que la app funcione y analíticas para mejorarla. <a href="/legal.html#cookies">Más info</a></p>
+  <div class="cookie-banner-actions">
+    <button class="cookie-btn-accept" id="cookie-accept">Aceptar</button>
+    <button class="cookie-btn-reject" id="cookie-reject">Solo esenciales</button>
+  </div>
+</div>
+
+<!-- ═══ FIREBASE ═══ -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+<script>
+const firebaseConfig={apiKey:"AIzaSyDjpJMEs-I_3bAR4OP2O9thKqecgNkpjkA",authDomain:"borradodelmapa-85257.firebaseapp.com",projectId:"borradodelmapa-85257",storageBucket:"borradodelmapa-85257.firebasestorage.app",messagingSenderId:"833042338746",appId:"1:833042338746:web:32b58e582488c6064d8383"};
+if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
+window.SALMA_API="https://salma-api.paco-defoto.workers.dev";
+</script>
+
+<!-- ═══ STRIPE ═══ -->
+<script src="https://js.stripe.com/v3/"></script>
+
+<!-- ═══ APP ═══ -->
+<script src="country-utils.js"></script>
+<script src="app.js?v=44"></script>
+<script src="nav-history.js"></script>
+<script src="notas.js"></script>
+<script src="salma.js?v=44"></script>
+<script src="video-player.js"></script>
+<script src="guide-renderer.js?v=44"></script>
+<script src="bitacora-renderer.js"></script>
+<script src="mapa-ruta.js"></script>
+<script src="mapa-itinerario.js?v=44"></script>
+<script src="docs-viajero.js?v=1"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+if (typeof salma !== 'undefined') { salma.initGeolocation(); salma.initVoices(); salma.initVoiceToggle(); }
+
+// Salma info modal
+document.getElementById('salma-info-close')?.addEventListener('click', () => {
+  document.getElementById('salma-info-overlay').style.display = 'none';
+});
+document.getElementById('salma-info-overlay')?.addEventListener('click', (e) => {
+  if (e.target.id === 'salma-info-overlay') e.target.style.display = 'none';
+});
+
+// Cookie consent
+(function() {
+  const consent = localStorage.getItem('cookie_consent');
+  if (!consent) {
+    document.getElementById('cookie-banner').style.display = 'flex';
+  }
+  document.getElementById('cookie-accept')?.addEventListener('click', function() {
+    localStorage.setItem('cookie_consent', 'all');
+    document.getElementById('cookie-banner').style.display = 'none';
+    if (typeof loadGA4 === 'function') loadGA4(); // Cargar GA4 tras consentimiento
+  });
+  document.getElementById('cookie-reject')?.addEventListener('click', function() {
+    localStorage.setItem('cookie_consent', 'essential');
+    document.getElementById('cookie-banner').style.display = 'none';
+  });
+})();
+</script>
+</body>
+</html>

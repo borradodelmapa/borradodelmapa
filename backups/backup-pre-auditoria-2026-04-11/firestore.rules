@@ -1,0 +1,46 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Usuarios — solo el propio usuario puede leer/escribir
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      match /{subcollection}/{docId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // Guías públicas — lectura abierta, escritura solo del dueño (P0-5)
+    match /public_guides/{slug} {
+      allow read: if true;
+      // Crear: cualquier usuario autenticado (debe incluir su uid)
+      allow create: if request.auth != null
+                    && request.resource.data.uid == request.auth.uid;
+      // Actualizar/borrar: solo el dueño
+      // Legacy: guías sin campo uid permiten update/delete por cualquier auth
+      // (migrar docs legacy para añadir uid y eliminar este fallback)
+      allow update, delete: if request.auth != null
+                            && (resource.data.uid == request.auth.uid
+                                || !('uid' in resource.data));
+    }
+
+    // Config (DEPRECATED en favor de Cloudflare KV)
+    // Solo lectura autenticada para retrocompatibilidad. Nuevas escrituras van a KV.
+    match /config/{doc} {
+      allow read: if request.auth != null;
+      allow write: if false; // Cerrado. Usar KV en Cloudflare para config.
+    }
+    match /config/{doc}/history/{histId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Admin logs — solo autenticados (seguridad en logs sensibles)
+    match /admin_logs/{logId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+  }
+}

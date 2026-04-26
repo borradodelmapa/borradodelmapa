@@ -1,0 +1,252 @@
+data: {"searching":true}
+
+data: {"t":"\n\n"}
+
+data: {"t":"Est"}
+
+data: {"t":"ás en **Hanói** — y es buen sit"}
+
+data: {"t":"io para estar. Te cuento cómo sacarle el ju"}
+
+data: {"t":"go al día desde donde estás.\n\nLo primero que"}
+
+data: {"t":" tienes a tiro es el **lago Hoan"}
+
+data: {"t":" Kiem**, que está en el corazón del C"}
+
+data: {"t":"asco Antiguo, a menos de 2 km de tu posición."}
+
+data: {"t":" No es solo un lago bonito: ahí dentro hay una pequeña isla"}
+
+data: {"t":" con la **Torre de la Tortuga**, y"}
+
+data: {"t":" la leyenda dice que el rey Lê Lợi devolvió su"}
+
+data: {"t":" espada mágica a una tortuga gigante en esas"}
+
+data: {"t":" aguas en el siglo XV. La tortuga existe"}
+
+data: {"t":" de verdad — la especie *Rafetus s"}
+
+data: {"t":"winhoei*, una de las más raras del planeta"}
+
+data: {"t":", vivió en ese lago hasta 2016. El"}
+
+data: {"t":" templo **Ngoc Son** está en otra isl"}
+
+data: {"t":"ita conectada por el puente rojo **The Huc"}
+
+data: {"t":"**, y merece los **30.000 VND** (~"}
+
+data: {"t":"1,10€) de entrada.\n\n![Hoan Kiem Lake](https://salma-api.paco-defoto."}
+
+data: {"t":"workers.dev/photo?ref=AU_ZVEGj8mrd"}
+
+data: {"t":"XegpwF_IK"}
+
+data: {"t":"_jbVbZfX"}
+
+data: {"t":"igSMuPYase5"}
+
+data: {"t":"b1ACxlYIe"}
+
+data: {"t":"ugHvI8TSqO"}
+
+data: {"t":"6yp9bvjK"}
+
+data: {"t":"qRS2ABHj-M"}
+
+data: {"t":"kPWBQogh6"}
+
+data: {"t":"hxqxmLu3"}
+
+data: {"t":"s2Xo0VrL"}
+
+data: {"t":"XsjQ2xGCD"}
+
+data: {"t":"QEVIrJsPU"}
+
+data: {"t":"yanzGWgYenT"}
+
+data: {"t":"iWIajZ3D5T"}
+
+data: {"t":"0URwbQgCQ"}
+
+data: {"t":"s686J2i-m3"}
+
+data: {"t":"hCOLUHH94"}
+
+data: {"t":"m6ToP-h6aj2"}
+
+data: {"t":"ywBFecFR9U"}
+
+data: {"t":"qpm7_KtAsHn"}
+
+data: {"t":"9ge53khPtjk"}
+
+data: {"t":"6ToWKj67ts3"}
+
+data: {"t":"WmF8yqlLV"}
+
+data: {"t":"19qHlxmZ3A"}
+
+data: {"t":"YC5BzjtaPP"}
+
+data: {"t":"wRxfFew_9"}
+
+data: {"t":"YKe321Qui-IXk"}
+
+data: {"t":"LJZiRjPb"}
+
+data: {"t":"gkrNoYOTd"}
+
+data: {"t":"ytCTSQiaJeL"}
+
+data: {"t":"dXCtpymaO0"}
+
+data: {"t":"bzj7SZZ5EG"}
+
+data: {"t":"xzALucZ8i"}
+
+data: {"t":"uarNUo4p-fs"}
+
+data: {"t":"P4HO4RG98"}
+
+data: {"t":"v6IdwSt5B"}
+
+data: {"t":"5N8rg827ndj"}
+
+data: {"t":"gUJAGbxj"}
+
+data: {"t":"U_HBAIPsnito40"}
+
+data: {"t":"SVTxUTbm2"}
+
+data: {"t":"tFf19qTXP"}
+
+data: {"t":"qycPZ47HWJ"}
+
+data: {"t":"9BqfKaq-b"}
+
+data: {"t":"Nc2a0tupPwN"}
+
+data: {"t":"PKCncoX3_"}
+
+data: {"t":"OWxPOpat40we"}
+
+data: {"t":"-g3eSr1NPH"}
+
+data: {"t":"CmNqn4WA"}
+
+data: {"t":"-LPEPSz7"}
+
+data: {"t":"gf7zEYeJ"}
+
+data: {"t":"a1QvabHHX"}
+
+data: {"t":"S4y3GC2O"}
+
+data: {"t":"vJ9_d-Hwr"}
+
+data: {"t":"4U5LvNFLx"}
+
+data: {"t":"rOCuOhgR"}
+
+data: {"t":"LKYXH5Nry"}
+
+data: {"t":"MH-iXBwyk"}
+
+data: {"t":"fS-9irx_Jo"}
+
+data: {"t":"2HrOQwtBC"}
+
+data: {"t":"npswqkBEs1"}
+
+data: {"t":"nD)\n\nDesde el lago, te metes"}
+
+data: {"t":" a pie por el **Casco Antiguo (Phố C"}
+
+data: {"t":"ổ)**. Son 36 calles históricas, cada una nomb"}
+
+data: {"t":"rada por el gremio que la ocupaba — Hang"}
+
+data: {"t":" Bac (plata), Hang Gai (s"}
+
+data: {"t":"eda), Hang Ma (papel). Todavía funciona más o menos así"}
+
+data: {"t":". Es un caos de motos, pero navegable. Dedícale una"}
+
+data: {"t":" hora a perderte sin mapa.\n\nPor la tarde, si ti"}
+
+data: {"t":"enes energía, vale la pena ir al **Templo de la Literatura ("}
+
+data: {"t":"Văn Miếu)**, que está a unos 3 km al"}
+
+data: {"t":" suroeste. Es la primera universidad de Vietnam, fundada en 1070,"}
+
+data: {"t":" antes que la mayoría de universidades europeas. Dentro hay"}
+
+data: {"t":" estelas de piedra sobre tortugas con los nombres de los doct"}
+
+data: {"t":"ores que se graduaron entre los siglos XV y XVIII. Entrada:"}
+
+data: {"t":" **30.000 VND**.\n\n![Temple of Literature](https://salma-api.paco-defoto.workers.dev/photo?ref=AU_"}
+
+data: {"t":"ZVEF3tkRCxkJ02cH85G_W0Cdd40sRKLuCh8VcCaCVFvLkpAnTfOwKi2hP6C2Hsfe2W"}
+
+data: {"t":"xeHBfE8i3QpLliaIe7mBknFE-OrzTjXzJM1oaLxmZn06Ivy77mhVnP48wMt1aGJ"}
+
+data: {"t":"pqkm7dHLxE9aoFte3yyXguDF6q48gN7PeixQhUNlMcucLS-fN6kEt-r-mP3a-uEpd"}
+
+data: {"t":"_S97rplNIyh2Qg57ITcWQQEdecNueXDag8y12NH5fEPoIMCO43rdOl2yoarB8bBQbuXftToN0"}
+
+data: {"t":"sifswZIF-5Hau7UKK_odE-6I8e9nJY25GaxarfGuhUStou_T1rZwW8DnNkNiEtK0PKD"}
+
+data: {"t":"cVibIY8z7hPjcB4zqo_WAJPWIsvVJxZcpdbBnzOUERkozJX8lM2inELaB6vb8Wb"}
+
+data: {"t":"WcO-MuPk7N7m3WMhYlYUdYx3E1Dt6XNwasG0AR4yFTsfEJYgAIQsjV9g0o-V"}
+
+data: {"t":"GuJyP-Df-NDhVJVs7vF7TQOwVnJhiBktiKr9JXPA6wdzBXhbwyhB6cB1JLwhs5y4"}
+
+data: {"t":"H2gaAzuE65GK1ZptOpWqL2K2RP7q9Qn--pKrLuoxmn1G6t-yVn9NqZG8c_OUK"}
+
+data: {"t":"MMbVrG46eYMa8ebstL3H9I)\n\nPara comer, en el Casco Antiguo bus"}
+
+data: {"t":"ca **bún chả** — la versión hanoy"}
+
+data: {"t":"ense: cerdo a la brasa con vermic"}
+
+data: {"t":"elli y hierbas frescas, unos **40.000-"}
+
+data: {"t":"60.000 VND** (~1,50-2,20€). El **phở** aqu"}
+
+data: {"t":"í es más ligero y menos dulce que en el sur"}
+
+data: {"t":", pruébalo en cualquier puesto de calle con"}
+
+data: {"t":" cola de locales. Por la noche, la calle p"}
+
+data: {"t":"eatonal alrededor del lago se llena de gente — es donde los han"}
+
+data: {"t":"oyenses salen a pasear y los viernes abren la **"}
+
+data: {"t":"Calle del Tren** para turistas (cuidado con los"}
+
+data: {"t":" precios de las cafeterías de ahí, han sub"}
+
+data: {"t":"ido mucho).\n\nPara moverte, la app **Grab** es lo que"}
+
+data: {"t":" usa todo el mundo aquí — taxi o moto, con precio"}
+
+data: {"t":" fijado antes de subir. Evita los xe om"}
+
+data: {"t":" (moteros sin app) si no controlas el regat"}
+
+data: {"t":"eo en vietnamita.\n\nSi quieres que te busque dónde comer algo"}
+
+data: {"t":" concreto cerca, o cualquier otro sit"}
+
+data: {"t":"io, dime."}
+
+data: {"done":true,"reply":"Estás en **Hanói** — y es buen sitio para estar. Te cuento cómo sacarle el jugo al día desde donde estás.\n\nLo primero que tienes a tiro es el **lago Hoan Kiem** (https://www.google.com/maps/dir/?api=1&destination=Ho%C3%A0n%20Ki%E1%BA%BFm%20Lake&destination_place_id=ChIJlclXM5WrNTERDqL5tGu_ugE), que está en el corazón del Casco Antiguo, a menos de 2 km de tu posición. No es solo un lago bonito: ahí dentro hay una pequeña isla con la **Torre de la Tortuga** (https://www.google.com/maps/dir/?api=1&destination=Torre%20de%20la%20Tortuga&destination_place_id=ChIJpdyXK5WrNTER8vAiRLlnjT0), y la leyenda dice que el rey Lê Lợi devolvió su espada mágica a una tortuga gigante en esas aguas en el siglo XV. La tortuga existe de verdad — la especie *Rafetus swinhoei*, una de las más raras del planeta, vivió en ese lago hasta 2016. El templo **Ngoc Son** (https://www.google.com/maps/dir/?api=1&destination=Templo%20Ngoc%20Son&destination_place_id=ChIJp56AAMCrNTERHTeCAuwWJ7s) está en otra islita conectada por el puente rojo **The Huc**, y merece los **30.000 VND** (~1,10€) de entrada.\n\n![Hoan Kiem Lake](https://salma-api.paco-defoto.workers.dev/photo?ref=AU_ZVEGj8mrdXegpwF_IK_jbVbZfXigSMuPYase5b1ACxlYIeugHvI8TSqO6yp9bvjKqRS2ABHj-MkPWBQogh6hxqxmLu3s2Xo0VrLXsjQ2xGCDQEVIrJsPUyanzGWgYenTiWIajZ3D5T0URwbQgCQs686J2i-m3hCOLUHH94m6ToP-h6aj2ywBFecFR9Uqpm7_KtAsHn9ge53khPtjk6ToWKj67ts3WmF8yqlLV19qHlxmZ3AYC5BzjtaPPwRxfFew_9YKe321Qui-IXkLJZiRjPbgkrNoYOTdytCTSQiaJeLdXCtpymaO0bzj7SZZ5EGxzALucZ8iuarNUo4p-fsP4HO4RG98v6IdwSt5B5N8rg827ndjgUJAGbxjU_HBAIPsnito40SVTxUTbm2tFf19qTXPqycPZ47HWJ9BqfKaq-bNc2a0tupPwNPKCncoX3_OWxPOpat40we-g3eSr1NPHCmNqn4WA-LPEPSz7gf7zEYeJa1QvabHHXS4y3GC2OvJ9_d-Hwr4U5LvNFLxrOCuOhgRLKYXH5NryMH-iXBwykfS-9irx_Jo2HrOQwtBCnpswqkBEs1nD)\n\nDesde el lago, te metes a pie por el **Casco Antiguo (Phố Cổ)**. Son 36 calles históricas, cada una nombrada por el gremio que la ocupaba — Hang Bac (plata), Hang Gai (seda), Hang Ma (papel). Todavía funciona más o menos así. Es un caos de motos, pero navegable. Dedícale una hora a perderte sin mapa.\n\nPor la tarde, si tienes energía, vale la pena ir al **Templo de la Literatura (Văn Miếu)**, que está a unos 3 km al suroeste. Es la primera universidad de Vietnam, fundada en 1070, antes que la mayoría de universidades europeas. Dentro hay estelas de piedra sobre tortugas con los nombres de los doctores que se graduaron entre los siglos XV y XVIII. Entrada: **30.000 VND**.\n\n![Temple of Literature](https://salma-api.paco-defoto.workers.dev/photo?ref=AU_ZVEF3tkRCxkJ02cH85G_W0Cdd40sRKLuCh8VcCaCVFvLkpAnTfOwKi2hP6C2Hsfe2WxeHBfE8i3QpLliaIe7mBknFE-OrzTjXzJM1oaLxmZn06Ivy77mhVnP48wMt1aGJpqkm7dHLxE9aoFte3yyXguDF6q48gN7PeixQhUNlMcucLS-fN6kEt-r-mP3a-uEpd_S97rplNIyh2Qg57ITcWQQEdecNueXDag8y12NH5fEPoIMCO43rdOl2yoarB8bBQbuXftToN0sifswZIF-5Hau7UKK_odE-6I8e9nJY25GaxarfGuhUStou_T1rZwW8DnNkNiEtK0PKDcVibIY8z7hPjcB4zqo_WAJPWIsvVJxZcpdbBnzOUERkozJX8lM2inELaB6vb8WbWcO-MuPk7N7m3WMhYlYUdYx3E1Dt6XNwasG0AR4yFTsfEJYgAIQsjV9g0o-VGuJyP-Df-NDhVJVs7vF7TQOwVnJhiBktiKr9JXPA6wdzBXhbwyhB6cB1JLwhs5y4H2gaAzuE65GK1ZptOpWqL2K2RP7q9Qn--pKrLuoxmn1G6t-yVn9NqZG8c_OUKMMbVrG46eYMa8ebstL3H9I)\n\nPara comer, en el Casco Antiguo busca **bún chả** — la versión hanoyense: cerdo a la brasa con vermicelli y hierbas frescas, unos **40.000-60.000 VND** (~1,50-2,20€). El **phở** aquí es más ligero y menos dulce que en el sur, pruébalo en cualquier puesto de calle con cola de locales. Por la noche, la calle peatonal alrededor del lago se llena de gente — es donde los hanoyenses salen a pasear y los viernes abren la **Calle del Tren** para turistas (cuidado con los precios de las cafeterías de ahí, han subido mucho).\n\nPara moverte, la app **Grab** es lo que usa todo el mundo aquí — taxi o moto, con precio fijado antes de subir. Evita los xe om (moteros sin app) si no controlas el regateo en vietnamita.\n\nSi quieres que te busque dónde comer algo concreto cerca, o cualquier otro sitio, dime.\n\nhttps://www.google.com/maps/dir/21.0286669,105.8521484/21.0278184,105.8522631/21.0306883,105.8523861","route":null}
+

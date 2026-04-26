@@ -1,0 +1,37 @@
+Basándome en la auditoría completa, esto es lo que falta — todo real, verificado contra el código:
+
+P0 — CRÍTICO (te puede costar dinero o un problema legal)
+1. Stripe webhook — Ahora mismo un usuario puede manipular el JS del navegador y darse coins sin pagar. El pago se confirma client-side en app.js y actualiza Firestore directamente. Falta un webhook en el Worker que reciba la confirmación de Stripe y sea él quien sume los coins.
+
+2. Chat endpoint sin auth — Cualquier persona que conozca la URL https://salma-api.paco-defoto.workers.dev puede hacer POST y usar a Salma gratis sin límite. No hay verificación de Firebase token. Los coins y rutas gratis se envían desde el frontend y el Worker los cree sin validar.
+
+3. Credenciales de Salma bot en GitHub — scripts/publish-destinos-salma.js tiene el email, contraseña y Firebase API key de la cuenta Salma en texto plano. Está committeado y visible en el repo público.
+
+4. Legal incompleta — legal.html tiene 4 campos vacíos [PENDIENTE]: nombre del titular, CIF/NIF, email de contacto, dirección. Es obligatorio por LSSI en España. Sin esto, cualquier reclamación o inspección es un problema.
+
+5. public_guides sin ownership — En firestore.rules, la regla de escritura es auth != null. Cualquier usuario registrado puede sobrescribir la guía pública de otro usuario si conoce el slug.
+
+P1 — IMPORTANTE (afecta usuarios reales)
+6. Cookie consent sin UI — GA4 se carga al abrir la web sin pedir consentimiento. La política de cookies menciona un banner que no existe. Ilegal en la UE.
+
+7. Sin modo offline — El Service Worker hace cache: 'no-store' para todo. Si un viajero pierde cobertura (que es exactamente tu caso de uso), la app es una pantalla en blanco. Como mínimo: cachear el shell + las guías guardadas en localStorage.
+
+8. Stripe en modo test — La key es pk_test_*. No se pueden cobrar pagos reales hasta pasar a live en el dashboard de Stripe.
+
+P2 — TÉCNICO (deuda técnica, no urgente pero crece)
+9. Código duplicado — _groupByDay(), _sampleWaypoints(), _fullRouteGmapsUrl(), escapeHTML() están copiados idénticos en 3-4 archivos. Un bug corregido en uno se queda vivo en los demás. Solución: moverlos a un utils.js compartido.
+
+10. Google Maps API key sin restricción — AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U funciona desde cualquier dominio. Hay que restringirla a borradodelmapa.com + localhost en GCP Console. Son 2 minutos.
+
+11. Monkey-patch frágil — mapa-itinerario.js sobrescribe bitacoraRenderer.renderDiario en runtime. Si cambia el orden de carga de scripts, se rompe silenciosamente sin error.
+
+12. Dead code en el Worker — injectGoogleMapsLink() e injectTransportBlock() tienen return reply como primera línea. Todo el código debajo está muerto.
+
+P3 — PRODUCTO (mejoras, no roturas)
+13. Deep links de transporte — Solo Uber y Lyft funcionan. Bolt, Grab, DiDi, GoJek, Careem, Ola, inDrive tienen deep_link: null en transport-apps.json.
+
+14. Manifest PWA básico — Sin shortcuts (accesos rápidos), sin screenshots (mejora install prompt en Android), icono 192px sin versión maskable dedicada.
+
+15. Push notifications incompletas — El SW las recibe y muestra, pero no hay flujo de suscripción (PushManager.subscribe) ni envío server-side. La infraestructura está, falta conectarla.
+
+16. Notificaciones que manda salma al teléfono ordenador salen notificaciones raras

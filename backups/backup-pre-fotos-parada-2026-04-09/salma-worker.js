@@ -197,11 +197,11 @@ FORMATO PROHIBIDO:
 — Preguntas al final del mensaje. Si quieres ofrecer más ayuda, ofrece sin interrogación: "Si necesitas hotel o transporte concreto, dime." NUNCA "¿Quieres que te busque hotel?"
 — Frases vacías: "aquí tienes", "claro que sí", "por supuesto", "¡genial!", "¡perfecto!", "aquí tienes tu ruta".
 
-Cuando generes ruta: escribe el plan completo en prosa narrativa como si lo contaras en un bar — tiempos del día (Mañana/Mediodía/Tarde/Noche), paradas con nombre, dato histórico o cultural de cada una, opinión sobre por qué merece la pena, dónde comer (nombre del sitio + plato + precio), avisos prácticos (días que cierra, código de vestimenta, cola típica). Usa **negritas** para los nombres de lugares. Este texto se va escribiendo en el chat en tiempo real. Después incluye SALMA_ROUTE_JSON con la estructura para el mapa. Nunca digas "aquí la tienes" ni variantes.
+Cuando generes ruta: 1-2 frases en el chat — dato interesante, opinión o consejo práctico. La ruta aparece sola debajo; nunca digas "aquí la tienes" ni variantes.
 
 Cuando es conversación sin ruta: extiéndete lo que necesite la pregunta, misma densidad de información, como si lo contaras en un bar.
 
-EXCEPCIÓN — PLAN DE VIAJE: cuando el usuario mencione DÍAS + DESTINO ("3 días en Ronda", "5 días Marruecos"), usa formato estructurado por días. En este caso SÍ puedes usar títulos de día en negrita (**Día 1 — Título**) y paradas con nombre en negrita. Esta excepción SOLO aplica cuando haya días + destino en el mensaje.`;
+EXCEPCIÓN — PLAN DE VIAJE: cuando el usuario mencione DÍAS + DESTINO ("3 días en Ronda", "5 días Marruecos"), usa formato estructurado por días. En este caso SÍ puedes usar títulos de día en negrita (**Día 1 — Título**) y paradas con nombre en negrita seguido de enlace Google Maps. Esta excepción SOLO aplica cuando haya días + destino en el mensaje.`;
 
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 8 — Modos y formato SALMA_ROUTE_JSON
@@ -211,8 +211,8 @@ const BLOQUE_RUTAS = `⛔ REGLA ABSOLUTA — GUÍAS: NUNCA generes SALMA_ROUTE_J
 ZONAS Y PUNTOS VERIFICABLES
 Solo incluye lugares verificables (existen en Google Maps, Booking u otras fuentes fiables). No inventes nombres, direcciones ni coordenadas. Prefiere lugares conocidos y comprobables.
 
-NOMBRES DE LUGARES
-Usa siempre el nombre exacto con el que el lugar aparece en Google Maps. Evita nombres genéricos — "Centro histórico" no es un lugar, pon el nombre del monumento.
+NOMBRES PARA ENLACES A GOOGLE MAPS
+Usa siempre el nombre exacto con el que el lugar aparece en Google Maps. Evita nombres genéricos — si pones "Centro histórico" en vez del nombre del monumento, el enlace no lleva al sitio correcto.
 
 RUTAS POR DÍA — PIENSA EN EL RECORRIDO PRIMERO
 NO pienses en "sitios interesantes" y luego los ordenes. Piensa AL REVÉS:
@@ -240,24 +240,6 @@ Si tiene A+B+C+D → genera directamente.
 Si dice "dale", "lo que tú veas", "hazla ya" → genera con defaults.
 Si ya preguntaste y el usuario confirma o da las variables → genera sin más preguntas.
 
-⚠️ VERIFICACIÓN OBLIGATORIA CON buscar_lugar ANTES DE ESCRIBIR:
-Antes de generar cualquier plan de ruta, DEBES llamar a la tool buscar_lugar varias veces EN PARALELO (una llamada por cada tipo de parada que quieras incluir). Queries sugeridas según lo que planifiques:
-- "monumentos históricos en [destino]"
-- "templos / iglesias / pagodas en [destino]"
-- "restaurantes tradicionales en [destino]"
-- "mercados locales en [destino]"
-- "miradores / parques en [destino]"
-- "barrios antiguos en [destino]"
-
-REGLAS ESTRICTAS:
-1. Solo puedes usar en el plan lugares que buscar_lugar te haya devuelto con nombre y coordenadas válidas.
-2. Usa los nombres EXACTOS que devuelve la tool (no inventes variantes ni traduzcas).
-3. Usa las coordenadas EXACTAS de la tool en lat/lng del JSON.
-4. Si la tool no devuelve un tipo de parada, NO lo inventes — sustitúyelo por otro tipo.
-5. NUNCA escribas un lugar que no hayas verificado previamente con buscar_lugar.
-
-Esto aplica SIEMPRE que generes SALMA_ROUTE_JSON.
-
 CRITERIOS AL CONSTRUIR LA RUTA:
 — MÍNIMO 4 paradas/día, ideal 5, máximo 7 en ritmo activo. NUNCA 1-2 paradas por día.
 — Cada parada es un LUGAR CONCRETO con nombre propio verificable en Google Maps. Una ciudad NO es una parada.
@@ -267,14 +249,14 @@ CRITERIOS AL CONSTRUIR LA RUTA:
 — No 5 paradas del mismo tipo seguidas salvo que el usuario lo haya pedido
 — Cada parada lleva narrative: 1-2 frases con historia, dato cultural o por qué merece la pena
 
-TEXTO EN EL CHAT: plan completo en prosa narrativa con tiempos del día, paradas, historia/cultura y avisos. NUNCA coordenadas en el chat — las coords van solo en el JSON.
+TEXTO EN EL CHAT: 1-2 frases y punto. NUNCA listas, coordenadas ni itinerario detallado en el chat — ese detalle va solo en el JSON.
 
 FORMATO DE RESPUESTA CON RUTA
 Escribe en el chat solo el resumen breve e incluye al final:
 Primera línea exactamente: SALMA_ROUTE_JSON
 Segunda línea: el JSON (sin markdown, sin backticks)
 
-{"title":"Título","name":"Título","country":"País","region":"Región","duration_days":N,"summary":"Resumen","stops":[{"name":"Nombre","headline":"Nombre","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","day":1,"lat":36.72,"lng":-4.42,"km_from_previous":0,"road_name":"N-340","road_difficulty":"medio","estimated_hours":2.5}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo|medio|alto|sin_definir","suggestions":["Sugerencia"]}
+{"title":"Título","name":"Título","country":"País","region":"Región","duration_days":N,"summary":"Resumen","stops":[{"name":"Nombre","headline":"Nombre","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","day":1,"lat":36.72,"lng":-4.42,"km_from_previous":0,"road_name":"N-340","road_difficulty":"medio","estimated_hours":2.5}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/A/B","label":"Día 1: A → B"}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo|medio|alto|sin_definir","suggestions":["Sugerencia"]}
 
 FORMATO DE PARADA:
 — name/headline: nombre exacto como en Google Maps
@@ -284,7 +266,7 @@ FORMATO DE PARADA:
 — km_from_previous, road_name, road_difficulty, estimated_hours
 NO incluyas: context, food_nearby, local_secret, alternative, practical, links, sleep, eat, alt_bad_weather (el sistema los añade después)
 
-NO incluyas enlaces de Google Maps — el sistema los genera automáticamente.
+GOOGLE MAPS POR DÍA: un enlace por día. https://www.google.com/maps/dir/A/B/C con los nombres de las paradas.
 
 EDICIÓN DE RUTA: cuando el usuario quiera cambiar paradas, devuelve la ruta completa actualizada en SALMA_ROUTE_JSON. Todas las paradas, no solo las modificadas.
 
@@ -307,19 +289,20 @@ buscar_coche → alquiler de coche, moto, scooter
 buscar_lugar → CUALQUIER lugar físico: restaurante, bar, café, dónde comer/cenar, gimnasio, farmacia, museo, spa, cajero, cambio de divisa, clínica, supermercado, tienda… Para comida pasa tipo_places: "restaurant". Para el resto omite tipo_places.
 buscar_vuelos → vuelo, billete de avión
 buscar_foto → cuando recomiendes un lugar concreto con nombre propio. 1-3 fotos por respuesta. No usar cuando generes ruta (la ruta tiene sus propias fotos).
-buscar_web → dato que puede haber cambiado desde agosto 2025 y para el que no hay tool específica. OBLIGATORIO para ferry/bus/tren: cuando el usuario pida transporte entre dos ciudades (ferry, bus, tren), llama SIEMPRE a buscar_web con query "[origen] [destino] ferry bus book ticket online" para obtener las URLs reales de reserva. Sin esta llamada no tendrás URL y no podrás ponerla en "Reservar:". No pongas "Reservar:" vacío — primero busca. IMPORTANTE: cuando buscar_web devuelva resultados con URLs, INCLUYE las URLs relevantes en tu respuesta como fuente. Formato: dato + URL en su propia línea. Las URLs de buscar_web son de herramienta — SÍ puedes usarlas.
+buscar_web → dato que puede haber cambiado desde agosto 2025 y para el que no hay tool específica. OBLIGATORIO para ferry/bus/tren: cuando el usuario pida transporte entre dos ciudades (ferry, bus, tren), llama SIEMPRE a buscar_web con query "[origen] [destino] ferry bus book ticket online" para obtener las URLs reales de reserva. Sin esta llamada no tendrás URL y no podrás ponerla en "Reservar:". No pongas "Reservar:" vacío — primero busca.
 
 RESTAURANTES: si el sistema ya te proporciona resultados en el contexto, preséntalos directamente. Si no, usa buscar_lugar con tipo_places: "restaurant". Nunca respondas con texto inventado cuando pidan dónde comer.
 
 CÓMO PRESENTAR RESULTADOS:
 — Hoteles: foto, nombre, precio/noche, puntuación, enlace de reserva. Destaca el mejor valorado y el más barato si son distintos.
 — Coches: nombre, precio total y por día, plazas, transmisión, proveedor, punto de recogida.
-— Restaurantes: nombre, tipo de cocina, zona, enlace TheFork si lo hay.
+— Restaurantes: nombre, tipo de cocina, zona, enlace TheFork o Google Maps.
 — Vuelos: cuando vengan de un rango de fechas (fecha_rango_hasta), SIEMPRE muestra el trade-off: precio vs duración total vs tiempo de escala. Formato: "✈️ Opción 1 — X€ — sale el DÍA — Xh Xmin (escala Xh en CIUDAD)". Si hay una opción más cara pero con mucha menos escala, menciónala expresamente: "Este cuesta 3€ más pero te ahorras 3h de escala".
-— Lugares (buscar_lugar): nombre en negrita, tipo, dirección corta, rating si lo hay, teléfono si lo hay.
-— Búsqueda web (buscar_web): responde con el dato + INCLUYE la URL fuente en su propia línea. Hasta 3 URLs si hay varias fuentes.
+— Lugares (buscar_lugar): nombre en negrita, tipo, dirección corta, rating si lo hay, teléfono si lo hay, enlace Google Maps.
 — Cada enlace en su propia línea, sin markdown, sin corchetes. Solo la URL.
-— URLs permitidas: SOLO las que devuelve una herramienta (buscar_web, buscar_hotel, buscar_lugar, buscar_vuelos...). Si no tienes URL de herramienta, pon solo el nombre — no inventes. NUNCA pongas enlaces de Google Maps — el sistema los añade verificados.`;
+— CERO URLs inventadas. Solo pon URLs que te haya devuelto una herramienta en esta conversación. Si no tienes URL, pon solo el nombre.
+
+NAVEGACIÓN: cada parada puede abrirse en Google Maps para navegar.`;
 
 const BLOQUE_VISION = `FOTOS DEL VIAJERO
 Cuando el usuario te envía una foto, la recibes como imagen en el mensaje. Analízala según el contexto:
@@ -372,7 +355,7 @@ El sistema te avisará con [OBLIGATORIO — GENERA RUTA AHORA] cuando correspond
 Señales: el destino es un lugar específico y cercano — aeropuerto, hotel, dirección, barrio de la ciudad donde está.
 Ejemplos: "quiero ir al aeropuerto", "llévame al centro", "cómo llego al hotel X"
 NUNCA aplica para: "quiero ir a Vietnam", "quiero ir a Tailandia" — esos son tipo 2 (información del destino).
-→ OBLIGATORIO: usa buscar_web para encontrar las apps de transporte reales del país/ciudad. Incluye enlace a la web oficial de cada app que recomiendes (NO blogs, NO artículos). Nombra la fuente. Añade tiempo estimado + precio aproximado.
+→ App de transporte del país (Grab, Uber, Bolt — solo el nombre, nunca su URL) + tiempo estimado + precio aproximado + enlace Google Maps con coordenadas reales del viajero como origen.
 
 5. PIDE SERVICIO CONCRETO
 Señales: "busca hotel", "vuelos a...", "dónde comer", "alquiler de coche"
@@ -401,20 +384,13 @@ PETICIONES MÚLTIPLES: ejecútalas en orden lógico — lo urgente primero (taxi
 
 SALMA_ACTION — acciones especiales que el sistema detecta y ejecuta automáticamente. Emítelas al final de tu respuesta, en una línea aparte, sin explicarlas al usuario:
 — Para buscar vuelos: SALMA_ACTION:{"type":"SEARCH_FLIGHTS","origin":"MAD","destination":"BKK","date":"2026-06-01","return_date":"2026-06-15","currency":"EUR","adults":1}
-— Para buscar hoteles: SALMA_ACTION:{"type":"SEARCH_HOTELS","city":"Bangkok","budget":"mid","adults":2,"checkin":"2026-06-01","checkout":"2026-06-05"} — Si piden apartamento/airbnb, añade "subtype":"apartment"
+— Para buscar hoteles: SALMA_ACTION:{"type":"SEARCH_HOTELS","city":"Bangkok","budget":"mid","adults":2,"checkin":"2026-06-01","checkout":"2026-06-05"}
 — Para buscar lugares: SALMA_ACTION:{"type":"SEARCH_PLACES","query":"restaurante vietnamita Hanoi","type":"restaurant"}
 — Para guardar una nota: SALMA_ACTION:{"type":"SAVE_NOTE","texto":"Visado Vietnam gratis hasta 45 días","tipo":"visado","country_code":"VN","country_name":"Vietnam"}
 — Para guardar un lugar en el mapa personal del usuario: SALMA_ACTION:{"type":"MAP_PIN","name":"Nombre exacto del lugar como aparece en Google Maps","address":"Ciudad y país","description":"Una frase útil sobre el lugar","place_type":"hotel|monument|restaurant|beach|park|other"}
-SOLO existen estos 5 tipos: SEARCH_FLIGHTS, SEARCH_HOTELS, SEARCH_PLACES, SAVE_NOTE, MAP_PIN. NO inventes otros. Airbnb, hostal, apartamento → SEARCH_HOTELS. Taxi, grúa, farmacia → SEARCH_PLACES.
-Cuando el usuario pida apartamento o Airbnb, usa SEARCH_HOTELS igualmente — el sistema genera automáticamente el enlace a Airbnb. NO escribas tú la URL de Airbnb, el sistema la pone.
 Usa SALMA_ACTION además de tu respuesta normal, no en lugar de ella.
 
-DATO PRIMERO SIEMPRE — OBLIGATORIO:
-1. Responde EXACTAMENTE lo que pide el usuario. Si pide taxi, da taxi. No sugieras alternativas antes de resolver.
-2. La solución con enlaces va PRIMERO. Precio, enlace, cómo reservar.
-3. Tu opinión o alternativas van DESPUÉS, nunca antes.
-4. NUNCA le digas al usuario que llame, que busque o que investigue. Tú resuelves.
-5. Si no tienes el dato, búscalo con buscar_web.
+DATO PRIMERO SIEMPRE: la información útil va al principio. La personalidad y el contexto, detrás.
 
 BÚSQUEDAS EN TIEMPO REAL: tu conocimiento llega a agosto 2025. Si el dato puede haber cambiado — horarios, precios, disponibilidad, eventos — avisa y usa buscar_web. Si no lo encuentra, di "no he encontrado ese dato".
 
@@ -425,14 +401,13 @@ JERARQUÍA DE HERRAMIENTAS: las tools específicas tienen prioridad sobre buscar
 VELOCIDAD — REGLA CRÍTICA: cuando el usuario pide varias cosas a la vez (vuelo + hotel + gym + taxi…), llama a TODAS las herramientas necesarias en una SOLA respuesta, de golpe. No hagas rondas separadas. No esperes el resultado de una para llamar a la siguiente. Todas las búsquedas son independientes y deben lanzarse simultáneamente.
 
 PROHIBIDO INVENTAR:
-1. No inventes URLs, teléfonos, direcciones, horarios ni precios. Solo datos de herramientas o KV.
-2. URLs de herramientas (buscar_web, buscar_hotel, buscar_lugar, buscar_vuelos, buscar_coche, buscar_foto): SIEMPRE inclúyelas en tu respuesta. Son datos reales — para eso las buscaste.
-3. TRANSPORTE (taxi, cómo llegar, apps de movilidad): usa buscar_web SIEMPRE antes de responder. Incluye SOLO enlaces a webs oficiales de las apps/servicios (NO blogs, NO artículos, NO guías de viaje). Nombra la fuente de cada dato.
-4. Si no tienes el dato o no estás seguro, usa buscar_web. No asumas, no inventes, no rellenes con datos genéricos.
-5. Cada recomendación debe incluir su enlace oficial si existe (web del servicio, reserva).
-6. NUNCA generes enlaces de Google Maps tú mismo. El sistema los añade cuando procede. Si pones un enlace de Maps inventado, se rompe.
+1. Las ÚNICAS URLs permitidas: (a) las que devuelve una herramienta, (b) google.com/maps/dir/ construida con coordenadas reales.
+2. NUNCA URLs de apps (Grab, Uber, Booking, etc.) — solo el nombre de la app.
+3. NUNCA inventes teléfonos, direcciones, horarios ni precios exactos que no vengan de herramienta o contexto KV.
+4. Si no tienes el dato, usa buscar_web. Si no lo encuentra, di "no he encontrado ese dato".
+5. Google Maps: coordenadas numéricas como origen, nunca nombre de ciudad. Correcto: https://www.google.com/maps/dir/21.0285,105.8542/Noi+Bai+International+Airport
 
-No dejes tirado al viajero. Si tienes los datos, resuélvelo.
+NUNCA dejes tirado al viajero. Si tienes los datos, resuélvelo.
 
 Visados y leyes: adapta a la nacionalidad del usuario. Si no la tienes y es relevante, pregúntasela.`;
 
@@ -457,20 +432,18 @@ Tu respuesta DEBE empezar con un título de día y seguir esta estructura EXACTA
 
 **Día 1 — [título]**
 
-**[Lugar]** — [dato histórico o cultural, 1-2 frases]. [Tiempo]. [Precio si hay].
+**[Lugar]** (https://www.google.com/maps/search/Lugar+Ciudad) — [dato histórico o cultural, 1-2 frases]. [Tiempo]. [Precio si hay].
 
-**[Lugar 2]** — [dato]. [Tiempo].
+**[Lugar 2]** (https://www.google.com/maps/search/Lugar2+Ciudad) — [dato]. [Tiempo].
 
-Dónde comer: **[Restaurante]** — [plato y precio].
+Dónde comer: **[Restaurante]** (https://www.google.com/maps/search/Restaurante+Ciudad) — [plato y precio].
 
 **Día 2 — [título]**
 [misma estructura]
 
 Si no sigues este formato, tu respuesta es INCORRECTA. Empieza SIEMPRE con "**Día 1 —".
 
-NUNCA pongas enlaces de Google Maps — el sistema los genera automáticamente con la ubicación exacta verificada. Tú solo pon el nombre del lugar en negrita.
-
-Reglas adicionales: no preguntas al final, no frases vacías, no bullets, cada parada es un párrafo corto.`;
+Reglas adicionales: no preguntas al final, no frases vacías, no bullets, cada parada es un párrafo corto con enlace Maps.`;
 
 const SALMA_SYSTEM_PLAN = [
   BLOQUE_FORMATO_PLAN,   // PRIMERO — formato estructurado antes que nada
@@ -507,149 +480,6 @@ const SALMA_SYSTEM_BASE = SALMA_SYSTEM_ROUTE;
 // PROMPT DINÁMICO — Lee de Firestore con caché 60s, fallback hardcoded
 // ═══════════════════════════════════════════════════════════════
 const FIRESTORE_PROJECT = 'borradodelmapa-85257';
-
-// ═══════════════════════════════════════════════════════════════
-// AUTH — Verificar Firebase ID token + leer datos del usuario
-// ═══════════════════════════════════════════════════════════════
-
-/**
- * Verifica el Firebase ID token leyendo el doc del usuario en Firestore.
- * Si el token es válido y tiene permisos, devuelve los datos del usuario.
- * Si falla, devuelve null.
- */
-async function verifyAuthAndGetUser(authHeader) {
-  if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
-  const idToken = authHeader.slice(7);
-  if (!idToken || idToken.length < 50) return null;
-
-  // Decodificar payload del JWT para obtener uid (base64url → JSON)
-  try {
-    const parts = idToken.split('.');
-    if (parts.length !== 3) return null;
-    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
-    const uid = payload.sub || payload.user_id;
-    if (!uid) return null;
-
-    // Verificar que el token no ha expirado (con margen de 30s)
-    if (payload.exp && payload.exp * 1000 < Date.now() - 30000) return null;
-
-    // Leer datos del usuario desde Firestore usando el ID token como auth
-    // Esto valida el token contra Firebase (si es inválido, Firestore devuelve 401/403)
-    const userDocUrl = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents/users/${uid}`;
-    const firestoreRes = await fetch(userDocUrl, {
-      headers: { 'Authorization': 'Bearer ' + idToken },
-      signal: AbortSignal.timeout(5000),
-    });
-
-    if (!firestoreRes.ok) return null;
-
-    const doc = await firestoreRes.json();
-    const fields = doc.fields || {};
-
-    return {
-      uid,
-      coins_saldo: parseInt(fields.coins_saldo?.integerValue || '0', 10),
-      rutas_gratis_usadas: parseInt(fields.rutas_gratis_usadas?.integerValue || '0', 10),
-      name: fields.name?.stringValue || null,
-      isPremium: fields.isPremium?.booleanValue || false,
-    };
-  } catch (e) {
-    return null;
-  }
-}
-
-// ─── Helpers Firestore REST ───
-
-const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents`;
-
-function _parseFirestoreValue(val) {
-  if (!val) return null;
-  if ('stringValue' in val) return val.stringValue;
-  if ('integerValue' in val) return parseInt(val.integerValue, 10);
-  if ('doubleValue' in val) return val.doubleValue;
-  if ('booleanValue' in val) return val.booleanValue;
-  if ('nullValue' in val) return null;
-  if ('timestampValue' in val) return val.timestampValue;
-  if ('arrayValue' in val) return (val.arrayValue.values || []).map(_parseFirestoreValue);
-  if ('mapValue' in val) {
-    const obj = {};
-    for (const [k, v] of Object.entries(val.mapValue.fields || {})) obj[k] = _parseFirestoreValue(v);
-    return obj;
-  }
-  return null;
-}
-
-function parseFirestoreDoc(doc) {
-  if (!doc || !doc.fields) return null;
-  const obj = {};
-  for (const [k, v] of Object.entries(doc.fields)) obj[k] = _parseFirestoreValue(v);
-  // Extraer docId del name
-  if (doc.name) obj._docId = doc.name.split('/').pop();
-  return obj;
-}
-
-function _toFirestoreValue(val) {
-  if (val === null || val === undefined) return { nullValue: null };
-  if (typeof val === 'string') return { stringValue: val };
-  if (typeof val === 'number') return Number.isInteger(val) ? { integerValue: String(val) } : { doubleValue: val };
-  if (typeof val === 'boolean') return { booleanValue: val };
-  if (Array.isArray(val)) return { arrayValue: { values: val.map(_toFirestoreValue) } };
-  if (typeof val === 'object') {
-    const fields = {};
-    for (const [k, v] of Object.entries(val)) fields[k] = _toFirestoreValue(v);
-    return { mapValue: { fields } };
-  }
-  return { stringValue: String(val) };
-}
-
-function toFirestoreFields(obj) {
-  const fields = {};
-  for (const [k, v] of Object.entries(obj)) {
-    if (k.startsWith('_')) continue; // skip internal fields
-    fields[k] = _toFirestoreValue(v);
-  }
-  return { fields };
-}
-
-/**
- * Normaliza nombre de lugar → variantes de clave para buscar en KV (spot:xxx).
- * Devuelve array de variantes en orden de prioridad: [full, withoutCity, firstTwo, first]
- */
-function normalizeSpotKey(rawName) {
-  const norm = (rawName || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  if (!norm || norm.length < 3) return [];
-  const full = norm.replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').substring(0, 80);
-  const parts = norm.replace(/[,()]/g, '').split(/\s+/).filter(w => w.length > 2);
-  const first = parts[0] || '';
-  const firstTwo = parts.slice(0, 2).join('-');
-  const withoutCity = norm.replace(/,.*$/, '').trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-  const variants = [full];
-  if (withoutCity && withoutCity !== full) variants.push(withoutCity);
-  if (firstTwo && !variants.includes(firstTwo)) variants.push(firstTwo);
-  if (first.length > 4 && !variants.includes(first)) variants.push(first);
-  return variants;
-}
-
-/**
- * Rate limiting por UID usando KV.
- * Devuelve true si se permite la petición, false si se ha excedido el límite.
- */
-const RATE_LIMIT_MAX = 60; // mensajes por hora
-const RATE_LIMIT_TTL = 3600; // 1 hora en segundos
-
-async function checkRateLimit(uid, kvNamespace) {
-  if (!kvNamespace || !uid) return true; // sin KV, permitir
-  const hourBucket = Math.floor(Date.now() / (RATE_LIMIT_TTL * 1000));
-  const key = `rate:${uid}:${hourBucket}`;
-  try {
-    const current = parseInt(await kvNamespace.get(key) || '0', 10);
-    if (current >= RATE_LIMIT_MAX) return false;
-    await kvNamespace.put(key, String(current + 1), { expirationTtl: RATE_LIMIT_TTL });
-    return true;
-  } catch (e) {
-    return true; // si KV falla, permitir (fail-open)
-  }
-}
 
 // Caché a nivel de módulo — persiste mientras el worker esté caliente (minutos/horas)
 // Evita hasta la llamada KV en requests frecuentes → 0ms en vez de 20-60ms
@@ -871,7 +701,7 @@ const SALMA_TOOLS = [
   },
   {
     name: "buscar_web",
-    description: "Busca información actual en internet usando Google. Usa esta herramienta OBLIGATORIAMENTE cuando la pregunta incluya fechas concretas, horarios, precios actuales, programas de eventos, procesiones, conciertos, ferias, si algo está abierto o cerrado, o cualquier dato que pueda haber cambiado desde agosto de 2025. Devuelve resultados con título, snippet, URL y contenido de la página. SIEMPRE incluye las URLs de los resultados relevantes en tu respuesta como fuente — son URLs reales de herramienta, no inventadas.",
+    description: "Busca información actual en internet usando Google. Usa esta herramienta OBLIGATORIAMENTE cuando la pregunta incluya fechas concretas, horarios, precios actuales, programas de eventos, procesiones, conciertos, ferias, si algo está abierto o cerrado, o cualquier dato que pueda haber cambiado desde agosto de 2025. Devuelve los resultados más relevantes con su fuente para que puedas responder con datos verificados.",
     input_schema: {
       type: "object",
       properties: {
@@ -917,52 +747,21 @@ const SALMA_TOOLS = [
 ];
 
 // URLs reales de las apps de transporte — para inyectar por código, no por IA
-// deep_link: template con {pickup_lat},{pickup_lng},{dropoff_lat},{dropoff_lng},{dropoff_name}
 const TRANSPORT_APP_URLS = {
-  uber:     { name: 'Uber',     icon: '🚕', web: 'https://m.uber.com',
-              deep_link: 'https://m.uber.com/ul/?action=setPickup&pickup[latitude]={pickup_lat}&pickup[longitude]={pickup_lng}&dropoff[latitude]={dropoff_lat}&dropoff[longitude]={dropoff_lng}&dropoff[nickname]={dropoff_name}',
-              store_ios: 'https://apps.apple.com/app/uber/id368677368', store_android: 'https://play.google.com/store/apps/details?id=com.ubercab' },
-  lyft:     { name: 'Lyft',     icon: '🩷', web: 'https://www.lyft.com',
-              deep_link: 'https://lyft.com/ride?pickup[latitude]={pickup_lat}&pickup[longitude]={pickup_lng}&destination[latitude]={dropoff_lat}&destination[longitude]={dropoff_lng}',
-              store_ios: 'https://apps.apple.com/app/lyft/id529379082', store_android: 'https://play.google.com/store/apps/details?id=me.lyft.android' },
-  ola:      { name: 'Ola',      icon: '🟡', web: 'https://www.olacabs.com',
-              deep_link: 'https://olawebcdn.com/assets/ola-universal-link.html?lat={pickup_lat}&lng={pickup_lng}&drop_lat={dropoff_lat}&drop_lng={dropoff_lng}',
-              store_ios: 'https://apps.apple.com/app/ola-cabs/id539179365', store_android: 'https://play.google.com/store/apps/details?id=com.olacabs.customer' },
-  yandex:   { name: 'Yandex Go',icon: '🔴', web: 'https://go.yandex.com',
-              deep_link: 'https://yango.go.link/route?start-lat={pickup_lat}&start-lon={pickup_lng}&end-lat={dropoff_lat}&end-lon={dropoff_lng}',
-              store_android: 'https://play.google.com/store/apps/details?id=ru.yandex.taxi' },
-  yango:    { name: 'Yango',    icon: '🔴', web: 'https://yango.com',
-              deep_link: 'https://yango.go.link/route?start-lat={pickup_lat}&start-lon={pickup_lng}&end-lat={dropoff_lat}&end-lon={dropoff_lng}',
-              store_android: 'https://play.google.com/store/apps/details?id=com.yandex.yango' },
-  grab:     { name: 'Grab',     icon: '🟩', web: 'https://www.grab.com',
-              scheme: 'grab', pkg: 'com.grabtaxi.passenger', ios_id: '647268330',
-              store_ios: 'https://apps.apple.com/app/grab-superapp/id647268330', store_android: 'https://play.google.com/store/apps/details?id=com.grabtaxi.passenger' },
-  bolt:     { name: 'Bolt',     icon: '🟢', web: 'https://bolt.eu',
-              scheme: 'bolt', pkg: 'ee.mtakso.client', ios_id: '675033630',
-              store_ios: 'https://apps.apple.com/app/bolt-request-a-ride/id675033630', store_android: 'https://play.google.com/store/apps/details?id=ee.mtakso.client' },
-  didi:     { name: 'DiDi',     icon: '🟠', web: 'https://www.didiglobal.com',
-              scheme: 'didi', pkg: 'com.xiaojukeji.didi.global.customer', ios_id: '554499054',
-              store_ios: 'https://apps.apple.com/app/didi-rider/id554499054', store_android: 'https://play.google.com/store/apps/details?id=com.xiaojukeji.didi.global.customer' },
-  gojek:    { name: 'Gojek',    icon: '🟢', web: 'https://www.gojek.com',
-              scheme: 'gojek', pkg: 'com.gojek.app', ios_id: '944875099',
-              store_ios: 'https://apps.apple.com/app/gojek/id944875099', store_android: 'https://play.google.com/store/apps/details?id=com.gojek.app' },
-  careem:   { name: 'Careem',   icon: '🟢', web: 'https://www.careem.com',
-              scheme: 'careem', pkg: 'com.careem.acma', ios_id: '592978487',
-              store_ios: 'https://apps.apple.com/app/careem/id592978487', store_android: 'https://play.google.com/store/apps/details?id=com.careem.acma' },
-  indrive:  { name: 'inDrive',  icon: '🟣', web: 'https://indrive.com',
-              scheme: 'indrive', pkg: 'sinet.startup.inDriver', ios_id: '1050763635',
-              store_ios: 'https://apps.apple.com/app/indrive/id1050763635', store_android: 'https://play.google.com/store/apps/details?id=sinet.startup.inDriver' },
-  cabify:   { name: 'Cabify',   icon: '🟣', web: 'https://cabify.com',
-              scheme: 'cabify', pkg: 'com.cabify.rider', ios_id: '476087442',
-              store_ios: 'https://apps.apple.com/app/cabify/id476087442', store_android: 'https://play.google.com/store/apps/details?id=com.cabify.rider' },
-  freenow:  { name: 'FREENOW',  icon: '🔴', web: 'https://www.free-now.com',
-              scheme: 'freenow', pkg: 'taxi.android.client', ios_id: '357852748',
-              store_ios: 'https://apps.apple.com/app/free-now/id357852748', store_android: 'https://play.google.com/store/apps/details?id=taxi.android.client' },
-  kakao_t:  { name: 'Kakao T',  icon: '🟡', web: 'https://t.kakao.com',
-              scheme: 'kakaot', pkg: 'com.kakao.taxi',
-              store_android: 'https://play.google.com/store/apps/details?id=com.kakao.taxi' },
-  google_maps: { name: 'Google Maps', icon: '🗺️', web: 'https://www.google.com/maps',
-              deep_link: 'https://www.google.com/maps/dir/?api=1&origin={pickup_lat},{pickup_lng}&destination={dropoff_lat},{dropoff_lng}&travelmode=driving' },
+  grab:     { name: 'Grab',     icon: '🟩', web: 'https://www.grab.com' },
+  uber:     { name: 'Uber',     icon: '🚕', web: 'https://m.uber.com' },
+  bolt:     { name: 'Bolt',     icon: '🟢', web: 'https://bolt.eu' },
+  didi:     { name: 'DiDi',     icon: '🟠', web: 'https://www.didiglobal.com' },
+  gojek:    { name: 'Gojek',    icon: '🟢', web: 'https://www.gojek.com' },
+  careem:   { name: 'Careem',   icon: '🟢', web: 'https://www.careem.com' },
+  indrive:  { name: 'inDrive',  icon: '🟣', web: 'https://indrive.com' },
+  cabify:   { name: 'Cabify',   icon: '🟣', web: 'https://cabify.com' },
+  freenow:  { name: 'FREENOW',  icon: '🔴', web: 'https://www.free-now.com' },
+  yandex:   { name: 'Yandex Go',icon: '🔴', web: 'https://go.yandex.com' },
+  lyft:     { name: 'Lyft',     icon: '🩷', web: 'https://www.lyft.com' },
+  ola:      { name: 'Ola',      icon: '🟡', web: 'https://www.olacabs.com' },
+  kakao_t:  { name: 'Kakao T',  icon: '🟡', web: 'https://t.kakao.com' },
+  yango:    { name: 'Yango',    icon: '🔴', web: 'https://yango.com' },
 };
 
 // ═══════════════════════════════════════════════════════════════
@@ -970,28 +769,12 @@ const TRANSPORT_APP_URLS = {
 // ═══════════════════════════════════════════════════════════════
 
 function isRouteRequest(message, history) {
-  if (/salma\s+hazme\s+una\s+gu[ií]a|hazme\s+una\s+gu[ií]a\s+salma/i.test(message)) return true;
-  // "N días en X" (dígitos) → ruta completa con mapa
-  if (/\b(\d{1,2})\s*d[ií]as?\b/i.test(message)) return true;
-  // "un/dos/tres... días en X" (palabras) → ruta completa con mapa
-  if (/\b(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince)\s*d[ií]as?\b/i.test(message)) return true;
-  return false;
+  return /salma\s+hazme\s+una\s+gu[ií]a|hazme\s+una\s+gu[ií]a\s+salma/i.test(message);
 }
 
 // Detecta "destino + días" sin ser petición de guía → respuesta estructurada por días (no JSON)
 function isDaysDestination(message) {
-  if (isRouteRequest(message)) return false;
-  // Con días explícitos (números o palabras: un/dos/tres...)
-  if (/\b(\d{1,2})\s*d[ií]as?\b/i.test(message)) return true;
-  if (/\b(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince)\s*d[ií]as?\b/i.test(message)) return true;
-  // Solo destino (1-4 palabras, sin pregunta, sin verbo de acción) → tratar como plan 1 día
-  const clean = message.trim().replace(/^(me apetece|vamos a)\s+/i, '').trim();
-  if (clean.length >= 3 && clean.length <= 40 && clean.split(/\s+/).length <= 4
-    && !/[?¿]/.test(clean)
-    && !/\b(hola|hey|buenas|ey|hi|hello|saludos|busca|hotel|vuelo|restaurante|comer|dormir|tiempo|clima|visa|visado|precio|cuanto|como|donde|cuando|que|quiero|necesito|puedo|taxi|ferry|tren|bus|emergencia|ayuda)\b/i.test(clean)) {
-    return true;
-  }
-  return false;
+  return /\b(\d{1,2})\s*d[ií]as?\b/i.test(message) && !isRouteRequest(message);
 }
 
 // Post-procesado: divide el texto en N días con headers **Día N**
@@ -1072,92 +855,23 @@ function formatDayHeaders(text, numDays) {
   return final;
 }
 
-// ═══ INJECT VERIFIED MAPS LINKS — Post-streaming: extrae negritas → Google Places → place_id ═══
-// Claude solo escribe nombres en negrita. El worker busca cada uno en Google Places
-// y añade el enlace verificado (place_id) al lado. Sin intervención de Claude en URLs.
-async function injectVerifiedMapsLinks(reply, placesKey, region, countryCode, skipRouteLink = false) {
-  if (!placesKey || !reply) return reply;
-
-  // Extraer nombres en negrita: **Nombre del Lugar**
-  // Excluir patrones que NO son lugares: **Día N**, **8€**, **2h30**, **Dónde comer**
-  const boldRegex = /\*\*([^*]+)\*\*/g;
-  const skipPatterns = /^(D[ií]a\s*\d|d[oó]nde\s|para\s|c[oó]mo\s|\d+[€$£¥]|\d+h|\d+min|tip[os]?:|consejo|nota|importante|atenci[oó]n|ojo|cuidado)/i;
-  // Nombre propio: descarta precios/puntuaciones/frases con minúsculas
-  // - 1 palabra: debe ser capitalizada y ≥4 chars (permite "Alhambra", "Louvre", "Coliseo")
-  // - 2+ palabras: al menos 2 capitalizadas (permite "Heritage Corner Hostel", "Ba Dinh")
-  function looksLikeProperName(name) {
-    const words = name.trim().split(/\s+/);
-    const capWord = /^[A-ZÁÉÍÓÚÑÀÈÌÒÙÂÊÎÔÛÄËÏÖÜÇ]/;
-    const capsWords = words.filter(w => capWord.test(w));
-    if (words.length === 1) return capsWords.length === 1 && words[0].length >= 4;
-    return capsWords.length >= 2;
-  }
-  let matches = [];
-  const seen = new Set();
+// Genera un enlace Google Maps directions con todas las paradas mencionadas en el texto
+function appendRouteMapLink(text) {
+  // Extraer nombres de lugares de los enlaces Maps (más fiable que negritas)
+  const boldNames = [];
+  const mapsRegex = /google\.com\/maps\/search\/([^\s)]+)/g;
   let m;
-  while ((m = boldRegex.exec(reply)) !== null) {
-    const name = m[1].trim();
-    const nameLower = name.toLowerCase();
-    // Filtrar: mín 3 chars, no es patrón de skip, no duplicado
-    if (name.length < 3 || skipPatterns.test(name) || seen.has(nameLower)) continue;
-    // Filtrar valores numéricos/precios sueltos
-    if (/^\d+[\s.,]?\d*\s*[€$£¥kmh]?$/i.test(name)) continue;
-    // Filtrar negritas que no parecen nombre propio (precios, puntuaciones, "la noche", etc.)
-    if (!looksLikeProperName(name)) continue;
-    seen.add(nameLower);
-    matches.push({ bold: m[0], name });
+  while ((m = mapsRegex.exec(text)) !== null) {
+    const name = decodeURIComponent(m[1]).replace(/\+/g, ' ').trim();
+    if (name.length < 4) continue;
+    // Evitar duplicados
+    if (!boldNames.includes(name)) boldNames.push(name);
   }
-  if (!matches.length) return reply;
-
-  // Limitar a 6 negritas máx — evita exceder subrequest limit de Cloudflare y colgar el flujo.
-  // Cada negrita dispara hasta 3 fetches a Places (21 fetches = riesgo de timeout/ratelimit).
-  if (matches.length > 6) matches = matches.slice(0, 6);
-
-  // Validar cada negrita con getValidatedPlace (strictNameMatch + tipos + región/país).
-  // Regla única: si no pasa validación → no se inyecta link.
-  const regionCtx = region || '';
-  const results = await Promise.all(matches.map(async ({ bold, name }) => {
-    const v = await getValidatedPlace(name, placesKey, regionCtx, countryCode, null);
-    if (v) return { bold, name, placeId: v.place_id, googleName: v.name, lat: v.lat, lng: v.lng };
-    return { bold, name, placeId: null };
-  }));
-
-  // Limpiar PRIMERO cualquier URL de Maps que Claude haya puesto por su cuenta
-  let enriched = reply;
-  // Quitar duplicaciones bold+link de Claude: [**Name**](URL) → **Name**
-  enriched = enriched.replace(/\[\*\*([^\]*]+)\*\*\]\([^)]+\)/g, '**$1**');
-  // **Name** [Name](URL) → **Name** (con o sin espacio)
-  enriched = enriched.replace(/\*\*([^*]+)\*\*\s*\[([^\]]+)\]\([^)]+\)/g, '**$1**');
-  // URLs sueltas de Maps inventadas por Claude
-  // Lookbehind `(?<!\]\()` protege URLs dentro de markdown de imagen ![alt](URL) y enlaces [texto](URL)
-  enriched = enriched.replace(/(?<!\]\()\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/search\/[^\s)]*\)?/gi, '');
-  enriched = enriched.replace(/(?<!\]\()\s*https?:\/\/(?:www\.)?google\.com\/maps\/dir\/[^\s)>\]]+/gi, '');
-  enriched = enriched.replace(/(?<!\]\()\s*\(?https?:\/\/(?:www\.)?google\.com\/maps\/place\/[^\s)]*\)?/gi, '');
-
-  // Inyectar "🗺️ Cómo llegar" al lado de cada negrita validada.
-  // Formato oficial de Google: dir/?api=1 con destination + destination_place_id.
-  // Google usa destination_place_id como fuente de verdad; destination es texto de backup.
-  for (const { bold, name, googleName, placeId } of results) {
-    if (!placeId) continue;
-    const dest = encodeURIComponent(googleName || name);
-    const link = `https://www.google.com/maps/dir/?api=1&destination=${dest}&destination_place_id=${placeId}`;
-    const boldEscaped = bold.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const withLinkRegex = new RegExp(boldEscaped + '\\s*\\([^)]*google\\.com[^)]*\\)');
-    if (withLinkRegex.test(enriched)) continue;
-    enriched = enriched.replace(bold, `${bold} (${link})`);
-  }
-
-  // "Ruta completa" al final: con lat/lng reales (Google los entiende literal).
-  // Formato /maps/dir/place_id:X/place_id:Y NO funciona — Google lo lee como texto literal.
-  // Usamos lat,lng que vienen de getValidatedPlace (son coords reales de Google Places).
-  const validPlaces = results.filter(r => r.placeId && r.lat && r.lng);
-  if (validPlaces.length >= 2 && !skipRouteLink) {
-    const segments = validPlaces.map(r => `${r.lat},${r.lng}`).join('/');
-    const routeUrl = `https://www.google.com/maps/dir/${segments}`;
-    enriched = enriched.trimEnd() + `\n\n${routeUrl}`;
-  }
-
-  return enriched;
+  if (boldNames.length < 3) return text; // muy pocas paradas
+  // Tomar máximo 20 paradas (límite de Google Maps)
+  const waypoints = boldNames.slice(0, 20).map(n => encodeURIComponent(n.replace(/\s+/g, '+')));
+  const mapsUrl = 'https://www.google.com/maps/dir/' + waypoints.join('/');
+  return text + '\n\n📍 **Ruta completa en Google Maps:**\n' + mapsUrl;
 }
 
 function isHelpRequest(message) {
@@ -1269,12 +983,9 @@ function extractTransportOD(message) {
     while (words.length > 1 && noise.test(words[words.length - 1])) words.pop();
     return words.join(' ');
   };
-  // Patrón principal: "de/desde X a/al/hasta Y"
-  const m1 = message.match(/\b(?:de|desde)\s+([\wáéíóúñÁÉÍÓÚÑ\s\-]{2,30}?)\s+(?:al?|hasta|hacia)\s+([\wáéíóúñÁÉÍÓÚÑ\s\-]{2,30}?)(?:\s*[?,.]|$)/i);
+  // Patrón principal: "de/desde X a/hasta Y"
+  const m1 = message.match(/\b(?:de|desde)\s+([\wáéíóúñÁÉÍÓÚÑ\s\-]{2,30}?)\s+(?:a|hasta|hacia)\s+([\wáéíóúñÁÉÍÓÚÑ\s\-]{2,30}?)(?:\s*[?,.]|$)/i);
   if (m1) return { origin: stripTrailingWords(m1[1]), dest: stripTrailingWords(m1[2]) };
-  // Patrón "taxi/ir LUGAR al/a LUGAR"
-  const m3 = message.match(/(?:taxi|ir|llegar)\s+(?:del?\s+)?([\wáéíóúñÁÉÍÓÚÑ\s\-]{2,30}?)\s+(?:al?|hasta|hacia)\s+([\wáéíóúñÁÉÍÓÚÑ\s\-]{2,30}?)(?:\s*[?,.]|$)/i);
-  if (m3) return { origin: stripTrailingWords(m3[1]), dest: stripTrailingWords(m3[2]) };
   // Patrón inglés: "from X to Y"
   const m2 = message.match(/\bfrom\s+([\w\s\-]{2,30}?)\s+to\s+([\w\s\-]{2,30}?)(?:\s*[?,.]|$)/i);
   if (m2) return { origin: stripTrailingWords(m2[1]), dest: stripTrailingWords(m2[2]) };
@@ -1359,571 +1070,6 @@ function getIATAFromCoords(lat, lng) {
   }
   return null;
 }
-
-// ═══════════════════════════════════════════════════════════════════
-// ═══ "QUIERO IR A..." — Funciones de detección, resolución y orquestación
-// ═══════════════════════════════════════════════════════════════════
-
-function haversineKm(lat1, lng1, lat2, lng2) {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLng = (lng2 - lng1) * Math.PI / 180;
-  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
-function getFlexDate(daysFromNow) {
-  const d = new Date();
-  d.setDate(d.getDate() + daysFromNow);
-  return d.toISOString().split('T')[0];
-}
-
-// Mapa de países reutilizable (extraído del inline de ~línea 5670)
-const GO_TO_COUNTRY_MAP = {
-  'espana': 'ES', 'spain': 'ES', 'francia': 'FR', 'france': 'FR', 'portugal': 'PT',
-  'italia': 'IT', 'italy': 'IT', 'alemania': 'DE', 'germany': 'DE', 'reino unido': 'GB',
-  'united kingdom': 'GB', 'estados unidos': 'US', 'united states': 'US', 'usa': 'US',
-  'mexico': 'MX', 'argentina': 'AR', 'colombia': 'CO', 'peru': 'PE', 'chile': 'CL',
-  'brasil': 'BR', 'brazil': 'BR', 'tailandia': 'TH', 'thailand': 'TH', 'japon': 'JP',
-  'japan': 'JP', 'marruecos': 'MA', 'morocco': 'MA', 'turquia': 'TR', 'turkey': 'TR',
-  'turkiye': 'TR', 'grecia': 'GR', 'greece': 'GR', 'iran': 'IR', 'india': 'IN', 'china': 'CN',
-  'australia': 'AU', 'canada': 'CA', 'cuba': 'CU', 'republica dominicana': 'DO',
-  'costa rica': 'CR', 'panama': 'PA', 'ecuador': 'EC', 'bolivia': 'BO', 'uruguay': 'UY',
-  'paraguay': 'PY', 'venezuela': 'VE', 'guatemala': 'GT', 'honduras': 'HN',
-  'el salvador': 'SV', 'nicaragua': 'NI', 'filipinas': 'PH', 'philippines': 'PH',
-  'indonesia': 'ID', 'malasia': 'MY', 'malaysia': 'MY', 'vietnam': 'VN', 'camboya': 'KH',
-  'cambodia': 'KH', 'laos': 'LA', 'myanmar': 'MM', 'singapur': 'SG', 'singapore': 'SG',
-  'corea del sur': 'KR', 'south korea': 'KR', 'egipto': 'EG', 'egypt': 'EG',
-  'sudafrica': 'ZA', 'south africa': 'ZA', 'kenia': 'KE', 'kenya': 'KE',
-  'tanzania': 'TZ', 'etiopia': 'ET', 'ethiopia': 'ET', 'nigeria': 'NG',
-  'belgica': 'BE', 'belgium': 'BE', 'paises bajos': 'NL', 'netherlands': 'NL',
-  'suiza': 'CH', 'switzerland': 'CH', 'austria': 'AT', 'irlanda': 'IE', 'ireland': 'IE',
-  'dinamarca': 'DK', 'denmark': 'DK', 'noruega': 'NO', 'norway': 'NO',
-  'suecia': 'SE', 'sweden': 'SE', 'finlandia': 'FI', 'finland': 'FI',
-  'polonia': 'PL', 'poland': 'PL', 'rumania': 'RO', 'romania': 'RO',
-  'hungria': 'HU', 'hungary': 'HU', 'republica checa': 'CZ', 'czechia': 'CZ',
-  'croacia': 'HR', 'croatia': 'HR', 'serbia': 'RS', 'bulgaria': 'BG',
-  'rusia': 'RU', 'russia': 'RU', 'ucrania': 'UA', 'ukraine': 'UA',
-  'israel': 'IL', 'jordania': 'JO', 'jordan': 'JO', 'libano': 'LB', 'lebanon': 'LB',
-  'arabia saudita': 'SA', 'saudi arabia': 'SA', 'emiratos arabes unidos': 'AE',
-  'united arab emirates': 'AE', 'qatar': 'QA', 'oman': 'OM', 'kuwait': 'KW',
-  'nueva zelanda': 'NZ', 'new zealand': 'NZ', 'islandia': 'IS', 'iceland': 'IS',
-  'nepal': 'NP', 'sri lanka': 'LK', 'bangladesh': 'BD', 'pakistan': 'PK',
-  'birmania': 'MM', 'tunez': 'TN', 'tunisia': 'TN', 'senegal': 'SN',
-  'ruanda': 'RW', 'rwanda': 'RW', 'georgia': 'GE', 'armenia': 'AM', 'azerbaiyan': 'AZ',
-  'uzbekistan': 'UZ', 'kazajistan': 'KZ', 'mongolia': 'MN', 'taiwan': 'TW',
-};
-
-function detectCountryFromText(text) {
-  if (!text) return null;
-  const norm = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
-  // Intentar coincidencia exacta primero
-  if (GO_TO_COUNTRY_MAP[norm]) return GO_TO_COUNTRY_MAP[norm];
-  // Intentar cada clave como substring
-  for (const [key, cc] of Object.entries(GO_TO_COUNTRY_MAP)) {
-    if (norm === key || norm.startsWith(key + ' ') || norm.endsWith(' ' + key)) return cc;
-  }
-  return null;
-}
-
-const CONTINENT_MAP = {
-  // Eurasia + África (conectados por tierra)
-  eurasia_africa: ['ES','FR','DE','IT','PT','GB','IE','BE','NL','LU','CH','AT','DK','NO','SE','FI','IS','PL','CZ','SK','HU','RO','BG','HR','RS','BA','ME','MK','AL','GR','TR','CY','RU','UA','BY','MD','EE','LV','LT','GE','AM','AZ','KZ','UZ','TM','TJ','KG','MN','CN','JP','KR','KP','TW','IN','PK','BD','NP','LK','MM','TH','VN','LA','KH','MY','SG','ID','PH','BN','IR','IQ','SY','LB','JO','IL','PS','SA','AE','QA','OM','KW','BH','YE','AF','EG','LY','TN','DZ','MA','MR','SN','GM','GN','SL','LR','CI','GH','TG','BJ','NE','NG','CM','TD','CF','CD','CG','GA','GQ','ST','AO','ZM','ZW','MZ','MW','TZ','KE','UG','RW','BI','ET','ER','DJ','SO','SD','SS','BF','ML'],
-  // Américas (conectadas por tierra, con interrupción Darién pero técnicamente posible)
-  americas: ['US','CA','MX','GT','BZ','HN','SV','NI','CR','PA','CO','VE','GY','SR','EC','PE','BR','BO','PY','UY','AR','CL'],
-  // Oceanía (islas, solo avión)
-  oceania: ['AU','NZ','FJ','PG','WS','TO','VU','SB','KI','FM','MH','PW','NR','TV'],
-};
-
-function isOverlandViable(userCC, destCC) {
-  if (!userCC || !destCC) return false;
-  const u = userCC.toUpperCase();
-  const d = destCC.toUpperCase();
-  if (u === d) return true;
-  for (const [, countries] of Object.entries(CONTINENT_MAP)) {
-    if (countries.includes(u) && countries.includes(d)) return true;
-  }
-  return false;
-}
-
-function isGoToRequest(message) {
-  if (!message) return false;
-  const m = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  // Excluir si ya es un request de ruta explícito ("hazme una guía/ruta")
-  if (/hazme\s+una\s+(guia|ruta)|salma\s+hazme/i.test(m)) return false;
-  return /\b(?:quiero\s+ir\s+a|como\s+llego\s+a|como\s+ir\s+a|me\s+voy\s+a|viajo\s+a|viajar\s+a|quiero\s+viajar\s+a|me\s+gustaria\s+ir\s+a|estoy\s+pensando\s+ir\s+a|voy\s+a\s+ir\s+a|i\s+want\s+to\s+go\s+to|how\s+(?:to|do\s+i)\s+get\s+to|llegar\s+a\b.*desde|ir\s+a\b.*desde)\b/.test(m);
-}
-
-function extractGoToDestination(message) {
-  const m = message.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  const patterns = [
-    /(?:quiero\s+ir|como\s+llego|como\s+ir|me\s+voy|viajo|viajar|quiero\s+viajar|me\s+gustaria\s+ir|estoy\s+pensando\s+ir|voy\s+a\s+ir|i\s+want\s+to\s+go|how\s+(?:to|do\s+i)\s+get)\s+(?:a|to)\s+(.+?)(?:\s+desde\s|\s+from\s|[.?!]|$)/i,
-    /(?:llegar)\s+a\s+(.+?)(?:\s+desde\s|[.?!]|$)/i,
-    /\bir\s+a\s+(.+?)\s+desde\s/i,
-  ];
-  for (const p of patterns) {
-    const match = m.match(p);
-    if (match && match[1]) {
-      let dest = match[1].trim();
-      // Limpiar trailing words que no son destino
-      dest = dest.replace(/\s+(en\s+(coche|tren|bus|avion|ferry)|con\s+(ninos|familia)|este\s+(fin|verano|mes)).*$/i, '').trim();
-      if (dest.length > 1 && dest.length < 80) return dest;
-    }
-  }
-  return null;
-}
-
-async function resolveGoToDestination(destText, userLocation, userCountryCode, env) {
-  let destLat = null, destLng = null, destCC = null, destName = destText, destCapital = null;
-  let isCountry = false;
-
-  // Fase 1: ¿Es un país conocido?
-  const cc = detectCountryFromText(destText);
-  if (cc) {
-    destCC = cc;
-    isCountry = true;
-    // Obtener capital del KV base para coords
-    if (env.SALMA_KB) {
-      try {
-        const baseJson = await env.SALMA_KB.get('dest:' + cc.toLowerCase() + ':base');
-        if (baseJson) {
-          const base = JSON.parse(baseJson);
-          destName = base.pais || destText;
-          destCapital = base.capital || null;
-          if (base.capital) {
-            // Geocodificar capital
-            try {
-              const geoUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(base.capital + ', ' + (base.pais || ''))}&format=json&limit=1`;
-              const geoRes = await fetch(geoUrl, { headers: { 'User-Agent': 'SalmaBot/1.0' }, signal: AbortSignal.timeout(3000) });
-              const geoArr = await geoRes.json();
-              if (geoArr[0]) { destLat = parseFloat(geoArr[0].lat); destLng = parseFloat(geoArr[0].lon); }
-            } catch (_) {}
-          }
-        }
-      } catch (_) {}
-    }
-  }
-
-  // Fase 2: Si no es país, geocodificar con Google Places (biased a GPS)
-  if (!isCountry && env.GOOGLE_PLACES_KEY) {
-    try {
-      const locBias = userLocation ? `&location=${userLocation.lat},${userLocation.lng}&radius=50000` : '';
-      const pr = await fetch(
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(destText)}${locBias}&language=es&key=${env.GOOGLE_PLACES_KEY}`,
-        { signal: AbortSignal.timeout(4000) }
-      );
-      const pd = await pr.json();
-      if (pd.results?.[0]?.geometry?.location) {
-        const p = pd.results[0];
-        destLat = p.geometry.location.lat;
-        destLng = p.geometry.location.lng;
-        destName = p.name || destText;
-      }
-    } catch (_) {}
-
-    // Obtener country code del destino por reverse geocode
-    if (destLat && !destCC) {
-      try {
-        const revUrl = `https://nominatim.openstreetmap.org/reverse?lat=${destLat}&lon=${destLng}&format=json&zoom=3&accept-language=en`;
-        const revRes = await fetch(revUrl, { headers: { 'User-Agent': 'SalmaBot/1.0' }, signal: AbortSignal.timeout(3000) });
-        const revData = await revRes.json();
-        destCC = (revData.address?.country_code || '').toUpperCase();
-      } catch (_) {}
-    }
-  }
-
-  // Calcular distancia y nivel
-  let distanceKm = null;
-  let level = 'international';
-  if (userLocation && destLat) {
-    distanceKm = haversineKm(userLocation.lat, userLocation.lng, destLat, destLng);
-  }
-  const sameCountry = destCC && userCountryCode && destCC.toUpperCase() === userCountryCode.toUpperCase();
-  if (sameCountry && distanceKm !== null && distanceKm < 50) {
-    level = 'local';
-  } else if (sameCountry && distanceKm !== null && distanceKm <= 2000) {
-    level = 'regional';
-  }
-
-  return { destText, destName, destLat, destLng, destCC, destCapital, distanceKm, level, isCountry, sameCountry };
-}
-
-function buildGoToTransportActions(userLocation, dest, transportData) {
-  const actions = [];
-  // Google Maps directions (siempre primero)
-  if (userLocation && dest.destLat) {
-    actions.push({
-      name: 'Google Maps', icon: '🗺️', type: 'deeplink',
-      url: `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${dest.destLat},${dest.destLng}&travelmode=transit`,
-      label: 'Cómo llegar → ' + (dest.destName || 'destino')
-    });
-  }
-  // Apps ride-hailing del país
-  if (transportData?.ridehailing?.best) {
-    const appNames = [transportData.ridehailing.best, ...(transportData.ridehailing.others || [])].filter(Boolean).slice(0, 2);
-    for (const appName of appNames) {
-      const ad = TRANSPORT_APP_URLS[appName.toLowerCase()];
-      if (!ad) continue;
-      if (ad.deep_link && userLocation && dest.destLat) {
-        actions.push({
-          name: ad.name, icon: ad.icon, type: 'deeplink',
-          url: ad.deep_link.replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
-            .replace(/{dropoff_lat}/g, dest.destLat).replace(/{dropoff_lng}/g, dest.destLng)
-            .replace(/{dropoff_name}/g, encodeURIComponent(dest.destName || '')),
-          label: 'Pedir ' + ad.name
-        });
-      } else {
-        actions.push({
-          name: ad.name, icon: ad.icon, type: 'app',
-          url: ad.web, scheme: ad.scheme || null, pkg: ad.pkg || null,
-          store_ios: ad.store_ios || null, store_android: ad.store_android || null,
-          label: 'Abrir ' + ad.name
-        });
-      }
-    }
-  }
-  return actions;
-}
-
-function buildDestTransportInfo(transportData) {
-  // Para destinos internacionales: info de transporte sin deep links (el usuario no está allí aún)
-  const actions = [];
-  if (transportData?.ridehailing?.best) {
-    const appNames = [transportData.ridehailing.best, ...(transportData.ridehailing.others || [])].filter(Boolean).slice(0, 3);
-    for (const appName of appNames) {
-      const ad = TRANSPORT_APP_URLS[appName.toLowerCase()];
-      if (!ad) continue;
-      actions.push({
-        name: ad.name, icon: ad.icon, type: 'app',
-        url: ad.web, scheme: ad.scheme || null, pkg: ad.pkg || null,
-        store_ios: ad.store_ios || null, store_android: ad.store_android || null,
-        label: 'Descargar ' + ad.name
-      });
-    }
-  }
-  return actions;
-}
-
-function buildFollowUpChips(dest, collectedData, userCountryCode) {
-  const chips = [];
-  if (dest.level === 'local') {
-    chips.push({ label: '🏨 Hotel cerca', msg: `Busca un hotel cerca de ${dest.destName}` });
-    chips.push({ label: '📸 Más sitios', msg: `Qué más puedo ver cerca de ${dest.destName}` });
-    chips.push({ label: '📋 Hazme una ruta', msg: `Hazme una ruta por ${dest.destName}` });
-  } else if (dest.level === 'regional') {
-    chips.push({ label: '🚗 Ir por tierra', msg: `Cómo puedo ir por tierra a ${dest.destName}. Cuéntame opciones de tren, bus y carretera.` });
-    chips.push({ label: '📋 Hazme una ruta', msg: `Hazme una ruta por ${dest.destName}` });
-    chips.push({ label: '🏨 Hotel', msg: `Busca hoteles en ${dest.destName}` });
-    chips.push({ label: '💰 Presupuesto', msg: `Cuánto cuesta viajar a ${dest.destName}` });
-  } else {
-    if (isOverlandViable(userCountryCode, dest.destCC)) {
-      chips.push({ label: '🚗 Ir por tierra', msg: `Cómo puedo ir por tierra a ${dest.destName}. Cuéntame la ruta, países, visados y mejor época.` });
-    }
-    chips.push({ label: '📋 Hazme una ruta', msg: `Hazme una ruta por ${dest.destName}` });
-    chips.push({ label: '🛂 Detalle visado', msg: `Cuéntame más sobre el visado para ${dest.destName}` });
-    chips.push({ label: '🏨 Hotel', msg: `Busca hoteles en ${dest.destName}` });
-  }
-  return chips.slice(0, 4);
-}
-
-async function generateMiniResumen(dest, collectedData, userLocationName, env, userName) {
-  if (!env.ANTHROPIC_API_KEY) return null;
-  // Solo datos útiles para sugerir rutas — NO pasar visa/moneda/clima (Haiku los repite)
-  const parts = [];
-  parts.push(`Destino: ${dest.destName}. Desde: ${userLocationName || '?'}.`);
-  if (collectedData.kvBase?.mejor_epoca) parts.push(`Mejor época: ${collectedData.kvBase.mejor_epoca}.`);
-  if (collectedData.kvDestinos) {
-    const d = collectedData.kvDestinos;
-    const tops = d.top_destinos || d.destinos || [];
-    if (Array.isArray(tops) && tops.length) {
-      parts.push(`Destinos top: ${tops.slice(0, 6).map(t => t.nombre || t.name || '').filter(Boolean).join(', ')}.`);
-    }
-  }
-  try {
-    const res = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 200,
-        messages: [{
-          role: 'user',
-          content: `Eres Salma.${userName ? ' El viajero se llama ' + userName + '. Deduce género del nombre.' : ''} Sugiere en 2 frases qué rutas le puedes montar por ${dest.destName}.\n\nDatos reales:\n${parts.join('\n')}\n\nREGLAS:\n- Exactamente 2 frases. Tutea.\n- NO repitas visado, moneda, enchufes, clima ni nada que ya sale en tarjetas.\n- Sugiere rutas o planes ("te puedo montar una ruta por el norte con X y Y, o por la costa con Z").\n- PROHIBIDO inventar precios o aerolíneas.\n- Sin emojis. Sin saludar.`
-        }]
-      }),
-      signal: AbortSignal.timeout(8000)
-    });
-    const data = await res.json();
-    return data.content?.[0]?.text || null;
-  } catch (_) { return null; }
-}
-
-async function searchNearbyPlaces(lat, lng, type, googleKey) {
-  if (!googleKey || !lat || !lng) return [];
-  try {
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=2000&type=${type}&language=es&key=${googleKey}`;
-    const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
-    const data = await res.json();
-    return (data.results || []).slice(0, 5).map(p => ({
-      name: p.name,
-      rating: p.rating || null,
-      reviews: p.user_ratings_total || null,
-      photo_ref: p.photos?.[0]?.photo_reference || null,
-      address: p.vicinity || '',
-      open_now: p.opening_hours?.open_now ?? null,
-      maps_link: `https://www.google.com/maps/place/?q=place_id:${p.place_id}`,
-    }));
-  } catch (_) { return []; }
-}
-
-// Buscar IATA dinámicamente: primero tabla local, luego Duffel places/suggestions
-async function findIATA(location, locationName, duffelToken) {
-  // 1. Tabla local rápida
-  if (location) {
-    const fromCoords = getIATAFromCoords(location.lat, location.lng);
-    if (fromCoords) return fromCoords.iata;
-  }
-  if (locationName) {
-    const fromCity = getCityIATA(locationName.split(',')[0].trim());
-    if (fromCity) return fromCity;
-  }
-  // 2. Duffel places/suggestions (funciona con cualquier ciudad del mundo)
-  if (duffelToken && locationName) {
-    try {
-      const q = locationName.split(',')[0].trim();
-      const res = await fetch(
-        `https://api.duffel.com/places/suggestions?query=${encodeURIComponent(q)}&type[]=airport&type[]=city`,
-        {
-          headers: { 'Accept': 'application/json', 'Duffel-Version': 'v2', 'Authorization': `Bearer ${duffelToken}` },
-          signal: AbortSignal.timeout(4000)
-        }
-      );
-      const data = await res.json();
-      if (data.data?.length) {
-        // Preferir ciudad (agrupa aeropuertos), luego aeropuerto
-        const city = data.data.find(p => p.type === 'city');
-        if (city?.iata_code) return city.iata_code;
-        const airport = data.data.find(p => p.type === 'airport' && p.iata_code);
-        if (airport?.iata_code) return airport.iata_code;
-      }
-    } catch (_) {}
-  }
-  return null;
-}
-
-// Detectar mes en el mensaje para vuelos (ej: "en junio" → 2026-06-01)
-function detectMonthFromMessage(message) {
-  if (!message) return null;
-  const m = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  const meses = { enero: 1, febrero: 2, marzo: 3, abril: 4, mayo: 5, junio: 6, julio: 7, agosto: 8, septiembre: 9, octubre: 10, noviembre: 11, diciembre: 12, january: 1, february: 2, march: 3, april: 4, may: 5, june: 6, july: 7, august: 8, september: 9, october: 10, november: 11, december: 12 };
-  for (const [name, num] of Object.entries(meses)) {
-    if (m.includes(name)) {
-      const now = new Date();
-      let year = now.getFullYear();
-      // Si el mes ya pasó, usar el año que viene
-      if (num < now.getMonth() + 1) year++;
-      return `${year}-${String(num).padStart(2, '0')}-01`;
-    }
-  }
-  return null;
-}
-
-async function handleGoTo(dest, userLocation, userCountryCode, userLocationName, env, writer, encoder, travelDates, userNationality, userName, message) {
-  const collectedData = {};
-  const emit = async (section, data) => {
-    try { await writer.write(encoder.encode(`data: ${JSON.stringify({ go_to: section, data })}\n\n`)); } catch (_) {}
-  };
-  // Detectar mes del mensaje para vuelos
-  const detectedDate = detectMonthFromMessage(message);
-
-  // Header inmediato
-  await emit('header', { destName: dest.destName, destCC: dest.destCC, level: dest.level, distanceKm: Math.round(dest.distanceKm || 0) });
-
-  // ─── LOCAL (<50km) ───
-  if (dest.level === 'local') {
-    // Directions inmediato
-    if (userLocation && dest.destLat) {
-      await emit('directions', {
-        url: `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${dest.destLat},${dest.destLng}&travelmode=transit`,
-        name: dest.destName, distanceKm: Math.round(dest.distanceKm)
-      });
-    }
-
-    // Paralelo: transport + attractions + restaurants
-    const promises = {};
-    const tcCC = (userCountryCode || '').toLowerCase();
-    if (tcCC && env.SALMA_KB) promises.transport = env.SALMA_KB.get('transport:' + tcCC).then(r => r ? JSON.parse(r) : null).catch(() => null);
-    if (dest.destLat && env.GOOGLE_PLACES_KEY) {
-      promises.attractions = searchNearbyPlaces(dest.destLat, dest.destLng, 'tourist_attraction', env.GOOGLE_PLACES_KEY);
-      promises.restaurants = searchNearbyPlaces(dest.destLat, dest.destLng, 'restaurant', env.GOOGLE_PLACES_KEY);
-    }
-
-    const keys = Object.keys(promises);
-    const results = await Promise.allSettled(Object.values(promises));
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]; const val = results[i].status === 'fulfilled' ? results[i].value : null;
-      if (!val) continue;
-      collectedData[key] = val;
-      if (key === 'transport') {
-        const actions = buildGoToTransportActions(userLocation, dest, val);
-        if (actions.length) await emit('transport', { actions, tip: val.ridehailing?.tips || null });
-      }
-      if (key === 'attractions' && val.length) await emit('attractions', { places: val, query: 'Qué ver cerca' });
-      if (key === 'restaurants' && val.length) await emit('restaurants', { places: val, query: 'Dónde comer cerca' });
-    }
-  }
-
-  // ─── REGIONAL (50-2000km) ───
-  else if (dest.level === 'regional') {
-    // Directions inmediato
-    if (userLocation && dest.destLat) {
-      await emit('directions', {
-        url: `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${dest.destLat},${dest.destLng}&travelmode=transit`,
-        name: dest.destName, distanceKm: Math.round(dest.distanceKm)
-      });
-    }
-
-    const promises = {};
-    const tcCC = (userCountryCode || '').toLowerCase();
-    if (tcCC && env.SALMA_KB) promises.transport = env.SALMA_KB.get('transport:' + tcCC).then(r => r ? JSON.parse(r) : null).catch(() => null);
-    if (env.BRAVE_SEARCH_KEY) {
-      const fromCity = userLocationName?.split(',')[0] || '';
-      promises.braveRoutes = buscarWeb({ query: `como ir de ${fromCity} a ${dest.destName} tren bus transporte` }, env.BRAVE_SEARCH_KEY).catch(() => null);
-    }
-    // Vuelos domésticos si >300km — IATA dinámico via Duffel
-    if (dest.distanceKm > 300 && env.DUFFEL_ACCESS_TOKEN) {
-      promises.flights = (async () => {
-        const originIATA = await findIATA(userLocation, userLocationName, env.DUFFEL_ACCESS_TOKEN);
-        const destIATA = await findIATA({ lat: dest.destLat, lng: dest.destLng }, dest.destName, env.DUFFEL_ACCESS_TOKEN);
-        if (originIATA && destIATA) {
-          return buscarVuelosDuffel({ origen: originIATA, destino: destIATA, fecha_ida: travelDates?.from || detectedDate || getFlexDate(7), adultos: 1 }, env.DUFFEL_ACCESS_TOKEN);
-        }
-        return null;
-      })().catch(() => null);
-    }
-    // Qué ver y dónde comer
-    if (dest.destLat && env.GOOGLE_PLACES_KEY) {
-      promises.attractions = searchNearbyPlaces(dest.destLat, dest.destLng, 'tourist_attraction', env.GOOGLE_PLACES_KEY);
-      promises.restaurants = searchNearbyPlaces(dest.destLat, dest.destLng, 'restaurant', env.GOOGLE_PLACES_KEY);
-    }
-    // KV destinos
-    if (tcCC && env.SALMA_KB) promises.kvDestinos = env.SALMA_KB.get('dest:' + tcCC + ':destinos').then(r => r ? JSON.parse(r) : null).catch(() => null);
-
-    const keys = Object.keys(promises);
-    const results = await Promise.allSettled(Object.values(promises));
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]; const val = results[i].status === 'fulfilled' ? results[i].value : null;
-      if (!val) continue;
-      collectedData[key] = val;
-      if (key === 'transport') {
-        const actions = buildGoToTransportActions(userLocation, dest, val);
-        if (actions.length) await emit('transport', { actions, tip: val.ridehailing?.tips || null });
-      }
-      if (key === 'braveRoutes' && val.resultados?.length) await emit('routes', { results: val.resultados.slice(0, 3) });
-      if (key === 'flights' && val.vuelos?.length) await emit('flights', val);
-      if (key === 'attractions' && val.length) await emit('attractions', { places: val, query: 'Qué ver en ' + dest.destName });
-      if (key === 'restaurants' && val.length) await emit('restaurants', { places: val, query: 'Dónde comer en ' + dest.destName });
-    }
-  }
-
-  // ─── INTERNATIONAL ───
-  else {
-    const promises = {};
-    const ccLower = (dest.destCC || '').toLowerCase();
-
-    // KV base (visa, moneda, idioma, emergencias)
-    if (ccLower && env.SALMA_KB) promises.kvBase = env.SALMA_KB.get('dest:' + ccLower + ':base').then(r => r ? JSON.parse(r) : null).catch(() => null);
-    // KV transport destino
-    if (ccLower && env.SALMA_KB) promises.kvTransport = env.SALMA_KB.get('transport:' + ccLower).then(r => r ? JSON.parse(r) : null).catch(() => null);
-    // KV destinos (qué hacer)
-    if (ccLower && env.SALMA_KB) promises.kvDestinos = env.SALMA_KB.get('dest:' + ccLower + ':destinos').then(r => r ? JSON.parse(r) : null).catch(() => null);
-    // Vuelos — IATA dinámico: usa capital para países, nombre para ciudades
-    if (env.DUFFEL_ACCESS_TOKEN && userLocation) {
-      promises.flights = (async () => {
-        const originIATA = await findIATA(userLocation, userLocationName, env.DUFFEL_ACCESS_TOKEN);
-        // Para países: buscar IATA de la capital (ej: Vietnam → "Hanoi" → HAN)
-        const destSearchName = dest.isCountry && dest.destCapital ? dest.destCapital : dest.destName;
-        const destIATA = await findIATA(dest.destLat ? { lat: dest.destLat, lng: dest.destLng } : null, destSearchName, env.DUFFEL_ACCESS_TOKEN);
-        if (!originIATA) return null;
-        return buscarVuelosDuffel({
-          origen: originIATA, destino: destIATA || dest.destCC,
-          fecha_ida: travelDates?.from || detectedDate || getFlexDate(14),
-          fecha_vuelta: null,
-          fecha_rango_hasta: (travelDates?.from || detectedDate) ? null : getFlexDate(21),
-          adultos: 1
-        }, env.DUFFEL_ACCESS_TOKEN);
-      })().catch(() => null);
-    }
-    // Visa online (Brave)
-    if (env.BRAVE_SEARCH_KEY) {
-      const nat = userNationality || 'espanol';
-      promises.braveVisa = buscarWeb({ query: `visado ${dest.destName} ${nat} 2026 requisitos entrada` }, env.BRAVE_SEARCH_KEY).catch(() => null);
-    }
-    // Weather
-    if (env.OPENWEATHER_KEY) promises.weather = fetchWeather(dest.destName, env.OPENWEATHER_KEY).catch(() => null);
-    // Rutas terrestres (solo si viable)
-    if (isOverlandViable(userCountryCode, dest.destCC) && dest.distanceKm && dest.distanceKm < 5000 && env.BRAVE_SEARCH_KEY) {
-      const fromCity = userLocationName?.split(',')[0] || '';
-      promises.braveRoutes = buscarWeb({ query: `como ir de ${fromCity} a ${dest.destName} por tierra tren bus overland` }, env.BRAVE_SEARCH_KEY).catch(() => null);
-    }
-
-    // Procesar resultados progresivamente
-    const keys = Object.keys(promises);
-    const results = await Promise.allSettled(Object.values(promises));
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]; const val = results[i].status === 'fulfilled' ? results[i].value : null;
-      if (!val) continue;
-      collectedData[key] = val;
-
-      switch (key) {
-        case 'kvBase':
-          await emit('country_info', {
-            pais: val.pais, capital: val.capital, moneda: val.moneda, cambio: val.cambio_aprox_eur,
-            idioma: val.idioma_oficial, idioma_viajero: val.idioma_viajero, enchufes: val.enchufes,
-            emergencias: val.emergencias, prefijo: val.prefijo_tel, visa_kv: val.visado_espanoles,
-            visa_eu: val.visado_eu, seguridad: val.seguridad, agua: val.agua_potable,
-            mejor_epoca: val.mejor_epoca, evitar_epoca: val.evitar_epoca,
-            coste_mochilero: val.coste_diario_mochilero, coste_medio: val.coste_diario_medio
-          });
-          break;
-        case 'kvTransport':
-          const destActions = buildDestTransportInfo(val);
-          if (destActions.length) await emit('transport', { actions: destActions, tip: val.ridehailing?.tips || null });
-          break;
-        case 'flights':
-          if (val.vuelos?.length) await emit('flights', val);
-          break;
-        case 'braveVisa':
-          if (val.resultados?.length) await emit('visa', { results: val.resultados.slice(0, 3) });
-          break;
-        case 'weather':
-          await emit('weather', val);
-          break;
-        case 'braveRoutes':
-          if (val.resultados?.length) await emit('routes', { results: val.resultados.slice(0, 3), viable: true });
-          break;
-        case 'kvDestinos':
-          // Emitido como info extra si hay datos
-          break;
-      }
-    }
-
-    // Terrestre no viable → avisar
-    if (!isOverlandViable(userCountryCode, dest.destCC)) {
-      await emit('routes', { results: [], viable: false, message: `Desde ${userLocationName?.split(',')[0] || 'tu ubicación'} a ${dest.destName} solo se puede llegar en avión.` });
-    }
-  }
-
-  // ─── CHIPS FOLLOW-UP ───
-  const chips = buildFollowUpChips(dest, collectedData, userCountryCode);
-  if (chips.length) await emit('chips', { chips });
-
-  // ─── DONE ───
-  await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: '', route: null })}\n\n`));
-  await writer.close();
-}
-
-// ═══ FIN "QUIERO IR A..." ═══
 
 function extractHelpLocation(message, history, currentRoute) {
   // 1a. Patrón "desde X a/hasta Y" → destino es Y
@@ -2099,93 +1245,6 @@ async function fetchWeather(location, openweatherKey) {
   } catch (e) {
     return null;
   }
-}
-
-// ─── Banner tiempo: clima actual por lat/lon ───
-function windDegToCardinal(deg) {
-  const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'];
-  return dirs[Math.round(deg / 22.5) % 16];
-}
-
-async function fetchWeatherBanner(lat, lon, key) {
-  if (!key) return null;
-  try {
-    // Weather + reverse geocode en paralelo (el geocode da "Hanoi" en vez de "Xom Po")
-    const [wxRes, geoRes] = await Promise.allSettled([
-      fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${key}`, { signal: AbortSignal.timeout(6000) }),
-      fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${key}`, { signal: AbortSignal.timeout(5000) }),
-    ]);
-    if (wxRes.status !== 'fulfilled' || !wxRes.value.ok) return null;
-    const d = await wxRes.value.json();
-    let locationName = d.name || '';
-    if (geoRes.status === 'fulfilled' && geoRes.value.ok) {
-      const geo = await geoRes.value.json();
-      if (geo?.[0]?.name) locationName = geo[0].name;
-    }
-    // AQI + forecast en paralelo para no añadir latencia
-    let aqi = null;
-    let forecast = [];
-    try {
-      const [aqRes, fcRes] = await Promise.allSettled([
-        fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${key}`, { signal: AbortSignal.timeout(5000) }),
-        fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&cnt=40&units=metric&lang=es&appid=${key}`, { signal: AbortSignal.timeout(6000) }),
-      ]);
-      if (aqRes.status === 'fulfilled' && aqRes.value.ok) {
-        const aqData = await aqRes.value.json();
-        aqi = aqData?.list?.[0]?.main?.aqi ?? null;
-      }
-      if (fcRes.status === 'fulfilled' && fcRes.value.ok) {
-        const fcData = await fcRes.value.json();
-        const tzOff = d.timezone || 0; // offset en segundos
-        // Agrupar entradas por fecha local
-        const dailyMap = {};
-        for (const item of (fcData.list || [])) {
-          const localDate = new Date((item.dt + tzOff) * 1000).toISOString().split('T')[0];
-          if (!dailyMap[localDate]) dailyMap[localDate] = [];
-          dailyMap[localDate].push(item);
-        }
-        // Fecha de hoy en zona horaria local
-        const todayLocal = new Date((Math.floor(Date.now() / 1000) + tzOff) * 1000).toISOString().split('T')[0];
-        const dayNames = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-        forecast = Object.keys(dailyMap)
-          .filter(dd => dd > todayLocal).sort().slice(0, 4)
-          .map(date => {
-            const items = dailyMap[date];
-            // Entrada más cercana a las 12:00 hora local
-            const noonItem = items.reduce((best, item) => {
-              const h = new Date((item.dt + tzOff) * 1000).getUTCHours();
-              const bh = new Date((best.dt + tzOff) * 1000).getUTCHours();
-              return Math.abs(h - 12) < Math.abs(bh - 12) ? item : best;
-            });
-            const temps = items.map(i => i.main.temp);
-            const [y, m, day] = date.split('-').map(Number);
-            return {
-              day: dayNames[new Date(Date.UTC(y, m - 1, day)).getUTCDay()],
-              icon: noonItem.weather[0]?.icon || '01d',
-              max: Math.round(Math.max(...temps)),
-              min: Math.round(Math.min(...temps)),
-            };
-          });
-      }
-    } catch(_) {}
-    return {
-      location: locationName,
-      country: d.sys?.country || '',
-      temp: Math.round(d.main.temp),
-      feels_like: Math.round(d.main.feels_like),
-      description: d.weather[0]?.description || '',
-      icon: d.weather[0]?.icon || '01d',
-      humidity: d.main.humidity,
-      wind_kmph: Math.round((d.wind?.speed || 0) * 3.6),
-      wind_deg: d.wind?.deg || 0,
-      wind_dir: windDegToCardinal(d.wind?.deg || 0),
-      wind_gust_kmph: d.wind?.gust ? Math.round(d.wind.gust * 3.6) : null,
-      aqi,
-      forecast,
-      _lat: lat,
-      _lon: lon,
-    };
-  } catch (_) { return null; }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2595,11 +1654,11 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
     // Foto → no pegar bloques de modo, BLOQUE_VISION en system prompt + texto del usuario es suficiente
   } else if (isRouteRequest(message, history)) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
-— Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: plan completo en prosa narrativa (tiempos del día, paradas con nombre en negrita, historia, avisos prácticos) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
+— Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 1-2 frases sobre el destino + salto de línea + SALMA_ROUTE_JSON + JSON completo.
 — NO respondas solo con texto. NO digas "aquí tienes" ni variantes.
 — Usa defaults para lo que falte: tipo mezcla cultura+emblemáticos, compañía solo, ritmo intermedio.
 — MÍNIMO 4-6 PARADAS POR DÍA. Nunca 1 parada por día. Cada día es un recorrido completo con desayuno, visitas, comida, paseo, atardecer.
-— NO escribas enlaces a Google Maps. Los genera el sistema después tras verificar con Google Places.
+— 1 enlace Google Maps por día en maps_links, NO 1 enlace para toda la ruta.
 — Nombres EXACTOS como en Google Maps, nunca genéricos ("Desierto del Sahara" → "Erg Chebbi, Merzouga").
 — Coordenadas REALES del lugar exacto, en el país correcto.
 — Continuidad: la primera parada del día N+1 empieza donde acabó el día N.]`;
@@ -2607,20 +1666,20 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
     // Destino + días → respuesta estructurada por días (sin JSON, sin ruta)
     userContent += `\n\n[MODO PLAN DE VIAJE — INSTRUCCIONES ESTRICTAS:
 
-PROHIBIDO: SALMA_ROUTE_JSON, preguntar, mencionar guías/coins, inventar URLs, párrafos largos, enlaces de Google Maps (el sistema los pone verificados).
-
-DÍAS: si el usuario no especificó número de días (solo puso el destino), genera UN SOLO DÍA. Si dijo "N días", usa ese número exacto.
+PROHIBIDO: SALMA_ROUTE_JSON, preguntar, mencionar guías/coins, inventar URLs, párrafos largos.
 
 BREVEDAD OBLIGATORIA: máximo 2-3 frases por parada. Dato histórico/cultural + precio + tiempo. Sin prosa. Sin rodeos.
 
-FORMATO DE CADA PARADA: nombre en negrita + descripción breve. SIN enlaces — el sistema los añade automáticamente.
-Ejemplo: **Puente Nuevo** — 42 años de obras (1751-1793), cámara interior que fue cárcel. Baja al Camino de los Molinos para la mejor vista. 1h. Gratis.
+FORMATO DE CADA PARADA: nombre en negrita + descripción breve + enlace Maps AL FINAL del párrafo (no al principio).
+Ejemplo: **Puente Nuevo** — 42 años de obras (1751-1793), cámara interior que fue cárcel. Baja al Camino de los Molinos para la mejor vista. 1h. Gratis. https://www.google.com/maps/search/Puente+Nuevo+Ronda
 
-4-5 paradas por día. Cada día termina con dónde comer (nombre en negrita + plato + precio).
+4-5 paradas por día. Cada día termina con dónde comer (nombre + plato + precio + enlace Maps al final).
+
+AL FINAL DE TODO: incluye un enlace Google Maps de la ruta completa con todas las paradas principales encadenadas. Formato: https://www.google.com/maps/dir/Parada1/Parada2/Parada3/... con los nombres de los lugares. Uno por ruta, al final.
 
 Cierra con: "Si quieres la guía completa con mapa y navegación, dime 'Salma hazme una guía'."
 
-NO llames a buscar_foto — las fotos se cargan automáticamente en el frontend.]`;
+FOTOS OBLIGATORIAS: llama a buscar_foto para CADA PARADA que menciones. Si tienes 4 paradas en un día, llama a buscar_foto 4 veces con los 4 nombres. Cada parada merece su foto. No agrupes — una foto justo antes de cada párrafo de parada.]`;
   } else {
     userContent += `\n\n[MODO CONVERSACIONAL — INSTRUCCIONES ESTRICTAS:
 
@@ -2628,7 +1687,7 @@ PROHIBIDO:
 — Generar SALMA_ROUTE_JSON bajo ningún concepto.
 — Preguntar "¿qué tipo de viaje?", "¿con quién vas?", "¿qué quieres hacer?" ni ninguna pregunta para personalizar una ruta.
 — Mencionar guías, rutas, coins, Salma Coins o el modo guía.
-— Inventar URLs. Solo URLs que devuelve una herramienta. NUNCA enlaces de Google Maps — el sistema los genera verificados.
+— Inventar URLs. CERO URLs salvo las que devuelva una herramienta o google.com/maps/dir/.
 — Poner negritas como título en línea sola (**Transporte:**, **Para comer:**). Las negritas son solo para datos inline: **8€**, **Lomprayah**, **2h30**.
 — Hacer preguntas al final del mensaje. Si quieres ofrecer ayuda, ofrece sin preguntar: "Si quieres que te busque hotel o algo concreto, dime." NO "¿Quieres que te busque hotel?"
 
@@ -2636,7 +1695,7 @@ QUÉ HACER:
 — Responde con información RICA del destino: historia, cultura, contexto, qué ver, qué comer, clima, transporte, seguridad, datos prácticos.
 — Mete datos históricos y culturales siempre que sea relevante — por qué un lugar es como es, quién lo construyó, qué pasó ahí.
 — Todo en PROSA fluida, como si lo contaras en un bar. Sin secciones, sin títulos, sin listas.
-— Cada lugar concreto que menciones (monumento, plaza, restaurante, mirador) va con nombre en negrita. El sistema añade automáticamente los enlaces verificados de Google Maps — tú NUNCA pongas enlaces de Maps.
+— ENLACES GOOGLE MAPS OBLIGATORIOS: cada lugar concreto que menciones (monumento, plaza, restaurante, mirador, barrio) lleva su enlace Google Maps justo después del nombre. Formato: https://www.google.com/maps/search/Nombre+del+Lugar+Ciudad. Ejemplo: "El **Puente Nuevo** (https://www.google.com/maps/search/Puente+Nuevo+Ronda) se terminó en 1793...". Sin esto, el usuario no puede llegar — y para eso se va a Google.
 — Si mencionas un lugar concreto con nombre propio, usa buscar_foto para mostrar 1-3 fotos.
 — Si mencionas transporte entre ciudades (ferry, bus, tren), usa buscar_web para obtener URLs reales de reserva. NUNCA inventes URLs de 12go, skyscanner, rome2rio ni ninguna otra.
 — Si el contexto incluye datos del KV (país, transporte, destino), ÚSALOS. No los ignores.
@@ -2699,17 +1758,16 @@ ${formatted}
 Si alguno de estos eventos o festivales coincide con las fechas del viaje, menciónalo brevemente en el día que toque como dato útil. NO reestructures la ruta por un evento. Si ninguno encaja con las fechas, ignóralos. NUNCA inventes eventos.]`;
   }
 
-  // Si hay imagen, enviar como content array (vision Anthropic)
+  // Si hay imagen, enviar como content array (vision de OpenAI)
   if (imageBase64) {
     messages.push({
       role: 'user',
       content: [
         {
-          type: 'image',
-          source: {
-            type: 'base64',
-            media_type: 'image/jpeg',
-            data: imageBase64
+          type: 'image_url',
+          image_url: {
+            url: `data:image/jpeg;base64,${imageBase64}`,
+            detail: 'high'
           }
         },
         { type: 'text', text: userContent || 'El viajero te envía esta foto.' }
@@ -2756,8 +1814,8 @@ function extractRouteFromReply(text) {
         links: Array.isArray(s.links) ? s.links : [],
         type: s.type || 'lugar',
         day: typeof s.day === 'number' ? s.day : (parseInt(s.day) || 1),
-        lat: typeof s.lat === 'number' ? s.lat : (s.lat != null && !isNaN(parseFloat(s.lat)) ? parseFloat(s.lat) : null),
-        lng: typeof s.lng === 'number' ? s.lng : (s.lng != null && !isNaN(parseFloat(s.lng)) ? parseFloat(s.lng) : null),
+        lat: typeof s.lat === 'number' ? s.lat : (parseFloat(s.lat) || 0),
+        lng: typeof s.lng === 'number' ? s.lng : (parseFloat(s.lng) || 0),
         photo_ref: s.photo_ref || '',
         verified_address: s.verified_address || '',
         km_from_previous: typeof s.km_from_previous === 'number' ? s.km_from_previous : (parseFloat(s.km_from_previous) || 0),
@@ -2768,9 +1826,7 @@ function extractRouteFromReply(text) {
         eat: s.eat || null,
         alt_bad_weather: s.alt_bad_weather || '',
       }));
-      // Ignoramos lo que Claude haya puesto en maps_links — se regenera server-side
-      // en verifyAllStops a partir de paradas con place_id validado.
-      route.maps_links = [];
+      if (!route.maps_links) route.maps_links = [];
       if (!route.pre_departure) route.pre_departure = null;
       if (!route.practical_info) route.practical_info = null;
       return route;
@@ -2794,8 +1850,6 @@ function sanitizeInventedUrls(text) {
   return text.replace(urlRegex, (url) => {
     if (url.includes('google.com/maps')) return url;
     if (url.includes('googleusercontent.com') || url.includes('places.googleapis.com')) return url;
-    // URLs del proxy propio del worker (fotos permanentes)
-    if (url.includes('salma-api.paco-defoto.workers.dev')) return url;
     if (url.includes('thefork.com') || url.includes('thefork.es')) return url;
     if (url.includes('booking.com')) return url;
     if (url.includes('skyscanner.es') || url.includes('skyscanner.com')) return url;
@@ -2838,9 +1892,139 @@ function sanitizeInventedUrls(text) {
 
 // Inyecta enlace Google Maps si el usuario tiene GPS, la respuesta habla de ir a un sitio,
 // y no hay ya un enlace de Google Maps en la respuesta.
-// Desactivadas — Claude genera sus propios enlaces Maps y transporte con buscar_web (P2-12)
-function injectGoogleMapsLink(reply) { return reply; }
-function injectTransportBlock(reply) { return reply; }
+function injectGoogleMapsLink(reply, userLocation, message) {
+  if (!reply || !userLocation || !userLocation.lat || !userLocation.lng) return reply;
+  // Si ya tiene un enlace de Google Maps, no duplicar
+  if (reply.includes('google.com/maps')) return reply;
+  // Solo para transporte local concreto — no para intención de viaje a un país/ciudad lejana
+  const goKeywords = /aeropuerto|airport|estación|estacion|station|terminal|cómo llegar|como llegar|llegar a[l ]|ir desde|dame enlace|google maps|navegar|cómo voy|como voy|taxi/i;
+  if (!goKeywords.test(message)) return reply;
+  // Extraer destino del mensaje y de la respuesta de GPT
+  let dest = null;
+
+  // 0. Del mensaje: "ir a Málaga desde X", "ir desde X a Y", "ir a Y en taxi"
+  //    Extraer destino: la palabra/s después de "a/hasta/hacia" cortando en "desde/en/por/con"
+  const destPatterns = [
+    /\ba\s+([\wáéíóúñ]+(?:\s+[\wáéíóúñ]+)?)\s+desde/i,                           // "a Málaga desde..."
+    /(?:ir|llegar|viajar)\s+(?:al?\s|hasta\s|hacia\s)([\wáéíóúñ\s]+?)(?:\s+(?:desde|en\s|por\s|con\s|para\s|,)|$)/i, // "ir a/al Málaga en taxi"
+    /desde\s+[\wáéíóúñ\s]+?\s+(?:al?\s|hasta\s|hacia\s)([\wáéíóúñ\s]+?)(?:\s+(?:para\s|el\s+\d|en\s|por\s|con\s|,)|$)/i, // "desde X a/al Y"
+    /taxi\s+(?:desde\s+[\wáéíóúñ\s]+?\s+)?(?:al?\s|hasta\s|hacia\s)([\wáéíóúñ\s]+?)(?:\s+(?:para\s|el\s+\d|de la|del|desde|en\s|por\s|con\s|,)|$)/i, // "taxi ... al centro de la ciudad"
+  ];
+  for (const pat of destPatterns) {
+    const m = message.match(pat);
+    if (m) {
+      const candidate = m[1].trim();
+      if (candidate.length >= 3 && !/^(un|una|el|la|los|las|mi|tu|su|este|donde|aqui|ahi|alli|taxi|coche|bus|tren|pie)$/i.test(candidate)) {
+        dest = candidate;
+        break;
+      }
+    }
+  }
+
+  // 1. Buscar aeropuerto/estación con nombre completo en la respuesta
+  if (!dest) {
+    const airportPatterns = [
+      /\*\*([^*]*(?:Airport|Aeropuerto|Aeroporto)[^*]*)\*\*/i,
+      /\*\*([^*]*(?:Station|Estación|Terminal|Gare)[^*]*)\*\*/i,
+    ];
+    for (const pat of airportPatterns) {
+      const m = reply.match(pat);
+      if (m) {
+        dest = m[1].replace(/\s*[-—].*/, '').replace(/\s*\+\d.*/, '').trim();
+        break;
+      }
+    }
+  }
+
+  // 2. Del mensaje: "ir al aeropuerto de Málaga", "a la torre eiffel"
+  if (!dest) {
+    const msgDest = message.match(/(?:a[l ]?\s*(?:la\s+)?)(aeropuerto\s+de\s+[\w\sáéíóúñ]{2,20}|estación\s+de\s+[\w\sáéíóúñ]{2,20}|torre eiffel|taj mahal|coliseo|big ben|sagrada familia|alhambra|machu picchu)/i);
+    if (msgDest) dest = msgDest[1].trim();
+  }
+
+  // 3. Fallback: primer lugar en negrita en la respuesta (ignorar precios, números, phones)
+  if (!dest) {
+    const boldMatches = reply.matchAll(/\*\*([^*]{3,50})\*\*/g);
+    for (const bm of boldMatches) {
+      const candidate = bm[1].replace(/\s*[-—].*/, '').replace(/\s*\+\d.*/, '').trim();
+      // Ignorar si es un precio, número, teléfono o texto genérico
+      if (/^\d|^[€$£¥]|€|USD|\d+\s*(min|km|h\b|hora|metro|€|\$)/.test(candidate)) continue;
+      if (candidate.length < 3) continue;
+      dest = candidate;
+      break;
+    }
+  }
+
+  if (!dest) return reply;
+
+  // Extraer origen del mensaje: "desde X" → usar X como origen en vez de GPS
+  let origin = `${userLocation.lat},${userLocation.lng}`;
+  let originCity = '';
+  const fromMatch = message.match(/desde\s+([\wáéíóúñÁÉÍÓÚÑ\s]{3,40}?)(?:\s+(?:al?\s|hasta\s|hacia\s|para\s|en\s+taxi|en\s+coche|por|con|,)|$)/i);
+  if (fromMatch) {
+    const fromPlace = fromMatch[1].trim();
+    if (fromPlace.length >= 3 && !/^(un|una|el|la|los|las|mi|tu|su|aqui|ahi|alli|taxi|coche|bus|tren)$/i.test(fromPlace)) {
+      origin = fromPlace.replace(/\s+/g, '+');
+      // Extraer ciudad del origen para enriquecer destinos genéricos
+      const cityMatch = fromPlace.match(/(?:de|in)\s+([\wáéíóúñ]+)/i);
+      if (cityMatch) originCity = cityMatch[1];
+    }
+  }
+
+  // Si el destino es genérico ("centro", "centro de la ciudad"), añadir la ciudad
+  if (/^centro\b/i.test(dest) && originCity) {
+    dest = dest + ', ' + originCity;
+  }
+  dest = dest.replace(/\s+/g, '+');
+
+  const mapsUrl = `https://www.google.com/maps/dir/${origin}/${dest}`;
+  return reply + `\n\n📍 ${mapsUrl}`;
+}
+
+// Inyecta bloque de transporte (app + descarga) cuando el usuario quiere ir a un sitio
+// Usa datos reales del KV de transporte + URLs reales de TRANSPORT_APP_URLS
+function injectTransportBlock(reply, kvTransportData, message) {
+  if (!reply || !message) return reply;
+  // Solo para transporte local concreto — NO para intención de viaje a un país/ciudad lejana
+  const goKeywords = /llévame|taxi|aeropuerto|airport|estación|estacion|station|terminal/i;
+  if (!goKeywords.test(message)) return reply;
+  // Si ya tiene enlace o mención del bloque de app de transporte, no duplicar
+  if (/grab\.com|m\.uber\.com|bolt\.eu|indrive\.com/i.test(reply)) return reply;
+  if (/Abre \*\*Grab\*\*|Abre \*\*Uber\*\*|Abre \*\*Bolt\*\*|🟩 Abre|🚕 Transporte local/i.test(reply)) return reply;
+
+  let appBlock = '';
+  if (kvTransportData && kvTransportData.ridehailing) {
+    const best = kvTransportData.ridehailing.best;
+    const appData = best ? TRANSPORT_APP_URLS[best.toLowerCase()] : null;
+    if (appData) {
+      // Caso normal: app conocida con URL de descarga
+      appBlock += `\n\n${appData.icon} Abre **${appData.name}** y pide un coche hasta tu destino.`;
+      // Alternativas
+      const others = (kvTransportData.ridehailing.others || []).filter(o => o !== best);
+      if (others.length > 0) {
+        const otherNames = others.map(o => {
+          const od = TRANSPORT_APP_URLS[o.toLowerCase()];
+          return od ? od.name : o;
+        }).join(', ');
+        appBlock += `\nTambién funciona: ${otherNames}`;
+      }
+      if (kvTransportData.ridehailing.tips) {
+        appBlock += `\n${kvTransportData.ridehailing.tips}`;
+      }
+    } else if (kvTransportData.ridehailing.tips) {
+      // Caso especial: no hay app en stores internacionales pero hay tips (ej: Irán → Snapp)
+      appBlock += `\n\n🚕 **Transporte local**: ${kvTransportData.ridehailing.tips}`;
+    }
+  }
+
+  if (!appBlock) return reply;
+  // Insertar antes del enlace de Google Maps si existe, o al final
+  const mapsIdx = reply.indexOf('📍');
+  if (mapsIdx !== -1) {
+    return reply.slice(0, mapsIdx).trimEnd() + appBlock + '\n\n' + reply.slice(mapsIdx);
+  }
+  return reply + appBlock;
+}
 
 // ═══════════════════════════════════════════════════════════════
 // BLOQUES PARALELOS — Rutas largas (>7 días)
@@ -2972,6 +2156,7 @@ function mergeBlocks(blockResults, originalMessage) {
 
   const base = blockResults[0].route;
   const allStops = [];
+  const allMapsLinks = [];
   const allTips = [];
   const allTags = new Set();
 
@@ -2990,8 +2175,7 @@ function mergeBlocks(blockResults, originalMessage) {
     }
 
     allStops.push(...stops);
-    // maps_links no se acumulan: cada bloque ya los tiene generados en verifyAllStops
-    // a partir de paradas validadas. Los regeneramos aquí a nivel ruta completa.
+    if (br.route.maps_links) allMapsLinks.push(...br.route.maps_links);
     if (br.route.tips) allTips.push(...br.route.tips);
     if (br.route.tags) br.route.tags.forEach(t => allTags.add(t));
   }
@@ -3006,7 +2190,7 @@ function mergeBlocks(blockResults, originalMessage) {
     duration_days: maxDay,
     summary: base.summary || '',
     stops: allStops,
-    maps_links: buildMapsLinksFromStops(allStops),
+    maps_links: allMapsLinks,
     tips: [...new Set(allTips)],
     tags: [...allTags],
     budget_level: base.budget_level || 'sin_definir',
@@ -3020,313 +2204,145 @@ function mergeBlocks(blockResults, originalMessage) {
 // VERIFICACIÓN DE PARADAS — Google Places (post-generación)
 // ═══════════════════════════════════════════════════════════════
 
-// Normaliza texto para comparación: sin tildes, lowercase, sin puntuación
-function normalizeForMatch(str) {
-  return (str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
-}
-
-// Name match estricto: >= 2 palabras significativas en común O >60% overlap
-function strictNameMatch(originalName, googleName) {
-  const normOrig = normalizeForMatch(originalName);
-  const normGoogle = normalizeForMatch(googleName);
-  if (!normOrig || !normGoogle) return false;
-
-  const origWords = normOrig.split(/\s+/).filter(w => w.length > 3);
-  const googleWords = normGoogle.split(/\s+/).filter(w => w.length > 3);
-
-  // Contar palabras en común
-  const commonWords = origWords.filter(w => googleWords.some(gw => gw.includes(w) || w.includes(gw)));
-  // Si hay 2+ palabras en común → match
-  if (commonWords.length >= 2) return true;
-  // Si solo hay 1 palabra significativa (ej: "Alhambra") y coincide → match
-  if (origWords.length === 1 && commonWords.length === 1) return true;
-  if (origWords.length === 0 && googleWords.length === 0) {
-    // Nombres cortos: comparar directamente
-    return normOrig === normGoogle || normOrig.includes(normGoogle) || normGoogle.includes(normOrig);
-  }
-
-  // Fallback: >60% overlap de caracteres (para nombres con variaciones)
-  const shorter = normOrig.length < normGoogle.length ? normOrig : normGoogle;
-  const longer = normOrig.length >= normGoogle.length ? normOrig : normGoogle;
-  if (longer.includes(shorter) && shorter.length > 4) return true;
-
-  return false;
-}
-
-function addressContainsLocation(formattedAddress, ...locations) {
-  if (!formattedAddress) return false;
-  const normAddr = normalizeForMatch(formattedAddress);
-  return locations.filter(Boolean).map(normalizeForMatch).some(c => c && c.length > 2 && normAddr.includes(c));
-}
-
 async function verifyAllStops(route, placesKey) {
   if (!route?.stops || !placesKey) return route;
 
   const region = route.region || route.country || '';
-  const country = route.country || '';
-  const countryCode = country ? getCountryCode(country) : '';
-  const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
-  const FIELDS = 'place_id,photos,geometry,name,formatted_address,opening_hours,editorial_summary,business_status';
-  const DETAIL_FIELDS = 'name,photos,geometry,editorial_summary,opening_hours,business_status,formatted_address';
+  const countryCode = route.country ? getCountryCode(route.country) : '';
 
-  async function findPlace(name, biasLat, biasLng, radiusM) {
-    const q = region ? `${name}, ${region}` : name;
-    const bias = (biasLat && biasLng && Math.abs(biasLat) > 0.01) ? `&locationbias=circle:${radiusM}@${biasLat},${biasLng}` : '';
-    try {
-      return await (await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(q)}&inputtype=textquery${bias}${countryFilter}&fields=${FIELDS}&language=es&key=${placesKey}`)).json();
-    } catch (_) { return null; }
-  }
-
-  async function textSearch(name) {
-    const q = region ? `${name} ${region}` : name;
-    try {
-      const data = await (await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(q)}${countryFilter}&language=es&key=${placesKey}`)).json();
-      if (data?.results?.[0]) return { candidates: [data.results[0]] };
-      return null;
-    } catch (_) { return null; }
-  }
-
-  function validateCandidate(candidate, stop) {
-    if (!candidate?.geometry?.location) return { valid: false, reason: 'no_geometry' };
-    const pLat = candidate.geometry.location.lat, pLng = candidate.geometry.location.lng;
-    if (candidate.business_status === 'CLOSED_PERMANENTLY') return { valid: false, reason: 'closed' };
-    const nameOk = strictNameMatch(stop.name || stop.headline || '', candidate.name || '');
-    const addrOk = addressContainsLocation(candidate.formatted_address, region, route.region, country);
-    let distKm = Infinity;
-    if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01) distKm = haversineKm(stop.lat, stop.lng, pLat, pLng);
-    if (nameOk && (addrOk || distKm < 3)) return { valid: true, distKm };
-    if (nameOk && distKm < 10) return { valid: true, distKm };
-    if (distKm < 1 && addrOk) return { valid: true, distKm };
-    if (!nameOk) return { valid: false, reason: 'name_mismatch', distKm };
-    return { valid: false, reason: 'too_far', distKm };
-  }
-
-  const attempt1 = await Promise.all(route.stops.map(stop => {
+  // 1. Buscar cada parada en Google Places (find + details en 1 sola llamada)
+  const findPromises = route.stops.map(stop => {
     const name = stop.name || stop.headline || '';
     if (!name || name.length < 3) return Promise.resolve(null);
-    return findPlace(name, stop.lat, stop.lng, 5000);
-  }));
-
-  const needsA2 = [];
-  attempt1.forEach((r, i) => {
+    const searchQuery = region ? `${name} ${region}` : name;
+    const bias = (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01)
+      ? `&locationbias=circle:50000@${stop.lat},${stop.lng}` : '';
+    const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
+    return fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(searchQuery)}&inputtype=textquery${bias}${countryFilter}&fields=place_id,photos,geometry,name,formatted_address,opening_hours,editorial_summary&language=es&key=${placesKey}`)
+      .then(r => r.json()).catch(() => null);
+  });
+  const findResults = await Promise.all(findPromises);
+  // DEBUG photos
+  findResults.forEach((r, i) => {
     const c = r?.candidates?.[0];
-    if (!c?.geometry?.location || !validateCandidate(c, route.stops[i]).valid) needsA2.push(i);
+    if (c) console.log(`[FIND] ${route.stops[i]?.name} → ${c.name} | photos: ${c.photos?.length || 0} | photo_ref: ${(c.photos?.[0]?.photo_reference || '').substring(0, 30)}`);
   });
-  const a2 = {};
-  if (needsA2.length > 0) {
-    const results = await Promise.all(needsA2.map(i => findPlace(route.stops[i].name || route.stops[i].headline || '', route.stops[i].lat, route.stops[i].lng, 15000)));
-    needsA2.forEach((idx, j) => { a2[idx] = results[j]; });
-  }
 
-  const needsA3 = [];
-  needsA2.forEach(i => {
-    const c = a2[i]?.candidates?.[0];
-    if (!c?.geometry?.location || !validateCandidate(c, route.stops[i]).valid) needsA3.push(i);
-  });
-  const a3 = {};
-  if (needsA3.length > 0) {
-    const results = await Promise.all(needsA3.map(i => textSearch(route.stops[i].name || route.stops[i].headline || '')));
-    needsA3.forEach((idx, j) => { a3[idx] = results[j]; });
-  }
-
-  const bestCandidates = route.stops.map((stop, i) => {
-    for (const result of [attempt1[i], a2[i], a3[i]]) {
-      const c = result?.candidates?.[0];
-      if (!c?.geometry?.location) continue;
-      if (validateCandidate(c, stop).valid) return { candidate: c };
+  // 2. Calcular centro y radio dinámico
+  const verifiedCoords = [];
+  findResults.forEach(data => {
+    const c = data?.candidates?.[0];
+    if (c?.geometry?.location) {
+      verifiedCoords.push({ lat: c.geometry.location.lat, lng: c.geometry.location.lng });
     }
-    return null;
   });
-
-  const detailResults = new Array(route.stops.length).fill(null);
-  const BATCH_SIZE = 5;
-  const toFetch = bestCandidates.map((bc, i) => bc?.candidate?.place_id ? i : -1).filter(i => i >= 0);
-  for (let b = 0; b < toFetch.length; b += BATCH_SIZE) {
-    const batch = toFetch.slice(b, b + BATCH_SIZE);
-    const results = await Promise.all(batch.map(i =>
-      fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${bestCandidates[i].candidate.place_id}&fields=${DETAIL_FIELDS}&language=es&key=${placesKey}`)
-        .then(r => r.json()).catch(() => null)
-    ));
-    batch.forEach((idx, j) => { detailResults[idx] = results[j]; });
+  let centerLat = 0, centerLng = 0, routeRadiusKm = 50;
+  if (verifiedCoords.length > 0) {
+    centerLat = verifiedCoords.reduce((s, p) => s + p.lat, 0) / verifiedCoords.length;
+    centerLng = verifiedCoords.reduce((s, p) => s + p.lng, 0) / verifiedCoords.length;
+    const maxDist = verifiedCoords.reduce((max, p) => {
+      const d = Math.sqrt(Math.pow(Math.abs(p.lat - centerLat), 2) + Math.pow(Math.abs(p.lng - centerLng), 2)) * 111;
+      return d > max ? d : max;
+    }, 0);
+    routeRadiusKm = Math.max(50, maxDist * 1.5);
   }
 
-  // Regla única: sin place_id validado por Google Places → la parada NO entra en el JSON final.
-  const validatedStops = [];
-  const discarded = [];
+  // 3. Place Details en lotes de 5 (fotos + editorial summary)
+  const detailResults = new Array(findResults.length).fill(null);
+  const BATCH_SIZE = 5;
+  for (let i = 0; i < findResults.length; i += BATCH_SIZE) {
+    const batch = [];
+    for (let j = i; j < Math.min(i + BATCH_SIZE, findResults.length); j++) {
+      const c = findResults[j]?.candidates?.[0];
+      if (!c?.place_id) { batch.push(Promise.resolve(null)); continue; }
+      if (centerLat && centerLng && c.geometry?.location) {
+        const distKm = Math.sqrt(Math.pow(Math.abs(c.geometry.location.lat - centerLat), 2) + Math.pow(Math.abs(c.geometry.location.lng - centerLng), 2)) * 111;
+        if (distKm > routeRadiusKm) { batch.push(Promise.resolve(null)); continue; }
+      }
+      batch.push(
+        fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${c.place_id}&fields=name,photos,geometry,editorial_summary&language=es&key=${placesKey}`)
+          .then(r => r.json()).catch(() => null)
+      );
+    }
+    const batchResults = await Promise.all(batch);
+    batchResults.forEach((r, idx) => { detailResults[i + idx] = r; });
+  }
 
+  // 4. Enriquecer cada parada con datos reales
+  const verifiedStops = [];
   route.stops.forEach((stop, i) => {
-    const bc = bestCandidates[i];
+    const candidate = findResults[i]?.candidates?.[0];
     const detail = detailResults[i]?.result;
 
-    if (!bc) {
-      const last = a3[i] || a2[i] || attempt1[i];
-      const lc = last?.candidates?.[0];
-      const reason = !lc?.geometry?.location ? 'no_google_result' : (validateCandidate(lc, stop).reason || 'no_match');
-      discarded.push({ name: stop.name || stop.headline || '(sin nombre)', day: stop.day || null, reason });
-      console.log(`[VERIFY] ✗ DESCARTADA "${stop.name}" (${reason})`);
+    if (!candidate?.geometry?.location) {
+      // Google no encontró → mantener datos originales de Claude
+      verifiedStops.push(stop);
       return;
     }
 
-    const candidate = bc.candidate;
-    const pLat = candidate.geometry.location.lat, pLng = candidate.geometry.location.lng;
-    const googleName = detail?.name || candidate.name || '';
+    const pLat = candidate.geometry.location.lat;
+    const pLng = candidate.geometry.location.lng;
 
+    // Validar distancia al centro
+    if (centerLat && centerLng) {
+      const distKm = Math.sqrt(Math.pow(Math.abs(pLat - centerLat), 2) + Math.pow(Math.abs(pLng - centerLng), 2)) * 111;
+      if (distKm > routeRadiusKm) {
+        verifiedStops.push(stop); // Fuera de rango → mantener original
+        return;
+      }
+    }
+
+    // Validar que Google devolvió algo relevante (no una tienda random)
+    const originalName = (stop.name || stop.headline || '').toLowerCase();
+    const googleName = (detail?.name || candidate.name || '').toLowerCase();
+    const nameWords = originalName.split(/\s+/).filter(w => w.length > 3);
+    const nameMatch = nameWords.some(w => googleName.includes(w)) || googleName.split(/\s+/).filter(w => w.length > 3).some(w => originalName.includes(w));
+
+    // Validar distancia al punto original de Claude
+    const origDist = (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01)
+      ? Math.sqrt(Math.pow(Math.abs(pLat - stop.lat), 2) + Math.pow(Math.abs(pLng - stop.lng), 2)) * 111
+      : 0;
+    const closeEnough = origDist < 15; // menos de 15km del punto original
+
+    if (!nameMatch && !closeEnough) {
+      // Google devolvió algo sin relación → mantener datos de Claude
+      verifiedStops.push(stop);
+      return;
+    }
+
+    // Google solo corrige coords y fotos — NO sobrescribe contenido de Haiku
     stop.lat = pLat;
     stop.lng = pLng;
-    stop.place_id = candidate.place_id;
-    delete stop._unverified;
-    delete stop._verifyReason;
 
-    const photoRef = detail?.photos?.[0]?.photo_reference || candidate.photos?.[0]?.photo_reference || '';
+    const photoRef = candidate.photos?.[0]?.photo_reference || detail?.photos?.[0]?.photo_reference || '';
     if (photoRef) stop.photo_ref = photoRef;
 
-    if (googleName && strictNameMatch(stop.name || stop.headline || '', googleName)) {
-      stop.name = googleName; stop.headline = googleName;
-    }
+    // Solo sobrescribir nombre si Google devolvió algo relevante
+    const verifiedName = detail?.name || candidate.name || '';
+    if (verifiedName && nameMatch) { stop.name = verifiedName; stop.headline = verifiedName; }
 
-    const addr = detail?.formatted_address || candidate.formatted_address || '';
-    if (addr) stop.verified_address = addr;
+    if (candidate.formatted_address) stop.verified_address = candidate.formatted_address;
 
+    // Horarios: solo si aportan (no "Abierto 24 horas" genérico) y no hay practical de Haiku
     if (!stop.practical && detail?.opening_hours?.weekday_text) {
-      const h = detail.opening_hours.weekday_text.join(' · ');
-      if (!/abierto 24 horas|open 24 hours/i.test(h)) stop.practical = h;
+      const hours = detail.opening_hours.weekday_text.join(' · ');
+      const isGeneric = /abierto 24 horas/i.test(hours) || /open 24 hours/i.test(hours);
+      if (!isGeneric) {
+        stop.practical = hours;
+      }
     }
 
-    const desc = detail?.editorial_summary?.overview || '';
-    if (desc && !stop.description) stop.description = desc;
+    // Editorial summary de Google → solo como description (datos), nunca como context
+    const googleDesc = detail?.editorial_summary?.overview || '';
+    if (googleDesc && !stop.description) stop.description = googleDesc;
 
-    validatedStops.push(stop);
-    console.log(`[VERIFY] ✓ ${stop.name} → ${googleName} (${pLat.toFixed(5)}, ${pLng.toFixed(5)}) place_id:${(candidate.place_id||'').substring(0, 20)}`);
+    // NO meter reseñas de Google como context — context es para info histórica/cultural de Haiku
+
+    verifiedStops.push(stop);
   });
 
-  route.stops = validatedStops;
-  route.discarded_stops = discarded;
-  route.maps_links = buildMapsLinksFromStops(validatedStops);
-
-  console.log(`[VERIFY] Resumen: ${validatedStops.length} validadas, ${discarded.length} descartadas`);
-
+  route.stops = verifiedStops;
   return route;
-}
-
-// Tipos de Google Places que NO son POIs concretos (barrios, direcciones, zonas administrativas).
-const BAD_PLACE_TYPES = new Set([
-  'locality','sublocality','sublocality_level_1','sublocality_level_2','sublocality_level_3',
-  'neighborhood','political',
-  'administrative_area_level_1','administrative_area_level_2','administrative_area_level_3','administrative_area_level_4',
-  'country','continent',
-  'street_address','route','premise','subpremise','postal_code','postal_code_prefix','intersection',
-  'plus_code','geocode'
-]);
-// Tipos de Google Places que SÍ son POIs concretos.
-const GOOD_PLACE_TYPES = new Set([
-  'lodging','restaurant','food','cafe','bar','bakery','meal_takeaway','meal_delivery','night_club',
-  'tourist_attraction','museum','art_gallery','aquarium','zoo','park','amusement_park','campground','rv_park',
-  'stadium','place_of_worship','church','mosque','synagogue','hindu_temple','cemetery',
-  'spa','gym','shopping_mall','department_store','store','supermarket','convenience_store','book_store','clothing_store',
-  'pharmacy','hospital','doctor','dentist','veterinary_care',
-  'movie_theater','library','university','school','train_station','subway_station','bus_station','airport','transit_station',
-  'gas_station','car_rental','parking','atm','bank','embassy','police','fire_station','post_office'
-]);
-
-// Busca un lugar en Google Places y SOLO devuelve resultado si pasa validación estricta:
-// - nombre match (strictNameMatch)
-// - tipos: rechaza si es barrio/calle/zona administrativa sin ser también POI
-// - (dirección contiene región/país O distancia <10km a coord bias)
-// Si no pasa → null. Regla única: no se devuelve lugar no verificado.
-async function getValidatedPlace(query, placesKey, region, countryCode, biasCoords) {
-  if (!placesKey || !query || query.length < 3) return null;
-  const FIELDS = 'place_id,name,geometry,formatted_address,photos,business_status,types';
-  const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
-  const q = region ? `${query}, ${region}` : query;
-
-  async function tryFindPlace(radiusM) {
-    const bias = (biasCoords?.lat && biasCoords?.lng && Math.abs(biasCoords.lat) > 0.01)
-      ? `&locationbias=circle:${radiusM}@${biasCoords.lat},${biasCoords.lng}` : '';
-    try {
-      const r = await fetch(
-        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(q)}&inputtype=textquery${bias}${countryFilter}&fields=${FIELDS}&language=es&key=${placesKey}`,
-        { signal: AbortSignal.timeout(3500) }
-      );
-      const d = await r.json();
-      return d?.candidates?.[0] || null;
-    } catch (_) { return null; }
-  }
-
-  async function tryTextSearch() {
-    try {
-      const r = await fetch(
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(q)}${countryFilter}&language=es&key=${placesKey}`,
-        { signal: AbortSignal.timeout(3500) }
-      );
-      const d = await r.json();
-      return d?.results?.[0] || null;
-    } catch (_) { return null; }
-  }
-
-  function isValid(cand) {
-    if (!cand?.geometry?.location || !cand.place_id) return false;
-    if (cand.business_status === 'CLOSED_PERMANENTLY') return false;
-    if (!strictNameMatch(query, cand.name || '')) return false;
-    // Filtrar por tipos: si es un barrio/calle/zona administrativa Y no es también un POI → descartar.
-    const types = Array.isArray(cand.types) ? cand.types : [];
-    const hasBad = types.some(t => BAD_PLACE_TYPES.has(t));
-    const hasGood = types.some(t => GOOD_PLACE_TYPES.has(t));
-    if (hasBad && !hasGood) return false;
-    // Con biasCoords (rutas): exigir distancia <10km al punto sugerido.
-    if (biasCoords?.lat && biasCoords?.lng && Math.abs(biasCoords.lat) > 0.01) {
-      const distKm = haversineKm(biasCoords.lat, biasCoords.lng, cand.geometry.location.lat, cand.geometry.location.lng);
-      return distKm < 10;
-    }
-    // Sin biasCoords (chat): confiamos en strictNameMatch + types.
-    // El components=country:XX del fetch ya filtra por país en el fetch.
-    return true;
-  }
-
-  // 3 intentos: bias 5km → bias 15km → text search libre (con country filter)
-  let c = await tryFindPlace(5000);
-  if (!isValid(c)) c = await tryFindPlace(15000);
-  if (!isValid(c)) c = await tryTextSearch();
-  if (!isValid(c)) return null;
-
-  const photoRef = c.photos?.[0]?.photo_reference || '';
-  return {
-    place_id: c.place_id,
-    name: c.name,
-    lat: c.geometry.location.lat,
-    lng: c.geometry.location.lng,
-    url: 'https://www.google.com/maps/place/?q=place_id:' + c.place_id,
-    photo_ref: photoRef,
-    formatted_address: c.formatted_address || ''
-  };
-}
-
-// Genera maps_links por día usando SOLO paradas con place_id validado.
-// Formato con lat/lng (Google los entiende literal en /dir/, los place_id en path NO funcionan).
-function buildMapsLinksFromStops(stops) {
-  if (!Array.isArray(stops) || stops.length === 0) return [];
-  const byDay = new Map();
-  for (const s of stops) {
-    if (!s || !s.place_id || !s.lat || !s.lng) continue;
-    const d = s.day || 1;
-    if (!byDay.has(d)) byDay.set(d, []);
-    byDay.get(d).push(s);
-  }
-  const links = [];
-  const days = [...byDay.keys()].sort((a, b) => a - b);
-  for (const day of days) {
-    const arr = byDay.get(day);
-    if (arr.length === 0) continue;
-    const label = `Día ${day}: ${arr[0].name || arr[0].headline || ''}${arr.length > 1 ? ' → ' + (arr[arr.length - 1].name || arr[arr.length - 1].headline || '') : ''}`;
-    if (arr.length === 1) {
-      // 1 parada → link al lugar con place_id (formato oficial, funciona)
-      links.push({ day, url: 'https://www.google.com/maps/place/?q=place_id:' + arr[0].place_id, label });
-    } else {
-      // 2+ paradas → ruta con lat/lng (formato que Google entiende en /dir/)
-      const segments = arr.map(p => `${p.lat},${p.lng}`).join('/');
-      links.push({ day, url: 'https://www.google.com/maps/dir/' + segments, label });
-    }
-  }
-  return links;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -3865,8 +2881,6 @@ async function buscarLugar(input, placesKey, userCoords) {
         abierto: d?.opening_hours?.open_now != null ? (d.opening_hours.open_now ? 'Abierto ahora' : 'Cerrado ahora') : '',
         web: d?.website || '',
         google_maps: gmapsLink,
-        lat: p.geometry?.location?.lat || null,
-        lng: p.geometry?.location?.lng || null,
       };
       if (esComida && (d?.price_level || p.price_level)) {
         entry.precio = '€'.repeat(d?.price_level || p.price_level);
@@ -3908,7 +2922,7 @@ async function buscarWeb(input, braveKey) {
     if (!organic.length) return { resultados: [], mensaje: 'No se encontraron resultados para esa búsqueda.' };
 
     // 2. Intentar obtener contenido de las top 2 URLs
-    const topUrls = organic.slice(0, 2).map(r => r.url).filter(Boolean);
+    const topUrls = organic.slice(0, 2).map(r => r.link).filter(Boolean);
     const contenidos = await Promise.all(topUrls.map(async url => {
       try {
         const res = await fetch(url, {
@@ -3931,16 +2945,12 @@ async function buscarWeb(input, braveKey) {
       }
     }));
 
-    // 3. Combinar snippets + contenido real de las webs (vincular por URL)
-    const contenidoMap = {};
-    for (const c of contenidos) {
-      if (c?.url) contenidoMap[c.url] = c.texto;
-    }
-    const resultados = organic.map(r => ({
+    // 3. Combinar snippets de Serper + contenido real de las webs
+    const resultados = organic.map((r, i) => ({
       titulo: r.title || '',
       snippet: r.description || '',
       url: r.url || '',
-      contenido: contenidoMap[r.url] || null,
+      contenido: contenidos[i]?.texto || null,
     }));
 
     return { resultados, query: input.query };
@@ -3959,8 +2969,17 @@ function getToolProgressMsg(toolName, input) {
       return `✈️ Buscando vuelos ${input.origen || ''} → ${input.destino || ''}...\n`;
     case 'buscar_hotel':
       return `🏨 Mirando hoteles en ${input.ciudad || ''}...\n`;
-    case 'buscar_lugar':
-      return `🔍 Buscando...\n`;
+    case 'buscar_lugar': {
+      const q = input.query || '';
+      const c = input.ciudad || '';
+      if (/restaurante|comer|cenar|sushi|thai|tapas/i.test(q)) return `🍽️ Buscando dónde comer en ${c}...\n`;
+      if (/gym|boxeo|fitness|sport/i.test(q)) return `🥊 Buscando gimnasio en ${c}...\n`;
+      if (/taxi|transfer|traslado/i.test(q)) return `🚕 Buscando taxi en ${c}...\n`;
+      if (/sim|tarjeta.*datos|telefon/i.test(q)) return `📱 Buscando dónde comprar SIM en ${c}...\n`;
+      if (/cambio|divisa|moneda|exchange/i.test(q)) return `💱 Buscando cambio de divisas en ${c}...\n`;
+      if (/farmacia/i.test(q)) return `💊 Buscando farmacia en ${c}...\n`;
+      return `📍 Buscando ${q} en ${c}...\n`;
+    }
     case 'buscar_coche':
       return `🚗 Buscando coches en ${input.ciudad_recogida || ''}...\n`;
     case 'buscar_web':
@@ -4010,21 +3029,23 @@ async function buscarFotoLugar(input, placesKey) {
       return { error: 'No se encontró foto para: ' + input.lugar, lugar: input.lugar };
     }
 
-    // 2. Construir URLs PERMANENTES vía el proxy /photo del worker.
-    // Antes usábamos photoRes.url (URL temporal de googleusercontent que caduca en minutos
-    // → imágenes rotas cuando el navegador las pide tarde). Ahora /photo?ref=X es estable y cacheable.
+    // 2. Obtener hasta 3 fotos DISTINTAS del lugar
     const maxPhotos = Math.min(place.photos.length, 3);
     const fotos = [];
-    const cleanName = (place.name || input.lugar).replace(/[\[\]()]/g, '').trim();
 
     for (let i = 0; i < maxPhotos; i++) {
-      const photoRef = place.photos[i]?.photo_reference;
-      if (!photoRef) continue;
-      const photoUrl = `https://salma-api.paco-defoto.workers.dev/photo?ref=${encodeURIComponent(photoRef)}`;
-      fotos.push({
-        url: photoUrl,
-        markdown: `![${cleanName}](${photoUrl})`,
-      });
+      try {
+        const photoRef = place.photos[i].photo_reference;
+        const photoRes = await fetch(
+          `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photo_reference=${photoRef}&key=${placesKey}`
+        );
+        if (photoRes.ok) {
+          fotos.push({
+            url: photoRes.url,
+            markdown: `![${place.name || input.lugar}](${photoRes.url})`,
+          });
+        }
+      } catch (_) {}
     }
 
     if (fotos.length === 0) {
@@ -4067,9 +3088,9 @@ function extractSalmaActions(text) {
 }
 
 // Ejecuta todas las acciones en paralelo y filtra nulls
-async function executeSalmaActionsParallel(actions, env, userLocation, userMessage) {
+async function executeSalmaActionsParallel(actions, env, userLocation) {
   const results = await Promise.all(
-    actions.map(action => executeSalmaAction(action, env, userLocation, userMessage).catch(e => ({ type: action.type, error: e.message })))
+    actions.map(action => executeSalmaAction(action, env, userLocation).catch(e => ({ type: action.type, error: e.message })))
   );
   return results.filter(r => r !== null);
 }
@@ -4086,7 +3107,7 @@ function parseDurationHours(d) {
 }
 
 // Dispatcher individual — un switch por tipo de acción
-async function executeSalmaAction(action, env, userLocation, userMessage) {
+async function executeSalmaAction(action, env, userLocation) {
   switch (action.type) {
     case 'SEARCH_FLIGHTS': {
       // Usamos Duffel (mismo proveedor que buscar_vuelos tool)
@@ -4129,10 +3150,7 @@ async function executeSalmaAction(action, env, userLocation, userMessage) {
       };
     }
     case 'SEARCH_HOTELS':
-    case 'SEARCH_AIRBNB':
-    case 'SEARCH_ACCOMMODATION':
-    case 'SEARCH_HOSTEL':
-      return await searchHotelsPlaces({ ...action, _userMessage: userMessage }, env.GOOGLE_PLACES_KEY, userLocation);
+      return await searchHotelsPlaces(action, env.GOOGLE_PLACES_KEY, userLocation);
     case 'SEARCH_PLACES':
       return await searchPlacesGoogle(action, env.GOOGLE_PLACES_KEY, userLocation);
     case 'SAVE_NOTE':
@@ -4154,28 +3172,8 @@ async function executeSalmaAction(action, env, userLocation, userMessage) {
 async function searchHotelsPlaces(params, placesKey, userLocation) {
   if (!placesKey) return { type: 'hotels', error: 'No GOOGLE_PLACES_KEY configurada' };
   const { city, lat, lng, budget, adults = 2, checkin, checkout } = params;
-  // Detectar si es búsqueda de apartamento/airbnb
-  const originalType = params.type || '';
-  const isApartment = originalType === 'SEARCH_AIRBNB' || originalType === 'SEARCH_ACCOMMODATION'
-    || params.subtype === 'apartment'
-    || /apartamento|airbnb|apartment/i.test(params.query || params._userMessage || '');
 
-  // Apartamento → solo enlace Airbnb, sin Google Places (no tiene apartamentos)
-  if (isApartment) {
-    let airbnbLink = null;
-    if (city) {
-      const citySlug = city.trim().replace(/\s+/g, '-');
-      airbnbLink = `https://www.airbnb.com/s/${encodeURIComponent(citySlug)}/homes`;
-      const qs = [];
-      if (checkin) qs.push(`checkin=${checkin}`);
-      if (checkout) qs.push(`checkout=${checkout}`);
-      if (adults) qs.push(`adults=${adults}`);
-      if (qs.length) airbnbLink += '?' + qs.join('&');
-    }
-    return { type: 'hotels', city, checkin, checkout, adults, budget, hotels: [], airbnb_link: airbnbLink };
-  }
-
-  // Hotel normal → buscar en Google Places
+  // Construir query adaptada al presupuesto
   let query = 'hotel';
   if (budget === 'low') query = 'hostel alojamiento barato';
   else if (budget === 'high') query = 'hotel de lujo boutique';
@@ -4569,7 +3567,7 @@ export default {
       return new Response(null, {
         headers: {
           'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
           'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         },
       });
@@ -4628,16 +3626,13 @@ export default {
         if (!photo) {
           return new Response(JSON.stringify({ error: 'Missing photo' }), { status: 400, headers: corsH });
         }
-        const isVideo = photo.type && photo.type.startsWith('video/');
-        const maxSize = isVideo ? 50 * 1024 * 1024 : 6 * 1024 * 1024;
-        if (photo.size > maxSize) {
-          return new Response(JSON.stringify({ error: isVideo ? 'Video too large (max 50MB)' : 'Photo too large (max 6MB)' }), { status: 400, headers: corsH });
+        if (photo.size > 6 * 1024 * 1024) {
+          return new Response(JSON.stringify({ error: 'Photo too large (max 6MB)' }), { status: 400, headers: corsH });
         }
         const timestamp = Date.now();
-        const ext = isVideo ? '.mp4' : '.jpg';
-        const key = `photos/${uid}/gallery/${timestamp}${ext}`;
+        const key = `photos/${uid}/gallery/${timestamp}.jpg`;
         await env.SALMA_PHOTOS.put(key, photo.stream(), {
-          httpMetadata: { contentType: photo.type || 'image/jpeg' },
+          httpMetadata: { contentType: 'image/jpeg' },
           customMetadata: { uid, source: 'gallery' }
         });
         const photoUrl = `https://salma-api.paco-defoto.workers.dev/photo/${encodeURIComponent(key)}`;
@@ -4848,59 +3843,6 @@ export default {
       }
     }
 
-    // ─── ENDPOINT /weather (banner tiempo) ───
-    if (request.method === 'GET' && url.pathname === '/weather') {
-      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
-      const lat = parseFloat(url.searchParams.get('lat'));
-      const lon = parseFloat(url.searchParams.get('lon'));
-      const city = url.searchParams.get('city') || '';
-      try {
-        let data = null;
-        if (!isNaN(lat) && !isNaN(lon)) {
-          data = await fetchWeatherBanner(lat, lon, env.OPENWEATHER_KEY);
-        } else if (city) {
-          const geoRes = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(city)}&limit=1&appid=${env.OPENWEATHER_KEY}`, { signal: AbortSignal.timeout(5000) });
-          const geo = await geoRes.json();
-          if (geo?.[0]) data = await fetchWeatherBanner(geo[0].lat, geo[0].lon, env.OPENWEATHER_KEY);
-        }
-        if (!data) return new Response(JSON.stringify({ error: 'no data' }), { status: 404, headers: corsH });
-        return new Response(JSON.stringify(data), { headers: corsH });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
-      }
-    }
-
-    // ─── ENDPOINT /staticmap (proxy para evitar CORS en canvas) ───
-    if (request.method === 'GET' && url.pathname === '/staticmap') {
-      const lat = url.searchParams.get('lat');
-      const lng = url.searchParams.get('lng');
-      const zoom = url.searchParams.get('zoom') || '14';
-      const size = url.searchParams.get('size') || '640x640';
-      const maptype = url.searchParams.get('maptype') || 'satellite';
-      const scale = url.searchParams.get('scale') || '1';
-      const pathEnc = url.searchParams.get('path') || '';
-      const apiKey = url.searchParams.get('key') || env.GOOGLE_PLACES_KEY;
-      if (!lat || !lng || !apiKey) {
-        return new Response('Missing params', { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } });
-      }
-      try {
-        let gmUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${size}&maptype=${maptype}&scale=${scale}&key=${apiKey}`;
-        if (pathEnc) gmUrl += `&path=color:0xD4A017FF|weight:3|enc:${encodeURIComponent(pathEnc)}`;
-        const imgRes = await fetch(gmUrl);
-        if (!imgRes.ok) return new Response('Map error', { status: 502, headers: { 'Access-Control-Allow-Origin': '*' } });
-        const imgBlob = await imgRes.arrayBuffer();
-        return new Response(imgBlob, {
-          headers: {
-            'Content-Type': imgRes.headers.get('Content-Type') || 'image/png',
-            'Access-Control-Allow-Origin': '*',
-            'Cache-Control': 'public, max-age=86400',
-          }
-        });
-      } catch(e) {
-        return new Response('Proxy error', { status: 500, headers: { 'Access-Control-Allow-Origin': '*' } });
-      }
-    }
-
     // ─── ENDPOINT /photo ───
     if (request.method === 'GET' && url.pathname === '/photo') {
       const name = url.searchParams.get('name') || '';
@@ -4931,53 +3873,21 @@ export default {
         return new Response(JSON.stringify({ error: 'missing params' }), { status: 400, headers: corsH });
       }
       try {
-        // KV-first: buscar photo_ref cacheado antes de llamar a Find Place ($0.017)
-        let photoRef = null;
-        if (env.SALMA_KB) {
-          const variants = normalizeSpotKey(name);
-          for (const v of variants) {
-            try {
-              const spotJson = await env.SALMA_KB.get('spot:' + v);
-              if (spotJson) {
-                const spot = JSON.parse(spotJson);
-                if (spot.photo_ref) { photoRef = spot.photo_ref; }
-                break;
-              }
-            } catch (_) {}
+        const bias = (lat && lng) ? `&locationbias=circle:10000@${lat},${lng}` : '';
+        const findRes = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(name)}&inputtype=textquery${bias}&fields=photos,geometry&key=${placesKey}`);
+        const findData = await findRes.json();
+        const candidate = findData.candidates?.[0];
+        const photoRef = candidate?.photos?.[0]?.photo_reference;
+        if (!photoRef) return new Response(JSON.stringify({ error: 'not found' }), { status: 404, headers: corsH });
+
+        if (lat && lng) {
+          const pLat = candidate?.geometry?.location?.lat;
+          const pLng = candidate?.geometry?.location?.lng;
+          if (pLat && pLng) {
+            const distKm = Math.sqrt(Math.pow(Math.abs(pLat - parseFloat(lat)), 2) + Math.pow(Math.abs(pLng - parseFloat(lng)), 2)) * 111;
+            if (distKm > 30) return new Response(JSON.stringify({ error: 'too far' }), { status: 404, headers: corsH });
           }
         }
-
-        // Si no hay KV hit, Find Place API (fallback)
-        if (!photoRef) {
-          const bias = (lat && lng) ? `&locationbias=circle:10000@${lat},${lng}` : '';
-          const findRes = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(name)}&inputtype=textquery${bias}&fields=photos,geometry&key=${placesKey}`);
-          const findData = await findRes.json();
-          const candidate = findData.candidates?.[0];
-          photoRef = candidate?.photos?.[0]?.photo_reference;
-          if (!photoRef) return new Response(JSON.stringify({ error: 'not found' }), { status: 404, headers: corsH });
-
-          if (lat && lng) {
-            const pLat = candidate?.geometry?.location?.lat;
-            const pLng = candidate?.geometry?.location?.lng;
-            if (pLat && pLng) {
-              const distKm = Math.sqrt(Math.pow(Math.abs(pLat - parseFloat(lat)), 2) + Math.pow(Math.abs(pLng - parseFloat(lng)), 2)) * 111;
-              if (distKm > 30) return new Response(JSON.stringify({ error: 'too far' }), { status: 404, headers: corsH });
-            }
-          }
-          // Cachear photo_ref en KV para futuras llamadas (30 días)
-          if (env.SALMA_KB && photoRef) {
-            const cacheKey = 'spot:' + normalizeSpotKey(name)[0];
-            const existing = await env.SALMA_KB.get(cacheKey).catch(() => null);
-            const spotData = existing ? JSON.parse(existing) : {};
-            spotData.photo_ref = photoRef;
-            if (candidate?.geometry?.location) {
-              spotData.lat = spotData.lat || candidate.geometry.location.lat;
-              spotData.lng = spotData.lng || candidate.geometry.location.lng;
-            }
-            env.SALMA_KB.put(cacheKey, JSON.stringify(spotData), { expirationTtl: 2592000 }).catch(() => {});
-          }
-        }
-
         const imgRes = await fetch(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${photoRef}&key=${placesKey}`);
         if (!imgRes.ok) return new Response(JSON.stringify({ error: 'photo error' }), { status: 404, headers: corsH });
         if (url.searchParams.get('json') === '1') {
@@ -5167,24 +4077,6 @@ export default {
       }
     }
 
-    // ─── ENDPOINT /transport (Apps de transporte por país desde KV) ───
-    if (request.method === 'GET' && url.pathname === '/transport') {
-      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
-      const country = url.searchParams.get('country');
-      if (!country || !env.SALMA_KB) {
-        return new Response(JSON.stringify({ error: 'Missing country or KV' }), { status: 400, headers: corsH });
-      }
-      try {
-        const tjson = await env.SALMA_KB.get('transport:' + country.toLowerCase());
-        if (!tjson) {
-          return new Response(JSON.stringify({ error: 'Not found' }), { status: 404, headers: corsH });
-        }
-        return new Response(JSON.stringify({ country, transport: JSON.parse(tjson) }), { headers: corsH });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
-      }
-    }
-
     // ─── ENDPOINT /sos (Emergencia — SMS via Twilio) ───
     if (request.method === 'POST' && url.pathname === '/sos') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
@@ -5326,28 +4218,16 @@ export default {
           }
         }
 
-        const narrateRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': env.ANTHROPIC_API_KEY,
-            'anthropic-version': '2023-06-01',
-          },
-          body: JSON.stringify({
-            model: 'claude-haiku-4-5-20251001',
-            max_tokens: 200,
-            messages: [{
-              role: 'user',
-              content: `Eres Salma, compañera de viaje. El viajero está junto a ${poi_name}${countryContext}. Cuéntale en 2-3 frases: qué es, por qué importa y un dato curioso. Tono cercano y directo, sin paja. Máximo 80 palabras. Solo el texto, sin encabezados ni viñetas.`
-            }]
-          }),
+        const apiKey = env.OPENAI_API_KEY;
+        const result = await callOpenAI(apiKey, {
+          model: 'gpt-4o-mini',
+          max_tokens: 200,
+          messages: [{
+            role: 'user',
+            content: `Eres Salma, compañera de viaje. El viajero está junto a ${poi_name}${countryContext}. Cuéntale en 2-3 frases: qué es, por qué importa y un dato curioso. Tono cercano y directo, sin paja. Máximo 80 palabras. Solo el texto, sin encabezados ni viñetas.`
+          }]
         });
-        if (!narrateRes.ok) {
-          const errText = await narrateRes.text().catch(() => '');
-          throw new Error('Anthropic ' + narrateRes.status + ': ' + errText);
-        }
-        const narrateData = await narrateRes.json();
-        const narrative = narrateData.content?.[0]?.text || '';
+        const narrative = result.text || '';
         return new Response(JSON.stringify({ narrative, poi_name }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
@@ -5659,35 +4539,6 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       }
     }
 
-    // ─── /admin/verify-place — Valida coords contra findPlaceFromQuery ───
-    if (request.method === 'GET' && url.pathname === '/admin/verify-place') {
-      const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
-      const authHeader = request.headers.get('Authorization') || '';
-      if (authHeader.replace('Bearer ', '') !== env.ADMIN_TOKEN) {
-        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsH });
-      }
-      const name = url.searchParams.get('name') || '';
-      const lat = parseFloat(url.searchParams.get('lat') || '0');
-      const lng = parseFloat(url.searchParams.get('lng') || '0');
-      try {
-        const bias = (lat && lng) ? `&locationbias=circle:5000@${lat},${lng}` : '';
-        const r = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(name)}&inputtype=textquery${bias}&fields=place_id,name,formatted_address,geometry&language=es&key=${env.GOOGLE_PLACES_KEY}`);
-        const d = await r.json();
-        const top = d.candidates?.[0];
-        if (!top) return new Response(JSON.stringify({ found: false, status: d.status }), { headers: corsH });
-        const tLat = top.geometry?.location?.lat;
-        const tLng = top.geometry?.location?.lng;
-        const dist = (tLat && tLng && lat && lng) ? haversineKm(lat, lng, tLat, tLng) * 1000 : null;
-        return new Response(JSON.stringify({
-          found: true, google_name: top.name, google_lat: tLat, google_lng: tLng,
-          google_address: top.formatted_address, distance_m: dist ? Math.round(dist) : null,
-          place_id: top.place_id,
-        }), { headers: corsH });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
-      }
-    }
-
     // ─── /admin/test-extract — Fase 1: Haiku extrae reglas del prompt ───
     if (request.method === 'POST' && url.pathname === '/admin/test-extract') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
@@ -5749,34 +4600,15 @@ Responde en JSON estricto (sin markdown, sin backticks):
         const ruleResult = { id: rule.id, name: rule.name, description: rule.description, tests: [] };
 
         for (const testMsg of rule.test_messages.slice(0, 2)) {
-          // Salma responde al mensaje trampa — Claude Sonnet (modelo real de producción)
-          let salmaReply = '';
-          let debugInfo = '';
-          try {
-            const salmaRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': env.ANTHROPIC_API_KEY,
-                'anthropic-version': '2023-06-01',
-              },
-              body: JSON.stringify({
-                model: 'claude-sonnet-4-6',
-                max_tokens: 1500,
-                temperature: 0.7,
-                system: currentPrompt,
-                messages: [{ role: 'user', content: testMsg }],
-              }),
-            });
-            const salmaJson = await salmaRes.json();
-            salmaReply = salmaJson?.content?.[0]?.text || '';
-            if (!salmaReply) {
-              debugInfo = `[DEBUG status=${salmaRes.status}] ` + JSON.stringify(salmaJson).slice(0, 500);
-            }
-          } catch (e) {
-            debugInfo = `[DEBUG exception] ` + e.message;
-          }
-          if (!salmaReply && debugInfo) salmaReply = debugInfo;
+          // Salma responde al mensaje trampa
+          const salmaResult = await callOpenAI(apiKey, {
+            model: 'gpt-4o-mini',
+            max_tokens: 1500,
+            temperature: 0.7,
+            system: currentPrompt,
+            messages: [{ role: 'user', content: testMsg }],
+          });
+          const salmaReply = salmaResult.text || '';
 
           // GPT evalúa la respuesta
           const evalPrompt = `Evalúa si esta respuesta de un chatbot cumple una regla específica.
@@ -5965,7 +4797,7 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
           .replace(/^[\s]*[-•]\s*/gm, '')
           .replace(/\s+/g, ' ')
           .trim()
-          .slice(0, 4000); // Límite ampliado (ElevenLabs soporta hasta 5000)
+          .slice(0, 1500); // Límite: no leer guías enteras
 
         if (!clean) return new Response('Empty text', { status: 400, headers: corsH });
 
@@ -6002,588 +4834,20 @@ Responde con el prompt COMPLETO corregido. Sin explicaciones, sin markdown, solo
       }
     }
 
-    // ─── POST /translate — Traductor simultáneo (Claude Haiku 4.5) ───
-    if (request.method === 'POST' && url.pathname === '/translate') {
-      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
-      try {
-        const { text, fromLang, toLang } = await request.json();
-        if (!text || !toLang) {
-          return new Response(JSON.stringify({ error: 'missing params' }), { status: 400, headers: corsH });
-        }
-        const clean = String(text).trim().slice(0, 8000);
-        if (!clean) {
-          return new Response(JSON.stringify({ translated: '' }), { headers: corsH });
-        }
-        const fromHint = fromLang ? ` de ${fromLang}` : '';
-        const prompt = `Traduce el siguiente texto${fromHint} a ${toLang}. Devuelve SOLO la traducción, sin comillas, sin explicaciones, sin prefijos, sin alternativas. Mantén los saltos de línea y la estructura. Si hay varias personas hablando, conserva esa separación. Si el texto ya está en ${toLang}, devuélvelo tal cual.\n\nTexto:\n${clean}`;
-
-        const anthRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
-          method: 'POST',
-          headers: {
-            'x-api-key': env.ANTHROPIC_API_KEY,
-            'anthropic-version': '2023-06-01',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: 'claude-haiku-4-5-20251001',
-            max_tokens: 4000,
-            messages: [{ role: 'user', content: prompt }],
-          }),
-        });
-
-        if (!anthRes.ok) {
-          const detail = await anthRes.text().catch(() => '');
-          return new Response(JSON.stringify({ error: 'anthropic_error', status: anthRes.status, detail: detail.slice(0, 200) }), {
-            status: 502,
-            headers: corsH,
-          });
-        }
-
-        const data = await anthRes.json();
-        const translated = ((data.content && data.content[0] && data.content[0].text) || '').trim();
-        return new Response(JSON.stringify({ translated }), { headers: corsH });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: String(e && e.message || e) }), {
-          status: 500,
-          headers: corsH,
-        });
-      }
-    }
-
-    // ─── POST /tts-google — Google Cloud Text-to-Speech (voces nativas por idioma) ───
-    if (request.method === 'POST' && url.pathname === '/tts-google') {
-      const corsH = { 'Access-Control-Allow-Origin': '*' };
-      try {
-        const { text, languageCode, voiceName } = await request.json();
-        if (!text || !languageCode) {
-          return new Response(JSON.stringify({ error: 'missing params' }), {
-            status: 400, headers: { ...corsH, 'Content-Type': 'application/json' },
-          });
-        }
-        const clean = String(text).trim().slice(0, 4500);
-        if (!clean) {
-          return new Response(JSON.stringify({ error: 'empty' }), {
-            status: 400, headers: { ...corsH, 'Content-Type': 'application/json' },
-          });
-        }
-        const ttsKey = env.GOOGLE_TTS_KEY || env.GOOGLE_PLACES_KEY;
-        const voice = { languageCode };
-        if (voiceName) voice.name = voiceName;
-        const gRes = await fetch(`https://texttospeech.googleapis.com/v1/text:synthesize?key=${ttsKey}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            input: { text: clean },
-            voice,
-            audioConfig: { audioEncoding: 'MP3', speakingRate: 0.95 },
-          }),
-        });
-        if (!gRes.ok) {
-          const detail = await gRes.text().catch(() => '');
-          return new Response(JSON.stringify({ error: 'google_tts_error', status: gRes.status, detail: detail.slice(0, 2000) }), {
-            status: 502, headers: { ...corsH, 'Content-Type': 'application/json' },
-          });
-        }
-        const data = await gRes.json();
-        const b64 = data.audioContent;
-        if (!b64) {
-          return new Response(JSON.stringify({ error: 'no audio' }), {
-            status: 500, headers: { ...corsH, 'Content-Type': 'application/json' },
-          });
-        }
-        // Decode base64 → binary MP3
-        const bin = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-        return new Response(bin, {
-          headers: { ...corsH, 'Content-Type': 'audio/mpeg' },
-        });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: String(e && e.message || e) }), {
-          status: 500, headers: { ...corsH, 'Content-Type': 'application/json' },
-        });
-      }
-    }
-
-    // ─── POST /historia-lugar — Genera historia de un lugar con Claude Haiku ───
-    if (request.method === 'POST' && url.pathname === '/historia-lugar') {
-      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
-      let body;
-      try { body = await request.json(); } catch (e) {
-        return new Response(JSON.stringify({ error: 'JSON inválido' }), { status: 400, headers: corsH });
-      }
-
-      const { place, lat, lng } = body;
-      if (!place || typeof place !== 'string' || place.trim().length < 2) {
-        return new Response(JSON.stringify({ error: 'Falta el nombre del lugar' }), { status: 400, headers: corsH });
-      }
-
-      const placeName = place.trim();
-      const slug = placeName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-      const kvKey = `historia:${slug}`;
-
-      // 1. Cache KV
-      if (env.SALMA_KB) {
-        try {
-          const cached = await env.SALMA_KB.get(kvKey);
-          if (cached) {
-            return new Response(JSON.stringify({ historia: JSON.parse(cached), source: 'cache' }), { headers: corsH });
-          }
-        } catch (_) {}
-      }
-
-      // 2. Generar con Claude Haiku
-      const prompt = `Eres un historiador experto. Genera la historia de "${placeName}" como JSON con esta estructura exacta, sin texto extra:
-
-{
-  "title": "Nombre: subtítulo histórico",
-  "description": "Descripción de 1-2 frases sobre la relevancia histórica del lugar",
-  "emoji": "🏛️",
-  "category": "Europa|Asia|América|África|Oceanía",
-  "paradas": [
-    {
-      "year": 1492,
-      "title": "Título del hito histórico",
-      "subtitle": "Una frase que contextualiza",
-      "content": "Párrafo narrativo de 3-5 frases explicando qué ocurrió, por qué importa y cómo afectó al lugar. Directo, sin paja.",
-      "key_facts": ["Dato clave 1", "Dato clave 2", "Dato clave 3"]
-    }
-  ]
-}
-
-REGLAS:
-- Entre 4 y 6 paradas cronológicas cubriendo los momentos más importantes
-- Los años pueden ser negativos (a.C.) si es relevante
-- El emoji debe representar el lugar o su cultura (bandera, monumento, símbolo)
-- Contenido en español, tono cercano y directo
-- Solo devuelve el JSON, sin markdown ni explicaciones`;
-
-      try {
-        // 2a. Claude + Places en paralelo
-        const claudePromise = fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': env.ANTHROPIC_API_KEY,
-            'anthropic-version': '2023-06-01',
-          },
-          body: JSON.stringify({
-            model: 'claude-haiku-4-5-20251001',
-            max_tokens: 1800,
-            messages: [{ role: 'user', content: prompt }],
-          }),
-          signal: AbortSignal.timeout(20000),
-        });
-
-        const placesPromise = (async () => {
-          if (!env.GOOGLE_PLACES_KEY) return null;
-          const locBias = (lat && lng) ? `&location=${lat},${lng}&radius=50000` : '';
-          const r = await fetch(
-            `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(placeName)}&language=es${locBias}&key=${env.GOOGLE_PLACES_KEY}`,
-            { signal: AbortSignal.timeout(5000) }
-          );
-          const d = await r.json();
-          return d.results?.[0]?.photos?.[0]?.photo_reference || null;
-        })().catch(() => null);
-
-        const [claudeRes, photoRef] = await Promise.all([claudePromise, placesPromise]);
-
-        if (!claudeRes.ok) throw new Error('Claude ' + claudeRes.status);
-
-        const claudeData = await claudeRes.json();
-        const raw = (claudeData.content?.[0]?.text || '').trim();
-
-        const jsonMatch = raw.match(/\{[\s\S]*\}/);
-        if (!jsonMatch) throw new Error('Claude no devolvió JSON válido');
-
-        const historia = JSON.parse(jsonMatch[0]);
-        historia.id = slug;
-        if (photoRef) historia.photo_ref = photoRef;
-
-        // 3. Guardar en KV 30 días
-        if (env.SALMA_KB) {
-          env.SALMA_KB.put(kvKey, JSON.stringify(historia), { expirationTtl: 2592000 }).catch(() => {});
-        }
-
-        return new Response(JSON.stringify({ historia, source: 'claude' }), { headers: corsH });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
-      }
-    }
-
-    // ═══ FLIGHT WATCHES — Vigilancia de vuelos ═══
-
-    const FW_CORS = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
-    const FW_FREE_LIMIT = 3;
-
-    // ─── GET /flight-places — autocompletado de ciudades/aeropuertos (Duffel) ───
-    if (request.method === 'GET' && url.pathname === '/flight-places') {
-      try {
-        const q = url.searchParams.get('q');
-        if (!q || q.length < 2) {
-          return new Response(JSON.stringify({ places: [] }), { headers: FW_CORS });
-        }
-
-        const duffelToken = env.DUFFEL_ACCESS_TOKEN;
-        if (!duffelToken) {
-          return new Response(JSON.stringify({ error: 'Duffel not configured' }), { status: 500, headers: FW_CORS });
-        }
-
-        const res = await fetch(
-          `https://api.duffel.com/places/suggestions?query=${encodeURIComponent(q)}&type[]=airport&type[]=city`,
-          {
-            headers: {
-              'Accept': 'application/json',
-              'Duffel-Version': 'v2',
-              'Authorization': `Bearer ${duffelToken}`
-            },
-            signal: AbortSignal.timeout(5000)
-          }
-        );
-
-        if (!res.ok) {
-          return new Response(JSON.stringify({ places: [] }), { headers: FW_CORS });
-        }
-
-        const data = await res.json();
-        const places = (data.data || []).slice(0, 8).map(p => ({
-          name: p.name,
-          iata: p.iata_code || p.iata_city_code || '',
-          city: p.city_name || p.city?.name || p.name,
-          country: p.iata_country_code || '',
-          type: p.type // 'airport' or 'city'
-        })).filter(p => p.iata);
-
-        return new Response(JSON.stringify({ places }), { headers: FW_CORS });
-      } catch (e) {
-        return new Response(JSON.stringify({ places: [], error: e.message }), { headers: FW_CORS });
-      }
-    }
-
-    // ─── GET /flight-watches — listar vigilancias del usuario ───
-    if (request.method === 'GET' && url.pathname === '/flight-watches') {
-      try {
-        const authHeader = request.headers.get('Authorization') || '';
-        const authUser = await verifyAuthAndGetUser(authHeader);
-        if (!authUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: FW_CORS });
-        const idToken = authHeader.slice(7);
-
-        const listUrl = `${FIRESTORE_BASE}/users/${authUser.uid}/flight_watches`;
-        const res = await fetch(listUrl, { headers: { 'Authorization': 'Bearer ' + idToken }, signal: AbortSignal.timeout(5000) });
-        if (!res.ok) return new Response(JSON.stringify({ watches: [] }), { headers: FW_CORS });
-        const data = await res.json();
-        const watches = (data.documents || []).map(parseFirestoreDoc).filter(Boolean);
-        return new Response(JSON.stringify({ watches, count: watches.length }), { headers: FW_CORS });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
-      }
-    }
-
-    // ─── POST /flight-watches — crear vigilancia (con limite coins) ───
-    if (request.method === 'POST' && url.pathname === '/flight-watches') {
-      try {
-        const authHeader = request.headers.get('Authorization') || '';
-        const authUser = await verifyAuthAndGetUser(authHeader);
-        if (!authUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: FW_CORS });
-        const idToken = authHeader.slice(7);
-
-        const body = await request.json();
-        const { origin, destination, destination_name, date_from, date_to, trip_type, cabin, budget, passengers, flexible } = body;
-
-        if (!origin || !destination || !date_from || !trip_type) {
-          return new Response(JSON.stringify({ error: 'Campos obligatorios: origin, destination, date_from, trip_type' }), { status: 400, headers: FW_CORS });
-        }
-
-        // Contar watches existentes
-        const listUrl = `${FIRESTORE_BASE}/users/${authUser.uid}/flight_watches?pageSize=50`;
-        const listRes = await fetch(listUrl, { headers: { 'Authorization': 'Bearer ' + idToken }, signal: AbortSignal.timeout(5000) });
-        const listData = listRes.ok ? await listRes.json() : {};
-        const currentCount = (listData.documents || []).length;
-
-        let coinsRemaining = authUser.coins_saldo;
-
-        // Limite: 3 gratis, despues 1 coin
-        if (currentCount >= FW_FREE_LIMIT) {
-          if (authUser.coins_saldo < 1) {
-            return new Response(JSON.stringify({
-              error: 'no_coins',
-              message: 'Necesitas Salma Coins para añadir más vigilancias. Las 3 primeras son gratis.'
-            }), { status: 402, headers: FW_CORS });
-          }
-          // Descontar 1 coin
-          coinsRemaining = authUser.coins_saldo - 1;
-          const userPatchUrl = `${FIRESTORE_BASE}/users/${authUser.uid}?updateMask.fieldPaths=coins_saldo`;
-          await fetch(userPatchUrl, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
-            body: JSON.stringify({ fields: { coins_saldo: { integerValue: String(coinsRemaining) } } }),
-            signal: AbortSignal.timeout(5000)
-          });
-        }
-
-        // Crear doc
-        const watchId = 'fw_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
-        const now = new Date().toISOString();
-        const watchDoc = {
-          id: watchId,
-          origin: origin.toUpperCase().trim(),
-          destination: destination.toUpperCase().trim(),
-          destination_name: destination_name || destination,
-          date_from,
-          date_to: trip_type === 'roundtrip' ? (date_to || null) : null,
-          trip_type: trip_type || 'roundtrip',
-          cabin: cabin || 'economy',
-          passengers: passengers || 1,
-          budget: budget ? parseInt(budget, 10) : null,
-          currency: 'EUR',
-          flexible: !!flexible,
-          active: true,
-          last_price: null,
-          lowest_price: null,
-          last_checked: null,
-          created_at: now,
-          updated_at: now
-        };
-
-        // Escribir en Firestore
-        const docUrl = `${FIRESTORE_BASE}/users/${authUser.uid}/flight_watches/${watchId}`;
-        const writeRes = await fetch(docUrl, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
-          body: JSON.stringify(toFirestoreFields(watchDoc)),
-          signal: AbortSignal.timeout(5000)
-        });
-
-        if (!writeRes.ok) {
-          const errText = await writeRes.text();
-          return new Response(JSON.stringify({ error: 'Firestore write failed', detail: errText }), { status: 500, headers: FW_CORS });
-        }
-
-        // Sync a KV para el cron
-        if (env.SALMA_KB) {
-          try {
-            // Actualizar lista de watches del usuario en KV
-            const kvKey = 'fw:' + authUser.uid;
-            const existing = JSON.parse(await env.SALMA_KB.get(kvKey) || '[]');
-            existing.push(watchDoc);
-            await env.SALMA_KB.put(kvKey, JSON.stringify(existing));
-
-            // Actualizar indice de usuarios con watches
-            const usersKey = 'flight_watch_users';
-            const users = JSON.parse(await env.SALMA_KB.get(usersKey) || '[]');
-            if (!users.includes(authUser.uid)) {
-              users.push(authUser.uid);
-              await env.SALMA_KB.put(usersKey, JSON.stringify(users));
-            }
-          } catch (kvErr) {
-            console.log('[FW] KV sync error (non-blocking):', kvErr.message);
-          }
-        }
-
-        return new Response(JSON.stringify({ ok: true, watch: watchDoc, coins_remaining: coinsRemaining }), { status: 201, headers: FW_CORS });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
-      }
-    }
-
-    // ─── DELETE /flight-watches — eliminar vigilancia ───
-    if (request.method === 'DELETE' && url.pathname === '/flight-watches') {
-      try {
-        const authHeader = request.headers.get('Authorization') || '';
-        const authUser = await verifyAuthAndGetUser(authHeader);
-        if (!authUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: FW_CORS });
-        const idToken = authHeader.slice(7);
-
-        const body = await request.json();
-        const { watchId } = body;
-        if (!watchId) return new Response(JSON.stringify({ error: 'watchId requerido' }), { status: 400, headers: FW_CORS });
-
-        // Borrar de Firestore
-        const delUrl = `${FIRESTORE_BASE}/users/${authUser.uid}/flight_watches/${watchId}`;
-        await fetch(delUrl, {
-          method: 'DELETE',
-          headers: { 'Authorization': 'Bearer ' + idToken },
-          signal: AbortSignal.timeout(5000)
-        });
-
-        // Borrar alerta asociada (si existe)
-        const alertDelUrl = `${FIRESTORE_BASE}/users/${authUser.uid}/flight_alerts/${watchId}`;
-        await fetch(alertDelUrl, {
-          method: 'DELETE',
-          headers: { 'Authorization': 'Bearer ' + idToken },
-          signal: AbortSignal.timeout(3000)
-        }).catch(() => {});
-
-        // Sync KV
-        if (env.SALMA_KB) {
-          try {
-            const kvKey = 'fw:' + authUser.uid;
-            const existing = JSON.parse(await env.SALMA_KB.get(kvKey) || '[]');
-            const filtered = existing.filter(w => w.id !== watchId);
-            if (filtered.length > 0) {
-              await env.SALMA_KB.put(kvKey, JSON.stringify(filtered));
-            } else {
-              await env.SALMA_KB.delete(kvKey);
-              // Quitar del indice de usuarios
-              const usersKey = 'flight_watch_users';
-              const users = JSON.parse(await env.SALMA_KB.get(usersKey) || '[]');
-              const updatedUsers = users.filter(u => u !== authUser.uid);
-              await env.SALMA_KB.put(usersKey, JSON.stringify(updatedUsers));
-            }
-            // Borrar alertas de KV
-            const alertsKey = 'fw_alerts:' + authUser.uid;
-            const alerts = JSON.parse(await env.SALMA_KB.get(alertsKey) || '[]');
-            const filteredAlerts = alerts.filter(a => a.watchId !== watchId);
-            if (filteredAlerts.length > 0) {
-              await env.SALMA_KB.put(alertsKey, JSON.stringify(filteredAlerts), { expirationTtl: 604800 });
-            } else {
-              await env.SALMA_KB.delete(alertsKey);
-            }
-          } catch (kvErr) {
-            console.log('[FW] KV sync error (non-blocking):', kvErr.message);
-          }
-        }
-
-        return new Response(JSON.stringify({ ok: true }), { headers: FW_CORS });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
-      }
-    }
-
-    // ─── PUT /flight-watches/pause — pausar/reanudar vigilancia ───
-    if (request.method === 'PUT' && url.pathname === '/flight-watches/pause') {
-      try {
-        const authHeader = request.headers.get('Authorization') || '';
-        const authUser = await verifyAuthAndGetUser(authHeader);
-        if (!authUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: FW_CORS });
-        const idToken = authHeader.slice(7);
-
-        const body = await request.json();
-        const { watchId, active } = body;
-        if (!watchId || typeof active !== 'boolean') {
-          return new Response(JSON.stringify({ error: 'watchId y active (bool) requeridos' }), { status: 400, headers: FW_CORS });
-        }
-
-        const now = new Date().toISOString();
-        const patchUrl = `${FIRESTORE_BASE}/users/${authUser.uid}/flight_watches/${watchId}?updateMask.fieldPaths=active&updateMask.fieldPaths=updated_at`;
-        await fetch(patchUrl, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
-          body: JSON.stringify({ fields: { active: { booleanValue: active }, updated_at: { stringValue: now } } }),
-          signal: AbortSignal.timeout(5000)
-        });
-
-        // Sync KV
-        if (env.SALMA_KB) {
-          try {
-            const kvKey = 'fw:' + authUser.uid;
-            const existing = JSON.parse(await env.SALMA_KB.get(kvKey) || '[]');
-            const watch = existing.find(w => w.id === watchId);
-            if (watch) {
-              watch.active = active;
-              watch.updated_at = now;
-              await env.SALMA_KB.put(kvKey, JSON.stringify(existing));
-            }
-          } catch (kvErr) {
-            console.log('[FW] KV sync error (non-blocking):', kvErr.message);
-          }
-        }
-
-        return new Response(JSON.stringify({ ok: true, active }), { headers: FW_CORS });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
-      }
-    }
-
-    // ─── GET /flight-alerts — alertas no vistas ───
-    if (request.method === 'GET' && url.pathname === '/flight-alerts') {
-      try {
-        const authHeader = request.headers.get('Authorization') || '';
-        const authUser = await verifyAuthAndGetUser(authHeader);
-        if (!authUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: FW_CORS });
-
-        if (!env.SALMA_KB) return new Response(JSON.stringify({ alerts: [] }), { headers: FW_CORS });
-
-        const alertsKey = 'fw_alerts:' + authUser.uid;
-        const all = JSON.parse(await env.SALMA_KB.get(alertsKey) || '[]');
-        const unseen = all.filter(a => !a.seen);
-        return new Response(JSON.stringify({ alerts: unseen, count: unseen.length }), { headers: FW_CORS });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
-      }
-    }
-
-    // ─── PUT /flight-alerts/mark-seen — marcar alertas como vistas ───
-    if (request.method === 'PUT' && url.pathname === '/flight-alerts/mark-seen') {
-      try {
-        const authHeader = request.headers.get('Authorization') || '';
-        const authUser = await verifyAuthAndGetUser(authHeader);
-        if (!authUser) return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: FW_CORS });
-
-        const body = await request.json();
-        const { alertIds } = body;
-        if (!alertIds || !Array.isArray(alertIds)) {
-          return new Response(JSON.stringify({ error: 'alertIds (array) requerido' }), { status: 400, headers: FW_CORS });
-        }
-
-        if (env.SALMA_KB) {
-          const alertsKey = 'fw_alerts:' + authUser.uid;
-          const all = JSON.parse(await env.SALMA_KB.get(alertsKey) || '[]');
-          const now = new Date().toISOString();
-          let changed = false;
-          for (const a of all) {
-            if (alertIds.includes(a.id) && !a.seen) {
-              a.seen = true;
-              a.seen_at = now;
-              changed = true;
-            }
-          }
-          if (changed) {
-            await env.SALMA_KB.put(alertsKey, JSON.stringify(all), { expirationTtl: 604800 });
-          }
-        }
-
-        return new Response(JSON.stringify({ ok: true }), { headers: FW_CORS });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: FW_CORS });
-      }
-    }
-
     // ─── POST / ───
     if (request.method !== 'POST') {
       return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
     }
 
-    const corsChat = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
-
-    // ─── AUTH — Verificar Firebase ID token ───
-    const authHeader = request.headers.get('Authorization') || '';
-    const authUser = await verifyAuthAndGetUser(authHeader);
-    if (!authUser) {
-      return new Response(JSON.stringify({
-        reply: 'Inicia sesión para hablar conmigo. ¡Es gratis!',
-        route: null,
-        error: 'auth_required'
-      }), { status: 401, headers: corsChat });
-    }
-
-    // ─── RATE LIMITING — 60 msgs/hora por usuario ───
-    const withinLimit = await checkRateLimit(authUser.uid, env.SALMA_KB);
-    if (!withinLimit) {
-      return new Response(JSON.stringify({
-        reply: 'Has enviado demasiados mensajes esta hora. Espera un poco y vuelve a intentarlo.',
-        route: null,
-        error: 'rate_limited'
-      }), { status: 429, headers: corsChat });
-    }
-
     let body;
     try { body = await request.json(); } catch (e) {
-      return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: corsChat });
+      return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
     const message = body.message || body.msg || '';
     const history = body.history || [];
     const currentRoute = body.current_route || null;
-    const userName = authUser.name || body.user_name || null;
+    const userName = body.user_name || null;
 
     // ─── RESPUESTAS PRE-COCINADAS — saludos simples sin contenido (~50ms, 0 tokens) ───
     // Solo intercepta cuando el mensaje es un saludo puro, sin destino ni pregunta añadida
@@ -6591,7 +4855,7 @@ REGLAS:
       const msgNorm = message.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       const isPureGreeting = /^(hola[.!¡?]*|hey[.!]?|buenas[.!]?|buenos dias[.!]?|buenas (tardes|noches)[.!]?|ey[.!]?|hi[.!]?|hello[.!]?|qu[e']? (tal|pasa|hay)|como estas?[?]?|todo bien[?]?|saludos[.!]?)$/.test(msgNorm);
       if (isPureGreeting) {
-        const nombre = userName ? `, ${userName.split(' ')[0]}` : '';
+        const nombre = body.user_name ? `, ${body.user_name.split(' ')[0]}` : '';
         const respuestas = [
           `¡Hola${nombre}! ¿A dónde tiramos hoy?`,
           `¡Buenas${nombre}! Cuéntame, ¿qué destino te tiene loco?`,
@@ -6616,61 +4880,44 @@ REGLAS:
     const travelDates = body.travel_dates || null;
     const transport = body.transport || null;
     const withKids = body.with_kids || false;
-    // Coins y rutas gratis se leen server-side desde Firestore (P0-2 — no confiar en el frontend)
-    const coinsSaldo = authUser.coins_saldo;
-    const rutasGratisUsadas = authUser.rutas_gratis_usadas;
+    const coinsSaldo = typeof body.coins_saldo === 'number' ? body.coins_saldo : 0;
+    const rutasGratisUsadas = typeof body.rutas_gratis_usadas === 'number' ? body.rutas_gratis_usadas : 0;
     const imageBase64 = body.image_base64 || null;
     const mapMode = body.map_mode || false;
-    const uid = authUser.uid; // UID verificado server-side (no confiar en body.uid)
+    const uid = body.uid || null;
     const userNotes = body.user_notes || null;
     const frontendCountryCode = body.country || null; // País enviado por el frontend (detectado por GPS)
 
-    // ─── BYPASS: petición explícita de enlace Google Maps ───
-    // Si el usuario pide un link (enlace/link/maps/cómo llegar/dónde está/ubicación/dirección),
-    // respondemos DIRECTO con getValidatedPlace. Sin Claude, sin tools, sin tokens.
-    // Resultado: link validado con place_id O frase fija. Siempre <1s, siempre seguro.
-    if (!currentRoute && !imageBase64 && message && message.length <= 200 &&
-        /\b(enlace|link|url|maps|google\s*maps|c[oó]mo\s+llegar|d[oó]nde\s+(est[aá]|queda)|ubicaci[oó]n\s+de|direcci[oó]n\s+de)\b/i.test(message) &&
-        env.GOOGLE_PLACES_KEY) {
-      const _cleanMsg = message.trim().replace(/[¿?¡!.,;:]+$/g, '');
-      const candidateName = _cleanMsg
-        .replace(/^\s*(dame|dime|pasame|p[aá]same|envi[aá]me|necesito|quiero|busco|b[uú]scame|cu[aá]l es|d[oó]nde (est[aá]|queda)|c[oó]mo llego a|c[oó]mo llegar a|c[oó]mo ir a|mu[eé]strame|ens[eé]ñame|ver|salma,?\s*)\s+/i, '')
-        .replace(/^\s*(el|la|los|las|un|una|unos|unas)\s+/i, '')
-        // Quita "enlace/link/maps/..." incluso si no va seguido de "de/del"
-        .replace(/^\s*(enlace|link|url|google\s*maps|maps|ubicaci[oó]n|direcci[oó]n)\s+(de\s+|del\s+|a\s+|al\s+|para\s+)?/i, '')
-        // Quita "el/la" si quedó después de quitar "enlace"
-        .replace(/^\s*(el|la|los|las)\s+/i, '')
-        .replace(/^\s*(puto|puta|pinche|coñ?o|carajo|joder)\s+/i, '')
-        .replace(/\b(por favor|porfa|gracias)\b/gi, '')
-        .trim();
-
-      if (candidateName.length >= 3 && candidateName.length <= 100) {
-        try {
-          const bias = userLocation && userLocation.lat ? { lat: userLocation.lat, lng: userLocation.lng } : null;
-          const validated = await getValidatedPlace(candidateName, env.GOOGLE_PLACES_KEY, '', frontendCountryCode || '', bias);
-          const reply = validated
-            ? validated.url
-            : 'No he encontrado ese sitio en Google Maps con seguridad.';
-          return new Response(
-            JSON.stringify({ reply, route: null }),
-            { headers: corsChat }
-          );
-        } catch (_) {
-          // Si getValidatedPlace falla, caemos al flujo normal con Claude
-        }
-      }
-    }
-
-    // ─── PRE-FETCH TRANSPORTE — arranca Brave INMEDIATAMENTE, en paralelo con geocoding+KV ───
+    // ─── PRE-FETCH TRANSPORTE — arranca Brave+Duffel INMEDIATAMENTE, en paralelo con geocoding+KV ───
+    // Si el mensaje parece transporte con OD, no esperar al bloque helpCategory (~400ms después)
     let _braveTransportPromise = null;
+    let _duffelTransportPromise = null;
+    let _transportODPrefetch = null;
     {
       const _isTransportMsg = /taxi|transfer|ferry|aeropuerto|airport|\btren\b|flixbus|renfe|\bave\s|como.?llegar|como.*ir.*de|de.*a.*en|bus.?(de|desde)|estacion/i.test(message);
       if (_isTransportMsg && env.BRAVE_SEARCH_KEY) {
-        const cleanMsg = message.replace(/^(necesito|quiero|busco|dame|dime)\s+/i, '').trim();
-        _braveTransportPromise = buscarWeb(
-          { query: `${cleanMsg} precio app transporte` },
-          env.BRAVE_SEARCH_KEY
-        ).catch(() => null);
+        _transportODPrefetch = extractTransportOD(message);
+        if (_transportODPrefetch) {
+          const _routeStr = `${_transportODPrefetch.origin} to ${_transportODPrefetch.dest}`;
+          _braveTransportPromise = buscarWeb(
+            { query: `how to get from ${_routeStr} ferry bus train book ticket buy online booking` },
+            env.BRAVE_SEARCH_KEY
+          ).catch(() => null);
+          // Duffel también arranca ya
+          const _origIATA = getCityIATA(_transportODPrefetch.origin);
+          const _destIATA = getCityIATA(_transportODPrefetch.dest);
+          if (_origIATA && _destIATA && env.DUFFEL_ACCESS_TOKEN) {
+            // Usar fechas del frontend si las hay, o extraerlas del mensaje, o mañana como fallback
+            const _extractedDates = travelDates || extractDatesFromMessage(message);
+            const _tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+            const _duffelDate = _extractedDates?.from || _tomorrow;
+            const _duffelReturn = _extractedDates?.to || null;
+            _duffelTransportPromise = buscarVuelosDuffel(
+              { origen: _origIATA, destino: _destIATA, fecha_ida: _duffelDate, fecha_vuelta: _duffelReturn, adultos: 1 },
+              env.DUFFEL_ACCESS_TOKEN
+            ).catch(() => null);
+          }
+        }
       }
     }
 
@@ -6713,49 +4960,16 @@ REGLAS:
       }
     }
 
-    if (!message.trim() && !imageBase64) {
+    if (!message.trim()) {
       return new Response(
         JSON.stringify({ reply: 'Dime a dónde quieres ir o qué te apetece hacer y te ayudo.', route: null }),
         { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
       );
     }
 
-    // ─── "QUIERO IR A..." — Detección y orquestación paralela (bypass Claude) ───
-    if (isGoToRequest(message) && userLocation) {
-      const goToDestText = extractGoToDestination(message);
-      if (goToDestText) {
-        const goToDest = await resolveGoToDestination(goToDestText, userLocation, userCountryCode || frontendCountryCode, env);
-        if (goToDest.destLat || goToDest.isCountry) {
-          const goToHeaders = {
-            'Content-Type': 'text/event-stream',
-            'Cache-Control': 'no-cache',
-            'Connection': 'keep-alive',
-            'Access-Control-Allow-Origin': '*',
-          };
-          const goToEncoder = new TextEncoder();
-          const { readable: goToReadable, writable: goToWritable } = new TransformStream();
-          const goToWriter = goToWritable.getWriter();
-
-          ctx.waitUntil((async () => {
-            try {
-              await handleGoTo(goToDest, userLocation, userCountryCode || frontendCountryCode, userLocationName, env, goToWriter, goToEncoder, travelDates, userNationality, userName, message);
-            } catch (e) {
-              try {
-                await goToWriter.write(goToEncoder.encode(`data: ${JSON.stringify({ done: true, reply: 'No he podido buscar esa información. Inténtalo de nuevo.', route: null })}\n\n`));
-                await goToWriter.close();
-              } catch (_) {}
-            }
-          })());
-
-          return new Response(goToReadable, { headers: goToHeaders });
-        }
-      }
-    }
-    // Si go_to no detectó destino válido → continúa al flujo normal de Claude
-
-    const apiKey = env.OPENAI_API_KEY; // fallback legacy (rutas largas)
-    // Todo va por Anthropic. Solo bloqueamos si no hay key
-    if (!env.ANTHROPIC_API_KEY) {
+    const apiKey = env.OPENAI_API_KEY; // solo para fotos (imageBase64) y rutas largas
+    // Texto sin foto → Anthropic. Solo bloqueamos si no hay ninguna key disponible
+    if (!apiKey && !env.ANTHROPIC_API_KEY) {
       return new Response(
         JSON.stringify({ reply: 'Salma no está configurada (falta API key).', route: null }),
         { status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
@@ -6776,24 +4990,40 @@ REGLAS:
       }
       // Solo usar GPS coords si la ubicación NO viene del mensaje (evita buscar taxis en Samui cuando piden Málaga)
       const searchCoords = helpLocationFromMessage ? null : userLocation;
-      // Transporte: búsqueda directa con el mensaje, no necesita helpLocation
-      if (helpCategory === 'transport') {
-        try {
-          if (env.BRAVE_SEARCH_KEY) {
-            // Usar el prefetch si ya arrancó, si no buscar ahora
-            const braveRes = _braveTransportPromise ? await _braveTransportPromise : await buscarWeb(
-              { query: `${message.replace(/^(necesito|quiero|busco|dame|dime)\s+/i, '').trim()} precio app transporte` },
-              env.BRAVE_SEARCH_KEY
-            ).catch(() => null);
-            if (braveRes?.resultados?.length > 0) {
-              transportSearchData = { resultados: braveRes.resultados, flightData: null };
-            }
-          }
-        } catch (e) { /* Fallo silencioso */ }
-      } else if (helpLocation) {
+      if (helpLocation) {
         try {
           if (helpCategory === 'weather') {
             weatherData = await fetchWeather(helpLocation, env.OPENWEATHER_KEY);
+          } else if (helpCategory === 'transport') {
+            // Formato rico con Brave SOLO cuando hay origen+destino explícito ("de X a Y")
+            // Preguntas genéricas ("hay taxi aquí", "bus turístico") → Claude responde con su conocimiento
+            const od = extractTransportOD(message);
+            if (od && od.origin && od.dest) {
+              const originCity = od.origin;
+              const destCity = od.dest;
+              const routeStr = `${originCity} to ${destCity}`;
+
+              // Usar el promise pre-iniciado (arrancó ~400ms antes, en paralelo con geocoding+KV)
+              // Si por alguna razón no se pre-inició, lanzar ahora como fallback
+              const bravePromise = _braveTransportPromise ||
+                (env.BRAVE_SEARCH_KEY
+                  ? buscarWeb({ query: `how to get from ${routeStr} ferry bus train book ticket buy online booking` }, env.BRAVE_SEARCH_KEY).catch(() => null)
+                  : Promise.resolve(null));
+
+              const origIATA = getCityIATA(originCity);
+              const destIATA = getCityIATA(destCity);
+              const duffelPromise = _duffelTransportPromise ||
+                (origIATA && destIATA && env.DUFFEL_ACCESS_TOKEN
+                  ? buscarVuelosDuffel({ origen: origIATA, destino: destIATA, fecha_ida: new Date(Date.now() + 86400000).toISOString().split('T')[0], adultos: 1 }, env.DUFFEL_ACCESS_TOKEN).catch(() => null)
+                  : Promise.resolve(null));
+
+              const [res1, flightRes] = await Promise.all([bravePromise, duffelPromise]);
+
+              const combinedResults = res1?.resultados || [];
+              if (combinedResults.length > 0) transportSearchData = { resultados: combinedResults, flightData: flightRes };
+              else if (flightRes && !flightRes.error) transportSearchData = { resultados: [], flightData: flightRes };
+            }
+            // Si no hay od explícito → transportSearchData queda null → Claude responde sin formato
           } else {
             helpResults = await searchPlacesForHelp(message, helpLocation, env.GOOGLE_PLACES_KEY, searchCoords);
           }
@@ -6809,29 +5039,99 @@ REGLAS:
       weatherFallbackMsg = '[TIEMPO: Los datos en tiempo real no están disponibles. USA buscar_web AHORA para obtener el tiempo actual. El tiempo cambia cada hora — jamás respondas con tu conocimiento base.]';
     }
 
-    // Si era consulta de transporte → inyectar resultados de búsqueda con URLs reales
+    // Si era consulta de transporte → inyectar bloque pre-estructurado con URLs ya asignadas
+    // Claude solo rellena los [campos] — las líneas "Reservar:" están fijas en el worker
     let transportFallbackMsg = null;
-    if (helpCategory === 'transport' && transportSearchData?.resultados?.length > 0) {
-      const snippets = transportSearchData.resultados.slice(0, 5).map((r, i) => {
-        let s = `[${i+1}] ${r.titulo}`;
-        if (r.url) s += `\nURL: ${r.url}`;
-        s += `\n${r.snippet}`;
-        if (r.contenido) s += `\n${r.contenido.slice(0, 400)}`;
-        return s;
-      }).join('\n\n');
+    if (helpCategory === 'transport') {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', timeZone: 'Europe/Madrid' });
+      const timeStr = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid' });
 
-      transportFallbackMsg = `[DATOS TRANSPORTE — FUENTE PRIMARIA. Responde SOLO con estos datos, NO con tu memoria.
+      const fd = transportSearchData?.flightData;
+      const hasData = transportSearchData?.resultados?.length > 0 || (fd && !fd.error);
 
-${snippets}
+      if (hasData) {
+        // URL terrestre: primera URL de Brave que esté en la whitelist, o rome2rio como fallback garantizado
+        const braveUrls = transportSearchData?.resultados?.filter(r => r.url) || [];
+        const _allowedLandDomains = [
+          '12go.asia','12go.com','bookaway.com','lomprayah.com','seatrandiscovery.com','seatranferry.com',
+          'rome2rio.com','busbud.com','trainline.com','thetrainline.com','trenitalia.com','renfe.com',
+          'omio.com','omio.es','wanderu.com','flixbus.es','flixbus.com','blablacar.es','blablacar.com',
+          'directferries.com','directferries.es','ferryhopper.com','ferryscanner.com','clickferry.com',
+          'balearia.com','frs.es','trasmediterranea.es','armasferry.com','aferry.com','aferry.es',
+          'virail.es','virail.com','alsa.es','rajaferryport.com',
+        ];
+        const allowedBraveUrl = braveUrls.find(r => _allowedLandDomains.some(d => r.url?.includes(d)));
+        const od = _transportODPrefetch;
+        const rome2rioUrl = od
+          ? `https://www.rome2rio.com/s/${encodeURIComponent(od.origin)}/${encodeURIComponent(od.dest)}`
+          : 'https://www.rome2rio.com';
+        const landUrl = allowedBraveUrl?.url || rome2rioUrl;
+        // URL vuelo: Skyscanner de Duffel si hay resultados, null si no
+        const flightUrl = (fd && !fd.error) ? fd.enlace_reserva : null;
 
-INSTRUCCIONES:
-1. Resuelve lo que pide el usuario PRIMERO. Precio + cómo reservar.
-2. Cada dato que des DEBE venir de las referencias de arriba. Cita la fuente por nombre (ej: "según Hootling", "fuente: TaxiSol").
-3. Cada servicio/empresa que menciones DEBE llevar su URL de las referencias. Formato: nombre + URL en la siguiente línea.
-4. NO respondas de memoria. Si no está en las referencias, no lo digas.
-5. Alternativas u opiniones van AL FINAL, después de resolver.
-6. NO generes enlaces de Google Maps.
-]`;
+        let ctx = `[DATOS TRANSPORTE — ${dateStr}, ${timeStr}\n\n`;
+
+        // Referencias para precios y compañías (Brave)
+        if (transportSearchData?.resultados?.length > 0) {
+          const snippets = transportSearchData.resultados.slice(0, 4).map((r, i) => {
+            let s = `[${i+1}] ${r.titulo}\n${r.snippet}`;
+            if (r.contenido) s += `\nInfo: ${r.contenido.slice(0, 300)}`;
+            return s;
+          }).join('\n\n');
+          ctx += `REFERENCIAS — precios, compañías, horarios reales:\n${snippets}\n\n`;
+        }
+
+        // Vuelos Duffel (precios en tiempo real)
+        if (fd && !fd.error && fd.vuelos?.length > 0) {
+          const vSnippets = fd.vuelos.slice(0, 3).map(v =>
+            `• ${v.aerolinea}: ${v.origen}→${v.destino} ${v.salida?.slice(11,16) || ''}→${v.llegada?.slice(11,16) || ''} | ${v.precio} | ${v.duracion || ''}`
+          ).join('\n');
+          ctx += `VUELOS DUFFEL (precios reales de hoy):\n${vSnippets}\n\n`;
+        }
+
+        // Esqueleto pre-estructurado — URLs ya incrustadas, Claude solo rellena [campos]
+        ctx += `RESPUESTA EXACTA — sustituye los [campos] con datos de las REFERENCIAS. `;
+        ctx += `Las líneas "Reservar:" están FIJAS: cópialas tal cual, sin cambiar ni una letra.\n\n`;
+        ctx += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        ctx += `Encontré [N] opciones verificadas hoy (${dateStr}, ${timeStr}):\n\n`;
+
+        ctx += `[EMOJI] [Nombre opción 1 — ej. "Ferry + Bus nocturno"] ([etiqueta: Más barato / Recomendado])\n`;
+        ctx += `  • [Compañía]: [Origen] → [Destino] · [duración] · [precio]\n`;
+        ctx += `  • Total: [precio total] | [tiempo total] ⏱️\n`;
+        ctx += `  • Reservar: ${landUrl}\n\n`;
+
+        ctx += `[EMOJI] [Nombre opción 2 — si existe otra opción terrestre diferente, ej. "Ferry + Tren nocturno"]\n`;
+        ctx += `  • [Compañía]: [Origen] → [Destino] · [duración] · [precio]\n`;
+        ctx += `  • Total: [precio total] | [tiempo total] ⏱️\n`;
+        ctx += `  • Reservar: ${landUrl}\n\n`;
+
+        if (flightUrl) {
+          const primerVuelo = fd?.vuelos?.[0];
+          ctx += `✈️ Vuelo directo (Más rápido)\n`;
+          if (primerVuelo) {
+            ctx += `  • ${primerVuelo.aerolinea}: ${primerVuelo.origen}→${primerVuelo.destino} | ${primerVuelo.precio} | ${primerVuelo.duracion || ''}\n`;
+          } else {
+            ctx += `  • [Aerolínea]: [Origen] → [Destino] · [duración] · [precio]\n`;
+          }
+          ctx += `  • Total: ${primerVuelo ? primerVuelo.precio : '[precio]'} | [duración] ⏱️\n`;
+          ctx += `  • Reservar: ${flightUrl}\n\n`;
+        }
+
+        ctx += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+        ctx += `REGLAS:\n`;
+        ctx += `- Sustituye todos los [campos] con datos reales de las REFERENCIAS\n`;
+        ctx += `- Si solo hay una opción terrestre real, elimina el bloque de opción 2\n`;
+        ctx += `- GEOGRAFÍA: si el destino no tiene puerto (Bangkok, Madrid, Roma, Marrakech...), el ferry NUNCA llega directo — muestra siempre el tramo ferry + tramo terrestre\n`;
+        ctx += `- Emojis: 🚢 ferry · 🚌 bus · 🚄 tren · ✈️ vuelo · 🛥️ speedboat · 🚕 taxi\n`;
+        ctx += `- Rango de precio si no hay exacto (ej. "800-1.200 THB")\n`;
+        ctx += `- Termina sin preguntas\n`;
+        ctx += `]`;
+
+        transportFallbackMsg = ctx;
+      } else {
+        transportFallbackMsg = null;
+      }
     }
 
     // ─── EVENT SEARCH (pre-Claude, solo cuando hay fechas) ───
@@ -6852,14 +5152,12 @@ INSTRUCCIONES:
     let kvDestinationData = null;
     let kvCachedRoute = null;
     let kvTransportData = null;
-    let countryFromMessage = false;
-    let countryCode = null;
     const _kvDebug = {};
     if (env.SALMA_KB) {
       try {
         // Extraer ubicación: primero el extractor normal, luego buscar palabras del mensaje en KV
         let location = extractHelpLocation(message, history, currentRoute);
-        countryCode = null;
+        let countryCode = null;
 
         if (location) {
           const kwNorm = location.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
@@ -6876,83 +5174,62 @@ INSTRUCCIONES:
           }
         }
 
-        // Fallback 2: Nominatim — geocodificar cualquier palabra del mensaje que no sea stopword
-        // Va ANTES del escaneo word-by-word de KV porque Nominatim detecta ciudades que KV no tiene
+        // Fix lowercase: si el mensaje tiene palabras en minúscula que son países/ciudades
         if (!countryCode) {
-          const STOPWORDS = new Set(['que','con','como','para','una','los','las','del','por','sin','mas','muy','hay','tiene','quiero','puedo','donde','cuanto','cuesta','vale','esta','esto','esa','ese','cual','cuando','desde','hasta','sobre','entre','tras','cada','todo','toda','nada','algo','algun','alguna','bien','mal','bueno','mala','mejor','peor','gran','poco','mucho','menos','hola','oye','dame','dime','dinos','cuales','son','fue','era','han','has','haz','pon','mira','vez','dia','mes','ano','hora','tiempo','lugar','sitio','zona','area','parte','tipo','cosa','info','datos','dato','precio','coste','tema','tips','tip','idioma','moneda','visa','visado','seguro','seguridad','vuelo','hotel','ruta','viaje','viajes','pais','ciudad','playa','mar','rio','lago','taxi','aeropuerto','centro','necesito','busco','queria','estacion','terminal','apartamento','restaurante','coche','grua','embajada','farmacia','hospital','policia','emergencia','gym','gimnasio','boxeo','fitness','cerca','mejor','buscame','encuentra','dame']);
-          const candidateWords = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').match(/\b[a-z]{3,}\b/g) || [];
-          const candidates = candidateWords.filter(w => !STOPWORDS.has(w));
-
-          // Probar cada candidato en Nominatim (máx 2 intentos para no gastar tiempo)
-          const countryMap = {
-            'espana': 'ES', 'spain': 'ES', 'francia': 'FR', 'france': 'FR', 'portugal': 'PT',
-            'italia': 'IT', 'italy': 'IT', 'alemania': 'DE', 'germany': 'DE', 'reino unido': 'GB',
-            'united kingdom': 'GB', 'estados unidos': 'US', 'united states': 'US', 'mexico': 'MX',
-            'argentina': 'AR', 'colombia': 'CO', 'peru': 'PE', 'chile': 'CL', 'brasil': 'BR',
-            'brazil': 'BR', 'tailandia': 'TH', 'thailand': 'TH', 'japon': 'JP', 'japan': 'JP',
-            'marruecos': 'MA', 'morocco': 'MA', 'turquia': 'TR', 'turkey': 'TR', 'turkiye': 'TR',
-            'grecia': 'GR', 'greece': 'GR', 'iran': 'IR', 'india': 'IN', 'china': 'CN',
-            'australia': 'AU', 'canada': 'CA', 'cuba': 'CU', 'republica dominicana': 'DO',
-            'costa rica': 'CR', 'panama': 'PA', 'ecuador': 'EC', 'bolivia': 'BO', 'uruguay': 'UY',
-            'paraguay': 'PY', 'venezuela': 'VE', 'guatemala': 'GT', 'honduras': 'HN',
-            'el salvador': 'SV', 'nicaragua': 'NI', 'filipinas': 'PH', 'philippines': 'PH',
-            'indonesia': 'ID', 'malasia': 'MY', 'malaysia': 'MY', 'vietnam': 'VN', 'viet nam': 'VN',
-            'camboya': 'KH', 'cambodia': 'KH', 'laos': 'LA', 'myanmar': 'MM', 'singapur': 'SG',
-            'singapore': 'SG', 'corea del sur': 'KR', 'south korea': 'KR', 'egipto': 'EG',
-            'egypt': 'EG', 'sudafrica': 'ZA', 'south africa': 'ZA', 'kenia': 'KE', 'kenya': 'KE',
-            'tanzania': 'TZ', 'etiopia': 'ET', 'ethiopia': 'ET', 'nigeria': 'NG',
-            'belgica': 'BE', 'belgium': 'BE', 'paises bajos': 'NL', 'netherlands': 'NL',
-            'suiza': 'CH', 'switzerland': 'CH', 'austria': 'AT', 'irlanda': 'IE', 'ireland': 'IE',
-            'dinamarca': 'DK', 'denmark': 'DK', 'noruega': 'NO', 'norway': 'NO',
-            'suecia': 'SE', 'sweden': 'SE', 'finlandia': 'FI', 'finland': 'FI',
-            'polonia': 'PL', 'poland': 'PL', 'rumania': 'RO', 'romania': 'RO',
-            'hungria': 'HU', 'hungary': 'HU', 'republica checa': 'CZ', 'czechia': 'CZ',
-            'croacia': 'HR', 'croatia': 'HR', 'serbia': 'RS', 'bulgaria': 'BG',
-            'rusia': 'RU', 'russia': 'RU', 'ucrania': 'UA', 'ukraine': 'UA',
-            'israel': 'IL', 'jordania': 'JO', 'jordan': 'JO', 'libano': 'LB', 'lebanon': 'LB',
-            'arabia saudita': 'SA', 'saudi arabia': 'SA', 'emiratos arabes unidos': 'AE',
-            'united arab emirates': 'AE', 'qatar': 'QA', 'oman': 'OM', 'kuwait': 'KW',
-            'nueva zelanda': 'NZ', 'new zealand': 'NZ', 'islandia': 'IS', 'iceland': 'IS',
-            'nepal': 'NP', 'nepal': 'NP', 'sri lanka': 'LK', 'bangladesh': 'BD',
-            'birmania': 'MM', 'tunez': 'TN', 'tunisia': 'TN', 'senegal': 'SN', 'ruanda': 'RW', 'rwanda': 'RW',
-          };
-
-          for (const word of candidates.slice(0, 2)) {
-            // Primero comprobar si es un país conocido en el mapa
-            if (countryMap[word]) { countryCode = countryMap[word]; location = location || word; break; }
-            // Si no, geocodificar con Nominatim
-            try {
-              // Caché en KV para no repetir la misma ciudad
-              const geoCacheKey = 'geocity:' + word;
-              let cachedCC = env.SALMA_KB ? await env.SALMA_KB.get(geoCacheKey) : null;
-              if (cachedCC) {
-                countryCode = cachedCC;
-                location = location || word;
-                break;
-              }
-              const geoUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(word)}&format=json&limit=1&accept-language=en`;
-              const geoRes = await fetch(geoUrl, { headers: { 'User-Agent': 'SalmaBot/1.0' }, signal: AbortSignal.timeout(3000) });
-              const geoArr = await geoRes.json();
-              if (geoArr.length > 0 && geoArr[0].display_name) {
-                const parts = geoArr[0].display_name.split(',');
-                const countryName = parts[parts.length - 1].trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                const cc = countryMap[countryName] || null;
-                if (cc) {
-                  countryCode = cc;
-                  location = location || word;
-                  // Cachear en KV para la próxima vez (30 días)
-                  if (env.SALMA_KB) {
-                    try { await env.SALMA_KB.put(geoCacheKey, cc, { expirationTtl: 2592000 }); } catch (_) {}
-                  }
-                  break;
-                }
-              }
-            } catch (_) {}
+          const STOPWORDS = new Set(['que','con','como','para','una','los','las','del','por','sin','mas','muy','hay','tiene','quiero','puedo','donde','cuanto','cuesta','vale','esta','esto','esa','ese','cual','cuando','desde','hasta','sobre','entre','tras','cada','todo','toda','nada','algo','algun','alguna','bien','mal','bueno','mala','mejor','peor','gran','poco','mucho','menos','hola','oye','dame','dime','dinos','cuales','son','fue','era','han','has','haz','pon','mira','vez','dia','mes','ano','hora','tiempo','lugar','sitio','zona','area','parte','tipo','tipo','cosa','info','info','datos','dato','precio','coste','coste','tema','tema','tips','tip','idioma','moneda','visa','visado','seguro','seguridad','vuelo','hotel','ruta','viaje','viajes','pais','ciudad','playa','mar','rio','lago']);
+          const allWords = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').match(/\b[a-z]{3,}\b/g) || [];
+          for (const word of allWords) {
+            if (STOPWORDS.has(word)) continue;
+            const code = await env.SALMA_KB.get('kw:' + word);
+            if (code) { countryCode = code; location = location || word; break; }
           }
         }
 
-        // Guardar si el país se detectó del mensaje (vs GPS) para saber si es consulta local o remota
-        countryFromMessage = !!countryCode;
+        // Fallback 2: geocodificar el nombre de la ciudad/lugar para detectar país
+        if (!countryCode && location) {
+          try {
+            const geoUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=1&accept-language=es`;
+            const geoRes = await fetch(geoUrl, { headers: { 'User-Agent': 'SalmaBot/1.0' } });
+            const geoArr = await geoRes.json();
+            if (geoArr.length > 0 && geoArr[0].display_name) {
+              // Extraer país del display_name (último componente) o usar boundingbox
+              const parts = geoArr[0].display_name.split(',');
+              const countryName = parts[parts.length - 1].trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+              // Mapeo rápido de nombres de país a código ISO
+              const countryMap = {
+                'espana': 'ES', 'spain': 'ES', 'francia': 'FR', 'france': 'FR', 'portugal': 'PT',
+                'italia': 'IT', 'italy': 'IT', 'alemania': 'DE', 'germany': 'DE', 'reino unido': 'GB',
+                'united kingdom': 'GB', 'estados unidos': 'US', 'united states': 'US', 'mexico': 'MX',
+                'argentina': 'AR', 'colombia': 'CO', 'peru': 'PE', 'chile': 'CL', 'brasil': 'BR',
+                'brazil': 'BR', 'tailandia': 'TH', 'thailand': 'TH', 'japon': 'JP', 'japan': 'JP',
+                'marruecos': 'MA', 'morocco': 'MA', 'turquia': 'TR', 'turkey': 'TR', 'turkiye': 'TR',
+                'grecia': 'GR', 'greece': 'GR', 'iran': 'IR', 'india': 'IN', 'china': 'CN',
+                'australia': 'AU', 'canada': 'CA', 'cuba': 'CU', 'republica dominicana': 'DO',
+                'costa rica': 'CR', 'panama': 'PA', 'ecuador': 'EC', 'bolivia': 'BO', 'uruguay': 'UY',
+                'paraguay': 'PY', 'venezuela': 'VE', 'guatemala': 'GT', 'honduras': 'HN',
+                'el salvador': 'SV', 'nicaragua': 'NI', 'filipinas': 'PH', 'philippines': 'PH',
+                'indonesia': 'ID', 'malasia': 'MY', 'malaysia': 'MY', 'vietnam': 'VN', 'viet nam': 'VN',
+                'camboya': 'KH', 'cambodia': 'KH', 'laos': 'LA', 'myanmar': 'MM', 'singapur': 'SG',
+                'singapore': 'SG', 'corea del sur': 'KR', 'south korea': 'KR', 'egipto': 'EG',
+                'egypt': 'EG', 'sudafrica': 'ZA', 'south africa': 'ZA', 'kenia': 'KE', 'kenya': 'KE',
+                'tanzania': 'TZ', 'etiopia': 'ET', 'ethiopia': 'ET', 'nigeria': 'NG',
+                'belgica': 'BE', 'belgium': 'BE', 'paises bajos': 'NL', 'netherlands': 'NL',
+                'suiza': 'CH', 'switzerland': 'CH', 'austria': 'AT', 'irlanda': 'IE', 'ireland': 'IE',
+                'dinamarca': 'DK', 'denmark': 'DK', 'noruega': 'NO', 'norway': 'NO',
+                'suecia': 'SE', 'sweden': 'SE', 'finlandia': 'FI', 'finland': 'FI',
+                'polonia': 'PL', 'poland': 'PL', 'rumania': 'RO', 'romania': 'RO',
+                'hungria': 'HU', 'hungary': 'HU', 'republica checa': 'CZ', 'czechia': 'CZ',
+                'croacia': 'HR', 'croatia': 'HR', 'serbia': 'RS', 'bulgaria': 'BG',
+                'rusia': 'RU', 'russia': 'RU', 'ucrania': 'UA', 'ukraine': 'UA',
+                'israel': 'IL', 'jordania': 'JO', 'jordan': 'JO', 'libano': 'LB', 'lebanon': 'LB',
+                'arabia saudita': 'SA', 'saudi arabia': 'SA', 'emiratos arabes unidos': 'AE',
+                'united arab emirates': 'AE', 'qatar': 'QA', 'oman': 'OM', 'kuwait': 'KW',
+                'nueva zelanda': 'NZ', 'new zealand': 'NZ', 'islandia': 'IS', 'iceland': 'IS',
+              };
+              countryCode = countryMap[countryName] || null;
+            }
+          } catch (e) { /* geocoding fallo — silencioso */ }
+        }
 
         // Fallback 3: si hay GPS y no se encontró país por el mensaje, usar el país del GPS
         if (!countryCode && userCountryCode) {
@@ -6995,12 +5272,6 @@ INSTRUCCIONES:
       } catch (e) { /* KV fallo silencioso — Salma funciona sin KV */ }
     }
 
-    // Determinar si es consulta local (GPS coincide con destino) o remota
-    const gpsCountry = (userCountryCode || frontendCountryCode || '').toUpperCase();
-    const detectedCountry = (countryCode || '').toUpperCase();
-    // Es local si: no detectamos país del mensaje (usó GPS), o si el país detectado coincide con GPS
-    const isLocalQuery = !countryFromMessage || (detectedCountry === gpsCountry);
-
     // Si hay ruta cacheada, devolverla directamente (0 coste, <100ms)
     // Pero solo si tiene calidad mínima: al menos 3 paradas/día de media
     const _cachedStops = kvCachedRoute?.stops?.length || 0;
@@ -7016,12 +5287,8 @@ INSTRUCCIONES:
       });
     }
 
-    // KV solo para rutas y guías — en todo lo demás Claude usa sus tools
-    const isRoute = isRouteRequest(message, history) || isDaysDestination(message);
-    const skipKV = !isRoute;
-
-    // ─── RESPUESTA DIRECTA DEL KV (sin llamar a Claude = 0 coste) — SOLO para rutas/guías ───
-    if (kvCountryData && !skipKV && !imageBase64 && !isFlightRequest(message) && !isHotelRequest(message) && !isServiceRequest(message) && !helpCategory) {
+    // ─── RESPUESTA DIRECTA DEL KV (sin llamar a Claude = 0 coste) ───
+    if (kvCountryData && !imageBase64 && !isRouteRequest(message, history) && !isFlightRequest(message) && !isHotelRequest(message) && !isServiceRequest(message) && !helpCategory) {
       const kvDirectReply = tryKVDirectAnswer(message, kvCountryData, kvDestinationData);
       if (kvDirectReply) {
         return new Response(
@@ -7033,7 +5300,9 @@ INSTRUCCIONES:
 
     // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
     const dynamicPrompt = await getSystemPrompt(env);
-    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode);
+
+    // Construir mensajes (con datos KV si los hay)
+    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode);
 
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {
@@ -7063,6 +5332,7 @@ INSTRUCCIONES:
       }
     }
 
+    const isRoute = isRouteRequest(message, history);
     const isFlightReq = isFlightRequest(message);
     const isHotelReq = isHotelRequest(message);
     const isServiceReq = isServiceRequest(message);
@@ -7073,9 +5343,9 @@ INSTRUCCIONES:
     const webSearchNeeded = needsWebSearchTool(message);
     // transportFallbackMsg tiene datos pre-buscados → Claude no necesita tools, responde directo del esqueleto
     const needsTools = isRoute || isFlightReq || isHotelReq || serviceReqEffective || !!imageBase64 || !!weatherFallbackMsg || webSearchNeeded;
-    // Todo va a Claude Sonnet (visión nativa incluida)
-    const useAnthropic = true;
-    const reqModel = 'gpt-4o-mini'; // fallback legacy (no se usa si useAnthropic=true)
+    // Fotos → OpenAI (mejor visión). Texto → Claude Sonnet (mejor instrucciones)
+    const useAnthropic = !imageBase64;
+    const reqModel = 'gpt-4o-mini'; // solo para fotos (OpenAI)
     const reqMaxTokens = needsTools ? 6000 : 3000;
 
     // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
@@ -7120,86 +5390,6 @@ INSTRUCCIONES:
       const longRoute = isLongRoute(message); // Rutas ≥8 días → generación por bloques paralelos
 
       try {
-        // ── TRANSPORT: buscar destino + emitir botones ANTES de Claude ──
-        if (helpCategory === 'transport' && userLocation) {
-          // 1. País del GPS (SIEMPRE GPS, nunca del mensaje)
-          const _tcCC = (userCountryCode || frontendCountryCode || '').toLowerCase();
-
-          // 2. Cargar transport data fresca de KV (no reusar kvTransportData que puede ser de otro país)
-          let _tcData = null;
-          if (_tcCC && env.SALMA_KB) {
-            try {
-              const raw = await env.SALMA_KB.get('transport:' + _tcCC);
-              if (raw) _tcData = JSON.parse(raw);
-            } catch (_) {}
-          }
-
-          // 3. Extraer destino del mensaje
-          const _tcDest = message.replace(/^(necesito|quiero|busco|pedir?|dame|dime)\s*/i, '')
-            .replace(/\b(un\s+)?taxi\b/i, '').replace(/\b(al?|para|hacia|hasta|ir\s+a|de)\b/gi, '').replace(/\s+/g, ' ').trim();
-
-          // 4. Buscar coords del destino con Google Places
-          let _tcCoords = null;
-          if (env.GOOGLE_PLACES_KEY && _tcDest.length > 3 && !/^(necesito|pedir|taxi|transporte|un)$/i.test(_tcDest)) {
-            try {
-              const _pr = await fetch(
-                `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(_tcDest)}&location=${userLocation.lat},${userLocation.lng}&radius=50000&language=es&key=${env.GOOGLE_PLACES_KEY}`,
-                { signal: AbortSignal.timeout(4000) }
-              );
-              const _pd = await _pr.json();
-              if (_pd.results?.[0]?.geometry?.location) {
-                const _p = _pd.results[0];
-                _tcCoords = { lat: _p.geometry.location.lat, lng: _p.geometry.location.lng, name: _p.name || _tcDest };
-                _lastBuscarLugarCoords = _tcCoords;
-              }
-            } catch (_) {}
-          }
-
-          // 5. Construir y emitir botones
-          if (_tcCoords) {
-            const actions = [];
-
-            // Google Maps con ruta
-            actions.push({
-              name: 'Google Maps', icon: '🗺️', type: 'deeplink',
-              url: `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${_tcCoords.lat},${_tcCoords.lng}&travelmode=driving`,
-              label: 'Cómo llegar → ' + _tcCoords.name
-            });
-
-            // App best del país + primer alternativa
-            if (_tcData?.ridehailing?.best) {
-              const _appNames = [_tcData.ridehailing.best, ...(_tcData.ridehailing.others || [])].filter(Boolean).slice(0, 2);
-              for (const _an of _appNames) {
-                const _ad = TRANSPORT_APP_URLS[_an.toLowerCase()];
-                if (!_ad) continue;
-                if (_ad.deep_link) {
-                  actions.push({
-                    name: _ad.name, icon: _ad.icon, type: 'deeplink',
-                    url: _ad.deep_link.replace(/{pickup_lat}/g, userLocation.lat).replace(/{pickup_lng}/g, userLocation.lng)
-                      .replace(/{dropoff_lat}/g, _tcCoords.lat).replace(/{dropoff_lng}/g, _tcCoords.lng)
-                      .replace(/{dropoff_name}/g, encodeURIComponent(_tcCoords.name || '')),
-                    label: 'Pedir ' + _ad.name
-                  });
-                } else {
-                  // App sin deep link → enviar scheme+pkg para que frontend abra la app nativa
-                  actions.push({
-                    name: _ad.name, icon: _ad.icon, type: 'app',
-                    url: _ad.web, scheme: _ad.scheme || null, pkg: _ad.pkg || null,
-                    store_ios: _ad.store_ios || null, store_android: _ad.store_android || null,
-                    label: 'Abrir ' + _ad.name
-                  });
-                }
-              }
-            }
-
-            // Emitir SSE ANTES de Claude
-            const _tip = _tcData?.ridehailing?.tips || null;
-            try {
-              await writer.write(encoder.encode(`data: ${JSON.stringify({ transport_actions: actions, transport_tip: _tip })}\n\n`));
-            } catch (_) {}
-          }
-        }
-
         // ── RUTA LARGA (≥8 días): generación por bloques paralelos ──
         if (longRoute) {
           const days = extractDaysFromMessage(message);
@@ -7285,11 +5475,6 @@ INSTRUCCIONES:
         // Mensajes que crecen con cada iteración del bucle (tool_use → tool_result)
         let currentMessages = [...messages];
         let lastFlightBookingUrl = null; // Guardar enlace de vuelos para inyectar si GPT no lo incluye
-        let _toolUrls = []; // URLs de buscar_lugar y buscar_web para inyectar si Claude no las pone
-        let _hotelPhotosByName = new Map(); // nombre.toLowerCase() → { foto, enlace } de buscar_hotel (para reparar markdown roto)
-        let _lastBuscarLugarCoords = null; // Coords del último lugar buscado (para deep links transporte)
-        let _pendingTransportActions = null; // Acciones de transporte para enviar en done event
-        let _pendingTransportTip = null;
 
         for (let iteration = 0; iteration <= MAX_TOOL_ITERATIONS; iteration++) {
           let apiRes;
@@ -7298,7 +5483,7 @@ INSTRUCCIONES:
           if (useAnthropic) {
             // ── Claude Sonnet (texto sin foto) ──
             try {
-              apiRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+              apiRes = await fetch('https://api.anthropic.com/v1/messages', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -7422,31 +5607,6 @@ INSTRUCCIONES:
               if (block.name === 'buscar_vuelos' && toolResult.enlace_reserva) {
                 lastFlightBookingUrl = toolResult.enlace_reserva;
               }
-              // Capturar fotos y enlaces de hoteles para reparar markdown roto de Claude
-              if (block.name === 'buscar_hotel' && Array.isArray(toolResult.hoteles)) {
-                for (const h of toolResult.hoteles) {
-                  if (h.nombre && h.foto) {
-                    _hotelPhotosByName.set(h.nombre.toLowerCase().trim(), { foto: h.foto, enlace: h.enlace_reserva || '' });
-                  }
-                }
-              }
-              // Capturar URLs de resultados de herramientas para inyectar si Claude no las pone
-              if (block.name === 'buscar_lugar' && toolResult.lugares) {
-                for (const l of toolResult.lugares) {
-                  if (l.website) _toolUrls.push({ titulo: l.nombre || l.name, url: l.website });
-                  if (l.maps_link) _toolUrls.push({ titulo: (l.nombre || l.name) + ' en Maps', url: l.maps_link });
-                }
-                // Capturar coords del primer resultado para deep links de transporte
-                const _firstLugar = toolResult.lugares[0];
-                if (_firstLugar?.lat && _firstLugar?.lng) {
-                  _lastBuscarLugarCoords = { lat: _firstLugar.lat, lng: _firstLugar.lng, name: _firstLugar.nombre || '' };
-                }
-              }
-              if (block.name === 'buscar_web' && toolResult.resultados) {
-                for (const r of toolResult.resultados) {
-                  if (r.url) _toolUrls.push({ titulo: r.titulo, url: r.url });
-                }
-              }
               // Enviar evento al cliente para guardar nota en Firestore
               if (block.name === 'guardar_nota' && toolResult.saved) {
                 try { await writer.write(encoder.encode(`data: ${JSON.stringify({ save_nota: true, nota_data: toolResult.nota })}\n\n`)); } catch (_) {}
@@ -7494,8 +5654,8 @@ INSTRUCCIONES:
         // ── Inyectar Google Maps y transporte como stream chunks (antes de procesar reply) ──
         {
           const tempReply = replyWithoutRouteBlock(allText);
-          const withMaps = injectGoogleMapsLink(tempReply, userLocation, message, isLocalQuery);
-          const withTransport = injectTransportBlock(withMaps, kvTransportData, message, isLocalQuery);
+          const withMaps = injectGoogleMapsLink(tempReply, userLocation, message);
+          const withTransport = injectTransportBlock(withMaps, kvTransportData, message);
           // Si se añadió algo, enviar la parte nueva como chunk de texto
           if (withTransport.length > tempReply.length) {
             const injected = withTransport.slice(tempReply.length);
@@ -7511,150 +5671,18 @@ INSTRUCCIONES:
         // ── Procesar respuesta final (ruta, verificación, etc.) ──
         let route = extractRouteFromReply(allText);
         let reply = replyWithoutRouteBlock(allText);
-        // ── Reparar markdown de imagen roto de Claude en respuestas de hotel ──
-        // Sonnet a veces emite ![Name]( + saltos de línea + url_enlace en vez de ![Name](url_foto).
-        // Sustituimos por la foto correcta del tool result; si no hay match, quitamos el fragmento huérfano.
-        if (_hotelPhotosByName.size > 0 && !route) {
-          reply = reply.replace(/!\[([^\]]+)\]\(\s*(?:\n|$)/g, (_match, name) => {
-            const entry = _hotelPhotosByName.get(name.toLowerCase().trim());
-            if (entry && entry.foto) return `![${name}](${entry.foto})\n`;
-            return '';
-          });
-        }
         // Inyectar Google Maps automáticamente si aplica
-        reply = injectGoogleMapsLink(reply, userLocation, message, isLocalQuery);
+        reply = injectGoogleMapsLink(reply, userLocation, message);
         // Inyectar bloque de transporte (app + descarga) si aplica
-        reply = injectTransportBlock(reply, kvTransportData, message, isLocalQuery);
+        reply = injectTransportBlock(reply, kvTransportData, message);
         // Post-procesado: dividir respuesta en días con headers **Día N**
         // Siempre intentar — si no hay ordinales ni suficientes párrafos, devuelve texto sin cambios
         const _daysMatch = message.match(/(\d{1,2})\s*d.{0,2}as?/i);
         const _numDays = _daysMatch ? parseInt(_daysMatch[1]) : 0;
         if (_numDays >= 2 && !route) {
           reply = formatDayHeaders(reply, _numDays);
-        }
-
-        // ── Inyectar enlaces Maps verificados (place_id) en nombres en negrita ──
-        if (!route && env.GOOGLE_PLACES_KEY) {
-          // Extraer destino del mensaje del usuario (prioritario sobre GPS)
-          let _msgDest = (message || '').trim();
-          _msgDest = _msgDest.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
-          _msgDest = _msgDest.replace(/^d[ií]as?\s+(en|por|a)?\s*/i, '');
-          _msgDest = _msgDest.replace(/[¿?¡!.,;:]+/g, '').trim();
-          // Solo usar el mensaje como región si parece destino (no saludo/pregunta corta)
-          const _isValidDest = _msgDest.length >= 3 && _msgDest.length <= 60
-            && !/^(hola|hey|buenas|ey|hi|hello|saludos|gracias|ok|vale|si|no)$/i.test(_msgDest)
-            && _msgDest.split(/\s+/).length <= 8;
-          const _region = _isValidDest ? _msgDest : (userLocationName || location || '');
-          const _cc = countryCode || userCountryCode || '';
-          const _skipRouteLink = isHotelRequest(message);
-          // ─── Inject primero: links en negritas (con límite 6 + timeout 8s) ───
-          try {
-            const _injectPromise = injectVerifiedMapsLinks(reply, env.GOOGLE_PLACES_KEY, _region, _cc, _skipRouteLink);
-            const _timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('inject_timeout')), 8000));
-            reply = await Promise.race([_injectPromise, _timeoutPromise]);
-          } catch (_) {}
-          reply = reply.replace(/\n{3,}/g, '\n\n').trim();
-
-          // ─── Fallback: si no hay link Maps en el reply, intentar con petición explícita ───
-          const _hasMapsLink = /google\.com\/maps\/(dir|place)/i.test(reply);
-          if (!_hasMapsLink && message && message.length > 3 && message.length < 200) {
-            const _msgClean = message.trim().replace(/[¿?¡!.,;:]+$/g, '');
-            const _isExplicitLinkRequest = /\b(enlace|link|url|maps|google\s*maps|c[oó]mo\s+llegar|d[oó]nde\s+(est[aá]|queda)|ubicaci[oó]n\s+de|direcci[oó]n\s+de)\b/i.test(_msgClean);
-
-            let _candidateName = _msgClean
-              .replace(/^\s*(dame|dime|pasame|p[aá]same|envi[aá]me|necesito|quiero|busco|b[uú]scame|cu[aá]l es|d[oó]nde (est[aá]|queda)|c[oó]mo llego a|c[oó]mo llegar a|c[oó]mo ir a|mu[eé]strame|ens[eé]ñame|ver|salma,?\s*)\s+/i, '')
-              .replace(/^\s*(el|la|los|las|un|una|unos|unas)\s+/i, '')
-              .replace(/^\s*(enlace|link|url|maps|google\s*maps|ubicaci[oó]n|direcci[oó]n)\s+(de|del|a|al|para)\s+/i, '')
-              .replace(/^\s*(puto|puta|pinche|coñ?o|carajo|joder)\s+/i, '')
-              .replace(/\b(por favor|porfa|gracias)\b/gi, '')
-              .trim();
-
-            const _usable = _candidateName.length >= 3 && _candidateName.length <= 100 && _candidateName.split(/\s+/).length <= 12;
-            if (_usable && (_isExplicitLinkRequest || _candidateName.split(/\s+/).length >= 2)) {
-              try {
-                const validated = await getValidatedPlace(
-                  _candidateName,
-                  env.GOOGLE_PLACES_KEY,
-                  '',
-                  _cc,
-                  userLocation && userLocation.lat ? { lat: userLocation.lat, lng: userLocation.lng } : null
-                );
-                if (validated) {
-                  reply = reply.trimEnd() + `\n\n${validated.url}`;
-                } else if (_isExplicitLinkRequest) {
-                  reply = reply.trimEnd() + `\n\nNo he encontrado ese sitio en Google Maps con seguridad.`;
-                }
-              } catch (_) {}
-            }
-          }
-        }
-
-        // (transport_actions ya emitidos ANTES de Claude)
-
-        // ── Inyectar URLs de tools (buscar_lugar, buscar_web) que Claude no incluyó ──
-        if (!route && _toolUrls.length > 0) {
-          const missingUrls = _toolUrls
-            .filter(u => u.url && !reply.includes(u.url))
-            .filter(u => !/blog|guia|guide|tripadvisor|wikipedia|wikivoyage/i.test(u.url))
-            .slice(0, 3);
-          if (missingUrls.length > 0) {
-            let toolLinksBlock = '\n';
-            for (const u of missingUrls) {
-              toolLinksBlock += `\n🔗 ${(u.titulo || '').slice(0, 60)} — ${u.url}`;
-            }
-            reply += toolLinksBlock;
-            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: toolLinksBlock })}\n\n`)); } catch (_) {}
-          }
-        }
-
-        // ── POST-PROCESADO FOTOS: buscar fotos e inyectar junto a cada lugar en negrita ──
-        if (!route && env.GOOGLE_PLACES_KEY) {
-          try {
-            // Extraer destino del mensaje del usuario (igual que injectVerifiedMapsLinks)
-            let _photoRegion = (message || '').trim();
-            _photoRegion = _photoRegion.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
-            _photoRegion = _photoRegion.replace(/^d[ií]as?\s+(en|por|a)?\s*/i, '');
-            _photoRegion = _photoRegion.replace(/[¿?¡!.,;:]+/g, '').trim();
-            const _photoValidDest = _photoRegion.length >= 3 && _photoRegion.length <= 60
-              && !/^(hola|hey|buenas|ey|hi|hello|saludos|gracias|ok|vale|si|no)$/i.test(_photoRegion)
-              && _photoRegion.split(/\s+/).length <= 8;
-            const _photoLocHint = _photoValidDest ? _photoRegion : (userLocationName || '');
-
-            const boldNames = [];
-            const boldRegex = /\*\*([^*]{3,50})\*\*/g;
-            let bm;
-            while ((bm = boldRegex.exec(allText)) !== null) {
-              const name = bm[1].trim();
-              if (/^\d|^€|^USD|^Día\s|^Tip:|^Nota:|^Precio|^Gratis|^Abierto|^Cerrado/i.test(name)) continue;
-              // Rechazar 1 palabra solo si es corta (Día, Tip, Ojo…). Acepta Alhambra, Louvre, Coliseo…
-              if (name.split(/\s+/).length === 1 && name.length < 5) continue;
-              if (!boldNames.includes(name)) boldNames.push(name);
-            }
-            if (boldNames.length > 0) {
-              const photoPromises = boldNames.slice(0, 8).map(name => {
-                const query = _photoLocHint ? `${name}, ${_photoLocHint}` : name;
-                return buscarFotoLugar({ lugar: query }, env.GOOGLE_PLACES_KEY).catch(() => null);
-              });
-              const photoResults = await Promise.all(photoPromises);
-              // Inyectar cada foto justo después de su nombre en negrita
-              for (let pi = 0; pi < photoResults.length; pi++) {
-                const pr = photoResults[pi];
-                if (pr?.fotos?.length && pr.fotos[0]?.markdown && !allText.includes(pr.fotos[0].url)) {
-                  const name = boldNames[pi];
-                  const marker = `**${name}**`;
-                  const idx = allText.indexOf(marker);
-                  if (idx !== -1) {
-                    // Insertar foto después del párrafo que contiene el nombre
-                    const afterMarker = idx + marker.length;
-                    const nextNewline = allText.indexOf('\n', afterMarker);
-                    const insertPos = nextNewline !== -1 ? nextNewline : allText.length;
-                    const photoMd = '\n' + pr.fotos[0].markdown;
-                    allText = allText.slice(0, insertPos) + photoMd + allText.slice(insertPos);
-                  }
-                }
-              }
-            }
-          } catch (_) {}
+          // Añadir enlace Google Maps de ruta completa al final
+          reply = appendRouteMapLink(reply);
         }
 
         // ── SALMA_ACTION: extraer acciones del texto, limpiar reply, ejecutar APIs en paralelo ──
@@ -7663,7 +5691,7 @@ INSTRUCCIONES:
           const { cleanText: saClean, actions: saActions } = extractSalmaActions(reply);
           if (saActions.length > 0) {
             reply = saClean;
-            actionResults = await executeSalmaActionsParallel(saActions, env, userLocation, message);
+            actionResults = await executeSalmaActionsParallel(saActions, env, userLocation);
           }
         } catch (_) {}
 
@@ -7671,15 +5699,22 @@ INSTRUCCIONES:
           // ── PASO 1: Enriquecer paradas con KV (coords + fotos verificadas, instantáneo) ──
           if (env.SALMA_KB) {
             for (const stop of route.stops) {
-              const rawName = stop.name || stop.headline || '';
+              const rawName = (stop.name || stop.headline || '').toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
               if (!rawName || rawName.length < 3) continue;
               try {
-                const variants = normalizeSpotKey(rawName);
-                let spotJson = null;
-                for (const v of variants) {
-                  spotJson = await env.SALMA_KB.get('spot:' + v);
-                  if (spotJson) break;
-                }
+                // Generar variantes de búsqueda
+                const full = rawName.replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').substring(0, 80);
+                const parts = rawName.replace(/[,()]/g, '').split(/\s+/).filter(w => w.length > 2);
+                const first = parts[0] || '';
+                const firstTwo = parts.slice(0, 2).join('-');
+                const withoutCity = rawName.replace(/,.*$/, '').trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+
+                // Buscar en orden: nombre completo, sin ciudad, primeras 2 palabras, primera palabra
+                let spotJson = await env.SALMA_KB.get('spot:' + full);
+                if (!spotJson && withoutCity !== full) spotJson = await env.SALMA_KB.get('spot:' + withoutCity);
+                if (!spotJson && firstTwo && firstTwo !== full) spotJson = await env.SALMA_KB.get('spot:' + firstTwo);
+                if (!spotJson && first.length > 4 && first !== firstTwo) spotJson = await env.SALMA_KB.get('spot:' + first);
 
                 if (spotJson) {
                   const spot = JSON.parse(spotJson);
@@ -7786,19 +5821,9 @@ INSTRUCCIONES:
   // CRON: Lunes = regenerar fichas nivel 1 | Miércoles = generar rutas nivel 3
   // ═══════════════════════════════════════════════════════════════
   async scheduled(event, env, ctx) {
-    if (!env.SALMA_KB) return;
+    if (!env.SALMA_KB || !env.OPENAI_API_KEY) return;
 
-    const hour = new Date(event.scheduledTime).getUTCHours();
     const dayOfWeek = new Date(event.scheduledTime).getUTCDay(); // 0=dom, 1=lun, 3=mié
-
-    // 6:00 UTC DIARIO → Monitoreo vuelos
-    if (hour === 6) {
-      await this._cronFlightWatches(env);
-      return;
-    }
-
-    if (!env.OPENAI_API_KEY) return;
-
     if (dayOfWeek === 3) {
       // MIÉRCOLES → Generar rutas nivel 3
       await this._cronNivel3(env);
@@ -8001,207 +6026,6 @@ INSTRUCCIONES:
 
     } catch (e) {
       console.log(`[KV Cron L3] Error general: ${e.message}`);
-    }
-  },
-
-  // ═══ CRON DIARIO: Monitoreo precios vuelos (Flight Watches) ═══
-  async _cronFlightWatches(env) {
-    const MAX_CHECKS = 20;
-    const DELAY_MS = 1500;
-    const duffelToken = env.DUFFEL_ACCESS_TOKEN;
-    if (!duffelToken || !env.SALMA_KB) {
-      console.log('[FW Cron] Sin Duffel token o KV — skip');
-      return;
-    }
-
-    console.log('[FW Cron] ========== INICIO MONITOREO VUELOS ==========');
-    const startTime = Date.now();
-    let checked = 0, alertsCreated = 0, errors = 0;
-
-    try {
-      const usersJson = await env.SALMA_KB.get('flight_watch_users');
-      if (!usersJson) { console.log('[FW Cron] Sin usuarios con watches'); return; }
-      const userIds = JSON.parse(usersJson);
-      console.log(`[FW Cron] ${userIds.length} usuarios con watches`);
-
-      const todayStr = new Date().toISOString().slice(0, 10);
-
-      for (const uid of userIds) {
-        if (checked >= MAX_CHECKS) break;
-
-        const kvKey = 'fw:' + uid;
-        const watchesJson = await env.SALMA_KB.get(kvKey);
-        if (!watchesJson) continue;
-        const watches = JSON.parse(watchesJson);
-
-        // Ordenar por last_checked mas antiguo primero (round-robin)
-        watches.sort((a, b) => {
-          const aTime = a.last_checked ? new Date(a.last_checked).getTime() : 0;
-          const bTime = b.last_checked ? new Date(b.last_checked).getTime() : 0;
-          return aTime - bTime;
-        });
-
-        let kvChanged = false;
-
-        for (const watch of watches) {
-          if (checked >= MAX_CHECKS) break;
-          if (!watch.active) continue;
-          // Saltar si fecha de ida ya paso (flexible: comparar mes)
-          const isFlexible = watch.flexible || (watch.date_from && watch.date_from.length === 7);
-          if (isFlexible) {
-            // "2026-05" → saltar si ya pasamos ese mes
-            if (watch.date_from + '-31' < todayStr) continue;
-          } else {
-            if (watch.date_from < todayStr) continue;
-          }
-
-          try {
-            let allOffers = [];
-
-            if (isFlexible) {
-              // Mes flexible: buscar dia 1, 15 y ultimo del mes
-              const [y, m] = watch.date_from.split('-').map(Number);
-              const lastDay = new Date(y, m, 0).getDate();
-              const sampleDates = [`${watch.date_from}-01`, `${watch.date_from}-15`, `${watch.date_from}-${lastDay}`]
-                .filter(d => d >= todayStr);
-
-              // Fechas vuelta flexible
-              let returnDates = [null];
-              if (watch.date_to && watch.date_to.length === 7) {
-                const [ry, rm] = watch.date_to.split('-').map(Number);
-                const rLast = new Date(ry, rm, 0).getDate();
-                returnDates = [`${watch.date_to}-01`, `${watch.date_to}-15`, `${watch.date_to}-${rLast}`];
-              } else if (watch.date_to) {
-                returnDates = [watch.date_to];
-              }
-
-              console.log(`[FW Cron] Buscando flexible ${watch.origin}→${watch.destination} (${sampleDates.length} fechas)`);
-
-              // Buscar primera fecha de muestra (para no gastar demasiadas llamadas)
-              const sampleDate = sampleDates[0];
-              const sampleReturn = returnDates[0];
-              if (sampleDate) {
-                const offers = await _buscarVuelosFecha({
-                  origen: watch.origin,
-                  destino: watch.destination,
-                  fecha_ida: sampleDate,
-                  fecha_vuelta: sampleReturn,
-                  adultos: watch.passengers || 1,
-                  clase: watch.cabin || 'economy'
-                }, duffelToken);
-                allOffers.push(...(offers || []));
-              }
-            } else {
-              console.log(`[FW Cron] Buscando ${watch.origin}→${watch.destination} (${watch.date_from})`);
-              const offers = await _buscarVuelosFecha({
-                origen: watch.origin,
-                destino: watch.destination,
-                fecha_ida: watch.date_from,
-                fecha_vuelta: watch.date_to || null,
-                adultos: watch.passengers || 1,
-                clase: watch.cabin || 'economy'
-              }, duffelToken);
-              allOffers.push(...(offers || []));
-            }
-
-            checked++;
-            const offers = allOffers;
-
-            if (!offers || offers.length === 0) {
-              console.log(`[FW Cron] Sin resultados para ${watch.origin}→${watch.destination}`);
-              watch.last_checked = new Date().toISOString();
-              kvChanged = true;
-              await new Promise(r => setTimeout(r, DELAY_MS));
-              continue;
-            }
-
-            // Buscar el mas barato
-            const sorted = offers.sort((a, b) => {
-              const pa = parseFloat(a.total_amount || a.totalPrice || 9999999);
-              const pb = parseFloat(b.total_amount || b.totalPrice || 9999999);
-              return pa - pb;
-            });
-            const cheapest = sorted[0];
-            const currentPrice = parseFloat(cheapest.total_amount || cheapest.totalPrice || 0);
-            if (!currentPrice || currentPrice <= 0) {
-              watch.last_checked = new Date().toISOString();
-              kvChanged = true;
-              await new Promise(r => setTimeout(r, DELAY_MS));
-              continue;
-            }
-
-            const previousPrice = watch.last_price;
-
-            // Actualizar precios en watch
-            watch.last_price = currentPrice;
-            watch.last_checked = new Date().toISOString();
-            if (!watch.lowest_price || currentPrice < watch.lowest_price) {
-              watch.lowest_price = currentPrice;
-            }
-            kvChanged = true;
-
-            // Evaluar condiciones de alerta
-            let shouldAlert = false;
-            let alertReason = '';
-
-            if (previousPrice && previousPrice > 0 && currentPrice < previousPrice * 0.85) {
-              shouldAlert = true;
-              alertReason = 'price_drop';
-            }
-            if (watch.budget && currentPrice <= watch.budget) {
-              shouldAlert = true;
-              alertReason = alertReason || 'budget_hit';
-            }
-
-            if (shouldAlert) {
-              const alertsKey = 'fw_alerts:' + uid;
-              const existingAlerts = JSON.parse(await env.SALMA_KB.get(alertsKey) || '[]');
-
-              // Evitar alerta duplicada en las ultimas 24h para el mismo watch
-              const recentAlert = existingAlerts.find(a =>
-                a.watchId === watch.id && !a.seen &&
-                (Date.now() - new Date(a.created_at).getTime()) < 24 * 60 * 60 * 1000
-              );
-
-              if (!recentAlert) {
-                existingAlerts.push({
-                  id: 'fwa_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5),
-                  watchId: watch.id,
-                  origin: watch.origin,
-                  destination: watch.destination,
-                  destination_name: watch.destination_name || watch.destination,
-                  previous_price: previousPrice,
-                  current_price: currentPrice,
-                  lowest_price: watch.lowest_price,
-                  budget: watch.budget,
-                  reason: alertReason,
-                  currency: watch.currency || 'EUR',
-                  seen: false,
-                  created_at: new Date().toISOString()
-                });
-                await env.SALMA_KB.put(alertsKey, JSON.stringify(existingAlerts), { expirationTtl: 604800 });
-                alertsCreated++;
-                console.log(`[FW Cron] ALERTA: ${watch.origin}→${watch.destination} ${previousPrice}→${currentPrice} EUR (${alertReason})`);
-              }
-            }
-
-            await new Promise(r => setTimeout(r, DELAY_MS));
-          } catch (e) {
-            console.log(`[FW Cron] Error ${watch.origin}→${watch.destination}: ${e.message}`);
-            errors++;
-          }
-        }
-
-        // Guardar watches actualizados en KV
-        if (kvChanged) {
-          await env.SALMA_KB.put(kvKey, JSON.stringify(watches));
-        }
-      }
-
-      const duration = Date.now() - startTime;
-      console.log(`[FW Cron] ========== FIN: ${checked} checks, ${alertsCreated} alertas, ${errors} errores (${duration}ms) ==========`);
-    } catch (e) {
-      console.log(`[FW Cron] Error critico: ${e.message}`);
     }
   },
 };
