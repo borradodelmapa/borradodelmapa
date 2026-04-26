@@ -28,6 +28,29 @@
   margin: 0;
 }
 
+/* ─── Botón Historia en viaje-card ──────────────────────────────────────── */
+
+.viaje-card-historia {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  background: none;
+  border: 1px solid rgba(240,180,41,.3);
+  border-radius: var(--radius-pill);
+  color: var(--dorado);
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+
+.viaje-card-historia:hover {
+  background: rgba(240,180,41,.1);
+  border-color: var(--dorado);
+}
+
 /* ─── Buscador ───────────────────────────────────────────────────────────── */
 
 .hist-search-box {

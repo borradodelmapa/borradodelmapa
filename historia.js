@@ -523,6 +523,17 @@ const historiaModule = (() => {
     }
   }
 
-  return { render };
+  function loadPlace(place) {
+    _currentHistoria = null;
+    _currentParadaIdx = 0;
+    window.speechSynthesis && window.speechSynthesis.cancel();
+    _ttsActive = false;
+    // Render lista primero para tener el contenedor, luego lanzar búsqueda
+    _renderLista();
+    // Pequeño delay para que el DOM esté listo
+    setTimeout(() => _onBuscar(place), 50);
+  }
+
+  return { render, loadPlace };
 
 })();

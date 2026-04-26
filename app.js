@@ -2019,10 +2019,20 @@ async function loadUserGuides() {
         <div class="viaje-card-body">
           <div class="viaje-card-title">${escapeHTML(d.nombre || 'Mi ruta')}</div>
           <div class="viaje-card-meta">${d.num_dias || d.dias || '?'} DÍAS · ${escapeHTML((d.destino || '').toUpperCase())}</div>
+          ${d.destino ? `<button class="viaje-card-historia" data-destino="${escapeHTML(d.destino)}" title="Historia de ${escapeHTML(d.destino)}">📚 Historia</button>` : ''}
         </div>
         <button class="viaje-card-delete" data-doc-id="${doc.id}" title="Eliminar guía">✕</button>`;
       card.addEventListener('click', (e) => {
         if (e.target.closest('.viaje-card-delete')) return;
+        if (e.target.closest('.viaje-card-historia')) {
+          e.stopPropagation();
+          const destino = e.target.closest('.viaje-card-historia').dataset.destino;
+          if (typeof historiaModule !== 'undefined' && destino) {
+            historiaModule.loadPlace(destino);
+            showState('historia');
+          }
+          return;
+        }
         if (d.source === 'kv-nivel2' && d.slug) {
           window.location.href = '/destinos/' + d.slug + '.html';
           return;
