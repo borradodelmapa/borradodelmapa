@@ -1417,13 +1417,7 @@ const GO_TO_COUNTRY_MAP = {
 function detectCountryFromText(text) {
   if (!text) return null;
   const norm = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
-  // Intentar coincidencia exacta primero
-  if (GO_TO_COUNTRY_MAP[norm]) return GO_TO_COUNTRY_MAP[norm];
-  // Intentar cada clave como substring
-  for (const [key, cc] of Object.entries(GO_TO_COUNTRY_MAP)) {
-    if (norm === key || norm.startsWith(key + ' ') || norm.endsWith(' ' + key)) return cc;
-  }
-  return null;
+  return GO_TO_COUNTRY_MAP[norm] || null;
 }
 
 const CONTINENT_MAP = {
@@ -6725,7 +6719,7 @@ REGLAS:
       const goToDestText = extractGoToDestination(message);
       if (goToDestText) {
         const goToDest = await resolveGoToDestination(goToDestText, userLocation, userCountryCode || frontendCountryCode, env);
-        if (goToDest.destLat || goToDest.isCountry) {
+        if ((goToDest.destLat || goToDest.isCountry) && goToDest.level === 'international') {
           const goToHeaders = {
             'Content-Type': 'text/event-stream',
             'Cache-Control': 'no-cache',
