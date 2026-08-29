@@ -24,6 +24,8 @@ const salma = {
   _pendingRouteInfo: null,  // Info parcial mientras esperamos fechas
   _pendingPhoto: null,      // {blob, base64, localUrl} mientras compone mensaje con foto
   _pendingTaxiDest: false,  // Chip "Pide Taxi" activo: el próximo mensaje es un destino de taxi
+  _rutaDraft: null,               // Flujo guiado de creación de ruta (objeto de estado en memoria)
+  _rutaGuiadaWaitingText: false,  // El próximo send() del usuario es texto libre del flujo guiado
   _narratorActive: false,
   _narratorNotified: new Set(),
   _narratorLastCheck: 0,
@@ -880,6 +882,16 @@ const salma = {
     }
     if (!msg && !photo) return;
     if (this._streaming) return;
+
+    // Flujo guiado de ruta: si estamos esperando texto libre (destino o restricciones),
+    // el mensaje del usuario va al flujo, NO al worker.
+    if (this._rutaGuiadaWaitingText && msg && !photo) {
+      this._rutaGuiadaWaitingText = false;
+      this._addUserBubble(msg);
+      this._rutaGuiadaTextInput(msg);
+      return;
+    }
+
     if (!this._checkRate()) return;
 
     // Warm-up del sintetizador dentro del gesto del usuario (una vez por sesión).
@@ -931,6 +943,250 @@ const salma = {
 
     // Todo va directo al worker — Salma decide si preguntar
     this._doSend(msg || '', { photo });
+  },
+
+  // ═══════════════════════════════════════════
+  //  FLUJO GUIADO DE CREACIÓN DE RUTA (8 preguntas)
+  //  Activado desde el chip fijo "Crear ruta nueva".
+  //  Todo el cuestionario es frontend (0 tokens). Al terminar,
+  //  dispara UNA generación de ruta con los datos ya en el system prompt.
+  // ═══════════════════════════════════════════
+  _RUTA_STEPS: [
+    { campo: 'destino', pregunta: '¿A dónde te llevo esta vez?', tipo: 'texto' },
+    { campo: 'duracion_dias', pregunta: '¿Cuántos días tienes pensados?', tipo: 'chips',
+      opciones: [
+        { label: '3-4 días', valor: '3-4' }, { label: '5-7 días', valor: '5-7' },
+        { label: '8-14 días', valor: '8-14' }, { label: '+14 días', valor: '+14' }
+      ] },
+    { campo: 'fechas', pregunta: '¿Ya tienes fechas o vamos a ojo?', tipo: 'fechas', opcional: true,
+      opciones: [
+        { label: 'Tengo fechas', valor: '__fechas__' },
+        { label: 'Aún no lo sé', valor: null }
+      ] },
+    { campo: 'compania', pregunta: '¿Con quién te vas?', tipo: 'chips',
+      opciones: [
+        { label: 'Solo/a', valor: 'solo' }, { label: 'En pareja', valor: 'pareja' },
+        { label: 'Familia con peques', valor: 'familia' }, { label: 'Con amigos', valor: 'amigos' }
+      ] },
+    { campo: 'presupuesto', pregunta: '¿Cómo vamos de presupuesto por día?', tipo: 'chips',
+      opciones: [
+        { label: 'Ajustado', valor: 'ajustado' }, { label: 'Medio', valor: 'medio' },
+        { label: 'Sin límite', valor: 'sin_limite' }
+      ] },
+    { campo: 'ritmo', pregunta: '¿Vacaciones de sofá-mirador o de correr todo el día?', tipo: 'chips',
+      opciones: [
+        { label: 'Tranquilo', valor: 'tranquilo' }, { label: 'Equilibrado', valor: 'equilibrado' },
+        { label: 'Intenso', valor: 'intenso' }
+      ] },
+    { campo: 'intereses', pregunta: '¿Qué te mueve más? Elige los que quieras.', tipo: 'multi',
+      opciones: [
+        { label: 'Cultura/historia', valor: 'cultura' }, { label: 'Naturaleza', valor: 'naturaleza' },
+        { label: 'Fiesta/vida nocturna', valor: 'fiesta' }, { label: 'Gastronomía', valor: 'gastronomia' },
+        { label: 'Compras', valor: 'compras' }, { label: 'Playa/relax', valor: 'playa' }
+      ] },
+    { campo: 'restricciones', pregunta: '¿Algo que deba tener en cuenta? Dieta, movilidad, lo que sea.', tipo: 'restr', opcional: true,
+      opciones: [
+        { label: 'Nada especial', valor: null },
+        { label: 'Sí, cuéntame', valor: '__texto__' }
+      ] },
+  ],
+
+  startRutaGuiada() {
+    // Slate limpio: sin ruta activa ni historial que confunda la generación
+    this.reset();
+    if (currentState !== 'chat') this._initChat();
+    const area = this._getChatArea();
+    if (area) {
+      const empty = area.querySelector('.chat-empty');
+      if (empty) empty.remove();
+    }
+    this._rutaDraft = {
+      destino: null, duracion_dias: null, fechas: null, compania: null,
+      presupuesto: null, ritmo: null, intereses: [], restricciones: null,
+      step: 0, tripId: null, _campoTexto: null
+    };
+    // Limpiar borradores abandonados de un intento anterior
+    if (window.currentUser && typeof db !== 'undefined') {
+      db.collection('users').doc(window.currentUser.uid).collection('maps')
+        .where('estado', '==', 'borrador').get()
+        .then(snap => snap.forEach(doc => doc.ref.delete().catch(() => {})))
+        .catch(() => {});
+    }
+    this._addSalmaBubble('Vale, vamos a montar esto bien. Te hago unas preguntas rápidas — chip o texto, como quieras.');
+    this._rutaPregunta(0);
+  },
+
+  _rutaCancelUI() {
+    const area = this._getChatArea();
+    if (!area) return;
+    area.querySelectorAll('.ruta-guiada-ui').forEach(el => el.remove());
+  },
+
+  _rutaPregunta(step) {
+    if (!this._rutaDraft) return;
+    this._rutaCancelUI();
+    if (step >= this._RUTA_STEPS.length) { this._rutaFinalizar(); return; }
+    const s = this._RUTA_STEPS[step];
+    this._addSalmaBubble(s.pregunta);
+    const area = this._getChatArea();
+    if (!area) return;
+
+    // Texto libre (destino)
+    if (s.tipo === 'texto') {
+      this._rutaDraft._campoTexto = s.campo;
+      this._rutaGuiadaWaitingText = true;
+      const inp = document.getElementById('salma-input');
+      if (inp) { inp.placeholder = 'Escribe el destino...'; inp.focus(); }
+      return;
+    }
+
+    const wrap = document.createElement('div');
+    wrap.className = 'ruta-guiada-ui ruta-chips';
+
+    // Multi-select (intereses): chips toggle + botón Seguir
+    if (s.tipo === 'multi') {
+      const seleccion = new Set();
+      s.opciones.forEach(op => {
+        const b = document.createElement('button');
+        b.className = 'ruta-chip';
+        b.textContent = op.label;
+        b.addEventListener('click', () => {
+          if (seleccion.has(op.valor)) { seleccion.delete(op.valor); b.classList.remove('ruta-chip--on'); }
+          else { seleccion.add(op.valor); b.classList.add('ruta-chip--on'); }
+        });
+        wrap.appendChild(b);
+      });
+      const go = document.createElement('button');
+      go.className = 'ruta-chip ruta-chip--go';
+      go.textContent = 'Seguir';
+      go.addEventListener('click', () => {
+        const arr = [...seleccion];
+        const labels = s.opciones.filter(o => seleccion.has(o.valor)).map(o => o.label);
+        this._rutaResponder(s.campo, arr, labels.length ? labels.join(', ') : 'Cualquier cosa');
+      });
+      wrap.appendChild(go);
+      area.appendChild(wrap);
+      this._scrollToBottom(true);
+      return;
+    }
+
+    // Chips simples / fechas / restricciones
+    s.opciones.forEach(op => {
+      const b = document.createElement('button');
+      b.className = 'ruta-chip';
+      b.textContent = op.label;
+      b.addEventListener('click', () => {
+        // Fechas: "Tengo fechas" abre selector inline
+        if (s.tipo === 'fechas' && op.valor === '__fechas__') {
+          this._rutaPickFechas(wrap, s);
+          return;
+        }
+        // Restricciones: "Sí, cuéntame" pide texto libre
+        if (s.tipo === 'restr' && op.valor === '__texto__') {
+          this._rutaCancelUI();
+          this._addUserBubble(op.label);
+          this._rutaDraft._campoTexto = s.campo;
+          this._rutaGuiadaWaitingText = true;
+          const inp = document.getElementById('salma-input');
+          if (inp) { inp.placeholder = 'Cuéntame la restricción...'; inp.focus(); }
+          return;
+        }
+        this._rutaResponder(s.campo, op.valor, op.label);
+      });
+      wrap.appendChild(b);
+    });
+    area.appendChild(wrap);
+    this._scrollToBottom(true);
+  },
+
+  _rutaPickFechas(wrap, s) {
+    wrap.innerHTML = '';
+    const box = document.createElement('div');
+    box.className = 'ruta-fechas-box';
+    const i1 = document.createElement('input'); i1.type = 'date'; i1.className = 'ruta-fecha-input';
+    const i2 = document.createElement('input'); i2.type = 'date'; i2.className = 'ruta-fecha-input';
+    const lbl1 = document.createElement('span'); lbl1.textContent = 'Ida';
+    const lbl2 = document.createElement('span'); lbl2.textContent = 'Vuelta';
+    const go = document.createElement('button');
+    go.className = 'ruta-chip ruta-chip--go';
+    go.textContent = 'Listo';
+    go.addEventListener('click', () => {
+      const inicio = i1.value || null;
+      const fin = i2.value || null;
+      if (!inicio && !fin) { this._rutaResponder(s.campo, null, 'A ojo'); return; }
+      this._rutaResponder(s.campo, { inicio, fin }, [inicio, fin].filter(Boolean).join(' → '));
+    });
+    box.appendChild(lbl1); box.appendChild(i1);
+    box.appendChild(lbl2); box.appendChild(i2);
+    box.appendChild(go);
+    wrap.appendChild(box);
+    this._scrollToBottom(true);
+  },
+
+  // El usuario ha escrito texto libre para un paso del flujo (destino / restricciones)
+  _rutaGuiadaTextInput(text) {
+    if (!this._rutaDraft || !this._rutaDraft._campoTexto) return;
+    const campo = this._rutaDraft._campoTexto;
+    this._rutaDraft._campoTexto = null;
+    this._rutaResponder(campo, text.trim(), null);
+  },
+
+  async _rutaResponder(campo, valor, displayLabel) {
+    if (!this._rutaDraft) return;
+    if (displayLabel) this._addUserBubble(displayLabel);
+    this._rutaDraft[campo] = valor;
+    this._rutaDraft.step++;
+    this._rutaCancelUI();
+    // Restaurar placeholder por si se quedó en modo texto
+    const inp = document.getElementById('salma-input');
+    if (inp) inp.placeholder = 'Escribe a Salma...';
+    // Guardado incremental (no bloqueante para la UI)
+    this._rutaGuardarBorrador();
+    this._rutaPregunta(this._rutaDraft.step);
+  },
+
+  async _rutaGuardarBorrador() {
+    if (!this._rutaDraft) return;
+    if (!window.currentUser || typeof db === 'undefined') return; // invitado: solo memoria
+    const d = this._rutaDraft;
+    const payload = {
+      destino: d.destino, duracion_dias: d.duracion_dias, fechas: d.fechas,
+      compania: d.compania, presupuesto: d.presupuesto, ritmo: d.ritmo,
+      intereses: d.intereses, restricciones: d.restricciones, step: d.step,
+      estado: 'borrador', guided: true,
+      updatedAt: new Date().toISOString()
+    };
+    try {
+      const col = db.collection('users').doc(window.currentUser.uid).collection('maps');
+      if (!d.tripId) {
+        payload.createdAt = new Date().toISOString();
+        const ref = await col.add(payload);
+        d.tripId = ref.id;
+      } else {
+        await col.doc(d.tripId).set(payload, { merge: true });
+      }
+    } catch (e) {
+      console.warn('[ruta guiada] no se pudo guardar el borrador:', e && e.message);
+    }
+  },
+
+  _rutaFinalizar() {
+    if (!this._rutaDraft) return;
+    const d = this._rutaDraft;
+    this._rutaCancelUI();
+    this._rutaGuiadaWaitingText = false;
+    this._addSalmaBubble('Perfecto, dame un segundo que te arme la ruta 🗺️');
+    // Copia limpia (sin campos internos) para el worker
+    const guided = {
+      destino: d.destino, duracion_dias: d.duracion_dias, fechas: d.fechas,
+      compania: d.compania, presupuesto: d.presupuesto, ritmo: d.ritmo,
+      intereses: d.intereses, restricciones: d.restricciones
+    };
+    // Día concreto según el rango elegido → el mensaje lleva "N días" para que
+    // el worker use su ruta de generación de siempre (bloques si es larga, verify, etc.)
+    const diasNum = { '3-4': 4, '5-7': 6, '8-14': 11, '+14': 16 }[d.duracion_dias] || 7;
+    const msg = `Hazme una ruta de ${diasNum} días por ${d.destino || 'el destino indicado'}.`;
+    this._doSend(msg, { guided_route: guided });
   },
 
   // ═══ ENVÍO AL WORKER ═══
@@ -1000,6 +1256,8 @@ const salma = {
       if (extra.travel_dates) body.travel_dates = extra.travel_dates;
       if (extra.transport) body.transport = extra.transport;
       if (extra.with_kids) body.with_kids = extra.with_kids;
+      // Flujo guiado de ruta: los 8 campos ya recogidos → el worker los inyecta en el system prompt
+      if (extra.guided_route) body.guided_route = extra.guided_route;
       // Foto del chat
       if (extra.photo) {
         body.image_base64 = extra.photo.base64;
@@ -1078,6 +1336,18 @@ const salma = {
               this._scrollToBottom(true);
             }
           }
+        }
+
+        // Flujo guiado: la ruta ya está generada → el borrador incremental
+        // ya cumplió su función (sobrevivir a un abandono). Se borra (Opción A).
+        if (this._rutaDraft) {
+          const _draftId = this._rutaDraft.tripId;
+          if (_draftId && window.currentUser && typeof db !== 'undefined') {
+            db.collection('users').doc(window.currentUser.uid)
+              .collection('maps').doc(_draftId).delete().catch(() => {});
+          }
+          this._rutaDraft = null;
+          this._rutaGuiadaWaitingText = false;
         }
       }
 

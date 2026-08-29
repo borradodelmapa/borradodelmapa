@@ -2436,12 +2436,13 @@ function tryKVDirectAnswer(message, country, destination) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute) {
   // ── Seleccionar prompt base según contexto ──
   // Si es petición de guía o edición de ruta → prompt con BLOQUE_RUTAS
   // Si no → prompt SIN BLOQUE_RUTAS (Claude no ve cómo generar guías = no las genera)
   // IMPORTANTE: dynamicPrompt (Firestore) incluye BLOQUE_RUTAS, así que solo se usa para rutas
-  const isRoute = isRouteRequest(message, history);
+  // guidedRoute → el usuario completó el flujo guiado de 8 preguntas: forzar modo ruta.
+  const isRoute = isRouteRequest(message, history) || !!guidedRoute;
   const hasCurrentRouteEdit = currentRoute && currentRoute.stops && currentRoute.stops.length > 0;
   let systemPrompt;
   if (isRoute || hasCurrentRouteEdit) {
@@ -2486,6 +2487,30 @@ function buildMessages(history, message, currentRoute, userName, userNationality
   }
   if (withKids) {
     ctx.push(`[VIAJA CON NIÑOS — adapta paradas y ritmo, incluye planes kid-friendly]`);
+  }
+
+  // ── Flujo guiado de ruta: 8 campos recogidos por el frontend ──
+  if (guidedRoute) {
+    const g = guidedRoute;
+    const _compania = { solo: 'solo/a', pareja: 'en pareja', familia: 'en familia con niños pequeños', amigos: 'con amigos' }[g.compania] || g.compania || 'sin especificar';
+    const _presupuesto = { ajustado: 'ajustado (mochilero/low cost)', medio: 'medio', sin_limite: 'sin límite (comodidad y experiencias premium)' }[g.presupuesto] || g.presupuesto || 'sin especificar';
+    const _ritmo = { tranquilo: 'tranquilo (pocas paradas, tiempo de sobra, miradores y descanso)', equilibrado: 'equilibrado', intenso: 'intenso (aprovechar el día al máximo, muchas paradas)' }[g.ritmo] || g.ritmo || 'equilibrado';
+    let _fechas = 'sin definir';
+    if (g.fechas && (g.fechas.inicio || g.fechas.fin)) {
+      _fechas = [g.fechas.inicio, g.fechas.fin].filter(Boolean).join(' al ');
+    }
+    const _intereses = Array.isArray(g.intereses) && g.intereses.length ? g.intereses.join(', ') : 'sin preferencia marcada';
+    const _restr = (g.restricciones && String(g.restricciones).trim()) ? g.restricciones : 'ninguna';
+    ctx.push(`[RUTA SOLICITADA POR EL USUARIO — datos recogidos en el cuestionario guiado. Úsalos TODOS. NO vuelvas a preguntar nada de esto:
+- Destino: ${g.destino || 'sin especificar'}
+- Duración: ${g.duracion_dias || 'sin especificar'} días
+- Fechas: ${_fechas}
+- Viaja: ${_compania}
+- Presupuesto por día: ${_presupuesto}
+- Ritmo deseado: ${_ritmo}
+- Intereses: ${_intereses}
+- Restricciones: ${_restr}
+Genera la ruta día por día ajustada a estos datos. Si hay restricciones, respétalas a rajatabla.]`);
   }
 
   // ── Datos verificados del KV (nivel 1 + nivel 2) ──
@@ -2587,16 +2612,17 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
 
   if (hasPhoto) {
     // Foto → no pegar bloques de modo, BLOQUE_VISION en system prompt + texto del usuario es suficiente
-  } else if (isRouteRequest(message, history)) {
+  } else if (isRouteRequest(message, history) || guidedRoute) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
 — Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: plan completo en prosa narrativa (tiempos del día, paradas con nombre en negrita, historia, avisos prácticos) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
 — NO respondas solo con texto. NO digas "aquí tienes" ni variantes.
-— Usa defaults para lo que falte: tipo mezcla cultura+emblemáticos, compañía solo, ritmo intermedio.
+— Usa defaults para lo que falte: tipo mezcla cultura+emblemáticos, compañía solo, ritmo intermedio. Si "tengo tiempo" sin número de días: 8-10 días.
 — MÍNIMO 4-6 PARADAS POR DÍA. Nunca 1 parada por día. Cada día es un recorrido completo con desayuno, visitas, comida, paseo, atardecer.
 — NO escribas enlaces a Google Maps. Los genera el sistema después tras verificar con Google Places.
 — Nombres EXACTOS como en Google Maps, nunca genéricos ("Desierto del Sahara" → "Erg Chebbi, Merzouga").
 — Coordenadas REALES del lugar exacto, en el país correcto.
-— Continuidad: la primera parada del día N+1 empieza donde acabó el día N.]`;
+— Continuidad: la primera parada del día N+1 empieza donde acabó el día N.
+— Respeta restricciones del usuario: si dice "no quiero X", NO incluyas X.]`;
   } else if (isDaysDestination(message)) {
     // Destino + días → respuesta estructurada por días (sin JSON, sin ruta)
     userContent += `\n\n[MODO PLAN DE VIAJE — INSTRUCCIONES ESTRICTAS:
@@ -3132,6 +3158,57 @@ async function verifyAllStops(route, placesKey) {
     return null;
   });
 
+  // ── RESCATE BLANDO — solo POIs únicos (no restaurantes/hoteles/bares) ──
+  // Para destinos remotos (norte de Vietnam, Atlas marroquí…) Google Places a veces
+  // devuelve el sitio pero el nombre no hace match estricto. Si el candidato es un POI
+  // (GOOD types, no BAD types), está abierto, y cae dentro de 50km de la coord del modelo
+  // o 150km del centro de la ruta → lo aceptamos. Coords y place_id son reales de Places.
+  // Para restaurantes/hoteles/bares NO se aplica (riesgo de coger sitio equivocado en ciudad).
+  const SOFT_SKIP = /restaurant|restaurante|hotel|hostel|hostal|alojamiento|bar\b|caf[eé]|tienda|store|shop|mercado|market|bakery|panader/i;
+
+  // Centro de la ruta: media de paradas validadas estrictamente, o de coords del modelo si no hay.
+  let centerLat = 0, centerLng = 0, centerCount = 0;
+  bestCandidates.forEach(bc => {
+    if (bc?.candidate?.geometry?.location) {
+      centerLat += bc.candidate.geometry.location.lat;
+      centerLng += bc.candidate.geometry.location.lng;
+      centerCount++;
+    }
+  });
+  if (centerCount === 0) {
+    route.stops.forEach(s => {
+      if (s.lat && s.lng && Math.abs(s.lat) > 0.01) {
+        centerLat += s.lat; centerLng += s.lng; centerCount++;
+      }
+    });
+  }
+  const hasCenter = centerCount > 0;
+  if (hasCenter) { centerLat /= centerCount; centerLng /= centerCount; }
+
+  route.stops.forEach((stop, i) => {
+    if (bestCandidates[i]) return;
+    const stopType = (stop.type || '') + ' ' + (stop.name || '') + ' ' + (stop.headline || '');
+    if (SOFT_SKIP.test(stopType)) return;
+    for (const result of [attempt1[i], a2[i], a3[i]]) {
+      const c = result?.candidates?.[0];
+      if (!c?.geometry?.location) continue;
+      if (c.business_status === 'CLOSED_PERMANENTLY') continue;
+      const cTypes = Array.isArray(c.types) ? c.types : [];
+      const hasBad = cTypes.some(t => BAD_PLACE_TYPES.has(t));
+      const hasGood = cTypes.some(t => GOOD_PLACE_TYPES.has(t));
+      if (hasBad && !hasGood) continue;
+      const cLat = c.geometry.location.lat, cLng = c.geometry.location.lng;
+      let inRange = false;
+      if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && haversineKm(stop.lat, stop.lng, cLat, cLng) < 50) inRange = true;
+      else if (hasCenter && haversineKm(centerLat, centerLng, cLat, cLng) < 150) inRange = true;
+      if (inRange) {
+        bestCandidates[i] = { candidate: c, soft: true };
+        console.log(`[VERIFY] ⚠ RESCATE BLANDO "${stop.name}" → ${c.name} (${cLat.toFixed(5)}, ${cLng.toFixed(5)})`);
+        break;
+      }
+    }
+  });
+
   const detailResults = new Array(route.stops.length).fill(null);
   const BATCH_SIZE = 5;
   const toFetch = bestCandidates.map((bc, i) => bc?.candidate?.place_id ? i : -1).filter(i => i >= 0);
@@ -3170,6 +3247,7 @@ async function verifyAllStops(route, placesKey) {
     stop.place_id = candidate.place_id;
     delete stop._unverified;
     delete stop._verifyReason;
+    if (bc.soft) stop._soft_match = true; else delete stop._soft_match;
 
     const photoRef = detail?.photos?.[0]?.photo_reference || candidate.photos?.[0]?.photo_reference || '';
     if (photoRef) stop.photo_ref = photoRef;
@@ -3300,7 +3378,9 @@ function buildMapsLinksFromStops(stops) {
   if (!Array.isArray(stops) || stops.length === 0) return [];
   const byDay = new Map();
   for (const s of stops) {
-    if (!s || !s.place_id || !s.lat || !s.lng) continue;
+    // Las paradas que llegan aquí ya pasaron por verifyAllStops → coords de Google Places.
+    // place_id es preferible para 1 parada, pero si falta, lat/lng igualmente sirven.
+    if (!s || !s.lat || !s.lng) continue;
     const d = s.day || 1;
     if (!byDay.has(d)) byDay.set(d, []);
     byDay.get(d).push(s);
@@ -3312,8 +3392,11 @@ function buildMapsLinksFromStops(stops) {
     if (arr.length === 0) continue;
     const label = `Día ${day}: ${arr[0].name || arr[0].headline || ''}${arr.length > 1 ? ' → ' + (arr[arr.length - 1].name || arr[arr.length - 1].headline || '') : ''}`;
     if (arr.length === 1) {
-      // 1 parada → link al lugar con place_id (formato oficial, funciona)
-      links.push({ day, url: 'https://www.google.com/maps/place/?q=place_id:' + arr[0].place_id, label });
+      // 1 parada → place_id si lo hay (formato oficial); fallback a lat/lng.
+      const url = arr[0].place_id
+        ? 'https://www.google.com/maps/place/?q=place_id:' + arr[0].place_id
+        : `https://www.google.com/maps/search/?api=1&query=${arr[0].lat},${arr[0].lng}`;
+      links.push({ day, url, label });
     } else {
       // 2+ paradas → ruta con lat/lng (formato que Google entiende en /dir/)
       const segments = arr.map(p => `${p.lat},${p.lng}`).join('/');
@@ -6618,6 +6701,7 @@ REGLAS:
     const uid = authUser.uid; // UID verificado server-side (no confiar en body.uid)
     const userNotes = body.user_notes || null;
     const frontendCountryCode = body.country || null; // País enviado por el frontend (detectado por GPS)
+    const guidedRoute = body.guided_route || null; // Flujo guiado: 8 campos ya recogidos por el frontend
 
     // ─── BYPASS: petición explícita de enlace Google Maps ───
     // Si el usuario pide un link (enlace/link/maps/cómo llegar/dónde está/ubicación/dirección),
@@ -6853,6 +6937,8 @@ INSTRUCCIONES:
       try {
         // Extraer ubicación: primero el extractor normal, luego buscar palabras del mensaje en KV
         let location = extractHelpLocation(message, history, currentRoute);
+        // Flujo guiado: el destino no está en el mensaje, viene en guided_route
+        if (!location && guidedRoute && guidedRoute.destino) location = guidedRoute.destino;
         countryCode = null;
 
         if (location) {
@@ -7011,7 +7097,7 @@ INSTRUCCIONES:
     }
 
     // KV solo para rutas y guías — en todo lo demás Claude usa sus tools
-    const isRoute = isRouteRequest(message, history) || isDaysDestination(message);
+    const isRoute = isRouteRequest(message, history) || isDaysDestination(message) || !!guidedRoute;
     const skipKV = !isRoute;
 
     // ─── RESPUESTA DIRECTA DEL KV (sin llamar a Claude = 0 coste) — SOLO para rutas/guías ───
@@ -7027,7 +7113,7 @@ INSTRUCCIONES:
 
     // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
     const dynamicPrompt = await getSystemPrompt(env);
-    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode);
+    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute);
 
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {
@@ -7505,6 +7591,63 @@ INSTRUCCIONES:
         // ── Procesar respuesta final (ruta, verificación, etc.) ──
         let route = extractRouteFromReply(allText);
         let reply = replyWithoutRouteBlock(allText);
+
+        // ── FALLBACK: era petición de guía pero el modelo olvidó SALMA_ROUTE_JSON ──
+        // Pasa cuando el modelo escribe el plan en prosa larga y se olvida del JSON al final.
+        // Hacemos una 2ª llamada a Claude con prefill forzado para extraer el JSON del texto.
+        if (!route && isRouteRequest(message, history) && allText && allText.length > 600) {
+          try {
+            const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
+
+{"title":"...","name":"...","country":"...","region":"...","duration_days":N,"summary":"...","stops":[{"name":"Nombre exacto","headline":"Nombre exacto","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","day":1,"lat":21.0285,"lng":105.8524,"km_from_previous":0,"road_name":"","road_difficulty":"medio","estimated_hours":1.5}],"tips":[],"tags":[],"budget_level":"medio","suggestions":[]}
+
+REGLAS:
+- Una entrada en "stops" por cada lugar nombrado en el plan (negrita o no).
+- "day" = número de día (1, 2, 3…). "day_title" = título corto, mismo para todas las paradas del día.
+- "lat"/"lng" = coordenadas reales del lugar (decimales).
+- "narrative" = 1-2 frases del plan original sobre la parada.
+- NO inventes paradas que no estén en el plan.`;
+
+            const fallbackUser = `Plan a convertir:\n\n${allText.substring(0, 12000)}`;
+
+            const fallbackRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': env.ANTHROPIC_API_KEY,
+                'anthropic-version': '2023-06-01',
+              },
+              body: JSON.stringify({
+                model: 'claude-sonnet-4-6',
+                max_tokens: 6000,
+                system: fallbackSys,
+                messages: [
+                  { role: 'user', content: fallbackUser },
+                  { role: 'assistant', content: '{' },  // prefill — fuerza JSON desde la primera línea
+                ],
+              }),
+              signal: AbortSignal.timeout(45000),
+            });
+
+            if (fallbackRes.ok) {
+              const fallbackData = await fallbackRes.json();
+              const jsonTail = fallbackData.content?.[0]?.text || '';
+              const fullJson = '{' + jsonTail; // recomponer con el prefill
+              try {
+                const parsed = JSON.parse(fullJson);
+                if (parsed?.stops && Array.isArray(parsed.stops) && parsed.stops.length >= 3) {
+                  route = parsed;
+                  console.log(`[FALLBACK] ✓ JSON generado a posteriori: ${parsed.stops.length} paradas`);
+                }
+              } catch (e) {
+                console.log(`[FALLBACK] ✗ JSON inválido: ${e.message}`);
+              }
+            }
+          } catch (e) {
+            console.log(`[FALLBACK] ✗ Error: ${e.message}`);
+          }
+        }
+
         // ── Reparar markdown de imagen roto de Claude en respuestas de hotel ──
         // Sonnet a veces emite ![Name]( + saltos de línea + url_enlace en vez de ![Name](url_foto).
         // Sustituimos por la foto correcta del tool result; si no hay match, quitamos el fragmento huérfano.

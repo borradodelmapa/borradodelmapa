@@ -332,6 +332,55 @@ body {
   background:rgba(240,180,41,.12); border-color:rgba(240,180,41,.3); color:#fff;
 }
 
+/* ── Flujo guiado de creación de ruta ── */
+.chat-empty-chip--ruta {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  width:100%; max-width:340px; margin:0 auto 4px;
+  padding:11px 16px; border-radius:22px;
+  background:linear-gradient(180deg, rgba(240,180,41,.22), rgba(240,180,41,.12));
+  border:1px solid rgba(240,180,41,.5);
+  color:var(--crema, #f5f0e8); font-family:var(--font-tight, 'Inter Tight'), sans-serif;
+  font-size:14px; font-weight:600; letter-spacing:.02em;
+  cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent;
+}
+.chat-empty-chip--ruta:hover {
+  background:linear-gradient(180deg, rgba(240,180,41,.32), rgba(240,180,41,.18));
+  border-color:var(--dorado, #f0b429); color:#fff;
+}
+.chat-empty-chip--ruta:active { transform:scale(.97); }
+@media (min-width:600px) { .chat-empty-chip--ruta { max-width:420px; } }
+
+.ruta-chips { display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 8px; }
+.ruta-chip {
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15);
+  border-radius:20px; padding:8px 15px; font-size:13px;
+  font-family:var(--font-tight, 'Inter Tight'), sans-serif;
+  color:rgba(255,255,255,.78); cursor:pointer;
+  transition:background .15s,border-color .15s,color .15s; -webkit-tap-highlight-color:transparent;
+}
+.ruta-chip:hover, .ruta-chip:active {
+  background:rgba(240,180,41,.14); border-color:rgba(240,180,41,.35); color:#fff;
+}
+.ruta-chip--on {
+  background:rgba(240,180,41,.22); border-color:var(--dorado, #f0b429); color:#fff;
+}
+.ruta-chip--go {
+  background:var(--dorado, #f0b429); border-color:var(--dorado, #f0b429);
+  color:#060503; font-weight:600;
+}
+.ruta-chip--go:hover, .ruta-chip--go:active {
+  background:var(--dorado2, #ffc947); border-color:var(--dorado2, #ffc947); color:#060503;
+}
+.ruta-fechas-box {
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+  padding:6px 0; font-size:13px; color:rgba(255,255,255,.7);
+}
+.ruta-fecha-input {
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.2);
+  border-radius:12px; padding:7px 10px; color:#fff; font-size:13px;
+  font-family:var(--font-body, 'Inter'), sans-serif;
+}
+
 /* ── Input bar (fijo abajo, NUNCA desaparece) ── */
 .app-input-bar {
   position:fixed; bottom:56px; left:0; right:0; z-index:1100;

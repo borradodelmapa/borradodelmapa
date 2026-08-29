@@ -265,6 +265,10 @@ function _renderChatEmpty() {
         <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
         <div class="msg-body-salma">${saludo}</div>
       </div>
+      <button class="chat-empty-chip chat-empty-chip--ruta" data-action="crear-ruta">
+        <svg class="chip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+        Crear ruta nueva
+      </button>
       <div class="chat-empty-chips">
         <div class="chat-empty-col">${chipsLeft.map(renderChip).join('')}</div>
         <div class="chat-empty-col">${chipsRight.map(renderChip).join('')}</div>
@@ -274,6 +278,10 @@ function _renderChatEmpty() {
   area.querySelectorAll('.chat-empty-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       const action = chip.dataset.action;
+      if (action === 'crear-ruta') {
+        if (typeof salma !== 'undefined' && salma.startRutaGuiada) salma.startRutaGuiada();
+        return;
+      }
       if (action === 'sos') {
         const sosConfigured = (currentUserSOSConfig?.contacts || []).filter(c => c.phone?.trim()).length > 0;
         if (sosConfigured) showSOSConfirm(); else renderSOSConfig();
@@ -500,6 +508,7 @@ async function _loadChipsAsync(chipsEl) {
         snap.forEach(doc => {
           if (seen.size >= 3) return;
           const d = doc.data();
+          if (d.estado === 'borrador') return; // ruta guiada a medias — no mostrar
           const label = chipLabel(d.nombre || 'Mi ruta');
           if (seen.has(label)) return; // evitar chips duplicados
           seen.add(label);
@@ -797,7 +806,9 @@ async function renderProfile() {
   db.collection('users').doc(currentUser.uid)
     .collection('maps').get().then(snap => {
       const el = document.getElementById('prof-stat-guides');
-      if (el) el.textContent = snap.size;
+      let n = 0;
+      snap.forEach(doc => { if (doc.data().estado !== 'borrador') n++; }); // no contar rutas guiadas a medias
+      if (el) el.textContent = n;
     }).catch(() => {
       const el = document.getElementById('prof-stat-guides');
       if (el) el.textContent = '0';
@@ -815,7 +826,11 @@ async function _loadProfileGuides() {
       .collection('maps').orderBy('createdAt', 'desc').get();
 
     const allGuides = [];
-    snap.forEach(doc => allGuides.push({ id: doc.id, data: doc.data() }));
+    snap.forEach(doc => {
+      const d = doc.data();
+      if (d.estado === 'borrador') return; // ruta guiada a medias — no mostrar
+      allGuides.push({ id: doc.id, data: d });
+    });
 
     for (const g of allGuides) {
       // Sincronizar copia offline: guardar SIEMPRE al cargar desde Firestore
@@ -944,6 +959,7 @@ async function renderBitacora() {
 
     mapsSnap.forEach(doc => {
       const d = doc.data();
+      if (d.estado === 'borrador') return; // ruta guiada a medias — no mostrar
       let route = null;
       try { route = JSON.parse(d.itinerarioIA || '{}'); } catch (_) {}
       let country = normalizeCountry(d.country || '');
@@ -2003,6 +2019,7 @@ async function loadUserGuides() {
     snap.forEach(doc => {
       const d = doc.data();
       if (d.source === 'kv-nivel2') { kvDocs.push(doc); return; }
+      if (d.estado === 'borrador') return; // ruta guiada a medias — no mostrar
       allGuides.push({ id: doc.id, data: d });
     });
     if (kvDocs.length > 0) {
@@ -3612,6 +3629,7 @@ async function openRouteSelector() {
     list.innerHTML = '';
     snap.forEach(doc => {
       const d = doc.data();
+      if (d.estado === 'borrador') return; // ruta guiada a medias — no seleccionable en el mapa
       // Las paradas están serializadas en itinerarioIA
       let routeData = null;
       try { routeData = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null; } catch(_) {}
