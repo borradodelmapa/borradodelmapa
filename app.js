@@ -222,7 +222,7 @@ function handleAvatarClick() {
   }
 }
 
-// ═══ CHAT VACÍO — saludo + chips ═══
+// ═══ CHAT VACÍO — chips de acceso rápido ═══
 
 function _renderChatEmpty() {
   if (!document.getElementById('chat-area')) {
@@ -231,27 +231,17 @@ function _renderChatEmpty() {
   const area = document.getElementById('chat-area');
   if (!area || area.querySelector('.msg')) return;
 
-  const saludos = [
-    'Dime. Ruta, hotel, restaurante, vuelo — lo que necesites.',
-    'Ey, ¿qué plan tienes? Cuéntame y lo montamos.',
-    '¿A dónde vamos? Te armo la ruta entera.',
-    'Aquí estoy. Dime destino o lo que necesites resolver.'
-  ];
-  const saludo = saludos[Math.floor(Math.random() * saludos.length)];
-
   const _ci = (d) => `<svg class="chip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
   const chipsLeft = [
     // "Quiero ir a..." → desactivado 2026-04-17. Ver PENDIENTES.md
-    { label: 'Ruta desde aquí', icon: _ci('<path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>'), msg: 'Hazme una ruta desde donde estoy' },
+    { label: 'Cerca mía', icon: _ci('<path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>'), msg: 'Hazme una ruta desde donde estoy' },
     { label: 'Buscar vuelo', icon: _ci('<path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5 5.2 3L5.8 13 4 12.5l-1 1 3 2 2 3 1-1-.5-1.8 2.8-2.8 3 5.2.5-.3c.4-.2.6-.6.5-1.1z"/>'), msg: 'Busca vuelos' },
     { label: 'Alerta vuelos', icon: _ci('<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>'), msg: null, action: 'vuelos' },
-    { label: 'Pide taxi', icon: _ci('<path d="M5 17h14v-5H5z"/><path d="M7 12V9a1 1 0 011-1h8a1 1 0 011 1v3"/><path d="M5 17l-1 2h1M19 17l1 2h-1"/><circle cx="7.5" cy="14.5" r="1"/><circle cx="16.5" cy="14.5" r="1"/><path d="M9 8l1-3h4l1 3"/>'), msg: null, action: 'taxi' },
-    { label: 'Hotel cerca', icon: _ci('<path d="M3 21V7a2 2 0 012-2h6v16"/><path d="M13 21V3h6a2 2 0 012 2v16"/><path d="M7 9h2M7 13h2M15 9h2M15 13h2"/>'), msg: 'Busca un hotel cerca' },
-    { label: 'Dónde comer', icon: _ci('<path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>'), msg: 'Recomiéndame dónde comer cerca' },
   ];
   const chipsRight = [
     { label: 'Mis Notas', icon: _ci('<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>'), msg: null, action: 'notas' },
-    { label: 'Galería', icon: _ci('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>'), msg: null, action: 'galeria' },
+    // "Galería" → oculto de momento 2026-08-30. Reactivar descomentando esta línea.
+    // { label: 'Galería', icon: _ci('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>'), msg: null, action: 'galeria' },
     // "Explorar zona" (narrador) → desactivado 2026-04-17. Ver PENDIENTES.md
     { label: 'Cambio moneda', icon: _ci('<circle cx="9" cy="9" r="6"/><path d="M15.5 15.5a6 6 0 10-6-6"/><path d="M7.5 9h3M9 7.5v3"/><path d="M13.5 15h3M15 13.5v3"/>'), msg: null, action: 'moneda' },
     { label: 'Traductor', icon: _ci('<path d="M4 5h7"/><path d="M9 3v2c0 4.418-2.686 8-6 8"/><path d="M5 9a8 8 0 006 3"/><path d="M12 20l4-9 4 9"/><path d="M19 18h-6"/>'), msg: null, action: 'traductor' },
@@ -261,10 +251,6 @@ function _renderChatEmpty() {
 
   area.innerHTML = `
     <div class="chat-empty">
-      <div class="msg msg-salma">
-        <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
-        <div class="msg-body-salma">${saludo}</div>
-      </div>
       <button class="chat-empty-chip chat-empty-chip--ruta" data-action="crear-ruta">
         <svg class="chip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
         Crear ruta nueva
