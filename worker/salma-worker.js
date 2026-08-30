@@ -2807,12 +2807,18 @@ function replyWithoutRouteBlock(text) {
 }
 
 // Elimina URLs inventadas por Claude que no vienen de herramientas.
-// Solo permite: google.com/maps, y URLs que el worker inyecta (Google Places, etc.)
+// Solo permite: enlaces de Maps con place_id verificado o búsqueda por nombre, y URLs que el worker inyecta.
 function sanitizeInventedUrls(text) {
   if (!text || typeof text !== 'string') return text;
   const urlRegex = /(?:https?:\/\/|[a-z]+:\/\/)[^\s<>]+/gi;
   return text.replace(urlRegex, (url) => {
-    if (url.includes('google.com/maps')) return url;
+    // BLOQUE E — enlaces de Google Maps: solo place_id o búsqueda por nombre.
+    // Coords sueltas, /maps/@, /dir/NombreA/NombreB → los inventa el modelo → fuera.
+    if (url.includes('google.com/maps') || url.includes('maps.google.')) {
+      if (/place_id[:=][A-Za-z0-9_-]{10,}/.test(url)) return url;
+      if (/\/maps\/search\/\?api=1&query=/i.test(url)) return url;
+      return '';
+    }
     if (url.includes('googleusercontent.com') || url.includes('places.googleapis.com')) return url;
     // URLs del proxy propio del worker (fotos permanentes)
     if (url.includes('salma-api.paco-defoto.workers.dev')) return url;
@@ -3026,7 +3032,7 @@ function mergeBlocks(blockResults, originalMessage) {
     duration_days: maxDay,
     summary: base.summary || '',
     stops: allStops,
-    maps_links: buildMapsLinksFromStops(allStops),
+    maps_links: buildMapsLinksFromStops(allStops, base.region || base.country || ''),
     tips: [...new Set(allTips)],
     tags: [...allTags],
     budget_level: base.budget_level || 'sin_definir',
@@ -3273,7 +3279,7 @@ async function verifyAllStops(route, placesKey) {
 
   route.stops = validatedStops;
   route.discarded_stops = discarded;
-  route.maps_links = buildMapsLinksFromStops(validatedStops);
+  route.maps_links = buildMapsLinksFromStops(validatedStops, region);
 
   console.log(`[VERIFY] Resumen: ${validatedStops.length} validadas, ${discarded.length} descartadas`);
 
@@ -3372,15 +3378,40 @@ async function getValidatedPlace(query, placesKey, region, countryCode, biasCoor
   };
 }
 
-// Genera maps_links por día usando SOLO paradas con place_id validado.
-// Formato con lat/lng (Google los entiende literal en /dir/, los place_id en path NO funcionan).
-function buildMapsLinksFromStops(stops) {
+// ═══════════════════════════════════════════════════════════════
+// BLOQUE E — Validador de enlaces de Google Maps
+// Red de seguridad que corre DESPUÉS de verifyAllStops / buildMapsLinksFromStops,
+// justo antes de entregar una ruta o una respuesta de chat al frontend.
+// Regla dura (Opción B): un enlace de Maps solo puede ser
+//   (a) ficha real de Google  →  place/?q=place_id:XXX   (place_id verificado)
+//   (b) búsqueda por nombre    →  search/?api=1&query=<nombre>
+// Nunca un pin sobre coordenadas inventadas por el modelo.
+// ═══════════════════════════════════════════════════════════════
+
+// Coordenada geográficamente posible: número finito, en rango, y no la "isla nula" 0,0.
+function isValidCoord(lat, lng) {
+  const a = typeof lat === 'number' ? lat : parseFloat(lat);
+  const o = typeof lng === 'number' ? lng : parseFloat(lng);
+  if (!Number.isFinite(a) || !Number.isFinite(o)) return false;
+  if (a < -90 || a > 90 || o < -180 || o > 180) return false;
+  if (Math.abs(a) < 0.0001 && Math.abs(o) < 0.0001) return false; // 0,0 = sin coordenada real
+  return true;
+}
+
+// Enlace de búsqueda por nombre — el fallback seguro. Google busca por texto: casi nunca falla.
+function mapsSearchUrlByName(name, regionCtx) {
+  const q = [name, regionCtx].filter(Boolean).join(', ').trim();
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q || name || '');
+}
+
+// Genera maps_links por día. Opción B:
+//   place_id → ficha oficial · sin place_id → búsqueda por nombre.
+// Nunca genera un enlace con lat/lng que no venga de una parada con place_id validado.
+function buildMapsLinksFromStops(stops, regionCtx = '') {
   if (!Array.isArray(stops) || stops.length === 0) return [];
   const byDay = new Map();
   for (const s of stops) {
-    // Las paradas que llegan aquí ya pasaron por verifyAllStops → coords de Google Places.
-    // place_id es preferible para 1 parada, pero si falta, lat/lng igualmente sirven.
-    if (!s || !s.lat || !s.lng) continue;
+    if (!s) continue;
     const d = s.day || 1;
     if (!byDay.has(d)) byDay.set(d, []);
     byDay.get(d).push(s);
@@ -3389,21 +3420,198 @@ function buildMapsLinksFromStops(stops) {
   const days = [...byDay.keys()].sort((a, b) => a - b);
   for (const day of days) {
     const arr = byDay.get(day);
-    if (arr.length === 0) continue;
-    const label = `Día ${day}: ${arr[0].name || arr[0].headline || ''}${arr.length > 1 ? ' → ' + (arr[arr.length - 1].name || arr[arr.length - 1].headline || '') : ''}`;
+    if (!arr || arr.length === 0) continue;
+    const firstName = arr[0].name || arr[0].headline || '';
+    const lastName = arr[arr.length - 1].name || arr[arr.length - 1].headline || '';
+    const label = `Día ${day}: ${firstName}${arr.length > 1 ? ' → ' + lastName : ''}`;
+
+    // Paradas fiables ese día = place_id + coordenada posible (coords reales de Google Places).
+    const trusted = arr.filter(s => s.place_id && isValidCoord(s.lat, s.lng));
+
+    let url;
     if (arr.length === 1) {
-      // 1 parada → place_id si lo hay (formato oficial); fallback a lat/lng.
-      const url = arr[0].place_id
+      url = arr[0].place_id
         ? 'https://www.google.com/maps/place/?q=place_id:' + arr[0].place_id
-        : `https://www.google.com/maps/search/?api=1&query=${arr[0].lat},${arr[0].lng}`;
-      links.push({ day, url, label });
+        : mapsSearchUrlByName(firstName, regionCtx);
+    } else if (trusted.length >= 2) {
+      // Ruta del día SOLO con paradas fiables
+      const segments = trusted.map(p => `${p.lat},${p.lng}`).join('/');
+      url = 'https://www.google.com/maps/dir/' + segments;
+    } else if (trusted.length === 1) {
+      url = 'https://www.google.com/maps/place/?q=place_id:' + trusted[0].place_id;
     } else {
-      // 2+ paradas → ruta con lat/lng (formato que Google entiende en /dir/)
-      const segments = arr.map(p => `${p.lat},${p.lng}`).join('/');
-      links.push({ day, url: 'https://www.google.com/maps/dir/' + segments, label });
+      // Ninguna parada fiable ese día → búsqueda por nombre de la primera
+      url = mapsSearchUrlByName(firstName, regionCtx);
     }
+    links.push({ day, url, label });
   }
   return links;
+}
+
+// Extrae coords de una URL de Google Maps en sus formatos habituales. null si no hay.
+function extractCoordsFromMapsUrl(u) {
+  if (!u) return null;
+  const pats = [
+    /[?&](?:q|query|destination|center|ll|sll)=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/i,
+    /\/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/,
+    /\/dir\/(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/,
+    /!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/,
+  ];
+  for (const p of pats) {
+    const m = u.match(p);
+    if (m) return { lat: parseFloat(m[1]), lng: parseFloat(m[2]) };
+  }
+  return null;
+}
+
+// URL de Maps respaldada por un place_id (q=place_id:XXX, destination_place_id=XXX, query_place_id=XXX…)
+function isPlaceIdMapsUrl(u) {
+  if (!/google\.[a-z.]+\/maps|maps\.google\./.test(u || '')) return false;
+  return /place_id[:=][A-Za-z0-9_-]{10,}/.test(u);
+}
+
+// URL de ruta /maps/dir/ (tras injectVerifiedMapsLinks, las de Claude ya están limpiadas → estas son del worker)
+function isDirMapsUrl(u) {
+  return /\/maps\/dir\//.test(u || '');
+}
+
+// search/?api=1&query=<texto> donde <texto> NO es "lat,lng"
+function isNameSearchMapsUrl(u) {
+  const m = (u || '').match(/\/maps\/search\/\?api=1&query=([^&\s)\]]+)/i);
+  if (!m) return false;
+  let decoded = m[1];
+  try { decoded = decodeURIComponent(m[1]); } catch (_) {}
+  return !/^-?\d+(?:\.\d+)?,-?\d+(?:\.\d+)?$/.test(decoded);
+}
+
+// HEAD con timeout corto. Fail-safe: solo marca roto un 404/410 explícito, timeout o error de red.
+// Cualquier otra respuesta rara de Google (405, 429, 3xx a consent…) → se deja pasar.
+async function headCheckMapsUrl(u, ms = 3000) {
+  try {
+    const r = await fetch(u, { method: 'HEAD', redirect: 'follow', signal: AbortSignal.timeout(ms) });
+    if (r.status === 404 || r.status === 410) return { ok: false, reason: '404' };
+    return { ok: true, reason: null };
+  } catch (e) {
+    return { ok: false, reason: (e && e.name === 'TimeoutError') ? 'timeout' : 'other' };
+  }
+}
+
+const MAX_HEAD_CHECKS = 15;
+
+/**
+ * Valida y corrige los enlaces de Google Maps de una ruta o de un texto de chat.
+ * @param {object|string} payload  route (con .stops) o string de respuesta de chat
+ * @param {object} opts  { surface, region, tripId, userId }
+ * @returns {Promise<{ value:(object|string), incidents:Array }>}
+ *   incidents: [{ original_url, place_name, replacement_url, trip_id, user_id, reason, surface }]
+ *   reason ∈ "404" | "timeout" | "invalid_coordinates" | "other"
+ */
+async function validarYCorregirLinksMaps(payload, opts = {}) {
+  const surface = opts.surface || 'desconocido';
+  const incidents = [];
+  const pushIncident = (original_url, place_name, replacement_url, reason) => {
+    incidents.push({
+      original_url: original_url || '',
+      place_name: place_name || '',
+      replacement_url: replacement_url || '',
+      trip_id: opts.tripId || '',
+      user_id: opts.userId || '',
+      reason,
+      surface,
+    });
+  };
+
+  // ─────────── RUTA ───────────
+  if (payload && typeof payload === 'object' && Array.isArray(payload.stops)) {
+    const route = payload;
+    const region = opts.region || route.region || route.country || '';
+
+    // 0. Sanear coords imposibles a nivel de parada (verify saltado/fallido, ruta de KV, etc.)
+    for (const s of route.stops) {
+      const hasCoord = s && s.lat != null && s.lng != null && s.lat !== '' && s.lng !== '';
+      if (hasCoord && !isValidCoord(s.lat, s.lng)) {
+        const repl = mapsSearchUrlByName(s.name || s.headline || '', region);
+        pushIncident(`coord:${s.lat},${s.lng}`, s.name || s.headline || '', repl, 'invalid_coordinates');
+        s.lat = null; s.lng = null; // place_id (si lo hay) sigue sirviendo para la ficha
+      }
+    }
+
+    // 1. Regenerar maps_links con la regla dura (place_id → ficha; si no → nombre)
+    route.maps_links = buildMapsLinksFromStops(route.stops, region);
+
+    // 2. HEAD-check de los enlaces que dependen de place_id / coords (los de nombre no hace falta)
+    const toCheck = [];
+    route.maps_links.forEach((l, i) => {
+      if (l && l.url && !isNameSearchMapsUrl(l.url)) toCheck.push({ i, link: l });
+    });
+    const capped = toCheck.slice(0, MAX_HEAD_CHECKS);
+    const checks = await Promise.allSettled(capped.map(c => headCheckMapsUrl(c.link.url)));
+    checks.forEach((res, k) => {
+      const r = res.status === 'fulfilled' ? res.value : { ok: false, reason: 'other' };
+      if (r.ok) return;
+      const { i, link } = capped[k];
+      const dayStops = route.stops.filter(s => (s.day || 1) === link.day);
+      const name = (dayStops[0] && (dayStops[0].name || dayStops[0].headline)) || '';
+      const repl = mapsSearchUrlByName(name, region);
+      pushIncident(link.url, name, repl, r.reason || 'other');
+      route.maps_links[i] = { day: link.day, url: repl, label: link.label };
+    });
+
+    if (incidents.length) {
+      console.log(`[BLOQUE_E] ${surface}: ${incidents.length} enlace(s) de ruta corregidos`);
+    }
+    return { value: route, incidents };
+  }
+
+  // ─────────── TEXTO DE CHAT ───────────
+  if (typeof payload === 'string') {
+    let text = payload;
+    const urlRe = /https?:\/\/(?:www\.)?(?:google\.[a-z.]+\/maps|maps\.google\.[a-z.]+)[^\s)\]]*/gi;
+    const urls = [...new Set(text.match(urlRe) || [])];
+    if (urls.length === 0) return { value: text, incidents };
+
+    const okSet = new Set();
+    const headCandidates = [];
+    for (const u of urls) {
+      if (isNameSearchMapsUrl(u)) { okSet.add(u); continue; }        // búsqueda por nombre → segura
+      const coords = extractCoordsFromMapsUrl(u);
+      if (coords && !isValidCoord(coords.lat, coords.lng)) {
+        pushIncident(u, '', '', 'invalid_coordinates');
+        continue; // coords imposibles → se elimina
+      }
+      if (isPlaceIdMapsUrl(u)) { headCandidates.push(u); continue; } // place_id → verificar existencia con HEAD
+      if (isDirMapsUrl(u)) { okSet.add(u); continue; }               // /maps/dir/ del worker (Claude ya limpiado antes)
+      pushIncident(u, '', '', 'other'); // formato "suelto" del modelo (maps?q=, /maps/@, maps.google.com/?q=) → fuera
+    }
+
+    if (headCandidates.length) {
+      const capped = headCandidates.slice(0, MAX_HEAD_CHECKS);
+      const results = await Promise.allSettled(capped.map(u => headCheckMapsUrl(u)));
+      results.forEach((res, k) => {
+        const u = capped[k];
+        const r = res.status === 'fulfilled' ? res.value : { ok: false, reason: 'other' };
+        if (r.ok) okSet.add(u);
+        else pushIncident(u, '', '', r.reason || 'other');
+      });
+      headCandidates.slice(MAX_HEAD_CHECKS).forEach(u => okSet.add(u)); // sobre el tope → place_id ya es de confianza
+    }
+
+    for (const u of urls) {
+      if (okSet.has(u)) continue;
+      const esc = u.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      text = text.replace(new RegExp('\\[([^\\]]+)\\]\\(' + esc + '\\)', 'g'), '$1'); // [txt](url) → txt
+      text = text.replace(new RegExp('\\(\\s*' + esc + '\\s*\\)', 'g'), '');           // (url) → ''
+      text = text.replace(new RegExp(esc, 'g'), '');                                    // url suelto → ''
+    }
+    text = text.replace(/\(\s*\)/g, '').replace(/[ \t]{2,}/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+
+    if (incidents.length) {
+      console.log(`[BLOQUE_E] ${surface}: ${incidents.length} enlace(s) de chat corregidos/eliminados`);
+    }
+    return { value: text, incidents };
+  }
+
+  return { value: payload, incidents };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -4637,6 +4845,34 @@ async function logToFirestore(logData) {
       body: JSON.stringify({ fields }),
     });
   } catch (_) { /* logging no debe romper el flujo */ }
+}
+
+// BLOQUE E — vuelca a Firestore cada sustitución de enlace de Maps.
+// Colección aislada `url_validation_incidents` — Bloque B (monitor de calidad) podrá leerla tal cual.
+// Escribe autenticado con el ID token del propio usuario (mismo patrón que flight_watches).
+// Llamar siempre envuelto en ctx.waitUntil() para no bloquear la respuesta.
+async function logUrlIncidents(incidents, idToken) {
+  if (!Array.isArray(incidents) || incidents.length === 0 || !idToken) return;
+  const base = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT}/databases/(default)/documents/url_validation_incidents`;
+  const nowIso = new Date().toISOString();
+  await Promise.allSettled(incidents.map(inc => {
+    const docId = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    const fields = {
+      original_url:    { stringValue: String(inc.original_url || '').slice(0, 500) },
+      place_name:      { stringValue: String(inc.place_name || '').slice(0, 200) },
+      replacement_url: { stringValue: String(inc.replacement_url || '').slice(0, 500) },
+      trip_id:         { stringValue: String(inc.trip_id || '') },
+      user_id:         { stringValue: String(inc.user_id || '') },
+      reason:          { stringValue: String(inc.reason || 'other') },
+      surface:         { stringValue: String(inc.surface || 'desconocido') },
+      timestamp:       { timestampValue: nowIso },
+    };
+    return fetch(`${base}/${docId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+      body: JSON.stringify({ fields }),
+    });
+  }));
 }
 
 export default {
@@ -6702,6 +6938,7 @@ REGLAS:
     const userNotes = body.user_notes || null;
     const frontendCountryCode = body.country || null; // País enviado por el frontend (detectado por GPS)
     const guidedRoute = body.guided_route || null; // Flujo guiado: 8 campos ya recogidos por el frontend
+    const _urlIncidents = []; // BLOQUE E — sustituciones de enlaces Maps (se vuelcan a Firestore al final)
 
     // ─── BYPASS: petición explícita de enlace Google Maps ───
     // Si el usuario pide un link (enlace/link/maps/cómo llegar/dónde está/ubicación/dirección),
@@ -7088,6 +7325,13 @@ INSTRUCCIONES:
     const _cachedDayCount = _cachedDaySet.size || 1;
     const _cachedQuality = _cachedStops / _cachedDayCount >= 3;
     if (kvCachedRoute && kvCachedRoute.stops && _cachedStops > 0 && _cachedQuality) {
+      // BLOQUE E — la ruta de KV no pasó por verifyAllStops: validar sus enlaces de Maps
+      try {
+        const _r = await validarYCorregirLinksMaps(kvCachedRoute, { surface: 'ruta_guiada', region: kvCachedRoute.region || kvCachedRoute.country || '', userId: uid });
+        kvCachedRoute = _r.value;
+        _urlIncidents.push(..._r.incidents);
+      } catch (_) {}
+      if (_urlIncidents.length) ctx.waitUntil(logUrlIncidents(_urlIncidents.splice(0), authHeader.slice(7)));
       const cachedReply = kvCachedRoute.title ? `Tu ruta por ${kvCachedRoute.title} está lista.` : 'Tu ruta está lista.';
       // Devolver como SSE para que el frontend lo procese correctamente
       const sseData = `data: ${JSON.stringify({ t: cachedReply })}\n\ndata: ${JSON.stringify({ done: true, reply: cachedReply, route: kvCachedRoute })}\n\n`;
@@ -7313,6 +7557,13 @@ INSTRUCCIONES:
               if (route) {
                 const reply = 'Tu ruta completa está lista.';
 
+                // BLOQUE E — validar enlaces de Maps antes de cachear y entregar
+                try {
+                  const _r = await validarYCorregirLinksMaps(route, { surface: 'ruta_guiada', region: route.region || route.country || '', userId: uid });
+                  route = _r.value;
+                  _urlIncidents.push(..._r.incidents);
+                } catch (_) {}
+
                 // Guardar en KV nivel 3 — con múltiples keys para matchear
                 if (route.stops && route.stops.length > 0 && env.SALMA_KB) {
                   try {
@@ -7341,6 +7592,7 @@ INSTRUCCIONES:
                 }
                 await writer.write(encoder.encode(`data: ${JSON.stringify(doneEvtB)}\n\n`));
 
+                if (_urlIncidents.length) ctx.waitUntil(logUrlIncidents(_urlIncidents.splice(0), authHeader.slice(7)));
                 ctx.waitUntil(logToFirestore({
                   timestamp: new Date().toISOString(),
                   type: 'route_blocks',
@@ -7844,6 +8096,25 @@ REGLAS:
           } catch (_) {}
         }
 
+        // ── BLOQUE E: validar enlaces de Google Maps antes de cachear y entregar ──
+        {
+          const _surface = route ? 'ruta_guiada' : 'chat_libre';
+          if (route) {
+            try {
+              const _r = await validarYCorregirLinksMaps(route, { surface: _surface, region: route.region || route.country || '', userId: uid });
+              route = _r.value;
+              _urlIncidents.push(..._r.incidents);
+            } catch (_) {}
+          }
+          if (reply && typeof reply === 'string') {
+            try {
+              const _r = await validarYCorregirLinksMaps(reply, { surface: _surface, userId: uid });
+              reply = _r.value;
+              _urlIncidents.push(..._r.incidents);
+            } catch (_) {}
+          }
+        }
+
         // ── Guardar ruta en KV (nivel 3 — caché automático con múltiples keys) ──
         if (route && route.stops && route.stops.length > 0 && env.SALMA_KB) {
           try {
@@ -7886,6 +8157,9 @@ REGLAS:
           }
         }
         await writer.write(encoder.encode(`data: ${JSON.stringify(doneEvt)}\n\n`));
+
+        // BLOQUE E — volcar sustituciones de enlaces de Maps a Firestore
+        if (_urlIncidents.length) ctx.waitUntil(logUrlIncidents(_urlIncidents.splice(0), authHeader.slice(7)));
 
         // Log exitoso
         ctx.waitUntil(logToFirestore({

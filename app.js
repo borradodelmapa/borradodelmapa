@@ -5410,6 +5410,30 @@ function escapeHTML(str) {
   return d.innerHTML;
 }
 
+// BLOQUE E (frontend) — true si la URL de Maps NO lleva coords imposibles. Sin red.
+// Gemelo de _mapsUrlCoordsSane() en guide-renderer.js.
+function mapsUrlCoordsSane(url) {
+  if (!url || typeof url !== 'string') return true;
+  if (!/google\.[a-z.]+\/maps|maps\.google\./i.test(url)) return true;
+  var pats = [
+    /[?&](?:q|query|destination|center|ll|sll)=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/i,
+    /\/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/,
+    /\/dir\/(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/,
+    /!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/
+  ];
+  for (var i = 0; i < pats.length; i++) {
+    var m = url.match(pats[i]);
+    if (m) {
+      var lat = parseFloat(m[1]), lng = parseFloat(m[2]);
+      if (!isFinite(lat) || !isFinite(lng)) return false;
+      if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return false;
+      if (Math.abs(lat) < 0.0001 && Math.abs(lng) < 0.0001) return false;
+      return true;
+    }
+  }
+  return true;
+}
+
 // Sanitizar URLs inventadas por Claude — solo permite dominios de herramientas reales
 function sanitizeUrls(text) {
   if (!text) return text;
@@ -5440,6 +5464,7 @@ function sanitizeUrls(text) {
     if (urlMatch) workerUrls.add(urlMatch[0]);
   }
   var clean = text.replace(/(?:https?:\/\/|[a-z]+:\/\/)[^\s<>]+/gi, function(url) {
+    if (!mapsUrlCoordsSane(url)) return '';   // BLOQUE E — enlace de Maps con coords imposibles
     if (workerUrls.has(url)) return url;
     for (var i = 0; i < allowed.length; i++) {
       if (url.indexOf(allowed[i]) !== -1) return url;
@@ -5471,6 +5496,7 @@ function formatMessage(str) {
   // Extraer enlaces markdown [texto](url) ANTES de sanitizar — son links intencionales de Salma
   const links = [];
   raw = raw.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_, text, url) => {
+    if (!mapsUrlCoordsSane(url)) return text;  // BLOQUE E — enlace de Maps con coords imposibles → solo texto
     const idx = links.length;
     links.push('<a href="' + url + '" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href);return false;">' + text + '</a>');
     return '%%LINK' + idx + '%%';

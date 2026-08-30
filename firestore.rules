@@ -42,5 +42,15 @@ service cloud.firestore {
       allow read: if request.auth != null;
       allow write: if request.auth != null;
     }
+
+    // BLOQUE E — incidentes de validación de enlaces de Maps.
+    // Escribe el Worker autenticado como el propio usuario. Solo alta, sin editar/borrar.
+    // Diseñada para que Bloque B (monitor de calidad) la lea tal cual en el futuro.
+    match /url_validation_incidents/{incidentId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+                    && request.resource.data.user_id == request.auth.uid;
+      allow update, delete: if false;
+    }
   }
 }

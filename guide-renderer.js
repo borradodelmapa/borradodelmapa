@@ -216,7 +216,8 @@ const guideRenderer = {
     const dayNums = Object.keys(days).map(Number).sort((a, b) => a - b);
     const linksMap = {};
     if (Array.isArray(mapsLinks)) {
-      mapsLinks.forEach(l => { if (l.day && l.url) linksMap[l.day] = l; });
+      // BLOQUE E (frontend) — descarta enlaces de días con coords imposibles (guías antiguas ya guardadas)
+      mapsLinks.forEach(l => { if (l.day && l.url && this._mapsUrlCoordsSane(l.url)) linksMap[l.day] = l; });
     }
 
     for (let i = 0; i < dayNums.length; i++) {
@@ -489,6 +490,30 @@ const guideRenderer = {
   },
 
   // ═══ GOOGLE MAPS URLS ═══
+
+  // BLOQUE E (frontend) — true si la URL de Maps NO lleva coords imposibles. Sin red.
+  // Gemelo de mapsUrlCoordsSane() en app.js (guide-renderer se usa también en 404.html, sin app.js).
+  _mapsUrlCoordsSane(url) {
+    if (!url || typeof url !== 'string') return true;
+    if (!/google\.[a-z.]+\/maps|maps\.google\./i.test(url)) return true;
+    const pats = [
+      /[?&](?:q|query|destination|center|ll|sll)=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/i,
+      /\/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/,
+      /\/dir\/(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/,
+      /!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/
+    ];
+    for (const p of pats) {
+      const m = url.match(p);
+      if (m) {
+        const lat = parseFloat(m[1]), lng = parseFloat(m[2]);
+        if (!isFinite(lat) || !isFinite(lng)) return false;
+        if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return false;
+        if (Math.abs(lat) < 0.0001 && Math.abs(lng) < 0.0001) return false;
+        return true;
+      }
+    }
+    return true;
+  },
 
   // Regla única: sin place_id validado por Google Places → no hay enlace.
   _stopGmapsUrl(stop, country) {
