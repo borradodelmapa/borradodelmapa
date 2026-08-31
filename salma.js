@@ -1185,7 +1185,9 @@ const salma = {
     // Día concreto según el rango elegido → el mensaje lleva "N días" para que
     // el worker use su ruta de generación de siempre (bloques si es larga, verify, etc.)
     const diasNum = { '3-4': 4, '5-7': 6, '8-14': 11, '+14': 16 }[d.duracion_dias] || 7;
-    const msg = `Hazme una ruta de ${diasNum} días por ${d.destino || 'el destino indicado'}.`;
+    // Frase-disparador explícita: "salma hazme una guía" es la ÚNICA que BLOQUE_RUTAS del prompt
+    // permite para generar SALMA_ROUTE_JSON. Con "hazme una ruta" el modelo describía y no generaba.
+    const msg = `Salma hazme una guía de ${diasNum} días por ${d.destino || 'el destino indicado'}.`;
     this._doSend(msg, { guided_route: guided });
   },
 
@@ -1349,6 +1351,26 @@ const salma = {
           this._rutaDraft = null;
           this._rutaGuiadaWaitingText = false;
         }
+      } else if (this._rutaDraft || this._isRouteMsg(msg)) {
+        // Era una petición de ruta (flujo guiado o "salma hazme una guía") pero el worker
+        // no devolvió ruta usable. No dejar spinner colgado: avisar y ofrecer reintento.
+        this._removeLoading();
+        this._addSalmaBubble('Uf, se me ha atascado el mapa a mitad. El texto de arriba es la ruta que tenía pensada — dame a "Reintentar" y te la monto en condiciones.');
+        const _area = this._getChatArea();
+        if (_area) {
+          const _rw = document.createElement('div');
+          _rw.className = 'historia-chat-chip-wrap';
+          const _rb = document.createElement('button');
+          _rb.className = 'historia-chat-chip';
+          _rb.textContent = '🔄 Reintentar ruta';
+          const _retryMsg = this._lastMsg || msg;
+          const _retryExtra = this._lastExtra || {};
+          _rb.addEventListener('click', () => { _rw.remove(); this._doSend(_retryMsg, _retryExtra); });
+          _rw.appendChild(_rb);
+          _area.appendChild(_rw);
+          this._scrollToBottom(true);
+        }
+        // El borrador incremental se conserva por si el reintento también falla.
       }
 
       // Si hay video_params, renderizar player inline

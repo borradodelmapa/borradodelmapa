@@ -2510,7 +2510,8 @@ function buildMessages(history, message, currentRoute, userName, userNationality
 - Ritmo deseado: ${_ritmo}
 - Intereses: ${_intereses}
 - Restricciones: ${_restr}
-Genera la ruta día por día ajustada a estos datos. Si hay restricciones, respétalas a rajatabla.]`);
+Genera la ruta día por día ajustada a estos datos. Si hay restricciones, respétalas a rajatabla.
+En el JSON: "country" = país real (ej. "Portugal"); "region" = región o zona real (ej. "Algarve" o "Faro"), NUNCA el texto literal del destino con "desde", números de carretera (N2) ni el medio de transporte. Si el destino es una carretera o ruta lineal (N2, Ruta 40, costa…), traza las paradas siguiendo ese trazado en orden geográfico y respeta el punto de salida indicado.]`);
   }
 
   // ── Datos verificados del KV (nivel 1 + nivel 2) ──
@@ -2806,6 +2807,72 @@ function replyWithoutRouteBlock(text) {
   return sanitizeInventedUrls(clean);
 }
 
+// ── RESCATE de SALMA_ROUTE_JSON truncado (stop_reason: max_tokens) ──
+// El modelo empezó a escribir el JSON pero se quedó sin tokens a mitad de "stops".
+// Recuperamos la cabecera (title/country/region/…) + todas las paradas COMPLETAS
+// y cerramos el array + el objeto. Los campos opcionales de cola (tips/tags/…) se pierden
+// y los rellena extractRouteFromReply con defaults. Devuelve string JSON o null.
+function salvageIncompleteRouteJson(text) {
+  if (!text || typeof text !== 'string') return null;
+  const marker = 'SALMA_ROUTE_JSON';
+  const mi = text.indexOf(marker);
+  if (mi === -1) return null;
+  let s = text.slice(mi + marker.length).replace(/^\s*```(?:json)?\s*/i, '').trim();
+  const start = s.indexOf('{');
+  if (start === -1) return null;
+  s = s.slice(start);
+
+  // ¿ya es válido tal cual? (a veces solo faltaba el cierre de ``` )
+  try {
+    const r = JSON.parse(s);
+    if (r && Array.isArray(r.stops) && r.stops.length) return JSON.stringify(r);
+  } catch (_) {}
+
+  const stopsAt = s.search(/"stops"\s*:\s*\[/);
+  if (stopsAt === -1) return null;
+  const arrOpen = s.indexOf('[', stopsAt);
+  if (arrOpen === -1) return null;
+
+  let depth = 0, inStr = false, esc = false, lastComplete = -1;
+  for (let i = arrOpen + 1; i < s.length; i++) {
+    const c = s[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === '\\') esc = true;
+      else if (c === '"') inStr = false;
+      continue;
+    }
+    if (c === '"') { inStr = true; continue; }
+    if (c === '{') depth++;
+    else if (c === '}') { depth--; if (depth === 0) lastComplete = i; }
+    else if (c === ']' && depth === 0) { lastComplete = Math.max(lastComplete, i - 1); break; }
+  }
+  if (lastComplete === -1) return null; // ni una parada completa
+
+  const candidate = s.slice(0, arrOpen + 1) + s.slice(arrOpen + 1, lastComplete + 1) + ']}';
+  try {
+    const r = JSON.parse(candidate);
+    if (r && Array.isArray(r.stops) && r.stops.length >= 2) {
+      r._salvaged = true;
+      return JSON.stringify(r);
+    }
+  } catch (_) {}
+  return null;
+}
+
+// Limpia una cadena de región/país para usarla como sesgo de búsqueda en Google Places.
+// "N2 Portugal desde Faro en moto" → "Portugal". Evita que verifyAllStops falle todas las paradas.
+function cleanRegionForSearch(raw) {
+  if (!raw || typeof raw !== 'string') return '';
+  let r = raw.trim();
+  r = r.replace(/\s+(desde|saliendo de|partiendo de|empezando en|hasta|a trav[eé]s de|por la?)\s+.+$/i, '');
+  r = r.replace(/\b(en|con)\s+(moto|coche|bici|bicicleta|furgoneta|autocaravana|caravana|tren|autob[uú]s|coche de alquiler)\b/gi, '');
+  r = r.replace(/\b(ruta|itinerario|road\s?trip|viaje)\b/gi, '');
+  r = r.replace(/\bN-?\d{1,3}\b/g, ''); // códigos de carretera sueltos (N2, N-340…) no ayudan al bias
+  r = r.replace(/\s{2,}/g, ' ').replace(/^[\s,·\-–]+|[\s,·\-–]+$/g, '').trim();
+  return r;
+}
+
 // Elimina URLs inventadas por Claude que no vienen de herramientas.
 // Solo permite: enlaces de Maps con place_id verificado o búsqueda por nombre, y URLs que el worker inyecta.
 function sanitizeInventedUrls(text) {
@@ -2922,7 +2989,7 @@ Genera el bloque SALMA_ROUTE_JSON como siempre, pero solo con las paradas de est
 
   const result = await callOpenAI(apiKey, {
     model: 'gpt-4o-mini',
-    max_tokens: 4000,
+    max_tokens: 16000, // un bloque = 5-7 días × 5-7 paradas: 4000 truncaba el JSON (tope gpt-4o-mini: 16384)
     temperature: 0.7,
     system: systemPrompt,
     messages: [{ role: 'user', content: blockPrompt }],
@@ -2930,7 +2997,11 @@ Genera el bloque SALMA_ROUTE_JSON como siempre, pero solo con las paradas de est
 
   if (result.error) return null;
   const text = result.text || '';
-  const route = extractRouteFromReply(text);
+  let route = extractRouteFromReply(text);
+  if (!route && text.includes('SALMA_ROUTE_JSON')) {
+    const sv = salvageIncompleteRouteJson(text);
+    if (sv) route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + sv);
+  }
   const reply = replyWithoutRouteBlock(text);
   return { route, reply, block };
 }
@@ -3088,9 +3159,16 @@ function addressContainsLocation(formattedAddress, ...locations) {
 async function verifyAllStops(route, placesKey) {
   if (!route?.stops || !placesKey) return route;
 
-  const region = route.region || route.country || '';
-  const country = route.country || '';
-  const countryCode = country ? getCountryCode(country) : '';
+  // Región saneada para el sesgo de búsqueda: "N2 Portugal desde Faro en moto" → "Portugal".
+  // Sin esto, las queries salían como "Miradouro X, N2 Portugal desde Faro" y no validaba ninguna parada.
+  const region = cleanRegionForSearch(route.region || route.country || '') || (route.country || '');
+  let country = route.country || '';
+  let countryCode = country ? getCountryCode(country) : '';
+  // Si el país no resuelve, intentar deducirlo de la región saneada (p.ej. "Portugal" dentro de "N2 Portugal")
+  if (!countryCode && region) {
+    const m = region.match(/\b(Portugal|España|Spain|France|Francia|Italia|Italy|Marruecos|Morocco|Alemania|Germany|Reino Unido|United Kingdom|Irlanda|Ireland|Países Bajos|Netherlands|Bélgica|Belgium|Suiza|Switzerland|Austria|Grecia|Greece|Croacia|Croatia|Portugal)\b/i);
+    if (m) { countryCode = getCountryCode(m[1]) || ''; if (countryCode && !country) country = m[1]; }
+  }
   const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
   const FIELDS = 'place_id,photos,geometry,name,formatted_address,opening_hours,editorial_summary,business_status';
   const DETAIL_FIELDS = 'name,photos,geometry,editorial_summary,opening_hours,business_status,formatted_address';
@@ -4620,6 +4698,7 @@ async function readOpenAIStream(openaiRes, writer, encoder, decoder, forwardText
   let contentBlocks = [];
   let stopReason = null;
   let routeSignalSent = false;
+  let routeHeartbeat = 0; // latidos mientras se genera el JSON en silencio (mantiene viva la SSE)
   // Track tool calls being built
   const toolCallsInProgress = {}; // indexed by tool call index
 
@@ -4657,6 +4736,9 @@ async function readOpenAIStream(openaiRes, writer, encoder, decoder, forwardText
             } else if (!routeSignalSent) {
               routeSignalSent = true;
               await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`));
+            } else if ((++routeHeartbeat % 30) === 0) {
+              // JSON largo generándose en silencio: latido cada ~30 chunks para no perder la conexión
+              try { await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`)); } catch (_) {}
             }
           }
         }
@@ -4714,6 +4796,7 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
   let contentBlocks = [];
   let stopReason = null;
   let routeSignalSent = false;
+  let routeHeartbeat = 0; // latidos mientras se genera el JSON en silencio (mantiene viva la SSE)
   const blocksInProgress = {};
 
   while (true) {
@@ -4741,6 +4824,9 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
                 try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: chunk })}\n\n`)); } catch (_) {}
               } else if (!routeSignalSent) {
                 routeSignalSent = true;
+                try { await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`)); } catch (_) {}
+              } else if ((++routeHeartbeat % 30) === 0) {
+                // JSON largo generándose en silencio: latido cada ~30 chunks para no perder la conexión
                 try { await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`)); } catch (_) {}
               }
             }
@@ -7400,7 +7486,10 @@ INSTRUCCIONES:
     // Todo va a Claude Sonnet (visión nativa incluida)
     const useAnthropic = true;
     const reqModel = 'gpt-4o-mini'; // fallback legacy (no se usa si useAnthropic=true)
-    const reqMaxTokens = needsTools ? 6000 : 3000;
+    // Rutas: la respuesta = prosa larga + SALMA_ROUTE_JSON con 16-40 paradas (cada una ~180 tokens).
+    // Con 6000 se truncaba el JSON a mitad y la ruta llegaba null. Sonnet admite hasta 64k de salida.
+    // 24000 da margen para una ruta de 7 días (el tope single-shot; ≥8 días va por bloques).
+    const reqMaxTokens = isRoute ? 24000 : (needsTools ? 6000 : 3000);
 
     // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
     const sseHeaders = {
@@ -7622,6 +7711,7 @@ INSTRUCCIONES:
         let _lastBuscarLugarCoords = null; // Coords del último lugar buscado (para deep links transporte)
         let _pendingTransportActions = null; // Acciones de transporte para enviar en done event
         let _pendingTransportTip = null;
+        let lastStopReason = null; // 'max_tokens' | 'end_turn' | 'tool_use'… — para detectar truncado y rescatar el JSON
 
         for (let iteration = 0; iteration <= MAX_TOOL_ITERATIONS; iteration++) {
           let apiRes;
@@ -7709,6 +7799,7 @@ INSTRUCCIONES:
           }
 
           allText += result.fullText;
+          lastStopReason = result.stopReason;
 
           // ── Si terminó (no pide herramientas), salir del bucle ──
           if (result.stopReason !== 'tool_use') {
@@ -7844,23 +7935,36 @@ INSTRUCCIONES:
         let route = extractRouteFromReply(allText);
         let reply = replyWithoutRouteBlock(allText);
 
-        // ── FALLBACK: era petición de guía pero el modelo olvidó SALMA_ROUTE_JSON ──
-        // Pasa cuando el modelo escribe el plan en prosa larga y se olvida del JSON al final.
-        // Hacemos una 2ª llamada a Claude con prefill forzado para extraer el JSON del texto.
-        if (!route && isRouteRequest(message, history) && allText && allText.length > 600) {
+        // ── RESCATE 1: el JSON empezó pero se cortó por max_tokens ──
+        // Reconstituimos con las paradas completas antes de gastar otra llamada a Claude.
+        if (!route && allText.includes('SALMA_ROUTE_JSON')) {
+          const salvaged = salvageIncompleteRouteJson(allText);
+          if (salvaged) {
+            route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + salvaged);
+            if (route) console.log(`[RESCATE] ✓ JSON truncado reconstruido: ${route.stops.length} paradas (stop_reason: ${lastStopReason || 'n/d'})`);
+          }
+        }
+
+        // ── RESCATE 2 (FALLBACK): era petición de ruta pero no hay JSON usable ──
+        // Cubre: (a) el modelo escribió el plan en prosa y se olvidó del JSON,
+        //        (b) el JSON se truncó tan pronto que el RESCATE 1 no encontró ni 2 paradas.
+        // 2ª llamada a Claude con prefill forzado para extraer el JSON del texto.
+        // Se dispara con `isRoute` (incluye el flujo guiado de 8 preguntas), no solo con la frase.
+        if (!route && (isRoute || isRouteRequest(message, history)) && allText && allText.length > 600) {
           try {
             const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
 
 {"title":"...","name":"...","country":"...","region":"...","duration_days":N,"summary":"...","stops":[{"name":"Nombre exacto","headline":"Nombre exacto","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","day":1,"lat":21.0285,"lng":105.8524,"km_from_previous":0,"road_name":"","road_difficulty":"medio","estimated_hours":1.5}],"tips":[],"tags":[],"budget_level":"medio","suggestions":[]}
 
 REGLAS:
-- Una entrada en "stops" por cada lugar nombrado en el plan (negrita o no).
+- Una entrada en "stops" por cada lugar nombrado en el plan (negrita o no). Inclúyelas TODAS, no recortes.
+- "country" = país real (ej. "Portugal"). "region" = región o zona real (ej. "Algarve"), nunca con "desde", números de carretera ni medio de transporte.
 - "day" = número de día (1, 2, 3…). "day_title" = título corto, mismo para todas las paradas del día.
 - "lat"/"lng" = coordenadas reales del lugar (decimales).
 - "narrative" = 1-2 frases del plan original sobre la parada.
 - NO inventes paradas que no estén en el plan.`;
 
-            const fallbackUser = `Plan a convertir:\n\n${allText.substring(0, 12000)}`;
+            const fallbackUser = `Plan a convertir:\n\n${allText.substring(0, 40000)}`;
 
             const fallbackRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
               method: 'POST',
@@ -7871,33 +7975,43 @@ REGLAS:
               },
               body: JSON.stringify({
                 model: 'claude-sonnet-4-6',
-                max_tokens: 6000,
+                max_tokens: 24000,
                 system: fallbackSys,
                 messages: [
                   { role: 'user', content: fallbackUser },
                   { role: 'assistant', content: '{' },  // prefill — fuerza JSON desde la primera línea
                 ],
               }),
-              signal: AbortSignal.timeout(45000),
+              signal: AbortSignal.timeout(60000),
             });
 
             if (fallbackRes.ok) {
               const fallbackData = await fallbackRes.json();
               const jsonTail = fallbackData.content?.[0]?.text || '';
-              const fullJson = '{' + jsonTail; // recomponer con el prefill
-              try {
-                const parsed = JSON.parse(fullJson);
-                if (parsed?.stops && Array.isArray(parsed.stops) && parsed.stops.length >= 3) {
-                  route = parsed;
-                  console.log(`[FALLBACK] ✓ JSON generado a posteriori: ${parsed.stops.length} paradas`);
-                }
-              } catch (e) {
-                console.log(`[FALLBACK] ✗ JSON inválido: ${e.message}`);
+              let fullJson = '{' + jsonTail; // recomponer con el prefill
+              let parsed = null;
+              try { parsed = JSON.parse(fullJson); } catch (_) {
+                // si el propio fallback se truncó, intentar rescatarlo igual
+                const sv = salvageIncompleteRouteJson('SALMA_ROUTE_JSON\n' + fullJson);
+                if (sv) { try { parsed = JSON.parse(sv); } catch (_) {} }
+              }
+              if (parsed?.stops && Array.isArray(parsed.stops) && parsed.stops.length >= 2) {
+                route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + JSON.stringify(parsed)) || parsed;
+                route._fallback = true;
+                console.log(`[FALLBACK] ✓ JSON generado a posteriori: ${parsed.stops.length} paradas`);
+              } else {
+                console.log(`[FALLBACK] ✗ JSON sin paradas suficientes`);
               }
             }
           } catch (e) {
             console.log(`[FALLBACK] ✗ Error: ${e.message}`);
           }
+        }
+
+        // ── Si tras ambos rescates seguimos sin ruta pero era intención de ruta,
+        //    dejar constancia para que el frontend lo diga (no spinner infinito). ──
+        if (!route && (isRoute || isRouteRequest(message, history)) && allText.includes('SALMA_ROUTE_JSON')) {
+          console.log(`[RUTA] ✗ No se pudo materializar la ruta (stop_reason: ${lastStopReason || 'n/d'}, len: ${allText.length})`);
         }
 
         // ── Reparar markdown de imagen roto de Claude en respuestas de hotel ──
@@ -8372,7 +8486,7 @@ REGLAS:
             const prompt = ROUTE_PROMPT_TEMPLATE(dest.nombre, countryName, dest.dias_recomendados || 3, dest.region || '');
             const result = await callOpenAI(env.OPENAI_API_KEY, {
               model: 'gpt-4o-mini',
-              max_tokens: 6000,
+              max_tokens: 16000, // ruta cacheada nivel 3: 6000 truncaba destinos de 5+ días (tope gpt-4o-mini: 16384)
               temperature: 0.7,
               messages: [{ role: 'user', content: prompt }],
             });
@@ -8381,7 +8495,12 @@ REGLAS:
             const jsonMatch = text.match(/\{[\s\S]*\}/);
             if (!jsonMatch) throw new Error('No JSON');
 
-            const route = JSON.parse(jsonMatch[0]);
+            let route;
+            try { route = JSON.parse(jsonMatch[0]); } catch (_) {
+              const sv = salvageIncompleteRouteJson('SALMA_ROUTE_JSON\n' + jsonMatch[0]);
+              if (!sv) throw new Error('JSON inválido');
+              route = JSON.parse(sv);
+            }
             if (!route.stops || route.stops.length === 0) throw new Error('Sin paradas');
 
             // Validar calidad de la ruta antes de guardar
