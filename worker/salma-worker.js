@@ -978,6 +978,19 @@ function isRouteRequest(message, history) {
   return false;
 }
 
+// Detecta si el usuario pide seguir estrictamente una carretera concreta
+// (p.ej. "sin salirte de la N2", "por la A-2", "siguiendo la N-340") y devuelve
+// el código normalizado ("N-2") o null si no aplica.
+function extractPreferredRoad(message) {
+  if (!message) return null;
+  const m = message.match(/(?:sin\s+salir(?:te)?\s+de\s+la|sin\s+salir(?:te)?\s+de|por\s+la|siguiendo\s+la|carretera)\s+([A-Za-z]{1,3}\s?-?\s?\d{1,4})\b/i);
+  if (!m) return null;
+  const raw = m[1].toUpperCase().replace(/\s+/g, '').replace(/-/g, '');
+  const match = raw.match(/^([A-Z]{1,3})(\d{1,4})$/);
+  if (!match) return null;
+  return `${match[1]}-${match[2]}`;
+}
+
 // Detecta "destino + días" sin ser petición de guía → respuesta estructurada por días (no JSON)
 function isDaysDestination(message) {
   if (isRouteRequest(message)) return false;
@@ -5489,6 +5502,37 @@ export default {
       }
     }
 
+    // Compara los pasos ("steps") de una ruta de Google Directions con la carretera
+    // pedida por el usuario. Cuenta como "fuera de ruta" cada tramo cuya instrucción
+    // menciona explícitamente una carretera distinta a la pedida.
+    function _scoreRouteAgainstRoad(googleRoute, preferRoad) {
+      const targetNorm = preferRoad.replace(/-/g, '').toUpperCase();
+      let totalMeters = 0;
+      let offMeters = 0;
+      const offByRoad = {};
+      for (const leg of googleRoute.legs || []) {
+        for (const step of leg.steps || []) {
+          const meters = step.distance?.value || 0;
+          totalMeters += meters;
+          const text = (step.html_instructions || '').replace(/<[^>]*>/g, '');
+          const codes = text.toUpperCase().match(/\b[A-Z]{1,3}-?\s?\d{1,4}\b/g) || [];
+          for (const raw of codes) {
+            const norm = raw.replace(/[\s-]/g, '');
+            if (norm !== targetNorm) {
+              offMeters += meters;
+              const pretty = norm.replace(/^([A-Z]{1,3})(\d{1,4})$/, '$1-$2');
+              offByRoad[pretty] = (offByRoad[pretty] || 0) + meters;
+              break; // contar el tramo una sola vez aunque mencione varios códigos
+            }
+          }
+        }
+      }
+      const offSegments = Object.entries(offByRoad)
+        .map(([road, m]) => ({ road, km: Math.round(m / 100) / 10 }))
+        .sort((a, b) => b.km - a.km);
+      return { offMeters, totalMeters, offSegments };
+    }
+
     // ─── ENDPOINT /directions (polyline para mini-mapas) ───
     if (request.method === 'GET' && url.pathname === '/directions') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
@@ -5497,6 +5541,7 @@ export default {
       const destination = url.searchParams.get('destination') || '';
       const waypoints = url.searchParams.get('waypoints') || '';
       const mode = url.searchParams.get('mode') || 'driving';
+      const preferRoad = url.searchParams.get('preferRoad') || '';
 
       if (!origin || !destination || !placesKey) {
         return new Response(JSON.stringify({ error: 'missing params' }), { status: 400, headers: corsH });
@@ -5505,6 +5550,7 @@ export default {
       try {
         let dirUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&mode=${mode}&key=${placesKey}`;
         if (waypoints) dirUrl += `&waypoints=${encodeURIComponent(waypoints)}`;
+        if (preferRoad) dirUrl += `&alternatives=true`;
 
         const res = await fetch(dirUrl);
         const data = await res.json();
@@ -5513,7 +5559,30 @@ export default {
           return new Response(JSON.stringify({ error: data.status || 'No route' }), { status: 404, headers: corsH });
         }
 
-        const route = data.routes[0];
+        // Si se pidió una carretera concreta ("sin salirte de la N2"), puntuamos cada
+        // alternativa que ofrece Google por km fuera de esa carretera y nos quedamos
+        // con la que menos se desvía (opción E). Si aun así se desvía por encima del
+        // umbral, lo marcamos en road_check para que el frontend avise (opción B-lite).
+        let route = data.routes[0];
+        let roadCheck = null;
+        if (preferRoad && data.routes.length > 0) {
+          let best = null;
+          for (const candidate of data.routes) {
+            const score = _scoreRouteAgainstRoad(candidate, preferRoad);
+            if (!best || score.offMeters < best.score.offMeters) best = { candidate, score };
+          }
+          route = best.candidate;
+          const { offMeters, totalMeters, offSegments } = best.score;
+          const offPct = totalMeters > 0 ? offMeters / totalMeters : 0;
+          roadCheck = {
+            target: preferRoad,
+            offKm: Math.round(offMeters / 100) / 10,
+            offPct: Math.round(offPct * 1000) / 10, // porcentaje, 1 decimal
+            flagged: offPct > 0.12,
+            segments: offSegments.slice(0, 3),
+          };
+        }
+
         const polyline = route.overview_polyline?.points || '';
         const legs = (route.legs || []).map(l => ({
           distance: l.distance?.text || '',
@@ -5536,6 +5605,7 @@ export default {
         }
 
         const payload = includeSteps ? { polyline, legs, steps } : { polyline, legs };
+        if (roadCheck) payload.road_check = roadCheck;
         return new Response(JSON.stringify(payload), {
           headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' }
         });
@@ -8324,6 +8394,13 @@ REGLAS:
         }
 
         // ── Guardar ruta en KV (nivel 3 — caché automático con múltiples keys) ──
+        // Adjuntar carretera preferida detectada (p.ej. "sin salirte de la N2")
+        // para que el frontend pueda pedir /directions con preferRoad y avisar si se desvía.
+        if (route) {
+          const _preferredRoad = extractPreferredRoad(message);
+          if (_preferredRoad) route.preferred_road = _preferredRoad;
+        }
+
         if (route && route.stops && route.stops.length > 0 && env.SALMA_KB) {
           try {
             const routeJson = JSON.stringify(route);

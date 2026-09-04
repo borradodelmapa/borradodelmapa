@@ -51,6 +51,7 @@ const guideRenderer = {
 
     const r = routeData;
     const stops = r.stops || [];
+    this._preferredRoad = r.preferred_road || null;
     const country = r.country || r.region || '';
 
     // Agrupar stops por día
@@ -742,7 +743,7 @@ const guideRenderer = {
 
     // Pedir ruta real a Google Directions
     if (valid.length >= 2) {
-      this._loadDirections(map, valid, color);
+      this._loadDirections(map, valid, color, this._preferredRoad);
     }
   },
 
@@ -811,24 +812,51 @@ const guideRenderer = {
     });
   },
 
-  _loadDirections(map, stops, color) {
+  _loadDirections(map, stops, color, preferredRoad) {
     const origin = stops[0].lat + ',' + stops[0].lng;
     const dest = stops[stops.length - 1].lat + ',' + stops[stops.length - 1].lng;
     const waypoints = stops.slice(1, -1).map(s => s.lat + ',' + s.lng).join('|');
 
-    const url = window.SALMA_API + '/directions?origin=' + origin + '&destination=' + dest
+    let url = window.SALMA_API + '/directions?origin=' + origin + '&destination=' + dest
       + (waypoints ? '&waypoints=' + waypoints : '');
+    if (preferredRoad) url += '&preferRoad=' + encodeURIComponent(preferredRoad);
 
     fetch(url).then(r => r.json()).then(data => {
       if (data.polyline) {
         const coords = this._decodePolyline(data.polyline);
         L.polyline(coords, { color: color, weight: 3, opacity: 0.7 }).addTo(map);
       }
+      // Aviso honesto si la ruta real se aparta de la carretera pedida (B-lite)
+      if (data.road_check) {
+        this._renderRoadWarning(map.getContainer(), data.road_check);
+      }
     }).catch(() => {
       // Fallback: línea recta entre paradas
       const coords = stops.map(s => [s.lat, s.lng]);
       L.polyline(coords, { color: color, weight: 2, opacity: 0.5, dashArray: '6,8' }).addTo(map);
     });
+  },
+
+  // Aviso discreto en el propio mapa cuando la ruta real se desvía de la carretera pedida
+  _renderRoadWarning(mapEl, roadCheck) {
+    if (!mapEl) return;
+    mapEl.querySelectorAll('.map-road-warning').forEach(el => el.remove());
+    if (!roadCheck || !roadCheck.flagged) return;
+
+    const topRoad = roadCheck.segments && roadCheck.segments[0];
+    const detail = topRoad
+      ? `~${roadCheck.offKm} km pasan por la ${topRoad.road}`
+      : `~${roadCheck.offKm} km se apartan de la ${roadCheck.target}`;
+
+    const badge = document.createElement('div');
+    badge.className = 'map-road-warning';
+    badge.textContent = `⚠️ Parte de esta ruta no sigue la ${roadCheck.target}: ${detail}`;
+    badge.style.cssText = 'position:absolute;left:8px;right:8px;bottom:8px;z-index:500;'
+      + 'background:rgba(20,20,20,0.88);color:#f5d78e;font-size:11px;line-height:1.35;'
+      + 'padding:6px 10px;border-radius:8px;border:1px solid rgba(245,215,142,0.35);pointer-events:none;';
+
+    mapEl.style.position = 'relative';
+    mapEl.appendChild(badge);
   },
 
   // ═══ PRINT / PDF ═══
@@ -895,6 +923,7 @@ const guideRenderer = {
   _updateMaps(routeData) {
     const stops = routeData.stops || [];
     const days = this._groupByDay(stops);
+    if (routeData.preferred_road) this._preferredRoad = routeData.preferred_road;
 
     // Mapa principal
     const mainMap = this._maps['main'];
@@ -942,7 +971,7 @@ const guideRenderer = {
       map.fitBounds(bounds, { padding: [20, 20] });
 
       // Re-pedir ruta
-      if (dayStops.length >= 2) this._loadDirections(map, dayStops, color);
+      if (dayStops.length >= 2) this._loadDirections(map, dayStops, color, this._preferredRoad);
     }
   },
 
