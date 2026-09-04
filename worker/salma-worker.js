@@ -975,6 +975,8 @@ function isRouteRequest(message, history) {
   if (/\b(\d{1,2})\s*d[ií]as?\b/i.test(message)) return true;
   // "un/dos/tres... días en X" (palabras) → ruta completa con mapa
   if (/\b(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince)\s*d[ií]as?\b/i.test(message)) return true;
+  // "un solo día" / "solo un día" / "sólo un día" — variantes habituales para pedir ruta de un día
+  if (/\b(un\s+solo|solo\s+un|s[óo]lo\s+un)\s+d[ií]a\b/i.test(message)) return true;
   return false;
 }
 
@@ -1269,6 +1271,8 @@ function needsWebSearchTool(message) {
   if (/\b(busca|search|consulta|averigua|investiga|find|look up|comprueba|verifica)\b.*\b(info|informacion|dato|web|pagina|enlace|horario|precio)\b/i.test(m)) return true;
   // Noticias o alertas de viaje
   if (/\b(alerta|aviso|warning|noticias|news|cerrado|cortado|huelga|strike)\b/i.test(m)) return true;
+  // Nivel 2 — requisitos de conducción (cambian por ciudad/país, no fiarse de memoria)
+  if (/\b(zona de bajas emisiones|zbe|lez|low emission zone|permiso internacional de conducir|peaje obligatorio|vineta)\b/i.test(m)) return true;
   return false;
 }
 
@@ -2449,7 +2453,7 @@ function tryKVDirectAnswer(message, country, destination) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData) {
   // ── Seleccionar prompt base según contexto ──
   // Si es petición de guía o edición de ruta → prompt con BLOQUE_RUTAS
   // Si no → prompt SIN BLOQUE_RUTAS (Claude no ve cómo generar guías = no las genera)
@@ -2733,6 +2737,26 @@ ${formatted}
 Si alguno de estos eventos o festivales coincide con las fechas del viaje, menciónalo brevemente en el día que toque como dato útil. NO reestructures la ruta por un evento. Si ninguno encaja con las fechas, ignóralos. NUNCA inventes eventos.]`;
   }
 
+  // Inyectar verificación de hechos críticos (D + Nivel 1 — ya buscado, no es opcional para Claude)
+  if (factCheckData) {
+    if (factCheckData.road) {
+      userContent += `\n\n[VERIFICACIÓN DE CARRETERA — búsqueda web real:
+${factCheckData.road}
+Si estos resultados indican que la carretera tiene tramos discontinuos, renombrados, cortados o en obras, dilo explícitamente en tu respuesta — no des la carretera por continua sin más. Si los resultados no aclaran nada, dilo con la incertidumbre correspondiente ("no he podido confirmar si el tramo X es continuo") — nunca lo presentes como un hecho seguro sin haberlo comprobado. NUNCA inventes.]`;
+    }
+    if (factCheckData.visaBorderSafety) {
+      userContent += `\n\n[VERIFICACIÓN DE VISADO/FRONTERA/SEGURIDAD — búsqueda web real:
+${factCheckData.visaBorderSafety}
+Usa estos resultados para responder con datos actuales. Si mencionan requisitos concretos (visado, e-visa, estado de la frontera, riesgo de seguridad), inclúyelos. Si los resultados son insuficientes o contradictorios, dilo claramente y recomienda confirmar en fuente oficial antes de viajar — NUNCA afirmes con seguridad un dato de visado/frontera/seguridad que no esté respaldado aquí.]`;
+    }
+  }
+
+  // Nivel 2 — requisitos de conducción (zona de bajas emisiones, permiso internacional, peajes/viñetas):
+  // mismo mecanismo que [OBLIGATORIO — GENERA RUTA AHORA], obliga a comprobar en vez de fiarse de memoria.
+  if (/\b(zona de bajas emisiones|zbe|lez|low emission zone|permiso internacional de conducir|peaje obligatorio|vi[nñ]eta)\b/i.test(message)) {
+    userContent += `\n\n[OBLIGATORIO — VERIFICA CON buscar_web: el usuario pregunta por requisitos de conducción (zona de bajas emisiones, permiso internacional, peajes o viñetas). Estos requisitos cambian por ciudad/país y no son fiables de memoria. Llama a buscar_web con una consulta específica (ciudad o país + el requisito exacto) ANTES de responder. Si buscar_web no da un dato claro, dilo explícitamente en vez de inventar un requisito.]`;
+  }
+
   // Si hay imagen, enviar como content array (vision Anthropic)
   if (imageBase64) {
     messages.push({
@@ -2891,7 +2915,8 @@ REGLAS:
 - "day" = número de día (1, 2, 3…). "day_title" = título corto, mismo para todas las paradas del día.
 - "lat"/"lng" = coordenadas reales del lugar (decimales).
 - "narrative" = 1-2 frases del plan original sobre la parada.
-- NO inventes paradas que no estén en el plan.`;
+- NO inventes paradas que no estén en el plan.
+- RUTAS DE CARRETERA (un plan que describe un recorrido a lo largo de una carretera o tramo, con miradores, pueblos, embalses, paisajes o paradas naturales mencionadas en el texto narrativo, no en una lista): cada punto con nombre propio y ubicación reconocible cuenta como "stop" exactamente igual que en una guía multi-ciudad, aunque esté mencionado dentro de un párrafo corrido y no con negrita ni viñetas. No exijas formato de lista para extraerlo — léelo del texto igual.`;
 
   const fallbackUser = `Plan a convertir:\n\n${text.substring(0, 40000)}`;
 
@@ -7381,6 +7406,37 @@ INSTRUCCIONES:
       } catch (e) { /* Fallo silencioso */ }
     }
 
+    // ─── D + NIVEL 1: VERIFICACIÓN DE HECHOS CRÍTICOS (pre-Claude) ───
+    // Para categorías donde inventar sale caro (carretera única, visado, frontera, seguridad),
+    // el backend busca por su cuenta ANTES de que Claude responda — igual que ya se hace con
+    // el tiempo real — para no depender de que el modelo decida buscar por su cuenta.
+    let factCheckData = null;
+    if (env.BRAVE_SEARCH_KEY) {
+      const _fcQueries = {};
+      const _fcRoad = extractPreferredRoad(message);
+      if (_fcRoad) {
+        _fcQueries.road = `carretera ${_fcRoad} tramos discontinuos cortada cerrada 2026`;
+      }
+      if (/\b(visado|visa|e-visa|frontera|cruzar a pie|es seguro viajar a|es peligroso ir a|zona de conflicto|alerta de viaje|guerra en)\b/i.test(message)) {
+        const nat = userNationality || 'español';
+        _fcQueries.visaBorderSafety = `${message.slice(0, 90)} visado frontera seguridad ${nat} 2026`;
+      }
+      const fcKeys = Object.keys(_fcQueries);
+      if (fcKeys.length) {
+        try {
+          const fcResults = await Promise.all(fcKeys.map(k => buscarWeb({ query: _fcQueries[k] }, env.BRAVE_SEARCH_KEY).catch(() => null)));
+          const fcData = {};
+          fcKeys.forEach((k, i) => {
+            const r = fcResults[i];
+            if (r && Array.isArray(r.resultados) && r.resultados.length) {
+              fcData[k] = r.resultados.slice(0, 3).map(x => `${x.titulo}: ${x.snippet}`).join('\n');
+            }
+          });
+          if (Object.keys(fcData).length) factCheckData = fcData;
+        } catch (e) { /* Fallo silencioso — Claude sigue sin este dato, no se bloquea la respuesta */ }
+      }
+    }
+
     // ─── KV LOOKUP (pre-Claude) ───
     let kvCountryData = null;
     let kvDestinationData = null;
@@ -7576,7 +7632,7 @@ INSTRUCCIONES:
 
     // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
     const dynamicPrompt = await getSystemPrompt(env);
-    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute);
+    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData);
 
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {
@@ -8044,9 +8100,21 @@ INSTRUCCIONES:
           _searchingActive = false;
 
           // Añadir resultados de herramientas al historial
+          const _toolResultContent = [...toolResults];
+          // ── B: quedan pocas iteraciones libres — forzar cierre del JSON YA con lo verificado ──
+          // en vez de arriesgarse a agotar MAX_TOOL_ITERATIONS a mitad de más búsquedas
+          // (rutas atadas a una sola carretera necesitan muchas verificaciones de buscar_lugar).
+          // OJO: usar solo isRouteRequest/guidedRoute, NUNCA el isRoute genérico — isRoute
+          // también es true para isDaysDestination (MODO PLAN), que PROHÍBE el JSON a propósito.
+          if ((isRouteRequest(message, history) || !!guidedRoute) && iteration >= MAX_TOOL_ITERATIONS - 2) {
+            _toolResultContent.push({
+              type: 'text',
+              text: '[AVISO DEL SISTEMA — quedan pocas oportunidades de búsqueda antes de que se corte tu turno. NO llames a más herramientas de verificación. Con las paradas que ya tienes verificadas hasta ahora, cierra tu respuesta YA: prosa + SALMA_ROUTE_JSON completo. Si te falta verificar alguna parada, usa el nombre y ubicación que ya conoces — no sigas buscando.]'
+            });
+          }
           currentMessages.push({
             role: 'user',
-            content: toolResults
+            content: _toolResultContent
           });
 
           // Separador entre texto de la iteración anterior y la siguiente
@@ -8122,7 +8190,8 @@ REGLAS:
 - "day" = número de día (1, 2, 3…). "day_title" = título corto, mismo para todas las paradas del día.
 - "lat"/"lng" = coordenadas reales del lugar (decimales).
 - "narrative" = 1-2 frases del plan original sobre la parada.
-- NO inventes paradas que no estén en el plan.`;
+- NO inventes paradas que no estén en el plan.
+- RUTAS DE CARRETERA (un plan que describe un recorrido a lo largo de una carretera o tramo, con miradores, pueblos, embalses, paisajes o paradas naturales mencionadas en el texto narrativo, no en una lista): cada punto con nombre propio y ubicación reconocible cuenta como "stop" exactamente igual que en una guía multi-ciudad, aunque esté mencionado dentro de un párrafo corrido y no con negrita ni viñetas. No exijas formato de lista para extraerlo — léelo del texto igual.`;
 
             const fallbackUser = `Plan a convertir:\n\n${allText.substring(0, 40000)}`;
 
@@ -8168,10 +8237,18 @@ REGLAS:
           }
         }
 
-        // ── Si tras ambos rescates seguimos sin ruta pero era intención de ruta,
-        //    dejar constancia para que el frontend lo diga (no spinner infinito). ──
-        if (!route && (isRoute || isRouteRequest(message, history)) && allText.includes('SALMA_ROUTE_JSON')) {
+        // ── C: si tras ambos rescates seguimos sin ruta pero era intención de ruta,
+        //    decirlo claramente en vez de entregar la respuesta como si nada
+        //    (antes solo quedaba constancia en el log — el usuario no se enteraba).
+        //    OJO: usar solo isRouteRequest/guidedRoute, NUNCA el isRoute genérico —
+        //    isRoute también es true para isDaysDestination (MODO PLAN), que PROHÍBE
+        //    el JSON a propósito; ahí route=null es el comportamiento correcto, no un fallo. ──
+        if (!route && (isRouteRequest(message, history) || !!guidedRoute)) {
           console.log(`[RUTA] ✗ No se pudo materializar la ruta (stop_reason: ${lastStopReason || 'n/d'}, len: ${allText.length})`);
+          const _honestNote = '\n\n_No he podido montar el mapa interactivo de esta ruta — aquí tienes toda la información en texto. Puedes pedírmelo de nuevo o pulsar "Generar guía con mapa" para reintentarlo._';
+          reply = (reply || '').trimEnd() + _honestNote;
+          allText += _honestNote;
+          try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: _honestNote })}\n\n`)); } catch (_) {}
         }
 
         // ── Reparar markdown de imagen roto de Claude (hoteles y lugares/buscar_foto) ──
