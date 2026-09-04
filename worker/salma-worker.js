@@ -4269,6 +4269,26 @@ function generarVideo(input) {
 // BUSCAR LUGAR — Google Places genérico (gym, farmacia, museo…)
 // ═══════════════════════════════════════════════════════════════
 
+// Geocodifica una ciudad a coordenadas para sesgar buscar_lugar — cache en memoria del isolate
+// (una ciudad siempre geocodifica igual, no hace falta repetir la llamada entre requests).
+const _ciudadGeocodeCache = {};
+async function geocodeCiudad(ciudad, placesKey) {
+  if (!ciudad) return null;
+  const key = ciudad.trim().toLowerCase();
+  if (key in _ciudadGeocodeCache) return _ciudadGeocodeCache[key];
+  try {
+    const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(ciudad)}&language=es&key=${placesKey}`, { signal: AbortSignal.timeout(5000) });
+    const data = await res.json();
+    const loc = data?.results?.[0]?.geometry?.location;
+    const result = (loc && typeof loc.lat === 'number' && typeof loc.lng === 'number') ? { lat: loc.lat, lng: loc.lng } : null;
+    _ciudadGeocodeCache[key] = result;
+    return result;
+  } catch (e) {
+    _ciudadGeocodeCache[key] = null;
+    return null;
+  }
+}
+
 async function buscarLugar(input, placesKey, userCoords) {
   if (!placesKey) return { error: 'Google Places key no configurada' };
 
@@ -4285,8 +4305,18 @@ async function buscarLugar(input, placesKey, userCoords) {
     let url;
     const typeParam = input.tipo_places ? `&type=${encodeURIComponent(input.tipo_places)}` : (esComida ? '&type=restaurant' : '');
     const radius = esComida ? 1500 : 3000;
-    if (userCoords && userCoords.lat && userCoords.lng) {
-      url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchTerms)}&language=es&location=${userCoords.lat},${userCoords.lng}&radius=${radius}${typeParam}&key=${placesKey}`;
+    // ── Sesgo de ubicación: por la CIUDAD pedida, NUNCA por el GPS real del usuario ──
+    // Bug real detectado: si Salma planifica una ruta en otro país (p.ej. Portugal) mientras
+    // el usuario está físicamente en otro sitio, usar userCoords como sesgo hacía que un nombre
+    // genérico ("Restaurante Porta") devolviera un resultado homónimo cerca de donde está el
+    // usuario de verdad, no cerca de la ciudad de la ruta — coordenadas a cientos de km de donde
+    // debían estar, rompiendo el enlace "cómo llegar" y el trazado de la ruta en el mapa.
+    // userCoords solo se usa como último recurso si la ciudad no se pudo geocodificar (p.ej. el
+    // modelo mandó "cerca de mí" en vez de una ciudad real) — ahí sí tiene sentido.
+    const ciudadCoords = ciudad ? await geocodeCiudad(ciudad, placesKey) : null;
+    const biasCoords = ciudadCoords || (userCoords && userCoords.lat && userCoords.lng ? userCoords : null);
+    if (biasCoords) {
+      url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchTerms)}&language=es&location=${biasCoords.lat},${biasCoords.lng}&radius=${radius}${typeParam}&key=${placesKey}`;
     } else {
       url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchTerms)}&language=es${typeParam}&key=${placesKey}`;
     }
