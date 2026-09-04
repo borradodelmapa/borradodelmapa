@@ -1351,9 +1351,9 @@ const salma = {
           this._rutaDraft = null;
           this._rutaGuiadaWaitingText = false;
         }
-      } else if (this._rutaDraft || this._isRouteMsg(msg)) {
-        // Era una petición de ruta (flujo guiado o "salma hazme una guía") pero el worker
-        // no devolvió ruta usable. No dejar spinner colgado: avisar y ofrecer reintento.
+      } else if (this._rutaDraft) {
+        // Fallo real durante flujo guiado/borrador incremental (no un simple desajuste de frase).
+        // No dejar spinner colgado: avisar y ofrecer reintento.
         this._removeLoading();
         this._addSalmaBubble('Uf, se me ha atascado el mapa a mitad. El texto de arriba es la ruta que tenía pensada — dame a "Reintentar" y te la monto en condiciones.');
         const _area = this._getChatArea();
@@ -1371,6 +1371,26 @@ const salma = {
           this._scrollToBottom(true);
         }
         // El borrador incremental se conserva por si el reintento también falla.
+      } else if (this._isRouteMsg(msg)) {
+        // El mensaje sonaba a petición de ruta pero no llevaba la frase que activa el mapa
+        // ("hazme una guía"). Salma respondió en modo texto/información a propósito — ofrecer
+        // convertirlo en guía con mapa en vez de sugerir que algo se rompió.
+        this._removeLoading();
+        this._addSalmaBubble('Ahí tienes toda la info 👆. Si quieres, te la monto como guía con mapa para que la puedas guardar y consultar paso a paso en el viaje.');
+        const _area = this._getChatArea();
+        if (_area) {
+          const _rw = document.createElement('div');
+          _rw.className = 'historia-chat-chip-wrap';
+          const _rb = document.createElement('button');
+          _rb.className = 'historia-chat-chip';
+          _rb.textContent = '📍 Generar guía con mapa';
+          const _retryMsg = this._lastMsg || msg;
+          const _retryExtra = this._lastExtra || {};
+          _rb.addEventListener('click', () => { _rw.remove(); this._doSend('Salma, hazme una guía: ' + _retryMsg, _retryExtra); });
+          _rw.appendChild(_rb);
+          _area.appendChild(_rw);
+          this._scrollToBottom(true);
+        }
       }
 
       // Si hay video_params, renderizar player inline
