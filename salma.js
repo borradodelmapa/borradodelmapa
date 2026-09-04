@@ -1386,7 +1386,7 @@ const salma = {
           _rb.textContent = '📍 Generar guía con mapa';
           const _retryMsg = this._lastMsg || msg;
           const _retryExtra = this._lastExtra || {};
-          _rb.addEventListener('click', () => { _rw.remove(); this._doSend('Salma, hazme una guía: ' + _retryMsg, _retryExtra); });
+          _rb.addEventListener('click', () => { _rw.remove(); this._doSend('Salma hazme una guía: ' + _retryMsg, _retryExtra); });
           _rw.appendChild(_rb);
           _area.appendChild(_rw);
           this._scrollToBottom(true);
