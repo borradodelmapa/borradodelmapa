@@ -2860,6 +2860,68 @@ function salvageIncompleteRouteJson(text) {
   return null;
 }
 
+// ─── Conversión directa de prosa (ruta ya escrita) a JSON estructurado ───
+// Usada por el fast-path del botón "Generar guía con mapa": en vez de repetir toda
+// la búsqueda desde cero (riesgo real de quedarse sin iteraciones en rutas de varias
+// paradas, ver MAX_TOOL_ITERATIONS), convierte el texto YA generado en la respuesta
+// anterior directamente a la estructura del mapa. Misma lógica que el RESCATE 2 del
+// flujo normal (más abajo), extraída aquí para poder llamarla sin pasar por el bucle.
+async function convertProseToRouteJson(text, env) {
+  if (!text || typeof text !== 'string' || text.length < 100) return null;
+  const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
+
+{"title":"...","name":"...","country":"...","region":"...","duration_days":N,"summary":"...","stops":[{"name":"Nombre exacto","headline":"Nombre exacto","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","day":1,"lat":21.0285,"lng":105.8524,"km_from_previous":0,"road_name":"","road_difficulty":"medio","estimated_hours":1.5}],"tips":[],"tags":[],"budget_level":"medio","suggestions":[]}
+
+REGLAS:
+- Una entrada en "stops" por cada lugar nombrado en el plan (negrita o no). Inclúyelas TODAS, no recortes.
+- "country" = país real (ej. "Portugal"). "region" = región o zona real (ej. "Algarve"), nunca con "desde", números de carretera ni medio de transporte.
+- "day" = número de día (1, 2, 3…). "day_title" = título corto, mismo para todas las paradas del día.
+- "lat"/"lng" = coordenadas reales del lugar (decimales).
+- "narrative" = 1-2 frases del plan original sobre la parada.
+- NO inventes paradas que no estén en el plan.`;
+
+  const fallbackUser = `Plan a convertir:\n\n${text.substring(0, 40000)}`;
+
+  try {
+    const fallbackRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 24000,
+        system: fallbackSys,
+        messages: [
+          { role: 'user', content: fallbackUser },
+          { role: 'assistant', content: '{' },  // prefill — fuerza JSON desde la primera línea
+        ],
+      }),
+      signal: AbortSignal.timeout(60000),
+    });
+    if (!fallbackRes.ok) return null;
+    const fallbackData = await fallbackRes.json();
+    const jsonTail = fallbackData.content?.[0]?.text || '';
+    let fullJson = '{' + jsonTail; // recomponer con el prefill
+    let parsed = null;
+    try { parsed = JSON.parse(fullJson); } catch (_) {
+      const sv = salvageIncompleteRouteJson('SALMA_ROUTE_JSON\n' + fullJson);
+      if (sv) { try { parsed = JSON.parse(sv); } catch (_) {} }
+    }
+    if (parsed?.stops && Array.isArray(parsed.stops) && parsed.stops.length >= 2) {
+      const route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + JSON.stringify(parsed)) || parsed;
+      route._fallback = true;
+      return route;
+    }
+    return null;
+  } catch (e) {
+    console.log(`[FAST-PATH] ✗ Error convirtiendo texto a JSON: ${e.message}`);
+    return null;
+  }
+}
+
 // Limpia una cadena de región/país para usarla como sesgo de búsqueda en Google Places.
 // "N2 Portugal desde Faro en moto" → "Portugal". Evita que verifyAllStops falle todas las paradas.
 function cleanRegionForSearch(raw) {
@@ -7024,6 +7086,7 @@ REGLAS:
     const userNotes = body.user_notes || null;
     const frontendCountryCode = body.country || null; // País enviado por el frontend (detectado por GPS)
     const guidedRoute = body.guided_route || null; // Flujo guiado: 8 campos ya recogidos por el frontend
+    const sourceText = typeof body.source_text === 'string' ? body.source_text.trim() : ''; // Fast-path: texto ya generado, convertir directo a mapa
     const _urlIncidents = []; // BLOQUE E — sustituciones de enlaces Maps (se vuelcan a Firestore al final)
 
     // ─── BYPASS: petición explícita de enlace Google Maps ───
@@ -7529,7 +7592,7 @@ INSTRUCCIONES:
     // Todo el flujo (incluido el bucle agentic) ocurre dentro de ctx.waitUntil
     ctx.waitUntil((async () => {
       let allText = '';  // Texto acumulado de TODAS las iteraciones
-      const MAX_TOOL_ITERATIONS = 5;  // Seguridad: máximo 5 tool calls por turno
+      const MAX_TOOL_ITERATIONS = 10;  // Seguridad: máximo 10 tool calls por turno (subido de 5 — rutas con restricción de carretera única necesitan varias búsquedas de buscar_lugar antes de cerrar el JSON)
       const longRoute = isLongRoute(message); // Rutas ≥8 días → generación por bloques paralelos
 
       try {
@@ -7708,11 +7771,31 @@ INSTRUCCIONES:
         let lastFlightBookingUrl = null; // Guardar enlace de vuelos para inyectar si GPT no lo incluye
         let _toolUrls = []; // URLs de buscar_lugar y buscar_web para inyectar si Claude no las pone
         let _hotelPhotosByName = new Map(); // nombre.toLowerCase() → { foto, enlace } de buscar_hotel (para reparar markdown roto)
+        let _placePhotosByName = new Map(); // nombre.toLowerCase() → url de foto de buscar_foto (para reparar markdown roto)
         let _lastBuscarLugarCoords = null; // Coords del último lugar buscado (para deep links transporte)
         let _pendingTransportActions = null; // Acciones de transporte para enviar en done event
         let _pendingTransportTip = null;
         let lastStopReason = null; // 'max_tokens' | 'end_turn' | 'tool_use'… — para detectar truncado y rescatar el JSON
 
+        // ── FAST-PATH: convertir texto ya generado directamente a guía con mapa ──
+        // Botón "Generar guía con mapa": en vez de repetir toda la búsqueda desde cero
+        // (riesgo real de agotar MAX_TOOL_ITERATIONS en rutas de varias paradas, cortando
+        // el turno a medias sin JSON), convertimos el texto que YA se generó en la respuesta
+        // anterior directamente. Si falla o no hay sourceText, cae al flujo normal sin cambios.
+        let _fastPathRoute = null;
+        if (sourceText && sourceText.length > 400 && isRouteRequest(message, history)) {
+          try {
+            await writer.write(encoder.encode(`data: ${JSON.stringify({ t: 'Convirtiendo tu ruta en guía con mapa...' })}\n\n`));
+          } catch (_) {}
+          try {
+            _fastPathRoute = await convertProseToRouteJson(sourceText, env);
+            if (_fastPathRoute && (!Array.isArray(_fastPathRoute.stops) || _fastPathRoute.stops.length < 2)) _fastPathRoute = null;
+          } catch (_) {
+            _fastPathRoute = null;
+          }
+        }
+
+        if (!_fastPathRoute) {
         for (let iteration = 0; iteration <= MAX_TOOL_ITERATIONS; iteration++) {
           let apiRes;
           let result;
@@ -7853,6 +7936,11 @@ INSTRUCCIONES:
                   }
                 }
               }
+              // Capturar fotos de buscar_foto (lugares/paradas) para reparar markdown roto de Claude
+              if (block.name === 'buscar_foto' && Array.isArray(toolResult.fotos) && toolResult.fotos.length > 0) {
+                const _pfKey = (toolResult.lugar || '').toLowerCase().trim();
+                if (_pfKey && toolResult.fotos[0] && toolResult.fotos[0].url) _placePhotosByName.set(_pfKey, toolResult.fotos[0].url);
+              }
               // Capturar URLs de resultados de herramientas para inyectar si Claude no las pone
               if (block.name === 'buscar_lugar' && toolResult.lugares) {
                 for (const l of toolResult.lugares) {
@@ -7896,6 +7984,7 @@ INSTRUCCIONES:
 
           // El for vuelve al inicio: OpenAI recibe los resultados y decide qué hacer
         }
+        }
 
         // ── Inyectar enlace de vuelos si GPT no lo incluyó ──
         if (lastFlightBookingUrl && !allText.includes(lastFlightBookingUrl)) {
@@ -7932,8 +8021,9 @@ INSTRUCCIONES:
         }
 
         // ── Procesar respuesta final (ruta, verificación, etc.) ──
-        let route = extractRouteFromReply(allText);
+        let route = _fastPathRoute || extractRouteFromReply(allText);
         let reply = replyWithoutRouteBlock(allText);
+        if (_fastPathRoute && !reply) reply = _fastPathRoute.title ? `Tu ruta por ${_fastPathRoute.title} está lista.` : 'Tu ruta está lista.';
 
         // ── RESCATE 1: el JSON empezó pero se cortó por max_tokens ──
         // Reconstituimos con las paradas completas antes de gastar otra llamada a Claude.
@@ -8014,13 +8104,17 @@ REGLAS:
           console.log(`[RUTA] ✗ No se pudo materializar la ruta (stop_reason: ${lastStopReason || 'n/d'}, len: ${allText.length})`);
         }
 
-        // ── Reparar markdown de imagen roto de Claude en respuestas de hotel ──
-        // Sonnet a veces emite ![Name]( + saltos de línea + url_enlace en vez de ![Name](url_foto).
+        // ── Reparar markdown de imagen roto de Claude (hoteles y lugares/buscar_foto) ──
+        // Sonnet a veces emite ![Name]( + saltos de línea, o ![Name](url... que nunca cierra con '\)'
+        // (URL de foto larga truncada al copiarla), en vez de ![Name](url_foto) bien formado.
         // Sustituimos por la foto correcta del tool result; si no hay match, quitamos el fragmento huérfano.
-        if (_hotelPhotosByName.size > 0 && !route) {
-          reply = reply.replace(/!\[([^\]]+)\]\(\s*(?:\n|$)/g, (_match, name) => {
-            const entry = _hotelPhotosByName.get(name.toLowerCase().trim());
-            if (entry && entry.foto) return `![${name}](${entry.foto})\n`;
+        if ((_hotelPhotosByName.size > 0 || _placePhotosByName.size > 0) && !route) {
+          reply = reply.replace(/!\[([^\]]+)\]\(([^)]*)(?=\n|!\[|$)/g, (_match, name, _partial) => {
+            const key = name.toLowerCase().trim();
+            const hotelEntry = _hotelPhotosByName.get(key);
+            if (hotelEntry && hotelEntry.foto) return `![${name}](${hotelEntry.foto})`;
+            const placeUrl = _placePhotosByName.get(key);
+            if (placeUrl) return `![${name}](${placeUrl})`;
             return '';
           });
         }

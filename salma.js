@@ -1260,6 +1260,7 @@ const salma = {
       if (extra.with_kids) body.with_kids = extra.with_kids;
       // Flujo guiado de ruta: los 8 campos ya recogidos → el worker los inyecta en el system prompt
       if (extra.guided_route) body.guided_route = extra.guided_route;
+      if (extra.source_text) body.source_text = extra.source_text; // Fast-path: texto ya generado, convertir directo a mapa
       // Foto del chat
       if (extra.photo) {
         body.image_base64 = extra.photo.base64;
@@ -1385,7 +1386,9 @@ const salma = {
           _rb.className = 'historia-chat-chip';
           _rb.textContent = '📍 Generar guía con mapa';
           const _retryMsg = this._lastMsg || msg;
-          const _retryExtra = this._lastExtra || {};
+          // Fast-path: pasamos el texto YA generado (data.reply) para que el worker
+          // lo convierta directo a mapa sin repetir toda la búsqueda desde cero.
+          const _retryExtra = Object.assign({}, this._lastExtra || {}, { source_text: data.reply || '' });
           _rb.addEventListener('click', () => { _rw.remove(); this._doSend('Salma hazme una guía: ' + _retryMsg, _retryExtra); });
           _rw.appendChild(_rb);
           _area.appendChild(_rw);
