@@ -1537,6 +1537,11 @@ const salma = {
                     }
                   }
                 }
+                // La ruta que llega en el evento done es la buena: verificada, deduplicada
+                // y con la geometria real de la carretera. Sin esto la vista se queda con el draft.
+                if (evt.route && evt.route.stops && evt.route.stops.length) {
+                  try { this._applyFinalRoute(evt.route); } catch (_) {}
+                }
                 resolved = true;
                 resolve({
                   reply: evt.reply || fullText,
@@ -1631,22 +1636,10 @@ const salma = {
 
               // VERIFIED — actualización background con coords/fotos de Google
               if (evt.verified && evt.route) {
-                this.currentRoute = evt.route;
-                try {
-                  guideRenderer.updateVerified(evt.route);
-                } catch (_) {}
-                // Si la vista de itinerario está abierta, es la que ve el usuario de
-                // verdad (no guide-renderer) — sin esto, el mapa se queda con la ruta
-                // sin verificar y nunca llega a pintar route.road_geometry ni a
-                // actualizar el botón de Google Maps con road_gmaps_url.
-                if (window._itinViewOpen && evt.route.stops?.length) {
-                  try {
-                    window._itinViewRoute = evt.route;
-                    mapaRuta.init('itin-map-container', evt.route.stops, { preview: true, roadGeometry: evt.route.road_geometry });
-                    setTimeout(() => mapaRuta.invalidateSize(), 200);
-                    mapaItinerario.init('itin-cards-container', evt.route.stops, evt.route, window._itinViewOptions || {});
-                  } catch (_) {}
-                }
+                // Mismo camino que el evento done — una sola copia de la logica para que
+                // no puedan divergir. Hoy el worker no emite este evento, pero si algun
+                // dia lo emite (verificacion en background), la vista se refresca igual.
+                this._applyFinalRoute(evt.route);
                 // Actualizar Firestore si ya estaba guardada
                 if (this._lastSavedDocId && typeof currentUser !== 'undefined' && currentUser) {
                   try {
@@ -3068,6 +3061,27 @@ const salma = {
     return document.getElementById('salma-stream-text');
   },
 
+  // Aplica la ruta FINAL del worker a lo que el usuario tiene delante.
+  //
+  // El worker emite `draft` con la ruta cruda de Claude y SOLO DESPUES la verifica
+  // contra Google Places, la deduplica y le resuelve la geometria real de la
+  // carretera; todo eso viaja en el evento `done`. La vista se abria con el draft
+  // y se refrescaba en un evento `verified` que el worker NO EMITE (comprobado en
+  // 60 commits del worker: nunca ha existido), asi que el usuario se quedaba mirando
+  // la ruta sin verificar y sin carretera para siempre. De ahi que ningun arreglo
+  // del motor se viera en pantalla.
+  _applyFinalRoute(route) {
+    if (!route || !Array.isArray(route.stops) || !route.stops.length) return;
+    this.currentRoute = route;
+    try { guideRenderer.updateVerified(route); } catch (_) {}
+    if (!window._itinViewOpen) return;
+    try {
+      window._itinViewRoute = route;
+      mapaRuta.init("itin-map-container", route.stops, { preview: true, roadGeometry: route.road_geometry });
+      setTimeout(() => { try { mapaRuta.invalidateSize(); } catch (_) {} }, 200);
+      mapaItinerario.init("itin-cards-container", route.stops, route, window._itinViewOptions || {});
+    } catch (_) {}
+  },
   _fixStreamBubble() {
     const el = document.getElementById('salma-stream-msg');
     if (el) {
