@@ -204,7 +204,7 @@ FORMATO PROHIBIDO:
 — Preguntas al final del mensaje. Si quieres ofrecer más ayuda, ofrece sin interrogación: "Si necesitas hotel o transporte concreto, dime." NUNCA "¿Quieres que te busque hotel?"
 — Frases vacías: "aquí tienes", "claro que sí", "por supuesto", "¡genial!", "¡perfecto!", "aquí tienes tu ruta".
 
-Cuando generes ruta: escribe el plan completo en prosa narrativa como si lo contaras en un bar — tiempos del día (Mañana/Mediodía/Tarde/Noche), paradas con nombre, dato histórico o cultural de cada una, opinión sobre por qué merece la pena, dónde comer (nombre del sitio + plato + precio), avisos prácticos (días que cierra, código de vestimenta, cola típica). Usa **negritas** para los nombres de lugares. Este texto se va escribiendo en el chat en tiempo real. Después incluye SALMA_ROUTE_JSON con la estructura para el mapa. Nunca digas "aquí la tienes" ni variantes.
+Cuando generes ruta: en el chat solo 2-3 frases contando qué recorre y por qué merece la pena, con **negritas** en los nombres. NO escribas el plan día a día, NO enumeres las paradas, NO repitas su historia ni dónde comer: todo eso va en el JSON y se muestra aparte, en la guía, con su mapa y sus tarjetas. Repetirlo en el chat obliga al usuario a leer dos veces la misma ruta. Después incluye SALMA_ROUTE_JSON con la estructura para el mapa. Nunca digas "aquí la tienes" ni variantes.
 
 Cuando es conversación sin ruta: extiéndete lo que necesite la pregunta, misma densidad de información, como si lo contaras en un bar.
 
@@ -281,7 +281,7 @@ CRITERIOS AL CONSTRUIR LA RUTA:
 — No 5 paradas del mismo tipo seguidas salvo que el usuario lo haya pedido
 — Cada parada lleva narrative: 1-2 frases con historia, dato cultural o por qué merece la pena
 
-TEXTO EN EL CHAT: plan completo en prosa narrativa con tiempos del día, paradas, historia/cultura y avisos. NUNCA coordenadas en el chat — las coords van solo en el JSON.
+TEXTO EN EL CHAT: 2-3 frases y punto. Qué recorre la ruta y por qué merece la pena. NO enumeres las paradas, NO escribas el plan día a día, NO repitas lo que ya va en el JSON: la guía se muestra aparte con su mapa y sus tarjetas, y escribir lo mismo en el chat obliga al usuario a leer dos veces la misma ruta. NUNCA coordenadas en el chat.
 
 FORMATO DE RESPUESTA CON RUTA
 Escribe en el chat solo el resumen breve e incluye al final:
@@ -2646,7 +2646,7 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
     // Foto → no pegar bloques de modo, BLOQUE_VISION en system prompt + texto del usuario es suficiente
   } else if (isRouteRequest(message, history) || guidedRoute) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
-— Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: plan completo en prosa narrativa (tiempos del día, paradas con nombre en negrita, historia, avisos prácticos) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
+— Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 2-3 frases de resumen (sin enumerar paradas, sin plan día a día — eso ya va en el JSON y se muestra en la guía) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
 — NO respondas solo con texto. NO digas "aquí tienes" ni variantes.
 — Usa defaults para lo que falte: tipo mezcla cultura+emblemáticos, compañía solo, ritmo intermedio. Si "tengo tiempo" sin número de días: 8-10 días.
 — MÍNIMO 4-6 PARADAS POR DÍA. Nunca 1 parada por día. Cada día es un recorrido completo con desayuno, visitas, comida, paseo, atardecer.
@@ -8585,7 +8585,45 @@ REGLAS:
               return true;
             });
             if (route.stops.length < before) {
-              console.log(`[DEDUP] ${before - route.stops.length} parada(s) duplicada(s) eliminada(s)`);
+              console.log(`[DEDUP] ${before - route.stops.length} parada(s) con place_id repetido eliminada(s)`);
+            }
+
+            // SEGUNDA PASADA — el mismo sitio con DOS place_id distintos. Google mantiene
+            // fichas separadas para el mismo lugar y el filtro de arriba no las ve. Caso
+            // real en produccion: "River beach Fragas de Sao Simao" y "Fragas de Sao
+            // Simao", a 6 METROS una de otra y con IDs diferentes: el usuario veia la
+            // misma parada dos veces. Se descarta la que este a menos de 250 m de otra Y
+            // cuyo nombre normalizado coincida o quede contenido en el de aquella.
+            const _normStopName = (t) => (t || '')
+              .toLowerCase()
+              .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+              .replace(/\b(river|beach|praia|playa|fluvial|mirador|miradouro|viewpoint|the|de|da|do|dos|das|del|la|el|los|of)\b/g, ' ')
+              .replace(/[^a-z0-9 ]/g, ' ')
+              .replace(/\s+/g, ' ').trim();
+
+            const _kept = [];
+            for (const _s of route.stops) {
+              const _sn = _normStopName(_s.name || _s.headline);
+              const _dup = _kept.find(k => {
+                if (!_s.lat || !_s.lng || !k.lat || !k.lng) return false;
+                if (haversineKm(k.lat, k.lng, _s.lat, _s.lng) > 0.25) return false;
+                const _kn = _normStopName(k.name || k.headline);
+                if (!_sn || !_kn) return false;
+                return _sn === _kn || (_sn.length >= 6 && _kn.includes(_sn)) || (_kn.length >= 6 && _sn.includes(_kn));
+              });
+              if (_dup) {
+                // Nos quedamos con la primera, sin perder datos que solo trajo la otra.
+                if (!_dup.photo_ref && _s.photo_ref) _dup.photo_ref = _s.photo_ref;
+                if (!_dup.narrative && _s.narrative) _dup.narrative = _s.narrative;
+                const _m = Math.round(haversineKm(_dup.lat, _dup.lng, _s.lat, _s.lng) * 1000);
+                console.log(`[DEDUP] "${_s.name}" es el mismo sitio que "${_dup.name}" (${_m} m) — eliminada`);
+                continue;
+              }
+              _kept.push(_s);
+            }
+            route.stops = _kept;
+
+            if (route.stops.length < before) {
               route.maps_links = buildMapsLinksFromStops(route.stops, route.region || route.country || '');
             }
           }
