@@ -3,27 +3,6 @@
    Cards de parada + enriquecimiento Places
    ══════════════════════════════════════════ */
 
-// Estilo del desplegable "Leer más" — inyectado una vez, no depende de styles.css.
-function ensureItinMoreStyles() {
-  if (document.getElementById('itin-more-style')) return;
-  const style = document.createElement('style');
-  style.id = 'itin-more-style';
-  style.textContent = `
-    .itin-more{margin-top:8px;}
-    .itin-more summary{display:inline-flex;align-items:center;gap:4px;font-weight:600;
-      font-size:12px;color:var(--crema-dim,#a99f8c);cursor:pointer;list-style:none;}
-    .itin-more summary::-webkit-details-marker{display:none;}
-    .itin-more summary::after{content:"";width:6px;height:6px;
-      border-right:1.5px solid var(--crema-dim,#a99f8c);border-bottom:1.5px solid var(--crema-dim,#a99f8c);
-      transform:rotate(45deg);transition:transform .15s ease;margin-top:-2px;}
-    .itin-more[open] summary::after{transform:rotate(-135deg);margin-top:2px;}
-    .itin-more[open] summary{color:var(--crema,#f5f0e8);}
-    .itin-more summary:hover{color:var(--dorado2,#ffc947);}
-    .itin-more-body{margin-top:8px;}
-  `;
-  document.head.appendChild(style);
-}
-
 const mapaItinerario = {
   _stops: [],
   _cards: [],
@@ -41,7 +20,6 @@ const mapaItinerario = {
   init(containerId, stops, routeData, options = {}) {
     this._container = document.getElementById(containerId);
     if (!this._container || !stops || !stops.length) return;
-    ensureItinMoreStyles();
 
     this._stops = stops;
     this._cards = [];
@@ -49,35 +27,15 @@ const mapaItinerario = {
     this._container.innerHTML = '';
 
     const country = routeData.country || routeData.region || '';
-    this._roadGeometry = Array.isArray(routeData.road_geometry) ? routeData.road_geometry : null;
-    const mapsUrl = this._fullRouteGmapsUrl(stops, country, routeData.road_gmaps_url);
-    // Aviso de paradas que no caen sobre la carretera pedida. El Worker lo calcula
-    // contra la geometria real de OSM (route.road_check) y hasta ahora solo lo
-    // pintaba guide-renderer.js, que no es la vista que ve el usuario.
-    try { this._renderRoadWarning(routeData.road_check); } catch (_) {}
+    const mapsUrl = this._fullRouteGmapsUrl(stops, country);
 
     // Header de la ruta (título + volver — desktop)
-    const totalKm = Math.round(stops.reduce((sum, s) => sum + (s.km_from_previous || 0), 0));
     const header = document.createElement('div');
     header.className = 'itin-header';
     header.innerHTML = `
       <div class="itin-header-info">
         <div class="itin-title">${this._esc(routeData.title || routeData.name || 'Tu ruta')}</div>
-        <div class="itin-meta">${this._totalDays(stops)} días · ${this._esc(country.toUpperCase())}</div>
-        <div style="display:grid;grid-template-columns:repeat(${routeData.road_name ? 3 : 2},1fr);gap:8px;margin-top:10px;">
-          <div style="background:var(--gris2,#1e190f);border:1px solid var(--linea,rgba(240,180,41,.22));border-radius:10px;padding:8px 10px;">
-            <div style="font-family:var(--font-mono,monospace);font-size:16px;color:var(--dorado2,#ffc947);">${totalKm || '—'}${totalKm ? ' km' : ''}</div>
-            <div style="font-size:9px;letter-spacing:.06em;color:var(--crema-dim,#a99f8c);text-transform:uppercase;">Distancia</div>
-          </div>
-          <div style="background:var(--gris2,#1e190f);border:1px solid var(--linea,rgba(240,180,41,.22));border-radius:10px;padding:8px 10px;">
-            <div style="font-family:var(--font-mono,monospace);font-size:16px;color:var(--dorado2,#ffc947);">${stops.length}</div>
-            <div style="font-size:9px;letter-spacing:.06em;color:var(--crema-dim,#a99f8c);text-transform:uppercase;">Paradas</div>
-          </div>
-          ${routeData.road_name ? `<div style="background:var(--gris2,#1e190f);border:1px solid var(--linea,rgba(240,180,41,.22));border-radius:10px;padding:8px 10px;">
-            <div style="font-family:var(--font-mono,monospace);font-size:16px;color:var(--dorado2,#ffc947);">${this._esc(routeData.road_name)}</div>
-            <div style="font-size:9px;letter-spacing:.06em;color:var(--crema-dim,#a99f8c);text-transform:uppercase;">Carretera</div>
-          </div>` : ''}
-        </div>
+        <div class="itin-meta">${this._totalDays(stops)} días · ${stops.length} paradas · ${this._esc(country.toUpperCase())}</div>
       </div>
     `;
     this._container.appendChild(header);
@@ -152,11 +110,10 @@ const mapaItinerario = {
       this._handleShare(routeData);
     });
 
-    // Escuchar clicks en marcadores del mapa — quitar el listener anterior si init()
-    // se llama otra vez (ej. al llegar la ruta verificada) para no acumular duplicados.
-    if (this._onMarkerClick) document.removeEventListener('itin:marker-click', this._onMarkerClick);
-    this._onMarkerClick = (e) => this.highlightCard(e.detail.index);
-    document.addEventListener('itin:marker-click', this._onMarkerClick);
+    // Escuchar clicks en marcadores del mapa
+    document.addEventListener('itin:marker-click', (e) => {
+      this.highlightCard(e.detail.index);
+    });
 
     // Enriquecer con Places API en paralelo
     this._enrichAll(stops);
@@ -230,16 +187,10 @@ const mapaItinerario = {
           ${horas ? `<span class="itin-card-hours">${this._formatHours(horas)}</span>` : ''}
         </div>
         ${nota ? `<div class="itin-card-nota">${this._esc(nota)}</div>` : ''}
-        ${(stop.context || stop.food_nearby || stop.local_secret || stop.practical) ? `
-        <details class="itin-more" onclick="event.stopPropagation()">
-          <summary>Leer más</summary>
-          <div class="itin-more-body">
-            ${stop.context ? `<div class="guide-stop-tag tag-context"><span class="guide-stop-tag-label">📖 CONTEXTO</span>${this._esc(stop.context)}</div>` : ''}
-            ${stop.food_nearby ? `<div class="guide-stop-tag tag-food"><span class="guide-stop-tag-label">🍜 COME CERCA</span>${this._esc(stop.food_nearby)}</div>` : ''}
-            ${stop.local_secret ? `<div class="guide-stop-tag tag-secret"><span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>${this._esc(stop.local_secret)}</div>` : ''}
-            ${stop.practical ? `<div class="guide-stop-practical">${this._esc(stop.practical)}</div>` : ''}
-          </div>
-        </details>` : `<div class="itin-more-pending" id="itin-more-${index}"></div>`}
+        ${stop.context ? `<div class="guide-stop-tag tag-context"><span class="guide-stop-tag-label">📖 CONTEXTO</span>${this._esc(stop.context)}</div>` : ''}
+        ${stop.food_nearby ? `<div class="guide-stop-tag tag-food"><span class="guide-stop-tag-label">🍜 COME CERCA</span>${this._esc(stop.food_nearby)}</div>` : ''}
+        ${stop.local_secret ? `<div class="guide-stop-tag tag-secret"><span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>${this._esc(stop.local_secret)}</div>` : ''}
+        ${stop.practical ? `<div class="guide-stop-practical">${this._esc(stop.practical)}</div>` : ''}
         <div class="itin-card-places" id="itin-places-${index}"></div>
         ${mapsNavUrl ? `<a class="itin-card-nav" href="${mapsNavUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 Ir aquí</a>` : ''}
       </div>
@@ -383,30 +334,6 @@ const mapaItinerario = {
   },
 
   // ═══ HELPERS ═══
-  // Badge discreto sobre el mapa cuando alguna parada queda lejos de la carretera
-  // pedida. Mismo criterio visual que guide-renderer para no tener dos lenguajes.
-  _renderRoadWarning(roadCheck) {
-    const mapEl = document.getElementById("itin-map-container");
-    if (!mapEl) return;
-    mapEl.querySelectorAll(".map-road-warning").forEach(el => el.remove());
-    if (!roadCheck || !roadCheck.flagged || !roadCheck.off_stops || !roadCheck.off_stops.length) return;
-
-    const worst = roadCheck.off_stops[0];
-    const detail = roadCheck.off_stops.length > 1
-      ? this._esc(worst.name) + " y " + (roadCheck.off_stops.length - 1) + " parada(s) mas, a " + worst.km + "+ km"
-      : this._esc(worst.name) + ", a " + worst.km + " km";
-
-    const badge = document.createElement("div");
-    badge.className = "map-road-warning";
-    badge.textContent = "⚠️ Alguna parada no esta justo en la " + roadCheck.target + ": " + detail;
-    badge.style.cssText = "position:absolute;left:8px;right:8px;bottom:8px;z-index:500;"
-      + "background:rgba(20,20,20,0.88);color:#f5d78e;font-size:11px;line-height:1.35;"
-      + "padding:6px 10px;border-radius:8px;border:1px solid rgba(245,215,142,0.35);pointer-events:none;";
-
-    mapEl.style.position = "relative";
-    mapEl.appendChild(badge);
-  },
-
   _esc(str) {
     if (!str) return '';
     const d = document.createElement('div');
@@ -433,11 +360,7 @@ const mapaItinerario = {
 
   // ═══ GOOGLE MAPS RUTA COMPLETA ═══
   // Regla única: sin place_id validado → no hay enlace.
-  // roadGmapsUrl: si el Worker resolvió una carretera con nombre (route.road_gmaps_url,
-  // puntos reales de OSM cada ~12km), se usa tal cual — el enlace de solo-paradas puede
-  // dejar que Google elija una autopista paralela en vez de la carretera pedida.
-  _fullRouteGmapsUrl(stops, country, roadGmapsUrl) {
-    if (roadGmapsUrl) return roadGmapsUrl;
+  _fullRouteGmapsUrl(stops, country) {
     const valid = (stops || []).filter(s => s && s.place_id && s.lat && s.lng);
     if (valid.length === 0) return null;
     if (valid.length === 1) return 'https://www.google.com/maps/place/?q=place_id:' + valid[0].place_id;
@@ -472,8 +395,6 @@ const mapaItinerario = {
   },
 
   // ═══ ACTUALIZAR CAMPOS ENRIQUECIDOS (después de enrichGuia) ═══
-  // Los mete detrás del mismo "Leer más" que ya usan las cards que llegaron con estos
-  // datos desde el principio — si no, quedaría inconsistente (unas plegadas, otras no).
   updateEnrichedFields(stops) {
     if (!Array.isArray(stops)) return;
     stops.forEach((stop, i) => {
@@ -481,22 +402,20 @@ const mapaItinerario = {
       if (!card) return;
       const body = card.querySelector('.itin-card-body');
       if (!body) return;
-
+      // Eliminar tags enriquecidos anteriores para no duplicar
+      body.querySelectorAll('.guide-stop-tag, .guide-stop-practical').forEach(el => el.remove());
+      // Insertar antes del div de places
+      const placesDiv = body.querySelector('.itin-card-places');
+      if (!placesDiv) return;
       const tags = [];
       if (stop.context) tags.push(`<div class="guide-stop-tag tag-context"><span class="guide-stop-tag-label">📖 CONTEXTO</span>${this._esc(stop.context)}</div>`);
       if (stop.food_nearby) tags.push(`<div class="guide-stop-tag tag-food"><span class="guide-stop-tag-label">🍜 COME CERCA</span>${this._esc(stop.food_nearby)}</div>`);
       if (stop.local_secret) tags.push(`<div class="guide-stop-tag tag-secret"><span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>${this._esc(stop.local_secret)}</div>`);
       if (stop.practical) tags.push(`<div class="guide-stop-practical">${this._esc(stop.practical)}</div>`);
-      if (!tags.length) return;
-
-      const existingMore = body.querySelector('.itin-more .itin-more-body');
-      if (existingMore) {
-        existingMore.innerHTML = tags.join(''); // ya había "Leer más" — reemplazar contenido, no duplicar
-        return;
-      }
-      const pending = body.querySelector(`#itin-more-${i}`);
-      if (pending) {
-        pending.outerHTML = `<details class="itin-more" onclick="event.stopPropagation()"><summary>Leer más</summary><div class="itin-more-body">${tags.join('')}</div></details>`;
+      if (tags.length) {
+        const temp = document.createElement('div');
+        temp.innerHTML = tags.join('');
+        while (temp.firstChild) body.insertBefore(temp.firstChild, placesDiv);
       }
     });
   },
@@ -548,7 +467,7 @@ const mapaItinerario = {
 
     // Inicializar mapa (preview: sin controles, solo botón "Ir al mapa") y cards
     const stops = routeData.stops;
-    mapaRuta.init('itin-map-container', stops, { preview: true, roadGeometry: routeData.road_geometry });
+    mapaRuta.init('itin-map-container', stops, { preview: true });
     mapaItinerario.init('itin-cards-container', stops, routeData, options);
 
     // Asegurar que el mapa se dimensiona bien

@@ -29,10 +29,6 @@ const mapaRuta = {
     this._currentContainerId = containerId;
     this._currentStops = stops;
     this._previewMode = !!(options && options.preview);
-    // Geometría real de la carretera pedida (route.road_geometry, ver resolveNamedRoad
-    // en el Worker) — si existe, se pinta tal cual en vez de pedirle a Directions la
-    // ruta "óptima" entre paradas (esa puede irse por una autopista paralela).
-    this._roadGeometry = (options && Array.isArray(options.roadGeometry)) ? options.roadGeometry : null;
     this.destroy();
 
     this._initGoogleMaps(containerId, stops);
@@ -459,40 +455,19 @@ const mapaRuta = {
       .catch(() => {}); // Mantener línea recta como fallback
   },
 
-  // Red de seguridad extra en el cliente: si una parada trae una coordenada absurda
-  // (visto en producción: nombre correcto en Portugal, lat/lng en Brasil — alucinación
-  // de Claude en el borrador antes de verificar), no la pintamos aunque el saneo del
-  // Worker fallara por lo que sea. Mismo criterio que el saneo del Worker (400km).
-  _filterGeoOutliers(stops) {
-    if (stops.length < 3) return stops;
-    const lats = stops.map(s => s.lat).sort((a, b) => a - b);
-    const lngs = stops.map(s => s.lng).sort((a, b) => a - b);
-    const medianLat = lats[Math.floor(lats.length / 2)];
-    const medianLng = lngs[Math.floor(lngs.length / 2)];
-    const R = 6371;
-    const toRad = d => d * Math.PI / 180;
-    const distKm = (lat, lng) => {
-      const dLat = toRad(lat - medianLat), dLng = toRad(lng - medianLng);
-      const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat)) * Math.cos(toRad(medianLat)) * Math.sin(dLng / 2) ** 2;
-      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    };
-    return stops.filter(s => distKm(s.lat, s.lng) <= 1500); // deja pasar rutas largas reales, corta saltos de continente
-  },
-
   // ═══ GOOGLE MAPS DYNAMIC (Copiloto ON) ═══
   _initGoogleMaps(containerId, stops) {
     const el = document.getElementById(containerId);
     if (!el) return;
 
-    const valid = this._filterGeoOutliers(stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01));
+    const valid = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
     if (!valid.length) { el.style.display = 'none'; return; }
 
     el.innerHTML = ''; // Limpiar imagen estática
     this._mapType = 'google';
 
-    // Lanzar fetch de directions EN PARALELO con la carga del API — no hace falta si ya
-    // tenemos la geometría real de una carretera concreta (route.road_geometry).
-    const dirPromise = (!this._roadGeometry && valid.length >= 2) ? this._fetchDirections(valid) : null;
+    // Lanzar fetch de directions EN PARALELO con la carga del API
+    const dirPromise = valid.length >= 2 ? this._fetchDirections(valid) : null;
 
     // Cargar Maps JS si no está cargado aún, luego inicializar
     (window._loadGoogleMaps ? window._loadGoogleMaps() : Promise.reject('no loader'))
@@ -546,20 +521,13 @@ const mapaRuta = {
       return marker;
     });
 
-    // Polyline: si hay geometría real de carretera (route.road_geometry) se pinta
-    // directamente — nada de pedirle a Directions "la más rápida" entre paradas, que
-    // puede irse por una autopista paralela a la carretera pedida (ver N2/A24 en
-    // memoria del proyecto). Si no hay carretera concreta, línea recta provisional
-    // hasta que llegue la ruta real de Directions más abajo.
-    const initialPath = (this._roadGeometry && this._roadGeometry.length >= 2)
-      ? this._roadGeometry.map(p => ({ lat: p.lat, lng: p.lon }))
-      : valid.map(s => ({ lat: s.lat, lng: s.lng }));
+    // Polyline provisional recta
     this._polyline = new google.maps.Polyline({
-      path: initialPath,
+      path: valid.map(s => ({ lat: s.lat, lng: s.lng })),
       map: this._map,
       strokeColor: '#D4A843',
       strokeWeight: 3,
-      strokeOpacity: this._roadGeometry ? 0.85 : 0.6,
+      strokeOpacity: 0.6,
       icons: [{ icon: { path: google.maps.SymbolPath.FORWARD_OPEN_ARROW, scale: 3, strokeColor: '#D4A843' }, repeat: '80px' }],
     });
 
@@ -568,15 +536,11 @@ const mapaRuta = {
     valid.forEach(s => bounds.extend({ lat: s.lat, lng: s.lng }));
     this._map.fitBounds(bounds, { top: 40, right: 40, bottom: 60, left: 40 });
 
-    // Aplicar ruta real de Directions — solo si NO tenemos ya la geometría real de
-    // una carretera concreta (esa ya es la definitiva, pedir Directions la sustituiría
-    // por la ruta "óptima" y perderíamos justo lo que se pidió).
-    if (!this._roadGeometry) {
-      if (dirPromise) {
-        dirPromise.then(data => this._applyDirections(data)).catch(() => {});
-      } else if (valid.length >= 2) {
-        this._fetchDirections(valid).then(data => this._applyDirections(data)).catch(() => {});
-      }
+    // Aplicar ruta real (pre-fetched en paralelo o fetch ahora)
+    if (dirPromise) {
+      dirPromise.then(data => this._applyDirections(data)).catch(() => {});
+    } else if (valid.length >= 2) {
+      this._fetchDirections(valid).then(data => this._applyDirections(data)).catch(() => {});
     }
 
     // Controles DESPUÉS del mapa (evita que innerHTML='' los borre)
@@ -657,13 +621,7 @@ const mapaRuta = {
       return marker;
     });
 
-    const leafletPath = (this._roadGeometry && this._roadGeometry.length >= 2)
-      ? this._roadGeometry.map(p => [p.lat, p.lon])
-      : valid.map(s => [s.lat, s.lng]);
-    this._polyline = L.polyline(leafletPath, this._roadGeometry
-      ? { color: '#D4A843', weight: 3, opacity: 0.85 }
-      : { color: '#D4A843', weight: 3, opacity: 0.7, dashArray: '8 6' }
-    ).addTo(this._map);
+    this._polyline = L.polyline(valid.map(s => [s.lat, s.lng]), { color: '#D4A843', weight: 3, opacity: 0.7, dashArray: '8 6' }).addTo(this._map);
     this._map.fitBounds(bounds, { padding: [40, 40] });
 
     // En modo preview (itinerario) solo botón "Ir al mapa"

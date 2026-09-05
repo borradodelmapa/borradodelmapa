@@ -1281,7 +1281,7 @@ const salma = {
         const isEdit = this.currentRouteId && this.currentRoute;
         const prevStopsCount = this.currentRoute?.stops?.length || 0;
         this.currentRoute = data.route;
-        if (!data._hadDraft) {
+        if (!data._hadDraft || data._isBlocks) {
           // Ruta nueva o ruta de bloques: abrir vista itinerario
           this._removeLoading();
           try {
@@ -1474,6 +1474,7 @@ const salma = {
         let resolved = false;
         let textDone = false;
         let draftSent = false;
+        let isBlocksRoute = false;
 
         const processLines = () => {
           const lines = buffer.split('\n');
@@ -1536,17 +1537,13 @@ const salma = {
                     }
                   }
                 }
-                // La ruta que llega en el evento done es la buena: verificada, deduplicada
-                // y con la geometria real de la carretera. Sin esto la vista se queda con el draft.
-                if (evt.route && evt.route.stops && evt.route.stops.length) {
-                  try { this._applyFinalRoute(evt.route); } catch (_) {}
-                }
                 resolved = true;
                 resolve({
                   reply: evt.reply || fullText,
                   route: evt.route || null,
                   video_params: evt.video_params || null,
-                  _hadDraft: draftSent
+                  _hadDraft: draftSent,
+                  _isBlocks: isBlocksRoute
                 });
                 return;
               }
@@ -1589,17 +1586,55 @@ const salma = {
                 continue;
               }
 
-              // (retirados) PLAN / DRAFT_BLOCK / VERIFIED_BLOCK — eventos del pipeline
-              // viejo de rutas por bloques. El worker no los emite desde que se unifico
-              // el motor: comprobado, 0 apariciones en salma-worker.js. Eran 22 referencias
-              // a datos que no llegan nunca, en mitad del camino critico de renderizado.
+              // PLAN — bloques paralelos planificados
+              if (evt.plan) {
+                textDone = true;
+                isBlocksRoute = true;
+                this._fixStreamBubble();
+                this._addLoading(`Montando ${evt.total_blocks || evt.plan.length} partes...`, true);
+                continue;
+              }
+
+              // DRAFT_BLOCK — bloque parcial generado (sin verificar)
+              if (evt.draft_block && evt.route_partial) {
+                draftSent = true;
+                textDone = true;
+                this._fixStreamBubble();
+                this._addLoading(`Verificando parte ${evt.draft_block} de ${evt.total_blocks}...`, true);
+                // Renderizar bloque parcial progresivamente
+                if (evt.route_partial.stops) {
+                  if (!this.currentRoute) {
+                    this.currentRoute = evt.route_partial;
+                    try {
+                      guideRenderer.render(evt.route_partial, { partial: true });
+                    } catch (e) {}
+                  } else {
+                    // Añadir paradas al route existente
+                    this.currentRoute.stops = [...(this.currentRoute.stops || []), ...evt.route_partial.stops];
+                    if (evt.route_partial.maps_links) {
+                      this.currentRoute.maps_links = [...(this.currentRoute.maps_links || []), ...evt.route_partial.maps_links];
+                    }
+                    try {
+                      guideRenderer.render(this.currentRoute, { partial: true });
+                    } catch (e) {}
+                  }
+                  // No hacer scroll — el usuario explora mientras carga
+                }
+                continue;
+              }
+
+              // VERIFIED_BLOCK — bloque verificado con Google Places
+              if (evt.verified_block && evt.route_partial) {
+                this._addLoading(`Parte ${evt.verified_block} de ${evt.total_blocks} lista ✓`, true);
+                continue;
+              }
 
               // VERIFIED — actualización background con coords/fotos de Google
               if (evt.verified && evt.route) {
-                // Mismo camino que el evento done — una sola copia de la logica para que
-                // no puedan divergir. Hoy el worker no emite este evento, pero si algun
-                // dia lo emite (verificacion en background), la vista se refresca igual.
-                this._applyFinalRoute(evt.route);
+                this.currentRoute = evt.route;
+                try {
+                  guideRenderer.updateVerified(evt.route);
+                } catch (_) {}
                 // Actualizar Firestore si ya estaba guardada
                 if (this._lastSavedDocId && typeof currentUser !== 'undefined' && currentUser) {
                   try {
@@ -3021,27 +3056,6 @@ const salma = {
     return document.getElementById('salma-stream-text');
   },
 
-  // Aplica la ruta FINAL del worker a lo que el usuario tiene delante.
-  //
-  // El worker emite `draft` con la ruta cruda de Claude y SOLO DESPUES la verifica
-  // contra Google Places, la deduplica y le resuelve la geometria real de la
-  // carretera; todo eso viaja en el evento `done`. La vista se abria con el draft
-  // y se refrescaba en un evento `verified` que el worker NO EMITE (comprobado en
-  // 60 commits del worker: nunca ha existido), asi que el usuario se quedaba mirando
-  // la ruta sin verificar y sin carretera para siempre. De ahi que ningun arreglo
-  // del motor se viera en pantalla.
-  _applyFinalRoute(route) {
-    if (!route || !Array.isArray(route.stops) || !route.stops.length) return;
-    this.currentRoute = route;
-    try { guideRenderer.updateVerified(route); } catch (_) {}
-    if (!window._itinViewOpen) return;
-    try {
-      window._itinViewRoute = route;
-      mapaRuta.init("itin-map-container", route.stops, { preview: true, roadGeometry: route.road_geometry });
-      setTimeout(() => { try { mapaRuta.invalidateSize(); } catch (_) {} }, 200);
-      mapaItinerario.init("itin-cards-container", route.stops, route, window._itinViewOptions || {});
-    } catch (_) {}
-  },
   _fixStreamBubble() {
     const el = document.getElementById('salma-stream-msg');
     if (el) {

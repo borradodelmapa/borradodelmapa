@@ -9,13 +9,6 @@
 
 const ELEVENLABS_VOICE_ID = 'fzAdMudUtRHNnk5tjJRR';
 
-// Version del motor de rutas. Solo se sirven desde cache las rutas generadas por
-// este motor (Sonnet + tools + web_search + verify Google Places + geometria real
-// de carretera). Cualquier ruta sin esta marca viene de un motor anterior (cron
-// nivel 3, prompt de una linea, sin tools ni verificacion) y se ignora al leer.
-// Subir esta constante invalida la cache entera sin tener que tocar KV.
-const ENGINE_VERSION = 'v4';
-
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 1 — Identidad
 // ═══════════════════════════════════════════════════════════════
@@ -204,7 +197,7 @@ FORMATO PROHIBIDO:
 — Preguntas al final del mensaje. Si quieres ofrecer más ayuda, ofrece sin interrogación: "Si necesitas hotel o transporte concreto, dime." NUNCA "¿Quieres que te busque hotel?"
 — Frases vacías: "aquí tienes", "claro que sí", "por supuesto", "¡genial!", "¡perfecto!", "aquí tienes tu ruta".
 
-Cuando generes ruta: en el chat solo 2-3 frases contando qué recorre y por qué merece la pena, con **negritas** en los nombres. NO escribas el plan día a día, NO enumeres las paradas, NO repitas su historia ni dónde comer: todo eso va en el JSON y se muestra aparte, en la guía, con su mapa y sus tarjetas. Repetirlo en el chat obliga al usuario a leer dos veces la misma ruta. Después incluye SALMA_ROUTE_JSON con la estructura para el mapa. Nunca digas "aquí la tienes" ni variantes.
+Cuando generes ruta: escribe el plan completo en prosa narrativa como si lo contaras en un bar — tiempos del día (Mañana/Mediodía/Tarde/Noche), paradas con nombre, dato histórico o cultural de cada una, opinión sobre por qué merece la pena, dónde comer (nombre del sitio + plato + precio), avisos prácticos (días que cierra, código de vestimenta, cola típica). Usa **negritas** para los nombres de lugares. Este texto se va escribiendo en el chat en tiempo real. Después incluye SALMA_ROUTE_JSON con la estructura para el mapa. Nunca digas "aquí la tienes" ni variantes.
 
 Cuando es conversación sin ruta: extiéndete lo que necesite la pregunta, misma densidad de información, como si lo contaras en un bar.
 
@@ -247,28 +240,21 @@ Si tiene A+B+C+D → genera directamente.
 Si dice "dale", "lo que tú veas", "hazla ya" → genera con defaults.
 Si ya preguntaste y el usuario confirma o da las variables → genera sin más preguntas.
 
-⚠️ VERIFICACIÓN OBLIGATORIA CON buscar_lugar Y web_search ANTES DE ESCRIBIR:
-Antes de generar cualquier plan de ruta, DEBES buscar de verdad — nunca escribas una parada solo de memoria. Combina dos herramientas:
-
-- buscar_lugar → para lugares concretos dentro de una ciudad/zona. Llama varias veces EN PARALELO, una por tipo de parada:
-  - "monumentos históricos en [destino]"
-  - "templos / iglesias / pagodas en [destino]"
-  - "restaurantes tradicionales en [destino]"
-  - "mercados locales en [destino]"
-  - "miradores / parques en [destino]"
-  - "barrios antiguos en [destino]"
-
-- web_search → úsala SIEMPRE que: (a) el usuario pida seguir una carretera concreta (ej. "sigue la N2", "por la A-92", "sin salirte de la costa"), porque buscar_lugar busca por ciudad, no por carretera; (b) quieras confirmar que un pueblo/mirador/parada existe realmente y en qué punto exacto de la carretera cae, antes de inventártelo; (c) quieras un dato real (historia, curiosidad, por qué merece la pena) para escribir el narrative de una parada, en vez de rellenar con generalidades turísticas. Ejemplos de búsqueda: "pueblos y puntos de interés en la carretera N2 Portugal entre Chaves y Viseu", "qué ver en [pueblo] carretera [X]".
-
-RUTAS DE CARRETERA ÚNICA (el usuario pide seguir una carretera con nombre):
-El sistema comprobará después, con datos reales de OpenStreetMap, que cada parada está de verdad sobre o junto a esa carretera — así que no te la juegues: usa web_search para encontrar pueblos/miradores/paradas REALES a lo largo del tramo pedido, en el orden geográfico correcto, antes de escribir el JSON. Si no encuentras suficientes paradas reales para cubrir los km pedidos, dilo en el texto en vez de inventar relleno.
+⚠️ VERIFICACIÓN OBLIGATORIA CON buscar_lugar ANTES DE ESCRIBIR:
+Antes de generar cualquier plan de ruta, DEBES llamar a la tool buscar_lugar varias veces EN PARALELO (una llamada por cada tipo de parada que quieras incluir). Queries sugeridas según lo que planifiques:
+- "monumentos históricos en [destino]"
+- "templos / iglesias / pagodas en [destino]"
+- "restaurantes tradicionales en [destino]"
+- "mercados locales en [destino]"
+- "miradores / parques en [destino]"
+- "barrios antiguos en [destino]"
 
 REGLAS ESTRICTAS:
-1. Solo puedes usar en el plan lugares que buscar_lugar o web_search te hayan devuelto con nombre y ubicación reales.
-2. Usa los nombres EXACTOS que devuelven las tools (no inventes variantes ni traduzcas).
-3. Usa las coordenadas EXACTAS que te den las tools en lat/lng del JSON. Si web_search no te da coordenadas exactas, usa buscar_lugar con ese nombre para conseguirlas.
-4. Si no encuentras un tipo de parada, NO lo inventes — sustitúyelo por otro tipo o redúcelo.
-5. NUNCA escribas un lugar que no hayas verificado previamente.
+1. Solo puedes usar en el plan lugares que buscar_lugar te haya devuelto con nombre y coordenadas válidas.
+2. Usa los nombres EXACTOS que devuelve la tool (no inventes variantes ni traduzcas).
+3. Usa las coordenadas EXACTAS de la tool en lat/lng del JSON.
+4. Si la tool no devuelve un tipo de parada, NO lo inventes — sustitúyelo por otro tipo.
+5. NUNCA escribas un lugar que no hayas verificado previamente con buscar_lugar.
 
 Esto aplica SIEMPRE que generes SALMA_ROUTE_JSON.
 
@@ -281,7 +267,7 @@ CRITERIOS AL CONSTRUIR LA RUTA:
 — No 5 paradas del mismo tipo seguidas salvo que el usuario lo haya pedido
 — Cada parada lleva narrative: 1-2 frases con historia, dato cultural o por qué merece la pena
 
-TEXTO EN EL CHAT: 2-3 frases y punto. Qué recorre la ruta y por qué merece la pena. NO enumeres las paradas, NO escribas el plan día a día, NO repitas lo que ya va en el JSON: la guía se muestra aparte con su mapa y sus tarjetas, y escribir lo mismo en el chat obliga al usuario a leer dos veces la misma ruta. NUNCA coordenadas en el chat.
+TEXTO EN EL CHAT: plan completo en prosa narrativa con tiempos del día, paradas, historia/cultura y avisos. NUNCA coordenadas en el chat — las coords van solo en el JSON.
 
 FORMATO DE RESPUESTA CON RUTA
 Escribe en el chat solo el resumen breve e incluye al final:
@@ -2646,7 +2632,7 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
     // Foto → no pegar bloques de modo, BLOQUE_VISION en system prompt + texto del usuario es suficiente
   } else if (isRouteRequest(message, history) || guidedRoute) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
-— Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 2-3 frases de resumen (sin enumerar paradas, sin plan día a día — eso ya va en el JSON y se muestra en la guía) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
+— Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: plan completo en prosa narrativa (tiempos del día, paradas con nombre en negrita, historia, avisos prácticos) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
 — NO respondas solo con texto. NO digas "aquí tienes" ni variantes.
 — Usa defaults para lo que falte: tipo mezcla cultura+emblemáticos, compañía solo, ritmo intermedio. Si "tengo tiempo" sin número de días: 8-10 días.
 — MÍNIMO 4-6 PARADAS POR DÍA. Nunca 1 parada por día. Cada día es un recorrido completo con desayuno, visitas, comida, paseo, atardecer.
@@ -3050,8 +3036,7 @@ function injectGoogleMapsLink(reply) { return reply; }
 function injectTransportBlock(reply) { return reply; }
 
 // ═══════════════════════════════════════════════════════════════
-// Detección de rutas largas — mismo motor de generación que el resto,
-// solo se usa para avisar al usuario y ampliar el presupuesto de tokens.
+// BLOQUES PARALELOS — Rutas largas (>7 días)
 // ═══════════════════════════════════════════════════════════════
 
 function extractDaysFromMessage(message) {
@@ -3064,6 +3049,169 @@ function isLongRoute(message) {
   return days !== null && days >= 8;
 }
 
+async function planBlocks(systemPrompt, message, days, apiKey) {
+  const planPrompt = `El usuario quiere una ruta de ${days} días. Divide la ruta en bloques de 5-7 días máximo cada uno, según las zonas geográficas naturales del destino.
+
+Responde SOLO con JSON, sin texto antes ni después:
+{"blocks":[{"block":1,"days_start":1,"days_end":5,"region":"nombre de la zona","start":"ciudad de inicio","end":"ciudad final"},{"block":2,...}]}
+
+El último bloque puede tener menos de 5 días. Los bloques deben conectar: el end del bloque N es el start del bloque N+1. Mensaje del usuario: "${message}"`;
+
+  const result = await callOpenAI(apiKey, {
+    model: 'gpt-4o-mini',
+    max_tokens: 500,
+    temperature: 0.3,
+    system: 'Eres un planificador de rutas. Responde SOLO con JSON válido.',
+    messages: [{ role: 'user', content: planPrompt }],
+  });
+
+  if (result.error) return null;
+  const text = result.text || '';
+  try {
+    // Extraer JSON del texto
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) return null;
+    const plan = JSON.parse(jsonMatch[0]);
+    if (plan.blocks && Array.isArray(plan.blocks) && plan.blocks.length > 1) {
+      return plan.blocks;
+    }
+  } catch (e) {}
+  return null;
+}
+
+async function generateBlock(block, systemPrompt, message, apiKey, kvData) {
+  const blockPrompt = `${message}
+
+INSTRUCCIÓN ESPECIAL: Genera SOLO los días ${block.days_start} a ${block.days_end} de la ruta.
+Zona: ${block.region}. Empiezas en ${block.start}, terminas en ${block.end}.
+El campo "day" de cada parada debe ser el número real (${block.days_start}, ${block.days_start + 1}, etc.).
+Genera el bloque SALMA_ROUTE_JSON como siempre, pero solo con las paradas de estos días.`;
+
+  const result = await callOpenAI(apiKey, {
+    model: 'gpt-4o-mini',
+    max_tokens: 16000, // un bloque = 5-7 días × 5-7 paradas: 4000 truncaba el JSON (tope gpt-4o-mini: 16384)
+    temperature: 0.7,
+    system: systemPrompt,
+    messages: [{ role: 'user', content: blockPrompt }],
+  });
+
+  if (result.error) return null;
+  const text = result.text || '';
+  let route = extractRouteFromReply(text);
+  if (!route && text.includes('SALMA_ROUTE_JSON')) {
+    const sv = salvageIncompleteRouteJson(text);
+    if (sv) route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + sv);
+  }
+  const reply = replyWithoutRouteBlock(text);
+  return { route, reply, block };
+}
+
+async function generateAndVerifyPipeline(blocks, systemPrompt, message, apiKey, placesKey, writer, encoder) {
+  const results = [];
+  const totalBlocks = blocks.length;
+
+  // Pipeline: generar + verificar cada bloque en cuanto termina
+  const promises = blocks.map(async (block) => {
+    try {
+      // 1. Generar bloque (con retry)
+      let genResult = await generateBlock(block, systemPrompt, message, apiKey, null);
+      if (!genResult?.route) {
+        // Retry una vez
+        genResult = await generateBlock(block, systemPrompt, message, apiKey, null);
+        if (!genResult?.route) return null;
+      }
+
+      // 2. Enviar draft inmediato (sin verificar)
+      try {
+        await writer.write(encoder.encode(`data: ${JSON.stringify({
+          draft_block: block.block,
+          total_blocks: totalBlocks,
+          route_partial: genResult.route,
+          reply: genResult.reply
+        })}\n\n`));
+      } catch (_) {}
+
+      // 3. Verificar este bloque
+      try {
+        genResult.route = await verifyAllStops(genResult.route, placesKey);
+      } catch (_) {
+        // Si verify falla, mantener la ruta sin verificar
+      }
+
+      // 4. Enviar bloque verificado
+      try {
+        await writer.write(encoder.encode(`data: ${JSON.stringify({
+          verified_block: block.block,
+          total_blocks: totalBlocks,
+          route_partial: genResult.route
+        })}\n\n`));
+      } catch (_) {}
+
+      return genResult;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  const settled = await Promise.allSettled(promises);
+  for (const result of settled) {
+    if (result.status === 'fulfilled' && result.value) {
+      results.push(result.value);
+    }
+  }
+
+  results.sort((a, b) => a.block.block - b.block.block);
+  return results;
+}
+
+function mergeBlocks(blockResults, originalMessage) {
+  if (!blockResults || blockResults.length === 0) return null;
+
+  const base = blockResults[0].route;
+  const allStops = [];
+  const allTips = [];
+  const allTags = new Set();
+
+  for (let i = 0; i < blockResults.length; i++) {
+    const br = blockResults[i];
+    if (!br.route?.stops) continue;
+
+    let stops = br.route.stops;
+
+    if (i > 0 && allStops.length > 0) {
+      const lastStopName = (allStops[allStops.length - 1].name || '').toLowerCase().trim();
+      const firstStopName = (stops[0]?.name || '').toLowerCase().trim();
+      if (lastStopName && firstStopName && lastStopName === firstStopName) {
+        stops = stops.slice(1);
+      }
+    }
+
+    allStops.push(...stops);
+    // maps_links no se acumulan: cada bloque ya los tiene generados en verifyAllStops
+    // a partir de paradas validadas. Los regeneramos aquí a nivel ruta completa.
+    if (br.route.tips) allTips.push(...br.route.tips);
+    if (br.route.tags) br.route.tags.forEach(t => allTags.add(t));
+  }
+
+  const maxDay = allStops.reduce((max, s) => Math.max(max, s.day || 0), 0);
+
+  return {
+    title: base.title || '',
+    name: base.name || base.title || '',
+    country: base.country || '',
+    region: base.region || '',
+    duration_days: maxDay,
+    summary: base.summary || '',
+    stops: allStops,
+    maps_links: buildMapsLinksFromStops(allStops, base.region || base.country || ''),
+    tips: [...new Set(allTips)],
+    tags: [...allTags],
+    budget_level: base.budget_level || 'sin_definir',
+    suggestions: base.suggestions || [],
+    pre_departure: base.pre_departure || null,
+    practical_info: base.practical_info || null,
+  };
+}
 
 // ═══════════════════════════════════════════════════════════════
 // VERIFICACIÓN DE PARADAS — Google Places (post-generación)
@@ -3221,29 +3369,6 @@ async function verifyAllStops(route, placesKey) {
   const hasCenter = centerCount > 0;
   if (hasCenter) { centerLat /= centerCount; centerLng /= centerCount; }
 
-  // Radio REAL de la ruta. El umbral fijo de 150 km desde el centro era absurdo en
-  // rutas cortas: visto en produccion, en una ruta de ~50 km por Serta se colo
-  // la parada Ponte Romana rescatada como Roman Bridge of Candal, a 119 km del centro
-  // — dentro del umbral viejo pero mas lejos que la ruta entera. Ahora el margen
-  // es proporcional: 1.5x el radio real, con suelo de 25 km y techo de 150 km.
-  let routeRadiusKm = 0;
-  if (hasCenter) {
-    const _pts = [];
-    bestCandidates.forEach(bc => {
-      const loc = bc?.candidate?.geometry?.location;
-      if (loc) _pts.push([loc.lat, loc.lng]);
-    });
-    route.stops.forEach(s2 => {
-      if (s2.lat && s2.lng && Math.abs(s2.lat) > 0.01) _pts.push([s2.lat, s2.lng]);
-    });
-    for (const [_la, _ln] of _pts) {
-      const _d = haversineKm(centerLat, centerLng, _la, _ln);
-      if (_d > routeRadiusKm) routeRadiusKm = _d;
-    }
-  }
-  const SOFT_CENTER_KM = hasCenter ? Math.min(150, Math.max(25, routeRadiusKm * 1.5)) : 150;
-  const SOFT_STOP_KM = Math.min(50, SOFT_CENTER_KM);
-
   route.stops.forEach((stop, i) => {
     if (bestCandidates[i]) return;
     const stopType = (stop.type || '') + ' ' + (stop.name || '') + ' ' + (stop.headline || '');
@@ -3258,11 +3383,11 @@ async function verifyAllStops(route, placesKey) {
       if (hasBad && !hasGood) continue;
       const cLat = c.geometry.location.lat, cLng = c.geometry.location.lng;
       let inRange = false;
-      if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && haversineKm(stop.lat, stop.lng, cLat, cLng) < SOFT_STOP_KM) inRange = true;
-      else if (hasCenter && haversineKm(centerLat, centerLng, cLat, cLng) < SOFT_CENTER_KM) inRange = true;
+      if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && haversineKm(stop.lat, stop.lng, cLat, cLng) < 50) inRange = true;
+      else if (hasCenter && haversineKm(centerLat, centerLng, cLat, cLng) < 150) inRange = true;
       if (inRange) {
         bestCandidates[i] = { candidate: c, soft: true };
-        console.log(`[VERIFY] ⚠ RESCATE BLANDO "${stop.name}" → ${c.name} (${cLat.toFixed(5)}, ${cLng.toFixed(5)}) [radio ruta ${routeRadiusKm.toFixed(0)}km, margen ${SOFT_CENTER_KM.toFixed(0)}km]`);
+        console.log(`[VERIFY] ⚠ RESCATE BLANDO "${stop.name}" → ${c.name} (${cLat.toFixed(5)}, ${cLng.toFixed(5)})`);
         break;
       }
     }
@@ -3429,306 +3554,6 @@ async function getValidatedPlace(query, placesKey, region, countryCode, biasCoor
     photo_ref: photoRef,
     formatted_address: c.formatted_address || ''
   };
-}
-
-// ═══════════════════════════════════════════════════════════════
-// MOTOR DE RUTAS — Resolución de carretera con nombre contra OpenStreetMap
-//
-// Sustituye al enfoque de "pedirle a un motor de rutas la más rápida y
-// puntuar alternativas" (Bloque B-lite+E, ver /directions preferRoad más abajo,
-// retirado). Un motor de rutas SIEMPRE puede preferir una autopista paralela
-// aunque le des muchos waypoints — comprobado en vivo (N2 Portugal, tramo
-// Lamego-Viseu se iba por la A24). La única forma fiable de "seguir la carretera
-// X" es coger la geometría REAL de esa carretera (la relación route=road que
-// mantiene la comunidad de OSM) y usarla tal cual, no una ruta "óptima" calculada.
-// ═══════════════════════════════════════════════════════════════
-
-// Genera variantes razonables del código de carretera para buscar en OSM.
-// "N-2" → también prueba "EN-2"/"EN2" (Portugal usa "Estrada Nacional", ref real "EN 2"
-// aunque todo el mundo la llama "N2" — así se encontró la relación real de la N2).
-function _roadRefVariants(roadCode) {
-  const m = (roadCode || '').match(/^([A-Z]{1,3})-(\d{1,4})$/);
-  if (!m) return [roadCode];
-  const [, letters, num] = m;
-  const variants = new Set([roadCode, `${letters}${num}`, `${letters} ${num}`]);
-  if (letters === 'N') { variants.add(`EN-${num}`); variants.add(`EN${num}`); variants.add(`EN ${num}`); }
-  if (letters === 'EN') { variants.add(`N-${num}`); variants.add(`N${num}`); }
-  return [...variants];
-}
-
-// Nombres de carretera nacional por país, para buscar también por "name" en OSM
-// (en Portugal la relación de la N2 solo se encontró por name="Estrada Nacional 2",
-// el filtro por ref+network no devolvió nada — ver memoria del proyecto).
-function _roadNamePatterns(roadCode, countryCode) {
-  const num = (roadCode.match(/\d+/) || [])[0];
-  if (!num) return [];
-  const cc = (countryCode || '').toUpperCase();
-  if (cc === 'PT') return [`Estrada Nacional ${num}`];
-  if (cc === 'ES') return [`Carretera Nacional ${num}`, `Nacional ${num}`];
-  if (cc === 'FR') return [`Route Nationale ${num}`];
-  if (cc === 'IT') return [`Strada Statale ${num}`];
-  return [];
-}
-
-// Busca en Overpass la relación route=road real de una carretera con nombre/código,
-// stitchea sus miembros en un polyline ordenado (nearest-neighbor sobre nube de
-// puntos con grid espacial — MÁS ROBUSTO que caminar la topología del grafo por
-// nodo, porque las relaciones de OSM traen huecos y direcciones invertidas que
-// rompen un chain-walk). Cachea en KV (las carreteras no cambian). Fail-open:
-// si Overpass falla o no encuentra nada, devuelve found:false y el resto del
-// flujo sigue sin el chequeo geométrico duro (no rompe la generación de ruta).
-async function resolveNamedRoad(roadCode, countryCode, env) {
-  if (!roadCode || !countryCode) return { found: false };
-  const cacheKey = `road_geom:${countryCode.toLowerCase()}:${roadCode.replace(/\s+/g, '')}`;
-
-  if (env.SALMA_KB) {
-    try {
-      const cached = await env.SALMA_KB.get(cacheKey);
-      if (cached) return JSON.parse(cached);
-    } catch (_) {}
-  }
-
-  try {
-    const refVariants = _roadRefVariants(roadCode);
-    const namePatterns = _roadNamePatterns(roadCode, countryCode);
-    const refRegex = refVariants.map(v => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
-    const nameClauses = namePatterns.map(p => `relation["name"~"^${p}$",i](area.a);`).join('\n      ');
-
-    const query = `[out:json][timeout:20];
-area["ISO3166-1"="${countryCode.toUpperCase()}"][admin_level=2]->.a;
-(
-  relation["ref"~"^(${refRegex})$",i]["route"="road"](area.a);
-  ${nameClauses}
-);
-out tags;`;
-
-    // Overpass devuelve 406 sin un User-Agent identificable (probado: el UA por
-    // defecto de fetch en Workers/Node lo rechaza; con este header responde 200).
-    const OVERPASS_HEADERS = {
-      'User-Agent': 'SalmaWorker/1.0 (borradodelmapa.com; contacto: paco.defoto@gmail.com)',
-      'Content-Type': 'application/x-www-form-urlencoded',
-    };
-
-    // overpass-api.de (la instancia "oficial") cae con cierta frecuencia (521/504
-    // vistos en producción varias veces la misma tarde) — probamos varios espejos
-    // públicos en orden antes de rendirnos. Todos hablan el mismo lenguaje de query.
-    // Orden por fiabilidad MEDIDA el 5 sept 2026 (probados uno a uno):
-    // overpass-api.de responde en ~2s desde fuera pero devuelve 521 al Worker (error de
-    // Cloudflare alcanzando el origen — está detrás de Cloudflare, igual que nosotros);
-    // se deja primero porque cuando falla lo hace al instante, no consume timeout.
-    // maps.mail.ru fue el único que sirvió la geometría completa de la N2 (2,6 MB).
-    // kumi.systems y openstreetmap.ru daban TIMEOUT, así que van al final: un espejo que
-    // agota el timeout cuesta segundos de espera, uno que responde 5xx no cuesta nada.
-    const OVERPASS_MIRRORS = [
-      'https://overpass-api.de/api/interpreter',
-      'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
-      'https://overpass.private.coffee/api/interpreter',
-      'https://overpass.osm.ch/api/interpreter',
-      'https://overpass.kumi.systems/api/interpreter',
-      'https://overpass.openstreetmap.ru/api/interpreter',
-    ];
-
-    async function fetchOverpass(body, timeoutMs, label) {
-      for (const url of OVERPASS_MIRRORS) {
-        try {
-          const res = await fetch(url, {
-            method: 'POST',
-            headers: OVERPASS_HEADERS,
-            body: 'data=' + encodeURIComponent(body),
-            signal: AbortSignal.timeout(timeoutMs),
-          });
-          if (res.ok) return await res.json();
-          console.log(`[MOTOR_RUTAS] Overpass (${url}) HTTP ${res.status} en ${label} — probando siguiente espejo`);
-        } catch (e) {
-          console.log(`[MOTOR_RUTAS] Overpass (${url}) error de red en ${label}: ${e.message} — probando siguiente espejo`);
-        }
-      }
-      return null;
-    }
-
-    const relData = await fetchOverpass(query, 12000, 'relation search');
-    if (!relData) {
-      console.log(`[MOTOR_RUTAS] Ningún espejo de Overpass respondió para "${roadCode}" (${countryCode})`);
-      return { found: false };
-    }
-    const relation = relData.elements?.find(e => e.type === 'relation');
-    if (!relation) {
-      console.log(`[MOTOR_RUTAS] Overpass no devolvió ninguna relación para "${roadCode}" (${countryCode}) — ref/name probados: ${refRegex} / ${namePatterns.join(', ') || '(ninguno)'}`);
-      return { found: false };
-    }
-
-    const wayQuery = `[out:json][timeout:25];\nrelation(${relation.id});\nway(r);\nout geom;`;
-    const wayData = await fetchOverpass(wayQuery, 20000, 'way geometry');
-    if (!wayData) {
-      console.log(`[MOTOR_RUTAS] Ningún espejo de Overpass devolvió geometría para relación ${relation.id} ("${roadCode}")`);
-      return { found: false };
-    }
-    const ways = (wayData.elements || []).filter(e => e.type === 'way' && e.geometry?.length >= 2);
-    if (ways.length === 0) {
-      console.log(`[MOTOR_RUTAS] Relación ${relation.id} sin ways con geometría ("${roadCode}")`);
-      return { found: false };
-    }
-
-    const points = _stitchWaysNearestNeighbor(ways);
-    if (points.length < 2) {
-      console.log(`[MOTOR_RUTAS] Stitching de "${roadCode}" produjo <2 puntos (${ways.length} ways)`);
-      return { found: false };
-    }
-
-    const simplified = _simplifyLatLng(points, 0.0003); // ~30m en grados a esta latitud
-    const result = {
-      found: true,
-      relationId: relation.id,
-      name: relation.tags?.name || roadCode,
-      points: simplified,
-    };
-
-    if (env.SALMA_KB) {
-      try { await env.SALMA_KB.put(cacheKey, JSON.stringify(result), { expirationTtl: 15552000 }); } catch (_) {} // 180 días
-    }
-    return result;
-  } catch (_) {
-    return { found: false };
-  }
-}
-
-// Reconstruye un polyline ordenado a partir de la nube de puntos de todos los
-// `way` de la relación, caminando siempre al punto no visitado más cercano
-// (con un índice espacial en cuadrícula para no ser O(n²)). Empieza en el punto
-// de latitud más alta (arbitrario pero estable — no importa el sentido para
-// pintar el mapa ni para muestrear waypoints).
-function _stitchWaysNearestNeighbor(ways) {
-  let points = [];
-  const seen = new Set();
-  for (const w of ways) {
-    for (const g of w.geometry) {
-      const k = Math.round(g.lat * 100000) + ',' + Math.round(g.lon * 100000);
-      if (seen.has(k)) continue;
-      seen.add(k);
-      points.push({ lat: g.lat, lon: g.lon });
-    }
-  }
-  if (points.length < 2) return points;
-
-  const midLat = points.reduce((s, p) => s + p.lat, 0) / points.length;
-  const cosLat = Math.cos(midLat * Math.PI / 180);
-  const toXY = p => ({ x: p.lon * 111320 * cosLat, y: p.lat * 110540 });
-  const xy = points.map(toXY);
-
-  const CELL = 300;
-  const grid = new Map();
-  const cellKey = (x, y) => Math.floor(x / CELL) + '_' + Math.floor(y / CELL);
-  xy.forEach((p, i) => {
-    const k = cellKey(p.x, p.y);
-    if (!grid.has(k)) grid.set(k, []);
-    grid.get(k).push(i);
-  });
-
-  const visited = new Array(points.length).fill(false);
-  let startIdx = 0;
-  for (let i = 1; i < points.length; i++) if (points[i].lat > points[startIdx].lat) startIdx = i;
-
-  const order = [startIdx];
-  visited[startIdx] = true;
-  let current = startIdx;
-  let remaining = points.length - 1;
-
-  function findNearestUnvisited(curIdx) {
-    const cx = xy[curIdx].x, cy = xy[curIdx].y;
-    for (let ring = 1; ring <= 60; ring++) {
-      let best = -1, bestD = Infinity;
-      const cKx = Math.floor(cx / CELL), cKy = Math.floor(cy / CELL);
-      for (let gx = cKx - ring; gx <= cKx + ring; gx++) {
-        for (let gy = cKy - ring; gy <= cKy + ring; gy++) {
-          if (ring > 1 && gx > cKx - ring && gx < cKx + ring && gy > cKy - ring && gy < cKy + ring) continue;
-          const bucket = grid.get(gx + '_' + gy);
-          if (!bucket) continue;
-          for (const idx of bucket) {
-            if (visited[idx]) continue;
-            const dx = xy[idx].x - cx, dy = xy[idx].y - cy;
-            const d = dx * dx + dy * dy;
-            if (d < bestD) { bestD = d; best = idx; }
-          }
-        }
-      }
-      if (best !== -1) return { idx: best, dist: Math.sqrt(bestD) };
-    }
-    return null;
-  }
-
-  // Medido con la N2 portuguesa (2497 ways, 27.808 puntos): con 20000 el trazado se
-  // cortaba en la latitud 38,41 y devolvía 551 km de los 739 reales — media carretera.
-  // Con 40000 sale completo hasta Faro (742 km) y cuesta 101 ms en vez de 96: el coste
-  // no está en el tope sino en el índice espacial, así que subirlo es casi gratis.
-  const MAX_POINTS = 40000; // límite de seguridad (CPU del Worker)
-  while (remaining > 0 && order.length < MAX_POINTS) {
-    const res = findNearestUnvisited(current);
-    if (!res) break;
-    visited[res.idx] = true;
-    order.push(res.idx);
-    current = res.idx;
-    remaining--;
-  }
-
-  return order.map(i => points[i]);
-}
-
-// Douglas-Peucker sobre lat/lng directos (suficiente para no reventar el tamaño
-// del KV/JSON — no hace falta precisión de metros para esto, solo aligerar).
-function _simplifyLatLng(points, epsilonDeg) {
-  if (points.length < 3) return points;
-  function perpDist(p, a, b) {
-    const dx = b.lat - a.lat, dy = b.lon - a.lon;
-    const len2 = dx * dx + dy * dy;
-    if (len2 === 0) return Math.hypot(p.lat - a.lat, p.lon - a.lon);
-    let t = ((p.lat - a.lat) * dx + (p.lon - a.lon) * dy) / len2;
-    t = Math.max(0, Math.min(1, t));
-    return Math.hypot(p.lat - (a.lat + t * dx), p.lon - (a.lon + t * dy));
-  }
-  function simplify(pts) {
-    if (pts.length < 3) return pts;
-    let maxD = 0, idx = 0;
-    for (let i = 1; i < pts.length - 1; i++) {
-      const d = perpDist(pts[i], pts[0], pts[pts.length - 1]);
-      if (d > maxD) { maxD = d; idx = i; }
-    }
-    if (maxD > epsilonDeg) {
-      const left = simplify(pts.slice(0, idx + 1));
-      const right = simplify(pts.slice(idx));
-      return left.slice(0, -1).concat(right);
-    }
-    return [pts[0], pts[pts.length - 1]];
-  }
-  return simplify(points);
-}
-
-// Distancia mínima (km) de un punto a la geometría de una carretera resuelta.
-// Usada como chequeo duro: si una parada cae lejos de la carretera pedida,
-// se marca para que el frontend/prompt lo sepa en vez de colarse en silencio.
-function distanceToRoadKm(lat, lng, roadPoints) {
-  let best = Infinity;
-  for (const p of roadPoints) {
-    const d = haversineKm(lat, lng, p.lat, p.lon);
-    if (d < best) best = d;
-  }
-  return best;
-}
-
-// Muestrea la geometría real de una carretera cada ~stepKm para usarla como
-// waypoints densos en el enlace "abrir ruta completa en Google Maps" — ese
-// enlace público no admite alternatives=true ni scoring, así que la única
-// forma de que no se desvíe es no dejarle margen: darle puntos reales cada
-// pocos km. Sustituye a _fullRouteGmapsUrl cuando hay carretera resuelta.
-function sampleRoadForGmaps(roadPoints, stepKm) {
-  if (!roadPoints || roadPoints.length < 2) return [];
-  const picked = [roadPoints[0]];
-  let acc = 0;
-  for (let i = 1; i < roadPoints.length; i++) {
-    acc += haversineKm(roadPoints[i - 1].lat, roadPoints[i - 1].lon, roadPoints[i].lat, roadPoints[i].lon);
-    if (acc >= stepKm) { picked.push(roadPoints[i]); acc = 0; }
-  }
-  picked.push(roadPoints[roadPoints.length - 1]);
-  return picked;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -4929,11 +4754,7 @@ function toolsToOpenAI(tools) {
 }
 
 const OPENAI_TOOLS = toolsToOpenAI(SALMA_TOOLS);
-// Tool nativa de Anthropic (server-side): Claude busca en la web y Anthropic ejecuta
-// la búsqueda dentro del mismo turno — no pasa por executeToolCall ni por OPENAI_TOOLS,
-// por eso vive fuera de SALMA_TOOLS (que sí se convierte a formato OpenAI más arriba).
-const WEB_SEARCH_TOOL = { type: 'web_search_20250305', name: 'web_search', max_uses: 5 };
-const ANTHROPIC_TOOLS = [...SALMA_TOOLS, WEB_SEARCH_TOOL];
+const ANTHROPIC_TOOLS = SALMA_TOOLS; // ya en formato Anthropic (input_schema)
 
 // Llamada no-streaming a OpenAI (reemplaza todas las llamadas a Anthropic sin stream)
 async function callOpenAI(apiKey, { model, max_tokens, temperature, system, messages }) {
@@ -5121,11 +4942,6 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
         const evt = JSON.parse(jsonStr);
         if (evt.type === 'content_block_start') {
           blocksInProgress[evt.index] = { ...evt.content_block, partial_json: '' };
-          // web_search nativa: Anthropic la ejecuta sola, sin pasar por nuestro bucle de
-          // tools — sin este aviso el usuario vería un hueco de silencio mientras busca.
-          if (evt.content_block?.type === 'server_tool_use' && forwardText && writer) {
-            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ searching: true })}\n\n`)); } catch (_) {}
-          }
         } else if (evt.type === 'content_block_delta') {
           const b = blocksInProgress[evt.index];
           if (!b) continue;
@@ -5162,14 +4978,6 @@ async function readAnthropicStream(res, writer, encoder, decoder, forwardText) {
       let input = {};
       try { input = JSON.parse(b.partial_json || '{}'); } catch (e) {}
       contentBlocks.push({ type: 'tool_use', id: b.id, name: b.name, input });
-    } else if (b.type === 'server_tool_use') {
-      // web_search: Anthropic la ejecuta sola dentro del turno (no pasa por executeToolCall).
-      // La conservamos igual que un tool_use normal para que el historial quede fiel.
-      let input = {};
-      try { input = JSON.parse(b.partial_json || '{}'); } catch (e) {}
-      contentBlocks.push({ type: 'server_tool_use', id: b.id, name: b.name, input });
-    } else if (b.type === 'web_search_tool_result') {
-      contentBlocks.push({ type: 'web_search_tool_result', tool_use_id: b.tool_use_id, content: b.content });
     }
   }
 
@@ -5749,13 +5557,38 @@ export default {
       }
     }
 
+    // Compara los pasos ("steps") de una ruta de Google Directions con la carretera
+    // pedida por el usuario. Cuenta como "fuera de ruta" cada tramo cuya instrucción
+    // menciona explícitamente una carretera distinta a la pedida.
+    function _scoreRouteAgainstRoad(googleRoute, preferRoad) {
+      const targetNorm = preferRoad.replace(/-/g, '').toUpperCase();
+      let totalMeters = 0;
+      let offMeters = 0;
+      const offByRoad = {};
+      for (const leg of googleRoute.legs || []) {
+        for (const step of leg.steps || []) {
+          const meters = step.distance?.value || 0;
+          totalMeters += meters;
+          const text = (step.html_instructions || '').replace(/<[^>]*>/g, '');
+          const codes = text.toUpperCase().match(/\b[A-Z]{1,3}-?\s?\d{1,4}\b/g) || [];
+          for (const raw of codes) {
+            const norm = raw.replace(/[\s-]/g, '');
+            if (norm !== targetNorm) {
+              offMeters += meters;
+              const pretty = norm.replace(/^([A-Z]{1,3})(\d{1,4})$/, '$1-$2');
+              offByRoad[pretty] = (offByRoad[pretty] || 0) + meters;
+              break; // contar el tramo una sola vez aunque mencione varios códigos
+            }
+          }
+        }
+      }
+      const offSegments = Object.entries(offByRoad)
+        .map(([road, m]) => ({ road, km: Math.round(m / 100) / 10 }))
+        .sort((a, b) => b.km - a.km);
+      return { offMeters, totalMeters, offSegments };
+    }
+
     // ─── ENDPOINT /directions (polyline para mini-mapas) ───
-    // Ya NO acepta preferRoad/alternatives-scoring (Bloque B-lite+E, retirado —
-    // pedir varias rutas a Google y puntuar cuál se desvía menos seguía permitiendo
-    // que Google se fuera por una autopista paralela). Cuando la ruta pide seguir
-    // una carretera con nombre, el frontend usa route.road_geometry (geometría real
-    // de OSM, ver resolveNamedRoad) en vez de llamar aquí. Este endpoint se queda
-    // para el caso normal: trazado entre paradas sin carretera única que respetar.
     if (request.method === 'GET' && url.pathname === '/directions') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
       const placesKey = env.GOOGLE_PLACES_KEY;
@@ -5763,6 +5596,7 @@ export default {
       const destination = url.searchParams.get('destination') || '';
       const waypoints = url.searchParams.get('waypoints') || '';
       const mode = url.searchParams.get('mode') || 'driving';
+      const preferRoad = url.searchParams.get('preferRoad') || '';
 
       if (!origin || !destination || !placesKey) {
         return new Response(JSON.stringify({ error: 'missing params' }), { status: 400, headers: corsH });
@@ -5771,6 +5605,7 @@ export default {
       try {
         let dirUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&mode=${mode}&key=${placesKey}`;
         if (waypoints) dirUrl += `&waypoints=${encodeURIComponent(waypoints)}`;
+        if (preferRoad) dirUrl += `&alternatives=true`;
 
         const res = await fetch(dirUrl);
         const data = await res.json();
@@ -5779,7 +5614,30 @@ export default {
           return new Response(JSON.stringify({ error: data.status || 'No route' }), { status: 404, headers: corsH });
         }
 
-        const route = data.routes[0];
+        // Si se pidió una carretera concreta ("sin salirte de la N2"), puntuamos cada
+        // alternativa que ofrece Google por km fuera de esa carretera y nos quedamos
+        // con la que menos se desvía (opción E). Si aun así se desvía por encima del
+        // umbral, lo marcamos en road_check para que el frontend avise (opción B-lite).
+        let route = data.routes[0];
+        let roadCheck = null;
+        if (preferRoad && data.routes.length > 0) {
+          let best = null;
+          for (const candidate of data.routes) {
+            const score = _scoreRouteAgainstRoad(candidate, preferRoad);
+            if (!best || score.offMeters < best.score.offMeters) best = { candidate, score };
+          }
+          route = best.candidate;
+          const { offMeters, totalMeters, offSegments } = best.score;
+          const offPct = totalMeters > 0 ? offMeters / totalMeters : 0;
+          roadCheck = {
+            target: preferRoad,
+            offKm: Math.round(offMeters / 100) / 10,
+            offPct: Math.round(offPct * 1000) / 10, // porcentaje, 1 decimal
+            flagged: offPct > 0.12,
+            segments: offSegments.slice(0, 3),
+          };
+        }
+
         const polyline = route.overview_polyline?.points || '';
         const legs = (route.legs || []).map(l => ({
           distance: l.distance?.text || '',
@@ -5802,6 +5660,7 @@ export default {
         }
 
         const payload = includeSteps ? { polyline, legs, steps } : { polyline, legs };
+        if (roadCheck) payload.road_check = roadCheck;
         return new Response(JSON.stringify(payload), {
           headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' }
         });
@@ -7483,7 +7342,7 @@ REGLAS:
     }
     // Si go_to no detectó destino válido → continúa al flujo normal de Claude
 
-    const apiKey = env.OPENAI_API_KEY; // usado por el fallback de fotos con visión (gpt-4o-mini)
+    const apiKey = env.OPENAI_API_KEY; // fallback legacy (rutas largas)
     // Todo va por Anthropic. Solo bloqueamos si no hay key
     if (!env.ANTHROPIC_API_KEY) {
       return new Response(
@@ -7770,11 +7629,7 @@ INSTRUCCIONES:
     const _cachedDaySet = new Set((kvCachedRoute?.stops || []).map(s => s.day));
     const _cachedDayCount = _cachedDaySet.size || 1;
     const _cachedQuality = _cachedStops / _cachedDayCount >= 3;
-    const _cachedEngineOk = kvCachedRoute?.engine === ENGINE_VERSION;
-    if (kvCachedRoute && !_cachedEngineOk) {
-      console.log(`[MOTOR_RUTAS] Cache ignorada (motor ${kvCachedRoute.engine || 'anterior'}) — se regenera con ${ENGINE_VERSION}`);
-    }
-    if (kvCachedRoute && kvCachedRoute.stops && _cachedStops > 0 && _cachedQuality && _cachedEngineOk) {
+    if (kvCachedRoute && kvCachedRoute.stops && _cachedStops > 0 && _cachedQuality) {
       // BLOQUE E — la ruta de KV no pasó por verifyAllStops: validar sus enlaces de Maps
       try {
         const _r = await validarYCorregirLinksMaps(kvCachedRoute, { surface: 'ruta_guiada', region: kvCachedRoute.region || kvCachedRoute.country || '', userId: uid });
@@ -7850,12 +7705,10 @@ INSTRUCCIONES:
     // Todo va a Claude Sonnet (visión nativa incluida)
     const useAnthropic = true;
     const reqModel = 'gpt-4o-mini'; // fallback legacy (no se usa si useAnthropic=true)
-    // Rutas: la respuesta = prosa larga + SALMA_ROUTE_JSON (cada parada ~180 tokens).
-    // Motor de rutas único (ya no hay pipeline aparte de bloques con gpt-4o-mini para
-    // ≥8 días — mismo Sonnet+tools+web_search para cualquier duración, solo escalamos
-    // el presupuesto de tokens). Sonnet admite hasta 64k de salida.
-    const _isLongRouteReq = isRoute && isLongRoute(message);
-    const reqMaxTokens = _isLongRouteReq ? 58000 : (isRoute ? 24000 : (needsTools ? 6000 : 3000));
+    // Rutas: la respuesta = prosa larga + SALMA_ROUTE_JSON con 16-40 paradas (cada una ~180 tokens).
+    // Con 6000 se truncaba el JSON a mitad y la ruta llegaba null. Sonnet admite hasta 64k de salida.
+    // 24000 da margen para una ruta de 7 días (el tope single-shot; ≥8 días va por bloques).
+    const reqMaxTokens = isRoute ? 24000 : (needsTools ? 6000 : 3000);
 
     // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
     const sseHeaders = {
@@ -7895,7 +7748,8 @@ INSTRUCCIONES:
     // Todo el flujo (incluido el bucle agentic) ocurre dentro de ctx.waitUntil
     ctx.waitUntil((async () => {
       let allText = '';  // Texto acumulado de TODAS las iteraciones
-      const MAX_TOOL_ITERATIONS = 14;  // Rutas largas o de carretera única necesitan más búsquedas (buscar_lugar + web_search) antes de cerrar el JSON — antes 10, subido al unificar rutas largas con el flujo normal.
+      const MAX_TOOL_ITERATIONS = 10;  // Seguridad: máximo 10 tool calls por turno (subido de 5 — rutas con restricción de carretera única necesitan varias búsquedas de buscar_lugar antes de cerrar el JSON)
+      const longRoute = isLongRoute(message); // Rutas ≥8 días → generación por bloques paralelos
 
       try {
         // ── TRANSPORT: buscar destino + emitir botones ANTES de Claude ──
@@ -7978,11 +7832,94 @@ INSTRUCCIONES:
           }
         }
 
-        // ── RUTA LARGA (≥8 días): mismo motor que cualquier ruta, solo avisamos que tarda más ──
-        // (antes iba por un pipeline aparte con gpt-4o-mini sin ninguna búsqueda real — retirado
-        // al unificar el motor de rutas: planBlocks/generateAndVerifyPipeline/mergeBlocks quedan sin uso).
-        if (_isLongRouteReq) {
-          try { await writer.write(encoder.encode(`data: ${JSON.stringify({ t: 'Venga, me pongo con ello — una ruta larga lleva más búsquedas, dame un momento...' })}\n\n`)); } catch (_) {}
+        // ── RUTA LARGA (≥8 días): generación por bloques paralelos ──
+        if (longRoute) {
+          const days = extractDaysFromMessage(message);
+          try {
+            // 1. Texto intro streameado
+            await writer.write(encoder.encode(`data: ${JSON.stringify({ t: 'Venga, me pongo con ello. Te la monto en varias partes para que vayas viendo...' })}\n\n`));
+
+            // 2. Planificar bloques (~2s)
+            const blocks = await planBlocks(systemPrompt, message, days, apiKey);
+
+            if (blocks && blocks.length > 1) {
+              await writer.write(encoder.encode(`data: ${JSON.stringify({ plan: blocks, total_blocks: blocks.length })}\n\n`));
+
+              // 3. Generar bloques en paralelo
+              const keepalive = setInterval(async () => {
+                try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
+              }, 3000);
+
+              let route = null;
+              try {
+                // Pipeline: cada bloque genera→verifica→emite independientemente
+                const blockResults = await generateAndVerifyPipeline(blocks, systemPrompt, message, apiKey, env.GOOGLE_PLACES_KEY, writer, encoder);
+
+                if (blockResults.length > 0) {
+                  route = mergeBlocks(blockResults, message);
+                }
+              } finally {
+                clearInterval(keepalive);
+              }
+
+              if (route) {
+                const reply = 'Tu ruta completa está lista.';
+
+                // BLOQUE E — validar enlaces de Maps antes de cachear y entregar
+                try {
+                  const _r = await validarYCorregirLinksMaps(route, { surface: 'ruta_guiada', region: route.region || route.country || '', userId: uid });
+                  route = _r.value;
+                  _urlIncidents.push(..._r.incidents);
+                } catch (_) {}
+
+                // Guardar en KV nivel 3 — con múltiples keys para matchear
+                if (route.stops && route.stops.length > 0 && env.SALMA_KB) {
+                  try {
+                    const routeJson = JSON.stringify(route);
+                    const ttl = { expirationTtl: 2592000 }; // 30 días
+                    const country = (route.country || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+                    const region = (route.region || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+                    const title = (route.title || route.name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+                    const cc = await env.SALMA_KB.get('kw:' + country) || country.substring(0, 2);
+                    // Key principal (region completa)
+                    if (region) ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${region}:${days}`, routeJson, ttl));
+                    // Key simple (solo país/destino — para matchear "3 días en Sevilla")
+                    if (country && country !== region) ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${country}:${days}`, routeJson, ttl));
+                    // Key por primera palabra relevante del destino
+                    const simpleKey = region.split(',')[0].split('-')[0].trim();
+                    if (simpleKey && simpleKey !== country && simpleKey !== region) {
+                      ctx.waitUntil(env.SALMA_KB.put(`route:${cc}:${simpleKey}:${days}`, routeJson, ttl));
+                    }
+                  } catch (_) {}
+                }
+
+                const doneEvtB = { done: true, reply, route };
+                if (photoUploadPromise) {
+                  const pr = await photoUploadPromise;
+                  if (pr) { doneEvtB.photo_url = pr.url; doneEvtB.photo_key = pr.key; }
+                }
+                await writer.write(encoder.encode(`data: ${JSON.stringify(doneEvtB)}\n\n`));
+
+                if (_urlIncidents.length) ctx.waitUntil(logUrlIncidents(_urlIncidents.splice(0), authHeader.slice(7)));
+                ctx.waitUntil(logToFirestore({
+                  timestamp: new Date().toISOString(),
+                  type: 'route_blocks',
+                  user_message: message.slice(0, 200),
+                  chars_out: JSON.stringify(route).length,
+                  latency_ms: Date.now() - reqStartTime,
+                  status: 'ok',
+                  error_detail: `${blocks.length} bloques`,
+                  model: reqModel,
+                }));
+
+                await writer.close();
+                return; // Sale del flujo — ruta larga completada
+              }
+            }
+            // Si planBlocks falla o devuelve 1 bloque, cae al flujo normal
+          } catch (e) {
+            // Fallback al flujo normal
+          }
         }
 
         // Mensajes que crecen con cada iteración del bucle (tool_use → tool_result)
@@ -8043,7 +7980,6 @@ INSTRUCCIONES:
               break;
             }
             if (!apiRes.ok) {
-              try { console.error(`[ANTHROPIC_ERROR] status=${apiRes.status} body=${(await apiRes.text()).slice(0, 1500)}`); } catch (_) {}
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
@@ -8272,11 +8208,7 @@ INSTRUCCIONES:
         //        (b) el JSON se truncó tan pronto que el RESCATE 1 no encontró ni 2 paradas.
         // 2ª llamada a Claude con prefill forzado para extraer el JSON del texto.
         // Se dispara con `isRoute` (incluye el flujo guiado de 8 preguntas), no solo con la frase.
-        // El umbral era 600 caracteres, pensado para cuando el prompt pedia "plan completo
-        // en prosa" y el chat traia la ruta entera escrita. Ahora el chat lleva 2-3 frases
-        // a proposito (la guia ya muestra las paradas), asi que ese umbral dejaba la red de
-        // seguridad permanentemente apagada. Se baja a 80: si hay algo de texto, se intenta.
-        if (!route && (isRoute || isRouteRequest(message, history)) && allText && allText.length > 80) {
+        if (!route && (isRoute || isRouteRequest(message, history)) && allText && allText.length > 600) {
           try {
             const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
 
@@ -8510,34 +8442,6 @@ REGLAS:
         } catch (_) {}
 
         if (route) {
-          // ── SANEO GEOMÉTRICO DEL BORRADOR ──
-          // Claude a veces acierta el nombre de la parada pero "alucina" una coordenada
-          // absurda (visto en producción: una parada real de Portugal con lat/lng en
-          // Brasil). El nombre suele ser correcto, así que no se descarta la parada —
-          // solo se le quita la coordenada mala para que el mapa del borrador no la
-          // pinte en el sitio equivocado antes de que verifyAllStops la re-ubique
-          // buscando por nombre (más abajo).
-          if (Array.isArray(route.stops) && route.stops.length >= 3) {
-            const withCoords = route.stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01);
-            if (withCoords.length >= 3) {
-              const sortedLat = withCoords.map(s => s.lat).sort((a, b) => a - b);
-              const sortedLng = withCoords.map(s => s.lng).sort((a, b) => a - b);
-              const medianLat = sortedLat[Math.floor(sortedLat.length / 2)];
-              const medianLng = sortedLng[Math.floor(sortedLng.length / 2)];
-              const OUTLIER_KM = 1500; // deja pasar rutas largas reales (país entero, dos países), corta saltos de continente
-              for (const s of route.stops) {
-                if (s.lat && s.lng && Math.abs(s.lat) > 0.01) {
-                  const distKm = haversineKm(s.lat, s.lng, medianLat, medianLng);
-                  if (distKm > OUTLIER_KM) {
-                    console.log(`[SANEO] Coordenada absurda descartada: "${s.name || s.headline || '?'}" estaba a ${Math.round(distKm)}km del resto de la ruta (${s.lat},${s.lng})`);
-                    s.lat = 0;
-                    s.lng = 0;
-                  }
-                }
-              }
-            }
-          }
-
           // ── PASO 1: Enriquecer paradas con KV (coords + fotos verificadas, instantáneo) ──
           if (env.SALMA_KB) {
             for (const stop of route.stops) {
@@ -8575,101 +8479,6 @@ REGLAS:
               if (verified) route = verified;
             }
           } catch (_) {}
-
-          // ── DEDUP — Claude a veces escribe la misma parada dos veces con nombres
-          // ligeramente distintos (visto en producción: "Fragas de São Simão" repetida).
-          // Tras verify ambas apuntan al mismo place_id real → nos quedamos con la primera.
-          if (Array.isArray(route.stops) && route.stops.length > 1) {
-            const seenPlaceIds = new Set();
-            const before = route.stops.length;
-            route.stops = route.stops.filter(s => {
-              if (!s.place_id) return true; // sin verificar, no lo tocamos aquí
-              if (seenPlaceIds.has(s.place_id)) return false;
-              seenPlaceIds.add(s.place_id);
-              return true;
-            });
-            if (route.stops.length < before) {
-              console.log(`[DEDUP] ${before - route.stops.length} parada(s) con place_id repetido eliminada(s)`);
-            }
-
-            // SEGUNDA PASADA — el mismo sitio con DOS place_id distintos. Google mantiene
-            // fichas separadas para el mismo lugar y el filtro de arriba no las ve. Caso
-            // real en produccion: "River beach Fragas de Sao Simao" y "Fragas de Sao
-            // Simao", a 6 METROS una de otra y con IDs diferentes: el usuario veia la
-            // misma parada dos veces. Se descarta la que este a menos de 250 m de otra Y
-            // cuyo nombre normalizado coincida o quede contenido en el de aquella.
-            const _normStopName = (t) => (t || '')
-              .toLowerCase()
-              .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-              .replace(/\b(river|beach|praia|playa|fluvial|mirador|miradouro|viewpoint|the|de|da|do|dos|das|del|la|el|los|of)\b/g, ' ')
-              .replace(/[^a-z0-9 ]/g, ' ')
-              .replace(/\s+/g, ' ').trim();
-
-            const _kept = [];
-            for (const _s of route.stops) {
-              const _sn = _normStopName(_s.name || _s.headline);
-              const _dup = _kept.find(k => {
-                if (!_s.lat || !_s.lng || !k.lat || !k.lng) return false;
-                if (haversineKm(k.lat, k.lng, _s.lat, _s.lng) > 0.25) return false;
-                const _kn = _normStopName(k.name || k.headline);
-                if (!_sn || !_kn) return false;
-                return _sn === _kn || (_sn.length >= 6 && _kn.includes(_sn)) || (_kn.length >= 6 && _sn.includes(_kn));
-              });
-              if (_dup) {
-                // Nos quedamos con la primera, sin perder datos que solo trajo la otra.
-                if (!_dup.photo_ref && _s.photo_ref) _dup.photo_ref = _s.photo_ref;
-                if (!_dup.narrative && _s.narrative) _dup.narrative = _s.narrative;
-                const _m = Math.round(haversineKm(_dup.lat, _dup.lng, _s.lat, _s.lng) * 1000);
-                console.log(`[DEDUP] "${_s.name}" es el mismo sitio que "${_dup.name}" (${_m} m) — eliminada`);
-                continue;
-              }
-              _kept.push(_s);
-            }
-            route.stops = _kept;
-
-            if (route.stops.length < before) {
-              route.maps_links = buildMapsLinksFromStops(route.stops, route.region || route.country || '');
-            }
-          }
-
-          // ── PASO 3b: carretera con nombre pedida → geometría real de OSM ──
-          // Sustituye el viejo enfoque de "pedir varias rutas a Google Directions y
-          // puntuar cuál se desvía menos" (Bloque B-lite+E, retirado de /directions):
-          // en vez de una ruta óptima calculada, usamos el trazado real de la carretera.
-          const _preferredRoad = extractPreferredRoad(message);
-          if (_preferredRoad) route.preferred_road = _preferredRoad;
-          if (_preferredRoad && route.stops?.length > 0) {
-            try {
-              const _roadCC = getCountryCode(route.country || '') || '';
-              const _roadInfo = _roadCC ? await resolveNamedRoad(_preferredRoad, _roadCC, env) : { found: false };
-              if (_roadInfo.found) {
-                const THRESHOLD_KM = 3;
-                const offStops = [];
-                for (const stop of route.stops) {
-                  if (!stop.lat || !stop.lng) continue;
-                  const distKm = distanceToRoadKm(stop.lat, stop.lng, _roadInfo.points);
-                  stop.km_to_road = Math.round(distKm * 10) / 10;
-                  if (distKm > THRESHOLD_KM) offStops.push({ name: stop.name || stop.headline || '', km: stop.km_to_road });
-                }
-                route.road_name = _roadInfo.name;
-                route.road_geometry = sampleRoadForGmaps(_roadInfo.points, 1).slice(0, 500); // ~1 punto/km para pintar el mapa
-                route.road_gmaps_url = 'https://www.google.com/maps/dir/' +
-                  sampleRoadForGmaps(_roadInfo.points, 12).map(p => `${p.lat.toFixed(5)},${p.lon.toFixed(5)}`).join('/');
-                if (offStops.length > 0) {
-                  route.road_check = {
-                    target: _preferredRoad,
-                    flagged: true,
-                    off_stops: offStops.slice(0, 5),
-                  };
-                  console.log(`[MOTOR_RUTAS] ${offStops.length} parada(s) a más de ${THRESHOLD_KM}km de ${_preferredRoad}`);
-                }
-              } else {
-                console.log(`[MOTOR_RUTAS] No se pudo resolver geometría real de "${_preferredRoad}" (país ${_roadCC || '?'}) — sigue sin chequeo geométrico duro`);
-              }
-            } catch (e) {
-              console.log(`[MOTOR_RUTAS] Error resolviendo carretera: ${e.message}`);
-            }
-          }
         }
 
         // ── BLOQUE E: validar enlaces de Google Maps antes de cachear y entregar ──
@@ -8692,10 +8501,15 @@ REGLAS:
         }
 
         // ── Guardar ruta en KV (nivel 3 — caché automático con múltiples keys) ──
+        // Adjuntar carretera preferida detectada (p.ej. "sin salirte de la N2")
+        // para que el frontend pueda pedir /directions con preferRoad y avisar si se desvía.
+        if (route) {
+          const _preferredRoad = extractPreferredRoad(message);
+          if (_preferredRoad) route.preferred_road = _preferredRoad;
+        }
+
         if (route && route.stops && route.stops.length > 0 && env.SALMA_KB) {
           try {
-            route.engine = ENGINE_VERSION;
-            route.engine_at = Date.now();
             const routeJson = JSON.stringify(route);
             const ttl = { expirationTtl: 2592000 }; // 30 días
             const country = (route.country || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
@@ -8788,12 +8602,11 @@ REGLAS:
 
     if (!env.OPENAI_API_KEY) return;
 
-    // El cron de rutas nivel 3 (miercoles) se retiro: generaba rutas con un prompt
-    // de una linea, sin tools, sin web_search y sin verificacion de Google Places,
-    // y esas rutas tenian prioridad sobre el motor real al servirse desde cache.
-    // Las rutas ahora solo las genera el motor del chat. Guard explicito por si
-    // quedara vivo algun trigger antiguo en Cloudflare: aqui solo actua el lunes.
-    if (dayOfWeek !== 1) return;
+    if (dayOfWeek === 3) {
+      // MIÉRCOLES → Generar rutas nivel 3
+      await this._cronNivel3(env);
+      return;
+    }
 
     // LUNES → Regenerar fichas nivel 1 caducadas
     const MAX_PER_RUN = 5;
@@ -8898,6 +8711,104 @@ REGLAS:
 
     } catch (e) {
       console.log(`[KV Cron] Error general: ${e.message}`);
+    }
+  },
+
+  // ═══ CRON MIÉRCOLES: Generar rutas nivel 3 ═══
+  async _cronNivel3(env) {
+    const MAX_ROUTES = 3; // máx rutas por ejecución (~$0.18)
+    const ROUTE_PROMPT_TEMPLATE = (destName, country, days, region) =>
+      `Genera una ruta de viaje de ${days} días por ${destName}, ${country}. Responde SOLO con JSON válido. Estructura: {"title":"${destName} en ${days} días","name":"${destName} en ${days} días","country":"${country}","region":"${region}","duration_days":${days},"summary":"Resumen","stops":[{"name":"Nombre Google Maps","headline":"Nombre","narrative":"1-2 frases","day_title":"Título día","type":"lugar","day":1,"lat":0,"lng":0,"km_from_previous":0,"road_name":"carretera","road_difficulty":"bajo","estimated_hours":0}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/A/B","label":"Día 1"}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo","suggestions":["Sugerencia"]}. Reglas: 3-5 paradas/día, nombres exactos Google Maps, km reales, orden geográfico.`;
+
+    try {
+      // Leer índice de destinos con rutas generadas
+      let routeIndex = {};
+      const routeIdxJson = await env.SALMA_KB.get('_index:routes');
+      if (routeIdxJson) routeIndex = JSON.parse(routeIdxJson);
+
+      // Buscar destinos sin ruta (listar keys dest:*:destinos)
+      const destList = await env.SALMA_KB.list({ prefix: 'dest:', limit: 500 });
+      const countriesWithDests = [];
+      for (const key of destList.keys) {
+        if (key.name.endsWith(':destinos')) {
+          const code = key.name.replace('dest:', '').replace(':destinos', '');
+          countriesWithDests.push(code);
+        }
+      }
+
+      // Buscar destinos sin ruta cacheada
+      let generated = 0;
+      for (const code of countriesWithDests) {
+        if (generated >= MAX_ROUTES) break;
+
+        const destJson = await env.SALMA_KB.get('dest:' + code + ':destinos');
+        if (!destJson) continue;
+        const destinos = JSON.parse(destJson);
+
+        // Ficha del país para el nombre
+        const baseJson = await env.SALMA_KB.get('dest:' + code + ':base');
+        const countryName = baseJson ? JSON.parse(baseJson).pais : code;
+
+        for (const dest of destinos) {
+          if (generated >= MAX_ROUTES) break;
+          if (!dest.id || !dest.nombre) continue;
+
+          // ¿Ya tiene ruta?
+          const routeKey = 'route:' + code + ':' + dest.id + ':' + (dest.dias_recomendados || 3);
+          if (routeIndex[routeKey]) continue;
+
+          // Generar ruta con Sonnet
+          console.log(`[KV Cron L3] Generando: ${dest.nombre}, ${countryName} (${dest.dias_recomendados || 3} días)...`);
+
+          try {
+            const prompt = ROUTE_PROMPT_TEMPLATE(dest.nombre, countryName, dest.dias_recomendados || 3, dest.region || '');
+            const result = await callOpenAI(env.OPENAI_API_KEY, {
+              model: 'gpt-4o-mini',
+              max_tokens: 16000, // ruta cacheada nivel 3: 6000 truncaba destinos de 5+ días (tope gpt-4o-mini: 16384)
+              temperature: 0.7,
+              messages: [{ role: 'user', content: prompt }],
+            });
+
+            const text = result.text || '';
+            const jsonMatch = text.match(/\{[\s\S]*\}/);
+            if (!jsonMatch) throw new Error('No JSON');
+
+            let route;
+            try { route = JSON.parse(jsonMatch[0]); } catch (_) {
+              const sv = salvageIncompleteRouteJson('SALMA_ROUTE_JSON\n' + jsonMatch[0]);
+              if (!sv) throw new Error('JSON inválido');
+              route = JSON.parse(sv);
+            }
+            if (!route.stops || route.stops.length === 0) throw new Error('Sin paradas');
+
+            // Validar calidad de la ruta antes de guardar
+            const minStops = (dest.dias_recomendados || 3) * 2;
+            const hasValidCoords = route.stops.every(s => s.lat !== 0 && s.lng !== 0);
+            const hasValidNames = route.stops.every(s => s.name && s.name.length > 2);
+            if (route.stops.length < minStops || !hasValidCoords || !hasValidNames) {
+              console.log(`[KV Cron L3] ⚠️ Ruta de ${dest.nombre} no supera validación de calidad, descartada`);
+              continue;
+            }
+
+            // Guardar en KV
+            await env.SALMA_KB.put(routeKey, JSON.stringify(route), { expirationTtl: 2592000 });
+            routeIndex[routeKey] = Date.now();
+            generated++;
+            console.log(`[KV Cron L3] ✅ ${dest.nombre}: ${route.stops.length} paradas`);
+
+            await new Promise(r => setTimeout(r, 2000));
+          } catch (e) {
+            console.log(`[KV Cron L3] ❌ ${dest.nombre}: ${e.message}`);
+          }
+        }
+      }
+
+      // Guardar índice de rutas
+      await env.SALMA_KB.put('_index:routes', JSON.stringify(routeIndex));
+      console.log(`[KV Cron L3] Completado: ${generated} rutas generadas`);
+
+    } catch (e) {
+      console.log(`[KV Cron L3] Error general: ${e.message}`);
     }
   },
 
