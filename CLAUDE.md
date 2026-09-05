@@ -1,4 +1,106 @@
 # CLAUDE.md — Borrado del Mapa
+---
+
+## ⛔ PROTOCOLO DE TRABAJO — LEER ANTES DE TOCAR NADA
+
+Escrito el 5 septiembre 2026 después de una sesión en la que se arreglaron seis
+fallos reales y **ninguno se llegó a ver en la app**, se restauró todo al día
+anterior y se perdieron las 15 API keys del Worker. Las causas no fueron técnicas:
+fueron de método. Estas reglas existen para que no vuelva a pasar.
+
+### 1. UNA SOLA SESIÓN sobre `C:\Users\User\Desktop\salma`
+
+Aquel día había **tres sesiones de Claude Code editando los mismos ficheros y
+desplegando el mismo Worker**. Dos hicieron los mismos arreglos por duplicado; una
+tercera borró el Worker entero. Con varias sesiones sobre el mismo directorio es
+imposible saber qué versión se está probando.
+
+- Antes de empezar: comprobar que no hay otra sesión abierta sobre este directorio.
+- Si hacen falta dos a la vez, la segunda **en worktree aparte**, nunca en el mismo árbol.
+- **Si un `git push` sale rechazado (`non-fast-forward`), PARAR.** No es un trámite de
+  git: significa que alguien más está escribiendo aquí. Mirar quién antes de seguir.
+
+### 2. UN CAMBIO, UNA PRUEBA, UNA CONFIRMACIÓN DE PACO
+
+Aquel día se encadenaron cinco arreglos sin verificar ninguno. Cuando algo seguía
+mal, ya era imposible saber cuál había servido.
+
+- No se toca el siguiente fallo hasta que Paco diga qué ve en su pantalla.
+- **Nunca decir "arreglado"**. Se dice: *"desplegado — dime qué ves"*. Que un `grep`
+  encuentre una función no prueba que en la pantalla de Paco pase nada.
+- Verificar **comportamiento**, no código. El código desplegado y correcto puede no
+  cambiar nada de lo que el usuario ve — eso fue exactamente lo que pasó.
+
+### 3. PEDIR EVIDENCIA DE SU PANTALLA, Y PRONTO
+
+Se estuvo horas arreglando la vista del mapa mientras Paco hablaba del texto del
+chat. Una captura al principio ahorra media tarde.
+
+- Ante un "sigue igual": pedir **captura de pantalla** y el panel **🐛** (botón flotante
+  abajo-derecha → "Copiar"), que trae los errores de JavaScript de su navegador y, en
+  la cabecera, la versión del Worker y el `?v=` de cada script que ese navegador tiene
+  cargado. Esa cabecera es lo primero que hay que leer.
+- Si menciona una demo, un diseño o un comportamiento esperado: **preguntar qué es
+  exactamente**, no suponerlo.
+- Diagnóstico en vivo: `npx wrangler tail salma-api --format pretty` mientras él prueba.
+
+### 4. CHECKLIST DE DESPLIEGUE — SIEMPRE EN ESTE ORDEN
+
+1. Subir versión `?v=` en `index.html` de **cada** `.js` modificado (si no, el navegador
+   sirve el viejo aunque el fichero esté subido). Los 18 scripts locales llevan `?v=`;
+   ninguno debe quedarse sin él.
+2. `git add` + `commit` + `push`.
+3. Comprobar que la web ya sirve la versión nueva — GitHub Pages tarda entre 45 s y
+   varios minutos:
+   `curl.exe -s https://borradodelmapa.com/index.html | Select-String '\.js\?v='`
+4. Desde `worker\`: `npx wrangler deploy -c wrangler.toml` — **siempre con `-c`**: en la
+   raíz del proyecto hay un `wrangler.jsonc` que wrangler coge por error si no se le
+   dice cuál. La terminal de Paco es PowerShell, donde `&&` **no existe**; se encadena
+   con `;`:
+   `cd C:\Users\User\Desktop\salma\worker; npx wrangler deploy -c wrangler.toml`
+5. Comprobar que el Worker que corre es el que crees — el `Current Version ID` del
+   deploy tiene que coincidir con el que devuelve el endpoint:
+   `curl.exe -s https://salma-api.paco-defoto.workers.dev/version`
+   Ojo: en PowerShell `curl` a secas es `Invoke-WebRequest` y se queda pidiendo `Uri:`.
+   Hay que escribir `curl.exe`.
+6. **Paco prueba en la app.** Hasta aquí no está terminado. Si hay cualquier duda de si
+   está viendo lo nuevo o algo de su caché: panel 🐛 → la cabecera dorada trae el
+   Version ID del Worker y el `?v=` de cada script cargado, y el botón "Copiar" lo pega
+   delante de los logs.
+
+### 5. NO SE BORRA EL WORKER. NUNCA
+
+Ni el fichero ni el Worker de Cloudflare. **Al eliminarse un Worker, Cloudflare
+destruye sus secrets de forma irreversible** — son de solo escritura y no hay copia.
+Aquel día costó dos horas reponer 15 claves, y varias no estaban en local.
+
+- Copia de seguridad de secrets: `worker/restaurar-secrets.cjs` sube los que hay en
+  `api\*.txt` (carpeta gitignored). Los que no estén ahí hay que sacarlos de su panel.
+- Diagnóstico de claves de Google: `worker/probar-google-keys.cjs`.
+- Comprobar qué hay puesto: `npx wrangler secret list -c wrangler.toml` (son 15).
+
+### 6. ANTES DE DAR UN FALLO POR ENTENDIDO
+
+Aquel día se cambió tres veces de sospechoso porque se miraba una sola capa.
+
+- Un dato puede **calcularse bien y no llegar a pantalla**: el Worker mandaba la ruta
+  verificada y el frontend la descartaba. Seguir el dato **de punta a punta**.
+- Al hacer un corte limpio, buscar **todos** los escritores y lectores en el repo
+  entero (worker + scripts + crons), no solo la función obvia. Había un segundo motor
+  de rutas vivo, en un cron, con prioridad sobre el nuevo.
+- Al tocar el prompt, buscar **contradicciones entre bloques**: tres instrucciones
+  distintas pedían el plan completo en el chat *y* en el JSON. La duplicación estaba
+  escrita en el propio prompt.
+
+### 7. RESTAURAR SIN DESTRUIR
+
+- Volver atrás con un **commit nuevo que restaure el árbol**, nunca reescribiendo la
+  historia: `git restore --source=<commit> --worktree --staged .`
+- Antes de cualquier vuelta atrás, dejar un tag o rama de salvaguarda.
+- Puntos de restauración del 5 sept 2026: tags `v-5sept-antes-de-volver-atras` y
+  `v-5sept-antes-de-borrar` (todo el trabajo de ese día, Worker intacto).
+
+---
 ## V2 Mapa — 11 abril 2026 | Backup: `backups/borradodelmapa-v2-mapa-2026-04-11/`
 ## V3 Share + Fotos — 17 abril 2026 (sesión)
 
@@ -336,6 +438,7 @@ Post-procesado que corrige cada parada de una ruta generada:
 | POST | `/admin/apply-fix` | Aplicar fix IA al prompt, guardar con historial en Firestore |
 | POST | `/admin/save-prompt` | Guardar prompt editado manualmente |
 | GET | `/health` | Health check de todos los servicios (admin) |
+| GET | `/version` | Version ID del despliegue (publico, sin token) — para saber que worker corre |
 | GET | `/sitemap.xml` | Sitemap index (1h caché) |
 | GET | `/sitemap-guides.xml` | Sitemap dinámico de guías públicas desde Firestore |
 

@@ -7555,7 +7555,7 @@ INSTRUCCIONES:
             'arabia saudita': 'SA', 'saudi arabia': 'SA', 'emiratos arabes unidos': 'AE',
             'united arab emirates': 'AE', 'qatar': 'QA', 'oman': 'OM', 'kuwait': 'KW',
             'nueva zelanda': 'NZ', 'new zealand': 'NZ', 'islandia': 'IS', 'iceland': 'IS',
-            'nepal': 'NP', 'nepal': 'NP', 'sri lanka': 'LK', 'bangladesh': 'BD',
+            'nepal': 'NP', 'sri lanka': 'LK', 'bangladesh': 'BD',
             'birmania': 'MM', 'tunez': 'TN', 'tunisia': 'TN', 'senegal': 'SN', 'ruanda': 'RW', 'rwanda': 'RW',
           };
 
