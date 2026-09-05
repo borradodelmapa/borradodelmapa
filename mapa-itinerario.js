@@ -3,6 +3,27 @@
    Cards de parada + enriquecimiento Places
    ══════════════════════════════════════════ */
 
+// Estilo del desplegable "Leer más" — inyectado una vez, no depende de styles.css.
+function ensureItinMoreStyles() {
+  if (document.getElementById('itin-more-style')) return;
+  const style = document.createElement('style');
+  style.id = 'itin-more-style';
+  style.textContent = `
+    .itin-more{margin-top:8px;}
+    .itin-more summary{display:inline-flex;align-items:center;gap:4px;font-weight:600;
+      font-size:12px;color:var(--crema-dim,#a99f8c);cursor:pointer;list-style:none;}
+    .itin-more summary::-webkit-details-marker{display:none;}
+    .itin-more summary::after{content:"";width:6px;height:6px;
+      border-right:1.5px solid var(--crema-dim,#a99f8c);border-bottom:1.5px solid var(--crema-dim,#a99f8c);
+      transform:rotate(45deg);transition:transform .15s ease;margin-top:-2px;}
+    .itin-more[open] summary::after{transform:rotate(-135deg);margin-top:2px;}
+    .itin-more[open] summary{color:var(--crema,#f5f0e8);}
+    .itin-more summary:hover{color:var(--dorado2,#ffc947);}
+    .itin-more-body{margin-top:8px;}
+  `;
+  document.head.appendChild(style);
+}
+
 const mapaItinerario = {
   _stops: [],
   _cards: [],
@@ -20,6 +41,7 @@ const mapaItinerario = {
   init(containerId, stops, routeData, options = {}) {
     this._container = document.getElementById(containerId);
     if (!this._container || !stops || !stops.length) return;
+    ensureItinMoreStyles();
 
     this._stops = stops;
     this._cards = [];
@@ -32,13 +54,26 @@ const mapaItinerario = {
 
     // Header de la ruta (título + volver — desktop)
     const totalKm = Math.round(stops.reduce((sum, s) => sum + (s.km_from_previous || 0), 0));
-    const roadMeta = routeData.road_name ? ` · ${totalKm} km · 🛣️ ${this._esc(routeData.road_name)}` : '';
     const header = document.createElement('div');
     header.className = 'itin-header';
     header.innerHTML = `
       <div class="itin-header-info">
         <div class="itin-title">${this._esc(routeData.title || routeData.name || 'Tu ruta')}</div>
-        <div class="itin-meta">${this._totalDays(stops)} días · ${stops.length} paradas · ${this._esc(country.toUpperCase())}${roadMeta}</div>
+        <div class="itin-meta">${this._totalDays(stops)} días · ${this._esc(country.toUpperCase())}</div>
+        <div style="display:grid;grid-template-columns:repeat(${routeData.road_name ? 3 : 2},1fr);gap:8px;margin-top:10px;">
+          <div style="background:var(--gris2,#1e190f);border:1px solid var(--linea,rgba(240,180,41,.22));border-radius:10px;padding:8px 10px;">
+            <div style="font-family:var(--font-mono,monospace);font-size:16px;color:var(--dorado2,#ffc947);">${totalKm || '—'}${totalKm ? ' km' : ''}</div>
+            <div style="font-size:9px;letter-spacing:.06em;color:var(--crema-dim,#a99f8c);text-transform:uppercase;">Distancia</div>
+          </div>
+          <div style="background:var(--gris2,#1e190f);border:1px solid var(--linea,rgba(240,180,41,.22));border-radius:10px;padding:8px 10px;">
+            <div style="font-family:var(--font-mono,monospace);font-size:16px;color:var(--dorado2,#ffc947);">${stops.length}</div>
+            <div style="font-size:9px;letter-spacing:.06em;color:var(--crema-dim,#a99f8c);text-transform:uppercase;">Paradas</div>
+          </div>
+          ${routeData.road_name ? `<div style="background:var(--gris2,#1e190f);border:1px solid var(--linea,rgba(240,180,41,.22));border-radius:10px;padding:8px 10px;">
+            <div style="font-family:var(--font-mono,monospace);font-size:16px;color:var(--dorado2,#ffc947);">${this._esc(routeData.road_name)}</div>
+            <div style="font-size:9px;letter-spacing:.06em;color:var(--crema-dim,#a99f8c);text-transform:uppercase;">Carretera</div>
+          </div>` : ''}
+        </div>
       </div>
     `;
     this._container.appendChild(header);
@@ -191,10 +226,16 @@ const mapaItinerario = {
           ${horas ? `<span class="itin-card-hours">${this._formatHours(horas)}</span>` : ''}
         </div>
         ${nota ? `<div class="itin-card-nota">${this._esc(nota)}</div>` : ''}
-        ${stop.context ? `<div class="guide-stop-tag tag-context"><span class="guide-stop-tag-label">📖 CONTEXTO</span>${this._esc(stop.context)}</div>` : ''}
-        ${stop.food_nearby ? `<div class="guide-stop-tag tag-food"><span class="guide-stop-tag-label">🍜 COME CERCA</span>${this._esc(stop.food_nearby)}</div>` : ''}
-        ${stop.local_secret ? `<div class="guide-stop-tag tag-secret"><span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>${this._esc(stop.local_secret)}</div>` : ''}
-        ${stop.practical ? `<div class="guide-stop-practical">${this._esc(stop.practical)}</div>` : ''}
+        ${(stop.context || stop.food_nearby || stop.local_secret || stop.practical) ? `
+        <details class="itin-more" onclick="event.stopPropagation()">
+          <summary>Leer más</summary>
+          <div class="itin-more-body">
+            ${stop.context ? `<div class="guide-stop-tag tag-context"><span class="guide-stop-tag-label">📖 CONTEXTO</span>${this._esc(stop.context)}</div>` : ''}
+            ${stop.food_nearby ? `<div class="guide-stop-tag tag-food"><span class="guide-stop-tag-label">🍜 COME CERCA</span>${this._esc(stop.food_nearby)}</div>` : ''}
+            ${stop.local_secret ? `<div class="guide-stop-tag tag-secret"><span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>${this._esc(stop.local_secret)}</div>` : ''}
+            ${stop.practical ? `<div class="guide-stop-practical">${this._esc(stop.practical)}</div>` : ''}
+          </div>
+        </details>` : `<div class="itin-more-pending" id="itin-more-${index}"></div>`}
         <div class="itin-card-places" id="itin-places-${index}"></div>
         ${mapsNavUrl ? `<a class="itin-card-nav" href="${mapsNavUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 Ir aquí</a>` : ''}
       </div>
@@ -403,6 +444,8 @@ const mapaItinerario = {
   },
 
   // ═══ ACTUALIZAR CAMPOS ENRIQUECIDOS (después de enrichGuia) ═══
+  // Los mete detrás del mismo "Leer más" que ya usan las cards que llegaron con estos
+  // datos desde el principio — si no, quedaría inconsistente (unas plegadas, otras no).
   updateEnrichedFields(stops) {
     if (!Array.isArray(stops)) return;
     stops.forEach((stop, i) => {
@@ -410,20 +453,22 @@ const mapaItinerario = {
       if (!card) return;
       const body = card.querySelector('.itin-card-body');
       if (!body) return;
-      // Eliminar tags enriquecidos anteriores para no duplicar
-      body.querySelectorAll('.guide-stop-tag, .guide-stop-practical').forEach(el => el.remove());
-      // Insertar antes del div de places
-      const placesDiv = body.querySelector('.itin-card-places');
-      if (!placesDiv) return;
+
       const tags = [];
       if (stop.context) tags.push(`<div class="guide-stop-tag tag-context"><span class="guide-stop-tag-label">📖 CONTEXTO</span>${this._esc(stop.context)}</div>`);
       if (stop.food_nearby) tags.push(`<div class="guide-stop-tag tag-food"><span class="guide-stop-tag-label">🍜 COME CERCA</span>${this._esc(stop.food_nearby)}</div>`);
       if (stop.local_secret) tags.push(`<div class="guide-stop-tag tag-secret"><span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>${this._esc(stop.local_secret)}</div>`);
       if (stop.practical) tags.push(`<div class="guide-stop-practical">${this._esc(stop.practical)}</div>`);
-      if (tags.length) {
-        const temp = document.createElement('div');
-        temp.innerHTML = tags.join('');
-        while (temp.firstChild) body.insertBefore(temp.firstChild, placesDiv);
+      if (!tags.length) return;
+
+      const existingMore = body.querySelector('.itin-more .itin-more-body');
+      if (existingMore) {
+        existingMore.innerHTML = tags.join(''); // ya había "Leer más" — reemplazar contenido, no duplicar
+        return;
+      }
+      const pending = body.querySelector(`#itin-more-${i}`);
+      if (pending) {
+        pending.outerHTML = `<details class="itin-more" onclick="event.stopPropagation()"><summary>Leer más</summary><div class="itin-more-body">${tags.join('')}</div></details>`;
       }
     });
   },
