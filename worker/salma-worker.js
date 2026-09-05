@@ -2522,6 +2522,11 @@ function buildMessages(history, message, currentRoute, userName, userNationality
     }
     const _intereses = Array.isArray(g.intereses) && g.intereses.length ? g.intereses.join(', ') : 'sin preferencia marcada';
     const _restr = (g.restricciones && String(g.restricciones).trim()) ? g.restricciones : 'ninguna';
+    const _guidedTail = guidedIsReco
+      // PIEZA A — Tiempo 1: SOLO recomendaciones en prosa. Prohibido el JSON aquí.
+      ? `Con estos datos, dame RECOMENDACIONES en prosa organizadas por día. NO generes SALMA_ROUTE_JSON ni ningún JSON — eso es el paso siguiente, cuando el usuario pulse el botón. Si hay restricciones, respétalas a rajatabla.`
+      : `Genera la ruta día por día ajustada a estos datos. Si hay restricciones, respétalas a rajatabla.
+En el JSON: "country" = país real (ej. "Portugal"); "region" = región o zona real (ej. "Algarve" o "Faro"), NUNCA el texto literal del destino con "desde", números de carretera (N2) ni el medio de transporte. Si el destino es una carretera o ruta lineal (N2, Ruta 40, costa…), traza las paradas siguiendo ese trazado en orden geográfico y respeta el punto de salida indicado.`;
     ctx.push(`[RUTA SOLICITADA POR EL USUARIO — datos recogidos en el cuestionario guiado. Úsalos TODOS. NO vuelvas a preguntar nada de esto:
 - Destino: ${g.destino || 'sin especificar'}
 - Duración: ${g.duracion_dias || 'sin especificar'} días
@@ -2531,8 +2536,7 @@ function buildMessages(history, message, currentRoute, userName, userNationality
 - Ritmo deseado: ${_ritmo}
 - Intereses: ${_intereses}
 - Restricciones: ${_restr}
-Genera la ruta día por día ajustada a estos datos. Si hay restricciones, respétalas a rajatabla.
-En el JSON: "country" = país real (ej. "Portugal"); "region" = región o zona real (ej. "Algarve" o "Faro"), NUNCA el texto literal del destino con "desde", números de carretera (N2) ni el medio de transporte. Si el destino es una carretera o ruta lineal (N2, Ruta 40, costa…), traza las paradas siguiendo ese trazado en orden geográfico y respeta el punto de salida indicado.]`);
+${_guidedTail}]`);
   }
 
   // ── Datos verificados del KV (nivel 1 + nivel 2) ──
@@ -8265,7 +8269,9 @@ INSTRUCCIONES:
         }
 
         // ── Procesar respuesta final (ruta, verificación, etc.) ──
-        let route = _fastPathRoute || extractRouteFromReply(allText);
+        // PIEZA A — Tiempo 1 (recomendaciones): aunque el modelo se saltase la orden y
+        // emitiera un SALMA_ROUTE_JSON, aquí NO se convierte en ruta. Solo prosa + botón.
+        let route = _fastPathRoute || (guidedIsReco ? null : extractRouteFromReply(allText));
         let reply = replyWithoutRouteBlock(allText);
         if (_fastPathRoute && !reply) reply = _fastPathRoute.title ? `Tu ruta por ${_fastPathRoute.title} está lista.` : 'Tu ruta está lista.';
 
