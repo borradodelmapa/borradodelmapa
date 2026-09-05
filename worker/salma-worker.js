@@ -3479,17 +3479,38 @@ out tags;`;
       'Content-Type': 'application/x-www-form-urlencoded',
     };
 
-    const relRes = await fetch('https://overpass-api.de/api/interpreter', {
-      method: 'POST',
-      headers: OVERPASS_HEADERS,
-      body: 'data=' + encodeURIComponent(query),
-      signal: AbortSignal.timeout(15000),
-    });
-    if (!relRes.ok) {
-      console.log(`[MOTOR_RUTAS] Overpass relation search HTTP ${relRes.status} para "${roadCode}" (${countryCode})`);
+    // overpass-api.de (la instancia "oficial") cae con cierta frecuencia (521/504
+    // vistos en producción varias veces la misma tarde) — probamos varios espejos
+    // públicos en orden antes de rendirnos. Todos hablan el mismo lenguaje de query.
+    const OVERPASS_MIRRORS = [
+      'https://overpass-api.de/api/interpreter',
+      'https://overpass.kumi.systems/api/interpreter',
+      'https://overpass.openstreetmap.ru/api/interpreter',
+    ];
+
+    async function fetchOverpass(body, timeoutMs, label) {
+      for (const url of OVERPASS_MIRRORS) {
+        try {
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: OVERPASS_HEADERS,
+            body: 'data=' + encodeURIComponent(body),
+            signal: AbortSignal.timeout(timeoutMs),
+          });
+          if (res.ok) return await res.json();
+          console.log(`[MOTOR_RUTAS] Overpass (${url}) HTTP ${res.status} en ${label} — probando siguiente espejo`);
+        } catch (e) {
+          console.log(`[MOTOR_RUTAS] Overpass (${url}) error de red en ${label}: ${e.message} — probando siguiente espejo`);
+        }
+      }
+      return null;
+    }
+
+    const relData = await fetchOverpass(query, 8000, 'relation search');
+    if (!relData) {
+      console.log(`[MOTOR_RUTAS] Ningún espejo de Overpass respondió para "${roadCode}" (${countryCode})`);
       return { found: false };
     }
-    const relData = await relRes.json();
     const relation = relData.elements?.find(e => e.type === 'relation');
     if (!relation) {
       console.log(`[MOTOR_RUTAS] Overpass no devolvió ninguna relación para "${roadCode}" (${countryCode}) — ref/name probados: ${refRegex} / ${namePatterns.join(', ') || '(ninguno)'}`);
@@ -3497,17 +3518,11 @@ out tags;`;
     }
 
     const wayQuery = `[out:json][timeout:25];\nrelation(${relation.id});\nway(r);\nout geom;`;
-    const wayRes = await fetch('https://overpass-api.de/api/interpreter', {
-      method: 'POST',
-      headers: OVERPASS_HEADERS,
-      body: 'data=' + encodeURIComponent(wayQuery),
-      signal: AbortSignal.timeout(20000),
-    });
-    if (!wayRes.ok) {
-      console.log(`[MOTOR_RUTAS] Overpass way geometry HTTP ${wayRes.status} para relación ${relation.id} ("${roadCode}")`);
+    const wayData = await fetchOverpass(wayQuery, 12000, 'way geometry');
+    if (!wayData) {
+      console.log(`[MOTOR_RUTAS] Ningún espejo de Overpass devolvió geometría para relación ${relation.id} ("${roadCode}")`);
       return { found: false };
     }
-    const wayData = await wayRes.json();
     const ways = (wayData.elements || []).filter(e => e.type === 'way' && e.geometry?.length >= 2);
     if (ways.length === 0) {
       console.log(`[MOTOR_RUTAS] Relación ${relation.id} sin ways con geometría ("${roadCode}")`);
