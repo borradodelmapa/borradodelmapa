@@ -8509,6 +8509,24 @@ REGLAS:
             }
           } catch (_) {}
 
+          // ── DEDUP — Claude a veces escribe la misma parada dos veces con nombres
+          // ligeramente distintos (visto en producción: "Fragas de São Simão" repetida).
+          // Tras verify ambas apuntan al mismo place_id real → nos quedamos con la primera.
+          if (Array.isArray(route.stops) && route.stops.length > 1) {
+            const seenPlaceIds = new Set();
+            const before = route.stops.length;
+            route.stops = route.stops.filter(s => {
+              if (!s.place_id) return true; // sin verificar, no lo tocamos aquí
+              if (seenPlaceIds.has(s.place_id)) return false;
+              seenPlaceIds.add(s.place_id);
+              return true;
+            });
+            if (route.stops.length < before) {
+              console.log(`[DEDUP] ${before - route.stops.length} parada(s) duplicada(s) eliminada(s)`);
+              route.maps_links = buildMapsLinksFromStops(route.stops, route.region || route.country || '');
+            }
+          }
+
           // ── PASO 3b: carretera con nombre pedida → geometría real de OSM ──
           // Sustituye el viejo enfoque de "pedir varias rutas a Google Directions y
           // puntuar cuál se desvía menos" (Bloque B-lite+E, retirado de /directions):
