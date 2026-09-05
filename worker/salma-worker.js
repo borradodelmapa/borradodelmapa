@@ -3221,6 +3221,29 @@ async function verifyAllStops(route, placesKey) {
   const hasCenter = centerCount > 0;
   if (hasCenter) { centerLat /= centerCount; centerLng /= centerCount; }
 
+  // Radio REAL de la ruta. El umbral fijo de 150 km desde el centro era absurdo en
+  // rutas cortas: visto en produccion, en una ruta de ~50 km por Serta se colo
+  // la parada Ponte Romana rescatada como Roman Bridge of Candal, a 119 km del centro
+  // — dentro del umbral viejo pero mas lejos que la ruta entera. Ahora el margen
+  // es proporcional: 1.5x el radio real, con suelo de 25 km y techo de 150 km.
+  let routeRadiusKm = 0;
+  if (hasCenter) {
+    const _pts = [];
+    bestCandidates.forEach(bc => {
+      const loc = bc?.candidate?.geometry?.location;
+      if (loc) _pts.push([loc.lat, loc.lng]);
+    });
+    route.stops.forEach(s2 => {
+      if (s2.lat && s2.lng && Math.abs(s2.lat) > 0.01) _pts.push([s2.lat, s2.lng]);
+    });
+    for (const [_la, _ln] of _pts) {
+      const _d = haversineKm(centerLat, centerLng, _la, _ln);
+      if (_d > routeRadiusKm) routeRadiusKm = _d;
+    }
+  }
+  const SOFT_CENTER_KM = hasCenter ? Math.min(150, Math.max(25, routeRadiusKm * 1.5)) : 150;
+  const SOFT_STOP_KM = Math.min(50, SOFT_CENTER_KM);
+
   route.stops.forEach((stop, i) => {
     if (bestCandidates[i]) return;
     const stopType = (stop.type || '') + ' ' + (stop.name || '') + ' ' + (stop.headline || '');
@@ -3235,11 +3258,11 @@ async function verifyAllStops(route, placesKey) {
       if (hasBad && !hasGood) continue;
       const cLat = c.geometry.location.lat, cLng = c.geometry.location.lng;
       let inRange = false;
-      if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && haversineKm(stop.lat, stop.lng, cLat, cLng) < 50) inRange = true;
-      else if (hasCenter && haversineKm(centerLat, centerLng, cLat, cLng) < 150) inRange = true;
+      if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && haversineKm(stop.lat, stop.lng, cLat, cLng) < SOFT_STOP_KM) inRange = true;
+      else if (hasCenter && haversineKm(centerLat, centerLng, cLat, cLng) < SOFT_CENTER_KM) inRange = true;
       if (inRange) {
         bestCandidates[i] = { candidate: c, soft: true };
-        console.log(`[VERIFY] ⚠ RESCATE BLANDO "${stop.name}" → ${c.name} (${cLat.toFixed(5)}, ${cLng.toFixed(5)})`);
+        console.log(`[VERIFY] ⚠ RESCATE BLANDO "${stop.name}" → ${c.name} (${cLat.toFixed(5)}, ${cLng.toFixed(5)}) [radio ruta ${routeRadiusKm.toFixed(0)}km, margen ${SOFT_CENTER_KM.toFixed(0)}km]`);
         break;
       }
     }
@@ -3489,8 +3512,18 @@ out tags;`;
     // overpass-api.de (la instancia "oficial") cae con cierta frecuencia (521/504
     // vistos en producción varias veces la misma tarde) — probamos varios espejos
     // públicos en orden antes de rendirnos. Todos hablan el mismo lenguaje de query.
+    // Orden por fiabilidad MEDIDA el 5 sept 2026 (probados uno a uno):
+    // overpass-api.de responde en ~2s desde fuera pero devuelve 521 al Worker (error de
+    // Cloudflare alcanzando el origen — está detrás de Cloudflare, igual que nosotros);
+    // se deja primero porque cuando falla lo hace al instante, no consume timeout.
+    // maps.mail.ru fue el único que sirvió la geometría completa de la N2 (2,6 MB).
+    // kumi.systems y openstreetmap.ru daban TIMEOUT, así que van al final: un espejo que
+    // agota el timeout cuesta segundos de espera, uno que responde 5xx no cuesta nada.
     const OVERPASS_MIRRORS = [
       'https://overpass-api.de/api/interpreter',
+      'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
+      'https://overpass.private.coffee/api/interpreter',
+      'https://overpass.osm.ch/api/interpreter',
       'https://overpass.kumi.systems/api/interpreter',
       'https://overpass.openstreetmap.ru/api/interpreter',
     ];
@@ -3513,7 +3546,7 @@ out tags;`;
       return null;
     }
 
-    const relData = await fetchOverpass(query, 8000, 'relation search');
+    const relData = await fetchOverpass(query, 12000, 'relation search');
     if (!relData) {
       console.log(`[MOTOR_RUTAS] Ningún espejo de Overpass respondió para "${roadCode}" (${countryCode})`);
       return { found: false };
@@ -3525,7 +3558,7 @@ out tags;`;
     }
 
     const wayQuery = `[out:json][timeout:25];\nrelation(${relation.id});\nway(r);\nout geom;`;
-    const wayData = await fetchOverpass(wayQuery, 12000, 'way geometry');
+    const wayData = await fetchOverpass(wayQuery, 20000, 'way geometry');
     if (!wayData) {
       console.log(`[MOTOR_RUTAS] Ningún espejo de Overpass devolvió geometría para relación ${relation.id} ("${roadCode}")`);
       return { found: false };
@@ -3623,7 +3656,11 @@ function _stitchWaysNearestNeighbor(ways) {
     return null;
   }
 
-  const MAX_POINTS = 20000; // límite de seguridad (CPU del Worker)
+  // Medido con la N2 portuguesa (2497 ways, 27.808 puntos): con 20000 el trazado se
+  // cortaba en la latitud 38,41 y devolvía 551 km de los 739 reales — media carretera.
+  // Con 40000 sale completo hasta Faro (742 km) y cuesta 101 ms en vez de 96: el coste
+  // no está en el tope sino en el índice espacial, así que subirlo es casi gratis.
+  const MAX_POINTS = 40000; // límite de seguridad (CPU del Worker)
   while (remaining > 0 && order.length < MAX_POINTS) {
     const res = findNearestUnvisited(current);
     if (!res) break;
