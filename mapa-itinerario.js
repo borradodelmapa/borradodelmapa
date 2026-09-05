@@ -51,6 +51,10 @@ const mapaItinerario = {
     const country = routeData.country || routeData.region || '';
     this._roadGeometry = Array.isArray(routeData.road_geometry) ? routeData.road_geometry : null;
     const mapsUrl = this._fullRouteGmapsUrl(stops, country, routeData.road_gmaps_url);
+    // Aviso de paradas que no caen sobre la carretera pedida. El Worker lo calcula
+    // contra la geometria real de OSM (route.road_check) y hasta ahora solo lo
+    // pintaba guide-renderer.js, que no es la vista que ve el usuario.
+    try { this._renderRoadWarning(routeData.road_check); } catch (_) {}
 
     // Header de la ruta (título + volver — desktop)
     const totalKm = Math.round(stops.reduce((sum, s) => sum + (s.km_from_previous || 0), 0));
@@ -379,6 +383,30 @@ const mapaItinerario = {
   },
 
   // ═══ HELPERS ═══
+  // Badge discreto sobre el mapa cuando alguna parada queda lejos de la carretera
+  // pedida. Mismo criterio visual que guide-renderer para no tener dos lenguajes.
+  _renderRoadWarning(roadCheck) {
+    const mapEl = document.getElementById("itin-map-container");
+    if (!mapEl) return;
+    mapEl.querySelectorAll(".map-road-warning").forEach(el => el.remove());
+    if (!roadCheck || !roadCheck.flagged || !roadCheck.off_stops || !roadCheck.off_stops.length) return;
+
+    const worst = roadCheck.off_stops[0];
+    const detail = roadCheck.off_stops.length > 1
+      ? this._esc(worst.name) + " y " + (roadCheck.off_stops.length - 1) + " parada(s) mas, a " + worst.km + "+ km"
+      : this._esc(worst.name) + ", a " + worst.km + " km";
+
+    const badge = document.createElement("div");
+    badge.className = "map-road-warning";
+    badge.textContent = "⚠️ Alguna parada no esta justo en la " + roadCheck.target + ": " + detail;
+    badge.style.cssText = "position:absolute;left:8px;right:8px;bottom:8px;z-index:500;"
+      + "background:rgba(20,20,20,0.88);color:#f5d78e;font-size:11px;line-height:1.35;"
+      + "padding:6px 10px;border-radius:8px;border:1px solid rgba(245,215,142,0.35);pointer-events:none;";
+
+    mapEl.style.position = "relative";
+    mapEl.appendChild(badge);
+  },
+
   _esc(str) {
     if (!str) return '';
     const d = document.createElement('div');
