@@ -27,15 +27,18 @@ const mapaItinerario = {
     this._container.innerHTML = '';
 
     const country = routeData.country || routeData.region || '';
-    const mapsUrl = this._fullRouteGmapsUrl(stops, country);
+    this._roadGeometry = Array.isArray(routeData.road_geometry) ? routeData.road_geometry : null;
+    const mapsUrl = this._fullRouteGmapsUrl(stops, country, routeData.road_gmaps_url);
 
     // Header de la ruta (título + volver — desktop)
+    const totalKm = Math.round(stops.reduce((sum, s) => sum + (s.km_from_previous || 0), 0));
+    const roadMeta = routeData.road_name ? ` · ${totalKm} km · 🛣️ ${this._esc(routeData.road_name)}` : '';
     const header = document.createElement('div');
     header.className = 'itin-header';
     header.innerHTML = `
       <div class="itin-header-info">
         <div class="itin-title">${this._esc(routeData.title || routeData.name || 'Tu ruta')}</div>
-        <div class="itin-meta">${this._totalDays(stops)} días · ${stops.length} paradas · ${this._esc(country.toUpperCase())}</div>
+        <div class="itin-meta">${this._totalDays(stops)} días · ${stops.length} paradas · ${this._esc(country.toUpperCase())}${roadMeta}</div>
       </div>
     `;
     this._container.appendChild(header);
@@ -110,10 +113,11 @@ const mapaItinerario = {
       this._handleShare(routeData);
     });
 
-    // Escuchar clicks en marcadores del mapa
-    document.addEventListener('itin:marker-click', (e) => {
-      this.highlightCard(e.detail.index);
-    });
+    // Escuchar clicks en marcadores del mapa — quitar el listener anterior si init()
+    // se llama otra vez (ej. al llegar la ruta verificada) para no acumular duplicados.
+    if (this._onMarkerClick) document.removeEventListener('itin:marker-click', this._onMarkerClick);
+    this._onMarkerClick = (e) => this.highlightCard(e.detail.index);
+    document.addEventListener('itin:marker-click', this._onMarkerClick);
 
     // Enriquecer con Places API en paralelo
     this._enrichAll(stops);
@@ -360,7 +364,11 @@ const mapaItinerario = {
 
   // ═══ GOOGLE MAPS RUTA COMPLETA ═══
   // Regla única: sin place_id validado → no hay enlace.
-  _fullRouteGmapsUrl(stops, country) {
+  // roadGmapsUrl: si el Worker resolvió una carretera con nombre (route.road_gmaps_url,
+  // puntos reales de OSM cada ~12km), se usa tal cual — el enlace de solo-paradas puede
+  // dejar que Google elija una autopista paralela en vez de la carretera pedida.
+  _fullRouteGmapsUrl(stops, country, roadGmapsUrl) {
+    if (roadGmapsUrl) return roadGmapsUrl;
     const valid = (stops || []).filter(s => s && s.place_id && s.lat && s.lng);
     if (valid.length === 0) return null;
     if (valid.length === 1) return 'https://www.google.com/maps/place/?q=place_id:' + valid[0].place_id;
@@ -467,7 +475,7 @@ const mapaItinerario = {
 
     // Inicializar mapa (preview: sin controles, solo botón "Ir al mapa") y cards
     const stops = routeData.stops;
-    mapaRuta.init('itin-map-container', stops, { preview: true });
+    mapaRuta.init('itin-map-container', stops, { preview: true, roadGeometry: routeData.road_geometry });
     mapaItinerario.init('itin-cards-container', stops, routeData, options);
 
     // Asegurar que el mapa se dimensiona bien

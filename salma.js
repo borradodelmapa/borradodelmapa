@@ -1635,6 +1635,18 @@ const salma = {
                 try {
                   guideRenderer.updateVerified(evt.route);
                 } catch (_) {}
+                // Si la vista de itinerario está abierta, es la que ve el usuario de
+                // verdad (no guide-renderer) — sin esto, el mapa se queda con la ruta
+                // sin verificar y nunca llega a pintar route.road_geometry ni a
+                // actualizar el botón de Google Maps con road_gmaps_url.
+                if (window._itinViewOpen && evt.route.stops?.length) {
+                  try {
+                    window._itinViewRoute = evt.route;
+                    mapaRuta.init('itin-map-container', evt.route.stops, { preview: true, roadGeometry: evt.route.road_geometry });
+                    setTimeout(() => mapaRuta.invalidateSize(), 200);
+                    mapaItinerario.init('itin-cards-container', evt.route.stops, evt.route, window._itinViewOptions || {});
+                  } catch (_) {}
+                }
                 // Actualizar Firestore si ya estaba guardada
                 if (this._lastSavedDocId && typeof currentUser !== 'undefined' && currentUser) {
                   try {

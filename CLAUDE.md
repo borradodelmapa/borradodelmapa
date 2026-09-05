@@ -1,6 +1,62 @@
 # CLAUDE.md — Borrado del Mapa
 ## V2 Mapa — 11 abril 2026 | Backup: `backups/borradodelmapa-v2-mapa-2026-04-11/`
 ## V3 Share + Fotos — 17 abril 2026 (sesión)
+## V4 Motor de rutas — 5 sept 2026 (sesión) — PENDIENTE DE DEPLOY
+
+---
+
+## Sesión 5 sept 2026 — Motor de rutas: web_search + geometría real de carretera
+
+**Corte limpio**: sustituye el pipeline de rutas largas (gpt-4o-mini por bloques) y el
+Bloque B-lite+E (puntuar alternativas de Google Directions) por un único motor, para
+cualquier duración de ruta. Diseño completo en memoria: `project_motor_rutas_websearch.md`.
+
+### Por qué
+Las rutas generaban paradas inventadas y no respetaban carreteras con nombre pedidas
+("sigue la N2"). Causa raíz: ningún paso de generación tenía grounding real, y un motor
+de rutas (Google Directions, OSRM) SIEMPRE puede preferir una autopista paralela aunque
+se le den muchos waypoints — probado en vivo (N2 Portugal, Lamego-Viseu se iba por la A24).
+
+### Cambios en `worker/salma-worker.js` (código, NO desplegado todavía)
+1. **Tool nativa `web_search_20250305`** añadida a `ANTHROPIC_TOOLS` (fuera de `SALMA_TOOLS`
+   para no romper la conversión a formato OpenAI). Prompt de rutas actualizado para exigir
+   su uso junto a `buscar_lugar`, especialmente en rutas de carretera única.
+2. **`readAnthropicStream`** ahora conserva los bloques `server_tool_use`/`web_search_tool_result`
+   en el historial (antes se descartaban) y emite `{searching:true}` cuando Claude busca.
+3. **Motor de resolución de carretera real** (`resolveNamedRoad`, `_stitchWaysNearestNeighbor`,
+   `distanceToRoadKm`, `sampleRoadForGmaps`): busca en OpenStreetMap/Overpass la relación
+   `route=road` real de la carretera pedida, reconstruye su geometría (nearest-neighbor sobre
+   nube de puntos, no topología de grafo — las relaciones OSM traen huecos/direcciones
+   invertidas), cachea en KV (`road_geom:{país}:{carretera}`, 180 días). Fail-open: si
+   Overpass no encuentra nada, la ruta sigue sin el chequeo geométrico duro.
+4. **Rutas largas (≥8 días) unificadas**: ya no hay pipeline aparte con `gpt-4o-mini`
+   (`planBlocks`/`generateBlock`/`generateAndVerifyPipeline`/`mergeBlocks`, eliminadas).
+   Mismo Sonnet+tools+web_search para cualquier duración; solo se amplía `max_tokens`
+   (58000 para ≥8 días) y `MAX_TOOL_ITERATIONS` (14).
+5. **`/directions`**: retirado `preferRoad`/`alternatives`/`_scoreRouteAgainstRoad`. Ya no
+   puntúa alternativas de Google — cuando hay carretera resuelta, el frontend usa
+   `route.road_geometry` directamente en vez de llamar aquí.
+6. Ruta ahora puede llevar: `road_name`, `road_geometry` (≤500 puntos reales para pintar),
+   `road_gmaps_url` (enlace con ~1 punto real cada 12km, para que el deep-link de Google
+   Maps no tenga margen de desviarse), `road_check` (`{target, flagged, off_stops}` si
+   alguna parada cae a >3km de la carretera real).
+
+### Cambios en frontend
+- **`guide-renderer.js`**: `_loadDirections` pinta `route.road_geometry` (recortado por día
+  con `_clipRoadGeometryToStops`) en vez de pedir `/directions?preferRoad=`. `_renderRoadWarning`
+  adaptado al nuevo formato de `road_check` (por parada, no por tramo). `_fullRouteGmapsUrl`
+  prioriza `route.road_gmaps_url`.
+- **`mapa-itinerario.js`**: mismo cambio en `_fullRouteGmapsUrl`.
+- **`mapa-ruta.js` (mapa live/GPS) NO se tocó a propósito**: la navegación turn-by-turn
+  necesita Directions real (instrucciones drivables), no la geometría cruda de OSM — es un
+  caso de uso distinto al de la vista previa de la guía.
+
+### Pendiente
+- **Deploy**: nada de esto está en producción — falta `wrangler deploy` desde `worker/` y
+  probar con una ruta real de carretera única antes de confirmar que funciona en vivo.
+- Sintaxis verificada con `node --check` en los 3 archivos tocados. No se ha podido probar
+  contra las APIs reales (Anthropic/Google/Overpass) sin desplegar — Overpass sí se validó
+  en vivo durante el diseño (ver memoria del proyecto).
 
 ---
 

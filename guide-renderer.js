@@ -26,6 +26,18 @@ function linkify(str) {
   return html;
 }
 
+// Estilo del número sobre cada pin del mapa principal (L.divIcon no trae estilo propio).
+// Se inyecta una vez, no depende de que styles.css tenga esta clase.
+function ensureGuideMapPinStyles() {
+  if (document.getElementById('guide-map-pin-style')) return;
+  const style = document.createElement('style');
+  style.id = 'guide-map-pin-style';
+  style.textContent = `.guide-map-pin-num{display:flex;align-items:center;justify-content:center;
+    width:16px;height:16px;font:700 10px/1 var(--font-mono,monospace);color:#060503;
+    pointer-events:none;}`;
+  document.head.appendChild(style);
+}
+
 const guideRenderer = {
 
   // Iconos por tipo de parada
@@ -39,6 +51,7 @@ const guideRenderer = {
   render(routeData, options = {}) {
     const area = document.getElementById('chat-area');
     if (!area || !routeData) return;
+    ensureGuideMapPinStyles();
 
     // Eliminar guide-card anterior y limpiar mapas
     const prev = area.querySelector('.guide-card');
@@ -51,13 +64,19 @@ const guideRenderer = {
 
     const r = routeData;
     const stops = r.stops || [];
+    this._stops = stops;
     this._preferredRoad = r.preferred_road || null;
+    // Geometría real de la carretera pedida (OSM, ver resolveNamedRoad en el Worker) —
+    // si existe, se pinta tal cual en vez de pedir un trazado "óptimo" a Directions.
+    this._roadGeometry = Array.isArray(r.road_geometry) ? r.road_geometry : null;
+    this._roadCheck = r.road_check || null;
     const country = r.country || r.region || '';
 
     // Agrupar stops por día
     const days = this._groupByDay(stops);
     const totalStops = stops.length;
     const totalDays = Object.keys(days).length;
+    const totalKm = Math.round(stops.reduce((sum, s) => sum + (s.km_from_previous || 0), 0));
 
     // Construir HTML
     const card = document.createElement('div');
@@ -69,6 +88,21 @@ const guideRenderer = {
         <div class="guide-title">${escapeHTML(r.title || r.name || 'Tu ruta')}</div>
         <div class="guide-meta">${totalDays} DÍAS · ${escapeHTML(country.toUpperCase())} · ${totalStops} PARADAS</div>
         ${r.summary ? `<p class="guide-summary">${escapeHTML(r.summary)}</p>` : ''}
+        ${r.road_name ? `
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;">
+          <div style="background:var(--gris2,#1e190f);border:1px solid var(--linea,rgba(240,180,41,.22));border-radius:10px;padding:8px 10px;">
+            <div style="font-family:var(--font-mono,monospace);font-size:16px;color:var(--dorado2,#ffc947);">${totalKm} km</div>
+            <div style="font-size:9px;letter-spacing:.06em;color:var(--crema-dim,#a99f8c);text-transform:uppercase;">Distancia</div>
+          </div>
+          <div style="background:var(--gris2,#1e190f);border:1px solid var(--linea,rgba(240,180,41,.22));border-radius:10px;padding:8px 10px;">
+            <div style="font-family:var(--font-mono,monospace);font-size:16px;color:var(--dorado2,#ffc947);">${totalStops}</div>
+            <div style="font-size:9px;letter-spacing:.06em;color:var(--crema-dim,#a99f8c);text-transform:uppercase;">Paradas</div>
+          </div>
+          <div style="background:var(--gris2,#1e190f);border:1px solid var(--linea,rgba(240,180,41,.22));border-radius:10px;padding:8px 10px;">
+            <div style="font-family:var(--font-mono,monospace);font-size:16px;color:var(--dorado2,#ffc947);">${escapeHTML(r.road_name)}</div>
+            <div style="font-size:9px;letter-spacing:.06em;color:var(--crema-dim,#a99f8c);text-transform:uppercase;">Carretera</div>
+          </div>
+        </div>` : ''}
       </div>
 
       <div class="guide-map-container" id="guide-map-main"></div>
@@ -84,7 +118,7 @@ const guideRenderer = {
 
       ${options.partial ? '<div class="guide-actions"><div class="guide-loading-blocks">Cargando más días...</div></div>' : `<div class="guide-actions">
         ${options.saved ? '' : '<button class="btn-primary" id="guide-save-btn">GUARDAR MI GUÍA</button>'}
-        ${(() => { const u = options.showGmapsOffer ? this._fullRouteGmapsUrl(stops, country) : null; return u ? `<a class="btn-primary" id="guide-gmaps-btn" href="${u}" target="_blank" rel="noopener">🗺 ABRIR EN GOOGLE MAPS</a>` : ''; })()}
+        ${(() => { const u = options.showGmapsOffer ? this._fullRouteGmapsUrl(stops, country, r.road_gmaps_url) : null; return u ? `<a class="btn-primary" id="guide-gmaps-btn" href="${u}" target="_blank" rel="noopener">🗺 ABRIR EN GOOGLE MAPS</a>` : ''; })()}
         <button class="btn-ghost" id="guide-share-btn">COMPARTIR</button>
       </div>`}
     `;
@@ -238,7 +272,7 @@ const guideRenderer = {
         : '';
 
       html += `
-        <div class="guide-day${isFirst ? ' open' : ''}">
+        <div class="guide-day${isFirst ? ' open' : ''}" data-day="${num}">
           <div class="guide-day-head">
             <span class="guide-day-num">DÍA ${num}</span>
             <span class="guide-day-title">${escapeHTML(day.title)}</span>
@@ -340,7 +374,7 @@ const guideRenderer = {
         : `<div class="guide-stop-photo" data-photo-name="${escapeHTML(s.name || s.headline || '')}" data-lat="${s.lat||''}" data-lng="${s.lng||''}"><div class="guide-stop-photo-placeholder">📷</div></div>`;
 
       html += `
-        <div class="guide-stop${isFirstStop ? ' open' : ''}">
+        <div class="guide-stop${isFirstStop ? ' open' : ''}" data-stop-lat="${s.lat ? s.lat.toFixed(5) : ''}" data-stop-lng="${s.lng ? s.lng.toFixed(5) : ''}">
           ${routeBadgeHtml}
           <div class="guide-stop-head">
             <span class="guide-stop-icon">${icon}</span>
@@ -533,7 +567,12 @@ const guideRenderer = {
     return 'https://www.google.com/maps/dir/' + segments;
   },
 
-  _fullRouteGmapsUrl(stops, country) {
+  // roadGmapsUrl: enlace ya construido en el Worker con puntos reales de la carretera
+  // pedida cada ~12km (route.road_gmaps_url, ver sampleRoadForGmaps) — el enlace público
+  // de Google Maps no admite forzar una carretera, así que la única forma de que no se
+  // desvíe es no dejarle margen: muchos puntos reales en vez de solo las paradas.
+  _fullRouteGmapsUrl(stops, country, roadGmapsUrl) {
+    if (roadGmapsUrl) return roadGmapsUrl;
     const valid = (stops || []).filter(s => s && s.place_id && s.lat && s.lng);
     if (valid.length === 0) return null;
     if (valid.length === 1) return this._stopGmapsUrl(valid[0], country);
@@ -613,16 +652,31 @@ const guideRenderer = {
       maxZoom: 18
     }).addTo(map);
 
-    // Pins por día con colores distintos
+    // Trazado real de la ruta — ANTES de los pines para que quede debajo.
+    // Bug que reportó Paco: este mapa nunca pintaba línea, solo puntos sueltos —
+    // por eso parecía "no haber cambiado nada" con la geometría real de carretera.
+    this._loadDirections(map, valid, '#f0b429', this._roadGeometry);
+
+    // Pins por día con colores distintos — numerados y clicables: al tocar uno,
+    // se abre esa parada en el itinerario de abajo y se hace scroll hasta ella
+    // (igual que en la demo aprobada).
     const dayNums = Object.keys(days).map(Number).sort((a, b) => a - b);
+    let stopNum = 0;
     dayNums.forEach((num, idx) => {
       const color = this._dayColors[idx % this._dayColors.length];
       const dayStops = this._getValidStops(days[num].stops);
       dayStops.forEach(s => {
+        stopNum++;
         const marker = L.circleMarker([s.lat, s.lng], {
-          radius: 7, fillColor: color, color: '#fff', weight: 2, fillOpacity: 0.9
+          radius: 8, fillColor: color, color: '#fff', weight: 2, fillOpacity: 0.9
         }).addTo(map);
+        const label = L.divIcon({
+          className: 'guide-map-pin-num', html: String(stopNum),
+          iconSize: [16, 16], iconAnchor: [8, 8]
+        });
+        L.marker([s.lat, s.lng], { icon: label, interactive: false }).addTo(map);
         this._bindRichPopup(marker, s, num);
+        marker.on('click', () => this._scrollToStop(s));
       });
     });
 
@@ -632,6 +686,30 @@ const guideRenderer = {
 
     // Brújula (centro-izquierda)
     this._renderGuideCompass(el);
+  },
+
+  // Abre el día y la parada correspondientes en el itinerario y hace scroll hasta ella —
+  // usado al tocar un pin numerado en el mapa principal.
+  _scrollToStop(stop) {
+    if (!stop.lat || !stop.lng) return;
+    const lat = stop.lat.toFixed(5), lng = stop.lng.toFixed(5);
+    const el = document.querySelector(`.guide-stop[data-stop-lat="${lat}"][data-stop-lng="${lng}"]`);
+    if (!el) return;
+    const dayEl = el.closest('.guide-day');
+    if (dayEl && !dayEl.classList.contains('open')) {
+      dayEl.classList.add('open');
+      const dayNum = dayEl.dataset.day;
+      const dayStops = this._groupByDay(this._stops || [])[dayNum];
+      if (dayNum) this._initDayMap(Number(dayNum), (dayStops && dayStops.stops) || []);
+    }
+    if (!el.classList.contains('open')) {
+      el.classList.add('open');
+      this._lazyLoadPhoto(el);
+    }
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.style.transition = 'box-shadow .3s ease';
+    el.style.boxShadow = '0 0 0 2px var(--dorado)';
+    setTimeout(() => { el.style.boxShadow = ''; }, 1600);
   },
 
   _guideCompassHandler: null,
@@ -741,10 +819,32 @@ const guideRenderer = {
     map.fitBounds(bounds, { padding: [20, 20] });
     this._maps[mapId] = map;
 
-    // Pedir ruta real a Google Directions
+    // Trazado: geometría real de OSM si se pidió seguir una carretera concreta,
+    // si no, ruta normal a Google Directions.
     if (valid.length >= 2) {
-      this._loadDirections(map, valid, color, this._preferredRoad);
+      this._loadDirections(map, valid, color, this._clipRoadGeometryToStops(this._roadGeometry, valid));
     }
+  },
+
+  // Recorta la geometría real de la carretera (route.road_geometry, todo el trayecto)
+  // al tramo que corresponde a las paradas de un día concreto — cada mini-mapa de día
+  // solo debe pintar su trozo, no la carretera entera.
+  _clipRoadGeometryToStops(roadGeometry, stops) {
+    if (!Array.isArray(roadGeometry) || roadGeometry.length < 2 || !stops?.length) return null;
+    const nearestIdx = (lat, lng) => {
+      let best = 0, bestD = Infinity;
+      for (let i = 0; i < roadGeometry.length; i++) {
+        const dLat = roadGeometry[i].lat - lat, dLon = roadGeometry[i].lon - lng;
+        const d = dLat * dLat + dLon * dLon;
+        if (d < bestD) { bestD = d; best = i; }
+      }
+      return best;
+    };
+    let i0 = nearestIdx(stops[0].lat, stops[0].lng);
+    let i1 = nearestIdx(stops[stops.length - 1].lat, stops[stops.length - 1].lng);
+    if (i0 > i1) { const t = i0; i0 = i1; i1 = t; }
+    const slice = roadGeometry.slice(i0, i1 + 1);
+    return slice.length >= 2 ? slice : null;
   },
 
   _bindRichPopup(marker, stop, dayNum) {
@@ -812,23 +912,29 @@ const guideRenderer = {
     });
   },
 
-  _loadDirections(map, stops, color, preferredRoad) {
+  // roadGeometry: array real de {lat,lon} de OpenStreetMap (route.road_geometry,
+  // ver resolveNamedRoad en el Worker) cuando el usuario pidió seguir una carretera
+  // concreta. Si existe, se pinta tal cual — nada de pedirle a Directions "la más
+  // rápida" y confiar en que no se vaya por una autopista paralela.
+  _loadDirections(map, stops, color, roadGeometry) {
+    if (Array.isArray(roadGeometry) && roadGeometry.length >= 2) {
+      const coords = roadGeometry.map(p => [p.lat, p.lon]);
+      L.polyline(coords, { color: color, weight: 3, opacity: 0.7 }).addTo(map);
+      if (this._roadCheck) this._renderRoadWarning(map.getContainer(), this._roadCheck);
+      return;
+    }
+
     const origin = stops[0].lat + ',' + stops[0].lng;
     const dest = stops[stops.length - 1].lat + ',' + stops[stops.length - 1].lng;
     const waypoints = stops.slice(1, -1).map(s => s.lat + ',' + s.lng).join('|');
 
-    let url = window.SALMA_API + '/directions?origin=' + origin + '&destination=' + dest
+    const url = window.SALMA_API + '/directions?origin=' + origin + '&destination=' + dest
       + (waypoints ? '&waypoints=' + waypoints : '');
-    if (preferredRoad) url += '&preferRoad=' + encodeURIComponent(preferredRoad);
 
     fetch(url).then(r => r.json()).then(data => {
       if (data.polyline) {
         const coords = this._decodePolyline(data.polyline);
         L.polyline(coords, { color: color, weight: 3, opacity: 0.7 }).addTo(map);
-      }
-      // Aviso honesto si la ruta real se aparta de la carretera pedida (B-lite)
-      if (data.road_check) {
-        this._renderRoadWarning(map.getContainer(), data.road_check);
       }
     }).catch(() => {
       // Fallback: línea recta entre paradas
@@ -837,20 +943,21 @@ const guideRenderer = {
     });
   },
 
-  // Aviso discreto en el propio mapa cuando la ruta real se desvía de la carretera pedida
+  // Aviso discreto en el propio mapa cuando alguna parada cae lejos de la carretera
+  // pedida (route.road_check, calculado en el Worker contra la geometría real de OSM).
   _renderRoadWarning(mapEl, roadCheck) {
     if (!mapEl) return;
     mapEl.querySelectorAll('.map-road-warning').forEach(el => el.remove());
-    if (!roadCheck || !roadCheck.flagged) return;
+    if (!roadCheck || !roadCheck.flagged || !roadCheck.off_stops?.length) return;
 
-    const topRoad = roadCheck.segments && roadCheck.segments[0];
-    const detail = topRoad
-      ? `~${roadCheck.offKm} km pasan por la ${topRoad.road}`
-      : `~${roadCheck.offKm} km se apartan de la ${roadCheck.target}`;
+    const worst = roadCheck.off_stops[0];
+    const detail = roadCheck.off_stops.length > 1
+      ? `${worst.name} y ${roadCheck.off_stops.length - 1} parada(s) más, a ${worst.km}+ km`
+      : `${worst.name}, a ${worst.km} km`;
 
     const badge = document.createElement('div');
     badge.className = 'map-road-warning';
-    badge.textContent = `⚠️ Parte de esta ruta no sigue la ${roadCheck.target}: ${detail}`;
+    badge.textContent = `⚠️ Alguna parada no está justo en la ${roadCheck.target}: ${detail}`;
     badge.style.cssText = 'position:absolute;left:8px;right:8px;bottom:8px;z-index:500;'
       + 'background:rgba(20,20,20,0.88);color:#f5d78e;font-size:11px;line-height:1.35;'
       + 'padding:6px 10px;border-radius:8px;border:1px solid rgba(245,215,142,0.35);pointer-events:none;';
@@ -924,22 +1031,35 @@ const guideRenderer = {
     const stops = routeData.stops || [];
     const days = this._groupByDay(stops);
     if (routeData.preferred_road) this._preferredRoad = routeData.preferred_road;
+    if (Array.isArray(routeData.road_geometry)) this._roadGeometry = routeData.road_geometry;
+    if (routeData.road_check) this._roadCheck = routeData.road_check;
 
     // Mapa principal
     const mainMap = this._maps['main'];
     if (mainMap) {
       const valid = this._getValidStops(stops);
       if (valid.length > 0) {
-        // Limpiar markers y re-crear
-        mainMap.eachLayer(l => { if (l instanceof L.CircleMarker) mainMap.removeLayer(l); });
+        // Limpiar markers, línea de ruta y números — y re-crear
+        mainMap.eachLayer(l => {
+          if (l instanceof L.CircleMarker || l instanceof L.Polyline || l instanceof L.Marker) mainMap.removeLayer(l);
+        });
+        this._loadDirections(mainMap, valid, '#f0b429', this._roadGeometry);
         const dayNums = Object.keys(days).map(Number).sort((a, b) => a - b);
+        let stopNum = 0;
         dayNums.forEach((num, idx) => {
           const color = this._dayColors[idx % this._dayColors.length];
           this._getValidStops(days[num].stops).forEach(s => {
+            stopNum++;
             const marker = L.circleMarker([s.lat, s.lng], {
-              radius: 7, fillColor: color, color: '#fff', weight: 2, fillOpacity: 0.9
+              radius: 8, fillColor: color, color: '#fff', weight: 2, fillOpacity: 0.9
             }).addTo(mainMap);
+            const label = L.divIcon({
+              className: 'guide-map-pin-num', html: String(stopNum),
+              iconSize: [16, 16], iconAnchor: [8, 8]
+            });
+            L.marker([s.lat, s.lng], { icon: label, interactive: false }).addTo(mainMap);
             this._bindRichPopup(marker, s, num);
+            marker.on('click', () => this._scrollToStop(s));
           });
         });
         const bounds = L.latLngBounds(valid.map(s => [s.lat, s.lng]));
@@ -971,7 +1091,7 @@ const guideRenderer = {
       map.fitBounds(bounds, { padding: [20, 20] });
 
       // Re-pedir ruta
-      if (dayStops.length >= 2) this._loadDirections(map, dayStops, color, this._preferredRoad);
+      if (dayStops.length >= 2) this._loadDirections(map, dayStops, color, this._clipRoadGeometryToStops(this._roadGeometry, dayStops));
     }
   },
 
