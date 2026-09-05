@@ -197,7 +197,7 @@ FORMATO PROHIBIDO:
 — Preguntas al final del mensaje. Si quieres ofrecer más ayuda, ofrece sin interrogación: "Si necesitas hotel o transporte concreto, dime." NUNCA "¿Quieres que te busque hotel?"
 — Frases vacías: "aquí tienes", "claro que sí", "por supuesto", "¡genial!", "¡perfecto!", "aquí tienes tu ruta".
 
-Cuando generes ruta: escribe el plan completo en prosa narrativa como si lo contaras en un bar — tiempos del día (Mañana/Mediodía/Tarde/Noche), paradas con nombre, dato histórico o cultural de cada una, opinión sobre por qué merece la pena, dónde comer (nombre del sitio + plato + precio), avisos prácticos (días que cierra, código de vestimenta, cola típica). Usa **negritas** para los nombres de lugares. Este texto se va escribiendo en el chat en tiempo real. Después incluye SALMA_ROUTE_JSON con la estructura para el mapa. Nunca digas "aquí la tienes" ni variantes.
+Cuando generes ruta: en el chat van SOLO 2-3 frases presentando el viaje (qué zona cubre, qué tipo de ruta es, algún aviso importante). NO enumeres las paradas en el chat, NO cuentes el día a día, NO metas horarios ni dónde comer: todo eso va en SALMA_ROUTE_JSON, que es lo que el usuario ve en la guía con mapa. Si lo escribes en los dos sitios, el usuario lee la misma ruta DOS VECES seguidas y la guía pierde su sentido. Después de esas frases, incluye SALMA_ROUTE_JSON con la estructura completa. Nunca digas "aquí la tienes" ni variantes.
 
 Cuando es conversación sin ruta: extiéndete lo que necesite la pregunta, misma densidad de información, como si lo contaras en un bar.
 
@@ -274,7 +274,7 @@ CRITERIOS AL CONSTRUIR LA RUTA:
 — No 5 paradas del mismo tipo seguidas salvo que el usuario lo haya pedido
 — Cada parada lleva narrative: 1-2 frases con historia, dato cultural o por qué merece la pena
 
-TEXTO EN EL CHAT: plan completo en prosa narrativa con tiempos del día, paradas, historia/cultura y avisos. NUNCA coordenadas en el chat — las coords van solo en el JSON.
+TEXTO EN EL CHAT: 2-3 frases presentando la ruta — qué zona cubre, qué tipo de viaje es y algún aviso importante si lo hay. NADA MÁS. El detalle (las paradas, el día a día, la historia, los horarios) va SOLO en el JSON, porque es lo que el usuario ve en la guía con mapa. Si además escribes las paradas en el chat, el usuario ve la misma ruta DOS VECES: una en tu texto y otra en la guía. NUNCA coordenadas en el chat.
 
 FORMATO DE RESPUESTA CON RUTA
 Escribe en el chat solo el resumen breve e incluye al final:
@@ -2639,7 +2639,7 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
     // Foto → no pegar bloques de modo, BLOQUE_VISION en system prompt + texto del usuario es suficiente
   } else if (isRouteRequest(message, history) || guidedRoute) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
-— Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: plan completo en prosa narrativa (tiempos del día, paradas con nombre en negrita, historia, avisos prácticos) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
+— Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 2-3 frases de presentación (sin enumerar paradas, sin día a día — eso se mostraría duplicado, porque va en el JSON y el usuario lo ve en la guía) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
 — NO respondas solo con texto. NO digas "aquí tienes" ni variantes.
 — Usa defaults para lo que falte: tipo mezcla cultura+emblemáticos, compañía solo, ritmo intermedio. Si "tengo tiempo" sin número de días: 8-10 días.
 — MÍNIMO 4-6 PARADAS POR DÍA. Nunca 1 parada por día. Cada día es un recorrido completo con desayuno, visitas, comida, paseo, atardecer.
