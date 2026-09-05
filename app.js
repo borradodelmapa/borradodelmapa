@@ -2564,8 +2564,7 @@ async function guardarGuiaDirecto(routeData) {
     const slug = generateSlug(r.title || r.name || 'mi-ruta');
     publishGuide(docRef.id, ruta, slug, r).catch(() => {});
 
-    // Enriquecer en background (no esperar)
-    enrichGuia(docRef.id, r);
+    // PIEZA A — Enrich (Pasada 2) eliminado: era una 2ª llamada de IA por ruta.
 
     return docRef.id;
   } catch (e) {
@@ -2622,58 +2621,11 @@ async function publishGuide(docId, rutaData, slug, routeData) {
   }
 }
 
-// ═══ ENRIQUECIMIENTO (Pasada 2 — Haiku en background) ═══
-
-async function enrichGuia(docId, routeData) {
-  if (!currentUser || !docId || !routeData) return;
-  try {
-    const res = await fetch(window.SALMA_API + '/enrich', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ route: routeData })
-    });
-    const data = await res.json();
-
-    if (data.route && data.route.stops) {
-      const enrichedJSON = JSON.stringify(data.route);
-      await db.collection('users').doc(currentUser.uid)
-        .collection('maps').doc(docId).update({
-          itinerarioIA: enrichedJSON,
-          enriched: true,
-          enrichedAt: new Date().toISOString()
-        });
-
-      // Actualizar guía pública también
-      try {
-        const userDoc = await db.collection('users').doc(currentUser.uid)
-          .collection('maps').doc(docId).get();
-        const slug = userDoc.data()?.slug;
-        if (slug) {
-          await db.collection('public_guides').doc(slug).update({
-            itinerarioIA: enrichedJSON,
-            updatedAt: new Date().toISOString()
-          });
-        }
-      } catch (_) {}
-
-      // Si el usuario sigue viendo esta guía, actualizar la vista
-      if (typeof salma !== 'undefined' && salma.currentRouteId === docId) {
-        salma.currentRoute = data.route;
-        // Actualizar cards de mapaItinerario si está activo
-        if (typeof mapaItinerario !== 'undefined' && typeof mapaItinerario.updateEnrichedFields === 'function') {
-          mapaItinerario.updateEnrichedFields(data.route.stops);
-        } else {
-          guideRenderer.render(data.route, { saved: true });
-        }
-      }
-    }
-  } catch (e) {
-    console.warn('Enriquecimiento fallido:', e);
-    // No pasa nada — la guía ligera funciona perfectamente
-  }
-}
-
-window.enrichGuia = enrichGuia;
+// ═══ ENRIQUECIMIENTO (Pasada 2) — ELIMINADO en PIEZA A ═══
+// Era una 2ª llamada de IA (GPT-4o-mini) por ruta para rellenar context/food/sleep/eat.
+// Corte limpio: los datos de cada parada (rating, horario, foto) los da Google Places
+// vía mapaItinerario._enrichAll, sin IA y sin llamada extra.
+// El endpoint /enrich del worker queda inerte — se retira en la Pieza D.
 
 // ═══ INPUT — textarea auto-resize + enviar ═══
 

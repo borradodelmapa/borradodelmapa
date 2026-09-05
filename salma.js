@@ -1176,20 +1176,59 @@ const salma = {
     const d = this._rutaDraft;
     this._rutaCancelUI();
     this._rutaGuiadaWaitingText = false;
-    this._addSalmaBubble('Perfecto, dame un segundo que te arme la ruta 🗺️');
     // Copia limpia (sin campos internos) para el worker
     const guided = {
       destino: d.destino, duracion_dias: d.duracion_dias, fechas: d.fechas,
       compania: d.compania, presupuesto: d.presupuesto, ritmo: d.ritmo,
       intereses: d.intereses, restricciones: d.restricciones
     };
-    // Día concreto según el rango elegido → el mensaje lleva "N días" para que
-    // el worker use su ruta de generación de siempre (bloques si es larga, verify, etc.)
     const diasNum = { '3-4': 4, '5-7': 6, '8-14': 11, '+14': 16 }[d.duracion_dias] || 7;
-    // Frase-disparador explícita: "salma hazme una guía" es la ÚNICA que BLOQUE_RUTAS del prompt
-    // permite para generar SALMA_ROUTE_JSON. Con "hazme una ruta" el modelo describía y no generaba.
-    const msg = `Salma hazme una guía de ${diasNum} días por ${d.destino || 'el destino indicado'}.`;
-    this._doSend(msg, { guided_route: guided });
+
+    // El borrador incremental ya cumplió su función (sobrevivir a un abandono
+    // durante las preguntas). A partir de aquí el contexto vive en _pendingGuidedRoute.
+    const _draftId = d.tripId;
+    if (_draftId && window.currentUser && typeof db !== 'undefined') {
+      db.collection('users').doc(window.currentUser.uid)
+        .collection('maps').doc(_draftId).delete().catch(() => {});
+    }
+    this._rutaDraft = null;
+
+    // PIEZA A — TIEMPO 1: recomendaciones en prosa. NO la frase-disparador:
+    // el worker responde en modo texto con el contexto de guided_route y NO genera
+    // el JSON. El mapa se pide en el Tiempo 2 con el botón "Crear ruta con mapa".
+    this._pendingGuidedRoute = guided;
+    this._pendingGuidedBaseMsg = `una guía de ${diasNum} días por ${d.destino || 'el destino indicado'}`;
+    this._addSalmaBubble('Perfecto, dame un segundo que te preparo las recomendaciones 📝');
+    const msg = `Recomiéndame un plan de ${diasNum} días por ${d.destino || 'el destino indicado'}.`;
+    this._doSend(msg, { guided_route: guided, guided_stage: 'reco' });
+  },
+
+  // ─────────────────────────────────────────────
+  //  PIEZA A — Botón "Crear ruta con mapa" (TIEMPO 2)
+  //  Camino único para el flujo guiado y para el chat libre: convierte el texto
+  //  de recomendaciones que YA se generó en guía con mapa vía fast-path
+  //  (source_text → JSON en el worker), sin repetir la búsqueda.
+  // ─────────────────────────────────────────────
+  _offerCrearRutaConMapa({ baseMsg, sourceText, guidedRoute } = {}) {
+    const area = this._getChatArea();
+    if (!area) return;
+    // No duplicar el botón si ya hay uno pendiente
+    area.querySelectorAll('.crear-ruta-mapa-wrap').forEach(el => el.remove());
+    const wrap = document.createElement('div');
+    wrap.className = 'historia-chat-chip-wrap crear-ruta-mapa-wrap';
+    const btn = document.createElement('button');
+    btn.className = 'historia-chat-chip';
+    btn.textContent = '🗺️ Crear ruta con mapa';
+    btn.addEventListener('click', () => {
+      wrap.remove();
+      const extra = Object.assign({}, this._lastExtra || {}, { source_text: sourceText || '' });
+      if (guidedRoute) extra.guided_route = guidedRoute;
+      delete extra.guided_stage; // el Tiempo 2 ya no es "reco"
+      this._doSend('Salma hazme una guía: ' + (baseMsg || this._lastMsg || 'la ruta de arriba'), extra);
+    });
+    wrap.appendChild(btn);
+    area.appendChild(wrap);
+    this._scrollToBottom(true);
   },
 
   // ═══ ENVÍO AL WORKER ═══
@@ -1262,6 +1301,10 @@ const salma = {
       if (extra.with_kids) body.with_kids = extra.with_kids;
       // Flujo guiado de ruta: los 8 campos ya recogidos → el worker los inyecta en el system prompt
       if (extra.guided_route) body.guided_route = extra.guided_route;
+      // PIEZA A — respuesta en 2 tiempos. guided_stage:'reco' → Tiempo 1: el worker
+      // responde recomendaciones en prosa (con el contexto de guided_route) y NO genera
+      // el JSON de ruta. El mapa se pide en el Tiempo 2 con el botón "Crear ruta con mapa".
+      if (extra.guided_stage) body.guided_stage = extra.guided_stage;
       if (extra.source_text) body.source_text = extra.source_text; // Fast-path: texto ya generado, convertir directo a mapa
       // Foto del chat
       if (extra.photo) {
@@ -1354,6 +1397,21 @@ const salma = {
           this._rutaDraft = null;
           this._rutaGuiadaWaitingText = false;
         }
+        // PIEZA A — Tiempo 2 completado: limpiar el contexto guiado pendiente.
+        this._pendingGuidedRoute = null;
+        this._pendingGuidedBaseMsg = null;
+      } else if (this._pendingGuidedRoute) {
+        // PIEZA A — Tiempo 1 del flujo guiado: Salma ya ha dado las recomendaciones
+        // en prosa (arriba). Ofrecemos el paso 2 con el mismo botón que el chat libre.
+        this._removeLoading();
+        this._addSalmaBubble('Ahí tienes las recomendaciones 👆. Cuando lo veas claro, te lo monto como guía con mapa para guardarla y seguirla paso a paso.');
+        this._offerCrearRutaConMapa({
+          baseMsg: this._pendingGuidedBaseMsg,
+          sourceText: data.reply || '',
+          guidedRoute: this._pendingGuidedRoute,
+        });
+        this._pendingGuidedRoute = null;
+        this._pendingGuidedBaseMsg = null;
       } else if (this._rutaDraft) {
         // Fallo real durante flujo guiado/borrador incremental (no un simple desajuste de frase).
         // No dejar spinner colgado: avisar y ofrecer reintento.
@@ -1378,24 +1436,13 @@ const salma = {
         // El mensaje sonaba a petición de ruta pero no llevaba la frase que activa el mapa
         // ("hazme una guía"). Salma respondió en modo texto/información a propósito — ofrecer
         // convertirlo en guía con mapa en vez de sugerir que algo se rompió.
+        // PIEZA A — mismo botón y mismo camino que el flujo guiado (helper único).
         this._removeLoading();
         this._addSalmaBubble('Ahí tienes toda la info 👆. Si quieres, te la monto como guía con mapa para que la puedas guardar y consultar paso a paso en el viaje.');
-        const _area = this._getChatArea();
-        if (_area) {
-          const _rw = document.createElement('div');
-          _rw.className = 'historia-chat-chip-wrap';
-          const _rb = document.createElement('button');
-          _rb.className = 'historia-chat-chip';
-          _rb.textContent = '📍 Generar guía con mapa';
-          const _retryMsg = this._lastMsg || msg;
-          // Fast-path: pasamos el texto YA generado (data.reply) para que el worker
-          // lo convierta directo a mapa sin repetir toda la búsqueda desde cero.
-          const _retryExtra = Object.assign({}, this._lastExtra || {}, { source_text: data.reply || '' });
-          _rb.addEventListener('click', () => { _rw.remove(); this._doSend('Salma hazme una guía: ' + _retryMsg, _retryExtra); });
-          _rw.appendChild(_rb);
-          _area.appendChild(_rw);
-          this._scrollToBottom(true);
-        }
+        this._offerCrearRutaConMapa({
+          baseMsg: this._lastMsg || msg,
+          sourceText: data.reply || '',
+        });
       }
 
       // Si hay video_params, renderizar player inline
@@ -1836,12 +1883,9 @@ const salma = {
     if (typeof window.openItinerarioView === 'function') {
       window.openItinerarioView(routeData, this.currentRouteId, { saved: true, fromChat: false });
     }
-
-    // Si no está enriquecida, enriquecer ahora en background
-    const isEnriched = docData && docData.enriched === true;
-    if (!isEnriched && docId && typeof enrichGuia === 'function') {
-      enrichGuia(docId, routeData);
-    }
+    // PIEZA A — Enrich (Pasada 2 GPT-4o-mini) eliminado: era una 2ª llamada a otro
+    // modelo por ruta. Los datos de cada parada (rating/horario/foto) los rellena
+    // mapaItinerario._enrichAll con Google Places, sin IA.
   },
 
   // ═══ GUARDAR ═══

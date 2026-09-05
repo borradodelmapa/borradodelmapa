@@ -2453,16 +2453,20 @@ function tryKVDirectAnswer(message, country, destination) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco) {
   // ── Seleccionar prompt base según contexto ──
   // Si es petición de guía o edición de ruta → prompt con BLOQUE_RUTAS
   // Si no → prompt SIN BLOQUE_RUTAS (Claude no ve cómo generar guías = no las genera)
   // IMPORTANTE: dynamicPrompt (Firestore) incluye BLOQUE_RUTAS, así que solo se usa para rutas
   // guidedRoute → el usuario completó el flujo guiado de 8 preguntas: forzar modo ruta.
-  const isRoute = isRouteRequest(message, history) || !!guidedRoute || !!routeFromHere;
+  // PIEZA A — guidedIsReco (Tiempo 1): NUNCA modo ruta aunque el mensaje lleve "N días".
+  // Se responde con recomendaciones en prosa día por día, sin JSON. El mapa es el Tiempo 2.
+  const isRoute = !guidedIsReco && (isRouteRequest(message, history) || !!guidedRoute || !!routeFromHere);
   const hasCurrentRouteEdit = currentRoute && currentRoute.stops && currentRoute.stops.length > 0;
   let systemPrompt;
-  if (isRoute || hasCurrentRouteEdit) {
+  if (guidedIsReco) {
+    systemPrompt = SALMA_SYSTEM_PLAN;  // recomendaciones por días, sin BLOQUE_RUTAS
+  } else if (isRoute || hasCurrentRouteEdit) {
     systemPrompt = dynamicPrompt || SALMA_SYSTEM_ROUTE;
   } else if (isDaysDestination(message)) {
     systemPrompt = SALMA_SYSTEM_PLAN;  // días+destino → formato estructurado por días
@@ -2630,6 +2634,13 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
 
   if (hasPhoto) {
     // Foto → no pegar bloques de modo, BLOQUE_VISION en system prompt + texto del usuario es suficiente
+  } else if (guidedIsReco) {
+    // PIEZA A — TIEMPO 1: recomendaciones en prosa día por día. NADA de JSON.
+    userContent += `\n\n[MODO RECOMENDACIONES — PASO 1 de 2. INSTRUCCIONES ESTRICTAS:
+PROHIBIDO: SALMA_ROUTE_JSON, generar el JSON de ruta, preguntar, inventar URLs, enlaces de Google Maps (el sistema los pone verificados), mencionar coins/guías.
+QUÉ HACER: recomienda el viaje día por día en prosa. Para cada día, 3-5 sitios con nombre en negrita, por qué merecen la pena, qué comer y un consejo práctico. Ajusta TODO a los datos del cuestionario guiado (compañía, presupuesto, ritmo, intereses, restricciones) que tienes en el contexto.
+Organiza con **Día 1**, **Día 2**… hasta el total de días indicado. Breve: 2-3 frases por sitio.
+CIERRE EXACTO — termina con esta frase y nada más: "Si te encaja, dale a **Crear ruta con mapa** aquí abajo y te lo monto con paradas, coordenadas y navegación."]`;
   } else if (isRouteRequest(message, history) || guidedRoute || routeFromHere) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
 — Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: plan completo en prosa narrativa (tiempos del día, paradas con nombre en negrita, historia, avisos prácticos) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
@@ -7242,6 +7253,9 @@ REGLAS:
     const userNotes = body.user_notes || null;
     const frontendCountryCode = body.country || null; // País enviado por el frontend (detectado por GPS)
     const guidedRoute = body.guided_route || null; // Flujo guiado: 8 campos ya recogidos por el frontend
+    // PIEZA A — Tiempo 1 del flujo guiado (recomendaciones en prosa, sin JSON).
+    // El Tiempo 2 (mapa) llega sin este flag y con source_text.
+    const guidedIsReco = body.guided_stage === 'reco';
     const sourceText = typeof body.source_text === 'string' ? body.source_text.trim() : ''; // Fast-path: texto ya generado, convertir directo a mapa
     const _urlIncidents = []; // BLOQUE E — sustituciones de enlaces Maps (se vuelcan a Firestore al final)
 
@@ -7624,7 +7638,9 @@ INSTRUCCIONES:
           // Leer KV en paralelo (en vez de secuencial — ahorra ~200ms)
           const daysMatch = message.match(/(\d+)\s*d\S*as?/i) || message.match(/(\d+)\s*days?/i);
           const days = daysMatch ? daysMatch[1] : null;
-          const routeKey = (isRouteRequest(message, history) && days)
+          // PIEZA A — en el Tiempo 1 (recomendaciones) NUNCA servir una ruta cacheada por
+          // delante: rompería el flujo de 2 tiempos y devolvería un mapa sin pasar por aquí.
+          const routeKey = (isRouteRequest(message, history) && days && !guidedIsReco)
             ? 'route:' + countryCode + ':' + kwNorm.replace(/\s+/g, '-') + ':' + days
             : null;
 
@@ -7677,8 +7693,10 @@ INSTRUCCIONES:
     }
 
     // KV solo para rutas y guías — en todo lo demás Claude usa sus tools
-    const isRoute = isRouteRequest(message, history) || isDaysDestination(message) || !!guidedRoute;
-    const skipKV = !isRoute;
+    // PIEZA A — guidedIsReco (Tiempo 1): NO es modo ruta (no genera JSON) aunque el
+    // mensaje lleve "N días", pero SÍ merece contexto KV para unas buenas recomendaciones.
+    const isRoute = !guidedIsReco && (isRouteRequest(message, history) || isDaysDestination(message) || !!guidedRoute);
+    const skipKV = !isRoute && !guidedIsReco;
 
     // ─── RESPUESTA DIRECTA DEL KV (sin llamar a Claude = 0 coste) — SOLO para rutas/guías ───
     if (kvCountryData && !skipKV && !imageBase64 && !isFlightRequest(message) && !isHotelRequest(message) && !isServiceRequest(message) && !helpCategory) {
@@ -7693,7 +7711,7 @@ INSTRUCCIONES:
 
     // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
     const dynamicPrompt = await getSystemPrompt(env);
-    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere);
+    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco);
 
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {
@@ -8167,7 +8185,7 @@ INSTRUCCIONES:
           // (rutas atadas a una sola carretera necesitan muchas verificaciones de buscar_lugar).
           // OJO: usar solo isRouteRequest/guidedRoute, NUNCA el isRoute genérico — isRoute
           // también es true para isDaysDestination (MODO PLAN), que PROHÍBE el JSON a propósito.
-          if ((isRouteRequest(message, history) || !!guidedRoute) && iteration >= MAX_TOOL_ITERATIONS - 2) {
+          if (!guidedIsReco && (isRouteRequest(message, history) || !!guidedRoute) && iteration >= MAX_TOOL_ITERATIONS - 2) {
             _toolResultContent.push({
               type: 'text',
               text: '[AVISO DEL SISTEMA — quedan pocas oportunidades de búsqueda antes de que se corte tu turno. NO llames a más herramientas de verificación. Con las paradas que ya tienes verificadas hasta ahora, cierra tu respuesta YA: prosa + SALMA_ROUTE_JSON completo. Si te falta verificar alguna parada, usa el nombre y ubicación que ya conoces — no sigas buscando.]'
@@ -8239,7 +8257,7 @@ INSTRUCCIONES:
         //        (b) el JSON se truncó tan pronto que el RESCATE 1 no encontró ni 2 paradas.
         // 2ª llamada a Claude con prefill forzado para extraer el JSON del texto.
         // Se dispara con `isRoute` (incluye el flujo guiado de 8 preguntas), no solo con la frase.
-        if (!route && (isRoute || isRouteRequest(message, history)) && allText && allText.length > 600) {
+        if (!route && !guidedIsReco && (isRoute || isRouteRequest(message, history)) && allText && allText.length > 600) {
           try {
             const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
 
@@ -8304,7 +8322,7 @@ REGLAS:
         //    OJO: usar solo isRouteRequest/guidedRoute, NUNCA el isRoute genérico —
         //    isRoute también es true para isDaysDestination (MODO PLAN), que PROHÍBE
         //    el JSON a propósito; ahí route=null es el comportamiento correcto, no un fallo. ──
-        if (!route && (isRouteRequest(message, history) || !!guidedRoute)) {
+        if (!route && !guidedIsReco && (isRouteRequest(message, history) || !!guidedRoute)) {
           console.log(`[RUTA] ✗ No se pudo materializar la ruta (stop_reason: ${lastStopReason || 'n/d'}, len: ${allText.length})`);
           const _honestNote = '\n\n_No he podido montar el mapa interactivo de esta ruta — aquí tienes toda la información en texto. Puedes pedírmelo de nuevo o pulsar "Generar guía con mapa" para reintentarlo._';
           reply = (reply || '').trimEnd() + _honestNote;
