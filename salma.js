@@ -1281,7 +1281,7 @@ const salma = {
         const isEdit = this.currentRouteId && this.currentRoute;
         const prevStopsCount = this.currentRoute?.stops?.length || 0;
         this.currentRoute = data.route;
-        if (!data._hadDraft || data._isBlocks) {
+        if (!data._hadDraft) {
           // Ruta nueva o ruta de bloques: abrir vista itinerario
           this._removeLoading();
           try {
@@ -1474,7 +1474,6 @@ const salma = {
         let resolved = false;
         let textDone = false;
         let draftSent = false;
-        let isBlocksRoute = false;
 
         const processLines = () => {
           const lines = buffer.split('\n');
@@ -1547,8 +1546,7 @@ const salma = {
                   reply: evt.reply || fullText,
                   route: evt.route || null,
                   video_params: evt.video_params || null,
-                  _hadDraft: draftSent,
-                  _isBlocks: isBlocksRoute
+                  _hadDraft: draftSent
                 });
                 return;
               }
@@ -1591,48 +1589,10 @@ const salma = {
                 continue;
               }
 
-              // PLAN — bloques paralelos planificados
-              if (evt.plan) {
-                textDone = true;
-                isBlocksRoute = true;
-                this._fixStreamBubble();
-                this._addLoading(`Montando ${evt.total_blocks || evt.plan.length} partes...`, true);
-                continue;
-              }
-
-              // DRAFT_BLOCK — bloque parcial generado (sin verificar)
-              if (evt.draft_block && evt.route_partial) {
-                draftSent = true;
-                textDone = true;
-                this._fixStreamBubble();
-                this._addLoading(`Verificando parte ${evt.draft_block} de ${evt.total_blocks}...`, true);
-                // Renderizar bloque parcial progresivamente
-                if (evt.route_partial.stops) {
-                  if (!this.currentRoute) {
-                    this.currentRoute = evt.route_partial;
-                    try {
-                      guideRenderer.render(evt.route_partial, { partial: true });
-                    } catch (e) {}
-                  } else {
-                    // Añadir paradas al route existente
-                    this.currentRoute.stops = [...(this.currentRoute.stops || []), ...evt.route_partial.stops];
-                    if (evt.route_partial.maps_links) {
-                      this.currentRoute.maps_links = [...(this.currentRoute.maps_links || []), ...evt.route_partial.maps_links];
-                    }
-                    try {
-                      guideRenderer.render(this.currentRoute, { partial: true });
-                    } catch (e) {}
-                  }
-                  // No hacer scroll — el usuario explora mientras carga
-                }
-                continue;
-              }
-
-              // VERIFIED_BLOCK — bloque verificado con Google Places
-              if (evt.verified_block && evt.route_partial) {
-                this._addLoading(`Parte ${evt.verified_block} de ${evt.total_blocks} lista ✓`, true);
-                continue;
-              }
+              // (retirados) PLAN / DRAFT_BLOCK / VERIFIED_BLOCK — eventos del pipeline
+              // viejo de rutas por bloques. El worker no los emite desde que se unifico
+              // el motor: comprobado, 0 apariciones en salma-worker.js. Eran 22 referencias
+              // a datos que no llegan nunca, en mitad del camino critico de renderizado.
 
               // VERIFIED — actualización background con coords/fotos de Google
               if (evt.verified && evt.route) {

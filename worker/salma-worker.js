@@ -8272,7 +8272,11 @@ INSTRUCCIONES:
         //        (b) el JSON se truncó tan pronto que el RESCATE 1 no encontró ni 2 paradas.
         // 2ª llamada a Claude con prefill forzado para extraer el JSON del texto.
         // Se dispara con `isRoute` (incluye el flujo guiado de 8 preguntas), no solo con la frase.
-        if (!route && (isRoute || isRouteRequest(message, history)) && allText && allText.length > 600) {
+        // El umbral era 600 caracteres, pensado para cuando el prompt pedia "plan completo
+        // en prosa" y el chat traia la ruta entera escrita. Ahora el chat lleva 2-3 frases
+        // a proposito (la guia ya muestra las paradas), asi que ese umbral dejaba la red de
+        // seguridad permanentemente apagada. Se baja a 80: si hay algo de texto, se intenta.
+        if (!route && (isRoute || isRouteRequest(message, history)) && allText && allText.length > 80) {
           try {
             const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
 
