@@ -1221,9 +1221,11 @@ const salma = {
     btn.textContent = '🗺️ Crear ruta con mapa';
     btn.addEventListener('click', () => {
       wrap.remove();
-      const extra = Object.assign({}, this._lastExtra || {}, { source_text: sourceText || '' });
+      const extra = Object.assign({}, this._lastExtra || {}, {
+        source_text: sourceText || '',
+        guided_stage: 'map',   // TIEMPO 2 — el worker convierte el texto en guía, no regenera
+      });
       if (guidedRoute) extra.guided_route = guidedRoute;
-      delete extra.guided_stage; // el Tiempo 2 ya no es "reco"
       this._doSend('Salma hazme una guía: ' + (baseMsg || this._lastMsg || 'la ruta de arriba'), extra);
     });
     wrap.appendChild(btn);
@@ -1432,6 +1434,28 @@ const salma = {
           this._scrollToBottom(true);
         }
         // El borrador incremental se conserva por si el reintento también falla.
+      } else if (data.map_stage_failed || (this._lastExtra && this._lastExtra.guided_stage === 'map')) {
+        // PIEZA A — Tiempo 2 falló al convertir el texto en mapa. Reintento con el
+        // mismo source_text (no regenera nada, no duplica).
+        this._removeLoading();
+        this._addSalmaBubble(data.reply || 'No me ha salido montar el mapa. Dale otra vez y lo reintento.');
+        const _area = this._getChatArea();
+        if (_area) {
+          const _rw = document.createElement('div');
+          _rw.className = 'historia-chat-chip-wrap crear-ruta-mapa-wrap';
+          const _rb = document.createElement('button');
+          _rb.className = 'historia-chat-chip';
+          _rb.textContent = '🔄 Reintentar mapa';
+          const _retryMsg = this._lastMsg || msg;
+          const _retryExtra = Object.assign({}, this._lastExtra || {});
+          _rb.addEventListener('click', () => {
+            _rw.remove();
+            this._doSend(_retryMsg, _retryExtra);
+          });
+          _rw.appendChild(_rb);
+          _area.appendChild(_rw);
+          this._scrollToBottom(true);
+        }
       } else if (this._isRouteMsg(msg)) {
         // El mensaje sonaba a petición de ruta pero no llevaba la frase que activa el mapa
         // ("hazme una guía"). Salma respondió en modo texto/información a propósito — ofrecer
@@ -1592,7 +1616,8 @@ const salma = {
                   route: evt.route || null,
                   video_params: evt.video_params || null,
                   _hadDraft: draftSent,
-                  _isBlocks: isBlocksRoute
+                  _isBlocks: isBlocksRoute,
+                  map_stage_failed: evt.map_stage_failed === true
                 });
                 return;
               }

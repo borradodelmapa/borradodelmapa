@@ -2922,8 +2922,14 @@ function salvageIncompleteRouteJson(text) {
 // paradas, ver MAX_TOOL_ITERATIONS), convierte el texto YA generado en la respuesta
 // anterior directamente a la estructura del mapa. Misma lógica que el RESCATE 2 del
 // flujo normal (más abajo), extraída aquí para poder llamarla sin pasar por el bucle.
-async function convertProseToRouteJson(text, env) {
+async function convertProseToRouteJson(text, env, opts = {}) {
   if (!text || typeof text !== 'string' || text.length < 100) return null;
+  const guided = opts.guided || null;
+  const _anchor = guided
+    ? `\n\nDATOS DEL VIAJE (úsalos para "country"/"region"/"duration_days" si el texto no los deja claros):
+- Destino: ${guided.destino || '—'}
+- Días: ${guided.duracion_dias || '—'}`
+    : '';
   const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
 
 {"title":"...","name":"...","country":"...","region":"...","duration_days":N,"summary":"...","stops":[{"name":"Nombre exacto","headline":"Nombre exacto","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","day":1,"lat":21.0285,"lng":105.8524,"km_from_previous":0,"road_name":"","road_difficulty":"medio","estimated_hours":1.5}],"tips":[],"tags":[],"budget_level":"medio","suggestions":[]}
@@ -2937,8 +2943,11 @@ REGLAS:
 - NO inventes paradas que no estén en el plan.
 - RUTAS DE CARRETERA (un plan que describe un recorrido a lo largo de una carretera o tramo, con miradores, pueblos, embalses, paisajes o paradas naturales mencionadas en el texto narrativo, no en una lista): cada punto con nombre propio y ubicación reconocible cuenta como "stop" exactamente igual que en una guía multi-ciudad, aunque esté mencionado dentro de un párrafo corrido y no con negrita ni viñetas. No exijas formato de lista para extraerlo — léelo del texto igual.`;
 
-  const fallbackUser = `Plan a convertir:\n\n${text.substring(0, 40000)}`;
+  const fallbackUser = `Plan a convertir:\n\n${text.substring(0, 40000)}${_anchor}`;
 
+  // Hasta 2 intentos: el timeout de 60s se quedaba corto para rutas de muchas paradas
+  // (JSON de 8-12k tokens) y devolvía null → el flujo caía al bucle largo. Ahora 150s + reintento.
+  for (let attempt = 1; attempt <= 2; attempt++) {
   try {
     const fallbackRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
       method: 'POST',
@@ -2956,9 +2965,9 @@ REGLAS:
           { role: 'assistant', content: '{' },  // prefill — fuerza JSON desde la primera línea
         ],
       }),
-      signal: AbortSignal.timeout(60000),
+      signal: AbortSignal.timeout(150000),
     });
-    if (!fallbackRes.ok) return null;
+    if (!fallbackRes.ok) { console.log(`[FAST-PATH] intento ${attempt}: HTTP ${fallbackRes.status}`); continue; }
     const fallbackData = await fallbackRes.json();
     const jsonTail = fallbackData.content?.[0]?.text || '';
     let fullJson = '{' + jsonTail; // recomponer con el prefill
@@ -2970,13 +2979,15 @@ REGLAS:
     if (parsed?.stops && Array.isArray(parsed.stops) && parsed.stops.length >= 2) {
       const route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + JSON.stringify(parsed)) || parsed;
       route._fallback = true;
+      console.log(`[FAST-PATH] ✓ intento ${attempt}: ${route.stops.length} paradas`);
       return route;
     }
-    return null;
+    console.log(`[FAST-PATH] intento ${attempt}: JSON sin paradas suficientes (${parsed?.stops?.length || 0})`);
   } catch (e) {
-    console.log(`[FAST-PATH] ✗ Error convirtiendo texto a JSON: ${e.message}`);
-    return null;
+    console.log(`[FAST-PATH] intento ${attempt}: ${e.message}`);
   }
+  }
+  return null;
 }
 
 // Limpia una cadena de región/país para usarla como sesgo de búsqueda en Google Places.
@@ -7256,6 +7267,11 @@ REGLAS:
     // PIEZA A — Tiempo 1 del flujo guiado (recomendaciones en prosa, sin JSON).
     // El Tiempo 2 (mapa) llega sin este flag y con source_text.
     const guidedIsReco = body.guided_stage === 'reco';
+    // PIEZA A — Tiempo 2: el botón "Crear ruta con mapa". Convierte el texto de
+    // recomendaciones (source_text) en guía con mapa SIN volver a generar el plan
+    // ni re-escribirlo en el chat. Si la conversión falla, se avisa — NO se cae al
+    // bucle largo de búsquedas (eso duplicaba el texto y tardaba minutos).
+    const guidedMapStage = body.guided_stage === 'map';
     const sourceText = typeof body.source_text === 'string' ? body.source_text.trim() : ''; // Fast-path: texto ya generado, convertir directo a mapa
     const _urlIncidents = []; // BLOQUE E — sustituciones de enlaces Maps (se vuelcan a Firestore al final)
 
@@ -7638,9 +7654,10 @@ INSTRUCCIONES:
           // Leer KV en paralelo (en vez de secuencial — ahorra ~200ms)
           const daysMatch = message.match(/(\d+)\s*d\S*as?/i) || message.match(/(\d+)\s*days?/i);
           const days = daysMatch ? daysMatch[1] : null;
-          // PIEZA A — en el Tiempo 1 (recomendaciones) NUNCA servir una ruta cacheada por
-          // delante: rompería el flujo de 2 tiempos y devolvería un mapa sin pasar por aquí.
-          const routeKey = (isRouteRequest(message, history) && days && !guidedIsReco)
+          // PIEZA A — ni en el Tiempo 1 (recomendaciones) ni en el Tiempo 2 (botón) se
+          // sirve una ruta cacheada por delante: el Tiempo 2 debe montar el mapa a partir
+          // del texto de recomendaciones que el usuario acaba de ver, no otra ruta distinta.
+          const routeKey = (isRouteRequest(message, history) && days && !guidedIsReco && !guidedMapStage)
             ? 'route:' + countryCode + ':' + kwNorm.replace(/\s+/g, '-') + ':' + days
             : null;
 
@@ -7983,21 +8000,31 @@ INSTRUCCIONES:
         let lastStopReason = null; // 'max_tokens' | 'end_turn' | 'tool_use'… — para detectar truncado y rescatar el JSON
 
         // ── FAST-PATH: convertir texto ya generado directamente a guía con mapa ──
-        // Botón "Generar guía con mapa": en vez de repetir toda la búsqueda desde cero
+        // Botón "Crear ruta con mapa": en vez de repetir toda la búsqueda desde cero
         // (riesgo real de agotar MAX_TOOL_ITERATIONS en rutas de varias paradas, cortando
         // el turno a medias sin JSON), convertimos el texto que YA se generó en la respuesta
         // anterior directamente. Si falla o no hay sourceText, cae al flujo normal sin cambios.
         let _fastPathRoute = null;
+        let _mapStageFailed = false;
         if (sourceText && sourceText.length > 400 && isRouteRequest(message, history)) {
           try {
-            await writer.write(encoder.encode(`data: ${JSON.stringify({ t: 'Convirtiendo tu ruta en guía con mapa...' })}\n\n`));
+            await writer.write(encoder.encode(`data: ${JSON.stringify({ t: 'Montando tu ruta con mapa...' })}\n\n`));
           } catch (_) {}
           try {
-            _fastPathRoute = await convertProseToRouteJson(sourceText, env);
+            _fastPathRoute = await convertProseToRouteJson(sourceText, env, { guided: guidedRoute });
             if (_fastPathRoute && (!Array.isArray(_fastPathRoute.stops) || _fastPathRoute.stops.length < 2)) _fastPathRoute = null;
           } catch (_) {
             _fastPathRoute = null;
           }
+          // PIEZA A — Tiempo 2 (botón guiado): si la conversión falla NO caemos al bucle
+          // largo (duplicaba el plan en el chat y tardaba minutos). Se avisa y se corta.
+          if (!_fastPathRoute && guidedMapStage) _mapStageFailed = true;
+        }
+
+        if (_mapStageFailed) {
+          const _msg = 'No me ha salido montarte el mapa de esta ruta. Las recomendaciones de arriba están bien — dale otra vez al botón y lo reintento.';
+          try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: _msg, route: null, map_stage_failed: true })}\n\n`)); } catch (_) {}
+          return; // el finally cierra el writer
         }
 
         if (!_fastPathRoute) {
