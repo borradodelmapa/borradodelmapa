@@ -632,7 +632,22 @@ const guideRenderer = {
   _maps: {},
 
   _getValidStops(stops) {
-    return (stops || []).filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
+    const withCoords = (stops || []).filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
+    // Red de seguridad extra: nunca pintar una coordenada absurda (visto en producción:
+    // nombre correcto en Portugal, lat/lng en Brasil — alucinación de Claude en el
+    // borrador). El Worker ya lo sanea, esto es solo por si acaso.
+    if (withCoords.length < 3) return withCoords;
+    const lats = withCoords.map(s => s.lat).sort((a, b) => a - b);
+    const lngs = withCoords.map(s => s.lng).sort((a, b) => a - b);
+    const medianLat = lats[Math.floor(lats.length / 2)];
+    const medianLng = lngs[Math.floor(lngs.length / 2)];
+    const toRad = d => d * Math.PI / 180;
+    const distKm = (lat, lng) => {
+      const R = 6371, dLat = toRad(lat - medianLat), dLng = toRad(lng - medianLng);
+      const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat)) * Math.cos(toRad(medianLat)) * Math.sin(dLng / 2) ** 2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    };
+    return withCoords.filter(s => distKm(s.lat, s.lng) <= 1500); // deja pasar rutas largas reales, corta saltos de continente
   },
 
   _initMainMap(allStops, days) {

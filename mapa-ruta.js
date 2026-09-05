@@ -459,12 +459,32 @@ const mapaRuta = {
       .catch(() => {}); // Mantener línea recta como fallback
   },
 
+  // Red de seguridad extra en el cliente: si una parada trae una coordenada absurda
+  // (visto en producción: nombre correcto en Portugal, lat/lng en Brasil — alucinación
+  // de Claude en el borrador antes de verificar), no la pintamos aunque el saneo del
+  // Worker fallara por lo que sea. Mismo criterio que el saneo del Worker (400km).
+  _filterGeoOutliers(stops) {
+    if (stops.length < 3) return stops;
+    const lats = stops.map(s => s.lat).sort((a, b) => a - b);
+    const lngs = stops.map(s => s.lng).sort((a, b) => a - b);
+    const medianLat = lats[Math.floor(lats.length / 2)];
+    const medianLng = lngs[Math.floor(lngs.length / 2)];
+    const R = 6371;
+    const toRad = d => d * Math.PI / 180;
+    const distKm = (lat, lng) => {
+      const dLat = toRad(lat - medianLat), dLng = toRad(lng - medianLng);
+      const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat)) * Math.cos(toRad(medianLat)) * Math.sin(dLng / 2) ** 2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    };
+    return stops.filter(s => distKm(s.lat, s.lng) <= 1500); // deja pasar rutas largas reales, corta saltos de continente
+  },
+
   // ═══ GOOGLE MAPS DYNAMIC (Copiloto ON) ═══
   _initGoogleMaps(containerId, stops) {
     const el = document.getElementById(containerId);
     if (!el) return;
 
-    const valid = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
+    const valid = this._filterGeoOutliers(stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01));
     if (!valid.length) { el.style.display = 'none'; return; }
 
     el.innerHTML = ''; // Limpiar imagen estática

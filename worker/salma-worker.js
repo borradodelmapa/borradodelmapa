@@ -7980,6 +7980,7 @@ INSTRUCCIONES:
               break;
             }
             if (!apiRes.ok) {
+              try { console.error(`[ANTHROPIC_ERROR] status=${apiRes.status} body=${(await apiRes.text()).slice(0, 1500)}`); } catch (_) {}
               await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: 'Uy, no he podido conectar. Inténtalo en un momento.', route: null })}\n\n`));
               break;
             }
@@ -8442,6 +8443,34 @@ REGLAS:
         } catch (_) {}
 
         if (route) {
+          // ── SANEO GEOMÉTRICO DEL BORRADOR ──
+          // Claude a veces acierta el nombre de la parada pero "alucina" una coordenada
+          // absurda (visto en producción: una parada real de Portugal con lat/lng en
+          // Brasil). El nombre suele ser correcto, así que no se descarta la parada —
+          // solo se le quita la coordenada mala para que el mapa del borrador no la
+          // pinte en el sitio equivocado antes de que verifyAllStops la re-ubique
+          // buscando por nombre (más abajo).
+          if (Array.isArray(route.stops) && route.stops.length >= 3) {
+            const withCoords = route.stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01);
+            if (withCoords.length >= 3) {
+              const sortedLat = withCoords.map(s => s.lat).sort((a, b) => a - b);
+              const sortedLng = withCoords.map(s => s.lng).sort((a, b) => a - b);
+              const medianLat = sortedLat[Math.floor(sortedLat.length / 2)];
+              const medianLng = sortedLng[Math.floor(sortedLng.length / 2)];
+              const OUTLIER_KM = 1500; // deja pasar rutas largas reales (país entero, dos países), corta saltos de continente
+              for (const s of route.stops) {
+                if (s.lat && s.lng && Math.abs(s.lat) > 0.01) {
+                  const distKm = haversineKm(s.lat, s.lng, medianLat, medianLng);
+                  if (distKm > OUTLIER_KM) {
+                    console.log(`[SANEO] Coordenada absurda descartada: "${s.name || s.headline || '?'}" estaba a ${Math.round(distKm)}km del resto de la ruta (${s.lat},${s.lng})`);
+                    s.lat = 0;
+                    s.lng = 0;
+                  }
+                }
+              }
+            }
+          }
+
           // ── PASO 1: Enriquecer paradas con KV (coords + fotos verificadas, instantáneo) ──
           if (env.SALMA_KB) {
             for (const stop of route.stops) {
