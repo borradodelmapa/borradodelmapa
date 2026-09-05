@@ -5265,6 +5265,26 @@ export default {
       return new Response(object.body, { headers });
     }
 
+    // ─── ENDPOINT /version (que version corre de verdad) ───
+    // Publico a proposito: el Version ID no es un secreto y hace falta poder
+    // consultarlo desde el movil sin token. Lo usa el panel de debug.
+    if (request.method === 'GET' && url.pathname === '/version') {
+      const meta = env.CF_VERSION_METADATA || {};
+      return new Response(JSON.stringify({
+        version_id: meta.id || null,
+        version_short: meta.id ? String(meta.id).slice(0, 8) : null,
+        tag: meta.tag || null,
+        deployed_at: meta.timestamp || null,
+        now: new Date().toISOString()
+      }, null, 2), {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'no-store'
+        }
+      });
+    }
+
     // ─── ENDPOINT /health (monitoreo de APIs) ───
     if (request.method === 'GET' && url.pathname === '/health') {
       const corsH = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };

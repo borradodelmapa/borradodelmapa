@@ -12,6 +12,12 @@ mode = "smart"
 binding = "SALMA_KB"
 id = "b2056c0613d94feb955b92279ba02fb6"
 
+# Expone el Version ID real del despliegue dentro del Worker (env.CF_VERSION_METADATA).
+# Sirve para el endpoint /version: asi se puede comprobar en 2 segundos que version esta
+# corriendo de verdad, en vez de discutir a ciegas si un cambio esta subido o no.
+[version_metadata]
+binding = "CF_VERSION_METADATA"
+
 [[r2_buckets]]
 binding = "SALMA_PHOTOS"
 bucket_name = "salma-photos"
