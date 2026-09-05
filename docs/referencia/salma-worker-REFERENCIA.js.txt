@@ -9,13 +9,6 @@
 
 const ELEVENLABS_VOICE_ID = 'fzAdMudUtRHNnk5tjJRR';
 
-// Version del motor de rutas. Solo se sirven desde cache las rutas generadas por
-// este motor (Sonnet + tools + web_search + verify Google Places + geometria real
-// de carretera). Cualquier ruta sin esta marca viene de un motor anterior (cron
-// nivel 3, prompt de una linea, sin tools ni verificacion) y se ignora al leer.
-// Subir esta constante invalida la cache entera sin tener que tocar KV.
-const ENGINE_VERSION = 'v4';
-
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 1 — Identidad
 // ═══════════════════════════════════════════════════════════════
@@ -204,7 +197,7 @@ FORMATO PROHIBIDO:
 — Preguntas al final del mensaje. Si quieres ofrecer más ayuda, ofrece sin interrogación: "Si necesitas hotel o transporte concreto, dime." NUNCA "¿Quieres que te busque hotel?"
 — Frases vacías: "aquí tienes", "claro que sí", "por supuesto", "¡genial!", "¡perfecto!", "aquí tienes tu ruta".
 
-Cuando generes ruta: en el chat solo 2-3 frases contando qué recorre y por qué merece la pena, con **negritas** en los nombres. NO escribas el plan día a día, NO enumeres las paradas, NO repitas su historia ni dónde comer: todo eso va en el JSON y se muestra aparte, en la guía, con su mapa y sus tarjetas. Repetirlo en el chat obliga al usuario a leer dos veces la misma ruta. Después incluye SALMA_ROUTE_JSON con la estructura para el mapa. Nunca digas "aquí la tienes" ni variantes.
+Cuando generes ruta: escribe el plan completo en prosa narrativa como si lo contaras en un bar — tiempos del día (Mañana/Mediodía/Tarde/Noche), paradas con nombre, dato histórico o cultural de cada una, opinión sobre por qué merece la pena, dónde comer (nombre del sitio + plato + precio), avisos prácticos (días que cierra, código de vestimenta, cola típica). Usa **negritas** para los nombres de lugares. Este texto se va escribiendo en el chat en tiempo real. Después incluye SALMA_ROUTE_JSON con la estructura para el mapa. Nunca digas "aquí la tienes" ni variantes.
 
 Cuando es conversación sin ruta: extiéndete lo que necesite la pregunta, misma densidad de información, como si lo contaras en un bar.
 
@@ -281,7 +274,7 @@ CRITERIOS AL CONSTRUIR LA RUTA:
 — No 5 paradas del mismo tipo seguidas salvo que el usuario lo haya pedido
 — Cada parada lleva narrative: 1-2 frases con historia, dato cultural o por qué merece la pena
 
-TEXTO EN EL CHAT: 2-3 frases y punto. Qué recorre la ruta y por qué merece la pena. NO enumeres las paradas, NO escribas el plan día a día, NO repitas lo que ya va en el JSON: la guía se muestra aparte con su mapa y sus tarjetas, y escribir lo mismo en el chat obliga al usuario a leer dos veces la misma ruta. NUNCA coordenadas en el chat.
+TEXTO EN EL CHAT: plan completo en prosa narrativa con tiempos del día, paradas, historia/cultura y avisos. NUNCA coordenadas en el chat — las coords van solo en el JSON.
 
 FORMATO DE RESPUESTA CON RUTA
 Escribe en el chat solo el resumen breve e incluye al final:
@@ -2646,7 +2639,7 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
     // Foto → no pegar bloques de modo, BLOQUE_VISION en system prompt + texto del usuario es suficiente
   } else if (isRouteRequest(message, history) || guidedRoute) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
-— Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: 2-3 frases de resumen (sin enumerar paradas, sin plan día a día — eso ya va en el JSON y se muestra en la guía) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
+— Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: plan completo en prosa narrativa (tiempos del día, paradas con nombre en negrita, historia, avisos prácticos) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
 — NO respondas solo con texto. NO digas "aquí tienes" ni variantes.
 — Usa defaults para lo que falte: tipo mezcla cultura+emblemáticos, compañía solo, ritmo intermedio. Si "tengo tiempo" sin número de días: 8-10 días.
 — MÍNIMO 4-6 PARADAS POR DÍA. Nunca 1 parada por día. Cada día es un recorrido completo con desayuno, visitas, comida, paseo, atardecer.
@@ -3221,29 +3214,6 @@ async function verifyAllStops(route, placesKey) {
   const hasCenter = centerCount > 0;
   if (hasCenter) { centerLat /= centerCount; centerLng /= centerCount; }
 
-  // Radio REAL de la ruta. El umbral fijo de 150 km desde el centro era absurdo en
-  // rutas cortas: visto en produccion, en una ruta de ~50 km por Serta se colo
-  // la parada Ponte Romana rescatada como Roman Bridge of Candal, a 119 km del centro
-  // — dentro del umbral viejo pero mas lejos que la ruta entera. Ahora el margen
-  // es proporcional: 1.5x el radio real, con suelo de 25 km y techo de 150 km.
-  let routeRadiusKm = 0;
-  if (hasCenter) {
-    const _pts = [];
-    bestCandidates.forEach(bc => {
-      const loc = bc?.candidate?.geometry?.location;
-      if (loc) _pts.push([loc.lat, loc.lng]);
-    });
-    route.stops.forEach(s2 => {
-      if (s2.lat && s2.lng && Math.abs(s2.lat) > 0.01) _pts.push([s2.lat, s2.lng]);
-    });
-    for (const [_la, _ln] of _pts) {
-      const _d = haversineKm(centerLat, centerLng, _la, _ln);
-      if (_d > routeRadiusKm) routeRadiusKm = _d;
-    }
-  }
-  const SOFT_CENTER_KM = hasCenter ? Math.min(150, Math.max(25, routeRadiusKm * 1.5)) : 150;
-  const SOFT_STOP_KM = Math.min(50, SOFT_CENTER_KM);
-
   route.stops.forEach((stop, i) => {
     if (bestCandidates[i]) return;
     const stopType = (stop.type || '') + ' ' + (stop.name || '') + ' ' + (stop.headline || '');
@@ -3258,11 +3228,11 @@ async function verifyAllStops(route, placesKey) {
       if (hasBad && !hasGood) continue;
       const cLat = c.geometry.location.lat, cLng = c.geometry.location.lng;
       let inRange = false;
-      if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && haversineKm(stop.lat, stop.lng, cLat, cLng) < SOFT_STOP_KM) inRange = true;
-      else if (hasCenter && haversineKm(centerLat, centerLng, cLat, cLng) < SOFT_CENTER_KM) inRange = true;
+      if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && haversineKm(stop.lat, stop.lng, cLat, cLng) < 50) inRange = true;
+      else if (hasCenter && haversineKm(centerLat, centerLng, cLat, cLng) < 150) inRange = true;
       if (inRange) {
         bestCandidates[i] = { candidate: c, soft: true };
-        console.log(`[VERIFY] ⚠ RESCATE BLANDO "${stop.name}" → ${c.name} (${cLat.toFixed(5)}, ${cLng.toFixed(5)}) [radio ruta ${routeRadiusKm.toFixed(0)}km, margen ${SOFT_CENTER_KM.toFixed(0)}km]`);
+        console.log(`[VERIFY] ⚠ RESCATE BLANDO "${stop.name}" → ${c.name} (${cLat.toFixed(5)}, ${cLng.toFixed(5)})`);
         break;
       }
     }
@@ -3512,18 +3482,8 @@ out tags;`;
     // overpass-api.de (la instancia "oficial") cae con cierta frecuencia (521/504
     // vistos en producción varias veces la misma tarde) — probamos varios espejos
     // públicos en orden antes de rendirnos. Todos hablan el mismo lenguaje de query.
-    // Orden por fiabilidad MEDIDA el 5 sept 2026 (probados uno a uno):
-    // overpass-api.de responde en ~2s desde fuera pero devuelve 521 al Worker (error de
-    // Cloudflare alcanzando el origen — está detrás de Cloudflare, igual que nosotros);
-    // se deja primero porque cuando falla lo hace al instante, no consume timeout.
-    // maps.mail.ru fue el único que sirvió la geometría completa de la N2 (2,6 MB).
-    // kumi.systems y openstreetmap.ru daban TIMEOUT, así que van al final: un espejo que
-    // agota el timeout cuesta segundos de espera, uno que responde 5xx no cuesta nada.
     const OVERPASS_MIRRORS = [
       'https://overpass-api.de/api/interpreter',
-      'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
-      'https://overpass.private.coffee/api/interpreter',
-      'https://overpass.osm.ch/api/interpreter',
       'https://overpass.kumi.systems/api/interpreter',
       'https://overpass.openstreetmap.ru/api/interpreter',
     ];
@@ -3546,7 +3506,7 @@ out tags;`;
       return null;
     }
 
-    const relData = await fetchOverpass(query, 12000, 'relation search');
+    const relData = await fetchOverpass(query, 8000, 'relation search');
     if (!relData) {
       console.log(`[MOTOR_RUTAS] Ningún espejo de Overpass respondió para "${roadCode}" (${countryCode})`);
       return { found: false };
@@ -3558,7 +3518,7 @@ out tags;`;
     }
 
     const wayQuery = `[out:json][timeout:25];\nrelation(${relation.id});\nway(r);\nout geom;`;
-    const wayData = await fetchOverpass(wayQuery, 20000, 'way geometry');
+    const wayData = await fetchOverpass(wayQuery, 12000, 'way geometry');
     if (!wayData) {
       console.log(`[MOTOR_RUTAS] Ningún espejo de Overpass devolvió geometría para relación ${relation.id} ("${roadCode}")`);
       return { found: false };
@@ -3656,11 +3616,7 @@ function _stitchWaysNearestNeighbor(ways) {
     return null;
   }
 
-  // Medido con la N2 portuguesa (2497 ways, 27.808 puntos): con 20000 el trazado se
-  // cortaba en la latitud 38,41 y devolvía 551 km de los 739 reales — media carretera.
-  // Con 40000 sale completo hasta Faro (742 km) y cuesta 101 ms en vez de 96: el coste
-  // no está en el tope sino en el índice espacial, así que subirlo es casi gratis.
-  const MAX_POINTS = 40000; // límite de seguridad (CPU del Worker)
+  const MAX_POINTS = 20000; // límite de seguridad (CPU del Worker)
   while (remaining > 0 && order.length < MAX_POINTS) {
     const res = findNearestUnvisited(current);
     if (!res) break;
@@ -7770,11 +7726,7 @@ INSTRUCCIONES:
     const _cachedDaySet = new Set((kvCachedRoute?.stops || []).map(s => s.day));
     const _cachedDayCount = _cachedDaySet.size || 1;
     const _cachedQuality = _cachedStops / _cachedDayCount >= 3;
-    const _cachedEngineOk = kvCachedRoute?.engine === ENGINE_VERSION;
-    if (kvCachedRoute && !_cachedEngineOk) {
-      console.log(`[MOTOR_RUTAS] Cache ignorada (motor ${kvCachedRoute.engine || 'anterior'}) — se regenera con ${ENGINE_VERSION}`);
-    }
-    if (kvCachedRoute && kvCachedRoute.stops && _cachedStops > 0 && _cachedQuality && _cachedEngineOk) {
+    if (kvCachedRoute && kvCachedRoute.stops && _cachedStops > 0 && _cachedQuality) {
       // BLOQUE E — la ruta de KV no pasó por verifyAllStops: validar sus enlaces de Maps
       try {
         const _r = await validarYCorregirLinksMaps(kvCachedRoute, { surface: 'ruta_guiada', region: kvCachedRoute.region || kvCachedRoute.country || '', userId: uid });
@@ -8272,11 +8224,7 @@ INSTRUCCIONES:
         //        (b) el JSON se truncó tan pronto que el RESCATE 1 no encontró ni 2 paradas.
         // 2ª llamada a Claude con prefill forzado para extraer el JSON del texto.
         // Se dispara con `isRoute` (incluye el flujo guiado de 8 preguntas), no solo con la frase.
-        // El umbral era 600 caracteres, pensado para cuando el prompt pedia "plan completo
-        // en prosa" y el chat traia la ruta entera escrita. Ahora el chat lleva 2-3 frases
-        // a proposito (la guia ya muestra las paradas), asi que ese umbral dejaba la red de
-        // seguridad permanentemente apagada. Se baja a 80: si hay algo de texto, se intenta.
-        if (!route && (isRoute || isRouteRequest(message, history)) && allText && allText.length > 80) {
+        if (!route && (isRoute || isRouteRequest(message, history)) && allText && allText.length > 600) {
           try {
             const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
 
@@ -8589,45 +8537,7 @@ REGLAS:
               return true;
             });
             if (route.stops.length < before) {
-              console.log(`[DEDUP] ${before - route.stops.length} parada(s) con place_id repetido eliminada(s)`);
-            }
-
-            // SEGUNDA PASADA — el mismo sitio con DOS place_id distintos. Google mantiene
-            // fichas separadas para el mismo lugar y el filtro de arriba no las ve. Caso
-            // real en produccion: "River beach Fragas de Sao Simao" y "Fragas de Sao
-            // Simao", a 6 METROS una de otra y con IDs diferentes: el usuario veia la
-            // misma parada dos veces. Se descarta la que este a menos de 250 m de otra Y
-            // cuyo nombre normalizado coincida o quede contenido en el de aquella.
-            const _normStopName = (t) => (t || '')
-              .toLowerCase()
-              .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-              .replace(/\b(river|beach|praia|playa|fluvial|mirador|miradouro|viewpoint|the|de|da|do|dos|das|del|la|el|los|of)\b/g, ' ')
-              .replace(/[^a-z0-9 ]/g, ' ')
-              .replace(/\s+/g, ' ').trim();
-
-            const _kept = [];
-            for (const _s of route.stops) {
-              const _sn = _normStopName(_s.name || _s.headline);
-              const _dup = _kept.find(k => {
-                if (!_s.lat || !_s.lng || !k.lat || !k.lng) return false;
-                if (haversineKm(k.lat, k.lng, _s.lat, _s.lng) > 0.25) return false;
-                const _kn = _normStopName(k.name || k.headline);
-                if (!_sn || !_kn) return false;
-                return _sn === _kn || (_sn.length >= 6 && _kn.includes(_sn)) || (_kn.length >= 6 && _sn.includes(_kn));
-              });
-              if (_dup) {
-                // Nos quedamos con la primera, sin perder datos que solo trajo la otra.
-                if (!_dup.photo_ref && _s.photo_ref) _dup.photo_ref = _s.photo_ref;
-                if (!_dup.narrative && _s.narrative) _dup.narrative = _s.narrative;
-                const _m = Math.round(haversineKm(_dup.lat, _dup.lng, _s.lat, _s.lng) * 1000);
-                console.log(`[DEDUP] "${_s.name}" es el mismo sitio que "${_dup.name}" (${_m} m) — eliminada`);
-                continue;
-              }
-              _kept.push(_s);
-            }
-            route.stops = _kept;
-
-            if (route.stops.length < before) {
+              console.log(`[DEDUP] ${before - route.stops.length} parada(s) duplicada(s) eliminada(s)`);
               route.maps_links = buildMapsLinksFromStops(route.stops, route.region || route.country || '');
             }
           }
@@ -8694,8 +8604,6 @@ REGLAS:
         // ── Guardar ruta en KV (nivel 3 — caché automático con múltiples keys) ──
         if (route && route.stops && route.stops.length > 0 && env.SALMA_KB) {
           try {
-            route.engine = ENGINE_VERSION;
-            route.engine_at = Date.now();
             const routeJson = JSON.stringify(route);
             const ttl = { expirationTtl: 2592000 }; // 30 días
             const country = (route.country || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
@@ -8788,12 +8696,11 @@ REGLAS:
 
     if (!env.OPENAI_API_KEY) return;
 
-    // El cron de rutas nivel 3 (miercoles) se retiro: generaba rutas con un prompt
-    // de una linea, sin tools, sin web_search y sin verificacion de Google Places,
-    // y esas rutas tenian prioridad sobre el motor real al servirse desde cache.
-    // Las rutas ahora solo las genera el motor del chat. Guard explicito por si
-    // quedara vivo algun trigger antiguo en Cloudflare: aqui solo actua el lunes.
-    if (dayOfWeek !== 1) return;
+    if (dayOfWeek === 3) {
+      // MIÉRCOLES → Generar rutas nivel 3
+      await this._cronNivel3(env);
+      return;
+    }
 
     // LUNES → Regenerar fichas nivel 1 caducadas
     const MAX_PER_RUN = 5;
@@ -8898,6 +8805,104 @@ REGLAS:
 
     } catch (e) {
       console.log(`[KV Cron] Error general: ${e.message}`);
+    }
+  },
+
+  // ═══ CRON MIÉRCOLES: Generar rutas nivel 3 ═══
+  async _cronNivel3(env) {
+    const MAX_ROUTES = 3; // máx rutas por ejecución (~$0.18)
+    const ROUTE_PROMPT_TEMPLATE = (destName, country, days, region) =>
+      `Genera una ruta de viaje de ${days} días por ${destName}, ${country}. Responde SOLO con JSON válido. Estructura: {"title":"${destName} en ${days} días","name":"${destName} en ${days} días","country":"${country}","region":"${region}","duration_days":${days},"summary":"Resumen","stops":[{"name":"Nombre Google Maps","headline":"Nombre","narrative":"1-2 frases","day_title":"Título día","type":"lugar","day":1,"lat":0,"lng":0,"km_from_previous":0,"road_name":"carretera","road_difficulty":"bajo","estimated_hours":0}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/A/B","label":"Día 1"}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo","suggestions":["Sugerencia"]}. Reglas: 3-5 paradas/día, nombres exactos Google Maps, km reales, orden geográfico.`;
+
+    try {
+      // Leer índice de destinos con rutas generadas
+      let routeIndex = {};
+      const routeIdxJson = await env.SALMA_KB.get('_index:routes');
+      if (routeIdxJson) routeIndex = JSON.parse(routeIdxJson);
+
+      // Buscar destinos sin ruta (listar keys dest:*:destinos)
+      const destList = await env.SALMA_KB.list({ prefix: 'dest:', limit: 500 });
+      const countriesWithDests = [];
+      for (const key of destList.keys) {
+        if (key.name.endsWith(':destinos')) {
+          const code = key.name.replace('dest:', '').replace(':destinos', '');
+          countriesWithDests.push(code);
+        }
+      }
+
+      // Buscar destinos sin ruta cacheada
+      let generated = 0;
+      for (const code of countriesWithDests) {
+        if (generated >= MAX_ROUTES) break;
+
+        const destJson = await env.SALMA_KB.get('dest:' + code + ':destinos');
+        if (!destJson) continue;
+        const destinos = JSON.parse(destJson);
+
+        // Ficha del país para el nombre
+        const baseJson = await env.SALMA_KB.get('dest:' + code + ':base');
+        const countryName = baseJson ? JSON.parse(baseJson).pais : code;
+
+        for (const dest of destinos) {
+          if (generated >= MAX_ROUTES) break;
+          if (!dest.id || !dest.nombre) continue;
+
+          // ¿Ya tiene ruta?
+          const routeKey = 'route:' + code + ':' + dest.id + ':' + (dest.dias_recomendados || 3);
+          if (routeIndex[routeKey]) continue;
+
+          // Generar ruta con Sonnet
+          console.log(`[KV Cron L3] Generando: ${dest.nombre}, ${countryName} (${dest.dias_recomendados || 3} días)...`);
+
+          try {
+            const prompt = ROUTE_PROMPT_TEMPLATE(dest.nombre, countryName, dest.dias_recomendados || 3, dest.region || '');
+            const result = await callOpenAI(env.OPENAI_API_KEY, {
+              model: 'gpt-4o-mini',
+              max_tokens: 16000, // ruta cacheada nivel 3: 6000 truncaba destinos de 5+ días (tope gpt-4o-mini: 16384)
+              temperature: 0.7,
+              messages: [{ role: 'user', content: prompt }],
+            });
+
+            const text = result.text || '';
+            const jsonMatch = text.match(/\{[\s\S]*\}/);
+            if (!jsonMatch) throw new Error('No JSON');
+
+            let route;
+            try { route = JSON.parse(jsonMatch[0]); } catch (_) {
+              const sv = salvageIncompleteRouteJson('SALMA_ROUTE_JSON\n' + jsonMatch[0]);
+              if (!sv) throw new Error('JSON inválido');
+              route = JSON.parse(sv);
+            }
+            if (!route.stops || route.stops.length === 0) throw new Error('Sin paradas');
+
+            // Validar calidad de la ruta antes de guardar
+            const minStops = (dest.dias_recomendados || 3) * 2;
+            const hasValidCoords = route.stops.every(s => s.lat !== 0 && s.lng !== 0);
+            const hasValidNames = route.stops.every(s => s.name && s.name.length > 2);
+            if (route.stops.length < minStops || !hasValidCoords || !hasValidNames) {
+              console.log(`[KV Cron L3] ⚠️ Ruta de ${dest.nombre} no supera validación de calidad, descartada`);
+              continue;
+            }
+
+            // Guardar en KV
+            await env.SALMA_KB.put(routeKey, JSON.stringify(route), { expirationTtl: 2592000 });
+            routeIndex[routeKey] = Date.now();
+            generated++;
+            console.log(`[KV Cron L3] ✅ ${dest.nombre}: ${route.stops.length} paradas`);
+
+            await new Promise(r => setTimeout(r, 2000));
+          } catch (e) {
+            console.log(`[KV Cron L3] ❌ ${dest.nombre}: ${e.message}`);
+          }
+        }
+      }
+
+      // Guardar índice de rutas
+      await env.SALMA_KB.put('_index:routes', JSON.stringify(routeIndex));
+      console.log(`[KV Cron L3] Completado: ${generated} rutas generadas`);
+
+    } catch (e) {
+      console.log(`[KV Cron L3] Error general: ${e.message}`);
     }
   },
 

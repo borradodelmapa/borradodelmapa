@@ -118,15 +118,46 @@ async function main() {
   // 5. Actualizar sitemap
   run(`node scripts/grow-sitemap.js --count ${countries.length}`, `Actualizar sitemap (+${countries.length} países)`);
 
-  // 6. (retirado) Subir rutas a KV
-  //
-  // Este paso subia las rutas de worker/kv/routes-nivel3 a las claves route:*,
-  // las mismas que el worker consulta antes de generar. Eran rutas de otro motor
-  // (sin tools, sin web_search, sin verificacion de Google Places) y al estar en
-  // cache se servian al usuario EN LUGAR de generar la ruta real. El worker ahora
-  // solo sirve desde cache rutas marcadas con ENGINE_VERSION, asi que subirlas no
-  // haria dano — pero tampoco sirve de nada: ocuparia KV con rutas que nunca se
-  // entregan. Las paginas SEO estaticas siguen usando routes-nivel3 en el paso 3.
+  // 6. Subir rutas a KV (nivel 3)
+  console.log('\n  ▶ Subir rutas a KV...');
+  if (!dryRun) {
+    try {
+      const nivel3Dir = path.join(ROOT, 'worker/kv/routes-nivel3');
+      const routeFiles = fs.readdirSync(nivel3Dir).filter(f => f.endsWith('.json'));
+      const pairs = [];
+
+      for (const file of routeFiles) {
+        const route = JSON.parse(fs.readFileSync(path.join(nivel3Dir, file), 'utf-8'));
+        if (!route.stops || !route.country) continue;
+
+        const country = (route.country || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+        const region = (route.region || route.country || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+        const days = route.duration_days || 3;
+        const key = `route:${country.substring(0, 2)}:${region}:${days}`;
+        pairs.push({ key, value: JSON.stringify(route) });
+      }
+
+      if (pairs.length > 0) {
+        const tmpFile = path.join(ROOT, 'worker/kv/_routes_bulk.json');
+        fs.writeFileSync(tmpFile, JSON.stringify(pairs));
+        try {
+          execSync(`npx wrangler kv bulk put kv/_routes_bulk.json --namespace-id b2056c0613d94feb955b92279ba02fb6 --remote`, {
+            cwd: path.join(ROOT, 'worker'),
+            stdio: 'inherit',
+            timeout: 60000,
+          });
+        } catch (e) {
+          console.log('    ⚠️ KV upload falló (rate limit?) — las rutas se cachearán cuando se pidan');
+        }
+        try { fs.unlinkSync(tmpFile); } catch {}
+      }
+
+      console.log(`    ✅ ${pairs.length} rutas preparadas para KV`);
+    } catch (e) {
+      console.log(`    ⚠️ Error subiendo a KV: ${e.message}`);
+    }
+  }
+
   // Resumen
   console.log('\n' + '═'.repeat(50));
   console.log('✅ CARGA PROGRESIVA COMPLETADA');

@@ -1,0 +1,11 @@
+REFERENCIA — NO SE EJECUTA
+
+Copia integra del Worker tal y como estaba el 5 de septiembre de 2026 (commit 49290515),
+guardada antes de eliminarlo. Extension .txt a proposito: no es codigo activo, nada lo
+carga ni lo despliega. Sirve como guia si algun dia se reconstruye.
+
+- salma-worker-REFERENCIA.js.txt  — el Worker completo (~316 KB, 25+ endpoints)
+- wrangler-REFERENCIA.toml.txt    — su configuracion (KV, R2, crons)
+- ../prompt-salma-referencia.md   — el prompt, bloque a bloque
+
+El historial de git tambien lo conserva: git show 49290515:worker/salma-worker.js
