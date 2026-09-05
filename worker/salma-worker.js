@@ -7697,7 +7697,12 @@ INSTRUCCIONES:
     const _cachedDaySet = new Set((kvCachedRoute?.stops || []).map(s => s.day));
     const _cachedDayCount = _cachedDaySet.size || 1;
     const _cachedQuality = _cachedStops / _cachedDayCount >= 3;
-    if (kvCachedRoute && kvCachedRoute.stops && _cachedStops > 0 && _cachedQuality) {
+    // PIEZA A — cortocircuito de caché DESACTIVADO. Servía rutas viejas (de un cron
+    // sin verificar) por delante de la IA: respuesta instantánea pero errónea, saltándose
+    // el flujo de recomendaciones + botón. Se regenera siempre. Reactivar solo con un
+    // marcador de versión de motor y calidad garantizada.
+    const _CACHE_SHORTCIRCUIT_ENABLED = false;
+    if (_CACHE_SHORTCIRCUIT_ENABLED && kvCachedRoute && kvCachedRoute.stops && _cachedStops > 0 && _cachedQuality) {
       // BLOQUE E — la ruta de KV no pasó por verifyAllStops: validar sus enlaces de Maps
       try {
         const _r = await validarYCorregirLinksMaps(kvCachedRoute, { surface: 'ruta_guiada', region: kvCachedRoute.region || kvCachedRoute.country || '', userId: uid });
@@ -7778,7 +7783,9 @@ INSTRUCCIONES:
     // Rutas: la respuesta = prosa larga + SALMA_ROUTE_JSON con 16-40 paradas (cada una ~180 tokens).
     // Con 6000 se truncaba el JSON a mitad y la ruta llegaba null. Sonnet admite hasta 64k de salida.
     // 24000 da margen para una ruta de 7 días (el tope single-shot; ≥8 días va por bloques).
-    const reqMaxTokens = isRoute ? 24000 : (needsTools ? 6000 : 3000);
+    // PIEZA A — el Tiempo 1 (recomendaciones) no es "isRoute" pero puede ser largo
+    // (viajes de 11-16 días en prosa) → margen amplio para que no se trunque.
+    const reqMaxTokens = isRoute ? 24000 : (guidedIsReco ? 14000 : (needsTools ? 6000 : 3000));
 
     // ─── STREAMING SSE + BUCLE AGENTIC (tool use) ───
     const sseHeaders = {
@@ -7903,7 +7910,10 @@ INSTRUCCIONES:
         }
 
         // ── RUTA LARGA (≥8 días): generación por bloques paralelos ──
-        if (longRoute) {
+        // PIEZA A — NO en el Tiempo 1: este pipeline (gpt-4o-mini, sin grounding) genera
+        // la ruta entera con JSON e ignora guidedIsReco → se saltaba las recomendaciones
+        // y devolvía puntos por toda la región. En 'reco' se usa el camino normal de prosa.
+        if (longRoute && !guidedIsReco) {
           const days = extractDaysFromMessage(message);
           try {
             // 1. Texto intro streameado
