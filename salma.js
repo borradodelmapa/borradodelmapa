@@ -871,7 +871,7 @@ const salma = {
   },
 
   // ═══ PUNTO DE ENTRADA ÚNICO ═══
-  async send(msg) {
+  async send(msg, opts = {}) {
     // Capturar foto pendiente antes de validar msg
     const photo = this._pendingPhoto;
     if (photo) {
@@ -932,6 +932,7 @@ const salma = {
       if (needsLocation) {
         this._addUserBubble(msg);
         this._pendingGeoMessage = msg;  // guardar para reenviar tras GPS
+        this._pendingGeoRouteFromHere = !!opts.routeFromHere;
         this._showGeoPrompt();
         return;
       }
@@ -942,7 +943,7 @@ const salma = {
     // NO push a history aquí — se hace en _doSend tras recibir respuesta
 
     // Todo va directo al worker — Salma decide si preguntar
-    this._doSend(msg || '', { photo });
+    this._doSend(msg || '', { photo, route_from_here: !!opts.routeFromHere });
   },
 
   // ═══════════════════════════════════════════
@@ -1238,6 +1239,7 @@ const salma = {
       // coins_saldo y rutas_gratis_usadas se leen server-side desde Firestore
       // (ya no se envían desde el frontend por seguridad — P0-2)
       if (this._userLocation) body.user_location = this._userLocation;
+      if (extra && extra.route_from_here) body.route_from_here = true;
       // Inyectar notas del usuario (sistema unificado)
       if (window.currentUser && typeof notasManager !== 'undefined') {
         try {
@@ -3208,8 +3210,10 @@ const salma = {
         // Reenviar el mensaje original automáticamente
         if (this._pendingGeoMessage) {
           const pendingMsg = this._pendingGeoMessage;
+          const pendingRFH = this._pendingGeoRouteFromHere;
           this._pendingGeoMessage = null;
-          setTimeout(() => this.send(pendingMsg), 400);
+          this._pendingGeoRouteFromHere = false;
+          setTimeout(() => this.send(pendingMsg, { routeFromHere: pendingRFH }), 400);
         }
       },
       (err) => {

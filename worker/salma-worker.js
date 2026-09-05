@@ -2453,13 +2453,13 @@ function tryKVDirectAnswer(message, country, destination) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere) {
   // ── Seleccionar prompt base según contexto ──
   // Si es petición de guía o edición de ruta → prompt con BLOQUE_RUTAS
   // Si no → prompt SIN BLOQUE_RUTAS (Claude no ve cómo generar guías = no las genera)
   // IMPORTANTE: dynamicPrompt (Firestore) incluye BLOQUE_RUTAS, así que solo se usa para rutas
   // guidedRoute → el usuario completó el flujo guiado de 8 preguntas: forzar modo ruta.
-  const isRoute = isRouteRequest(message, history) || !!guidedRoute;
+  const isRoute = isRouteRequest(message, history) || !!guidedRoute || !!routeFromHere;
   const hasCurrentRouteEdit = currentRoute && currentRoute.stops && currentRoute.stops.length > 0;
   let systemPrompt;
   if (isRoute || hasCurrentRouteEdit) {
@@ -2630,7 +2630,7 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
 
   if (hasPhoto) {
     // Foto → no pegar bloques de modo, BLOQUE_VISION en system prompt + texto del usuario es suficiente
-  } else if (isRouteRequest(message, history) || guidedRoute) {
+  } else if (isRouteRequest(message, history) || guidedRoute || routeFromHere) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
 — Tu respuesta DEBE contener SALMA_ROUTE_JSON. Formato: plan completo en prosa narrativa (tiempos del día, paradas con nombre en negrita, historia, avisos prácticos) + salto de línea + SALMA_ROUTE_JSON + JSON completo.
 — NO respondas solo con texto. NO digas "aquí tienes" ni variantes.
@@ -2641,6 +2641,14 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
 — Coordenadas REALES del lugar exacto, en el país correcto.
 — Continuidad: la primera parada del día N+1 empieza donde acabó el día N.
 — Respeta restricciones del usuario: si dice "no quiero X", NO incluyas X.]`;
+    if (routeFromHere && userLocation) {
+      const _rfhWhere = userLocationName || 'su ubicación actual';
+      userContent += `\n\n[RUTA DESDE DONDE ESTOY — el viajero pulsó un botón de un toque:
+— NO hagas NINGUNA pregunta de vuelta. Genera la ruta directamente ahora.
+— El viajero está en ${_rfhWhere} (lat=${userLocation.lat}, lng=${userLocation.lng}). La ruta ARRANCA de ahí.
+— Decide el tipo según el sitio: ciudad o pueblo grande con centro caminable → RUTA A PIE por la ciudad (plazas, miradores, barrios con encanto, sitios de comer de verdad). Pueblo pequeño o zona rural → ESCAPADA EN COCHE por los alrededores, radio máximo 1 hora de conducción.
+— Duración: medio día. 4-7 paradas reales, un solo día.]`;
+    }
   } else if (isDaysDestination(message)) {
     // Destino + días → respuesta estructurada por días (sin JSON, sin ruta)
     userContent += `\n\n[MODO PLAN DE VIAJE — INSTRUCCIONES ESTRICTAS:
@@ -7219,6 +7227,9 @@ REGLAS:
     }
     const userNationality = body.nationality || null;
     const userLocation = body.user_location || null;
+    // Chip "Cerca mía" (o frase equivalente escrita a mano) → ruta directa desde la ubicación, sin preguntas
+    const routeFromHere = body.route_from_here === true ||
+      /\bruta\b[^.?!\n]*\b(desde donde estoy|desde aqu[ií]|donde estoy|cerca de m[ií]|por aqu[ií])\b/i.test(message || '');
     const travelDates = body.travel_dates || null;
     const transport = body.transport || null;
     const withKids = body.with_kids || false;
@@ -7682,7 +7693,7 @@ INSTRUCCIONES:
 
     // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
     const dynamicPrompt = await getSystemPrompt(env);
-    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData);
+    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere);
 
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {
