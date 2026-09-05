@@ -9,6 +9,13 @@
 
 const ELEVENLABS_VOICE_ID = 'fzAdMudUtRHNnk5tjJRR';
 
+// Version del motor de rutas. Solo se sirven desde cache las rutas generadas por
+// este motor (Sonnet + tools + web_search + verify Google Places + geometria real
+// de carretera). Cualquier ruta sin esta marca viene de un motor anterior (cron
+// nivel 3, prompt de una linea, sin tools ni verificacion) y se ignora al leer.
+// Subir esta constante invalida la cache entera sin tener que tocar KV.
+const ENGINE_VERSION = 'v4';
+
 // ═══════════════════════════════════════════════════════════════
 // BLOQUE 1 — Identidad
 // ═══════════════════════════════════════════════════════════════
@@ -7726,7 +7733,11 @@ INSTRUCCIONES:
     const _cachedDaySet = new Set((kvCachedRoute?.stops || []).map(s => s.day));
     const _cachedDayCount = _cachedDaySet.size || 1;
     const _cachedQuality = _cachedStops / _cachedDayCount >= 3;
-    if (kvCachedRoute && kvCachedRoute.stops && _cachedStops > 0 && _cachedQuality) {
+    const _cachedEngineOk = kvCachedRoute?.engine === ENGINE_VERSION;
+    if (kvCachedRoute && !_cachedEngineOk) {
+      console.log(`[MOTOR_RUTAS] Cache ignorada (motor ${kvCachedRoute.engine || 'anterior'}) — se regenera con ${ENGINE_VERSION}`);
+    }
+    if (kvCachedRoute && kvCachedRoute.stops && _cachedStops > 0 && _cachedQuality && _cachedEngineOk) {
       // BLOQUE E — la ruta de KV no pasó por verifyAllStops: validar sus enlaces de Maps
       try {
         const _r = await validarYCorregirLinksMaps(kvCachedRoute, { surface: 'ruta_guiada', region: kvCachedRoute.region || kvCachedRoute.country || '', userId: uid });
@@ -8604,6 +8615,8 @@ REGLAS:
         // ── Guardar ruta en KV (nivel 3 — caché automático con múltiples keys) ──
         if (route && route.stops && route.stops.length > 0 && env.SALMA_KB) {
           try {
+            route.engine = ENGINE_VERSION;
+            route.engine_at = Date.now();
             const routeJson = JSON.stringify(route);
             const ttl = { expirationTtl: 2592000 }; // 30 días
             const country = (route.country || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
@@ -8696,11 +8709,12 @@ REGLAS:
 
     if (!env.OPENAI_API_KEY) return;
 
-    if (dayOfWeek === 3) {
-      // MIÉRCOLES → Generar rutas nivel 3
-      await this._cronNivel3(env);
-      return;
-    }
+    // El cron de rutas nivel 3 (miercoles) se retiro: generaba rutas con un prompt
+    // de una linea, sin tools, sin web_search y sin verificacion de Google Places,
+    // y esas rutas tenian prioridad sobre el motor real al servirse desde cache.
+    // Las rutas ahora solo las genera el motor del chat. Guard explicito por si
+    // quedara vivo algun trigger antiguo en Cloudflare: aqui solo actua el lunes.
+    if (dayOfWeek !== 1) return;
 
     // LUNES → Regenerar fichas nivel 1 caducadas
     const MAX_PER_RUN = 5;
@@ -8805,104 +8819,6 @@ REGLAS:
 
     } catch (e) {
       console.log(`[KV Cron] Error general: ${e.message}`);
-    }
-  },
-
-  // ═══ CRON MIÉRCOLES: Generar rutas nivel 3 ═══
-  async _cronNivel3(env) {
-    const MAX_ROUTES = 3; // máx rutas por ejecución (~$0.18)
-    const ROUTE_PROMPT_TEMPLATE = (destName, country, days, region) =>
-      `Genera una ruta de viaje de ${days} días por ${destName}, ${country}. Responde SOLO con JSON válido. Estructura: {"title":"${destName} en ${days} días","name":"${destName} en ${days} días","country":"${country}","region":"${region}","duration_days":${days},"summary":"Resumen","stops":[{"name":"Nombre Google Maps","headline":"Nombre","narrative":"1-2 frases","day_title":"Título día","type":"lugar","day":1,"lat":0,"lng":0,"km_from_previous":0,"road_name":"carretera","road_difficulty":"bajo","estimated_hours":0}],"maps_links":[{"day":1,"url":"https://www.google.com/maps/dir/A/B","label":"Día 1"}],"tips":["Consejo"],"tags":["tag"],"budget_level":"bajo","suggestions":["Sugerencia"]}. Reglas: 3-5 paradas/día, nombres exactos Google Maps, km reales, orden geográfico.`;
-
-    try {
-      // Leer índice de destinos con rutas generadas
-      let routeIndex = {};
-      const routeIdxJson = await env.SALMA_KB.get('_index:routes');
-      if (routeIdxJson) routeIndex = JSON.parse(routeIdxJson);
-
-      // Buscar destinos sin ruta (listar keys dest:*:destinos)
-      const destList = await env.SALMA_KB.list({ prefix: 'dest:', limit: 500 });
-      const countriesWithDests = [];
-      for (const key of destList.keys) {
-        if (key.name.endsWith(':destinos')) {
-          const code = key.name.replace('dest:', '').replace(':destinos', '');
-          countriesWithDests.push(code);
-        }
-      }
-
-      // Buscar destinos sin ruta cacheada
-      let generated = 0;
-      for (const code of countriesWithDests) {
-        if (generated >= MAX_ROUTES) break;
-
-        const destJson = await env.SALMA_KB.get('dest:' + code + ':destinos');
-        if (!destJson) continue;
-        const destinos = JSON.parse(destJson);
-
-        // Ficha del país para el nombre
-        const baseJson = await env.SALMA_KB.get('dest:' + code + ':base');
-        const countryName = baseJson ? JSON.parse(baseJson).pais : code;
-
-        for (const dest of destinos) {
-          if (generated >= MAX_ROUTES) break;
-          if (!dest.id || !dest.nombre) continue;
-
-          // ¿Ya tiene ruta?
-          const routeKey = 'route:' + code + ':' + dest.id + ':' + (dest.dias_recomendados || 3);
-          if (routeIndex[routeKey]) continue;
-
-          // Generar ruta con Sonnet
-          console.log(`[KV Cron L3] Generando: ${dest.nombre}, ${countryName} (${dest.dias_recomendados || 3} días)...`);
-
-          try {
-            const prompt = ROUTE_PROMPT_TEMPLATE(dest.nombre, countryName, dest.dias_recomendados || 3, dest.region || '');
-            const result = await callOpenAI(env.OPENAI_API_KEY, {
-              model: 'gpt-4o-mini',
-              max_tokens: 16000, // ruta cacheada nivel 3: 6000 truncaba destinos de 5+ días (tope gpt-4o-mini: 16384)
-              temperature: 0.7,
-              messages: [{ role: 'user', content: prompt }],
-            });
-
-            const text = result.text || '';
-            const jsonMatch = text.match(/\{[\s\S]*\}/);
-            if (!jsonMatch) throw new Error('No JSON');
-
-            let route;
-            try { route = JSON.parse(jsonMatch[0]); } catch (_) {
-              const sv = salvageIncompleteRouteJson('SALMA_ROUTE_JSON\n' + jsonMatch[0]);
-              if (!sv) throw new Error('JSON inválido');
-              route = JSON.parse(sv);
-            }
-            if (!route.stops || route.stops.length === 0) throw new Error('Sin paradas');
-
-            // Validar calidad de la ruta antes de guardar
-            const minStops = (dest.dias_recomendados || 3) * 2;
-            const hasValidCoords = route.stops.every(s => s.lat !== 0 && s.lng !== 0);
-            const hasValidNames = route.stops.every(s => s.name && s.name.length > 2);
-            if (route.stops.length < minStops || !hasValidCoords || !hasValidNames) {
-              console.log(`[KV Cron L3] ⚠️ Ruta de ${dest.nombre} no supera validación de calidad, descartada`);
-              continue;
-            }
-
-            // Guardar en KV
-            await env.SALMA_KB.put(routeKey, JSON.stringify(route), { expirationTtl: 2592000 });
-            routeIndex[routeKey] = Date.now();
-            generated++;
-            console.log(`[KV Cron L3] ✅ ${dest.nombre}: ${route.stops.length} paradas`);
-
-            await new Promise(r => setTimeout(r, 2000));
-          } catch (e) {
-            console.log(`[KV Cron L3] ❌ ${dest.nombre}: ${e.message}`);
-          }
-        }
-      }
-
-      // Guardar índice de rutas
-      await env.SALMA_KB.put('_index:routes', JSON.stringify(routeIndex));
-      console.log(`[KV Cron L3] Completado: ${generated} rutas generadas`);
-
-    } catch (e) {
-      console.log(`[KV Cron L3] Error general: ${e.message}`);
     }
   },
 
