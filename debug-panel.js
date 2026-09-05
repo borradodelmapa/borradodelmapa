@@ -76,8 +76,10 @@
     } catch (_) { return []; }
   }
 
+  // Pide /version SIEMPRE, sin cachear: si se despliega el Worker con la app
+  // abierta, la cabecera tiene que reflejarlo. Mientras llega la respuesta se
+  // sigue mostrando el ultimo valor conocido, asi no parpadea.
   async function loadWorkerVersion() {
-    if (workerVer !== null) return workerVer;
     try {
       if (!window.SALMA_API) throw new Error('SALMA_API no definido');
       const res = await fetch(window.SALMA_API + '/version', { cache: 'no-store' });
@@ -100,6 +102,21 @@
            '\nFRONT   ' + (f.length ? f.join('  ') : '(ningún script con ?v=)') +
            '\nURL     ' + location.href +
            '\nUA      ' + navigator.userAgent;
+  }
+
+  let verTimer = null;
+
+  function startVerRefresh() {
+    stopVerRefresh();
+    verTimer = setInterval(() => {
+      const ov = document.getElementById('dbg-overlay');
+      if (!ov || ov.style.display === 'none') { stopVerRefresh(); return; }
+      loadWorkerVersion().then(renderVersion);
+    }, 15000);
+  }
+
+  function stopVerRefresh() {
+    if (verTimer) { clearInterval(verTimer); verTimer = null; }
   }
 
   function renderVersion() {
@@ -156,6 +173,7 @@
     if (overlay) {
       overlay.style.display = 'flex';
       loadWorkerVersion().then(renderVersion);
+      startVerRefresh();
       return;
     }
     overlay = document.createElement('div');
@@ -173,7 +191,8 @@
     renderLogs(body);
     renderVersion();
     loadWorkerVersion().then(renderVersion);
-    overlay.querySelector('#dbg-close').addEventListener('click', () => { overlay.style.display = 'none'; });
+    startVerRefresh();
+    overlay.querySelector('#dbg-close').addEventListener('click', () => { overlay.style.display = 'none'; stopVerRefresh(); });
     overlay.querySelector('#dbg-clear').addEventListener('click', () => { logs.length = 0; renderLogs(body); });
     overlay.querySelector('#dbg-copy').addEventListener('click', async () => {
       const text = versionText() + '\n────────────\n' +
