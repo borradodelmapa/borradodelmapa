@@ -2453,7 +2453,7 @@ function tryKVDirectAnswer(message, country, destination) {
 // CONSTRUIR MENSAJES
 // ═══════════════════════════════════════════════════════════════
 
-function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco) {
+function buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, kvCountryData, kvDestinationData, kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry) {
   // ── Seleccionar prompt base según contexto ──
   // Si es petición de guía o edición de ruta → prompt con BLOQUE_RUTAS
   // Si no → prompt SIN BLOQUE_RUTAS (Claude no ve cómo generar guías = no las genera)
@@ -2522,11 +2522,16 @@ function buildMessages(history, message, currentRoute, userName, userNationality
     }
     const _intereses = Array.isArray(g.intereses) && g.intereses.length ? g.intereses.join(', ') : 'sin preferencia marcada';
     const _restr = (g.restricciones && String(g.restricciones).trim()) ? g.restricciones : 'ninguna';
+    // ANCLA DE PAÍS — el destino ("Córdoba") ya se resolvió a país concreto por Geocoding.
+    // Sin esto el modelo mezcla homónimos (Córdoba España + Córdoba Argentina) en una ruta.
+    const _anclaPais = (anchorCountry && anchorCountry.countryName)
+      ? `\n- PAÍS (ANCLA DURA): ${anchorCountry.countryName}. TODAS las paradas y recomendaciones DENTRO de este país. Si existe un lugar con el mismo nombre en otro país, usa SIEMPRE el de ${anchorCountry.countryName}. No cruces fronteras salvo que el usuario lo pida explícitamente.`
+      : '';
     const _guidedTail = guidedIsReco
       // PIEZA A — Tiempo 1: SOLO recomendaciones en prosa. Prohibido el JSON aquí.
       ? `Con estos datos, dame RECOMENDACIONES en prosa organizadas por día. NO generes SALMA_ROUTE_JSON ni ningún JSON — eso es el paso siguiente, cuando el usuario pulse el botón. Si hay restricciones, respétalas a rajatabla.`
       : `Genera la ruta día por día ajustada a estos datos. Si hay restricciones, respétalas a rajatabla.
-En el JSON: "country" = país real (ej. "Portugal"); "region" = región o zona real (ej. "Algarve" o "Faro"), NUNCA el texto literal del destino con "desde", números de carretera (N2) ni el medio de transporte. Si el destino es una carretera o ruta lineal (N2, Ruta 40, costa…), traza las paradas siguiendo ese trazado en orden geográfico y respeta el punto de salida indicado.`;
+En el JSON: "country" = ${anchorCountry && anchorCountry.countryName ? `"${anchorCountry.countryName}" (obligatorio, no otro)` : `país real (ej. "Portugal")`}; "region" = región o zona real (ej. "Algarve" o "Faro"), NUNCA el texto literal del destino con "desde", números de carretera (N2) ni el medio de transporte.${anchorCountry && anchorCountry.countryName ? ` Descarta cualquier parada que no esté en ${anchorCountry.countryName}.` : ''} Si el destino es una carretera o ruta lineal (N2, Ruta 40, costa…), traza las paradas siguiendo ese trazado en orden geográfico y respeta el punto de salida indicado.`;
     ctx.push(`[RUTA SOLICITADA POR EL USUARIO — datos recogidos en el cuestionario guiado. Úsalos TODOS. NO vuelvas a preguntar nada de esto:
 - Destino: ${g.destino || 'sin especificar'}
 - Duración: ${g.duracion_dias || 'sin especificar'} días
@@ -2535,7 +2540,7 @@ En el JSON: "country" = país real (ej. "Portugal"); "region" = región o zona r
 - Presupuesto por día: ${_presupuesto}
 - Ritmo deseado: ${_ritmo}
 - Intereses: ${_intereses}
-- Restricciones: ${_restr}
+- Restricciones: ${_restr}${_anclaPais}
 ${_guidedTail}]`);
   }
 
@@ -2929,10 +2934,14 @@ function salvageIncompleteRouteJson(text) {
 async function convertProseToRouteJson(text, env, opts = {}) {
   if (!text || typeof text !== 'string' || text.length < 100) return null;
   const guided = opts.guided || null;
-  const _anchor = guided
+  const anchorCountry = opts.anchorCountry || null;
+  const _anchorPaisLine = (anchorCountry && anchorCountry.countryName)
+    ? `\n- PAÍS: ${anchorCountry.countryName} — "country" DEBE ser exactamente "${anchorCountry.countryName}". Descarta del JSON cualquier parada que no esté en ${anchorCountry.countryName} (homónimos en otro país NO valen).`
+    : '';
+  const _anchor = (guided || anchorCountry)
     ? `\n\nDATOS DEL VIAJE (úsalos para "country"/"region"/"duration_days" si el texto no los deja claros):
-- Destino: ${guided.destino || '—'}
-- Días: ${guided.duracion_dias || '—'}`
+- Destino: ${guided?.destino || '—'}
+- Días: ${guided?.duracion_dias || '—'}${_anchorPaisLine}`
     : '';
   const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
 
@@ -3290,8 +3299,15 @@ function addressContainsLocation(formattedAddress, ...locations) {
   return locations.filter(Boolean).map(normalizeForMatch).some(c => c && c.length > 2 && normAddr.includes(c));
 }
 
-async function verifyAllStops(route, placesKey) {
+async function verifyAllStops(route, placesKey, opts = {}) {
   if (!route?.stops || !placesKey) return route;
+
+  // ANCLA DE PAÍS — si el destino se resolvió a un país concreto antes de generar,
+  // manda ESE país por encima de route.country (que lo escribe el modelo y puede
+  // equivocar: Córdoba España vs Córdoba Argentina).
+  const forceCC = (opts.forceCountryCode || '').toUpperCase();
+  const anchorLat = typeof opts.anchorLat === 'number' ? opts.anchorLat : null;
+  const anchorLng = typeof opts.anchorLng === 'number' ? opts.anchorLng : null;
 
   // Región saneada para el sesgo de búsqueda: "N2 Portugal desde Faro en moto" → "Portugal".
   // Sin esto, las queries salían como "Miradouro X, N2 Portugal desde Faro" y no validaba ninguna parada.
@@ -3302,6 +3318,14 @@ async function verifyAllStops(route, placesKey) {
   if (!countryCode && region) {
     const m = region.match(/\b(Portugal|España|Spain|France|Francia|Italia|Italy|Marruecos|Morocco|Alemania|Germany|Reino Unido|United Kingdom|Irlanda|Ireland|Países Bajos|Netherlands|Bélgica|Belgium|Suiza|Switzerland|Austria|Grecia|Greece|Croacia|Croatia|Portugal)\b/i);
     if (m) { countryCode = getCountryCode(m[1]) || ''; if (countryCode && !country) country = m[1]; }
+  }
+  // El ancla gana: fuerza el filtro de país y corrige route.country si el modelo puso otro.
+  if (forceCC) {
+    if (countryCode && countryCode.toUpperCase() !== forceCC) {
+      console.log(`[VERIFY] ancla de país: route.country="${country}" (${countryCode}) → forzado a ${forceCC}`);
+    }
+    countryCode = forceCC;
+    if (opts.forceCountryName) { country = opts.forceCountryName; route.country = opts.forceCountryName; }
   }
   const countryFilter = countryCode ? `&components=country:${countryCode}` : '';
   const FIELDS = 'place_id,photos,geometry,name,formatted_address,opening_hours,editorial_summary,business_status';
@@ -3416,6 +3440,9 @@ async function verifyAllStops(route, placesKey) {
       const hasGood = cTypes.some(t => GOOD_PLACE_TYPES.has(t));
       if (hasBad && !hasGood) continue;
       const cLat = c.geometry.location.lat, cLng = c.geometry.location.lng;
+      // ANCLA — el rescate blando NO se aplica a candidatos a más de 400 km del ancla del
+      // destino. Es lo que mataba el salto España↔Argentina (coord del modelo mal + homónimo).
+      if (anchorLat != null && haversineKm(anchorLat, anchorLng, cLat, cLng) > 400) continue;
       let inRange = false;
       if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && haversineKm(stop.lat, stop.lng, cLat, cLng) < 50) inRange = true;
       else if (hasCenter && haversineKm(centerLat, centerLng, cLat, cLng) < 150) inRange = true;
@@ -4319,6 +4346,68 @@ async function geocodeCiudad(ciudad, placesKey) {
     return result;
   } catch (e) {
     _ciudadGeocodeCache[key] = null;
+    return null;
+  }
+}
+
+// ─── ANCLA DE PAÍS DEL DESTINO ───────────────────────────────────
+// Resuelve el destino del flujo guiado (texto libre: "Córdoba") a un país concreto
+// ANTES de generar nada. Sin esto, un homónimo (Córdoba España vs Córdoba Argentina)
+// lo decide el modelo a ciegas y mezcla paradas de los dos.
+//   - Geocoding de Google SIN filtro de país (queremos todos los candidatos).
+//   - Si hay más de un país entre los resultados y tenemos GPS del viajero,
+//     gana el candidato más cercano (Córdoba desde Portugal → España, no Argentina).
+//   - Si el destino ya trae país ("Córdoba, Argentina"), Geocoding lo resuelve solo.
+//   - Caché KV 30 días. Si algo falla → null → el flujo se comporta como antes.
+const _anchorPaisCache = {};
+async function resolverPaisDestino(destino, userLocation, env) {
+  if (!destino || typeof destino !== 'string') return null;
+  const placesKey = env.GOOGLE_PLACES_KEY;
+  if (!placesKey) return null;
+  let d = destino.trim().replace(/^(provincia|regi[oó]n|comunidad|estado|departamento)\s+de\s+/i, '').trim();
+  if (d.length < 2) return null;
+  const norm = d.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  if (norm in _anchorPaisCache) return _anchorPaisCache[norm];
+
+  const kvKey = 'geocity:anchor:' + norm;
+  if (env.SALMA_KB) {
+    try {
+      const cached = await env.SALMA_KB.get(kvKey);
+      if (cached) { const p = JSON.parse(cached); _anchorPaisCache[norm] = p; return p; }
+    } catch (_) {}
+  }
+
+  try {
+    const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(d)}&language=es&key=${placesKey}`, { signal: AbortSignal.timeout(5000) });
+    const data = await res.json();
+    const results = Array.isArray(data?.results) ? data.results : [];
+    if (!results.length) { _anchorPaisCache[norm] = null; return null; }
+
+    // Extraer país + coords de cada candidato
+    const cands = results.map(r => {
+      const cc = (r.address_components || []).find(c => Array.isArray(c.types) && c.types.includes('country'));
+      const loc = r.geometry?.location;
+      if (!cc || !loc || typeof loc.lat !== 'number') return null;
+      return { countryCode: (cc.short_name || '').toUpperCase(), countryName: cc.long_name || '', lat: loc.lat, lng: loc.lng };
+    }).filter(Boolean);
+    if (!cands.length) { _anchorPaisCache[norm] = null; return null; }
+
+    let chosen = cands[0];
+    const distinctCC = new Set(cands.map(c => c.countryCode));
+    if (distinctCC.size > 1 && userLocation && typeof userLocation.lat === 'number') {
+      chosen = cands.slice().sort((a, b) =>
+        haversineKm(userLocation.lat, userLocation.lng, a.lat, a.lng) -
+        haversineKm(userLocation.lat, userLocation.lng, b.lat, b.lng)
+      )[0];
+    }
+
+    _anchorPaisCache[norm] = chosen;
+    if (env.SALMA_KB) {
+      try { await env.SALMA_KB.put(kvKey, JSON.stringify(chosen), { expirationTtl: 2592000 }); } catch (_) {}
+    }
+    return chosen;
+  } catch (e) {
+    _anchorPaisCache[norm] = null;
     return null;
   }
 }
@@ -7279,6 +7368,16 @@ REGLAS:
     const sourceText = typeof body.source_text === 'string' ? body.source_text.trim() : ''; // Fast-path: texto ya generado, convertir directo a mapa
     const _urlIncidents = []; // BLOQUE E — sustituciones de enlaces Maps (se vuelcan a Firestore al final)
 
+    // ─── ANCLA DE PAÍS DEL DESTINO (flujo guiado) ───
+    // Resuelve "Córdoba" → país concreto por Geocoding (con desempate por cercanía al GPS)
+    // ANTES de generar. Se reutiliza en buildMessages, convertProseToRouteJson y verifyAllStops.
+    // Si falla → null → todo se comporta como antes.
+    let anchorCountry = null;
+    if (guidedRoute && guidedRoute.destino) {
+      try { anchorCountry = await resolverPaisDestino(guidedRoute.destino, userLocation, env); } catch (_) {}
+      if (anchorCountry) console.log(`[ANCLA-PAIS] "${guidedRoute.destino}" → ${anchorCountry.countryName} (${anchorCountry.countryCode})`);
+    }
+
     // ─── BYPASS: petición explícita de enlace Google Maps ───
     // Si el usuario pide un link (enlace/link/maps/cómo llegar/dónde está/ubicación/dirección),
     // respondemos DIRECTO con getValidatedPlace. Sin Claude, sin tools, sin tokens.
@@ -7737,7 +7836,7 @@ INSTRUCCIONES:
 
     // Leer prompt dinámico de Firestore (caché 60s, fallback hardcoded)
     const dynamicPrompt = await getSystemPrompt(env);
-    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco);
+    let { systemPrompt, messages } = buildMessages(history, message, currentRoute, userName, userNationality, helpResults, weatherData, userLocation, userLocationName, eventData, travelDates, transport, withKids, coinsSaldo, rutasGratisUsadas, skipKV ? null : kvCountryData, skipKV ? null : kvDestinationData, skipKV ? null : kvTransportData, imageBase64, dynamicPrompt, mapMode, guidedRoute, factCheckData, routeFromHere, guidedIsReco, anchorCountry);
 
     // Inyectar notas del usuario en el contexto
     if (userNotes && userNotes.length > 0) {
@@ -8025,7 +8124,7 @@ INSTRUCCIONES:
             await writer.write(encoder.encode(`data: ${JSON.stringify({ t: 'Montando tu ruta con mapa...' })}\n\n`));
           } catch (_) {}
           try {
-            _fastPathRoute = await convertProseToRouteJson(sourceText, env, { guided: guidedRoute });
+            _fastPathRoute = await convertProseToRouteJson(sourceText, env, { guided: guidedRoute, anchorCountry });
             if (_fastPathRoute && (!Array.isArray(_fastPathRoute.stops) || _fastPathRoute.stops.length < 2)) _fastPathRoute = null;
           } catch (_) {
             _fastPathRoute = null;
@@ -8567,7 +8666,13 @@ REGLAS:
           // ── PASO 3: Verify con Google Places (fotos + coords reales) ──
           try {
             if (env.GOOGLE_PLACES_KEY) {
-              const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY);
+              const _vOpts = anchorCountry ? {
+                forceCountryCode: anchorCountry.countryCode,
+                forceCountryName: anchorCountry.countryName,
+                anchorLat: anchorCountry.lat,
+                anchorLng: anchorCountry.lng,
+              } : {};
+              const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY, _vOpts);
               if (verified) route = verified;
             }
           } catch (_) {}
