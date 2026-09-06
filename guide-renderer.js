@@ -625,7 +625,20 @@ const guideRenderer = {
   _maps: {},
 
   _getValidStops(stops) {
-    return (stops || []).filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
+    return (stops || []).filter(s => {
+      if (!s) return false;
+      const la = +s.lat, ln = +s.lng;
+      return isFinite(la) && isFinite(ln)
+        && Math.abs(la) > 0.01 && Math.abs(ln) > 0.01
+        && la >= -90 && la <= 90 && ln >= -180 && ln <= 180;
+    });
+  },
+
+  // fitBounds que no aborta el render si los bounds salen mal (Leaflet peta con "reading 'min'")
+  _safeFit(map, bounds, opts) {
+    try {
+      if (map && bounds && bounds.isValid && bounds.isValid()) map.fitBounds(bounds, opts);
+    } catch (e) { console.warn('[guide] fitBounds ignorado:', e && e.message); }
   },
 
   _initMainMap(allStops, days) {
@@ -659,7 +672,7 @@ const guideRenderer = {
     });
 
     // Ajustar vista a todos los puntos — limitado a la ruta
-    map.fitBounds(bounds, { padding: [30, 30] });
+    this._safeFit(map, bounds, { padding: [30, 30] });
     this._maps['main'] = map;
 
     // Brújula (centro-izquierda)
@@ -770,7 +783,7 @@ const guideRenderer = {
     });
 
     // Ajustar vista — limitado a la ruta
-    map.fitBounds(bounds, { padding: [20, 20] });
+    this._safeFit(map, bounds, { padding: [20, 20] });
     this._maps[mapId] = map;
 
     // Pedir ruta real a Google Directions
@@ -975,7 +988,7 @@ const guideRenderer = {
           });
         });
         const bounds = L.latLngBounds(valid.map(s => [s.lat, s.lng]));
-        mainMap.fitBounds(bounds, { padding: [30, 30] });
+        this._safeFit(mainMap, bounds, { padding: [30, 30] });
       }
     }
 
@@ -1000,7 +1013,7 @@ const guideRenderer = {
         this._bindRichPopup(marker, s, dayNum);
       });
       const bounds = L.latLngBounds(dayStops.map(s => [s.lat, s.lng]));
-      map.fitBounds(bounds, { padding: [20, 20] });
+      this._safeFit(map, bounds, { padding: [20, 20] });
 
       // Re-pedir ruta
       if (dayStops.length >= 2) this._loadDirections(map, dayStops, color, this._preferredRoad);

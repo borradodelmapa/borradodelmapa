@@ -21,6 +21,17 @@ const mapaRuta = {
   // Colores por día
   _dayColors: ['#D4A843', '#E87040', '#5CB85C', '#5BC0DE', '#D9534F', '#AA66CC', '#FF8C00'],
 
+  // Paradas con coordenada usable: número finito, dentro de rango, no (0,0).
+  // Una coord imposible (lat 999, lat/lng cambiados) reventaba fitBounds con "reading 'min'".
+  _validStops(stops) {
+    return (stops || []).filter(s => {
+      if (!s) return false;
+      const la = +s.lat, ln = +s.lng;
+      return isFinite(la) && isFinite(ln) && Math.abs(la) > 0.01 && Math.abs(ln) > 0.01
+        && la >= -90 && la <= 90 && ln >= -180 && ln <= 180;
+    });
+  },
+
   // ═══ INIT ═══
   init(containerId, stops, options) {
     const el = document.getElementById(containerId);
@@ -53,11 +64,11 @@ const mapaRuta = {
     btnMaps.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`;
     btnMaps.addEventListener('click', () => {
       if (!this._map || this._mapType !== 'google' || !window.google) return;
-      const valid = this._currentStops.filter(s => s.lat && s.lng);
+      const valid = this._validStops(this._currentStops);
       if (!valid.length) return;
       const bounds = new google.maps.LatLngBounds();
       valid.forEach(s => bounds.extend({ lat: s.lat, lng: s.lng }));
-      this._map.fitBounds(bounds, { top: 40, right: 40, bottom: 60, left: 40 });
+      try { this._map.fitBounds(bounds, { top: 40, right: 40, bottom: 60, left: 40 }); } catch (e) { console.warn("[mapa-ruta] fitBounds:", e && e.message); }
     });
 
     // Botón Compartir
@@ -385,7 +396,7 @@ const mapaRuta = {
     const el = document.getElementById(containerId);
     if (!el) return;
 
-    const valid = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
+    const valid = this._validStops(stops);
     if (!valid.length) { el.style.display = 'none'; return; }
 
     const KEY = 'AIzaSyCtNPO5QVnLpHPkaJraQM0M71RXqAJ6L4U';
@@ -460,7 +471,7 @@ const mapaRuta = {
     const el = document.getElementById(containerId);
     if (!el) return;
 
-    const valid = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01 && Math.abs(s.lng) > 0.01);
+    const valid = this._validStops(stops);
     if (!valid.length) { el.style.display = 'none'; return; }
 
     el.innerHTML = ''; // Limpiar imagen estática
@@ -534,7 +545,7 @@ const mapaRuta = {
     // Ajustar bounds
     const bounds = new google.maps.LatLngBounds();
     valid.forEach(s => bounds.extend({ lat: s.lat, lng: s.lng }));
-    this._map.fitBounds(bounds, { top: 40, right: 40, bottom: 60, left: 40 });
+    try { this._map.fitBounds(bounds, { top: 40, right: 40, bottom: 60, left: 40 }); } catch (e) { console.warn("[mapa-ruta] fitBounds:", e && e.message); }
 
     // Aplicar ruta real (pre-fetched en paralelo o fetch ahora)
     if (dirPromise) {
@@ -622,7 +633,7 @@ const mapaRuta = {
     });
 
     this._polyline = L.polyline(valid.map(s => [s.lat, s.lng]), { color: '#D4A843', weight: 3, opacity: 0.7, dashArray: '8 6' }).addTo(this._map);
-    this._map.fitBounds(bounds, { padding: [40, 40] });
+    try { this._map.fitBounds(bounds, { padding: [40, 40] }); } catch (e) { console.warn("[mapa-ruta] fitBounds:", e && e.message); }
 
     // En modo preview (itinerario) solo botón "Ir al mapa"
     if (!this._previewMode) {
