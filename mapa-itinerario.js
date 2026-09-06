@@ -83,6 +83,9 @@ const mapaItinerario = {
     // Extras: antes de salir, info práctica, tips (reutiliza guide-renderer)
     if (typeof guideRenderer !== 'undefined') {
       const extrasHtml = [
+        (typeof guideRenderer._renderNearby === 'function'
+          ? guideRenderer._renderNearby(routeData.nearby_stops || null, country, routeData.anchor_locality || '')
+          : ''),
         guideRenderer._renderPreDeparture(routeData.pre_departure || null),
         guideRenderer._renderPracticalInfo(routeData.practical_info || null),
         guideRenderer._renderTips(routeData.tips || null),

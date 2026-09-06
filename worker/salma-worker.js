@@ -3630,6 +3630,7 @@ async function verifyAllStops(route, placesKey, opts = {}) {
 
   route.stops = finalStops;
   route.nearby_stops = nearbyStops;
+  if (nearbyStops.length && opts.anchorLocality) route.anchor_locality = opts.anchorLocality;
   route.discarded_stops = discarded;
   route.maps_links = buildMapsLinksFromStops(finalStops, region);
 

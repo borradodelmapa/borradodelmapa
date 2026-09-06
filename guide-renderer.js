@@ -78,6 +78,7 @@ const guideRenderer = {
         ${this._renderDays(days, country, r.maps_links)}
       </div>
 
+      ${this._renderNearby(r.nearby_stops, country, r.anchor_locality)}
       ${this._renderPreDeparture(r.pre_departure)}
       ${this._renderPracticalInfo(r.practical_info)}
       ${this._renderTips(r.tips)}
@@ -485,6 +486,37 @@ const guideRenderer = {
     let html = '<div class="guide-tips"><div class="guide-tips-label">CONSEJOS DE SALMA</div>';
     for (const tip of tips) {
       html += `<p>${escapeHTML(tip)}</p>`;
+    }
+    html += '</div>';
+    return html;
+  },
+
+  // PIEZA A — paradas que verify apartó por caer FUERA de la localidad del destino
+  // ("Gaucín 1 día" → Ronda a 40 km). No van en la ruta numerada ni en el mapa;
+  // se listan aparte como "escapadas cerca".
+  _renderNearby(nearby, country, anchorLoc) {
+    if (!Array.isArray(nearby) || !nearby.length) return '';
+    const _e = (typeof escapeHTML === 'function') ? escapeHTML : (s => String(s == null ? '' : s));
+    const loc = (anchorLoc || '').toString().trim();
+    const label = (loc || country || '').toString().toUpperCase();
+    const dirUrl = (s) => {
+      const b = 'https://www.google.com/maps/dir/?api=1&';
+      if (s.place_id) return b + 'destination=' + encodeURIComponent(s.name || '') + '&destination_place_id=' + s.place_id;
+      if (typeof s.lat === 'number' && typeof s.lng === 'number' && Math.abs(s.lat) > 0.01) return b + 'destination=' + s.lat + '%2C' + s.lng;
+      if (s.name) return b + 'destination=' + encodeURIComponent(s.name);
+      return null;
+    };
+    let html = `<div class="guide-nearby"><div class="guide-nearby-label">🔭 CERCA${label ? ' DE ' + _e(label) : ''}</div>`;
+    html += `<p class="guide-nearby-intro">No entran en la ruta${loc ? ' de ' + _e(loc) : ''}, pero están a un paso si te sobra tiempo.</p>`;
+    for (const s of nearby) {
+      const u = dirUrl(s);
+      const km = s.dist_km ? `<span class="guide-nearby-km">${Math.round(s.dist_km)} km</span>` : '';
+      const desc = s.narrative ? `<p class="guide-nearby-desc">${_e(String(s.narrative).slice(0, 220))}</p>` : '';
+      html += `<div class="guide-nearby-item">
+        <div class="guide-nearby-name">${_e(s.name || '')} ${km}</div>
+        ${desc}
+        ${u ? `<a class="guide-nearby-nav" href="${u}" target="_blank" rel="noopener">🗺️ Cómo llegar</a>` : ''}
+      </div>`;
     }
     html += '</div>';
     return html;
