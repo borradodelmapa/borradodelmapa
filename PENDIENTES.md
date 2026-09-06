@@ -151,10 +151,8 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
 - **Pintar `route.nearby_stops` en la guía** como "🔭 Cerca de {localidad}" — ahora esas paradas
   se apartan bien del mapa pero DESAPARECEN sin decir nada. Front (guide-renderer / mapa-itinerario).
   Cada una trae `name, lat, lng, place_id, photo_ref, narrative, dist_km`.
-- **Fotos en el Tiempo 1 del chip**: el bloque de fotos del worker (~línea 8700, `if (!route && …)`)
-  recorta "N días en X" del mensaje para saber el destino; el chip manda "Recomiéndame un plan de
-  N días por X" (no empieza por número) → falla → busca con el país del GPS → sin fotos. En chat
-  libre sí funciona. Fix: que use `guided_route.destino` / `body.dest_hint`.
+- ~~Fotos en el Tiempo 1 del chip~~ ✅ HECHO y confirmado (`53577759`). `_photoLocHint` usa
+  localidad del ancla → `dest_hint` → `guided_route.destino` → recorte del mensaje → GPS.
 - Verificar el fallo #2 (excursiones lejanas en el prompt) y #3 (Leaflet `guide-renderer.js:836`)
   ahora que las coords son sanas.
 
