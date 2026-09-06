@@ -7470,7 +7470,11 @@ REGLAS:
     // prosa + botón "Crear ruta con mapa". Sin mapa hasta que el usuario pulsa el botón.
     // Así "3 días Málaga", "San Pedro Alcántara" y el chip de 8 preguntas se comportan igual.
     const _guidedStageReco = body.guided_stage === 'reco';
-    const _editingRoute = !!(currentRoute && currentRoute.stops && currentRoute.stops.length > 0);
+    // "Editando" solo si hay ruta cargada Y el mensaje suena a retoque ("quita la parada 2",
+    // "añade un día", "en vez de..."). Un destino nuevo escrito con una ruta abierta NO es
+    // edición: va por el Tiempo 1 igual que si no hubiera nada cargado.
+    const _looksLikeEdit = /\b(quita|quíta|elimina|borra|a[ñn]ade|agrega|mete|cambia|sustituye|reempla|mueve|pon(?:le|me)?|swap|m[aá]s d[ií]as|menos d[ií]as|en vez de|en lugar de|otra parada|esa parada|la parada)\b/i.test(message || '');
+    const _editingRoute = _looksLikeEdit && !!(currentRoute && currentRoute.stops && currentRoute.stops.length > 0);
     const _tiempo1Chat = !_guidedStageReco && !guidedMapStage && !_editingRoute && !imageBase64 &&
       (isRouteRequest(message, history) || isDaysDestination(message));
     const guidedIsReco = _guidedStageReco || _tiempo1Chat;
