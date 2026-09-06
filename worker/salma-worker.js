@@ -8758,7 +8758,15 @@ REGLAS:
           }
 
           // ── PASO 2: Draft inmediato (coords del KV donde haya, Claude donde no) ──
-          try { await writer.write(encoder.encode(`data: ${JSON.stringify({ draft: true, reply, route })}\n\n`)); } catch (_) {}
+          // CON ANCLA: NO se manda el borrador. El front pinta el borrador en el mapa y
+          // luego solo parchea fotos — nunca quita las paradas que verify descarta, así que
+          // los marcadores basura (Portugal, Palma…) se quedaban. Con ancla mandamos la
+          // ruta una sola vez, ya verificada. Sin ancla se mantiene el preview instantáneo.
+          if (!anchorCountry) {
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ draft: true, reply, route })}\n\n`)); } catch (_) {}
+          } else {
+            try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
+          }
 
           // ── PASO 3: Verify con Google Places (fotos + coords reales) ──
           try {
