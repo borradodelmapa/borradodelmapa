@@ -3596,11 +3596,44 @@ async function verifyAllStops(route, placesKey, opts = {}) {
     });
   }
 
+  // ── FILTRO POR LOCALIDAD (destino de punto + viaje corto) ──
+  // "Gaucín 1 día" no debe traer paradas de Ronda aunque caigan a <35 km: en el mapa
+  // parece un road trip. Las paradas fuera de la localidad del ancla NO se borran — pasan
+  // a route.nearby_stops y el front las enseña como "cerca de", sin marcador numerado.
+  const _locNorm = s => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+  const anchorLocN = _locNorm(opts.anchorLocality);
+  let nearbyStops = [];
+  if (pointAnchor && anchorLocN && _durDays <= 2 && finalStops.length > 3) {
+    const inTown = [];
+    finalStops.forEach(s => {
+      const addrN = _locNorm(s.verified_address);
+      const dKm = (typeof s.lat === 'number' && typeof s.lng === 'number')
+        ? haversineKm(anchorLat, anchorLng, s.lat, s.lng) : 999;
+      // En el pueblo si la dirección menciona la localidad del ancla; si no hay dirección
+      // reconocible (miradores, naturaleza) se acepta hasta 8 km; y cualquier cosa a <5 km.
+      if (addrN.includes(anchorLocN) || (!addrN && dKm <= 8) || dKm <= 5) {
+        inTown.push(s);
+      } else {
+        nearbyStops.push({
+          name: s.name || s.headline || '', day: s.day || null,
+          lat: s.lat, lng: s.lng, place_id: s.place_id || '', photo_ref: s.photo_ref || '',
+          verified_address: s.verified_address || '',
+          narrative: s.narrative || s.description || '', dist_km: Math.round(dKm),
+        });
+        console.log(`[VERIFY] ↪ CERCA (fuera de ${opts.anchorLocality}) "${s.name}" ${Math.round(dKm)}km`);
+      }
+    });
+    if (inTown.length >= 2) finalStops = inTown;   // no vaciar la ruta si el filtro se pasa de listo
+    else nearbyStops = [];                          // revertir: mejor road trip que ruta vacía
+  }
+  finalStops.forEach((s, i) => { if ('n' in s) s.n = i + 1; if ('order' in s) s.order = i + 1; });
+
   route.stops = finalStops;
+  route.nearby_stops = nearbyStops;
   route.discarded_stops = discarded;
   route.maps_links = buildMapsLinksFromStops(finalStops, region);
 
-  console.log(`[VERIFY] Resumen: ${finalStops.length} validadas, ${discarded.length} descartadas${pointAnchor ? ' (ancla de punto ON)' : ''}`);
+  console.log(`[VERIFY] Resumen: ${finalStops.length} validadas, ${discarded.length} descartadas, ${nearbyStops.length} cerca${pointAnchor ? ' (ancla de punto ON)' : ''}`);
 
   return route;
 }
@@ -4449,9 +4482,9 @@ async function resolverPaisDestino(destino, userLocation, env) {
   const norm = d.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   if (norm in _anchorPaisCache) return _anchorPaisCache[norm];
 
-  // v4: método de resolución cambiado (Places, no Geocoding) → claves anteriores fuera.
+  // v5: ahora se guarda también la localidad del ancla (filtro por localidad en verify).
   // TTL corto (1 día) mientras se estabiliza el ceñido; subir a 30d después.
-  const kvKey = 'geocity:anchor4:' + norm;
+  const kvKey = 'geocity:anchor5:' + norm;
   if (env.SALMA_KB) {
     try {
       const cached = await env.SALMA_KB.get(kvKey);
@@ -4484,13 +4517,18 @@ async function resolverPaisDestino(destino, userLocation, env) {
     }
     const lat = cand.geometry.location.lat, lng = cand.geometry.location.lng;
 
-    // País: address_components de Place Details; fallback = último trozo de formatted_address.
-    let countryCode = '', countryName = '';
+    // País + LOCALIDAD: address_components de Place Details; fallback país = último trozo de formatted_address.
+    let countryCode = '', countryName = '', locality = '';
     try {
       const dRes = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${cand.place_id}&fields=address_component&language=es&key=${placesKey}`, { signal: AbortSignal.timeout(5000) });
       const dData = await dRes.json();
-      const cc = (dData?.result?.address_components || []).find(c => Array.isArray(c.types) && c.types.includes('country'));
+      const comps = dData?.result?.address_components || [];
+      const cc = comps.find(c => Array.isArray(c.types) && c.types.includes('country'));
       if (cc) { countryCode = (cc.short_name || '').toUpperCase(); countryName = cc.long_name || ''; }
+      const locComp = comps.find(c => c.types.includes('locality'))
+        || comps.find(c => c.types.includes('postal_town'))
+        || comps.find(c => c.types.includes('administrative_area_level_3'));
+      if (locComp) locality = locComp.long_name || '';
     } catch (_) {}
     if (!countryCode && cand.formatted_address) {
       const last = cand.formatted_address.split(',').pop().trim();
@@ -4505,8 +4543,8 @@ async function resolverPaisDestino(destino, userLocation, env) {
     const types = Array.isArray(cand.types) ? cand.types : [];
     const isBigAdmin = types.includes('country') || types.includes('administrative_area_level_1');
     const pointScope = !isBigAdmin && !textIsRegion;
-    const chosen = { countryCode, countryName, lat, lng, pointScope, _types: types.join(',') };
-    console.log(`[ANCLA] destino="${d}" → ${countryName} (${countryCode}) pointScope=${pointScope} ${lat.toFixed(3)},${lng.toFixed(3)} types=[${chosen._types}]`);
+    const chosen = { countryCode, countryName, lat, lng, pointScope, locality, _types: types.join(',') };
+    console.log(`[ANCLA] destino="${d}" → ${countryName} (${countryCode}) loc="${locality}" pointScope=${pointScope} ${lat.toFixed(3)},${lng.toFixed(3)} types=[${chosen._types}]`);
     _anchorPaisCache[norm] = chosen;
     if (env.SALMA_KB) {
       try { await env.SALMA_KB.put(kvKey, JSON.stringify(chosen), { expirationTtl: 86400 }); } catch (_) {}
@@ -8818,6 +8856,7 @@ REGLAS:
                 anchorLng: anchorCountry.lng,
                 anchorPointScope: !!anchorCountry.pointScope,
                 anchorDays: _anchorDays,
+                anchorLocality: anchorCountry.locality || '',
               } : {};
               const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY, _vOpts);
               if (verified) route = verified;
@@ -8829,11 +8868,12 @@ REGLAS:
             const _dd = extractDaysFromMessage(message) || (guidedRoute && parseInt(guidedRoute.duracion_dias, 10)) || (sourceText && extractDaysFromMessage(sourceText)) || 0;
             const _rk = _dd <= 1 ? 35 : (_dd === 2 ? 70 : (_dd <= 4 ? 120 : 160));
             const _a = anchorCountry
-              ? `A:${anchorCountry.countryCode} ps:${anchorCountry.pointScope ? 'T' : 'F'} ${(anchorCountry.lat||0).toFixed(2)},${(anchorCountry.lng||0).toFixed(2)} d${_dd}/r${_rk} src:${_anchorDbg.src} used:"${_anchorDbg.used}" hint:"${_anchorDbg.hint}"`
+              ? `A:${anchorCountry.countryCode} loc:"${anchorCountry.locality||'?'}" ps:${anchorCountry.pointScope ? 'T' : 'F'} ${(anchorCountry.lat||0).toFixed(2)},${(anchorCountry.lng||0).toFixed(2)} d${_dd}/r${_rk} src:${_anchorDbg.src} used:"${_anchorDbg.used}"`
               : `A:NULL used:"${_anchorDbg.used}" hint:"${_anchorDbg.hint}" src:${_anchorDbg.src} ms:${guidedMapStage ? 'T' : 'F'}`;
             const _disc = Array.isArray(route.discarded_stops) ? route.discarded_stops.length : 0;
+            const _near = Array.isArray(route.nearby_stops) ? route.nearby_stops.length : 0;
             const _path = _fastPathRoute ? 'fp' : 'gen';
-            route._dbg = `[dbg ${_a} ${_path} ${route.stops?.length || 0}ok/${_disc}desc]`;
+            route._dbg = `[dbg ${_a} ${_path} ${route.stops?.length || 0}ok/${_disc}desc/${_near}near]`;
             route.title = route._dbg + ' ' + (route.title || '');
           }
         }
