@@ -158,8 +158,11 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
   `_getValidStops` / `_validStops` ahora exigen número finito + rango; los 8 `fitBounds`
   van con `isValid()` + try/catch (`_safeFit` en guide-renderer). `guide-renderer.js?v=47`,
   `mapa-ruta.js?v=3`. **No repro conocido con coords sanas — es red de seguridad.**
-- Fallo #2 (excursiones lejanas en el prompt): el ceñido de verify ya las aparta; queda
-  afinar el prompt para que el modelo no las proponga. Cosmético, baja prioridad.
+- ~~Fallo #2 (excursiones lejanas en el prompt)~~ ✅ HECHO (`74c9281d`). `[MODO RECOMENDACIONES]`
+  ahora gradúa el radio por días: 3-4d = 1 excursión media jornada <45min marcada como opcional;
+  5+d = 1-2 excursiones <1h, prioriza barrios/museos/vida local, nunca 2 provincias; si la
+  ciudad se queda corta → menos días o más profundidad, no rellenar con pueblos lejanos.
+  **Pendiente verificar Paco** con "Córdoba 7 días" (no debe meter Sevilla/Granada).
 
 ### PENDIENTE GRANDE — Historial de conversación persistente (6 sept, Paco)
 Al navegar hacia atrás (botón atrás del móvil / bottom-bar) **se pierde toda la conversación
