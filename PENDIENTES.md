@@ -148,11 +148,11 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
 - Estado: `main` `1fa16374`. Cache key `geocity:anchor4` → `anchor5` (ahora guarda localidad).
 
 ### PENDIENTE de esto
-- **Pintar `route.nearby_stops` en la guía** como "🔭 Cerca de {localidad}" — ahora esas paradas
-  se apartan bien del mapa pero DESAPARECEN sin decir nada. Front (guide-renderer / mapa-itinerario).
-  Cada una trae `name, lat, lng, place_id, photo_ref, narrative, dist_km`.
-- ~~Fotos en el Tiempo 1 del chip~~ ✅ HECHO y confirmado (`53577759`). `_photoLocHint` usa
-  localidad del ancla → `dest_hint` → `guided_route.destino` → recorte del mensaje → GPS.
+- ~~Pintar `route.nearby_stops` en la guía~~ ✅ HECHO (`af0d89b6`), **pendiente verificar Paco**.
+  `guideRenderer._renderNearby()` (helper compartido), usado por la vista itinerario y por
+  guide-renderer. Worker manda `route.anchor_locality`. Front: `guide-renderer.js?v=46`,
+  `mapa-itinerario.js?v=47`, `styles.css?v=52`.
+- ~~Fotos en el Tiempo 1 del chip~~ ✅ HECHO y confirmado (`53577759`).
 - Verificar el fallo #2 (excursiones lejanas en el prompt) y #3 (Leaflet `guide-renderer.js:836`)
   ahora que las coords son sanas.
 
