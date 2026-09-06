@@ -1456,15 +1456,14 @@ const salma = {
           _area.appendChild(_rw);
           this._scrollToBottom(true);
         }
-      } else if (this._isRouteMsg(msg)) {
-        // El mensaje sonaba a petición de ruta pero no llevaba la frase que activa el mapa
-        // ("hazme una guía"). Salma respondió en modo texto/información a propósito — ofrecer
-        // convertirlo en guía con mapa en vez de sugerir que algo se rompió.
-        // PIEZA A — mismo botón y mismo camino que el flujo guiado (helper único).
+      } else if (data.offer_map_button || this._isRouteMsg(msg)) {
+        // PIEZA A — FLUJO ÚNICO. Toda petición de ruta/destino (chat libre o worker-detectada)
+        // se responde primero con recomendaciones en texto. Aquí ofrecemos el botón para
+        // montar la guía con mapa — mismo camino que el chip de 8 preguntas.
         this._removeLoading();
-        this._addSalmaBubble('Ahí tienes toda la info 👆. Si quieres, te la monto como guía con mapa para que la puedas guardar y consultar paso a paso en el viaje.');
+        this._addSalmaBubble('Ahí tienes el plan 👆. Cuando lo veas claro, dale al botón y te lo monto como guía con mapa para guardarla y seguirla paso a paso.');
         this._offerCrearRutaConMapa({
-          baseMsg: this._lastMsg || msg,
+          baseMsg: data.map_base_msg || this._lastMsg || msg,
           sourceText: data.reply || '',
         });
       }

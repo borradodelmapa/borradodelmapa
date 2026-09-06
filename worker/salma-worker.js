@@ -2647,8 +2647,8 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
     // PIEZA A — TIEMPO 1: recomendaciones en prosa día por día. NADA de JSON.
     userContent += `\n\n[MODO RECOMENDACIONES — PASO 1 de 2. INSTRUCCIONES ESTRICTAS:
 PROHIBIDO: SALMA_ROUTE_JSON, generar el JSON de ruta, preguntar, inventar URLs, enlaces de Google Maps (el sistema los pone verificados), mencionar coins/guías.
-QUÉ HACER: recomienda el viaje día por día en prosa. Para cada día, 3-5 sitios con nombre en negrita, por qué merecen la pena, qué comer y un consejo práctico. Ajusta TODO a los datos del cuestionario guiado (compañía, presupuesto, ritmo, intereses, restricciones) que tienes en el contexto.
-Organiza con **Día 1**, **Día 2**… hasta el total de días indicado. Breve: 2-3 frases por sitio.
+QUÉ HACER: recomienda el viaje día por día en prosa. Para cada día, 3-5 sitios con nombre en negrita, por qué merecen la pena, qué comer y un consejo práctico. Si hay datos del cuestionario guiado en el contexto (compañía, presupuesto, ritmo, intereses, restricciones), ajústalo TODO a ellos; si no los hay, usa defaults sensatos (en pareja, ritmo equilibrado, presupuesto medio, mezcla de cultura y sitios emblemáticos).
+Organiza con **Día 1**, **Día 2**… hasta el total de días indicado (si no se indica número de días, haz 1 día). Breve: 2-3 frases por sitio.
 CIERRE EXACTO — termina con esta frase y nada más: "Si te encaja, dale a **Crear ruta con mapa** aquí abajo y te lo monto con paradas, coordenadas y navegación."]`;
   } else if (isRouteRequest(message, history) || guidedRoute || routeFromHere) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
@@ -7459,15 +7459,21 @@ REGLAS:
     const userNotes = body.user_notes || null;
     const frontendCountryCode = body.country || null; // País enviado por el frontend (detectado por GPS)
     const guidedRoute = body.guided_route || null; // Flujo guiado: 8 campos ya recogidos por el frontend
-    // PIEZA A — Tiempo 1 del flujo guiado (recomendaciones en prosa, sin JSON).
-    // El Tiempo 2 (mapa) llega sin este flag y con source_text.
-    const guidedIsReco = body.guided_stage === 'reco';
     // PIEZA A — Tiempo 2: el botón "Crear ruta con mapa". Convierte el texto de
     // recomendaciones (source_text) en guía con mapa SIN volver a generar el plan
     // ni re-escribirlo en el chat. Si la conversión falla, se avisa — NO se cae al
     // bucle largo de búsquedas (eso duplicaba el texto y tardaba minutos).
     const guidedMapStage = body.guided_stage === 'map';
     const sourceText = typeof body.source_text === 'string' ? body.source_text.trim() : ''; // Fast-path: texto ya generado, convertir directo a mapa
+    // PIEZA A — FLUJO ÚNICO. TODA petición de ruta/destino escrita en el chat (no el botón de
+    // mapa, no editando una ruta ya abierta) se responde como Tiempo 1: recomendaciones en
+    // prosa + botón "Crear ruta con mapa". Sin mapa hasta que el usuario pulsa el botón.
+    // Así "3 días Málaga", "San Pedro Alcántara" y el chip de 8 preguntas se comportan igual.
+    const _guidedStageReco = body.guided_stage === 'reco';
+    const _editingRoute = !!(currentRoute && currentRoute.stops && currentRoute.stops.length > 0);
+    const _tiempo1Chat = !_guidedStageReco && !guidedMapStage && !_editingRoute && !imageBase64 &&
+      (isRouteRequest(message, history) || isDaysDestination(message));
+    const guidedIsReco = _guidedStageReco || _tiempo1Chat;
     const _urlIncidents = []; // BLOQUE E — sustituciones de enlaces Maps (se vuelcan a Firestore al final)
 
     // ─── ANCLA DE PAÍS DEL DESTINO (flujo guiado) ───
@@ -7476,9 +7482,10 @@ REGLAS:
     // Si falla → null → todo se comporta como antes.
     let anchorCountry = null;
     {
-      // Destino: del cuestionario guiado, o extraído del mensaje si es petición de ruta a mano.
+      // Destino: del cuestionario guiado, o extraído del mensaje. Se calcula para el Tiempo 1
+      // (ancla en la prosa: "Córdoba" no se va a Argentina) y para el Tiempo 2 (ancla en verify).
       let _anchorDestino = (guidedRoute && guidedRoute.destino) ? String(guidedRoute.destino) : null;
-      if (!_anchorDestino && !guidedIsReco && isRouteRequest(message, history)) {
+      if (!_anchorDestino && (isRouteRequest(message, history) || isDaysDestination(message) || guidedMapStage)) {
         try {
           const _loc = extractHelpLocation(message, history, currentRoute);
           if (_loc && String(_loc).trim().length >= 2) _anchorDestino = String(_loc).trim();
@@ -8499,7 +8506,8 @@ INSTRUCCIONES:
 
         // ── RESCATE 1: el JSON empezó pero se cortó por max_tokens ──
         // Reconstituimos con las paradas completas antes de gastar otra llamada a Claude.
-        if (!route && allText.includes('SALMA_ROUTE_JSON')) {
+        // (En Tiempo 1 NO — aunque el modelo se salte la orden y emita JSON, no hay mapa.)
+        if (!route && !guidedIsReco && allText.includes('SALMA_ROUTE_JSON')) {
           const salvaged = salvageIncompleteRouteJson(allText);
           if (salvaged) {
             route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + salvaged);
@@ -8853,6 +8861,13 @@ REGLAS:
         // ── Enviar DONE con ruta verificada (fotos + coords corregidas) ──
         const doneEvt = { done: true, reply, route: route || null };
         if (actionResults.length > 0) doneEvt.action_results = actionResults;
+        // PIEZA A — FLUJO ÚNICO: si esto fue Tiempo 1 (recomendaciones sin mapa), decirle al
+        // front que muestre el botón "Crear ruta con mapa". map_base_msg = destino/petición
+        // original, para que el Tiempo 2 sepa de qué ruta hablar.
+        if (guidedIsReco && !guidedMapStage && !route) {
+          doneEvt.offer_map_button = true;
+          doneEvt.map_base_msg = _guidedStageReco ? null : (message || '').slice(0, 200);
+        }
         if (photoUploadPromise) {
           const photoResult = await photoUploadPromise;
           if (photoResult) { doneEvt.photo_url = photoResult.url; doneEvt.photo_key = photoResult.key; }
