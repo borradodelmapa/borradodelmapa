@@ -74,32 +74,45 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
 - Estado: `main` `20fcf2e8`, worker `18e43a69`, front `salma:55` / `app:60`.
 - Ficheros tocados: `salma.js` (`_rutaFinalizar`, `_offerCrearRutaConMapa`, `_doSend`), `app.js` (fuera `enrichGuia`), `worker/salma-worker.js` (`guidedIsReco` / `guidedMapStage`, `convertProseToRouteJson`, gates de `longRoute` / caché / rescates).
 
-### PROGRESO 6 sept 2026 (sesión Claude)
-- **#1 Destino sin país — ARREGLADO.** `resolverPaisDestino()` en el worker: geocoding del
-  destino sin filtro de país + desempate por cercanía al GPS. Se enhebra en `buildMessages`,
-  `convertProseToRouteJson` y `verifyAllStops` (`forceCountryCode`). Confirmado por Paco: sale España.
-- **Bug colateral — el botón "Crear ruta con mapa" daba HTTP 400 SIEMPRE.** `claude-sonnet-4-6`
-  no admite prefill de assistant (`{role:'assistant',content:'{'}`). Quitado de los 2 sitios +
+### PROGRESO 6 sept 2026 (sesión Claude) — worker en `f2ca6a48`
+
+- **#1 Destino sin país — ARREGLADO y CONFIRMADO** (Córdoba + Toledo salen en España,
+  dentro de su provincia). `resolverPaisDestino()` en el worker. Se enhebra en
+  `buildMessages`, `convertProseToRouteJson` y `verifyAllStops` (`forceCountryCode`).
+- **#2/#3-coords "la ruta se iba a Portugal/Madrid/Palma" — ARREGLADO y CONFIRMADO.**
+  `verifyAllStops` con `pointAnchor` (destino = ciudad → `pointScope=true`): sesga las
+  búsquedas de Places por el **ancla** (no por las coords del modelo) y **descarta**
+  paradas a >120 km. Caché KV `geocity:anchor4:` (TTL 1 día — **subir a 30d al terminar**).
+- **ROOT CAUSE de las 3 h de vueltas:** `resolverPaisDestino` usaba la **Geocoding API**
+  de Google. La `GOOGLE_PLACES_KEY` NO está habilitada para Geocoding (sí para Places)
+  → `/geocode/json` devolvía `REQUEST_DENIED` en silencio → `anchorCountry = null` →
+  **todo el anclaje + ceñido + no-borrador se saltaba**. Fix: `resolverPaisDestino` usa
+  ahora `findplacefromtext` + Place Details (Places API). *(La `geocodeCiudad` que ya
+  existía tiene el mismo problema latente — cae a `userCoords` y nadie lo notó.)*
+- **Bug colateral — el botón "Crear ruta con mapa" daba HTTP 400 SIEMPRE.**
+  `claude-sonnet-4-6` no admite prefill de assistant. Quitado de los 2 sitios +
   `parseModelRouteJson()`. Arreglado.
-- **#2/#3 ceñido al radio de la ciudad — EN CURSO.** `resolverPaisDestino` marca `pointScope`
-  (destino = ciudad/pueblo). `verifyAllStops` con `pointAnchor`: sesga las búsquedas por el
-  ancla (no por las coords del modelo) y descarta paradas a >120 km. Caché KV `geocity:anchor3:`.
-  **Root cause del "seguía saliendo Portugal/Palma": el front pinta el borrador PRE-verify en
-  el mapa y luego solo parchea fotos — nunca quita las paradas que verify descarta.** Fix
-  (worker `60f95a10`): con ancla NO se manda el evento `{draft}`, se manda la ruta una sola
-  vez ya verificada. **Pendiente que Paco confirme que el mapa sale limpio.**
-- Diagnóstico temporal vivo en worker (`_convertFailReason` + `(motivo:)` + línea `_[dbg ancla]`
-  que NO se ve porque el front tira `data.reply` en rutas guiadas + `console.log('[ANCLA-PAIS]')`).
-  **QUITAR todo eso cuando el ceñido esté confirmado.** build tag actual: `dbg-radio-2`.
-- Nota: el chip de duración es un rango "5-7 días" → que salgan 6 días no es bug.
+- **El front pinta el borrador PRE-verify y luego solo parchea fotos** (nunca quita/mueve
+  marcadores). Fix worker: en `guidedMapStage` o con ancla NO se manda el evento `{draft}`,
+  la ruta va una sola vez ya verificada.
+- Nota menor: el chip de duración es un rango "5-7 días" → que salgan 6 no es bug.
+
+### ⚠️ DIAGNÓSTICO TEMPORAL VIVO — QUITAR AL TERMINAR CON GUÍAS (Paco lo deja a propósito)
+Todo en `worker/salma-worker.js`:
+- `let _convertFailReason` + bloque `if (!fallbackRes.ok)` ampliado en `convertProseToRouteJson`
+  + sufijo `\n\n(motivo: …)` en el `_msg` de `map_stage_failed`.
+- Bloque `[dbg …]` que se **prepende a `route.title`** tras PASO 3 (build tag `b:radio4`).
+- `console.log('[ANCLA] …')` en `resolverPaisDestino`, `console.log('[ANCLA-PAIS] …')` en el
+  handler, `console.log('[VERIFY] … (ancla de punto ON)')`.
+- Al quitar: subir `geocity:anchor4` TTL de 86400 a 2592000.
 
 ### PENDIENTE — fallos de MOTOR DE RUTAS
-2. **La ruta se sale de la ciudad** (queda tuneo de prompt además del ceñido de verify): el
-   texto de recomendaciones del T1 a veces mete excursiones lejanas. Con destino de muchos días
-   para una ciudad, el modelo rellena.
+2. **La ruta se sale de la ciudad — tuneo de PROMPT** (ya no de coords). El texto del T1
+   a veces mete excursiones lejanas cuando el destino lleva muchos días. El ceñido de verify
+   ya las descarta (`Ndesc` en el `[dbg]`), pero mejor que el modelo no las proponga.
 3. **Render / solapamiento.** `Cannot read properties of undefined (reading 'min')` en Leaflet
-   desde `guide-renderer.js:836` (bounds nulos por lat/lng mezclados). "Carga una guía vieja y
-   en un segundo sube otra" = dos renders. Revisar tras confirmar el fix del borrador.
+   desde `guide-renderer.js:836` (bounds nulos por lat/lng mezclados/vacíos). "Carga una guía
+   vieja y en un segundo sube otra" = dos renders. Revisar ahora que las coords ya son sanas.
 
 ### PENDIENTE — mejoras de UI de la guía / itinerario (pedidas por Paco 6 sept)
 1. **Botón cerrar** arriba a la izquierda del mapa que sale en la guía / vista itinerario.
