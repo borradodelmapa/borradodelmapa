@@ -109,13 +109,9 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
   handler, `console.log('[VERIFY] … ↪ CERCA …')`.
 - Al quitar: subir `geocity:anchor5` TTL de 86400 a 2592000 (línea ~4453 de `resolverPaisDestino`).
 
-### PENDIENTE — fallos de MOTOR DE RUTAS
-2. **La ruta se sale de la ciudad — tuneo de PROMPT** (ya no de coords). El texto del T1
-   a veces mete excursiones lejanas cuando el destino lleva muchos días. El ceñido de verify
-   ya las descarta (`Ndesc` en el `[dbg]`), pero mejor que el modelo no las proponga.
-3. **Render / solapamiento.** `Cannot read properties of undefined (reading 'min')` en Leaflet
-   desde `guide-renderer.js:836` (bounds nulos por lat/lng mezclados/vacíos). "Carga una guía
-   vieja y en un segundo sube otra" = dos renders. Revisar ahora que las coords ya son sanas.
+### MOTOR DE RUTAS — los 3 fallos CERRADOS (ver detalle más abajo)
+- #1 país del destino ✅ · #2 excursiones lejanas ✅ (prompt + filtro provincia + bias 22km)
+  · #3 crash Leaflet ✅ (blindado). Queda solo la verificación en uso de Paco.
 
 ### HECHO 6 sept — mejoras de UI de la guía + flujo único
 - **#4** enlaces de Maps fuera de las recomendaciones del Tiempo 1 (worker `d975c04a`). ✓
