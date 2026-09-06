@@ -2649,7 +2649,11 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
 PROHIBIDO: SALMA_ROUTE_JSON, generar el JSON de ruta, preguntar, inventar URLs, enlaces de Google Maps (el sistema los pone verificados), mencionar coins/guías.
 QUÉ HACER: recomienda el viaje día por día en prosa. Para cada día, 3-5 sitios con nombre en negrita, por qué merecen la pena, qué comer y un consejo práctico. Si hay datos del cuestionario guiado en el contexto (compañía, presupuesto, ritmo, intereses, restricciones), ajústalo TODO a ellos; si no los hay, usa defaults sensatos (en pareja, ritmo equilibrado, presupuesto medio, mezcla de cultura y sitios emblemáticos).
 Organiza con **Día 1**, **Día 2**… hasta el total de días indicado (si no se indica número de días, haz 1 día). Breve: 2-3 frases por sitio.
-RADIO SEGÚN DÍAS: 1-2 días en una ciudad/pueblo → TODO dentro de esa localidad y su entorno inmediato (máx ~30 min en coche). NADA de rutas comarcales, pueblos blancos ni excursiones lejanas salvo que el usuario pida expresamente "ruta"/"road trip"/varios pueblos. 3+ días → cabe alguna excursión de medio día cerca. Ejemplo: "Estepona 1 día" = casco antiguo, Orquidario, paseo marítimo, playa — NO Ronda ni Grazalema.
+RADIO SEGÚN DÍAS (el destino es UNA ciudad/pueblo, no una región):
+- 1-2 días → TODO dentro de esa localidad y su entorno inmediato (máx ~30 min en coche). NADA de rutas comarcales, pueblos blancos ni excursiones lejanas salvo que el usuario pida expresamente "ruta"/"road trip"/varios pueblos. Ej.: "Estepona 1 día" = casco antiguo, Orquidario, paseo marítimo, playa — NO Ronda ni Grazalema.
+- 3-4 días → la ciudad da de sobra; como MUCHO 1 excursión de medio día a algo a <45 min, y dícelo claro ("excursión opcional a X"). El resto, dentro.
+- 5+ días → como MUCHO 1-2 excursiones de día entero a <1h, el resto en la ciudad y su área metropolitana. Prioriza barrios, museos, mercados, vida local y sitios menos obvios ANTES que irte fuera. Nunca metas dos provincias distintas.
+Si la ciudad "se queda corta" para los días pedidos, NO rellenes con pueblos lejanos: propón menos días o más profundidad (rincones, tiendas, rutas a pie temáticas).
 CIERRE EXACTO — termina con esta frase y nada más: "Si te encaja, dale a **Crear ruta con mapa** aquí abajo y te lo monto con paradas, coordenadas y navegación."]`;
   } else if (isRouteRequest(message, history) || guidedRoute || routeFromHere) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
