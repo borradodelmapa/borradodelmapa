@@ -98,13 +98,16 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
 - Nota menor: el chip de duración es un rango "5-7 días" → que salgan 6 no es bug.
 
 ### ⚠️ DIAGNÓSTICO TEMPORAL VIVO — QUITAR AL TERMINAR CON GUÍAS (Paco lo deja a propósito)
-Todo en `worker/salma-worker.js`:
+`worker/salma-worker.js`:
 - `let _convertFailReason` + bloque `if (!fallbackRes.ok)` ampliado en `convertProseToRouteJson`
   + sufijo `\n\n(motivo: …)` en el `_msg` de `map_stage_failed`.
-- Bloque `[dbg …]` que se **prepende a `route.title`** tras PASO 3 (build tag `b:radio4`).
-- `console.log('[ANCLA] …')` en `resolverPaisDestino`, `console.log('[ANCLA-PAIS] …')` en el
-  handler, `console.log('[VERIFY] … (ancla de punto ON)')`.
-- Al quitar: subir `geocity:anchor4` TTL de 86400 a 2592000.
+- `let _anchorDbg` en el handler + bloque `[dbg …]` que se **prepende a `route.title`** Y se
+  manda como `route._dbg` tras PASO 3. Formato actual:
+  `[dbg A:ES loc:"Gaucín" ps:T 36.52,-5.32 d1/r35 src:hint used:"GAUCIN" fp 4ok/2desc/1near]`.
+- `salma.js` (v57): burbuja `🔧 ` + `data.route._dbg` en la rama `if (data.route && data.route.stops)`.
+- `console.log('[ANCLA] …')` en `resolverPaisDestino`, `console.log('[ANCLA-PAIS] src=… …')` en el
+  handler, `console.log('[VERIFY] … ↪ CERCA …')`.
+- Al quitar: subir `geocity:anchor5` TTL de 86400 a 2592000 (línea ~4453 de `resolverPaisDestino`).
 
 ### PENDIENTE — fallos de MOTOR DE RUTAS
 2. **La ruta se sale de la ciudad — tuneo de PROMPT** (ya no de coords). El texto del T1
@@ -127,13 +130,33 @@ Todo en `worker/salma-worker.js`:
   Worker manda `offer_map_button`; front lo usa. `salma.js?v=56`, worker `3faa7071`.
   **Pendiente verificar por Paco.**
 
+### HECHO 6 sept (tarde) — ceñido fino + flujo único confirmado
+- **Flujo único CONFIRMADO** por Paco: "3 días Ciudad Real", "estepona un día", chip →
+  todos dan descripción + botón, sin mapa directo. `salma.js?v=57`.
+- **`dest_hint` del front** (`_cleanDestino` en salma.js): "3 días Ciudad Real" → "Ciudad Real".
+  Se manda en todo envío de ruta. El worker lo usa para el ancla ANTES de `extractHelpLocation`
+  (que fallaba con destinos de 2+ palabras → ancla `A:NULL` → radio dinámico → paradas en Madrid).
+- **`_editingRoute`** ahora exige que el mensaje suene a retoque (quita/añade/cambia). Un destino
+  nuevo con una ruta abierta ya NO se trata como edición (antes disparaba guía directa sin T1).
+- **Radio del ancla por días**: `MAX_ANCHOR_KM` = 35 (1d) / 70 (2d) / 120 (3-4d) / 160 (5+).
+- **Filtro por LOCALIDAD** (`resolverPaisDestino` devuelve `locality`; verify): destino de punto
+  + 1-2 días → parada "en el pueblo" si `verified_address` menciona la localidad del ancla, o
+  (sin dirección) <8 km, o <5 km. El resto → `route.nearby_stops` (NO se borra). Si quedan <2
+  en el pueblo → se revierte. Confirmado con "Gaucín un día": `4ok/2desc/1near`.
+- **`[MODO RECOMENDACIONES]`**: "1-2 días en una ciudad → todo dentro de la localidad, nada de
+  rutas comarcales salvo que se pida *ruta*".
+- Estado: `main` `1fa16374`. Cache key `geocity:anchor4` → `anchor5` (ahora guarda localidad).
+
 ### PENDIENTE de esto
-- Verificar que "3 días Málaga", "San Pedro Alcántara", "Salma hazme una guía" y el chip
-  se comportan TODOS igual: descripción + fotos + botón, sin mapa hasta pulsar.
-- **Fotos en el Tiempo 1**: para el chip, `_photoRegion` no se extrae bien del mensaje
-  ("Recomiéndame un plan de N días por X" no empieza por número) → busca fotos con el
-  país del GPS. Para chat libre sí funciona. Revisar la extracción de destino del bloque
-  de fotos (~línea 8690 del worker).
+- **Pintar `route.nearby_stops` en la guía** como "🔭 Cerca de {localidad}" — ahora esas paradas
+  se apartan bien del mapa pero DESAPARECEN sin decir nada. Front (guide-renderer / mapa-itinerario).
+  Cada una trae `name, lat, lng, place_id, photo_ref, narrative, dist_km`.
+- **Fotos en el Tiempo 1 del chip**: el bloque de fotos del worker (~línea 8700, `if (!route && …)`)
+  recorta "N días en X" del mensaje para saber el destino; el chip manda "Recomiéndame un plan de
+  N días por X" (no empieza por número) → falla → busca con el país del GPS → sin fotos. En chat
+  libre sí funciona. Fix: que use `guided_route.destino` / `body.dest_hint`.
+- Verificar el fallo #2 (excursiones lejanas en el prompt) y #3 (Leaflet `guide-renderer.js:836`)
+  ahora que las coords son sanas.
 
 ### Menores
 - La **última foto de todas las guías es siempre la misma** (paisaje genérico).
