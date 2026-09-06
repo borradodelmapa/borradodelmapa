@@ -781,9 +781,12 @@ const mapaRuta = {
     const marker = this._markers[index];
     if (!marker) return;
 
-    const gmapsUrl = stop.place_id
-      ? `https://www.google.com/maps/place/?q=place_id:${stop.place_id}`
-      : null;
+    // "Cómo llegar" a ESA parada: place_id > coords > nombre. Siempre sale.
+    let gmapsUrl = null;
+    const _b = 'https://www.google.com/maps/dir/?api=1&';
+    if (stop.place_id) gmapsUrl = _b + `destination=${encodeURIComponent(stop.headline || stop.name || '')}&destination_place_id=${stop.place_id}`;
+    else if (typeof stop.lat === 'number' && typeof stop.lng === 'number' && Math.abs(stop.lat) > 0.01) gmapsUrl = _b + `destination=${stop.lat}%2C${stop.lng}`;
+    else if (stop.name || stop.headline) gmapsUrl = _b + `destination=${encodeURIComponent(stop.name || stop.headline)}`;
     const dayColor = this._dayColors ? this._dayColors[((stop.day || 1) - 1) % this._dayColors.length] : '#D4A843';
 
     const _buildContent = (photoHtml) => `
@@ -801,7 +804,7 @@ const mapaRuta = {
                     color:#f4efe6;text-decoration:none;padding:5px 10px;border-radius:6px;
                     background:rgba(66,133,244,.15);border:1px solid rgba(66,133,244,.3);">
             <svg width="12" height="12" viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="2.5"/></svg>
-            Ver en Google Maps
+            Cómo llegar
           </a>` : ''}
         </div>
       </div>`;

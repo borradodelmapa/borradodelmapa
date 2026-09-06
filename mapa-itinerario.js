@@ -167,14 +167,9 @@ const mapaItinerario = {
     const horas = stop.estimated_hours || stop.duracion_horas || null;
     const km = stop.km_from_previous || 0;
 
-    // Regla única: sin place_id validado → no hay enlace a Maps.
-    const mapsNavUrl = stop.place_id
-      ? `https://www.google.com/maps/place/?q=place_id:${stop.place_id}`
-      : null;
-    // "Cómo llegar" = direcciones hasta ESA parada (Google usa origen = ubicación del usuario).
-    const mapsDirUrl = stop.place_id
-      ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(stop.headline || stop.name || '')}&destination_place_id=${stop.place_id}`
-      : null;
+    // "Cómo llegar" = direcciones hasta ESA parada (Google pone el origen = ubicación del
+    // usuario). place_id si lo hay; si no, coordenadas; si no, el nombre. Siempre sale.
+    const mapsDirUrl = this._stopDirUrl(stop);
     const notaLarga = nota && nota.length > 140;
 
     card.innerHTML = `
@@ -198,9 +193,8 @@ const mapaItinerario = {
         ${stop.local_secret ? `<div class="guide-stop-tag tag-secret"><span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>${this._esc(stop.local_secret)}</div>` : ''}
         ${stop.practical ? `<div class="guide-stop-practical">${this._esc(stop.practical)}</div>` : ''}
         <div class="itin-card-places" id="itin-places-${index}"></div>
-        ${(mapsNavUrl || mapsDirUrl) ? `<div class="itin-card-actions">
-          ${mapsNavUrl ? `<a class="itin-card-nav" href="${mapsNavUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 Ir aquí</a>` : ''}
-          ${mapsDirUrl ? `<a class="itin-card-nav" href="${mapsDirUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🗺️ Cómo llegar</a>` : ''}
+        ${mapsDirUrl ? `<div class="itin-card-actions">
+          <a class="itin-card-nav" href="${mapsDirUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🗺️ Cómo llegar</a>
         </div>` : ''}
       </div>
     `;
@@ -381,10 +375,24 @@ const mapaItinerario = {
 
   // ═══ GOOGLE MAPS RUTA COMPLETA ═══
   // Regla única: sin place_id validado → no hay enlace.
+  // URL de "cómo llegar" a UNA parada. Preferencia: place_id > coords > nombre.
+  _stopDirUrl(stop) {
+    if (!stop) return null;
+    const base = 'https://www.google.com/maps/dir/?api=1&';
+    if (stop.place_id) {
+      return base + `destination=${encodeURIComponent(stop.headline || stop.name || '')}&destination_place_id=${stop.place_id}`;
+    }
+    if (typeof stop.lat === 'number' && typeof stop.lng === 'number' && Math.abs(stop.lat) > 0.01) {
+      return base + `destination=${stop.lat}%2C${stop.lng}`;
+    }
+    if (stop.name || stop.headline) return base + `destination=${encodeURIComponent(stop.name || stop.headline)}`;
+    return null;
+  },
+
   _fullRouteGmapsUrl(stops, country) {
-    const valid = (stops || []).filter(s => s && s.place_id && s.lat && s.lng);
+    const valid = (stops || []).filter(s => s && s.lat && s.lng && Math.abs(s.lat) > 0.01);
     if (valid.length === 0) return null;
-    if (valid.length === 1) return 'https://www.google.com/maps/place/?q=place_id:' + valid[0].place_id;
+    if (valid.length === 1) return this._stopDirUrl(valid[0]);
     const sampled = this._sampleWaypoints(valid, 25);
     // /dir/ usa lat,lng — place_id: no funciona en path de /dir/
     const segments = sampled.map(p => `${p.lat},${p.lng}`).join('/');
