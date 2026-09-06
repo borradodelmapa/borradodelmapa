@@ -4444,11 +4444,15 @@ async function resolverPaisDestino(destino, userLocation, env) {
   const norm = d.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   if (norm in _anchorPaisCache) return _anchorPaisCache[norm];
 
-  const kvKey = 'geocity:anchor:' + norm;
+  // v2: la clave vieja cacheó objetos sin `pointScope` → se ignoran.
+  const kvKey = 'geocity:anchor2:' + norm;
   if (env.SALMA_KB) {
     try {
       const cached = await env.SALMA_KB.get(kvKey);
-      if (cached) { const p = JSON.parse(cached); _anchorPaisCache[norm] = p; return p; }
+      if (cached) {
+        const p = JSON.parse(cached);
+        if (p && typeof p.pointScope === 'boolean') { _anchorPaisCache[norm] = p; return p; }
+      }
     } catch (_) {}
   }
 
