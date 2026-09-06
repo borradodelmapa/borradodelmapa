@@ -184,7 +184,11 @@ const mapaRuta = {
   },
 
   // ═══ BOTÓN "IR AL MAPA" (modo preview del itinerario) ═══
+  // DESACTIVADO 6 sept 2026 (decisión de Paco). Detrás de este botón está el acceso al
+  // mapa live con TODO el set de herramientas en construcción: I'M FINE, IR AQUÍ, GUARDAR,
+  // añadir fotos, CENTRAR, TIPO, CAPAS, SOS, buscar lugar. Reactivar quitando este return.
   _renderGoToMapButton(containerId) {
+    return;
     const el = document.getElementById(containerId);
     if (!el) return;
     el.querySelector('.itin-go-to-map')?.remove();

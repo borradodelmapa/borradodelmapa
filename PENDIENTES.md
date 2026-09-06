@@ -176,8 +176,18 @@ la app — "como tú, que tienes historial".
 - Ojo: hoy la history se **vacía a propósito** tras generar una guía (`this.history = []`).
   Eso habría que repensarlo si el chat pasa a ser persistente.
 
+### DESACTIVADO 6 sept — botón "IR AL MAPA" del preview del itinerario
+`mapaRuta._renderGoToMapButton()` hace `return` al principio (mapa-ruta.js). El botón salía
+sobre el mapa de la vista itinerario y abría el **mapa live**, que es donde vive TODO el set
+de herramientas que se está construyendo y aún no está listo para enseñar:
+**I'M FINE, IR AQUÍ, GUARDAR, añadir fotos, CENTRAR, TIPO, CAPAS, SOS, buscar lugar** (+ voz).
+Reactivar = quitar el `return`. Cuando esas herramientas estén, se reactiva.
+
 ### Menores
-- La **última foto de todas las guías es siempre la misma** (paisaje genérico).
+- La **última foto de todas las guías es siempre la misma** (paisaje genérico). Relacionado:
+  el inyector de fotos del worker cogía la negrita del cierre ("Crear ruta con mapa") como si
+  fuera un lugar → foto de montaña genérica. Excluido 6 sept (`a9b6fdcd`+). Revisar si aún
+  pasa con otros cierres.
 - El **chat libre** ("3 días Córdoba" escrito a mano) sigue yendo directo al mapa. Unificarlo con el flujo de 2 tiempos = "paso 1b": reusar `guided_stage:'reco'` disparado desde el front para mensajes de ruta sin la frase "hazme una guía". ~15-25 líneas de front, 0 worker. Pendiente OK de Paco.
 
 ### Por dónde empezar

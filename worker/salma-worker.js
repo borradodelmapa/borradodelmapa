@@ -8798,6 +8798,8 @@ REGLAS:
             while ((bm = boldRegex.exec(allText)) !== null) {
               const name = bm[1].trim();
               if (/^\d|^€|^USD|^Día\s|^Tip:|^Nota:|^Precio|^Gratis|^Abierto|^Cerrado/i.test(name)) continue;
+              // No es un lugar: es la llamada a la acción del cierre ("Crear ruta con mapa").
+              if (/\b(crear ruta con mapa|crear ruta|ruta con mapa|generar (?:la )?ruta|hazme una gu[ií]a|dale a|pulsa)\b/i.test(name)) continue;
               // Rechazar 1 palabra solo si es corta (Día, Tip, Ojo…). Acepta Alhambra, Louvre, Coliseo…
               if (name.split(/\s+/).length === 1 && name.length < 5) continue;
               if (!boldNames.includes(name)) boldNames.push(name);

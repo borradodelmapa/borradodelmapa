@@ -4605,21 +4605,25 @@ body {
 }
 .itin-go-to-map:active { opacity:.8; transform:translateX(-50%) scale(.96); }
 
-/* ── Barra de acciones flotante (se añade al body, z-index raíz) ── */
+/* ── Barra de acciones flotante (se añade al body, z-index raíz) ──
+   Va bajo el botón cerrar (arriba-izquierda), en columna, para no tapar el título. */
 .itin-action-bar {
   position: fixed;
-  top: 12px;
-  right: 12px;
+  top: 58px;
+  left: 12px;
+  right: auto;
   z-index: 1250;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: 6px;
   background: rgba(5,5,5,.88);
-  padding: 6px 10px;
+  padding: 6px;
   border-radius: 12px;
   border: 1px solid rgba(212,160,23,.3);
   backdrop-filter: blur(12px);
 }
+.itin-action-bar .itin-btn { justify-content: center; }
 .itin-btn {
   background: none;
   border: 1px solid rgba(240,180,41,.3);

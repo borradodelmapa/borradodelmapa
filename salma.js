@@ -1264,10 +1264,36 @@ const salma = {
     $send.disabled = true;
     const camBtn = document.getElementById('cam-btn');
     if (camBtn) camBtn.disabled = true;
-    const loadingPhrase = this._isRouteMsg(msg)
-      ? null  // aleatoria del pool de rutas
-      : this._loadingPhrasesSimple[Math.floor(Math.random() * this._loadingPhrasesSimple.length)];
+    const _isMapBuild = !!(extra && extra.guided_stage === 'map');
+    const loadingPhrase = _isMapBuild
+      ? 'Leyendo tu plan...'  // T2: pasos propios abajo, sin rotación aleatoria
+      : this._isRouteMsg(msg)
+        ? null  // aleatoria del pool de rutas
+        : this._loadingPhrasesSimple[Math.floor(Math.random() * this._loadingPhrasesSimple.length)];
     const loadingEl = this._addLoading(loadingPhrase);
+
+    // TIEMPO 2 (botón "Crear ruta con mapa"): la conversión + verify tarda. En vez de una
+    // frase suelta, enseñar pasos que avanzan para que se note que está trabajando.
+    if (_isMapBuild) {
+      const steps = [
+        'Leyendo tu plan...',
+        'Colocando las paradas en el mapa...',
+        'Verificando cada sitio con Google...',
+        'Ajustando coordenadas y cargando fotos...',
+        'Casi listo, montando la guía...',
+      ];
+      let si = 0;
+      const setStep = () => {
+        const el = document.getElementById('loading-status');
+        if (el) el.textContent = steps[si];
+      };
+      setStep();
+      this._mapBuildTimer = setInterval(() => {
+        si = Math.min(si + 1, steps.length - 1);
+        setStep();
+        if (si === steps.length - 1) { clearInterval(this._mapBuildTimer); this._mapBuildTimer = null; }
+      }, 6000);
+    }
 
     try {
       const body = {
@@ -3486,6 +3512,10 @@ const salma = {
     if (this._retryTimer) {
       clearTimeout(this._retryTimer);
       this._retryTimer = null;
+    }
+    if (this._mapBuildTimer) {
+      clearInterval(this._mapBuildTimer);
+      this._mapBuildTimer = null;
     }
   },
 
