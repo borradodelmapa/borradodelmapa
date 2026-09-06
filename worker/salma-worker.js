@@ -2649,6 +2649,7 @@ Plan B lluvia: ${d.plan_b_lluvia}`;
 PROHIBIDO: SALMA_ROUTE_JSON, generar el JSON de ruta, preguntar, inventar URLs, enlaces de Google Maps (el sistema los pone verificados), mencionar coins/guías.
 QUÉ HACER: recomienda el viaje día por día en prosa. Para cada día, 3-5 sitios con nombre en negrita, por qué merecen la pena, qué comer y un consejo práctico. Si hay datos del cuestionario guiado en el contexto (compañía, presupuesto, ritmo, intereses, restricciones), ajústalo TODO a ellos; si no los hay, usa defaults sensatos (en pareja, ritmo equilibrado, presupuesto medio, mezcla de cultura y sitios emblemáticos).
 Organiza con **Día 1**, **Día 2**… hasta el total de días indicado (si no se indica número de días, haz 1 día). Breve: 2-3 frases por sitio.
+RADIO SEGÚN DÍAS: 1-2 días en una ciudad/pueblo → TODO dentro de esa localidad y su entorno inmediato (máx ~30 min en coche). NADA de rutas comarcales, pueblos blancos ni excursiones lejanas salvo que el usuario pida expresamente "ruta"/"road trip"/varios pueblos. 3+ días → cabe alguna excursión de medio día cerca. Ejemplo: "Estepona 1 día" = casco antiguo, Orquidario, paseo marítimo, playa — NO Ronda ni Grazalema.
 CIERRE EXACTO — termina con esta frase y nada más: "Si te encaja, dale a **Crear ruta con mapa** aquí abajo y te lo monto con paradas, coordenadas y navegación."]`;
   } else if (isRouteRequest(message, history) || guidedRoute || routeFromHere) {
     userContent += `\n\n[OBLIGATORIO — GENERA RUTA AHORA:
@@ -3352,8 +3353,12 @@ async function verifyAllStops(route, placesKey, opts = {}) {
   // coords que inventó el modelo) y se descarta toda parada a >MAX_ANCHOR_KM del ancla.
   // Mata "Hammam Al Ándalus" resuelto a Madrid o una parada con lat/lng en Portugal.
   const pointAnchor = !!opts.anchorPointScope && anchorLat != null && anchorLng != null;
-  const MAX_ANCHOR_KM = 120; // day-trips de provincia OK (Medina Azahara 8, Almodóvar 25, Sierra 30); Madrid 260 y Portugal 450 fuera
-  const ANCHOR_BIAS_M = 60000;
+  // Radio según nº de días: 1 día = te quedas en la ciudad; 3+ días = day-trips de provincia OK.
+  // Estepona 1 día NO debe irse a Ronda (50 km) ni Zahara (55 km); Córdoba 5 días SÍ llega a Almodóvar (25).
+  const _durDays = Number(opts.anchorDays) || Number(route.duration_days) ||
+    (Array.isArray(route.stops) ? new Set(route.stops.map(s => s.day || 1)).size : 1);
+  const MAX_ANCHOR_KM = _durDays <= 1 ? 35 : (_durDays === 2 ? 70 : (_durDays <= 4 ? 120 : 160));
+  const ANCHOR_BIAS_M = Math.min(MAX_ANCHOR_KM, 60) * 1000;
 
   // Región saneada para el sesgo de búsqueda: "N2 Portugal desde Faro en moto" → "Portugal".
   // Sin esto, las queries salían como "Miradouro X, N2 Portugal desde Faro" y no validaba ninguna parada.
@@ -8798,12 +8803,17 @@ REGLAS:
           // ── PASO 3: Verify con Google Places (fotos + coords reales) ──
           try {
             if (env.GOOGLE_PLACES_KEY) {
+              const _anchorDays = extractDaysFromMessage(message)
+                || (guidedRoute && parseInt(guidedRoute.duracion_dias, 10))
+                || (sourceText && extractDaysFromMessage(sourceText))
+                || 0;
               const _vOpts = anchorCountry ? {
                 forceCountryCode: anchorCountry.countryCode,
                 forceCountryName: anchorCountry.countryName,
                 anchorLat: anchorCountry.lat,
                 anchorLng: anchorCountry.lng,
                 anchorPointScope: !!anchorCountry.pointScope,
+                anchorDays: _anchorDays,
               } : {};
               const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY, _vOpts);
               if (verified) route = verified;
@@ -8812,8 +8822,10 @@ REGLAS:
 
           // DIAGNÓSTICO TEMPORAL — QUITAR cuando el ceñido esté confirmado.
           if (route) {
+            const _dd = extractDaysFromMessage(message) || (guidedRoute && parseInt(guidedRoute.duracion_dias, 10)) || (sourceText && extractDaysFromMessage(sourceText)) || 0;
+            const _rk = _dd <= 1 ? 35 : (_dd === 2 ? 70 : (_dd <= 4 ? 120 : 160));
             const _a = anchorCountry
-              ? `A:${anchorCountry.countryCode} ps:${anchorCountry.pointScope ? 'T' : 'F'} ${(anchorCountry.lat||0).toFixed(1)},${(anchorCountry.lng||0).toFixed(1)}`
+              ? `A:${anchorCountry.countryCode} ps:${anchorCountry.pointScope ? 'T' : 'F'} ${(anchorCountry.lat||0).toFixed(1)},${(anchorCountry.lng||0).toFixed(1)} d${_dd}/r${_rk}`
               : `A:NULL hint:${(body.dest_hint||'—')} gr:${guidedRoute ? (guidedRoute.destino ? 'destino' : 'sinDestino') : 'no'} ms:${guidedMapStage ? 'T' : 'F'}`;
             const _disc = Array.isArray(route.discarded_stops) ? route.discarded_stops.length : 0;
             const _path = _fastPathRoute ? 'fp' : 'gen';
