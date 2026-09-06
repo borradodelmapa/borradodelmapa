@@ -114,15 +114,26 @@ Todo en `worker/salma-worker.js`:
    desde `guide-renderer.js:836` (bounds nulos por lat/lng mezclados/vacíos). "Carga una guía
    vieja y en un segundo sube otra" = dos renders. Revisar ahora que las coords ya son sanas.
 
-### PENDIENTE — mejoras de UI de la guía / itinerario (pedidas por Paco 6 sept)
-1. **Botón cerrar** arriba a la izquierda del mapa que sale en la guía / vista itinerario.
-2. En la **descripción de cada parada**: enlace **"leer más"** que despliega la info ampliada de
-   esa parada (ahora se ve truncada).
-3. En cada parada, botón **"cómo llegar"** que abra Google Maps **solo a esa localización**
-   (además del enlace de ruta completa).
-4. **Quitar** de las **recomendaciones del Tiempo 1** (antes de montar la guía con mapa) los
-   enlaces **"🗺️ Cómo llegar"** por parada y **"🗺️ Ruta completa en Google Maps"** al final —
-   ahí sobran, esos enlaces son para la guía ya montada.
+### HECHO 6 sept — mejoras de UI de la guía + flujo único
+- **#4** enlaces de Maps fuera de las recomendaciones del Tiempo 1 (worker `d975c04a`). ✓
+- **Botón cerrar ✕** arriba-izq del mapa, visible en desktop (antes solo móvil). ✓
+- **"Leer más"** en la descripción de la parada (3 líneas + toggle). El conversor deja de
+  resumir `narrative` a "1-2 frases" → descripción completa (~600 ch). ✓
+- **Un solo "🗺️ Cómo llegar"** por parada (card + popup del marcador). No exige `place_id`
+  (place_id → coords → nombre). Botón "ruta completa" (barra superior) también sin exigir place_id. ✓
+- **FLUJO ÚNICO** (`3faa7071`): TODA petición de ruta/destino escrita en el chat pasa por
+  el Tiempo 1 (recomendaciones + botón), igual que el chip de 8 preguntas. El Tiempo 1
+  ya NUNCA produce mapa (RESCATE 1/2 y `extractRouteFromReply` gateados con `guidedIsReco`).
+  Worker manda `offer_map_button`; front lo usa. `salma.js?v=56`, worker `3faa7071`.
+  **Pendiente verificar por Paco.**
+
+### PENDIENTE de esto
+- Verificar que "3 días Málaga", "San Pedro Alcántara", "Salma hazme una guía" y el chip
+  se comportan TODOS igual: descripción + fotos + botón, sin mapa hasta pulsar.
+- **Fotos en el Tiempo 1**: para el chip, `_photoRegion` no se extrae bien del mensaje
+  ("Recomiéndame un plan de N días por X" no empieza por número) → busca fotos con el
+  país del GPS. Para chat libre sí funciona. Revisar la extracción de destino del bloque
+  de fotos (~línea 8690 del worker).
 
 ### Menores
 - La **última foto de todas las guías es siempre la misma** (paisaje genérico).
