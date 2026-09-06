@@ -2934,6 +2934,36 @@ function salvageIncompleteRouteJson(text) {
 // DIAGNÓSTICO TEMPORAL — motivo del último fallo de convertProseToRouteJson,
 // para mostrarlo en el mensaje de "no me ha salido montarte el mapa". Quitar cuando esté cazado.
 let _convertFailReason = '';
+
+// Normaliza la respuesta CRUDA del modelo a objeto de ruta.
+// claude-sonnet-4-6 NO admite prefill de assistant, así que el modelo devuelve el JSON
+// entero él mismo: puede venir con fences ```json, con prosa antes/después, o truncado.
+// Recorta al objeto por profundidad de llaves (respetando strings) y, si no parsea,
+// tira de salvageIncompleteRouteJson.
+function parseModelRouteJson(raw) {
+  if (!raw || typeof raw !== 'string') return null;
+  let s = raw.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+  const start = s.indexOf('{');
+  if (start < 0) return null;
+  s = s.slice(start);
+  let depth = 0, inStr = false, esc = false, end = -1;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === '\\') esc = true;
+      else if (c === '"') inStr = false;
+    } else if (c === '"') inStr = true;
+    else if (c === '{') depth++;
+    else if (c === '}') { depth--; if (depth === 0) { end = i; break; } }
+  }
+  const candidate = end >= 0 ? s.slice(0, end + 1) : s;
+  try { return JSON.parse(candidate); } catch (_) {}
+  const sv = salvageIncompleteRouteJson('SALMA_ROUTE_JSON\n' + s);
+  if (sv) { try { return JSON.parse(sv); } catch (_) {} }
+  return null;
+}
+
 async function convertProseToRouteJson(text, env, opts = {}) {
   if (!text || typeof text !== 'string' || text.length < 100) return null;
   const guided = opts.guided || null;
@@ -2975,14 +3005,12 @@ REGLAS:
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        // Anthropic devuelve HTTP 400 duro si max_tokens pasa de ~21333 en peticiones
-        // NO-streaming. 20000 va por debajo del límite. Si un JSON gigante se trunca,
-        // salvageIncompleteRouteJson rescata el parcial. (Arreglo de fondo = stream:true en Pieza B/C.)
+        // claude-sonnet-4-6 NO admite prefill de assistant → la conversación acaba en user.
+        // El JSON grande que se trunque lo rescata salvageIncompleteRouteJson.
         max_tokens: 20000,
         system: fallbackSys,
         messages: [
           { role: 'user', content: fallbackUser },
-          { role: 'assistant', content: '{' },  // prefill — fuerza JSON desde la primera línea
         ],
       }),
       signal: AbortSignal.timeout(150000),
@@ -2995,13 +3023,7 @@ REGLAS:
       continue;
     }
     const fallbackData = await fallbackRes.json();
-    const jsonTail = fallbackData.content?.[0]?.text || '';
-    let fullJson = '{' + jsonTail; // recomponer con el prefill
-    let parsed = null;
-    try { parsed = JSON.parse(fullJson); } catch (_) {
-      const sv = salvageIncompleteRouteJson('SALMA_ROUTE_JSON\n' + fullJson);
-      if (sv) { try { parsed = JSON.parse(sv); } catch (_) {} }
-    }
+    const parsed = parseModelRouteJson(fallbackData.content?.[0]?.text || '');
     if (parsed?.stops && Array.isArray(parsed.stops) && parsed.stops.length >= 2) {
       const route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + JSON.stringify(parsed)) || parsed;
       route._fallback = true;
@@ -8413,7 +8435,7 @@ INSTRUCCIONES:
         // ── RESCATE 2 (FALLBACK): era petición de ruta pero no hay JSON usable ──
         // Cubre: (a) el modelo escribió el plan en prosa y se olvidó del JSON,
         //        (b) el JSON se truncó tan pronto que el RESCATE 1 no encontró ni 2 paradas.
-        // 2ª llamada a Claude con prefill forzado para extraer el JSON del texto.
+        // 2ª llamada a Claude para extraer el JSON del texto (sin prefill: el modelo no lo admite).
         // Se dispara con `isRoute` (incluye el flujo guiado de 8 preguntas), no solo con la frase.
         if (!route && !guidedIsReco && (isRoute || isRouteRequest(message, history)) && allText && allText.length > 600) {
           try {
@@ -8441,11 +8463,11 @@ REGLAS:
               },
               body: JSON.stringify({
                 model: 'claude-sonnet-4-6',
-                max_tokens: 20000, // HTTP 400 duro por encima de ~21333 sin streaming (ver convertProseToRouteJson)
+                // claude-sonnet-4-6 NO admite prefill de assistant → la conversación acaba en user.
+                max_tokens: 20000,
                 system: fallbackSys,
                 messages: [
                   { role: 'user', content: fallbackUser },
-                  { role: 'assistant', content: '{' },  // prefill — fuerza JSON desde la primera línea
                 ],
               }),
               signal: AbortSignal.timeout(60000),
@@ -8453,14 +8475,7 @@ REGLAS:
 
             if (fallbackRes.ok) {
               const fallbackData = await fallbackRes.json();
-              const jsonTail = fallbackData.content?.[0]?.text || '';
-              let fullJson = '{' + jsonTail; // recomponer con el prefill
-              let parsed = null;
-              try { parsed = JSON.parse(fullJson); } catch (_) {
-                // si el propio fallback se truncó, intentar rescatarlo igual
-                const sv = salvageIncompleteRouteJson('SALMA_ROUTE_JSON\n' + fullJson);
-                if (sv) { try { parsed = JSON.parse(sv); } catch (_) {} }
-              }
+              const parsed = parseModelRouteJson(fallbackData.content?.[0]?.text || '');
               if (parsed?.stops && Array.isArray(parsed.stops) && parsed.stops.length >= 2) {
                 route = extractRouteFromReply('SALMA_ROUTE_JSON\n' + JSON.stringify(parsed)) || parsed;
                 route._fallback = true;
