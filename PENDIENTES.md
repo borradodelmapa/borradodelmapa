@@ -74,10 +74,42 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
 - Estado: `main` `20fcf2e8`, worker `18e43a69`, front `salma:55` / `app:60`.
 - Ficheros tocados: `salma.js` (`_rutaFinalizar`, `_offerCrearRutaConMapa`, `_doSend`), `app.js` (fuera `enrichGuia`), `worker/salma-worker.js` (`guidedIsReco` / `guidedMapStage`, `convertProseToRouteJson`, gates de `longRoute` / caché / rescates).
 
-### PENDIENTE — 3 fallos de MOTOR DE RUTAS (vistos en `wrangler tail`, NO son del flujo)
-1. **Destino sin país.** "Córdoba" con GPS en Portugal → el modelo/verify coge **Córdoba de Argentina** para varias paradas y las **mezcla** con Córdoba de España en la misma ruta (hubo `/directions` con waypoints saltando España↔Argentina).
-2. **La ruta se sale de la ciudad.** "Córdoba ciudad" 11 días → recomendaciones y paradas por toda la provincia (Zuheros, Écija, Baena…) e incluso Sevilla/Jaén. Es tuneo de prompt: 11 días para una ciudad es demasiado y el modelo rellena con excursiones.
-3. **Ruta malformada → crashes de render.** `TypeError: This WritableStream has been closed` en el worker (respuestas solapándose) y `Cannot read properties of undefined (reading 'min')` en Leaflet desde `guide-renderer.js:836` (bounds nulos por lat/lng mezclados). Paco ve "carga un modelo de guía viejo y en un segundo sube otro" = dos renders / dos respuestas.
+### PROGRESO 6 sept 2026 (sesión Claude)
+- **#1 Destino sin país — ARREGLADO.** `resolverPaisDestino()` en el worker: geocoding del
+  destino sin filtro de país + desempate por cercanía al GPS. Se enhebra en `buildMessages`,
+  `convertProseToRouteJson` y `verifyAllStops` (`forceCountryCode`). Confirmado por Paco: sale España.
+- **Bug colateral — el botón "Crear ruta con mapa" daba HTTP 400 SIEMPRE.** `claude-sonnet-4-6`
+  no admite prefill de assistant (`{role:'assistant',content:'{'}`). Quitado de los 2 sitios +
+  `parseModelRouteJson()`. Arreglado.
+- **#2/#3 ceñido al radio de la ciudad — EN CURSO.** `resolverPaisDestino` marca `pointScope`
+  (destino = ciudad/pueblo). `verifyAllStops` con `pointAnchor`: sesga las búsquedas por el
+  ancla (no por las coords del modelo) y descarta paradas a >120 km. Caché KV `geocity:anchor3:`.
+  **Root cause del "seguía saliendo Portugal/Palma": el front pinta el borrador PRE-verify en
+  el mapa y luego solo parchea fotos — nunca quita las paradas que verify descarta.** Fix
+  (worker `60f95a10`): con ancla NO se manda el evento `{draft}`, se manda la ruta una sola
+  vez ya verificada. **Pendiente que Paco confirme que el mapa sale limpio.**
+- Diagnóstico temporal vivo en worker (`_convertFailReason` + `(motivo:)` + línea `_[dbg ancla]`
+  que NO se ve porque el front tira `data.reply` en rutas guiadas + `console.log('[ANCLA-PAIS]')`).
+  **QUITAR todo eso cuando el ceñido esté confirmado.** build tag actual: `dbg-radio-2`.
+- Nota: el chip de duración es un rango "5-7 días" → que salgan 6 días no es bug.
+
+### PENDIENTE — fallos de MOTOR DE RUTAS
+2. **La ruta se sale de la ciudad** (queda tuneo de prompt además del ceñido de verify): el
+   texto de recomendaciones del T1 a veces mete excursiones lejanas. Con destino de muchos días
+   para una ciudad, el modelo rellena.
+3. **Render / solapamiento.** `Cannot read properties of undefined (reading 'min')` en Leaflet
+   desde `guide-renderer.js:836` (bounds nulos por lat/lng mezclados). "Carga una guía vieja y
+   en un segundo sube otra" = dos renders. Revisar tras confirmar el fix del borrador.
+
+### PENDIENTE — mejoras de UI de la guía / itinerario (pedidas por Paco 6 sept)
+1. **Botón cerrar** arriba a la izquierda del mapa que sale en la guía / vista itinerario.
+2. En la **descripción de cada parada**: enlace **"leer más"** que despliega la info ampliada de
+   esa parada (ahora se ve truncada).
+3. En cada parada, botón **"cómo llegar"** que abra Google Maps **solo a esa localización**
+   (además del enlace de ruta completa).
+4. **Quitar** de las **recomendaciones del Tiempo 1** (antes de montar la guía con mapa) los
+   enlaces **"🗺️ Cómo llegar"** por parada y **"🗺️ Ruta completa en Google Maps"** al final —
+   ahí sobran, esos enlaces son para la guía ya montada.
 
 ### Menores
 - La **última foto de todas las guías es siempre la misma** (paisaje genérico).
