@@ -4444,9 +4444,9 @@ async function resolverPaisDestino(destino, userLocation, env) {
   const norm = d.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   if (norm in _anchorPaisCache) return _anchorPaisCache[norm];
 
-  // v3: las claves anteriores cachearon pointScope calculado mal → se ignoran.
+  // v4: método de resolución cambiado (Places, no Geocoding) → claves anteriores fuera.
   // TTL corto (1 día) mientras se estabiliza el ceñido; subir a 30d después.
-  const kvKey = 'geocity:anchor3:' + norm;
+  const kvKey = 'geocity:anchor4:' + norm;
   if (env.SALMA_KB) {
     try {
       const cached = await env.SALMA_KB.get(kvKey);
@@ -4457,49 +4457,58 @@ async function resolverPaisDestino(destino, userLocation, env) {
     } catch (_) {}
   }
 
+  // ¿El destino es un PUNTO (ciudad/pueblo/POI) al que ceñir la ruta por radio?
+  // Por defecto SÍ. Se desactiva solo si el texto es una ruta lineal / región amplia.
+  const textIsRegion =
+    /\b(ruta|carretera|costa|litoral|road\s?trip|circuito|vuelta a|c[oô]te|amalfit|andaluc[ií]a|galicia|catalu|arag[oó]n|castilla|extremadura|asturias|cantabria|navarra|rioja|murcia|toscana|provenza|algarve|regi[oó]n|comarca)\b/i.test(d)
+    || /\bn-?\d{1,3}\b/i.test(d)
+    || /\ba-?\d{2,3}\b/i.test(d);
+
+  // Places API (findplacefromtext + details), NO Geocoding API — la key está habilitada
+  // para Places (verify funciona) pero puede NO estarlo para Geocoding (→ REQUEST_DENIED
+  // silencioso → anchorCountry null → todo el anclaje se saltaba).
   try {
-    const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(d)}&language=es&key=${placesKey}`, { signal: AbortSignal.timeout(5000) });
-    const data = await res.json();
-    const results = Array.isArray(data?.results) ? data.results : [];
-    if (!results.length) { _anchorPaisCache[norm] = null; return null; }
+    const bias = (userLocation && typeof userLocation.lat === 'number')
+      ? `&locationbias=circle:2000000@${userLocation.lat},${userLocation.lng}` : '';
+    const fRes = await fetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(d)}&inputtype=textquery&fields=place_id,geometry,formatted_address,types,name${bias}&language=es&key=${placesKey}`, { signal: AbortSignal.timeout(5000) });
+    const fData = await fRes.json();
+    const cand = fData?.candidates?.[0];
+    if (!cand?.geometry?.location || typeof cand.geometry.location.lat !== 'number') {
+      console.log(`[ANCLA] findplace SIN candidato "${d}" status=${fData?.status} err=${fData?.error_message || ''}`);
+      _anchorPaisCache[norm] = null; return null;
+    }
+    const lat = cand.geometry.location.lat, lng = cand.geometry.location.lng;
 
-    // ¿El destino es un PUNTO (ciudad/pueblo/POI) al que ceñir la ruta por radio?
-    // Por defecto SÍ. Se desactiva solo si:
-    //   - el geocoding lo marca como país o comunidad/estado entero, o
-    //   - el texto es una ruta lineal / región amplia ("Andalucía", "N2 Portugal", "costa…").
-    const textIsRegion =
-      /\b(ruta|carretera|costa|litoral|road\s?trip|circuito|vuelta a|c[oô]te|amalfit|andaluc[ií]a|galicia|catalu|arag[oó]n|castilla|extremadura|asturias|cantabria|navarra|rioja|murcia|toscana|provenza|algarve|regi[oó]n|comarca)\b/i.test(d)
-      || /\bn-?\d{1,3}\b/i.test(d)
-      || /\ba-?\d{2,3}\b/i.test(d);
-
-    // Extraer país + coords + escala de cada candidato
-    const cands = results.map(r => {
-      const cc = (r.address_components || []).find(c => Array.isArray(c.types) && c.types.includes('country'));
-      const loc = r.geometry?.location;
-      if (!cc || !loc || typeof loc.lat !== 'number') return null;
-      const types = Array.isArray(r.types) ? r.types : [];
-      const isBigAdmin = types.includes('country') || types.includes('administrative_area_level_1');
-      const pointScope = !isBigAdmin && !textIsRegion;
-      return { countryCode: (cc.short_name || '').toUpperCase(), countryName: cc.long_name || '', lat: loc.lat, lng: loc.lng, pointScope, _types: types.join(',') };
-    }).filter(Boolean);
-    if (!cands.length) { _anchorPaisCache[norm] = null; return null; }
-
-    let chosen = cands[0];
-    const distinctCC = new Set(cands.map(c => c.countryCode));
-    if (distinctCC.size > 1 && userLocation && typeof userLocation.lat === 'number') {
-      chosen = cands.slice().sort((a, b) =>
-        haversineKm(userLocation.lat, userLocation.lng, a.lat, a.lng) -
-        haversineKm(userLocation.lat, userLocation.lng, b.lat, b.lng)
-      )[0];
+    // País: address_components de Place Details; fallback = último trozo de formatted_address.
+    let countryCode = '', countryName = '';
+    try {
+      const dRes = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${cand.place_id}&fields=address_component&language=es&key=${placesKey}`, { signal: AbortSignal.timeout(5000) });
+      const dData = await dRes.json();
+      const cc = (dData?.result?.address_components || []).find(c => Array.isArray(c.types) && c.types.includes('country'));
+      if (cc) { countryCode = (cc.short_name || '').toUpperCase(); countryName = cc.long_name || ''; }
+    } catch (_) {}
+    if (!countryCode && cand.formatted_address) {
+      const last = cand.formatted_address.split(',').pop().trim();
+      const cc2 = getCountryCode(last);
+      if (cc2) { countryCode = cc2.toUpperCase(); countryName = last; }
+    }
+    if (!countryCode) {
+      console.log(`[ANCLA] SIN país "${d}" addr="${cand.formatted_address}"`);
+      _anchorPaisCache[norm] = null; return null;
     }
 
-    console.log(`[ANCLA] destino="${d}" → ${chosen.countryName} (${chosen.countryCode}) pointScope=${chosen.pointScope} lat=${chosen.lat.toFixed(3)} lng=${chosen.lng.toFixed(3)} types=[${chosen._types}] textIsRegion=${textIsRegion}`);
+    const types = Array.isArray(cand.types) ? cand.types : [];
+    const isBigAdmin = types.includes('country') || types.includes('administrative_area_level_1');
+    const pointScope = !isBigAdmin && !textIsRegion;
+    const chosen = { countryCode, countryName, lat, lng, pointScope, _types: types.join(',') };
+    console.log(`[ANCLA] destino="${d}" → ${countryName} (${countryCode}) pointScope=${pointScope} ${lat.toFixed(3)},${lng.toFixed(3)} types=[${chosen._types}]`);
     _anchorPaisCache[norm] = chosen;
     if (env.SALMA_KB) {
-      try { await env.SALMA_KB.put(kvKey, JSON.stringify(chosen), { expirationTtl: 86400 }); } catch (_) {} // 1 día mientras se estabiliza; subir a 30d
+      try { await env.SALMA_KB.put(kvKey, JSON.stringify(chosen), { expirationTtl: 86400 }); } catch (_) {}
     }
     return chosen;
   } catch (e) {
+    console.log(`[ANCLA] excepción "${d}": ${e.message}`);
     _anchorPaisCache[norm] = null;
     return null;
   }
@@ -8758,11 +8767,11 @@ REGLAS:
           }
 
           // ── PASO 2: Draft inmediato (coords del KV donde haya, Claude donde no) ──
-          // CON ANCLA: NO se manda el borrador. El front pinta el borrador en el mapa y
-          // luego solo parchea fotos — nunca quita las paradas que verify descarta, así que
-          // los marcadores basura (Portugal, Palma…) se quedaban. Con ancla mandamos la
-          // ruta una sola vez, ya verificada. Sin ancla se mantiene el preview instantáneo.
-          if (!anchorCountry) {
+          // El front pinta el borrador en el mapa y luego, en una ruta con borrador, SOLO
+          // parchea fotos — nunca quita ni mueve las paradas que verify descarta/corrige.
+          // En el Tiempo 2 guiado (o con ancla) las coords vienen SIN verificar por
+          // definición → NO se manda borrador, se manda la ruta una sola vez ya verificada.
+          if (!guidedMapStage && !anchorCountry) {
             try { await writer.write(encoder.encode(`data: ${JSON.stringify({ draft: true, reply, route })}\n\n`)); } catch (_) {}
           } else {
             try { await writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)); } catch (_) {}
@@ -8791,7 +8800,7 @@ REGLAS:
               : `A:NULL gr:${guidedRoute ? (guidedRoute.destino ? 'destino' : 'sinDestino') : 'no'} ms:${guidedMapStage ? 'T' : 'F'}`;
             const _disc = Array.isArray(route.discarded_stops) ? route.discarded_stops.length : 0;
             const _path = _fastPathRoute ? 'fp' : 'gen';
-            route.title = `[dbg ${_a} ${_path} ${route.stops?.length || 0}ok/${_disc}desc b:radio3] ` + (route.title || '');
+            route.title = `[dbg ${_a} ${_path} ${route.stops?.length || 0}ok/${_disc}desc b:radio4] ` + (route.title || '');
           }
         }
 
