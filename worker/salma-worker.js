@@ -2975,7 +2975,10 @@ REGLAS:
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 24000,
+        // Anthropic devuelve HTTP 400 duro si max_tokens pasa de ~21333 en peticiones
+        // NO-streaming. 20000 va por debajo del límite. Si un JSON gigante se trunca,
+        // salvageIncompleteRouteJson rescata el parcial. (Arreglo de fondo = stream:true en Pieza B/C.)
+        max_tokens: 20000,
         system: fallbackSys,
         messages: [
           { role: 'user', content: fallbackUser },
@@ -2984,7 +2987,13 @@ REGLAS:
       }),
       signal: AbortSignal.timeout(150000),
     });
-    if (!fallbackRes.ok) { console.log(`[FAST-PATH] intento ${attempt}: HTTP ${fallbackRes.status}`); _convertFailReason = `HTTP ${fallbackRes.status} intento ${attempt}`; continue; }
+    if (!fallbackRes.ok) {
+      let _body = '';
+      try { _body = (await fallbackRes.text()).slice(0, 300); } catch (_) {}
+      console.log(`[FAST-PATH] intento ${attempt}: HTTP ${fallbackRes.status} ${_body}`);
+      _convertFailReason = `HTTP ${fallbackRes.status} intento ${attempt}${_body ? ' — ' + _body : ''}`;
+      continue;
+    }
     const fallbackData = await fallbackRes.json();
     const jsonTail = fallbackData.content?.[0]?.text || '';
     let fullJson = '{' + jsonTail; // recomponer con el prefill
