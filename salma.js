@@ -1224,6 +1224,7 @@ const salma = {
       const extra = Object.assign({}, this._lastExtra || {}, {
         source_text: sourceText || '',
         guided_stage: 'map',   // TIEMPO 2 — el worker convierte el texto en guía, no regenera
+        dest_hint: this._cleanDestino(baseMsg || this._lastMsg || ''),  // ancla de país fiable (no depende del regex del worker)
       });
       if (guidedRoute) extra.guided_route = guidedRoute;
       this._doSend('Salma hazme una guía: ' + (baseMsg || this._lastMsg || 'la ruta de arriba'), extra);
@@ -1308,6 +1309,15 @@ const salma = {
       // el JSON de ruta. El mapa se pide en el Tiempo 2 con el botón "Crear ruta con mapa".
       if (extra.guided_stage) body.guided_stage = extra.guided_stage;
       if (extra.source_text) body.source_text = extra.source_text; // Fast-path: texto ya generado, convertir directo a mapa
+      // PIEZA A — destino limpio para el ancla de país (el regex del worker fallaba con "Ciudad Real")
+      if (extra.guided_route && extra.guided_route.destino) {
+        body.dest_hint = String(extra.guided_route.destino).slice(0, 80);
+      } else if (extra.dest_hint) {
+        body.dest_hint = String(extra.dest_hint).slice(0, 80);
+      } else if (this._isRouteMsg(msg) || extra.guided_stage) {
+        const _dh = this._cleanDestino(msg);
+        if (_dh && _dh.length >= 2) body.dest_hint = _dh.slice(0, 80);
+      }
       // Foto del chat
       if (extra.photo) {
         body.image_base64 = extra.photo.base64;
@@ -1325,6 +1335,7 @@ const salma = {
 
       // Si hay ruta, renderizar guide-card
       if (data.route && data.route.stops) {
+        if (data.route._dbg) { try { this._addSalmaBubble('🔧 ' + data.route._dbg); } catch (_) {} }
         const isEdit = this.currentRouteId && this.currentRoute;
         const prevStopsCount = this.currentRoute?.stops?.length || 0;
         this.currentRoute = data.route;
@@ -3357,6 +3368,22 @@ const salma = {
   ],
   _isRouteMsg(msg) {
     return /ruta|itinerario|días|dias|semana|viaje a |voy a |me voy a |quiero ir|visitar|recorrer|\d+\s*d[íi]/i.test(msg);
+  },
+
+  // PIEZA A — extrae el destino "limpio" de un mensaje de ruta ("3 días Ciudad Real" → "Ciudad Real",
+  // "Salma hazme una guía: Estepona un día" → "Estepona"). Se manda como dest_hint para que el
+  // worker ancle el país sin depender de su propio regex, que fallaba con frases de 2+ palabras.
+  _cleanDestino(msg) {
+    if (!msg) return '';
+    let s = String(msg).trim();
+    s = s.replace(/^\s*salma[,\s]+hazme una gu[ií]a\s*:?\s*/i, '');
+    s = s.replace(/^\s*hazme una gu[ií]a\s*(de|por|para)?\s*:?\s*/i, '');
+    s = s.replace(/\b(\d{1,2}|un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince)\s+d[ií]as?\b/gi, ' ');
+    s = s.replace(/\b(un|una)\s+semana\b/gi, ' ').replace(/\bfin de semana\b/gi, ' ');
+    s = s.replace(/\b(una?\s+)?(ruta|itinerario|viaje|gu[ií]a|escapada)\s+(de|por|a|para|en)\b/gi, ' ');
+    s = s.replace(/^\s*(a|en|por|para|de)\s+/i, '');
+    s = s.replace(/\s{2,}/g, ' ').replace(/^[\s,.:;–-]+|[\s,.:;–-]+$/g, '');
+    return s.trim();
   },
   _loadingInterval: null,
 

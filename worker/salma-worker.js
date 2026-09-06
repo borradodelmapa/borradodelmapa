@@ -7485,6 +7485,10 @@ REGLAS:
       // Destino: del cuestionario guiado, o extraído del mensaje. Se calcula para el Tiempo 1
       // (ancla en la prosa: "Córdoba" no se va a Argentina) y para el Tiempo 2 (ancla en verify).
       let _anchorDestino = (guidedRoute && guidedRoute.destino) ? String(guidedRoute.destino) : null;
+      // dest_hint viene del front ya limpio ("3 días Ciudad Real" → "Ciudad Real"). Es lo fiable.
+      if (!_anchorDestino && typeof body.dest_hint === 'string' && body.dest_hint.trim().length >= 2) {
+        _anchorDestino = body.dest_hint.trim();
+      }
       if (!_anchorDestino && (isRouteRequest(message, history) || isDaysDestination(message) || guidedMapStage)) {
         try {
           const _loc = extractHelpLocation(message, history, currentRoute);
@@ -8802,15 +8806,15 @@ REGLAS:
             }
           } catch (_) {}
 
-          // DIAGNÓSTICO TEMPORAL — se mete en route.title porque el front NO muestra
-          // data.reply en rutas guiadas. QUITAR cuando el ceñido esté confirmado.
+          // DIAGNÓSTICO TEMPORAL — QUITAR cuando el ceñido esté confirmado.
           if (route) {
             const _a = anchorCountry
               ? `A:${anchorCountry.countryCode} ps:${anchorCountry.pointScope ? 'T' : 'F'} ${(anchorCountry.lat||0).toFixed(1)},${(anchorCountry.lng||0).toFixed(1)}`
-              : `A:NULL gr:${guidedRoute ? (guidedRoute.destino ? 'destino' : 'sinDestino') : 'no'} ms:${guidedMapStage ? 'T' : 'F'}`;
+              : `A:NULL hint:${(body.dest_hint||'—')} gr:${guidedRoute ? (guidedRoute.destino ? 'destino' : 'sinDestino') : 'no'} ms:${guidedMapStage ? 'T' : 'F'}`;
             const _disc = Array.isArray(route.discarded_stops) ? route.discarded_stops.length : 0;
             const _path = _fastPathRoute ? 'fp' : 'gen';
-            route.title = `[dbg ${_a} ${_path} ${route.stops?.length || 0}ok/${_disc}desc b:radio4] ` + (route.title || '');
+            route._dbg = `[dbg ${_a} ${_path} ${route.stops?.length || 0}ok/${_disc}desc]`;
+            route.title = route._dbg + ' ' + (route.title || '');
           }
         }
 
