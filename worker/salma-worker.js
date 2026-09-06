@@ -7490,23 +7490,27 @@ REGLAS:
     // ANTES de generar. Se reutiliza en buildMessages, convertProseToRouteJson y verifyAllStops.
     // Si falla → null → todo se comporta como antes.
     let anchorCountry = null;
+    let _anchorDbg = { hint: (typeof body.dest_hint === 'string' ? body.dest_hint : ''), src: '', used: '' };
     {
       // Destino: del cuestionario guiado, o extraído del mensaje. Se calcula para el Tiempo 1
       // (ancla en la prosa: "Córdoba" no se va a Argentina) y para el Tiempo 2 (ancla en verify).
       let _anchorDestino = (guidedRoute && guidedRoute.destino) ? String(guidedRoute.destino) : null;
+      if (_anchorDestino) _anchorDbg.src = 'guided';
       // dest_hint viene del front ya limpio ("3 días Ciudad Real" → "Ciudad Real"). Es lo fiable.
       if (!_anchorDestino && typeof body.dest_hint === 'string' && body.dest_hint.trim().length >= 2) {
         _anchorDestino = body.dest_hint.trim();
+        _anchorDbg.src = 'hint';
       }
       if (!_anchorDestino && (isRouteRequest(message, history) || isDaysDestination(message) || guidedMapStage)) {
         try {
           const _loc = extractHelpLocation(message, history, currentRoute);
-          if (_loc && String(_loc).trim().length >= 2) _anchorDestino = String(_loc).trim();
+          if (_loc && String(_loc).trim().length >= 2) { _anchorDestino = String(_loc).trim(); _anchorDbg.src = 'extract'; }
         } catch (_) {}
       }
       if (_anchorDestino) {
+        _anchorDbg.used = _anchorDestino;
         try { anchorCountry = await resolverPaisDestino(_anchorDestino, userLocation, env); } catch (_) {}
-        console.log(`[ANCLA-PAIS] "${_anchorDestino}" → ${anchorCountry ? anchorCountry.countryName + ' (' + anchorCountry.countryCode + ') pointScope=' + anchorCountry.pointScope : 'NULL'}`);
+        console.log(`[ANCLA-PAIS] src=${_anchorDbg.src} "${_anchorDestino}" → ${anchorCountry ? anchorCountry.countryName + ' (' + anchorCountry.countryCode + ') pointScope=' + anchorCountry.pointScope + ' ' + anchorCountry.lat + ',' + anchorCountry.lng : 'NULL'}`);
       }
     }
 
@@ -8825,8 +8829,8 @@ REGLAS:
             const _dd = extractDaysFromMessage(message) || (guidedRoute && parseInt(guidedRoute.duracion_dias, 10)) || (sourceText && extractDaysFromMessage(sourceText)) || 0;
             const _rk = _dd <= 1 ? 35 : (_dd === 2 ? 70 : (_dd <= 4 ? 120 : 160));
             const _a = anchorCountry
-              ? `A:${anchorCountry.countryCode} ps:${anchorCountry.pointScope ? 'T' : 'F'} ${(anchorCountry.lat||0).toFixed(1)},${(anchorCountry.lng||0).toFixed(1)} d${_dd}/r${_rk}`
-              : `A:NULL hint:${(body.dest_hint||'—')} gr:${guidedRoute ? (guidedRoute.destino ? 'destino' : 'sinDestino') : 'no'} ms:${guidedMapStage ? 'T' : 'F'}`;
+              ? `A:${anchorCountry.countryCode} ps:${anchorCountry.pointScope ? 'T' : 'F'} ${(anchorCountry.lat||0).toFixed(2)},${(anchorCountry.lng||0).toFixed(2)} d${_dd}/r${_rk} src:${_anchorDbg.src} used:"${_anchorDbg.used}" hint:"${_anchorDbg.hint}"`
+              : `A:NULL used:"${_anchorDbg.used}" hint:"${_anchorDbg.hint}" src:${_anchorDbg.src} ms:${guidedMapStage ? 'T' : 'F'}`;
             const _disc = Array.isArray(route.discarded_stops) ? route.discarded_stops.length : 0;
             const _path = _fastPathRoute ? 'fp' : 'gen';
             route._dbg = `[dbg ${_a} ${_path} ${route.stops?.length || 0}ok/${_disc}desc]`;
