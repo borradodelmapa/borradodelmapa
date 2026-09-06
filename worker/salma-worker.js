@@ -8605,7 +8605,9 @@ REGLAS:
         }
 
         // ── Inyectar enlaces Maps verificados (place_id) en nombres en negrita ──
-        if (!route && env.GOOGLE_PLACES_KEY) {
+        // PIEZA A — en el Tiempo 1 (recomendaciones) NO se inyectan: ni "Cómo llegar" por
+        // parada ni "Ruta completa en Google Maps". Esos enlaces son para la guía ya montada.
+        if (!route && !guidedIsReco && env.GOOGLE_PLACES_KEY) {
           // Extraer destino del mensaje del usuario (prioritario sobre GPS)
           let _msgDest = (message || '').trim();
           _msgDest = _msgDest.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
