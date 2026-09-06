@@ -7466,9 +7466,19 @@ REGLAS:
     // ANTES de generar. Se reutiliza en buildMessages, convertProseToRouteJson y verifyAllStops.
     // Si falla → null → todo se comporta como antes.
     let anchorCountry = null;
-    if (guidedRoute && guidedRoute.destino) {
-      try { anchorCountry = await resolverPaisDestino(guidedRoute.destino, userLocation, env); } catch (_) {}
-      if (anchorCountry) console.log(`[ANCLA-PAIS] "${guidedRoute.destino}" → ${anchorCountry.countryName} (${anchorCountry.countryCode})`);
+    {
+      // Destino: del cuestionario guiado, o extraído del mensaje si es petición de ruta a mano.
+      let _anchorDestino = (guidedRoute && guidedRoute.destino) ? String(guidedRoute.destino) : null;
+      if (!_anchorDestino && !guidedIsReco && isRouteRequest(message, history)) {
+        try {
+          const _loc = extractHelpLocation(message, history, currentRoute);
+          if (_loc && String(_loc).trim().length >= 2) _anchorDestino = String(_loc).trim();
+        } catch (_) {}
+      }
+      if (_anchorDestino) {
+        try { anchorCountry = await resolverPaisDestino(_anchorDestino, userLocation, env); } catch (_) {}
+        console.log(`[ANCLA-PAIS] "${_anchorDestino}" → ${anchorCountry ? anchorCountry.countryName + ' (' + anchorCountry.countryCode + ') pointScope=' + anchorCountry.pointScope : 'NULL'}`);
+      }
     }
 
     // ─── BYPASS: petición explícita de enlace Google Maps ───
@@ -8767,12 +8777,13 @@ REGLAS:
 
           // DIAGNÓSTICO TEMPORAL — línea visible en el chat para ver el estado del ancla
           // sin necesidad de wrangler tail. QUITAR cuando el ceñido esté confirmado.
-          if (guidedMapStage) {
+          {
             const _a = anchorCountry
               ? `${anchorCountry.countryName} · pointScope=${!!anchorCountry.pointScope} · ${(anchorCountry.lat||0).toFixed(2)},${(anchorCountry.lng||0).toFixed(2)}`
-              : 'SIN ANCLA (anchorCountry=null)';
+              : `SIN ANCLA (guidedRoute=${!!guidedRoute}, mapStage=${guidedMapStage})`;
             const _disc = Array.isArray(route?.discarded_stops) ? route.discarded_stops.length : 0;
-            reply = (reply || '') + `\n\n_[dbg ancla: ${_a} — verify: ${route?.stops?.length || 0} ok / ${_disc} descartadas · build dbg-radio-1]_`;
+            const _path = _fastPathRoute ? 'fast-path' : 'gen-completa';
+            reply = (reply || '') + `\n\n_[dbg ancla: ${_a} — ${_path} — verify: ${route?.stops?.length || 0} ok / ${_disc} descartadas · build dbg-radio-2]_`;
           }
         }
 
