@@ -82,6 +82,7 @@ const mapaItinerario = {
 
     // Extras: antes de salir, info práctica, tips (reutiliza guide-renderer)
     if (typeof guideRenderer !== 'undefined') {
+      try { console.log('[NEARBY] itin.init nearby:', (routeData.nearby_stops||[]).length, 'loc:', routeData.anchor_locality || null, 'fn:', typeof guideRenderer._renderNearby); } catch (_) {}
       const extrasHtml = [
         (typeof guideRenderer._renderNearby === 'function'
           ? guideRenderer._renderNearby(routeData.nearby_stops || null, country, routeData.anchor_locality || '')

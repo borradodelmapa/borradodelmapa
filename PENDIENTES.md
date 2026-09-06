@@ -156,6 +156,18 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
 - Verificar el fallo #2 (excursiones lejanas en el prompt) y #3 (Leaflet `guide-renderer.js:836`)
   ahora que las coords son sanas.
 
+### PENDIENTE GRANDE — Historial de conversación persistente (6 sept, Paco)
+Al navegar hacia atrás (botón atrás del móvil / bottom-bar) **se pierde toda la conversación
+del chat**. Paco quiere que Salma tenga un historial que sobreviva a la navegación y a cerrar
+la app — "como tú, que tienes historial".
+- Hoy: `salma.history` en memoria + `_saveSession()` a `sessionStorage` (se borra al cerrar
+  pestaña). `nav-history.js` envuelve `showState` pero no restaura el chat.
+- Objetivo: persistir turnos (usuario + Salma) en Firestore por `uid` (`users/{uid}/chat_log`
+  o similar) o al menos `localStorage`, y **restaurar el chat al volver**. Decidir: ¿historial
+  único continuo, o por "sesiones/conversaciones" con lista tipo ChatGPT?
+- Ojo: hoy la history se **vacía a propósito** tras generar una guía (`this.history = []`).
+  Eso habría que repensarlo si el chat pasa a ser persistente.
+
 ### Menores
 - La **última foto de todas las guías es siempre la misma** (paisaje genérico).
 - El **chat libre** ("3 días Córdoba" escrito a mano) sigue yendo directo al mapa. Unificarlo con el flujo de 2 tiempos = "paso 1b": reusar `guided_stage:'reco'` disparado desde el front para mensajes de ruta sin la frase "hazme una guía". ~15-25 líneas de front, 0 worker. Pendiente OK de Paco.

@@ -1336,6 +1336,7 @@ const salma = {
       // Si hay ruta, renderizar guide-card
       if (data.route && data.route.stops) {
         if (data.route._dbg) { try { this._addSalmaBubble('🔧 ' + data.route._dbg); } catch (_) {} }
+        try { console.log('[NEARBY] recibido en front:', JSON.stringify({ n: (data.route.nearby_stops||[]).length, loc: data.route.anchor_locality || null, note: !!data.route.nearby_note, hadDraft: data._hadDraft })); } catch (_) {}
         const isEdit = this.currentRouteId && this.currentRoute;
         const prevStopsCount = this.currentRoute?.stops?.length || 0;
         this.currentRoute = data.route;
