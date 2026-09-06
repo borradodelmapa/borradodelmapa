@@ -2981,14 +2981,14 @@ async function convertProseToRouteJson(text, env, opts = {}) {
     : '';
   const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
 
-{"title":"...","name":"...","country":"...","region":"...","duration_days":N,"summary":"...","stops":[{"name":"Nombre exacto","headline":"Nombre exacto","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","day":1,"lat":21.0285,"lng":105.8524,"km_from_previous":0,"road_name":"","road_difficulty":"medio","estimated_hours":1.5}],"tips":[],"tags":[],"budget_level":"medio","suggestions":[]}
+{"title":"...","name":"...","country":"...","region":"...","duration_days":N,"summary":"...","stops":[{"name":"Nombre exacto","headline":"Nombre exacto","narrative":"descripción completa del plan","day_title":"Título del día","type":"lugar","day":1,"lat":21.0285,"lng":105.8524,"km_from_previous":0,"road_name":"","road_difficulty":"medio","estimated_hours":1.5}],"tips":[],"tags":[],"budget_level":"medio","suggestions":[]}
 
 REGLAS:
 - Una entrada en "stops" por cada lugar nombrado en el plan (negrita o no). Inclúyelas TODAS, no recortes.
 - "country" = país real (ej. "Portugal"). "region" = región o zona real (ej. "Algarve"), nunca con "desde", números de carretera ni medio de transporte.
 - "day" = número de día (1, 2, 3…). "day_title" = título corto, mismo para todas las paradas del día.
 - "lat"/"lng" = coordenadas reales del lugar (decimales).
-- "narrative" = 1-2 frases del plan original sobre la parada.
+- "narrative" = la descripción COMPLETA de esa parada tal como aparece en el plan (por qué merece la pena, historia, qué comer cerca, consejos prácticos, precios). Cópiala entera, hasta ~600 caracteres. NO la resumas a 1-2 frases.
 - NO inventes paradas que no estén en el plan.
 - RUTAS DE CARRETERA (un plan que describe un recorrido a lo largo de una carretera o tramo, con miradores, pueblos, embalses, paisajes o paradas naturales mencionadas en el texto narrativo, no en una lista): cada punto con nombre propio y ubicación reconocible cuenta como "stop" exactamente igual que en una guía multi-ciudad, aunque esté mencionado dentro de un párrafo corrido y no con negrita ni viñetas. No exijas formato de lista para extraerlo — léelo del texto igual.`;
 
@@ -8516,14 +8516,14 @@ INSTRUCCIONES:
           try {
             const fallbackSys = `Convierte planes de ruta en prosa a JSON estructurado. Formato exacto, sin backticks, sin markdown, sin texto fuera del JSON.
 
-{"title":"...","name":"...","country":"...","region":"...","duration_days":N,"summary":"...","stops":[{"name":"Nombre exacto","headline":"Nombre exacto","narrative":"1-2 frases","day_title":"Título del día","type":"lugar","day":1,"lat":21.0285,"lng":105.8524,"km_from_previous":0,"road_name":"","road_difficulty":"medio","estimated_hours":1.5}],"tips":[],"tags":[],"budget_level":"medio","suggestions":[]}
+{"title":"...","name":"...","country":"...","region":"...","duration_days":N,"summary":"...","stops":[{"name":"Nombre exacto","headline":"Nombre exacto","narrative":"descripción completa del plan","day_title":"Título del día","type":"lugar","day":1,"lat":21.0285,"lng":105.8524,"km_from_previous":0,"road_name":"","road_difficulty":"medio","estimated_hours":1.5}],"tips":[],"tags":[],"budget_level":"medio","suggestions":[]}
 
 REGLAS:
 - Una entrada en "stops" por cada lugar nombrado en el plan (negrita o no). Inclúyelas TODAS, no recortes.
 - "country" = país real (ej. "Portugal"). "region" = región o zona real (ej. "Algarve"), nunca con "desde", números de carretera ni medio de transporte.
 - "day" = número de día (1, 2, 3…). "day_title" = título corto, mismo para todas las paradas del día.
 - "lat"/"lng" = coordenadas reales del lugar (decimales).
-- "narrative" = 1-2 frases del plan original sobre la parada.
+- "narrative" = la descripción COMPLETA de esa parada tal como aparece en el plan (por qué merece la pena, historia, qué comer cerca, consejos prácticos, precios). Cópiala entera, hasta ~600 caracteres. NO la resumas a 1-2 frases.
 - NO inventes paradas que no estén en el plan.
 - RUTAS DE CARRETERA (un plan que describe un recorrido a lo largo de una carretera o tramo, con miradores, pueblos, embalses, paisajes o paradas naturales mencionadas en el texto narrativo, no en una lista): cada punto con nombre propio y ubicación reconocible cuenta como "stop" exactamente igual que en una guía multi-ciudad, aunque esté mencionado dentro de un párrafo corrido y no con negrita ni viñetas. No exijas formato de lista para extraerlo — léelo del texto igual.`;
 

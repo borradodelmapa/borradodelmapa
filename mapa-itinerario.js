@@ -171,6 +171,11 @@ const mapaItinerario = {
     const mapsNavUrl = stop.place_id
       ? `https://www.google.com/maps/place/?q=place_id:${stop.place_id}`
       : null;
+    // "Cómo llegar" = direcciones hasta ESA parada (Google usa origen = ubicación del usuario).
+    const mapsDirUrl = stop.place_id
+      ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(stop.headline || stop.name || '')}&destination_place_id=${stop.place_id}`
+      : null;
+    const notaLarga = nota && nota.length > 140;
 
     card.innerHTML = `
       <div class="itin-card-photo" id="itin-photo-${index}">
@@ -186,13 +191,17 @@ const mapaItinerario = {
           ${km > 0 ? `<span class="itin-card-km">${Math.round(km)} km</span>` : ''}
           ${horas ? `<span class="itin-card-hours">${this._formatHours(horas)}</span>` : ''}
         </div>
-        ${nota ? `<div class="itin-card-nota">${this._esc(nota)}</div>` : ''}
+        ${nota ? `<div class="itin-card-nota${notaLarga ? '' : ' expanded'}">${this._esc(nota)}</div>` : ''}
+        ${notaLarga ? `<span class="itin-card-leermas">Leer más</span>` : ''}
         ${stop.context ? `<div class="guide-stop-tag tag-context"><span class="guide-stop-tag-label">📖 CONTEXTO</span>${this._esc(stop.context)}</div>` : ''}
         ${stop.food_nearby ? `<div class="guide-stop-tag tag-food"><span class="guide-stop-tag-label">🍜 COME CERCA</span>${this._esc(stop.food_nearby)}</div>` : ''}
         ${stop.local_secret ? `<div class="guide-stop-tag tag-secret"><span class="guide-stop-tag-label">🔑 SECRETO LOCAL</span>${this._esc(stop.local_secret)}</div>` : ''}
         ${stop.practical ? `<div class="guide-stop-practical">${this._esc(stop.practical)}</div>` : ''}
         <div class="itin-card-places" id="itin-places-${index}"></div>
-        ${mapsNavUrl ? `<a class="itin-card-nav" href="${mapsNavUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 Ir aquí</a>` : ''}
+        ${(mapsNavUrl || mapsDirUrl) ? `<div class="itin-card-actions">
+          ${mapsNavUrl ? `<a class="itin-card-nav" href="${mapsNavUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 Ir aquí</a>` : ''}
+          ${mapsDirUrl ? `<a class="itin-card-nav" href="${mapsDirUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🗺️ Cómo llegar</a>` : ''}
+        </div>` : ''}
       </div>
     `;
 
@@ -223,6 +232,18 @@ const mapaItinerario = {
             }, 500);
           }
         }
+      });
+    }
+
+    // "Leer más" — desplegar/plegar la descripción de la parada
+    const leermas = card.querySelector('.itin-card-leermas');
+    if (leermas) {
+      leermas.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const nd = card.querySelector('.itin-card-nota');
+        if (!nd) return;
+        const expandida = nd.classList.toggle('expanded');
+        leermas.textContent = expandida ? 'Leer menos' : 'Leer más';
       });
     }
 

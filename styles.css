@@ -4522,33 +4522,29 @@ body {
   }
 }
 
-/* ── Botón volver flotante (mobile only) ── */
+/* ── Botón cerrar flotante — arriba-izquierda del mapa, siempre visible ── */
 .itin-mobile-back {
-  display: none;
+  display: flex;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  background: rgba(5,5,5,.78);
+  border: 1px solid rgba(212,160,23,.5);
+  color: var(--dorado);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background .15s;
 }
-@media (max-width: 768px) {
-  .itin-mobile-back {
-    display: flex;
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 1000;
-    background: rgba(5,5,5,.75);
-    border: 1px solid rgba(212,160,23,.5);
-    color: var(--dorado);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    cursor: pointer;
-    backdrop-filter: blur(4px);
-  }
-  .itin-mobile-back:active {
-    background: rgba(212,160,23,.2);
-  }
-}
+.itin-mobile-back:hover { background: rgba(212,160,23,.15); }
+.itin-mobile-back:active { background: rgba(212,160,23,.25); }
 
 /* ── Header ── */
 .itin-header {
@@ -4790,8 +4786,35 @@ body {
   font-size: 13px;
   line-height: 1.5;
   color: rgba(255,255,255,.65);
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
+.itin-card-nota.expanded {
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+.itin-card-leermas {
+  display: inline-block;
+  font-size: 12px;
+  font-family: var(--font-mono, monospace);
+  color: var(--dorado);
+  cursor: pointer;
+  margin-bottom: 8px;
+  user-select: none;
+}
+.itin-card-leermas:hover { text-decoration: underline; }
+
+/* ── Fila de acciones de la card (Ir aquí / Cómo llegar) ── */
+.itin-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.itin-card-actions .itin-card-nav { margin-top: 0; }
 
 /* ── Card enriquecimiento Places ── */
 .itin-card-places {
