@@ -8441,7 +8441,7 @@ REGLAS:
               },
               body: JSON.stringify({
                 model: 'claude-sonnet-4-6',
-                max_tokens: 24000,
+                max_tokens: 20000, // HTTP 400 duro por encima de ~21333 sin streaming (ver convertProseToRouteJson)
                 system: fallbackSys,
                 messages: [
                   { role: 'user', content: fallbackUser },
