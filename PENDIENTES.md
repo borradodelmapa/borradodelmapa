@@ -206,9 +206,9 @@ de herramientas que se está construyendo y aún no está listo para enseñar:
 **I'M FINE, IR AQUÍ, GUARDAR, añadir fotos, CENTRAR, TIPO, CAPAS, SOS, buscar lugar** (+ voz).
 Reactivar = quitar el `return`. Cuando esas herramientas estén, se reactiva.
 
-### HECHO 6 sept — chip "Hoteles" reañadido
-`_renderChatEmpty()` en app.js — chip "Hoteles" (`msg: 'Busca hoteles'`) en `chipsLeft`,
-justo debajo de "Buscar vuelo". `app.js?v=61`.
+### HECHO 6 sept — chip "Buscar Alojamiento" reañadido
+`_renderChatEmpty()` en app.js — chip **"Buscar Alojamiento"** (`msg: 'Busca alojamiento'`,
+lo pilla el regex de hotel del worker) en `chipsLeft`, debajo de "Alerta vuelos". `app.js?v=62`.
 
 ### Menores
 - La **última foto de todas las guías es siempre la misma** (paisaje genérico). Relacionado:

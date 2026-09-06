@@ -236,8 +236,8 @@ function _renderChatEmpty() {
     // "Quiero ir a..." → desactivado 2026-04-17. Ver PENDIENTES.md
     { label: 'Cerca mía', icon: _ci('<path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>'), msg: 'Hazme una ruta desde donde estoy', action: 'ruta-aqui' },
     { label: 'Buscar vuelo', icon: _ci('<path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5 5.2 3L5.8 13 4 12.5l-1 1 3 2 2 3 1-1-.5-1.8 2.8-2.8 3 5.2.5-.3c.4-.2.6-.6.5-1.1z"/>'), msg: 'Busca vuelos' },
-    { label: 'Hoteles', icon: _ci('<path d="M2 20V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12"/><path d="M2 14h20"/><path d="M7 10h.01"/><path d="M2 20h20"/>'), msg: 'Busca hoteles' },
     { label: 'Alerta vuelos', icon: _ci('<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>'), msg: null, action: 'vuelos' },
+    { label: 'Buscar Alojamiento', icon: _ci('<path d="M2 20V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12"/><path d="M2 14h20"/><path d="M7 10h.01"/><path d="M2 20h20"/>'), msg: 'Busca alojamiento' },
   ];
   const chipsRight = [
     { label: 'Mis Notas', icon: _ci('<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>'), msg: null, action: 'notas' },
