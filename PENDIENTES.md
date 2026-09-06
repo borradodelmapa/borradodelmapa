@@ -153,8 +153,13 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
   guide-renderer. Worker manda `route.anchor_locality`. Front: `guide-renderer.js?v=46`,
   `mapa-itinerario.js?v=47`, `styles.css?v=52`.
 - ~~Fotos en el Tiempo 1 del chip~~ ✅ HECHO y confirmado (`53577759`).
-- Verificar el fallo #2 (excursiones lejanas en el prompt) y #3 (Leaflet `guide-renderer.js:836`)
-  ahora que las coords son sanas.
+- ~~Fallo #3 (Leaflet crash "reading 'min'")~~ ✅ BLINDADO (`c5f337cd`). Los fitBounds ya
+  filtraban lista vacía pero NO una coord imposible (lat 999, lat/lng cambiados).
+  `_getValidStops` / `_validStops` ahora exigen número finito + rango; los 8 `fitBounds`
+  van con `isValid()` + try/catch (`_safeFit` en guide-renderer). `guide-renderer.js?v=47`,
+  `mapa-ruta.js?v=3`. **No repro conocido con coords sanas — es red de seguridad.**
+- Fallo #2 (excursiones lejanas en el prompt): el ceñido de verify ya las aparta; queda
+  afinar el prompt para que el modelo no las proponga. Cosmético, baja prioridad.
 
 ### PENDIENTE GRANDE — Historial de conversación persistente (6 sept, Paco)
 Al navegar hacia atrás (botón atrás del móvil / bottom-bar) **se pierde toda la conversación
