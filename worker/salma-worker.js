@@ -2931,6 +2931,9 @@ function salvageIncompleteRouteJson(text) {
 // paradas, ver MAX_TOOL_ITERATIONS), convierte el texto YA generado en la respuesta
 // anterior directamente a la estructura del mapa. Misma lógica que el RESCATE 2 del
 // flujo normal (más abajo), extraída aquí para poder llamarla sin pasar por el bucle.
+// DIAGNÓSTICO TEMPORAL — motivo del último fallo de convertProseToRouteJson,
+// para mostrarlo en el mensaje de "no me ha salido montarte el mapa". Quitar cuando esté cazado.
+let _convertFailReason = '';
 async function convertProseToRouteJson(text, env, opts = {}) {
   if (!text || typeof text !== 'string' || text.length < 100) return null;
   const guided = opts.guided || null;
@@ -2960,6 +2963,7 @@ REGLAS:
 
   // Hasta 2 intentos: el timeout de 60s se quedaba corto para rutas de muchas paradas
   // (JSON de 8-12k tokens) y devolvía null → el flujo caía al bucle largo. Ahora 150s + reintento.
+  _convertFailReason = '';
   for (let attempt = 1; attempt <= 2; attempt++) {
   try {
     const fallbackRes = await fetch('https://gateway.ai.cloudflare.com/v1/f0c9caa483309964a6a236f9556993ec/salma/anthropic/v1/messages', {
@@ -2980,7 +2984,7 @@ REGLAS:
       }),
       signal: AbortSignal.timeout(150000),
     });
-    if (!fallbackRes.ok) { console.log(`[FAST-PATH] intento ${attempt}: HTTP ${fallbackRes.status}`); continue; }
+    if (!fallbackRes.ok) { console.log(`[FAST-PATH] intento ${attempt}: HTTP ${fallbackRes.status}`); _convertFailReason = `HTTP ${fallbackRes.status} intento ${attempt}`; continue; }
     const fallbackData = await fallbackRes.json();
     const jsonTail = fallbackData.content?.[0]?.text || '';
     let fullJson = '{' + jsonTail; // recomponer con el prefill
@@ -2996,8 +3000,10 @@ REGLAS:
       return route;
     }
     console.log(`[FAST-PATH] intento ${attempt}: JSON sin paradas suficientes (${parsed?.stops?.length || 0})`);
+    _convertFailReason = `JSON sin paradas suficientes (${parsed?.stops?.length || 0}) intento ${attempt}`;
   } catch (e) {
     console.log(`[FAST-PATH] intento ${attempt}: ${e.message}`);
+    _convertFailReason = `${e.name === 'TimeoutError' ? 'timeout' : (e.message || 'error')} intento ${attempt}`;
   }
   }
   return null;
@@ -8125,9 +8131,10 @@ INSTRUCCIONES:
           } catch (_) {}
           try {
             _fastPathRoute = await convertProseToRouteJson(sourceText, env, { guided: guidedRoute, anchorCountry });
-            if (_fastPathRoute && (!Array.isArray(_fastPathRoute.stops) || _fastPathRoute.stops.length < 2)) _fastPathRoute = null;
-          } catch (_) {
+            if (_fastPathRoute && (!Array.isArray(_fastPathRoute.stops) || _fastPathRoute.stops.length < 2)) { _convertFailReason = _convertFailReason || `ruta devuelta con ${_fastPathRoute.stops?.length || 0} paradas`; _fastPathRoute = null; }
+          } catch (e) {
             _fastPathRoute = null;
+            _convertFailReason = _convertFailReason || (e.message || 'excepción');
           }
           // PIEZA A — Tiempo 2 (botón guiado): si la conversión falla NO caemos al bucle
           // largo (duplicaba el plan en el chat y tardaba minutos). Se avisa y se corta.
@@ -8135,7 +8142,7 @@ INSTRUCCIONES:
         }
 
         if (_mapStageFailed) {
-          const _msg = 'No me ha salido montarte el mapa de esta ruta. Las recomendaciones de arriba están bien — dale otra vez al botón y lo reintento.';
+          const _msg = 'No me ha salido montarte el mapa de esta ruta. Las recomendaciones de arriba están bien — dale otra vez al botón y lo reintento.' + (_convertFailReason ? `\n\n(motivo: ${_convertFailReason})` : '');
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: _msg, route: null, map_stage_failed: true })}\n\n`)); } catch (_) {}
           return; // el finally cierra el writer
         }
