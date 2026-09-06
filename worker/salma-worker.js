@@ -8746,7 +8746,11 @@ REGLAS:
         // ── POST-PROCESADO FOTOS: buscar fotos e inyectar junto a cada lugar en negrita ──
         if (!route && env.GOOGLE_PLACES_KEY) {
           try {
-            // Extraer destino del mensaje del usuario (igual que injectVerifiedMapsLinks)
+            // Destino para sesgar las fotos. Prioridad: localidad del ancla ya resuelta →
+            // dest_hint limpio del front → destino del cuestionario guiado → recorte del
+            // mensaje → nombre de ciudad del GPS. El chip mandaba "Recomiéndame un plan de N
+            // días por X" (no empieza por número) → el recorte fallaba → caía al GPS (Portugal)
+            // → fotos sin resultados. Con el ancla/dest_hint eso ya no pasa.
             let _photoRegion = (message || '').trim();
             _photoRegion = _photoRegion.replace(/^(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|\d{1,2})\s*d[ií]as?\s+(en|por|a)?\s*/i, '');
             _photoRegion = _photoRegion.replace(/^d[ií]as?\s+(en|por|a)?\s*/i, '');
@@ -8754,7 +8758,13 @@ REGLAS:
             const _photoValidDest = _photoRegion.length >= 3 && _photoRegion.length <= 60
               && !/^(hola|hey|buenas|ey|hi|hello|saludos|gracias|ok|vale|si|no)$/i.test(_photoRegion)
               && _photoRegion.split(/\s+/).length <= 8;
-            const _photoLocHint = _photoValidDest ? _photoRegion : (userLocationName || '');
+            const _dh = (typeof body.dest_hint === 'string' && body.dest_hint.trim().length >= 2) ? body.dest_hint.trim() : '';
+            const _photoLocHint =
+              (anchorCountry && anchorCountry.locality) ? anchorCountry.locality
+              : _dh ? _dh
+              : (guidedRoute && guidedRoute.destino) ? String(guidedRoute.destino)
+              : _photoValidDest ? _photoRegion
+              : (userLocationName || '');
 
             const boldNames = [];
             const boldRegex = /\*\*([^*]{3,50})\*\*/g;
