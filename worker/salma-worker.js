@@ -2970,6 +2970,9 @@ async function convertProseToRouteJson(text, env, opts = {}) {
   const anchorCountry = opts.anchorCountry || null;
   const _anchorPaisLine = (anchorCountry && anchorCountry.countryName)
     ? `\n- PAÍS: ${anchorCountry.countryName} — "country" DEBE ser exactamente "${anchorCountry.countryName}". Descarta del JSON cualquier parada que no esté en ${anchorCountry.countryName} (homónimos en otro país NO valen).`
+      + ((typeof anchorCountry.lat === 'number' && anchorCountry.pointScope)
+          ? `\n- El destino está centrado en lat ${anchorCountry.lat.toFixed(4)}, lng ${anchorCountry.lng.toFixed(4)}. TODAS las paradas deben quedar a menos de ~1 h de ese punto. Si un lugar con el mismo nombre existe en varias ciudades (cadenas, museos, mercados), usa SIEMPRE el de ${guided?.destino || 'esa ciudad'} y sus coordenadas reales ahí — nunca las de otra ciudad.`
+          : '')
     : '';
   const _anchor = (guided || anchorCountry)
     ? `\n\nDATOS DEL VIAJE (úsalos para "country"/"region"/"duration_days" si el texto no los deja claros):
@@ -3345,6 +3348,12 @@ async function verifyAllStops(route, placesKey, opts = {}) {
   const forceCC = (opts.forceCountryCode || '').toUpperCase();
   const anchorLat = typeof opts.anchorLat === 'number' ? opts.anchorLat : null;
   const anchorLng = typeof opts.anchorLng === 'number' ? opts.anchorLng : null;
+  // Destino de PUNTO (ciudad/pueblo): las búsquedas se sesgan por el ancla (no por las
+  // coords que inventó el modelo) y se descarta toda parada a >MAX_ANCHOR_KM del ancla.
+  // Mata "Hammam Al Ándalus" resuelto a Madrid o una parada con lat/lng en Portugal.
+  const pointAnchor = !!opts.anchorPointScope && anchorLat != null && anchorLng != null;
+  const MAX_ANCHOR_KM = 120; // day-trips de provincia OK (Medina Azahara 8, Almodóvar 25, Sierra 30); Madrid 260 y Portugal 450 fuera
+  const ANCHOR_BIAS_M = 60000;
 
   // Región saneada para el sesgo de búsqueda: "N2 Portugal desde Faro en moto" → "Portugal".
   // Sin esto, las queries salían como "Miradouro X, N2 Portugal desde Faro" y no validaba ninguna parada.
@@ -3369,6 +3378,8 @@ async function verifyAllStops(route, placesKey, opts = {}) {
   const DETAIL_FIELDS = 'name,photos,geometry,editorial_summary,opening_hours,business_status,formatted_address';
 
   async function findPlace(name, biasLat, biasLng, radiusM) {
+    // Punto: sesgar SIEMPRE por el ancla, ignorando las coords del modelo (que es lo que falla).
+    if (pointAnchor) { biasLat = anchorLat; biasLng = anchorLng; radiusM = ANCHOR_BIAS_M; }
     const q = region ? `${name}, ${region}` : name;
     const bias = (biasLat && biasLng && Math.abs(biasLat) > 0.01) ? `&locationbias=circle:${radiusM}@${biasLat},${biasLng}` : '';
     try {
@@ -3378,8 +3389,9 @@ async function verifyAllStops(route, placesKey, opts = {}) {
 
   async function textSearch(name) {
     const q = region ? `${name} ${region}` : name;
+    const bias = pointAnchor ? `&location=${anchorLat},${anchorLng}&radius=${ANCHOR_BIAS_M}` : '';
     try {
-      const data = await (await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(q)}${countryFilter}&language=es&key=${placesKey}`)).json();
+      const data = await (await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(q)}${bias}${countryFilter}&language=es&key=${placesKey}`)).json();
       if (data?.results?.[0]) return { candidates: [data.results[0]] };
       return null;
     } catch (_) { return null; }
@@ -3391,6 +3403,15 @@ async function verifyAllStops(route, placesKey, opts = {}) {
     if (candidate.business_status === 'CLOSED_PERMANENTLY') return { valid: false, reason: 'closed' };
     const nameOk = strictNameMatch(stop.name || stop.headline || '', candidate.name || '');
     const addrOk = addressContainsLocation(candidate.formatted_address, region, route.region, country);
+    // Punto: la referencia de distancia es el ANCLA, no las coords del modelo.
+    // Nombre correcto + dentro del radio del ancla = válido; fuera del radio = fuera, sin más.
+    if (pointAnchor) {
+      const distAnchor = haversineKm(anchorLat, anchorLng, pLat, pLng);
+      if (distAnchor > MAX_ANCHOR_KM) return { valid: false, reason: 'fuera_del_radio_ancla', distKm: distAnchor };
+      if (nameOk) return { valid: true, distKm: distAnchor };
+      if (addrOk) return { valid: true, distKm: distAnchor };
+      return { valid: false, reason: 'name_mismatch', distKm: distAnchor };
+    }
     let distKm = Infinity;
     if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01) distKm = haversineKm(stop.lat, stop.lng, pLat, pLng);
     if (nameOk && (addrOk || distKm < 3)) return { valid: true, distKm };
@@ -3477,11 +3498,12 @@ async function verifyAllStops(route, placesKey, opts = {}) {
       const hasGood = cTypes.some(t => GOOD_PLACE_TYPES.has(t));
       if (hasBad && !hasGood) continue;
       const cLat = c.geometry.location.lat, cLng = c.geometry.location.lng;
-      // ANCLA — el rescate blando NO se aplica a candidatos a más de 400 km del ancla del
-      // destino. Es lo que mataba el salto España↔Argentina (coord del modelo mal + homónimo).
-      if (anchorLat != null && haversineKm(anchorLat, anchorLng, cLat, cLng) > 400) continue;
+      // ANCLA — el rescate blando NO acepta candidatos lejos del ancla: >MAX_ANCHOR_KM si el
+      // destino es un punto (ciudad), >400 km en otro caso (mataba el salto España↔Argentina).
+      if (anchorLat != null && haversineKm(anchorLat, anchorLng, cLat, cLng) > (pointAnchor ? MAX_ANCHOR_KM : 400)) continue;
       let inRange = false;
-      if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && haversineKm(stop.lat, stop.lng, cLat, cLng) < 50) inRange = true;
+      if (pointAnchor) inRange = true; // ya filtrado por radio del ancla arriba
+      else if (stop.lat && stop.lng && Math.abs(stop.lat) > 0.01 && haversineKm(stop.lat, stop.lng, cLat, cLng) < 50) inRange = true;
       else if (hasCenter && haversineKm(centerLat, centerLng, cLat, cLng) < 150) inRange = true;
       if (inRange) {
         bestCandidates[i] = { candidate: c, soft: true };
@@ -3553,11 +3575,27 @@ async function verifyAllStops(route, placesKey, opts = {}) {
     console.log(`[VERIFY] ✓ ${stop.name} → ${googleName} (${pLat.toFixed(5)}, ${pLng.toFixed(5)}) place_id:${(candidate.place_id||'').substring(0, 20)}`);
   });
 
-  route.stops = validatedStops;
-  route.discarded_stops = discarded;
-  route.maps_links = buildMapsLinksFromStops(validatedStops, region);
+  // Red de seguridad — destino de punto: fuera cualquier parada que, pese a todo, quede
+  // a más de MAX_ANCHOR_KM del ancla (coord basura que se coló por el rescate blando, etc.).
+  let finalStops = validatedStops;
+  if (pointAnchor) {
+    finalStops = [];
+    validatedStops.forEach(s => {
+      const dOk = (typeof s.lat === 'number' && typeof s.lng === 'number')
+        ? haversineKm(anchorLat, anchorLng, s.lat, s.lng) <= MAX_ANCHOR_KM : false;
+      if (dOk) finalStops.push(s);
+      else {
+        discarded.push({ name: s.name || s.headline || '(sin nombre)', day: s.day || null, reason: 'fuera_del_radio_ancla' });
+        console.log(`[VERIFY] ✗ DESCARTADA (radio ancla) "${s.name}" (${s.lat}, ${s.lng})`);
+      }
+    });
+  }
 
-  console.log(`[VERIFY] Resumen: ${validatedStops.length} validadas, ${discarded.length} descartadas`);
+  route.stops = finalStops;
+  route.discarded_stops = discarded;
+  route.maps_links = buildMapsLinksFromStops(finalStops, region);
+
+  console.log(`[VERIFY] Resumen: ${finalStops.length} validadas, ${discarded.length} descartadas${pointAnchor ? ' (ancla de punto ON)' : ''}`);
 
   return route;
 }
@@ -4420,12 +4458,19 @@ async function resolverPaisDestino(destino, userLocation, env) {
     const results = Array.isArray(data?.results) ? data.results : [];
     if (!results.length) { _anchorPaisCache[norm] = null; return null; }
 
-    // Extraer país + coords de cada candidato
+    // ¿El destino es un PUNTO (ciudad/pueblo/POI) y no un país o región grande?
+    // Solo si es punto se aplica el ceñido de radio en verify (una ruta lineal por un
+    // país entero no debe ceñirse a un centro).
+    const POINT_TYPES = new Set(['locality','postal_town','sublocality','neighborhood','point_of_interest','premise','establishment','tourist_attraction','natural_feature','airport','park','administrative_area_level_3','administrative_area_level_4']);
+
+    // Extraer país + coords + escala de cada candidato
     const cands = results.map(r => {
       const cc = (r.address_components || []).find(c => Array.isArray(c.types) && c.types.includes('country'));
       const loc = r.geometry?.location;
       if (!cc || !loc || typeof loc.lat !== 'number') return null;
-      return { countryCode: (cc.short_name || '').toUpperCase(), countryName: cc.long_name || '', lat: loc.lat, lng: loc.lng };
+      const types = Array.isArray(r.types) ? r.types : [];
+      const pointScope = !types.includes('country') && types.some(t => POINT_TYPES.has(t));
+      return { countryCode: (cc.short_name || '').toUpperCase(), countryName: cc.long_name || '', lat: loc.lat, lng: loc.lng, pointScope };
     }).filter(Boolean);
     if (!cands.length) { _anchorPaisCache[norm] = null; return null; }
 
@@ -8702,6 +8747,7 @@ REGLAS:
                 forceCountryName: anchorCountry.countryName,
                 anchorLat: anchorCountry.lat,
                 anchorLng: anchorCountry.lng,
+                anchorPointScope: !!anchorCountry.pointScope,
               } : {};
               const verified = await verifyAllStops(route, env.GOOGLE_PLACES_KEY, _vOpts);
               if (verified) route = verified;
