@@ -160,6 +160,33 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
   ciudad se queda corta → menos días o más profundidad, no rellenar con pueblos lejanos.
   **Pendiente verificar Paco** con "Córdoba 7 días" (no debe meter Sevilla/Granada).
 
+### PENDIENTE GRANDE — Replantear el sistema de HISTORIA (6 sept, Paco)
+Paco quiere que "Historia" sea una **parte relevante e integrada**, no un módulo aparte:
+que viva dentro de las guías y rutas Y en el botón/pestaña Historia, coherente.
+
+**Cómo está hoy (`historia.js`, 539 líneas, módulo IIFE `historiaModule`):**
+- Contenido: un array `HISTORIAS` **hardcoded** (solo demo Vietnam, ~6 paradas por año con
+  imágenes de Unsplash) + búsqueda en vivo contra el endpoint del worker **`/historia-lugar`**
+  (POST) que genera la historia de un lugar al vuelo. Flujo: lista → detalle → paradas con
+  narración TTS (`_narrar`, Web Speech).
+- API pública: `historiaModule.render()` y `historiaModule.loadPlace(place)`.
+- Puntos de entrada dispersos:
+  - Pestaña inferior "Historia" → `showState('historia')` → `historiaModule.render()` (app.js:213, :91).
+  - Botón "📚 Historia" en cada tarjeta de Mis Viajes → `loadPlace(destino)` (app.js:2030-2040).
+  - Botón flotante 📚 (app.js:3298-3320) → `loadPlace(place)`.
+  - Chip "📚 Historia de {destino}" tras generar una ruta (salma.js:1417-1425).
+- CSS propio: `historia.css` (`?v=2`).
+- NO está conectado con la guía en sí: la guía no muestra historia por parada, ni la
+  historia enlaza con las paradas del mapa. Son dos mundos.
+
+**Objetivo a decidir con Paco:**
+- ¿La historia se genera junto con la ruta (una pasada más del worker) y se guarda con la guía?
+- ¿Historia por PARADA (contexto del sitio) vs historia del DESTINO (relato largo)? ¿las dos?
+- ¿La pestaña Historia pasa a ser "biblioteca" de lo generado en tus viajes + búsqueda libre?
+- Quitar el `HISTORIAS` hardcoded (demo Vietnam) o dejarlo como ejemplo destacado.
+- Reunificar los 4 puntos de entrada en un flujo coherente.
+- Coste: `/historia-lugar` ya existe — medir tokens reales antes de meterlo en cada ruta.
+
 ### PENDIENTE GRANDE — Historial de conversación persistente (6 sept, Paco)
 Al navegar hacia atrás (botón atrás del móvil / bottom-bar) **se pierde toda la conversación
 del chat**. Paco quiere que Salma tenga un historial que sobreviva a la navegación y a cerrar
@@ -178,6 +205,10 @@ sobre el mapa de la vista itinerario y abría el **mapa live**, que es donde viv
 de herramientas que se está construyendo y aún no está listo para enseñar:
 **I'M FINE, IR AQUÍ, GUARDAR, añadir fotos, CENTRAR, TIPO, CAPAS, SOS, buscar lugar** (+ voz).
 Reactivar = quitar el `return`. Cuando esas herramientas estén, se reactiva.
+
+### HECHO 6 sept — chip "Hoteles" reañadido
+`_renderChatEmpty()` en app.js — chip "Hoteles" (`msg: 'Busca hoteles'`) en `chipsLeft`,
+justo debajo de "Buscar vuelo". `app.js?v=61`.
 
 ### Menores
 - La **última foto de todas las guías es siempre la misma** (paisaje genérico). Relacionado:
