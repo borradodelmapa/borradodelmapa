@@ -3634,6 +3634,14 @@ async function verifyAllStops(route, placesKey, opts = {}) {
   route.discarded_stops = discarded;
   route.maps_links = buildMapsLinksFromStops(finalStops, region);
 
+  // Pueblo pequeño: la ruta dentro del casco queda corta y hay escapadas al lado.
+  // Salma lo dice y ofrece salidas (estirar el día, hacerlo en 2, o ruta por la zona).
+  if (nearbyStops.length && finalStops.length <= 3 && opts.anchorLocality) {
+    const _loc = opts.anchorLocality;
+    const _ex = nearbyStops.slice(0, 3).map(s => s.name).filter(Boolean).join(', ');
+    route.nearby_note = `${_loc} en sí se ve en poco tiempo: la ruta son ${finalStops.length} parada${finalStops.length === 1 ? '' : 's'} dentro del pueblo. Abajo te dejo ${nearbyStops.length} escapada${nearbyStops.length === 1 ? '' : 's'} al lado${_ex ? ` (${_ex})` : ''} por si quieres estirar el día. Si prefieres, dime **"${_loc} en 2 días"** o **"ruta por la zona de ${_loc}"** y te lo monto entero.`;
+  }
+
   console.log(`[VERIFY] Resumen: ${finalStops.length} validadas, ${discarded.length} descartadas, ${nearbyStops.length} cerca${pointAnchor ? ' (ancla de punto ON)' : ''}`);
 
   return route;

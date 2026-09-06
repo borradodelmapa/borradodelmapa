@@ -1377,6 +1377,10 @@ const salma = {
               });
           } catch (e) { console.warn('Error actualizando guía:', e); }
         } else {
+          // Pueblo pequeño: ruta corta dentro del casco + escapadas al lado → Salma da opciones.
+          if (data.route.nearby_note) {
+            try { this._addSalmaBubble(data.route.nearby_note); } catch (_) {}
+          }
           // Ruta nueva — indicar que hay que pulsar GUARDAR
           this._addSalmaBubble('Dale al botón GUARDAR de abajo para no perderla. Cuando quieras otra ruta, dime destino y días.');
           this.history = [];
@@ -1627,7 +1631,9 @@ const salma = {
                   video_params: evt.video_params || null,
                   _hadDraft: draftSent,
                   _isBlocks: isBlocksRoute,
-                  map_stage_failed: evt.map_stage_failed === true
+                  map_stage_failed: evt.map_stage_failed === true,
+                  offer_map_button: evt.offer_map_button === true,
+                  map_base_msg: evt.map_base_msg || null
                 });
                 return;
               }
