@@ -8764,6 +8764,16 @@ REGLAS:
               if (verified) route = verified;
             }
           } catch (_) {}
+
+          // DIAGNÓSTICO TEMPORAL — línea visible en el chat para ver el estado del ancla
+          // sin necesidad de wrangler tail. QUITAR cuando el ceñido esté confirmado.
+          if (guidedMapStage) {
+            const _a = anchorCountry
+              ? `${anchorCountry.countryName} · pointScope=${!!anchorCountry.pointScope} · ${(anchorCountry.lat||0).toFixed(2)},${(anchorCountry.lng||0).toFixed(2)}`
+              : 'SIN ANCLA (anchorCountry=null)';
+            const _disc = Array.isArray(route?.discarded_stops) ? route.discarded_stops.length : 0;
+            reply = (reply || '') + `\n\n_[dbg ancla: ${_a} — verify: ${route?.stops?.length || 0} ok / ${_disc} descartadas · build dbg-radio-1]_`;
+          }
         }
 
         // ── BLOQUE E: validar enlaces de Google Maps antes de cachear y entregar ──
