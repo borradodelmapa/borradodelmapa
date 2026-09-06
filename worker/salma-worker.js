@@ -4444,8 +4444,9 @@ async function resolverPaisDestino(destino, userLocation, env) {
   const norm = d.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   if (norm in _anchorPaisCache) return _anchorPaisCache[norm];
 
-  // v2: la clave vieja cacheó objetos sin `pointScope` → se ignoran.
-  const kvKey = 'geocity:anchor2:' + norm;
+  // v3: las claves anteriores cachearon pointScope calculado mal → se ignoran.
+  // TTL corto (1 día) mientras se estabiliza el ceñido; subir a 30d después.
+  const kvKey = 'geocity:anchor3:' + norm;
   if (env.SALMA_KB) {
     try {
       const cached = await env.SALMA_KB.get(kvKey);
@@ -4462,10 +4463,14 @@ async function resolverPaisDestino(destino, userLocation, env) {
     const results = Array.isArray(data?.results) ? data.results : [];
     if (!results.length) { _anchorPaisCache[norm] = null; return null; }
 
-    // ¿El destino es un PUNTO (ciudad/pueblo/POI) y no un país o región grande?
-    // Solo si es punto se aplica el ceñido de radio en verify (una ruta lineal por un
-    // país entero no debe ceñirse a un centro).
-    const POINT_TYPES = new Set(['locality','postal_town','sublocality','neighborhood','point_of_interest','premise','establishment','tourist_attraction','natural_feature','airport','park','administrative_area_level_3','administrative_area_level_4']);
+    // ¿El destino es un PUNTO (ciudad/pueblo/POI) al que ceñir la ruta por radio?
+    // Por defecto SÍ. Se desactiva solo si:
+    //   - el geocoding lo marca como país o comunidad/estado entero, o
+    //   - el texto es una ruta lineal / región amplia ("Andalucía", "N2 Portugal", "costa…").
+    const textIsRegion =
+      /\b(ruta|carretera|costa|litoral|road\s?trip|circuito|vuelta a|c[oô]te|amalfit|andaluc[ií]a|galicia|catalu|arag[oó]n|castilla|extremadura|asturias|cantabria|navarra|rioja|murcia|toscana|provenza|algarve|regi[oó]n|comarca)\b/i.test(d)
+      || /\bn-?\d{1,3}\b/i.test(d)
+      || /\ba-?\d{2,3}\b/i.test(d);
 
     // Extraer país + coords + escala de cada candidato
     const cands = results.map(r => {
@@ -4473,8 +4478,9 @@ async function resolverPaisDestino(destino, userLocation, env) {
       const loc = r.geometry?.location;
       if (!cc || !loc || typeof loc.lat !== 'number') return null;
       const types = Array.isArray(r.types) ? r.types : [];
-      const pointScope = !types.includes('country') && types.some(t => POINT_TYPES.has(t));
-      return { countryCode: (cc.short_name || '').toUpperCase(), countryName: cc.long_name || '', lat: loc.lat, lng: loc.lng, pointScope };
+      const isBigAdmin = types.includes('country') || types.includes('administrative_area_level_1');
+      const pointScope = !isBigAdmin && !textIsRegion;
+      return { countryCode: (cc.short_name || '').toUpperCase(), countryName: cc.long_name || '', lat: loc.lat, lng: loc.lng, pointScope, _types: types.join(',') };
     }).filter(Boolean);
     if (!cands.length) { _anchorPaisCache[norm] = null; return null; }
 
@@ -4487,9 +4493,10 @@ async function resolverPaisDestino(destino, userLocation, env) {
       )[0];
     }
 
+    console.log(`[ANCLA] destino="${d}" → ${chosen.countryName} (${chosen.countryCode}) pointScope=${chosen.pointScope} lat=${chosen.lat.toFixed(3)} lng=${chosen.lng.toFixed(3)} types=[${chosen._types}] textIsRegion=${textIsRegion}`);
     _anchorPaisCache[norm] = chosen;
     if (env.SALMA_KB) {
-      try { await env.SALMA_KB.put(kvKey, JSON.stringify(chosen), { expirationTtl: 2592000 }); } catch (_) {}
+      try { await env.SALMA_KB.put(kvKey, JSON.stringify(chosen), { expirationTtl: 86400 }); } catch (_) {} // 1 día mientras se estabiliza; subir a 30d
     }
     return chosen;
   } catch (e) {
