@@ -3362,7 +3362,11 @@ async function verifyAllStops(route, placesKey, opts = {}) {
   const _durDays = Number(opts.anchorDays) || Number(route.duration_days) ||
     (Array.isArray(route.stops) ? new Set(route.stops.map(s => s.day || 1)).size : 1);
   const MAX_ANCHOR_KM = _durDays <= 1 ? 35 : (_durDays === 2 ? 70 : (_durDays <= 4 ? 120 : 160));
-  const ANCHOR_BIAS_M = Math.min(MAX_ANCHOR_KM, 60) * 1000;
+  // Sesgo de búsqueda de Places APRETADO (22 km): cuando el modelo ata una parada a la
+  // ciudad del ancla, Places debe devolver la de la ciudad y no una homónima de la
+  // provincia ("Bodegas Cruz Conde" → la de Córdoba capital, no la de Montilla a 40 km).
+  // El descarte de largo alcance sigue siendo MAX_ANCHOR_KM; esto solo guía la búsqueda.
+  const ANCHOR_BIAS_M = 22000;
 
   // Región saneada para el sesgo de búsqueda: "N2 Portugal desde Faro en moto" → "Portugal".
   // Sin esto, las queries salían como "Miradouro X, N2 Portugal desde Faro" y no validaba ninguna parada.
