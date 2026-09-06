@@ -8783,15 +8783,15 @@ REGLAS:
             }
           } catch (_) {}
 
-          // DIAGNÓSTICO TEMPORAL — línea visible en el chat para ver el estado del ancla
-          // sin necesidad de wrangler tail. QUITAR cuando el ceñido esté confirmado.
-          {
+          // DIAGNÓSTICO TEMPORAL — se mete en route.title porque el front NO muestra
+          // data.reply en rutas guiadas. QUITAR cuando el ceñido esté confirmado.
+          if (route) {
             const _a = anchorCountry
-              ? `${anchorCountry.countryName} · pointScope=${!!anchorCountry.pointScope} · ${(anchorCountry.lat||0).toFixed(2)},${(anchorCountry.lng||0).toFixed(2)}`
-              : `SIN ANCLA (guidedRoute=${!!guidedRoute}, mapStage=${guidedMapStage})`;
-            const _disc = Array.isArray(route?.discarded_stops) ? route.discarded_stops.length : 0;
-            const _path = _fastPathRoute ? 'fast-path' : 'gen-completa';
-            reply = (reply || '') + `\n\n_[dbg ancla: ${_a} — ${_path} — verify: ${route?.stops?.length || 0} ok / ${_disc} descartadas · build dbg-radio-2]_`;
+              ? `A:${anchorCountry.countryCode} ps:${anchorCountry.pointScope ? 'T' : 'F'} ${(anchorCountry.lat||0).toFixed(1)},${(anchorCountry.lng||0).toFixed(1)}`
+              : `A:NULL gr:${guidedRoute ? (guidedRoute.destino ? 'destino' : 'sinDestino') : 'no'} ms:${guidedMapStage ? 'T' : 'F'}`;
+            const _disc = Array.isArray(route.discarded_stops) ? route.discarded_stops.length : 0;
+            const _path = _fastPathRoute ? 'fp' : 'gen';
+            route.title = `[dbg ${_a} ${_path} ${route.stops?.length || 0}ok/${_disc}desc b:radio3] ` + (route.title || '');
           }
         }
 
