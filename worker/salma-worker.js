@@ -4672,15 +4672,21 @@ async function resolverPaisDestino(destino, userLocation, env) {
   const norm = d.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   if (norm in _anchorPaisCache) return _anchorPaisCache[norm];
 
-  // v6: se guarda localidad + PROVINCIA del ancla (filtro por provincia en verify).
-  // TTL corto (1 día) mientras se estabiliza el ceñido; subir a 30d después.
-  const kvKey = 'geocity:anchor6:' + norm;
+  // v7: se guarda localidad + PROVINCIA del ancla (filtro por provincia en verify).
+  // Datos prácticamente inmutables (una ciudad no cambia de país ni se mueve) → TTL 30 días.
+  // A KV solo se escribe cuando la resolución es FIRME (país + geometría reales, más abajo);
+  // los fallos (sin candidato, sin país, excepción) se quedan solo en el cache de isolate.
+  // Si se cuela un sitio mal resuelto: purga puntual con `wrangler kv key delete geocity:anchor7:<slug>`
+  // o sube el prefijo a anchor8 para invalidar todo de golpe.
+  const kvKey = 'geocity:anchor7:' + norm;
   if (env.SALMA_KB) {
     try {
       const cached = await env.SALMA_KB.get(kvKey);
       if (cached) {
         const p = JSON.parse(cached);
-        if (p && typeof p.pointScope === 'boolean') { _anchorPaisCache[norm] = p; return p; }
+        if (p && typeof p.pointScope === 'boolean' && typeof p.countryCode === 'string' && p.countryCode) {
+          _anchorPaisCache[norm] = p; return p;
+        }
       }
     } catch (_) {}
   }
@@ -4740,7 +4746,7 @@ async function resolverPaisDestino(destino, userLocation, env) {
     console.log(`[ANCLA] destino="${d}" → ${countryName} (${countryCode}) loc="${locality}" prov="${province}" pointScope=${pointScope} ${lat.toFixed(3)},${lng.toFixed(3)} types=[${chosen._types}]`);
     _anchorPaisCache[norm] = chosen;
     if (env.SALMA_KB) {
-      try { await env.SALMA_KB.put(kvKey, JSON.stringify(chosen), { expirationTtl: 86400 }); } catch (_) {}
+      try { await env.SALMA_KB.put(kvKey, JSON.stringify(chosen), { expirationTtl: 2592000 }); } catch (_) {}
     }
     return chosen;
   } catch (e) {
