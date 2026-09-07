@@ -613,6 +613,169 @@ function toFirestoreFields(obj) {
   return { fields };
 }
 
+// ═══════════════════════════════════════════════════════════════
+// PASARELA PREMIUM — service account de Firebase + Stripe
+// ═══════════════════════════════════════════════════════════════
+
+// base64url de un string o de bytes (Uint8Array / ArrayBuffer)
+function _b64url(input) {
+  let bytes;
+  if (typeof input === 'string') bytes = new TextEncoder().encode(input);
+  else if (input instanceof ArrayBuffer) bytes = new Uint8Array(input);
+  else bytes = input;
+  let bin = '';
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+}
+
+// PEM PKCS#8 → ArrayBuffer DER
+function _pemToPkcs8(pem) {
+  const b64 = String(pem || '')
+    .replace(/-----BEGIN PRIVATE KEY-----/, '')
+    .replace(/-----END PRIVATE KEY-----/, '')
+    .replace(/\s+/g, '');
+  const bin = atob(b64);
+  const buf = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+  return buf.buffer;
+}
+
+/**
+ * Access token OAuth de una service account de Google (scope datastore).
+ * Se usa SOLO en el webhook de Stripe para escribir en Firestore sin token de
+ * usuario. Cacheado en KV (_sa_token, ~55 min).
+ */
+async function getServiceAccountToken(env) {
+  try {
+    const cached = env.SALMA_KB && await env.SALMA_KB.get('_sa_token');
+    if (cached) return cached;
+  } catch (_) {}
+
+  const raw = env.FIREBASE_SERVICE_ACCOUNT;
+  if (!raw) throw new Error('FIREBASE_SERVICE_ACCOUNT no configurado');
+  let sa;
+  try { sa = JSON.parse(raw); } catch (e) { throw new Error('FIREBASE_SERVICE_ACCOUNT no es JSON válido'); }
+  if (!sa.client_email || !sa.private_key) throw new Error('FIREBASE_SERVICE_ACCOUNT sin client_email/private_key');
+
+  const now = Math.floor(Date.now() / 1000);
+  const header = { alg: 'RS256', typ: 'JWT' };
+  const claim = {
+    iss: sa.client_email,
+    scope: 'https://www.googleapis.com/auth/datastore',
+    aud: 'https://oauth2.googleapis.com/token',
+    iat: now,
+    exp: now + 3600,
+  };
+  const unsigned = _b64url(JSON.stringify(header)) + '.' + _b64url(JSON.stringify(claim));
+  const key = await crypto.subtle.importKey(
+    'pkcs8', _pemToPkcs8(sa.private_key),
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']
+  );
+  const sig = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, new TextEncoder().encode(unsigned));
+  const jwt = unsigned + '.' + _b64url(new Uint8Array(sig));
+
+  const res = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+      assertion: jwt,
+    }).toString(),
+    signal: AbortSignal.timeout(8000),
+  });
+  const data = await res.json();
+  if (!data.access_token) throw new Error('OAuth token error: ' + JSON.stringify(data).slice(0, 200));
+  try {
+    if (env.SALMA_KB) await env.SALMA_KB.put('_sa_token', data.access_token, { expirationTtl: 3300 });
+  } catch (_) {}
+  return data.access_token;
+}
+
+// GET de un documento Firestore con el token de service account. null si 404.
+async function firestoreAdminGet(env, path) {
+  const token = await getServiceAccountToken(env);
+  const res = await fetch(`${FIRESTORE_BASE}/${path}`, {
+    headers: { 'Authorization': 'Bearer ' + token },
+    signal: AbortSignal.timeout(8000),
+  });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error('Firestore GET ' + path + ' → ' + res.status);
+  return await res.json();
+}
+
+// PATCH (crea o mergea) un documento Firestore. `fields` ya en formato REST.
+async function firestoreAdminPatch(env, path, fields) {
+  const token = await getServiceAccountToken(env);
+  const mask = Object.keys(fields).map(f => 'updateMask.fieldPaths=' + encodeURIComponent(f)).join('&');
+  const res = await fetch(`${FIRESTORE_BASE}/${path}?${mask}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+    body: JSON.stringify({ fields }),
+    signal: AbortSignal.timeout(8000),
+  });
+  if (!res.ok) throw new Error('Firestore PATCH ' + path + ' → ' + res.status + ' ' + (await res.text()).slice(0, 200));
+  return await res.json();
+}
+
+// POST form-urlencoded a la API de Stripe. Devuelve el JSON parseado.
+async function stripeApi(env, path, params) {
+  const res = await fetch('https://api.stripe.com/v1/' + path, {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Basic ' + btoa(env.STRIPE_SECRET_KEY + ':'),
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams(params).toString(),
+    signal: AbortSignal.timeout(10000),
+  });
+  return await res.json();
+}
+
+function _timingSafeEqualHex(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length) return false;
+  let out = 0;
+  for (let i = 0; i < a.length; i++) out |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return out === 0;
+}
+
+/**
+ * Verifica la firma de un webhook de Stripe (cabecera Stripe-Signature).
+ * HMAC-SHA256 sobre "{t}.{payload}" con STRIPE_WEBHOOK_SECRET. Rechaza si t
+ * tiene más de 5 min (replay). Fail-closed: sin secret → false.
+ */
+async function stripeVerifyWebhook(payload, sigHeader, secret) {
+  if (!sigHeader || !secret) return false;
+  let t = null;
+  const v1s = [];
+  for (const part of sigHeader.split(',')) {
+    const idx = part.indexOf('=');
+    if (idx === -1) continue;
+    const k = part.slice(0, idx).trim();
+    const v = part.slice(idx + 1).trim();
+    if (k === 't') t = v;
+    else if (k === 'v1') v1s.push(v);
+  }
+  if (!t || v1s.length === 0) return false;
+  const ts = parseInt(t, 10);
+  if (!ts || Math.abs(Date.now() / 1000 - ts) > 300) return false;
+
+  const key = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+  );
+  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(t + '.' + payload));
+  const expected = [...new Uint8Array(sig)].map(b => b.toString(16).padStart(2, '0')).join('');
+  return v1s.some(v => _timingSafeEqualHex(v, expected));
+}
+
+// Planes Premium — pago único que da N meses de acceso. Tabla dura, nunca del cliente.
+const PREMIUM_PLANS = {
+  '1viaje':     { label: '1 viaje',    amount: 499,  months: 1  },
+  'trimestral': { label: 'Trimestral', amount: 899,  months: 3  },
+  'semestral':  { label: 'Semestral',  amount: 1499, months: 6  },
+  'anual':      { label: 'Anual',      amount: 2499, months: 12 },
+};
+
 /**
  * Normaliza nombre de lugar → variantes de clave para buscar en KV (spot:xxx).
  * Devuelve array de variantes en orden de prioridad: [full, withoutCity, firstTwo, first]
@@ -6474,13 +6637,18 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
       }
     }
 
-    // ─── ENDPOINT /create-payment (Stripe PaymentIntent) ───
+    // ─── ENDPOINT /create-payment (Stripe Checkout — Premium por periodos) ───
     if (request.method === 'POST' && url.pathname === '/create-payment') {
       const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
 
-      const stripeKey = env.STRIPE_SECRET_KEY;
-      if (!stripeKey) {
+      if (!env.STRIPE_SECRET_KEY) {
         return new Response(JSON.stringify({ error: 'Stripe not configured' }), { status: 500, headers: corsH });
+      }
+
+      // Token Firebase obligatorio (antes se aceptaba cualquier user_id del body)
+      const authUser = await verifyAuthAndGetUser(request.headers.get('Authorization') || '');
+      if (!authUser) {
+        return new Response(JSON.stringify({ error: 'auth_required' }), { status: 401, headers: corsH });
       }
 
       let payBody;
@@ -6488,50 +6656,126 @@ RUTA: ${route.title || ''}, ${route.region || ''}, ${route.country || ''}, ${rou
         return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: corsH });
       }
 
-      const userId = payBody.user_id;
-      if (!userId) {
-        return new Response(JSON.stringify({ error: 'user_id required' }), { status: 400, headers: corsH });
+      const planKey = String(payBody.plan || 'anual').toLowerCase();
+      const PLAN = PREMIUM_PLANS[planKey];
+      if (!PLAN) {
+        return new Response(JSON.stringify({ error: 'plan inválido' }), { status: 400, headers: corsH });
       }
 
-      // Packs disponibles — Starter, Viajero, Explorador
-      const PACKS = {
-        starter:   { name: 'starter',   amount: 499,  coins: 10,  currency: 'eur' },
-        viajero:   { name: 'viajero',   amount: 999,  coins: 25,  currency: 'eur' },
-        explorador:{ name: 'explorador', amount: 1999, coins: 60,  currency: 'eur' },
-      };
-      const packKey = (payBody.pack || 'viajero').toLowerCase();
-      const PACK = PACKS[packKey] || PACKS.viajero;
-
+      const origin = 'https://borradodelmapa.com';
       try {
-        // Crear PaymentIntent en Stripe
-        const stripeRes = await fetch('https://api.stripe.com/v1/payment_intents', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Basic ' + btoa(stripeKey + ':'),
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: new URLSearchParams({
-            amount: PACK.amount.toString(),
-            currency: PACK.currency,
-            'metadata[user_id]': userId,
-            'metadata[pack]': PACK.name,
-            'metadata[coins]': PACK.coins.toString(),
-          }).toString(),
+        const session = await stripeApi(env, 'checkout/sessions', {
+          'mode': 'payment',
+          'client_reference_id': authUser.uid,
+          'success_url': origin + '/?pago=ok&sid={CHECKOUT_SESSION_ID}',
+          'cancel_url': origin + '/?pago=cancel',
+          'line_items[0][quantity]': '1',
+          'line_items[0][price_data][currency]': 'eur',
+          'line_items[0][price_data][unit_amount]': String(PLAN.amount),
+          'line_items[0][price_data][product_data][name]': 'Borrado del Mapa Premium — ' + PLAN.label,
+          'metadata[user_id]': authUser.uid,
+          'metadata[plan]': planKey,
+          'metadata[months]': String(PLAN.months),
+          'payment_intent_data[metadata][user_id]': authUser.uid,
+          'payment_intent_data[metadata][months]': String(PLAN.months),
         });
 
-        const intent = await stripeRes.json();
-
-        if (intent.error) {
-          return new Response(JSON.stringify({ error: intent.error.message }), { status: 400, headers: corsH });
+        if (session.error) {
+          return new Response(JSON.stringify({ error: session.error.message }), { status: 400, headers: corsH });
         }
 
         return new Response(JSON.stringify({
-          client_secret: intent.client_secret,
-          amount: PACK.amount,
-          coins: PACK.coins,
+          url: session.url,
+          plan: planKey,
+          months: PLAN.months,
+          amount: PLAN.amount,
         }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /stripe-webhook (confirma el pago server-side y acredita Premium) ───
+    if (request.method === 'POST' && url.pathname === '/stripe-webhook') {
+      const jsonH = { 'Content-Type': 'application/json' };
+      const payload = await request.text();
+      const sig = request.headers.get('Stripe-Signature') || '';
+
+      const validSig = await stripeVerifyWebhook(payload, sig, env.STRIPE_WEBHOOK_SECRET);
+      if (!validSig) {
+        return new Response(JSON.stringify({ error: 'bad signature' }), { status: 400, headers: jsonH });
+      }
+
+      let event;
+      try { event = JSON.parse(payload); } catch (e) {
+        return new Response(JSON.stringify({ error: 'bad json' }), { status: 400, headers: jsonH });
+      }
+
+      // Solo el pago completado de Checkout lleva nuestra metadata en la sesión
+      if (event.type !== 'checkout.session.completed') {
+        return new Response(JSON.stringify({ received: true, ignored: event.type }), { headers: jsonH });
+      }
+
+      const session = (event.data && event.data.object) || {};
+      if (session.payment_status !== 'paid') {
+        return new Response(JSON.stringify({ received: true, not_paid: session.payment_status || null }), { headers: jsonH });
+      }
+
+      const sessionId = session.id;
+      const meta = session.metadata || {};
+      const uid = meta.user_id || session.client_reference_id;
+      const months = parseInt(meta.months || '0', 10);
+
+      if (!uid || !months || !sessionId) {
+        return new Response(JSON.stringify({ received: true, error: 'missing uid/months/id' }), { headers: jsonH });
+      }
+
+      try {
+        // Idempotencia: Stripe reintenta webhooks — no acreditar dos veces
+        const already = await firestoreAdminGet(env, 'processed_payments/' + sessionId);
+        if (already) {
+          return new Response(JSON.stringify({ received: true, duplicate: true }), { headers: jsonH });
+        }
+
+        // premium_until = max(actual, ahora) + N meses de calendario
+        const userDoc = await firestoreAdminGet(env, 'users/' + uid);
+        const curStr = userDoc && userDoc.fields && userDoc.fields.premium_until && userDoc.fields.premium_until.timestampValue;
+        const now = Date.now();
+        const baseMs = curStr ? Math.max(new Date(curStr).getTime(), now) : now;
+        const until = new Date(baseMs);
+        until.setMonth(until.getMonth() + months);
+        const untilIso = until.toISOString();
+        const nowIso = new Date(now).toISOString();
+
+        await firestoreAdminPatch(env, 'users/' + uid, {
+          premium_until:      { timestampValue: untilIso },
+          isPremium:          { booleanValue: true },
+          premium_last_plan:  { stringValue: meta.plan || '' },
+          premium_updated_at: { timestampValue: nowIso },
+        });
+
+        await firestoreAdminPatch(env, 'processed_payments/' + sessionId, {
+          uid:           { stringValue: uid },
+          plan:          { stringValue: meta.plan || '' },
+          months:        { integerValue: String(months) },
+          amount_total:  { integerValue: String(session.amount_total || 0) },
+          currency:      { stringValue: session.currency || 'eur' },
+          premium_until: { timestampValue: untilIso },
+          created_at:    { timestampValue: nowIso },
+        });
+
+        return new Response(JSON.stringify({ received: true, uid, premium_until: untilIso }), { headers: jsonH });
+      } catch (e) {
+        // Firma válida pero fallo al acreditar: el pago está cobrado. Registrar y
+        // devolver 500 para que Stripe reintente el webhook.
+        try {
+          await firestoreAdminPatch(env, 'payment_failures/' + sessionId, {
+            uid:   { stringValue: uid || '' },
+            error: { stringValue: String((e && e.message) || e).slice(0, 400) },
+            at:    { timestampValue: new Date().toISOString() },
+          });
+        } catch (_) {}
+        return new Response(JSON.stringify({ received: true, credit_error: String((e && e.message) || e) }), { status: 500, headers: jsonH });
       }
     }
 
