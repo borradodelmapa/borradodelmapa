@@ -1864,7 +1864,7 @@ const salma = {
                 // Esconder botón reintentar si existe
                 const retryBtn = document.querySelector('.btn-retry-salma');
                 if (retryBtn) retryBtn.remove();
-                if (textEl && !document.getElementById('salma-searching-dots')) {
+                if (textEl && !textEl.dataset.loader && !document.getElementById('salma-searching-dots')) {
                   const dots = document.createElement('div');
                   dots.id = 'salma-searching-dots';
                   dots.className = 'loading-dots searching-dots';
@@ -1877,6 +1877,8 @@ const salma = {
 
               // TEXT CHUNK
               if (evt.t) {
+                // Primer contenido real → fuera el indicador de carga (puntitos + frase + Reintentar)
+                this._clearStreamLoader();
                 // Quitar dots de búsqueda cuando llega contenido real
                 const searchingDots = document.getElementById('salma-searching-dots');
                 if (searchingDots) searchingDots.remove();
@@ -3188,12 +3190,18 @@ const salma = {
       existing.id = 'salma-stream-msg';
       const body = existing.querySelector('.msg-body-salma');
       if (body) {
-        body.innerHTML = '';
         body.id = 'salma-stream-text';
+        // NO vaciar la burbuja: se dejan los puntitos + la frase girando hasta que
+        // llegue el primer chunk real (los quita _clearStreamLoader en evt.t / _fixStreamBubble).
+        // Antes se ponía innerHTML='' y quedaba una burbuja vacía y muda varios segundos
+        // mientras el worker preparaba la respuesta (rutas, road-trips). — 7 sept 2026
+        if (!body.querySelector('.loading-dots')) {
+          body.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
+        }
+        body.dataset.loader = '1';
       }
-      // Limpiar intervalos de loading
-      if (this._loadingInterval) { clearInterval(this._loadingInterval); this._loadingInterval = null; }
-      if (this._retryTimer) { clearTimeout(this._retryTimer); this._retryTimer = null; }
+      // Se MANTIENEN vivos this._loadingInterval (frase) y this._retryTimer (botón
+      // "Reintentar" a los 18s) hasta el primer chunk — así nunca hay burbuja muda.
       return document.getElementById('salma-stream-text');
     }
     // Fallback: crear nueva burbuja
@@ -3204,12 +3212,27 @@ const salma = {
     div.id = 'salma-stream-msg';
     div.innerHTML = `
       <div class="msg-salma-header"><div class="msg-avatar"><img src="salma_ai_avatar.webp" alt="Salma"></div><span class="msg-salma-name">Salma</span></div>
-      <div class="msg-body-salma" id="salma-stream-text"></div>`;
+      <div class="msg-body-salma" id="salma-stream-text"><div class="loading-dots"><span></span><span></span><span></span></div></div>`;
     area.appendChild(div);
-    return document.getElementById('salma-stream-text');
+    const _t = document.getElementById('salma-stream-text');
+    if (_t) _t.dataset.loader = '1';
+    return _t;
+  },
+
+  // Quita el indicador de carga (puntitos + frase + botón Reintentar) de la burbuja de
+  // stream en cuanto llega contenido real. Idempotente.
+  _clearStreamLoader() {
+    if (this._loadingInterval) { clearInterval(this._loadingInterval); this._loadingInterval = null; }
+    if (this._retryTimer) { clearTimeout(this._retryTimer); this._retryTimer = null; }
+    const txt = document.getElementById('salma-stream-text');
+    if (txt && txt.dataset.loader) {
+      txt.innerHTML = '';
+      delete txt.dataset.loader;
+    }
   },
 
   _fixStreamBubble() {
+    this._clearStreamLoader();
     const el = document.getElementById('salma-stream-msg');
     if (el) {
       el.removeAttribute('id');
