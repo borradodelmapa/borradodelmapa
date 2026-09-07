@@ -12,11 +12,10 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
 trazado real): commit `11cda25f`, worker Version `a2949fc4`, front `guide-renderer.js?v=48` /
 `mapa-ruta.js?v=5` / `mapa-itinerario.js?v=49`. Todo en `main` y en producción.
 
-**Estado 7 sept:** mapa incrustado ya sigue la N2 (confirmado por Paco). Iteración `e64e0fe2`:
-T2 ya no se queda mudo (spinner "Generando tu ruta…" + keepalive), y el enlace "Abrir en Google
-Maps" se arma con ~10 puntos del trazado real → no se desvía a la autopista.
-**PENDIENTE:** Paco despliega el worker (`e64e0fe2`) y reprueba: T2 con feedback + enlace Maps que
-siga la N2. Frontend `guide-renderer.js?v=49` / `mapa-itinerario.js?v=50` ya en Pages.
+**CONFIRMADO POR PACO 7 sept** ("muy bien pero que muy bien"): mapa incrustado sigue la N2, T2
+ya no se queda mudo, enlace Google Maps no se desvía. Worker desplegado `1f70eedf-2293-4e47-badd-ba856c862e3c`,
+front `guide-renderer.js?v=49` / `mapa-ruta.js?v=5` / `mapa-itinerario.js?v=50`, commits `e64e0fe2` + `f1720283`.
+**Fase 1 + Fase 2 CERRADAS.**
 
 **Frase para retomar:**
 > "Motor de carreteras: `PENDIENTES.md` sección 0. Iterar Fase 2 / afinar."
