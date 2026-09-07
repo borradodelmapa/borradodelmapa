@@ -5,50 +5,45 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
 
 ---
 
-## 0. ⚠️ MOTOR DE ROAD-TRIPS (carreteras con nombre) — Fase 1 pasos 1-6 HECHOS, SIN COMMITEAR
+## 0. MOTOR DE ROAD-TRIPS (carreteras con nombre) — Fase 1 + Fase 2 DESPLEGADAS (7 sept 2026)
 
-**7 sept 2026.** Trabajo en el árbol de trabajo que **NO está commiteado ni desplegado**.
-NO hacer `git stash` / `git checkout .` / `git clean` sin leer esto. **Solo falta el paso 7 (deploy).**
+**Fase 1** (resolver OSM + `/roads/resolve` + 18 geometrías en KV `ROAD_GEOM`): commits
+`206a24c2` + `6d6da155`. **Fase 2** (worker adjunta `road_geometry`, los mapas pintan el
+trazado real): commit `11cda25f`, worker Version `a2949fc4`, front `guide-renderer.js?v=48` /
+`mapa-ruta.js?v=5` / `mapa-itinerario.js?v=49`. Todo en `main` y en producción.
+
+**PRUEBA PENDIENTE DE PACO:** en la app, "hazme una ruta siguiendo la N2 de Chaves a Faro" →
+la vista itinerario debe pintar el **zigzag real de la N2**, no la recta por la autopista.
+Si va bien → cerrar del todo. Si no → panel 🐛 + captura.
 
 **Frase para retomar:**
-> "Retomamos el motor de carreteras. `PENDIENTES.md` sección 0. Solo falta el paso 7."
+> "Motor de carreteras: `PENDIENTES.md` sección 0. Iterar Fase 2 / afinar."
+
+### Lo que queda por pulir (siguiente iteración, NO bloquea)
+- Path **Google Maps** de `mapa-ruta` sin probar en harness (sin API key) — código simétrico al Leaflet.
+- **Chat libre** (ruta escrita a mano con evento `{draft}`): el parche solo-fotos no redibuja la
+  carretera. El camino guiado T1→T2 (el normal) sí. Fix: `_updateMaps` redibuja si llega `road_geometry`.
+- **Rutas >8 días** (pipeline gpt-4o-mini): sin `road_geometry`.
+- **Mapa live** (`selectRouteOnMap`): no tocado.
+- **Wild Atlantic Way** coge un fragmento de 9.8km (elegir superroute padre). Ampliar precarga con
+  las ~10 que fallaron: `cd worker/roads; node precarga-roads.mjs --only=<slug>` y luego `--upload-only --kv`.
+- **Tiles Leaflet rotos** (pre-existente, no de esto): `basemaps.cartocdn.com/dark_all` ahora pide
+  API key → mapa en negro "API KEY REQUIRED" en el fallback. Cambiar a otro proveedor de tiles.
 
 **Qué es:** enfoque B — geometría real de OSM para el trazado del mapa cuando el usuario nombra
 una carretera ("sigue la N2", "Ruta 40", "Great Ocean Road"). NO toca la generación de paradas.
-Diseño + aprendizajes: memoria `project_road_engine_fase1`.
+Diseño + aprendizajes + estado detallado: memoria `project_road_engine_fase1`.
 
-**Estado (HEAD `a82aa584`, sin tocar):**
-- `worker/roads/` (sin trackear): `road-resolver.js` (motor: `resolveNamedRoad`, `extractRoadQuery`
-  19/19, `stitch`, `toGeoJSON`, `toGPX`, `ROAD_LEXICON` con slug+id por carretera), `package.json`
-  `{type:module}`, `precarga-roads.mjs`, `extract.test.mjs`, `.gitignore` (ignora `out/`).
-- `worker/salma-worker.js` M: `import` + endpoint `GET /roads/resolve` (~L5991, gate `?token=ADMIN_TOKEN`,
-  pasa `q` por `extractRoadQuery`; `?raw=1` lo salta). Nada más cambia.
-- `worker/wrangler.toml` M: binding KV `ROAD_GEOM` (id `39ff0d3316ab43d9b78f1f14b746e5ad`).
-- **KV `ROAD_GEOM` (remoto) ya tiene 18 geometrías** sembradas por `precarga-roads.mjs`. No las
-  lee nadie aún → inofensivas. Rerun: `cd worker/roads; node precarga-roads.mjs --upload-only --kv`.
-- Verificado: `wrangler deploy --dry-run -c wrangler.toml` compila (450KB). Con `wrangler dev --remote`:
-  `/roads/resolve?q=siguiendo la N2&country=PT` → **cache hit KV, 727km, cached:true, cero Overpass**.
-  `/version` y resto del worker intactos.
-- **DESPLEGADO 7 sept** (worker `590db5be-8b5f-4c00-9232-fe38a73be656`, commit `206a24c2`).
-  ⚠️ En producción `/roads/resolve` devuelve **403 SIEMPRE** porque el secret `ADMIN_TOKEN`
-  no está puesto en el worker (se perdió en sept, nunca se repuso — ver sección "Secrets" abajo).
-  No es un bug del motor: el endpoint es solo una puerta de debug y **nadie lo usa aún**. Se
-  arreglará solo al reponer `ADMIN_TOKEN`. El motor + las 18 geometrías en KV están vivos.
-
-**PASO 7 (lo único que falta — necesita OK de Paco, es deploy a producción):**
-```
-git add worker/ PENDIENTES.md ; git commit -m "Motor road-trips Fase 1: resolver OSM + /roads/resolve + precarga KV (18)"
-git push
-cd worker ; npx wrangler deploy -c wrangler.toml           # SIEMPRE con -c
-curl.exe -s https://salma-api.paco-defoto.workers.dev/version   # Version ID == el del deploy
-curl.exe -s "https://salma-api.paco-defoto.workers.dev/roads/resolve?token=<ADMIN_TOKEN>&q=siguiendo%20la%20N2&country=PT"
-```
-No lleva `?v=` (no toca frontend). Riesgo: si el `import` fallara en runtime tumbaría el worker
-→ mitigado (dry-run + dev remoto ya OK); rollback = `wrangler rollback` o redeploy del commit previo.
-
-**Fase 2** (sesión aparte): enganchar `extractRoadQuery` al flujo de ruta real — pasar `geometry`
-al trazado del mapa en vez de pedir "la más rápida" a Directions. `overpass_error`/low-confidence
-→ fallback a Directions, NUNCA bloquea. Afinar ahí: WAW superroute, backoff Overpass, más precarga.
+**Cómo está montado:**
+- `worker/roads/road-resolver.js` — motor: `resolveNamedRoad(input, {kv, cacheOnly, endpoints})`,
+  `extractRoadQuery(msg, cc)` (léxico ~28 carreteras + refs con disparador), `stitch`, `toGeoJSON`,
+  `toGPX`. `ROAD_LEXICON` lleva `slug`+`id` por carretera (mismo slug que `precarga-roads.mjs`).
+- `worker/roads/precarga-roads.mjs` — siembra `ROAD_GEOM`. Rerun: `node precarga-roads.mjs --upload-only --kv`.
+- `worker/salma-worker.js` — `import` + endpoint debug `GET /roads/resolve` (gate `?token=ADMIN_TOKEN`
+  → **403 en prod** hasta reponer ese secret; nadie lo usa) + hook en la generación de ruta que
+  adjunta `route.road_geometry`.
+- `worker/wrangler.toml` — binding KV `ROAD_GEOM` (`39ff0d3316ab43d9b78f1f14b746e5ad`, 18 claves).
+- Front: `guide-renderer.js` + `mapa-ruta.js` + `mapa-itinerario.js` pintan `road_geometry.coords`.
 
 **Ojo:** `wrangler dev`/`deploy` SIEMPRE con `-c wrangler.toml` (o coge el `wrangler.jsonc` de la raíz y peta).
 
