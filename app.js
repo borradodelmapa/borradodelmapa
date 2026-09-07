@@ -213,6 +213,32 @@ function handleAvatarClick() {
   }
 }
 
+// ═══ Fase 3 navegación — los modales participan en el historial ═══
+// Al abrir un modal se empuja una entrada. El botón atrás del móvil la
+// deshace y cierra el modal, en vez de navegar por la pantalla de debajo.
+window._modalStack = [];
+window.pushModal = function (name, closeFn) {
+  window._modalStack.push({ name: name, closeFn: closeFn });
+  try { history.pushState({ state: history.state && history.state.state, modal: name }, ''); } catch (_) {}
+};
+// Llamar cuando el modal se cierra por su propia ✕ / Esc / clic-fuera:
+// consume la entrada de historial sin volver a cerrar nada.
+window.popModal = function (name) {
+  var top = window._modalStack[window._modalStack.length - 1];
+  if (!top || (name && top.name !== name)) return;
+  window._modalStack.pop();
+  window._skipModalPop = true;
+  try { history.back(); } catch (_) { window._skipModalPop = false; }
+};
+window.addEventListener('popstate', function (e) {
+  if (window._skipModalPop) { window._skipModalPop = false; return; }
+  if (window._modalStack.length) {
+    var m = window._modalStack.pop();
+    e.stopImmediatePropagation();
+    try { m.closeFn(); } catch (_) {}
+  }
+});
+
 // ═══ CHAT VACÍO — chips de acceso rápido ═══
 
 function _renderChatEmpty() {
@@ -3219,8 +3245,10 @@ function openCoinsModal() {
   document.body.appendChild(overlay);
 
   // Cerrar
-  document.getElementById('coins-modal-close').addEventListener('click', () => overlay.remove());
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+  const closeCoins = () => { if (window.popModal) window.popModal('coins'); overlay.remove(); };
+  document.getElementById('coins-modal-close').addEventListener('click', closeCoins);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeCoins(); });
+  if (window.pushModal) window.pushModal('coins', closeCoins);
 
   // Acordeón
   document.getElementById('coins-accordion').addEventListener('click', () => {
@@ -6077,6 +6105,7 @@ function openCurrencyConverter() {
   });
 
   function close() {
+    if (window.popModal) window.popModal('moneda');
     backdrop.remove();
     document.removeEventListener('keydown', onKey);
   }
@@ -6084,6 +6113,7 @@ function openCurrencyConverter() {
   document.addEventListener('keydown', onKey);
   backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(); });
   backdrop.querySelector('.currency-close').addEventListener('click', close);
+  if (window.pushModal) window.pushModal('moneda', close);
 
   // Cargar rates
   _fetchCurrencyRates().then(data => {
