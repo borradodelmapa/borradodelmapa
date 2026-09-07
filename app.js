@@ -277,6 +277,29 @@ function _renderChatEmpty() {
   try { _ceName = (currentUser && (currentUser.displayName || '')) || (window.currentUserData && window.currentUserData.name) || ''; } catch (e) {}
   const _ceHi = _ceName ? ('Buenas, ' + String(_ceName).trim().split(/\s+/)[0]) : 'Hola, viajero';
 
+  // Normaliza una ruta real (itinerarioIA parseado) para el tablero
+  const _ceFromRoute = (r, docId, docData) => {
+    const stops = (r && Array.isArray(r.stops)) ? r.stops : [];
+    if (!stops.length) return null;
+    const named = stops.map(s => s.name || s.headline).filter(Boolean);
+    const days = stops.reduce((m, s) => Math.max(m, s.day || 1), 1);
+    const withCoords = stops.filter(s => s.lat && s.lng && Math.abs(s.lat) > 0.01).length;
+    const title = r.title || r.name || (docData && docData.nombre) || (named[0] || 'Tu ruta');
+    const head = named.slice(0, 3).map(escapeHTML).join(' · ') + (named.length > 3 ? ` <b>· +${named.length - 3}</b>` : '');
+    const _a = named[0], _z = named[named.length - 1];
+    const code = (named.length >= 2 && _a && _z) ? `${_a} → ${_z}`.toUpperCase() : String(title).toUpperCase();
+    return {
+      title: String(title),
+      code: code,
+      ribbon: (named.slice(0, 4).join(' · ').toUpperCase()) || 'RUTA',
+      sub: `${days} día${days > 1 ? 's' : ''} · ${stops.length} paradas`,
+      stopsHtml: head,
+      stats: [['DÍAS', String(days)], ['PARADAS', String(stops.length)], ['EN MAPA', String(withCoords)]],
+      docId: docId || null,
+      docData: docData || null
+    };
+  };
+
   const _ceBoardHTML = (idea) => `
       <div class="ce-card-ribbon"><span>${idea.ribbon}</span></div>
       <div class="ce-row"><span class="ce-code">${idea.to}</span><span class="ce-arr"></span></div>
@@ -290,6 +313,21 @@ function _renderChatEmpty() {
       <div class="ce-cta">
         <button class="ce-cta-main" data-ce-go>Pídesela a Salma <span>→</span></button>
         <button class="ce-cta-alt" data-ce-next aria-label="Otra idea">↻</button>
+      </div>`;
+
+  // Tablero de RUTA REAL. mode: 'active' (en ruta, verde, abre mapa) | 'resume' (ámbar, retoma la guía)
+  const _ceRouteHTML = (rt, mode) => `
+      <div class="ce-card-ribbon"><span>${rt.ribbon}</span></div>
+      <div class="ce-row"><span class="ce-code">${escapeHTML(rt.code)}</span><span class="ce-arr"></span></div>
+      <div class="ce-head">
+        <span class="ce-eyebrow">${mode === 'active' ? 'En ruta' : 'Retoma tu ruta'}</span>
+        <div class="ce-title">${escapeHTML(rt.title)}</div>
+        <div class="ce-sub">${rt.sub}</div>
+      </div>
+      <div class="ce-stops">${rt.stopsHtml}</div>
+      <div class="ce-stats">${rt.stats.map(s => `<div class="ce-stat"><div class="ce-k">${s[0]}</div><div class="ce-v">${s[1]}</div></div>`).join('')}</div>
+      <div class="ce-cta">
+        <button class="ce-cta-main" ${mode === 'active' ? 'data-ce-map' : 'data-ce-resume'}>${mode === 'active' ? 'Abrir el mapa' : 'Seguir con esta ruta'} <span>→</span></button>
       </div>`;
 
   const _ceChipsRow = `
@@ -308,12 +346,24 @@ function _renderChatEmpty() {
       </div>
     </div>`;
 
+  // ¿Hay ruta activa? (localStorage — igual criterio que _restoreActiveRoute)
+  let _ceActive = null;
   try {
+    const raw = localStorage.getItem('bdm_live_active_route');
+    if (raw) _ceActive = _ceFromRoute(JSON.parse(raw), localStorage.getItem('bdm_live_active_route_id') || null, null);
+  } catch (e) { _ceActive = null; }
+  let _ceResume = null; // ruta real más reciente para "retomar" (se rellena async)
+
+  try {
+    const _initCard = _ceActive
+      ? { cls: 'ce-card ce-active', html: _ceRouteHTML(_ceActive, 'active') }
+      : { cls: 'ce-card', html: _ceBoardHTML(CE_IDEAS[_ceIdea]) };
+
     area.innerHTML = `
       <div class="chat-empty">
         <div class="ce-top"><span class="ce-hi">${_ceHi}</span><span class="ce-meta">${_ceMonth}</span></div>
         <div class="ce-greet">¿Y ahora dónde?</div>
-        <div class="ce-card" id="ce-card">${_ceBoardHTML(CE_IDEAS[_ceIdea])}</div>
+        <div class="${_initCard.cls}" id="ce-card">${_initCard.html}</div>
         <div class="ce-or">o <b>dime tú el destino</b> abajo ↓</div>
         ${_ceChipsRow}
       </div>`;
@@ -329,8 +379,47 @@ function _renderChatEmpty() {
         if (e.target.closest('[data-ce-go]')) {
           const idea = CE_IDEAS[_ceIdea];
           if (typeof salma !== 'undefined' && idea) salma.send(idea.msg);
+          return;
+        }
+        if (e.target.closest('[data-ce-map]')) {
+          if (typeof openLiveMap === 'function') openLiveMap();
+          else if (typeof window.openLiveMap === 'function') window.openLiveMap();
+          return;
+        }
+        if (e.target.closest('[data-ce-resume]')) {
+          if (_ceResume && _ceResume.docId && typeof salma !== 'undefined' && salma.cargarGuia) {
+            salma.cargarGuia(_ceResume.docId, _ceResume.docData);
+          }
+          return;
         }
       });
+
+      // Si no hay ruta activa: traer la ruta REAL más reciente y ofrecer retomarla
+      if (!_ceActive && currentUser && typeof db !== 'undefined') {
+        db.collection('users').doc(currentUser.uid).collection('maps')
+          .orderBy('createdAt', 'desc').limit(6).get()
+          .then(snap => {
+            if (!snap || snap.empty) return;
+            let picked = null;
+            snap.forEach(doc => {
+              if (picked) return;
+              const d = doc.data();
+              if (d.estado === 'borrador') return;
+              let r = null;
+              try { r = d.itinerarioIA ? JSON.parse(d.itinerarioIA) : null; } catch (_) {}
+              const rt = r && _ceFromRoute(r, doc.id, d);
+              if (rt) picked = rt;
+            });
+            if (!picked) return;
+            _ceResume = picked;
+            const card = area.querySelector('#ce-card');
+            // solo sustituir si el usuario no ha tocado el ↻ (sigue en la 1ª idea curada)
+            if (card && !card.classList.contains('ce-active')) {
+              card.innerHTML = _ceRouteHTML(picked, 'resume');
+            }
+          })
+          .catch(() => {});
+      }
     }
   } catch (err) {
     console.warn('[chat-empty] render nuevo falló, uso fallback', err);

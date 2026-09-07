@@ -6120,7 +6120,7 @@ body {
 .ce-card.ce-active .ce-card-ribbon{border-bottom-color:var(--ce-green);}
 .ce-card-ribbon span{font-family:var(--ce-flapf);font-size:9.5px;letter-spacing:.13em;color:rgba(255,255,255,.92);text-shadow:0 1px 3px rgba(0,0,0,.75);text-transform:uppercase;}
 .ce-row{display:flex;align-items:center;gap:11px;padding:13px 12px 11px;border-bottom:1px solid var(--ce-line);}
-.ce-row .ce-code{font-family:var(--ce-sign);font-weight:800;font-size:19px;letter-spacing:.03em;text-transform:uppercase;color:var(--ce-ink);}
+.ce-row .ce-code{font-family:var(--ce-sign);font-weight:800;font-size:19px;letter-spacing:.03em;text-transform:uppercase;color:var(--ce-ink);flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .ce-row .ce-arr{flex:1;height:1px;background:var(--ce-line-hi);position:relative;}
 .ce-row .ce-arr::after{content:'';position:absolute;right:-1px;top:-3.5px;border:4.5px solid transparent;border-left-color:var(--ce-line-hi);}
 .ce-head{padding:12px;border-bottom:1px solid var(--ce-line);}
