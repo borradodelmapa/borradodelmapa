@@ -359,22 +359,24 @@ function _renderChatEmpty() {
       </div>
       <div class="ce-stops">${rt.stopsHtml}</div>
       <div class="ce-stats">${rt.stats.map(s => `<div class="ce-stat"><div class="ce-k">${s[0]}</div><div class="ce-v">${s[1]}</div></div>`).join('')}</div>
-      <div class="ce-cta"><button class="ce-cta-main" data-ce-guide>Abrir la guía <span>→</span></button></div>
-      <button class="ce-newbillete" data-ce-newbillete>+ Billete nuevo</button>`;
+      <div class="ce-cta ce-cta--dual">
+        <button class="ce-cta-main" data-ce-guide>Abrir la guía <span>→</span></button>
+        <button class="ce-cta-main ce-cta-2nd" data-ce-newbillete>Billete nuevo <span>+</span></button>
+      </div>`;
 
   const _ceChipsRow = `
       <div class="chat-empty-chips">
         <button class="chat-empty-chip chat-empty-chip--ruta" data-action="crear-ruta">${_mapIco}Ruta nueva</button>
-        <div class="chat-empty-col">${chipsLeft.map(renderChip).join('')}</div>
-        <div class="chat-empty-col">${chipsRight.map(renderChip).join('')}</div>
+        ${chipsLeft.map(renderChip).join('')}
+        ${chipsRight.map(renderChip).join('')}
       </div>`;
 
   const _ceFallback = `
     <div class="chat-empty">
-      <button class="chat-empty-chip chat-empty-chip--ruta" data-action="crear-ruta">${_mapIco}Crear ruta nueva</button>
       <div class="chat-empty-chips">
-        <div class="chat-empty-col">${chipsLeft.map(renderChip).join('')}</div>
-        <div class="chat-empty-col">${chipsRight.map(renderChip).join('')}</div>
+        <button class="chat-empty-chip chat-empty-chip--ruta" data-action="crear-ruta">${_mapIco}Ruta nueva</button>
+        ${chipsLeft.map(renderChip).join('')}
+        ${chipsRight.map(renderChip).join('')}
       </div>
     </div>`;
 
