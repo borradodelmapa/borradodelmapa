@@ -43,6 +43,11 @@ const $toast = document.getElementById('toast');
 // ═══ NAVEGACIÓN — 3 estados ═══
 
 function showState(state) {
+  // Navegación Fase 4: si la vista itinerario estaba abierta y el usuario
+  // navega (bottom bar), desmontarla primero. Sin tocar historial.
+  if (window._itinViewOpen && typeof window._teardownItinView === 'function') {
+    window._teardownItinView();
+  }
   currentState = state;
   updateHeader();
 
@@ -178,23 +183,7 @@ function updateBottomBar() {
     </button>`;
 
   document.getElementById('tab-chat').addEventListener('click', () => {
-    // Si hay guía abierta, cerrarla primero
-    if (window._itinViewOpen && typeof closeItinerarioView === 'function') {
-      closeItinerarioView();
-    } else if (window._itinViewOpen) {
-      const _view = document.getElementById('itin-view');
-      const _appContent = document.getElementById('app-content');
-      const _inputBar = document.getElementById('app-input-bar');
-      window._itinViewOpen = false;
-      // Quitar barra flotante (Google Maps + Compartir) del body
-      const _actionBar = document.body.querySelector('.itin-action-bar');
-      if (_actionBar) _actionBar.remove();
-      if (_view) _view.style.display = 'none';
-      if (_appContent) _appContent.style.display = '';
-      if (_inputBar) _inputBar.style.display = '';
-      if (typeof mapaRuta !== 'undefined') mapaRuta.destroy();
-      if (typeof mapaItinerario !== 'undefined') mapaItinerario.destroy();
-    }
+    // La vista itinerario la desmonta showState() (Fase 4). Aquí solo al chat.
     if (typeof salma !== 'undefined') salma._initChat();
     showState('chat');
   });
@@ -220,6 +209,8 @@ function handleAvatarClick() {
 // deshace y cierra el modal, en vez de navegar por la pantalla de debajo.
 window._modalStack = [];
 window.pushModal = function (name, closeFn) {
+  var top = window._modalStack[window._modalStack.length - 1];
+  if (top && top.name === name) { top.closeFn = closeFn; return; } // ya hay uno arriba: refrescar, no duplicar
   window._modalStack.push({ name: name, closeFn: closeFn });
   try { history.pushState({ state: history.state && history.state.state, modal: name }, ''); } catch (_) {}
 };

@@ -1283,15 +1283,19 @@ const salma = {
     const _itinSavedDocId = window._itinViewDocId || null;
     const _itinSavedOptions = window._itinViewOptions || null;
     if (_itinWasOpen) {
-      const _view = document.getElementById('itin-view');
-      const _appContent = document.getElementById('app-content');
-      const _inputBar = document.getElementById('app-input-bar');
-      window._itinViewOpen = false;
-      if (_view) _view.style.display = 'none';
-      if (_appContent) _appContent.style.display = '';
-      if (_inputBar) _inputBar.style.display = '';
-      if (typeof mapaRuta !== 'undefined') mapaRuta.destroy();
-      if (typeof mapaItinerario !== 'undefined') mapaItinerario.destroy();
+      if (typeof window._teardownItinView === 'function') {
+        window._teardownItinView();
+      } else {
+        const _view = document.getElementById('itin-view');
+        const _appContent = document.getElementById('app-content');
+        const _inputBar = document.getElementById('app-input-bar');
+        window._itinViewOpen = false;
+        if (_view) _view.style.display = 'none';
+        if (_appContent) _appContent.style.display = '';
+        if (_inputBar) _inputBar.style.display = '';
+        if (typeof mapaRuta !== 'undefined') mapaRuta.destroy();
+        if (typeof mapaItinerario !== 'undefined') mapaItinerario.destroy();
+      }
     }
 
     this._streaming = true;

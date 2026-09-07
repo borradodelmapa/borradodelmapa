@@ -489,6 +489,8 @@ const mapaItinerario = {
   let _openedFromChat = false;
 
   function openItinerarioView(routeData, docId, options = {}) {
+    // Si ya había una vista abierta, cerrarla (sin tocar historial) antes de reabrir
+    if (window._itinViewOpen) _teardownItinView();
     _openedFromChat = !!options.fromChat;
 
     // Guardar referencia global para que salma.js pueda reabrir la vista
@@ -538,59 +540,43 @@ const mapaItinerario = {
     };
     document.addEventListener('itin:open-live-map', _onOpenLiveMap);
 
-    // Interceptar showState para cerrar la vista si el usuario navega con el bottom bar
-    const _origShowState = window.showState;
-    window.showState = function(state) {
-      if (view.style.display !== 'none') {
-        view.style.display = 'none';
-        if (appContent) appContent.style.display = '';
-        if (inputBar) inputBar.style.display = '';
-        document.querySelector('.app-header')?.style.removeProperty('display');
-        const bb = document.getElementById('app-bottom-bar');
-        if (bb) bb.style.display = '';
-        // Quitar barra flotante (Google Maps + Compartir)
-        document.body.querySelectorAll('.itin-action-bar').forEach(el => el.remove());
-        mapaRuta.destroy();
-        mapaItinerario.destroy();
-        window.showState = _origShowState;
-      }
-      _origShowState(state);
-    };
-
+    // Navegación Fase 4: la vista itinerario se comporta como un modal en el
+    // historial (pushModal / popModal). El botón atrás del móvil la cierra.
+    // Fuera el monkey-patch de window.showState (causaba un leak: cada
+    // apertura/cierre por ✕ apilaba otro wrapper sin restaurarlo).
+    if (window.pushModal) window.pushModal('itinerario', _teardownItinView);
   }
 
-  function closeItinerarioView() {
+  // Desmontaje puro de la vista (DOM + mapas). NO toca historial.
+  function _teardownItinView() {
+    if (!window._itinViewOpen) return;
+    window._itinViewOpen = false;
+
+    try { mapaRuta.destroy(); } catch (_) {}
+    try { mapaItinerario.destroy(); } catch (_) {}
+
+    document.body.querySelectorAll('.itin-action-bar').forEach(el => el.remove());
+
     const view = document.getElementById('itin-view');
     const appContent = document.getElementById('app-content');
     const inputBar = document.getElementById('app-input-bar');
-
-    window._itinViewOpen = false;
-
-    mapaRuta.destroy();
-    mapaItinerario.destroy();
-
-    // Quitar barra flotante (Google Maps + Compartir) del body
-    const actionBar = document.body.querySelector('.itin-action-bar');
-    if (actionBar) actionBar.remove();
-
     if (view) view.style.display = 'none';
     if (appContent) appContent.style.display = '';
     if (inputBar) inputBar.style.display = '';
+    document.querySelector('.app-header')?.style.removeProperty('display');
     const bottomBar = document.getElementById('app-bottom-bar');
     if (bottomBar) bottomBar.style.display = '';
+  }
+  window._teardownItinView = _teardownItinView;
 
-    // Restaurar showState si fue interceptado
-    if (window.showState !== window._showStateOriginal && typeof window._showStateOriginal === 'function') {
-      window.showState = window._showStateOriginal;
-    }
-
-    // Solo volver a bitácora si veníamos de ella (no del chat)
-    if (!_openedFromChat && typeof showState === 'function') showState('bitacora');
+  // Cierre "de verdad" (✕ / itin:close / Ir al mapa): desmonta y consume
+  // la entrada de historial. El botón atrás llega por popModal → _teardownItinView.
+  function closeItinerarioView() {
+    if (!window._itinViewOpen) return;
+    _teardownItinView();
+    if (window.popModal) window.popModal('itinerario');
   }
 
-  // Exponer globalmente para que app.js y salma.js puedan llamarlo (P2-11: ya no hay monkey-patch)
   window.openItinerarioView = openItinerarioView;
-
-  // Escuchar cierre desde el botón back
   document.addEventListener('itin:close', closeItinerarioView);
 })();
