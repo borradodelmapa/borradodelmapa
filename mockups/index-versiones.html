@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Índice — versiones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* MOCKUP — 3 versiones del índice sobre lo que ya hay. No es producción. */
+:root{
+  --bg:#050505;--panel:#0a0a0a;--flap:#171613;
+  --ink:#fff;--ink2:#d9d4c6;--ink3:#8f8a7e;
+  --amber:#f0b429;--amber-hi:#ffc947;--amber-ink:#0a0a0a;
+  --green:#43d977;--red:#ff5a5a;
+  --line:rgba(255,255,255,.32);--line-hi:rgba(255,255,255,.55);
+  --sign:'Archivo',sans-serif;--body:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;--logo:'Bebas Neue',sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0c0c0b;color:var(--ink);font-family:var(--body);line-height:1.5;padding:32px 16px 90px;}
+.wrap{max-width:1280px;margin:0 auto;}
+.kick{display:block;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);}
+h1{font-family:var(--sign);text-transform:uppercase;letter-spacing:.03em;font-size:26px;font-weight:800;text-align:center;margin:6px 0 4px;}
+.lead{text-align:center;color:var(--ink2);font-size:13.5px;max-width:640px;margin:0 auto 28px;}
+
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;align-items:start;}
+@media(max-width:1080px){.grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:620px){.grid{grid-template-columns:1fr;}}
+.col{display:flex;flex-direction:column;gap:10px;}
+.col > .tag{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);text-align:center;}
+.col > .tag b{color:var(--amber);}
+.col .note{font-size:12px;color:var(--ink2);}
+.col .note b{color:var(--ink);}
+
+.phone{border-radius:30px;padding:8px;background:#1a1a1a;box-shadow:0 30px 60px -24px rgba(0,0,0,.9);}
+.screen{position:relative;width:100%;aspect-ratio:293/620;border-radius:24px;overflow:hidden;background:var(--bg);}
+.screen::before{content:'';position:absolute;inset:0;opacity:.4;background:radial-gradient(120% 60% at 78% 8%,rgba(240,180,41,.13),transparent 55%),repeating-linear-gradient(118deg,rgba(240,180,41,.05) 0 2px,transparent 2px 28px);}
+.scr{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;padding:14px 11px 0;overflow:hidden;}
+
+/* comunes */
+.top{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--line);padding-bottom:7px;}
+.top .hi{color:var(--amber);}
+.greet{font-family:var(--sign);text-transform:uppercase;font-weight:800;font-size:18px;letter-spacing:.02em;margin:10px 0 10px;}
+.bar{margin-top:auto;height:38px;display:flex;align-items:center;justify-content:space-around;border-top:1.5px solid var(--line-hi);background:var(--panel);margin:0 -11px;}
+.bar span{font-family:var(--mono);font-size:7px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);}
+.bar span.on{color:var(--amber);}
+.inp{margin:0 -11px;padding:7px 11px 9px;background:var(--panel);border-top:1px solid var(--line);display:flex;gap:6px;align-items:center;}
+.inp input{flex:1;background:var(--bg);border:1.5px solid var(--line-hi);border-radius:3px;color:var(--ink3);font-size:10px;padding:7px 8px;}
+.inp .r{width:26px;height:26px;border-radius:50%;border:1px solid var(--line-hi);flex-shrink:0;}
+.or{text-align:center;font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin:9px 0;}
+.or b{color:var(--ink2);}
+
+/* ── ticket base ── */
+.tk{border:1.5px solid var(--amber);border-radius:6px;background:var(--panel);overflow:hidden;}
+.tk-hd{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:linear-gradient(90deg,var(--amber),var(--amber-hi));}
+.tk-hd .b{font-family:var(--logo);font-size:12px;letter-spacing:.08em;color:#0a0a0a;}
+.tk-hd .b i{opacity:.5;font-style:normal;}
+.tk-hd .n{font-family:var(--mono);font-size:7.5px;letter-spacing:.1em;color:#0a0a0a;font-weight:700;}
+.fld{padding:9px 10px;border-bottom:1px dashed var(--line);}
+.fld .k{font-family:var(--mono);font-size:7.5px;letter-spacing:.12em;color:var(--ink3);text-transform:uppercase;margin-bottom:5px;}
+.fld .dest{font-family:var(--sign);text-transform:uppercase;font-weight:800;font-size:16px;letter-spacing:.03em;color:var(--ink3);border-bottom:2px solid var(--line-hi);padding-bottom:3px;}
+.chipd{display:flex;gap:4px;flex-wrap:wrap;}
+.chipd b{font-family:var(--sign);text-transform:uppercase;font-weight:700;font-size:9px;border:1.5px solid var(--line-hi);border-radius:3px;padding:5px 7px;}
+.chipd b.on{background:var(--amber);border-color:var(--amber);color:#0a0a0a;}
+.afin{font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);padding:9px 10px;border-bottom:1px dashed var(--line);display:flex;justify-content:space-between;}
+.afin span{color:var(--ink3);}
+.perf{position:relative;height:0;border-top:1px dashed var(--line-hi);margin:0 8px;}
+.perf::before,.perf::after{content:'';position:absolute;top:-6px;width:12px;height:12px;border-radius:50%;background:#1a1a1a;}
+.perf::before{left:-14px;}.perf::after{right:-14px;}
+.stub{padding:10px;}
+.emit{width:100%;background:linear-gradient(180deg,var(--amber-hi),var(--amber));color:#0a0a0a;border:0;border-radius:3px;font-family:var(--sign);text-transform:uppercase;font-weight:800;letter-spacing:.05em;font-size:12px;padding:11px;display:flex;justify-content:space-between;align-items:center;}
+.hint{text-align:center;font-family:var(--mono);font-size:7px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-top:7px;}
+
+/* ── chips fila base ── */
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:2px 0 6px;}
+.chips .c{display:flex;align-items:center;justify-content:center;gap:5px;font-family:var(--sign);text-transform:uppercase;font-weight:700;font-size:9px;letter-spacing:.03em;color:var(--ink);background:var(--panel);border:1.5px solid var(--line-hi);border-radius:3px;padding:7px 6px;}
+.chips .c.sos{color:var(--red);border-color:var(--red);}
+.chips .c svg{width:11px;height:11px;stroke:var(--amber);fill:none;stroke-width:2;}
+
+/* ═══ V2 · banda de destino ═══ */
+.v2 .tk-ribbon{height:52px;background:linear-gradient(135deg,#5a6b3e,#8a6a35 55%,#3d4653);border-bottom:1.5px solid var(--amber);display:flex;align-items:flex-end;padding:5px 9px;}
+.v2 .tk-ribbon span{font-family:var(--mono);font-size:7px;letter-spacing:.1em;color:rgba(255,255,255,.85);text-transform:uppercase;text-shadow:0 1px 2px #000;}
+.v2 .chips{display:flex;gap:5px;overflow:hidden;grid-template-columns:none;}
+.v2 .chips .c{flex-shrink:0;border-radius:99px;padding:7px 10px;}
+
+/* ═══ V3 · panel de salidas ═══ */
+.v3 .board-hd{display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);border-bottom:1px solid var(--amber);padding-bottom:5px;margin-bottom:8px;}
+.v3 .greet{font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.08em;}
+.v3 .tk{border-radius:3px;}
+.v3 .tk-row{display:flex;align-items:center;gap:6px;padding:9px 10px;border-bottom:1px solid var(--line);font-family:var(--mono);text-transform:uppercase;}
+.v3 .tk-row .lbl{font-size:7px;letter-spacing:.1em;color:var(--ink3);width:40px;flex-shrink:0;}
+.v3 .tk-row .val{font-size:12px;color:var(--ink);letter-spacing:.04em;}
+.v3 .flap{display:flex;gap:3px;}
+.v3 .flap i{font-family:var(--mono);font-weight:800;font-size:12px;color:var(--amber);background:var(--flap);border:1px solid var(--line);border-radius:1px;padding:4px 5px;position:relative;}
+.v3 .flap i::after{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.5);}
+.v3 .chips{grid-template-columns:1fr 1fr 1fr;gap:4px;}
+.v3 .chips .c{border-radius:2px;font-size:8px;padding:6px 4px;}
+
+.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);text-align:center;line-height:1.9;}
+.foot b{color:var(--ink2);}
+svg.i{display:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="kick">Borrado del Mapa · índice</span>
+  <h1>Mejorar el índice · 3 versiones</h1>
+  <p class="lead">Sobre lo que ya hay. Mismo billete + chips, tres direcciones distintas de acabado. Dime cuál (o mezcla).</p>
+
+  <div class="grid">
+
+    <!-- ═══════ ACTUAL ═══════ -->
+    <div class="col">
+      <div class="tag">Actual · <b>en producción</b></div>
+      <div class="phone"><div class="screen"><div class="scr">
+        <div class="top"><span class="hi">Hola, viajero</span><span>Sep</span></div>
+        <div class="greet">¿A dónde vamos?</div>
+        <div class="tk">
+          <div class="tk-hd"><span class="b">BORRADO<i>DEL</i>MAPA</span><span class="n">Nº BDM·0907</span></div>
+          <div class="fld"><div class="k">Pasajero</div><div style="font-family:var(--sign);font-weight:800;font-size:11px;letter-spacing:.06em">VIAJERO</div></div>
+          <div class="fld"><div class="k">Destino</div><div class="dest">¿A dónde?</div></div>
+          <div class="fld"><div class="k">Días</div><div class="chipd"><b>3–4</b><b class="on">5–7</b><b>8–14</b><b>+14</b></div></div>
+          <div class="afin">Afinar la ruta <span>6 detalles ▾</span></div>
+          <div class="perf"></div>
+          <div class="stub"><button class="emit">Emitir billete <span>→</span></button><div class="hint">Salma monta la ruta con lo que hayas puesto</div></div>
+        </div>
+        <div class="or">o <b>díctame el plan entero</b> ↓</div>
+        <div class="chips">
+          <div class="c">Cerca mía</div><div class="c">Notas</div>
+          <div class="c">Vuelos</div><div class="c">Moneda</div>
+          <div class="c">Alertas</div><div class="c">Traductor</div>
+          <div class="c">Hoteles</div><div class="c sos">SOS</div>
+        </div>
+        <div class="inp"><input value="Escribe a Salma..."><span class="r"></span><span class="r"></span><span class="r"></span></div>
+        <div class="bar"><span class="on">Salma</span><span>Mis Viajes</span><span>Entrar</span></div>
+      </div></div></div>
+      <div class="note">Lo que hay hoy. Referencia.</div>
+    </div>
+
+    <!-- ═══════ V1 · COMPACTO ═══════ -->
+    <div class="col">
+      <div class="tag">V1 · <b>compacto y afinado</b></div>
+      <div class="phone"><div class="screen"><div class="scr">
+        <div class="top"><span class="hi">Buenas, Paco</span><span>Sáb · Sep</span></div>
+        <div class="greet" style="font-size:15px;color:var(--ink2)">Emite tu billete</div>
+        <div class="tk">
+          <div class="tk-hd"><span class="b">BORRADO<i>DEL</i>MAPA · <span style="font-size:9px">PACO</span></span><span class="n">BDM·0907</span></div>
+          <div class="fld" style="padding:11px 10px"><div class="k">Destino</div><div class="dest" style="font-size:19px">¿A dónde?</div></div>
+          <div class="fld" style="display:flex;gap:10px;align-items:center"><div class="k" style="margin:0">Días</div><div class="chipd"><b>3–4</b><b class="on">5–7</b><b>8–14</b><b>+14</b></div></div>
+          <div class="afin">＋ Afinar <span>con quién · presupuesto · ritmo…</span></div>
+          <div class="perf"></div>
+          <div class="stub"><button class="emit">Emitir billete <span>→</span></button></div>
+        </div>
+        <div class="chips" style="margin-top:9px">
+          <div class="c"><svg viewBox="0 0 24 24"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/></svg>Cerca mía</div>
+          <div class="c"><svg viewBox="0 0 24 24"><path d="M17 8 21 3l-4 5 3 8-3-2-2 3-2-3-3 2 3-8-4-5 4 5z"/></svg>Vuelos</div>
+          <div class="c"><svg viewBox="0 0 24 24"><path d="M2 20V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12M2 14h20"/></svg>Hoteles</div>
+          <div class="c"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>Notas</div>
+          <div class="c"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="6"/><path d="M15.5 15.5a6 6 0 1 0-6-6"/></svg>Moneda</div>
+          <div class="c sos"><svg viewBox="0 0 24 24" style="stroke:var(--red)"><path d="M12 2 2 7v10l10 5 10-5V7z"/></svg>SOS</div>
+        </div>
+        <div class="or">o <b>díctame el plan</b> abajo ↓</div>
+        <div class="inp"><input value="Ej: Ronda 3 días"><span class="r"></span><span class="r"></span><span class="r"></span></div>
+        <div class="bar"><span class="on">Salma</span><span>Mis Viajes</span><span>Perfil</span></div>
+      </div></div></div>
+      <div class="note"><b>Más apretado</b> — "Pasajero" sube a la cabecera, Días en la misma línea que su etiqueta, perforación y talón más finos. <b>Iconos en los chips</b>, 3+2 (Traductor y Alertas se pliegan bajo "Afinar"/menos usados). Saludo pequeño de eyebrow. Menos hueco muerto.</div>
+    </div>
+
+    <!-- ═══════ V2 · BANDA DE DESTINO ═══════ -->
+    <div class="col v2">
+      <div class="tag">V2 · <b>con banda de destino</b></div>
+      <div class="phone"><div class="screen"><div class="scr">
+        <div class="top"><span class="hi">Buenas, Paco</span><span>Sep</span></div>
+        <div class="greet">¿A dónde vamos?</div>
+        <div class="tk">
+          <div class="tk-ribbon"><span>Tu próximo destino aparece aquí en foto</span></div>
+          <div class="tk-hd" style="background:var(--panel)"><span class="b" style="color:var(--amber)">BORRADO<i style="color:var(--amber)">DEL</i>MAPA</span><span class="n" style="color:var(--ink3)">Nº BDM·0907</span></div>
+          <div class="fld"><div class="k">Destino</div><div class="dest">¿A dónde?</div></div>
+          <div class="fld"><div class="k">Días</div><div class="chipd"><b>3–4</b><b class="on">5–7</b><b>8–14</b><b>+14</b></div></div>
+          <div class="afin">Afinar la ruta <span>6 detalles ▾</span></div>
+          <div class="perf"></div>
+          <div class="stub"><button class="emit">Emitir billete <span>→</span></button><div class="hint">Con lo que pongas, Salma la monta</div></div>
+        </div>
+        <div class="or">o <b>díctame el plan</b> ↓</div>
+        <div class="chips">
+          <div class="c">Cerca mía</div><div class="c">Vuelos</div><div class="c">Hoteles</div>
+          <div class="c">Notas</div><div class="c">Moneda</div><div class="c sos">SOS</div>
+        </div>
+        <div class="inp"><input value="Escribe a Salma..."><span class="r"></span><span class="r"></span><span class="r"></span></div>
+        <div class="bar"><span class="on">Salma</span><span>Mis Viajes</span><span>Perfil</span></div>
+      </div></div></div>
+      <div class="note"><b>Le da calor</b> — franja de foto arriba del billete (destino sugerido, o un paisaje genérico si no hay). El resto igual que ahora. <b>Chips como píldoras</b> en una tira que scrollea, con icono. Es la versión más "revista de viajes" sin salirse del billete.</div>
+    </div>
+
+    <!-- ═══════ V3 · PANEL DE SALIDAS ═══════ -->
+    <div class="col v3">
+      <div class="tag">V3 · <b>panel de salidas</b></div>
+      <div class="phone"><div class="screen"><div class="scr">
+        <div class="board-hd"><span>Salidas</span><span>Sep · 09:41</span></div>
+        <div class="greet">¿A dónde, Paco?</div>
+        <div class="tk">
+          <div class="tk-hd"><span class="b">BDM · BILLETE</span><span class="n">0907</span></div>
+          <div class="tk-row"><span class="lbl">Destino</span><span class="val" style="color:var(--ink3)">— — —</span></div>
+          <div class="tk-row"><span class="lbl">Días</span><div class="flap"><i>0</i><i>5</i></div><span class="val" style="font-size:8px;color:var(--ink3)">→ 5-7</span></div>
+          <div class="tk-row"><span class="lbl">Estado</span><span class="val" style="color:var(--green);font-size:9px">● listo para emitir</span></div>
+          <div class="afin" style="border-bottom:0">＋ Afinar <span>6 datos</span></div>
+          <div class="perf"></div>
+          <div class="stub"><button class="emit">Emitir <span>→</span></button></div>
+        </div>
+        <div class="or">o <b>escribe el destino</b> ↓</div>
+        <div class="chips">
+          <div class="c">Cerca</div><div class="c">Vuelos</div><div class="c">Hoteles</div>
+          <div class="c">Notas</div><div class="c">Moneda</div><div class="c">Traduc.</div>
+          <div class="c">Alertas</div><div class="c">Info</div><div class="c sos">SOS</div>
+        </div>
+        <div class="inp"><input value="Destino…"><span class="r"></span><span class="r"></span><span class="r"></span></div>
+        <div class="bar"><span class="on">Salma</span><span>Mis Viajes</span><span>Perfil</span></div>
+      </div></div></div>
+      <div class="note"><b>A tope con el tablero</b> — todo en monoespaciada, el billete es una "fila" con columnas Destino / Días / Estado, días en celdas <b>split-flap</b>, cabecera "SALIDAS · hora". Chips como etiquetas de puerta 3×3. La más distinta y con más carácter; también la más fría.</div>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    Mockup · <b>mockups/index-versiones.html</b> · nada tocado en producción<br>
+    Elige una, o dime qué coger de cada una
+  </div>
+</div>
+</body>
+</html>
