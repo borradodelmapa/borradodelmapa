@@ -12,9 +12,11 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
 trazado real): commit `11cda25f`, worker Version `a2949fc4`, front `guide-renderer.js?v=48` /
 `mapa-ruta.js?v=5` / `mapa-itinerario.js?v=49`. Todo en `main` y en producción.
 
-**PRUEBA PENDIENTE DE PACO:** en la app, "hazme una ruta siguiendo la N2 de Chaves a Faro" →
-la vista itinerario debe pintar el **zigzag real de la N2**, no la recta por la autopista.
-Si va bien → cerrar del todo. Si no → panel 🐛 + captura.
+**Estado 7 sept:** mapa incrustado ya sigue la N2 (confirmado por Paco). Iteración `e64e0fe2`:
+T2 ya no se queda mudo (spinner "Generando tu ruta…" + keepalive), y el enlace "Abrir en Google
+Maps" se arma con ~10 puntos del trazado real → no se desvía a la autopista.
+**PENDIENTE:** Paco despliega el worker (`e64e0fe2`) y reprueba: T2 con feedback + enlace Maps que
+siga la N2. Frontend `guide-renderer.js?v=49` / `mapa-itinerario.js?v=50` ya en Pages.
 
 **Frase para retomar:**
 > "Motor de carreteras: `PENDIENTES.md` sección 0. Iterar Fase 2 / afinar."
