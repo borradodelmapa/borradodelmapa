@@ -285,7 +285,7 @@ function _renderChatEmpty() {
     opts.map(o => `<button class="ce-chip${o.on ? ' on' : ''}" data-v="${o.v}">${o.l}</button>`).join('') +
     `</div>`;
 
-  const _ceBilleteHTML = () => `
+  const _ceBilleteHTML = (hasActive) => `
       <div class="ce-tk-head"><span class="ce-tk-b">BORRADO<span>DEL</span>MAPA</span><span class="ce-tk-t">Billete de ruta</span></div>
       <div class="ce-fld">
         <div class="ce-k">Destino</div>
@@ -343,6 +343,7 @@ function _renderChatEmpty() {
       <div class="ce-stub">
         <button class="ce-emit" data-ce-emit>Emitir billete <span>→</span></button>
         <div class="ce-stub-hint">Salma monta la ruta con lo que hayas puesto</div>
+        ${hasActive ? '<button class="ce-back-active" data-ce-back-active>← Volver a la ruta activa</button>' : ''}
       </div>`;
 
   // Tablero de RUTA ACTIVA — modo compañero. Abre la GUÍA del viaje + billete nuevo.
@@ -424,13 +425,25 @@ function _renderChatEmpty() {
         // Ruta activa → empezar un billete nuevo sin perder la ruta
         if (e.target.closest('[data-ce-newbillete]')) {
           ceCard.className = 'ce-card ce-ticket';
-          ceCard.innerHTML = _ceBilleteHTML();
+          ceCard.innerHTML = _ceBilleteHTML(true);
           const g = area.querySelector('.ce-greet');
           if (g) g.textContent = '¿A dónde te llevo?';
           const or = area.querySelector('.ce-or b');
           if (or) or.textContent = 'díctame el plan entero';
           const dest = ceCard.querySelector('.ce-tk-dest');
           if (dest) dest.focus();
+          return;
+        }
+        // Billete → volver a la ruta activa (solo si se llegó desde el modo compañero)
+        if (e.target.closest('[data-ce-back-active]')) {
+          if (_ceActive) {
+            ceCard.className = 'ce-card ce-active';
+            ceCard.innerHTML = _ceRouteHTML(_ceActive);
+            const g = area.querySelector('.ce-greet');
+            if (g) g.textContent = '¿Cómo va el viaje?';
+            const or = area.querySelector('.ce-or b');
+            if (or) or.textContent = 'pregúntale a Salma';
+          }
           return;
         }
         // Billete — desplegar "Afinar"

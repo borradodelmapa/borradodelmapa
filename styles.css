@@ -6233,3 +6233,11 @@ body {
 }
 .chat-empty .ce-newbillete:hover,
 .chat-empty .ce-newbillete:active{border-color:var(--ce-amber);color:var(--ce-amber);}
+
+/* billete: volver a la ruta activa (solo si se llegó desde el modo compañero) */
+.chat-empty .ce-back-active{
+  display:block;width:100%;margin-top:10px;background:transparent;border:0;
+  color:var(--ce-ink2);font-family:var(--ce-flapf);font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;padding:6px;cursor:pointer;text-align:center;
+}
+.chat-empty .ce-back-active:hover{color:var(--ce-amber);}
