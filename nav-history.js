@@ -14,7 +14,7 @@
 
   // Estados principales que merecen entrada en el historial
   // 'diario' no está — es sub-vista de bitácora, su back lo gestiona itin:close
-  const PUSH_STATES = ['welcome', 'chat', 'rutas', 'profile', 'bitacora', 'notas', 'documentos', 'galeria'];
+  const PUSH_STATES = ['welcome', 'chat', 'rutas', 'profile', 'bitacora', 'notas', 'documentos', 'galeria', 'vuelos', 'historia'];
 
   // Guardar referencia ANTES de sobreescribir
   const _orig = showState;

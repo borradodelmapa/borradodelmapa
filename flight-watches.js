@@ -159,6 +159,7 @@ window.flightWatches = (() => {
     $content.innerHTML = `
       <div class="vuelos-area fade-in">
         <div class="vuelos-header">
+          <button class="sv-back" onclick="history.back()" aria-label="Volver">‹</button>
           <div class="vuelos-title">VUELOS</div>
           <button class="vuelos-add-btn" id="vuelos-add-btn">+ Nueva</button>
         </div>

@@ -1409,6 +1409,7 @@ async function renderGaleria(albumFilter) {
   $c.innerHTML = `
     <div class="galeria-area fade-in">
       <div class="galeria-header">
+        <button class="sv-back" onclick="history.back()" aria-label="Volver">‹</button>
         <span class="galeria-title">Galería</span>
         <div class="galeria-header-btns">
           ${activeAlbum && activeAlbum !== '__sin_album__'

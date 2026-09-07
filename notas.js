@@ -322,6 +322,7 @@ window.notasManager = (() => {
     $content.innerHTML = `
       <div class="notas-area fade-in">
         <div class="notas-header">
+          <button class="sv-back" onclick="history.back()" aria-label="Volver">‹</button>
           <div class="notas-title">Mis Notas</div>
           <button class="notas-add-btn" id="notas-add-btn">+</button>
         </div>
