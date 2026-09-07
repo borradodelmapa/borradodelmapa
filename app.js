@@ -348,7 +348,7 @@ function _renderChatEmpty() {
         <div class="ce-stub-hint">Salma monta la ruta con lo que hayas puesto</div>
       </div>`;
 
-  // Tablero de RUTA ACTIVA (verde, abre el mapa)
+  // Tablero de RUTA ACTIVA — modo compañero. Abre la GUÍA del viaje + billete nuevo.
   const _ceRouteHTML = (rt) => `
       <div class="ce-card-ribbon"><span>${rt.ribbon}</span></div>
       <div class="ce-row"><span class="ce-code">${escapeHTML(rt.code)}</span><span class="ce-arr"></span></div>
@@ -359,9 +359,8 @@ function _renderChatEmpty() {
       </div>
       <div class="ce-stops">${rt.stopsHtml}</div>
       <div class="ce-stats">${rt.stats.map(s => `<div class="ce-stat"><div class="ce-k">${s[0]}</div><div class="ce-v">${s[1]}</div></div>`).join('')}</div>
-      <div class="ce-cta">
-        <button class="ce-cta-main" data-ce-map>Abrir el mapa <span>→</span></button>
-      </div>`;
+      <div class="ce-cta"><button class="ce-cta-main" data-ce-guide>Abrir la guía <span>→</span></button></div>
+      <button class="ce-newbillete" data-ce-newbillete>+ Billete nuevo</button>`;
 
   const _ceChipsRow = `
       <div class="chat-empty-chips">
@@ -403,10 +402,32 @@ function _renderChatEmpty() {
     const ceCard = area.querySelector('#ce-card');
     if (ceCard) {
       ceCard.addEventListener('click', (e) => {
-        // Ruta activa → abrir el mapa
-        if (e.target.closest('[data-ce-map]')) {
-          if (typeof openLiveMap === 'function') openLiveMap();
-          else if (typeof window.openLiveMap === 'function') window.openLiveMap();
+        // Ruta activa → abrir la GUÍA de ese viaje (vista itinerario)
+        if (e.target.closest('[data-ce-guide]')) {
+          try {
+            const raw = localStorage.getItem('bdm_live_active_route');
+            const rd = raw ? JSON.parse(raw) : null;
+            const id = localStorage.getItem('bdm_live_active_route_id') || null;
+            if (rd && rd.stops && rd.stops.length && typeof window.openItinerarioView === 'function') {
+              window.openItinerarioView(rd, id, { saved: true, fromChat: false });
+            } else if (id && typeof salma !== 'undefined' && salma.cargarGuia) {
+              salma.cargarGuia(id, null);
+            } else if (typeof openLiveMap === 'function') {
+              openLiveMap();
+            }
+          } catch (_) {}
+          return;
+        }
+        // Ruta activa → empezar un billete nuevo sin perder la ruta
+        if (e.target.closest('[data-ce-newbillete]')) {
+          ceCard.className = 'ce-card ce-ticket';
+          ceCard.innerHTML = _ceBilleteHTML();
+          const g = area.querySelector('.ce-greet');
+          if (g) g.textContent = '¿A dónde te llevo?';
+          const or = area.querySelector('.ce-or b');
+          if (or) or.textContent = 'díctame el plan entero';
+          const dest = ceCard.querySelector('.ce-tk-dest');
+          if (dest) dest.focus();
           return;
         }
         // Billete — desplegar "Afinar"
