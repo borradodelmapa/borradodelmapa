@@ -28,7 +28,12 @@ Diseño + aprendizajes: memoria `project_road_engine_fase1`.
   lee nadie aún → inofensivas. Rerun: `cd worker/roads; node precarga-roads.mjs --upload-only --kv`.
 - Verificado: `wrangler deploy --dry-run -c wrangler.toml` compila (450KB). Con `wrangler dev --remote`:
   `/roads/resolve?q=siguiendo la N2&country=PT` → **cache hit KV, 727km, cached:true, cero Overpass**.
-  Sin token → 403. `/version` y resto del worker intactos.
+  `/version` y resto del worker intactos.
+- **DESPLEGADO 7 sept** (worker `590db5be-8b5f-4c00-9232-fe38a73be656`, commit `206a24c2`).
+  ⚠️ En producción `/roads/resolve` devuelve **403 SIEMPRE** porque el secret `ADMIN_TOKEN`
+  no está puesto en el worker (se perdió en sept, nunca se repuso — ver sección "Secrets" abajo).
+  No es un bug del motor: el endpoint es solo una puerta de debug y **nadie lo usa aún**. Se
+  arreglará solo al reponer `ADMIN_TOKEN`. El motor + las 18 geometrías en KV están vivos.
 
 **PASO 7 (lo único que falta — necesita OK de Paco, es deploy a producción):**
 ```
@@ -46,6 +51,16 @@ al trazado del mapa en vez de pedir "la más rápida" a Directions. `overpass_er
 → fallback a Directions, NUNCA bloquea. Afinar ahí: WAW superroute, backoff Overpass, más precarga.
 
 **Ojo:** `wrangler dev`/`deploy` SIEMPRE con `-c wrangler.toml` (o coge el `wrangler.jsonc` de la raíz y peta).
+
+### Secrets del worker que faltan (perdidos en sept 2026, nunca repuestos)
+`npx wrangler secret list -c wrangler.toml` (7 sept) devuelve solo 9: ANTHROPIC_API_KEY,
+BRAVE_SEARCH_KEY, DUFFEL_ACCESS_TOKEN, ELEVENLABS_API_KEY, GOOGLE_PLACES_KEY, GOOGLE_TTS_KEY,
+OPENAI_API_KEY, OPENWEATHER_KEY, RAPIDAPI_KEY.
+**Faltan:** `ADMIN_TOKEN` (rompe `/health`, `/admin/*`, `/ga4`, `/roads/resolve` → todos 403),
+`SERPER_API_KEY` (búsqueda de eventos), `STRIPE_SECRET_KEY` (pagos), `TWILIO_ACCOUNT_SID` /
+`TWILIO_AUTH_TOKEN` / `TWILIO_PHONE_NUMBER` (SOS SMS), `GA4_CREDENTIALS` (analytics admin).
+Reponer con `npx wrangler secret put NOMBRE -c wrangler.toml`. `ADMIN_TOKEN` es una cadena
+que eliges tú (la misma que uses en el panel admin). CLAUDE.md sección 5 tiene el detalle.
 
 ---
 
