@@ -2501,7 +2501,9 @@ function tryKVDirectAnswer(message, country, destination) {
   }
 
   // ── Seguridad ──
-  if (/segur|seguridad|peligro|safe|dangerous|robo|estafa|scam|cuidado/i.test(m)) {
+  // OJO: límites de palabra obligatorios. Sin \b, "scam" se colaba dentro de "búscame"
+  // y una petición de ruta ("búscame camping al final") se tomaba como pregunta de seguridad.
+  if (/\bsegur|\bpeligr|\bsafe\b|\bdangerous\b|\brobo\b|\brobos\b|\bestafa|\bscam\b|\bcuidado\b/i.test(m)) {
     return `**Seguridad en ${pais}:** ${c.seguridad}\n\nEmergencias: ${c.emergencias}`;
   }
 
@@ -8314,8 +8316,14 @@ INSTRUCCIONES:
     const isRoute = !guidedIsReco && (isRouteRequest(message, history) || isDaysDestination(message) || !!guidedRoute);
     const skipKV = !isRoute && !guidedIsReco;
 
+    // No cortar con una respuesta corta de KV si el usuario pide EXPLÍCITAMENTE una guía/ruta
+    // o viene del botón "Crear ruta con mapa" (T2). Blindaje contra colisiones de subcadena
+    // (una palabra suelta del texto secuestrando la petición y devolviendo un factoide).
+    const _explicitRouteAsk = guidedMapStage || !!guidedRoute ||
+      /hazme\s+una\s+(gu[ií]a|ruta)|mont[ae]me\s+una\s+ruta|cr[eé]a(?:me)?\s+una\s+ruta/i.test(message || '');
+
     // ─── RESPUESTA DIRECTA DEL KV (sin llamar a Claude = 0 coste) — SOLO para rutas/guías ───
-    if (kvCountryData && !skipKV && !imageBase64 && !isFlightRequest(message) && !isHotelRequest(message) && !isServiceRequest(message) && !helpCategory) {
+    if (kvCountryData && !skipKV && !_explicitRouteAsk && !imageBase64 && !isFlightRequest(message) && !isHotelRequest(message) && !isServiceRequest(message) && !helpCategory) {
       const kvDirectReply = tryKVDirectAnswer(message, kvCountryData, kvDestinationData);
       if (kvDirectReply) {
         return new Response(
