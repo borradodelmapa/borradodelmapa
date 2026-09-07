@@ -346,9 +346,8 @@ function _renderChatEmpty() {
           <input class="ce-tk-notes" type="text" autocomplete="off" placeholder="Dieta, movilidad, lo que sea…">
         </div>
       </div>
-      <div class="ce-perf"><span class="ce-perf-lbl">desprende aquí</span></div>
+      <div class="ce-perf"></div>
       <div class="ce-stub">
-        <div class="ce-barcode"></div>
         <button class="ce-emit" data-ce-emit>Emitir billete <span>→</span></button>
         <div class="ce-stub-hint">Salma monta la ruta con lo que hayas puesto</div>
         ${hasActive ? '<button class="ce-back-active" data-ce-back-active>← Volver a la ruta activa</button>' : ''}
