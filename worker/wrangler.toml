@@ -12,6 +12,13 @@ mode = "smart"
 binding = "SALMA_KB"
 id = "b2056c0613d94feb955b92279ba02fb6"
 
+# Geometría real de carreteras con nombre (OSM), cacheada por road-resolver.js.
+# Namespace propio (no prefijo en SALMA_KB) para poder compartirlo con una futura
+# app aparte sin migración. Clave: road_geom:v1:{cc}:{slug}
+[[kv_namespaces]]
+binding = "ROAD_GEOM"
+id = "39ff0d3316ab43d9b78f1f14b746e5ad"
+
 # Expone el Version ID real del despliegue dentro del Worker (env.CF_VERSION_METADATA).
 # Sirve para el endpoint /version: asi se puede comprobar en 2 segundos que version esta
 # corriendo de verdad, en vez de discutir a ciegas si un cambio esta subido o no.

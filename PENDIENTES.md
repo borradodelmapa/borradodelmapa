@@ -5,6 +5,50 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
 
 ---
 
+## 0. ⚠️ MOTOR DE ROAD-TRIPS (carreteras con nombre) — Fase 1 pasos 1-6 HECHOS, SIN COMMITEAR
+
+**7 sept 2026.** Trabajo en el árbol de trabajo que **NO está commiteado ni desplegado**.
+NO hacer `git stash` / `git checkout .` / `git clean` sin leer esto. **Solo falta el paso 7 (deploy).**
+
+**Frase para retomar:**
+> "Retomamos el motor de carreteras. `PENDIENTES.md` sección 0. Solo falta el paso 7."
+
+**Qué es:** enfoque B — geometría real de OSM para el trazado del mapa cuando el usuario nombra
+una carretera ("sigue la N2", "Ruta 40", "Great Ocean Road"). NO toca la generación de paradas.
+Diseño + aprendizajes: memoria `project_road_engine_fase1`.
+
+**Estado (HEAD `a82aa584`, sin tocar):**
+- `worker/roads/` (sin trackear): `road-resolver.js` (motor: `resolveNamedRoad`, `extractRoadQuery`
+  19/19, `stitch`, `toGeoJSON`, `toGPX`, `ROAD_LEXICON` con slug+id por carretera), `package.json`
+  `{type:module}`, `precarga-roads.mjs`, `extract.test.mjs`, `.gitignore` (ignora `out/`).
+- `worker/salma-worker.js` M: `import` + endpoint `GET /roads/resolve` (~L5991, gate `?token=ADMIN_TOKEN`,
+  pasa `q` por `extractRoadQuery`; `?raw=1` lo salta). Nada más cambia.
+- `worker/wrangler.toml` M: binding KV `ROAD_GEOM` (id `39ff0d3316ab43d9b78f1f14b746e5ad`).
+- **KV `ROAD_GEOM` (remoto) ya tiene 18 geometrías** sembradas por `precarga-roads.mjs`. No las
+  lee nadie aún → inofensivas. Rerun: `cd worker/roads; node precarga-roads.mjs --upload-only --kv`.
+- Verificado: `wrangler deploy --dry-run -c wrangler.toml` compila (450KB). Con `wrangler dev --remote`:
+  `/roads/resolve?q=siguiendo la N2&country=PT` → **cache hit KV, 727km, cached:true, cero Overpass**.
+  Sin token → 403. `/version` y resto del worker intactos.
+
+**PASO 7 (lo único que falta — necesita OK de Paco, es deploy a producción):**
+```
+git add worker/ PENDIENTES.md ; git commit -m "Motor road-trips Fase 1: resolver OSM + /roads/resolve + precarga KV (18)"
+git push
+cd worker ; npx wrangler deploy -c wrangler.toml           # SIEMPRE con -c
+curl.exe -s https://salma-api.paco-defoto.workers.dev/version   # Version ID == el del deploy
+curl.exe -s "https://salma-api.paco-defoto.workers.dev/roads/resolve?token=<ADMIN_TOKEN>&q=siguiendo%20la%20N2&country=PT"
+```
+No lleva `?v=` (no toca frontend). Riesgo: si el `import` fallara en runtime tumbaría el worker
+→ mitigado (dry-run + dev remoto ya OK); rollback = `wrangler rollback` o redeploy del commit previo.
+
+**Fase 2** (sesión aparte): enganchar `extractRoadQuery` al flujo de ruta real — pasar `geometry`
+al trazado del mapa en vez de pedir "la más rápida" a Directions. `overpass_error`/low-confidence
+→ fallback a Directions, NUNCA bloquea. Afinar ahí: WAW superroute, backoff Overpass, más precarga.
+
+**Ojo:** `wrangler dev`/`deploy` SIEMPRE con `-c wrangler.toml` (o coge el `wrangler.jsonc` de la raíz y peta).
+
+---
+
 ## 1. Chip "Quiero ir a..." — desactivado 2026-04-17
 
 **Estado**: chip retirado de la UI. Handler intacto en [app.js](app.js) (aprox. línea 292).

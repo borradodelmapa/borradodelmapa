@@ -7,6 +7,8 @@
  *   - Secret: ELEVENLABS_API_KEY
  */
 
+import { resolveNamedRoad, toGeoJSON, toGPX, extractRoadQuery } from './roads/road-resolver.js';
+
 const ELEVENLABS_VOICE_ID = 'fzAdMudUtRHNnk5tjJRR';
 
 // ═══════════════════════════════════════════════════════════════
@@ -5978,6 +5980,51 @@ export default {
         return new Response(JSON.stringify(payload), {
           headers: { ...corsH, 'Cache-Control': 'public, max-age=86400' }
         });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
+      }
+    }
+
+    // ─── ENDPOINT /roads/resolve (DEBUG — resolver de carreteras con nombre vía OSM) ───
+    // Gate con ?token=ADMIN_TOKEN. NO cambia ningún otro flujo. Fase 1 del motor de
+    // road-trips: por ahora solo sirve para probar road-resolver.js en vivo.
+    if (request.method === 'GET' && url.pathname === '/roads/resolve') {
+      const corsH = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      const tok = url.searchParams.get('token') || (request.headers.get('Authorization') || '').replace('Bearer ', '');
+      if (!env.ADMIN_TOKEN || tok !== env.ADMIN_TOKEN) {
+        return new Response(JSON.stringify({ error: 'forbidden' }), { status: 403, headers: corsH });
+      }
+      const q = url.searchParams.get('q') || '';
+      const country = url.searchParams.get('country') || '';
+      const relationId = url.searchParams.get('relationId') || '';
+      const nocache = url.searchParams.get('nocache') === '1';
+      const raw = url.searchParams.get('raw') === '1'; // saltar extractRoadQuery, ir directo
+      const format = url.searchParams.get('format') || 'json';
+      if (!q && !relationId) {
+        return new Response(JSON.stringify({ error: 'falta ?q= o ?relationId=' }), { status: 400, headers: corsH });
+      }
+      try {
+        // Camino real (como lo usará Fase 2): extractRoadQuery -> input con slug/relationId.
+        let input;
+        if (relationId) input = { relationId: Number(relationId), country };
+        else if (!raw) input = extractRoadQuery(q, country) || { query: q, country };
+        else input = { query: q, country };
+        const result = await resolveNamedRoad(input, {
+          kv: env.ROAD_GEOM,
+          // desde un Worker de CF: maps.mail.ru responde; overpass-api.de suele dar timeout
+          endpoints: [
+            'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
+            'https://overpass-api.de/api/interpreter',
+          ],
+          nocache,
+        });
+        if (format === 'geojson') {
+          return new Response(JSON.stringify(toGeoJSON(result)), { headers: { ...corsH, 'Content-Type': 'application/geo+json' } });
+        }
+        if (format === 'gpx') {
+          return new Response(toGPX(result), { headers: { ...corsH, 'Content-Type': 'application/gpx+xml' } });
+        }
+        return new Response(JSON.stringify({ _input: input, ...result }), { headers: corsH });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsH });
       }
