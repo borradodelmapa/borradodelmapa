@@ -5,6 +5,35 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
 
 ---
 
+## ⛔ HISTORIA (pestaña + módulo) — DESACTIVADA 7 sept 2026
+
+Paco: "quitar el botón Historia y todo lo relacionado, apuntarlo en pendiente.
+Requiere tiempo. Ahora interesa dejar solo las funciones básicas funcionando."
+
+### Qué se ha tocado (todo reversible descomentando)
+- **`index.html`**: comentados `<link historia.css>` y `<script historia.js>` →
+  `historiaModule` queda `undefined`, así que todos los `typeof historiaModule !== 'undefined'`
+  se saltan solos (chip "📚 Historia de X" tras generar ruta, handler de `.viaje-card-historia`,
+  `liveMapAbrirHistoria`). Comentado también el botón `#live-map-historia-btn` (📚 del mapa live).
+- **`app.js`**:
+  - `showState`: `if (state === 'historia') state = 'chat'` (redirige).
+  - `updateBottomBar`: **barra pasa de 4 a 3 pestañas** (Salma · Mis Viajes · Perfil).
+    Quitados el botón `tab-historia`, su handler y `isHistoria`.
+  - `renderProfile`/tarjetas de Mis Viajes: quitado el botón `.viaje-card-historia` ("📚 Historia").
+  - `liveMapAbrirHistoria()` queda como función muerta (no se llama). NO borrada.
+- **`nav-history.js`**: `historia` fuera de `PUSH_STATES`.
+- **NO borrados**: `historia.js`, `historia.css` (siguen en el repo), ni CSS de `.viaje-card-historia`
+  / `#tab-historia` / `#live-map-historia-btn` (huérfano, inofensivo).
+
+### Reactivar
+Descomentar en `index.html` el link + el script. Revertir en `app.js` la redirección de
+`showState`, volver a meter la 4ª pestaña en `updateBottomBar`, el botón `.viaje-card-historia`
+y el `#live-map-historia-btn`. Volver a añadir `historia` a `PUSH_STATES`.
+
+**Frase para retomar:** "Historia: `PENDIENTES.md` sección ⛔ HISTORIA."
+
+---
+
 ## ⛔ FAB DEL MAPA (botón flotante que abre el mapa de la ruta) — DESACTIVADO 7 sept 2026
 
 Paco pidió quitarlo hasta arreglarlo. Está oculto por dos sitios (a prueba de

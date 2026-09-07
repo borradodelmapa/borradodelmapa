@@ -79,7 +79,8 @@ window._loadGoogleMaps = function() {
 </script>
 <link rel="stylesheet" href="styles.css?v=67">
 <link rel="stylesheet" href="docs-viajero.css?v=2">
-<link rel="stylesheet" href="historia.css?v=2">
+<!-- Historia DESACTIVADA 7 sept 2026 — ver PENDIENTES.md. Reactivar: descomentar. -->
+<!-- <link rel="stylesheet" href="historia.css?v=2"> -->
 <!-- Google Analytics 4 — se carga solo tras consentimiento de cookies (P1-6) -->
 <script>
 window.dataLayer=window.dataLayer||[];
@@ -134,7 +135,9 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
   <button id="live-map-back" onclick="closeLiveMap()">✕</button>
   <button id="live-map-routes-btn" onclick="openRouteSelector()" title="Mis Rutas">📍 Mis Rutas</button>
   <button id="live-map-clear-route" onclick="clearRouteFromLiveMap()" style="display:none" title="Quitar ruta">✕ Ruta</button>
+  <!-- Historia DESACTIVADA 7 sept 2026 — ver PENDIENTES.md
   <button id="live-map-historia-btn" title="Historia del lugar" onclick="liveMapAbrirHistoria()">📚</button>
+  -->
   <div id="live-map-nearest-chip" style="display:none"></div>
   <div id="live-map-routes-sheet" style="display:none">
     <div class="lmrs-header">
@@ -415,8 +418,8 @@ window.SALMA_API="https://salma-api.paco-defoto.workers.dev";
 <!-- ═══ APP ═══ -->
 <script src="debug-panel.js?v=3"></script>
 <script src="country-utils.js?v=1"></script>
-<script src="app.js?v=80"></script>
-<script src="nav-history.js?v=3"></script>
+<script src="app.js?v=81"></script>
+<script src="nav-history.js?v=4"></script>
 <script src="notas.js?v=2"></script>
 <script src="flight-watches.js?v=2"></script>
 <script src="salma.js?v=64"></script>
@@ -430,7 +433,8 @@ window.SALMA_API="https://salma-api.paco-defoto.workers.dev";
 <script src="map-modal.js?v=7"></script>
 <script src="share-inbox.js?v=9"></script>
 <script src="translator.js?v=14"></script>
-<script src="historia.js?v=1"></script>
+<!-- Historia DESACTIVADA 7 sept 2026 — ver PENDIENTES.md. Reactivar: descomentar. -->
+<!-- <script src="historia.js?v=1"></script> -->
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').catch(() => {});

@@ -50,6 +50,8 @@ function showState(state) {
   }
   // 'welcome' está deprecado (Fase 5 navegación): el estado por defecto es el chat.
   if (state === 'welcome') state = 'chat';
+  // Historia DESACTIVADA 7 sept 2026 (ver PENDIENTES.md): cualquier intento → chat.
+  if (state === 'historia') state = 'chat';
   currentState = state;
   updateHeader();
 
@@ -88,10 +90,6 @@ function showState(state) {
     $content.style.paddingBottom = '80px';
   } else if (state === 'vuelos') {
     if (typeof flightWatches !== 'undefined') flightWatches.renderVuelosView();
-    if (inputBar) inputBar.style.display = 'none';
-    $content.style.paddingBottom = '80px';
-  } else if (state === 'historia') {
-    if (typeof historiaModule !== 'undefined') historiaModule.render();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
   } else if (state === 'chat') {
@@ -158,10 +156,9 @@ function updateBottomBar() {
 
   const isChat = currentState === 'chat';
   const isRutas = currentState === 'rutas';
-  const isHistoria = currentState === 'historia';
   const isProfile = ['profile', 'bitacora', 'diario', 'documentos', 'notas', 'galeria', 'vuelos'].includes(currentState);
 
-  // Barra fija de 4 — no cambia según la pantalla (Fase 1 navegación)
+  // Barra fija de 3 — Historia DESACTIVADA 7 sept 2026 (ver PENDIENTES.md)
   bar.innerHTML = `
     <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -170,10 +167,6 @@ function updateBottomBar() {
     <button class="bottom-tab ${isRutas ? 'bottom-tab-active' : ''}" id="tab-rutas">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
-    </button>
-    <button class="bottom-tab ${isHistoria ? 'bottom-tab-active' : ''}" id="tab-historia">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 0 3-3h7z"/></svg>
-      <span>Historia</span>
     </button>
     <button class="bottom-tab ${isProfile ? 'bottom-tab-active' : ''}" id="tab-profile">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -189,8 +182,6 @@ function updateBottomBar() {
     if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
     showState('rutas');
   });
-  const tabHistoria = document.getElementById('tab-historia');
-  if (tabHistoria) tabHistoria.addEventListener('click', () => showState('historia'));
   document.getElementById('tab-profile').addEventListener('click', handleAvatarClick);
 }
 
@@ -2286,7 +2277,6 @@ async function loadUserGuides() {
         <div class="viaje-card-body">
           <div class="viaje-card-title">${escapeHTML(d.nombre || 'Mi ruta')}</div>
           <div class="viaje-card-meta">${d.num_dias || d.dias || '?'} DÍAS · ${escapeHTML((d.destino || '').toUpperCase())}</div>
-          ${d.destino ? `<button class="viaje-card-historia" data-destino="${escapeHTML(d.destino)}" title="Historia de ${escapeHTML(d.destino)}">📚 Historia</button>` : ''}
         </div>
         <button class="viaje-card-delete" data-doc-id="${doc.id}" title="Eliminar guía">✕</button>`;
       card.addEventListener('click', (e) => {
