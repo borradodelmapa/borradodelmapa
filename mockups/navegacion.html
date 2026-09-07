@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navegación — estudio y propuesta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0b0a;--panel:#141412;--card:#1c1b18;--ink:#fff;--ink2:#d7d2c6;--ink3:#8f8a7e;
+  --amber:#f0b429;--green:#43d977;--red:#ff5a5a;--line:rgba(255,255,255,.14);
+  --sign:'Archivo',sans-serif;--body:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;padding:34px 18px 90px;}
+.wrap{max-width:1000px;margin:0 auto;}
+h1{font-family:var(--sign);text-transform:uppercase;letter-spacing:.03em;font-size:26px;font-weight:800;text-align:center;}
+.lead{text-align:center;color:var(--ink2);font-size:14px;max-width:640px;margin:8px auto 0;}
+.kick{display:block;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:6px;}
+
+h2{font-family:var(--sign);text-transform:uppercase;letter-spacing:.04em;font-size:15px;font-weight:800;margin:40px 0 4px;padding-left:10px;border-left:3px solid var(--amber);}
+h2.g{border-color:var(--green);}
+.sub{color:var(--ink3);font-size:13px;margin:0 0 16px 13px;}
+
+/* mapa de estados */
+.map{display:flex;flex-wrap:wrap;gap:10px;}
+.node{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-width:130px;}
+.node .n{font-family:var(--sign);text-transform:uppercase;font-weight:700;font-size:12px;letter-spacing:.03em;}
+.node .d{font-family:var(--mono);font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-top:3px;}
+.node.hub{border-color:var(--amber);}
+.node.overlay{border-style:dashed;border-color:var(--ink3);}
+
+.bar{display:flex;gap:6px;margin:14px 0;}
+.bar .tab{flex:1;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 4px;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);}
+.bar .tab.only{border-color:var(--red);color:var(--red);}
+.bar .tab.act{border-color:var(--amber);color:var(--amber);}
+
+.list{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:6px;}
+.list li{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--red);border-radius:7px;padding:11px 13px;font-size:13px;}
+.list li b{color:var(--ink);}
+.list.ok li{border-left-color:var(--green);}
+.tagn{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,90,90,.14);color:var(--red);padding:1px 6px;border-radius:3px;margin-right:6px;}
+.list.ok .tagn{background:rgba(67,217,119,.14);color:var(--green);}
+
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:12.5px;}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top;}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);background:var(--panel);}
+td .no{color:var(--red);font-weight:600;}
+td .yes{color:var(--green);font-weight:600;}
+
+.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);text-align:center;line-height:1.9;}
+.foot b{color:var(--ink2);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="kick">Borrado del Mapa · navegación</span>
+  <h1>Cómo se mueve la app hoy · y cómo hacerla fluida</h1>
+  <p class="lead">Estudio de toda la navegación: barra inferior, pantallas, overlays y el botón atrás del móvil.</p>
+
+  <!-- AHORA -->
+  <h2>1 · La barra inferior de ahora</h2>
+  <p class="sub">Cambia de 4 a 5 botones según dónde estés → el layout salta.</p>
+  <div class="bar">
+    <div class="tab">Mis Viajes</div>
+    <div class="tab">Historia</div>
+    <div class="tab only">Nuevo*</div>
+    <div class="tab act">Salma</div>
+    <div class="tab">Perfil / Entrar</div>
+  </div>
+  <p class="sub" style="margin-left:0">* “Nuevo” solo aparece en el chat. Hace <code style="font-family:var(--mono);color:var(--amber)">salma.newChat()</code>; la pestaña “Salma” hace casi lo mismo (<code style="font-family:var(--mono);color:var(--amber)">_initChat()</code>). Dos botones para una idea parecida.</p>
+
+  <h2>2 · Las pantallas</h2>
+  <p class="sub">Hub = tiene pestaña propia. Overlay (línea de rayas) = tapa todo y solo se cierra con su ✕.</p>
+  <div class="map">
+    <div class="node hub"><div class="n">Salma / Chat</div><div class="d">billete · guía inline</div></div>
+    <div class="node hub"><div class="n">Mis Viajes</div><div class="d">rutas guardadas</div></div>
+    <div class="node hub"><div class="n">Historia</div><div class="d">no empuja historial</div></div>
+    <div class="node hub"><div class="n">Perfil</div><div class="d">hub de nivel 2</div></div>
+    <div class="node"><div class="n">Mis Notas</div><div class="d">hijo de Perfil · sin ←</div></div>
+    <div class="node"><div class="n">Galería</div><div class="d">hijo de Perfil · sin ←</div></div>
+    <div class="node"><div class="n">Cuaderno</div><div class="d">hijo de Perfil · sin ←</div></div>
+    <div class="node"><div class="n">Documentos</div><div class="d">hijo de Perfil · sin ←</div></div>
+    <div class="node"><div class="n">Vuelos</div><div class="d">se abre desde un chip · sin ←</div></div>
+    <div class="node"><div class="n">Diario</div><div class="d">sub de Cuaderno · no empuja historial</div></div>
+    <div class="node overlay"><div class="n">Mapa live</div><div class="d">oculta la barra · solo ✕</div></div>
+    <div class="node overlay"><div class="n">Vista itinerario</div><div class="d">oculta la barra · parchea showState</div></div>
+    <div class="node overlay"><div class="n">Login</div><div class="d">modal · Back no lo cierra</div></div>
+    <div class="node overlay"><div class="n">Conversor moneda</div><div class="d">modal</div></div>
+    <div class="node overlay"><div class="n">Traductor</div><div class="d">modal</div></div>
+    <div class="node overlay"><div class="n">SOS</div><div class="d">modal</div></div>
+    <div class="node overlay"><div class="n">Coins</div><div class="d">modal</div></div>
+    <div class="node overlay"><div class="n">¿Qué puedo hacer?</div><div class="d">modal</div></div>
+  </div>
+
+  <h2>3 · El botón atrás del móvil</h2>
+  <table>
+    <tr><th>Desde…</th><th>¿Back funciona?</th></tr>
+    <tr><td>Chat, Mis Viajes, Perfil, Notas, Cuaderno, Documentos, Galería</td><td><span class="yes">Sí</span> — están en el historial</td></tr>
+    <tr><td>Historia, Vuelos, Diario</td><td><span class="no">No</span> — no empujan historial; Back te saca a la pantalla anterior equivocada</td></tr>
+    <tr><td>Mapa live, Vista itinerario</td><td><span class="no">No</span> — hay que usar su ✕; si falla el parche de <code style="font-family:var(--mono)">showState</code> te quedas atrapado</td></tr>
+    <tr><td>Login, Moneda, Traductor, SOS, Coins, ¿Qué puedo hacer?</td><td><span class="no">No</span> — Back cierra la pantalla de debajo, no el modal</td></tr>
+  </table>
+
+  <h2>4 · Fricciones, en orden</h2>
+  <ul class="list">
+    <li><span class="tagn">barra</span><b>La barra salta de 4 a 5.</b> “Nuevo” aparece/desaparece. Y duplica a “Salma”.</li>
+    <li><span class="tagn">atrás</span><b>El Back del móvil es una lotería.</b> Funciona en la mitad de las pantallas y en ninguna de las grandes (mapa, itinerario) ni en los modales.</li>
+    <li><span class="tagn">atrapado</span><b>Mapa e itinerario tapan la barra entera.</b> Único escape: su ✕. El parche de <code style="font-family:var(--mono)">window.showState</code> es frágil (ya documentado como causa de bugs).</li>
+    <li><span class="tagn">huérfano</span><b>Las pantallas hijas de Perfil no tienen ← visible.</b> Se vuelve re-pulsando la pestaña o con el Back (si va).</li>
+    <li><span class="tagn">perdido</span><b>Vuelos no tiene sitio.</b> Se entra desde un chip y no hay forma clara de salir.</li>
+    <li><span class="tagn">ruido</span><b>El estado <code style="font-family:var(--mono)">welcome</code> está deprecado</b> pero sigue en el código y en el historial.</li>
+    <li><span class="tagn">duplicado</span><b>El chip “Ruta nueva” del billete</b> abre las 8 preguntas antiguas — justo lo que el billete ya sustituye.</li>
+  </ul>
+
+  <!-- PROPUESTA -->
+  <h2 class="g">5 · Propuesta — barra fija de 4</h2>
+  <p class="sub">Sin “Nuevo”. Empezar de cero se hace dentro del chat (el billete ya es eso, o un ↻ arriba).</p>
+  <div class="bar">
+    <div class="tab act">Salma</div>
+    <div class="tab">Mis Viajes</div>
+    <div class="tab">Historia</div>
+    <div class="tab">Perfil</div>
+  </div>
+
+  <h2 class="g">6 · Propuesta — una sola regla</h2>
+  <ul class="list ok">
+    <li><span class="tagn">1</span><b>Todo pasa por <code style="font-family:var(--mono)">showState</code>.</b> Vuelos, Historia, Diario, y también Mapa e Itinerario dejan de ser overlays con parche: son estados normales. Un único sitio decide qué se ve, cómo queda la barra y qué se empuja al historial.</li>
+    <li><span class="tagn">2</span><b>El Back del móvil siempre funciona.</b> Cada estado y cada modal empuja una entrada; <code style="font-family:var(--mono)">popstate</code> la deshace. Nunca te quedas atrapado.</li>
+    <li><span class="tagn">3</span><b>Cabecera propia en todo nivel 2.</b> <code style="font-family:var(--mono)">← Título</code> arriba en Notas, Galería, Cuaderno, Documentos, Vuelos, Coins, SOS. El ← vuelve a su padre.</li>
+    <li><span class="tagn">4</span><b>Mapa e Itinerario mantienen un ← fijo visible</b> (o la barra), no dependen de un ✕ suelto.</li>
+    <li><span class="tagn">5</span><b>Los modales pequeños</b> (moneda, traductor, SOS, coins) los cierra el Back del móvil.</li>
+    <li><span class="tagn">6</span><b>Fuera <code style="font-family:var(--mono)">welcome</code></b> y el chip “Ruta nueva” duplicado del billete.</li>
+  </ul>
+
+  <div class="foot">
+    Esto es un estudio, no toca nada todavía · el paso 5-6 mueve <b>showState</b> (núcleo de app.js)<br>
+    Si te encaja, lo hacemos por partes con tu OK en cada una — empezando por la barra fija y las cabeceras ←
+  </div>
+</div>
+</body>
+</html>

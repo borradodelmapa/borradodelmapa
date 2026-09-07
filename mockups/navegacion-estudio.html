@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navegación — estudio a fondo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0b0a;--panel:#141412;--card:#1b1a17;--ink:#fff;--ink2:#d7d2c6;--ink3:#8f8a7e;
+  --amber:#f0b429;--green:#43d977;--red:#ff5a5a;--line:rgba(255,255,255,.13);
+  --sign:'Archivo',sans-serif;--body:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;padding:34px 16px 100px;}
+.wrap{max-width:1060px;margin:0 auto;}
+.kick{display:block;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:6px;}
+h1{font-family:var(--sign);text-transform:uppercase;letter-spacing:.03em;font-size:25px;font-weight:800;text-align:center;}
+.lead{text-align:center;color:var(--ink2);font-size:13.5px;max-width:660px;margin:8px auto 0;}
+h2{font-family:var(--sign);text-transform:uppercase;letter-spacing:.04em;font-size:15px;font-weight:800;margin:42px 0 4px;padding-left:10px;border-left:3px solid var(--amber);}
+h2.g{border-color:var(--green);}
+h3{font-family:var(--sign);text-transform:uppercase;font-size:12px;letter-spacing:.05em;color:var(--ink2);margin:20px 0 8px;}
+.note{color:var(--ink3);font-size:12.5px;margin:2px 0 14px 13px;}
+p{font-size:13px;margin:10px 0;}
+code{font-family:var(--mono);font-size:.9em;color:var(--amber);}
+b{color:var(--ink);}
+
+table{width:100%;border-collapse:collapse;margin:10px 0 4px;font-size:12px;}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top;}
+th{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);background:var(--panel);}
+td.no,.no{color:var(--red);font-weight:600;}
+td.yes,.yes{color:var(--green);font-weight:600;}
+td.mid,.mid{color:var(--amber);font-weight:600;}
+.wrap-tbl{overflow-x:auto;}
+
+ul{margin:8px 0 8px 4px;list-style:none;display:flex;flex-direction:column;gap:8px;}
+ul li{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--red);border-radius:6px;padding:10px 12px;font-size:12.5px;}
+ul.ok li{border-left-color:var(--green);}
+ul.plain li{border-left-color:var(--amber);}
+.n{display:inline-block;font-family:var(--mono);font-size:9px;background:rgba(255,90,90,.14);color:var(--red);padding:1px 6px;border-radius:3px;margin-right:6px;}
+ul.ok .n{background:rgba(67,217,119,.14);color:var(--green);}
+ul.plain .n{background:rgba(240,180,41,.14);color:var(--amber);}
+
+.phase{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 15px;margin:10px 0;}
+.phase .h{font-family:var(--sign);text-transform:uppercase;font-weight:800;font-size:13px;letter-spacing:.03em;display:flex;justify-content:space-between;align-items:center;}
+.phase .risk{font-family:var(--mono);font-size:9px;letter-spacing:.08em;padding:2px 7px;border-radius:3px;}
+.risk.low{background:rgba(67,217,119,.15);color:var(--green);}
+.risk.mid{background:rgba(240,180,41,.15);color:var(--amber);}
+.risk.high{background:rgba(255,90,90,.15);color:var(--red);}
+.phase ol{margin:9px 0 0 18px;font-size:12.5px;display:flex;flex-direction:column;gap:5px;}
+.phase .test{margin-top:9px;font-size:12px;color:var(--ink2);border-top:1px dashed var(--line);padding-top:8px;}
+.phase .test b{color:var(--green);}
+
+.foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);text-align:center;line-height:1.9;}
+.foot b{color:var(--ink2);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="kick">Borrado del Mapa · navegación</span>
+  <h1>Estudio a fondo · rutas, modales, botón atrás</h1>
+  <p class="lead">Cada pantalla: cómo se entra, cómo se sale, qué barra sale, si el botón atrás del móvil funciona. Y el plan para arreglarlo tocando <code>showState</code> por fases.</p>
+
+  <!-- ══ 1 · INVENTARIO ══ -->
+  <h2>1 · Inventario — qué tipos de “pantalla” hay</h2>
+  <table>
+    <tr><th>Tipo</th><th>Cómo funciona</th><th>Ejemplos</th></tr>
+    <tr><td><b>Hub</b></td><td>Estado de <code>showState</code>. Reemplaza <code>#app-content</code>. Tiene pestaña propia en la barra.</td><td>Salma/Chat · Mis Viajes · Perfil · Historia</td></tr>
+    <tr><td><b>Sub-pantalla</b></td><td>Estado de <code>showState</code> también, pero “cuelga” de un hub (normalmente Perfil).</td><td>Notas · Galería · Cuaderno · Diario · Documentos · Vuelos · SOS</td></tr>
+    <tr><td><b>Overlay grande</b></td><td><b>No pasa por <code>showState</code>.</b> Un <code>&lt;div&gt;</code> a pantalla completa que tapa la barra. Solo se cierra con su ✕.</td><td>Mapa live · Vista itinerario</td></tr>
+    <tr><td><b>Modal</b></td><td>Overlay flotante encima de todo. Ni <code>showState</code> ni historial.</td><td>Login · Conversor moneda · Traductor · Coins · ¿Qué puedo hacer? · SOS confirmar</td></tr>
+  </table>
+
+  <!-- ══ 2 · HUBS Y SUB-PANTALLAS ══ -->
+  <h2>2 · Hubs y sub-pantallas · entrada / salida / atrás</h2>
+  <div class="wrap-tbl">
+  <table>
+    <tr><th>Estado</th><th>Se entra desde</th><th>Pestaña activa</th><th>← en la vista</th><th>Back del móvil</th></tr>
+    <tr><td><b>chat</b> <span class="note" style="margin:0">billete / guía inline</span></td><td>Pestaña Salma · tras login · <code>?go=chat</code> · cerrar mapa/guía</td><td class="yes">Salma</td><td>—</td><td class="yes">Sí — está en el historial</td></tr>
+    <tr><td><b>rutas</b> (Mis Viajes)</td><td>Pestaña Mis Viajes (pide login)</td><td class="yes">Mis Viajes</td><td class="no">no (es hub)</td><td class="yes">Sí</td></tr>
+    <tr><td><b>profile</b></td><td>Pestaña Perfil (si logueado)</td><td class="yes">Perfil</td><td class="no">no (es hub)</td><td class="yes">Sí</td></tr>
+    <tr><td><b>historia</b></td><td>Pestaña Historia · desde el chat (<code>salma</code> abre un artículo)</td><td class="yes">Historia</td><td class="mid">el artículo sí (“← Todas las historias”), la lista no</td><td class="no">No — no empuja historial</td></tr>
+    <tr><td><b>vuelos</b></td><td>Chip “Alertas/Vuelos” del billete (pide login)</td><td class="no">ninguna</td><td class="no">NINGUNO</td><td class="no">No — no empuja historial</td></tr>
+    <tr><td><b>notas</b></td><td>Chip “Notas” · botón en Perfil</td><td class="yes">Perfil</td><td class="no">NINGUNO — solo título + “＋”</td><td class="yes">Sí</td></tr>
+    <tr><td><b>galeria</b></td><td>Chip · botón en Perfil</td><td class="yes">Perfil</td><td class="no">NINGUNO — solo título + botones de acción</td><td class="yes">Sí</td></tr>
+    <tr><td><b>bitacora</b> (Cuaderno)</td><td>Botón en Perfil</td><td class="yes">Perfil</td><td class="no">no en el nivel Cuaderno</td><td class="yes">Sí</td></tr>
+    <tr><td><b>diario</b> (día concreto)</td><td>Dentro de Cuaderno</td><td class="yes">Perfil</td><td class="yes">← (vuelve a Cuaderno)</td><td class="no">No — no empuja historial</td></tr>
+    <tr><td><b>documentos</b></td><td>Botón en Perfil</td><td class="yes">Perfil</td><td class="yes">‹ (vuelve a Perfil)</td><td class="yes">Sí</td></tr>
+    <tr><td><b>sos / sos-config</b></td><td>Chip SOS · botón en Perfil</td><td class="no">ninguna</td><td class="mid">config sí (“← Volver”), confirmar es overlay</td><td class="no">No</td></tr>
+    <tr><td><b>welcome</b></td><td><b>DEPRECADO</b> — sigue en el código y en el historial</td><td class="no">—</td><td>—</td><td>—</td></tr>
+  </table>
+  </div>
+  <p class="note" style="margin-left:0">La barra marca “Perfil” para profile/notas/galeria/bitacora/diario/documentos. <b>Vuelos, Historia (a medias) y SOS no encajan en ese patrón.</b></p>
+
+  <!-- ══ 3 · OVERLAYS GRANDES ══ -->
+  <h2>3 · Overlays grandes — mapa y guía</h2>
+  <div class="wrap-tbl">
+  <table>
+    <tr><th>Overlay</th><th>Se abre desde</th><th>Se cierra con</th><th>Back del móvil</th><th>Problema</th></tr>
+    <tr>
+      <td><b>Mapa live</b><br><code>#live-map-view</code></td>
+      <td>FAB flotante 🗺 · chip “Cerca mía” · selector de rutas · botón “Ir al mapa” de la guía</td>
+      <td>Su ✕ → <code>closeLiveMap()</code> → <code>showState('chat')</code></td>
+      <td class="no">No</td>
+      <td>Oculta la barra entera (<code>bar.style.display='none'</code>). Único escape: el ✕. Siempre vuelve al chat, aunque vinieras de Mis Viajes.</td>
+    </tr>
+    <tr>
+      <td><b>Vista itinerario</b><br><code>#itin-view</code></td>
+      <td>Tarjeta de guía en el chat · <code>salma.cargarGuia()</code> · botón “Abrir la guía” del modo compañero · desde Mis Viajes · desde Cuaderno</td>
+      <td>✕ · pestaña Salma · o navegar con la barra (parche)</td>
+      <td class="no">No</td>
+      <td><b>Parchea <code>window.showState</code> en caliente</b>, encima del parche que ya pone <code>nav-history.js</code>. El restore de <code>closeItinerarioView()</code> usa <code>window._showStateOriginal</code>, que <b>no se asigna en ningún sitio</b> → si cierras con el ✕, el parche se queda puesto. Cada vez que reabres, se apila otro. (Ya documentado como causa de bugs.)</td>
+    </tr>
+  </table>
+  </div>
+
+  <!-- ══ 4 · MODALES ══ -->
+  <h2>4 · Modales — ninguno respeta el botón atrás</h2>
+  <div class="wrap-tbl">
+  <table>
+    <tr><th>Modal</th><th>Se abre desde</th><th>Se cierra con</th><th>Back del móvil</th></tr>
+    <tr><td><b>Login / gate</b> <code>#auth-screen</code></td><td><code>openModal()</code> — al arrancar sin sesión, o al tocar algo que pide login</td><td><code>closeModal()</code> / login correcto</td><td class="no">Cierra la pantalla de debajo</td></tr>
+    <tr><td><b>Conversor moneda</b></td><td>Chip “Moneda”</td><td>✕ / clic fuera → <code>.remove()</code></td><td class="no">No</td></tr>
+    <tr><td><b>Traductor</b></td><td>Chip “Traductor”</td><td>Su propio cierre</td><td class="no">No</td></tr>
+    <tr><td><b>Coins</b></td><td>Botón en Perfil</td><td>✕ / clic fuera → <code>.remove()</code></td><td class="no">No</td></tr>
+    <tr><td><b>¿Qué puedo hacer?</b> <code>#salma-info-overlay</code></td><td>Botón en Perfil</td><td><code>#salma-info-close</code></td><td class="no">No</td></tr>
+    <tr><td><b>SOS confirmar</b></td><td>Chip SOS (si configurado)</td><td><code>overlay.style.display='none'</code></td><td class="no">No</td></tr>
+    <tr><td>Foto ampliada · params de vídeo · sheets del mapa · share</td><td>Inline en chat / mapa</td><td><code>.remove()</code></td><td class="no">No</td></tr>
+  </table>
+  </div>
+
+  <!-- ══ 5 · EL BOTÓN ATRÁS ══ -->
+  <h2>5 · El botón atrás del móvil, caso por caso</h2>
+  <p><code>nav-history.js</code> envuelve <code>showState</code> y solo empuja historial para: <code>welcome, chat, rutas, profile, bitacora, notas, documentos, galeria</code>.</p>
+  <div class="wrap-tbl">
+  <table>
+    <tr><th>Estás en…</th><th>Pulsas atrás →</th></tr>
+    <tr><td>Chat, Mis Viajes, Perfil, Notas, Galería, Cuaderno, Documentos</td><td class="yes">Va bien — al hub anterior</td></tr>
+    <tr><td><b>Historia, Vuelos, Diario, SOS</b></td><td class="no">No empujan historial → atrás te saca a la pantalla ANTERIOR a esa, que casi nunca es la que esperas</td></tr>
+    <tr><td><b>Mapa live, Vista itinerario</b></td><td class="no">Atrás no hace nada útil (o navega por debajo del overlay). Hay que usar su ✕. Si el ✕ falla → atrapado</td></tr>
+    <tr><td><b>Cualquier modal</b> (login, moneda, traductor, coins, SOS…)</td><td class="no">Atrás cierra la pantalla de debajo y deja el modal colgando, o te saca de la app</td></tr>
+    <tr><td>Primer arranque (gate de login)</td><td class="no">Atrás sale de la app</td></tr>
+  </table>
+  </div>
+
+  <!-- ══ 6 · FRICCIONES ══ -->
+  <h2>6 · Fricciones, priorizadas</h2>
+  <ul>
+    <li><span class="n">P1</span><b>Te puedes quedar atrapado en el mapa y en la guía.</b> Tapan la barra; solo el ✕ sale; el ✕ de la guía depende de un parche roto.</li>
+    <li><span class="n">P2</span><b>El botón atrás es una lotería.</b> Va en ~7 pantallas, falla en Historia, Vuelos, Diario, mapa, guía y todos los modales.</li>
+    <li><span class="n">P3</span><b>La barra salta de 4 a 5 botones.</b> “Nuevo” aparece solo en el chat y hace casi lo mismo que la pestaña “Salma”.</li>
+    <li><span class="n">P4</span><b>Notas, Galería y Vuelos no tienen ← visible.</b> Se vuelve re-pulsando la pestaña (si la hay) o con el atrás (si va).</li>
+    <li><span class="n">P5</span><b>Vuelos no tiene sitio.</b> Se entra por un chip, no ilumina ninguna pestaña, no hay salida clara.</li>
+    <li><span class="n">P6</span><b>El mapa siempre te devuelve al chat</b>, aunque hubieras entrado desde Mis Viajes.</li>
+    <li><span class="n">P7</span><b>Ruido en el código:</b> el estado <code>welcome</code> deprecado sigue vivo y en el historial; el chip “Ruta nueva” del billete abre las 8 preguntas antiguas (lo que el billete ya sustituye); <code>isVuelos</code>/<code>isHome</code> son variables muertas.</li>
+  </ul>
+
+  <!-- ══ 7 · MODELO PROPUESTO ══ -->
+  <h2 class="g">7 · El modelo propuesto — cinco reglas</h2>
+  <ul class="ok">
+    <li><span class="n">R1</span><b>Una barra fija de 4, siempre visible:</b> Salma · Mis Viajes · Historia · Perfil. Sin “Nuevo” — empezar de cero se hace dentro del chat (un ↻ arriba del billete; y el billete en sí ya es empezar de cero).</li>
+    <li><span class="n">R2</span><b>Todo pasa por <code>showState</code>.</b> Vuelos, Historia, Diario, y también <b>Mapa e Itinerario</b> dejan de ser overlays con parche: son estados normales. <code>showState</code> es el único sitio que decide: qué se ve, qué pestaña se marca, si sale la barra de input, y qué se empuja al historial.</li>
+    <li><span class="n">R3</span><b>El botón atrás del móvil funciona siempre.</b> Cada estado y cada modal empuja UNA entrada de historial; <code>popstate</code> la deshace. Nunca te quedas atrapado.</li>
+    <li><span class="n">R4</span><b>Cabecera estándar <code>← Título</code> en todo lo que cuelga de un hub</b> (Notas, Galería, Vuelos, Cuaderno, Documentos, Diario, SOS, Coins, ¿Qué puedo hacer?). El ← hace <code>history.back()</code>.</li>
+    <li><span class="n">R5</span><b>El mapa y la guía mantienen un ← fijo visible</b> (o la barra). Su ✕ pasa a ser <code>history.back()</code>. Vuelven a DE DÓNDE viniste, no siempre al chat.</li>
+  </ul>
+
+  <!-- ══ 8 · PLAN ══ -->
+  <h2 class="g">8 · Plan de implementación — por fases, cada una desplegable y probable</h2>
+  <p class="note" style="margin-left:0">Cada fase se despliega sola y Paco la prueba antes de la siguiente. El orden va de menos a más riesgo.</p>
+
+  <div class="phase">
+    <div class="h">Fase 1 · Barra fija de 4 <span class="risk low">riesgo bajo</span></div>
+    <ol>
+      <li><code>updateBottomBar()</code>: quitar el botón “Nuevo”, dejar 4 fijos (Salma · Mis Viajes · Historia · Perfil).</li>
+      <li>Añadir un botón “empezar de cero” (↻) dentro del chat, arriba del billete → <code>salma.newChat()</code>.</li>
+      <li><code>isProfile</code> pasa a incluir <code>'vuelos'</code>. Borrar <code>isVuelos</code>/<code>isHome</code> muertos.</li>
+    </ol>
+    <div class="test"><b>Prueba:</b> la barra ya no salta al entrar/salir del chat; las 4 pestañas llevan a su sitio; el ↻ del chat abre conversación nueva.</div>
+  </div>
+
+  <div class="phase">
+    <div class="h">Fase 2 · Cabecera “← Título” en nivel 2 <span class="risk low">riesgo bajo</span></div>
+    <ol>
+      <li>Componente <code>subviewHeader(titulo)</code> → <code>← Título</code>; el ← hace <code>history.back()</code>.</li>
+      <li>Meterlo en Notas, Galería, Vuelos. Homogeneizar el que ya tienen Documentos, Diario y SOS.</li>
+      <li><code>nav-history.js</code>: añadir <code>vuelos, diario, historia, sos</code> a <code>PUSH_STATES</code> (1 línea) para que el atrás tenga a dónde volver.</li>
+      <li>Quitar <code>welcome</code> de <code>PUSH_STATES</code>.</li>
+    </ol>
+    <div class="test"><b>Prueba:</b> desde Notas / Galería / Vuelos / Diario, el ← y el botón atrás del móvil vuelven a Perfil (o a la lista). Historia con atrás vuelve al chat.</div>
+  </div>
+
+  <div class="phase">
+    <div class="h">Fase 3 · Los modales respetan el atrás <span class="risk mid">riesgo medio</span></div>
+    <ol>
+      <li>Helper <code>pushModal(nombre, fnCerrar)</code>: empuja <code>{modal:nombre}</code> al historial y registra <code>fnCerrar</code>.</li>
+      <li>Un <code>popstate</code> global: si la entrada saliente era un modal, lo cierra en vez de navegar.</li>
+      <li>Aplicar a: login, moneda, traductor, coins, ¿qué puedo hacer?, SOS confirmar.</li>
+    </ol>
+    <div class="test"><b>Prueba:</b> con cualquier modal abierto, el botón atrás cierra el modal y deja la pantalla de debajo intacta. Abrir/cerrar 3 modales seguidos y comprobar que el historial no se descuadra.</div>
+  </div>
+
+  <div class="phase">
+    <div class="h">Fase 4 · Mapa e Itinerario como estados <span class="risk high">riesgo alto — el gordo</span></div>
+    <ol>
+      <li>Nuevos estados <code>mapa</code> e <code>itinerario</code> en <code>showState</code>, que muestran/ocultan <code>#live-map-view</code> / <code>#itin-view</code> y <b>mantienen la barra visible</b> (o un ← fijo).</li>
+      <li><b>Eliminar el parche de <code>window.showState</code></b> de <code>openItinerarioView</code>. Usar el router normal. (Esto arregla de paso el <i>leak</i> del doble-wrap.)</li>
+      <li>El ✕ del mapa y de la guía → <code>history.back()</code>. Recuerdan de dónde viniste (chat, Mis Viajes, Cuaderno).</li>
+      <li>Añadir <code>mapa</code> e <code>itinerario</code> a <code>PUSH_STATES</code>.</li>
+      <li>Revisar que GPS se pausa/reanuda y que no queda la barra flotante de la guía huérfana.</li>
+    </ol>
+    <div class="test"><b>Prueba exhaustiva:</b> abrir guía desde tarjeta del chat, desde “Abrir la guía”, desde Mis Viajes y desde Cuaderno; cerrar con ✕, con atrás y con pestaña; abrir/cerrar mapa y guía en cadena 5 veces; comprobar que nunca queda parche puesto, ni barra huérfana, ni GPS corriendo de fondo.</div>
+  </div>
+
+  <div class="phase">
+    <div class="h">Fase 5 · Limpieza <span class="risk low">riesgo bajo</span></div>
+    <ol>
+      <li>Borrar el estado <code>welcome</code> y <code>renderWelcome()</code>.</li>
+      <li>Quitar el chip “Ruta nueva” duplicado del billete.</li>
+      <li>Borrar variables y ramas muertas de <code>updateBottomBar</code> / <code>showState</code>.</li>
+    </ol>
+    <div class="test"><b>Prueba:</b> regresión completa — recorrer las 4 pestañas, cada sub-pantalla, mapa, guía, y todos los modales, con el atrás del móvil en cada punto.</div>
+  </div>
+
+  <div class="foot">
+    Estudio · no toca nada todavía · <b>mockups/navegacion-estudio.html</b><br>
+    Fases 1–2 son baratas y visibles · la 4 es la que arregla “quedarse atrapado” y el bug del parche<br>
+    Empezamos por la 1 cuando digas
+  </div>
+</div>
+</body>
+</html>
