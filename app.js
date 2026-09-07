@@ -250,17 +250,92 @@ function _renderChatEmpty() {
   ];
   const renderChip = c => `<button class="chat-empty-chip ${c.cls || ''}" data-msg="${c.msg || ''}" data-action="${c.action || ''}">${c.icon || ''}${c.emoji ? `<span class="chip-emoji">${c.emoji}</span>` : ''}${c.label}</button>`;
 
-  area.innerHTML = `
+  // ── Rediseño v1 (rama rediseno-visual) — tablero de guía + chips estilo panel de aeropuerto ──
+  const _mapIco = '<svg class="chip-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>';
+
+  const CE_IDEAS = [
+    { to:'ALENTEJO', title:'Alentejo sin prisa', sub:'4 días · en coche · mejor época ahora',
+      ribbon:'ÉVORA · MONSARAZ · MARVÃO', stops:'Évora · Monsaraz · Marvão <b>· pueblos blancos</b>',
+      stats:[['ÉPOCA','SEP–OCT'],['DÍAS','4'],['CÓMO','COCHE']],
+      msg:'Hazme una guía de 4 días por el Alentejo en coche' },
+    { to:'RIBEIRA SACRA', title:'Ribeira Sacra', sub:'5 días · cañones, vino y monasterios',
+      ribbon:'OURENSE · PARADA DE SIL · DOADE', stops:'Ourense · Parada de Sil · Doade <b>· +4 paradas</b>',
+      stats:[['ÉPOCA','TODO EL AÑO'],['DÍAS','5'],['CÓMO','COCHE']],
+      msg:'Hazme una guía de 5 días por la Ribeira Sacra' },
+    { to:'PICOS DE EUROPA', title:'Picos de Europa', sub:'3 días · montaña, lagos y queso',
+      ribbon:'CANGAS DE ONÍS · COVADONGA · FUENTE DÉ', stops:'Cangas de Onís · Covadonga · Fuente Dé',
+      stats:[['ÉPOCA','MAY–OCT'],['DÍAS','3'],['CÓMO','COCHE']],
+      msg:'Hazme una guía de 3 días por los Picos de Europa' },
+    { to:'ALGARVE', title:'Algarve de costa', sub:'4 días · playa y acantilado',
+      ribbon:'LAGOS · SAGRES · CARRAPATEIRA', stops:'Lagos · Sagres · Carrapateira <b>· Costa Vicentina</b>',
+      stats:[['ÉPOCA','ABR–OCT'],['DÍAS','4'],['CÓMO','COCHE']],
+      msg:'Hazme una guía de 4 días por el Algarve' },
+  ];
+  let _ceIdea = Math.floor(Math.random() * CE_IDEAS.length);
+  const _ceMonth = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'][new Date().getMonth()];
+  let _ceName = '';
+  try { _ceName = (currentUser && (currentUser.displayName || '')) || (window.currentUserData && window.currentUserData.name) || ''; } catch (e) {}
+  const _ceHi = _ceName ? ('Buenas, ' + String(_ceName).trim().split(/\s+/)[0]) : 'Hola, viajero';
+
+  const _ceBoardHTML = (idea) => `
+      <div class="ce-card-ribbon"><span>${idea.ribbon}</span></div>
+      <div class="ce-row"><span class="ce-code">${idea.to}</span><span class="ce-arr"></span></div>
+      <div class="ce-head">
+        <span class="ce-eyebrow">Salma propone</span>
+        <div class="ce-title">${idea.title}</div>
+        <div class="ce-sub">${idea.sub}</div>
+      </div>
+      <div class="ce-stops">${idea.stops}</div>
+      <div class="ce-stats">${idea.stats.map(s => `<div class="ce-stat"><div class="ce-k">${s[0]}</div><div class="ce-v">${s[1]}</div></div>`).join('')}</div>
+      <div class="ce-cta">
+        <button class="ce-cta-main" data-ce-go>Pídesela a Salma <span>→</span></button>
+        <button class="ce-cta-alt" data-ce-next aria-label="Otra idea">↻</button>
+      </div>`;
+
+  const _ceChipsRow = `
+      <div class="chat-empty-chips">
+        <button class="chat-empty-chip chat-empty-chip--ruta" data-action="crear-ruta">${_mapIco}Ruta nueva</button>
+        <div class="chat-empty-col">${chipsLeft.map(renderChip).join('')}</div>
+        <div class="chat-empty-col">${chipsRight.map(renderChip).join('')}</div>
+      </div>`;
+
+  const _ceFallback = `
     <div class="chat-empty">
-      <button class="chat-empty-chip chat-empty-chip--ruta" data-action="crear-ruta">
-        <svg class="chip-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
-        Crear ruta nueva
-      </button>
+      <button class="chat-empty-chip chat-empty-chip--ruta" data-action="crear-ruta">${_mapIco}Crear ruta nueva</button>
       <div class="chat-empty-chips">
         <div class="chat-empty-col">${chipsLeft.map(renderChip).join('')}</div>
         <div class="chat-empty-col">${chipsRight.map(renderChip).join('')}</div>
       </div>
     </div>`;
+
+  try {
+    area.innerHTML = `
+      <div class="chat-empty">
+        <div class="ce-top"><span class="ce-hi">${_ceHi}</span><span class="ce-meta">${_ceMonth}</span></div>
+        <div class="ce-greet">¿Y ahora dónde?</div>
+        <div class="ce-card" id="ce-card">${_ceBoardHTML(CE_IDEAS[_ceIdea])}</div>
+        <div class="ce-or">o <b>dime tú el destino</b> abajo ↓</div>
+        ${_ceChipsRow}
+      </div>`;
+
+    const ceCard = area.querySelector('#ce-card');
+    if (ceCard) {
+      ceCard.addEventListener('click', (e) => {
+        if (e.target.closest('[data-ce-next]')) {
+          _ceIdea = (_ceIdea + 1) % CE_IDEAS.length;
+          ceCard.innerHTML = _ceBoardHTML(CE_IDEAS[_ceIdea]);
+          return;
+        }
+        if (e.target.closest('[data-ce-go]')) {
+          const idea = CE_IDEAS[_ceIdea];
+          if (typeof salma !== 'undefined' && idea) salma.send(idea.msg);
+        }
+      });
+    }
+  } catch (err) {
+    console.warn('[chat-empty] render nuevo falló, uso fallback', err);
+    area.innerHTML = _ceFallback;
+  }
 
   area.querySelectorAll('.chat-empty-chip').forEach(chip => {
     chip.addEventListener('click', () => {
