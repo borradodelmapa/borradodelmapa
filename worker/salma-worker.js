@@ -3103,8 +3103,8 @@ function salvageIncompleteRouteJson(text) {
 // paradas, ver MAX_TOOL_ITERATIONS), convierte el texto YA generado en la respuesta
 // anterior directamente a la estructura del mapa. Misma lógica que el RESCATE 2 del
 // flujo normal (más abajo), extraída aquí para poder llamarla sin pasar por el bucle.
-// DIAGNÓSTICO TEMPORAL — motivo del último fallo de convertProseToRouteJson,
-// para mostrarlo en el mensaje de "no me ha salido montarte el mapa". Quitar cuando esté cazado.
+// Motivo del último fallo de convertProseToRouteJson. Se traza en servidor
+// ([T2-FAIL] en wrangler tail); NO se muestra al usuario.
 let _convertFailReason = '';
 
 // Normaliza la respuesta CRUDA del modelo a objeto de ruta.
@@ -7853,27 +7853,26 @@ REGLAS:
     // ANTES de generar. Se reutiliza en buildMessages, convertProseToRouteJson y verifyAllStops.
     // Si falla → null → todo se comporta como antes.
     let anchorCountry = null;
-    let _anchorDbg = { hint: (typeof body.dest_hint === 'string' ? body.dest_hint : ''), src: '', used: '' };
+    let _anchorSrc = '';
     {
       // Destino: del cuestionario guiado, o extraído del mensaje. Se calcula para el Tiempo 1
       // (ancla en la prosa: "Córdoba" no se va a Argentina) y para el Tiempo 2 (ancla en verify).
       let _anchorDestino = (guidedRoute && guidedRoute.destino) ? String(guidedRoute.destino) : null;
-      if (_anchorDestino) _anchorDbg.src = 'guided';
+      if (_anchorDestino) _anchorSrc = 'guided';
       // dest_hint viene del front ya limpio ("3 días Ciudad Real" → "Ciudad Real"). Es lo fiable.
       if (!_anchorDestino && typeof body.dest_hint === 'string' && body.dest_hint.trim().length >= 2) {
         _anchorDestino = body.dest_hint.trim();
-        _anchorDbg.src = 'hint';
+        _anchorSrc = 'hint';
       }
       if (!_anchorDestino && (isRouteRequest(message, history) || isDaysDestination(message) || guidedMapStage)) {
         try {
           const _loc = extractHelpLocation(message, history, currentRoute);
-          if (_loc && String(_loc).trim().length >= 2) { _anchorDestino = String(_loc).trim(); _anchorDbg.src = 'extract'; }
+          if (_loc && String(_loc).trim().length >= 2) { _anchorDestino = String(_loc).trim(); _anchorSrc = 'extract'; }
         } catch (_) {}
       }
       if (_anchorDestino) {
-        _anchorDbg.used = _anchorDestino;
         try { anchorCountry = await resolverPaisDestino(_anchorDestino, userLocation, env); } catch (_) {}
-        console.log(`[ANCLA-PAIS] src=${_anchorDbg.src} "${_anchorDestino}" → ${anchorCountry ? anchorCountry.countryName + ' (' + anchorCountry.countryCode + ') pointScope=' + anchorCountry.pointScope + ' ' + anchorCountry.lat + ',' + anchorCountry.lng : 'NULL'}`);
+        console.log(`[ANCLA-PAIS] src=${_anchorSrc} "${_anchorDestino}" → ${anchorCountry ? anchorCountry.countryName + ' (' + anchorCountry.countryCode + ') pointScope=' + anchorCountry.pointScope + ' ' + anchorCountry.lat + ',' + anchorCountry.lng : 'NULL'}`);
       }
     }
 
@@ -8650,7 +8649,8 @@ INSTRUCCIONES:
         }
 
         if (_mapStageFailed) {
-          const _msg = 'No me ha salido montarte el mapa de esta ruta. Las recomendaciones de arriba están bien — dale otra vez al botón y lo reintento.' + (_convertFailReason ? `\n\n(motivo: ${_convertFailReason})` : '');
+          if (_convertFailReason) console.log(`[T2-FAIL] ${_convertFailReason}`);
+          const _msg = 'No me ha salido montarte el mapa de esta ruta. Las recomendaciones de arriba están bien — dale otra vez al botón y lo reintento.';
           try { await writer.write(encoder.encode(`data: ${JSON.stringify({ done: true, reply: _msg, route: null, map_stage_failed: true })}\n\n`)); } catch (_) {}
           return; // el finally cierra el writer
         }
@@ -9254,18 +9254,14 @@ REGLAS:
             }
           } catch (_) {}
 
-          // DIAGNÓSTICO TEMPORAL — QUITAR cuando el ceñido esté confirmado.
+          // Traza en servidor (wrangler tail) del anclaje y el ceñido. NO toca route.title.
           if (route) {
-            const _dd = extractDaysFromMessage(message) || (guidedRoute && parseInt(guidedRoute.duracion_dias, 10)) || (sourceText && extractDaysFromMessage(sourceText)) || 0;
-            const _rk = _dd <= 1 ? 35 : (_dd === 2 ? 70 : (_dd <= 4 ? 120 : 160));
-            const _a = anchorCountry
-              ? `A:${anchorCountry.countryCode} loc:"${anchorCountry.locality||'?'}" prov:"${anchorCountry.province||'?'}" ps:${anchorCountry.pointScope ? 'T' : 'F'} ${(anchorCountry.lat||0).toFixed(2)},${(anchorCountry.lng||0).toFixed(2)} d${_dd}/r${_rk} ${_dd >= 3 ? 'PF' : 'LF'} src:${_anchorDbg.src} used:"${_anchorDbg.used}"`
-              : `A:NULL used:"${_anchorDbg.used}" hint:"${_anchorDbg.hint}" src:${_anchorDbg.src} ms:${guidedMapStage ? 'T' : 'F'}`;
             const _disc = Array.isArray(route.discarded_stops) ? route.discarded_stops.length : 0;
             const _near = Array.isArray(route.nearby_stops) ? route.nearby_stops.length : 0;
-            const _path = _fastPathRoute ? 'fp' : 'gen';
-            route._dbg = `[dbg ${_a} ${_path} ${route.stops?.length || 0}ok/${_disc}desc/${_near}near]`;
-            route.title = route._dbg + ' ' + (route.title || '');
+            const _a = anchorCountry
+              ? `${anchorCountry.countryCode} loc:"${anchorCountry.locality||'?'}" prov:"${anchorCountry.province||'?'}" ps:${anchorCountry.pointScope ? 'T' : 'F'}`
+              : 'NULL';
+            console.log(`[CEÑIDO] ancla=${_a} ${_fastPathRoute ? 'fp' : 'gen'} ${route.stops?.length || 0}ok/${_disc}desc/${_near}near`);
           }
         }
 
