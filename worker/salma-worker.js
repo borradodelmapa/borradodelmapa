@@ -8367,15 +8367,24 @@ INSTRUCCIONES:
         let _fastPathRoute = null;
         let _mapStageFailed = false;
         if (sourceText && sourceText.length > 400 && isRouteRequest(message, history)) {
+          // Antes se mandaba un chunk de texto ("Montando tu ruta con mapa...") que
+          // el front convertía en burbuja y mataba el spinner → 15s de silencio.
+          // Ahora: {generating} (spinner persistente "Generando tu ruta…") + keepalive
+          // cada 3s mientras convierte, para que no se quede mudo.
           try {
-            await writer.write(encoder.encode(`data: ${JSON.stringify({ t: 'Montando tu ruta con mapa...' })}\n\n`));
+            await writer.write(encoder.encode(`data: ${JSON.stringify({ generating: true })}\n\n`));
           } catch (_) {}
+          const _kaTimer = setInterval(() => {
+            writer.write(encoder.encode(`data: ${JSON.stringify({ k: 1 })}\n\n`)).catch(() => {});
+          }, 3000);
           try {
             _fastPathRoute = await convertProseToRouteJson(sourceText, env, { guided: guidedRoute, anchorCountry });
             if (_fastPathRoute && (!Array.isArray(_fastPathRoute.stops) || _fastPathRoute.stops.length < 2)) { _convertFailReason = _convertFailReason || `ruta devuelta con ${_fastPathRoute.stops?.length || 0} paradas`; _fastPathRoute = null; }
           } catch (e) {
             _fastPathRoute = null;
             _convertFailReason = _convertFailReason || (e.message || 'excepción');
+          } finally {
+            clearInterval(_kaTimer);
           }
           // PIEZA A — Tiempo 2 (botón guiado): si la conversión falla NO caemos al bucle
           // largo (duplicaba el plan en el chat y tardaba minutos). Se avisa y se corta.

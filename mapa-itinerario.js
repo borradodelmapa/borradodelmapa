@@ -27,7 +27,13 @@ const mapaItinerario = {
     this._container.innerHTML = '';
 
     const country = routeData.country || routeData.region || '';
-    const mapsUrl = this._fullRouteGmapsUrl(stops, country);
+    // Si la ruta sigue una carretera con nombre (N2…), el enlace a Google Maps se
+    // arma con puntos del trazado real, no solo con las paradas → Google no se
+    // desvía a la autopista paralela.
+    const _rg = routeData.road_geometry;
+    const mapsUrl = (_rg && Array.isArray(_rg.coords) && _rg.coords.length > 2)
+      ? this._roadGmapsUrl(_rg.coords)
+      : this._fullRouteGmapsUrl(stops, country);
 
     // Header de la ruta (título + volver — desktop)
     const header = document.createElement('div');
@@ -401,6 +407,19 @@ const mapaItinerario = {
     // /dir/ usa lat,lng — place_id: no funciona en path de /dir/
     const segments = sampled.map(p => `${p.lat},${p.lng}`).join('/');
     return 'https://www.google.com/maps/dir/' + segments;
+  },
+
+  // Enlace /dir/ con ~10 puntos repartidos por el trazado real de la carretera.
+  // Con tantos waypoints Google no tiene margen para irse por la autopista.
+  _roadGmapsUrl(coords) {
+    const n = (coords || []).length;
+    if (n < 2) return null;
+    const MAX = 10;
+    const step = Math.max(1, Math.floor((n - 1) / (MAX - 1)));
+    const pts = [];
+    for (let i = 0; i < n; i += step) pts.push(coords[i]);
+    if (pts[pts.length - 1] !== coords[n - 1]) pts.push(coords[n - 1]);
+    return 'https://www.google.com/maps/dir/' + pts.map(c => `${c[0]},${c[1]}`).join('/');
   },
 
   _sampleWaypoints(arr, max) {

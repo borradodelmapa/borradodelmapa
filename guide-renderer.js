@@ -88,7 +88,7 @@ const guideRenderer = {
 
       ${options.partial ? '<div class="guide-actions"><div class="guide-loading-blocks">Cargando más días...</div></div>' : `<div class="guide-actions">
         ${options.saved ? '' : '<button class="btn-primary" id="guide-save-btn">GUARDAR MI GUÍA</button>'}
-        ${(() => { const u = options.showGmapsOffer ? this._fullRouteGmapsUrl(stops, country) : null; return u ? `<a class="btn-primary" id="guide-gmaps-btn" href="${u}" target="_blank" rel="noopener">🗺 ABRIR EN GOOGLE MAPS</a>` : ''; })()}
+        ${(() => { const u = options.showGmapsOffer ? (this._roadGeometry ? this._roadGmapsUrl(this._roadGeometry.coords) : this._fullRouteGmapsUrl(stops, country)) : null; return u ? `<a class="btn-primary" id="guide-gmaps-btn" href="${u}" target="_blank" rel="noopener">🗺 ABRIR EN GOOGLE MAPS</a>` : ''; })()}
         <button class="btn-ghost" id="guide-share-btn">COMPARTIR</button>
       </div>`}
     `;
@@ -575,6 +575,19 @@ const guideRenderer = {
     const sampled = this._sampleWaypoints(valid, 25);
     const segments = sampled.map(p => `${p.lat},${p.lng}`).join('/');
     return 'https://www.google.com/maps/dir/' + segments;
+  },
+
+  // Enlace /dir/ con ~10 puntos del trazado real de la carretera nombrada (N2…)
+  // para que Google no se desvíe a la autopista paralela.
+  _roadGmapsUrl(coords) {
+    const n = (coords || []).length;
+    if (n < 2) return null;
+    const MAX = 10;
+    const step = Math.max(1, Math.floor((n - 1) / (MAX - 1)));
+    const pts = [];
+    for (let i = 0; i < n; i += step) pts.push(coords[i]);
+    if (pts[pts.length - 1] !== coords[n - 1]) pts.push(coords[n - 1]);
+    return 'https://www.google.com/maps/dir/' + pts.map(c => `${c[0]},${c[1]}`).join('/');
   },
 
   _sampleWaypoints(arr, max) {
