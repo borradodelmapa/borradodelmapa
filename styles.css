@@ -6206,6 +6206,7 @@ body {
 .ce-chip.on{background:var(--ce-amber);border-color:var(--ce-amber);color:#0a0a0a;}
 .ce-chips[data-field="intereses"] .ce-chip.on{background:var(--ce-green);border-color:var(--ce-green);}
 .ce-tk-fechas{display:flex;gap:10px;margin-top:10px;}
+.chat-empty .ce-tk-fechas[hidden]{display:none;}
 .ce-tk-fechas label{font-family:var(--ce-flapf);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ce-ink3);display:flex;flex-direction:column;gap:4px;}
 .ce-tk-fechas input{background:var(--ce-flap);border:1px solid var(--ce-line-hi);border-radius:3px;color:var(--ce-ink);font-family:var(--ce-flapf);font-size:12px;padding:6px 8px;color-scheme:dark;}
 .ce-afinar{width:100%;background:transparent;border:0;border-bottom:1px dashed var(--ce-line);color:var(--ce-ink2);font-family:var(--ce-flapf);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:12px 13px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
