@@ -40,9 +40,17 @@ const mapaRuta = {
     this._currentContainerId = containerId;
     this._currentStops = stops;
     this._previewMode = !!(options && options.preview);
+    // FASE 2 — trazado real de la carretera nombrada (OSM), si el worker lo adjuntó
+    const rg = options && options.roadGeometry;
+    this._roadGeometry = (rg && Array.isArray(rg.coords) && rg.coords.length > 1) ? rg : null;
     this.destroy();
 
     this._initGoogleMaps(containerId, stops);
+  },
+
+  // [[lat,lng],…] del trazado real, listo para Google/Leaflet
+  _roadGeomPath() {
+    return this._roadGeometry ? this._roadGeometry.coords.map(c => ({ lat: c[0], lng: c[1] })) : null;
   },
 
 
@@ -536,19 +544,22 @@ const mapaRuta = {
       return marker;
     });
 
-    // Polyline provisional recta
+    // Polyline: si hay trazado real de la carretera nombrada (OSM), pintar ESE;
+    // si no, línea provisional recta hasta que llegue Directions.
+    const _roadPath = this._roadGeomPath();
     this._polyline = new google.maps.Polyline({
-      path: valid.map(s => ({ lat: s.lat, lng: s.lng })),
+      path: _roadPath || valid.map(s => ({ lat: s.lat, lng: s.lng })),
       map: this._map,
       strokeColor: '#D4A843',
-      strokeWeight: 3,
-      strokeOpacity: 0.6,
-      icons: [{ icon: { path: google.maps.SymbolPath.FORWARD_OPEN_ARROW, scale: 3, strokeColor: '#D4A843' }, repeat: '80px' }],
+      strokeWeight: _roadPath ? 4 : 3,
+      strokeOpacity: _roadPath ? 0.9 : 0.6,
+      icons: _roadPath ? [] : [{ icon: { path: google.maps.SymbolPath.FORWARD_OPEN_ARROW, scale: 3, strokeColor: '#D4A843' }, repeat: '80px' }],
     });
 
-    // Ajustar bounds
+    // Ajustar bounds (incluye el trazado de la carretera si lo hay)
     const bounds = new google.maps.LatLngBounds();
     valid.forEach(s => bounds.extend({ lat: s.lat, lng: s.lng }));
+    if (_roadPath) _roadPath.forEach(p => bounds.extend(p));
     try { this._map.fitBounds(bounds, { top: 40, right: 40, bottom: 60, left: 40 }); } catch (e) { console.warn("[mapa-ruta] fitBounds:", e && e.message); }
 
     // Aplicar ruta real (pre-fetched en paralelo o fetch ahora)
@@ -592,8 +603,20 @@ const mapaRuta = {
 
   // Aplicar polyline real + steps turn-by-turn
   _applyDirections(data) {
-    if (!data.polyline || !this._map || this._mapType !== 'google') return;
+    if (!this._map || this._mapType !== 'google') return;
 
+    // Con trazado real de la carretera: NO tocar la polyline (Directions se va por
+    // la autopista). Aprovechar solo los pasos turn-by-turn.
+    if (this._roadGeometry) {
+      if (data && data.steps && data.steps.length) {
+        this._steps = data.steps;
+        this._currentStep = 0;
+        this._updateTurnPanel();
+      }
+      return;
+    }
+
+    if (!data.polyline) return;
     if (this._polyline) this._polyline.setMap(null);
 
     const decoded = this._decodePolyline(data.polyline);
@@ -636,7 +659,12 @@ const mapaRuta = {
       return marker;
     });
 
-    this._polyline = L.polyline(valid.map(s => [s.lat, s.lng]), { color: '#D4A843', weight: 3, opacity: 0.7, dashArray: '8 6' }).addTo(this._map);
+    if (this._roadGeometry) {
+      this._polyline = L.polyline(this._roadGeometry.coords, { color: '#D4A843', weight: 4, opacity: 0.9 }).addTo(this._map);
+      try { bounds.extend(this._polyline.getBounds()); } catch (_) {}
+    } else {
+      this._polyline = L.polyline(valid.map(s => [s.lat, s.lng]), { color: '#D4A843', weight: 3, opacity: 0.7, dashArray: '8 6' }).addTo(this._map);
+    }
     try { this._map.fitBounds(bounds, { padding: [40, 40] }); } catch (e) { console.warn("[mapa-ruta] fitBounds:", e && e.message); }
 
     // En modo preview (itinerario) solo botón "Ir al mapa"

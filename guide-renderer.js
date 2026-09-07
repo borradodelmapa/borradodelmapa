@@ -52,6 +52,9 @@ const guideRenderer = {
     const r = routeData;
     const stops = r.stops || [];
     this._preferredRoad = r.preferred_road || null;
+    // FASE 2 — trazado real de la carretera nombrada (OSM), si el worker lo adjuntó
+    this._roadGeometry = (r.road_geometry && Array.isArray(r.road_geometry.coords) && r.road_geometry.coords.length > 1)
+      ? r.road_geometry : null;
     const country = r.country || r.region || '';
 
     // Agrupar stops por día
@@ -786,9 +789,22 @@ const guideRenderer = {
     this._safeFit(map, bounds, { padding: [20, 20] });
     this._maps[mapId] = map;
 
-    // Pedir ruta real a Google Directions
-    if (valid.length >= 2) {
+    // Trazado: si el usuario nombró una carretera concreta y tenemos su geometría
+    // real de OSM, pintar ESA (Directions se va por la autopista paralela). Si no,
+    // Google Directions como siempre.
+    if (this._roadGeometry) {
+      this._drawRoadGeometry(map, this._roadGeometry, color, valid);
+    } else if (valid.length >= 2) {
       this._loadDirections(map, valid, color, this._preferredRoad);
+    }
+  },
+
+  _drawRoadGeometry(map, rg, color, stops) {
+    try {
+      const line = L.polyline(rg.coords, { color: color, weight: 4, opacity: 0.85 }).addTo(map);
+      try { this._safeFit(map, line.getBounds(), { padding: [24, 24] }); } catch (_) {}
+    } catch (_) {
+      if (Array.isArray(stops) && stops.length >= 2) this._loadDirections(map, stops, color, this._preferredRoad);
     }
   },
 

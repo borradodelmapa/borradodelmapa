@@ -512,6 +512,11 @@ export async function resolveNamedRoad(input, deps = {}) {
     } catch (_) {}
   }
 
+  // cacheOnly: para el camino caliente (generar ruta). Si no está en KV, se rinde
+  // al instante en vez de llamar a Overpass en vivo (que tarda 60-140s y bloquearía
+  // la entrega de la ruta). La resolución en vivo se hace offline con precarga-roads.mjs.
+  if (deps.cacheOnly) return { schema: ROAD_SCHEMA, ok: false, reason: 'not_cached' };
+
   // ── elegir la relación ──
   let relId;
   let tags = null;

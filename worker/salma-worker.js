@@ -8989,6 +8989,31 @@ REGLAS:
         if (route) {
           const _preferredRoad = extractPreferredRoad(message);
           if (_preferredRoad) route.preferred_road = _preferredRoad;
+
+          // FASE 2 — si el usuario nombró una carretera concreta ("sigue la N2",
+          // "Great Ocean Road"…), adjuntar su geometría real de OSM (precargada en
+          // KV ROAD_GEOM) para que el mapa trace ESA carretera en vez de "la más
+          // rápida" de Directions. cacheOnly = nunca llama a Overpass en el hot path.
+          try {
+            const _rq = extractRoadQuery(message, (anchorCountry && anchorCountry.countryCode) || route.country || '');
+            if (_rq) {
+              const _road = await resolveNamedRoad(_rq, { kv: env.ROAD_GEOM, cacheOnly: true });
+              if (_road && _road.ok && Array.isArray(_road.geometry) && _road.geometry.length > 1) {
+                route.road_geometry = {
+                  name: _road.road.name || null,
+                  ref: _road.road.ref || _rq.ref || null,
+                  coords: _road.geometry,           // [[lat,lng], …] simplificada
+                  length_km: _road.length_km,
+                  continuity: _road.continuity,     // clean | minor_gaps | fragmented
+                  osm_relation: _road.road.relation_id || null,
+                };
+                if (!route.preferred_road && route.road_geometry.ref) {
+                  route.preferred_road = route.road_geometry.ref;
+                }
+                console.log(`[ROAD] ${_rq.cacheSlug || _rq.ref || _rq.name} → ${_road.length_km}km [${_road.continuity}] ${_road.geometry.length}pts`);
+              }
+            }
+          } catch (e) { console.log('[ROAD] skip: ' + e.message); }
         }
 
         if (route && route.stops && route.stops.length > 0 && env.SALMA_KB) {

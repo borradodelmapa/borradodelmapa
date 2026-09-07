@@ -500,7 +500,7 @@ const mapaItinerario = {
 
     // Inicializar mapa (preview: sin controles, solo botón "Ir al mapa") y cards
     const stops = routeData.stops;
-    mapaRuta.init('itin-map-container', stops, { preview: true });
+    mapaRuta.init('itin-map-container', stops, { preview: true, roadGeometry: routeData.road_geometry || null });
     mapaItinerario.init('itin-cards-container', stops, routeData, options);
 
     // Asegurar que el mapa se dimensiona bien
