@@ -1017,6 +1017,41 @@ const salma = {
     this._rutaPregunta(0);
   },
 
+  // ─────────────────────────────────────────────
+  //  BILLETE — mismo flujo guiado, pero los 8 campos llegan de una sola vez
+  //  desde el formulario del índice (rediseño v1). Reutiliza _rutaFinalizar.
+  //  f: { destino, duracion_dias, fechas, compania, presupuesto, ritmo, intereses[], restricciones }
+  // ─────────────────────────────────────────────
+  emitirBillete(f) {
+    f = f || {};
+    if (!f.destino || !String(f.destino).trim()) return false;
+    this.reset();
+    if (currentState !== 'chat') this._initChat();
+    const area = this._getChatArea();
+    if (area) { const e = area.querySelector('.chat-empty'); if (e) e.remove(); }
+    if (window.currentUser && typeof db !== 'undefined') {
+      db.collection('users').doc(window.currentUser.uid).collection('maps')
+        .where('estado', '==', 'borrador').get()
+        .then(snap => snap.forEach(doc => doc.ref.delete().catch(() => {})))
+        .catch(() => {});
+    }
+    this._rutaDraft = {
+      destino: String(f.destino).trim(),
+      duracion_dias: f.duracion_dias || '5-7',
+      fechas: f.fechas || null,
+      compania: f.compania || null,
+      presupuesto: f.presupuesto || null,
+      ritmo: f.ritmo || null,
+      intereses: Array.isArray(f.intereses) ? f.intereses : [],
+      restricciones: (f.restricciones && String(f.restricciones).trim()) || null,
+      step: this._RUTA_STEPS.length,
+      tripId: null,
+      _campoTexto: null
+    };
+    this._rutaFinalizar();
+    return true;
+  },
+
   _rutaCancelUI() {
     const area = this._getChatArea();
     if (!area) return;
