@@ -6269,3 +6269,26 @@ body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:fle
 .sv-back:active{transform:scale(.92);}
 .vuelos-header{justify-content:flex-start;gap:12px;}
 .vuelos-header .vuelos-add-btn{margin-left:auto;}
+
+/* FAB del mapa DESACTIVADO 7 sept 2026 — ver PENDIENTES.md (popup "Cómo llegar" roto) */
+#fab-map, #fab-diario { display:none !important; }
+
+/* Botón "Crear ruta con mapa" — protagonista, en oro (7 sept 2026) */
+.crear-ruta-mapa-wrap { margin:12px 0 6px; }
+.crear-ruta-btn {
+  display:flex; align-items:center; justify-content:center; gap:9px; width:100%;
+  background:linear-gradient(180deg, #ffc947, #f0b429);
+  color:#0a0a0a; border:0; border-radius:13px;
+  font-family:var(--font-tight,'Inter Tight'),sans-serif; font-weight:800;
+  font-size:15.5px; letter-spacing:.01em; padding:16px 18px; cursor:pointer;
+  box-shadow:0 12px 30px -10px rgba(240,180,41,.6);
+  animation:crearRutaPulse 2.6s ease-in-out infinite;
+  -webkit-tap-highlight-color:transparent;
+}
+.crear-ruta-btn .crb-arrow { font-weight:700; }
+@keyframes crearRutaPulse {
+  0%,100% { box-shadow:0 12px 30px -10px rgba(240,180,41,.5); }
+  50%     { box-shadow:0 12px 34px -8px rgba(240,180,41,.85); }
+}
+.crear-ruta-btn:hover  { background:linear-gradient(180deg, #ffd45f, #ffc233); }
+.crear-ruta-btn:active { transform:scale(.98); }

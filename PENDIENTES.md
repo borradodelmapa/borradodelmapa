@@ -5,6 +5,28 @@ Leer antes de tocar chips del chat vacío o flujos relacionados.
 
 ---
 
+## ⛔ FAB DEL MAPA (botón flotante que abre el mapa de la ruta) — DESACTIVADO 7 sept 2026
+
+Paco pidió quitarlo hasta arreglarlo. Está oculto por dos sitios (a prueba de
+"vuelve a salir mañana"):
+- `app.js` `showState()` — la línea que lo mostraba está comentada, se fuerza `display:none`.
+- `styles.css` — `#fab-map, #fab-diario { display:none !important; }`
+
+### Bugs a arreglar antes de reactivar (mapa live `openLiveMap` + `selectRouteOnMap`)
+- **Popup de una parada → botón "Cómo llegar": el enlace es correcto pero NO funciona
+  al pulsarlo.** (URL bien formada, el click no navega / no abre.)
+- Los botones del diario-picker (**i**, **I'm fine**, **Ir aquí**, **Guardar**, **Centrar**…)
+  se comportan raro / no responden como deberían.
+- Sensación de Paco: "ayer se quitaron funciones y hoy vuelven a estar". Revisar si otra
+  sesión / un revert las reintroduce. El mapa live NO se tocó en el motor de carreteras
+  (sección 0 dice "Mapa live: no tocado").
+
+### Reactivar
+`app.js`: descomentar la línea original en `showState`. `styles.css`: quitar la regla
+`#fab-map, #fab-diario`. Y arreglar primero el "Cómo llegar" del popup y el picker.
+
+---
+
 ## 0. MOTOR DE ROAD-TRIPS (carreteras con nombre) — Fase 1 + Fase 2 DESPLEGADAS (7 sept 2026)
 
 **Fase 1** (resolver OSM + `/roads/resolve` + 18 geometrías en KV `ROAD_GEOM`): commits

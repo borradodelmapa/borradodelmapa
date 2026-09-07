@@ -132,9 +132,11 @@ function showState(state) {
   // Limpiar barra flotante de guía si quedó huérfana
   const _orphanBar = document.body.querySelector('.itin-action-bar');
   if (_orphanBar) _orphanBar.remove();
-  // FAB mapa: visible en todo menos welcome
+  // FAB mapa DESACTIVADO 7 sept 2026 — popup "Cómo llegar" roto + botones del picker raros.
+  // Ver PENDIENTES.md. Reactivar: volver a la línea de abajo comentada.
   const fab = document.getElementById('fab-map');
-  if (fab) fab.style.display = (state === 'welcome' || !currentUser) ? 'none' : '';
+  if (fab) fab.style.display = 'none';
+  // if (fab) fab.style.display = (state === 'welcome' || !currentUser) ? 'none' : '';
 }
 
 function updateHeader() {

@@ -1252,8 +1252,8 @@ const salma = {
     const wrap = document.createElement('div');
     wrap.className = 'historia-chat-chip-wrap crear-ruta-mapa-wrap';
     const btn = document.createElement('button');
-    btn.className = 'historia-chat-chip';
-    btn.textContent = '🗺️ Crear ruta con mapa';
+    btn.className = 'crear-ruta-btn';
+    btn.innerHTML = '<span>🗺️</span> Crear ruta con mapa <span class="crb-arrow">→</span>';
     btn.addEventListener('click', () => {
       wrap.remove();
       const extra = Object.assign({}, this._lastExtra || {}, {
@@ -3261,7 +3261,9 @@ const salma = {
     let m;
     while ((m = re.exec(html)) !== null) {
       const name = m[1].replace(/<[^>]*>/g, '').trim();
-      if (name.length < 3 || /salma|gu[ií]a|dónde comer|donde comer/i.test(name)) continue;
+      // Excluir texto en negrita que NO es un lugar: el CTA de cierre "Crear ruta con mapa"
+      // y variantes. Antes se colaba una foto random delante de esa frase (7 sept 2026).
+      if (name.length < 3 || /salma|gu[ií]a|d[oó]nde comer|crear ruta|ruta con mapa|si te encaja|aqu[ií] abajo/i.test(name)) continue;
       // Buscar URL Maps cercana para extraer query con ciudad
       const afterStr = html.slice(m.index, m.index + 500);
       const mapsMatch = afterStr.match(/maps\/search\/([^"&<]+)/);
