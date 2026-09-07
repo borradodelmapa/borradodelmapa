@@ -285,8 +285,15 @@ function _renderChatEmpty() {
     opts.map(o => `<button class="ce-chip${o.on ? ' on' : ''}" data-v="${o.v}">${o.l}</button>`).join('') +
     `</div>`;
 
+  const _paxName = (_ceName ? String(_ceName).trim().split(/\s+/)[0] : 'Viajero').toUpperCase();
+  const _tkNum = 'BDM·' + String(new Date().getMonth() + 1).padStart(2, '0') + String(new Date().getDate()).padStart(2, '0');
+
   const _ceBilleteHTML = (hasActive) => `
-      <div class="ce-tk-head"><span class="ce-tk-b">BORRADO<span>DEL</span>MAPA</span><span class="ce-tk-t">Billete de ruta</span></div>
+      <div class="ce-tk-head">
+        <span class="ce-tk-b">✦ BORRADO<span>DEL</span>MAPA</span>
+        <span class="ce-tk-t">Nº ${_tkNum}</span>
+      </div>
+      <div class="ce-tk-pax"><span class="ce-k">Pasajero</span><span class="ce-tk-pax-v">${_paxName}</span></div>
       <div class="ce-fld">
         <div class="ce-k">Destino</div>
         <input class="ce-tk-dest" type="text" autocomplete="off" placeholder="¿A dónde?">
@@ -339,8 +346,9 @@ function _renderChatEmpty() {
           <input class="ce-tk-notes" type="text" autocomplete="off" placeholder="Dieta, movilidad, lo que sea…">
         </div>
       </div>
-      <div class="ce-perf"></div>
+      <div class="ce-perf"><span class="ce-perf-lbl">desprende aquí</span></div>
       <div class="ce-stub">
+        <div class="ce-barcode"></div>
         <button class="ce-emit" data-ce-emit>Emitir billete <span>→</span></button>
         <div class="ce-stub-hint">Salma monta la ruta con lo que hayas puesto</div>
         ${hasActive ? '<button class="ce-back-active" data-ce-back-active>← Volver a la ruta activa</button>' : ''}
@@ -392,7 +400,7 @@ function _renderChatEmpty() {
     const _initCard = _ceActive
       ? { cls: 'ce-card ce-active', html: _ceRouteHTML(_ceActive) }
       : { cls: 'ce-card ce-ticket', html: _ceBilleteHTML() };
-    const _greet = _ceActive ? '¿Cómo va el viaje?' : '¿A dónde te llevo?';
+    const _greet = _ceActive ? '¿Cómo va el viaje?' : '¿A dónde vamos?';
 
     area.innerHTML = `
       <div class="chat-empty">
@@ -427,7 +435,7 @@ function _renderChatEmpty() {
           ceCard.className = 'ce-card ce-ticket';
           ceCard.innerHTML = _ceBilleteHTML(true);
           const g = area.querySelector('.ce-greet');
-          if (g) g.textContent = '¿A dónde te llevo?';
+          if (g) g.textContent = '¿A dónde vamos?';
           const or = area.querySelector('.ce-or b');
           if (or) or.textContent = 'díctame el plan entero';
           const dest = ceCard.querySelector('.ce-tk-dest');
