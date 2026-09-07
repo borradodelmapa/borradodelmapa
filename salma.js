@@ -914,8 +914,8 @@ const salma = {
     // Si no tenemos ubicación todavía, reintentar (ahora hay interacción del usuario)
     if (!this._userLocation && !this._geoWatchId && !this._geoBlocked) this.initGeolocation();
 
-    // Transicionar a chat si estamos en welcome
-    if (currentState === 'welcome' || currentState === 'viajes') {
+    // Transicionar a chat si venimos de otra vista
+    if (currentState === 'viajes') {
       this._initChat();
     }
 

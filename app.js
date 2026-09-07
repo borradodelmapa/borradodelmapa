@@ -48,16 +48,14 @@ function showState(state) {
   if (window._itinViewOpen && typeof window._teardownItinView === 'function') {
     window._teardownItinView();
   }
+  // 'welcome' está deprecado (Fase 5 navegación): el estado por defecto es el chat.
+  if (state === 'welcome') state = 'chat';
   currentState = state;
   updateHeader();
 
   const inputBar = document.querySelector('.app-input-bar');
 
-  if (state === 'welcome') {
-    renderWelcome();
-    if (inputBar) inputBar.style.display = 'none';
-    $content.style.paddingBottom = '0';
-  } else if (state === 'rutas') {
+  if (state === 'rutas') {
     loadUserGuides();
     if (inputBar) inputBar.style.display = 'none';
     $content.style.paddingBottom = '80px';
@@ -379,22 +377,18 @@ function _renderChatEmpty() {
         <button class="ce-cta-main ce-cta-2nd" data-ce-newbillete>Billete nuevo <span>+</span></button>
       </div>`;
 
+  // "Ruta nueva" quitado (Fase 5): el billete ya es el creador de ruta; ese chip
+  // abría el flujo viejo de 8 preguntas y duplicaba la función.
   const _ceChipsRow = `
       <div class="chat-empty-chips">
-        <div class="ce-chip-row">
-          <button class="chat-empty-chip chat-empty-chip--ruta" data-action="crear-ruta">Ruta nueva</button>
-          ${chipsLeft.map(renderChip).join('')}
-        </div>
+        <div class="ce-chip-row">${chipsLeft.map(renderChip).join('')}</div>
         <div class="ce-chip-row">${chipsRight.map(renderChip).join('')}</div>
       </div>`;
 
   const _ceFallback = `
     <div class="chat-empty">
       <div class="chat-empty-chips">
-        <div class="ce-chip-row">
-          <button class="chat-empty-chip chat-empty-chip--ruta" data-action="crear-ruta">Ruta nueva</button>
-          ${chipsLeft.map(renderChip).join('')}
-        </div>
+        <div class="ce-chip-row">${chipsLeft.map(renderChip).join('')}</div>
         <div class="ce-chip-row">${chipsRight.map(renderChip).join('')}</div>
       </div>
     </div>`;

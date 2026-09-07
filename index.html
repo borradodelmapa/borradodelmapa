@@ -77,7 +77,7 @@ window._loadGoogleMaps = function() {
   });
 };
 </script>
-<link rel="stylesheet" href="styles.css?v=66">
+<link rel="stylesheet" href="styles.css?v=67">
 <link rel="stylesheet" href="docs-viajero.css?v=2">
 <link rel="stylesheet" href="historia.css?v=2">
 <!-- Google Analytics 4 — se carga solo tras consentimiento de cookies (P1-6) -->
@@ -338,31 +338,8 @@ if(localStorage.getItem('cookie_consent')==='all') loadGA4();
 
 </div>
 
-<!-- ═══ MODAL: QUÉ PUEDE HACER SALMA ═══ -->
-<div class="salma-info-overlay" id="salma-info-overlay" style="display:none">
-  <div class="salma-info-modal">
-    <button class="salma-info-close" id="salma-info-close">&times;</button>
-    <div class="salma-info-hero">
-      <div class="salma-info-hero-line">Antes, durante y después</div>
-      <div class="salma-info-hero-line">Siempre contigo</div>
-      <div class="salma-info-hero-big">Salma te resuelve</div>
-    </div>
-    <div class="salma-info-list">
-      <div class="salma-info-item done">No sé por dónde empezar → Te monta la ruta</div>
-      <div class="salma-info-item done">Son las 11pm y no tengo hotel → Te busca uno abierto</div>
-      <div class="salma-info-item done">No entiendo el menú → Te traduce</div>
-      <div class="salma-info-item done">Me han robado la cartera → Embajada + teléfonos</div>
-      <div class="salma-info-item done">¿Necesito visado? → Te lo dice al momento</div>
-      <div class="salma-info-item done">¿Este barrio es seguro? → Te avisa</div>
-      <div class="salma-info-item done">¿Cuánto me va a costar? → Presupuesto real</div>
-      <div class="salma-info-item done">Llueve y se me cae el plan → Plan B listo</div>
-      <div class="salma-info-item done">Quiero compartir mi ruta → Link directo</div>
-      <div class="salma-info-item soon">Avería en carretera → Grúa + mecánico cerca</div>
-      <div class="salma-info-item soon">Audio guía en ruta</div>
-      <div class="salma-info-item soon">Salma te acompaña en tiempo real</div>
-    </div>
-  </div>
-</div>
+<!-- (modal "Qué puede hacer Salma" eliminado — Fase 5: era código muerto,
+     nunca se mostraba. La pantalla real es renderSalmaCan en app.js.) -->
 
 <!-- ═══ TOAST ═══ -->
 <div class="toast" id="toast"></div>
@@ -438,11 +415,11 @@ window.SALMA_API="https://salma-api.paco-defoto.workers.dev";
 <!-- ═══ APP ═══ -->
 <script src="debug-panel.js?v=3"></script>
 <script src="country-utils.js?v=1"></script>
-<script src="app.js?v=79"></script>
-<script src="nav-history.js?v=2"></script>
+<script src="app.js?v=80"></script>
+<script src="nav-history.js?v=3"></script>
 <script src="notas.js?v=2"></script>
 <script src="flight-watches.js?v=2"></script>
-<script src="salma.js?v=63"></script>
+<script src="salma.js?v=64"></script>
 <script src="video-player.js?v=3"></script>
 <script src="video-assembly.js?v=2"></script>
 <script src="guide-renderer.js?v=49"></script>
@@ -459,14 +436,6 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').catch(() => {});
 }
 if (typeof salma !== 'undefined') { salma.initGeolocation(); salma.initVoices(); salma.initVoiceToggle(); }
-
-// Salma info modal
-document.getElementById('salma-info-close')?.addEventListener('click', () => {
-  document.getElementById('salma-info-overlay').style.display = 'none';
-});
-document.getElementById('salma-info-overlay')?.addEventListener('click', (e) => {
-  if (e.target.id === 'salma-info-overlay') e.target.style.display = 'none';
-});
 
 // Cookie consent
 (function() {
