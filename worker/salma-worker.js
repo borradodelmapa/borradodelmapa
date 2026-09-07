@@ -309,7 +309,7 @@ buscar_coche → alquiler de coche, moto, scooter
 buscar_lugar → CUALQUIER lugar físico: restaurante, bar, café, dónde comer/cenar, gimnasio, farmacia, museo, spa, cajero, cambio de divisa, clínica, supermercado, tienda… Para comida pasa tipo_places: "restaurant". Para el resto omite tipo_places.
 buscar_vuelos → vuelo, billete de avión
 buscar_foto → cuando recomiendes un lugar concreto con nombre propio. 1-3 fotos por respuesta. No usar cuando generes ruta (la ruta tiene sus propias fotos).
-buscar_web → dato que puede haber cambiado desde agosto 2025 y para el que no hay tool específica. OBLIGATORIO para ferry/bus/tren: cuando el usuario pida transporte entre dos ciudades (ferry, bus, tren), llama SIEMPRE a buscar_web con query "[origen] [destino] ferry bus book ticket online" para obtener las URLs reales de reserva. Sin esta llamada no tendrás URL y no podrás ponerla en "Reservar:". No pongas "Reservar:" vacío — primero busca. IMPORTANTE: cuando buscar_web devuelva resultados con URLs, INCLUYE las URLs relevantes en tu respuesta como fuente. Formato: dato + URL en su propia línea. Las URLs de buscar_web son de herramienta — SÍ puedes usarlas.
+buscar_web → dato que puede haber cambiado desde agosto 2025 y para el que no hay tool específica. OBLIGATORIO para ferry/bus/tren: cuando el usuario pida transporte entre dos ciudades (ferry, bus, tren), llama SIEMPRE a buscar_web con query "[origen] [destino] ferry bus book ticket online" para obtener la URL real de reserva. Sin esta llamada no tendrás URL y no podrás ponerla en "Reservar:". No pongas "Reservar:" vacío — primero busca. USO DE LAS URLs: úsalas para darte el dato, pero NO las pegues en tu respuesta. Cuenta el dato con tus palabras y ya está. Pega una URL SOLO si (a) el usuario pide explícitamente el enlace, la fuente o "de dónde lo sacas", o (b) es la web OFICIAL de reserva de un transporte que el usuario ha pedido reservar (ferry/bus/tren). NUNCA pegues blogs, artículos ni guías de viaje.
 
 RESTAURANTES: si el sistema ya te proporciona resultados en el contexto, preséntalos directamente. Si no, usa buscar_lugar con tipo_places: "restaurant". Nunca respondas con texto inventado cuando pidan dónde comer.
 
@@ -319,9 +319,9 @@ CÓMO PRESENTAR RESULTADOS:
 — Restaurantes: nombre, tipo de cocina, zona, enlace TheFork si lo hay.
 — Vuelos: cuando vengan de un rango de fechas (fecha_rango_hasta), SIEMPRE muestra el trade-off: precio vs duración total vs tiempo de escala. Formato: "✈️ Opción 1 — X€ — sale el DÍA — Xh Xmin (escala Xh en CIUDAD)". Si hay una opción más cara pero con mucha menos escala, menciónala expresamente: "Este cuesta 3€ más pero te ahorras 3h de escala".
 — Lugares (buscar_lugar): nombre en negrita, tipo, dirección corta, rating si lo hay, teléfono si lo hay.
-— Búsqueda web (buscar_web): responde con el dato + INCLUYE la URL fuente en su propia línea. Hasta 3 URLs si hay varias fuentes.
-— Cada enlace en su propia línea, sin markdown, sin corchetes. Solo la URL.
-— URLs permitidas: SOLO las que devuelve una herramienta (buscar_web, buscar_hotel, buscar_lugar, buscar_vuelos...). Si no tienes URL de herramienta, pon solo el nombre — no inventes. NUNCA pongas enlaces de Google Maps — el sistema los añade verificados.`;
+— Búsqueda web (buscar_web): responde SOLO con el dato, con tus palabras. NO listes fuentes ni pegues URLs de blogs/artículos/guías. Solo pon un enlace si el usuario lo pide explícitamente ("dame el enlace", "la fuente", "de dónde lo sacas") o si es la web oficial de reserva de un transporte que ha pedido reservar.
+— Cuando SÍ toque poner un enlace: cada uno en su propia línea, sin markdown, sin corchetes. Solo la URL.
+— URLs permitidas: SOLO las que devuelve una herramienta (buscar_hotel, buscar_lugar, buscar_vuelos, buscar_coche, y buscar_web solo en los dos casos de arriba). Si no tienes URL de herramienta, pon solo el nombre — no inventes. NUNCA pongas enlaces de Google Maps — el sistema los añade verificados.`;
 
 const BLOQUE_VISION = `FOTOS DEL VIAJERO
 Cuando el usuario te envía una foto, la recibes como imagen en el mensaje. Analízala según el contexto:
@@ -428,10 +428,10 @@ VELOCIDAD — REGLA CRÍTICA: cuando el usuario pide varias cosas a la vez (vuel
 
 PROHIBIDO INVENTAR:
 1. No inventes URLs, teléfonos, direcciones, horarios ni precios. Solo datos de herramientas o KV.
-2. URLs de herramientas (buscar_web, buscar_hotel, buscar_lugar, buscar_vuelos, buscar_coche, buscar_foto): SIEMPRE inclúyelas en tu respuesta. Son datos reales — para eso las buscaste.
-3. TRANSPORTE (taxi, cómo llegar, apps de movilidad): usa buscar_web SIEMPRE antes de responder. Incluye SOLO enlaces a webs oficiales de las apps/servicios (NO blogs, NO artículos, NO guías de viaje). Nombra la fuente de cada dato.
+2. URLs de herramientas de reserva (buscar_hotel, buscar_vuelos, buscar_coche) y de buscar_lugar: inclúyelas cuando el usuario ha pedido ESE servicio (hotel, vuelo, coche, un sitio concreto). buscar_web: NO pegues su URL salvo que el usuario pida explícitamente el enlace/la fuente, o sea la web oficial de reserva de un transporte que ha pedido reservar. NUNCA blogs, artículos ni guías de viaje.
+3. TRANSPORTE (taxi, cómo llegar, apps de movilidad): usa buscar_web SIEMPRE antes de responder. Da el dato con tus palabras; pon un enlace SOLO si es la web oficial de la app/servicio y el usuario quiere reservar (NO blogs, NO artículos, NO guías de viaje).
 4. Si no tienes el dato o no estás seguro, usa buscar_web. No asumas, no inventes, no rellenes con datos genéricos.
-5. Cada recomendación debe incluir su enlace oficial si existe (web del servicio, reserva).
+5. Los servicios que el usuario ha pedido (hotel, vuelo, coche) llevan su enlace oficial de reserva. El resto de respuestas NO llevan enlaces salvo que los pida.
 6. NUNCA generes enlaces de Google Maps tú mismo. El sistema los añade cuando procede. Si pones un enlace de Maps inventado, se rompe.
 
 No dejes tirado al viajero. Si tienes los datos, resuélvelo.
@@ -1036,7 +1036,7 @@ const SALMA_TOOLS = [
   },
   {
     name: "buscar_web",
-    description: "Busca información actual en internet usando Google. Usa esta herramienta OBLIGATORIAMENTE cuando la pregunta incluya fechas concretas, horarios, precios actuales, programas de eventos, procesiones, conciertos, ferias, si algo está abierto o cerrado, o cualquier dato que pueda haber cambiado desde agosto de 2025. Devuelve resultados con título, snippet, URL y contenido de la página. SIEMPRE incluye las URLs de los resultados relevantes en tu respuesta como fuente — son URLs reales de herramienta, no inventadas.",
+    description: "Busca información actual en internet usando Google. Usa esta herramienta OBLIGATORIAMENTE cuando la pregunta incluya fechas concretas, horarios, precios actuales, programas de eventos, procesiones, conciertos, ferias, si algo está abierto o cerrado, o cualquier dato que pueda haber cambiado desde agosto de 2025. Devuelve resultados con título, snippet, URL y contenido de la página. Usa ese contenido para dar el dato con tus palabras; NO pegues las URLs de los resultados en tu respuesta salvo que el usuario pida explícitamente el enlace o la fuente, o sea la web oficial de reserva de un transporte que ha pedido reservar. Nunca blogs, artículos ni guías de viaje.",
     input_schema: {
       type: "object",
       properties: {
@@ -9001,6 +9001,15 @@ REGLAS:
           reply = formatDayHeaders(reply, _numDays);
         }
 
+        // ── ¿El usuario quiere ver enlaces? ── Por defecto NO: nada de URLs de blogs/webs/
+        // artículos en la respuesta. Solo si lo pide explícitamente, o si es transporte
+        // (donde una URL oficial de reserva SÍ es el resultado que ha pedido). — 7 sept 2026
+        const _userWantsLinks =
+          /\b(enlace|enlaces|link|links|url|p[aá]gina web|web oficial|fuente|fuentes|referencia|de d[oó]nde (?:lo )?(?:sacas|sale)|d[oó]nde (?:lo )?(?:pone|dice|has visto))\b/i.test(message || '')
+          || helpCategory === 'transport'
+          || isHotelRequest(message) || isFlightRequest(message)
+          || /\balquil|coche.*alquil|rent.*car\b/i.test(message || '');
+
         // ── Inyectar enlaces Maps verificados (place_id) en nombres en negrita ──
         // PIEZA A — en el Tiempo 1 (recomendaciones) NO se inyectan: ni "Cómo llegar" por
         // parada ni "Ruta completa en Google Maps". Esos enlaces son para la guía ya montada.
@@ -9062,10 +9071,11 @@ REGLAS:
         // (transport_actions ya emitidos ANTES de Claude)
 
         // ── Inyectar URLs de tools (buscar_lugar, buscar_web) que Claude no incluyó ──
-        if (!route && _toolUrls.length > 0) {
+        // Solo si el usuario quiere ver enlaces. Por defecto NO se añade ninguna URL.
+        if (!route && _toolUrls.length > 0 && _userWantsLinks) {
           const missingUrls = _toolUrls
             .filter(u => u.url && !reply.includes(u.url))
-            .filter(u => !/blog|guia|guide|tripadvisor|wikipedia|wikivoyage/i.test(u.url))
+            .filter(u => !/blog|guia|guide|tripadvisor|wikipedia|wikivoyage|viajero|turismo|mundo|rutas?\b/i.test(u.url))
             .slice(0, 3);
           if (missingUrls.length > 0) {
             let toolLinksBlock = '\n';
@@ -9137,6 +9147,34 @@ REGLAS:
               }
             }
           } catch (_) {}
+        }
+
+        // ── RED DE SEGURIDAD: fuera URLs de blogs/webs/artículos si el usuario no las ha pedido ──
+        // Aunque el prompt ya se lo dice, si el modelo cuela una URL igualmente, aquí se quita.
+        // Se respeta el markdown de imagen ![...](...) (fotos) y los enlaces de Google Maps
+        // verificados que añade el propio sistema.
+        if (!route && !_userWantsLinks) {
+          const _stripLooseUrls = (s) => {
+            if (typeof s !== 'string' || !/https?:\/\//i.test(s)) return s;
+            const _keep = [];
+            // proteger fotos ![alt](url) y enlaces Maps verificados
+            s = s.replace(/!\[[^\]]*\]\([^)]+\)/g, (m) => { _keep.push(m); return `~K${_keep.length - 1}~`; });
+            s = s.replace(/\[[^\]]*\]\(https?:\/\/(?:www\.)?google\.[^)]*\/maps[^)]*\)/gi, (m) => { _keep.push(m); return `~K${_keep.length - 1}~`; });
+            s = s.replace(/https?:\/\/(?:www\.)?google\.[^\s)]*\/maps[^\s)]*/gi, (m) => { _keep.push(m); return `~K${_keep.length - 1}~`; });
+            // líneas que son básicamente una cita/fuente con URL → fuera enteras
+            s = s.replace(/^[ \t>]*[-•*]?[ \t]*(?:[\u{1F300}-\u{1FAFF}☀-➿]️?[ \t]*)?[^\n]*https?:\/\/[^\n]*$/gmu, '');
+            // enlaces markdown [txt](url) → dejar solo txt
+            s = s.replace(/\[([^\]]+)\]\(https?:\/\/[^)]+\)/g, '$1');
+            // cualquier URL suelta que quede
+            s = s.replace(/\(?\bhttps?:\/\/[^\s)]+\)?/g, '');
+            // limpieza de restos
+            s = s.replace(/[ \t]+$/gm, '').replace(/\n{3,}/g, '\n\n')
+                 .replace(/^[ \t]*[|—–\-·:]+[ \t]*$/gm, '').trim();
+            s = s.replace(/~K(\d+)~/g, (_, i) => _keep[+i] || '');
+            return s;
+          };
+          reply = _stripLooseUrls(reply);
+          if (typeof allText === 'string') allText = _stripLooseUrls(allText);
         }
 
         // ── SALMA_ACTION: extraer acciones del texto, limpiar reply, ejecutar APIs en paralelo ──

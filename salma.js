@@ -1648,7 +1648,10 @@ const salma = {
                 if (textEl && evt.reply && fullText.trim() && evt.reply.trim() !== fullText.trim()) {
                   const replyHasExtras = /google\.com\/maps/i.test(evt.reply) && !/google\.com\/maps/i.test(fullText);
                   const replyLonger = evt.reply.length > fullText.length + 20;
-                  if (replyHasExtras || replyLonger) {
+                  // El worker quita URLs de blogs/webs no pedidas → el reply final es más corto:
+                  // re-renderizar para que no queden a la vista las que se hayan colado en streaming.
+                  const replyStrippedUrls = /https?:\/\//i.test(fullText) && !/https?:\/\//i.test(evt.reply);
+                  if (replyHasExtras || replyLonger || replyStrippedUrls) {
                     let display = evt.reply;
                     const markerPos = display.indexOf('SALMA_ROUTE');
                     if (markerPos !== -1) display = display.substring(0, markerPos);
