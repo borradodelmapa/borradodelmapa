@@ -6244,3 +6244,16 @@ body {
   text-transform:uppercase;padding:6px;cursor:pointer;text-align:center;
 }
 .chat-empty .ce-back-active:hover{color:var(--ce-amber);}
+
+/* ── Botón "empezar de cero" — Fase 1 navegación ── */
+#chat-fresh{
+  position:fixed;top:calc(env(safe-area-inset-top) + 10px);right:12px;z-index:900;
+  width:34px;height:34px;border-radius:50%;
+  border:1.5px solid var(--linea-fuerte);
+  background:rgba(8,7,4,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  color:var(--dorado);cursor:pointer;
+  display:none;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+#chat-fresh:active{transform:scale(.92);}
+body:has(#app-content.app-content--chat #chat-area .msg) #chat-fresh{display:flex;}

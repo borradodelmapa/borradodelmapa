@@ -151,14 +151,17 @@ function updateBottomBar() {
     document.body.appendChild(bar);
   }
 
-  const isHome = currentState === 'welcome';
   const isChat = currentState === 'chat';
   const isRutas = currentState === 'rutas';
-  const isVuelos = currentState === 'vuelos';
   const isHistoria = currentState === 'historia';
-  const isProfile = currentState === 'profile' || currentState === 'bitacora' || currentState === 'diario' || currentState === 'documentos' || currentState === 'notas' || currentState === 'galeria';
+  const isProfile = ['profile', 'bitacora', 'diario', 'documentos', 'notas', 'galeria', 'vuelos'].includes(currentState);
 
+  // Barra fija de 4 — no cambia según la pantalla (Fase 1 navegación)
   bar.innerHTML = `
+    <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Salma</span>
+    </button>
     <button class="bottom-tab ${isRutas ? 'bottom-tab-active' : ''}" id="tab-rutas">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/><rect x="1" y="3" width="4" height="4" rx="1"/><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="1" y="17" width="4" height="4" rx="1"/></svg>
       <span>Mis Viajes</span>
@@ -166,14 +169,6 @@ function updateBottomBar() {
     <button class="bottom-tab ${isHistoria ? 'bottom-tab-active' : ''}" id="tab-historia">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 0 3-3h7z"/></svg>
       <span>Historia</span>
-    </button>
-    ${isChat ? `<button class="bottom-tab bottom-tab-newchat" id="tab-newchat">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      <span>Nuevo</span>
-    </button>` : ''}
-    <button class="bottom-tab ${isChat ? 'bottom-tab-active' : ''}" id="tab-chat">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span>Salma</span>
     </button>
     <button class="bottom-tab ${isProfile ? 'bottom-tab-active' : ''}" id="tab-profile">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -200,10 +195,6 @@ function updateBottomBar() {
     }
     if (typeof salma !== 'undefined') salma._initChat();
     showState('chat');
-  });
-  const tabNewchat = document.getElementById('tab-newchat');
-  if (tabNewchat) tabNewchat.addEventListener('click', () => {
-    if (typeof salma !== 'undefined') salma.newChat();
   });
   document.getElementById('tab-rutas').addEventListener('click', () => {
     if (!currentUser) { window._afterLogin = 'rutas'; openModal(); return; }
