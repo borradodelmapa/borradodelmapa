@@ -6296,6 +6296,8 @@ body {
   border-bottom:1px solid var(--ce-line);padding-bottom:10px;
 }
 .ce-top .ce-hi{font-family:var(--ce-flapf);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ce-amber);}
+.ce-top .ce-brand{font-family:var(--ce-sign);font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--ce-amber);}
+.ce-top .ce-brand span{color:var(--ce-ink3);}
 .ce-top .ce-meta{font-family:var(--ce-flapf);font-size:11px;letter-spacing:.12em;color:var(--ce-ink2);}
 .ce-greet{
   font-family:var(--ce-sign);text-transform:uppercase;font-weight:800;
@@ -6385,7 +6387,7 @@ body {
 /* ── BILLETE (índice = creador de ruta) — ámbito .chat-empty ── */
 .chat-empty .ce-card.ce-ticket{padding:0;}
 /* cabecera del billete: banda fina, sin relleno naranja sólido (doc 8 sep — un solo relleno sólido por pantalla) */
-.ce-tk-head{display:flex;justify-content:space-between;align-items:center;padding:11px 13px;border-bottom:1.5px solid var(--ce-amber);background:var(--ce-flap);}
+.ce-tk-head{display:flex;justify-content:flex-end;align-items:center;padding:11px 13px;border-bottom:1.5px solid var(--ce-amber);background:var(--ce-flap);}
 .ce-tk-b{font-family:var(--ce-sign);font-weight:800;font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--ce-amber);}
 .ce-tk-b span{color:var(--ce-ink3);}
 .ce-tk-head .ce-tk-t{color:var(--ce-ink2);font-weight:700;}

@@ -294,7 +294,6 @@ function _renderChatEmpty() {
 
   const _ceBilleteHTML = (hasActive) => `
       <div class="ce-tk-head">
-        <span class="ce-tk-b">✦ BORRADO<span>DEL</span>MAPA</span>
         <span class="ce-tk-t">Nº ${_tkNum}</span>
       </div>
       <div class="ce-tk-pax"><span class="ce-k">Pasajero</span><span class="ce-tk-pax-v">${_paxName}</span></div>
@@ -418,7 +417,7 @@ function _renderChatEmpty() {
 
     area.innerHTML = `
       <div class="chat-empty">
-        <div class="ce-top"><span class="ce-hi">${_ceHi}</span><span class="ce-meta">${_ceMonth}</span></div>
+        <div class="ce-top"><span class="ce-brand">✦ BORRADO<span>DEL</span>MAPA</span><span class="ce-meta">${_ceMonth}</span></div>
         ${_ceActive ? `<div class="ce-greet">${_greet}</div>` : _ceHeroHTML}
         <div class="${_initCard.cls}" id="ce-card"${_ceActive ? '' : ' hidden'}>${_initCard.html}</div>
         ${_ceChipsRow}
